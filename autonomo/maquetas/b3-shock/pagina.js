@@ -41,7 +41,8 @@ const monitor = monitorDelShock($('trazas'));
 
 function recDe(pac, extra = {}) { return { ...pac.rec, g: est.g, ...extra }; }
 function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asentar = 30 } = {}) {
-  est.pac = pac; est.g = g ?? pac.rec.g; est.rec = rec ? { ...pac.rec, ...rec } : recDe(pac);
+  // la gravedad: la que se pide, si no la de la receta que llega, si no la del paciente (antes, «¿Qué shock es?» perdía la suya)
+  est.pac = pac; est.g = g ?? rec?.g ?? pac.rec.g; est.rec = { ...pac.rec, ...(rec || {}), g: est.g };
   cab = crearCabecera(est.rec, { asentar });
   const ap = ajuste.soporte ?? 'no';
   est.aparato = ap;
@@ -546,7 +547,7 @@ $('zona-may').addEventListener('click', (ev) => {
   const q = LISTA_MAY[may.i], b = ev.target.closest('button'); if (!b) return;
   const acc = b.dataset.acc;
   if (acc === 'otra') { may = { i: 0, res: [], fichaCaso: [] }; pintarMay(); return; }
-  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { eroaMitral: 0.5, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
+  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
   if (acc === 'ops') { $('ops').innerHTML = q.opciones.map((o, i) => `<button type="button" class="b" data-op="${i}">${o.t}</button>`).join(''); $('ops').hidden = false; $('fmt').remove(); return; }
   if (acc === 'sig') { may.i++; pintarMay(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (acc === 'comprueba') {

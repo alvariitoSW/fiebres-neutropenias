@@ -1,8 +1,0 @@
-<!doctype html><html><head><meta charset="utf-8"><style>:root{--bg-main:#17140f;--bg-card:rgba(46,38,28,.72);--border-color:rgba(196,154,74,.35);--text-main:#ece3cc;--text-muted:#a5967c;--text-dim:#c9bda4;--accent-green:#90a06a;--accent-red:#b85c3e;--accent-yellow:#cf9a3e;--accent-blue:#d4af37;--accent-purple:#9c5476;--card2:rgba(46,38,28,1)}body{background:#17140f;margin:0}svg{display:block}</style></head><body>
-<svg id="a" viewBox="0 0 200 120" width="400" height="240"></svg><div id="b" style="width:224px"></div><div id="c" style="width:112px"></div>
-<script type="module">
-import { bomba, bombaMini } from './bomba.js'; import { isometrica } from './dibujo-iso.js';
-document.getElementById('a').innerHTML = bomba(isometrica({x:64,y:56}), { l1: 'ADENOSINA', l2: '6 mg + LAVADO', avance: 0.35 });
-document.getElementById('b').innerHTML = bombaMini({ l1: 'µg/min', l2: '8', avance: .2 }).replace('<svg ', '<svg width="224" ');
-document.getElementById('c').innerHTML = bombaMini({ l1: 'U/min', l2: '0,03', avance: .6, candado: true });
-</script></body></html>

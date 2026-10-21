@@ -1,6 +1,7 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
+import { textoGravedad } from './soporte.mjs';
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
 export const PDF_S = '../../docs/marino-2024-shock-caps14-17.pdf';
@@ -110,19 +111,21 @@ export const PACIENTES = [
   { k: 'amparo', nombre: 'Amparo', chip: 'sepsis', tipo: 'septico', peso: 76, ideal: 58, edad: 58, sexo: 'mujer', hb: 12.4, fr: 26, t: 39.2, obj: 'marino-14-5',
     rec: { esc: 'sepsis', g: 1, util: 'sepsis', hb: 12.4 }, linea: '58 años, 76 kg (ideal 58) · pielonefritis obstructiva · urgencias' },
   { k: 'aurelio', nombre: 'Aurelio', chip: 'infarto', tipo: 'cardio', peso: 82, edad: 67, sexo: 'varón', hb: 14, fr: 24, t: 36.7, obj: 'marino-16-2',
-    rec: { esc: 'fallo', g: 0.75, volemia: -1500, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
+    // la PCP no está alta (14, el 30 % de la p. 40): le falta volumen; tras 250 mL, 18 (el caso S3 de la cobertura)
+    rec: { esc: 'fallo', g: 0.8, volemia: -1450, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
   { k: 'joaquin', nombre: 'Joaquín', chip: 'taponamiento', tipo: 'tapon', peso: 84, edad: 56, sexo: 'varón', hb: 13.5, fr: 24, t: 36.8, obj: 'marino-14-5',
     rec: { esc: 'derrame', g: 0.85, hb: 13.5 }, linea: '56 años, 84 kg · disección aórtica tipo A que sangra al pericardio' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
-    rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
+    rec: { esc: 'tep', g: 1, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
 ];
 // La gravedad de cada paciente, con nombre (el mando mueve la «g» del escenario del motor)
 export const GRAVEDAD = {
   hemo: { min: 0, max: 1, paso: 0.01, texto: (g, pac) => { const pct = Math.round(g * 42), ml = Math.round(pct / 100 * 66 * pac.peso / 50) * 50; return [`${pct} % de la volemia`, `≈ ${ml.toLocaleString('es-ES')} mL de ${(66 * pac.peso / 1000).toFixed(1).replace('.', ',')} L · clase ${clase(pct)}`]; }, nota: 'Sangre perdida (Tabla 15.1; 66 mL/kg en el varón, p. 21)', cita: C.t151 },
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
   cardio: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VI ${(3.1 * (0.3 / 3.1) ** g).toFixed(2).replace('.', ',')}`, `contractilidad al ${Math.round(100 * (0.3 / 3.1) ** g)} %`], nota: 'Contractilidad del VI (modelo)', cita: C.csHemo },
-  tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(390 * (1 - (1 - g) ** 2))} mL`, 'de derrame en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
-  tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [`resistencia ×${(16 ** g).toFixed(1).replace('.', ',')}`, 'pulmonar (el émbolo)'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
+  // el derrame y el émbolo: el texto de la gravedad lo da el motor (escenarios.mjs), así no se separan
+  tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
+  tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
 export const clase = (pct) => pct < 15 ? 'I' : pct <= 30 ? 'II' : pct <= 40 ? 'III' : 'IV';
 
@@ -238,7 +241,7 @@ export const ESTADOS = {
       { t: (R) => `La consola da ${c1(R.imp)} L/min de la bomba y ${c1(R.icNat * 1.85)} del corazón. El modelo con gasto total ajusta la bomba solo.`, s: ['.maquina', '[data-fila="ic"]'], c: C.impella },
       { t: (R) => `Descarga el VI: la PCP baja (${R.pcp}) y la curva arterial se estrecha. Con soporte, la PCP de 18-20 deja de ser la meta.`, s: ['[data-fila="pcp"]', '#tr-art'], c: C.impellaEf, org: 'la forma: fisiología general' },
       { t: 'Hemólisis significativa en el 5-10 %; contraindicado con valvulopatía o prótesis aórtica y con trombo en el VI.', s: ['.p-jaula'], c: C.impellaEf }] },
-  'impella-vacio': { tit: 'Impella: el VI está casi vacío', frase: (R) => `La bomba pide ${c1(R.impPide)} L/min pero solo saca ${c1(R.imp)}: no puede sacar del VI la sangre que no le llega. El gasto total se queda en ${c1(R.gcTotal)} L/min. Primero, el llenado: PCP 18-20.`, org: 'ficha · p. 42, 47-48; que no saque lo que no hay: fisiología general',
+  'impella-vacio': { tit: 'Impella: el VI está casi vacío', frase: (R) => `La bomba pide ${c1(R.impPide)} L/min pero solo saca ${c1(R.imp)}: no puede sacar del VI la sangre que no le llega. El gasto total se queda en ${c1(R.gcTotal)} L/min. Primero, el llenado: PCP 18-20.`, org: 'ficha · p. 42, 47-48',
     guia: [{ t: (R) => `La bomba aspira del VI. Pides ${c1(R.impPide)} L/min y saca ${c1(R.imp)}: la consola lo marca.`, s: ['#consola', '.p-entrada'], c: C.impella },
       { t: (R) => `Al VI le llega poca sangre: PCP ${R.pcp}. Sin llenado, la entrada se queda sin sangre que sacar.`, s: ['[data-fila="pcp"]', '.p-entrada'], c: C.llenado, org: 'que la bomba no saque lo que no hay: fisiología general' },
       { t: 'Por eso el gasto total apenas sube. La ficha pide antes la presión de llenado óptima, 18-20: dale volumen y vuelve a mirar la consola.', s: ['[data-pest="vol"]', '[data-fila="ic"]'], c: C.llenado },
@@ -307,7 +310,8 @@ export const QS = [
   { pac: 'aurelio', tipo: 'cardio', g: 0.92, volemia: 0, quien: 'Varón de 67 años', real: 'Aurelio, horas después: shock cardiogénico con la PCP alta' },
   { pac: 'joaquin', tipo: 'tapon', g: 0.85, quien: 'Varón de 56 años' },
   { pac: 'consuelo', tipo: 'tep', g: 0.95, quien: 'Mujer de 63 años' },
-  { pac: 'consuelo', tipo: 'no', g: 0.75, quien: 'Mujer de 63 años', real: 'Consuelo, hora 0: TEP con el VD sobrecargado, sin shock' },
+  // sin shock: PAM ~82 y lactato normal (con el defecto del motor, g ≈ 0,93, la PAM es 67 pero el lactato ya sube)
+  { pac: 'consuelo', tipo: 'no', g: 0.6, quien: 'Mujer de 63 años', real: 'Consuelo, hora 0: TEP con el VD sobrecargado, sin shock' },
   { pac: 'nerea', tipo: 'septico', esc: 'sepsis', g: 0.9, quien: 'Mujer de 31 años', real: 'Nerea: shock tóxico estreptocócico (distributivo)', peso: 60 },
 ];
 export const OPC_QS = [['hemo', 'Hipovolémico'], ['septico', 'Distributivo'], ['cardio', 'Cardiogénico'], ['tapon', 'Obstructivo: taponamiento'], ['tep', 'Obstructivo: TEP'], ['no', 'No está en shock']];
@@ -341,7 +345,7 @@ export const PREGUNTAS = [
       { t: 'La PCP baja y el pulso de la curva arterial se estrecha.', ok: true },
       { t: 'La PCP baja y el pulso se ensancha, por más volumen sistólico.', porque: 'El flujo de la bomba es continuo: sustituye al que eyecta el VI. El pulso se estrecha y, si el VI ya no abre la aórtica, casi desaparece.' }],
     explica: 'Descarga el VI y sube el gasto (p. 48). Que la curva se aplane al pasar el flujo de pulsátil a continuo es fisiología general; el modelo lo calcula.', cita: C.impellaEf,
-    comprueba: { txt: 'Compruébalo: sube el Impella a 5,5', ajuste: { impella: 5.5 }, mira: 'Mira la PCP y la curva arterial; y en la consola, cuánto da la bomba y cuánto el corazón.' } },
+    comprueba: { txt: 'Compruébalo: sube el Impella a 5,5', ajuste: { impella: 5.5 }, mira: 'Mira la PCP y la curva arterial; y en la consola, cuánto da la bomba y cuánto el corazón. Si la bomba no llega a lo que pides, la consola lo avisa: al VI no le llega bastante sangre.' } },
   { id: 'G3', grupo: 'guia', predice: true, prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 1, volemia: -600 }, ajuste: { soporte: 'ecmo', ecmo: 3 }, escena: 'ecmo' },
     enunciado: 'Aurelio, con el VI muy débil, en ECMO VA a 3 L/min. Subes a 6. <b>¿Qué le pasa a su VI?</b>',
     opciones: [
@@ -434,7 +438,7 @@ export const CASO = {
         { t: 'Su FC subirá, habitualmente 5-15 lpm.', cita: C.dobuta },
         { t: 'Si no basta, levosimendán 72 h, que tiene una semivida de 80 h.', mal: true, buena: 'La semivida es de 80 h, pero las infusiones suelen limitarse a 24 h (p. 44).', cita: C.levo }],
       explica: 'Dobutamina de inicio; la milrinona y el levosimendán bajan la PA.', cita: C.dobuta },
-    { dia: 'Hora 18 · el giro', prepara: { pac: 'aurelio', rec: { eroaMitral: 0.5, pao2: 56 }, volumen: 250, horas: 18, ajuste: { na: 5, dobuta: true }, escena: 'corazon', canales: 'todos' }, tipo: 'test',
+    { dia: 'Hora 18 · el giro', prepara: { pac: 'aurelio', rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, horas: 18, ajuste: { na: 5, dobuta: true }, escena: 'corazon', canales: 'todos' }, tipo: 'test',
       ficha: (R) => [['Hora 18', 'soplo holosistólico nuevo', 1], ['PCP', `${R.pcp} mmHg`, 1], ['SpO₂', `${R.spo2} % con O₂`, 1], ['Eco', 'un velo mitral se va a la aurícula en cada sístole', 1]],
       enunciado: (R) => `Soplo holosistólico nuevo, PCP ${R.pcp}, SpO₂ ${R.spo2} %; en la eco, un velo mitral se va a la aurícula en cada sístole. <b>¿Qué le ha pasado?</b>`,
       opciones: [
@@ -443,7 +447,7 @@ export const CASO = {
         { t: 'Se ha roto un músculo papilar: insuficiencia mitral aguda.', ok: true },
         { t: 'Se ha roto la pared libre del VI.', porque: 'Da un hemopericardio que se acumula deprisa y un taponamiento (p. 38): la PVC y la PCP se igualarían. No explica el velo que se va a la aurícula.' }],
       explica: 'La rotura de un músculo papilar (el 7 % de los shocks del infarto) da una insuficiencia mitral aguda que amenaza la vida. Las tres roturas del infarto aparecen típicamente en las primeras 24 h (p. 38).', cita: C.papilar },
-    { dia: 'Hora 18 · el soporte', prepara: { pac: 'aurelio', rec: { eroaMitral: 0.5, pao2: 56 }, volumen: 250, horas: 18, ajuste: { na: 5, dobuta: true }, escena: 'corazon', canales: 'todos' }, tipo: 'destapa',
+    { dia: 'Hora 18 · el soporte', prepara: { pac: 'aurelio', rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, horas: 18, ajuste: { na: 5, dobuta: true }, escena: 'corazon', canales: 'todos' }, tipo: 'destapa',
       ficha: (R) => [['Hora 18', `fallo respiratorio: SpO₂ ${R.spo2} % con el respirador`, 1]],
       enunciado: 'Los fármacos ya no bastan y el respirador no corrige la hipoxemia. <b>¿Qué soporte le pones y qué vigilas? Son dos cosas.</b>',
       puntos: [
