@@ -83,9 +83,7 @@ p { margin: 0; }
 
 /* La escena */
 .escena-caja { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--bg-main); }
-.esc-pest { position: absolute; left: 4px; right: 4px; top: 4px; z-index: 2; display: flex; gap: 4px; align-items: center; pointer-events: none; }
-.esc-pest > * { pointer-events: auto; }
-.esc-pest .chip-b { background: color-mix(in srgb, var(--bg-main) 82%, transparent); }
+.esc-pest { display: flex; gap: 4px; align-items: center; padding: 4px 4px 0; }
 .esc-pest .chip-b { min-height: 32px; }
 .esc-pest .sep { flex: 1; }
 #esc-svg { display: block; width: 100%; height: auto; }
@@ -239,6 +237,7 @@ dl.paciente dt { color: var(--text-muted); } dl.paciente dd { margin: 0; } dl.pa
   <section class="escena-caja" id="escena" aria-label="Dentro del paciente">
     <div class="esc-pest" id="esc-pest"></div>
     <svg id="esc-svg" class="escena-aparato" role="img" aria-label="El paciente o el aparato, movido por el mismo motor que el monitor"></svg>
+    <canvas id="esc-eco" hidden role="img" aria-label="Ecocardiograma en apical de cuatro cámaras, formado con el ecógrafo de la app sobre el mismo motor"></canvas>
     <span class="fig-esq" id="fig-esq" hidden></span>
     <div class="sello" id="sello" hidden></div>
     <div class="velo-tapa" id="velo-esc" hidden>El dibujo, al contestar.</div>

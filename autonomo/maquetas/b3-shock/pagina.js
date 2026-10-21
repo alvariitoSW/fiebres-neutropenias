@@ -189,10 +189,10 @@ function montarEscena() {
   if (k === escTipo && escena) return;
   escTipo = k; const svg = $('esc-svg');
   svg.setAttribute('class', 'escena-aparato');
-  if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q) => c.pintar(cb.m.s, cb.lectura, cb.lectura?.u?.rvs ?? 1488, q) }; }
+  if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q) => c.pintar(cb, dt, q) }; }
   else {
     const [ap, pl] = k.split(':');
-    if (pl === 'recorrido') { const r = montarRecorrido(svg); r.poner(ap); escena = { actualizar: (cb, dt, q) => r.tick(dt, q), texto: r.texto }; }
+    if (pl === 'recorrido') { const r = montarRecorrido(svg); r.poner(ap); escena = { actualizar: (cb, dt, q) => r.tick(dt, q, cb), get texto() { return r.texto; } }; }
     else if (pl === 'dentro') escena = { impella: montarImpella, balon: montarBalon, ecmo: montarEcmo }[ap](svg);
     else escena = { impella: montarDespieceImpella, balon: montarDespieceBalon, ecmo: montarDespieceEcmo }[ap](svg);
   }
