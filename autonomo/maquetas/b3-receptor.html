@@ -1,0 +1,1711 @@
+<!-- PROPUESTA PARA ELEGIR (plan socialista, bloque 3, parada 1). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b3-receptor.html
+     El receptor vivo: los fármacos del shock como llaves que abren (o tapan) cerraduras en células concretas, y lo que
+     hace la célula se ve en el monitor. Especificación: autonomo/bloques/b3/farmacos.md (§2, §3, §4, §5, §7 y §10).
+     Fichas: Merino Cardiología (vasopresores, shock cardiogénico, shock séptico, anafilaxia), Marino cap. 52
+     (betabloqueantes y glucagón, Fig. 52.4) y Sobrevivir a la UMI (vasoactivos, otra fuente).
+     PDF: docs/marino-2024-shock-caps14-17.pdf (S), docs/marino-2024-toxicologia-caps52-53-apendices.pdf (T),
+     docs/marino-2024-respiratory-management-caps22-26.pdf (R). La página citada es la del PDF.
+     El monitor es la misma pieza que la cabecera del shock (b3-shock.html): mismas curvas, mismas cifras.
+     Cada cifra lleva su origen: «ficha · p. N», «fisiología general» o «ilustrativo». Sin librerías: SVG y JS puro;
+     con «reducir movimiento» (o el botón de pausa), todo quieto en su estado final.
+     Dos estilos para elegir (A grabado crema y oro, B microscopio de fluorescencia), con los mismos tokens. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El receptor vivo · para elegir</title>
+<style>
+/* Tokens de css/variables.css, copiados tal cual. Ningún color fuera de esta lista. */
+:root {
+  color-scheme: dark;
+  --bg-main: #17140f;
+  --bg-card: rgba(46, 38, 28, 0.72);
+  --border-color: rgba(196, 154, 74, 0.35);
+  --text-main: #ece3cc;
+  --text-muted: #a5967c;
+  --text-dim: #c9bda4;
+  --accent-green: #90a06a;
+  --accent-red: #b85c3e;
+  --accent-yellow: #cf9a3e;
+  --accent-blue: #d4af37;
+  --accent-purple: #9c5476;
+  --bg: var(--bg-main); --card: var(--bg-card); --card2: rgba(46, 38, 28, 1); --line: var(--border-color);
+  --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted);
+  --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple);
+  --serif: Georgia, 'Times New Roman', serif;
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --dock-h: 152px;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.5 var(--serif);
+  padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(var(--dock-h) + var(--frase-h, 44px) + 16px) max(12px, env(safe-area-inset-left, 0px)); }
+main { max-width: 560px; margin: 0 auto; display: grid; gap: 10px; grid-template-columns: minmax(0, 1fr); }
+main > *, .bloque > * { min-width: 0; }
+h1 { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--oro); font-weight: normal; }
+h1 em { color: var(--fg); }
+h2 { font-size: 1.06rem; margin: 0 0 4px; color: var(--oro); font-weight: normal; }
+h3 { font: 600 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 4px 0 2px; }
+p { margin: 0; }
+[hidden] { display: none !important; }
+button { font-family: inherit; }
+button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+.aviso { font: 600 .7rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--oro); border-radius: 6px; padding: 4px 8px; width: fit-content; }
+.cabecera { display: grid; gap: 6px; }
+.lead { color: var(--dim); font-size: .92rem; line-height: 1.38; }
+.org { font: .66rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; white-space: nowrap; }
+.org.ilu { border-style: dashed; }
+.org.otra { border-color: var(--purpura); color: var(--dim); }
+.frase .org, .para .org, .nota-fuentes .org, .lead .org, .cas-txt .org, dd .org, .info-diana .org { white-space: normal; overflow-wrap: anywhere; }
+.hl-a, .hl-r, .hl-v, .hl-p, .hl-azul { padding: 0 2px; border-radius: 2px; font-weight: 600; }
+.hl-a { background: linear-gradient(to bottom, transparent 58%, rgba(207, 154, 62, .34) 58%); }
+.hl-r { background: linear-gradient(to bottom, transparent 58%, rgba(184, 92, 62, .38) 58%); }
+.hl-v { background: linear-gradient(to bottom, transparent 58%, rgba(144, 160, 106, .36) 58%); }
+.hl-p { background: linear-gradient(to bottom, transparent 58%, rgba(156, 84, 118, .36) 58%); }
+.hl-azul { background: linear-gradient(to bottom, transparent 58%, rgba(212, 175, 55, .32) 58%); color: var(--oro-claro); }
+
+/* Estilo y modos */
+.estilos { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.estilos button { min-height: 44px; text-align: left; padding: 6px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--card2); color: var(--dim); font: 600 .8rem/1.2 var(--sans); cursor: pointer; }
+.estilos button small { display: block; font-weight: 400; font-size: .66rem; color: var(--muted); margin-top: 2px; }
+.estilos button[aria-pressed="true"] { border-color: var(--oro); box-shadow: inset 0 0 0 1px var(--oro); color: var(--fg); }
+.interruptor { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--line); border-radius: 999px; overflow: hidden; font: .82rem/1.1 var(--sans); }
+.interruptor button { min-height: 44px; background: transparent; color: var(--muted); border: 0; font: inherit; cursor: pointer; padding: 0 4px; }
+.interruptor button + button { border-left: 1px solid var(--line); }
+.interruptor button[aria-selected="true"] { background: var(--oro); color: var(--bg); font-weight: 600; }
+
+/* Momentos (estados con nombre) */
+.momentos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.momentos button { min-height: 44px; padding: 4px 10px; border-radius: 12px; border: 1px solid var(--line); background: var(--card2); color: var(--dim); font: 600 .78rem/1.15 var(--sans); cursor: pointer; text-align: left; }
+.momentos button small { display: block; font-weight: 400; font-size: .64rem; color: var(--muted); }
+.momentos button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+.momentos button[aria-pressed="true"] small { color: var(--bg); }
+.ficha-pac { font: .8rem/1.35 var(--sans); color: var(--dim); }
+.ficha-pac b { color: var(--fg); }
+
+/* El monitor de cabecera (la misma pieza que la cabecera del shock) */
+.monitor { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-main); padding: 6px; display: grid; gap: 4px; position: relative;
+  box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(23, 20, 15, .9); }
+.mon-cab { display: flex; justify-content: space-between; align-items: center; gap: 6px; font: 600 .66rem/1.2 var(--sans); color: var(--muted); letter-spacing: .04em; text-transform: uppercase; padding: 0 2px; }
+.mon-cab .pausa { min-height: 32px; min-width: 44px; border: 1px solid var(--line); background: transparent; color: var(--dim); border-radius: 8px; font: 600 .7rem var(--sans); cursor: pointer; text-transform: none; letter-spacing: 0; }
+.mon-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 0; }
+#trazas { display: block; width: 100%; height: 236px; }
+.cifras { display: grid; grid-template-rows: 42px 62px 40px 42px 50px; border-left: 1px solid rgba(196, 154, 74, .18); }
+.cifra { display: grid; align-content: center; padding: 0 0 0 7px; border-bottom: 1px solid rgba(196, 154, 74, .12); min-width: 0; position: relative; cursor: pointer; }
+.cifra:last-child { border-bottom: 0; }
+.cifra .et { font: 600 .62rem/1.1 var(--sans); letter-spacing: .03em; display: flex; justify-content: space-between; gap: 2px; }
+.cifra .v { font: 700 1.36rem/1.05 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cifra .v small { font-size: .7rem; font-weight: 600; margin-left: 2px; }
+.cifra .obj { font: .6rem/1.15 var(--sans); color: var(--muted); }
+.c-ecg { color: var(--verde); } .c-art { color: var(--rojo); } .c-sat { color: var(--oro); } .c-pvc { color: var(--purpura); } .c-resp { color: var(--dim); }
+.c-pvc .v { color: var(--fg); }
+.marca { font: 700 .66rem var(--sans); border-radius: 4px; padding: 0 3px; margin-left: 2px; }
+.marca.si { color: var(--bg); background: var(--verde); }
+.marca.no { color: var(--fg); background: var(--rojo); }
+.marca.ojo { color: var(--bg); background: var(--oro); }
+.perfusion { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
+.celda { background: var(--card); border: 1px solid var(--card2); border-radius: 9px; padding: 3px 5px; min-width: 0; display: grid; align-content: start; cursor: pointer; text-align: left; color: var(--fg); font: inherit; }
+.celda .k { font: .6rem/1.15 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 2px; }
+.celda .g { font: 700 .98rem/1.15 var(--sans); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.celda .g small { font: 600 .56rem var(--sans); color: var(--dim); margin-left: 1px; }
+.celda .t { font: .56rem/1.15 var(--sans); color: var(--muted); overflow-wrap: anywhere; }
+.celda.no .g { color: var(--rojo); } .celda.si .g { color: var(--verde); } .celda.ojo .g { color: var(--oro); }
+.celda.apagada { opacity: .5; }
+.celda.encendida { border-color: var(--oro); }
+.oculto .v, .oculto .g { color: var(--muted) !important; }
+.mon-pie { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; font: .7rem/1.3 var(--sans); color: var(--muted); }
+.detalle-fila { font: .78rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-radius: 10px; padding: 6px 8px; display: grid; gap: 2px; }
+
+/* El cuerpo (dianas) y la lupa */
+.dibujo { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
+.dibujo svg { display: block; width: 100%; height: auto; }
+#cuerpo [data-diana] { cursor: pointer; }
+.info-diana { font: .8rem/1.4 var(--sans); color: var(--dim); background: var(--card); border-left: 3px solid var(--oro); border-radius: 0 10px 10px 0; padding: 6px 9px; display: grid; gap: 4px; }
+.lupa-cab { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: baseline; justify-content: space-between; }
+.lupa-tit { font: 600 .8rem/1.2 var(--sans); color: var(--fg); }
+.leyenda { display: flex; flex-wrap: wrap; gap: 4px 10px; font: .7rem/1.3 var(--sans); color: var(--dim); }
+.leyenda span { display: inline-flex; align-items: center; gap: 3px; }
+.leyenda svg { width: 18px; height: 14px; flex: none; }
+.lupa-barra { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+.tapa { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(23, 20, 15, .94); font: 600 .9rem/1.3 var(--sans); color: var(--dim); text-align: center; padding: 20px; }
+.cascada { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; }
+.cas-cab { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.cas-pasos { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.cas-pasos button { min-height: 44px; min-width: 44px; padding: 2px 9px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--dim); font: 600 .72rem/1.1 var(--sans); cursor: pointer; text-align: left; }
+.cas-pasos button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+.cas-txt { font: .88rem/1.42 var(--serif); color: var(--fg); display: grid; gap: 4px; min-height: 3em; }
+.lamina-ancha { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 8px; align-items: center; background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 6px; cursor: zoom-in; text-align: left; color: var(--dim); font: .78rem/1.35 var(--sans); width: 100%; min-height: 44px; }
+.lamina-ancha .caja { background: var(--text-main); border-radius: 6px; padding: 2px; }
+.lamina-ancha img { display: block; width: 100%; height: auto; }
+.lamina-ancha b { color: var(--fg); }
+
+/* Frase viva y botones */
+.frase { position: fixed; left: 0; right: 0; bottom: var(--dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line);
+  font: .84rem/1.3 var(--serif); color: var(--fg); padding: 5px max(14px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); cursor: pointer; }
+.frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.frase.abierta .frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
+button.b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+button.b:disabled { opacity: .55; cursor: default; }
+.fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+
+/* La cita que lleva a la app (como core/citas.js) */
+.cita { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; }
+.cita-ir { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; border: 1px dashed var(--oro); border-radius: 999px; background: transparent; color: var(--oro); font: 600 .74rem/1.2 var(--sans); text-align: left; cursor: pointer; max-width: 100%; overflow-wrap: anywhere; }
+.cita-ir.otra { border-color: var(--purpura); color: var(--dim); }
+.cita-c { display: inline; white-space: nowrap; }
+.cita-c .cita-pdf-c { margin-left: 4px; }
+.cita-ir.cita-corta { display: inline-block; min-height: 0; padding: 1px 8px; font: 600 .68rem/1.4 var(--sans); position: relative; white-space: nowrap; }
+.cita-ir.cita-corta::after { content: ''; position: absolute; inset: -13px -3px; }
+.cita-pdf-c { font: .66rem var(--sans); color: var(--muted); text-decoration: underline; text-underline-offset: 2px; position: relative; }
+.cita-pdf-c::after { content: ''; position: absolute; inset: -14px -6px; }
+.cita-pdf { display: inline-flex; align-items: center; min-height: 44px; color: var(--muted); font: .72rem var(--sans); text-decoration: underline; text-underline-offset: 2px; }
+.toast { position: fixed; left: 50%; top: 12px; transform: translateX(-50%); z-index: 40; width: min(92vw, 520px); background: var(--card2); border: 1px solid var(--oro); border-radius: 12px; padding: 10px 12px; font: .82rem/1.4 var(--sans); color: var(--fg); box-shadow: 0 8px 22px rgba(23, 20, 15, .9); }
+
+/* Explicación guiada (como core/explicacion-guiada.js), en la hoja de abajo */
+.guia { display: grid; gap: 6px; font: .9rem/1.4 var(--serif); color: var(--fg); padding: 6px 0 4px; }
+.guia-cab { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.guia-n { font: 700 .66rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--oro); white-space: nowrap; }
+.guia-tit { flex: 1; min-width: 0; font: 600 .84rem/1.2 var(--sans); color: var(--dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--fg); font-size: 1.2rem; cursor: pointer; }
+.guia-txt { margin: 0; border-left: 3px solid var(--oro); padding: 1px 0 1px 9px; max-height: 24vh; overflow-y: auto; }
+.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
+.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card); color: var(--fg); font: 600 .84rem var(--sans); cursor: pointer; }
+.guia-b:disabled { opacity: .45; cursor: default; }
+.guia-b.prim { background: var(--oro); border-color: var(--oro); color: var(--bg); }
+.guia-puntos { display: flex; justify-content: center; gap: 5px; }
+.guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--oro); }
+.guia-puntos i.hecho { background: var(--oro); opacity: .5; }
+.guia-puntos i.aqui { background: var(--oro); }
+.guia-anillo { fill: none; stroke: var(--oro-claro); stroke-width: 2.4; stroke-dasharray: 6 3; vector-effect: non-scaling-stroke; pointer-events: none; }
+.guia-marco { box-shadow: 0 0 0 2px var(--oro-claro) !important; border-radius: 8px; }
+@media (prefers-reduced-motion: no-preference) {
+  .guia-anillo { animation: guia-late 1.4s ease-in-out infinite; }
+  .entra { animation: entra .25s ease-out; }
+}
+@keyframes guia-late { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
+@keyframes entra { from { opacity: .3; } to { opacity: 1; } }
+
+/* Dock fijo abajo: las bombas */
+.dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line);
+  padding: 4px max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 4px; }
+.seg { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; min-width: 0; }
+.seg button { min-height: 44px; font: 600 .72rem/1.1 var(--sans); background: transparent; color: var(--muted); border: 0; padding: 2px; cursor: pointer; min-width: 0; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button[aria-pressed="true"] { background: var(--oro); color: var(--bg); }
+.seg button small { display: block; font-weight: 400; font-size: .58rem; }
+.bomba { display: grid; grid-template-columns: 116px minmax(0, 1fr); gap: 8px; align-items: center; background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 4px 6px; }
+.bomba-pant { background: var(--bg-main); border: 1px solid var(--line); border-radius: 8px; padding: 3px 6px; display: grid; gap: 0; min-width: 0; box-shadow: inset 0 0 8px rgba(23, 20, 15, .9); }
+.bomba-f { font: 600 .62rem/1.1 var(--sans); color: var(--muted); text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bomba-v { font: 700 1.05rem/1.1 var(--sans); color: var(--oro-claro); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bomba-v small { font: 600 .6rem var(--sans); color: var(--dim); }
+.bomba-conv { font: .6rem/1.2 var(--sans); color: var(--dim); }
+.bomba-mando { display: grid; gap: 0; min-width: 0; position: relative; }
+.tramos { position: relative; height: 8px; border-radius: 4px; margin: 0 8px; overflow: hidden; display: flex; }
+.tramos i { display: block; height: 100%; }
+.bomba-mando input { width: 100%; min-height: 36px; accent-color: var(--oro); margin: 0; }
+.bomba-marcas { position: relative; height: 13px; margin: 0 8px; font: .6rem/1 var(--sans); color: var(--muted); }
+.bomba-marcas span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.bomba-tramo-txt { font: .62rem/1.2 var(--sans); color: var(--dim); }
+.candado { display: flex; align-items: center; gap: 6px; font: .7rem/1.25 var(--sans); color: var(--dim); }
+.candado svg { width: 20px; height: 22px; flex: none; }
+.tog { min-height: 44px; display: inline-flex; align-items: center; justify-content: center; gap: 2px; padding: 2px 8px; border-radius: 10px; background: var(--card2); border: 1px solid var(--line); color: var(--fg); font: 600 .72rem/1.1 var(--sans); cursor: pointer; min-width: 0; text-align: center; flex-direction: column; }
+.tog small { display: block; font-weight: 400; font-size: .58rem; color: var(--muted); }
+.tog[aria-pressed="true"] { border-color: var(--oro); background: rgba(207, 154, 62, .22); box-shadow: inset 0 0 0 1px var(--oro); }
+.dock-nota { font: .66rem/1.3 var(--sans); color: var(--muted); }
+.dock-est { display: grid; gap: 4px; padding: 6px 0; }
+.pasos { display: flex; gap: 4px; }
+.pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+.pasos i.on { background: var(--oro); border-color: var(--oro); } .pasos i.mal { background: var(--rojo); border-color: var(--rojo); } .pasos i.aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
+.dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+
+/* Secciones de abajo */
+.bloque { display: grid; gap: 8px; }
+details.plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 12px; }
+details.plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .86rem var(--sans); color: var(--dim); }
+details.plegable[open] { padding-bottom: 12px; }
+details.farmaco summary { color: var(--fg); }
+details.farmaco summary small { font-weight: 400; color: var(--muted); margin-left: 6px; }
+dl.kv { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2px; margin: 0; font: .82rem/1.45 var(--sans); }
+dl.kv dt { color: var(--oro); font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; margin-top: 8px; }
+dl.kv dd { margin: 0; color: var(--dim); display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+dl.kv dd b { color: var(--fg); }
+.dosis-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.dosis-lista li { border-left: 2px solid var(--line); padding-left: 8px; display: grid; gap: 1px; }
+.otra-fuente { border-left: 3px solid var(--purpura); background: var(--card2); border-radius: 0 10px 10px 0; padding: 6px 9px; display: grid; gap: 4px; }
+.nota-fuentes { border-left: 3px solid var(--purpura); background: var(--card); border-radius: 0 10px 10px 0; padding: 8px 10px; font: .8rem/1.45 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+.nota-fuentes b { color: var(--fg); }
+.nota-tipo { display: inline-block; width: fit-content; font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--fg); background: var(--purpura); border-radius: 5px; padding: 1px 6px; }
+.nota-tipo.calla { background: var(--muted); color: var(--bg); } .nota-tipo.autor { background: var(--oro); color: var(--bg); } .nota-tipo.errata { background: var(--rojo); }
+ul.lista { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .82rem/1.45 var(--sans); color: var(--dim); }
+ul.lista li { border-left: 2px solid var(--line); padding-left: 8px; min-width: 0; overflow-wrap: anywhere; display: grid; gap: 2px; }
+dialog#visor { width: min(96vw, 560px); max-height: 92vh; padding: 10px; border: 1px solid var(--oro); border-radius: 14px; background: var(--card2); color: var(--fg); }
+dialog#visor::backdrop { background: rgba(23, 20, 15, .82); }
+#visor .caja-img { background: var(--text-main); border-radius: 8px; padding: 4px; }
+#visor img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: contain; }
+#visor p { font: .84rem/1.4 var(--sans); color: var(--dim); margin-top: 8px; }
+.elige { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
+.opciones-elige { display: flex; flex-wrap: wrap; gap: 6px; }
+.opciones-elige button { min-height: 44px; font: 600 .78rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; text-align: left; }
+.opciones-elige button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+
+/* Mayéutica */
+.formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+.cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+.num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+.tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.grupo { font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 6px; padding: 1px 6px; }
+.grupo.examen { background: var(--rojo); color: var(--fg); } .grupo.caso { background: var(--purpura); color: var(--fg); }
+.pregunta { font-size: 1rem; line-height: 1.45; }
+.op { display: grid; gap: 8px; }
+.op button.elegida-bien { border-color: var(--verde); } .op button.elegida-mal { border-color: var(--rojo); }
+.respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; font: .9rem/1.45 var(--serif); }
+.ok { color: var(--verde); font: 600 .9rem var(--sans); } .mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+.dia { font: 700 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); }
+dl.paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .82rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 8px 10px; }
+dl.paciente dt { color: var(--muted); } dl.paciente dd { margin: 0; color: var(--fg); }
+dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
+
+/* ============================================================
+   Los dibujos en los dos estilos (mismas piezas, mismos tokens)
+   ============================================================ */
+.dib text { font-family: var(--serif); }
+.dib .rot { fill: var(--text-dim); font-style: italic; }
+.dib .rot-s { fill: var(--text-muted); font-style: italic; }
+.dib .rec-et { fill: var(--c); font-family: var(--sans); font-weight: 700; font-style: normal; }
+.dib .hilo { fill: var(--accent-blue); font-family: var(--sans); font-weight: 700; font-style: normal; }
+.dib .hilo-l { stroke: var(--accent-blue); stroke-dasharray: 3 3; fill: none; }
+.dib .flecha { stroke: var(--text-dim); stroke-width: 1.3; fill: none; }
+.dib .nodo { fill: var(--bg-card); stroke: var(--text-dim); stroke-width: 1; }
+.dib .nodo-t { fill: var(--text-main); font-style: italic; }
+.dib .llave .k { fill: var(--accent-blue); stroke: var(--bg-main); stroke-width: .9; }
+.dib .llave .h { fill: var(--bg-main); }
+.dib .tapon rect { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: 1.2; }
+.dib .tapon line { stroke: var(--text-main); stroke-width: 2.6; stroke-linecap: round; }
+.dib .ca { fill: var(--accent-yellow); }
+.dib .ampc { fill: var(--accent-blue); }
+.dib .hist { fill: var(--accent-purple); }
+.dib .equis { stroke: var(--accent-red); stroke-width: 3; stroke-linecap: round; }
+.dib .sangre { fill: var(--accent-red); fill-opacity: .75; }
+.dib .marca-on { stroke: var(--accent-blue); stroke-width: 3.6; fill: none; stroke-linecap: round; }
+.dib .marca-off { stroke: var(--border-color); stroke-width: 2; fill: none; stroke-linecap: round; }
+.dib .cono { fill: var(--accent-yellow); fill-opacity: .07; stroke: var(--accent-yellow); stroke-opacity: .45; stroke-dasharray: 4 3; }
+.dib .marco-diana { fill: var(--bg-card); stroke: var(--text-muted); stroke-width: 1; }
+.dib .sel .marco-diana { stroke: var(--accent-yellow); stroke-width: 2.2; }
+.dib .resalta { stroke: var(--accent-blue) !important; stroke-width: 2.4 !important; }
+
+/* A · Grabado crema y oro */
+.est-a .dib .fondo { fill: var(--bg-main); }
+.est-a .dib .citop { fill: url(#p-trama); }
+.est-a .dib .capilar { fill: var(--accent-red); fill-opacity: .14; stroke: var(--text-main); stroke-width: 1; }
+.est-a .dib .mb { fill: var(--text-main); fill-opacity: .9; }
+.est-a .dib .mt { stroke: var(--text-muted); stroke-width: .8; }
+.est-a .dib .halo { display: none; }
+.est-a .dib .rec-c { fill: var(--bg-card); stroke: var(--text-main); stroke-width: 1.2; }
+.est-a .dib .rec.on .rec-c { fill: var(--c); fill-opacity: .5; stroke: var(--c); stroke-width: 1.6; }
+.est-a .dib .tinta { fill: url(#p-trama-fina); stroke: var(--text-main); stroke-width: 1.2; }
+.est-a .dib .tinta-suave { fill: var(--bg-card); stroke: var(--text-dim); stroke-width: 1; }
+.est-a .dib .gran { fill: var(--accent-purple); fill-opacity: .5; stroke: var(--text-main); stroke-width: 1; }
+.est-a .dib .gran-p { fill: var(--text-main); }
+.est-a .dib .nucleo { fill: url(#p-punteado); stroke: var(--text-dim); stroke-width: 1.2; }
+.est-a .dib .actina { stroke: var(--text-dim); stroke-width: 1; }
+.est-a .dib .miosina { stroke: var(--accent-red); stroke-width: 3.2; stroke-linecap: round; }
+.est-a .dib .pared { fill: url(#p-pared); stroke: var(--text-main); stroke-width: 1.2; }
+.est-a .dib .canal { fill: var(--accent-purple); fill-opacity: .55; stroke: var(--text-main); stroke-width: 1.1; }
+.est-a .dib .pde { fill: var(--bg-card); stroke: var(--text-main); stroke-width: 1.2; }
+
+/* B · Microscopio de fluorescencia */
+.est-b .dib .fondo { fill: var(--bg-main); }
+.est-b .dib .citop { fill: var(--accent-purple); fill-opacity: .05; }
+.est-b .dib .capilar { fill: var(--accent-red); fill-opacity: .06; stroke: var(--accent-red); stroke-opacity: .35; stroke-width: 1; }
+.est-b .dib .mb, .est-b .dib .mt { opacity: 0; }
+.est-b .dib .halo { stroke: var(--accent-purple); stroke-opacity: .4; stroke-width: 22; fill: none; filter: url(#f-difuso); }
+.est-b .dib .rec-c { fill: none; stroke: var(--c); stroke-opacity: .45; stroke-width: 1.2; }
+.est-b .dib .rec.on .rec-c { fill: var(--c); fill-opacity: .95; stroke: var(--c); stroke-opacity: 1; filter: url(#f-brillo); }
+.est-b .dib .tinta { fill: var(--accent-purple); fill-opacity: .08; stroke: var(--accent-purple); stroke-opacity: .55; stroke-width: 1; }
+.est-b .dib .tinta-suave { fill: none; stroke: var(--text-muted); stroke-opacity: .5; stroke-width: 1; stroke-dasharray: 2 2; }
+.est-b .dib .gran { fill: var(--accent-red); fill-opacity: .85; stroke: none; filter: url(#f-brillo); }
+.est-b .dib .gran-p { fill: var(--text-main); fill-opacity: .7; }
+.est-b .dib .nucleo { fill: var(--accent-purple); fill-opacity: .6; stroke: none; filter: url(#f-difuso); }
+.est-b .dib .actina { stroke: var(--accent-green); stroke-width: 1; stroke-opacity: .8; }
+.est-b .dib .miosina { stroke: var(--accent-red); stroke-width: 3.2; stroke-linecap: round; filter: url(#f-brillo); }
+.est-b .dib .pared { fill: var(--accent-red); fill-opacity: .12; stroke: var(--accent-red); stroke-opacity: .7; stroke-width: 1.2; filter: url(#f-brillo); }
+.est-b .dib .canal { fill: var(--accent-purple); fill-opacity: .9; stroke: none; filter: url(#f-brillo); }
+.est-b .dib .pde { fill: none; stroke: var(--accent-green); stroke-width: 1.4; filter: url(#f-brillo); }
+.est-b .dib .nodo { fill: none; stroke: var(--text-muted); stroke-dasharray: 2 2; }
+.est-b .dib .nodo-t, .est-b .dib .rot { fill: var(--text-dim); font-family: var(--sans); font-style: normal; letter-spacing: .02em; }
+.est-b .dib .rot-s { font-family: var(--sans); font-style: normal; }
+.est-b .dib .llave .k, .est-b .dib .ca, .est-b .dib .ampc, .est-b .dib .hist { filter: url(#f-brillo); }
+.est-b .dib .sangre { fill-opacity: .45; filter: url(#f-brillo); }
+.est-b .dib .flecha { stroke: var(--text-muted); stroke-dasharray: 3 2; }
+.est-b .dib .marco-diana { fill: none; stroke: var(--text-muted); stroke-opacity: .6; }
+</style>
+</head>
+<body class="est-a">
+<!-- Tramas y filtros compartidos por los dibujos (no se ve) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="p-trama" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--accent-yellow)" stroke-opacity=".13" stroke-width=".8"/></pattern>
+    <pattern id="p-trama-fina" width="3" height="3" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)"><line x1="0" y1="0" x2="0" y2="3" style="stroke:var(--text-dim)" stroke-opacity=".2" stroke-width=".5"/></pattern>
+    <pattern id="p-punteado" width="6" height="5" patternUnits="userSpaceOnUse"><circle cx="1.5" cy="1.5" r=".7" style="fill:var(--text-dim)" fill-opacity=".45"/><circle cx="4.5" cy="3.8" r=".6" style="fill:var(--text-dim)" fill-opacity=".3"/></pattern>
+    <pattern id="p-pared" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-red)" stroke-opacity=".45" stroke-width="1"/></pattern>
+    <filter id="f-brillo" filterUnits="userSpaceOnUse" x="-40" y="-40" width="440" height="410"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="f-difuso" filterUnits="userSpaceOnUse" x="-40" y="-40" width="440" height="410"><feGaussianBlur stdDeviation="5"/></filter>
+  </defs>
+</svg>
+<main>
+  <header class="cabecera">
+    <p class="aviso">Para elegir: aún no está en la app</p>
+    <h1>El receptor vivo: <em>la llave, la cerradura y el monitor</em></h1>
+    <p class="lead">Cada fármaco es una <span class="hl-azul">llave</span>: abre unas <span class="hl-a">cerraduras</span> en unas células concretas. Lo que hace la célula es lo que ves en el monitor. <span class="org">ficha · p. 12</span> <span class="org">fisiología general</span></p>
+  </header>
+
+  <section aria-label="Estilo del dibujo">
+    <h3>Elige el estilo del dibujo</h3>
+    <div class="estilos" id="estilos">
+      <button type="button" data-estilo="a" aria-pressed="true">A · Grabado<small>crema y oro, como el vaso</small></button>
+      <button type="button" data-estilo="b" aria-pressed="false">B · Fluorescencia<small>las cerraduras se encienden</small></button>
+    </div>
+  </section>
+
+  <div class="interruptor" role="tablist" aria-label="Modo">
+    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+  </div>
+
+  <section id="zona-momentos" class="bloque" aria-label="Cuatro momentos">
+    <div class="momentos" id="momentos"></div>
+    <p class="ficha-pac" id="ficha-pac"></p>
+  </section>
+
+  <section class="monitor" id="monitor" aria-label="Monitor de cabecera">
+    <div class="mon-cab"><span id="mon-quien">Monitor</span><button type="button" class="pausa" id="pausa" aria-pressed="false">Pausa</button></div>
+    <div class="mon-cuerpo">
+      <svg id="trazas" role="img" aria-label="Curvas del monitor: ECG, presión arterial, pletismografía, PVC y respiración"></svg>
+      <div class="cifras" id="cifras">
+        <div class="cifra c-ecg" data-fila="fc"><span class="et"><span>FC</span><span>lpm</span></span><span class="v" id="n-fc">–</span></div>
+        <div class="cifra c-art" data-fila="pa"><span class="et"><span>ART</span><span>mmHg</span></span><span class="v" id="n-pa">–</span><span class="obj" id="o-pa"></span></div>
+        <div class="cifra c-sat" data-fila="spo2"><span class="et"><span>SpO₂</span><span>%</span></span><span class="v" id="n-spo2">–</span></div>
+        <div class="cifra c-pvc" data-fila="pvc"><span class="et"><span>PVC</span><span>mmHg</span></span><span class="v" id="n-pvc">–</span></div>
+        <div class="cifra c-resp" data-fila="fr"><span class="et"><span>FR</span><span>rpm</span></span><span class="v" id="n-fr">–</span><span class="obj" id="n-t"></span></div>
+      </div>
+    </div>
+    <div class="perfusion" id="perfusion"></div>
+    <div class="mon-pie" id="mon-pie"></div>
+    <div class="detalle-fila" id="detalle-fila" hidden></div>
+  </section>
+
+  <div class="fila" id="fila-explicame"><button type="button" class="b prim" id="explicame">Explícame este estado</button><span class="para" id="explicame-txt"></span></div>
+
+  <section class="bloque" id="zona-modelo" aria-label="Del cuerpo a la célula">
+    <h3>Dónde actúa: toca una diana para verla con lupa</h3>
+    <div class="dibujo" id="caja-cuerpo">
+      <svg id="cuerpo" class="dib" viewBox="0 0 360 100" role="img" aria-label="Seis dianas: corazón, arteriola, vena, mastocito, riñón e hipófisis"></svg>
+    </div>
+    <div class="info-diana" id="info-diana" hidden></div>
+    <p class="para">Marcas del anillo: cuánto actúa el fármaco en esa diana, leído del texto («principal», «débil»), no medido. <span class="org ilu">ilustrativo</span></p>
+
+    <div class="lupa-cab"><span class="lupa-tit" id="lupa-tit">Lupa</span><span id="lupa-org"></span></div>
+    <div class="dibujo" id="caja-lupa">
+      <svg id="lupa" class="dib" viewBox="0 0 360 324" role="img" aria-label="La célula diana con sus receptores"></svg>
+      <div class="tapa" id="tapa" hidden>Primero contesta. El dibujo y las cifras salen después.</div>
+    </div>
+    <div class="leyenda" id="leyenda"></div>
+    <div class="lupa-barra">
+      <div class="seg" role="group" aria-label="Cascada"><button type="button" data-cas="facil" aria-pressed="true">Fácil</button><button type="button" data-cas="completa" aria-pressed="false">Completa</button></div>
+      <button type="button" class="b" id="paso-a-paso">▶ Paso a paso</button>
+    </div>
+    <div class="cascada" id="cascada" aria-live="polite">
+      <p class="cas-cab" id="cas-cab"></p>
+      <ol class="cas-pasos" id="cas-pasos"></ol>
+      <div class="cas-txt" id="cas-txt"></div>
+    </div>
+    <button type="button" class="lamina-ancha" id="fig524" hidden><span class="caja"><img src="../../js/modules/libros/img/mar-fig52-4-glucagon.jpg" alt="Fig. 52.4 de Marino: receptores de glucagón y β, adenilato ciclasa, AMPc, PDE, canal de calcio y proteínas contráctiles" loading="lazy"></span><span><b>Así lo dibuja el libro: Fig. 52.4.</b> El mismo miocito, con el receptor de glucagón, el β, el AMPc, la PDE y el canal de calcio. Tócala para verla grande.</span></button>
+  </section>
+
+  <section id="vista-preguntas" class="bloque" hidden aria-live="polite"><div class="formato" id="preg"></div></section>
+
+  <section id="zona-abajo" class="bloque">
+    <h3>La ficha de cada fármaco de este momento</h3>
+    <div class="bloque" id="fichas-farmaco"></div>
+    <details class="plegable" id="fuentes-estado"><summary>Las fuentes de este estado</summary><ul class="lista" id="lista-fuentes"></ul></details>
+    <h3>Así lo dibuja el libro</h3>
+    <div class="bloque" id="tira"></div>
+    <details class="plegable"><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div class="bloque" id="lista-notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que este receptor aún no enseña</summary><ul class="lista" id="lista-profundizar"></ul></details>
+    <section class="elige" aria-label="Para decidir"><h2>Para decidir</h2><div id="elige"></div><p class="para" id="resumen-elige"></p></section>
+  </section>
+</main>
+
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+
+<div class="dock" id="dock">
+  <div class="dock-in" id="dock-explorar"></div>
+  <div class="dock-in" id="dock-guia" hidden></div>
+  <div class="dock-in dock-est" id="dock-estudio" hidden><div class="pasos" id="dock-pasos"></div><div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div></div>
+</div>
+
+<dialog id="visor"><div class="caja-img"><img id="visor-img" alt=""></div><p id="visor-txt"></p><div class="fila" style="margin-top:8px; justify-content:space-between"><span id="visor-cita"></span><button type="button" class="b" id="visor-cerrar">Cerrar</button></div></dialog>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
+const NS = 'http://www.w3.org/2000/svg';
+const PDF_S = '../../docs/marino-2024-shock-caps14-17.pdf';
+const PDF_R = '../../docs/marino-2024-respiratory-management-caps22-26.pdf';
+const PDF_T = '../../docs/marino-2024-toxicologia-caps52-53-apendices.pdf';
+const IMG52 = '../../js/modules/libros/img/mar-fig52-4-glucagon.jpg';
+
+/* ============================================================
+   1. Citas: «Ver en la ficha» (el enlace cruzado de la app) y el PDF de segunda opción
+   ============================================================ */
+const CARDIO = ['cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs'];
+const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
+const TOX = ['libros', 'marinoToxicos', 'panel-marino-tox-tabs'];
+const UMI = ['sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs'];
+// [destino, título de la ficha, nombre corto, PDF, prefijo del capítulo en el chip]
+const FICHA = {
+  'mc-definiciones': [CARDIO, 'Shock: definiciones y monitorización', 'Shock: definiciones', PDF_S, ''],
+  'mc-vasopresores': [CARDIO, 'Vasopresores en el shock: fármacos y dosis', 'Vasopresores', PDF_S, ''],
+  'mc-cardiogenico-farmaco': [CARDIO, 'Shock cardiogénico: soporte farmacológico', 'Cardiogénico: fármacos', PDF_S, ''],
+  'mc-shock-septico': [CARDIO, 'Shock séptico: definiciones y manejo', 'Shock séptico', PDF_S, ''],
+  'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S, ''],
+  'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar aguda: manejo', 'Embolia pulmonar: manejo', PDF_R, 'cap. 22, '],
+  'mt-bzd-betabloq': [TOX, 'Benzodiacepinas y betabloqueantes', 'Betabloqueantes y glucagón', PDF_T, 'cap. 52, '],
+  'umi-vasoactivos': [UMI, 'Fármacos vasoactivos: receptores y dosis', 'Manual UMI: vasoactivos', null, ''],
+};
+const pag = p => (/[-,]/.test(String(p)) ? 'pp. ' : 'p. ') + p;
+const primeraPag = p => String(p).match(/\d+/)[0];
+function cita(c) {
+  const [[esp, view, panel], titulo, corto, pdf, cap] = FICHA[c.f];
+  const otra = !pdf ? ' otra' : '';
+  return `<span class="cita"><button type="button" class="cita-ir${otra}" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">Ver en la ficha: ${corto} · ${c.sitio} →</button>${pdf ? `<a class="cita-pdf" href="${pdf}#page=${primeraPag(c.p)}" target="_blank" rel="noopener">PDF, ${cap}${pag(c.p)}</a>` : ''}</span>`;
+}
+// El chip de origen de una cita: «ficha · p. N» (o «Manual UMI», que es otra fuente)
+function chip(c) {
+  if (!c) return '';
+  const [, , , pdf, cap] = FICHA[c.f];
+  return pdf ? `<span class="org">ficha · ${cap}${pag(c.p)}</span>` : `<span class="org otra">otra fuente: Manual UMI</span>`;
+}
+// Cita corta: el chip de origen es a la vez el botón «Ver en la ficha» (con su zona de toque de 44 px) y el PDF al lado
+function citaCorta(c) {
+  const [[esp, view, panel], titulo, , pdf, cap] = FICHA[c.f];
+  return `<span class="cita-c"><button type="button" class="cita-ir cita-corta${pdf ? '' : ' otra'}" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">${pdf ? `Ver en la ficha · ${cap}${pag(c.p)}` : 'Ver en el Manual UMI'} →</button>${pdf ? `<a class="cita-pdf-c" href="${pdf}#page=${primeraPag(c.p)}" target="_blank" rel="noopener">PDF</a>` : ''}</span>`;
+}
+const org = (t, ilu) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span>`;
+let toastT = null;
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('.cita-ir'); if (!b) return;
+  const t = $('toast'); t.hidden = false;
+  t.textContent = `En la app, este botón abre la ficha «${b.dataset.titulo}» y resalta «${b.dataset.sitio}». Al volver, regresas aquí.`;
+  clearTimeout(toastT); toastT = setTimeout(() => { t.hidden = true; }, 3600);
+});
+
+// Las citas (los ids son los que se pondrán en las fichas; las páginas, del PDF)
+const C = {
+  t145: { f: 'mc-definiciones', id: 'mc-tabla-14-5', sitio: 'Tabla 14.5', p: 17 },
+  pam: { f: 'mc-definiciones', id: 'mc-shock-ecuacion', sitio: 'Ecuación de la PAM', p: '2-3' },
+  vaso: { f: 'mc-vasopresores', id: 'mc-vasopresores-intro', sitio: 'Los vasopresores', p: 12 },
+  periferica: { f: 'mc-vasopresores', id: 'mc-via-periferica', sitio: 'Vía periférica', p: 12 },
+  extrav: { f: 'mc-vasopresores', id: 'mc-extravasacion', sitio: 'Extravasación', p: 12 },
+  naRec: { f: 'mc-vasopresores', id: 'mc-norepinefrina', sitio: 'Norepinefrina', p: 12 },
+  naDosis: { f: 'mc-vasopresores', id: 'mc-norepinefrina', sitio: 'Norepinefrina: dosis', p: 13 },
+  naSeg: { f: 'mc-vasopresores', id: 'mc-seguridad-na', sitio: 'Efectos adversos de la NA', p: 13 },
+  t144: { f: 'mc-vasopresores', id: 'mc-tabla-14-4', sitio: 'Tabla 14.4', p: 13 },
+  adre: { f: 'mc-vasopresores', id: 'mc-epinefrina', sitio: 'Epinefrina', p: '13-14' },
+  dopa: { f: 'mc-vasopresores', id: 'mc-dopamina', sitio: 'Dopamina', p: '14-15' },
+  fenil: { f: 'mc-vasopresores', id: 'mc-fenilefrina', sitio: 'Fenilefrina', p: 15 },
+  vasopresina: { f: 'mc-vasopresores', id: 'mc-vasopresina', sitio: 'Vasopresina', p: 15 },
+  vasoDosis: { f: 'mc-vasopresores', id: 'mc-vasopresina', sitio: 'Vasopresina: dosis', p: 16 },
+  vasoNota: { f: 'mc-vasopresores', id: 'mc-nota-vasopresina-unidades', sitio: 'Nota: unidades de la vasopresina', p: 16 },
+  angio: { f: 'mc-vasopresores', id: 'mc-angiotensina', sitio: 'Angiotensina II', p: 16 },
+  csNa: { f: 'mc-cardiogenico-farmaco', id: 'mc-cs-vasopresor', sitio: 'Vasopresor', p: '42-43' },
+  dobuta: { f: 'mc-cardiogenico-farmaco', id: 'mc-dobutamina', sitio: 'Dobutamina', p: 43 },
+  t163: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-3', sitio: 'Tabla 16.3', p: 43 },
+  milri: { f: 'mc-cardiogenico-farmaco', id: 'mc-milrinona', sitio: 'Milrinona', p: 44 },
+  levo: { f: 'mc-cardiogenico-farmaco', id: 'mc-levosimendan', sitio: 'Levosimendán', p: 44 },
+  t162: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-2', sitio: 'Tabla 16.2', p: 42 },
+  t172: { f: 'mc-shock-septico', id: 'mc-tabla-17-2', sitio: 'Tabla 17.2', p: 60 },
+  sepVaso: { f: 'mc-shock-septico', id: 'mc-septico-vasopresores', sitio: 'Vasopresores preferidos', p: 60 },
+  cortic: { f: 'mc-shock-septico', id: 'mc-corticoides', sitio: 'Corticoides', p: 61 },
+  anaAdre: { f: 'mc-anafilaxia', id: 'mc-anafilaxia-epinefrina', sitio: 'Epinefrina', p: 65 },
+  t175: { f: 'mc-anafilaxia', id: 'mc-tabla-17-5', sitio: 'Tabla 17.5', p: '65-66' },
+  anaGluc: { f: 'mc-anafilaxia', id: 'mc-glucagon', sitio: 'Glucagón', p: 66 },
+  anaSeg: { f: 'mc-anafilaxia', id: 'mc-segunda-linea', sitio: 'Fármacos de segunda línea', p: 66 },
+  anaShock: { f: 'mc-anafilaxia', id: 'mc-shock-anafilactico', sitio: 'Shock anafiláctico', p: 67 },
+  tepHemo: { f: 'neumo-ep-manejo', id: 'nep-hemodinamica', sitio: 'Manejo hemodinámico', p: 11 },
+  glucMec: { f: 'mt-bzd-betabloq', id: 'mt-glucagon-mecanismo', sitio: 'Glucagón: por qué sirve', p: 10 },
+  fig524: { f: 'mt-bzd-betabloq', id: 'mar-img-52-4', sitio: 'Fig. 52.4', p: 11 },
+  glucDosis: { f: 'mt-bzd-betabloq', id: 'mt-glucagon-dosis', sitio: 'Glucagón: dosis', p: '11-12' },
+  ipde: { f: 'mt-bzd-betabloq', id: 'mt-ipde', sitio: 'Inhibidores de la fosfodiesterasa', p: 12 },
+  umi: { f: 'umi-vasoactivos', id: 'umi-vasoactivos', sitio: 'Receptores y catecolaminas', p: '' },
+};
+
+/* ============================================================
+   2. Los pacientes de los cuatro momentos y el motor (dirección de la ficha; magnitud ilustrativa)
+   ============================================================ */
+const PAULINO = { k: 'paulino', nombre: 'Paulino', tipo: 'sepsis', peso: 80, chip: 'shock séptico',
+  linea: '<b>Paulino</b>, 72 años, 80 kg (ideal 70) · HTA · colangitis aguda litiásica: shock séptico · hora 1, tras 2,1 L de cristaloide' };
+const AURELIO = { k: 'aurelio', nombre: 'Aurelio', tipo: 'cardio', peso: 82, chip: 'shock cardiogénico',
+  linea: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior: shock cardiogénico · con noradrenalina a 5 µg/min' };
+const BEGONA = { k: 'begona', nombre: 'Begoña', tipo: 'anafilaxia', peso: 65, chip: 'anafilaxia',
+  linea: '<b>Begoña</b>, 52 años, 65 kg · toma bisoprolol · anafilaxia por amoxicilina-clavulánico IV · minuto 30' };
+const MOMENTOS = {
+  1: { tit: 'NA de 5 a 25', sub: 'Paulino · séptico', pac: PAULINO, lupa: 'arteriola', ini: { na: 5, vaso: false } },
+  2: { tit: '+ Vasopresina', sub: 'Paulino · séptico', pac: PAULINO, lupa: 'arteriola', ini: { na: 25, vaso: true } },
+  3: { tit: 'El miocito', sub: 'Aurelio · dobutamina, milrinona', pac: AURELIO, lupa: 'miocito', ini: { ino: 'dobuta', dobuta: 5 } },
+  4: { tit: 'El β tapado', sub: 'Begoña · anafilaxia, glucagón', pac: BEGONA, lupa: 'mastocito', ini: { bb: true, adre: 10, gluc: false } },
+};
+const BASE_ST = { na: 0, vaso: false, ino: 'ninguno', dobuta: 5, bb: true, adre: 10, gluc: false };
+const ST = { momento: 1, lupa: 'arteriola', cas: 'facil', ...BASE_ST };
+
+// El α de la NA crece por encima de 10 µg/min y llega al techo a 30 (cap. 14, p. 13); la forma de la curva: ilustrativa
+const alfaNA = na => na <= 3 ? 0 : Math.pow(Math.min(1, (na - 3) / 27), 1.3);
+const betaNA = na => Math.min(na, 10) / 10;
+function calcular(s = ST) {
+  const pac = MOMENTOS[s.momento].pac, tipo = pac.tipo;
+  let r;
+  if (tipo === 'sepsis') {
+    // Paulino a NA 0: PA 74/40 (PAM 51), FC 112; a 24 µg/min, PAM 62 (el caso). Direcciones: cap. 14, p. 13 y 15.
+    const b = betaNA(s.na), a = alfaNA(s.na), v = s.vaso ? 1 : 0;
+    const ic = 4.0 + 0.4 * b - 0.1 * a - 0.05 * v;
+    const irvs = 11.75 * (1 + 0.195 * a + 0.166 * v);
+    const pvc = 4;
+    r = { ic, irvs, pvc, pam: pvc + ic * irvs, fc: 112 + 2 * b - 3 * a, pp: 34 + (ic - 4) * 6, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null };
+  } else if (tipo === 'cardio') {
+    // Aurelio con NA 5: PA 86/58, FC 108, IC 1,9. Dobutamina: FC +5-15 y la PA se mantiene (p. 43); milrinona: menos
+    // taquicardia y PA que baja (p. 44). Cuánto: ilustrativo.
+    const d = s.ino === 'dobuta' ? s.dobuta : 0, m = s.ino === 'milri' ? 1 : 0;
+    const ic = 1.9 + 0.055 * Math.min(d, 10) + 0.015 * Math.max(0, d - 10) + 0.5 * m;
+    const pvc = 12 - 0.1 * d - 1 * m, pam = 67.3 + 0.2 * d - 7 * m;
+    r = { ic, pvc, pam, irvs: (pam - pvc) / ic, fc: 108 + 1.2 * d + 3 * m, pp: 28 + (ic - 1.9) * 8, spo2: 92, fr: 26, t: 36.7, lact: 3.2, glu: null };
+  } else {
+    // Begoña: PA 72/40 sin adrenalina. La adrenalina frena la salida de mediadores por el β; el betabloqueante lo atenúa
+    // o lo anula; el glucagón puede devolver la respuesta (cap. 17, p. 65-67). Cuánto: ilustrativo.
+    const a = s.adre, g = s.gluc ? 1 : 0, bEf = s.bb ? 0.15 : 1, bMast = s.bb ? (g ? 0.56 : 0.15) : 1;
+    const rel = 1 - 0.8 * Math.min(a, 10) / 10 * bMast;   // fracción de mediadores que sale
+    const ic = 3.0 + 0.04 * a * bEf + 0.5 * g, pvc = 3 + 2 * (1 - rel);
+    const irvs = 15.9 * (1 + 0.2 * (1 - rel)) * (1 + 0.008 * a);
+    r = { ic, irvs, pvc, pam: pvc + ic * irvs, fc: (s.bb ? 84 : 118) + 1.5 * a * bEf + 12 * g, pp: 32 + (ic - 3) * 8, spo2: 93, fr: 28, t: 36.8,
+      lact: a > 0 ? 'sube' : null, glu: a > 0 || g ? 'sube' : null, rel };
+  }
+  // Paciente posible (farmacos §5.3): si algo sale de aquí, se busca el error en su origen; el clamp solo avisa
+  const fuera = [];
+  if (r.pam < 40 || r.pam > 130) fuera.push('PAM'); if (r.fc < 40 || r.fc > 170) fuera.push('FC'); if (r.ic < 1.2 || r.ic > 5) fuera.push('IC'); if (r.pvc < 0 || r.pvc > 25) fuera.push('PVC');
+  if (fuera.length) console.warn('Paciente imposible en', fuera.join(', '), JSON.stringify(s));
+  r.pad = r.pam - r.pp / 3; r.pas = r.pam + 2 * r.pp / 3; r.soporte = 'no';
+  const R = { fc: Math.round(r.fc), pas: Math.round(r.pas), pad: Math.round(r.pad), pa: Math.round(r.pam), spo2: r.spo2, fr: r.fr, t: r.t,
+    pvc: Math.round(r.pvc), ic: +r.ic.toFixed(1), irvs: +r.irvs.toFixed(1), lact: r.lact, glu: r.glu };
+  R.raw = r; R.tipo = tipo; R.geff = 0.6;
+  return R;
+}
+
+/* ============================================================
+   3. El monitor de cabecera (misma pieza que la cabecera del shock; formas ilustrativas)
+   ============================================================ */
+const gauss = (x, m, s) => Math.exp(-((x - m) * (x - m)) / (2 * s * s));
+function ecg(tau, T) {
+  const k = Math.min(1, T / 0.8);
+  return 0.12 * gauss(tau, 0.08 * k, 0.022) - 0.1 * gauss(tau, 0.165 * k, 0.006) + 1.0 * gauss(tau, 0.185 * k, 0.009)
+    - 0.25 * gauss(tau, 0.205 * k, 0.008) + 0.28 * gauss(tau, 0.42 * k, 0.05 * k);
+}
+function art(tau, T, resp, R) {
+  const r = R.raw, pas = r.pas, pad = r.pad, pp = pas - pad, k = Math.min(1, T / 0.8);
+  const up = 0.11 * k, notch = 0.33 * k;
+  let p;
+  if (tau < up) p = pad + pp * Math.sin((tau / up) * Math.PI / 2);
+  else if (tau < notch) p = pas - pp * 0.32 * Math.pow((tau - up) / (notch - up), 1.4);
+  else { const pn = pas - pp * 0.36; p = pad + (pn + pp * 0.06 * gauss(tau, notch + 0.04 * k, 0.02) - pad) * Math.exp(-(tau - notch) / (0.55 * T)); }
+  if (R.tipo === 'sepsis' || R.tipo === 'anafilaxia') p -= pp * 0.08 * gauss(tau, notch, 0.03);
+  return p;
+}
+function pleth(tau, T, R) {
+  const f = ((tau - 0.18) / T + 1) % 1;
+  const v = Math.sin(Math.min(1, f / 0.25) * Math.PI / 2) * (f < 0.25 ? 1 : Math.exp(-(f - 0.25) / 0.45)) + 0.12 * gauss(f, 0.45, 0.04);
+  return v * ({ sepsis: 1.0, cardio: 0.45, anafilaxia: 0.9 }[R.tipo] ?? 0.8);
+}
+function pvc(tau, T, resp, R) {
+  const f = tau / T;
+  return R.raw.pvc + 1.6 * gauss(f, 0.12, 0.05) + 0.8 * gauss(f, 0.3, 0.04) + 1.3 * gauss(f, 0.62, 0.06) - 1.8 * Math.max(0, Math.sin(resp * 2 * Math.PI));
+}
+const respir = resp => 0.5 - 0.5 * Math.cos(resp * 2 * Math.PI);
+const FILAS = [
+  { k: 'ecg', y: 3, h: 37, rot: 'II', col: 'var(--accent-green)' },
+  { k: 'art', y: 45, h: 56, rot: 'ART', col: 'var(--accent-red)', min: 20, max: 150 },
+  { k: 'pleth', y: 107, h: 34, rot: 'Pleth', col: 'var(--accent-yellow)' },
+  { k: 'pvc', y: 147, h: 36, rot: 'PVC', col: 'var(--accent-purple)', min: 0, max: 30 },
+  { k: 'resp', y: 190, h: 42, rot: 'Resp', col: 'var(--text-dim)' },
+];
+let W = 240, NP = 210, buffers = {}, cursor = 0, faseResp = 0, tauLat = 0, pausado = false, ultimoT = 0, R = null, acum = 0;
+const SEG = 4.2, GUT = 30;
+function montarTrazas() {
+  const svg = $('trazas'); W = Math.max(150, Math.round(svg.getBoundingClientRect().width));
+  svg.setAttribute('viewBox', `0 0 ${W} 236`);
+  let h = '';
+  for (const f of FILAS) {
+    h += `<line x1="0" y1="${f.y + f.h + 1.5}" x2="${W}" y2="${f.y + f.h + 1.5}" stroke="rgba(196,154,74,.12)"/>`;
+    h += `<text x="2" y="${f.y + 10}" font-size="9.5" fill="${f.col}" font-family="system-ui, sans-serif" font-weight="600">${f.rot}</text>`;
+    if (f.k === 'art') h += `<line id="l65" x1="${GUT}" x2="${W}" stroke="var(--accent-red)" stroke-dasharray="3 4" stroke-opacity=".7"/><text id="t65" x="${GUT - 3}" text-anchor="end" font-size="9" fill="var(--accent-red)" font-family="system-ui, sans-serif">65</text>`
+      + `<line id="lpam" x1="${GUT}" x2="${W}" stroke="var(--accent-yellow)" stroke-opacity=".55"/><text id="tpam" x="${GUT - 3}" text-anchor="end" font-size="8.5" fill="var(--accent-yellow)" font-family="system-ui, sans-serif">PAM</text>`;
+    h += `<path id="tr-${f.k}" fill="none" stroke="${f.col}" stroke-width="1.6" stroke-linejoin="round"/>`;
+  }
+  svg.innerHTML = h;
+  NP = W - GUT; buffers = {}; for (const f of FILAS) buffers[f.k] = new Array(NP).fill(null);
+  cursor = 0;
+}
+function yDe(f, v) {
+  if (f.k === 'ecg') return f.y + f.h * 0.72 - v * f.h * 0.62;
+  if (f.k === 'pleth') return f.y + f.h * 0.94 - v * f.h * 0.72;
+  if (f.k === 'resp') return f.y + f.h * 0.92 - v * f.h * 0.62;
+  return f.y + f.h - (clamp(v, f.min, f.max) - f.min) / (f.max - f.min) * f.h;
+}
+function muestra(dt) {
+  const T = 60 / R.raw.fc, Tr = 60 / R.raw.fr;
+  tauLat += dt; if (tauLat >= T) tauLat -= T;
+  faseResp = (faseResp + dt / Tr) % 1;
+  const vals = { ecg: ecg(tauLat, T), art: art(tauLat, T, faseResp, R), pleth: pleth(tauLat, T, R), pvc: pvc(tauLat, T, faseResp, R), resp: respir(faseResp) };
+  for (const f of FILAS) buffers[f.k][cursor] = yDe(f, vals[f.k]);
+  cursor = (cursor + 1) % NP;
+  for (let j = 1; j <= 7; j++) { const c = (cursor + j - 1) % NP; for (const f of FILAS) buffers[f.k][c] = null; }
+}
+function pintarTrazas() {
+  for (const f of FILAS) {
+    const b = buffers[f.k]; let d = '', pluma = false;
+    for (let x = 0; x < NP; x++) { const y = b[x]; if (y == null) { pluma = false; continue; } d += (pluma ? 'L' : 'M') + (x + GUT) + ' ' + y.toFixed(1); pluma = true; }
+    $('tr-' + f.k).setAttribute('d', d);
+  }
+  const fa = FILAS[1], y65 = yDe(fa, 65), yp = yDe(fa, R.raw.pam);
+  $('l65').setAttribute('y1', y65); $('l65').setAttribute('y2', y65);
+  $('lpam').setAttribute('y1', yp); $('lpam').setAttribute('y2', yp);
+  if (Math.abs(yp - y65) < 12) { const arr = Math.min(yp, y65), aba = Math.max(yp, y65);
+    $(yp < y65 ? 'tpam' : 't65').setAttribute('y', arr - 1); $(yp < y65 ? 't65' : 'tpam').setAttribute('y', Math.max(aba, arr + 1) + 10); }
+  else { $('t65').setAttribute('y', y65 + 3); $('tpam').setAttribute('y', yp + 3); }
+}
+function llenarEstatico() { for (let i = 0; i < NP; i++) muestra(SEG / NP); pintarTrazas(); }
+
+// Objetivos de cada tabla (ficha). Se comparan con el valor redondeado que se ve.
+const OBJ = {
+  sepsis: { nombre: 'Tabla 14.5', cita: C.t145, filas: { pa: ['≥65', v => v >= 65], ic: ['≥2,5', v => v >= 2.5], lact: ['<2', v => v < 2] } },
+  cardio: { nombre: 'Tabla 16.2', cita: C.t162, filas: { pa: ['≥65', v => v >= 65], ic: ['≥2,5', v => v >= 2.5], irvs: ['25-30', v => v >= 25 && v <= 30], lact: ['<2', v => v < 2] } },
+  anafilaxia: { nombre: 'PAM del shock anafiláctico', cita: C.anaShock, filas: { pa: ['≥65', v => v >= 65] } },
+};
+// Las cuatro cifras de abajo: grandes las que mueve el fármaco; apagadas las que no toca en este momento
+const PERF = [
+  { k: 'ic', et: 'IC', u: 'L/min/m²', d: 1 }, { k: 'irvs', et: 'IRVS', u: 'UW·m²', d: 1 },
+  { k: 'lact', et: 'Lactato', u: 'mmol/L', d: 1 }, { k: 'glu', et: 'Glucemia', u: '' },
+];
+let modo = 'explorar', tapado = false;
+function marca(k, v) {
+  const ob = OBJ[R.tipo].filas[k]; if (!ob || typeof v !== 'number') return { cls: '', txt: '' };
+  return ob[1](v) ? { cls: 'si', txt: '<span class="marca si">✓</span>' } : { cls: 'no', txt: '<span class="marca no">✗</span>' };
+}
+function pintarCifras() {
+  const tap = tapado;
+  $('n-fc').innerHTML = tap ? '?' : R.fc;
+  $('n-pa').innerHTML = tap ? '?' : `${R.pas}/${R.pad}<small>(${R.pa})</small>`;
+  const mp = marca('pa', R.pa);
+  $('o-pa').innerHTML = tap ? '' : `${mp.txt} PAM ≥65`;
+  $('n-spo2').innerHTML = tap ? '?' : R.spo2;
+  $('n-pvc').innerHTML = tap ? '?' : R.pvc;
+  $('n-fr').innerHTML = tap ? '?' : R.fr;
+  $('n-t').textContent = tap ? '' : `T ${coma(R.t, 1)} °C`;
+  document.querySelectorAll('#cifras .cifra').forEach(c => c.classList.toggle('oculto', tap));
+  const o = OBJ[R.tipo];
+  $('perfusion').innerHTML = PERF.map(p => {
+    const v = R[p.k];
+    let val, t, cls = '';
+    if (p.k === 'lact' || p.k === 'glu') {
+      if (v == null) { val = '—'; t = p.k === 'lact' ? 'no cambia en minutos' : 'sin dato'; cls = 'apagada'; }
+      else if (v === 'sube') { val = '↑'; t = p.k === 'lact' ? 'sube: producción aeróbica' : (ST.gluc ? 'sube: α y glucagón' : 'sube: el α frena la insulina'); cls = 'encendida'; }
+      else { val = coma(v, p.d || 0); t = 'fijo en este momento'; cls = 'apagada'; }
+    } else { val = coma(v, p.d || 0); const ob = o.filas[p.k]; t = ob ? 'obj. ' + ob[0] : 'sin objetivo'; }
+    const m = tap || typeof v !== 'number' ? { cls: '', txt: '' } : marca(p.k, v);
+    return `<button type="button" class="celda ${m.cls} ${tap ? 'oculto' : cls}" data-fila="${p.k}"><span class="k"><span>${p.et}</span>${m.txt}</span><span class="g">${tap ? '?' : val}${p.u ? `<small>${p.u}</small>` : ''}</span><span class="t">${tap ? '' : t}</span></button>`;
+  }).join('');
+  $('mon-pie').innerHTML = `${org('cifras y curvas: ilustrativo', true)} <span>Objetivos: ${o.nombre}</span> ${chip(o.cita)}`;
+}
+const EXPLICA_FILA = {
+  fc: ['La FC: la sube el β del nodo (adrenalina, dobutamina: +5-15 lpm) y la frena el betabloqueante. La noradrenalina apenas la mueve.', C.dobuta],
+  pa: ['La PAM sale de PAM = GC × RVS + PAD: el fármaco que aprieta mueve la RVS; el que empuja, el gasto. Objetivo ≥65 mmHg.', C.pam],
+  spo2: ['La SpO₂ no la mueve ninguno de estos fármacos en este momento: su valor es ilustrativo.', null],
+  pvc: ['La PVC: en estos cuatro momentos apenas cambia; su valor es ilustrativo.', null],
+  fr: ['La FR no tiene objetivo; su valor es ilustrativo.', null],
+  ic: ['El IC lo sube el β₁ del miocito (dobutamina, la NA a dosis baja) o la milrinona por otra vía. Objetivo ≥2,5 L/min/m².', C.t145],
+  irvs: ['IRVS = (PAM − PVC) / IC, en unidades Wood·m². La sube el α₁ (o el V₁) de la arteriola. Objetivo 25-30 solo en la Tabla 16.2.', C.t162],
+  lact: ['La adrenalina sube el lactato por producción aeróbica: engaña, no es hipoperfusión.', C.adre],
+  glu: ['La adrenalina sube la glucemia: el α frena la secreción de insulina. El glucagón también la sube (hiperglucemia leve).', C.adre],
+};
+$('monitor').addEventListener('click', ev => {
+  const c = ev.target.closest('[data-fila]'); if (!c || tapado) return;
+  const [t, ci] = EXPLICA_FILA[c.dataset.fila] || []; if (!t) return;
+  const d = $('detalle-fila'); d.hidden = false; d.innerHTML = `<span>${t}${ci ? '' : ' ' + org('ilustrativo', true)}</span>${ci ? cita(ci) : ''}`;
+});
+
+/* ============================================================
+   4. Formas: cerraduras (el negativo) y llaves (el positivo). Una sola tabla (farmacos §2.3)
+   ============================================================ */
+const MT = 72;   // línea de las cerraduras (cara de fuera de la membrana)
+const RECEP = {
+  a1: { nombre: 'α₁', c: 'var(--accent-red)', forma: 'muesca triangular', muesca: 'L-7 72 L0 84 L7 72', bit: 'M-8 0 L0 -8 L8 0 L0 12 Z' },
+  b1: { nombre: 'β₁', c: 'var(--accent-yellow)', forma: 'muesca semicircular', muesca: 'L-7 72 A7 7 0 0 0 7 72', bit: 'M-7 0 A7 7 0 0 0 7 0 A7 7 0 0 0 -7 0 Z' },
+  b2: { nombre: 'β₂', c: 'var(--text-main)', forma: 'muesca cuadrada', muesca: 'L-6 72 L-6 80 L6 80 L6 72', bit: 'M-6 -6 L6 -6 L6 7 L-6 7 Z' },
+  v1: { nombre: 'V₁', c: 'var(--accent-purple)', forma: 'hexágono', muesca: 'L-8 72 L-4 80 L4 80 L8 72', bit: 'M-8 0 L-4 -7.5 L4 -7.5 L8 0 L4 7.5 L-4 7.5 Z' },
+  gluc: { nombre: 'glucagón', c: 'var(--accent-green)', forma: 'óvalo', muesca: 'L-8 72 A8 6 0 0 0 8 72', bit: 'M-8 0 A8 6 0 0 0 8 0 A8 6 0 0 0 -8 0 Z' },
+  h: { nombre: 'H₁ / H₂', c: 'var(--accent-purple)', forma: 'cruz', muesca: 'L-7 72 L-7 76 L-2.5 76 L-2.5 82 L2.5 82 L2.5 76 L7 76 L7 72', bit: '' },
+};
+function recCuerpo(t) { return `M-13 124 L-13 76 Q-13 72 -9 72 ${RECEP[t].muesca} L9 72 Q13 72 13 76 L13 124 Q13 126 11 126 L-11 126 Q-13 126 -13 124 Z`; }
+function receptor(t, x, id, tf) {
+  return `<g class="rec rec-${t}" id="${id}" data-tipo="${t}" data-x="${x}" style="--c:${RECEP[t].c}" transform="${tf || `translate(${x} 0)`}"><path class="rec-c" d="${recCuerpo(t)}"/></g>`;
+}
+function llaveSVG(t) {
+  return `<rect class="k" x="-1.7" y="-27" width="3.4" height="20" rx="1"/><circle class="k" cx="0" cy="-31" r="5.5"/><circle class="h" cx="0" cy="-31" r="2.1"/><rect class="k" x="1.7" y="-20" width="4" height="2.6"/><path class="k" d="${RECEP[t].bit}"/>`;
+}
+function tapon() { return `<rect x="-9" y="-6" width="18" height="12" rx="3"/><line x1="-12" y1="0" x2="12" y2="0"/>`; }
+// Icono pequeño de la cerradura para la leyenda
+function icoCerr(t) {
+  const d = recCuerpo(t);
+  return `<svg viewBox="-16 64 32 30" aria-hidden="true"><path d="${d}" style="fill:var(--bg-card);stroke:${RECEP[t].c};stroke-width:2"/></svg>`;
+}
+function icoLlave() { return `<svg viewBox="-10 -38 20 52" aria-hidden="true"><g style="fill:var(--accent-blue)"><rect x="-1.7" y="-27" width="3.4" height="20"/><circle cx="0" cy="-31" r="5.5"/><path d="${RECEP.a1.bit}"/></g></svg>`; }
+function icoTapon() { return `<svg viewBox="-13 -8 26 16" aria-hidden="true"><rect x="-9" y="-6" width="18" height="12" rx="3" style="fill:var(--bg-main);stroke:var(--text-muted)"/><line x1="-12" y1="0" x2="12" y2="0" style="stroke:var(--text-main);stroke-width:2.6"/></svg>`; }
+
+// La membrana: dos filas de cuentas con sus colas (como la Fig. 52.4), con huecos donde están los receptores
+function membrana(x0, x1, huecos) {
+  let h = `<path class="halo" d="M${x0} 87 L${x1} 87"/>`;
+  for (let x = x0 + 4; x < x1; x += 8.5) {
+    if (huecos.some(([a, b]) => x > a - 3 && x < b + 3)) continue;
+    h += `<line class="mt" x1="${x - 1}" y1="80" x2="${x - 1}" y2="94"/><line class="mt" x1="${x + 1}" y1="80" x2="${x + 1}" y2="94"/><circle class="mb" cx="${x}" cy="77" r="3.3"/><circle class="mb" cx="${x}" cy="97" r="3.3"/>`;
+  }
+  return h;
+}
+function capilar(x0, x1) {
+  return `<rect class="capilar" x="${x0}" y="4" width="${x1 - x0}" height="22" rx="11"/><text class="rot-s" x="${x1 - 12}" y="19" font-size="9.5" text-anchor="end">sangre</text><g id="flujo"></g>`;
+}
+
+/* ============================================================
+   5. Las tres células (lupa). Cada una se monta una vez y se actualiza con el estado
+   ============================================================ */
+const CELULAS = {
+  arteriola: {
+    tit: 'Lupa: célula de músculo liso de la arteriola',
+    org: () => org('fisiología general') + ' ' + chip(C.naRec),
+    receptores: [['a1', 26], ['a1', 62], ['a1', 98], ['a1', 134], ['a1', 170], ['a1', 206], ['v1', 250], ['v1', 286], ['b2', 328]],
+    leyenda: ['a1', 'v1', 'b2'],
+    montar() {
+      let h = `<rect class="fondo" x="0" y="0" width="360" height="324"/><rect class="citop" x="0" y="100" width="360" height="224"/>`;
+      h += capilar(0, 360);
+      h += membrana(0, 360, this.receptores.map(([, x]) => [x - 13, x + 13]));
+      h += this.receptores.map(([t, x], i) => receptor(t, x, `r-${t}-${i}`)).join('');
+      h += `<path class="flecha" d="M14 130 L218 130 M238 130 L298 130"/><text class="rec-et" style="--c:var(--accent-red)" x="116" y="144" font-size="10.5" text-anchor="middle">α₁</text>
+        <text class="rec-et" style="--c:var(--accent-purple)" x="268" y="144" font-size="10.5" text-anchor="middle">V₁</text><text class="rec-et" style="--c:var(--text-main)" x="328" y="144" font-size="10.5" text-anchor="middle">β₂</text>`;
+      // Completa: Gq → IP₃/DAG → Ca²⁺ del retículo → actina y miosina (fisiología general)
+      h += `<g class="solo-completa"><path class="flecha" d="M116 148 L120 160 M268 148 L151 170"/><ellipse class="nodo" id="n-gq" cx="128" cy="172" rx="22" ry="11"/><text class="nodo-t" x="128" y="176" font-size="10.5" text-anchor="middle">Gq</text>
+        <path class="flecha" d="M128 183 L128 194"/><rect class="nodo" id="n-ip3" x="92" y="195" width="72" height="20" rx="10"/><text class="nodo-t" x="128" y="209" font-size="10" text-anchor="middle">IP₃ · DAG</text>
+        <path class="flecha" d="M112 214 L82 230"/></g>`;
+      h += `<g class="solo-facil"><path class="flecha" d="M116 148 L120 166 M268 148 L182 178"/><rect class="nodo" id="n-orden" x="84" y="168" width="96" height="24" rx="12"/><text class="nodo-t" x="132" y="184" font-size="10.5" text-anchor="middle">la orden</text><path class="flecha" d="M112 192 L82 230"/></g>`;
+      h += `<path class="tinta-suave" id="n-re" d="M18 240 C30 228 46 250 60 236 C74 222 88 246 104 234 L104 246 C88 258 74 236 60 250 C46 262 30 242 18 254 Z"/>
+        <text class="rot" x="62" y="270" font-size="9.5" text-anchor="middle"><tspan class="solo-completa">retículo</tspan><tspan class="solo-facil">depósito de calcio</tspan></text><g id="ca-arteriola"></g>`;
+      // La célula que se acorta (el huso) con sus filamentos
+      h += `<g id="fil"><ellipse class="tinta" id="huso" cx="190" cy="282" rx="66" ry="17"/><g id="filamentos"></g></g>
+        <text class="rot" x="190" y="314" font-size="9.5" text-anchor="middle"><tspan class="solo-completa">actina y miosina</tspan><tspan class="solo-facil">la célula se aprieta</tspan></text>`;
+      // La luz de la arteriola (lo que ve el monitor)
+      h += `<text class="rot" x="306" y="176" font-size="9.5" text-anchor="middle">la luz</text><g id="luz"><circle class="pared" cx="306" cy="226" r="40"/><circle class="sangre" id="luz-sangre" cx="306" cy="226" r="24"/></g>
+        <path class="hilo-l" d="M256 282 C276 282 286 274 292 266"/><text class="hilo" id="hilo-txt" x="306" y="300" font-size="10" text-anchor="middle">IRVS</text><text class="hilo" id="hilo-txt2" x="306" y="314" font-size="10" text-anchor="middle">PAM</text>`;
+      return h + `<g id="llaves"></g><g id="guia-capa"></g>`;
+    },
+    ocupacion(s) {
+      const pac = MOMENTOS[s.momento].pac.tipo;
+      let a1 = 0, v1 = 0, b2 = 0, tapa = new Set();
+      if (pac === 'sepsis') { const a = alfaNA(s.na); a1 = s.na > 0 ? Math.max(1, Math.ceil(a * 6 - 0.001)) : 0; v1 = s.vaso ? 2 : 0; }
+      if (pac === 'cardio') { a1 = 1; b2 = s.ino === 'dobuta' && s.dobuta > 0 ? 1 : 0; }
+      if (pac === 'anafilaxia') { a1 = s.adre > 0 ? Math.ceil(s.adre / 15 * 3) : 0; b2 = s.adre > 0 ? 1 : 0; }
+      return { a1, v1, b2, tapa };
+    },
+    actualizar(s) {
+      const pac = MOMENTOS[s.momento].pac.tipo;
+      const k = pac === 'sepsis' ? clamp(alfaNA(s.na) + (s.vaso ? 0.45 : 0), 0, 1.2) : pac === 'cardio' ? (s.ino === 'milri' ? 0.25 : s.ino === 'dobuta' ? 0.45 : 0.55) : 0.15 + (s.adre / 15) * 0.4;
+      const f = 1 - 0.2 * k / 1.2;
+      $('huso').setAttribute('rx', (66 * f).toFixed(1));
+      let fil = '';
+      for (let i = 0; i < 4; i++) {
+        const y = 272 + i * 7, w = 50 * f;
+        fil += `<line class="actina" x1="${190 - w}" y1="${y}" x2="${190 + w}" y2="${y}"/><line class="miosina" x1="${190 - w * (0.35 + 0.25 * k)}" y1="${y}" x2="${190 + w * (0.35 + 0.25 * k)}" y2="${y}"/>`;
+      }
+      $('filamentos').innerHTML = fil;
+      const luzR = clamp(24 * Math.pow(14 / R.raw.irvs, 1.6), 9, 32);
+      $('luz-sangre').setAttribute('r', luzR.toFixed(1));
+      let ca = '';
+      const n = Math.round(2 + 7 * k);
+      for (let i = 0; i < n; i++) ca += `<circle class="ca" data-ca="${i}" cx="${(90 + (i * 23) % 70).toFixed(1)}" cy="${(250 + (i * 13) % 26).toFixed(1)}" r="2.6"/>`;
+      $('ca-arteriola').innerHTML = ca;
+      $('hilo-txt').textContent = tapado ? 'IRVS ?' : `IRVS ${coma(R.irvs, 1)}`;
+      $('hilo-txt2').textContent = tapado ? 'PAM ?' : `PAM ${R.pa}`;
+    },
+  },
+  miocito: {
+    tit: 'Lupa: miocito del ventrículo (la Fig. 52.4 viva)',
+    org: () => chip(C.fig524),
+    receptores: [['gluc', 30], ['gluc', 66], ['b1', 120], ['b1', 156], ['b1', 192]],
+    leyenda: ['gluc', 'b1'],
+    montar() {
+      let h = `<rect class="fondo" x="0" y="0" width="360" height="324"/><rect class="citop" x="0" y="100" width="360" height="224"/>`;
+      h += capilar(0, 360);
+      h += membrana(0, 360, [...this.receptores.map(([, x]) => [x - 13, x + 13]), [282, 318]]);
+      h += this.receptores.map(([t, x], i) => receptor(t, x, `r-${t}-${i}`)).join('');
+      // El canal de calcio (dos pilares, como en el libro)
+      h += `<g id="canal-ca"><rect class="canal" id="canal-i" x="283" y="66" width="12" height="62" rx="5"/><rect class="canal" id="canal-d" x="305" y="66" width="12" height="62" rx="5"/></g>
+        <text class="rec-et" style="--c:var(--accent-green)" x="48" y="144" font-size="10" text-anchor="middle">glucagón</text><text class="rec-et" style="--c:var(--accent-yellow)" x="156" y="144" font-size="10.5" text-anchor="middle">β₁</text>
+        <text class="rot" x="340" y="140" font-size="9.5" text-anchor="middle">canal</text><text class="rot" x="340" y="152" font-size="9.5" text-anchor="middle">de Ca²⁺</text>`;
+      // Adenilato ciclasa, AMPc, proteína cinasa, PDE (cap. 52, p. 10-11)
+      h += `<path class="flecha" d="M48 148 L92 166 M156 148 L118 166"/><rect class="nodo" id="n-ac" x="50" y="166" width="110" height="22" rx="11"/>
+        <text class="nodo-t" x="105" y="181" font-size="10" text-anchor="middle"><tspan class="solo-completa">adenilato ciclasa</tspan><tspan class="solo-facil">fabrica la señal</tspan></text>
+        <text class="rot" x="24" y="222" font-size="10" text-anchor="middle">ATP</text><path class="flecha" d="M38 218 L112 218"/><path class="flecha" d="M105 189 L130 206"/>
+        <g id="nube-ampc"></g><ellipse class="nodo" id="n-ampc" cx="140" cy="218" rx="22" ry="11"/><text class="nodo-t" x="140" y="222" font-size="10.5" text-anchor="middle"><tspan class="solo-completa">AMPc</tspan><tspan class="solo-facil">señal</tspan></text>
+        <g class="solo-completa"><path class="flecha" d="M162 212 L200 190"/><rect class="nodo" id="n-pk" x="190" y="172" width="98" height="20" rx="10"/><text class="nodo-t" x="239" y="186" font-size="10" text-anchor="middle">proteína cinasa</text><path class="flecha" d="M262 172 C276 158 284 146 292 132"/></g>
+        <g class="solo-facil"><path class="flecha" d="M162 212 C220 196 268 170 292 132"/></g>
+        <path class="flecha" d="M140 229 L140 252"/><ellipse class="pde" id="n-pde" cx="140" cy="264" rx="20" ry="11"/><text class="nodo-t" x="140" y="268" font-size="10" text-anchor="middle">PDE</text>
+        <path class="flecha" d="M140 275 L140 292"/><text class="rot" x="140" y="306" font-size="10" text-anchor="middle">AMP</text>
+        <g id="milri" opacity="0"><text class="hilo" x="62" y="268" font-size="10" text-anchor="middle">milrinona</text><path class="hilo-l" d="M94 264 L114 264"/><path class="equis" d="M113 256 L123 272 M123 256 L113 272"/></g>
+        <text class="rot" x="140" y="320" font-size="9" text-anchor="middle"><tspan class="solo-completa">la PDE corta el AMPc</tspan><tspan class="solo-facil">la tijera de la señal</tspan></text>`;
+      // Proteínas contráctiles y el calcio que baja
+      h += `<g id="ca-flujo"></g><g id="fil"><g id="sarcomeros"></g></g>
+        <text class="rot" x="294" y="296" font-size="9.5" text-anchor="middle"><tspan class="solo-completa">proteínas contráctiles</tspan><tspan class="solo-facil">empuja</tspan></text>
+        <text class="hilo" id="hilo-txt" x="294" y="312" font-size="10" text-anchor="middle">IC</text>`;
+      return h + `<g id="llaves"></g><g id="guia-capa"></g>`;
+    },
+    ocupacion(s) {
+      const pac = MOMENTOS[s.momento].pac.tipo;
+      let b1 = 0, gluc = 0, tapa = new Set();
+      if (pac === 'sepsis') b1 = s.na > 0 ? Math.max(1, Math.ceil(betaNA(s.na) * 2)) : 0;
+      if (pac === 'cardio') b1 = Math.max(1, s.ino === 'dobuta' ? Math.ceil(Math.min(s.dobuta, 10) / 10 * 3) : 0);
+      if (pac === 'anafilaxia') { b1 = s.adre > 0 && !s.bb ? Math.ceil(s.adre / 15 * 3) : 0; gluc = s.gluc ? 2 : 0; if (s.bb) tapa.add('b1'); }
+      return { b1, gluc, tapa };
+    },
+    nivelAMPc(s) {
+      const o = this.ocupacion(s), m = MOMENTOS[s.momento].pac.tipo === 'cardio' && s.ino === 'milri';
+      return clamp(0.15 + 0.22 * o.b1 + 0.3 * o.gluc + (m ? 0.55 : 0), 0, 1.2);
+    },
+    actualizar(s) {
+      const amp = this.nivelAMPc(s), m = MOMENTOS[s.momento].pac.tipo === 'cardio' && s.ino === 'milri';
+      $('milri').setAttribute('opacity', m ? 1 : 0);
+      let nube = '';
+      const n = Math.round(3 + 9 * amp);
+      for (let i = 0; i < n; i++) { const ang = i * 2.4, rr = 26 + (i % 3) * 5; nube += `<circle class="ampc" cx="${(140 + Math.cos(ang) * rr * 1.25).toFixed(1)}" cy="${(218 + Math.sin(ang) * rr * 0.55).toFixed(1)}" r="2.3"/>`; }
+      $('nube-ampc').innerHTML = nube;
+      const abre = clamp(2 + 9 * amp, 2, 12);
+      $('canal-i').setAttribute('x', (300 - abre / 2 - 12).toFixed(1)); $('canal-d').setAttribute('x', (300 + abre / 2).toFixed(1));
+      this.nCa = Math.round(2 + 6 * amp);
+      $('hilo-txt').textContent = tapado ? 'IC ? · FC ?' : `IC ${coma(R.ic, 1)} · FC ${R.fc}`;
+      pintarSarcomeros(0);
+    },
+  },
+  mastocito: {
+    tit: 'Lupa: mastocito (y su diana: vaso y bronquio)',
+    org: () => chip(C.anaGluc) + ' ' + org('la forma: fisiología general'),
+    receptores: [['b2', 34], ['b2', 74], ['b2', 114]],
+    leyenda: ['b2', 'h'],
+    montar() {
+      let h = `<rect class="fondo" x="0" y="0" width="360" height="324"/><rect class="citop" x="0" y="100" width="248" height="224" rx="0"/>`;
+      h += capilar(0, 176);
+      h += membrana(0, 248, this.receptores.map(([, x]) => [x - 13, x + 13]));
+      h += this.receptores.map(([t, x], i) => receptor(t, x, `r-${t}-${i}`)).join('');
+      // La diana: vaso y bronquio, con sus receptores H₁ y H₂ mirando hacia abajo
+      h += `<path class="flecha" d="M254 30 L254 320" stroke-dasharray="4 4"/>${membrana(262, 360, [[273, 299], [319, 345]])}
+        ${receptor('h', 286, 'r-h-0')}${receptor('h', 332, 'r-h-1')}
+        <text class="rec-et" style="--c:var(--accent-purple)" x="286" y="140" font-size="10" text-anchor="middle">H₁</text><text class="rec-et" style="--c:var(--accent-purple)" x="332" y="140" font-size="10" text-anchor="middle">H₂</text>
+        <text class="rot" x="309" y="155" font-size="9.5" text-anchor="middle">vaso y bronquio</text>`;
+      h += `<text class="rec-et" style="--c:var(--text-main)" x="74" y="144" font-size="10" text-anchor="middle">receptor β</text><text class="rot-s" id="et-bb" x="74" y="158" font-size="9.5" text-anchor="middle">bisoprolol: tapado</text>`;
+      // El glucagón en el mastocito: la fuente no dice cómo
+      h += `<g id="q-gluc" opacity="0"><ellipse cx="140" cy="48" rx="9" ry="7" style="fill:var(--accent-green)"/><text class="hilo" x="140" y="52" font-size="10" text-anchor="middle" style="fill:var(--bg-main)">?</text><text class="rot" x="153" y="52" font-size="9.5">glucagón: ¿por dónde?</text></g>`;
+      h += `<path class="tinta" id="nucleo" d="M60 252 C60 232 96 226 112 240 C124 226 160 228 166 246 C182 248 186 272 166 280 C150 296 120 288 108 280 C92 292 58 284 60 268 C50 264 50 254 60 252 Z" style="fill:url(#p-punteado)"/>
+        <g id="granulos"></g><g id="hist"></g>
+        <text class="rot" x="118" y="314" font-size="9.5" text-anchor="middle"><tspan class="solo-completa">gránulos: histamina y otros mediadores</tspan><tspan class="solo-facil">los gránulos de la reacción</tspan></text>`;
+      // Lo que ve el monitor: el vaso de la diana se abre y fuga
+      h += `<g id="luz"><circle class="pared" cx="306" cy="226" r="38"/><circle class="sangre" id="luz-sangre" cx="306" cy="226" r="24"/></g><g id="fuga"></g>
+        <text class="hilo" id="hilo-txt" x="306" y="300" font-size="10" text-anchor="middle">PAM</text><text class="rot-s" id="hilo-txt2" x="306" y="314" font-size="9" text-anchor="middle">fuga</text>`;
+      return h + `<g id="llaves"></g><g id="guia-capa"></g>`;
+    },
+    ocupacion(s) {
+      let b2 = 0, tapa = new Set();
+      if (MOMENTOS[s.momento].pac.tipo === 'anafilaxia') { b2 = s.adre > 0 && !s.bb ? Math.ceil(s.adre / 15 * 3) : 0; if (s.bb) tapa.add('b2'); }
+      return { b2, tapa };
+    },
+    actualizar(s) {
+      const rel = R.raw.rel ?? 1;
+      $('et-bb').setAttribute('opacity', s.bb ? 1 : 0);
+      $('q-gluc').setAttribute('opacity', s.gluc && s.bb ? 1 : 0);
+      const pos = [[40, 184], [82, 176], [124, 186], [168, 176], [210, 190], [56, 216], [196, 222], [216, 252], [26, 290]];
+      const salen = Math.round(rel * 6);
+      let g = '';
+      pos.forEach(([x, y], i) => {
+        const sale = i < salen, X = sale ? 146 + i * 20 : x, Y = sale ? 110 : y;
+        g += sale ? `<g transform="translate(${X} ${Y})"><path class="gran" d="M-8 -3 A8 8 0 1 0 8 -3 L5 -3 A5 5 0 1 1 -5 -3 Z"/></g>`
+          : `<g transform="translate(${X} ${Y})"><circle class="gran" r="10.5"/><circle class="gran-p" cx="-3" cy="-2" r="1.6"/><circle class="gran-p" cx="3" cy="1" r="1.6"/><circle class="gran-p" cx="-1" cy="4" r="1.4"/></g>`;
+      });
+      $('granulos').innerHTML = g;
+      this.nHist = Math.round(rel * 10);
+      $('luz-sangre').setAttribute('r', clamp(24 * Math.pow(14 / R.raw.irvs, 1.6), 9, 32).toFixed(1));
+      let f = ''; for (let i = 0; i < Math.round(rel * 8); i++) { const a = i * 0.8 + 0.4; f += `<circle class="hist" cx="${(306 + Math.cos(a) * 46).toFixed(1)}" cy="${(226 + Math.sin(a) * 46).toFixed(1)}" r="2"/>`; }
+      $('fuga').innerHTML = f;
+      $('hilo-txt').textContent = tapado ? 'PAM ?' : `PAM ${R.pa}`;
+      $('hilo-txt2').textContent = rel > 0.6 ? 'se abre y fuga' : rel > 0.3 ? 'fuga menos' : 'casi sin fuga';
+    },
+  },
+};
+
+// Las llaves: encajadas, rebotando (receptor tapado) o fluyendo por la sangre
+let celula = null, llavesEstado = new Map(), tCel = 0;
+function montarLupa() {
+  const cel = CELULAS[ST.lupa];
+  $('lupa').innerHTML = cel.montar();
+  $('lupa-tit').textContent = cel.tit; $('lupa-org').innerHTML = cel.org();
+  celula = cel; llavesEstado = new Map();
+  aplicarCascadaVisible();
+  pintarLeyenda();
+}
+function aplicarCascadaVisible() {
+  document.querySelectorAll('#lupa .solo-completa').forEach(e => e.setAttribute('display', ST.cas === 'completa' ? 'inline' : 'none'));
+  document.querySelectorAll('#lupa .solo-facil').forEach(e => e.setAttribute('display', ST.cas === 'facil' ? 'inline' : 'none'));
+}
+function llaveDe(t) { return t === 'h' ? null : t; }
+function actualizarLupa() {
+  const cel = celula, s = ST, oc = cel.ocupacion(s), ahora = performance.now();
+  // ¿Qué fármaco es cada llave? (para el rótulo accesible)
+  const porTipo = {};
+  for (const [t] of cel.receptores) porTipo[t] = (porTipo[t] || 0);
+  let h = '';
+  const vistos = {};
+  cel.receptores.forEach(([t, x], i) => {
+    vistos[t] = (vistos[t] || 0) + 1;
+    const n = oc[t] || 0, on = vistos[t] <= n, tapado_ = oc.tapa.has(t);
+    const el = $(`r-${t}-${i}`); if (!el) return;
+    el.classList.toggle('on', on && !tapado_);
+    const clave = `${t}-${i}`, previo = llavesEstado.get(clave);
+    if (tapado_) {
+      h += `<g class="tapon" transform="translate(${x} ${MT})">${tapon()}</g>`;
+      const quiere = (MOMENTOS[s.momento].pac.tipo === 'anafilaxia' && s.adre > 0 && t !== 'gluc');
+      if (quiere) { llavesEstado.set(clave, { modo: 'rebota', t0: previo?.t0 ?? ahora - i * 300 }); h += `<g class="llave" data-llave="${clave}" data-rebota="1" data-x="${x}" transform="translate(${x} ${MT - 22})" opacity=".85">${llaveSVG(llaveDe(t))}</g>`; }
+      else llavesEstado.delete(clave);
+    } else if (on && llaveDe(t)) {
+      const t0 = previo && previo.modo === 'encaja' ? previo.t0 : ahora;
+      llavesEstado.set(clave, { modo: 'encaja', t0 });
+      h += `<g class="llave" data-llave="${clave}" data-x="${x}" transform="translate(${x} ${MT})">${llaveSVG(t)}</g>`;
+    } else llavesEstado.delete(clave);
+  });
+  // Histamina en H₁/H₂ de la diana cuando el mastocito suelta
+  if (ST.lupa === 'mastocito') {
+    const rel = R.raw.rel ?? 1;
+    ['r-h-0', 'r-h-1'].forEach(id => $(id).classList.toggle('on', rel > 0.3));
+  }
+  $('llaves').innerHTML = h;
+  cel.actualizar(s);
+  if (REDUCIR || pausado) { posarLlaves(ahora + 99999); pintarFlujo(4000); }
+}
+// Muelle al encajar (sobrepasa y vuelve) y rebote contra el tapón
+const muelle = u => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(u - 1, 3) + c1 * Math.pow(u - 1, 2); };
+function posarLlaves(t) {
+  document.querySelectorAll('#llaves .llave').forEach(g => {
+    const e = llavesEstado.get(g.dataset.llave); if (!e) return;
+    const x = +g.dataset.x;
+    if (e.modo === 'encaja') { const u = clamp((t - e.t0) / 650, 0, 1); g.setAttribute('transform', `translate(${x} ${(MT - 46 * (1 - muelle(u))).toFixed(1)})`); }
+    else { const fase = ((t - e.t0) % 1500) / 1500, y = MT - 12 - 26 * Math.abs(Math.sin(fase * Math.PI)); g.setAttribute('transform', `translate(${x} ${(REDUCIR || pausado ? MT - 24 : y).toFixed(1)})`); }
+  });
+}
+// La sangre: llaves pequeñas que pasan (tantas como dosis); el calcio que entra; la histamina que sale
+function pintarFlujo(t) {
+  const f = $('flujo'); if (!f) return;
+  const tipos = llavesEnSangre();
+  let h = '';
+  tipos.forEach(([tt, n], j) => {
+    for (let i = 0; i < n; i++) {
+      const x = ((i * 47 + j * 23 + t * 0.03 * (1 + (i % 3) * 0.2)) % 380) - 10;
+      if (x > (ST.lupa === 'mastocito' ? 170 : 352)) continue;
+      h += `<g class="llave" transform="translate(${x.toFixed(1)} 17) rotate(-90) scale(.42)">${llaveSVG(tt)}</g>`;
+    }
+  });
+  f.innerHTML = h;
+  if (ST.lupa === 'miocito' && $('ca-flujo')) {
+    let c = '';
+    for (let i = 0; i < (celula.nCa || 0); i++) { const y = ((t * (REDUCIR || pausado ? 0 : 0.05) + i * 31) % 190) + 40; c += `<circle class="ca" cx="${300 + Math.sin(i + y / 30) * (y < 128 ? 1 : 6)}" cy="${y.toFixed(1)}" r="2.6"/>`; }
+    $('ca-flujo').innerHTML = c;
+  }
+  if (ST.lupa === 'mastocito' && $('hist')) {
+    let c = '';
+    for (let i = 0; i < (celula.nHist || 0); i++) {
+      const u = REDUCIR || pausado ? ((i * 0.37) % 0.9 + 0.05) : ((t * 0.0004 + i * 0.13) % 1), x0 = 146 + (i % 5) * 20, x = x0 + (i % 2 ? 286 - x0 : 332 - x0) * u, y = 66 - 34 * Math.sin(u * Math.PI);
+      c += `<path class="hist" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})" d="M-1 -3.5 h2 v2.5 h2.5 v2 h-2.5 v2.5 h-2 v-2.5 h-2.5 v-2 h2.5 Z"/>`;
+    }
+    $('hist').innerHTML = c;
+  }
+}
+function llavesEnSangre() {
+  const s = ST, p = MOMENTOS[s.momento].pac.tipo, out = [];
+  if (p === 'sepsis') { if (s.na > 0) out.push(['a1', Math.round(1 + s.na / 8)]); if (s.vaso) out.push(['v1', 2]); }
+  if (p === 'cardio') { out.push(['a1', 1]); if (s.ino === 'dobuta' && s.dobuta > 0) out.push(['b1', Math.round(1 + s.dobuta / 5)]); }
+  if (p === 'anafilaxia') { if (s.adre > 0) out.push([ST.lupa === 'miocito' ? 'b1' : 'b2', Math.round(1 + s.adre / 5)]); if (s.gluc) out.push(['gluc', 2]); }
+  return out;
+}
+function pintarSarcomeros(t) {
+  const g = $('sarcomeros'); if (!g) return;
+  const T = 60 / R.raw.fc * 1000, fase = REDUCIR || pausado ? 0.25 : ((t % T) / T);
+  const sist = Math.max(0, Math.sin(clamp(fase / 0.4, 0, 1) * Math.PI));
+  const amp = clamp(R.raw.ic / 2.6, 0.4, 1.6) * 0.16;
+  const s = 1 - amp * sist;
+  let h = '';
+  for (let i = 0; i < 6; i++) { const y = 234 + i * 9, w = 52 * s; h += `<line class="${i % 2 ? 'actina' : 'miosina'}" x1="${(294 - w).toFixed(1)}" y1="${y}" x2="${(294 + w).toFixed(1)}" y2="${y}"/>`; }
+  g.innerHTML = h;
+}
+function pintarLeyenda() {
+  const cel = celula;
+  const quien = { a1: 'NA, adrenalina', v1: 'vasopresina', b2: ST.lupa === 'mastocito' ? 'adrenalina; el subtipo, del Manual UMI' : 'dobutamina, adrenalina: Manual UMI', b1: 'NA, adrenalina, dobutamina', gluc: 'glucagón', h: 'histamina; los antihistamínicos lo tapan' };
+  $('leyenda').innerHTML = cel.leyenda.map(t => `<span>${icoCerr(t)}${RECEP[t].nombre} (${RECEP[t].forma}): ${quien[t]}</span>`).join('')
+    + `<span>${icoLlave()}llave de oro: el fármaco que abre</span><span>${icoTapon()}tapón: el que tapa sin abrir</span><span>${org('cuántas llaves: ilustrativo', true)}</span>`;
+}
+
+/* ============================================================
+   6. El cuerpo: seis dianas con su anillo de 0-3 marcas (forma, no solo color)
+   ============================================================ */
+const DIANAS = [
+  { k: 'corazon', x: 30, nombre: 'corazón', mueve: 'IC · FC', lupa: 'miocito' },
+  { k: 'arteriola', x: 90, nombre: 'arteriola', mueve: 'IRVS', lupa: 'arteriola' },
+  { k: 'vena', x: 150, nombre: 'vena', mueve: 'PVC' },
+  { k: 'mastocito', x: 210, nombre: 'mastocito', mueve: 'PA', lupa: 'mastocito' },
+  { k: 'rinon', x: 270, nombre: 'riñón', mueve: 'agua' },
+  { k: 'hipofisis', x: 330, nombre: 'hipófisis', mueve: 'ACTH' },
+];
+function icono(k) {
+  if (k === 'corazon') return `<path class="tinta" d="M0 12 C-20 -2 -16 -18 -5 -15 C-1 -14 0 -10 0 -9 C0 -10 1 -14 5 -15 C16 -18 20 -2 0 12 Z"/>`;
+  if (k === 'arteriola') return `<circle class="pared" r="15"/><circle class="sangre" id="d-luz" r="7"/>`;
+  if (k === 'vena') return `<ellipse class="tinta-suave" rx="16" ry="11"/><ellipse class="sangre" rx="13" ry="8.5" style="fill:var(--accent-purple)"/>`;
+  if (k === 'mastocito') return `<circle class="tinta" r="14"/><circle class="gran" cx="-5" cy="-4" r="3.4"/><circle class="gran" cx="5" cy="-3" r="3.4"/><circle class="gran" cx="0" cy="5" r="3.4"/>`;
+  if (k === 'rinon') return `<path class="tinta" d="M4 -15 C-10 -17 -15 -4 -13 4 C-11 14 2 17 7 10 C3 6 2 -3 8 -6 C12 -9 10 -14 4 -15 Z"/>`;
+  return `<path class="tinta-suave" d="M-15 -6 C-10 -16 10 -16 15 -6"/><path class="flecha" d="M0 -9 L0 1"/><circle class="tinta" cx="0" cy="7" r="7"/>`;
+}
+function marcasDianas() {
+  const s = ST, p = MOMENTOS[s.momento].pac.tipo, m = { corazon: 0, arteriola: 0, vena: 0, mastocito: 0, rinon: 0, hipofisis: 0 }, tapa = new Set(), duda = new Set();
+  const sube = (k, v) => { m[k] = Math.max(m[k], v); };
+  if (p === 'sepsis') {
+    if (s.na > 0) { sube('corazon', s.na < 10 ? 2 : 1); sube('arteriola', s.na < 10 ? 1 : 3); }
+    if (s.vaso) { sube('arteriola', 3); sube('rinon', 1); sube('hipofisis', 1); }
+  } else if (p === 'cardio') {
+    sube('corazon', 2); sube('arteriola', 1);
+    if (s.ino === 'dobuta' && s.dobuta > 0) sube('corazon', 3);
+    if (s.ino === 'milri') { sube('corazon', 3); sube('arteriola', 2); }
+  } else {
+    if (s.adre > 0) { sube('arteriola', 2); if (s.bb) { tapa.add('corazon'); tapa.add('mastocito'); } else { sube('corazon', 3); sube('mastocito', 3); } }
+    if (s.gluc) { sube('corazon', 3); if (s.bb) duda.add('mastocito'); }
+  }
+  return { m, tapa, duda };
+}
+function pintarCuerpo() {
+  let { m, tapa, duda } = marcasDianas(); const sel = DIANAS.find(d => d.lupa === ST.lupa);
+  if (tapado) { for (const k in m) m[k] = 0; tapa = new Set(); duda = new Set(); }
+  let h = `<rect class="fondo" x="0" y="0" width="360" height="100"/>`;
+  if (sel) h += `<path class="cono" d="M${sel.x - 30} 2 L${sel.x + 30} 2 L${sel.x + 30} 88 L${sel.x + 9} 88 L${sel.x} 98 L${sel.x - 9} 88 L${sel.x - 30} 88 Z"/>`;
+  for (const d of DIANAS) {
+    const angs = [[-148, -112], [-106, -74], [-68, -32]];
+    const arcos = angs.map(([a0, a1], i) => {
+      const r = 28, p0 = [d.x + r * Math.cos(a0 * Math.PI / 180), 30 + r * Math.sin(a0 * Math.PI / 180)], p1 = [d.x + r * Math.cos(a1 * Math.PI / 180), 30 + r * Math.sin(a1 * Math.PI / 180)];
+      return `<path class="${i < m[d.k] ? 'marca-on' : 'marca-off'}" d="M${p0[0].toFixed(1)} ${p0[1].toFixed(1)} A${r} ${r} 0 0 1 ${p1[0].toFixed(1)} ${p1[1].toFixed(1)}"/>`;
+    }).join('');
+    h += `<g data-diana="${d.k}" id="d-${d.k}" class="${sel === d ? 'sel' : ''}" role="button" aria-label="${d.nombre}: ${m[d.k]} de 3 marcas${tapa.has(d.k) ? ', receptor tapado' : ''}">
+      <circle class="marco-diana" cx="${d.x}" cy="30" r="22"/>${arcos}<g transform="translate(${d.x} 30)">${icono(d.k)}</g>
+      ${tapa.has(d.k) ? `<g class="tapon" transform="translate(${d.x + 17} 47) scale(.7)">${tapon()}</g>` : ''}
+      ${duda.has(d.k) ? `<text class="hilo" x="${d.x + 18}" y="16" font-size="11">?</text>` : ''}
+      <text class="rot" x="${d.x}" y="68" font-size="10" text-anchor="middle">${d.nombre}</text><text class="rot-s" x="${d.x}" y="82" font-size="9" text-anchor="middle">→ ${d.mueve}</text>
+      <rect x="${d.x - 30}" y="0" width="60" height="90" fill="transparent"/></g>`;
+  }
+  $('cuerpo').innerHTML = h;
+  const luz = $('d-luz'); if (luz) luz.setAttribute('r', clamp(8.5 * Math.pow(14 / R.raw.irvs, 1.6), 3.5, 12).toFixed(1));
+}
+const INFO_DIANA = {
+  vena: { t: 'La vena tiene el mismo músculo liso: la nitroglicerina y el nitroprusiato la aflojan y baja la precarga. Qué hace la noradrenalina en la vena: Marino no lo dice; el Manual UMI atribuye a los receptores α la vasoconstricción de las venas.', c: [C.umi], org: 'la fuente no lo dice' },
+  rinon: { t: 'La vasopresina actúa también en el receptor V₂ del túbulo distal: más reabsorción de agua. La dopamina a ≤3 µg/kg/min sube el flujo del riñón y del intestino.', c: [C.vasopresina, C.dopa] },
+  hipofisis: { t: 'El receptor V₃ de la hipófisis anterior: la vasopresina libera ACTH. La angiotensina II hace salir vasopresina de la hipófisis posterior.', c: [C.vasopresina, C.angio] },
+};
+$('cuerpo').addEventListener('click', ev => {
+  const g = ev.target.closest('[data-diana]'); if (!g || tapado) return;
+  const d = DIANAS.find(x => x.k === g.dataset.diana);
+  if (d.lupa) { $('info-diana').hidden = true; if (ST.lupa !== d.lupa) { ST.lupa = d.lupa; casPaso = 0; montarLupa(); actualizar(); } return; }
+  const i = INFO_DIANA[d.k];
+  $('info-diana').hidden = false;
+  $('info-diana').innerHTML = `<span><b>${d.nombre[0].toUpperCase() + d.nombre.slice(1)}.</b> ${i.t}${i.org ? ' ' + org(i.org) : ''}</span>${i.c.map(cita).join('')}`;
+});
+
+/* ============================================================
+   7. La cascada: Fácil (3 pasos, sin siglas) o Completa (cada eslabón con su origen); paso a paso
+   ============================================================ */
+const CASCADA = {
+  arteriola: {
+    facil: [
+      { n: 'La llave encaja', t: 'La noradrenalina encaja en el α₁ de la célula lisa; la vasopresina, en otra cerradura, el V₁.', r: ['.rec-a1', '.rec-v1'], c: C.naRec, c2: C.vasopresina },
+      { n: 'La orden', t: 'Dentro de la célula sube el calcio.', r: ['#n-orden', '#n-re'], org: 'fisiología general' },
+      { n: 'El efecto', t: 'La célula se acorta y la luz de la arteriola se estrecha: sube la RVS y, con ella, la PAM.', r: ['#fil', '#luz'], c: C.naRec },
+    ],
+    completa: [
+      { n: 'α₁', t: 'La noradrenalina estimula el receptor α₁: vasoconstricción. Es su acción principal.', r: ['.rec-a1'], c: C.naRec },
+      { n: 'V₁', t: 'La vasopresina usa su propio receptor, el V₁ del músculo liso. Aprieta más en la piel, el músculo y el territorio esplácnico.', r: ['.rec-v1'], c: C.vasopresina },
+      { n: 'Gq', t: 'Los dos receptores activan una proteína Gq.', r: ['#n-gq'], org: 'fisiología general' },
+      { n: 'IP₃ · DAG', t: 'La Gq fabrica IP₃ y DAG.', r: ['#n-ip3'], org: 'fisiología general' },
+      { n: 'Ca²⁺', t: 'El IP₃ suelta calcio del retículo.', r: ['#n-re', '#ca-arteriola'], org: 'fisiología general' },
+      { n: 'Actina y miosina', t: 'Con el calcio, la actina y la miosina se deslizan: la célula se acorta.', r: ['#fil'], org: 'fisiología general' },
+      { n: 'La luz', t: 'La luz se estrecha: sube la RVS. PAM = GC × RVS + PAD.', r: ['#luz'], c: C.pam },
+      { n: 'β₂', t: 'Al revés: la dobutamina vasodilata un poco. Marino no da el receptor; el Manual UMI lo atribuye al β₂.', r: ['.rec-b2'], c: C.dobuta, c2: C.umi },
+    ],
+  },
+  miocito: {
+    facil: [
+      { n: 'La llave encaja', t: 'La dobutamina (y la noradrenalina o la adrenalina) encaja en el β₁; el glucagón, en su propio receptor.', r: ['.rec-b1', '.rec-gluc'], c: C.glucMec },
+      { n: 'La señal', t: 'La célula fabrica una señal (el AMPc) y abre la puerta del calcio.', r: ['#n-ac', '#n-ampc', '#canal-ca'], c: C.glucMec },
+      { n: 'El efecto', t: 'Entra calcio y el músculo empuja más fuerte y más deprisa: sube el gasto.', r: ['#fil'], c: C.glucMec },
+    ],
+    completa: [
+      { n: 'β₁', t: 'La dobutamina estimula el β₁ del corazón: sube el volumen latido y la FC.', r: ['.rec-b1'], c: C.dobuta },
+      { n: 'Glucagón', t: 'El glucagón tiene su propio receptor, unido a la misma enzima que el β.', r: ['.rec-gluc'], c: C.glucMec },
+      { n: 'Adenilato ciclasa', t: 'Los dos receptores están unidos a la adenilato ciclasa, en la cara interna de la membrana. (La proteína Gs que los une la nombra el Manual UMI.)', r: ['#n-ac'], c: C.glucMec, c2: C.umi },
+      { n: 'AMPc', t: 'La adenilato ciclasa convierte el ATP en AMPc.', r: ['#n-ampc', '#nube-ampc'], c: C.glucMec },
+      { n: 'Proteína cinasa', t: 'El AMPc activa una proteína cinasa que abre el canal: entra calcio en la célula.', r: ['#n-pk', '#canal-ca'], c: C.glucMec },
+      { n: 'Contracción', t: 'El calcio hace interactuar a las proteínas contráctiles: más fuerza y más frecuencia.', r: ['#fil'], c: C.glucMec },
+      { n: 'PDE', t: 'La PDE corta el AMPc a AMP. La milrinona la frena: el AMPc se acumula, también con el β bloqueado.', r: ['#n-pde', '#milri'], c: C.ipde, c2: C.milri },
+    ],
+  },
+  mastocito: {
+    facil: [
+      { n: 'La llave encaja', t: 'La adrenalina encaja en los receptores β del mastocito.', r: ['.rec-b2'], c: C.anaGluc },
+      { n: 'La orden', t: '«No sueltes»: la célula frena la salida de mediadores. Cómo lo hace por dentro, la fuente no lo dice.', r: ['#granulos'], org: 'la fuente no lo dice' },
+      { n: 'El efecto', t: 'Los gránulos se quedan dentro: la reacción se para. Por eso la adrenalina es el único fármaco que la detiene.', r: ['#granulos', '#luz'], c: C.anaAdre },
+    ],
+    completa: [
+      { n: 'Receptor β', t: 'La adrenalina frena la liberación de mediadores a través de receptores β. El subtipo (β₂) lo da el Manual UMI.', r: ['.rec-b2'], c: C.anaGluc, c2: C.umi },
+      { n: 'Dentro', t: 'La cadena de dentro del mastocito: la fuente no la da.', r: ['#nucleo'], org: 'la fuente no lo dice' },
+      { n: 'Gránulos', t: 'Los gránulos de mastocitos y basófilos llevan los mediadores de la reacción; la adrenalina los retiene.', r: ['#granulos'], c: C.anaAdre },
+      { n: 'Betabloqueante', t: 'Un betabloqueante tapa el β: atenúa o anula la respuesta a la adrenalina.', r: ['.tapon'], c: C.anaGluc },
+      { n: 'Glucagón', t: 'El glucagón puede devolver la respuesta; por qué, el libro lo remite al cap. 52, que lo explica en el corazón, no en el mastocito.', r: ['#q-gluc'], c: C.anaGluc, c2: C.glucMec },
+      { n: 'H₁ y H₂', t: 'La histamina que sale encaja en H₁ y H₂. Los antihistamínicos los tapan: alivian el picor y la rinorrea, pero no cambian el curso.', r: ['.rec-h'], c: C.anaSeg },
+    ],
+  },
+};
+let casPaso = 0, casTimer = null;
+function pintarCascada() {
+  const pasos = CASCADA[ST.lupa][ST.cas];
+  if (casPaso >= pasos.length) casPaso = 0;
+  $('cas-cab').textContent = `La cascada · ${ST.cas === 'facil' ? 'Fácil' : 'Completa'} · ${pasos.length} pasos`;
+  $('cas-pasos').innerHTML = pasos.map((p, i) => `<li><button type="button" data-cp="${i}" aria-pressed="${i === casPaso}">${i + 1} · ${p.n}</button></li>`).join('');
+  const p = pasos[casPaso];
+  $('cas-txt').innerHTML = `<span>${p.t} ${p.c ? chip(p.c) : ''}${p.c2 ? ' ' + chip(p.c2) : ''}${p.org ? ' ' + org(p.org) : ''}</span>${p.c ? cita(p.c) : ''}${p.c2 ? cita(p.c2) : ''}`;
+}
+function resaltarCascada(sinScroll) {
+  const p = CASCADA[ST.lupa][ST.cas][casPaso];
+  senalar(p.r, sinScroll);
+}
+$('cas-pasos').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-cp]'); if (!b) return;
+  pararPasoAPaso(); casPaso = +b.dataset.cp; pintarCascada(); resaltarCascada(true);
+});
+document.querySelector('.lupa-barra .seg').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-cas]'); if (!b) return;
+  pararPasoAPaso(); ST.cas = b.dataset.cas; casPaso = 0;
+  document.querySelectorAll('[data-cas]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.cas === ST.cas)));
+  aplicarCascadaVisible(); pintarCascada(); borrarSenal();
+});
+function pararPasoAPaso() { clearInterval(casTimer); casTimer = null; $('paso-a-paso').textContent = '▶ Paso a paso'; }
+$('paso-a-paso').addEventListener('click', () => {
+  if (casTimer) { pararPasoAPaso(); return; }
+  const pasos = CASCADA[ST.lupa][ST.cas];
+  if (REDUCIR) { casPaso = (casPaso + 1) % pasos.length; pintarCascada(); resaltarCascada(true); return; }   // sin movimiento: un paso por toque
+  casPaso = 0; pintarCascada(); resaltarCascada(true);
+  $('paso-a-paso').textContent = '■ Parar';
+  casTimer = setInterval(() => {
+    if (casPaso >= pasos.length - 1) { pararPasoAPaso(); return; }
+    casPaso++; pintarCascada(); resaltarCascada(true);
+  }, 2600);
+});
+
+/* ============================================================
+   8. La ficha de cada fármaco (plegada): receptor por dosis, dosis con página, función, efectos adversos, otra fuente
+   ============================================================ */
+const FARMACOS = {
+  na: { nombre: 'Noradrenalina', sub: 'α₁ principal, β débil',
+    receptores: [['<b>α₁</b>, su acción principal: vasoconstricción; y un <b>β débil</b>, que estimula algo el corazón.', C.naRec],
+      ['<b>&lt;10 µg/min:</b> el β puede subir el gasto · <b>&gt;10:</b> predomina el α · <b>30:</b> ya no hay más respuesta.', C.naDosis]],
+    dosis: [['Sin dosis de carga; empezar a 5-10 µg/min y subir según la PA.', C.naDosis], ['Rango 5-40 µg/min.', C.t144], ['A 30 µg/min, añadir un segundo vasopresor.', C.naDosis],
+      ['Séptico: si hacen falta 0,25-0,5 µg/kg/min (18-35 µg/min en 70 kg), añadir vasopresina.', C.sepVaso],
+      ['Cardiogénico: 5 µg/min (0,05 µg/kg/min), subir cada 5 min; habitual 5-30 µg/min (0,05-0,5). Ver la nota de las equivalencias.', C.csNa],
+      ['Por una vía periférica del brazo, segura hasta 48 h; en el séptico, por encima de la fosa antecubital.', C.periferica]],
+    funcion: ['El vasopresor más usado y el preferido en el shock séptico. En el cardiogénico, menos taquiarritmias y menos muertes que la adrenalina y la dopamina. En el TEP hipotenso, porque no sube la resistencia pulmonar.', C.naRec, C.csNa, C.tepHemo],
+    adversos: ['Isquemia (miocardio, cerebro, miembro) y arritmias (taqui y bradi) en ~10 %, quizá por el propio shock. Inmunosupresión: se une a los receptores de los leucocitos (significado clínico incierto). Extravasación: fentolamina 5-10 mg en 10 mL en la zona, antes de 12 h.', C.naSeg, C.extrav],
+    umi: 'β₁ y α, sin β₂. Dosis 0,2-1,3 µg/kg/min; 10 mg en 100 mL. Las dos fuentes no coinciden en el rango: ver las notas.' },
+  vaso: { nombre: 'Vasopresina', sub: 'V₁, otra cerradura',
+    receptores: [['<b>V₁</b> del músculo liso: vasoconstricción, más marcada en la piel, el músculo y el territorio esplácnico. <b>V₂</b> del túbulo distal: reabsorbe agua. <b>V₃</b> de la hipófisis anterior: libera ACTH.', C.vasopresina]],
+    dosis: [['Séptico resistente a la NA: 0,03-0,04 U/min en perfusión; no se titula. El libro imprime «U/h»: ver la nota.', C.vasoDosis], ['Tabla 14.4: 0,01-0,04.', C.t144],
+      ['Parada: 40 U IV en dosis única, en lugar de la 1.ª o la 2.ª de adrenalina.', C.vasopresina]],
+    funcion: ['Segundo vasopresor en el séptico resistente a la NA: sube la PA y ahorra catecolamina, sin beneficio probado de supervivencia. No sube la PA en voluntarios sanos; sí en el shock vasodilatador. No se ha evaluado en la anafilaxia.', C.vasopresina, C.anaShock],
+    adversos: ['Como los de la noradrenalina, en tipo y en frecuencia.', C.vasoDosis],
+    umi: 'La cuenta entre los vasoconstrictores (receptores de arginina-vasopresina); no da su dosis.' },
+  dobuta: { nombre: 'Dobutamina', sub: 'β₁',
+    receptores: [['<b>β₁</b> del corazón: más volumen latido y más FC. Vasodilatación leve (el receptor, β₂ débil, lo da el Manual UMI).', C.dobuta, C.umi]],
+    dosis: [['Empezar a 3-5 µg/kg/min y subir de 3 a 5 cada vez; habitual 3-20 µg/kg/min.', C.t163]],
+    funcion: ['El inotrópico más usado en el shock cardiogénico: mantiene la PA porque el volumen latido compensa la vasodilatación. En el TEP con PA normal se puede considerar; sola con hipotensión, no.', C.dobuta, C.tepHemo],
+    adversos: ['FC +5-15 lpm (puede pasar de 30), más consumo de O₂ y más trabajo cardíaco. Contraindicada, como todo inotrópico, en la obstrucción dinámica del tracto de salida del VI.', C.dobuta],
+    umi: '3-15 µg/kg/min (Marino: 3-20). Contraindicada en la miocardiopatía hipertrófica y en las taquiarritmias ventriculares.' },
+  milri: { nombre: 'Milrinona', sub: 'sin cerradura: frena la PDE',
+    receptores: [['<b>Sin cerradura</b>: frena la fosfodiesterasa, no se degrada el AMPc y entra más calcio en el miocito. Además vasodilata.', C.milri], ['Aumenta el gasto también con el β bloqueado.', C.ipde]],
+    dosis: [['50 µg/kg en 10 min y luego 0,375-0,75 µg/kg/min; no más de 1,13 mg/kg al día.', C.t163],
+      ['Con insuficiencia renal (ClCr en mL/min/1,73 m²): 50 → 0,43 · 40 → 0,38 · 30 → 0,33 · 20 → 0,28 µg/kg/min.', C.t163], ['Semivida 2,5 h, más larga en la insuficiencia renal.', C.milri]],
+    funcion: ['Inotropismo como la dobutamina, con menos taquicardia. Más apropiada en la insuficiencia cardíaca descompensada sin hipotensión.', C.milri],
+    adversos: ['Hipotensión: su gran inconveniente en el shock cardiogénico.', C.milri],
+    umi: 'La nombra entre los vasodilatadores (inhibidores de la fosfodiesterasa III); no da su dosis.' },
+  adre: { nombre: 'Adrenalina', sub: 'β potente y α',
+    receptores: [['<b>β</b> potente y <b>α</b>: sube la FC, el volumen latido y la PA según la dosis. En el mastocito, el β frena la salida de mediadores.', C.adre, C.anaGluc]],
+    dosis: [['Anafilaxia: 0,3-0,5 mg IM (solución 1:1.000) en la cara anterolateral del muslo, cada 5-15 min.', C.anaAdre],
+      ['Shock anafiláctico: 5-15 µg/min (1:100.000: 2 mg en 200 mL, 10 µg/mL), con o sin un bolo IV de 10 µg.', C.t175, C.anaShock],
+      ['Edema de laringe: 2,5 mg nebulizada (1:100). Parada: 1 mg IV (1:10.000) cada 3-5 min.', C.t175], ['Séptico: 0,1 µg/kg/min, hasta 0,5 como máximo.', C.adre]],
+    funcion: ['En la anafilaxia, el único fármaco que para la reacción. En el séptico, de segunda línea (cap. 14) o de tercera (Tabla 17.2): las fuentes discrepan.', C.anaAdre, C.t172],
+    adversos: ['Taquicardia y arritmias; hipoperfusión esplácnica (α); más metabolismo; hiperglucemia (el α frena la insulina); lactato alto por producción aeróbica, que engaña.', C.adre],
+    umi: 'β₂: vasodilatación del músculo y de las coronarias; β₁: inotropismo; α: más RVS. Efecto β a 1-4 µg/min y α por encima de 20 µg/min (Marino no da este corte).' },
+  gluc: { nombre: 'Glucagón', sub: 'su propia cerradura',
+    receptores: [['<b>Su propio receptor</b>, unido a la misma adenilato ciclasa que el β: el corazón responde aunque el β esté tapado.', C.glucMec]],
+    dosis: [['Anafilaxia con betabloqueante: 1-5 mg IV lenta (en 5 min) y luego 5-15 µg/min, según respuesta.', C.anaGluc],
+      ['Otra pauta, para otro caso: en la intoxicación por betabloqueantes, 3 mg IV (0,05 mg/kg), 5 mg si no responde, y luego 5 mg/h. No se mezclan.', C.glucDosis]],
+    funcion: ['Anafilaxia refractaria a la adrenalina en quien toma betabloqueantes. Antídoto de los betabloqueantes: responde el 90 %.', C.anaGluc, C.glucMec],
+    adversos: ['Vómitos: si está obnubilado, de lado. En la intoxicación: náuseas y vómitos por encima de 5 mg/h, hiperglucemia leve, hipopotasemia y subidas de PA.', C.anaGluc, C.glucDosis],
+    umi: null },
+};
+function farmacosActivos() {
+  const s = ST, p = MOMENTOS[s.momento].pac.tipo, l = [];
+  if (p === 'sepsis') { l.push('na'); if (s.vaso || s.momento === 2) l.push('vaso'); }
+  if (p === 'cardio') l.push('dobuta', 'milri');
+  if (p === 'anafilaxia') l.push('adre', 'gluc');
+  return l;
+}
+function pintarFichas() {
+  $('fichas-farmaco').innerHTML = farmacosActivos().map(k => {
+    const f = FARMACOS[k];
+    const rec = f.receptores.map(([t, ...cs]) => `<span>${t} ${cs.map(citaCorta).join(' ')}</span>`);
+    const [fun, ...fc] = f.funcion, [adv, ...ac] = f.adversos;
+    return `<details class="plegable farmaco"><summary>${f.nombre}<small>${f.sub}</small></summary><dl class="kv">
+      <dt>Receptor según la dosis</dt><dd>${rec.join('')}</dd>
+      <dt>Dosis</dt><dd><ul class="dosis-lista">${f.dosis.map(([t, ...cs]) => `<li><span>${t} ${cs.map(citaCorta).join(' ')}</span></li>`).join('')}</ul></dd>
+      <dt>Para qué</dt><dd><span>${fun} ${fc.map(citaCorta).join(' ')}</span></dd>
+      <dt>Efectos adversos</dt><dd><span>${adv} ${ac.map(citaCorta).join(' ')}</span></dd>
+      <dt>Otra fuente</dt><dd>${f.umi ? `<div class="otra-fuente"><span><b>Manual UMI:</b> ${f.umi} <span class="org otra">otra fuente</span> ${citaCorta(C.umi)}</span></div>` : '<span>El Manual UMI no lo trata.</span>'}</dd>
+    </dl></details>`;
+  }).join('');
+}
+
+/* ============================================================
+   9. La frase viva y la explicación guiada de cada momento (3-5 pasos que señalan el dibujo)
+   ============================================================ */
+function pintarFrase() {
+  const s = ST, m = s.momento; let t = '', c = null;
+  if (m === 1 || m === 2) {
+    const kg = s.na / PAULINO.peso;
+    if (s.na === 0) { t = 'Sin noradrenalina, los vasos de Paulino están abiertos. Sube la bomba y mira qué célula responde primero.'; c = C.naDosis; }
+    else if (s.vaso) { t = s.na >= 20 ? 'Dos puertas, una sola contracción: la vasopresina aprieta por el V₁ y la PAM sube sin tocar la noradrenalina. Prueba a bajarla: ahorra catecolamina. La vasopresina no se titula.'
+      : R.pa >= 65 ? 'Con la vasopresina en el V₁, la PAM se sostiene con menos noradrenalina: ahorro de catecolamina. La vasopresina no se titula.' : 'La vasopresina aprieta por otra puerta, el V₁, pero con tan poca noradrenalina la PAM no llega a 65. No se titula: se mueve la NA.'; c = C.vasopresina; }
+    else if (s.na < 10) { t = 'Por debajo de 10 µg/min, la noradrenalina empuja más que aprieta: el β del corazón sube el gasto.'; c = C.naDosis; }
+    else if (s.na < 30) { t = 'Por encima de 10 manda el α: las cerraduras de la arteriola se llenan, la luz se estrecha y sube la RVS.'; c = C.naDosis; }
+    else { t = 'A 30 µg/min, más dosis apenas aprieta: otra puerta, no más llave. Es el momento del segundo vasopresor.'; c = C.naDosis; }
+    if (kg >= 0.25 && !s.vaso) t += ` Para Paulino, ${s.na} µg/min son ${coma(kg, 2)} µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.`;
+  } else if (m === 3) {
+    if (s.ino === 'dobuta' && s.dobuta > 0) { t = 'La dobutamina empuja más fuerte y más deprisa, y gasta más oxígeno; la PA se mantiene.'; c = C.dobuta; }
+    else if (s.ino === 'milri') { t = 'La milrinona no tiene cerradura: frena la PDE. Fuerza con menos taquicardia, pero baja la PA.'; c = C.milri; }
+    else { t = 'El miocito de Aurelio, solo con noradrenalina a 5 µg/min: poca señal y el gasto bajo.'; c = C.csNa; }
+  } else {
+    if (s.adre === 0) { t = 'Sin adrenalina, el mastocito suelta sus gránulos: los vasos se abren y fugan.'; c = C.anaShock; }
+    else if (!s.bb) { t = 'Sin betabloqueante, la adrenalina para la reacción: los gránulos se quedan dentro.'; c = C.anaAdre; }
+    else if (!s.gluc) { t = 'Con el β tapado, la adrenalina rebota: la reacción sigue y la PA no sube.'; c = C.anaGluc; }
+    else { t = 'Con el β tapado, el glucagón entra por otra puerta: el corazón responde.'; c = C.glucMec; }
+  }
+  $('frase-txt').innerHTML = `${t} ${chip(c)}`;
+  medirDock();
+}
+const GUIAS = {
+  1: { tit: 'Paulino: noradrenalina de 5 a 25', pasos: [
+    { t: 'Con 5 µg/min, las llaves de la noradrenalina llegan a dos células distintas: el miocito del corazón y la célula lisa de la arteriola.', set: { na: 5, lupa: 'arteriola' }, r: ['#d-corazon', '#d-arteriola'], c: C.naRec },
+    { t: 'En el miocito encajan en el β₁: por debajo de 10 µg/min, el β puede subir el gasto. Mira el IC.', set: { na: 8, lupa: 'miocito' }, r: ['.rec-b1', '[data-fila="ic"]'], c: C.naDosis },
+    { t: 'En la arteriola, a esa dosis, pocas llaves en los α₁: la luz apenas cambia. Cuántas llaves: es una imagen.', set: { na: 8, lupa: 'arteriola' }, r: ['.rec-a1', '#luz'], c: C.naDosis, org: 'ilustrativo' },
+    { t: 'Por encima de 10 manda el α: las cerraduras α₁ se llenan, la célula se acorta y la luz se estrecha. La IRVS y la PAM suben.', set: { na: 25, lupa: 'arteriola' }, r: ['#luz', '[data-fila="irvs"]', '[data-fila="pa"]'], c: C.naDosis },
+    { t: 'A 30 µg/min, subir la bomba ya no aprieta más: segundo vasopresor. Añadirlo no ha demostrado más supervivencia.', set: { na: 30, lupa: 'arteriola' }, bomba: 'na', r: ['#bomba-na', '.rec-a1'], c: C.naDosis, c2: C.vaso }] },
+  2: { tit: 'Paulino: se añade vasopresina', pasos: [
+    { t: 'Entra otra llave, hexagonal: la vasopresina encaja en sus receptores V₁ del músculo liso.', set: { na: 25, vaso: true, lupa: 'arteriola' }, r: ['.rec-v1'], c: C.vasopresina },
+    { t: 'La misma célula se aprieta por otra puerta: por eso funciona aunque el α esté al máximo. La cadena de dentro es fisiología general.', set: { cas: 'completa' }, r: ['#n-gq', '#luz'], c: C.vasopresina, org: 'fisiología general' },
+    { t: 'Su bomba sale con candado: 0,03-0,04 U por minuto, y no se titula, a diferencia de las catecolaminas. El libro imprime «U/h»: ver la nota.', bomba: 'vaso', r: ['#bomba-vaso'], c: C.vasoDosis },
+    { t: 'Con la vasopresina, la PAM se sostiene con menos noradrenalina: ahorra catecolamina. Cuánto baja aquí la NA es ilustrativo.', set: { na: 12 }, bomba: 'na', r: ['#bomba-na', '[data-fila="pa"]'], c: C.vasopresina, org: 'ilustrativo' },
+    { t: 'Fuera del vaso, la misma hormona: V₂ en el túbulo distal (reabsorbe agua) y V₃ en la hipófisis anterior (ACTH).', r: ['#d-rinon', '#d-hipofisis'], c: C.vasopresina }] },
+  3: { tit: 'Aurelio: el miocito', pasos: [
+    { t: 'La dobutamina encaja en el β₁ del miocito.', set: { ino: 'dobuta', dobuta: 5, lupa: 'miocito' }, r: ['.rec-b1'], c: C.dobuta },
+    { t: 'El β₁ activa la adenilato ciclasa: el ATP pasa a AMPc. El AMPc activa una proteína cinasa que abre el canal de calcio.', set: { cas: 'completa' }, r: ['#n-ac', '#n-ampc', '#n-pk', '#canal-ca'], c: C.glucMec },
+    { t: 'Entra calcio y las proteínas contráctiles tiran más fuerte: sube el IC; la PA se mantiene porque compensa su leve vasodilatación.', r: ['#fil', '[data-fila="ic"]', '[data-fila="pa"]'], c: C.dobuta },
+    { t: 'El precio: FC +5-15 lpm (a veces más de 30) y más consumo de O₂.', r: ['[data-fila="fc"]'], c: C.dobuta },
+    { t: 'La milrinona no tiene cerradura: frena la PDE, la tijera que corta el AMPc. Más AMPc y más fuerza con menos taquicardia, pero vasodilata: la PAM baja.', set: { ino: 'milri' }, r: ['#n-pde', '#milri', '[data-fila="pa"]'], c: C.milri }] },
+  4: { tit: 'Begoña: el betabloqueado', pasos: [
+    { t: 'Sin betabloqueante, la adrenalina encaja en los receptores β del mastocito y los gránulos se quedan dentro: es el único fármaco que para la reacción.', set: { bb: false, adre: 10, gluc: false, lupa: 'mastocito' }, r: ['.rec-b2', '#granulos'], c: C.anaAdre },
+    { t: 'Begoña toma bisoprolol: los β están tapados. La adrenalina llega y rebota; los gránulos siguen saliendo y la PA no sube.', set: { bb: true }, r: ['.tapon', '#granulos', '[data-fila="pa"]'], c: C.anaGluc },
+    { t: 'El glucagón entra por su propia puerta: su receptor activa la misma adenilato ciclasa que el β. El corazón responde aunque el β esté tapado.', set: { gluc: true, lupa: 'miocito' }, r: ['.rec-gluc', '#n-ac'], c: C.glucMec },
+    { t: 'En el mastocito, el glucagón puede devolver la respuesta a la adrenalina; cómo lo hace aquí, la fuente no lo dice.', set: { lupa: 'mastocito' }, r: ['#q-gluc', '#granulos'], c: C.anaGluc, org: 'la fuente no lo dice' },
+    { t: 'Dosis: 1-5 mg IV en 5 min y luego 5-15 µg/min. Puede provocar vómitos: si está obnubilada, de lado. La pauta de la intoxicación es otra.', r: ['[data-fila="glu"]'], c: C.anaGluc }] },
+};
+let guia = null, gi = 0;
+function abrirGuia(g) {
+  pararPasoAPaso();
+  guia = g; gi = 0;
+  $('dock-explorar').innerHTML = ''; $('dock-explorar').hidden = true; $('dock-estudio').hidden = true; $('dock-guia').hidden = false; $('frase').hidden = true;
+  pintarGuia();
+}
+function cerrarGuia() {
+  borrarSenal(); guia = null;
+  $('dock-guia').hidden = true; $('frase').hidden = modo !== 'explorar';
+  if (modo === 'explorar') { $('dock-explorar').hidden = false; pintarDock(); } else $('dock-estudio').hidden = false;
+  medirDock();
+}
+function aplicarSet(set) {
+  if (!set) return;
+  const cambiaLupa = set.lupa && set.lupa !== ST.lupa, cambiaCas = set.cas && set.cas !== ST.cas;
+  Object.assign(ST, set);
+  if (cambiaCas) { document.querySelectorAll('[data-cas]').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.cas === ST.cas))); casPaso = 0; }
+  if (cambiaLupa) montarLupa(); else if (cambiaCas) aplicarCascadaVisible();
+  actualizar();
+}
+function pintarGuia() {
+  const p = guia.pasos[gi], n = guia.pasos.length;
+  aplicarSet(p.set);
+  $('dock-guia').innerHTML = `<div class="guia entra"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${guia.tit}</span><button type="button" class="guia-x" id="guia-x" aria-label="Cerrar la explicación">×</button></div>
+    <p class="guia-txt">${p.t} ${chip(p.c)}${p.c2 ? ' ' + chip(p.c2) : ''}${p.org ? ' ' + org(p.org, p.org === 'ilustrativo') : ''}</p>${cita(p.c)}${p.bomba ? `<div class="guia-bomba">${p.bomba === 'na' ? bombaNA() : bombaVaso()}</div>` : ''}
+    <div class="guia-nav"><button type="button" class="guia-b" id="guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${guia.pasos.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
+  $('dock-guia').querySelectorAll('.guia-bomba input, .guia-bomba button').forEach(e => { e.disabled = true; });
+  $('guia-x').onclick = cerrarGuia;
+  $('guia-ant').onclick = () => { gi--; pintarGuia(); };
+  $('guia-sig').onclick = () => { if (gi === n - 1) cerrarGuia(); else { gi++; pintarGuia(); } };
+  medirDock();
+  requestAnimationFrame(() => requestAnimationFrame(() => senalar(p.r)));
+}
+function borrarSenal() { document.querySelectorAll('.guia-anillo').forEach(e => e.remove()); document.querySelectorAll('.guia-marco').forEach(e => e.classList.remove('guia-marco')); }
+function senalar(sels, sinScroll) {
+  borrarSenal(); let primero = null;
+  for (const s of sels || []) {
+    for (const el of document.querySelectorAll(s)) {
+      if (!el.getClientRects().length) continue;
+      const svg = el.ownerSVGElement;
+      if (svg) {
+        let b; try { b = el.getBBox(); } catch { continue; }
+        if (!b.width && !b.height) continue;
+        const m = svg.getScreenCTM().inverse().multiply(el.getScreenCTM());
+        const xs = [b.x, b.x + b.width].flatMap(x => [b.y, b.y + b.height].map(y => [m.a * x + m.c * y + m.e, m.b * x + m.d * y + m.f]));
+        const x0 = Math.min(...xs.map(p => p[0])), x1 = Math.max(...xs.map(p => p[0])), y0 = Math.min(...xs.map(p => p[1])), y1 = Math.max(...xs.map(p => p[1]));
+        const r = document.createElementNS(NS, 'rect');
+        r.setAttribute('class', 'guia-anillo'); r.setAttribute('x', x0 - 3); r.setAttribute('y', y0 - 3); r.setAttribute('width', x1 - x0 + 6); r.setAttribute('height', y1 - y0 + 6); r.setAttribute('rx', 6);
+        svg.appendChild(r); primero = primero || r;
+      } else { el.classList.add('guia-marco'); primero = primero || el; }
+    }
+  }
+  if (primero && !sinScroll) {
+    const caja = primero.getBoundingClientRect(), alto = innerHeight - $('dock').offsetHeight;
+    if (caja.top < 8 || caja.bottom > alto - 8) scrollBy({ top: caja.top - (alto - caja.height) / 2, behavior: REDUCIR ? 'auto' : 'smooth' });
+  }
+}
+$('explicame').addEventListener('click', () => abrirGuia(GUIAS[ST.momento]));
+
+/* ============================================================
+   10. Fuentes del estado (lista), lámina del libro, notas, profundizar y decidir
+   ============================================================ */
+function pintarFuentes() {
+  const g = GUIAS[ST.momento], vistos = new Set(), items = [];
+  const mete = c => { if (!c) return; const k = c.f + c.id + c.sitio; if (vistos.has(k)) return; vistos.add(k); items.push(c); };
+  g.pasos.forEach(p => { mete(p.c); mete(p.c2); });
+  mete(OBJ[R.tipo].cita); mete(C.umi);
+  $('lista-fuentes').innerHTML = items.map(c => `<li><span>${FICHA[c.f][3] ? `Marino, ${c.sitio} (${FICHA[c.f][4]}${pag(c.p)})` : 'Manual UMI, fármacos vasoactivos (otra fuente)'}</span>${cita(c)}</li>`).join('');
+  $('explicame-txt').textContent = `${g.pasos.length} pasos: ${g.tit}`;
+}
+function pintarTira() {
+  $('tira').innerHTML = `<button type="button" class="lamina-ancha" id="lam-52"><span class="caja"><img src="${IMG52}" alt="Fig. 52.4 de Marino" loading="lazy"></span><span><b>Fig. 52.4</b> · cómo cambian los fármacos la fuerza del corazón: glucagón, β, AMPc, PDE y canal de calcio. Es el miocito de la lupa.</span></button>
+    <ul class="lista">
+      <li><span>Tabla 14.4: los vasopresores y su rango de dosis.</span>${cita(C.t144)}</li>
+      <li><span>Tabla 16.3: los inotrópicos del shock cardiogénico, con el ajuste renal de la milrinona.</span>${cita(C.t163)}</li>
+      <li><span>Tabla 17.5: las soluciones de adrenalina y para qué sirve cada una.</span>${cita(C.t175)}</li>
+    </ul>`;
+  const abrir = () => { $('visor-img').src = IMG52; $('visor-img').alt = 'Fig. 52.4 de Marino';
+    $('visor-txt').textContent = 'Fig. 52.4: el receptor de glucagón y el receptor β están unidos a la adenilato ciclasa: el ATP pasa a AMPc. El AMPc activa una proteína cinasa que abre el canal de calcio, y el calcio llega a las proteínas contráctiles. La PDE degrada el AMPc a AMP; la milrinona la frena. Los betabloqueantes tapan el β y los calcioantagonistas cierran el canal.';
+    $('visor-cita').innerHTML = cita(C.fig524); $('visor').showModal(); };
+  $('lam-52').onclick = abrir; $('fig524').onclick = abrir;
+  $('visor-cerrar').onclick = () => $('visor').close();
+}
+const NOTAS = [
+  { tipo: 'discrepan', txt: '<b>El rango de la noradrenalina.</b> Marino: 5-40 µg/min (Tabla 14.4) y 5-30 µg/min en el shock cardiogénico. El Manual UMI: 0,2-1,3 µg/kg/min, que en Paulino (80 kg) son 16-104 µg/min. Ninguna se elige: cada una con su chip.', c: [C.t144, C.csNa, C.umi] },
+  { tipo: 'discrepan', txt: '<b>Cuándo añadir vasopresina.</b> El cap. 14 dice con NA ≥0,2 µg/kg/min; la Tabla 17.2 y el texto del cap. 17, con 0,25-0,5. Para la hidrocortisona, la Tabla 17.2 dice «>0,25» y el texto, «≥0,25».', c: [C.vasopresina, C.t172, C.cortic] },
+  { tipo: 'discrepan', txt: '<b>La adrenalina en el séptico.</b> Segunda línea en el cap. 14; tercer vasopresor en la Tabla 17.2.', c: [C.adre, C.t172] },
+  { tipo: 'calla', txt: '<b>Las equivalencias del shock cardiogénico.</b> El libro escribe «5 µg/min (0,05 µg/kg/min)» y «5-30 µg/min (0,05-0,5)» sin decir para qué peso: la primera cuadra con 100 kg y la segunda, con 60. La bomba calcula con el peso del paciente y enseña al lado la cifra del libro.', c: [C.csNa] },
+  { tipo: 'errata', titulo: 'Errata de dosis', txt: '<b>La unidad de la vasopresina.</b> El libro imprime «U/h» (0,01-0,04 en la Tabla 14.4; 0,03-0,04 en la p. 16). La bomba usa 0,03 U/min, la dosis habitual (conocimiento general, no del libro: compruébalo en la ficha técnica).', c: [C.vasoNota] },
+  { tipo: 'errata', titulo: 'Posible errata', txt: '<b>El potasio del levosimendán.</b> Marino escribe que vasodilata «facilitando la entrada de potasio en el músculo liso vascular». Abrir canales de K⁺ suele describirse como salida de potasio, que relaja la célula (conocimiento general, no de la fuente; está por comprobar en otra fuente). Se reproduce la frase del libro y el dibujo no pinta la dirección.', c: [C.levo] },
+  { tipo: 'calla', txt: '<b>El subtipo de cada receptor.</b> Marino dice que la NA es un «β débil» y que la adrenalina actúa en el mastocito por receptores β, sin subtipo. El β₁ de la NA, su «sin β₂» y el β₂ del mastocito y de la dobutamina son del Manual UMI, con su chip. Las cadenas Gq e IP₃ son fisiología general.', c: [C.naRec, C.umi] },
+  { tipo: 'calla', txt: '<b>El corte β/α de la adrenalina.</b> Marino no da a qué dosis pasa de β a α; el Manual UMI, sí: β a 1-4 µg/min, α por encima de 20.', c: [C.adre, C.umi] },
+  { tipo: 'calla', txt: '<b>Qué betabloqueante.</b> El libro habla de «betabloqueantes» sin distinguir. El bisoprolol de Begoña es cardioselectivo (β₁; fisiología general): cuánto tapa el β del mastocito, la fuente no lo dice. El dibujo tapa sus β, como el libro, y deja libre el β₂ de la arteriola.', c: [C.anaGluc] },
+  { tipo: 'calla', txt: '<b>El glucagón en el mastocito.</b> El cap. 17 dice que el glucagón puede devolver la respuesta a la adrenalina y remite al cap. 52, que lo explica en el corazón. Cómo lo hace en el mastocito, la fuente no lo dice: el dibujo pone una interrogación.', c: [C.anaGluc, C.glucMec] },
+  { tipo: 'calla', txt: '<b>Cuánto mueve cada fármaco.</b> La ficha da la dirección (la NA sube la RVS, la dobutamina sube el gasto y la FC, la milrinona baja la PA), no cuánto. Las cifras del monitor tras cada cambio son ilustrativas; las de partida de cada paciente, del caso.', c: [C.naDosis] },
+];
+const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'], errata: ['Errata de dosis', 'errata'] };
+const PROFUNDIZAR = [
+  { t: 'La dopamina y sus tres tramos (≤3, 3-10 y >10 µg/kg/min), con más taquiarritmias que los demás.', c: C.dopa },
+  { t: 'La fenilefrina: α puro, bradicardia refleja; útil en el séptico con FA rápida (opinión del autor).', c: C.fenil },
+  { t: 'La angiotensina II: libera vasopresina y frena la fibrinólisis (trombosis 13 % frente a 5 %).', c: C.angio },
+  { t: 'El levosimendán: sensibiliza los miofilamentos al calcio y dilata las coronarias.', c: C.levo },
+  { t: 'La extravasación de un vasopresor y la fentolamina en la zona.', c: C.extrav },
+  { t: 'La hidrocortisona en el séptico: facilita la respuesta a las catecolaminas.', c: C.cortic },
+  { t: 'Los antihistamínicos y el albuterol en la anafilaxia: alivian, no paran.', c: C.anaSeg },
+];
+function pintarFijos() {
+  $('lista-notas').innerHTML = NOTAS.map(n => `<div class="nota-fuentes"><span class="nota-tipo ${NOTA_TIPO[n.tipo][1]}">${n.titulo || NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.c.map(cita).join('')}</div>`).join('');
+  $('lista-profundizar').innerHTML = PROFUNDIZAR.map(p => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
+  pintarElige(); pintarTira();
+}
+const elegido = {};
+const DECIDIR = [
+  ['estilo', '1 · ¿Qué estilo?', [['a', 'A · Grabado crema y oro'], ['b', 'B · Microscopio de fluorescencia']]],
+  ['sustituye', '2 · ¿Modelo nuevo que contiene y sustituye a los receptores animados, o ampliar el diagrama que hay?', [['nuevo', 'Modelo nuevo (recomendado)'], ['ampliar', 'Ampliar el diagrama']]],
+  ['orden', '3 · ¿Primero los fármacos del shock y luego los vasodilatadores y los frenos, o todos a la vez?', [['shock', 'Primero los del shock (recomendado)'], ['todos', 'Todos a la vez']]],
+  ['umi', '4 · ¿El Manual UMI dentro del modelo, como segunda fuente con su chip?', [['si', 'Sí (recomendado)'], ['no', 'No, solo Marino']]],
+  ['barras', '5 · Cuando el modelo esté, ¿se quitan de la ficha de vasopresores las barras y el selector actuales?', [['quitar', 'Sí, quitarlos'], ['dejar', 'No, dejarlos']]],
+  ['monitor', '6 · ¿Un solo monitor para la cabecera del shock y para este modelo?', [['uno', 'Uno solo (recomendado)'], ['dos', 'Cada uno el suyo']]],
+];
+function pintarElige() {
+  $('elige').innerHTML = DECIDIR.map(([k, q, ops]) => `<p class="para">${q}</p><div class="opciones-elige">${ops.map(([v, t]) => `<button type="button" data-el="${k}" data-v="${v}" aria-pressed="${elegido[k] === v}">${t}</button>`).join('')}</div>`).join('');
+  const r = DECIDIR.filter(([k]) => elegido[k]).map(([k, , ops]) => ops.find(o => o[0] === elegido[k])[1]);
+  $('resumen-elige').textContent = r.length ? 'Tu elección: ' + r.join(' · ') : '';
+}
+$('elige').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-el]'); if (!b) return;
+  elegido[b.dataset.el] = b.dataset.v; if (b.dataset.el === 'estilo') ponerEstilo(b.dataset.v);
+  pintarElige();
+});
+function ponerEstilo(e) {
+  document.body.classList.toggle('est-a', e === 'a'); document.body.classList.toggle('est-b', e === 'b');
+  document.querySelectorAll('[data-estilo]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.estilo === e)));
+  elegido.estilo = e; pintarElige();
+}
+$('estilos').addEventListener('click', ev => { const b = ev.target.closest('[data-estilo]'); if (b) ponerEstilo(b.dataset.estilo); });
+
+/* ============================================================
+   11. Momentos y dock: las bombas de perfusión
+   ============================================================ */
+function pintarMomentos() {
+  $('momentos').innerHTML = Object.entries(MOMENTOS).map(([k, m]) => `<button type="button" data-mom="${k}" aria-pressed="${ST.momento === +k}">${k} · ${m.tit}<small>${m.sub}</small></button>`).join('');
+  $('ficha-pac').innerHTML = `${MOMENTOS[ST.momento].pac.linea} ${org('cifras del paciente: del caso; los cambios, ilustrativo', true)}`;
+}
+$('momentos').addEventListener('click', ev => { const b = ev.target.closest('[data-mom]'); if (b) ponerMomento(+b.dataset.mom); });
+function ponerMomento(m) {
+  pararPasoAPaso();
+  Object.assign(ST, BASE_ST, MOMENTOS[m].ini, { momento: m, lupa: MOMENTOS[m].lupa });
+  casPaso = 0; $('info-diana').hidden = true; $('detalle-fila').hidden = true;
+  pintarMomentos(); montarLupa(); actualizar(); llenarEstatico(); pintarDock();
+}
+const SVG_CANDADO = `<svg viewBox="0 0 20 22" aria-hidden="true"><path d="M5 10 V6.5 a5 5 0 0 1 10 0 V10" fill="none" style="stroke:var(--accent-blue)" stroke-width="2.2"/><rect x="2" y="10" width="16" height="11" rx="2.5" style="fill:var(--accent-blue)"/><circle cx="10" cy="15" r="1.8" style="fill:var(--bg-main)"/></svg>`;
+function bombaNA() {
+  const kg = ST.na / MOMENTOS[ST.momento].pac.peso, max = 40;
+  const tramo = ST.na === 0 ? 'parada' : ST.na < 10 ? 'pesa el β' : ST.na < 30 ? 'manda el α' : 'techo: segundo vasopresor';
+  const pct = v => (v / max * 100).toFixed(1) + '%';
+  return `<div class="bomba" id="bomba-na"><div class="bomba-pant"><span class="bomba-f">Noradrenalina</span><span class="bomba-v">${ST.na}<small> µg/min</small></span><span class="bomba-conv">= ${coma(kg, 2)} µg/kg/min<br>con ${MOMENTOS[ST.momento].pac.peso} kg</span></div>
+    <div class="bomba-mando"><div class="tramos" aria-hidden="true"><i style="width:${pct(10)};background:var(--accent-yellow);opacity:.5"></i><i style="width:${pct(20)};background:var(--accent-red);opacity:.6"></i><i style="width:${pct(10)};background:var(--text-muted);opacity:.4"></i></div>
+    <input type="range" id="d-na" min="0" max="${max}" step="1" value="${ST.na}" aria-label="Noradrenalina en µg/min">
+    <div class="bomba-marcas" aria-hidden="true">${[5, 10, 30, 40].map(v => `<span style="left:${pct(v)}">${v}</span>`).join('')}</div>
+    <span class="bomba-tramo-txt">${tramo} ${org('tramos: ficha · p. 13')}</span></div></div>`;
+}
+function bombaVaso() {
+  return `<div class="bomba" id="bomba-vaso"><div class="bomba-pant"><span class="bomba-f">Vasopresina</span><span class="bomba-v">${ST.vaso ? '0,03' : '0'}<small> U/min</small></span><span class="bomba-conv">${ST.vaso ? 'dosis fija' : 'apagada'}</span></div>
+    <div class="candado">${SVG_CANDADO}<span>Dosis fija: no se titula ${org('ficha · p. 16')}</span><button type="button" class="tog" data-tog="vaso" aria-pressed="${ST.vaso}" style="margin-left:auto">${ST.vaso ? 'Quitar' : 'Añadir'}</button></div></div>`;
+}
+function pintarDock() {
+  const m = ST.momento, h = [];
+  if (m === 1 || m === 2) { h.push(bombaNA()); if (m === 2) h.push(bombaVaso()); else h.push(`<p class="dock-nota">Mueve la bomba: los tramos pintados son los del libro. Sin dosis de carga.</p>`); }
+  if (m === 3) {
+    h.push(`<div class="seg" role="group" aria-label="Inotrópico">${[['ninguno', 'Solo NA', '5 µg/min'], ['dobuta', 'Dobutamina', 'β₁'], ['milri', 'Milrinona', 'frena la PDE']].map(([k, n, s]) => `<button type="button" data-ino="${k}" aria-pressed="${ST.ino === k}">${n}<small>${s}</small></button>`).join('')}</div>`);
+    if (ST.ino === 'dobuta') {
+      const pct = v => (v / 20 * 100).toFixed(1) + '%';
+      h.push(`<div class="bomba" id="bomba-dobuta"><div class="bomba-pant"><span class="bomba-f">Dobutamina</span><span class="bomba-v">${ST.dobuta}<small> µg/kg/min</small></span><span class="bomba-conv">= ${Math.round(ST.dobuta * AURELIO.peso)} µg/min · ${AURELIO.peso} kg</span></div>
+        <div class="bomba-mando"><div class="tramos" aria-hidden="true"><i style="width:${pct(3)};background:var(--text-muted);opacity:.3"></i><i style="width:${pct(2)};background:var(--accent-yellow);opacity:.8"></i><i style="width:${pct(15)};background:var(--accent-yellow);opacity:.4"></i></div>
+        <input type="range" id="d-dobuta" min="0" max="20" step="1" value="${ST.dobuta}" aria-label="Dobutamina en µg/kg/min">
+        <div class="bomba-marcas" aria-hidden="true">${[3, 5, 20].map(v => `<span style="left:${pct(v)}">${v}</span>`).join('')}</div>
+        <span class="bomba-tramo-txt">inicio 3-5, habitual 3-20 ${org('ficha · p. 43')}</span></div></div>`);
+    } else if (ST.ino === 'milri') {
+      h.push(`<div class="bomba" id="bomba-milri"><div class="bomba-pant"><span class="bomba-f">Milrinona</span><span class="bomba-v">0,375<small> µg/kg/min</small></span><span class="bomba-conv">tras 50 µg/kg en 10 min</span></div><span class="bomba-tramo-txt">Rango 0,375-0,75; ajuste por ClCr en la ficha del fármaco ${org('ficha · p. 43')}</span></div>`);
+    } else h.push(`<p class="dock-nota">Elige un inotrópico y mira el miocito y el monitor.</p>`);
+  }
+  if (m === 4) {
+    h.push(`<div class="seg" role="group" aria-label="Betabloqueante">${[[true, 'Con bisoprolol', 'β tapado'], [false, 'Sin betabloqueante', 'β libre']].map(([v, n, s]) => `<button type="button" data-bb="${v}" aria-pressed="${ST.bb === v}">${n}<small>${s}</small></button>`).join('')}</div>`);
+    h.push(`<div class="seg" role="group" aria-label="Adrenalina en perfusión">${[0, 5, 10, 15].map(d => `<button type="button" data-adre="${d}" aria-pressed="${ST.adre === d}">${d}<small>${d === 0 ? 'sin adrenalina' : 'µg/min'}</small></button>`).join('')}</div>`);
+    h.push(`<div class="fila" style="justify-content:space-between"><span class="dock-nota">Adrenalina 1:100.000, 5-15 µg/min ${org('ficha · pp. 66-67')}</span><button type="button" class="tog" data-tog="gluc" aria-pressed="${ST.gluc}">Glucagón<small>1-5 mg en 5 min</small></button></div>`);
+  }
+  $('dock-explorar').innerHTML = h.join('');
+  const na = $('d-na'); if (na) na.oninput = e => { ST.na = +e.target.value; actualizar(); refrescarBombaNA(); };
+  const db = $('d-dobuta'); if (db) db.oninput = e => { ST.dobuta = +e.target.value; actualizar(); const p = document.querySelector('#bomba-dobuta .bomba-v'); p.innerHTML = `${ST.dobuta}<small> µg/kg/min</small>`; document.querySelector('#bomba-dobuta .bomba-conv').textContent = `= ${Math.round(ST.dobuta * AURELIO.peso)} µg/min · ${AURELIO.peso} kg`; };
+  medirDock();
+}
+function refrescarBombaNA() {
+  const b = $('bomba-na'); if (!b) return;
+  const kg = ST.na / MOMENTOS[ST.momento].pac.peso;
+  b.querySelector('.bomba-v').innerHTML = `${ST.na}<small> µg/min</small>`;
+  b.querySelector('.bomba-conv').innerHTML = `= ${coma(kg, 2)} µg/kg/min<br>con ${MOMENTOS[ST.momento].pac.peso} kg`;
+  b.querySelector('.bomba-tramo-txt').innerHTML = `${ST.na === 0 ? 'parada' : ST.na < 10 ? 'pesa el β' : ST.na < 30 ? 'manda el α' : 'techo: segundo vasopresor'} ${org('tramos: ficha · p. 13')}`;
+}
+$('dock-explorar').addEventListener('click', ev => {
+  const b = ev.target.closest('button'); if (!b) return;
+  if (b.dataset.tog) ST[b.dataset.tog] = !ST[b.dataset.tog];
+  if (b.dataset.ino) ST.ino = b.dataset.ino;
+  if (b.dataset.bb) ST.bb = b.dataset.bb === 'true';
+  if (b.dataset.adre) ST.adre = +b.dataset.adre;
+  actualizar(); pintarDock();
+});
+$('frase').addEventListener('click', () => { $('frase').classList.toggle('abierta'); medirDock(); });
+$('pausa').addEventListener('click', () => { pausado = !pausado; $('pausa').setAttribute('aria-pressed', String(pausado)); $('pausa').textContent = pausado ? 'Seguir' : 'Pausa'; actualizarLupa(); });
+function medirDock() { requestAnimationFrame(() => { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', ($('frase').hidden ? 0 : $('frase').offsetHeight) + 'px'); }); }
+
+function actualizar() {
+  R = calcular();
+  pintarCifras(); pintarCuerpo(); actualizarLupa(); pintarCascada();
+  $('fig524').hidden = ST.lupa !== 'miocito';
+  if (modo === 'explorar') { pintarFrase(); pintarFuentes(); pintarFichas(); }
+  $('mon-quien').textContent = `Monitor · ${MOMENTOS[ST.momento].pac.nombre}`;
+  if (REDUCIR || pausado) llenarEstatico();
+}
+
+/* ============================================================
+   12. El bucle: curvas, llaves, calcio, histamina y latido (todo quieto con «reducir movimiento» o en pausa)
+   ============================================================ */
+function bucle(t) {
+  if (!ultimoT) ultimoT = t;
+  const dt = Math.min(0.1, (t - ultimoT) / 1000); ultimoT = t;
+  if (!pausado) {
+    const paso = SEG / NP; acum += dt;
+    while (acum >= paso) { muestra(paso); acum -= paso; }
+    pintarTrazas(); posarLlaves(t); pintarFlujo(t); pintarSarcomeros(t);
+  }
+  requestAnimationFrame(bucle);
+}
+
+/* ============================================================
+   13. Mayéutica (muestra): una pregunta de la guía socrática, una del examen y el primer paso del caso de Paulino
+   ============================================================ */
+// Las respuestas están aquí, en el código; el HTML no las lleva hasta que se contesta.
+const MUESTRA = [
+  { grupo: 'guia', num: 'G1', predice: true, momento: 1, ajustes: { na: 5 },
+    enunciado: 'Paulino, hora 1: vas a subir la noradrenalina de 5 a 25 µg/min. Antes de tocar la bomba, <b>¿qué cifra del monitor se mueve primero?</b>',
+    opciones: [
+      { t: 'La IRVS: la noradrenalina aprieta los vasos desde la primera gota.', porque: 'Por debajo de 10 µg/min pesa más el β y lo que sube es el gasto (p. 13). Si esperas ver la PAM arriba con 5, subirás la bomba de golpe sin ver lo que hace en el corazón de Paulino.' },
+      { t: 'El IC: por debajo de 10 µg/min pesa el β del corazón.', ok: true },
+      { t: 'La FC: la noradrenalina es, sobre todo, un fármaco que acelera.', porque: 'Su acción principal es el α y el β es débil (p. 12). Si esperas taquicardia para saber que actúa, creerás que no hace nada y la subirás de más.' },
+      { t: 'Ninguna hasta los 30 µg/min: antes no se nota.', porque: 'A 30 se llega al techo, no al comienzo (p. 13). Esperar hasta ahí deja a Paulino con una PAM de 51 mucho más tiempo.' }],
+    explicacion: 'Por debajo de 10 µg/min, el β de la noradrenalina puede subir el gasto; por encima de 10 predomina el α y sube la resistencia; a 30, no hay más respuesta.', fuente: C.naDosis,
+    tocar: { txt: 'Compruébalo: sube la bomba de 5 a 25' } },
+  { grupo: 'examen', num: 'E1', sinModelo: true,
+    enunciado: 'Paulino, hora 10: noradrenalina 26 µg/min, vasopresina y, desde la hora 8, adrenalina a 0,1 µg/kg/min (8 µg/min). El lactato pasa de 3,1 a 5,0 mmol/L y la glucemia es de 262 mg/dL. <b>¿Qué cambio explica el receptor α de la adrenalina?</b>',
+    opciones: [
+      { t: 'El lactato: el α cierra el intestino y el lactato sale de ahí.', porque: 'El libro atribuye la subida del lactato a la producción aeróbica, no a la isquemia (p. 14). Leído como hipoperfusión, a Paulino le subirías volumen o fármacos que no necesita.' },
+      { t: 'La taquicardia que aparece al subir la dosis.', porque: 'La taquicardia es del β (p. 13-14). Si la culpas al α, bajarías la noradrenalina y dejarías la adrenalina, que es la que acelera a Paulino.' },
+      { t: 'La glucemia: el α frena la secreción de insulina.', ok: true },
+      { t: 'El gasto metabólico de todo el cuerpo, que se dispara.', porque: 'El libro cita el aumento del metabolismo sin darle receptor (p. 14). Dárselo al α no tiene base, y lo que le importa a Paulino es que ese gasto sobra en un shock.' }],
+    explicacion: 'La adrenalina sube la glucemia porque el α inhibe la secreción de insulina, y sube el lactato por producción aeróbica: los dos engañan en el shock.', fuente: C.adre },
+  { grupo: 'caso', num: 'Paso 1', momento: 1, ajustes: { na: 0 }, dia: 'Urgencias · hora 0',
+    paciente: [['Paciente', 'Paulino, 72 años, 80 kg (ideal 70); HTA'], ['Motivo', 'colangitis aguda litiásica', 1], ['Volumen', '2,1 L de cristaloide en 3 h (30 mL/kg de peso ideal)', 1], ['PA', '74/40 mmHg (PAM 51)', 1], ['FC', '112 lpm, sinusal', 1], ['Lactato', '4,4 mmol/L', 1], ['Vías', 'sin vía central', 1]],
+    enunciado: '<b>¿Qué le das y por dónde?</b>',
+    opciones: [
+      { t: 'Noradrenalina a 5-10 µg/min por una vena del brazo, encima de la fosa antecubital.', ok: true },
+      { t: 'Esperar a la vía central: un vasopresor por una periférica se extravasa.', porque: 'Se puede empezar por una vena periférica del brazo (p. 60), segura hasta 48 h (p. 12). Esperar al catéter deja a Paulino con una PAM de 51.' },
+      { t: 'Dopamina a 5 µg/kg/min: sube el gasto sin cerrar los vasos.', porque: 'Da más taquicardia y arritmias, como la FA, que los demás vasopresores (p. 14). Con 112 lpm, Paulino tiene papeletas para una FA; en el séptico, la de elección es la noradrenalina (p. 60).' },
+      { t: 'Fenilefrina en bolo de 100 µg, como en la anestesia.', porque: 'No se recomienda en ningún shock y en el séptico va sin bolo (p. 15). Paulino ganaría vasoconstricción pura, bradicardia refleja y menos riego en el riñón y el intestino.' }],
+    explicacion: 'Tras 30 mL/kg de cristaloide, la noradrenalina es el vasopresor de elección; puede empezar por una vena periférica por encima de la fosa antecubital, sin dosis de carga, a 5-10 µg/min.', fuente: C.t172, fuente2: C.naDosis,
+    sigue: 'En la app, el caso sigue: hora 2, noradrenalina a 24 µg/min y PAM 62. Calcularás la dosis por kilo con la bomba y decidirás qué añadir.' },
+];
+const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso de Paulino' };
+let paso = 0; const result = [];
+function pintarDockEst() {
+  $('dock-pasos').innerHTML = MUESTRA.map((_, i) => `<i class="${i < paso ? (result[i] ? 'on' : 'mal') : ''}${i === paso ? ' aqui' : ''}"></i>`).join('');
+  $('dock-est-izq').textContent = paso < MUESTRA.length ? `Pregunta ${paso + 1} de ${MUESTRA.length}` : 'Hecho';
+  $('dock-est-der').textContent = paso < MUESTRA.length ? GRUPO[MUESTRA[paso].grupo] : `${result.filter(Boolean).length} de ${MUESTRA.length} bien`;
+  medirDock();
+}
+function pintarPaso() {
+  pintarDockEst();
+  const cont = $('preg');
+  if (paso >= MUESTRA.length) {
+    tapado = false; $('tapa').hidden = true; $('zona-modelo').hidden = false; $('monitor').hidden = false; actualizar();
+    cont.innerHTML = `<h2>Hasta aquí la muestra</h2><p class="para">En la app, el receptor vivo tendrá la guía socrática entera, el examen y el caso de Paulino hasta el día 3, con el modelo en el punto de cada pregunta.</p><div class="fila"><button class="b" type="button" data-acc="otra">Otra vez</button></div>`;
+    return;
+  }
+  const q = MUESTRA[paso];
+  $('zona-modelo').hidden = !!q.sinModelo; $('monitor').hidden = !!q.sinModelo;
+  if (q.momento) { Object.assign(ST, BASE_ST, MOMENTOS[q.momento].ini, { momento: q.momento, lupa: MOMENTOS[q.momento].lupa }, q.ajustes || {}); pintarMomentos(); montarLupa(); }
+  tapado = !!q.predice; $('tapa').hidden = !q.predice;
+  if (!q.sinModelo) { actualizar(); llenarEstatico(); }
+  let h = '';
+  if (q.paciente) h += `<p class="dia">${q.dia}</p><dl class="paciente">${q.paciente.map(([k, v, n]) => `<dt>${k}</dt><dd${n ? ' class="cambia"' : ''}>${v}</dd>`).join('')}</dl>`;
+  h += `<div class="cab-preg"><span class="num">${q.num}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}</span></div>`;
+  h += `<p class="pregunta">${q.enunciado}</p><div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div><div id="q-res"></div>`;
+  cont.innerHTML = h; cont.classList.remove('entra'); void cont.offsetWidth; cont.classList.add('entra');
+}
+function subirBomba(de, a, alFin) {
+  if (REDUCIR) { ST.na = a; actualizar(); alFin(); return; }
+  let v = de; const t = setInterval(() => { v += 1; ST.na = v; actualizar(); if (v >= a) { clearInterval(t); alFin(); } }, 140);
+}
+$('preg').addEventListener('click', ev => {
+  const q = MUESTRA[paso], a = ev.target.closest('[data-acc]')?.dataset.acc;
+  if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
+  if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
+  if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
+  if (a === 'tocar') {
+    const fila = ev.target.closest('.fila');
+    const v = n => { const s = { ...ST, na: n }; return calcular(s); };
+    const [r5, r10, r25] = [v(5), v(10), v(25)];
+    fila.innerHTML = '<span class="para">Subiendo la bomba…</span>';
+    $('monitor').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' });
+    subirBomba(5, 25, () => {
+      fila.outerHTML = `<p class="para"><span class="ok">✓ Mira el monitor y la lupa:</span> de 5 a 10 µg/min el IC pasa de ${coma(r5.ic, 1)} a ${coma(r10.ic, 1)} y la IRVS, de ${coma(r5.irvs, 1)} a ${coma(r10.irvs, 1)}; de 10 a 25 la IRVS sube a ${coma(r25.irvs, 1)} y el IC ya no sube (${coma(r25.ic, 1)}). ${org('cifras: ilustrativo', true)}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`;
+    });
+    return;
+  }
+  const op = ev.target.closest('[data-op]');
+  if (op && !op.disabled) {
+    const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
+    document.querySelectorAll('#ops button').forEach(b => { b.disabled = true; }); op.classList.add(o.ok ? 'elegida-bien' : 'elegida-mal');
+    tapado = false; $('tapa').hidden = true; if (!q.sinModelo) actualizar();
+    $('q-res').innerHTML = `<div class="respuesta entra"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion} ${chip(q.fuente)}</p>${cita(q.fuente)}${q.fuente2 ? cita(q.fuente2) : ''}${q.sigue ? `<p class="para">${q.sigue}</p>` : ''}
+      <div class="fila">${q.tocar ? `<button class="b prim" type="button" data-acc="tocar">${q.tocar.txt}</button>` : `<button class="b prim" type="button" data-acc="sig">${paso === MUESTRA.length - 1 ? 'Terminar la muestra' : 'Siguiente →'}</button>`}</div></div>`;
+    pintarDockEst();
+  }
+});
+
+/* ============================================================
+   14. Modos y arranque
+   ============================================================ */
+function setModo(m) {
+  if (guia) cerrarGuia();
+  pararPasoAPaso();
+  modo = m; borrarSenal();
+  for (const [id, k] of [['modo-explorar', 'explorar'], ['modo-preguntas', 'preguntas']]) $(id).setAttribute('aria-selected', String(m === k));
+  $('zona-momentos').hidden = m !== 'explorar'; $('fila-explicame').hidden = m !== 'explorar'; $('zona-abajo').hidden = m !== 'explorar';
+  $('vista-preguntas').hidden = m !== 'preguntas';
+  $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';
+  $('frase').hidden = m !== 'explorar'; $('detalle-fila').hidden = true; $('tapa').hidden = true; $('info-diana').hidden = true;
+  $('zona-modelo').hidden = false; $('monitor').hidden = false;
+  tapado = false;
+  if (m === 'explorar') ponerMomento(1);
+  if (m === 'preguntas') { paso = 0; result.length = 0; pintarPaso(); }
+  medirDock();
+}
+$('modo-explorar').onclick = () => setModo('explorar');
+$('modo-preguntas').onclick = () => setModo('preguntas');
+addEventListener('resize', () => { montarTrazas(); llenarEstatico(); medirDock(); });
+
+montarTrazas();
+R = calcular();
+pintarFijos();
+ponerMomento(1);
+llenarEstatico();
+if (!REDUCIR) requestAnimationFrame(bucle);
+medirDock();
+</script>
+</body>
+</html>
