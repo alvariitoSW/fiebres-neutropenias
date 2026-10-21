@@ -4,9 +4,11 @@
 // contexto limpio: accesos (menús, buscador, 10 fichas con su estado), la Mayéutica entera fallando 4 con su repaso,
 // los 3 casos hasta «Lo que te llevas», lo guardado tras recargar, Conceptos y el «← VOLVER» a la ficha. Mide el
 // desborde lateral (0 px) tras cada respuesta, el repaso y cada paso de los casos, y los errores de consola.
+// Y la explicación guiada de los estados (guias-comun.mjs): dos enteras, paso a paso, y cada cita a un párrafo que existe.
 // Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
-const { PREGUNTAS, CASOS } = await import(new URL('../../js/data/agua-viva-data.js', import.meta.url));
+const { GUIAS, PREGUNTAS, CASOS } = await import(new URL('../../js/data/agua-viva-data.js', import.meta.url));
+const { probarGuias } = await import(new URL('./guias-comun.mjs', import.meta.url));
 const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
@@ -231,6 +233,8 @@ await pulsar('#agv-raiz [data-acidobase-vivo]'); await p.waitForTimeout(REDUCIDO
 await pulsar('#abv-volver'); await p.waitForTimeout(1000);
 ok(await fichaAbierta('mar-cristaloides'), 'ficha → río y mar → ácido-base: «← VOLVER» vuelve a la ficha de origen');
 ok(errores.length === 0, `0 errores de consola al final (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
+// La explicación guiada (guias-comun.mjs): dos enteras, la forma de todas y cada «Ver en la ficha» a un párrafo que existe
+await probarGuias({ p, ok, pre: 'agv', view: 'aguaViva', attr: 'aguaViva', GUIAS, recorrer: ['salino', 'hemorragia'], foto, desborde, REDUCIDO });
 await ctx.close();
 fallosTotales.push(...fallos.map(f => `${tag}: ${f}`));
 }

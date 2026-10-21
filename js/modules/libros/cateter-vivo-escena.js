@@ -39,7 +39,7 @@ const LUPA = { cx: 180, cy: 166, r: 150 };
 // Un rótulo: nunca por debajo de s 6,4 (7,8 de letra), para que a 390 px no baje de 7,5 px ni en el estudio.
 const t = (x, y, txt, { s = 7, c = 'text-muted', a = 'start', i = true, w = '', id = '' } = {}) =>
     `<text${id ? ` id="ctv-${id}"` : ''} x="${x}" y="${y}" font-size="${+(Math.max(s, 6.4) * 1.22).toFixed(1)}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
-const numero = (x, y, n) => `<g transform="translate(${x} ${y})"><circle r="8" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.5"/><text y="3.2" font-size="9" text-anchor="middle" style="fill:var(--bg-main);font-family:Georgia,serif;font-weight:700">${n}</text></g>`;
+const numero = (x, y, n) => `<g data-g="n${n}" transform="translate(${x} ${y})"><circle r="8" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.5"/><text y="3.2" font-size="9" text-anchor="middle" style="fill:var(--bg-main);font-family:Georgia,serif;font-weight:700">${n}</text></g>`;
 
 function defs() {
     return `<defs>
@@ -277,15 +277,17 @@ export function pintarLupaB(e) {
             <rect x="20" y="268" width="320" height="60" fill="url(#ctv-p-cruzado)"/>
             ${t(40, 165, 'piel', { s: 7 })}${t(40, 198, 'grasa', { s: 7 })}${t(312, 244, 'vena', { s: 7.5, c: 'accent-purple', a: 'end' })}`;
         // apósito
+        h += '<g data-g="aposito">';
         if (e.aposito === 'gasa') h += `<rect x="166" y="147" width="60" height="9" rx="2" style="fill:var(--text-main)" fill-opacity=".22"/><rect x="166" y="147" width="60" height="9" rx="2" fill="url(#ctv-p-cruzado)"/>${t(232, 154, 'gasa', { s: 6.5 })}`;
         else {
             h += `<path d="M164 155 L228 155" style="stroke:var(--text-main)" stroke-opacity=".6" stroke-width="1.8"/>${t(232, 154, e.aposito === 'esponja' ? 'film + esponja' : 'film transparente', { s: 6.4 })}`;
             if (e.aposito === 'esponja') h += `<ellipse cx="194" cy="157" rx="11" ry="3.4" style="fill:var(--accent-green)" fill-opacity=".6"/>`;
             if (e.aposito === 'humedo') h += [172, 182, 206, 216].map(x => svgParticula('agua', x, 160, 1.9)).join('') + t(196, 182, 'humedad debajo', { s: 6.6, a: 'middle', c: 'accent-red', i: false, w: 600 });
         }
+        h += '</g>';
         // puertas del paquete de inserción (cualitativo)
         const puertas = ['manos', 'barreras', 'clorhex'];
-        h += puertas.map((k, i) => { const x = 96 + i * 11, cerrada = e.paquete[k]; return `<rect x="${x}" y="${cerrada ? 148 : 151}" width="7" height="${cerrada ? 8 : 5}" style="fill:${cerrada ? 'var(--accent-yellow)' : 'none'};stroke:var(--accent-yellow)" stroke-width=".8"/>`; }).join('') + t(108, 142, `puertas: ${d.puertasCerradas} de 3`, { s: 6.2, a: 'middle', c: 'text-dim' });
+        h += '<g data-g="puertas">' + puertas.map((k, i) => { const x = 96 + i * 11, cerrada = e.paquete[k]; return `<rect x="${x}" y="${cerrada ? 148 : 151}" width="7" height="${cerrada ? 8 : 5}" style="fill:${cerrada ? 'var(--accent-yellow)' : 'none'};stroke:var(--accent-yellow)" stroke-width=".8"/>`; }).join('') + t(108, 142, `puertas: ${d.puertasCerradas} de 3`, { s: 6.2, a: 'middle', c: 'text-dim' }) + '</g>';
         // tubo, conector y catéter
         h += `<path d="M356 70 C330 92 296 114 260 124" style="fill:none;stroke:var(--text-dim)" stroke-width="8" stroke-linecap="round"/><path d="M356 70 C330 92 296 114 260 124" style="fill:none;stroke:var(--bg-main)" stroke-width="5" stroke-linecap="round"/>
             <g transform="rotate(-22 249 128)"><rect x="236" y="121" width="26" height="14" rx="3" style="fill:var(--text-main);stroke:var(--bg-main)" fill-opacity=".85"/><rect x="244" y="119" width="4" height="18" rx="1" style="fill:var(--bg-main)"/></g>`;
@@ -294,7 +296,7 @@ export function pintarLupaB(e) {
         else h += `<path d="M192 162 L146 234" style="fill:none;stroke:var(--text-muted)" stroke-dasharray="3 3" stroke-width="1.2"/>${t(60, 214, 'retirado: otro, en un sitio nuevo', { s: 6.4, c: 'text-dim' })}`;
         // biopelícula en la punta
         const niv = sinCat || guia ? 0 : d.nivel;
-        if (niv) { const rx = 8 + niv * 5, ry = 5 + niv * 2.2; h += `<ellipse cx="${90 + niv}" cy="250" rx="${rx}" ry="${ry}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity=".14" stroke-dasharray="2 2" stroke-width=".8"/><ellipse cx="${90 + niv}" cy="250" rx="${rx}" ry="${ry}" fill="url(#ctv-p-rayado)"/>`; }
+        if (niv) { const rx = 8 + niv * 5, ry = 5 + niv * 2.2; h += `<ellipse data-g="bio" cx="${90 + niv}" cy="250" rx="${rx}" ry="${ry}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity=".14" stroke-dasharray="2 2" stroke-width=".8"/><ellipse cx="${90 + niv}" cy="250" rx="${rx}" ry="${ry}" fill="url(#ctv-p-rayado)"/>`; }
         // cocos: vía 3 (piel, por el trayecto), vía 2 (conector), vía 4 (sangre); cantidades ilustrativas
         const cocos = [];
         const n3 = sinCat ? 0 : d.piel;
@@ -313,11 +315,11 @@ export function pintarLupaB(e) {
         h += `<rect x="20" y="10" width="320" height="320" style="fill:var(--accent-purple)" fill-opacity=".16"/><rect x="20" y="10" width="320" height="320" fill="url(#ctv-p-ciruela)" opacity=".5"/>`;
         const niv = sinCat || e.manejo === 'guia' ? 0 : d.nivel;
         if (!sinCat) h += `<path d="M16 110 L214 206" style="stroke:var(--bg-main)" stroke-width="40" stroke-linecap="butt"/><path d="M16 110 L214 206" style="stroke:var(--accent-yellow)" stroke-width="36" stroke-linecap="butt"/><path d="M16 110 L214 206" style="stroke:url(#ctv-p-rayado-fino)" stroke-width="36"/>
-            <ellipse cx="214" cy="206" rx="10" ry="18" transform="rotate(26 214 206)" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width="2"/>${t(46, 94, e.manejo === 'guia' ? 'nuevo sobre guía (el libro lo desaconseja)' : 'la punta del catéter', { s: 7.2, c: 'accent-yellow', i: false, w: 600 })}`;
+            <ellipse data-g="punta" cx="214" cy="206" rx="10" ry="18" transform="rotate(26 214 206)" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width="2"/>${t(46, 94, e.manejo === 'guia' ? 'nuevo sobre guía (el libro lo desaconseja)' : 'la punta del catéter', { s: 7.2, c: 'accent-yellow', i: false, w: 600 })}`;
         else h += t(180, 170, 'sin catéter: sin superficie donde pegarse', { s: 8, a: 'middle', c: 'text-dim' });
         if (niv) {
             const blob = `M${110 - niv * 6} ${160 - niv * 4} C${130} ${132 - niv * 8} ${200 + niv * 6} ${160 - niv * 4} ${232 + niv * 6} ${188 - niv * 2} C${250 + niv * 4} ${220 + niv * 6} ${200} ${246 + niv * 6} ${150 - niv * 4} ${216 + niv * 4} C${110 - niv * 6} ${200} ${92 - niv * 6} ${180} ${110 - niv * 6} ${160 - niv * 4}Z`;
-            h += `<path d="${blob}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity=".16" stroke-width="1" stroke-dasharray="3 2"/><path d="${blob}" fill="url(#ctv-p-rayado)"/>`;
+            h += `<path data-g="matriz" d="${blob}" style="fill:var(--accent-yellow);stroke:var(--accent-yellow)" fill-opacity=".16" stroke-width="1" stroke-dasharray="3 2"/><path d="${blob}" fill="url(#ctv-p-rayado)"/>`;
             const pegados = [];
             for (let i = 0; i < 4 + niv * 5; i++) { const f = (i * 0.618) % 1, lado = i % 2 ? -1 : 1; pegados.push([120 + f * 100 + (i % 3) * 3, 160 + f * 50 + lado * (20 + (i % 4) * 2.5)]); }
             h += pegados.map(([x, y]) => svgParticula('coco', x, y, 4)).join('');
@@ -338,8 +340,8 @@ export function pintarLupaB(e) {
             ${t(180, 293, 'barra: 1 µm', { s: 6.8, a: 'middle', c: 'text-muted' })}`;
     } else if (vista === 'frascos') {
         const hora = Anim.hcHora;
-        const frasco = (x, nombre, hPos) => { const pos = hora >= hPos, op = pos ? clamp((hora - hPos) / 1.5, 0.25, 1) : 0;
-            return `<g transform="translate(${x} 14)">
+        const frasco = (x, nombre, hPos, g) => { const pos = hora >= hPos, op = pos ? clamp((hora - hPos) / 1.5, 0.25, 1) : 0;
+            return `<g data-g="${g}" transform="translate(${x} 14)">
                 <path d="M-10 78 L-10 100 L-30 136 L-30 228 Q-30 236 -22 236 L22 236 Q30 236 30 228 L30 136 L10 100 L10 78 Z" style="fill:var(--text-main);stroke:var(--text-dim)" fill-opacity=".06" stroke-width="1.4"/>
                 <path d="M-29 150 L29 150 L29 228 Q29 235 22 235 L-22 235 Q-29 235 -29 228 Z" style="fill:var(--accent-red)" fill-opacity=".22"/>
                 <path d="M-29 150 L29 150 L29 228 Q29 235 22 235 L-22 235 Q-29 235 -29 228 Z" fill="url(#ctv-p-turbio)" opacity="${op}"/>
@@ -348,7 +350,7 @@ export function pintarLupaB(e) {
                 ${t(0, 250, nombre, { s: 8, a: 'middle', c: 'text-main', i: false, w: 600 })}
                 ${t(0, 261, pos ? `positivo a las ${dec(hPos, hPos % 1 ? 1 : 0)} h` : 'aún claro', { s: 7, a: 'middle', c: pos ? 'accent-red' : 'text-muted', i: false })}
             </g>`; };
-        h += frasco(125, 'del catéter', HC.horaCateter) + frasco(235, 'periférico', HC.horaCateter + HC.difCaso);
+        h += frasco(125, 'del catéter', HC.horaCateter, 'frasco-cat') + frasco(235, 'periférico', HC.horaCateter + HC.difCaso, 'frasco-per');
         if (hora >= HC.horaCateter + HC.difCaso) h += t(180, 292, '2,5 h antes: el catéter es la fuente', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 });
     }
     $('lupaB').innerHTML = h;
@@ -371,13 +373,13 @@ function pintarLupaC(e) {
         <path d="M172 18 L172 146 Q166 156 150 182 M188 18 L188 146 Q194 156 210 182" style="fill:none;stroke:var(--text-dim)" stroke-width="1.6"/>
         <path d="M172 146 Q180 150 188 146" style="fill:none;stroke:var(--text-dim)" stroke-width="1.6"/>
         ${t(196, 152, 'carina', { s: 7.4, c: 'text-dim' })}
-        <line x1="140" y1="158" x2="196" y2="158" style="stroke:var(--accent-yellow)" stroke-dasharray="2 2" stroke-width=".7"/>
+        <line data-g="carina" x1="140" y1="158" x2="196" y2="158" style="stroke:var(--accent-yellow)" stroke-dasharray="2 2" stroke-width=".7"/>
         <!-- venas: yugular y subclavia derechas, innominadas, cava superior y aurícula -->
         <path d="M126 14 L136 106" style="stroke:var(--accent-purple)" stroke-opacity=".5" stroke-width="9" stroke-linecap="round"/>
         <path d="M40 122 C84 114 116 108 136 106 L150 122" style="fill:none;stroke:var(--accent-purple)" stroke-opacity=".5" stroke-width="9" stroke-linecap="round"/>
         <path d="M320 122 C270 112 236 108 214 114 L152 126" style="fill:none;stroke:var(--accent-purple)" stroke-opacity=".42" stroke-width="8" stroke-linecap="round"/>
-        <path d="M150 120 L150 182" style="stroke:var(--accent-purple)" stroke-opacity=".55" stroke-width="16"/>
-        <ellipse cx="146" cy="212" rx="24" ry="30" style="fill:var(--accent-purple)" fill-opacity=".38"/>
+        <path data-g="cava" d="M150 120 L150 182" style="stroke:var(--accent-purple)" stroke-opacity=".55" stroke-width="16"/>
+        <ellipse data-g="auricula" cx="146" cy="212" rx="24" ry="30" style="fill:var(--accent-purple)" fill-opacity=".38"/>
         <path d="M168 196 C210 180 252 196 262 240 C270 280 220 300 184 280 C170 270 166 240 168 196Z" style="fill:var(--accent-red)" fill-opacity=".16"/>
         <path d="M168 196 C210 180 252 196 262 240 C270 280 220 300 184 280 C170 270 166 240 168 196Z" fill="url(#ctv-p-rayado)"/>
         ${t(122, 216, 'AD', { s: 8, c: 'text-main', i: false, w: 600 })}${t(222, 246, 'VD', { s: 8, c: 'text-main', i: false, w: 600 })}${t(116, 150, 'cava sup.', { s: 6.6, c: 'text-dim', a: 'end' })}
@@ -388,11 +390,11 @@ function pintarLupaC(e) {
     h += `<path id="ctv-c-ruta" d="${ruta}" style="fill:none;stroke:var(--bg-main)" stroke-width="5.4" stroke-linecap="round"/><path d="${ruta}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="3.4" stroke-linecap="round"/>`;
     const pIzq = [156, 134], tip = e.izquierdo ? pIzq : PUNTA_XY[e.punta];
     const hub = e.izquierdo ? [312, 120] : [52, 120];
-    h += `<rect x="${hub[0] - 6}" y="${hub[1] - 5}" width="12" height="10" rx="2" style="fill:var(--text-main);stroke:var(--bg-main)"/>${e.aire.abierto ? t(hub[0] + (e.izquierdo ? -2 : 2), hub[1] + 18, 'conector abierto', { s: 6.6, c: 'accent-red', a: e.izquierdo ? 'end' : 'start', i: false, w: 700 }) : ''}`;
+    h += `<rect data-g="conector" x="${hub[0] - 6}" y="${hub[1] - 5}" width="12" height="10" rx="2" style="fill:var(--text-main);stroke:var(--bg-main)"/>${e.aire.abierto ? t(hub[0] + (e.izquierdo ? -2 : 2), hub[1] + 18, 'conector abierto', { s: 6.6, c: 'accent-red', a: e.izquierdo ? 'end' : 'start', i: false, w: 700 }) : ''}`;
     const ok = d.punta.ok;
     h += `<circle id="ctv-c-asa" cx="${tip[0]}" cy="${tip[1]}" r="9" style="fill:none;stroke:${ok === false ? 'var(--accent-red)' : 'var(--accent-blue)'}" stroke-width="1.4" stroke-dasharray="3 2"/>
         <circle cx="${tip[0]}" cy="${tip[1]}" r="2.6" style="fill:${ok === false ? 'var(--accent-red)' : 'var(--text-main)'}"/>`;
-    if (e.izquierdo) h += `<path d="M144 128 L144 140" style="stroke:var(--accent-red)" stroke-width="2.4"/>${t(160, 112, 'apoya en la pared', { s: 7, c: 'accent-red', i: false, w: 700 })}`;
+    if (e.izquierdo) h += `<path data-g="pared" d="M144 128 L144 140" style="stroke:var(--accent-red)" stroke-width="2.4"/>${t(160, 112, 'apoya en la pared', { s: 7, c: 'accent-red', i: false, w: 700 })}`;
     if (!e.izquierdo && !e.aire.abierto) h += t(tip[0] + 14, tip[1] + 3, 'arrastra la punta', { s: 6.4, c: 'text-muted' });
     if (e.aire.abierto && e.aire.postura !== 'espontanea') h += `<rect x="62" y="260" width="236" height="26" rx="7" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".8"/>${t(180, 271, e.aire.postura === 'trendelenburg' ? 'Trendelenburg: sube la presión venosa' : 'Femoral: el catéter no entra en el tórax', { s: 7.2, a: 'middle', c: 'text-main', i: false })}${t(180, 281, e.aire.postura === 'trendelenburg' ? 'menos riesgo; cuánto, el libro no lo dice' : 'sin presión negativa: el libro no ve riesgo', { s: 7.2, a: 'middle', c: 'accent-yellow', i: false, w: 600 })}`;
     h += `<g id="ctv-c-burbujas"></g>`;
@@ -417,20 +419,20 @@ function pintarLupaD(e) {
         if (E.trombosada) h += `<ellipse cx="146" cy="196" rx="30" ry="20" fill="url(#ctv-p-moteado)"/><ellipse cx="146" cy="196" rx="30" ry="20" fill="url(#ctv-p-moteado)"/>`;
         h += `<circle id="ctv-d-arteria" cx="214" cy="206" r="15" style="fill:${d.colorArteria ? col(d.colorArteria) : 'var(--bg-main)'};stroke:var(--text-main)" fill-opacity="${d.colorArteria ? 0.75 : 1}" stroke-width="3"/>`;
         if (d.colorVena) h += t(146, 200, d.colorVena === 'rojo' ? '↑' : '↓', { s: 11, a: 'middle', c: 'text-main', i: false, w: 700 }) + t(214, 210, d.colorArteria === 'rojo' ? '↑' : '↓', { s: 11, a: 'middle', c: 'text-main', i: false, w: 700 });
-        if (d.aguja === 'punto') h += `<circle cx="140" cy="${d.venaColapsa ? 196 : 190}" r="3" style="fill:var(--text-main)"/>`;
+        if (d.aguja === 'punto') h += `<circle data-g="aguja" cx="140" cy="${d.venaColapsa ? 196 : 190}" r="3" style="fill:var(--text-main)"/>`;
         h += `</g>${t(146, d.venaColapsa ? 214 : 232, E.trombosada ? 'vena trombosada' : 'vena', { s: 8, a: 'middle', c: 'text-main', i: false, w: 600 })}${t(214, 236, 'arteria', { s: 8, a: 'middle', c: 'text-main', i: false, w: 600 })}`;
         if (E.comprimir) h += t(180, 258, d.venaColapsa ? 'la vena se colapsa; la arteria no' : 'la trombosada no se comprime', { s: 7.4, a: 'middle', c: 'accent-yellow', i: false });
     } else {
-        h += `<rect x="40" y="${d.venaColapsa ? 192 : 176}" width="280" height="${d.venaColapsa ? 6 : 38}" style="fill:${d.colorVena ? col(d.colorVena) : 'var(--bg-main)'};stroke:var(--text-dim)" fill-opacity="${d.colorVena ? 0.75 : 1}" stroke-width="1.2"/>`;
+        h += `<rect data-g="vena-larga" x="40" y="${d.venaColapsa ? 192 : 176}" width="280" height="${d.venaColapsa ? 6 : 38}" style="fill:${d.colorVena ? col(d.colorVena) : 'var(--bg-main)'};stroke:var(--text-dim)" fill-opacity="${d.colorVena ? 0.75 : 1}" stroke-width="1.2"/>`;
         if (d.colorVena) h += t(180, 200, d.colorVena === 'rojo' ? '← hacia la sonda' : 'se aleja →', { s: 8, a: 'middle', c: 'text-main', i: false, w: 700 });
-        if (d.aguja === 'linea') h += `<path d="M76 ${yS + 24} L176 192" style="stroke:var(--text-main)" stroke-width="2.6" stroke-linecap="round"/>`;
+        if (d.aguja === 'linea') h += `<path data-g="aguja" d="M76 ${yS + 24} L176 192" style="stroke:var(--text-main)" stroke-width="2.6" stroke-linecap="round"/>`;
         h += `</g>${t(60, 170, 'vena (eje largo)', { s: 8, c: 'text-main', i: false, w: 600 })}${t(180, 240, 'no se ve la arteria vecina', { s: 7.2, a: 'middle', c: 'text-dim' })}`;
     }
     // sonda (el punto marca su lado) y escala de color
-    h += `<rect x="118" y="${yS}" width="124" height="14" rx="4" style="fill:var(--accent-yellow);stroke:var(--bg-main)"/>
+    h += `<rect data-g="sonda" x="118" y="${yS}" width="124" height="14" rx="4" style="fill:var(--accent-yellow);stroke:var(--bg-main)"/>
         <circle cx="${E.girada ? 234 : 126}" cy="${yS + 7}" r="3" style="fill:var(--bg-main)"/>
         ${t(112, yS + 10, E.eje === 'corto' ? 'sonda · corto' : 'sonda · largo', { s: 6.6, a: 'end', c: 'text-dim' })}`;
-    if (E.doppler) h += `<rect x="300" y="150" width="8" height="34" style="fill:var(--accent-red)"/><rect x="300" y="184" width="8" height="34" style="fill:var(--accent-blue)"/>
+    if (E.doppler) h += `<g data-g="escala"><rect x="300" y="150" width="8" height="34" style="fill:var(--accent-red)"/><rect x="300" y="184" width="8" height="34" style="fill:var(--accent-blue)"/></g>
         ${t(296, 160, 'hacia', { s: 6.2, a: 'end', c: 'text-dim' })}${t(296, 168, 'la sonda', { s: 6.2, a: 'end', c: 'text-dim' })}${t(296, 204, 'se', { s: 6.2, a: 'end', c: 'text-dim' })}${t(296, 212, 'aleja', { s: 6.2, a: 'end', c: 'text-dim' })}`;
     h += t(180, 287, 'esquema, no el ecógrafo', { s: 6.4, a: 'middle', c: 'text-muted' });
     $('lupaD').innerHTML = h;

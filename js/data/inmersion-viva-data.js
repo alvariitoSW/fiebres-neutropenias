@@ -169,6 +169,109 @@ export const PAGINAS = { 'mar-dolor-intro': 16, 'mar-fig-6-1': 17, 'mar-hipernoc
       'mar-midazolam': 25, 'mar-lorazepam': 25, 'mar-tabla-6-5': 26, 'mar-bzd-proscontras': 26, 'mar-bzd-prevencion': 27, 'mar-tabla-6-6': 27, 'mar-propofol': 28,
       'mar-propofol-calc': 28, 'mar-nota-propofol-240': 28, 'mar-pris': 28, 'mar-tabla-6-7': 29, 'mar-dexmedetomidina': 29, 'mar-haloperidol-intro': 30,
       'mar-tabla-6-8': 30, 'mar-halo-wizard': 30, 'mar-haloperidol-qtc': 31, 'mar-opiofobia': 31, 'mar-analgesia': 16, 'mar-sedacion': 23 };
+/* ============================================================
+   La explicación guiada de cada estado con nombre (REGLAS §7.10; core/explicacion-guiada.js): 3-5 pasos cortos.
+   Cada paso: { t, mirar (el anillo de la escena o una cifra del tablero: ANCLAS de inmersion-viva-escena.js),
+   resalta (un marco), e (cómo cambia la hoja de órdenes en ese paso), cita (core/citas.js: ficha, párrafo y página
+   del PDF), org }. Todo sale de las fichas de analgesia y sedación (Marino, cap. 6).
+   ============================================================ */
+export const PDF_B = 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf';
+const SED = new Set(['mar-ansiedad', 'mar-tabla-6-4', 'mar-rass-pasos', 'mar-escalas-sedacion', 'mar-bzd-intro', 'mar-tabla-6-5', 'mar-midazolam', 'mar-lorazepam', 'mar-bzd-proscontras', 'mar-bzd-prevencion',
+    'mar-tabla-6-6', 'mar-propofol', 'mar-pris', 'mar-tabla-6-7', 'mar-tabla-6-7-mensaje', 'mar-dexmedetomidina', 'mar-haloperidol-intro', 'mar-tabla-6-8', 'mar-haloperidol-qtc']);
+const AS = (id, pag = PAGINAS[id] ?? (id === 'mar-tabla-6-7-mensaje' ? 29 : undefined)) => ({ libro: 'Marino, cap. 6', ficha: SED.has(id) ? 'mar-sedacion' : 'mar-analgesia', id, pag, pdf: PDF_B });
+export const GUIAS = {
+    'dolor-oculto': [
+        { t: 'Sedado (RASS −3) y con el monitor tranquilo: FC y PA normales.', mirar: 'monitor', cita: AS('mar-constantes-dolor'), org: 'FC, PA y RASS: ilustrativas' },
+        { t: 'Pero la correlación entre la intensidad del dolor y los cambios de FC o PA es <span class="hl-rojo">mala</span>: hay que abandonar esa práctica.', mirar: 'fc', cita: AS('mar-constantes-dolor') },
+        { t: 'Si no puede contestar, la escala conductual del dolor (BPS, Tabla 6.1): la cara, los miembros superiores y la adaptación al ventilador. De 3 a 12; ≥6 es dolor inaceptable.', mirar: 'medallon', cita: [AS('mar-bps-intro'), AS('mar-bps-calc')] },
+        { t: 'Aquí, <span class="hl-rojo">BPS 9</span>: le duele. Mira la cara, no la FC.', mirar: 'bps', cita: AS('mar-bps-intro'), org: 'BPS 9: ilustrativa' },
+    ],
+    diazepam: [
+        { t: 'Diazepam: le hunde (RASS −3), pero <span class="hl-rojo">la tormenta sigue</span>. No alivia el dolor.', mirar: 'buzo', cita: AS('mar-fig-6-1') },
+        { t: 'En la Fig. 6.1 respondieron mal a si el diazepam alivia el dolor el ~80 % de los residentes y el ~43 % de las enfermeras de UCI.', mirar: 'medallon', cita: [AS('mar-fig-6-1'), AS('mar-img-6-1', 17)], org: 'Fig. 6.1: lectura aproximada' },
+        { t: 'La cara sigue en BPS 9: dolor inaceptable (≥6).', mirar: 'bps', cita: AS('mar-bps-intro'), org: 'BPS 9: ilustrativa' },
+        { t: 'Además, el diazepam se evita en vena: vida media de 90 h y metabolitos activos.', mirar: 'buzo', cita: AS('mar-bzd-intro') },
+    ],
+    fentanilo: [
+        { t: 'Fentanilo: <span class="hl">calma la tormenta</span>. Inicio en 1-2 min (Tabla 6.2).', mirar: 'aceite', cita: AS('mar-tabla-6-2') },
+        { t: 'Ha sustituido a la morfina como el opioide más usado en la UCI: 600 veces más liposoluble, sin liberar histamina (menos hipotensión) y sin metabolitos activos.', mirar: 'aceite', cita: AS('mar-fentanilo') },
+        { t: 'Los opioides dan una sedación leve, sin amnesia: el paciente apenas baja.', mirar: 'rass', cita: AS('mar-opioide-definiciones'), org: 'RASS −1: ilustrativa' },
+        { t: 'Su pega: por su lipofilia se acumula en el cerebro con el uso continuado.', mirar: 'buzo', cita: AS('mar-fentanilo') },
+    ],
+    'morfina-ir': [
+        { t: 'Morfina con insuficiencia renal: <span class="hl-rojo">sus metabolitos activos se acumulan</span>.', mirar: 'aceite', cita: AS('mar-morfina') },
+        { t: 'La morfina-3-glucurónido puede dar agitación con mioclonías y convulsiones; la 6-glucurónido es más analgésica que la propia morfina.', mirar: 'buzo', cita: AS('mar-morfina') },
+        { t: 'Por eso, en la insuficiencia renal, <span class="hl">−50 %</span> la dosis de mantenimiento (Tabla 6.2).', mirar: 'aceite', cita: [AS('mar-tabla-6-2'), AS('mar-morfina')] },
+        { t: 'Libera histamina: vasodilatación e hipotensión, sobre todo con el tono vascular alto. No causa broncoespasmo.', mirar: 'pa', cita: AS('mar-morfina') },
+    ],
+    hipernocicepcion: [
+        { t: 'El dolor está amplificado en el crítico (<span class="hl-rojo">hipernocicepción</span>): algo menor se vuelve doloroso.', mirar: 'medallon', cita: AS('mar-hipernocicepcion') },
+        { t: 'Se atribuye a la inflamación sistémica (prostanoides) y a la inmovilidad prolongada.', mirar: 'buzo', cita: AS('mar-hipernocicepcion') },
+        { t: 'Una causa frecuente es simplemente moverle en la cama; y un 50 % tiene dolor en reposo, sobre todo lumbar y en las piernas.', mirar: 'bps', cita: AS('mar-hipernocicepcion') },
+        { t: 'Sin analgesia ni sedante, la BPS sube a 11 y se agita (RASS +2).', mirar: 'rass', cita: [AS('mar-bps-intro'), AS('mar-tabla-6-4')], org: 'BPS y RASS: ilustrativas' },
+    ],
+    'rass-objetivo': [
+        { t: 'La RASS va de +4 (combativo) a −5 (no despertable); <span class="hl-verde">el óptimo es 0</span>.', mirar: 'regla', cita: [AS('mar-tabla-6-4'), AS('mar-escalas-sedacion')] },
+        { t: 'En perfusión de sedantes se titula a <span class="hl">RASS −1 a −2</span>: sedación ligera.', mirar: 'rass', cita: AS('mar-escalas-sedacion') },
+        { t: 'Tres pasos: observar sin interactuar; la voz (su nombre en voz alta, que te mire); y el estímulo físico (sacudir el hombro, frotar el esternón).', mirar: 'buzo', cita: AS('mar-rass-pasos') },
+        { t: 'Mantener una sedación ligera titulada con una escala favorece el destete y reduce el delirio.', mirar: 'regla', cita: AS('mar-bzd-prevencion') },
+    ],
+    'profunda-72h': [
+        { t: 'Propofol 72 h en sedación profunda: <span class="hl-rojo">RASS −4</span>. No responde a la voz; se mueve con el estímulo físico.', mirar: 'rass', cita: AS('mar-tabla-6-4') },
+        { t: 'Cuanto más hondo, más tarda en subir: tras 72 h, la profunda despierta en 59 h; la ligera, en 34 min (Tabla 6.7).', mirar: 'relojes', cita: AS('mar-tabla-6-7') },
+        { t: 'Lo que más alarga el despertar es la profundidad: mantener una sedación ligera con propofol si es posible.', mirar: 'regla', cita: AS('mar-tabla-6-7-mensaje') },
+    ],
+    despertar: [
+        { t: 'Dos buzos con propofol 72 h: uno en sedación ligera y otro en profunda. ¿Quién llega antes?', mirar: 'relojes', cita: AS('mar-tabla-6-7') },
+        { t: 'Sueltan el lastre: la ligera despierta en <span class="hl-verde">34 min</span>; la profunda, en <span class="hl-rojo">59 horas</span>.', e: { subido: true }, mirar: 'reloj', cita: AS('mar-tabla-6-7') },
+        { t: 'Con más duración, más tarda: tras 7 días, 3,3 h la ligera y 71 h la profunda.', e: { subido: true }, mirar: 'relojes', cita: AS('mar-tabla-6-7') },
+        { t: 'La profundidad pesa más que la duración: mantener una sedación ligera con propofol si es posible.', e: { subido: true }, mirar: 'regla', cita: AS('mar-tabla-6-7-mensaje') },
+    ],
+    'midazolam-48h': [
+        { t: 'Midazolam en perfusión: muy liposoluble, <span class="hl-rojo">se acumula en el SNC</span>.', mirar: 'buzo', cita: AS('mar-midazolam') },
+        { t: 'Tras 72 h, la esponja pesa más y el paciente baja (RASS −3). Se recomienda limitar la perfusión a ≤48 h.', mirar: 'rass', cita: AS('mar-midazolam'), org: 'cuánto baja: ilustrativo' },
+        { t: 'Lo metaboliza el citocromo P450 (el diltiazem o la eritromicina potencian su efecto) y tiene un metabolito activo que elimina el riñón.', mirar: 'buzo', cita: AS('mar-midazolam') },
+        { t: 'Las guías más recientes: evitar las benzodiacepinas en la sedación prolongada del ventilado, si se puede.', mirar: 'regla', cita: AS('mar-bzd-prevencion') },
+    ],
+    'lorazepam-pg': [
+        { t: 'Lorazepam: menos liposoluble y sin metabolitos activos, acumula menos.', mirar: 'buzo', cita: AS('mar-lorazepam') },
+        { t: 'Su riesgo es el propilenglicol, el disolvente: con más de 0,1 mg/kg/h o 10 mg/h durante más de 48 h, <span class="hl-rojo">se convierte en ácido láctico</span>.', mirar: 'buzo', cita: AS('mar-lorazepam') },
+        { t: 'Da acidosis láctica, alteración mental, inflamación sistémica e insuficiencia renal.', mirar: 'medallon', cita: AS('mar-lorazepam') },
+        { t: 'El lactato no predice bien la toxicidad: vigila el hiato osmolar (>10 mOsm/kg H₂O se correlaciona con la acumulación).', mirar: 'buzo', cita: AS('mar-lorazepam') },
+    ],
+    dexmedetomidina: [
+        { t: 'Dexmedetomidina, un agonista α2: sedante, amnésica y algo analgésica, <span class="hl-verde">sin depresión respiratoria</span>.', mirar: 'buzo', cita: AS('mar-dexmedetomidina') },
+        { t: 'Sedación cooperativa: el paciente se despierta sin bajar la perfusión y, cuando ya no hace falta, vuelve solo a su sedación.', mirar: 'buzo', cita: AS('mar-dexmedetomidina') },
+        { t: 'Si se para, despierta en 6-10 min (Tabla 6.6).', mirar: 'reloj', cita: AS('mar-tabla-6-6') },
+        { t: 'Es simpaticolítica: <span class="hl-rojo">baja la FC y la PA</span>. Síndrome de retirada en el 30 %.', mirar: 'fc', cita: AS('mar-dexmedetomidina') },
+    ],
+    pris: [
+        { t: 'Propofol a dosis alta (>80 µg/kg/min o >5 mg/kg/h) durante más de 48 h: <span class="hl-rojo">síndrome de infusión de propofol</span>.', mirar: 'buzo', cita: AS('mar-pris') },
+        { t: 'Insuficiencia cardíaca sistólica brusca, acidosis láctica que no cede, rabdomiólisis, fracaso renal y fallo multiorgánico.', mirar: 'pa', cita: AS('mar-pris') },
+        { t: 'Quizá por inhibición de la cadena de transporte de electrones mitocondrial. Incidencia del 3 %; mortalidad del 30-35 %.', mirar: 'buzo', cita: AS('mar-pris') },
+        { t: 'El tratamiento es de soporte (ECMO en algún caso).', mirar: 'monitor', cita: AS('mar-pris') },
+    ],
+    delirio: [
+        { t: 'La ansiedad, la agitación y el delirio aparecen en hasta el 85 % de los pacientes de UCI. El delirio es un estado confusional agudo.', mirar: 'medallon', cita: AS('mar-ansiedad') },
+        { t: 'Muy agitado (RASS +3): se tira o se quita tubos o catéteres.', mirar: 'rass', cita: AS('mar-tabla-6-4'), org: 'RASS +3: ilustrativa' },
+        { t: 'La dexmedetomidina es el fármaco de elección para el delirio de la UCI, que sufre un 40 % de los mayores de 65 años.', e: { sedante: 'dexmedetomidina' }, mirar: 'buzo', cita: AS('mar-dexmedetomidina') },
+    ],
+    haloperidol: [
+        { t: 'Si la dexmedetomidina no se tolera por bradicardia o hipotensión, sirve el haloperidol.', mirar: 'fc', cita: AS('mar-haloperidol-intro') },
+        { t: 'Antagonista dopaminérgico, el único antipsicótico que se da IV: seda sin depresión respiratoria. Efecto a los 10-20 min; dura 3-4 h.', mirar: 'buzo', cita: AS('mar-haloperidol-intro') },
+        { t: '5 mg IV en bolo; si no responde, 10 mg; si responde, el 25 % de la dosis eficaz cada 6 h (el texto dice cada 4-6 h).', mirar: 'rass', cita: AS('mar-tabla-6-8') },
+        { t: '<span class="hl-rojo">No usar si el QTc es >500 ms</span>: torsade de pointes en el 3-4 %.', mirar: 'monitor', cita: AS('mar-haloperidol-qtc') },
+    ],
+};
+// Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
+// explicación. Otro libro puede añadir las suyas (ESTADOS[k].fuentes.push) sin rehacer el modelo; nunca se funden.
+for (const [k, s] of Object.entries(ESTADOS)) {
+    s.n = s.nombre;
+    const vistos = new Set();
+    s.fuentes = (GUIAS[k] || []).flatMap(p => [].concat(p.cita || []))
+        .filter(c => { const id = `${c.ficha}#${c.id}`; if (vistos.has(id)) return false; vistos.add(id); return true; });
+}
+
 export function chipTxt(f) {
       if (!f) return '';
       const tipos = new Set();

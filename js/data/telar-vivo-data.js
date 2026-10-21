@@ -180,6 +180,130 @@ export const PAGINAS = { 'mar-tev-intro': '1', 'mar-tabla-5-1': '2', 'mar-tev-ci
     'mar-fondaparinux': '8', 'mar-fondaparinux-errata': '4, 8', 'mar-nota-dalteparina-farmacos': '4, 7, 11', 'mar-tabla-5-3': '8-9', 'mar-acod-puntos': '8-9', 'mar-aspirina': '9',
     'mar-neuroeje': '9-10', 'mar-mecanica': '10', 'mar-cni-pegas': '10', 'mar-filtro-vci': '11', 'mar-esc-alto-riesgo': '11', 'mar-esc-especiales': '11', 'mar-esc-cirugia-general': '11',
     'mar-esc-bariatrica': '11-12', 'mar-esc-ortopedica': '12', 'mar-esc-neuro-cardio': '12', 'mar-esc-trauma': '12', 'mar-esc-tce': '12', 'mar-esc-medica': '13', 'mar-inmovilidad': '13' };
+/* ============================================================
+   La explicación guiada de cada estado con nombre (REGLAS §7.10; core/explicacion-guiada.js): 3-5 pasos cortos.
+   Cada paso: { t, mirar (el anillo del telar: ANCLAS de telar-vivo-escena.js), resalta (un marco: una cifra del
+   tablero o la caja de la dosis), e (cómo cambia la hoja de órdenes en ese paso), cita (core/citas.js: ficha,
+   párrafo y página del PDF), org }. Todo sale de las fichas de la tromboprofilaxis (Marino, cap. 5).
+   ============================================================ */
+export const PDF_B = 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf';
+const ESC = new Set(['mar-mecanica', 'mar-mecanica-intro', 'mar-cni-pegas', 'mar-filtro-vci', 'mar-esc-alto-riesgo', 'mar-esc-especiales', 'mar-esc-medica', 'mar-esc-trauma', 'mar-inmovilidad', 'mar-nota-dalteparina-escenarios']);
+const TP = (id, pag = PAGINAS[id]) => ({ libro: 'Marino, cap. 5', ficha: ESC.has(id) ? 'mar-tromboprofilaxis-escenarios' : 'mar-tromboprofilaxis-farmacos', id, pag, pdf: PDF_B });
+const CELDA = n => `#tel-tablero .tel-celda:nth-child(${n})`;
+export const GUIAS = {
+    sano: [
+        { t: 'La enfermedad tromboembólica venosa es frecuente, a menudo oculta y corregible: se cita como <span class="hl-rojo">la primera causa de muerte evitable</span> en el hospital.', mirar: 'telar', cita: TP('mar-tev-intro') },
+        { t: 'Los trombos se forman sobre todo en las venas femorales e ilíacas, y suelen ser silentes hasta que embolizan. Aquí, la femoral.', mirar: 'valvula', cita: TP('mar-tev-intro') },
+        { t: 'Los hematíes suben al ritmo del gasto: con el gasto normal, el retorno venoso también lo es.', mirar: 'flujo', resalta: CELDA(1), cita: TP('mar-inmovilidad') },
+        { t: 'Las antitrombinas, quietas: la heparina se une a la antitrombina y la activa.', mirar: 'telar', resalta: CELDA(3), cita: TP('mar-hnf'), org: 'cuántas antitrombinas: ilustrativo' },
+    ],
+    inflamacion: [
+        { t: 'Enciende la inflamación (las citoquinas): la tejedora, la trombina, se pone a trabajar y <span class="hl-rojo">la red de fibrina crece</span>.', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-inmovilidad'), org: 'el ritmo: ilustrativo' },
+        { t: 'El flujo sigue intacto: no hay estasis. La red crece por la inflamación.', mirar: 'flujo', resalta: CELDA(1), cita: TP('mar-inmovilidad') },
+        { t: 'Lo que dispararía la TVP en muchos pacientes de alto riesgo sería probablemente la inflamación (además de la lesión vascular en trauma y ortopedia).', mirar: 'telar', cita: TP('mar-inmovilidad'), org: 'opinión del autor' },
+        { t: 'En la UCI se suman la inflamación sistémica (sepsis), el shock, los vasopresores, la ventilación prolongada (>48 h) y los catéteres centrales.', mirar: 'valvula', cita: TP('mar-tev-uci') },
+    ],
+    inmovil: [
+        { t: 'La adivinanza del autor: si la inmovilidad es factor de riesgo, ¿por qué la TVP no es epidémica en ancianos encamados con contracturas?', mirar: 'flujo', cita: TP('mar-inmovilidad') },
+        { t: 'La idea viene de la tríada de Virchow (estasis), pero <span class="hl">inmovilidad no es estasis</span>: en un sistema cerrado, si el gasto es normal, el retorno venoso también lo es.', mirar: 'flujo', resalta: CELDA(1), cita: TP('mar-inmovilidad') },
+        { t: 'Tres semanas inmóvil, y los hematíes suben al mismo ritmo: el telar no teje.', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-inmovilidad'), org: 'el telar quieto: ilustrativo' },
+        { t: 'Según el autor, creer que la inmovilidad predispone a la TVP probablemente lleva a usar <span class="hl-rojo">anticoagulantes de más</span>.', mirar: 'flujo', cita: TP('mar-inmovilidad'), org: 'opinión del autor' },
+    ],
+    hnf: [
+        { t: 'Heparina no fraccionada: una mezcla de cadenas largas y de largos distintos, de 3.000 a 30.000 daltons.', mirar: 'telar', cita: TP('mar-hnf') },
+        { t: 'Se une a la antitrombina y la activa: <span class="hl">inhibe el Xa</span> (la rueda) y con ello la generación de trombina.', mirar: 'xa', cita: [TP('mar-hnf'), TP('mar-img-5-2')] },
+        { t: 'También se une a la trombina (la tejedora): efecto anti-IIa, 10 veces el anti-Xa. Depende de la longitud de la cadena: <span class="hl-rojo">efecto variable</span>.', mirar: 'iia', resalta: CELDA(3), cita: TP('mar-hnf') },
+        { t: 'La activación de la antitrombina es muy sensible: bastan dosis bajas. 5.000 U SC cada 8-12 h.', resalta: '#tel-dosis', cita: [TP('mar-hnf'), TP('mar-tabla-5-2')] },
+    ],
+    hbpm: [
+        { t: 'Enoxaparina, una HBPM: heparina cortada, moléculas más pequeñas y uniformes (4.500 daltons de media).', mirar: 'telar', cita: TP('mar-hbpm') },
+        { t: 'Inhibe el Xa, pero <span class="hl">se une menos a la trombina</span>: respuesta predecible, sin monitorizar de rutina.', mirar: 'xa', resalta: CELDA(3), cita: [TP('mar-hbpm'), TP('mar-img-5-2')] },
+        { t: 'Frente a la HNF: biodisponibilidad del 90 % (15-30 %) y TIH en el 0,2 % (2,6 %).', mirar: 'iia', cita: TP('mar-hbpm') },
+        { t: '40 mg al día, o 30 mg cada 12 h en el alto riesgo.', resalta: '#tel-dosis', cita: [TP('mar-hbpm'), TP('mar-tabla-5-2')] },
+    ],
+    fondaparinux: [
+        { t: 'La «heparina diminuta»: un análogo sintético del pentasacárido que une la heparina a la antitrombina. Cinco cuentas.', mirar: 'telar', cita: TP('mar-fondaparinux') },
+        { t: 'Es el primer inhibidor selectivo del Xa: <span class="hl">solo frena el Xa</span>.', mirar: 'xa', resalta: CELDA(3), cita: [TP('mar-fondaparinux'), TP('mar-img-5-2')] },
+        { t: '2,5 mg SC al día, vida media de 17 h; lo elimina el riñón. No es popular ni se ha estudiado en la UCI.', resalta: '#tel-dosis', cita: [TP('mar-fondaparinux'), TP('mar-tabla-5-2')] },
+    ],
+    'xa-directo': [
+        { t: 'Apixabán: inhibe el Xa <span class="hl">directamente, sin la antitrombina</span> (la X de la Fig. 5.2).', mirar: 'xa', resalta: CELDA(3), cita: [TP('mar-img-5-2'), TP('mar-acod-puntos')] },
+        { t: 'Los anticoagulantes orales directos actúan en 1-4 h y no necesitan controles.', mirar: 'xa', cita: TP('mar-acod-puntos') },
+        { t: 'Hoy solo se recomiendan en profilaxis para prótesis de cadera y rodilla; ahí el apixabán podría ser el preferido (dabigatrán y rivaroxabán sangran más en algunos estudios).', mirar: 'telar', cita: TP('mar-acod-puntos') },
+        { t: '2,5 mg cada 12 h; no usar si el ClCr es <15 (Tabla 5.3).', resalta: '#tel-dosis', cita: TP('mar-tabla-5-3') },
+    ],
+    dabigatran: [
+        { t: 'Dabigatrán: inhibidor directo de <span class="hl">la trombina</span> (IIa). La tejedora se para.', mirar: 'iia', resalta: CELDA(3), cita: [TP('mar-img-5-2'), TP('mar-acod-puntos')] },
+        { t: '110 mg al inicio y luego 220 mg al día. No usar si el ClCr es <30, ni con IMC ≥40 o peso >120 kg.', resalta: '#tel-dosis', cita: TP('mar-tabla-5-3') },
+        { t: 'En cadera y rodilla supera a la HBPM, pero en algunos estudios sangra más.', mirar: 'telar', cita: TP('mar-acod-puntos') },
+    ],
+    tih: [
+        { t: 'La HNF también se une al <span class="hl">factor plaquetario 4</span> y forma un complejo antigénico.', mirar: 'fp4', cita: TP('mar-hnf') },
+        { t: 'El complejo atrae anticuerpos IgG que activan las plaquetas: <span class="hl-rojo">trombosis y trombocitopenia</span> por consumo (TIH).', mirar: 'fp4', resalta: CELDA(1), cita: TP('mar-hnf') },
+        { t: 'No depende de la dosis: puede darse con dosis profilácticas. Con HNF, en el 2,6 %.', resalta: [CELDA(2), CELDA(3)], cita: [TP('mar-hnf'), TP('mar-hbpm')] },
+        { t: 'Con HBPM, en el 0,2 %: se une menos. Menos, no cero.', e: { farmaco: 'enoxaparina' }, resalta: CELDA(2), cita: TP('mar-hbpm') },
+    ],
+    'tih-fondaparinux': [
+        { t: 'Con TIH sospechada o previa, el fondaparinux sirve para la profilaxis; se ha usado incluso en la confirmada.', resalta: CELDA(1), cita: [TP('mar-fondaparinux'), TP('mar-esc-especiales')] },
+        { t: 'Pero el tratamiento aprobado de la TIH es el <span class="hl">argatrobán</span>.', resalta: CELDA(2), cita: TP('mar-fondaparinux') },
+        { t: 'Cómo se relaciona el fondaparinux con el FP4, la ficha no lo dice: no se dibuja.', mirar: 'fp4', resalta: CELDA(3), cita: TP('mar-fondaparinux'), org: 'la fuente no lo dice' },
+    ],
+    'renal-25': [
+        { t: 'Enoxaparina con ClCr 25: la Tabla 5.2 la ajusta en la insuficiencia renal.', mirar: 'rinon', cita: TP('mar-tabla-5-2'), org: 'el vaso que se llena: ilustrativo' },
+        { t: 'Con ClCr <30, <span class="hl">30 mg al día</span>, o usar HNF.', resalta: '#tel-dosis', cita: [TP('mar-tabla-5-2'), TP('mar-hbpm')] },
+        { t: 'Y con ClCr <20, la HNF parece la mejor opción. La HNF y la dalteparina van sin ajuste en la tabla.', mirar: 'rinon', cita: [TP('mar-hbpm'), TP('mar-tabla-5-2')] },
+    ],
+    'fonda-32': [
+        { t: 'Fondaparinux con ClCr 32: lo elimina el riñón.', mirar: 'rinon', cita: TP('mar-fondaparinux') },
+        { t: 'La Tabla 5.2: 1,5 mg al día con ClCr 35-50 y no usar con <30. Entre 30 y 35, la tabla calla.', resalta: '#tel-dosis', cita: [TP('mar-tabla-5-2'), TP('mar-fondaparinux-errata')] },
+        { t: 'El texto del mismo capítulo: 1,5 mg con ClCr 20-50 y no usar con <20. <span class="hl-purpura">Las fuentes discrepan</span>: se dan las dos.', resalta: '#tel-dosis', cita: TP('mar-fondaparinux-errata'), org: 'las fuentes discrepan' },
+    ],
+    'renal-12': [
+        { t: 'Dalteparina con ClCr 12.', mirar: 'rinon', cita: TP('mar-tabla-5-2') },
+        { t: 'La Tabla 5.2 (p. 4) y el texto de la dalteparina (p. 7) dicen «sin ajuste renal».', resalta: '#tel-dosis', cita: [TP('mar-tabla-5-2'), TP('mar-hbpm')] },
+        { t: 'Las recomendaciones generales (p. 11): con ClCr <15, solo HNF o warfarina. El capítulo no las concilia: <span class="hl-purpura">las fuentes discrepan</span>.', resalta: '#tel-dosis', cita: [TP('mar-nota-dalteparina-farmacos'), TP('mar-esc-especiales')], org: 'las fuentes discrepan' },
+    ],
+    'obesidad-42': [
+        { t: 'Enoxaparina con IMC 42: en la obesidad mórbida, <span class="hl">40 mg cada 12 h</span>.', resalta: '#tel-dosis', cita: [TP('mar-tabla-5-2'), TP('mar-hbpm')] },
+        { t: 'Si la dosis fija es dudosa (obesidad), el anti-Xa es útil: objetivo profiláctico, pico de 0,2-0,5 UI/mL.', e: { antiXa: true }, resalta: '#tel-dosis', cita: TP('mar-hbpm') },
+        { t: 'La HNF también se ajusta: con IMC ≥40, 7.500 U cada 8 h previene mejor.', e: { farmaco: 'hnf' }, resalta: '#tel-dosis', cita: [TP('mar-hnf'), TP('mar-tabla-5-2')] },
+    ],
+    medias: [
+        { t: 'La compresión externa de las piernas favorece el retorno venoso.', mirar: 'mangas', cita: TP('mar-mecanica-intro', 10) },
+        { t: 'Medias de compresión gradual: <span class="hl">18 mmHg en el tobillo y 8 en el muslo</span>, un gradiente de 10.', mirar: 'mangas', cita: TP('mar-mecanica') },
+        { t: 'Son el método menos eficaz: <span class="hl-rojo">nunca como único método</span> en el hospitalizado.', mirar: 'mangas', cita: TP('mar-mecanica') },
+    ],
+    cni: [
+        { t: 'Compresión neumática intermitente: 2-3 cámaras que se inflan de distal a proximal, 35-40 mmHg en el tobillo y 20 en el muslo, cada 10 s.', mirar: 'mangas', cita: TP('mar-mecanica'), org: 'el reparto del ciclo: ilustrativo' },
+        { t: 'Doble efecto: aumenta el flujo y <span class="hl-verde">la fibrinólisis</span> (los puntos verdes).', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-mecanica') },
+        { t: 'Puede ser tan eficaz como la anticoagulación y suma eficacia a ella: es el método mecánico estándar.', mirar: 'mangas', cita: TP('mar-mecanica') },
+        { t: 'Sustituye a la anticoagulación si el paciente sangra o tiene alto riesgo de sangrar, o se suma a ella en el alto riesgo.', mirar: 'mangas', cita: TP('mar-mecanica-intro', 10) },
+    ],
+    'cni-diastolica': [
+        { t: 'La CNI aprieta a 35-40 mmHg en el tobillo, y este paciente tiene una diastólica de 34.', mirar: 'mangas', cita: TP('mar-mecanica') },
+        { t: 'La presión <span class="hl-rojo">nunca debe superar la diastólica</span>: comprimiría las arterias.', mirar: 'mangas', cita: TP('mar-cni-pegas'), org: 'el pie pálido: fisiología general' },
+        { t: 'Además limita la movilidad, macera la piel y molesta al paciente despierto: retirarla en cuanto no haga falta.', mirar: 'mangas', cita: TP('mar-cni-pegas') },
+    ],
+    filtro: [
+        { t: 'Filtro de vena cava inferior: atrapa los trombos que suben y reduce la embolia pulmonar.', mirar: 'filtro', cita: TP('mar-filtro-vci') },
+        { t: 'Pero <span class="hl-rojo">no previene la TVP</span>: la red de abajo sigue creciendo.', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-filtro-vci') },
+        { t: 'Se usa a veces en la TVP que no se puede anticoagular; no se recomienda como profilaxis.', mirar: 'filtro', cita: TP('mar-filtro-vci') },
+    ],
+    neuroeje: [
+        { t: 'Punciones y catéteres neuroaxiales: riesgo de <span class="hl-rojo">hematoma espinal y parálisis</span>. Cuenta las horas desde la última dosis.', mirar: 'reloj', resalta: CELDA(1), cita: TP('mar-neuroeje') },
+        { t: 'A las 24 h ya se puede con HNF SC (≥12 h), enoxaparina una vez al día (≥24 h) y apixabán (≥24 h).', resalta: CELDA(2), cita: TP('mar-neuroeje') },
+        { t: 'Dabigatrán y rivaroxabán, ≥48 h. Con función renal normal o algo reducida; más tiempo si la insuficiencia renal es más grave.', resalta: CELDA(3), cita: TP('mar-neuroeje') },
+    ],
+};
+// Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
+// explicación. Otro libro puede añadir las suyas (ESTADOS[k].fuentes.push) sin rehacer el modelo; nunca se funden.
+for (const [k, s] of Object.entries(ESTADOS)) {
+    s.n = s.nombre;
+    const vistos = new Set();
+    s.fuentes = (GUIAS[k] || []).flatMap(p => [].concat(p.cita || []))
+        .filter(c => { const id = `${c.ficha}#${c.id}`; if (vistos.has(id)) return false; vistos.add(id); return true; });
+}
+
 export function chipTxt(f) {
     if (!f) return '';
     const tipos = new Set();

@@ -38,7 +38,8 @@
       <div id="ctv-vista-explorar" class="ctv-bloque">
         <section class="ctv-bloque">
           <h3 class="ctv-h">Ir a un estado</h3>
-          <p class="ctv-para">Cada ficha de los accesos vasculares abre el catéter en su estado («Ver en el catéter vivo»), y su «← VOLVER» te devuelve a ella. Aquí están todos, por ficha. Los mandos, abajo.</p>
+          <div class="ctv-guia-abrir"><button type="button" class="ctv-b ctv-prim" id="ctv-guia-abrir">Explícame este estado paso a paso</button><span class="ctv-para" id="ctv-guia-de"></span></div>
+          <p class="ctv-para">Cada ficha de los accesos vasculares abre el catéter en su estado («Ver en el catéter vivo»), y su «← VOLVER» te devuelve a ella. Aquí están todos, por ficha. Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en el dibujo. Los mandos, abajo.</p>
           <ul class="ctv-prof ctv-estados" id="ctv-lista-estados"></ul>
         </section>
 
@@ -212,6 +213,8 @@
             </div>
             <div class="ctv-dock-panel" data-ctv-panel="lupa" hidden><div id="ctv-mandos-lupa" role="group" aria-label="Mandos de la lupa" class="ctv-dock-panel"></div></div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de los mandos -->
+          <div id="ctv-dock-guia" hidden></div>
           <div id="ctv-dock-estudio" class="ctv-dock-estudio" hidden>
             <div class="ctv-pasos" id="ctv-dock-pasos"></div>
             <div class="ctv-dock-est-txt"><span id="ctv-dock-est-izq"></span><span id="ctv-dock-est-der"></span></div>

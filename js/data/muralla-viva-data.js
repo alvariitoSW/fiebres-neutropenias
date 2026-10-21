@@ -127,6 +127,109 @@ export const ESTADOS = {
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
 
 /* ============================================================
+   La explicación guiada de cada estado con nombre (REGLAS §7.10; core/explicacion-guiada.js): 3-5 pasos cortos.
+   Cada paso: { t, mirar (el anillo de la lámina: ANCLAS de muralla-viva-escena.js), resalta (lo que se enmarca: un
+   rincón de la lámina o una cifra del tablero), e (cómo cambia la hoja de órdenes en ese paso), cita (core/citas.js:
+   ficha, párrafo y página del PDF A), org }. Todo sale de las fichas mar-microbioma y mar-ulcera-estres.
+   ============================================================ */
+export const PDF_A = 'docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf';
+const MI = (id, pag) => ({ libro: 'Marino, cap. 4', ficha: 'mar-microbioma', id, pag, pdf: PDF_A });
+const UE = (id, pag) => ({ libro: 'Marino, cap. 4', ficha: 'mar-ulcera-estres', id, pag, pdf: PDF_A });
+const CELDA = n => `#mur-tablero .mur-celda:nth-child(${n})`;
+export const GUIAS = {
+    sano: [
+        { t: 'La mucosa digestiva es nuestra «piel interna»: <span class="hl-rojo">una sola capa de células de 0,1 mm</span> frente a 100-400 billones de microbios. Una barrera de papel.', mirar: 'regla', cita: MI('mar-piel-interna', 58) },
+        { t: 'El reparto es desigual (Fig. 4.1): el estómago es lo menos poblado (<10³ por mL) y el 99 % vive en el colon.', mirar: 'tira', cita: [MI('mar-microbioma-cifras', 58), MI('mar-img-4-1', 58)] },
+        { t: 'La flora residente se pega a la mucosa y <span class="hl-verde">ocupa todos los huecos</span>: no deja sitio a los patógenos.', mirar: 'vellosidad', resalta: CELDA(1), cita: MI('mar-microbioma-proteccion', 59) },
+        { t: 'Produce ácidos grasos de cadena corta, combustible de la mucosa; y sus productos ayudan al GALT, que atrapa y destruye a los que cruzan.', mirar: 'galt', cita: MI('mar-microbioma-proteccion', 59) },
+    ],
+    disbiosis: [
+        { t: 'Un antibiótico de amplio espectro altera el microbioma: <span class="hl-rojo">disbiosis</span>. Estropea los tres mecanismos que protegen.', mirar: 'vellosidad', resalta: CELDA(1), cita: MI('mar-disbiosis', 59) },
+        { t: '① Sobrecrecen los patógenos donde antes estaba la flora (Fig. 4.2).', mirar: 'luz', cita: [MI('mar-disbiosis', 59), MI('mar-img-4-2', '60-61')] },
+        { t: '② La mucosa se rompe y ③ el aclaramiento linfático se altera: los patógenos cruzan la pared. Es la <span class="hl-rojo">translocación</span>.', mirar: 'galt', resalta: CELDA(2), cita: [MI('mar-img-4-2', '60-61'), MI('mar-disbiosis', 59)] },
+        { t: 'La translocación es una fuente principal de sepsis y fallo multiorgánico en el crítico.', mirar: 'sangre', cita: MI('mar-disbiosis', 59) },
+    ],
+    'motor-fmo': [
+        { t: 'El fallo multiorgánico, la primera causa de muerte en el crítico: una inflamación sistémica que persiste o progresa con disfunción de dos o más órganos.', mirar: 'rueda', cita: MI('mar-motor-fmo', 60) },
+        { t: 'Lo desencadena una disbiosis o un periodo de hipoperfusión esplácnica (aquí, las dos): ambos rompen la barrera mucosa.', mirar: 'vellosidad', cita: MI('mar-motor-fmo', 60) },
+        { t: 'Pasan patógenos o mediadores a la circulación y se inicia la respuesta inflamatoria.', mirar: 'sangre', cita: MI('mar-motor-fmo', 60) },
+        { t: 'La activación simpática contrae los vasos esplácnicos y rompe aún más la barrera: <span class="hl-purpura">se autoalimenta</span>. El intestino, «motor» del fallo multiorgánico.', mirar: 'rueda', resalta: CELDA(3), cita: MI('mar-motor-fmo', 60), org: 'la velocidad de la rueda: ilustrativa' },
+    ],
+    'boca-uci': [
+        { t: 'La boca produce unos 750 mL de saliva al día, con un millón de microbios por mL. En el sano, una flora poco dañina.', resalta: CELDA(3), cita: MI('mar-saliva', 62) },
+        { t: 'En el grave, la orofaringe se coloniza por <span class="hl-rojo">bacilos gramnegativos aerobios</span> (p. ej., <i>Pseudomonas</i>): ~70 % en la UCI frente a ~2 % en sanos (Fig. 4.4).', mirar: 'fig44', resalta: CELDA(1), cita: [MI('mar-colonizacion-orofaringe', 63), MI('mar-fig-4-4', 63)], org: 'Fig. 4.4: lectura aproximada' },
+        { t: 'No depende del entorno sino de la enfermedad: las proteínas de adhesión del epitelio cambian de forma y pasan a unir patógenos. Decide que puedan pegarse.', mirar: 'cerraduras', resalta: CELDA(2), cita: MI('mar-colonizacion-orofaringe', 63) },
+        { t: 'Aspirar solo el 0,13 % de la saliva mete <span class="hl-rojo">un millón de microbios</span> en la vía aérea: sería el desencadenante de la mayoría de las neumonías nosocomiales.', e: { gota: 1 }, mirar: 'traquea', cita: MI('mar-saliva', 62) },
+    ],
+    clorhexidina: [
+        { t: 'Clorhexidina al 0,12 % en la mucosa oral cada 6 h, mientras dependa del ventilador. La de 2 %, no: mucositis ulcerosa.', mirar: 'superficie', cita: [MI('mar-tabla-4-1', '63-64'), MI('mar-clorhexidina-oral', 64)] },
+        { t: 'Actúa sobre todo frente a grampositivos (los cocos), pero en la orofaringe del crítico <span class="hl-rojo">predominan los gramnegativos</span>: siguen pegados.', mirar: 'cerraduras', cita: MI('mar-clorhexidina-oral', 64) },
+        { t: 'Algunos estudios, −30 % de neumonía asociada al ventilador sin menos mortalidad; 11 ensayos juntos, más mortalidad. Las guías internacionales retiraron la recomendación.', resalta: '#mur-consec', cita: MI('mar-clorhexidina-oral', 64) },
+    ],
+    sod: [
+        { t: 'Descontaminación oral selectiva: gel con gentamicina, colistina y vancomicina al 2 %, con el dedo enguantado cada 6 h.', mirar: 'superficie', cita: MI('mar-tabla-4-1', '63-64') },
+        { t: 'Busca erradicar los patógenos respetando la flora normal: va contra estafilococos, bacilos gramnegativos aerobios y <i>Candida</i>, y apenas toca los anaerobios.', mirar: 'cerraduras', cita: MI('mar-sod', '64-65') },
+        { t: 'Reduce la neumonía asociada al ventilador y las bacteriemias por gramnegativos: <span class="hl-verde">−33 %</span> (Fig. 4.5).', resalta: '#mur-consec', cita: [MI('mar-sod', '64-65'), MI('mar-fig-4-5', '64-65')] },
+        { t: 'Aun así se ignora, y la clorhexidina sigue siendo el estándar: «la antítesis de la medicina basada en la evidencia», según el autor.', mirar: 'superficie', cita: MI('mar-sod', '64-65'), org: 'opinión del autor' },
+    ],
+    'estomago-sano': [
+        { t: 'El estómago es la zona menos poblada (<10³ por mL): la función principal del ácido es ser una <span class="hl">defensa antimicrobiana</span>.', mirar: 'luz', cita: [MI('mar-acido-antiseptico', 60), MI('mar-microbioma-cifras', 58)] },
+        { t: 'Fig. 4.3: la <i>Salmonella</i> crece a pH 4, cae a pH 3 y <span class="hl-verde">desaparece en 1 hora a pH 2</span>. El jugo gástrico tiene pH 1-2.', mirar: 'salmonella', resalta: CELDA(3), cita: [MI('mar-fig-4-3', '61-62'), MI('mar-acido-prueba', 62)] },
+        { t: 'Una capa de moco rico en bicarbonato (pH 7) protege el epitelio del ácido y la pepsina.', mirar: 'moco', cita: UE('mar-ulcera-patogenia', 67) },
+        { t: 'El flujo de la mucosa la sostiene: el 70-90 % del riego del estómago va a la mucosa.', mirar: 'capilar', cita: UE('mar-ulcera-patogenia', 67) },
+    ],
+    isquemia: [
+        { t: 'Ventilado, sin nutrición enteral y con la PA normal: puede haber <span class="hl-rojo">hipoperfusión gástrica oculta</span>, sobre todo con ventilación mecánica.', mirar: 'capilar', cita: UE('mar-ulcera-patogenia', 67) },
+        { t: 'Aparece una erosión que rezuma sangre: hay erosiones visibles en el 75-100 % en las primeras 24 h de UCI. El sangrado clínicamente significativo es infrecuente.', mirar: 'lesion', cita: [UE('mar-ulcera-frecuencia', 67), UE('mar-ulcera-def', 67)] },
+        { t: 'Ventilación mecánica >24 h sin nutrición enteral: riesgo <span class="hl-rojo">máximo (8-10 %)</span> en la Tabla 4.2. Profilaxis, sí.', resalta: ['[data-toca="escalera"]', CELDA(1)], cita: UE('mar-tabla-4-2', 68) },
+        { t: 'Sangrado «clínicamente significativo»: visible y con caída de la PA ≥20 mmHg, vasopresor nuevo o +20 %, Hb −2 g/dL o ≥2 concentrados.', mirar: 'lesion', cita: UE('mar-sangrado-significativo', 67) },
+    ],
+    ulcera: [
+        { t: 'Shock: las erosiones más profundas, hasta la submucosa, son las <span class="hl-rojo">úlceras de estrés</span>, más propensas a sangrar.', mirar: 'lesion', cita: UE('mar-ulcera-def', 67) },
+        { t: 'El desencadenante es la isquemia local; el ácido la agrava y, en la hemorragia, la reperfusión también contribuye.', mirar: 'capilar', cita: UE('mar-ulcera-patogenia', 67) },
+        { t: 'En la Tabla 4.2 el shock es un riesgo moderado; aquí manda la ventilación sin enteral: riesgo máximo.', resalta: ['[data-toca="escalera"]', CELDA(1)], cita: UE('mar-tabla-4-2', 68) },
+        { t: 'Para el autor, la causa es la hipoperfusión de la mucosa, no el ácido: bebidas tan ácidas como el jugo gástrico (limón, refrescos) no queman la boca.', mirar: 'capilar', cita: [UE('mar-acidofobia-autor', '72-73'), UE('mar-acidofobia', '72-73')], org: 'opinión del autor' },
+    ],
+    ibp: [
+        { t: 'Pantoprazol 40 mg IV al día: bloquea de forma irreversible la bomba que segrega H⁺. <span class="hl">Inhibición completa del ácido</span>.', mirar: 'luz', resalta: CELDA(2), cita: [UE('mar-ibp', 69), UE('mar-tabla-4-3', '68-69')] },
+        { t: 'Sin ácido, la <i>Salmonella</i> <span class="hl-rojo">deja de morir</span>. Prueba del papel del ácido: suprimirlo aumenta las gastroenteritis y las infecciones por <i>C. difficile</i>.', mirar: 'salmonella', resalta: CELDA(3), cita: [MI('mar-fig-4-3', '61-62'), MI('mar-acido-prueba', 62)] },
+        { t: 'Fig. 4.6: en 3.298 pacientes de alto riesgo, el sangrado significativo bajó de 4,2 a 2,5 %: un efecto de solo 1,7 %.', resalta: '[data-toca="balanza"]', cita: UE('mar-ibp-pantoprazol', '69-70') },
+        { t: 'Sumando neumonía, <i>C. difficile</i> (el triple con IBP) e isquemia miocárdica: 21,9 % frente a 22,6 %. <span class="hl-purpura">Sin beneficio neto</span>.', mirar: 'balanza', cita: [UE('mar-ibp-pantoprazol', '69-70'), UE('mar-acido-riesgos', 70)] },
+    ],
+    enteral: [
+        { t: 'La nutrición enteral protege: efecto trófico sobre la mucosa y <span class="hl-verde">sube el pH gástrico</span>.', mirar: 'moco', resalta: CELDA(2), cita: UE('mar-enteral-protege', 72) },
+        { t: 'En tres estudios, los supresores del ácido dejaban de reducir el sangrado con nutrición enteral completa: según la fuente, es todo lo que hace falta.', mirar: 'lesion', cita: UE('mar-enteral-protege', 72) },
+        { t: 'Ventilación >24 h con nutrición enteral baja a riesgo moderado (2-4 %): sin profilaxis. La enteral reduce mucho el riesgo en el ventilado.', resalta: ['[data-toca="escalera"]', CELDA(1)], cita: [UE('mar-tabla-4-2', 68), UE('mar-tabla-4-2-mensajes', 68)] },
+        { t: 'Seis ensayos: retirar el pantoprazol en pacientes de alto riesgo no aumenta el sangrado significativo; la diferencia con los antiguos se atribuye a la mejor nutrición enteral.', mirar: 'lesion', cita: UE('mar-desprescribir', 71) },
+    ],
+    sucralfato: [
+        { t: 'Sucralfato 1 g cada 6 h: una sal de aluminio que se adhiere a la mucosa dañada y la cubre.', mirar: 'lesion', cita: [UE('mar-sucralfato', 71), UE('mar-tabla-4-3', '68-69')] },
+        { t: 'Mantiene la acidez, lo más deseable: la <i>Salmonella</i> sigue muriendo. Reduce el sangrado, con menos neumonía que los supresores del ácido.', mirar: 'salmonella', resalta: CELDA(3), cita: UE('mar-sucralfato', 71) },
+        { t: 'Pero necesita el estómago vacío: <span class="hl-rojo">no se puede usar con nutrición enteral</span> (bezoares). Eso lo excluye en la mayoría de los pacientes de UCI.', mirar: 'moco', cita: UE('mar-sucralfato-pegas', 71) },
+        { t: 'Eficacia: IBP > anti-H2 > sucralfato, y ninguno mejora la supervivencia.', resalta: '[data-toca="escalera"]', cita: UE('mar-profilaxis-uso', 68) },
+    ],
+    sdd: [
+        { t: 'Descontaminación digestiva selectiva: el principio de la SOD aplicado a todo el tubo. Gel en la boca, solución por la sonda y cefuroxima IV los 4 primeros días.', mirar: 'fig45', cita: MI('mar-sdd', '65-66') },
+        { t: 'Descontaminar el intestino tarda <span class="hl">5-7 días</span>: el día 7 los patógenos ya no están; la flora normal se respeta.', mirar: 'vellosidad', resalta: CELDA(2), cita: [MI('mar-sdd', '65-66'), MI('mar-sod', '64-65')], org: 'el ritmo: ilustrativo' },
+        { t: 'Reduce las infecciones adquiridas en la UCI y la mortalidad; bacteriemias por gramnegativos <span class="hl-verde">−67 %</span> (Fig. 4.5).', mirar: 'fig45', cita: [MI('mar-sdd', '65-66'), MI('mar-fig-4-5', '64-65')] },
+        { t: 'A todo paciente que vaya a estar en la UCI más de 72 h. Se ignora por miedo a las resistencias, pero ningún estudio ha mostrado más infecciones por resistentes.', mirar: 'fig45', cita: [MI('mar-sdd', '65-66'), MI('mar-sdd-ignora', 66)] },
+    ],
+    multirresistentes: [
+        { t: 'La misma SDD, día 7, en una unidad con bacilos gramnegativos multirresistentes (con halo rojo).', mirar: 'luz', cita: MI('mar-sdd', '65-66') },
+        { t: '<span class="hl-rojo">El efecto se pierde</span>: los patógenos no caen. No es apropiada en una UCI con resistencias problemáticas.', mirar: 'vellosidad', resalta: CELDA(2), cita: MI('mar-sdd', '65-66') },
+        { t: 'Otra cosa es el miedo a crear resistencias: ningún estudio (uno prospectivo de 5 años, una experiencia de 16) ha mostrado más infecciones por resistentes.', mirar: 'fig45', cita: MI('mar-sdd-ignora', 66) },
+    ],
+};
+// Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
+// explicación. Otro libro puede añadir las suyas (ESTADOS[k].fuentes.push) sin rehacer el modelo; nunca se funden.
+for (const [k, s] of Object.entries(ESTADOS)) {
+    s.n = s.nombre;
+    const vistos = new Set();
+    s.fuentes = (GUIAS[k] || []).flatMap(p => [].concat(p.cita || []))
+        .filter(c => { const id = `${c.ficha}#${c.id}`; if (vistos.has(id)) return false; vistos.add(id); return true; });
+}
+
+/* ============================================================
    El chip de origen: «ficha», «fisiología general» o «ilustrativo», y la página del PDF. El id de la ficha nunca se ve.
    ============================================================ */
 export const PAGINAS = { 'mar-piel-interna': '58', 'mar-microbioma-cifras': '58', 'mar-microbioma-proteccion': '59', 'mar-disbiosis': '59', 'mar-motor-fmo': '60',

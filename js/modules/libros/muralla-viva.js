@@ -13,12 +13,13 @@
 // clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
-import { escapeHtml } from '../../core/ui.js';
 import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { citaHTML, citaExacta, hrefPdf } from '../../core/citas.js';
+import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { montarCama7 } from './cama7.js';
 import {
-    ESTADOS, CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, LAMINAS, estadoBase, estadoDe, derivar, copia, clamp, chipTxt, pruebasMuralla,
+    ESTADOS, CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, LAMINAS, GUIAS, PAGINAS, PDF_A, estadoBase, estadoDe, derivar, copia, clamp, chipTxt, pruebasMuralla,
 } from '../../data/muralla-viva-data.js';
 import {
     $, estado, D, REDUCIR, ocultos, initEscena, aplicarModelo, setOcultos, arrancar, ponerVisible, anillo, anilloObj,
@@ -37,18 +38,6 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
 const ALIAS = { '«Sucralfato»': 'mar-sucralfato', '«IBP»': 'mar-ibp', '«Anti-H2»': 'mar-anti-h2', '«Clorhexidina oral»': 'mar-clorhexidina-oral',
     '«SOD»': 'mar-sod', '«Riesgos de suprimir el ácido»': 'mar-acido-riesgos', '«Riesgos»': 'mar-acido-riesgos', 'Fig. 4.6': 'mar-img-4-6',
     'Fig. 4.5': 'mar-fig-4-5', 'Fig. 4.4': 'mar-fig-4-4', 'Fig. 4.3': 'mar-fig-4-3', 'Fig. 4.1': 'mar-img-4-1', 'Fig. 4.2': 'mar-disbiosis' };
-const limpio = t => (t || '').replace(/\s+/g, ' ').trim();
-const tituloFicha = tab => limpio(tab.querySelector('h3')?.textContent || tab.id).split(':')[0];
-function etiquetaDe(el) {
-    if (el.dataset.nombre) return el.dataset.nombre;
-    if (el.matches('dl')) return limpio(el.querySelector('dt')?.textContent);
-    if (el.matches('.micro-prof-item')) return limpio(el.querySelector('.micro-prof-head span')?.textContent);
-    if (el.matches('.article-figure')) return limpio(el.querySelector('.article-figure-caption')?.textContent).split('—')[0].trim();
-    const num = el.id.match(/-(tabla|fig|img)-(\d+)-(\d+)$/);
-    if (num) return `${num[1] === 'tabla' ? 'Tabla' : 'Figura'} ${num[2]}.${num[3]}`;
-    const t = limpio(el.textContent);
-    return t.length > 40 ? t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : t;
-}
 // Los ids (y los alias) que cita una fuente, en orden y sin repetir
 function idsDe(fuente) {
     const ids = [];
@@ -59,19 +48,11 @@ function idsDe(fuente) {
     }
     return [...new Set(ids)];
 }
-function enlacesTexto(fuente) {
-    const vistosTab = new Set(), botones = [];
-    for (const id of idsDe(fuente)) {
-        const r = rutaDe(id); if (!r) continue;
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        let texto = vistosTab.has(r.tab.id) ? (sub || tituloFicha(r.tab)) : tituloFicha(r.tab) + (sub ? ' · ' + sub : '');
-        vistosTab.add(r.tab.id);
-        texto = texto.length > 64 ? texto.slice(0, 62) + '…' : texto;
-        botones.push(`<button type="button" class="mur-ir-texto" ${atributosFicha(r)}>${escapeHtml(texto)} →</button>`);
-    }
-    return botones.join(' ');
-}
-const verEnTexto = fuente => `<p class="mur-fuente-p">Ver en el texto: ${enlacesTexto(fuente)} ${chipSpan(fuente)}</p>`;
+// Cada sitio citado, con la pieza común (core/citas.js): «Ver en la ficha» al párrafo exacto y, de segunda opción, el PDF
+// en su página (PAGINAS). Lo que no lleva a ningún sitio no se pinta.
+const citaDeId = id => { const r = rutaDe(id); return r && { libro: 'Marino, cap. 4', ficha: r.tab.id, id, pag: PAGINAS[id], pdf: PDF_A }; };
+const enlacesTexto = fuente => idsDe(fuente).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { max: 80 })).join('');
+const verEnTexto = fuente => `<div class="mur-fuente-p">${enlacesTexto(fuente)} ${chipSpan(fuente)}</div>`;
 const esIlu = f => /ilustrativ/.test(f) && !/mar-|Fig|Tabla/.test(f);
 const chipSpan = f => f ? `<span class="mur-org${esIlu(f) ? ' mur-ilu' : ''}">${chipTxt(f)}</span>` : '';
 // El chip de la frase viva: un enlace a su sitio en la ficha, si lo tiene
@@ -87,7 +68,8 @@ function chip(f) {
 let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
-    const nuevo = `${html} ${chip(fuente)}`;
+    const guiaBtn = claveActual && GUIAS[claveActual] && !Guia.activo && modo === 'explorar' ? `<button type="button" class="mur-ir-estado" data-mur-guia="${claveActual}">Explícamelo →</button> ` : '';
+    const nuevo = `${guiaBtn}${html} ${chip(fuente)}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('lamina').setAttribute('aria-label', fraseEl.textContent);
@@ -223,6 +205,7 @@ function sincronizarMandos() {
         b.setAttribute('aria-pressed', String(pulsado(b.dataset.m, b.dataset.v)));
         if (b.dataset.m === 'proteccion' && b.dataset.v === 'sucralfato') { b.disabled = estado.enteral; b.title = estado.enteral ? 'Necesita el estómago vacío; con la nutrición, bezoares' : ''; }
     });
+    sincronizarGuia();
 }
 // La pestaña del dock que tiene la orden de cada estado con nombre
 const PESTANA_DE = { riego: 'paciente', paciente: 'paciente', proteccion: 'estomago', enteral: 'estomago', antibiotico: 'intestino', sdd: 'intestino', mr: 'unidad', descontaminacion: 'boca' };
@@ -235,12 +218,13 @@ function engancharDock() {
         cambiar(s => ordenar(s, m, b.dataset.v));
         if (estado.estacion !== antes) elegirPestana(estado.estacion, true);
     });
-    $('m-estado').addEventListener('change', ev => { const k = ev.target.value; if (!k) return; ponerEnEstado(k); ev.target.value = ''; });
+    $('m-estado').addEventListener('change', ev => { const k = ev.target.value; if (!k) return; if (guia.activo) guia.cerrar(); ponerEnEstado(k); ev.target.value = ''; });
+    $('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (!b) return; if (guia.activo) guia.cerrar(); ponerEnEstado(b.dataset.estado); $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' }); });
     enRaiz('.mur-dock-tabs button').forEach(b => b.addEventListener('click', () => {
         elegirPestana(b.dataset.murTab);
         if (['estomago', 'intestino', 'boca'].includes(b.dataset.murTab) && b.dataset.murTab !== estado.estacion) cambiar(s => { s.estacion = b.dataset.murTab; });
     }));
-    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad]')) return; $('frase').classList.toggle('mur-abierta'); });
+    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad], [data-mur-guia]')) return; $('frase').classList.toggle('mur-abierta'); });
     $('lamina').addEventListener('click', tocarLamina);
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).addEventListener('click', () => setModo(k));
 }
@@ -255,6 +239,7 @@ function subir() {
     if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' });
 }
 function setModo(m) {
+    if (guia && guia.activo) guia.cerrar();
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('mur-estudio', m !== 'explorar');
@@ -326,7 +311,7 @@ function accionMando(b, cont) {
 }
 
 // «Para profundizar»: lo que no se pregunta, con su sitio en la ficha y en el libro
-const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="mur-fuente-p">${enlacesTexto(p.donde)} <a class="mur-pdf" href="${p.href}" target="_blank" rel="noopener">Ver en el libro (${chipTxt(p.donde).replace('ficha · ', '')}) →</a></span></section>`).join('');
+const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="mur-fuente-p">${idsDe(p.donde).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { pdf: false, max: 80 })).join('')} <a class="mur-pdf" href="${p.href}" target="_blank" rel="noopener">Ver en el libro (${chipTxt(p.donde).replace('ficha · ', '')}) →</a></span></section>`).join('');
 
 const Estudio = {
     c: 0,
@@ -430,9 +415,59 @@ function revisarMayeutica() {
 }
 
 /* ============================================================
+   La explicación guiada de cada estado (core/explicacion-guiada.js): sus pasos van en el dock, en el sitio de la hoja
+   de órdenes; cada paso pone la escena como lo cuenta (paso.e sobre el estado) y señala lo que cuenta (el anillo de
+   la escena con paso.mirar, o un marco con paso.resalta). «Ver en la ficha» lleva al párrafo exacto (core/citas.js).
+   ============================================================ */
+let claveActual = null, guia = null;
+const APLICAR_GUIA = { frase: false }, SUBIR_A = 'tablero';
+const Guia = { get activo() { return !!guia && guia.activo; } };
+// ¿Está la escena en este estado con nombre?
+const enEstado = k => !!ESTADOS[k] && JSON.stringify(estado) === JSON.stringify(estadoDe(ESTADOS[k].e));
+function sincronizarGuia() {
+    if (claveActual && !enEstado(claveActual) && !Guia.activo) claveActual = null;
+    const g = $('guia-abrir');
+    if (g) { g.disabled = !claveActual || !GUIAS[claveActual]; $('guia-de').textContent = claveActual ? `«${ESTADOS[claveActual].nombre}»` : 'Elige antes un estado'; }
+    enRaiz('#mur-chips-estado [data-estado]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.estado === claveActual)));
+}
+function crearGuia() {
+    guia = crearExplicacion({
+        cont: $('dock-guia'), raiz,
+        alPaso(paso) {
+            const p = copia(ESTADOS[guia.datos.clave].e);
+            for (const [k, v] of Object.entries(paso.e || {})) p[k] = v && typeof v === 'object' && !Array.isArray(v) ? Object.assign(p[k] || {}, copia(v)) : copia(v);
+            aplicar(estadoDe(p), APLICAR_GUIA);
+            requestAnimationFrame(() => anillo(paso.mirar || null));
+            subirEscena(paso);
+        },
+        alSalir(d) {
+            anillo(null);
+            $('dock-explorar').hidden = modo !== 'explorar';
+            if (d && d.clave && modo === 'explorar') { ponerEnEstado(d.clave); requestAnimationFrame(() => $('guia-abrir').focus({ preventScroll: true })); }
+            sincronizarGuia();
+        },
+        citaOpciones: { clase: 'cita', max: 90 },
+    });
+}
+// La escena (sin la cama de arriba) queda arriba; el dock, con la explicación, abajo
+function subirEscena(paso) {
+    const r = $(typeof SUBIR_A === 'function' ? SUBIR_A(paso) : SUBIR_A).getBoundingClientRect();
+    if (Math.abs(r.top) > 4) window.scrollBy({ top: r.top, behavior: 'auto' });
+}
+function explicar(clave) {
+    if (!GUIAS[clave] || modo !== 'explorar') return;
+    if (claveActual !== clave || !enEstado(clave)) ponerEnEstado(clave);
+    claveActual = clave;
+    $('dock-explorar').hidden = true;
+    guia.abrir({ clave, titulo: ESTADOS[clave].nombre, pasos: GUIAS[clave], fuentes: ESTADOS[clave].fuentes });
+    sincronizarGuia();
+}
+
+/* ============================================================
    Abrir en un estado (el menú de estados del dock, los botones de las fichas, el menú de Libros y el buscador)
    ============================================================ */
 function ponerEnEstado(clave) {
+    claveActual = ESTADOS[clave] ? clave : null;
     const s = ESTADOS[clave] || ESTADOS.sano;
     aplicar(estadoDe(s.e), { frase: false });
     const c = s.clave, v = copia(estado); if (c) v[c] = estadoBase()[c];
@@ -446,6 +481,7 @@ function ponerEnEstado(clave) {
 // cama): la cama 7 grande y su zoom de entrada; con estado, la cama compacta y la lámina en ese estado.
 export function abrirEstado(clave, origen) {
     if (origen !== undefined) marcarVolver(document.getElementById('mur-volver'), raiz, origen);
+    if (guia && guia.activo) guia.cerrar();
     if (modo !== 'explorar') setModo('explorar');
     if (clave && ESTADOS[clave]) ponerEnEstado(clave);
     cama?.mostrar({ intro: !clave });
@@ -463,13 +499,16 @@ function leyendas() {
     $('laminas').innerHTML = LAMINAS.map(([f, n, c]) => `<figure class="mur-lam-item"><div class="article-figure mur-lam"><img loading="lazy" src="js/modules/libros/img/${f}" alt="${n} del libro: ${c}"></div><figcaption>${n}</figcaption></figure>`).join('');
     $('prof-lista').innerHTML = profundizarHTML();
     $('prof-may').innerHTML = profundizarHTML();
+    $('chips-estado').innerHTML = Object.entries(ESTADOS).map(([k, st]) => `<button type="button" data-estado="${k}" aria-pressed="false">${st.nombre}</button>`).join('');
     $('m-estado').innerHTML = '<option value="">Ir a un estado con nombre…</option>' + Object.entries(ESTADOS).map(([k, s]) => `<option value="${k}">${s.nombre}</option>`).join('');
 }
 export function init() {
     raiz = document.getElementById('mur-raiz');
     if (!raiz) return null;
     initEscena();
-    leyendas(); engancharDock();
+    leyendas(); engancharDock(); crearGuia();
+    raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-mur-guia]'); if (g && modo === 'explorar') explicar(g.dataset.murGuia); });
+    $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
     Mayeutica.cargar();
     aplicar(estadoBase(), { frase: false }); decir(...fraseEstacion('intestino'));
     // La cama 7: su zoom de entrada abre la lámina; el respirador es una orden de la hoja
@@ -497,6 +536,8 @@ export function init() {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado, los estados pintados, la Mayéutica y el bucle.
+    window.__murGuias = () => ({ clave: claveActual, guia: guia && guia.activo ? { clave: guia.datos.clave, paso: guia.paso, n: guia.datos.pasos.length } : null,
+        citas: Object.entries(GUIAS).flatMap(([k, ps]) => ps.flatMap(pa => [].concat(pa.cita || []).map(c => ({ estado: k, ficha: c.ficha, id: c.id, exacta: citaExacta(c), ficha_existe: !!document.getElementById(c.ficha), pdf: hrefPdf(c) })))) });
     window.__murPruebas = () => {
         const r = pruebasMuralla();
         r.regla = raiz.querySelector('#mur-lamina [data-regla]')?.dataset.regla || null;

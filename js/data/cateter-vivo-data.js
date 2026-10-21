@@ -213,6 +213,155 @@ export const NOMBRE_ESTADO = { calibre: 'Calibre', longitud: 'Longitud', altura:
     'aposito-humedo': 'Apósito húmedo', hemocultivos: 'Hemocultivos', 'recambio-guia': 'Recambio sobre guía', punta: 'La punta', 'punta-izquierda': 'Catéter izquierdo',
     aire: 'Conector abierto', trendelenburg: 'Trendelenburg', 'eco-eje-corto': 'Eco: eje corto', 'eco-eje-largo': 'Eco: eje largo', 'eco-compresion': 'Eco: comprimir', 'eco-doppler': 'Eco: Doppler' };
 
+/* ============================================================
+   La explicación guiada de cada estado con nombre (REGLAS §7.10; core/explicacion-guiada.js): 3-5 pasos cortos que
+   se leen uno a uno. Cada paso: { t, resalta (lo que se señala en el dibujo), mirar (el anillo del modelo), e (cómo
+   cambia el catéter en ese paso, sobre el estado), cita (core/citas.js: ficha, párrafo, página del PDF), org }.
+   Todo sale de las fichas de marino-fundamentos.html; cada paso con su página del PDF.
+   ============================================================ */
+const CI = (ficha, id, pag) => ({ libro: 'Marino, cap. ' + ({ 'mar-cateteres-flujo': 1, 'mar-tipos-cateter': 1, 'mar-eco-intraosea': 1, 'mar-cvc-sitios': 2, 'mar-cvc-complicaciones': 2, 'mar-cateter-cuidados': 3, 'mar-bacteriemia-cateter': 3 }[ficha] || 1), ficha, id, pag, pdf: PDF });
+const FLU = (id, pag) => CI('mar-cateteres-flujo', id, pag), TIP = (id, pag) => CI('mar-tipos-cateter', id, pag), ECO = (id, pag) => CI('mar-eco-intraosea', id, pag);
+const SIT = (id, pag) => CI('mar-cvc-sitios', id, pag), COM = (id, pag) => CI('mar-cvc-complicaciones', id, pag), CUI = (id, pag) => CI('mar-cateter-cuidados', id, pag), BAC = (id, pag) => CI('mar-bacteriemia-cateter', id, pag);
+const LB = sel => '#ctv-lupaB ' + sel, LC = sel => '#ctv-lupaC ' + sel, LD = sel => '#ctv-lupaD ' + sel;
+export const GUIAS = {
+    calibre: [
+        { t: 'La Fig. 1.1: agua por gravedad a través de catéteres de la misma longitud. Con un 16 G, la probeta se llena a <span class="hl">220 mL/min</span>.', resalta: '#ctv-g-probeta', cita: FLU('mar-fig-1-1-calibre', 4) },
+        { t: 'Cambia a un 20 G: solo <span class="hl-rojo">60 mL/min</span>. El 16 G pasa más del doble que el 18 G (105) y casi cuatro veces más que el 20 G, con menos de 1 mm de diferencia de diámetro.', e: { figCal: 20 }, resalta: ['#ctv-g-cat-brazo', '#ctv-g-probeta'], cita: [FLU('mar-calibre-radio', 4), FLU('mar-tabla-1-1', 3)] },
+        { t: 'El porqué es la ecuación de Hagen-Poiseuille: el flujo es proporcional a la <span class="hl-azul">cuarta potencia del radio</span> (r⁴). El radio es lo que más pesa.', resalta: '#ctv-g-cat-brazo', cita: FLU('mar-poiseuille', '3-4') },
+        { t: 'Para infundir rápido: un catéter de gran calibre; y mejor aún, corto y de gran calibre.', resalta: '#ctv-g-cat-brazo', cita: FLU('mar-corto-grueso', 4) },
+    ],
+    longitud: [
+        { t: 'El mismo 16 G, con distinta longitud (Fig. 1.1, derecha). Un periférico mide unas 2 pulgadas: 151 mL/min.', e: { figLong: 2 }, resalta: '#ctv-g-cat-brazo', cita: FLU('mar-fig-1-1-longitud', 4) },
+        { t: 'A 6 pulgadas, la longitud habitual de un catéter central: <span class="hl-rojo">91 mL/min</span>, un 40 % menos.', resalta: ['#ctv-g-cat-brazo', '#ctv-g-probeta'], cita: FLU('mar-longitud-flujo', 4) },
+        { t: 'A 12 pulgadas, otro 40 % menos: 54 mL/min. En Hagen-Poiseuille la longitud divide: el flujo es inversamente proporcional a L.', e: { figLong: 12 }, resalta: '#ctv-g-probeta', cita: [FLU('mar-longitud-flujo', 4), FLU('mar-poiseuille', '3-4')] },
+        { t: 'Por eso, para correr: <span class="hl">corto y de gran calibre</span>.', e: { figLong: 2 }, resalta: '#ctv-g-cat-brazo', cita: FLU('mar-corto-grueso', 4) },
+    ],
+    altura: [
+        { t: 'Por gravedad, la resistencia del catéter se vence subiendo el gradiente de presión (el ΔP de la ecuación): subiendo la bolsa sobre el punto de punción.', resalta: '#ctv-g-bolsa', cita: FLU('mar-altura-bolsa', 5) },
+        { t: 'A 100 cm la presión de infusión es de 75 mmHg: el periférico corto da los <span class="hl">6,0 L/h</span> de la Tabla 1.2.', e: { altura: 100 }, resalta: ['#ctv-g-regla', '#ctv-g-probeta'], cita: [FLU('mar-altura-bolsa', 5), TIP('mar-tabla-1-2', 8)] },
+        { t: 'A 68 cm, 50 mmHg: el flujo cae en la misma proporción, × 50/75, a unos 4 L/h. Es un cálculo del modelo con la ecuación, no una cifra de la tabla.', resalta: ['#ctv-g-bolsa', '#ctv-lectura'], cita: [FLU('mar-altura-bolsa', 5), FLU('mar-poiseuille', '3-4')], org: '4 L/h: calculado' },
+        { t: 'Con la bolsa a la altura del brazo no hay gradiente: no hay flujo.', e: { altura: 0 }, resalta: '#ctv-g-bolsa', cita: FLU('mar-poiseuille', '3-4') },
+    ],
+    catalogo: [
+        { t: 'El PICC es una versión más larga del midline: entra por las mismas venas del brazo, pero llega a la cava superior. El más usado, de doble luz y 50 cm.', resalta: '#ctv-g-cat-brazo', cita: TIP('mar-picc', 9) },
+        { t: 'Su luz distal da solo <span class="hl-rojo">0,26 L/h</span> por gravedad (Tabla 1.3).', resalta: ['#ctv-g-probeta', '#ctv-lectura'], cita: TIP('mar-tabla-1-3', 9) },
+        { t: 'El midline, de 15 cm, da 1,3 L/h por luz: el PICC mide más del triple y su flujo es solo un 20 % del del midline.', e: { cat: 'midline' }, resalta: '#ctv-g-cat-brazo', cita: [TIP('mar-tabla-1-2', 8), TIP('mar-picc', 9)] },
+        { t: 'Ese flujo comprometido podría explicar su tasa relativamente alta de oclusiones. La Tabla 1.4 lo resume: la longitud del PICC puede limitar el ritmo de infusión.', resalta: '#ctv-g-cat-brazo', cita: [TIP('mar-picc', 9), TIP('mar-tabla-1-4', 11)] },
+    ],
+    'cvc-luces': [
+        { t: 'El CVC más usado es el de triple luz (7 Fr, 20 cm). Las tres luces salen en el extremo, a distinta altura.', resalta: '#ctv-g-cat-brazo', cita: TIP('mar-cvc-triple', '9-10') },
+        { t: 'La luz distal es más gruesa, de 16 G: <span class="hl">2,28 L/h</span> (Tabla 1.3).', resalta: ['#ctv-g-probeta', '#ctv-lectura'], cita: TIP('mar-tabla-1-3', 9) },
+        { t: 'La medial y la proximal son de 18 G: 0,91 y 0,99 L/h. La distal da más del doble.', e: { cat: 'cvc-m' }, resalta: '#ctv-g-probeta', cita: [TIP('mar-tabla-1-3', 9), TIP('mar-cvc-triple', 9)] },
+        { t: 'Por eso la luz distal es la mejor para infundir <span class="hl">volumen rápido</span>.', e: { cat: 'cvc-d' }, resalta: '#ctv-g-cat-brazo', cita: TIP('mar-cvc-triple', 9) },
+    ],
+    infusor: [
+        { t: 'Las bombas ajustan la presión (hasta 15 psi) para dar el ritmo programado. Una volumétrica no pasa de 1.000 mL/h: sirve para dosificar.', e: { bomba: 'volumetrica', cat: 'pc' }, resalta: '#ctv-g-bomba', cita: FLU('mar-bombas', 5) },
+        { t: 'Para la hemorragia masiva están los infusores rápidos: fluidos o hemoderivados calientes, <span class="hl">hasta 1,5 L/min</span>.', resalta: ['#ctv-g-bomba', '#ctv-lectura'], cita: FLU('mar-bombas', 5) },
+        { t: 'Piden su catéter: el «de infusión rápida», de 7-8 Fr y 2-2,5 pulgadas de largo. Corto y grueso, como dice Hagen-Poiseuille.', resalta: '#ctv-g-cat-brazo', cita: [FLU('mar-bombas', 5), FLU('mar-corto-grueso', 4)] },
+    ],
+    intraosea: [
+        { t: 'La vía intraósea es el acceso urgente cuando la IV es difícil o no está al momento: parada, trauma grave o shock.', resalta: '#ctv-g-hueso', cita: ECO('mar-io-indicaciones', 17) },
+        { t: 'Su ventaja: la cavidad medular es rígida y <span class="hl">no se colapsa</span> con la hipotensión o la hipovolemia, a diferencia de las venas.', resalta: '#ctv-g-hueso', cita: ECO('mar-io-indicaciones', 17) },
+        { t: 'Pero el flujo es lento: <span class="hl-rojo">un 25 % del de una vía periférica</span>, por la viscosidad de la médula y la presión de la cavidad (unos 30 mmHg).', resalta: '#ctv-g-probeta', cita: ECO('mar-io-flujo', 20) },
+        { t: 'Por eso se presuriza siempre, con bomba o manguito; aun así, 300 mmHg o más pueden no bastar en una hemorragia masiva, y algunos proponen dos vías IO.', resalta: '#ctv-g-cat-brazo', cita: ECO('mar-io-flujo', 20) },
+    ],
+    'oclusion-trombo': [
+        { t: 'Un PICC con bomba volumétrica que deja de pasar. La causa más frecuente de oclusión es un <span class="hl-rojo">trombo</span> (60 %).', resalta: '#ctv-g-oclusion', cita: CUI('mar-oclusion-causas', 42) },
+        { t: 'Se nota como flujo lento o nulo, o alarmas frecuentes de la bomba por presión excesiva; cuesta o no se puede aspirar sangre.', resalta: '#ctv-g-bomba', cita: CUI('mar-oclusion-causas', 42) },
+        { t: 'No pasar una guía para desatascarlo: puede soltar la masa y embolizarla. Lo estándar es disolverla químicamente.', resalta: '#ctv-g-oclusion', cita: CUI('mar-permeabilidad', 42) },
+        { t: 'Alteplasa 2 mg (2 mL) en la luz: esperar 30 min y, si sigue ocluido, otros 90. Recupera el <span class="hl">80-90 %</span> de los catéteres.', e: { instilado: 'alteplasa' }, resalta: '#ctv-g-cat-brazo', cita: [CUI('mar-alteplasa', '42-43'), CUI('mar-alteplasa-eficacia', 42)] },
+    ],
+    'oclusion-precipitado': [
+        { t: 'Otro PICC ocluido, esta vez por un precipitado mineral: nutrición parenteral rica en Ca²⁺ y PO₄.', resalta: '#ctv-g-oclusion', cita: CUI('mar-tabla-3-3', 43) },
+        { t: 'Si la alteplasa no funciona, hay que pensar en las causas no trombóticas: qué pasaba por esa luz (Tabla 3.3).', e: { instilado: 'alteplasa' }, resalta: '#ctv-g-oclusion', cita: CUI('mar-alteplasa', 43) },
+        { t: 'La regla: lo alcalino se disuelve con un álcali, lo ácido con un ácido y los lípidos con etanol. Para el mineral, NaOH 0,1 N de primera elección.', e: { instilado: 'naoh' }, resalta: '#ctv-g-cat-brazo', cita: [CUI('mar-oclusion-regla', 43), CUI('mar-tabla-3-3', 43)] },
+    ],
+    colonizacion: [
+        { t: 'La Fig. 3.2: cuatro vías por las que el germen llega al catéter. La 1, la infusión contaminada (p. ej., hemoderivados), es rara.', resalta: LB('[data-g="n1"]'), cita: BAC('mar-bac-vias', '46-47') },
+        { t: 'La 2, la luz interna, por puntos de rotura como los conectores: quizá destacada en los tunelizados.', resalta: LB('[data-g="n2"]'), cita: BAC('mar-bac-vias', '46-47') },
+        { t: 'La 3, la piel, que migra por el trayecto subcutáneo: la <span class="hl-rojo">vía principal</span> en los percutáneos no tunelizados, la mayoría en la UCI. Arriba, las tres medidas del paquete de inserción (manos, barreras, clorhexidina): juntas han reducido las bacteriemias.', resalta: [LB('[data-g="n3"]'), LB('[data-g="puertas"]')], cita: [BAC('mar-bac-vias', '46-47'), SIT('mar-paquete-efecto', 24)], org: 'cuántos cocos: ilustrativo' },
+        { t: 'La 4, la sangre: los microbios circulantes se pegan a la parte intravascular. El autor plantea si vienen del intestino: es su opinión.', resalta: LB('[data-g="n4"]'), cita: [BAC('mar-bac-vias', '46-47'), BAC('mar-bac-intestino', 54)] },
+        { t: 'Desde las 48 h puede haber clínica, pero es inespecífica: la fiebre y la leucocitosis son inflamación, no prueba de infección.', resalta: LB('#ctv-b-cocos'), cita: BAC('mar-bac-clinica', 48) },
+    ],
+    biopelicula: [
+        { t: 'La punta, de cerca: los microbios se pegan a la superficie inerte con <span class="hl-azul">adhesinas</span>.', resalta: LB('[data-g="punta"]'), cita: BAC('mar-biofilm', 47) },
+        { t: 'Y segregan una matriz (<i>slime</i>: polisacáridos, proteínas, fibrina y ADN) que los protege de los fagocitos.', resalta: LB('[data-g="matriz"]'), cita: BAC('mar-biofilm', 47) },
+        { t: 'Se ve al microscopio electrónico incluso tras un solo día. Los estafilococos coagulasa negativos, la primera causa, se pegan a los polímeros.', resalta: LB('[data-g="matriz"]'), cita: BAC('mar-biofilm', 47), org: 'el ritmo de crecimiento: ilustrativo' },
+        { t: 'Con antibiótico mueren las libres; para las de la matriz harían falta concentraciones <span class="hl-rojo">100 a 1.000 veces mayores</span>.', e: { antibiotico: true }, resalta: LB('#ctv-b-libres'), cita: BAC('mar-biofilm', 47) },
+    ],
+    'aposito-humedo': [
+        { t: 'El apósito transparente («oclusivo») deja ver el punto y lo sella; atrapa la humedad de la piel. Se cambia al menos cada 7 días.', e: { aposito: 'transparente' }, resalta: LB('[data-g="aposito"]'), cita: [CUI('mar-aposito-transparente', 40), CUI('mar-tabla-3-1', 41)] },
+        { t: 'Si se acumula humedad o sangre debajo, el oclusivo puede <span class="hl-rojo">favorecer la colonización</span> y la infección.', resalta: LB('[data-g="aposito"]'), cita: CUI('mar-aposito-paradoja', 41) },
+        { t: 'Por la vía 3, la piel, suben más gérmenes por el trayecto.', resalta: LB('[data-g="n3"]'), cita: BAC('mar-bac-vias', '46-47'), org: 'cuántos: ilustrativo' },
+        { t: 'Es motivo para cambiarlo. Si la piel no se mantiene seca, mejor gasa, cambiada al menos cada 48 h.', e: { aposito: 'gasa' }, resalta: LB('[data-g="aposito"]'), cita: [CUI('mar-tabla-3-1', 41), CUI('mar-aposito-gasa', 40)] },
+    ],
+    hemocultivos: [
+        { t: 'La clínica no hace el diagnóstico: hace falta un hemocultivo positivo de un sitio distinto del catéter y alguna prueba de que el catéter es la fuente. Dos frascos a la vez: del catéter y periférico.', resalta: [LB('[data-g="frasco-cat"]'), LB('[data-g="frasco-per"]')], cita: [BAC('mar-bac-cultivos', '48-49'), BAC('mar-tabla-3-4', 49)] },
+        { t: 'El mismo germen crece en los dos; el del catéter, antes.', resalta: LB('[data-g="frasco-cat"]'), cita: BAC('mar-tabla-3-4', 49), org: 'las horas: ilustrativas' },
+        { t: 'Si crece al menos <span class="hl">2 h antes</span>, el catéter es la fuente: tiempo diferencial, exactitud del 91 %. Aquí, 2,5 h.', resalta: LB('[data-g="frasco-per"]'), cita: BAC('mar-tabla-3-4', 49), org: '2,5 h: del caso' },
+        { t: 'La otra prueba, los cuantitativos (colonias del catéter ≥3 veces las periféricas), es algo más exacta (94 %). Ninguna es claramente mejor.', resalta: LB('[data-g="frasco-cat"]'), cita: [BAC('mar-tabla-3-4', 49), BAC('mar-bac-metodo', '49-50')] },
+    ],
+    'recambio-guia': [
+        { t: 'Día 7 de un catéter con bacteriemia confirmada: la biopelícula sigue creciendo en la punta.', e: { manejo: null }, resalta: LB('[data-g="bio"]'), cita: BAC('mar-biofilm', 47), org: 'el ritmo: ilustrativo' },
+        { t: 'Mientras llegan los cultivos se deja: de 1.527 catéteres retirados por sospecha, solo se confirmó en 169 (11 %).', e: { manejo: 'dejar' }, resalta: LB('[data-g="bio"]'), cita: BAC('mar-bac-no-retirar', 51) },
+        { t: 'Recambio sobre guía: <span class="hl-rojo">no</span>. Retirar y poner otro en un sitio nuevo; sobre guía solo si el acceso venoso es muy limitado.', resalta: LB('#ctv-b-cocos'), cita: BAC('mar-bac-guia', 52) },
+        { t: 'Si se deja, el antibiótico sistémico apenas lo descontamina (biopelícula) y son de esperar recurrencias. Al retirarlo, la biopelícula se va con él.', e: { manejo: 'retirar' }, resalta: LB('[data-g="n3"]'), cita: BAC('mar-bac-guia', 52) },
+    ],
+    punta: [
+        { t: 'Un catéter yugular o subclavio va en la cava superior, con la punta <span class="hl">1-2 cm por encima de la aurícula</span>.', resalta: LC('#ctv-c-asa'), cita: COM('mar-punta-objetivo', 36) },
+        { t: 'En la radiografía, la referencia es la carina: está justo encima de la unión cava-aurícula. La punta, a su altura o algo por encima.', resalta: [LC('[data-g="carina"]'), LC('#ctv-c-asa')], cita: COM('mar-punta-rx', 36) },
+        { t: 'Hay malposición en el 15-18 %, sobre todo con la subclavia: aquí ha subido a la yugular. Con eco, mira las dos yugulares.', e: { punta: 'yugular' }, resalta: LC('#ctv-c-asa'), cita: [COM('mar-punta-objetivo', 36), COM('mar-punta-eco', 37)] },
+        { t: '¿Y en la aurícula? En 2.348 pacientes así, ninguna perforación ni arritmia relevante: se está dejando de recolocar.', e: { punta: 'auricula' }, resalta: LC('[data-g="auricula"]'), cita: COM('mar-punta-auricula', 37) },
+    ],
+    'punta-izquierda': [
+        { t: 'Un catéter izquierdo llega a la cava por la innominada izquierda.', resalta: LC('#ctv-c-ruta'), cita: CUI('mar-perforacion-vcs', 45) },
+        { t: 'No siempre gira hacia abajo: la punta <span class="hl-rojo">apoya en la pared lateral</span> de la cava y puede erosionarla.', resalta: LC('[data-g="pared"]'), cita: CUI('mar-perforacion-vcs', 45) },
+        { t: 'Sale sangre y suero al mediastino y la pleura. Los síntomas (dolor retroesternal, tos, disnea) son inespecíficos.', resalta: LC('#ctv-c-asa'), cita: CUI('mar-perforacion-vcs', 45) },
+        { t: 'La pista suele ser un ensanchamiento mediastínico y un derrame pleural nuevos (Fig. 3.1).', resalta: LC('[data-g="cava"]'), cita: CUI('mar-perforacion-vcs', 45) },
+    ],
+    aire: [
+        { t: 'Respira solo: la presión intratorácica es negativa y crea el gradiente que mete aire en las venas.', e: { aire: { postura: 'espontanea', abierto: false } }, resalta: LC('[data-g="cava"]'), cita: COM('mar-aire-fisio', 33) },
+        { t: 'Con el conector abierto, un gradiente de solo 5 mmHg por un 14 G arrastra <span class="hl-rojo">100 mL de aire por segundo</span>.', resalta: LC('[data-g="conector"]'), cita: COM('mar-aire-fisio', 33) },
+        { t: 'Es mortal cuando entran 200-300 mL (3-5 mL/kg) en pocos segundos: puede bloquear el ventrículo derecho, dar edema pulmonar o pasar por un foramen oval y causar un ictus.', resalta: LC('#ctv-c-burbujas'), cita: COM('mar-aire-fisio', 33) },
+        { t: 'Si se sospecha: aspirar con una jeringa, oxígeno al 100 % y decúbito lateral izquierdo (eficacia no demostrada).', resalta: LC('[data-g="conector"]'), cita: COM('mar-aire-manejo', 34) },
+    ],
+    trendelenburg: [
+        { t: 'La prevención estándar es el Trendelenburg al canalizar yugular y subclavia: sube la presión venosa.', resalta: LC('[data-g="cava"]'), cita: COM('mar-aire-prevencion', 33) },
+        { t: 'Reduce el riesgo, pero el conector se cierra igual. Cuánto aire entra así, el libro no lo dice.', resalta: LC('[data-g="conector"]'), cita: COM('mar-aire-prevencion', 33), org: 'las burbujas lentas: ilustrativo' },
+        { t: 'Además distiende la yugular. No hace falta, y no se tolera, con congestión venosa; no se aconseja con hipertensión intracraneal.', resalta: LC('[data-g="cava"]'), cita: SIT('mar-yugular', 26) },
+        { t: 'En la femoral no hace falta: el catéter no entra en el tórax ni sufre presiones negativas.', e: { aire: { postura: 'femoral', abierto: true } }, resalta: LC('[data-g="conector"]'), cita: COM('mar-aire-prevencion', 33) },
+    ],
+    'eco-eje-corto': [
+        { t: 'Eje corto: el haz corta los vasos de través. Se localiza bien la vena y se ve a la vez la arteria vecina: menos punciones arteriales.', resalta: [LD('#ctv-d-vena'), LD('#ctv-d-arteria')], cita: ECO('mar-eco-ejes', '13-14') },
+        { t: 'La aguja solo se ve como un <span class="hl">punto brillante</span> cuando llega a la luz.', resalta: LD('[data-g="aguja"]'), cita: [ECO('mar-eco-ejes', '13-14'), ECO('mar-eco-aguja', 16)] },
+        { t: 'Las venas se colapsan al puncionarlas: con eje corto se perfora la pared posterior en el <span class="hl-rojo">40 %</span> (18 % con eje largo).', resalta: LD('#ctv-d-vena'), cita: ECO('mar-eco-pared-posterior', 16) },
+        { t: 'Hoy se prefiere el eje corto para localizar la vena y confirmar la punción.', resalta: LD('[data-g="sonda"]'), cita: ECO('mar-eco-cual', 14) },
+    ],
+    'eco-eje-largo': [
+        { t: 'Eje largo: el haz va a lo largo de la vena. Se ve avanzar la aguja, la guía y el catéter enteros.', resalta: LD('[data-g="aguja"]'), cita: [ECO('mar-eco-ejes', '13-14'), ECO('mar-eco-aguja', 16)] },
+        { t: 'Pero <span class="hl-rojo">no se ve la arteria vecina</span>, y hace falta una vena bastante recta.', resalta: LD('[data-g="vena-larga"]'), cita: ECO('mar-eco-ejes', '13-14') },
+        { t: 'Se prefiere para confirmar que la guía y luego el catéter están dentro de la luz (Fig. 1.9).', resalta: LD('[data-g="vena-larga"]'), cita: [ECO('mar-eco-cual', 14), ECO('mar-eco-pared-posterior', 16)] },
+    ],
+    'eco-compresion': [
+        { t: '¿Vena o arteria? El método más fácil y usado: apretar la piel con la sonda.', resalta: LD('[data-g="sonda"]'), cita: ECO('mar-compresibilidad', 16) },
+        { t: 'La vena se colapsa mucho antes que la arteria (Fig. 1.7).', resalta: [LD('#ctv-d-vena'), LD('#ctv-d-arteria')], cita: ECO('mar-compresibilidad', 16) },
+        { t: 'Excepción: <span class="hl-rojo">una vena trombosada no se comprime</span>.', e: { eco: { comprimir: true, trombosada: true } }, resalta: LD('#ctv-d-vena'), cita: ECO('mar-compresibilidad', 16) },
+    ],
+    'eco-doppler': [
+        { t: 'El Doppler color pinta el cambio de frecuencia que produce la dirección del flujo sobre la imagen en grises.', resalta: [LD('#ctv-d-vena'), LD('#ctv-d-arteria')], cita: ECO('mar-doppler-color', 16) },
+        { t: 'Los colores <span class="hl-purpura">no significan arteria o vena</span>: indican la dirección del flujo respecto a la sonda. Lo dice la escala.', resalta: LD('[data-g="escala"]'), cita: ECO('mar-doppler-color', 16) },
+        { t: 'Gira la sonda: cambia la dirección respecto a ella y los colores se intercambian. Ahora la arteria sale azul y la vena roja.', e: { eco: { doppler: true, girada: true } }, resalta: [LD('[data-g="sonda"]'), LD('#ctv-d-arteria')], cita: ECO('mar-doppler-color', '15-16'), org: 'girar la sonda: fisiología general' },
+    ],
+};
+// Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
+// explicación. Otro libro puede añadir las suyas (ESTADOS[k].fuentes.push) sin rehacer el modelo; nunca se funden.
+for (const [k, s] of Object.entries(ESTADOS)) {
+    s.n = NOMBRE_ESTADO[k];
+    const vistos = new Set();
+    s.fuentes = (GUIAS[k] || []).flatMap(p => [].concat(p.cita || []))
+        .filter(c => { const id = `${c.ficha}#${c.id}`; if (vistos.has(id)) return false; vistos.add(id); return true; });
+}
+
 export function hash(s) { let h = 7; for (const ch of s) h = (h * 31 + ch.charCodeAt(0)) >>> 0; return h; }
 export function barajar(ops, id) {   // orden fijo por pregunta, para que la buena no sea siempre la primera
     const a = ops.map((o, i) => ({ ...o, i })); const h = hash(id);

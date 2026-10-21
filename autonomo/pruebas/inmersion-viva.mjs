@@ -9,7 +9,8 @@
 // Mide el desborde lateral (0 px) tras cada respuesta, el repaso y cada paso de los casos; comprueba que las cifras que
 // se predicen salen tapadas, que no se ve ningún id interno y los errores de consola. Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
-const { PREGUNTAS, CASOS, CONCEPTOS, ESTADOS, estadoDe } = await import(new URL('../../js/data/inmersion-viva-data.js', import.meta.url));
+const { GUIAS, PREGUNTAS, CASOS, CONCEPTOS, ESTADOS, estadoDe } = await import(new URL('../../js/data/inmersion-viva-data.js', import.meta.url));
+const { probarGuias } = await import(new URL('./guias-comun.mjs', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -230,7 +231,7 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   const tr = await T();
   if (tr.ocultos.length) ok(false, `${donde}: siguen tapadas ${tr.ocultos.join(', ')} tras contestar`);
   const c = await sinIds(); if (c.length) ok(false, `${donde}: se ve ${c.join(' | ')}`);
-  if (!await p.evaluate(() => document.querySelectorAll('#inm-preg .inm-ir-texto').length > 0)) ok(false, `${donde}: sin «Ver en el texto» enlazado`);
+  if (!await p.evaluate(() => document.querySelectorAll('#inm-preg .cita-ir[data-resaltar]').length > 0)) ok(false, `${donde}: sin «Ver en la ficha» al párrafo`);
   // «Siguiente» se ve entero, por encima del dock
   if (!REDUCIDO) await p.waitForTimeout(400);
   if (!await p.evaluate(() => { const s = document.querySelector('#inm-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('inm-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
@@ -293,7 +294,7 @@ for (let i = 0; i < CONCEPTOS.length; i++) {
 ok(await desborde() <= 0, `sin desborde en los ${CONCEPTOS.length} conceptos`);
 crudos = await sinIds(); ok(!crudos.length, `sin ids internos a la vista en Conceptos ${crudos.slice(0, 3).join(' | ')}`);
 // «Ver en el texto» desde el modelo lleva a la ficha
-await pulsar('#inm-concepto .inm-ir-texto'); await p.waitForTimeout(800);
+await pulsar('#inm-concepto .cita-ir'); await p.waitForTimeout(800);
 ok(await p.evaluate(() => [...document.querySelectorAll('#marino-fund-view .tab-content.active')].some(e => e.offsetParent)), '«Ver en el texto» abre la ficha');
 ok(errores.length === 0, `0 errores de consola (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
 const ids = await p.evaluate(() => { const v = {}; document.querySelectorAll('[id]').forEach(e => { v[e.id] = (v[e.id] || 0) + 1; }); return Object.keys(v).filter(k => v[k] > 1); });
@@ -312,6 +313,8 @@ await p.evaluate(() => document.querySelector('.btn-volver-libros-menu').click()
 await p.evaluate(() => { document.getElementById('inm-menu-libros').click(); }); await p.waitForTimeout(300);
 ok(await p.evaluate(() => document.getElementById('inm-volver').textContent === '← VOLVER'), 'desde el menú, «← VOLVER» lleva al menú');
 ok(errores.length === 0, `0 errores de consola al final (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
+// La explicación guiada (guias-comun.mjs): dos enteras, la forma de todas y cada «Ver en la ficha» a un párrafo que existe
+await probarGuias({ p, ok, pre: 'inm', view: 'inmersionViva', attr: 'inmersionViva', GUIAS, recorrer: ['dolor-oculto', 'despertar'], foto, desborde, REDUCIDO });
 await ctx.close();
 fallosTotales.push(...fallos.map(f => `${tag}: ${f}`));
 }

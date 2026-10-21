@@ -14,10 +14,11 @@
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { iconoParticula } from '../../core/particulas.js';
-import { escapeHtml } from '../../core/ui.js';
-import { crearMayeuticaModelo, rutaDe, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { enlacesFuente, origenEnlazado, citaExacta, hrefPdf } from '../../core/citas.js';
+import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import {
-    FLUIDOS, ORDEN_FLUIDOS, PACIENTES, PERDIDAS, BUN_ALTO, CONCEPTOS, PREGUNTAS, CASOS, ESTADOS_ANCLA,
+    FLUIDOS, ORDEN_FLUIDOS, PACIENTES, PERDIDAS, BUN_ALTO, CONCEPTOS, PREGUNTAS, CASOS, ESTADOS_ANCLA, GUIAS, NOMBRE_ESTADO,
     estadoBase, copia, clamp, fmt, fmtL, dec, pruebasAguaViva,
 } from '../../data/agua-viva-data.js';
 import {
@@ -35,7 +36,8 @@ let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');
-    const nuevo = `${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}`;
+    const guiaBtn = claveActual && GUIAS[claveActual] && !Guia.activo && modo === 'explorar' ? `<button type="button" class="agv-ir-estado" data-agv-guia="${claveActual}">Explícamelo →</button> ` : '';
+    const nuevo = `${guiaBtn}${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('lienzo').setAttribute('aria-label', fraseEl.textContent);
@@ -186,6 +188,7 @@ function sincronizarMandos() {
     $('m-albbaja').setAttribute('aria-pressed', String(estado.albBaja)); $('m-inflamacion').setAttribute('aria-pressed', String(estado.inflamacion));
     $('m-paciente').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.paciente)));
     pintarInfundir();
+    sincronizarGuia();
 }
 function engancharDock() {
     $('chips-fluido').addEventListener('click', e => { const b = e.target.closest('.agv-chip-f'); if (b) elegirFluido(b.dataset.fluido); });
@@ -269,6 +272,7 @@ function subir() {
     if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' });
 }
 function setModo(m) {
+    if (guia && guia.activo) guia.cerrar();
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('agv-estudio', m !== 'explorar');
@@ -285,52 +289,12 @@ function setModo(m) {
 }
 
 /* ============================================================
-   «Ver en el texto»: cada fuente (ficha#elemento) es un enlace cruzado a su ficha
+   «Ver en el texto» y los chips de origen: la pieza común de las citas (core/citas.js)
    ============================================================ */
-const tituloFicha = tab => (tab.querySelector('h3')?.textContent || tab.id).replace(/\s+/g, ' ').trim();
-function etiquetaDe(el) {
-    const dt = el.matches('dl') && el.querySelector('dt');
-    if (dt) return dt.textContent.trim();
-    const cab = el.matches('.micro-prof-item') && el.querySelector('.micro-prof-head span');
-    if (cab) return cab.textContent.trim();
-    return null;
-}
-function botonFicha(r, texto) {
-    return `<button type="button" class="agv-ir-texto" data-especialidad="${r.nav.especialidad}" data-view="${r.nav.view}" data-panel="${r.panel}" data-tab="${r.tab.id}"${r.el !== r.tab ? ` data-resaltar="#${r.el.id}"` : ''}>${escapeHtml(texto)} →</button>`;
-}
-function verEnTexto(fuente) {
-    let tabPrevio = null; const vistos = new Set();
-    const trozos = fuente.split(' · ').map(t => {
-        const m = t.trim().match(/^(#?)([a-z0-9-]+)(?:#([a-z0-9-]+))?\s*(.*)$/i);
-        if (!m) return `<span class="agv-org">${t}</span>`;
-        const [, rel, a, b, resto] = m;
-        const idEl = rel ? a : b || a, idTab = rel ? tabPrevio : a;
-        const r = rutaDe(idEl) || rutaDe(idTab);
-        if (!r) return `<span class="agv-org">${t}</span>`;
-        tabPrevio = r.tab.id;
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        let texto = vistos.has(r.tab.id) ? (sub || tituloFicha(r.tab)) : tituloFicha(r.tab) + (sub ? ' · ' + sub : '');
-        vistos.add(r.tab.id);
-        if (resto) texto += ' ' + resto;
-        return botonFicha(r, texto.length > 70 ? texto.slice(0, 68) + '…' : texto);
-    });
-    return `<p class="agv-fuente-p">Ver en el texto: ${trozos.join(' ')}</p>`;
-}
-
-// Un texto de origen («ficha · mar-fig-10-1 · proporcional: ilustrativo»): cada ficha citada pasa a ser
-// un enlace a ella con su título; lo demás («ficha», «ilustrativo», «sin cifra»…) queda como texto.
-function origenHTML(texto) {
-    const vistos = new Set();
-    return String(texto).split(' · ').map(t => {
-        const m = t.trim().match(/^(#?)([a-z0-9]+(?:-[a-z0-9]+)+)(?:#([a-z0-9-]+))?(\s.*)?$/);
-        const r = m && (rutaDe(m[3] || m[2]) || rutaDe(m[2]));
-        if (!r) return escapeHtml(t);
-        const resto = m[4] ? escapeHtml(m[4]) : '';
-        if (vistos.has(r.tab.id)) return resto.trim() || null;   // la misma ficha, un solo enlace
-        vistos.add(r.tab.id);
-        return `<button type="button" class="agv-org-ir" data-especialidad="${r.nav.especialidad}" data-view="${r.nav.view}" data-panel="${r.panel}" data-tab="${r.tab.id}"${r.el !== r.tab ? ` data-resaltar="#${r.el.id}"` : ''}>${escapeHtml(tituloFicha(r.tab))}</button>${resto}`;
-    }).filter(x => x !== null).join(' · ');
-}
+const verEnTexto = fuente => `<p class="agv-fuente-p">${enlacesFuente(fuente, { clase: 'agv-ir-texto', claseOrg: 'agv-org' })}</p>`;
+// Un texto de origen («ficha · mar-fig-10-1 · proporcional: ilustrativo»): cada ficha citada pasa a ser un enlace a
+// ella con su título; lo demás («ficha», «ilustrativo», «sin cifra»…) queda como texto (core/citas.js).
+const origenHTML = texto => origenEnlazado(texto, { clase: 'agv-org-ir', corta: true });
 // Los chips de origen escritos en el HTML o en los textos de las preguntas («ficha · …») se enlazan al pintarse.
 // En los datos, los ids van en data-org (<span class="agv-org" data-org="ficha · mr-…">ficha</span>): nunca se leen.
 function enlazarOrigenes(cont) {
@@ -472,10 +436,75 @@ function ponerEnEstado(a) {
 export function abrirEstado(clave, origen) {
     if (origen !== undefined) marcarVolver(document.getElementById('agv-volver'), raiz, origen);
     if (!clave) { requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' })); return; }
-    const a = ESTADOS_ANCLA[clave] || ESTADOS_ANCLA.inicio;
+    if (guia && guia.activo) guia.cerrar();
     if (modo !== 'explorar') setModo('explorar');
-    ponerEnEstado(a);
+    ponerEnClave(ESTADOS_ANCLA[clave] ? clave : 'inicio');
     requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
+}
+
+// Un estado con nombre: el modelo en ese estado y la clave recordada (su explicación guiada).
+let poniendo = false;
+function ponerEnClave(k) {
+    poniendo = true; claveActual = k;
+    try { ponerEnEstado(ESTADOS_ANCLA[k]); } finally { poniendo = false; }
+    sincronizarGuia();
+    decirConGuia();
+}
+// La pastilla «Explícamelo» delante de la frase que dejó el estado (si la frase no cambió, no se repinta sola)
+function decirConGuia() {
+    const f = $('frase');
+    if (!claveActual || !GUIAS[claveActual] || Guia.activo || modo !== 'explorar' || f.querySelector('[data-agv-guia]')) return;
+    f.insertAdjacentHTML('afterbegin', `<button type="button" class="agv-ir-estado" data-agv-guia="${claveActual}">Explícamelo →</button> `);
+    fraseActual = f.innerHTML;
+}
+
+/* ============================================================
+   La explicación guiada de cada estado (core/explicacion-guiada.js): sus pasos van en el dock, en el sitio de los
+   mandos; cada paso pone el estuario como lo cuenta (paso.e sobre el estado), abre su lupa y señala lo que cuenta
+   (el anillo del estuario con paso.mirar, o un marco con paso.resalta). «Ver en la ficha» lleva al párrafo exacto.
+   ============================================================ */
+let claveActual = null, guia = null;
+const Guia = { get activo() { return !!guia && guia.activo; } };
+// ¿Está el estuario en este estado con nombre?
+const enEstado = k => !!ESTADOS_ANCLA[k] && JSON.stringify(estado) === JSON.stringify(estadoDe(ESTADOS_ANCLA[k].estado));
+function sincronizarGuia() {
+    if (claveActual && !poniendo && !enEstado(claveActual) && !Guia.activo) claveActual = null;
+    const g = $('guia-abrir');
+    if (g) { g.disabled = !claveActual || !GUIAS[claveActual]; $('guia-de').textContent = claveActual ? `«${NOMBRE_ESTADO[claveActual]}»` : 'Elige antes un estado'; }
+    enRaiz('#agv-chips-estado [data-estado]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.estado === claveActual)));
+}
+function crearGuia() {
+    guia = crearExplicacion({
+        cont: $('dock-guia'), raiz,
+        alPaso(paso) {
+            const a = ESTADOS_ANCLA[guia.datos.clave];
+            aplicar(estadoDe(Object.assign(copia(a.estado || {}), copia(paso.e || {}))), { frase: false });
+            const lupa = 'lupa' in paso ? paso.lupa : a.lupa;
+            if (lupa) { if (Lupa.abierta !== lupa) Lupa.abrir(lupa); } else if (Lupa.abierta) Lupa.cerrar();
+            anillo(paso.mirar || null);
+            subirEscena();
+        },
+        alSalir(d) {
+            anillo(null);
+            $('dock-explorar').hidden = modo !== 'explorar';
+            if (d && d.clave && modo === 'explorar') { ponerEnClave(d.clave); requestAnimationFrame(() => $('guia-abrir').focus({ preventScroll: true })); }
+            sincronizarGuia();
+        },
+        citaOpciones: { clase: 'cita', max: 90 },
+    });
+}
+function subirEscena() {
+    const r = $('escena-bloque').getBoundingClientRect();
+    if (Math.abs(r.top) > 4) window.scrollBy({ top: r.top, behavior: 'auto' });
+}
+function explicar(clave) {
+    if (!GUIAS[clave] || modo !== 'explorar') return;
+    if (claveActual !== clave || !enEstado(clave)) ponerEnClave(clave);
+    claveActual = clave;
+    $('dock-explorar').hidden = true;
+    $('frase').querySelector('[data-agv-guia]')?.remove();   // mientras explica, la pastilla sobra
+    guia.abrir({ clave, titulo: NOMBRE_ESTADO[clave], pasos: GUIAS[clave], fuentes: ESTADOS_ANCLA[clave].fuentes });
+    sincronizarGuia();
 }
 
 /* ============================================================
@@ -485,7 +514,11 @@ export function init() {
     raiz = document.getElementById('agv-raiz');
     if (!raiz) return null;
     initEscena({ enEstudio });
-    chipsFluido(); iconos(raiz); engancharDock();
+    chipsFluido(); iconos(raiz); engancharDock(); crearGuia();
+    $('chips-estado').innerHTML = Object.keys(ESTADOS_ANCLA).map(k => `<button type="button" data-estado="${k}" aria-pressed="false">${NOMBRE_ESTADO[k]}</button>`).join('');
+    $('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (!b) return; if (guia.activo) guia.cerrar(); ponerEnClave(b.dataset.estado); $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' }); });
+    raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-agv-guia]'); if (g && modo === 'explorar') explicar(g.dataset.agvGuia); });
+    $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
     enlazarOrigenes(raiz);
     ponerFormatoOrigen(origenHTML);   // los orígenes de los mareógrafos, también con su enlace
     Mayeutica.cargar();
@@ -513,6 +546,8 @@ export function init() {
     // Para las pruebas (Playwright): las cifras de cada fluido frente al anexo de la maqueta y el estado del bucle.
     window.__agvPruebas = () => ({ ...pruebasAguaViva(), bucle: estadoBucle(), modo, fase: Mayeutica.fase, estado: copia(estado),
         ocultos: [...ocultos], guardado: Mayeutica.prog.g.leer(), vaciarFotogramas, dibujar });
+    window.__agvGuias = () => ({ clave: claveActual, guia: guia && guia.activo ? { clave: guia.datos.clave, paso: guia.paso, n: guia.datos.pasos.length } : null,
+        citas: Object.entries(GUIAS).flatMap(([k, ps]) => ps.flatMap(pa => [].concat(pa.cita || []).map(c => ({ estado: k, ficha: c.ficha, id: c.id, exacta: citaExacta(c), ficha_existe: !!document.getElementById(c.ficha), pdf: hrefPdf(c) })))) });
 
     return { abrir: abrirEstado };
 }

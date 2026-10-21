@@ -13,11 +13,12 @@
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
-import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas } from '../../core/citas.js';
+import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExacta, hrefPdf } from '../../core/citas.js';
+import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import {
     CAT, ORDEN_CAT, OCLUSIONES, INSTILAR, ORDEN_PUNTA, FIGS, TIRA, ESTADOS, FICHAS_ESTADO, NOMBRE_ESTADO,
-    CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, PDF, estadoBase, estadoDe, derivar, resuelta, copia, clamp, dec,
+    CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, PDF, GUIAS, estadoBase, estadoDe, derivar, resuelta, copia, clamp, dec,
     pruebasCateter,
 } from '../../data/cateter-vivo-data.js';
 import {
@@ -36,7 +37,8 @@ let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');
-    const nuevo = `<span class="ctv-frase-txt">${html} ${fuente ? `<span class="ctv-org${ilu ? ' ctv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}</span>`;
+    const guia = claveActual && GUIAS[claveActual] && !Guia.activo ? `<button type="button" class="ctv-ir-estado" data-ctv-guia="${claveActual}">Explícamelo →</button>` : '';
+    const nuevo = `<span class="ctv-frase-txt">${html} ${fuente ? `<span class="ctv-org${ilu ? ' ctv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}</span>${guia}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('lamina').setAttribute('aria-label', fraseEl.textContent);
@@ -200,7 +202,12 @@ function sincronizarMandos() {
     $('m-conector').textContent = e.aire.abierto ? 'Cerrar conector' : 'Abrir conector';
     $('m-incubar').textContent = e.hcIncubado ? 'Incubar otra vez' : 'Incubar los dos frascos';
     enRaiz('#ctv-lupas [data-ctv-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.ctvLupa === e.lupa)));
+    if (claveActual && !enEstado(claveActual) && !Guia.activo) claveActual = null;
+    const g = $('guia-abrir');
+    if (g) { g.disabled = !claveActual || !GUIAS[claveActual]; $('guia-de').textContent = claveActual ? `«${NOMBRE_ESTADO[claveActual]}»` : 'Elige antes un estado'; }
 }
+// ¿Está el catéter en este estado con nombre?
+const enEstado = k => !!ESTADOS[k] && JSON.stringify(estado) === JSON.stringify(estadoDe(ESTADOS[k].e));
 function segClick(id, fn) { $(id).addEventListener('click', ev => { const b = ev.target.closest('button'); if (b && !b.disabled) fn(b.dataset.v); }); }
 function elegirPestana(tab) {
     enRaiz('.ctv-dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.ctvTab === tab)));
@@ -341,6 +348,7 @@ function ponerEnEstado(clave) {
     const st = estadoDe(ESTADOS[clave]?.e || {});
     medir();
     fraseActual = '';
+    claveActual = ESTADOS[clave] ? clave : null;
     aplicar(st, { forzar: true, frase: false });
     decir(...fraseDeEstado(st));
     elegirPestana(pestanaDe(st));
@@ -361,6 +369,7 @@ function subir() {
     if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' });
 }
 function setModo(m) {
+    if (guia && guia.activo) guia.cerrar();
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('ctv-estudio', m !== 'explorar');
@@ -370,9 +379,49 @@ function setModo(m) {
     anillo(null); setOcultos([]);
     if (m === 'conceptos') Estudio.concepto(Estudio.c);
     if (m === 'preguntas') Mayeutica.entrar();
-    if (m === 'explorar') { fraseActual = ''; decir(...FRASE_INICIO()); }
+    if (m === 'explorar') { fraseActual = ''; claveActual = null; decir(...FRASE_INICIO()); sincronizarMandos(); }
     if (REDUCIR) pintarUnaVez(); else arrancar();
     subir();
+}
+
+/* ============================================================
+   La explicación guiada de cada estado (core/explicacion-guiada.js): sus pasos van en el dock, en el sitio de los
+   mandos; cada paso pone el catéter como lo cuenta (paso.e sobre el estado) y señala en el dibujo lo que cuenta.
+   «Ver en la ficha» lleva al párrafo exacto (core/citas.js).
+   ============================================================ */
+let claveActual = null, guia = null;
+const Guia = { get activo() { return !!guia && guia.activo; } };
+function estadoDePaso(clave, paso) {
+    const p = copia(ESTADOS[clave].e);
+    for (const [k, v] of Object.entries(paso.e || {})) p[k] = v && typeof v === 'object' && !Array.isArray(v) ? Object.assign(p[k] || {}, copia(v)) : v;
+    return estadoDe(p);
+}
+function crearGuia() {
+    guia = crearExplicacion({
+        cont: $('dock-guia'), raiz,
+        alPaso(paso) {
+            aplicar(estadoDePaso(guia.datos.clave, paso), { frase: false });
+            anillo(paso.mirar || null);
+            subirEscena();
+        },
+        alSalir(d) {
+            anillo(null);
+            $('dock-explorar').hidden = modo !== 'explorar';
+            if (d && d.clave && modo === 'explorar') { ponerEnEstado(d.clave); requestAnimationFrame(() => $('guia-abrir').focus({ preventScroll: true })); }
+        },
+        citaOpciones: { clase: 'cita', max: 90 },
+    });
+}
+function subirEscena() {
+    const r = $('escena-bloque').getBoundingClientRect();
+    if (Math.abs(r.top) > 4) window.scrollBy({ top: r.top, behavior: 'auto' });
+}
+function explicar(clave) {
+    if (!GUIAS[clave] || modo !== 'explorar') return;
+    if (claveActual !== clave || !enEstado(clave)) ponerEnEstado(clave);
+    claveActual = clave;
+    $('dock-explorar').hidden = true;
+    guia.abrir({ clave, titulo: NOMBRE_ESTADO[clave], pasos: GUIAS[clave], fuentes: ESTADOS[clave].fuentes });
 }
 
 /* ============================================================
@@ -511,6 +560,7 @@ function pintarProfundizar() {
 export function abrirEstado(clave, origen) {
     if (origen !== undefined) marcarVolver(document.getElementById('ctv-volver'), raiz, origen);
     if (!clave) { requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' })); return; }
+    if (guia && guia.activo) guia.cerrar();
     if (modo !== 'explorar') setModo('explorar');
     ponerEnEstado(clave === 'inicio' ? null : clave);
     requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
@@ -523,9 +573,11 @@ export function init() {
     raiz = document.getElementById('ctv-raiz');
     if (!raiz) return null;
     initEscena();
-    chipsCatalogo(); leyendas(); pintarProfundizar(); pintarEstados(); engancharDock();
+    chipsCatalogo(); leyendas(); pintarProfundizar(); pintarEstados(); engancharDock(); crearGuia();
+    raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-ctv-guia]'); if (g && modo === 'explorar') explicar(g.dataset.ctvGuia); });
+    $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).addEventListener('click', () => setModo(k));
-    $('lista-estados').addEventListener('click', ev => { const b = ev.target.closest('[data-ctv-estado]'); if (b) { ponerEnEstado(b.dataset.ctvEstado); subir(); } });
+    $('lista-estados').addEventListener('click', ev => { const b = ev.target.closest('[data-ctv-estado]'); if (b) { if (guia.activo) guia.cerrar(); ponerEnEstado(b.dataset.ctvEstado); subir(); } });
     $('tira').addEventListener('click', ev => { const b = ev.target.closest('[data-ctv-fig]'); if (b) abrirVisor(b.dataset.ctvFig); });
     $('visor-cerrar').addEventListener('click', () => $('visor').close());
     $('visor').addEventListener('click', ev => { if (ev.target === $('visor')) $('visor').close(); });
@@ -561,6 +613,9 @@ export function init() {
             D: { valor: D.valor, unidad: D.unidad, texto: D.texto, org: D.org, ocluido: D.ocluido, alarma: D.alarma, rel: D.rel, presion: D.presion, presionMedula: D.presionMedula, aire: D.aire, punta: D.punta, bio: D.bio, eco: D.eco },
             aireMl: Math.round(Anim.aireMl), ocultos: [...ocultos], lectura, guardado: Mayeutica.prog.g.leer(), vaciarFotogramas };
     };
+    // La explicación guiada: el estado con nombre, el paso abierto y cada cita de las explicaciones
+    window.__ctvGuias = () => ({ clave: claveActual, guia: guia && guia.activo ? { clave: guia.datos.clave, paso: guia.paso, n: guia.datos.pasos.length } : null,
+        citas: Object.entries(GUIAS).flatMap(([k, ps]) => ps.flatMap(pa => [].concat(pa.cita || []).map(c => ({ estado: k, ficha: c.ficha, id: c.id, exacta: citaExacta(c), ficha_existe: !!document.getElementById(c.ficha), pdf: hrefPdf(c) })))) });
 
     return { abrir: abrirEstado };
 }

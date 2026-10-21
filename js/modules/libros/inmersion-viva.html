@@ -31,8 +31,9 @@
       <div id="inm-vista-explorar" class="inm-bloque">
         <section class="inm-bloque">
           <h3 class="inm-h">Ir a un estado</h3>
+          <div class="inm-guia-abrir"><button type="button" class="inm-b inm-prim" id="inm-guia-abrir">Explícame este estado paso a paso</button><span class="inm-para" id="inm-guia-de"></span></div>
           <div class="inm-chips-estado" id="inm-chips-estado"></div>
-          <p class="inm-para">Cada estado es el de una idea de las fichas de analgesia y de sedación (o el de un paciente de los casos). Los mandos, abajo, en la hoja de órdenes.</p>
+          <p class="inm-para">Cada estado es el de una idea de las fichas de analgesia y de sedación (o el de un paciente de los casos). Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en la escena. Los mandos, abajo, en la hoja de órdenes.</p>
         </section>
 
         <details class="nota-plegable" id="inm-t67" open>
@@ -168,6 +169,8 @@
               <div class="inm-raya"><button type="button" class="inm-tog" id="inm-m-halo">Haloperidol 5 mg IV</button><button type="button" class="inm-tog" id="inm-m-qtc">QTc &gt;500 ms</button></div>
             </div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de la hoja de órdenes -->
+          <div id="inm-dock-guia" hidden></div>
           <div id="inm-dock-estudio" class="inm-dock-estudio" hidden>
             <div class="inm-pasos" id="inm-dock-pasos"></div>
             <div class="inm-dock-est-txt"><span id="inm-dock-est-izq"></span><span id="inm-dock-est-der"></span></div>

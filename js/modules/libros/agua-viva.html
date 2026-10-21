@@ -48,6 +48,12 @@
       <!-- ============ EXPLORAR ============ -->
       <div id="agv-vista-explorar" class="agv-bloque">
         <section class="agv-bloque">
+          <h3 class="agv-h">Ir a un estado</h3>
+          <div class="agv-guia-abrir"><button type="button" class="agv-b agv-prim" id="agv-guia-abrir">Explícame este estado paso a paso</button><span class="agv-para" id="agv-guia-de"></span></div>
+          <div class="agv-chips-estado" id="agv-chips-estado"></div>
+          <p class="agv-para">Cada estado es el de una idea de las fichas de los sueros, la hemorragia y el sodio. Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en el estuario. Los mandos, abajo.</p>
+        </section>
+        <section class="agv-bloque">
           <h3 class="agv-h">Qué es cada cosa que se mueve</h3>
           <ul class="agv-leyenda" id="agv-leyenda">
             <li><span data-agv-particula="dulce"></span>glucosado: agua dulce, no brilla</li>
@@ -212,6 +218,8 @@
               </div>
             </div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de los mandos -->
+          <div id="agv-dock-guia" hidden></div>
           <div id="agv-dock-estudio" class="agv-dock-estudio" hidden>
             <div class="agv-pasos" id="agv-dock-pasos"></div>
             <div class="agv-dock-est-txt"><span id="agv-dock-est-izq"></span><span id="agv-dock-est-der"></span></div>

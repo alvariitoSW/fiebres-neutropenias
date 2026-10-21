@@ -776,10 +776,10 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">El trauma es la principal causa de muerte a nivel mundial en el grupo de 25-49 años, y la causa más tratable de muerte en estos casos es el shock hemorrágico.</p>
 
             <p class="section-label">Pérdida aguda de sangre</p>
-            <dl class="kv-row"><dt>Volumen sanguíneo normal</dt><dd><strong>Varones:</strong> 66 mL/kg de peso corporal magro (ej. 75 kg → ~5 litros). <strong>Mujeres:</strong> 60 mL/kg de peso corporal magro (ej. 60 kg → ~3,6 litros).</dd></dl>
+            <dl class="kv-row" id="mc-volemia"><dt>Volumen sanguíneo normal</dt><dd><strong>Varones:</strong> 66 mL/kg de peso corporal magro (ej. 75 kg → ~5 litros). <strong>Mujeres:</strong> 60 mL/kg de peso corporal magro (ej. 60 kg → ~3,6 litros).</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Respuestas compensadoras</p>
-            <ul class="term-chips">
+            <ul class="term-chips" id="mc-compensacion">
                 <li><strong>Relleno transcapilar:</strong> la caída de PA moviliza líquido intersticial hacia el torrente sanguíneo — puede añadir hasta 1 litro al volumen plasmático, a costa de un déficit de líquido intersticial</li>
                 <li><strong>Respuesta simpática:</strong> taquicardia y vasoconstricción periférica para preservar la perfusión tisular</li>
                 <li><strong>ADH:</strong> liberación de hormona antidiurética que promueve la retención renal de agua</li>
@@ -789,7 +789,7 @@
             <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hemorragia">🌊 Ver una hemorragia del 20 % en el río y mar: el Hto a la hora y a las 8-12 h →</button></p>
             <p class="section-label" style="margin-top:16px;">Tabla 15.1 — Sistema de clasificación de la pérdida aguda de sangre</p>
             <div style="overflow-x:auto;">
-            <table class="data-table">
+            <table class="data-table" id="mc-tabla-15-1" data-nombre="Tabla 15.1">
                 <thead><tr><th></th><th>Clase I</th><th>Clase II</th><th>Clase III</th><th>Clase IV</th></tr></thead>
                 <tbody>
                     <tr><td>Déficit de volumen</td><td>&lt;15%</td><td>15-30%</td><td>31-40%</td><td>&gt;40%</td></tr>
@@ -816,7 +816,7 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase I</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Pérdida &lt;15% del volumen sanguíneo (&lt;10 mL/kg). Volumen totalmente restaurado por relleno transcapilar (típicamente &lt;1 litro), volumen sanguíneo mantenido, hallazgos clínicos mínimos o ausentes — reanimación con volumen no necesaria.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div class="micro-prof-item" id="mc-clase-2">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>Clase II</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Pérdida 15-30% (10-20 mL/kg). Fase compensada de hipovolemia: PA mantenida por vasoconstricción sistémica. La diuresis puede empezar a caer, pero no llega al nivel de oliguria (&lt;0,5 mL/kg/h). La respuesta vasoconstrictora es más intensa en la circulación esplácnica, y la hipoperfusión esplácnica puede llevar a disrupción de la mucosa intestinal e invasión de patógenos entéricos en el torrente sanguíneo.</div>
                 </div>
@@ -831,10 +831,10 @@
             </div>
 
             <p class="section-label" style="margin-top:16px;">Hemoglobina y hematocrito: una trampa de interpretación</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">El uso de la Hb/Hct (H &amp; H) para evaluar la presencia y gravedad de la pérdida aguda de sangre es común pero inapropiado. Los cambios en el hematocrito se correlacionan mal con el déficit real de volumen sanguíneo y con el déficit de eritrocitos: la pérdida aguda de sangre involucra la pérdida de sangre completa, con descensos <strong>proporcionales</strong> del plasma y de los eritrocitos — como resultado, la pérdida aguda de sangre reduce el volumen sanguíneo, pero <strong>no</strong> el H &amp; H. El H &amp; H solo declinará más tarde, por efecto del relleno transcapilar y del aumento de ADH/aldosterona — un efecto que tarda 8-12 horas en aparecer y puede tardar días en completarse.</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">El tipo de fluido de reanimación también determina el hematocrito, no la magnitud de la pérdida: la infusión de suero salino isotónico expande el volumen plasmático pero no el de eritrocitos → dilución del Hto. La reanimación con sangre completa añade plasma y eritrocitos de forma proporcional → sin cambio en el Hto.</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);"><em>En las primeras horas tras una pérdida aguda de sangre, la hemoglobina y el hematocrito son un reflejo del esfuerzo de reanimación (tipo y volumen de fluidos infundidos), y no de la magnitud de la pérdida de sangre.</em></p>
-            <div class="article-figure">
+            <p style="font-size:0.85rem; color:var(--text-dim);" id="mc-hto-trampa" data-nombre="Hb y Hto: la trampa">El uso de la Hb/Hct (H &amp; H) para evaluar la presencia y gravedad de la pérdida aguda de sangre es común pero inapropiado. Los cambios en el hematocrito se correlacionan mal con el déficit real de volumen sanguíneo y con el déficit de eritrocitos: la pérdida aguda de sangre involucra la pérdida de sangre completa, con descensos <strong>proporcionales</strong> del plasma y de los eritrocitos — como resultado, la pérdida aguda de sangre reduce el volumen sanguíneo, pero <strong>no</strong> el H &amp; H. El H &amp; H solo declinará más tarde, por efecto del relleno transcapilar y del aumento de ADH/aldosterona — un efecto que tarda 8-12 horas en aparecer y puede tardar días en completarse.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);" id="mc-hto-fluido" data-nombre="Hb y Hto: el fluido">El tipo de fluido de reanimación también determina el hematocrito, no la magnitud de la pérdida: la infusión de suero salino isotónico expande el volumen plasmático pero no el de eritrocitos → dilución del Hto. La reanimación con sangre completa añade plasma y eritrocitos de forma proporcional → sin cambio en el Hto.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);" id="mc-hto-reanimacion" data-nombre="Hb y Hto en las primeras horas"><em>En las primeras horas tras una pérdida aguda de sangre, la hemoglobina y el hematocrito son un reflejo del esfuerzo de reanimación (tipo y volumen de fluidos infundidos), y no de la magnitud de la pérdida de sangre.</em></p>
+            <div class="article-figure" id="mc-fig-15-1">
                 <img src="js/modules/cardiologia/img/mc-fig15-1-volumen-hto.jpg" alt="Cilindros de volumen sanguíneo y hematocrito antes y después de la hemorragia/reanimación" loading="lazy">
                 <p class="article-figure-caption">Fig. 15.1 — Influencia de la hemorragia aguda y la reanimación con fluidos sobre el volumen sanguíneo y el hematocrito. El Hto normal (45%) se mantiene idéntico 1h tras la hemorragia (pérdida proporcional de plasma y células). La reanimación con salino diluye el Hto a 27% sin reponer eritrocitos; la sangre completa lo mantiene en 45% reponiendo ambos compartimentos en proporción.</p>
             </div>
@@ -962,7 +962,7 @@
             <p style="font-size:0.85rem; color:var(--text-dim);">Dos objetivos fundamentales en el paciente sangrante: (1) apoyar el aporte de O₂ a los tejidos, promoviendo el gasto cardíaco y manteniendo una concentración adecuada de hemoglobina; y (2) el "control de la fuente" para detener el sangrado — el sangrado continuo no solo agota recursos, también aumenta el riesgo de una coagulopatía potencialmente mortal (ver <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-damage-control" style="margin:0; padding:0; font:inherit; text-align:left; text-decoration:underline;">Damage control: hipotensión, TIC y TEG</button>).</p>
 
             <p class="section-label" style="margin-top:16px;">Tabla 15.4 — Volumen de reanimación asanguínea para hemorragia Clase II</p>
-            <table class="data-table">
+            <table class="data-table" id="mc-tabla-15-4" data-nombre="Tabla 15.4">
                 <thead><tr><th>Paso</th><th>Método</th></tr></thead>
                 <tbody>
                     <tr><td>1. Estimar volumen plasmático normal (VP)</td><td>VP = 40 mL/kg (varones) · 36 mL/kg (mujeres)</td></tr>
@@ -972,7 +972,7 @@
                 </tbody>
             </table>
             <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="reanimacion">🌊 Ver adónde van 1,8 L de Ringer tras una hemorragia del 20 % (varón de 75 kg, Tabla 15.4) →</button></p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Nota: el factor ×3 para cristaloides es una estimación conservadora, ya que solo el 20-25% del cristaloide infundido permanece expandiendo el volumen plasmático.</p>
+            <p style="font-size:0.85rem; color:var(--text-dim);" id="mc-tabla-15-4-nota" data-nombre="Tabla 15.4: el ×3">Nota: el factor ×3 para cristaloides es una estimación conservadora, ya que solo el 20-25% del cristaloide infundido permanece expandiendo el volumen plasmático.</p>
 
             <div class="card" style="padding:14px 16px; margin-top:12px;">
                 <p class="section-label" style="margin-top:0;">🧮 Calculadora de volumen de reanimación</p>

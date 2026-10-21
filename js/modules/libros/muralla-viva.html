@@ -29,6 +29,12 @@
       <!-- ============ EXPLORAR ============ -->
       <div id="mur-vista-explorar" class="mur-bloque">
         <section class="mur-bloque">
+          <h3 class="mur-h">Ir a un estado</h3>
+          <div class="mur-guia-abrir"><button type="button" class="mur-b mur-prim" id="mur-guia-abrir">Explícame este estado paso a paso</button><span class="mur-para" id="mur-guia-de"></span></div>
+          <div class="mur-chips-estado" id="mur-chips-estado"></div>
+          <p class="mur-para">Cada estado es el de una idea de las fichas (o el de un paciente de los casos). Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en la lámina. Los mandos, abajo, en la hoja de órdenes.</p>
+        </section>
+        <section class="mur-bloque">
           <h3 class="mur-h">Qué es cada cosa que se mueve</h3>
           <ul class="mur-leyenda" id="mur-leyenda"></ul>
           <p class="mur-para">Todas las formas salen de la tabla única de la app, la misma de la nefrona viva, el río y mar, el capilar y el catéter: cruz = H⁺, triángulo = HCO₃⁻, trébol = citoquinas, disco = hematíe. La forma dice qué es; el color, nunca solo. Cuántos microbios se dibujan y a qué velocidad se mueven: <b>ilustrativo</b>.</p>
@@ -216,6 +222,8 @@
               <select id="mur-m-estado" aria-label="Ir a un estado con nombre"></select>
             </div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de la hoja de órdenes -->
+          <div id="mur-dock-guia" hidden></div>
           <div id="mur-dock-estudio" class="mur-dock-estudio" hidden>
             <div class="mur-pasos" id="mur-dock-pasos"></div>
             <div class="mur-dock-est-txt"><span id="mur-dock-est-izq"></span><span id="mur-dock-est-der"></span></div>

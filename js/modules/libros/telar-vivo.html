@@ -31,6 +31,12 @@
       <!-- ============ EXPLORAR ============ -->
       <div id="tel-vista-explorar" class="tel-bloque">
         <section class="tel-bloque">
+          <h3 class="tel-h">Ir a un estado</h3>
+          <div class="tel-guia-abrir"><button type="button" class="tel-b tel-prim" id="tel-guia-abrir">Explícame este estado paso a paso</button><span class="tel-para" id="tel-guia-de"></span></div>
+          <div class="tel-chips-estado" id="tel-chips-estado"></div>
+          <p class="tel-para">Cada estado es el de una idea de las fichas (o el de un paciente de los casos). Elige uno y pulsa «Explícame»: te cuenta qué pasa y te lo señala en la lámina. Los mandos, abajo, en la hoja de órdenes.</p>
+        </section>
+        <section class="tel-bloque">
           <h3 class="tel-h">Qué es cada cosa que se mueve</h3>
           <ul class="tel-leyenda" id="tel-leyenda"></ul>
           <p class="tel-para">Todas las formas salen de la tabla única de la app, la misma de la nefrona viva, el río y mar y la muralla: disco = hematíe, trébol = citoquinas, escudo = antitrombina, collar = heparina, cuatro bolitas = FP4, Y = IgG. Las «máquinas» del telar (Xa, II, IIa) van rotuladas con su nombre, como en la Fig. 5.2. La forma dice qué es; el color, nunca solo. Cuántas cuentas lleva cada cadena y a qué ritmo crece la red: <b>ilustrativo</b>.</p>
@@ -232,6 +238,8 @@
               <p class="tel-rot-dock tel-rot-alto">Punción o catéter neuroaxial: horas desde la última dosis profiláctica, con función renal normal o algo reducida.</p>
             </div>
           </div>
+          <!-- La explicación guiada de un estado (js/core/explicacion-guiada.js): ocupa el sitio de la hoja de órdenes -->
+          <div id="tel-dock-guia" hidden></div>
           <div id="tel-dock-estudio" class="tel-dock-estudio" hidden>
             <div class="tel-pasos" id="tel-dock-pasos"></div>
             <div class="tel-dock-est-txt"><span id="tel-dock-est-izq"></span><span id="tel-dock-est-der"></span></div>

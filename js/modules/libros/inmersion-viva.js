@@ -12,13 +12,14 @@
 // clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
-import { escapeHtml } from '../../core/ui.js';
 import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { citaHTML, citaExacta, hrefPdf } from '../../core/citas.js';
+import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { montarCama7 } from './cama7.js';
 import {
     ESTADOS, CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, LAMINAS, OPIOIDES, AHORRO, SEDANTES, TABLA_6_7,
-    estadoBase, estadoDe, derivar, copia, clamp, chipTxt, pruebasInmersion,
+    estadoBase, estadoDe, derivar, copia, clamp, chipTxt, pruebasInmersion, PAGINAS, PDF_B, GUIAS,
 } from '../../data/inmersion-viva-data.js';
 import {
     $, estado, D, REDUCIR, ocultos, initEscena, aplicarModelo, setOcultos, arrancar, ponerVisible, mirar, anilloObj,
@@ -33,19 +34,6 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
    de la ficha (enlace cruzado de siempre) con el nombre que tiene en el texto; el chip dice solo «ficha»,
    «fisiología general» o «ilustrativo» y la página del PDF. Ningún id interno a la vista.
    ============================================================ */
-const limpio = t => (t || '').replace(/\s+/g, ' ').trim();
-const tituloFicha = tab => limpio(tab.querySelector('h3')?.textContent || tab.id).split(':')[0];
-function etiquetaDe(el) {
-    if (el.dataset.nombre) return el.dataset.nombre;
-    if (el.matches('dl')) return limpio(el.querySelector('dt')?.textContent);
-    if (el.matches('.micro-prof-item')) return limpio(el.querySelector('.micro-prof-head span')?.textContent).replace(/^\S+\s/, '');
-    if (el.matches('.article-figure')) return limpio(el.querySelector('.article-figure-caption')?.textContent).split('—')[0].trim();
-    const num = el.id.match(/-(tabla|fig|img)-(\d+)-(\d+)$/);
-    if (num) return `${num[1] === 'tabla' ? 'Tabla' : 'Figura'} ${num[2]}.${num[3]}`;
-    if (el.matches('.agua-simulador')) return limpio(el.querySelector('h4')?.textContent).replace(/^\S+\s/, '');
-    const t = limpio(el.textContent);
-    return t.length > 40 ? t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : t;
-}
 // Los ids que cita una fuente, en orden y sin repetir
 function idsDe(fuente) {
     const ids = [];
@@ -55,21 +43,13 @@ function idsDe(fuente) {
     }
     return [...new Set(ids)];
 }
-function enlacesTexto(fuente) {
-    const vistosTab = new Set(), botones = [];
-    for (const id of idsDe(fuente)) {
-        const r = rutaDe(id); if (!r) continue;
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        let texto = vistosTab.has(r.tab.id) ? (sub || tituloFicha(r.tab)) : tituloFicha(r.tab) + (sub ? ' · ' + sub : '');
-        vistosTab.add(r.tab.id);
-        texto = texto.length > 64 ? texto.slice(0, 62) + '…' : texto;
-        botones.push(`<button type="button" class="inm-ir-texto" ${atributosFicha(r)}>${escapeHtml(texto)} →</button>`);
-    }
-    return botones.join(' ');
-}
+// Cada sitio citado, con la pieza común (core/citas.js): «Ver en la ficha» al párrafo exacto y, de segunda opción, el PDF
+// en su página (PAGINAS). Lo que no lleva a ningún sitio no se pinta.
+const citaDeId = id => { const r = rutaDe(id); return r && { libro: 'Marino, cap. 6', ficha: r.tab.id, id, pag: PAGINAS[id], pdf: PDF_B }; };
+const enlacesTexto = fuente => idsDe(fuente).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { max: 80 })).join('');
 const esIlu = f => /ilustrativ|sin cifra|hueco/.test(f) && !/mar-|Fig|Tabla/.test(f);
 const chipSpan = f => f ? `<span class="inm-org${esIlu(f) ? ' inm-ilu' : ''}">${chipTxt(f)}</span>` : '';
-const verEnTexto = fuente => `<p class="inm-fuente-p">Ver en el texto: ${enlacesTexto(fuente)} ${chipSpan(fuente)}</p>`;
+const verEnTexto = fuente => `<div class="inm-fuente-p">${enlacesTexto(fuente)} ${chipSpan(fuente)}</div>`;
 // El chip de la frase viva: un enlace a su sitio en la ficha, si lo tiene
 function chip(f) {
     if (!f) return '';
@@ -83,7 +63,8 @@ function chip(f) {
 let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
-    const nuevo = `${html} ${chip(fuente)}`;
+    const guiaBtn = claveActual && GUIAS[claveActual] && !Guia.activo && modo === 'explorar' ? `<button type="button" class="inm-ir-estado" data-inm-guia="${claveActual}">Explícamelo →</button> ` : '';
+    const nuevo = `${guiaBtn}${html} ${chip(fuente)}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('mar').setAttribute('aria-label', fraseEl.textContent);
@@ -206,6 +187,7 @@ function sincronizarMandos() {
     $('m-despertar').innerHTML = estado.par && estado.subido ? 'Volver a sedar <small>otra vez abajo</small>' : 'Despertar <small>soltar el lastre</small>';
     enRaiz('#inm-chips-estado button').forEach(b => b.setAttribute('aria-pressed', 'false'));
     pintarTabla67();
+    sincronizarGuia();
 }
 function elegirPestana(tab) {
     enRaiz('.inm-dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.inmTab === tab)));
@@ -233,10 +215,11 @@ function engancharDock() {
     });
     $('m-sacudir').addEventListener('click', () => decirVoz(llamar('fisico')));
     $('ir-despertar').addEventListener('click', () => { ponerEnEstado('despertar'); $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' }); });
-    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad]')) return; $('frase').classList.toggle('inm-abierta'); });
+    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad], [data-inm-guia]')) return; $('frase').classList.toggle('inm-abierta'); });
     $('mar').addEventListener('click', tocarLamina);
     $('chips-estado').addEventListener('click', e => {
         const b = e.target.closest('[data-estado]'); if (!b) return;
+        if (guia.activo) guia.cerrar();
         ponerEnEstado(b.dataset.estado);
         b.setAttribute('aria-pressed', 'true');
         $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' });
@@ -258,6 +241,7 @@ function alPrincipio() {
     if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' });
 }
 function setModo(m) {
+    if (guia && guia.activo) guia.cerrar();
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('inm-estudio', m !== 'explorar');
@@ -324,7 +308,7 @@ function accionMando(m, cont, q) {
 }
 
 // «Para profundizar»: lo que no se pregunta, con su sitio en la ficha y en el libro
-const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="inm-fuente-p">${enlacesTexto(p.donde)} <a class="inm-pdf" href="${p.href}" target="_blank" rel="noopener">Ver en el libro (p. ${p.pag}) →</a></span></section>`).join('')
+const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="inm-fuente-p">${idsDe(p.donde).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { pdf: false, max: 80 })).join('')} <a class="inm-pdf" href="${p.href}" target="_blank" rel="noopener">Ver en el libro (p. ${p.pag}) →</a></span></section>`).join('')
     + '<p class="inm-para">El recorrido completo de las dos fichas (Texto) cubre el resto.</p>';
 
 const Estudio = {
@@ -445,12 +429,65 @@ function revisarMayeutica() {
 }
 
 /* ============================================================
+   La explicación guiada de cada estado (core/explicacion-guiada.js): sus pasos van en el dock, en el sitio de la hoja
+   de órdenes; cada paso pone la escena como lo cuenta (paso.e sobre el estado) y señala lo que cuenta (el anillo de
+   la escena con paso.mirar, o un marco con paso.resalta). «Ver en la ficha» lleva al párrafo exacto (core/citas.js).
+   ============================================================ */
+let claveActual = null, guia = null;
+const APLICAR_GUIA = { frase: false, inmediato: true }, SUBIR_A = 'tablero';
+const anillo = k => mirar(k);   // el anillo de la inmersión: sobre una pieza de la escena o una cifra del tablero
+const Guia = { get activo() { return !!guia && guia.activo; } };
+// ¿Está la escena en este estado con nombre?
+// (el despertar lo sigue siendo cuando los buzos ya han subido)
+const enEstado = k => !!ESTADOS[k] && JSON.stringify(ESTADOS[k].subir ? { ...estado, subido: false } : estado) === JSON.stringify(estadoDe(ESTADOS[k].e));
+function sincronizarGuia() {
+    if (claveActual && !enEstado(claveActual) && !Guia.activo) claveActual = null;
+    const g = $('guia-abrir');
+    if (g) { g.disabled = !claveActual || !GUIAS[claveActual]; $('guia-de').textContent = claveActual ? `«${ESTADOS[claveActual].nombre}»` : 'Elige antes un estado'; }
+    enRaiz('#inm-chips-estado [data-estado]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.estado === claveActual)));
+}
+function crearGuia() {
+    guia = crearExplicacion({
+        cont: $('dock-guia'), raiz,
+        alPaso(paso) {
+            clearTimeout(esperaSubida);   // el despertar sube cuando lo dice su paso, no solo
+            const p = copia(ESTADOS[guia.datos.clave].e);
+            for (const [k, v] of Object.entries(paso.e || {})) p[k] = v && typeof v === 'object' && !Array.isArray(v) ? Object.assign(p[k] || {}, copia(v)) : copia(v);
+            aplicar(estadoDe(p), APLICAR_GUIA);
+            requestAnimationFrame(() => anillo(paso.mirar || null));
+            subirEscena();
+        },
+        alSalir(d) {
+            anillo(null);
+            $('dock-explorar').hidden = modo !== 'explorar';
+            if (d && d.clave && modo === 'explorar') { ponerEnEstado(d.clave); requestAnimationFrame(() => $('guia-abrir').focus({ preventScroll: true })); }
+            sincronizarGuia();
+        },
+        citaOpciones: { clase: 'cita', max: 90 },
+    });
+}
+// La escena (sin la cama de arriba) queda arriba; el dock, con la explicación, abajo
+function subirEscena() {
+    const r = $(SUBIR_A).getBoundingClientRect();
+    if (Math.abs(r.top) > 4) window.scrollBy({ top: r.top, behavior: 'auto' });
+}
+function explicar(clave) {
+    if (!GUIAS[clave] || modo !== 'explorar') return;
+    if (claveActual !== clave || !enEstado(clave)) ponerEnEstado(clave);
+    claveActual = clave;
+    $('dock-explorar').hidden = true;
+    guia.abrir({ clave, titulo: ESTADOS[clave].nombre, pasos: GUIAS[clave], fuentes: ESTADOS[clave].fuentes });
+    sincronizarGuia();
+}
+
+/* ============================================================
    Abrir en un estado (los chips de Explorar, los botones de las fichas, el menú de Libros y el buscador)
    ============================================================ */
 const PESTANA_DE = { 'dolor-oculto': 'dolor', diazepam: 'sedante', fentanilo: 'analgesia', 'morfina-ir': 'paciente', hipernocicepcion: 'dolor', 'rass-objetivo': 'sedante',
     'profunda-72h': 'sedante', despertar: 'subida', 'midazolam-48h': 'sedante', 'lorazepam-pg': 'sedante', dexmedetomidina: 'subida', pris: 'sedante', delirio: 'delirio', haloperidol: 'delirio' };
 let esperaSubida = null;
 function ponerEnEstado(clave) {
+    claveActual = ESTADOS[clave] ? clave : null;
     const s = ESTADOS[clave]; if (!s) return;
     clearTimeout(esperaSubida);
     aplicar(estadoDe(s.e), { frase: false });
@@ -467,6 +504,7 @@ function ponerEnEstado(clave) {
 // cama): la cama 7 grande y su zoom de entrada; con estado, la cama compacta y la escena en ese estado.
 export function abrirEstado(clave, origen) {
     if (origen !== undefined) marcarVolver(document.getElementById('inm-volver'), raiz, origen);
+    if (guia && guia.activo) guia.cerrar();
     if (modo !== 'explorar') setModo('explorar');
     if (clave && ESTADOS[clave]) ponerEnEstado(clave);
     cama?.mostrar({ intro: !clave });
@@ -501,7 +539,9 @@ export function init() {
     raiz = document.getElementById('inm-raiz');
     if (!raiz) return null;
     initEscena();
-    chipsDock(); leyendas(); engancharDock();
+    chipsDock(); leyendas(); engancharDock(); crearGuia();
+    raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-inm-guia]'); if (g && modo === 'explorar') explicar(g.dataset.inmGuia); });
+    $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
     Mayeutica.cargar();
     aplicar(estadoBase(), { frase: false, inmediato: true }); decir(...FRASE_INICIO());
     // La cama 7: su zoom de entrada sumerge al paciente; el respirador es la tercera categoría de la BPS
@@ -528,6 +568,8 @@ export function init() {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado, los estados pintados, la Mayéutica y el bucle.
+    window.__inmGuias = () => ({ clave: claveActual, guia: guia && guia.activo ? { clave: guia.datos.clave, paso: guia.paso, n: guia.datos.pasos.length } : null,
+        citas: Object.entries(GUIAS).flatMap(([k, ps]) => ps.flatMap(pa => [].concat(pa.cita || []).map(c => ({ estado: k, ficha: c.ficha, id: c.id, exacta: citaExacta(c), ficha_existe: !!document.getElementById(c.ficha), pdf: hrefPdf(c) })))) });
     window.__inmPruebas = () => {
         const r = pruebasInmersion();
         // la voz: con dexmedetomidina sube a la superficie y te mira

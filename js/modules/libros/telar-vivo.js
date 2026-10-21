@@ -12,13 +12,14 @@
 // clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
-import { escapeHtml } from '../../core/ui.js';
 import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { citaHTML, citaExacta, hrefPdf } from '../../core/citas.js';
+import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { montarCama7 } from './cama7.js';
 import {
     ESTADOS, RIESGOS, FARMACOS, CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, LAMINAS, NEURO, NEURO_NOMBRE, ORDEN_NEURO, ES_HBPM, ES_HEPARINA,
-    estadoBase, estadoDe, copia, clamp, chipTxt, profilaxis, pruebasTelar, PDF,
+    estadoBase, estadoDe, copia, clamp, chipTxt, profilaxis, pruebasTelar, PDF, PDF_B, PAGINAS, GUIAS,
 } from '../../data/telar-vivo-data.js';
 import {
     $, estado, D, REDUCIR, ocultos, ganchos, initEscena, aplicarModelo, setOcultos, arrancar, ponerVisible, anillo, anilloObj,
@@ -34,20 +35,6 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
    «fisiología general» o «ilustrativo» y la página del PDF. Ningún id interno a la vista.
    ============================================================ */
 const ALIAS = { 'Fig. 5.2': 'mar-img-5-2', 'Fig. 5.1': 'mar-img-5-1' };
-const limpio = t => (t || '').replace(/\s+/g, ' ').replace(/[+−]\s*$/, '').trim();
-const tituloFicha = tab => limpio(tab.querySelector('h3')?.textContent || tab.id).split(':')[0];
-function etiquetaDe(el) {
-    if (el.dataset.nombre) return el.dataset.nombre;
-    if (el.matches('dl')) return limpio(el.querySelector('dt')?.textContent);
-    if (el.matches('.micro-prof-item')) return limpio(el.querySelector('.micro-prof-head span')?.textContent).replace(/^[^\p{L}\d«(]+/u, '');
-    if (el.matches('.article-figure')) return limpio(el.querySelector('.article-figure-caption')?.textContent).split('—')[0].trim();
-    if (el.matches('details')) return limpio(el.querySelector('summary')?.textContent).replace(/^📝\s*/, '');
-    if (el.matches('.agua-simulador')) return limpio(el.querySelector('h4')?.textContent).replace(/^🧮\s*/, '');
-    const num = el.id.match(/-(tabla|fig|img)-(\d+)-(\d+)$/);
-    if (num) return `${num[1] === 'tabla' ? 'Tabla' : 'Figura'} ${num[2]}.${num[3]}`;
-    const t = limpio(el.textContent);
-    return t.length > 40 ? t.slice(0, 38).replace(/\s+\S*$/, '') + '…' : t;
-}
 // Los ids (y los alias) que cita una fuente, en orden y sin repetir
 function idsDe(fuente) {
     const ids = [];
@@ -58,21 +45,13 @@ function idsDe(fuente) {
     }
     return [...new Set(ids)];
 }
-function enlacesTexto(fuente) {
-    const vistosTab = new Set(), botones = [];
-    for (const id of idsDe(fuente)) {
-        const r = rutaDe(id); if (!r) continue;
-        const sub = r.el !== r.tab ? etiquetaDe(r.el) : null;
-        let texto = vistosTab.has(r.tab.id) ? (sub || tituloFicha(r.tab)) : tituloFicha(r.tab) + (sub ? ' · ' + sub : '');
-        vistosTab.add(r.tab.id);
-        texto = texto.length > 64 ? texto.slice(0, 62) + '…' : texto;
-        botones.push(`<button type="button" class="tel-ir-texto" ${atributosFicha(r)}>${escapeHtml(texto)} →</button>`);
-    }
-    return botones.join(' ');
-}
+// Cada sitio citado, con la pieza común (core/citas.js): «Ver en la ficha» al párrafo exacto y, de segunda opción, el PDF
+// en su página (PAGINAS). Lo que no lleva a ningún sitio no se pinta.
+const citaDeId = id => { const r = rutaDe(id); return r && { libro: 'Marino, cap. 5', ficha: r.tab.id, id, pag: PAGINAS[id], pdf: PDF_B }; };
+const enlacesTexto = fuente => idsDe(fuente).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { max: 80 })).join('');
 const esIlu = f => /ilustrativ|fisiología general/.test(f) && !/mar-/.test(f);
 const chipSpan = f => f ? `<span class="tel-org${esIlu(f) ? ' tel-ilu' : ''}">${chipTxt(f)}</span>` : '';
-const verEnTexto = fuente => `<p class="tel-fuente-p">Ver en el texto: ${enlacesTexto(fuente)} ${chipSpan(fuente)}</p>`;
+const verEnTexto = fuente => `<div class="tel-fuente-p">${enlacesTexto(fuente)} ${chipSpan(fuente)}</div>`;
 // El chip de la frase viva: un enlace a su sitio en la ficha, si lo tiene
 function chip(f) {
     if (!f) return '';
@@ -86,7 +65,8 @@ function chip(f) {
 let fraseActual = '';
 function decir(html, fuente) {
     const fraseEl = $('frase');
-    const nuevo = `${html} ${chip(fuente)}`;
+    const guiaBtn = claveActual && GUIAS[claveActual] && !Guia.activo && modo === 'explorar' ? `<button type="button" class="tel-ir-estado" data-tel-guia="${claveActual}">Explícamelo →</button> ` : '';
+    const nuevo = `${guiaBtn}${html} ${chip(fuente)}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
     $('lamina').setAttribute('aria-label', fraseEl.textContent);
@@ -223,6 +203,7 @@ function pulsado(m, v) {
 function sincronizarMandos() {
     enRaiz('#tel-dock-explorar [data-m]').forEach(b => b.setAttribute('aria-pressed', String(pulsado(b.dataset.m, b.dataset.v))));
     $('m-riesgo').value = estado.riesgo;
+    sincronizarGuia();
 }
 function engancharDock() {
     $('dock-explorar').addEventListener('click', ev => {
@@ -230,7 +211,8 @@ function engancharDock() {
         cambiar(s => ordenar(s, b.dataset.m, b.dataset.v));
     });
     $('m-riesgo').addEventListener('change', ev => cambiar(s => ordenar(s, 'riesgo', ev.target.value)));
-    $('m-estado').addEventListener('change', ev => { const k = ev.target.value; if (!k) return; ponerEnEstado(k); ev.target.value = ''; });
+    $('m-estado').addEventListener('change', ev => { const k = ev.target.value; if (!k) return; if (guia.activo) guia.cerrar(); ponerEnEstado(k); ev.target.value = ''; });
+    $('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (!b) return; if (guia.activo) guia.cerrar(); ponerEnEstado(b.dataset.estado); $('escena-bloque').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' }); });
     enRaiz('.tel-dock-tabs button').forEach(b => b.addEventListener('click', () => {
         const tab = b.dataset.telTab;
         elegirPestana(tab);
@@ -241,7 +223,7 @@ function engancharDock() {
         cambiar(e => { e.vista = 'telar'; e.tih = false; });
         if (raiz.querySelector('.tel-dock-tabs [aria-selected="true"]')?.dataset.telTab === 'reloj') elegirPestana('paciente');
     });
-    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad]')) return; $('frase').classList.toggle('tel-abierta'); });
+    $('frase').addEventListener('click', ev => { if (ev.target.closest('[data-especialidad], [data-tel-guia]')) return; $('frase').classList.toggle('tel-abierta'); });
     $('lamina').addEventListener('click', tocarLamina);
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).addEventListener('click', () => setModo(k));
 }
@@ -270,6 +252,7 @@ function subir() {
     if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' });
 }
 function setModo(m) {
+    if (guia && guia.activo) guia.cerrar();
     modo = m;
     for (const k of ['explorar', 'conceptos', 'preguntas']) $('modo-' + k).setAttribute('aria-selected', String(k === m));
     raiz.classList.toggle('tel-estudio', m !== 'explorar');
@@ -333,7 +316,7 @@ function accionMando(b, cont) {
 }
 
 // «Para profundizar»: lo que no se pregunta, con su sitio en la ficha y en el libro
-const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="tel-fuente-p">${enlacesTexto(p.donde)} <a class="tel-pdf" href="${PDF(p.pag)}" target="_blank" rel="noopener">Ver en el libro (p. ${p.pag}) →</a></span></section>`).join('');
+const profundizarHTML = () => PROFUNDIZAR.map(p => `<section>${p.html} <span class="tel-fuente-p">${idsDe(p.donde).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { pdf: false, max: 80 })).join('')} <a class="tel-pdf" href="${PDF(p.pag)}" target="_blank" rel="noopener">Ver en el libro (p. ${p.pag}) →</a></span></section>`).join('');
 
 const Estudio = {
     c: 0,
@@ -434,9 +417,60 @@ function revisarMayeutica() {
 }
 
 /* ============================================================
+   La explicación guiada de cada estado (core/explicacion-guiada.js): sus pasos van en el dock, en el sitio de la hoja
+   de órdenes; cada paso pone la escena como lo cuenta (paso.e sobre el estado) y señala lo que cuenta (el anillo de
+   la escena con paso.mirar, o un marco con paso.resalta). «Ver en la ficha» lleva al párrafo exacto (core/citas.js).
+   ============================================================ */
+let claveActual = null, guia = null;
+// Los pasos que señalan la caja de la dosis (debajo de la lámina) suben la lámina entera; los demás, desde el tablero
+const APLICAR_GUIA = { frase: false, forzar: true }, SUBIR_A = paso => /dosis/.test(String(paso && paso.resalta)) ? 'escena' : 'tablero';
+const Guia = { get activo() { return !!guia && guia.activo; } };
+// ¿Está la escena en este estado con nombre?
+const enEstado = k => !!ESTADOS[k] && JSON.stringify(estado) === JSON.stringify(estadoDe(ESTADOS[k].e));
+function sincronizarGuia() {
+    if (claveActual && !enEstado(claveActual) && !Guia.activo) claveActual = null;
+    const g = $('guia-abrir');
+    if (g) { g.disabled = !claveActual || !GUIAS[claveActual]; $('guia-de').textContent = claveActual ? `«${ESTADOS[claveActual].nombre}»` : 'Elige antes un estado'; }
+    enRaiz('#tel-chips-estado [data-estado]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.estado === claveActual)));
+}
+function crearGuia() {
+    guia = crearExplicacion({
+        cont: $('dock-guia'), raiz,
+        alPaso(paso) {
+            const p = copia(ESTADOS[guia.datos.clave].e);
+            for (const [k, v] of Object.entries(paso.e || {})) p[k] = v && typeof v === 'object' && !Array.isArray(v) ? Object.assign(p[k] || {}, copia(v)) : copia(v);
+            aplicar(estadoDe(p), APLICAR_GUIA);
+            requestAnimationFrame(() => anillo(paso.mirar || null));
+            subirEscena(paso);
+        },
+        alSalir(d) {
+            anillo(null);
+            $('dock-explorar').hidden = modo !== 'explorar';
+            if (d && d.clave && modo === 'explorar') { ponerEnEstado(d.clave); requestAnimationFrame(() => $('guia-abrir').focus({ preventScroll: true })); }
+            sincronizarGuia();
+        },
+        citaOpciones: { clase: 'cita', max: 90 },
+    });
+}
+// La escena (sin la cama de arriba) queda arriba; el dock, con la explicación, abajo
+function subirEscena(paso) {
+    const r = $(typeof SUBIR_A === 'function' ? SUBIR_A(paso) : SUBIR_A).getBoundingClientRect();
+    if (Math.abs(r.top) > 4) window.scrollBy({ top: r.top, behavior: 'auto' });
+}
+function explicar(clave) {
+    if (!GUIAS[clave] || modo !== 'explorar') return;
+    if (claveActual !== clave || !enEstado(clave)) ponerEnEstado(clave);
+    claveActual = clave;
+    $('dock-explorar').hidden = true;
+    guia.abrir({ clave, titulo: ESTADOS[clave].nombre, pasos: GUIAS[clave], fuentes: ESTADOS[clave].fuentes });
+    sincronizarGuia();
+}
+
+/* ============================================================
    Abrir en un estado (el menú de estados del dock, los botones de las fichas, el menú de Libros y el buscador)
    ============================================================ */
 function ponerEnEstado(clave) {
+    claveActual = ESTADOS[clave] ? clave : null;
     const s = ESTADOS[clave] || ESTADOS.sano;
     const nuevo = estadoDe(s.e);
     aplicar(nuevo, { frase: false, forzar: true, reiniciar: true });
@@ -452,6 +486,7 @@ function ponerEnEstado(clave) {
 // cama): la cama 7 grande y su zoom de entrada; con estado, la cama compacta y el telar en ese estado.
 export function abrirEstado(clave, origen) {
     if (origen !== undefined) marcarVolver(document.getElementById('tel-volver'), raiz, origen);
+    if (guia && guia.activo) guia.cerrar();
     if (modo !== 'explorar') setModo('explorar');
     if (clave && ESTADOS[clave]) ponerEnEstado(clave);
     cama?.mostrar({ intro: !clave });
@@ -472,6 +507,7 @@ function leyendas() {
     $('laminas').innerHTML = LAMINAS.map(([f, n, c]) => `<figure class="tel-lam-item"><div class="article-figure tel-lam"><img loading="lazy" src="js/modules/libros/img/${f}" alt="${n} del libro: ${c}"></div><figcaption>${n}</figcaption></figure>`).join('');
     $('prof-lista').innerHTML = profundizarHTML();
     $('prof-may').innerHTML = profundizarHTML();
+    $('chips-estado').innerHTML = Object.entries(ESTADOS).map(([k, st]) => `<button type="button" data-estado="${k}" aria-pressed="false">${st.nombre}</button>`).join('');
     $('m-estado').innerHTML = '<option value="">Estados con nombre…</option>' + Object.entries(ESTADOS).map(([k, s]) => `<option value="${k}">${s.nombre}</option>`).join('');
 }
 export function init() {
@@ -479,7 +515,9 @@ export function init() {
     if (!raiz) return null;
     initEscena();
     ganchos.despues = pintarDosis;
-    leyendas(); engancharDock();
+    leyendas(); engancharDock(); crearGuia();
+    raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-tel-guia]'); if (g && modo === 'explorar') explicar(g.dataset.telGuia); });
+    $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });
     Mayeutica.cargar();
     aplicar(estadoBase(), { frase: false, forzar: true }); decir(...FRASE_INICIO());
     // La cama 7: su zoom de entrada abre la lámina por la pierna; el respirador recuerda un factor de riesgo de la UCI
@@ -511,6 +549,8 @@ export function init() {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado, los estados pintados, la Mayéutica y el bucle.
+    window.__telGuias = () => ({ clave: claveActual, guia: guia && guia.activo ? { clave: guia.datos.clave, paso: guia.paso, n: guia.datos.pasos.length } : null,
+        citas: Object.entries(GUIAS).flatMap(([k, ps]) => ps.flatMap(pa => [].concat(pa.cita || []).map(c => ({ estado: k, ficha: c.ficha, id: c.id, exacta: citaExacta(c), ficha_existe: !!document.getElementById(c.ficha), pdf: hrefPdf(c) })))) });
     window.__telPruebas = () => {
         const r = pruebasTelar();
         r.estados = {};
