@@ -6,7 +6,7 @@
 // - Cualquier botón con data-eco-vista / data-eco-escenario / data-eco-medir / data-eco-panel (junto a
 //   data-especialidad="eco", que hace la navegación en home/index.js) deja el simulador en esa vista, ese escenario,
 //   esa medida del modo M o con ese panel abierto (guyton, epp, cateter, termo: la hemodinámica de Marino). Con
-//   data-eco-panel, el «← VOLVER» vuelve a la ficha de origen (core/volver-ficha.js, por modelosVivos).
+//   data-eco-panel/escenario/vista/medir, el «← VOLVER» vuelve a la ficha de origen (core/volver-ficha.js, por modelosVivos).
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
 import { ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
@@ -159,6 +159,8 @@ export function init() {
         // llegar desde un enlace de otra ficha: arriba del todo (la página venía desplazada de la ficha de origen)
         irAFicha() { marcarVolver(volver, null, null); window.scrollTo(0, 0); },
         // data-eco-panel: home/index.js lo llama tras irAFicha con la ficha de la que se sale
-        modelosVivos: { ecoPanel: (_panel, origen) => marcarVolver(volver, null, origen) },
+        // Cualquier entrada desde una ficha (escenario, vista, medida o panel) deja el «← VOLVER» a esa ficha.
+        modelosVivos: Object.fromEntries(['ecoPanel', 'ecoEscenario', 'ecoVista', 'ecoMedir']
+            .map(clave => [clave, (_valor, origen) => marcarVolver(volver, null, origen)])),
     };
 }
