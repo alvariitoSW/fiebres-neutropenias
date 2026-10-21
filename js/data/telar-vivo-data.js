@@ -175,7 +175,7 @@ export const ESTADOS = {
 /* ============================================================
    El chip de origen: «ficha», «fisiología general» o «ilustrativo», y la página del PDF. El id de la ficha nunca se ve.
    ============================================================ */
-export const PAGINAS = { 'mar-tev-intro': '1', 'mar-tabla-5-1': '2', 'mar-tev-cirugia': '2', 'mar-tev-trauma': '2', 'mar-tev-medica': '2', 'mar-tev-uci': '2-3', 'mar-fig-5-1': '3', 'mar-img-5-1': '3',
+export const PAGINAS = { 'mar-tev-intro': '1', 'mar-tabla-5-1': '2', 'mar-tev-cirugia': '2', 'mar-tev-trauma': '2', 'mar-tev-medica': '2', 'mar-tev-uci': '3', 'mar-fig-5-1': '3', 'mar-img-5-1': '3',
     'mar-tev-contra-absolutas': '4', 'mar-tev-contra-relativas': '4', 'mar-tabla-5-2': '4', 'mar-profilaxis-calc': '4, 8-9', 'mar-hnf': '4-5', 'mar-hbpm': '6-7', 'mar-img-5-2': '6',
     'mar-fondaparinux': '8', 'mar-fondaparinux-errata': '4, 8', 'mar-nota-dalteparina-farmacos': '4, 7, 11', 'mar-tabla-5-3': '8-9', 'mar-acod-puntos': '8-9', 'mar-aspirina': '9',
     'mar-neuroeje': '9-10', 'mar-mecanica': '10', 'mar-cni-pegas': '10', 'mar-filtro-vci': '11', 'mar-esc-alto-riesgo': '11', 'mar-esc-especiales': '11', 'mar-esc-cirugia-general': '11',
@@ -198,7 +198,7 @@ export const GUIAS = {
         { t: 'Las antitrombinas, quietas: la heparina se une a la antitrombina y la activa.', mirar: 'telar', resalta: CELDA(3), cita: TP('mar-hnf'), org: 'cuántas antitrombinas: ilustrativo' },
     ],
     inflamacion: [
-        { t: 'Enciende la inflamación (las citoquinas): la tejedora, la trombina, se pone a trabajar y <span class="hl-rojo">la red de fibrina crece</span>.', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-inmovilidad'), org: 'el ritmo: ilustrativo' },
+        { t: 'La inflamación y la coagulación están muy ligadas. En el telar: la tejedora, la trombina, trabaja y <span class="hl-rojo">la red de fibrina crece</span>.', mirar: 'telar', resalta: CELDA(2), cita: TP('mar-inmovilidad'), org: 'trombina y fibrina como mecanismo: fisiología general; el libro solo dice «muy ligadas»; el ritmo: ilustrativo' },
         { t: 'El flujo sigue intacto: no hay estasis. La red crece por la inflamación.', mirar: 'flujo', resalta: CELDA(1), cita: TP('mar-inmovilidad') },
         { t: 'Lo que dispararía la TVP en muchos pacientes de alto riesgo sería probablemente la inflamación (además de la lesión vascular en trauma y ortopedia).', mirar: 'telar', cita: TP('mar-inmovilidad'), org: 'opinión del autor' },
         { t: 'En la UCI se suman la inflamación sistémica (sepsis), el shock, los vasopresores, la ventilación prolongada (>48 h) y los catéteres centrales.', mirar: 'valvula', cita: TP('mar-tev-uci') },
@@ -210,7 +210,7 @@ export const GUIAS = {
         { t: 'Según el autor, creer que la inmovilidad predispone a la TVP probablemente lleva a usar <span class="hl-rojo">anticoagulantes de más</span>.', mirar: 'flujo', cita: TP('mar-inmovilidad'), org: 'opinión del autor' },
     ],
     hnf: [
-        { t: 'Heparina no fraccionada: una mezcla de cadenas largas y de largos distintos, de 3.000 a 30.000 daltons.', mirar: 'telar', cita: TP('mar-hnf') },
+        { t: 'Heparina no fraccionada: una mezcla heterogénea de moléculas de tamaños distintos, de 3.000 a 30.000 daltons.', mirar: 'telar', cita: TP('mar-hnf') },
         { t: 'Se une a la antitrombina y la activa: <span class="hl">inhibe el Xa</span> (la rueda) y con ello la generación de trombina.', mirar: 'xa', cita: [TP('mar-hnf'), TP('mar-img-5-2')] },
         { t: 'También se une a la trombina (la tejedora): efecto anti-IIa, 10 veces el anti-Xa. Depende de la longitud de la cadena: <span class="hl-rojo">efecto variable</span>.', mirar: 'iia', resalta: CELDA(3), cita: TP('mar-hnf') },
         { t: 'La activación de la antitrombina es muy sensible: bastan dosis bajas. 5.000 U SC cada 8-12 h.', resalta: '#tel-dosis', cita: [TP('mar-hnf'), TP('mar-tabla-5-2')] },

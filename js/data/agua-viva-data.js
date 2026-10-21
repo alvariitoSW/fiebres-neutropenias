@@ -704,30 +704,30 @@ export const GUIAS = {
   ],
   salino: [
     { t: '1 L de salino al 0,9 %: el sodio se reparte por todo el extracelular, y el plasma es solo el 20 % de él.', mirar: 'rio', cita: CR('mar-salino', 5) },
-    { t: 'Solo <span class="hl-rojo">275 mL se quedan en el río</span>; 825 mL van a la marisma (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-fig-10-1', 5), CR('mar-salino', 5)] },
+    { t: 'Solo <span class="hl-rojo">275 mL se quedan en el río</span>; 825 mL van a la marisma (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-fig-10-1', 6), CR('mar-salino', 5)] },
     { t: 'El total (1.100 mL) supera lo infundido: es algo hipertónico (308 mOsm/L) y saca agua de las células.', mirar: 'mar', resalta: MAREA('mar'), cita: CR('mar-salino', 5), org: 'los 100 mL del mar: la resta' },
-    { t: 'Lo que más importa es el cloro: 154 frente a 103. A 30 mL/kg/h el pH bajó de 7,41 a 7,28 con salino; con Ringer, no cambió (Fig. 10.2).', mirar: 'rio', cita: [CR('mar-salino', 6), CR('mar-tabla-10-2', 4)] },
+    { t: 'Lo que más importa es el cloro: 154 frente a 103. A 30 mL/kg/h el pH bajó de 7,41 a 7,28 con salino; con Ringer, no cambió (Fig. 10.2).', mirar: 'rio', cita: [CR('mar-salino', 6), CR('mar-tabla-10-2', 5)] },
   ],
   glucosado: [
     { t: 'Glucosado al 5 %: 278 mOsm/L, cerca del plasma. Pero la glucosa entra en las células y se metaboliza.', mirar: 'compuertas', cita: CR('mar-glucosado-volumen', 11) },
     { t: 'El agua la sigue: <span class="hl-rojo">dos tercios acaban dentro de las células</span> (edema celular).', mirar: 'mar', resalta: MAREA('mar'), cita: CR('mar-glucosado-volumen', 11) },
-    { t: 'Fuera quedan unos 350 mL; al río llegan solo 100 (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-glucosado-volumen', 11), CR('mar-fig-10-1', 5)] },
+    { t: 'Fuera quedan unos 350 mL; al río llegan solo 100 (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-glucosado-volumen', 11), CR('mar-fig-10-1', 6)] },
     { t: 'Hasta un 90 % de los pacientes de UCI tiene hiperglucemia en algún momento: parece razonable evitar los sueros con dextrosa.', mirar: 'rio', cita: CR('mar-glucosado-hiperglucemia', 12) },
   ],
   ringer: [
-    { t: 'Ringer lactato: Na⁺ 130, Cl⁻ 109, 273 mOsm/L. Su cloro se parece al del plasma (103): no da acidosis hiperclorémica.', mirar: 'rio', cita: [CR('mar-tabla-10-2', 4), CR('mar-ringer', 7)] },
+    { t: 'Ringer lactato: Na⁺ 130, Cl⁻ 109, 273 mOsm/L. Su cloro se parece al del plasma (103): no da acidosis hiperclorémica.', mirar: 'rio', cita: [CR('mar-tabla-10-2', 5), CR('mar-ringer', 7)] },
     { t: 'Como todo cristaloide se reparte por el extracelular: <span class="hl">el 20 % queda en el río</span> y el 80 % va a la marisma.', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: RV('mar-cristaloide-reparto', 26) },
     { t: 'Su efecto principal es expandir el intersticio, no el plasma, y eso favorece el edema.', mirar: 'marisma', cita: RV('mar-cristaloide-reparto', 26) },
-    { t: 'Es algo hipotónico: con el estrés, que libera ADH, los sueros hipotónicos como el Ringer añaden riesgo de hiponatremia.', e: { adh: true }, mirar: 'rio', cita: HD('mr-estres-adh', 11) },
+    { t: 'Es algo hipotónico: con el estrés, que libera ADH, los sueros hipotónicos como el Ringer añaden riesgo de hiponatremia.', e: { adh: true }, mirar: 'rio', cita: HD('mr-estres-adh', 12) },
   ],
   albumina5: [
     { t: 'Albúmina al 5 %: un coloide. Sus moléculas grandes no cruzan la orilla y retienen agua en el río: presión oncótica.', mirar: 'rio', cita: [CO('mar-coloide-definicion', 13), CR('mar-oncotica', 3)] },
-    { t: 'De 1 L, <span class="hl">700 mL se quedan en el río</span> y 300 van a la marisma (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-fig-10-1', 5), CO('mar-coloide-definicion', 13)] },
+    { t: 'De 1 L, <span class="hl">700 mL se quedan en el río</span> y 300 van a la marisma (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CR('mar-fig-10-1', 6), CO('mar-coloide-definicion', 13)] },
     { t: 'Unas 3 veces más eficaz que el salino (275 mL): el mismo aumento de plasma con un 30 % del volumen de cristaloide.', mirar: 'rio', cita: CO('mar-coloide-definicion', 13) },
     { t: 'Su efecto empieza a irse a las 6 h y suele perderse a las 12 h; la Tabla 10.3 le da 24 h. <span class="hl-purpura">Las fuentes discrepan</span>.', mirar: 'rio', cita: [CO('mar-albumina', 13), CO('mar-nota-albumina-duracion', 13)], org: 'las fuentes discrepan' },
   ],
   albumina25: [
-    { t: 'Albúmina al 25 %: hiperoncótica, 70 mmHg, 2,5 veces la presión oncótica del plasma.', mirar: 'rio', cita: CO('mar-tabla-10-3', 13) },
+    { t: 'Albúmina al 25 %: hiperoncótica, 70 mmHg, 2,5 veces la presión oncótica del plasma.', mirar: 'rio', cita: [CO('mar-oncotica-expansion', 13), CO('mar-tabla-10-3', 13)] },
     { t: '100 mL hacen crecer el río <span class="hl">300-400 mL</span>: lo que falta lo saca de la marisma.', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: [CO('mar-tabla-10-3', 13), CO('mar-albumina', 14)], org: 'el dibujo usa ×3,5: ilustrativo' },
     { t: '<span class="hl-rojo">Mueve líquido, no repone pérdidas</span>: no es un fluido de reanimación.', mirar: 'marisma', cita: CO('mar-albumina', 14) },
     { t: 'Se usa para subir rápido el plasma en pacientes con edemas, sobre todo por hipoalbuminemia.', mirar: 'rio', cita: CO('mar-albumina', 14) },
@@ -735,7 +735,7 @@ export const GUIAS = {
   hipertonico: [
     { t: 'Salino al 7,5 %: 2.567 mOsm/L, nueve veces el plasma.', mirar: 'rio', cita: CR('mar-hipertonico', 9) },
     { t: '250 mL añaden 1.235 mL al extracelular, unas 5 veces lo infundido, <span class="hl">sacando agua de las células</span>.', mirar: 'mar', resalta: MAREA('mar'), cita: CR('mar-hipertonico', 9), org: 'los −985 mL del mar: la resta' },
-    { t: 'Al río, 535 mL; a la marisma, 700 (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: CR('mar-fig-10-1', 5) },
+    { t: 'Al río, 535 mL; a la marisma, 700 (Fig. 10.1).', resalta: [MAREA('rio'), MAREA('marisma')].flat(), cita: CR('mar-fig-10-1', 6) },
     { t: 'En animales con hemorragia mantuvo el gasto con 1/5 del volumen de salino isotónico, pero en el trauma no ha mostrado mejor supervivencia.', mirar: 'rio', cita: CR('mar-hipertonico', 9) },
   ],
   salino3: [
@@ -746,8 +746,8 @@ export const GUIAS = {
   ],
   hemorragia: [
     { t: 'Varón de 75 kg: volemia de 66 mL/kg de peso magro, unos 5 L.', mirar: 'rio', cita: HC('mc-volemia', 21) },
-    { t: 'Pierde el 20 %, unos 990 mL: <span class="hl">clase II</span> (15-30 %). Fase compensada: la PA se mantiene por vasoconstricción; se reanima con cristaloides.', mirar: 'herida', cita: [HC('mc-tabla-15-1', 22), HC('mc-clase-2', 22)], org: '990 mL: calculado' },
-    { t: 'A la hora, <span class="hl-rojo">el Hto sigue en 45 %</span>: se pierde sangre entera, plasma y hematíes en proporción.', mirar: 'hto', cita: [HC('mc-hto-trampa', 23), HC('mc-fig-15-1', 23)] },
+    { t: 'Pierde el 20 %, unos 990 mL: <span class="hl">clase II</span> (15-30 %). Fase compensada: la PA se mantiene por vasoconstricción; se reanima con cristaloides.', mirar: 'herida', cita: [HC('mc-tabla-15-1', 22), HC('mc-clase-2', 23)], org: '990 mL: calculado' },
+    { t: 'A la hora, <span class="hl-rojo">el Hto sigue en 45 %</span>: se pierde sangre entera, plasma y hematíes en proporción.', mirar: 'hto', cita: [HC('mc-hto-trampa', 23), HC('mc-fig-15-1', 24)] },
     { t: 'Después, la caída de PA moviliza agua de la marisma al río (relleno transcapilar, hasta 1 L) y el Hto baja.', e: { reloj: '8-12h' }, mirar: 'marisma', cita: [HC('mc-compensacion', 21), HC('mc-hto-trampa', 23)], org: 'el ritmo: ilustrativo' },
     { t: 'En las primeras horas, la Hb y el Hto reflejan la reanimación, no la magnitud de la pérdida.', mirar: 'hto', cita: HC('mc-hto-reanimacion', 23) },
   ],
@@ -755,7 +755,7 @@ export const GUIAS = {
     { t: 'Tabla 15.4: plasma de 40 mL/kg en el varón, 3 L. Una pérdida del 20 % deja un déficit de 600 mL.', mirar: 'rio', cita: HF('mc-tabla-15-4', 29) },
     { t: 'Con cristaloide, el déficit × 3: <span class="hl">1,8 L de Ringer</span>.', resalta: MAREA('rio'), cita: HF('mc-tabla-15-4', 29) },
     { t: 'El ×3 es una estimación conservadora: solo el 20-25 % se queda en el plasma; el resto inunda la marisma.', resalta: MAREA('marisma'), cita: [HF('mc-tabla-15-4-nota', 29), RV('mar-cristaloide-reparto', 26)] },
-    { t: 'El cap. 11 calcula con el 20 % (×5) y el cap. 15 usa ×3. <span class="hl-purpura">Las fuentes discrepan</span>: el modelo enseña las dos y no elige.', mirar: 'marisma', cita: [RV('mar-deficit-calc', 26), HF('mc-tabla-15-4-nota', 29)], org: 'las fuentes discrepan' },
+    { t: 'El cap. 11 hace la cuenta con el 20 % que se queda en el plasma (450/0,2 = 2,25 L: ×5); el cap. 15 usa ×3. El cap. 15 lo explica: llama al ×3 «estimación conservadora» y parte del mismo reparto (20-25 % en el plasma).', mirar: 'marisma', cita: [RV('mar-deficit-calc', 26), HF('mc-tabla-15-4-nota', 29)] },
     { t: 'Y el Hto cae: el cristaloide expande el plasma pero no los hematíes, y lo diluye.', mirar: 'hto', cita: HC('mc-hto-fluido', 23) },
   ],
   hiponatremia: [
@@ -767,8 +767,9 @@ export const GUIAS = {
   hipernatremia: [
     { t: 'Na⁺ 160: la hipertonía <span class="hl-rojo">saca agua de las células</span> y las encoge, sobre todo en el cerebro.', resalta: '#agv-lupa', cita: HP('mr-hiperna-cerebro', 5) },
     { t: 'Las neuronas empiezan a recuperar volumen a las 9 h acumulando osmolitos, y en 48 h pueden haberlo recuperado del todo.', resalta: '#agv-lupa', cita: HP('mr-hiperna-cerebro', 5) },
-    { t: 'Por eso se teme corregir deprisa: edema cerebral. El ritmo óptimo no se conoce; lo tradicional, ≤0,5 mEq/L/h.', resalta: '#agv-lectura', cita: HP('mr-hiperna-ritmo', 6) },
-    { t: 'Se recomienda glucosado al 5 % o agua por la sonda. El salino isotónico corrige la hipotensión, no la hipernatremia.', mirar: 'mar', cita: HP('mr-hiperna-tto', 6) },
+    { t: 'Por eso se teme corregir deprisa: edema cerebral. El ritmo óptimo no se conoce; lo tradicional, ≤0,5 mEq/L/h, aunque se han usado ritmos mayores sin edema cerebral.', resalta: '#agv-lectura', cita: HP('mr-hiperna-ritmo', 6) },
+    { t: 'Se recomienda glucosado al 5 % o agua por la sonda. El salino isotónico corrige la hipotensión, no la hipernatremia.', mirar: 'mar', cita: HP('mr-hiperna-tto', '5-6') },
+    { t: 'Como la pérdida de líquido hipotónico también se lleva sodio, al autor le parece más adecuado el salino al 0,45 % que el glucosado.', mirar: 'mar', cita: HP('mr-hiperna-tto', 6), org: 'opinión del autor' },
   ],
   osmolalidad: [
     { t: 'Osmolalidad calculada: 2 × Na + glucosa/18 + BUN/2,8. Con valores normales, 290.', resalta: '#agv-lectura', cita: OS('mr-osm-calculada', 4) },
@@ -777,7 +778,7 @@ export const GUIAS = {
     { t: 'Si la membrana deja pasar el soluto, los dos lados acaban con la misma actividad osmótica: solo los solutos que no cruzan (la tonicidad) mueven agua.', resalta: '#agv-lupa', cita: [OS('mr-osm-relativa', 2), OS('mr-osm-efectiva', 2)] },
   ],
   hiperglucemia: [
-    { t: 'Glucosa 600 sin insulina: no entra en las células y <span class="hl">les saca agua</span>.', mirar: 'mar', cita: HD('mr-hiperglucemia-na', 9) },
+    { t: 'Glucosa 600: cuando no entra con facilidad en las células, <span class="hl">les saca agua</span>.', mirar: 'mar', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Ese agua diluye el sodio: 2,4 mEq/L menos por cada 100 mg/dL de glucosa. El Na⁺ medido baja a 128.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Na corregido = Na medido + 2,4 × (glucosa − 100)/100: con 600, <span class="hl-azul">140</span>. El ejemplo de la ficha: 130 con 600 → 142.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
   ],

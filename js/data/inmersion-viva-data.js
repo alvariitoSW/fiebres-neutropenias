@@ -162,13 +162,13 @@ export const ESTADOS = {
      El chip de origen: «ficha», «fisiología general» o «ilustrativo», y la página del PDF. El id de la ficha nunca se ve.
      ============================================================ */
 export const PAGINAS = { 'mar-dolor-intro': 16, 'mar-fig-6-1': 17, 'mar-hipernocicepcion': 17, 'mar-escala-numerica': 17, 'mar-bps-intro': 17, 'mar-bps-calc': 18,
-      'mar-constantes-dolor': 18, 'mar-opioide-definiciones': 18, 'mar-opioide-dosis-individual': 19, 'mar-tabla-6-2': 19, 'mar-morfina': '19-20', 'mar-fentanilo': 20,
+      'mar-constantes-dolor': 18, 'mar-opioide-definiciones': '18-19', 'mar-opioide-dosis-individual': 19, 'mar-tabla-6-2': 19, 'mar-morfina': '19-20', 'mar-fentanilo': 20,
       'mar-hidromorfona': 20, 'mar-remifentanilo': 20, 'mar-meperidina': '20-21', 'mar-pca': 21, 'mar-opioide-respiratorio': 21,
       'mar-opioide-cardio': 21, 'mar-opioide-intestino': 21, 'mar-opioide-nauseas': 22, 'mar-tabla-6-3': 22, 'mar-analgesico-calc': 22, 'mar-ketamina-errata': 22,
       'mar-ketamina': 23, 'mar-neuropatico': 23, 'mar-ansiedad': 23, 'mar-tabla-6-4': 24, 'mar-rass-pasos': 24, 'mar-escalas-sedacion': 24, 'mar-bzd-intro': 25,
-      'mar-midazolam': 25, 'mar-lorazepam': 25, 'mar-tabla-6-5': 26, 'mar-bzd-proscontras': 26, 'mar-bzd-prevencion': 27, 'mar-tabla-6-6': 27, 'mar-propofol': 28,
-      'mar-propofol-calc': 28, 'mar-nota-propofol-240': 28, 'mar-pris': 28, 'mar-tabla-6-7': 29, 'mar-dexmedetomidina': 29, 'mar-haloperidol-intro': 30,
-      'mar-tabla-6-8': 30, 'mar-halo-wizard': 30, 'mar-haloperidol-qtc': 31, 'mar-opiofobia': 31, 'mar-analgesia': 16, 'mar-sedacion': 23 };
+      'mar-midazolam': 25, 'mar-lorazepam': '25-26', 'mar-tabla-6-5': 26, 'mar-bzd-proscontras': 26, 'mar-bzd-prevencion': 27, 'mar-tabla-6-6': 27, 'mar-propofol': 28,
+      'mar-propofol-calc': 28, 'mar-nota-propofol-240': 28, 'mar-pris': 28, 'mar-tabla-6-7': 29, 'mar-dexmedetomidina': '29-30', 'mar-haloperidol-intro': '30-31',
+      'mar-tabla-6-8': '30-31', 'mar-halo-wizard': 30, 'mar-haloperidol-qtc': 31, 'mar-opiofobia': 31, 'mar-analgesia': 16, 'mar-sedacion': 23 };
 /* ============================================================
    La explicación guiada de cada estado con nombre (REGLAS §7.10; core/explicacion-guiada.js): 3-5 pasos cortos.
    Cada paso: { t, mirar (el anillo de la escena o una cifra del tablero: ANCLAS de inmersion-viva-escena.js),
@@ -260,7 +260,7 @@ export const GUIAS = {
         { t: 'Si la dexmedetomidina no se tolera por bradicardia o hipotensión, sirve el haloperidol.', mirar: 'fc', cita: AS('mar-haloperidol-intro') },
         { t: 'Antagonista dopaminérgico, el único antipsicótico que se da IV: seda sin depresión respiratoria. Efecto a los 10-20 min; dura 3-4 h.', mirar: 'buzo', cita: AS('mar-haloperidol-intro') },
         { t: '5 mg IV en bolo; si no responde, 10 mg; si responde, el 25 % de la dosis eficaz cada 6 h (el texto dice cada 4-6 h).', mirar: 'rass', cita: AS('mar-tabla-6-8') },
-        { t: '<span class="hl-rojo">No usar si el QTc es >500 ms</span>: torsade de pointes en el 3-4 %.', mirar: 'monitor', cita: AS('mar-haloperidol-qtc') },
+        { t: 'Alarga el QT y puede dar torsade de pointes: se ha descrito en el 3-4 % de los tratados con haloperidol IV, en la mayoría de los casos con QTc >500 ms o más de 35 mg al día. <span class="hl-rojo">No usar si el QTc es >500 ms</span>.', mirar: 'monitor', cita: AS('mar-haloperidol-qtc') },
     ],
 };
 // Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
