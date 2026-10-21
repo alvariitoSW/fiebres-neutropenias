@@ -562,3 +562,33 @@ opciones (https://claude.ai/artifact/XF9rGsUJYivo6BAs9yTCGA); eligió A + C y la
   (Mira: la vista Visual de siempre; Juega con el modelo; Piensa: Guía; Examínate: Examen y repaso; El caso) y «Para
   profundizar» al final. El botón «Visual» de la cabecera y `data-en-visual` abren Estudiar → Mira. Las demás fichas de
   la app siguen con Texto | Visual.
+
+## Bloque 2 de Marino: caps. 12-13, anemia, transfusión, plaquetas y plasma (20-21/10/2026)
+
+Primer bloque con las **paradas nuevas** (4-5 por bloque, `REGLAS.md` §2.3) y con las **reglas del usuario del
+20/10** (§7.9 cada cita lleva a la app; §7.10 Explorar explica; §7.11 modelos por concepto). Paquete y decisiones en
+`autonomo/bloques/b2/` (encargo, cobertura, auditorías, juicio del profesor).
+- **Cobertura** (profesor): ≈92 % de 120 ideas; el modelo enseña el 43 % del bloque (en el bloque 1, el 30 %). Halló un
+  fallo del bloque 1: el capilar dejaba el gasto fijo con anemia y la extracción tocaba techo con Hb 7,5; el cap. 12
+  dice que el gasto sube y el techo no llega hasta Hb ~3 (p. 4-7). Corregido («Anemia, gasto fijo» + «¿Y si el
+  corazón compensa?»).
+- **Parada 1** (maquetas del vaso, del capilar ampliado y de las formas): «muy guapas… como base está bien». Pidió
+  citas que lleven al párrafo de la app, explicación guiada en Explorar, fusión de las direcciones A y B del vaso y
+  modelos reutilizables por otros libros (bitácora B-008).
+- **Piezas comunes nuevas** (en `js/core/`): `citas.js` («Ver en la ficha» al párrafo exacto y el PDF de segunda
+  opción), `explicacion-guiada.js` (3-5 pasos por estado que señalan el dibujo), `bolsa.js`, `tubo.js`;
+  `js/data/hemoderivados-data.js` (cifras una sola vez) y 9 formas nuevas en `formas-iones.js`.
+- **Capilar ampliado**: «el corazón compensa», «volemia», «Transfundir 1 CH» (el gasto queda quieto: decisión del
+  usuario; el libro no dice que baje), lupas del tubo y del alvéolo (TRALI/TACO) y 8 estados; 88 pasos guiados en 24
+  estados.
+- **El vaso que sangra** (nuevo, `js/modules/libros/vaso-vivo*`): fusión de A (arteriola de grabado y red con los
+  órganos) y B (la herida en lupa); 18 estados con 68 pasos guiados; usa la cascada y la plaqueta-FP4 del telar
+  (exportadas, sin copiar). Su Mayéutica usa las preguntas de las fichas 4-6 (una sola fuente) más 4 propias de
+  predecir y tocar. En la Mayéutica el dibujo se recorta al trozo que pide la pregunta (zona fija ≤340 px).
+- **Las 6 fichas** (Merino HEMATO): 105 ids por sección con su página, Texto | Estudiar, 128 preguntas, casos de
+  Fermín, Rocío, Gonzalo, Inés y Salvador, 7 láminas del PDF y el bloque «Sangre y hemostasia» en la portada.
+- **Auditorías ciegas**: estudio 0 graves (12 menores, 2 huecos), capilar 0 graves (10, 3), vaso 0 graves (10, 4);
+  todo arreglado. Discrepancias del libro con su nota: plasma residual 15-30 frente a 30-50 mL (p. 9); plaquetas a
+  la hora 35-50 mil frente a ~66 mil de la Fig. 13.2 (p. 30-31); leucorreducidos «si hay antecedente» (p. 9) frente
+  a «tras la 2.ª reacción» (p. 13); HIT con HBPM (cap. 5 p. 7 frente a cap. 13 p. 23).
+- **Profesor**: todo ≥4 salvo el móvil (3: la zona fija del vaso ocupaba 466 de 844 px); arreglado.
