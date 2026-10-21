@@ -392,6 +392,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script type="module">
+import { crearMuestra } from './comun/muestra-mayeutica.js';
 import { svgParticula } from '../../js/core/particulas.js';
 // Las piezas comunes (autonomo/maquetas/comun/): el grabado, la bomba de jeringa y el monitor
 import * as I from './comun/dibujo-iso.js';
@@ -654,11 +655,11 @@ const FARMACOS = {
 // EL PACIENTE: cifras de partida (del caso cuando lo hay; si no, ilustrativas) y cómo responde
 // kR: cuánto sube la IRVS por unidad de tono del anillo (ilustrativo); post: cuánto cae el volumen latido con la poscarga
 const PACIENTES = {
-  paulino: { corta: '<b>Paulino</b>, 72 años, 80 kg · shock séptico (colangitis)', nombre: 'Paulino', chip: 'shock séptico', peso: 80, obj: 'sepsis', del: 'caso',
-    linea: '<b>Paulino</b>, 72 años, 80 kg (ideal 70) · HTA · colangitis aguda: shock séptico, tras 2,1 L de cristaloide',
+  paulino: { corta: '<b>Amparo</b>, 58 años, 76 kg · shock séptico (pielonefritis)', nombre: 'Amparo', chip: 'shock séptico', peso: 76, obj: 'sepsis', del: 'caso',
+    linea: '<b>Amparo</b>, 58 años, 76 kg (ideal 58) · pielonefritis obstructiva: shock séptico, tras 1,75 L de cristaloide',
     base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 4, pp: 34, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null, k: null }, kR: 0.198, post: 0.15, sensV1: 1 },
-  paulino10: { corta: '<b>Paulino</b>, hora 10 · NA 26 µg/min y vasopresina', nombre: 'Paulino', chip: 'shock séptico, hora 10', peso: 80, obj: 'sepsis', del: 'caso',
-    linea: '<b>Paulino</b>, hora 10 · NA 26 µg/min y vasopresina; lactato 3,1 antes de la adrenalina',
+  paulino10: { corta: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina', nombre: 'Amparo', chip: 'shock séptico, hora 10', peso: 76, obj: 'sepsis', del: 'caso',
+    linea: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina; lactato 3,1 antes de la adrenalina',
     base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 5, pp: 36, spo2: 95, fr: 24, t: 38.4, lact: 3.1, glu: 160, k: null }, kR: 0.198, post: 0.15, sensV1: 1 },
   sano: { corta: '<b>Voluntario sano</b>, 75 kg', nombre: 'Voluntario sano', chip: 'voluntario sano', peso: 75, obj: null, del: 'ilustrativo',
     linea: '<b>Voluntario sano</b>, 75 kg · las cifras son ilustrativas',
@@ -697,14 +698,14 @@ const FAMILIAS = { vaso: 'Vasopresores', ino: 'Inotrópicos', freno: 'Frenos y a
 const ESTADOS = [
   { id: 'na-baja', fam: 'vaso', tit: 'NA baja', sub: 'pesa el β', pac: 'paulino', f: { na: 8 }, reg: { na: 'shock' }, lupa: 'miocito',
     frase: (S, R) => fraseNA(S, R),
-    guia: { tit: 'Paulino: noradrenalina a 8 µg/min', pasos: [
+    guia: { tit: 'Amparo: noradrenalina a 8 µg/min', pasos: [
       { t: 'La bomba empuja noradrenalina por la vía: las mismas llaves llegan a la arteriola y al corazón.', r: ['#e-via'], c: C.naRec },
       { t: 'Por debajo de 10 µg/min pesa el β: las llaves entran sobre todo en las cerraduras β₁ del miocito y la aguja de la fuerza sube. Mira el IC.', set: { f: { na: 8 } }, r: ['#e-mio', '#e-medidor', '[data-fila="ic"]'], c: C.naDosis },
       { t: 'En el anillo de la arteriola, pocas cerraduras α₁ tienen llave: el calibre apenas se mueve. Cuántas llaves: es una imagen.', r: ['#e-anillo', '#e-cal'], c: C.naDosis, org: 'ilustrativo' },
       { t: 'Con lupa: la llave β₁ alinea los pines, el cilindro gira y la palanca pone en marcha la máquina que fabrica AMPc y abre el canal de calcio.', set: { lupa: 'miocito', cas: 'completa' }, r: ['#l-cerr', '#l-prensa', '#l-canal'], c: C.glucMec }] } },
   { id: 'na-alta', fam: 'vaso', tit: 'NA alta', sub: 'manda el α', pac: 'paulino', f: { na: 25 }, reg: { na: 'shock' }, lupa: 'liso-arteriola',
     frase: (S, R) => fraseNA(S, R),
-    guia: { tit: 'Paulino: noradrenalina a 25 µg/min', pasos: [
+    guia: { tit: 'Amparo: noradrenalina a 25 µg/min', pasos: [
       { t: 'Por encima de 10 manda el α: las cerraduras α₁ del anillo de la arteriola se llenan.', set: { f: { na: 25 } }, r: ['#e-anillo'], c: C.naDosis },
       { t: 'Cada célula lisa se acorta y el anillo se cierra: el calibre mide una luz más estrecha.', r: ['#e-anillo', '#e-cal'], c: C.naRec },
       { t: 'Pocos micrómetros bastan: la resistencia sube con la cuarta potencia del radio. Suben la IRVS y la PAM.', r: ['#e-cal', '[data-fila="irvs"]', '[data-fila="pa"]'], c: C.pam, org: 'fisiología general' },
@@ -712,15 +713,15 @@ const ESTADOS = [
       { t: 'El β₁ del corazón sigue con sus llaves, pero ya no manda.', r: ['#e-mio'], c: C.naDosis }] } },
   { id: 'na-techo', fam: 'vaso', tit: 'NA en el techo', sub: '30 y más', pac: 'paulino', f: { na: 30 }, reg: { na: 'shock' }, lupa: 'liso-arteriola',
     frase: (S, R) => fraseNA(S, R),
-    guia: { tit: 'Paulino: el techo de la noradrenalina', pasos: [
+    guia: { tit: 'Amparo: el techo de la noradrenalina', pasos: [
       { t: 'A 30 µg/min todas las cerraduras α₁ del anillo tienen llave. Es una imagen: el libro dice que ya no hay más respuesta.', set: { f: { na: 30 } }, r: ['#e-anillo'], c: C.naDosis, org: 'ilustrativo' },
       { t: 'Sube la bomba a 40: las llaves sobran, el anillo no se cierra más y la PAM apenas cambia.', set: { f: { na: 40 } }, r: ['#bomba-na', '#e-cal', '[data-fila="pa"]'], c: C.naDosis },
       { t: 'A 30, otra puerta: un segundo vasopresor. Añadirlo no ha demostrado más supervivencia.', r: ['#bomba-na'], c: C.naDosis, c2: C.vaso },
-      { t: 'Para Paulino, 30 µg/min son 0,38 µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.', set: { f: { na: 30 } }, r: ['#bomba-na'], c: C.t172 }] } },
+      { t: 'Para Amparo, 30 µg/min son 0,39 µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.', set: { f: { na: 30 } }, r: ['#bomba-na'], c: C.t172 }] } },
   { id: 'na-vasopresina', fam: 'vaso', tit: '+ Vasopresina', sub: 'otra cerradura', pac: 'paulino', f: { na: 25, vasopresina: 0.03 }, reg: { na: 'shock', vasopresina: 'septico' }, lupa: 'liso-arteriola',
     frase: (S, R) => S.f.vasopresina ? (R.pam >= 65 ? ['Dos cerraduras, una sola contracción: la vasopresina aprieta por el V₁ y la PAM llega a 65 con menos noradrenalina. No se titula.', C.vasopresina]
       : ['La vasopresina aprieta por el V₁, pero con tan poca noradrenalina la PAM no llega a 65. No se titula: se mueve la NA.', C.vasopresina]) : fraseNA(S, R),
-    guia: { tit: 'Paulino: se añade vasopresina', pasos: [
+    guia: { tit: 'Amparo: se añade vasopresina', pasos: [
       { t: 'Entra otra llave, hexagonal: la vasopresina encaja en las cerraduras V₁ de las mismas células lisas.', set: { f: { na: 25, vasopresina: 0.03 } }, r: ['#e-anillo [data-cerr="v1"]'], c: C.vasopresina },
       { t: 'La misma célula se aprieta por otra cerradura: la PA sube y hace falta menos noradrenalina.', r: ['#e-anillo', '[data-fila="pa"]'], c: C.vasopresina },
       { t: 'Su bomba sale con candado: 0,03-0,04 U por minuto, sin titular. El libro imprime «U/h»: ver la nota.', r: ['#bomba-vasopresina'], c: C.vasoDosis },
@@ -728,9 +729,9 @@ const ESTADOS = [
       { t: 'Con lupa: el V₁ y el α₁ empujan el mismo carro hacia el depósito de calcio. Que compartan esa cadena es fisiología general.', set: { lupa: 'liso-arteriola', cas: 'completa' }, r: ['#l-sec-v1', '#l-carro', '#l-ret'], c: C.vasopresina, org: 'fisiología general' }] } },
   { id: 'vasopresina-sano', fam: 'vaso', tit: 'Vasopresina en el sano', sub: 'no sube la PA', pac: 'paulino', f: { na: 0, vasopresina: 0.03 }, reg: { vasopresina: 'septico' }, lupa: 'liso-arteriola', pacientes: ['paulino', 'sano'],
     frase: (S, R) => S.pac === 'sano' ? ['En el voluntario sano, la vasopresina no sube la PA; en el shock vasodilatador, sí. Por qué, el libro no lo explica.', C.vasopresina]
-      : ['En Paulino, con los vasos abiertos, la vasopresina sola sube la PA: otra cerradura, la V₁.', C.vasopresina],
+      : ['En Amparo, con los vasos abiertos, la vasopresina sola sube la PA: otra cerradura, la V₁.', C.vasopresina],
     guia: { tit: 'La vasopresina: vasodilatado frente a sano', pasos: [
-      { t: 'Paulino, con el vaso abierto por la sepsis: la vasopresina encaja en el V₁ y la PA sube.', set: { pac: 'paulino' }, r: ['#e-anillo [data-cerr="v1"]', '[data-fila="pa"]'], c: C.vasopresina },
+      { t: 'Amparo, con el vaso abierto por la sepsis: la vasopresina encaja en el V₁ y la PA sube.', set: { pac: 'paulino' }, r: ['#e-anillo [data-cerr="v1"]', '[data-fila="pa"]'], c: C.vasopresina },
       { t: 'La misma dosis en un voluntario sano: la PA no sube. Lo dice el libro; por qué, no lo explica.', set: { pac: 'sano' }, r: ['[data-fila="pa"]', '#e-cal'], c: C.vasopresina, org: 'la fuente no lo dice' },
       { t: 'Donde más aprieta: la piel, el músculo y el territorio esplácnico.', r: ['#e-anillo'], c: C.vasopresina },
       { t: 'Aquí solo se dibuja el V₁. La misma hormona abre el V₂ del túbulo distal (reabsorbe agua) y el V₃ de la hipófisis anterior (libera ACTH).', r: ['#e-anillo [data-cerr="v1"]'], c: C.vasopresina }] } },
@@ -740,15 +741,15 @@ const ESTADOS = [
         : d <= 3 ? ['Hasta 3 µg/kg/min, solo las cerraduras de la dopamina de los lechos renal y esplácnico: sube su flujo, no la PA.', C.dopa]
         : d <= 10 ? ['Entre 3 y 10, el β₁ del corazón: sube el volumen latido. Y más taquicardia que con los demás vasopresores.', C.dopa]
         : ['Por encima de 10, el α: sube la RVS, y esa poscarga puede deshacer la subida del volumen latido.', C.dopa]; },
-    guia: { tit: 'Paulino: la dopamina, tramo a tramo', pasos: [
+    guia: { tit: 'Amparo: la dopamina, tramo a tramo', pasos: [
       { t: 'A 2 µg/kg/min solo encajan las cerraduras de la dopamina, la estrella, de las arteriolas del riñón y del intestino: sube su flujo.', set: { f: { dopamina: 2 } }, r: ['#e-anillo [data-cerr="dopa"]'], c: C.dopa },
       { t: 'Entre 3 y 10, el β₁ del miocito: sube el volumen latido.', set: { f: { dopamina: 7 } }, r: ['#e-mio', '[data-fila="ic"]'], c: C.dopa },
       { t: 'Por encima de 10, el α₁ del anillo: sube la RVS, y esa poscarga puede deshacer la subida del volumen latido.', set: { f: { dopamina: 15 } }, r: ['#e-anillo', '[data-fila="irvs"]'], c: C.dopa },
       { t: 'El precio: más taquicardia y arritmias, como la FA, que con los demás vasopresores. Hoy está en desuso en el séptico y en el cardiogénico.', r: ['#e-nodo', '[data-fila="fc"]'], c: C.dopa }] } },
   { id: 'adrenalina', fam: 'vaso', tit: 'Adrenalina', sub: 'lactato y glucemia', pac: 'paulino10', f: { na: 26, vasopresina: 0.03, adrenalina: 0.1 }, reg: { na: 'shock', vasopresina: 'septico', adrenalina: 'septico' }, fijos: ['na', 'vasopresina'], lupa: 'miocito',
     frase: (S, R) => S.f.adrenalina > 0 ? [`Sube todo, también el lactato (${coma(R.lact, 1)}) y la glucemia (${Math.round(R.glu)}): no los leas como hipoperfusión.`, C.adre]
-      : ['Paulino con noradrenalina y vasopresina. Añade adrenalina y mira las dos cifras del laboratorio.', C.adre],
-    guia: { tit: 'Paulino, hora 10: la adrenalina', pasos: [
+      : ['Amparo con noradrenalina y vasopresina. Añade adrenalina y mira las dos cifras del laboratorio.', C.adre],
+    guia: { tit: 'Amparo, hora 10: la adrenalina', pasos: [
       { t: 'La adrenalina es un β potente y además abre el α: llaves en el β₁ del miocito y en el α₁ del anillo. El β₂ de los vasos lo da el Manual UMI.', set: { f: { na: 26, vasopresina: 0.03, adrenalina: 0.1 } }, r: ['#e-mio', '#e-anillo'], c: C.adre, c2: C.umi },
       { t: 'Se encienden dos cifras del laboratorio: el lactato, por más producción aeróbica, y la glucemia, porque el α frena la insulina.', r: ['[data-fila="lact"]', '[data-fila="glu"]'], c: C.adre },
       { t: 'Ese lactato engaña: no es hipoperfusión.', r: ['[data-fila="lact"]'], c: C.adre },
@@ -823,11 +824,11 @@ function fraseNA(S, R) {
   // lo que cambia respecto a la bomba parada: el IC (el β) y la IRVS (el α), leídos del modelo
   const R0 = efecto({ ...S, f: { ...S.f, na: 0 } }), c1 = x => coma(x, 1);
   const cambio = `IC ${c1(R0.ic)} → ${c1(R.ic)}; IRVS ${c1(R0.irvs)} → ${c1(R.irvs)}`;
-  if (na === 0) t = `Sin noradrenalina, los vasos de Paulino están abiertos (IRVS ${c1(R.irvs)}, PAM ${Math.round(R.pam)}). Sube la bomba y mira qué célula responde primero.`;
+  if (na === 0) t = `Sin noradrenalina, los vasos de Amparo están abiertos (IRVS ${c1(R.irvs)}, PAM ${Math.round(R.pam)}). Sube la bomba y mira qué célula responde primero.`;
   else if (na < 10) t = `Por debajo de 10 µg/min, la noradrenalina empuja más que aprieta: el β del corazón sube el gasto y el anillo apenas se cierra (${cambio}).`;
   else if (na < 30) t = `Por encima de 10 manda el α: las cerraduras del anillo se llenan, la luz se estrecha y sube la RVS (${cambio}).`;
   else t = 'A 30 µg/min, más dosis apenas aprieta: otra cerradura, no más llave. Es el momento del segundo vasopresor.';
-  if (kg >= 0.25 && !S.f.vasopresina) t += ` Para Paulino, ${na} µg/min son ${coma(kg, 2)} µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.`;
+  if (kg >= 0.25 && !S.f.vasopresina) t += ` Para Amparo, ${na} µg/min son ${coma(kg, 2)} µg/kg/min: la Tabla 17.2 añade vasopresina e hidrocortisona.`;
   return [t, kg >= 0.25 && !S.f.vasopresina ? C.t172 : C.naDosis];
 }
 
@@ -2015,7 +2016,7 @@ function pintarFuentes() {
   $('explicame-txt').textContent = `${E.guia.pasos.length} pasos: ${E.guia.tit}`;
 }
 const NOTAS = [
-  { tipo: 'discrepan', txt: '<b>El rango de la noradrenalina.</b> Marino: 5-40 µg/min (Tabla 14.4) y 5-30 µg/min en el shock cardiogénico. El Manual UMI: 0,2-1,3 µg/kg/min, que en Paulino (80 kg) son 16-104 µg/min. Ninguna se elige: cada una con su chip.', c: [C.t144, C.csNa, C.umi] },
+  { tipo: 'discrepan', txt: '<b>El rango de la noradrenalina.</b> Marino: 5-40 µg/min (Tabla 14.4) y 5-30 µg/min en el shock cardiogénico. El Manual UMI: 0,2-1,3 µg/kg/min, que en Amparo (76 kg) son 15-99 µg/min. Ninguna se elige: cada una con su chip.', c: [C.t144, C.csNa, C.umi] },
   { tipo: 'discrepan', txt: '<b>Cuándo añadir vasopresina.</b> El cap. 14 dice con NA ≥0,2 µg/kg/min; la Tabla 17.2 y el texto del cap. 17, con 0,25-0,5. Para la hidrocortisona, la Tabla 17.2 dice «>0,25» y el texto, «≥0,25».', c: [C.vasopresina, C.t172, C.cortic] },
   { tipo: 'discrepan', txt: '<b>La adrenalina en el séptico.</b> Segunda línea en el cap. 14; tercer vasopresor en la Tabla 17.2.', c: [C.adre, C.t172] },
   { tipo: 'errata', titulo: 'Errata de dosis', txt: '<b>La unidad de la vasopresina.</b> El libro imprime «U/h» (0,01-0,04 en la Tabla 14.4; 0,03-0,04 en la p. 16). La bomba usa 0,03 U/min, la dosis habitual (conocimiento general, no del libro: compruébalo en la ficha técnica).', c: [C.vasoNota] },
@@ -2028,7 +2029,7 @@ const NOTAS = [
   { tipo: 'calla', txt: '<b>Qué betabloqueante.</b> El libro habla de «betabloqueantes» sin distinguir. El bisoprolol de Begoña es cardioselectivo (fisiología general): cuánto tapa el β del mastocito, la fuente no lo dice. En la isquemia por cocaína tampoco dice cuál: el dibujo tapa β₁ y β₂.', c: [C.anaGluc, C.cocaina] },
   { tipo: 'calla', txt: '<b>El glucagón en el mastocito.</b> El cap. 17 dice que el glucagón puede devolver la respuesta a la adrenalina y remite al cap. 52, que lo explica en el corazón. Cómo lo hace en el mastocito, la fuente no lo dice: el dibujo pone una interrogación.', c: [C.anaGluc, C.glucMec] },
   { tipo: 'calla', txt: '<b>La obstrucción del tracto de salida.</b> El libro contraindica los inotrópicos y prefiere la fenilefrina, sin explicar el mecanismo; que la dobutamina baje aquí la PA es fisiología general, con cifras ilustrativas.', c: [C.csIno, C.csFenil] },
-  { tipo: 'calla', txt: '<b>Cuánto mueve cada fármaco.</b> La ficha da la dirección (la NA sube la RVS, la dobutamina sube el gasto y la FC, la milrinona baja la PA), no cuánto. Las cifras tras cada cambio son ilustrativas; las de partida de Paulino, Aurelio y Begoña, de sus casos. El dibujo exagera el cambio de calibre para que se vea: el radio verdadero sale en la lectura.', c: [C.naDosis] },
+  { tipo: 'calla', txt: '<b>Cuánto mueve cada fármaco.</b> La ficha da la dirección (la NA sube la RVS, la dobutamina sube el gasto y la FC, la milrinona baja la PA), no cuánto. Las cifras tras cada cambio son ilustrativas; las de partida de Amparo, Aurelio y Begoña, de sus casos. El dibujo exagera el cambio de calibre para que se vea: el radio verdadero sale en la lectura.', c: [C.naDosis] },
   { tipo: 'autor', txt: '<b>La fenilefrina en el séptico con FA rápida.</b> «Útil», dice el autor: es su observación, no una recomendación.', c: [C.fenil] },
   { tipo: 'errata', titulo: 'Posible errata', txt: '<b>El potasio del levosimendán.</b> Marino escribe que vasodilata «facilitando la entrada de potasio en el músculo liso vascular». Abrir canales de K⁺ suele describirse como salida de potasio (conocimiento general, no de la fuente; está por comprobar en otra fuente).', c: [C.levo] },
 ];
@@ -2127,16 +2128,16 @@ function pintarVivo(t, dt) {
 
 /* ============================================================
    10. Mayéutica (muestra): dos preguntas de la guía socrática con «predice y compruébalo», dos del examen y el primer
-   paso del caso de Paulino. Las respuestas viven aquí, en el código; el HTML no las lleva hasta que se contesta.
+   paso del caso de Amparo. Las respuestas viven aquí, en el código; el HTML no las lleva hasta que se contesta.
    ============================================================ */
-const MUESTRA = [
+const PREG_RECORRIDO = [
   { grupo: 'guia', num: 'G1', predice: true, estado: 'na-baja', ajustes: { na: 5 },
-    enunciado: 'Paulino: vas a subir la noradrenalina de 5 a 25 µg/min. Antes de tocar la bomba, <b>¿qué cifra del monitor se mueve primero?</b>',
+    enunciado: 'Amparo: vas a subir la noradrenalina de 5 a 25 µg/min. Antes de tocar la bomba, <b>¿qué cifra del monitor se mueve primero?</b>',
     opciones: [
-      { t: 'La IRVS: la noradrenalina aprieta los vasos desde la primera gota.', porque: 'Por debajo de 10 µg/min pesa más el β y lo que sube es el gasto (p. 13). Si esperas ver la PAM arriba con 5, subirás la bomba de golpe sin ver lo que hace en el corazón de Paulino.' },
+      { t: 'La IRVS: la noradrenalina aprieta los vasos desde la primera gota.', porque: 'Por debajo de 10 µg/min pesa más el β y lo que sube es el gasto (p. 13). Si esperas ver la PAM arriba con 5, subirás la bomba de golpe sin ver lo que hace en el corazón de Amparo.' },
       { t: 'El IC: por debajo de 10 µg/min pesa el β del corazón.', ok: true },
       { t: 'La FC: la noradrenalina es, sobre todo, un fármaco que acelera.', porque: 'Su acción principal es el α y el β es débil (p. 12). Si esperas taquicardia para saber que actúa, creerás que no hace nada y la subirás de más.' },
-      { t: 'Ninguna hasta los 30 µg/min: antes no se nota.', porque: 'A 30 se llega al techo, no al comienzo (p. 13). Esperar hasta ahí deja a Paulino con una PAM de 51 mucho más tiempo.' }],
+      { t: 'Ninguna hasta los 30 µg/min: antes no se nota.', porque: 'A 30 se llega al techo, no al comienzo (p. 13). Esperar hasta ahí deja a Amparo con una PAM de 51 mucho más tiempo.' }],
     explicacion: 'Por debajo de 10 µg/min, el β de la noradrenalina puede subir el gasto; por encima de 10 predomina el α y sube la resistencia; a 30, no hay más respuesta.', fuente: C.naDosis,
     tocar: { txt: 'Compruébalo: sube la bomba de 5 a 25', de: 5, a: 25, k: 'na' } },
   { grupo: 'guia', num: 'G2', predice: true, estado: 'fenilefrina', ajustes: { fenilefrina: 0 },
@@ -2149,12 +2150,12 @@ const MUESTRA = [
     explicacion: 'La fenilefrina es un agonista α puro: aprieta los vasos y sube la PA, y puede acompañarse de bradicardia, que es refleja.', fuente: C.fenil, fuente2: C.csFenil,
     tocar: { txt: 'Compruébalo: pon la fenilefrina a 35', de: 0, a: 35, k: 'fenilefrina' } },
   { grupo: 'examen', num: 'E1', sinModelo: true,
-    enunciado: 'Paulino, hora 10: noradrenalina 26 µg/min, vasopresina y, desde la hora 8, adrenalina a 0,1 µg/kg/min (8 µg/min). El lactato pasa de 3,1 a 5,0 mmol/L y la glucemia es de 262 mg/dL. <b>¿Qué cambio explica el receptor α de la adrenalina?</b>',
+    enunciado: 'Amparo, hora 10: noradrenalina 26 µg/min, vasopresina y, desde la hora 8, adrenalina a 0,1 µg/kg/min (≈8 µg/min). El lactato pasa de 3,1 a 5,0 mmol/L y la glucemia es de 262 mg/dL. <b>¿Qué cambio explica el receptor α de la adrenalina?</b>',
     opciones: [
-      { t: 'El lactato: el α cierra el intestino y el lactato sale de ahí.', porque: 'El libro atribuye la subida del lactato a la producción aeróbica, no a la isquemia (p. 14). Leído como hipoperfusión, a Paulino le subirías volumen o fármacos que no necesita.' },
-      { t: 'La taquicardia que aparece al subir la dosis.', porque: 'La taquicardia es del β (pp. 13-14). Si la culpas al α, bajarías la noradrenalina y dejarías la adrenalina, que es la que acelera a Paulino.' },
+      { t: 'El lactato: el α cierra el intestino y el lactato sale de ahí.', porque: 'El libro atribuye la subida del lactato a la producción aeróbica, no a la isquemia (p. 14). Leído como hipoperfusión, a Amparo le subirías volumen o fármacos que no necesita.' },
+      { t: 'La taquicardia que aparece al subir la dosis.', porque: 'La taquicardia es del β (pp. 13-14). Si la culpas al α, bajarías la noradrenalina y dejarías la adrenalina, que es la que acelera a Amparo.' },
       { t: 'La glucemia: el α frena la secreción de insulina.', ok: true },
-      { t: 'El gasto metabólico de todo el cuerpo, que se dispara.', porque: 'El libro cita el aumento del metabolismo sin darle receptor (p. 14). Dárselo al α no tiene base, y lo que le importa a Paulino es que ese gasto sobra en un shock.' }],
+      { t: 'El gasto metabólico de todo el cuerpo, que se dispara.', porque: 'El libro cita el aumento del metabolismo sin darle receptor (p. 14). Dárselo al α no tiene base, y lo que le importa a Amparo es que ese gasto sobra en un shock.' }],
     explicacion: 'La adrenalina sube la glucemia porque el α inhibe la secreción de insulina, y sube el lactato por producción aeróbica: los dos engañan en el shock.', fuente: C.adre },
   { grupo: 'examen', num: 'E2', sinModelo: true,
     enunciado: '<b>¿En qué shock considera Marino la fenilefrina más apropiada que la noradrenalina?</b>',
@@ -2164,79 +2165,94 @@ const MUESTRA = [
       { t: 'En el anafiláctico, como primer vasopresor tras la adrenalina.', porque: 'En la anafilaxia refractaria el libro la pone junto a la NA como segundo vasopresor posible, sin preferirla; y si la paciente toma betabloqueantes, antes va el glucagón (p. 67). Le faltaría el fármaco que funciona.' },
       { t: 'En el hipovolémico, mientras llega la sangre.', porque: 'El libro no la recomienda en ningún shock (p. 15). Al que sangra solo le subirías la PA del monitor, apretando además el riñón y el intestino, que se quedan con menos riego (p. 15).' }],
     explicacion: 'En el shock cardiogénico por obstrucción dinámica del tracto de salida del VI, un vasoconstrictor puro como la fenilefrina (que puede dar bradicardia refleja) es más apropiado que la noradrenalina; los inotrópicos están contraindicados.', fuente: C.csFenil, fuente2: C.csIno },
-  { grupo: 'caso', num: 'Paso 1', estado: 'na-baja', ajustes: { na: 0 }, dia: 'Urgencias · hora 0',
-    paciente: [['Paciente', 'Paulino, 72 años, 80 kg (ideal 70); HTA'], ['Motivo', 'colangitis aguda litiásica', 1], ['Volumen', '2,1 L de cristaloide en 3 h (30 mL/kg de peso ideal)', 1], ['PA', '74/40 mmHg (PAM 51)', 1], ['FC', '112 lpm, sinusal', 1], ['Lactato', '4,4 mmol/L', 1], ['Vías', 'sin vía central', 1]],
-    enunciado: '<b>¿Qué le das y por dónde?</b>',
-    opciones: [
-      { t: 'Noradrenalina a 5-10 µg/min por una vena del brazo, sobre la fosa antecubital.', ok: true },
-      { t: 'Esperar a tener la vía central: por una vena periférica, el vasopresor se extravasa.', porque: 'Se puede empezar por una vena periférica del brazo (p. 60), segura hasta 48 h (p. 12). Esperar al catéter deja a Paulino con una PAM de 51.' },
-      { t: 'Dopamina a 5 µg/kg/min: sube el gasto sin cerrar los vasos.', porque: 'Da más taquicardia y arritmias, como la FA, que los demás vasopresores (p. 14). Con 112 lpm, Paulino tiene papeletas para una FA; en el séptico, la de elección es la noradrenalina (p. 60).' },
-      { t: 'Fenilefrina en bolo de 100 µg, como en la anestesia.', porque: 'No se recomienda en ningún shock y en el séptico va sin bolo (p. 15). Paulino ganaría vasoconstricción pura, bradicardia refleja y menos riego en el riñón y el intestino.' }],
-    explicacion: 'Tras 30 mL/kg de cristaloide, la noradrenalina es el vasopresor de elección; puede empezar por una vena periférica por encima de la fosa antecubital, sin dosis de carga, a 5-10 µg/min.', fuente: C.t172, fuente2: C.naDosis,
-    sigue: 'En la app, el caso sigue: hora 2, noradrenalina a 24 µg/min (0,30 µg/kg/min) y PAM 65, justa. Calcularás la dosis por kilo con la bomba y decidirás qué añadir.' },
 ];
-const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso de Paulino' };
-let paso = 0; const result = [];
+// El caso de Begoña (S4 de la cobertura del bloque): anafilaxia en planta que no responde porque toma bisoprolol.
+// Las cifras del paciente son del caso; conductas y dosis, de la ficha (Marino, cap. 17, p. 64-67).
+const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
+  { num: 'Paso 1', sinModelo: true, dia: 'Planta · minuto 4 de la amoxicilina-clavulánico IV',
+    paciente: [['Paciente', 'Begoña, 52 años, 65 kg; ingresada por neumonía'], ['Piel', 'habones y la cara hinchada', 1], ['Pulmón', 'sibilancias', 1], ['PA', '70/40 mmHg', 1]],
+    enunciado: '<b>¿Qué le das primero, y por dónde?</b>',
+    opciones: [
+      { t: 'Hidrocortisona 200 mg IV: corta la reacción alérgica.', porque: 'No hay pruebas de que los corticoides frenen o eviten la reacción: «no tienen papel en el manejo agudo» (p. 66). Mientras, Begoña seguiría soltando mediadores con 70/40.' },
+      { t: 'Adrenalina 0,5 mg IM en el muslo (0,5 mL de 1:1.000).', ok: true },
+      { t: 'Adrenalina 0,5 mg subcutánea en el brazo.', porque: 'Por vía subcutánea se absorbe más despacio (p. 65): la dosis buena va IM profunda, en la cara anterolateral del muslo. Begoña tardaría más en recibir el único fármaco que para la reacción.' },
+      { t: 'Difenhidramina y ranitidina IV, y ver cómo responde.', porque: 'Los antihistamínicos alivian síntomas, no cambian el curso, y nunca sustituyen a la adrenalina (p. 66). Begoña seguiría en shock.' }],
+    explicacion: 'La adrenalina es el único fármaco que para la reacción: frena la salida de mediadores del mastocito. 0,3-0,5 mg (0,3-0,5 mL de la solución 1:1.000) IM profunda en el muslo, repetible cada 5-15 min (p. 65; Tabla 17.5).', fuente: C.anaAdre, fuente2: C.t175 },
+  { num: 'Paso 2', tipo: 'destapa', sinModelo: true, dia: 'Minuto 10',
+    paciente: [['Adrenalina', '2.ª dosis IM', 1], ['PA', '72/40 mmHg', 1]],
+    enunciado: 'Sigue hipotensa. <b>¿Por qué necesita volumen, y cuánto le pones?</b> Son dos cosas.',
+    puntos: [
+      { t: 'Los capilares fugan: puede perder hasta el <span class="hl-rojo">35 % del volumen intravascular</span>, bastante para un shock hipovolémico.', c: C.anaShock },
+      { t: 'Empezar con <span class="hl-azul">1-2 L de cristaloide (20-30 mL/kg) o 500 mL de albúmina al 5 %</span> en los primeros 5-10 min; después, según cómo responda.', c: C.anaShock }],
+    explicacion: 'Con la fuga, casi todo el cristaloide sale del vaso y suma edema: la fuente sugiere añadir un coloide como la albúmina al 5 % (p. 67).', fuente: C.anaShock },
+  { num: 'Paso 3', sinModelo: true, dia: 'Minuto 20 · la perfusión',
+    paciente: [['Volumen', '2 L de cristaloide', 1], ['PA', '74/42 mmHg', 1]],
+    enunciado: 'Pasas a adrenalina IV: 2 mg (2 mL de 1:1.000) en 200 mL de suero, que son 10 µg/mL. <b>Para 10 µg/min, ¿a qué ritmo pones la bomba?</b>',
+    opciones: [
+      { t: 'A 1 mL/h: 10 µg/min entre 10 µg/mL.', porque: 'Eso es 1 mL por minuto, no por hora: 10 µg/min × 60 = 600 µg/h, entre 10 µg/mL. A 1 mL/h Begoña recibiría 0,17 µg/min, nada.' },
+      { t: 'A 6 mL/h: 600 µg/h entre 100 µg/mL.', porque: 'La solución lleva 10 µg/mL, no 100 (Tabla 17.5): a 6 mL/h le darías 1 µg/min, un décimo de lo pensado, y la PA de Begoña no subiría.' },
+      { t: 'A 60 mL/h: 600 µg/h entre 10 µg/mL.', ok: true },
+      { t: 'A 600 mL/h: los µg por hora, en mL.', porque: 'Falta dividir por la concentración: 600 mL/h serían 100 µg/min, diez veces el máximo de 15 (p. 67). Begoña haría taquiarritmias y una isquemia.' }],
+    explicacion: 'En el shock anafiláctico, adrenalina IV a 5-15 µg/min, con la dilución 1:100.000 (10 µg/mL); puede ir precedida de un bolo de 10 µg, repetible, para mantener la PAM ≥65 (Tabla 17.5; p. 67).', fuente: C.t175, fuente2: C.anaShock },
+  { num: 'Paso 4', estado: 'betabloqueo', ajustes: { adrenalina: 10, bisoprolol: 1, glucagon: 0 }, predice: true, dia: 'Minuto 30 · el giro',
+    paciente: [['Adrenalina', '10 µg/min IV', 1], ['PA', '72/40 mmHg; FC 84 lpm', 1], ['En su hoja', 'bisoprolol, para la HTA', 1]],
+    enunciado: 'No responde a la adrenalina ni al volumen, y la FC no pasa de 84. En su hoja de tratamiento aparece el bisoprolol. <b>¿Qué le das?</b>',
+    opciones: [
+      { t: 'Vasopresina, otra cerradura distinta del α y el β.', porque: 'La vasopresina no se ha evaluado en el shock anafiláctico (p. 67). Y lo que falla aquí es el β tapado, que deja a la adrenalina sin efecto en el mastocito (p. 66).' },
+      { t: 'Subir la adrenalina hasta 30 µg/min.', porque: 'Con el β tapado por el bisoprolol, la respuesta a la adrenalina se atenúa o desaparece (p. 66). Le darías el doble del máximo de 15 µg/min (p. 67) sin que la llave gire.' },
+      { t: 'Glucagón 1-5 mg IV en 5 min y 5-15 µg/min, de lado.', ok: true },
+      { t: 'Metilprednisolona IV, por si es una reacción bifásica.', porque: 'Los corticoides no previenen la recurrencia ni la frenan (p. 66). Begoña seguiría hipotensa.' }],
+    explicacion: 'El betabloqueante atenúa o anula la respuesta a la adrenalina; en la anafilaxia refractaria con β-bloqueo, el glucagón puede devolverla: 1-5 mg IV lento (5 min) y 5-15 µg/min. Da vómitos: si está obnubilada, de lado (p. 66-67).', fuente: C.anaGluc, fuente2: C.glucMec,
+    tocar: { txt: 'Compruébalo: pon el glucagón', k: 'glucagon' } },
+  { num: 'Paso 5', tipo: 'error', sinModelo: true, dia: 'Hora 1 · el plan del residente',
+    paciente: [['Glucagón', 'en perfusión; ya responde', 1], ['PA', '96/58 mmHg', 1]],
+    enunciado: 'El R1 escribe el plan para la noche. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
+    frases: [
+      { t: 'Hidrocortisona IV cada 6 h para cortar la reacción.', mal: true, buena: 'Los corticoides no tienen papel en el manejo agudo: no revierten, no frenan ni evitan la reacción (p. 66).', cita: C.anaSeg },
+      { t: 'Difenhidramina y ranitidina, después de la adrenalina.', cita: C.anaSeg },
+      { t: 'Si aparece estridor, adrenalina nebulizada (2,5 mg).', cita: C.t175 },
+      { t: 'Si vuelve a caer la PA, vasopresina como segundo vasopresor.', mal: true, buena: 'Si sigue hipotensa y ya lleva glucagón, el segundo vasopresor es la noradrenalina o la fenilefrina: la vasopresina no se ha evaluado en el shock anafiláctico (p. 67).', cita: C.anaShock }],
+    explicacion: 'Dos errores. Los antihistamínicos alivian síntomas y van después de la adrenalina; la adrenalina nebulizada para el edema de laringe está en la Tabla 17.5, aunque su eficacia no está clara.', fuente: C.anaSeg },
+], llevas: [
+  'Adrenalina IM en el muslo primero: es la única que para la reacción; nada la sustituye (p. 65-66).',
+  'Si toma un betabloqueante y no responde: glucagón 1-5 mg en 5 min y 5-15 µg/min, de lado (p. 66).',
+  'Volumen a manos llenas (fuga del 35 %) y adrenalina IV a 5-15 µg/min: 10 µg/mL son 60 mL/h para 10 µg/min (p. 67).',
+], vuelta: C.anaGluc };
 function tapar(si) { tapado = si; $('tapa1').hidden = !si; $('tapa2').hidden = !si; }
-function pintarDockEst() {
-  $('dock-pasos').innerHTML = MUESTRA.map((_, i) => `<i class="${i < paso ? (result[i] ? 'on' : 'mal') : ''}${i === paso ? ' aqui' : ''}"></i>`).join('');
-  $('dock-est-izq').textContent = paso < MUESTRA.length ? `Pregunta ${paso + 1} de ${MUESTRA.length}` : 'Hecho';
-  $('dock-est-der').textContent = paso < MUESTRA.length ? GRUPO[MUESTRA[paso].grupo] : `${result.filter(Boolean).length} de ${MUESTRA.length} bien`;
-  medirDock();
-}
 function verModelo(si) { $('fig1').hidden = !si; $('monitor').hidden = !si; $('zona-lupa').hidden = !si; }
-function pintarPaso() {
-  pintarDockEst();
-  const cont = $('preg');
-  if (paso >= MUESTRA.length) {
-    tapar(false); verModelo(true); actualizar();
-    cont.innerHTML = `<h2>Hasta aquí la muestra</h2><p class="para">En la app, el receptor vivo tendrá la guía socrática entera, el examen y el caso de Paulino hasta el día 3, con el modelo en el punto de cada pregunta.</p><div class="fila"><button class="b" type="button" data-acc="otra">Otra vez</button></div>`;
-    return;
-  }
-  const q = MUESTRA[paso];
-  verModelo(!q.sinModelo);
-  if (q.estado) { ponerEstado(q.estado, true); Object.assign(ST.f, q.ajustes || {}); }
-  tapar(!!q.predice);
-  if (!q.sinModelo) { actualizar(); llenarEstatico(); }
-  let h = '';
-  if (q.paciente) h += `<p class="dia">${q.dia}</p><dl class="paciente">${q.paciente.map(([k, v, n]) => `<dt>${k}</dt><dd${n ? ' class="cambia"' : ''}>${v}</dd>`).join('')}</dl>`;
-  h += `<div class="cab-preg"><span class="num">${q.num}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}</span></div>`;
-  h += `<p class="pregunta">${q.enunciado}</p><div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div><div id="q-res"></div>`;
-  cont.innerHTML = h; cont.classList.remove('entra'); void cont.offsetWidth; cont.classList.add('entra');
-}
 function subirBomba(k, de, a, alFin) {
   if (REDUCIR) { ST.f[k] = a; actualizar(); pintarDock(); alFin(); return; }
   let v = de; const pasoB = a > de ? Math.max(1, Math.round((a - de) / 20)) : 1;
   const t = setInterval(() => { v = Math.min(a, v + pasoB); ST.f[k] = v; actualizar(); if (v >= a) { clearInterval(t); alFin(); } }, 140);
 }
-$('preg').addEventListener('click', ev => {
-  const q = MUESTRA[paso], a = ev.target.closest('[data-acc]')?.dataset.acc;
-  if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
-  if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
-  if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
-  if (a === 'tocar') {
-    const fila = ev.target.closest('.fila'), T = q.tocar;
-    const en = x => efecto({ ...ST, f: { ...ST.f, [T.k]: x } });
-    fila.innerHTML = '<span class="para">Moviendo la bomba…</span>';
+// La muestra de la Mayéutica: la pieza común comun/muestra-mayeutica.js (recorrido, «otra vez lo que fallaste» y el caso)
+const mayeutica = crearMuestra({
+  cont: $('preg'), dock: { pasos: $('dock-pasos'), izq: $('dock-est-izq'), der: $('dock-est-der') }, medir: () => medirDock(),
+  recorrido: PREG_RECORRIDO, caso: { ...CASO, modelo: { txt: 'Volver al receptor de Begoña (β tapado y glucagón)', ir: () => { setModo('explorar'); ponerEstado('betabloqueo'); ST.f.glucagon = 1; actualizar(); } } },
+  grupos: { caso: 'El caso de Begoña' }, cita, chip,
+  preparar: (q) => {
+    if (q.tipo === 'aviso') return;
+    verModelo(!q.sinModelo);
+    if (q.estado) { ponerEstado(q.estado, true); Object.assign(ST.f, q.ajustes || {}); }
+    tapar(!!q.predice && !q.sinModelo);
+    if (!q.sinModelo) { actualizar(); llenarEstatico(); }
+  },
+  destapar: (q) => { tapar(false); if (q && !q.sinModelo) actualizar(); if (!q) verModelo(true); },
+  tocar: (q, hecho) => {
+    const T = q.tocar, en = (x) => efecto({ ...ST, f: { ...ST.f, [T.k]: x } });
     $('monitor').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' });
+    if (T.k === 'glucagon') {
+      const [r0, r1] = [en(0), en(1)]; ST.f.glucagon = 1; actualizar(); pintarDock();
+      return hecho(`con el glucagón, la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la FC de ${Math.round(r0.fc)} a ${Math.round(r1.fc)}: entra por su propia cerradura, aunque el β siga tapado. ${org('cifras: ilustrativo', true)}`);
+    }
     subirBomba(T.k, T.de, T.a, () => {
       let txt;
       if (T.k === 'na') { const [r5, r10, r25] = [en(5), en(10), en(25)];
         txt = `de 5 a 10 µg/min el IC pasa de ${coma(r5.ic, 1)} a ${coma(r10.ic, 1)} y la IRVS apenas, de ${coma(r5.irvs, 1)} a ${coma(r10.irvs, 1)}; de 10 a 25 la IRVS sube a ${coma(r25.irvs, 1)} y el IC ya no sube (${coma(r25.ic, 1)}). Mira el anillo y el miocito de la lámina 1.`; }
       else { const [r0, r1] = [en(T.de), en(T.a)]; txt = `la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la FC baja de ${Math.round(r0.fc)} a ${Math.round(r1.fc)}, sin una sola llave en el β₁ del metrónomo.`; }
-      fila.outerHTML = `<p class="para"><span class="ok">✓ Mira el monitor y la lámina:</span> ${txt} ${org('cifras: ilustrativo', true)}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`;
+      hecho(`${txt} ${org('cifras: ilustrativo', true)}`);
     });
-    return;
-  }
-  const op = ev.target.closest('[data-op]');
-  if (op && !op.disabled) {
-    const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
-    document.querySelectorAll('#ops button').forEach(b => { b.disabled = true; }); op.classList.add(o.ok ? 'elegida-bien' : 'elegida-mal');
-    tapar(false); if (!q.sinModelo) actualizar();
-    $('q-res').innerHTML = `<div class="respuesta entra"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion} ${chip(q.fuente)}</p>${cita(q.fuente)}${q.fuente2 ? cita(q.fuente2) : ''}${q.sigue ? `<p class="para">${q.sigue}</p>` : ''}
-      <div class="fila">${q.tocar ? `<button class="b prim" type="button" data-acc="tocar">${q.tocar.txt}</button>` : `<button class="b prim" type="button" data-acc="sig">${paso === MUESTRA.length - 1 ? 'Terminar la muestra' : 'Siguiente →'}</button>`}</div></div>`;
-    pintarDockEst();
-  }
+  },
 });
 /* ============================================================
    11. Modos y arranque
@@ -2251,7 +2267,7 @@ function setModo(m) {
   $('frase').hidden = m !== 'explorar'; $('detalle-fila').hidden = true;
   verModelo(true); tapar(false);
   if (m === 'explorar') ponerEstado('na-baja');
-  if (m === 'preguntas') { paso = 0; result.length = 0; pintarPaso(); }
+  if (m === 'preguntas') mayeutica.empezar();
   medirDock();
 }
 $('modo-explorar').onclick = () => setModo('explorar');

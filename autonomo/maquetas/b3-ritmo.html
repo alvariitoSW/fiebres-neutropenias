@@ -295,6 +295,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 <div class="toast" id="toast" role="status" hidden></div>
 
 <script type="module">
+import { crearMuestra } from './comun/muestra-mayeutica.js';
 // Las piezas comunes (autonomo/maquetas/comun/): el monitor, el grabado isométrico y la bomba de jeringa
 import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from './comun/monitor.js';
 import * as I from './comun/dibujo-iso.js';
@@ -737,6 +738,9 @@ const C = {
   digo: cf('mc-fa-frecuencia', 'mc-tabla-19-1', 'Digoxina', 25),
   final: cf('mc-fa-frecuencia', 'mc-fa-punto-final', 'Punto final del control', 25),
   cv: cf('mc-fa-cardioversion', 'mc-cardioversion', 'Cardioversión eléctrica', 25),
+  cha: cf('mc-fa-cardioversion', 'mc-tabla-19-2', 'Tabla 19.2', 26),
+  valv: cf('mc-fa-cardioversion', 'mc-fa-valvular', 'FA valvular', '26-27'),
+  warf: cf('mc-fa-cardioversion', 'mc-tabla-19-3', 'Warfarina y ACOD', 27),
   wpw: cf('mc-fa-cardioversion', 'mc-wpw', 'Síndrome de WPW', '27-28'),
   tam: cf('mc-otras-taqui', 'mc-tam', 'Taquicardia auricular multifocal', 28),
   psvt: cf('mc-otras-taqui', 'mc-psvt', 'Mecanismo de la reentrada', 29),
@@ -1070,7 +1074,7 @@ const CRECE = [
 ];
 
 // ---------- Mayéutica (muestra): primero predices, luego compruebas ----------
-const MUESTRA = [
+const RECORRIDO = [
   { grupo: 'guia', num: 'G1', predice: true, estado: 'nodal',
     enunciado: 'La onda da vueltas dentro del nodo AV. Vas a poner 6 mg de adenosina. Antes de mirar: <b>¿qué verás en la tira mientras actúa?</b>',
     opciones: [
@@ -1104,7 +1108,11 @@ const MUESTRA = [
       { t: 'Adrenalina 1 mg cada 3-5 min, y compresiones.', ok: true },
       { t: 'Lidocaína 1-1,5 mg/kg IV, que funciona mejor que la amiodarona.', porque: 'La lidocaína es la alternativa si no hay amiodarona, y también va tras el 3.er choque (p. 59). El libro no dice que funcione mejor; ahora toca la adrenalina.' }],
     explicacion: 'Si hace falta un 2.º choque, empieza la adrenalina: 1 mg IV o IO cada 3-5 min. Tras cada choque, 2 min de compresiones antes de mirar el ritmo. Si hace falta un 3.º, amiodarona 300 mg (p. 59).', fuente: C.algoritmo },
-  { grupo: 'caso', num: 'Paso 1', estado: 'fa', fcFA: 148, dia: 'Día 2 de la lobectomía · tarde',
+];
+// El caso de Teodoro (C2 de la cobertura del bloque): evoluciona del día 2 al día 3, con el giro de la estenosis mitral.
+// Las cifras del paciente son del caso; las conductas, dosis y umbrales, de la ficha (Marino, cap. 19).
+const CASO = { titulo: 'La lobectomía (Teodoro)', pasos: [
+  { num: 'Paso 1', estado: 'fa', fcFA: 148, dia: 'Día 2 de la lobectomía · tarde',
     paciente: [['Paciente', 'Teodoro, 74 años, 78 kg'], ['Antecedentes', 'HTA, diabetes'], ['Motivo', 'lobectomía pulmonar hace 2 días'], ['Monitor', '148 lpm', 1], ['Síntomas', 'palpitaciones', 1]],
     enunciado: 'Mira la tira de Teodoro. <b>¿Qué ritmo es?</b>',
     opciones: [
@@ -1113,9 +1121,56 @@ const MUESTRA = [
       { t: 'Reentrada nodal: QRS estrecho sin P visibles.', porque: 'La reentrada nodal es regular (p. 19, 29) y este RR es irregular. Si la tratas como reentrada, los fármacos y las dosis no serían los de la FA (Tabla 19.1) y su frecuencia seguiría en 148.' },
       { t: 'Fibrilación auricular: RR irregular y ninguna P.', ok: true }],
     explicacion: 'QRS estrecho e irregular, sin P y con ondas de fibrilación: FA (p. 20). Tras la cirugía torácica aparece hasta en el 45 % de los casos, casi siempre en los primeros 5 días (p. 21).', fuente: C.irregular,
-    sigue: 'En la app, el caso sigue: PA 108/66 y 78 kg. ¿Qué fármaco y cuánto?' },
-];
-const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso' };
+  },
+  { num: 'Paso 2', estado: 'fa', fcFA: 148, dia: 'Día 2 · tarde, 5 min después',
+    paciente: [['PA', '108/66 mmHg', 1], ['Peso', '78 kg', 1]],
+    enunciado: 'Teodoro tolera la PA. Quieres frenar la frecuencia. <b>¿Qué le das y cuánto, para sus 78 kg?</b>',
+    opciones: [
+      { t: 'Diltiazem 78 mg IV: 1 mg/kg en 2 min y luego 5-15 mg/h.', porque: 'La dosis es 0,25 mg/kg (Tabla 19.1): con 1 mg/kg le darías cuatro veces más. El diltiazem ya da hipotensión en el 20-30 % a la dosis buena (p. 23); a esta, Teodoro se hundiría.' },
+      { t: 'Diltiazem ≈ 20 mg IV en 2 min (0,25 mg/kg) y 5-15 mg/h.', ok: true },
+      { t: 'Digoxina 0,25 mg IV cada 2 h hasta 1,5 mg: no baja la PA.', porque: 'La digoxina tarda: casi nada en la primera hora y a las 6 h aún no baja de 100 lpm (Fig. 19.5); sola no sirve para frenar deprisa (p. 25). Teodoro seguiría horas a 148.' },
+      { t: 'Cardioversión sincronizada a 100 J: es lo más rápido.', porque: 'La cardioversión se reserva para el paciente inestable (p. 25), y Teodoro tolera 108/66. Además exige antes una eco para buscar trombos en la aurícula (p. 25).' }],
+    explicacion: 'El diltiazem es el más usado para frenar deprisa la FA: 0,25 mg/kg IV en 2 min (0,25 × 78 ≈ 20 mg) y después 5-15 mg/h (Tabla 19.1).', fuente: C.t191, fuente2: C.dilt },
+  { num: 'Paso 3', estado: 'fa', fcFA: 118, dia: 'Día 2 · 40 min después · el giro',
+    paciente: [['PA', '84/50 mmHg', 1], ['Monitor', 'FA a 118 lpm', 1], ['Diltiazem', 'en perfusión', 1]],
+    enunciado: 'La frecuencia baja, pero la PA cae a 84/50. <b>¿Qué haces ahora?</b>',
+    opciones: [
+      { t: 'Otro bolo de diltiazem: la FC aún no baja de 100.', porque: 'La hipotensión es la complicación que limita el diltiazem: aparece en el 20-30 % (p. 23). Otro bolo bajaría aún más la PA de Teodoro.' },
+      { t: 'Esmolol, que se ajusta minuto a minuto.', porque: 'Los betabloqueantes se parecen al diltiazem en el riesgo de hipotensión y en el efecto inotrópico negativo (Tabla 19.1). Cambiarías un hipotensor por otro.' },
+      { t: 'Paro el diltiazem y paso a amiodarona 150 mg en 10 min.', ok: true },
+      { t: 'Digoxina sola, que no baja la PA.', porque: 'Sola no sirve para el control rápido: a las 6 h aún no baja de 100 lpm (Fig. 19.5, p. 25). Se usa como añadido al diltiazem o al betabloqueante con IC o PA lábil (p. 25).' }],
+    explicacion: 'La amiodarona es la alternativa en quien no tolera el diltiazem o los betabloqueantes: deprime menos el corazón y da mucha menos hipotensión que el diltiazem. 150 mg IV en 10 min, repetibles, y después la perfusión (Tabla 19.1; p. 24-25).', fuente: C.amio, fuente2: C.t191 },
+  { num: 'Paso 4', tipo: 'destapa', estado: 'fa', fcFA: 104, dia: 'Día 2 · noche',
+    paciente: [['Amiodarona', 'en perfusión', 1], ['Monitor', 'FA a 104 lpm', 1]],
+    enunciado: 'El adjunto te pregunta: <b>«¿Hasta dónde vas a bajar la frecuencia de Teodoro, y por qué?»</b>',
+    puntos: [
+      { t: 'No hay acuerdo en la cifra: los estudios han usado de <span class="hl-azul">80 a 110 lpm</span> como punto final.', c: C.final },
+      { t: 'Un punto final más fisiológico: que <span class="hl-verde">desaparezca el déficit de pulso</span> (o que la sistólica deje de variar latido a latido), porque dos latidos muy juntos no llenan el ventrículo (Fig. 19.4).', c: C.f194 }],
+    explicacion: 'El libro propone mirar el pulso, no solo la cifra del monitor (p. 22, 25).', fuente: C.final },
+  { num: 'Paso 5', estado: 'fa', fcFA: 104, llenadoMalo: true, dia: 'Día 3 · la eco',
+    paciente: [['Ritmo', 'sigue en FA', 1], ['Eco', 'estenosis mitral significativa', 1]],
+    enunciado: 'Sigue en FA. Antes de pensar en el CHA₂DS₂-VASc (74 años, HTA, diabetes: 3 puntos), la eco enseña una estenosis mitral significativa. <b>¿Qué cambia?</b>',
+    opciones: [
+      { t: 'Nada: con 3 puntos, anticoagulo con un ACOD, que sangra menos.', porque: 'La escala no vale para la FA valvular (p. 26) y la preferencia por los ACOD no llega a la FA con estenosis mitral significativa: ahí la warfarina es superior (p. 27). Teodoro quedaría peor protegido del ictus.' },
+      { t: 'Es una FA valvular: siempre se anticoagula, y con warfarina.', ok: true },
+      { t: 'Solo antiagregar, porque con la estenosis la escala no vale.', porque: 'Que la escala no valga no quita la anticoagulación: la FA valvular la necesita siempre (p. 26). Antiagregado, Teodoro se quedaría sin la protección que pide la fuente.' },
+      { t: 'Esperar a ver si sale de la FA antes de anticoagular.', porque: 'La FA valvular siempre requiere anticoagulación (p. 26). Esperar deja a Teodoro expuesto al trombo de la aurícula izquierda.' }],
+    explicacion: 'La FA con estenosis mitral o con una prótesis es valvular: la escala de la Tabla 19.2 no se aplica y siempre se anticoagula; la warfarina (INR 2-3) es superior a los ACOD (p. 26-27). Y explica por qué se hundió: con el llenado ya limitado por la estenosis, una FC rápida baja el volumen latido (p. 21-22).', fuente: C.valv, fuente2: C.faCons },
+  { num: 'Paso 6', tipo: 'error', estado: 'fa', fcFA: 96, llenadoMalo: true, dia: 'Día 3 · el plan del residente',
+    paciente: [['Por la noche', 'se cayó al ir al baño, sin lesiones', 1]],
+    enunciado: 'El R1 escribe el plan del alta a planta. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
+    frases: [
+      { t: 'Se ha caído esta noche: no lo anticoagulo.', mal: true, buena: 'Una historia de caídas no contraindica la anticoagulación en la FA (p. 26).', cita: C.cha },
+      { t: 'Warfarina, ajustada a un INR de 2-3.', cita: C.warf },
+      { t: 'Ojo: la amiodarona frena el metabolismo de la warfarina.', cita: C.amio },
+      { t: 'Mejor un ACOD, que no necesita controles.', mal: true, buena: 'En la FA valvular (estenosis mitral significativa) la warfarina es superior a los ACOD (p. 27).', cita: C.warf }],
+    explicacion: 'Dos errores: las caídas no contraindican la anticoagulación, y con una estenosis mitral significativa la warfarina va antes que los ACOD.', fuente: C.warf },
+], llevas: [
+  'Diltiazem 0,25 mg/kg en 2 min y 5-15 mg/h; si cae la PA (20-30 %), amiodarona 150 mg en 10 min (p. 22-25).',
+  'El punto final más fisiológico: que desaparezca el déficit de pulso (p. 22, 25).',
+  'FA con estenosis mitral = valvular: siempre anticoagular, y con warfarina, no con un ACOD (p. 26-27).',
+], vuelta: C.final };
+
 /* ============================================================
    EL DIBUJO. Grabado anatómico: crema sobre fondo oscuro, muchas piezas pequeñas, un solo acento iluminado (el frente
    de onda). Nada se mueve «porque queda bien»: la tinta, los torniquetes, la aguja y los aparatos leen el MOTOR.
@@ -2167,46 +2222,20 @@ function grafica214() {
   return `<div class="grafica"><p>La ETCO₂ en 20 min de RCP: si no pasa de 10-15 mmHg, el pulso no suele volver ${org('lectura de la Fig. 21.4 · ficha · p. 63')}</p>${s}</div>`;
 }
 
-/* ---------- Mayéutica (muestra) ---------- */
-let paso = 0; const result = [];
-function pintarDockEst() {
-  $('dock-pasos').innerHTML = MUESTRA.map((_, i) => `<i class="${i < paso ? (result[i] ? 'on' : 'mal') : ''}${i === paso ? ' aqui' : ''}"></i>`).join('');
-  $('dock-est-izq').textContent = paso < MUESTRA.length ? `Pregunta ${paso + 1} de ${MUESTRA.length}` : 'Hecho';
-  $('dock-est-der').textContent = paso < MUESTRA.length ? GRUPO[MUESTRA[paso].grupo] : `${result.filter(Boolean).length} de ${MUESTRA.length} bien`;
-  medirDock();
-}
+/* ---------- Mayéutica (muestra): la pieza común comun/muestra-mayeutica.js ---------- */
 function taparTodo(si, tira) {
   tapado = si; taparTira = !!tira;
   const tp = $('tapa-tira'), tt = $('tapa-tira-txt'); if (tp) { tp.toggleAttribute('hidden', !taparTira); tt.toggleAttribute('hidden', !taparTira); }
   pintarCifras(); pintarGraficas();
 }
-function pintarPaso() {
-  pintarDockEst(); const cont = $('preg');
-  if (paso >= MUESTRA.length) { taparTodo(false); cont.innerHTML = `<h2>Hasta aquí la muestra</h2><p class="para">En la app, cada ficha tendrá su recorrido entero (Mira, Juega, Piensa, Examínate y el caso), con el corazón en el ritmo de cada pregunta.</p><div class="fila"><button class="b" type="button" data-acc="otra">Otra vez</button></div>`; return; }
-  const q = MUESTRA[paso];
-  ponerEstado(q.estado, q.wpwFa ? { wpwFa: true } : q.fcFA ? { fcFA: q.fcFA } : {});
-  taparTodo(true, q.estado === 'wpw' && !q.wpwFa);
-  let h = '';
-  if (q.paciente) h += `<p class="dia">${q.dia}</p><dl class="paciente">${q.paciente.map(([k, v, n]) => `<dt>${k}</dt><dd${n ? ' class="cambia"' : ''}>${v}</dd>`).join('')}</dl>`;
-  h += `<div class="cab-preg"><span class="num">${q.num}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}</span></div>`;
-  h += `<p class="pregunta">${q.enunciado}</p><div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:6px"><button class="b prim" type="button" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div><div id="q-res"></div>`;
-  cont.innerHTML = h; cont.classList.remove('entra'); void cont.offsetWidth; cont.classList.add('entra');
-}
-$('preg').addEventListener('click', ev => {
-  const q = MUESTRA[paso], a = ev.target.closest('[data-acc]')?.dataset.acc;
-  if (a === 'otra') { paso = 0; result.length = 0; pintarPaso(); return; }
-  if (a === 'ops') { const o = $('ops'); o.innerHTML = q.opciones.map((op, i) => `<button class="b" type="button" data-op="${i}">${op.t}</button>`).join(''); o.hidden = false; $('fmt').remove(); return; }
-  if (a === 'sig') { paso++; pintarPaso(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
-  if (a === 'tocar') { accion('ade6'); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); ev.target.closest('.fila').outerHTML = `<p class="para"><span class="ok">✓ Mira:</span> ${q.tocar.confirma}</p><div class="fila"><button class="b prim" type="button" data-acc="sig">Siguiente →</button></div>`; return; }
-  const op = ev.target.closest('[data-op]');
-  if (op && !op.disabled) {
-    const o = q.opciones[op.dataset.op]; result[paso] = !!o.ok;
-    document.querySelectorAll('#ops button').forEach(b => { b.disabled = true; }); op.classList.add(o.ok ? 'elegida-bien' : 'elegida-mal');
-    taparTodo(false);
-    $('q-res').innerHTML = `<div class="respuesta entra"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explicacion}</p>${cita(q.fuente)}${q.sigue ? `<p class="para">${q.sigue}</p>` : ''}
-      <div class="fila">${q.tocar ? `<button class="b prim" type="button" data-acc="tocar">${q.tocar.txt}</button>` : `<button class="b prim" type="button" data-acc="sig">${paso === MUESTRA.length - 1 ? 'Terminar la muestra' : 'Siguiente →'}</button>`}</div></div>`;
-    pintarDockEst();
-  }
+const mayeutica = crearMuestra({
+  cont: $('preg'), dock: { pasos: $('dock-pasos'), izq: $('dock-est-izq'), der: $('dock-est-der') }, medir: () => medirDock(),
+  recorrido: RECORRIDO, caso: { ...CASO, modelo: { txt: 'Volver al corazón de Teodoro (FA con estenosis mitral)', ir: () => { setModo('explorar'); ponerEstado('fa', { fcFA: 104, llenadoMalo: true }); } } },
+  grupos: { caso: 'El caso de Teodoro' }, cita,
+  // el corazón en el ritmo de la pregunta; las cifras, tapadas (en el caso, las del paciente van en su ficha)
+  preparar: (q) => { if (q.tipo === 'aviso' || !q.estado) return; ponerEstado(q.estado, q.wpwFa ? { wpwFa: true } : q.fcFA ? { fcFA: q.fcFA, llenadoMalo: !!q.llenadoMalo } : {}); taparTodo(true, q.estado === 'wpw' && !q.wpwFa && q.grupo !== 'caso'); },
+  destapar: (q) => { if (!q || q.grupo !== 'caso') taparTodo(false); else taparTodo(true, false); },
+  tocar: (q, hecho) => { accion(q.tocar.accion || 'ade6'); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); hecho(q.tocar.confirma); },
 });
 function setModo(m) {
   if (guia) cerrarGuia(); modo = m; borrarSenal();
@@ -2216,7 +2245,7 @@ function setModo(m) {
   $('frase').hidden = m !== 'explorar'; $('peligro').hidden = true;
   taparTodo(false);
   if (m === 'explorar') { S.medir = null; ponerEstado('sinusal'); }
-  if (m === 'preguntas') { $('rtm-aparatos').hidden = true; $('rtm-escena').before($('vista-preguntas')); paso = 0; result.length = 0; pintarPaso(); }
+  if (m === 'preguntas') { $('rtm-aparatos').hidden = true; $('rtm-escena').before($('vista-preguntas')); mayeutica.empezar(); }
   medirDock();
 }
 

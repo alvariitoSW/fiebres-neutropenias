@@ -41,7 +41,7 @@ function gotas(vEdema) {
 }
 // la arteriola de cerca: adventicia, media con sus células musculares, endotelio y la luz con dos hematíes
 function arteriola(rLuz) {
-  const cx = 318, cy = 46, R = 25, rm = cl(rLuz + 2, 5, 19), n = 14;
+  const cx = 318, cy = 40, R = 25, rm = cl(rLuz + 2, 5, 19), n = 14;
   let cel = '';
   const rMed = (R - 3 + rm) / 2, esp = Math.max(1.6, (R - 3 - rm) / 2);
   for (let i = 0; i < n; i++) { const a = 2 * Math.PI * i / n, x = cx + rMed * Math.cos(a), y = cy + rMed * Math.sin(a); cel += `<ellipse class="art-celula" cx="${f1(x)}" cy="${f1(y)}" rx="${f1(Math.PI * rMed / n * 0.95)}" ry="${f1(esp * 0.9)}" transform="rotate(${f1(a * 180 / Math.PI + 90)} ${f1(x)} ${f1(y)})"/>`; }
@@ -56,7 +56,7 @@ export function montarCorazon(svg) {
   svg.innerHTML = `<g class="grabado"><g id="cor-pulmon">${pulmones()}</g><g id="cor-gotas"></g>
     <g id="cor-corazon" transform="translate(70 30) scale(.86)"></g>
     <g id="cor-arteriola"></g>
-    <text x="318" y="86" class="rot-g" text-anchor="middle">arteriola</text><text x="318" y="96" class="rot-g dim" text-anchor="middle">(la resistencia)</text>
+    <text x="318" y="80" class="rot-g" text-anchor="middle">arteriola</text><text x="318" y="90" class="rot-g dim" text-anchor="middle">(la resistencia)</text>
     <text x="80" y="262" class="rot-g">VCI</text></g>`;
   const c = crearCorazonCorte(svg.querySelector('#cor-corazon'), { pre: 'cor', vci: 160, aorta: 'corta' });
   const gg = svg.querySelector('#cor-gotas'), ga = svg.querySelector('#cor-arteriola');
@@ -80,8 +80,8 @@ export function montarCorazon(svg) {
 // así el catéter, la cánula y la sangre recorren los vasos dibujados y acaban donde dice la fuente.
 const COR_T = { x: 137, y: 46, k: 0.36 };
 export const aFrente = ([x, y]) => [COR_T.x + x * COR_T.k, COR_T.y + y * COR_T.k];
-const IL_D = suave2([[188, 204], [178, 218], [166, 236], [158, 254], [154, 272]], 6), IL_I = suave2([[188, 204], [198, 218], [210, 236], [218, 254], [222, 272]], 6);
-const VENA_D = suave2([[144, 272], [148, 254], [158, 236], [168, 220], [176, 206]], 6), VENA_I = suave2([[232, 272], [228, 254], [220, 236], [208, 220], [182, 206]], 6);
+const IL_D = suave2([[188, 204], [178, 218], [166, 236], [158, 254], [154, 270]], 6), IL_I = suave2([[188, 204], [198, 218], [210, 236], [218, 254], [222, 270]], 6);
+const VENA_D = suave2([[144, 270], [148, 254], [158, 236], [168, 220], [176, 206]], 6), VENA_I = suave2([[232, 270], [228, 254], [220, 236], [208, 220], [182, 206]], 6);
 const TRONCOS = [[[0, 0], [-4, -16], [-8, -30]], [[7, -2], [7, -18], [7, -30]], [[14, 0], [22, -14], [32, -24]]];
 export const RUTAS = {
   balon: { txt: 'Arteria femoral → ilíaca → aorta descendente; la punta, justo por debajo de la subclavia izquierda (p. 45).', art: true },
@@ -92,7 +92,7 @@ function torso() {
   // el contorno: cuello, hombros, brazos cortados, costados, cintura, caderas y muslos
   const piel = 'M160 0 C160 8 156 12 146 16 C120 22 92 24 74 34 C60 42 56 60 56 84 L54 128 M200 0 C200 8 204 12 214 16 C240 22 268 24 286 34 C300 42 304 60 304 84 L306 128'
     + ' M84 70 C88 110 90 150 100 182 C104 198 100 212 96 230 C92 248 96 262 100 270 M276 70 C272 110 270 150 260 182 C256 198 260 212 264 230 C268 248 264 262 260 270'
-    + ' M54 128 C60 130 68 128 74 124 M306 128 C300 130 292 128 286 124 M180 186 m-2 0 a2 2 0 1 0 4 0 a2 2 0 1 0 -4 0';
+    + ' M54 128 C60 130 68 128 74 124 M306 128 C300 130 292 128 286 124 M100 270 L260 270 M180 186 m-2 0 a2 2 0 1 0 4 0 a2 2 0 1 0 -4 0';
   const claviculas = 'M180 22 C164 22 140 26 108 30 C100 31 96 34 94 37 M180 22 C196 22 220 26 252 30 C260 31 264 34 266 37';
   let cost = '';
   for (let k = 0; k < 9; k++) {
@@ -111,6 +111,7 @@ function torso() {
     + `<path class="hueso" d="${pelvis}"/><path class="hueso-l" d="${agujeros}"/><circle cx="132" cy="250" r="8" class="hueso"/><circle cx="228" cy="250" r="8" class="hueso"/>`
     + `<path class="costilla" d="${cost}"/><path class="hueso" d="${esternon}"/><path class="clavicula" d="${claviculas}"/><path class="cartilago" d="${reborde}"/><path class="diafragma" d="${diafragma}"/>`;
 }
+const nudo = (p, w, cls) => `<path class="${cls}-pared" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w + 1.6)}" stroke-linecap="round"/><path class="${cls}" d="M${f1(p[0])} ${f1(p[1])}h.01" stroke-width="${f1(w)}" stroke-linecap="round"/>`;
 const tuboV = (pts, w, cls, cap = 'round') => `<path class="${cls}-pared" d="${P(pts)}" stroke-width="${f1(w + 1.6)}" stroke-linecap="${cap}"/><path class="${cls}" d="${P(pts)}" stroke-width="${f1(w)}" stroke-linecap="${cap}"/>`;
 function gotasFrente(vEdema) {
   const n = Math.min(30, Math.round((vEdema || 0) / 30)); let h = '';
@@ -119,22 +120,22 @@ function gotasFrente(vEdema) {
 }
 export function montarFrente(grupo, { pre = 'fr' } = {}) {
   grupo.innerHTML = `<g class="fr-torso">${torso()}</g><g class="fr-venas"></g><g class="fr-arterias"></g>
-    <g class="fr-cor" transform="translate(${COR_T.x} ${COR_T.y}) scale(${COR_T.k})"></g>`;
+    <g class="fr-rios"></g><g class="fr-cor" transform="translate(${COR_T.x} ${COR_T.y}) scale(${COR_T.k})"></g>`;
   const c = crearCorazonCorte(grupo.querySelector('.fr-cor'), { pre, rotulos: false, vci: 10, aorta: 'larga', saco: true });
   c.pintar({}, 1, true);
   const pu = c.puertos(), raiz = aFrente(pu.aorta), r = pu.aortaR * 2 * COR_T.k;   // la luz de la raíz, en el dibujo
-  const aorta = suave2([raiz, [raiz[0], raiz[1] - 10], [raiz[0] + 6, raiz[1] - 22], [raiz[0] + 20, raiz[1] - 26], [raiz[0] + 30, raiz[1] - 18], [raiz[0] + 32, raiz[1] - 2], [raiz[0] + 28, 80], [raiz[0] + 22, 120], [raiz[0] + 16, 160], [188, 204]], 8);
+  const aorta = suave2([raiz, [raiz[0], raiz[1] - 6], [raiz[0] + 6, raiz[1] - 14], [raiz[0] + 18, raiz[1] - 18], [raiz[0] + 28, raiz[1] - 12], [raiz[0] + 31, raiz[1] + 2], [raiz[0] + 28, 80], [raiz[0] + 22, 120], [raiz[0] + 16, 160], [188, 204]], 8);
   const cayado = aorta.reduce((a, p) => (p[1] < a[1] ? p : a));
   const troncos = TRONCOS.map((t) => suave2(t.map(([x, y]) => [cayado[0] - 9 + x, cayado[1] + 2 + y]), 5));
   const vciE = aFrente(pu.vciAbajo), vci = suave2([[176, 206], [172, 176], [168, 140], [vciE[0] + 4, vciE[1] + 12], vciE], 6);
-  grupo.querySelector('.fr-venas').innerHTML = tuboV(VENA_D, 4.4, 'vaso-v') + tuboV(VENA_I, 4.4, 'vaso-v') + tuboV(vci, pu.dVci * COR_T.k * 1.4, 'vaso-v', 'butt');
+  grupo.querySelector('.fr-venas').innerHTML = tuboV(VENA_D, 4.4, 'vaso-v', 'butt') + tuboV(VENA_I, 4.4, 'vaso-v', 'butt') + tuboV(vci, pu.dVci * COR_T.k * 1.4, 'vaso-v', 'butt') + nudo([176, 206], 5.4, 'vaso-v') + nudo([181, 206], 4.4, 'vaso-v');
   // renales (dos ramas cortas a cada lado) y la aorta, de la raíz a la bifurcación
   const ren = [[aorta[Math.round(aorta.length * 0.72)], -1], [aorta[Math.round(aorta.length * 0.74)], 1]].map(([p, l]) => suave2([p, [p[0] + l * 14, p[1] + 2]], 2));
   grupo.querySelector('.fr-arterias').innerHTML = troncos.map((t) => tuboV(t, 3.2, 'vaso-a')).join('') + ren.map((t) => tuboV(t, 2, 'vaso-a')).join('')
-    + tuboV(aorta, r, 'vaso-a', 'butt') + tuboV(IL_D, 4.6, 'vaso-a') + tuboV(IL_I, 4.6, 'vaso-a');
+    + tuboV(aorta, r, 'vaso-a', 'butt') + tuboV(IL_D, 4.6, 'vaso-a', 'butt') + tuboV(IL_I, 4.6, 'vaso-a', 'butt') + nudo([188, 204], 5.6, 'vaso-a');
   const subcl = troncos[2][0];
   return {
-    c, puertos: pu, aorta, IL_D, IL_I, VENA_D, VENA_I, vci, cayado, subcl,
+    c, puertos: pu, rios: grupo.querySelector('.fr-rios'), aorta, IL_D, IL_I, VENA_D, VENA_I, vci, cayado, subcl,
     vi: aFrente(pu.vi), valvAo: aFrente(pu.valvAo), vciEntrada: aFrente(pu.vciEntrada),
     pintar(cab, dt, quieto) {
       if (!cab?.m) return;

@@ -226,7 +226,7 @@ function coronarias(P) {
   const os = enEje(-10, 18.5);
   const cor = vasoCortado(P, curva2([os, [os[0] + 14, os[1] + 4], [os[0] + 30, os[1] - 4]], 4), () => 2.6, 1.2, { finales: [false, true] });
   const os2 = P.iso([...enEje(-12, -6).slice(0, 1), -6, enEje(-12, -6)[1]]);
-  return { svg: svgVaso(cor) + `<ellipse class="ostium" cx="${f1(os2[0])}" cy="${f1(os2[1])}" rx="3.4" ry="2.2"/>`, ruta: [enEje(-2, 10), os, [os[0] + 14, os[1] + 4], [os[0] + 30, os[1] - 4]] };
+  return { svg: svgVaso(cor), ruta: [enEje(-2, 10), os, [os[0] + 14, os[1] + 4], [os[0] + 30, os[1] - 4]] };
 }
 
 // =====================================================================================================================
@@ -236,10 +236,10 @@ const S_VALV = 50;                    // la cánula cruza el anillo 50 por encim
 const VUELTAS_POR_LMIN = 0.45;        // vueltas por segundo del dibujo por cada L/min: muy ralentizado (rpm reales: sin fuente)
 export function montarImpella(svg) {
   const az = 22, el = 24;
-  const caja = [[56, 0, 30], [236, 0, 30], [56, 0, 262], [236, 0, 262], [302, 44, 30], [302, 44, 130]];
+  const caja = [[56, 0, 30], [236, 0, 30], [56, 0, 262], [236, 0, 262], [330, 36, 52], [330, 36, 120]];
   const P = I.ajustar(caja, W, H, { pad: 2, az, el });
   const lz = new I.Lienzo('imp');
-  const A = centroAorta({ arcoHasta: 70 });
+  const A = centroAorta({ arcoHasta: 0, descHasta: 120 });   // la aorta entera: raíz, cayado y descendente (cortada abajo)
   const aorta = vasoCortado(P, A.pts, radioRaiz(largo2(A.pts)), 3.2, { finales: [false, true] });
   const tronco = vasoCortado(P, curva2([[A.cayado[0] + 54 * Math.cos(2.6), A.cayado[1] + 54 * Math.sin(2.6)], [A.cayado[0] + 48 * Math.cos(2.6) - 6, A.cayado[1] + 72]], 4), () => 6, 1.6, { finales: [false, true] });
   const ent = enEje(S_VALV);
@@ -261,18 +261,25 @@ export function montarImpella(svg) {
     return d;
   };
   const ventanas = ranuras(4, 13, R.ent + 0.02, 4, 0.4), huecos = ranuras(57.5, 67.5, R.jau + 0.02, 6, 0.1, 0.62);
-  const rutaCat = [pos(96), ...A.pts.filter((p, i) => i > 9).map(([x, z]) => [x - 2, 0, z]), [A.cayado[0] + 40 * Math.cos(1.1) + 6, 0, A.cayado[1] + 40 * Math.sin(1.1) + 8]];
+  const cons = consola(P, lz, { x: 282, y: 14, z: 56, w: 46, d: 22, h: 34, pre: 'imp-c', lineas: 3 });
+  // el catéter: por la luz de la aorta hasta su corte de abajo; sale y llega a la consola por su conector
+  const fin = A.pts[A.pts.length - 1], pc = cons.puertoIzq;
+  const rutaCat = [pos(96), ...A.pts.filter((p, i) => i > 9).map(([x, z]) => [x - 2, 0, z]), [fin[0] - 2, 0, fin[1] - 10], [fin[0] + 2, 4, fin[1] - 20], [pc[0] - 10, pc[1], pc[2] - 4], [pc[0] - 1.5, pc[1], pc[2]]];
+  const Mcon = I.marco([pc[0] - 2.4, pc[1], pc[2]], [1, 0, 0]);
+  const conector = I.torno([[0, 2.2], [2.4, 2.2], [2.6, 1.6]], Mcon, P, { pasos: 24 });
   const Tcat = I.tubo(rutaCat, 2.0, P);
   const pg = [];
   for (let k = 0; k <= 26; k++) { const t = k / 26, a = Math.PI * 0.2 + t * Math.PI * 1.75, r = 8.5 - 3.2 * t; pg.push([ent[0] + EJE[0] * 9 + r * Math.cos(a) - 6, 0.2, ent[1] + EJE[1] * 9 + r * Math.sin(a) - 2]); }
   const Tpig = I.tubo([pos(0), pos(-4), ...pg], 1.5, P);
-  const cons = consola(P, lz, { x: 244, y: 16, z: 34, w: 56, d: 26, h: 40, pre: 'imp-c', lineas: 3 });
+  
   const cor = coronarias(P);
 
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `<g class="iso">
     <g>${auriculaIzq(P)}</g>
+    <path class="miocardio" d="${caminoPlano(P, curva2([M2, enEje(0, -15), enEje(-10, -19.5), enEje(-20, -18.5), [136, 177], [133, 170]], 3), true)}"/>
     <g id="imp-vi"></g>
+    <path class="cav-luz" d="${caminoPlano(P, [M1, M2, enEje(0, -15), enEje(4, -9), enEje(6, -2), [137, 149.2]], true)}"/>
     ${svgVaso(tronco)}${svgVaso(aorta)}
     <g>${cor.svg}</g>
     <g id="imp-velos-detras"></g><g id="imp-mitral"></g>
@@ -287,7 +294,7 @@ export function montarImpella(svg) {
       ${lz.tubo(Tcat, { clase: 'p-cateter' })}
     </g>
     <g id="imp-rios"></g>
-    <g class="maquina">${cons.svg}</g>
+    <g class="maquina">${cons.svg}${lz.torno(conector, { clase: 'p-cateter', linea: 'mid' })}</g>
   </g>`;
   svg.querySelector('.iso').insertAdjacentHTML('afterbegin', lz.defsSvg());
   const rios = new Corrientes(svg.querySelector('#imp-rios'), 110), riosD = new Corrientes(svg.querySelector('#imp-rios-detras'), 40);
@@ -481,7 +488,7 @@ export function montarEcmo(svg) {
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `<g class="iso">
     <g class="grabado" id="ecm-frente" transform="translate(${FR.x} ${FR.y}) scale(${FR.k})"></g>
-    <g id="ecm-cuerpo" transform="translate(${FR.x} ${FR.y}) scale(${FR.k})"><g id="ecm-venteo"></g><g class="aparato" id="ecm-canulas"></g><g id="ecm-rios-cuerpo"></g></g>
+    <g id="ecm-cuerpo" transform="translate(${FR.x} ${FR.y}) scale(${FR.k})"><g id="ecm-venteo"></g><g class="aparato" id="ecm-canulas"></g></g>
     <g class="circuito" id="ecm-circuito"></g>
     <g class="maquina">${maq}</g>
     <g id="ecm-rios"></g>
@@ -511,11 +518,11 @@ export function montarEcmo(svg) {
   const LU = { x: 306, y: 60, r: 50 }, corG = aG(F.vi);
   g('ecm-lupa').innerHTML = `<path class="lupa-linea" d="M${f1(corG[0] + 16)} ${f1(corG[1] - 8)} L${f1(LU.x - LU.r * 0.92)} ${f1(LU.y + LU.r * 0.3)}"/><ellipse class="lupa-marca" cx="${f1(corG[0] - 4)}" cy="${f1(corG[1] - 6)}" rx="26" ry="30"/>`
     + `<clipPath id="ecm-lupa-clip"><circle cx="${LU.x}" cy="${LU.y}" r="${LU.r - 2}"/></clipPath><circle cx="${LU.x}" cy="${LU.y}" r="${LU.r + 2}" class="lupa-aro"/>`
-    + `<g clip-path="url(#ecm-lupa-clip)"><rect x="${LU.x - LU.r}" y="${LU.y - LU.r}" width="${2 * LU.r}" height="${2 * LU.r}" class="lupa-fondo"/><g class="grabado" id="ecm-corazon" transform="translate(${f1(LU.x - 128 * 0.42)} ${f1(LU.y - 118 * 0.42)}) scale(.42)"></g></g>`
+    + `<g clip-path="url(#ecm-lupa-clip)"><rect x="${LU.x - LU.r}" y="${LU.y - LU.r}" width="${2 * LU.r}" height="${2 * LU.r}" class="lupa-fondo"/><g class="grabado" id="ecm-corazon" transform="translate(${f1(LU.x - 132 * 0.38)} ${f1(LU.y - 136 * 0.38)}) scale(.38)"></g></g>`
     + `<text x="${LU.x}" y="${LU.y + LU.r + 13}" class="rot-g" text-anchor="middle">el corazón, de cerca</text>`;
-  const corLupa = crearCorazonCorte(g('ecm-corazon'), { pre: 'ecml', rotulos: true, vci: 40, aorta: 'corta', saco: true });
+  const corLupa = crearCorazonCorte(g('ecm-corazon'), { pre: 'ecml', rotulos: false, vci: 40, aorta: 'corta', saco: true });
   // --- la sangre: por el circuito, por la aorta al revés (desde la cánula arterial) y la que eyecta el VI
-  const rios = new Corrientes(g('ecm-rios'), 130), riosC = new Corrientes(g('ecm-rios-cuerpo'), 90);
+  const rios = new Corrientes(g('ecm-rios'), 130), riosC = new Corrientes(F.rios, 90);   // la sangre del cuerpo, por detrás del corazón
   rios.rio('ven', [...venosa.slice().reverse().map(aG), ...tVen], { dens: 3, clase: 'ven' });
   rios.rio('ven2', tPO, { dens: 6, clase: 'ven' });
   rios.rio('art', [...tOC, ...tArt], { dens: 4, clase: 'art' });

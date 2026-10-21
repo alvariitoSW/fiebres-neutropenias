@@ -207,7 +207,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     // ---- venas: VCS arriba, VCI abajo (su diámetro, de la PVC), dos pulmonares a la derecha
     const vcsA = enFraccion(adC, 0.42).p, vcsB = enFraccion(adC, 0.6).p;
     const vciA = enFraccion(adC, 0.84).p, vciB = enFraccion(adC, 0.96).p;
-    const pvs = [0.62, 0.78].map((t) => { const { p, i } = enFraccion(aiC, t); let n = normal(aiC, i); if (n[0] * (p[0] - 182) + n[1] * (p[1] - 98) < 0) n = [-n[0], -n[1]]; return { p, n }; });
+    const pvs = [0.83, 0.95].map((t) => { const { p, i } = enFraccion(aiC, t); let n = normal(aiC, i); if (n[0] * (p[0] - 182) + n[1] * (p[1] - 98) < 0) n = [-n[0], -n[1]]; const l = Math.hypot(n[0] + 1.2, n[1]); return { p, n: [(n[0] + 1.2) / l, n[1] / l] }; });
     return { solCamaras, sep, cav, viExt, sept, libre, vdExt, TS, TL, ad, ai, adC, aiC, adExt, aiExt, izq, der, aoLuz, paredIzq, paredDer, coapM, tipA, tipP, papAL, papPM, pv, pvC, tipTs, tipTa, cuspI, cuspD, saco, serosa, vcsA, vcsB, vciA, vciB, pvs, s, e, yTop, gVi };
   }
 
@@ -226,7 +226,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     const vciLuz = [...desplazar(vciPts, dv / 2), ...desplazar(vciPts, -dv / 2).reverse()];
     let det = `<path class="cc-pared-vena" d="${Pc(vciPared)}"/><path class="cc-sangre-v" d="${Pc(vciLuz)}"/><path class="cc-punteado" d="${Pc(vciLuz)}"/>`;
     for (const { p, n } of g.pvs) {
-      const q = [p[0] + n[0] * 34, p[1] + n[1] * 34 - 2], eje = suave2([mezcla(p, q, -0.1), q], 4), r = 6;
+      const q = [p[0] + n[0] * 28, p[1] + n[1] * 28], eje = suave2([mezcla(p, q, -0.1), q], 4), r = 6;
       const pared = [...desplazar(eje, r + 1.4), ...desplazar(eje, -r - 1.4).reverse()];
       det += `<path class="cc-pared-vaso" d="${Pc(pared)}"/><ellipse class="cc-corte" cx="${f1(q[0])}" cy="${f1(q[1])}" rx="2.6" ry="${f1(r + 1.4)}" transform="rotate(${f1(Math.atan2(n[1], n[0]) * 180 / Math.PI)} ${f1(q[0])} ${f1(q[1])})"/>`
         + `<ellipse class="cc-corte-luz" cx="${f1(q[0])}" cy="${f1(q[1])}" rx="1.4" ry="${f1(r - 1)}" transform="rotate(${f1(Math.atan2(n[1], n[0]) * 180 / Math.PI)} ${f1(q[0])} ${f1(q[1])})"/>`;
@@ -255,6 +255,9 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     cav += `<path id="${pre}-ad" class="cc-sangre-v" d="${Pc([...g.adC])}"/><path id="${pre}-ai" class="cc-sangre-a" d="${Pc([...g.aiC])}"/>`
       + `<path id="${pre}-vd" class="cc-sangre-v" d="${vdLuz}"/><path id="${pre}-vi" class="cc-sangre-a" d="${viLuz}"/><path class="cc-sangre-a" d="${Pc(g.aoLuz)}"/>`
       + `<path class="cc-punteado" d="${Pc([...g.adC])}"/><path class="cc-punteado" d="${Pc([...g.aiC])}"/><path class="cc-punteado" d="${vdLuz}"/><path class="cc-punteado" d="${viLuz}"/>`;
+    // los orificios (mitral, tricúspide y tracto de salida): la sangre pasa sin línea entre cavidades
+    cav += `<path class="cc-sangre-a" d="${Pc([[S0[0] + 1, S0[1] + 4], [S0[0] + 1, 104], [AL[0] + 2, AL[1] + 1], [AR[0] - 2, AR[1] + 1], [MA[0] + 2, MA[1] - 5], [MP[0] - 3, MP[1] - 6], [MP[0] - 3, MP[1] + 6], [MA[0] + 2, MA[1] + 8]])}"/>`
+      + `<path class="cc-sangre-v" d="${Pc([[g.TS[0] - 1, g.TS[1] - 6], [g.TL[0] + 3, g.TL[1] - 6], [g.TL[0] + 3, g.TL[1] + 6], [g.TS[0] - 1, g.TS[1] + 6]])}"/>`;
     // trabéculas: en la punta del VI y en la pared libre del VD
     let trab = '';
     for (let i = Math.round(g.cav.length * 0.3); i < g.cav.length * 0.66; i += 2) { const a = g.cav[i], c = [MB[0] + V[0] * 50, MB[1] + V[1] * 50], q = mezcla(a, c, 0.07 + 0.03 * (i % 3)); trab += `M${f1(a[0])} ${f1(a[1])}L${f1(q[0])} ${f1(q[1])}`; }
