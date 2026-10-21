@@ -1430,7 +1430,7 @@ function aparatosEstatico() {
   h += caja(OD, 10, 16, 32, 4, 8, 9) + caja(OD, 70, 16, 32, 4, 8, 9) + caja(OD, 10, 16, 41, 64, 8, 3, { top: 'var(--text-dim)', topOp: .5 });
   // pantalla (con su ECG en miniatura), mando de energía y botones
   h += `<path d="${isoPath(OD, [[5, 40, 9], [44, 40, 9], [44, 40, 28], [5, 40, 28]])}" fill="var(--bg-main)" stroke="var(--text-main)" stroke-width=".5"/>
-    <g transform="${caraY(OD, 7, 40, 25)}"><text id="rtm-desfib-txt1" x="0" y="0" font-size="8" fill="var(--text-main)" font-weight="700">APAGADO</text><path id="rtm-desfib-ecg" d="" fill="none" stroke="var(--accent-green)" stroke-width=".8" transform="translate(0 3)"/></g>`;
+    <g transform="${caraY(OD, 7, 40, 25)}"><text id="rtm-desfib-txt1" x="0" y="0" font-size="9" fill="var(--text-main)" font-weight="700">APAGADO</text><path id="rtm-desfib-ecg" d="" fill="none" stroke="var(--accent-green)" stroke-width=".8" transform="translate(0 3)"/></g>`;
   { const c = isoP(OD, 58, 40, 20); h += `<g transform="${caraY(OD, 58, 40, 20)}"><circle cx="0" cy="0" r="7" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".6"/>${Array.from({ length: 18 }, (_, i) => { const a = i / 18 * 2 * Math.PI; return `<line x1="${f1(6 * Math.cos(a))}" y1="${f1(6 * Math.sin(a))}" x2="${f1(7 * Math.cos(a))}" y2="${f1(7 * Math.sin(a))}" stroke="var(--bg-main)" stroke-width=".4"/>`; }).join('')}<line id="rtm-mando" x1="0" y1="0" x2="0" y2="-5.5" stroke="var(--bg-main)" stroke-width="1.2" stroke-linecap="round"/>${[-120, -60, 0, 60, 120].map(a => `<line x1="${f1(8.4 * Math.sin(a * Math.PI / 180))}" y1="${f1(-8.4 * Math.cos(a * Math.PI / 180))}" x2="${f1(10 * Math.sin(a * Math.PI / 180))}" y2="${f1(-10 * Math.cos(a * Math.PI / 180))}" stroke="var(--text-main)" stroke-width=".5"/>`).join('')}</g>`; void c; }
   h += [['CARGA', 49, 6], ['CHOQUE', 62, 6], ['SINC', 75, 6]].map(([t, x, z], i) => `<path id="rtm-btn-${i}" d="${isoPath(OD, [[x, 40, z], [x + 10, 40, z], [x + 10, 40, z + 6], [x, 40, z + 6]])}" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".45"/>`).join('');
   // tomas de los cables en la cara derecha; cables a los parches
@@ -1790,7 +1790,9 @@ function pintarAparatos() {
   $('aparatos-lectura').innerHTML = lect || 'Ningún aparato en uso.';
   const ang = dfb ? ({ '100 J': -60, '120 J': -30, '200 J': 30, '120-200 J': 0 }[dfb.energia] ?? 0) : -120;
   const mando = $('rtm-mando'); if (mando) mando.setAttribute('transform', `rotate(${ang})`);
-  $('rtm-desfib-txt1').textContent = dfb ? `${dfb.energia} · ${dfb.modo === 'sinc' ? 'SINC' : 'ASINC'}` : 'APAGADO';
+  { const tx = $('rtm-desfib-txt1'), txt = dfb ? dfb.energia : 'APAGADO';
+    tx.textContent = txt;   // la energía (el modo lo dice la tecla SINC, encendida, y la lectura); si no cabe en 35, se aprieta
+    if (txt.length * 5.4 > 35) { tx.setAttribute('textLength', 35); tx.setAttribute('lengthAdjust', 'spacingAndGlyphs'); } else { tx.removeAttribute('textLength'); tx.removeAttribute('lengthAdjust'); } }
 }
 function pintarAparatosVivos(t) {
   const b = S.bomba;

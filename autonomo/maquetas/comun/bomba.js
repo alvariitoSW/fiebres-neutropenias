@@ -25,8 +25,9 @@ const PLANA = {
 // piel: 'plana' (tonos) o 'grabado' (clases t-*, con trama; necesita instalarGrabado())
 const estilo = (piel, k, tono = 'med') => (piel === 'plana' ? { tonos: PLANA[k] } : { tono });
 
-// La escala vertical de la cámara en pantalla: los rótulos de la pantalla se leen igual de grandes con cualquier k
-const escV = (P) => Math.hypot(...P.dir([0, 0, 1])) || 1;
+// La escala de la cara frontal en pantalla (raíz del área: cuenta la inclinación de la isométrica): los rótulos de la
+// pantalla se leen igual de grandes con cualquier cámara
+const escV = (P) => { const u = P.dir([1, 0, 0]), v = P.dir([0, 0, -1]); return Math.sqrt(Math.abs(u[0] * v[1] - u[1] * v[0])) || 1; };
 
 export function embolo(P, avance = 0.35, piel = 'plana') {
   const x = 66 + 20 * (1 - Math.max(0, Math.min(1, avance)));
@@ -37,9 +38,9 @@ export function embolo(P, avance = 0.35, piel = 'plana') {
 
 export function bomba(P, { l1 = '', l2 = '', avance = 0.35, candado = false, piel = 'plana', id = '', idL1 = '', idL2 = '', idEmbolo = '', sombra = true } = {}) {
   const e = escV(P), ANCHO = 55;
-  // el rótulo cabe en la pantalla: baja de tamaño hasta 7,6 px en pantalla y, si aún no cabe, se aprieta
-  const ajusta = (txt, px) => { const n = String(txt).length || 1, fs = Math.max(7.6 / e, Math.min(px / e, ANCHO / (n * 0.6))); return { fs: f1(fs), lt: n * 0.6 * fs > ANCHO ? ` textLength="${ANCHO}" lengthAdjust="spacingAndGlyphs"` : '' }; };
-  const a1 = ajusta(l1, 7.8), a2 = ajusta(l2, 10.4);
+  // el rótulo cabe en la pantalla: baja de tamaño hasta 8,2 px en pantalla (7,5 a 360 px de ancho) y, si aún no cabe, se aprieta
+  const ajusta = (txt, px) => { const n = String(txt).length || 1, fs = Math.max(8.2 / e, Math.min(px / e, ANCHO / (n * 0.6))); return { fs: f1(fs), lt: n * 0.6 * fs > ANCHO ? ` textLength="${ANCHO}" lengthAdjust="spacingAndGlyphs"` : '' }; };
+  const a1 = ajusta(l1, 8.4), a2 = ajusta(l2, 10.6);
   const linea = (a, b, extra) => { const p = P.iso(a), q = P.iso(b); return `<line x1="${f1(p[0])}" y1="${f1(p[1])}" x2="${f1(q[0])}" y2="${f1(q[1])}" ${extra}/>`; };
   const cara = (pts) => camino(pts.map(P.iso), true);
   let h = `<g${id ? ` id="${id}"` : ''} class="bomba-jeringa">`;
