@@ -251,3 +251,15 @@ Las claves de guardado y su formato no cambian (no se pierde el progreso). Difer
 el capilar ahora baraja las opciones; las respuestas no van en el HTML hasta que se contestan; «✗ Qué le habría pasado
 al paciente» (la redacción de REGLAS §8); marcas ✓/✗ además del color; «Había un error: la N». El ácido-base vivo se
 queda con su motor: guarda en otro formato y su «tocar» va por etapas; meterlo obligaba a cambiar su guardado.
+
+## Skill `/ingenieria-reversa` (23/10/2026)
+
+A petición del usuario («mira si con este repositorio nos puede ayudar para tener la skill de /ingeniería-reversa»,
+`aicodeking/leanrea`). leanrea (MIT) es una sola guía de unos 8 KB que dice al agente el comando más rápido por tipo
+de objetivo, sin servidor MCP; su autor la mide ~38 % más rápida y ~35 % más barata que REA (`morluto/rea`) con
+precisión parecida (3 repeticiones, un modelo, una máquina). No se instaló tal cual: casi todo su contenido es para
+binarios y apps de escritorio, y aquí lo que se estudian son webs. Se escribió `.claude/skills/ingenieria-reversa/`
+en español con su método (leer trozos, juntar llamadas, «visto / deducido / no visto», parar con pruebas) y lo
+aprendido con anesthbeta, EchoSuite, AngioView y NavRad: Playwright a 390 px, el código ajeno solo en memoria
+(guardarlo lo bloquea el sistema de permisos y lo prohíbe CLAUDE §7.9), REA solo si aporta, un investigador por web y
+el formato del informe-propuesta.
