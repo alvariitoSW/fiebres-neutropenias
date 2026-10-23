@@ -354,6 +354,10 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **✅ Aprobado por el usuario el 23/10** («te doy el ok a todo»; orden, carriles y paradas «en principio no» cambian):
+  los 6 cambios previos, las 8 tareas de la fase 0, el «ok» a la maqueta v2 del corazón eléctrico y tocar el motor
+  para que lata con el ritmo. Pidió ver el plan final integrado **antes de tocar código ni nada**: se le reenvía y se
+  espera su «adelante».
 - **🔴 Plan de integración (cómo lo ejecutaría el plan socialista)** (https://claude.ai/artifact/5em9RdpkzZGjV91CBMCBLh): dos carriles a la vez (corazón = bloque 3
   con la fase 1 dentro; producto = fase 0), 20 tareas con clave (8 de la fase 0, 5 de la fase 1, 7 de las fases 2-4 en
   espera) y **6 cambios previos** en el propio plan: objetivo y tipo `integracion` en el tablero; modo `integrar` en la
