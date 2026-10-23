@@ -320,8 +320,35 @@ río y mar) → 39-44 → 45-53.
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
-| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso (2026-10-21) · cobertura | Paquete: `autonomo/bloques/b3/encargo.md` |
+| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3` | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
+
+## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `tee-inversa` | Ingeniería inversa del simulador de ETE de anesthbeta: entender cómo está hecho y traer a nuestro simulador todas las mejoras que se puedan | pendiente · necesita acceso de red a `tee-simulator.anesthbeta.com` (2026-10-23) | Aprobada por el usuario el 23/10; va antes de seguir con el bloque 3 |
+
+### Encargo · `tee-inversa`
+
+- **Lo que dijo el usuario (23/10)**: «quiero hacer otra cosa con /reverse-engineer-anything de la siguiente página web
+  https://tee-simulator.anesthbeta.com/atlas?lang=ja para poder entender cómo se ha hecho y poder añadir todas las
+  mejoras que poder aplicar a nuestro simulador y mejorarlo».
+- **Tipo**: `auditoria` (fase 1, informe) + `visual` (fase 2, construir lo que elija).
+- **Fase 1 · entender** (skill `reverse-engineer-anything`, con su servidor REA si está conectado; si no, Playwright):
+  qué enseña (vistas de ETE, el atlas por vistas, la sonda y sus movimientos —avance, rotación, flexión, ángulo
+  multiplano 0-180°—, cortes, estructuras rotuladas, Doppler, casos), cómo lo hace (tecnología, modelo 3D del corazón y
+  de dónde sale, cómo genera la imagen de eco a partir del modelo, cómo mapea la sonda al plano de corte, rendimiento en
+  el móvil, idiomas) y qué datos usa. Comparar, punto por punto, con nuestro simulador (`js/modules/eco/`, README y
+  atlas) y con el informe de ATRIA-EchoTrace (tarea #94, ver `docs/historial/eco.md`).
+- **Salida de la fase 1**: un informe-propuesta (página para el móvil) con la lista de mejoras, cada una con lo que
+  aporta para estudiar, su esfuerzo y su orden recomendado (p. ej. vistas transesofágicas sobre nuestro corazón, sonda
+  con sus mandos, rótulos de estructuras al tocar, atlas por vistas…). **Parada del usuario**: elige qué se hace.
+- **Fase 2 · construir** lo elegido, sobre nuestros motores (corazón, ecógrafo, Doppler), con sus pruebas
+  (`node --test 'js/modules/eco/pruebas/*.test.mjs'`, `jueces.mjs --eco`).
+- **Lo que NO quiero** (CLAUDE §7.9): copiar su código ni sus imágenes o modelos si su licencia no lo permite. Ideas y
+  método sí; el código se reconstruye sobre los motores de la app. Nada de mezclar sus textos con nuestras fuentes.
+- **Depende de**: acceso de red al dominio (hoy 403). El servidor REA no conectó en esta sesión (reintentar al abrir).
 
 ## Lo que aún no está aprobado
 

@@ -200,7 +200,27 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 
-| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | Siguiente: el bloque 2 de Marino. |
+| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
+| `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
+| `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
+| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | pendiente · **necesita acceso de red** | 2026-10-23 | Aprobada por el usuario el 23/10 |
+
+### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
+
+- **Esperando al usuario (parada 1, 2.ª vuelta)**: las tres maquetas v2 ya pulidas, en `main` y en el móvil:
+  `autonomo/maquetas/b3-shock.html` (monitor de UCI, Impella, balón y ECMO como objetos reales, «¿Qué shock es?»),
+  `b3-ritmo.html` (corazón eléctrico: grafo de conducción y ECG generado) y `b3-receptor.html` (receptor vivo:
+  arteriola y cerraduras de pines). Piezas comunes en `autonomo/maquetas/comun/`. Falta su «ok» o sus cambios.
+- **Hecho y en la rama `auto/b3`** (sin PR aún): las 26 fichas con 290 ids por sección y su página, vista Visual en
+  Merino Cardiología y Neumología, hallazgos de fidelidad arreglados, y Texto | Estudiar en las 9 del shock (152
+  preguntas, casos de Mateo, Amparo, Nerea y Begoña), auditadas (0 graves) y corregidas.
+- **Ya en `main`**: el motor del latido llega a shock sin romperse (2 vueltas), con entrada de soporte (Impella, ECMO,
+  balón); el «← VOLVER A LA FICHA» del ecógrafo.
+- **Siguiente, tras su «ok»**: construir en la app la cabecera del shock (pasar `comun/` a `js/core/`), el receptor
+  vivo y el corazón eléctrico (sub-bloques 3A → 3B → 3C), con jueces, auditor y profesor; el hueco del caso de Amparo
+  (control del foco, p. 11).
+- **Lo que falta de él**: el PDF de la guía ESC 2021 de marcapasos (bradicardias y bloqueos AV).
+- Documentos: `autonomo/bloques/b3/` (encargo, cobertura, farmacos, megaproyecto-*, juicio-maquetas-v2, auditoria-3a).
 
 El resto del tablero sigue `aparcada`.
 
@@ -214,6 +234,9 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 Acceso de red para el simulador TEE** · apuntado 23/10: la red del entorno rechaza
+  `tee-simulator.anesthbeta.com` (403). **Tú**: añadir ese dominio en «Allowed domains» del entorno (menú del entorno →
+  Edit → Network access). Sin eso no se puede estudiar la página desde aquí.
 - **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
   no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
   Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
