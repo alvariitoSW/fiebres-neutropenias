@@ -223,6 +223,11 @@ esta sección.
      Assistant; IA de eco. **Choca con reglas actuales** (sin backend; una sola librería) y abre temas legales: datos
      de salud de pacientes reales (anonimizar, mejor en el propio dispositivo o en un ordenador del hospital) y
      producto sanitario (una herramienta que ayuda a diagnosticar es regulada; en estudio no). Decisión del usuario.
+  - **Datos de pacientes** (el usuario, 23/10): no guardar datos personales; sí usarlo para calcular y para ayudar a
+    diagnosticar sin que se guarde; y usar las imágenes para «alimentar a Claude». Explicado y anotado en
+    `docs/historial/radar.md` §3: cálculos sin identificar y sin guardar, sí; imágenes reales, solo anonimizadas y
+    procesadas en el dispositivo o en el hospital; a un servicio de IA externo, no; «mejorarse» = biblioteca de casos
+    anonimizados o abiertos dentro de la app.
   - **Vigía tecnológico** dentro del radar: cada avance (IA de imagen, de eco, modelos nuevos) entra como una
     entrada más y se tría contra el norte.
 - **Lo que NO quiero** **(supongo)**: acumular proyectos sueltos; construir sin pasar por el norte; meter código,
@@ -318,6 +323,9 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 Propuestas de cambio de reglas (Radar, 23/10)**: el norte en `CLAUDE.md`, el radar en `REGLAS.md`, el modo
+  guardia sin guardar nada, la excepción del nivel 3 (IA aparte, datos anonimizados) y la biblioteca de casos. Detalle
+  en `docs/historial/radar.md` §4. Nada cambia hasta que las apruebes.
 - **🔴 INFORME FINAL «Del simulador a la cama»** (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee; NavRad con imagen: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm): junta las 6 webs y sustituye a
   los informes parciales para decidir. Hoja de ruta única: fase 0 (ya, sin fuentes: acabado de producto en eco,
   calculadoras y corazón eléctrico, bibliografía de RA), fase 1 (noviembre, PIF Cardiología: corazón eléctrico en la
