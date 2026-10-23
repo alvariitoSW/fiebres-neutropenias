@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-23 (tee-inversa, fase 1: informe-propuesta; tres webs nuevas apuntadas para ingeniería inversa).
+Última sincronización: 2026-10-23 (informe final de ingeniería inversa; B-012 Radar apuntada y afinada).
 
 ---
 
@@ -228,6 +228,8 @@ esta sección.
     `docs/historial/radar.md` §3: cálculos sin identificar y sin guardar, sí; imágenes reales, solo anonimizadas y
     procesadas en el dispositivo o en el hospital; a un servicio de IA externo, no; «mejorarse» = biblioteca de casos
     anonimizados o abiertos dentro de la app.
+    **Decidido (23/10): la idea de «alimentar a Claude» con imágenes de pacientes queda descartada** («lo de alimentar
+    a Claude lo olvidamos»).
   - **Vigía tecnológico** dentro del radar: cada avance (IA de imagen, de eco, modelos nuevos) entra como una
     entrada más y se tría contra el norte.
 - **Lo que NO quiero** **(supongo)**: acumular proyectos sueltos; construir sin pasar por el norte; meter código,
@@ -333,23 +335,8 @@ El resto del tablero sigue `aparcada`.
   eco de UCI), fase 4 (imagen real: visor ligero, «¿dónde está la punta?», recorridos, casos). Espera: arrancar fase 0,
   el «ok» a la maqueta v2 del corazón eléctrico, los PDF (lista en el informe), abrir en la red `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` y `heart.org`, y 6 decisiones grandes.
-- **🔴 «Ritmo vivo y placa guiada»** (https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5): recomendado ya (sin fuentes nuevas) pulir el corazón eléctrico
-  (monitor latido a latido, regla PR/QRS/QT, velocidad 1×/5×/20×) y la bibliografía enlazada de Radiology Assistant en
-  el PIF de Radiología (17 artículos con URL comprobada). El **PIF de Cardiología empieza el 01/11**: para su cuaderno
-  «ECG y arritmias» falta el PDF de ECG básico de la rotación (¿cuál?). Además: AHA 2025 (5 algoritmos), ESC 2021 de
-  estimulación, PDF de las rotaciones de Radiología de tórax y Neurorradiología. Decisiones: «ok» a la maqueta v2 del
-  corazón eléctrico, que el ritmo mueva el motor, 12 derivaciones «ilustrativas», pila de imágenes como pieza nueva y
-  figuras de RA con crédito (su Disclaimer las permite con fines docentes; los textos no).
-- **🔴 «Un paciente, todas las pruebas»** (https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS): elegir fase (0 acabado de producto, recomendada ya; 1 coronarias
-  e IAM en el motor; 2 coronariografía y ETE; 3 calculadoras de eco de UCI; 4 visor de TC) o números sueltos. PDF que
-  hacen falta: ESC de SCA, ASE/EACVI 2015 de cámaras, ASE 2025 de corazón derecho y diastólica, ASE/SCA 2013 de ETE,
-  Di Mario y Sutaria 2005. Decisiones: tocar el motor y la anatomía congelada; visor de TC como pieza nueva; dónde vive
-  el «paciente vivo». Incluye los paquetes de tee-inversa.
-- **🔴 tee-inversa: elegir paquete A, B y/o C** (ver «Dónde quedó tee-inversa»). Para B y la mejora 7, el **PDF de la
-  guía ASE/SCA 2013 de ETE completa** (Hahn y cols., J Am Soc Echocardiogr 2013); para B, si se añade el recorrido del
-  esófago a la anatomía (está congelada); para C, si se parten las valvas. Y, si existe, el informe de ATRIA-EchoTrace
-  (tarea #94) que citaba el encargo: no está en el repositorio. (El acceso a `tee-simulator.anesthbeta.com` ya
-  funciona desde el 23/10.)
+- Los informes parciales del 23/10 («Ritmo vivo y placa guiada», «Un paciente, todas las pruebas» y tee-inversa con sus
+  paquetes A, B y C) quedan **dentro del informe final**; su detalle, en `docs/historial/radar.md` y en los partes del 23/10.
 - **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
   no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
   Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
@@ -421,6 +408,12 @@ El resto del tablero sigue `aparcada`.
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-23 · **Ingeniería inversa de 6 simuladores** (anesthbeta, EchoSuite, AngioView, NavRad con imagen,
+  Radiology Assistant, RitmoLab): 5 informes y el **informe final «Del simulador a la cama»**
+  (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
+  (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
+  no cambió.
+
 - 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
   - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
   - 11 formas nuevas en la tabla única. Si un modelo vivo falla, el resto de Libros sigue funcionando.
@@ -455,41 +448,3 @@ El resto del tablero sigue `aparcada`.
     el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
   - Leyenda nueva en tres modelos.
   - Arreglada la célula de la nefrona viva que se quedaba congelada.
-
-- 2026-10-15 · **Plan Marino, revisiones R8-R13** (caps. 31-53 y apéndices, 79 fichas), aprobadas y en la app
-  (PR #10-#15). **La fase 1 de Marino está terminada.**
-  - R8: la gasometría de ejemplo se queda como en el libro, con su nota.
-  - R9: la hipermagnesemia grave, consultada en la web (Manual Merck) y anotada.
-  - R10: el Ringer lactato, consultado en la web (WikEM y StatPearls) y anotado.
-  - R11: los topes de la reversión se quedan.
-  - R12: las abreviaturas valen.
-  - R13: las calculadoras de tóxicos, solo para adultos (20-300 kg).
-
-- 2026-10-15 · **Reglas aprobadas tras R4-R10** (`autonomo/REGLAS.md` §1.8-1.10 y §2.5b, `CLAUDE.md` §5 y §7):
-  - erratas de dosis: dosis habitual + nota visible, con consulta web si hay duda;
-  - notas de interpretación siempre con fuente, y web si hay discordia;
-  - umbrales de las calculadoras comparados redondeados;
-  - SVG recreados con fondo propio.
-- 2026-10-15 · **Plan Marino, revisiones R4-R7** (caps. 14-30, 47 fichas), aprobadas y en la app (PR #6-#9):
-  - R4: vasopresina en U/min con nota, 3.er vasopresor = epinefrina, remisiones «Ficha N» → botones; después,
-    el escenario de bradicardia repuesto con el texto de Marino (lo pediste);
-  - R5: dabigatrán y HNF con nota de errata, CHA₂DS₂-VASc puntuable, tablas que cabían mal a 360 px;
-  - R6: clasificador de riesgo de la EP fiel, esteroides del SDRA, figuras legibles;
-  - R7: descontaminación oral (SOD), notas del manguito y la PImax, clasificador del derrame sin conducta inventada.
-- 2026-10-14 · **Plan Marino, revisiones R1-R3** (caps. 1-13, 29 fichas), aprobadas y en la app (PR #3, #4 y #5):
-  - R1: signo de la RASS, límites de las calculadoras y notas de fuentes (propofol con fuentes externas);
-  - R2: los simuladores de fluidos y de retorno venoso ya dan pacientes posibles;
-  - R3: 7 graves corregidos en Merino HEMATO (TRALI/TACO, PFC:hematíes, 4Ts, HIT) y lo que faltaba del libro.
-- 2026-10-14 · **Mejoras del plan aprobadas**: el comprobador elige un puerto libre y ya no da falsas alarmas de
-  imágenes; recetas Visual por id; primero los archivos modelo; dos tareas a la vez en carpetas aparte.
-
-- 2026-10-14 · **Preguntas para estudiar**: maqueta aprobada, reglas (`REGLAS.md` §8) y el profesor que diseña y
-  juzga.
-- 2026-10-14 · **Plan socialista revisado** tras el piloto: rúbrica «sirve para estudiar», encargos y tipos de tarea.
-- 2026-10-14 · **Plan socialista montado**: skill, agentes, jueces automáticos, regla «paciente posible» y enlace
-  «Ver en el móvil».
-- 2026-10-14 · **Receptores adrenérgicos animados** en Merino Cardiología (Motion).
-- 2026-10-14 · **Atlas cap. 14** (ventrículo derecho) y huecos del Manual UMI.
-- 2026-10-13 · **Atlas caps. 08, 09 y 10** sobre el motor; el atlas en español dentro de Eco cardíaca.
-- 2026-10-13 · **Marino completo** en Libros (caps. 1-11, 31-53 y apéndices) con sus revisiones.
-- 2026-10-13 · **Manual UMI**: bloque neurocrítico y meningitis.

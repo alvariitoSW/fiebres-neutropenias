@@ -68,6 +68,7 @@ Lo que se le explicó (para tenerlo en cuenta al diseñar):
   y enviar imágenes de pacientes a un servicio de IA externo es una cesión de datos de salud. Lo que sí se puede: que
   **la app** crezca con una biblioteca de **casos anonimizados o abiertos** (hallazgo, diagnóstico final, lección),
   escritos por el usuario sin datos personales, y con casos de licencia abierta. Eso es «mejorarse» sin riesgo.
+- **Decidido por el usuario (23/10)**: «lo de alimentar a Claude lo olvidamos». Queda descartado.
 
 ## 4. Propuestas de cambio de reglas (pendientes de aprobación del usuario)
 
