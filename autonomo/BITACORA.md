@@ -256,6 +256,35 @@ esta sección.
      prefieres solo lo que corra en el propio teléfono? ¿Uso solo docente con casos abiertos, o también con
      pacientes reales (requiere el visto bueno del hospital)?
 
+### B-013 · Pulmón con respirador (modelo vivo) · apuntado 2026-10-23
+- **Lo que dijiste**: «El punto 5 sobre lo que me propones me gusta, añádelo» (la propuesta del pulmón con respirador).
+- **Cómo lo entiendo**: tipo `visual` (modelo vivo grande, megaproyecto según REGLAS §7.12). **Ya estaba previsto** como
+  el modelo del **bloque 4 de Marino** (caps. 23-30) y diseñado como maqueta M3 en `autonomo/ideas/marino.md` §4.1:
+  - Qué se ve: alvéolos en la caja torácica unidos al tubo y al respirador, con las curvas vivas de presión, flujo y
+    volumen; alvéolos sobredistendidos, abiertos y colapsados que se abren y cierran.
+  - Mandos: VCV | PCV, Vt por peso predicho, PEEP (presión de conducción y mejor PEEP), compliance y resistencia, FR e
+    I:E (PEEP oculta), pausas inspiratoria y espiratoria, esfuerzo del paciente (SBT), VNI y alto flujo.
+  - Se une al **motor del corazón** (la presión intratorácica baja el gasto; VVS en cada latido) y al **ácido-base**
+    (la ventilación minuto fija la PaCO₂).
+  - ~19 fichas (Merino Neumología, Marino caps. 7, 11 y 23-30), con imágenes reales de SDRA y VILI.
+  - Encaja con el norte del Radar: nivel 1 (estudiar) y, después, nivel 2 (la guardia: ajustar el respirador con tus
+    datos).
+- **Depende de**: terminar el bloque 3 (o adelantarlo si lo decides); la maqueta M3 para que elijas antes de construir.
+- **Tamaño**: grande (maqueta → modelo → fichas con Estudiar). Trozos: 1) maqueta; 2) modelo en la app; 3) enlace con
+  el corazón y el ácido-base; 4) Mayéutica y casos en las fichas.
+- **Dudas**: ¿lo dejas en su sitio (bloque 4, tras el 3) o lo adelantas?
+
+### B-014 · Inventario de estudio · apuntado 2026-10-23
+- **Lo que dijiste**: (el mismo mensaje) la propuesta del inventario.
+- **Cómo lo entiendo**: tipo `auditoria`, **solo lectura**, sin tocar la app. Una tabla de las ~724 fichas: si tienen
+  vista Visual, modelo vivo que las explique, Estudiar (Mayéutica) o solo preguntas viejas (y cuántas «de
+  redactar»), con su especialidad y su fuente. Salida: una página para el móvil con el recuento por especialidad y
+  la lista ordenada por lo que más ayudaría a estudiar.
+- **Para qué**: decidir con datos qué mejorar primero (y alimentar el Radar: dónde encaja cada idea nueva).
+- **Depende de**: nada.
+- **Tamaño**: pequeña (una sesión).
+- **Dudas**: ninguna.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -398,13 +427,8 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Para el mapa visual de Marino**, ya hay ideas de los revisores de R1-R10 y dos tuyas («agua de río y de mar»
-  para los fluidos; **ácido-base como proyecto propio sobre el riñón de PIF Nefrología**, «que sorprenda a nivel
-  artístico») en `autonomo/ideas/marino.md`. Los revisores de R6 y R7 piden, los tres, un **pulmón con respirador**
-  (caps. 23-30).
-- **Inventario de estudio**: una tabla de qué fichas tienen vista Visual, cuáles tienen un modelo grande que las
-  explique y cuáles tienen solo preguntas viejas. Por qué: sirve para ordenar las tareas `estudio` por lo que más
-  ayuda. Es una tarea pequeña de solo lectura.
+- (23/10) Las dos propuestas que había (pulmón con respirador e inventario de estudio) te gustaron y pasan a
+  «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
 
