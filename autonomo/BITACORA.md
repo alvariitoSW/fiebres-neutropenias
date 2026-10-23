@@ -354,6 +354,13 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 Plan de integración (cómo lo ejecutaría el plan socialista)** (https://claude.ai/artifact/5em9RdpkzZGjV91CBMCBLh): dos carriles a la vez (corazón = bloque 3
+  con la fase 1 dentro; producto = fase 0), 20 tareas con clave (8 de la fase 0, 5 de la fase 1, 7 de las fases 2-4 en
+  espera) y **6 cambios previos** en el propio plan: objetivo y tipo `integracion` en el tablero; modo `integrar` en la
+  skill; 3 puntos más en el constructor (no abrir la web ajena, cifras y fórmula, chip de origen); profesor que juzga
+  «en la guardia»; jueces `--calc` y `--origen` y límite de peso y fps de la eco; norte y Radar en las reglas.
+  Regla de oro: el constructor trabaja solo con nuestro informe, nunca con la web ajena. **Nada aplicado**: espera
+  tu aprobación de los cambios 1-5, de las 8 tareas de la fase 0 y del «ok» a la maqueta v2 del corazón eléctrico.
 - **🔴 Propuestas de cambio de reglas (Radar, 23/10)**: el norte en `CLAUDE.md`, el radar en `REGLAS.md`, el modo
   guardia sin guardar nada, la excepción del nivel 3 (IA aparte, datos anonimizados) y la biblioteca de casos. Detalle
   en `docs/historial/radar.md` §4. Nada cambia hasta que las apruebes.

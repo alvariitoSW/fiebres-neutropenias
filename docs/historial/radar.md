@@ -91,3 +91,20 @@ Lo que se le explicó (para tenerlo en cuenta al diseñar):
 - Del informe final: arrancar la fase 0; «ok» a la maqueta v2 del corazón eléctrico (bloque 3); PDF (ECG básico de la
   rotación de Cardiología, que empieza el 01/11; AHA 2025; ESC 2021 de estimulación; ESC de SCA; ASE/EACVI 2015; ASE
   2025 de corazón derecho y diastólica; ASE/SCA 2013 de ETE; Di Mario y Sutaria 2005; temarios de radiología).
+
+## 6. Plan de integración (propuesta del 23/10, sin aplicar)
+
+El usuario pidió «construir el plan socialista para unir con la ingeniería inversa las páginas… para ver cómo sería
+el plan que ejecutar y si fuera necesario hacer cambios antes de actuar». Página: https://claude.ai/artifact/5em9RdpkzZGjV91CBMCBLh.
+- **Cadena**: radar → ingeniería inversa → filtro del norte → tablero → plan socialista → «Ver en el móvil».
+- **Regla de oro**: el constructor trabaja solo con nuestro informe de ingeniería inversa y nuestras fuentes; nunca
+  abre la web ajena.
+- **Dos carriles**: corazón (bloque 3, con la fase 1 dentro: `b3-ritmo-v3`, `b3-3c`, `b3-ritmo-motor`, `pif-ecg`,
+  `b3-bradi`) y producto (fase 0: `f0-cifras`, `f0-origen`, `f0-eco-color`, `f0-eco-rotulos`, `f0-eco-viaje`,
+  `f0-eco-guia` —las cuatro de eco, un solo constructor en serie—, `f0-movil`, `f0-ra-biblio`). En espera: `f2-coronarias`,
+  `f2-angio`, `f2-ete`, `f3-calc-eco`, `f4-visor`, `f4-punta`, `f4-recorridos`.
+- **Seis cambios previos** (propuestos): 1) objetivo «Integración» y tipo `integracion` en el tablero; 2) modo
+  `integrar <clave>` en la skill del plan socialista; 3) constructor: no abrir webs ajenas, cifra/grado y fórmula,
+  chip de origen; 4) profesor: modo «en la guardia» y 3 puntos más de rúbrica; 5) jueces `--calc`, `--origen` y
+  presupuesto de peso y fps de la eco; 6) norte y Radar en las reglas (§4 de este archivo).
+
