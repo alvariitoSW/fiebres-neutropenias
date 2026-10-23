@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-19 (fases 1, 2 y 4 de Marino en la app: revisiones, mapa, ácido-base vivo y río y mar).
+Última sincronización: 2026-10-23 (tee-inversa, fase 1: informe-propuesta; tres webs nuevas apuntadas para ingeniería inversa).
 
 ---
 
@@ -178,6 +178,44 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
+### B-009 · Ingeniería inversa de EchoSuite (calculadoras de eco) · apuntado 2026-10-23
+- **Lo que dijiste**: «te voy a seguir mandando más cosas para hacer aquí ingeniería reversa /reverse-engineer-anything
+  de las siguientes páginas https://echosuite.app/calculators/ […] Recuerda usar este repositorio
+  https://github.com/morluto/rea».
+- **Cómo lo entiendo**: tipo `auditoria` (fase 1, informe) + lo que elijas después (fase 2), igual que `tee-inversa`.
+  - Qué quiero: entender qué calculadoras de eco tiene, cómo las presenta (entrada de datos, resultado, gráficos,
+    gradación por guías) y cómo están hechas, y traer las mejoras a nuestras calculadoras de eco y al simulador.
+  - Para qué: consultar a pie de cama y estudiar.
+  - Comparar con: las calculadoras que ya tenemos (FS de FATE, ITV y GC, E/A, TAPSE, VExUS…) y con la regla de
+    *The Heart by Ultrasound* «una cifra nunca contradice su grado» (pendiente en el README de eco).
+  - Herramienta: REA (`morluto/rea`, MIT): su skill `reverse-engineer-anything` y su servidor, instalados con
+    `npx rea-agents setup` al abrir la sesión; si no, Playwright.
+  - Salida: informe-propuesta para el móvil, con cada mejora, lo que aporta, su esfuerzo y su orden. Parada tuya.
+  - Lo que NO quiero: copiar su código ni sus textos. Las fórmulas y los umbrales, solo con su guía de origen en PDF
+    (CLAUDE §7): las suyas sirven para saber qué buscar, no como fuente.
+- **Depende de**: acceso de red a `echosuite.app` (hoy el entorno ni siquiera lo encuentra) y poder instalar REA.
+- **Tamaño**: mediana (fase 1, una sesión).
+
+### B-010 · Ingeniería inversa de AngioView · apuntado 2026-10-23
+- **Lo que dijiste**: (el mismo mensaje) «https://angioview.com/».
+- **Cómo lo entiendo**: tipo `auditoria` + fase 2 a elegir. No he podido abrirla: por el nombre, **(supongo)** que
+  enseña coronariografía (proyecciones del arco en C, árbol coronario en 3D). Qué hace, cómo lo hace y qué podríamos
+  traer (p. ej. coronarias en nuestro corazón 3D, que ya las tiene; proyecciones; enlaces con las fichas de SCA).
+  Misma herramienta, misma salida y mismo «no» que B-009.
+- **Depende de**: acceso de red a `angioview.com` y REA.
+- **Tamaño**: mediana (fase 1).
+- **Dudas**: ¿para qué la quieres (eco, cardiología, hemodinámica)? Si es solo para el corazón 3D, lo junto con
+  `tee-inversa`.
+
+### B-011 · Ingeniería inversa de Navigating Radiology (anatomía) · apuntado 2026-10-23
+- **Lo que dijiste**: (el mismo mensaje) «https://anatomy.navigatingradiology.com/».
+- **Cómo lo entiendo**: tipo `auditoria` + fase 2 a elegir. Sin abrirla, **(supongo)** que es un atlas de anatomía
+  radiológica (TC, RM, Rx) con cortes rotulados. Qué hace, cómo lo hace y qué traer: sobre todo, cómo rotula y cómo
+  pasa de un corte a otro, para las fichas de imagen y para la Rx de tórax del PIF. Nada de sus imágenes si su
+  licencia no lo permite (CLAUDE §7.9).
+- **Depende de**: acceso de red a `anatomy.navigatingradiology.com` y REA.
+- **Tamaño**: mediana (fase 1).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -203,7 +241,18 @@ esta sección.
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
-| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | pendiente · **necesita acceso de red** | 2026-10-23 | Aprobada por el usuario el 23/10 |
+| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
+
+### ⏸ Dónde quedó tee-inversa
+
+- **Informe**: https://claude.ai/artifact/6N5ChQF3E82Ca7DoNqEfaU (parte `autonomo/partes/2026-10-23-tee-inversa.md`).
+- **Cómo está hecho su simulador**: corazón 3D de anatomía fija (Human Reference Atlas, CC BY 4.0) con Three.js; el
+  esófago es una curva por 7 puntos; sonda con 5 mandos (avance, giro, ante/retroflexión, flexión lateral, multiplano);
+  28 vistas + 7 vasculares que viajan entre sí; imagen dibujada (no ecografía); válvulas en A1-P3 y cúspides; rótulos
+  que no se pisan. Ellos ganan en ETE y anatomía del corte; nosotros, en ecografía, fisiología, Doppler y enfermedad.
+- **Esperando tu elección**: paquete **A** (recomendado: colores de estructura, rótulos con enlace al 3D y viaje entre
+  vistas, en la ETT), **B** (ETE medioesofágico y transgástrico con reto) y/o **C** (segmentos de válvula), o números
+  sueltos del 1 al 7.
 
 ### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
 
@@ -234,9 +283,14 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
-- **🔴 Acceso de red para el simulador TEE** · apuntado 23/10: la red del entorno rechaza
-  `tee-simulator.anesthbeta.com` (403). **Tú**: añadir ese dominio en «Allowed domains» del entorno (menú del entorno →
-  Edit → Network access). Sin eso no se puede estudiar la página desde aquí.
+- **🔴 tee-inversa: elegir paquete A, B y/o C** (ver «Dónde quedó tee-inversa»). Para B y la mejora 7, el **PDF de la
+  guía ASE/SCA 2013 de ETE completa** (Hahn y cols., J Am Soc Echocardiogr 2013); para B, si se añade el recorrido del
+  esófago a la anatomía (está congelada); para C, si se parten las valvas. Y, si existe, el informe de ATRIA-EchoTrace
+  (tarea #94) que citaba el encargo: no está en el repositorio. (El acceso a `tee-simulator.anesthbeta.com` ya
+  funciona desde el 23/10.)
+- **🔴 Acceso de red para B-009, B-010 y B-011** · apuntado 23/10: el entorno no encuentra `echosuite.app`,
+  `angioview.com` ni `anatomy.navigatingradiology.com`. **Tú**: añadirlos en «Allowed domains» del entorno (menú del
+  entorno → Edit → Network access). REA sí se puede instalar (npm responde: `rea-agents` 6.7.0).
 - **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
   no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
   Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
