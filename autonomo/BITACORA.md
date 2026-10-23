@@ -178,6 +178,56 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
+### B-012 · Radar: integrar webs, repositorios, Twitter e ideas con un plan sólido · apuntado 2026-10-23
+- **Lo que dijiste**: «integrar estas y futuras páginas/repositorios/lo que vea en tuiter/lo que se me ocurra y de ahí
+  desarrollar el proyecto bien con un plan sólido y sobre todo teniendo en cuenta lo que realmente se quiere conseguir».
+- **Cómo lo entiendo**: un **proyecto permanente** (no una tarea que se acaba) con dos partes: un **norte** que no
+  cambia y un **radar** por el que entra todo lo nuevo. Nada se construye porque «está chulo»: solo si acerca al norte.
+  1. **El norte** (borrador, **(supongo)**; lo decides tú): «Que un R1 de UCI entienda y maneje al paciente crítico:
+     en la cama, la respuesta en 30 segundos desde el móvil; para estudiar, el mecanismo que se ve y preguntas que
+     obligan a pensar; todo fiel a su fuente con página, en español, sin cuenta ni servidor». De él salen las
+     **situaciones de guardia** del informe final (shock, dolor torácico, arritmia inestable, comprobar un
+     dispositivo, neurocrítico, quirófano cardíaco), que son la vara de medir.
+  2. **Una sola puerta de entrada**: me pasas una web, un repositorio, un tuit o una idea, y queda apuntado en un
+     registro (`autonomo/radar/`) con la fecha, lo que dijiste y el tipo. **(supongo)** una skill `/radar` que lo
+     haga, o que `/bitacora apunta` lo mande allí.
+  3. **Triaje con una ficha fija** para cada entrada: qué es; a qué situación de guardia, ficha o modelo vivo sirve;
+     qué fuente lo respalda; licencia; coste; si encaja en una fase ya existente. Veredicto: **integrar en la fase N**,
+     **idea suelta** (se guarda) o **descartar** (con motivo).
+  4. **Cómo se estudia cada tipo**:
+     - una web o una app → `/ingenieria-reversa` (como hoy);
+     - un repositorio → leerlo, comprobar la licencia y, si es una herramienta, revisarla antes de instalarla (como
+       las skills de hoy);
+     - un tuit → no es fuente: se extrae la idea y se busca la fuente primaria con `claim-check` o `paper-lookup`;
+     - una idea tuya → se convierte en ficha de encargo, con las preguntas mínimas.
+  5. **Una hoja de ruta viva**: la del informe final «Del simulador a la cama» (fases 0-4) pasa a ser el documento
+     único. Cada entrada nueva se encaja en una fase (o abre una), sin duplicar. Una página para el móvil que se
+     republica en el mismo enlace.
+  6. **Pocas paradas**: las decisiones se te llevan **por tandas** (p. ej. cada semana o cada 5 entradas), no una a
+     una, como pediste para los bloques (REGLAS §2.3).
+  7. **Medir si sirve**: cada fase se cierra con su situación de guardia «resuelta» (lo que se consulta en la cama y
+     lo que se estudia, comprobado en el móvil) y con tu uso real en la rotación que toque.
+- **Lo que NO quiero** **(supongo)**: acumular proyectos sueltos; construir sin pasar por el norte; meter código,
+  textos o imágenes ajenos; dar por fuente un tuit o una web; abrir 10 frentes a la vez.
+- **Primeras entradas**: las 6 webs de hoy (anesthbeta, EchoSuite, AngioView, NavRad, Radiology Assistant, RitmoLab),
+  las 3 herramientas (REA, leanrea → skill `/ingenieria-reversa`, y las skills de clinical-ai-skills y
+  research-agent-skills), ya estudiadas: entran triadas en la fase que les toca.
+- **Depende de**: que confirmes o corrijas el norte. La ejecución (fases 0-4) depende de lo que está en «Esperando algo
+  tuyo» (informe final).
+- **Tamaño**: grande y permanente. Trozos que propongo:
+  1. **Norte** (pequeña): escribirlo contigo en una página corta y dejarlo fijo.
+  2. **Montar el radar** (pequeña-mediana): registro, ficha de triaje, la skill `/radar` y la hoja de ruta viva.
+  3. **Volcar lo de hoy** (pequeña): las 6 webs y las 3 herramientas como primeras entradas triadas.
+  4. **Revisión periódica** (cada tanda): triar lo nuevo y re-priorizar contigo.
+  Las fases 0-4 del informe final se aprueban aparte, como tareas del plan socialista.
+- **Dudas**:
+  1. ¿El norte de arriba es lo que quieres conseguir, o le falta algo (p. ej. el MIR, la docencia a otros, la consulta
+     en la guardia frente al estudio)?
+  2. ¿Cómo me pasarás lo de Twitter: enlace, captura o texto copiado? (x.com suele estar bloqueado desde aquí; una
+     captura o el texto funcionan siempre.)
+  3. ¿Cada cuánto quieres la tanda de decisiones: semanal o cada N entradas?
+  4. ¿Te vale el nombre «Radar»?
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
