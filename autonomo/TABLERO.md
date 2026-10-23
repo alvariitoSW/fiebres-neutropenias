@@ -327,7 +327,7 @@ río y mar) → 39-44 → 45-53.
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `tee-inversa` | Ingeniería inversa del simulador de ETE de anesthbeta: entender cómo está hecho y traer a nuestro simulador todas las mejoras que se puedan | pendiente · necesita acceso de red a `tee-simulator.anesthbeta.com` (2026-10-23) | Aprobada por el usuario el 23/10; va antes de seguir con el bloque 3 |
+| 1 | `tee-inversa` | Ingeniería inversa del simulador de ETE de anesthbeta: entender cómo está hecho y traer a nuestro simulador todas las mejoras que se puedan | en curso, ⏸ parado en la fase 1 (2026-10-23): informe-propuesta esperando la elección del usuario, https://claude.ai/artifact/6N5ChQF3E82Ca7DoNqEfaU | Aprobada por el usuario el 23/10; va antes de seguir con el bloque 3 |
 
 ### Encargo · `tee-inversa`
 
@@ -349,6 +349,9 @@ río y mar) → 39-44 → 45-53.
 - **Lo que NO quiero** (CLAUDE §7.9): copiar su código ni sus imágenes o modelos si su licencia no lo permite. Ideas y
   método sí; el código se reconstruye sobre los motores de la app. Nada de mezclar sus textos con nuestras fuentes.
 - **Depende de**: acceso de red al dominio (hoy 403). El servidor REA no conectó en esta sesión (reintentar al abrir).
+- **Fase 1 hecha (23/10)**: la web ya se lee desde el entorno. Informe con 7 mejoras y 3 paquetes (A: colores de
+  estructura, rótulos con enlace al 3D y viaje entre vistas, en la ETT; B: ETE medioesofágico y transgástrico; C:
+  segmentos de válvula). Parte: `autonomo/partes/2026-10-23-tee-inversa.md`.
 
 ## Lo que aún no está aprobado
 
