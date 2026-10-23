@@ -204,7 +204,7 @@ esta sección.
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
-| `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | en curso | 2026-10-23 | Aprobadas el 23/10 al pedir el informe |
+| `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 
 ### ⏸ Dónde quedó tee-inversa
 
@@ -246,6 +246,11 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 «Un paciente, todas las pruebas»** (https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS): elegir fase (0 acabado de producto, recomendada ya; 1 coronarias
+  e IAM en el motor; 2 coronariografía y ETE; 3 calculadoras de eco de UCI; 4 visor de TC) o números sueltos. PDF que
+  hacen falta: ESC de SCA, ASE/EACVI 2015 de cámaras, ASE 2025 de corazón derecho y diastólica, ASE/SCA 2013 de ETE,
+  Di Mario y Sutaria 2005. Decisiones: tocar el motor y la anatomía congelada; visor de TC como pieza nueva; dónde vive
+  el «paciente vivo». Incluye los paquetes de tee-inversa.
 - **🔴 tee-inversa: elegir paquete A, B y/o C** (ver «Dónde quedó tee-inversa»). Para B y la mejora 7, el **PDF de la
   guía ASE/SCA 2013 de ETE completa** (Hahn y cols., J Am Soc Echocardiogr 2013); para B, si se añade el recorrido del
   esófago a la anatomía (está congelada); para C, si se parten las valvas. Y, si existe, el informe de ATRIA-EchoTrace

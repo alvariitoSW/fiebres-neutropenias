@@ -328,9 +328,9 @@ río y mar) → 39-44 → 45-53.
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `tee-inversa` | Ingeniería inversa del simulador de ETE de anesthbeta: entender cómo está hecho y traer a nuestro simulador todas las mejoras que se puedan | en curso, ⏸ parado en la fase 1 (2026-10-23): informe-propuesta esperando la elección del usuario, https://claude.ai/artifact/6N5ChQF3E82Ca7DoNqEfaU | Aprobada por el usuario el 23/10; va antes de seguir con el bloque 3 |
-| 2 | `rea-echosuite` | Ingeniería inversa de EchoSuite (70 calculadoras de eco, simulador, aprendizaje): informe-propuesta | en curso (2026-10-23) | Aprobada por el usuario el 23/10 (B-009); fase 1 con REA o Playwright |
-| 3 | `rea-angioview` | Ingeniería inversa de AngioView (proyecciones de coronariografía): informe-propuesta | en curso (2026-10-23) | Aprobada el 23/10 (B-010) |
-| 4 | `rea-navrad` | Ingeniería inversa de NavRad Anatomy (visores de TC rotulados): informe-propuesta | en curso (2026-10-23) | Aprobada el 23/10 (B-011) |
+| 2 | `rea-echosuite` | Ingeniería inversa de EchoSuite (70 calculadoras de eco, simulador, aprendizaje): informe-propuesta | en curso, ⏸ parado en la fase 1 (2026-10-23): informe conjunto «Un paciente, todas las pruebas», https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS | Aprobada por el usuario el 23/10 (B-009); fase 1 con REA o Playwright |
+| 3 | `rea-angioview` | Ingeniería inversa de AngioView (proyecciones de coronariografía): informe-propuesta | en curso, ⏸ parado en la fase 1 (2026-10-23): informe conjunto «Un paciente, todas las pruebas», https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS | Aprobada el 23/10 (B-010) |
+| 4 | `rea-navrad` | Ingeniería inversa de NavRad Anatomy (visores de TC rotulados): informe-propuesta | en curso, ⏸ parado en la fase 1 (2026-10-23): informe conjunto «Un paciente, todas las pruebas», https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS | Aprobada el 23/10 (B-011) |
 
 ### Encargo · `tee-inversa`
 
@@ -368,6 +368,10 @@ río y mar) → 39-44 → 45-53.
   NavRad con cómo enseñamos imagen (y la Rx de tórax y la neurorradiología del PIF, pendientes). Ideas y método sí;
   código, textos e imágenes no (CLAUDE §7.9); mallas o imágenes con licencia abierta, solo con cita y decisión del
   usuario; cifras clínicas solo con su fuente en PDF. Salida: informe para el móvil y parada del usuario.
+- **Fase 1 hecha (23/10)**: un informe conjunto de las cuatro webs (con `tee-inversa`) que propone «el paciente
+  vivo» en 4 fases (0 acabado de producto, 1 coronarias y IAM en el motor, 2 coronariografía y ETE, 3 calculadoras de
+  eco de UCI, 4 visor de TC). Informes de cada web en `autonomo/ideas/ingenieria-inversa/`. Parte:
+  `autonomo/partes/2026-10-23-rea.md`.
 
 ## Lo que aún no está aprobado
 
