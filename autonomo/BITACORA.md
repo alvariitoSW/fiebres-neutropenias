@@ -247,6 +247,13 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 INFORME FINAL «Del simulador a la cama»** (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee; NavRad con imagen: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm): junta las 6 webs y sustituye a
+  los informes parciales para decidir. Hoja de ruta única: fase 0 (ya, sin fuentes: acabado de producto en eco,
+  calculadoras y corazón eléctrico, bibliografía de RA), fase 1 (noviembre, PIF Cardiología: corazón eléctrico en la
+  app, el ritmo mueve el motor, territorios e IAM), fase 2 (coronariografía que late y ETE), fase 3 (calculadoras de
+  eco de UCI), fase 4 (imagen real: visor ligero, «¿dónde está la punta?», recorridos, casos). Espera: arrancar fase 0,
+  el «ok» a la maqueta v2 del corazón eléctrico, los PDF (lista en el informe), abrir en la red `zenodo.org`,
+  `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` y `heart.org`, y 6 decisiones grandes.
 - **🔴 «Ritmo vivo y placa guiada»** (https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5): recomendado ya (sin fuentes nuevas) pulir el corazón eléctrico
   (monitor latido a latido, regla PR/QRS/QT, velocidad 1×/5×/20×) y la bibliografía enlazada de Radiology Assistant en
   el PIF de Radiología (17 artículos con URL comprobada). El **PIF de Cardiología empieza el 01/11**: para su cuaderno

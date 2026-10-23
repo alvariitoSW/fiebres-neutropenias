@@ -333,6 +333,7 @@ río y mar) → 39-44 → 45-53.
 | 4 | `rea-navrad` | Ingeniería inversa de NavRad Anatomy (visores de TC rotulados): informe-propuesta | en curso, ⏸ parado en la fase 1 (2026-10-23): informe conjunto «Un paciente, todas las pruebas», https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS | Aprobada el 23/10 (B-011) |
 | 5 | `rea-radiologyassistant` | Ingeniería inversa de The Radiology Assistant: informe-propuesta para la app y el PIF de Radiología | en curso, ⏸ parado en la fase 1 (2026-10-23): informe «Ritmo vivo y placa guiada», https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 | Aprobada por el usuario el 23/10 al pedir el informe |
 | 6 | `rea-ritmolab` | Ingeniería inversa de RitmoLab (Farmacotips), ya accesible: informe-propuesta para el PIF de Cardiología, los modelos vivos (corazón eléctrico, motor) y la puerta «Arritmias» | en curso, ⏸ parado en la fase 1 (2026-10-23): informe «Ritmo vivo y placa guiada», https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 | Aprobada el 23/10; antecedentes en `docs/historial/cardiologia.md` («RitmoLab») |
+| 7 | `rea-final` | Informe final de la ingeniería inversa (6 webs) + segunda pasada de NavRad con imagen | ⏸ parado (2026-10-23): esperando la elección del usuario. Final: https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee · NavRad: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm | Pedido por el usuario el 23/10; sustituye a los informes parciales como documento de decisión |
 
 ### Encargo · `tee-inversa`
 
