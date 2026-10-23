@@ -205,6 +205,7 @@ esta sección.
 | `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
+| `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 
 ### ⏸ Dónde quedó tee-inversa
 
@@ -246,6 +247,13 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 «Ritmo vivo y placa guiada»** (https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5): recomendado ya (sin fuentes nuevas) pulir el corazón eléctrico
+  (monitor latido a latido, regla PR/QRS/QT, velocidad 1×/5×/20×) y la bibliografía enlazada de Radiology Assistant en
+  el PIF de Radiología (17 artículos con URL comprobada). El **PIF de Cardiología empieza el 01/11**: para su cuaderno
+  «ECG y arritmias» falta el PDF de ECG básico de la rotación (¿cuál?). Además: AHA 2025 (5 algoritmos), ESC 2021 de
+  estimulación, PDF de las rotaciones de Radiología de tórax y Neurorradiología. Decisiones: «ok» a la maqueta v2 del
+  corazón eléctrico, que el ritmo mueva el motor, 12 derivaciones «ilustrativas», pila de imágenes como pieza nueva y
+  figuras de RA con crédito (su Disclaimer las permite con fines docentes; los textos no).
 - **🔴 «Un paciente, todas las pruebas»** (https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS): elegir fase (0 acabado de producto, recomendada ya; 1 coronarias
   e IAM en el motor; 2 coronariografía y ETE; 3 calculadoras de eco de UCI; 4 visor de TC) o números sueltos. PDF que
   hacen falta: ESC de SCA, ASE/EACVI 2015 de cámaras, ASE 2025 de corazón derecho y diastólica, ASE/SCA 2013 de ETE,
