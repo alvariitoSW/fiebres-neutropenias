@@ -207,6 +207,24 @@ esta sección.
      una, como pediste para los bloques (REGLAS §2.3).
   7. **Medir si sirve**: cada fase se cierra con su situación de guardia «resuelta» (lo que se consulta en la cama y
      lo que se estudia, comprobado en el móvil) y con tu uso real en la rotación que toque.
+- **Afinado el 23/10** (el usuario: «mejorarlo y abrir la puerta a seguir mejorándolo conforme avanza la IA y la
+  tecnología»; «la IA de Nvidia para leer TC body… unirlas para crear… un agente de IA que ayude al médico radiólogo»;
+  «poder pasar la información de ecocardio en tiempo real y realizar el máximo de cálculos posibles… y hacer
+  literalmente magia»). El norte pasa a tener **tres niveles**, cada uno con su puerta:
+  1. **Estudiar** (lo de hoy): modelos vivos, fichas, Mayéutica. Lo ya estudiado de las webs (eco, arritmias, ETE,
+     coronarias, TC) ahorra diseño: se rehace sobre nuestros motores.
+  2. **Ayudar en la guardia, en el móvil y sin datos del paciente**: metes las medidas de la eco que haces y la app
+     calcula todo lo que se puede (VS, GC, E/e′, PAPS, TAPSE/PAPS, VExUS…), con su grado, su fórmula y la coherencia
+     entre medidas, y **el motor se ajusta a esas medidas** para mostrar «tu paciente» latiendo (un gemelo
+     hemodinámico). Cabe en la arquitectura actual (todo en el teléfono). **(supongo)** «tiempo real» = tú tecleas o
+     dictas las medidas mientras exploras; conectar el ecógrafo directamente no es posible desde una web en el móvil.
+  3. **Asistente con IA** (lo que llegue con la tecnología): leer imagen con modelos abiertos (p. ej. los de NVIDIA
+     para TC, familia MONAI / VISTA-3D, **por comprobar** modelo y licencia) unidos al método de NavRad y Radiology
+     Assistant; IA de eco. **Choca con reglas actuales** (sin backend; una sola librería) y abre temas legales: datos
+     de salud de pacientes reales (anonimizar, mejor en el propio dispositivo o en un ordenador del hospital) y
+     producto sanitario (una herramienta que ayuda a diagnosticar es regulada; en estudio no). Decisión del usuario.
+  - **Vigía tecnológico** dentro del radar: cada avance (IA de imagen, de eco, modelos nuevos) entra como una
+    entrada más y se tría contra el norte.
 - **Lo que NO quiero** **(supongo)**: acumular proyectos sueltos; construir sin pasar por el norte; meter código,
   textos o imágenes ajenos; dar por fuente un tuit o una web; abrir 10 frentes a la vez.
 - **Primeras entradas**: las 6 webs de hoy (anesthbeta, EchoSuite, AngioView, NavRad, Radiology Assistant, RitmoLab),
@@ -227,6 +245,9 @@ esta sección.
      captura o el texto funcionan siempre.)
   3. ¿Cada cuánto quieres la tanda de decisiones: semanal o cada N entradas?
   4. ¿Te vale el nombre «Radar»?
+  5. (23/10) Para el nivel 3: ¿aceptas cambiar «sin backend» para esa parte (un servidor o un ordenador con GPU), o
+     prefieres solo lo que corra en el propio teléfono? ¿Uso solo docente con casos abiertos, o también con
+     pacientes reales (requiere el visto bueno del hospital)?
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
