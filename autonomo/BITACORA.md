@@ -313,7 +313,7 @@ esta sección.
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
-| `rea-2` | **Segunda pasada de las 6 webs** (método v2) para el megaproyecto: guardia y estudio | en curso | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
+| `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ⏸ **esperando tu elección** (25/10) | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 
 ### ⏸ Dónde quedó tee-inversa
 
@@ -355,6 +355,12 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
+  sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
+  hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:
+  G1 shock (puede empezar ya: Manual UMI y VExUS en `docs/`), G2 inestable y paro (AHA 2025), G3 marcapasos/SCA,
+  G4 tras el dispositivo, G5 neurocrítico, G6 ETE. Espera: ¿puerta «Guardia» nueva en la raíz?, ¿G1 tras la fase 0?,
+  PDF, y abrir `huggingface.co` y `arxiv.org`.
 - **✅ Aprobado por el usuario el 23/10** («te doy el ok a todo»; orden, carriles y paradas «en principio no» cambian):
   los 6 cambios previos, las 8 tareas de la fase 0, el «ok» a la maqueta v2 del corazón eléctrico y tocar el motor
   para que lata con el ritmo. Pidió ver el plan final integrado **antes de tocar código ni nada**: se le reenvía y se
