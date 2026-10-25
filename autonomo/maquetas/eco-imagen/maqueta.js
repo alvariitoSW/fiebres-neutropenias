@@ -76,21 +76,22 @@ const color = () => getComputedStyle(document.body).getPropertyValue('--accent-y
 
 // ---- «Señálalo»: marca la zona del artefacto sobre la imagen de después y dice su frase en una línea
 const FRASES = {
-  sombra: 'Sombra: la costilla no deja pasar el sonido; no falta tejido.',
-  refuerzo: 'Refuerzo: el líquido frena poco el sonido; no es tejido más denso.',
-  reverb: 'Rebote en la pared del tórax: quieto al latir; no es un trombo.',
-  especular: 'El haz pasa paralelo a la pared: no es que no se contraiga.',
-  ventana: 'Aire del pulmón: la ganancia no lo arregla; cambia de ventana.',
+  sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
+  refuerzo: 'Refuerzo: el líquido apenas frena el sonido y lo de detrás brilla más. No es tejido más denso.',
+  reverb: 'Rebote del sonido en la pared del tórax. No se mueve con el corazón: no es un trombo.',
+  especular: 'Pared lateral gris: el haz le pasa paralelo. No es que no se contraiga.',
+  ventana: 'Aire del pulmón: tapa el sonido. La ganancia no lo arregla; cambia de ventana.',
 };
-const ROTULOS = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebote a 2× la pared', especular: 'pared apagada', ventana: 'pulmón' };
+const ROTULOS = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebotes a 2× y 3× la pared', especular: 'pared apagada', ventana: 'pulmón' };
 const MEJORA_DE = { sombra: 'sombra', refuerzo: 'sombra', reverb: 'reverb', especular: 'especular', ventana: 'ventana' };
+let rotuloEsp = 'pared apagada';
 function senalar(tipo, b) {
   const pt = (r, th) => [b.cx + b.escala * r * Math.sin(th), b.arriba + b.escala * r * Math.cos(th)];
   const sector = (t0, t1, r0, r1) => { const p = []; for (let k = 0; k <= 12; k++) p.push(pt(r0, t0 + (t1 - t0) * k / 12)); for (let k = 12; k >= 0; k--) p.push(pt(r1, t0 + (t1 - t0) * k / 12)); return p; };
   const M = b.mitad, sub = VISTAS[st.vista].ventana === 'subcostal';
   let forma = null, aviso = '';
   if (tipo === 'sombra') { if (sub) aviso = 'En la subcostal el haz no cruza costillas: mira otra vista.'; else forma = sector(-M, -0.74 * M, b.pared - 6, b.prof - 2); }
-  else if (tipo === 'reverb') forma = sector(-0.95 * M, 0.95 * M, 2 * b.pared - 3, 2 * b.pared + 3);
+  else if (tipo === 'reverb') forma = { varias: [2, 3].map(k => sector(-0.95 * M, 0.95 * M, k * b.pared - 3, k * b.pared + 3)) };
   else if (tipo === 'ventana') { if (!b.pulmon) aviso = 'En esta vista el pulmón no se interpone.'; else forma = sector(b.pulmon.borde * M, M, b.pulmon.rl, b.prof - 2); }
   else if (tipo === 'refuerzo') {
     // la tira más larga de haces centrales con sangre: la zona de 3 a 28 mm por debajo de la sangre más profunda
@@ -102,24 +103,30 @@ function senalar(tipo, b) {
     const t = tiras.reduce((a, x) => (x.length > a.length ? x : a), []);
     if (t.length > 3) forma = t.map(([th, r]) => pt(Math.min(b.prof - 2, r + 3), th)).concat(t.slice().reverse().map(([th, r]) => pt(Math.min(b.prof - 2, r + 28), th)));
   } else if (tipo === 'especular') {
-    // las muestras de músculo que el haz roza en paralelo, en la mitad de la imagen donde hay más
-    const lado = [[], []];
-    for (let q = 0; q < b.tag.length; q++) if (b.apagado(q)) { const i = q % b.nb, j = (q / b.nb) | 0; lado[i < b.nb / 2 ? 0 : 1].push(pt((j + 0.5) * b.dr, -M + (i + 0.5) * b.dth)); }
-    const L = lado[1].length >= lado[0].length ? lado[1] : lado[0];
+    // las muestras de músculo que el haz roza en paralelo. En el apical de 4 cámaras, solo la pared lateral del VI (las
+    // del VI a la derecha de su centro); en las demás vistas, el lado de la imagen donde hay más
+    const tVi = b.etiquetas && b.etiquetas.get('VI'), a4 = st.vista === 'a4c' && tVi, P2 = [];
+    let sx0 = 0, n0 = 0;
+    if (a4) for (let q = 0; q < b.tag.length; q++) if (b.tag[q] === tVi) { sx0 += pt(((q / b.nb) | 0) * b.dr, -M + (q % b.nb + 0.5) * b.dth)[0]; n0++; }
+    const xc = n0 ? sx0 / n0 : 0, lado = [[], []];
+    for (let q = 0; q < b.tag.length; q++) if (b.apagado(q)) { const i = q % b.nb, j = (q / b.nb) | 0, p = pt((j + 0.5) * b.dr, -M + (i + 0.5) * b.dth);
+      if (a4) { if (b.tag[q] === tVi && p[0] > xc + 6) P2.push(p); } else lado[i < b.nb / 2 ? 0 : 1].push(p); }
+    const L = a4 ? P2 : (lado[1].length >= lado[0].length ? lado[1] : lado[0]);
+    rotuloEsp = a4 ? 'pared lateral del VI' : 'músculo paralelo al haz';
     if (L.length > 20) { const mx = L.reduce((a, p) => a + p[0], 0) / L.length, my = L.reduce((a, p) => a + p[1], 0) / L.length;
       const sx = Math.sqrt(L.reduce((a, p) => a + (p[0] - mx) ** 2, 0) / L.length), sy = Math.sqrt(L.reduce((a, p) => a + (p[1] - my) ** 2, 0) / L.length);
       forma = { elipse: [mx, my, Math.max(10, 1.8 * sx), Math.max(14, 1.8 * sy)] }; }
     else aviso = 'En esta vista ninguna pared queda paralela al haz.';
   }
-  $('#ei-senal').textContent = aviso || FRASES[tipo];
+  $('#ei-senal').textContent = aviso || (tipo === 'especular' && st.vista !== 'a4c' ? 'El haz pasa paralelo a este músculo: se ve más gris, no está enfermo.' : FRASES[tipo]);
   if (!forma) return;
   ctx.save(); ctx.strokeStyle = color(); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath();
   let cx, cy;
   if (forma.elipse) { const [x, y, rx, ry] = forma.elipse; ctx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); cx = x; cy = y - ry - 10; }
-  else { forma.forEach(([x, y], k) => (k ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
-    cx = forma.reduce((a, p) => a + p[0], 0) / forma.length; cy = forma.reduce((a, p) => a + p[1], 0) / forma.length; }
+  else { for (const f of forma.varias || [forma]) { f.forEach(([x, y], k) => (k ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath(); }
+    const f = (forma.varias || [forma]).at(-1); cx = f.reduce((a, p) => a + p[0], 0) / f.length; cy = f.reduce((a, p) => a + p[1], 0) / f.length; }
   ctx.stroke(); ctx.setLineDash([]);
-  const txt = ROTULOS[tipo]; ctx.font = '600 14px system-ui, sans-serif'; const w = ctx.measureText(txt).width + 10;
+  const txt = tipo === 'especular' ? rotuloEsp : ROTULOS[tipo]; ctx.font = '600 14px system-ui, sans-serif'; const w = ctx.measureText(txt).width + 10;
   const lx = Math.max(2, Math.min(ANCHO - w - 2, cx - w / 2)), ly = Math.max(2, Math.min(ALTO - 22, tipo === 'reverb' ? cy + 22 : cy - 10));   // el rebote es una banda fina: el rótulo, debajo
   ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-main').trim() || 'black'; ctx.globalAlpha = 0.85; ctx.fillRect(lx, ly, w, 20);
   ctx.globalAlpha = 1; ctx.fillStyle = color(); ctx.fillText(txt, lx + 5, ly + 15); ctx.restore();

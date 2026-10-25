@@ -97,7 +97,7 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
       if (y >= pared && y < 50 + 40 * R) c = amp(-18 + 6 * R - (0.55 - 0.3 * R) * (y - pared));
       // en el apical el ápex cae en el campo cercano: más niebla en los primeros 3-4 cm
       if (R > 0 && o.ventanaVista === 'apical' && y >= pared && y < pared + 40) c += R * amp(-15 - 0.35 * (y - pared));
-      if (R > 0) for (let k = 2; k <= 4; k++) { const d = r - k * pared; if (Math.abs(d) < 4) c += R * amp(-2 - 5 * k) * Math.exp(-(d * d) / 2.2); }
+      if (R > 0) for (let k = 2; k <= 4; k++) { const d = r - k * pared; if (Math.abs(d) < 4) c += R * amp(4 - 6 * k) * Math.exp(-(d * d) / 3.5); }
       CL[q] = c * kW;
     }
     // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
@@ -188,7 +188,8 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
     const { N, A, TAG, DEN, FILL, OR, OD, X, Y, Rr, EB } = G, reloj = [performance.now()];
     const els = elementosDelCorte(partes, P, o.ref || null); reloj.push(performance.now());
     DEN.fill(0); rellenar(P, els[0].seg, (q) => { DEN[q] = 1; });
-    const aS = amp(DB.sangre), aE = amp(DB.extracardiaco), PT = G.PT;
+    // grano real: la sangre no es negro absoluto; un eco muy bajo que asoma al subir la ganancia
+    const aS = amp(DB.sangre + 4 * m.moteado), aE = amp(DB.extracardiaco), PT = G.PT;
     for (let q = 0; q < N; q++) {
       if (PT[q] >= 0) { A[q] = PT[q]; TAG[q] = 0; }
       else if (DEN[q]) { A[q] = aS; TAG[q] = 255; } else { A[q] = aE; TAG[q] = 0; }
@@ -208,11 +209,13 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
         if (borde) trazar(P, el.seg, el.ancho * (1 - 0.45 * W2), el.db - 3 * W2, espec - 3 * W2, tag, m.especular, 1 - W2);
+        // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
+        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - 0.4 * W2), el.db - 8 * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular);
       }
     }
     // anisotropía: el músculo paralelo al haz devuelve menos eco
-    if (m.especular > 0) { const k = -(22 - 8 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
+    if (m.especular > 0) { const k = -(22 - 5 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
     // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
     const W = m.ventana;
     let pulmon = null;
@@ -300,7 +303,7 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
     reloj.push(performance.now());
     const tiempos = { corte: reloj[1] - reloj[0], raster: reloj[2] - reloj[1], sombra: reloj[3] - reloj[2], moteado: reloj[4] - reloj[3], haz: reloj[5] - reloj[4], envolvente: reloj[6] - reloj[5], pantalla: reloj[7] - reloj[6], total: reloj[7] - reloj[0] };
     return { tiempos, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, tag: TAG, db: E, nb, ns, dth: G.dth, dr: G.dr, mitad: P.mitad, prof: P.prof,
-      pared: G.pared, pulmon, apagado: (q) => FILL[q] && OD[q] < 6 && OR[q] < 0.35 };
+      pared: G.pared, pulmon, etiquetas: etiqueta, apagado: (q) => FILL[q] && OD[q] < 6 && OR[q] < 0.35 };
   }
   return { formar, nb, ns };
 }
