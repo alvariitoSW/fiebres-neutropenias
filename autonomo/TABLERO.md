@@ -338,12 +338,12 @@ río y mar) → 39-44 → 45-53.
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
 | 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | pendiente (aprobada 2026-10-25) | Va en la etapa A del plan de integración |
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
-| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en curso, ⏸ (2026-10-25): parada 1 hecha y en la app (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8) · PR #30 en borrador. Siguiente: `rea-eco` y después la parada 2, anatomía. Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b | Empieza por una maqueta «antes / después» de la imagen |
+| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en curso, ⏸ (2026-10-25): parada 1 hecha y en la app (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8) · PR #30 en borrador. Siguiente: que el usuario elija en el informe de `rea-eco` y después la parada 2, anatomía. Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
-| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | pendiente (aprobada 2026-10-25) | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | ⏸ parado en la fase 1 (2026-10-25): informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg | Va antes de la parada 2 de `eco-mega` (anatomía) |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -583,7 +583,7 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | pendiente (aprobada 2026-10-25) | Pequeña; los cálculos ya existen |
+| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña; los cálculos ya existen |
 | 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | pendiente (aprobada 2026-10-25) | Pequeña-mediana |
 | 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | pendiente (aprobada 2026-10-25) | Mediana; llega a inmersión, muralla, telar y vaso |
 | 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
