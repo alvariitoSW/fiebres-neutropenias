@@ -178,23 +178,6 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
-### B-024 · Ingeniería inversa de las webs de eco para un corazón más real · apuntado 2026-10-25
-- **Lo que dijiste**: (tras ver la maqueta de la imagen, «me encanta») «habría que dar una vuelta con
-  /ingenieria-reversa a las páginas de eco que hay para mejorar aún más nuestro modelo […] tiene que reflejar la
-  fisiología verdadera y habría que poder usar imágenes de eco reales […] sobre todo el corazón que se ve».
-- **Cómo lo entiendo**: tipo `mapa` + ingeniería inversa, **antes de la parada 2 de `eco-mega`** (anatomía), para que
-  la anatomía nueva salga de lo mejor que hacen otros. Webs: las de eco ya estudiadas (anesthbeta/ETE, EchoSuite,
-  *The Heart by Ultrasound*) **(supongo)** más otras de eco que se encuentren . Foco: **el corazón** (forma, grosor y movimiento de paredes y valvas, trabéculas, cómo late cada parte) y la
-  **imagen** (cómo se ve en cada vista). Imágenes de eco reales como **referencia** para calibrar la nuestra (lado a
-  lado: «real / nuestra» en cada vista), solo con licencia que lo permita y citadas. Salida: informe-propuesta para el
-  móvil con qué traer, en qué orden, y qué imágenes reales se pueden usar.
-- **Para qué**: estudiar con una eco que se parezca a la de verdad y que salga de la fisiología real (el motor).
-- **Depende de**: nada; entra antes de la parada 2 de `eco-mega`.
-- **Tamaño**: mediana (una sesión de ingeniería inversa + la propuesta).
-- **Decidido por el usuario (25/10)**: webs = las ya estudiadas (*The Heart by Ultrasound* / echodemo, con la que
-  empezamos; EchoSuite; el simulador de ETE de anesthbeta). Imágenes reales: **solo de uso libre y citadas**.
-- **Dudas**: ninguna.
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -228,6 +211,7 @@ esta sección.
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | en el tablero, Objetivo V (`monitor-comun`, aparcada hasta el bloque 3) | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
+| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | pendiente en el tablero, Objetivo E (antes de la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 
 ### ⏸ Dónde quedó tee-inversa
 
