@@ -1,0 +1,152 @@
+<title>Vuelta de modelos vivos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: una columna para el móvil; cada modelo es una fila de monitor con su derivación */
+:root{
+  --bg:#f3f6f5; --panel:#ffffff; --fg:#17201e; --muted:#5a6966; --line:#d5dfdc;
+  --accent:#0f7a63; --warn:#9a5b00; --chip:#e4efec;
+  --sans:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0d1413; --panel:#141e1c; --fg:#e3ece9; --muted:#93a5a0; --line:#25332f;
+  --accent:#4fd1ac; --warn:#f0b357; --chip:#1c2a27; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d1413; --panel:#141e1c; --fg:#e3ece9; --muted:#93a5a0; --line:#25332f;
+  --accent:#4fd1ac; --warn:#f0b357; --chip:#1c2a27; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--sans);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+main{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1{font-size:1.5rem;margin:0;text-wrap:balance}
+h2{font-size:1.05rem;margin:0 0 8px;text-wrap:balance}
+p{margin:0}
+.lead{color:var(--muted)}
+.eti{font:500 .72rem var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ol.top{margin:0;padding-left:1.3em;display:flex;flex-direction:column;gap:10px}
+ol.top li strong{color:var(--accent)}
+.esf{font:500 .72rem var(--mono);padding:1px 7px;border-radius:99px;background:var(--chip);white-space:nowrap}
+.lista{display:flex;flex-direction:column;gap:10px}
+.mod{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.mod header{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mod h3{font-size:1rem;margin:0}
+.ya{color:var(--muted);font-size:.88rem}
+.mec{display:grid;grid-template-columns:auto 1fr;gap:4px 8px;font-size:.92rem}
+.mec b{font:500 .72rem var(--mono);color:var(--accent);padding-top:3px}
+.hueco{font-size:.85rem;color:var(--warn)}
+.hueco::before{content:"⚠ Hueco: ";font-weight:600}
+ul.no{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px;font-size:.92rem}
+.nota{font-size:.88rem;color:var(--muted);border-top:1px solid var(--line);padding-top:12px}
+</style>
+<main>
+  <header style="display:flex;flex-direction:column;gap:6px">
+    <span class="eti">Plan socialista · vuelta-modelos · 25/10/2026</span>
+    <h1>Qué mecánica nueva le encaja a cada modelo vivo</h1>
+    <p class="lead">El profesor revisó los 14 modelos vivos con lo aprendido al estudiar RitmoLab, EchoSuite y el simulador de ETE. No se ha tocado la app. Tú eliges qué se construye.</p>
+  </header>
+
+  <section>
+    <h2>Lo recomendado: más estudio por menos trabajo</h2>
+    <ol class="top">
+      <li><strong>La fórmula con tus números</strong>, como pieza común para todos. Al mover un mando, aparece el renglón «fórmula → tus números → resultado», p. ej. CaO₂ = 1,34 × 7 × 0,97 + 0,003 × 90. Les llega al capilar, al río y mar, al glomérulo, al filtro y a la eco. Los cálculos ya existen. <span class="esf">pequeño</span></li>
+      <li><strong>En el potasio, el «mecanismo prioritario»</strong>. El calcio protege la membrana pero no baja el K⁺; la insulina y el salbutamol lo meten en la célula un rato; solo el riñón, las resinas o la diálisis lo sacan. Al acabar el reloj, una revisión por objetivos: ECG protegido, K⁺ en zona y salida iniciada. <span class="esf">pequeño-medio</span></li>
+      <li><strong>La revisión final por objetivos en los casos</strong>, dentro del motor común de preguntas. Al cerrar un caso dice «cumplido» o «falta, y por qué», sin nota. Llega a la vez a la inmersión, la muralla, el telar y el vaso. <span class="esf">medio</span></li>
+      <li><strong>En la eco, «retenido» en la VCI con ventilación mecánica</strong>. El simulador avisa: «no uses el colapso solo» (umbrales del Manual UMI). <span class="esf">pequeño</span></li>
+      <li><strong>Un monitor común</strong> (el de las maquetas del bloque 3), cuando toque el bloque 3. Después, en el capilar, la eco, los receptores y la cama 7. <span class="esf">medio</span></li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>Modelo a modelo</h2>
+    <div class="lista">
+      <article class="mod"><header><h3>Río y mar (sodio y agua)</h3><span class="esf">P / M</span></header>
+        <p class="ya">Ya tiene: 5 pestañas, 14 preguntas, 3 casos y una guía.</p>
+        <div class="mec"><b>1</b><span>Fórmula con tus números: Posm efectiva = 2 × Na + glucosa / 18, al mover el sodio.</span>
+        <b>2</b><span>Error con consecuencia: si das salino al 0,9 % en un SIADH o corriges demasiado rápido, la escena avisa de la desmielinización.</span></div>
+        <p class="hueco">comprobar que la ficha da el ritmo máximo de corrección, con su página.</p></article>
+
+      <article class="mod"><header><h3>Capilar y oxígeno</h3><span class="esf">P / M</span></header>
+        <p class="ya">Ya tiene: un tablero tipo monitor y la SpO₂ en blanco si no hay onda (un «retenido» en la práctica).</p>
+        <div class="mec"><b>1</b><span>Fórmula con tus números: CaO₂ con la Hb que eliges. Con anemia se ve que el 1,5 % de oxígeno disuelto no la compensa.</span>
+        <b>2</b><span>Cambiar su tablero propio por el monitor común.</span></div></article>
+
+      <article class="mod"><header><h3>Catéter vivo</h3><span class="esf">P</span></header>
+        <p class="ya">Ya tiene: el tiempo en días, lupas y 3 casos.</p>
+        <div class="mec"><b>1</b><span>Comparar calibre y longitud con su flujo: un 14 G corto frente a un CVC largo, con la tabla del libro.</span>
+        <b>2</b><span>Fórmula: Poiseuille (r⁴ / L) con tus números.</span></div>
+        <p class="hueco">solo los flujos que trae la tabla de la ficha.</p></article>
+
+      <article class="mod"><header><h3>Muralla de papel (protección gástrica)</h3><span class="esf">M</span></header>
+        <p class="ya">Ya tiene: consecuencia parcial (el IBP y el sucralfato, con su coste).</p>
+        <div class="mec"><b>1</b><span>Mecanismo prioritario: lo que protege es la nutrición enteral. El IBP sin factor de riesgo «no cambia nada» y trae neumonía y <i>C. difficile</i>.</span>
+        <b>2</b><span>Revisión por objetivos al final del caso de la cama 7.</span></div>
+        <p class="hueco">cifras de riesgo, solo las de la ficha.</p></article>
+
+      <article class="mod"><header><h3>Telar de la trombina</h3><span class="esf">P</span></header>
+        <p class="ya">Ya tiene: calculadora de dosis en la escena (ClCr e IMC) y una pestaña de reloj.</p>
+        <div class="mec"><b>1</b><span>Error con consecuencia: si sigues con heparina en una TIH, el telar trombosa más; si das enoxaparina con ClCr &lt;15, se acumula (p. 11).</span></div>
+        <p class="hueco">cuánto sangra o acumula, solo cualitativo, sin cifras inventadas.</p></article>
+
+      <article class="mod"><header><h3>La inmersión (sedación y analgesia)</h3><span class="esf">M</span></header>
+        <p class="ya">Ya tiene: consecuencia parcial (el midazolam más de 48 h se acumula).</p>
+        <div class="mec"><b>1</b><span>Mecanismo prioritario: sedar sin analgesia no baja el BPS de 9 (Andrés, con FC tranquila y dolor).</span>
+        <b>2</b><span>Revisión por objetivos al cerrar el caso: BPS, RASS objetivo y CAM-ICU.</span></div>
+        <p class="hueco">tiempo de despertar del diazepam (ya anotado).</p></article>
+
+      <article class="mod"><header><h3>Vaso que sangra</h3><span class="esf">M</span></header>
+        <p class="ya">Ya tiene: una guía por estado, 3 casos y «predice y compruébalo».</p>
+        <div class="mec"><b>1</b><span>Mecanismo prioritario: en la CID, tratar la causa; el plasma o las plaquetas sin tratar la causa no cierran la red.</span>
+        <b>2</b><span>Error con consecuencia: plaquetas en una PTT → más trombos.</span></div>
+        <p class="hueco">comprobar que Merino o Marino lo dicen, con página.</p></article>
+
+      <article class="mod"><header><h3>Ácido-base vivo</h3><span class="esf">P</span></header>
+        <p class="ya">Ya tiene: aviso de «combinación no fisiológica», ecuaciones visibles y 4 casos.</p>
+        <div class="mec"><b>1</b><span>«Retenido» con motivo: si el pH no cuadra con [H⁺] = 24 × PaCO₂ / HCO₃⁻, dice «no interpretes, repítela».</span></div>
+        <p class="hueco">umbral de coherencia: buscarlo en el cap. 31. Tiene su propio motor de preguntas: la revisión por objetivos (n.º 3) no le llega sin pasarlo al común.</p></article>
+
+      <article class="mod"><header><h3>Nefrona viva</h3><span class="esf">M</span></header>
+        <p class="ya">Ya tiene: 3 zooms, NTA, obstrucción y fármacos.</p>
+        <div class="mec"><b>1</b><span>Mecanismo prioritario: en la obstrucción, los fluidos no cambian la orina; en la prerrenal, sí.</span></div>
+        <p class="hueco">FENa por estado, solo si la ficha la da.</p></article>
+
+      <article class="mod"><header><h3>Glomérulo vivo</h3><span class="esf">P</span></header>
+        <p class="ya">Ya tiene: consecuencias (AINE + IECA + depleción).</p>
+        <div class="mec"><b>1</b><span>Fórmula con tus números: presión de filtración = presión capilar − Bowman − oncótica, al mover la PAM.</span></div>
+        <p class="hueco">presiones de fisiología general, con el rótulo «ilustrativo».</p></article>
+
+      <article class="mod"><header><h3>Filtro de la TRR</h3><span class="esf">P</span></header>
+        <p class="ya">Ya tiene: difusión, convección, híbrida y dosis.</p>
+        <div class="mec"><b>1</b><span>Fórmula: 25 ml/kg/h × 80 kg = 2000 ml/h de efluente.</span></div></article>
+
+      <article class="mod"><header><h3>Potasio (hiper e hipo)</h3><span class="esf">P-M</span></header>
+        <p class="ya">Ya tiene: reloj de 12 h, botón ×4 y los tiempos de la tabla.</p>
+        <div class="mec"><b>1</b><span>Mecanismo prioritario: el calcio protege pero no baja el K⁺ (ver n.º 2 de arriba).</span>
+        <b>2</b><span>Revisión por objetivos al acabar el reloj.</span></div>
+        <p class="hueco">cuántos mEq mueve cada medida (ya avisado en el modelo).</p></article>
+
+      <article class="mod"><header><h3>Circulación viva y ecógrafo</h3><span class="esf">P / G</span></header>
+        <p class="ya">Ya tiene: el motor, Doppler con ITV y GC, elevación pasiva de piernas y bolos.</p>
+        <div class="mec"><b>1</b><span>«Retenido»: VCI con ventilación mecánica → «no uses el colapso solo» (umbrales 12/18/40 % del Manual UMI).</span>
+        <b>2</b><span>Monitor común que lee el motor (ya previsto en el bloque 3).</span></div>
+        <p class="hueco">la guía ASE 2025 de presión en la aurícula derecha no está en docs/.</p></article>
+
+      <article class="mod"><header><h3>Receptores animados</h3><span class="esf">M</span></header>
+        <p class="ya">Ya tiene: 5 pasos animados.</p>
+        <div class="mec"><b>1</b><span>Monitor común: la PA y la FC cambian según el fármaco.</span></div>
+        <p class="hueco">solo cualitativo (nivel 0-3), sin cifras de PA.</p></article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Lo que no encaja, y por qué</h2>
+    <ul class="no">
+      <li><b>Velocidad 1×/5×/20×</b>: no sirve en el glomérulo, el ácido-base, el capilar ni los receptores, porque muestran un estado estable y no hay tiempo que correr. El potasio ya tiene su ×4.</li>
+      <li><b>«Retenido»</b>: no en la muralla, el telar ni la inmersión, porque no tienen una medida que pueda salir mala.</li>
+      <li><b>Monitor común</b>: no en la nefrona, el filtro, el catéter ni la muralla, porque no tienen constantes y solo sería decorado.</li>
+      <li><b>Revisión por objetivos</b>: no en el glomérulo, el filtro ni los receptores, porque no tienen un caso que se juegue dentro del modelo.</li>
+      <li><b>Pares de prueba</b>: sirven al comprobador automático, no al residente que estudia.</li>
+      <li><b>El orden fijo de RitmoLab</b> (adrenalina tras el 2.º choque) necesita la guía AHA, que no está en docs/.</li>
+    </ul>
+  </section>
+
+  <p class="nota">Riesgo: el profesor no abrió la app ni miró capturas; todo sale del código. Las cifras de los huecos no están comprobadas en las fichas. Para elegir, responde con los números (p. ej. «1, 2 y 4») o con nombres de modelos.</p>
+</main>
