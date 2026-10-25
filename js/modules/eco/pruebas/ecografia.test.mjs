@@ -78,13 +78,18 @@ test('en el 4 cámaras, la cavidad del VI y la AI son sangre (las paredes no se 
   assert.equal(tagMuestra(im, P, f.transformar(f.enCamara.ai([0.45, 0, 0]))), 255, 'centro de la AI');
 });
 
-test('contraste: el miocardio brilla mucho más que la sangre y el pericardio más que el miocardio', () => {
-  const P = planoVista('psaxPm', td), im = ec.formar(gTd.partes, P);
-  const media = (fn) => { let s = 0, n = 0; for (let q = 0; q < im.tag.length; q++) if (fn(im.tag[q])) { s += im.db[q]; n++; } return s / n; };
-  const vi = im.etiquetas.get('VI'), peri = im.etiquetas.get('Pericardio');
-  const dMio = media(t => t === vi), dSangre = media(t => t === 255), dPeri = media(t => t === peri);
-  assert.ok(dMio - dSangre > 25, `miocardio ${dMio.toFixed(0)} dB, sangre ${dSangre.toFixed(0)} dB`);
-  assert.ok(dPeri > dMio + 4, `pericardio ${dPeri.toFixed(0)} dB, miocardio ${dMio.toFixed(0)} dB`);
+test('contraste: el miocardio brilla mucho más que la sangre y el pericardio más que el miocardio', async () => {
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
+  // con las mejoras a 0, el contraste de siempre (>25 dB); con las de por defecto, la sangre deja de ser negro absoluto
+  // (su grano y la neblina del campo cercano) y el músculo se ve gris medio a propósito: el contraste baja pero sigue siendo grande
+  for (const [nombre, m, minimo] of [['mejoras a 0', MEJORAS_CERO, 25], ['mejoras por defecto', undefined, 10]]) {
+    const P = planoVista('psaxPm', td), im = ec.formar(gTd.partes, P, { m });
+    const media = (fn) => { let s = 0, n = 0; for (let q = 0; q < im.tag.length; q++) if (fn(im.tag[q])) { s += im.db[q]; n++; } return s / n; };
+    const vi = im.etiquetas.get('VI'), peri = im.etiquetas.get('Pericardio');
+    const dMio = media(t => t === vi), dSangre = media(t => t === 255), dPeri = media(t => t === peri);
+    assert.ok(dMio - dSangre > minimo, `${nombre}: miocardio ${dMio.toFixed(0)} dB, sangre ${dSangre.toFixed(0)} dB`);
+    assert.ok(dPeri > dMio + 4, `${nombre}: pericardio ${dPeri.toFixed(0)} dB, miocardio ${dMio.toFixed(0)} dB`);
+  }
 });
 
 test('el moteado sigue al tejido: el campo de desplazamiento predice dónde estaba en telediástole lo que se ve en sístole', () => {
@@ -110,15 +115,20 @@ test('el moteado sigue al tejido: el campo de desplazamiento predice dónde esta
   const I = ajusteAfin(vi.seg, vi.seg); assert.ok(Math.abs(I[4] - 1) < 1e-9 && Math.abs(I[5]) < 1e-9 && Math.abs(I[7] - 1) < 1e-9);
 });
 
-test('la imagen es determinista para un mismo estado y la sangre cambia con el tiempo; el tejido, no', () => {
+test('la imagen es determinista para un mismo estado y la sangre cambia con el tiempo; el tejido, no', async () => {
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
   const P = planoVista('a4c', td);
-  const a = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1 }).db), b = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1 }).db);
-  assert.deepEqual(a, b);
-  const im = ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1.5 }), vi = im.etiquetas.get('VI');
-  let dT = 0, nT = 0, dS = 0, nS = 0;
-  for (let q = 0; q < a.length; q++) { const d = Math.abs(im.db[q] - a[q]); if (im.tag[q] === vi) { dT += d; nT++; } else if (im.tag[q] === 255) { dS += d; nS++; } }
-  assert.ok(dT / nT < 1, `el moteado del miocardio cambia sin moverse (${(dT / nT).toFixed(1)} dB)`);
-  assert.ok(dS / nS > 3, `el ruido de la sangre no cambia con el tiempo (${(dS / nS).toFixed(1)} dB)`);
+  // con las mejoras a 0 el tejido apenas cambia (<1 dB); con las de por defecto, algo más (la sombra y la pared gris
+  // lo acercan al ruido de fondo, que sí cambia con el tiempo), pero mucho menos que la sangre
+  for (const [m, tope] of [[MEJORAS_CERO, 1], [undefined, 2]]) {
+    const a = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1, m }).db), b = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1, m }).db);
+    assert.deepEqual(a, b);
+    const im = ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1.5, m }), vi = im.etiquetas.get('VI');
+    let dT = 0, nT = 0, dS = 0, nS = 0;
+    for (let q = 0; q < a.length; q++) { const d = Math.abs(im.db[q] - a[q]); if (im.tag[q] === vi) { dT += d; nT++; } else if (im.tag[q] === 255) { dS += d; nS++; } }
+    assert.ok(dT / nT < tope, `el moteado del miocardio cambia sin moverse (${(dT / nT).toFixed(1)} dB)`);
+    assert.ok(dS / nS > 3 && dS > 2 * dT * nS / nT, `el ruido de la sangre no cambia con el tiempo (${(dS / nS).toFixed(1)} dB)`);
+  }
 });
 
 // Modo M: la columna es la misma imagen a lo largo de un haz (mismos grises que la imagen B) y, sobre el anillo
@@ -219,5 +229,21 @@ test('fase 5: las paredes quedan cerradas en las vistas nuevas también en los e
     for (const k of ['sc4c', 'scVci', 'sse']) { const P = planoVista(k, t0);
       for (let i = 0; i < oo.length; i += 80) for (const e of elementosDelCorte(construirCorazon(estadoGeo(oo[i], ex), OP).partes, P))
         if (e.tipo === 'relleno') assert.equal(e.abiertos, 0, `${esc} · ${k}: ${e.grupo} sin cerrar`); }
+  }
+});
+
+// Las mejoras de la imagen (paredes, moteado, sombra, reverberación, especular, TGC, foco, ventana): con todas las
+// intensidades a 0, la imagen es la de antes (referencia congelada en ecografia-antes.mjs).
+test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris ≈ 0) y con ellas encendidas, cambia', async () => {
+  const { crearEcografo: crearAntes } = await import('./ecografia-antes.mjs');
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
+  const antes = crearAntes({ ancho: 300, alto: 250 }), nuevo = crearEcografo({ ancho: 300, alto: 250 });
+  for (const v of ['plax', 'psaxPm', 'a4c', 'sc4c']) {
+    const P = planoVista(v, td), opc = { ref: gTd.partes, t: 1.3 };
+    const a = antes.formar(gTs.partes, P, opc).pix, b = nuevo.formar(gTs.partes, P, { ...opc, m: MEJORAS_CERO, ventanaVista: VISTAS[v].ventana }).pix, c = nuevo.formar(gTs.partes, P, { ...opc, ventanaVista: VISTAS[v].ventana }).pix;
+    let d0 = 0, d1 = 0, n = 0;
+    for (let i = 0; i < a.length; i += 4) { d0 += Math.abs(a[i] - b[i]); d1 += Math.abs(a[i] - c[i]); n++; }
+    assert.ok(d0 / n < 0.05, `${v}: con las mejoras a 0 la imagen difiere ${(d0 / n).toFixed(3)} niveles de gris`);
+    assert.ok(d1 / n > 3, `${v}: con las mejoras por defecto la imagen apenas cambia (${(d1 / n).toFixed(2)} niveles)`);
   }
 });

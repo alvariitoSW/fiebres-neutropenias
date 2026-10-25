@@ -159,10 +159,24 @@ export function montarSimulador(raiz, opc = {}) {
     opc.onVista?.(k);
   }
   $('#cv-vistas').addEventListener('click', (e) => { const b = e.target.closest('[data-eco]'); if (b) elegirVista(b.dataset.eco); });
+  // calidad automática de la imagen: cuatro niveles de haces × muestras; si la imagen tarda más de 40 ms (25 por segundo),
+  // baja un nivel, y sube si el de arriba cabría en 32 ms. No cuenta el fotograma que construye la rejilla.
+  const NIVELES_ECO = [{ nb: 192, ns: 448 }, { nb: 160, ns: 384 }, { nb: 128, ns: 320 }, { nb: 96, ns: 256 }];
+  let ecosNivel = [], nivelEco = 0, emaEco = 0, desdeCambioEco = 0;
+  const ecoDeNivel = () => (ecosNivel[nivelEco] ||= crearEcografo({ ancho: ecoC.width, alto: ecoC.height, ...NIVELES_ECO[nivelEco] }));
+  function calidadAutomaticaEco(ms) {
+    emaEco = emaEco ? emaEco * 0.7 + ms * 0.3 : ms; desdeCambioEco++;
+    if (desdeCambioEco < 6) return;
+    const coste = (n) => NIVELES_ECO[n].nb * NIVELES_ECO[n].ns;
+    if (emaEco > 40 && nivelEco < NIVELES_ECO.length - 1) nivelEco++;
+    else if (nivelEco > 0 && emaEco * coste(nivelEco - 1) / coste(nivelEco) < 32) nivelEco--;
+    else return;
+    emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoPendiente = true;
+  }
   function ajustarEco() {
     const w = Math.round(ecoC.clientWidth * Math.min(dpr(), 1.5)), h = Math.round(w * 0.8);
     if (!w || (ecografo && ecoC.width === w)) return;
-    ecoC.width = w; ecoC.height = h; ecografo = crearEcografo({ ancho: w, alto: h }); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
+    ecoC.width = w; ecoC.height = h; ecosNivel = []; nivelEco = 0; emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
   }
   // ---- Modo M (modo-m.mjs): una línea del modo B a lo largo del tiempo, con calibres
   let modoEco = 'B', thetaM = 0, medir = 'libre', ultimoTM = null, ecoGeom = null;
@@ -461,7 +475,7 @@ export function montarSimulador(raiz, opc = {}) {
     const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
     // el corte lleva siempre el abdomen (aunque en el 3D esté oculto): es anatomía, no una opción de dibujo
     const abdEco = !propia && abd ? abd : construirAbdomen(geoEco, datosVci(s));
-    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0 });
+    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0, ventanaVista: VISTAS[vistaEco].ventana });
     // Doppler: las velocidades de este instante (las mismas piezas, el mismo estado)
     const Fd = colorOn || (modoEco === 'D' && gate) ? fuentesFlujo(geoEco.flujo, s, areasD(), abdEco.vasos, datosFlujo()) : null;
     if (colorOn) ecografo.colorear(mapaColor(planoEco, im, Fd), nyq);
@@ -488,6 +502,7 @@ export function montarSimulador(raiz, opc = {}) {
       ecoCtx.restore();
     }
     ecoMs = 0.8 * ecoMs + 0.2 * im.tiempos.total; ultimoEco = ahora; ecoPendiente = false;
+    if (!im.geometriaNueva) calidadAutomaticaEco(im.tiempos.total);
     const P = planoEco, k = im.escala, X = (u) => im.cx + u * k, Y = (v) => im.arriba + v * k, px = ecoC.width / ecoC.clientWidth;
     ecoCtx.font = `${Math.round(11 * px)}px system-ui,sans-serif`; ecoCtx.textAlign = 'center'; ecoCtx.textBaseline = 'middle';
     // escala de profundidad: un punto por centímetro junto al borde derecho del sector; cifra cada 5 cm

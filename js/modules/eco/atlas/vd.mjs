@@ -18,7 +18,7 @@
 import { crearMotor, BASE } from '../motor.mjs';
 import { baseGeometrica, construirCorazon, PHI_SEPTO } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { planoVista, crearEcografo, enPlano } from '../ecografia.mjs';
+import { planoVista, crearEcografo, enPlano, VISTAS } from '../ecografia.mjs';
 import { areasAnillo } from '../doppler.mjs';
 import { modeloVci } from '../abdomen.mjs';
 import { estimarPad } from './hemodinamica.mjs';
@@ -222,12 +222,12 @@ export function montar(el) {
   function foto(s, clave) {
     let f = fotos.get(clave); if (f) return f;
     const { extra, gTd, P } = planos, est = estadoGeo(s, extra), geo = construirCorazon(est, { pericardio: true });
-    const lienzoDe = (eco, plano) => { const im = eco.formar(geo.partes, plano, { ref, t: s.t ?? 0 }); const c = document.createElement('canvas'); c.width = W_ECO; c.height = H_ECO;
+    const lienzoDe = (eco, plano, vista) => { const im = eco.formar(geo.partes, plano, { ref, t: s.t ?? 0, ventanaVista: VISTAS[vista].ventana }); const c = document.createElement('canvas'); c.width = W_ECO; c.height = H_ECO;
       c.getContext('2d').putImageData(new ImageData(new Uint8ClampedArray(im.pix), W_ECO, H_ECO), 0, 0); return { c, cx: im.cx, arriba: im.arriba, k: im.escala }; };
     // diámetros del índice de excentricidad, en el nivel del plano: los puntos de la geometría, movidos como la malla
     const g = baseGeometrica(est), des = g.vi.Le - gTd.vi.Le, z = nivelPm(gTd) - des, ie = indiceExcentricidad(g, z);
     const pt = (f) => enPlano(P, geo.flujo.transformar(g.endoVi(z, f)));
-    f = { A: lienzoDe(ecoA, planos.A), P: lienzoDe(ecoP, P), ie,
+    f = { A: lienzoDe(ecoA, planos.A, 'a4c'), P: lienzoDe(ecoP, P, 'psaxPm'), ie,
       d1: [pt(PHI_SEPTO), pt(PHI_SEPTO + Math.PI)], d2: [pt(PHI_SEPTO + Math.PI / 2), pt(PHI_SEPTO - Math.PI / 2)] };
     fotos.set(clave, f);
     return f;
