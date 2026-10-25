@@ -178,22 +178,6 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
-### B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas · apuntado 2026-10-25
-- **Lo que dijiste**: «hay que estudiar cómo optimizar el uso de modelos y de tokens para superar fácilmente ese
-  listón en ciertas tareas que requieren ese 8,75; […] lo bajamos a un 8 sobre 10, pero lo ideal sería llegar a 8,75
-  mínimo».
-- **Cómo lo entiendo**: tipo `auditoria`, de solo lectura, con `autonomo/gasto.mjs` y los partes. Medir en las tareas
-  ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó, y proponer reglas para llegar a 8,75 a
-  la primera. Ideas de partida **(supongo)**: que el profesor diseñe antes de construir y deje la rúbrica escrita en el
-  encargo (el constructor sabe con qué le van a juzgar); que el constructor se autopuntúe con capturas antes de
-  entregar; vueltas cortas con el mismo constructor (sigue con su contexto, sin empezar de cero); potente solo en la
-  primera vuelta de algo nuevo y en el juicio; y saber qué tareas necesitan la meta (modelos vivos, maquetas) y
-  cuáles basta con el 8.
-- **Para qué**: menos vueltas y menos gasto con el listón alto.
-- **Depende de**: nada (mejor con 2-3 tareas ya juzgadas sobre 10).
-- **Tamaño**: pequeña (una sesión).
-- **Dudas**: ninguna.
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -226,6 +210,7 @@ esta sección.
 | `radar`, `vuelta-modelos`, `eco-mega`, `inventario`, `pulmon-respirador` | **B-012 a B-016**, aprobadas | pendientes en el tablero | 2026-10-25 | «estoy de acuerdo con todo» (25/10) |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | en el tablero, Objetivo V (`monitor-comun`, aparcada hasta el bloque 3) | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
+| `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
 
 ### ⏸ Dónde quedó tee-inversa
 

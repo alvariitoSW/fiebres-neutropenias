@@ -342,6 +342,19 @@ río y mar) → 39-44 → 45-53.
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
+| 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
+
+**Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
+- Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
+  (`autonomo/gasto.mjs`, partes, informes del profesor), y proponer reglas para llegar a 8,75 a la primera.
+- Para qué: menos vueltas y menos gasto con el listón alto (se aprueba con 8 sobre 10; la meta es 8,75).
+- Ideas de partida (supongo): la rúbrica escrita en el encargo antes de construir; el constructor se autopuntúa con
+  capturas antes de entregar; vueltas con el mismo constructor (SendMessage, sin empezar de cero); potente solo en la
+  primera vuelta de algo nuevo y en el juicio; qué tipos de tarea necesitan la meta y cuáles basta con el 8.
+- Salida: una página para el móvil con la tabla vuelta → nota → modelo → tokens y las propuestas de regla, para que
+  el usuario elija.
+- Lo que NO quiero: cambiar reglas sin su visto bueno.
+- Fuente: `autonomo/partes/`, `autonomo/gasto.mjs`, los informes `profesor.md` de cada tarea.
 
 ### Encargo · `tee-inversa`
 
