@@ -361,6 +361,12 @@ El resto del tablero sigue `aparcada`.
   G1 shock (puede empezar ya: Manual UMI y VExUS en `docs/`), G2 inestable y paro (AHA 2025), G3 marcapasos/SCA,
   G4 tras el dispositivo, G5 neurocrítico, G6 ETE. Espera: ¿puerta «Guardia» nueva en la raíz?, ¿G1 tras la fase 0?,
   PDF, y abrir `huggingface.co` y `arxiv.org`.
+- **🔴 Los 3 modelos vivos del bloque 3 (25/10)**: el informe del megaproyecto (versión 2, mismo enlace) cruza el juicio de
+  las maquetas v2 (`autonomo/bloques/b3/juicio-maquetas-v2.md`: ninguna pasa, 5 puntos <4 cada una) con lo aprendido en
+  las webs, y propone una **v3** de las tres con esos arreglos y **un solo monitor de UCI común** antes de llevarlas a la
+  app. Espera tu aprobación. También añade: lo que ya tenemos, mejoras pieza por pieza (eco, atlas, calculadoras,
+  catéter, potasio y ácido-base, casos, pulmón con respirador) y el método para futuros modelos vivos (monitor común,
+  arco en C, sonda de ETE, «la placa de la cama 7», gemelo hemodinámico).
 - **✅ Aprobado por el usuario el 23/10** («te doy el ok a todo»; orden, carriles y paradas «en principio no» cambian):
   los 6 cambios previos, las 8 tareas de la fase 0, el «ok» a la maqueta v2 del corazón eléctrico y tocar el motor
   para que lata con el ritmo. Pidió ver el plan final integrado **antes de tocar código ni nada**: se le reenvía y se
