@@ -335,6 +335,11 @@ río y mar) → 39-44 → 45-53.
 | 6 | `rea-ritmolab` | Ingeniería inversa de RitmoLab (Farmacotips), ya accesible: informe-propuesta para el PIF de Cardiología, los modelos vivos (corazón eléctrico, motor) y la puerta «Arritmias» | en curso, ⏸ parado en la fase 1 (2026-10-23): informe «Ritmo vivo y placa guiada», https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 | Aprobada el 23/10; antecedentes en `docs/historial/cardiologia.md` («RitmoLab») |
 | 7 | `rea-final` | Informe final de la ingeniería inversa (6 webs) + segunda pasada de NavRad con imagen | ⏸ parado (2026-10-23): esperando la elección del usuario. Final: https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee · NavRad: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm | Pedido por el usuario el 23/10; sustituye a los informes parciales como documento de decisión |
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
+| 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | pendiente (aprobada 2026-10-25) | Va en la etapa A del plan de integración |
+| 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; antes que B-015 |
+| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | pendiente (aprobada 2026-10-25) | Empieza por una maqueta «antes / después» de la imagen |
+| 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
+| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 
 ### Encargo · `tee-inversa`
 
@@ -376,6 +381,145 @@ río y mar) → 39-44 → 45-53.
   vivo» en 4 fases (0 acabado de producto, 1 coronarias y IAM en el motor, 2 coronariografía y ETE, 3 calculadoras de
   eco de UCI, 4 visor de TC). Informes de cada web en `autonomo/ideas/ingenieria-inversa/`. Parte:
   `autonomo/partes/2026-10-23-rea.md`.
+
+
+### Encargos aprobados el 25/10/2026 («estoy de acuerdo con todo»), copiados de la bitácora
+
+### B-012 · Radar: integrar webs, repositorios, Twitter e ideas con un plan sólido · apuntado 2026-10-23
+- **Lo que dijiste**: «integrar estas y futuras páginas/repositorios/lo que vea en tuiter/lo que se me ocurra y de ahí
+  desarrollar el proyecto bien con un plan sólido y sobre todo teniendo en cuenta lo que realmente se quiere conseguir».
+- **Cómo lo entiendo**: un **proyecto permanente** (no una tarea que se acaba) con dos partes: un **norte** que no
+  cambia y un **radar** por el que entra todo lo nuevo. Nada se construye porque «está chulo»: solo si acerca al norte.
+  1. **El norte** (borrador, **(supongo)**; lo decides tú): «Que un R1 de UCI entienda y maneje al paciente crítico:
+     en la cama, la respuesta en 30 segundos desde el móvil; para estudiar, el mecanismo que se ve y preguntas que
+     obligan a pensar; todo fiel a su fuente con página, en español, sin cuenta ni servidor». De él salen las
+     **situaciones de guardia** del informe final (shock, dolor torácico, arritmia inestable, comprobar un
+     dispositivo, neurocrítico, quirófano cardíaco), que son la vara de medir.
+  2. **Una sola puerta de entrada**: me pasas una web, un repositorio, un tuit o una idea, y queda apuntado en un
+     registro (`autonomo/radar/`) con la fecha, lo que dijiste y el tipo. **(supongo)** una skill `/radar` que lo
+     haga, o que `/bitacora apunta` lo mande allí.
+  3. **Triaje con una ficha fija** para cada entrada: qué es; a qué situación de guardia, ficha o modelo vivo sirve;
+     qué fuente lo respalda; licencia; coste; si encaja en una fase ya existente. Veredicto: **integrar en la fase N**,
+     **idea suelta** (se guarda) o **descartar** (con motivo).
+  4. **Cómo se estudia cada tipo**:
+     - una web o una app → `/ingenieria-reversa` (como hoy);
+     - un repositorio → leerlo, comprobar la licencia y, si es una herramienta, revisarla antes de instalarla (como
+       las skills de hoy);
+     - un tuit → no es fuente: se extrae la idea y se busca la fuente primaria con `claim-check` o `paper-lookup`;
+     - una idea tuya → se convierte en ficha de encargo, con las preguntas mínimas.
+  5. **Una hoja de ruta viva**: la del informe final «Del simulador a la cama» (fases 0-4) pasa a ser el documento
+     único. Cada entrada nueva se encaja en una fase (o abre una), sin duplicar. Una página para el móvil que se
+     republica en el mismo enlace.
+  6. **Pocas paradas**: las decisiones se te llevan **por tandas** (p. ej. cada semana o cada 5 entradas), no una a
+     una, como pediste para los bloques (REGLAS §2.3).
+  7. **Medir si sirve**: cada fase se cierra con su situación de guardia «resuelta» (lo que se consulta en la cama y
+     lo que se estudia, comprobado en el móvil) y con tu uso real en la rotación que toque.
+- **Afinado el 23/10** (el usuario: «mejorarlo y abrir la puerta a seguir mejorándolo conforme avanza la IA y la
+  tecnología»; «la IA de Nvidia para leer TC body… unirlas para crear… un agente de IA que ayude al médico radiólogo»;
+  «poder pasar la información de ecocardio en tiempo real y realizar el máximo de cálculos posibles… y hacer
+  literalmente magia»). El norte pasa a tener **tres niveles**, cada uno con su puerta:
+  1. **Estudiar** (lo de hoy): modelos vivos, fichas, Mayéutica. Lo ya estudiado de las webs (eco, arritmias, ETE,
+     coronarias, TC) ahorra diseño: se rehace sobre nuestros motores.
+  2. **Ayudar en la guardia, en el móvil y sin datos del paciente**: metes las medidas de la eco que haces y la app
+     calcula todo lo que se puede (VS, GC, E/e′, PAPS, TAPSE/PAPS, VExUS…), con su grado, su fórmula y la coherencia
+     entre medidas, y **el motor se ajusta a esas medidas** para mostrar «tu paciente» latiendo (un gemelo
+     hemodinámico). Cabe en la arquitectura actual (todo en el teléfono). **(supongo)** «tiempo real» = tú tecleas o
+     dictas las medidas mientras exploras; conectar el ecógrafo directamente no es posible desde una web en el móvil.
+  3. **Asistente con IA** (lo que llegue con la tecnología): leer imagen con modelos abiertos (p. ej. los de NVIDIA
+     para TC, familia MONAI / VISTA-3D, **por comprobar** modelo y licencia) unidos al método de NavRad y Radiology
+     Assistant; IA de eco. **Choca con reglas actuales** (sin backend; una sola librería) y abre temas legales: datos
+     de salud de pacientes reales (anonimizar, mejor en el propio dispositivo o en un ordenador del hospital) y
+     producto sanitario (una herramienta que ayuda a diagnosticar es regulada; en estudio no). Decisión del usuario.
+  - **Datos de pacientes** (el usuario, 23/10): no guardar datos personales; sí usarlo para calcular y para ayudar a
+    diagnosticar sin que se guarde; y usar las imágenes para «alimentar a Claude». Explicado y anotado en
+    `docs/historial/radar.md` §3: cálculos sin identificar y sin guardar, sí; imágenes reales, solo anonimizadas y
+    procesadas en el dispositivo o en el hospital; a un servicio de IA externo, no; «mejorarse» = biblioteca de casos
+    anonimizados o abiertos dentro de la app.
+    **Decidido (23/10): la idea de «alimentar a Claude» con imágenes de pacientes queda descartada** («lo de alimentar
+    a Claude lo olvidamos»).
+  - **Vigía tecnológico** dentro del radar: cada avance (IA de imagen, de eco, modelos nuevos) entra como una
+    entrada más y se tría contra el norte.
+- **Lo que NO quiero** **(supongo)**: acumular proyectos sueltos; construir sin pasar por el norte; meter código,
+  textos o imágenes ajenos; dar por fuente un tuit o una web; abrir 10 frentes a la vez.
+- **Primeras entradas**: las 6 webs de hoy (anesthbeta, EchoSuite, AngioView, NavRad, Radiology Assistant, RitmoLab),
+  las 3 herramientas (REA, leanrea → skill `/ingenieria-reversa`, y las skills de clinical-ai-skills y
+  research-agent-skills), ya estudiadas: entran triadas en la fase que les toca.
+- **Depende de**: que confirmes o corrijas el norte. La ejecución (fases 0-4) depende de lo que está en «Esperando algo
+  tuyo» (informe final).
+- **Tamaño**: grande y permanente. Trozos que propongo:
+  1. **Norte** (pequeña): escribirlo contigo en una página corta y dejarlo fijo.
+  2. **Montar el radar** (pequeña-mediana): registro, ficha de triaje, la skill `/radar` y la hoja de ruta viva.
+  3. **Volcar lo de hoy** (pequeña): las 6 webs y las 3 herramientas como primeras entradas triadas.
+  4. **Revisión periódica** (cada tanda): triar lo nuevo y re-priorizar contigo.
+  Las fases 0-4 del informe final se aprueban aparte, como tareas del plan socialista.
+- **Dudas**:
+  1. ¿El norte de arriba es lo que quieres conseguir, o le falta algo (p. ej. el MIR, la docencia a otros, la consulta
+     en la guardia frente al estudio)?
+  2. ¿Cómo me pasarás lo de Twitter: enlace, captura o texto copiado? (x.com suele estar bloqueado desde aquí; una
+     captura o el texto funcionan siempre.)
+  3. ¿Cada cuánto quieres la tanda de decisiones: semanal o cada N entradas?
+  4. ¿Te vale el nombre «Radar»?
+  5. (23/10) Para el nivel 3: ¿aceptas cambiar «sin backend» para esa parte (un servidor o un ordenador con GPU), o
+     prefieres solo lo que corra en el propio teléfono? ¿Uso solo docente con casos abiertos, o también con
+     pacientes reales (requiere el visto bueno del hospital)?
+
+### B-013 · Pulmón con respirador (modelo vivo) · apuntado 2026-10-23
+- **Lo que dijiste**: «El punto 5 sobre lo que me propones me gusta, añádelo» (la propuesta del pulmón con respirador).
+- **Cómo lo entiendo**: tipo `visual` (modelo vivo grande, megaproyecto según REGLAS §7.12). **Ya estaba previsto** como
+  el modelo del **bloque 4 de Marino** (caps. 23-30) y diseñado como maqueta M3 en `autonomo/ideas/marino.md` §4.1:
+  - Qué se ve: alvéolos en la caja torácica unidos al tubo y al respirador, con las curvas vivas de presión, flujo y
+    volumen; alvéolos sobredistendidos, abiertos y colapsados que se abren y cierran.
+  - Mandos: VCV | PCV, Vt por peso predicho, PEEP (presión de conducción y mejor PEEP), compliance y resistencia, FR e
+    I:E (PEEP oculta), pausas inspiratoria y espiratoria, esfuerzo del paciente (SBT), VNI y alto flujo.
+  - Se une al **motor del corazón** (la presión intratorácica baja el gasto; VVS en cada latido) y al **ácido-base**
+    (la ventilación minuto fija la PaCO₂).
+  - ~19 fichas (Merino Neumología, Marino caps. 7, 11 y 23-30), con imágenes reales de SDRA y VILI.
+  - Encaja con el norte del Radar: nivel 1 (estudiar) y, después, nivel 2 (la guardia: ajustar el respirador con tus
+    datos).
+- **Depende de**: terminar el bloque 3 (o adelantarlo si lo decides); la maqueta M3 para que elijas antes de construir.
+- **Tamaño**: grande (maqueta → modelo → fichas con Estudiar). Trozos: 1) maqueta; 2) modelo en la app; 3) enlace con
+  el corazón y el ácido-base; 4) Mayéutica y casos en las fichas.
+- **Dudas**: ¿lo dejas en su sitio (bloque 4, tras el 3) o lo adelantas?
+
+### B-014 · Inventario de estudio · apuntado 2026-10-23
+- **Lo que dijiste**: (el mismo mensaje) la propuesta del inventario.
+- **Cómo lo entiendo**: tipo `auditoria`, **solo lectura**, sin tocar la app. Una tabla de las ~724 fichas: si tienen
+  vista Visual, modelo vivo que las explique, Estudiar (Mayéutica) o solo preguntas viejas (y cuántas «de
+  redactar»), con su especialidad y su fuente. Salida: una página para el móvil con el recuento por especialidad y
+  la lista ordenada por lo que más ayudaría a estudiar.
+- **Para qué**: decidir con datos qué mejorar primero (y alimentar el Radar: dónde encaja cada idea nueva).
+- **Depende de**: nada.
+- **Tamaño**: pequeña (una sesión).
+- **Dudas**: ninguna.
+
+### B-015 · Megaproyecto de la eco: modelo, imagen más realista y lo mejor de las webs · apuntado 2026-10-25
+- **Lo que dijiste**: «nuestra eco la podemos mejorar por un millón… mejorar el modelo, el renderizado, el hacerlo más
+  realista, el añadir las mejoras de todas las páginas de eco en nuestro modelo».
+- **Cómo lo entiendo**: tipo `visual`, megaproyecto (REGLAS §7.12) sobre `js/modules/eco/`, con sus pruebas en verde.
+  Tres frentes: 1) **modelo**: anatomía más fiel del corazón y de lo que lo rodea (esófago para la ETE, segmentos de
+  valvas, coronarias), sin perder que lo mueve el motor; 2) **imagen**: eco más realista (sombra acústica, artefactos,
+  ganancia y profundidad, ventana pobre, calidad automática en el móvil); 3) **lo de las webs**: colores de estructura,
+  rótulos con enlace al 3D, viaje entre vistas, guía de sonda, ETE, banco de la mitral, calculadora ↔ simulador,
+  gemelo hemodinámico. **(supongo)** primero una maqueta comparativa «antes / después» de la imagen para que elijas.
+- **Depende de**: decidir tocar la anatomía congelada; ASE/SCA 2013 de ETE; fuentes de cada medida.
+- **Tamaño**: grande. Trozos: maqueta de imagen → anatomía → vistas y mandos → calculadoras y gemelo.
+- **Dudas**: ¿se puede añadir anatomía a partir de mallas abiertas (BodyParts3D, CC BY, con cita) o todo procedural?
+
+### B-016 · Vuelta por los modelos vivos: mecánicas nuevas · apuntado 2026-10-25
+- **Lo que dijiste**: «de los modelos vivos que ya tenemos, se podría dar una pequeña vuelta a ver si hubiera que
+  mejorarlos con alguna nueva mecánica que podamos añadir».
+- **Cómo lo entiendo**: tipo `auditoria` de solo lectura (profesor, modo juzgar) sobre los 14 modelos vivos, con las
+  mecánicas aprendidas en la ingeniería inversa: error con consecuencia y «mecanismo prioritario», revisión final por
+  objetivos, velocidad 1×/5×/20×, monitor común, fórmula con tus números, pares de prueba, «retenido» con motivo.
+  Salida: una tabla modelo → mecánica que le encaja → esfuerzo, para que elijas.
+- **Depende de**: nada. **Tamaño**: pequeña (una sesión).
+
+**Decisiones del usuario del 25/10** (aprobó todas las recomendaciones): etapa A «adelante»; v3 de los 3 modelos del
+bloque 3 con los arreglos del juicio y un monitor común antes de la app; puerta «Guardia» nueva en la raíz; G1 (shock)
+tras la fase 0; tocar el motor (ritmo e IAM) y la anatomía congelada (esófago, valvas por segmentos, coronarias);
+mallas abiertas con cita: se decide viendo la maqueta; visor de cortes en la fase 4; casos de imagen «no comerciales»,
+sí; figuras de Radiology Assistant, no (se enlaza). Respuestas por defecto del Radar: Twitter por captura, texto o el
+bot de Telegram (B-017); decisiones semanales; nombre «Radar»; la IA de TC, solo en el teléfono hasta nueva decisión.
 
 ## Lo que aún no está aprobado
 
