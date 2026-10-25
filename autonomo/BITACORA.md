@@ -184,18 +184,16 @@ esta sección.
   fisiología verdadera y habría que poder usar imágenes de eco reales […] sobre todo el corazón que se ve».
 - **Cómo lo entiendo**: tipo `mapa` + ingeniería inversa, **antes de la parada 2 de `eco-mega`** (anatomía), para que
   la anatomía nueva salga de lo mejor que hacen otros. Webs: las de eco ya estudiadas (anesthbeta/ETE, EchoSuite,
-  *The Heart by Ultrasound*) **(supongo)** más otras de eco que se encuentren (simuladores de ETT/ETE, atlas con
-  vídeos). Foco: **el corazón** (forma, grosor y movimiento de paredes y valvas, trabéculas, cómo late cada parte) y la
+  *The Heart by Ultrasound*) **(supongo)** más otras de eco que se encuentren . Foco: **el corazón** (forma, grosor y movimiento de paredes y valvas, trabéculas, cómo late cada parte) y la
   **imagen** (cómo se ve en cada vista). Imágenes de eco reales como **referencia** para calibrar la nuestra (lado a
   lado: «real / nuestra» en cada vista), solo con licencia que lo permita y citadas. Salida: informe-propuesta para el
   móvil con qué traer, en qué orden, y qué imágenes reales se pueden usar.
 - **Para qué**: estudiar con una eco que se parezca a la de verdad y que salga de la fisiología real (el motor).
 - **Depende de**: nada; entra antes de la parada 2 de `eco-mega`.
 - **Tamaño**: mediana (una sesión de ingeniería inversa + la propuesta).
-- **Dudas**: ¿qué webs de eco quieres que entren, además de las ya vistas? Imágenes reales: las de bancos de
-  pacientes con licencia restrictiva (CAMUS, EchoNet) no se pueden usar (CLAUDE.md §7.9); ¿tienes tú vídeos o
-  fotos propias o de tu hospital (anonimizadas) que se puedan usar como referencia, o tiramos solo de imágenes con
-  licencia abierta?
+- **Decidido por el usuario (25/10)**: webs = las ya estudiadas (*The Heart by Ultrasound* / echodemo, con la que
+  empezamos; EchoSuite; el simulador de ETE de anesthbeta). Imágenes reales: **solo de uso libre y citadas**.
+- **Dudas**: ninguna.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
