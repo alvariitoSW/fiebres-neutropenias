@@ -337,7 +337,7 @@ río y mar) → 39-44 → 45-53.
 | 7 | `rea-final` | Informe final de la ingeniería inversa (6 webs) + segunda pasada de NavRad con imagen | ⏸ parado (2026-10-23): esperando la elección del usuario. Final: https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee · NavRad: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm | Pedido por el usuario el 23/10; sustituye a los informes parciales como documento de decisión |
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
 | 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | pendiente (aprobada 2026-10-25) | Va en la etapa A del plan de integración |
-| 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | en revisión (2026-10-25): PR #29, el usuario elige mecánicas (informe https://claude.ai/artifact/5hpTv7763RnZUPt9hwMycW) | Corta, de solo lectura; antes que B-015 |
+| 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | pendiente (aprobada 2026-10-25) | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
@@ -547,6 +547,51 @@ tras la fase 0; tocar el motor (ritmo e IAM) y la anatomía congelada (esófago,
 mallas abiertas con cita: se decide viendo la maqueta; visor de cortes en la fase 4; casos de imagen «no comerciales»,
 sí; figuras de Radiology Assistant, no (se enlaza). Respuestas por defecto del Radar: Twitter por captura, texto o el
 bot de Telegram (B-017); decisiones semanales; nombre «Radar»; la IA de TC, solo en el teléfono hasta nueva decisión.
+
+## Objetivo V · Mecánicas nuevas en los modelos vivos
+
+Aprobado por el usuario el 25/10/2026 («me parece todo perfecto, estoy de acuerdo en lo que dice el profesor»), sobre el
+informe de `vuelta-modelos` (`autonomo/ideas/vuelta-modelos.md`, https://claude.ai/artifact/5hpTv7763RnZUPt9hwMycW).
+Son mejoras de lo que ya existe (tipo `visual` sobre modelos hechos): a `main` con los jueces en verde y `--modelo`
+de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marcada como hueco en el informe.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | pendiente (aprobada 2026-10-25) | Pequeña; los cálculos ya existen |
+| 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | pendiente (aprobada 2026-10-25) | Pequeña-mediana |
+| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | pendiente (aprobada 2026-10-25) | Mediana; llega a inmersión, muralla, telar y vaso |
+| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
+| 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
+
+**Encargo `formula-comun`** · tipo: visual (mejora de lo existente)
+- Qué quiero: al mover un mando, un renglón «fórmula → tus números → resultado» (p. ej. CaO₂ = 1,34 × 7 × 0,97 + 0,003 × 90).
+- Para qué: estudiar (ver de dónde sale la cifra).
+- Modelo «así sí»: los modelos vivos de Libros (`capilar-vivo`, `agua-viva`).
+- Lo visual: una pieza común en `js/core/` (junto a `ui.js`), usada en capilar (CaO₂/DO₂), río y mar (Posm efectiva), glomérulo (presión de filtración, rótulo «ilustrativo»), filtro de la TRR (dosis de efluente) y eco (GC por ITV).
+- Lo que NO quiero: fórmulas nuevas sin fuente; recalcular en la pieza (copia el cálculo que ya existe).
+- Fuente: la de cada ficha; la del glomérulo es fisiología general.
+
+**Encargo `potasio-prioritario`** · tipo: visual (mejora de lo existente)
+- Qué quiero: que el simulador enseñe qué hace cada medida. El calcio protege la membrana pero no baja el K⁺; la insulina y el salbutamol lo meten en la célula un rato; solo el riñón, las resinas o la diálisis lo sacan. Lo que no trata el mecanismo prioritario «no cambia nada». Al acabar el reloj, revisión por objetivos (ECG protegido, K⁺ en zona, salida iniciada), sin nota.
+- Modelo «así sí»: `js/modules/nefrologia/hiperpotasemia-sim.js` (+ `potasio-escena.js`), patrón de RitmoLab (`autonomo/ideas/ingenieria-inversa/ritmolab-2.md`).
+- Lo que NO quiero: cifras de cuántos mEq mueve cada medida si la ficha no las da (hueco ya avisado).
+- Fuente: la tabla de tiempos que ya usa el simulador.
+
+**Encargo `objetivos-casos`** · tipo: visual (mejora de lo existente)
+- Qué quiero: al cerrar un caso de un modelo vivo, «cumplido / falta y por qué» por objetivos (p. ej. inmersión: BPS, RASS objetivo, CAM-ICU), y como opción del motor «si eliges mal, el modelo pasa a…» (error con consecuencia: TIH en el telar, PTT en el vaso, midazolam en la inmersión).
+- Modelo «así sí»: `js/core/mayeutica-motor.js` (`crearMayeuticaModelo`) y `js/modules/libros/capilar-vivo.js`.
+- Lo que NO quiero: nota numérica; romper los casos que ya existen. El ácido-base tiene motor propio: fuera, salvo que se pida migrarlo.
+- Fuente: la de cada ficha (Merino o Marino, con página).
+
+**Encargo `eco-vci-retenido`** · tipo: visual (mejora de lo existente)
+- Qué quiero: con ventilación mecánica, el ecógrafo no da la estimación por colapso de la VCI sola: «retenido: no uses el colapso solo», con su motivo.
+- Modelo «así sí»: el aviso de «combinación no fisiológica» y el patrón «retenido» de EchoSuite (`autonomo/ideas/ingenieria-inversa/echosuite-2.md`).
+- Lo que NO quiero: umbrales de la ASE 2025 (no está en `docs/`).
+- Fuente: Manual UMI (umbrales 12/18/40 %), con página. Pruebas: `node --test 'js/modules/eco/pruebas/*.test.mjs'`, `jueces.mjs --eco`.
+
+**Encargo `monitor-comun`** · tipo: visual · aparcada hasta el bloque 3
+- Qué quiero: el monitor común de `autonomo/maquetas/comun/` pasado a `js/core/` con el bloque 3; después, en capilar (sustituye su tablero), eco (lee el motor), receptores (PA y FC por fármaco, cualitativo 0-3) y cama 7.
+- Lo que NO quiero: monitor en la nefrona, el filtro, el catéter ni la muralla (no tienen constantes).
 
 ## Lo que aún no está aprobado
 
