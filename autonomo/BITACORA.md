@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-23 (informe final de ingeniería inversa; B-012 Radar apuntada y afinada).
+Última sincronización: 2026-10-25 (sin PR en revisión; el plan socialista, con contador de gasto y reglas de ahorro).
 
 ---
 
@@ -333,6 +333,11 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-25 · **Plan socialista más barato**: contador de gasto de tokens por tarea y por agente, y cuatro reglas de
+  ahorro (una tarea o parada por sesión, encargos de una pieza con tope de ~100 pasos, modelo potente solo para lo
+  nuevo, lecturas acotadas de REGLAS). Aprobadas B-012 a B-017 y el megaproyecto «La UCI en el bolsillo». La app no
+  cambió.
 
 - 2026-10-23 · **Ingeniería inversa de 6 simuladores** (anesthbeta, EchoSuite, AngioView, NavRad con imagen,
   Radiology Assistant, RitmoLab): 5 informes y el **informe final «Del simulador a la cama»**
