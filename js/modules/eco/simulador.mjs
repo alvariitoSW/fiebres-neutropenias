@@ -369,11 +369,11 @@ export function montarSimulador(raiz, opc = {}) {
       const u = motor.ultimo, aCm2 = areasD()[fuenteD.n] / 100, gc = medD.itv * aCm2 * u.fc / 1000;
       if (fuenteD.n === 'aortica' && fuenteD.tubo) {
         if (cajaF && pintarFormula) pintarFormula(cajaF, [{ titulo: 'Gasto cardíaco', formula: 'GC = ITV × área del TSVI × FC ÷ 1000',
-          numeros: `${fx(medD.itv, 1)} cm × ${fx(aCm2, 2)} cm²${refGeoTd?.geo?.rA ? ` (Ø ${fx(refGeoTd.geo.rA / 5, 1)} cm)` : ''} × ${fx(u.fc, 1)} lpm ÷ 1000`, resultado: fx(gc, 1), unidad: 'L/min',
+          numeros: `${fx(medD.itv, 1)} cm × ${fx(aCm2, 2)} cm²${refGeoTd?.geo?.rA ? ` (Ø ${fx(refGeoTd.geo.rA / 5, 1)} cm)` : ''} × ${fx(u.fc, 1)} lpm ÷ 1000`, resultado: fx(gc, 1), unidad: `L/min · estimado por Doppler; el simulador: ${fx(u.gc, 1)}`,
           origen: 'fisiología general · ITV: ficha · cardio-eco-itv · área y FC del modelo: ilustrativo', prefijos: ['cardio'] }]);
         enl.innerHTML = enlace('ITV en la Ficha 11', 'cardio-interaccion-corazon-pulmon', '#cardio-eco-itv');
         poner(medD.itv >= 18 && medD.itv <= 22 ? 'ok' : 'warn', cab + `<b>ITV ${fx(medD.itv, 1)} cm</b> (normal 18-22 cm, Ficha 11) · pico ${fx(medD.pico)} cm/s`
-          + (cajaF && pintarFormula ? `<br>GC real del simulador: <b>${fx(u.gc, 1)} L/min</b> · el Doppler lo estima <span class="cv-muted">(ilustrativo)</span>` : `<br>GC ≈ ITV × área del TSVI (${fx(aCm2, 2)} cm²) × FC = <b>${fx(gc, 1)} L/min</b> (el motor: ${fx(u.gc, 1)} L/min)`)
+          + (cajaF && pintarFormula ? '' : `<br>GC ≈ ITV × área del TSVI (${fx(aCm2, 2)} cm²) × FC = <b>${fx(gc, 1)} L/min</b> (el motor: ${fx(u.gc, 1)} L/min)`)
           + `<br><span class="cv-muted">El pico es del modelo: su eyección es más afilada de lo normal (pendiente de calibrar); el ITV no depende de eso.</span>`);
       } else poner('', cab + `ITV ${fx(medD.itv, 1)} cm · pico ${fx(medD.pico)} cm/s · GC ≈ ${fx(gc, 1)} L/min<br><span class="cv-muted">${fuenteD.tubo ? 'En el tracto de salida.' : 'Por encima de la válvula: es la velocidad del chorro, no la del tracto de salida.'} Ilustrativo.</span>`);
       return;

@@ -1,7 +1,7 @@
 # 2026-10-25 · formula-comun (B-018)
 
 **Resultado:** hecha, en `main` (Objetivo V: mejoras de lo existente, directo con los jueces en verde; sin PR)
-**Vueltas:** 2 · **Jueces:** general ✓ · `--eco` y pruebas del eco (247) ✓ · `--modelo capilar-vivo` y `agua-viva` ✓ · auditoría ✓ (0 graves) · profesor ✓ tras la vuelta 2
+**Vueltas:** 2 (+ retoque del director) · **Jueces:** general ✓ · `--eco` y pruebas del eco (247) ✓ · `--modelo capilar-vivo` y `agua-viva` ✓ · auditoría ✓ (0 graves) · profesor ✓ tras la vuelta 2
 
 ## Encargo
 La ficha del tablero estaba completa; el director añadió la API (solo dibuja, sin recalcular), los archivos de cada uso
@@ -36,3 +36,11 @@ y el «hecho». Copia: `/tmp/plan-socialista/formula-comun/encargo.md` (resumida
 Total 2,4 M equivalentes. Constructor · sonnet 2,0 M (80 %, 2 agentes); director 283 k (12 %); profesor · opus 111 k;
 auditor · sonnet 88 k. Más caros: Constructor 2 (1,1 M, 52 herramientas, con la vuelta 2), Constructor 1 (841 k).
 El constructor 2 llevó tres modelos y la vuelta; repartir eco aparte habría acortado su conversación.
+
+## Rejuicio con la escala nueva (sobre 10, aprobada hoy)
+Profesor tras la vuelta 2: todo ≥8 (pasa); 8,5 en «móvil a 360» y «eco 4,8 frente a 5,2». El director hizo los dos
+arreglos baratos para la meta de 8,75: el chip de origen parte a todo el ancho (`.fml-ref` en línea) y, en el eco, la
+cifra del simulador va en el mismo renglón («estimado por Doppler; el simulador: 5,2»), sin la línea suelta de arriba.
+Sin rejuicio de esos dos (gasto); jueces en verde tras ellos.
+- Opcional, fuera del encargo (profesor): en el filtro, el medidor de dosis dice «ilustrativo» y el renglón «dosis:
+  ficha»; conviene igualarlos con la ficha `trr-dosis`.

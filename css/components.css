@@ -4661,8 +4661,8 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
 .fml .fml-s small { color: var(--text-muted); font-size: .7rem; }
 .fml .fml-org { font-size: .66rem; line-height: 1.25; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 6px; flex: 0 1 auto; max-width: 100%; overflow-wrap: anywhere; }
 .fml .fml-org.fml-ilu { border-style: dashed; }
-.fml .fml-ref { display: inline-flex; align-items: baseline; gap: .3em; max-width: 100%; vertical-align: top; }
-.fml .fml-ref > span { white-space: nowrap; flex: none; }
+.fml .fml-ref { display: inline; }
+.fml .fml-ref > span { white-space: nowrap; margin-right: .3em; }
 .fml .fml-ref .fml-ir { min-width: 0; }
 .fml .fml-ir { position: relative; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: var(--accent-yellow); text-decoration: underline; text-underline-offset: 2px; text-align: left; cursor: pointer; }
 .fml .fml-ir::before { content: ''; position: absolute; inset: -14px -4px; }
