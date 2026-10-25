@@ -98,5 +98,6 @@ Los fija la cobertura. No repetir: Andrés (62), la Sra. R. (64), Fermín (71), 
 Salvador (47).
 
 **Decisión del usuario (25/10/2026)**: el caso de Aurelio es el de la maqueta (fallo respiratorio → ECMO). La rotura
-del papilar a las 18 h (cap. 16, p. 38) se queda como pregunta suelta de la ficha `mc-cardiogenico-fisio`, no como el
-caso de Aurelio.
+del papilar (Marino cap. 16, p. 38: con la del septo y la de pared libre, en las primeras 24 h) **se enseña entera**,
+como pide la fuente: estado `rotura-papilar` del modelo M7 (IM aguda con `eroaMitral` y el chorro en color, sub-bloque
+3B), paso «predice» de la ficha `mc-cardiogenico-fisio` y un caso corto propio (paciente distinto de Aurelio).
