@@ -2445,6 +2445,10 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-mini-grande { min-height: 44px; padding: 8px 12px; }
 .cv-mandos-img .cv-mini[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 700; }
 .cv-senal-frase { margin: 6px 0 0; padding: 6px 10px; border-left: 3px solid var(--accent-yellow); font-size: 0.8rem; color: var(--text-main); }
+/* con los mandos abiertos, la imagen y la frase de Señálalo quedan fijas arriba mientras se bajan los deslizadores */
+.cv-eco-fijo:has(~ .cv-mandos-img[open]) { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding-bottom: 4px; }
+.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-eco canvas { width: min(100%, 37.5vh); height: auto; margin: 0 auto; }
+.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-senal-frase { font-size: 0.74rem; padding: 4px 8px; }
 
 /* ===================== LIBROS (índice central y Marino · Fundamentos) ===================== */
 /* Línea de fuente al principio y al final de cada ficha de un libro. */

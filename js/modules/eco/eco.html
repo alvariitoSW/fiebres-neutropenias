@@ -67,10 +67,13 @@
                     <option value="90">Color ±90 cm/s</option>
                 </select>
             </div>
+            <div class="cv-eco-fijo" id="cv-eco-fijo">
             <div class="cv-eco">
                 <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
                 <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
                 <div class="cv-eco-fase" id="cv-eco-fase"></div>
+            </div>
+            <p class="cv-muted cv-senal-frase" id="cv-senal-frase" aria-live="polite" hidden></p>
             </div>
             <div class="cv-fila">
                 <button type="button" class="cv-mini" id="cv-sonda-toggle" aria-expanded="false" aria-controls="cv-sonda">🎛 Sonda libre</button>
@@ -88,11 +91,11 @@
                 </div>
                 <div class="tfg-estado" id="cv-sonda-reto-txt" hidden></div>
             </div>
-            <p class="cv-muted cv-senal-frase" id="cv-senal-frase" aria-live="polite" hidden></p>
             <details class="cv-mandos-img" id="cv-mandos-img">
                 <summary>🎚 Mandos de imagen</summary>
                 <p class="cv-muted">Como en un ecógrafo. Los pones tú; la imagen se rehace al momento.</p>
                 <label class="cv-sonda-fila"><span>Ganancia</span><input type="range" id="cv-img-gan" min="-10" max="15" step="1" value="0"><b id="cv-img-gan-v">0 dB</b></label>
+                <p class="cv-muted">Con mucha ganancia la sangre deja de ser negra y se llena de ruido: bájala hasta que la sangre vuelva a quedar negra.</p>
                 <label class="cv-sonda-fila"><span>Profundidad</span><input type="range" id="cv-img-prof" min="100" max="240" step="10" value="170"><b id="cv-img-prof-v">17 cm</b></label>
                 <label class="cv-sonda-fila"><span>Foco</span><input type="range" id="cv-img-foco" min="30" max="160" step="10" value="80"><b id="cv-img-foco-v">8 cm</b></label>
                 <p class="cv-muted">Ganancia por profundidad (TGC), de arriba abajo en la imagen.</p>

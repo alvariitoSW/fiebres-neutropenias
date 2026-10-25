@@ -178,10 +178,10 @@ export function montarSimulador(raiz, opc = {}) {
   const FRASES_SENAL = {
     sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
     refuerzo: 'Refuerzo: el líquido apenas frena el sonido y lo de detrás brilla más. No es tejido más denso.',
-    reverb: 'Rebote del sonido en la pared del tórax. No se mueve con el corazón: no es un trombo.',
-    especular: 'Pared lateral gris: el haz le pasa paralelo. No es que no se contraiga.',
-    especularOtra: 'El haz pasa paralelo a este músculo: se ve más gris, no está enfermo.',
-    foco: 'Foco: el haz es más estrecho a esta profundidad y la imagen es más nítida. Por delante y por detrás se ensancha y emborrona. Mira el tabique al mover el foco de 4 a 12 cm.',
+    reverb: 'Rebotes del sonido entre la sonda y la pared del tórax. Se quedan quietos en la pantalla y no se mueven con la pared del corazón; un trombo sí se mueve con ella.',
+    especular: 'Pared lateral gris: reflexión especular. El haz le pasa paralelo y vuelve poco eco (dropout). Puede ser artefacto: confírmalo en otra vista antes de decir que no se contrae.',
+    especularOtra: 'El haz pasa paralelo a este músculo y se ve más gris (reflexión especular, dropout). Puede ser artefacto: confírmalo en otra vista.',
+    foco: 'Foco: el haz es más estrecho a esta profundidad y la imagen es más nítida. Por delante, por detrás y hacia los bordes se ensancha y emborrona.',
     ventana: 'Aire del pulmón: tapa el sonido. La ganancia no lo arregla; cambia de ventana.',
   };
   const ROTULOS_SENAL = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebotes a 2× y 3× la pared', ventana: 'pulmón' };
@@ -213,7 +213,8 @@ export function montarSimulador(raiz, opc = {}) {
     if (!img.senal) { $('#cv-senal-frase').hidden = true; $('#cv-senal-frase').textContent = ''; }
     ecoPendiente = true;
   }
-  $('#cv-senalalo').addEventListener('click', (e) => { const b = e.target.closest('[data-senal]'); if (b) ponerSenal(b.dataset.senal); });
+  $('#cv-senalalo').addEventListener('click', (e) => { const b = e.target.closest('[data-senal]'); if (!b) return; ponerSenal(b.dataset.senal);
+    if (img.senal && !$('#cv-mandos-img').open) $('#cv-eco-fijo').scrollIntoView({ block: 'nearest' }); });
   const ficha = (n) => getComputedStyle(document.body).getPropertyValue(n).trim();
   // marca del foco: un triángulo pequeño en el borde izquierdo del abanico, a la profundidad del foco
   function marcaFoco(im, P) {
@@ -261,26 +262,40 @@ export function montarSimulador(raiz, opc = {}) {
       else aviso = 'En esta vista ninguna pared queda paralela al haz.';
     }
     const caja = $('#cv-senal-frase'); caja.hidden = false;
-    caja.textContent = aviso || (tipo === 'especular' && !a4 ? FRASES_SENAL.especularOtra : FRASES_SENAL[tipo]);
+    const estructura = { apical: 'el tabique', paraesternal: 'las paredes del VI' }[VISTAS[vistaEco].ventana] || 'la estructura que quieres medir';
+    caja.textContent = aviso || (tipo === 'especular' && !a4 ? FRASES_SENAL.especularOtra : FRASES_SENAL[tipo]) + (tipo === 'foco' ? ` Mueve el foco de 4 a 12 cm y mira ${estructura}.` : '');
     if (!forma) return;
     ecoCtx.save(); ecoCtx.strokeStyle = ficha('--accent-yellow') || 'white'; ecoCtx.lineWidth = 2 * px; ecoCtx.setLineDash([6 * px, 4 * px]); ecoCtx.beginPath();
     if (forma.elipse) { const [x, y, rx, ry] = forma.elipse; ecoCtx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); }
     else if (forma.linea) forma.linea.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y)));
     else for (const f of forma.varias || [forma]) { f.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y))); ecoCtx.closePath(); }
     ecoCtx.stroke(); ecoCtx.setLineDash([]);
+    if (tipo === 'sombra') {   // el borde del abanico, tenue: la zona negra está dentro de la imagen
+      ecoCtx.strokeStyle = ficha('--text-muted') || 'gray'; ecoCtx.globalAlpha = 0.6; ecoCtx.lineWidth = px; ecoCtx.beginPath();
+      const [x0, y0] = pt(0, 0), [x1, y1] = pt(b.prof, -M), [x2, y2] = pt(b.prof, M);
+      ecoCtx.moveTo(x1, y1); ecoCtx.lineTo(x0, y0); ecoCtx.lineTo(x2, y2); ecoCtx.arc(b.cx, b.arriba, b.prof * b.escala, Math.PI / 2 - M, Math.PI / 2 + M); ecoCtx.stroke(); ecoCtx.globalAlpha = 1;
+    }
     // rótulo: se prueba una rejilla de sitios y gana el que tapa menos corazón (celdas con tejido o sangre), sin pisar las
     // esquinas de abajo (título y fase de la imagen), el vértice ni el borde; entre los que tapan igual, el más cercano al sitio
     ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; const w = ecoCtx.measureText(rotulo).width + 10 * px, h = 18 * px;
-    const ocupado = (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba); if (rr >= b.prof || Math.abs(th) >= M) return 0;
+    const ocupado = (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba);
+      // la escala de centímetros (junto al borde derecho del abanico) cuenta como ocupada
+      const dx = x - b.cx, dy = y - b.arriba, along = dx * Math.sin(M) + dy * Math.cos(M), perp = dx * Math.cos(M) - dy * Math.sin(M);
+      if (perp > 0 && perp < 30 * px && along > 0 && along < b.prof * b.escala) return 1;
+      if (rr >= b.prof || Math.abs(th) >= M) return 0;
       const i = Math.min(b.nb - 1, ((th + M) / b.dth) | 0), j = Math.min(b.ns - 1, (rr / b.dr) | 0); return b.tag[j * b.nb + i] ? 1 : 0; };
     const [ax, ay] = ancla || [W / 2, H / 2]; let mejor = null;
     for (let y = 6 * px; y <= H - 26 * px - h; y += 8 * px) for (let x = 3 * px; x <= W - w - 3 * px; x += 10 * px) {
       let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 6; ix++) n += ocupado(x + w * (ix + 0.5) / 6, y + h * (iy + 0.5) / 3);
       const vertice = Math.abs(x + w / 2 - b.cx) < w / 2 + 14 * px && y < b.arriba + 24 * px ? 1 : 0;
-      const costo = n * 1000 + vertice * 5000 + Math.hypot(x + w / 2 - ax, y + h / 2 - ay);
+      const costo = n * 1000 + vertice * 5000 + 3 * Math.hypot(x + w / 2 - ax, y + h / 2 - ay);
       if (!mejor || costo < mejor.costo) mejor = { x, y, costo };
     }
     const { x: lx, y: ly } = mejor || { x: 3 * px, y: 6 * px };
+    if (ancla && Math.hypot(lx + w / 2 - ax, ly + h / 2 - ay) > 30 * px) {   // línea fina del rótulo a su zona
+      ecoCtx.strokeStyle = ficha('--accent-yellow') || 'white'; ecoCtx.lineWidth = px; ecoCtx.globalAlpha = 0.8;
+      ecoCtx.beginPath(); ecoCtx.moveTo(Math.max(lx, Math.min(lx + w, ax)), Math.max(ly, Math.min(ly + h, ay))); ecoCtx.lineTo(ax, ay); ecoCtx.stroke(); ecoCtx.globalAlpha = 1;
+    }
     ecoCtx.fillStyle = ficha('--bg-main') || 'black'; ecoCtx.globalAlpha = 0.8; ecoCtx.fillRect(lx, ly, w, h);
     ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = ficha('--accent-yellow') || 'white'; ecoCtx.textAlign = 'left'; ecoCtx.textBaseline = 'middle'; ecoCtx.fillText(rotulo, lx + 5 * px, ly + h / 2 + px); ecoCtx.restore();
   }

@@ -32,3 +32,18 @@ la maqueta, reordenado) · *avisos: «Sin sangre en el centro de la imagen: no h
 ## No comprobado / riesgo
 Rendimiento en móvil real. El rótulo se coloca por rejilla de sitios (puede quedar lejos del artefacto si el centro está lleno).
 Las paredes VD/AD más finas: ajuste a ojo (−3/−4 dB), el profesor debe revalidar. Frase de Señálalo bajo la imagen, fuera de ella.
+
+## Vuelta 2 (profesor y auditor)
+- Imagen fija: con los mandos abiertos, `.cv-eco-fijo` (imagen + frase de Señálalo, movida bajo la imagen) queda `sticky` arriba, a ≤30vh de alto
+  (ancho `min(100%, 37.5vh)`: con `width:auto` el tamaño oscilaba y borraba el canvas cada fotograma). Sin transform/filter. Si los mandos
+  están cerrados, al tocar Señálalo la imagen se trae a la vista (`scrollIntoView`).
+- Señálalo: sombra dibuja el borde del abanico en gris tenue; la escala de cm cuenta como ocupada; el rótulo pesa 3× la cercanía y lleva una
+  línea fina a su zona si queda a más de 30 px.
+- AD con paredes reales: 15·W dB menos (antes 12) y adelgazamiento de 0,7·W (antes 0,55·W).
+- Frase nueva bajo Ganancia: «Con mucha ganancia la sangre deja de ser negra y se llena de ruido: bájala hasta que la sangre vuelva a quedar negra.» (fisiología general).
+- Frases reescritas (fisiología general): especular «reflexión especular… dropout… Puede ser artefacto: confírmalo en otra vista»; rebotes «…no se
+  mueven con la pared del corazón; un trombo sí se mueve con ella»; foco «…hacia los bordes se ensancha…» + «Mueve el foco de 4 a 12 cm y mira el tabique /
+  las paredes del VI / la estructura que quieres medir» según la ventana.
+- Pruebas: Playwright con `tap()` a 390 y 360 (A4C y PLAX, 5 Señálalo): imagen y frase dentro de la pantalla tras cada toque, sin desborde ni errores.
+  Capturas `p2v2-*.png`. Versión 20261027-25.
+- No comprobado: la hoja fija del cuaderno de la ficha con el simulador (solo `laboratorio.html`); el rótulo del pulmón.

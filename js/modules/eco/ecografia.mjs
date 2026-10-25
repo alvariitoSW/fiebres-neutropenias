@@ -665,7 +665,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
         if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), el.db - (el.grupo === 'VD' ? 7 : 3) * W2, espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
-        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.55 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 12 : 8) * W2, espec, tag, m.especular);
+        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio');   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }
     }
