@@ -203,10 +203,10 @@ esta sección.
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
-| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
-| `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
-| `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
-| `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ⏸ **esperando tu elección** (25/10) | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
+| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
+| `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
+| `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
+| `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos`, `eco-mega`, `inventario`, `pulmon-respirador` | **B-012 a B-016**, aprobadas | pendientes en el tablero | 2026-10-25 | «estoy de acuerdo con todo» (25/10) |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 
@@ -256,37 +256,18 @@ El resto del tablero sigue `aparcada`.
   G1 shock (puede empezar ya: Manual UMI y VExUS en `docs/`), G2 inestable y paro (AHA 2025), G3 marcapasos/SCA,
   G4 tras el dispositivo, G5 neurocrítico, G6 ETE. Espera: ¿puerta «Guardia» nueva en la raíz?, ¿G1 tras la fase 0?,
   PDF, y abrir `huggingface.co` y `arxiv.org`.
-- **🔴 Los 3 modelos vivos del bloque 3 (25/10)**: el informe del megaproyecto (versión 2, mismo enlace) cruza el juicio de
-  las maquetas v2 (`autonomo/bloques/b3/juicio-maquetas-v2.md`: ninguna pasa, 5 puntos <4 cada una) con lo aprendido en
-  las webs, y propone una **v3** de las tres con esos arreglos y **un solo monitor de UCI común** antes de llevarlas a la
-  app. Espera tu aprobación. También añade: lo que ya tenemos, mejoras pieza por pieza (eco, atlas, calculadoras,
-  catéter, potasio y ácido-base, casos, pulmón con respirador) y el método para futuros modelos vivos (monitor común,
-  arco en C, sonda de ETE, «la placa de la cama 7», gemelo hemodinámico).
-- **✅ Aprobado por el usuario el 25/10**: todas las recomendaciones del informe del megaproyecto y B-012 a B-016 (detalle de
-  las decisiones en `autonomo/TABLERO.md`, «Encargos aprobados el 25/10/2026»). Siguiente: etapa A en una sesión nueva.
-- **✅ Aprobado por el usuario el 23/10** («te doy el ok a todo»; orden, carriles y paradas «en principio no» cambian):
-  los 6 cambios previos, las 8 tareas de la fase 0, el «ok» a la maqueta v2 del corazón eléctrico y tocar el motor
-  para que lata con el ritmo. Pidió ver el plan final integrado **antes de tocar código ni nada**: se le reenvía y se
-  espera su «adelante».
-- **🔴 Plan de integración (cómo lo ejecutaría el plan socialista)** (https://claude.ai/artifact/5em9RdpkzZGjV91CBMCBLh): dos carriles a la vez (corazón = bloque 3
-  con la fase 1 dentro; producto = fase 0), 20 tareas con clave (8 de la fase 0, 5 de la fase 1, 7 de las fases 2-4 en
-  espera) y **6 cambios previos** en el propio plan: objetivo y tipo `integracion` en el tablero; modo `integrar` en la
-  skill; 3 puntos más en el constructor (no abrir la web ajena, cifras y fórmula, chip de origen); profesor que juzga
-  «en la guardia»; jueces `--calc` y `--origen` y límite de peso y fps de la eco; norte y Radar en las reglas.
-  Regla de oro: el constructor trabaja solo con nuestro informe, nunca con la web ajena. **Nada aplicado**: espera
-  tu aprobación de los cambios 1-5, de las 8 tareas de la fase 0 y del «ok» a la maqueta v2 del corazón eléctrico.
-- **🔴 Propuestas de cambio de reglas (Radar, 23/10)**: el norte en `CLAUDE.md`, el radar en `REGLAS.md`, el modo
-  guardia sin guardar nada, la excepción del nivel 3 (IA aparte, datos anonimizados) y la biblioteca de casos. Detalle
-  en `docs/historial/radar.md` §4. Nada cambia hasta que las apruebes.
-- **🔴 INFORME FINAL «Del simulador a la cama»** (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee; NavRad con imagen: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm): junta las 6 webs y sustituye a
-  los informes parciales para decidir. Hoja de ruta única: fase 0 (ya, sin fuentes: acabado de producto en eco,
-  calculadoras y corazón eléctrico, bibliografía de RA), fase 1 (noviembre, PIF Cardiología: corazón eléctrico en la
-  app, el ritmo mueve el motor, territorios e IAM), fase 2 (coronariografía que late y ETE), fase 3 (calculadoras de
-  eco de UCI), fase 4 (imagen real: visor ligero, «¿dónde está la punta?», recorridos, casos). Espera: arrancar fase 0,
-  el «ok» a la maqueta v2 del corazón eléctrico, los PDF (lista en el informe), abrir en la red `zenodo.org`,
-  `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` y `heart.org`, y 6 decisiones grandes.
-- Los informes parciales del 23/10 («Ritmo vivo y placa guiada», «Un paciente, todas las pruebas» y tee-inversa con sus
-  paquetes A, B y C) quedan **dentro del informe final**; su detalle, en `docs/historial/radar.md` y en los partes del 23/10.
+- **✅ Decidido el 25/10** («estoy de acuerdo con todo»): el plan de integración, el megaproyecto «La UCI en el bolsillo»,
+  la v3 de los 3 modelos del bloque 3, la puerta «Guardia», G1 tras la fase 0, tocar el motor y la anatomía, y B-012 a
+  B-016. Detalle en `autonomo/TABLERO.md` («Encargos aprobados el 25/10/2026») y `docs/historial/radar.md`.
+  **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
+- **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
+  `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
+- **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
+  hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
+  `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
+- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · ESC 2021 de
+  estimulación · ESC de SCA · Di Mario 2005 · ASE 2025 de corazón derecho y diastólica · ASE/EACVI 2015 · ASE/SCA 2013
+  de ETE · temarios de Radiología de tórax y Neurorradiología.
 - **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
   no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
   Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
