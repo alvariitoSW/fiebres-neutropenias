@@ -191,6 +191,14 @@ Idea tomada de *The Heart by Ultrasound* (ver «Créditos»), estudiada a fondo 
 - **Ilustrativo:** ecogenicidades (dB frente al miocardio), resolución, ganancia y la pared torácica.
 - **Defecto de la geometría encontrado al hacerlo, ya corregido** (tocando la anatomía, con permiso explícito del
   usuario): ver «Pericardio» más abajo.
+- **Imagen más realista (eco-mega, parada 1, 25/10/2026):** las mejoras aprobadas en la maqueta
+  `autonomo/maquetas/eco-imagen.html` están en `crearEcografo()`, encendidas por defecto: paredes de músculo, moteado,
+  sombra y refuerzo posterior, reverberación, especular, ganancia/TGC y foco; la ventana pobre existe a 0 (reto).
+  `formar()` acepta `o.m` (intensidades 0..1; `MEJORAS_CERO` las apaga), `o.tgc`, `o.focoMm` y `o.ventanaVista`.
+  Con todo a 0 la imagen es la de antes (`pruebas/ecografia-antes.mjs`, copia congelada). El simulador tiene
+  «Mandos de imagen» (ganancia, profundidad, foco con su marca, 4 TGC, ventana pobre) y «Señálalo» de 5 artefactos,
+  y calidad automática en 4 niveles de haces × muestras (baja por encima de 40 ms). Coste: 19-29 ms por imagen en
+  Node con todo encendido, 9-13 ms en el nivel más bajo. La maqueta importa ya este módulo (una sola copia).
 
 ## Pericardio
 

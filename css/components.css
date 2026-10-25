@@ -2449,6 +2449,8 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]) { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding-bottom: 4px; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-eco canvas { width: min(100%, 37.5vh); height: auto; margin: 0 auto; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-senal-frase { font-size: 0.74rem; padding: 4px 8px; }
+/* que la imagen fija no tape el mando al que salta la página */
+.cv-mandos-img[open] :is(input, button, .cv-sonda-fila) { scroll-margin-top: 46vh; }
 
 /* ===================== LIBROS (índice central y Marino · Fundamentos) ===================== */
 /* Línea de fuente al principio y al final de cada ficha de un libro. */

@@ -357,3 +357,13 @@ Ahora la arteria pulmonar se endurece por encima de 24 mmHg y el TEP llega a ×9
 (4) `ultimo.gc` podía salir negativo con el reflujo de cierre: `vs` y `gcValvula`, netos y ≥0; `gc` = válvula + bombas.
 Punto de entrada `p.soporte` (balón, Impella, ECMO y venteo). Se reajustaron el Atlas · 14 (`atlas/vd.mjs`) y la
 vasoplejía (×0,55) para no contar dos veces lo nuevo. Pruebas nuevas en `motor.test.mjs` y `escenarios.test.mjs`.
+
+## Imagen de eco más realista en la app (eco-mega, parada 1, paso 2 · 25/10/2026)
+
+El usuario aprobó todas las mejoras de la maqueta «antes / después» (0-8; ventana pobre como reto apagado). Pasaron
+a `ecografia.mjs` (pieza 1) y al simulador con sus mandos y «Señálalo» (pieza 2), con constructor barato. Profesor:
+vuelta 1 suspendida por un punto (7,4: en el móvil, al tocar Señálalo, la imagen quedaba fuera de la pantalla);
+vuelta 2, 8,5/8,8/8,7/8,8/8,8 con la imagen fija arriba. Auditor: 0 graves, 4 frases afinadas (especular = «puede
+ser artefacto: confírmalo en otra vista»; un trombo sí se mueve con la pared). Contraste miocardio-sangre de ~28 a
+~14 dB a propósito: las pruebas de contraste miden ahora los dos casos. Queda para la parada 2 (anatomía): la pared
+lateral de la AD, lo más blanco del lado izquierdo. Parte: `autonomo/partes/2026-10-25-eco-mega-2.md`.

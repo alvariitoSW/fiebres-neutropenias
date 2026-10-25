@@ -23,3 +23,20 @@ Capturas mías en `/tmp/plan-socialista/eco-mega/capturas/prof-p2-*`: zoom de la
 - El atlas con la imagen nueva: solo he visto el simulador.
 - Señálalo en A2C, A3C, PSAX Ao, SC VCI y supraesternal sin recorrer; en la subcostal, la sombra da su aviso (no hay costillas), pero no lo he capturado.
 - Las frases son «fisiología general» sin página (aceptado en la maqueta).
+
+## Vuelta 2 (693085b, versión 20261027-25) · app real, 390 y 360 px táctil, navegador relanzado
+Con «Mandos de imagen» abierto toqué los 5 Señálalo en A4C y PLAX, y «Pulmón» con la ventana pobre. Tras cada toque, la imagen queda en 1-254 px (1-234 a 360) y la frase justo debajo, en 261-338 px: las dos se ven. 0 errores de consola, sin desborde. El final de la página y «Reanudar» se tocan bien. Capturas: `prof-p2v2-ab-*`, `prof-p2v2-390|360-*`.
+
+| Punto | V1 | V2 | Por qué |
+|---|---|---|---|
+| 1. Eco real | 8,4 | **8,5** ✅ | La AD es algo más fina, pero su pared lateral sigue como el trazo más blanco del lado izquierdo (`prof-p2v2-390-a4c-zoom`). El resto es anatomía de la parada 2 |
+| 2. Mejoras | 8,7 | **8,8** ✅ | La frase bajo «Ganancia» enseña la regla: la sangre ha de quedar negra |
+| 3. Uso en el móvil | 7,4 | **8,7** ✅ | La imagen fija y la frase se ven siempre, y los mandos se manejan debajo. Ocupa unos 330 de 844 px. Un salto automático deja el TGC «Fondo» tapado por la imagen: `elementFromPoint` da `cv-eco` |
+| 4. Artefactos | 8,2 | **8,8** ✅ | El borde gris del abanico deja claro que la sombra está dentro. El rótulo de los rebotes lleva su línea hasta la zona. «Pulmón» ya no pisa la escala (`prof-p2v2-390-ventana-pulmon-zoom`) |
+| 5. Paciente posible | 8,8 | **8,8** ✅ | Sin cambios |
+
+**Veredicto: ✅ PASA** (todo ≥8). Llegan a la meta la 2, la 4 y la 5.
+- Para subir la 3 a 8,75 (trivial): `scroll-margin-top: calc(30vh + 90px)` en `.cv-mandos-img label, .cv-mandos-img button` (`css/components.css` l. 2449), para que ningún salto automático deje un mando debajo de la imagen fija.
+- Para subir la 1 a 8,75 (barato): bajar 2-3 dB más la pared lateral de la AD, o dejarlo para la parada 2.
+- Nota: Señálalo vive dentro del plegable, así que con los mandos cerrados no se puede tocar. El `scrollIntoView` que añadió el constructor para ese caso no se usa nunca. No pasa nada.
+- No comprobado: el simulador dentro de la hoja fija de una ficha, las otras 6 vistas con Señálalo y la fluidez en un móvil real.
