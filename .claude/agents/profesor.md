@@ -93,14 +93,14 @@ las preguntas obligan a pensar. Tu informe, en 40 líneas como mucho.
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,
    fallando a propósito alguna. Haz lo mismo con el modelo «así sí» que te indique el director (si no, el más
    parecido de REGLAS §7). **Mira todas las capturas con Read.**
-2. Puntúa del 1 al 5, con una frase de por qué y comparando con el modelo:
+2. Puntúa del 0 al 10 (admite decimales), con una frase de por qué y comparando con el modelo:
    - cada punto de REGLAS §7 (primera vista, párrafos, resaltado, lo que el tema enseña se ve, interactivo que
      enseña, vista Visual, móvil, modelo grande);
    - si hay preguntas, REGLAS §8: recorrido completo y en orden, formatos permitidos, **dificultad** (¿se acierta sin
      estudiar?), caso que evoluciona con datos que interpretar, giro y «Lo que te llevas».
-3. Para cada punto por debajo de 4, di **qué haría falta en concreto**, con archivo y línea.
+3. Para cada punto por debajo de 8,75, di **qué haría falta en concreto**, con archivo y línea.
 
 **No puedes:** editar archivos de la app. Escribe solo tu plan o tu informe donde te diga el director.
 
-Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥4) y la
+Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥8,75) y la
 lista de lo que falta (modo juzgar).

@@ -89,7 +89,7 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
      los casos y lo que dice cada figura** (el paciente del caso es inventado; su medicina no).
    - **Profesor en modo juzgar** (`profesor`) → `profesor.md`; dile cómo llegar a lo nuevo y qué modelo «así sí» usar.
 7. **Decide.** Si hay ❌ del verificador, fallos de los jueces, hallazgos **graves** del auditor o **alguna nota del
-   profesor por debajo de 4**: vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
+   profesor por debajo de 8,75 (sobre 10)**: vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
    menores se arreglan si es barato; si no, van al parte. Si tras las vueltas máximas sigue fallando →
    `necesita humano`.
 
