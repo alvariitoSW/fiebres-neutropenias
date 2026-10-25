@@ -5,6 +5,11 @@ puerta**: la **Bandeja del Radar**, el issue #27 de GitHub
 (https://github.com/alvariitoSW/fiebres-neutropenias/issues/27). Un enlace por comentario, desde la app de GitHub del
 móvil. Coste: 0 € (usa el plan de Claude que ya tiene el usuario). Aprobado el 25/10/2026 (B-012 y B-017).
 
+**Hilos de Twitter/X**: un solo comentario con el enlace del primer tuit en la primera línea y, debajo, los enlaces de
+los artículos del hilo (uno por línea), más una línea de contexto o una captura si quiere. Cada artículo cuenta como
+una entrada aparte (comparten el contexto del hilo). Si solo viene el enlace del hilo, se intenta leer (vía pública
+de incrustar o la captura) y sacar los artículos; si X no deja, se le pide en el issue que pegue los enlaces.
+
 ## Quién la procesa
 
 Una **tarea programada de Claude Code**, una vez al día, en una sesión nueva. Solo mira los comentarios del usuario
