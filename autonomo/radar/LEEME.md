@@ -31,3 +31,15 @@ quedan para el día siguiente, para no gastar demasiado del límite de uso del p
 respalda · licencia · coste · veredicto (integrar en fase N / idea suelta / descartar con motivo)`.
 
 El norte con el que se tría: `docs/historial/radar.md` §2.
+
+## Encargo de la tarea diaria (para pegarlo al crearla desde la app)
+
+La tarea creada desde una sesión (`trig_01SJ6yy2dka8BFevHR5aCNnF`) no se abría con el repositorio dentro y no podía
+añadirlo sola (25/10: dos pruebas sin resultado); quedó **pausada**. Se crea desde la app de Claude (Claude Code →
+tareas programadas), con el repositorio `alvariitoSW/fiebres-neutropenias` elegido, todos los días a las 6:42 (hora de
+Canarias), en una sesión nueva, con este texto:
+
+> Procesa la Bandeja del Radar: sigue al pie de la letra `autonomo/radar/LEEME.md`. Lee el issue #27 y toma solo los
+> comentarios del usuario posteriores a tu última respuesta; si no hay ninguno, termina sin escribir nada. Como mucho
+> 5 entradas. Papers a UCI / Papers Tuiter en rama propia con PR en borrador (nunca a `main`); notas del Radar
+> directas a `main`. Responde una sola vez en el issue #27 con una línea por entrada. Español llano.
