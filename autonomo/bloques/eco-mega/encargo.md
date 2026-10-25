@@ -34,3 +34,27 @@ Rellenado por el director (25/10/2026) a partir de B-015 del tablero; el usuario
 - Capturas a 390 px de cada vista antes / después (PNG) en `/tmp/plan-socialista/eco-mega/capturas/`.
 - Una página Artifact para que el usuario elija (la publica el director).
 - Siguiente parada (no ahora): anatomía (esófago, valvas por segmentos, coronarias) y la duda de las mallas abiertas.
+
+---
+
+# Parada 1 · paso 2: las mejoras de la imagen, en la app (sesión del 25/10/2026)
+
+Rellenado por el director. El usuario aprobó **todas** las mejoras de la maqueta (0-8), con la ventana pobre como
+reto apagado por defecto (tablero, 25/10). Tipo: visual (mejora de lo existente; copia la maqueta → constructor barato).
+
+- Qué quiero: que la imagen del simulador y del atlas sea la «después» de `autonomo/maquetas/eco-imagen.html`.
+- **Pieza 1 · el ecógrafo** (`js/modules/eco/ecografia.mjs`): las mejoras 0-6 de `eco-imagen/ecografia-v2.mjs`
+  pasan al `crearEcografo()` real, encendidas con las intensidades por defecto de la maqueta; la 7 (ventana pobre)
+  existe pero a 0; la 8 (calidad automática: menos haces o muestras si el fotograma va lento) en el bucle de dibujo
+  del simulador y del atlas. Sin dos copias: la maqueta pasa a importar del módulo real (o se queda como estaba,
+  congelada, si cambiarla rompe su «antes»). Pruebas del módulo en verde y una nueva: con todas las intensidades a 0,
+  la imagen es la de antes (diferencia media de gris ≈ 0).
+- **Pieza 2 · los mandos y el estudio** (`js/modules/eco/simulador.mjs` y su HTML): ganancia, TGC (4 mandos),
+  profundidad y foco (con su marca en el borde de la imagen, como en los ecógrafos), el reto «ventana pobre», y
+  «Señálalo» de los artefactos (sombra, refuerzo, reverberación, especular, foco) con su frase y origen
+  `fisiología general`. Más las notas baratas del profesor de la vuelta 3: rótulos de Señálalo que no chocan, pared
+  libre del VD y AD más finas con «Paredes reales».
+- Modelo «así sí»: la propia maqueta (vuelta 3, aprobada por el profesor 8,3-8,8).
+- Lo que NO quiero: tocar la anatomía (parada 2), colores nuevos, código de echodemo, cambiar una referencia para que
+  pase una prueba, que el móvil vaya a tirones.
+- Hecho: `node --test 'js/modules/eco/pruebas/*.test.mjs'` y `jueces.mjs --eco` en verde; profesor ≥8 (meta 8,75).
