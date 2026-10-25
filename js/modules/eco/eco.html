@@ -88,6 +88,34 @@
                 </div>
                 <div class="tfg-estado" id="cv-sonda-reto-txt" hidden></div>
             </div>
+            <p class="cv-muted cv-senal-frase" id="cv-senal-frase" aria-live="polite" hidden></p>
+            <details class="cv-mandos-img" id="cv-mandos-img">
+                <summary>🎚 Mandos de imagen</summary>
+                <p class="cv-muted">Como en un ecógrafo. Los pones tú; la imagen se rehace al momento.</p>
+                <label class="cv-sonda-fila"><span>Ganancia</span><input type="range" id="cv-img-gan" min="-10" max="15" step="1" value="0"><b id="cv-img-gan-v">0 dB</b></label>
+                <label class="cv-sonda-fila"><span>Profundidad</span><input type="range" id="cv-img-prof" min="100" max="240" step="10" value="170"><b id="cv-img-prof-v">17 cm</b></label>
+                <label class="cv-sonda-fila"><span>Foco</span><input type="range" id="cv-img-foco" min="30" max="160" step="10" value="80"><b id="cv-img-foco-v">8 cm</b></label>
+                <p class="cv-muted">Ganancia por profundidad (TGC), de arriba abajo en la imagen.</p>
+                <label class="cv-sonda-fila"><span>Cerca</span><input type="range" id="cv-img-tgc0" min="-12" max="12" step="1" value="0"><b id="cv-img-tgc0-v">0</b></label>
+                <label class="cv-sonda-fila"><span>Medio</span><input type="range" id="cv-img-tgc1" min="-12" max="12" step="1" value="0"><b id="cv-img-tgc1-v">0</b></label>
+                <label class="cv-sonda-fila"><span>Lejos</span><input type="range" id="cv-img-tgc2" min="-12" max="12" step="1" value="0"><b id="cv-img-tgc2-v">0</b></label>
+                <label class="cv-sonda-fila"><span>Fondo</span><input type="range" id="cv-img-tgc3" min="-12" max="12" step="1" value="0"><b id="cv-img-tgc3-v">0</b></label>
+                <div class="cv-fila"><button type="button" class="cv-mini cv-mini-grande" id="cv-img-cero">↺ Mandos a cero</button></div>
+                <p class="cv-muted">El triángulo del borde izquierdo de la imagen marca la profundidad del foco: ahí el haz es más estrecho y la imagen, más nítida.</p>
+                <p class="cv-muted"><b>Señálalo</b>: marca en la imagen de arriba qué es cada artefacto. Vuelve a tocar el botón para quitarlo.</p>
+                <div class="cv-chips" id="cv-senalalo" role="group" aria-label="Señalar un artefacto en la imagen">
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="sombra" aria-pressed="false">Sombra</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="refuerzo" aria-pressed="false">Refuerzo</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="reverb" aria-pressed="false">Rebotes</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="especular" aria-pressed="false">Pared apagada</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="foco" aria-pressed="false">Foco</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="ventana" aria-pressed="false" hidden>Pulmón</button>
+                </div>
+                <p class="cv-muted">Origen de las frases: fisiología general (física de los ultrasonidos). Ilustrativo, sin ficha.</p>
+                <p class="cv-muted"><b>Reto: ventana pobre</b> (apagado). Pruébalo para ver qué pasa en un paciente difícil.</p>
+                <div class="cv-fila"><button type="button" class="cv-mini cv-mini-grande" id="cv-img-ventana" aria-pressed="false">🫁 Ventana pobre: apagada</button></div>
+                <div class="tfg-estado tfg-estado-warn" id="cv-img-ventana-txt" hidden></div>
+            </details>
             <div id="cv-m-zona" hidden>
                 <div class="cv-m">
                     <canvas id="cv-m" width="360" height="198" aria-label="Modo M: la línea elegida a lo largo del tiempo"></canvas>

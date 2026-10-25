@@ -655,7 +655,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     for (const el of els.slice(1)) {
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno') { abiertos += el.abiertos; const mus = el.db <= 1, a = amp(el.db - (mus ? 7 * m.paredes : 0));   // paredes reales: músculo gris medio
+      if (el.tipo === 'relleno') { abiertos += el.abiertos; const mus = el.db <= 1, a = amp(el.db - (mus ? (7 + (el.grupo === 'VD' ? 3 : 0)) * m.paredes : 0));   // paredes reales: músculo gris medio (la pared libre del VD, más fina, algo más tenue)
         rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; FILL[q] = mus ? 1 : 0; }); }
       else {
         // con la mejora especular, también el pericardio depende del ángulo
@@ -663,9 +663,9 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
-        if (borde) trazar(P, el.seg, el.ancho * (1 - 0.45 * W2), el.db - 3 * W2, espec - 3 * W2, tag, m.especular, 1 - W2);
+        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), el.db - (el.grupo === 'VD' ? 7 : 3) * W2, espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
-        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - 0.4 * W2), el.db - 8 * W2, espec, tag, m.especular);
+        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.55 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 12 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio');   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }
     }
@@ -773,7 +773,6 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       }
       return out;
     };
-    return { tiempos, columna, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els };
     return { tiempos, columna, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els, geometriaNueva: geoNueva,
       mitad: P.mitad, prof: P.prof, pared: G.pared, pulmon, apagado: (q) => FILL[q] && OD[q] < 6 && OR[q] < 0.35 };
   }

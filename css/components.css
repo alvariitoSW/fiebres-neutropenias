@@ -2438,6 +2438,13 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-sonda-fila b { color: var(--accent-blue); font-size: 0.78rem; text-align: right; }
 #cv-sonda-reto-txt { margin-top: 8px; }
 .cv-sonda-fila input[type=range] { accent-color: var(--accent-blue); }
+/* Mandos de imagen del simulador de eco: plegados, con botones y deslizadores de 44 px */
+.cv-mandos-img { margin-top: 8px; padding: 8px 10px; border: 1px solid var(--border-color); border-radius: 6px; background: rgba(0,0,0,.18); }
+.cv-mandos-img > summary { cursor: pointer; font-size: 0.8rem; font-weight: 700; color: var(--accent-blue); min-height: 44px; display: flex; align-items: center; }
+.cv-mandos-img input[type=range] { min-height: 44px; }
+.cv-mini-grande { min-height: 44px; padding: 8px 12px; }
+.cv-mandos-img .cv-mini[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 700; }
+.cv-senal-frase { margin: 6px 0 0; padding: 6px 10px; border-left: 3px solid var(--accent-yellow); font-size: 0.8rem; color: var(--text-main); }
 
 /* ===================== LIBROS (índice central y Marino · Fundamentos) ===================== */
 /* Línea de fuente al principio y al final de cada ficha de un libro. */

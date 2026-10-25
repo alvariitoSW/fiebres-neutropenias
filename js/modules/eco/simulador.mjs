@@ -149,7 +149,7 @@ export function montarSimulador(raiz, opc = {}) {
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
   function elegirVista(k) {
     if (!VISTAS[k]) return;
-    vistaEco = k; claveTd = ''; ecoPendiente = true;
+    vistaEco = k; claveTd = ''; ecoPendiente = true; img.prof = null; ponerMandosImg();
     $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k));
     // la muestra Doppler estaba en el plano de la vista anterior: se quita y, en modo D, va a la de esta vista
     reto = null; gate = null; marcarPreset(null); ponerSonda(SONDA_CERO);
@@ -172,6 +172,117 @@ export function montarSimulador(raiz, opc = {}) {
     else if (nivelEco > 0 && emaEco * coste(nivelEco - 1) / coste(nivelEco) < 32) nivelEco--;
     else return;
     emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoPendiente = true;
+  }
+  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: ilustrativo y fisiología general.
+  const img = { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null, ventana: false, senal: null };
+  const FRASES_SENAL = {
+    sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
+    refuerzo: 'Refuerzo: el líquido apenas frena el sonido y lo de detrás brilla más. No es tejido más denso.',
+    reverb: 'Rebote del sonido en la pared del tórax. No se mueve con el corazón: no es un trombo.',
+    especular: 'Pared lateral gris: el haz le pasa paralelo. No es que no se contraiga.',
+    especularOtra: 'El haz pasa paralelo a este músculo: se ve más gris, no está enfermo.',
+    foco: 'Foco: el haz es más estrecho a esta profundidad y la imagen es más nítida. Por delante y por detrás se ensancha y emborrona. Mira el tabique al mover el foco de 4 a 12 cm.',
+    ventana: 'Aire del pulmón: tapa el sonido. La ganancia no lo arregla; cambia de ventana.',
+  };
+  const ROTULOS_SENAL = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebotes a 2× y 3× la pared', ventana: 'pulmón' };
+  const FRASE_VENTANA = 'Paciente obeso o ventilado: la grasa y el pulmón se interponen. Llega menos señal y hay más ruido y neblina; el pulmón tapa un lado de la imagen y entra y sale con la respiración. La ganancia y la profundidad ayudan algo; si el pulmón tapa la imagen, cambia de ventana o recoloca al paciente.';
+  const cm = (mm) => (mm / 10).toFixed(0) + ' cm', signo = (v) => (v > 0 ? '+' : '') + v;
+  function ponerMandosImg() {
+    $('#cv-img-gan').value = img.gan; $('#cv-img-gan-v').textContent = signo(img.gan) + ' dB';
+    const pr = img.prof ?? VISTAS[vistaEco].prof; $('#cv-img-prof').value = pr; $('#cv-img-prof-v').textContent = cm(pr);
+    $('#cv-img-foco').value = img.foco; $('#cv-img-foco-v').textContent = cm(img.foco);
+    img.tgc.forEach((v, i) => { $('#cv-img-tgc' + i).value = v; $('#cv-img-tgc' + i + '-v').textContent = signo(v); });
+  }
+  function mandoImg(id, fn) { $(id).addEventListener('input', (e) => { fn(+e.target.value); ponerMandosImg(); ecoPendiente = true; }); }
+  mandoImg('#cv-img-gan', (v) => { img.gan = v; });
+  mandoImg('#cv-img-prof', (v) => { img.prof = v === VISTAS[vistaEco].prof ? null : v; });
+  mandoImg('#cv-img-foco', (v) => { img.foco = v; });
+  for (let i = 0; i < 4; i++) mandoImg('#cv-img-tgc' + i, (v) => { img.tgc[i] = v; });
+  $('#cv-img-cero').addEventListener('click', () => { Object.assign(img, { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null }); ponerMandosImg(); ecoPendiente = true; });
+  function ponerVentana(on) {
+    img.ventana = on; const b = $('#cv-img-ventana');
+    b.setAttribute('aria-pressed', String(on)); b.textContent = '🫁 Ventana pobre: ' + (on ? 'encendida' : 'apagada');
+    $('#cv-img-ventana-txt').hidden = !on; $('#cv-img-ventana-txt').textContent = on ? FRASE_VENTANA : '';
+    $('#cv-senalalo [data-senal="ventana"]').hidden = !on; if (!on && img.senal === 'ventana') ponerSenal(null);
+    ecoPendiente = true;
+  }
+  $('#cv-img-ventana').addEventListener('click', () => ponerVentana(!img.ventana));
+  function ponerSenal(k) {
+    img.senal = img.senal === k ? null : k;
+    $$('#cv-senalalo [data-senal]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.senal === img.senal)));
+    if (!img.senal) { $('#cv-senal-frase').hidden = true; $('#cv-senal-frase').textContent = ''; }
+    ecoPendiente = true;
+  }
+  $('#cv-senalalo').addEventListener('click', (e) => { const b = e.target.closest('[data-senal]'); if (b) ponerSenal(b.dataset.senal); });
+  const ficha = (n) => getComputedStyle(document.body).getPropertyValue(n).trim();
+  // marca del foco: un triángulo pequeño en el borde izquierdo del abanico, a la profundidad del foco
+  function marcaFoco(im, P) {
+    const px = ecoC.width / ecoC.clientWidth, r = Math.min(img.foco, P.prof - 6), dx = Math.sin(P.mitad), dy = Math.cos(P.mitad);
+    const x = im.cx - r * dx * im.escala - 3 * px, y = im.arriba + r * dy * im.escala, t = 5 * px;
+    ecoCtx.save(); ecoCtx.fillStyle = ficha('--accent-yellow') || 'white';
+    ecoCtx.beginPath(); ecoCtx.moveTo(x, y); ecoCtx.lineTo(x - t * 1.3, y - t); ecoCtx.lineTo(x - t * 1.3, y + t); ecoCtx.closePath(); ecoCtx.fill(); ecoCtx.restore();
+  }
+  // «Señálalo»: contorno de la zona del artefacto y un rótulo que se coloca donde menos corazón tapa
+  function senalar(tipo, b) {
+    const px = ecoC.width / ecoC.clientWidth, W = ecoC.width, H = ecoC.height;
+    const pt = (r, th) => [b.cx + b.escala * r * Math.sin(th), b.arriba + b.escala * r * Math.cos(th)];
+    const sector = (t0, t1, r0, r1) => { const p = []; for (let k = 0; k <= 12; k++) p.push(pt(r0, t0 + (t1 - t0) * k / 12)); for (let k = 12; k >= 0; k--) p.push(pt(r1, t0 + (t1 - t0) * k / 12)); return p; };
+    const M = b.mitad, sub = VISTAS[vistaEco].ventana === 'subcostal', a4 = vistaEco === 'a4c';
+    let forma = null, aviso = '', rotulo = ROTULOS_SENAL[tipo], ancla = null;
+    if (tipo === 'sombra') { if (sub) aviso = 'En la subcostal el haz no cruza costillas: mira otra vista.'; else { forma = sector(-M, -0.74 * M, b.pared - 6, b.prof - 2); ancla = pt(b.prof * 0.55, -0.9 * M); } }
+    else if (tipo === 'reverb') { forma = { varias: [2, 3].map(k => sector(-0.95 * M, 0.95 * M, k * b.pared - 3, k * b.pared + 3)) }; ancla = pt(3 * b.pared, -0.95 * M); }
+    else if (tipo === 'ventana') { if (!b.pulmon) aviso = 'En esta vista el pulmón no se interpone.'; else { forma = sector(b.pulmon.borde * M, M, b.pulmon.rl, b.prof - 2); ancla = pt(b.prof * 0.6, 0.9 * M); } }
+    else if (tipo === 'foco') {
+      const r = Math.min(img.foco, b.prof - 6), arco = []; for (let k = 0; k <= 24; k++) arco.push(pt(r, -M + 2 * M * k / 24));
+      forma = { linea: arco }; rotulo = 'foco a ' + cm(img.foco); ancla = pt(r, -0.9 * M);
+    } else if (tipo === 'refuerzo') {
+      // la tira más larga de haces centrales con sangre: de 3 a 28 mm por debajo de la sangre más profunda
+      const tiras = [[]];
+      for (let i = 0; i < b.nb; i++) { const e = (i + 0.5) / b.nb * 2 - 1; let jj = -1;
+        if (Math.abs(e) < 0.6) for (let j = b.ns - 1; j >= 0; j--) if (b.tag[j * b.nb + i] === 255) { jj = j; break; }
+        if (jj < 0) { if (tiras.at(-1).length) tiras.push([]); continue; }
+        tiras.at(-1).push([-M + (i + 0.5) * b.dth, (jj + 0.5) * b.dr]); }
+      const t = tiras.reduce((a, x) => (x.length > a.length ? x : a), []);
+      if (t.length > 3) { forma = t.map(([th, r]) => pt(Math.min(b.prof - 2, r + 3), th)).concat(t.slice().reverse().map(([th, r]) => pt(Math.min(b.prof - 2, r + 28), th))); ancla = forma[Math.floor(forma.length / 4)]; }
+      else aviso = 'Sin sangre en el centro de la imagen: no hay refuerzo que señalar.';
+    } else if (tipo === 'especular') {
+      // músculo que el haz roza en paralelo. En el apical de 4 cámaras, solo la pared lateral del VI; en las demás vistas, el lado con más
+      const tVi = b.etiquetas && b.etiquetas.get('VI'), a4v = a4 && tVi, P2 = [];
+      let sx0 = 0, n0 = 0;
+      if (a4v) for (let q = 0; q < b.tag.length; q++) if (b.tag[q] === tVi) { sx0 += pt(((q / b.nb) | 0) * b.dr, -M + (q % b.nb + 0.5) * b.dth)[0]; n0++; }
+      const xc = n0 ? sx0 / n0 : 0, lado = [[], []];
+      for (let q = 0; q < b.tag.length; q++) if (b.apagado(q)) { const i = q % b.nb, j = (q / b.nb) | 0, p = pt((j + 0.5) * b.dr, -M + (i + 0.5) * b.dth);
+        if (a4v) { if (b.tag[q] === tVi && p[0] > xc + 6) P2.push(p); } else lado[i < b.nb / 2 ? 0 : 1].push(p); }
+      const L = a4v ? P2 : (lado[1].length >= lado[0].length ? lado[1] : lado[0]);
+      rotulo = a4v ? 'pared lateral del VI' : 'músculo paralelo al haz';
+      if (L.length > 20) { const mx = L.reduce((a, p) => a + p[0], 0) / L.length, my = L.reduce((a, p) => a + p[1], 0) / L.length;
+        const sx = Math.sqrt(L.reduce((a, p) => a + (p[0] - mx) ** 2, 0) / L.length), sy = Math.sqrt(L.reduce((a, p) => a + (p[1] - my) ** 2, 0) / L.length);
+        forma = { elipse: [mx, my, Math.max(10 * px, 1.8 * sx), Math.max(14 * px, 1.8 * sy)] }; ancla = [mx, my]; }
+      else aviso = 'En esta vista ninguna pared queda paralela al haz.';
+    }
+    const caja = $('#cv-senal-frase'); caja.hidden = false;
+    caja.textContent = aviso || (tipo === 'especular' && !a4 ? FRASES_SENAL.especularOtra : FRASES_SENAL[tipo]);
+    if (!forma) return;
+    ecoCtx.save(); ecoCtx.strokeStyle = ficha('--accent-yellow') || 'white'; ecoCtx.lineWidth = 2 * px; ecoCtx.setLineDash([6 * px, 4 * px]); ecoCtx.beginPath();
+    if (forma.elipse) { const [x, y, rx, ry] = forma.elipse; ecoCtx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); }
+    else if (forma.linea) forma.linea.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y)));
+    else for (const f of forma.varias || [forma]) { f.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y))); ecoCtx.closePath(); }
+    ecoCtx.stroke(); ecoCtx.setLineDash([]);
+    // rótulo: se prueba una rejilla de sitios y gana el que tapa menos corazón (celdas con tejido o sangre), sin pisar las
+    // esquinas de abajo (título y fase de la imagen), el vértice ni el borde; entre los que tapan igual, el más cercano al sitio
+    ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; const w = ecoCtx.measureText(rotulo).width + 10 * px, h = 18 * px;
+    const ocupado = (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba); if (rr >= b.prof || Math.abs(th) >= M) return 0;
+      const i = Math.min(b.nb - 1, ((th + M) / b.dth) | 0), j = Math.min(b.ns - 1, (rr / b.dr) | 0); return b.tag[j * b.nb + i] ? 1 : 0; };
+    const [ax, ay] = ancla || [W / 2, H / 2]; let mejor = null;
+    for (let y = 6 * px; y <= H - 26 * px - h; y += 8 * px) for (let x = 3 * px; x <= W - w - 3 * px; x += 10 * px) {
+      let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 6; ix++) n += ocupado(x + w * (ix + 0.5) / 6, y + h * (iy + 0.5) / 3);
+      const vertice = Math.abs(x + w / 2 - b.cx) < w / 2 + 14 * px && y < b.arriba + 24 * px ? 1 : 0;
+      const costo = n * 1000 + vertice * 5000 + Math.hypot(x + w / 2 - ax, y + h / 2 - ay);
+      if (!mejor || costo < mejor.costo) mejor = { x, y, costo };
+    }
+    const { x: lx, y: ly } = mejor || { x: 3 * px, y: 6 * px };
+    ecoCtx.fillStyle = ficha('--bg-main') || 'black'; ecoCtx.globalAlpha = 0.8; ecoCtx.fillRect(lx, ly, w, h);
+    ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = ficha('--accent-yellow') || 'white'; ecoCtx.textAlign = 'left'; ecoCtx.textBaseline = 'middle'; ecoCtx.fillText(rotulo, lx + 5 * px, ly + h / 2 + px); ecoCtx.restore();
   }
   function ajustarEco() {
     const w = Math.round(ecoC.clientWidth * Math.min(dpr(), 1.5)), h = Math.round(w * 0.8);
@@ -451,10 +562,11 @@ export function montarSimulador(raiz, opc = {}) {
     if (!motor.onda.length) return null;
     // la muestra telediastólica, con la masa del VI de la forma de enfermedad (fija la posición del ápex)
     const mioVi = motor.p.mioVi ?? 1, td = { ...muestraTd(), mioVi };
-    const clave = [vistaEco, Math.round(td.vvi / 3), Math.round(td.vvd / 3), mioVi, sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
+    const clave = [vistaEco, img.prof, Math.round(td.vvi / 3), Math.round(td.vvd / 3), mioVi, sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
     if (clave !== claveTd) {
       // el plano de la vista estándar y, encima, el movimiento de la sonda (sonda libre)
       planoBase = planoVista(vistaEco, td); planoEco = planoLibre(planoBase, sonda); claveTd = clave;
+      if (img.prof) planoEco = { ...planoEco, prof: img.prof };   // el mando de profundidad
       fanEco = abanicoVista(planoEco); fanBase = sondaMovida(sonda) ? abanicoVista(planoBase) : null;
       modoM.setProf(planoEco.prof); estadoSonda(td);
     }
@@ -475,7 +587,7 @@ export function montarSimulador(raiz, opc = {}) {
     const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
     // el corte lleva siempre el abdomen (aunque en el 3D esté oculto): es anatomía, no una opción de dibujo
     const abdEco = !propia && abd ? abd : construirAbdomen(geoEco, datosVci(s));
-    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0, ventanaVista: VISTAS[vistaEco].ventana });
+    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0, ventanaVista: VISTAS[vistaEco].ventana, ganancia: img.gan, tgc: img.tgc, focoMm: img.foco, m: { ventana: img.ventana ? 0.7 : 0 } });
     // Doppler: las velocidades de este instante (las mismas piezas, el mismo estado)
     const Fd = colorOn || (modoEco === 'D' && gate) ? fuentesFlujo(geoEco.flujo, s, areasD(), abdEco.vasos, datosFlujo()) : null;
     if (colorOn) ecografo.colorear(mapaColor(planoEco, im, Fd), nyq);
@@ -510,6 +622,7 @@ export function montarSimulador(raiz, opc = {}) {
     for (let cm = 1; cm * 10 < P.prof; cm++) { const r = cm * 10, x = X(r * dx) + 6 * px, y = Y(r * dy);
       ecoCtx.fillStyle = 'rgba(220,214,196,.8)'; ecoCtx.fillRect(x - 1, y - 1, cm % 5 ? 2 : 4, 2);
       if (cm % 5 === 0) { const dentro = x + 20 * px < ecoC.width; ecoCtx.textAlign = dentro ? 'left' : 'right'; ecoCtx.fillText(cm + '', dentro ? x + 6 * px : x - 4 * px, y - (dentro ? 0 : 9 * px)); ecoCtx.textAlign = 'center'; } }
+    marcaFoco(im, P);
     // marca de orientación (el lado de la muesca del transductor) a la derecha del vértice
     ecoCtx.fillStyle = '#d4af37'; ecoCtx.beginPath(); ecoCtx.arc(im.cx + 18 * px, im.arriba + 8 * px, 3 * px, 0, Math.PI * 2); ecoCtx.fill();
     // rótulos de las cavidades que el plano corta (centros que se mueven con las paredes)
@@ -530,6 +643,7 @@ export function montarSimulador(raiz, opc = {}) {
         rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
+    if (img.senal) senalar(img.senal, im);
     $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco] + (sondaMovida(sonda) ? ' · sonda libre' : '');
     ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
     $('#cv-eco-fase').textContent = `${s.fase} · ${FASES[s.fase]}`;
