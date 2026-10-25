@@ -285,6 +285,28 @@ esta sección.
 - **Tamaño**: pequeña (una sesión).
 - **Dudas**: ninguna.
 
+### B-015 · Megaproyecto de la eco: modelo, imagen más realista y lo mejor de las webs · apuntado 2026-10-25
+- **Lo que dijiste**: «nuestra eco la podemos mejorar por un millón… mejorar el modelo, el renderizado, el hacerlo más
+  realista, el añadir las mejoras de todas las páginas de eco en nuestro modelo».
+- **Cómo lo entiendo**: tipo `visual`, megaproyecto (REGLAS §7.12) sobre `js/modules/eco/`, con sus pruebas en verde.
+  Tres frentes: 1) **modelo**: anatomía más fiel del corazón y de lo que lo rodea (esófago para la ETE, segmentos de
+  valvas, coronarias), sin perder que lo mueve el motor; 2) **imagen**: eco más realista (sombra acústica, artefactos,
+  ganancia y profundidad, ventana pobre, calidad automática en el móvil); 3) **lo de las webs**: colores de estructura,
+  rótulos con enlace al 3D, viaje entre vistas, guía de sonda, ETE, banco de la mitral, calculadora ↔ simulador,
+  gemelo hemodinámico. **(supongo)** primero una maqueta comparativa «antes / después» de la imagen para que elijas.
+- **Depende de**: decidir tocar la anatomía congelada; ASE/SCA 2013 de ETE; fuentes de cada medida.
+- **Tamaño**: grande. Trozos: maqueta de imagen → anatomía → vistas y mandos → calculadoras y gemelo.
+- **Dudas**: ¿se puede añadir anatomía a partir de mallas abiertas (BodyParts3D, CC BY, con cita) o todo procedural?
+
+### B-016 · Vuelta por los modelos vivos: mecánicas nuevas · apuntado 2026-10-25
+- **Lo que dijiste**: «de los modelos vivos que ya tenemos, se podría dar una pequeña vuelta a ver si hubiera que
+  mejorarlos con alguna nueva mecánica que podamos añadir».
+- **Cómo lo entiendo**: tipo `auditoria` de solo lectura (profesor, modo juzgar) sobre los 14 modelos vivos, con las
+  mecánicas aprendidas en la ingeniería inversa: error con consecuencia y «mecanismo prioritario», revisión final por
+  objetivos, velocidad 1×/5×/20×, monitor común, fórmula con tus números, pares de prueba, «retenido» con motivo.
+  Salida: una tabla modelo → mecánica que le encaja → esfuerzo, para que elijas.
+- **Depende de**: nada. **Tamaño**: pequeña (una sesión).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
