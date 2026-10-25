@@ -343,7 +343,7 @@ río y mar) → 39-44 → 45-53.
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
-| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | pendiente (aprobada 2026-10-25) | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | en curso (2026-10-25) | Va antes de la parada 2 de `eco-mega` (anatomía) |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
