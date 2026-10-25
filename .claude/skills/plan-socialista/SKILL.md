@@ -42,8 +42,10 @@ tablero y el último parte, sin trabajar.
 «sin tarea».
 
 Lanza los agentes con la herramienta Agent (`subagent_type` = su nombre). **En cada encargo di explícitamente:
-«Lee CLAUDE.md, autonomo/REGLAS.md y tu tarea desde el disco»** (los agentes heredan una copia que puede estar
-vieja). Pásales siempre: la clave, la carpeta de trabajo, la fuente exacta, la definición de «hecho» y el encargo.
+«Lee tu encargo desde el disco y, de `autonomo/REGLAS.md`, solo estos apartados: §…»** (los agentes heredan una copia
+que puede estar vieja; `CLAUDE.md` ya lo tienen cargado). Nombra tú los apartados que tocan: un agente que relee las
+reglas enteras las vuelve a pagar en cada paso que da. Pásales siempre: la clave, la carpeta de trabajo, la fuente
+exacta (archivo y páginas), la definición de «hecho» y el encargo.
 
 **Si un agente no aparece** como `subagent_type` (los de `.claude/agents/` solo se cargan al abrir sesión), lanza
 `general-purpose` con «Lee `.claude/agents/<nombre>.md` y haz ese papel», con su mismo modelo, y anótalo en el parte.
@@ -74,7 +76,8 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
    modelo: si propone un modelo nuevo grande (decisión del usuario), no lo construyas, anótalo en el parte y sigue
    con lo que sí se puede. Si una pieza del motor falta (p. ej. el chorro regurgitante en el ecógrafo), **se
    construye**, con sus pruebas; no se esquiva con un esquema.
-5. **Constructor** (`constructor`, con `model: "opus"`) → lo visual, el texto reorganizado para estudiar y las
+5. **Constructor** (`constructor`; potente, `model: "opus"`, solo si construye un modelo vivo o una pieza nueva;
+   barato si sigue un modelo que ya existe, que es lo normal en preguntas, textos y fichas) → lo visual, el texto reorganizado para estudiar y las
    preguntas, con el `plan-estudio.md` entero y el modelo de preguntas `autonomo/modelos/preguntas-para-estudiar.html`.
    Si las preguntas necesitan el botón «Preguntas» y sus formatos y la app aún no los tiene (tarea `preguntas` del
    tablero sin `hecha`), las preguntas se escriben en el formato de test actual con el estilo de §8 (razonamiento,
@@ -125,7 +128,7 @@ es la base de cómo se trabaja ahora.
 - **Informes de 40 líneas como mucho**, en la carpeta del bloque, con ✅/❌ y «No comprobado / riesgo» al final. Lee el
   archivo, no pidas el informe entero en el mensaje.
 - **Modelos**: potente solo para el profesor y los modelos vivos o maquetas; barato para el auditor, la Mayéutica
-  siguiendo un modelo, el revisor de código y el verificador.
+  siguiendo un modelo, el revisor de código y el verificador. (Endurecido el 25/10, abajo.)
 - **Escalera antes de escribir código** (idea de Ponytail): reutilizar lo que ya hay antes de escribir nada nuevo. Vale
   para el código; el contenido médico y lo visual no se recortan.
 - **Paralelo con dueño de archivo**: dos constructores a la vez, cada uno en su carpeta; los archivos compartidos los
@@ -137,6 +140,27 @@ es la base de cómo se trabaja ahora.
   (`[HUECO <quién>: …]`), sube tú el `?v=` y decide el orden de fusión. Cada agente, en su subcarpeta temporal.
 - **Dependencias entre ramas**: si una pieza necesita un modelo de otra rama aún sin fusionar, deja el enlace
   preparado (`modeloFuturo`/`modeloVivo`) y conéctalo al unir.
+
+### Ahorro medido (aprobado por el usuario el 25/10/2026)
+
+Medido con `autonomo/gasto.mjs` sobre la sesión del 10 al 25/10: el director gastó **la mitad** de todo (cada paso
+relee su conversación entera, que había pasado de 500.000 tokens) y los constructores potentes el 31 % (5 veces más
+por agente que los baratos; los más caros, 150-230 pasos). Cuatro reglas:
+
+1. **Sesiones cortas.** Una sesión por tarea, o por parada de un bloque. Al cerrarla (parte y gasto escritos), no
+   encadenes la siguiente en la misma conversación: abre tú una sesión nueva con `create_session` (mismo repositorio
+   y entorno; mensaje `/plan-socialista <clave>`) y díselo al usuario. Tú no lees PDF, código largo ni informes de más
+   de 40 líneas: eso lo leen los agentes, y tú lees su informe.
+2. **Encargos de una pieza.** Cada encargo de constructor es una sola pieza (un modelo, un grupo de fichas, una tanda de
+   arreglos). Si un constructor llega a **unos 100 pasos** sin terminar, se para y entrega lo hecho con la lista de lo
+   que falta; tú lanzas otro encargo con el resto. Si una pieza no cabe en 100 pasos, pártela antes de lanzarla.
+3. **Más modelo barato.** Potente (opus) solo para el profesor, la cobertura y el **primer** modelo vivo o maqueta de
+   algo nuevo. Barato (sonnet) para todo lo que copia algo ya hecho: preguntas y Mayéutica, fichas, textos, arreglos,
+   correcciones de auditoría, la segunda escena de una pieza común. Ante la duda, barato; si el juez lo tumba dos
+   veces, la vuelta siguiente va en potente y el parte lo dice.
+4. **Lecturas acotadas.** Cada agente lee su encargo, el `CLAUDE.md` del módulo que toca y solo los apartados de
+   `autonomo/REGLAS.md` que le nombres. Las fuentes, por archivo y páginas exactas; los archivos grandes, con `graft`
+   o por trozos (`sed -n`), no enteros.
 
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
@@ -163,7 +187,8 @@ se copian a otras fichas (Merino HEMATO, modelo de fichas con calculadora, tení
 **No pidas aprobación tarea a tarea** (el usuario lo pidió el 20/10/2026). Lo técnico y los arreglos, con los jueces
 en verde, van directo a `main`; el contenido de un bloque se acumula en su rama `auto/<bN>` y solo se para al usuario
 en las 4-5 paradas del bloque (`REGLAS.md` §2.3), con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar.
-Mientras el usuario mira, sigues trabajando. Si contesta con cambios, se atienden en la vuelta siguiente.
+Mientras el usuario mira, la tarea siguiente sigue en **otra sesión** (Ahorro medido, punto 1). Si contesta con
+cambios, se atienden en la vuelta siguiente.
 
 **Dos tareas a la vez**: la segunda trabaja en una carpeta aparte (`git worktree add /tmp/wt-<clave> -B auto/<clave>
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,

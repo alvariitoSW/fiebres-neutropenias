@@ -3,7 +3,8 @@
 Lo edita el usuario (orden, notas, límites), la bitácora (`/bitacora`: mete las tareas que el usuario aprueba y las
 marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea por línea, en orden de prioridad.
 
-- **Límite por sesión:** 3 tareas (decisión del usuario, 14/10/2026, para las revisiones de Marino)
+- **Límite por sesión:** 1 tarea, o una parada de un bloque (decisión del usuario, 25/10/2026, para ahorrar: el director
+  relee su conversación en cada paso). La siguiente, en una sesión nueva que abre el propio director
 - **Vueltas máximas por tarea:** 3 (constructor ↔ jueces). Una 4.ª solo si tras la 2.ª quedan **más de 3 fallos**
   (sumando graves, medianos y pequeños); nunca más de 4.
 - **Parar si:** 2 tareas seguidas fallan o quedan bloqueadas

@@ -125,6 +125,8 @@ También puedes decírselo al director en el chat; él actualiza el tablero.
 - **Va más lento que una conversación normal**, porque cada cosa la hacen y la revisan varios. Un capítulo del atlas
   puede llevar una hora larga de trabajo de agentes.
 - **Gasta más**: varios modelos a la vez. Por eso los trabajadores son modelos baratos y hay un límite por sesión.
+  Cada parte trae su «Gasto» (`autonomo/gasto.mjs`), y desde el 25/10 hay cuatro reglas de ahorro medidas: sesiones
+  cortas, encargos de una pieza (unos 100 pasos), más modelo barato y lecturas acotadas.
 - **Se va a equivocar.** Para eso están los jueces automáticos, el auditor ciego y tu revisión final. Si ves un
   error que se repite, añade una regla en `REGLAS.md` y no volverá a pasar.
 - **Cuando no puede**, no lo inventa: marca la tarea como «necesita humano» y te dice qué le falta (un PDF, una

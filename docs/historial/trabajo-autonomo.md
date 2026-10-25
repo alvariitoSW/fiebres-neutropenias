@@ -294,3 +294,9 @@ Primera medida, sobre la sesión larga del 10 al 25/10 (bloques 1-3, R1-R13, maq
   el número de pasos.
 - Límite conocido: la transcripción a veces guarda solo la cifra inicial de salida de un mensaje; la salida puede
   quedarse algo corta.
+
+Con esas cifras, el usuario aprobó (25/10) las cuatro reglas de ahorro propuestas, en la skill («Ahorro medido»):
+sesiones cortas (una tarea o una parada de bloque por sesión; la siguiente la abre el director con `create_session`;
+el límite del tablero pasa de 3 tareas a 1), encargos de una pieza con tope de unos 100 pasos para el constructor,
+modelo potente solo para el profesor, la cobertura y el primer modelo de algo nuevo, y lecturas acotadas (el encargo
+nombra los apartados de `REGLAS.md`; el lector de fuente ya no relee `CLAUDE.md`, que tiene cargado).
