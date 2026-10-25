@@ -13,6 +13,7 @@
 // repinta si cambia; el bucle se para cuando nada se mueve o la vista está
 // oculta; con «reducir movimiento» se pinta el estado final, sin bucle.
 import { pintarParticula, colorParticula } from '../../core/particulas.js';
+import { pintarFormula } from '../../core/formula.js';
 import { sinMovimiento } from '../../core/motion.js';
 import {
     COMP, HTO0, NA0, FLUIDOS, estadoBase, derivar, clamp, copia, fmt, fmtD,
@@ -902,6 +903,11 @@ export function pintarLectura() {
     h += `<span class="agv-k">Hto</span><b>${q('hto', `${Math.round(D.hto)} %`)}</b>${f.hto != null ? caso : '<span class="agv-t">fisiol.</span>'}`;
     h += '<span class="agv-pie">Ec. 35.3-35.5 · Hto = hematíes ÷ volemia</span>';
     const el = $('lectura'); el.style.gridTemplateColumns = 'auto auto auto'; poner(el, 'innerHTML', h);
+    // «fórmula → números → resultado»: las cifras que ya calculó derivar() (D.posm, D.posmEf), con el mismo redondeo
+    const num = `2 × ${Math.round(D.naMed)} + ${Math.round(estado.glucosa)}/18`, l = [];
+    if (!ocultos.has('posm') && !ocultos.has('na')) l.push({ titulo: 'Posm (Ec. 35.3)', formula: '2 × Na + glucosa/18 + BUN/2,8', numeros: `${num} + ${Math.round(D.bun)}/2,8`, resultado: String(Math.round(D.posm)), unidad: 'mOsm/kg', origen: 'ficha · mr-osm-calculada' + (estado.urea ? ' · BUN: ilustrativo' : '') });
+    if (!ocultos.has('efect') && !ocultos.has('posm') && !ocultos.has('na')) l.push({ titulo: 'Posm efectiva (Ec. 35.4)', formula: '2 × Na + glucosa/18 (sin la urea)', numeros: num, resultado: String(Math.round(D.posmEf)), unidad: 'mOsm/kg', origen: 'ficha · mr-osm-efectiva-calc' });
+    pintarFormula($('formula'), l);
 }
 function origenDe(c) {
     const partes = [];

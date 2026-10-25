@@ -4648,3 +4648,18 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
   border: 1px dashed var(--accent-yellow); border-radius: 10px; font: 600 .86rem/1.3 system-ui, -apple-system, 'Segoe UI', sans-serif;
   cursor: pointer; touch-action: manipulation; overflow-wrap: anywhere; }
 .est-pie { border-top: 1px solid var(--border-color); padding-top: 10px; }
+
+/* Renglón «fórmula → números → resultado» (js/core/formula.js), común a los modelos vivos */
+.fml { display: grid; gap: 6px; margin: 8px 0; min-width: 0; }
+.fml .fml-r { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 6px 9px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; font: .78rem/1.35 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-main); }
+.fml .fml-t, .fml .fml-f, .fml .fml-org { flex: 1 1 100%; }
+.fml .fml-t { font-weight: 700; color: var(--text-muted); font-size: .66rem; letter-spacing: .04em; }
+.fml .fml-f { color: var(--text-dim); overflow-wrap: anywhere; }
+.fml .fml-n, .fml .fml-s { overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
+.fml .fml-n i, .fml .fml-s i { color: var(--accent-yellow); font-style: normal; }
+.fml .fml-s b { font-size: .95rem; color: var(--text-main); }
+.fml .fml-s small { color: var(--text-muted); font-size: .7rem; }
+.fml .fml-org { font-size: .66rem; line-height: 1.25; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 6px; flex: 0 1 auto; max-width: 100%; overflow-wrap: anywhere; }
+.fml .fml-org.fml-ilu { border-style: dashed; }
+.fml .fml-ir { position: relative; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: var(--accent-yellow); text-decoration: underline; text-underline-offset: 2px; text-align: left; cursor: pointer; }
+.fml .fml-ir::before { content: ''; position: absolute; inset: -14px -4px; }

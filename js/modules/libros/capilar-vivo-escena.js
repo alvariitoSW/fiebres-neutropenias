@@ -10,6 +10,7 @@
 // única de formas); la bolsa, de js/core/bolsa.js; el tubo de hematocrito, de js/core/tubo.js (piezas comunes).
 // Rendimiento: el bucle solo corre con la vista a la vista; con «reducir movimiento» se pinta el estado final.
 import { svgParticula, iconoParticula } from '../../core/particulas.js';
+import { pintarFormula } from '../../core/formula.js';
 import { sinMovimiento } from '../../core/motion.js';
 import { svgBolsa, moverGota } from '../../core/bolsa.js';
 import { svgTubosHto, crecerPlasma } from '../../core/tubo.js';
@@ -187,6 +188,13 @@ export const CELDAS = [
     { k: 'gap', n: 'Gap CO₂', u: 'mmHg', o: 'ilustr.', ilu: true },
     { k: 'petco2', n: 'PETCO₂', u: 'mmHg', o: 'ilustr.', ilu: true },
 ];
+// Los renglones «fórmula → números → resultado»: copian lo que ya calculó derivar() (R.cao2, R.do2), sin recalcular
+function pintarFormulas(R, e) {
+    const sat = dec(D.sao2, 3), hb = dec(e.hb, 1), l = [];
+    if (!tapado('cao2')) l.push({ titulo: 'CaO₂', formula: '1,34 × Hb × SaO₂ + 0,003 × PaO₂', numeros: `1,34 × ${hb} × ${sat} + 0,003 × ${e.pao2}`, resultado: dec(R.cao2, 1), unidad: 'mL/dL', origen: 'ficha · mar-cao2-9' });
+    if (!tapado('do2') && !e.rcp) l.push({ titulo: 'DO₂', formula: 'GC × 1,34 × Hb × SaO₂ × 10 (sin el disuelto)', numeros: `${dec(R.gc, 1)} × 1,34 × ${hb} × ${sat} × 10`, resultado: mil(R.do2), unidad: 'mL/min', origen: D.gcIlu ? 'ficha · mar-do2 · gasto: ilustrativo' : 'ficha · mar-do2' });
+    pintarFormula($('formula'), l);
+}
 export function pintarTablero() {
     const R = D.R, e = estado;
     const val = {
@@ -221,6 +229,7 @@ export function pintarTablero() {
         const sub = el.querySelector('.cpv-sub');
         sub.textContent = tap || e.rcp || sinPista() ? '' : c.k === 'gc' ? (e.gcFijo != null ? 'quieto' : e.volemia === 'baja' ? 'sin volumen' : e.compensa && R.gc > 5.05 ? 'compensa' : '') : c.k === 'hb' ? (e.dil ? 'Hto / 3' : '') : c.k === 'o2er' ? (R.ext >= 50 ? 'techo' : '') : c.k === 'do2' ? `/m² ${R.do2i}` : c.k === 'vo2' ? `/m² ${R.vo2i}` : c.k === 'ven' ? tabla94(R, e).corto : c.k === 'spo2' && R.spo2 == null ? 'sin onda' : c.k === 'lact' ? (R.lact <= 2 ? 'mort. 15 %' : R.lact < 4 ? 'mort. 25 %' : 'mort. 38 %') : c.k === 'gap' ? (R.gap > 6 ? 'hipoperfusión' : R.gap >= 2 && R.gap <= 5 ? 'normal 2-5' : R.gap > 5 ? 'sin corte (5-6)' : '') : '';
     }
+    pintarFormulas(R, e);
 }
 let celdaMirada = null;
 export function mirarCelda(k) {
