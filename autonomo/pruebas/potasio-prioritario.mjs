@@ -52,7 +52,7 @@ for (const ANCHO of [390, 360]) {
   const rev = await txt('#hk-revision');
   ok(['ECG protegido', 'K⁺ por debajo de 5', 'Salida iniciada'].every(o => rev.includes(o)), 'la revisión muestra los tres objetivos');
   ok(/✓ Cumplido · ECG protegido/.test(rev) && /✓ Cumplido · Salida iniciada/.test(rev), 'ECG protegido y salida iniciada: cumplidos');
-  ok(/(✓ Cumplido|✗ Falta) · K⁺ por debajo de 5/.test(rev) && !/\d{2,}\.\d/.test(rev), 'K⁺ por debajo de 5 tiene veredicto y la revisión no lleva nota numérica');
+  ok(/✓ Cumplido · K⁺ por debajo de 5/.test(rev) && !/\d{2,}\.\d/.test(rev), 'K⁺ por debajo de 5 tiene veredicto y la revisión no lleva nota numérica');
   ok(await p.evaluate(() => [...document.querySelectorAll('#hk-revision [data-ver]')].every(e => document.getElementById(e.dataset.ver.split(',')[0]))), 'los «Texto ↓» de la revisión llegan a un párrafo que existe');
   ok(await desborde() <= 0, 'sin desborde tras la revisión');
 
@@ -78,7 +78,8 @@ for (const ANCHO of [390, 360]) {
   await sesion('renal-grave', ['calcio']);
   await correr();
   const rev3 = await txt('#hk-revision');
-  ok(/✗ Falta · ECG protegido/.test(rev3) && /30-60 min \(tabla\)/.test(rev3), 'solo calcio: «✗ Falta · ECG protegido» con la duración de la tabla');
+  ok(/✓ Cumplido · ECG protegido/.test(rev3) && /⚠ El efecto del calcio dura 30-60 min \(tabla\)/.test(rev3), 'solo calcio a tiempo: «✓ ECG protegido» con la línea ⚠ de la duración de la tabla');
+  ok(/✗ Falta · Salida iniciada/.test(rev3), 'solo calcio: falta la salida');
   ok(/✗ Falta · K⁺ por debajo de 5/.test(rev3) && !/vuelve al plasma/.test(rev3), 'solo calcio: el K⁺ falta y no habla de lo que «se mete y vuelve»');
   ok(await desborde() <= 0, 'sin desborde tras la revisión (sesión C)');
   await clic('#hk-revision [data-empezar]'); await p.waitForTimeout(300);

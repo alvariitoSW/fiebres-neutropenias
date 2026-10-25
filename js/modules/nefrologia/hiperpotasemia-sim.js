@@ -91,10 +91,10 @@ ${leyendaParticulas([
     <div><div class="hk-nombre">${f.nombre}</div>
       <div class="hk-meta">${f.tiempo || 'Inicio/duración: ' + TABLA.find(t => t.id === f.fila).tiempo}</div>
       ${f.fidelidad ? `<div class="hk-fidelidad">${f.fidelidad}</div>` : ''}
-      <div class="hk-estado" id="hk-estado-${f.id}"></div>
-      <div class="hk-efecto" id="hk-efecto-${f.id}" aria-live="polite"></div></div>
+      <div class="hk-estado" id="hk-estado-${f.id}"></div></div>
     <div class="hk-acciones"><button type="button" class="visual-mini hk-dar" id="hk-dar-${f.id}" data-dar="${f.id}">Dar</button>
-      <button type="button" class="visual-link" data-ver="hk-tto-${f.fila}${f.extra ? ',' + f.extra : ''}" aria-label="Ver ${f.nombre} en el texto">Texto ↓</button></div></div>`).join('')).join('')}
+      <button type="button" class="visual-link" data-ver="hk-tto-${f.fila}${f.extra ? ',' + f.extra : ''}" aria-label="Ver ${f.nombre} en el texto">Texto ↓</button></div>
+    <div class="hk-efecto" id="hk-efecto-${f.id}" aria-live="polite"></div></div>`).join('')).join('')}
 </div>
 <p class="hk-aviso-modelo">Modelo didáctico. Los tiempos de inicio y duración salen de la tabla de la ficha; la ficha no dice cuántos mEq/l mueve cada medida ni a qué ritmo sale el K⁺ en cada causa, así que esas cantidades son ilustrativas. "Minutos/hora" (diálisis) y "horas" (diuréticos) no son cifras cerradas: en el modelo la diálisis empieza en unos minutos y ambos siguen mientras corre el reloj. Los puntos no están a escala: en la célula hay 150 mEq/l frente a 4 en el plasma.</p>`;
 
@@ -219,12 +219,18 @@ function revision(S, m) {
     const desp = DESPLAZAN.some(f => (S.dados[f.id] || []).length > 0);
     const calcio = (S.dados.calcio || []).length > 0;
     const el = (cumple, titulo, porque, ver) => ({ cumple, titulo, porque, ver });
+    // Criterio ilustrativo del simulador: la ficha pone el calcio como «primera medida» ante cambios en el ECG; se da por
+    // buena si se da en los primeros minutos de ECG alterado (≤10 min, final del «5-10 min» de inicio del calcio en la tabla).
+    const aTiempo = calcio && S.tCalcio0 - S.tECG0 <= UMBRAL_SIN_PROTEGER;
+    const largo = `⚠ El efecto del calcio dura 30-60 min (tabla) y el ECG siguió alterado ${fmtT(S.sinProt)} sin protección; lo que lo acorta es bajar el K⁺.`;
     const ecg = !S.huboECG
         ? el(true, 'ECG protegido', S.c.pseudo ? 'El K⁺ real era normal: no había nada que proteger.' : 'No hubo cambios en el ECG que proteger. Aun así, el ECG tiene baja sensibilidad: no descarta riesgo.', 'hk-ecg-sensibilidad')
-        : S.sinProt <= UMBRAL_SIN_PROTEGER
-            ? el(true, 'ECG protegido', calcio ? 'El calcio protegió la membrana mientras el ECG estuvo alterado; no baja el K⁺.' : 'El ECG estuvo alterado menos de 10 min y se normalizó al bajar el K⁺.', 'hk-tto-calcio')
-            : el(false, 'ECG protegido', calcio ? `El calcio protege 30-60 min (tabla); el ECG siguió alterado ${fmtT(S.sinProt)} sin protección. Aunque no baje el K⁺, antagoniza el efecto cardíaco.`
-                : 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
+        : aTiempo
+            ? { ...el(true, 'ECG protegido', 'El calcio se dio en cuanto el ECG se alteró: protege la membrana, aunque no baja el K⁺ (criterio ilustrativo del simulador).', 'hk-tto-calcio'), aviso: S.sinProt > UMBRAL_SIN_PROTEGER ? largo : '' }
+            : !calcio && S.sinProt <= UMBRAL_SIN_PROTEGER
+                ? el(true, 'ECG protegido', 'El ECG estuvo alterado menos de 10 min (criterio ilustrativo del simulador).', 'hk-tto-calcio')
+                : el(false, 'ECG protegido', calcio ? 'El calcio se dio tarde: la ficha lo pone como primera medida ante cambios en el ECG, y antagoniza el efecto cardíaco aunque no baje el K⁺.'
+                    : 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
     const zona = m.k < 5
         ? el(true, 'K⁺ por debajo de 5', (S.kMax < 5 ? 'El K⁺ no llegó a 5 mEq/l (umbral de hiperpotasemia de la ficha).' : `El K⁺ ha bajado a ${coma(m.k)} mEq/l, por debajo de 5 (umbral de hiperpotasemia de la ficha, Figura 7).`)
             + (m.k <= 3.6 ? ' Está en el límite de la hipopotasemia (<3,5 en la ficha).' : ''), m.k <= 3.6 ? 'hk-fig7' : 'hk-fig7')
@@ -239,7 +245,7 @@ function revision(S, m) {
     return [ecg, zona, salida];
 }
 const htmlRevision = obj => '<p class="section-label">Revisión de las 12 h · sin nota</p>' + obj.map(o =>
-    `<div class="tfg-estado tfg-estado-${o.cumple ? 'ok' : 'danger'}"><strong>${o.cumple ? '✓ Cumplido' : '✗ Falta'} · ${o.titulo}.</strong> ${o.porque}${enlace(o.ver)}</div>`).join('')
+    `<div class="tfg-estado tfg-estado-${o.cumple ? 'ok' : 'danger'}"><strong>${o.cumple ? '✓ Cumplido' : '✗ Falta'} · ${o.titulo}.</strong> ${o.porque}${enlace(o.ver)}</div>${o.aviso ? `<div class="tfg-estado tfg-estado-warn">${o.aviso}</div>` : ''}`).join('')
     + '<p class="hk-nota">Orientativa: los criterios (K⁺ por debajo de 5, ECG, salida del cuerpo) salen de la ficha; cuánto mueve cada medida es ilustrativo.</p>'
     + '<div><button type="button" class="visual-mini hk-primario" data-empezar>Empezar de nuevo</button></div>';
 
@@ -401,7 +407,7 @@ function montar(tab, texto, visual) {
         cuadrar(m);
         const r = rasgosECG(S, m.k), nivel = nivelGravedad(m.k, r.t);
         const dtm = S.t - S.tPrev; S.tPrev = S.t;
-        if (r.t) { S.huboECG = true; if (!enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.sinProt += dtm; }
+        if (r.t) { S.huboECG = true; if (S.tECG0 === null) S.tECG0 = S.t; if (!enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.sinProt += dtm; }
         S.kMax = Math.max(S.kMax, m.k);
         leer(m, r, nivel, act);
         dibujar(m, act, nivel);
@@ -414,7 +420,7 @@ function montar(tab, texto, visual) {
         S = {
             c, renal: E['hk-renal'].value, ecg: E['hk-ecg-modo'].value, t: 0, corriendo: false, dados: {}, repetido: false,
             anadido: { acido: 0, lisis: 0, aporte: 0 }, eliminado: { orina: 0, heces: 0, dial: 0 }, picoDesplazado: 0,
-            efectos: {}, huboECG: false, sinProt: 0, tPrev: 0, kMax: 0,
+            efectos: {}, huboECG: false, tECG0: null, tCalcio0: null, sinProt: 0, tPrev: 0, kMax: 0,
         };
         E['hk-causa-detalle'].innerHTML = c.texto + enlace(c.fuente);
         crearParticulas();
@@ -439,6 +445,7 @@ function montar(tab, texto, visual) {
         if (dar && !dar.disabled) {
             const f = FARMACOS.find(x => x.id === dar.dataset.dar), act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
             S.efectos[f.id] = efectoMedida(S, f, m, rasgosECG(S, m.k), act);
+            if (f.id === 'calcio' && S.tCalcio0 === null) S.tCalcio0 = S.t;
             (S.dados[f.id] ||= []).push(S.t); paso();
         }
         if (e.target.closest('[data-empezar]')) reiniciar(false);

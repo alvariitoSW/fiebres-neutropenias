@@ -2241,7 +2241,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .hk-meta, .hk-estado { font-size: 0.68rem; line-height: 1.4; }
 .hk-meta { color: var(--text-muted); }
 .hk-estado { color: var(--text-main); }
-.hk-efecto { margin-top: 4px; }
+.hk-efecto { grid-column: 1 / -1; margin-top: 2px; }
 .hk-efecto:empty { display: none; }
 .hk-efecto .tfg-estado { font-size: 0.7rem; line-height: 1.4; }
 .hk-efecto .visual-link, .hk-revision .visual-link { min-height: 28px; padding: 0 8px; font-size: 0.66rem; vertical-align: middle; margin-left: 4px; }
