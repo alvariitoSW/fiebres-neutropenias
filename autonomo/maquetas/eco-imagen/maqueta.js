@@ -12,13 +12,13 @@ import { crearEcografoV2 } from './ecografia-v2.mjs';
 
 const $ = (s) => document.querySelector(s);
 const ANCHO = 360, ALTO = 300, NFOT = 20, OP = { pericardio: true, detalle: true };
-const NIVELES = [{ nb: 192, ns: 448, n: 'alta' }, { nb: 160, ns: 384, n: 'media' }, { nb: 128, ns: 320, n: 'baja' }, { nb: 96, ns: 256, n: 'mínima' }];
-const MEJORAS = ['moteado', 'sombra', 'reverb', 'especular', 'tgc', 'foco', 'ventana', 'calidad'];
+const NIVELES = [{ nb: 192, ns: 448, n: 'la más fina' }, { nb: 160, ns: 384, n: 'fina' }, { nb: 128, ns: 320, n: 'más rápida' }, { nb: 96, ns: 256, n: 'la más rápida' }];
+const MEJORAS = ['paredes', 'moteado', 'sombra', 'reverb', 'especular', 'tgc', 'foco', 'ventana', 'calidad'];
 
 const st = {
   vista: 'a4c', escenario: 'normal', corte: 0.5, pausa: false, fase: 0, ganancia: 0, prof: null, tgc: [0, 0, 0, 0], focoMm: 80,
   on: Object.fromEntries(MEJORAS.map(k => [k, true])),
-  int: { moteado: 0.7, sombra: 0.7, reverb: 0.6, especular: 0.7, foco: 0.7, ventana: 0 },
+  int: { paredes: 0.9, moteado: 0.7, sombra: 0.7, reverb: 0.6, especular: 0.7, foco: 0.7, ventana: 0 },
 };
 st.on.ventana = false;          // la ventana pobre es un reto: se enciende a mano
 st.int.ventana = 0.7;
@@ -60,26 +60,87 @@ const xA = cA.getContext('2d'), xB = cB.getContext('2d'), dA = xA.createImageDat
 
 function mejorasActivas() {
   const m = {};
-  for (const k of ['moteado', 'sombra', 'reverb', 'especular', 'foco', 'ventana']) m[k] = st.on[k] ? st.int[k] : 0;
+  for (const k of ['paredes', 'moteado', 'sombra', 'reverb', 'especular', 'foco', 'ventana']) m[k] = st.on[k] ? st.int[k] : 0;
   m.tgc = st.on.tgc ? 1 : 0; return m;
 }
 function componer() {
   ctx.clearRect(0, 0, ANCHO, ALTO); ctx.drawImage(cA, 0, 0);
   const x = Math.round(st.corte * ANCHO);
   if (x < ANCHO) ctx.drawImage(cB, x, 0, ANCHO - x, ALTO, x, 0, ANCHO - x, ALTO);
-  if (x > 0 && x < ANCHO) { ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--accent-yellow') || 'white'; ctx.fillRect(x - 1, 0, 2, ALTO); }
+  if (x > 0 && x < ANCHO) { ctx.fillStyle = color(); ctx.fillRect(x - 1, 0, 2, ALTO); }
+  if (st.senal && ultimoB) senalar(st.senal, ultimoB);
   $('#ei-rot-antes').hidden = st.corte < 0.12; $('#ei-rot-despues').hidden = st.corte > 0.88;
 }
-let renders = 0;
+let renders = 0, ultimoB = null;
+const color = () => getComputedStyle(document.body).getPropertyValue('--accent-yellow').trim() || 'white';
+
+// ---- «Señálalo»: marca la zona del artefacto sobre la imagen de después y dice su frase en una línea
+const FRASES = {
+  sombra: 'Sombra: la costilla no deja pasar el sonido; no falta tejido.',
+  refuerzo: 'Refuerzo: el líquido frena poco el sonido; no es tejido más denso.',
+  reverb: 'Rebote en la pared del tórax: quieto al latir; no es un trombo.',
+  especular: 'El haz pasa paralelo a la pared: no es que no se contraiga.',
+  ventana: 'Aire del pulmón: la ganancia no lo arregla; cambia de ventana.',
+};
+const ROTULOS = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebote a 2× la pared', especular: 'pared apagada', ventana: 'pulmón' };
+const MEJORA_DE = { sombra: 'sombra', refuerzo: 'sombra', reverb: 'reverb', especular: 'especular', ventana: 'ventana' };
+function senalar(tipo, b) {
+  const pt = (r, th) => [b.cx + b.escala * r * Math.sin(th), b.arriba + b.escala * r * Math.cos(th)];
+  const sector = (t0, t1, r0, r1) => { const p = []; for (let k = 0; k <= 12; k++) p.push(pt(r0, t0 + (t1 - t0) * k / 12)); for (let k = 12; k >= 0; k--) p.push(pt(r1, t0 + (t1 - t0) * k / 12)); return p; };
+  const M = b.mitad, sub = VISTAS[st.vista].ventana === 'subcostal';
+  let forma = null, aviso = '';
+  if (tipo === 'sombra') { if (sub) aviso = 'En la subcostal el haz no cruza costillas: mira otra vista.'; else forma = sector(-M, -0.74 * M, b.pared - 6, b.prof - 2); }
+  else if (tipo === 'reverb') forma = sector(-0.95 * M, 0.95 * M, 2 * b.pared - 3, 2 * b.pared + 3);
+  else if (tipo === 'ventana') { if (!b.pulmon) aviso = 'En esta vista el pulmón no se interpone.'; else forma = sector(b.pulmon.borde * M, M, b.pulmon.rl, b.prof - 2); }
+  else if (tipo === 'refuerzo') {
+    // la tira más larga de haces centrales con sangre: la zona de 3 a 28 mm por debajo de la sangre más profunda
+    const tiras = [[]];
+    for (let i = 0; i < b.nb; i++) { const e = (i + 0.5) / b.nb * 2 - 1; let jj = -1;
+      if (Math.abs(e) < 0.6) for (let j = b.ns - 1; j >= 0; j--) if (b.tag[j * b.nb + i] === 255) { jj = j; break; }
+      if (jj < 0) { if (tiras.at(-1).length) tiras.push([]); continue; }
+      tiras.at(-1).push([-M + (i + 0.5) * b.dth, (jj + 0.5) * b.dr]); }
+    const t = tiras.reduce((a, x) => (x.length > a.length ? x : a), []);
+    if (t.length > 3) forma = t.map(([th, r]) => pt(Math.min(b.prof - 2, r + 3), th)).concat(t.slice().reverse().map(([th, r]) => pt(Math.min(b.prof - 2, r + 28), th)));
+  } else if (tipo === 'especular') {
+    // las muestras de músculo que el haz roza en paralelo, en la mitad de la imagen donde hay más
+    const lado = [[], []];
+    for (let q = 0; q < b.tag.length; q++) if (b.apagado(q)) { const i = q % b.nb, j = (q / b.nb) | 0; lado[i < b.nb / 2 ? 0 : 1].push(pt((j + 0.5) * b.dr, -M + (i + 0.5) * b.dth)); }
+    const L = lado[1].length >= lado[0].length ? lado[1] : lado[0];
+    if (L.length > 20) { const mx = L.reduce((a, p) => a + p[0], 0) / L.length, my = L.reduce((a, p) => a + p[1], 0) / L.length;
+      const sx = Math.sqrt(L.reduce((a, p) => a + (p[0] - mx) ** 2, 0) / L.length), sy = Math.sqrt(L.reduce((a, p) => a + (p[1] - my) ** 2, 0) / L.length);
+      forma = { elipse: [mx, my, Math.max(10, 1.8 * sx), Math.max(14, 1.8 * sy)] }; }
+    else aviso = 'En esta vista ninguna pared queda paralela al haz.';
+  }
+  $('#ei-senal').textContent = aviso || FRASES[tipo];
+  if (!forma) return;
+  ctx.save(); ctx.strokeStyle = color(); ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.beginPath();
+  let cx, cy;
+  if (forma.elipse) { const [x, y, rx, ry] = forma.elipse; ctx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); cx = x; cy = y - ry - 10; }
+  else { forma.forEach(([x, y], k) => (k ? ctx.lineTo(x, y) : ctx.moveTo(x, y))); ctx.closePath();
+    cx = forma.reduce((a, p) => a + p[0], 0) / forma.length; cy = forma.reduce((a, p) => a + p[1], 0) / forma.length; }
+  ctx.stroke(); ctx.setLineDash([]);
+  const txt = ROTULOS[tipo]; ctx.font = '600 14px system-ui, sans-serif'; const w = ctx.measureText(txt).width + 10;
+  const lx = Math.max(2, Math.min(ANCHO - w - 2, cx - w / 2)), ly = Math.max(2, Math.min(ALTO - 22, tipo === 'reverb' ? cy + 22 : cy - 10));   // el rebote es una banda fina: el rótulo, debajo
+  ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--bg-main').trim() || 'black'; ctx.globalAlpha = 0.85; ctx.fillRect(lx, ly, w, 20);
+  ctx.globalAlpha = 1; ctx.fillStyle = color(); ctx.fillText(txt, lx + 5, ly + 15); ctx.restore();
+}
+function ponerSenal(tipo) {
+  st.senal = st.senal === tipo ? null : tipo;
+  document.querySelectorAll('.ei-senalalo').forEach(x => x.setAttribute('aria-pressed', x.dataset.senal === st.senal));
+  if (!st.senal) { $('#ei-senal').textContent = ''; componer(); return; }
+  const k = MEJORA_DE[tipo]; st.on[k] = true; $('#ei-on-' + k).checked = true;
+  if (k === 'ventana' && st.int.ventana < 0.6) { st.int.ventana = 0.8; $('#ei-int-ventana').value = 80; }
+  st.corte = 0; $('#ei-corte').value = 0; repintar();
+}
 function pintar() {
   const f = fotograma(st.fase), P = plano(), t = f.s.t + vueltas * (pac.onda.at(-1).t - pac.onda[0].t);     // un solo reloj: el del latido
   const a = antes.formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia });
   dA.data.set(a.pix); xA.putImageData(dA, 0, 0); guarda(tA, a.tiempos.total);
-  const b = ec2().formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia, m: mejorasActivas(), tgc: st.tgc, focoMm: st.focoMm, ventanaVista: VISTAS[st.vista].ventana });
+  const b = ultimoB = ec2().formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia, m: mejorasActivas(), tgc: st.tgc, focoMm: st.focoMm, ventanaVista: VISTAS[st.vista].ventana });
   dB.data.set(b.pix); xB.putImageData(dB, 0, 0); guarda(tB, b.tiempos.total);
   componer(); renders++;
   if (!nuevo) calidadAutomatica(b.tiempos.total);
-  $('#ei-tiempos').textContent = `Antes: ${mediana(tA).toFixed(0)} ms por imagen · Después: ${mediana(tB).toFixed(0)} ms · calidad ${NIVELES[nivel].n} (${NIVELES[nivel].nb} haces × ${NIVELES[nivel].ns} muestras)`;
+  $('#ei-tiempos').textContent = `Antes: ${mediana(tA).toFixed(0)} ms por imagen · Después: ${mediana(tB).toFixed(0)} ms · imagen ${NIVELES[nivel].n}`;
   $('#ei-fase').value = st.fase;
 }
 // calidad automática: si «después» pasa de 40 ms por imagen (25 por segundo), menos haces y muestras; si el nivel de
@@ -142,6 +203,7 @@ for (const k of MEJORAS) {
   const r = $('#ei-int-' + k); if (r) { r.value = Math.round(st.int[k] * 100); r.addEventListener('input', () => { st.int[k] = r.value / 100; repintar(); }); }
 }
 const todas = (v) => { for (const k of MEJORAS) { if (k === 'ventana' && v) continue; st.on[k] = v; const c = $('#ei-on-' + k); if (c) c.checked = v; } repintar(); };
+document.querySelectorAll('.ei-senalalo').forEach(b => b.addEventListener('click', () => ponerSenal(b.dataset.senal)));
 $('#ei-todo').addEventListener('click', () => todas(true));
 $('#ei-nada').addEventListener('click', () => todas(false));
 
@@ -157,6 +219,7 @@ window.__ecoMaqueta = {
     if (cfg.tgc) { st.tgc = cfg.tgc; cfg.tgc.forEach((v, i) => { $('#ei-tgc' + i).value = v; $('#ei-tgc' + i + '-v').textContent = (v > 0 ? '+' : '') + v; }); } if (cfg.ganancia != null) st.ganancia = cfg.ganancia;
     if (cfg.corte != null) { st.corte = cfg.corte; $('#ei-corte').value = cfg.corte * 100; }
     if (cfg.fase != null) st.fase = cfg.fase; if (cfg.pausa != null) st.pausa = cfg.pausa;
+    if ('senal' in cfg) { st.senal = null; $('#ei-senal').textContent = ''; document.querySelectorAll('.ei-senalalo').forEach(x => x.setAttribute('aria-pressed', 'false')); if (cfg.senal) ponerSenal(cfg.senal); }
     pintar(); return renders;
   },
   tiempos: () => ({ antes: mediana(tA), despues: mediana(tB), nivel }),

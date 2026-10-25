@@ -20,8 +20,12 @@
   p { margin: 6px 0; }
   .ei-idea { color: var(--text-dim); }
   .ei-origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 2px 9px; margin: 4px 4px 0 0; }
-  .ei-marco { position: relative; margin: 10px 0 6px; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: var(--bg-main); }
-  #ei-lienzo { display: block; width: 100%; height: auto; touch-action: pan-y; cursor: ew-resize; }
+  .ei-fijo { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding: 4px 0 6px; margin: 0 -14px; padding-left: 14px; padding-right: 14px; border-bottom: 1px solid var(--border-color); }
+  #ei-senal { font-size: 13px; color: var(--accent-yellow); margin: 4px 0 0; min-height: 1.4em; }
+  .ei-senalalo { min-height: 40px; font-size: 14px; margin: 4px 6px 2px 0; }
+  .ei-senalalo[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); }
+  .ei-marco { position: relative; margin: 6px 0 0; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: var(--bg-main); }
+  #ei-lienzo { display: block; height: min(260px, 34vh); width: auto; max-width: 100%; margin: 0 auto; touch-action: pan-y; cursor: ew-resize; }
   .ei-rot { position: absolute; top: 6px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border-color); }
   #ei-rot-antes { left: 6px; } #ei-rot-despues { right: 6px; color: var(--accent-yellow); }
   #ei-espera { position: absolute; inset: auto 0 8px 0; text-align: center; font-size: 13px; color: var(--text-dim); }
@@ -49,10 +53,13 @@
 <p class="ei-idea">El mismo latido y el mismo corte del corazón del simulador, con dos formas de convertirlo en imagen. <strong>A la izquierda, la de hoy; a la derecha, la propuesta.</strong> Arrastra la línea sobre la imagen.</p>
 <span class="ei-origen">ilustrativo · fisiología general</span><span class="ei-origen">idea de The Heart by Ultrasound (D. Ouyang), reconstruida</span>
 
+<div class="ei-fijo">
 <div class="ei-marco">
   <canvas id="ei-lienzo" width="360" height="300" aria-label="Imagen ecográfica: antes a la izquierda, después a la derecha"></canvas>
   <span class="ei-rot" id="ei-rot-antes">Antes</span><span class="ei-rot" id="ei-rot-despues">Después</span>
   <div id="ei-espera">Preparando el paciente…</div>
+</div>
+<p id="ei-senal" aria-live="polite"></p>
 </div>
 <div class="ei-mando"><span>Línea</span><input id="ei-corte" type="range" min="0" max="100" value="50" aria-label="Posición de la línea entre antes y después"><output></output></div>
 <div class="ei-fila ei-tres">
@@ -84,21 +91,28 @@
 <p class="ei-nota">Enciende y apaga cada una para ver qué cambia. Todo apagado, la imagen de después es igual que la de antes.</p>
 <div class="ei-fila"><button type="button" id="ei-todo">Encender todas</button><button type="button" id="ei-nada">Apagar todas</button></div>
 
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-paredes"><span><span class="ei-num">0.</span> Paredes reales</span></label>
+  <p>En una eco real, el borde de la pared no es una línea: <span class="hl-azul">se ve por el contraste entre la sangre negra y el músculo gris</span>. Las líneas brillantes son el pericardio, que suele ser lo más brillante, y el plano de las válvulas.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-paredes" type="range" min="0" max="100"></div></div>
+
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-moteado"><span><span class="ei-num">1.</span> Grano que viaja con la pared</span></label>
-  <p>El grano de la imagen (el moteado) nace de los ecos de muchos puntos diminutos del tejido. Va pegado al músculo: al latir, <span class="hl-azul">el grano se desliza con la pared</span> en vez de cambiar de golpe. La sangre casi no da eco y su grano se mueve despacio.</p>
+  <p>El grano de la imagen (el moteado) nace de los ecos de muchos puntos diminutos del tejido. Va pegado al músculo: al latir, <span class="hl-azul">el grano se desliza con la pared</span> en vez de cambiar de golpe. El grano es alargado de lado y corto en profundidad, porque el haz es más ancho que largo el pulso. La sangre casi no da eco: su grano es tenue y no sigue a la pared.</p>
   <div class="ei-mando"><span>Textura</span><input id="ei-int-moteado" type="range" min="0" max="100"></div></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-sombra"><span><span class="ei-num">2.</span> Sombra y refuerzo</span></label>
-  <p>Lo muy brillante devuelve o absorbe gran parte del sonido: casi todo una costilla o el hueso, algo menos el pericardio. Detrás queda una banda oscura, <span class="hl-azul">la sombra acústica</span>. La sangre y el líquido frenan el sonido menos que el músculo: lo que hay detrás se ve más claro (refuerzo posterior). Mira detrás de un derrame.</p>
-  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-sombra" type="range" min="0" max="100"></div></div>
+  <p>Lo muy duro, como una costilla o el calcio, apenas deja pasar el sonido: detrás queda una banda oscura, <span class="hl-azul">la sombra acústica</span>. La sangre y el líquido frenan el sonido menos que el músculo: lo que hay detrás se ve más claro (refuerzo posterior). Mira detrás de un derrame.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-sombra" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="sombra">Señálalo: sombra</button><button type="button" class="ei-senalalo" data-senal="refuerzo">Señálalo: refuerzo</button></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-reverb"><span><span class="ei-num">3.</span> Neblina y rebotes de la pared</span></label>
   <p>El sonido rebota entre la sonda y la pared del tórax. Esos rebotes dejan una neblina arriba y bandas a 2, 3 y 4 veces la profundidad de la pared. <span class="hl-azul">No se mueven con el corazón</span>: se quedan quietas en la pantalla.</p>
-  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-reverb" type="range" min="0" max="100"></div></div>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-reverb" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="reverb">Señálalo</button></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-especular"><span><span class="ei-num">4.</span> Bordes que brillan de frente</span></label>
-  <p>Una superficie lisa refleja como un espejo: <span class="hl-azul">brilla cuando el haz le llega de frente</span> y se apaga cuando le pasa paralelo. Por eso, en el apical de 4 cámaras, el tabique y la pared lateral se ven más débiles que las válvulas, que el haz corta de frente. El músculo paralelo al haz también se ve más gris.</p>
-  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-especular" type="range" min="0" max="100"></div></div>
+  <p>Una superficie lisa refleja como un espejo: <span class="hl-azul">brilla cuando el haz le llega de frente</span> y se apaga cuando le pasa paralelo. Por eso, en el apical de 4 cámaras, el tabique y la pared lateral se ven más débiles que el plano de las válvulas, que el haz corta de frente. El músculo paralelo al haz también se ve más gris.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-especular" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="especular">Señálalo</button></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-tgc"><span><span class="ei-num">5.</span> Ganancia por profundidad</span></label>
   <p>El eco de lo profundo vuelve más débil. El ecógrafo lo compensa con <span class="hl-azul">la ganancia por profundidad</span>: los cuatro mandos de arriba, de cerca a fondo. La ganancia general sube o baja toda la imagen; la profundidad acerca o aleja el corazón.</p></div>
@@ -108,11 +122,12 @@
   <div class="ei-mando"><span>Intensidad</span><input id="ei-int-foco" type="range" min="0" max="100"></div></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-ventana"><span><span class="ei-num">7.</span> Ventana pobre (reto)</span></label>
-  <p>En el paciente obeso o ventilado, la grasa y el pulmón se interponen: <span class="hl-azul">llega menos señal y hay más ruido y neblina</span>. Con más intensidad, el pulmón tapa un lado de la imagen y entra y sale con la respiración. Prueba a recuperar la imagen con la ganancia y la profundidad.</p>
-  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-ventana" type="range" min="0" max="100"></div></div>
+  <p>En el paciente obeso o ventilado, la grasa y el pulmón se interponen: <span class="hl-azul">llega menos señal y hay más ruido y neblina</span>. Con más intensidad, el pulmón tapa un lado de la imagen y entra y sale con la respiración. La ganancia y la profundidad ayudan algo; si el pulmón tapa la imagen, hay que cambiar de ventana o recolocar al paciente.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-ventana" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="ventana">Señálalo</button></div>
 
 <div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-calidad"><span><span class="ei-num">8.</span> Calidad automática</span></label>
-  <p>Si el móvil tarda más de 40 ms en formar la imagen de después, usa menos haces y menos muestras: <span class="hl-azul">menos detalle, más fluidez</span>. Si va sobrado, vuelve a subir. La línea de tiempos de arriba dice cuánto tarda cada imagen en este aparato.</p></div>
+  <p>Si el móvil tarda más de 40 ms en formar la imagen de después, <span class="hl-azul">la hace menos fina y más rápida</span>. Si va sobrado, vuelve a afinarla. La línea de tiempos de arriba dice cuánto tarda cada imagen en este aparato.</p></div>
 
 <p class="ei-creditos">Imagen formada a partir del corazón y el latido del simulador de la app, cortados por el plano de cada vista. Brillo de cada tejido, atenuación, anchura del haz y artefactos: ilustrativos, según la física general de los ultrasonidos. Ideas de la imagen de <em>The Heart by Ultrasound</em>, de David Ouyang, reconstruidas sin su código, con permiso del autor. Hígado, diafragma y apófisis xifoides: mallas de Z-Anatomy (CC BY-SA 4.0), derivadas de BodyParts3D (DBCLS).</p>
 </main>

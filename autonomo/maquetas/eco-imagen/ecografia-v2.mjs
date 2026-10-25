@@ -212,7 +212,7 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
       }
     }
     // anisotropía: el músculo paralelo al haz devuelve menos eco
-    if (m.especular > 0) { const k = -22 * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
+    if (m.especular > 0) { const k = -(22 - 8 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
     // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
     const W = m.ventana;
     let pulmon = null;
