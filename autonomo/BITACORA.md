@@ -211,6 +211,7 @@ esta sección.
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | en el tablero, Objetivo V (`monitor-comun`, aparcada hasta el bloque 3) | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
+| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | pendiente en el tablero, Objetivo E (antes de la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 
 ### ⏸ Dónde quedó tee-inversa
 
