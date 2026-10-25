@@ -340,6 +340,7 @@ río y mar) → 39-44 → 45-53.
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | pendiente (aprobada 2026-10-25) | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
+| 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | hecha (2026-10-25): instalada | Tarea programada «Bandeja del Radar», `trig_01SJ6yy2dka8BFevHR5aCNnF`, 6:42 Atlantic/Canary; procedimiento en `autonomo/radar/LEEME.md` |
 
 ### Encargo · `tee-inversa`
 
@@ -381,6 +382,31 @@ río y mar) → 39-44 → 45-53.
   vivo» en 4 fases (0 acabado de producto, 1 coronarias y IAM en el motor, 2 coronariografía y ETE, 3 calculadoras de
   eco de UCI, 4 visor de TC). Informes de cada web en `autonomo/ideas/ingenieria-inversa/`. Parte:
   `autonomo/partes/2026-10-23-rea.md`.
+
+
+### B-017 (aprobada e instalada el 25/10, opción A: GitHub, 0 €) · Mandar enlaces desde Telegram a la app (tuits y papers) · apuntado 2026-10-25
+- **Lo que dijiste**: «poder mandar por Telegram o algún lado los links de tuiter que veo… o links que llevan a papers de
+  medicina… y que la app lo suba ya con el proceso de integración de información médica que hacemos en el apartado de
+  UCI papers tuiter».
+- **Cómo lo entiendo**: tipo `arreglo` técnico sobre lo que **ya existe**: el panel de subida (`backend/worker`, un
+  Cloudflare Worker) y la integración automática (`.github/workflows/integrate-content.yml`, un agente de Claude que
+  construye el contenido con nuestras reglas y abre una **PR en borrador**; nunca fusiona solo).
+  1. **Bot de Telegram** propio: le reenvías el enlace del tuit, del paper o una captura. Solo responde a tu cuenta
+     (lista con tu identificador de Telegram y un secreto en el enlace del bot).
+  2. Una ruta nueva del mismo Worker recibe el mensaje y lanza la integración con destino **UCI / Papers Tuiter** y
+     el enlace como fuente; te contesta «recibido» y, al acabar, el enlace de la PR para revisarla en el móvil.
+  3. **Tuits**: x.com no deja leerlos sin cuenta desde aquí. El agente saca el texto del tuit por su vía pública de
+     incrustar (oEmbed, **por comprobar**) o de la captura que mandes, encuentra el **paper original** (DOI/PubMed,
+     con las skills `paper-lookup` y `claim-check`) e integra **el paper**, no el tuit: un tuit no es fuente.
+  4. Lo que no sea un paper (una web, una herramienta, una idea) entra en el **Radar** (B-012) en vez de en UCI Papers.
+- **Lo que NO quiero** **(supongo)**: que nada entre en la app sin tu visto bueno (siempre PR en borrador); datos de
+  pacientes por el bot; que cualquiera pueda usar el bot.
+- **Depende de**: encender el panel de subida, que sigue pendiente (clave de la API de Anthropic y desplegar el Worker,
+  ver «Esperando algo tuyo»). Coste: cada integración gasta de tu clave de la API (tope de 8 USD por integración,
+  ajustable); Telegram, Cloudflare y GitHub Actions, gratis para este uso.
+- **Tamaño**: pequeña-mediana (el bot y la ruta del Worker; la integración ya existe).
+- **Dudas**: ¿Telegram te vale (o prefieres WhatsApp, que es más difícil y de pago, o el correo)? ¿Quieres que te avise
+  al acabar cada integración con el enlace de la PR?
 
 
 ### Encargos aprobados el 25/10/2026 («estoy de acuerdo con todo»), copiados de la bitácora

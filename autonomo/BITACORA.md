@@ -178,30 +178,6 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
-### B-017 · Mandar enlaces desde Telegram a la app (tuits y papers) · apuntado 2026-10-25
-- **Lo que dijiste**: «poder mandar por Telegram o algún lado los links de tuiter que veo… o links que llevan a papers de
-  medicina… y que la app lo suba ya con el proceso de integración de información médica que hacemos en el apartado de
-  UCI papers tuiter».
-- **Cómo lo entiendo**: tipo `arreglo` técnico sobre lo que **ya existe**: el panel de subida (`backend/worker`, un
-  Cloudflare Worker) y la integración automática (`.github/workflows/integrate-content.yml`, un agente de Claude que
-  construye el contenido con nuestras reglas y abre una **PR en borrador**; nunca fusiona solo).
-  1. **Bot de Telegram** propio: le reenvías el enlace del tuit, del paper o una captura. Solo responde a tu cuenta
-     (lista con tu identificador de Telegram y un secreto en el enlace del bot).
-  2. Una ruta nueva del mismo Worker recibe el mensaje y lanza la integración con destino **UCI / Papers Tuiter** y
-     el enlace como fuente; te contesta «recibido» y, al acabar, el enlace de la PR para revisarla en el móvil.
-  3. **Tuits**: x.com no deja leerlos sin cuenta desde aquí. El agente saca el texto del tuit por su vía pública de
-     incrustar (oEmbed, **por comprobar**) o de la captura que mandes, encuentra el **paper original** (DOI/PubMed,
-     con las skills `paper-lookup` y `claim-check`) e integra **el paper**, no el tuit: un tuit no es fuente.
-  4. Lo que no sea un paper (una web, una herramienta, una idea) entra en el **Radar** (B-012) en vez de en UCI Papers.
-- **Lo que NO quiero** **(supongo)**: que nada entre en la app sin tu visto bueno (siempre PR en borrador); datos de
-  pacientes por el bot; que cualquiera pueda usar el bot.
-- **Depende de**: encender el panel de subida, que sigue pendiente (clave de la API de Anthropic y desplegar el Worker,
-  ver «Esperando algo tuyo»). Coste: cada integración gasta de tu clave de la API (tope de 8 USD por integración,
-  ajustable); Telegram, Cloudflare y GitHub Actions, gratis para este uso.
-- **Tamaño**: pequeña-mediana (el bot y la ruta del Worker; la integración ya existe).
-- **Dudas**: ¿Telegram te vale (o prefieres WhatsApp, que es más difícil y de pago, o el correo)? ¿Quieres que te avise
-  al acabar cada integración con el enlace de la PR?
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -232,6 +208,7 @@ esta sección.
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ⏸ **fase 1 hecha, esperando tu elección** (23/10) | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ⏸ **esperando tu elección** (25/10) | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos`, `eco-mega`, `inventario`, `pulmon-respirador` | **B-012 a B-016**, aprobadas | pendientes en el tablero | 2026-10-25 | «estoy de acuerdo con todo» (25/10) |
+| `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ✅ instalada (25/10): tarea diaria a las 6:42 de Canarias | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 
 ### ⏸ Dónde quedó tee-inversa
 

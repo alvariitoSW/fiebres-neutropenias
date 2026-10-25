@@ -108,3 +108,14 @@ el plan que ejecutar y si fuera necesario hacer cambios antes de actuar». Pági
   chip de origen; 4) profesor: modo «en la guardia» y 3 puntos más de rúbrica; 5) jueces `--calc`, `--origen` y
   presupuesto de peso y fps de la eco; 6) norte y Radar en las reglas (§4 de este archivo).
 
+
+## 7. La bandeja del Radar (25/10/2026)
+
+El usuario pidió mandar desde el móvil los tuits y papers que ve, para que entren en la app con el proceso de UCI
+Papers. Se descartó usar el panel de subida (`backend/`), porque gasta de una clave de pago de la API («No voy a pagar
+más, quiero usar un medio que no me haga gastar ni un euro»). Elegida la **opción A**: un issue fijo de GitHub, el
+**#27 «📥 Bandeja del Radar»**, donde comenta los enlaces desde la app de GitHub; y una **tarea programada diaria** de
+Claude Code (6:42, hora de Canarias; sesión nueva cada vez; como mucho 5 entradas por día) que la procesa con su plan,
+sin coste extra. Procedimiento en `autonomo/radar/LEEME.md`, registro en `autonomo/radar/ENTRADAS.md`. Los papers
+entran por PR en borrador; un tuit no es fuente: se busca el paper original. Telegram (opción B, también gratis con
+Cloudflare) queda para más adelante si la usa mucho.
