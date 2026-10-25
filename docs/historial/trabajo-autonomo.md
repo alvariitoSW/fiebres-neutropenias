@@ -251,3 +251,23 @@ Las claves de guardado y su formato no cambian (no se pierde el progreso). Difer
 el capilar ahora baraja las opciones; las respuestas no van en el HTML hasta que se contestan; «✗ Qué le habría pasado
 al paciente» (la redacción de REGLAS §8); marcas ✓/✗ además del color; «Había un error: la N». El ácido-base vivo se
 queda con su motor: guarda en otro formato y su «tocar» va por etapas; meterlo obligaba a cambiar su guardado.
+
+### Contador de gasto por tarea (25/10/2026)
+
+El usuario: «quiero añadir una mejora a la skill /plan-socialista para que también se tenga el uso de tokens por tarea
+para poder optimizar mejor el uso y ahorrar». Nuevo `autonomo/gasto.mjs`: lee las transcripciones que guarda Claude
+Code (la del director y la de cada agente, con su `.meta.json`) y suma por tarea y por agente la entrada, la caché
+escrita, la caché leída y la salida, más un «equivalente» con el peso de cada tipo en el precio (×1, ×1,25, ×0,1, ×5).
+La tarea sale de la descripción del agente, que el director empieza ahora por `[clave]`; el gasto del director se
+reparte por tiempo (aproximado). Al cerrar cada tarea, el director lo copia al parte («Gasto»).
+
+Primera medida, sobre la sesión larga del 10 al 25/10 (bloques 1-3, R1-R13, maquetas): ≈750 M equivalentes.
+- **El director, la mitad (49 %)**: 5.234 turnos con un contexto mediano de 539 k tokens (p90: 712 k). Cada paso relee
+  medio millón de tokens de la caché; es lo que más pesa con diferencia.
+- **Constructores en el modelo potente, 31 %** (47 agentes, 5 M de media; los más caros, 7-13 M, con 150-230 pasos).
+  En el barato, 1,1 M de media.
+- Auditores, profesor, verificadores y revisores de código: 2-4 % cada papel.
+- En los agentes, lo que más pesa es releer su propio contexto (caché leída), no lo que escriben: el gasto crece con
+  el número de pasos.
+- Límite conocido: la transcripción a veces guarda solo la cifra inicial de salida de un mensaje; la salida puede
+  quedarse algo corta.

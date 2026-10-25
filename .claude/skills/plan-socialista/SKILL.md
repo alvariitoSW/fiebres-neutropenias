@@ -37,6 +37,10 @@ tablero y el último parte, sin trabajar.
 
 ## 1. El ciclo
 
+**La descripción de cada agente empieza por la clave de su tarea entre corchetes** (`[b3] Constructor 3A`,
+`[tee-inversa] Auditor`): así `autonomo/gasto.mjs` sabe a qué tarea apuntar lo que gasta. Sin clave, su gasto queda
+«sin tarea».
+
 Lanza los agentes con la herramienta Agent (`subagent_type` = su nombre). **En cada encargo di explícitamente:
 «Lee CLAUDE.md, autonomo/REGLAS.md y tu tarea desde el disco»** (los agentes heredan una copia que puede estar
 vieja). Pásales siempre: la clave, la carpeta de trabajo, la fuente exacta, la definición de «hecho» y el encargo.
@@ -188,7 +192,11 @@ origin/main`), con su propio servidor en otro puerto; así no se pisan los archi
    y los arreglos, directo con los jueces en verde (`REGLAS.md` §2.3).
 3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
-4. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
+4. **Gasto de la tarea**: `node autonomo/gasto.mjs --clave <clave>` (lee las transcripciones de esta sesión; tarda
+   1-2 minutos si la sesión es larga). Copia al parte, en «Gasto», el total, la tabla «Por papel» y los 3 agentes que
+   más gastaron, con una línea de **dónde se fue y cómo se ahorraría la próxima vez** (p. ej. «el constructor dio 200
+   pasos: el encargo tenía 3 piezas; partirlo»). Si ves un patrón que se repite, va a «Propuestas sobre las reglas».
+5. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.

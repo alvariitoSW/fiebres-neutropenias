@@ -14,6 +14,7 @@ basta con saber qué pedir y revisar lo que entrega.
 | **Las reglas** | `autonomo/REGLAS.md` | Lo que nadie del equipo puede saltarse (no inventar, fidelidad a la fuente, móvil de 390 px…) y la **rúbrica «Sirve para estudiar»** (§7) con tus modelos «así sí». Es corto a propósito: los agentes lo leen en cada vuelta. |
 | **La bitácora** | `autonomo/BITACORA.md` + skill `/bitacora` | Tu cuaderno de navegación: le cuentas lo que hay que hacer, lo convierte en tareas que esperan tu visto bueno y te dice «a dónde nos dirigimos». No toca la app. |
 | **El tablero** | `autonomo/TABLERO.md` | Las tareas **aprobadas**, en orden, y qué significa «hecho». Es lo único que trabaja el plan. La bitácora mete aquí lo que apruebas. |
+| **El contador de gasto** | `autonomo/gasto.mjs` | Cuenta los tokens que gastó cada tarea y cada agente (el director también). Lo pasa el director al cerrar cada tarea y lo copia al parte. |
 | **Los partes** | `autonomo/partes/AAAA-MM-DD.md` | Uno por sesión: qué se hizo, qué falló, qué no pudo leer y qué te deja para revisar. Es lo que lees por la mañana. |
 
 ## Cómo se usa
