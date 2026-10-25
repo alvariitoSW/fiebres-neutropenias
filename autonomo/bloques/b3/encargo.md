@@ -96,3 +96,7 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 
 Los fija la cobertura. No repetir: Andrés (62), la Sra. R. (64), Fermín (71), Rocío (67), Gonzalo (66), Inés (41),
 Salvador (47).
+
+**Decisión del usuario (25/10/2026)**: el caso de Aurelio es el de la maqueta (fallo respiratorio → ECMO). La rotura
+del papilar a las 18 h (cap. 16, p. 38) se queda como pregunta suelta de la ficha `mc-cardiogenico-fisio`, no como el
+caso de Aurelio.
