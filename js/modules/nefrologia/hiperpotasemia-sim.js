@@ -46,7 +46,7 @@ export function initHiperpotasemiaSim() {
 
 // ---------- Marcado de la vista Visual ----------
 const MARCADO = `
-<p class="visual-guia">El K⁺ es una nube de cuadrados que vive en el plasma, en la célula o sale del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
+<p class="visual-guia">El K⁺ es una nube de cuadrados que vive en el plasma, en la célula o sale del cuerpo. Cada medida hace una sola cosa: el calcio <span class="hl hl-azul">protege</span> el corazón (no baja el K⁺), insulina, salbutamol y bicarbonato lo <span class="hl hl-azul">meten</span> en la célula y diuréticos, captores y diálisis lo <span class="hl hl-azul">sacan</span> del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
 <div class="hk-escenario">
   <div class="hk-campo"><label for="hk-causa">Causa</label><select id="hk-causa">${Object.entries(CAUSAS).map(([k, c]) => `<option value="${k}">${c.etiqueta}</option>`).join('')}</select></div>
   <p class="hk-causa-detalle" id="hk-causa-detalle"></p>
@@ -222,7 +222,7 @@ function revision(S, m) {
     // Criterio ilustrativo del simulador: la ficha pone el calcio como «primera medida» ante cambios en el ECG; se da por
     // buena si se da en los primeros minutos de ECG alterado (≤10 min, final del «5-10 min» de inicio del calcio en la tabla).
     const aTiempo = calcio && S.tCalcio0 - S.tECG0 <= UMBRAL_SIN_PROTEGER;
-    const largo = `⚠ El efecto del calcio dura 30-60 min (tabla) y el ECG siguió alterado ${fmtT(S.sinProt)} sin protección; lo que lo acorta es bajar el K⁺.`;
+    const largo = `⚠ El efecto del calcio dura 30-60 min (tabla) y el ECG siguió alterado ${fmtT(S.sinProt)} sin protección; lo que lo acorta es bajar el K⁺.${enlace('hk-tto-calcio')}`;
     const ecg = !S.huboECG
         ? el(true, 'ECG protegido', S.c.pseudo ? 'El K⁺ real era normal: no había nada que proteger.' : 'No hubo cambios en el ECG que proteger. Aun así, el ECG tiene baja sensibilidad: no descarta riesgo.', 'hk-ecg-sensibilidad')
         : aTiempo
