@@ -24,6 +24,7 @@
 import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { pintarFormula } from '../../core/formula.js';
 import { pintarParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 300;
@@ -82,6 +83,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         ${m.has('anticoag') ? chips('anticoag', ANTICOAG) : ''}
         ${m.has('anticoag') ? '<div class="nv-chips"><button type="button" class="visual-mini" data-fv-cambiar>Cambiar el filtro</button></div>' : ''}
         <div class="nv-medidores gl-medidores"></div>
+        <div class="fml fv-formula" hidden></div>
         <div class="hk-avisos gl-avisos"></div>
         <p class="hk-aviso-modelo">Los mecanismos, las duraciones, las dosis y las cifras del citrato son de la ficha. La fracción de filtración (con un paciente de 70 kg y hematocrito del 30%), lo rápido que se coagula el filtro y cuántas partículas cruzan la membrana son ilustrativos.</p>`;
     const lienzo = cuerpo.querySelector('canvas'), ctx = lienzo.getContext('2d');
@@ -235,6 +237,11 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
             items.push(['Filtro coagulado', `${Math.round(coag * 100)}%`, false, coag > 0.5 ? 'malo' : '', coag >= 1 ? 'Sin flujo útil: cambiar el circuito' : 'Avanza más rápido con fracción de filtración alta o flujo bajo']);
         }
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(medidor).join('');
+        pintarFormula(cuerpo.querySelector('.fv-formula'), md.conv && m.has('dosis') ? [{
+            titulo: 'Efluente', formula: 'dosis (ml/kg/h) × peso (kg)',
+            numeros: `${e.dosis} × ${PESO}`, resultado: Math.round(M.qef * 60).toLocaleString('es-ES', { useGrouping: false }), unidad: 'ml/h',
+            origen: 'ficha · trr-dosis-base · peso de 70 kg: ilustrativo', prefijos: ['trr'],
+        }] : null);
         const av = [];
         if (e.modo === 'hd') av.push(['warn', 'Rápida y eficaz, pero su ultrafiltración depende de lo que tolere la tensión: menos estabilidad hemodinámica que la TRR continua.' + enlace(textos.hd)]);
         if (e.modo === 'hib') av.push(['ok', 'Combinan rasgos de la HD y de la TRR continua: 8-16 h, con velocidades de ultrafiltración y aclaramiento intermedias.' + enlace(textos.hib)]);

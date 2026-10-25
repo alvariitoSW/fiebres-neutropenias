@@ -346,7 +346,11 @@ export function montarSimulador(raiz, opc = {}) {
     medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD) : null;
     pintarResultadoD();
   }
+  // El renglón «fórmula → números → resultado» es de la app (core/formula.js); el laboratorio suelto no lo carga y deja el texto de siempre.
+  let pintarFormula = null;
+  import('../../core/formula.js').then(m => { pintarFormula = m.pintarFormula; pintarResultadoD(); }).catch(() => {});
   function pintarResultadoD() {
+    const cajaF = $('#cv-d-formula'); if (cajaF && pintarFormula) pintarFormula(cajaF, null);
     const box = $('#cv-d-resultado'), enl = $('#cv-d-enlaces'), poner = (estado, html) => { box.className = 'tfg-estado' + (estado ? ' tfg-estado-' + estado : ''); box.innerHTML = html; };
     enl.innerHTML = '';
     if (!fuenteD || !medD) { poner('', 'La muestra no cae en ningún flujo: sangre quieta, pared o fuera del corazón. Muévela o elige dónde ponerla.'); return; }
@@ -364,9 +368,12 @@ export function montarSimulador(raiz, opc = {}) {
     if (medD.tipo === 'eyeccion') {
       const u = motor.ultimo, aCm2 = areasD()[fuenteD.n] / 100, gc = medD.itv * aCm2 * u.fc / 1000;
       if (fuenteD.n === 'aortica' && fuenteD.tubo) {
+        if (cajaF && pintarFormula) pintarFormula(cajaF, [{ titulo: 'Gasto cardíaco', formula: 'GC = ITV × área del TSVI × FC',
+          numeros: `${fx(medD.itv, 1)} cm × ${fx(aCm2, 2)} cm² × ${fx(u.fc, 1)} lpm ÷ 1000`, resultado: fx(gc, 1), unidad: 'L/min',
+          origen: 'ficha · cardio-eco-itv · área y FC del modelo: ilustrativo', prefijos: ['cardio'] }]);
         enl.innerHTML = enlace('ITV en la Ficha 11', 'cardio-interaccion-corazon-pulmon', '#cardio-eco-itv');
         poner(medD.itv >= 18 && medD.itv <= 22 ? 'ok' : 'warn', cab + `<b>ITV ${fx(medD.itv, 1)} cm</b> (normal 18-22 cm, Ficha 11) · pico ${fx(medD.pico)} cm/s`
-          + `<br>GC ≈ ITV × área del TSVI (${fx(aCm2, 2)} cm²) × FC = <b>${fx(gc, 1)} L/min</b> (el motor: ${fx(u.gc, 1)} L/min)`
+          + (cajaF && pintarFormula ? `<br>GC del modelo (todo el latido): <b>${fx(u.gc, 1)} L/min</b>` : `<br>GC ≈ ITV × área del TSVI (${fx(aCm2, 2)} cm²) × FC = <b>${fx(gc, 1)} L/min</b> (el motor: ${fx(u.gc, 1)} L/min)`)
           + `<br><span class="cv-muted">El pico es del modelo: su eyección es más afilada de lo normal (pendiente de calibrar); el ITV no depende de eso.</span>`);
       } else poner('', cab + `ITV ${fx(medD.itv, 1)} cm · pico ${fx(medD.pico)} cm/s · GC ≈ ${fx(gc, 1)} L/min<br><span class="cv-muted">${fuenteD.tubo ? 'En el tracto de salida.' : 'Por encima de la válvula: es la velocidad del chorro, no la del tracto de salida.'} Ilustrativo.</span>`);
       return;
