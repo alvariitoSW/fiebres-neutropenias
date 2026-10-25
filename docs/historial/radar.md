@@ -119,3 +119,11 @@ Claude Code (6:42, hora de Canarias; sesión nueva cada vez; como mucho 5 entrad
 sin coste extra. Procedimiento en `autonomo/radar/LEEME.md`, registro en `autonomo/radar/ENTRADAS.md`. Los papers
 entran por PR en borrador; un tuit no es fuente: se busca el paper original. Telegram (opción B, también gratis con
 Cloudflare) queda para más adelante si la usa mucho.
+
+## 8. Montaje del Radar (25/10/2026)
+
+Tarea `radar` (B-012), aprobada el 25/10 («estoy de acuerdo con todo»). Solo organización, sin tocar la app:
+- `autonomo/radar/NORTE.md` (el norte fijo, tres niveles, G1-G6, datos de pacientes, lo que no queremos).
+- `autonomo/radar/HOJA-DE-RUTA.md` (fases 0-4, fase G y carriles, con su estado copiado del tablero).
+- `autonomo/radar/ENTRADAS.md` con la ficha de triaje de las 12 entradas y una «Tanda pendiente» vacía.
+- Skill `/radar` (`apunta`, `tanda`, `rumbo`) en `.claude/skills/radar/SKILL.md`; en la PR para su visto bueno.
