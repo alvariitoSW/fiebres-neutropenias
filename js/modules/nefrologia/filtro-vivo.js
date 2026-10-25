@@ -239,8 +239,8 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(medidor).join('');
         pintarFormula(cuerpo.querySelector('.fv-formula'), md.conv && m.has('dosis') ? [{
             titulo: 'Efluente', formula: 'dosis (ml/kg/h) × peso (kg)',
-            numeros: `${e.dosis} × ${PESO}`, resultado: Math.round(M.qef * 60).toLocaleString('es-ES', { useGrouping: false }), unidad: 'ml/h',
-            origen: 'ficha · trr-dosis-base · peso de 70 kg: ilustrativo', prefijos: ['trr'],
+            numeros: `${e.dosis} × ${PESO}`, resultado: Math.round(M.qef * 60).toLocaleString('es-ES', { useGrouping: true, minimumGroupingDigits: 1 }), unidad: 'ml/h',
+            origen: 'fisiología general · dosis: ficha · trr-dosis-base · peso de 70 kg: ilustrativo', prefijos: ['trr'],
         }] : null);
         const av = [];
         if (e.modo === 'hd') av.push(['warn', 'Rápida y eficaz, pero su ultrafiltración depende de lo que tolere la tensión: menos estabilidad hemodinámica que la TRR continua.' + enlace(textos.hd)]);

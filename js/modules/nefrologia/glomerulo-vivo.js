@@ -283,9 +283,9 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
         const bruta = M.pcg - M.pb - 30;
         pintarFormula(cuerpo.querySelector('.gl-formula'), [{
             titulo: 'Presión neta de filtración', formula: 'P capilar − P Bowman − P oncótica',
-            numeros: `${coma(M.pcg, 1)} − ${Math.round(M.pb)} − 30${bruta < 0 ? ` = ${coma(bruta, 1)} (negativa: no filtra)` : ''}`,
+            numeros: `${Math.abs(M.pcg - Math.round(M.pcg)) < 0.05 ? Math.round(M.pcg) : coma(M.pcg, 1)} − ${Math.round(M.pb)} − 30${bruta < 0 ? ` = ${coma(bruta, 1)} (negativa: no filtra)` : ''}`,
             resultado: coma(M.pnf, 1), unidad: 'mmHg',
-            origen: 'ficha · fisio-filtracion · cuánto mueve cada mando: ilustrativo', prefijos: ['fisio'],
+            origen: 'fisiología general · presiones: ficha · fisio-filtracion · cuánto mueve cada mando: ilustrativo', prefijos: ['fisio'],
         }]);
         const av = [];
         if (opciones.mandos.includes('pam')) {

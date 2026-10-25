@@ -9,9 +9,12 @@
 import { origenEnlazado } from './citas.js';
 import { escapeHtml } from './ui.js';
 
+// «ficha · Título» va junto: el prefijo no se queda solo en una línea y el título parte dentro de su caja.
+const agrupar = h => h.replace(/^([^<]*)(<button[\s\S]*?<\/button>)/, '<span class="fml-ref"><span>$1</span>$2</span>');
+
 const renglon = r => {
     const ilu = !/^ficha/.test(r.origen || '');
-    const org = r.origen ? `<span class="fml-org${ilu ? ' fml-ilu' : ''}">${origenEnlazado(r.origen, { clase: 'fml-ir', corta: true, ...(r.prefijos ? { prefijos: r.prefijos } : {}) })}</span>` : '';
+    const org = r.origen ? `<span class="fml-org${ilu ? ' fml-ilu' : ''}">${agrupar(origenEnlazado(r.origen, { clase: 'fml-ir', corta: true, ...(r.prefijos ? { prefijos: r.prefijos } : {}) }))}</span>` : '';
     return `<div class="fml-r"><span class="fml-t">${escapeHtml(r.titulo)}</span>`
         + `<span class="fml-f">${escapeHtml(r.formula)}</span>`
         + `<span class="fml-n"><i aria-hidden="true">→</i> ${escapeHtml(r.numeros)}</span>`
