@@ -1,0 +1,33 @@
+# Radar
+
+Todo lo que el usuario ve y quiere traer a la app (webs, repositorios, tuits, papers, ideas) entra por **una sola
+puerta**: la **Bandeja del Radar**, el issue #27 de GitHub
+(https://github.com/alvariitoSW/fiebres-neutropenias/issues/27). Un enlace por comentario, desde la app de GitHub del
+móvil. Coste: 0 € (usa el plan de Claude que ya tiene el usuario). Aprobado el 25/10/2026 (B-012 y B-017).
+
+## Quién la procesa
+
+Una **tarea programada de Claude Code**, una vez al día, en una sesión nueva. Solo mira los comentarios del usuario
+que están **después de la última respuesta de Claude** en el issue. Como mucho **5 entradas por día**: las demás
+quedan para el día siguiente, para no gastar demasiado del límite de uso del plan.
+
+## Qué hace con cada entrada
+
+1. **Clasifica**: paper · tuit · web/app · repositorio · idea.
+2. **Paper** → se integra en *UCI / Papers Tuiter* con las reglas de siempre (`CLAUDE.md` y
+   `js/modules/uci-papers/CLAUDE.md`; las preguntas nuevas siguen `CLAUDE.md` §8: nada de redactar). Necesita el
+   **texto completo**: si es de acceso abierto y se puede descargar, a `docs/`; si no, se pide al usuario que adjunte
+   el PDF en la propia bandeja. Rama `auto/bandeja-<AAAA-MM-DD>-<n>` y **PR en borrador**; nunca a `main` directamente.
+3. **Tuit** → no es fuente. Se busca el **paper original** (DOI/PubMed; skills `paper-lookup` y `claim-check`) y se
+   sigue como un paper. Si no hay paper detrás, va al Radar como idea.
+4. **Web, app o repositorio** → se apunta en `ENTRADAS.md` con su ficha de triaje; la ingeniería inversa
+   (`/ingenieria-reversa`) se hace solo si el usuario la pide.
+5. **Idea** → se apunta en `ENTRADAS.md` y, si es una tarea, como entrada nueva en `autonomo/BITACORA.md` (Apuntado).
+6. **Responde en el issue** con una línea por entrada: qué es, qué se hizo, el enlace de la PR o lo que falta.
+
+## Ficha de triaje (una por entrada en `ENTRADAS.md`)
+
+`fecha · tipo · enlace · lo que dijo el usuario · qué es · a qué situación de guardia o ficha sirve · fuente que lo
+respalda · licencia · coste · veredicto (integrar en fase N / idea suelta / descartar con motivo)`.
+
+El norte con el que se tría: `docs/historial/radar.md` §2.
