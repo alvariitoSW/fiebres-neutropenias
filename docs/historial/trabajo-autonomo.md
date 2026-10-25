@@ -306,3 +306,6 @@ nombra los apartados de `REGLAS.md`; el lector de fuente ya no relee `CLAUDE.md`
 El usuario cambió la rúbrica durante la parada 1 de `eco-mega`: el profesor puntúa cada punto de REGLAS §7 y §8 del 0
 al 10 y se pasa con **8,75 o más en todos**; si no, se repite la vuelta. Antes era del 1 al 5 y se pasaba con 4 (un 8 sobre
 10). Cambiado en `REGLAS.md` §7, `TABLERO.md`, el agente `profesor` y la skill `plan-socialista`.
+
+El mismo día lo ajustó: **se aprueba con 8 en todos los puntos y la meta es 8,75**; y pidió estudiar cómo usar mejor los
+modelos y los tokens para llegar a esa meta sin más vueltas (bitácora B-023).

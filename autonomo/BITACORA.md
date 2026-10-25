@@ -178,6 +178,22 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
+### B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas · apuntado 2026-10-25
+- **Lo que dijiste**: «hay que estudiar cómo optimizar el uso de modelos y de tokens para superar fácilmente ese
+  listón en ciertas tareas que requieren ese 8,75; […] lo bajamos a un 8 sobre 10, pero lo ideal sería llegar a 8,75
+  mínimo».
+- **Cómo lo entiendo**: tipo `auditoria`, de solo lectura, con `autonomo/gasto.mjs` y los partes. Medir en las tareas
+  ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó, y proponer reglas para llegar a 8,75 a
+  la primera. Ideas de partida **(supongo)**: que el profesor diseñe antes de construir y deje la rúbrica escrita en el
+  encargo (el constructor sabe con qué le van a juzgar); que el constructor se autopuntúe con capturas antes de
+  entregar; vueltas cortas con el mismo constructor (sigue con su contexto, sin empezar de cero); potente solo en la
+  primera vuelta de algo nuevo y en el juicio; y saber qué tareas necesitan la meta (modelos vivos, maquetas) y
+  cuáles basta con el 8.
+- **Para qué**: menos vueltas y menos gasto con el listón alto.
+- **Depende de**: nada (mejor con 2-3 tareas ya juzgadas sobre 10).
+- **Tamaño**: pequeña (una sesión).
+- **Dudas**: ninguna.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -189,7 +205,7 @@ esta sección.
 | B (estudio) | **profesor diseña** → constructor → verificador + auditor + **profesor juzga** | visual con los modelos grandes, texto para estudiar, recorrido de preguntas y casos | potente |
 | Cierre | revisor → rama propia y propuesta (PR) en borrador con «Ver en el móvil» | que lo pruebes y apruebes | — |
 
-- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 4), vuelve al
+- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 8 sobre 10; la meta, 8,75), vuelve al
   constructor. Como mucho 3 vueltas; si no, «necesita humano».
 - **Una tarea por sesión.** Con `/plan-socialista` hace la siguiente del tablero; con `/loop /plan-socialista`
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras

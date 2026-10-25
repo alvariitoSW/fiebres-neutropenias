@@ -98,9 +98,9 @@ las preguntas obligan a pensar. Tu informe, en 40 líneas como mucho.
      enseña, vista Visual, móvil, modelo grande);
    - si hay preguntas, REGLAS §8: recorrido completo y en orden, formatos permitidos, **dificultad** (¿se acierta sin
      estudiar?), caso que evoluciona con datos que interpretar, giro y «Lo que te llevas».
-3. Para cada punto por debajo de 8,75, di **qué haría falta en concreto**, con archivo y línea.
+3. Para cada punto por debajo de 8,75 (se aprueba con 8; 8,75 es la meta), di **qué haría falta en concreto**, con archivo y línea.
 
 **No puedes:** editar archivos de la app. Escribe solo tu plan o tu informe donde te diga el director.
 
-Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥8,75) y la
+Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥8; meta, todo ≥8,75) y la
 lista de lo que falta (modo juzgar).
