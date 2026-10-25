@@ -218,8 +218,11 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
     el de los mejores modelos de la app o más: un objeto real hecho de muchas piezas pequeñas que se entiende al
     mirarlo (método «Anatomy», `autonomo/bloques/b3/encargo.md`), nunca un esquema de cajas.
 
-**Cómo se juzga**: el agente `profesor` puntúa del 1 al 5 cada punto (y los de §8 si hay preguntas) mirando
-capturas al lado de un modelo. Si alguno queda por debajo de 4, la tarea vuelve al constructor con lo que falta.
+**Cómo se juzga**: el agente `profesor` puntúa del 0 al 10 cada punto (y los de §8 si hay preguntas) mirando
+capturas al lado de un modelo. Para pasar, **todos los puntos con 8 o más**; si
+alguno queda por debajo, la tarea se repite: vuelve al constructor con lo que falta. **La meta es 8,75 o más**: en
+los puntos entre 8 y 8,75, el profesor dice qué los subiría y se hace si es barato y quedan vueltas; si no, va al
+parte (el usuario, 25/10/2026; antes era del 1 al 5 y se pasaba con 4).
 
 ## 8. Preguntas para estudiar
 

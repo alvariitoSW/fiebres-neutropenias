@@ -300,3 +300,12 @@ sesiones cortas (una tarea o una parada de bloque por sesión; la siguiente la a
 el límite del tablero pasa de 3 tareas a 1), encargos de una pieza con tope de unos 100 pasos para el constructor,
 modelo potente solo para el profesor, la cobertura y el primer modelo de algo nuevo, y lecturas acotadas (el encargo
 nombra los apartados de `REGLAS.md`; el lector de fuente ya no relee `CLAUDE.md`, que tiene cargado).
+
+## Notas del profesor sobre 10 (25/10/2026)
+
+El usuario cambió la rúbrica durante la parada 1 de `eco-mega`: el profesor puntúa cada punto de REGLAS §7 y §8 del 0
+al 10 y se pasa con **8,75 o más en todos**; si no, se repite la vuelta. Antes era del 1 al 5 y se pasaba con 4 (un 8 sobre
+10). Cambiado en `REGLAS.md` §7, `TABLERO.md`, el agente `profesor` y la skill `plan-socialista`.
+
+El mismo día lo ajustó: **se aprueba con 8 en todos los puntos y la meta es 8,75**; y pidió estudiar cómo usar mejor los
+modelos y los tokens para llegar a esa meta sin más vueltas (bitácora B-023).

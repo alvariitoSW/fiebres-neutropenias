@@ -23,8 +23,8 @@ Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p
 
 | Tipo | Qué es | «Hecho» propio | Modelo del constructor |
 |---|---|---|---|
-| `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
-| `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
+| `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥8 sobre 10 (meta 8,75) en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
+| `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥8 sobre 10 (meta 8,75) en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
 | `revision` | **revisar** algo ya construido, sin construir: fidelidad a la fuente (temas completos, cifras, figuras e imágenes, bibliografía y páginas), código (solo graves) y móvil; los revisores dejan ideas para la parte de estudio | graves corregidos; informe de menores; ideas anotadas en `autonomo/ideas/<libro>.md` | barato (sonnet) |
 | `mapa` | el profesor, como director de arte, mira un libro entero y propone los pocos modelos grandes que lo explicarían, el orden de los bloques y las maquetas que el usuario debe elegir | «Mapa visual» en `autonomo/ideas/<libro>.md` + maqueta de cada modelo nuevo para que el usuario elija | potente (opus) |
 | `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
@@ -142,7 +142,7 @@ Marcador: capítulos con estado `hecha`.
 8. **Documentación**: párrafo nuevo en la sección del atlas de `js/modules/eco/README.md` y, en `docs/historial/eco.md`, la
    cuenta de capítulos actualizada en la sección del atlas (una línea, no un relato).
 9. **Auditoría ciega** sin hallazgos graves pendientes.
-10. **Sirve para estudiar** (tipo `visual`): el juez `profesor` da ≥4 en todos los puntos de REGLAS §7 comparando
+10. **Sirve para estudiar** (tipo `visual`): el juez `profesor` da ≥8 sobre 10 (meta 8,75) en todos los puntos de REGLAS §7 comparando
     con el capítulo 14 o el 10. La figura enseña **lo que el capítulo enseña, en la imagen que lo muestra en la
     clínica**: si es eco, en el ecógrafo de la app (vistas, Doppler color, espectros, modo M); si es hemodinámica,
     con el motor (asa, presiones) a la vez. Al menos igual de didáctica que la figura del original de echodemo.
@@ -289,7 +289,7 @@ es ligera):
   - las dos herramientas abren a 390 y 360 px sin errores ni desborde;
   - `__pruebas()` o su equivalente en verde;
   - los casos llegan a «Lo que te llevas»;
-  - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥4);
+  - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥8 sobre 10 (meta 8,75));
   - PR en borrador con «Ver en el móvil».
 
 ## Objetivo M5 · Marino en modelos vivos, por bloques (prioridad única)
@@ -308,7 +308,7 @@ terminar Marino. La app pasa de texto teórico a **modelos vivos + Mayéutica** 
    - Guía socrática + Examen (nivel MIR) + casos;
    - «Para profundizar» con lo que no se cubre;
    - la **ruta del bloque**, con el orden de estudio.
-5. Jueces (`--ficha` y `--modelo`), auditor, profesor (≥4) y PR en borrador con «Ver en el móvil».
+5. Jueces (`--ficha` y `--modelo`), auditor, profesor (≥8 sobre 10 (meta 8,75)) y PR en borrador con «Ver en el móvil».
 
 **Orden de los bloques**: 1-11 → 12-13 → 14-22 → 23-30 (pulmón con respirador) → 31-38 (ya tiene ácido-base vivo y
 río y mar) → 39-44 → 45-53.
@@ -337,11 +337,24 @@ río y mar) → 39-44 → 45-53.
 | 7 | `rea-final` | Informe final de la ingeniería inversa (6 webs) + segunda pasada de NavRad con imagen | ⏸ parado (2026-10-23): esperando la elección del usuario. Final: https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee · NavRad: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm | Pedido por el usuario el 23/10; sustituye a los informes parciales como documento de decisión |
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
 | 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | pendiente (aprobada 2026-10-25) | Va en la etapa A del plan de integración |
-| 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; antes que B-015 |
+| 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en curso, ⏸ parado en la parada 1 (2026-10-25): maqueta de la imagen esperando la elección del usuario, https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
+| 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
+
+**Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
+- Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
+  (`autonomo/gasto.mjs`, partes, informes del profesor), y proponer reglas para llegar a 8,75 a la primera.
+- Para qué: menos vueltas y menos gasto con el listón alto (se aprueba con 8 sobre 10; la meta es 8,75).
+- Ideas de partida (supongo): la rúbrica escrita en el encargo antes de construir; el constructor se autopuntúa con
+  capturas antes de entregar; vueltas con el mismo constructor (SendMessage, sin empezar de cero); potente solo en la
+  primera vuelta de algo nuevo y en el juicio; qué tipos de tarea necesitan la meta y cuáles basta con el 8.
+- Salida: una página para el móvil con la tabla vuelta → nota → modelo → tokens y las propuestas de regla, para que
+  el usuario elija.
+- Lo que NO quiero: cambiar reglas sin su visto bueno.
+- Fuente: `autonomo/partes/`, `autonomo/gasto.mjs`, los informes `profesor.md` de cada tarea.
 
 ### Encargo · `tee-inversa`
 
@@ -547,6 +560,51 @@ tras la fase 0; tocar el motor (ritmo e IAM) y la anatomía congelada (esófago,
 mallas abiertas con cita: se decide viendo la maqueta; visor de cortes en la fase 4; casos de imagen «no comerciales»,
 sí; figuras de Radiology Assistant, no (se enlaza). Respuestas por defecto del Radar: Twitter por captura, texto o el
 bot de Telegram (B-017); decisiones semanales; nombre «Radar»; la IA de TC, solo en el teléfono hasta nueva decisión.
+
+## Objetivo V · Mecánicas nuevas en los modelos vivos
+
+Aprobado por el usuario el 25/10/2026 («me parece todo perfecto, estoy de acuerdo en lo que dice el profesor»), sobre el
+informe de `vuelta-modelos` (`autonomo/ideas/vuelta-modelos.md`, https://claude.ai/artifact/5hpTv7763RnZUPt9hwMycW).
+Son mejoras de lo que ya existe (tipo `visual` sobre modelos hechos): a `main` con los jueces en verde y `--modelo`
+de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marcada como hueco en el informe.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | pendiente (aprobada 2026-10-25) | Pequeña; los cálculos ya existen |
+| 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | pendiente (aprobada 2026-10-25) | Pequeña-mediana |
+| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | pendiente (aprobada 2026-10-25) | Mediana; llega a inmersión, muralla, telar y vaso |
+| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
+| 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
+
+**Encargo `formula-comun`** · tipo: visual (mejora de lo existente)
+- Qué quiero: al mover un mando, un renglón «fórmula → tus números → resultado» (p. ej. CaO₂ = 1,34 × 7 × 0,97 + 0,003 × 90).
+- Para qué: estudiar (ver de dónde sale la cifra).
+- Modelo «así sí»: los modelos vivos de Libros (`capilar-vivo`, `agua-viva`).
+- Lo visual: una pieza común en `js/core/` (junto a `ui.js`), usada en capilar (CaO₂/DO₂), río y mar (Posm efectiva), glomérulo (presión de filtración, rótulo «ilustrativo»), filtro de la TRR (dosis de efluente) y eco (GC por ITV).
+- Lo que NO quiero: fórmulas nuevas sin fuente; recalcular en la pieza (copia el cálculo que ya existe).
+- Fuente: la de cada ficha; la del glomérulo es fisiología general.
+
+**Encargo `potasio-prioritario`** · tipo: visual (mejora de lo existente)
+- Qué quiero: que el simulador enseñe qué hace cada medida. El calcio protege la membrana pero no baja el K⁺; la insulina y el salbutamol lo meten en la célula un rato; solo el riñón, las resinas o la diálisis lo sacan. Lo que no trata el mecanismo prioritario «no cambia nada». Al acabar el reloj, revisión por objetivos (ECG protegido, K⁺ en zona, salida iniciada), sin nota.
+- Modelo «así sí»: `js/modules/nefrologia/hiperpotasemia-sim.js` (+ `potasio-escena.js`), patrón de RitmoLab (`autonomo/ideas/ingenieria-inversa/ritmolab-2.md`).
+- Lo que NO quiero: cifras de cuántos mEq mueve cada medida si la ficha no las da (hueco ya avisado).
+- Fuente: la tabla de tiempos que ya usa el simulador.
+
+**Encargo `objetivos-casos`** · tipo: visual (mejora de lo existente)
+- Qué quiero: al cerrar un caso de un modelo vivo, «cumplido / falta y por qué» por objetivos (p. ej. inmersión: BPS, RASS objetivo, CAM-ICU), y como opción del motor «si eliges mal, el modelo pasa a…» (error con consecuencia: TIH en el telar, PTT en el vaso, midazolam en la inmersión).
+- Modelo «así sí»: `js/core/mayeutica-motor.js` (`crearMayeuticaModelo`) y `js/modules/libros/capilar-vivo.js`.
+- Lo que NO quiero: nota numérica; romper los casos que ya existen. El ácido-base tiene motor propio: fuera, salvo que se pida migrarlo.
+- Fuente: la de cada ficha (Merino o Marino, con página).
+
+**Encargo `eco-vci-retenido`** · tipo: visual (mejora de lo existente)
+- Qué quiero: con ventilación mecánica, el ecógrafo no da la estimación por colapso de la VCI sola: «retenido: no uses el colapso solo», con su motivo.
+- Modelo «así sí»: el aviso de «combinación no fisiológica» y el patrón «retenido» de EchoSuite (`autonomo/ideas/ingenieria-inversa/echosuite-2.md`).
+- Lo que NO quiero: umbrales de la ASE 2025 (no está en `docs/`).
+- Fuente: Manual UMI (umbrales 12/18/40 %), con página. Pruebas: `node --test 'js/modules/eco/pruebas/*.test.mjs'`, `jueces.mjs --eco`.
+
+**Encargo `monitor-comun`** · tipo: visual · aparcada hasta el bloque 3
+- Qué quiero: el monitor común de `autonomo/maquetas/comun/` pasado a `js/core/` con el bloque 3; después, en capilar (sustituye su tablero), eco (lee el motor), receptores (PA y FC por fármaco, cualitativo 0-3) y cama 7.
+- Lo que NO quiero: monitor en la nefrona, el filtro, el catéter ni la muralla (no tienen constantes).
 
 ## Lo que aún no está aprobado
 
