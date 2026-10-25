@@ -601,3 +601,15 @@ inmersión (14, 54) usan ya `core/citas.js` y `core/explicacion-guiada.js`, con 
 las fichas. Auditoría ciega: ninguna cifra mal; 2 frases de mecanismo sin apoyo (disbiosis por antibióticos;
 citoquinas y trombina) rotuladas «fisiología general», 3 huecos y 12 menores (sobre todo páginas desviadas en 1),
 todo arreglado. El ácido-base vivo queda fuera: tiene motor propio (tarea aparte en la bitácora).
+
+## «La fórmula con tus números» en los modelos vivos (B-018, `formula-comun`, 25/10/2026)
+
+Pieza común `js/core/formula.js` (`pintarFormula(contenedor, renglones)`, estilos `.fml` en `components.css`): un
+renglón «fórmula → tus números → resultado» que solo dibuja; el modelo le pasa las cadenas ya calculadas con su
+mismo redondeo, y el origen (`ficha · <id>` se enlaza con `core/citas.js`; `fisiología general`, `ilustrativo`).
+Usos: capilar (CaO₂ y DO₂, `mar-cao2-9`, `mar-do2`), río y mar (Posm y efectiva, Ec. 35.3-35.4), glomérulo (PCG −
+PBowman − πCG, forma de fisiología general con las cifras de la ficha), filtro de la TRR (dosis × peso, peso 70 kg
+ilustrativo) y Doppler del eco (GC = ITV × área TSVI × FC ÷ 1000, con la cifra real del simulador al lado: «el Doppler
+lo estima»). Auditor: 0 graves; profesor: dos 3 (dos cifras de GC sin explicar en el eco, millar en el filtro),
+arreglados en la vuelta 2. La prueba de rendimiento del capilar fallaba a ratos también en `main` («n=0»: la escena
+quedaba fuera de la vista y su bucle se pausa); ahora la prueba la pone a la vista antes de medir.
