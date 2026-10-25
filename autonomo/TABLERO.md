@@ -557,7 +557,7 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | en curso (2026-10-25) | Pequeña; los cálculos ya existen |
+| 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña; los cálculos ya existen |
 | 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | pendiente (aprobada 2026-10-25) | Pequeña-mediana |
 | 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | pendiente (aprobada 2026-10-25) | Mediana; llega a inmersión, muralla, telar y vaso |
 | 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
