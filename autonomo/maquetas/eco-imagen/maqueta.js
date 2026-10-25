@@ -33,7 +33,9 @@ function prepararPaciente(k) {
   pac = { k, m, onda, extra, td: { ...td, mioVi: m.p.mioVi ?? 1 }, pvc, idx, fot: new Array(NFOT).fill(null),
     ref: gr.partes.concat(construirAbdomen(gr, { pvc, pad: pvc, t: 0 }).partes), planos: {} };
 }
+let nuevo = false;     // este fotograma se ha construido ahora: su tiempo no cuenta para la calidad
 function fotograma(i) {
+  nuevo = !pac.fot[i];
   if (!pac.fot[i]) { const s = pac.onda[pac.idx[i]], g = construirCorazon(estadoGeo(s, pac.extra), OP);
     pac.fot[i] = { s, partes: g.partes.concat(construirAbdomen(g, { pvc: pac.pvc, pad: s.pad, t: s.t }).partes) }; }
   return pac.fot[i];
@@ -76,7 +78,7 @@ function pintar() {
   const b = ec2().formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia, m: mejorasActivas(), tgc: st.tgc, focoMm: st.focoMm, ventanaVista: VISTAS[st.vista].ventana });
   dB.data.set(b.pix); xB.putImageData(dB, 0, 0); guarda(tB, b.tiempos.total);
   componer(); renders++;
-  calidadAutomatica(b.tiempos.total);
+  if (!nuevo) calidadAutomatica(b.tiempos.total);
   $('#ei-tiempos').textContent = `Antes: ${mediana(tA).toFixed(0)} ms por imagen · Después: ${mediana(tB).toFixed(0)} ms · calidad ${NIVELES[nivel].n} (${NIVELES[nivel].nb} haces × ${NIVELES[nivel].ns} muestras)`;
   $('#ei-fase').value = st.fase;
 }
