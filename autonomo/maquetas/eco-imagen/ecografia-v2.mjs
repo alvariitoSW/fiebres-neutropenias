@@ -40,12 +40,19 @@ function lento(x, y) {
   const a = VL[hash(ix, iy)], b = VL[hash(ix + 1, iy)], c = VL[hash(ix, iy + 1)], d = VL[hash(ix + 1, iy + 1)];
   return a + (b - a) * tx + (c - a) * ty + (a - b - c + d) * tx * ty;
 }
-function gauss(sig, cap) { const r = Math.min(cap, Math.max(1, Math.ceil(sig * 2.5))); const k = new Float32Array(2 * r + 1); let s = 0;
-  for (let i = -r; i <= r; i++) { const v = Math.exp(-(i * i) / (2 * sig * sig)); k[i + r] = v; s += v; } for (let i = 0; i < k.length; i++) k[i] /= s; return k; }
+// pulso axial: pesos de una campana por recurrencia (cada peso sale del anterior: w(i+1) = w(i)·q^(2i+1), con
+// q = e^(−1/2σ²)), simétricos, hasta 2,5 σ (como mucho «tope» muestras a cada lado), y que suman 1
+function pulsoAxial(sig, tope) {
+  const media = clamp(Math.ceil(2.5 * sig), 1, tope), q = Math.exp(-0.5 / (sig * sig)), mitad = [1];
+  for (let i = 0; i < media; i++) mitad.push(mitad[i] * Math.pow(q, 2 * i + 1));
+  const total = mitad.reduce((a, w, i) => a + (i ? 2 * w : w), 0), pesos = new Float32Array(2 * media + 1);
+  mitad.forEach((w, i) => { pesos[media + i] = pesos[media - i] = w / total; });
+  return pesos;
+}
 // potencia del ruido tras dos cajas de semiancho h (para devolverla a 1)
 const S2 = Array.from({ length: 16 }, (_, h) => { const w = 2 * h + 1; let s = 0; for (let t = -2 * h; t <= 2 * h; t++) { const c = (w - Math.abs(t)) / (w * w); s += c * c; } return s; });
 
-export const MEJORAS_CERO = Object.freeze({ moteado: 0, sombra: 0, reverb: 0, especular: 0, tgc: 0, foco: 0, ventana: 0 });
+export const MEJORAS_CERO = Object.freeze({ paredes: 0, moteado: 0, sombra: 0, reverb: 0, especular: 0, tgc: 0, foco: 0, ventana: 0 });
 
 /**
  * El ecógrafo «después». formar(partes, P, o) como el de la app, más o.m (intensidades 0..1 de cada mejora),
@@ -54,19 +61,21 @@ export const MEJORAS_CERO = Object.freeze({ moteado: 0, sombra: 0, reverb: 0, es
 export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } = {}) {
   let G = null;
   const geometria = (P, o) => {
-    const m = o.m, clave = [P.prof, P.mitad.toFixed(4), ancho, alto, m.reverb, m.foco, o.focoMm, m.ventana, m.sombra > 0, o.ventanaVista].join('|');
+    const m = o.m, clave = [P.prof, P.mitad.toFixed(4), ancho, alto, m.reverb, m.foco, o.focoMm, m.ventana, m.sombra > 0, o.ventanaVista, m.moteado].join('|');
     if (G && G.clave === clave) return G;
     const N = nb * ns, dth = 2 * P.mitad / nb, dr = P.prof / ns;
     const X = new Float32Array(N), Y = new Float32Array(N), Rr = new Float32Array(ns), EB = new Float32Array(nb);
     for (let j = 0; j < ns; j++) { const rr = (j + 0.5) * dr; Rr[j] = rr; for (let i = 0; i < nb; i++) { const th = -P.mitad + (i + 0.5) * dth; X[j * nb + i] = rr * Math.sin(th); Y[j * nb + i] = rr * Math.cos(th); } }
     for (let i = 0; i < nb; i++) EB[i] = (-P.mitad + (i + 0.5) * dth) / P.mitad;
-    const kAx = gauss(SIG_AX / dr, 6); let s2a = 0; for (const w of kAx) s2a += w * w;
+    const kAx = pulsoAxial(SIG_AX / dr, 6); let s2a = 0; for (const w of kAx) s2a += w * w;
     // desenfoque lateral por muestra: sin la mejora, el de hoy (solo la profundidad); con ella, foco y bordes
     const HB = new Uint8Array(N), NORM = new Float32Array(N), I = m.foco, f = o.focoMm ?? 80;
     for (let j = 0; j < ns; j++) {
       const rr = Math.max(4, Rr[j]), s0 = SIG_LAT0(rr), sF = Math.max(0.45, 0.55 + 0.012 * Math.abs(rr - f) + 0.004 * rr);
       for (let i = 0; i < nb; i++) {
-        const e = EB[i], sig = ((1 - I) * s0 + I * sF) * (1 + 0.9 * I * e * e);
+        const e = EB[i], M = m.moteado;
+        // con el grano real, el haz nunca baja de ~1 mm de ancho: el grano sale alargado de lado y corto en profundidad
+        const sig = Math.max(0.45 + 0.6 * M, ((1 - I) * s0 + I * sF) * (1 + 0.25 * M)) * (1 + 0.9 * I * e * e);
         const sg = sig / (rr * dth), h = Math.max(0, Math.min(15, Math.round((Math.sqrt(1 + 6 * sg * sg) - 1) / 2)));
         HB[j * nb + i] = h; NORM[j * nb + i] = 1 / (S2[h] * s2a);
       }
@@ -86,7 +95,9 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
     for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) {
       const q = j * nb + i, y = Y[q], r = Rr[j]; let c = 0;
       if (y >= pared && y < 50 + 40 * R) c = amp(-18 + 6 * R - (0.55 - 0.3 * R) * (y - pared));
-      if (R > 0) for (let k = 2; k <= 4; k++) { const d = r - k * pared; if (Math.abs(d) < 4) c += R * amp(-6 - 6 * k) * Math.exp(-(d * d) / 2.2); }
+      // en el apical el ápex cae en el campo cercano: más niebla en los primeros 3-4 cm
+      if (R > 0 && o.ventanaVista === 'apical' && y >= pared && y < pared + 40) c += R * amp(-15 - 0.35 * (y - pared));
+      if (R > 0) for (let k = 2; k <= 4; k++) { const d = r - k * pared; if (Math.abs(d) < 4) c += R * amp(-2 - 5 * k) * Math.exp(-(d * d) / 2.2); }
       CL[q] = c * kW;
     }
     // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
@@ -129,7 +140,7 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
    * Línea gruesa. espec: brillo extra de frente (dB); S: intensidad de la mejora especular (0 = la fórmula de hoy,
    * cos⁴). Con S > 0, apunta además en una franja de 5 mm la orientación del borde (para la anisotropía del músculo).
    */
-  function trazar(P, seg, ancho, dbBase, espec, tag, S) {
+  function trazar(P, seg, ancho, dbBase, espec, tag, S, realce = 1) {
     const { A, TAG, X, Y, OR, OD, FILL, dth, dr } = G, h = ancho / 2, banda = espec && S > 0 ? 6 : 0, hh = Math.max(h + 0.35, banda);
     for (let i = 0; i < seg.length; i += 4) {
       const ax = seg[i], ay = seg[i + 1], bx = seg[i + 2], by = seg[i + 3];
@@ -138,7 +149,7 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
         const tx = bx - ax, ty = by - ay, tl = Math.hypot(tx, ty) || 1, mx = (ax + bx) / 2, my = (ay + by) / 2, ml = Math.hypot(mx, my) || 1;
         c = Math.abs((-ty * mx + tx * my) / (tl * ml));
         const p = 4 + 4 * S;
-        db += (espec + 4 * S) * Math.pow(c, p) - 6 * S * (1 - c) * (1 - c);
+        db += (espec + 4 * S * realce) * Math.pow(c, p) - 6 * S * (1 - c) * (1 - c);
       }
       const a = amp(db);
       const ra = Math.hypot(ax, ay), rb = Math.hypot(bx, by), ta = Math.atan2(ax, ay), tb = Math.atan2(bx, by);
@@ -188,19 +199,26 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
     for (const el of els.slice(1)) {
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno') { const a = amp(el.db), mus = el.db <= 1; rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; FILL[q] = mus ? 1 : 0; }); }
+      if (el.tipo === 'relleno') { const mus = el.db <= 1, a = amp(el.db - (mus ? 7 * m.paredes : 0));   // paredes reales: músculo gris medio
+        rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; FILL[q] = mus ? 1 : 0; }); }
       else {
         // con la mejora especular, también el pericardio depende del ángulo
         const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
-        trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular);
+        // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
+        // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
+        const W2 = m.paredes, borde = !!el.especular && W2 > 0;
+        if (borde) trazar(P, el.seg, el.ancho * (1 - 0.45 * W2), el.db - 3 * W2, espec - 3 * W2, tag, m.especular, 1 - W2);
+        else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular);
       }
     }
     // anisotropía: el músculo paralelo al haz devuelve menos eco
     if (m.especular > 0) { const k = -22 * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
     // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
     const W = m.ventana;
+    let pulmon = null;
     if (W > 0.25 && o.ventanaVista !== 'subcostal') {
       const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;
+      pulmon = { borde, rl };
       for (let i = 0; i < nb; i++) { if (EB[i] < borde) continue;
         for (let j = 0; j < ns; j++) { const r = Rr[j]; if (r < rl) continue; const q = j * nb + i, k = Math.round(r / rl), d = r - k * rl;
           A[q] = Math.abs(d) < 1.2 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; } }
@@ -281,7 +299,8 @@ export function crearEcografoV2({ ancho = 360, alto = 300, nb = 192, ns = 448 } 
     }
     reloj.push(performance.now());
     const tiempos = { corte: reloj[1] - reloj[0], raster: reloj[2] - reloj[1], sombra: reloj[3] - reloj[2], moteado: reloj[4] - reloj[3], haz: reloj[5] - reloj[4], envolvente: reloj[6] - reloj[5], pantalla: reloj[7] - reloj[6], total: reloj[7] - reloj[0] };
-    return { tiempos, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, tag: TAG, db: E, nb, ns, dth: G.dth, dr: G.dr };
+    return { tiempos, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, tag: TAG, db: E, nb, ns, dth: G.dth, dr: G.dr, mitad: P.mitad, prof: P.prof,
+      pared: G.pared, pulmon, apagado: (q) => FILL[q] && OD[q] < 6 && OR[q] < 0.35 };
   }
   return { formar, nb, ns };
 }
