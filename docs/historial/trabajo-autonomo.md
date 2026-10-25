@@ -263,3 +263,14 @@ en español con su método (leer trozos, juntar llamadas, «visto / deducido / n
 aprendido con anesthbeta, EchoSuite, AngioView y NavRad: Playwright a 390 px, el código ajeno solo en memoria
 (guardarlo lo bloquea el sistema de permisos y lo prohíbe CLAUDE §7.9), REA solo si aporta, un investigador por web y
 el formato del informe-propuesta.
+
+### `/ingenieria-reversa`, segunda versión (25/10/2026)
+
+A petición del usuario («aplícalo para mejorar la skill»), tras releer la guía completa de leanrea (versión del
+17/10; el 23/10 solo se había leído un resumen). Añadido: presupuesto de 2-4 llamadas por pregunta y no volver a
+comprobar lo visto («cada paso cuesta más que lo que lees»); como mucho 2 capturas por web y comprimidas;
+investigadores con el modelo barato (lección del gasto de la sesión del 23/10); reutilizar el informe que ya exista y,
+en una web a la que se vuelve, comparar primero sus piezas; mapa de la red sin contenido; aviso de imágenes en otro
+subdominio (NavRad); mapas de código fuente primero y receta para leer a trozos en memoria (probada); embellecer en
+memoria; pares de prueba observados en su pantalla para probar después nuestra versión; ruta de leanrea para una app
+de Android. Lo demás de leanrea (binarios de Mac, Windows, Linux) no aplica a webs.
