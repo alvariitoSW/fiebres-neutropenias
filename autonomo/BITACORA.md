@@ -189,7 +189,7 @@ esta sección.
 | B (estudio) | **profesor diseña** → constructor → verificador + auditor + **profesor juzga** | visual con los modelos grandes, texto para estudiar, recorrido de preguntas y casos | potente |
 | Cierre | revisor → rama propia y propuesta (PR) en borrador con «Ver en el móvil» | que lo pruebes y apruebes | — |
 
-- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 4), vuelve al
+- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 8 sobre 10; la meta, 8,75), vuelve al
   constructor. Como mucho 3 vueltas; si no, «necesita humano».
 - **Una tarea por sesión.** Con `/plan-socialista` hace la siguiente del tablero; con `/loop /plan-socialista`
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
@@ -210,6 +210,8 @@ esta sección.
 | `radar`, `vuelta-modelos`, `eco-mega`, `inventario`, `pulmon-respirador` | **B-012 a B-016**, aprobadas | pendientes en el tablero | 2026-10-25 | «estoy de acuerdo con todo» (25/10) |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | en el tablero, Objetivo V (`monitor-comun`, aparcada hasta el bloque 3) | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
+| `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
+| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | ⏸ parado en la fase 1 (informe https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) | 2026-10-25 | «aprueba B-024» (25/10) |
 
 ### ⏸ Dónde quedó tee-inversa
 
@@ -251,6 +253,11 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **🔴 Un corazón más real** (`rea-eco`, https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg): 12 mejoras en 3 fases
+  para la parada 2 de `eco-mega` (fase 1: cuerdas que brillan, sin manchas sueltas, papilares que se acortan; fase 2:
+  cortina aorto-mitral, brillo por tejido, sombra del calcio, festones A1-P3…; fase 3: pared acinética por regiones y
+  ecos reales «real / nuestra»). Espera: qué fases entran, PDF (Lang 2015, ASE/SCA 2013 mitral, guía de strain),
+  abrir `commons.wikimedia.org` y `upload.wikimedia.org`, y confirmar que no se usa la malla de Visible Human.
 - **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
   sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
   hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:

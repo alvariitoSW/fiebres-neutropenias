@@ -23,8 +23,8 @@ Cada tarea tiene un tipo. El «hecho» de un tipo **se suma** al del objetivo (p
 
 | Tipo | Qué es | «Hecho» propio | Modelo del constructor |
 |---|---|---|---|
-| `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥4 en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
-| `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥4 en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
+| `visual` | contenido nuevo o rehecho: fase A (fiel) + fase B (visual y preguntas) | fidelidad + **rúbrica de estudio ≥8 sobre 10 (meta 8,75) en todo** (REGLAS §7 y §8, juez `profesor`) + paciente posible si hay simulador | potente (opus) |
+| `estudio` | contenido que **ya está** en la app: fase A ligera (comprobación de fuentes: cifras, páginas y bibliografía contra el PDF; lo grave se corrige, lo bueno no se reescribe) + fase B (el profesor diseña lo visual con los modelos grandes, el recorrido de preguntas y los casos) | comprobación sin graves + rúbrica ≥8 sobre 10 (meta 8,75) en §7 y §8 + auditor sin graves en preguntas, casos y figuras | barato en la fase A, potente (opus) en la B |
 | `revision` | **revisar** algo ya construido, sin construir: fidelidad a la fuente (temas completos, cifras, figuras e imágenes, bibliografía y páginas), código (solo graves) y móvil; los revisores dejan ideas para la parte de estudio | graves corregidos; informe de menores; ideas anotadas en `autonomo/ideas/<libro>.md` | barato (sonnet) |
 | `mapa` | el profesor, como director de arte, mira un libro entero y propone los pocos modelos grandes que lo explicarían, el orden de los bloques y las maquetas que el usuario debe elegir | «Mapa visual» en `autonomo/ideas/<libro>.md` + maqueta de cada modelo nuevo para que el usuario elija | potente (opus) |
 | `auditoria` | cotejar fichas existentes con su fuente | informe de graves/huecos/menores y los graves corregidos | barato (sonnet) |
@@ -142,7 +142,7 @@ Marcador: capítulos con estado `hecha`.
 8. **Documentación**: párrafo nuevo en la sección del atlas de `js/modules/eco/README.md` y, en `docs/historial/eco.md`, la
    cuenta de capítulos actualizada en la sección del atlas (una línea, no un relato).
 9. **Auditoría ciega** sin hallazgos graves pendientes.
-10. **Sirve para estudiar** (tipo `visual`): el juez `profesor` da ≥4 en todos los puntos de REGLAS §7 comparando
+10. **Sirve para estudiar** (tipo `visual`): el juez `profesor` da ≥8 sobre 10 (meta 8,75) en todos los puntos de REGLAS §7 comparando
     con el capítulo 14 o el 10. La figura enseña **lo que el capítulo enseña, en la imagen que lo muestra en la
     clínica**: si es eco, en el ecógrafo de la app (vistas, Doppler color, espectros, modo M); si es hemodinámica,
     con el motor (asa, presiones) a la vez. Al menos igual de didáctica que la figura del original de echodemo.
@@ -289,7 +289,7 @@ es ligera):
   - las dos herramientas abren a 390 y 360 px sin errores ni desborde;
   - `__pruebas()` o su equivalente en verde;
   - los casos llegan a «Lo que te llevas»;
-  - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥4);
+  - verificador, auditor ciego (solo lo que cambie de la maqueta) y profesor (≥8 sobre 10 (meta 8,75));
   - PR en borrador con «Ver en el móvil».
 
 ## Objetivo M5 · Marino en modelos vivos, por bloques (prioridad única)
@@ -308,7 +308,7 @@ terminar Marino. La app pasa de texto teórico a **modelos vivos + Mayéutica** 
    - Guía socrática + Examen (nivel MIR) + casos;
    - «Para profundizar» con lo que no se cubre;
    - la **ruta del bloque**, con el orden de estudio.
-5. Jueces (`--ficha` y `--modelo`), auditor, profesor (≥4) y PR en borrador con «Ver en el móvil».
+5. Jueces (`--ficha` y `--modelo`), auditor, profesor (≥8 sobre 10 (meta 8,75)) y PR en borrador con «Ver en el móvil».
 
 **Orden de los bloques**: 1-11 → 12-13 → 14-22 → 23-30 (pulmón con respirador) → 31-38 (ya tiene ácido-base vivo y
 río y mar) → 39-44 → 45-53.
@@ -342,6 +342,32 @@ río y mar) → 39-44 → 45-53.
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
+| 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | ⏸ parado en la fase 1 (2026-10-25): informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg | Va antes de la parada 2 de `eco-mega` (anatomía) |
+
+**Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
+- Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
+  (`autonomo/gasto.mjs`, partes, informes del profesor), y proponer reglas para llegar a 8,75 a la primera.
+- Para qué: menos vueltas y menos gasto con el listón alto (se aprueba con 8 sobre 10; la meta es 8,75).
+- Ideas de partida (supongo): la rúbrica escrita en el encargo antes de construir; el constructor se autopuntúa con
+  capturas antes de entregar; vueltas con el mismo constructor (SendMessage, sin empezar de cero); potente solo en la
+  primera vuelta de algo nuevo y en el juicio; qué tipos de tarea necesitan la meta y cuáles basta con el 8.
+- Salida: una página para el móvil con la tabla vuelta → nota → modelo → tokens y las propuestas de regla, para que
+  el usuario elija.
+- Lo que NO quiero: cambiar reglas sin su visto bueno.
+- Fuente: `autonomo/partes/`, `autonomo/gasto.mjs`, los informes `profesor.md` de cada tarea.
+
+**Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
+- Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
+  y el simulador de ETE de anesthbeta, y proponer qué traer a nuestro modelo para que el corazón que se ve sea más
+  real y salga de la fisiología del motor.
+- Foco: forma y grosor de paredes, valvas y su movimiento, trabéculas, cómo late cada parte; cómo se ve en cada vista.
+- Imágenes de eco reales: solo de uso libre y citadas, como referencia «real / nuestra» en cada vista (nunca CAMUS ni
+  EchoNet).
+- Salida: informe-propuesta para el móvil (qué traer, en qué orden, qué imágenes reales se pueden usar); el usuario
+  elige y eso alimenta la parada 2 de `eco-mega`.
+- Lo que NO quiero: copiar código, textos ni imágenes con licencia restrictiva.
+- Fuente: las tres webs y `autonomo/ideas/ingenieria-inversa/` (lo ya estudiado, para no repetir).
 
 ### Encargo · `tee-inversa`
 
