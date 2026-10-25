@@ -78,6 +78,7 @@ ${leyendaParticulas([
   <div class="hk-nota hk-fila" id="hk-reparto"></div>
 </div>
 <div class="hk-avisos" id="hk-avisos" aria-live="polite"></div>
+<div class="hk-revision" id="hk-revision" aria-live="polite"></div>
 <div class="hk-controles">
   <button type="button" class="visual-mini hk-primario" id="hk-play"></button>
   <button type="button" class="visual-mini" id="hk-rapido" aria-pressed="false">×4</button>
@@ -90,7 +91,8 @@ ${leyendaParticulas([
     <div><div class="hk-nombre">${f.nombre}</div>
       <div class="hk-meta">${f.tiempo || 'Inicio/duración: ' + TABLA.find(t => t.id === f.fila).tiempo}</div>
       ${f.fidelidad ? `<div class="hk-fidelidad">${f.fidelidad}</div>` : ''}
-      <div class="hk-estado" id="hk-estado-${f.id}"></div></div>
+      <div class="hk-estado" id="hk-estado-${f.id}"></div>
+      <div class="hk-efecto" id="hk-efecto-${f.id}" aria-live="polite"></div></div>
     <div class="hk-acciones"><button type="button" class="visual-mini hk-dar" id="hk-dar-${f.id}" data-dar="${f.id}">Dar</button>
       <button type="button" class="visual-link" data-ver="hk-tto-${f.fila}${f.extra ? ',' + f.extra : ''}" aria-label="Ver ${f.nombre} en el texto">Texto ↓</button></div></div>`).join('')).join('')}
 </div>
@@ -171,14 +173,68 @@ function avisos(S, m, r, nivel) {
     return a.map(([e, x]) => `<div class="tfg-estado tfg-estado-${e}">${x}</div>`).join('');
 }
 
+// ---------- Mecanismo prioritario y revisión por objetivos ----------
+// Lo prioritario sale del estado que ya calcula el simulador: ECG alterado sin
+// protección → calcio; K⁺ ≥5 (Figura 7) → bajarlo; y sin salida iniciada → sacarlo.
+const dadoAlguna = (S, lista) => lista.some(f => (S.dados[f.id] || []).length > 0);
+const enCurso = (S, f, act) => { const d = S.dados[f.id] || []; return act[f.id] > 0 || (d.length > 0 && S.t - d[d.length - 1] < f.ini[1]); };
+const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+
+// Qué hace la medida `f` sobre el mecanismo, antes de registrar la dosis.
+function efectoMedida(S, f, m, r, act) {
+    const papel = GRUPOS[f.grupo].papel, fila = 'hk-tto-' + f.fila;
+    const salida = dadoAlguna(S, ELIMINAN), alto = m.k >= 5;
+    const sin = motivo => ({ util: false, texto: `<strong>${f.nombre}</strong>: no trata el mecanismo prioritario: ${motivo}. No cambia nada.`, ver: fila });
+    const si = extra => ({ util: true, texto: `<strong>${f.nombre}</strong>: ${papel}${extra ? ' ' + extra : ''}`, ver: fila });
+    if (S.c.pseudo && !S.repetido) return sin('lo primero es confirmar el K⁺ con una nueva analítica, porque el valor puede ser falso');
+    if (S.c.pseudo) return sin('el K⁺ real del paciente es normal');
+    const ecgSinProteger = r.t && !enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act);
+    if (f.grupo === 'protege') {
+        if (ecgSinProteger) return si('Es lo prioritario: el ECG está alterado.');
+        return sin(r.t ? 'el ECG ya está protegido' : 'el ECG no tiene cambios que proteger');
+    }
+    if (f.grupo === 'desplaza') {
+        if (!alto) return sin(salida ? 'la salida ya está iniciada y el K⁺ está en zona' : 'el K⁺ ya está en zona');
+        return si(ecgSinProteger ? 'Antes, protege la membrana con calcio.' : salida ? '' : 'Falta la salida del cuerpo.');
+    }
+    const sostener = m.desplazado > 0.3;
+    if (!alto && !sostener) return sin('el K⁺ ya está en zona y no hay nada que sostener');
+    if (!alto && salida) return sin('la salida ya está iniciada y el K⁺ está en zona');
+    const ir = f.id === 'diuretico' && S.renal === 'ir' ? ' Con insuficiencia renal grave, muy poco.' : '';
+    return si((alto ? '' : 'Evita que vuelva a subir cuando acabe lo desplazado.') + ir);
+}
+
+// Tres objetivos al acabar el reloj, sin nota: cumplido (✓) o falta (✗), con el mecanismo.
+function revision(S, m) {
+    const sal = ELIMINAN.filter(f => (S.dados[f.id] || []).length > 0);
+    const el = (cumple, titulo, porque, ver) => ({ cumple, titulo, porque, ver });
+    const ecg = !S.huboECG
+        ? el(true, 'ECG protegido', S.c.pseudo ? 'El K⁺ real era normal: no había nada que proteger.' : 'No hubo cambios en el ECG que proteger. Aun así, el ECG tiene baja sensibilidad: no descarta riesgo.', 'hk-ecg-sensibilidad')
+        : S.protegido ? el(true, 'ECG protegido', 'El calcio protegió la membrana mientras el K⁺ seguía alto; no baja el K⁺.', 'hk-tto-calcio')
+            : el(false, 'ECG protegido', 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
+    const zona = m.k < 5
+        ? el(true, 'K⁺ en zona', S.kMax < 5 ? 'El K⁺ no llegó a 5 mEq/l (Figura 7).' : `El K⁺ ha bajado a ${coma(m.k)} mEq/l, por debajo de 5 (Figura 7).`, 'hk-fig7')
+        : el(false, 'K⁺ en zona', sal.length ? `El K⁺ sigue en ${coma(m.k)} mEq/l: la salida iniciada no ha bastado. La hemodiálisis es el método más rápido y seguro en IR grave.`
+            : `El K⁺ sigue en ${coma(m.k)} mEq/l: lo que se mete en la célula vuelve al plasma cuando acaba su efecto; solo la salida del cuerpo lo baja de forma sostenida.`, sal.length ? 'hk-tto-nota' : 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
+    const necesita = S.kMax >= 5 && !S.c.pseudo;
+    const salida = sal.length ? el(true, 'Salida iniciada', `Has puesto en marcha ${sal.map(f => f.nombre).join(' y ')}: saca el K⁺ del cuerpo.`, 'hk-tto-' + sal[0].fila)
+        : !necesita ? el(true, 'Salida iniciada', 'No hacía falta: el K⁺ no llegó a 5 mEq/l.', 'hk-fig7')
+            : el(false, 'Salida iniciada', 'Ninguna medida sacó el K⁺ del cuerpo: solo diuréticos, captores de potasio o diálisis lo eliminan; insulina y salbutamol solo lo guardan en la célula.', 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
+    return [ecg, zona, salida];
+}
+const htmlRevision = obj => '<p class="section-label">Revisión de las 12 h · sin nota</p>' + obj.map(o =>
+    `<div class="tfg-estado tfg-estado-${o.cumple ? 'ok' : 'danger'}"><strong>${o.cumple ? '✓ Cumplido' : '✗ Falta'} · ${o.titulo}.</strong> ${o.porque}${enlace(o.ver)}</div>`).join('')
+    + '<p class="hk-nota">Orientativa: los criterios (K⁺ por debajo de 5, ECG, salida del cuerpo) salen de la ficha; cuánto mueve cada medida es ilustrativo.</p>'
+    + '<div><button type="button" class="visual-mini hk-primario" data-empezar>Empezar de nuevo</button></div>';
+
 // ---------- Montaje de la vista ----------
 function montar(tab, texto, visual) {
     visual.innerHTML = MARCADO;
     const $ = id => visual.querySelector('#' + id);
     const E = {}; // referencias a los elementos que se reescriben, buscadas una sola vez
     for (const id of ['hk-k', 'hk-gravedad', 'hk-k-real', 'hk-k-real-txt', 'hk-repetir', 'hk-ecg-texto', 'hk-riesgo-txt',
-        'hk-riesgo-fill', 'hk-reparto', 'hk-avisos', 'hk-reloj', 'hk-play', 'hk-rapido', 'hk-causa', 'hk-renal', 'hk-ecg-modo', 'hk-causa-detalle']) E[id] = $(id);
-    for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
+        'hk-riesgo-fill', 'hk-reparto', 'hk-avisos', 'hk-reloj', 'hk-play', 'hk-rapido', 'hk-revision', 'hk-causa', 'hk-renal', 'hk-ecg-modo', 'hk-causa-detalle']) E[id] = $(id);
+    for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['efecto-' + f.id] = $('hk-efecto-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
     const poner = crearPoner();
     const esc = crearEscena(visual, { escena: 'hk-escena', ecg: 'hk-ecg' });
     const { C, reducido, rotulo, particulas, anillos } = esc;
@@ -300,8 +356,11 @@ function montar(tab, texto, visual) {
         poner('reloj', E['hk-reloj'], 'textContent', fmtT(S.t));
         poner('avisos', E['hk-avisos'], 'innerHTML', avisos(S, m, r, nivel));
         poner('play', E['hk-play'], 'textContent', S.t >= T_MAX ? 'Fin del reloj (12 h)' : S.corriendo ? '❚❚ Pausar' : '▶ Correr el reloj');
+        poner('revision', E['hk-revision'], 'innerHTML', S.t >= T_MAX ? htmlRevision(revision(S, m)) : '');
         for (const f of FARMACOS) {
             const dosis = S.dados[f.id] || [];
+            const ef = S.efectos[f.id];
+            poner('efe' + f.id, E['efecto-' + f.id], 'innerHTML', ef ? `<div class="tfg-estado tfg-estado-${ef.util ? 'ok' : 'neutro'}">${ef.util ? '✓' : '○'} ${ef.texto}${enlace(ef.ver)}</div>` : '');
             poner('est' + f.id, E['estado-' + f.id], 'textContent', estadoDosis(dosis, S.t, f, act[f.id]));
             const enCurso = act[f.id] > 0 || (dosis.length && S.t - dosis[dosis.length - 1] < f.ini[1]);
             const [txt, off] = !dosis.length ? ['Dar', false] : f.repetible && !enCurso ? ['Repetir', false] : ['Dado', true];
@@ -325,6 +384,8 @@ function montar(tab, texto, visual) {
         const act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
         cuadrar(m);
         const r = rasgosECG(S, m.k), nivel = nivelGravedad(m.k, r.t);
+        if (r.t) { S.huboECG = true; if (enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.protegido = true; }
+        S.kMax = Math.max(S.kMax, m.k);
         leer(m, r, nivel, act);
         dibujar(m, act, nivel);
         esc.pintarECG(r, latido, `${r.t}${r.qrs}${r.fv}`);
@@ -336,6 +397,7 @@ function montar(tab, texto, visual) {
         S = {
             c, renal: E['hk-renal'].value, ecg: E['hk-ecg-modo'].value, t: 0, corriendo: false, dados: {}, repetido: false,
             anadido: { acido: 0, lisis: 0, aporte: 0 }, eliminado: { orina: 0, heces: 0, dial: 0 }, picoDesplazado: 0,
+            efectos: {}, huboECG: false, protegido: false, kMax: 0,
         };
         E['hk-causa-detalle'].innerHTML = c.texto + enlace(c.fuente);
         crearParticulas();
@@ -357,7 +419,12 @@ function montar(tab, texto, visual) {
     E['hk-repetir'].addEventListener('click', () => { S.repetido = true; paso(); });
     visual.addEventListener('click', e => {
         const dar = e.target.closest('[data-dar]');
-        if (dar && !dar.disabled) { (S.dados[dar.dataset.dar] ||= []).push(S.t); paso(); }
+        if (dar && !dar.disabled) {
+            const f = FARMACOS.find(x => x.id === dar.dataset.dar), act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
+            S.efectos[f.id] = efectoMedida(S, f, m, rasgosECG(S, m.k), act);
+            (S.dados[f.id] ||= []).push(S.t); paso();
+        }
+        if (e.target.closest('[data-empezar]')) reiniciar(false);
     });
     enlazarTexto(visual, tab, texto);
     animarMientrasVisible(visual, paso);
