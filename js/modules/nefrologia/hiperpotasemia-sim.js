@@ -160,7 +160,7 @@ function avisos(S, m, r, nivel) {
     if (c.pseudo && !S.repetido) a.push(['danger', 'Antes de tratar, confirma con una nueva analítica: una muestra hemolizada da un K⁺ falsamente alto.' + enlace('hk-confirmar')]);
     if (c.pseudo && Object.keys(S.dados).length) a.push(['danger', 'El K⁺ real del paciente es normal: tratar baja un potasio que no estaba alto.']);
     if (r.t && !dado('calcio')) a.push(['danger', 'Hay cambios en el ECG: la ficha pone el gluconato cálcico como primera medida.' + enlace('hk-tto-nota')]);
-    if (r.t && dado('calcio') && m.calcio === 0) a.push(['danger', 'El efecto del calcio (30-60 min) ya ha pasado y el ECG sigue alterado. Puedes repetir la dosis.']);
+    if (r.t && dado('calcio') && m.calcio === 0) a.push(['danger', 'El efecto del calcio (30-60 min) ya ha pasado y el ECG sigue alterado: está sin protección.']);
     if (S.ecg === 'ninguno' && nivel === 3) a.push(['warn', 'ECG normal con K⁺ grave: la gravedad sigue siendo grave (Figura 7).' + enlace('hk-fig7')]);
     if (m.k > 6 && !c.pseudo) a.push(['warn', 'K⁺ &gt;6 mmol/l: monitorización ECG aunque no haya cambios típicos.' + enlace('hk-monitorizacion')]);
     if (dado('salbutamol') && !dado('insulina')) a.push(['warn', 'La monoterapia con β-agonistas falla en el 20-40% de los pacientes; con insulina-glucosa es más eficaz.']);
@@ -185,39 +185,55 @@ function efectoMedida(S, f, m, r, act) {
     const papel = GRUPOS[f.grupo].papel, fila = 'hk-tto-' + f.fila;
     const salida = dadoAlguna(S, ELIMINAN), alto = m.k >= 5;
     const sin = motivo => ({ util: false, texto: `<strong>${f.nombre}</strong>: no trata el mecanismo prioritario: ${motivo}. No cambia nada.`, ver: fila });
-    const si = extra => ({ util: true, texto: `<strong>${f.nombre}</strong>: ${papel}${extra ? ' ' + extra : ''}`, ver: fila });
+    const verbo = papel.replace(/^(protege|mete|saca)/, '<span class="hl hl-azul">$1</span>');
+    const pista = { protege: 'Mira el corazón y el ECG.', desplaza: 'Mira los K⁺ que entran en la célula.', elimina: 'Mira los K⁺ que salen por su vía.' }[f.grupo];
+    const si = extra => ({ util: true, texto: `<strong>${f.nombre}</strong>: ${verbo}${extra ? ' ' + extra : ''} <span class="hk-pista">${pista}</span>`, ver: fila });
     if (S.c.pseudo && !S.repetido) return sin('lo primero es confirmar el K⁺ con una nueva analítica, porque el valor puede ser falso');
     if (S.c.pseudo) return sin('el K⁺ real del paciente es normal');
     const ecgSinProteger = r.t && !enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act);
     if (f.grupo === 'protege') {
-        if (ecgSinProteger) return si('Es lo prioritario: el ECG está alterado.');
+        if (ecgSinProteger) return si('Es lo prioritario: el ECG está alterado.' + ((S.dados.calcio || []).length ? ' Su efecto anterior ya había terminado (30-60 min, tabla) y el ECG seguía alterado.' : ''));
         return sin(r.t ? 'el ECG ya está protegido' : 'el ECG no tiene cambios que proteger');
     }
     if (f.grupo === 'desplaza') {
+        if (f.id === 'bicarbonato' && !S.c.acido) return sin('sin acidosis metabólica el bicarbonato aporta poco: la ficha lo reserva para la acidosis concomitante');
         if (!alto) return sin(salida ? 'la salida ya está iniciada y el K⁺ está en zona' : 'el K⁺ ya está en zona');
         return si(ecgSinProteger ? 'Antes, protege la membrana con calcio.' : salida ? '' : 'Falta la salida del cuerpo.');
     }
     const sostener = m.desplazado > 0.3;
     if (!alto && !sostener) return sin('el K⁺ ya está en zona y no hay nada que sostener');
     if (!alto && salida) return sin('la salida ya está iniciada y el K⁺ está en zona');
-    const ir = f.id === 'diuretico' && S.renal === 'ir' ? ' Con insuficiencia renal grave, muy poco.' : '';
-    return si((alto ? '' : 'Evita que vuelva a subir cuando acabe lo desplazado.') + ir);
+    if (f.id === 'diuretico' && S.renal === 'ir') return { util: false, texto: `<strong>${f.nombre}</strong>: saca el K⁺ por el riñón, pero con insuficiencia renal grave apenas actúa; la hemodiálisis es el método más rápido y seguro en IR grave.`, ver: fila };
+    // «Evita que vuelva a subir…»: consecuencia de fisiología general, no es una frase de la ficha.
+    const dial = f.id === 'dialisis' ? 'La ficha la sitúa en IR grave o si fallan las medidas previas.' : '';
+    return si([alto ? '' : 'Evita que vuelva a subir cuando acabe lo desplazado (fisiología general).', dial].filter(Boolean).join(' '));
 }
 
 // Tres objetivos al acabar el reloj, sin nota: cumplido (✓) o falta (✗), con el mecanismo.
+const ARTICULO = { diuretico: 'los diuréticos de asa', csz: 'el ciclosilicato de zirconio (CSZ)', patiromero: 'el patirómero', dialisis: 'la diálisis' };
+// Un ECG alterado sin calcio en curso más de 10 min (el final del «5-10 min» de inicio del calcio en la tabla) cuenta como sin proteger.
+const UMBRAL_SIN_PROTEGER = FARMACOS.find(f => f.id === 'calcio').ini[1];
 function revision(S, m) {
     const sal = ELIMINAN.filter(f => (S.dados[f.id] || []).length > 0);
+    const salEfi = sal.filter(f => !(f.id === 'diuretico' && S.renal === 'ir'));
+    const desp = DESPLAZAN.some(f => (S.dados[f.id] || []).length > 0);
+    const calcio = (S.dados.calcio || []).length > 0;
     const el = (cumple, titulo, porque, ver) => ({ cumple, titulo, porque, ver });
     const ecg = !S.huboECG
         ? el(true, 'ECG protegido', S.c.pseudo ? 'El K⁺ real era normal: no había nada que proteger.' : 'No hubo cambios en el ECG que proteger. Aun así, el ECG tiene baja sensibilidad: no descarta riesgo.', 'hk-ecg-sensibilidad')
-        : S.protegido ? el(true, 'ECG protegido', 'El calcio protegió la membrana mientras el K⁺ seguía alto; no baja el K⁺.', 'hk-tto-calcio')
-            : el(false, 'ECG protegido', 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
+        : S.sinProt <= UMBRAL_SIN_PROTEGER
+            ? el(true, 'ECG protegido', calcio ? 'El calcio protegió la membrana mientras el ECG estuvo alterado; no baja el K⁺.' : 'El ECG estuvo alterado menos de 10 min y se normalizó al bajar el K⁺.', 'hk-tto-calcio')
+            : el(false, 'ECG protegido', calcio ? `El calcio protege 30-60 min (tabla); el ECG siguió alterado ${fmtT(S.sinProt)} sin protección. Aunque no baje el K⁺, antagoniza el efecto cardíaco.`
+                : 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
     const zona = m.k < 5
-        ? el(true, 'K⁺ en zona', S.kMax < 5 ? 'El K⁺ no llegó a 5 mEq/l (Figura 7).' : `El K⁺ ha bajado a ${coma(m.k)} mEq/l, por debajo de 5 (Figura 7).`, 'hk-fig7')
-        : el(false, 'K⁺ en zona', sal.length ? `El K⁺ sigue en ${coma(m.k)} mEq/l: la salida iniciada no ha bastado. La hemodiálisis es el método más rápido y seguro en IR grave.`
-            : `El K⁺ sigue en ${coma(m.k)} mEq/l: lo que se mete en la célula vuelve al plasma cuando acaba su efecto; solo la salida del cuerpo lo baja de forma sostenida.`, sal.length ? 'hk-tto-nota' : 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
+        ? el(true, 'K⁺ por debajo de 5', (S.kMax < 5 ? 'El K⁺ no llegó a 5 mEq/l (umbral de hiperpotasemia de la ficha).' : `El K⁺ ha bajado a ${coma(m.k)} mEq/l, por debajo de 5 (umbral de hiperpotasemia de la ficha, Figura 7).`)
+            + (m.k <= 3.6 ? ' Está en el límite de la hipopotasemia (<3,5 en la ficha).' : ''), m.k <= 3.6 ? 'hk-fig7' : 'hk-fig7')
+        : el(false, 'K⁺ por debajo de 5', salEfi.length ? `El K⁺ sigue en ${coma(m.k)} mEq/l: la salida iniciada no ha bastado. ${S.renal === 'ir' ? 'La hemodiálisis es el método más rápido y seguro en IR grave.' : 'La ficha reserva la hemodiálisis para IR grave o si fallan las medidas previas.'}`
+            : !desp ? `El K⁺ sigue en ${coma(m.k)} mEq/l: el calcio no lo baja y ninguna medida lo metió en la célula ni lo sacó del cuerpo.`
+            : `El K⁺ sigue en ${coma(m.k)} mEq/l: lo que se mete en la célula vuelve al plasma cuando acaba su efecto; solo la salida del cuerpo lo baja de forma sostenida.`, salEfi.length ? 'hk-tto-nota' : 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
     const necesita = S.kMax >= 5 && !S.c.pseudo;
-    const salida = sal.length ? el(true, 'Salida iniciada', `Has puesto en marcha ${sal.map(f => f.nombre).join(' y ')}: saca el K⁺ del cuerpo.`, 'hk-tto-' + sal[0].fila)
+    const salida = salEfi.length ? el(true, 'Salida iniciada', `Has puesto en marcha ${salEfi.map(f => ARTICULO[f.id]).join(' y ')}: saca el K⁺ del cuerpo.`, 'hk-tto-' + salEfi[0].fila)
+        : sal.length ? el(false, 'Salida iniciada', 'Solo se dio el diurético y con insuficiencia renal grave apenas saca K⁺: la ficha pone la hemodiálisis como el método más rápido y seguro en IR grave.', 'hk-tto-dialisis')
         : !necesita ? el(true, 'Salida iniciada', 'No hacía falta: el K⁺ no llegó a 5 mEq/l.', 'hk-fig7')
             : el(false, 'Salida iniciada', 'Ninguna medida sacó el K⁺ del cuerpo: solo diuréticos, captores de potasio o diálisis lo eliminan; insulina y salbutamol solo lo guardan en la célula.', 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
     return [ecg, zona, salida];
@@ -384,7 +400,8 @@ function montar(tab, texto, visual) {
         const act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
         cuadrar(m);
         const r = rasgosECG(S, m.k), nivel = nivelGravedad(m.k, r.t);
-        if (r.t) { S.huboECG = true; if (enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.protegido = true; }
+        const dtm = S.t - S.tPrev; S.tPrev = S.t;
+        if (r.t) { S.huboECG = true; if (!enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.sinProt += dtm; }
         S.kMax = Math.max(S.kMax, m.k);
         leer(m, r, nivel, act);
         dibujar(m, act, nivel);
@@ -397,7 +414,7 @@ function montar(tab, texto, visual) {
         S = {
             c, renal: E['hk-renal'].value, ecg: E['hk-ecg-modo'].value, t: 0, corriendo: false, dados: {}, repetido: false,
             anadido: { acido: 0, lisis: 0, aporte: 0 }, eliminado: { orina: 0, heces: 0, dial: 0 }, picoDesplazado: 0,
-            efectos: {}, huboECG: false, protegido: false, kMax: 0,
+            efectos: {}, huboECG: false, sinProt: 0, tPrev: 0, kMax: 0,
         };
         E['hk-causa-detalle'].innerHTML = c.texto + enlace(c.fuente);
         crearParticulas();

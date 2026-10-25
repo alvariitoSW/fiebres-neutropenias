@@ -41,7 +41,7 @@ for (const ANCHO of [390, 360]) {
   };
 
   // Sesión A: calcio → insulina → diálisis
-  await sesion('renal-grave', ['calcio', 'insulina', 'dialisis']);
+  await sesion('acidosis', ['calcio', 'insulina', 'dialisis']);
   const ca = await txt('#hk-efecto-calcio'), ins = await txt('#hk-efecto-insulina'), dia = await txt('#hk-efecto-dialisis');
   ok(/protege la membrana; el K⁺ no baja/.test(ca) && /lo prioritario/i.test(ca), 'calcio: «protege la membrana; el K⁺ no baja» y es lo prioritario');
   ok(/mete el K⁺ en la célula, por un tiempo/.test(ins), 'insulina: «mete el K⁺ en la célula, por un tiempo»');
@@ -50,9 +50,9 @@ for (const ANCHO of [390, 360]) {
   await foto('01-mensajes', '#hk-efecto-insulina');
   await correr(); await foto('02-revision', '#hk-revision');
   const rev = await txt('#hk-revision');
-  ok(['ECG protegido', 'K⁺ en zona', 'Salida iniciada'].every(o => rev.includes(o)), 'la revisión muestra los tres objetivos');
+  ok(['ECG protegido', 'K⁺ por debajo de 5', 'Salida iniciada'].every(o => rev.includes(o)), 'la revisión muestra los tres objetivos');
   ok(/✓ Cumplido · ECG protegido/.test(rev) && /✓ Cumplido · Salida iniciada/.test(rev), 'ECG protegido y salida iniciada: cumplidos');
-  ok(/(✓ Cumplido|✗ Falta) · K⁺ en zona/.test(rev) && !/\d{2,}\.\d/.test(rev), 'K⁺ en zona tiene veredicto y la revisión no lleva nota numérica');
+  ok(/(✓ Cumplido|✗ Falta) · K⁺ por debajo de 5/.test(rev) && !/\d{2,}\.\d/.test(rev), 'K⁺ por debajo de 5 tiene veredicto y la revisión no lleva nota numérica');
   ok(await p.evaluate(() => [...document.querySelectorAll('#hk-revision [data-ver]')].every(e => document.getElementById(e.dataset.ver.split(',')[0]))), 'los «Texto ↓» de la revisión llegan a un párrafo que existe');
   ok(await desborde() <= 0, 'sin desborde tras la revisión');
 
@@ -61,7 +61,7 @@ for (const ANCHO of [390, 360]) {
   await clic('#hk-dar-calcio'); await p.waitForTimeout(250);
   ok(/no trata el mecanismo prioritario/.test(await txt('#hk-efecto-calcio')) && /No cambia nada/.test(await txt('#hk-efecto-calcio')), 'calcio con el ECG sin cambios: «no trata el mecanismo prioritario… no cambia nada»');
   await clic('#hk-dar-insulina'); await p.waitForTimeout(250);
-  ok(/no trata el mecanismo prioritario/.test(await txt('#hk-efecto-insulina')), 'insulina con el K⁺ en zona: «no trata el mecanismo prioritario»');
+  ok(/no trata el mecanismo prioritario/.test(await txt('#hk-efecto-insulina')), 'insulina con el K⁺ por debajo de 5: «no trata el mecanismo prioritario»');
   ok(await desborde() <= 0, 'sin desborde con los mensajes de «no trata»');
 
   // Sesión B: solo insulina → falta la salida
@@ -73,6 +73,14 @@ for (const ANCHO of [390, 360]) {
   const rev2 = await txt('#hk-revision');
   ok(/✗ Falta · Salida iniciada/.test(rev2) && /✗ Falta · ECG protegido/.test(rev2), 'solo insulina: faltan ECG protegido y salida iniciada');
   ok(await desborde() <= 0, 'sin desborde tras la revisión (sesión B)');
+  // Sesión C: solo calcio → el efecto se acaba y el ECG sigue alterado
+  await clic('#hk-revision [data-empezar]'); await p.waitForTimeout(300);
+  await sesion('renal-grave', ['calcio']);
+  await correr();
+  const rev3 = await txt('#hk-revision');
+  ok(/✗ Falta · ECG protegido/.test(rev3) && /30-60 min \(tabla\)/.test(rev3), 'solo calcio: «✗ Falta · ECG protegido» con la duración de la tabla');
+  ok(/✗ Falta · K⁺ por debajo de 5/.test(rev3) && !/vuelve al plasma/.test(rev3), 'solo calcio: el K⁺ falta y no habla de lo que «se mete y vuelve»');
+  ok(await desborde() <= 0, 'sin desborde tras la revisión (sesión C)');
   await clic('#hk-revision [data-empezar]'); await p.waitForTimeout(300);
   ok(await txt('#hk-revision') === '' && await txt('#hk-reloj') !== '', '«Empezar de nuevo» reinicia el simulador');
   ok(errores.length === 0, 'sin errores de consola' + (errores.length ? ': ' + [...new Set(errores)].join(' | ') : ''));
