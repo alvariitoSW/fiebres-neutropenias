@@ -2678,3 +2678,15 @@ en la app, pero antes arregla los fallos»; después, sobre la lámina, «la tab
   están en `autonomo/pruebas/` y `node autonomo/jueces.mjs --modelo acidobase-vivo --modelo agua-viva` las lanza:
   a 390 y 360 px, desborde 0 tras cada respuesta, repaso y paso de caso, sin errores, entrada desde las fichas y
   VOLVER.
+
+## Potasio: mecanismo prioritario y revisión por objetivos (25/10/2026, tarea `potasio-prioritario`, B-019)
+
+Patrón de RitmoLab llevado a la vista Visual de Hiperpotasemia. Cada medida dice su papel (el calcio protege la
+membrana y no baja el K⁺; insulina, salbutamol y bicarbonato lo meten en la célula un rato; diuréticos, captores y
+diálisis lo sacan) y, si no trata lo prioritario del momento, «no cambia nada». Lo prioritario sale del estado del
+simulador: confirmar la analítica si es pseudohiperpotasemia, calcio si el ECG está alterado sin protección, bajar el
+K⁺ si es ≥5. Al acabar el reloj, revisión sin nota: «ECG protegido» (calcio en ≤10 min desde el cambio del ECG,
+criterio ilustrativo; aviso ámbar si el ECG siguió alterado tras sus 30-60 min de la tabla), «K⁺ por debajo de 5»
+(umbral de hiperpotasemia de la ficha, no un objetivo de tratamiento; aviso de límite de hipopotasemia si acaba en
+3,5) y «salida iniciada». Decisión: en la vuelta 2 el ✗ por tiempo sin protección suspendía a quien trataba bien
+(la ficha no dice repetir el calcio), y se cambió por el aviso ámbar. Prueba: `autonomo/pruebas/potasio-prioritario.mjs`.

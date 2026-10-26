@@ -14,6 +14,7 @@
 import { irAlTexto, irAlVisual } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { pintarFormula } from '../../core/formula.js';
 import { pintarParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 300;
@@ -119,6 +120,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
         ${opciones.mandos.includes('pam') ? `<div class="tfg-slider-row"><label>Presión arterial media</label><input type="range" class="gl-pam" min="40" max="220" step="5" value="${e.pam}"><span class="gl-pam-out">${e.pam} mmHg</span></div>` : ''}
         ${toggles.length ? `<div class="nv-chips gl-mandos">${toggles.map(m => `<button type="button" class="visual-mini" data-gl="${m}" aria-pressed="false">${MANDOS[m]}</button>`).join('')}</div>` : ''}
         <div class="nv-medidores gl-medidores"></div>
+        <div class="fml gl-formula" hidden></div>
         <div class="hk-avisos gl-avisos"></div>
         <p class="hk-aviso-modelo">Presiones de la ficha "Filtración glomerular" (capilar 55, Bowman 15, oncótica 30, neta 10 mmHg) y autorregulación entre 80 y 180 mmHg del simulador de "Regulación del filtrado". Cuánto mueve cada fármaco o situación la presión es ilustrativo: sirve para ver el sentido del cambio, no para calcularlo.</p>`;
     const lienzo = cuerpo.querySelector('canvas'), ctx = lienzo.getContext('2d');
@@ -277,6 +279,14 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(([n, v, ficha, s, nota, tono]) => `
             <div class="nv-medidor"><div class="nv-medidor-nombre"><span>${n}</span>${fuente(ficha)}</div>
             <div class="nv-medidor-valor ${tono}">${s === 'sube' ? '↑ ' : s === 'baja' ? '↓ ' : ''}${v}</div><div class="nv-medidor-nota">${nota}</div></div>`).join('');
+        const coma = (v, n) => v.toFixed(n).replace('.', ',').replace('-', '−');
+        const bruta = M.pcg - M.pb - 30;
+        pintarFormula(cuerpo.querySelector('.gl-formula'), [{
+            titulo: 'Presión neta de filtración', formula: 'P capilar − P Bowman − P oncótica',
+            numeros: `${Math.abs(M.pcg - Math.round(M.pcg)) < 0.05 ? Math.round(M.pcg) : coma(M.pcg, 1)} − ${Math.round(M.pb)} − 30${bruta < 0 ? ` = ${coma(bruta, 1)} (negativa: no filtra)` : ''}`,
+            resultado: coma(M.pnf, 1), unidad: 'mmHg',
+            origen: 'fisiología general · presiones: ficha · fisio-filtracion · cuánto mueve cada mando: ilustrativo', prefijos: ['fisio'],
+        }]);
         const av = [];
         if (opciones.mandos.includes('pam')) {
             if (M.pa >= 80 && M.pa <= 180) av.push(['ok', 'Entre 80 y 180 mmHg la arteriola aferente se contrae o se dilata y la TFG apenas cambia.' + enlace('pam')]);

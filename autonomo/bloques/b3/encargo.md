@@ -96,3 +96,8 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 
 Los fija la cobertura. No repetir: Andrés (62), la Sra. R. (64), Fermín (71), Rocío (67), Gonzalo (66), Inés (41),
 Salvador (47).
+
+**Decisión del usuario (25/10/2026)**: el caso de Aurelio es el de la maqueta (fallo respiratorio → ECMO). La rotura
+del papilar (Marino cap. 16, p. 38: con la del septo y la de pared libre, en las primeras 24 h) **se enseña entera**,
+como pide la fuente: estado `rotura-papilar` del modelo M7 (IM aguda con `eroaMitral` y el chorro en color, sub-bloque
+3B), paso «predice» de la ficha `mc-cardiogenico-fisio` y un caso corto propio (paciente distinto de Aurelio).
