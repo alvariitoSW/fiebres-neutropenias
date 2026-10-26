@@ -46,6 +46,11 @@ if (QUE === 'shock' || QUE === 'todo') {
   await tap('[data-pest="sop"]'); await tap('[data-sop="ecmo"]'); await page.waitForTimeout(600); await range('#d-ecmo', 60, ['change']); await page.waitForTimeout(600); fila('  ECMO 6 + 6 L', await R());
   await tap('[data-vent="impella"]'); await page.waitForTimeout(600); fila('  ECMO 6 + venteo Impella', await R());
   await tap('.dock-asa'); await tap('[data-pest="far"]'); await tap('[data-na="30"]'); await tap('[data-far="dobuta"]'); await page.waitForTimeout(500); fila('  + NA30 + dobuta', await R());
+  // 6) el reloj hasta las 48 h con botones de 18, 5 y 1 h: el sello «Reloj agotado» y los botones apagados
+  await tap('[data-pac="amparo"]'); await page.waitForTimeout(250); await tap('[data-pest="reloj"]');
+  for (const h of [18, 18, 5, 5, 1, 1]) { await tap(`[data-h="${h}"]`); await page.waitForTimeout(300); }
+  fila('reloj 48 h', await R());
+  fila('  botones h apagados', String(await page.evaluate(() => [...document.querySelectorAll('[data-h]')].filter((b) => b.disabled).length)) + ' de 3');
   console.log('SHOCK errores', errores.length, errores.slice(0, 3).join(' | '), 'desborde', await desb(), 'NaN', await nan());
 }
 
@@ -130,6 +135,35 @@ if (QUE === 'ritmo' || QUE === 'todo') {
   await pon('fv'); const haveParada = await page.evaluate(() => !!window.__ritmo.S.parada); console.log('fv parada', haveParada);
   await acc('comp'); await acc('adre', 15); await acc('amio-pcr', 5); await tap('[data-insufl="30"]'); await range('#d-min', 20); await page.waitForTimeout(600); await acc('choque', 10); fila('FV comp adre×15 amio×5 insufl30 min20 choque×10', await L());
   await page.evaluate(() => window.__ritmo.avanzarHasta(window.__ritmo.simT + 600)); await page.waitForTimeout(800); fila('  +600 s', await L());
+  // --- Vuelta de topes (profesor, 26/10 noche): repetición de cada acción, con espera para separar el efecto transitorio
+  //     (el bolo que acaba de caer) del tope que falta. accN cuenta cuántas veces existía el botón al pulsarlo.
+  const CAP = '/tmp/plan-socialista/b3/limites/'; await import('node:fs').then((fs) => fs.mkdirSync(CAP, { recursive: true }));
+  const accN = async (a, n = 1, ms = 250) => { let hits = 0; for (let i = 0; i < n; i++) { hits += await page.evaluate((a) => { const b = document.querySelector(`[data-acc="${a}"]`); if (!b || b.disabled) return 0; b.click(); return 1; }, a); await page.waitForTimeout(ms); } return hits; };
+  const topes = () => page.evaluate(() => ({ sellos: document.querySelectorAll('.tope-sello').length, avisos: document.querySelectorAll('.tope-aviso').length, apagados: document.querySelectorAll('[data-acc]:disabled, [data-acc].tope-apagado').length, bomba: document.querySelector('#bomba, .bomba')?.textContent.replace(/\s+/g, ' ').slice(0, 60) || '-' }));
+  const L2 = async (t, esperas = [800, 3000, 6000]) => { let prev = 0; for (const ms of esperas) { await page.waitForTimeout(ms - prev); prev = ms; fila(`${t} +${ms / 1000} s`, await L()); } console.log('   topes', JSON.stringify(await topes())); };
+  console.log('¿usa tope.js?', await page.evaluate(() => !!document.querySelector('.tope-mon, .tope-avisos')));
+  await pon('nodal'); console.log('nodal ade6 ×1 hits', await accN('ade6', 1)); await L2('  ade6 ×1');
+  await pon('nodal'); console.log('nodal ade6 ×1 + ade12 ×6 hits', await accN('ade6', 1), await accN('ade12', 6)); await L2('  ade12 ×6', [800, 2000, 4000, 7000]);
+  await page.screenshot({ path: CAP + 'ritmo-01-nodal-ade12x6.png' });
+  await pon('nodal'); console.log('nodal dilt ×3 hits', await accN('dilt-nodo', 3)); await L2('  dilt ×3 solo');
+  await pon('nodal'); console.log('nodal vagal-c ×10 hits', await accN('vagal-c', 10)); await L2('  masaje ×10', [800, 3000]);
+  await pon('tam'); console.log('tam mg ×5 hits', await accN('mg-tam', 5)); await L2('  Mg ×5 (40 g)', [800, 4000]);
+  await pon('tam'); console.log('tam vera ×5 hits', await accN('vera-tam', 5), 'meto ×5', await accN('meto-tam', 5)); await L2('  vera×5 meto×5', [800, 4000]);
+  await pon('wpw'); await accN('llegafa'); await page.waitForTimeout(500); await tap('[data-pest="tratar"]'); console.log('wpw w-dilt×3 w-bb×3 w-digo×3 hits', await accN('w-dilt', 3), await accN('w-bb', 3), await accN('w-digo', 3)); await L2('  3 frenos ×3', [800, 3000]);
+  console.log('  verfv hits', await accN('verfv', 1)); await page.waitForTimeout(2500); console.log('  desf-wpw ×4 hits', await accN('desf-wpw', 4, 400)); await L2('  tras desf', [800, 3000]);
+  await pon('tv'); console.log('tv estable amio ×6 hits', await accN('amio-tv', 6)); await L2('  amio ×6 (900 mg)', [800, 4000]); console.log('  cv-tv ×6 hits', await accN('cv-tv', 6, 400), 'choquesTV', await page.evaluate(() => window.__ritmo.S.choquesTV)); await L2('  cv ×6', [800, 3000]);
+  await page.screenshot({ path: CAP + 'ritmo-02-tv-cv6.png' });
+  await pon('fa'); console.log('fa cv-fa ×5 hits', await accN('cv-fa', 5, 400)); await L2('  cv ×5', [800, 3000]);
+  await pon('torsade'); for (const k of ['haloperidol', 'claritromicina', 'amiodarona', 'kBajo', 'mgBajo', 'caBajo']) await accN('qt-' + k); await page.waitForTimeout(3000); fila('torsade 6 factores (3 s)', await L());
+  console.log('  tdp disabled?', await page.evaluate(() => document.querySelector('[data-acc="tdp"]')?.disabled), 'hits', await accN('tdp', 1)); await page.waitForTimeout(1500);
+  console.log('  mg-tdp ×5 hits', await accN('mg-tdp', 5), 'desf-tdp ×5 hits', await accN('desf-tdp', 5, 400)); await L2('  tdp Mg×5 desf×5', [800, 3000]);
+  await pon('fv'); await accN('comp'); console.log('fv responde: choque ×1 hits', await accN('choque', 1)); await page.waitForTimeout(2500); fila('  tras 1 choque', await L());
+  console.log('  choque ×4 más hits', await accN('choque', 4, 400), 'adre ×15 hits', await accN('adre', 15, 120), 'amio ×5 hits', await accN('amio-pcr', 5, 120));
+  await page.waitForTimeout(1500); fila('  tras RCE: choque×4 adre×15 amio×5', await L()); console.log('   parada', await page.evaluate(() => { const p = window.__ritmo.S.parada; return JSON.stringify({ choques: p.choques, rce: p.rce, adre: p.adrenalina.length, amio: p.amio, reloj: Math.round(p.reloj) }); }));
+  await page.screenshot({ path: CAP + 'ritmo-03-fv-tras-rce.png' });
+  await pon('fv'); await tap('[data-esc="refractaria"]'); await accN('comp'); await accN('choque', 3, 1500); await page.waitForTimeout(1500); fila('fv refractaria 3 choques', await L());
+  for (const s of [600, 1800]) { await page.evaluate((s) => window.__ritmo.avanzarHasta(window.__ritmo.simT + s), s); await page.waitForTimeout(800); fila(`  +${s} s de simulación`, await L()); console.log('   reloj parada (min)', await page.evaluate(() => Math.round(window.__ritmo.S.parada.reloj / 60)), 'adre hits', await accN('adre', 3, 100), 'choque hits', await accN('choque', 3, 300)); }
+  await pon('aesp'); await accN('comp'); console.log('aesp adre ×10 hits', await accN('adre', 10, 120), 'choque hits', await accN('choque', 1)); await page.evaluate(() => window.__ritmo.avanzarHasta(window.__ritmo.simT + 1200)); await page.waitForTimeout(800); fila('  aesp +1200 s', await L()); console.log('   reloj parada (min)', await page.evaluate(() => Math.round(window.__ritmo.S.parada.reloj / 60)), 'rce', await page.evaluate(() => window.__ritmo.S.parada.rce));
   console.log('RITMO errores', errores.length, errores.slice(0, 4).join(' | '), 'desborde', await desb(), 'NaN', await nan());
 }
 await browser.close();
