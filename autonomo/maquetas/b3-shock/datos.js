@@ -143,6 +143,13 @@ export function indicacion(pac, tipoAparato) {
 
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
+// Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
+export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+export const sobrecarga = (R) => R.pcp >= TOPES.pcp || R.pvc > TOPES.pvc;
+export const perdidoMl = (pac, R) => Math.round(R.perdida / 100 * 66 * pac.peso);
+// lo que se puede reponer: 1,5 veces lo perdido (el ×1,5: ilustrativo); solo en la hemorragia con pérdida
+export const topeRepos = (R, X) => X.pac.tipo === 'hemo' && R.perdida > 0 ? TOPES.reposicion * perdidoMl(X.pac, R) : null;
+export const hipertensionVaso = (R, X) => (X.ajuste.na > 0 || X.ajuste.vaso) && R.pam > TOPES.pamVaso;
 export function nombreEstado(R, X) {
   const s = X.aparato ?? X.ajuste.soporte;
   if (s !== 'no') {
@@ -153,6 +160,10 @@ export function nombreEstado(R, X) {
     if (bombaEcmoNoLlega(R)) return 'ecmo-vacio';
     return R.aoAbre <= 2 ? 'ecmo-cerrada' : R.pcp >= 22 ? 'ecmo-carga' : 'ecmo';
   }
+  if (hipertensionVaso(R, X)) return 'hipertension-vaso';
+  if (sobrecarga(R)) return 'sobrecarga';
+  const tr = topeRepos(R, X);
+  if (tr != null && X.infundido.cris + X.infundido.sangre >= tr) return 'hemo-tope';
   const t = X.pac.tipo;
   // la hemorragia se nombra por lo que enseña el paciente (FC y PA de la Tabla 15.1), no solo por lo perdido
   if (t === 'hemo') {
@@ -164,7 +175,7 @@ export function nombreEstado(R, X) {
   if (t === 'septico') { if (X.ajuste.na >= 10) return 'septico-na'; return R.irvs >= 25 && R.pam >= 65 ? 'sin-shock' : 'septico'; }
   if (t === 'cardio') { if (R.pam >= 65 && R.ic >= 2.2) return 'sin-shock'; return R.pcp < 18 ? 'cardio-pcp-baja' : R.pcp <= 20 ? 'cardio-pcp-optima' : 'cardio'; }
   if (t === 'tapon') return Math.abs(R.pvc - R.pcp) > 3 ? 'sin-shock' : 'tapon';
-  if (t === 'tep') return X.infundido.cris > 500 ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
+  if (t === 'tep') return X.infundido.cris >= TOPES.tepMl ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
   return t;
 }
 const c1 = (x) => (+x).toFixed(1).replace('.', ',');
@@ -246,7 +257,20 @@ export const ESTADOS = {
     guia: [{ t: 'El VD se dilata contra el émbolo.', s: ['#cor-vd'], c: C.tepEco },
       { t: (R) => `PAM ${R.pam}: sin inestabilidad hemodinámica no es el alto riesgo.`, s: ['[data-fila="pa"]'], c: C.tepRiesgo },
       { t: 'Sube la gravedad del émbolo para ver el paso al alto riesgo.', s: ['#dock'], c: C.tepRiesgo }] },
-  'tep-bolo': { tit: 'TEP: más de 500 mL', frase: (R) => `Más de 500 mL al VD que no puede: se dilata, empuja el tabique y el VI se llena menos. IC ${c1(R.ic)}.`, org: 'ficha · cap. 22, p. 10',
+  'sobrecarga': { tit: 'Sobrecarga de volumen', frase: (R) => `PCP ${R.pcp} y PVC ${R.pvc}: más volumen ya no sube el gasto (IC ${c1(R.ic)}) y no cabe en las venas${R.edema > 50 ? `; ${Math.round(R.edema).toLocaleString('es-ES')} mL de edema en el pulmón (SpO₂ ${R.spo2} %)` : ''}. Los botones de volumen se apagan.`, org: 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general',
+    guia: [{ t: (R) => `PCP ${R.pcp}: llega a 20, el techo de la presión de llenado de la ficha (18-20).`, s: ['[data-fila="pcp"]'], c: C.llenado },
+      { t: (R) => `PVC ${R.pvc}: por encima de 12 las venas ya no admiten más (el 12 es fisiología general, no de la ficha).`, s: ['[data-fila="pvc"]'], c: C.llenado, org: 'el 12: fisiología general' },
+      { t: (R) => `El gasto no mejora (IC ${c1(R.ic)}): pasado el techo, más volumen no sube el gasto.`, s: ['[data-fila="ic"]'], c: C.llenado },
+      { t: 'Pasa el reloj: 3/4 del cristaloide se van al intersticio y los botones vuelven a encenderse.', s: ['[data-pest="reloj"]'], c: C.volIni }] },
+  'hemo-tope': { tit: 'Repuesto más de lo perdido', frase: (R, X) => `Has dado ${(X.infundido.cris + X.infundido.sangre).toLocaleString('es-ES')} mL: más de 1,5 veces lo perdido (≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL, ${R.perdida} % de la volemia). Los botones de volumen se apagan.`, org: 'ficha · p. 21-23 (la volemia) · el ×1,5: ilustrativo',
+    guia: [{ t: (R, X) => `Perdió ${R.perdida} % de la volemia: ≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL (66 mL/kg × ${X.pac.peso} kg).`, s: ['#cor-cav'], c: C.volemia },
+      { t: 'La sangre repone hematíes y volumen; el cristaloide, solo volumen, y 3/4 se van al intersticio.', s: ['[data-pest="vol"]'], c: C.volIni },
+      { t: (R) => `PVC ${R.pvc} y PCP ${R.pcp}: reponer más de lo perdido solo sobrecarga.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.t151, org: 'el tope ×1,5: ilustrativo' }] },
+  'hipertension-vaso': { tit: 'Hipertensión por vasopresor', frase: (R, X) => `PAM ${R.pam} con ${X.ajuste.na ? `noradrenalina a ${X.ajuste.na} µg/min` : 'vasopresina'}${X.ajuste.na && X.ajuste.vaso ? ' y vasopresina' : ''}: este paciente no estaba en shock y el vasopresor lo pasa de largo. Baja la dosis.`, org: 'ficha · p. 12-13 (el fármaco) · el 110: fisiología general',
+    guia: [{ t: (R) => `PAM ${R.pam}: pasa de 110 (fisiología general). El objetivo del shock es 65 o más, no más.`, s: ['[data-fila="pa"]'], c: C.na, org: 'el 110: fisiología general' },
+      { t: 'El vasopresor aprieta las arteriolas aunque no haga falta: la resistencia sube y el corazón empuja contra más carga.', s: ['[data-fila="irvs"]'], c: C.na },
+      { t: 'Baja la dosis en la pestaña Fármacos hasta que la PAM vuelva a su sitio.', s: ['[data-pest="far"]'], c: C.na }] },
+  'tep-bolo': { tit: 'TEP: tope de 500 mL', frase: (R) => `Ya van 500 mL o más: el VD que no puede se dilata, empuja el tabique y el VI se llena menos. IC ${c1(R.ic)}. Los botones de volumen se apagan.`, org: 'ficha · cap. 22, p. 10',
     guia: [{ t: 'El VD dilatado empuja el tabique hacia el VI.', s: ['#cor-vd', '#cor-tabique'], c: C.tepHemo },
       { t: (R) => `El gasto no sube (IC ${c1(R.ic)}): por eso el volumen se limita a 500 mL y se guía con la eco.`, s: ['[data-fila="ic"]'], c: C.tepHemo }] },
   balon: { tit: 'Balón de contrapulsación', frase: (R) => `Se hincha al cerrarse la aórtica y empuja la sangre a las coronarias; se vacía antes de que se abra: el VI eyecta contra menos presión. PAM ${R.pam}.`, org: 'ficha · p. 45-46',

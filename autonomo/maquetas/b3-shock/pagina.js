@@ -8,7 +8,9 @@ import { crearDock } from '../comun/dock.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
 import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
+import { crearTope } from '../comun/tope.js';
 import * as D from './datos.js';
+import { calcularTopes, bolosQueNoCaben } from './topes.js';
 
 const $ = (id) => document.getElementById(id);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -93,7 +95,7 @@ function leer() {
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
   return r;
 }
-const ctxX = () => ({ pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
+const ctxX = () => ({ g: est.g, pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
 function ctxMon() {
   const P = cab.lectura ? perfusion(cab.lectura, est.rec) : { petco2: 35 };
   return { fr: est.pac.fr || 16, etco2: P.petco2, amplPleth: est.pac.tipo === 'septico' ? 1 : 0.65, voltajeBajo: est.pac.tipo === 'tapon' ? 0.6 : null };
@@ -324,7 +326,8 @@ function pintarDock() {
     const G = D.GRAVEDAD[t], [a, b] = G.texto(est.g, p);
     h.push(`<div class="deslizador"><input type="range" id="d-grav" min="0" max="100" step="1" value="${Math.round(est.g * 100)}" aria-label="Gravedad"><output id="o-grav">${a}<small>${b}</small></output></div><p class="dock-nota">${G.nota} ${org('la escala del mando: el modelo')}</p>`);
   } else if (est.pest === 'vol') {
-    h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button" class="tog" data-vol="250">+250 mL<small>cristaloide</small></button><button type="button" class="tog" data-vol="500">+500 mL<small>cristaloide</small></button><button type="button" class="tog" data-vol="2000">+2 L<small>cristaloide</small></button>${t === 'hemo' ? '<button type="button" class="tog" data-sangre="1000">+1 L<small>sangre completa</small></button>' : ''}</div>`);
+    const no = bolosQueNoCaben(R, ctxX()), off = (mL) => no(mL) ? ' disabled class="tog tope-apagado"' : ' class="tog"';
+    h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button"${off(250)} data-vol="250">+250 mL<small>cristaloide</small></button><button type="button"${off(500)} data-vol="500">+500 mL<small>cristaloide</small></button><button type="button"${off(2000)} data-vol="2000">+2 L<small>cristaloide</small></button>${t === 'hemo' ? `<button type="button"${off(1000)} data-sangre="1000">+1 L<small>sangre completa</small></button>` : ''}</div>`);
     h.push(`<p class="dock-nota">Llevas ${cab.infundido.cris.toLocaleString('es-ES')} mL de cristaloide${cab.infundido.sangre ? ` y ${cab.infundido.sangre} mL de sangre` : ''}. Al pasar la hora, 3/4 del cristaloide se van al intersticio (p. 11).</p>`);
   } else if (est.pest === 'far') {
     h.push(`<div class="seg" role="group" aria-label="Noradrenalina">${[0, 5, 10, 25, 30].map((d) => `<button type="button" data-na="${d}" aria-pressed="${aj.na === d}">${d}<small>${d ? 'µg/min' : 'sin NA'}</small></button>`).join('')}</div>`);
@@ -336,9 +339,10 @@ function pintarDock() {
     if (!ok && est.aparato !== 'no') h.push(`<p class="dock-nota">${D.indicacion(p, est.aparato).txt}</p>`);
     if (est.aparato === 'no') h.push(`<p class="dock-nota">La fuente lo reserva para el shock cardiogénico refractario (p. 45): pruébalo con Aurelio.</p>`);
   } else {
-    h.push(`<div class="rejilla" style="--n:3"><button type="button" class="tog" data-h="1">+1 hora</button><button type="button" class="tog" data-h="5">+5 horas</button><button type="button" class="tog" data-h="18">+18 horas</button></div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
+    h.push(`<div class="rejilla" style="--n:3">${[[1, '+1 hora'], [5, '+5 horas'], [18, '+18 horas']].map(([n, tx]) => `<button type="button"${est.horas + n > D.TOPES.horas ? ' disabled class="tog tope-apagado"' : ' class="tog"'} data-h="${n}">${tx}</button>`).join('')}</div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
   }
   $('dock-panel').innerHTML = h.join('');
+  aplicarTopes(true);
   const dg = $('d-grav');
   if (dg) { dg.oninput = () => { est.g = +dg.value / 100; const [a, b] = D.GRAVEDAD[t].texto(est.g, p); $('o-grav').innerHTML = `${a}<small>${b}</small>`; }; dg.onchange = () => { trabajar(() => reconstruir()); }; }
   medirDock();
@@ -382,7 +386,7 @@ function trabajar(f, seg = 8) { f(); cab.correr(seg); refrescar(true); pintarDoc
 function refrescar(todo) {
   if (!cab?.lectura) return;
   R = leer();
-  pintarCifras(); pintarConsola();
+  pintarCifras(); pintarConsola(); aplicarTopes(false);
   if (est.modo === 'explorar') { pintarFrase(); pintarLab(); }
   if (todo) { montarEscena(); pintarPestEscena(); escena.actualizar(cab, 0, true, infoEscena()); if (REDUCIR || est.pausa) monitor.llenar(cab, ctxMon()); monitor.pintar(); pintarMandos(); }
   $('obj-umi').disabled = est.pac.tipo !== 'septico' || est.modo === 'qs';
@@ -394,6 +398,18 @@ $('obj-umi').onclick = () => { est.tabla = 'umi'; $('obj-umi').setAttribute('ari
 $('enclavar').onclick = () => { monitor.enclavar(!monitor.enclavado); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); monitor.pintar(); refrescar(false); };
 $('pausa').onclick = () => { est.pausa = !est.pausa; $('pausa').setAttribute('aria-pressed', String(est.pausa)); $('pausa').textContent = est.pausa ? 'Seguir' : 'Pausa'; };
 const dock = crearDock($('dock'), { plegables: [$('dock-tabs'), $('dock-panel')] });
+// Los topes de los mandos (topes.js): avisos ámbar bajo el mando y sellos en el monitor, con su origen
+const tope = crearTope({ monitor: $('monitor'), dock: $('dock'), cita });
+const topeVisto = {};
+function aplicarTopes(forzar) {
+  if (!cab?.lectura || !R) return;
+  const hay = est.modo === 'qs' ? {} : calcularTopes(R, ctxX(), est.horas, horaTxt);
+  for (const k of ['sobrecarga', 'tep', 'reposicion', 'vaso', 'reloj']) {
+    const t = hay[k], firma = t ? JSON.stringify(t) : '';
+    if (!forzar && topeVisto[k] === firma) continue;
+    topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
+  }
+}
 function medirDock() { dock.medir(); }
 
 // ---------------------------------------------------------------- pacientes (Explorar)
