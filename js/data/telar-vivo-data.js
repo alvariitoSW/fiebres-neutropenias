@@ -102,7 +102,7 @@ export function profilaxis(f, clcr, imc) {
    La hoja de órdenes y lo que se deriva de ella
    ============================================================ */
 export function estadoBase() {
-    return { vista: 'telar', riesgo: 'ninguno', inflamacion: false, inmovil: false, gastoBajo: false, tih: false,
+    return { vista: 'telar', riesgo: 'ninguno', inflamacion: false, inmovil: false, gastoBajo: false, tih: false, sospechaTih: false,
         farmaco: null, antiXa: false, clcr: 90, imc: 25, mecanica: 'nada', diastolica: 70, filtro: false, horas: 6 };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
@@ -541,7 +541,7 @@ export const CASOS = [
                     enunciado: 'Las plaquetas caen a menos de la mitad. ¿Qué mecanismo sospechas, y por qué no te tranquiliza que la dosis fuera profiláctica?',
                     puntos: ['<span class="hl-rojo">TIH</span>: la heparina se une al FP4 y forma un complejo antigénico.', 'Los <span class="hl-rojo">IgG</span> activan las plaquetas: trombosis y trombocitopenia por consumo.', '<span class="hl">No depende de la dosis</span>: pasa con dosis profilácticas.'],
                     explicacion: 'Con HNF, 2,6 %; con HBPM, 0,2 %. El diagnóstico y el tratamiento de la TIH están en el cap. 13 del libro («Para profundizar»).' } },
-            { momento: 'Día 6 · la profilaxis', datos: { Sospecha: 'TIH, sin trombosis por ahora' }, nuevo: ['Sospecha'], estado: { vista: 'tih', tih: false, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
+            { momento: 'Día 6 · la profilaxis', datos: { Sospecha: 'TIH, sin trombosis por ahora' }, nuevo: ['Sospecha'], estado: { vista: 'tih', tih: false, sospechaTih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
                 pregunta: { id: 'tr-4', tipo: 'test', fuente: 'mar-fondaparinux · mar-esc-especiales (p. 8, 11)',
                     despues: { vista: 'tih', tih: true, farmaco: 'fondaparinux', imc: 42, clcr: 25 },
                     enunciado: 'Sospechas una TIH y sigue necesitando profilaxis. ¿Qué dice el capítulo?',
