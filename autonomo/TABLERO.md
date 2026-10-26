@@ -344,7 +344,7 @@ río y mar) → 39-44 → 45-53.
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
 | 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
-| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | ⏸ informe hecho (2026-10-26): https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi (`autonomo/ideas/ingenieria-inversa/eco-fisiopatologia.md`); espera la elección del usuario (núcleo F1, F5, N2, N3, P1, P2, P4 en la parada 2 de `eco-mega`) | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
+| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | hecha (2026-10-26): informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi; el usuario eligió el núcleo, que entra en la parada 2 de `eco-mega` | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -393,6 +393,18 @@ real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `
   (pared por regiones e infarto) espera a que las coronarias entren en el motor** (decisión del usuario el 26/10).
 - **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
 - Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
+- **Ampliación del 26/10 (B-025, informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi,
+  `autonomo/ideas/ingenieria-inversa/eco-fisiopatologia.md`)**, decidida por el usuario:
+  1. El **núcleo nuevo entra en la parada 2**: F1 (paciente posible del latido), F5 (VD que late como VD), N2 (VD en
+     U con banda moderadora), N3 (aorta descendente, pleura-pulmón y columna), P1 (taponamiento), P2 (beso de
+     papilares), P4 (TEP con criterios de Lang). El resto (F3, F4, N1, P5, P6) va a la parada 3; P3 espera a C2a.
+  2. **Orden**: el del informe (0 lector → A1 → B1 + F1 → A2 → B2 + N2 → A3 → N3 → B3 → B4 → F5 → B5 → P2 → C1 → P1
+     → D1 → P4), con F1 primero como red de pruebas y después P2 y P1.
+  3. **P1 en potente**, y además **revisar bien el pericardio, sobre todo alrededor de las aurículas, y hacerlo más
+     realista** (palabras del usuario).
+  4. **P7**: la hipertrofia y la dilatada por defecto **se dejan como «forma grave» con una nota visible** (no se
+     recalibran las gravedades).
+  5. PDF para los huecos: el usuario los busca (lista en el parte); hasta que lleguen, esas cifras quedan «hueco».
 
 **Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
 - Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
