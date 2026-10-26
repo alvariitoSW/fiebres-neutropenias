@@ -19,7 +19,7 @@ const nan = async () => page.evaluate(() => /NaN|undefined|Infinity/.test(docume
 
 if (QUE === 'shock' || QUE === 'todo') {
   await ir('b3-shock');
-  const R = () => page.evaluate(() => { const c = window.__cabecera, r = c.R, L = c.cab.lectura; return { est: document.querySelector('#frase-txt .estado')?.textContent, pa: `${r.pas}/${r.pad}`, pam: r.pam, fc: r.fc, pvc: r.pvc, pcp: r.pcp, ic: r.ic, irvs: r.irvs, spo2: r.spo2, lact: r.lact, diur: r.diur, edema: Math.round(L.edema || 0), cris: c.cab.infundido.cris, crisT: c.cab.infundido.crisTotal, sangre: c.cab.infundido.sangre, h: c.est.horas, sello: !document.getElementById('sello').hidden, aviso: !!document.querySelector('.consola-aviso') }; });
+  const R = () => page.evaluate(() => { const c = window.__cabecera, r = c.R, L = c.cab.lectura; return { est: document.querySelector('#frase-txt .estado')?.textContent, pa: `${r.pas}/${r.pad}`, pam: r.pam, fc: r.fc, pvc: r.pvc, pcp: r.pcp, ic: r.ic, irvs: r.irvs, spo2: r.spo2, lact: r.lact, diur: r.diur, edema: Math.round(L.edema || 0), cris: c.cab.infundido.cris, crisT: c.cab.infundido.crisTotal, sangre: c.cab.infundido.sangre, h: c.est.horas, sello: !document.getElementById('sello').hidden, topes: [...document.querySelectorAll('.tope-sello')].map((e) => e.firstChild.textContent.trim()).join('|') || '-', avisos: document.querySelectorAll('.tope-aviso').length, apagados: document.querySelectorAll('.tope-apagado').length, aviso: !!document.querySelector('.consola-aviso') }; });
   const grav = (v) => range('#d-grav', v);
   // 1) sueros sin fin: cada paciente a su gravedad tope, +2 L × 12 (24 L)
   for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
