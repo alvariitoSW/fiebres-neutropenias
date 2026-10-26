@@ -182,7 +182,7 @@ const EXPLICA = {
 $('monitor').addEventListener('click', (ev) => {
   const c = ev.target.closest('[data-fila]'); if (!c || est.tapado) return;
   const [t, ci] = EXPLICA[c.dataset.fila] || []; if (!t) return;
-  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}`;
+  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}` + (c.dataset.fila === 'spo2' ? '<span>Con ECMO el valor es una mezcla: fisiología general, la ficha no lo dice.</span><button type="button" class="chip-b" data-nota="spo2-ecmo">Ver la nota</button>' : '');
 });
 
 // ---------------------------------------------------------------- la escena

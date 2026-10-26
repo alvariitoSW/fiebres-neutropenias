@@ -55,7 +55,7 @@ export const factorPoscarga = (pao) => Math.max(POSCARGA_MIN, 1 - Math.max(0, pa
 // (Los que no están en escenarios.mjs se escriben aquí con la forma que tendrían allí.)
 export const ESCENARIOS_EXTRA = {
   // la hemorragia del motor (escenarios.mjs), más la respuesta simpática del traumatizado que sangra: la taquicardia de la
-  // Tabla 15.1 (>100 en la clase II, >120 en la III, >140 en la IV; cap. 15, p. 22) es más de lo que da el barorreflejo del
+  // Tabla 15.1 (solo flechas, cap. 15, p. 22; las cifras de FC son ilustrativas) es más de lo que da el barorreflejo del
   // motor solo (FC 110 con un 35 % perdido). Ilustrativo: la dirección es de la tabla
   hemorragia: { ...ESCENARIOS.hemorragia, aplicar: (m, g = 0.5) => { ESCENARIOS.hemorragia.aplicar(m, g); m.p.fc = BASE.fc * (1 + HEM_SIMPATICO * g); } },
   // el TEP del motor, con la arteria pulmonar menos distensible cuanto más resistencia (el producto resistencia × distensibilidad

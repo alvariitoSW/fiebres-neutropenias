@@ -129,8 +129,8 @@ export const GRAVEDAD = {
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
 export const clase = (pct) => pct < 15 ? 'I' : pct <= 30 ? 'II' : pct <= 40 ? 'III' : 'IV';
-// La clase por lo que se ve (Tabla 15.1, p. 22): FC >100 en la II, >120 y la PA baja en la III, >140 en la IV. El umbral de
-// «PA baja» (sistólica <90) y el de la clase IV (<70) no los cifra la tabla: fisiología general
+// La clase por lo que se ve. La Tabla 15.1 (p. 22) solo da flechas (FC ↔/↑/↑↑, PA ↔/↓/↓↓): los cortes de aquí (FC 95/120/140,
+// PAS 90/70) son ILUSTRATIVOS, no de la ficha (ver la nota «clase-cortes»)
 export const claseClinica = (R) => R.pas < 70 || R.fc > 140 ? 'IV' : R.pas < 90 || R.fc > 120 ? 'III' : R.fc >= 95 ? 'II' : 'I';
 
 // ---------------------------------------------------------------- soporte: para quién (p. 45, 48)
@@ -178,18 +178,18 @@ export const ESTADOS = {
     guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: menos del 15 %.`, s: ['#cor-cav'], c: C.t151 },
       { t: 'El relleno transcapilar mete líquido del intersticio en la sangre: hasta un litro.', s: ['[data-fila="pvc"]'], c: C.compens },
       { t: 'Casi no hay signos y no hace falta reponer volumen (Tabla 15.1).', s: ['[data-fila="fc"]', '[data-fila="pa"]'], c: C.t151 }] },
-  'hemo-ii': { tit: 'Hemorragia, clase II', frase: (R) => `Clase II (${R.perdida} %): los vasos se aprietan y la PA aguanta. El primer aviso es la FC (${R.fc}).`, org: 'ficha · p. 22-23',
+  'hemo-ii': { tit: 'Hemorragia, clase II', frase: (R) => `Clase II (${R.perdida} %): los vasos se aprietan y la PA aguanta. El primer aviso es la FC (${R.fc}).`, org: 'ficha · p. 22-23 (la clase: % perdido; el nombre por FC y PA, ilustrativo)',
     guia: [{ t: (R) => `Ha perdido un ${R.perdida} % de la volemia: la clase II (15-30 %), la fase compensada.`, s: ['#cor-cav'], c: C.t151 },
       { t: (R) => `El simpático acelera el corazón: FC ${R.fc}. Es lo primero que sube.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.compens },
       { t: 'Mira la arteriola: se cierra. La vasoconstricción sostiene la PA.', s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.compens },
       { t: (R) => `PAM ${R.pam}: aún por encima de 65. La orina y el lactato tardan en moverse (Tabla 15.1).`, s: ['[data-fila="pa"]', '#lab'], c: C.t151 }] },
-  'hemo-iii': { tit: 'Hemorragia, clase III', frase: (R) => `Clase III (${R.perdida} %): apretar ya no basta. PA ${R.pas}/${R.pad} y FC ${R.fc}: es el shock hemorrágico. Se repone con sangre.`, org: 'ficha · p. 22-23',
+  'hemo-iii': { tit: 'Hemorragia, clase III', frase: (R) => `Clase III (${R.perdida} %): apretar ya no basta. PA ${R.pas}/${R.pad} y FC ${R.fc}: es el shock hemorrágico. Se repone con sangre.`, org: 'ficha · p. 22-23 (la clase: % perdido; el nombre por FC y PA, ilustrativo)',
     guia: [{ t: (R, X) => `${X.pac.nombre} ha perdido un ${R.perdida} %: ${X.texto} (66 mL/kg × ${X.pac.peso} kg). Es la clase III (31-40 %).`, s: ['#cor-cav'], c: C.volemia, org: 'cuánto se pierde: el mando' },
       { t: (R) => `La PVC está en ${R.pvc} y las cavidades, pequeñas: falta volumen.`, s: ['[data-fila="pvc"]', '#cor-cav'], c: C.t141 },
       { t: (R) => `La arteriola, cerrada (IRVS ${R.irvs}). La vasoconstricción sostuvo la PA en la clase II; en la III ya no basta.`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.claseIII },
       { t: (R) => `La curva arterial es estrecha: PAS ${R.pas}, PAD ${R.pad}. Es el ventrículo que se vacía.`, s: ['#tr-art'], c: C.t141, org: 'la forma: fisiología general' },
       { t: 'La Hb aún no baja: pierde sangre entera. No baja hasta las 8-12 h. La clase III se repone con sangre.', s: ['#lab'], c: C.hb }] },
-  'hemo-iv': { tit: 'Hemorragia, clase IV', frase: (R) => `Clase IV (${R.perdida} %): shock profundo, quizá irreversible. PAM ${R.pam}. Es la pérdida masiva.`, org: 'ficha · p. 23',
+  'hemo-iv': { tit: 'Hemorragia, clase IV', frase: (R) => `Clase IV (${R.perdida} %): shock profundo, quizá irreversible. PAM ${R.pam}. Es la pérdida masiva.`, org: 'ficha · p. 23 (la clase: % perdido; el nombre por FC y PA, ilustrativo)',
     guia: [{ t: 'Más del 40 % perdido: shock hemorrágico profundo, quizá irreversible.', s: ['#cor-cav'], c: C.claseIV },
       { t: (R) => `La PA cae (PAM ${R.pam}) y la curva arterial es mínima.`, s: ['#tr-art', '[data-fila="pa"]'], c: C.t151 },
       { t: 'Fallo multiorgánico y acidosis láctica: el lactato sube con las horas. Transfusión masiva (Tabla 15.1).', s: ['#lab'], c: C.claseIV }] },
@@ -197,7 +197,7 @@ export const ESTADOS = {
     guia: [{ t: (R) => `La FC (${R.fc}) y la PA (${R.pas}/${R.pad}) ya no son las de la clase III: lo que define la clase en la cabecera es lo que enseña el paciente.`, s: ['[data-fila="fc"]', '[data-fila="pa"]'], c: C.t151 },
       { t: (R, X) => X.infundido.sangre > 0 ? 'La sangre repone hematíes y volumen: la clase III se repone con sangre.' : 'El cristaloide repuso la presión, no los hematíes: la Hb que mide el laboratorio está diluida y 3/4 del suero se irán al intersticio.', s: ['#lab'], c: C.hb },
       { t: 'Lo perdido sigue perdido: si la herida sangra, la clase vuelve. Mira el lactato y la orina en las horas siguientes.', s: ['#lab', '[data-pest="reloj"]'], c: C.claseIII }] },
-  'sin-shock': { tit: 'Sin shock', frase: (R, X) => `PAM ${R.pam}, IC ${c1(R.ic)} e IRVS ${R.irvs}: ${X.pac.tipo === 'tapon' ? `el derrame aún no aprieta (PVC ${R.pvc}, PCP ${R.pcp})` : X.pac.tipo === 'septico' ? 'los vasos aguantan y no hay hipoperfusión' : 'el corazón aún bombea bastante'}. Sube la gravedad para ver el shock.`, org: 'ficha · Tabla 14.5; el nombre, por las cifras',
+  'sin-shock': { tit: 'Sin shock', frase: (R, X) => `PAM ${R.pam}, IC ${c1(R.ic)} e IRVS ${R.irvs}: ${X.pac.tipo === 'tapon' ? `el derrame aún no aprieta (PVC ${R.pvc}, PCP ${R.pcp})` : X.pac.tipo === 'septico' ? 'los vasos aguantan y no hay hipoperfusión' : 'el corazón aún bombea bastante'}. Sube la gravedad para ver el shock.`, org: 'ficha · Tabla 14.5 (IC ≥2,5); el nombre, por las cifras del modelo: ilustrativo (los cortes de IC 2,2 e IRVS 25 no son de la ficha)',
     guia: [{ t: (R) => `PAM ${R.pam} (≥65) e IC ${c1(R.ic)} (≥2,5 o cerca): los objetivos de la Tabla 14.5 se cumplen sin hacer nada.`, s: ['[data-fila="pa"]', '[data-fila="ic"]'], c: C.t145 },
       { t: (R) => `IRVS ${R.irvs}: ni la resistencia baja del shock vasodilatador ni la alta del resto (Tabla 14.1).`, s: ['[data-fila="irvs"]', '#cor-arteriola'], c: C.t141 },
       { t: 'El shock lo define la hipoperfusión, no el diagnóstico: mueve el mando de gravedad y mira cuándo cae la PAM y sube el lactato.', s: ['#dock', '#lab'], c: C.opinion }] },
@@ -236,12 +236,12 @@ export const ESTADOS = {
       { t: (R) => `El líquido no deja llenarse al corazón: shock obstructivo, con el patrón del cardiogénico (PVC ${R.pvc}, IC ${c1(R.ic)}, IRVS ${R.irvs}).`, s: ['[data-fila="pvc"]', '[data-fila="ic"]'], c: C.t141 },
       { t: (R) => `PVC ${R.pvc} y PCP ${R.pcp}: se igualan. También pasa cuando falla el VD: lo separa la eco.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
       { t: 'El tratamiento va a la causa. El balón está contraindicado en la disección.', s: ['#cor-saco'], c: C.iabp }] },
-  'tep-alto': { tit: 'TEP de alto riesgo', frase: (R) => `El VD no puede con el émbolo: PVC ${R.pvc}, PCP ${R.pcp} y PAM ${R.pam}. Noradrenalina para la PA; volumen, como mucho 500 mL.`, org: 'ficha · cap. 22, p. 7, 10-11',
+  'tep-alto': { tit: 'TEP de alto riesgo', frase: (R) => `El VD no puede con el émbolo: PVC ${R.pvc}, PCP ${R.pcp} y PAM ${R.pam}. Noradrenalina para la PA; volumen con cautela: el tope de 500 mL de la ficha es para la PVC normal (4-6).`, org: 'ficha · cap. 22, p. 7, 10-11',
     guia: [{ t: 'El VD está dilatado y la paciente ya está inestable: TEP de alto riesgo (masivo).', s: ['#cor-vd'], c: C.tepRiesgo },
       { t: (R) => `La PVC (${R.pvc}) supera a la PCP (${R.pcp}): falla el derecho.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vdMed },
       { t: (R) => `La presión pulmonar sube (${R.paps}/${R.papd}): mira la curva de la AP.`, s: ['#tr-pap'], c: C.tepEco, org: 'cuánto: el modelo' },
       { t: 'Taquicardia, taquipnea e hipoxemia: lo típico, pero ninguna confirma ni descarta. El 30 % tiene la PaO₂ normal.', s: ['[data-fila="fc"]', '[data-fila="fr"]'], c: C.tepClin },
-      { t: 'Para la hipotensión, noradrenalina: no sube la resistencia pulmonar. Volumen, como mucho 500 mL y guiado por la eco.', s: ['[data-fila="pa"]'], c: C.tepHemo }] },
+      { t: 'Para la hipotensión, noradrenalina: no sube la resistencia pulmonar. Volumen: la ficha pone el tope de 500 mL con la PVC normal (4-6), y aquí está alta; guíalo con la eco.', s: ['[data-fila="pa"]'], c: C.tepHemo }] },
   'tep-intermedio': { tit: 'TEP con el VD sobrecargado, sin shock', frase: (R) => `PAM ${R.pam}: aún sin inestabilidad. Con el VD sobrecargado es el riesgo intermedio; el alto riesgo exige inestabilidad.`, org: 'ficha · cap. 22, p. 7',
     guia: [{ t: 'El VD se dilata contra el émbolo.', s: ['#cor-vd'], c: C.tepEco },
       { t: (R) => `PAM ${R.pam}: sin inestabilidad hemodinámica no es el alto riesgo.`, s: ['[data-fila="pa"]'], c: C.tepRiesgo },
@@ -270,7 +270,7 @@ export const ESTADOS = {
     guia: [{ t: 'Con un VI débil o poco lleno, la bomba se lleva toda la sangre que llega.', s: ['.p-entrada', '.p-jaula'], c: C.impella },
       { t: (R) => `El VI no llega a la presión de la aorta: la válvula no se abre (${R.aoAbre} de ${R.aoDe} latidos).`, s: ['#tr-art', '.p-canula'], c: C.impella, org: 'fisiología general' },
       { t: (R) => `La curva arterial se aplana: ${R.pas}/${R.pad}. La PAM se sostiene con flujo continuo.`, s: ['#tr-art', '[data-fila="pa"]'], c: C.impella, org: 'fisiología general' }] },
-  ecmo: { tit: 'ECMO venoarterial', frase: (R) => `La bomba saca sangre de la cava, el oxigenador la vuelve roja y la devuelve por la femoral: ${c1(R.ecmo)} L/min contra corriente. El VI aún abre (${R.aoAbre} de ${R.aoDe}) y la SpO₂ es la mezcla.`, org: 'ficha · p. 48-49',
+  ecmo: { tit: 'ECMO venoarterial', frase: (R) => `La bomba saca sangre de la cava, el oxigenador la vuelve roja y la devuelve por la femoral: ${c1(R.ecmo)} L/min contra corriente. El VI aún abre (${R.aoAbre} de ${R.aoDe}) y la SpO₂ del monitor es una mezcla (ver la nota).`, org: 'ficha · p. 48-49; la SpO₂: fisiología general (la ficha no la trata)',
     guia: [{ t: 'La cánula venosa sube por la cava inferior hasta cerca de la AD.', s: ['.p-canula-v'], c: C.ecmo },
       { t: 'La bomba centrífuga crea el flujo; el oxigenador saca el CO₂ y mete el O₂; el calentador la devuelve a 37 °C (Fig. 16.5).', s: ['.p-bomba', '.p-oxigenador', '.p-calentador'], c: C.f165 },
       { t: 'La sangre vuelve por la arteria femoral y sube por la aorta al revés, para llegar al cayado y al cerebro.', s: ['.p-canula-a'], c: C.ecmo },
@@ -300,6 +300,7 @@ export const ESTADOS = {
 
 // ---------------------------------------------------------------- notas (con su tipo) y «Para profundizar»
 export const NOTAS = [
+  { k: 'clase-cortes', tipo: 'calla', txt: '<b>Los cortes de FC y PA por clase.</b> La Tabla 15.1 de Marino (p. 22) da el % de volemia perdido y solo flechas para la FC (↔, ↑, ↑↑, ↑↑↓) y la PA (↔, ↔↓, ↓, ↓↓). Las cifras con que el modelo nombra la clase de cada paciente (FC 95, 120 y 140; PAS 90 y 70) son ilustrativas, no de la ficha.', citas: [C.t151] },
   { k: 'impella-fuentes', tipo: 'discrepan', txt: '<b>¿Qué bomba lleva el Impella?</b> Marino la llama «bomba centrífuga miniatura» y da 2,5-5,5 L/min según el catéter (p. 47). La Guía ESC 2026 de IC de la app habla de «bombas de flujo microaxial (hasta 4-5,5 l/min)». El dibujo enseña la hélice que describen las dos; el nombre del tipo de bomba no se elige.', citas: [C.impella, C.escMcs] },
   { k: 'scvo2-fuentes', tipo: 'discrepan', txt: '<b>ScvO₂ objetivo.</b> Marino (Tabla 14.5): ScvO₂ >50 %. El Manual UMI, para el shock séptico en sus 6 primeras horas: ScvO₂ ≥70 % (o SvO₂ ≥65 %). El monitor enseña las dos y no elige.', citas: [C.t145, C.umi6h] },
   { k: 'pam-fuentes', tipo: 'discrepan', txt: '<b>PAM objetivo.</b> Marino: ≥65 mmHg (Tabla 14.5). El Manual UMI: TAM ≥65-70 mmHg en el séptico. El monitor marca con ≥65 y lo dice.', citas: [C.t145, C.umi6h] },
