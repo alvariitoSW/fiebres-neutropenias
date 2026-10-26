@@ -613,3 +613,21 @@ ilustrativo) y Doppler del eco (GC = ITV × área TSVI × FC ÷ 1000, con la cif
 lo estima»). Auditor: 0 graves; profesor: dos 3 (dos cifras de GC sin explicar en el eco, millar en el filtro),
 arreglados en la vuelta 2. La prueba de rendimiento del capilar fallaba a ratos también en `main` («n=0»: la escena
 quedaba fuera de la vista y su bucle se pausa); ahora la prueba la pone a la vista antes de medir.
+
+## Revisión por objetivos y error con consecuencia en los casos de los modelos vivos (26/10/2026, tarea `objetivos-casos`, B-020)
+
+Mejora del motor común `js/core/mayeutica-motor.js` (Objetivo V), con dos campos opcionales en los casos (sin ellos,
+todo queda como antes; el ácido-base, con motor propio, fuera):
+- `C.objetivos = [{ id, texto, pasos, si, no, fuente }]`: al cerrar el caso, «Revisión por objetivos» arriba de «Lo que
+  te llevas», ✓ cumplido / ✗ falta con su porqué, «Elegiste / Te faltó / Fallaste en: «…»» y «Ver en el texto». Sin
+  nota ni recuento; solo en memoria. `pasos` admite índices o `{ paso, frases | puntos | opciones | consecuencia }`
+  (así, en un «encuentra el error» con dos errores, cada objetivo cae solo por el suyo).
+- `consecuencia: { estado, texto, fuente }` en una opción mala: el modelo pasa a ese estado (enganche `alConsecuencia`),
+  la vista baja a la caja «⚠ Lo que acaba de pasar» y el paso siguiente repone su estado; `tras` en el paso siguiente
+  («El adjunto lo cambia a…»).
+- Contenido: inmersión E4 (4 objetivos; midazolam en perfusión → acumulación, RASS de la escena ilustrativo) y E8;
+  telar, caso Rosa (seguir con HNF en la TIH → trombosis + trombocitopenia; celda «bajan · sin agregados aún» solo con
+  sospecha de TIH); vaso, caso Inés (plaquetas en la PTT → más microtrombosis, frase de microangiopatías de la ficha);
+  muralla E1 (mantener el IBP hasta la extubación → colonización y aspiración, «se cree que»).
+- Jueces: auditor 0 graves (2 vueltas); profesor v1 8,0-8,6 → v2 8,75-9,0. Pruebas de los 4 modelos con recorrido
+  bien, con fallo y con la consecuencia (caja dentro de la pantalla).

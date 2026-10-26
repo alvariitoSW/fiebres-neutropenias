@@ -102,7 +102,7 @@ export function profilaxis(f, clcr, imc) {
    La hoja de órdenes y lo que se deriva de ella
    ============================================================ */
 export function estadoBase() {
-    return { vista: 'telar', riesgo: 'ninguno', inflamacion: false, inmovil: false, gastoBajo: false, tih: false,
+    return { vista: 'telar', riesgo: 'ninguno', inflamacion: false, inmovil: false, gastoBajo: false, tih: false, sospechaTih: false,
         farmaco: null, antiXa: false, clcr: 90, imc: 25, mecanica: 'nada', diastolica: 70, filtro: false, horas: 6 };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
@@ -541,16 +541,21 @@ export const CASOS = [
                     enunciado: 'Las plaquetas caen a menos de la mitad. ¿Qué mecanismo sospechas, y por qué no te tranquiliza que la dosis fuera profiláctica?',
                     puntos: ['<span class="hl-rojo">TIH</span>: la heparina se une al FP4 y forma un complejo antigénico.', 'Los <span class="hl-rojo">IgG</span> activan las plaquetas: trombosis y trombocitopenia por consumo.', '<span class="hl">No depende de la dosis</span>: pasa con dosis profilácticas.'],
                     explicacion: 'Con HNF, 2,6 %; con HBPM, 0,2 %. El diagnóstico y el tratamiento de la TIH están en el cap. 13 del libro («Para profundizar»).' } },
-            { momento: 'Día 6 · la profilaxis', datos: { Sospecha: 'TIH, sin trombosis por ahora' }, nuevo: ['Sospecha'], estado: { vista: 'tih', tih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
+            { momento: 'Día 6 · la profilaxis', datos: { Sospecha: 'TIH, sin trombosis por ahora' }, nuevo: ['Sospecha'], estado: { vista: 'tih', tih: false, sospechaTih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
                 pregunta: { id: 'tr-4', tipo: 'test', fuente: 'mar-fondaparinux · mar-esc-especiales (p. 8, 11)',
                     despues: { vista: 'tih', tih: true, farmaco: 'fondaparinux', imc: 42, clcr: 25 },
                     enunciado: 'Sospechas una TIH y sigue necesitando profilaxis. ¿Qué dice el capítulo?',
                     opciones: [
                         { t: 'Fondaparinux, aceptado si se sospecha TIH', ok: true },
                         { t: 'Enoxaparina: la HBPM da diez veces menos TIH', ok: false, porque: 'Da menos TIH (0,2 %), pero también la da: es heparina. Con una TIH en marcha, la seguirías exponiendo a trombosis.' },
-                        { t: 'Seguir con HNF: a dosis baja la TIH no progresa', ok: false, porque: 'La TIH no depende de la dosis: con la HNF seguiría formando el complejo, con riesgo de trombosis y más caída de plaquetas.' }],
+                        { t: 'Seguir con HNF: a dosis baja la TIH no progresa', ok: false, porque: 'La TIH no depende de la dosis: con la HNF seguiría formando el complejo, con riesgo de trombosis y más caída de plaquetas.',
+                            // Error con consecuencia: la lámina de la TIH pasa a la trombosis y la trombocitopenia (tih: true), con la HNF puesta
+                            consecuencia: { estado: { vista: 'tih', tih: true, farmaco: 'hnf', imc: 42, clcr: 25 }, mirar: 'fp4',
+                                texto: 'Sigues con la HNF. Se une al <span class="hl">factor plaquetario 4</span> y forma el complejo contra el que se hacen los anticuerpos IgG, que activan las plaquetas: <span class="hl-rojo">trombosis y trombocitopenia por consumo</span>. Y la TIH <span class="hl">no depende de la dosis</span>: también pasa con dosis profilácticas. Mira cómo aparecen los agregados.',
+                                corto: 'la HNF siguió activando las plaquetas: trombosis y trombocitopenia.',
+                                fuente: 'mar-hnf · mar-esc-especiales · cuándo aparecen los agregados: ilustrativo' } }],
                     explicacion: 'El fondaparinux <span class="hl">puede usarse para la profilaxis con TIH sospechada o previa</span>. Si se confirma la TIH o aparece una trombosis, ya no es profilaxis: el tratamiento aprobado de la TIH es el <span class="hl-rojo">argatrobán</span> (cap. 13 del libro, fuera de esta ficha).' } },
-            { momento: 'Día 6 · el giro', datos: { Plan: 'fondaparinux en profilaxis', ClCr: '25 mL/min' }, nuevo: ['Plan'], estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
+            { momento: 'Día 6 · el giro', datos: { Plan: 'fondaparinux en profilaxis', ClCr: '25 mL/min' }, nuevo: ['Plan'], tras: 'El adjunto lo cambia a fondaparinux: puede usarse para la profilaxis con TIH sospechada.', estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
                 pregunta: { id: 'tr-5', tipo: 'test', fuente: 'mar-fondaparinux · mar-fondaparinux-errata · mar-tabla-5-2 (p. 4, 8)', ocultar: ['dosis'],
                     enunciado: 'El fondaparinux lo elimina el riñón, y su ClCr es 25. ¿Qué dice el capítulo sobre su dosis?',
                     opciones: [
@@ -569,6 +574,20 @@ export const CASOS = [
                         { t: '2,5 mg al día: con 50 ya es como un riñón sano', ok: false, porque: 'Entre 35 (o 20) y 50, la tabla y el texto piden 1,5 mg. Con 2,5 mg se acumularía y podría sangrar.' }],
                     explicacion: 'Con ClCr <span class="hl">35-50: 1,5 mg al día</span> en la tabla; el texto lo da entre 20 y 50. Por encima de 50, 2,5 mg.' } },
         ],
+        // La revisión por objetivos al cerrar el caso (core/mayeutica-motor.js): pasos desde 0
+        objetivos: [
+            { id: 'dosis', texto: 'Profilaxis para su riñón y su obesidad: HNF', pasos: [0, 1],
+                si: 'La Tabla 5.2 no da pauta para la enoxaparina con obesidad e insuficiencia renal a la vez; la HNF no tiene ajuste renal (7.500 U cada 8 h con IMC ≥40), y sin medias como único método ni CNI de rutina.',
+                no: 'Con IMC ≥40 y ClCr <30 a la vez, la tabla no da pauta para la enoxaparina; la HNF no tiene ajuste renal (7.500 U cada 8 h con IMC ≥40). Las medias nunca van como único método y en la UCI médica no se añade CNI de rutina.',
+                fuente: 'mar-tabla-5-2 · mar-hnf · mar-mecanica · mar-esc-medica' },
+            { id: 'tih', texto: 'TIH reconocida y sin seguir con heparina', pasos: [2, 3],
+                si: 'La TIH es FP4 + IgG, con trombosis y trombocitopenia, y no depende de la dosis; con TIH sospechada, el fondaparinux sirve para la profilaxis.',
+                no: 'La TIH no depende de la dosis: con la HNF sigue formando el complejo, y con la HBPM, aunque menos (0,2 % frente a 2,6 %), también. Con TIH sospechada, el fondaparinux sirve para la profilaxis.',
+                fuente: 'mar-hnf · mar-hbpm · mar-fondaparinux · mar-esc-especiales' },
+            { id: 'renal', texto: 'Fondaparinux y riñón: las dos fuentes de la ficha', pasos: [4, 5],
+                si: 'Con ClCr 25 la tabla (no usar si <30) y el texto (1,5 mg con 20-50) discrepan, y con ClCr 50 coinciden: 1,5 mg al día.',
+                no: 'El fondaparinux lo elimina el riñón. La tabla da 1,5 mg con ClCr 35-50 y no usar si <30; el texto, 1,5 mg con 20-50. Las fuentes discrepan y no se elige ganadora.',
+                fuente: 'mar-fondaparinux · mar-fondaparinux-errata · mar-tabla-5-2' }],
         lleva: ['Con IMC ≥40 y ClCr &lt;30 a la vez, la Tabla 5.2 no da pauta para la enoxaparina; la HNF no tiene ajuste renal (7.500 U cada 8 h con IMC ≥40).',
             'En la UCI médica, HBPM sin mecánica añadida de rutina; las medias, nunca solas.',
             'TIH: FP4 + IgG, trombosis y trombocitopenia, sin depender de la dosis. Profilaxis con fondaparinux si se sospecha (con ClCr 25, la tabla y el texto discrepan); si se confirma o trombosa, el tratamiento aprobado es el argatrobán.'],
