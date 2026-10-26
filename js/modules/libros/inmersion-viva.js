@@ -38,14 +38,19 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
 function idsDe(fuente) {
     const ids = [];
     for (const t of String(fuente || '').split(' · ')) {
-        const m = t.trim().match(/^#?(mar-[a-z0-9-]+)(?:#(mar-[a-z0-9-]+))?/);
+        const m = t.trim().match(/^#?((?:mar|mn)-[a-z0-9-]+)(?:#((?:mar|mn)-[a-z0-9-]+))?/);
         if (m) ids.push(m[2] || m[1]);
     }
     return [...new Set(ids)];
 }
 // Cada sitio citado, con la pieza común (core/citas.js): «Ver en la ficha» al párrafo exacto y, de segunda opción, el PDF
 // en su página (PAGINAS). Lo que no lleva a ningún sitio no se pinta.
-const citaDeId = id => { const r = rutaDe(id); return r && { libro: 'Marino, cap. 6', ficha: r.tab.id, id, pag: PAGINAS[id], pdf: PDF_B }; };
+// El delirio de los objetivos y las consecuencias vive en la ficha del cap. 45 (Marino, neurología; PDF, p. 5).
+const PAG_MN = { 'mn-del-cam': 5, 'mn-del-sedacion': 5 }, PDF_MN = 'docs/marino-2024-neurologia-caps45-47.pdf';
+const citaDeId = id => {
+    const r = rutaDe(id); if (!r) return null;
+    return id.startsWith('mn-') ? { libro: 'Marino, cap. 45', ficha: r.tab.id, id, pag: PAG_MN[id], pdf: PDF_MN } : { libro: 'Marino, cap. 6', ficha: r.tab.id, id, pag: PAGINAS[id], pdf: PDF_B };
+};
 const enlacesTexto = fuente => idsDe(fuente).map(citaDeId).filter(Boolean).map(c => citaHTML(c, { max: 80 })).join('');
 const esIlu = f => /ilustrativ|sin cifra|hueco/.test(f) && !/mar-|Fig|Tabla/.test(f);
 const chipSpan = f => f ? `<span class="inm-org${esIlu(f) ? ' inm-ilu' : ''}">${chipTxt(f)}</span>` : '';
@@ -354,6 +359,8 @@ const Mayeutica = crearMayeuticaModelo({
         verEnTexto: q => verEnTexto(q.fuente),
         alCerrar: q => { if (q.despues) aplicar(estadoDe(q.despues), { frase: false }); setOcultos([]); if (q.mirarDespues) mirar(q.mirarDespues); },
         alSalir: () => { mirar(null); setOcultos([], false); },
+        // Error con consecuencia (casos): el modelo pasa a ese estado, con su animación (o directo con «reducir movimiento»)
+        alConsecuencia: c => { setOcultos([]); aplicar(estadoDe(c.estado), { frase: false, inmediato: REDUCIR }); requestAnimationFrame(() => mirar(c.mirar || null)); },
         tocar: {
             mandoHTML,
             alMostrar: q => mirar(q.tocar.mirar || q.mirar || null),
@@ -419,6 +426,15 @@ function revisarMayeutica() {
         if (!c.pasos.some(p => /giro/.test(p.momento))) r.fallos.push(c.id + ': sin giro');
         if (!rutaDe(c.volver.ancla)) r.fallos.push(c.id + ': «Repasar en la ficha» sin destino');
         for (const p of c.pasos) if (p.calculadora && !rutaDe(p.calculadora.ir)) r.fallos.push(c.id + ': calculadora sin destino');
+        // Objetivos y consecuencias: pasos que existen, fuentes que llevan a su sitio y la consecuencia solo en una opción mala
+        for (const o of c.objetivos || []) {
+            if (!o.texto || !o.si || !o.no || !o.pasos?.length || o.pasos.some(i => !c.pasos[i])) r.fallos.push(`${c.id}: objetivo ${o.id} incompleto`);
+            for (const id of idsDe(o.fuente)) if (!rutaDe(id)) r.fallos.push(`${c.id}: objetivo ${o.id}, la fuente ${id} no lleva a la ficha`);
+        }
+        for (const p of c.pasos) for (const op of p.pregunta.opciones || []) if (op.consecuencia) {
+            if (op.ok) r.fallos.push(`${p.pregunta.id}: consecuencia en la opción buena`);
+            if (!op.consecuencia.texto || !idsDe(op.consecuencia.fuente).every(id => rutaDe(id))) r.fallos.push(`${p.pregunta.id}: consecuencia sin texto o sin fuente`);
+        }
     }
     if (todas.some(x => !x.fuente)) r.fallos.push('pregunta sin fuente');
     for (const x of [...todas, ...CONCEPTOS]) if (!idsDe(x.fuente).some(id => rutaDe(id))) r.fallos.push((x.id || x.titulo) + ': «Ver en el texto» sin destino');

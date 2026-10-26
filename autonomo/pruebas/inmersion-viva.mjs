@@ -33,7 +33,7 @@ const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - w
 const T = () => p.evaluate(() => { const t = window.__inmPruebas(); return { estado: t.estado, D: t.D, modo: t.modo, fase: t.fase, todo: t.todoCoincide, fallos: t.fallos, bucle: t.bucle, guardado: t.guardado, celdas: t.celdas, relojes: t.relojes, ocultos: t.ocultos, mayeutica: t.mayeutica, cama: t.cama }; });
 const foto = n => CAPTURAS ? p.screenshot({ path: CAPTURAS + 'inm-' + n + '-' + tag + '.png' }) : null;
 const vistaVisible = () => p.evaluate(() => { const v = document.getElementById('inmersion-viva-view'); return v.style.display === 'block' && v.offsetParent !== null && document.getElementById('libros-view').style.display === 'block'; });
-const sinIds = () => p.evaluate(() => { const t = document.getElementById('inm-raiz').innerText; return (t.match(/\b(mar|mr|mc)-[a-z0-9]+(-[a-z0-9]+)*/g) || []).concat(/maqueta|propuesta|formas-iones|dolor-oculto|§|caso B3|pregunta 16/i.test(t) ? ['nombre interno'] : []); });
+const sinIds = () => p.evaluate(() => { const t = document.getElementById('inm-raiz').innerText; return (t.match(/\b(mar|mr|mc|mn)-[a-z0-9]+(-[a-z0-9]+)*/g) || []).concat(/maqueta|propuesta|formas-iones|dolor-oculto|§|caso B3|pregunta 16/i.test(t) ? ['nombre interno'] : []); });
 const estadoEs = (t, k) => sinLlamar(t.estado) === sinLlamar(estadoDe(ESTADOS[k].e));
 const arriba = () => p.evaluate(() => document.getElementById('inm-raiz').scrollIntoView({ block: 'start' }));
 
@@ -185,7 +185,7 @@ const tests = PREGUNTAS.filter(q => q.tipo === 'test' && !q.tocar);
 const FALLAR = new Set([tests[0].id, tests[2].id, tests[5].id]);
 const FALLAR_TOCAR = 'in-g4';
 let nDesbordeOk = 0;
-const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
+const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = null) => {
   const pref = '#inm-preg ';
   // antes de contestar: las cifras que se predicen salen tapadas (también en el tablero)
   const tap = q.ocultar || q.tocar?.ocultar || [];
@@ -201,7 +201,9 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
     const buena = txt.findIndex(x => x === q.opciones.find(o => o.ok).t.replace(/<[^>]+>/g, '')), mala = txt.findIndex((x, i) => i !== buena);
     if (buena < 0) ok(false, `${donde}: no encuentro la opción buena`);
     if (foto1) { await p.evaluate(() => document.getElementById('inm-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
-    await pulsar(pref + `[data-op="${fallar ? mala : buena}"]`);
+    const otra = elegir ? txt.findIndex(x => x === elegir.replace(/<[^>]+>/g, '')) : -1;
+    if (elegir && otra < 0) ok(false, `${donde}: no encuentro la opción «${elegir}»`);
+    await pulsar(pref + `[data-op="${elegir ? otra : fallar ? mala : buena}"]`);
   } else if (q.tipo === 'destapa') {
     await pulsar(pref + '[data-accion="destapa"]');
     if (!fallar) await p.evaluate(() => document.querySelectorAll('#inm-pts input').forEach(c => { c.checked = true; }));
@@ -236,8 +238,10 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   if (!REDUCIDO) await p.waitForTimeout(400);
   if (!await p.evaluate(() => { const s = document.querySelector('#inm-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('inm-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
   if (foto1) await foto(foto1 + '-despues');
+  if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
 };
+let antesDeSeguir = null;   // una comprobación extra antes de «Siguiente» (la caja de la consecuencia)
 for (const [i, q] of PREGUNTAS.entries()) {
   const html = await p.evaluate(() => document.getElementById('inm-preg').innerHTML);
   if (/data-correcta|data-mal|data-ok|"ok"/.test(html)) ok(false, `${q.id}: la respuesta está escrita en el HTML`);
@@ -276,6 +280,53 @@ for (const [k, C] of CASOS.entries()) {
     await pulsar('#inm-modo-preguntas'); await pulsar('#inm-preg [data-ir="casos"]');
   } else if (k < CASOS.length - 1) await pulsar('#inm-preg [data-fin="otro"]');
 }
+// 7b. La revisión por objetivos al cerrar el caso (core/mayeutica-motor.js). Del recorrido de arriba (falló el paso 1
+// de cada caso): el objetivo que depende del paso 1 sale ✗ con su porqué; los demás, ✓.
+const objetivosFin = () => p.evaluate(() => [...document.querySelectorAll('#inm-preg [data-objetivo]')].map(li => ({ id: li.dataset.objetivo, ok: li.dataset.cumplido === 'true', txt: li.textContent.replace(/\s+/g, ' ').trim(), cita: !!li.querySelector('.cita-ir[data-resaltar]') })));
+let ob = await objetivosFin();
+const E8 = CASOS.find(c => c.id === 'E8');
+ok(ob.length === E8.objetivos.length && ob.every(o => o.cita), `E8: revisión por objetivos con ${ob.length} objetivos, cada uno con «Ver en la ficha»`);
+ok(ob.find(o => o.id === 'despertar')?.ok === false && /✗ Falta/.test(ob.find(o => o.id === 'despertar').txt) && /paso 1/.test(ob.find(o => o.id === 'despertar').txt), 'E8 (paso 1 fallado): «despertar» ✗ con su porqué y el paso');
+ok(ob.filter(o => o.id !== 'despertar').every(o => o.ok && /✓ Cumplido/.test(o.txt)), 'E8: los demás objetivos ✓');
+ok(await p.evaluate(() => { const t = document.getElementById('inm-preg').textContent; return t.indexOf('Revisión por objetivos') < t.indexOf('Lo que te llevas') && !/\d+ de \d+|%/.test(document.querySelector('#inm-preg .inm-objetivos').textContent.replace(/\d+ (h|min|mg|mL)/g, '')); }), 'E8: los objetivos van arriba de «Lo que te llevas», sin nota ni recuento');
+const E4 = CASOS[0];
+const recorrerE4 = async (tag, elegir = {}) => {
+  await pulsar('#inm-preg [data-fin="otro"]'); await pulsar('#inm-preg [data-caso="0"]');
+  for (const [j, paso] of E4.pasos.entries()) await contestar({ ...paso.pregunta, estado: paso.estado }, false, null, false, `${tag} paso ${j + 1}`, elegir[j] || null);
+};
+// Todo bien: todos ✓
+await recorrerE4('E4 todo bien');
+ob = await objetivosFin();
+ok(ob.length === E4.objetivos.length && ob.every(o => o.ok && /✓ Cumplido/.test(o.txt)), `E4 todo bien: los ${ob.length} objetivos ✓ (${ob.filter(o => !o.ok).map(o => o.id).join(', ')})`);
+// La opción con consecuencia: midazolam en el delirio (paso 5) → el modelo pasa a la esponja >48 h y sale la caja
+const iCons = E4.pasos.findIndex(pa => pa.pregunta.opciones?.some(o => o.consecuencia));
+const opCons = E4.pasos[iCons].pregunta.opciones.find(o => o.consecuencia);
+const vigilar = async () => {
+  const v = await T();
+  ok(v.estado.sedante === 'midazolam' && v.estado.horas === 72 && v.D.rass === -3 && v.D.av.midaz, `consecuencia: el modelo pasa al midazolam >48 h (RASS ${v.D.rass}, sedante ${v.estado.sedante})`);
+  const caja = await p.evaluate(() => { const c = document.querySelector('#inm-preg .inm-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
+  ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  await p.evaluate(() => document.querySelector('#inm-preg .inm-consecuencia').scrollIntoView({ block: 'center' })); await foto('09b-consecuencia');
+};
+// contestar() llama a antesDeSeguir justo antes de «Siguiente» del paso con la consecuencia
+await pulsar('#inm-preg [data-fin="otro"]'); await pulsar('#inm-preg [data-caso="0"]');
+for (const [j, paso] of E4.pasos.entries()) {
+  if (j === iCons) antesDeSeguir = vigilar;
+  await contestar({ ...paso.pregunta, estado: paso.estado }, false, null, false, `E4 consecuencia paso ${j + 1}`, j === iCons ? opCons.t : null);
+  if (j === iCons) {
+    const v = await T();
+    ok(v.estado.sedante === E4.pasos[iCons + 1].estado.sedante && v.estado.bradi === true, `al pasar al paso siguiente, el modelo vuelve a su estado (${v.estado.sedante})`);
+  }
+}
+ob = await objetivosFin();
+const del = ob.find(o => o.id === 'delirio'), rass = ob.find(o => o.id === 'rass');
+ok(del && !del.ok && /✗ Falta/.test(del.txt) && new RegExp(`paso ${iCons + 1}`).test(del.txt) && /⚠ Lo que pasó/.test(del.txt), 'E4 con midazolam: «delirio» ✗ con su porqué, el paso y la consecuencia');
+ok(rass && !rass.ok, 'E4 con midazolam: «RASS objetivo» ✗ (comparte el paso)');
+ok(ob.filter(o => !['delirio', 'rass'].includes(o.id)).every(o => o.ok), 'E4 con midazolam: los demás objetivos ✓');
+await p.evaluate(() => document.querySelector('#inm-preg .inm-objetivos').scrollIntoView({ block: 'start' })); await foto('09c-objetivos');
+if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');
+crudos = await sinIds(); if (crudos.length) ok(false, `revisión por objetivos: se ve ${crudos.join(' | ')}`);
+
 const nRespuestas = PREGUNTAS.length + 4 + CASOS.reduce((a, c) => a + c.pasos.length, 0);
 ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de ${nRespuestas} respuestas y pasos`);
 
