@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { construirCorazon, baseGeometrica, REF } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista } from '../ecografia.mjs';
+import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista, distSeg, distMin, PAPILAR_FADE } from '../ecografia.mjs';
 import { construirAbdomen, anatomiaAbdomen, dentroMalla, ARRIBA } from '../abdomen.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
 
@@ -246,4 +246,42 @@ test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris �
     assert.ok(d0 / n < 0.05, `${v}: con las mejoras a 0 la imagen difiere ${(d0 / n).toFixed(3)} niveles de gris`);
     assert.ok(d1 / n > 3, `${v}: con las mejoras por defecto la imagen apenas cambia (${(d1 / n).toFixed(2)} niveles)`);
   }
+});
+
+// ---- A1 (parada 2 de eco-mega): cuerdas como losa y papilares que se desvanecen lejos de la pared
+test('cuerdas: en el 4 cámaras en diástole se ven, con menos brillo que la valva', () => {
+  const els = elementosDelCorte(gTd.partes, planoVista('a4c', td)), cu = els.filter(e => e.grupo === 'Cuerdas');
+  assert.ok(cu.length >= 1, 'ninguna cuerda en la imagen');
+  const valva = Math.max(...els.filter(e => /^(Mitral|Tricúspide)/.test(e.grupo || '')).map(e => e.db));
+  for (const c of cu) assert.ok(c.db <= valva, `cuerda ${c.db.toFixed(1)} dB por encima de la valva ${valva}`);
+});
+
+test('cuerdas: brillo máximo en el centro del plano y al menos 6 dB menos a 3 mm o más', () => {
+  const P = { O: [0, 0, 0], d: [0, 1, 0], r: [1, 0, 0], n: [0, 0, 1] };
+  const cuerdaA = (z) => elementosDelCorte([{ nombre: 'Cuerdas', lineas: new Float32Array([0, 5, z, 0, 15, z]) }], P).filter(e => e.grupo === 'Cuerdas');
+  const db = (z) => { const c = cuerdaA(z); return c.length ? Math.max(...c.map(e => e.db)) : -Infinity; };
+  assert.ok(db(0) >= db(1) && db(1) >= db(2), 'el brillo no baja de forma continua');
+  for (const z of [3, 3.5, 4]) assert.ok(db(z) <= db(0) - 6, `a ${z} mm: ${db(z)} frente a ${db(0)} dB en el centro`);
+  assert.equal(cuerdaA(5).length, 0, 'fuera de la losa no debe verse');
+  assert.ok(cuerdaA(0)[0].ancho > cuerdaA(3)[0].ancho, 'la cuerda del centro es más gruesa que la del borde');
+});
+
+test('papilares: los que nacen de la pared se ven; el que queda suelto a más de 6 mm se funde con la sangre', () => {
+  const P = planoVista('psaxPm', td);
+  for (const [nom, g] of [['telesístole', gTs], ['telediástole', gTd]]) {
+    const im = ec.formar(g.partes, P), vi = im.elementos.filter(e => e.grupo === 'VI' && e.tipo === 'relleno').flatMap(e => e.seg);
+    const pap = im.elementos.filter(e => /^Papilar/.test(e.grupo || '') && e.tipo === 'relleno' && !/ del VD$/.test(e.grupo));
+    assert.ok(pap.length >= 1, `${nom}: no hay papilares en el corte`);
+    for (const e of pap) {
+      assert.ok(distMin(e.seg, vi) <= PAPILAR_FADE[1], `${nom}: ${e.grupo} suelto a ${distMin(e.seg, vi).toFixed(1)} mm`);
+      let n = 0; const t = im.etiquetas.get(e.grupo); for (let q = 0; q < im.tag.length; q++) if (im.tag[q] === t) n++;
+      assert.ok(n > 20, `${nom}: ${e.grupo} desapareció (${n} píxeles)`);
+    }
+  }
+  // papilar suelto: el mismo corte con el músculo apartado de la pared (hacia el centro de la cavidad)
+  const lejos = gTs.partes.map(p => /^Papilar (anterolateral|posteromedial)$/.test(p.nombre) ? { ...p, pos: p.pos.map((v, i) => (i % 3 === 2 ? v : v * 0.15)) } : p);
+  const im = ec.formar(lejos, P), vi = im.elementos.filter(e => e.grupo === 'VI' && e.tipo === 'relleno').flatMap(e => e.seg);
+  const sueltos = im.elementos.filter(e => /^Papilar (anterolateral|posteromedial)$/.test(e.grupo || '') && e.tipo === 'relleno' && e.distPared > PAPILAR_FADE[1]);
+  assert.ok(sueltos.length >= 1, 'la prueba no logró soltar ningún papilar');
+  for (const e of sueltos) { const t = im.etiquetas.get(e.grupo); let n = 0; for (let q = 0; q < im.tag.length; q++) if (im.tag[q] === t) n++; assert.equal(n, 0, `${e.grupo} suelto a ${e.distPared.toFixed(1)} mm sigue en la imagen`); }
 });

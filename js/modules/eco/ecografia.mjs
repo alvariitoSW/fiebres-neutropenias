@@ -199,6 +199,24 @@ export function vistaMasParecida(P, est, ventana) {
   return mejor;
 }
 
+/** Distancia (mm) de un punto del plano al segmento más cercano de una lista [x0,y0,x1,y1,…]. */
+export function distSeg(x, y, seg) {
+  let best = Infinity;
+  for (let i = 0; i < seg.length; i += 4) {
+    const ax = seg[i], ay = seg[i + 1], ux = seg[i + 2] - ax, uy = seg[i + 3] - ay, l2 = ux * ux + uy * uy || 1e-9;
+    const t = Math.max(0, Math.min(1, ((x - ax) * ux + (y - ay) * uy) / l2)), d = Math.hypot(x - ax - t * ux, y - ay - t * uy);
+    if (d < best) best = d;
+  }
+  return best;
+}
+
+/** Distancia mínima (mm) de los extremos de una lista de segmentos a otra lista de segmentos. */
+export function distMin(seg, pared) {
+  let m = Infinity;
+  for (let i = 0; i < seg.length; i += 2) m = Math.min(m, distSeg(seg[i], seg[i + 1], pared));
+  return m;
+}
+
 /** Un punto del corazón en el plano: [u, v, distancia al plano]. */
 export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(q, P.d), dot(q, P.n)]; }
 
@@ -231,6 +249,9 @@ const TIPOS = [
   [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: 13, ancho: 1.4 }],
   [/^Pericardio$/, { clase: 'pericardio', db: 14, ancho: 2 }],
 ];
+export const CUERDA_H = 4;      // medio grosor (mm) de la losa en que las cuerdas entran en la imagen
+/** Un papilar cortado se desvanece entre PAPILAR_FADE[0] y [1] mm de distancia mínima a la pared del VI: más lejos, suelto, ya no hay tejido. */
+export const PAPILAR_FADE = [3, 6];
 export const DB = { sangre: -42, extracardiaco: -20, borde: -9, especular: 9 };
 const tipoDe = (nombre) => { for (const [re, t] of TIPOS) if (re.test(nombre)) return t; return null; };
 
@@ -308,7 +329,7 @@ function cerrarExtremos(trozos, maxPuente = 30) {
   return { puentes, puentesRef, abiertos };
 }
 
-/** Segmentos de las cuerdas (líneas 3D) dentro de ±h mm del plano, proyectados; con su distancia. */
+/** Segmentos de las cuerdas (líneas 3D) dentro de ±h mm del plano, proyectados; con su distancia (0-1 del grosor del corte). */
 function cortarLineas(p, P, h = 2) {
   const L = p.lineas, out = [];
   for (let i = 0; i < L.length; i += 6) {
@@ -336,12 +357,16 @@ function cortarLineas(p, P, h = 2) {
  * puntos / puntosRef: pares (actual, referencia) para que el moteado siga al tejido.
  * ref: las mismas piezas en la forma de referencia (telediástole), o null.
  */
-export function elementosDelCorte(partes, P, ref = null) {
+export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = true } = {}) {
   const grupos = new Map(), lineas = [], valvas = [], tubos = [], mascara = { tipo: 'mascara', seg: [] }, peri = [];
   let base = 0;
   partes.forEach((p, k) => {
     if (p.lineas) {
-      if (p.nombre === 'Cuerdas') for (const [a, b, f] of cortarLineas(p, P)) valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 4 - 6 * f, ancho: 0.9, grupo: 'Cuerdas' });
+      // cuerdas como losa de ±CUERDA_H mm: brillan al cruzar el centro del plano (8 dB, siempre por debajo de la valva)
+      // y se apagan con la distancia: a 3 mm ya están 7,5 dB más oscuras; de ahí al borde de la losa, mucho más rápido
+      if (p.nombre === 'Cuerdas' && !cuerdasYPapilares) for (const [a, b, f] of cortarLineas(p, P)) valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 4 - 6 * f, ancho: 0.9, grupo: 'Cuerdas' });   // la línea fina de antes
+      else if (p.nombre === 'Cuerdas') for (const [a, b, f] of cortarLineas(p, P, CUERDA_H)) { const mm = f * CUERDA_H;
+        valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 8 - 2.5 * mm - (mm > 3 ? 10 * (mm - 3) : 0), ancho: 0.7 + 0.8 * (1 - f), grupo: 'Cuerdas' }); }
       return;
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
@@ -368,6 +393,8 @@ export function elementosDelCorte(partes, P, ref = null) {
     // borde de la pared: más brillante donde el haz le da de frente (reflexión especular)
     out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g });
   }
+  // papilares y trabéculas: nacen de la pared, así que lo que queda lejos de ella se desvanece (en formar)
+  const paredVI = cuerdasYPapilares && grupos.has('VI') ? grupos.get('VI').trozos.flatMap(x => x.seg) : null;
   for (const x of tubos) {
     // cerrado: cada extremo suelto tiene otro en el mismo sitio (la costura de la rejilla del tubo)
     const cerrado = cerrarExtremos([x], 0.6).abiertos === 0;
@@ -379,7 +406,7 @@ export function elementosDelCorte(partes, P, ref = null) {
       out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
       continue;
     }
-    out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0 }
+    out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0, distPared: paredVI && /^Papilar/.test(x.nombre) ? distMin(x.seg, paredVI) : null }
       : { tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
   }
   return out.concat(lineas, valvas, peri);
@@ -502,8 +529,8 @@ const S2 = Array.from({ length: 16 }, (_, h) => { const w = 2 * h + 1; let s = 0
  *   ventana   · ventana pobre: pared más gruesa, más pérdida, más ruido; con más intensidad, el borde del pulmón tapa un
  *               lado del sector y entra y sale con la respiración (por defecto apagada: es un reto)
  */
-export const MEJORAS_CERO = Object.freeze({ paredes: 0, moteado: 0, sombra: 0, reverb: 0, especular: 0, tgc: 0, foco: 0, ventana: 0 });
-export const MEJORAS_DEFECTO = Object.freeze({ paredes: 0.9, moteado: 0.7, sombra: 0.7, reverb: 0.6, especular: 0.7, tgc: 1, foco: 0.7, ventana: 0 });
+export const MEJORAS_CERO = Object.freeze({ paredes: 0, moteado: 0, sombra: 0, reverb: 0, especular: 0, tgc: 0, foco: 0, ventana: 0, trabeculas: 0 });
+export const MEJORAS_DEFECTO = Object.freeze({ trabeculas: 1, paredes: 0.9, moteado: 0.7, sombra: 0.7, reverb: 0.6, especular: 0.7, tgc: 1, foco: 0.7, ventana: 0 });
 
 /**
  * Un ecógrafo de NB haces por NS muestras. formar() devuelve la imagen del sector en un búfer RGBA de ancho × alto
@@ -641,7 +668,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     const m = { ...MEJORAS_DEFECTO, ...(o.m || {}) };
     geoNueva = false; geometria(P, { ...o, m });
     const { N, A, TAG, DEN, FILL, OR, OD, X, Y, Rr, EB } = G, reloj = [performance.now()];
-    const els = elementosDelCorte(partes, P, o.ref || null); reloj.push(performance.now());
+    const els = elementosDelCorte(partes, P, o.ref || null, { cuerdasYPapilares: m.trabeculas > 0 }); reloj.push(performance.now());
     DEN.fill(0); rellenar(P, els[0].seg, (q) => { DEN[q] = 1; });
     // grano real: la sangre no es negro absoluto; un eco muy bajo que asoma al subir la ganancia
     const aS = amp(DB.sangre + 4 * m.moteado), aE = amp(DB.extracardiaco), PT = G.PT;
@@ -656,7 +683,10 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
       const tag = Math.min(254, tagDe(el));
       if (el.tipo === 'relleno') { abiertos += el.abiertos; const mus = el.db <= 1, a = amp(el.db - (mus ? (7 + (el.grupo === 'VD' ? 3 : 0)) * m.paredes : 0));   // paredes reales: músculo gris medio (la pared libre del VD, más fina, algo más tenue)
-        rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; FILL[q] = mus ? 1 : 0; }); }
+        // papilar o trabécula sin pared cerca: se funde con la sangre entero (nace de la pared; suelto sería un «trombo»)
+        const [f0, f1] = PAPILAR_FADE, u = el.distPared == null ? 0 : clamp((el.distPared - f0) / (f1 - f0), 0, 1);
+        if (u < 1) { const a2 = u > 0 ? amp((el.db - (mus ? 7 * m.paredes : 0)) * (1 - u) + (DB.sangre + 4 * m.moteado) * u) : a;
+          rellenar(P, el.seg, (q) => { A[q] = a2; TAG[q] = tag; FILL[q] = u === 0 && mus ? 1 : 0; }); } }
       else {
         // con la mejora especular, también el pericardio depende del ángulo
         const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
