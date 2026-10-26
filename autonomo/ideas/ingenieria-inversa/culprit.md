@@ -87,7 +87,15 @@ guardado; solo 2 capturas del simulador para el informe (JPEG 390 px, fuera del 
   en ≥ 6 derivaciones con ↑ST en aVR y/o V1 (multivaso o tronco), BRIHH/BRD/marcapasos como equivalentes, Wellens y
   T hiperagudas citadas. **No trae**: la tabla arteria → derivaciones, la dominancia, de Winter ni Sgarbossa; los
   patrones dibujados van al **material suplementario** (figuras S2 y S3), que no está en estos PDF.
-- **Sigue faltando**: el suplemento de la ESC 2023 (figuras S2 y S3) y un libro de ECG para los territorios.
+- **Territorios (la tabla arteria → derivaciones → pared)** → `docs/wagner-2009-aha-ecg-isquemia-infarto.pdf`
+  (AHA/ACCF/HRS, parte VI: isquemia e infarto agudos, Circulation 2009;119:e262-70; impresa = e261 + pág. del PDF).
+  Completa (9 págs.). p. 4-5: DA proximal antes de S1 y D1, DA distal, CD frente a Cx según cuál dé la descendente
+  posterior (dominancia), ↑ST III > II con ↓ST en I y aVL en la CD, CD proximal con VD, ↓ST difuso con aVR en tronco o
+  multivaso; p. 9: Cx, V7 y bloqueo de rama.
+- **Definición universal** → `docs/thygesen-2018-cuarta-definicion-infarto.pdf` (Circulation 2018;138:e618-51;
+  impresa = e617 + pág. del PDF). ECG en p. 20-22: aVR y tronco, V7-V9, V3R/V4R, bloqueos de rama, T hiperagudas.
+- **Con esto, A y B tienen fuente completa.** Opcional: el suplemento de la ESC 2023 (figuras S2 y S3). Los apuntes
+  del usuario, si llegan, solo para ordenar el contenido (no son fuente).
 
 ## 4. Licencia y coste
 - Sin licencia publicada ni aviso de copyright en la página (buscado: licen, ©, copyright). **Deducido: todos los
