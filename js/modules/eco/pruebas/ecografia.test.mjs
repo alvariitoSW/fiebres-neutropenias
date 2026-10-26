@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { construirCorazon, baseGeometrica, REF } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista, distSeg, distMin, PAPILAR_FADE } from '../ecografia.mjs';
+import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista, distSeg, distMin, PAPILAR_FADE, MEJORAS_CERO } from '../ecografia.mjs';
 import { construirAbdomen, anatomiaAbdomen, dentroMalla, ARRIBA } from '../abdomen.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
 
@@ -297,4 +297,51 @@ test('tabla de tejidos: orden de brillo, origen en cada fila y la imagen lee de 
   }
   assert.equal(DB.sangre, T.sangre.db); assert.equal(DB.extracardiaco, T.extracardiaco.db);
   assert.equal(DB.borde, DB_IMAGEN.borde.db); assert.equal(DB.especular, DB_IMAGEN.especular.db);
+});
+
+// ---- A3 (parada 2 de eco-mega): sombra acústica detrás del calcio
+/** Con y sin calcio en la valva aórtica (PLAX): dB medios de lo que hay detrás, solo en haces con valva y tejido detrás. */
+function sombraDetras(calcio, mejoras = {}) {
+  const P = planoVista('plax', td), opc = { ref: gTd.partes, t: 1.3, ventanaVista: VISTAS.plax.ventana, m: mejoras };
+  const foto = (r) => ({ db: Float32Array.from(r.db), tag: Uint8Array.from(r.tag), pix: Uint8Array.from(r.pix), etiquetas: r.etiquetas, nb: r.nb, ns: r.ns, dr: r.dr });   // el ecógrafo reutiliza sus búferes
+  const sin = foto(ec.formar(gTd.partes, P, opc)), con = foto(ec.formar(gTd.partes, P, { ...opc, calcio }));
+  const tag = con.etiquetas.get('Aórtica');
+  let n = 0, dSin = 0, dCon = 0;
+  for (let i = 0; i < con.nb; i++) {
+    let jv = -1; for (let j = 0; j < con.ns; j++) if (con.tag[j * con.nb + i] === tag) jv = j;
+    if (jv < 0) continue;
+    for (let j = jv + Math.ceil(4 / con.dr); j < Math.min(con.ns, jv + Math.ceil(14 / con.dr)); j++) {
+      const q = j * con.nb + i; if (sin.db[q] < -8) continue;     // solo donde la imagen sin calcio tiene tejido claro (más abajo, la sombra choca con el ruido de fondo, hacia -40 dB)
+      dSin += sin.db[q]; dCon += con.db[q]; n++;
+    }
+  }
+  return { n, sin: dSin / n, con: dCon / n };
+}
+
+test('calcio: detrás de la valva aórtica calcificada (PLAX) la imagen es ≥30 dB más oscura que sin calcio', () => {
+  const r = sombraDetras('^Aórtica');
+  assert.ok(r.n > 30, `muy pocas muestras detrás de la valva (${r.n})`);
+  assert.ok(r.sin - r.con >= 30, `solo ${(r.sin - r.con).toFixed(1)} dB de sombra`);
+});
+
+test('calcio: la valva calcificada brilla más que la sana y que el pericardio; sin calcio, imagen idéntica a la de hoy', () => {
+  const P = planoVista('plax', td), opc = { ref: gTd.partes, t: 1.3, ventanaVista: VISTAS.plax.ventana };
+  const foto = (r) => ({ db: Float32Array.from(r.db), tag: Uint8Array.from(r.tag), pix: Uint8Array.from(r.pix), etiquetas: r.etiquetas });   // el ecógrafo reutiliza sus búferes
+  const a = foto(ec.formar(gTd.partes, P, opc)), b = foto(ec.formar(gTd.partes, P, { ...opc, calcio: null })), c = foto(ec.formar(gTd.partes, P, { ...opc, calcio: /^Aórtica/ }));
+  assert.deepEqual(Array.from(a.pix), Array.from(b.pix), 'sin calcio la imagen cambió');
+  // la cara de entrada es la que brilla (detrás, el calcio ya está en sombra): se compara el máximo de la valva
+  const max = (r) => { const t = r.etiquetas.get('Aórtica'); let m = -Infinity; for (let q = 0; q < r.tag.length; q++) if (r.tag[q] === t && r.db[q] > m) m = r.db[q]; return m; };
+  assert.ok(max(c) > max(a) + 3, `la valva calcificada (${max(c).toFixed(1)} dB) no brilla más que la sana (${max(a).toFixed(1)})`);
+});
+
+test('calcio: también hay sombra con las mejoras a 0 y no toca lo que queda delante', () => {
+  const r = sombraDetras('^Aórtica', MEJORAS_CERO);
+  assert.ok(r.n > 30 && r.sin - r.con >= 30, `sombra con mejoras a 0: ${(r.sin - r.con).toFixed(1)} dB`);
+});
+
+test('tabla de tejidos: el calcio es el más brillante, con su atenuación y su origen', async () => {
+  const { TEJIDOS } = await import('../../../data/eco-tejidos.js');
+  const c = TEJIDOS.calcio;
+  assert.ok(c && Object.entries(TEJIDOS).every(([k, t]) => k === 'calcio' || t.db < c.db), 'el calcio no es el más brillante');
+  assert.ok(c.atenuacion > 0 && c.origen === 'ilustrativo');
 });

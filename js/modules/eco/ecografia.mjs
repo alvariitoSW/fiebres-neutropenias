@@ -539,7 +539,7 @@ export const MEJORAS_DEFECTO = Object.freeze({ trabeculas: 1, paredes: 0.9, mote
  * píxeles (vértice del sector arriba en el centro) y la rejilla polar en dB (para pruebas).
  * formar(partes, P, o): partes, las del corazón en este fotograma; P, el plano; o.ref, las piezas de la forma de
  * referencia (para el moteado); o.t, tiempo (s); o.ganancia (dB); o.m, intensidades 0..1 de cada mejora (MEJORAS_DEFECTO);
- * o.tgc, 4 dB de arriba abajo; o.focoMm, profundidad del foco; o.ventanaVista, 'apical', 'paraesternal', 'subcostal'…
+ * o.calcio, regexp (o texto) con el nombre de las piezas calcificadas, p. ej. /^Aórtica/ (sombra acústica detrás; sin ella, nada cambia); o.tgc, 4 dB de arriba abajo; o.focoMm, profundidad del foco; o.ventanaVista, 'apical', 'paraesternal', 'subcostal'…
  */
 export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = {}) {
   let G = null, geoNueva = false;      // geoNueva: este fotograma ha tenido que construir la rejilla (tarda más de lo normal)
@@ -680,6 +680,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     FILL.fill(0); OD.fill(1e9); OR.fill(1);
     const mov = [null], etiqueta = new Map(), campo = [null]; let abiertos = 0;
+    const reCal = o.calcio ? (o.calcio instanceof RegExp ? o.calcio : new RegExp(o.calcio)) : null, esCal = new Uint8Array(256); let hayCal = false;
     const tagDe = (el) => { if (!etiqueta.has(el.grupo)) { etiqueta.set(el.grupo, mov.length); mov.push(ajusteAfin(el.seg, el.segRef)); campo.push(campoDesplazamiento(el.seg, el.segRef)); } return etiqueta.get(el.grupo); };
     for (const el of els.slice(1)) {
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
@@ -691,6 +692,8 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
           rellenar(P, el.seg, (q) => { A[q] = a2; TAG[q] = tag; FILL[q] = u === 0 && mus ? 1 : 0; }); } }
       else {
         // con la mejora especular, también el pericardio depende del ángulo
+        // calcio (o.calcio: nombre de las piezas calcificadas): muy brillante y con la atenuación de su fila de la tabla
+        if (reCal && el.tipo === 'linea' && reCal.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.calcio.ancho, TEJIDOS.calcio.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
         const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
@@ -716,12 +719,13 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
     const S = m.sombra;
-    if (S > 0 || W > 0) {
-      const dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6, tope = amp(12);
+    if (S > 0 || W > 0 || hayCal) {
+      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6, tope = amp(12);
       for (let i = 0; i < nb; i++) { let at = 1;
         for (let j = 0, q = i; j < ns; j++, q += nb) {
           const a = A[q]; A[q] = a * at;
           if (Rr[j] < G.pared) at *= fT;
+          if (hayCal && esCal[TAG[q]] && a > a6) at *= fC;   // sombra acústica: el calcio no deja pasar el haz
           if (S > 0) {
             if (ABS[q]) at *= fH;
             else if (a > a6) at *= Math.pow(a / a6, kb);      // lo muy ecogénico refleja y deja pasar menos
