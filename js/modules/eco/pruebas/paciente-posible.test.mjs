@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { baseGeometrica, construirCorazon, REF, TAPSE_POR_ML } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, REF, TAPSE_POR_ML, LIMITES } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, medidasCorazon } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -144,11 +144,63 @@ test('TEP: la torsión no debería subir con un VI vacío', { todo: 'B3 (torsió
   assert.ok(de('tep').v.torsion <= de('normal').v.torsion, `${fmt(de('tep').v.torsion)}° frente a ${fmt(de('normal').v.torsion)}°`);
 });
 
+// ---- Aurículas dibujadas (B2) ------------------------------------------------------------------------------------------
+// Volumen de una cúpula auricular (malla abierta por el suelo): se cierra con un punto del plano del suelo
+function volCupula(pa) {
+  const P = pa.pos, I = pa.idx; let zMin = Infinity; for (let i = 2; i < P.length; i += 3) zMin = Math.min(zMin, P[i]);
+  let n = 0, zs = 0; for (let i = 2; i < P.length; i += 3) if (P[i] < zMin + 2) { zs += P[i]; n++; }
+  const z0 = zs / n; let v = 0;
+  for (let i = 0; i < I.length; i += 3) { const [a, b, c] = [I[i] * 3, I[i + 1] * 3, I[i + 2] * 3];
+    const A = [P[a], P[a + 1], P[a + 2] - z0], B = [P[b], P[b + 1], P[b + 2] - z0], C = [P[c], P[c + 1], P[c + 2] - z0];
+    v += A[0] * (B[1] * C[2] - B[2] * C[1]) - A[1] * (B[0] * C[2] - B[2] * C[0]) + A[2] * (B[0] * C[1] - B[1] * C[0]); }
+  return Math.abs(v) / 6000;
+}
+// Ejes de una aurícula en el A4C como los mide Lang (p. 28-30): el mayor, del centro del anillo AV al techo (en el A4C la
+// aurícula queda al fondo del sector: la profundidad v crece hacia el techo); el menor, la mayor anchura en su tercio medio.
+// Se corta la malla dibujada (ya movida) con el plano de la vista.
+function ejesA4C(pa, P, anillo) {
+  const n = [P.r[1] * P.d[2] - P.r[2] * P.d[1], P.r[2] * P.d[0] - P.r[0] * P.d[2], P.r[0] * P.d[1] - P.r[1] * P.d[0]];
+  const X = pa.pos, I = pa.idx, pts = [], rel = (q) => [q[0] - P.O[0], q[1] - P.O[1], q[2] - P.O[2]];
+  const uv = (q) => { const d = rel(q); return [d[0] * P.r[0] + d[1] * P.r[1] + d[2] * P.r[2], d[0] * P.d[0] + d[1] * P.d[1] + d[2] * P.d[2]]; };
+  const pt = (i) => [X[i * 3], X[i * 3 + 1], X[i * 3 + 2]], sd = (q) => { const d = rel(q); return d[0] * n[0] + d[1] * n[1] + d[2] * n[2]; };
+  for (let k = 0; k < I.length; k += 3) { const t = [pt(I[k]), pt(I[k + 1]), pt(I[k + 2])], s = t.map(sd);
+    for (let e = 0; e < 3; e++) { const a = s[e], b = s[(e + 1) % 3];
+      if ((a < 0) !== (b < 0)) { const f = a / (a - b), A = t[e], B = t[(e + 1) % 3]; pts.push(uv([0, 1, 2].map(j => A[j] + (B[j] - A[j]) * f))); } } }
+  const v0 = uv(anillo)[1], v1 = Math.max(...pts.map(p => p[1])), L = v1 - v0, filas = new Map();
+  for (const [u, v] of pts) { const b = Math.round(v), e = filas.get(b) || [Infinity, -Infinity]; filas.set(b, [Math.min(e[0], u), Math.max(e[1], u)]); }
+  let menor = 0; for (const [b, [a, c]] of filas) if (b >= v0 + L / 3 && b <= v0 + 2 * L / 3) menor = Math.max(menor, c - a);
+  return { mayor: L, menor };
+}
+function auriculas(k) {
+  const m = correr(k), o = m.onda, ex = extraDeMotor(m);
+  const ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
+  return [o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts].map(s => {
+    const e = estadoGeo(s, ex), c = construirCorazon(e, { detalle: false }), g = baseGeometrica(e), P = planoVista('a4c', e);
+    const ai = c.partes.find(p => p.nombre === 'AI'), ad = c.partes.find(p => p.nombre === 'AD');
+    return { s, sc: m.p.sc, vAi: volCupula(ai), vAd: volCupula(ad), ejeAd: ejesA4C(ad, P, [g.ct[0], g.ct[1], c.descenso]) };
+  });
+}
+// Un estado por fotograma: la aurícula dibujada tiene los mL de la aurícula del motor (antes, ~2 veces más)
+for (const k of ['normal', 'hemorragia', 'fallo', 'derrame', 'tep', 'hipertrofia', 'dilatada']) {
+  test(`${ESCENARIOS[k].nombre}: las aurículas dibujadas tienen el volumen del motor (±12 %) en telediástole y telesístole`, () => {
+    for (const a of auriculas(k)) for (const [dib, motor, n] of [[a.vAi, a.s.vai, 'AI'], [a.vAd, a.s.vad, 'AD']]) {
+      const mot = Math.min(LIMITES.au[1], Math.max(LIMITES.au[0], motor));   // fuera de LIMITES.au se dibuja en el límite
+      assert.ok(Math.abs(dib - mot) <= 0.12 * mot + 1, `${n}: dibujada ${fmt(dib)} mL, motor ${fmt(motor)} mL`); }
+  });
+}
+// Ejes de la AD en el A4C, en telesístole (aurícula llena), indexados: Lang 2015 p. 30 (Tabla 13)
+test('Normal: ejes de la AD en el A4C (mayor 2,4 ± 0,3 y menor 1,9 ± 0,3 cm/m²) [Lang 2015 p. 30]', () => {
+  const a = auriculas('normal')[1], may = a.ejeAd.mayor / 10 / a.sc, men = a.ejeAd.menor / 10 / a.sc;
+  for (const [id, x] of [['ad-eje-mayor', may], ['ad-eje-menor', men]])
+    assert.ok(x >= FORMA[id].min && x <= FORMA[id].max, `${id} = ${fmt(x)} cm/m², fuera de ${FORMA[id].texto} (${FORMA[id].fuente})`);
+});
+
 // Huecos: la fuente no da la cifra (fuente-p2.md). Sin cifra, no hay prueba: queda marcado.
 for (const [h, quien] of [['MAPSE (descenso de la base): no está en Lang ni Mor-Avi como cifra', 'B1'],
   ['rotación basal y apical por separado (solo la torsión neta, Mor-Avi p. 290)', 'B3'], ['S′ tricuspídea: el modelo no calcula velocidades del anillo', 'F5'],
   ['TSVD (RVOT) PLAX, proximal y distal: aún no se mide en el modelo', 'N2'], ['grosor sistólico de la pared libre del VD', 'B4'],
-  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'], ['índice de excentricidad del tabique', 'F4']]) {
+  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'], ['índice de excentricidad del tabique', 'F4'],
+  ['relación largo/ancho del VI y ejes de la AI en mm (Lang los da en su Suplemento, Tablas 2 y 9, que no tenemos)', 'B2']]) {
   test('HUECO: ' + h, { todo: 'hueco de fuente · ' + quien }, () => assert.fail('sin cifra de referencia'));
 }
 
