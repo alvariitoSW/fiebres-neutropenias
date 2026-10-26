@@ -65,16 +65,22 @@ guardado; solo 2 capturas del simulador para el informe (JPEG 390 px, fuera del 
 - **Para nosotros**: sus cifras (2 % de las DA proximales con de Winter, 1 de cada 10 izquierda dominante, 0,36 de
   Smith…) solo dicen qué buscar en la ESC de SCA y en el libro de ECG de la rotación (PDF que aún no tenemos).
 
-### Dónde buscar sus cifras (búsqueda del 26/10; aún no son fuente: falta el PDF en `docs/`)
-- **de Winter, «2 %»**: carta de de Winter et al., N Engl J Med 2008;359:2071-3 (PubMed 18987380): 30 de 1532 IAM
-  anteriores (2,0 %), todos con oclusión de la DA proximal y sin oclusión del tronco; casi todos con ↑ST 1-2 mm en
-  aVR. Visto en el resumen de PubMed y fuentes secundarias, no en el texto completo.
-- **Dominancia izquierda, «1 de cada 10»**: las series varían mucho (izquierda 7-25 %, codominancia 4-15 %); la mayor,
-  6382 TC, da 91 % derecha y 9 % izquierda (PMC4505791). Solo fuentes secundarias abiertas: buscar la cifra en la
-  ESC de SCA o en un texto de anatomía antes de usarla.
-- **Tronco y aVR**: Yamaji et al. (16 oclusiones agudas del tronco): ↑ST en aVR en el 88 % (43 % en la DA, 8 % en la
-  CD); ↑ST aVR ≥ V1 separa tronco de DA con S 81 % y E 80 %. Contradice su modelo (aVR baja en su oclusión del
-  tronco). Visto en una revisión (World J Cardiol, PMC4110611) y en LITFL, no en el artículo original.
+### Sus cifras, ya con PDF en `docs/` (26/10; páginas del PDF, para `#page=N`)
+- **de Winter, «2 %»** → `docs/de-winter-2008-nejm-signo-da-proximal.pdf` (N Engl J Med 2008;359:2071-3), p. 1:
+  «30 of 1532 patients with anterior myocardial infarction (2.0%)»; «in most patients there was a 1- to 2-mm
+  ST-elevation in lead aVR». El PDF empieza con la carta anterior de la revista; la de de Winter sigue en p. 1-2
+  (figura en p. 2).
+- **Dominancia, «1 de cada 10»** → `docs/gebhard-2015-confirm-dominancia-coronaria.pdf` (registro CONFIRM, Eur Heart
+  J Cardiovasc Imaging 2015;16:853-62): 6382 pacientes con TC, derecha 91 % (5817) e izquierda 9 % (565), p. 1 y 3;
+  en la literatura citan izquierda 8-33 % y codominancia 3-7 %, p. 2. **Ojo**: CONFIRM no separa la codominancia; en
+  la ficha irá su cifra y el rango citado, con nota de fuentes.
+- **Tronco y aVR** → `docs/tamura-2014-wjc-avr-sca.pdf` (Tamura, World J Cardiol 2014;6:630-7, revisión), p. 2:
+  Yamaji et al., ↑ST > 0,05 mV en aVR en el 88 % de las oclusiones agudas del tronco frente al 43 % de la DA y al 8 %
+  de la CD; ↑ST aVR ≥ V1: sensibilidad 81 % y especificidad 80 % para separar tronco de DA. **Confirma** que el tronco
+  de Culprit (aVR baja) va contra la fuente. Es una revisión: cita a Yamaji, no es el artículo original.
+- **LITFL** (https://litfl.com/st-elevation-in-avr/, enlace que pasó el usuario): web, solo para enlace cruzado y
+  para saber qué buscar; no es fuente de cifras (NORTE, «Lo que NO queremos»).
+- **Sigue faltando**: la guía ESC 2023 de SCA (el usuario no la consiguió) y el libro de ECG de la rotación.
 
 ## 4. Licencia y coste
 - Sin licencia publicada ni aviso de copyright en la página (buscado: licen, ©, copyright). **Deducido: todos los
