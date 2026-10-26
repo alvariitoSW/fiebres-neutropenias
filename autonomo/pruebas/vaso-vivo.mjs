@@ -351,6 +351,7 @@ const vigilar = async () => {
   const nud = await p.evaluate(() => { const d = window.__vsoPruebas(); return d; });
   const caja = await p.evaluate(() => { const c = document.querySelector('#vso-preg .vso-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.vso-ir-texto'), visible: c.offsetParent !== null }; });
   ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  ok(/Si el frotis confirma esquistocitos/.test(caja.txt), 'consecuencia: la caja no anticipa el frotis («Si el frotis confirma esquistocitos…»)');
   await p.evaluate(() => document.querySelector('#vso-preg .vso-consecuencia').scrollIntoView({ block: 'center' })); await foto('15-consecuencia');
 };
 await abrirInes();
@@ -362,6 +363,8 @@ for (const [j, paso] of INES.pasos.entries()) {
 ob = await objetivosFin();
 const pl = ob.find(o => o.id === 'plaquetas');
 ok(pl && !pl.ok && /✗ Falta/.test(pl.txt) && new RegExp(`paso ${iCons + 1}`).test(pl.txt) && /⚠ Lo que pasó/.test(pl.txt), 'Inés con las plaquetas: «plaquetas» ✗ con su porqué, el paso y la consecuencia');
+ok(/Elegiste: «Una sepsis con CID/.test(pl.txt), 'Inés con las plaquetas: el ✗ dice «Elegiste: …»');
+ok(ob.find(o => o.id === 'recambio')?.ok, 'Inés con las plaquetas (h4-1): «recambio» sigue ✓ (no mide lo mismo que «plaquetas»)');
 ok(ob.filter(o => o.id === 'ptt').every(o => o.ok), 'Inés con las plaquetas: «PTT» ✓');
 await p.evaluate(() => document.querySelector('#vso-preg .vso-objetivos').scrollIntoView({ block: 'start' })); await foto('16-objetivos');
 if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');

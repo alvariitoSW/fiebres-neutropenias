@@ -197,15 +197,17 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = n
     const buena = txt.findIndex(x => x === q.opciones.find(o => o.ok).t.replace(/<[^>]+>/g, '')), mala = txt.findIndex((x, i) => i !== buena);
     if (buena < 0) ok(false, `${donde}: no encuentro la opción buena`);
     if (foto1) { await p.evaluate(() => document.getElementById('mur-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
-    const otra = elegir ? txt.findIndex(x => x === elegir.replace(/<[^>]+>/g, '')) : -1;
-    if (elegir && otra < 0) ok(false, `${donde}: no encuentro la opción «${elegir}»`);
-    await pulsar(pref + `[data-op="${elegir ? otra : fallar ? mala : buena}"]`);
+    const otra = typeof elegir === 'string' ? txt.findIndex(x => x === elegir.replace(/<[^>]+>/g, '')) : -1;
+    if (typeof elegir === 'string' && otra < 0) ok(false, `${donde}: no encuentro la opción «${elegir}»`);
+    await pulsar(pref + `[data-op="${typeof elegir === 'string' ? otra : fallar ? mala : buena}"]`);
   } else if (q.tipo === 'destapa') {
     await pulsar(pref + '[data-accion="destapa"]');
     if (!fallar) await p.evaluate(() => document.querySelectorAll('#mur-pts input').forEach(c => { c.checked = true; }));
     await pulsar(pref + '[data-accion="puntos"]');
   } else {
-    if (!fallar) for (const [i, f] of q.frases.entries()) if (f.mal) await pulsar(pref + `[data-fr="${i}"]`);
+    // elegir = [índices]: solo marca esas frases (p. ej. encontrar los corticoides y no la famotidina)
+    const marcar = Array.isArray(elegir) ? elegir : fallar ? [] : q.frases.flatMap((f, i) => f.mal ? [i] : []);
+    for (const i of marcar) await pulsar(pref + `[data-fr="${i}"]`);
     await pulsar(pref + '[data-accion="corregir"]');
     const mal = q.frases.findIndex(f => f.mal);
     if (mal >= 0) { await pulsar(pref + `[data-ver="${mal}"]`); if (!await p.evaluate(() => /Corrección/.test(document.getElementById('mur-preg').textContent))) ok(false, `${donde}: la frase buena no se destapa`); }
@@ -236,7 +238,8 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = n
   // «Siguiente» se ve entero, por encima del dock
   const visible = await p.evaluate(() => { const s = document.querySelector('#mur-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('mur-dock').getBoundingClientRect(); return s.bottom <= d.top + 1 && s.top >= 0; });
   if (!REDUCIDO) await p.waitForTimeout(400);
-  if (!visible && !await p.evaluate(() => { const s = document.querySelector('#mur-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('mur-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
+  const conCaja = await p.evaluate(() => !!document.querySelector('#mur-preg .mur-consecuencia'));   // con consecuencia, la vista va a la caja ⚠ y «Siguiente» queda más abajo
+  if (!visible && !conCaja && !await p.evaluate(() => { const s = document.querySelector('#mur-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('mur-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
   if (foto1) { await foto(foto1 + '-despues'); }
   if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
@@ -302,6 +305,9 @@ const vigilar = async () => {
   ok(v.estado.proteccion === 'pantoprazol' && v.estado.estacion === 'boca' && v.estado.gota === 1, 'consecuencia: el modelo pasa a la boca con pantoprazol y aspiración (la flecha al pulmón)');
   const caja = await p.evaluate(() => { const c = document.querySelector('#mur-preg .mur-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
   ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  // la caja ⚠ queda a la vista (entre el modelo fijo y el dock) sin que el alumno tenga que buscarla
+  const vista = await p.evaluate(() => { const r = document.querySelector('#mur-preg .mur-consecuencia').getBoundingClientRect(); return r.top >= 0 && r.top < document.getElementById('mur-dock').getBoundingClientRect().top - 40; });
+  ok(vista, 'consecuencia: la caja ⚠ queda dentro de la pantalla al elegir la opción');
   await p.evaluate(() => document.querySelector('#mur-preg .mur-consecuencia').scrollIntoView({ block: 'center' })); await foto('09b-consecuencia');
 };
 await pulsar('#mur-preg [data-fin="otro"]'); await pulsar('#mur-preg [data-caso="0"]');
@@ -318,7 +324,23 @@ await p.evaluate(() => document.querySelector('#mur-preg .mur-objetivos').scroll
 if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');
 crudos = await sinIds(); if (crudos.length) ok(false, `revisión por objetivos: se ve ${crudos.join(' | ')}`);
 
-const nRespuestas = PREGUNTAS.length + 4 + CASOS.reduce((a, c) => a + c.pasos.length, 0);
+// 8c. E1 «encuentra el de los corticoides, no el de la famotidina»: «indicación» ✓ y «renal» ✗ con lo que faltó (objetivos por frase)
+await pulsar('#mur-preg [data-fin="otro"]'); await pulsar('#mur-preg [data-caso="0"]');
+const iErr = E1.pasos.findIndex(pa => pa.pregunta.tipo === 'error');
+for (const [j, paso] of E1.pasos.entries()) await contestar({ ...paso.pregunta }, false, null, false, `E1 solo corticoides paso ${j + 1}`, j === iErr ? [0] : null);
+ob = await objetivosFin();
+const ind2 = ob.find(o => o.id === 'indicacion'), ren2 = ob.find(o => o.id === 'renal');
+ok(ind2 && ind2.ok && /✓ Cumplido/.test(ind2.txt), '8c: «indicación» ✓ (encontró la frase de los corticoides)');
+ok(ren2 && !ren2.ok && /✗ Falta/.test(ren2.txt) && new RegExp(`paso ${iErr + 1}`).test(ren2.txt) && /Fallaste en: «Si hiciera falta famotidina/.test(ren2.txt), '8c: «renal» ✗ con el paso y la frase que no vio (la famotidina)');
+ok(ob.filter(o => o.id !== 'renal').every(o => o.ok), '8c: los demás objetivos ✓');
+// 8d. Elegir «Pasarla a pantoprazol» en el paso de la famotidina: «renal» sigue ✓ (la dosis no era lo que falló) y «desprescribir» dice qué elegiste
+await pulsar('#mur-preg [data-fin="otro"]'); await pulsar('#mur-preg [data-caso="0"]');
+const iFam = E1.pasos.findIndex(pa => pa.pregunta.id === 'e1-4');
+for (const [j, paso] of E1.pasos.entries()) await contestar({ ...paso.pregunta }, false, null, false, `E1 pantoprazol paso ${j + 1}`, j === iFam ? paso.pregunta.opciones[0].t : null);
+ob = await objetivosFin();
+ok(ob.find(o => o.id === 'renal')?.ok && /Elegiste: «Pasarla a pantoprazol/.test(ob.find(o => o.id === 'desprescribir')?.txt || ''), '8d: «renal» ✓ y «desprescribir» ✗ con «Elegiste: …»');
+
+const nRespuestas = PREGUNTAS.length + 4 + 2 * E1.pasos.length + CASOS.reduce((a, c) => a + c.pasos.length, 0);
 ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de ${nRespuestas} respuestas y pasos`);
 
 // 9. Lo guardado sigue al recargar; Conceptos

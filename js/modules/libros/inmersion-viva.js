@@ -428,7 +428,7 @@ function revisarMayeutica() {
         for (const p of c.pasos) if (p.calculadora && !rutaDe(p.calculadora.ir)) r.fallos.push(c.id + ': calculadora sin destino');
         // Objetivos y consecuencias: pasos que existen, fuentes que llevan a su sitio y la consecuencia solo en una opción mala
         for (const o of c.objetivos || []) {
-            if (!o.texto || !o.si || !o.no || !o.pasos?.length || o.pasos.some(i => !c.pasos[i])) r.fallos.push(`${c.id}: objetivo ${o.id} incompleto`);
+            if (!o.texto || !o.si || !o.no || !o.pasos?.length || o.pasos.some(i => !c.pasos[typeof i === "number" ? i : i.paso])) r.fallos.push(`${c.id}: objetivo ${o.id} incompleto`);
             for (const id of idsDe(o.fuente)) if (!rutaDe(id)) r.fallos.push(`${c.id}: objetivo ${o.id}, la fuente ${id} no lleva a la ficha`);
         }
         for (const p of c.pasos) for (const op of p.pregunta.opciones || []) if (op.consecuencia) {

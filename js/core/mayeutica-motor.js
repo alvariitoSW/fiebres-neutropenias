@@ -17,12 +17,18 @@
 //       · C.objetivos = [{ id, texto, pasos: [i…], si, no, fuente }]: al cerrar el caso, arriba de «Lo que te
 //         llevas», la «Revisión por objetivos»: ✓ cumplido (si) si TODOS sus pasos (índices desde 0) salieron bien a
 //         la primera, o ✗ falta (no), con el paso que falló y, si eligió una opción con consecuencia, cuál. Sin nota
-//         ni recuento. Solo en memoria durante el caso (nada nuevo en localStorage).
+//         ni recuento. Solo en memoria durante el caso (nada nuevo en localStorage). En `pasos`, un número es el paso
+//         entero; { paso: 4, frases: [0] } es solo esa frase de un «encuentra el error» (cae únicamente si falló ESA
+//         frase, no la otra), { paso: 3, puntos: [1] } solo ese punto de un «destapa», { paso: 2, opciones: [0] } solo si
+//         eligió esa opción del test (su lugar en los datos) y { paso: 0, consecuencia: true } solo si eligió la
+//         opción con consecuencia. El ✗ dice qué hizo: «Elegiste:
+//         «…»» (test), «Te faltó: «…»» (destapa) o «Fallaste en: «…»» (error).
 //       · consecuencia: { estado, texto, fuente, mirar, corto } en una opción mala de un test de un paso: al elegirla, el
 //         modelo pasa a ese estado (enganche alConsecuencia o, si no lo hay, alEmpezar con ese estado) y sale la caja
 //         «⚠ Lo que acaba de pasar» con su «Ver en el texto»; luego, la explicación de siempre. El paso siguiente
 //         vuelve a poner el modelo en su estado. `corto` (opcional): la consecuencia en media línea, para recordarla
-//         en la revisión por objetivos.
+//         en la revisión por objetivos. El paso que sigue puede llevar `tras: 'El adjunto lo cambia a…'`: esa línea sale
+//         bajo la ficha solo si en el paso anterior eligió una opción con consecuencia (la historia sigue con el plan bueno).
 //   - crearMayeuticaModelo(): el modo Mayéutica entero de un modelo vivo (inicio, recorrido de guía y examen, repaso
 //     y casos), con su dock de progreso.
 // El ácido-base vivo (js/modules/nefrologia/acidobase-vivo.js) tiene su motor propio, anterior a este: guarda en
@@ -220,7 +226,8 @@ export function pintarPregunta(cont, q, o) {
         if (!conConsecuencia) o.alCerrar?.(q);
         r.innerHTML = `<div class="${c('respuesta entra')}">${htmlRes}${pie}${botonSig()}</div>`;
         enlazar(r);
-        asomar(r.querySelector('[data-accion="sig"]'));
+        // Con consecuencia, lo que hay que ver es la caja «⚠ Lo que acaba de pasar», no el botón de abajo.
+        asomar((conConsecuencia && r.querySelector('.' + c('consecuencia'))) || r.querySelector('[data-accion="sig"]'));
     }
     function finComprobar(html) {
         T.alComprobar?.(q, cont);
@@ -281,6 +288,7 @@ export function pintarPregunta(cont, q, o) {
             e.target.closest('button').disabled = true;
             const malas = q.frases.map((f, i) => f.mal ? i + 1 : 0).filter(Boolean), todas = bien === q.frases.length;
             if (!todas) res.ok = false;
+            res.frases = q.frases.map((f, i) => i).filter(i => cont.querySelector(`[data-fr="${i}"]`).classList.contains(c('fallo')));
             cerrar(`<span class="${c(todas ? 'ok' : 'mal')}">${todas ? '✓' : '✗'} ${bien} de ${q.frases.length} bien juzgadas. ${malas.length === 0 ? 'No había ningún error.' : malas.length === 1 ? `Había un error: la ${malas[0]}.` : `Había ${malas.length} errores: la ${malas.join(' y la ')}.`}</span>${q.explicacion ? `<p>${q.explicacion}</p>` : ''}`);
             return;
         }
@@ -299,6 +307,7 @@ export function pintarPregunta(cont, q, o) {
             op.style.borderColor = x.ok ? 'var(--accent-green)' : 'var(--accent-red)'; op.style.opacity = 1;
             op.insertAdjacentHTML('afterbegin', x.ok ? '✓ ' : '✗ ');
             if (!x.ok) res.ok = false;
+            res.elegida = x.t; res.opcion = x.i;   // x.i: su lugar en los datos (el orden se baraja)
             // Error con consecuencia: el modelo pasa a ese estado y lo cuenta una caja antes de la explicación.
             const cs = !x.ok && x.consecuencia;
             let caja = '';
@@ -371,11 +380,11 @@ export class Casos {
         this.cfg.barra(C.pasos.map((_, j) => j < this.p ? 'on' : j === this.p ? 'on aqui' : ''), C.corto, `paso ${this.p + 1} de ${C.pasos.length}`);
         // Lo nuevo de este paso, en rojo y con su marca «nuevo» (no solo por el color).
         const cab = `<span class="${p}-dia">${paso.momento}</span>
-            <dl class="${p}-paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk === 'SpO2' ? 'SpO₂' : kk}</dt><dd${nuevos.includes(kk) ? ` class="${p}-cambia"` : ''}>${v}${nuevos.includes(kk) ? ` <small class="${p}-nuevo">nuevo</small>` : ''}</dd>`).join('')}</dl>${this.cfg.cabeceraPaso?.(paso, C) || ''}`;
+            <dl class="${p}-paciente">${Object.entries(this.ficha).map(([kk, v]) => `<dt>${kk === 'SpO2' ? 'SpO₂' : kk}</dt><dd${nuevos.includes(kk) ? ` class="${p}-cambia"` : ''}>${v}${nuevos.includes(kk) ? ` <small class="${p}-nuevo">nuevo</small>` : ''}</dd>`).join('')}</dl>${this.cfg.cabeceraPaso?.(paso, C) || ''}${paso.tras && this.resultados[this.p - 1]?.consecuencia ? `<p class="tfg-estado tfg-estado-neutro ${p}-tras">${paso.tras}</p>` : ''}`;
         const q = { ...paso.pregunta, ...this.cfg.preguntaDePaso?.(paso, C), ultimo: this.p === C.pasos.length - 1, calculadora: paso.calculadora };
         pintarPregunta(this.zona, q, { ...this.cfg.pregunta(q), cabecera: cab, alFinal: r => {
             this.cfg.prog.anotarCaso(q, r);
-            this.resultados[this.p] = { ok: r.ok, consecuencia: r.consecuencia || null };
+            this.resultados[this.p] = { ok: r.ok, consecuencia: r.consecuencia || null, elegida: r.elegida, opcion: r.opcion, faltan: r.faltan, frases: r.frases };
             if (this.p < C.pasos.length - 1) { this.p++; this.paso(); this.cfg.subir(); }
             else this.fin();
         } });
@@ -397,22 +406,42 @@ export class Casos {
             this.cfg.alClicFin?.(e, C);
         };
     }
+    // ¿Salió bien este paso del objetivo? Un número, el paso entero; { paso, frases } o { paso, puntos }, solo eso.
+    cumple(e) {
+        const r = this.resultados[typeof e === 'number' ? e : e.paso];
+        if (!r) return false;
+        if (e.consecuencia) return !r.consecuencia;
+        if (e.opciones) return !e.opciones.includes(r.opcion);
+        if (typeof e === 'number' || (!e.frases && !e.puntos)) return !!r.ok;
+        if (e.frases) return !e.frases.some(i => r.frases?.includes(i));
+        return !e.puntos.some(i => r.faltan?.includes(i));
+    }
+    // Lo que hizo en un paso fallado, en corto: la opción elegida, el punto que le faltó o la frase que juzgó mal.
+    queHizo(paso, r) {
+        const t = s => { const x = String(s).replace(/<[^>]+>/g, '').trim(); return x.length > 90 ? x.slice(0, 88).trimEnd() + '…' : x; };
+        const q = paso.pregunta;
+        if (!r) return '';
+        if (r.elegida) return `Elegiste: «${t(r.elegida)}».`;
+        if (r.faltan?.length && q.puntos) return `Te faltó: ${r.faltan.map(i => `«${t(q.puntos[i])}»`).join(', ')}.`;
+        if (r.frases?.length && q.frases) return `Fallaste en: ${r.frases.map(i => `«${t(q.frases[i].t)}»`).join(', ')}.`;
+        return '';
+    }
     // La revisión por objetivos (vacía si el caso no los tiene): ✓ cumplido o ✗ falta, con su porqué, el paso que
     // falló y, si eligió una opción con consecuencia, cuál. Icono y texto, no solo color; sin nota ni recuento.
     objetivosHTML(C) {
         if (!C.objetivos?.length) return '';
         const { p } = this.cfg;
         const li = C.objetivos.map(o => {
-            const malos = o.pasos.filter(i => !this.resultados[i]?.ok);
+            const malos = o.pasos.filter(e => !this.cumple(e)).map(e => typeof e === 'number' ? e : e.paso);
             const ok = !malos.length;
-            const pasos = malos.map(i => `paso ${i + 1} (${C.pasos[i].momento})`).join(' y ');
+            const pasos = malos.map(i => `paso ${i + 1} (${C.pasos[i].momento}). ${this.queHizo(C.pasos[i], this.resultados[i])}`.trim()).join(' · ');
             const cons = malos.map(i => this.resultados[i]?.consecuencia).filter(Boolean);
             // «Ver en el texto», plegado: con 3-4 objetivos, sus citas abiertas serían un muro
             const citas = o.fuente ? this.cfg.pregunta({ fuente: o.fuente }).verEnTexto?.({ fuente: o.fuente }) || '' : '';
             const ver = citas ? `<details class="${p}-objetivo-ver"><summary>Ver en el texto</summary>${citas}</details>` : '';
             return `<li class="tfg-estado ${ok ? 'tfg-estado-ok' : 'tfg-estado-danger'} ${p}-objetivo" data-objetivo="${o.id}" data-cumplido="${ok}">
                 <b class="${p}-${ok ? 'ok' : 'mal'}">${ok ? '✓ Cumplido' : '✗ Falta'}: ${o.texto}</b>
-                <span>${ok ? o.si : `${o.no} <small>Falló en el ${pasos}.</small>`}</span>
+                <span>${ok ? o.si : `${o.no} <small>Falló en el ${pasos}</small>`}</span>
                 ${cons.map(x => `<span>⚠ Lo que pasó: ${x.corto || x.texto}</span>`).join('')}${ver}</li>`;
         }).join('');
         return `<span class="${p}-eyebrow">Revisión por objetivos</span><ul class="${p}-objetivos">${li}</ul>`;

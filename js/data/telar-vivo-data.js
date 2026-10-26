@@ -555,7 +555,7 @@ export const CASOS = [
                                 corto: 'la HNF siguió activando las plaquetas: trombosis y trombocitopenia.',
                                 fuente: 'mar-hnf · mar-esc-especiales · cuándo aparecen los agregados: ilustrativo' } }],
                     explicacion: 'El fondaparinux <span class="hl">puede usarse para la profilaxis con TIH sospechada o previa</span>. Si se confirma la TIH o aparece una trombosis, ya no es profilaxis: el tratamiento aprobado de la TIH es el <span class="hl-rojo">argatrobán</span> (cap. 13 del libro, fuera de esta ficha).' } },
-            { momento: 'Día 6 · el giro', datos: { Plan: 'fondaparinux en profilaxis', ClCr: '25 mL/min' }, nuevo: ['Plan'], estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
+            { momento: 'Día 6 · el giro', datos: { Plan: 'fondaparinux en profilaxis', ClCr: '25 mL/min' }, nuevo: ['Plan'], tras: 'El adjunto lo cambia a fondaparinux: puede usarse para la profilaxis con TIH sospechada.', estado: { farmaco: 'fondaparinux', imc: 42, clcr: 25 }, mirar: 'rinon',
                 pregunta: { id: 'tr-5', tipo: 'test', fuente: 'mar-fondaparinux · mar-fondaparinux-errata · mar-tabla-5-2 (p. 4, 8)', ocultar: ['dosis'],
                     enunciado: 'El fondaparinux lo elimina el riñón, y su ClCr es 25. ¿Qué dice el capítulo sobre su dosis?',
                     opciones: [

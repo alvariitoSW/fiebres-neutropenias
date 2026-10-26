@@ -228,7 +228,8 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = n
   const c = await sinIds(); if (c.length) ok(false, `${donde}: se ve ${c.join(' | ')}`);
   if (!await p.evaluate(() => document.querySelectorAll('#tel-preg .cita-ir[data-resaltar]').length > 0)) ok(false, `${donde}: sin «Ver en la ficha» al párrafo`);
   if (!REDUCIDO) await p.waitForTimeout(400);
-  if (!await p.evaluate(() => { const s = document.querySelector('#tel-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('tel-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
+  const conCaja = await p.evaluate(() => !!document.querySelector('#tel-preg .tel-consecuencia'));   // con consecuencia, la vista va a la caja ⚠ y «Siguiente» queda más abajo
+  if (!conCaja && !await p.evaluate(() => { const s = document.querySelector('#tel-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('tel-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
   if (foto1) await foto(foto1 + '-despues');
   if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
@@ -287,6 +288,7 @@ const vigilar = async () => {
   ok(v.estado.vista === 'tih' && v.estado.tih === true && v.estado.farmaco === 'hnf' && v.D.plaquetasCaen, `consecuencia: la lámina de la TIH con la HNF y la trombosis dibujada (tih ${v.estado.tih}, plaquetas caen ${v.D.plaquetasCaen})`);
   const caja = await p.evaluate(() => { const c = document.querySelector('#tel-preg .tel-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
   ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  ok(await p.evaluate(() => { const r = document.querySelector('#tel-preg .tel-consecuencia').getBoundingClientRect(); return r.top >= 0 && r.top < document.getElementById('tel-dock').getBoundingClientRect().top - 40; }), 'consecuencia: la caja ⚠ queda dentro de la pantalla al elegir la opción');
   await p.evaluate(() => document.querySelector('#tel-preg .tel-consecuencia').scrollIntoView({ block: 'center' })); await foto('10-consecuencia');
 };
 await pulsar('#tel-preg [data-fin="otro"]'); await pulsar('#tel-preg [data-caso="0"]');
@@ -294,15 +296,19 @@ for (const [j, paso] of ROSA.pasos.entries()) {
   if (j === iCons) {
     const antes = await T();
     ok(antes.estado.vista === 'tih' && antes.estado.tih === false, `antes de elegir, el paso ${j + 1} deja la lámina de la TIH sin la trombosis (tih ${antes.estado.tih})`);
+    // Rosa ya tiene las plaquetas bajas (95.000): con tih:false y heparina, el tablero no pone «—»
+    ok(await p.evaluate(() => /bajan · sin agregados aún/.test(document.getElementById('tel-tablero').textContent)), 'paso de la TIH sin trombosis: «Plaquetas: bajan · sin agregados aún» (no contradice los 95.000 de Rosa)');
     antesDeSeguir = vigilar;
   }
   await contestar({ ...paso.pregunta }, false, null, false, `Rosa consecuencia paso ${j + 1}`, j === iCons ? opCons.t : null);
+  if (j === iCons) ok(await p.evaluate(() => /El adjunto lo cambia a fondaparinux/.test(document.getElementById('tel-preg').textContent)), 'tras la consecuencia, el paso siguiente dice «El adjunto lo cambia a fondaparinux…»');
   if (j === iCons) { const v = await T(); ok(v.estado.farmaco === ROSA.pasos[iCons + 1].estado.farmaco && v.estado.tih === false, `al pasar al paso siguiente, el telar vuelve a su estado (${v.estado.farmaco}, tih ${v.estado.tih})`); }
 }
 ob = await objetivosFin();
 const tihOb = ob.find(o => o.id === 'tih');
 ok(tihOb && !tihOb.ok && /✗ Falta/.test(tihOb.txt) && new RegExp(`paso ${iCons + 1}`).test(tihOb.txt) && /⚠ Lo que pasó/.test(tihOb.txt), 'Rosa con la HNF en la TIH: «TIH» ✗ con su porqué, el paso y la consecuencia');
 ok(ob.filter(o => o.id !== 'tih').every(o => o.ok), 'Rosa con la HNF en la TIH: los demás objetivos ✓');
+ok(/Elegiste: «Seguir con HNF/.test(tihOb.txt), 'Rosa con la HNF en la TIH: el ✗ dice «Elegiste: …»');
 await p.evaluate(() => document.querySelector('#tel-preg .tel-objetivos').scrollIntoView({ block: 'start' })); await foto('11-objetivos');
 if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');
 crudos = await sinIds(); if (crudos.length) ok(false, `revisión por objetivos: se ve ${crudos.join(' | ')}`);

@@ -79,7 +79,7 @@ export function itemsBPS(d) {
 export function rassDe(e, bps) {
       if (e.fijo.rass != null) return e.fijo.rass;
       if (e.par && e.subido) return 0;
-      if (e.delirio) { if (e.halo && !e.qtcLargo) return -1; if (e.sedante === 'dexmedetomidina') return -2; return 3; }
+      if (e.delirio) { if (e.halo && !e.qtcLargo) return -1; if (e.sedante === 'dexmedetomidina') return -2; if (e.sedante === 'midazolam' && e.horas > 48) return -3; return 3; }
       if (e.sedante === 'diazepam') return -3;
       if (e.sedante === 'dexmedetomidina') return -2;
       if (e.sedante) { if (e.prof === 'profunda') return -4; if (e.sedante === 'midazolam' && e.horas > 48) return -3; return -2; }
@@ -526,14 +526,14 @@ export const CASOS = [
           no: 'La FC y la PA se correlacionan mal con el dolor: se mide con la BPS (≥6, inaceptable). El diazepam no alivia el dolor y el propofol no tiene efecto analgésico: primero, el opioide.',
           fuente: 'mar-analgesia#mar-bps-intro · #mar-constantes-dolor · #mar-fig-6-1 · mar-sedacion#mar-propofol' },
         { id: 'rinon', texto: 'Opioide elegido para su riñón (ClCr 25 mL/min)', pasos: [2],
-          si: 'Fentanilo, o morfina con el mantenimiento al 50 %: los metabolitos de la morfina se acumulan en la IR.',
+          si: 'Fentanilo, o morfina con el mantenimiento al 50 %: los metabolitos de la morfina se acumulan en la IR. (El fentanilo también se acumula en la IR y algunos aconsejan evitarlo en la enfermedad renal terminal, «¿evitar?» en la Tabla 6.2.)',
           no: 'La morfina a dosis plenas acumula sus metabolitos en la IR (la M3G da mioclonías y convulsiones): mantenimiento al 50 %. La hidromorfona no se ajusta según la Tabla 6.2.',
-          fuente: 'mar-analgesia#mar-tabla-6-2 · #mar-morfina' },
+          fuente: 'mar-analgesia#mar-tabla-6-2 · #mar-morfina · #mar-fentanilo' },
         { id: 'rass', texto: 'Sedación ligera: RASS objetivo −1 a −2', pasos: [3, 4],
           si: 'Titulaste la perfusión a RASS −1/−2 y no lo hundiste más para calmar el delirio: cuanto más hondo, más tarda en despertar.',
           no: 'El objetivo de la perfusión es RASS −1 a −2 (el óptimo, 0). Más hondo alarga el despertar: a las 72 h de propofol, 34 min en ligera frente a 59 h en profunda.',
           fuente: 'mar-sedacion#mar-escalas-sedacion · #mar-tabla-6-7' },
-        { id: 'delirio', texto: 'Delirio cribado con el CAM-ICU y tratado sin benzodiacepinas', pasos: [4, 5],
+        { id: 'delirio', texto: 'Delirio (CAM-ICU positivo) tratado sin benzodiacepinas', pasos: [4, 5],
           si: 'Con el CAM-ICU positivo, dexmedetomidina (la de elección en el delirio de la UCI); y al no tolerarla (FC 44, PA 84/48), haloperidol con su QTc de 470.',
           no: 'El delirio se detecta con una herramienta validada (la más usada, el CAM-ICU) y se trata con dexmedetomidina; si no se tolera, haloperidol, salvo QTc >500. Las benzodiacepinas son las principales promotoras del delirio en la UCI.',
           fuente: 'mn-delirio#mn-del-cam · #mn-del-sedacion · mar-sedacion#mar-dexmedetomidina · #mar-haloperidol-intro · #mar-haloperidol-qtc' }],
@@ -584,13 +584,13 @@ export const CASOS = [
               { t: 'Subir el propofol hasta RASS −4', ok: false, porque: 'Más hondo: 59 h para despertar a las 72 h (Tabla 6.7). Y a dosis altas más de 48 h, riesgo de SIP.' },
               { t: 'Midazolam en perfusión: seda rápido', ok: false, porque: 'Las BZD se asocian a más delirio (quizá por el GABA), y las guías piden evitarlas en el ventilado.',
                 // Error con consecuencia: el modelo pasa al midazolam más de 48 h (la esponja le hunde: RASS −3 de la escena)
-                consecuencia: { estado: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', sedante: 'midazolam', prof: 'ligera', horas: 72 }, mirar: 'buzo',
+                consecuencia: { estado: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', sedante: 'midazolam', prof: 'ligera', horas: 72, delirio: true }, mirar: 'buzo',
                   texto: 'Pasan los días con el midazolam en perfusión. Es muy liposoluble: <span class="hl-rojo">se acumula en el SNC</span> y le hunde más de lo pedido (por eso, ≤48 h). La acumulación da un despertar tardío que retrasa el destete. Y las benzodiacepinas son las principales promotoras del delirio en la UCI: el que querías tratar.',
                   corto: 'el midazolam se acumuló: más hondo de lo pedido, despertar tardío y más delirio.',
                   fuente: 'mar-sedacion#mar-midazolam · #mar-bzd-proscontras · mn-delirio#mn-del-sedacion · RASS de la escena: ilustrativo' } },
               { t: 'Pasar a dexmedetomidina', ok: true }],
             explicacion: 'La dexmedetomidina es <span class="hl">la de elección para el delirio de la UCI</span> y da menos delirio que las BZD o el propofol.' } },
-        { momento: 'Día 4 · 14:00 · el giro', datos: { Sedación: 'dexmedetomidina', FC: '44 lpm', PA: '84/48 mmHg', RASS: '+2 (sigue con delirio)', QTc: '470 ms' }, nuevo: ['Sedación', 'FC', 'PA', 'RASS', 'QTc'],
+        { momento: 'Día 4 · 14:00 · el giro', tras: 'El adjunto lo cambia a dexmedetomidina, la de elección en el delirio de la UCI.', datos: { Sedación: 'dexmedetomidina', FC: '44 lpm', PA: '84/48 mmHg', RASS: '+2 (sigue con delirio)', QTc: '470 ms' }, nuevo: ['Sedación', 'FC', 'PA', 'RASS', 'QTc'],
           estado: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', sedante: 'dexmedetomidina', delirio: true, bradi: true, fijo: { fc: 44, pa: '84/48', rass: 2 } }, mirar: 'monitor', calculadora: { nombre: 'Haloperidol paso a paso', ir: 'mar-halo-wizard' },
           pregunta: { id: 'e4-6', tipo: 'test', fuente: 'mar-sedacion#mar-haloperidol-intro · #mar-tabla-6-8 · #mar-haloperidol-qtc · #mar-dexmedetomidina',
             despues: { estimulo: 'reposo', renal: 'ir', opioide: 'fentanilo', delirio: true, bradi: true, halo: true },

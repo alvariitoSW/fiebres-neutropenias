@@ -469,7 +469,7 @@ export const CASOS = [
                         { t: 'Mantenerlo hasta la extubación: sigue con VM', ok: false, porque: 'Con enteral completa, la VM es un solo moderado (2-4 %): no hay indicación. Seis ensayos: retirarlo no aumenta el sangrado. Mantenerlo le deja <i>C. difficile</i> ×3 y neumonía.' ,
                             // Error con consecuencia: el IBP sigue y el jugo gástrico sin ácido se coloniza y se aspira
                             consecuencia: { estado: { ...EULC, estacion: 'boca', riego: 'oculta', corticoides: true, clcr50: true, proteccion: 'pantoprazol', enteral: true, dia: 3, gota: 1 }, mirar: 'traquea',
-                                texto: 'Sigue con pantoprazol sin indicación. Sin ácido, el jugo gástrico se coloniza y se aspira (la gota baja por la tráquea): más neumonía, también asociada al ventilador, y con el IBP el triple de riesgo de <i>C. difficile</i>.',
+                                texto: 'Sigue con pantoprazol sin indicación. Sin ácido, se cree que el jugo gástrico se coloniza y se aspira (la gota baja por la tráquea): más neumonía, también asociada al ventilador, y con el IBP el triple de riesgo de <i>C. difficile</i>.',
                                 corto: 'siguió con el IBP: más neumonía y <i>C. difficile</i> ×3',
                                 fuente: 'mar-ulcera-estres#mar-acido-riesgos · #mar-desprescribir (A p. 70-71)' } },
                         { t: 'Pasarlo a sucralfato, que conserva la acidez', ok: false, porque: 'Con la nutrición no se puede (estómago vacío, bezoares), y ya no hay indicación: le sumarías un fármaco que fija otros en el estómago.' },
@@ -498,15 +498,15 @@ export const CASOS = [
         ],
         // La revisión por objetivos al cerrar el caso (core/mayeutica-motor.js): pasos desde 0
         objetivos: [
-            { id: 'indicacion', texto: 'Profilaxis solo con indicación de la Tabla 4.2, no por los corticoides', pasos: [0, 4],
+            { id: 'indicacion', texto: 'Profilaxis solo con indicación de la Tabla 4.2, no por los corticoides', pasos: [0, { paso: 4, frases: [0] }],
                 si: 'Viste que la VM >24 h sin enteral es riesgo máximo y que los corticoides (riesgo bajo) no cambian la decisión.',
                 no: 'La indicación sale de la Tabla 4.2: VM >24 h sin enteral es riesgo máximo. Los corticoides son un mito: 25 estudios, sin efecto sobre el sangrado.',
                 fuente: 'mar-ulcera-estres#mar-tabla-4-2 · #mar-mito-corticoides' },
             { id: 'desprescribir', texto: 'Retirar el IBP al empezar la nutrición enteral completa', pasos: [2, 3],
-                si: 'Con enteral completa quedó un solo moderado: retiraste el pantoprazol y no lo cambiaste por otro supresor.',
-                no: 'La nutrición enteral protege (trófica, sube el pH) y seis ensayos no ven más sangrado al retirar el pantoprazol. Mantenerlo o cambiarlo por otro supresor suma neumonía y <i>C. difficile</i>.',
+                si: 'Con enteral completa quedó un solo moderado: retiraste el pantoprazol y, con la famotidina de guardia, no la cambiaste por un IBP.',
+                no: 'La nutrición enteral protege (trófica, sube el pH) y seis ensayos no ven más sangrado al retirar el pantoprazol. Mantenerlo, o cambiarlo por un IBP, suma neumonía y <i>C. difficile</i>: la asociación es más fuerte con IBP.',
                 fuente: 'mar-ulcera-estres#mar-desprescribir · #mar-enteral-protege · #mar-acido-riesgos' },
-            { id: 'renal', texto: 'Ajustar al riñón lo que se mantenga: famotidina a mitad de dosis con ClCr <50', pasos: [3, 4],
+            { id: 'renal', texto: 'Ajustar al riñón lo que se mantenga: famotidina a mitad de dosis con ClCr <50', pasos: [{ paso: 3, opciones: [2] }, { paso: 4, frases: [2] }],
                 si: 'Con ClCr 40 no dejaste la famotidina a 20 mg cada 12 h: retirada o, si hiciera falta, a mitad de dosis.',
                 no: 'Con ClCr <50, la famotidina va a la mitad de la dosis diaria (puede ser neurotóxica); los IBP no necesitan ajuste.',
                 fuente: 'mar-ulcera-estres#mar-tabla-4-3 · #mar-anti-h2' }],

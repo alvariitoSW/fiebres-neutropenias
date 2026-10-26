@@ -236,7 +236,8 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = n
   if (!await p.evaluate(() => document.querySelectorAll('#inm-preg .cita-ir[data-resaltar]').length > 0)) ok(false, `${donde}: sin «Ver en la ficha» al párrafo`);
   // «Siguiente» se ve entero, por encima del dock
   if (!REDUCIDO) await p.waitForTimeout(400);
-  if (!await p.evaluate(() => { const s = document.querySelector('#inm-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('inm-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
+  const conCaja = await p.evaluate(() => !!document.querySelector('#inm-preg .inm-consecuencia'));   // con consecuencia, la vista va a la caja ⚠ y «Siguiente» queda más abajo
+  if (!conCaja && !await p.evaluate(() => { const s = document.querySelector('#inm-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('inm-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
   if (foto1) await foto(foto1 + '-despues');
   if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
@@ -306,6 +307,8 @@ const vigilar = async () => {
   ok(v.estado.sedante === 'midazolam' && v.estado.horas === 72 && v.D.rass === -3 && v.D.av.midaz, `consecuencia: el modelo pasa al midazolam >48 h (RASS ${v.D.rass}, sedante ${v.estado.sedante})`);
   const caja = await p.evaluate(() => { const c = document.querySelector('#inm-preg .inm-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
   ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  ok(v.estado.delirio === true, 'consecuencia: el delirio sigue en el estado del modelo (el midazolam no lo quita)');
+  ok(await p.evaluate(() => { const r = document.querySelector('#inm-preg .inm-consecuencia').getBoundingClientRect(); return r.top >= 0 && r.top < document.getElementById('inm-dock').getBoundingClientRect().top - 40; }), 'consecuencia: la caja ⚠ queda dentro de la pantalla al elegir la opción');
   await p.evaluate(() => document.querySelector('#inm-preg .inm-consecuencia').scrollIntoView({ block: 'center' })); await foto('09b-consecuencia');
 };
 // contestar() llama a antesDeSeguir justo antes de «Siguiente» del paso con la consecuencia
@@ -314,6 +317,7 @@ for (const [j, paso] of E4.pasos.entries()) {
   if (j === iCons) antesDeSeguir = vigilar;
   await contestar({ ...paso.pregunta, estado: paso.estado }, false, null, false, `E4 consecuencia paso ${j + 1}`, j === iCons ? opCons.t : null);
   if (j === iCons) {
+    ok(await p.evaluate(() => /El adjunto lo cambia a dexmedetomidina/.test(document.getElementById('inm-preg').textContent)), 'tras la consecuencia, el paso siguiente dice «El adjunto lo cambia a dexmedetomidina…»');
     const v = await T();
     ok(v.estado.sedante === E4.pasos[iCons + 1].estado.sedante && v.estado.bradi === true, `al pasar al paso siguiente, el modelo vuelve a su estado (${v.estado.sedante})`);
   }
@@ -322,6 +326,8 @@ ob = await objetivosFin();
 const del = ob.find(o => o.id === 'delirio'), rass = ob.find(o => o.id === 'rass');
 ok(del && !del.ok && /✗ Falta/.test(del.txt) && new RegExp(`paso ${iCons + 1}`).test(del.txt) && /⚠ Lo que pasó/.test(del.txt), 'E4 con midazolam: «delirio» ✗ con su porqué, el paso y la consecuencia');
 ok(rass && !rass.ok, 'E4 con midazolam: «RASS objetivo» ✗ (comparte el paso)');
+ok(/Elegiste: «Midazolam en perfusión/.test(del.txt), 'E4 con midazolam: el ✗ dice «Elegiste: …»');
+ok(!/cribado/.test(del.txt) && /CAM-ICU positivo/.test(del.txt), 'E4: el objetivo del delirio parte del CAM-ICU positivo (sin «cribado»)');
 ok(ob.filter(o => !['delirio', 'rass'].includes(o.id)).every(o => o.ok), 'E4 con midazolam: los demás objetivos ✓');
 await p.evaluate(() => document.querySelector('#inm-preg .inm-objetivos').scrollIntoView({ block: 'start' })); await foto('09c-objetivos');
 if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');

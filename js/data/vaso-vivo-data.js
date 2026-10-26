@@ -466,24 +466,25 @@ const VOLVER = { h3: 'hit-argatroban', h4: 'ptt-recambio', h5: 'pfc-inr' };
 // Revisión por objetivos al cerrar el caso (core/mayeutica-motor.js): pasos desde 0. Solo Inés (H4); sus fuentes son las de sus preguntas.
 const OBJETIVOS = {
     h4: [
-        { id: 'plaquetas', texto: 'Plaquetas bajas con esquistocitos: sin transfundir plaquetas', pasos: [0, 3],
+        { id: 'plaquetas', texto: 'Plaquetas bajas con esquistocitos: sin transfundir plaquetas', pasos: [{ paso: 0, consecuencia: true }, { paso: 3, frases: [0] }],
           si: 'Las indicaciones de transfusión de plaquetas no se aplican a la trombocitopenia por consumo de las microangiopatías: transfundirlas puede agravar la microtrombosis.',
-          no: 'Con esquistocitos y plaquetas bajas es una microangiopatía trombótica, y ahí las indicaciones de transfusión de plaquetas no se aplican: pueden agravar la microtrombosis.',
+          no: 'Con esquistocitos y plaquetas bajas es una microangiopatía trombótica (aquí, el frotis lo confirma después), y ahí las indicaciones de transfusión de plaquetas no se aplican: pueden agravar la microtrombosis.',
           fuente: 'mh-plaq-indicaciones · mh-mat-hemolisis · mh-mat' },
         { id: 'ptt', texto: 'PTT y no CID: la coagulación lo separa', pasos: [1, 2],
           si: 'INR, aPTT, fibrinógeno y dímero-D normales descartan la CID; con creatinina <2 mg/dl, fiebre y confusión, es una PTT.',
           no: 'La CID consume factores (INR y aPTT alargados, fibrinógeno bajo, dímero-D alto); con todo normal no es CID. Una creatinina <2 mg/dl es lo habitual en la PTT, y sin tratar mata en 24-48 h.',
           fuente: 'mh-tabla-13-3 · mh-cid · mh-ptt' },
-        { id: 'recambio', texto: 'Recambio plasmático bien pautado', pasos: [3, 4, 5],
-          si: 'Recambio en las primeras 48 h, de ~1,5 veces el volumen plasmático por sesión, a diario hasta plaquetas normales 2 días seguidos.',
-          no: 'El recambio se hace en las primeras 48 h, ~1,5 veces el volumen plasmático por sesión, a diario hasta que las plaquetas sean normales 2 días seguidos.',
-          fuente: 'mh-ptt · mh-plaq-preparaciones' }],
+        { id: 'recambio', texto: 'Recambio plasmático bien pautado', pasos: [{ paso: 3, frases: [1, 3] }, 4, 5],
+          si: 'Recambio de inicio precoz (<48 h desde los síntomas), de ~1,5 veces el volumen plasmático por sesión, a diario hasta plaquetas normales 2 días seguidos.',
+          no: 'El recambio es de inicio precoz (<48 h desde los síntomas), ~1,5 veces el volumen plasmático por sesión, a diario hasta que las plaquetas sean normales 2 días seguidos.',
+          fuente: 'mh-ptt' }],
 };
 // Error con consecuencia: transfundir plaquetas ya, con una microangiopatía por delante (h4-1). Cuántos nudos: ilustrativo.
 const CONSECUENCIAS = {
-    'h4-1': { 'Una sepsis con CID: hemocultivos y transfundir plaquetas ya': {
+    // Atada al índice de la opción (la 3.ª de h4-1), no a su texto: si alguien reescribe la opción, no se pierde.
+    'h4-1': { 2: {
         estado: { causa: 'mat', plaq: 16000, rep: 'lena' },
-        texto: 'Le transfundes plaquetas antes de confirmar nada. Con esquistocitos y plaquetas bajas es una microangiopatía trombótica, y ahí <span class="hl-rojo">transfundir plaquetas puede agravar la microtrombosis</span>: mira cómo se llenan más los capilares del pulmón, el riñón y el cerebro.',
+        texto: 'Le transfundes plaquetas antes de confirmar nada. Si el frotis confirma esquistocitos, con plaquetas bajas será una microangiopatía trombótica, y ahí <span class="hl-rojo">transfundir plaquetas puede agravar la microtrombosis</span>: mira cómo se llenan más los capilares del pulmón, el riñón y el cerebro.',
         corto: 'las plaquetas agravaron la microtrombosis.',
         fuente: 'mh-plaq-indicaciones · mh-cid · trombosis más: ilustrativo' } },
 };
@@ -493,7 +494,7 @@ export const CASOS = FICHAS.flatMap(f => H[f].casos).map(C => ({
         const v = PASOS_VASO[paso.pregunta.id] || { e: {} };
         const despues = 'despues' in v ? v.despues : estadoVasoDe(paso.pregunta);
         const cons = CONSECUENCIAS[paso.pregunta.id];
-        const preg = cons ? { ...paso.pregunta, opciones: paso.pregunta.opciones.map(o => cons[o.t] ? { ...o, consecuencia: cons[o.t] } : o) } : paso.pregunta;
+        const preg = cons ? { ...paso.pregunta, opciones: paso.pregunta.opciones.map((o, i) => cons[i] ? { ...o, consecuencia: cons[i] } : o) } : paso.pregunta;
         return { ...paso, estado: v.e, ocultar: v.ocultar, pregunta: { ...preg, despues, despuesP: v.crio ? { rep: 'crio', lesion: 'grande', t: 4, plaq: 150000 } : null } };
     }),
 }));

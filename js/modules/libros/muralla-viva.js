@@ -405,7 +405,7 @@ function revisarMayeutica() {
         if (c.pasos.length < 5 || c.pasos.length > 8) r.fallos.push(c.id + ': de 5 a 8 pasos');
         if (!c.pasos.some(p => /giro/.test(p.momento))) r.fallos.push(c.id + ': sin giro');
         for (const ob of c.objetivos || []) {
-            if (!ob.texto || !ob.si || !ob.no || !ob.pasos?.length || ob.pasos.some(i => !c.pasos[i])) r.fallos.push(c.id + ': objetivo ' + ob.id + ' incompleto');
+            if (!ob.texto || !ob.si || !ob.no || !ob.pasos?.length || ob.pasos.some(i => !c.pasos[typeof i === "number" ? i : i.paso])) r.fallos.push(c.id + ': objetivo ' + ob.id + ' incompleto');
             if (!idsDe(ob.fuente).some(id => rutaDe(id))) r.fallos.push(c.id + ': objetivo ' + ob.id + ' sin «Ver en el texto»');
             for (const id of idsDe(ob.fuente)) if (!document.getElementById(id)) r.fallos.push(`${c.id}: la fuente ${id} no existe`);
         }
