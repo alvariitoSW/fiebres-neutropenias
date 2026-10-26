@@ -42,12 +42,21 @@ export const COLORES = {
 };
 
 // lVi: largo del VI con 120 mL (de 78 a 80 mm al afinar el ápex, B2: con la misma pared, la bala estrecha necesita
-// algo más de largo para el mismo volumen). lVdRel bajó de 0,82 a 0,80 para que el VD conserve su largo (N2 lo rehará)
+// algo más de largo para el mismo volumen). lVdRel: el VD de Lang mide 71 ± 6 mm de base a ápex (Tabla 8, p. 20) y
+// su ápex trabeculado llega cerca del ápex del VI (Mitchell 2019, p. 26); con 0,83 sale ~78 mm en el A4C del normal y ≤83 en el fallo del VI, de VI más largo (N2)
 export const REF = {
   vVi: 120, lVi: 80, vMioVi: 130,
-  vVd: 140, phiA: 1.15, phiB: 4.45, lVdRel: 0.80, paredVd: 4.0,
+  vVd: 140, phiA: 1.15, phiB: 4.45, lVdRel: 0.83, paredVd: 4.0,
   vAi: 40, vAd: 35,
 };
+
+// Perfil del VD de la base al ápex: (1 − s^e)^p. Con 2,2 / 0,6 el VD era un tubo de lados paralelos con el ápex romo; con
+// 1,5 / 0,85 se estrecha de forma casi lineal y en el A4C sale triangular, «bastante más pequeño en área» que el VI
+// (Mitchell 2019, p. 26). Ilustrativo; las medidas (basal, medio, largo) se comprueban con Lang 2015 p. 20 (N2)
+const PERFIL_VD = [1.5, 0.85];
+// Orificio de salida del VD (z = 0) y anillo pulmonar: semiejes (mm) a tamaño normal y radio del tubo en la válvula
+// pulmonar. Se eligen para que el TSVD salga en Lang 2015, p. 20 (Tabla 8): PLAX 25 ± 2,5, proximal 28 ± 3,5, distal 22 ± 2,5
+const RVOT = { a: 10, b: 11.5, rP: 12 };
 
 // ---- Perfil del VI: base casi fija (anillo) que se funde en una bala ---------
 const N_BALA = 2.4, SB = 0.22, EXP_BALA = [2.0, 0.6];
@@ -548,8 +557,11 @@ export function construirCorazon(estado, opciones = {}) {
     }
     if (cuerdas.length) partes.push({ nombre: 'Cuerdas', lineas: new Float32Array(cuerdas.flat()), color: COLORES.cuerda });
     // Banda moderadora del VD
-    { const zB = -Lvd * 0.62, phB = 2.9; const a = epiVi(zB, phB), b = endoVd(zB, phB + 0.25);
-      if (!corte || (dentroCorte(phB) && dentroCorte(phB + 0.25))) anadir('Banda moderadora', tubo([a, [mix(a[0], b[0], 0.5), mix(a[1], b[1], 0.5), zB - 3], b], 3.2, 8), COLORES.papilar); }
+    // Cruza la cavidad del VD del tabique a la pared libre, en el tercio apical y en el plano de la vista apical de 4 cámaras
+    // (phB ≈ 3,2: allí corta el A4C), un poco más baja en la pared libre (arqueada). Los extremos entran 1,5 mm en cada pared.
+    { const zB = -Lvd * 0.64, phB = 3.2, entra = (p, d) => { const r = Math.hypot(p[0], p[1]); return [p[0] * (r + d) / r, p[1] * (r + d) / r, p[2]]; };
+      const a = entra(epiVi(zB, phB), -1.5), b = entra(endoVd(zB - 4, phB), 1.5), m = lerp(a, b, 0.5);
+      if (!corte || dentroCorte(phB)) anadir('Banda moderadora', tubo([a, [m[0], m[1], m[2] - 3], b], 3.2, 8), COLORES.papilar); }
     // Coronarias: nacen de los senos de Valsalva y corren por los surcos
     const sobreEpi = (z, ph, extra) => {
       const f = anguloNorm(ph); const p = (ventana(f) > 0.001 && z > -Lvd) ? epiVd(z, f) : epiVi(Math.max(z, -vi.Le * 0.98), f);
@@ -713,8 +725,8 @@ export function baseGeometrica(estado) {
   // raíz cúbica del volumen: el VD dilatado pasa de semiluna a esfera y el anillo tricuspídeo se dilata (Mukherjee 2025,
   // en Atlas · 14). El ritmo (0,9 por cada 110 mL) es ilustrativo
   const kT = 0.62 + 0.38 * clamp((vvd - 30) / 110, 0, 1) + 0.9 * Math.max(0, vvd - 140) / 110;
-  const Wb = memo((f) => kT * Math.sqrt(ventana(f)) * (18 + 13 * gauss(f, 3.23, 0.66) + 10 * gauss(f, 1.72, 0.38)));
-  const perfilZ = memo((z) => Math.pow(Math.max(0, 1 - Math.pow(-z / Lvd, 2.2)), 0.6));
+  const Wb = memo((f) => kT * Math.sqrt(ventana(f)) * (18 + 13 * gauss(f, 3.23, 0.66) + 15 * gauss(f, 1.72, 0.38)));
+  const perfilZ = memo((z) => Math.pow(Math.max(0, 1 - Math.pow(-z / Lvd, PERFIL_VD[0])), PERFIL_VD[1]));
   const SBR = 0.40, wz = (z) => paso(0, SBR, -z / Lvd);
   // volumen del VD = C0 + C1·A + C2·A² (cuadrática exacta en A)
   let C0 = 0, C1 = 0, C2 = 0;
@@ -737,7 +749,7 @@ export function baseGeometrica(estado) {
   // el infundíbulo crece menos que la base: su ventana angular es estrecha y,
   // con el VD muy dilatado, un orificio que creciera con kT se saldría de ella
   const kR = Math.min(kT, 1.3);
-  const phiR = 1.72, aR = 7.5 * kR, bR = 10.5 * kR, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
+  const phiR = 1.72, aR = RVOT.a * kR, bR = RVOT.b * kR, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
   const e1R = [Math.cos(phiR), Math.sin(phiR)], e2R = [-Math.sin(phiR), Math.cos(phiR)];
   const anilloRVOT = (psi) => [cR[0] + aR * Math.cos(psi) * e1R[0] + bR * Math.sin(psi) * e2R[0], cR[1] + aR * Math.cos(psi) * e1R[1] + bR * Math.sin(psi) * e2R[1], 0];
   return { vi, mio, septo, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, tvdW, endoVd, epiVd, rimRV, kM, kT,
@@ -747,7 +759,7 @@ export function baseGeometrica(estado) {
 // Infundíbulo: tubo desde el orificio de salida del VD (z = 0) hasta el anillo pulmonar,
 // con marcos por transporte paralelo para que la elipse de abajo pase a círculo arriba sin girar.
 function infundibulo(g, rhoInf, NR) {
-  const rP = 9.5, P = [g.cR[0] + 2, g.cR[1] - 10, 26], nTop = norm([0.05, -0.35, 0.94]);
+  const rP = RVOT.rP, P = [g.cR[0] + 2, g.cR[1] - 10, 26], nTop = norm([0.05, -0.35, 0.94]);
   const C0 = [g.cR[0], g.cR[1], 0], C1 = [g.cR[0], g.cR[1], 12], C2 = res(P, esc(nTop, 10)), C3 = P;
   const bez = (t) => { const s = 1 - t; return [0, 1, 2].map(c => s * s * s * C0[c] + 3 * s * s * t * C1[c] + 3 * s * t * t * C2[c] + t * t * t * C3[c]); };
   const der = (t) => { const s = 1 - t; return norm([0, 1, 2].map(c => 3 * s * s * (C1[c] - C0[c]) + 6 * s * t * (C2[c] - C1[c]) + 3 * t * t * (C3[c] - C2[c]))); };
@@ -773,4 +785,13 @@ function infundibulo(g, rhoInf, NR) {
     return lerp([base[0], base[1], tubo[2] * 0.6], tubo, w);
   };
   return { rP, P, marcos, anillo, anilloExt };
+}
+
+/** Diámetros del TSVD (infundíbulo) como los mide Lang 2015, p. 20 (Tabla 8), sobre el mismo tubo que se dibuja:
+ *  proximal = eje mayor del orificio (z = 0); PLAX = eje anteroposterior a media altura del tubo (entre el orificio y la
+ *  válvula pulmonar); distal = diámetro justo antes de la válvula pulmonar. mm. Ilustrativo: el método es el nuestro. */
+export function diametrosTSVD(g) {
+  const inf = infundibulo(g, new Array(40).fill(0), 40), NK = inf.marcos.length - 1;
+  const a = (k) => mix(g.aR, inf.rP, paso(0, 1, inf.marcos[k].t)), b = (k) => mix(g.bR, inf.rP, paso(0, 1, inf.marcos[k].t));
+  return { proximal: 2 * Math.max(a(0), b(0)), plax: 2 * a(Math.round(NK / 2)), distal: 2 * a(NK - 1) };
 }

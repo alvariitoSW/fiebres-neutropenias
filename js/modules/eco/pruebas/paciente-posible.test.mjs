@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { baseGeometrica, construirCorazon, REF, TAPSE_POR_ML, LIMITES } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, diametrosTSVD, REF, TAPSE_POR_ML, LIMITES } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, medidasCorazon } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -28,6 +28,8 @@ const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].apli
 // VD en el plano apical de 4 cámaras (vista enfocada al VD, Lang Tabla 8): se cuentan las celdas del plano que caen
 // en la cavidad del VD. Basal = la mayor anchura del tercio de la base; medio = la del tercio medio; longitudinal =
 // de la base al ápex del VD; área en cm². Para el FAC se usa el área en telediástole y en telesístole.
+// (N2: la profundidad v crece desde el transductor, en el ápex, hacia la base; antes «basal» se leía en el tercio del
+// ápex y daba ~16 mm. Era un fallo de la medida, no del modelo; con el tercio de la base da ~30 mm. Las referencias no se tocan.)
 function medirVd(est) {
   const g = baseGeometrica(est), vi = g.vi, P = planoVista('a4c', est), h = 0.8, filas = new Map(); let n = 0;
   for (let v = 0; v <= P.prof; v += h) { let mn = Infinity, mx = -Infinity;
@@ -40,7 +42,7 @@ function medirVd(est) {
     if (mx > mn) filas.set(v, mx - mn); }
   const vs = [...filas.keys()], v0 = vs[0], L = vs[vs.length - 1] - v0;
   const ancho = (a, b) => Math.max(...vs.filter(v => v >= v0 + L * a && v <= v0 + L * b).map(v => filas.get(v)));
-  return { area: n * h * h / 100, largo: L, basal: ancho(0, 1 / 3), medio: ancho(1 / 3, 2 / 3) };
+  return { area: n * h * h / 100, largo: L, basal: ancho(2 / 3, 1), medio: ancho(1 / 3, 2 / 3), apice: ancho(0, 1 / 3), filas };
 }
 
 // Todo lo que se mide de un escenario (clave = id de REFERENCIAS_FORMA / REFERENCIAS, o del engrosamiento)
@@ -48,7 +50,7 @@ function medir(k) {
   const m = correr(k), o = m.onda, u = m.ultimo, sc = m.p.sc;
   const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a)), ex = extraDeMotor(m);
   const eT = estadoGeo(td, ex), eS = estadoGeo(ts, ex), mT = medidasCorazon(eT, sc), mS = medidasCorazon(eS, sc);
-  const gT = baseGeometrica(eT), vdT = medirVd(eT), vdS = medirVd(eS);
+  const gT = baseGeometrica(eT), vdT = medirVd(eT), vdS = medirVd(eS), tsvd = diametrosTSVD(gT);
   const cT = construirCorazon(eT, { detalle: false }), cS = construirCorazon(eS, { detalle: false });
   // giro neto = ángulo del ápex − ángulo de la base en telesístole, según la deformación del dibujo (flujo.transformar)
   const ang = (c, z) => { const p = c.flujo.transformar([40, 0, z]); return Math.atan2(p[1], p[0]) * 180 / Math.PI; };
@@ -59,7 +61,9 @@ function medir(k) {
     'vi-engrosa': (mS.paredPost / mT.paredPost - 1) * 100,
     'ai-vol': Math.max(...o.map(s => s.vai)) / sc, 'ad-vol-h': Math.max(...o.map(s => s.vad)) / sc,
     'vd-basal': vdT.basal, 'vd-medio': vdT.medio, 'vd-largo': vdT.largo,
+    'rvot-plax': tsvd.plax, 'rvot-prox': tsvd.proximal, 'rvot-dist': tsvd.distal,
     'vd-pared': gT.tvdW(gT.wRV(-0.2 * gT.Lvd, (REF.phiA + REF.phiB) / 2)),
+    'vd-area-vi': vdT.area / (medidasCorazon(eT, sc).areaVdVi ? vdT.area / medidasCorazon(eT, sc).areaVdVi : 1),
     'vd-area-td-h': vdT.area, 'vd-area-ts-h': vdS.area, 'vd-fac': (vdT.area - vdS.area) / vdT.area * 100,
     'vd-vtdi-h': u.edvD / sc, 'vd-vtsi-h': u.esvD / sc, 'vd-fe3d': u.feD * 100,
     // TAPSE: bajada del anillo tricuspídeo lateral del dibujo entre telediástole y telesístole
@@ -80,20 +84,20 @@ const fmt = (x) => Number.isFinite(x) ? (Math.abs(x) < 10 ? x.toFixed(2) : x.toF
 //  · { todo: 'ENCARGO' }   el modelo aún no llega y lo corrige ese encargo (no falla; avisa cuando ya llegue).
 // Cada id no listado tiene que estar dentro de su banda.
 const PREVISTO = {
-  normal: { 'vd-basal': { todo: 'N2 (VD en U: hoy ~16 mm en el A4C, banda 25-41)' } },
+  normal: {},
   hemorragia: {
-    'vd-basal': { todo: 'N2 (VD en U)' }, 'vd-medio': { libre: 'hipovolemia: el VD se llena menos' }, 'vd-area-td-h': { libre: 'hipovolemia: el VD se llena menos' },
+    'vd-basal': { libre: 'hipovolemia: el VD se llena menos (24,8 mm: justo bajo el 25)' }, 'rvot-prox': { libre: 'hipovolemia: el orificio del TSVD se contrae con el volumen del VD (19 mm; ilustrativo)' }, 'vd-medio': { libre: 'hipovolemia: el VD se llena menos' }, 'vd-area-td-h': { libre: 'hipovolemia: el VD se llena menos' },
     'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared (Lang p. 17)' }, 'tapse': { todo: 'F5 (el TAPSE debe salir del acortamiento de la pared libre; hoy ∝ mL vaciados)' },
     'vi-septo-h': { todo: 'sin encargo: con el VI en 100 mL la pared telediastólica sale de 10,5 mm (miocardio de volumen constante)' },
   },
   fallo: {
-    'vd-basal': { todo: 'N2 (VD en U)' }, 'tapse': { todo: 'F5' }, 'vi-vts-h': { libre: 'FE baja: el VI no se vacía' }, 'vi-vtsi-h': { libre: 'FE baja' },
+    'tapse': { todo: 'F5' }, 'vi-vts-h': { libre: 'FE baja: el VI no se vacía' }, 'vi-vtsi-h': { libre: 'FE baja' },
     'vi-fe-h': { libre: 'es el fallo del VI' }, 'vi-engrosa': { libre: 'contractilidad baja' }, 'torsion': { libre: 'Mor-Avi p. 15: la torsión cae con la FE' },
     'vd-fe3d': { libre: 'el fallo del VI arrastra al VD' }, 'vd-fac': { libre: 'el fallo del VI arrastra al VD' }, 'vi-rwt-h': { libre: 'cavidad dilatada con pared sin engrosar' },
     'vi-vtdi-h': { libre: 'VI dilatado' }, 'vi-vtd-h': { libre: 'VI dilatado' }, 'vi-dtd-h': { libre: 'VI dilatado' }, 'vi-dts-h': { libre: 'VI dilatado' }, 'ai-vol': { libre: 'PCP alta' },
   },
   derrame: {
-    'vd-basal': { todo: 'N2 (VD en U)' }, 'vd-medio': { libre: 'taponamiento: el VD se llena menos' }, 'vd-area-td-h': { libre: 'taponamiento: el VD se llena menos' },
+    'vd-basal': { libre: 'taponamiento: el VD se llena menos' }, 'rvot-prox': { libre: 'taponamiento: el orificio del TSVD se contrae con el volumen del VD' }, 'vd-medio': { libre: 'taponamiento: el VD se llena menos' }, 'vd-area-td-h': { libre: 'taponamiento: el VD se llena menos' },
     'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared' }, 'tapse': { todo: 'F5' },
     'vi-septo-h': { todo: 'sin encargo: pared telediastólica de 11,3 mm con el VI en 85 mL (miocardio de volumen constante)' },
     'vi-engrosa': { todo: 'sin encargo: engrosamiento de 39,4 % frente a >40 % con la pared ya gruesa en diástole' },
@@ -115,7 +119,7 @@ for (const k of Object.keys(PREVISTO)) {
 
 // Signos de cada enfermedad según Lang / Mor-Avi (escenarios con su gravedad por defecto)
 const SIGNOS = [
-  { k: 'tep', id: 'vd-basal', ok: (x) => x > 41, texto: 'VD basal >41 mm (Lang p. 17, 20)', todo: 'P4 (TEP con los criterios de Lang) y N2 (VD en U)' },
+  { k: 'tep', id: 'vd-basal', ok: (x) => x > 41, texto: 'VD basal >41 mm (Lang p. 17, 20)' },
   { k: 'tep', id: 'vd-fac', ok: (x) => x < 35, texto: 'FAC <35 % (Lang p. 23)' },
   { k: 'tep', id: 'vd-fe3d', ok: (x) => x < 45, texto: 'FE del VD <45 % (Lang p. 23)' },
   { k: 'tep', id: 'tapse', ok: (x) => x < 17, texto: 'TAPSE <17 mm (Lang p. 19, 23)' },
@@ -198,7 +202,7 @@ test('Normal: ejes de la AD en el A4C (mayor 2,4 ± 0,3 y menor 1,9 ± 0,3 cm/m�
 // Huecos: la fuente no da la cifra (fuente-p2.md). Sin cifra, no hay prueba: queda marcado.
 for (const [h, quien] of [['MAPSE (descenso de la base): no está en Lang ni Mor-Avi como cifra', 'B1'],
   ['rotación basal y apical por separado (solo la torsión neta, Mor-Avi p. 290)', 'B3'], ['S′ tricuspídea: el modelo no calcula velocidades del anillo', 'F5'],
-  ['TSVD (RVOT) PLAX, proximal y distal: aún no se mide en el modelo', 'N2'], ['grosor sistólico de la pared libre del VD', 'B4'],
+  ['grosor sistólico de la pared libre del VD', 'B4'],
   ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'], ['índice de excentricidad del tabique', 'F4'],
   ['relación largo/ancho del VI y ejes de la AI en mm (Lang los da en su Suplemento, Tablas 2 y 9, que no tenemos)', 'B2']]) {
   test('HUECO: ' + h, { todo: 'hueco de fuente · ' + quien }, () => assert.fail('sin cifra de referencia'));
@@ -214,4 +218,38 @@ test('normal: la pulmonar abre antes y cierra después que la aórtica (fisiolog
   assert.ok(abre('qAo') > 0 && abre('qPul') > 0);
   assert.ok(abre('qPul') <= abre('qAo'), `pulmonar abre en ${abre('qPul')}, aórtica en ${abre('qAo')}`);
   assert.ok(cierra('qPul') >= cierra('qAo'), `pulmonar cierra en ${cierra('qPul')}, aórtica en ${cierra('qAo')}`);
+});
+
+// ---- VD en U (N2): triangular en el A4C, ápex trabeculado cerca del ápex del VI, banda moderadora en el plano, TSVD ------
+test('Normal: el VD en el A4C es triangular, más ancho en la base que en el medio y que cerca del ápex [Mitchell 2019, p. 26]', () => {
+  const g = baseGeometrica(estadoGeo(de('normal').m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), extraDeMotor(de('normal').m))), vd = medirVd(estadoGeo(
+    de('normal').m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), extraDeMotor(de('normal').m)));
+  assert.ok(vd.basal > vd.medio && vd.medio > vd.apice, `base ${fmt(vd.basal)}, medio ${fmt(vd.medio)}, ápex ${fmt(vd.apice)} mm`);
+  assert.ok(vd.apice < 0.5 * vd.basal, `el tercio del ápex (${fmt(vd.apice)} mm) debe ser menos de la mitad de la base (${fmt(vd.basal)} mm)`);
+  // el ápex del VD llega cerca del ápex del VI: al menos el 80 % de su largo (Mitchell p. 26: el VD «llega cerca del ápex»; ilustrativo)
+  assert.ok(g.Lvd >= 0.8 * g.vi.Le, `largo del VD ${fmt(g.Lvd)} mm frente a ${fmt(g.vi.Le)} mm del VI`);
+});
+test('Normal: el área del VD no pasa del 60 % de la del VI en el A4C [Ficha 11, Fisiopatología UCI · Cardiología]', () => {
+  const x = de('normal').v['vd-area-vi']; assert.ok(x < 0.6 && x > 0.2, `VD/VI = ${fmt(x)}`);
+});
+// La banda moderadora (Mitchell 2019, p. 26: se ve en la parte apical del VD en el A4C): su malla corta el plano de la vista
+test('Normal: la banda moderadora cruza el VD y el plano del A4C la corta, en el tercio apical', () => {
+  const m = de('normal').m, est = estadoGeo(m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), extraDeMotor(m));
+  const P = planoVista('a4c', est), c = construirCorazon(est), banda = c.partes.find(p => p.nombre === 'Banda moderadora');
+  assert.ok(banda, 'no hay banda moderadora');
+  const n = [P.r[1] * P.d[2] - P.r[2] * P.d[1], P.r[2] * P.d[0] - P.r[0] * P.d[2], P.r[0] * P.d[1] - P.r[1] * P.d[0]];
+  const sd = (i) => (banda.pos[i * 3] - P.O[0]) * n[0] + (banda.pos[i * 3 + 1] - P.O[1]) * n[1] + (banda.pos[i * 3 + 2] - P.O[2]) * n[2];
+  let cortan = 0, mn = Infinity, mx = -Infinity;
+  for (let k = 0; k < banda.idx.length; k += 3) { const s = [0, 1, 2].map(j => sd(banda.idx[k + j])); if (Math.min(...s) < 0 && Math.max(...s) > 0) cortan++; }
+  for (let i = 0; i < banda.pos.length; i += 3) { const z = banda.pos[i + 2]; mn = Math.min(mn, z); mx = Math.max(mx, z); }
+  assert.ok(cortan >= 6, `solo ${cortan} triángulos de la banda cortan el plano`);
+  const g = c.geo; assert.ok(mx < -0.4 * g.Lvd && mn > -g.Lvd, `la banda va de z = ${fmt(mn)} a ${fmt(mx)} mm; el VD llega a ${fmt(-g.Lvd)}`);
+});
+test('Normal: la banda moderadora va del tabique a la pared libre del VD (sus extremos están en las paredes)', () => {
+  const m = de('normal').m, est = estadoGeo(m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), extraDeMotor(m));
+  const c = construirCorazon(est), g = c.geo, banda = c.partes.find(p => p.nombre === 'Banda moderadora');
+  let rMin = Infinity, rMax = -Infinity;
+  for (let i = 0; i < banda.pos.length; i += 3) { const r = Math.hypot(banda.pos[i], banda.pos[i + 1]); rMin = Math.min(rMin, r); rMax = Math.max(rMax, r); }
+  const z = -0.64 * g.Lvd, f = 3.2, septo = g.rEpiVi(z, f), libre = g.rEpiVi(z, f) + g.wRV(z, f);
+  assert.ok(rMin <= septo + 1 && rMax >= libre - 6, `la banda va de ρ = ${fmt(rMin)} a ${fmt(rMax)} mm; la cavidad, de ${fmt(septo)} a ${fmt(libre)} mm`);
 });

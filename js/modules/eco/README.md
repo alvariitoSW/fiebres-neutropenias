@@ -241,6 +241,18 @@ media elipse con lados paralelos) y `REF.lVi` pasa de 78 a 80 mm para el mismo v
 (Suplemento de Lang): hueco; hoy ~1,5-1,6 en telediástole. Pruebas en `paciente-posible.test.mjs`: volumen dibujado
 de la AI y la AD = motor ±12 % en 7 escenarios y ejes de la AD del normal en la banda de Lang p. 30.
 
+**VD en U y TSVD (N2, eco-mega parada 2, octubre 2026).** El VD ya era una media luna que abraza al VI en el eje corto y lo
+mueve el motor (`A` sale del volumen). Cambia su perfil de la base al ápex (`PERFIL_VD` 1,5 / 0,85; antes 2,2 / 0,6, un
+tubo de lados paralelos y ápex romo): en el A4C sale triangular, ancho en la base y estrecho en el ápex (Mitchell 2019,
+p. 26). `lVdRel` 0,80 → 0,83: el ápex trabeculado llega cerca del ápex del VI (~78 mm de largo, Lang Tabla 8 p. 20: 71 ± 6).
+La **banda moderadora** se dibuja ahora en el plano del A4C (ϕ ≈ 3,2), del tabique a la pared libre en el tercio apical, con
+los extremos dentro de las paredes (antes quedaba a un lado del plano y casi no se veía). El **TSVD** (`RVOT`: semiejes
+10 / 11,5 mm, radio 12 en la pulmonar; la base del VD se ensancha hacia el infundíbulo (+5 en la huella) para que quepa) sale en Lang p. 20: PLAX 25 ± 2,5 (medido a media altura del tubo), proximal 28 ± 3,5 (23 mm: en la mitad baja de la banda), distal 22 ± 2,5; se mide con
+`diametrosTSVD(geo)` sobre el mismo tubo que se dibuja (método nuestro, ilustrativo). Corrección de una medida, no del
+modelo: la prueba leía el diámetro «basal» en el tercio del ápex (la profundidad crece desde el transductor) y daba
+~16 mm; en el tercio de la base da ~30 mm (Lang 25-41). Referencias sin tocar. En hemorragia y derrame el VD basal baja a
+24,8 mm (justo bajo el 25): se marca como efecto de la enfermedad (`libre`). El área VD/VI normal sigue <0,6 (Ficha 11).
+
 ## En la app
 
 Decisiones del usuario (octubre 2026): el simulador va **en dos sitios** —la 5.ª puerta de la pantalla inicial y una
