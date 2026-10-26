@@ -56,3 +56,61 @@ export const REFERENCIAS = [
 export function evaluar(u, o) {
   return REFERENCIAS.map(r => { const v = r.valor(u, o); return { ...r, v, ok: Number.isFinite(v) && v >= r.min && v <= r.max }; });
 }
+
+// ---------------------------------------------------------------------------------------------------------------
+// Cifras de forma y tamaño (parada 2 de eco-mega, 26/10/2026; lector de fuente): normales de las cámaras, grosores,
+// función del VD y torsión. Mismo formato que arriba, pero NO las evalúa `evaluar()`: el motor no mide diámetros
+// ni áreas (los mide la geometría), así que `valor` es SIN_MEDIR (NaN). Las usará la prueba «paciente posible»
+// (paciente-posible.test.mjs, B1) con su propia medida. Rango = límites de la fuente; si la fuente solo da media ± DE,
+// se dice en `nota` que el rango es media ± 2 DE calculado aquí. Las páginas son las del PDF (en Lang 2015 coinciden
+// con las impresas; en Mor-Avi 2011, impresa = PDF + 276).
+const LANG = (p) => 'Lang 2015 (ASE/EACVI, cuantificación de cámaras; docs/lang-2015-cuantificacion-camaras-ase.pdf, p. ' + p + ')';
+const MOR = (p, q) => 'Mor-Avi 2011 (ASE/EAE, mecánica cardíaca; docs/mor-avi-2011-mecanica-cardiaca-ase.pdf, p. PDF ' + p + ' = impresa ' + q + ')';
+const SIN_MEDIR = () => NaN;
+export const REFERENCIAS_FORMA = [
+  { id: 'vi-dtd-h', nombre: 'VI: diámetro telediastólico (varón)', unidad: 'mm', valor: SIN_MEDIR, min: 42, max: 58.4, texto: '50,2 ± 4,1 (42,0-58,4)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-dtd-m', nombre: 'VI: diámetro telediastólico (mujer)', unidad: 'mm', valor: SIN_MEDIR, min: 37.8, max: 52.2, texto: '45,0 ± 3,6 (37,8-52,2)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-dts-h', nombre: 'VI: diámetro telesistólico (varón)', unidad: 'mm', valor: SIN_MEDIR, min: 25, max: 39.8, texto: '32,4 ± 3,7 (25,0-39,8)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-dts-m', nombre: 'VI: diámetro telesistólico (mujer)', unidad: 'mm', valor: SIN_MEDIR, min: 21.6, max: 34.8, texto: '28,2 ± 3,3 (21,6-34,8)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtd-h', nombre: 'VI: volumen telediastólico biplano (varón)', unidad: 'mL', valor: SIN_MEDIR, min: 62, max: 150, texto: '106 ± 22 (62-150)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtd-m', nombre: 'VI: volumen telediastólico biplano (mujer)', unidad: 'mL', valor: SIN_MEDIR, min: 46, max: 106, texto: '76 ± 15 (46-106)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vts-h', nombre: 'VI: volumen telesistólico biplano (varón)', unidad: 'mL', valor: SIN_MEDIR, min: 21, max: 61, texto: '41 ± 10 (21-61)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vts-m', nombre: 'VI: volumen telesistólico biplano (mujer)', unidad: 'mL', valor: SIN_MEDIR, min: 14, max: 42, texto: '28 ± 7 (14-42)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtdi-h', nombre: 'VI: volumen telediastólico indexado (varón)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 34, max: 74, texto: '54 ± 10 (34-74)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtdi-m', nombre: 'VI: volumen telediastólico indexado (mujer)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 29, max: 61, texto: '45 ± 8 (29-61)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtsi-h', nombre: 'VI: volumen telesistólico indexado (varón)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 11, max: 31, texto: '21 ± 5 (11-31)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-vtsi-m', nombre: 'VI: volumen telesistólico indexado (mujer)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 8, max: 24, texto: '16 ± 4 (8-24)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-fe-h', nombre: 'VI: fracción de eyección biplana (varón)', unidad: '%', valor: SIN_MEDIR, min: 52, max: 72, texto: '62 ± 5 (52-72)', origen: 'ficha', fuente: LANG(7), nota: 'el texto da 63 ± 5 (53-73) para ambos sexos (p. 7)' },
+  { id: 'vi-fe-m', nombre: 'VI: fracción de eyección biplana (mujer)', unidad: '%', valor: SIN_MEDIR, min: 54, max: 74, texto: '64 ± 5 (54-74)', origen: 'ficha', fuente: LANG(7) },
+  { id: 'vi-septo-h', nombre: 'VI: grosor del septo y de la pared posterior (varón)', unidad: 'cm', valor: SIN_MEDIR, min: 0.6, max: 1.0, texto: '0,6-1,0', origen: 'ficha', fuente: LANG(17), nota: 'método lineal; la fuente no da media ± DE' },
+  { id: 'vi-septo-m', nombre: 'VI: grosor del septo y de la pared posterior (mujer)', unidad: 'cm', valor: SIN_MEDIR, min: 0.6, max: 0.9, texto: '0,6-0,9', origen: 'ficha', fuente: LANG(17), nota: 'método lineal; la fuente no da media ± DE' },
+  { id: 'vi-rwt-h', nombre: 'VI: grosor relativo de pared (varón)', unidad: '', valor: SIN_MEDIR, min: 0.24, max: 0.42, texto: '0,24-0,42', origen: 'ficha', fuente: LANG(17), nota: 'RWT = 2 × pared posterior / DTDVI. La tabla rotula la unidad «cm» (errata de la fuente: es un cociente)' },
+  { id: 'vi-rwt-m', nombre: 'VI: grosor relativo de pared (mujer)', unidad: '', valor: SIN_MEDIR, min: 0.22, max: 0.42, texto: '0,22-0,42', origen: 'ficha', fuente: LANG(17) },
+  { id: 'vi-masa-h', nombre: 'VI: masa indexada, método 2D (varón)', unidad: 'g/m²', valor: SIN_MEDIR, min: 50, max: 102, texto: '50-102', origen: 'ficha', fuente: LANG(17) },
+  { id: 'vi-masa-m', nombre: 'VI: masa indexada, método 2D (mujer)', unidad: 'g/m²', valor: SIN_MEDIR, min: 44, max: 88, texto: '44-88', origen: 'ficha', fuente: LANG(17) },
+  { id: 'ai-vol', nombre: 'Aurícula izquierda: volumen máximo indexado (biplano)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 16, max: 34, texto: '16-34 (media 25)', origen: 'ficha', fuente: LANG(10), nota: 'la media 25 mL/m² está en la p. 25; el límite superior pasó de 28 a 34' },
+  { id: 'ad-vol-h', nombre: 'Aurícula derecha: volumen indexado, 4C monoplano (varón)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 11, max: 39, texto: '25 ± 7', origen: 'ficha', fuente: LANG(30), nota: 'la fuente da solo media ± DE (también en el texto, p. 28); el rango es media ± 2 DE calculado aquí' },
+  { id: 'ad-vol-m', nombre: 'Aurícula derecha: volumen indexado, 4C monoplano (mujer)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 9, max: 33, texto: '21 ± 6', origen: 'ficha', fuente: LANG(30), nota: 'la fuente da solo media ± DE (también en el texto, p. 28); el rango es media ± 2 DE calculado aquí' },
+  { id: 'ad-eje-menor', nombre: 'Aurícula derecha: eje menor indexado', unidad: 'cm/m²', valor: SIN_MEDIR, min: 1.3, max: 2.5, texto: '1,9 ± 0,3 (ambos sexos)', origen: 'ficha', fuente: LANG(30), nota: 'rango = media ± 2 DE calculado aquí' },
+  { id: 'ad-eje-mayor', nombre: 'Aurícula derecha: eje mayor indexado', unidad: 'cm/m²', valor: SIN_MEDIR, min: 1.8, max: 3.1, texto: '2,5 ± 0,3 mujer; 2,4 ± 0,3 varón', origen: 'ficha', fuente: LANG(30), nota: 'rango = media ± 2 DE de la mujer, calculado aquí' },
+  { id: 'vd-basal', nombre: 'VD: diámetro basal (vista enfocada al VD)', unidad: 'mm', valor: SIN_MEDIR, min: 25, max: 41, texto: '33 ± 4 (25-41); dilatado >41', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-medio', nombre: 'VD: diámetro medio', unidad: 'mm', valor: SIN_MEDIR, min: 19, max: 35, texto: '27 ± 4 (19-35); dilatado >35', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-largo', nombre: 'VD: diámetro longitudinal', unidad: 'mm', valor: SIN_MEDIR, min: 59, max: 83, texto: '71 ± 6 (59-83)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'rvot-plax', nombre: 'TSVD: diámetro en PLAX', unidad: 'mm', valor: SIN_MEDIR, min: 20, max: 30, texto: '25 ± 2,5 (20-30)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'rvot-prox', nombre: 'TSVD: diámetro proximal', unidad: 'mm', valor: SIN_MEDIR, min: 21, max: 35, texto: '28 ± 3,5 (21-35)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'rvot-dist', nombre: 'TSVD: diámetro distal', unidad: 'mm', valor: SIN_MEDIR, min: 17, max: 27, texto: '22 ± 2,5 (17-27)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-pared', nombre: 'VD: grosor de la pared libre (telediástole)', unidad: 'mm', valor: SIN_MEDIR, min: 1, max: 5, texto: '3 ± 1 (1-5)', origen: 'ficha', fuente: LANG(20), nota: 'sin cifra sistólica en la fuente (hueco)' },
+  { id: 'vd-area-td-h', nombre: 'VD: área telediastólica (varón)', unidad: 'cm²', valor: SIN_MEDIR, min: 10, max: 24, texto: '17 ± 3,5 (10-24)', origen: 'ficha', fuente: LANG(20), nota: 'errata de la fuente: la tabla rotula esta fila «RVOT EDA»; por contexto es el área telediastólica del VD' },
+  { id: 'vd-area-td-m', nombre: 'VD: área telediastólica (mujer)', unidad: 'cm²', valor: SIN_MEDIR, min: 8, max: 20, texto: '14 ± 3 (8-20)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-area-ts-h', nombre: 'VD: área telesistólica (varón)', unidad: 'cm²', valor: SIN_MEDIR, min: 3, max: 15, texto: '9 ± 3 (3-15)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-area-ts-m', nombre: 'VD: área telesistólica (mujer)', unidad: 'cm²', valor: SIN_MEDIR, min: 3, max: 11, texto: '7 ± 2 (3-11)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-vtdi-h', nombre: 'VD: volumen telediastólico indexado, 3D (varón)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 35, max: 87, texto: '61 ± 13 (35-87)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-vtdi-m', nombre: 'VD: volumen telediastólico indexado, 3D (mujer)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 32, max: 74, texto: '53 ± 10,5 (32-74)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-vtsi-h', nombre: 'VD: volumen telesistólico indexado, 3D (varón)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 10, max: 44, texto: '27 ± 8,5 (10-44)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-vtsi-m', nombre: 'VD: volumen telesistólico indexado, 3D (mujer)', unidad: 'mL/m²', valor: SIN_MEDIR, min: 8, max: 36, texto: '22 ± 7 (8-36)', origen: 'ficha', fuente: LANG(20) },
+  { id: 'vd-fe3d', nombre: 'VD: fracción de eyección 3D', unidad: '%', valor: SIN_MEDIR, min: 45, max: Infinity, texto: '58 ± 6,5; anormal <45', origen: 'ficha', fuente: LANG(23) },
+  { id: 'tapse', nombre: 'TAPSE (anillo tricuspídeo lateral)', unidad: 'mm', valor: SIN_MEDIR, min: 17, max: 31, texto: '24 ± 3,5; anormal <17', origen: 'ficha', fuente: LANG(23), nota: 'tope 31 = media + 2 DE calculado aquí; el PDF solo da el umbral <17 (también en p. 19)' },
+  { id: 'vd-s', nombre: 'Onda S′ tricuspídea lateral (Doppler pulsado)', unidad: 'cm/s', valor: SIN_MEDIR, min: 9.5, max: 18.7, texto: '14,1 ± 2,3; anormal <9,5', origen: 'ficha', fuente: LANG(23), nota: 'tope 18,7 = media + 2 DE calculado aquí; umbral <9,5 también en p. 20' },
+  { id: 'vd-fac', nombre: 'VD: cambio fraccional de área (FAC)', unidad: '%', valor: SIN_MEDIR, min: 35, max: 63, texto: '49 ± 7; anormal <35', origen: 'ficha', fuente: LANG(23), nota: 'tope 63 = media + 2 DE calculado aquí' },
+  { id: 'torsion', nombre: 'VI: torsión máxima (giro neto ápex − base)', unidad: '°', valor: SIN_MEDIR, min: 0.7, max: 14.7, texto: '7,7 ± 3,5', origen: 'ficha', fuente: MOR(14, 290), nota: 'rango = media ± 2 DE calculado aquí. Por edad: <40 años 6,7 ± 2,9; 40-60 8,0 ± 3,0; >60 10,8 ± 4,9. Rotación basal y apical por separado: hueco' },
+];
