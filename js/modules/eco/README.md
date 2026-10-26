@@ -229,6 +229,18 @@ cortan de forma continua (`cortarRayo`): un rayo que pasa a menos de R del centr
 entre R y R + 5 mm llega más lejos poco a poco. Salto máximo en un latido: AI 8,0 → 0,7 mm, AD 5,7 → 1,1 mm (prueba
 en `geometria.test.mjs`, umbral 2 mm).
 
+**Forma del VI y de las aurículas (B2, eco-mega parada 2, octubre 2026).** Antes, cada aurícula ocupaba todo el
+surco AV («torta» de ~63 mm de ancho y ~24 de alto) y su altura salía de una fórmula fija: la cúpula dibujada tenía
+~2 veces los mL de la aurícula del motor. Ahora la huella se recorta a un **cuello** (anillo + 3 mm), la **altura sale
+del volumen del motor** (`alturaAu`, contando cómo estira la cúpula el descenso de la base y, en la AD, el del anillo
+tricuspídeo lateral) y el **bulto** se elige para que alto / ancho sea el de los ejes de la AD del varón de Lang 2015,
+p. 30 (2,4 / 1,9 cm/m²; `formaAu`). La AI usa la misma proporción: sus ejes están en el Suplemento de Lang (hueco).
+El VI se estrecha desde el tercio basal hasta un ápex más estrecho (`EXP_BALA` 2,0 / 0,6; antes 2,3 / 0,55, casi
+media elipse con lados paralelos) y `REF.lVi` pasa de 78 a 80 mm para el mismo volumen y la misma pared (≤10 mm);
+`lVdRel` 0,82 → 0,80 deja el VD con su largo (lo rehace N2). La relación largo/ancho normal del VI no tiene fuente
+(Suplemento de Lang): hueco; hoy ~1,5-1,6 en telediástole. Pruebas en `paciente-posible.test.mjs`: volumen dibujado
+de la AI y la AD = motor ±12 % en 7 escenarios y ejes de la AD del normal en la banda de Lang p. 30.
+
 ## En la app
 
 Decisiones del usuario (octubre 2026): el simulador va **en dos sitios** —la 5.ª puerta de la pantalla inicial y una
