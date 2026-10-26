@@ -22,8 +22,6 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 ## Tanda pendiente
 
-- Impeccable: ¿probar el detector una vez, instalar la skill sin hooks, o nada? (26/10)
-
 (Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
 
 ## Fichas de triaje (las 14 entradas, la más reciente arriba)
@@ -43,9 +41,13 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Fuente**: README del repositorio (leído el 26/10)
 - **Licencia**: Apache 2.0
 - **Coste**: gratis; tokens extra por los avisos del hook en cada edición
-- **Veredicto**: pendiente del usuario. Propuesta: probar primero su detector una vez, sin instalar, sobre la app;
-  instalar la skill sin hooks solo si lo que encuentra vale la pena. Choca en parte con las reglas propias de diseño
-  (tokens de `css/variables.css`, sin dependencias): mandan las de la app.
+- **Veredicto**: descartar la instalación (26/10). El usuario eligió probar el detector una vez sin instalar. Con la
+  app servida no pudo escanear (la página tiene más de 30.000 elementos: todas las vistas se cargan a la vez). Sobre
+  los archivos sueltos dio 218 avisos, casi todos falsos por leerlos sin el CSS de la app (contraste con texto negro
+  que en la app no existe, imágenes «rotas» que reciben su `src` por JS) o de gusto (bordes de color a la izquierda,
+  brillos dorados: son el estilo de la app). Real y comprobado en el navegador a 390 px: texto de 8,5-10,4 px en el
+  menú principal (rótulos y etiquetas de las puertas, botones Escalas/Estudio/Buscar). Arreglo pequeño, si el usuario
+  lo aprueba.
 
 ### Culprit (Cliff Reid)
 - **Fecha / tipo**: 2026-10-26 · web/app
