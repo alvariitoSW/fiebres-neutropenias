@@ -11,7 +11,7 @@ import { crearMonitor as crearPieza, ecgLatido } from '../comun/monitor.js';
 export const CANALES = [
   { k: 'ecg', rot: 'II', alto: 26, col: 'var(--accent-green)', base: 0.7, gan: 0.6 },
   { k: 'art', rot: 'ART', alto: 48, min: 0, max: 150, marcas: [50, 100], col: 'var(--accent-red)', ref: true, lineas: [{ k: '65', v: 65, clase: 'mon-65' }] },
-  { k: 'pap', rot: 'PAP', alto: 32, min: 0, max: 50, marcas: [25], col: 'var(--accent-yellow)' },
+  { k: 'pap', rot: 'PAP', alto: 36, min: 0, max: 50, marcas: [25], col: 'var(--accent-yellow)' },
   { k: 'pvc', rot: 'PVC', alto: 28, min: 0, max: 25, marcas: [10], col: 'var(--accent-purple)' },
   { k: 'pleth', rot: 'Pleth', alto: 24, col: 'var(--text-dim)', base: 0.92, gan: 0.8 },
   { k: 'co2', rot: 'CO₂', alto: 24, min: 0, max: 50, marcas: [], col: 'var(--text-muted)' },

@@ -124,10 +124,15 @@ export function crearMonitor(svg, { canales, margen = 26, hueco = 4, borrar = 6,
 
 // La columna de cifras. celda: { k (data-fila), cls (color del canal), et, u, v (html), obj (html), marca (html, en
 // lugar de la unidad), estado ('si' | 'no' | 'ojo': el color del valor), alto (px, para alinear con su curva) }
+// Si el canal mide menos de ALTO_3_LINEAS px, la tercera línea (obj) no cabe: va en la línea de la etiqueta, en lugar de
+// la unidad (v3: en el PAP del shock, «PCP 16 ✓» quedaba pisado)
+const ALTO_3_LINEAS = 44;
 export function pintarCifras(el, celdas, { tapado = false } = {}) {
-  el.innerHTML = celdas.map((c) => `<div class="cifra ${c.cls || ''} ${tapado ? 'oculto' : c.estado || ''}" data-fila="${c.k}"${c.alto ? ` style="height:${c.alto}px"` : ''}>`
-    + `<span class="et"><span>${c.et}</span><span>${tapado ? '' : c.marca || c.u || ''}</span></span>`
-    + `<span class="v">${tapado ? '?' : c.v}</span>${c.obj != null ? `<span class="obj">${tapado ? '' : c.obj}</span>` : ''}</div>`).join('');
+  el.innerHTML = celdas.map((c) => {
+    const fundir = c.obj != null && c.alto && c.alto < ALTO_3_LINEAS;
+    return `<div class="cifra ${c.cls || ''} ${tapado ? 'oculto' : c.estado || ''}" data-fila="${c.k}"${c.alto ? ` style="height:${c.alto}px"` : ''}>`
+    + `<span class="et"><span>${c.et}</span><span class="${fundir ? 'obj' : ''}">${tapado ? '' : fundir ? c.obj : c.marca || c.u || ''}</span></span>`
+    + `<span class="v">${tapado ? '?' : c.v}</span>${c.obj != null && !fundir ? `<span class="obj">${tapado ? '' : c.obj}</span>` : ''}</div>`; }).join('');
 }
 
 export const MONITOR_CSS = `
@@ -153,7 +158,8 @@ export const MONITOR_CSS = `
 .cifras { display: flex; flex-direction: column; border-left: 1px solid color-mix(in srgb, var(--accent-yellow) 18%, transparent); min-width: 0; }
 .cifra { flex: 1 1 auto; overflow: hidden; display: grid; align-content: center; padding: 1px 0 1px 6px; min-width: 0; border-bottom: 1px solid color-mix(in srgb, var(--accent-yellow) 12%, transparent); cursor: pointer; }
 .cifra:last-child { border-bottom: 0; }
-.cifra .et { font: 600 .58rem/1.1 var(--sans); letter-spacing: .02em; display: flex; justify-content: space-between; gap: 2px; white-space: nowrap; }
+.cifra .et { font: 600 .58rem/1.1 var(--sans); letter-spacing: .02em; display: flex; justify-content: space-between; gap: 2px; white-space: nowrap; min-width: 0; }
+.cifra .et .obj { font-weight: 400; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
 .cifra .v { font: 700 var(--mon-v)/1.05 var(--sans); font-variant-numeric: tabular-nums; white-space: nowrap; color: var(--text-main); }
 .cifra .v small { font-size: .62rem; font-weight: 600; margin-left: 2px; }
 .cifra .obj { font: .56rem/1.15 var(--sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
