@@ -696,7 +696,7 @@ export function montarSimulador(raiz, opc = {}) {
     if (rgl && abierto('#cv-plegable-3d')) {
       // al revisar un instante pasado, la sangre (que vive en el tiempo del motor) no se dibuja
       const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
-      let partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
+      let partes = (verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes).filter(p => !p.soloEco);
       if (abd3d.length) partes = partes.concat(abd3d);
       let conPlano = partes;
       if ($('#cv-eco-plano').checked && fanEco) {

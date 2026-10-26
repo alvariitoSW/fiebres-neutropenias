@@ -14,6 +14,7 @@
 
 import { earcut } from './earcut.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
+import { construirTorax } from './torax.mjs';
 
 const TAU = Math.PI * 2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -39,6 +40,7 @@ export const COLORES = {
   vena: [0.38, 0.30, 0.60], valva: [0.93, 0.88, 0.78], coronaria: [0.62, 0.12, 0.10],
   venaCoronaria: [0.36, 0.22, 0.42], pericardio: [0.75, 0.75, 0.85], papilar: [0.62, 0.28, 0.25],
   cuerda: [0.95, 0.92, 0.85], tapa: [0.70, 0.30, 0.28], grasa: [0.88, 0.74, 0.44],
+  hueso: [0.90, 0.86, 0.76], pulmon: [0.85, 0.62, 0.60],
 };
 
 // lVi: largo del VI con 120 mL (de 78 a 80 mm al afinar el ápex, B2: con la misma pared, la bala estrecha necesita
@@ -468,7 +470,7 @@ export function construirCorazon(estado, opciones = {}) {
       const pie = [ac[0] + rhoAo[k] * Math.cos(psi), ac[1] + rhoAo[k] * Math.sin(psi), 0.3], z = 10, rr = rRaiz(z, psi) + 0.4;
       const cima = [ac[0] + rr * Math.cos(psi), ac[1] + rr * Math.sin(psi), z]; const w = Math.pow(u, 0.6);
       return [mix(pie[0], cima[0], w), mix(pie[1], cima[1], w), mix(pie[2], cima[2], paso(0, 1, u))]; }), COLORES.grasa, { dobleCara: true }); }
-  const aorta = suave([[ac[0], ac[1], zST], [ac[0], ac[1], zST + 8], [ac[0] - 2, ac[1] + 1, 42], [ac[0] - 1, ac[1] - 4, 62], [0, -14, 75], [14, -34, 72], [21, -54, 54], [22, -60, 24], [22, -60, -16]]);
+  const aorta = suave([[ac[0], ac[1], zST], [ac[0], ac[1], zST + 8], [ac[0] - 2, ac[1] + 1, 42], [ac[0] - 1, ac[1] - 4, 62], [0, -14, 75], [14, -34, 72], [21, -54, 54]]);   // el arco acaba aquí; la aorta descendente la dibuja torax.mjs (N3)
   anadirR('Aorta', tubo(aorta, rA, 16, u => rA * (1 + 0.14 * paso(0, 0.08, u) - 0.22 * paso(0.35, 0.7, u))), COLORES.arteria, { dobleCara: true });
 
   // --- Infundíbulo del VD (tracto de salida) y tronco pulmonar ---
@@ -648,6 +650,12 @@ export function construirCorazon(estado, opciones = {}) {
     }
   };
   for (const pz of partes) { if (pz.pos) { if (!pz.propia) pz.pos = new Float32Array(pz.pos); mover(pz.pos); } if (pz.lineas) mover(pz.lineas); }
+  // --- Tórax (N3): aorta descendente, columna y pleura-pulmón, fijos al cuerpo (no los mueve la base) ---
+  let torax = null;
+  if (!opciones.vistaBase) {
+    torax = construirTorax(partes, { tubo, suave, rA, arranque: aorta[aorta.length - 1], colores: COLORES });
+    for (const { nombre, pos, idx, color, ...resto } of torax.piezas) anadirR(nombre, { pos, idx }, color, resto);
+  }
 
   // --- Interior para el flujo de sangre: puntos dentro de cada cavidad a partir de coordenadas
   // normalizadas (se mueven con las paredes), centros valvulares y vías de los vasos ---

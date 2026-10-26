@@ -249,6 +249,9 @@ const TIPOS = [
   [/^Grasa/, { clase: 'linea', db: T.grasa.db, ancho: T.grasa.ancho }],
   [/^Coronaria/, { clase: 'linea', db: T.coronaria.db, ancho: T.coronaria.ancho }],
   [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: T.valva.db, ancho: T.valva.ancho }],
+  // tórax (torax.mjs): el hueso brilla y da sombra; la pleura brilla y deja líneas A detrás (ver formar)
+  [/^Vértebra/, { clase: 'linea', db: T.hueso.db, ancho: T.hueso.ancho }],
+  [/^Pulmón/, { clase: 'linea', db: T.pleura.db, ancho: T.pleura.ancho }],
   [/^Pericardio$/, { clase: 'pericardio', db: T.pericardio.db, ancho: T.pericardio.ancho }],
 ];
 export const CUERDA_H = 4;      // medio grosor (mm) de la losa en que las cuerdas entran en la imagen
@@ -681,6 +684,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     FILL.fill(0); OD.fill(1e9); OR.fill(1);
     const mov = [null], etiqueta = new Map(), campo = [null]; let abiertos = 0;
     const reCal = o.calcio ? (o.calcio instanceof RegExp ? o.calcio : new RegExp(o.calcio)) : null, esCal = new Uint8Array(256); let hayCal = false;
+    const esPl = new Uint8Array(256); let hayPl = false;
     const tagDe = (el) => { if (!etiqueta.has(el.grupo)) { etiqueta.set(el.grupo, mov.length); mov.push(ajusteAfin(el.seg, el.segRef)); campo.push(campoDesplazamiento(el.seg, el.segRef)); } return etiqueta.get(el.grupo); };
     for (const el of els.slice(1)) {
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
@@ -694,6 +698,9 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // con la mejora especular, también el pericardio depende del ángulo
         // calcio (o.calcio: nombre de las piezas calcificadas): muy brillante y con la atenuación de su fila de la tabla
         if (reCal && el.tipo === 'linea' && reCal.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.calcio.ancho, TEJIDOS.calcio.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
+        // hueso (columna): como el calcio, con su fila de la tabla; pleura: línea brillante que marca dónde empiezan las líneas A
+        if (el.tipo === 'linea' && /^Vértebra/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.hueso.ancho, TEJIDOS.hueso.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
+        if (el.tipo === 'linea' && /^Pulmón/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.pleura.ancho, TEJIDOS.pleura.db, 0, tag, 0); esPl[tag] = 1; hayPl = true; continue; }
         const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
@@ -719,10 +726,13 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
     const S = m.sombra;
-    if (S > 0 || W > 0 || hayCal) {
+    if (S > 0 || W > 0 || hayCal || hayPl) {
       const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6, tope = amp(12);
-      for (let i = 0; i < nb; i++) { let at = 1;
+      for (let i = 0; i < nb; i++) { let at = 1, rp = 0;
         for (let j = 0, q = i; j < ns; j++, q += nb) {
+          // detrás de la pleura no hay tejido: líneas A a múltiplos de su profundidad y el resto, negro
+          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
+          else if (hayPl && esPl[TAG[q]] && A[q] > a6) rp = Rr[j];
           const a = A[q]; A[q] = a * at;
           if (Rr[j] < G.pared) at *= fT;
           if (hayCal && esCal[TAG[q]] && a > a6) at *= fC;   // sombra acústica: el calcio no deja pasar el haz

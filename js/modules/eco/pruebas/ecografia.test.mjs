@@ -239,8 +239,10 @@ test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris �
   const { MEJORAS_CERO } = await import('../ecografia.mjs');
   const antes = crearAntes({ ancho: 300, alto: 250 }), nuevo = crearEcografo({ ancho: 300, alto: 250 });
   for (const v of ['plax', 'psaxPm', 'a4c', 'sc4c']) {
-    const P = planoVista(v, td), opc = { ref: gTd.partes, t: 1.3 };
-    const a = antes.formar(gTs.partes, P, opc).pix, b = nuevo.formar(gTs.partes, P, { ...opc, m: MEJORAS_CERO, ventanaVista: VISTAS[v].ventana }).pix, c = nuevo.formar(gTs.partes, P, { ...opc, ventanaVista: VISTAS[v].ventana }).pix;
+    // sin hueso ni pleura (N3): el ecógrafo de antes no los conoce; lo que se compara son las mejoras de la imagen
+    const sinTorax = (g) => g.partes.filter(p => !/^(Vértebra|Pulmón)/.test(p.nombre));
+    const P = planoVista(v, td), opc = { ref: sinTorax(gTd), t: 1.3 };
+    const a = antes.formar(sinTorax(gTs), P, opc).pix, b = nuevo.formar(sinTorax(gTs), P, { ...opc, m: MEJORAS_CERO, ventanaVista: VISTAS[v].ventana }).pix, c = nuevo.formar(gTs.partes, P, { ...opc, ventanaVista: VISTAS[v].ventana }).pix;
     let d0 = 0, d1 = 0, n = 0;
     for (let i = 0; i < a.length; i += 4) { d0 += Math.abs(a[i] - b[i]); d1 += Math.abs(a[i] - c[i]); n++; }
     assert.ok(d0 / n < 0.05, `${v}: con las mejoras a 0 la imagen difiere ${(d0 / n).toFixed(3)} niveles de gris`);

@@ -253,6 +253,28 @@ modelo: la prueba leía el diámetro «basal» en el tercio del ápex (la profun
 ~16 mm; en el tercio de la base da ~30 mm (Lang 25-41). Referencias sin tocar. En hemorragia y derrame el VD basal baja a
 24,8 mm (justo bajo el 25): se marca como efecto de la enfermedad (`libre`). El área VD/VI normal sigue <0,6 (Ficha 11).
 
+**Aorta descendente, columna y pleura-pulmón (N3, eco-mega parada 2, octubre 2026; descongela la anatomía con permiso
+del usuario).** Nuevo `torax.mjs`: tres piezas del cuerpo que `construirCorazon` añade al final, tras bajar la base
+(sin la vista de la base). Todo **ilustrativo**: Mitchell 2019 p. 61 solo dice dónde buscar la aorta descendente
+(detrás de la AI en el eje largo paraesternal y en el supraesternal); ningún diámetro ni posición tiene página (hueco).
+· **Aorta descendente** (`Aorta descendente`): el arco ya no acaba en un muñón a media altura; su último punto es el
+arranque de un tubo que baja por la izquierda (`TORAX.latAo`) a lo largo del eje vertical del cuerpo, de ~18 mm de
+diámetro, **apoyado detrás del saco** (cálculo cerrado sobre todos los vértices; pasos de 2 mm para que no tiemble). Así
+en la PLAX es un corte oval (el plano la corta oblicua, ~17 × 38 mm) detrás de la AI, y el derrame queda entre el corazón
+y ella: la referencia para distinguir el derrame pericárdico (delante de la aorta) del pleural (detrás/lateral). Con el
+derrame grande la aorta se aleja con el saco (el cuerpo real no se aparta; compromiso ilustrativo). En el A4C, el plano
+pasa por delante de ella (no se ve sin inclinar la sonda hacia atrás).
+· **Columna**: ocho cuerpos vertebrales (elipses de 34 × 26 mm, 22 mm de alto con 4 de disco) detrás de la aorta. Tejido
+nuevo `hueso` (24 dB, atenuación 20 dB/mm como el calcio): brilla y da sombra negra detrás (A3). Se ve en la
+supraesternal, la PSAX profunda y con la profundidad aumentada en el eje largo; el plano del A4C y el subcostal 4C no
+la cortan.
+· **Pleura-pulmón**: dos láminas verticales detrás y a los lados del saco (de 100° a 175° desde la línea media delantera,
+a 4 mm del saco), `soloEco` (no se dibujan en el 3D). Tejido nuevo `pleura` (20 dB): línea brillante y, detrás, líneas A a
+múltiplos de su profundidad en lugar de tejido (como la «ventana pobre»). Delante no hay pulmón: ahí están las ventanas.
+Prueba en `pruebas/geometria.test.mjs` (aorta detrás de la AI, sin cruzar nada en 9 escenarios con derrame de 500 mL,
+columna detrás de la aorta, pulmón solo detrás y en los bordes del A4C). La sangre del flujo 3D sigue acabando en el
+arranque de la descendente (`vias.ao` termina en el arco).
+
 ## En la app
 
 Decisiones del usuario (octubre 2026): el simulador va **en dos sitios** —la 5.ª puerta de la pantalla inicial y una

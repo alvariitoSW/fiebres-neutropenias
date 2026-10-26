@@ -4,6 +4,10 @@ import assert from 'node:assert/strict';
 import { baseGeometrica, construirCorazon, LIMITES, puntoValva } from '../corazon-geo.mjs';
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
+import { estadoGeo, extraDeMotor } from '../formas.mjs';
+import { planoVista, cortarPieza } from '../ecografia.mjs';
+import { aplicarEscenario } from '../escenarios.mjs';
+import { TORAX, aEje } from '../torax.mjs';
 
 const TAU = Math.PI * 2;
 
@@ -164,4 +168,50 @@ test('las aurículas no saltan entre dos fotogramas seguidos (rayos casi tangent
     prev = cur;
   }
   assert.ok(peor < 2, `salto máximo ${peor.toFixed(2)} mm`);
+});
+
+// ---- N3: aorta descendente, columna y pleura-pulmón (torax.mjs) ----
+const corazonDe = (k, liquido) => { const m = crearMotor(); m.correr(12); aplicarEscenario(m, k);
+  const td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ex = extraDeMotor(m); if (liquido != null) ex.liquidoPeri = liquido;
+  return { g: construirCorazon(estadoGeo(td, ex), { pericardio: true, detalle: true }), td }; };
+const rango = (seg) => { const r = [Infinity, -Infinity, Infinity, -Infinity]; for (let i = 0; i < seg.length; i += 2) { r[0] = Math.min(r[0], seg[i]); r[1] = Math.max(r[1], seg[i]); r[2] = Math.min(r[2], seg[i + 1]); r[3] = Math.max(r[3], seg[i + 1]); } return r; };
+const pieza = (g, n) => g.partes.find(p => p.nombre === n);
+
+test('N3: en la PLAX la aorta descendente es un círculo detrás de la AI, de unos 20 mm (ilustrativo)', () => {
+  const { g, td } = corazonDe('normal'), P = planoVista('plax', td);
+  const ao = rango(cortarPieza(pieza(g, 'Aorta descendente'), P).seg), ai = rango(cortarPieza(pieza(g, 'AI'), P).seg);
+  assert.ok(ao[2] > ai[3], `la aorta (d ${ao[2].toFixed(0)}) empieza detrás de la AI (d hasta ${ai[3].toFixed(0)})`);
+  assert.ok(ao[0] < ai[1] && ao[1] > ai[0], 'a la altura de la AI (su rango en el plano se solapa)');
+  assert.ok(ao[3] <= P.prof + 3, 'cabe en la profundidad de la vista');
+  const diametro = Math.min(ao[1] - ao[0], ao[3] - ao[2]); assert.ok(diametro > 10 && diametro < 24, `diámetro del corte ${diametro.toFixed(1)} mm`);
+});
+
+test('N3: la aorta descendente no cruza ninguna pieza del corazón ni el saco, ni con el derrame grande', () => {
+  const casos = [['normal'], ['hemorragia'], ['fallo'], ['derrame'], ['derrame', 500], ['tep'], ['dilatada'], ['hipertrofia'], ['vasoplejia']];
+  for (const [k, liq] of casos) {
+    const { g } = corazonDe(k, liq), ao = pieza(g, 'Aorta descendente'), R = TORAX.rAo, nSeg = 16;
+    const anillos = ao.pos.length / 3 / (nSeg + 1); let peor = Infinity;
+    for (let a = 3; a < anillos; a++) { const c = [0, 0, 0]; for (let j = 0; j <= nSeg; j++) for (let t = 0; t < 3; t++) c[t] += ao.pos[(a * (nSeg + 1) + j) * 3 + t] / (nSeg + 1);
+      for (const p of g.partes) { if (!p.pos || /^(Aorta|Derrame|Vértebra|Pulmón)/.test(p.nombre) || /sangre$/.test(p.nombre)) continue;
+        for (let i = 0; i < p.pos.length; i += 3) peor = Math.min(peor, Math.hypot(p.pos[i] - c[0], p.pos[i + 1] - c[1], p.pos[i + 2] - c[2])); } }
+    assert.ok(peor >= R - 1.5, `${k}${liq ? ' ' + liq : ''}: el eje de la aorta queda a ${peor.toFixed(1)} mm de otra pieza (radio ${R})`);
+  }
+});
+
+test('N3: la columna va detrás de la aorta y la corta la supraesternal; el pulmón solo detrás y a los lados', () => {
+  const { g, td } = corazonDe('normal'), vert = g.partes.filter(p => /^Vértebra/.test(p.nombre));
+  assert.equal(vert.length, TORAX.vertebra.n);
+  const ant = (p) => { let s = 0; for (let i = 0; i < p.pos.length; i += 3) s += aEje([p.pos[i], p.pos[i + 1], p.pos[i + 2]])[1]; return s / (p.pos.length / 3); };
+  const aoAnt = ant(pieza(g, 'Aorta descendente')); // media del tubo: la parte vertical domina
+  for (const v of vert) assert.ok(ant(v) < aoAnt, 'la vértebra queda detrás de la aorta');
+  const P = planoVista('sse', td);
+  assert.ok(vert.filter(v => cortarPieza(v, P).seg.length).length >= 3, 'la supraesternal corta varias vértebras');
+  // pulmón: ningún punto delante del centro del corazón (ahí están las ventanas)
+  for (const n of ['Pulmón izquierdo', 'Pulmón derecho']) { const p = pieza(g, n); let maxAnt = -Infinity;
+    for (let i = 0; i < p.pos.length; i += 3) maxAnt = Math.max(maxAnt, aEje([p.pos[i], p.pos[i + 1], p.pos[i + 2]])[1]);
+    assert.ok(maxAnt < 10, `${n}: no pasa a la parte de delante (ant máx ${maxAnt.toFixed(0)})`); }
+  // en el apical, lo que el pulmón corta dentro del sector queda en los bordes o en el fondo (último 10 %), nunca delante del corazón
+  const A = planoVista('a4c', td);
+  for (const n of ['Pulmón izquierdo', 'Pulmón derecho']) { const s = cortarPieza(pieza(g, n), A).seg;
+    for (let i = 0; i < s.length; i += 2) if (s[i + 1] > 0 && s[i + 1] < 0.9 * A.prof) assert.ok(Math.abs(Math.atan2(s[i], s[i + 1])) > 0.45, `${n}: en el A4C solo en los bordes del sector o en el fondo`); }
 });
