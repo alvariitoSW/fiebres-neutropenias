@@ -2241,6 +2241,14 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .hk-meta, .hk-estado { font-size: 0.68rem; line-height: 1.4; }
 .hk-meta { color: var(--text-muted); }
 .hk-estado { color: var(--text-main); }
+.hk-efecto { grid-column: 1 / -1; margin-top: 2px; }
+.hk-efecto:empty { display: none; }
+.hk-efecto .tfg-estado { font-size: 0.7rem; line-height: 1.4; }
+.hk-efecto .visual-link, .hk-revision .visual-link { min-height: 28px; padding: 0 8px; font-size: 0.66rem; vertical-align: middle; margin-left: 4px; }
+.hk-revision { display: grid; gap: 6px; margin-top: 12px; }
+.hk-revision:empty { display: none; }
+.hk-revision .section-label { margin: 0; }
+.hk-revision .tfg-estado { font-size: 0.74rem; line-height: 1.45; }
 .hk-fidelidad { font-size: 0.66rem; color: var(--accent-blue); line-height: 1.4; }
 .hk-acciones { display: flex; gap: 6px; align-items: center; }
 .hk-dar { min-width: 72px; }

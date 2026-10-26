@@ -58,3 +58,25 @@ reto apagado por defecto (tablero, 25/10). Tipo: visual (mejora de lo existente;
 - Lo que NO quiero: tocar la anatomía (parada 2), colores nuevos, código de echodemo, cambiar una referencia para que
   pase una prueba, que el móvil vaya a tirones.
 - Hecho: `node --test 'js/modules/eco/pruebas/*.test.mjs'` y `jueces.mjs --eco` en verde; profesor ≥8 (meta 8,75).
+
+---
+
+# Parada 2 · anatomía, fisiología y patología (desde el 26/10/2026)
+
+Decidida por el usuario: «Parada 2 de `eco-mega`» en `autonomo/TABLERO.md` (con la ampliación de B-025). Los encargos
+están escritos, con sus fuentes, pares de prueba, archivo dueño y modelo, en:
+- `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md` §2 (A1-A3, B1-B5, C1, D1) y §3 (equipos y dueños);
+- `autonomo/ideas/ingenieria-inversa/eco-fisiopatologia.md` §5 (F1, F5, N2, N3, P1, P2, P4).
+
+**Orden**: 0 lector → A1 → B1 + F1 → A2 → B2 + N2 → A3 → N3 → B3 → B4 → F5 → B5 → P2 → C1 → P1 → D1 → P4.
+**Equipos** (no se pisan): Imagen = `ecografia.mjs`, `js/data/eco-tejidos.js`, `ecografia.test.mjs`,
+`enfermedad.test.mjs`; Forma = `corazon-geo.mjs`, `referencias.mjs`, `geometria.test.mjs`, `paciente-posible.test.mjs`.
+`escenarios.mjs`, `motor.mjs`, `eco.html`, README: solo con permiso del director. `?v=` y fusión: el director.
+
+**Reglas del usuario para esta parada**: barato salvo B2, C1, P1 (potente). P1 incluye **revisar el pericardio, sobre
+todo alrededor de las aurículas, y hacerlo más real**. P7: hipertrofia y dilatada por defecto como «forma grave» con
+nota visible. Malla de Visible Human solo como referencia. Cifra sin PDF → «hueco» (nunca inventada). Nunca cambiar
+una referencia para que pase una prueba.
+
+**Jueces por encargo**: `node --test` del archivo tocado; al cerrar, la suite de eco entera y `jueces.mjs --eco`.
+Profesor solo en la parada (capturas antes / después).

@@ -321,7 +321,7 @@ río y mar) → 39-44 → 45-53.
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
-| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3` | Paquete: `autonomo/bloques/b3/encargo.md` |
+| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3`. Informe y plan con gasto (26/10): https://claude.ai/artifact/Rw8ZKfAZdYgjBogGxuCP9w (`autonomo/bloques/b3/informe-plan-b3-b4.html`), 4 preguntas al usuario | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
@@ -336,14 +336,15 @@ río y mar) → 39-44 → 45-53.
 | 6 | `rea-ritmolab` | Ingeniería inversa de RitmoLab (Farmacotips), ya accesible: informe-propuesta para el PIF de Cardiología, los modelos vivos (corazón eléctrico, motor) y la puerta «Arritmias» | en curso, ⏸ parado en la fase 1 (2026-10-23): informe «Ritmo vivo y placa guiada», https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 | Aprobada el 23/10; antecedentes en `docs/historial/cardiologia.md` («RitmoLab») |
 | 7 | `rea-final` | Informe final de la ingeniería inversa (6 webs) + segunda pasada de NavRad con imagen | ⏸ parado (2026-10-23): esperando la elección del usuario. Final: https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee · NavRad: https://claude.ai/artifact/2v4kHFM66eac8d5bYWZgtm | Pedido por el usuario el 23/10; sustituye a los informes parciales como documento de decisión |
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
-| 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | pendiente (aprobada 2026-10-25) | Va en la etapa A del plan de integración |
+| 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | hecha (2026-10-26) · PR #28 aprobada por el usuario, en main | Va en la etapa A del plan de integración |
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
-| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en curso, ⏸ (2026-10-25): parada 1 hecha y en la app (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8) · PR #30 en borrador. Siguiente: que el usuario elija en el informe de `rea-eco` y después la parada 2, anatomía. Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b | Empieza por una maqueta «antes / después» de la imagen |
-| 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura |
-| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
+| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en revisión (2026-10-25): parada 1 hecha (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8), PR #30 en borrador: https://github.com/alvariitoSW/fiebres-neutropenias/pull/30 · maqueta https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b. Siguiente: **parada 2**, ya decidida (26/10; ver «Parada 2 de `eco-mega`» abajo) | Empieza por una maqueta «antes / después» de la imagen |
+| 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | hecha (2026-10-26) · PR #31, en main · informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir | Corta, de solo lectura |
+| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino. Propuesta de atajo (26/10, en el informe del `b3`): cobertura y maqueta M3 durante la parada 2 del `b3`; la presión del tórax (M8) hecha una vez para CPAP y respirador; el pulmón entra en la app a la vez que el 3C. Espera la elección del usuario |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
-| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | ⏸ parado en la fase 1 (2026-10-25): informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | hecha (2026-10-26): informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi; el usuario eligió el núcleo, que entra en la parada 2 de `eco-mega` | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -356,6 +357,54 @@ río y mar) → 39-44 → 45-53.
   el usuario elija.
 - Lo que NO quiero: cambiar reglas sin su visto bueno.
 - Fuente: `autonomo/partes/`, `autonomo/gasto.mjs`, los informes `profesor.md` de cada tarea.
+
+**Encargo `eco-anatomia`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
+- Lo que dijo el usuario (26/10): «la anatomía del corazón no es real… informe con Fable 5.1… /ingenieria-reversa de
+  las páginas que tenemos ya para mejorar nuestra ecocardio sobre todo en la anatomía… mejorar mucho más la parte de
+  realismo anato-fisiológico-patológico… un /plan-socialista para llevarlo a cabo y ver el gasto… optimizarlo».
+- Qué quiero: un informe-propuesta (página para el móvil) de cómo hacer que el corazón del simulador sea anatómica,
+  fisiológica y patológicamente real: forma 3D de cada cavidad, paredes y grosores, valvas por segmentos, cuerdas y
+  papilares, trabéculas, anillos, grandes vasos y lo que rodea (pericardio, pulmón, aorta descendente, esófago);
+  cómo late cada parte (torsión, descenso del anillo, engrosamiento) desde el motor; y cómo cambia con cada
+  enfermedad que ya tiene el simulador (dilatada, hipertrófica, derrame, hipovolemia, VD en TEP…).
+- Cómo: con el modelo Fable 5.1; partiendo de lo ya estudiado (`autonomo/ideas/ingenieria-inversa/echodemo-anatomia.md`,
+  `echosuite-anesthbeta-anatomia.md`, `ecos-reales-libres.md`, `tee`, informe «Un corazón más real»), sin repetirlo:
+  profundizar y comparar con nuestro `js/modules/eco/` (`corazon-geo.mjs`, `motor.mjs`, `formas.mjs`, `escenarios.mjs`).
+- Salida: el informe con mejoras ordenadas (qué aporta para estudiar, esfuerzo, riesgo) **y un plan socialista**
+  troceado en tareas de una pieza con el **gasto estimado** de cada una (con las cifras medidas de `autonomo/gasto.mjs`
+  en tareas parecidas) y una versión optimizada (qué va en modelo barato, qué en potente, qué se puede saltar).
+- Lo que NO quiero: copiar código, textos o mallas con licencia restrictiva; imágenes de CAMUS ni EchoNet; tocar la app.
+- Después: el usuario elige; lo elegido se trabaja como paradas de `eco-mega`.
+
+**Parada 2 de `eco-mega`** · decidida por el usuario el 26/10/2026 sobre la versión 2 del informe «Un corazón más
+real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `auto/eco-mega` (PR #30)
+- **Entra ya (sin PDF)**:
+  - A1: cuerdas que brillan y sin manchas sueltas;
+  - A2: tabla de brillo por tejido;
+  - A3: sombra del calcio, solo la sombra y sin escenario si no hay ficha de estenosis aórtica;
+  - B4: papilares que se acortan y VD que engruesa;
+  - B5: cortina aorto-mitral (anatomía nueva, aprobada);
+  - D1: eco real de uso libre al lado del nuestro, con autor y licencia; las de Yale y Lynch, una a una (si son
+    dibujos, no entran).
+  
+  Todo en modelo barato, salvo lo que el informe marca como potente.
+- **Con los PDF, ya en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, subidos el 26/10): B1, B2
+  (**en potente desde la primera vuelta**, decisión del usuario el 26/10), B3 y C1 entran en la misma parada. **C2
+  (pared por regiones e infarto) espera a que las coronarias entren en el motor** (decisión del usuario el 26/10).
+- **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
+- Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
+- **Ampliación del 26/10 (B-025, informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi,
+  `autonomo/ideas/ingenieria-inversa/eco-fisiopatologia.md`)**, decidida por el usuario:
+  1. El **núcleo nuevo entra en la parada 2**: F1 (paciente posible del latido), F5 (VD que late como VD), N2 (VD en
+     U con banda moderadora), N3 (aorta descendente, pleura-pulmón y columna), P1 (taponamiento), P2 (beso de
+     papilares), P4 (TEP con criterios de Lang). El resto (F3, F4, N1, P5, P6) va a la parada 3; P3 espera a C2a.
+  2. **Orden**: el del informe (0 lector → A1 → B1 + F1 → A2 → B2 + N2 → A3 → N3 → B3 → B4 → F5 → B5 → P2 → C1 → P1
+     → D1 → P4), con F1 primero como red de pruebas y después P2 y P1.
+  3. **P1 en potente**, y además **revisar bien el pericardio, sobre todo alrededor de las aurículas, y hacerlo más
+     realista** (palabras del usuario).
+  4. **P7**: la hipertrofia y la dilatada por defecto **se dejan como «forma grave» con una nota visible** (no se
+     recalibran las gravedades).
+  5. PDF para los huecos: el usuario los busca (lista en el parte); hasta que lleguen, esas cifras quedan «hueco».
 
 **Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
 - Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
@@ -584,8 +633,8 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña; los cálculos ya existen |
-| 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | pendiente (aprobada 2026-10-25) | Pequeña-mediana |
-| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | pendiente (aprobada 2026-10-25) | Mediana; llega a inmersión, muralla, telar y vaso |
+| 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña-mediana |
+| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | en curso (2026-10-26), rama `auto/objetivos-casos` (motor, inmersión, telar, vaso y muralla a medias) | Mediana; llega a inmersión, muralla, telar y vaso |
 | 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
 | 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
 
