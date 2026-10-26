@@ -32,6 +32,10 @@ La ficha del tablero estaba completa; el director añadió el «hecho» y la rut
 - En simuladores con «revisión por objetivos», la prueba del modelo debe incluir un recorrido incompleto (p. ej. solo
   la primera medida) y un recorrido correcto: el fallo grave (un instante contaba como objetivo cumplido) solo se veía así.
 
+- **Del usuario (26/10), para mejorar la skill:** al terminar una tarea, el director cierra (archiva) su propia sesión
+  sin esperar a que el usuario la valide, y al usuario le llega un informe de las sesiones cerradas (qué se hizo, qué
+  quedó y qué decidir). Así el proyecto no se frena por validar algo que no es importante.
+
 ## Gasto
 Total 1,7 M equivalentes. Constructor (sonnet) 800 k (46 %, 39 herramientas en 3 vueltas); profesor (opus) 406 k
 (23 %); director 364 k (21 %); auditor (sonnet) 180 k (10 %). El gasto se fue en 3 vueltas del constructor por un
