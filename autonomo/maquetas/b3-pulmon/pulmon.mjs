@@ -54,8 +54,9 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
       // las cifras «reales» del modelo (sin maniobra): para las pruebas y para el dibujo del alvéolo
       palvFinInsp: ciclo.palvFinInsp, palvFinEsp: peepTot, autoPeepReal: autoPeep,
       pres: ciclo.pico - ciclo.palvFinInsp,
-      cstat: meseta != null && peepTotMed != null && meseta > peepTotMed ? vtExh / (meseta - peepTotMed) : null,
-      dp: meseta != null && peepTotMed != null ? meseta - peepTotMed : null,
+      // Cstat y presión de conducción: con la PEEP total si se ocluyó; si no, con la aplicada (y se rotula así)
+      cstat: meseta != null && meseta > (peepTotMed ?? r.peep) ? vtExh / (meseta - (peepTotMed ?? r.peep)) : null,
+      dp: meseta != null ? meseta - (peepTotMed ?? r.peep) : null, conPeepTotal: peepTotMed != null,
       vtIns: ciclo.vtIns, vtExh, vm: vtExh * r.fr / 1000, flujoFinEsp: ciclo.flujoFinEsp,
       pMedia: ciclo.nPaw ? ciclo.sumaPaw / ciclo.nPaw : 0,
       ti, te, ie: te / ti, vAtrapado: Math.max(0, ciclo.vFinEsp - C() * r.peep),
