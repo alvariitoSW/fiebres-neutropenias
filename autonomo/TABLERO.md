@@ -12,6 +12,18 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
 - **Modo git y paradas** (`REGLAS.md` §2.3, desde el 20/10/2026): el contenido de un bloque, en una rama `auto/<bN>`
   con una sola PR en borrador y 4-5 paradas del usuario por bloque; los arreglos y lo técnico, directo a `main` con
   los jueces en verde
+- **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que hacer
+  que la siguiente nos intente costar un poco menos»): cada encargo lleva su **presupuesto** (pasos y tokens
+  equivalentes) = el 90 % del último agente del mismo papel y modelo en una pieza parecida (tabla de abajo); al llegar
+  al presupuesto, el agente para y entrega lo hecho con lo que falta. El parte compara gasto con presupuesto, dice por
+  qué se pasó o cómo ahorró, y actualiza la tabla. Las pruebas y arneses que escribe un agente se guardan en el
+  repositorio (`autonomo/bloques/<bN>/herramientas/`) para que el siguiente los reutilice. Fable solo para pensar
+  (profesor, cobertura); constructores, arreglos y auditor, en sonnet (decisión del usuario, 26/10/2026)
+- **Presupuestos vigentes** (medidos el 26/10 en `b3`; equivalentes de `gasto.mjs`): profesor juzgar a fondo · fable
+  60 pasos / 1,3 M (medido 107 / 2,3 M) · profesor juicio rápido · fable 60 / 1,0 M (75 / 1,1 M) · profesor cobertura ·
+  fable 40 / 0,85 M (41 / 0,93 M) · constructor maqueta · sonnet 60 / 1,1 M (72 / 1,3-1,6 M) · constructor arreglos
+  cortos · sonnet 15 / 90 k (9-12 / 0,1 M) · auditor · sonnet 35 / 0,55 M (32-44 / 0,46-0,77 M) · director, una parada:
+  0,9 M (0,98 M)
 - **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
