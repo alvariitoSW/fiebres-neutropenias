@@ -1138,16 +1138,16 @@ const RECORRIDO = [
     enunciado: 'Un hombre de 71 años con EPOC reagudizada tiene 128 lpm, P de varias formas, PR variable y un ritmo irregular. El magnesio sérico es normal. <b>¿Qué haces primero?</b>',
     opciones: [
       { t: 'Magnesio IV empírico: 2 g en 15 min y 6 g en 6 h, y corregir el potasio.', ok: true },
-      { t: 'Verapamilo, porque hay EPOC y el metoprolol no va.', porque: 'El verapamilo corrige menos de la mitad y es inotrópico negativo (p. 28); no es lo primero. Si empiezas por él, dejas sin dar la medida de mayor éxito (88 % con magnesio) y arriesgas la IC con FE reducida.' },
+      { t: 'Verapamilo, porque hay EPOC y el metoprolol no está indicado en ese caso.', porque: 'El verapamilo corrige menos de la mitad y es inotrópico negativo (p. 28); no es lo primero. Si empiezas por él, dejas sin dar la medida de mayor éxito (88 % con magnesio) y arriesgas la IC con FE reducida.' },
       { t: 'Metoprolol IV: 80 % de éxito en la TAM.', porque: 'El metoprolol va si fallan las medidas previas y solo si la EPOC no es la causa (p. 28); aquí lo es. Si lo das primero, un betabloqueante cae sobre un pulmón enfermo.' },
       { t: 'Ningún magnesio: con el sérico normal no hay déficit que corregir.', porque: 'El magnesio sérico puede ser normal con el total del cuerpo agotado, y la respuesta fue independiente del valor sérico (p. 28). Si lo descartas, dejas sin tratar a un paciente con una arritmia que ya es tozuda.' }],
     explicacion: 'En la TAM, lo primero es corregir el magnesio y el potasio; el magnesio IV empírico (2 g en 15 min y 6 g en 6 h) pasó a sinusal al 88 %, con independencia del magnesio sérico. Después, metoprolol si la EPOC no es la causa, o verapamilo (p. 28).', fuente: C.tam },
   { grupo: 'examen', num: 'E4', estado: 'torsade',
     enunciado: 'Una paciente de UCI con haloperidol tiene un QTc de 0,52 s en la hoja de la mañana, sin arritmias. <b>¿Cómo lo interpretas?</b>',
     opciones: [
-      { t: 'Normal: el límite es 0,5 s en las mujeres.', porque: 'Normal es ≤0,44 s y >0,5 s es riesgo de torsade (p. 35); el libro no da otro límite por sexo. Si lo aceptas, no tocarás el fármaco ni los electrolitos.' },
+      { t: 'Normal: el límite sube a 0,5 s en las mujeres, que tienen el QT algo más largo.', porque: 'Normal es ≤0,44 s y >0,5 s es riesgo de torsade (p. 35); el libro no da otro límite por sexo. Si lo aceptas, no tocarás el fármaco ni los electrolitos.' },
       { t: 'La torsade es inevitable: retiras todo y dejas el desfibrilador cargado.', porque: 'El libro insiste en que el QT largo es común en la UCI y la torsade, poco frecuente (p. 35). Desfibrilar es para la torsade sostenida (p. 35), no para un QT largo sin arritmia.' },
-      { t: 'Riesgo de torsade (>0,5 s) que no es una sentencia: mira K⁺ y Mg²⁺ y el fármaco que alarga el QT.', ok: true },
+      { t: 'Riesgo de torsade (>0,5 s), no sentencia: mira K⁺, Mg²⁺ y el fármaco.', ok: true },
       { t: 'Magnesio 1-2 g en 15 min a todo el que pase de 0,5 s.', porque: 'El magnesio se cita para terminar la torsade (p. 35); lo que previene las recaídas es corregir la hipopotasemia y la hipomagnesemia y retirar el fármaco (p. 35). Darlo a ciegas no corrige la causa.' }],
     explicacion: 'Un QTc normal es ≤0,44 s y >0,5 s es un riesgo de torsade; pero un QT largo es común en la UCI y la torsade es rara. Se corrigen el potasio y el magnesio y se retira el fármaco de riesgo (p. 35).', fuente: C.qtc },
   { grupo: 'examen', num: 'E5', estado: 'stemi',
@@ -1155,7 +1155,7 @@ const RECORRIDO = [
     opciones: [
       { t: 'No: en V2-V3 hacen falta ≥2 mm.', porque: 'Los 2 mm son el umbral del varón; en la mujer es ≥1,5 mm en V2-V3 (Tabla 20.1, p. 41). Si aplicas el del varón, retrasas la reperfusión de una mujer que sí lo cumple.' },
       { t: 'Solo con la troponina elevada: sin ella el ECG no basta.', porque: 'El criterio de la tabla es del ECG (p. 41); la troponina detecta la lesión de la célula y se mide a la llegada y a la hora (p. 41). Si esperas la troponina para decidirlo, atrasas la decisión de reperfundir.' },
-      { t: 'Sí, pero solo si el ST de II también sube ≥1 mm.', porque: 'El criterio pide ≥2 derivaciones contiguas (p. 41), y V2 y V3 lo son; no hace falta que cambie II. Si lo exiges, pasas por alto un STEMI anterior.' },
+      { t: 'Sí, pero solo si el ST de II también sube ≥1 mm, como en las demás derivaciones.', porque: 'El criterio pide ≥2 derivaciones contiguas (p. 41), y V2 y V3 lo son; no hace falta que cambie II. Si lo exiges, pasas por alto un STEMI anterior.' },
       { t: 'Sí: ≥1,5 mm en V2-V3 en una mujer, en dos derivaciones contiguas.', ok: true }],
     explicacion: 'Tabla 20.1: STEMI es ST elevado en el punto J en ≥2 derivaciones contiguas, ≥1,5 mm (mujeres) o ≥2 mm (varones) en V2-V3, o ≥1 mm en las demás (p. 41).', fuente: C.t201 },
   { grupo: 'examen', num: 'E6', estado: 'fv',
@@ -1163,7 +1163,7 @@ const RECORRIDO = [
     opciones: [
       { t: 'La reanimación con éxito es improbable: no pasa de 10-15 mmHg a los 20 min.', ok: true },
       { t: 'Que las compresiones son demasiado profundas.', porque: 'Una compresión más profunda se acompaña de más ETCO₂, no de menos (p. 63). Si la lees al revés, comprimirás menos justo cuando necesitas flujo.' },
-      { t: 'Que está normal: en la parada la ETCO₂ es como el PCO₂ arterial, de unos 40 mmHg.', porque: 'El valor de ≈40 es el de la circulación normal (p. 62-63); en la RCP la ETCO₂ cae con el flujo bajo y la Fig. 21.4 muestra lo contrario en quien no recupera pulso. Si lo das por normal, no lo usarás como señal.' },
+      { t: 'Que está normal: en la parada la ETCO₂ es como el PCO₂ arterial, de unos 40 mmHg.', porque: 'El valor de ≈40 es el de la circulación normal (p. 62-63); en la RCP la ETCO₂ cae con el flujo bajo y la Fig. 21.4 muestra cifras bajas y en descenso en quien no recupera el pulso. Si lo das por normal, no lo usarás como señal.' },
       { t: 'Que hay que parar ya, porque nadie se recupera con una cifra así.', porque: 'El libro habla de probabilidad: por encima de ese umbral se ha seguido hasta 1½ h con buen resultado (p. 63). Una cifra baja pesa mucho, pero es una decisión de equipo, no una regla automática.' }],
     explicacion: 'La ETCO₂ en serie durante la RCP orienta hacia el retorno de la circulación: sube en quienes la recuperan y cae en los demás; con menos de 10-15 mmHg a los 20 min es improbable un buen desenlace (p. 63, Fig. 21.4).', fuente: C.etco2 },
   { grupo: 'examen', num: 'E7', tipo: 'destapa', estado: 'sinusal',
