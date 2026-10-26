@@ -1147,11 +1147,11 @@ const RECORRIDO = [
   { grupo: 'examen', num: 'E3', estado: 'tam',
     enunciado: 'Un hombre de 71 años con EPOC reagudizada tiene 128 lpm, P de varias formas, PR variable y un ritmo irregular. El magnesio sérico es normal. <b>¿Qué haces primero?</b>',
     opciones: [
-      { t: 'Magnesio IV empírico: 2 g en 15 min y 6 g en 6 h, y corregir el potasio.', ok: true },
+      { t: 'Magnesio IV empírico: 2 g en 15 min y 6 g en 6 h.', ok: true },
       { t: 'Verapamilo, porque hay EPOC y el metoprolol no está indicado en ese caso.', porque: 'El verapamilo corrige menos de la mitad y es inotrópico negativo (p. 28); no es lo primero. Si empiezas por él, dejas sin dar la medida de mayor éxito (88 % con magnesio) y arriesgas la IC con FE reducida.' },
       { t: 'Metoprolol IV: 80 % de éxito en la TAM.', porque: 'El metoprolol va si fallan las medidas previas y solo si la EPOC no es la causa (p. 28); aquí lo es. Si lo das primero, un betabloqueante cae sobre un pulmón enfermo.' },
       { t: 'Ningún magnesio: con el sérico normal no hay déficit que corregir.', porque: 'El magnesio sérico puede ser normal con el total del cuerpo agotado, y la respuesta fue independiente del valor sérico (p. 28). Si lo descartas, dejas sin tratar a un paciente con una arritmia que ya es tozuda.' }],
-    explicacion: 'En la TAM, lo primero es corregir el magnesio y el potasio; el magnesio IV empírico (2 g en 15 min y 6 g en 6 h) pasó a sinusal al 88 %, con independencia del magnesio sérico. Después, metoprolol si la EPOC no es la causa, o verapamilo (p. 28).', fuente: C.tam },
+    explicacion: 'En la TAM, lo primero es corregir, si hace falta, el magnesio y el potasio; el magnesio IV empírico (2 g en 15 min y 6 g en 6 h) pasó a sinusal al 88 %, con independencia del magnesio sérico. Después, metoprolol si la EPOC no es la causa, o verapamilo (p. 28).', fuente: C.tam },
   { grupo: 'examen', num: 'E4', estado: 'torsade',
     enunciado: 'Una paciente de UCI con haloperidol tiene un QTc de 0,52 s en la hoja de la mañana, sin arritmias. <b>¿Cómo lo interpretas?</b>',
     opciones: [
@@ -1179,7 +1179,7 @@ const RECORRIDO = [
   { grupo: 'examen', num: 'E7', tipo: 'destapa', estado: 'sinusal',
     enunciado: 'Ante una taquicardia en el monitor, el libro dice que el diagnóstico se apoya en 3 hallazgos del ECG. <b>¿Cuáles?</b>',
     puntos: [
-      { t: 'La <span class="hl-azul">duración del QRS</span>: estrecho (≤0,12 s) nace por encima del sistema de conducción; ancho, por debajo.', c: C.hallazgos },
+      { t: 'La <span class="hl-azul">duración del QRS</span>: estrecho (≤0,12 s) nace por encima del sistema de conducción; ancho (>0,12 s): una TV o una supraventricular con conducción aberrante (p. 20-21).', c: C.hallazgos },
       { t: 'La <span class="hl-azul">uniformidad de los intervalos R-R</span>: regular o irregular.', c: C.regular },
       { t: 'Las <span class="hl-azul">características de la actividad auricular</span>: P iguales, ausencia de P o dientes de sierra.', c: C.regular }],
     explicacion: 'Son la duración del QRS, la uniformidad del R-R y la actividad auricular (Fig. 19.1, p. 18-19).', fuente: C.hallazgos },
@@ -1765,7 +1765,7 @@ function cuartaCifra(L) {
   if (S.clave === 'torsade') { const v = S.tdp ? null : L.qtc; return { k: 'qt', et: 'QTc', v: v ? coma(v, 2) : '—', u: 's', o: '>0,5: riesgo · p. 35', cls: v > 0.5 ? 'no' : v > 0.44 ? 'ojo' : 'si' }; }
   if (S.clave === 'stemi') { const mm = lesionMm()[S.deriv], lim = umbralST(); return { k: 'st', et: `ST ${S.deriv}`, v: coma(mm, 1), u: 'mm', o: `umbral ${coma(lim, 1)} · p. 41`, cls: mm >= lim ? 'no' : 'si' }; }
   if (S.clave === 'hiperk') return { k: 'k', et: 'K⁺', v: coma(S.k, 1), u: 'mEq/l', o: 'Nefrología al día · p. 21', cls: S.k >= 6.5 ? 'no' : S.k > 5.5 ? 'ojo' : 'si' };
-  const q = L.caos ? null : L.qrs; return { k: 'qrs', et: 'QRS', v: q ? coma(q, 2) : '—', u: 's', o: 'corte 0,12 · p. 18', cls: q > 0.12 ? 'no' : '' };
+  const q = L.caos ? null : L.qrs; return { k: 'qrs', et: 'QRS', v: q ? coma(q, 2) : '—', u: 's', o: 'ilustrativo · corte 0,12 p. 18', cls: q > 0.12 ? 'no' : '' };
 }
 const umbralST = () => (S.deriv === 'II' ? 1 : S.sexo === 'm' ? 1.5 : 2);
 
