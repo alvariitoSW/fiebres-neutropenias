@@ -16,7 +16,7 @@
 .cifra .obj b { color: var(--text-main); }
 .calc .celda .t { display: block; }
 .escena-caja { padding: 0; }
-#esc-svg { display: block; width: 100%; height: auto; }
+#esc-svg { display: block; width: 84%; height: auto; margin: 0 auto; }
 .leyenda button { min-height: 40px; }
 .dock-tabs { grid-auto-columns: minmax(0, 1fr); }
 .deslizador output b { color: var(--accent-yellow); }
@@ -31,7 +31,7 @@
 </head>
 <body>
 <main>
-  <div class="cab"><h1>El pulmón con respirador <em>· pieza 1</em></h1><span class="aviso">Para elegir: aún no está en la app</span></div>
+  <div class="cab"><h1>El pulmón con respirador</h1><span class="aviso">Para elegir · no está en la app</span></div>
   <div class="interruptor" role="tablist" aria-label="Modo">
     <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
     <button type="button" role="tab" id="modo-may" aria-selected="false">Mayéutica</button>
@@ -49,7 +49,7 @@
   </section>
 
   <section id="zona-may" class="formato" hidden aria-live="polite"></section>
-  <section class="escena-caja" id="escena" aria-label="El respirador, el tubo y el tórax">
+  <section class="escena-caja" id="escena" data-dock-pliega aria-label="El respirador, el tubo y el tórax">
     <svg id="esc-svg" role="img" aria-label="Respirador con su pantalla, rama inspiratoria y espiratoria, válvula espiratoria, tubo con cuff, tórax con pleura y diafragma y el racimo de alvéolos"></svg>
     <span class="fig-esq">Un compartimento · fisiología general</span>
   </section>
@@ -67,7 +67,7 @@
 
 <div class="dock" id="dock">
   <div class="dock-in" id="dock-explorar">
-    <div class="frase" id="frase"><span class="frase-txt" id="frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="btn-guia">Explí-<br>came</button></div>
+    <div class="frase" id="frase"><span class="frase-txt" id="frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="btn-guia" aria-label="Explicación guiada de este estado">Guía</button></div>
     <div class="dock-tabs" role="tablist" id="dock-tabs">
       <button type="button" role="tab" data-pest="resp" aria-selected="true">Respirador</button>
       <button type="button" role="tab" data-pest="pulmon" aria-selected="false">Pulmón</button>
