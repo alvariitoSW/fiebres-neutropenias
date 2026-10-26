@@ -252,8 +252,9 @@ El resto del tablero sigue `aparcada`.
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
   C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. **Falta**: el PDF de la ESC 2023
-  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191) y el de ECG de la rotación (la ESC no se pudo
-  conseguir el 26/10). Ya en `docs/`: de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
+  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191) y el de ECG de la rotación . Ya en `docs/`: ESC 2023 de SCA (2 partes),
+  de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). Faltan el suplemento de la ESC (figuras S2-S3) y un
+  libro de ECG para la tabla arteria → derivaciones (la ESC no la trae). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
 
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar

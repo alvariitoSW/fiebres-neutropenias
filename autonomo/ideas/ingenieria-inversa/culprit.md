@@ -80,7 +80,14 @@ guardado; solo 2 capturas del simulador para el informe (JPEG 390 px, fuera del 
   de Culprit (aVR baja) va contra la fuente. Es una revisión: cita a Yamaji, no es el artículo original.
 - **LITFL** (https://litfl.com/st-elevation-in-avr/, enlace que pasó el usuario): web, solo para enlace cruzado y
   para saber qué buscar; no es fuente de cifras (NORTE, «Lo que NO queremos»).
-- **Sigue faltando**: la guía ESC 2023 de SCA (el usuario no la consiguió) y el libro de ECG de la rotación.
+- **Guía ESC 2023 de SCA** → `docs/esc-2023-sca-parte1.pdf` (págs. impresas 3720-3773; impresa = 3719 + pág. del PDF)
+  y `docs/esc-2023-sca-parte2.pdf` (3774-3826; impresa = 3773 + pág. del PDF). Completa (107 págs.). El ECG está en
+  §3.2.1-3.2.2, parte 1 p. 19 (impresa 3738): umbrales de ↑ST en el punto J (V2-V3 por sexo y edad, ≥ 1 mm en las
+  demás), V3R/V4R en el inferior, V7-V9 en el posterior (a menudo la Cx), ↓ST V1-V3 con T terminal positiva, ↓ST ≥ 1 mm
+  en ≥ 6 derivaciones con ↑ST en aVR y/o V1 (multivaso o tronco), BRIHH/BRD/marcapasos como equivalentes, Wellens y
+  T hiperagudas citadas. **No trae**: la tabla arteria → derivaciones, la dominancia, de Winter ni Sgarbossa; los
+  patrones dibujados van al **material suplementario** (figuras S2 y S3), que no está en estos PDF.
+- **Sigue faltando**: el suplemento de la ESC 2023 (figuras S2 y S3) y un libro de ECG para los territorios.
 
 ## 4. Licencia y coste
 - Sin licencia publicada ni aviso de copyright en la página (buscado: licen, ©, copyright). **Deducido: todos los
