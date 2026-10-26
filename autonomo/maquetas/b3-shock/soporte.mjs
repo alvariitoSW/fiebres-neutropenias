@@ -108,7 +108,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
     get vBalon() { return ms.vBalon; }, get qImp() { return ms.qImp; }, get qEcmo() { return ms.qEcmo; }, get qVent() { return ms.qVent; } };
   let acum = nuevo(), ultimoLat = m.s.nLatido, lectura = null, historiaAo = [];
-  let cris = 0, sangre = 0, crisTotal = 0;
+  let cris = 0, sangre = 0, crisTotal = 0, edemaVisto = 0, vvenBase = 0;
   function nuevo() { return { aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
 
   // Fármacos y vasopresores: multiplicadores sobre lo basal del paciente (dirección de la ficha; magnitud ilustrativa)
@@ -172,10 +172,23 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (tipo === 'sangre') sangre += mL; else { cris += mL; crisTotal += mL; }
     bolo(m, mL);                                // maniobras.mjs: entra en las venas
   }
-  // El reloj: al pasar las horas, 3/4 del cristaloide se van al intersticio (Marino, cap. 14, p. 11)
-  function redistribuir() { const sale = 0.75 * cris; if (sale > 0) { m.s.vven -= sale; cris = 0; } return sale; }
+  // El reloj: al pasar las horas, 3/4 del cristaloide se van al intersticio (Marino, cap. 14, p. 11). El motor ya sacó parte
+  // al pulmón (edema) mientras tanto: eso cuenta como ya salido, y de las venas no puede irse más de lo que tienen por
+  // encima de lo basal. Se reparte en tramos (la hora), no de golpe (26/10/2026: restar todo de golpe daba PA 15/5).
+  function redistribuir() {
+    const yaEdema = Math.max(0, m.s.vEdema - edemaVisto);
+    let falta = Math.max(0, 0.75 * cris - yaEdema), total = 0;
+    const TRAMOS = 6, trozo = falta / TRAMOS;
+    for (let i = 0; i < TRAMOS && trozo > 0; i++) {
+      const sale = Math.min(trozo, Math.max(0, m.s.vven - vvenBase));
+      m.s.vven -= sale; total += sale; correr(1.5);
+    }
+    cris = 0; edemaVisto = m.s.vEdema;
+    return total;
+  }
 
   correr(asentar);
+  edemaVisto = m.s.vEdema; vvenBase = m.s.vven;
   return { m, ajuste, st, base, paso, correr, ajustar, volumen, redistribuir, get lectura() { return lectura; },
     get infundido() { return { cris, sangre, crisTotal }; } };
 }
