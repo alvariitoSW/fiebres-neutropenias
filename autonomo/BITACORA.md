@@ -179,16 +179,6 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
-### B-026 · Ingeniería inversa de Culprit (cliffreid.com) · apuntado 2026-10-26
-- **Lo que dijiste**: «Habría que hacer después de todas las mejoras que están activas ingeniería reversa a este
-  repositorio/página web https://www.cliffreid.com/culprit/#explore».
-- **Cómo lo entiendo**: `/ingenieria-reversa` de la web (informe-propuesta para el móvil, sin copiar código, textos
-  ni imágenes), con el norte del Radar. Ficha de triaje en `autonomo/radar/ENTRADAS.md`.
-- **Depende de**: terminar las mejoras activas (Marino primero, Objetivo M5). La red de la sesión bloquea
-  `cliffreid.com`: hace falta permitir el dominio en el entorno o usar el REA/Playwright del usuario.
-- **Tamaño**: pequeña (una sesión, como las de las 6 webs).
-- **Dudas**: ninguna; el orden ya lo dijiste («después»).
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -258,6 +248,12 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **B-026 · Culprit (Cliff Reid), informe «Arteria culpable»** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw, 26/10): ocluyes una coronaria y cambian el ECG de
+  12 y la eco. Propuesta para después de Marino: A ficha «Del vaso a la derivación», B preguntas «predice el ECG» y
+  «coloca el trombo», C modelo vivo «Arteria culpable» (2D), D caso con reloj. **Espera**: qué entra y en qué fase
+  (recomiendo A + B en la Fase 1 y C cuando el motor tenga las coronarias), y los PDF de la ESC 2023 de SCA y de ECG de
+  la rotación. Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md`.
 
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar

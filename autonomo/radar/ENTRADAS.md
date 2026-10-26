@@ -33,15 +33,20 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Enlace**: https://www.cliffreid.com/culprit/#explore
 - **Dijo**: «Habría que hacer después de todas las mejoras que están activas ingeniería reversa a este
   repositorio/página web» (26/10)
-- **Qué es**: no consta. La web no se pudo abrir desde la sesión (la red del entorno bloquea el dominio) y la búsqueda
-  no devolvió nada sobre ella. Por el nombre podría tratar de la lesión culpable (coronarias o ECG); **sin comprobar**.
-- **Sirve a**: no consta hasta verla (si es lo que sugiere el nombre: G3, nivel 1 y 2)
-- **Fuente**: no consta
-- **Licencia**: no consta
-- **Coste**: no consta
-- **Veredicto**: ingeniería inversa pedida por el usuario, **después de las mejoras activas** (Marino primero,
-  Objetivo M5). Apuntada en la bitácora (B-026). Necesita una sesión con acceso a `cliffreid.com` o el REA del
-  usuario; la fase de la hoja de ruta se decide al verla.
+- **Qué es**: «Coronary Culprit», simulador docente gratis (en inglés) del IAM por oclusión: ocluyes un punto de una
+  coronaria en un corazón 3D y responden el ECG de 12 derivaciones (con V4R y V7-V9) y la eco (17 segmentos, FEVI y
+  WMSI estimadas). Curso de 6 módulos, 36 escenarios (territorios, OMI sutil, reperfusión, imitadores), 14 casos con
+  reloj y entrenamiento ECG → arteria. Hecho por Cliff Reid con Claude Code. Visto el 26/10/2026
+  (`autonomo/ideas/ingenieria-inversa/culprit.md`).
+- **Sirve a**: G3 (vaso → derivaciones → pared → complicación); niveles 1 (estudiar) y, como esquema, 2
+- **Fuente**: no cita ninguna (ni guías ni artículos); solo nombres de signos (Smith, Aslanger, Wellens, de Winter).
+  Sus cifras sirven para saber qué buscar en la ESC de SCA y en el libro de ECG de la rotación
+- **Licencia**: sin licencia ni copyright publicados; se entiende «todos los derechos reservados» (ideas sí; código,
+  textos e imágenes no). Usa three.js (MIT)
+- **Coste**: gratis, sin cuenta; donativo opcional. Guarda progreso en el navegador y manda analítica anónima propia
+- **Veredicto**: idea fuerte para la Fase 1 (territorios arteria ↔ derivaciones ↔ segmentos) y la Fase 2
+  (coronarias con dominancia). **Se construye después de Marino** (Objetivo M5). Informe:
+  https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw
 
 ### NV-Reason-CT (NVIDIA)
 - **Fecha / tipo**: 2026-10-25 · repositorio
