@@ -179,6 +179,16 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
+### B-026 · Ingeniería inversa de Culprit (cliffreid.com) · apuntado 2026-10-26
+- **Lo que dijiste**: «Habría que hacer después de todas las mejoras que están activas ingeniería reversa a este
+  repositorio/página web https://www.cliffreid.com/culprit/#explore».
+- **Cómo lo entiendo**: `/ingenieria-reversa` de la web (informe-propuesta para el móvil, sin copiar código, textos
+  ni imágenes), con el norte del Radar. Ficha de triaje en `autonomo/radar/ENTRADAS.md`.
+- **Depende de**: terminar las mejoras activas (Marino primero, Objetivo M5). La red de la sesión bloquea
+  `cliffreid.com`: hace falta permitir el dominio en el entorno o usar el REA/Playwright del usuario.
+- **Tamaño**: pequeña (una sesión, como las de las 6 webs).
+- **Dudas**: ninguna; el orden ya lo dijiste («después»).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |

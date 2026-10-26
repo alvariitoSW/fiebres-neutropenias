@@ -24,9 +24,24 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 (vacía) Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.
 
-## Fichas de triaje (las 12 entradas, la más reciente arriba)
+## Fichas de triaje (las 13 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Culprit (Cliff Reid)
+- **Fecha / tipo**: 2026-10-26 · web/app
+- **Enlace**: https://www.cliffreid.com/culprit/#explore
+- **Dijo**: «Habría que hacer después de todas las mejoras que están activas ingeniería reversa a este
+  repositorio/página web» (26/10)
+- **Qué es**: no consta. La web no se pudo abrir desde la sesión (la red del entorno bloquea el dominio) y la búsqueda
+  no devolvió nada sobre ella. Por el nombre podría tratar de la lesión culpable (coronarias o ECG); **sin comprobar**.
+- **Sirve a**: no consta hasta verla (si es lo que sugiere el nombre: G3, nivel 1 y 2)
+- **Fuente**: no consta
+- **Licencia**: no consta
+- **Coste**: no consta
+- **Veredicto**: ingeniería inversa pedida por el usuario, **después de las mejoras activas** (Marino primero,
+  Objetivo M5). Apuntada en la bitácora (B-026). Necesita una sesión con acceso a `cliffreid.com` o el REA del
+  usuario; la fase de la hoja de ruta se decide al verla.
 
 ### NV-Reason-CT (NVIDIA)
 - **Fecha / tipo**: 2026-10-25 · repositorio
