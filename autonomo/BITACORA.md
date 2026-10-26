@@ -212,6 +212,7 @@ esta sección.
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | en el tablero, Objetivo V (`monitor-comun`, aparcada hasta el bloque 3) | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | ⏸ parado en la fase 1 (informe https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) | 2026-10-25 | «aprueba B-024» (25/10) |
+| `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | en curso: informe | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
 ### ⏸ Dónde quedó tee-inversa
 

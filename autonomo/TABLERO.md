@@ -344,6 +344,7 @@ río y mar) → 39-44 → 45-53.
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
 | 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | ⏸ parado en la fase 1 (2026-10-25): informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | en curso (2026-10-26): informe | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -356,6 +357,24 @@ río y mar) → 39-44 → 45-53.
   el usuario elija.
 - Lo que NO quiero: cambiar reglas sin su visto bueno.
 - Fuente: `autonomo/partes/`, `autonomo/gasto.mjs`, los informes `profesor.md` de cada tarea.
+
+**Encargo `eco-anatomia`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
+- Lo que dijo el usuario (26/10): «la anatomía del corazón no es real… informe con Fable 5.1… /ingenieria-reversa de
+  las páginas que tenemos ya para mejorar nuestra ecocardio sobre todo en la anatomía… mejorar mucho más la parte de
+  realismo anato-fisiológico-patológico… un /plan-socialista para llevarlo a cabo y ver el gasto… optimizarlo».
+- Qué quiero: un informe-propuesta (página para el móvil) de cómo hacer que el corazón del simulador sea anatómica,
+  fisiológica y patológicamente real: forma 3D de cada cavidad, paredes y grosores, valvas por segmentos, cuerdas y
+  papilares, trabéculas, anillos, grandes vasos y lo que rodea (pericardio, pulmón, aorta descendente, esófago);
+  cómo late cada parte (torsión, descenso del anillo, engrosamiento) desde el motor; y cómo cambia con cada
+  enfermedad que ya tiene el simulador (dilatada, hipertrófica, derrame, hipovolemia, VD en TEP…).
+- Cómo: con el modelo Fable 5.1; partiendo de lo ya estudiado (`autonomo/ideas/ingenieria-inversa/echodemo-anatomia.md`,
+  `echosuite-anesthbeta-anatomia.md`, `ecos-reales-libres.md`, `tee`, informe «Un corazón más real»), sin repetirlo:
+  profundizar y comparar con nuestro `js/modules/eco/` (`corazon-geo.mjs`, `motor.mjs`, `formas.mjs`, `escenarios.mjs`).
+- Salida: el informe con mejoras ordenadas (qué aporta para estudiar, esfuerzo, riesgo) **y un plan socialista**
+  troceado en tareas de una pieza con el **gasto estimado** de cada una (con las cifras medidas de `autonomo/gasto.mjs`
+  en tareas parecidas) y una versión optimizada (qué va en modelo barato, qué en potente, qué se puede saltar).
+- Lo que NO quiero: copiar código, textos o mallas con licencia restrictiva; imágenes de CAMUS ni EchoNet; tocar la app.
+- Después: el usuario elige; lo elegido se trabaja como paradas de `eco-mega`.
 
 **Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
 - Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
