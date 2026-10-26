@@ -1,0 +1,20 @@
+// Vuelta de límites, shock: 6 capturas en los topes y búsqueda del texto con NaN/undefined. Servidor en el 8796.
+import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const BASE = 'http://127.0.0.1:8796/autonomo/maquetas/b3-shock.html', CAP = '/tmp/plan-socialista/b3/limites/';
+const browser = await chromium.launch(); const page = await (await browser.newContext({ ...devices['iPhone 12'], viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true })).newPage();
+const tap = async (s) => { await page.evaluate((s) => document.querySelector(s)?.click(), s); await page.waitForTimeout(120); };
+const grav = (v) => page.evaluate((v) => { const d = document.getElementById('d-grav'); d.value = v; d.dispatchEvent(new Event('input')); d.dispatchEvent(new Event('change')); }, v);
+const nanDonde = () => page.evaluate(() => [...document.querySelectorAll('body *')].filter((e) => e.children.length === 0 && /NaN|undefined|Infinity/.test(e.textContent)).map((e) => (e.id || e.className || e.tagName) + ': ' + e.textContent.slice(0, 80)).slice(0, 4));
+await page.goto(BASE, { waitUntil: 'networkidle' }); await page.waitForTimeout(900);
+await tap('[data-pac="mateo"]'); await grav(83); await page.waitForTimeout(400); await tap('[data-pest="vol"]');
+for (let i = 0; i < 12; i++) await tap('[data-vol="2000"]'); await page.waitForTimeout(600); await page.screenshot({ path: CAP + '01-mateo-24L.png' });
+console.log('Mateo 24 L nota:', await page.evaluate(() => document.querySelector('#dock-panel .dock-nota')?.textContent), '| NaN:', await nanDonde());
+await tap('[data-pest="reloj"]'); await tap('[data-h="1"]'); await page.waitForTimeout(600); await page.screenshot({ path: CAP + '02-mateo-24L-1h.png' });
+console.log('Mateo 24 L +1 h:', await page.evaluate(() => { const r = window.__cabecera.R; return `PA ${r.pas}/${r.pad} PVC ${r.pvc} PCP ${r.pcp} SpO2 ${r.spo2} edema ${Math.round(window.__cabecera.cab.lectura.edema)} estado ${document.querySelector('#frase-txt .estado')?.textContent}`; }));
+await tap('[data-pac="joaquin"]'); await page.waitForTimeout(300); await tap('[data-pest="grav"]'); await grav(100); await page.waitForTimeout(400); await tap('[data-pest="vol"]');
+for (let i = 0; i < 12; i++) await tap('[data-vol="2000"]'); await page.waitForTimeout(600); await page.screenshot({ path: CAP + '03-joaquin-24L.png' });
+console.log('Joaquín 24 L NaN:', await nanDonde(), await page.evaluate(() => { const r = window.__cabecera.R; return `PA ${r.pas}/${r.pad} PVC ${r.pvc} PCP ${r.pcp} IC ${r.ic}`; }));
+await tap('[data-pac="amparo"]'); await page.waitForTimeout(300); await tap('[data-pest="reloj"]'); for (let i = 0; i < 20; i++) await tap('[data-h="18"]'); await page.waitForTimeout(500); await page.screenshot({ path: CAP + '04-amparo-15d.png' });
+await tap('[data-pest="grav"]'); await grav(0); await page.waitForTimeout(400); await tap('[data-pest="far"]'); await tap('[data-na="30"]'); await tap('[data-far="vaso"]'); await tap('[data-pest="vol"]'); for (let i = 0; i < 5; i++) await tap('[data-vol="2000"]'); await page.waitForTimeout(600); await page.screenshot({ path: CAP + '05-amparo-sana-na30-10L.png' });
+console.log('Amparo sana NA30 10 L:', await page.evaluate(() => { const r = window.__cabecera.R; return `PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} estado ${document.querySelector('#frase-txt .estado')?.textContent}`; }));
+await browser.close();
