@@ -111,7 +111,6 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .fig-pie .lect { color: var(--fg); font: 600 .7rem/1.3 var(--sans); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
 .fig-pie .lect small { display: block; color: var(--muted); font-weight: 400; }
 .fig svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
-.fig .tapa { position: absolute; inset: 0; display: grid; place-items: center; background: var(--bg-main); font: 600 .9rem/1.3 var(--sans); color: var(--dim); text-align: center; padding: 20px; z-index: 2; }
 .celulas { display: flex; flex-wrap: wrap; gap: 6px; }
 .celulas button { min-height: 44px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); background: transparent; color: var(--dim); font: 600 .74rem/1.15 var(--sans); cursor: pointer; }
 .celulas button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
@@ -235,10 +234,6 @@ dialog#visor::backdrop { background: rgba(23, 20, 15, .82); }
 #visor .caja-img { background: var(--text-main); border-radius: 8px; padding: 4px; }
 #visor img { display: block; width: 100%; height: auto; max-height: 62vh; object-fit: contain; }
 #visor p { font: .84rem/1.4 var(--sans); color: var(--dim); margin-top: 8px; }
-.elige { border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 8px; }
-.opciones-elige { display: flex; flex-wrap: wrap; gap: 6px; }
-.opciones-elige button { min-height: 44px; font: 600 .78rem var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 6px 10px; cursor: pointer; text-align: left; }
-.opciones-elige button[aria-pressed="true"] { background: var(--oro); color: var(--bg); border-color: var(--oro); }
 
 /* Mayéutica */
 .formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
@@ -299,6 +294,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
 .dib .ap { opacity: .14; }
 .dib [data-pieza] { cursor: pointer; }
 .dib .marca-pin { stroke: var(--accent-red); stroke-width: 1; stroke-dasharray: 2 2; }
+.org, .frase .org, .para .org, .nota-fuentes .org, .lead .org, .cas-txt .org, dd .org, .pieza-info .org, .ficha-pac .org, .guia-txt .org, .frase-txt .org { display: inline-block; white-space: nowrap; overflow-wrap: normal; max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
 </style>
 </head>
 <body>
@@ -320,6 +316,12 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
     <p class="ficha-pac" id="ficha-pac"></p>
   </header>
 
+  <div class="interruptor" role="tablist" aria-label="Modo">
+    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+  </div>
+  <section id="vista-preguntas" class="bloque" hidden aria-live="polite"><div class="formato" id="preg"></div><p class="para" id="aviso-tapa" hidden>El monitor y el dibujo salen cuando contestes.</p></section>
+
   <section class="monitor" id="monitor" aria-label="Monitor de cabecera">
     <div class="mon-cab"><span id="mon-quien">Monitor</span><span class="mon-botones"><button type="button" class="pausa" id="cinco" aria-pressed="false">5 curvas</button><button type="button" class="pausa" id="pausa" aria-pressed="false">Pausa</button></span></div>
     <div class="mon-cuerpo">
@@ -335,15 +337,9 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
     <div class="fig-cab"><span class="n">Fig. 1</span><span class="t" id="fig1-tit">Dos órganos, una misma vía</span></div>
     <svg id="escena" class="dib" viewBox="0 0 360 276" role="img" aria-label="La vía de la bomba lleva las llaves a la arteriola y al banco del corazón"></svg>
     <div class="fig-pie"><span class="pista" id="fig1-pista">Toca una célula para verla con lupa</span><span class="lect" id="fig1-lect"></span></div>
-    <div class="tapa" id="tapa1" hidden>Primero contesta. El dibujo y las cifras salen después.</div>
   </section>
 
-  <div class="interruptor" role="tablist" aria-label="Modo">
-    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
-    <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
-  </div>
 
-  <section id="vista-preguntas" class="bloque" hidden aria-live="polite"><div class="formato" id="preg"></div></section>
 
   <div class="fila" id="fila-explicame"><button type="button" class="b prim" id="explicame">Explícame este estado</button><span class="para" id="explicame-txt"></span></div>
 
@@ -359,7 +355,6 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
       <svg id="lupa" class="dib" viewBox="0 0 360 372" role="img" aria-label="La célula con sus cerraduras y la maquinaria de dentro"></svg>
       <div class="fig-pie"><span class="pista" id="fig2-pista">Toca una pieza: su nombre sale abajo</span><span class="lect" id="fig2-lect"></span></div>
       <div class="fig-pie"><button type="button" class="btn-plano" id="lupa-grande">⤢ La lupa, a pantalla completa</button></div>
-      <div class="tapa" id="tapa2" hidden>Primero contesta. El dibujo y las cifras salen después.</div>
     </section>
     <div class="barra-lupa">
       <div class="seg" role="group" aria-label="Cómo se ve la maquinaria"><button type="button" data-cas="facil" aria-pressed="true">Fácil<small>llave, palanca, efecto</small></button><button type="button" data-cas="completa" aria-pressed="false">Completa<small>cada máquina</small></button></div>
@@ -377,7 +372,6 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
     <details class="plegable"><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div class="bloque" id="lista-notas"></div></details>
     <details class="plegable"><summary>Para profundizar: lo que este modelo aún no enseña</summary><ul class="lista" id="lista-profundizar"></ul></details>
     <details class="plegable"><summary>Cómo crecerá: otras fuentes de la app</summary><div class="envuelve"><table class="tabla-crece" id="tabla-crece"></table></div></details>
-    <section class="elige" aria-label="Para decidir"><h2>Para decidir</h2><div id="elige"></div><p class="para" id="resumen-elige"></p></section>
   </section>
 </main>
 
@@ -441,7 +435,7 @@ function cita(c) {
 function chip(c) {
   if (!c) return '';
   const [, , , pdf, cap] = FICHA[c.f];
-  return pdf ? `<span class="org">ficha · ${cap}${pag(c.p)}</span>` : `<span class="org otra">otra fuente: Manual UMI</span>`;
+  return pdf ? `<span class="org fch">ficha · ${cap}${pag(c.p)}</span>` : `<span class="org otra">otra fuente: Manual UMI</span>`;
 }
 function citaCorta(c) {
   const [[esp, view, panel], titulo, , pdf, cap] = FICHA[c.f];
@@ -542,7 +536,7 @@ const alfaNA = d => d <= 3 ? 0 : Math.pow(Math.min(1, (d - 3) / 27), 1.3);   // 
 const sat = (d, k) => 1 - Math.exp(-d / k);
 const FARMACOS = {
   na: { nombre: 'Noradrenalina', corto: 'NA', sub: 'α₁ principal, β débil', unidad: 'µg/min',
-    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => 0.45 * Math.min(1, d / 10) }, { rec: 'alfa1', tipo: 'ag', occ: alfaNA }],   // cuánto β: ilustrativo (la ficha da la dirección)
+    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => 0.6 * Math.min(1, d / 10) }, { rec: 'alfa1', tipo: 'ag', occ: alfaNA }],   // cuánto β: ilustrativo (la ficha da la dirección)
     regimen: { shock: { min: 0, max: 40, paso: 1, marcas: [5, 10, 30, 40], porKg: false,
       tramos: [[0, 10, 'pesa el β', '--accent-yellow'], [10, 30, 'manda el α', '--accent-red'], [30, 40, 'techo: segundo vasopresor', '--text-muted']], chip: 'tramos: ficha · p. 13' },
       fija5: { fija: 5, txt: '5 µg/min, la dosis de inicio del cardiogénico', chip: 'ficha · pp. 42-43' } },
@@ -565,7 +559,8 @@ const FARMACOS = {
       adversos: ['Como los de la noradrenalina, en tipo y en frecuencia.', C.vasoDosis],
       umi: 'La cuenta entre los vasoconstrictores (receptores de arginina-vasopresina); no da su dosis.' } },
   adrenalina: { nombre: 'Adrenalina', corto: 'Adrenalina', sub: 'β potente y α', unidad: 'µg/min',
-    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => sat(d, 4) }, { rec: 'beta2', tipo: 'ag', occ: d => sat(d, 4) }, { rec: 'alfa1', tipo: 'ag', occ: d => sat(d, 15) }],
+    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => sat(d, 4) }, { rec: 'beta2', tipo: 'ag', occ: d => sat(d, 4), cel: ['liso-arteriola', 'liso-bronquio'] }, { rec: 'beta2', tipo: 'ag', occ: d => sat(d, 9), cel: ['mastocito'] },   // el mastocito se llena más despacio: la dosis se titula (ilustrativo)
+      { rec: 'alfa1', tipo: 'ag', occ: d => sat(d, 15) }],
     // lactato (producción aeróbica) y glucemia (el α frena la insulina): S p. 14. Cuánto: ilustrativo (8 µg/min: lactato +1,9 y glucemia +102, del caso)
     sist: { lact: d => 1.9 * sat(d, 8) / sat(8, 8), glu: d => 102 * sat(d, 8) / sat(8, 8) },
     regimen: { septico: { min: 0, max: 0.5, paso: 0.05, porKg: true, unidadVista: 'µg/kg/min', marcas: [0.1, 0.5], tramos: [[0, 0.1, '', '--text-muted'], [0.1, 0.5, 'inicio 0,1 → máximo 0,5', '--accent-yellow']], chip: 'ficha · p. 14' },
@@ -578,8 +573,8 @@ const FARMACOS = {
       adversos: ['Taquicardia y arritmias; hipoperfusión esplácnica (α); más metabolismo; hiperglucemia (el α frena la insulina); lactato alto por producción aeróbica, que engaña.', C.adre],
       umi: 'β₂: vasodilatación del músculo y de las coronarias; β₁: inotropismo; α: más RVS. Efecto β a 1-4 µg/min y α por encima de 20 µg/min (Marino no da este corte).' } },
   dopamina: { nombre: 'Dopamina', corto: 'Dopamina', sub: 'tres fármacos según la dosis', unidad: 'µg/kg/min',
-    llaves: [{ rec: 'dopa', tipo: 'ag', occ: d => 0.9 * Math.min(1, d / 3) }, { rec: 'beta1', tipo: 'ag', occ: d => d <= 3 ? 0 : 0.75 * Math.min(1, (d - 3) / 7) },
-      { rec: 'alfa1', tipo: 'ag', occ: d => d <= 10 ? 0 : Math.min(1, (d - 10) / 25) }],
+    llaves: [{ rec: 'dopa', tipo: 'ag', occ: d => 0.9 * Math.min(1, d / 3) }, { rec: 'beta1', tipo: 'ag', occ: d => d <= 3 ? 0 : 0.65 * Math.min(1, (d - 3) / 7) },
+      { rec: 'alfa1', tipo: 'ag', occ: d => d <= 10 ? 0 : Math.min(1, (d - 10) / 15) }],
     regimen: { septico: { min: 0, max: 20, paso: 1, porKg: true, unidadVista: 'µg/kg/min', marcas: [3, 10, 20],
       tramos: [[0, 3, 'dopaminérgico', '--accent-green'], [3, 10, 'β: sube el volumen latido', '--accent-yellow'], [10, 20, 'α: sube la RVS', '--accent-red']], chip: 'tramos: ficha · p. 14' } },
     ficha: { receptores: [['<b>≤3 µg/kg/min:</b> receptores de dopamina de los lechos renal y esplácnico (sube su flujo) · <b>3-10:</b> β del corazón (sube el volumen latido) · <b>&gt;10:</b> α (sube la RVS; la poscarga puede deshacer la subida del volumen latido).', C.dopa]],
@@ -598,7 +593,7 @@ const FARMACOS = {
       adversos: ['Bradicardia (refleja), menos volumen latido con disfunción cardíaca, menos riego en riñón e intestino.', C.fenil, C.csFenil],
       umi: 'Agonista selectivo de los α₁.' } },
   dobutamina: { nombre: 'Dobutamina', corto: 'Dobutamina', sub: 'β₁', unidad: 'µg/kg/min',
-    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => sat(d, 6) }, { rec: 'beta2', tipo: 'ag', occ: d => 0.3 * sat(d, 6), cel: ['liso-arteriola'] }],
+    llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => sat(d, 6) }, { rec: 'beta2', tipo: 'ag', occ: d => 0.75 * sat(d, 6), cel: ['liso-arteriola'] }],
     regimen: { cardiogenico: { min: 0, max: 20, paso: 1, porKg: true, unidadVista: 'µg/kg/min', marcas: [3, 5, 20], tramos: [[0, 3, '', '--text-muted'], [3, 5, 'inicio 3-5', '--accent-yellow'], [5, 20, 'habitual hasta 20', '--accent-yellow']], chip: 'ficha · p. 43' },
       tsvi: { tog: true, txt: 'Contraindicada aquí; se pone para ver por qué', chip: 'ficha · p. 43', dosisModelo: 5 } },
     ficha: { receptores: [['<b>β₁</b> del corazón: más volumen latido y más FC. Vasodilatación leve (el receptor, β₂ débil, lo da el Manual UMI).', C.dobuta, C.umi]],
@@ -659,10 +654,10 @@ const FARMACOS = {
 const PACIENTES = {
   paulino: { corta: '<b>Amparo</b>, 58 años, 76 kg · shock séptico (pielonefritis)', nombre: 'Amparo', chip: 'shock séptico', peso: 76, obj: 'sepsis', del: 'caso',
     linea: '<b>Amparo</b>, 58 años, 76 kg (ideal 58) · pielonefritis obstructiva: shock séptico, tras 1,75 L de cristaloide',
-    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 4, pp: 34, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null, k: null }, kR: 0.198, post: 0.15, sensV1: 1 },
+    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 4, pp: 34, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null, k: null }, kR: 0.38, post: 0.4, sensV1: 1 },
   paulino10: { corta: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina', nombre: 'Amparo', chip: 'shock séptico, hora 10', peso: 76, obj: 'sepsis', del: 'caso',
     linea: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina; lactato 3,1 antes de la adrenalina',
-    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 5, pp: 36, spo2: 95, fr: 24, t: 38.4, lact: 3.1, glu: 160, k: null }, kR: 0.198, post: 0.15, sensV1: 1 },
+    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 5, pp: 36, spo2: 95, fr: 24, t: 38.4, lact: 3.1, glu: 160, k: null }, kR: 0.38, post: 0.4, sensV1: 1 },
   sano: { corta: '<b>Voluntario sano</b>, 75 kg', nombre: 'Voluntario sano', chip: 'voluntario sano', peso: 75, obj: null, del: 'ilustrativo',
     linea: '<b>Voluntario sano</b>, 75 kg · las cifras son ilustrativas',
     base: { fc: 68, ic: 3.2, irvs: 26, pvc: 5, pp: 45, spo2: 98, fr: 14, t: 36.6, lact: null, glu: null, k: null }, kR: 0.35, post: 0.15, sensV1: 0.06 },
@@ -1693,6 +1688,15 @@ function marcaObj(k, v) {
   const o = OBJETIVOS[R.P.obj]?.filas[k]; if (!o || typeof v !== 'number') return { cls: '', txt: '' };
   return o[1](+v.toFixed(k === 'ic' || k === 'irvs' || k === 'lact' ? 1 : 0)) ? { cls: 'si', txt: '<span class="marca si">✓</span>' } : { cls: 'no', txt: '<span class="marca no">✗</span>' };
 }
+// El lactato no cambia de golpe: tarda horas. Aquí, en segundos (ilustrativo): sigue a su destino con una constante de tiempo
+let lactVis = null, lactClave = '';
+function seguirLactato(dt) {
+  if (!R || typeof R.lact !== 'number') { lactVis = null; return; }
+  const clave = ST.id + '|' + ST.pac;
+  if (lactVis == null || clave !== lactClave) { lactVis = R.lact; lactClave = clave; return; }
+  const antes = lactVis; lactVis = seguir(lactVis, R.lact, dt, 0.3);
+  if (Math.abs(lactVis - antes) > 0.004 && Math.round(lactVis * 10) !== Math.round(antes * 10)) pintarCifras();
+}
 function pintarCifras() {
   const tap = tapado, pa = Math.round(R.pam), mp = marcaObj('pa', R.pam), al = k => monitor.altoDe(k);
   const filas = [
@@ -1706,7 +1710,7 @@ function pintarCifras() {
   const celdas = [{ k: 'ic', et: 'IC', u: 'L/min/m²', d: 1 }, { k: 'irvs', et: 'IRVS', u: 'UW·m²', d: 1 }, { k: 'pvc', et: 'PVC', u: 'mmHg', d: 0 },
     { k: 'lact', et: 'Lactato', u: 'mmol/L', d: 1 }, R.P.base.k != null ? { k: 'k', et: 'K⁺', u: 'mmol/L', d: 1 } : { k: 'glu', et: 'Glucemia', u: 'mg/dL', d: 0 }];
   $('perfusion').innerHTML = celdas.map(p => {
-    const v = R[p.k]; let val, t, cls = '';
+    const v = p.k === 'lact' && typeof R.lact === 'number' && lactVis != null ? lactVis : R[p.k]; let val, t, cls = '';
     if (p.k === 'lact' || p.k === 'glu' || p.k === 'k') {
       const sube = p.k === 'lact' ? R.A.sist.lact > 0 : p.k === 'glu' ? R.A.sist.glu > 0 : R.A.sist.k !== 0;
       if (v == null) { val = '—'; t = 'no la mueve'; cls = 'apagada'; }
@@ -2053,29 +2057,15 @@ const CRECE = [
   ['Marino, abdomen', 'El lecho esplácnico: terlipresina en el V₁ y el octreótido.'],
   ['El Libro Azul y UCI papers', 'La arteriola pulmonar: el óxido nítrico y el sildenafilo, la misma trituradora que la PDE de la milrinona.'],
 ];
-const elegido = {};
-const DECIDIR = [
-  ['objeto', '1 · ¿La cerradura de pines con su maquinaria (prensa, trituradora, depósito, trinquete) como la célula del modelo?', [['si', 'Sí, así'], ['mas', 'Más biológica, menos máquina']]],
-  ['banco', '2 · ¿El corazón como haz de miocitos en su banco y el nodo como metrónomo?', [['si', 'Sí'], ['otro', 'Prefiero otro objeto']]],
-  ['bronquio', '3 · ¿El bronquio entra ya como muestra de «misma célula, otro órgano»?', [['ya', 'Sí, ya'], ['luego', 'Después de Marino']]],
-  ['piezas', '4 · ¿Monitor corto o de 5 curvas y bomba dibujada como piezas comunes para el shock y el corazón eléctrico?', [['si', 'Sí (recomendado)'], ['no', 'Cada modelo las suyas']]],
-];
 function pintarFijos() {
   $('lista-notas').innerHTML = NOTAS.map(n => `<div class="nota-fuentes"><span class="nota-tipo ${NOTA_TIPO[n.tipo][1]}">${n.titulo || NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.c.map(cita).join('')}</div>`).join('');
   $('lista-profundizar').innerHTML = PROFUNDIZAR.map(p => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
   $('tabla-crece').innerHTML = `<thead><tr><th>Fuente de la app</th><th>Qué añade al modelo</th></tr></thead><tbody>${CRECE.map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join('')}</tbody>`;
-  pintarElige();
   const abrir = () => { $('visor-img').src = IMG52; $('visor-img').alt = 'Fig. 52.4 de Marino';
     $('visor-txt').textContent = 'Fig. 52.4: el receptor de glucagón y el receptor β están unidos a la adenilato ciclasa: el ATP pasa a AMPc. El AMPc activa una proteína cinasa que abre la entrada de calcio, y el calcio llega a las proteínas contráctiles. La PDE degrada el AMPc a AMP; la milrinona la frena. Los betabloqueantes tapan el β y los calcioantagonistas cierran el canal.';
     $('visor-cita').innerHTML = cita(C.fig524); $('visor').showModal(); };
   $('fig524').onclick = abrir; $('visor-cerrar').onclick = () => $('visor').close();
 }
-function pintarElige() {
-  $('elige').innerHTML = DECIDIR.map(([k, q, ops]) => `<p class="para">${q}</p><div class="opciones-elige">${ops.map(([v, t]) => `<button type="button" data-el="${k}" data-v="${v}" aria-pressed="${elegido[k] === v}">${t}</button>`).join('')}</div>`).join('');
-  const r = DECIDIR.filter(([k]) => elegido[k]).map(([k, , ops]) => ops.find(o => o[0] === elegido[k])[1]);
-  $('resumen-elige').textContent = r.length ? 'Tu elección: ' + r.join(' · ') : '';
-}
-$('elige').addEventListener('click', ev => { const b = ev.target.closest('[data-el]'); if (!b) return; elegido[b.dataset.el] = b.dataset.v; pintarElige(); });
 /* ---- El bucle: curvas, llaves en la vía, latido del haz, medidor, péndulo, calibre y la lámina 2 ---- */
 const V = { rl: null, acorta: -1 };
 function bucle(t) {
@@ -2086,6 +2076,7 @@ function bucle(t) {
     while (acum >= paso) { muestra(paso); acum -= paso; }
     pintarTrazas();
   }
+  seguirLactato(dt);
   pintarVivo(t, dt);
   requestAnimationFrame(bucle);
 }
@@ -2220,7 +2211,8 @@ const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
   'Si toma un betabloqueante y no responde: glucagón 1-5 mg en 5 min y 5-15 µg/min, de lado (p. 66).',
   'Volumen a manos llenas (fuga del 35 %) y adrenalina IV a 5-15 µg/min: 10 µg/mL son 60 mL/h para 10 µg/min (p. 67).',
 ], vuelta: C.anaGluc };
-function tapar(si) { tapado = si; $('tapa1').hidden = !si; $('tapa2').hidden = !si; }
+// Mientras se predice, el monitor y los dibujos se esconden del todo (nada de 600 px de figura velada bajo la pregunta)
+function tapar(si) { tapado = si; $('aviso-tapa').hidden = !si; if (si) { $('fig1').hidden = true; $('monitor').hidden = true; $('zona-lupa').hidden = true; } }
 function verModelo(si) { $('fig1').hidden = !si; $('monitor').hidden = !si; $('zona-lupa').hidden = !si; }
 function subirBomba(k, de, a, alFin) {
   if (REDUCIR) { ST.f[k] = a; actualizar(); pintarDock(); alFin(); return; }
