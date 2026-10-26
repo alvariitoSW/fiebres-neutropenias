@@ -231,7 +231,7 @@ export const FARMACOS = {
       umi: null } },
   bisoprolol: { nombre: 'Bisoprolol', corto: 'Bisoprolol', sub: 'tapón del β', unidad: 'on', material: 'ciega', via: 'oral',
     llaves: [{ rec: 'beta1', tipo: 'tap', occ: d => d > 0 ? 0.85 : 0 }, { rec: 'beta2', tipo: 'tap', occ: d => d > 0 ? 0.85 : 0, cel: ['mastocito'] }],
-    regimen: { cronico: { tog: true, txt: 'Lo toma de casa', chip: 'ficha · p. 66' } },
+    regimen: { cronico: { candado: true, fija: 1, txt: 'Lo toma de casa: no se quita', chip: 'ficha · p. 66' } },
     ficha: { receptores: [['<b>Tapón</b> de los receptores β: el libro habla de «betabloqueantes» sin distinguir; atenúan o anulan la respuesta a la adrenalina.', C.anaGluc]],
       dosis: [['La pauta crónica de Begoña no cambia el razonamiento: la fuente no la da.', C.anaGluc]],
       funcion: ['Explica la anafilaxia que no responde a la adrenalina.', C.anaGluc], adversos: ['—', C.anaGluc], umi: null } },
@@ -275,13 +275,13 @@ export const PACIENTES = {
   aurelio: { corta: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior: shock cardiogénico', nombre: 'Aurelio', chip: 'shock cardiogénico', peso: 82, obj: 'cardio', del: 'caso',
     linea: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior: shock cardiogénico · tras 250 mL, PCP 19, IC 2,1, PAM 64',
     base: { fc: 108, ic: 2.1, irvs: 25.7, pvc: 10, pp: 26, spo2: 92, fr: 26, t: 36.7, lact: 3.2, glu: null, k: null }, kR: 0.35, post: 0.35, sensV1: 1, baro: 0.2 },
-  tsvi: { nombre: 'Obstrucción del TSVI', chip: 'obstrucción dinámica del TSVI', peso: 70, obj: 'cardio', del: 'ilustrativo', tsvi: true,
+  tsvi: { corta: '<b>Obstrucción dinámica del tracto de salida del VI</b> (paciente tipo)', nombre: 'Obstrucción del TSVI', chip: 'obstrucción dinámica del TSVI', peso: 70, obj: 'cardio', del: 'ilustrativo', tsvi: true,
     linea: '<b>Obstrucción dinámica del tracto de salida del VI</b> (paciente tipo) · las cifras son ilustrativas',
     base: { fc: 110, ic: 2.0, irvs: 27, pvc: 6, pp: 24, spo2: 94, fr: 22, t: 36.8, lact: null, glu: null, k: null }, kR: 0.35, post: 0.35, sensV1: 1, baro: 0.2 },
   begona: { corta: '<b>Begoña</b>, 52 años, 65 kg · toma bisoprolol · anafilaxia', nombre: 'Begoña', chip: 'anafilaxia', peso: 65, obj: 'anafilaxia', del: 'caso', mediadores: true,
     linea: '<b>Begoña</b>, 52 años, 65 kg · toma bisoprolol · anafilaxia por amoxicilina-clavulánico IV · minuto 30',
     base: { fc: 84, fcSinBeta: 118, ic: 3.0, irvs: 16, pvc: 3, pp: 32, spo2: 93, fr: 28, t: 36.8, lact: 3.0, glu: null, k: null }, kR: 0.30, post: 0.15, sensV1: 1, sensAlfa: 0.4, baro: 0.25 },
-  cocaina: { nombre: 'Isquemia por cocaína', chip: 'isquemia por cocaína', peso: 75, obj: null, del: 'ilustrativo', lecho: 'coronaria',
+  cocaina: { corta: '<b>Isquemia miocárdica por cocaína</b> (paciente tipo)', nombre: 'Isquemia por cocaína', chip: 'isquemia por cocaína', peso: 75, obj: null, del: 'ilustrativo', lecho: 'coronaria',
     linea: '<b>Isquemia miocárdica por cocaína</b> (paciente tipo) · las cifras son ilustrativas',
     base: { fc: 118, ic: 3.4, irvs: 29, pvc: 6, pp: 60, spo2: 97, fr: 20, t: 37.4, lact: null, glu: null, k: null }, kR: 0.35, post: 0.15, sensV1: 1, pesoB2: 1.0,
     endogeno: { alfa1: 0.55, beta1: 0.6, beta2: 0.55 } },
@@ -476,7 +476,7 @@ export function ocupar(S) {
   // La maquinaria (0-1,6; ilustrativo). AMPc = lo que fabrica la prensa / lo que tritura la PDE
   const ampcDe = (cel, pdeGan) => (0.2 + 0.6 * act(cel, 'beta1') + 0.6 * act(cel, 'gluc') + 0.6 * act(cel, 'beta2')) / (1 - pdeGan * dentro.pde);
   const maq = {
-    miocito: { ampc: Math.min(1.6, ampcDe('miocito', 0.7)), pde: dentro.pde },
+    miocito: { ampc: Math.min(1.6, ampcDe('miocito', 0.5)), pde: dentro.pde },
     nodo: { ampc: Math.min(1.6, ampcDe('nodo', 0.35)), pde: dentro.pde },
   };
   maq.miocito.ca = maq.miocito.ampc; maq.nodo.ca = maq.nodo.ampc;

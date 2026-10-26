@@ -117,6 +117,8 @@ export const bombaDib = (valorTxt, unidad, avance, candado) => bombaMini({ l1: u
 export function bombaHTML(k) {
   const E = ESTADO[ST.id], P = PACIENTES[ST.pac], F = FARMACOS[k], reg = F.regimen[E.reg[k]];
   if (reg.tog) return `<button type="button" class="tog" data-tog="${k}" id="bomba-${k}" aria-pressed="${!!ST.f[k]}">${F.corto}<small>${reg.txt}</small></button>`;
+  if (reg.candado && F.unidad === 'on') return `<div class="bomba" id="bomba-${k}">${bombaDib(ST.f[k] ? 'en casa' : 'sin él', 'oral', ST.f[k] ? 0.6 : 0, true)}
+      <div class="bomba-mando"><div class="bomba-cab"><b>${F.corto} · ${ST.f[k] ? 'lo toma' : 'apartado (solo en la explicación)'}</b></div><div class="candado"><span>${reg.txt} ${org(reg.chip)}</span></div></div></div>`;
   if (reg.candado) return `<div class="bomba" id="bomba-${k}">${bombaDib(ST.f[k] ? coma(reg.fija, 2) : '0', F.unidad, ST.f[k] ? 0.6 : 0, true)}
       <div class="bomba-mando"><div class="bomba-cab"><b>${F.corto} · ${ST.f[k] ? coma(reg.fija, 2) + ' ' + F.unidad : 'apagada'}</b></div><div class="candado"><span>${reg.txt} ${org(reg.chip)}</span><button type="button" class="tog" data-fija="${k}" aria-pressed="${!!ST.f[k]}" style="margin-left:auto">${ST.f[k] ? 'Quitar' : 'Añadir'}</button></div></div></div>`;
   if (reg.fija !== undefined) return '';
@@ -168,7 +170,7 @@ export function refrescarBomba(k) {
 }
 $('dock-explorar').addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b) return;
-  if (b.dataset.tog) ST.f[b.dataset.tog] = ST.f[b.dataset.tog] ? 0 : 1;
+  if (b.dataset.tog) ST.f[b.dataset.tog] = ST.f[b.dataset.tog] ? 0 : (FARMACOS[b.dataset.tog].regimen[ESTADO[ST.id].reg[b.dataset.tog]].dosisModelo ?? 1);
   else if (b.dataset.fija) { const reg = FARMACOS[b.dataset.fija].regimen[ESTADO[ST.id].reg[b.dataset.fija]]; ST.f[b.dataset.fija] = ST.f[b.dataset.fija] ? 0 : reg.fija; }
   else if (b.dataset.pac) { ST.pac = b.dataset.pac; }
   else return;
