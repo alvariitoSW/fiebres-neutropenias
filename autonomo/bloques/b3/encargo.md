@@ -149,3 +149,52 @@ como pide la fuente: estado `rotura-papilar` del modelo M7 (IM aguda con `eroaMi
 - **Neumotórax a tensión**: sí, como escena aparte del pulmón con respirador.
 - **Pulmón, esquema o dibujo real**: lo revisa el usuario (pendiente).
 - **Shock, corazón eléctrico y receptor a la app**: todavía no; antes, la vuelta de límites.
+
+### Decisiones del usuario (26/10/2026, tras ver el pulmón): pantallas como las reales
+
+El usuario mandó dos fotos de la UCI (un respirador y la consola de un balón de contrapulsación) y pide: «adaptar el
+modelo vivo del respirador a cómo se ve un monitor en la vida real, para estar familiarizado con el modelo y con el
+uso. Lo del pulmón me parece cojonudo, pero lo podemos mejorar muchísimo más y profesionalizarlo». Lo mismo vale para
+la consola del balón en el shock. **Las fotos no se suben al repositorio** (salen personal y el brazo de un paciente):
+esta descripción las sustituye. **Nada de marcas ni logotipos**: se recrea la disposición y las convenciones de
+uso de una pantalla real, con aspecto propio (CLAUDE §7.9).
+
+**1. Pantalla de respirador** (maqueta `b3-pulmon`; foto: un respirador de UCI de gama alta en modo VC-MMV).
+- **Fondo claro** de pantalla médica (gris muy claro o blanco), curvas con **área rellena** azul oscuro, unidades en
+  **mbar** (con nota: 1 mbar ≈ 1 cmH₂O; el Marino usa cmH₂O).
+- **Barra de arriba**: icono de adulto, **modo** grande («VC-AC», «PC-AC», «VC-SIMV», «SPN-CPAP/PS»…), interfaz
+  («Tubo» o «VNI»), hora, red/batería y volumen de alarma.
+- **Izquierda, curvas apiladas**: Paw (escala −10 a 60 mbar, con la **línea roja del límite Pmáx** y una punteada),
+  Flujo (−100 a 100 L/min, relleno por encima y por debajo de cero) y una tercera elegible (volumen, o tendencia de
+  2 h). Bajo la Paw, un **marcador triangular con un pulmón** en cada respiración que dispara el paciente. Rótulos
+  informativos como banda («La compensación de fugas está activa»).
+- **Derecha, casillas de valores medidos** en dos columnas, nombre y unidad arriba a la izquierda, cifra grande abajo
+  a la derecha, límites de alarma pequeños al lado: FiO₂ (Vol%), Pmedia, EIP (presión al final de la inspiración =
+  meseta: vacía si no hay pausa), PEEP, FRmand, FRtrig, FR, FRespon, VTe mand, VTe espon, VMe, VMe espon.
+- **Abajo, mandos redondos** (círculo azul con la cifra y el nombre debajo; se tocan para cambiarlos): FiO₂, VT, Ti,
+  FR, PEEP, ΔPsop (presión de soporte), Rampa, Flujo, Pmáx. **Pestañas de modo** en la franja inferior (VC-AC, VC-SIMV,
+  SPN-CPAP/PS, PC-AC, Otros modos) y botón «Detener ventilación».
+- **Columna derecha de teclas**: Alarmas, Vistas, Tendencias, Sensores, Procedimientos; y las maniobras **«Insp.
+  mantenida»** (= pausa inspiratoria → EIP/meseta) y **«Espiración mantenida»** (= oclusión espiratoria → PEEP
+  intrínseca), Congelar curvas, O₂/succión, Nebulización. Así el residente aprende dónde están en el aparato.
+- El pulmón (racimo, tórax) se queda como **lupa** al lado o debajo de la pantalla; la pantalla es lo primero.
+- **Alarmas reales**: al pasar un límite (Pmáx, VMe alto o bajo, FR alta), la casilla se pone en rojo y suena (sin
+  sonido de verdad: icono) en la barra de arriba con su texto. Encaja con la vuelta de límites.
+
+**2. Consola del balón de contrapulsación** (maqueta `b3-shock`, aparato «balón»; foto: una consola de balón con
+pantalla arriba y panel táctil abajo).
+- **Pantalla oscura**, tres trazados: **ECG** verde (derivación, «Disparo: ECG», con **marcas de inflado** bajo cada
+  latido), **presión arterial** roja (sistólica/diastólica y media entre paréntesis, p. ej. 121/52 (102)) con el
+  **pico de aumento diastólico** tras la muesca, y **presión del balón** azul (meseta de inflado, caída al desinflar).
+- Cifras: FC, presión, **«Aumento»** (presión diastólica aumentada, mayor que la sistólica del paciente: en la foto
+  131 frente a 121) con barra, **frecuencia del balón 1:1** (y 1:2, 1:3), «Alarma aumento», baterías y **bombona de helio**.
+- **Panel táctil**: Automático / Semiautomático, **Disparo** (ECG, Presión, Marcapasos, Interno), Frecuencia del balón,
+  **Aumento** (máx. con flechas), **Temporización** inflado y desinflado (flechas), Espera / Inicio, Llenado.
+- Lo que enseña: el aumento diastólico, la bajada de la presión al final de la diástole (menos poscarga), y la
+  **frecuencia 1:2** para ver latido asistido frente a no asistido. Los errores de temporización (inflar pronto o
+  tarde) **solo con fuente**: el Marino (cap. 16) no los trae; si no hay otra fuente en `docs/`, es hueco (no se inventa).
+
+**Cómo**: después de la vuelta de límites (que toca los mismos archivos). Profesor (Fable) en modo diseñar → plan
+corto de las dos pantallas (qué cifras salen del modelo, qué es interfaz `ilustrativo`); constructor potente para la
+pantalla del respirador (pieza nueva, reutilizable para la VNI y el weaning: `comun/respirador.js`) y constructor barato
+para la consola del balón copiando el patrón. Presupuestos según REGLAS §4.7.
