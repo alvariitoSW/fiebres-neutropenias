@@ -95,13 +95,16 @@ export function montarSimulador(raiz, opc = {}) {
   }
 
   // ---- Barra del ciclo: fases A-G del último latido, con su duración real, y un cursor en el instante actual
-  let cicloLatido = -1, cicloPeriodo = 0.857, cicloSeg = [];
+  let cicloFases = '', cicloLatido = -1, cicloPeriodo = 0.857, cicloSeg = [];
   function construirCiclo() {
     const o = motor.onda, u = motor.ultimo; if (!o.length || !u) return;
     cicloLatido = motor.s.nLatido; cicloPeriodo = u.periodo;
     const seg = segmentosFase(o, cicloPeriodo); cicloSeg = seg;
     const pc = (t) => (t / cicloPeriodo * 100).toFixed(2) + '%';
-    $('#cv-ciclo').innerHTML = seg.map(g => `<button type="button" data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cv-cur" id="cv-ciclo-cur"></div>';
+    // con las mismas fases solo se ajustan los anchos: un botón que se sustituye mientras se toca pierde el toque
+    const fases = seg.map(g => g.f).join(''), btns = $$('#cv-ciclo button');
+    if (fases === cicloFases && btns.length === seg.length) seg.forEach((g, i) => { btns[i].style.width = pc(g.t1 - g.t0); const t = (g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''; if (btns[i].textContent !== t) btns[i].textContent = t; });
+    else { cicloFases = fases; $('#cv-ciclo').innerHTML = seg.map(g => `<button type="button" data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cv-cur" id="cv-ciclo-cur"></div>'; }
     const tB = seg.find(g => g.f === 'B')?.t0, tE = seg.find(g => g.f === 'E')?.t0;
     $('#cv-ciclo-pie').innerHTML = (tB != null && tE != null)
       ? `<span style="left:${pc(tB)}">▲S1</span><span style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
