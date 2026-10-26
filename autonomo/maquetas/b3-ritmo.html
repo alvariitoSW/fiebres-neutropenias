@@ -1126,6 +1126,53 @@ const RECORRIDO = [
       { t: 'Adrenalina 1 mg cada 3-5 min, y compresiones.', ok: true },
       { t: 'Lidocaína 1-1,5 mg/kg IV, que funciona mejor que la amiodarona.', porque: 'La lidocaína es la alternativa si no hay amiodarona, y también va tras el 3.er choque (p. 59). El libro no dice que funcione mejor; ahora toca la adrenalina.' }],
     explicacion: 'Si hace falta un 2.º choque, empieza la adrenalina: 1 mg IV o IO cada 3-5 min. Tras cada choque, 2 min de compresiones antes de mirar el ritmo. Si hace falta un 3.º, amiodarona 300 mg (p. 59).', fuente: C.algoritmo },
+  { grupo: 'guia', num: 'G3', predice: true, estado: 'flutter',
+    enunciado: 'Un circuito gira en la aurícula y el nodo AV deja pasar uno de cada dos impulsos (2:1). Antes de mirar: <b>¿qué verás en la tira?</b>',
+    opciones: [
+      { t: 'P iguales, cada una con su QRS: una taquicardia sinusal.', porque: 'P uniformes con PR igual son la taquicardia sinusal (p. 18-19); aquí la línea de base no tiene P. Si las esperas, buscarás fiebre o dolor en vez de un circuito.' },
+      { t: 'Ninguna actividad auricular y un QRS estrecho y regular: la reentrada del nodo.', porque: 'La ausencia de P sugiere la reentrada nodal (p. 18-19), pero el flúter sí deja actividad auricular visible. Si no la buscas, pensarás en el nodo y no en la aurícula.' },
+      { t: 'Una línea de base sin orden y QRS irregulares: una FA.', porque: 'En la FA los R-R son irregulares (p. 20); el flúter con bloqueo fijo (2:1, 3:1) da un ritmo regular (p. 18-19). Si los confundes, mirarás el control de la frecuencia de una FA donde hay un ritmo regular.' },
+      { t: 'Dientes de sierra, y un QRS estrecho y regular por cada dos dientes.', ok: true }],
+    explicacion: 'Los dientes de sierra son la señal del flúter; con un bloqueo AV fijo (2:1, 3:1) el ritmo es regular y el QRS, estrecho (p. 18-19). La frecuencia de la aurícula no la da el libro: fisiología general.', fuente: C.regular },
+  { grupo: 'examen', num: 'E3', estado: 'tam',
+    enunciado: 'Un hombre de 71 años con EPOC reagudizada tiene 128 lpm, P de varias formas, PR variable y un ritmo irregular. El magnesio sérico es normal. <b>¿Qué haces primero?</b>',
+    opciones: [
+      { t: 'Magnesio IV empírico: 2 g en 15 min y 6 g en 6 h, y corregir el potasio.', ok: true },
+      { t: 'Verapamilo, porque hay EPOC y el metoprolol no va.', porque: 'El verapamilo corrige menos de la mitad y es inotrópico negativo (p. 28); no es lo primero. Si empiezas por él, dejas sin dar la medida de mayor éxito (88 % con magnesio) y arriesgas la IC con FE reducida.' },
+      { t: 'Metoprolol IV: 80 % de éxito en la TAM.', porque: 'El metoprolol va si fallan las medidas previas y solo si la EPOC no es la causa (p. 28); aquí lo es. Si lo das primero, un betabloqueante cae sobre un pulmón enfermo.' },
+      { t: 'Ningún magnesio: con el sérico normal no hay déficit que corregir.', porque: 'El magnesio sérico puede ser normal con el total del cuerpo agotado, y la respuesta fue independiente del valor sérico (p. 28). Si lo descartas, dejas sin tratar a un paciente con una arritmia que ya es tozuda.' }],
+    explicacion: 'En la TAM, lo primero es corregir el magnesio y el potasio; el magnesio IV empírico (2 g en 15 min y 6 g en 6 h) pasó a sinusal al 88 %, con independencia del magnesio sérico. Después, metoprolol si la EPOC no es la causa, o verapamilo (p. 28).', fuente: C.tam },
+  { grupo: 'examen', num: 'E4', estado: 'torsade',
+    enunciado: 'Una paciente de UCI con haloperidol tiene un QTc de 0,52 s en la hoja de la mañana, sin arritmias. <b>¿Cómo lo interpretas?</b>',
+    opciones: [
+      { t: 'Normal: el límite es 0,5 s en las mujeres.', porque: 'Normal es ≤0,44 s y >0,5 s es riesgo de torsade (p. 35); el libro no da otro límite por sexo. Si lo aceptas, no tocarás el fármaco ni los electrolitos.' },
+      { t: 'La torsade es inevitable: retiras todo y dejas el desfibrilador cargado.', porque: 'El libro insiste en que el QT largo es común en la UCI y la torsade, poco frecuente (p. 35). Desfibrilar es para la torsade sostenida (p. 35), no para un QT largo sin arritmia.' },
+      { t: 'Riesgo de torsade (>0,5 s) que no es una sentencia: mira K⁺ y Mg²⁺ y el fármaco que alarga el QT.', ok: true },
+      { t: 'Magnesio 1-2 g en 15 min a todo el que pase de 0,5 s.', porque: 'El magnesio se cita para terminar la torsade (p. 35); lo que previene las recaídas es corregir la hipopotasemia y la hipomagnesemia y retirar el fármaco (p. 35). Darlo a ciegas no corrige la causa.' }],
+    explicacion: 'Un QTc normal es ≤0,44 s y >0,5 s es un riesgo de torsade; pero un QT largo es común en la UCI y la torsade es rara. Se corrigen el potasio y el magnesio y se retira el fármaco de riesgo (p. 35).', fuente: C.qtc },
+  { grupo: 'examen', num: 'E5', estado: 'stemi',
+    enunciado: 'Una mujer de 63 años con dolor opresivo tiene un ST elevado 1,7 mm en el punto J en V2 y en V3; el resto de las derivaciones, sin cambios. <b>¿Cumple el criterio de STEMI?</b>',
+    opciones: [
+      { t: 'No: en V2-V3 hacen falta ≥2 mm.', porque: 'Los 2 mm son el umbral del varón; en la mujer es ≥1,5 mm en V2-V3 (Tabla 20.1, p. 41). Si aplicas el del varón, retrasas la reperfusión de una mujer que sí lo cumple.' },
+      { t: 'Solo con la troponina elevada: sin ella el ECG no basta.', porque: 'El criterio de la tabla es del ECG (p. 41); la troponina detecta la lesión de la célula y se mide a la llegada y a la hora (p. 41). Si esperas la troponina para decidirlo, atrasas la decisión de reperfundir.' },
+      { t: 'Sí, pero solo si el ST de II también sube ≥1 mm.', porque: 'El criterio pide ≥2 derivaciones contiguas (p. 41), y V2 y V3 lo son; no hace falta que cambie II. Si lo exiges, pasas por alto un STEMI anterior.' },
+      { t: 'Sí: ≥1,5 mm en V2-V3 en una mujer, en dos derivaciones contiguas.', ok: true }],
+    explicacion: 'Tabla 20.1: STEMI es ST elevado en el punto J en ≥2 derivaciones contiguas, ≥1,5 mm (mujeres) o ≥2 mm (varones) en V2-V3, o ≥1 mm en las demás (p. 41).', fuente: C.t201 },
+  { grupo: 'examen', num: 'E6', estado: 'fv',
+    enunciado: 'A los 20 min de RCP, la ETCO₂ de Leandro es de 7 mmHg y no ha subido desde el principio. <b>¿Qué te dice?</b>',
+    opciones: [
+      { t: 'La reanimación con éxito es improbable: no pasa de 10-15 mmHg a los 20 min.', ok: true },
+      { t: 'Que las compresiones son demasiado profundas.', porque: 'Una compresión más profunda se acompaña de más ETCO₂, no de menos (p. 63). Si la lees al revés, comprimirás menos justo cuando necesitas flujo.' },
+      { t: 'Que está normal: en la parada la ETCO₂ es como el PCO₂ arterial, de unos 40 mmHg.', porque: 'El valor de ≈40 es el de la circulación normal (p. 62-63); en la RCP la ETCO₂ cae con el flujo bajo y la Fig. 21.4 muestra lo contrario en quien no recupera pulso. Si lo das por normal, no lo usarás como señal.' },
+      { t: 'Que hay que parar ya, porque nadie se recupera con una cifra así.', porque: 'El libro habla de probabilidad: por encima de ese umbral se ha seguido hasta 1½ h con buen resultado (p. 63). Una cifra baja pesa mucho, pero es una decisión de equipo, no una regla automática.' }],
+    explicacion: 'La ETCO₂ en serie durante la RCP orienta hacia el retorno de la circulación: sube en quienes la recuperan y cae en los demás; con menos de 10-15 mmHg a los 20 min es improbable un buen desenlace (p. 63, Fig. 21.4).', fuente: C.etco2 },
+  { grupo: 'examen', num: 'E7', tipo: 'destapa', estado: 'sinusal',
+    enunciado: 'Ante una taquicardia en el monitor, el libro dice que el diagnóstico se apoya en 3 hallazgos del ECG. <b>¿Cuáles?</b>',
+    puntos: [
+      { t: 'La <span class="hl-azul">duración del QRS</span>: estrecho (≤0,12 s) nace por encima del sistema de conducción; ancho, por debajo.', c: C.hallazgos },
+      { t: 'La <span class="hl-azul">uniformidad de los intervalos R-R</span>: regular o irregular.', c: C.regular },
+      { t: 'Las <span class="hl-azul">características de la actividad auricular</span>: P iguales, ausencia de P o dientes de sierra.', c: C.regular }],
+    explicacion: 'Son la duración del QRS, la uniformidad del R-R y la actividad auricular (Fig. 19.1, p. 18-19).', fuente: C.hallazgos },
 ];
 // El caso de Teodoro (C2 de la cobertura del bloque): evoluciona del día 2 al día 3, con el giro de la estenosis mitral.
 // Las cifras del paciente son del caso; las conductas, dosis y umbrales, de la ficha (Marino, cap. 19).
