@@ -321,3 +321,11 @@ con programa de prueba y ≤10 capturas, encargos con dirección exacta, archivo
 `autonomo/bloques/<bN>/herramientas/`. El usuario autorizó que el director editara las reglas, los agentes y la skill.
 Pendiente: el buscador `graft` no está instalado en el entorno (falta `@nanonets/graft` en el script de arranque y su
 índice `graft/` en el repositorio).
+
+### Regla de topes y consecuencias (26/10/2026)
+
+En la parada 1 del bloque 3, el usuario infundió 23 L de suero en la maqueta del shock y no pasaba casi nada. Pidió
+que esté en las reglas: un mando que deja superar lo real es un fallo, y el profesor lo debe corregir en sus
+revisiones. Entró como `REGLAS.md` §1.14 (tope con origen, aviso, sello con consecuencia de paciente real, prueba con
+todos los mandos al tope), en el modo juzgar del profesor (fallo grave, nota <8), en la lista del constructor y en
+`CLAUDE.md` §12. La pieza común es `autonomo/maquetas/comun/tope.js`.

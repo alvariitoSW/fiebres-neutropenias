@@ -47,6 +47,20 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 13. **Tres tipos de nota, cada una con su nombre** (lección 3): **las fuentes discrepan** (dicen cosas distintas),
     **la fuente no lo dice** (calla: no es una discrepancia) y **opinión del autor** (no es una regla). Nunca se marca
     como error algo que el libro afirma literalmente.
+14. **Cada mando tiene su tope y su consecuencia** (el usuario, 26/10/2026: «si se pueden modificar los datos hasta el
+    punto de superar lo real, es un fallo […] no puedes meter 20 litros a un paciente, se muere antes»). Vale para
+    todo modelo vivo, simulador, maqueta y calculadora con mandos (volumen, fármacos y dosis, aparatos, reloj,
+    respirador, gravedad…):
+    - **Tope escrito y con origen**: la dosis o el límite de la ficha (con página); si la ficha no lo da, la
+      fisiología (`fisiología general`) o `ilustrativo`, rotulado. Nada ilimitado.
+    - **Al acercarse, avisa** (≈80 % del tope); **al pasarse, el paciente responde como un paciente real**: el sello
+      con la consecuencia clínica y su cita (sobrecarga, edema, hipoxemia, crisis hipertensiva, «sin ventilación»…),
+      el mando se apaga y la frase viva lo dice. No basta con «se encharca un poco»: cambian todas las constantes que
+      cambiarían en la realidad (PVC, PCP, SpO₂, PA…), y si el paciente no lo sobreviviría, la pantalla lo dice.
+    - **Ningún estado da una cifra imposible** (§1.7): si pasa, se corrige el motor, no se tapa con el tope.
+    - **La prueba del modelo lleva cada mando a su tope** (y las acciones repetidas, a su máximo) y comprueba que sale
+      el sello y que las cifras siguen siendo de un paciente posible. La pieza común es
+      `autonomo/maquetas/comun/tope.js` (aviso y sello).
 
 ## 2. La app
 
@@ -153,6 +167,10 @@ vez:
 3. Cada regla nacida así se apunta en la lista de abajo, con la tarea donde se vio.
 
 **Reglas nacidas de fallos**
+- §1.14 (topes y consecuencias): maquetas v3 del bloque 3 (`b3`, 26/10/2026). El usuario infundió 23 L de suero en el
+  shock (PVC 87, edema de 7,6 L y la frase seguía en «Tras el cristaloide»); el pulmón dejaba Vt de 2.924 mL y el ritmo
+  FC 0 sin aviso. Ningún juez lo vio porque las pruebas no llevaban los mandos al tope. Entró en el profesor, el
+  constructor y `CLAUDE.md` §12, por petición expresa del usuario.
 - §1.7 (paciente posible): capítulo 18 del atlas, `mr` (octubre 2026). Con el EROA máximo la figura daba PAS 73 mmHg
   y un chorro de 3,4 m/s; los dos jueces la aprobaron porque las cifras iban «en la dirección del texto». Lo vio el
   director en una captura. Entró en el verificador y en `CLAUDE.md` §12.

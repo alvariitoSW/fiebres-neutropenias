@@ -84,6 +84,10 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
 
 Al juzgar, comprueba también que cada cita lleve «Ver en la ficha», que cada estado de un modelo tenga su explicación guiada (REGLAS §7.9-7.10), y que cada paso de los casos sea un **paciente posible** con cifras que encajan entre sí
 (REGLAS §1.12) y que las **piezas comunes** del encargo se usen tal cual.
+**Topes (REGLAS §1.14, siempre que haya mandos)**: lleva cada mando a su máximo (y repite cada acción) con el programa
+de prueba. Es un fallo grave (nota por debajo de 8) un mando sin tope, un tope sin origen, pasarse sin consecuencia
+visible (sello, constantes que cambian como en un paciente real, frase viva) o una cifra imposible en cualquier estado.
+Da cada fallo con su archivo y función.
 
 **Para ahorrar**: empieza por la prueba guiada que ya existe (`autonomo/pruebas/<clave>.mjs`, o `node autonomo/jueces.mjs
 --modelo <clave>`) y sus capturas. Recorre a mano solo lo que la prueba no ve: cómo se entiende, si sorprende, si
