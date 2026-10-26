@@ -4,6 +4,7 @@ import { instalarIso } from '../comun/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
 import { monitorDelShock, CANALES } from './canales.js';
 import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
+import { crearDock } from '../comun/dock.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
 import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
@@ -62,11 +63,17 @@ function reconstruir() {   // al cambiar la gravedad: mismo paciente, mismos man
   est.rec = recDe(est.pac);
   cab.ajustar({ na: aj.na, vaso: aj.vaso, dobuta: aj.dobuta, soporte: aj.soporte, impella: aj.impella, ecmo: aj.ecmo, venteo: aj.venteo, total: aj.total });
   if (inf.cris) cab.volumen(inf.cris); if (inf.sangre) cab.volumen(inf.sangre, 'sangre');
-  cab.correr(8); est.horas = h;
+  cab.correr(8);
+  // la gravedad define al paciente que llega: el laboratorio vuelve a ser el de la hora 0 (v3: antes la clase I llegaba con el
+  // lactato de la clase III)
+  est.horas = 0; est.historia = [];
+  const P0 = perfusion(cab.lectura, est.rec);
+  est.lab = { lact: P0.lactObj, diur: P0.diurObj };
+  apuntarHistoria();
 }
 function avanzarReloj(horas, { silencioso = false } = {}) {
   cab.redistribuir(); cab.correr(8);
-  est.lab = avanzarLab(est.lab, perfusion(cab.lectura, est.rec), horas);
+  est.lab = avanzarLab(est.lab, perfusion(cab.lectura, est.rec), horas, { pam: cab.lectura.u.pam });
   est.horas += horas;
   apuntarHistoria();
   if (!silencioso) refrescar(true);
@@ -344,7 +351,7 @@ function pintarMandos() {
     h.push(`<div class="deslizador"><input type="range" id="d-imp" min="25" max="55" step="1" value="${Math.round(aj.impella * 10)}" aria-label="Flujo del Impella" ${aj.total != null ? 'disabled' : ''}><output>${coma(aj.impella, 1)} L/min<small>2,5-5,5 según el catéter (p. 47)</small></output></div>`);
     h.push(`<button type="button" class="tog" data-total="1" aria-pressed="${aj.total != null}">Gasto total pedido: 5,0 L/min<small>mide el gasto propio y ajusta la bomba (p. 47)</small></button>`);
   }
-  if (ok && ap === 'ecmo') h.push(`<div class="deslizador"><input type="range" id="d-ecmo" min="0" max="60" step="1" value="${Math.round(aj.ecmo * 10)}" aria-label="Flujo del ECMO"><output>${coma(aj.ecmo, 1)} L/min<small>hasta 5-6 (p. 48)</small></output></div><div class="seg" role="group" aria-label="Venteo del VI">${[['no', 'Sin venteo'], ['balon', 'Balón'], ['impella', 'Impella'], ['drenaje', 'Drenaje']].map(([k, n]) => `<button type="button" data-vent="${k}" aria-pressed="${aj.venteo === k}">${n}</button>`).join('')}</div><p class="dock-nota">Venteo: un balón o un Impella a la vez, o drenar el VI (p. 48-49). Por dónde se drena, la fuente no lo dice.</p>`);
+  if (ok && ap === 'ecmo') h.push(`<div class="deslizador"><input type="range" id="d-ecmo" min="10" max="60" step="1" value="${Math.round(aj.ecmo * 10)}" aria-label="Flujo del ECMO"><output>${coma(aj.ecmo, 1)} L/min<small>hasta 5-6 (p. 48)</small></output></div><div class="seg" role="group" aria-label="Venteo del VI">${[['no', 'Sin venteo'], ['balon', 'Balón'], ['impella', 'Impella'], ['drenaje', 'Drenaje']].map(([k, n]) => `<button type="button" data-vent="${k}" aria-pressed="${aj.venteo === k}">${n}</button>`).join('')}</div><p class="dock-nota">Venteo: un balón o un Impella a la vez, o drenar el VI (p. 48-49). Por dónde se drena, la fuente no lo dice.</p>`);
   if (ok && ap === 'balon') h.push(`<div class="seg" role="group" aria-label="Volumen del balón">${[35, 40].map((v) => `<button type="button" data-bal="${v}" aria-pressed="${aj.balon === v}">${v} mL<small>de helio (p. 45)</small></button>`).join('')}</div>`);
   $('mandos').innerHTML = h.length ? `<div class="formato" style="gap:5px"><span class="tipo">Los mandos del aparato</span>${h.join('')}</div>` : '';
   const di = $('d-imp'); if (di) di.onchange = () => trabajar(() => cab.ajustar({ impella: +di.value / 10 }));
@@ -364,7 +371,8 @@ $('dock-panel').addEventListener('click', (ev) => {
   if (d.sangre) trabajar(() => cab.volumen(+d.sangre, 'sangre'), 20);
   if (d.na) trabajar(() => cab.ajustar({ na: +d.na }));
   if (d.far) trabajar(() => cab.ajustar({ [d.far]: !cab.ajuste[d.far] }));
-  if (d.sop) { est.aparato = d.sop; est.vista = d.sop === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro'; trabajar(() => cab.ajustar({ soporte: D.indicacion(est.pac, d.sop).ok || d.sop === 'no' ? d.sop : 'no' })); monitor.llenar(cab, ctxMon()); monitor.pintar(); }
+  if (d.sop) { est.aparato = d.sop; est.vista = d.sop === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro'; trabajar(() => cab.ajustar({ soporte: D.indicacion(est.pac, d.sop).ok || d.sop === 'no' ? d.sop : 'no' })); monitor.llenar(cab, ctxMon()); monitor.pintar();
+    if (d.sop !== 'no') { dock.plegar(true); $('escena').scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' }); } }
   if (d.h) trabajar(() => avanzarReloj(+d.h, { silencioso: true }));
 });
 // Un cambio: asienta el motor unos segundos (el barorreflejo tarda ~10 s) y repinta
@@ -385,7 +393,8 @@ $('obj-marino').onclick = () => { est.tabla = 'marino'; $('obj-marino').setAttri
 $('obj-umi').onclick = () => { est.tabla = 'umi'; $('obj-umi').setAttribute('aria-pressed', 'true'); $('obj-marino').setAttribute('aria-pressed', 'false'); refrescar(false); };
 $('enclavar').onclick = () => { monitor.enclavar(!monitor.enclavado); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); monitor.pintar(); refrescar(false); };
 $('pausa').onclick = () => { est.pausa = !est.pausa; $('pausa').setAttribute('aria-pressed', String(est.pausa)); $('pausa').textContent = est.pausa ? 'Seguir' : 'Pausa'; };
-function medirDock() { requestAnimationFrame(() => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px')); }
+const dock = crearDock($('dock'), { plegables: [$('dock-tabs'), $('dock-panel')] });
+function medirDock() { dock.medir(); }
 
 // ---------------------------------------------------------------- pacientes (Explorar)
 function pintarPacientes() {
@@ -405,12 +414,12 @@ let guia = null, gi = 0;
 function abrirGuia(E, alSalir) {
   guia = { E, alSalir }; gi = 0;
   $('dock-explorar').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false;
-  pintarGuia();
+  dock.plegar(false); dock.asa.hidden = true; pintarGuia();
 }
 function cerrarGuia() {
   borrarSenal(); const f = guia?.alSalir; guia = null; $('dock-guia').hidden = true;
   if (est.modo === 'explorar') $('dock-explorar').hidden = false; else if (est.modo === 'may') $('dock-est').hidden = false;
-  medirDock(); f?.();
+  dock.asa.hidden = est.modo !== 'explorar'; medirDock(); f?.();
 }
 function pintarGuia() {
   const E = guia.E, p = E.guia[gi], n = E.guia.length;
@@ -511,6 +520,10 @@ $('zona-qs').addEventListener('click', (ev) => {
   if (b.id === 'qs-sig') { borrarSenal(); qs.i++; qs.etapa = 0; qs.hecho = false; est.vista = 'paciente'; pintarQS(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); }
 });
 
+// Las cifras del «Compruébalo» (antes → después): etiqueta y formato de cada clave de la lectura R
+const CIFRA_ET = { pam: 'PAM', pas: 'PAS', pad: 'PAD', pcp: 'PCP', pvc: 'PVC', ic: 'IC', irvs: 'IRVS', fc: 'FC', spo2: 'SpO₂', imp: 'bomba (L/min)', ecmo: 'ECMO (L/min)', aoAbre: 'aórtica abre', edema: 'edema (mL)', picoDia: 'pico diastólico' };
+function cifraTxt(k, r) { const v = r[k]; if (v == null) return '—'; if (k === 'aoAbre') return `${v} de ${r.aoDe}`; if (k === 'ic' || k === 'imp' || k === 'ecmo') return coma(v, 1); return coma(v, 0); }
+
 // ---------------------------------------------------------------- Mayéutica: guía socrática, examen y el caso
 // Las tres partes de REGLAS §8: el recorrido (guía y examen), «Otra vez lo que fallaste» (se arma al acabar el
 // recorrido, con las opciones en otro orden) y el caso de Aurelio.
@@ -580,10 +593,14 @@ $('zona-may').addEventListener('click', (ev) => {
   if (acc === 'sig') { may.i++; pintarMay(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (acc === 'comprueba') {
     const c = q.comprueba; tapar(false);
+    const antes = R ? { ...R } : null;
     trabajar(() => { if (c.ajuste) { if (c.ajuste.soporte) { est.aparato = c.ajuste.soporte; est.vista = 'aparato'; } cab.ajustar(c.ajuste); } if (c.volumen) cab.volumen(c.volumen); }, c.volumen ? 20 : 10);
-    b.closest('.fila').outerHTML = `<p class="para"><span class="ok">Mira el modelo:</span> ${c.mira}</p><div class="fila"><button type="button" class="b prim" data-acc="sig">Siguiente →</button></div>`;
+    // las cifras que nombra «mira», antes → después, aquí mismo (el monitor queda arriba): v3
+    const cifras = antes && c.cifras ? `<dl class="antes-despues">${c.cifras.map((k) => `<dt>${CIFRA_ET[k] || k}</dt><dd>${cifraTxt(k, antes)} <span class="flecha">→</span> <b>${cifraTxt(k, R)}</b></dd>`).join('')}</dl>` : '';
+    b.closest('.fila').outerHTML = `<p class="para"><span class="ok">Mira el modelo:</span> ${c.mira}</p>${cifras}<div class="fila"><button type="button" class="b" data-acc="monitor">Ver el monitor</button><button type="button" class="b prim" data-acc="sig">Siguiente →</button></div>`;
     return;
   }
+  if (acc === 'monitor') { $('monitor').scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (b.dataset.op && !b.disabled) {
     const o = may.ops[+b.dataset.op]; may.res[may.i] = !!o.ok;
     document.querySelectorAll('#ops button').forEach((x, i) => { x.disabled = true; if (may.ops[i].ok) x.classList.add('bien'); });
@@ -624,7 +641,7 @@ function setModo(m) {
   $('zona-pac').hidden = m !== 'explorar'; $('abajo').hidden = m !== 'explorar';
   $('zona-qs').hidden = m !== 'qs'; $('zona-may').hidden = m !== 'may';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-est').hidden = m !== 'may';
-  $('dock').hidden = m === 'qs';
+  $('dock').hidden = m === 'qs'; dock.asa.hidden = m !== 'explorar'; dock.plegar(false);   // el asa solo pliega los mandos de Explorar
   $('velo-esc').hidden = true; est.canales = 'todos'; monitor.ver(CANALES.map((x) => x.k));
   if (m === 'explorar') { est.aparato = 'no'; est.vista = 'paciente'; nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock(); }
   if (m === 'qs') empezarQS();
