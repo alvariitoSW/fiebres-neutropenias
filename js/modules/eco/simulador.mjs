@@ -214,7 +214,7 @@ export function montarSimulador(raiz, opc = {}) {
     if (medir === 'vci') enl.innerHTML = enlace('Colapsabilidad de la VCI (FATE)', 'umi-fate', '#umi-fate-vci', 'panel-manual-umi-tabs', 'sobrevivirUmi', 'manualUmi')
       + (guardado.dmax && guardado.dmin ? `<button type="button" class="especialidad-link" id="cv-m-a-vci" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-vci-resultado">Llevar Dmáx y Dmín a la calculadora de la VCI (FATE) →</button>` : '');
     if (!m) { if (medir === 'vci') { poner(...textoVci()); return; } poner('', medir === 'vi' ? textoVi() : medir === 'vci' ? textoVci()[1] : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
-    if (medir === 'vci') { const [estado, txt] = textoVci(); poner(estado, `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + txt); return; }
+    if (medir === 'vci') { const [estado, txt] = textoVci(); if (respVci !== 'espontanea') { poner(estado, txt); return; } poner(estado, `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + txt); return; }
     if (medir === 'libre') { poner('', `Δ profundidad <b>${f1(m.mm)} mm</b> · Δ tiempo <b>${Math.round(m.ms)} ms</b>`); return; }
     if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
     // TAPSE: las dos cifras de normalidad que cita la app; y lo que hace el modelo en este latido
@@ -233,39 +233,47 @@ export function montarSimulador(raiz, opc = {}) {
   }
   // VCI: las dos tablas de FATE (Manual UMI): banda de la PAD por diámetro y colapso, y el índice de colapsabilidad
   // en ventilación espontánea (el modelo respira solo); y lo que hace el modelo con su PVC
+  const mm1 = (x) => Math.round(x * 10) / 10, fmm = (x) => x == null ? '—' : f1(x) + ' mm';
+  // medidas imposibles (calibres mal puestos): se avisa como «combinación no fisiológica», sin veredicto clínico
+  const avisoVci = (a, b, idx) => a && b && (b < 2 || (idx != null && idx > 100))
+    ? ['warn', `<b>Revisa los calibres:</b> ${b < 2 ? `un Dmín de ${fmm(b)} no es una medida creíble de la VCI.` : `un índice de ${Math.round(idx)}% (más del 100%) no es creíble con estos diámetros.`} Sin veredicto clínico.`] : null;
   function textoVci() {
-    const a = guardado.dmax, b = guardado.dmin, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
-    let t = `Dmáx ${cm(a)} · Dmín ${cm(b)}`, estado = '';
-    if (respVci !== 'espontanea') return textoVciVm(a, b, t);
-    if (a && b && a > b) {
-      const col = (a - b) / a * 100, ancha = a > 21, colapsa = col > 50;
+    const A = guardado.dmax && mm1(guardado.dmax), B = guardado.dmin && mm1(guardado.dmin);
+    if (respVci !== 'espontanea') return textoVciVm(A, B);
+    let t = `Dmáx ${fmm(A)} · Dmín ${fmm(B)}`, estado = '';
+    if (A && B && A > B) {
+      const col = (A - B) / A * 100, r = Math.round(col), aviso = avisoVci(A, B, col);
+      if (aviso) return [aviso[0], t + '<br>' + aviso[1]];
+      const ancha = A > 21, colapsa = r > 50;
       const banda = !ancha && colapsa ? 'normal (0-5 mmHg; PAD ≈ 3)' : ancha && !colapsa ? 'alta (10-20 mmHg; PAD ≈ 15)' : 'intermedia (5-10 mmHg; PAD ≈ 8)';
       estado = !ancha && colapsa ? 'ok' : ancha && !colapsa ? 'danger' : 'warn';
-      t += ` · <b>colapso ${Math.round(col)}%</b> → banda ${banda} (FATE: diámetro &lt;2,1 / &gt;2,1 cm y colapso &gt;50 / &lt;50%)`
-        + `<br>Índice de colapsabilidad en ventilación espontánea ${Math.round(col)}%: ${col > 40 ? 'por encima' : 'por debajo'} del 40% con el que FATE considera al paciente respondedor a volumen.`;
-    } else if (a && b) t += ' · Dmín tiene que ser menor que Dmáx.';
+      t += ` · <b>colapso ${r}%</b> = (${f1(A)}−${f1(B)})×100/${f1(A)} → banda ${banda} (FATE: diámetro &lt;2,1 / &gt;2,1 cm y colapso &gt;50 / &lt;50%)`
+        + `<br>Índice de colapsabilidad en ventilación espontánea ${r}%: ${r > 40 ? 'por encima' : 'por debajo'} del 40% con el que FATE considera al paciente respondedor a volumen.`;
+    } else if (A && B) t += ' · Dmín tiene que ser menor que Dmáx.';
     const u = motor.ultimo; if (u) { const v = modeloVci(u.pvc);
       t += `<br><span class="cv-muted">En el modelo, con PVC ${f1(u.pvc)} mmHg: Dmáx ${f1(v.dmax)} mm y colapso ${Math.round(v.colapso * 100)}% (calibre ilustrativo, elegido para caer en las bandas de FATE).</span>`; }
     return [estado, t];
   }
   // VM: el colapso queda retenido (el Manual UMI usa otras fórmulas y cortes y no da bandas de PAD) y se calcula el
   // índice de VM con los diámetros guardados. Los umbrales son del Manual UMI, pág. 70; el trazado no simula la VM.
-  function textoVciVm(a, b, t) {
+  function textoVciVm(A, B) {
     const sinEsf = respVci === 'vm-sin-esfuerzo', corte = sinEsf ? 18 : 12;
-    let h = '<b>⏸ Retenido: con ventilación mecánica no uses el colapso solo.</b>'
-      + '<br>El &gt;40% del Manual UMI es para ventilación espontánea; con VM el mismo manual usa otras fórmulas y otros cortes. Su tabla de PAD se basa en el colapso con la respiración y no da bandas para VM: no estimes la PAD por la VCI.'
-      + `<br>${t}`;
-    if (a && b && a > b) {
-      const idx = sinEsf ? (a - b) * 100 / b : (a - b) * 100 / (0.5 * (a + b)), r = Math.round(idx);
-      h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> (${sinEsf ? '(Dmáx−Dmín)×100/Dmín' : '(Dmáx−Dmín)×100/[0,5×(Dmín+Dmáx)]'}): ${r > corte ? 'por encima' : 'por debajo'} del ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
-    } else if (a && b) h += '<br>Dmín tiene que ser menor que Dmáx.';
+    let h = '<b>⚠ Retenido: con ventilación mecánica no uses el colapso solo.</b>'
+      + `<br>Dmáx ${fmm(A)} · Dmín ${fmm(B)}`;
+    if (A && B && A > B) {
+      const idx = sinEsf ? (A - B) * 100 / B : (A - B) * 100 / (0.5 * (A + B)), r = Math.round(idx), aviso = avisoVci(A, B, idx);
+      if (aviso) return [aviso[0], h + '<br>' + aviso[1]];
+      h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> = ${sinEsf ? `(${f1(A)}−${f1(B)})×100/${f1(B)}` : `(${f1(A)}−${f1(B)})×100/[0,5×(${f1(B)}+${f1(A)})]`}: ${r > corte ? 'por encima' : 'por debajo'} del ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
+    } else if (A && B) h += '<br>Dmín tiene que ser menor que Dmáx.';
     else h += '<br>Guarda Dmáx y Dmín para calcular el índice de VM.';
-    h += '<br><span class="cv-muted">El modelo respira solo: aquí practicas la cuenta de VM con sus diámetros; el trazado no simula la VM. Origen: umbrales y fórmulas, ficha (Manual UMI, pág. 70); calibre del modelo, ilustrativo.</span>'
+    h += '<br>El &gt;40% es para ventilación espontánea; con VM el manual usa otras fórmulas y otros cortes. El manual no da bandas de PAD para VM (pág. 70): con VM, esta app no estima la PAD por la VCI.'
+      + '<br><span class="cv-muted">El modelo respira solo: aquí practicas la cuenta de VM con sus diámetros; el trazado no simula la VM. Origen: umbrales y fórmulas, ficha (Manual UMI, pág. 70); calibre del modelo, ilustrativo.</span>'
+      + '<br><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-vci-vm">Ver en la ficha →</button>'
       + '<br><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=18" target="_blank" rel="noopener">Manual UMI, parte 2, pág. 70</a>'
-      + '<details class="nota-plegable"><summary>Nota de fuentes</summary><p>Los cortes de VM vienen de estudios en pacientes con VM y sepsis: '
+      + '<details class="nota-plegable"><summary>Nota de fuentes</summary><p>Según estas publicaciones, los cortes de VM vienen de estudios en pacientes con VM y sepsis: '
       + '<a class="biblio-link" href="https://www.springermedicine.com/respiratory-changes-in-inferior-vena-cava-diameter-are-helpful-i/20581424" target="_blank" rel="noopener">Barbier 2004, Intensive Care Med 30:1740-1746</a> (índice de distensibilidad (Dmáx−Dmín)/Dmín) y '
       + '<a class="biblio-link" href="https://www.springermedicine.com/the-respiratory-variation-in-inferior-vena-cava-diameter-as-a-gu/20581370" target="_blank" rel="noopener">Feissel 2004, Intensive Care Med 30:1834-1837</a> (corte del 12%). '
-      + 'Las fuentes discrepan: Marino (<a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=27" target="_blank" rel="noopener">cap. 11, pág. 27 del PDF</a>) dice que la variación respiratoria de la VCI «proved to be unreliable», en general y no solo en VM.</p></details>';
+      + 'Matiz de Marino (<a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=27" target="_blank" rel="noopener">cap. 11, pág. 27 del PDF</a>): dice que la variación respiratoria de la VCI «proved to be unreliable», en general y no solo en VM.</p></details>';
     return ['neutro', h];
   }
   function guardarVci(k) { const m = modoM.medida(); if (!m) return; guardado[k] = m.mm; modoM.borrarCalibres(); pintarMedida(null); }
@@ -283,7 +291,7 @@ export function montarSimulador(raiz, opc = {}) {
   $('#cv-m-enlaces').addEventListener('click', (e) => {
     if (e.target.closest('#cv-m-a-vci')) {
       const modo = document.getElementById('umi-vci-modo'), a = document.getElementById('umi-vci-dmax'), b = document.getElementById('umi-vci-dmin'); if (!modo || !a || !b) return;
-      modo.value = respVci; a.value = (guardado.dmax / 10).toFixed(1); b.value = (guardado.dmin / 10).toFixed(1);
+      modo.value = respVci; a.value = (mm1(guardado.dmax) / 10).toFixed(2); b.value = (mm1(guardado.dmin) / 10).toFixed(2);
       for (const el of [modo, a, b]) el.dispatchEvent(new Event('input', { bubbles: true }));
       return;
     }

@@ -352,6 +352,18 @@ test('fase 5: vistas subcostales y supraesternal, la VCI medida en modo M y la s
   assert.match(vm, /Retenido/); assert.match(vm, /Índice de VM sin esfuerzo respiratorio: 25%/); assert.doesNotMatch(vm, /banda (normal|intermedia|alta)/);
   await pg.click('[data-vci-resp="vm-general"]');
   assert.match(await pg.textContent('#cv-m-resultado'), /fórmula general\): 22%/);
+  // «Llevar…»: lo que se pasa a la calculadora del manual (aquí, campos de prueba) da el mismo % que el simulador
+  await pg.evaluate(() => { const d = document.createElement('div'); d.innerHTML = '<select id="umi-vci-modo"><option value="espontanea"></option><option value="vm-sin-esfuerzo"></option><option value="vm-general"></option></select><input id="umi-vci-dmax"><input id="umi-vci-dmin">'; document.body.appendChild(d); });
+  await pg.click('[data-vci-resp="vm-sin-esfuerzo"]'); await pg.click('#cv-m-a-vci');
+  const pctSim = (await pg.textContent('#cv-m-resultado')).match(/Índice de VM sin esfuerzo respiratorio: (\d+)%/)[1];
+  const [dx, dn] = [Number(await pg.inputValue('#umi-vci-dmax')), Number(await pg.inputValue('#umi-vci-dmin'))];
+  assert.equal(String(Math.round((dx - dn) * 100 / dn)), pctSim); assert.equal(await pg.inputValue('#umi-vci-dmax'), '1.70'); assert.equal(await pg.inputValue('#umi-vci-modo'), 'vm-sin-esfuerzo');
+  await pg.evaluate(() => document.getElementById('umi-vci-modo').parentNode.remove());
+  // dos toques reales a ~10 px/cm: el segundo pone B y no arrastra A
+  await pg.evaluate(() => window.__eco.modoM.borrarCalibres());
+  await pg.locator('#cv-m-capa').scrollIntoViewIfNeeded(); const cb = await pg.locator('#cv-m-capa').boundingBox();
+  await pg.mouse.click(cb.x + cb.width * 0.3, cb.y + cb.height * 0.5); await pg.mouse.click(cb.x + cb.width * 0.3, cb.y + cb.height * 0.5 + 12);
+  assert.ok((await pg.evaluate(() => window.__eco.modoM.medida())) !== null, 'el segundo toque cercano no puso B');
   await pg.click('[data-vci-resp="espontanea"]');
   // Doppler: la suprahepática da S, D y A
   await pg.locator('[data-modo="D"]').tap(); await pg.locator('[data-muestra="suprahep"]').tap(); await pg.waitForTimeout(3000);
