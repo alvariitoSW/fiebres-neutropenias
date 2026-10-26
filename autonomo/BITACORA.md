@@ -215,7 +215,7 @@ esta sección.
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: las dos primeras, hechas (25/10, en main); `objetivos-casos`, en curso (26/10, rama propia); `eco-vci-retenido`, pendiente; `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
-| `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | en curso: informe | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
+| `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | ✅ elegido el 26/10: el núcleo entra en la parada 2 de `eco-mega` (P1 potente, pericardio de las aurículas más real, P7 como forma grave con nota); PDF de los huecos los busca el usuario · https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
 ### ⏸ Dónde quedó tee-inversa
 
@@ -248,6 +248,13 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
+  vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
+  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. **Falta**: el PDF de la ESC 2023
+  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191) y el de ECG de la rotación . Ya en `docs/`: ESC 2023 de SCA (2 partes),
+  de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). También Wagner 2009 (AHA, territorios) y Thygesen
+  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
 
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar

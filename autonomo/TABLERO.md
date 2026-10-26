@@ -321,7 +321,7 @@ río y mar) → 39-44 → 45-53.
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
-| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3` | Paquete: `autonomo/bloques/b3/encargo.md` |
+| 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3`. Informe y plan con gasto (26/10): https://claude.ai/artifact/Rw8ZKfAZdYgjBogGxuCP9w; el usuario contestó (26/10): maquetas v3, pulmón fusionado (3D), Fable para pensar y medir (ver paquete §4). Siguiente: maquetas v3 + cobertura del 3D | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
@@ -340,11 +340,12 @@ río y mar) → 39-44 → 45-53.
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en revisión (2026-10-25): parada 1 hecha (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8), PR #30 en borrador: https://github.com/alvariitoSW/fiebres-neutropenias/pull/30 · maqueta https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b. Siguiente: **parada 2**, ya decidida (26/10; ver «Parada 2 de `eco-mega`» abajo) | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | hecha (2026-10-26) · PR #31, en main · informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir | Corta, de solo lectura |
-| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
+| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | fusionada en `b3` (2026-10-26, decisión del usuario: sub-bloque 3D) | Antes: bloque 4 de Marino. Propuesta de atajo (26/10, en el informe del `b3`): cobertura y maqueta M3 durante la parada 2 del `b3`; la presión del tórax (M8) hecha una vez para CPAP y respirador; el pulmón entra en la app a la vez que el 3C. Espera la elección del usuario |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
 | 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
-| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | en curso (2026-10-26): informe | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
+| 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | hecha (2026-10-26): informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi; el usuario eligió el núcleo, que entra en la parada 2 de `eco-mega` | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
+| 18 | `rea-culprit` | B-026 · Ingeniería inversa de Coronary Culprit (Cliff Reid): ocluir una coronaria y ver el ECG de 12 y la eco | hecha la fase 1 (2026-10-26): el usuario eligió la opción 1 (A + B en la Fase 1 tras Marino; C cuando la eco tenga coronarias; D tras C); falta el PDF de la ESC 2023 de SCA y el de ECG. Informe «Arteria culpable», https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw; detalle en `autonomo/ideas/ingenieria-inversa/culprit.md` | Pedido por el usuario el 26/10; lo que se construya va después de Marino (Objetivo M5) |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -393,6 +394,18 @@ real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `
   (pared por regiones e infarto) espera a que las coronarias entren en el motor** (decisión del usuario el 26/10).
 - **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
 - Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
+- **Ampliación del 26/10 (B-025, informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi,
+  `autonomo/ideas/ingenieria-inversa/eco-fisiopatologia.md`)**, decidida por el usuario:
+  1. El **núcleo nuevo entra en la parada 2**: F1 (paciente posible del latido), F5 (VD que late como VD), N2 (VD en
+     U con banda moderadora), N3 (aorta descendente, pleura-pulmón y columna), P1 (taponamiento), P2 (beso de
+     papilares), P4 (TEP con criterios de Lang). El resto (F3, F4, N1, P5, P6) va a la parada 3; P3 espera a C2a.
+  2. **Orden**: el del informe (0 lector → A1 → B1 + F1 → A2 → B2 + N2 → A3 → N3 → B3 → B4 → F5 → B5 → P2 → C1 → P1
+     → D1 → P4), con F1 primero como red de pruebas y después P2 y P1.
+  3. **P1 en potente**, y además **revisar bien el pericardio, sobre todo alrededor de las aurículas, y hacerlo más
+     realista** (palabras del usuario).
+  4. **P7**: la hipertrofia y la dilatada por defecto **se dejan como «forma grave» con una nota visible** (no se
+     recalibran las gravedades).
+  5. PDF para los huecos: el usuario los busca (lista en el parte); hasta que lleguen, esas cifras quedan «hueco».
 
 **Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
 - Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
