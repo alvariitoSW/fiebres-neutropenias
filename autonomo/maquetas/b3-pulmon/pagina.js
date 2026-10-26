@@ -6,7 +6,9 @@ import { crearMonitor, pintarCifras, instalarMonitor, canalesRespiratorios, inst
 import { instalarCss } from '../comun/dibujo-iso.js';
 import { crearDock } from '../comun/dock.js';
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
-import { crearPulmon, pbw, ORIGEN_MODELO, avisosAjuste } from './pulmon.mjs';
+import { crearPulmon, pbw, ORIGEN_MODELO } from './pulmon.mjs';
+import { crearTope } from '../comun/tope.js';
+import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from './datos.js';
 
@@ -50,7 +52,7 @@ const PBW = () => pbw(est.pac.talla, est.pac.sexo);
 
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
-  est.clave = clave; est.pac = pacDe(E.pac);
+  est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   P.ajustar({ ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r }); P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
@@ -108,6 +110,7 @@ function pintarCifrasTodo() {
     { k: 'flujofin', cls: 'c-flujo', et: 'Flujo fin esp.', u: 'L/min', v: f0(l.flujoFinEsp), obj: l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no llega a cero' : 'llega a cero', estado: l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si', alto: altos[1] },
     { k: 'vt', cls: 'c-vol', et: 'Vt exh.', u: 'mL', v: f0(l.vtExh), obj: `${f1(l.vtExh != null ? l.vtExh / kg : null)} mL/kg PBW`, alto: altos[2] },
   ], { tapado: est.tapado });
+  aplicarTopes();
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('meseta', 'Meseta', l.meseta != null ? f1(l.meseta) : 'haz pausa', 'cmH₂O · con pausa', alarma30(l.meseta)),
@@ -117,24 +120,39 @@ function pintarCifrasTodo() {
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : 'haz pausa', l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
     celda('vm', 'Vol. minuto', f1(l.vm), 'L/min'),
-    celda('ie', 'I:E', l.ie != null ? `1:${f1(l.ie)}` : '—', l.cabe === false ? 'no cabe la esp.' : 'objetivo ≥ 1:2', l.ie != null && l.ie < 2 ? 'no' : ''),
+    celda('ie', 'I:E', l.ie != null ? `1:${f1(l.ie)}` : '—', l.cabe === false ? `no cabe la esp. · FR real ${f0(l.frReal)}` : 'objetivo ≥ 1:2', l.ie != null && l.ie < 2 ? 'no' : ''),
   ].join('');
-  const avisos = avisosAjuste(l, kg).map((a) => a.txt);
-  $('consola').hidden = !(l.alarmaPresion || l.cabe === false || avisos.length);
-  const extra = avisos.map((a) => `<span class="consola-aviso">${a}</span>`).join('');
-  $('consola').innerHTML = extra + (l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Combinación no fisiológica: baja el flujo, el Vt o la resistencia.</span>`
+  $('consola').hidden = !(l.alarmaPresion || l.cabe === false);
+  $('consola').innerHTML = (l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Combinación no fisiológica: baja el flujo, el Vt o la resistencia.</span>`
     : l.cabe === false ? `<span class="consola-aviso">Combinación no fisiológica: con este Vt, flujo y frecuencia no cabe la espiración en el ciclo.</span>` : '');
 }
 function pintarFrase() {
   const E = D.ESTADOS[est.clave];
-  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
+  const S = est.sello;   // un tope pasado manda sobre la frase del estado: la frase viva dice lo que le pasa al paciente
+  $('frase-txt').innerHTML = S ? `<span class="estado">${S.titulo}</span>${S.texto} ${org(S.origen, false)}`
+    : `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
   $('pacientes').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pac === est.pac.k)));
   $('leyenda').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.estado === est.clave)));
   $('fuentes').innerHTML = E.fuentes.map((c) => `<li><span>${D.FICHA[c.f][4]}: ${c.sitio}</span>${cita(c)}</li>`).join('');
   $('mon-quien').textContent = `${est.pac.nombre} · ${E.tit}`;
 }
-function pintarTodo() { pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); pintarFrase(); pintarMandos(); medirDock(); }
+// Los topes de los mandos (topes.js): avisos ámbar bajo los mandos y sellos en el monitor, con su origen
+const tope = crearTope({ monitor: $('monitor'), dock: $('dock'), cita });
+const topeVisto = {};
+let topeMando = null;   // el sello de un mando que se pasó del tope y se quedó donde estaba
+function aplicarTopes() {
+  const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
+  if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
+  for (const k of ['vtkg', 'meseta', 'pmax', 'sello', 'sello2', 'sello3', 'sello4']) {
+    const t = hay[k], firma = t ? JSON.stringify(t) : '';
+    if (topeVisto[k] === firma) continue;
+    topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
+  }
+  const antes = est.sello; est.sello = hay.sello ? { titulo: hay.sello.titulo, texto: hay.sello.texto, origen: hay.sello.origen } : null;
+  if (JSON.stringify(antes) !== JSON.stringify(est.sello)) pintarFrase();
+}
+function pintarTodo() { pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); pintarFrase(); pintarMandos(); aplicarTopes(); medirDock(); }
 // Predice y comprueba: mientras el monitor está tapado, la presión alveolar del dibujo tampoco se enseña
 const taparEscena = () => { const t = document.getElementById('esc-palv'); if (t) t.toggleAttribute('hidden', est.tapado); };
 
@@ -159,11 +177,11 @@ function pintarMandos() {
   let h = '';
   if (est.pest === 'resp') {
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button></div>`;
-    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, 800, 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW`) + desl('flujo', 'Flujo', r.flujo, 30, 100, 5, 'L/min', 'ficha: 60, ≥80 si distrés');
+    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12`) + desl('flujo', 'Flujo', r.flujo, 30, 100, 5, 'L/min', 'ficha: 60, ≥80 si distrés');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha: 5-8 de inicio') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, 30, 70, 5, 'cmH₂O', 'ilustrativo');
+    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha: 5-8 de inicio') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, 30, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
   } else if (est.pest === 'pulmon') {
-    h += desl('c', 'Compliance', pu.c, 15, 100, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha: SDRA <25' : pu.c >= 50 ? 'ficha: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'fisiología general');
+    h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha: SDRA <25' : pu.c >= 50 ? 'ficha: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'fisiología general');
     h += `<div class="seg" aria-label="Resistencia espiratoria"><button type="button" data-m="fesp" data-v="1" aria-pressed="${est.factorEsp === 1}">Esp. = insp.<small>pulmón sano</small></button><button type="button" data-m="fesp" data-v="2" aria-pressed="${est.factorEsp === 2}">Esp. ×2<small>EPOC</small></button><button type="button" data-m="fesp" data-v="3" aria-pressed="${est.factorEsp === 3}">Esp. ×3<small>asma (ilustrativo)</small></button></div>`;
     h += `<p class="dock-nota">τ = R·C = ${f1(pu.r * pu.c / 1000)} s (insp.) · ${f1((pu.rEsp ?? pu.r) * pu.c / 1000)} s (esp.): en 3 τ sale el 95 % del aire. ${org('fisiología general')}</p>`;
   } else if (est.pest === 'man') {
@@ -172,19 +190,29 @@ function pintarMandos() {
   }
   $('dock-panel').innerHTML = h;
 }
+// El tope duro: si el cambio lleva a un estado que un paciente no aguanta (Vt > 12 mL/kg PBW, VM > 20 L/min), el mando
+// se queda donde estaba y sale el sello. Si el cambio es válido, el sello se quita.
+function guardarTope(k, antes) {
+  const l = estable(P.S.resp, P.S.pulmon), t = pasaDeTope(l, PBW());
+  if (!t) { topeMando = null; return; }
+  if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: antes }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: antes });
+  topeMando = t;
+}
 $('dock-panel').addEventListener('input', (ev) => {
   const i = ev.target.closest('input[type=range]'); if (!i) return;
   const k = i.dataset.m, v = +i.value;
+  const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
+  guardarTope(k, antes);
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor();
 });
 $('dock-panel').addEventListener('click', (ev) => {
   const b = ev.target.closest('button[data-m]'); if (!b) return;
   const k = b.dataset.m;
-  if (k === 'modo') P.ajustar({ modo: b.dataset.v });
+  if (k === 'modo') { const antes = P.S.resp.modo; P.ajustar({ modo: b.dataset.v }); guardarTope('modo', antes); }
   else if (k === 'fesp') { est.factorEsp = +b.dataset.v; P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); }
-  else if (k === 'pausa' || k === 'oclusion') P.maniobra({ [k]: !P.S.man[k] });
+  else if (k === 'pausa' || k === 'oclusion') { P.maniobra({ [k]: !P.S.man[k] }); topeMando = null; }
   else if (k === 'monpausa') est.pausa = !est.pausa;
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();

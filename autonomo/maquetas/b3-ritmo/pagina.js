@@ -6,6 +6,8 @@ import { $, C, CASO, CRECE, ESC_2021, ESTADOS, F195, FAMILIAS, FICHAS, GUIAS, IM
 import { pintarGraficas } from './graficas.js';
 import { montarEscena, pintarAparatos, pintarEscena, pintarEscenaPendiente, reiniciarD } from './escena.js';
 import { MOTOR } from './motor.js';
+import { crearTope } from '../comun/tope.js';
+import { ENERGIA_TV, ADE, MAX, calcularTopes, cargando } from './topes.js';
 import { G, f1 } from './dibujo.js';
 instalarMonitor();
 /* ============================================================
@@ -19,7 +21,7 @@ function resetS(clave) {
   Object.keys(S).forEach(k => delete S[k]);
   Object.assign(S, { clave, fcSA: { sinusal: 75, taquiSinusal: 120 }[clave], rama: 'i', flutter: 2, fcFA: 138, farmaco: null, horas: 0, llenadoMalo: false,
     tamCada: 0.5, wpwFa: false, wpwNodo: false, qt: {}, tdp: false, k: 4.2, sexo: 'v', deriv: clave === 'stemi' ? 'V2' : 'II', st: 2.5, inestable: false,
-    bomba: null, desfib: null, adeno: null, parada: null, mensaje: null, tdpMg: false });
+    bomba: null, desfib: null, adeno: null, parada: null, mensaje: null, tdpMg: false, dosis: {}, sinusal: false });
   if (clave === 'torsade') S.qt = { haloperidol: true, claritromicina: true, kBajo: true, mgBajo: true };
   if (['fv', 'aesp', 'asistolia'].includes(clave)) S.parada = { comp: false, choques: 0, adrenalina: [], amio: 0, insufl: 10, escenario: 'responde', reloj: 0, ciclo: null, rce: false, minuto: 5, causa: null };
 }
@@ -211,6 +213,7 @@ function pintarDock() {
   else h.push(mandosMedir());
   $('dock-panel').innerHTML = h.join('');
   for (const r of $('dock-panel').querySelectorAll('input[type=range]')) r.oninput = e => deslizar(e.target);
+  aplicarTopes(true);
   medirDock();
 }
 function mandosTratar() {
@@ -308,19 +311,26 @@ function infusion(nombre, dosis, lectura) { S.bomba = { nombre, dosis, lectura, 
 function cortarFuturo() {}   // el motor solo ha avanzado 70 ms por delante: lo nuevo manda desde ya
 function avisar(t) { S.mensaje = t; pintarFrase(); }
 function choque(modo, energia, alTerminar) {
+  if (cargando(S, simT)) { avisar('El desfibrilador aún está cargando o descargando: un choque por carga.'); return false; }   // antes se apilaban 3 choques en 1,2 s
   S.desfib = { modo, energia, cargadoEn: simT + 0.8 }; pintarAparatos();
   if (modo === 'sinc') S.desfib.esperaQRS = true;
   else en(1.1, () => { S.desfib.tChoque = simT; mo.choque(simT); alTerminar(); });
-  S.desfib.alTerminar = alTerminar;
+  S.desfib.alTerminar = alTerminar; return true;
 }
 function sincronizar() {   // el choque sincronizado cae sobre el siguiente QRS
   const d = S.desfib; if (!d || !d.esperaQRS || simT < d.cargadoEn) return;
   const b = mo.latidosV[mo.latidosV.length - 1]; if (b && b.t0 > d.cargadoEn && simT - b.t0 < 0.05) { d.esperaQRS = false; d.tChoque = b.t0 + 0.012; mo.choque(d.tChoque); d.alTerminar(); }
 }
-function exito(t) { const m = mo.m; mo.quitarOndaF(t); m.pAmp = 1; (S.eventos = S.eventos || []).push(t); m.fa = false; m.fv = false; m.flOn = false; m.crOn = false; m.foco = null; m.tdp = false; m.navRef = null; m.navF = 1; m.sa = true; m.sinMecanica = false; mo.reiniciarSA(t + 0.9); }
+function exito(t) { const m = mo.m; mo.quitarOndaF(t); m.pAmp = 1; (S.eventos = S.eventos || []).push(t); S.sinusal = true; m.fa = false; m.fv = false; m.flOn = false; m.crOn = false; m.foco = null; m.tdp = false; m.navRef = null; m.navF = 1; m.sa = true; m.sinMecanica = false; mo.reiniciarSA(t + 0.9); }
 function accion(a, b) {
   const m = mo ? mo.m : null, c = S.clave, t = simT, p = S.parada;
   S.mensaje = null;
+  if (mo && a !== 'reinicio') {   // el tope manda también cuando el mando llega por la Mayéutica o a mano (topes.js)
+    const r = calcularTopes(S, simT, mo);
+    if (r.off.has(a)) { avisar(`Tope: ${Object.values(r.T).map(x => x.titulo).join(' · ')}. ${Object.values(r.T).map(x => x.texto).join(' ')}`); pintarDock(); return; }
+    if (ADE.includes(a)) S.dosis.ade = (S.dosis.ade || 0) + 1;
+    else if (['dilt-nodo', 'vagal-v', 'vagal-m', 'vagal-c', 'mg-tam', 'meto-tam', 'vera-tam', 'amio-tv'].includes(a)) S.dosis[a] = (S.dosis[a] || 0) + 1;
+  }
   switch (a) {
     case 'reinicio': ponerEstado(c, c === 'fa' ? { fcFA: S.fcFA } : {}); return;
     case 'vagal-v': case 'vagal-m': case 'vagal-c': {
@@ -337,7 +347,7 @@ function accion(a, b) {
     case 'cv-fa': choque('sinc', '100 J', () => { exito(simT); S.mensaje = 'Choque sincronizado de 100 J bifásicos: vuelve el sinusal. Funciona mejor en la FA reciente; antes, eco transesofágica si da tiempo, y anticoagulación en quien la necesite (p. 25). Qué choque funciona: ilustrativo.'; pintarFrase(); }); break;
     case 'cv-wpw': choque('sinc', '100 J', () => { exito(simT); m.apOn = true; S.wpwFa = false; S.wpwNodo = false; pintarDock(); avisar('Cardioversión: vuelve el sinusal, con su PR corto y su onda delta (p. 28).'); }); break;
     case 'mg-tam': bolo('MgSO4', '2 g/15 min + 6 g', 'sulfato de magnesio 2 g en 15 min y 6 g en 6 h'); en(3, () => { m.foco = null; m.sa = true; mo.reiniciarSA(simT + 0.2); avisar('Con magnesio, la TAM pasó a sinusal en el 88 % de un estudio, con independencia del Mg sérico (p. 28). Aquí, uno de esos.'); }); break;
-    case 'meto-tam': bolo('METOPROLOL', '2,5-5 mg IV', 'metoprolol 2,5-5 mg IV en 2 min'); en(3, () => { m.foco = null; m.sa = true; mo.reiniciarSA(simT + 0.2); avisar('Metoprolol: 80 % de paso a sinusal, si la TAM no es por EPOC (p. 28).'); }); break;
+    case 'meto-tam': bolo('METOPROLOL', '2,5-5 mg IV', 'metoprolol 2,5-5 mg IV en 2 min'); if (S.dosis[a] === 1) en(3, () => { m.foco = null; m.sa = true; mo.reiniciarSA(simT + 0.2); avisar('Metoprolol: 80 % de paso a sinusal, si la TAM no es por EPOC (p. 28).'); }); break;
     case 'vera-tam': bolo('VERAPAMILO', '0,25-5 mg IV', 'verapamilo IV en 2 min (hasta 20 mg)'); en(1.5, () => { if (m.foco) m.foco.cada = 0.62; m.navF = 1.3; avisar('Verapamilo: corrige menos de la mitad, pero frena la FC. Es inotrópico negativo: no en la IC con FE reducida (p. 28).'); }); break;
     case 'llegafa': S.wpwFa = true; ponerEstado('wpw', { wpwFa: true }); return;
     case 'w-dilt': case 'w-bb': case 'w-digo': {
@@ -348,7 +358,7 @@ function accion(a, b) {
     case 'desf-wpw': choque('asinc', '120-200 J', () => { exito(simT); m.apOn = true; S.wpwFa = false; S.wpwNodo = false; S.fvWpw = false; $('peligro').hidden = true; pintarDock(); avisar('Desfibrilación: vuelve el sinusal, con su PR corto y su onda delta. La vía accesoria sigue ahí.'); }); break;
     case 'w-amio': infusion('AMIODARONA', '150 mg', 'amiodarona 150 mg IV'); en(3.5, () => { exito(simT); m.apOn = true; S.wpwFa = false; pintarDock(); avisar('Cardioversión farmacológica con amiodarona (o procainamida): vuelve el sinusal (p. 28). Cuándo: ilustrativo.'); }); break;
     case 'amio-tv': infusion('AMIODARONA', '150 mg/10 min', 'amiodarona 150 mg en 10 min, luego 1 mg/min'); en(1, () => { m.crRefr = 0.33; }); en(3, () => { m.crRefr = 0.42; }); avisar('Amiodarona IV: la de elección para suprimir la TV monomórfica estable (Fig. 19.8, p. 32-33). Cuándo cede: ilustrativo.'); break;
-    case 'cv-tv': { const e = S.choquesTV ? '200 J' : '100 J'; S.choquesTV = (S.choquesTV || 0) + 1; choque('sinc', e, () => { exito(simT); S.mensaje = `Choque sincronizado de ${e}: la TV cede. Se empieza en 100 J; si falla, 100 J bifásico o 200 J; se evitan los 360 J, que dañan el miocardio (p. 32). Qué choque funciona: ilustrativo.`; pintarFrase(); }); break; }
+    case 'cv-tv': { const e = ENERGIA_TV[Math.min(S.choquesTV || 0, 2)]; if (!choque('sinc', e, () => { exito(simT); S.mensaje = `Choque sincronizado de ${e}: la TV cede. Se empieza en 100 J; si falla, 100 J bifásico o 200 J; se evitan los 360 J, que dañan el miocardio (p. 32). Qué choque funciona: ilustrativo.`; pintarFrase(); })) break; S.choquesTV = (S.choquesTV || 0) + 1; break; }
     case 'tdp': ponerEstado('torsade', { qt: { ...S.qt }, tdp: true }); return;
     case 'desf-tdp': choque('asinc', '120-200 J', () => { exito(simT); m.apdExtra = qtExtra(S); S.tdp = false; pintarDock(); avisar('Desfibrilación (choque no sincronizado): la torsade sostenida cede. Con el QT aún largo, puede volver: magnesio y corregir (p. 35).'); }); break;
     case 'mg-tdp': S.tdpMg = true; bolo('MgSO4', '1-2 g/15 min', 'sulfato de magnesio 1-2 g en 15 min'); avisar('Magnesio IV, popular para cortar la torsade y combinable con el choque; la dosis no tiene consenso: 1-2 g en 15 min según la ACLS (p. 35). Su efecto aquí: ilustrativo.'); en(4, () => { if (S.tdp) { exito(simT); m.apdExtra = qtExtra(S); S.tdp = false; pintarDock(); } }); break;
@@ -356,7 +366,7 @@ function accion(a, b) {
     case 'comp': p.comp = !p.comp; if (p.comp && p.ciclo == null) { p.ciclo = p.reloj; p.avisoCiclo = false; } break;
     case 'choque': choque('asinc', '120-200 J', () => resultadoChoque()); break;
     case 'adre': {
-      bolo('ADRENALINA', '1 mg IV/IO', 'adrenalina 1 mg IV o IO cada 3-5 min'); p.adrenalina.push(t + 0.9);
+      bolo('ADRENALINA', '1 mg IV/IO', 'adrenalina 1 mg IV o IO cada 3-5 min'); p.adrenalina.push(t + 0.9); p.adreReloj = p.reloj;
       if (S.clave === 'fv' && p.choques < 2) avisar('La adrenalina empieza si hace falta un 2.º choque (p. 59). En la AESP y la asistolia, cuanto antes (p. 60-61).');
       else avisar('Adrenalina 1 mg: sube la presión de perfusión coronaria un 30 % durante al menos 3 min (p. 62). Mira la Fig. 21.3, abajo.');
       pintarGraficas(); break; }
@@ -394,9 +404,30 @@ function deslizar(el) {
 function aplicarFarmacoFA() { if (S.farmaco && !F195[S.farmaco]) return; S.fcFA = S.farmaco ? fcFig(S.farmaco, S.horas) : 138; mo.m.navF = navParaFC(S.fcFA); }
 // Con «reducir movimiento» o en pausa: se salta al final de lo que acaba de pasar
 function tras() { const fin = Math.max(simT + 0.6, ...agenda.map(x => x.t + 0.4), S.adeno ? S.adeno + 4 : 0); avanzarHasta(fin); llenarEstatico(); pintarEscena(simT); pintarCifras(); pintarFrase(); }
-function avanzarHasta(fin) { while (simT < fin) { simT = Math.min(fin, simT + 0.05); mo && mo.avanzar(simT + 0.07); procesarAgenda(); if (mo) sincronizar(); } }
+function avanzarHasta(fin) { while (simT < fin) { const t0 = simT; simT = Math.min(fin, simT + 0.05); relojParada(simT - t0); mo && mo.avanzar(simT + 0.07); procesarAgenda(); if (mo) sincronizar(); } }
 function procesarAgenda() { const ya = agenda.filter(x => x.t <= simT); agenda = agenda.filter(x => x.t > simT); for (const x of ya) x.fn(); }
 
+// El reloj de la parada va 10 veces más deprisa; se para a los 30 min sin pulso y al recuperarlo (topes.js). Lo mueven el bucle y avanzarHasta.
+function relojParada(dt) {
+  const p = S.parada; if (!p || p.rce) return;
+  if (p.comp || p.reloj > 0 || p.choques) p.reloj = Math.min(MAX.parada, p.reloj + dt * 10);
+  if (p.comp && p.ciclo != null && p.reloj - p.ciclo >= 120 && !p.avisoCiclo) { p.avisoCiclo = true; avisar(S.clave === 'fv' ? '2 min de compresiones: pausa breve para mirar el ritmo; si sigue en FV, otro choque (p. 59).' : '2 min de compresiones: mira el ritmo; si no es desfibrilable, sigue con compresiones y adrenalina cada 3-5 min (p. 60).'); }
+}
+/* ---------- Los topes de los mandos (topes.js): avisos ámbar y sellos en el monitor; los botones se apagan ---------- */
+const tope = crearTope({ monitor: $('rtm-monitor'), dock: $('dock'), cita });
+const topeVisto = {}; let topeFrase = null;
+function aplicarTopes(forzar) {
+  const quitarTodo = () => { for (const { clave } of tope.activos()) { tope.quitar(clave); delete topeVisto[clave]; } topeFrase = null; };
+  if (!mo || pend()) { quitarTodo(); return; }
+  const r = calcularTopes(S, simT, mo); topeFrase = r.frase;
+  for (const { clave } of tope.activos()) if (!(clave in r.T)) { tope.quitar(clave); delete topeVisto[clave]; }
+  for (const [k, t] of Object.entries(r.T)) { const f = JSON.stringify([t.nivel, t.titulo, t.texto]); if (!forzar && topeVisto[k] === f) continue; topeVisto[k] = f; tope.poner(k, t); }
+  for (const b of document.querySelectorAll('#dock-panel [data-acc]')) {
+    const a = b.dataset.acc, sm = b.querySelector('small');
+    if (r.off.has(a)) { if (!b.disabled) { b.disabled = true; b.classList.add('tope-apagado'); } } else if (b.classList.contains('tope-apagado')) { b.disabled = false; b.classList.remove('tope-apagado'); }
+    if (sm) { if (b.dataset.small0 == null) b.dataset.small0 = sm.textContent; sm.textContent = a in r.rot ? r.rot[a] : b.dataset.small0; }
+  }
+}
 /* ---------- La frase viva ---------- */
 function claveGuia() {
   const c = S.clave, p = S.parada;
@@ -412,7 +443,7 @@ function pintarFrase() {
   if (pend()) { $('frase-txt').innerHTML = `<b>${e.nombre}</b>: pendiente de fuente. Marino no lo trata; llegará de la guía ESC 2021 de estimulación.`; medirDock(); return; }
   const p = S.parada;
   if (p && p.rce) [t, o] = ESTADOS.rce.frase;
-  if (S.adeno && mo) { if (simT < S.adeno) [t, o] = ['La adenosina va por la vía hasta el corazón: en bolo rápido y con lavado, actúa en menos de 30 s.', 'ficha · p. 30']; else if (simT < mo.m.cerrojoFin) [t, o] = ['La adenosina echa el cerrojo al nodo AV: salen P sin QRS. Si el circuito pasa por el nodo, se rompe.', 'ficha · p. 29-30']; else if (S.clave === 'nodal' || S.clave === 'aberrancia') [t, o] = [S.clave === 'nodal' ? 'Vuelve el sinusal: la reentrada se cortó. Con 6 mg y luego 12 mg se cortan más del 90 %; por vía central, la mitad de la dosis.' : 'Vuelve el sinusal, con el QRS igual de ancho: el bloqueo de rama ya estaba (Fig. 19.6).', S.clave === 'nodal' ? 'ficha · p. 30' : 'ficha · p. 31']; else if (S.clave === 'tv') [t, o] = ['La adenosina cerró el nodo, pero la TV sigue: su circuito no pasa por él. Si un QRS ancho no responde a la adenosina, probablemente es una TV.', 'ficha · p. 33']; }
+  if (S.adeno && mo) { if (simT < S.adeno) [t, o] = ['La adenosina va por la vía hasta el corazón: en bolo rápido y con lavado, actúa en menos de 30 s.', 'ficha · p. 30']; else if (simT < mo.m.cerrojoFin) [t, o] = ['La adenosina echa el cerrojo al nodo AV: salen P sin QRS. Si el circuito pasa por el nodo, se rompe. Si pasa más de 1 s sin QRS, la unión AV escapa a unos 50/min. ' + org('el escape: fisiología general', true), 'ficha · p. 29-30']; else if (S.clave === 'nodal' || S.clave === 'aberrancia') [t, o] = [S.clave === 'nodal' ? 'Vuelve el sinusal: la reentrada se cortó. Con 6 mg y luego 12 mg se cortan más del 90 %; por vía central, la mitad de la dosis.' : 'Vuelve el sinusal, con el QRS igual de ancho: el bloqueo de rama ya estaba (Fig. 19.6).', S.clave === 'nodal' ? 'ficha · p. 30' : 'ficha · p. 31']; else if (S.clave === 'tv') [t, o] = ['La adenosina cerró el nodo, pero la TV sigue: su circuito no pasa por él. Si un QRS ancho no responde a la adenosina, probablemente es una TV.', 'ficha · p. 33']; }
   if (S.clave === 'fa' && F195[S.farmaco]) extra = ` Con ${NOMBRE_F[S.farmaco]}, a las ${coma(S.horas, 1)} h la FC media es ~${Math.round(fcFig(S.farmaco, S.horas))} lpm (Fig. 19.5). El monitor la cuenta latido a latido: en la FA sube y baja alrededor de esa media.`;
   if (S.clave === 'wpw' && S.wpwFa) [t, o] = S.fvWpw ? ['El bloqueo selectivo del nodo precipitó una FV: sin pulso. Desfibrilar.', 'ficha · p. 28']
     : S.wpwNodo ? ['Frenar el nodo no frena el atajo: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV. Con una vía accesoria no se dan antagonistas del calcio, betabloqueantes ni digoxina.', 'ficha · p. 28']
@@ -421,6 +452,7 @@ function pintarFrase() {
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
   if (p && !p.rce && p.comp) extra = p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
+  if (!S.mensaje && topeFrase) { t = topeFrase[0]; o = topeFrase[1]; extra = ''; }
   $('frase-txt').innerHTML = S.mensaje ? `${S.mensaje}` : `${t} ${org(o)}${extra}`;
   medirDock();
 }
@@ -569,10 +601,9 @@ function bucle(ts) {
   if (!pausado && mo) {
     acum += dt; const paso2 = 1 / PXS;
     while (acum >= paso2) { simT += paso2; acum -= paso2; mo.avanzar(simT + 0.07); procesarAgenda(); sincronizar(); muestra(simT); }
-    if (S.parada) { const p = S.parada; if (p.comp || p.reloj > 0 || p.choques) p.reloj += dt * 10;
-      if (p.comp && !p.rce && p.ciclo != null && p.reloj - p.ciclo >= 120 && !p.avisoCiclo) { p.avisoCiclo = true; avisar(S.clave === 'fv' ? '2 min de compresiones: pausa breve para mirar el ritmo; si sigue en FV, otro choque (p. 59).' : '2 min de compresiones: mira el ritmo; si no es desfibrilable, sigue con compresiones y adrenalina cada 3-5 min (p. 60).'); } }
+    relojParada(dt);
     pintarTiras(); pintarEscena(simT);
-    if (ts - tLect > 400) { tLect = ts; pintarCifras(); if (S.parada) pintarFicha(); if (S.clave === 'torsade' || S.clave === 'hiperk' || S.adeno) pintarFrase(); }
+    if (ts - tLect > 400) { tLect = ts; aplicarTopes(false); pintarCifras(); if (S.parada) pintarFicha(); if (S.clave === 'torsade' || S.clave === 'hiperk' || S.adeno) pintarFrase(); }
   }
   requestAnimationFrame(bucle);
 }

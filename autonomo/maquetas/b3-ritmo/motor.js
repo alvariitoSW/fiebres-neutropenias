@@ -189,7 +189,7 @@ export const MOTOR = (() => {
     const h = { push(e) { heap.push(e); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p].t <= e.t) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } },
       pop() { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let s = i; if (l < heap.length && heap[l].t < heap[s].t) s = l; if (r < heap.length && heap[r].t < heap[s].t) s = r; if (s === i) break; [heap[s], heap[i]] = [heap[i], heap[s]]; i = s; } } return top; } };
     const programar = (k, t, de) => h.push({ k, t, de });
-    let proxSA = 0, proxFA = 0, proxFV = 0, proxFoco = 0, tAhora = 0;
+    let proxSA = 0, proxFA = 0, proxFV = 0, proxFoco = 0, tAhora = 0, escUlt = -1e9;   // escUlt: el último latido de escape del nodo (ver avanzar)
     const apdK = new Float64Array(n).fill(0.3);
     function apd(k, t) {   // duración del potencial de acción ventricular según el RR local (restitución); se fija al activarse
       return apdK[k];
@@ -270,6 +270,10 @@ export const MOTOR = (() => {
         if (m.fa) tg = Math.min(tg, proxFA);
         if (m.fv) tg = Math.min(tg, proxFV);
         if (m.foco) tg = Math.min(tg, proxFoco);
+        // El escape de la unión: con el nodo AV cerrado (adenosina), si pasan 1,2 s sin QRS, el His late solo (~50/min;
+        // fisiología general: la unión AV escapa a 40-60/min). Sin él, el cerrojo dejaba el ventrículo sin ritmo.
+        let proxEsc = Infinity;
+        if (m.cerrojoFin > m.cerrojo && m.cerrojo >= 0) { const u = latidosV.length ? latidosV[latidosV.length - 1].t0 : -1e9; proxEsc = Math.max(m.cerrojo, u + 1.2, escUlt + 1.2); if (proxEsc < m.cerrojoFin) tg = Math.min(tg, proxEsc); else proxEsc = Infinity; }
         const te = heap.length ? heap[0].t : Infinity;
         const t = Math.min(tg, te);
         if (t > hasta) break;
@@ -277,6 +281,7 @@ export const MOTOR = (() => {
           if (m.sa && proxSA === tg) { programar(N.sa.k, tg, null); proxSA = tg + 60 / m.fcSA; }
           if (m.fa && proxFA === tg) { const ts = regiones.a[Math.floor(azar() * regiones.a.length)]; programar(ts.nodo.k, tg, null); proxFA = tg + m.faTasa * (0.5 + azar()); }
           if (m.foco && proxFoco === tg) { const k = m.foco.sitio(tg, azar); if (k != null) programar(k, tg, null); proxFoco = tg + m.foco.cada * (1 + (m.foco.jitter || 0) * (azar() - 0.5) * 2); }
+          if (proxEsc === tg) { programar(N.his1.k, tg, null); escUlt = tg; }
           if (m.fv && proxFV === tg) { const ts = regiones.v[Math.floor(azar() * regiones.v.length)]; programar(ts.nodo.k, tg, null); proxFV = tg + m.fvTasa * (0.5 + azar()); }
           continue;
         }

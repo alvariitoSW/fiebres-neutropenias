@@ -56,7 +56,7 @@ if (QUE === 'shock' || QUE === 'todo') {
 
 if (QUE === 'pulmon' || QUE === 'todo') {
   await ir('b3-pulmon'); await page.waitForTimeout(1800);
-  const C = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim().slice(0, 28); const o = {}; for (const k of ['pico', 'meseta', 'pres', 'peeptot', 'cstat', 'dp', 'vtkg', 'vm', 'ie', 'vt', 'flujofin']) o[k] = g(k); o.consola = document.getElementById('consola')?.hidden ? '-' : document.getElementById('consola')?.textContent.replace(/\s+/g, ' ').slice(0, 140); return o; });
+  const C = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"] .g`)?.textContent.trim(); const o = {}; for (const k of ['pico', 'meseta', 'peeptot', 'vtkg', 'vm', 'vt']) o[k] = g(k); o.sello = [...document.querySelectorAll('.tope-sello')].map((e) => e.firstChild.textContent.replace('⛔', '').trim()).join('|') || '-'; o.avisos = [...document.querySelectorAll('.tope-aviso b')].map((e) => e.textContent.trim()).join('|') || '-'; return o; });
   // Con el monitor congelado (#pausa) cada mando rellena el modelo ya estable (35 s de calentamiento, pagina.js
   // llenarMonitor): la lectura es la del estado estacionario y no una de un ciclo a medias (a FR 8 un ciclo dura 7,5 s).
   const M = async (k, v) => { const r = await range(`input[data-m="${k}"]`, v, ['input']); await page.waitForTimeout(250); return r; };
@@ -98,20 +98,44 @@ if (QUE === 'pulmon' || QUE === 'todo') {
 if (QUE === 'receptor' || QUE === 'todo') {
   await ir('b3-receptor');
   const R = () => page.evaluate(() => { const r = window.__receptor.R; return { pam: Math.round(r.pam), pa: `${Math.round(r.pas)}/${Math.round(r.pad)}`, fc: Math.round(r.fc), ic: +(+r.ic).toFixed(1), irvs: Math.round(r.irvs), lact: r.lact == null ? '-' : +(+r.lact).toFixed(1), f: JSON.stringify(window.__receptor.ST.f), frase: document.querySelector('#frase-txt')?.textContent.replace(/\s+/g, ' ').slice(0, 90) }; });
+  // Ampliada el 26/10/2026 (límites del receptor): los interruptores viven en #dock-explorar (no en #dock-panel: la
+  // versión anterior no los veía), se mide el 80 % del tope, el tope, las combinaciones (todo encendido a la vez), las
+  // acciones repetidas (cada interruptor ×6), r.fuera (paciente imposible) y si hay sello/aviso/apagado de tope.js.
+  const CAPR = '/tmp/plan-socialista/b3/limites/';
+  const RR = () => page.evaluate(() => { const r = window.__receptor.R; return { pam: Math.round(r.pam), pa: `${Math.round(r.pas)}/${Math.round(r.pad)}`, fc: Math.round(r.fc), ic: +(+r.ic).toFixed(1), irvs: Math.round(r.irvs), lact: r.lact == null ? '-' : typeof r.lact === 'number' ? +(+r.lact).toFixed(1) : r.lact, glu: r.glu ?? '-', k: r.k ?? '-', fuera: (r.fuera || []).join('/') || '-', f: JSON.stringify(window.__receptor.ST.f), topes: [...document.querySelectorAll('.tope-sello')].map((e) => e.firstChild.textContent.trim()).join('|') || '-', avisos: document.querySelectorAll('.tope-aviso').length, apagados: document.querySelectorAll('.tope-apagado, #dock-explorar [disabled]').length, frase: document.querySelector('#frase-txt')?.textContent.replace(/\s+/g, ' ').slice(0, 80) }; });
+  const TOG = '#dock-explorar button[data-tog], #dock-explorar button[data-fija]';
+  const togs = () => page.evaluate((s) => [...document.querySelectorAll(s)].map((b) => (b.dataset.tog || b.dataset.fija) + ':' + b.getAttribute('aria-pressed')), TOG);
+  const pulsa = async (k, n = 1) => { for (let i = 0; i < n; i++) { await page.evaluate(([k, s]) => [...document.querySelectorAll(s)].find((b) => (b.dataset.tog || b.dataset.fija) === k)?.click(), [k, TOG]); await page.waitForTimeout(120); } };
+  const estado = async (id) => { await page.evaluate((id) => window.__receptor.ponerEstado(id), id); await page.waitForTimeout(2200); };
   const estados = await page.evaluate(() => window.__receptor.ESTADOS.map((e) => e.id));
   console.log('estados', estados.join(' '));
   for (const id of estados) {
-    await page.evaluate((id) => window.__receptor.ponerEstado(id), id); await page.waitForTimeout(2500);
-    const base = await R();
-    const sliders = await page.evaluate(() => [...document.querySelectorAll('input[data-dosis]')].map((i) => [i.dataset.dosis, i.min, i.max]));
-    const togs = await page.evaluate(() => [...document.querySelectorAll('#dock-panel button[data-tog], #dock-panel button[data-fija]')].map((b) => (b.dataset.tog || b.dataset.fija) + ':' + b.getAttribute('aria-pressed')));
-    fila(`${id} base`, base); console.log('   mandos', sliders.map((s) => `${s[0]} ${s[1]}-${s[2]}`).join(', '), '| togs', togs.join(', '));
+    await estado(id);
+    const base = await RR();
+    const sliders = await page.evaluate(() => [...document.querySelectorAll('input[data-dosis]')].map((i) => [i.dataset.dosis, +i.min, +i.max, +i.step]));
+    fila(`${id} base`, base); console.log('   mandos', sliders.map((s) => `${s[0]} ${s[1]}-${s[2]}`).join(', ') || '(ninguno)', '| togs', (await togs()).join(', ') || '(ninguno)');
+    for (const [k, , max, step] of sliders) await range(`input[data-dosis="${k}"]`, Math.round(0.8 * max / step) * step);
+    if (sliders.length) { await page.waitForTimeout(2200); fila('   al 80 % del tope', await RR()); }
     for (const [k, , max] of sliders) await range(`input[data-dosis="${k}"]`, max);
-    for (const t of togs) { const [k, on] = t.split(':'); if (on !== 'true') { await page.evaluate((k) => document.querySelector(`#dock-panel button[data-tog="${k}"], #dock-panel button[data-fija="${k}"]`)?.click(), k); } }
-    await page.waitForTimeout(3200); fila('   TODO a tope', await R());
+    await page.waitForTimeout(2200); fila('   deslizadores a tope', await RR());
+    for (const t of await togs()) { const [k, on] = t.split(':'); if (on !== 'true') await pulsa(k); }
+    await page.waitForTimeout(2600); fila('   + todos los interruptores', await RR());
+    for (const t of await togs()) await pulsa(t.split(':')[0], 6);
+    await page.waitForTimeout(1500); fila('   interruptores ×6 (par)', await RR());
     for (const [k, min] of sliders) await range(`input[data-dosis="${k}"]`, min);
-    await page.waitForTimeout(2500); fila('   TODO a cero (togs on)', await R());
+    await page.waitForTimeout(2200); fila('   deslizadores a cero (togs on)', await RR());
+    for (const t of await togs()) { const [k, on] = t.split(':'); if (on === 'true') await pulsa(k); }
+    await page.waitForTimeout(1500); fila('   todo apagado', await RR());
+    console.log('   desborde', await desb(), 'NaN', await nan());
   }
+  // Combinaciones concretas que el recorrido de arriba no separa
+  await estado('na-techo'); await range('input[data-dosis="na"]', 40); await page.waitForTimeout(2200); await page.screenshot({ path: CAPR + 'receptor-01-na40.png' });
+  await estado('betabloqueo'); await range('input[data-dosis="adrenalina"]', 15); await pulsa('glucagon'); await page.waitForTimeout(2600); fila('Begoña adre 15 + glucagón', await RR());
+  await pulsa('bisoprolol'); await page.waitForTimeout(2600); fila('  … y sin bisoprolol (quitado)', await RR()); await page.screenshot({ path: CAPR + 'receptor-02-begona-sin-bb.png' });
+  await estado('cocaina'); await pulsa('betabloqueante'); await page.waitForTimeout(2600); fila('Cocaína + betabloqueante', await RR()); await page.screenshot({ path: CAPR + 'receptor-03-cocaina-bb.png' });
+  await estado('tsvi'); await pulsa('fenilefrina'); await page.waitForTimeout(2600); fila('TSVI dobuta + fenilefrina', await RR()); await pulsa('dobutamina'); await page.waitForTimeout(2600); fila('  … solo fenilefrina', await RR());
+  await estado('bronquio'); await pulsa('albuterol'); await pulsa('ipratropio'); await page.waitForTimeout(2600); fila('Bronquio albuterol + ipratropio', await RR());
+  console.log('reloj:', await page.evaluate(() => document.querySelectorAll('[data-h], [data-reloj], #reloj').length), '| tope.js cargado:', await page.evaluate(() => !!document.querySelector('.tope-mon')));
   console.log('RECEPTOR errores', errores.length, errores.slice(0, 3).join(' | '), 'desborde', await desb(), 'NaN', await nan());
 }
 
@@ -154,7 +178,7 @@ if (QUE === 'ritmo' || QUE === 'todo') {
   await pon('tv'); console.log('tv estable amio ×6 hits', await accN('amio-tv', 6)); await L2('  amio ×6 (900 mg)', [800, 4000]); console.log('  cv-tv ×6 hits', await accN('cv-tv', 6, 400), 'choquesTV', await page.evaluate(() => window.__ritmo.S.choquesTV)); await L2('  cv ×6', [800, 3000]);
   await page.screenshot({ path: CAP + 'ritmo-02-tv-cv6.png' });
   await pon('fa'); console.log('fa cv-fa ×5 hits', await accN('cv-fa', 5, 400)); await L2('  cv ×5', [800, 3000]);
-  await pon('torsade'); for (const k of ['haloperidol', 'claritromicina', 'amiodarona', 'kBajo', 'mgBajo', 'caBajo']) await accN('qt-' + k); await page.waitForTimeout(3000); fila('torsade 6 factores (3 s)', await L());
+  await pon('torsade'); for (const k of ['haloperidol', 'claritromicina', 'amiodarona', 'kBajo', 'mgBajo', 'caBajo']) if (!(await page.evaluate((k) => window.__ritmo.S.qt[k], k))) await accN('qt-' + k);   // el estado «torsade» ya trae 4 factores puestos: pulsar los 6 apagaba 4 (no era un doble toggle) await page.waitForTimeout(3000); fila('torsade 6 factores (3 s)', await L());
   console.log('  tdp disabled?', await page.evaluate(() => document.querySelector('[data-acc="tdp"]')?.disabled), 'hits', await accN('tdp', 1)); await page.waitForTimeout(1500);
   console.log('  mg-tdp ×5 hits', await accN('mg-tdp', 5), 'desf-tdp ×5 hits', await accN('desf-tdp', 5, 400)); await L2('  tdp Mg×5 desf×5', [800, 3000]);
   await pon('fv'); await accN('comp'); console.log('fv responde: choque ×1 hits', await accN('choque', 1)); await page.waitForTimeout(2500); fila('  tras 1 choque', await L());

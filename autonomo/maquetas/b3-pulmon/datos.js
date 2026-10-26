@@ -149,7 +149,7 @@ export const ESTADOS = {
     fuentes: [C.manejo, C.estrategias, C.ocultaAjuste, C.flujoIE],
   },
   'eulalia-conectada': {
-    tit: 'Asma casi fatal, recién conectada', pac: 'eulalia', resp: { modo: 'vcv', vt: 500, fr: 26, peep: 0, flujo: 60, pinsp: 15, ie: 2, pmax: 60 }, pulmon: { c: 60, r: 20, rEsp: 65 }, man: { oclusion: true },
+    tit: 'Asma casi fatal, recién conectada', pac: 'eulalia', resp: { modo: 'vcv', vt: 500, fr: 26, peep: 0, flujo: 60, pinsp: 15, ie: 2, pmax: 50 }, pulmon: { c: 60, r: 20, rEsp: 65 }, man: { oclusion: true },
     frase: 'Con Vt 500 y FR 26, cada respiración empieza con unos 800 mL que no salieron.',
     guia: [
       { t: 'Eulalia llega intubada y el respirador se queda con Vt 500 (9 mL/kg PBW) y FR 26. La resistencia espiratoria del asma deja el flujo lejos de cero al final de cada espiración.', s: ['flujo:finesp'], c: C.fig235 },
@@ -160,7 +160,7 @@ export const ESTADOS = {
     fuentes: [C.fig235, C.oclusion28, C.vppConsec, C.estrategias],
   },
   'eulalia-ajustada': {
-    tit: 'Asma casi fatal, bien ajustada', pac: 'eulalia', resp: { modo: 'vcv', vt: 330, fr: 10, peep: 0, flujo: 80, pinsp: 15, ie: 2, pmax: 60 }, pulmon: { c: 60, r: 20, rEsp: 65 }, man: { oclusion: true },
+    tit: 'Asma casi fatal, bien ajustada', pac: 'eulalia', resp: { modo: 'vcv', vt: 330, fr: 10, peep: 0, flujo: 80, pinsp: 15, ie: 2, pmax: 50 }, pulmon: { c: 60, r: 20, rEsp: 65 }, man: { oclusion: true },
     frase: 'FR 10, Vt 6 mL/kg, flujo 80: la espiración ocupa casi todo el ciclo y el aire sale.',
     guia: [
       { t: 'FR 10, Vt 330 (6 mL/kg PBW) y flujo 80 L/min: la inspiración dura 0,25 s y la espiración, más de 5. El flujo llega a cero.', s: ['flujo:finesp', '[data-fila="ie"]'], c: C.estrategias },
