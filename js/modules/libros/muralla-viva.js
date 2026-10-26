@@ -345,6 +345,7 @@ const Mayeutica = crearMayeuticaModelo({
     volverPor: 'La muralla de papel',
     pregunta: {
         alEmpezar: ponerModelo,
+        alConsecuencia: c => { setOcultos([], false); aplicar(estadoDe(c.estado), { frase: false }); requestAnimationFrame(() => anillo(c.mirar || null)); },
         asomar,
         verEnTexto: q => verEnTexto(q.fuente),
         alCerrar: q => { if (q.despues) aplicar(estadoDe(q.despues), { frase: false }); setOcultos([]); if (q.mirarDespues) anillo(q.mirarDespues); },
@@ -403,6 +404,16 @@ function revisarMayeutica() {
         if (c.lleva.length !== 3) r.fallos.push(c.id + ': «Lo que te llevas» no tiene 3 puntos');
         if (c.pasos.length < 5 || c.pasos.length > 8) r.fallos.push(c.id + ': de 5 a 8 pasos');
         if (!c.pasos.some(p => /giro/.test(p.momento))) r.fallos.push(c.id + ': sin giro');
+        for (const ob of c.objetivos || []) {
+            if (!ob.texto || !ob.si || !ob.no || !ob.pasos?.length || ob.pasos.some(i => !c.pasos[i])) r.fallos.push(c.id + ': objetivo ' + ob.id + ' incompleto');
+            if (!idsDe(ob.fuente).some(id => rutaDe(id))) r.fallos.push(c.id + ': objetivo ' + ob.id + ' sin «Ver en el texto»');
+            for (const id of idsDe(ob.fuente)) if (!document.getElementById(id)) r.fallos.push(`${c.id}: la fuente ${id} no existe`);
+        }
+        for (const p of c.pasos) for (const o of p.pregunta.opciones || []) if (o.consecuencia) {
+            const k = o.consecuencia;
+            if (o.ok || !k.texto || !k.fuente || !k.estado) r.fallos.push(p.pregunta.id + ': consecuencia incompleta');
+            else for (const id of idsDe(k.fuente)) if (!document.getElementById(id)) r.fallos.push(`${p.pregunta.id}: la fuente ${id} no existe`);
+        }
         if (!rutaDe(c.volver.ancla)) r.fallos.push(c.id + ': «Repasar en la ficha» sin destino');
         for (const p of c.pasos) { const m = /D[ií]a (\d+)/.exec(p.momento); if (m && estadoDe(p.estado).dia !== +m[1]) r.fallos.push(c.id + ': el día del paso no coincide con la hoja (' + p.momento + ')'); }
     }
