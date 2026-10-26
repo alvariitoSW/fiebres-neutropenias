@@ -2,7 +2,7 @@
 // Comprueba (REGLAS §1.7, CLAUDE §12) que en los estados de la maqueta y en los extremos y el punto medio de cada
 // mando las cifras son las de un paciente posible, y que el modelo reproduce lo que Marino afirma (Ec. 27.1-27.4,
 // Fig. 23.5, Fig. 28.9). Los valores esperados de los pacientes son los de cobertura-3d.md §3 y §5.
-import { simular, pbw } from './pulmon.mjs';
+import { simular, pbw, avisosAjuste } from './pulmon.mjs';
 
 let fallos = 0, n = 0;
 const ok = (cond, msg) => { n++; if (!cond) { fallos++; console.log('  ✗ ' + msg); } };
@@ -72,6 +72,19 @@ for (const vt of VT) for (const fr of FR) for (const peep of PEEP) for (const fl
 ok(combos === 729, `${combos} combinaciones`); ok(avisos > 0 && avisos < combos / 2, `${avisos} combinaciones «no cabe la espiración» (Vt alto, FR alta y flujo bajo)`);
 ok(alarmas > 0 && alarmas < combos, `${alarmas} combinaciones con la alarma de presión a 40 cmH₂O (el respirador corta la insuflación: pico ≤ 40, Vt recortado)`);
 console.log(`  pico máximo del barrido: ${r1(pMax)} cmH₂O`);
+
+console.log('Ajustes extremos: el modelo no se recorta, pero avisa (volumen por kg y volumen minuto)');
+let ax = simular({ modo: 'pcv', pinsp: 30, ie: 2, fr: 14, peep: 5 }, { c: 60, r: 5 }, MAN).lectura;
+let av = avisosAjuste(ax, 70.5).map((a) => a.k);
+console.log('  PCV 30: ' + resumen(ax) + ' · VM ' + r1(ax.vm) + ' · avisos ' + av.join(','));
+ok(av.includes('vtkg') && av.includes('vm'), 'PCV 30 sobre PEEP 5 en C 60 avisa de volumen por kg y de volumen minuto');
+ax = simular({ modo: 'vcv', vt: 800, fr: 35, peep: 5, flujo: 100 }, { c: 60, r: 5 }, MAN).lectura;
+av = avisosAjuste(ax, 70.5).map((a) => a.k); console.log('  VCV 800 × 35: VM ' + r1(ax.vm) + ' · avisos ' + av.join(','));
+ok(av.includes('vtkg') && av.includes('vm'), 'VCV 800 × 35 avisa');
+ax = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r: 5 }, MAN).lectura;
+ok(avisosAjuste(ax, 70.5).length === 0, 'el ajuste normal no avisa');
+ax = simular({ modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60 }, { c: 19, r: 8 }, MAN).lectura;
+ok(avisosAjuste(ax, 70.5).length === 0, 'Isidro protector (5 mL/kg, FR 30) no avisa');
 
 console.log(`\n${n - fallos} de ${n} comprobaciones en verde${fallos ? ` · ${fallos} FALLOS` : ''}`);
 process.exit(fallos ? 1 : 0);

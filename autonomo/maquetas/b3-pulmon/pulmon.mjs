@@ -119,3 +119,14 @@ export function simular(resp, pulmon, maniobras = {}, { ciclos = 10, dt = 0.005,
   }
   return { t, paw, flujo, vol, fase, lectura: p.lectura() };
 }
+
+// Aviso de ajuste imposible (no recorta el modelo): volumen por kg de peso ideal y volumen minuto.
+//  · Vt > 8 mL/kg PBW: por encima del protocolo protector (parte de 6 y baja hasta 4; Tabla 24.5, Marino cap. 24 p. 48).
+//  · Vt > 12 mL/kg PBW o VM > 20 L/min: «combinación no fisiológica» (fisiología general).
+export function avisosAjuste(l, kg) {
+  const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
+  const out = [], kgVt = l && l.vtExh != null ? Math.round(l.vtExh / kg * 10) / 10 : 0;
+  if (kgVt > 8) out.push({ k: 'vtkg', txt: `Volumen por kg peligroso: ${f1(kgVt)} mL/kg de peso ideal. El protocolo protector parte de 6 y baja hasta 4 mL/kg (Tabla 24.5, Marino p. 48).${kgVt > 12 ? ' Combinación no fisiológica: un pulmón sano no tolera tanto (fisiología general).' : ''}` });
+  if (l && l.vm != null && l.vm > 20) out.push({ k: 'vm', txt: `Combinación no fisiológica: volumen minuto de ${f1(l.vm)} L/min; por encima de 20 casi nadie lo mantiene (fisiología general).` });
+  return out;
+}

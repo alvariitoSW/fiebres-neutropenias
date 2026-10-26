@@ -4,8 +4,9 @@
 // muestra a muestra, con un barrido de 12 s.
 import { crearMonitor, pintarCifras, instalarMonitor, canalesRespiratorios, instalarMonitorResp } from '../comun/monitor.js';
 import { instalarCss } from '../comun/dibujo-iso.js';
+import { crearDock } from '../comun/dock.js';
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
-import { crearPulmon, pbw, ORIGEN_MODELO } from './pulmon.mjs';
+import { crearPulmon, pbw, ORIGEN_MODELO, avisosAjuste } from './pulmon.mjs';
 import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from './datos.js';
 
@@ -109,22 +110,24 @@ function pintarCifrasTodo() {
   ], { tapado: est.tapado });
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
-    celda('meseta', 'Meseta', l.meseta != null ? f1(l.meseta) : 'pausa', 'cmH₂O · con pausa', alarma30(l.meseta)),
+    celda('meseta', 'Meseta', l.meseta != null ? f1(l.meseta) : 'haz pausa', 'cmH₂O · con pausa', alarma30(l.meseta)),
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
     celda('peeptot', 'PEEP total', l.peepTot != null ? f1(l.peepTot) : 'ocluye', `oculta ${l.autoPeep != null ? f1(l.autoPeep) : '—'}`, l.autoPeep > 3 ? 'no' : ''),
-    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : 'pausa', l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
-    celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : 'pausa', l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
+    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : 'haz pausa', l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
+    celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : 'haz pausa', l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
     celda('vm', 'Vol. minuto', f1(l.vm), 'L/min'),
     celda('ie', 'I:E', l.ie != null ? `1:${f1(l.ie)}` : '—', l.cabe === false ? 'no cabe la esp.' : 'objetivo ≥ 1:2', l.ie != null && l.ie < 2 ? 'no' : ''),
   ].join('');
-  $('consola').hidden = !(l.alarmaPresion || l.cabe === false);
-  $('consola').innerHTML = l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Combinación no fisiológica: baja el flujo, el Vt o la resistencia.</span>`
-    : l.cabe === false ? `<span class="consola-aviso">Combinación no fisiológica: con este Vt, flujo y frecuencia no cabe la espiración en el ciclo.</span>` : '';
+  const avisos = avisosAjuste(l, kg).map((a) => a.txt);
+  $('consola').hidden = !(l.alarmaPresion || l.cabe === false || avisos.length);
+  const extra = avisos.map((a) => `<span class="consola-aviso">${a}</span>`).join('');
+  $('consola').innerHTML = extra + (l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Combinación no fisiológica: baja el flujo, el Vt o la resistencia.</span>`
+    : l.cabe === false ? `<span class="consola-aviso">Combinación no fisiológica: con este Vt, flujo y frecuencia no cabe la espiración en el ciclo.</span>` : '');
 }
 function pintarFrase() {
   const E = D.ESTADOS[est.clave];
-  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase} ${org(ORIGEN_MODELO + ' (modelo) · ficha (umbrales)')}`;
+  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
   $('pacientes').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pac === est.pac.k)));
   $('leyenda').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.estado === est.clave)));
@@ -147,7 +150,9 @@ function bucle(ts) {
 }
 
 // ---------------------------------------------------------------- dock: mandos
-function medirDock() { requestAnimationFrame(() => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px')); }
+const dock = crearDock($('dock'), { plegables: [$('dock-tabs'), $('dock-panel')] });
+function medirDock() { dock.medir(); }
+dock.plegar(true);   // plegado al abrir: la escena y el monitor se ven enteros
 const desl = (k, et, v, min, max, paso, u, extra = '') => `<label class="deslizador"><input type="range" data-m="${k}" min="${min}" max="${max}" step="${paso}" value="${v}" aria-label="${et}"><output>${et} <b>${String(v).replace('.', ',')}</b> ${u}<small>${extra}</small></output></label>`;
 function pintarMandos() {
   const r = P.S.resp, pu = P.S.pulmon, m = P.S.man, kg = PBW();
@@ -198,9 +203,9 @@ $('leyenda').addEventListener('click', (ev) => { const b = ev.target.closest('[d
 
 // ---------------------------------------------------------------- explicación guiada
 let guia = null, gi = 0;
-function abrirGuia(E) { guia = { E }; gi = 0; $('dock-explorar').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false; est.pausa = true; llenarMonitor(); pintarTodo(); pintarGuia(); }
+function abrirGuia(E) { guia = { E }; gi = 0; dock.plegar(false); dock.asa.hidden = true; $('dock-explorar').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false; est.pausa = true; llenarMonitor(); pintarTodo(); pintarGuia(); }
 function cerrarGuia() {
-  borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false;
+  borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false; dock.asa.hidden = est.modo !== 'explorar';
   if (est.modo === 'explorar') $('dock-explorar').hidden = false; else $('dock-est').hidden = false;
   medirDock();
 }
@@ -267,7 +272,7 @@ function ponerModo(m) {
   $('zona-may').hidden = m !== 'may'; $('zona-pac').hidden = m !== 'explorar'; $('bajo-escena').hidden = m !== 'explorar';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-est').hidden = m !== 'may';
   if (m === 'may') may.empezar(); else { est.tapado = false; $('velo-mon').hidden = true; pintarCifrasTodo(); taparEscena(); }
-  medirDock(); scrollTo({ top: 0 });
+  dock.asa.hidden = m !== 'explorar'; dock.plegar(m === 'explorar'); scrollTo({ top: 0 });
 }
 $('modo-explorar').addEventListener('click', () => ponerModo('explorar'));
 $('modo-may').addEventListener('click', () => ponerModo('may'));
