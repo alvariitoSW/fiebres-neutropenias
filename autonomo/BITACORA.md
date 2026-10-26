@@ -214,7 +214,7 @@ esta sección.
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: las dos primeras, hechas (25/10, en main); `objetivos-casos`, en curso (26/10, rama propia); `eco-vci-retenido`, pendiente; `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
-| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | ⏸ parado en la fase 1 (informe https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) | 2026-10-25 | «aprueba B-024» (25/10) |
+| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 | `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | en curso: informe | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
 ### ⏸ Dónde quedó tee-inversa
@@ -257,11 +257,11 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
-- **🔴 Un corazón más real** (`rea-eco`, https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg): 12 mejoras en 3 fases
-  para la parada 2 de `eco-mega` (fase 1: cuerdas que brillan, sin manchas sueltas, papilares que se acortan; fase 2:
-  cortina aorto-mitral, brillo por tejido, sombra del calcio, festones A1-P3…; fase 3: pared acinética por regiones y
-  ecos reales «real / nuestra»). Espera: qué fases entran, PDF (Lang 2015, ASE/SCA 2013 mitral, guía de strain),
-  abrir `commons.wikimedia.org` y `upload.wikimedia.org`, y confirmar que no se usa la malla de Visible Human.
+- **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
+  PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
+- **🔴 Abrir `asecho.org` y `www.asecho.org`** en la red del entorno (menú del entorno en la barra de título → Editar
+  → Acceso de red → Dominios permitidos, con «permitir gestores de paquetes» marcado). Así se descargan Lang 2015,
+  Hahn 2013 y Mor-Avi 2011, y salen B1, B2, B3, C1 y C2. Wikimedia ya no hace falta.
 - **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
   sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
   hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:
@@ -299,8 +299,8 @@ El resto del tablero sigue `aparcada`.
 - **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
   la vez desde la 1.ª vuelta; de ~2 h 45 a ~1-1 h 15 por capítulo). Tu decisión del 14/10: **todavía no**.
 - **🔴 Eco, parada 1 (PR #30)**: mirarla en el móvil y elegir qué mejoras de la imagen (0-8) entran y con qué
-  intensidad. Para la parada 2 (anatomía): la duda de las mallas abiertas (BodyParts3D, CC BY) frente a todo dibujado
-  por código. Va junto con la elección del informe «Un corazón más real» (arriba).
+  intensidad. Queda una duda: las mallas abiertas (BodyParts3D, CC BY) frente a todo dibujado por código. La malla de
+  Visible Human ya está decidida: solo como referencia.
 - **🔴 Pasar a tareas el rumbo ya aprobado** (parte del Radar, 26/10): la fase 0 (`f0-*`), la v3 del bloque 3 y las
   fases 2-4 están aprobadas como rumbo, pero no son filas del tablero, y el plan socialista no las ve. ¿Las convierto?
 - **Propuesta tuya (26/10), para la skill del plan**: al terminar una tarea, el director cierra su propia sesión sin

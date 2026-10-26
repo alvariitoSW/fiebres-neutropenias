@@ -338,12 +338,12 @@ río y mar) → 39-44 → 45-53.
 | 8 | `rea-2` | Segunda pasada de ingeniería inversa de las 6 webs con `/ingenieria-reversa` v2, para el megaproyecto: uso real en la guardia de UCI y estudio | ⏸ parado en la fase 1 (2026-10-25): informe «La UCI en el bolsillo», https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU | Pedido por el usuario el 25/10; 3 investigadores (eco, cardio, radiología) con el modelo barato |
 | 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | hecha (2026-10-26) · PR #28 aprobada por el usuario, en main | Va en la etapa A del plan de integración |
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
-| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en revisión (2026-10-25): parada 1 hecha (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8), PR #30 en borrador: https://github.com/alvariitoSW/fiebres-neutropenias/pull/30 · maqueta https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b. Siguiente: que el usuario elija en el informe de `rea-eco` y la parada 2, anatomía | Empieza por una maqueta «antes / después» de la imagen |
+| 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en revisión (2026-10-25): parada 1 hecha (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8), PR #30 en borrador: https://github.com/alvariitoSW/fiebres-neutropenias/pull/30 · maqueta https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b. Siguiente: **parada 2**, ya decidida (26/10; ver «Parada 2 de `eco-mega`» abajo) | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | en curso (2026-10-26), rama `auto/inventario` | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
-| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | ⏸ parado en la fase 1 (2026-10-25): informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): el usuario eligió sobre la versión 2 del informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
 | 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | en curso (2026-10-26): informe | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
@@ -375,6 +375,23 @@ río y mar) → 39-44 → 45-53.
   en tareas parecidas) y una versión optimizada (qué va en modelo barato, qué en potente, qué se puede saltar).
 - Lo que NO quiero: copiar código, textos o mallas con licencia restrictiva; imágenes de CAMUS ni EchoNet; tocar la app.
 - Después: el usuario elige; lo elegido se trabaja como paradas de `eco-mega`.
+
+**Parada 2 de `eco-mega`** · decidida por el usuario el 26/10/2026 sobre la versión 2 del informe «Un corazón más
+real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `auto/eco-mega` (PR #30)
+- **Entra ya (sin PDF)**:
+  - A1: cuerdas que brillan y sin manchas sueltas;
+  - A2: tabla de brillo por tejido;
+  - A3: sombra del calcio, solo la sombra y sin escenario si no hay ficha de estenosis aórtica;
+  - B4: papilares que se acortan y VD que engruesa;
+  - B5: cortina aorto-mitral (anatomía nueva, aprobada);
+  - D1: eco real de uso libre al lado del nuestro, con autor y licencia; las de Yale y Lynch, una a una (si son
+    dibujos, no entran).
+  
+  Todo en modelo barato, salvo lo que el informe marca como potente.
+- **Espera los PDF** (Lang 2015, Hahn 2013, Mor-Avi 2011): B1, B2, B3, C1 y C2. El usuario abre `asecho.org` y
+  `www.asecho.org` en la red del entorno y el director los descarga a `docs/` (comprobado el 26/10: hoy, bloqueados).
+- **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
+- Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
 
 **Encargo `rea-eco`** · tipo: mapa + ingeniería inversa (`/ingenieria-reversa`), sin tocar la app
 - Qué quiero: estudiar cómo hacen el corazón y la imagen *The Heart by Ultrasound* (echodemo, la primera), EchoSuite
