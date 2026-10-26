@@ -65,6 +65,17 @@ guardado; solo 2 capturas del simulador para el informe (JPEG 390 px, fuera del 
 - **Para nosotros**: sus cifras (2 % de las DA proximales con de Winter, 1 de cada 10 izquierda dominante, 0,36 de
   Smith…) solo dicen qué buscar en la ESC de SCA y en el libro de ECG de la rotación (PDF que aún no tenemos).
 
+### Dónde buscar sus cifras (búsqueda del 26/10; aún no son fuente: falta el PDF en `docs/`)
+- **de Winter, «2 %»**: carta de de Winter et al., N Engl J Med 2008;359:2071-3 (PubMed 18987380): 30 de 1532 IAM
+  anteriores (2,0 %), todos con oclusión de la DA proximal y sin oclusión del tronco; casi todos con ↑ST 1-2 mm en
+  aVR. Visto en el resumen de PubMed y fuentes secundarias, no en el texto completo.
+- **Dominancia izquierda, «1 de cada 10»**: las series varían mucho (izquierda 7-25 %, codominancia 4-15 %); la mayor,
+  6382 TC, da 91 % derecha y 9 % izquierda (PMC4505791). Solo fuentes secundarias abiertas: buscar la cifra en la
+  ESC de SCA o en un texto de anatomía antes de usarla.
+- **Tronco y aVR**: Yamaji et al. (16 oclusiones agudas del tronco): ↑ST en aVR en el 88 % (43 % en la DA, 8 % en la
+  CD); ↑ST aVR ≥ V1 separa tronco de DA con S 81 % y E 80 %. Contradice su modelo (aVR baja en su oclusión del
+  tronco). Visto en una revisión (World J Cardiol, PMC4110611) y en LITFL, no en el artículo original.
+
 ## 4. Licencia y coste
 - Sin licencia publicada ni aviso de copyright en la página (buscado: licen, ©, copyright). **Deducido: todos los
   derechos reservados**: se pueden traer ideas, no su código, textos ni imágenes. Gratis, sin cuenta.

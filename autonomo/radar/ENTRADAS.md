@@ -66,7 +66,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
   textos e imágenes no). Usa three.js (MIT)
 - **Coste**: gratis, sin cuenta; donativo opcional. Guarda progreso en el navegador y manda analítica anónima propia
 - **Veredicto**: idea fuerte para la Fase 1 (territorios arteria ↔ derivaciones ↔ segmentos) y la Fase 2
-  (coronarias con dominancia). **Se construye después de Marino** (Objetivo M5). Informe:
+  (coronarias con dominancia). **Decidido el 26/10**: A + B en la Fase 1 tras Marino (Objetivo M5); C y D después. Informe:
   https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw
 
 ### NV-Reason-CT (NVIDIA)
