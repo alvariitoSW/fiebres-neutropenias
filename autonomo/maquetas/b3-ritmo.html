@@ -1596,8 +1596,8 @@ const fasComp = t => (t * 110 / 60) % 1;
 function ecgEn(t) {
   let v = MOTOR.voltaje(mo, t, S.deriv, S.clave === 'stemi' ? { lesion: lesionMm() } : {});
   // Con el potasio muy alto el QRS y la T se funden en una onda sinuosa (p. 21): se alisa el trazo (cuánto: ilustrativo)
-  if (S.clave === 'hiperk' && S.k > 7.6) {
-    const a = clamp((S.k - 7.6) / 1, 0, 1), W = [-0.1, -0.067, -0.033, 0, 0.033, 0.067, 0.1].map(d => [d, Math.exp(-d * d / (2 * (0.03 + 0.035 * a) ** 2))]);
+  if (S.clave === 'hiperk' && S.k > 7.4) {
+    const a = clamp((S.k - 7.4) / 0.8, 0, 1), W = [-0.1, -0.067, -0.033, 0, 0.033, 0.067, 0.1].map(d => [d, Math.exp(-d * d / (2 * (0.035 + 0.03 * a) ** 2))]);
     let sv = 0, sw = 0; for (const [d, w] of W) { sv += w * MOTOR.voltaje(mo, t + d, S.deriv, {}); sw += w; }
     v = (1 - a) * v + a * (sv / sw) * 1.7;
   }
