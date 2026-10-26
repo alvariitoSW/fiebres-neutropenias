@@ -1,47 +1,50 @@
-# rea-eco · imágenes/vídeos de eco reales de uso libre
+# rea-eco · imágenes/vídeos de eco reales de uso libre (2.ª pasada, Commons abierto)
 
-## LIMITACIÓN IMPORTANTE (leer primero)
-- WebFetch falla con "getaddrinfo ENOTFOUND" en TODOS los dominios probados: commons.wikimedia.org, en.wikipedia.org,
-  europepmc.org, www.msdmanuals.com. Bash/curl: CONNECT 403 (proxy) o código 000 en commons.wikimedia.org,
-  en.wikipedia.org, upload.wikimedia.org, ncbi.nlm.nih.gov, ebi.ac.uk, openi.nlm.nih.gov, radiopaedia.org,
-  zenodo.org, wikidata.org.
-- Solo funcionó WebSearch. Ninguna página de archivo se pudo ABRIR: URL y licencia salen de los resultados de búsqueda
-  (la URL sale literal; la licencia es el resumen del buscador). Todo debe confirmarse abriendo la página de Commons
-  (sección "Licensing") antes de usar. Nada descargado; ninguna captura.
-- No pude confirmar si cada "still" es foto de eco real o ilustración/esquema; marcado "?" donde dudo.
+Método: API de Commons (extmetadata = los campos de la página del archivo: licencia, autor, crédito, permiso) + HTML de
+categorías. Commons limita mucho (429): quedaron sin metadatos propios los marcados «sin leer». Nada en el repositorio.
+Real vs dibujo: vista una miniatura (`a4c_440.jpg`, en esta carpeta). Lo demás se infiere de la descripción de la página.
+Página = https://commons.wikimedia.org/wiki/File:<nombre>. Archivo = URL de upload.wikimedia.org.
 
-## Tabla por vista (URL base: https://commons.wikimedia.org/wiki/File:<nombre>)
-| Vista | Mejor candidata | Alternativas | Notas |
-|---|---|---|---|
-| PLAX | `Heart_left_parasternal_long_axis.jpg` (Lynch/Jaffe, Yale, 2006, normal, CC BY 2.5) ? eco real o dibujo | `LeftParasternalLongAxis.gif` (Yale 1999, CC BY 2.5, gif animado ?); `Echo_heart_parasternal_long_axis_(CardioNetworks_ECHOpedia).jpg` (CC BY-SA 3.0 según página, que cita también CC BY 2.5: ambigua); `Heart_normal_lpla_echo_view.svg` (esquema, CC BY 2.5) | Sin vídeo normal libre encontrado |
-| PSAX (aórtico, mitral, papilares) | `Heart_normal_short_axis_echo_(CardioNetworks_ECHOpedia).png` (Lynch, 2006; CC BY-SA 3.0 con mención a CC BY 2.5) | ninguna con nivel indicado | No confirmado a qué nivel (Ao/mitral/papilares) corresponde. Hueco por niveles |
-| A4C | `A4C_normal_(CardioNetworks_ECHOpedia).webm` (vídeo 1 s, 624x480) licencia NO confirmada | `Echocardiogram_4chambers.jpg` (dominio público, 2005, foto real); `Echoapicalfourchamber.jpg` (esquema CC BY-SA 4.0); `Ultrasound_of_human_heart_apical_4-cahmber_view.gif` (CC BY-SA 3.0, animado); `Apical_4_chamber_view.png` (Yale 1999, CC BY 2.5) | La foto en dominio público es la única con licencia clara; falta confirmar que es eco real y normal |
-| A2C | `A2Cnormal_(CardioNetworks_ECGpedia).avi.webm` (vídeo) licencia NO confirmada | `Apical2Chamber.png` (Yale 1999, CC BY 2.5); `Heart_apical_2chamber.jpg` (Lynch 2006, CC BY 2.5) | Ver riesgo ECGpedia abajo |
-| A3C | `A3Cnormal_(CardioNetworks_ECGpedia).avi.webm` (vídeo) licencia NO confirmada | — | Misma duda |
-| Subcostal 4C | Sin candidata libre normal. Solo patología: clip "Pericardial effusion, swinging heart E00667/E00670 (CardioNetworks ECHOpedia).webm" (subcostal/PLAX) | — | Licencia sin confirmar |
-| VCI subcostal | `Inferior_vena_cava_ultrasound.gif` (normal, con VD visible; CC BY-SA 4.0 según buscador) | — | No pude ver autor |
-| ETE medioesofágico 4C | `Heart_tee_four_chamber_view.jpg` (Lynch/Jaffe, 2006, CC BY 2.5) ? | `Echocardiogram_4chambers.jpg` (dominio público; no es ETE confirmado); `Transesophageal_echo.jpg` (NHLBI, dominio público; es foto de sonda, no imagen eco) | |
+## Tabla por vista
+| Vista | Mejor candidata (verificada) | Licencia literal (Commons) | Autor / fuente | Real o dibujo | Archivo |
+|---|---|---|---|---|---|
+| A4C (foto) | `Echocardiogram_4chambers.jpg` | «Public domain» (sin plantilla CC; AttributionRequired=false) | sin autor en la página | REAL (visto: eco 4C, 1,7/3,4 MHz, texto en noruego; ventrículos amplios, no consta que sea normal) | https://upload.wikimedia.org/wikipedia/commons/b/bf/Echocardiogram_4chambers.jpg (636x434) |
+| A4C (vídeo normal) | `A4C_normal_(CardioNetworks_ECHOpedia).webm` | CC BY-SA 3.0 · https://creativecommons.org/licenses/by-sa/3.0 | CardioNetworks: Vdbilt; crédito «A4C_normal.avi»; permiso: CardioNetworks, titular de ecgpedia/pcipedia/echopedia, publica «under the license below» (excluye Rhythm Puzzles) | clip de eco (descripción «Apical 4 Chamber view of a normal heart»; no visto) | https://upload.wikimedia.org/wikipedia/commons/1/1b/A4C_normal_%28CardioNetworks_ECHOpedia%29.webm (624x480) |
+| A4C (gif alternativo) | `Ultrasound_of_human_heart_apical_4-cahmber_view.gif` | CC BY-SA 3.0 | Fruehaufsteher2, «Own work» | eco real animado (320x240; descripción «beating heart… tricuspid and mitral valve») | https://upload.wikimedia.org/wikipedia/commons/5/59/Ultrasound_of_human_heart_apical_4-cahmber_view.gif |
+| A2C | `A2Cnormal_(CardioNetworks_ECGpedia).avi.webm` | CC BY-SA 3.0 | CardioNetworks: Vdbilt; «A2Cnormal.avi» | clip de eco normal (no visto) | https://upload.wikimedia.org/wikipedia/commons/2/21/A2Cnormal_%28CardioNetworks_ECGpedia%29.avi.webm |
+| A3C | `A3Cnormal_(CardioNetworks_ECGpedia).avi.webm` | CC BY-SA 3.0 | CardioNetworks: Vdbilt; «A3Cnormal.avi» | clip de eco normal (no visto) | https://upload.wikimedia.org/wikipedia/commons/9/98/A3Cnormal_%28CardioNetworks_ECGpedia%29.avi.webm |
+| A5C (extra) | `A5Cnormal_(CardioNetworks_ECHOpedia).webm` | sin leer (misma serie; esperable CC BY-SA 3.0) | CardioNetworks | clip normal | página en categoría ECHOpedia |
+| PLAX | `Echo_heart_parasternal_long_axis_(CardioNetworks_ECHOpedia).jpg` | CC BY-SA 3.0 | Patrick J. Lynch, medical illustrator; permiso CardioNetworks (idem) | «medical illustrator» + 1200x904: probable esquema o eco anotado; NO visto | https://upload.wikimedia.org/wikipedia/commons/c/c8/Echo_heart_parasternal_long_axis_%28CardioNetworks_ECHOpedia%29.jpg |
+| PLAX (alt.) | `Heart_left_parasternal_long_axis.jpg` · `LeftParasternalLongAxis.gif` | CC BY 2.5 (https://creativecommons.org/licenses/by/2.5) | Lynch y C. Carl Jaffe, Yale; crédito http://www.yale.edu/imaging/echo_atlas/views/index.html; permiso: «available for commercial and non-commercial uses under a Creative Commons 2.5 attribution license» | Yale echo atlas; si es eco real o dibujo: sin comprobar | .../commons/1/12/Heart_left_parasternal_long_axis.jpg (3000x2000); .../commons/1/16/LeftParasternalLongAxis.gif (400x347) |
+| PSAX (un solo nivel) | `Heart_normal_short_axis_echo_(CardioNetworks_ECHOpedia).png` | CC BY-SA 3.0 | Lynch, medical illustrator; CardioNetworks | «normal parasternal short axis view»; nivel no indicado; real/dibujo sin ver | https://upload.wikimedia.org/wikipedia/commons/d/d7/Heart_normal_short_axis_echo_%28CardioNetworks_ECHOpedia%29.png (1000x718) |
+| VCI subcostal | `Inferior_vena_cava_ultrasound.gif` | CC BY-SA 4.0 · https://creativecommons.org/licenses/by-sa/4.0 | Tinss, «Own work» | eco real animado: «Normal inferior vena cava ultrasound with good variability throughout the respiratory cycle. The right ventricle can also be seen» | https://upload.wikimedia.org/wikipedia/commons/5/58/Inferior_vena_cava_ultrasound.gif (684x468) |
+| ETE medioesofágico 4C | `Heart_tee_four_chamber_view.jpg` | CC BY 2.5; permiso «Creative Commons Attribution 2.5 License 2006» | Patrick J. Lynch, medical illustrator | «Heart transesophageal echocardiography (TEE) view»; real/dibujo sin ver | https://upload.wikimedia.org/wikipedia/commons/6/65/Heart_tee_four_chamber_view.jpg (1981x1555) |
+| A2C (alt. imagen) | `Apical2Chamber.png` | CC BY 2.5 | Lynch y Jaffe; http://www.yale.edu/imaging/echo_atlas/views/apical_2c.html | sin ver | .../commons/c/c6/Apical2Chamber.png (400x347) |
 
-## Dónde mirar a continuación (cuando haya acceso a Commons)
-- Categoría: https://commons.wikimedia.org/wiki/Category:Echocardiography (salió en resultados; no abierta)
-- Clips patológicos PLAX/PSAX en `... (CardioNetworks ECHOpedia).webm`: Prolaps of PMVL E00588, ARVD E00316, Pulmonary valve
-  stenosis E00691, Abnormal pulmonary vein drainage E00576, Cyst adjacent to left atrium E00376 (útiles como contraste patológico).
-- Vídeo con licencia de revista: `Hypertrophic-cardiomyopathy-with-midventricular-obstruction-and-apical-aneurysm-formation-in-a-1476-7120-7-26-S1.ogv` (A2C patológico, de Cardiovascular Ultrasound; licencia no vista, probable CC BY).
-- Artículos PMC open access con vídeo normal: PMC3232574 (apicales normales, Images Paediatr Cardiol 2007) y PMC3232563 (paraesternales normales): licencia NO vista; esta revista era de acceso abierto pero hay que comprobar si es CC BY o solo "free".
-- PMC7188448 (Cureus 2020, doi 10.7759/cureus.7482), fig. 4: PLAX+PSAX+A4C normales en una sola figura. Cureus suele ser CC BY, pero NO confirmado.
+## Pregunta del coordinador: ¿ECHOpedia con NC?
+No. Las páginas de los archivos CardioNetworks (A4C, A2C, A3C, PLAX, PSAX) dicen CC BY-SA 3.0 en Commons, con permiso expreso del
+titular. El NC (CC BY-NC-SA) es el de los sitios originales ecgpedia/echopedia: no se usa su web, solo la copia de Commons.
+Excepción literal de la página: no vale lo de «Rhythm Puzzles» ni imágenes ajenas incluidas en ECGpedia.
 
-## No usables / dudosas
-- Radiopaedia (images.radiopaedia.org/licence): "modified CC BY-NC-SA 3.0" (no comercial). No usable salvo decisión del usuario.
-- ECGpedia/ECHOpedia (sitios originales, echopedia.org y en.ecgpedia.org): su licencia propia es CC BY-NC-SA (según SciCrunch y las páginas de archivo de ecgpedia). RIESGO: los vídeos CardioNetworks pueden llevar CC BY-NC-SA en origen aunque Commons ponga CC BY-SA 3.0 en algunos esquemas. Usar solo si la página de Commons del archivo concreto dice CC BY-SA/CC BY.
-- Sonosite, MSD Manuals, Glasgow EdShare (edshare.gla.ac.uk/875), Wiley, thepocusatlas.com, techmed.sk, 123sonography: propietarios o sin licencia clara. No usables.
-- CAMUS y EchoNet: prohibidos (no buscados).
+## Huecos (sin candidata verificada)
+- PSAX por niveles (aórtico, mitral, papilares): solo un PSAX sin nivel. En la categoría ECHOpedia (200 archivos de la 1.ª página,
+  nombrados por caso, no por vista) no hay «normal» de PSAX. Existen en Commons `Echoapicalshortaxis.jpg` (apical, esquema, CC BY-SA 4.0
+  según buscador) y `Aortic_valve_sa.png` (sin leer). Pendientes de leer: `Echoparasternallongaxis.jpg`, `Heart_normal_tte_views.jpg`.
+- Subcostal 4C normal: ninguna. Solo patología (derrame pericárdico «swinging heart» E00667/E00670 de ECHOpedia, licencia sin leer).
+- ETE: hay vídeos .ogv de artículos de Cardiovascular Ultrasound (Category:Transesophageal echocardiography), son patología y su
+  licencia (probable CC BY de BioMed Central) no se leyó.
+- Vídeo PLAX normal: ninguno libre encontrado.
 
-## Cómo citar (plantilla; completar con autor y licencia de la página de Commons)
-- Lynch/Yale: «Patrick J. Lynch (ilustrador) y C. Carl Jaffe, MD (cardiólogo), Yale University School of Medicine, 2006/1999, vía Wikimedia Commons, CC BY 2.5» + enlace a https://creativecommons.org/licenses/by/2.5/ . CC BY 2.5 exige conservar esos créditos.
-- CardioNetworks: «CardioNetworks ECHOpedia, vía Wikimedia Commons, CC BY-SA 3.0» + enlace https://creativecommons.org/licenses/by-sa/3.0/ ; SA obliga a compartir derivados con la misma licencia.
-- CC BY-SA 4.0 (IVC gif, esquemas): autor tal como figure en Commons + https://creativecommons.org/licenses/by-sa/4.0/ .
-- Dominio público: indicar nombre del archivo y "dominio público (Commons)".
-- Regla CLAUDE.md §7.7: solo fotos y registros reales de eco; los esquemas/dibujos de Lynch quedan fuera si se confirma que son dibujos.
+## No usables
+- Radiopaedia: «modified CC BY-NC-SA 3.0» (no comercial).
+- Sonosite, MSD Manuals, Glasgow EdShare, Wiley, thePOCUSAtlas, techmed.sk: propietarios / sin licencia clara.
+- CAMUS y EchoNet: prohibidos por regla.
+- Sitios originales ecgpedia.org / echopedia.org: CC BY-NC-SA propia; usar solo la copia de Commons con la licencia de su página.
 
-## Conclusión
-Con las herramientas disponibles no se pudo verificar ninguna licencia abriendo el origen. Cobertura probable: A4C, A2C, A3C, PLAX, VCI y ETE tienen candidata; PSAX por niveles y subcostal 4C normal, hueco. Hace falta una pasada con acceso a Commons (o que el usuario desbloquee commons.wikimedia.org / upload.wikimedia.org) para confirmar.
+## Atribución (plantillas; el archivo concreto manda)
+- CardioNetworks: «<título>, CardioNetworks (autor: Vdbilt / P. J. Lynch), vía Wikimedia Commons, CC BY-SA 3.0» + enlace a la licencia. Los derivados
+  (p. ej. recortes o gifs propios) deben ir también en CC BY-SA.
+- Yale/Lynch: «Patrick J. Lynch, ilustrador, y C. Carl Jaffe, MD, cardiólogo, Yale University School of Medicine (Yale Echo Atlas), vía Wikimedia Commons, CC BY 2.5».
+- IVC: «Tinss, CC BY-SA 4.0, vía Wikimedia Commons». Fruehaufsteher2, CC BY-SA 3.0 (gif A4C).
+- Dominio público: «Echocardiogram 4chambers.jpg, dominio público, Wikimedia Commons».
+- Nota CC BY-SA: compartir igual afecta a lo que se derive del archivo, no a la app entera, pero conviene decidirlo con el usuario.
