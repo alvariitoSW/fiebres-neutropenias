@@ -185,7 +185,8 @@ const tests = PREGUNTAS.filter(q => q.tipo === 'test' && !q.tocar);
 const FALLAR = new Set([tests[0].id, tests[3].id, tests[6].id]);
 const FALLAR_TOCAR = 'mu-g3';
 let nDesbordeOk = 0;
-const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
+let antesDeSeguir = null;   // una comprobación extra antes de «Siguiente» (la caja de la consecuencia)
+const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = null) => {
   const pref = '#mur-preg ';
   // antes de contestar: las cifras que se predicen salen tapadas
   const tap = q.ocultar || q.tocar?.ocultar || [];
@@ -196,7 +197,9 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
     const buena = txt.findIndex(x => x === q.opciones.find(o => o.ok).t.replace(/<[^>]+>/g, '')), mala = txt.findIndex((x, i) => i !== buena);
     if (buena < 0) ok(false, `${donde}: no encuentro la opción buena`);
     if (foto1) { await p.evaluate(() => document.getElementById('mur-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
-    await pulsar(pref + `[data-op="${fallar ? mala : buena}"]`);
+    const otra = elegir ? txt.findIndex(x => x === elegir.replace(/<[^>]+>/g, '')) : -1;
+    if (elegir && otra < 0) ok(false, `${donde}: no encuentro la opción «${elegir}»`);
+    await pulsar(pref + `[data-op="${elegir ? otra : fallar ? mala : buena}"]`);
   } else if (q.tipo === 'destapa') {
     await pulsar(pref + '[data-accion="destapa"]');
     if (!fallar) await p.evaluate(() => document.querySelectorAll('#mur-pts input').forEach(c => { c.checked = true; }));
@@ -235,6 +238,7 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   if (!REDUCIDO) await p.waitForTimeout(400);
   if (!visible && !await p.evaluate(() => { const s = document.querySelector('#mur-preg [data-accion="sig"]').getBoundingClientRect(), d = document.getElementById('mur-dock').getBoundingClientRect(); return s.bottom <= d.top + 1; })) ok(false, `${donde}: «Siguiente» queda tapado por el dock`);
   if (foto1) { await foto(foto1 + '-despues'); }
+  if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
 };
 for (const [i, q] of PREGUNTAS.entries()) {
@@ -254,6 +258,7 @@ ok(await p.evaluate(() => /No queda nada por repasar/.test(document.getElementBy
 t = await T();
 ok(Object.keys(t.guardado).length === PREGUNTAS.length && Object.values(t.guardado).filter(g => g.resultado === 'mal').length === 4, `localStorage: ${PREGUNTAS.length} guardadas, 4 falladas`);
 
+const objetivosFin = () => p.evaluate(() => [...document.querySelectorAll('#mur-preg [data-objetivo]')].map(li => ({ id: li.dataset.objetivo, ok: li.dataset.cumplido === 'true', txt: li.textContent.replace(/\s+/g, ' ').trim(), cita: !!li.querySelector('.cita-ir[data-resaltar]') })));
 // 8. Los 3 casos hasta «Lo que te llevas» (fallando el primer paso de cada uno)
 await pulsar('#mur-preg [data-ir="casos"]');
 for (const [k, C] of CASOS.entries()) {
@@ -269,6 +274,13 @@ for (const [k, C] of CASOS.entries()) {
   if (C.extra) ok(await p.evaluate(() => !!document.querySelector('#mur-preg [data-tab="neumo-nav-prevencion"]')), `${C.id}: enlaza la prevención de la NAV (Merino Neumología)`);
   if (await desborde() > 0) ok(false, `desborde en «Lo que te llevas» del caso ${C.id}`);
   if (k === 0) {
+    // Revisión por objetivos de E1 (falló el paso 1): «indicacion» ✗ con su porqué y el paso; los demás ✓; arriba de «Lo que te llevas», sin nota
+    const ob0 = await objetivosFin();
+    const ind = ob0.find(o => o.id === 'indicacion');
+    ok(ob0.length === C.objetivos.length && ob0.every(o => o.cita), `E1: revisión por objetivos con ${ob0.length} objetivos, cada uno con «Ver en la ficha»`);
+    ok(ind && !ind.ok && /✗ Falta/.test(ind.txt) && /paso 1/.test(ind.txt), 'E1 (paso 1 fallado): «indicación» ✗ con su porqué y el paso');
+    ok(ob0.filter(o => o.id !== 'indicacion').every(o => o.ok && /✓ Cumplido/.test(o.txt)), 'E1: los demás objetivos ✓');
+    ok(await p.evaluate(() => { const t = document.getElementById('mur-preg').textContent; return t.indexOf('Revisión por objetivos') < t.indexOf('Lo que te llevas') && !/\d+ de \d+|%/.test(document.querySelector('#mur-preg .mur-objetivos').textContent.replace(/\d+ (h|min|mg|mL)/g, '').replace(/\d+(,\d+)? %/g, '')); }), 'E1: objetivos arriba de «Lo que te llevas», sin nota ni recuento');
     await p.evaluate(() => document.getElementById('mur-preg').scrollIntoView({ block: 'end' })); await p.waitForTimeout(200);
     await foto('09-fin-caso');
     await pulsar('#mur-preg [data-fin="modelo"]'); await p.waitForTimeout(300);
@@ -277,6 +289,35 @@ for (const [k, C] of CASOS.entries()) {
     await pulsar('#mur-modo-preguntas'); await pulsar('#mur-preg [data-ir="casos"]');
   } else if (k < CASOS.length - 1) await pulsar('#mur-preg [data-fin="otro"]');
 }
+// 8b. E1 todo bien (todos ✓) y E1 eligiendo la opción con consecuencia (el modelo cambia y sale la caja)
+const E1 = CASOS[0];
+const iCons = E1.pasos.findIndex(pa => pa.pregunta.opciones?.some(o => o.consecuencia));
+const opCons = E1.pasos[iCons].pregunta.opciones.find(o => o.consecuencia);
+await pulsar('#mur-preg [data-fin="otro"]'); await pulsar('#mur-preg [data-caso="0"]');
+for (const [j, paso] of E1.pasos.entries()) await contestar({ ...paso.pregunta }, false, null, false, `E1 todo bien paso ${j + 1}`);
+let ob = await objetivosFin();
+ok(ob.length === E1.objetivos.length && ob.every(o => o.ok && /✓ Cumplido/.test(o.txt)), `E1 todo bien: los ${ob.length} objetivos ✓ (${ob.filter(o => !o.ok).map(o => o.id).join(', ')})`);
+const vigilar = async () => {
+  const v = await T();
+  ok(v.estado.proteccion === 'pantoprazol' && v.estado.estacion === 'boca' && v.estado.gota === 1, 'consecuencia: el modelo pasa a la boca con pantoprazol y aspiración (la flecha al pulmón)');
+  const caja = await p.evaluate(() => { const c = document.querySelector('#mur-preg .mur-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
+  ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  await p.evaluate(() => document.querySelector('#mur-preg .mur-consecuencia').scrollIntoView({ block: 'center' })); await foto('09b-consecuencia');
+};
+await pulsar('#mur-preg [data-fin="otro"]'); await pulsar('#mur-preg [data-caso="0"]');
+for (const [j, paso] of E1.pasos.entries()) {
+  if (j === iCons) antesDeSeguir = vigilar;
+  await contestar({ ...paso.pregunta }, false, null, false, `E1 consecuencia paso ${j + 1}`, j === iCons ? opCons.t : null);
+  if (j === iCons) { const v = await T(); ok(v.estado.estacion === 'estomago' && v.estado.gota === 0, 'al pasar al paso siguiente, el modelo vuelve a su estado'); }
+}
+ob = await objetivosFin();
+const des = ob.find(o => o.id === 'desprescribir');
+ok(des && !des.ok && /✗ Falta/.test(des.txt) && new RegExp(`paso ${iCons + 1}`).test(des.txt) && /⚠ Lo que pasó/.test(des.txt), 'E1 con IBP mantenido: «desprescribir» ✗ con su porqué, el paso y la consecuencia');
+ok(ob.filter(o => o.id !== 'desprescribir' && o.id !== 'renal').every(o => o.ok), 'E1 con IBP mantenido: «indicación» ✓');
+await p.evaluate(() => document.querySelector('#mur-preg .mur-objetivos').scrollIntoView({ block: 'start' })); await foto('09c-objetivos');
+if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');
+crudos = await sinIds(); if (crudos.length) ok(false, `revisión por objetivos: se ve ${crudos.join(' | ')}`);
+
 const nRespuestas = PREGUNTAS.length + 4 + CASOS.reduce((a, c) => a + c.pasos.length, 0);
 ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de ${nRespuestas} respuestas y pasos`);
 

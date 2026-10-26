@@ -247,7 +247,7 @@ await pulsar('#vso-preg [data-ir="recorrido"]');
 const FALLAR = new Set(['trb-g1', 'mat-g3', 'ppl-e2']);
 const FALLAR_TOCAR = 'vso-p2';
 let nDesbordeOk = 0;
-const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
+const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id, elegir = null) => {
   const pref = '#vso-preg ';
   const tap = q.ocultar || q.tocar?.ocultar || [];
   if (tap.length) {
@@ -258,8 +258,10 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   if (q.tipo === 'test') {
     await pulsar(pref + '[data-accion="ops"]');
     const orden = barajar(q.opciones, q.id), buena = orden.findIndex(o => o.ok), mala = orden.findIndex(o => !o.ok);
+    const otra = elegir ? orden.findIndex(o => o.t === elegir) : -1;
+    if (elegir && otra < 0) ok(false, `${donde}: no encuentro la opción «${elegir}»`);
     if (foto1) { await p.evaluate(() => document.getElementById('vso-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
-    await pulsar(pref + `[data-op="${fallar ? mala : buena}"]`);
+    await pulsar(pref + `[data-op="${elegir ? otra : fallar ? mala : buena}"]`);
   } else if (q.tipo === 'destapa') {
     await pulsar(pref + '[data-accion="destapa"]');
     if (!fallar) await p.evaluate(() => document.querySelectorAll('#vso-pts input').forEach(c => { c.checked = true; }));
@@ -290,8 +292,10 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   if (/maqueta|§|\b(mh|mar)-[a-z]/.test(txt)) ok(false, `${donde}: un nombre interno a la vista`);
   if (!await p.evaluate(() => document.querySelectorAll('#vso-preg .vso-ir-texto').length > 0)) ok(false, `${donde}: sin «Ver en el texto» enlazado`);
   if (foto1) { await p.waitForTimeout(REDUCIDO ? 100 : 600); await p.evaluate(() => document.querySelector('#vso-preg [data-accion="sig"]').scrollIntoView({ block: 'end' })); await foto(foto1 + '-despues'); }
+  if (antesDeSeguir) { const f = antesDeSeguir; antesDeSeguir = null; await f(); }
   await pulsar(pref + '[data-accion="sig"]');
 };
+let antesDeSeguir = null;   // una comprobación extra antes de «Siguiente» (la caja de la consecuencia)
 for (const [i, q] of PREGUNTAS.entries()) {
   const html = await p.evaluate(() => document.getElementById('vso-preg').innerHTML);
   if (/data-correcta|data-mal|data-ok/.test(html)) ok(false, `${q.id}: la respuesta está escrita en el HTML`);
@@ -329,6 +333,38 @@ for (const [k, C] of CASOS.entries()) {
     await pulsar('#vso-modo-preguntas'); await pulsar('#vso-preg [data-ir="casos"]');
   } else if (k < CASOS.length - 1) await pulsar('#vso-preg [data-fin="otro"]');
 }
+// 11b. La revisión por objetivos al cerrar el caso (core/mayeutica-motor.js), con Inés (H4)
+const objetivosFin = () => p.evaluate(() => [...document.querySelectorAll('#vso-preg [data-objetivo]')].map(li => ({ id: li.dataset.objetivo, ok: li.dataset.cumplido === 'true', txt: li.textContent.replace(/\s+/g, ' ').trim(), cita: !!li.querySelector('.cita-ir[data-resaltar]') })));
+const INES = CASOS.find(c => c.id === 'h4'), kInes = CASOS.indexOf(INES);
+const iCons = INES.pasos.findIndex(pa => pa.pregunta.opciones?.some(o => o.consecuencia));
+const opCons = INES.pasos[iCons].pregunta.opciones.find(o => o.consecuencia);
+const abrirInes = async () => { await pulsar('#vso-preg [data-fin="otro"]'); await pulsar(`#vso-preg [data-caso="${kInes}"]`); };
+await abrirInes();
+for (const [j, paso] of INES.pasos.entries()) await contestar({ ...paso.pregunta, ocultar: paso.ocultar }, false, null, false, `Inés todo bien paso ${j + 1}`);
+let ob = await objetivosFin();
+ok(ob.length === INES.objetivos.length && ob.every(o => o.ok && /✓ Cumplido/.test(o.txt) && o.cita), `Inés todo bien: los ${ob.length} objetivos ✓ con «Ver en la ficha» (${ob.filter(o => !o.ok).map(o => o.id).join(', ')})`);
+ok(await p.evaluate(() => { const t = document.getElementById('vso-preg').textContent; return t.indexOf('Revisión por objetivos') < t.indexOf('Lo que te llevas') && !/\d+ de \d+ objetivos|%/.test(document.querySelector('#vso-preg .vso-objetivos').textContent.replace(/\d+ (h|min|mg|mL)/g, '')); }), 'Inés: los objetivos van arriba de «Lo que te llevas», sin nota ni recuento');
+// La opción con consecuencia: transfundir plaquetas ya, con una microangiopatía por delante -> más microtrombos
+const vigilar = async () => {
+  const v = await T();
+  ok(v.estado.causa === 'mat' && v.estado.rep === 'lena' && v.celdas.amenaza !== undefined, `consecuencia: el vaso pasa a la microangiopatía con las plaquetas repuestas (${v.estado.causa}, ${v.estado.rep})`);
+  const nud = await p.evaluate(() => { const d = window.__vsoPruebas(); return d; });
+  const caja = await p.evaluate(() => { const c = document.querySelector('#vso-preg .vso-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
+  ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
+  await p.evaluate(() => document.querySelector('#vso-preg .vso-consecuencia').scrollIntoView({ block: 'center' })); await foto('15-consecuencia');
+};
+await abrirInes();
+for (const [j, paso] of INES.pasos.entries()) {
+  if (j === iCons) antesDeSeguir = vigilar;
+  await contestar({ ...paso.pregunta, ocultar: paso.ocultar }, false, null, false, `Inés consecuencia paso ${j + 1}`, j === iCons ? opCons.t : null);
+  if (j === iCons) { const v = await T(); ok(v.estado.rep !== 'lena', `al pasar al paso siguiente, el vaso vuelve a su estado (${v.estado.causa}, ${v.estado.rep || 'sin reposición'})`); }
+}
+ob = await objetivosFin();
+const pl = ob.find(o => o.id === 'plaquetas');
+ok(pl && !pl.ok && /✗ Falta/.test(pl.txt) && new RegExp(`paso ${iCons + 1}`).test(pl.txt) && /⚠ Lo que pasó/.test(pl.txt), 'Inés con las plaquetas: «plaquetas» ✗ con su porqué, el paso y la consecuencia');
+ok(ob.filter(o => o.id === 'ptt').every(o => o.ok), 'Inés con las plaquetas: «PTT» ✓');
+await p.evaluate(() => document.querySelector('#vso-preg .vso-objetivos').scrollIntoView({ block: 'start' })); await foto('16-objetivos');
+if (await desborde() > 0) ok(false, 'desborde en la revisión por objetivos');
 const nRespuestas = PREGUNTAS.length + 4 + CASOS.reduce((a, c) => a + c.pasos.length, 0);
 ok(nDesbordeOk >= nRespuestas, `sin desborde tras contestar en ${nDesbordeOk} de ${nRespuestas} respuestas y pasos`);
 

@@ -87,7 +87,7 @@ export function derivar(e) {
     } else if (e.causa === 'shu') {
         d.nudos = { rinon: 3 }; d.organos.rinon = 2; d.rotOrg.rinon = 'fracasa'; d.tipoNudo = 'fvw';
         if (e.vari === 'atipico') { d.organos.cerebro = 1; d.rotOrg.cerebro = '~20 %'; d.nudos.cerebro = 1; }
-    } else if (e.causa === 'mat') d.nudos = { pulmon: 1, rinon: 2, cerebro: 2 };
+    } else if (e.causa === 'mat') d.nudos = e.rep === 'lena' ? { pulmon: 2, rinon: 3, cerebro: 3 } : { pulmon: 1, rinon: 2, cerebro: 2 };   // reponer plaquetas «echa leña» a la microtrombosis (mh-plaq-indicaciones); cuánto, ilustrativo
     else if (e.lesion === 'ninguna' && e.plaq < 10000 && !e.rep) { d.organos.cerebro = 1; d.rotOrg.cerebro = 'HIC rara'; }
     // La lupa que se abre sola y lo que va bajo la arteriola en vez de la red
     d.lupaAuto = e.causa === 'edta' ? 'tubo' : e.causa === 'hit' ? (e.hep === 'argatroban' ? 'cascada' : 'plaqueta')
@@ -175,6 +175,7 @@ const F4 = 'ficha · merino-trombocitopenia', F5 = 'ficha · merino-microangiopa
 export function fraseDe(e) {
     const d = derivar(e);
     if (e.rep === 'recambio') return ['El tratamiento de la PTT es el <span class="hl-azul">recambio plasmático</span>: se separa y se desecha el plasma del paciente, y se le devuelven sus hematíes con plasma de un donante sano. Unas 1,5 veces el volumen de plasma cada día, hasta plaquetas normales <span class="hl">2 días seguidos</span>; si empieza en las primeras 48 h, <span class="hl-verde">sobrevive hasta el 90 %</span>.', `${F5}#mh-ptt · p. 28`];
+    if (e.rep === 'lena' && e.causa === 'mat') return ['Las indicaciones de transfusión de plaquetas <span class="hl-rojo">no se aplican</span> a la trombocitopenia por consumo de las microangiopatías: transfundirlas puede agravar la microtrombosis. Cuántos nudos más: ilustrativo.', `${F6}#mh-plaq-indicaciones · p. 29`];
     if (e.rep === 'lena') return ['Reponer plaquetas y factores en la CID no suele parar el sangrado y puede <span class="hl-rojo">«echar leña»</span> a la microtrombosis. No hay tratamiento eficaz: soporte y tratar la causa. Con fallo multiorgánico, la mortalidad es <span class="hl-rojo">≥80 %</span>.', `${F5}#mh-cid · p. 27`];
     if (e.rep === 'plaquetas') {
         if (e.abo) return ['Plaquetas <span class="hl-verde">ABO-compatibles</span>: atenúan la refractariedad. Cuánto, la fuente no lo dice: por eso las barras no cambian.', `${F6}#mh-plaq-respuesta · p. 30`];
@@ -462,12 +463,38 @@ const PASOS_VASO = {
 };
 // El estado al que vuelve cada caso («Abrir el vaso en el estado del paciente»)
 const VOLVER = { h3: 'hit-argatroban', h4: 'ptt-recambio', h5: 'pfc-inr' };
+// Revisión por objetivos al cerrar el caso (core/mayeutica-motor.js): pasos desde 0. Solo Inés (H4); sus fuentes son las de sus preguntas.
+const OBJETIVOS = {
+    h4: [
+        { id: 'plaquetas', texto: 'Plaquetas bajas con esquistocitos: sin transfundir plaquetas', pasos: [0, 3],
+          si: 'Las indicaciones de transfusión de plaquetas no se aplican a la trombocitopenia por consumo de las microangiopatías: transfundirlas puede agravar la microtrombosis.',
+          no: 'Con esquistocitos y plaquetas bajas es una microangiopatía trombótica, y ahí las indicaciones de transfusión de plaquetas no se aplican: pueden agravar la microtrombosis.',
+          fuente: 'mh-plaq-indicaciones · mh-mat-hemolisis · mh-mat' },
+        { id: 'ptt', texto: 'PTT y no CID: la coagulación lo separa', pasos: [1, 2],
+          si: 'INR, aPTT, fibrinógeno y dímero-D normales descartan la CID; con creatinina <2 mg/dl, fiebre y confusión, es una PTT.',
+          no: 'La CID consume factores (INR y aPTT alargados, fibrinógeno bajo, dímero-D alto); con todo normal no es CID. Una creatinina <2 mg/dl es lo habitual en la PTT, y sin tratar mata en 24-48 h.',
+          fuente: 'mh-tabla-13-3 · mh-cid · mh-ptt' },
+        { id: 'recambio', texto: 'Recambio plasmático bien pautado', pasos: [3, 4, 5],
+          si: 'Recambio en las primeras 48 h, de ~1,5 veces el volumen plasmático por sesión, a diario hasta plaquetas normales 2 días seguidos.',
+          no: 'El recambio se hace en las primeras 48 h, ~1,5 veces el volumen plasmático por sesión, a diario hasta que las plaquetas sean normales 2 días seguidos.',
+          fuente: 'mh-ptt · mh-plaq-preparaciones' }],
+};
+// Error con consecuencia: transfundir plaquetas ya, con una microangiopatía por delante (h4-1). Cuántos nudos: ilustrativo.
+const CONSECUENCIAS = {
+    'h4-1': { 'Una sepsis con CID: hemocultivos y transfundir plaquetas ya': {
+        estado: { causa: 'mat', plaq: 16000, rep: 'lena' },
+        texto: 'Le transfundes plaquetas antes de confirmar nada. Con esquistocitos y plaquetas bajas es una microangiopatía trombótica, y ahí <span class="hl-rojo">transfundir plaquetas puede agravar la microtrombosis</span>: mira cómo se llenan más los capilares del pulmón, el riñón y el cerebro.',
+        corto: 'las plaquetas agravaron la microtrombosis.',
+        fuente: 'mh-plaq-indicaciones · mh-cid · trombosis más: ilustrativo' } },
+};
 export const CASOS = FICHAS.flatMap(f => H[f].casos).map(C => ({
-    ...C, vaso: VOLVER[C.id],
+    ...C, vaso: VOLVER[C.id], ...(OBJETIVOS[C.id] ? { objetivos: OBJETIVOS[C.id] } : {}),
     pasos: C.pasos.map(paso => {
         const v = PASOS_VASO[paso.pregunta.id] || { e: {} };
         const despues = 'despues' in v ? v.despues : estadoVasoDe(paso.pregunta);
-        return { ...paso, estado: v.e, ocultar: v.ocultar, pregunta: { ...paso.pregunta, despues, despuesP: v.crio ? { rep: 'crio', lesion: 'grande', t: 4, plaq: 150000 } : null } };
+        const cons = CONSECUENCIAS[paso.pregunta.id];
+        const preg = cons ? { ...paso.pregunta, opciones: paso.pregunta.opciones.map(o => cons[o.t] ? { ...o, consecuencia: cons[o.t] } : o) } : paso.pregunta;
+        return { ...paso, estado: v.e, ocultar: v.ocultar, pregunta: { ...preg, despues, despuesP: v.crio ? { rep: 'crio', lesion: 'grande', t: 4, plaq: 150000 } : null } };
     }),
 }));
 
