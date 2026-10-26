@@ -162,6 +162,16 @@ por agente que los baratos; los más caros, 150-230 pasos). Cuatro reglas:
    `autonomo/REGLAS.md` que le nombres. Las fuentes, por archivo y páginas exactas; los archivos grandes, con `graft`
    o por trozos (`sed -n`), no enteros.
 
+### Gasto que baja (aprobado por el usuario el 26/10/2026; manda sobre lo anterior si choca)
+
+`autonomo/REGLAS.md` §4.7. En resumen: cada encargo lleva su **presupuesto** (pasos y tokens, el 90 % del último
+agente del mismo papel y modelo, tabla «Presupuestos vigentes» del tablero) y se dice en el encargo; Fable solo para
+pensar (profesor, cobertura), sonnet para construir, arreglar y auditar, opus solo para el primer modelo vivo de algo
+nuevo; un profesor por maqueta o pieza, con un programa de prueba que le da las cifras en texto y ≤10 capturas;
+encargos de constructor con archivo y función exactos; archivos de ≤700 líneas (si no, se parten antes); los
+programas de prueba se guardan en `autonomo/bloques/<bN>/herramientas/` y se reutilizan. En el parte: gasto frente
+a presupuesto por agente, por qué, y la tabla del tablero actualizada.
+
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
 Para lo que ya está en la app y ya tiene su fuente: **no se construye nada, se revisa**. Trabajadores revisores,

@@ -22,11 +22,52 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 ## Tanda pendiente
 
-(vacía) Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.
+(Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
 
-## Fichas de triaje (las 12 entradas, la más reciente arriba)
+## Fichas de triaje (las 14 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Impeccable (pbakaus)
+- **Fecha / tipo**: 2026-10-26 · repositorio (herramienta para el agente, no para la app)
+- **Enlace**: https://github.com/pbakaus/impeccable
+- **Dijo**: «¿Se puede instalar este repo?» (26/10)
+- **Qué es**: guía de diseño para agentes de IA: una skill `/impeccable` con 24 órdenes (audit, critique, polish,
+  adapt…) y un detector de 62 reglas sin IA (desbordes, contraste, imágenes rotas, «aspecto de IA»). Al instalarlo
+  añade hooks que revisan cada edición de `.html/.css/.js`, descarga un programa propio en `~/.impeccable/bin/` y
+  escribe `PRODUCT.md` y `DESIGN.md` en la raíz. Telemetría activada por defecto (se apaga con
+  `IMPECCABLE_NO_TELEMETRY=1`).
+- **Sirve a**: nivel 1 (acabado visual de fichas y modelos en el móvil); fase 0 (acabado de producto)
+- **Fuente**: README del repositorio (leído el 26/10)
+- **Licencia**: Apache 2.0
+- **Coste**: gratis; tokens extra por los avisos del hook en cada edición
+- **Veredicto**: descartar la instalación (26/10). El usuario eligió probar el detector una vez sin instalar. Con la
+  app servida no pudo escanear (la página tiene más de 30.000 elementos: todas las vistas se cargan a la vez). Sobre
+  los archivos sueltos dio 218 avisos, casi todos falsos por leerlos sin el CSS de la app (contraste con texto negro
+  que en la app no existe, imágenes «rotas» que reciben su `src` por JS) o de gusto (bordes de color a la izquierda,
+  brillos dorados: son el estilo de la app). Real y comprobado en el navegador a 390 px: texto de 8,5-10,4 px en el
+  menú principal (rótulos y etiquetas de las puertas, botones Escalas/Estudio/Buscar). Arreglo pequeño, si el usuario
+  lo aprueba.
+
+### Culprit (Cliff Reid)
+- **Fecha / tipo**: 2026-10-26 · web/app
+- **Enlace**: https://www.cliffreid.com/culprit/#explore
+- **Dijo**: «Habría que hacer después de todas las mejoras que están activas ingeniería reversa a este
+  repositorio/página web» (26/10)
+- **Qué es**: «Coronary Culprit», simulador docente gratis (en inglés) del IAM por oclusión: ocluyes un punto de una
+  coronaria en un corazón 3D y responden el ECG de 12 derivaciones (con V4R y V7-V9) y la eco (17 segmentos, FEVI y
+  WMSI estimadas). Curso de 6 módulos, 36 escenarios (territorios, OMI sutil, reperfusión, imitadores), 14 casos con
+  reloj y entrenamiento ECG → arteria. Hecho por Cliff Reid con Claude Code. Visto el 26/10/2026
+  (`autonomo/ideas/ingenieria-inversa/culprit.md`).
+- **Sirve a**: G3 (vaso → derivaciones → pared → complicación); niveles 1 (estudiar) y, como esquema, 2
+- **Fuente**: no cita ninguna (ni guías ni artículos); solo nombres de signos (Smith, Aslanger, Wellens, de Winter).
+  Sus cifras sirven para saber qué buscar en la ESC de SCA y en el libro de ECG de la rotación
+- **Licencia**: sin licencia ni copyright publicados; se entiende «todos los derechos reservados» (ideas sí; código,
+  textos e imágenes no). Usa three.js (MIT)
+- **Coste**: gratis, sin cuenta; donativo opcional. Guarda progreso en el navegador y manda analítica anónima propia
+- **Veredicto**: idea fuerte para la Fase 1 (territorios arteria ↔ derivaciones ↔ segmentos) y la Fase 2
+  (coronarias con dominancia). **Decidido el 26/10**: A + B en la Fase 1 tras Marino (Objetivo M5); C y D después. Informe:
+  https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw
 
 ### NV-Reason-CT (NVIDIA)
 - **Fecha / tipo**: 2026-10-25 · repositorio

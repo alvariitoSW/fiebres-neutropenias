@@ -309,3 +309,23 @@ al 10 y se pasa con **8,75 o más en todos**; si no, se repite la vuelta. Antes 
 
 El mismo día lo ajustó: **se aprueba con 8 en todos los puntos y la meta es 8,75**; y pidió estudiar cómo usar mejor los
 modelos y los tokens para llegar a esa meta sin más vueltas (bitácora B-023).
+
+## Gasto que baja (26/10/2026)
+
+Tras la parada 1 del bloque 3 (13,1 M equivalentes; profesor y constructor, el 83 %), el usuario pidió que cada
+operación cueste un poco menos que la anterior y que se aplique a todas las sesiones. Medido: la relectura de la
+conversación en cada paso (caché leída) es la mayor parte; el juicio de las v2 dio 107 pasos y 208 capturas, y el
+juicio rápido (17 capturas) la mitad. Reglas nuevas en `autonomo/REGLAS.md` §4.7, en los agentes `profesor` y
+`constructor` y en la skill: presupuesto por encargo (90 % del último), Fable solo para pensar, un profesor por pieza
+con programa de prueba y ≤10 capturas, encargos con dirección exacta, archivos de ≤700 líneas, arneses guardados en
+`autonomo/bloques/<bN>/herramientas/`. El usuario autorizó que el director editara las reglas, los agentes y la skill.
+Pendiente: el buscador `graft` no está instalado en el entorno (falta `@nanonets/graft` en el script de arranque y su
+índice `graft/` en el repositorio).
+
+### Regla de topes y consecuencias (26/10/2026)
+
+En la parada 1 del bloque 3, el usuario infundió 23 L de suero en la maqueta del shock y no pasaba casi nada. Pidió
+que esté en las reglas: un mando que deja superar lo real es un fallo, y el profesor lo debe corregir en sus
+revisiones. Entró como `REGLAS.md` §1.14 (tope con origen, aviso, sello con consecuencia de paciente real, prueba con
+todos los mandos al tope), en el modo juzgar del profesor (fallo grave, nota <8), en la lista del constructor y en
+`CLAUDE.md` §12. La pieza común es `autonomo/maquetas/comun/tope.js`.

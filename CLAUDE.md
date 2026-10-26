@@ -224,6 +224,8 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 - [ ] Si hay un simulador: en los extremos y el punto medio de cada mando, las constantes son las de un paciente
       posible (PA, FC, presiones, volúmenes, velocidades). El límite es la fisiología humana: una cifra imposible o
       muy alejada de la realidad no se recorta, se busca dónde está el error y se corrige en su origen.
+      Cada mando tiene tope con origen y, al pasarse, consecuencia visible de paciente real (sello, constantes, frase
+      viva): nada de 20 L de suero sin que pase nada (`autonomo/REGLAS.md` §1.14).
 - [ ] Toda cifra nueva tiene su fuente y su página; las erratas y discrepancias, con su nota.
 - [ ] Contenido nuevo o rehecho: **sirve para estudiar** (`autonomo/REGLAS.md` §7): arriba la idea y la figura, nada
       de muros de texto, 1-3 cosas resaltadas por bloque y el mecanismo visible con las piezas de la app, al nivel de
