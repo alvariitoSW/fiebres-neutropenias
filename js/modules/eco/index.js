@@ -10,6 +10,7 @@
 // - "Qué mirar en esta vista" copia líneas reales de otras fichas (que-mirar.js).
 import { QUE_MIRAR, ESCENARIO_TIPO, FORMA_NOTA } from './que-mirar.js';
 import { ATLAS_VISTA, ATLAS_ESCENARIO, ATLAS_MODO, atlasUrl } from './atlas-ouyang.js';
+import { pintarEcoReal } from './eco-real.mjs';
 import { initAtlas, enApp } from './atlas/atlas.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { arrancar } from '../../core/ui.js';
@@ -57,9 +58,9 @@ export function init() {
             // un fotograma para que se vea "Cargando…" antes de calcular el latido inicial (bloquea un momento)
             return new Promise(r => requestAnimationFrame(() => setTimeout(r, 0))).then(() => {
                 document.getElementById('cv-contenido').hidden = false;
-                sim = montarSimulador(raiz, { onVista: (k) => { pintarQueMirar(k); pintarAtlasAqui(); }, onEscenario: (k) => { pintarEscenario(k); pintarAtlasAqui(); } });
+                sim = montarSimulador(raiz, { onVista: (k) => { pintarQueMirar(k); pintarEcoReal(k); pintarAtlasAqui(); }, onEscenario: (k) => { pintarEscenario(k); pintarAtlasAqui(); } });
                 document.getElementById('cv-cargando').hidden = true;
-                pintarQueMirar(sim.vistaActual); pintarEscenario(sim.escenarioActual); pintarAtlasAqui();
+                pintarQueMirar(sim.vistaActual); pintarEcoReal(sim.vistaActual); pintarEscenario(sim.escenarioActual); pintarAtlasAqui();
                 aplicarPendiente(); actualizarActivo();
             });
         }).catch(err => {
