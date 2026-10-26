@@ -421,7 +421,9 @@ function aplicarTopes(forzar) {
   if (!mo || pend()) { quitarTodo(); return; }
   const r = calcularTopes(S, simT, mo); topeFrase = r.frase;
   for (const { clave } of tope.activos()) if (!(clave in r.T)) { tope.quitar(clave); delete topeVisto[clave]; }
-  for (const [k, t] of Object.entries(r.T)) { const f = JSON.stringify([t.nivel, t.titulo, t.texto]); if (!forzar && topeVisto[k] === f) continue; topeVisto[k] = f; tope.poner(k, t); }
+  let nuevo = false;
+  for (const [k, t] of Object.entries(r.T)) { const f = JSON.stringify([t.nivel, t.titulo, t.texto]); if (!forzar && topeVisto[k] === f) continue; if (t.nivel === 'sello' && k !== 'sinusal' && topeVisto[k] !== f) nuevo = true; topeVisto[k] = f; tope.poner(k, t); }
+  if (nuevo) { S.mensaje = null; pintarFrase(); }   // un sello nuevo manda sobre la frase vieja
   for (const b of document.querySelectorAll('#dock-panel [data-acc]')) {
     const a = b.dataset.acc, sm = b.querySelector('small');
     if (r.off.has(a)) { if (!b.disabled) { b.disabled = true; b.classList.add('tope-apagado'); } } else if (b.classList.contains('tope-apagado')) { b.disabled = false; b.classList.remove('tope-apagado'); }

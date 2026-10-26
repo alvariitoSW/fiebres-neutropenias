@@ -28,7 +28,7 @@ export function calcularTopes(S, simT, mo) {
   const carga = cargando(S, simT);
   if (carga) { apaga(CHOQUES); T.carga = { nivel: 'aviso', titulo: 'Cargando', texto: 'El desfibrilador tarda unos segundos en cargar y descargar: un choque por carga.', origen: 'ilustrativo' }; }
   const nTV = S.choquesTV || 0;
-  if (S.sinusal && !(p && !p.rce)) { apaga(SIN_SINUSAL); T.sinusal = { nivel: 'sello', titulo: 'Ya en sinusal', texto: 'Un choque ahora puede inducir una FV.', origen: 'fisiología general', cita: C.cv }; }
+  if (S.sinusal && !p) { apaga(SIN_SINUSAL); T.sinusal = { nivel: 'sello', titulo: 'Ya en sinusal', texto: 'Un choque ahora puede inducir una FV.', origen: 'fisiología general' }; }
   else if (S.clave === 'tv' && nTV >= MAX.tv) { apaga('cv-tv'); T.energia = { nivel: 'sello', titulo: 'Tope de energía', texto: 'Tres choques (100, 100 bifásico y 200 J): nunca 360 J, que daña el miocardio.', cita: C.f198, origen: 'ficha · p. 32' }; }
   else if (S.clave === 'tv' && nTV === 2) T.energia = { nivel: 'aviso', titulo: 'Último choque', texto: 'El siguiente es de 200 J, el último: no se usan 360 J.', cita: C.f198, origen: 'ficha · p. 32' };
   if (S.clave === 'tv') rot['cv-tv'] = nTV >= MAX.tv ? '3/3 choques' : nTV === 2 ? 'último: 200 J' : `${ENERGIA_TV[nTV]}${nTV ? '' : ' sinc.'}`;
