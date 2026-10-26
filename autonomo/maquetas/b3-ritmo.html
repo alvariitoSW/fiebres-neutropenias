@@ -74,6 +74,11 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .pendiente-mon { border: 1px dashed var(--line); border-radius: 10px; padding: 10px; font: .8rem/1.4 var(--sans); color: var(--dim); background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(196, 154, 74, .06) 8px 16px); }
 .pendiente-mon b { color: var(--fg); }
 
+.mini-lupa { display: flex; gap: 10px; align-items: center; margin: 0 0 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-main); }
+.mini-lupa svg { flex: 0 0 46%; max-width: 46%; height: auto; max-height: 104px; }
+.mini-cap { display: flex; flex-direction: column; gap: 4px; font: .72rem/1.35 var(--sans); color: var(--dim); min-width: 0; }
+.mini-cap b { color: var(--text); font-size: .76rem; }
+.mini-cap button { align-self: flex-start; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--dim); font: 600 .68rem var(--sans); }
 /* La escena: el corazón, las lupas y los aparatos (tarjetas al modo Anatomy) */
 .tarjeta { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
 .tarj-cab, .tarj-pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 2px 8px; font: .66rem/1.25 var(--sans); color: var(--muted); min-height: 26px; }
@@ -245,6 +250,11 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
       </div>
       <div class="cifras" id="mon-cifras"></div>
     </div>
+  </section>
+
+  <section class="mini-lupa" id="mini-lupa" aria-label="La lupa de este ritmo, junto al monitor" hidden>
+    <svg id="mini-lupa-svg" viewBox="4 312 174 108" role="img" aria-label="La lupa que explica este ritmo"></svg>
+    <div class="mini-cap"><b id="mini-tit"></b><span id="mini-txt"></span><button type="button" id="mini-grande">Ver en grande</button></div>
   </section>
 
   <section class="tarjeta" id="rtm-escena" aria-label="El corazón en corte">
@@ -1599,7 +1609,7 @@ function ponerEstado(clave, extra = {}) {
   resetS(clave); Object.assign(S, extra);
   arrancarMotor();
   if (est().fam && est().fam !== familia) familia = est().fam;
-  pintarDock(); pintarFicha(); pintarFuentes(); pintarGraficas(); pintarFrase(); pintarAparatos(); pintarLaminas();
+  pintarDock(); pintarFicha(); pintarFuentes(); pintarGraficas(); pintarFrase(); pintarAparatos(); pintarLaminas(); pintarMini();
   $('peligro').hidden = true;
 }
 function arrancarMotor() {
@@ -1753,7 +1763,7 @@ function cuartaCifra(L) {
   const p = P_();
   if (p) return { k: 'co2', et: 'ETCO₂', v: Math.round(etco2En(simT)), u: 'mmHg', o: p.rce ? 'sube de golpe · Fig. 21.2' : 'ilustrativo', cls: p.rce ? 'si' : '' };
   if (S.clave === 'torsade') { const v = S.tdp ? null : L.qtc; return { k: 'qt', et: 'QTc', v: v ? coma(v, 2) : '—', u: 's', o: '>0,5: riesgo · p. 35', cls: v > 0.5 ? 'no' : v > 0.44 ? 'ojo' : 'si' }; }
-  if (S.clave === 'stemi') { const mm = lesionMm()[S.deriv], lim = umbralST(); return { k: 'st', et: `ST ${S.deriv}`, v: coma(mm, 1), u: 'mm', o: `umbral ${coma(lim, 1)} · Tabla 20.1`, cls: mm >= lim ? 'no' : 'si' }; }
+  if (S.clave === 'stemi') { const mm = lesionMm()[S.deriv], lim = umbralST(); return { k: 'st', et: `ST ${S.deriv}`, v: coma(mm, 1), u: 'mm', o: `umbral ${coma(lim, 1)} · p. 41`, cls: mm >= lim ? 'no' : 'si' }; }
   if (S.clave === 'hiperk') return { k: 'k', et: 'K⁺', v: coma(S.k, 1), u: 'mEq/l', o: 'Nefrología al día · p. 21', cls: S.k >= 6.5 ? 'no' : S.k > 5.5 ? 'ojo' : 'si' };
   const q = L.caos ? null : L.qrs; return { k: 'qrs', et: 'QRS', v: q ? coma(q, 2) : '—', u: 's', o: 'corte 0,12 · p. 18', cls: q > 0.12 ? 'no' : '' };
 }
@@ -1948,6 +1958,14 @@ function pintarAparatosVivos(t) {
 }
 /* ---------- Los mandos (el dock): Ritmo · Tratar · Medir ---------- */
 const tog = (acc, t, small, extra = '') => `<button type="button" class="tog" data-acc="${acc}" ${extra}>${t}${small ? `<small>${small}</small>` : ''}</button>`;
+const MINI = { nodal: ['av', 'El torniquete del nodo AV', 'Mira cómo la onda baja por un carril y vuelve por el otro; la adenosina echa el cerrojo.'], aberrancia: ['av', 'El torniquete del nodo AV', 'La reentrada nace aquí; la rama bloqueada ensancha el QRS.'], flutter: ['av', 'El torniquete del nodo AV', 'Deja pasar uno de cada dos o tres impulsos de la aurícula.'], fa: ['av', 'El torniquete del nodo AV', 'Deja pasar lo que encuentra rearmado: de ahí el R-R irregular.'], tam: ['av', 'El torniquete del nodo AV', 'Los impulsos llegan a destiempo y solo pasan los que lo encuentran rearmado.'], wpw: ['av', 'El atajo junto al nodo', 'El atajo no tiene torniquete: la onda llega antes al ventrículo.'], torsade: ['celula', 'La célula del ventrículo', 'Lo que alarga el potencial de acción alarga el QT.'], hiperk: ['celula', 'La célula del ventrículo', 'El potasio alto cambia el potencial y, con él, el ECG.'] };
+function pintarMini() {
+  const m = MINI[S.clave], c = $('mini-lupa'); c.hidden = !m || pend(); if (!m || pend()) return;
+  const id = m[0] === 'av' ? 'rtm-lupa-av' : 'rtm-celula', vb = m[0] === 'av' ? '4 312 174 108' : '182 312 174 108';
+  $('mini-lupa-svg').setAttribute('viewBox', vb); $('mini-lupa-svg').innerHTML = `<use href="#${id}"/>`;
+  $('mini-tit').textContent = m[1]; $('mini-txt').textContent = m[2];
+}
+$('mini-grande').addEventListener('click', () => planoLupas.abrir());
 function pintarDock() {
   document.querySelectorAll('.dock-tabs [data-pest]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pest === pest)));
   const h = [];
