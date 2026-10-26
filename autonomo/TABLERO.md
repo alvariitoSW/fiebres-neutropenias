@@ -636,7 +636,7 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 | 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña; los cálculos ya existen |
 | 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña-mediana |
 | 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | hecha (2026-10-26) · en main, sin PR (Objetivo V) | Mediana; llega a inmersión, muralla, telar y vaso |
-| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
+| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | en curso (2026-10-26) | Pequeña; umbrales del Manual UMI |
 | 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
 
 **Encargo `formula-comun`** · tipo: visual (mejora de lo existente)
