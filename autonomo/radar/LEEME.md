@@ -1,5 +1,8 @@
 # Radar
 
+Mapa: el norte en `NORTE.md` · la hoja de ruta única y viva en `HOJA-DE-RUTA.md` · el registro y las fichas de triaje
+en `ENTRADAS.md` · la skill `/radar` (apunta, tanda, rumbo) en `.claude/skills/radar/SKILL.md`.
+
 Todo lo que el usuario ve y quiere traer a la app (webs, repositorios, tuits, papers, ideas) entra por **una sola
 puerta**: la **Bandeja del Radar**, el issue #27 de GitHub
 (https://github.com/alvariitoSW/fiebres-neutropenias/issues/27). Un enlace por comentario, desde la app de GitHub del
