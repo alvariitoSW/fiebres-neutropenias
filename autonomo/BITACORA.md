@@ -259,9 +259,9 @@ El resto del tablero sigue `aparcada`.
 
 - **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
   PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
-- **🔴 Abrir `asecho.org` y `www.asecho.org`** en la red del entorno (menú del entorno en la barra de título → Editar
-  → Acceso de red → Dominios permitidos, con «permitir gestores de paquetes» marcado). Así se descargan Lang 2015,
-  Hahn 2013 y Mor-Avi 2011, y salen B1, B2, B3, C1 y C2. Wikimedia ya no hace falta.
+- **Los PDF de la ASE ya están en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, 26/10): no hace
+  falta abrir `asecho.org` ni Wikimedia. B1, B2, B3 y C1 pueden entrar. **Queda una duda tuya**: la pared por
+  regiones y el infarto (C2), ¿en este bloque o cuando las coronarias entren en el motor?
 - **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
   sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
   hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:

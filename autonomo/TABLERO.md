@@ -343,7 +343,7 @@ río y mar) → 39-44 → 45-53.
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
-| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): el usuario eligió sobre la versión 2 del informe «Un corazón más real», https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
+| 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
 | 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | en curso (2026-10-26): informe | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
@@ -388,8 +388,9 @@ real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `
     dibujos, no entran).
   
   Todo en modelo barato, salvo lo que el informe marca como potente.
-- **Espera los PDF** (Lang 2015, Hahn 2013, Mor-Avi 2011): B1, B2, B3, C1 y C2. El usuario abre `asecho.org` y
-  `www.asecho.org` en la red del entorno y el director los descarga a `docs/` (comprobado el 26/10: hoy, bloqueados).
+- **Con los PDF, ya en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, subidos el 26/10): B1, B2
+  (en modelo barato, propuesta del informe, supongo), B3 y C1 pueden entrar en la misma parada. C2 (pared por regiones
+  e infarto) espera una decisión del usuario: en este bloque o cuando las coronarias entren en el motor.
 - **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
 - Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
 
