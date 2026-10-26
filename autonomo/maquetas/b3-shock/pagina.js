@@ -1,11 +1,12 @@
 // La página de la maqueta b3-shock v2: une el motor (soporte.mjs sobre js/modules/eco/motor.mjs), el monitor, la
 // escena (el paciente en grabado o el aparato) y los modos Explorar, «¿Qué shock es?» y Mayéutica.
-import { ISO_CSS } from '../comun/dibujo-iso.js';
+import { instalarIso } from '../comun/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
-import { crearMonitor, CANALES } from './monitor.js';
+import { monitorDelShock, CANALES } from './canales.js';
+import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
-import { montarCorazon, montarRecorrido, RUTAS } from './corazon.js';
+import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
 import * as D from './datos.js';
 
 const $ = (id) => document.getElementById(id);
@@ -13,7 +14,7 @@ const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');
 const NS = 'http://www.w3.org/2000/svg';
 const IMG = '../../js/modules/cardiologia/img/';
-{ const s = document.createElement('style'); s.textContent = ISO_CSS; document.head.appendChild(s); }
+instalarIso(); instalarMonitor();
 
 // ---------------------------------------------------------------- citas: «Ver en la ficha» y el PDF de segunda opción
 const pagTxt = (p) => /[-,]/.test(String(p)) ? `pp. ${p}` : `p. ${p}`;
@@ -36,11 +37,12 @@ const org = (t, ilu = true) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span
 const est = { modo: 'explorar', pac: D.PACIENTES[0], g: D.PACIENTES[0].rec.g, rec: null, horas: 0, lab: null, tabla: 'marino', aparato: 'no', vista: 'paciente', plano: 'dentro', foco: null,
   pausa: false, tapado: false, canales: 'todos', pest: 'grav', historia: [] };
 let cab = null, R = null;
-const monitor = crearMonitor($('trazas'));
+const monitor = monitorDelShock($('trazas'));
 
 function recDe(pac, extra = {}) { return { ...pac.rec, g: est.g, ...extra }; }
 function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asentar = 30 } = {}) {
-  est.pac = pac; est.g = g ?? pac.rec.g; est.rec = rec ? { ...pac.rec, ...rec } : recDe(pac);
+  // la gravedad: la que se pide, si no la de la receta que llega, si no la del paciente (antes, «¿Qué shock es?» perdía la suya)
+  est.pac = pac; est.g = g ?? rec?.g ?? pac.rec.g; est.rec = { ...pac.rec, ...(rec || {}), g: est.g };
   cab = crearCabecera(est.rec, { asentar });
   const ap = ajuste.soporte ?? 'no';
   est.aparato = ap;
@@ -78,7 +80,7 @@ function leer() {
     fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pcp: Math.round(u.pvp),
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
-    imp: L.imp, ecmo: L.ecmo, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
+    imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
@@ -119,8 +121,8 @@ function canalesVisibles() { return est.canales === 'cabecera' ? ['ecg', 'art', 
 function pintarCifras() {
   const tap = est.tapado, vis = new Set(canalesVisibles());
   const filas = FILAS_MON.filter((f) => vis.has(f.canal));
-  $('cifras').innerHTML = filas.map((f) => {
-    const c = CANALES.find((x) => x.k === f.canal), alto = c.alto + 4;
+  pintarColumna($('cifras'), filas.map((f) => {
+    const c = CANALES.find((x) => x.k === f.canal);
     let v = '', obj = '', mk = { html: '' };
     if (tap) v = '?';
     else if (f.k === 'fc') v = R.fc;
@@ -130,8 +132,8 @@ function pintarCifras() {
     else if (f.k === 'spo2') { v = R.spo2; mk = marca('spo2', R.spo2); }
     else if (f.k === 'fr') { v = `${R.etco2}`; obj = `FR ${est.pac.fr || 16}`; }
     const et = f.k === 'pcp' && monitor.enclavado ? ['PCP', 'mmHg'] : f.et;
-    return `<div class="cifra ${f.cls}" data-fila="${f.k === 'pa' ? 'pa' : f.k}" style="height:${alto}px"><span class="et"><span>${et[0]}</span><span>${tap ? '' : mk.html || et[1]}</span></span><span class="v">${v}</span><span class="obj">${tap ? '' : obj}</span></div>`;
-  }).join('');
+    return { k: f.k, cls: f.cls, et: et[0], u: et[1], marca: mk.html, v, obj, alto: c.alto + 4 };
+  }), { tapado: tap });
   const T = D.OBJETIVOS[tablaActual()];
   $('calc').hidden = est.canales === 'cabecera';
   $('calc').innerHTML = CALC.map((p) => {
@@ -153,9 +155,10 @@ function pintarConsola() {
   const ap = cab.ajuste.soporte, el = $('consola');
   if (ap === 'no' || est.tapado) { el.hidden = true; return; }
   el.hidden = false;
-  if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span><span>bomba <b>${coma(R.imp, 1)}</b></span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`;
+  if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span>${R.totalPide != null ? `<span>total pedido <b>${coma(R.totalPide, 1)}</b></span>` : ''}<span>bomba <b>${coma(R.imp, 1)}</b>${D.bombaNoLlega(R) ? ` de ${coma(R.impPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`
+    + (D.bombaNoLlega(R) ? `<span class="consola-aviso">⚠ La bomba no llega: el VI está casi vacío. Llénalo antes (pestaña Volumen).</span>` : '');
   else if (ap === 'balon') el.innerHTML = `<span>BALÓN</span><span><b>${Math.round(cab.ajuste.balon)}</b> mL helio</span><span>disparo: onda R</span><span>pico diastólico <b>${R.picoDia}</b></span>${R.teleDia != null ? `<span>telediastólica <b>${R.teleDia}</b></span>` : ''}`;
-  else el.innerHTML = `<span>ECMO VA</span><span>flujo <b>${coma(R.ecmo, 1)}</b></span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>${cab.ajuste.venteo !== 'no' ? `<span>venteo: ${({ balon: 'balón', impella: 'Impella', drenaje: 'drenaje' })[cab.ajuste.venteo]}</span>` : ''}`;
+  else el.innerHTML = `<span>ECMO VA</span><span>flujo <b>${coma(R.ecmo, 1)}</b>${R.ecmoPide - R.ecmo > 0.3 ? ` de ${coma(R.ecmoPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>${cab.ajuste.venteo !== 'no' ? `<span>venteo: ${({ balon: 'balón', impella: 'Impella', drenaje: 'drenaje' })[cab.ajuste.venteo]}</span>` : ''}`;
   el.insertAdjacentHTML('beforeend', org('cifras: el modelo'));
 }
 // Tocar una cifra: de dónde sale y su objetivo
@@ -177,19 +180,25 @@ $('monitor').addEventListener('click', (ev) => {
 
 // ---------------------------------------------------------------- la escena
 let escena = null, escTipo = '';
+const eco = crearEco($('esc-eco'));
+let ecoCab = null;
 function vistaEscena() {
+  if (est.vista === 'eco') return 'eco';
   if (est.vista === 'paciente' || est.aparato === 'no') return 'corazon';
   return `${est.aparato}:${est.plano}`;
 }
 function montarEscena() {
   const k = vistaEscena();
-  if (k === escTipo && escena) return;
+  if (k === escTipo && escena && !(k === 'eco' && ecoCab !== cab)) return;
   escTipo = k; const svg = $('esc-svg');
   svg.setAttribute('class', 'escena-aparato');
-  if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q) => c.pintar(cb.m.s, cb.lectura, cb.lectura?.u?.rvs ?? 1488, q) }; }
+  svg.toggleAttribute('hidden', k === 'eco'); $('esc-eco').hidden = k !== 'eco';
+  if (k !== 'eco') { eco.parar(); ecoCab = null; }
+  if (k === 'eco') { ecoCab = cab; eco.preparar(cab); escena = { actualizar: (cb, dt, q) => eco.tick(dt, q) }; }
+  else if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q) => c.pintar(cb, dt, q) }; }
   else {
     const [ap, pl] = k.split(':');
-    if (pl === 'recorrido') { const r = montarRecorrido(svg); r.poner(ap); escena = { actualizar: (cb, dt, q) => r.tick(dt, q), texto: r.texto }; }
+    if (pl === 'recorrido') { const r = montarRecorrido(svg); r.poner(ap); escena = { actualizar: (cb, dt, q) => r.tick(dt, q, cb), get texto() { return r.texto; } }; }
     else if (pl === 'dentro') escena = { impella: montarImpella, balon: montarBalon, ecmo: montarEcmo }[ap](svg);
     else escena = { impella: montarDespieceImpella, balon: montarDespieceBalon, ecmo: montarDespieceEcmo }[ap](svg);
   }
@@ -197,6 +206,12 @@ function montarEscena() {
 }
 function infoEscena() { const ap = est.aparato; return { on: ap !== 'no' && D.indicacion(est.pac, ap).ok }; }
 function pintarPestEscena() {
+  if (est.modo === 'qs') {
+    // «¿Qué shock es?»: la eco (ecógrafo de la app) desde el segundo tiempo; tras contestar, también el corte
+    $('esc-pest').innerHTML = qs?.hecho ? ['eco', 'paciente'].map((v) => `<button type="button" class="chip-b" data-vista="${v}" aria-pressed="${est.vista === v}">${v === 'eco' ? 'Eco' : 'Corte'}</button>`).join('') + '<span class="sep"></span><span class="org">eco y corte: el mismo motor</span>'
+      : `<span class="org">${qs?.etapa >= 2 ? 'eco · apical de cuatro cámaras' : 'la eco, en el segundo tiempo'}</span>`;
+    $('escena').classList.remove('gris'); $('sello').hidden = true; return;
+  }
   const ap = est.aparato, nom = { balon: 'Balón', impella: 'Impella', ecmo: 'ECMO VA' }[ap];
   let h = `<button type="button" class="chip-b" data-vista="paciente" aria-pressed="${est.vista === 'paciente' || ap === 'no'}">Paciente</button>`;
   if (ap !== 'no') {
@@ -454,6 +469,7 @@ function prepararQS() {
 }
 function pintarQS() {
   const z = $('zona-qs');
+  $('bajo-escena').before($('escena'));   // la escena sale de la tarjeta antes de repintarla
   if (qs.i >= qs.lista.length) {
     z.innerHTML = `<h2>${qs.puntos} puntos de ${qs.lista.length * 3}</h2><p class="para">3 puntos si aciertas con la cabecera, 2 con la eco y 1 con el catéter. La regla de la Tabla 14.1: primero la PVC (¿falta volumen o sobra?), luego el gasto y la resistencia; la PCP frente a la PVC dice qué ventrículo falla.</p>${cita(D.C.t141)}<div class="fila"><button type="button" class="b prim" id="qs-otra">Otros 10 pacientes</button></div>`;
     $('qs-otra').onclick = () => { empezarQS(); };
@@ -464,14 +480,17 @@ function pintarQS() {
   est.canales = qs.etapa === 1 ? 'cabecera' : qs.etapa === 2 ? 'cabecera' : 'todos';
   monitor.ver(est.canales === 'cabecera' ? ['ecg', 'art', 'pleth', 'co2'] : CANALES.map((x) => x.k)); monitor.llenar(cab, ctxMon());
   $('velo-esc').hidden = qs.etapa >= 2; $('velo-esc').textContent = 'La eco, en el segundo tiempo.';
+  est.vista = qs.etapa >= 2 ? 'eco' : 'paciente';
   refrescar(true);
   const etapas = ['Cabecera', 'Eco', 'Catéter'].map((t, i) => `<span class="${i < qs.etapa ? 'on' : ''}">${i + 1} · ${t}</span>`).join('');
   const lab = `Lactato <b>${coma(R.lact, 1)}</b> mmol/L · diuresis <b>${coma(R.diur, 1)}</b> mL/kg/h`;
-  const pide = qs.etapa === 1 ? 'Con la cabecera: PA, FC, SpO₂, FR y el laboratorio.' : qs.etapa === 2 ? 'Ahora tienes la eco (el dibujo). ¿Lo confirmas o lo cambias?' : 'Ahora, el catéter de arteria pulmonar: PVC, PCP, IC e IRVS.';
-  z.innerHTML = `<div class="cab-preg"><span class="num">${qs.i + 1} de ${qs.lista.length}</span><span class="tipo">${c.quien} en urgencias</span></div><div class="etapas">${etapas}</div>
+  const pide = qs.etapa === 1 ? 'Con la cabecera: PA, FC, SpO₂, FR y el laboratorio.' : qs.etapa === 2 ? 'Ahora tienes la eco, aquí debajo. ¿Lo confirmas o lo cambias?' : 'Ahora, el catéter de arteria pulmonar: PVC, PCP, IC e IRVS.';
+  z.innerHTML = `<div class="cab-preg"><span class="num">${qs.i + 1} de ${qs.lista.length}</span><span class="tipo">Llega a urgencias</span></div><div class="etapas">${etapas}</div>
     <p class="para">${lab} ${org('del modelo')}</p><p class="pregunta">${pide} <b>¿Qué shock es?</b></p>
     <div class="op" id="qs-ops">${D.OPC_QS.map(([k, n]) => `<button type="button" class="b${qs.elegido === k ? ' marcada' : ''}" data-qs="${k}">${n}</button>`).join('')}</div>
     <div class="fila">${qs.etapa < 3 ? `<button type="button" class="b" id="qs-mas" ${qs.elegido ? '' : 'disabled'}>${qs.etapa === 1 ? 'Ver la eco →' : 'Ver el catéter →'}</button>` : ''}<button type="button" class="b prim" id="qs-resp" ${qs.elegido ? '' : 'disabled'}>Es este</button></div><div id="qs-res"></div>`;
+  // la eco va dentro de la tarjeta, entre la pregunta y las opciones (en el primer tiempo, aún no)
+  $('escena').hidden = qs.etapa < 2; if (qs.etapa >= 2) z.querySelector('.pregunta').after($('escena'));
 }
 $('zona-qs').addEventListener('click', (ev) => {
   const b = ev.target.closest('button'); if (!b || b.disabled) return;
@@ -479,7 +498,7 @@ $('zona-qs').addEventListener('click', (ev) => {
   if (b.id === 'qs-mas') { qs.etapa++; pintarQS(); return; }
   if (b.id === 'qs-resp') {
     const c = qs.lista[qs.i], ok = qs.elegido === c.tipo, pts = ok ? 4 - qs.etapa : 0; qs.puntos += pts; qs.hecho = true;
-    est.canales = 'todos'; monitor.ver(CANALES.map((x) => x.k)); monitor.llenar(cab, ctxMon()); $('velo-esc').hidden = true; refrescar(true);
+    est.canales = 'todos'; monitor.ver(CANALES.map((x) => x.k)); monitor.llenar(cab, ctxMon()); $('velo-esc').hidden = true; est.vista = 'paciente'; refrescar(true);
     const nombre = D.OPC_QS.find((o) => o[0] === c.tipo)[1], H = D.HUELLA[c.tipo];
     const real = c.real || `${est.pac.nombre}: ${D.PACIENTES.find((p) => p.k === c.pac)?.linea || ''}`;
     document.querySelectorAll('#qs-ops button').forEach((x) => { x.disabled = true; if (x.dataset.qs === c.tipo) x.classList.add('bien'); else if (x.dataset.qs === qs.elegido) x.classList.add('malb'); });
@@ -488,14 +507,24 @@ $('zona-qs').addEventListener('click', (ev) => {
       <div class="fila"><button type="button" class="b prim" id="qs-sig">${qs.i === qs.lista.length - 1 ? 'Ver el resultado' : 'Otro paciente →'}</button></div></div>`;
     return;
   }
-  if (b.dataset.senal) { senalar(D.HUELLA[qs.lista[qs.i].tipo].pistas[+b.dataset.senal].s); return; }
-  if (b.id === 'qs-sig') { borrarSenal(); qs.i++; qs.etapa = 0; qs.hecho = false; pintarQS(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); }
+  if (b.dataset.senal) { if (est.vista === 'eco') { est.vista = 'paciente'; montarEscena(); pintarPestEscena(); escena.actualizar(cab, 0, true, infoEscena()); } senalar(D.HUELLA[qs.lista[qs.i].tipo].pistas[+b.dataset.senal].s); return; }
+  if (b.id === 'qs-sig') { borrarSenal(); qs.i++; qs.etapa = 0; qs.hecho = false; est.vista = 'paciente'; pintarQS(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); }
 });
 
 // ---------------------------------------------------------------- Mayéutica: guía socrática, examen y el caso
-const LISTA_MAY = [...D.PREGUNTAS.map((q) => ({ ...q, fuente: 'preg' })), ...D.CASO.pasos.map((p, i) => ({ ...p, id: `Caso ${i + 1}`, grupo: 'caso', fuente: 'caso', n: i }))];
-let may = { i: 0, res: [], fichaCaso: [] };
-const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', caso: 'El caso' };
+// Las tres partes de REGLAS §8: el recorrido (guía y examen), «Otra vez lo que fallaste» (se arma al acabar el
+// recorrido, con las opciones en otro orden) y el caso de Aurelio.
+const RECORRIDO_MAY = D.PREGUNTAS.map((q) => ({ ...q, fuente: 'preg' }));
+const CASO_MAY = D.CASO.pasos.map((p, i) => ({ ...p, id: `Caso ${i + 1}`, grupo: 'caso', fuente: 'caso', n: i }));
+let LISTA_MAY = [...RECORRIDO_MAY];
+let may = { i: 0, res: [], fichaCaso: [], repaso: false };
+const GRUPO = { guia: 'Guía socrática', examen: 'Examen · nivel MIR', repaso: 'Otra vez lo que fallaste', caso: 'El caso' };
+function armarRepaso() {
+  may.repaso = true;
+  const malas = RECORRIDO_MAY.filter((q, k) => !may.res[k]).map((q, n) => ({ ...q, grupo: 'repaso', id: `${q.id} · otra vez`, comprueba: null, predice: false,
+    opciones: q.opciones.map((o, k) => [o, k]).sort((a, b) => ((a[1] + n + 1) % q.opciones.length) - ((b[1] + n + 1) % q.opciones.length)).map((x) => x[0]) }));
+  LISTA_MAY = [...RECORRIDO_MAY, ...(malas.length ? malas : [{ grupo: 'repaso', id: '·', tipo: 'aviso', enunciado: 'No fallaste ninguna del recorrido: no hay nada que repasar. Sigue el caso.' }]), ...CASO_MAY];
+}
 function prepararPregunta(q) {
   const pr = q.prepara; if (!pr) return;
   const pac = D.PACIENTES.find((p) => p.k === pr.pac);
@@ -514,6 +543,7 @@ function pintarDockMay() {
   medirDock();
 }
 function pintarMay() {
+  if (may.i >= RECORRIDO_MAY.length && !may.repaso) armarRepaso();
   pintarDockMay();
   const z = $('zona-may'), q = LISTA_MAY[may.i];
   if (!q) {
@@ -530,11 +560,12 @@ function pintarMay() {
     may.fichaCaso = may.fichaCaso.map(([k, v]) => [k, v]).concat(nuevas);
     h += `<p class="dia">${q.dia}</p><dl class="paciente">${may.fichaCaso.map(([k, v], i) => `<dt>${k}</dt><dd class="${i >= may.fichaCaso.length - nuevas.length ? 'nuevo' : ''}">${v}</dd>`).join('')}</dl>`;
   }
-  const formato = q.tipo === 'error' ? 'Encuentra el error' : q.tipo === 'destapa' ? 'Piensa y destapa' : `Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}`;
+  const formato = q.tipo === 'aviso' ? '' : q.tipo === 'error' ? 'Encuentra el error' : q.tipo === 'destapa' ? 'Piensa y destapa' : `Test · piensa antes${q.predice ? ' · predice y compruébalo' : ''}`;
   h += `<div class="cab-preg"><span class="num">${may.i + 1}</span><span class="grupo ${q.grupo === 'guia' ? '' : q.grupo}">${GRUPO[q.grupo]}</span><span class="tipo">${formato}</span></div>`;
   const en = typeof q.enunciado === 'function' ? q.enunciado(R) : q.enunciado;
   h += `<p class="pregunta">${en}</p>`;
-  if (q.tipo === 'error') h += `<div class="op" id="frases">${q.frases.map((f, i) => `<button type="button" class="b" data-fr="${i}" aria-pressed="false">${f.t}</button>`).join('')}</div><div class="fila"><button type="button" class="b prim" data-acc="corregir">Corregir</button></div>`;
+  if (q.tipo === 'aviso') { may.res[may.i] = true; h += `<div class="fila"><button type="button" class="b prim" data-acc="sig">Al caso →</button></div>`; }
+  else if (q.tipo === 'error') h += `<div class="op" id="frases">${q.frases.map((f, i) => `<button type="button" class="b" data-fr="${i}" aria-pressed="false">${f.t}</button>`).join('')}</div><div class="fila"><button type="button" class="b prim" data-acc="corregir">Corregir</button></div>`;
   else if (q.tipo === 'destapa') h += `<p class="para">Piénsalo: son ${q.puntos.length === 3 ? 'tres' : q.puntos.length} cosas.</p><div class="fila"><button type="button" class="b prim" data-acc="destapar">Destapar</button></div>`;
   else h += `<div id="fmt"><p class="para">Piénsalo antes de ver las opciones.</p><div class="fila" style="margin-top:4px"><button type="button" class="b prim" data-acc="ops">Ya lo tengo: ver opciones</button></div></div><div class="op" id="ops" hidden></div>`;
   h += '<div id="q-res"></div>';
@@ -543,9 +574,9 @@ function pintarMay() {
 $('zona-may').addEventListener('click', (ev) => {
   const q = LISTA_MAY[may.i], b = ev.target.closest('button'); if (!b) return;
   const acc = b.dataset.acc;
-  if (acc === 'otra') { may = { i: 0, res: [], fichaCaso: [] }; pintarMay(); return; }
-  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { esc: 'fallo', g: 1, volemia: -600 }, ajuste: { soporte: 'ecmo', ecmo: 5.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
-  if (acc === 'ops') { $('ops').innerHTML = q.opciones.map((o, i) => `<button type="button" class="b" data-op="${i}">${o.t}</button>`).join(''); $('ops').hidden = false; $('fmt').remove(); return; }
+  if (acc === 'otra') { may = { i: 0, res: [], fichaCaso: [], repaso: false }; LISTA_MAY = [...RECORRIDO_MAY]; pintarMay(); return; }
+  if (acc === 'modelo') { setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio'); est.aparato = 'ecmo'; est.vista = 'aparato'; nuevoPaciente(p, { rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } }); pintarPacientes(); refrescar(true); pintarDock(); return; }
+  if (acc === 'ops') { may.ops = typeof q.opciones === 'function' ? q.opciones(R) : q.opciones; $('ops').innerHTML = may.ops.map((o, i) => `<button type="button" class="b" data-op="${i}">${o.t}</button>`).join(''); $('ops').hidden = false; $('fmt').remove(); return; }
   if (acc === 'sig') { may.i++; pintarMay(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (acc === 'comprueba') {
     const c = q.comprueba; tapar(false);
@@ -554,17 +585,17 @@ $('zona-may').addEventListener('click', (ev) => {
     return;
   }
   if (b.dataset.op && !b.disabled) {
-    const o = q.opciones[+b.dataset.op]; may.res[may.i] = !!o.ok;
-    document.querySelectorAll('#ops button').forEach((x, i) => { x.disabled = true; if (q.opciones[i].ok) x.classList.add('bien'); });
+    const o = may.ops[+b.dataset.op]; may.res[may.i] = !!o.ok;
+    document.querySelectorAll('#ops button').forEach((x, i) => { x.disabled = true; if (may.ops[i].ok) x.classList.add('bien'); });
     if (!o.ok) b.classList.add('malb');
     if (!q.comprueba) tapar(false), refrescar(true);
-    $('q-res').innerHTML = `<div class="respuesta"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explica}${q.org ? ' ' + org(q.org) : ''}</p>${cita(q.cita)}
+    $('q-res').innerHTML = `<div class="respuesta"><span class="${o.ok ? 'ok' : 'mal'}">${o.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${o.ok ? '' : `<p>${o.porque}</p>`}<p>${q.explica}${q.org ? ' ' + org(q.org) : ''}</p>${cita(q.cita)}${q.cita2 ? cita(q.cita2) : ''}
       <div class="fila">${q.comprueba ? `<button type="button" class="b prim" data-acc="comprueba">${q.comprueba.txt}</button>` : `<button type="button" class="b prim" data-acc="sig">Siguiente →</button>`}</div></div>`;
     pintarDockMay(); return;
   }
   if (b.dataset.fr != null && !q.corregido) { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('marcada', on); return; }
   if (acc === 'corregir') {
-    q.corregido = true; let bien = true;
+    q.corregido = true; let bien = true; b.closest('.fila').remove();
     document.querySelectorAll('#frases button').forEach((x, i) => { const f = q.frases[i], m = x.getAttribute('aria-pressed') === 'true'; x.disabled = true; if (!!f.mal !== m) bien = false; x.classList.add(f.mal ? 'malb' : 'bien'); });
     may.res[may.i] = bien; q.corregido = false;
     const errores = q.frases.map((f, i) => [f, i]).filter(([f]) => f.mal);
@@ -587,6 +618,7 @@ $('zona-may').addEventListener('click', (ev) => {
 // ---------------------------------------------------------------- modos
 function setModo(m) {
   if (guia) cerrarGuia();
+  $('bajo-escena').before($('escena')); $('escena').hidden = false;
   est.modo = m; borrarSenal(); tapar(false);
   for (const [id, k] of [['modo-explorar', 'explorar'], ['modo-qs', 'qs'], ['modo-may', 'may']]) $(id).setAttribute('aria-selected', String(m === k));
   $('zona-pac').hidden = m !== 'explorar'; $('abajo').hidden = m !== 'explorar';
@@ -596,7 +628,7 @@ function setModo(m) {
   $('velo-esc').hidden = true; est.canales = 'todos'; monitor.ver(CANALES.map((x) => x.k));
   if (m === 'explorar') { est.aparato = 'no'; est.vista = 'paciente'; nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock(); }
   if (m === 'qs') empezarQS();
-  if (m === 'may') { may = { i: 0, res: [], fichaCaso: [] }; pintarMay(); }
+  if (m === 'may') { may = { i: 0, res: [], fichaCaso: [], repaso: false }; LISTA_MAY = [...RECORRIDO_MAY]; pintarMay(); }
   medirDock();
 }
 $('modo-explorar').onclick = () => setModo('explorar');

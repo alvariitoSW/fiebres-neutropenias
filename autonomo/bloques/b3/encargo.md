@@ -82,6 +82,33 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
   los tres aparatos; los objetivos de otras fuentes salen ya en el monitor, cada uno con su chip y su nota si
   discrepan; el corazón eléctrico es el corazón en corte con su anillo aislante y el nodo AV como torniquete.
 
+### Decisiones del usuario (26/10/2026, sobre el informe https://claude.ai/artifact/Rw8ZKfAZdYgjBogGxuCP9w)
+
+- **Maquetas v2**: «están muy muy bien, pero se tienen que mejorar más, hay fallitos y partes que se pueden mejorar
+  muchísimo». → **Maquetas v3** antes de llevar nada a la app: el profesor (Fable) las juzga a fondo con capturas
+  (fallos y mejoras, sin cerrar la lista a la de `juicio-maquetas-v2.md`); un constructor por maqueta las arregla.
+- **Pulmón con respirador: fusionado con el bloque 3** (el director avisó de que salen 47 fichas en una sola PR y menos
+  paradas; el usuario decidió). El bloque 3 pasa a ser **Marino caps. 14-30**: las 26 fichas de §1 + las 21 de Merino
+  Neumología de los caps. 23-30 (`neumo-asma-epoc-basicos`, `neumo-asma-agudo`, `neumo-epoc-vpp`,
+  `neumo-sdra-diagnostico`, `neumo-sdra-no-ventilatorio`, `neumo-sdra-ventilacion`, `neumo-o2-indicaciones`,
+  `neumo-o2-sistemas`, `neumo-o2-toxicidad`, `neumo-vni-metodos`, `neumo-vni-uso`, `neumo-vm-modos`, `neumo-vm-ajuste`,
+  `neumo-vias-artificiales`, `neumo-cuidado-barotrauma`, `neumo-peep-oculta`, `neumo-nav-prevencion`,
+  `neumo-nav-diagnostico`, `neumo-derrame-antimicrobiano`, `neumo-sbt`, `neumo-weaning-extubacion`), sub-bloque **3D ·
+  El pulmón con respirador**. Fuentes: `docs/marino-2024-respiratory-management-caps22-26.pdf` y el PDF de los caps.
+  27-30 que haya en `docs/` (comprobarlo). La maqueta M3 (`autonomo/ideas/marino.md` §4.1 y §7) entra en la tanda de
+  maquetas v3, sobre `autonomo/maquetas/comun/monitor.js`. La presión intratorácica (M8) se hace una vez para CPAP y
+  respirador. Falta la cobertura del 3D (profesor, Fable).
+- **Paradas del bloque fusionado**: 1) maquetas v3 (shock, corazón eléctrico, receptor y pulmón); 2) el primer modelo
+  en la app; 3) el bloque entero; 4-5) los cambios que pida.
+- **Modelos**: Fable (`model: "fable"`) **solo para pensar** (profesor, cobertura) y **para medir**: el primer
+  constructor pesado va en Fable y se compara con `gasto.mjs` (pasos, vueltas, gasto) frente a los de Opus; con ese
+  dato se decide el resto. Todo lo que copia algo hecho, barato.
+- **Guía ESC 2021 de estimulación cardiaca**: el usuario pide que la busque el director. Copia CC BY localizada en HAL
+  (hal-amu.archives-ouvertes.fr/hal-03654607) y en Leiden; la red del entorno rechaza academic.oup.com, escardio.org,
+  europepmc.org, pmc.ncbi.nlm.nih.gov, revespcardiol.org, hal-amu.archives-ouvertes.fr y
+  scholarlypublications.universiteitleiden.nl (26/10). Sigue pendiente: o el usuario permite uno de esos dominios en
+  la red del entorno, o sube el PDF. Sin texto leído, nada de bloqueos AV.
+
 ## 5. Pasos
 
 | Paso | Quién | Sale en | Estado |
@@ -96,3 +123,8 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 
 Los fija la cobertura. No repetir: Andrés (62), la Sra. R. (64), Fermín (71), Rocío (67), Gonzalo (66), Inés (41),
 Salvador (47).
+
+**Decisión del usuario (25/10/2026)**: el caso de Aurelio es el de la maqueta (fallo respiratorio → ECMO). La rotura
+del papilar (Marino cap. 16, p. 38: con la del septo y la de pared libre, en las primeras 24 h) **se enseña entera**,
+como pide la fuente: estado `rotura-papilar` del modelo M7 (IM aguda con `eroaMitral` y el chorro en color, sub-bloque
+3B), paso «predice» de la ficha `mc-cardiogenico-fisio` y un caso corto propio (paciente distinto de Aurelio).

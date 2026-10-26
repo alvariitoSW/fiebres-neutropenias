@@ -1,0 +1,135 @@
+<!-- PROPUESTA PARA REVISAR (tarea eco-mega, parada 1: la imagen). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/eco-imagen.html
+     «Antes» = crearEcografo() de js/modules/eco/ecografia.mjs, sin tocar. «Después» = eco-imagen/ecografia-v2.mjs,
+     copia de trabajo que importa el corte, el ajuste del movimiento y el campo de desplazamiento del módulo real.
+     El latido, la geometría y el plano son los del simulador (motor.mjs, corazon-geo.mjs, escenarios.mjs).
+     Con todo apagado, «después» da la misma imagen que «antes» (diferencia media de gris 0,0 en Node).
+     Ideas de echodemo/src/bmode.js (sombra, neblina de la pared, desenfoque del haz, ganancia por profundidad),
+     reconstruidas sin su código. Solo tokens de css/variables.css. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La imagen de eco: antes y después</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 14px 14px 40px; }
+  h1 { font-size: 20px; margin: 4px 0 6px; }
+  h2 { font-size: 16px; margin: 22px 0 8px; color: var(--accent-yellow); }
+  p { margin: 6px 0; }
+  .ei-idea { color: var(--text-dim); }
+  .ei-origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 2px 9px; margin: 4px 4px 0 0; }
+  .ei-fijo { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding: 4px 0 6px; margin: 0 -14px; padding-left: 14px; padding-right: 14px; border-bottom: 1px solid var(--border-color); }
+  #ei-senal { font-size: 13px; color: var(--accent-yellow); margin: 4px 0 0; min-height: 1.4em; }
+  .ei-senalalo { min-height: 40px; font-size: 14px; margin: 4px 6px 2px 0; }
+  .ei-senalalo[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); }
+  .ei-marco { position: relative; margin: 6px 0 0; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: var(--bg-main); }
+  #ei-lienzo { display: block; height: min(260px, 34vh); width: auto; max-width: 100%; margin: 0 auto; touch-action: pan-y; cursor: ew-resize; }
+  .ei-rot { position: absolute; top: 6px; font-size: 12px; font-weight: 600; padding: 2px 8px; border-radius: 6px; background: var(--bg-card); border: 1px solid var(--border-color); }
+  #ei-rot-antes { left: 6px; } #ei-rot-despues { right: 6px; color: var(--accent-yellow); }
+  #ei-espera { position: absolute; inset: auto 0 8px 0; text-align: center; font-size: 13px; color: var(--text-dim); }
+  .ei-fila { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+  .ei-fila.ei-tres > button { flex: 1 1 0; padding: 6px 4px; }
+  button { font: inherit; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-height: 44px; padding: 6px 12px; cursor: pointer; }
+  .ei-chip[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+  .ei-chip[aria-pressed="true"]::before { content: "● "; }
+  .ei-mando { display: grid; grid-template-columns: 7.5em 1fr 4.2em; align-items: center; gap: 8px; margin: 4px 0; font-size: 14px; }
+  .ei-mando output { text-align: right; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; min-height: 32px; accent-color: var(--accent-yellow); }
+  #ei-tiempos { font-size: 13px; color: var(--text-dim); font-variant-numeric: tabular-nums; }
+  .ei-nota { font-size: 13px; color: var(--text-muted); }
+  .ei-mejora { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-card); padding: 8px 10px; margin: 8px 0; }
+  .ei-mejora label.ei-tit { display: flex; align-items: center; gap: 10px; font-weight: 600; min-height: 40px; cursor: pointer; }
+  .ei-mejora input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--accent-yellow); flex: none; }
+  .ei-num { color: var(--accent-yellow); }
+  .ei-mejora p { font-size: 14px; color: var(--text-dim); }
+  .ei-mejora .ei-mando { grid-template-columns: 6.5em 1fr; }
+  .hl-azul { color: var(--accent-blue); font-weight: 600; }
+  .ei-creditos { font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 24px; padding-top: 10px; }
+</style></head>
+<body><main>
+<h1>La imagen de eco: antes y después</h1>
+<p class="ei-idea">El mismo latido y el mismo corte del corazón del simulador, con dos formas de convertirlo en imagen. <strong>A la izquierda, la de hoy; a la derecha, la propuesta.</strong> Arrastra la línea sobre la imagen.</p>
+<span class="ei-origen">ilustrativo · fisiología general</span><span class="ei-origen">idea de The Heart by Ultrasound (D. Ouyang), reconstruida</span>
+
+<div class="ei-fijo">
+<div class="ei-marco">
+  <canvas id="ei-lienzo" width="360" height="300" aria-label="Imagen ecográfica: antes a la izquierda, después a la derecha"></canvas>
+  <span class="ei-rot" id="ei-rot-antes">Antes</span><span class="ei-rot" id="ei-rot-despues">Después</span>
+  <div id="ei-espera">Preparando el paciente…</div>
+</div>
+<p id="ei-senal" aria-live="polite"></p>
+</div>
+<div class="ei-mando"><span>Línea</span><input id="ei-corte" type="range" min="0" max="100" value="50" aria-label="Posición de la línea entre antes y después"><output></output></div>
+<div class="ei-fila ei-tres">
+  <button type="button" id="ei-ver-antes">Solo antes</button>
+  <button type="button" id="ei-ver-corte">Mitad y mitad</button>
+  <button type="button" id="ei-ver-despues">Solo después</button>
+</div>
+<div class="ei-fila"><button type="button" id="ei-pausa">Parar el latido</button></div>
+<div class="ei-mando"><span>Momento del latido</span><input id="ei-fase" type="range" min="0" max="19" value="0" aria-label="Momento del latido"><output></output></div>
+<p id="ei-tiempos">Midiendo…</p>
+
+<h2>Vista</h2>
+<div class="ei-fila" id="ei-vistas"></div>
+<h2>Paciente</h2>
+<div class="ei-fila" id="ei-estados"></div>
+<p class="ei-nota">El latido de cada paciente es el del simulador, con sus mismas cifras.</p>
+
+<h2>Mandos del ecógrafo</h2>
+<div class="ei-mando"><span>Ganancia</span><input id="ei-gan" type="range" min="-10" max="15" value="0"><output id="ei-gan-v">0 dB</output></div>
+<div class="ei-mando"><span>Profundidad</span><input id="ei-prof" type="range" min="100" max="240" step="10" value="170"><output id="ei-prof-v">17 cm</output></div>
+<p class="ei-nota">Ganancia y profundidad cambian las dos imágenes. La ganancia por profundidad y el foco, solo la de después.</p>
+<div class="ei-mando"><span>Ganancia, cerca</span><input id="ei-tgc0" type="range" min="-12" max="12" value="0"><output id="ei-tgc0-v">0</output></div>
+<div class="ei-mando"><span>Ganancia, medio</span><input id="ei-tgc1" type="range" min="-12" max="12" value="0"><output id="ei-tgc1-v">0</output></div>
+<div class="ei-mando"><span>Ganancia, lejos</span><input id="ei-tgc2" type="range" min="-12" max="12" value="0"><output id="ei-tgc2-v">0</output></div>
+<div class="ei-mando"><span>Ganancia, fondo</span><input id="ei-tgc3" type="range" min="-12" max="12" value="0"><output id="ei-tgc3-v">0</output></div>
+<div class="ei-mando"><span>Foco</span><input id="ei-foco" type="range" min="30" max="160" step="10" value="80"><output id="ei-foco-v">8 cm</output></div>
+
+<h2>Las mejoras, una a una</h2>
+<p class="ei-nota">Enciende y apaga cada una para ver qué cambia. Todo apagado, la imagen de después es igual que la de antes.</p>
+<div class="ei-fila"><button type="button" id="ei-todo">Encender todas</button><button type="button" id="ei-nada">Apagar todas</button></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-paredes"><span><span class="ei-num">0.</span> Paredes reales</span></label>
+  <p>En una eco real, el borde de la pared no es una línea: <span class="hl-azul">se ve por el contraste entre la sangre negra y el músculo gris</span>. Las líneas brillantes son el pericardio, que suele ser lo más brillante, y el plano de las válvulas.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-paredes" type="range" min="0" max="100"></div></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-moteado"><span><span class="ei-num">1.</span> Grano que viaja con la pared</span></label>
+  <p>El grano de la imagen (el moteado) nace de los ecos de muchos puntos diminutos del tejido. Va pegado al músculo: al latir, <span class="hl-azul">el grano se desliza con la pared</span> en vez de cambiar de golpe. El grano sale alargado de lado y corto hacia abajo: el haz es más ancho de lo que mide de largo cada pulso de sonido. La sangre casi no da eco: su grano es tenue y no sigue a la pared.</p>
+  <div class="ei-mando"><span>Textura</span><input id="ei-int-moteado" type="range" min="0" max="100"></div></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-sombra"><span><span class="ei-num">2.</span> Sombra y refuerzo</span></label>
+  <p>Lo muy duro, como una costilla o el calcio, apenas deja pasar el sonido: detrás queda una banda oscura, <span class="hl-azul">la sombra acústica</span>. La sangre y el líquido frenan el sonido menos que el músculo: lo que hay detrás se ve más claro (refuerzo posterior). Mira detrás de un derrame.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-sombra" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="sombra">Señálalo: sombra</button><button type="button" class="ei-senalalo" data-senal="refuerzo">Señálalo: refuerzo</button></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-reverb"><span><span class="ei-num">3.</span> Neblina y rebotes de la pared</span></label>
+  <p>El sonido rebota entre la sonda y la pared del tórax. Esos rebotes dejan una neblina arriba y bandas a 2, 3 y 4 veces la profundidad de la pared. <span class="hl-azul">No se mueven con el corazón</span>: se quedan quietas en la pantalla.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-reverb" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="reverb">Señálalo</button></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-especular"><span><span class="ei-num">4.</span> Bordes que brillan de frente</span></label>
+  <p>Una superficie lisa refleja como un espejo: <span class="hl-azul">brilla cuando el haz le llega de frente</span> y se apaga cuando le pasa paralelo. Por eso, en el apical de 4 cámaras, el tabique y la pared lateral se ven más débiles que el plano de las válvulas, que el haz corta de frente. El músculo paralelo al haz también se ve más gris.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-especular" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="especular">Señálalo</button></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-tgc"><span><span class="ei-num">5.</span> Ganancia por profundidad</span></label>
+  <p>El eco de lo profundo vuelve más débil. El ecógrafo lo compensa con <span class="hl-azul">la ganancia por profundidad</span>: los cuatro mandos de arriba, de cerca a fondo. La ganancia general sube o baja toda la imagen; la profundidad acerca o aleja el corazón.</p></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-foco"><span><span class="ei-num">6.</span> Haz que se ensancha</span></label>
+  <p>El haz es más estrecho a la profundidad del foco: ahí la imagen es más nítida. <span class="hl-azul">Por delante, por detrás y hacia los bordes del abanico se ensancha</span> y emborrona. Mueve el foco a la pared que quieres medir.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-foco" type="range" min="0" max="100"></div></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-ventana"><span><span class="ei-num">7.</span> Ventana pobre (reto)</span></label>
+  <p>En el paciente obeso o ventilado, la grasa y el pulmón se interponen: <span class="hl-azul">llega menos señal y hay más ruido y neblina</span>. Con más intensidad, el pulmón tapa un lado de la imagen y entra y sale con la respiración. La ganancia y la profundidad ayudan algo; si el pulmón tapa la imagen, hay que cambiar de ventana o recolocar al paciente.</p>
+  <div class="ei-mando"><span>Intensidad</span><input id="ei-int-ventana" type="range" min="0" max="100"></div>
+  <button type="button" class="ei-senalalo" data-senal="ventana">Señálalo</button></div>
+
+<div class="ei-mejora"><label class="ei-tit"><input type="checkbox" id="ei-on-calidad"><span><span class="ei-num">8.</span> Calidad automática</span></label>
+  <p>Si el móvil tarda más de 40 ms en formar la imagen de después, <span class="hl-azul">la hace menos fina y más rápida</span>. Si va sobrado, vuelve a afinarla. La línea de tiempos de arriba dice cuánto tarda cada imagen en este aparato.</p></div>
+
+<p class="ei-creditos">Imagen formada a partir del corazón y el latido del simulador de la app, cortados por el plano de cada vista. Brillo de cada tejido, atenuación, anchura del haz y artefactos: ilustrativos, según la física general de los ultrasonidos. Ideas de la imagen de <em>The Heart by Ultrasound</em>, de David Ouyang, reconstruidas sin su código, con permiso del autor. Hígado, diafragma y apófisis xifoides: mallas de Z-Anatomy (CC BY-SA 4.0), derivadas de BodyParts3D (DBCLS).</p>
+</main>
+<script type="module" src="eco-imagen/maqueta.js"></script>
+</body></html>

@@ -37,9 +37,15 @@ tablero y el último parte, sin trabajar.
 
 ## 1. El ciclo
 
+**La descripción de cada agente empieza por la clave de su tarea entre corchetes** (`[b3] Constructor 3A`,
+`[tee-inversa] Auditor`): así `autonomo/gasto.mjs` sabe a qué tarea apuntar lo que gasta. Sin clave, su gasto queda
+«sin tarea».
+
 Lanza los agentes con la herramienta Agent (`subagent_type` = su nombre). **En cada encargo di explícitamente:
-«Lee CLAUDE.md, autonomo/REGLAS.md y tu tarea desde el disco»** (los agentes heredan una copia que puede estar
-vieja). Pásales siempre: la clave, la carpeta de trabajo, la fuente exacta, la definición de «hecho» y el encargo.
+«Lee tu encargo desde el disco y, de `autonomo/REGLAS.md`, solo estos apartados: §…»** (los agentes heredan una copia
+que puede estar vieja; `CLAUDE.md` ya lo tienen cargado). Nombra tú los apartados que tocan: un agente que relee las
+reglas enteras las vuelve a pagar en cada paso que da. Pásales siempre: la clave, la carpeta de trabajo, la fuente
+exacta (archivo y páginas), la definición de «hecho» y el encargo.
 
 **Si un agente no aparece** como `subagent_type` (los de `.claude/agents/` solo se cargan al abrir sesión), lanza
 `general-purpose` con «Lee `.claude/agents/<nombre>.md` y haz ese papel», con su mismo modelo, y anótalo en el parte.
@@ -70,7 +76,8 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
    modelo: si propone un modelo nuevo grande (decisión del usuario), no lo construyas, anótalo en el parte y sigue
    con lo que sí se puede. Si una pieza del motor falta (p. ej. el chorro regurgitante en el ecógrafo), **se
    construye**, con sus pruebas; no se esquiva con un esquema.
-5. **Constructor** (`constructor`, con `model: "opus"`) → lo visual, el texto reorganizado para estudiar y las
+5. **Constructor** (`constructor`; potente, `model: "opus"`, solo si construye un modelo vivo o una pieza nueva;
+   barato si sigue un modelo que ya existe, que es lo normal en preguntas, textos y fichas) → lo visual, el texto reorganizado para estudiar y las
    preguntas, con el `plan-estudio.md` entero y el modelo de preguntas `autonomo/modelos/preguntas-para-estudiar.html`.
    Si las preguntas necesitan el botón «Preguntas» y sus formatos y la app aún no los tiene (tarea `preguntas` del
    tablero sin `hecha`), las preguntas se escriben en el formato de test actual con el estilo de §8 (razonamiento,
@@ -82,7 +89,7 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
      los casos y lo que dice cada figura** (el paciente del caso es inventado; su medicina no).
    - **Profesor en modo juzgar** (`profesor`) → `profesor.md`; dile cómo llegar a lo nuevo y qué modelo «así sí» usar.
 7. **Decide.** Si hay ❌ del verificador, fallos de los jueces, hallazgos **graves** del auditor o **alguna nota del
-   profesor por debajo de 4**: vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
+   profesor por debajo de 8 (sobre 10)** (la meta es 8,75: lo que falte hasta ahí, si es barato): vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
    menores se arreglan si es barato; si no, van al parte. Si tras las vueltas máximas sigue fallando →
    `necesita humano`.
 
@@ -121,7 +128,7 @@ es la base de cómo se trabaja ahora.
 - **Informes de 40 líneas como mucho**, en la carpeta del bloque, con ✅/❌ y «No comprobado / riesgo» al final. Lee el
   archivo, no pidas el informe entero en el mensaje.
 - **Modelos**: potente solo para el profesor y los modelos vivos o maquetas; barato para el auditor, la Mayéutica
-  siguiendo un modelo, el revisor de código y el verificador.
+  siguiendo un modelo, el revisor de código y el verificador. (Endurecido el 25/10, abajo.)
 - **Escalera antes de escribir código** (idea de Ponytail): reutilizar lo que ya hay antes de escribir nada nuevo. Vale
   para el código; el contenido médico y lo visual no se recortan.
 - **Paralelo con dueño de archivo**: dos constructores a la vez, cada uno en su carpeta; los archivos compartidos los
@@ -133,6 +140,27 @@ es la base de cómo se trabaja ahora.
   (`[HUECO <quién>: …]`), sube tú el `?v=` y decide el orden de fusión. Cada agente, en su subcarpeta temporal.
 - **Dependencias entre ramas**: si una pieza necesita un modelo de otra rama aún sin fusionar, deja el enlace
   preparado (`modeloFuturo`/`modeloVivo`) y conéctalo al unir.
+
+### Ahorro medido (aprobado por el usuario el 25/10/2026)
+
+Medido con `autonomo/gasto.mjs` sobre la sesión del 10 al 25/10: el director gastó **la mitad** de todo (cada paso
+relee su conversación entera, que había pasado de 500.000 tokens) y los constructores potentes el 31 % (5 veces más
+por agente que los baratos; los más caros, 150-230 pasos). Cuatro reglas:
+
+1. **Sesiones cortas.** Una sesión por tarea, o por parada de un bloque. Al cerrarla (parte y gasto escritos), no
+   encadenes la siguiente en la misma conversación: abre tú una sesión nueva con `create_session` (mismo repositorio
+   y entorno; mensaje `/plan-socialista <clave>`) y díselo al usuario. Tú no lees PDF, código largo ni informes de más
+   de 40 líneas: eso lo leen los agentes, y tú lees su informe.
+2. **Encargos de una pieza.** Cada encargo de constructor es una sola pieza (un modelo, un grupo de fichas, una tanda de
+   arreglos). Si un constructor llega a **unos 100 pasos** sin terminar, se para y entrega lo hecho con la lista de lo
+   que falta; tú lanzas otro encargo con el resto. Si una pieza no cabe en 100 pasos, pártela antes de lanzarla.
+3. **Más modelo barato.** Potente (opus) solo para el profesor, la cobertura y el **primer** modelo vivo o maqueta de
+   algo nuevo. Barato (sonnet) para todo lo que copia algo ya hecho: preguntas y Mayéutica, fichas, textos, arreglos,
+   correcciones de auditoría, la segunda escena de una pieza común. Ante la duda, barato; si el juez lo tumba dos
+   veces, la vuelta siguiente va en potente y el parte lo dice.
+4. **Lecturas acotadas.** Cada agente lee su encargo, el `CLAUDE.md` del módulo que toca y solo los apartados de
+   `autonomo/REGLAS.md` que le nombres. Las fuentes, por archivo y páginas exactas; los archivos grandes, con `graft`
+   o por trozos (`sed -n`), no enteros.
 
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
@@ -159,7 +187,8 @@ se copian a otras fichas (Merino HEMATO, modelo de fichas con calculadora, tení
 **No pidas aprobación tarea a tarea** (el usuario lo pidió el 20/10/2026). Lo técnico y los arreglos, con los jueces
 en verde, van directo a `main`; el contenido de un bloque se acumula en su rama `auto/<bN>` y solo se para al usuario
 en las 4-5 paradas del bloque (`REGLAS.md` §2.3), con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar.
-Mientras el usuario mira, sigues trabajando. Si contesta con cambios, se atienden en la vuelta siguiente.
+Mientras el usuario mira, la tarea siguiente sigue en **otra sesión** (Ahorro medido, punto 1). Si contesta con
+cambios, se atienden en la vuelta siguiente.
 
 **Dos tareas a la vez**: la segunda trabaja en una carpeta aparte (`git worktree add /tmp/wt-<clave> -B auto/<clave>
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
@@ -188,7 +217,11 @@ origin/main`), con su propio servidor en otro puerto; así no se pisan los archi
    y los arreglos, directo con los jueces en verde (`REGLAS.md` §2.3).
 3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
-4. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
+4. **Gasto de la tarea**: `node autonomo/gasto.mjs --clave <clave>` (lee las transcripciones de esta sesión; tarda
+   1-2 minutos si la sesión es larga). Copia al parte, en «Gasto», el total, la tabla «Por papel» y los 3 agentes que
+   más gastaron, con una línea de **dónde se fue y cómo se ahorraría la próxima vez** (p. ej. «el constructor dio 200
+   pasos: el encargo tenía 3 piezas; partirlo»). Si ves un patrón que se repite, va a «Propuestas sobre las reglas».
+5. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.

@@ -63,6 +63,10 @@ En los compartidos (`css/components.css`, menús, `index.html`, `index.js`, `sea
 la tuya. Tu servidor en tu puerto, tus capturas y pruebas en tu subcarpeta (`/tmp/plan-socialista/<bloque>/<tú>/`);
 nunca `pkill` genérico.
 
+**Tope de unos 100 pasos** (cada llamada a una herramienta es un paso): si llegas sin terminar, para y entrega lo
+hecho, con la lista exacta de lo que falta. El director lanza otro encargo con el resto: cada paso de más relee todo
+lo que llevas y es lo que más gasta.
+
 **No puedes:** hacer commit, push ni tocar ramas (lo hace el director); editar `CLAUDE.md`, `autonomo/REGLAS.md` ni
 `.claude/`; arreglar cosas fuera del encargo (anótalas en «Visto de paso»).
 

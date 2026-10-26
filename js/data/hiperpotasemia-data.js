@@ -47,10 +47,11 @@ export const farmacosHiperpotasemia = [
     return { ...f, fila, nombre: f.nombre || tratamientoHiperpotasemia.find(t => t.id === fila).agente };
 });
 
+// `papel` = lo que hace cada grupo sobre el mecanismo (de la columna "Mecanismo" de la tabla de tratamiento).
 export const gruposHiperpotasemia = {
-    protege: { rotulo: 'Protege el corazón', color: 'var(--accent-red)' },
-    desplaza: { rotulo: 'Mete K⁺ en la célula', color: 'var(--accent-blue)' },
-    elimina: { rotulo: 'Saca K⁺ del cuerpo', color: 'var(--accent-green)' },
+    protege: { rotulo: 'Protege el corazón', color: 'var(--accent-red)', papel: 'protege la membrana; el K⁺ no baja.' },
+    desplaza: { rotulo: 'Mete K⁺ en la célula', color: 'var(--accent-blue)', papel: 'mete el K⁺ en la célula, por un tiempo; no lo saca del cuerpo.' },
+    elimina: { rotulo: 'Saca K⁺ del cuerpo', color: 'var(--accent-green)', papel: 'saca el K⁺ del cuerpo.' },
 };
 
 // Causas = punto de partida de la escena. `fuente` = id de la línea de la

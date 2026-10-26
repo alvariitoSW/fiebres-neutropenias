@@ -66,7 +66,7 @@
 .escena-aparato .vaso-luz.fino { stroke-width: 4; }
 .escena-aparato .vaso-luz.art { stroke: color-mix(in srgb, var(--accent-red) 45%, var(--bg-main)); }
 .escena-aparato .vaso-luz.ven { stroke: color-mix(in srgb, var(--accent-purple) 45%, var(--bg-main)); }
-.escena-aparato .ruta { fill: none; stroke-width: 2.4; stroke-linecap: round; }
+.escena-aparato .ruta { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .escena-aparato .ruta-art { stroke: var(--accent-blue); }
 .escena-aparato .ruta-ven { stroke: var(--accent-blue); }
 .escena-aparato .punta { fill: var(--accent-blue); stroke: var(--text-main); stroke-width: .6; }
@@ -79,3 +79,29 @@
 .escena-aparato path.arteria-luz { stroke: color-mix(in srgb, var(--accent-red) 45%, var(--bg-main)); }
 .escena-aparato .aspa { fill: color-mix(in srgb, var(--accent-blue) 85%, var(--text-main)); stroke: color-mix(in srgb, var(--accent-yellow) 60%, var(--bg-main)); stroke-width: .25; }
 .escena-aparato .aspa.detras { fill: color-mix(in srgb, var(--accent-yellow) 45%, var(--bg-main)); }
+/* El paciente y el recorrido (corazon.js, sobre la pieza común del corte) */
+.escena-aparato .cisura { fill: none; stroke: color-mix(in srgb, var(--text-muted) 70%, var(--bg-main)); stroke-width: .6; }
+.escena-aparato .bronquio { fill: none; stroke: color-mix(in srgb, var(--text-dim) 45%, var(--bg-main)); stroke-width: 1.1; stroke-linecap: round; stroke-linejoin: round; }
+.escena-aparato .art-adv { fill: color-mix(in srgb, var(--text-dim) 22%, var(--bg-main)); stroke: var(--text-muted); stroke-width: .6; }
+.escena-aparato .art-celula { fill: color-mix(in srgb, var(--accent-red) 46%, var(--bg-main)); stroke: color-mix(in srgb, var(--accent-red) 70%, var(--text-main)); stroke-width: .35; }
+.escena-aparato .art-endo { fill: none; stroke: var(--text-main); stroke-width: .6; }
+.escena-aparato .art-luz { fill: color-mix(in srgb, var(--accent-red) 22%, var(--bg-main)); stroke: none; }
+.escena-aparato .hematie-g { fill: color-mix(in srgb, var(--accent-red) 80%, var(--text-main)); }
+.escena-aparato .piel { fill: none; stroke: var(--text-muted); stroke-width: .9; stroke-linecap: round; }
+.escena-aparato .vertebra { fill: color-mix(in srgb, var(--text-dim) 12%, var(--bg-main)); stroke: color-mix(in srgb, var(--text-muted) 60%, var(--bg-main)); stroke-width: .5; }
+.escena-aparato .hueso { fill: color-mix(in srgb, var(--text-dim) 14%, var(--bg-main)); stroke: var(--text-muted); stroke-width: .7; stroke-linejoin: round; }
+.escena-aparato .hueso-l { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: .5; }
+.escena-aparato .costilla { fill: none; stroke: color-mix(in srgb, var(--text-dim) 50%, var(--bg-main)); stroke-width: 2.6; stroke-linecap: round; opacity: .55; }
+.escena-aparato .cartilago { fill: none; stroke: color-mix(in srgb, var(--text-dim) 35%, var(--bg-main)); stroke-width: 2; stroke-linecap: round; }
+.escena-aparato .diafragma { fill: none; stroke: color-mix(in srgb, var(--accent-red) 40%, var(--text-muted)); stroke-width: 1.4; stroke-linecap: round; }
+.escena-aparato .vaso-a, .escena-aparato .vaso-v, .escena-aparato .vaso-a-pared, .escena-aparato .vaso-v-pared { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.escena-aparato .vaso-a { stroke: color-mix(in srgb, var(--accent-red) 22%, var(--bg-main)); }
+.escena-aparato .vaso-a-pared { stroke: color-mix(in srgb, var(--text-dim) 45%, var(--bg-main)); }
+.escena-aparato .vaso-v { stroke: color-mix(in srgb, var(--accent-purple) 30%, var(--bg-main)); }
+.escena-aparato .vaso-v-pared { stroke: color-mix(in srgb, var(--accent-purple) 70%, var(--text-main)); }
+#esc-eco { display: block; width: 100%; height: auto; background: var(--bg-main); }
+.escena-aparato .punta-canula { fill: var(--text-main); stroke: var(--bg-main); stroke-width: .5; }
+.escena-aparato .conector { fill: var(--card2); stroke: var(--text-main); stroke-width: .7; }
+.escena-aparato .lupa-linea { fill: none; stroke: var(--text-muted); stroke-width: .7; stroke-dasharray: 1.6 2; }
+.escena-aparato .lupa-marca { fill: none; stroke: var(--text-muted); stroke-width: .7; }
+.escena-aparato .lupa-fondo { fill: var(--bg-main); }

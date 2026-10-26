@@ -1,0 +1,211 @@
+<title>Marino: shock y respirador</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Hoja de guardia: una columna, bloques con franja de estado como un monitor de UCI */
+:root{
+  --bg:#f2f4f6; --card:#ffffff; --ink:#18212c; --muted:#5a6675; --line:#d6dce3;
+  --accent:#0b7466; --warn:#a35f00; --alert:#a8281f; --soft:#e5efed;
+  --display:"Fraunces",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#10151b; --card:#171e26; --ink:#e4e9ee; --muted:#9aa6b3; --line:#2a3440;
+  --accent:#48c9b0; --warn:#e0a24a; --alert:#ef7a6f; --soft:#1a2a2a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10151b; --card:#171e26; --ink:#e4e9ee; --muted:#9aa6b3; --line:#2a3440;
+  --accent:#48c9b0; --warn:#e0a24a; --alert:#ef7a6f; --soft:#1a2a2a; color-scheme:dark}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+main{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2{font-family:var(--display);font-weight:600;text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:1.7rem} h2{font-size:1.25rem}
+h3{font-size:1rem;margin:0}
+p{margin:0} ul,ol{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px}
+.eyebrow{font:500 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+section{display:flex;flex-direction:column;gap:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.franja{border-left:4px solid var(--accent)} .franja.warn{border-left-color:var(--warn)} .franja.alert{border-left-color:var(--alert)}
+.chip{display:inline-block;font:500 .72rem var(--mono);padding:2px 7px;border-radius:99px;border:1px solid currentColor;white-space:nowrap}
+.ok{color:var(--accent)} .w{color:var(--warn)} .a{color:var(--alert)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.tabla{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:.86rem}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font:500 .72rem var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+td.n,th.n{text-align:right;font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+tr.tot td{font-weight:600;border-bottom:none}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}
+.big{font:500 1.6rem var(--mono);font-variant-numeric:tabular-nums}
+a{color:var(--accent)} a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.decision{background:var(--soft);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.opc{display:flex;flex-direction:column;gap:4px;padding-left:10px;border-left:2px solid var(--line)}
+.opc.rec{border-left-color:var(--accent)}
+small,.muted{color:var(--muted);font-size:.84rem}
+</style>
+
+<main>
+<header style="display:flex;flex-direction:column;gap:8px">
+  <span class="eyebrow">Plan socialista · Marino · 26/10/2026</span>
+  <h1>Lo que queda de Marino: el shock y el pulmón con respirador</h1>
+  <p>Bloque 3 (caps. 14-22, 26 fichas) y bloque 4 (caps. 23-30, 21 fichas). Qué está hecho, qué falta, cómo se puede
+  adelantar el pulmón y cuánto cuesta. <strong>No se construye nada hasta que elijas</strong> (al final, 4 preguntas).</p>
+</header>
+
+<section>
+  <span class="eyebrow">En un vistazo</span>
+  <div class="grid2">
+    <div class="card franja"><span class="muted">Bloque 3 · lo que queda</span><span class="big">≈ 35 M</span><small>10 sesiones cortas, 2 paradas tuyas más</small></div>
+    <div class="card franja"><span class="muted">Pulmón (bloque 4)</span><span class="big">≈ 26 M</span><small>con el atajo; 28,5 M sin él</small></div>
+    <div class="card franja warn"><span class="muted">Fable en todo lo pesado</span><span class="big">+57 %</span><small>de coste; solo para «pensar», +6 %</small></div>
+  </div>
+  <p class="muted">M = millones de tokens «equivalentes», la unidad de <code>autonomo/gasto.mjs</code>. Las cifras salen de lo medido
+  en sesiones anteriores: un constructor barato gasta ≈ 1,1 M por 100 pasos, uno potente ≈ 5 M, un juicio del profesor ≈ 0,3-0,4 M.</p>
+</section>
+
+<section>
+  <h2>Dónde estamos</h2>
+  <div class="card franja">
+    <h3>Bloque 3 · El shock, el corazón y la embolia de pulmón</h3>
+    <ul>
+      <li>En <strong>main</strong> (lo que ves hoy en la app): las 26 fichas sin vista Visual ni Estudiar (lo dice el inventario).</li>
+      <li>En la rama del bloque (<code>auto/b3</code>, aún sin fusionar): <span class="num">26/26</span> fichas preparadas con su página,
+        vista Visual en Cardiología y Neumología, y <strong>Estudiar en las 9 del shock</strong> (152 preguntas y sus casos).</li>
+      <li>La auditoría de esas 9: <span class="chip ok">0 graves</span> <span class="chip w">2 huecos</span> <span class="chip w">14 menores</span>.
+        Los arreglos se quedaron a medias por el límite de uso.</li>
+      <li>Las <strong>maquetas v2</strong> (monitor del shock con Impella, balón y ECMO; corazón eléctrico; receptor vivo) están terminadas
+        y esperan tu visto bueno. Ya usan piezas comunes de verdad (un monitor, un dibujo de aparatos, una bomba).</li>
+      <li>El caso de Aurelio es el del ECMO y la rotura del papilar se enseña entera (decidiste el 25/10).</li>
+    </ul>
+    <p><a href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/b3-shock.html">Maqueta del shock</a> ·
+       <a href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/b3-ritmo.html">Corazón eléctrico</a> ·
+       <a href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/b3-receptor.html">Receptor vivo</a> ·
+       <a href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/index.html">La rama en el móvil</a>
+       <small>(Cardiología → Merino Cardiología → una ficha del shock → Estudiar)</small></p>
+  </div>
+  <div class="card franja warn">
+    <h3>Bloque 4 · El pulmón con respirador</h3>
+    <ul>
+      <li>21 fichas de Merino Neumología sin Visual ni Estudiar. 17 se explican con el pulmón; 4 no (oxígeno tóxico, NAV ×2, derrame).</li>
+      <li>Diseñado en el mapa de Marino (maqueta M3), sin maqueta hecha: alvéolos unidos al tubo y al respirador, curvas vivas
+        de presión, flujo y volumen, PEEP, PEEP oculta, pausas, VNI y alto flujo.</li>
+      <li>Capnografía y respuesta a fluidos (VVS) ya tienen Estudiar en Libros: solo se enlazan.</li>
+    </ul>
+  </div>
+  <div class="card franja alert">
+    <h3>Lo que bloquea algo</h3>
+    <ul>
+      <li><strong>Bradicardias y bloqueos AV</strong>: falta el PDF de la guía ESC 2021 de marcapasos (la red no deja descargarla).
+        Sin él, el corazón eléctrico se hace sin los bloqueos AV.</li>
+      <li>El motor del corazón lo comparten el shock y la eco (<code>eco-mega</code>). Mientras el bloque 3 toque el motor, la eco no
+        debe tocarlo a la vez.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2>¿Se puede atajar el pulmón?</h2>
+  <p>Sí, en parte. El shock y el respirador comparten tres piezas. Si se hacen pensando en los dos desde el principio, el
+  pulmón no tiene que reabrir nada:</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Pieza</th><th>En el shock</th><th>En el pulmón</th><th>Atajo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Monitor de cabecera</strong> (ya común en las maquetas)</td><td>ECG, PA invasiva, SpO₂, respiración, PVC, capnografía</td><td>añade presión, flujo y volumen del respirador</td><td>la maqueta M3 nace sobre ese monitor: ≈ 1 M menos</td></tr>
+      <tr><td><strong>Presión dentro del tórax</strong> en el motor (pieza M8 del 3B)</td><td>la CPAP descarga el VI en el edema (cap. 18)</td><td>la PEEP y la PEEP oculta bajan el gasto; la VVS late a latido</td><td>hacerla una vez, ya con PEEP: ≈ 1,5 M menos y sin repetir las pruebas del motor</td></tr>
+      <tr><td><strong>Ácido-base vivo</strong> (ya en la app)</td><td>—</td><td>la ventilación minuto fija la PaCO₂ (hipercapnia permisiva)</td><td>solo una conexión pequeña</td></tr>
+    </tbody>
+  </table></div>
+  <p>Y un puente clínico: el caso de Aurelio acaba en fallo respiratorio y ECMO, que es donde empieza el pulmón.</p>
+  <div class="card franja">
+    <h3>Cómo queda el calendario con el atajo</h3>
+    <ol>
+      <li>Mientras miras la parada 2 del shock, otra sesión hace la <strong>cobertura y la maqueta M3</strong> del pulmón. No espera nadie.</li>
+      <li>La pieza de la presión del tórax (3B) se escribe para la CPAP <strong>y</strong> para el respirador.</li>
+      <li>El pulmón entra en la app <strong>a la vez que el corazón eléctrico (3C)</strong>, cada uno en su carpeta. Llega unas 4 sesiones antes.</li>
+    </ol>
+    <p class="muted">Fusionar los dos bloques en uno no compensa: serían 47 fichas en una sola PR (el bloque 3 ya es 4 veces el 2) y
+    perderías las paradas para elegir.</p>
+  </div>
+</section>
+
+<section>
+  <h2>El plan, encargo a encargo</h2>
+  <p class="muted">Una sesión por fila, como pide la regla de ahorro del 25/10. Cada constructor, una sola pieza y como mucho unos 100 pasos.
+  «Fable» = el modelo más potente, solo donde se diseña o se construye algo nuevo. «Barato» = Sonnet, para todo lo que copia algo hecho.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>#</th><th>Encargo</th><th>Quién</th><th class="n">M</th></tr></thead>
+    <tbody>
+      <tr><td colspan="4"><strong>Bloque 3 · 3A El shock</strong></td></tr>
+      <tr><td>1</td><td>Cerrar la auditoría del shock (2 huecos, 14 menores)</td><td>constructor barato, ~60 pasos</td><td class="n">0,8</td></tr>
+      <tr><td>2</td><td>Motor del shock: gravedad sin saltos, lactato, ScvO₂ y diuresis, fuga capilar, fármacos (datos una sola vez), con pruebas de «paciente posible»</td><td>constructor <strong>Fable</strong></td><td class="n">5,5</td></tr>
+      <tr><td>3</td><td>Cabecera del shock y monitor común en la app (desde la maqueta) + receptor vivo</td><td>2 constructores baratos</td><td class="n">2,4</td></tr>
+      <tr><td>4</td><td><strong>Parada 2</strong>: jueces, profesor, auditor y una vuelta de arreglos</td><td>profesor <strong>Fable</strong> + baratos</td><td class="n">1,7</td></tr>
+      <tr><td colspan="4"><strong>3B La bomba que falla</strong></td></tr>
+      <tr><td>5</td><td>Motor: Impella, balón y ECMO; roturas del IAM (papilar, septo, pared); presión del tórax para CPAP y respirador</td><td>constructor <strong>Fable</strong></td><td class="n">5,5</td></tr>
+      <tr><td>6</td><td>Los aparatos como objetos reales y la placa del SCA, en la app</td><td>2 baratos</td><td class="n">2,2</td></tr>
+      <tr><td>7</td><td>Estudiar en las 10 fichas</td><td>2 baratos + auditor</td><td class="n">2,7</td></tr>
+      <tr><td colspan="4"><strong>3C El ritmo y la parada</strong></td></tr>
+      <tr><td>8</td><td>Corazón eléctrico en la app, trazado de ECG común y FA en el motor</td><td><strong>Fable</strong> + barato</td><td class="n">6,7</td></tr>
+      <tr><td>9</td><td>Estudiar en las 7 fichas</td><td>barato + auditor</td><td class="n">1,8</td></tr>
+      <tr><td>10</td><td><strong>Parada 3</strong>: el bloque entero, jueces, profesor, auditor, revisor y vuelta</td><td>profesor <strong>Fable</strong> + baratos</td><td class="n">3,3</td></tr>
+      <tr><td></td><td>Director (≈ 0,2 por sesión)</td><td>—</td><td class="n">2,0</td></tr>
+      <tr class="tot"><td></td><td>Bloque 3</td><td></td><td class="n">≈ 35</td></tr>
+      <tr><td colspan="4"><strong>Bloque 4 · El pulmón con respirador</strong> (con el atajo)</td></tr>
+      <tr><td>P1</td><td>Cobertura: piezas, pacientes y recorrido de las 21 fichas</td><td>profesor <strong>Fable</strong></td><td class="n">1,2</td></tr>
+      <tr><td>P2</td><td>Fuentes de las 21 fichas contra el PDF (ids y páginas, como en el bloque 3)</td><td>auditor y constructor baratos</td><td class="n">1,7</td></tr>
+      <tr><td>P3</td><td>Maqueta M3 sobre el monitor común, juicio y vuelta</td><td>constructor <strong>Fable</strong> + baratos</td><td class="n">7,2</td></tr>
+      <tr><td>P4</td><td>Pulmón con respirador en la app, con su prueba</td><td>constructor <strong>Fable</strong></td><td class="n">5,5</td></tr>
+      <tr><td>P5</td><td>Unión con el corazón y con el ácido-base</td><td>barato</td><td class="n">0,8</td></tr>
+      <tr><td>P6</td><td>Vista Visual y Estudiar en las 21 fichas</td><td>4 baratos + auditor</td><td class="n">5,3</td></tr>
+      <tr><td>P7</td><td>Parada final del bloque 4</td><td>profesor <strong>Fable</strong> + baratos</td><td class="n">2,7</td></tr>
+      <tr><td></td><td>Director</td><td>—</td><td class="n">1,5</td></tr>
+      <tr class="tot"><td></td><td>Bloque 4</td><td></td><td class="n">≈ 26</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Para comparar: la sesión larga del 10 al 25/10 gastó ≈ 750 M, la mitad en el director. Este plan, con sesiones cortas,
+  se queda en ≈ 61 M para los dos bloques. Las cifras son estimaciones; tras cada sesión se mide con <code>gasto.mjs</code> y se corrige.</p>
+</section>
+
+<section>
+  <h2>Cuánto cambia por usar Fable</h2>
+  <p>Los tokens son casi los mismos; lo que cambia es el precio de cada token. Por precio de lista, Fable cuesta 2,5 veces lo que
+  Opus en lo que escribe y lee nuevo, y algo más (×1,25) en lo que relee. Con la mezcla medida en los agentes, un agente en Fable
+  sale por <strong>unas 2 veces</strong> lo que el mismo agente en Opus, y unas 3 veces lo que uno barato.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Opción</th><th>Qué va en Fable</th><th class="n">Coste</th><th class="n">vs Opus</th></tr></thead>
+    <tbody>
+      <tr><td>Todo lo pesado en Opus (como antes)</td><td>nada</td><td class="n">78</td><td class="n">—</td></tr>
+      <tr><td><strong>Todo lo pesado en Fable</strong> (lo que pediste)</td><td>profesor, cobertura y los 5 constructores de algo nuevo (≈ 31 M)</td><td class="n">122</td><td class="n">+57 %</td></tr>
+      <tr><td>Fable solo para pensar</td><td>profesor y cobertura (≈ 3 M); los constructores nuevos en Opus</td><td class="n">82</td><td class="n">+6 %</td></tr>
+    </tbody>
+  </table></div>
+  <p class="muted">Coste en unidades: 1 unidad = 1 M en el modelo barato (≈ 2 $ a precio de API). Con una suscripción, en vez de dinero
+  es lo rápido que se llega al límite de uso, en la misma proporción. Fable se paga solo si ahorra vueltas: cada vuelta de un
+  constructor potente que no se repite son ≈ 5 M. Se mide en el encargo 2 y se decide con datos para el resto.</p>
+</section>
+
+<section>
+  <h2>Lo que tienes que elegir</h2>
+  <div class="decision">
+    <h3>1 · Las maquetas v2 del bloque 3</h3>
+    <div class="opc rec"><strong>Valen como base: llevarlas a la app.</strong><span class="muted">Se empieza por el encargo 1 y el motor del shock.</span></div>
+    <div class="opc"><strong>Cambiar algo antes.</strong><span class="muted">Dime qué (p. ej. el corazón del paciente, que aún es un esquema); se hace en la maqueta y vuelves a mirar.</span></div>
+  </div>
+  <div class="decision">
+    <h3>2 · El pulmón con respirador</h3>
+    <div class="opc rec"><strong>Con el atajo (recomendado).</strong><span class="muted">Maqueta M3 durante tu parada 2; entra en la app a la vez que el corazón eléctrico.</span></div>
+    <div class="opc"><strong>En su sitio.</strong><span class="muted">Después de cerrar el bloque 3 entero. Unos 2,5 M más y unas 4 sesiones más tarde.</span></div>
+    <div class="opc"><strong>Fusionarlo con el bloque 3.</strong><span class="muted">No lo recomiendo: una PR de 47 fichas y menos paradas para elegir.</span></div>
+  </div>
+  <div class="decision">
+    <h3>3 · Fable</h3>
+    <div class="opc"><strong>En todo lo pesado</strong> (como pediste): +57 %.</div>
+    <div class="opc rec"><strong>Solo para pensar al principio, y medir</strong>: profesor y cobertura en Fable, el motor del shock (encargo 2) en Fable para medirlo; si no ahorra vueltas, los demás constructores en Opus.</div>
+  </div>
+  <div class="decision">
+    <h3>4 · Bradicardias y bloqueos AV</h3>
+    <p>¿Puedes mandar el PDF de la <strong>guía ESC 2021 de estimulación cardiaca</strong> (Eur Heart J 2021;42:3427-3520; en español en
+    Rev Esp Cardiol 2022;75:370-410)? Si no, el corazón eléctrico se hace sin bloqueos AV y quedan anotados como hueco.</p>
+  </div>
+  <p class="muted">Cuando contestes, cada encargo va en una sesión nueva. Lo que veas en el móvil sigue en la rama <code>auto/b3</code> hasta la parada 3.</p>
+</section>
+</main>

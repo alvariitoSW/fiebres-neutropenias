@@ -251,3 +251,61 @@ Las claves de guardado y su formato no cambian (no se pierde el progreso). Difer
 el capilar ahora baraja las opciones; las respuestas no van en el HTML hasta que se contestan; «✗ Qué le habría pasado
 al paciente» (la redacción de REGLAS §8); marcas ✓/✗ además del color; «Había un error: la N». El ácido-base vivo se
 queda con su motor: guarda en otro formato y su «tocar» va por etapas; meterlo obligaba a cambiar su guardado.
+
+## Skill `/ingenieria-reversa` (23/10/2026)
+
+A petición del usuario («mira si con este repositorio nos puede ayudar para tener la skill de /ingeniería-reversa»,
+`aicodeking/leanrea`). leanrea (MIT) es una sola guía de unos 8 KB que dice al agente el comando más rápido por tipo
+de objetivo, sin servidor MCP; su autor la mide ~38 % más rápida y ~35 % más barata que REA (`morluto/rea`) con
+precisión parecida (3 repeticiones, un modelo, una máquina). No se instaló tal cual: casi todo su contenido es para
+binarios y apps de escritorio, y aquí lo que se estudian son webs. Se escribió `.claude/skills/ingenieria-reversa/`
+en español con su método (leer trozos, juntar llamadas, «visto / deducido / no visto», parar con pruebas) y lo
+aprendido con anesthbeta, EchoSuite, AngioView y NavRad: Playwright a 390 px, el código ajeno solo en memoria
+(guardarlo lo bloquea el sistema de permisos y lo prohíbe CLAUDE §7.9), REA solo si aporta, un investigador por web y
+el formato del informe-propuesta.
+
+### `/ingenieria-reversa`, segunda versión (25/10/2026)
+
+A petición del usuario («aplícalo para mejorar la skill»), tras releer la guía completa de leanrea (versión del
+17/10; el 23/10 solo se había leído un resumen). Añadido: presupuesto de 2-4 llamadas por pregunta y no volver a
+comprobar lo visto («cada paso cuesta más que lo que lees»); como mucho 2 capturas por web y comprimidas;
+investigadores con el modelo barato (lección del gasto de la sesión del 23/10); reutilizar el informe que ya exista y,
+en una web a la que se vuelve, comparar primero sus piezas; mapa de la red sin contenido; aviso de imágenes en otro
+subdominio (NavRad); mapas de código fuente primero y receta para leer a trozos en memoria (probada); embellecer en
+memoria; pares de prueba observados en su pantalla para probar después nuestra versión; ruta de leanrea para una app
+de Android. Lo demás de leanrea (binarios de Mac, Windows, Linux) no aplica a webs.
+
+### Contador de gasto por tarea (25/10/2026)
+
+El usuario: «quiero añadir una mejora a la skill /plan-socialista para que también se tenga el uso de tokens por tarea
+para poder optimizar mejor el uso y ahorrar». Nuevo `autonomo/gasto.mjs`: lee las transcripciones que guarda Claude
+Code (la del director y la de cada agente, con su `.meta.json`) y suma por tarea y por agente la entrada, la caché
+escrita, la caché leída y la salida, más un «equivalente» con el peso de cada tipo en el precio (×1, ×1,25, ×0,1, ×5).
+La tarea sale de la descripción del agente, que el director empieza ahora por `[clave]`; el gasto del director se
+reparte por tiempo (aproximado). Al cerrar cada tarea, el director lo copia al parte («Gasto»).
+
+Primera medida, sobre la sesión larga del 10 al 25/10 (bloques 1-3, R1-R13, maquetas): ≈750 M equivalentes.
+- **El director, la mitad (49 %)**: 5.234 turnos con un contexto mediano de 539 k tokens (p90: 712 k). Cada paso relee
+  medio millón de tokens de la caché; es lo que más pesa con diferencia.
+- **Constructores en el modelo potente, 31 %** (47 agentes, 5 M de media; los más caros, 7-13 M, con 150-230 pasos).
+  En el barato, 1,1 M de media.
+- Auditores, profesor, verificadores y revisores de código: 2-4 % cada papel.
+- En los agentes, lo que más pesa es releer su propio contexto (caché leída), no lo que escriben: el gasto crece con
+  el número de pasos.
+- Límite conocido: la transcripción a veces guarda solo la cifra inicial de salida de un mensaje; la salida puede
+  quedarse algo corta.
+
+Con esas cifras, el usuario aprobó (25/10) las cuatro reglas de ahorro propuestas, en la skill («Ahorro medido»):
+sesiones cortas (una tarea o una parada de bloque por sesión; la siguiente la abre el director con `create_session`;
+el límite del tablero pasa de 3 tareas a 1), encargos de una pieza con tope de unos 100 pasos para el constructor,
+modelo potente solo para el profesor, la cobertura y el primer modelo de algo nuevo, y lecturas acotadas (el encargo
+nombra los apartados de `REGLAS.md`; el lector de fuente ya no relee `CLAUDE.md`, que tiene cargado).
+
+## Notas del profesor sobre 10 (25/10/2026)
+
+El usuario cambió la rúbrica durante la parada 1 de `eco-mega`: el profesor puntúa cada punto de REGLAS §7 y §8 del 0
+al 10 y se pasa con **8,75 o más en todos**; si no, se repite la vuelta. Antes era del 1 al 5 y se pasaba con 4 (un 8 sobre
+10). Cambiado en `REGLAS.md` §7, `TABLERO.md`, el agente `profesor` y la skill `plan-socialista`.
+
+El mismo día lo ajustó: **se aprueba con 8 en todos los puntos y la meta es 8,75**; y pidió estudiar cómo usar mejor los
+modelos y los tokens para llegar a esa meta sin más vueltas (bitácora B-023).

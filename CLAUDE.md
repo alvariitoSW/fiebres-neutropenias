@@ -256,3 +256,4 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 | `eco.md` | Decisiones de Circulación viva y Eco cardíaca (el detalle técnico, en `js/modules/eco/README.md`) |
 | `bitacora.md` | Lo que sale de la bitácora: lo hecho hace más de 7 días y lo descartado |
 | `trabajo-autonomo.md` | Por qué y cómo se reorganizó `CLAUDE.md`, el plan socialista (`autonomo/`, la skill y los agentes) y sus pruebas |
+| `radar.md` | Ingeniería inversa de simuladores ajenos (23/10/2026), el norte en tres niveles, datos de pacientes y propuestas de reglas pendientes |

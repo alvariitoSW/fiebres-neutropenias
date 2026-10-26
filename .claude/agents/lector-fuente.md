@@ -6,7 +6,7 @@ model: sonnet
 ---
 Eres el **lector de fuente** del plan socialista (trabajo por equipos del proyecto HUD Clínico UCI).
 
-Antes de nada lee, desde el disco (no te fíes de lo que creas recordar): `CLAUDE.md` y `autonomo/REGLAS.md`.
+Antes de nada lee, desde el disco: `autonomo/REGLAS.md` §1 (contenido clínico). `CLAUDE.md` ya lo tienes cargado.
 
 **Tu trabajo:** leer la fuente que te indique el director y escribir en el archivo que te diga (normalmente
 `/tmp/plan-socialista/<clave>/fuente.md`) un extracto **completo y fiel**, sin resumir por debajo de la fuente:

@@ -13,6 +13,11 @@
 //   · anillo(), arco(): costuras y bandas sobre un cuerpo, solo la mitad visible (acaban en la silueta).
 //   · Lienzo: junta las piezas en una cadena SVG con sus degradados (ids propios por escena).
 //   · seguir(), muelle(), bucle(): movimiento basado en el tiempo; parado fuera de pantalla y con «reducir movimiento».
+//   · El grabado rápido (láminas y aparatos pequeños: el corazón eléctrico, el receptor vivo, la bomba de jeringa):
+//     isometrica() y oblicua(), dos proyecciones fijas con la MISMA forma que camara() (iso, dir, V, L, k); caja3(), la
+//     caja de tres tonos que elige sola sus caras visibles; cilindroV(), cilindroH(), tuboPlano(), tornillo() y regla(),
+//     piezas planas en la lámina; GRABADO_CSS y GRABADO_DEFS (tonos por clase y tramas) con instalarGrabado().
+//   · instalarCss(): cada pieza pone su CSS una sola vez (así pasa a js/core sin tocar el CSS de la app).
 // Colores: solo los tokens de css/variables.css (las mezclas de dos tokens, con color-mix).
 
 // ---------------------------------------------------------------- vectores
@@ -329,7 +334,7 @@ export class Lienzo {
   defsSvg() { return `<defs>${this.defs.join('')}</defs>`; }
 }
 export const lineas = (lista, clase = 'lo') => lista.map((x) => `<path class="iso-l ${clase}" d="${x.d}" opacity="${f1(x.a)}"/>`).join('');
-export const tornillos = (pts, r = 0.55) => pts.map((p) => `<circle class="iso-tornillo" cx="${f1(p[0])}" cy="${f1(p[1])}" r="${r}"/>`).join('');
+export const tornillos = (pts, r = 0.55) => pts.map((p) => tornillo(p[0], p[1], r)).join('');
 
 // El CSS de la pieza: tonos hechos con dos tokens cada uno (papel = fondo de la app)
 export const ISO_CSS = `
@@ -367,3 +372,112 @@ export function bucle(el, tick) {
   new IntersectionObserver((e) => { visible = e[e.length - 1].isIntersecting; if (visible) arrancar(); }, { rootMargin: '120px 0px' }).observe(el);
   return { arrancar, parar: () => { cancelAnimationFrame(raf); raf = 0; } };
 }
+
+
+// ---------------------------------------------------------------- grabado rápido: proyecciones fijas
+// La isométrica de 30°: x e y avanzan cos 30° y sen 30° en pantalla y z sube 1 (con k = 1). Es camara() con la mirada a
+// 35,26° (la diagonal del cubo), así que todo lo de arriba (torno, tubo, caraMatriz) vale igual.
+const ISO_EL = Math.asin(1 / Math.sqrt(3)) * 180 / Math.PI;
+export const isometrica = ({ x = 0, y = 0, k = 1 } = {}) => camara({ az: 45, el: ISO_EL, k: k * Math.sqrt(1.5), o: [x, y] });
+// La oblicua (caballera reducida): el frente (x, z) sin deformar y la profundidad y, que sube hacia la derecha
+// (a = 0,42 y b = 0,34 por unidad). Se ven el frente (y = 0), la tapa y el costado derecho.
+export function oblicua({ x = 0, y = 0, a = 0.42, b = 0.34, k = 1 } = {}) {
+  const V = unit([a, -1, b]), L = unit([-0.55, 0.35, 0.9]);
+  return { k, o: [x, y], V, L, iso: (p) => [x + k * (p[0] + a * p[1]), y - k * (p[2] + b * p[1])],
+    dir: (d) => [k * (d[0] + a * d[1]), -k * (d[2] + b * d[1])], prof: (p) => pto(p, V) };
+}
+
+// ---------------------------------------------------------------- grabado rápido: la caja de tres tonos
+// Una caja de [x, y, z] a [x + w, y + d, z + h] con cualquier proyección. Elige sola sus caras visibles (normal hacia el
+// observador) y les da el tono por la luz: la tapa, la cara clara y la oscura. Dos pieles:
+//   · por clase (el grabado del receptor, con trama): t-sup, t-<tono> y t-osc (+ «lit», el único acento);
+//   · por tonos (el banco plano del corazón eléctrico): { sup, supOp, claro, oscuro }, con su trazo.
+// id, clase y attrs van en el <g>; dentro, lo que se pinta encima (tornillos, rótulos).
+export function caja3(P, [x, y, z], [w, d, h], { tonos = null, tono = 'med', lit = false, id = '', clase = '', attrs = '', dentro = '' } = {}) {
+  const v = (i, j, k) => [x + i * w, y + j * d, z + k * h];
+  const lados = [
+    { n: [1, 0, 0], q: [v(1, 0, 0), v(1, 1, 0), v(1, 1, 1), v(1, 0, 1)] },
+    { n: [-1, 0, 0], q: [v(0, 0, 0), v(0, 1, 0), v(0, 1, 1), v(0, 0, 1)] },
+    { n: [0, 1, 0], q: [v(0, 1, 0), v(1, 1, 0), v(1, 1, 1), v(0, 1, 1)] },
+    { n: [0, -1, 0], q: [v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1)] },
+  ].filter((c) => pto(c.n, P.V) > 1e-6).map((c) => ({ ...c, b: brillo(c.n, P) })).sort((a, b) => a.b - b.b);
+  const sup = [v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), v(0, 1, 1)];
+  const dd = (q) => camino(q.map(P.iso), true), L = lit ? ' lit' : '';
+  // con una sola cara lateral a la vista, esa es la clara
+  const rol = (i) => (lados.length === 1 || i > 0 ? 'claro' : 'oscuro');
+  let s = '';
+  if (tonos) {
+    const st = 'stroke="var(--text-main)" stroke-width=".55" stroke-linejoin="round"';
+    lados.forEach((c, i) => { s += `<path d="${dd(c.q)}" fill="${rol(i) === 'claro' ? tonos.claro || 'var(--card2)' : tonos.oscuro || 'var(--bg-card)'}" ${st}/>`; });
+    if (P.V[2] > 0) s += `<path d="${dd(sup)}" fill="${tonos.sup || 'var(--text-muted)'}" fill-opacity="${tonos.supOp ?? 0.55}" ${st}/>`;
+  } else {
+    lados.forEach((c, i) => { s += `<path class="${rol(i) === 'claro' ? `t-${tono}` : 't-osc'}${L}" d="${dd(c.q)}"/>`; });
+    if (P.V[2] > 0) s += `<path class="t-sup${L}" d="${dd(sup)}"/>`;
+  }
+  return `<g${id ? ` id="${id}"` : ''}${clase ? ` class="${clase}"` : ''}${attrs ? ' ' + attrs : ''}>${s}${dentro}</g>`;
+}
+
+// ---------------------------------------------------------------- grabado rápido: piezas planas de la lámina
+// (En coordenadas de la lámina: la oblicua del receptor las usa tal cual.)
+const f2 = (x) => +(+x).toFixed(2);
+// Un cilindro de eje vertical: tapa elíptica arriba y la sombra en el costado
+export function cilindroV(cx, top, rx, ry, h, { tono = 'med', lit = false, id = '', attrs = '', tapa = true } = {}) {
+  const L = lit ? ' lit' : '';
+  const cuerpo = `M${f2(cx - rx)} ${f2(top)}v${f2(h)}a${f2(rx)} ${f2(ry)} 0 0 0 ${f2(2 * rx)} 0v${f2(-h)}`;
+  const sombra = `M${f2(cx + rx * 0.35)} ${f2(top + ry * 0.94)}v${f2(h)}a${f2(rx)} ${f2(ry)} 0 0 0 ${f2(rx * 0.65)} ${f2(-ry * 0.94)}v${f2(-h)}a${f2(rx)} ${f2(ry)} 0 0 1 ${f2(-rx * 0.65)} ${f2(ry * 0.94)}Z`;
+  return `<g${id ? ` id="${id}"` : ''}${attrs ? ' ' + attrs : ''}><path class="t-${tono}${L}" d="${cuerpo}"/><path class="t-osc" d="${sombra}" style="stroke:none"/>`
+    + (tapa ? `<ellipse class="t-sup${L}" cx="${f2(cx)}" cy="${f2(top)}" rx="${f2(rx)}" ry="${f2(ry)}"/>` : '') + `</g>`;
+}
+// Un cilindro de eje horizontal (x): se ve la cara de la derecha; el cuerpo con su brillo arriba
+export function cilindroH(x0, x1, cy, r, { tono = 'med', id = '', lit = false } = {}) {
+  const ry = r, rx = r * 0.36, L = lit ? ' lit' : '';
+  return `<g${id ? ` id="${id}"` : ''}><path class="t-${tono}${L}" d="M${f2(x0)} ${f2(cy - ry)}H${f2(x1)}a${f2(rx)} ${f2(ry)} 0 0 1 0 ${f2(2 * ry)}H${f2(x0)}a${f2(rx)} ${f2(ry)} 0 0 1 0 ${f2(-2 * ry)}Z"/>`
+    + `<path class="linea-f" d="M${f2(x0 + 1)} ${f2(cy - ry * 0.55)}H${f2(x1 - 1)}"/><ellipse class="t-sup${L}" cx="${f2(x1)}" cy="${f2(cy)}" rx="${f2(rx)}" ry="${f2(ry)}"/></g>`;
+}
+// Un tubo a lo largo de una línea quebrada: contorno, relleno, la luz roja de dentro y un brillo fino
+export function tuboPlano(pts, r, { id = '', luz = true } = {}) {
+  const d = 'M' + pts.map((p) => `${f2(p[0])} ${f2(p[1])}`).join('L');
+  return `<g${id ? ` id="${id}"` : ''}><path d="${d}" style="fill:none;stroke:var(--text-dim);stroke-width:${f2(2 * r + 1.4)};stroke-linejoin:round;stroke-linecap:round"/>`
+    + `<path d="${d}" style="fill:none;stroke:var(--card2);stroke-width:${f2(2 * r)};stroke-linejoin:round;stroke-linecap:round"/>`
+    + (luz ? `<path d="${d}" style="fill:none;stroke:var(--accent-red);stroke-opacity:.22;stroke-width:${f2(2 * r - 1.2)};stroke-linejoin:round;stroke-linecap:round"/>` : '')
+    + `<path d="${d}" style="fill:none;stroke:var(--text-main);stroke-opacity:.35;stroke-width:.6;stroke-linejoin:round" transform="translate(0 ${f2(-r * 0.5)})"/></g>`;
+}
+// Un tornillo (cabeza y ranura). Por debajo de r 0,7, solo la cabeza
+export const tornillo = (x, y, r = 1.5) => `<circle cx="${f2(x)}" cy="${f2(y)}" r="${f2(r)}" style="fill:var(--card2);stroke:var(--text-dim);stroke-width:${r < 0.7 ? 0.3 : 0.5}"/>`
+  + (r < 0.7 ? '' : `<path d="M${f2(x - r * 0.6)} ${f2(y)}h${f2(r * 1.2)}" style="stroke:var(--text-dim);stroke-width:.45"/>`);
+// Las marcas de una regla que cuelgan de su borde (cada «paso»; una mayor cada 5)
+export function regla(x0, x1, y, paso, alto = 2.4) {
+  let h = '';
+  for (let i = 0, x = x0; x <= x1 + 0.01; x += paso, i++) h += `<path class="${i % 5 ? 'linea-f' : 'linea'}" d="M${f2(x)} ${f2(y)}v${f2(i % 5 ? alto : alto * 1.8)}"/>`;
+  return h;
+}
+
+// ---------------------------------------------------------------- grabado rápido: tonos por clase y tramas
+// Tinta crema sobre fondo oscuro, sombra por trama: la tapa clara, el frente medio, el costado oscuro; .lit, el acento.
+export const GRABADO_CSS = `
+.dib .t-sup { fill: var(--card2); stroke: var(--text-dim); stroke-width: .7; stroke-linejoin: round; }
+.dib .t-med { fill: url(#g-media); stroke: var(--text-dim); stroke-width: .7; stroke-linejoin: round; }
+.dib .t-osc { fill: url(#g-densa); stroke: var(--text-dim); stroke-width: .7; stroke-linejoin: round; }
+.dib .t-base { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: .7; stroke-linejoin: round; }
+.dib .linea { fill: none; stroke: var(--text-dim); stroke-width: .7; stroke-linecap: round; stroke-linejoin: round; }
+.dib .linea-f { fill: none; stroke: var(--text-muted); stroke-width: .5; stroke-linecap: round; }
+.dib .linea-h { fill: none; stroke: var(--text-main); stroke-width: .9; stroke-linecap: round; stroke-linejoin: round; }
+.dib .lit { stroke: var(--text-main) !important; stroke-width: 1.2 !important; }
+`;
+export const GRABADO_DEFS = `<pattern id="g-media" width="3.2" height="3.2" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="3.2" height="3.2" style="fill:var(--bg-main)"/><line x1="0" y1="0" x2="0" y2="3.2" style="stroke:var(--text-dim)" stroke-opacity=".32" stroke-width=".6"/></pattern>
+<pattern id="g-densa" width="2.2" height="2.2" patternUnits="userSpaceOnUse" patternTransform="rotate(35)"><rect width="2.2" height="2.2" style="fill:var(--bg-main)"/><line x1="0" y1="0" x2="0" y2="2.2" style="stroke:var(--text-dim)" stroke-opacity=".45" stroke-width=".6"/></pattern>`;
+
+// Cada pieza pone su CSS (y sus tramas) una sola vez, aunque la usen varias figuras
+const instalados = new Set();
+export function instalarCss(clave, css, defs = '') {
+  if (typeof document === 'undefined' || instalados.has(clave)) return;
+  instalados.add(clave);
+  const st = document.createElement('style'); st.dataset.pieza = clave; st.textContent = css; document.head.prepend(st);   // antes que el CSS de la página: la página manda
+  if (defs) {
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '0'); svg.setAttribute('height', '0'); svg.setAttribute('aria-hidden', 'true'); svg.setAttribute('focusable', 'false');
+    svg.style.position = 'absolute'; svg.innerHTML = `<defs>${defs}</defs>`; document.body.prepend(svg);
+  }
+}
+export const instalarGrabado = () => instalarCss('grabado', GRABADO_CSS, GRABADO_DEFS);
+export const instalarIso = () => instalarCss('iso', ISO_CSS);

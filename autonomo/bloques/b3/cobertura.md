@@ -540,3 +540,12 @@ h. `mc-definiciones`: el bloque «Monitorización de la PA» no cita la p. 7 par
    lo hace el director sin parar, salvo que el usuario quiera verlo antes.
 5. ¿Las Mayéuticas de los modelos (cabecera, corazón eléctrico) usan las preguntas de las fichas (una sola fuente, como se
    decidió con el vaso) y añaden solo las de «predice y compruébalo»? Recomendado: sí.
+
+## 12. Cambios de las maquetas v2 (21/10/2026)
+
+- El receptor vivo usa a **Amparo** (76 kg; conversiones por kilo rehechas) en lugar de Paulino, y su caso es el **S4 de
+  Begoña** (anafilaxia con bisoprolol y glucagón).
+- El caso S3 (Aurelio) incluye un paso de **cálculo de la IRVS** = (PAM − PVC)/IC (ec. 14.2, p. 2-3; meta 25-30, Tabla
+  16.2).
+- Hueco del caso S2 (Amparo, pielonefritis obstructiva): falta un paso sobre el control del foco (p. 11).
+

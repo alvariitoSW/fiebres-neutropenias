@@ -5,7 +5,8 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-19 (fases 1, 2 y 4 de Marino en la app: revisiones, mapa, ácido-base vivo y río y mar).
+Última sincronización: 2026-10-26 (PR #28 del Radar fusionada; PR #30 de la eco en borrador; `objetivos-casos` e
+`inventario` en curso en sus ramas).
 
 ---
 
@@ -189,7 +190,7 @@ esta sección.
 | B (estudio) | **profesor diseña** → constructor → verificador + auditor + **profesor juzga** | visual con los modelos grandes, texto para estudiar, recorrido de preguntas y casos | potente |
 | Cierre | revisor → rama propia y propuesta (PR) en borrador con «Ver en el móvil» | que lo pruebes y apruebes | — |
 
-- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 4), vuelve al
+- Si algo suspende (un juez en rojo, algo grave en las fuentes, una nota del profesor por debajo de 8 sobre 10; la meta, 8,75), vuelve al
   constructor. Como mucho 3 vueltas; si no, «necesita humano».
 - **Una tarea por sesión.** Con `/plan-socialista` hace la siguiente del tablero; con `/loop /plan-socialista`
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
@@ -199,8 +200,50 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
+| `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
+| `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
+| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
+| `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
+| `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
+| `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
+| `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
+| `eco-mega` | **B-015 · Megaproyecto de la eco** | 👀 **en revisión**: parada 1 (imagen realista, mandos de imagen y «Señálalo»), [PR #30](https://github.com/alvariitoSW/fiebres-neutropenias/pull/30) en borrador | 2026-10-25 | Ver en el móvil: Eco cardíaca → simulador → «🎚 Mandos de imagen». Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
+| `inventario` | **B-014 · Inventario de estudio** | en curso (26/10), rama `auto/inventario` | 2026-10-25 | |
+| `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
+| `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
+| `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: las dos primeras, hechas (25/10, en main); `objetivos-casos`, en curso (26/10, rama propia); `eco-vci-retenido`, pendiente; `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
+| `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
+| `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
+| `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | ✅ elegido el 26/10: el núcleo entra en la parada 2 de `eco-mega` (P1 potente, pericardio de las aurículas más real, P7 como forma grave con nota); PDF de los huecos los busca el usuario · https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
-| `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | Siguiente: el bloque 2 de Marino. |
+### ⏸ Dónde quedó tee-inversa
+
+- **Informe**: https://claude.ai/artifact/6N5ChQF3E82Ca7DoNqEfaU (parte `autonomo/partes/2026-10-23-tee-inversa.md`).
+- **Cómo está hecho su simulador**: corazón 3D de anatomía fija (Human Reference Atlas, CC BY 4.0) con Three.js; el
+  esófago es una curva por 7 puntos; sonda con 5 mandos (avance, giro, ante/retroflexión, flexión lateral, multiplano);
+  28 vistas + 7 vasculares que viajan entre sí; imagen dibujada (no ecografía); válvulas en A1-P3 y cúspides; rótulos
+  que no se pisan. Ellos ganan en ETE y anatomía del corte; nosotros, en ecografía, fisiología, Doppler y enfermedad.
+- **Esperando tu elección**: paquete **A** (recomendado: colores de estructura, rótulos con enlace al 3D y viaje entre
+  vistas, en la ETT), **B** (ETE medioesofágico y transgástrico con reto) y/o **C** (segmentos de válvula), o números
+  sueltos del 1 al 7.
+
+### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
+
+- **Esperando al usuario (parada 1, 2.ª vuelta)**: las tres maquetas v2 ya pulidas, en `main` y en el móvil:
+  `autonomo/maquetas/b3-shock.html` (monitor de UCI, Impella, balón y ECMO como objetos reales, «¿Qué shock es?»),
+  `b3-ritmo.html` (corazón eléctrico: grafo de conducción y ECG generado) y `b3-receptor.html` (receptor vivo:
+  arteriola y cerraduras de pines). Piezas comunes en `autonomo/maquetas/comun/`. Falta su «ok» o sus cambios.
+- **Hecho y en la rama `auto/b3`** (sin PR aún): las 26 fichas con 290 ids por sección y su página, vista Visual en
+  Merino Cardiología y Neumología, hallazgos de fidelidad arreglados, y Texto | Estudiar en las 9 del shock (152
+  preguntas, casos de Mateo, Amparo, Nerea y Begoña), auditadas (0 graves) y corregidas.
+- **Ya en `main`**: el motor del latido llega a shock sin romperse (2 vueltas), con entrada de soporte (Impella, ECMO,
+  balón); el «← VOLVER A LA FICHA» del ecógrafo.
+- **Siguiente, tras su «ok»**: construir en la app la cabecera del shock (pasar `comun/` a `js/core/`), el receptor
+  vivo y el corazón eléctrico (sub-bloques 3A → 3B → 3C), con jueces, auditor y profesor; el hueco del caso de Amparo
+  (control del foco, p. 11).
+- **Lo que falta de él**: el PDF de la guía ESC 2021 de marcapasos (bradicardias y bloqueos AV).
+- Documentos: `autonomo/bloques/b3/` (encargo, cobertura, farmacos, megaproyecto-*, juicio-maquetas-v2, auditoria-3a).
 
 El resto del tablero sigue `aparcada`.
 
@@ -214,6 +257,29 @@ El resto del tablero sigue `aparcada`.
 - **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
   Salió en R5. ¿La apruebas?
 
+- **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
+  PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
+- **Los PDF de la ASE ya están en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, 26/10): no hace
+  falta abrir `asecho.org` ni Wikimedia. B1, B2, B3 y C1 entran (B2 en potente). La pared por regiones y el
+  infarto (C2) esperan a las coronarias en el motor (decidido el 26/10).
+- **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
+  sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
+  hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:
+  G1 shock (puede empezar ya: Manual UMI y VExUS en `docs/`), G2 inestable y paro (AHA 2025), G3 marcapasos/SCA,
+  G4 tras el dispositivo, G5 neurocrítico, G6 ETE. Espera: ¿puerta «Guardia» nueva en la raíz?, ¿G1 tras la fase 0?,
+  PDF, y abrir `huggingface.co` y `arxiv.org`.
+- **✅ Decidido el 25/10** («estoy de acuerdo con todo»): el plan de integración, el megaproyecto «La UCI en el bolsillo»,
+  la v3 de los 3 modelos del bloque 3, la puerta «Guardia», G1 tras la fase 0, tocar el motor y la anatomía, y B-012 a
+  B-016. Detalle en `autonomo/TABLERO.md` («Encargos aprobados el 25/10/2026») y `docs/historial/radar.md`.
+  **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
+- **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
+  `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
+- **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
+  hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
+  `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
+- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · ESC 2021 de
+  estimulación · ESC de SCA · Di Mario 2005 · ASE 2025 de corazón derecho y diastólica · ASE/EACVI 2015 · ASE/SCA 2013
+  de ETE · temarios de Radiología de tórax y Neurorradiología.
 - **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
   no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
   Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
@@ -232,6 +298,21 @@ El resto del tablero sigue `aparcada`.
 - **Panel de subida**: la clave de la API y desplegar el Worker (`backend/README.md`).
 - **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
   la vez desde la 1.ª vuelta; de ~2 h 45 a ~1-1 h 15 por capítulo). Tu decisión del 14/10: **todavía no**.
+- **🔴 Eco, parada 1 (PR #30)**: mirarla en el móvil y elegir qué mejoras de la imagen (0-8) entran y con qué
+  intensidad. Queda una duda: las mallas abiertas (BodyParts3D, CC BY) frente a todo dibujado por código. La malla de
+  Visible Human ya está decidida: solo como referencia.
+- **🔴 Pasar a tareas el rumbo ya aprobado** (parte del Radar, 26/10): la fase 0 (`f0-*`), la v3 del bloque 3 y las
+  fases 2-4 están aprobadas como rumbo, pero no son filas del tablero, y el plan socialista no las ve. ¿Las convierto?
+- **Propuesta tuya (26/10), para la skill del plan**: al terminar una tarea, el director cierra su propia sesión sin
+  esperar a que la valides, y te llega un informe de las sesiones cerradas (qué se hizo, qué quedó, qué decidir).
+  ¿La apunto como tarea?
+- **Propuestas de regla de los partes (25-26/10)**, ¿las apruebas?
+  - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
+  - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).
+  - En `/ingenieria-reversa`, probar antes el acceso a cada web; si está cerrada, pedirte abrirla (rea-eco).
+  - Una skill nueva pedida en una tarea aprobada va en la PR de esa tarea (Radar).
+  - Las vueltas de arreglo de una maqueta, con el modelo barato (eco-mega; lo mide `notas-meta`).
+  - Al pasar una maqueta a la app, probarla en la app real con toque a 390 px, al lado de la maqueta (eco-mega).
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; cuando se monte, hace falta que fijes un límite de gasto.
 
@@ -273,17 +354,52 @@ El resto del tablero sigue `aparcada`.
 - **Eco cardíaca fuera del atlas**: calibrar la RVS, medir los fps en el móvil, más formas de enfermedad
   (`js/modules/eco/README.md`, «Pendiente»).
 
+- **Visto de paso (25-26/10)**:
+  - Potasio: el K⁺ del modelo no baja de 3,5 (ya avisa, pero el suelo sigue); la ficha no dice si repetir el calcio
+    (hueco de fuente).
+  - Capilar y río y mar: el renglón de la fórmula queda bajo el tablero; con la hoja de mandos abierta hay que bajar.
+  - Eco: la torsión (~7°) y el engrosamiento (+44 %) del corazón no tienen fuente; el README cita Lang 2015 sin el
+    PDF en `docs/`.
+  - Eco: con 1 L de hemorragia, en sístole la cavidad del eje corto no llega a cerrarse (es el motor; revisar con
+    Marino caps. 14-17 si se quiere el «beso» de los papilares).
+  - Eco: con «Mandos de imagen» cerrado, «Señálalo» no se ve. Inofensivo.
+
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Para el mapa visual de Marino**, ya hay ideas de los revisores de R1-R10 y dos tuyas («agua de río y de mar»
-  para los fluidos; **ácido-base como proyecto propio sobre el riñón de PIF Nefrología**, «que sorprenda a nivel
-  artístico») en `autonomo/ideas/marino.md`. Los revisores de R6 y R7 piden, los tres, un **pulmón con respirador**
-  (caps. 23-30).
-- **Inventario de estudio**: una tabla de qué fichas tienen vista Visual, cuáles tienen un modelo grande que las
-  explique y cuáles tienen solo preguntas viejas. Por qué: sirve para ordenar las tareas `estudio` por lo que más
-  ayuda. Es una tarea pequeña de solo lectura.
+- (26/10) **Publicar ya lo hecho del bloque 3.** La rama `auto/b3` tiene, sin PR desde el 23/10: las 26 fichas de
+  Merino Cardiología y Neumología con sus páginas, la vista Visual y Texto | Estudiar en las 9 fichas del shock (152
+  preguntas, 4 casos, auditadas con 0 graves). Hoy no lo ves en el móvil porque espera a las maquetas. Propongo
+  sacarlo en una PR propia mientras decides las maquetas: así ya puedes estudiar el shock.
+- (26/10) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
+  más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
+  la misma tanda evita tocar esas fichas dos veces.
+- (23/10) Las dos propuestas que había (pulmón con respirador e inventario de estudio) te gustaron y pasan a
+  «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-26 · **Radar** (`radar`, B-012, PR #28): norte, hoja de ruta única, fichas de triaje y skill `/radar`.
+- 2026-10-25 · **Potasio, mecanismo prioritario** (`potasio-prioritario`, B-019, en main): el calcio protege, la
+  insulina y el salbutamol meten, solo el riñón, las resinas o la diálisis sacan; al acabar el reloj, revisión por
+  objetivos.
+- 2026-10-25 · **«La fórmula con tus números»** (`formula-comun`, B-018, en main): capilar, río y mar, glomérulo,
+  filtro de la TRR y eco (GC por ITV).
+- 2026-10-25 · **Informe «Un corazón más real»** (`rea-eco`, B-024): https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg.
+  Espera tu elección.
+
+- 2026-10-25 · **Vuelta por los modelos vivos** (`vuelta-modelos`, PR #29): qué mecánica nueva encaja en cada uno de
+  los 14. Informe https://claude.ai/artifact/5hpTv7763RnZUPt9hwMycW. Aprobadas sus 5 mejoras (B-018 a B-022). La app no
+  cambió.
+- 2026-10-25 · **Plan socialista más barato**: contador de gasto de tokens por tarea y por agente, y cuatro reglas de
+  ahorro (una tarea o parada por sesión, encargos de una pieza con tope de ~100 pasos, modelo potente solo para lo
+  nuevo, lecturas acotadas de REGLAS). Aprobadas B-012 a B-017 y el megaproyecto «La UCI en el bolsillo». La app no
+  cambió.
+
+- 2026-10-23 · **Ingeniería inversa de 6 simuladores** (anesthbeta, EchoSuite, AngioView, NavRad con imagen,
+  Radiology Assistant, RitmoLab): 5 informes y el **informe final «Del simulador a la cama»**
+  (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
+  (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
+  no cambió.
 
 - 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
   - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
@@ -319,41 +435,3 @@ El resto del tablero sigue `aparcada`.
     el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
   - Leyenda nueva en tres modelos.
   - Arreglada la célula de la nefrona viva que se quedaba congelada.
-
-- 2026-10-15 · **Plan Marino, revisiones R8-R13** (caps. 31-53 y apéndices, 79 fichas), aprobadas y en la app
-  (PR #10-#15). **La fase 1 de Marino está terminada.**
-  - R8: la gasometría de ejemplo se queda como en el libro, con su nota.
-  - R9: la hipermagnesemia grave, consultada en la web (Manual Merck) y anotada.
-  - R10: el Ringer lactato, consultado en la web (WikEM y StatPearls) y anotado.
-  - R11: los topes de la reversión se quedan.
-  - R12: las abreviaturas valen.
-  - R13: las calculadoras de tóxicos, solo para adultos (20-300 kg).
-
-- 2026-10-15 · **Reglas aprobadas tras R4-R10** (`autonomo/REGLAS.md` §1.8-1.10 y §2.5b, `CLAUDE.md` §5 y §7):
-  - erratas de dosis: dosis habitual + nota visible, con consulta web si hay duda;
-  - notas de interpretación siempre con fuente, y web si hay discordia;
-  - umbrales de las calculadoras comparados redondeados;
-  - SVG recreados con fondo propio.
-- 2026-10-15 · **Plan Marino, revisiones R4-R7** (caps. 14-30, 47 fichas), aprobadas y en la app (PR #6-#9):
-  - R4: vasopresina en U/min con nota, 3.er vasopresor = epinefrina, remisiones «Ficha N» → botones; después,
-    el escenario de bradicardia repuesto con el texto de Marino (lo pediste);
-  - R5: dabigatrán y HNF con nota de errata, CHA₂DS₂-VASc puntuable, tablas que cabían mal a 360 px;
-  - R6: clasificador de riesgo de la EP fiel, esteroides del SDRA, figuras legibles;
-  - R7: descontaminación oral (SOD), notas del manguito y la PImax, clasificador del derrame sin conducta inventada.
-- 2026-10-14 · **Plan Marino, revisiones R1-R3** (caps. 1-13, 29 fichas), aprobadas y en la app (PR #3, #4 y #5):
-  - R1: signo de la RASS, límites de las calculadoras y notas de fuentes (propofol con fuentes externas);
-  - R2: los simuladores de fluidos y de retorno venoso ya dan pacientes posibles;
-  - R3: 7 graves corregidos en Merino HEMATO (TRALI/TACO, PFC:hematíes, 4Ts, HIT) y lo que faltaba del libro.
-- 2026-10-14 · **Mejoras del plan aprobadas**: el comprobador elige un puerto libre y ya no da falsas alarmas de
-  imágenes; recetas Visual por id; primero los archivos modelo; dos tareas a la vez en carpetas aparte.
-
-- 2026-10-14 · **Preguntas para estudiar**: maqueta aprobada, reglas (`REGLAS.md` §8) y el profesor que diseña y
-  juzga.
-- 2026-10-14 · **Plan socialista revisado** tras el piloto: rúbrica «sirve para estudiar», encargos y tipos de tarea.
-- 2026-10-14 · **Plan socialista montado**: skill, agentes, jueces automáticos, regla «paciente posible» y enlace
-  «Ver en el móvil».
-- 2026-10-14 · **Receptores adrenérgicos animados** en Merino Cardiología (Motion).
-- 2026-10-14 · **Atlas cap. 14** (ventrículo derecho) y huecos del Manual UMI.
-- 2026-10-13 · **Atlas caps. 08, 09 y 10** sobre el motor; el atlas en español dentro de Eco cardíaca.
-- 2026-10-13 · **Marino completo** en Libros (caps. 1-11, 31-53 y apéndices) con sus revisiones.
-- 2026-10-13 · **Manual UMI**: bloque neurocrítico y meningitis.

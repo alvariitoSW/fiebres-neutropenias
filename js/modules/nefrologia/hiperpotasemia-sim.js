@@ -46,7 +46,7 @@ export function initHiperpotasemiaSim() {
 
 // ---------- Marcado de la vista Visual ----------
 const MARCADO = `
-<p class="visual-guia">El K⁺ es una nube de cuadrados que vive en el plasma, en la célula o sale del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
+<p class="visual-guia">El K⁺ es una nube de cuadrados que vive en el plasma, en la célula o sale del cuerpo. Cada medida hace una sola cosa: el calcio <span class="hl hl-azul">protege</span> el corazón (no baja el K⁺), insulina, salbutamol y bicarbonato lo <span class="hl hl-azul">meten</span> en la célula y diuréticos, captores y diálisis lo <span class="hl hl-azul">sacan</span> del cuerpo. Elige la causa, da los fármacos de la tabla y corre el reloj.</p>
 <div class="hk-escenario">
   <div class="hk-campo"><label for="hk-causa">Causa</label><select id="hk-causa">${Object.entries(CAUSAS).map(([k, c]) => `<option value="${k}">${c.etiqueta}</option>`).join('')}</select></div>
   <p class="hk-causa-detalle" id="hk-causa-detalle"></p>
@@ -78,6 +78,7 @@ ${leyendaParticulas([
   <div class="hk-nota hk-fila" id="hk-reparto"></div>
 </div>
 <div class="hk-avisos" id="hk-avisos" aria-live="polite"></div>
+<div class="hk-revision" id="hk-revision" aria-live="polite"></div>
 <div class="hk-controles">
   <button type="button" class="visual-mini hk-primario" id="hk-play"></button>
   <button type="button" class="visual-mini" id="hk-rapido" aria-pressed="false">×4</button>
@@ -92,7 +93,8 @@ ${leyendaParticulas([
       ${f.fidelidad ? `<div class="hk-fidelidad">${f.fidelidad}</div>` : ''}
       <div class="hk-estado" id="hk-estado-${f.id}"></div></div>
     <div class="hk-acciones"><button type="button" class="visual-mini hk-dar" id="hk-dar-${f.id}" data-dar="${f.id}">Dar</button>
-      <button type="button" class="visual-link" data-ver="hk-tto-${f.fila}${f.extra ? ',' + f.extra : ''}" aria-label="Ver ${f.nombre} en el texto">Texto ↓</button></div></div>`).join('')).join('')}
+      <button type="button" class="visual-link" data-ver="hk-tto-${f.fila}${f.extra ? ',' + f.extra : ''}" aria-label="Ver ${f.nombre} en el texto">Texto ↓</button></div>
+    <div class="hk-efecto" id="hk-efecto-${f.id}" aria-live="polite"></div></div>`).join('')).join('')}
 </div>
 <p class="hk-aviso-modelo">Modelo didáctico. Los tiempos de inicio y duración salen de la tabla de la ficha; la ficha no dice cuántos mEq/l mueve cada medida ni a qué ritmo sale el K⁺ en cada causa, así que esas cantidades son ilustrativas. "Minutos/hora" (diálisis) y "horas" (diuréticos) no son cifras cerradas: en el modelo la diálisis empieza en unos minutos y ambos siguen mientras corre el reloj. Los puntos no están a escala: en la célula hay 150 mEq/l frente a 4 en el plasma.</p>`;
 
@@ -158,7 +160,7 @@ function avisos(S, m, r, nivel) {
     if (c.pseudo && !S.repetido) a.push(['danger', 'Antes de tratar, confirma con una nueva analítica: una muestra hemolizada da un K⁺ falsamente alto.' + enlace('hk-confirmar')]);
     if (c.pseudo && Object.keys(S.dados).length) a.push(['danger', 'El K⁺ real del paciente es normal: tratar baja un potasio que no estaba alto.']);
     if (r.t && !dado('calcio')) a.push(['danger', 'Hay cambios en el ECG: la ficha pone el gluconato cálcico como primera medida.' + enlace('hk-tto-nota')]);
-    if (r.t && dado('calcio') && m.calcio === 0) a.push(['danger', 'El efecto del calcio (30-60 min) ya ha pasado y el ECG sigue alterado. Puedes repetir la dosis.']);
+    if (r.t && dado('calcio') && m.calcio === 0) a.push(['danger', 'El efecto del calcio (30-60 min) ya ha pasado y el ECG sigue alterado: está sin protección.']);
     if (S.ecg === 'ninguno' && nivel === 3) a.push(['warn', 'ECG normal con K⁺ grave: la gravedad sigue siendo grave (Figura 7).' + enlace('hk-fig7')]);
     if (m.k > 6 && !c.pseudo) a.push(['warn', 'K⁺ &gt;6 mmol/l: monitorización ECG aunque no haya cambios típicos.' + enlace('hk-monitorizacion')]);
     if (dado('salbutamol') && !dado('insulina')) a.push(['warn', 'La monoterapia con β-agonistas falla en el 20-40% de los pacientes; con insulina-glucosa es más eficaz.']);
@@ -171,14 +173,90 @@ function avisos(S, m, r, nivel) {
     return a.map(([e, x]) => `<div class="tfg-estado tfg-estado-${e}">${x}</div>`).join('');
 }
 
+// ---------- Mecanismo prioritario y revisión por objetivos ----------
+// Lo prioritario sale del estado que ya calcula el simulador: ECG alterado sin
+// protección → calcio; K⁺ ≥5 (Figura 7) → bajarlo; y sin salida iniciada → sacarlo.
+const dadoAlguna = (S, lista) => lista.some(f => (S.dados[f.id] || []).length > 0);
+const enCurso = (S, f, act) => { const d = S.dados[f.id] || []; return act[f.id] > 0 || (d.length > 0 && S.t - d[d.length - 1] < f.ini[1]); };
+const cap = t => t.charAt(0).toUpperCase() + t.slice(1);
+
+// Qué hace la medida `f` sobre el mecanismo, antes de registrar la dosis.
+function efectoMedida(S, f, m, r, act) {
+    const papel = GRUPOS[f.grupo].papel, fila = 'hk-tto-' + f.fila;
+    const salida = dadoAlguna(S, ELIMINAN), alto = m.k >= 5;
+    const sin = motivo => ({ util: false, texto: `<strong>${f.nombre}</strong>: no trata el mecanismo prioritario: ${motivo}. No cambia nada.`, ver: fila });
+    const verbo = papel.replace(/^(protege|mete|saca)/, '<span class="hl hl-azul">$1</span>');
+    const pista = { protege: 'Mira el corazón y el ECG.', desplaza: 'Mira los K⁺ que entran en la célula.', elimina: 'Mira los K⁺ que salen por su vía.' }[f.grupo];
+    const si = extra => ({ util: true, texto: `<strong>${f.nombre}</strong>: ${verbo}${extra ? ' ' + extra : ''} <span class="hk-pista">${pista}</span>`, ver: fila });
+    if (S.c.pseudo && !S.repetido) return sin('lo primero es confirmar el K⁺ con una nueva analítica, porque el valor puede ser falso');
+    if (S.c.pseudo) return sin('el K⁺ real del paciente es normal');
+    const ecgSinProteger = r.t && !enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act);
+    if (f.grupo === 'protege') {
+        if (ecgSinProteger) return si('Es lo prioritario: el ECG está alterado.' + ((S.dados.calcio || []).length ? ' Su efecto anterior ya había terminado (30-60 min, tabla) y el ECG seguía alterado.' : ''));
+        return sin(r.t ? 'el ECG ya está protegido' : 'el ECG no tiene cambios que proteger');
+    }
+    if (f.grupo === 'desplaza') {
+        if (f.id === 'bicarbonato' && !S.c.acido) return sin('sin acidosis metabólica el bicarbonato aporta poco: la ficha lo reserva para la acidosis concomitante');
+        if (!alto) return sin(salida ? 'la salida ya está iniciada y el K⁺ está en zona' : 'el K⁺ ya está en zona');
+        return si(ecgSinProteger ? 'Antes, protege la membrana con calcio.' : salida ? '' : 'Falta la salida del cuerpo.');
+    }
+    const sostener = m.desplazado > 0.3;
+    if (!alto && !sostener) return sin('el K⁺ ya está en zona y no hay nada que sostener');
+    if (!alto && salida) return sin('la salida ya está iniciada y el K⁺ está en zona');
+    if (f.id === 'diuretico' && S.renal === 'ir') return { util: false, texto: `<strong>${f.nombre}</strong>: saca el K⁺ por el riñón, pero con insuficiencia renal grave apenas actúa; la hemodiálisis es el método más rápido y seguro en IR grave.`, ver: fila };
+    // «Evita que vuelva a subir…»: consecuencia de fisiología general, no es una frase de la ficha.
+    const dial = f.id === 'dialisis' ? 'La ficha la sitúa en IR grave o si fallan las medidas previas.' : '';
+    return si([alto ? '' : 'Evita que vuelva a subir cuando acabe lo desplazado (fisiología general).', dial].filter(Boolean).join(' '));
+}
+
+// Tres objetivos al acabar el reloj, sin nota: cumplido (✓) o falta (✗), con el mecanismo.
+const ARTICULO = { diuretico: 'los diuréticos de asa', csz: 'el ciclosilicato de zirconio (CSZ)', patiromero: 'el patirómero', dialisis: 'la diálisis' };
+// Un ECG alterado sin calcio en curso más de 10 min (el final del «5-10 min» de inicio del calcio en la tabla) cuenta como sin proteger.
+const UMBRAL_SIN_PROTEGER = FARMACOS.find(f => f.id === 'calcio').ini[1];
+function revision(S, m) {
+    const sal = ELIMINAN.filter(f => (S.dados[f.id] || []).length > 0);
+    const salEfi = sal.filter(f => !(f.id === 'diuretico' && S.renal === 'ir'));
+    const desp = DESPLAZAN.some(f => (S.dados[f.id] || []).length > 0);
+    const calcio = (S.dados.calcio || []).length > 0;
+    const el = (cumple, titulo, porque, ver) => ({ cumple, titulo, porque, ver });
+    // Criterio ilustrativo del simulador: la ficha pone el calcio como «primera medida» ante cambios en el ECG; se da por
+    // buena si se da en los primeros minutos de ECG alterado (≤10 min, final del «5-10 min» de inicio del calcio en la tabla).
+    const aTiempo = calcio && S.tCalcio0 - S.tECG0 <= UMBRAL_SIN_PROTEGER;
+    const largo = `⚠ El efecto del calcio dura 30-60 min (tabla) y el ECG siguió alterado ${fmtT(S.sinProt)} sin protección; lo que lo acorta es bajar el K⁺.${enlace('hk-tto-calcio')}`;
+    const ecg = !S.huboECG
+        ? el(true, 'ECG protegido', S.c.pseudo ? 'El K⁺ real era normal: no había nada que proteger.' : 'No hubo cambios en el ECG que proteger. Aun así, el ECG tiene baja sensibilidad: no descarta riesgo.', 'hk-ecg-sensibilidad')
+        : aTiempo
+            ? { ...el(true, 'ECG protegido', 'El calcio se dio en cuanto el ECG se alteró: protege la membrana, aunque no baja el K⁺ (criterio ilustrativo del simulador).', 'hk-tto-calcio'), aviso: S.sinProt > UMBRAL_SIN_PROTEGER ? largo : '' }
+            : !calcio && S.sinProt <= UMBRAL_SIN_PROTEGER
+                ? el(true, 'ECG protegido', 'El ECG estuvo alterado menos de 10 min (criterio ilustrativo del simulador).', 'hk-tto-calcio')
+                : el(false, 'ECG protegido', calcio ? 'El calcio se dio tarde: la ficha lo pone como primera medida ante cambios en el ECG, y antagoniza el efecto cardíaco aunque no baje el K⁺.'
+                    : 'Hubo cambios en el ECG y no se protegió la membrana: el calcio antagoniza el efecto cardíaco aunque no baje el K⁺.', 'hk-tto-calcio');
+    const zona = m.k < 5
+        ? el(true, 'K⁺ por debajo de 5', (S.kMax < 5 ? 'El K⁺ no llegó a 5 mEq/l (umbral de hiperpotasemia de la ficha).' : `El K⁺ ha bajado a ${coma(m.k)} mEq/l, por debajo de 5 (umbral de hiperpotasemia de la ficha, Figura 7).`)
+            + (m.k <= 3.6 ? ' Está en el límite de la hipopotasemia (<3,5 en la ficha).' : ''), m.k <= 3.6 ? 'hk-fig7' : 'hk-fig7')
+        : el(false, 'K⁺ por debajo de 5', salEfi.length ? `El K⁺ sigue en ${coma(m.k)} mEq/l: la salida iniciada no ha bastado. ${S.renal === 'ir' ? 'La hemodiálisis es el método más rápido y seguro en IR grave.' : 'La ficha reserva la hemodiálisis para IR grave o si fallan las medidas previas.'}`
+            : !desp ? `El K⁺ sigue en ${coma(m.k)} mEq/l: el calcio no lo baja y ninguna medida lo metió en la célula ni lo sacó del cuerpo.`
+            : `El K⁺ sigue en ${coma(m.k)} mEq/l: lo que se mete en la célula vuelve al plasma cuando acaba su efecto; solo la salida del cuerpo lo baja de forma sostenida.`, salEfi.length ? 'hk-tto-nota' : 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
+    const necesita = S.kMax >= 5 && !S.c.pseudo;
+    const salida = salEfi.length ? el(true, 'Salida iniciada', `Has puesto en marcha ${salEfi.map(f => ARTICULO[f.id]).join(' y ')}: saca el K⁺ del cuerpo.`, 'hk-tto-' + salEfi[0].fila)
+        : sal.length ? el(false, 'Salida iniciada', 'Solo se dio el diurético y con insuficiencia renal grave apenas saca K⁺: la ficha pone la hemodiálisis como el método más rápido y seguro en IR grave.', 'hk-tto-dialisis')
+        : !necesita ? el(true, 'Salida iniciada', 'No hacía falta: el K⁺ no llegó a 5 mEq/l.', 'hk-fig7')
+            : el(false, 'Salida iniciada', 'Ninguna medida sacó el K⁺ del cuerpo: solo diuréticos, captores de potasio o diálisis lo eliminan; insulina y salbutamol solo lo guardan en la célula.', 'hk-tto-diuretico,hk-tto-captores,hk-tto-dialisis');
+    return [ecg, zona, salida];
+}
+const htmlRevision = obj => '<p class="section-label">Revisión de las 12 h · sin nota</p>' + obj.map(o =>
+    `<div class="tfg-estado tfg-estado-${o.cumple ? 'ok' : 'danger'}"><strong>${o.cumple ? '✓ Cumplido' : '✗ Falta'} · ${o.titulo}.</strong> ${o.porque}${enlace(o.ver)}</div>${o.aviso ? `<div class="tfg-estado tfg-estado-warn">${o.aviso}</div>` : ''}`).join('')
+    + '<p class="hk-nota">Orientativa: los criterios (K⁺ por debajo de 5, ECG, salida del cuerpo) salen de la ficha; cuánto mueve cada medida es ilustrativo.</p>'
+    + '<div><button type="button" class="visual-mini hk-primario" data-empezar>Empezar de nuevo</button></div>';
+
 // ---------- Montaje de la vista ----------
 function montar(tab, texto, visual) {
     visual.innerHTML = MARCADO;
     const $ = id => visual.querySelector('#' + id);
     const E = {}; // referencias a los elementos que se reescriben, buscadas una sola vez
     for (const id of ['hk-k', 'hk-gravedad', 'hk-k-real', 'hk-k-real-txt', 'hk-repetir', 'hk-ecg-texto', 'hk-riesgo-txt',
-        'hk-riesgo-fill', 'hk-reparto', 'hk-avisos', 'hk-reloj', 'hk-play', 'hk-rapido', 'hk-causa', 'hk-renal', 'hk-ecg-modo', 'hk-causa-detalle']) E[id] = $(id);
-    for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
+        'hk-riesgo-fill', 'hk-reparto', 'hk-avisos', 'hk-reloj', 'hk-play', 'hk-rapido', 'hk-revision', 'hk-causa', 'hk-renal', 'hk-ecg-modo', 'hk-causa-detalle']) E[id] = $(id);
+    for (const f of FARMACOS) { E['estado-' + f.id] = $('hk-estado-' + f.id); E['efecto-' + f.id] = $('hk-efecto-' + f.id); E['dar-' + f.id] = $('hk-dar-' + f.id); }
     const poner = crearPoner();
     const esc = crearEscena(visual, { escena: 'hk-escena', ecg: 'hk-ecg' });
     const { C, reducido, rotulo, particulas, anillos } = esc;
@@ -300,8 +378,11 @@ function montar(tab, texto, visual) {
         poner('reloj', E['hk-reloj'], 'textContent', fmtT(S.t));
         poner('avisos', E['hk-avisos'], 'innerHTML', avisos(S, m, r, nivel));
         poner('play', E['hk-play'], 'textContent', S.t >= T_MAX ? 'Fin del reloj (12 h)' : S.corriendo ? '❚❚ Pausar' : '▶ Correr el reloj');
+        poner('revision', E['hk-revision'], 'innerHTML', S.t >= T_MAX ? htmlRevision(revision(S, m)) : '');
         for (const f of FARMACOS) {
             const dosis = S.dados[f.id] || [];
+            const ef = S.efectos[f.id];
+            poner('efe' + f.id, E['efecto-' + f.id], 'innerHTML', ef ? `<div class="tfg-estado tfg-estado-${ef.util ? 'ok' : 'neutro'}">${ef.util ? '✓' : '○'} ${ef.texto}${enlace(ef.ver)}</div>` : '');
             poner('est' + f.id, E['estado-' + f.id], 'textContent', estadoDosis(dosis, S.t, f, act[f.id]));
             const enCurso = act[f.id] > 0 || (dosis.length && S.t - dosis[dosis.length - 1] < f.ini[1]);
             const [txt, off] = !dosis.length ? ['Dar', false] : f.repetible && !enCurso ? ['Repetir', false] : ['Dado', true];
@@ -325,6 +406,9 @@ function montar(tab, texto, visual) {
         const act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
         cuadrar(m);
         const r = rasgosECG(S, m.k), nivel = nivelGravedad(m.k, r.t);
+        const dtm = S.t - S.tPrev; S.tPrev = S.t;
+        if (r.t) { S.huboECG = true; if (S.tECG0 === null) S.tECG0 = S.t; if (!enCurso(S, FARMACOS.find(x => x.id === 'calcio'), act)) S.sinProt += dtm; }
+        S.kMax = Math.max(S.kMax, m.k);
         leer(m, r, nivel, act);
         dibujar(m, act, nivel);
         esc.pintarECG(r, latido, `${r.t}${r.qrs}${r.fv}`);
@@ -336,6 +420,7 @@ function montar(tab, texto, visual) {
         S = {
             c, renal: E['hk-renal'].value, ecg: E['hk-ecg-modo'].value, t: 0, corriendo: false, dados: {}, repetido: false,
             anadido: { acido: 0, lisis: 0, aporte: 0 }, eliminado: { orina: 0, heces: 0, dial: 0 }, picoDesplazado: 0,
+            efectos: {}, huboECG: false, tECG0: null, tCalcio0: null, sinProt: 0, tPrev: 0, kMax: 0,
         };
         E['hk-causa-detalle'].innerHTML = c.texto + enlace(c.fuente);
         crearParticulas();
@@ -357,7 +442,13 @@ function montar(tab, texto, visual) {
     E['hk-repetir'].addEventListener('click', () => { S.repetido = true; paso(); });
     visual.addEventListener('click', e => {
         const dar = e.target.closest('[data-dar]');
-        if (dar && !dar.disabled) { (S.dados[dar.dataset.dar] ||= []).push(S.t); paso(); }
+        if (dar && !dar.disabled) {
+            const f = FARMACOS.find(x => x.id === dar.dataset.dar), act = actividades(FARMACOS, S.dados, S.t), m = modelo(S, act);
+            S.efectos[f.id] = efectoMedida(S, f, m, rasgosECG(S, m.k), act);
+            if (f.id === 'calcio' && S.tCalcio0 === null) S.tCalcio0 = S.t;
+            (S.dados[f.id] ||= []).push(S.t); paso();
+        }
+        if (e.target.closest('[data-empezar]')) reiniciar(false);
     });
     enlazarTexto(visual, tab, texto);
     animarMientrasVisible(visual, paso);

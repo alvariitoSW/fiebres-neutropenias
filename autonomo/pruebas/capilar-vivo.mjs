@@ -267,7 +267,7 @@ await p.evaluate(() => { const t = document.createElement('button'); Object.assi
 if (!REDUCIDO) {
   const cdp = await ctx.newCDPSession(p);
   await cdp.send('Emulation.setCPUThrottlingRate', { rate: 4 });
-  await p.evaluate(() => { window.__cpvPruebas().vaciarFotogramas(); document.querySelector('[data-cpv-estado="sepsis"]').click(); });
+  await p.evaluate(() => { window.__cpvPruebas().vaciarFotogramas(); document.querySelector('[data-cpv-estado="sepsis"]').click(); document.getElementById('cpv-escena')?.scrollIntoView({ block: 'start' }); });
   await p.waitForTimeout(3000);
   const f = (await T()).bucle.fotogramas;
   ok(f.n > 20 && f.medio < 20, `fotograma medio con CPU ×4: ${f.medio} ms (n=${f.n}, máx ${f.max})`);

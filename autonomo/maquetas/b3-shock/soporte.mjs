@@ -2,21 +2,14 @@
 // node (pruebas) y en el navegador. Lee y mueve el MISMO motor del latido de la app (js/modules/eco/motor.mjs), sin
 // copiarlo: cada cifra del monitor, de las consolas y de los aparatos sale de aquí.
 //
-// Lo que el motor aún no tiene y este archivo le añade (en la app irá dentro de flujos() y presiones() del motor, con
-// pruebas en js/modules/eco/pruebas/soporte.test.mjs; aquí envuelve su paso() y mueve el volumen tras cada paso de
-// 0,1 ms, que es lo mismo con un desfase de un paso):
-//   · BALÓN DE CONTRAPULSACIÓN: volumen que desplaza en la aorta. Se hincha al cerrarse la aórtica (fases E-G y A del
-//     motor) y se vacía al empezar la fase B (contracción isovolumétrica), como dice Marino (cap. 16, p. 45,
-//     docs/marino-2024-shock-caps14-17.pdf#page=45). Entra como volumen sin tensión de la aorta que se resta:
-//     paoDist = (vao + vBalon − vuAo) / cAo. El pico diastólico y la muesca de antes de la eyección salen solos.
-//     35-40 mL de helio (p. 45); la velocidad de inflado y vaciado, ilustrativa.
-//   · IMPELLA: fuente de flujo continuo del VI a la aorta, 2,5-5,5 L/min según el catéter (p. 47). Cae si el VI se vacía
-//     (las paredes se tocan: fisiología general; el umbral, ilustrativo). Modo «gasto total»: un lazo mide el gasto
-//     nativo y ajusta solo la bomba para llegar al total pedido (p. 47).
-//   · ECMO VENOARTERIAL: saca sangre de las venas y la devuelve a la aorta (p. 48-49), hasta 5-6 L/min. Cae si las
-//     venas se vacían (ilustrativo). VENTEO: drenaje del VI hacia el circuito (p. 48-49), o el balón o el Impella a la
-//     vez (p. 48). Que la presión de la aorta frene al VI débil, que este se dilate y que suba la PCP no se escribe: sale
-//     del motor.
+// Los aparatos ya están en el motor (entrada p.soporte = { impella, ecmo, venteo (L/min), balon (mL) }: motor.mjs,
+// función soporte(), Marino cap. 16, p. 45-49, docs/marino-2024-shock-caps14-17.pdf): el balón se hincha al cerrarse la
+// aórtica y se vacía con la onda R; el Impella saca del VI y el ECMO de las venas, y las dos bombas pierden flujo si el VI o
+// las venas se vacían. Aquí solo queda lo que es de la maqueta (en la app irá a js/modules/eco/soporte.mjs):
+//   · los mandos de cada aparato (cuál está puesto, el venteo, los 35-40 mL del balón) traducidos a p.soporte;
+//   · el modo «gasto total» del Impella: un lazo mide el gasto por la válvula y ajusta solo la bomba para llegar al total
+//     pedido (p. 47; el lazo, ilustrativo);
+//   · lo que la cabecera lee por latido: cuántos latidos abre la aórtica, el pico diastólico y la presión al abrirse.
 //   · FÁRMACOS (pieza 4 de la cobertura): mueven parámetros del motor en la DIRECCIÓN de la ficha; la magnitud,
 //     ilustrativa. Noradrenalina: β (contractilidad y FC) por debajo de 10 µg/min, α (resistencias y venoconstricción)
 //     por encima, techo a 30 (Marino, cap. 14, p. 12-13). Vasopresina 0,03 U/min: vasoconstricción (p. 15-16).
@@ -31,7 +24,6 @@ import { bolo } from '../../../js/modules/eco/maniobras.mjs';
 import { derivar, estadoDe, satDe } from '../../../js/data/capilar-vivo-data.js';
 
 export const LMIN = 1000 / 60;             // mL/s por cada L/min
-const suave = (x) => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
 
 // ---------------------------------------------------------------- aparatos: las cifras de la fuente
 export const APARATO = {
@@ -39,10 +31,7 @@ export const APARATO = {
   impella: { flujo: [2.5, 5.5], pagina: 47 },                         // p. 47
   ecmo: { flujoMax: [5, 6], temperatura: 37, pagina: 48 },            // p. 48-49
 };
-// Constantes del modelo (ilustrativas: la fuente no las da)
-const TAU_INFLA = 0.03, TAU_VACIA = 0.02;      // s: el helio entra y sale rápido (p. 45: «rapidly»), cuánto, ilustrativo
-const VI_SUCCION = [6, 22];                    // mL del VI: por debajo de 6 la bomba no saca nada; desde 22, todo
-const VEN_SUCCION = [0.15, 1.2];                 // mmHg venosos: lo mismo para la cánula del ECMO
+// Constantes de la maqueta (ilustrativas: la fuente no las da)
 const VENTEO_DRENAJE = 0.8;                    // L/min que drena la cánula del VI (ilustrativo)
 const TAU_TOTAL = 3;                           // s del lazo del «gasto total» del Impella (ilustrativo)
 
@@ -67,13 +56,15 @@ export const ESCENARIOS_EXTRA = {
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
-// Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb }
+// Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
+// eroaMitral (cm², la insuficiencia mitral del motor) }
 export function prepararMotor(rec, segundos = 40) {
   const m = crearMotor();
   m.correr(12);
   if (rec.kEdema != null) m.p.kEdema = rec.kEdema;
   ESC[rec.esc]?.aplicar(m, rec.g);
   if (rec.volemia) m.s.vven += rec.volemia;
+  if (rec.eroaMitral) m.p.eroaMitral = rec.eroaMitral;   // rotura del papilar: insuficiencia mitral aguda (cap. 16, p. 38); el orificio, ilustrativo
   m.p.tEscenario = m.s.t;
   return m;
 }
@@ -81,12 +72,15 @@ export function prepararMotor(rec, segundos = 40) {
 // ---------------------------------------------------------------- la envoltura: aparatos + fármacos sobre el motor
 export function crearCabecera(rec, { asentar = 40 } = {}) {
   const m = prepararMotor(rec);
-  const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc, vuAo: m.p.vuAo };
+  const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
   const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, na: 0, vaso: false, dobuta: false };
-  const st = { vBalon: 0, qImp: 0, qImpObj: 3.5 * LMIN, qEcmo: 0, qVent: 0, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0 };
+  // lo que miran los dibujos: el balón y las bombas, del motor; lo que pide el Impella y las vueltas, de la maqueta
+  const ms = m.s;
+  const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
+    get vBalon() { return ms.vBalon; }, get qImp() { return ms.qImp; }, get qEcmo() { return ms.qEcmo; }, get qVent() { return ms.qVent; } };
   let acum = nuevo(), ultimoLat = m.s.nLatido, lectura = null, historiaAo = [];
   let cris = 0, sangre = 0;
-  function nuevo() { return { dt: 0, imp: 0, ecmo: 0, vent: 0, balonMax: 0, aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
+  function nuevo() { return { aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
 
   // Fármacos y vasopresores: multiplicadores sobre lo basal del paciente (dirección de la ficha; magnitud ilustrativa)
   function aplicarFarmacos() {
@@ -104,54 +98,36 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   }
 
   function paso(dt = 0.0001) {
-    const s = m.s, p = m.p;
     const conBalon = ajuste.soporte === 'balon' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'balon');
     const conImp = ajuste.soporte === 'impella' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'impella');
     const conEcmo = ajuste.soporte === 'ecmo';
-    // balón: inflado de E a A (tras cerrarse la aórtica, toda la diástole), vacío de B a D
-    const hinchar = conBalon && (s.fase === 'E' || s.fase === 'F' || s.fase === 'G' || (s.fase === 'A' && s.nLatido > 0));
-    const objB = hinchar ? ajuste.balon : 0;
-    st.vBalon += (objB - st.vBalon) * (1 - Math.exp(-dt / (hinchar ? TAU_INFLA : TAU_VACIA)));
-    p.vuAo = base.vuAo - st.vBalon;
+    if (conImp && ajuste.total != null && ajuste.soporte === 'impella') st.qImpObj += (st.impTotalObj - st.qImpObj) * dt / TAU_TOTAL;
+    else st.qImpObj = ajuste.impella * LMIN;
+    m.p.soporte = conBalon || conImp || conEcmo ? { balon: conBalon ? ajuste.balon : 0, impella: conImp ? st.qImpObj / LMIN : 0,
+      ecmo: conEcmo ? ajuste.ecmo : 0, venteo: conEcmo && ajuste.venteo === 'drenaje' ? VENTEO_DRENAJE : 0 } : null;
     m.paso(dt);
-    // Impella: del VI a la aorta
-    if (conImp) {
-      if (ajuste.total != null && ajuste.soporte === 'impella') st.qImpObj += (st.impTotalObj - st.qImpObj) * dt / TAU_TOTAL;
-      else st.qImpObj = ajuste.impella * LMIN;
-      const f = suave((s.vvi - VI_SUCCION[0]) / (VI_SUCCION[1] - VI_SUCCION[0]));
-      st.qImp = st.qImpObj * f;
-      s.vvi -= st.qImp * dt; s.vao += st.qImp * dt;
-      st.rotor += st.qImpObj / LMIN * dt;               // vueltas del dibujo (ralentizado; las rpm reales, sin fuente)
-    } else st.qImp = 0;
-    // ECMO: de las venas (y del VI si se ventea) a la aorta
-    if (conEcmo) {
-      const f = suave((s.pven - VEN_SUCCION[0]) / (VEN_SUCCION[1] - VEN_SUCCION[0]));
-      st.qEcmo = ajuste.ecmo * LMIN * f;
-      st.qVent = ajuste.venteo === 'drenaje' ? Math.min(st.qEcmo, VENTEO_DRENAJE * LMIN * suave((s.vvi - VI_SUCCION[0]) / (VI_SUCCION[1] - VI_SUCCION[0]))) : 0;
-      s.vven -= (st.qEcmo - st.qVent) * dt; s.vvi -= st.qVent * dt; s.vao += st.qEcmo * dt;
-      st.rodete += ajuste.ecmo * dt * 0.6;
-    } else { st.qEcmo = 0; st.qVent = 0; }
-    // por latido
-    acum.dt += dt; acum.imp += st.qImp * dt; acum.ecmo += st.qEcmo * dt; acum.vent += st.qVent * dt;
-    acum.balonMax = Math.max(acum.balonMax, st.vBalon); if (s.vAo && s.qAo > 2) acum.aoAbre = true;
-    if (st.vBalon > 20) acum.picoDia = Math.max(acum.picoDia, s.pao);
-    // la presión de la aorta cuando se abre la válvula (la que el vaciado del balón baja, p. 45)
+    const s = m.s;
+    if (conImp) st.rotor += st.qImpObj / LMIN * dt;         // vueltas del dibujo (ralentizado; las rpm reales, sin fuente)
+    if (conEcmo) st.rodete += ajuste.ecmo * dt * 0.6;
+    // por latido: si abre la aórtica, el pico diastólico con el balón y la presión de la aorta al abrirse la válvula
+    if (s.vAo && s.qAo > 2) acum.aoAbre = true;
+    if (s.vBalon > 20) acum.picoDia = Math.max(acum.picoDia, s.pao);
     if (s.vAo && !acum.aoAntes && acum.teleDia == null) acum.teleDia = s.paoDist;
     acum.aoAntes = s.vAo;
     if (s.nLatido !== ultimoLat) { ultimoLat = s.nLatido; cerrar(); }
   }
   function cerrar() {
     const u = m.ultimo; if (!u) { acum = nuevo(); return; }
-    const T = acum.dt || u.periodo;
-    const imp = acum.imp / T / LMIN, ecmo = acum.ecmo / T / LMIN, vent = acum.vent / T / LMIN;
     historiaAo.push(acum.aoAbre); if (historiaAo.length > 6) historiaAo.shift();
-    const gcNativo = Math.max(0, u.gc);                       // lo que sale por la válvula aórtica (el reflujo de cierre, fuera)
-    const gcTotal = gcNativo + imp + ecmo;                    // lo que llega al cuerpo (el venteo va dentro del ECMO)
+    // el motor separa el gasto: por la válvula (gcValvula, ≥0), el Impella, el ECMO (con el venteo dentro) y el total (gc)
+    const gcNativo = u.gcValvula, imp = u.gcImpella, ecmo = u.gcEcmo, vent = u.gcVenteo, gcTotal = u.gc;
     if (ajuste.total != null && ajuste.soporte === 'impella') st.impTotalObj = Math.min(5.5, Math.max(2.5, ajuste.total - gcNativo)) * LMIN;
-    lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, balon: acum.balonMax,
+    // lo que pide cada bomba (L/min): si saca menos, es que no le llega sangre (el VI o las venas, casi vacíos)
+    const impPide = (ajuste.soporte === 'impella' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'impella')) ? st.qImpObj / LMIN : 0;
+    const ecmoPide = ajuste.soporte === 'ecmo' ? ajuste.ecmo : 0;
+    lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, impPide, ecmoPide, totalPide: ajuste.soporte === 'impella' ? ajuste.total : null, balon: u.balon,
       aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema,
       picoDia: acum.picoDia, teleDia: acum.teleDia };
-    // si la aórtica no abre, el motor no cierra bien la fase; la RVS se lee con el flujo que cruza el lecho (ya lo hace)
     acum = nuevo();
   }
   function correr(seg, dt = 0.0001) { const n = Math.round(seg / dt); for (let i = 0; i < n; i++) paso(dt); return lectura; }
