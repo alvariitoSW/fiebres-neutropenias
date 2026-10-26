@@ -162,6 +162,19 @@ Las páginas («pág. ?») las pone el lector de fuente en el encargo 0. El PDF 
 5. B2 en barato con riesgo de segunda vuelta (+0,8 M), o directamente potente (+4 M). Propongo barato.
 6. Si el escenario de estenosis aórtica (A3) no tiene ficha en la app, ¿se hace solo el tejido «calcio» sin escenario?
 
+## 5 bis. Decisiones del usuario (26/10)
+
+1. **Malla de Visible Human: solo como referencia de forma** para B2, nunca como corazón ni en el repositorio. Antes,
+   comprobar su licencia en origen (HuBMAP, «Heart, Female v1.2», DOI 10.48539/HBM384.VWVH.465, CC BY 4.0 según el JSON
+   de anesthbeta) y citarla. Se mira o mide fuera del repositorio; lo que entra son proporciones con su cita, y
+   siempre detrás de Lang 2015 (si discrepan, manda la guía y se anota).
+2. **Cortina aorto-mitral (B5): sí.**
+3. **Pared por regiones (C2): espera a las coronarias en el motor.** Este bloque queda en unos 17 M (+4 M por B2 en
+   potente).
+4. **B2 (VI menos de bala y aurículas) en potente** desde la primera vuelta.
+5. Sombra del calcio (A3): sin respuesta expresa; por la regla de no inventar, si no hay ficha de estenosis aórtica
+   se hace solo el tejido «calcio» con su sombra, sin escenario.
+
 ## 6. No visto / riesgo
 
 - Las cifras de torsión (8,1° / 8,5°) salen del resumen del buscador, sin abrir el artículo: no se usan hasta tener el

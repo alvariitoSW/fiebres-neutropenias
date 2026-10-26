@@ -389,8 +389,8 @@ real» (https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg) · en la misma rama `
   
   Todo en modelo barato, salvo lo que el informe marca como potente.
 - **Con los PDF, ya en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, subidos el 26/10): B1, B2
-  (en modelo barato, propuesta del informe, supongo), B3 y C1 pueden entrar en la misma parada. C2 (pared por regiones
-  e infarto) espera una decisión del usuario: en este bloque o cuando las coronarias entren en el motor.
+  (**en potente desde la primera vuelta**, decisión del usuario el 26/10), B3 y C1 entran en la misma parada. **C2
+  (pared por regiones e infarto) espera a que las coronarias entren en el motor** (decisión del usuario el 26/10).
 - **Malla de Visible Human**: nunca como corazón de la app; sí como **referencia de forma** al corregir el VI (B2).
 - Ya no hace falta abrir Wikimedia: la versión 2 comprobó las licencias en Commons.
 
