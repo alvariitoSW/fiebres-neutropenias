@@ -10,7 +10,8 @@
 //     v puede ser una función), papel ({ mm, base }: el papel milimetrado del ECG, 1 mm y 5 mm) y ref (una 2.ª curva
 //     punteada, la de «sin balón»).
 //   → montar(), ver(lista), rotulo(k, txt), empujar(valores), llenar(fn), pintar(), capa(k), fondo(k), dato(nombre),
-//     yDe(k, v), x(i), altoDe(k), NP, cursor
+//     yDe(k, v), x(i), altoDe(k), NP, cursor, tramo(k, nombre, i0, i1) y borrarTramos() (señalar un trozo de curva)
+//   canalesRespiratorios({ peep }), MONITOR_RESP_CSS, instalarMonitorResp(): los canales paw, flujo y vol del respirador
 //     empujar: { <k>: valor, <k>Ref: valor, …otros } — lo que no es un canal se guarda tal cual (dato('t'), dato('r')).
 //   pintarCifras(el, celdas, { tapado })  la columna de cifras: { k, canal, cls, et, u, v, obj, marca, estado, alto }
 //   ecgLatido(t, T, pr)  un latido de ECG ilustrativo (P, QRS, T) para los monitores que no generan el suyo
@@ -54,7 +55,7 @@ export function crearMonitor(svg, { canales, margen = 26, hueco = 4, borrar = 6,
       }
       if (c.marcas) for (const m of c.marcas) { const yy = f1(yLocal(c, m)); h += `<line x1="${margen}" x2="${W}" y1="${yy}" y2="${yy}" class="mon-rej"/>` + (margen >= 18 && yy > 13 ? `<text x="${margen - 2}" y="${f1(yy + 3)}" class="mon-esc" text-anchor="end">${m}</text>` : ''); }
       for (const l of c.lineas || []) h += `<line data-linea="${l.k}" x1="${margen}" x2="${W}" class="${l.clase || 'mon-65'}"/>` + (l.rot && margen >= 18 ? `<text data-linea-rot="${l.k}" x="${margen - 3}" class="mon-esc ${l.clase || 'mon-65'}-rot" text-anchor="end">${l.rot}</text>` : '');
-      h += `<g data-capa="fondo"></g>`;
+      h += `<g data-capa="fondo"></g><g data-capa="tramos"></g>`;
       if (c.ref) h += `<path data-ref class="mon-ref"/>`;
       h += `<path data-traza class="mon-traza" stroke="${c.col}"/><g data-capa="encima"></g>`;
       const rot = c.rotTxt ?? c.rot;
@@ -101,6 +102,16 @@ export function crearMonitor(svg, { canales, margen = 26, hueco = 4, borrar = 6,
     ver(lista) { visibles.clear(); for (const k of lista) visibles.add(k); montar(); },
     rotulo(k, txt) { if (porK[k]) porK[k].rotTxt = txt; montar(); },
     capa: (k) => svg.querySelector(`#${prefijo}${k} [data-capa="encima"]`),
+    // Un tramo de una curva señalado (para la explicación guiada: «mira este trozo»): rect con data-tramo="nombre"
+    // sobre la capa «tramos» del canal, de la muestra i0 a la i1. borrarTramos() los quita todos.
+    tramo(k, nombre, i0, i1, clase = 'mon-tramo') {
+      const g = svg.querySelector(`#${prefijo}${k} [data-capa="tramos"]`), c = porK[k]; if (!g || !c) return null;
+      const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      r.setAttribute('data-tramo', nombre); r.setAttribute('class', clase);
+      r.setAttribute('x', margen + Math.max(0, i0)); r.setAttribute('width', Math.max(2, Math.min(NP, i1) - Math.max(0, i0)));
+      r.setAttribute('y', 0); r.setAttribute('height', c.alto); r.setAttribute('rx', 3); g.appendChild(r); return r;
+    },
+    borrarTramos() { svg.querySelectorAll('[data-tramo]').forEach((e) => e.remove()); },
     fondo: (k) => svg.querySelector(`#${prefijo}${k} [data-capa="fondo"]`),
     dato: (nombre) => buf[nombre] || otros[nombre] || [],
     yDe: (k, v) => yLocal(porK[k], v),
@@ -155,3 +166,26 @@ export const MONITOR_CSS = `
 .marca.si { color: var(--bg-main); background: var(--accent-green); } .marca.no { color: var(--text-main); background: var(--accent-red); } .marca.sin { color: var(--bg-main); background: var(--text-muted); }
 `;
 export const instalarMonitor = () => instalarCss('monitor', MONITOR_CSS);
+
+// Los tres canales del respirador (el pulmón con respirador, maqueta b3-pulmon): presión en la vía aérea con la línea
+// de PEEP (peep: función que devuelve la PEEP aplicada), flujo con su línea cero y volumen. Se concatenan a los canales
+// de cada maqueta; el barrido (segundos por pantalla) lo decide quien empuja las muestras.
+export function canalesRespiratorios({ peep = () => 5, pawMax = 60, flujoMax = 120, volMax = 1000 } = {}) {
+  return [
+    { k: 'paw', rot: 'Paw', alto: 56, min: 0, max: pawMax, marcas: [30], col: 'var(--accent-yellow)', lineas: [{ k: 'peep', v: peep, clase: 'mon-peep', rot: 'PEEP' }] },
+    { k: 'flujo', rot: 'Flujo', alto: 52, min: -flujoMax, max: flujoMax, marcas: [], col: 'var(--accent-green)', lineas: [{ k: 'cero', v: 0, clase: 'mon-cero', rot: '0' }] },
+    { k: 'vol', rot: 'Vol', alto: 40, min: 0, max: volMax, marcas: [500], col: 'var(--text-dim)' },
+  ];
+}
+export const MONITOR_RESP_CSS = `
+.mon-trazas .mon-cero { stroke: var(--text-dim); stroke-width: .8; opacity: .7; }
+.mon-trazas .mon-cero-rot { fill: var(--text-dim); }
+.mon-trazas .mon-peep { stroke: var(--accent-blue); stroke-dasharray: 3 3; stroke-width: .8; opacity: .8; }
+.mon-trazas .mon-peep-rot { fill: var(--accent-blue); }
+.mon-trazas .mon-tramo { fill: var(--accent-blue); fill-opacity: .16; stroke: var(--accent-blue); stroke-width: .8; stroke-dasharray: 4 3; }
+.mon-trazas .mon-marca { fill: var(--accent-red); }
+.mon-trazas .mon-marca-txt { font: 600 8px var(--sans); fill: var(--accent-red); }
+.c-paw { color: var(--accent-yellow); } .c-flujo { color: var(--accent-green); } .c-vol { color: var(--text-dim); }
+.cifra.c-paw .v { color: var(--accent-yellow); } .cifra.c-flujo .v { color: var(--accent-green); } .cifra.c-vol .v { color: var(--text-dim); }
+`;
+export const instalarMonitorResp = () => instalarCss('monitor-resp', MONITOR_RESP_CSS);
