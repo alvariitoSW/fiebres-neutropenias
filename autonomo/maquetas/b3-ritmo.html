@@ -74,6 +74,11 @@ button:focus-visible, input:focus-visible, summary:focus-visible, a:focus-visibl
 .pendiente-mon { border: 1px dashed var(--line); border-radius: 10px; padding: 10px; font: .8rem/1.4 var(--sans); color: var(--dim); background: repeating-linear-gradient(135deg, transparent 0 8px, rgba(196, 154, 74, .06) 8px 16px); }
 .pendiente-mon b { color: var(--fg); }
 
+.mini-lupa { display: flex; gap: 10px; align-items: center; margin: 0 0 8px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-main); }
+.mini-lupa svg { flex: 0 0 46%; max-width: 46%; height: auto; max-height: 104px; }
+.mini-cap { display: flex; flex-direction: column; gap: 4px; font: .72rem/1.35 var(--sans); color: var(--dim); min-width: 0; }
+.mini-cap b { color: var(--text); font-size: .76rem; }
+.mini-cap button { align-self: flex-start; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 8px; background: transparent; color: var(--dim); font: 600 .68rem var(--sans); }
 /* La escena: el corazón, las lupas y los aparatos (tarjetas al modo Anatomy) */
 .tarjeta { position: relative; border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--bg); }
 .tarj-cab, .tarj-pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 2px 8px; font: .66rem/1.25 var(--sans); color: var(--muted); min-height: 26px; }
@@ -245,6 +250,11 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
       </div>
       <div class="cifras" id="mon-cifras"></div>
     </div>
+  </section>
+
+  <section class="mini-lupa" id="mini-lupa" aria-label="La lupa de este ritmo, junto al monitor" hidden>
+    <svg id="mini-lupa-svg" viewBox="4 312 174 108" role="img" aria-label="La lupa que explica este ritmo"></svg>
+    <div class="mini-cap"><b id="mini-tit"></b><span id="mini-txt"></span><button type="button" id="mini-grande">Ver en grande</button></div>
   </section>
 
   <section class="tarjeta" id="rtm-escena" aria-label="El corazón en corte">
@@ -487,7 +497,7 @@ const MOTOR = (() => {
     const azar = () => { semilla = (semilla * 16807) % 2147483647; return (semilla - 1) / 2147483646; };
     const m = {   // modificadores (cada uno con su fuente en los datos de los estados)
       fcSA: 75, sa: true, navF: 1, navRet: 1, cerrojo: -1, cerrojoFin: -1, apOn: false, ramaD: true, ramaI: true,
-      musV: 1, musA: 1, apd: 0.30, apdExtra: 0, refrA: 0.15, fa: false, fv: false, flOn: false, crOn: false, crRefr: 0.30,
+      musV: 1, hpRet: 1, ondasF: [], musA: 1, apd: 0.30, apdExtra: 0, refrA: 0.15, fa: false, fv: false, flOn: false, crOn: false, crRefr: 0.30,
       pAmp: 1, tAmp: 1, tAncho: 1, sinMecanica: false, faTasa: 0.03, fvTasa: 0.022, navRef: null, foco: null, ocultoHis: 0.31, llenadoMalo: false, contractil: 1, pd: 68, tdp: false,
     };
     const h = { push(e) { heap.push(e); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p].t <= e.t) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } },
@@ -500,7 +510,9 @@ const MOTOR = (() => {
     }
     function apdNuevo(k, t) {
       const d = t - ultimo[k], rr = Math.min(2, Math.max(0.22, d > 5 ? 0.8 : d));
-      return (m.apd + m.apdExtra) * Math.sqrt(rr / 0.8);
+      // la zona que se activa tarde repolariza antes (el gradiente que mantiene la T concordante): el QT no arrastra el QRS ancho entero
+      const b = latidosV[latidosV.length - 1], retraso = b && t - b.fin < 0.05 ? Math.min(0.2, t - b.t0) : 0;
+      return Math.max(0.12, (m.apd + m.apdExtra) * Math.sqrt(rr / 0.8) - 0.55 * retraso);
     }
     function refractario(nd, t) {
       switch (nd.tipo) {
@@ -514,10 +526,12 @@ const MOTOR = (() => {
       }
       return 0.2;
     }
+    const VM = 0.42;   // velocidad base del músculo ventricular (fisiología general): con 1, el bloqueo de rama y la TV daban QRS de 0,2 s
     function factor(nd, tipo) {
-      if (tipo === 'mv' || tipo === 'pkm' || tipo === 'apV' || tipo === 'crV') return m.musV * (m.fv ? 1.0 + 0.8 * azar() : 1);
+      if (tipo === 'mv' || tipo === 'pkm' || tipo === 'apV' || tipo === 'crV') return VM * m.musV * (m.fv ? 1.0 + 0.8 * azar() : 1);
       if (tipo === 'ma' || tipo === 'flA') return m.musA * (m.fa ? 1.0 + 0.8 * azar() : 1);
       if (tipo === 'navR' || tipo === 'navL') return m.navRet;
+      if (tipo === 'his' || tipo === 'rama-d' || tipo === 'rama-i' || tipo === 'pk') return m.hpRet;   // el potasio alto enlentece también el His-Purkinje
       return 1;
     }
     function bloqueado(nd, t) {
@@ -638,8 +652,11 @@ const MOTOR = (() => {
     // Bloqueo unidireccional al arrancar un circuito: el nodo anterior queda refractario
     function arrancarCircuito(lista, t) { const ult = lista[lista.length - 1]; refr[ult.k] = t + 0.1; programar(lista[0].k, t, null); }
     function reiniciarSA(t) { proxSA = t; }
+    // Las ondas de la aurícula que no son una P: dientes de sierra del flúter y ondas f de la FA (se dibujan en el ECG; fisiología general)
+    function ponerOndaF(tipo, t) { m.ondasF.push({ tipo, t0: t, t1: 1e9 }); }
+    function quitarOndaF(t) { for (const o of m.ondasF) if (o.t1 > t) o.t1 = t; }
     function apdActual() { return (m.apd + m.apdExtra); }
-    return { m, reg, pasoNodo, latidosV, latidosA, ultimo, previo, refr, apdK, avanzar, latidosMecanicos, presion, contraccion, contraccionA, efectivo, choque, disparar, arrancarCircuito, reiniciarSA, apd, apdActual,
+    return { m, reg, pasoNodo, latidosV, latidosA, ultimo, previo, refr, apdK, avanzar, latidosMecanicos, presion, contraccion, contraccionA, efectivo, choque, disparar, arrancarCircuito, reiniciarSA, ponerOndaF, quitarOndaF, apd, apdActual,
       get ahora() { return tAhora; }, set proxFA(v) { proxFA = v; }, set proxFV(v) { proxFV = v; }, set proxFoco(v) { proxFoco = v; }, azar, grafo };
   }
 
@@ -668,6 +685,14 @@ const MOTOR = (() => {
       } else if (nd.tipo === 'a') {
         const dp = t - a.t; if (Math.abs(dp) < 0.04) v += AMP.p * m.pAmp * w * Math.exp(-(dp * dp) / (2 * AMP.sp * AMP.sp));
       }
+    }
+    // Ondas F del flúter (diente de sierra: bajada lenta y subida brusca, una por vuelta del circuito, 0,198 s) y ondas f de la FA
+    // (ondulación irregular, 350-450/min): amplitudes ilustrativas, rotuladas en la pantalla
+    for (const o of m.ondasF) {
+      if (t < o.t0 || t > o.t1) continue;
+      const ent = Math.min(1, (t - o.t0) / 0.15);
+      if (o.tipo === 'sierra') { const f = ((t - o.t0) / 0.198) % 1; v += ent * 0.4 * (f < 0.86 ? 0.5 - f / 0.86 : -0.5 + (f - 0.86) / 0.14); }
+      else v += ent * 0.1 * (0.55 + 0.45 * Math.sin(t * 2.1)) * (Math.sin(t * 41) + 0.6 * Math.sin(t * 57 + 1) + 0.4 * Math.sin(t * 29 + 2)) / 1.6;
     }
     // Lesión (ST elevado): una corriente de lesión entre el punto J y la onda T de cada latido (ilustrativo)
     if (extra.lesion) for (const b of mo.latidosV) {
@@ -827,16 +852,16 @@ const ESTADOS = {
     aplicar(mo, t, s) { mo.m.fcSA = s.fcSA || 120; mo.reiniciarSA(t + 0.05); } },
   rama: { fam: 'sinusal', nombre: 'Bloqueo de rama', corto: 'Bloqueo de rama', fuentes: [C.ancho, C.f196],
     frase: ['Una rama no conduce: su ventrículo se activa tarde, de músculo a músculo. QRS ancho aunque el ritmo nazca arriba.', 'ficha · p. 20-21'],
-    aplicar(mo, t, s) { RITMO_BASE(mo); mo.m.ramaD = s.rama !== 'd'; mo.m.ramaI = s.rama === 'd'; mo.reiniciarSA(t + 0.05); } },
+    aplicar(mo, t, s) { RITMO_BASE(mo); mo.m.ramaD = s.rama !== 'd'; mo.m.ramaI = s.rama === 'd'; mo.m.musV = 1.4; mo.reiniciarSA(t + 0.05); } },
   nodal: { fam: 'estrecho', nombre: 'Reentrada nodal', corto: 'Reentrada nodal', fuentes: [C.psvt, C.f192, C.vagal, C.adeno, C.t194],
     frase: ['La onda da vueltas dentro del nodo AV: baja por un carril y vuelve por el otro. Cada vuelta, un latido.', 'ficha · p. 29'],
     aplicar(mo, t) { RITMO_BASE(mo); mo.reiniciarSA(t + 0.05); mo.disparar(teselaDe('sia', 5, 0), t + 0.05 + 0.30); } },
   flutter: { fam: 'estrecho', nombre: 'Flúter auricular', corto: 'Flúter', fuentes: [C.regular, C.hallazgos],
     frase: ['Un solo circuito gira en la aurícula: dientes de sierra. El torniquete deja pasar uno de cada dos (2:1) o de cada tres (3:1).', 'ficha · p. 18-19'],
-    aplicar(mo, t, s) { mo.m.sa = false; mo.m.flOn = true; mo.m.pAmp = 1.8; mo.m.navRef = s.flutter === 3 ? { R: 0.5, L: 0.5, C: 0.45 } : { R: 0.36, L: 0.36, C: 0.30 }; mo.arrancarCircuito(MOTOR.grafo.FL, t + 0.02); } },
+    aplicar(mo, t, s) { mo.m.sa = false; mo.m.flOn = true; mo.m.pAmp = 0; mo.ponerOndaF('sierra', t); mo.m.navRef = s.flutter === 3 ? { R: 0.5, L: 0.5, C: 0.45 } : { R: 0.36, L: 0.36, C: 0.30 }; mo.arrancarCircuito(MOTOR.grafo.FL, t + 0.02); } },
   fa: { fam: 'estrecho', nombre: 'Fibrilación auricular', corto: 'FA', fuentes: [C.irregular, C.faHosp, C.faCons, C.f194, C.t191, C.f195, C.final],
     frase: ['Sin director: la aurícula tiembla y no empuja; el torniquete deja pasar lo que puede. Los latidos muy juntos no llegan a la muñeca.', 'ficha · p. 20-22'],
-    aplicar(mo, t, s) { mo.m.fa = true; mo.m.navRef = { R: 0.28, L: 0.28, C: 0.22 }; mo.m.navF = navParaFC(s.fcFA); mo.m.llenadoMalo = !!s.llenadoMalo; mo.reiniciarSA(t + 0.05); mo.proxFA = t; } },
+    aplicar(mo, t, s) { mo.m.fa = true; mo.m.pAmp = 0.25; mo.ponerOndaF('f', t); mo.m.navRef = { R: 0.28, L: 0.28, C: 0.22 }; mo.m.navF = navParaFC(s.fcFA); mo.m.llenadoMalo = !!s.llenadoMalo; mo.reiniciarSA(t + 0.05); mo.proxFA = t; } },
   tam: { fam: 'estrecho', nombre: 'Taquicardia auricular multifocal', corto: 'TAM', fuentes: [C.irregular, C.f193, C.tam],
     frase: ['Varios focos auriculares disparan por turnos: P de varias formas y PR variable. Busca el pulmón enfermo y el magnesio.', 'ficha · p. 20, 28'],
     aplicar(mo, t, s) {
@@ -845,13 +870,13 @@ const ESTADOS = {
       mo.m.foco = { cada: s.tamCada || 0.5, jitter: 0.24, sitio: (tt, azar) => focos[Math.floor(azar() * focos.length)] }; mo.proxFoco = t + 0.05; } },
   wpw: { fam: 'estrecho', nombre: 'Wolff-Parkinson-White', corto: 'WPW', fuentes: [C.wpw],
     frase: ['Un atajo a través del anillo, sin torniquete: PR corto y onda delta antes del QRS.', 'ficha · p. 27'],
-    aplicar(mo, t, s) { mo.m.apOn = true; mo.m.fcSA = 75; if (s.wpwFa) { mo.m.fa = true; mo.m.navRef = { R: 0.28, L: 0.28, C: 0.22 }; mo.m.navF = s.wpwNodo ? 2.4 : 1.1; mo.proxFA = t; } mo.reiniciarSA(t + 0.05); } },
+    aplicar(mo, t, s) { mo.m.apOn = true; mo.m.fcSA = 75; if (s.wpwFa) { mo.m.fa = true; mo.m.pAmp = 0.25; mo.ponerOndaF('f', t); mo.m.navRef = { R: 0.28, L: 0.28, C: 0.22 }; mo.m.navF = s.wpwNodo ? 2.4 : 1.1; mo.proxFA = t; } mo.reiniciarSA(t + 0.05); } },
   tv: { fam: 'ancho', nombre: 'Taquicardia ventricular', corto: 'TV', fuentes: [C.tv, C.tvsvt, C.f197, C.f198], paciente: 'hugo',
     frase: ['QRS ancho y regular, 140-200 lpm, de comienzo brusco. Las P van por libre: aurículas y ventrículos laten por separado.', 'ficha · p. 31-32'],
-    aplicar(mo, t) { RITMO_BASE(mo); mo.m.crOn = true; mo.m.musV = 0.85; mo.reiniciarSA(t + 0.12); mo.arrancarCircuito(MOTOR.grafo.CR, t + 0.02); } },
+    aplicar(mo, t) { RITMO_BASE(mo); mo.m.crOn = true; mo.m.musV = 1.35; mo.reiniciarSA(t + 0.12); mo.arrancarCircuito(MOTOR.grafo.CR, t + 0.02); } },
   aberrancia: { fam: 'ancho', nombre: 'Supraventricular con aberrancia', corto: 'Aberrancia', fuentes: [C.ancho, C.tvsvt, C.f196, C.f198, C.madeja],
     frase: ['Una reentrada nodal que baja con una rama bloqueada: QRS ancho que parece una TV.', 'ficha · p. 31'],
-    aplicar(mo, t) { RITMO_BASE(mo); mo.m.ramaI = false; mo.reiniciarSA(t + 0.05); mo.disparar(teselaDe('sia', 5, 0), t + 0.05 + 0.30); } },
+    aplicar(mo, t) { RITMO_BASE(mo); mo.m.ramaI = false; mo.m.musV = 1.4; mo.reiniciarSA(t + 0.05); mo.disparar(teselaDe('sia', 5, 0), t + 0.05 + 0.30); } },
   torsade: { fam: 'ancho', nombre: 'QT largo y torsade de pointes', corto: 'Torsade', fuentes: [C.torsade, C.t195, C.qtc, C.f199, C.tdpManejo, LA.pa], paciente: 'hugo',
     frase: ['Lo que alarga la repolarización alarga el QT. Con el QTc por encima de 0,5 s, la puerta queda abierta a la torsade.', 'ficha · p. 34-35'],
     aplicar(mo, t, s) { RITMO_BASE(mo); mo.m.apdExtra = qtExtra(s); mo.reiniciarSA(t + 0.05);
@@ -892,17 +917,18 @@ function focoGiratorio(t) {
 }
 // Lo que alarga el QT (Tabla 19.5 y p. 34): cuánto alarga cada uno es ilustrativo, ajustado para que la hoja de Hugo
 // (haloperidol + claritromicina + K⁺ 3,1 + Mg²⁺ 1,4) dé el QT de su caso: 520 ms a 75 lpm.
-const QT_ALARGA = { haloperidol: 0.046, claritromicina: 0.036, amiodarona: 0.036, kBajo: 0.022, mgBajo: 0.016, caBajo: 0.02 };
+const QT_ALARGA = { haloperidol: 0.058, claritromicina: 0.046, amiodarona: 0.046, kBajo: 0.028, mgBajo: 0.02, caBajo: 0.025 };
 const qtExtra = s => Object.entries(QT_ALARGA).reduce((a, [k, v]) => a + (s.qt && s.qt[k] ? v : 0), 0);
 // El potasio (De Sequera 2024, p. 21): ~6,5 T picudas; >7 PR largo, sin P y luego QRS ancho; >8 el QRS se funde con la
 // T en una onda sinuosa. Cuánto cambia cada parámetro del modelo: ilustrativo.
 function aplicarK(mo, k) {
   const m = mo.m, r = (a, b) => clamp((k - a) / (b - a), 0, 1);
   m.tAmp = 1 + 1.7 * r(5.5, 6.6); m.tAncho = 1 - 0.42 * r(5.5, 6.6) + 0.55 * r(7.8, 8.6);
-  m.apd = 0.30 - 0.05 * r(5.5, 7);
+  m.apd = 0.30 - 0.02 * r(5.5, 7);
   m.navRet = 1 + 0.75 * r(7, 8);
   m.pAmp = 1 - r(7, 7.6);
-  m.musV = 1 + 1.4 * r(7.2, 8) + 1.6 * r(8, 8.6);
+  m.hpRet = 1 + 3.2 * r(7.2, 8.2) + 0.9 * r(8.2, 8.6);
+  m.musV = 1 + 1.2 * r(7.2, 8) + 1.2 * r(8, 8.6);
 }
 
 // ---------- Explicación guiada de cada estado (3-5 pasos que señalan el dibujo) ----------
@@ -1110,6 +1136,53 @@ const RECORRIDO = [
       { t: 'Adrenalina 1 mg cada 3-5 min, y compresiones.', ok: true },
       { t: 'Lidocaína 1-1,5 mg/kg IV, que funciona mejor que la amiodarona.', porque: 'La lidocaína es la alternativa si no hay amiodarona, y también va tras el 3.er choque (p. 59). El libro no dice que funcione mejor; ahora toca la adrenalina.' }],
     explicacion: 'Si hace falta un 2.º choque, empieza la adrenalina: 1 mg IV o IO cada 3-5 min. Tras cada choque, 2 min de compresiones antes de mirar el ritmo. Si hace falta un 3.º, amiodarona 300 mg (p. 59).', fuente: C.algoritmo },
+  { grupo: 'guia', num: 'G3', predice: true, estado: 'flutter',
+    enunciado: 'Un circuito gira en la aurícula y el nodo AV deja pasar uno de cada dos impulsos (2:1). Antes de mirar: <b>¿qué verás en la tira?</b>',
+    opciones: [
+      { t: 'P iguales, cada una con su QRS: una taquicardia sinusal.', porque: 'P uniformes con PR igual son la taquicardia sinusal (p. 18-19); aquí la línea de base no tiene P. Si las esperas, buscarás fiebre o dolor en vez de un circuito.' },
+      { t: 'Ninguna actividad auricular y un QRS estrecho y regular: la reentrada del nodo.', porque: 'La ausencia de P sugiere la reentrada nodal (p. 18-19), pero el flúter sí deja actividad auricular visible. Si no la buscas, pensarás en el nodo y no en la aurícula.' },
+      { t: 'Una línea de base sin orden y QRS irregulares: una FA.', porque: 'En la FA los R-R son irregulares (p. 20); el flúter con bloqueo fijo (2:1, 3:1) da un ritmo regular (p. 18-19). Si los confundes, mirarás el control de la frecuencia de una FA donde hay un ritmo regular.' },
+      { t: 'Dientes de sierra, y un QRS estrecho y regular por cada dos dientes.', ok: true }],
+    explicacion: 'Los dientes de sierra son la señal del flúter; con un bloqueo AV fijo (2:1, 3:1) el ritmo es regular y el QRS, estrecho (p. 18-19). La frecuencia de la aurícula no la da el libro: fisiología general.', fuente: C.regular },
+  { grupo: 'examen', num: 'E3', estado: 'tam',
+    enunciado: 'Un hombre de 71 años con EPOC reagudizada tiene 128 lpm, P de varias formas, PR variable y un ritmo irregular. El magnesio sérico es normal. <b>¿Qué haces primero?</b>',
+    opciones: [
+      { t: 'Magnesio IV empírico: 2 g en 15 min y 6 g en 6 h, y corregir el potasio.', ok: true },
+      { t: 'Verapamilo, porque hay EPOC y el metoprolol no está indicado en ese caso.', porque: 'El verapamilo corrige menos de la mitad y es inotrópico negativo (p. 28); no es lo primero. Si empiezas por él, dejas sin dar la medida de mayor éxito (88 % con magnesio) y arriesgas la IC con FE reducida.' },
+      { t: 'Metoprolol IV: 80 % de éxito en la TAM.', porque: 'El metoprolol va si fallan las medidas previas y solo si la EPOC no es la causa (p. 28); aquí lo es. Si lo das primero, un betabloqueante cae sobre un pulmón enfermo.' },
+      { t: 'Ningún magnesio: con el sérico normal no hay déficit que corregir.', porque: 'El magnesio sérico puede ser normal con el total del cuerpo agotado, y la respuesta fue independiente del valor sérico (p. 28). Si lo descartas, dejas sin tratar a un paciente con una arritmia que ya es tozuda.' }],
+    explicacion: 'En la TAM, lo primero es corregir el magnesio y el potasio; el magnesio IV empírico (2 g en 15 min y 6 g en 6 h) pasó a sinusal al 88 %, con independencia del magnesio sérico. Después, metoprolol si la EPOC no es la causa, o verapamilo (p. 28).', fuente: C.tam },
+  { grupo: 'examen', num: 'E4', estado: 'torsade',
+    enunciado: 'Una paciente de UCI con haloperidol tiene un QTc de 0,52 s en la hoja de la mañana, sin arritmias. <b>¿Cómo lo interpretas?</b>',
+    opciones: [
+      { t: 'Normal: el límite sube a 0,5 s en las mujeres, que tienen el QT algo más largo.', porque: 'Normal es ≤0,44 s y >0,5 s es riesgo de torsade (p. 35); el libro no da otro límite por sexo. Si lo aceptas, no tocarás el fármaco ni los electrolitos.' },
+      { t: 'La torsade es inevitable: retiras todo y dejas el desfibrilador cargado.', porque: 'El libro insiste en que el QT largo es común en la UCI y la torsade, poco frecuente (p. 35). Desfibrilar es para la torsade sostenida (p. 35), no para un QT largo sin arritmia.' },
+      { t: 'Riesgo de torsade (>0,5 s), no sentencia: mira K⁺, Mg²⁺ y el fármaco.', ok: true },
+      { t: 'Magnesio 1-2 g en 15 min a todo el que pase de 0,5 s.', porque: 'El magnesio se cita para terminar la torsade (p. 35); lo que previene las recaídas es corregir la hipopotasemia y la hipomagnesemia y retirar el fármaco (p. 35). Darlo a ciegas no corrige la causa.' }],
+    explicacion: 'Un QTc normal es ≤0,44 s y >0,5 s es un riesgo de torsade; pero un QT largo es común en la UCI y la torsade es rara. Se corrigen el potasio y el magnesio y se retira el fármaco de riesgo (p. 35).', fuente: C.qtc },
+  { grupo: 'examen', num: 'E5', estado: 'stemi',
+    enunciado: 'Una mujer de 63 años con dolor opresivo tiene un ST elevado 1,7 mm en el punto J en V2 y en V3; el resto de las derivaciones, sin cambios. <b>¿Cumple el criterio de STEMI?</b>',
+    opciones: [
+      { t: 'No: en V2-V3 hacen falta ≥2 mm.', porque: 'Los 2 mm son el umbral del varón; en la mujer es ≥1,5 mm en V2-V3 (Tabla 20.1, p. 41). Si aplicas el del varón, retrasas la reperfusión de una mujer que sí lo cumple.' },
+      { t: 'Solo con la troponina elevada: sin ella el ECG no basta.', porque: 'El criterio de la tabla es del ECG (p. 41); la troponina detecta la lesión de la célula y se mide a la llegada y a la hora (p. 41). Si esperas la troponina para decidirlo, atrasas la decisión de reperfundir.' },
+      { t: 'Sí, pero solo si el ST de II también sube ≥1 mm, como en las demás derivaciones.', porque: 'El criterio pide ≥2 derivaciones contiguas (p. 41), y V2 y V3 lo son; no hace falta que cambie II. Si lo exiges, pasas por alto un STEMI anterior.' },
+      { t: 'Sí: ≥1,5 mm en V2-V3 en una mujer, en dos derivaciones contiguas.', ok: true }],
+    explicacion: 'Tabla 20.1: STEMI es ST elevado en el punto J en ≥2 derivaciones contiguas, ≥1,5 mm (mujeres) o ≥2 mm (varones) en V2-V3, o ≥1 mm en las demás (p. 41).', fuente: C.t201 },
+  { grupo: 'examen', num: 'E6', estado: 'fv',
+    enunciado: 'A los 20 min de RCP, la ETCO₂ de Leandro es de 7 mmHg y no ha subido desde el principio. <b>¿Qué te dice?</b>',
+    opciones: [
+      { t: 'La reanimación con éxito es improbable: no pasa de 10-15 mmHg a los 20 min.', ok: true },
+      { t: 'Que las compresiones son demasiado profundas.', porque: 'Una compresión más profunda se acompaña de más ETCO₂, no de menos (p. 63). Si la lees al revés, comprimirás menos justo cuando necesitas flujo.' },
+      { t: 'Que está normal: en la parada la ETCO₂ es como el PCO₂ arterial, de unos 40 mmHg.', porque: 'El valor de ≈40 es el de la circulación normal (p. 62-63); en la RCP la ETCO₂ cae con el flujo bajo y la Fig. 21.4 muestra cifras bajas y en descenso en quien no recupera el pulso. Si lo das por normal, no lo usarás como señal.' },
+      { t: 'Que hay que parar ya, porque nadie se recupera con una cifra así.', porque: 'El libro habla de probabilidad: por encima de ese umbral se ha seguido hasta 1½ h con buen resultado (p. 63). Una cifra baja pesa mucho, pero es una decisión de equipo, no una regla automática.' }],
+    explicacion: 'La ETCO₂ en serie durante la RCP orienta hacia el retorno de la circulación: sube en quienes la recuperan y cae en los demás; con menos de 10-15 mmHg a los 20 min es improbable un buen desenlace (p. 63, Fig. 21.4).', fuente: C.etco2 },
+  { grupo: 'examen', num: 'E7', tipo: 'destapa', estado: 'sinusal',
+    enunciado: 'Ante una taquicardia en el monitor, el libro dice que el diagnóstico se apoya en 3 hallazgos del ECG. <b>¿Cuáles?</b>',
+    puntos: [
+      { t: 'La <span class="hl-azul">duración del QRS</span>: estrecho (≤0,12 s) nace por encima del sistema de conducción; ancho, por debajo.', c: C.hallazgos },
+      { t: 'La <span class="hl-azul">uniformidad de los intervalos R-R</span>: regular o irregular.', c: C.regular },
+      { t: 'Las <span class="hl-azul">características de la actividad auricular</span>: P iguales, ausencia de P o dientes de sierra.', c: C.regular }],
+    explicacion: 'Son la duración del QRS, la uniformidad del R-R y la actividad auricular (Fig. 19.1, p. 18-19).', fuente: C.hallazgos },
 ];
 // El caso de Teodoro (C2 de la cobertura del bloque): evoluciona del día 2 al día 3, con el giro de la estenosis mitral.
 // Las cifras del paciente son del caso; las conductas, dosis y umbrales, de la ficha (Marino, cap. 19).
@@ -1536,7 +1609,7 @@ function ponerEstado(clave, extra = {}) {
   resetS(clave); Object.assign(S, extra);
   arrancarMotor();
   if (est().fam && est().fam !== familia) familia = est().fam;
-  pintarDock(); pintarFicha(); pintarFuentes(); pintarGraficas(); pintarFrase(); pintarAparatos(); pintarLaminas();
+  pintarDock(); pintarFicha(); pintarFuentes(); pintarGraficas(); pintarFrase(); pintarAparatos(); pintarLaminas(); pintarMini();
   $('peligro').hidden = true;
 }
 function arrancarMotor() {
@@ -1579,6 +1652,12 @@ function compresionesEn(t) { const p = P_(); if (!p || !p.comp || p.rce) return 
 const fasComp = t => (t * 110 / 60) % 1;
 function ecgEn(t) {
   let v = MOTOR.voltaje(mo, t, S.deriv, S.clave === 'stemi' ? { lesion: lesionMm() } : {});
+  // Con el potasio muy alto el QRS y la T se funden en una onda sinuosa (p. 21): se alisa el trazo (cuánto: ilustrativo)
+  if (S.clave === 'hiperk' && S.k > 7.4) {
+    const a = clamp((S.k - 7.4) / 0.8, 0, 1), W = [-0.1, -0.067, -0.033, 0, 0.033, 0.067, 0.1].map(d => [d, Math.exp(-d * d / (2 * (0.035 + 0.03 * a) ** 2))]);
+    let sv = 0, sw = 0; for (const [d, w] of W) { sv += w * MOTOR.voltaje(mo, t + d, S.deriv, {}); sw += w; }
+    v = (1 - a) * v + a * (sv / sw) * 1.7;
+  }
   if (compresionesEn(t)) v += 0.32 * Math.pow(Math.max(0, Math.sin(2 * Math.PI * fasComp(t))), 3);
   if (S.desfib && S.desfib.tChoque && t >= S.desfib.tChoque && t < S.desfib.tChoque + 0.2) v += 2.4 * Math.exp(-(t - S.desfib.tChoque) / 0.04);
   return v;
@@ -1623,14 +1702,17 @@ function llenarEstatico() {
 /* ---------- Las cifras del monitor: todas salen del motor ---------- */
 function leer() {
   if (!mo) return null;
-  const t = simT, ven = 7;
-  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.45 && b.t0 > t - ven && b.t0 <= t - 0.02);
+  // La ventana de lectura son los últimos 7 s, pero solo desde el último suceso (choque, fármaco que cierra el nodo, vuelta del
+  // sinusal): lo anterior era otro ritmo. Hasta tener 2 latidos del ritmo nuevo, el monitor dice «midiendo».
+  const ven = 7, desde = Math.max(simT - ven, ...(S.eventos || []).filter(e => e <= simT)), t = simT;
+  const elec = mo.latidosV.filter(b => !b.choque && b.n >= 0.5 * b.total && b.fin - b.t0 < 0.45 && b.t0 > desde && b.t0 <= t - 0.02);
+  const midiendo = desde > simT - ven && elec.length < 2 && !(mo.m.fv || (mo.m.foco && S.tdp));
   // la FC del monitor: media de los últimos latidos (en la FA, de toda la ventana: es irregular); si se hace una pausa,
   // cae con ella (no va detrás del dibujo)
   const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return 0; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
   let fc = ritmo(elec, b => b.t0);
   const caos = mo.m.fv || (mo.m.foco && S.tdp);
-  const lat = latidos(t).filter(b => b.t > t - ven && b.t <= t);
+  const lat = latidos(t).filter(b => b.t > desde && b.t <= t);
   const palp = lat.filter(b => b.amp >= 12);
   let pul = 0; if (palp.length && lat.length) { const u = lat.slice(-8), pu = u.filter(b => b.amp >= 12); pul = Math.min(fc, Math.round(fc * pu.length / Math.max(1, u.length))); }
   // la PA, latido a latido como el monitor: la sistólica, el pico de cada uno de los últimos 4 latidos que mueven sangre;
@@ -1638,21 +1720,24 @@ function leer() {
   let pas = 0, pad = 999;
   const conPulso = (P_() && !P_().rce) ? [] : lat.filter(b => b.amp > 0 && b.t <= t - 0.4).slice(-4);
   if (conPulso.length) { pas = 0; pad = 0; for (const b of conPulso) { let mx = 0; for (let s = b.t; s <= b.t + 0.4; s += 0.01) mx = Math.max(mx, artEn(s)); pas += mx; pad += artEn(b.t + 0.06); } pas /= conPulso.length; pad /= conPulso.length; }
-  else for (let s = t - 3; s <= t; s += 0.02) { const p = artEn(s); pas = Math.max(pas, p); pad = Math.min(pad, p); }
+  else for (let s = Math.max(t - 3, desde); s <= t; s += 0.02) { const p = artEn(s); pas = Math.max(pas, p); pad = Math.min(pad, p); }
   const ult = elec[elec.length - 1], prev = elec[elec.length - 2];
   let qrs = null, pr = null, qt = null, qtc = null, rr = null;
   if (ult) {
-    const sq = ult.n && mo.reg ? anchoKernel(ult) : 0.0055;
-    qrs = ult.fin - ult.t0 + 0.022;
-    const a = mo.latidosA.filter(x => x.t0 < ult.t0 - 0.04 && x.t0 > ult.t0 - 0.4).pop();
-    if (a && !mo.m.fa && !mo.m.flOn && mo.m.sa !== false) pr = (ult.t0 - 2 * sq) - (a.t0 - 0.022);
+    // el QRS se mide sobre latidos completos (con su silencio detrás) y en mediana de 3: un latido a medias no cuenta
+    const comp = elec.filter(b => t - b.fin > 0.06).slice(-3), cu = comp[comp.length - 1] || ult;
+    const anchos = comp.map(b => b.fin - b.t0 + 0.022).sort((x, y) => x - y);
+    qrs = anchos.length ? anchos[Math.floor(anchos.length / 2)] : ult.fin - ult.t0 + 0.022;
+    const sq = ult.n && mo.reg ? anchoKernel(cu) : 0.0055;
+    const a = mo.latidosA.filter(x => x.t0 < cu.t0 - 0.04 && x.t0 > cu.t0 - 0.4).pop();
+    if (a && !mo.m.fa && !mo.m.flOn && mo.m.sa !== false) pr = (cu.t0 - 2 * sq) - (a.t0 - 0.022);
     if (prev) rr = ult.t0 - prev.t0;
     const fin = elec.length >= 2 ? prev : ult;
     qt = (fin.r1 - 0.075 + 2.2 * 0.042 * mo.m.tAncho) - (fin.t0 - 2 * sq);
     const rrQ = elec.length >= 3 ? fin.t0 - elec[elec.length - 3].t0 : rr || 0.8;
     qtc = qt / Math.sqrt(rrQ);
   }
-  return { fc: caos ? null : fc, pul: caos ? 0 : pul, pas: Math.round(pas), pad: Math.round(pad), qrs, pr, qt, qtc, rr, ult, prev, caos };
+  return { midiendo, fc: caos ? null : fc, pul: caos ? 0 : pul, pas: Math.round(pas), pad: Math.round(pad), qrs, pr, qt, qtc, rr, ult, prev, caos };
 }
 function anchoKernel(b) {   // ¿llegó por His-Purkinje (estrecho) o por el músculo (ancho)? Lo dice el registro del motor
   let p = 0, m = 0; for (const a of mo.reg) { if (a.t < b.t0 - 0.001 || a.t > b.fin + 0.001) continue; const nd = G.nodos[a.k]; if (nd.tipo !== 'v') continue; if (a.et === 1) p++; else m++; }
@@ -1665,11 +1750,11 @@ function pintarCifras() {
   const L = leer(); ultLect = L; const p = P_();
   const cel = (k, cls, et, v, u, o, estado = '') => ({ k, cls, et, v, u, obj: o, estado });
   const parada = p && !p.rce;
-  const celdas = [cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.fc, 'lpm', 'del ECG · ilustrativo')];
-  const sinPulso = parada ? !p.comp : L.pas - L.pad < 6;
-  celdas.push(cel('art', 'c-art', 'ART', sinPulso ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : ''));
+  const celdas = [cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.midiendo ? '—' : L.fc, 'lpm', 'del ECG · ilustrativo')];
+  const sinPulso = parada ? !p.comp : L.midiendo ? false : L.pas - L.pad < 6;
+  celdas.push(cel('art', 'c-art', 'ART', sinPulso || L.midiendo ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : L.midiendo ? 'midiendo…' : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : ''));
   const def = L.fc && !parada ? Math.max(0, L.fc - L.pul) : 0;
-  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
+  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.midiendo ? '—' : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
   const k4 = cuartaCifra(L);
   celdas.push(cel(k4.k, 'c-co2', k4.et, k4.v, k4.u, k4.o, k4.cls || ''));
   pintarColumna(c, celdas, { tapado });
@@ -1678,7 +1763,7 @@ function cuartaCifra(L) {
   const p = P_();
   if (p) return { k: 'co2', et: 'ETCO₂', v: Math.round(etco2En(simT)), u: 'mmHg', o: p.rce ? 'sube de golpe · Fig. 21.2' : 'ilustrativo', cls: p.rce ? 'si' : '' };
   if (S.clave === 'torsade') { const v = S.tdp ? null : L.qtc; return { k: 'qt', et: 'QTc', v: v ? coma(v, 2) : '—', u: 's', o: '>0,5: riesgo · p. 35', cls: v > 0.5 ? 'no' : v > 0.44 ? 'ojo' : 'si' }; }
-  if (S.clave === 'stemi') { const mm = lesionMm()[S.deriv], lim = umbralST(); return { k: 'st', et: `ST ${S.deriv}`, v: coma(mm, 1), u: 'mm', o: `umbral ${coma(lim, 1)} · Tabla 20.1`, cls: mm >= lim ? 'no' : 'si' }; }
+  if (S.clave === 'stemi') { const mm = lesionMm()[S.deriv], lim = umbralST(); return { k: 'st', et: `ST ${S.deriv}`, v: coma(mm, 1), u: 'mm', o: `umbral ${coma(lim, 1)} · p. 41`, cls: mm >= lim ? 'no' : 'si' }; }
   if (S.clave === 'hiperk') return { k: 'k', et: 'K⁺', v: coma(S.k, 1), u: 'mEq/l', o: 'Nefrología al día · p. 21', cls: S.k >= 6.5 ? 'no' : S.k > 5.5 ? 'ojo' : 'si' };
   const q = L.caos ? null : L.qrs; return { k: 'qrs', et: 'QRS', v: q ? coma(q, 2) : '—', u: 's', o: 'corte 0,12 · p. 18', cls: q > 0.12 ? 'no' : '' };
 }
@@ -1873,6 +1958,14 @@ function pintarAparatosVivos(t) {
 }
 /* ---------- Los mandos (el dock): Ritmo · Tratar · Medir ---------- */
 const tog = (acc, t, small, extra = '') => `<button type="button" class="tog" data-acc="${acc}" ${extra}>${t}${small ? `<small>${small}</small>` : ''}</button>`;
+const MINI = { nodal: ['av', 'El torniquete del nodo AV', 'Mira cómo la onda baja por un carril y vuelve por el otro; la adenosina echa el cerrojo.'], aberrancia: ['av', 'El torniquete del nodo AV', 'La reentrada nace aquí; la rama bloqueada ensancha el QRS.'], flutter: ['av', 'El torniquete del nodo AV', 'Deja pasar uno de cada dos o tres impulsos de la aurícula.'], fa: ['av', 'El torniquete del nodo AV', 'Deja pasar lo que encuentra rearmado: de ahí el R-R irregular.'], tam: ['av', 'El torniquete del nodo AV', 'Los impulsos llegan a destiempo y solo pasan los que lo encuentran rearmado.'], wpw: ['av', 'El atajo junto al nodo', 'El atajo no tiene torniquete: la onda llega antes al ventrículo.'], torsade: ['celula', 'La célula del ventrículo', 'Lo que alarga el potencial de acción alarga el QT.'], hiperk: ['celula', 'La célula del ventrículo', 'El potasio alto cambia el potencial y, con él, el ECG.'] };
+function pintarMini() {
+  const m = MINI[S.clave], c = $('mini-lupa'); c.hidden = !m || pend(); if (!m || pend()) return;
+  const id = m[0] === 'av' ? 'rtm-lupa-av' : 'rtm-celula', vb = m[0] === 'av' ? '4 312 174 108' : '182 312 174 108';
+  $('mini-lupa-svg').setAttribute('viewBox', vb); $('mini-lupa-svg').innerHTML = `<use href="#${id}"/>`;
+  $('mini-tit').textContent = m[1]; $('mini-txt').textContent = m[2];
+}
+$('mini-grande').addEventListener('click', () => planoLupas.abrir());
 function pintarDock() {
   document.querySelectorAll('.dock-tabs [data-pest]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pest === pest)));
   const h = [];
@@ -1989,7 +2082,7 @@ function sincronizar() {   // el choque sincronizado cae sobre el siguiente QRS
   const d = S.desfib; if (!d || !d.esperaQRS || simT < d.cargadoEn) return;
   const b = mo.latidosV[mo.latidosV.length - 1]; if (b && b.t0 > d.cargadoEn && simT - b.t0 < 0.05) { d.esperaQRS = false; d.tChoque = b.t0 + 0.012; mo.choque(d.tChoque); d.alTerminar(); }
 }
-function exito(t) { const m = mo.m; m.fa = false; m.fv = false; m.flOn = false; m.crOn = false; m.foco = null; m.tdp = false; m.navRef = null; m.navF = 1; m.sa = true; m.sinMecanica = false; mo.reiniciarSA(t + 0.9); }
+function exito(t) { const m = mo.m; mo.quitarOndaF(t); m.pAmp = 1; (S.eventos = S.eventos || []).push(t); m.fa = false; m.fv = false; m.flOn = false; m.crOn = false; m.foco = null; m.tdp = false; m.navRef = null; m.navF = 1; m.sa = true; m.sinMecanica = false; mo.reiniciarSA(t + 0.9); }
 function accion(a, b) {
   const m = mo ? mo.m : null, c = S.clave, t = simT, p = S.parada;
   S.mensaje = null;
@@ -2001,7 +2094,7 @@ function accion(a, b) {
       avisar(`${nom} sube el tono vagal: ${ok ? '<b>esta vez corta el circuito</b>' : 'esta vez no lo corta (la onda va más despacio unos segundos)'}. Éxito en el estudio: ${Math.round(pr * 100)} % (p. 29). ${org('que frene el nodo: fisiología general')}`); break; }
     case 'ade6': case 'ade12': case 'ade-tv': case 'ade-ab': {
       const dosis = a === 'ade12' ? '12 mg' : '6 mg'; bolo('ADENOSINA', `${dosis} + LAVADO`, `adenosina ${dosis} en bolo rápido y lavado`);
-      m.cerrojo = t + 1.3; m.cerrojoFin = t + 1.3 + 3.2; S.adeno = t + 1.3; S.mensaje = null; break; }
+      m.cerrojo = t + 1.3; m.cerrojoFin = t + 1.3 + 3.2; S.adeno = t + 1.3; (S.eventos = S.eventos || []).push(m.cerrojoFin); S.mensaje = null; break; }
     case 'dilt-nodo': infusion('DILTIAZEM', '0,25 mg/kg', 'diltiazem 0,25 mg/kg en 2 min'); S.diltNodo = true; en(1.2, () => { m.navF = 1.5; m.navRet = 1.2; }); en(5, () => { m.navF = 1.15; m.navRet = 1.05; }); avisar('Si la adenosina no responde, el diltiazem o el verapamilo pueden cortarla (p. 31).'); break;
     case 'llenado': S.llenadoMalo = !S.llenadoMalo; m.llenadoMalo = S.llenadoMalo; latCache.t = -1; break;
     case 'esmolol': S.farmaco = 'esmo'; S.horas = 0; infusion('ESMOLOL', '500 µg/kg + 50', 'esmolol 500 µg/kg en bolo y 50 µg/kg/min'); m.navF = navParaFC(108); pintarGraficas();
