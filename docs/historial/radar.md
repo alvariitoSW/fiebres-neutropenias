@@ -127,3 +127,15 @@ Tarea `radar` (B-012), aprobada el 25/10 («estoy de acuerdo con todo»). Solo o
 - `autonomo/radar/HOJA-DE-RUTA.md` (fases 0-4, fase G y carriles, con su estado copiado del tablero).
 - `autonomo/radar/ENTRADAS.md` con la ficha de triaje de las 12 entradas y una «Tanda pendiente» vacía.
 - Skill `/radar` (`apunta`, `tanda`, `rumbo`) en `.claude/skills/radar/SKILL.md`; en la PR para su visto bueno.
+
+## 9. Coronary Culprit (26/10/2026, B-026)
+
+- `/ingenieria-reversa` de https://www.cliffreid.com/culprit/: primero bloqueada (`www.cliffreid.com` daba 403; el
+  usuario lo permitió en la red). Informe «Arteria culpable»: https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw;
+  detalle y 9 pares de prueba en `autonomo/ideas/ingenieria-inversa/culprit.md`.
+- Decisión del usuario: opción 1. Fichas A («Del vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el
+  trombo») en la Fase 1, después de Marino; C (modelo vivo 2D) cuando la eco tenga coronarias; D (caso con reloj) tras C.
+- Fuentes reunidas en `docs/`: ESC 2023 de SCA (2 partes), Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015,
+  Tamura 2014. Su modelo pone ↓ST en aVR en el tronco; Tamura (Yamaji) da ↑ST en el 88 %: no copiar ese detalle.
+- Sin respuesta aún: three.js (3D), repaso espaciado (4.ª excepción de `localStorage`) y el mensaje a Cliff Reid
+  pidiendo permiso para usar su material.
