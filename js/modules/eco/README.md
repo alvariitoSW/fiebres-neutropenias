@@ -704,6 +704,8 @@ integración: limitar a 60 fps (ahorra batería sin que se note) y animar solo c
 
 ## Créditos
 
+- **Eco real de uso libre** (Wikimedia Commons; tarjeta «Eco real» del simulador, `eco-real.mjs`): *Echocardiogram 4chambers.jpg* (sin autor, dominio público); bucle A4C de Fruehaufsteher2 (CC BY-SA 3.0, convertido a vídeo, misma licencia); PLAX recortado de *LeftParasternalLongAxis.gif*, Patrick J. Lynch y C. Carl Jaffe, Yale (CC BY 2.5).
+
 Varias ideas vienen de ***The Heart by Ultrasound***, de **David Ouyang** (`douyang/echodemo`, grupo EchoNet), que
 dio permiso para usar su trabajo. Aun así **se reconstruyen sobre nuestro motor, sin copiar código ni modelos**:
 un estado por fotograma, las formas precalculadas que solo se mezclan, las valvas con tres formas a lo largo de un
