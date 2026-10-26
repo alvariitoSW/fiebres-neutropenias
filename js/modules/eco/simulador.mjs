@@ -19,6 +19,7 @@ import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPaneles
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
 import { VISTAS, planoVista, medidasCorazon, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
+import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
@@ -194,6 +195,10 @@ export function montarSimulador(raiz, opc = {}) {
     img.tgc.forEach((v, i) => { $('#cv-img-tgc' + i).value = v; $('#cv-img-tgc' + i + '-v').textContent = signo(v); });
   }
   function mandoImg(id, fn) { $(id).addEventListener('input', (e) => { fn(+e.target.value); ponerMandosImg(); ecoPendiente = true; }); }
+  // leyenda de brillo: sale de la misma tabla que usa la imagen (js/data/eco-tejidos.js)
+  const tabLey = $('#cv-tejidos-tabla');
+  if (tabLey) tabLey.innerHTML = Object.values(TEJIDOS).sort((a, b) => a.db - b.db)
+    .map((t) => `<tr><td>${t.nombre}</td><td>${t.db > 0 ? '+' : ''}${t.db} dB</td><td>${t.origen}</td></tr>`).join('');
   mandoImg('#cv-img-gan', (v) => { img.gan = v; });
   mandoImg('#cv-img-prof', (v) => { img.prof = v === VISTAS[vistaEco].prof ? null : v; });
   mandoImg('#cv-img-foco', (v) => { img.foco = v; });
