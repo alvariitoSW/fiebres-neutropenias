@@ -128,3 +128,20 @@ Salvador (47).
 del papilar (Marino cap. 16, p. 38: con la del septo y la de pared libre, en las primeras 24 h) **se enseña entera**,
 como pide la fuente: estado `rotura-papilar` del modelo M7 (IM aguda con `eroaMitral` y el chorro en color, sub-bloque
 3B), paso «predice» de la ficha `mc-cardiogenico-fisio` y un caso corto propio (paciente distinto de Aurelio).
+
+### Decisiones del usuario (26/10/2026, sobre las maquetas v3, https://claude.ai/artifact/BLVPCGzFXLYnXKqoLjBGK6)
+
+- **Límites de lo interactivo** (vio el shock): «he llegado a infundir hasta 23 litros de suero. Creo que debería poner
+  unos límites […] no puedo poner ciertas cosas ilimitadamente, o si pongo ciertas cosas, pasa esto. Hay que definir muy
+  bien los límites de las partes interactivas para que no pierdan la seriedad ni la garantía de fidelidad de los
+  textos. No he visto el resto, pero supongo que también habrá cosas parecidas, hay que revisarlo». → **Vuelta de
+  límites en las cuatro maquetas** antes de la parada 2: cada mando (volumen, fármacos y dosis, aparatos, reloj,
+  respirador, gravedad…) con su tope y su consecuencia visible al acercarse o pasarse (p. ej. sueros: la PVC y la PCP
+  suben, edema, la SpO₂ cae, sello «sobrecarga»; dosis por encima de la ficha: aviso con la dosis de la ficha), cada tope
+  con su origen (`ficha` con página, `fisiología general` o `ilustrativo`). Primero el profesor (Fable) hace la tabla
+  de límites de todos los mandos de las cuatro (`autonomo/bloques/b3/limites.md`) y la pieza común si hace falta
+  (`comun/`); después un constructor barato por maqueta; la prueba de cada maqueta lleva todos los mandos a su tope.
+  Que sirva para el resto de modelos (propuesta de regla en el parte).
+- **Neumotórax a tensión**: sí, como escena aparte del pulmón con respirador.
+- **Pulmón, esquema o dibujo real**: lo revisa el usuario (pendiente).
+- **Shock, corazón eléctrico y receptor a la app**: todavía no; antes, la vuelta de límites.
