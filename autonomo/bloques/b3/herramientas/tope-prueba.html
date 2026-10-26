@@ -1,0 +1,9 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prueba del tope</title>
+<style>:root{--bg-main:#14110f;--bg-card:#1f1a16;--text-main:#e8e0d4;--text-dim:#a89f92;--text-muted:#8a8176;--border-color:#3a322b;--accent-red:#b85c3e;--accent-yellow:#cf9a3e;--sans:system-ui,sans-serif}
+body{margin:0;background:var(--bg-main);color:var(--text-main);font:14px var(--sans)}#mon{height:200px;background:var(--bg-card)}.dock{padding:8px 16px}button{min-height:44px}</style></head>
+<body><div id="mon">monitor</div>
+<div class="dock" id="dock"><div class="dock-in"><div class="frase">Frase viva</div><button id="b1" data-vol>+250 mL</button> <button id="b2" data-vol>+500 mL</button></div></div>
+<script type="module">
+import { crearTope } from '../../../maquetas/comun/tope.js';
+window.tope = crearTope({ monitor: document.getElementById('mon'), dock: document.getElementById('dock'), cita: (c) => `<button type="button" class="cita-ir">Ver en la ficha: ${c.sitio}</button>` });
+</script></body></html>
