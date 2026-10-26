@@ -235,14 +235,14 @@ export function montarSimulador(raiz, opc = {}) {
   // en ventilación espontánea (el modelo respira solo); y lo que hace el modelo con su PVC
   const mm1 = (x) => Math.round(x * 10) / 10, fmm = (x) => x == null ? '—' : f1(x) + ' mm';
   // medidas imposibles (calibres mal puestos): se avisa como «combinación no fisiológica», sin veredicto clínico
-  const avisoVci = (a, b, idx) => a && b && (b < 2 || (idx != null && idx > 100))
-    ? ['warn', `<b>Revisa los calibres:</b> ${b < 2 ? `un Dmín de ${fmm(b)} no es una medida creíble de la VCI.` : `un índice de ${Math.round(idx)}% (más del 100%) no es creíble con estos diámetros.`} Sin veredicto clínico.`] : null;
+  const avisoVci = (a, b) => a && b && b < 2
+    ? ['warn', `<b>Revisa los calibres:</b> un Dmín de ${fmm(b)} no es una medida creíble de la VCI. Sin veredicto clínico.`] : null;
   function textoVci() {
     const A = guardado.dmax && mm1(guardado.dmax), B = guardado.dmin && mm1(guardado.dmin);
     if (respVci !== 'espontanea') return textoVciVm(A, B);
     let t = `Dmáx ${fmm(A)} · Dmín ${fmm(B)}`, estado = '';
     if (A && B && A > B) {
-      const col = (A - B) / A * 100, r = Math.round(col), aviso = avisoVci(A, B, col);
+      const col = (A - B) / A * 100, r = Math.round(col), aviso = avisoVci(A, B);
       if (aviso) return [aviso[0], t + '<br>' + aviso[1]];
       const ancha = A > 21, colapsa = r > 50;
       const banda = !ancha && colapsa ? 'normal (0-5 mmHg; PAD ≈ 3)' : ancha && !colapsa ? 'alta (10-20 mmHg; PAD ≈ 15)' : 'intermedia (5-10 mmHg; PAD ≈ 8)';
@@ -261,7 +261,7 @@ export function montarSimulador(raiz, opc = {}) {
     let h = '<b>⚠ Retenido: con ventilación mecánica no uses el colapso solo.</b>'
       + `<br>Dmáx ${fmm(A)} · Dmín ${fmm(B)}`;
     if (A && B && A > B) {
-      const idx = sinEsf ? (A - B) * 100 / B : (A - B) * 100 / (0.5 * (A + B)), r = Math.round(idx), aviso = avisoVci(A, B, idx);
+      const idx = sinEsf ? (A - B) * 100 / B : (A - B) * 100 / (0.5 * (A + B)), r = Math.round(idx), aviso = avisoVci(A, B);
       if (aviso) return [aviso[0], h + '<br>' + aviso[1]];
       h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> = ${sinEsf ? `(${f1(A)}−${f1(B)})×100/${f1(B)}` : `(${f1(A)}−${f1(B)})×100/[0,5×(${f1(B)}+${f1(A)})]`}: ${r > corte ? 'por encima' : 'por debajo'} del ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
     } else if (A && B) h += '<br>Dmín tiene que ser menor que Dmáx.';

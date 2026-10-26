@@ -394,11 +394,6 @@ function calcVciColapso() {
     }
     if (Number.isNaN(icvci) || !Number.isFinite(icvci)) return;
     const indice = Math.round(icvci); // se compara el valor que se muestra
-    if (indice > 100) {
-        box.className = 'tfg-estado tfg-estado-warn';
-        box.innerHTML = `⚠️ Revisa los calibres: un índice de ${indice}% (más del 100%) no es creíble con estos diámetros.`;
-        return;
-    }
     const respondedor = indice > corte;
     box.className = `tfg-estado tfg-estado-${respondedor ? 'warn' : 'ok'}`;
     box.innerHTML = `Índice de colapsabilidad (${etiqueta}): <strong>${indice}%</strong> — ${respondedor ? `&gt;${corte}%, sugiere respuesta a volumen` : `≤${corte}%, no sugiere respuesta a volumen`}.`
