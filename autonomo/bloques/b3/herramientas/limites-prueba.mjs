@@ -52,11 +52,26 @@ if (QUE === 'shock' || QUE === 'todo') {
 if (QUE === 'pulmon' || QUE === 'todo') {
   await ir('b3-pulmon'); await page.waitForTimeout(1800);
   const C = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim().slice(0, 28); const o = {}; for (const k of ['pico', 'meseta', 'pres', 'peeptot', 'cstat', 'dp', 'vtkg', 'vm', 'ie', 'vt', 'flujofin']) o[k] = g(k); o.consola = document.getElementById('consola')?.hidden ? '-' : document.getElementById('consola')?.textContent.replace(/\s+/g, ' ').slice(0, 140); return o; });
-  const M = async (k, v) => { const r = await range(`input[data-m="${k}"]`, v, ['input']); await page.waitForTimeout(1500); return r; };
-  const btn = async (k, v) => { await tap(`button[data-m="${k}"]${v ? `[data-v="${v}"]` : ''}`); await page.waitForTimeout(1500); };
+  // Con el monitor congelado (#pausa) cada mando rellena el modelo ya estable (35 s de calentamiento, pagina.js
+  // llenarMonitor): la lectura es la del estado estacionario y no una de un ciclo a medias (a FR 8 un ciclo dura 7,5 s).
+  const M = async (k, v) => { const r = await range(`input[data-m="${k}"]`, v, ['input']); await page.waitForTimeout(250); return r; };
+  const btn = async (k, v) => { await tap(`button[data-m="${k}"]${v ? `[data-v="${v}"]` : ''}`); await page.waitForTimeout(250); };
   const pest = (p) => tap(`[data-pest="${p}"]`);
+  const congelar = async (si) => { const on = await page.evaluate(() => document.getElementById('pausa').getAttribute('aria-pressed') === 'true'); if (on !== si) await tap('#pausa'); await page.waitForTimeout(300); };
+  await congelar(true);
+  // 0) un mando a la vez desde el estado base de Rafael (¿qué tope tiene cada uno por separado?)
+  await tap('[data-pac="rafael"]'); await page.waitForTimeout(300); await pest('resp');
+  for (const [k, v] of [['vt', 800], ['vt', 200], ['flujo', 30], ['flujo', 100], ['fr', 35], ['fr', 8], ['peep', 20], ['pmax', 30]]) { await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('resp'); await M(k, v); fila(`rafael solo ${k}=${v}`, await C()); }
+  await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('resp'); await btn('modo', 'pcv');
+  for (const [k, v] of [['pinsp', 30], ['pinsp', 5], ['ie', 1], ['ie', 4]]) { await M(k, v); fila(`rafael PCV ${k}=${v}`, await C()); await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('resp'); await btn('modo', 'pcv'); }
+  await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('resp'); await btn('modo', 'pcv'); await M('pinsp', 30); await M('pmax', 30); fila('rafael PCV Pi30 + pmax30', await C());
+  await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('pulmon');
+  for (const [k, v] of [['c', 15], ['c', 100], ['r', 40], ['r', 2]]) { await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('pulmon'); await M(k, v); fila(`rafael solo ${k}=${v}`, await C()); }
+  await tap('[data-pac="rafael"]'); await page.waitForTimeout(200); await pest('pulmon'); await M('r', 40); await btn('fesp', '3'); fila('rafael R40 esp×3', await C());
+  await page.screenshot({ path: '/tmp/plan-socialista/b3/limites/pulmon-01-rafael-r40x3.png' });
+  // 1) todo a tope, paciente a paciente
   for (const pac of ['rafael', 'isidro', 'jacinto', 'eulalia']) {
-    await tap(`[data-pac="${pac}"]`); await page.waitForTimeout(1800); fila(`${pac} base`, await C());
+    await tap(`[data-pac="${pac}"]`); await page.waitForTimeout(400); fila(`${pac} base`, await C());
     await pest('resp'); await btn('modo', 'vcv'); await M('vt', 800); await M('fr', 35); await M('peep', 20); await M('flujo', 30); await M('pmax', 70); fila(`  VCV Vt800 FR35 PEEP20 Q30 pmax70`, await C());
     await M('pmax', 30); fila(`  …pmax 30`, await C());
     await M('vt', 200); await M('fr', 8); await M('peep', 0); fila(`  VCV Vt200 FR8 PEEP0`, await C());
@@ -66,6 +81,12 @@ if (QUE === 'pulmon' || QUE === 'todo') {
     await pest('man'); await btn('pausa'); await btn('oclusion'); fila(`  …pausa+oclusión`, await C()); await btn('pausa'); await btn('oclusion');
     console.log('  desborde', await desb(), 'NaN', await nan());
   }
+  await page.screenshot({ path: '/tmp/plan-socialista/b3/limites/pulmon-02-eulalia-tope.png' });
+  // 2) en vivo (sin congelar): cambiar la compliancia con el pulmón lleno deja la presión alveolar por encima de lo aplicado
+  await congelar(false); await tap('[data-pac="jacinto"]'); await page.waitForTimeout(1500); await pest('resp'); await btn('modo', 'pcv'); await M('pinsp', 30); await M('peep', 20); await M('fr', 35); await M('ie', 1);
+  await pest('pulmon'); await M('c', 100); await page.waitForTimeout(6000); fila('vivo Jacinto PCV50 C100 (6 s)', await C());
+  await M('c', 15); await M('r', 40); await btn('fesp', '3'); for (const ms of [1500, 3000]) { await page.waitForTimeout(ms); fila(`  → C15 R40 esp×3, +${ms} ms`, await C()); }
+  await page.waitForTimeout(12000); fila('  → +12 s más', await C());
   console.log('PULMON errores', errores.length, errores.slice(0, 3).join(' | '));
 }
 
