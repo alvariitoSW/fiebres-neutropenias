@@ -184,6 +184,7 @@ export function montarSimulador(raiz, opc = {}) {
     const p = medir === 'tapse' ? refGeoTd.anilloTricLateral : medir === 'vci' ? puntoVci(-20) : refGeoTd.flujo.transformar([0, 0, -0.3 * refGeoTd.vi.L]);
     thetaM = clamp(anguloHacia(planoEco, p), -planoEco.mitad + 0.02, planoEco.mitad - 0.02);
   }
+  let respVci = 'espontanea';
   function elegirModo(m) {
     modoEco = m; $$('[data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === m));
     $('#cv-m-zona').hidden = m !== 'M'; $('#cv-d-zona').hidden = m !== 'D';
@@ -193,7 +194,7 @@ export function montarSimulador(raiz, opc = {}) {
   }
   function elegirMedida(k, cambiarVista = true) {
     medir = k; $$('[data-medir]').forEach(b => b.classList.toggle('on', b.dataset.medir === k));
-    $('#cv-m-vi').hidden = k !== 'vi'; $('#cv-m-vci').hidden = k !== 'vci';
+    $('#cv-m-vi').hidden = k !== 'vi'; $('#cv-m-vci').hidden = k !== 'vci'; $('#cv-m-vci-resp-fila').hidden = k !== 'vci';
     modoM.setBarrido(k === 'vci' ? 6 : 2);
     const v = MEDIDAS[k].vista;
     if (cambiarVista && v && v !== vistaEco) elegirVista(v); else colocarLineaM();
@@ -212,7 +213,7 @@ export function montarSimulador(raiz, opc = {}) {
       + (guardado.lvdd && guardado.lvsd ? `<button type="button" class="especialidad-link" id="cv-m-a-fs" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-fs-resultado">Llevar LVDd y LVSd a la calculadora de FS (FATE) →</button>` : '');
     if (medir === 'vci') enl.innerHTML = enlace('Colapsabilidad de la VCI (FATE)', 'umi-fate', '#umi-fate-vci', 'panel-manual-umi-tabs', 'sobrevivirUmi', 'manualUmi')
       + (guardado.dmax && guardado.dmin ? `<button type="button" class="especialidad-link" id="cv-m-a-vci" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-fate" data-resaltar="#umi-vci-resultado">Llevar Dmáx y Dmín a la calculadora de la VCI (FATE) →</button>` : '');
-    if (!m) { poner('', medir === 'vi' ? textoVi() : medir === 'vci' ? textoVci()[1] : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
+    if (!m) { if (medir === 'vci') { poner(...textoVci()); return; } poner('', medir === 'vi' ? textoVi() : medir === 'vci' ? textoVci()[1] : 'Sin medida: toca dos puntos sobre el trazado.'); return; }
     if (medir === 'vci') { const [estado, txt] = textoVci(); poner(estado, `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + txt); return; }
     if (medir === 'libre') { poner('', `Δ profundidad <b>${f1(m.mm)} mm</b> · Δ tiempo <b>${Math.round(m.ms)} ms</b>`); return; }
     if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
@@ -235,6 +236,7 @@ export function montarSimulador(raiz, opc = {}) {
   function textoVci() {
     const a = guardado.dmax, b = guardado.dmin, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
     let t = `Dmáx ${cm(a)} · Dmín ${cm(b)}`, estado = '';
+    if (respVci !== 'espontanea') return textoVciVm(a, b, t);
     if (a && b && a > b) {
       const col = (a - b) / a * 100, ancha = a > 21, colapsa = col > 50;
       const banda = !ancha && colapsa ? 'normal (0-5 mmHg; PAD ≈ 3)' : ancha && !colapsa ? 'alta (10-20 mmHg; PAD ≈ 15)' : 'intermedia (5-10 mmHg; PAD ≈ 8)';
@@ -246,7 +248,29 @@ export function montarSimulador(raiz, opc = {}) {
       t += `<br><span class="cv-muted">En el modelo, con PVC ${f1(u.pvc)} mmHg: Dmáx ${f1(v.dmax)} mm y colapso ${Math.round(v.colapso * 100)}% (calibre ilustrativo, elegido para caer en las bandas de FATE).</span>`; }
     return [estado, t];
   }
+  // VM: el colapso queda retenido (el Manual UMI usa otras fórmulas y cortes y no da bandas de PAD) y se calcula el
+  // índice de VM con los diámetros guardados. Los umbrales son del Manual UMI, pág. 70; el trazado no simula la VM.
+  function textoVciVm(a, b, t) {
+    const sinEsf = respVci === 'vm-sin-esfuerzo', corte = sinEsf ? 18 : 12;
+    let h = '<b>⏸ Retenido: con ventilación mecánica no uses el colapso solo.</b>'
+      + '<br>El &gt;40% del Manual UMI es para ventilación espontánea; con VM el mismo manual usa otras fórmulas y otros cortes. Su tabla de PAD se basa en el colapso con la respiración y no da bandas para VM: no estimes la PAD por la VCI.'
+      + `<br>${t}`;
+    if (a && b && a > b) {
+      const idx = sinEsf ? (a - b) * 100 / b : (a - b) * 100 / (0.5 * (a + b)), r = Math.round(idx);
+      h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> (${sinEsf ? '(Dmáx−Dmín)×100/Dmín' : '(Dmáx−Dmín)×100/[0,5×(Dmín+Dmáx)]'}): ${r > corte ? 'por encima' : 'por debajo'} del ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
+    } else if (a && b) h += '<br>Dmín tiene que ser menor que Dmáx.';
+    else h += '<br>Guarda Dmáx y Dmín para calcular el índice de VM.';
+    h += '<br><span class="cv-muted">El modelo respira solo: aquí practicas la cuenta de VM con sus diámetros; el trazado no simula la VM. Origen: umbrales y fórmulas, ficha (Manual UMI, pág. 70); calibre del modelo, ilustrativo.</span>'
+      + '<br><a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=18" target="_blank" rel="noopener">Manual UMI, parte 2, pág. 70</a>'
+      + '<details class="nota-plegable"><summary>Nota de fuentes</summary><p>Los cortes de VM vienen de estudios en pacientes con VM y sepsis: '
+      + '<a class="biblio-link" href="https://www.springermedicine.com/respiratory-changes-in-inferior-vena-cava-diameter-are-helpful-i/20581424" target="_blank" rel="noopener">Barbier 2004, Intensive Care Med 30:1740-1746</a> (índice de distensibilidad (Dmáx−Dmín)/Dmín) y '
+      + '<a class="biblio-link" href="https://www.springermedicine.com/the-respiratory-variation-in-inferior-vena-cava-diameter-as-a-gu/20581370" target="_blank" rel="noopener">Feissel 2004, Intensive Care Med 30:1834-1837</a> (corte del 12%). '
+      + 'Las fuentes discrepan: Marino (<a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=27" target="_blank" rel="noopener">cap. 11, pág. 27 del PDF</a>) dice que la variación respiratoria de la VCI «proved to be unreliable», en general y no solo en VM.</p></details>';
+    return ['neutro', h];
+  }
   function guardarVci(k) { const m = modoM.medida(); if (!m) return; guardado[k] = m.mm; modoM.borrarCalibres(); pintarMedida(null); }
+  $('#cv-m-vci-resp').addEventListener('click', (e) => { const b = e.target.closest('[data-vci-resp]'); if (!b) return;
+    respVci = b.dataset.vciResp; $$('[data-vci-resp]').forEach(x => x.classList.toggle('on', x === b)); pintarMedida(modoM.medida()); });
   $('#cv-m-dmax').addEventListener('click', () => guardarVci('dmax'));
   $('#cv-m-dmin').addEventListener('click', () => guardarVci('dmin'));
   $('#cv-m-borrar-vci').addEventListener('click', () => modoM.borrarCalibres());
@@ -259,7 +283,7 @@ export function montarSimulador(raiz, opc = {}) {
   $('#cv-m-enlaces').addEventListener('click', (e) => {
     if (e.target.closest('#cv-m-a-vci')) {
       const modo = document.getElementById('umi-vci-modo'), a = document.getElementById('umi-vci-dmax'), b = document.getElementById('umi-vci-dmin'); if (!modo || !a || !b) return;
-      modo.value = 'espontanea'; a.value = (guardado.dmax / 10).toFixed(1); b.value = (guardado.dmin / 10).toFixed(1);
+      modo.value = respVci; a.value = (guardado.dmax / 10).toFixed(1); b.value = (guardado.dmin / 10).toFixed(1);
       for (const el of [modo, a, b]) el.dispatchEvent(new Event('input', { bubbles: true }));
       return;
     }

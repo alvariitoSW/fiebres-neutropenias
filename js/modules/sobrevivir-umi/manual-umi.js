@@ -390,7 +390,8 @@ function calcVciColapso() {
     if (Number.isNaN(icvci) || !Number.isFinite(icvci)) return;
     const respondedor = icvci > corte;
     box.className = `tfg-estado tfg-estado-${respondedor ? 'warn' : 'ok'}`;
-    box.innerHTML = `Índice de colapsabilidad (${etiqueta}): <strong>${icvci.toFixed(0)}%</strong> — ${respondedor ? `&gt;${corte}%, sugiere respuesta a volumen` : `≤${corte}%, no sugiere respuesta a volumen`}.`;
+    box.innerHTML = `Índice de colapsabilidad (${etiqueta}): <strong>${icvci.toFixed(0)}%</strong> — ${respondedor ? `&gt;${corte}%, sugiere respuesta a volumen` : `≤${corte}%, no sugiere respuesta a volumen`}.`
+        + (modo === 'espontanea' ? '' : '<br><span class="cv-muted">Con ventilación mecánica no se usa el 40%: el manual da otros cortes y no da bandas de PAD (pág. 70).</span>');
 }
 
 // ---------------------------------------------------------------------

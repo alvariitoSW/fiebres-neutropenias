@@ -521,6 +521,30 @@ export const preguntasManualUmi = [
         explicacion: 'En VM sin esfuerzo respiratorio el corte es >18% (fórmula (Dmáx−Dmín)×100/Dmín) — distinto del >40% que se usa en ventilación espontánea, porque la fisiología del llenado de la VCI cambia con la presión intratorácica positiva.',
     },
     {
+        id: 'umi-q068b', tema: 'umi-fate',
+        enunciado: 'Encuentra el error. Paciente en VM sin esfuerzo respiratorio; VCI subcostal: Dmáx 2,0 cm y Dmín 1,7 cm. El residente calcula (2,0−1,7)/2,0 = 15 %, "no llega al 40 %: no responde a volumen". ¿Qué falla?',
+        opciones: [
+            'Usó la fórmula y el corte de ventilación espontánea; en VM sin esfuerzo es (Dmáx−Dmín)×100/Dmín = 17,6 %, que no supera el 18 %: tampoco sugiere respuesta, pero por la cuenta correcta',
+            'Debería haber dividido entre el Dmáx, porque 15 % ya supera el corte de 12 % de la fórmula general',
+            'Nada: el 40 % vale igual en VM y la cuenta es correcta',
+            'Debería haber estimado la PAD con el diámetro de 2,0 cm y dar 15 mmHg',
+        ],
+        correcta: 0,
+        explicacion: 'El >40 % es el corte de la ventilación espontánea. En VM sin esfuerzo respiratorio el manual (pág. 70) usa (Dmáx−Dmín)×100/Dmín: (2,0−1,7)×100/1,7 = 17,6 %, no supera el 18 %. La conclusión coincide, pero el razonamiento del residente habría fallado con otros diámetros (p. ej. 2,0 y 1,6 cm dan 25 %, sobre el 18 %, y con su cuenta darían 20 %, bajo el 40 %).',
+    },
+    {
+        id: 'umi-q068c', tema: 'umi-fate',
+        enunciado: 'Paciente en VM con VCI de 2,4 cm. El residente quiere dar una PAD de 15 mmHg con la tabla de diámetro y colapso respiratorio del FATE. ¿Qué respondes?',
+        opciones: [
+            'El manual no da bandas de PAD para ventilación mecánica; la tabla se basa en el colapso con la respiración y no debe usarse así',
+            'Es correcto: la tabla vale en cualquier modo ventilatorio',
+            'Es correcto si además el índice de VM supera el 18 %',
+            'Hay que multiplicar la PAD de la tabla por 0,5 en VM',
+        ],
+        correcta: 0,
+        explicacion: 'Para la VM el Manual UMI (pág. 70) solo da fórmulas e índices de colapsabilidad (>18 % y >12 %); las bandas de PAD (3 / 8 / 15 mmHg) del Cuadro I se basan en el colapso respiratorio y no tienen versión para VM. No hay factor de corrección en el manual.',
+    },
+    {
         id: 'umi-q069', tema: 'umi-fate',
         enunciado: '¿Cuál de estas NO es una de las 6 preguntas del examen FATE sistemático?',
         opciones: ['Medir la fracción de eyección exacta por Simpson biplano', 'Buscar patología obvia', 'Evaluar la función biventricular', 'Explorar pleura en ambos lados'],

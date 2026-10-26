@@ -346,6 +346,13 @@ test('fase 5: vistas subcostales y supraesternal, la VCI medida en modo M y la s
   const txt = await pg.textContent('#cv-m-resultado');
   assert.match(txt, /colapso 20%/); assert.match(txt, /En el modelo, con PVC/);
   assert.equal(await pg.locator('#cv-m-a-vci').count(), 1);
+  // ventilación mecánica: el colapso queda retenido y sale el índice de VM (17 y 13,6 mm: 25 % sin esfuerzo)
+  await pg.click('[data-vci-resp="vm-sin-esfuerzo"]');
+  const vm = await pg.textContent('#cv-m-resultado');
+  assert.match(vm, /Retenido/); assert.match(vm, /Índice de VM sin esfuerzo respiratorio: 25%/); assert.doesNotMatch(vm, /banda (normal|intermedia|alta)/);
+  await pg.click('[data-vci-resp="vm-general"]');
+  assert.match(await pg.textContent('#cv-m-resultado'), /fórmula general\): 22%/);
+  await pg.click('[data-vci-resp="espontanea"]');
   // Doppler: la suprahepática da S, D y A
   await pg.locator('[data-modo="D"]').tap(); await pg.locator('[data-muestra="suprahep"]').tap(); await pg.waitForTimeout(3000);
   const info = await pg.evaluate(() => window.__eco.info());
