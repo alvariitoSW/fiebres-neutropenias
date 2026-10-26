@@ -18,6 +18,7 @@
 import { baseGeometrica, REF } from './corazon-geo.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
+import { TEJIDOS, DB_IMAGEN } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -224,35 +225,36 @@ export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(
 // clase: pared (miocardio de dos superficies, endo y epi: se rellena lo de en medio), tubo (relleno si su
 // corte cierra; si no, línea), linea (pared fina de una sola superficie: aurículas, vasos), valva,
 // pericardio. db: ecogenicidad frente al miocardio. ancho (mm) de las líneas.
+const T = TEJIDOS;
 const TIPOS = [
-  [/^VI (endo|epi)cardio$/, { grupo: 'VI', clase: 'pared', db: 0 }],
-  [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: 0 }],
-  [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: 0 }],
-  [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: 1, ancho: 3.5 }],
-  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -1, ancho: 2.6 }],
-  [/^Base V[ID]$/, { clase: 'linea', db: 0, ancho: 2 }],
-  [/^Raíz aórtica$/, { clase: 'linea', db: 6, ancho: 2.2 }],
+  [/^VI (endo|epi)cardio$/, { grupo: 'VI', clase: 'pared', db: T.miocardio.db }],
+  [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: T.miocardio.db }],
+  [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: T.miocardio.db }],
+  [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: T.papilar.db, ancho: T.papilar.ancho }],
+  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: T.auricula.db, ancho: T.auricula.ancho }],
+  [/^Base V[ID]$/, { clase: 'linea', db: T.baseV.db, ancho: T.baseV.ancho }],
+  [/^Raíz aórtica$/, { clase: 'linea', db: T.raiz.db, ancho: T.raiz.ancho }],
   // grandes vasos: luz con sangre aunque salgan del pericardio (el arco en la supraesternal, la aorta descendente
   // detrás de la AI en el eje largo)
-  [/^(Aorta|Tronco pulmonar|AP )/, { clase: 'vaso', db: 6, ancho: 2.2 }],
+  [/^(Aorta|Tronco pulmonar|AP )/, { clase: 'vaso', db: T.vaso.db, ancho: T.vaso.ancho }],
   // abdomen (abdomen.mjs): hígado y diafragma se rellenan como una pared (el diafragma, una banda muy ecogénica);
   // los vasos de dentro, luz con sangre y una pared fina (brillante en la porta, por su vaina fibrosa)
-  [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: 1 }],
-  [/^Diafragma$/, { grupo: 'Diafragma', clase: 'pared', db: 9 }],
-  [/^Apófisis xifoides$/, { grupo: 'Xifoides', clase: 'pared', db: 12 }],
-  [/^Vena cava inferior$/, { clase: 'vaso', db: 1, ancho: 1.2 }],
-  [/^Vena suprahepática/, { clase: 'vaso', db: -2, ancho: 0.8 }],
-  [/^(Vena porta|Rama portal)/, { clase: 'vaso', db: 9, ancho: 1.3 }],
-  [/^(Vena|Seno coronario)/, { clase: 'linea', db: -3, ancho: 1.3 }],
-  [/^Grasa/, { clase: 'linea', db: 3, ancho: 3.5 }],
-  [/^Coronaria/, { clase: 'linea', db: 5, ancho: 1.4 }],
-  [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: 13, ancho: 1.4 }],
-  [/^Pericardio$/, { clase: 'pericardio', db: 14, ancho: 2 }],
+  [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: T.higado.db }],
+  [/^Diafragma$/, { grupo: 'Diafragma', clase: 'pared', db: T.diafragma.db }],
+  [/^Apófisis xifoides$/, { grupo: 'Xifoides', clase: 'pared', db: T.xifoides.db }],
+  [/^Vena cava inferior$/, { clase: 'vaso', db: T.vci.db, ancho: T.vci.ancho }],
+  [/^Vena suprahepática/, { clase: 'vaso', db: T.suprahepatica.db, ancho: T.suprahepatica.ancho }],
+  [/^(Vena porta|Rama portal)/, { clase: 'vaso', db: T.porta.db, ancho: T.porta.ancho }],
+  [/^(Vena|Seno coronario)/, { clase: 'linea', db: T.venaPared.db, ancho: T.venaPared.ancho }],
+  [/^Grasa/, { clase: 'linea', db: T.grasa.db, ancho: T.grasa.ancho }],
+  [/^Coronaria/, { clase: 'linea', db: T.coronaria.db, ancho: T.coronaria.ancho }],
+  [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: T.valva.db, ancho: T.valva.ancho }],
+  [/^Pericardio$/, { clase: 'pericardio', db: T.pericardio.db, ancho: T.pericardio.ancho }],
 ];
 export const CUERDA_H = 4;      // medio grosor (mm) de la losa en que las cuerdas entran en la imagen
 /** Un papilar cortado se desvanece entre PAPILAR_FADE[0] y [1] mm de distancia mínima a la pared del VI: más lejos, suelto, ya no hay tejido. */
 export const PAPILAR_FADE = [3, 6];
-export const DB = { sangre: -42, extracardiaco: -20, borde: -9, especular: 9 };
+export const DB = { sangre: T.sangre.db, extracardiaco: T.extracardiaco.db, borde: DB_IMAGEN.borde.db, especular: DB_IMAGEN.especular.db };
 const tipoDe = (nombre) => { for (const [re, t] of TIPOS) if (re.test(nombre)) return t; return null; };
 
 // posición del vértice i de una pieza (mezclada si viene de las formas precalculadas)
@@ -366,7 +368,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
       // y se apagan con la distancia: a 3 mm ya están 7,5 dB más oscuras; de ahí al borde de la losa, mucho más rápido
       if (p.nombre === 'Cuerdas' && !cuerdasYPapilares) for (const [a, b, f] of cortarLineas(p, P)) valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 4 - 6 * f, ancho: 0.9, grupo: 'Cuerdas' });   // la línea fina de antes
       else if (p.nombre === 'Cuerdas') for (const [a, b, f] of cortarLineas(p, P, CUERDA_H)) { const mm = f * CUERDA_H;
-        valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 8 - 2.5 * mm - (mm > 3 ? 10 * (mm - 3) : 0), ancho: 0.7 + 0.8 * (1 - f), grupo: 'Cuerdas' }); }
+        valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: T.cuerda.db - 2.5 * mm - (mm > 3 ? 10 * (mm - 3) : 0), ancho: 0.7 + 0.8 * (1 - f), grupo: 'Cuerdas' }); }
       return;
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }

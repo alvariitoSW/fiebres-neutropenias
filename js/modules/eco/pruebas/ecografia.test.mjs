@@ -285,3 +285,16 @@ test('papilares: los que nacen de la pared se ven; el que queda suelto a más de
   assert.ok(sueltos.length >= 1, 'la prueba no logró soltar ningún papilar');
   for (const e of sueltos) { const t = im.etiquetas.get(e.grupo); let n = 0; for (let q = 0; q < im.tag.length; q++) if (im.tag[q] === t) n++; assert.equal(n, 0, `${e.grupo} suelto a ${e.distPared.toFixed(1)} mm sigue en la imagen`); }
 });
+
+test('tabla de tejidos: orden de brillo, origen en cada fila y la imagen lee de ella', async () => {
+  const { TEJIDOS, DB_IMAGEN } = await import('../../../data/eco-tejidos.js');
+  const { DB } = await import('../ecografia.mjs');
+  const T = TEJIDOS;
+  assert.ok(T.sangre.db < T.miocardio.db && T.miocardio.db < T.cuerda.db && T.cuerda.db < T.valva.db && T.valva.db < T.pericardio.db, 'sangre < miocardio < cuerda < valva < pericardio');
+  for (const [k, t] of Object.entries(T)) {
+    assert.ok(['ilustrativo', 'fisiología general', 'ficha'].includes(t.origen), `origen de ${k}`);
+    assert.ok(t.nombre && Number.isFinite(t.db), `nombre y dB de ${k}`);
+  }
+  assert.equal(DB.sangre, T.sangre.db); assert.equal(DB.extracardiaco, T.extracardiaco.db);
+  assert.equal(DB.borde, DB_IMAGEN.borde.db); assert.equal(DB.especular, DB_IMAGEN.especular.db);
+});
