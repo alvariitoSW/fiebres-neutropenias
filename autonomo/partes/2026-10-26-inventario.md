@@ -25,8 +25,9 @@ cuaderno, fuente, palabras, vista Visual, modelo vivo, Estudiar, preguntas y «d
   cabecera del cuaderno; por eso esas fichas no salen en la «lista de prioridad» del `.md` (sí en la página).
 
 ## Para el usuario
-- Decidir qué grupo sin plan va después del bloque 3: guía ESC de IC (encaja con el motor del corazón), Manual UMI,
-  Fisio UCI o los papers. Lo elegido entra como tarea con `/bitacora`.
+- Nada que decidir ahora: Marino es la prioridad única (Objetivo M5) y lo demás espera. El inventario queda como
+  referencia para cuando se termine Marino (grupos sin plan: guía ESC de IC, Manual UMI, Fisio UCI, papers).
+- Lo que sí está pendiente del usuario: elegir las maquetas v2 del bloque 3 (parada 1).
 - ¿Reconvertir algún día las 347 preguntas «de redactar»? (REGLAS §8: las viejas se quedan hasta que lo pidas).
 
 ## Visto de paso (no tocado)
