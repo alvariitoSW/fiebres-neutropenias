@@ -2136,7 +2136,16 @@ const PREG_RECORRIDO = [
       { t: 'Ninguna hasta los 30 µg/min: antes no se nota.', porque: 'A 30 se llega al techo, no al comienzo (p. 13). Esperar hasta ahí deja a Amparo con una PAM de 51 mucho más tiempo.' }],
     explicacion: 'Por debajo de 10 µg/min, el β de la noradrenalina puede subir el gasto; por encima de 10 predomina el α y sube la resistencia; a 30, no hay más respuesta.', fuente: C.naDosis,
     tocar: { txt: 'Compruébalo: sube la bomba de 5 a 25', de: 5, a: 25, k: 'na' } },
-  { grupo: 'guia', num: 'G2', predice: true, estado: 'fenilefrina', ajustes: { fenilefrina: 0 },
+  { grupo: 'guia', num: 'G2', predice: true, estado: 'dopamina', ajustes: { dopamina: 10 },
+    enunciado: 'Amparo está con dopamina a 10 µg/kg/min. Vas a subirla a 20. <b>¿Qué pasa con el IC en el monitor?</b>',
+    opciones: [
+      { t: 'Sigue subiendo: más dosis, más β₁ y más volumen latido.', porque: 'Por encima de 10 entra el α y la resistencia sube (p. 14). Subirías la dosis buscando gasto y lo que le darías a Amparo es más poscarga, más taquicardia y más riesgo de arritmia.' },
+      { t: 'Baja algo: el α sube la poscarga y deshace parte de lo ganado.', ok: true },
+      { t: 'No cambia: a más de 10 solo se estimulan los receptores de dopamina.', porque: 'Esos receptores son de la dosis baja, hasta 3 µg/kg/min (p. 14). Si creyeras que a 20 solo abre riñón e intestino, no esperarías que la PA suba por apretar los vasos.' },
+      { t: 'La IRVS baja: la dopamina dilata el lecho renal y el esplácnico.', porque: 'Eso ocurre con dosis ≤3 µg/kg/min y solo en esos lechos (p. 14). A 20 manda el α: si esperas vasodilatación, pondrás dopamina a un shock que ya está vasodilatado.' }],
+    explicacion: 'Con ≤3 µg/kg/min actúan los receptores de dopamina, con 3-10 el β del corazón, y por encima de 10 el α: la RVS sube y la poscarga puede deshacer la subida del volumen latido.', fuente: C.dopa,
+    tocar: { txt: 'Compruébalo: sube la dopamina de 10 a 20', de: 10, a: 20, k: 'dopamina', cuenta: (r0, r1) => `el IC pasa de ${coma(r0.ic, 1)} a ${coma(r1.ic, 1)} y la IRVS sube de ${coma(r0.irvs, 1)} a ${coma(r1.irvs, 1)}: el α aprieta el anillo.` } },
+  { grupo: 'guia', num: 'G3', predice: true, estado: 'fenilefrina', ajustes: { fenilefrina: 0 },
     enunciado: 'Hipotensión de la anestesia: vas a poner fenilefrina a 35 µg/min. <b>¿Qué hará la FC?</b> Mira el metrónomo después.',
     opciones: [
       { t: 'Subirá: al apretar los vasos, el corazón tiene que empujar más.', porque: 'La fenilefrina no trae llave para el β (p. 15) y la FC baja por reflejo (p. 42). Si esperas taquicardia, pensarás que no actúa y subirás la dosis hacia el máximo de 200 µg/min.' },
@@ -2145,6 +2154,39 @@ const PREG_RECORRIDO = [
       { t: 'Subirá un poco, porque a dosis altas también abre el β₁.', porque: 'Es un agonista α puro (p. 15): no hay llave para el β a ninguna dosis. Si la crees β, la pondrías para sostener la FC y conseguirías lo contrario.' }],
     explicacion: 'La fenilefrina es un agonista α puro: aprieta los vasos y sube la PA, y puede acompañarse de bradicardia, que es refleja.', fuente: C.fenil, fuente2: C.csFenil,
     tocar: { txt: 'Compruébalo: pon la fenilefrina a 35', de: 0, a: 35, k: 'fenilefrina' } },
+  { grupo: 'guia', num: 'G4', tipo: 'destapa', sinModelo: true,
+    enunciado: 'Amparo lleva noradrenalina a 26 µg/min y la PAM no pasa de 62. El R1 pregunta: «¿la vasopresina la subo poco a poco, como la noradrenalina?». <b>¿Qué le contestas?</b> Son tres cosas.',
+    puntos: [
+      { t: 'No se titula: <span class="hl-azul">dosis fija de 0,03-0,04 U/min</span> (el libro imprime «U/h»: ver la nota).', c: C.vasoDosis },
+      { t: 'Entra por <span class="hl-azul">otra cerradura, la V₁</span>: sube la PA y ahorra catecolamina, sin beneficio probado de supervivencia.', c: C.vasopresina },
+      { t: 'Es el <span class="hl-rojo">segundo vasopresor</span> del séptico resistente a la noradrenalina: en voluntarios sanos no sube la PA; en el shock vasodilatador, sí.', c: C.vasopresina }],
+    explicacion: 'La vasopresina se pone a dosis fija como segundo vasopresor; por eso en el modelo su bomba lleva candado.', fuente: C.vasoDosis },
+  { grupo: 'guia', num: 'G5', predice: true, estado: 'dobutamina', ajustes: { dobutamina: 0 },
+    enunciado: 'Aurelio, cardiogénico, con noradrenalina a 5 µg/min. Vas a poner dobutamina a 10 µg/kg/min. <b>¿Qué hará su PAM?</b>',
+    opciones: [
+      { t: 'Bajará: la dobutamina vasodilata y la PA cae.', porque: 'Tiene una vasodilatación leve, pero el volumen latido la compensa y mantiene la PA (p. 43). Si esperas una caída, no la pondrías por miedo a la hipotensión y Aurelio seguiría con IC 2,1.' },
+      { t: 'Subirá mucho: aprieta el anillo de las arteriolas como la noradrenalina.', porque: 'Su receptor es el β₁, no el α (p. 43). Si la tomas por vasopresor, la usarás para subir la PA y Aurelio seguirá con el gasto bajo.' },
+      { t: 'Subirá algo: el gasto compensa la vasodilatación.', ok: true },
+      { t: 'No cambiará: solo mueve la FC.', porque: 'Sube también el volumen latido y la FC solo +5-15 lpm (p. 43). Si crees que solo acelera, la retirarás por taquicardia sin ver que es lo que sostiene la PA.' }],
+    explicacion: 'La dobutamina es el inotrópico más usado en el shock cardiogénico: mantiene la PA porque el volumen latido compensa la vasodilatación.', fuente: C.dobuta,
+    tocar: { txt: 'Compruébalo: sube la dobutamina de 0 a 10', de: 0, a: 10, k: 'dobutamina', cuenta: (r0, r1) => `la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)}, el IC de ${coma(r0.ic, 1)} a ${coma(r1.ic, 1)} y la IRVS baja de ${coma(r0.irvs, 1)} a ${coma(r1.irvs, 1)}: la vasodilatación se ve, y el gasto la compensa.` } },
+  { grupo: 'guia', num: 'G6', predice: true, estado: 'milrinona', ajustes: { milrinona: 0 },
+    enunciado: 'Aurelio, con noradrenalina a 5 µg/min. La milrinona no tiene cerradura propia: atasca la trituradora (la PDE). Vas a ponerla a 0,375 µg/kg/min. <b>¿Qué temes en su PAM?</b>',
+    opciones: [
+      { t: 'Que suba demasiado: es un inotrópico y el gasto lo compensa todo.', porque: 'Además de inotrópico, vasodilata, y esa hipotensión es un inconveniente mayor en el cardiogénico (p. 44). Si esperas que suba, la pondrás con PA justa y Aurelio caerá.' },
+      { t: 'Que baje, porque también es vasodilatador.', ok: true },
+      { t: 'Que no cambie: la PDE solo está en el miocito.', porque: 'El libro dice que también vasodilata (p. 44). Si lo ignoras, la pondrás sin vigilar la PA y Aurelio puede quedarse hipotenso.' },
+      { t: 'Que acelere el corazón como la dobutamina.', porque: 'Con la milrinona hay menos riesgo de taquicardia que con la dobutamina (p. 44). Lo que debes temer es otra cosa: la PA.' }],
+    explicacion: 'La milrinona es inotrópica y vasodilatadora: más apropiada en la insuficiencia cardíaca descompensada sin hipotensión que en el shock cardiogénico.', fuente: C.milri,
+    tocar: { txt: 'Compruébalo: pon la milrinona a 0,375', de: 0, a: 0.375, k: 'milrinona', cuenta: (r0, r1) => `la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la IRVS de ${coma(r0.irvs, 1)} a ${coma(r1.irvs, 1)} aunque el IC sube de ${coma(r0.ic, 1)} a ${coma(r1.ic, 1)}: no hay cerradura, pero el anillo se afloja igual.` } },
+  { grupo: 'guia', num: 'G7', sinModelo: true,
+    enunciado: 'Amparo lleva noradrenalina por una vía periférica del brazo. De pronto la piel de alrededor se pone pálida y el brazo se hincha: es una extravasación. <b>¿Qué haces?</b>',
+    opciones: [
+      { t: 'Lavas el catéter con suero para arrastrar el fármaco que queda dentro y después lo retiras.', porque: 'No se lava la vía antes de quitarla (p. 12): empujarías el vasoconstrictor hacia el tejido y la zona isquémica sería mayor.' },
+      { t: 'Esperas a ver si la palidez se resuelve sola; la fentolamina vale a las 24 h.', porque: 'La fentolamina solo funciona si se usa antes de 12 horas (p. 12). Esperar un día deja la piel sin riego hasta que ya no responde.' },
+      { t: 'Paras la infusión, aspiras sin lavar, quitas el catéter e inyectas fentolamina 5-10 mg en 10 mL en la zona.', ok: true },
+      { t: 'Das la fentolamina por vena, en bolo, para que llegue a todo el brazo.', porque: 'Se inyecta directamente en la zona de la extravasación (p. 12). Por vena sería un bloqueo α sistémico en una paciente séptica que ya está hipotensa.' }],
+    explicacion: 'Se para la infusión, se aspira lo que se pueda sin lavar la vía, se retira el catéter y se inyecta fentolamina (bloqueante α) en la zona, antes de 12 h. Si hay palidez, debería desaparecer casi enseguida.', fuente: C.extrav },
   { grupo: 'examen', num: 'E1', sinModelo: true,
     enunciado: 'Amparo, hora 10: noradrenalina 26 µg/min, vasopresina y, desde la hora 8, adrenalina a 0,1 µg/kg/min (≈8 µg/min). El lactato pasa de 3,1 a 5,0 mmol/L y la glucemia es de 262 mg/dL. <b>¿Qué cambio explica el receptor α de la adrenalina?</b>',
     opciones: [
@@ -2161,6 +2203,14 @@ const PREG_RECORRIDO = [
       { t: 'En el anafiláctico, como primer vasopresor tras la adrenalina.', porque: 'En la anafilaxia refractaria el libro la pone junto a la NA como segundo vasopresor posible, sin preferirla; y si la paciente toma betabloqueantes, antes va el glucagón (p. 67). Le faltaría el fármaco que funciona.' },
       { t: 'En el hipovolémico, mientras llega la sangre.', porque: 'El libro no la recomienda en ningún shock (p. 15). Al que sangra solo le subirías la PA del monitor, apretando además el riñón y el intestino, que se quedan con menos riego (p. 15).' }],
     explicacion: 'En el shock cardiogénico por obstrucción dinámica del tracto de salida del VI, un vasoconstrictor puro como la fenilefrina (que puede dar bradicardia refleja) es más apropiado que la noradrenalina; los inotrópicos están contraindicados.', fuente: C.csFenil, fuente2: C.csIno },
+  { grupo: 'examen', num: 'E3', tipo: 'error', sinModelo: true,
+    enunciado: 'Nota de evolución de Amparo, hora 12. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
+    frases: [
+      { t: 'Noradrenalina a 30 µg/min; si hace falta más, se sube a 40 hasta llegar a la meta.', mal: true, buena: 'A 30 µg/min ya no hay más respuesta: se añade un segundo vasopresor (p. 13).', cita: C.naDosis },
+      { t: 'Vasopresina a dosis fija, sin titular.', cita: C.vasoDosis },
+      { t: 'Con la dopamina a 5 µg/kg/min se espera más volumen latido; el α entra por encima de 10.', cita: C.dopa },
+      { t: 'Si se extravasa la noradrenalina, fentolamina en la zona antes de 12 h.', cita: C.extrav }],
+    explicacion: 'Un error: la noradrenalina tiene techo a 30 µg/min (p. 13). La vasopresina no se titula, la dopamina pasa de β a α hacia los 10 µg/kg/min y la fentolamina local vale antes de 12 h.', fuente: C.naDosis },
 ];
 // El caso de Begoña (S4 de la cobertura del bloque): anafilaxia en planta que no responde porque toma bisoprolol.
 // Las cifras del paciente son del caso; conductas y dosis, de la ficha (Marino, cap. 17, p. 64-67).
@@ -2249,6 +2299,7 @@ const mayeutica = crearMuestra({
       let txt;
       if (T.k === 'na') { const [r5, r10, r25] = [en(5), en(10), en(25)];
         txt = `de 5 a 10 µg/min el IC pasa de ${coma(r5.ic, 1)} a ${coma(r10.ic, 1)} y la IRVS apenas, de ${coma(r5.irvs, 1)} a ${coma(r10.irvs, 1)}; de 10 a 25 la IRVS sube a ${coma(r25.irvs, 1)} y el IC ya no sube (${coma(r25.ic, 1)}). Mira el anillo y el miocito de la lámina 1.`; }
+      else if (T.cuenta) { txt = T.cuenta(en(T.de), en(T.a)); }
       else { const [r0, r1] = [en(T.de), en(T.a)]; txt = `la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la FC baja de ${Math.round(r0.fc)} a ${Math.round(r1.fc)}, sin una sola llave en el β₁ del metrónomo.`; }
       hecho(`${txt} ${org('cifras: ilustrativo', true)}`);
     });
@@ -2280,7 +2331,7 @@ ponerEstado('na-baja');
 llenarEstatico();
 requestAnimationFrame(bucle);
 medirDock();
-window.__receptor = { efecto, ESTADOS, FARMACOS, ST, get R() { return R; }, ponerEstado };
+window.__receptor = { PREG_RECORRIDO, CASO, efecto, ESTADOS, FARMACOS, ST, get R() { return R; }, ponerEstado };
 </script>
 </body>
 </html>
