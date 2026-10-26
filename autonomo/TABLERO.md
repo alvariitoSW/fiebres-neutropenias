@@ -339,7 +339,7 @@ río y mar) → 39-44 → 45-53.
 | 9 | `radar` | B-012 · Radar: norte, registro, ficha de triaje y skill `/radar`; volcar lo del 23-25/10 | hecha (2026-10-26) · PR #28 aprobada por el usuario, en main | Va en la etapa A del plan de integración |
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | pendiente (aprobada 2026-10-25) | Empieza por una maqueta «antes / después» de la imagen |
-| 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | en curso (2026-10-26) | Corta, de solo lectura |
+| 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | en curso (2026-10-26): informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
