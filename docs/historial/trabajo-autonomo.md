@@ -309,3 +309,15 @@ al 10 y se pasa con **8,75 o más en todos**; si no, se repite la vuelta. Antes 
 
 El mismo día lo ajustó: **se aprueba con 8 en todos los puntos y la meta es 8,75**; y pidió estudiar cómo usar mejor los
 modelos y los tokens para llegar a esa meta sin más vueltas (bitácora B-023).
+
+## Gasto que baja (26/10/2026)
+
+Tras la parada 1 del bloque 3 (13,1 M equivalentes; profesor y constructor, el 83 %), el usuario pidió que cada
+operación cueste un poco menos que la anterior y que se aplique a todas las sesiones. Medido: la relectura de la
+conversación en cada paso (caché leída) es la mayor parte; el juicio de las v2 dio 107 pasos y 208 capturas, y el
+juicio rápido (17 capturas) la mitad. Reglas nuevas en `autonomo/REGLAS.md` §4.7, en los agentes `profesor` y
+`constructor` y en la skill: presupuesto por encargo (90 % del último), Fable solo para pensar, un profesor por pieza
+con programa de prueba y ≤10 capturas, encargos con dirección exacta, archivos de ≤700 líneas, arneses guardados en
+`autonomo/bloques/<bN>/herramientas/`. El usuario autorizó que el director editara las reglas, los agentes y la skill.
+Pendiente: el buscador `graft` no está instalado en el entorno (falta `@nanonets/graft` en el script de arranque y su
+índice `graft/` en el repositorio).

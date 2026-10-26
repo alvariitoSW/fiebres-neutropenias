@@ -111,6 +111,25 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
      darlo por roto (con la máquina cargada fallan pruebas que están bien).
 
+7. **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que
+   hacer que la siguiente nos intente costar un poco menos»; vale para todas las sesiones y tareas). Un agente paga en
+   cada paso releer todo lo que lleva en su conversación: 100 pasos cuestan mucho más del doble que 50.
+   - **Presupuesto en cada encargo**: pasos y tokens equivalentes, el 90 % del último agente del mismo papel y modelo
+     en una pieza parecida (tabla «Presupuestos vigentes» del tablero). Al llegar, el agente para y entrega lo hecho
+     con lo que falta. El parte compara gasto y presupuesto, explica la diferencia y actualiza la tabla.
+   - **Modelos**: Fable solo para pensar (profesor, cobertura). Constructores, arreglos, auditor y revisores, en sonnet;
+     el primer modelo vivo de algo nuevo, en opus y con presupuesto.
+   - **Profesor**: un agente por maqueta o pieza (no uno para todas); las cifras y los mandos los recorre un programa
+     de prueba que devuelve un resumen en texto, y el profesor mira **como mucho 10 capturas**, las de lo que hay que ver
+     con los ojos; comprueba lo pedido en el juicio anterior y lo nuevo, sin repetir la exploración entera.
+   - **Constructor**: encargos con dirección exacta (archivo y función, o línea) que da el juez; archivos de **≤700
+     líneas** por pieza (una maqueta o un modelo que pase de ahí se parte en módulos antes de la vuelta siguiente,
+     como `autonomo/maquetas/b3-shock/`); lee solo la función que toca (`graft` o `sed -n`), nunca el archivo entero.
+   - **Lo hecho no se repite**: los programas de prueba y arneses que escribe un agente se guardan en
+     `autonomo/bloques/<bN>/herramientas/` (o `autonomo/pruebas/`) con un `LEEME.md`, y el siguiente los reutiliza.
+   - **Reanudar mejor que relanzar**: si un agente se para (límite de uso, pausa), se reanuda con SendMessage; antes
+     de una pausa larga escribe un apunte de 5 líneas que el director copia al repositorio.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los

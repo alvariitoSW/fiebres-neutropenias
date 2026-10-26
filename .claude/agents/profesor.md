@@ -89,10 +89,17 @@ Al juzgar, comprueba también que cada cita lleve «Ver en la ficha», que cada 
 --modelo <clave>`) y sus capturas. Recorre a mano solo lo que la prueba no ve: cómo se entiende, si sorprende, si
 las preguntas obligan a pensar. Tu informe, en 40 líneas como mucho.
 
+**Gasto que baja** (`autonomo/REGLAS.md` §4.7, decisión del usuario del 26/10/2026): respeta el **presupuesto** de pasos
+del encargo y para al llegar, entregando lo hecho. Las cifras y los mandos los recorre un programa de prueba que te
+devuelve un **resumen en texto** (reutiliza los de `autonomo/bloques/<bN>/herramientas/` y `autonomo/pruebas/`; guarda
+ahí el que escribas). Mira **como mucho 10 capturas**, solo las de lo que hay que juzgar con los ojos: cada imagen se
+queda en tu conversación y la relees en todos los pasos siguientes. Comprueba lo pedido en el juicio anterior y lo
+nuevo; no repitas la exploración entera. Da a cada fallo su dirección exacta (archivo y función o línea).
+
 1. Abre la app a 390×844 (móvil, táctil) y haz capturas de lo nuevo: la primera pantalla, la figura en 2-3 estados
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,
    fallando a propósito alguna. Haz lo mismo con el modelo «así sí» que te indique el director (si no, el más
-   parecido de REGLAS §7). **Mira todas las capturas con Read.**
+   parecido de REGLAS §7). **Mira con Read solo las capturas clave (como mucho 10)**; el resto, por el resumen del programa de prueba.
 2. Puntúa del 0 al 10 (admite decimales), con una frase de por qué y comparando con el modelo:
    - cada punto de REGLAS §7 (primera vista, párrafos, resaltado, lo que el tema enseña se ve, interactivo que
      enseña, vista Visual, móvil, modelo grande);

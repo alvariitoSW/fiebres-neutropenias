@@ -18,7 +18,8 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   al presupuesto, el agente para y entrega lo hecho con lo que falta. El parte compara gasto con presupuesto, dice por
   qué se pasó o cómo ahorró, y actualiza la tabla. Las pruebas y arneses que escribe un agente se guardan en el
   repositorio (`autonomo/bloques/<bN>/herramientas/`) para que el siguiente los reutilice. Fable solo para pensar
-  (profesor, cobertura); constructores, arreglos y auditor, en sonnet (decisión del usuario, 26/10/2026)
+  (profesor, cobertura); constructores, arreglos y auditor, en sonnet; opus solo para el primer modelo vivo de algo
+  nuevo (decisión del usuario, 26/10/2026). Reglas completas en `autonomo/REGLAS.md` §4.7
 - **Presupuestos vigentes** (medidos el 26/10 en `b3`; equivalentes de `gasto.mjs`): profesor juzgar a fondo · fable
   60 pasos / 1,3 M (medido 107 / 2,3 M) · profesor juicio rápido · fable 60 / 1,0 M (75 / 1,1 M) · profesor cobertura ·
   fable 40 / 0,85 M (41 / 0,93 M) · constructor maqueta · sonnet 60 / 1,1 M (72 / 1,3-1,6 M) · constructor arreglos
