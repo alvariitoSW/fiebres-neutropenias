@@ -334,7 +334,7 @@ for (const [k, C] of CASOS.entries()) {
   } else if (k < CASOS.length - 1) await pulsar('#vso-preg [data-fin="otro"]');
 }
 // 11b. La revisión por objetivos al cerrar el caso (core/mayeutica-motor.js), con Inés (H4)
-const objetivosFin = () => p.evaluate(() => [...document.querySelectorAll('#vso-preg [data-objetivo]')].map(li => ({ id: li.dataset.objetivo, ok: li.dataset.cumplido === 'true', txt: li.textContent.replace(/\s+/g, ' ').trim(), cita: !!li.querySelector('.cita-ir[data-resaltar]') })));
+const objetivosFin = () => p.evaluate(() => [...document.querySelectorAll('#vso-preg [data-objetivo]')].map(li => ({ id: li.dataset.objetivo, ok: li.dataset.cumplido === 'true', txt: li.textContent.replace(/\s+/g, ' ').trim(), cita: !!li.querySelector('.vso-ir-texto') })));
 const INES = CASOS.find(c => c.id === 'h4'), kInes = CASOS.indexOf(INES);
 const iCons = INES.pasos.findIndex(pa => pa.pregunta.opciones?.some(o => o.consecuencia));
 const opCons = INES.pasos[iCons].pregunta.opciones.find(o => o.consecuencia);
@@ -349,7 +349,7 @@ const vigilar = async () => {
   const v = await T();
   ok(v.estado.causa === 'mat' && v.estado.rep === 'lena' && v.celdas.amenaza !== undefined, `consecuencia: el vaso pasa a la microangiopatía con las plaquetas repuestas (${v.estado.causa}, ${v.estado.rep})`);
   const nud = await p.evaluate(() => { const d = window.__vsoPruebas(); return d; });
-  const caja = await p.evaluate(() => { const c = document.querySelector('#vso-preg .vso-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.cita-ir[data-resaltar]'), visible: c.offsetParent !== null }; });
+  const caja = await p.evaluate(() => { const c = document.querySelector('#vso-preg .vso-consecuencia'); return c && { txt: c.textContent, cita: !!c.querySelector('.vso-ir-texto'), visible: c.offsetParent !== null }; });
   ok(caja && caja.visible && /⚠ Lo que acaba de pasar/.test(caja.txt) && caja.cita, 'consecuencia: sale la caja «⚠ Lo que acaba de pasar» con «Ver en la ficha»');
   await p.evaluate(() => document.querySelector('#vso-preg .vso-consecuencia').scrollIntoView({ block: 'center' })); await foto('15-consecuencia');
 };
