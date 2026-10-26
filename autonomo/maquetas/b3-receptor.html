@@ -366,8 +366,7 @@ dl.paciente dd.cambia { color: var(--rojo); font-weight: 600; }
   </section>
 
   <section id="zona-abajo" class="bloque">
-    <h3>La ficha de cada fármaco de este estado</h3>
-    <div class="bloque" id="fichas-farmaco"></div>
+    <details class="plegable" id="plegable-fichas"><summary>La ficha de cada fármaco de este estado</summary><div class="bloque" id="fichas-farmaco"></div></details>
     <details class="plegable" id="fuentes-estado"><summary>Las fuentes de este estado</summary><ul class="lista" id="lista-fuentes"></ul></details>
     <details class="plegable"><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div class="bloque" id="lista-notas"></div></details>
     <details class="plegable"><summary>Para profundizar: lo que este modelo aún no enseña</summary><ul class="lista" id="lista-profundizar"></ul></details>
@@ -1035,6 +1034,10 @@ function dibTubo(R, rl) {
     const am = (a0 + a1) / 2 + tw / 2, rm = (g.mi + g.mo) / 2, [nxp, nyp] = pol(cx, cy, rm, am), largo = Math.max(2.4, (g.mi + g.mo) / 2 * (a1 - a0) * 0.3);
     h += `<ellipse class="nucleo" cx="${f2(nxp)}" cy="${f2(nyp)}" rx="${f2(largo)}" ry="${f2(Math.min(2.2, (g.mo - g.mi) * 0.16))}" transform="rotate(${f2(am * 180 / Math.PI + 90)} ${f2(nxp)} ${f2(nyp)})"/>`;
   }
+  // el epitelio del bronquio: una capa pegada a la luz, con sus cilios hacia dentro (lo que lo distingue de la arteriola)
+  if (bron) { h += `<circle cx="${cx}" cy="${cy}" r="${f2(g.mi - 0.8)}" style="fill:none;stroke:var(--text-dim);stroke-width:1.6;stroke-dasharray:3 1.2"/>`;
+    for (let i = 0; i < 24; i++) { const a = rad(i * 15 + 4), [x0, y0] = pol(cx, cy, g.mi - 1.6, a), [x1, y1] = pol(cx, cy, Math.max(1, g.mi - 4.2), a);
+      h += `<line x1="${f2(x0)}" y1="${f2(y0)}" x2="${f2(x1)}" y2="${f2(y1)}" style="stroke:var(--text-dim);stroke-width:.6"/>`; } }
   // las cerraduras del borde de fuera y sus llaves
   const sockets = [];
   for (let i = 0; i < n; i++) {
