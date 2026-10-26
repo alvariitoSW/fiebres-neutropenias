@@ -139,6 +139,11 @@ más ahorran aquí, por orden:
 
 ## 5. Lo que necesito del usuario
 
+**PDF recibidos el 26/10** y guardados en `docs/`: `lang-2015-cuantificacion-camaras-ase.pdf`,
+`mor-avi-2011-mecanica-cardiaca-ase.pdf`, `hahn-2013-ete-completa-ase-sca.pdf` y `mitchell-2019-ett-completa-ase.pdf`.
+Las páginas («pág. ?») las pone el lector de fuente en el encargo 0. El PDF de Lang trae al final una actualización
+(fe de erratas): el lector la lee también.
+
 **PDF para `docs/`** (todos en la web de la ASE, acceso libre; URL tal como salieron en el buscador; yo no descargo nada):
 - Lang 2015, cuantificación de cámaras: https://www.asecho.org/wp-content/uploads/2015/01/ChamberQuantification2015.pdf (B1, B2, C2a).
 - Hahn 2013, ETE completa ASE/SCA: https://asecho.org/wp-content/uploads/2014/05/2013_Performing-Comprehensive-TEE.pdf (C1 y la ETE).
