@@ -106,8 +106,12 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 - **Guía ESC 2021 de estimulación cardiaca**: el usuario pide que la busque el director. Copia CC BY localizada en HAL
   (hal-amu.archives-ouvertes.fr/hal-03654607) y en Leiden; la red del entorno rechaza academic.oup.com, escardio.org,
   europepmc.org, pmc.ncbi.nlm.nih.gov, revespcardiol.org, hal-amu.archives-ouvertes.fr y
-  scholarlypublications.universiteitleiden.nl (26/10). Sigue pendiente: o el usuario permite uno de esos dominios en
-  la red del entorno, o sube el PDF. Sin texto leído, nada de bloqueos AV.
+  scholarlypublications.universiteitleiden.nl (26/10). Intento del 26/10 con hal-amu.archives-ouvertes.fr permitido: NO se pudo
+  descargar. `curl` a `https://hal-amu.archives-ouvertes.fr/hal-03654607` y a `/hal-03654607/document` falla con «CONNECT tunnel
+  failed, response 403» (el proxy deniega el túnel; el registro del proxy muestra además un 403 a `amu.hal.science:443`,
+  adonde HAL redirige), y `scholarlypublications.universiteitleiden.nl/access/item%3A3311017/download` falla igual (403 en CONNECT).
+  Sin archivo, no hay licencia, desplazamiento de páginas ni páginas de bradicardias/bloqueos AV. Sigue pendiente: permitir también
+  `amu.hal.science` (o el host de Leiden), o que el usuario suba el PDF. Sin texto leído, nada de bloqueos AV.
 
 ## 5. Pasos
 
