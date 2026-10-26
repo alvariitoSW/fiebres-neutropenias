@@ -22,11 +22,30 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 ## Tanda pendiente
 
-(vacía) Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.
+- Impeccable: ¿probar el detector una vez, instalar la skill sin hooks, o nada? (26/10)
 
-## Fichas de triaje (las 13 entradas, la más reciente arriba)
+(Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
+
+## Fichas de triaje (las 14 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Impeccable (pbakaus)
+- **Fecha / tipo**: 2026-10-26 · repositorio (herramienta para el agente, no para la app)
+- **Enlace**: https://github.com/pbakaus/impeccable
+- **Dijo**: «¿Se puede instalar este repo?» (26/10)
+- **Qué es**: guía de diseño para agentes de IA: una skill `/impeccable` con 24 órdenes (audit, critique, polish,
+  adapt…) y un detector de 62 reglas sin IA (desbordes, contraste, imágenes rotas, «aspecto de IA»). Al instalarlo
+  añade hooks que revisan cada edición de `.html/.css/.js`, descarga un programa propio en `~/.impeccable/bin/` y
+  escribe `PRODUCT.md` y `DESIGN.md` en la raíz. Telemetría activada por defecto (se apaga con
+  `IMPECCABLE_NO_TELEMETRY=1`).
+- **Sirve a**: nivel 1 (acabado visual de fichas y modelos en el móvil); fase 0 (acabado de producto)
+- **Fuente**: README del repositorio (leído el 26/10)
+- **Licencia**: Apache 2.0
+- **Coste**: gratis; tokens extra por los avisos del hook en cada edición
+- **Veredicto**: pendiente del usuario. Propuesta: probar primero su detector una vez, sin instalar, sobre la app;
+  instalar la skill sin hooks solo si lo que encuentra vale la pena. Choca en parte con las reglas propias de diseño
+  (tokens de `css/variables.css`, sin dependencias): mandan las de la app.
 
 ### Culprit (Cliff Reid)
 - **Fecha / tipo**: 2026-10-26 · web/app
