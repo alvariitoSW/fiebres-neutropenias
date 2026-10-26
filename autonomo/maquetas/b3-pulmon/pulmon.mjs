@@ -65,6 +65,8 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
       cabe: ti + 0.2 <= 60 / r.fr,
       // la alarma de presión del respirador (pmax): en VCV corta la insuflación y el Vt no se entrega entero
       alarmaPresion: alarma,
+      // FR real: si la inspiración no deja sitio, tiempos() fija la espiración en 0,2 s y el ciclo se alarga
+      frReal: 60 / (ti + te),
     };
     Object.assign(ciclo, { pico: 0, mesetaMedida: null, peepTotMedida: null, vtIns: 0, sumaPaw: 0, nPaw: 0 }); alarma = false;
   }
@@ -73,11 +75,11 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
     const pa = palv();
     if (fase === 'insp') {
       if (r.modo === 'vcv') { q = r.flujo * 1000 / 60; V += q * dt; paw = palv() + Ri() * q / 1000; }
-      else { paw = r.peep + r.pinsp; q = Math.max(0, (paw - pa) / Ri() * 1000); V += q * dt; }
+      else { paw = r.peep + r.pinsp; if (paw > (r.pmax ?? 40)) { paw = r.pmax ?? 40; alarma = true; } q = Math.max(0, (paw - pa) / Ri() * 1000); V += q * dt; }   // PCV: el respirador no pasa de pmax (limita la presión; el tiempo inspiratorio sigue)
       ciclo.vtIns += q * dt;
       if (paw > ciclo.pico) ciclo.pico = paw;
       const pmax = r.pmax ?? 40, corta = r.modo === 'vcv' && paw > pmax;
-      if (corta) { alarma = true; ciclo.pico = pmax; }
+      if (corta) { alarma = true; ciclo.pico = Math.max(pmax, palv()); }
       if (tFase >= ti || corta) { ciclo.palvFinInsp = palv(); ciclo.vFinInsp = V; fase = tp ? 'pausa' : 'esp'; tFase = 0; }
     } else if (fase === 'pausa') {
       q = 0; paw += (pa - paw) * (1 - Math.exp(-dt / TAU_VALVULA));
@@ -104,7 +106,11 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
     get vol() { return V - C() * S.resp.peep; },                 // mL por encima del reposo a la PEEP aplicada
     get volAbs() { return V; },
     lectura: () => ultimo,
-    ajustar(o) { Object.assign(S.resp, o); }, pulmonAjustar(o) { Object.assign(S.pulmon, o); }, maniobra(o) { Object.assign(S.man, o); },
+    ajustar(o) { Object.assign(S.resp, o); }, pulmonAjustar(o) {
+      // al cambiar C, el volumen se reescala para conservar la presión alveolar (V = C · Palv): sin esto Palv = V/C salta de golpe
+      if (o.c != null && o.c !== S.pulmon.c && S.pulmon.c > 0) V *= o.c / S.pulmon.c;
+      Object.assign(S.pulmon, o);
+    }, maniobra(o) { Object.assign(S.man, o); },
   };
 }
 
@@ -128,5 +134,6 @@ export function avisosAjuste(l, kg) {
   const out = [], kgVt = l && l.vtExh != null ? Math.round(l.vtExh / kg * 10) / 10 : 0;
   if (kgVt > 8) out.push({ k: 'vtkg', txt: `Volumen por kg peligroso: ${f1(kgVt)} mL/kg de peso ideal. El protocolo protector parte de 6 y baja hasta 4 mL/kg (Tabla 24.5, Marino p. 48).${kgVt > 12 ? ' Combinación no fisiológica: un pulmón sano no tolera tanto (fisiología general).' : ''}` });
   if (l && l.vm != null && l.vm > 20) out.push({ k: 'vm', txt: `Combinación no fisiológica: volumen minuto de ${f1(l.vm)} L/min; por encima de 20 casi nadie lo mantiene (fisiología general).` });
+  if (l && l.vm != null && l.vm < 2) out.push({ k: 'sinvent', txt: `Sin ventilación eficaz: Vt ${f1(l.vtExh)} mL y volumen minuto de ${f1(l.vm)} L/min (fisiología general).` });
   return out;
 }

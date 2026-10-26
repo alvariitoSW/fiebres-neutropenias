@@ -2,7 +2,7 @@
 // Comprueba (REGLAS §1.7, CLAUDE §12) que en los estados de la maqueta y en los extremos y el punto medio de cada
 // mando las cifras son las de un paciente posible, y que el modelo reproduce lo que Marino afirma (Ec. 27.1-27.4,
 // Fig. 23.5, Fig. 28.9). Los valores esperados de los pacientes son los de cobertura-3d.md §3 y §5.
-import { simular, pbw, avisosAjuste } from './pulmon.mjs';
+import { simular, crearPulmon, pbw, avisosAjuste } from './pulmon.mjs';
 
 let fallos = 0, n = 0;
 const ok = (cond, msg) => { n++; if (!cond) { fallos++; console.log('  ✗ ' + msg); } };
@@ -85,6 +85,24 @@ ax = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r: 5
 ok(avisosAjuste(ax, 70.5).length === 0, 'el ajuste normal no avisa');
 ax = simular({ modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60 }, { c: 19, r: 8 }, MAN).lectura;
 ok(avisosAjuste(ax, 70.5).length === 0, 'Isidro protector (5 mL/kg, FR 30) no avisa');
+
+console.log('Errores de fondo corregidos (26/10): pmax en PCV, C en vivo, sin ventilación');
+ax = simular({ modo: 'pcv', pinsp: 30, ie: 2, fr: 14, peep: 5, pmax: 30 }, { c: 60, r: 5 }, MAN).lectura;
+ok(ax.pico <= 30.01 && ax.alarmaPresion, `PCV con pmax 30: el pico no pasa de 30 (${r1(ax.pico)}) y salta la alarma`);
+ax = simular({ modo: 'pcv', pinsp: 30, ie: 2, fr: 14, peep: 5 }, { c: 60, r: 5 }, MAN).lectura;
+ok(ax.pico > 34.9 && !ax.alarmaPresion, 'PCV 30 + PEEP 5 con pmax 40: pasa sin alarma');
+{
+  const p = crearPulmon({ modo: 'pcv', pinsp: 20, ie: 2, fr: 14, peep: 10, pmax: 40 }, { c: 100, r: 5 }, MAN);
+  for (let i = 0; i < 8000; i++) p.paso(0.005);
+  const antes = p.palv; p.pulmonAjustar({ c: 15 });
+  ok(Math.abs(p.palv - antes) < 0.01, `cambiar C no mueve la presión alveolar (${r1(antes)} → ${r1(p.palv)})`);
+  let max = 0; for (let i = 0; i < 6000; i++) { p.paso(0.005); max = Math.max(max, p.palv); }
+  ok(max < 41, `tras C 100 → 15 la presión alveolar no pasa de la que aplica el respirador (${r1(max)})`);
+}
+ax = simular({ modo: 'pcv', pinsp: 15, ie: 2, fr: 14, peep: 5, pmax: 40 }, { c: 60, r: 40 }, MAN).lectura;
+ok(avisosAjuste(ax, 75).some((a) => a.k === 'sinvent') === (ax.vm < 2), `R 40: VM ${r1(ax.vm)} L/min y el aviso «sin ventilación» concuerda`);
+ax = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60, pmax: 30 }, { c: 60, r: 40 }, MAN).lectura;
+ok(ax.vm < 2 && avisosAjuste(ax, 75).some((a) => a.k === 'sinvent'), `VCV con R 40 y pmax 30: Vt ${r1(ax.vtExh)} mL, avisa «sin ventilación»`);
 
 console.log(`\n${n - fallos} de ${n} comprobaciones en verde${fallos ? ` · ${fallos} FALLOS` : ''}`);
 process.exit(fallos ? 1 : 0);
