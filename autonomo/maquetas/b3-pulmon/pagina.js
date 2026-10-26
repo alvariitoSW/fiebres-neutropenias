@@ -112,7 +112,7 @@ function pintarCifrasTodo() {
     celda('meseta', 'Meseta', l.meseta != null ? f1(l.meseta) : 'pausa', 'cmH₂O · con pausa', alarma30(l.meseta)),
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
     celda('peeptot', 'PEEP total', l.peepTot != null ? f1(l.peepTot) : 'ocluye', `oculta ${l.autoPeep != null ? f1(l.autoPeep) : '—'}`, l.autoPeep > 3 ? 'no' : ''),
-    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : 'pausa', l.cstat == null ? 'mL/cmH₂O' : l.conPeepTotal ? 'con PEEP total' : 'con PEEP aplicada', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
+    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : 'pausa', l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : 'pausa', l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
     celda('vm', 'Vol. minuto', f1(l.vm), 'L/min'),

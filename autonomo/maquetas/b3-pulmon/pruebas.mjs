@@ -21,7 +21,7 @@ let L = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r
 console.log('  ' + resumen(L));
 ok(entre(L.pres, 4.5, 5.5), 'Pres = pico − meseta ≈ 5'); ok(entre(L.meseta, 12.5, 14), 'meseta ≈ 13');
 ok(entre(L.pico, 17.5, 19.5), 'pico ≈ 18'); ok(entre(L.peepTot, 4.8, 5.4), 'PEEP total = PEEP aplicada (sin oculta)');
-ok(entre(L.cstat, 55, 65), 'Cstat ≈ 60'); ok(L.flujoFinEsp > -1.5, 'el flujo llega a cero al final de la espiración');
+ok(entre(L.cstat, 55, 60), 'Cstat ≈ 57 (60 menos los 25 mL de la tubuladura, cap. 27 p. 7)'); ok(L.flujoFinEsp > -1.5, 'el flujo llega a cero al final de la espiración');
 ok(entre(L.pMedia, 5, 10), 'presión media 5-10 (pulmón normal, cap. 27 p. 6)');
 
 console.log('Normal en PCV (Pinsp 10 sobre PEEP 5, I:E 1:2) → Vt ≈ C·Pinsp; con C 19 el Vt cae');
@@ -32,7 +32,7 @@ console.log('  ' + resumen(L)); ok(entre(L.vtExh, 150, 220), 'Vt 150-220 con C 1
 
 console.log('SDRA, Isidro (C 19, R 8, PEEP 10): Vt 6 mL/kg = 420 → meseta 32; Vt 5 mL/kg = 352 → meseta < 30');
 L = simular({ modo: 'vcv', vt: 420, fr: 30, peep: 10, flujo: 60, pmax: 50 }, { c: 19, r: 8 }, MAN).lectura;
-console.log('  ' + resumen(L)); ok(entre(L.meseta, 31, 33), 'meseta ≈ 32'); ok(entre(L.pico, 39, 41), 'pico = meseta + R·flujo ≈ 40'); ok(entre(L.cstat, 17, 21), 'Cstat < 25 (cap. 27 p. 6)'); ok(L.cabe, 'cabe la espiración a FR 30');
+console.log('  ' + resumen(L)); ok(entre(L.meseta, 31, 33), 'meseta ≈ 32'); ok(entre(L.pico, 39, 41), 'pico = meseta + R·flujo ≈ 40'); ok(entre(L.cstat, 15, 21), 'Cstat < 25 (cap. 27 p. 6), corregida por la tubuladura'); ok(L.cabe, 'cabe la espiración a FR 30');
 L = simular({ modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60 }, { c: 19, r: 8 }, MAN).lectura;
 console.log('  ' + resumen(L)); ok(entre(L.meseta, 27, 30), 'meseta ≤ 30 con 5 mL/kg'); ok(entre(L.pMedia, 10, 20), 'presión media sube con la PEEP 10');
 L = simular({ modo: 'vcv', vt: 564, fr: 30, peep: 10, flujo: 60, pmax: 50 }, { c: 19, r: 8 }, MAN).lectura;

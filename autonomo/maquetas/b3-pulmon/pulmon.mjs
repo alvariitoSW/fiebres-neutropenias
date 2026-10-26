@@ -15,6 +15,7 @@
 //   pbw(tallaCm, sexo)  peso corporal predicho (Tabla 24.5 / 27.1)
 
 export const ORIGEN_MODELO = 'fisiología general';
+export const C_TUBULADURA = 3;  // mL/cmH₂O que se quedan en la tubuladura (cap. 27 p. 7): se restan del Vt para la Cstat
 export const T_PAUSA = 0.5;      // s de pausa inspiratoria (inflation-hold)
 export const T_OCLUSION = 1.0;   // s de oclusión al final de la espiración
 const TAU_VALVULA = 0.04;        // s: lo que tarda la presión proximal en igualarse al cerrar una válvula (ilustrativo)
@@ -55,7 +56,7 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
       palvFinInsp: ciclo.palvFinInsp, palvFinEsp: peepTot, autoPeepReal: autoPeep,
       pres: ciclo.pico - ciclo.palvFinInsp,
       // Cstat y presión de conducción: con la PEEP total si se ocluyó; si no, con la aplicada (y se rotula así)
-      cstat: meseta != null && meseta > (peepTotMed ?? r.peep) ? vtExh / (meseta - (peepTotMed ?? r.peep)) : null,
+      cstat: meseta != null && meseta > (peepTotMed ?? r.peep) ? Math.max(0, vtExh - C_TUBULADURA * (meseta - (peepTotMed ?? r.peep))) / (meseta - (peepTotMed ?? r.peep)) : null,
       dp: meseta != null ? meseta - (peepTotMed ?? r.peep) : null, conPeepTotal: peepTotMed != null,
       vtIns: ciclo.vtIns, vtExh, vm: vtExh * r.fr / 1000, flujoFinEsp: ciclo.flujoFinEsp,
       pMedia: ciclo.nPaw ? ciclo.sumaPaw / ciclo.nPaw : 0,
