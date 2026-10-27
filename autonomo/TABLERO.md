@@ -369,6 +369,7 @@ río y mar) → 39-44 → 45-53.
 | 23 | `propuestas-movil` | Las 3 propuestas del parte `2026-10-27-movil-existente.md`: (1) pieza común `verFrase()` en `js/core/` que lleva la frase viva a la vista tras tocar un mando, usada por todos los modelos vivos (hoy hay tres soluciones: margen, frase pegada, scroll); (2) en la lista del constructor (`.claude/agents/constructor.md`) y REGLAS §4.8 R1: «suelo de letra SVG ≈ 9,3 en coordenadas del dibujo (8 px / escala a 360 px)»; (3) en la skill `plan-socialista`: el director no fusiona `main` en un comando en segundo plano, lo hace a la vista y mira conflictos antes de seguir | hecha (27/10, directo a `main`; parte `2026-10-27-propuestas-movil.md`) | Tipo `arreglo` (directo a `main` con los jueces en verde). (2) y (3) son reglas aprobadas: las escribe la sesión, citando la aprobación en `docs/historial/trabajo-autonomo.md`. (1): constructor sonnet; `jueces.mjs --modelo` de los 8 modelos vivos en verde (móvil incluido); sube versión |
 | 24 | `reglas-27-10` | Escribir las 8 reglas aprobadas el 27/10 (ver su encargo) en `REGLAS.md`, `.claude/agents/constructor.md` y la skill `plan-socialista`, citando la aprobación en `docs/historial/trabajo-autonomo.md` | hecha (2026-10-27): directo a `main`; reglas en `REGLAS.md` §1.11, §1.14, §4.6, §4.7 y §5.6, lista del constructor y skill (límite diario en §0); parte `2026-10-27-reglas-27-10.md` | Tipo `arreglo` (solo reglas, directo a `main`). Lo hace la propia sesión, sin agentes. Antes que la parada 2 del `b3`, para que ya la use |
 | 25 | `topes-acidobase` | Ácido-base vivo: con la albúmina y la osmolalidad a sus extremos, la PaCO₂ a 90 da pH 6,36 (desde el inicio, 7,05). Buscar qué combinación lo produce y arreglarlo en su origen, no recortándolo | hecha (2026-10-27): no era la albúmina sino «Bicarbonato IV» + PaCO₂ 90; el modelo ya lo rechazaba, pero el aviso escribía el pH imposible. Aviso reescrito, directo a `main`; parte `2026-10-27-topes-acidobase.md` | Tipo `arreglo` (directo a `main` con `jueces-topes` y `--modelo acidobase-vivo` en verde). Constructor sonnet, ~25 pasos / 0,5 M. Hallazgo en `autonomo/partes/2026-10-27-jueces-topes.md` |
+| 26 | `reglas-b3p2` | Escribir las 4 reglas aprobadas el 27/10 tras la parada 2 del `b3` (ver su encargo) en `REGLAS.md`, `.claude/agents/constructor.md` y la skill `plan-socialista`, citando la aprobación en `docs/historial/trabajo-autonomo.md` | pendiente (aprobada por el usuario el 27/10) | Tipo `arreglo` (reglas, no toca la app). Directo a `main` |
 
 **Encargo `reglas-27-10`** · tipo: arreglo (reglas, no toca la app) · aprobado por el usuario el 27/10/2026
 - Ahorro (de `/ahorro`, en la bitácora): (1) el constructor pasa sus pruebas y las de lo que tocó; la suite entera la
@@ -381,6 +382,19 @@ río y mar) → 39-44 → 45-53.
   para e informa; (7) un modelo vivo nuevo con sello propio añade su ajuste a `jueces-topes.mjs`, no un arnés suelto;
   (8) citas que cruzan archivos de otra sesión: una rama `wt/…` por modelo que fusiona la sesión dueña (REGLAS §4.6).
 - Y el límite de gasto por día de arriba (18 % del uso semanal) en la skill `plan-socialista`.
+
+**Encargo `reglas-b3p2`** · tipo: arreglo (reglas, no toca la app) · aprobado por el usuario el 27/10/2026 (parte `autonomo/partes/2026-10-27-b3-parada2.md`)
+- (1) **`.claude/`**: la prohibición de tocarla queda para `CLAUDE.md`, `autonomo/REGLAS.md`, `.claude/agents/` y las
+  skills del proyecto. Lo que reescribe una herramienta instalada (graft en `.claude/settings.json` y su skill) lo sube
+  el director en un commit aparte, tras comprobar con `git diff` que no se pierde ninguna orden del proyecto (y volver a
+  ponerla si se perdió); el entorno bloquea al agente su propia configuración, así que hace falta el permiso del
+  usuario en la sesión. En la skill `plan-socialista` §3 y en REGLAS §5.1.
+- (2) **Una parada con varios modelos vivos va en una sesión por modelo** (el director de la parada 2 del `b3` gastó
+  5,1 M frente a 0,8 M por fusionar 12 ramas en una conversación). En la skill (Ahorro medido, punto 1) y REGLAS §4.7.
+- (3) **Botones estables**: un modelo vivo repinta sus botones en el sitio (cambia el texto o la marca), no los rehace
+  en cada cuadro; si no, los jueces dan «mando no tocable». A la lista del constructor.
+- (4) **Llevar una maqueta aprobada a la app son dos encargos**: el modelo (con su prueba) y su Mayéutica. En la skill
+  (Modo bloque, paso 3) con los presupuestos del tablero del 27/10 (`b3` parada 2).
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
