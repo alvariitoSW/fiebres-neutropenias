@@ -19,8 +19,8 @@ export function crearMayeutica(d) {
     d.ponerEstado(q.estado, q.wpwFa ? { wpwFa: true } : q.fcFA ? { fcFA: q.fcFA, llenadoMalo: !!q.llenadoMalo } : {});
     d.taparTodo(true, q.estado === 'wpw' && !q.wpwFa && q.grupo !== 'caso');
   };
-  const destapar = q => { if (q && q.grupo === 'caso') d.taparTodo(true, false); else d.taparTodo(false); };
-  const citas = q => [q.fuente, q.fuente2, ...(q.puntosC || []), ...(q.frases || []).map(f => f.cita)].filter(Boolean).filter((c, i, a) => a.findIndex(x => x.id === c.id && x.sitio === c.sitio) === i).map(cita).join('');
+  const destapar = q => { d.taparTodo(false); };   // al contestar se ven las cifras; también en el caso (el monitor no se queda en «?»)
+  const citas = q => [q.fuente, q.fuente2, q.fuente3, ...(q.puntosC || []), ...(q.frases || []).map(f => f.cita)].filter(Boolean).filter((c, i, a) => a.findIndex(x => x.id === c.id && x.sitio === c.sitio) === i).map(cita).join('');
   const subir = () => scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' });
   return crearMayeuticaModelo({
     p: 'rtv', cont: () => document.getElementById('rtv-preg'), clave: 'ritmo-vivo-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,

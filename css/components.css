@@ -3369,6 +3369,7 @@ body.study-mode-on .cpv-dock { padding-right: 82px; }
 .guia-tit { flex: 1; min-width: 0; font: 600 .84rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--border-color); background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
 .guia-txt { margin: 0; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; }
+.guia-org a, .guia-txt a { color: var(--accent-yellow); }
 .guia-org { font: .62rem/1.2 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); border: 1px dashed var(--border-color); border-radius: 999px; padding: 0 5px; }
 .guia-citas { display: grid; gap: 2px; }
 .guia-fuentes { font: .76rem/1.4 system-ui, -apple-system, 'Segoe UI', sans-serif; color: var(--text-muted); }
