@@ -97,7 +97,7 @@ console.log('Mayéutica: pasos', pasos, 'comprobaciones', comprobados); ok(pasos
 await cap('14-may-final'); await desborde('may final');
 await tap('[data-acc="modelo"]'); await page.waitForTimeout(600); await desborde('vuelta al modelo');
 // las otras dos maquetas abren sin errores
-for (const m of ['b3-ritmo', 'b3-receptor']) { const p2 = await ctx.newPage(); const e2 = []; p2.on('console', (x) => { if (x.type() === 'error') e2.push(x.text()); }); p2.on('pageerror', (e) => e2.push(e.message)); await p2.goto(BASE + m + '.html', { waitUntil: 'networkidle' }); await p2.waitForTimeout(1200); const d = await p2.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); console.log(m, 'errores', e2.length, 'desborde', d); ok(e2.length === 0 && d <= 0, `${m}: ${e2.join(' | ')} desborde ${d}`); await p2.close(); }
+for (const m of ['b3-ritmo', 'b3-receptor']) { const p2 = await ctx.newPage(); const e2 = []; p2.on('console', (x) => { if (x.type() === 'error') e2.push(x.text()); }); p2.on('pageerror', (e) => e2.push(e.message)); await p2.goto(BASE + m + '.html', { waitUntil: 'load' }); await p2.waitForTimeout(1200); const d = await p2.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); console.log(m, 'errores', e2.length, 'desborde', d); ok(e2.length === 0 && d <= 0, `${m}: ${e2.join(' | ')} desborde ${d}`); await p2.close(); }
 await browser.close();
 console.log('\nERRORES DE CONSOLA:', errores.length, errores.slice(0, 5));
 console.log('FALLOS:', fallos.length); for (const f of fallos) console.log(' ✗', f);
