@@ -10,6 +10,8 @@ import { animarLupa, aplicarCascada, granulos, heroe, heroeActual, heroeDe, lupa
 import { R, SEG, llenarEstatico, monitor, montarTrazas, muestra, pausado, pintarCifras, pintarTrazas, seguirLactato, setPausado, setR, setTapado, tapado } from './trazas.js';
 import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, fraseTope } from './topes.js';
+import { crearMayeuticaModelo } from '../../../core/mayeutica-motor.js';
+import { CASOS, PREGUNTAS } from '../../../data/receptor-vivo-mayeutica.js';
 /* ============================================================
    9. Estados, lupas, bombas (pieza común dibujada), frase viva, explicación guiada, fichas y notas
    ============================================================ */
@@ -431,10 +433,86 @@ export function subirBomba(k, de, a, alFin) {
 // La lupa en grande: la lámina 2 se mueve a un plano a pantalla completa por encima del dock (la pieza común)
 export const planoLupa = crearPlanoGrande({ titulo: 'La cerradura, de cerca', nota: 'Sigue moviéndose con la bomba: cámbiala abajo.', piezas: [{ nodo: () => $('lupa') }, { nodo: () => $('leyenda') }] });
 $('lupa-grande').addEventListener('click', () => planoLupa.abrir());
-// [HUECO receptor parte 2: Mayéutica] (preguntas, caso de Begoña y el interruptor Explorar | Mayéutica)
+/* ============================================================
+   Mayéutica: el motor común (core/mayeutica-motor.js) con los enganches del receptor
+   ============================================================ */
+function subir() { const r = $('raiz').getBoundingClientRect(); if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' }); }
+// El modelo en el estado de la pregunta; si se predice, el monitor y los dibujos se esconden hasta contestar
+function prepararPregunta(q) {
+  verModelo(!q.sinModelo);
+  if (q.estado) { ponerEstado(q.estado, true); Object.assign(ST.f, q.ajustes || {}); }
+  tapar(!!q.predice && !q.sinModelo);
+  if (!q.sinModelo) { actualizar(); llenarEstatico(); }
+}
+const citasDe = q => [].concat(q.fuente || []);
+let cuentaTocar = '';   // lo que el monitor dice tras «Compruébalo» (se calcula con el modelo, al terminar)
+function comprobarEnModelo(m, cont, q) {
+  const T = q.tocar, en = (x) => efecto({ ...ST, f: { ...ST.f, [T.k]: x } });
+  m.disabled = true;
+  $('monitor').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' });
+  const fin = (txt) => { cuentaTocar = `${txt} ${org('cifras: ilustrativo', true)}`; cont.querySelector('[data-accion="comprobar"]').click(); requestAnimationFrame(() => cont.querySelector('[data-hueco="fin"]')?.scrollIntoView({ block: 'start', behavior: 'auto' })); };
+  if (T.k === 'glucagon') {
+    const [r0, r1] = [en(0), en(1)]; ST.f.glucagon = 1; actualizar(); pintarDock();
+    return fin(`con el glucagón, la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la FC de ${Math.round(r0.fc)} a ${Math.round(r1.fc)}: entra por su propia cerradura, aunque el β siga tapado.`);
+  }
+  subirBomba(T.k, T.de, T.a, () => {
+    let txt;
+    if (T.k === 'na') { const [r5, r10, r25] = [en(5), en(10), en(25)];
+      txt = `de 5 a 10 µg/min el IC pasa de ${coma(r5.ic, 1)} a ${coma(r10.ic, 1)} y la IRVS apenas, de ${coma(r5.irvs, 1)} a ${coma(r10.irvs, 1)}; de 10 a 25 la IRVS sube a ${coma(r25.irvs, 1)} y el IC ya no sube (${coma(r25.ic, 1)}). Mira el anillo y el miocito de la lámina 1.`; }
+    else if (T.cuenta) { txt = T.cuenta(en(T.de), en(T.a)); }
+    else { const [r0, r1] = [en(T.de), en(T.a)]; txt = `la PAM pasa de ${Math.round(r0.pam)} a ${Math.round(r1.pam)} y la FC baja de ${Math.round(r0.fc)} a ${Math.round(r1.fc)}, sin una sola llave en el β₁ del metrónomo.`; }
+    fin(txt);
+  });
+}
+export const mayeutica = crearMayeuticaModelo({
+  p: 'rcv', cont: () => $('preg'), clave: 'receptor-vivo-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
+  subir, volverPor: 'El receptor vivo',
+  reiniciar: () => { verModelo(true); tapar(false); ponerEstado('na-baja'); },
+  pregunta: {
+    alEmpezar: q => prepararPregunta(q),
+    verEnTexto: q => `<p class="rcv-fuente-p">${citasDe(q).map(cita).join('')}</p>`,
+    alCerrar: q => { tapar(false); verModelo(!q.sinModelo); if (!q.sinModelo) actualizar(); },
+    tocar: {
+      mandoHTML: t => `<p class="rcv-para"><b>Compruébalo en el modelo:</b></p><button type="button" class="rcv-b rcv-prim" data-mando="sube">${t.txt}</button>`,
+      alMostrar: (q, cont) => { tapar(false); verModelo(true); actualizar(); llenarEstatico(); const f = cont.querySelector('[data-accion="comprobar"]').closest('.rcv-fila'); if (f) f.hidden = true; },
+      comprobar: () => true,
+      confirma: () => cuentaTocar,
+      accion: comprobarEnModelo,
+    },
+  },
+  textos: {
+    ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): la mitad se predice y se comprueba en el monitor; el resto, sin modelo.</span>
+      <span><b>2. Examen, nivel MIR</b> (${nE}): distractores finos que salen de las fichas.</span>
+      <span><b>3.</b> Otra vez lo que fallaste, solo eso.</span>
+      <span><b>4.</b> Un caso clínico que evoluciona: el betabloqueante de Begoña.</span>`,
+    empezar: 'Empezar la guía socrática', seguir: 'Seguir',
+    pie: 'Las cifras del monitor salen cuando contestas: primero predices, luego compruebas. El paciente del caso se inventa; la medicina sale de las fichas, y cada pregunta dice dónde.',
+    conModelo: 'el receptor', casos: 'El modelo se pone en el estado de cada paso. Lo nuevo de la ficha de la paciente sale en rojo.',
+    abrirPaciente: 'Volver al receptor de Begoña (β tapado y glucagón)',
+  },
+  preguntaDePaso: paso => ({ estado: paso.estado }),
+  alTerminarCaso: () => { verModelo(true); tapar(false); },
+  abrirPaciente: () => { setModo('explorar'); ponerEstado('betabloqueo'); ST.f.glucagon = 1; actualizar(); },
+});
 /* ============================================================
    11. Modos y arranque
    ============================================================ */
+export function setModo(m) {
+  if (guia) cerrarGuia();
+  pararPasoAPaso(); modo = m; borrarSenal();
+  for (const [id, k] of [['modo-explorar', 'explorar'], ['modo-preguntas', 'preguntas']]) $(id).setAttribute('aria-selected', String(m === k));
+  $('zona-estados').hidden = m !== 'explorar'; $('fila-explicame').hidden = m !== 'explorar'; $('zona-abajo').hidden = m !== 'explorar';
+  $('vista-preguntas').hidden = m !== 'preguntas';
+  $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';
+  $('frase').hidden = m !== 'explorar'; $('detalle-fila').hidden = true;
+  verModelo(true); tapar(false);
+  if (m === 'explorar') ponerEstado('na-baja');
+  if (m === 'preguntas') mayeutica.entrar();
+  medirDock();
+}
+$('modo-explorar').onclick = () => setModo('explorar');
+$('modo-preguntas').onclick = () => setModo('preguntas');
+mayeutica.cargar();
 addEventListener('resize', () => { montarTrazas(); llenarEstatico(); medirDock(); });
 setR(efecto({ ...ST, id: 'na-baja', pac: 'paulino', f: { na: 8 }, reg: { na: 'shock' } }));
 montarTrazas();
