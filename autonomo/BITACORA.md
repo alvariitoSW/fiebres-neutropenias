@@ -5,8 +5,8 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-26 (PR #28 del Radar fusionada; PR #30 de la eco en borrador; `objetivos-casos` e
-`inventario` en curso en sus ramas).
+Última sincronización: 2026-10-27 (PR #30 de la eco y #31 del inventario fusionadas; `objetivos-casos` y
+`eco-vci-retenido` hechas; PR #32 del bloque 3 abierta en borrador; `jueces-topes` aprobada).
 
 ---
 
@@ -202,18 +202,21 @@ esta sección.
 |---|---|---|---|---|
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
-| `b3` | **Bloque 3** (caps. 14-22) | ⏸ **parado en la parada 1** (23/10) | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
+| `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | ⏸ **parado en la parada 1**: maquetas v3 y topes hechos, [PR #32](https://github.com/alvariitoSW/fiebres-neutropenias/pull/32) en borrador | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
-| `eco-mega` | **B-015 · Megaproyecto de la eco** | 👀 **en revisión**: parada 1 (imagen realista, mandos de imagen y «Señálalo»), [PR #30](https://github.com/alvariitoSW/fiebres-neutropenias/pull/30) en borrador | 2026-10-25 | Ver en el móvil: Eco cardíaca → simulador → «🎚 Mandos de imagen». Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
-| `inventario` | **B-014 · Inventario de estudio** | en curso (26/10), rama `auto/inventario` | 2026-10-25 | |
+| `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1 y 2 **hechas y en main** (PR #30, 27/10); la parada 3 espera los PDF de los huecos | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
+| `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
+| `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
+| `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | pendiente (aprobada 27/10) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
-| `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: las dos primeras, hechas (25/10, en main); `objetivos-casos`, en curso (26/10, rama propia); `eco-vci-retenido`, pendiente; `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
-| `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | pendiente en el tablero, Objetivo E | 2026-10-25 | «aprueba B-023» (25/10) |
+| `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: cuatro hechas y en main (25-27/10); `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
+| `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | hecha (27/10, PR #33): R1-R9 aprobadas y en `REGLAS.md` §4.8; R1 automático, tarea `jueces-movil` | 2026-10-25 | «apruebo todas las propuestas de regla de R1 a R9» (27/10) |
+| `jueces-movil` | Juez automático del móvil (R1 de `notas-meta`) | pendiente en el tablero | 2026-10-27 | Técnica: directo a main |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 | `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | ✅ elegido el 26/10: el núcleo entra en la parada 2 de `eco-mega` (P1 potente, pericardio de las aurículas más real, P7 como forma grave con nota); PDF de los huecos los busca el usuario · https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
@@ -230,10 +233,13 @@ esta sección.
 
 ### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
 
-- **Esperando al usuario (parada 1, 2.ª vuelta)**: las tres maquetas v2 ya pulidas, en `main` y en el móvil:
-  `autonomo/maquetas/b3-shock.html` (monitor de UCI, Impella, balón y ECMO como objetos reales, «¿Qué shock es?»),
-  `b3-ritmo.html` (corazón eléctrico: grafo de conducción y ECG generado) y `b3-receptor.html` (receptor vivo:
-  arteriola y cerraduras de pines). Piezas comunes en `autonomo/maquetas/comun/`. Falta su «ok» o sus cambios.
+- **Esperando al usuario (parada 1, 3.ª vuelta, 26-27/10)**: las maquetas **v3** (shock, corazón eléctrico,
+  receptor y pulmón con respirador en 3D), ya con sus topes de paciente real (§1.14), en la [PR
+  #32](https://github.com/alvariitoSW/fiebres-neutropenias/pull/32). Tres preguntas: 1) ¿shock, corazón eléctrico y
+  receptor pasan a la app (parada 2)?; 2) receptor: en el sello el deslizador no se apaga (para poder bajar la dosis),
+  y §1.14 dice «se apaga»: ¿así?; 3) pulmón: ¿vale el esquema o quieres ver antes el racimo y el respirador reales?
+  (y el neumotórax a tensión, ¿escena aparte?). La sesión siguiente, «pantallas como las reales», la abres tú con
+  `/plan-socialista b3`.
 - **Hecho y en la rama `auto/b3`** (sin PR aún): las 26 fichas con 290 ids por sección y su página, vista Visual en
   Merino Cardiología y Neumología, hallazgos de fidelidad arreglados, y Texto | Estudiar en las 9 del shock (152
   preguntas, casos de Mateo, Amparo, Nerea y Begoña), auditadas (0 graves) y corregidas.
@@ -242,7 +248,7 @@ esta sección.
 - **Siguiente, tras su «ok»**: construir en la app la cabecera del shock (pasar `comun/` a `js/core/`), el receptor
   vivo y el corazón eléctrico (sub-bloques 3A → 3B → 3C), con jueces, auditor y profesor; el hueco del caso de Amparo
   (control del foco, p. 11).
-- **Lo que falta de él**: el PDF de la guía ESC 2021 de marcapasos (bradicardias y bloqueos AV).
+- **Lo que falta de él**: nada de fuentes (la ESC 2021 de marcapasos ya está en `docs/` desde el 26/10).
 - Documentos: `autonomo/bloques/b3/` (encargo, cobertura, farmacos, megaproyecto-*, juicio-maquetas-v2, auditoria-3a).
 
 El resto del tablero sigue `aparcada`.
@@ -284,15 +290,28 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · ESC 2021 de
-  estimulación · ESC de SCA · Di Mario 2005 · ASE 2025 de corazón derecho y diastólica · ASE/EACVI 2015 · ASE/SCA 2013
-  de ETE · temarios de Radiología de tórax y Neurorradiología.
-- **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
-  no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
-  Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
-  versión en español de Rev Esp Cardiol 2022;75:370-410. La red del entorno no deja descargarla. **Tú**: mandar el PDF
-  cuando puedas (dijiste el 21/10: «cuando pueda, te mando los PDFs»). Hasta entonces sus estados quedan preparados y
-  vacíos, rotulados «pendiente de fuente». Encaja también con la puerta de Arritmias (siguiente punto).
+- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · guía de amiloidosis cardíaca ·
+  fuente del MAPSE · Leung y Levine 1994 (opcional) · temarios de Radiología de tórax y Neurorradiología.
+- **✅ PDF de la ASE 2025 (27/10)**, en `docs/`:
+  - `nagueh-2025-funcion-diastolica-hfpef-ase.pdf` (J Am Soc Echocardiogr 2025;38:537-569; página impresa = página
+    del PDF + 536). **Lo había pedido**: el «ASE 2025 diastólica» de la fase 3 (`f3-calc-eco`, `echosuite.md` §4.6).
+    Además, el atlas cap. 10 lo cita 14 veces sin tener el PDF: ahora se puede cotejar.
+  - `taub-2025-informe-eco-estandarizado-ase.pdf` (2025;38:735-774; página impresa = PDF + 734). **No estaba pedido**
+    en ninguna lista, pero el atlas ya lo cita en los caps. de función sistólica y VD (`taub2025`), y sirve para la
+    ficha «cómo leer un informe» y los avisos críticos de la fase 3.
+- **✅ PDF recibidos el 27/10 (2.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
+  - `mukherjee-2025-corazon-derecho-hp-ase.pdf` (J Am Soc Echocardiogr 2025;38:141-186; +140): la PAD con
+    ventilación mecánica (`eat-q032`), las calculadoras del VD (`f3-calc-eco`) y el índice de excentricidad y el grosor
+    de la pared del VD (huecos de la parada 3 de `eco-mega`).
+  - `zoghbi-2017-insuficiencias-valvulares-ase.pdf` (2017;30:303-371; +302): IM de la parada 3 (P5) y `mr` del atlas.
+  - `klein-2013-pericardio-multimodal-ase.pdf` (2013;26:965-1027; +964): cifras del pericardio y del taponamiento.
+  - `aha-2025-parte9-soporte-vital-avanzado.pdf` (Circulation 2025;152(supl. 2):S538-S577; S = PDF + 537): paro,
+    taquiarritmia y bradicardia con pulso, cardioversión. `g2-paro` pasa a `pendiente`. Con
+    `aha-2025-novedades-rcp.pdf` (resumen de novedades, sin paginar como la revista).
+  - **Di Mario 2005**: de pago (60 €), el usuario no lo manda. `f2-angio` y `g3-sca` buscarán otra fuente de acceso
+    libre para las proyecciones, o lo marcarán como hueco.
+- **✅ PDF de la guía de marcapasos**: ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10). `b3-bradi` pasa a
+  `pendiente`.
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
   («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12
@@ -305,21 +324,29 @@ El resto del tablero sigue `aparcada`.
 - **Panel de subida**: la clave de la API y desplegar el Worker (`backend/README.md`).
 - **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
   la vez desde la 1.ª vuelta; de ~2 h 45 a ~1-1 h 15 por capítulo). Tu decisión del 14/10: **todavía no**.
-- **🔴 Eco, parada 1 (PR #30)**: mirarla en el móvil y elegir qué mejoras de la imagen (0-8) entran y con qué
-  intensidad. Queda una duda: las mallas abiertas (BodyParts3D, CC BY) frente a todo dibujado por código. La malla de
-  Visible Human ya está decidida: solo como referencia.
-- **🔴 Pasar a tareas el rumbo ya aprobado** (parte del Radar, 26/10): la fase 0 (`f0-*`), la v3 del bloque 3 y las
-  fases 2-4 están aprobadas como rumbo, pero no son filas del tablero, y el plan socialista no las ve. ¿Las convierto?
+- **Eco, paradas 1 y 2 ya en main (27/10)**: mirarlas en el móvil (Eco cardíaca → simulador: A4C, subcostal,
+  «Derrame» y «Hemorragia» a fondo, TEP, «Señálalo → Festones y cúspides»). La parada 3 (F3, F4, N1, P5, P6) espera
+  los PDF de los huecos. Si tienes la **ASE 2025** en PDF, también daría la PAD con ventilación mecánica.
 - **Propuesta tuya (26/10), para la skill del plan**: al terminar una tarea, el director cierra su propia sesión sin
   esperar a que la valides, y te llega un informe de las sesiones cerradas (qué se hizo, qué quedó, qué decidir).
   ¿La apunto como tarea?
-- **Propuestas de regla de los partes (25-26/10)**, ¿las apruebas?
+- **Propuestas de regla de los partes (25-27/10)**, ¿las apruebas?
   - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
   - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).
   - En `/ingenieria-reversa`, probar antes el acceso a cada web; si está cerrada, pedirte abrirla (rea-eco).
   - Una skill nueva pedida en una tarea aprobada va en la PR de esa tarea (Radar).
   - Las vueltas de arreglo de una maqueta, con el modelo barato (eco-mega; lo mide `notas-meta`).
   - Al pasar una maqueta a la app, probarla en la app real con toque a 390 px, al lado de la maqueta (eco-mega).
+  - Cada encargo de forma de la eco entrega una captura de cada vista junto a la eco real (eco-mega, parada 2).
+  - Dos constructores a la vez: la suite de pruebas solo con el árbol limpio o en su propia copia (eco-mega).
+  - El enlace «Ver en el móvil» lleva el commit completo, no el nombre de la rama (el 27/10 viste «No se pudo cargar
+    el simulador» por piezas viejas mezcladas).
+  - Los avisos de «medida imposible» se rotulan «control de la app» y solo cubren lo que rompe la fórmula
+    (eco-vci-retenido).
+  - Las pruebas miden la posición de una caja justo al contestar, no después de centrarla; y avisar al constructor
+    de los commits suyos ya hechos (objetivos-casos).
+  - Al pausar por límite de uso, los apuntes de los agentes se copian al repositorio (b3).
+  - ¿Guardar en `autonomo/` el script del inventario para repetirlo cada cierto tiempo? (inventario).
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; cuando se monte, hace falta que fijes un límite de gasto.
 
@@ -371,9 +398,19 @@ El resto del tablero sigue `aparcada`.
     Marino caps. 14-17 si se quiere el «beso» de los papilares).
   - Eco: con «Mandos de imagen» cerrado, «Señálalo» no se ve. Inofensivo.
 
+- **Visto de paso (26-27/10)**:
+  - Neutropenia febril: `tab-clinica` y `tab-micro` (tratamiento dirigido) son pestañas sin tarjeta (inventario).
+  - Telar: que los agregados salgan ya en la consecuencia del paso 3; vaso: ver la microangiopatía antes de
+    transfundir (objetivos-casos, opcional del profesor).
+  - VCI con ventilación: el Manual UMI tiene dos filas que dan veredictos opuestos con los mismos diámetros y no dice
+    cuál manda (lo explica `umi-q068b`).
+  - Bloque 3, para cuando pase a la app: la cobertura del pulmón da PBW 50 para Eulalia y la Tabla 24.5 da 54; el dock
+    plegado necesita dos toques y «Siguiente/Hecho» se sale a 360 px; la caja ART del receptor recorta «mmHg»; las
+    citas del pulmón apuntan a ids `nep-*` que aún no existen; la adenosina tarda 0,4 s en reactivarse.
+
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- (26/10) **Publicar ya lo hecho del bloque 3.** La rama `auto/b3` tiene, sin PR desde el 23/10: las 26 fichas de
+- (27/10: ya está en la PR #32, en borrador; falta que la mires) (26/10) **Publicar ya lo hecho del bloque 3.** La rama `auto/b3` tiene, sin PR desde el 23/10: las 26 fichas de
   Merino Cardiología y Neumología con sus páginas, la vista Visual y Texto | Estudiar en las 9 fichas del shock (152
   preguntas, 4 casos, auditadas con 0 graves). Hoy no lo ves en el móvil porque espera a las maquetas. Propongo
   sacarlo en una PR propia mientras decides las maquetas: así ya puedes estudiar el shock.
@@ -384,6 +421,15 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-27 · **Eco, paradas 1 y 2** (`eco-mega`, B-015, PR #30, en main): imagen realista con mandos de imagen y
+  «Señálalo»; corazón con aurículas y tabique, pericardio, festones y cúspides, derrame, hemorragia y TEP.
+  Profesor 8,1-8,4; auditor, 0 graves.
+- 2026-10-27 · **VCI «retenida» con ventilación** (`eco-vci-retenido`, B-021, en main): Manual UMI → FATE.
+- 2026-10-26 · **Casos con revisión por objetivos** (`objetivos-casos`, B-020, en main): inmersión, muralla, telar y
+  vaso.
+- 2026-10-26 · **Inventario de estudio** (`inventario`, B-014, PR #31): qué tiene cada una de las ~724 fichas.
+- 2026-10-26 · **Bloque 3: maquetas v3 y topes de paciente real** (`b3`, PR #32 en borrador): espera tu respuesta.
 
 - 2026-10-26 · **Radar** (`radar`, B-012, PR #28): norte, hoja de ruta única, fichas de triaje y skill `/radar`.
 - 2026-10-25 · **Potasio, mecanismo prioritario** (`potasio-prioritario`, B-019, en main): el calcio protege, la
@@ -418,27 +464,3 @@ El resto del tablero sigue `aparcada`.
   - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
   - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
   - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).
-
-- 2026-10-19 · **Ácido-base vivo y río y mar en la app** (PR #18), aprobados.
-  - Dónde están:
-    - el ácido-base, en PIF → Nefrología;
-    - el río y mar, en Libros → Marino;
-    - los dos, en el bloque «Modelos vivos» de los dos menús, en el buscador y con botones desde las fichas.
-  - Mayéutica con 14 + 14 preguntas y 4 + 3 casos.
-  - «← VOLVER A LA FICHA» lleva a la ficha de origen.
-  - El título «HUD Clínico UCI», más pequeño, lleva al menú principal.
-  - Regla nueva: los jueces miden el desborde también tras contestar (`--modelo`).
-
-- 2026-10-19 · **Plan Marino, fase 2: mapa visual y maquetas v2** (PR #16), aprobado.
-  - Ácido-base vivo unificado (A+B+C) y río y mar en crema y oro, con su Mayéutica.
-  - Están en `autonomo/maquetas/`.
-- 2026-10-19 · **Jueces con la vista Visual**: `jueces.mjs --ficha` abre también la vista Visual de cada bloque
-  (regla aprobada).
-  - Arreglados los 2 px de «Nefronas que quedan».
-  - El salicilato ionizado y el no ionizado, que se distinguían solo por el color, ahora también por la forma.
-
-- 2026-10-19 · **Una sola leyenda de formas de iones** en los modelos vivos (PR #17), aprobada y en la app.
-  - Una tabla única (`js/data/formas-iones.js`) y un dibujo común (`js/core/particulas.js`), que usan la nefrona viva,
-    el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
-  - Leyenda nueva en tres modelos.
-  - Arreglada la célula de la nefrona viva que se quedaba congelada.

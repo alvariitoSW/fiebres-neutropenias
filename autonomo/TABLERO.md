@@ -355,11 +355,13 @@ río y mar) → 39-44 → 45-53.
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | hecha (2026-10-26) · PR #31, en main · informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir | Corta, de solo lectura |
 | 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | fusionada en `b3` (2026-10-26, decisión del usuario: sub-bloque 3D) | Antes: bloque 4 de Marino. Propuesta de atajo (26/10, en el informe del `b3`): cobertura y maqueta M3 durante la parada 2 del `b3`; la presión del tórax (M8) hecha una vez para CPAP y respirador; el pulmón entra en la app a la vez que el 3C. Espera la elección del usuario |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
-| 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
+| 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | hecha (2026-10-27): el usuario aprobó las 9 propuestas (R1-R9), que entran en `REGLAS.md` §4.8, el constructor, el profesor, la skill y el formato del parte; R1 automático va en `jueces-movil`. Informe https://claude.ai/artifact/2DyGXcvYEMTXfT85YZESDs · PR #33 | Corta, de solo lectura |
 | 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
 | 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | hecha (2026-10-26): informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi; el usuario eligió el núcleo, que entra en la parada 2 de `eco-mega` | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
 | 18 | `rea-culprit` | B-026 · Ingeniería inversa de Coronary Culprit (Cliff Reid): ocluir una coronaria y ver el ECG de 12 y la eco | hecha la fase 1 (2026-10-26): el usuario eligió la opción 1 (A + B en la Fase 1 tras Marino; C cuando la eco tenga coronarias; D tras C); falta el PDF de la ESC 2023 de SCA y el de ECG. Informe «Arteria culpable», https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw; detalle en `autonomo/ideas/ingenieria-inversa/culprit.md` | Pedido por el usuario el 26/10; lo que se construya va después de Marino (Objetivo M5) |
-| 19 | `jueces-topes` | Jueces automáticos de topes (REGLAS §1.14): que `node autonomo/jueces.mjs --modelo <clave>` lleve cada mando de un modelo vivo a su tope y repita cada acción (copiando `autonomo/bloques/b3/herramientas/limites-prueba.mjs`), y falle si no sale el sello o sale una cifra fuera de lo fisiológico | pendiente (aprobada por el usuario el 27/10, propuesta del parte `2026-10-27-b3-limites.md`) | Tipo `arreglo` (técnico, directo a `main` con los jueces en verde). Constructor sonnet. Antes, en los modelos vivos que ya están en la app |
+| 19 | `jueces-topes` | Jueces automáticos de topes (REGLAS §1.14): que `node autonomo/jueces.mjs --modelo <clave>` lleve cada mando de un modelo vivo a su tope y repita cada acción (copiando `autonomo/bloques/b3/herramientas/limites-prueba.mjs`), y falle si no sale el sello o sale una cifra fuera de lo fisiológico | hecha (2026-10-27): juez `autonomo/jueces-topes.mjs` directo a `main`; el ❌ que da en lo ya construido (ácido-base, pH 6,36), en el parte `2026-10-27-jueces-topes.md` (propuesta `topes-acidobase`) | Tipo `arreglo` (técnico, directo a `main` con los jueces en verde). Constructor sonnet. Antes, en los modelos vivos que ya están en la app |
+| 20 | `jueces-movil` | Juez automático del móvil (REGLAS §4.8 R1): que `node autonomo/jueces.mjs --ficha/--modelo` falle a 390 y 360 px si la frase viva o el enunciado quedan bajo la barra de abajo, si la imagen sale de la pantalla al tocar sus mandos, si una frase sale cortada con «…» o si un rótulo baja de 9 px | hecha (2026-10-27): juez `autonomo/jueces-movil.mjs` directo a `main`; los ❌ que da en lo ya construido, en el parte `2026-10-27-jueces-movil.md` (propuesta `movil-existente`) | Tipo `arreglo` (técnico, directo a `main` con los jueces en verde). Constructor sonnet. Puede ir junto a `jueces-topes` |
+| 21 | `movil-existente` | Arreglar en lo ya construido lo que caza el juez del móvil (`jueces-movil`): «Siguiente» tapado en el capilar, frase viva bajo el dock o fuera de pantalla al tocar mandos (río y mar, ácido-base, capilar), frases cortadas con «…» (catéter, muralla, telar, inmersión, vaso, capilar, río y mar) y pies de figura cortados en Estudiar (fichas de Marino · Fundamentos), y rótulos de menos de 8 px | pendiente (aprobada por el usuario el 27/10: «apruebo la 1 y la 2»; la 2 bajó el mínimo de letra de 9 a 8 px) | Tipo `arreglo` (directo a `main` con los jueces en verde). Constructor sonnet, un encargo por modelo (o por grupo de fichas); antes, `jueces.mjs --modelo <clave>` para la lista exacta. Lista de hallazgos en `autonomo/partes/2026-10-27-jueces-movil.md`. Sube versión (`autonomo/version.mjs`) |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -682,6 +684,53 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 **Encargo `monitor-comun`** · tipo: visual · aparcada hasta el bloque 3
 - Qué quiero: el monitor común de `autonomo/maquetas/comun/` pasado a `js/core/` con el bloque 3; después, en capilar (sustituye su tablero), eco (lee el motor), receptores (PA y FC por fármaco, cualitativo 0-3) y cama 7.
 - Lo que NO quiero: monitor en la nefrona, el filtro, el catéter ni la muralla (no tienen constantes).
+
+## Objetivo I · Integración: lo que llega de la ingeniería inversa (rumbo del Radar)
+
+Aprobado por el usuario el 25/10/2026 como rumbo («estoy de acuerdo con todo») y **pasado a tareas el 27/10/2026**
+(«sí, pásalo al tablero»). Sale de la hoja de ruta (`autonomo/radar/HOJA-DE-RUTA.md`), del informe «Del simulador a la
+cama» (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee) y del plan de integración (`docs/historial/radar.md` §6).
+**Regla de oro**: el constructor trabaja solo con nuestro informe de ingeniería inversa y nuestras fuentes; nunca abre
+la web ajena. Orden propuesto por la bitácora el 27/10 y aceptado: **Fase 1** (la rotación de Cardiología empieza el
+01/11) → **Fase 0** → **G1** → el resto, según lleguen los PDF. Marino (Objetivo M5) sigue siendo el carril del
+corazón: lo que ya es parte de `b3` no se repite aquí.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | aparcada (espera PDF) | Falta el PDF de ECG básico de la rotación (01/11). En cuanto llegue, pasa a `pendiente`. La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
+| 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
+| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
+| 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
+| 5 | `culprit-b` | Fase 1 · Preguntas «predice el ECG» y «coloca el trombo» (B-026, B) | aparcada hasta terminar Marino | Va detrás de `culprit-a`. C (modelo 2D) espera a las coronarias del motor; D, tras C |
+| 6 | `f0-cifras` | Fase 0 · Calculadoras: la cifra nunca contradice su grado + «la fórmula con tus números» | pendiente | Usa la pieza de `formula-comun` (ya en `js/core/`). Juez `--calc` (cambio previo 5 del plan) |
+| 7 | `f0-origen` | Fase 0 · Origen y licencia a la vista en simuladores, calculadoras e imágenes | pendiente | CLAUDE.md §7.4. Juez `--origen` |
+| 8 | `f0-eco-color` | Fase 0 · Eco: colores por estructura | pendiente | Las cuatro `f0-eco-*`: **un solo constructor en serie**. Antes, mirar qué hicieron ya las paradas 1-2 de `eco-mega` (p. ej. «Señálalo») para no repetir |
+| 9 | `f0-eco-rotulos` | Fase 0 · Eco: rótulos que marcan la estructura en el corte y en el 3D | pendiente | Ver nota de `f0-eco-color` |
+| 10 | `f0-eco-viaje` | Fase 0 · Eco: la sonda viaja animada entre vistas | pendiente | Idea 3 de `anesthbeta.md` §6 |
+| 11 | `f0-eco-guia` | Fase 0 · Eco: ayuda en vivo al mover la sonda | pendiente | Sobre `vistaMasParecida()`; idea de EchoSuite |
+| 12 | `f0-movil` | Fase 0 · Calidad automática en el móvil (peso de la página y fps de la eco) | pendiente | Técnica, directo a `main`. Cambio previo 5 del plan |
+| 13 | `f0-ra-biblio` | Fase 0 · Bibliografía de The Radiology Assistant en el PIF de Radiología | pendiente | Solo enlaces verificados (CLAUDE.md §7.2); sus figuras, no (decidido 25/10) |
+| 14 | `g1-shock` | G1 · Puerta «Guardia» en la raíz y su primera situación: shock e hipotensión | pendiente | Tras la fase 0. Cadena VCI → PAD → VS → GC → E/e′ → VExUS, cada paso con su fórmula (`NORTE.md`). Fuentes: Manual UMI (FATE) y VExUS en `docs/`. Maqueta antes para elegir. Sin guardar datos del paciente |
+| 15 | `g2-paro` | G2 · Arritmia inestable y paro | pendiente | Fuente ya en `docs/` (27/10): `aha-2025-parte9-soporte-vital-avanzado.pdf` (paro, taquiarritmia y bradicardia con pulso, cardioversión; página impresa S = PDF + 537) y `aha-2025-novedades-rcp.pdf`. Después de G1 |
+| 16 | `g3-sca` | G3 · Dolor torácico y SCA (y marcapasos) | aparcada (espera PDF) | Falta Di Mario 2005 (de pago, 60 €: el usuario no lo manda, 27/10; buscar una fuente libre de las proyecciones o dejar hueco); la ESC 2023 de SCA y la ESC 2021 de estimulación ya están en `docs/` |
+| 17 | `g4-dispositivo` | G4 · Tras colocar un dispositivo (placa, punta del tubo o la vía, neumotórax) | aparcada | Antes, comprobar qué cubren Marino, Merino Neumología y Técnicas R1; faltan casos con licencia |
+| 18 | `g5-neuro` | G5 · Neurocrítico (TC de cráneo en 5 preguntas) | aparcada (espera PDF) | Falta el temario de Neurorradiología |
+| 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | pendiente | Fuente ya en `docs/` (`hahn-2013-ete-completa-ase-sca.pdf`). Después de G1 |
+| 20 | `f2-coronarias` | Fase 2 · Coronarias por segmentos con dominancia en el motor | aparcada | Abre `culprit` C y la pared por regiones (C2 de `rea-eco`) |
+| 21 | `f2-angio` | Fase 2 · Coronariografía que late (arco en C, vista óptima) y «cómo leer un informe de cateterismo» | aparcada (espera PDF) | Tras `f2-coronarias`. Falta Di Mario y Sutaria 2005 (de pago: buscar una fuente libre) |
+| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | pendiente | Fuente ya en `docs/` (Hahn 2013). Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6; decidido el 25/10 tocar la anatomía (esófago, valvas por segmentos) |
+| 23 | `f3-calc-eco` | Fase 3 · Calculadoras de eco para la UCI con catálogo único y «¿cómo se mide?» | aparcada (espera PDF) | Fuentes completas en `docs/` desde el 27/10: corazón derecho (Mukherjee 2025), cámaras (Lang 2015) y la diastólica, Nagueh 2025, y el informe estandarizado, Taub 2025, ya en `docs/` desde el 27/10). Ideas en `echosuite.md` y `echosuite-2.md` |
+| 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
+| 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
+| 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual; y temarios de Radiología de tórax y Neurorradiología |
+
+**Encargo común del Objetivo I** (cada tarea lo concreta su director con su informe de ingeniería inversa):
+- Para qué: ayudar en la guardia y estudiar (`autonomo/radar/NORTE.md`).
+- Modelo «así sí»: las piezas de la app que ya existen (eco, motor del latido, `formula-comun`, cuaderno de campo,
+  Mayéutica). Lo nuevo con maqueta antes para que el usuario elija.
+- Lo que NO quiero: copiar código, texto o imágenes de las webs estudiadas; cifras sin fuente; guardar datos de
+  pacientes; librerías nuevas sin que el usuario las elija (three.js sigue sin decidir).
+- Fuente: la que dice cada fila; sin PDF, la tarea se queda `aparcada`.
 
 ## Lo que aún no está aprobado
 

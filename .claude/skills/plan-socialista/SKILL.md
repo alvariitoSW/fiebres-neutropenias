@@ -173,6 +173,17 @@ encargos de constructor con archivo y función exactos; archivos de ≤700 líne
 programas de prueba se guardan en `autonomo/bloques/<bN>/herramientas/` y se reutilizan. En el parte: gasto frente
 a presupuesto por agente, por qué, y la tabla del tablero actualizada.
 
+### Llegar al 8,75 a la primera (aprobado por el usuario el 27/10/2026)
+
+`autonomo/REGLAS.md` §4.8 (R1-R9 de `notas-meta`). En resumen: el constructor pasa la prueba del móvil antes de
+entregar (R1); al aprobar una maqueta, el profesor escribe la lista de lo que hace y el constructor la tacha al
+llevarla a la app (R2); los criterios clínicos (avisos, objetivos, umbrales) van escritos con su fuente en el plan del
+profesor antes de construir (R3); en la eco y la anatomía, cada plano al lado de una imagen real (R4); **las vueltas
+de arreglo, con un constructor sonnet nuevo** y la lista exacta, salvo que el anterior lleve menos de 60 pasos (R5);
+**nada de opus en las vueltas** (R6); la meta 8,75 obliga en modelos vivos nuevos, maquetas y archivos modelo, y en
+lo demás basta el 8 (R7); el rejuicio solo puntúa lo que quedó por debajo (R8); y el parte lleva la tabla «Vueltas»
+(R9).
+
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
 Para lo que ya está en la app y ya tiene su fuente: **no se construye nada, se revisa**. Trabajadores revisores,
