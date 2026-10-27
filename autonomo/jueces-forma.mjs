@@ -66,6 +66,9 @@ export const MODELOS = {
     // El vaso que sangra: Explorar | Mayéutica (sin Conceptos: cada estado lleva su explicación guiada)
     'vaso-vivo': { raiz: '#vso-raiz', enlace: { especialidad: 'libros', view: 'vasoVivo' }, clave: 'vasoVivo', modo: { explorar: '#vso-modo-explorar', mayeutica: '#vso-modo-preguntas' },
         estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
+    // El corazón eléctrico (parte 1: sin Mayéutica todavía, por eso sin botones de modo): el estado va en data-ritmo-vivo
+    'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar' },
+        estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };

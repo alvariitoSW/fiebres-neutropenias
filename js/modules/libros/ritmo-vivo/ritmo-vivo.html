@@ -1,13 +1,71 @@
     <button class="back-btn btn-volver-libros-menu" id="rtv-volver">← VOLVER</button>
-    <!-- El corazón eléctrico (Marino cap. 19). Modelo vivo de Libros, en construcción: el constructor llena el hueco. Sus fichas son las de
-         Merino Cardiología. Lógica en ritmo-vivo/index.js. Prefijo de clases e ids: rtv-. -->
+    <!-- El corazón eléctrico (Marino cap. 19). Modelo vivo de Libros; sus fichas son las de Merino Cardiología.
+         Viene de la maqueta aprobada autonomo/maquetas/b3-ritmo.html. Lógica en ritmo-vivo/index.js (arranque) y pagina.js;
+         datos en js/data/ritmo-vivo-data.js. Prefijo de clases e ids: rtv-. -->
     <div class="rtv-raiz" id="rtv-raiz" data-modelo-vivo>
       <header class="rtv-cabecera">
         <p class="rtv-eyebrow">Modelo vivo · Marino cap. 19</p>
         <h2 class="rtv-titulo">El corazón eléctrico</h2>
       </header>
-      <div id="rtv-modelo">
-        <!-- [HUECO constructor ritmo: el modelo] -->
-        <p class="rtv-construccion">En construcción</p>
+
+      <section class="monitor" id="rtv-monitor" aria-label="Monitor de cabecera">
+        <div class="mon-cab"><span id="rtv-mon-tit">Monitor · derivación II</span><span class="rtv-der"><span class="rtv-mon-reloj" id="rtv-mon-reloj" hidden></span><button type="button" id="rtv-pausa" aria-pressed="false">Pausa</button></span></div>
+        <div class="mon-cuerpo">
+          <div class="rtv-mon-tiras">
+            <svg class="mon-trazas" id="rtv-tiras" role="img" aria-label="ECG generado por el corazón de abajo, presión arterial invasiva y, en la parada, capnografía"></svg>
+            <div class="rtv-pendiente-mon" id="rtv-mon-pendiente" hidden></div>
+          </div>
+          <div class="cifras" id="rtv-mon-cifras"></div>
+        </div>
+      </section>
+
+      <section class="rtv-mini-lupa" id="rtv-mini-lupa" aria-label="La lupa de este ritmo, junto al monitor" hidden>
+        <svg id="rtv-mini-lupa-svg" viewBox="4 312 174 108" role="img" aria-label="La lupa que explica este ritmo"></svg>
+        <div class="rtv-mini-cap"><b id="rtv-mini-tit"></b><span id="rtv-mini-txt"></span><button type="button" id="rtv-mini-grande">Ver en grande</button></div>
+      </section>
+
+      <section class="rtv-tarjeta" id="rtv-escena" aria-label="El corazón en corte">
+        <div class="rtv-tarj-cab"><b>Fig. 1 · el corazón en corte</b><button type="button" class="rtv-btn-explica" id="rtv-explicame">Explícame este estado</button></div>
+        <svg id="rtv-svg" viewBox="0 0 360 422" role="img" aria-label="Corte de cuatro cámaras con el sistema de conducción, el anillo fibroso y dos lupas: el nodo AV y la célula"></svg>
+        <div class="rtv-tarj-pie"><span class="rtv-pista" id="rtv-escena-pista">Toca una pieza: su nombre</span><span class="rtv-lectura" id="rtv-escena-lectura"></span></div>
+        <div class="rtv-tarj-pie"><button type="button" class="rtv-btn-plano" id="rtv-lupas-grandes">⤢ Las dos lupas, en grande</button></div>
+      </section>
+
+      <div id="rtv-peligro" class="rtv-banda-peligro" hidden></div>
+      <p class="rtv-ficha-pac" id="rtv-ficha-estado"></p>
+
+      <section class="rtv-tarjeta" id="rtv-aparatos" aria-label="Los aparatos">
+        <div class="rtv-tarj-cab"><b>Fig. 2 · los aparatos</b><span class="rtv-tit">bomba · desfibrilador · marcapasos</span></div>
+        <svg id="rtv-aparatos-svg" viewBox="0 0 360 162" role="img" aria-label="Bomba de jeringa, desfibrilador con sus parches y generador de marcapasos"></svg>
+        <div class="rtv-tarj-pie"><span class="rtv-pista">Se encienden al usarlos</span><span class="rtv-lectura" id="rtv-aparatos-lectura"></span></div>
+      </section>
+
+      <div class="rtv-graficas" id="rtv-graficas"></div>
+
+      <!-- [HUECO ritmo parte 2: Mayéutica] -->
+
+      <section id="rtv-zona-abajo" class="rtv-bloque">
+        <details class="rtv-plegable"><summary>Las fuentes de este estado</summary><ul class="rtv-lista" id="rtv-lista-fuentes"></ul></details>
+        <h3>Así se ve de verdad (láminas del libro)</h3>
+        <div class="rtv-laminas" id="rtv-laminas"></div>
+        <details class="rtv-plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="rtv-bloque" id="rtv-lista-notas"></div></details>
+        <details class="rtv-plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="rtv-lista" id="rtv-lista-profundizar"></ul></details>
+        <details class="rtv-plegable"><summary>Lo que vendrá: el modelo crece con otras fuentes</summary><div class="rtv-crece" id="rtv-crece"></div></details>
+      </section>
+
+      <p class="rtv-frase" id="rtv-frase" role="status" aria-live="polite"><span class="rtv-frase-txt" id="rtv-frase-txt"></span></p>
+
+      <div class="rtv-dock" id="rtv-dock">
+        <div class="dock-in rtv-dock-explorar" id="rtv-dock-explorar">
+          <div class="rtv-dock-tabs" role="tablist" aria-label="Mandos">
+            <button type="button" role="tab" data-pest="ritmo" aria-selected="true">Ritmo</button>
+            <button type="button" role="tab" data-pest="tratar" aria-selected="false">Tratar</button>
+            <button type="button" role="tab" data-pest="medir" aria-selected="false">Medir</button>
+          </div>
+          <div class="rtv-dock-panel" id="rtv-dock-panel"></div>
+        </div>
+        <div class="dock-in" id="rtv-dock-guia" hidden></div>
       </div>
+
+      <dialog id="rtv-visor"><div class="rtv-caja-img"><img id="rtv-visor-img" alt=""></div><p id="rtv-visor-txt"></p><div class="rtv-fila" style="margin-top:8px; justify-content:space-between"><span id="rtv-visor-cita"></span><button type="button" class="rtv-b" id="rtv-visor-cerrar">Cerrar</button></div></dialog>
     </div>
