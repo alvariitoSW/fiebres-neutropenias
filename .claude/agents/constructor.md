@@ -37,8 +37,8 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
       (`data-resaltar="#id"`); en un modelo vivo, cada estado con su **explicación guiada** de 3-5 pasos que señalan el
       dibujo (§7.10) y sus fuentes como lista (§7.11).
 - [ ] **Lista de frases nuevas** (REGLAS §1.11): cada frase de mecanismo o conducta que escribiste tú (no copiada de
-      la ficha), con su página. Sin página → «fisiología general» o fuera. La lista va en tu entrega: el auditor la
-      coteja.
+      la ficha), con su página. Sin página → **se busca otra fuente y se cita** (REGLAS §1.15); `fisiología general`
+      solo para lo trivial. La lista va en tu entrega, con las que quedan sin cita aparte: el auditor la coteja.
 - [ ] **Cifras en su contexto** (§1.12): cada cifra del libro, para el mismo caso que en el libro; en los casos, cada
       paso es un paciente posible y sus cifras encajan entre sí.
 - [ ] **Notas con su tipo** (§1.13): «las fuentes discrepan», «la fuente no lo dice» u «opinión del autor». Nada de lo
