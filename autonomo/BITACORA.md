@@ -5,8 +5,8 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27 (PR #30 de la eco y #31 del inventario fusionadas; `objetivos-casos` y
-`eco-vci-retenido` hechas; PR #32 del bloque 3 abierta en borrador; `jueces-topes` aprobada).
+Última sincronización: 2026-10-27, tarde (PR #34 de la eco, parada 3, en main; `jueces-topes`, `jueces-movil`,
+`movil-existente` y `propuestas-movil` hechas en main; `fuentes-b3` y las pantallas del `b3` hechas en `auto/b3`).
 
 ---
 
@@ -247,21 +247,23 @@ esta sección.
 |---|---|---|---|---|
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
-| `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | ⏸ **parado en la parada 1**: maquetas v3 y topes hechos, [PR #32](https://github.com/alvariitoSW/fiebres-neutropenias/pull/32) en borrador | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
+| `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | parada 1 **cerrada** (27/10, «sí a todo»): maquetas v3, topes, pantallas del respirador y del balón (8,7) y fuentes buscadas; **siguiente: parada 2** (shock, ritmo y receptor a la app). [PR #32](https://github.com/alvariitoSW/fiebres-neutropenias/pull/32) en borrador | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
-| `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1 y 2 **hechas y en main** (PR #30, 27/10); la parada 3 espera los PDF de los huecos | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
+| `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1, 2 y 3 **hechas y en main** (PR #30 y #34, 27/10). Siguiente, sin aprobar: B-027 y B-029 | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
 | `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
 | `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
-| `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | pendiente (aprobada 27/10) | 2026-10-27 | Técnica: directo a main |
+| `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (ver «Esperando algo tuyo») | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: cuatro hechas y en main (25-27/10); `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | hecha (27/10, PR #33): R1-R9 aprobadas y en `REGLAS.md` §4.8; R1 automático, tarea `jueces-movil` | 2026-10-25 | «apruebo todas las propuestas de regla de R1 a R9» (27/10) |
-| `jueces-movil` | Juez automático del móvil (R1 de `notas-meta`) | pendiente en el tablero | 2026-10-27 | Técnica: directo a main |
+| `jueces-movil` | Juez automático del móvil (R1 de `notas-meta`) | hecha (27/10, en main) | 2026-10-27 | Técnica: directo a main |
+| `movil-existente`, `propuestas-movil` | Arreglar en el móvil lo que cazó el juez nuevo (8 modelos vivos y Marino · Fundamentos) y la pieza común `verFrase()` | hechas (27/10, en main) | 2026-10-27 | |
+| `fuentes-b3` | Buscar y citar lo que la ficha no dice en las maquetas del `b3` (balón, distractores, topes) | hecha en `auto/b3` (27/10); entra en main con la PR del bloque | 2026-10-27 | Quedan 4 PDF (ver «Esperando algo tuyo») |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 | `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | ✅ elegido el 26/10: el núcleo entra en la parada 2 de `eco-mega` (P1 potente, pericardio de las aurículas más real, P7 como forma grave con nota); PDF de los huecos los busca el usuario · https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
 
@@ -278,13 +280,11 @@ esta sección.
 
 ### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
 
-- **Esperando al usuario (parada 1, 3.ª vuelta, 26-27/10)**: las maquetas **v3** (shock, corazón eléctrico,
-  receptor y pulmón con respirador en 3D), ya con sus topes de paciente real (§1.14), en la [PR
-  #32](https://github.com/alvariitoSW/fiebres-neutropenias/pull/32). Tres preguntas: 1) ¿shock, corazón eléctrico y
-  receptor pasan a la app (parada 2)?; 2) receptor: en el sello el deslizador no se apaga (para poder bajar la dosis),
-  y §1.14 dice «se apaga»: ¿así?; 3) pulmón: ¿vale el esquema o quieres ver antes el racimo y el respirador reales?
-  (y el neumotórax a tensión, ¿escena aparte?). La sesión siguiente, «pantallas como las reales», la abres tú con
-  `/plan-socialista b3`.
+- **Respondido el 27/10, «sí a todo»**: shock, corazón eléctrico y receptor pasan a la app (**parada 2, la
+  siguiente**: `/plan-socialista b3` en una sesión nueva); el deslizador del receptor se queda como está; el esquema
+  del pulmón vale; el neumotórax a tensión, escena aparte. Las **pantallas como las reales** (respirador y consola
+  del balón, 8,7 las dos) están aprobadas y en `main` como maquetas; los errores de temporización del balón ya tienen
+  fuente (`fuentes-b3`).
 - **Hecho y en la rama `auto/b3`** (sin PR aún): las 26 fichas con 290 ids por sección y su página, vista Visual en
   Merino Cardiología y Neumología, hallazgos de fidelidad arreglados, y Texto | Estudiar en las 9 del shock (152
   preguntas, casos de Mateo, Amparo, Nerea y Begoña), auditadas (0 graves) y corregidas.
@@ -392,6 +392,20 @@ El resto del tablero sigue `aparcada`.
     de los commits suyos ya hechos (objetivos-casos).
   - Al pausar por límite de uso, los apuntes de los agentes se copian al repositorio (b3).
   - ¿Guardar en `autonomo/` el script del inventario para repetirlo cada cierto tiempo? (inventario).
+- **Ácido-base vivo, pH 6,36** (juez de topes, 27/10): tras llevar la albúmina y la osmolalidad a sus extremos, la
+  PaCO₂ a 90 da pH 6,36 (con PaCO₂ 90 desde el principio sale 7,05). El parte propone una tarea pequeña
+  `topes-acidobase` (constructor barato): buscar qué combinación lo produce y arreglarlo en su origen. ¿La apruebo?
+- **4 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): ESC 2019 de taquicardias supraventriculares,
+  AHA 2020 de soporte vital (o ERC 2021), ESC 2023 de miocardiopatías y el consenso SCAI 2015. Sin ellos, esos puntos
+  quedan marcados como hueco.
+- **Propuestas de regla de los partes del 27/10 (tarde)**, ¿las apruebas?
+  - Toda frase de mecanismo en un «Piensa» lleva su origen, también en explicaciones y distractores (los dos graves
+    de la auditoría de las pantallas eran eso).
+  - Los arneses de prueba cierran su servidor por número de proceso, nunca con `pgrep -f … | xargs kill`.
+  - Un constructor no tapa una cifra mala del motor con un ajuste del dibujo: para e informa (la eco achicó las venas
+    pulmonares para disimular un flujo 3 veces el real).
+  - Un modelo vivo nuevo con sello propio añade su ajuste al juez de topes, no un arnés suelto.
+  - Citas que cruzan archivos de otra sesión: una rama por modelo que la sesión dueña fusiona (REGLAS §4.6).
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; cuando se monte, hace falta que fijes un límite de gasto.
 
@@ -462,6 +476,16 @@ El resto del tablero sigue `aparcada`.
     plegado necesita dos toques y «Siguiente/Hecho» se sale a 360 px; la caja ART del receptor recorta «mmHg»; las
     citas del pulmón apuntan a ids `nep-*` que aún no existen; la adenosina tarda 0,4 s en reactivarse.
 
+- **Visto de paso (27/10, tarde)**:
+  - Cardiología `mc-vasopresores`: rótulos de 7,4-7,6 px en «Membrana celular con los receptores». Las piezas comunes
+    `bolsa.js` y `particulas.js` pintan algunos rótulos justos: un suelo de letra en ellas lo arreglaría para todos.
+  - Receptor: la ficha de fármacos (`receptor-vivo-data.js`) repite tres afirmaciones sin cita.
+  - Balón: el juez no comprueba que «Compruébalo» deje marcado el botón de temporización correcto.
+  - `comun/monitor.js` pinta una R doble al rellenar la pantalla (la consola la filtra); `may-prueba.mjs b3-shock` se
+    atasca en la primera pregunta (prueba desfasada).
+  - Respirador: subir la PEEP de 0 a 20 de golpe da un volumen de 100 mL unos 35 s; la PVC del shock sigue recortada
+    a PCP − 1 en el soporte (recorte, no causa); `pagina.js` del shock ya tiene 697 líneas.
+
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
 - **Ahorro · La suite entera, una vez por fusión** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3
@@ -492,6 +516,13 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-27 · **Jueces nuevos** (`jueces-topes` y `jueces-movil`, en main): cada mando de un modelo vivo, a su tope;
+  y el móvil a 390 y 360 px (frase tapada, cortada, rótulos pequeños).
+- 2026-10-27 · **Lo ya construido, arreglado en el móvil** (`movil-existente` y `propuestas-movil`, en main): 8 modelos
+  vivos y Marino · Fundamentos en verde; pieza común `verFrase()`.
+- 2026-10-27 · **Bloque 3: pantallas como las reales** (respirador y consola del balón, 8,7) y **fuentes buscadas**
+  (`fuentes-b3`, temporización del balón con figura): maquetas en `main`, fichas en `auto/b3`.
 
 - 2026-10-27 · **Eco, parada 3** (`eco-mega`, B-015, PR #34, en main): saco y colapso del taponamiento, tricúspide,
   HP crónica, AI dilatada con chorro de IM, venas pulmonares, fosa oval y TAPSE posible. Profesor 8,5-8,7; auditor
