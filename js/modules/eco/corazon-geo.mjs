@@ -170,30 +170,6 @@ function rellenarEnvolvente(env, piezas, { zTop, zBot0, dz, df, wZ, wF, NF, NP, 
   }
 }
 
-// Redondeo del saco lleno: la lámina del derrame grande no sigue las esquinas de la envolvente convexa de cada altura
-// ni el filo de 1 mm por mm del tejado. Dilata R (radio por fila × columna) rho mm en altura y en arco y lo alisa con
-// pasadas [1 2 1]; nunca queda por debajo de R (el corazón sigue dentro). f0 = fila de arriba, f1 = última fila (incluida).
-function redondearSaco(R, { NP, df, dz, f0, f1, rho, pasadas = 6 }) {
-  const n = f1 - f0 + 1, A = new Float64Array(n * NP), B = new Float64Array(n * NP);
-  for (let i = 0; i < n; i++) for (let j = 0; j < NP; j++) A[i * NP + j] = R[(f0 + i) * NP + j];
-  const a = Math.max(1, Math.round(rho / dz));
-  // dilatación plana: en altura ±a filas; en arco, los mm de rho según el radio de cada fila (media de la fila)
-  for (let i = 0; i < n; i++) { let m = 0; for (let j = 0; j < NP; j++) m += A[i * NP + j]; m /= NP;
-    const b = Math.max(1, Math.round(rho / (Math.max(m, 10) * df)));
-    for (let j = 0; j < NP; j++) { let mx = 0;
-      for (let di = -a; di <= a; di++) { const ii = i + di; if (ii < 0 || ii >= n) continue;
-        for (let dj = -b; dj <= b; dj++) { const v = A[ii * NP + ((j + dj + NP * 4) % NP)]; if (v > mx) mx = v; } }
-      B[i * NP + j] = mx; } }
-  for (let k = 0; k < pasadas; k++) {
-    for (let i = 0; i < n; i++) for (let j = 0; j < NP; j++) A[i * NP + j] = 0.25 * B[i * NP + (j + NP - 1) % NP] + 0.5 * B[i * NP + j] + 0.25 * B[i * NP + (j + 1) % NP];
-    for (let i = 0; i < n; i++) for (let j = 0; j < NP; j++) { const u = A[Math.max(0, i - 1) * NP + j], d = A[Math.min(n - 1, i + 1) * NP + j];
-      B[i * NP + j] = 0.25 * u + 0.5 * A[i * NP + j] + 0.25 * d; }
-  }
-  const out = new Float64Array(R.length); out.set(R);
-  for (let i = 0; i < n; i++) for (let j = 0; j < NP; j++) out[(f0 + i) * NP + j] = Math.max(R[(f0 + i) * NP + j], B[i * NP + j]);
-  return out;
-}
-
 function rejilla(ni, nj, fn) {
   const pos = new Float32Array((ni + 1) * (nj + 1) * 3);
   let k = 0;
@@ -310,6 +286,7 @@ export function construirCorazon(estado, opciones = {}) {
   const anadirOriginal = anadir;
   const anadirFiltrado = (nombre, ...resto) => { if (opciones.vistaBase && RETIRADAS_BASE.includes(nombre)) return; anadirOriginal(nombre, ...resto); };
   const NZ = Math.round(26 * q), NP = Math.round(48 * q), NPV = Math.round(36 * q);
+  const NPS = 2 * NP;   // R1b: el saco lleva el doble de columnas (una lámina lisa, no un polígono)
   const NR = Math.max(20, Math.round(40 * q));          // puntos por anillo (válvulas, aurículas, vasos)
   const phi0 = corte ? corte.phi : 0, span = corte ? Math.PI : TAU;
   const dentroCorte = (phi) => !corte || (corte.nx * Math.cos(phi) + corte.ny * Math.sin(phi) >= -1e-9);
@@ -806,13 +783,14 @@ export function construirCorazon(estado, opciones = {}) {
     // la rejilla del saco no se mueve al latir (zTop fijo salvo aurículas muy altas): si sus filas cambiaran de altura en
     // cada fotograma, la mezcla de formas precalculadas se separaría de la geometría exacta
     const Z_TOP_SACO = 64;
-    const HOLGURA_SACO = 3, SUAVE_SACO = 2, RHO_RED = 10, liq = Math.max(0, estado.liquidoPeri || 0);
+    const HOLGURA_SACO = 3, SUAVE_SACO = 2, ALTURA_TEJADO = 6, ALTURA_RAIZ = 20, Z_APEX_SACO = 42, liq = Math.max(0, estado.liquidoPeri || 0);
     const { epiVdSinPliegue } = geo;
     const rVentr = (z, f) => Math.hypot(...((ventana(f) > 0.001 && z > -Lvd) ? epiVdSinPliegue(z, f) : epiVi(Math.max(z, -vi.Le * 0.999), f)).slice(0, 2));
     const dentroSaco = partes.filter(pz => pz.pos && /^(VD borde|Base V|AI$|AD$|Orejuela|Infundíbulo|Raíz aórtica|Grasa|Coronaria|Seno coronario)/.test(pz.nombre))
       .map(pz => pz.nombre === 'AD' && adSinPliegue ? { nombre: 'AD', pos: adSinPliegue } : pz);
     let zMax = 0; for (const pz of dentroSaco) for (let i = 2; i < pz.pos.length; i += 3) zMax = Math.max(zMax, pz.pos[i]);
     // el polo de abajo: lo que haga falta para el líquido del ápex (cota holgada; las filas que sobran quedan en r = 0)
+    const NP = NPS;
     const NF = NZ + 12, zTop = Math.max(Z_TOP_SACO, zMax + 8), zBot0 = -vi.Le - HOLGURA_SACO - 3 - 0.08 * liq;
     const dz = (zTop - zBot0) / NF, df = TAU / NP, wZ = 1.5 * dz, wF = 1.5 * df;   // núcleo de una celda, rampa de media
     const env = new Float32Array((NF + 1) * NP);
@@ -822,13 +800,13 @@ export function construirCorazon(estado, opciones = {}) {
     const zFila = (fi) => zTop - dz * fi;
     // 1) radio de lo que va dentro, fila a fila: ventrículos (sin pliegue) y la envolvente de lo demás (coronarias, grasa,
     //    aurículas, raíces); 2) envolvente convexa de cada fila; 3) sin bajar más de 1 mm por mm entre filas
-    const R0 = new Float64Array((NF + 1) * NP), xs = new Float64Array(NP), ys = new Float64Array(NP);
+    const R0 = new Float64Array((NF + 1) * NP), RAW = new Float64Array((NF + 1) * NP), xs = new Float64Array(NP), ys = new Float64Array(NP);
     const filaConvexa = (fi) => {
       const z = zFila(fi); let n = 0;
       for (let j = 0; j < NP; j++) {
         const f = j * df + FASE; let r = env[fi * NP + j];
         if (z < 0 && z >= -vi.Le) r = Math.max(r, rVentr(z, f));
-        R0[fi * NP + j] = r; if (r > 0) n++;
+        R0[fi * NP + j] = r; RAW[fi * NP + j] = r; if (r > 0) n++;
       }
       if (n < 3) return;
       // envolvente convexa (cadena monótona) de los puntos de la fila y radio de cada rayo sobre ella
@@ -849,29 +827,83 @@ export function construirCorazon(estado, opciones = {}) {
     };
     for (let fi = 1; fi < NF; fi++) filaConvexa(fi);
     // sin hundirse más de 1 mm por mm de altura (lámina tensa sobre la base y entre las aurículas), por encima del ápex
-    for (let fi = 1; fi < NF; fi++) { const z = zFila(fi); if (z < -vi.Le + 12) continue;
+    const pendiente = (A, fMin = 1) => {
+    for (let fi = fMin; fi < NF; fi++) { const z = zFila(fi); if (z < -vi.Le + 12) continue;
       // máximo suave (log-suma-exp, 2 mm): nunca menor que el máximo, y sin esquinas cuando cambia la fila que manda (si no,
       // el saco se mueve a saltos al latir y la mezcla de formas precalculadas se separa de la geometría exacta)
-      for (let j = 0; j < NP; j++) { let mx = R0[fi * NP + j];
-        for (let g = 1; g < NF; g++) { const zg = zFila(g); if (zg < -vi.Le + 12) continue; const v = R0[g * NP + j] - Math.abs(zg - z); if (v > mx) mx = v; }
-        let sum = 0; for (let g = 1; g < NF; g++) { const zg = zFila(g); if (zg < -vi.Le + 12 && g !== fi) continue; const v = g === fi ? R0[g * NP + j] : R0[g * NP + j] - Math.abs(zg - z); sum += Math.exp((v - mx) / SUAVE_SACO); }
+      for (let j = 0; j < NP; j++) { let mx = A[fi * NP + j];
+        for (let g = fMin; g < NF; g++) { const zg = zFila(g); if (zg < -vi.Le + 12) continue; const v = A[g * NP + j] - Math.abs(zg - z); if (v > mx) mx = v; }
+        let sum = 0; for (let g = fMin; g < NF; g++) { const zg = zFila(g); if (zg < -vi.Le + 12 && g !== fi) continue; const v = g === fi ? A[g * NP + j] : A[g * NP + j] - Math.abs(zg - z); sum += Math.exp((v - mx) / SUAVE_SACO); }
         ys[j] = mx + SUAVE_SACO * Math.log(sum); }
-      for (let j = 0; j < NP; j++) R0[fi * NP + j] = ys[j]; }
-    // R1 · saco lleno redondeado (ver redondearSaco): cuanto más líquido, más lisa la lámina; con poco, pegada como antes.
-    // El volumen que añade el redondeo se descuenta del líquido de abajo: el volumen dibujado sigue siendo el del motor.
+      for (let j = 0; j < NP; j++) A[fi * NP + j] = ys[j]; } };
+    pendiente(R0);
+    // R1b · saco lleno que sigue la silueta del corazón (sin envolvente convexa): en cada fila, el radio de lo que hay dentro
+    // por ángulo (los huecos se rellenan uniendo los vecinos), con la misma pendiente máxima entre filas, alisado con un
+    // filtro suave en ángulo y en altura y con un margen local que lo mantiene fuera del corazón. Cuanto más líquido, más
+    // se parece a esa lámina; con poco, la envolvente convexa de siempre. El volumen que cambia se descuenta del líquido
+    // que reparte kDer: el volumen dibujado sigue siendo el del motor.
+    // El tejado (con y sin derrame): media elipse de Z_APEX_SACO − 26 a Z_APEX_SACO mm de altura (lo más alto de dentro, las raíces, queda unos 6-8 mm por debajo); antes era un cono hasta zTop (33 mm de negro sobre el corazón).
     const sRed = paso(120, 388, liq); let extraRed = 0;
-    if (sRed > 0) {
-      let f1 = 1; while (f1 + 1 < NF && zFila(f1 + 1) >= -vi.Le) f1++;
-      const Rr = redondearSaco(R0, { NP, df, dz, f0: 1, f1, rho: RHO_RED });
-      // el tejado: por encima de lo más alto que hay dentro, una cúpula de media elipse (en vez de un cono cortado por una tapa
-      // plana, cuyo borde era una esquina). Parte del radio de la primera fila que está por debajo de zMax y cierra en zTop.
-      let fc = 1; while (fc + 1 <= f1 && zFila(fc + 1) >= zMax) fc++;
-      if (fc < f1) { const zb = zFila(fc + 1);
-        for (let fi = 1; fi <= fc; fi++) { const t = (zFila(fi) - zb) / (zTop - zb);
-          for (let j = 0; j < NP; j++) Rr[fi * NP + j] = Math.min(Rr[fi * NP + j], Rr[(fc + 1) * NP + j] * Math.sqrt(Math.max(0, 1 - t * t))); } }
-      for (let fi = 1; fi <= f1; fi++) for (let j = 0; j < NP; j++) { const a = R0[fi * NP + j], b = a + sRed * (Rr[fi * NP + j] - a);
+    let f1 = 1; while (f1 + 1 < NF && zFila(f1 + 1) >= -vi.Le) f1++;
+    // el cierre es fijo (salvo aurículas muy altas): la AI sube y baja 8 mm en cada latido y, si el tejado la siguiera, la mezcla de formas precalculadas se separaría de la exacta
+    const zApex = Math.max(Z_APEX_SACO, zMax + 3.5), zb = zApex - ALTURA_RAIZ - ALTURA_TEJADO, hD = zApex - zb;
+    let fb = 1; while (fb < f1 && zFila(fb) > zb) fb++;   // primera fila a la altura de la base del tejado o por debajo
+    const tejado = (A) => { for (let fi = 1; fi < fb; fi++) { const t = (zFila(fi) - zb) / hD, k = t >= 1 ? 0 : Math.sqrt(1 - t * t);
+      for (let j = 0; j < NP; j++) A[fi * NP + j] = Math.max(Math.min(A[fi * NP + j], A[fb * NP + j] * k), RAW[fi * NP + j]); } };
+    const SIGMA_SACO = 16, RHO_SACO = 4, OVALO_SACO = 0, MARGEN_SACO = 0, BARRIGA_SACO = 0;   // mm (ilustrativo)
+    if (sRed > 0 && fb < f1) {
+      const Rn = new Float64Array(R0.length), fila = new Float64Array(NP), tmp = new Float64Array(NP);
+      for (let fi = fb; fi <= f1; fi++) {   // silueta por ángulo, con los huecos unidos en línea recta (en x-y) entre vecinos
+        let n = 0; for (let j = 0; j < NP; j++) if (RAW[fi * NP + j] > 0) n++;
+        if (n < 3) { for (let j = 0; j < NP; j++) Rn[fi * NP + j] = R0[fi * NP + j]; continue; }
+        for (let j = 0; j < NP; j++) { if (RAW[fi * NP + j] > 0) { fila[j] = RAW[fi * NP + j]; continue; }
+          let a = 1, b = 1; while (RAW[fi * NP + (j - a + NP * 4) % NP] <= 0) a++; while (RAW[fi * NP + (j + b) % NP] <= 0) b++;
+          const ja = (j - a + NP * 4) % NP, jb = (j + b) % NP, ra = RAW[fi * NP + ja], rb = RAW[fi * NP + jb];
+          const pa = [ra * Math.cos(ja * df), ra * Math.sin(ja * df)], pb = [rb * Math.cos(jb * df), rb * Math.sin(jb * df)], t = a / (a + b);
+          fila[j] = Math.hypot(pa[0] + t * (pb[0] - pa[0]), pa[1] + t * (pb[1] - pa[1])); }
+        for (let j = 0; j < NP; j++) Rn[fi * NP + j] = fila[j]; }
+      pendiente(Rn, fb);
+      tejado(Rn);
+      // filtro gaussiano circular en ángulo (σ en mm de arco según el radio de la fila) y [1 2 1] en altura
+      const gauss = (A, fi) => { let m = 0; for (let j = 0; j < NP; j++) m += A[fi * NP + j]; m /= NP;
+        const sg = SIGMA_SACO / (Math.max(m, 20) * df), K = Math.ceil(3 * sg); let ws = 0; const w = []; for (let k = -K; k <= K; k++) { const v = Math.exp(-0.5 * (k / sg) ** 2); w.push(v); ws += v; }
+        for (let j = 0; j < NP; j++) { let acc = 0; for (let k = -K; k <= K; k++) acc += w[k + K] * A[fi * NP + (j + k + NP * 8) % NP]; tmp[j] = acc / ws; }
+        for (let j = 0; j < NP; j++) A[fi * NP + j] = tmp[j]; };
+      const gaussZ = (A) => { const sg = SIGMA_SACO / dz, K = Math.ceil(3 * sg), w = [], T = Float64Array.from(A); let ws = 0; for (let k = -K; k <= K; k++) { const v = Math.exp(-0.5 * (k / sg) ** 2); w.push(v); ws += v; }
+        for (let fi = 1; fi <= f1; fi++) for (let j = 0; j < NP; j++) { let acc = 0; for (let k = -K; k <= K; k++) acc += w[k + K] * T[Math.min(f1, Math.max(1, fi + k)) * NP + j]; A[fi * NP + j] = acc / ws; } };
+      // dilatación con un disco de RHO_SACO mm (en altura y en arco): redondea las esquinas salientes; el filtro, las entrantes
+      const dil = (A) => { const T = Float64Array.from(A), a = Math.max(1, Math.round(RHO_SACO / dz));
+        for (let fi = 1; fi <= f1; fi++) { let m = 0; for (let j = 0; j < NP; j++) m += T[fi * NP + j]; m /= NP; const rj = Math.max(m, 20) * df;
+          for (let j = 0; j < NP; j++) { let mx = T[fi * NP + j];
+            for (let di = -a; di <= a; di++) { const ii = fi + di; if (ii < 1 || ii > f1) continue; const w = Math.sqrt(Math.max(0, RHO_SACO * RHO_SACO - di * dz * di * dz)), b = Math.floor(w / rj);
+              for (let dj = -b; dj <= b; dj++) { const v = T[ii * NP + (j + dj + NP * 4) % NP]; if (v > mx) mx = v; } }
+            A[fi * NP + j] = mx; } } };
+      // ovalado: en cada fila se mezcla con la elipse más pequeña (ejes del modelo) que envuelve la silueta, para que los lados
+      // largos y rectos del contorno se curven como en un saco real
+      for (let fi = 1; fi <= f1; fi++) { let x0 = 1e9, x1 = -1e9, y0 = 1e9, y1 = -1e9, n = 0;
+        for (let j = 0; j < NP; j++) { const r = Rn[fi * NP + j]; if (r <= 0) continue; n++; const x = r * Math.cos(j * df + FASE), y = r * Math.sin(j * df + FASE); x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+        if (n < 8 || x1 - x0 < 10 || y1 - y0 < 10) continue;
+        const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, ax = (x1 - x0) / 2, ay = (y1 - y0) / 2; let sc = 1;
+        for (let j = 0; j < NP; j++) { const r = Rn[fi * NP + j]; if (r <= 0) continue; sc = Math.max(sc, Math.hypot((r * Math.cos(j * df + FASE) - cx) / ax, (r * Math.sin(j * df + FASE) - cy) / ay)); }
+        for (let j = 0; j < NP; j++) { const c = Math.cos(j * df + FASE), sn = Math.sin(j * df + FASE), A2 = (c / (sc * ax)) ** 2 + (sn / (sc * ay)) ** 2, B2 = -2 * (cx * c / (sc * ax) ** 2 + cy * sn / (sc * ay) ** 2), C2 = (cx / (sc * ax)) ** 2 + (cy / (sc * ay)) ** 2 - 1;
+          const disc = B2 * B2 - 4 * A2 * C2; if (disc <= 0) continue; const te = (-B2 + Math.sqrt(disc)) / (2 * A2);
+          if (te > Rn[fi * NP + j]) Rn[fi * NP + j] += OVALO_SACO * (te - Rn[fi * NP + j]); } }
+      // vientre: el saco distendido es más redondo que el corazón (que es un cono): se abomba en altura, nulo en los dos polos
+      for (let fi = 1; fi <= f1; fi++) { const t = (zFila(fi) + vi.Le) / (zApex + vi.Le), b = BARRIGA_SACO * Math.sin(Math.PI * Math.min(1, Math.max(0, t))) ** 2;
+        for (let j = 0; j < NP; j++) if (Rn[fi * NP + j] > 0) Rn[fi * NP + j] += b; }
+      dil(Rn); for (let it = 0; it < 2; it++) { for (let fi = 1; fi <= f1; fi++) gauss(Rn, fi); gaussZ(Rn); }
+      // margen local: lo que queda del corazón por fuera, ensanchado y alisado, se suma (el corazón sigue dentro)
+      const D = new Float64Array(R0.length); for (let fi = 1; fi <= f1; fi++) for (let j = 0; j < NP; j++) D[fi * NP + j] = Math.max(0, RAW[fi * NP + j] - MARGEN_SACO - Rn[fi * NP + j]);
+      const D2 = new Float64Array(R0.length), dzM = Math.max(1, Math.round(SIGMA_SACO / dz));
+      for (let fi = 1; fi <= f1; fi++) { const bM = Math.max(1, Math.round(1.5 * SIGMA_SACO / (Math.max(20, Rn[fi * NP]) * df)));
+        for (let j = 0; j < NP; j++) { let mx = 0; for (let di = -dzM; di <= dzM; di++) { const ii = fi + di; if (ii < 1 || ii > f1) continue; for (let dj = -bM; dj <= bM; dj++) mx = Math.max(mx, D[ii * NP + (j + dj + NP * 4) % NP]); } D2[fi * NP + j] = mx; } }
+      for (let fi = 1; fi <= f1; fi++) gauss(D2, fi);
+      for (let fi = 1; fi <= f1; fi++) for (let j = 0; j < NP; j++) Rn[fi * NP + j] = Math.max(Rn[fi * NP + j] + D2[fi * NP + j], RAW[fi * NP + j] - MARGEN_SACO);
+      tejado(R0);   // la envolvente convexa también, para mezclar (el tejado de Rn ya está dentro)
+      for (let fi = 1; fi <= f1; fi++) for (let j = 0; j < NP; j++) { const a = R0[fi * NP + j], b = a + sRed * (Rn[fi * NP + j] - a);
         R0[fi * NP + j] = b; extraRed += 0.5 * ((b + HOLGURA_SACO) ** 2 - (a + HOLGURA_SACO) ** 2); }
       extraRed *= df * dz / 1000; }
+    else tejado(R0);
     // arriba: por encima de lo más alto, la misma lámina tensa (1 mm por mm) cierra un tejado sobre las raíces, donde el
     // saco se refleja sobre los grandes vasos; en zTop, el polo
     // DERRAME: peso de cada punto del saco (ilustrativo). post: 1 detrás (−y, lo declive con el paciente tumbado), 0 delante.
@@ -885,6 +917,12 @@ export function construirCorazon(estado, opciones = {}) {
       const reflexion = 1 - paso(zMax - 22, zMax, z);
       return ((1 - circ) * post * post + circ) * senoOblicuo * reflexion;
     };
+    let iUlt = 1; while (iUlt + 1 < NF && zFila(iUlt + 1) >= -vi.Le) iUlt++;   // última fila del saco sobre el ápex
+    // R1b · casquete del ápex: con el saco lleno, media elipse tan alta como la mitad del radio (con 3 mm era un disco plano, una esquina
+    // y un lado recto en el corte). El volumen del casquete (1/3 · altura · Σ r² · Δθ) se descuenta del líquido que reparte kDer.
+    let alturaCasco = 0;
+    if (sRed > 0) { let sr2 = 0; for (let j = 0; j < NP; j++) sr2 += (R0[iUlt * NP + j] + HOLGURA_SACO) ** 2;
+      alturaCasco = Math.min(30, Math.max(0, 0.5 * Math.sqrt(sr2 / NP) - 3)) * sRed; extraRed += alturaCasco * sr2 * df / 3000; }
     // grosor = k · peso, con k tal que el volumen entre el saco sin derrame y con derrame = liq (cuadrática exacta)
     let kDer = 0;
     if (liq > 0) { let a1 = 0, a2 = 0;
@@ -892,12 +930,13 @@ export function construirCorazon(estado, opciones = {}) {
         for (let j = 0; j < NP; j++) { const r = R0[fi * NP + j] + HOLGURA_SACO, w = peso(z, j * df + FASE); a1 += r * w; a2 += 0.5 * w * w; } }
       a1 *= df * dz; a2 *= df * dz; kDer = (-a1 + Math.sqrt(a1 * a1 + 4 * a2 * Math.max(0, liq - extraRed) * 1000)) / (2 * a2); }
     const pesoApice = (f) => peso(-vi.Le, f);
-    let iUlt = 1; while (iUlt + 1 < NF && zFila(iUlt + 1) >= -vi.Le) iUlt++;   // última fila del saco sobre el ápex
     // bajo el ápex, las filas se reparten entre −Le y el polo (a la holgura más el líquido más fino que hay ahí)
     let hPolo = Infinity; for (let j = 0; j < NP; j++) hPolo = Math.min(hPolo, HOLGURA_SACO + kDer * pesoApice(j * df + FASE));
+    hPolo += alturaCasco;
     // hacia: cuánto se mete hacia dentro (0 el saco; el derrame, 1,5 mm por dentro, así queda dentro fila a fila)
     const saco = (hacia) => rejilla(NF, NP, (u, v, fi, j) => {
       const f = v * TAU + FASE; let z = zFila(fi), r;
+      z = Math.min(z, zApex - hacia);   // las filas por encima del cierre del tejado se apilan en su vértice
       if (u === 0) { z -= hacia; r = 0; }   // los dos polos cierran el saco
       else if (u === 1) { z = -vi.Le - hPolo + hacia; r = 0; }
       else if (z < -vi.Le && sRed > 0) {   // saco redondeado: el casquete del ápex sigue al radio de la última fila (media elipse) y no deja escalón

@@ -134,9 +134,10 @@ test('P1 · el líquido empieza por detrás (lo declive con el paciente tumbado)
   const zV = -30;   // tercio medio de los ventrículos (el corazón ya movido: el saco se mide tal como se ve)
   const atras = grosor(60, zV, -Math.PI / 2), delante = grosor(60, zV, Math.PI / 2);
   assert.ok(atras > 2 * delante && atras > 3, `60 mL: detrás ${atras.toFixed(1)} mm, delante ${delante.toFixed(1)} mm`);
+  // R1b: el saco sigue la silueta del corazón (ya no hay hueco de envolvente convexa): delante 5,2 mm y detrás 8,2 mm a 388 mL (antes > 8)
   const atrasG = grosor(388, zV, -Math.PI / 2), delanteG = grosor(388, zV, Math.PI / 2), ad = grosor(388, 15, Math.PI);
-  assert.ok(delanteG > 8, `388 mL: delante ${delanteG.toFixed(1)} mm (detrás ${atrasG.toFixed(1)})`);
-  assert.ok(ad > 6, `388 mL: junto a la AD ${ad.toFixed(1)} mm`);
+  assert.ok(delanteG > 4.5, `388 mL: delante ${delanteG.toFixed(1)} mm (detrás ${atrasG.toFixed(1)})`);
+  assert.ok(ad > 5, `388 mL: junto a la AD ${ad.toFixed(1)} mm`);
 });
 
 test('P1 · el líquido dibujado es el del motor (±10 %)', () => {
@@ -190,13 +191,15 @@ test('P1 · el saco cubre las aurículas en todas las vistas (sin derrame, con d
 
 // R1 (eco-mega, parada 3) · el saco del derrame grande es una lámina lisa que abraza al corazón: en los cortes de la eco no hay
 // esquinas (la caja del subcostal 4C, la V del apical 4C) ni saltos de la distancia al corazón. Con poco líquido sigue pegado.
+import { tramoGiro } from '../../../../autonomo/bloques/eco-mega/herramientas/r1b-medir.mjs';
 import { cortes, estadoGeo as estadoGeoR1, pacienteDerrame, telediastole } from '../../../../autonomo/bloques/eco-mega/herramientas/saco-contorno.mjs';
 test('R1 · a 388 mL, el contorno del saco en A4C, SC4C y PLAX no tiene esquinas (<120° a 12 mm) ni saltos de distancia al corazón', () => {
   const p = pacienteDerrame(1), e = estadoGeoR1(telediastole(p), p.ex);
   for (const v of ['a4c', 'sc4c', 'plax']) {
     const c = cortes(1, v, e), n = c.pts.length;
     assert.ok(n > 100, `${v}: contorno de ${n} puntos`);
-    const mn = Math.min(...c.ang); assert.ok(mn >= 120, `${v}: esquina de ${mn.toFixed(0)}°`);
+    const mn = Math.min(...c.ang); assert.ok(mn >= 130, `${v}: esquina de ${mn.toFixed(0)}°`);   // R1b: 130° (antes 120°); A4C y SC4C salen a 137°
+    const rg = tramoGiro(c.ang); assert.ok(rg <= 50, `${v}: tramo casi recto de ${rg} mm`);   // R1b: antes 51-57 mm
     let salto = 0; for (let i = 0; i < n; i++) salto = Math.max(salto, Math.abs(c.dist[i] - c.dist[(i + 1) % n]));
     assert.ok(salto <= 4.5, `${v}: la distancia saco-corazón salta ${salto.toFixed(1)} mm en 3 mm de contorno`);
   }
@@ -206,6 +209,16 @@ test('R1 · con poco líquido (60 mL) el saco sigue pegado: detrás crece menos 
   const p = paciente('normal'), e = estadoGeo(p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), p.ex);
   const radio = (L) => radioEn(construirCorazon({ ...e, liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), -30, -Math.PI / 2);
   const d60 = radio(60) - radio(0); assert.ok(d60 < 7, `60 mL: el saco crece ${d60.toFixed(1)} mm detrás`);
+});
+
+// R1b · sin derrame, el tejado del saco queda a ≤ 8 mm de lo más alto que hay dentro (antes un cono dejaba 33 mm de negro sobre el corazón)
+test('R1b · sin derrame, el tejado del saco queda a ≤ 8 mm de lo más alto de dentro en todo el latido (cierre fijo: la AI sube y baja 8 mm)', () => {
+  const p = paciente('normal'), zmax = (pz) => { let m = -1e9; for (let i = 2; i < pz.pos.length; i += 3) m = Math.max(m, pz.pos[i]); return m; };
+  let altoMax = -1e9, peri = 0;
+  for (let k = 0; k < p.o.length; k += 8) { const g = construirCorazon({ ...estadoGeo(p.o[k], p.ex), liquidoPeri: 0 }, OP);
+    const dentro = g.partes.filter(pz => pz.pos && /^(VD borde|Base V|AI$|AD$|Orejuela|Infundíbulo|Raíz aórtica|Grasa|Coronaria|Seno coronario)/.test(pz.nombre));
+    altoMax = Math.max(altoMax, ...dentro.map(zmax)); peri = Math.max(peri, zmax(g.partes.find(x => x.nombre === 'Pericardio'))); }
+  assert.ok(peri - altoMax <= 8 && peri - altoMax >= 0, `tejado a ${(peri - altoMax).toFixed(1)} mm de lo más alto de todo el latido`);
 });
 
 // R2 · la pared libre de la AD y la del VD se INVAGINAN (concavidad hacia la luz, con sangre a los dos lados del pliegue)

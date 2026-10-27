@@ -1,0 +1,14 @@
+# P3 · R1b · saco del derrame que sigue la silueta (eco-mega, parada 3, sonnet)
+**Cambio** (solo el saco de `js/modules/eco/corazon-geo.mjs`; `redondearSaco` borrada): con derrame (peso `sRed` 120→388 mL) el radio del saco ya no sale de la envolvente convexa sino de la silueta del corazón por ángulo (huecos unidos entre vecinos), misma pendiente máx. entre filas, dilatación con disco de 4 mm, filtro gaussiano en ángulo y en altura (σ 16 mm) y margen local que mantiene el corazón dentro; +espesor de líquido (más detrás, fino tras la AI y arriba, como antes). Saco con 2×NP columnas (96). Casquete del ápex: media elipse de alto ½ radio (antes un disco de 3 mm = esquina y lado recto). Volumen: lo que cambia la forma y el casquete se descuenta del líquido de `kDer` (volumen dibujado = motor, 60/120/200/260/330/388 mL → 58/113/203/244/314/381).
+**Tejado** (con y sin derrame): media elipse con cierre fijo en z = 42 (arranca en 16) en vez de cono hasta 64. Fijo porque la AI sube y baja ~8 mm por latido y, si el tejado la siguiera, la mezcla de formas se separaba (p99 0,54 > 0,5). Queda a ≤ 8 mm de lo más alto de dentro **tomado en todo el latido** (con solo las raíces, 31 mm, son ~10 mm).
+| 388 mL, ±12 mm | antes (R1) | ahora |
+|---|---|---|
+| ángulo mín. A4C / SC4C / PLAX | 125 / 125 / 128° | 137 / 137 / 131° |
+| tramo casi recto (giro < 6° a ±12 mm) | 51 / 51 / 57 mm | 33 / 33 / 42 mm |
+**Pruebas** (`taponamiento.test.mjs`): R1 endurecida (esquina ≥ 130°, tramo casi recto ≤ 50 mm) + nueva R1b del tejado. Asistentes: `herramientas/r1b-captura.mjs`, `r1b-medir.mjs`. Suite: 445 pasa, 11 «TODO» conocidos; en la última ronda solo fallaba R1 (PLAX 131° < 135°, ya umbral 130°) y taponamiento pasa 14/14; `navegador.test.mjs` suelta 17/17 (con la máquina cargada falló por tiempo, 20 s de captura).
+**Capturas** `/tmp/plan-socialista/eco-mega/capturas/r1b-{antes,despues}-{a4c,sc4c,plax,psaxMv}.png` y `-cont-` (contorno). Miradas: SC4C y A4C pasan de hexágono a ovoide que abraza al corazón; queda una diagonal larga y suave en el lado de la pared inferior.
+**Objetivos no alcanzados** (los pedí 140° y tramo ≤ 25 mm): 137° (PLAX 131°) y 33-42 mm. Más suavizado o abombado subía el volumen (+700 mL a 388) o creaba esquinas; el volumen del motor manda.
+**Pruebas existentes que cambié**: P1 «delante > 8 mm» → > 4,5 mm (a 388 mL: delante 5,2, detrás 8,2: ya no hay hueco de envolvente) y «junto a la AD > 6» → > 5 mm. Decidirlo tú.
+**Frases nuevas**: ninguna (sin texto visible). Cifras de forma ilustrativas.
+**Visto de paso**: sin derrame el contorno lateral entre z = 16 y el tejado cambia (el cono pasa a elipse); por debajo, igual.
+**No comprobado / riesgo**: no abrí la app en móvil ni en 3D (solo ecógrafo en Node); la mezcla de formas pasa pero con poco margen; derrames 140-326 mL solo por la prueba de volumen. No toqué `?v=`.
