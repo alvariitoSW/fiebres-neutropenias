@@ -57,3 +57,10 @@ Frases nuevas del receptor (constructor, 27/10) — texto en `b3-receptor/topes.
 - TSVI con dobutamina «Contraindicada» (pp. 42-43) · Cocaína con betabloqueante: «…deja la vasoconstricción α sin oposición: más isquemia coronaria.» (cap. 20 p. 47; paráfrasis)
 - Candado bisoprolol: «Lo toma de casa: no se quita» (p. 66)
 - Cambios de modelo: milrinona (fuerza PDE 0,7→0,5) y sensibilidad FC del nodo 0,2→0,3: cambia FC de varios estados (Begoña 86 frente a 84 del caso).
+
+Ritmo, vuelta 2 (frases cambiadas)
+- Mg torsade «Pauta completa»: «Una pauta de 1-2 g en 15 min (la dosis no tiene consenso). Repetirla sin que vuelva la torsade sería hipermagnesemia.» (p. 35; tope e hipermagnesemia: fisiología general)
+- Adenosina: «Tres bolos (6, 12 y 12 mg) son las dosis de la tabla: la ficha no da una cuarta. Si el ritmo sigue, la adenosina ya no lo corta.» (Tabla 19.4, p. 30)
+- Amiodarona TV: «Dos bolos de 150 mg en 10 min: sigue 1 mg/min 6 h y 0,5 mg/min 18 h, sin pasar de 2,2 g al día. La ficha admite dosis extra de 150 mg cada 10 min si hace falta: el límite de dos bolos es de esta pantalla.» (Fig. 19.8, p. 33; tope ilustrativo)
+- Verapamilo: «20 mg es el máximo de la ficha…» (p. 28; bradicardia e hipotensión: fisiología general)
+- Pausa tras el choque: «Pausa tras el choque: el sinusal tarda un latido en arrancar.» (fisiología general)
