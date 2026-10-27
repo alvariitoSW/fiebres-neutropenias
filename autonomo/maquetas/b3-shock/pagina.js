@@ -86,7 +86,7 @@ function apuntarHistoria() { const u = cab.lectura.u; est.historia.push({ h: est
 function leer() {
   const L = cab.lectura, u = L.u, P = perfusion(L, est.rec);
   const r = {
-    fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pcp: Math.round(u.pvp),
+    fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pvc0: Math.round(L.pvc0), pcp: Math.round(u.pvp),
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
     imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
@@ -404,7 +404,7 @@ const topeVisto = {};
 function aplicarTopes(forzar) {
   if (!cab?.lectura || !R) return;
   const hay = est.modo === 'qs' ? {} : calcularTopes(R, ctxX(), est.horas, horaTxt);
-  for (const k of ['sobrecarga', 'tep', 'reposicion', 'vaso', 'reloj']) {
+  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (!forzar && topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);

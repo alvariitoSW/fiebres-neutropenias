@@ -144,8 +144,11 @@ export function indicacion(pac, tipoAparato) {
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 // Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
-export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
-export const sobrecarga = (R) => R.pcp >= TOPES.pcp || R.pvc > TOPES.pvc;
+export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+// Sobrecarga: la PCP en el techo de la ficha, o la PVC por encima de 12 habiendo subido ≥ 4 sobre la de entrada y el pulmón ya
+// encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
+export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
+export const avisoVolumen = (R) => R.pcp >= TOPES.pcpAviso || (R.pvc >= TOPES.pvcAviso && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube - 2);
 export const perdidoMl = (pac, R) => Math.round(R.perdida / 100 * 66 * pac.peso);
 // lo que se puede reponer: 1,5 veces lo perdido (el ×1,5: ilustrativo); solo en la hemorragia con pérdida
 export const topeRepos = (R, X) => X.pac.tipo === 'hemo' && R.perdida > 0 ? TOPES.reposicion * perdidoMl(X.pac, R) : null;
@@ -257,10 +260,11 @@ export const ESTADOS = {
     guia: [{ t: 'El VD se dilata contra el émbolo.', s: ['#cor-vd'], c: C.tepEco },
       { t: (R) => `PAM ${R.pam}: sin inestabilidad hemodinámica no es el alto riesgo.`, s: ['[data-fila="pa"]'], c: C.tepRiesgo },
       { t: 'Sube la gravedad del émbolo para ver el paso al alto riesgo.', s: ['#dock'], c: C.tepRiesgo }] },
-  'sobrecarga': { tit: 'Sobrecarga de volumen', frase: (R) => `PCP ${R.pcp} y PVC ${R.pvc}: más volumen ya no sube el gasto (IC ${c1(R.ic)}) y no cabe en las venas${R.edema > 50 ? `; ${Math.round(R.edema).toLocaleString('es-ES')} mL de edema en el pulmón (SpO₂ ${R.spo2} %)` : ''}. Los botones de volumen se apagan.`, org: 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general',
-    guia: [{ t: (R) => `PCP ${R.pcp}: llega a 20, el techo de la presión de llenado de la ficha (18-20).`, s: ['[data-fila="pcp"]'], c: C.llenado },
-      { t: (R) => `PVC ${R.pvc}: por encima de 12 las venas ya no admiten más (el 12 es fisiología general, no de la ficha).`, s: ['[data-fila="pvc"]'], c: C.llenado, org: 'el 12: fisiología general' },
+  'sobrecarga': { tit: 'Sobrecarga de volumen', frase: (R) => `${R.pcp >= TOPES.pcp ? `PCP ${R.pcp}: pasa el techo de 18-20` : `PVC ${R.pvc}, ${R.pvc - R.pvc0} más que al llegar: las venas ya no admiten más`} y más volumen no sube el gasto (IC ${c1(R.ic)})${R.edema > 50 ? `; ${Math.round(R.edema).toLocaleString('es-ES')} mL de edema en el pulmón (SpO₂ ${R.spo2} %)` : ''}. Los botones de volumen se apagan.`, org: 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general',
+    guia: [{ t: (R) => R.pcp >= TOPES.pcp ? `PCP ${R.pcp}: pasa el techo de la presión de llenado de la ficha (18-20).` : `PCP ${R.pcp}: aún por debajo del techo de 18-20 de la ficha.`, s: ['[data-fila="pcp"]'], c: C.llenado },
+      { t: (R) => `PVC ${R.pvc} (entró con ${R.pvc0}): por encima de 12 es raro que más volumen suba el gasto (fisiología general, no de la ficha).`, s: ['[data-fila="pvc"]'], c: C.llenado, org: 'el 12: fisiología general' },
       { t: (R) => `El gasto no mejora (IC ${c1(R.ic)}): pasado el techo, más volumen no sube el gasto.`, s: ['[data-fila="ic"]'], c: C.llenado },
+      { t: 'Mira el pulmón: con la PCP por encima de 18 se encharca (gotas) y la SpO₂ baja.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' },
       { t: 'Pasa el reloj: 3/4 del cristaloide se van al intersticio y los botones vuelven a encenderse.', s: ['[data-pest="reloj"]'], c: C.volIni }] },
   'hemo-tope': { tit: 'Repuesto más de lo perdido', frase: (R, X) => `Has dado ${(X.infundido.cris + X.infundido.sangre).toLocaleString('es-ES')} mL: más de 1,5 veces lo perdido (≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL, ${R.perdida} % de la volemia). Los botones de volumen se apagan.`, org: 'ficha · p. 21-23 (la volemia) · el ×1,5: ilustrativo',
     guia: [{ t: (R, X) => `Perdió ${R.perdida} % de la volemia: ≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL (66 mL/kg × ${X.pac.peso} kg).`, s: ['#cor-cav'], c: C.volemia },
@@ -299,7 +303,7 @@ export const ESTADOS = {
       { t: 'La bomba centrífuga crea el flujo; el oxigenador saca el CO₂ y mete el O₂; el calentador la devuelve a 37 °C (Fig. 16.5).', s: ['.p-bomba', '.p-oxigenador', '.p-calentador'], c: C.f165 },
       { t: 'La sangre vuelve por la arteria femoral y sube por la aorta al revés, para llegar al cayado y al cerebro.', s: ['.p-canula-a'], c: C.ecmo },
       { t: 'Soporta los dos ventrículos y el intercambio de gases: es la elección si hay fallo respiratorio.', s: ['[data-fila="spo2"]'], c: C.seleccion }] },
-  'ecmo-carga': { tit: 'ECMO: el VI carga contra la aorta', frase: (R) => `El chorro que sube por la aorta frena al VI: aún abre (${R.aoAbre} de ${R.aoDe}), pero eyecta poco (${(R.icNat * 1.85).toFixed(1).replace('.', ',')} L/min) y la PCP sube a ${R.pcp}. Si sigue, hay que ventearlo.`, org: 'ficha · p. 48-49',
+  'ecmo-carga': { tit: 'ECMO: el VI carga contra la aorta', frase: (R) => `El chorro que sube por la aorta frena al VI: aún abre (${R.aoAbre} de ${R.aoDe}), pero eyecta poco (${R.icNat * 1.85 < 0.15 ? 'casi nada' : (R.icNat * 1.85).toFixed(1).replace('.', ',') + ' L/min'}) y la PCP sube a ${R.pcp}. Si sigue, hay que ventearlo.`, org: 'ficha · p. 48-49',
     guia: [{ t: 'El flujo retrógrado sube la poscarga del VI: un problema que no tienen los otros soportes.', s: ['.p-canula-a', '#tr-art'], c: C.ecmoPoscarga },
       { t: (R) => `El VI aún abre su válvula (${R.aoAbre} de ${R.aoDe} latidos), pero saca poca sangre: la consola lo separa del flujo del ECMO.`, s: ['#consola', '#ecm-corazon'], c: C.ecmoPoscarga },
       { t: (R) => `La PCP sube: ${R.pcp}. Mira la curva de la AP.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.ecmoPoscarga, org: 'cuánto: el modelo' },

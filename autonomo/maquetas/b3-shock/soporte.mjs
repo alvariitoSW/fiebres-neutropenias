@@ -41,7 +41,10 @@ const TAU_TOTAL = 3;                           // s del lazo del «gasto total»
 // PAM de 130). Fisiología general; los números, ilustrativos
 const SUCCION_VI = [12, 60];                   // mL del VI entre los que la bomba del Impella pierde su flujo
 const SUCCION_VEN = [0.3, 2.2];                    // mmHg de las venas entre los que el ECMO pierde su flujo
-const K_EDEMA = 1.5;                           // mL/s por mmHg sobre 28 en las venas pulmonares (motor: 0,1): tope físico de la PCP
+// El pulmón empieza a encharcarse en las venas pulmonares por encima de P_EDEMA: 18, el extremo bajo de la «presión de llenado
+// óptima» de 18-20 de la ficha (Marino, cap. 16, p. 42: la más alta que sube el gasto sin edema). Cuánto líquido pasa por cada
+// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1)
+const P_EDEMA = 18, K_EDEMA = 4;
 const TEP_CAP = 0.85;                           // la arteria pulmonar del TEP a fondo, un 20 % de distensible (ilustrativo)
 const HEM_SIMPATICO = 0.35;
 // Las bombas de flujo continuo (centrífuga del ECMO, microaxial del Impella) dan menos flujo cuanta más presión tienen que
@@ -88,7 +91,7 @@ export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.t
 export function prepararMotor(rec, segundos = 40) {
   const m = crearMotor();
   m.correr(12);
-  m.p.kEdema = rec.kEdema ?? K_EDEMA;
+  m.p.kEdema = rec.kEdema ?? K_EDEMA; m.p.pEdema = rec.pEdema ?? P_EDEMA;
   m.p.succionVi = SUCCION_VI; m.p.succionVen = SUCCION_VEN;
   ESC[rec.esc]?.aplicar(m, rec.g);
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
@@ -108,7 +111,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
     get vBalon() { return ms.vBalon; }, get qImp() { return ms.qImp; }, get qEcmo() { return ms.qEcmo; }, get qVent() { return ms.qVent; } };
   let acum = nuevo(), ultimoLat = m.s.nLatido, lectura = null, historiaAo = [];
-  let cris = 0, sangre = 0, crisTotal = 0, edemaVisto = 0, vvenBase = 0;
+  let cris = 0, sangre = 0, crisTotal = 0, edemaVisto = 0, vvenBase = 0, pvc0 = 0;
   function nuevo() { return { aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
 
   // Fármacos y vasopresores: multiplicadores sobre lo basal del paciente (dirección de la ficha; magnitud ilustrativa)
@@ -156,7 +159,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const impPide = (ajuste.soporte === 'impella' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'impella')) ? st.qImpObj / LMIN : 0;
     const ecmoPide = ajuste.soporte === 'ecmo' ? ajuste.ecmo : 0;
     lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, impPide, ecmoPide, totalPide: ajuste.soporte === 'impella' ? ajuste.total : null, balon: u.balon,
-      aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema,
+      aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema, get pvc0() { return pvc0; },
       picoDia: acum.picoDia, teleDia: acum.teleDia };
     acum = nuevo();
   }
@@ -179,8 +182,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const yaEdema = Math.max(0, m.s.vEdema - edemaVisto);
     let falta = Math.max(0, 0.75 * cris - yaEdema), total = 0;
     const TRAMOS = 6, trozo = falta / TRAMOS;
-    for (let i = 0; i < TRAMOS && trozo > 0; i++) {
-      const sale = Math.min(trozo, Math.max(0, m.s.vven - vvenBase));
+    // El motor corre siempre el tramo entero (9 s), aunque no quede cristaloide que repartir: con el VI distendido el pulmón
+    // sigue encharcándose mientras pasan las horas (v3: con cris 0 no simulaba ni un segundo y el paciente mejoraba)
+    for (let i = 0; i < TRAMOS; i++) {
+      const sale = trozo > 0 ? Math.min(trozo, Math.max(0, m.s.vven - vvenBase)) : 0;
       m.s.vven -= sale; total += sale; correr(1.5);
     }
     cris = 0; edemaVisto = m.s.vEdema;
@@ -188,7 +193,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   }
 
   correr(asentar);
-  edemaVisto = m.s.vEdema; vvenBase = m.s.vven;
+  edemaVisto = m.s.vEdema; vvenBase = m.s.vven; pvc0 = lectura ? lectura.u.pvc : 0;
   return { m, ajuste, st, base, paso, correr, ajustar, volumen, redistribuir, get lectura() { return lectura; },
     get infundido() { return { cris, sangre, crisTotal }; } };
 }
@@ -198,7 +203,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 // vuelve del oxigenador se toma como arterializada (98 %: ilustrativo, la fuente no da la saturación de salida)
 export function perfusion(L, rec) {
   const u = L.u;
-  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.03 * (u.vEdema || 0));
+  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0));
   const satNativa = satDe(pao2);
   const sao2 = L.ecmo > 0 ? ((L.gcNativo + L.imp) * satNativa + L.ecmo * 0.98) / Math.max(0.1, L.gcTotal) : satNativa;
   const d = derivar(estadoDe({ hb: rec.hb ?? 14, pao2, gcFijo: L.gcTotal, util: rec.util || 'normal', espacio: rec.espacio || 'no' }));

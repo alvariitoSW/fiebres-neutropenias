@@ -8,16 +8,23 @@ const mL = (x) => Math.round(x).toLocaleString('es-ES');
 
 export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const out = {}, inf = X.infundido, dado = inf.cris + inf.sangre, tipo = X.pac.tipo;
-  // 1) volumen: PCP ≥ 20 o PVC > 12 (aviso desde PCP 15 o PVC 11)
+  // 1) volumen: PCP ≥ 20, o PVC > 12 habiendo subido ≥ 4 sobre la de entrada (aviso desde PCP 15 o PVC 11)
+  const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
   if (D.sobrecarga(R)) {
-    out.sobrecarga = { nivel: 'sello', titulo: 'Sobrecarga de volumen',
-      texto: `PCP ${R.pcp} y PVC ${R.pvc}: la ficha para en 18-20 y más volumen ya no sube el gasto.${R.edema > 50 ? ` Edema: ${mL(R.edema)} mL.` : ''}`,
-      cita: C.t162, origen: 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general', deshabilita: VOL };
-  } else if (R.pcp >= T.pcpAviso || R.pvc >= T.pvcAviso) {
+    out.sobrecarga = R.pcp >= T.pcp
+      ? { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PCP ${R.pcp}: pasa el techo de 18-20 de la ficha; más volumen ya no sube el gasto y encharca el pulmón.${ed}`,
+          cita: C.llenado, origen: 'ficha · p. 42 y p. 11', deshabilita: VOL }
+      : { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PVC ${R.pvc} (entró con ${R.pvc0}): por encima de 12 es raro que más volumen suba el gasto; las venas no lo admiten.${ed}`,
+          origen: 'fisiología general', deshabilita: VOL };
+  } else if (D.avisoVolumen(R)) {
     out.sobrecarga = { nivel: 'aviso', titulo: 'Cerca del techo',
-      texto: R.pcp >= T.pcpAviso ? `PCP ${R.pcp}: la ficha para en 18-20.` : `PVC ${R.pvc}: por encima de 12 las venas no admiten más.`,
-      cita: C.llenado, origen: R.pcp >= T.pcpAviso ? 'ficha · p. 42' : 'fisiología general', bajo: '#dock-panel .rejilla' };
+      texto: porPcp ? `PCP ${R.pcp}: la ficha para en 18-20.${ed}` : `PVC ${R.pvc}: por encima de 12 es raro que más volumen suba el gasto.`,
+      cita: porPcp ? C.llenado : undefined, origen: porPcp ? 'ficha · p. 42' : 'fisiología general', bajo: '#dock-panel .rejilla' };
   }
+  // 1b) el pulmón encharcado: con el edema por encima de 1.000 mL y la SpO₂ cayendo, el paciente no lo aguanta sin ventilar
+  if (R.edema >= T.edemaSello) out.edema = { nivel: 'sello', titulo: 'Edema de pulmón',
+    texto: `${mL(R.edema)} mL de líquido en el pulmón y SpO₂ ${R.spo2} %${R.spo2 >= 95 ? ' (el oxigenador del ECMO tapa la caída)' : ''}: así no se sostiene; necesitaría intubación y ventilación con PEEP, y diurético o ultrafiltración.`,
+    origen: 'fisiología general (el líquido y la SpO₂: ilustrativos)', deshabilita: VOL };
   // 2) el TEP: 500 mL con la PVC normal (4-6)
   if (tipo === 'tep') {
     if (inf.cris >= T.tepMl) out.tep = { nivel: 'sello', titulo: 'Tope de 500 mL',
@@ -53,6 +60,6 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
 
 // ¿Este bolo pasaría un tope que ya se sabe en mL? (el TEP y la reposición); y el de 2 L, ya cerca del techo de la PCP
 export function bolosQueNoCaben(R, X) {
-  const inf = X.infundido, tr = D.topeRepos(R, X), cerca = R.pcp >= T.pcpAviso || R.pvc >= T.pvcAviso;
+  const inf = X.infundido, tr = D.topeRepos(R, X), cerca = D.avisoVolumen(R);
   return (mL) => (X.pac.tipo === 'tep' && inf.cris + mL > T.tepMl) || (tr != null && inf.cris + inf.sangre + mL > tr) || (cerca && mL >= 2000);
 }
