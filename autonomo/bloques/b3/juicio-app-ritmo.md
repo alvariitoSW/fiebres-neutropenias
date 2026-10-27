@@ -37,3 +37,13 @@ Base: `node autonomo/pruebas/ritmo-vivo.mjs` (352 ✅, 0 ❌, 390 y 360 px) + 9 
 - Sello «nunca 360 J» de la TV solo se alcanza forzando el contador (la TV cede al 1.er choque): tope sin consecuencia visible en juego normal, ya así en la maqueta (R30 ⚠).
 - Fig. 19.5 / 21.1 / 21.3-21.4 y las 6 láminas: solo por la prueba (se pintan, `naturalWidth>0`), no a ojo. 360 px: solo por la prueba y las capturas `-red` del tachado.
 - Fidelidad de las cifras de las preguntas: del auditor, no de este juicio.
+
+## Rejuicio (R8) · 27/10/2026, versión 20261027-62 (`origin/auto/b3` a0d27e5)
+Mismo programa (`autonomo/bloques/b3/herramientas/ritmo-plano-lupas.mjs`): el plano de las lupas ahora se cierra con Escape, al pasar a Mayéutica, al cambiar de estado y con «← VOLVER» (solo «ABIERTO» tras abrirlo). Prueba oficial `ritmo-vivo.mjs`: 362 ✅, 0 ❌ (390 y 360 px, «Todo en verde»). 2 capturas nuevas (frenos del WPW, guía nodal).
+| Criterio | Antes | Ahora | Por qué |
+|---|---|---|---|
+| §7.7 Móvil | 7,5 | **9** | ✅ El plano fijo ya no se queda pintado sobre la Mayéutica ni sobre el menú de Libros. |
+| §7.5 Interactivo | 8,5 | **8,75** | ✅ Los 3 frenos del WPW llevan «⚠ frena el nodo» además del borde naranja (captura r1). |
+| §7.9 Citas / §7.10 Guía | 9 / 8,5 | **9,25 / 8,75** | ✅ Enlaces de la guía en dorado (`rgb(207,154,62)` = `--accent-yellow`), legibles sobre el fondo oscuro (captura r2). |
+| §8 Caso | 8,75 | **9** | ✅ `mayeutica.js` `destapar()` → `taparTodo(false)`: al contestar y al final el monitor enseña las cifras de Teodoro (código + prueba en verde). |
+**Veredicto: pasa y llega a la meta** (mínimo 8,5 en §8 Dificultad; lo demás ≥8,75). Para el parte: §8 Dificultad 8,5 (en `rtv-g1` la correcta es la más larga; acortarla a 45-50 caracteres en `js/data/ritmo-vivo-preguntas.js`) y el sello «nunca 360 J» de la TV solo alcanzable forzando el contador (`pagina.js`, caso `cv-tv`: que la TV de Hugo no ceda siempre al 1.er choque; ilustrativo).
