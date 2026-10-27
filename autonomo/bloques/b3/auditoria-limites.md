@@ -1,0 +1,22 @@
+# Auditoría ciega b3 · vuelta de límites (shock, pulmón, ritmo; receptor pendiente)
+Páginas = página del PDF (pdftotext + lectura de la Fig. 19.8). Graves 3, menores 4, huecos 0.
+
+## GRAVES (cifra, página o afirmación sin apoyo)
+❌ RITMO · `b3-ritmo/topes.js:49` «Bolos completos»: cita `C.amio` (FA, Tabla 19.1, p. 23; «p. 24-25»). El texto es de TV: la fuente es la Fig. 19.8 (p. 33): «150 mg en 10 min; 1 mg/min 6 h y 0,5 mg/min 18 h; dosis extra de 150 mg cada 10 min si hace falta; máx. 2,2 g/día». Corrección: origen `ficha · Fig. 19.8, p. 33 · el tope de 2 bolos: ilustrativo` y cita a la Fig. 19.8 (la ficha NO limita a dos bolos). Cifras 150/1 mg/min/2,2 g sí coinciden.
+❌ RITMO · `topes.js:18` «Tope de adenosina»: «si el ritmo sigue, no es una reentrada por el nodo. Más dosis solo alargan las pausas» no está en Tabla 19.4 p. 30 (da 6, 12, 12 mg y «>90 %»). Corrección: añadir al origen «· la interpretación: fisiología general» o quitar la frase.
+❌ PULMÓN · `b3-pulmon/topes.js:42` (y :22) «Volumen no fisiológico»: «un pulmón sano no tolera tanto y se rompe». La ficha da 12-15 mL/kg como Vt «tradicional» (cap. 24 p. 46) y el daño por volumen se explica en el SDRA (pulmón al 50 %). Corrección: origen `tope 12 mL/kg: criterio de la maqueta; ficha: tradicional 12-15 (cap. 24 p. 46), normal 6-7, daño por volumen en SDRA` y texto «más del doble del volumen normal (6-7): lesión por volumen, sobre todo en SDRA».
+
+## MENORES
+❌ RITMO · `topes.js:44` «Tope de verapamilo»: «bradicardia e hipotensión» no está en p. 28 (solo «inotrópico negativo, no en IC con FE baja»; dosis 0,25-5 mg, repetible c/15-30 min, total 20 mg ✅). Rotular «bradicardia e hipotensión: fisiología general».
+❌ SHOCK · `topes.js:18` PVC: «por encima de 12 las venas no admiten más» es afirmación fuerte; rótulo «fisiología general» correcto, pero suavizar («por encima de 12 es raro que más volumen suba el gasto»).
+❌ SHOCK · `datos.js:149` `perdidoMl` usa 66 mL/kg para todos; la ficha (p. 21) da 66 (varón) y 60 (mujer, peso magro). Si algún paciente de hemorragia es mujer, usar 60 o nombrarlo en el origen.
+❌ RITMO · cerrojo: lista dice «más de 1 s»; `motor.js:273` usa 1,2 s (ya anotado por el constructor). Unificar a «más de 1 s» o 1,2 s.
+
+## ✅ Coincide con la fuente (cifra, contexto y página)
+PULMÓN: Vt alto (8→6; EPOC/asma 6-8, cap. 23 p. 29 ✅; Tabla 27.1 p. 14 ✅) · Vt bajo (mínimo 4, p. 14 ✅) · Meseta >30 (cap. 27 p. 4 «negligible ≤30»; cap. 24 p. 48 «>30 riesgo de rotura» ✅) · Hiperinflación (gasto cardíaco y barotrauma: cap. 23 p. 28, cap. 28 p. 31 ✅; el 20 y «oculta ≥2»: fisiología general razonable) · Alarma ≥45, VM>20, VM<2/«sin ventilación»: ilustrativo/fisiología general, rótulos razonables, la ficha no trae esas cifras · FR ≤35 (p. 14 ✅).
+SHOCK: PCP 18-20 (p. 42 ✅; «más volumen no sube el gasto» es lectura fiel) · edema 75 % del cristaloide (p. 11 ✅) · TEP 500 mL con PVC 4-6 y VD que empuja el tabique (cap. 22 p. 10 ✅; PVC 4-6 sí lo da la ficha) · PAM ≥65 y noradrenalina (p. 12 ✅; el 110, ×1,5, 42 h/48 h: ilustrativo/fisiología general, razonable).
+RITMO: adenosina 6/12/12 mg, 2 min, mitad por vía central (Tabla 19.4 p. 30 ✅) · diltiazem 0,25 mg/kg + 5-15 mg/h, hipotensión 20-30 % (Tabla 19.1 p. 22 ✅; «otro bolo no está» ✅) · metoprolol 2,5-5 mg ×3 (p. 23 ✅) · verapamilo ≤20 mg (p. 28 ✅) · Mg 2 g/15 min + 6 g/6 h en TAM (p. 28 ✅) · WPW: frenar el nodo puede precipitar FV (p. 28 ✅) · choques 100, 100 bif., 200 J, nunca 360 J (p. 32 ✅; Fig. 19.8 p. 33) · adrenalina c/3-5 min, amiodarona 300+150 mg (p. 59 ✅) · FV 5 % tras 3 choques y ECMO (p. 59-60 ✅) · «Ya hay pulso» (p. 59/62 + fisiología general ✅) · vagal p. 29 (el 3 ilustrativo ✅).
+Texto visible = lista: coincide salvo «Adenosina actuando» (el código dice «Espera a que acabe el cerrojo… la ficha deja 2 min»; la lista lo abrevia) y «Cargando».
+
+## No comprobado / riesgo
+Receptor: no llegó mensaje; sin auditar. «Sin RCE a los 30 min» (p. 60): la ficha no da 30 min (rotulado ilustrativo ✅). No abrí `pagina.js` completo (solo celda I:E y consola, coinciden). Maqueta shock: no verifiqué el texto de los estados nuevos más allá de sobrecarga/hemo-tope/hipertensión.
