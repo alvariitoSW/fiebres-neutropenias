@@ -141,8 +141,8 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (conImp && ajuste.total != null && ajuste.soporte === 'impella') st.qImpObj += (st.impTotalObj - st.qImpObj) * dt / TAU_TOTAL;
     else st.qImpObj = ajuste.impella * LMIN;
     const fPos = factorPoscarga(m.s.pamSensor);   // la presión media que vence la bomba (el sensor del barorreflejo ya la filtra)
-    const nDias = m.s.nLatido - (m.s.tLatido < m.p.pr ? 1 : 0);
-    m.p.soporte = conBalon || conImp || conEcmo ? { balon: conBalon && asiste(nDias) ? ajuste.balon : 0, impella: conImp ? st.qImpObj / LMIN * fPos : 0,
+    const nDias = m.s.nLatido - (m.s.tLatido < m.p.pr + Math.max(0, ajuste.tim?.des || 0) ? 1 : 0);   // con el vaciado tarde, la diástole asistida llega hasta pasada la R
+    m.p.soporte = conBalon || conImp || conEcmo ? { balon: conBalon && asiste(nDias) ? ajuste.balon : 0, tim: ajuste.tim, impella: conImp ? st.qImpObj / LMIN * fPos : 0,
       ecmo: conEcmo ? ajuste.ecmo * fPos : 0, venteo: conEcmo && ajuste.venteo === 'drenaje' ? VENTEO_DRENAJE : 0 } : null;
     m.paso(dt);
     const s = m.s;

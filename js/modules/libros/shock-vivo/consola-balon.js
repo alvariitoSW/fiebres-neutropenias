@@ -4,8 +4,13 @@
 // muestra) y la lectura por latido de soporte.mjs (picoDia/teleDia asistidos y picoNo/teleNo sin asistir).
 // Origen de cada cosa: presión arterial y aumento = modelo (fisiología general); el ECG (P-QRS-T) y la forma del balón = ilustrativos;
 // volumen 35-40 mL, hinchar en diástole y vaciar en la contracción isovolumétrica = ficha (Marino cap. 16, PDF p. 45).
-// Disparo, modo, temporización, alarma, baterías y helio: interfaz ilustrativa. Temporización: la fuente no lo dice.
+// Disparo, modo, alarma, baterías y helio: interfaz ilustrativa.
+// Temporización: los 4 errores (inflado precoz/tardío, desinflado precoz/tardío) = Gillespie 2024, p. 6 y 8 (textos y páginas en
+// js/data/balon-temporizacion-data.js). Cada botón cambia de verdad el instante de inflado o vaciado del balón en el motor
+// (p.soporte.tim, eco/motor.mjs) y la curva arterial sale sola; los segundos son del modelo (ilustrativo). Las curvas de la
+// figura de la fuente no se copian: son las del propio trazado.
 import { instalarCss } from '../../../core/dibujo-iso.js';
+import { TEMPORIZACION, tempDe, BALON_CITA, pdfPagina } from '../../../data/balon-temporizacion-data.js';
 
 const NP = 180, HUECO = 10;   // la goma de barrido: 10 muestras, para que se lea como goma y no como un corte
 const ALTO = { ecg: 44, art: 74, bal: 40 }, PAD = 3, MARGEN = 24;
@@ -50,6 +55,11 @@ const CSS = `
 .iabp-panel button[aria-pressed="true"] small { color: var(--iabp-fondo); }
 .iabp-panel button:disabled { opacity: .5; cursor: default; border-style: dashed; }
 .iabp-panel .espera[aria-pressed="true"] { background: var(--accent-yellow); border-color: var(--accent-yellow); }
+.iabp-tim { margin: 0; padding: 4px 8px; font: .66rem/1.35 var(--sans); color: var(--iabp-tinta); border-bottom: 1px solid var(--iabp-apagado); display: grid; gap: 2px; }
+.iabp-tim b { color: var(--iabp-balon); font-weight: 700; } .iabp-tim a { color: var(--iabp-balon); text-decoration: underline; white-space: nowrap; }
+.iabp-tim .org-tim { color: var(--iabp-apagado); font-size: .6rem; }
+.iabp-panel .fila.tim { flex-wrap: wrap; } .iabp-panel .fila.tim button { flex: 1 1 28%; }
+.iabp-panel-tim { grid-template-columns: minmax(0, 1fr); padding: 5px 6px; border-bottom: 1px solid var(--iabp-apagado); }
 .iabp-tubo { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--iabp-apagado) 40%, transparent); overflow: hidden; }
 .iabp-tubo i { display: block; height: 100%; width: 0; background: var(--iabp-balon); }
 .iabp-tubo.llena i { animation: iabp-llena 1.6s ease-out forwards; }
@@ -62,16 +72,19 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
   instalarCss('iabp', CSS);
   const f0 = (x) => (x == null || !isFinite(x) ? '—' : String(Math.round(x)));
   const buf = { ecg: new Array(NP).fill(null), art: new Array(NP).fill(null), bal: new Array(NP).fill(null), mk: new Array(NP).fill(null), lat: new Array(NP).fill(null) };
-  let cur = 0, W = 300, vol = 40;
+  let cur = 0, W = 300, vol = 40, timPintada = null;
   el.innerHTML = `<p class="iabp-linea" id="iabp-linea"><b>El balón trabaja a contratiempo del corazón:</b> se hincha en la diástole y se vacía justo antes de la sístole. ${org('ficha, p. 45', false)}</p><div class="iabp-cab"><span>Contrapulsación · disparo: ECG</span><span class="est" id="iabp-est">En marcha</span></div>
     <svg class="iabp-trazas" id="iabp-svg" role="img" aria-label="Tres trazados de la consola: ECG con marcas de disparo e inflado, presión arterial con el pico de aumento diastólico y presión del balón"></svg>
+    <div class="iabp-panel iabp-panel-tim">
+      <div class="gr ancho"><span class="tit">Temporización · fuente: ${BALON_CITA.corto}</span><div class="fila tim" id="iabp-tim-bt">${TEMPORIZACION.map((e) => `<button type="button" data-tim="${e.k}" aria-pressed="${e.k === 'ok'}">${e.boton}</button>`).join('')}</div></div>
+    </div>
+    <p class="iabp-tim" id="iabp-tim" aria-live="polite"></p>
     <div class="iabp-cifras" id="iabp-cifras"></div>
     <div class="iabp-panel" id="iabp-panel">
       <div class="gr"><span class="tit">Modo</span><div class="fila"><button type="button" aria-pressed="true" disabled>Automático</button><button type="button" aria-pressed="false" disabled>Semiauto.<small>no en este modelo</small></button></div></div>
       <div class="gr"><span class="tit">Disparo</span><div class="fila"><button type="button" aria-pressed="true" disabled>ECG</button><button type="button" aria-pressed="false" disabled>Presión</button></div><div class="fila"><button type="button" aria-pressed="false" disabled>Marcapasos</button><button type="button" aria-pressed="false" disabled>Interno<small>no en este modelo</small></button></div></div>
       <div class="gr"><span class="tit">Frecuencia del balón</span><div class="fila" id="iabp-razon">${[1, 2, 3].map((n) => `<button type="button" data-razon="${n}" aria-pressed="false">1:${n}</button>`).join('')}</div></div>
       <div class="gr"><span class="tit">Aumento máx.</span><div class="fila"><button type="button" disabled aria-label="Bajar el aumento">▼</button><button type="button" disabled aria-label="Subir el aumento">▲<small>100 % = el volumen</small></button></div></div>
-      <div class="gr ancho"><span class="tit">Temporización</span><div class="fila"><button type="button" disabled>◄ Inflado ►</button><button type="button" disabled>◄ Desinflado ►<small>la fuente no lo dice</small></button></div></div>
       <div class="gr"><span class="tit">Bomba</span><div class="fila"><button type="button" class="espera" id="iabp-espera" aria-pressed="false">Espera</button><button type="button" id="iabp-inicio" aria-pressed="true">Inicio</button></div></div>
       <div class="gr"><span class="tit">Llenado</span><div class="fila"><button type="button" id="iabp-llenado">Llenar<small>ilustrativo</small></button></div><div class="iabp-tubo" id="iabp-tubo"><i></i></div></div>
     </div>
@@ -155,6 +168,10 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
     const a = cab().ajuste, u = L.u, en = a.balon > 0;
     const sis = L.sisPropia || u.pas, dia = u.pad_, pam = u.pam, aum = en ? L.picoDia : null;
     const max = 220, pc = (v) => Math.min(100, Math.max(0, v / max * 100));
+    const tk = tempDe(a.timK).k;
+    for (const b of el.querySelectorAll('[data-tim]')) b.setAttribute('aria-pressed', String(b.dataset.tim === tk));
+    if (timPintada !== tk) { timPintada = tk; const e = tempDe(tk), pg = (n) => `<a href="${pdfPagina(n)}" target="_blank" rel="noopener">${BALON_CITA.corto}, p. ${n}</a>`;
+      el.querySelector('#iabp-tim').innerHTML = `<span><b>${e.boton}. Qué se ve:</b> ${e.ve}</span><span><b>Qué le pasa al paciente:</b> ${e.paciente}${e.corregir ? ' ' + e.corregir : ''}${e.nota ? ' ' + e.nota : ''}</span><span class="org-tim">fuente: ${pg(e.p)}${e.p2 ? ' · ' + pg(e.p2).replace(BALON_CITA.corto + ', p.', 'pie de la Fig. 7, p.') : ''}. Los milisegundos del error: ilustrativos.</span>`; }
     el.querySelector('#iabp-est').textContent = en ? 'En marcha' : 'Espera'; el.querySelector('#iabp-est').classList.toggle('espera', !en);
     el.querySelector('#iabp-espera').setAttribute('aria-pressed', String(!en)); el.querySelector('#iabp-inicio').setAttribute('aria-pressed', String(en));
     for (const b of el.querySelectorAll('[data-razon]')) b.setAttribute('aria-pressed', String(+b.dataset.razon === a.razon));
@@ -173,12 +190,13 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
   }
   function pie() {
     el.querySelector('#iabp-pie').innerHTML = `${org('presión, aumento y cifras: el modelo', false)}${org('ECG, forma del balón, batería, helio, disparo: ilustrativo')}${org('volumen 35-40 mL y momento: ficha, p. 45', false)}`
-      + `<span>El aumento diastólico sube el flujo coronario y la PAM; el vaciado antes de la sístole baja la poscarga (Marino cap. 16). Las cifras de aumento son del modelo: el libro no las da. La temporización (inflar pronto o tarde) no está en ninguna fuente de la app.</span>${cita(citaIabp)}`;
+      + `<span>El aumento diastólico sube el flujo coronario y la PAM; el vaciado antes de la sístole baja la poscarga (Marino cap. 16). Las cifras de aumento son del modelo: el libro no las da. La temporización (inflar y vaciar pronto o tarde) es de Gillespie 2024, p. 8; los milisegundos, ilustrativos.</span>${cita(citaIabp)}`;
   }
 
   el.addEventListener('click', (ev) => {
     const b = ev.target.closest('button'); if (!b || b.disabled) return;
     if (b.dataset.razon) alCambiar({ razon: +b.dataset.razon });
+    else if (b.dataset.tim) alCambiar({ tim: tempDe(b.dataset.tim).tim, timK: b.dataset.tim, ...(b.dataset.tim !== 'ok' && cab().ajuste.razon === 1 ? { razon: 2 } : {}) });   // la temporización se juzga en 1:2 (Gillespie 2024, p. 8): latido asistido junto al no asistido
     else if (b.id === 'iabp-espera') { const a = cab().ajuste; if (a.balon > 0) { vol = a.balon; alCambiar({ balon: 0 }); } }
     else if (b.id === 'iabp-inicio') { if (cab().ajuste.balon === 0) alCambiar({ balon: vol }); }
     else if (b.id === 'iabp-llenado') { const t = el.querySelector('#iabp-tubo'); t.classList.remove('llena'); void t.offsetWidth; t.classList.add('llena'); }

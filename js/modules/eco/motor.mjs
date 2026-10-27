@@ -398,7 +398,23 @@ export function crearMotor(ajustes = {}) {
     const so = p.soporte || {};
     // balón: vacío desde la onda R hasta que se cierra la aórtica (si no llega a abrirse, hasta que acaba la sístole)
     const sistole = s.tLatido >= p.pr && !s._aoCerro && (s.eVen > 0 || s.vAo);
-    const objB = so.balon > 0 && !sistole ? so.balon : 0;
+    let objB = so.balon > 0 && !sistole ? so.balon : 0;
+    // Errores de temporización (opcional; so.tim = { inf, des } en s: + tarde, − pronto; sin él, todo igual que arriba).
+    // Inflado: se mide desde el cierre de la aórtica (tarde) o desde el cierre del latido anterior (pronto, aún en eyección).
+    // Vaciado: se mide desde la onda R (pr).
+    const tim = so.tim;
+    if (tim && (tim.inf || tim.des)) {
+      const di = tim.inf || 0, dd = tim.des || 0;
+      if (s._aoCerro && !s._bCierre) { s._bCierre = true; s._tCierreB = s.tLatido; } else if (!s._aoCerro) s._bCierre = false;
+      const tc = s._tCierreB ?? 0;
+      const deflar = s.tLatido >= p.pr + dd && !s._aoCerro && (s.eVen > 0 || s.vAo || s.tLatido < p.pr);
+      const pronto = di < 0 && s.vAo && !s._aoCerro && s.tLatido >= tc + di;
+      if (pronto) s._bCmd = true;
+      else if (deflar) s._bCmd = false;
+      else if (s._aoCerro && s.tLatido >= tc + Math.max(di, 0)) s._bCmd = true;
+      else if (s._bCmd == null) s._bCmd = !sistole;
+      objB = so.balon > 0 && s._bCmd ? so.balon : 0;
+    } else s._bCmd = null;
     s.vBalon += (objB - s.vBalon) * (1 - Math.exp(-dt / (objB > s.vBalon ? p.tauBalon.hincha : p.tauBalon.vacia)));
     const fVi = suave(s.vvi, p.succionVi[0], p.succionVi[1]);
     s.qImp = (so.impella || 0) * LMIN * fVi;
