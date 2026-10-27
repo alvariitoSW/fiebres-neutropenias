@@ -340,7 +340,7 @@ function pintarLab() {
   }
   s += '<text x="2" y="10" class="tend-t">PAM · lactato · diuresis</text>';
   $('tend').innerHTML = s;
-  $('lab-nota').innerHTML = `Lactato y diuresis: de laboratorio y de la bolsa de orina, con su hora (${horaTxt()}). El lactato tarda en bajar. ${org('lactato y diuresis: ilustrativo (la fuente no da fórmula). La diuresis se sostiene hasta una PAM de 70: Marino cap. 18, p. 7')}`;
+  $('lab-nota').innerHTML = `Lactato y diuresis: de laboratorio y de la bolsa de orina, con su hora (${horaTxt()}). El lactato tarda en bajar. ${org('lactato y diuresis: ilustrativo (la fuente no da fórmula). El flujo renal se autorregula hasta una PAM de ~70: Marino cap. 18, p. 7')}`;
 }
 
 // ---------------------------------------------------------------- el dock de Explorar
