@@ -76,7 +76,7 @@ export function pintarCifras() {
   const o = OBJETIVOS[R.P.obj], S = R.S;
   const celdas = [{ k: 'ic', et: 'IC', u: 'L/min/m²', d: 1 }, { k: 'irvs', et: 'IRVS', u: 'UW·m²', d: 1 }, { k: 'pvc', et: 'PVC', u: 'mmHg', d: 0 },
     { k: 'lact', et: 'Lactato', u: 'mmol/L', d: 1 }, R.P.base.k != null ? { k: 'k', et: 'K⁺', u: 'mmol/L', d: 1 } : { k: 'glu', et: 'Glucemia', u: 'mg/dL', d: 0 }];
-  $('perfusion').innerHTML = celdas.map(p => {
+  const htmlPerf = celdas.map(p => {
     const v = p.k === 'lact' && typeof R.lact === 'number' && lactVis != null ? lactVis : R[p.k]; let val, t, cls = '';
     if (p.k === 'lact' || p.k === 'glu' || p.k === 'k') {
       const sube = p.k === 'lact' ? R.A.sist.lact > 0 : p.k === 'glu' ? R.A.sist.glu > 0 : R.A.sist.k !== 0;
@@ -87,6 +87,11 @@ export function pintarCifras() {
     const m = tap || typeof v !== 'number' ? { cls: '', txt: '' } : marcaObj(p.k, v);
     return `<button type="button" class="rcv-celda ${m.cls} ${tap ? 'rcv-oculto' : cls}" data-fila="${p.k}"><span class="rcv-k"><span>${p.et}</span>${m.txt}</span><span class="rcv-g">${tap ? '?' : val}</span><span class="rcv-t">${tap ? '' : t}</span></button>`;
   }).join('');
+  // Se reutilizan los botones (solo cambia lo de dentro): un toque en curso no pierde su botón cuando las cifras se animan
+  const P = $('perfusion'), tmp = document.createElement('div'); tmp.innerHTML = htmlPerf;
+  if (P.children.length === tmp.children.length && [...P.children].every((b, i) => b.dataset.fila === tmp.children[i].dataset.fila)) {
+    [...P.children].forEach((b, i) => { const n = tmp.children[i]; if (b.className !== n.className) b.className = n.className; if (b.innerHTML !== n.innerHTML) b.innerHTML = n.innerHTML; });
+  } else P.innerHTML = htmlPerf;
   $('mon-pie').innerHTML = `${org('curvas y cambios: ilustrativo', true)} ${o ? `<span>Objetivos: ${o.nombre}</span> ${chip(o.cita)}` : '<span>Sin tabla de objetivos</span>'}`;
 }
 export const EXPLICA_FILA = {

@@ -44,9 +44,9 @@ export function crearEscenaReceptores(raiz) {
     const svg = raiz.querySelector('svg'), pasos = raiz.querySelector('.ra-pasos'), leyenda = raiz.querySelector('.ra-leyenda');
 
     // ---- dibujo fijo
-    txt('extracelular', { x: 10, y: 20, 'font-size': 11, fill: '#a5967c', 'text-anchor': 'start' }, svg);
+    txt('extracelular', { x: 10, y: 20, 'font-size': 13.5, fill: '#a5967c', 'text-anchor': 'start' }, svg);
     el('rect', { x: 0, y: 104, width: 400, height: 22, fill: '#4a3d2a' }, svg);
-    txt('intracelular', { x: 10, y: 146, 'font-size': 11, fill: '#a5967c', 'text-anchor': 'start' }, svg);
+    txt('intracelular', { x: 10, y: 146, 'font-size': 13.5, fill: '#a5967c', 'text-anchor': 'start' }, svg);
     const R = {};
     for (const c of COLS) {
         const col = el('g', {}, svg), r = { col };
@@ -55,21 +55,21 @@ export function crearEscenaReceptores(raiz) {
         r.brillo = el('rect', { x: c.x - 22, y: 74, width: 44, height: 78, rx: 12, fill: 'none', stroke: c.c, 'stroke-width': 2 }, col);
         r.g = el('g', {}, col);
         el('circle', { cx: c.x, cy: 182, r: 17, fill: '#241e16', stroke: c.c, 'stroke-width': 2 }, r.g);
-        txt(c.g, { x: c.x, y: 187, 'font-size': 13, fill: '#ece3cc' }, r.g);
+        txt(c.g, { x: c.x, y: 187, 'font-size': 13.5, fill: '#ece3cc' }, r.g);
         r.m = c.m.map((t, i) => { const g = el('g', {}, col);
             el('rect', { x: c.x - 44, y: 222 + i * 30, width: 88, height: 24, rx: 12, fill: 'rgba(0,0,0,.35)', stroke: c.c }, g);
-            txt(t, { x: c.x, y: 238 + i * 30, 'font-size': 12, fill: '#ece3cc' }, g); return g; });
+            txt(t, { x: c.x, y: 238 + i * 30, 'font-size': 13.5, fill: '#ece3cc' }, g); return g; });
         r.ef = el('g', {}, col);
         el('rect', { x: c.x - 56, y: 292, width: 112, height: 22 + 18 * c.ef.length, rx: 8, fill: c.c, opacity: 0.25 }, r.ef);
-        c.ef.forEach((t, i) => txt(t, { x: c.x, y: 311 + i * 18, 'font-size': 12.5, fill: '#ece3cc', 'font-weight': 'bold' }, r.ef));
+        c.ef.forEach((t, i) => txt(t, { x: c.x, y: 311 + i * 18, 'font-size': 13.5, fill: '#ece3cc', 'font-weight': 'bold' }, r.ef));
         r.burbujas = el('g', {}, col);
         R[c.id] = r;
     }
     const molG = el('g', {}, svg);
     const otro = el('g', {}, svg);
     el('rect', { x: 30, y: 370, width: 340, height: 50, rx: 8, fill: 'rgba(207,154,62,.12)', stroke: '#cf9a3e', 'stroke-dasharray': '4 3' }, otro);
-    txt('No usa receptores α ni β', { x: 200, y: 391, 'font-size': 12, fill: '#ece3cc' }, otro);
-    const otroT = txt('', { x: 200, y: 409, 'font-size': 11, fill: '#c9bda4' }, otro);
+    txt('No usa receptores α ni β', { x: 200, y: 391, 'font-size': 13.5, fill: '#ece3cc' }, otro);
+    const otroT = txt('', { x: 200, y: 409, 'font-size': 13.5, fill: '#c9bda4' }, otro);
 
     // ---- estado
     // Motion anima la opacidad de los elementos SVG como atributo, así que todo se fija como atributo (un

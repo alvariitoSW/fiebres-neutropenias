@@ -28,9 +28,12 @@ export function ponerEstado(id, conservar) {
 }
 export function rlObjetivo(R) { return R.P.organo === 'bronquio' ? 30 * R.radioBDib : R_REF * R.radioDib; }
 export function pintarFamilias() {
+  // si ya están dibujados, solo se cambia cuál está marcado (el botón tocado no se sustituye)
+  const ya = $('familias').querySelectorAll('[data-estado]');
+  if (ya.length === ESTADOS.length) { ya.forEach(b => b.setAttribute('aria-pressed', String(ST.id === b.dataset.estado))); return; }
   $('familias').innerHTML = Object.entries(FAMILIAS).map(([k, nom]) => `<div class="rcv-familia"><h3>${nom}</h3><div class="rcv-estados">${ESTADOS.filter(e => e.fam === k).map(e => `<button type="button" data-estado="${e.id}" aria-pressed="${ST.id === e.id}">${e.tit}<small>${e.sub}</small></button>`).join('')}</div></div>`).join('');
 }
-$('familias').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (b) { ponerEstado(b.dataset.estado); $('monitor').scrollIntoView({ behavior: REDUCIR ? 'auto' : 'smooth', block: 'start' }); } });
+$('familias').addEventListener('click', ev => { const b = ev.target.closest('[data-estado]'); if (b) { ponerEstado(b.dataset.estado); verLupa(); } });
 export function celulasDe(R) {
   const l = [R.P.organo === 'bronquio' ? 'liso-bronquio' : 'liso-arteriola', 'miocito', 'nodo'];
   if (R.P.mediadores) l.push('mastocito');
@@ -158,7 +161,17 @@ export function conversor(k, d, reg, P) {
   if (F.unidad === 'µg/min') return `= ${coma(d / P.peso, 2)} µg/kg/min con ${P.peso} kg`;
   return '';
 }
+// En el móvil, lo que cambia al tocar un mando (la lupa) tiene que verse sin desplazarse: si queda bajo el pliegue o bajo la barra, se acerca de golpe
+function verLupa() {
+  const f = $('fig2').getBoundingClientRect(), tope = $('frase').getBoundingClientRect().top;
+  const vis = Math.max(0, Math.min(f.bottom, tope) - Math.max(f.top, 0)) / f.height;
+  if (vis >= 0.6) return;
+  const libre = tope; scrollBy({ top: f.top - Math.max(0, (libre - f.height) / 2), behavior: 'instant' });
+}
+['dock-explorar'].forEach(id => $(id).addEventListener('click', () => verLupa()));
+$('monitor').addEventListener('click', () => verLupa());
 $('dock-explorar').addEventListener('input', ev => {
+  verLupa();
   const i = ev.target.closest('[data-dosis]'); if (!i) return;
   ST.f[i.dataset.dosis] = +i.value; actualizar(); refrescarBomba(i.dataset.dosis);
 });
