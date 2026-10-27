@@ -145,6 +145,7 @@ export const sat = (d, k) => 1 - Math.exp(-d / k);
 export const FARMACOS = {
   na: { nombre: 'Noradrenalina', corto: 'NA', sub: 'α₁ principal, β débil', unidad: 'µg/min',
     llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => 0.6 * Math.min(1, d / 10) }, { rec: 'alfa1', tipo: 'ag', occ: alfaNA }],   // cuánto β: ilustrativo (la ficha da la dirección)
+    sist: { fc: d => d > 30 ? 1.2 * (d - 30) : 0 },   // las taquiarritmias a dosis de techo (S p. 13); cuánta FC: fisiología general (ilustrativo)
     regimen: { shock: { min: 0, max: 40, paso: 1, marcas: [5, 10, 30, 40], porKg: false,
       tramos: [[0, 10, 'pesa el β', '--accent-yellow'], [10, 30, 'manda el α', '--accent-red'], [30, 40, 'techo: segundo vasopresor', '--text-muted']], chip: 'tramos: ficha · p. 13' },
       fija5: { fija: 5, txt: '5 µg/min, la dosis de inicio del cardiogénico', chip: 'ficha · pp. 42-43' } },
@@ -166,11 +167,12 @@ export const FARMACOS = {
       funcion: ['Segundo vasopresor en el séptico resistente a la NA: sube la PA y ahorra catecolamina, sin beneficio probado de supervivencia. No sube la PA en voluntarios sanos; sí en el shock vasodilatador. No se ha evaluado en la anafilaxia.', C.vasopresina, C.anaShock],
       adversos: ['Como los de la noradrenalina, en tipo y en frecuencia.', C.vasoDosis],
       umi: 'La cuenta entre los vasoconstrictores (receptores de arginina-vasopresina); no da su dosis.' } },
-  adrenalina: { nombre: 'Adrenalina', corto: 'Adrenalina', sub: 'β potente y α', unidad: 'µg/min',
+  adrenalina: { nombre: 'Adrenalina', corto: 'Adrenalina', sub: 'β potente y α', unidad: 'µg/min', fcBeta: true,
     llaves: [{ rec: 'beta1', tipo: 'ag', occ: d => sat(d, 4) }, { rec: 'beta2', tipo: 'ag', occ: d => sat(d, 4), cel: ['liso-arteriola', 'liso-bronquio'] }, { rec: 'beta2', tipo: 'ag', occ: d => sat(d, 9), cel: ['mastocito'] },   // el mastocito se llena más despacio: la dosis se titula (ilustrativo)
       { rec: 'alfa1', tipo: 'ag', occ: d => sat(d, 15) }],
     // lactato (producción aeróbica) y glucemia (el α frena la insulina): S p. 14. Cuánto: ilustrativo (8 µg/min: lactato +1,9 y glucemia +102, del caso)
-    sist: { lact: d => 1.9 * sat(d, 8) / sat(8, 8), glu: d => 102 * sat(d, 8) / sat(8, 8) },
+    sist: { lact: d => 1.9 * sat(d, 8) / sat(8, 8), glu: d => 102 * sat(d, 8) / sat(8, 8),
+      fc: d => 0.5 * Math.min(d, 38) },   // la taquicardia de la adrenalina (S pp. 13-14): sube con la dosis; cuánta: ilustrativo
     regimen: { septico: { min: 0, max: 0.5, paso: 0.05, porKg: true, unidadVista: 'µg/kg/min', marcas: [0.1, 0.5], tramos: [[0, 0.1, '', '--text-muted'], [0.1, 0.5, 'inicio 0,1 → máximo 0,5', '--accent-yellow']], chip: 'ficha · p. 14' },
       anafilaxia: { min: 0, max: 15, paso: 5, porKg: false, marcas: [5, 15], tramos: [[0, 5, '', '--text-muted'], [5, 15, 'shock anafiláctico: 5-15', '--accent-yellow']], chip: 'ficha · pp. 66-67', solucion: '1:100.000' } },
     ficha: { receptores: [['<b>β</b> potente y <b>α</b>: sube la FC, el volumen latido y la PA según la dosis. En el mastocito, el β frena la salida de mediadores.', C.adre, C.anaGluc]],
@@ -183,6 +185,7 @@ export const FARMACOS = {
   dopamina: { nombre: 'Dopamina', corto: 'Dopamina', sub: 'tres fármacos según la dosis', unidad: 'µg/kg/min',
     llaves: [{ rec: 'dopa', tipo: 'ag', occ: d => 0.9 * Math.min(1, d / 3) }, { rec: 'beta1', tipo: 'ag', occ: d => d <= 3 ? 0 : 0.65 * Math.min(1, (d - 3) / 7) },
       { rec: 'alfa1', tipo: 'ag', occ: d => d <= 10 ? 0 : Math.min(1, (d - 10) / 15) }],
+    sist: { fc: d => d > 10 ? 1.6 * (d - 10) : 0 },   // «más taquicardia que los demás vasopresores» (S p. 14): sube sobre todo en la fase α; cuánta: ilustrativo
     regimen: { septico: { min: 0, max: 20, paso: 1, porKg: true, unidadVista: 'µg/kg/min', marcas: [3, 10, 20],
       tramos: [[0, 3, 'dopaminérgico', '--accent-green'], [3, 10, 'β: sube el volumen latido', '--accent-yellow'], [10, 20, 'α: sube la RVS', '--accent-red']], chip: 'tramos: ficha · p. 14' } },
     ficha: { receptores: [['<b>≤3 µg/kg/min:</b> receptores de dopamina de los lechos renal y esplácnico (sube su flujo) · <b>3-10:</b> β del corazón (sube el volumen latido) · <b>&gt;10:</b> α (sube la RVS; la poscarga puede deshacer la subida del volumen latido).', C.dopa]],
@@ -258,32 +261,32 @@ export const FARMACOS = {
 };
 
 // EL PACIENTE: cifras de partida (del caso cuando lo hay; si no, ilustrativas) y cómo responde
-// kR: cuánto sube la IRVS por unidad de tono del anillo (ilustrativo); post: cuánto cae el volumen latido con la poscarga
+// kR: 0.6cuánto sube la IRVS por unidad de tono del anillo (ilustrativo); post: cuánto cae el volumen latido con la poscarga
 export const PACIENTES = {
   paulino: { corta: '<b>Amparo</b>, 58 años, 76 kg · shock séptico (pielonefritis)', nombre: 'Amparo', chip: 'shock séptico', peso: 76, obj: 'sepsis', del: 'caso',
     linea: '<b>Amparo</b>, 58 años, 76 kg (ideal 58) · pielonefritis obstructiva: shock séptico, tras 1,75 L de cristaloide',
-    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 4, pp: 34, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null, k: null }, kR: 0.38, post: 0.4, sensV1: 1 },
+    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 4, pp: 34, spo2: 95, fr: 24, t: 38.9, lact: 4.4, glu: null, k: null }, kR: 0.6, post: 0.4, sensV1: 1 },
   paulino10: { corta: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina', nombre: 'Amparo', chip: 'shock séptico, hora 10', peso: 76, obj: 'sepsis', del: 'caso',
     linea: '<b>Amparo</b>, hora 10 · NA 26 µg/min y vasopresina; lactato 3,1 antes de la adrenalina',
-    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 5, pp: 36, spo2: 95, fr: 24, t: 38.4, lact: 3.1, glu: 160, k: null }, kR: 0.38, post: 0.4, sensV1: 1 },
+    base: { fc: 112, ic: 4.0, irvs: 11.75, pvc: 5, pp: 36, spo2: 95, fr: 24, t: 38.4, lact: 3.1, glu: 160, k: null }, kR: 0.6, post: 0.4, sensV1: 1 },
   sano: { corta: '<b>Voluntario sano</b>, 75 kg', nombre: 'Voluntario sano', chip: 'voluntario sano', peso: 75, obj: null, del: 'ilustrativo',
     linea: '<b>Voluntario sano</b>, 75 kg · las cifras son ilustrativas',
-    base: { fc: 68, ic: 3.2, irvs: 26, pvc: 5, pp: 45, spo2: 98, fr: 14, t: 36.6, lact: null, glu: null, k: null }, kR: 0.35, post: 0.15, sensV1: 0.06 },
+    base: { fc: 68, ic: 3.2, irvs: 26, pvc: 5, pp: 45, spo2: 98, fr: 14, t: 36.6, lact: null, glu: null, k: null }, kR: 0.6, post: 0.15, sensV1: 0.06 },
   anestesia: { corta: '<b>Hipotensión de la anestesia</b> (paciente tipo), 75 kg', nombre: 'Hipotensión de la anestesia', chip: 'hipotensión de la anestesia', peso: 75, obj: null, del: 'ilustrativo',
     linea: '<b>Hipotensión de la anestesia</b> (paciente tipo), 75 kg · las cifras son ilustrativas',
-    base: { fc: 80, ic: 2.8, irvs: 19, pvc: 5, pp: 36, spo2: 99, fr: 12, t: 36.4, lact: null, glu: null, k: null }, kR: 0.35, post: 0.15, sensV1: 1 },
+    base: { fc: 80, ic: 2.8, irvs: 19, pvc: 5, pp: 36, spo2: 99, fr: 12, t: 36.4, lact: null, glu: null, k: null }, kR: 0.6, post: 0.15, sensV1: 1 },
   aurelio: { corta: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior: shock cardiogénico', nombre: 'Aurelio', chip: 'shock cardiogénico', peso: 82, obj: 'cardio', del: 'caso',
     linea: '<b>Aurelio</b>, 67 años, 82 kg · IAM anterior: shock cardiogénico · tras 250 mL, PCP 19, IC 2,1, PAM 64',
-    base: { fc: 108, ic: 2.1, irvs: 25.7, pvc: 10, pp: 26, spo2: 92, fr: 26, t: 36.7, lact: 3.2, glu: null, k: null }, kR: 0.35, post: 0.35, sensV1: 1, baro: 0.2 },
+    base: { fc: 108, ic: 2.1, irvs: 25.7, pvc: 10, pp: 26, spo2: 92, fr: 26, t: 36.7, lact: 3.2, glu: null, k: null }, kR: 0.6, post: 0.35, sensV1: 1, baro: 0.2 },
   tsvi: { corta: '<b>Obstrucción dinámica del tracto de salida del VI</b> (paciente tipo)', nombre: 'Obstrucción del TSVI', chip: 'obstrucción dinámica del TSVI', peso: 70, obj: 'cardio', del: 'ilustrativo', tsvi: true,
     linea: '<b>Obstrucción dinámica del tracto de salida del VI</b> (paciente tipo) · las cifras son ilustrativas',
-    base: { fc: 110, ic: 2.0, irvs: 27, pvc: 6, pp: 24, spo2: 94, fr: 22, t: 36.8, lact: null, glu: null, k: null }, kR: 0.35, post: 0.35, sensV1: 1, baro: 0.2 },
+    base: { fc: 110, ic: 2.0, irvs: 27, pvc: 6, pp: 24, spo2: 94, fr: 22, t: 36.8, lact: null, glu: null, k: null }, kR: 0.6, post: 0.35, sensV1: 1, baro: 0.2 },
   begona: { corta: '<b>Begoña</b>, 52 años, 65 kg · toma bisoprolol · anafilaxia', nombre: 'Begoña', chip: 'anafilaxia', peso: 65, obj: 'anafilaxia', del: 'caso', mediadores: true,
     linea: '<b>Begoña</b>, 52 años, 65 kg · toma bisoprolol · anafilaxia por amoxicilina-clavulánico IV · minuto 30',
-    base: { fc: 84, fcSinBeta: 118, ic: 3.0, irvs: 16, pvc: 3, pp: 32, spo2: 93, fr: 28, t: 36.8, lact: 3.0, glu: null, k: null }, kR: 0.30, post: 0.15, sensV1: 1, sensAlfa: 0.4, baro: 0.25 },
+    base: { fc: 84, fcSinBeta: 118, ic: 3.0, irvs: 16, pvc: 3, pp: 32, spo2: 93, fr: 28, t: 36.8, lact: 3.0, glu: null, k: null }, kR: 0.6, post: 0.15, sensV1: 1, sensAlfa: 0.4, baro: 0.25 },
   cocaina: { corta: '<b>Isquemia miocárdica por cocaína</b> (paciente tipo)', nombre: 'Isquemia por cocaína', chip: 'isquemia por cocaína', peso: 75, obj: null, del: 'ilustrativo', lecho: 'coronaria',
     linea: '<b>Isquemia miocárdica por cocaína</b> (paciente tipo) · las cifras son ilustrativas',
-    base: { fc: 118, ic: 3.4, irvs: 29, pvc: 6, pp: 60, spo2: 97, fr: 20, t: 37.4, lact: null, glu: null, k: null }, kR: 0.35, post: 0.15, sensV1: 1, pesoB2: 1.0,
+    base: { fc: 118, ic: 3.4, irvs: 29, pvc: 6, pp: 60, spo2: 97, fr: 20, t: 37.4, lact: null, glu: null, k: null }, kR: 0.6, post: 0.15, sensV1: 1, pesoB2: 1.0,
     endogeno: { alfa1: 0.55, beta1: 0.6, beta2: 0.55 } },
   asma: { corta: '<b>Crisis de broncoespasmo</b> (paciente tipo)', nombre: 'Broncoespasmo', chip: 'broncoespasmo', peso: 70, obj: null, del: 'ilustrativo', organo: 'bronquio',
     linea: '<b>Crisis de broncoespasmo</b> (paciente tipo) · las cifras son ilustrativas',
@@ -452,6 +455,7 @@ export function canon(k, d, S) {
 }
 export function ocupar(S) {
   const P = PACIENTES[S.pac], occ = {}, dentro = { pde: 0 }, sist = { lact: 0, glu: 0, fc: 0, k: 0 };
+  let fcBeta = 0;   // la taquicardia que pasa por el β₁ del nodo: el betabloqueante la tapa
   for (const cel in CELULAS) { occ[cel] = {}; for (const r of CELULAS[cel].receptores) occ[cel][r] = { ag: 0, tap: 0, endo: 0, quien: null, max: 0, tapQuien: null }; }
   if (P.organo === 'bronquio') occ['liso-bronquio'].musc.endo = 0.5;   // la acetilcolina del vago: fisiología general
   for (const [k, d0] of Object.entries(S.f)) {
@@ -466,10 +470,11 @@ export function ocupar(S) {
       }
     }
     for (const dn of F.dentro || []) dentro[dn.diana] = Math.max(dentro[dn.diana], dn.inh(d));
-    for (const [q, fn] of Object.entries(F.sist || {})) sist[q] += fn(d);
+    for (const [q, fn] of Object.entries(F.sist || {})) { if (q === 'fc' && F.fcBeta) fcBeta += fn(d); else sist[q] += fn(d); }
   }
   for (const [rec, o] of Object.entries(P.endogeno || {})) for (const cel in occ) { const c = occ[cel][rec]; if (c) c.endo = o; }
   for (const cel in occ) for (const r in occ[cel]) { const c = occ[cel][r]; if (c.endo) { c.ag = 1 - (1 - c.ag) * (1 - c.endo); if (c.endo > c.max) { c.max = c.endo; c.quien = 'endogeno'; } } }
+  sist.fc += fcBeta * (1 - (occ.nodo.beta1.tap || 0));
   // El glucagón devuelve la respuesta del mastocito a la adrenalina (S p. 66); cómo, la fuente no lo dice: aquí se afloja el tapón
   if (S.f.glucagon && occ.mastocito.beta2.tap) occ.mastocito.beta2.tap *= 0.55;
   const act = (cel, rec) => { const c = occ[cel]?.[rec]; return c ? c.ag * (1 - c.tap) : 0; };

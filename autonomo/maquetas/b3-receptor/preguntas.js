@@ -122,8 +122,8 @@ export const CASO = { titulo: 'El betabloqueante (Begoña)', pasos: [
       { t: 'A 600 mL/h: los µg por hora, en mL.', porque: 'Falta dividir por la concentración: 600 mL/h serían 100 µg/min, unas siete veces el máximo de 15 (p. 67). Begoña haría taquiarritmias y una isquemia.' }],
     explicacion: 'En el shock anafiláctico, adrenalina IV a 5-15 µg/min, con la dilución 1:100.000 (10 µg/mL); puede ir precedida de un bolo de 10 µg, repetible, para mantener la PAM ≥65 (Tabla 17.5; p. 67).', fuente: C.t175, fuente2: C.anaShock },
   { num: 'Paso 4', estado: 'betabloqueo', ajustes: { adrenalina: 10, bisoprolol: 1, glucagon: 0 }, predice: true, dia: 'Minuto 30 · el giro',
-    paciente: [['Adrenalina', '10 µg/min IV', 1], ['PA', '72/40 mmHg; FC 84 lpm', 1], ['En su hoja', 'bisoprolol, para la HTA', 1]],
-    enunciado: 'No responde a la adrenalina ni al volumen, y la FC no pasa de 84. En su hoja de tratamiento aparece el bisoprolol. <b>¿Qué le das?</b>',
+    paciente: [['Adrenalina', '10 µg/min IV', 1], ['PA', '72/40 mmHg; FC 87 lpm', 1], ['En su hoja', 'bisoprolol, para la HTA', 1]],
+    enunciado: 'No responde a la adrenalina ni al volumen, y la FC no pasa de 87. En su hoja de tratamiento aparece el bisoprolol. <b>¿Qué le das?</b>',
     opciones: [
       { t: 'Vasopresina, otra cerradura distinta del α y el β.', porque: 'La vasopresina no se ha evaluado en el shock anafiláctico (p. 67). Y lo que falla aquí es el β tapado, que deja a la adrenalina sin efecto en el mastocito (p. 66).' },
       { t: 'Subir la adrenalina hasta 30 µg/min.', porque: 'Con el β tapado por el bisoprolol, la respuesta a la adrenalina se atenúa o desaparece (p. 66). Le darías el doble del máximo de 15 µg/min (p. 67) sin que la llave gire.' },

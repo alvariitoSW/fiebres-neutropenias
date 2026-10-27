@@ -19,8 +19,8 @@ import { instalarCss } from './dibujo-iso.js';
 
 export const TOPE_CSS = `
 .tope-mon { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
-.tope-sello { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%) rotate(-8deg); border: 3px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 70%, transparent); font: 800 .95rem/1.15 var(--sans, system-ui, sans-serif); letter-spacing: .08em; text-transform: uppercase; padding: 6px 12px; border-radius: 8px; text-align: center; max-width: 86%; box-sizing: border-box; overflow-wrap: anywhere; pointer-events: auto; }
-.tope-sello small, .tope-aviso small { display: block; font: 600 .66rem/1.25 var(--sans, system-ui, sans-serif); letter-spacing: 0; text-transform: none; color: var(--text-main); }
+.tope-sello { position: absolute; left: 50%; bottom: 26px; transform: translateX(-50%) rotate(-3deg); border: 2px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 88%, transparent); font: 800 .8rem/1.15 var(--sans, system-ui, sans-serif); letter-spacing: .03em; text-transform: uppercase; padding: 4px 8px; border-radius: 8px; text-align: center; width: max-content; max-width: 92%; max-height: 62%; overflow: hidden; box-sizing: border-box; overflow-wrap: normal; word-break: normal; hyphens: none; pointer-events: auto; }
+.tope-sello small, .tope-aviso small { display: block; font: 600 .62rem/1.2 var(--sans, system-ui, sans-serif); letter-spacing: 0; text-transform: none; color: var(--text-main); }
 .tope-sello .tope-org, .tope-aviso .tope-org { color: var(--text-dim); font-weight: 400; }
 .tope-linea { position: absolute; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; gap: 1px; }
 .tope-linea span { display: block; font: 600 .62rem/1.25 var(--sans, system-ui, sans-serif); color: var(--bg-main); background: var(--accent-yellow); padding: 1px 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
