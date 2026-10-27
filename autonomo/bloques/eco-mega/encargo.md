@@ -80,3 +80,29 @@ una referencia para que pase una prueba.
 
 **Jueces por encargo**: `node --test` del archivo tocado; al cerrar, la suite de eco entera y `jueces.mjs --eco`.
 Profesor solo en la parada (capturas antes / después).
+
+---
+
+# Parada 3 (sesión del 27/10/2026) · retoques de coste medio + N1, F3, F4, P5, P6
+
+Aprobado por el usuario el 27/10 («Seguimos con este orden, adelante») sobre la propuesta del director: ~9-10 M, todo
+constructor en sonnet, un encargo por pieza. Rama nueva `auto/eco-mega` desde `main` (la PR #30 ya está fusionada).
+
+**Fuentes en `docs/`**: Klein 2013 (pericardio), Zoghbi 2017 (insuficiencias), Mukherjee 2025 (corazón derecho e HP),
+Lang 2015, Mitchell 2019, Hahn 2013, Mor-Avi 2011. **Siguen hueco**: ESC/ERS 2022, amiloidosis, MAPSE, Leung y Levine
+1994 (no se rellenan con conocimiento general).
+
+**Orden y encargos** (cada uno con su informe ≤40 líneas en esta carpeta, `p3-<pieza>.md`):
+0. Lector (sonnet) → `fuente-p3.md`: Klein (grosor y forma del pericardio, cronología del colapso, «>1/3 del ciclo»),
+   Zoghbi (IM funcional: tenting, anillo, EROA, AI), Mukherjee (pared del VD, índice de excentricidad, AI/AD).
+1. R1 · saco del derrame grande que sigue al corazón, sin esquinas (SC4C) ni V (A4C) (`corazon-geo.mjs`, saco).
+2. R2 · el colapso de AD y VD dobla la pared hacia dentro antes de borrar la cámara (`plieguePared`).
+3. R3 · la tricúspide abre en F; el VI del TEP sin facetas (más vértices en la sección).
+4. N1 resto · fosa oval fina, seno coronario y válvula de Eustaquio (Mitchell pp. 25-26, 31).
+5. F3 · bomba auricular (Lang p. 20) · 6. F4 · tabique en telesístole del TEP (Ryan 1985 del atlas 14, Mukherjee).
+7. P5 · AI dilatada medible (Lang pp. 25, 28) e IM funcional (Zoghbi) · 8. P6 · VD grueso de la HP crónica (Lang
+   Tabla 8 p. 20, Mukherjee); amiloidosis, hueco.
+9. Jueces `--eco` + auditor (sonnet) + profesor (juicio rápido) sobre lo nuevo; meta 8 (8,75 en lo que sea modelo).
+
+**«Hecho» de cada pieza**: su prueba par en `js/modules/eco/pruebas/` en verde, la suite entera en verde, captura de la
+vista frente a la eco real (D1) cuando toque forma, paciente posible en los extremos, 390 y 360 px sin desborde.
