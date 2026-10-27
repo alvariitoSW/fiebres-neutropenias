@@ -754,9 +754,119 @@
 
         <div id="ecg-f4" class="tab-content">
             <h3 style="color: var(--accent-red);">Eje</h3>
-            <p class="fuente-ficha">En construcción.</p>
-            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
 
+            <p class="fuente-ficha">López Ramírez, cap. 4 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=55" target="_blank" rel="noopener">pp. 45-58</a>).</p>
+
+            <div class="card" id="ecg-f4-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> el eje del QRS es la dirección media de la despolarización ventricular en el plano frontal. Se halla con tres pasos: el QRS <span class="hl-azul">más isobifásico</span>, su <span class="hl-azul">perpendicular</span> y la <span class="hl-azul">polaridad</span> de esa perpendicular. Un atajo rápido: DI y AVF positivas, eje normal.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Qué es el eje <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=55" target="_blank" rel="noopener">p. 45</a></p>
+            <p id="ecg-f4-concepto" style="font-size:0.85rem; color:var(--text-dim);">Un vector es la representación gráfica de una fuerza; el vector cardiaco es la suma de las fuerzas eléctricas del ciclo. La despolarización produce fuerzas con polaridad positiva en la dirección en que avanza la activación. Se puede calcular el eje de la P, del QRS (el más usado) y de la T. <strong>Eje normal del adulto según el libro: −30° a +110°</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=55" target="_blank" rel="noopener">p. 45</a>).</p>
+            <details class="nota-plegable" id="ecg-f4-nota-normal"><summary>Nota de fuentes: el libro da dos rangos de «eje normal»</summary>
+                <p>La p. 45 dice −30° a +110°; la regla rápida de cuadrantes (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=62" target="_blank" rel="noopener">p. 52</a> y <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=66" target="_blank" rel="noopener">p. 56</a>) trata como normal el eje entre 0° y +90° (DI y AVF positivas). Son dos criterios del mismo libro; el segundo es una simplificación. Ninguna guía de la carpeta de fuentes define el eje normal, así que no hay un tercer criterio con el que contrastar.</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Las seis derivaciones del plano frontal <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=55" target="_blank" rel="noopener">pp. 45-46</a></p>
+            <svg viewBox="0 0 300 256" role="img" aria-label="Gráfico hexaxial del plano frontal: DI 0°, DII +60°, DIII +120°, AVF +90°, AVL −30°, AVR −150°" style="display:block;width:100%;max-width:340px;margin:0 auto;background:var(--bg-main);border-radius:8px;">
+<line x1="64.0" y1="128.0" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="236.0" y2="128.0" stroke="var(--accent-red)" stroke-width="2"/>
+<line x1="107.0" y1="53.5" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="193.0" y2="202.5" stroke="var(--accent-red)" stroke-width="2"/>
+<line x1="193.0" y1="53.5" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="107.0" y2="202.5" stroke="var(--accent-red)" stroke-width="2"/>
+<line x1="150.0" y1="42.0" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="150.0" y2="214.0" stroke="var(--accent-red)" stroke-width="2"/>
+<line x1="75.5" y1="171.0" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="224.5" y2="85.0" stroke="var(--accent-red)" stroke-width="2"/>
+<line x1="224.5" y1="171.0" x2="150" y2="128" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="150" y1="128" x2="75.5" y2="85.0" stroke="var(--accent-red)" stroke-width="2"/>
+<text x="258.0" y="131.0" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">DI</text>
+<text x="258.0" y="142.0" text-anchor="middle" font-size="9" fill="var(--text-dim)">0°</text>
+<text x="204.0" y="224.5" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">DII</text>
+<text x="204.0" y="235.5" text-anchor="middle" font-size="9" fill="var(--text-dim)">+60°</text>
+<text x="96.0" y="224.5" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">DIII</text>
+<text x="96.0" y="235.5" text-anchor="middle" font-size="9" fill="var(--text-dim)">+120°</text>
+<text x="150.0" y="239.0" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">AVF</text>
+<text x="150.0" y="250.0" text-anchor="middle" font-size="9" fill="var(--text-dim)">+90°</text>
+<text x="243.5" y="77.0" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">AVL</text>
+<text x="243.5" y="88.0" text-anchor="middle" font-size="9" fill="var(--text-dim)">−30°</text>
+<text x="56.5" y="77.0" text-anchor="middle" font-size="10" font-weight="700" fill="var(--text-main)">AVR</text>
+<text x="56.5" y="88.0" text-anchor="middle" font-size="9" fill="var(--text-dim)">−150°</text>
+<circle cx="150" cy="128" r="3" fill="var(--accent-red)"/>
+<text x="150" y="12" text-anchor="middle" font-size="9" fill="var(--text-dim)">−90° (arriba)</text>
+</svg>
+            <p class="fuente-ficha">Esquema recreado del gráfico hexaxial del libro (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=56" target="_blank" rel="noopener">p. 46</a>). Línea continua: lado positivo de cada derivación; discontinua: lado negativo.</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f4-tabla-derivaciones" data-nombre="Ángulo de cada derivación del plano frontal">
+                <thead><tr><th>Derivación</th><th>Ángulo</th><th>Mira a…</th></tr></thead>
+                <tbody>
+                    <tr><td>DI</td><td>0°</td><td>—</td></tr>
+                    <tr><td>DII</td><td>+60°</td><td>—</td></tr>
+                    <tr><td>DIII</td><td>+120°</td><td>—</td></tr>
+                    <tr><td>AVL</td><td>−30°</td><td>brazo izquierdo (L = left)</td></tr>
+                    <tr><td>AVF</td><td>+90°</td><td>los pies (F = foot)</td></tr>
+                    <tr><td>AVR</td><td>−150° (= +210°)</td><td>brazo derecho (R = right)</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=55" target="_blank" rel="noopener">pp. 45-46</a>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Cómo hallar el eje: tres pasos <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=57" target="_blank" rel="noopener">pp. 47-48</a></p>
+            <ol id="ecg-f4-pasos" style="font-size:0.85rem; color:var(--text-dim); padding-left:20px;">
+                <li>Busca la derivación donde el QRS es <strong>más isobifásico</strong> (tan positivo como negativo).</li>
+                <li>Busca su <strong>perpendicular</strong>. Nemotecnia: DI con AVF, DII con AVL, DIII con AVR; también «DOÑA FLOR Y SUS 3 MARIDOS» (F-I, L-II, R-III).</li>
+                <li>Mira la <strong>polaridad</strong> de la perpendicular y ubica el eje (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=57" target="_blank" rel="noopener">pp. 47-48</a>).</li>
+            </ol>
+            <div class="article-figure" id="ecg-f4-fig-90">
+                <img src="js/modules/pif-cardio/img/ecg/f4-eje-90.png" alt="Dos tiras de ECG: DI con QRS isobifásico y AVF con QRS alto positivo" loading="lazy">
+                <div class="article-figure-caption">Arriba, DI con QRS isobifásico; abajo, AVF positiva: el eje está a +90°. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=58" target="_blank" rel="noopener">p. 48</a>.</div>
+            </div>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f4-tabla-ejemplos" data-nombre="Ejemplos del libro de eje por derivaciones">
+                <thead><tr><th>Derivación isobifásica</th><th>Su perpendicular</th><th>Eje</th></tr></thead>
+                <tbody>
+                    <tr><td>AVF</td><td>DI positiva</td><td>0°</td></tr>
+                    <tr><td>DI</td><td>AVF positiva</td><td>+90°</td></tr>
+                    <tr><td>DIII</td><td>AVR negativa</td><td>+30°</td></tr>
+                    <tr><td>AVL</td><td>DII positiva</td><td>+60°</td></tr>
+                    <tr><td>AVR</td><td>DIII negativa</td><td>−60° (desviación patológica a la izquierda)</td></tr>
+                    <tr><td>DII (más isobifásica que AVR; DI + y AVF −)</td><td>AVL positiva</td><td>−30°</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=58" target="_blank" rel="noopener">pp. 48-52</a>. En el libro la tabla son series de seis derivaciones por eje; aquí se resume lo que se concluye de cada una.</p>
+            <details class="nota-plegable" id="ecg-f4-nota-errata-52"><summary>Nota de fidelidad: errata tipográfica de la p. 52</summary>
+                <p>En la p. 52 el libro escribe «perpendicukar» por «perpendicular». Se deja constancia; no cambia el contenido (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=62" target="_blank" rel="noopener">p. 52</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Método rápido por cuadrantes <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=62" target="_blank" rel="noopener">pp. 52-55</a></p>
+            <p id="ecg-f4-cuadrantes" style="font-size:0.85rem; color:var(--text-dim);">Si el eje cae entre 0° y +90° se considera normal y DI y AVF son positivas. Mirando solo la polaridad de DI y AVF se sabe en qué cuadrante está (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=63" target="_blank" rel="noopener">p. 53</a>):</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f4-tabla-cuadrantes" data-nombre="Cuadrantes del eje según DI y AVF">
+                <thead><tr><th>Cuadrante</th><th>DI</th><th>AVF</th></tr></thead>
+                <tbody>
+                    <tr><td>0° a +90° (normal)</td><td>+</td><td>+</td></tr>
+                    <tr><td>0° a −90°</td><td>+</td><td>−</td></tr>
+                    <tr><td>+90° a ±180°</td><td>−</td><td>+</td></tr>
+                    <tr><td>−90° a ±180°</td><td>−</td><td>−</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=63" target="_blank" rel="noopener">p. 53</a>. Las morfologías de DI y AVF en cada cuadrante, con la desviación a la izquierda (DEI) y a la derecha (DED), están dibujadas en la <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=65" target="_blank" rel="noopener">p. 55</a>.</p>
+            <p id="ecg-f4-sin-isobifasica" style="font-size:0.85rem; color:var(--text-dim);"><strong>Si ninguna derivación es isobifásica</strong>: ejemplo con DI positiva y AVF negativa (eje entre 0° y −90°). Se marca la zona de cada derivación y su perpendicular: DII y AVL positivas dejan una coincidencia entre 0° y −30°; DIII y AVR negativas la acotan a 30°. El eje queda entre 0° y −30°, <strong>unos −15°</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=63" target="_blank" rel="noopener">pp. 53-55</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">¿Para qué sirve el eje? <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=65" target="_blank" rel="noopener">pp. 55-57</a></p>
+            <dl class="kv-row" id="ecg-f4-utilidad-hipertrofia"><dt>Hipertrofia</dt><dd>La del VI tiende a desviar el eje a la <strong>izquierda</strong>; la del VD, a la <strong>derecha</strong>. La hipertrofia debe ser extrema para que se refleje (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=65" target="_blank" rel="noopener">pp. 55-56</a>). <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f5">Ficha 5 · Hipertrofias →</button></dd></dl>
+            <dl class="kv-row" id="ecg-f4-utilidad-infarto"><dt>Infarto</dt><dd>La necrosis es un «silencio eléctrico» y el eje se <strong>aleja de la zona necrosada</strong>: el IAM de la cara inferior da eje a la izquierda y el de la cara lateral, eje a la derecha. El libro avisa de que es una sobresimplificación (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=66" target="_blank" rel="noopener">p. 56</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f4-utilidad-tep"><dt>TEP agudo</dt><dd>Puede dar desviación a la derecha. Es útil comparar con un ECG previo: paciente con ECG prequirúrgico normal (eje entre 0° y 90°) que 24 h después tiene taquicardia y disnea con eje a 120°, alta probabilidad de TEP (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=66" target="_blank" rel="noopener">pp. 56-57</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f4-utilidad-qrs-ancho"><dt>Taquicardia de QRS ancho</dt><dd>La TV suele desviar el eje a la izquierda; la TPSV con conducción aberrante no (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=67" target="_blank" rel="noopener">p. 57</a>).</dd></dl>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f4-tv"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="tv">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <p id="ecg-f4-eje-p-t" style="font-size:0.85rem; color:var(--text-dim);">El <strong>eje de la P</strong> sigue un patrón parecido al del QRS (P normal, +60°, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=67" target="_blank" rel="noopener">p. 57</a>) y el eje de la T también.</p>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <p id="ecg-f4-profundizar" style="font-size:0.85rem; color:var(--text-dim);">El eje a la izquierda con QRS normal es la clave de los hemibloqueos: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7 · Intervalos →</button> Las taquicardias de QRS ancho se desarrollan en <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8 · Arritmias →</button></p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=68" target="_blank" rel="noopener">p. 58</a>): Meek y Morris, <em>BMJ</em> 2002;324:415; Vélez 2006; Goldman 1987; Dubin, <em>Interpretación de ECG</em>, Cover Inc. 2007; Goldberger, 6.ª ed.</p>
 
 
             <!-- [HUECO B: ficha 4] -->
@@ -767,9 +877,85 @@
 
         <div id="ecg-f5" class="tab-content">
             <h3 style="color: var(--accent-red);">Hipertrofias</h3>
-            <p class="fuente-ficha">En construcción.</p>
-            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
 
+            <p class="fuente-ficha">López Ramírez, cap. 5 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=69" target="_blank" rel="noopener">pp. 59-70</a>).</p>
+
+            <div class="card" id="ecg-f5-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> el ECG puede sugerir que una cavidad ha crecido, con limitaciones, pero es barato y está disponible: hay que correlacionarlo siempre con la clínica. En aurículas se mide la <span class="hl-azul">onda P</span> (2,5 mm de alto y de ancho como límite); en ventrículos se suman voltajes de R y S.</p>
+            </div>
+            <p id="ecg-f5-intro" style="font-size:0.85rem; color:var(--text-dim);">En hipertensos son frecuentes los signos de crecimiento de la <strong>aurícula izquierda</strong>: un hallazgo precoz que sugiere afectación de órgano blanco (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=69" target="_blank" rel="noopener">p. 59</a>). Los expertos prefieren hablar de «anomalías auriculares»; el libro usa el término tradicional de hipertrofia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=69" target="_blank" rel="noopener">p. 59</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Hipertrofia auricular: la onda P <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=69" target="_blank" rel="noopener">pp. 59-62</a></p>
+            <p id="ecg-f5-p-normal" style="font-size:0.85rem; color:var(--text-dim);">Se mide la P desde que empieza su ascenso hasta la línea de base al final (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=69" target="_blank" rel="noopener">p. 59</a>). <strong>Normal: menos de 2,5 mm de ancho y menos de 2,5 mm de alto</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=1" target="_blank" rel="noopener">p. 60</a>).</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f5-tabla-p" data-nombre="Medidas de la onda P y su significado">
+                <thead><tr><th>La P mide…</th><th>Significa</th></tr></thead>
+                <tbody>
+                    <tr><td>&gt; 2,5 mm de <strong>ancho</strong> (ejemplo: más de 3 mm)</td><td>Hipertrofia de la aurícula izquierda (HAI)</td></tr>
+                    <tr><td>&gt; 2,5 mm de <strong>alto</strong> (ejemplo: 3,5 mm)</td><td>Hipertrofia de la aurícula derecha (HAD)</td></tr>
+                    <tr><td>&gt; 2,5 mm de ancho y de alto</td><td>Hipertrofia biauricular</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=1" target="_blank" rel="noopener">p. 60</a>.</p>
+            <div class="article-figure" id="ecg-f5-fig-hai">
+                <img src="js/modules/pif-cardio/img/ecg/f5-p-hai-had.png" alt="Derivación II con una onda P mellada de más de 3 mm de ancho antes del QRS" loading="lazy">
+                <div class="article-figure-caption">P de más de 3 mm de ancho y mellada: hipertrofia de la aurícula izquierda. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=1" target="_blank" rel="noopener">p. 60</a>.</div>
+            </div>
+            <dl class="kv-row" id="ecg-f5-hai"><dt>HAI</dt><dd>La P tiende a ser <strong>mellada</strong>: «P mellada mitral» (la estenosis mitral dilata la aurícula izquierda). Hay P melladas que miden &lt; 2,5 mm y entonces no significan hipertrofia. Se ve en hipertensión arterial, estenosis aórtica, insuficiencia mitral y miocardiopatía hipertrófica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=2" target="_blank" rel="noopener">pp. 61-62</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f5-had"><dt>HAD</dt><dd>P alta y picuda: «P picuda pulmonar» (la hipertensión pulmonar la produce con frecuencia). Causas más frecuentes: enfermedad pulmonar crónica, hipertensión pulmonar, estenosis pulmonar, tetralogía de Fallot. Suele acompañarse de rasgos de HVD, salvo en la estenosis tricuspídea. El TEP agudo puede dar una P pulmonar transitoria. Los cambios de crecimiento auricular derecho correlacionan mal con la clínica y la anatomía patológica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=2" target="_blank" rel="noopener">pp. 61-62</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f5-v1"><dt>La P en V1</dt><dd>Es bifásica, «como una S itálica acostada»: la primera «montaña» es la aurícula derecha y el «valle» final, la izquierda. Cada componente no debe pasar de 2,5 mm. <strong>Montaña mayor que valle: HAD; valle mayor: HAI</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=2" target="_blank" rel="noopener">p. 61</a>).</dd></dl>
+            <details class="nota-plegable" id="ecg-f5-nota-errata-62"><summary>Nota de fidelidad: ejemplo biauricular de la p. 62</summary>
+                <p>El libro presenta como «compatibles con biauricular» una P de 2,5 mm de largo y 2,5 mm de alto en una mujer de 69 años con ecocardiograma de crecimiento biauricular, pero en la p. 60 da 2,5 mm como el límite normal (el criterio es «más de 2,5 mm»). Se reproduce tal cual (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=1" target="_blank" rel="noopener">p. 60</a> y <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=3" target="_blank" rel="noopener">p. 62</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Hipertrofia ventricular derecha (HVD) <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=4" target="_blank" rel="noopener">pp. 63-64</a></p>
+            <div class="card" id="ecg-f5-hvd-sensibilidad" style="padding:10px 14px; border-left:4px solid var(--accent-yellow);">
+                <p style="margin:0; font-size:0.85rem;"><strong>El ECG es poco sensible para la HVD:</strong> muchos pacientes con HVD no tienen ningún hallazgo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=4" target="_blank" rel="noopener">p. 63</a>).</p>
+            </div>
+            <ul class="term-chips" id="ecg-f5-hvd-criterios">
+                <li>R alta en aVR</li>
+                <li>Eje &gt; 110° (desviación a la derecha)</li>
+                <li>R &gt; S en V1</li>
+                <li>S &gt; R en V5 o V6</li>
+                <li>R de V1 + S de V5 o V6 &gt; 11 mm</li>
+            </ul>
+            <p class="fuente-ficha">Recuadro de criterios de HVD, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=5" target="_blank" rel="noopener">p. 64</a>. Con S &gt; 7 mm en V5 o V6 también se sospecha (ejemplo de cor pulmonale, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=4" target="_blank" rel="noopener">p. 63</a>). <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f4">Ficha 4 · Eje →</button></p>
+            <p id="ecg-f5-hvd-r" style="font-size:0.85rem; color:var(--text-dim);">La R normal de las precordiales derechas es pequeña o ausente en V1 y crece hasta su máximo en V5. En algunos cor pulmonale progresa poco hasta V4-V5: <strong>pobre progresión de la onda R</strong>. El mismo patrón sale en un infarto anterior antiguo y solo la historia clínica los distingue (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=4" target="_blank" rel="noopener">p. 63</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Hipertrofia ventricular izquierda (HVI) <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=5" target="_blank" rel="noopener">pp. 64-67</a></p>
+            <p id="ecg-f5-hvi-intro" style="font-size:0.85rem; color:var(--text-dim);">Hay cerca de 30 criterios y con <strong>uno solo</strong> se hace el diagnóstico; basta conocer cuatro o cinco (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=5" target="_blank" rel="noopener">p. 64</a>).</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f5-tabla-hvi" data-nombre="Criterios de hipertrofia ventricular izquierda">
+                <thead><tr><th>Criterio</th><th>Se cumple si…</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Sokolov</strong></td><td>S de V1 o V2 (la mayor) + R de V5 o V6 (la mayor) ≥ 35 mm</td></tr>
+                    <tr><td><strong>Cornell</strong></td><td>R de aVL + S de V3 &gt; 24 mm en varones y &gt; 20 mm en mujeres</td></tr>
+                    <tr><td>R en V6 &gt; R en V5</td><td>Normalmente V5 &gt; V6, porque V5 está más cerca del VI</td></tr>
+                    <tr><td>R en aVL</td><td>&gt; 11 mm</td></tr>
+                    <tr><td>R en aVF</td><td>&gt; 20 mm</td></tr>
+                    <tr><td>R en DI</td><td>&gt; 15 mm</td></tr>
+                    <tr><td><strong>Gubner</strong></td><td>R en DI + S en DIII &gt; 25 mm</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Textos de las <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=5" target="_blank" rel="noopener">pp. 64-66</a> y recuadro de la <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=8" target="_blank" rel="noopener">p. 67</a>. Los criterios de R en aVL y en DI <strong>no se usan si coexiste hemibloqueo anterior izquierdo</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=7" target="_blank" rel="noopener">p. 66</a>, <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7 · Intervalos →</button>). Ejemplos del libro: Sokolov de 44 mm (S de 25 mm en V2 + R de 19 mm en V5) y Cornell de 28 mm en un varón (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=7" target="_blank" rel="noopener">p. 66</a>).</p>
+            <details class="nota-plegable" id="ecg-f5-nota-sokolov"><summary>Nota de fidelidad: Sokolov y Cornell no se imprimen igual</summary>
+                <p>El texto de la p. 64 define Sokolov normal como &lt; 35 mm y sugestivo de HVI con ≥ 35 mm; el recuadro de la p. 67 dice «&gt; 35 mm». En el texto de Cornell (p. 65) falta el operador del valor de las mujeres («24 en varones y 20 en mujeres»). Se reproducen como están (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=5" target="_blank" rel="noopener">p. 64</a>, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=6" target="_blank" rel="noopener">p. 65</a> y <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=8" target="_blank" rel="noopener">p. 67</a>).</p>
+            </details>
+            <details class="nota-plegable" id="ecg-f5-nota-fuentes"><summary>Nota de fuentes: criterios de hipertrofia</summary>
+                <p>Los criterios de HVI y de HVD (pp. 63-67) son solo del libro: ninguna guía de la carpeta de fuentes los trata (Wagner 2009 menciona la HVI únicamente como confusor del ST).</p>
+            </details>
+            <div class="card" id="ecg-f5-hvi-matices" style="padding:10px 14px; border-left:4px solid var(--accent-yellow);">
+                <p style="margin:0; font-size:0.85rem;"><strong>Matices (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=8" target="_blank" rel="noopener">p. 67</a>):</strong> ten en cuenta edad, sexo, raza y hábito corporal. En jóvenes, sobre todo de raza negra, un estudio de la fuerza aérea de EE. UU. halló Sokolov normal hasta 50 mm en menores de 30 años. Los obesos tienen menos voltaje. <span class="hl-rojo">Un ECG normal en un hipertenso no descarta HVI.</span></p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Hipertrofia biventricular <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=8" target="_blank" rel="noopener">p. 67</a></p>
+            <p id="ecg-f5-biventricular" style="font-size:0.85rem; color:var(--text-dim);">Con un crecimiento homogéneo de todas las cámaras (p. ej. miocardiopatía dilatada) las fuerzas se equilibran y se enmascaran. Se habla de hipertrofia biventricular cuando el ECG cumple criterios de ambos ventrículos; también se sospecha con eje a la derecha, criterios de HVI y complejos amplios bifásicos (R altas y S profundas en varias derivaciones) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=8" target="_blank" rel="noopener">p. 67</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <p id="ecg-f5-profundizar" style="font-size:0.85rem; color:var(--text-dim);">La T invertida por sobrecarga de la HVI se distingue de la de isquemia en <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f6">Ficha 6 · Isquemia e infarto →</button> El hemibloqueo anterior invalida los criterios de R en aVL y DI: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7 · Intervalos →</button></p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=11" target="_blank" rel="noopener">p. 70</a>): AHA/ACCF/HRS 2009 parte V, <em>Circulation</em> 2009;119:e251-e261; Edhouse, Thakur y Khalil, <em>BMJ</em> 2002;324:1264-70; Harrigan y Jones, <em>BMJ</em> 2002;324:1201-4; Jenkins y Gerred 2006; Pewsner et al., <em>BMJ</em> 2007;335:711.</p>
 
 
             <!-- [HUECO B: ficha 5] -->
@@ -780,9 +966,127 @@
 
         <div id="ecg-f6" class="tab-content">
             <h3 style="color: var(--accent-red);">Isquemia e infarto</h3>
-            <p class="fuente-ficha">En construcción.</p>
-            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
 
+            <p class="fuente-ficha">López Ramírez, cap. 6 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=12" target="_blank" rel="noopener">pp. 71-89</a>).</p>
+
+            <div class="card" id="ecg-f6-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> una oclusión coronaria deja tres huellas en orden: la <span class="hl-azul">T</span> cambia primero (isquemia), después sube el <span class="hl-azul">ST</span> (lesión) y, si no hay reperfusión, aparece la <span class="hl-azul">Q</span> (necrosis). Para que cuenten, deben verse en <span class="hl-rojo">≥ 2 derivaciones contiguas</span>.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Secuencia isquemia, lesión y necrosis <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=12" target="_blank" rel="noopener">pp. 71-72</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f6-tabla-secuencia" data-nombre="Secuencia de cambios tras una oclusión coronaria">
+                <thead><tr><th>Cuándo</th><th>Qué se ve</th><th>Nombre</th></tr></thead>
+                <tbody>
+                    <tr><td>Primeros minutos</td><td>Cambio de la <strong>onda T</strong>, típicamente inversión simétrica</td><td>Onda de isquemia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=12" target="_blank" rel="noopener">p. 71</a>)</td></tr>
+                    <tr><td>Minutos a horas</td><td><strong>Supradesnivel del ST</strong> &gt; 1 mm</td><td>Onda de lesión (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=12" target="_blank" rel="noopener">pp. 71-72</a>)</td></tr>
+                    <tr><td>Horas sin reperfusión</td><td><strong>Ondas Q</strong></td><td>Onda de necrosis (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=13" target="_blank" rel="noopener">p. 72</a>)</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p id="ecg-f6-q" style="font-size:0.85rem; color:var(--text-dim);"><strong>Q patológica:</strong> mide más del 25 % de la R que le sigue (ejemplo del libro: Q de 4 mm y R de 10 mm = 40 %) y dura <strong>más de 0,04 s</strong> (1 mm de ancho) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=13" target="_blank" rel="noopener">p. 72</a>).</p>
+            <details class="nota-plegable" id="ecg-f6-nota-q"><summary>Nota de fuentes: criterio de Q patológica</summary>
+                <p>El criterio (&gt; 25 % de la R y &gt; 0,04 s) es solo del libro: ni Wagner 2009 ni la ESC 2023 de SCA, que están en la carpeta de fuentes, dan un criterio de Q. Además, el esquema de la p. 72 marca «70 mseg» para una Q sin explicarlo, y la p. 82 dice que la Q de un joven sano «mide menos de 0,4 segundos» (la regla de la p. 72 es 0,04 s). Se reproduce lo impreso (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=13" target="_blank" rel="noopener">p. 72</a> y <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=23" target="_blank" rel="noopener">p. 82</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Onda T negativa <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=14" target="_blank" rel="noopener">pp. 73-75</a></p>
+            <p id="ecg-f6-t-neg" style="font-size:0.85rem; color:var(--text-dim);">Es normal en aVR y en las precordiales derechas (V1-V3) en el 50 % de las mujeres sanas y el 25 % de los hombres sanos: <strong>patrón juvenil de la T</strong>. La hiperventilación y el estado posprandial pueden invertirla (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=14" target="_blank" rel="noopener">p. 73</a>). Otras causas de inversión: HVI, miocarditis, pericarditis, embolismo pulmonar, hemorragia subaracnoidea e hipopotasemia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=14" target="_blank" rel="noopener">p. 73</a>).</p>
+            <div class="article-figure" id="ecg-f6-fig-t">
+                <img src="js/modules/pif-cardio/img/ecg/f6-t-isquemia-hvi.png" alt="Dos derivaciones: T invertida simétrica y profunda por isquemia, y T invertida por sobrecarga en HVI" loading="lazy">
+                <div class="article-figure-caption">A: T invertida por isquemia, simétrica y profunda. B: T invertida por sobrecarga en HVI. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=14" target="_blank" rel="noopener">p. 73</a>.</div>
+            </div>
+            <dl class="kv-row" id="ecg-f6-t-hipok"><dt>Hipopotasemia</dt><dd>T planas o negativas y, si es grave, <strong>ondas U</strong>; las U también aparecen en el TEP (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=15" target="_blank" rel="noopener">p. 74</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f6-t-tep"><dt>TEP</dt><dd>Patrón <strong>S1-Q3-T3</strong> (S profunda en DI, Q en DIII, T negativa en DIII); solo si el embolismo es masivo, <strong>12 % de los casos</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=15" target="_blank" rel="noopener">pp. 74-75</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f6-t-ecv"><dt>ECV agudo</dt><dd>T invertidas en precordiales. El diagnóstico diferencial solo se hace con la clínica: el ECG es una ayuda, siempre con la historia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=16" target="_blank" rel="noopener">p. 75</a>).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Onda T picuda <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=16" target="_blank" rel="noopener">pp. 75-77</a></p>
+            <p id="ecg-f6-t-picuda" style="font-size:0.85rem; color:var(--text-dim);">La T es siempre positiva en DI, DII y V4-V6. Su altura normal es &lt; 5 mm en derivaciones de miembros y &lt; 10 mm en precordiales; es «picuda» si lo supera o si iguala o excede a la R precedente (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=16" target="_blank" rel="noopener">p. 75</a>).</p>
+            <dl class="kv-row" id="ecg-f6-t-subendo"><dt>Isquemia subendocárdica</dt><dd>T picuda (la subepicárdica da T negativa) en 2-3 derivaciones, salvo isquemia extensa muy grave (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=17" target="_blank" rel="noopener">p. 76</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f6-t-hiperk"><dt>Hiperpotasemia</dt><dd>T picudas en <strong>muchas derivaciones</strong>. Ejemplo del libro: mujer de 67 años con nefropatía diabética y <strong>K 7,2 mEq/L</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=17" target="_blank" rel="noopener">p. 76</a>).</dd></dl>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f6-hiperk"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="hiperk">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <dl class="kv-row" id="ecg-f6-t-precoz"><dt>Repolarización precoz</dt><dd>En jóvenes: T picuda con ligera elevación del ST (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=17" target="_blank" rel="noopener">p. 76</a>).</dd></dl>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f6-tabla-causas-t" data-nombre="Causas de T invertida y de T picuda">
+                <thead><tr><th>T invertida</th><th>T picuda</th></tr></thead>
+                <tbody>
+                    <tr><td>Isquemia subepicárdica</td><td>Isquemia subendocárdica</td></tr>
+                    <tr><td>Hipopotasemia</td><td>Hiperpotasemia</td></tr>
+                    <tr><td>Sanos (patrón juvenil)</td><td>Sanos (repolarización precoz)</td></tr>
+                    <tr><td>Hemorragia subaracnoidea</td><td>Evento cerebrovascular</td></tr>
+                    <tr><td>HVI · miocarditis · pericarditis · embolismo pulmonar</td><td>—</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Cuadro resumen de la <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=18" target="_blank" rel="noopener">p. 77</a>.</p>
+            <details class="nota-plegable" id="ecg-f6-nota-t-ecv"><summary>Nota de fidelidad: el evento cerebrovascular en el cuadro de la T</summary>
+                <p>El cuadro de la p. 77 pone el evento cerebrovascular en la columna de T picuda, pero el texto y el trazado de la p. 75 muestran T <em>invertidas</em> en el ECV. Se reproduce el cuadro tal cual (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=16" target="_blank" rel="noopener">p. 75</a> y <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=18" target="_blank" rel="noopener">p. 77</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Cambios del ST <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=18" target="_blank" rel="noopener">pp. 77-81</a></p>
+            <p id="ecg-f6-st-supra" style="font-size:0.85rem; color:var(--text-dim);">El supradesnivel del ST es la <strong>onda de lesión</strong> (infarto agudo en evolución), pero también aparece en la pericarditis y el aneurisma ventricular (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=18" target="_blank" rel="noopener">p. 77</a>). La lesión aguda tiene el ST <strong>convexo</strong> hacia arriba; la pericarditis aguda, <strong>cóncavo</strong> hacia arriba (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=19" target="_blank" rel="noopener">p. 78</a>). Tras un infarto se espera que desaparezca en horas o pocos días: si persiste días o semanas, sospecha <strong>aneurisma ventricular</strong> y confírmalo con ecocardiograma (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=19" target="_blank" rel="noopener">p. 78</a>). En sanos, sobre todo de raza negra, puede haber supradesnivel con T positivas (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=19" target="_blank" rel="noopener">p. 78</a>).</p>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f6-stemi"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="stemi">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <p id="ecg-f6-st-infra" style="font-size:0.85rem; color:var(--text-dim);">El infradesnivel del ST indica insuficiencia coronaria («lesión subendocárdica»), sobre todo en la prueba de esfuerzo; debe ser <strong>&gt; 1 mm</strong> en cualquier derivación salvo V2 y V3 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=19" target="_blank" rel="noopener">p. 78</a>). La digital produce un infradesnivel «combado» (cubeta digitálica; Dubin lo llama «el mostacho de Salvador Dalí», <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=20" target="_blank" rel="noopener">p. 79</a>).</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f6-tabla-cuatro" data-nombre="Cuatro situaciones de isquemia y lesión">
+                <thead><tr><th>Situación</th><th>Qué se ve</th></tr></thead>
+                <tbody>
+                    <tr><td>Isquemia subendocárdica</td><td>T picuda que empieza justo tras el QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=20" target="_blank" rel="noopener">p. 79</a>)</td></tr>
+                    <tr><td>Isquemia subepicárdica</td><td>T negativa simétrica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=21" target="_blank" rel="noopener">p. 80</a>)</td></tr>
+                    <tr><td>Lesión subendocárdica</td><td>Infradesnivel del ST &gt; 1 mm (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=21" target="_blank" rel="noopener">p. 80</a>)</td></tr>
+                    <tr><td>Lesión subepicárdica</td><td>Supradesnivel del ST (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=22" target="_blank" rel="noopener">p. 81</a>)</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Cuándo el cambio del ST es «relevante» <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=22" target="_blank" rel="noopener">p. 81</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f6-tabla-umbrales-st" data-nombre="Umbrales del ST según sexo y edad">
+                <thead><tr><th>Grupo</th><th>Cambio</th><th>V2-V3</th><th>Resto de derivaciones</th></tr></thead>
+                <tbody>
+                    <tr><td>Varones ≥ 40 años</td><td>Elevación</td><td>0,2 mV (2 mm)</td><td>&gt; 0,1 mV (1 mm)</td></tr>
+                    <tr><td>Varones &lt; 40 años</td><td>Elevación</td><td>0,25 mV (2,5 mm)</td><td>—</td></tr>
+                    <tr><td>Mujeres</td><td>Elevación</td><td>0,15 mV (1,5 mm)</td><td>&gt; 0,1 mV (1 mm)</td></tr>
+                    <tr><td>Ambos sexos</td><td>Infradesnivel</td><td>0,05 mV (0,5 mm)</td><td>0,1 mV (1 mm)</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <details class="nota-plegable" id="ecg-f6-nota-st"><summary>Nota de fidelidad y de fuentes: cuadro del punto J</summary>
+                <p>En el escaneo del libro la fila de encabezado del cuadro es ilegible; los valores se leen en la imagen. El rótulo de las dos columnas (V2-V3 y resto) no está en el libro: lo confirma Wagner 2009 (<a class="biblio-link" href="docs/wagner-2009-aha-ecg-isquemia-infarto.pdf#page=3" target="_blank" rel="noopener">Wagner 2009, p. e264</a>), que da los mismos umbrales. La ESC 2023 de SCA (<a class="biblio-link" href="docs/esc-2023-sca-parte1.pdf#page=19" target="_blank" rel="noopener">ESC 2023 SCA, p. 3738</a>) fija ≥ 2,5, ≥ 2 y ≥ 1,5 mm en V2-V3 (varón &lt; 40, varón ≥ 40 y mujer) y ≥ 1 mm en el resto, en ≥ 2 derivaciones contiguas y sin HVI ni BRI. El texto de la p. 78 dice «&gt; 1 mm salvo V2 y V3» y no da el valor de V2-V3; el cuadro sí (0,5 mm).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Onda Q <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=22" target="_blank" rel="noopener">pp. 81-82</a></p>
+            <p id="ecg-f6-q-normal" style="font-size:0.85rem; color:var(--text-dim);">La Q es la primera deflexión negativa del QRS. Es normal en aVR y V1, incluso con morfología QS (ejemplo del libro: varón de 39 años con QS en aVR y V1, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=22" target="_blank" rel="noopener">p. 81</a>). Una Q sin necrosis se ve en HVI, pectus excavatum, enfisema, bloqueo de rama izquierda y con <strong>mala colocación de los electrodos precordiales</strong> (QS), más en mujeres con los electrodos sobre la mama izquierda (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=22" target="_blank" rel="noopener">p. 81</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Derivaciones contiguas y caras <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=23" target="_blank" rel="noopener">pp. 82-83</a></p>
+            <p id="ecg-f6-contiguas" style="font-size:0.85rem; color:var(--text-dim);">Isquemia, lesión o necrosis solo significan algo si aparecen en <strong>≥ 2 derivaciones contiguas</strong>. Una onda aislada en DII o en V2 no tiene implicación (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=23" target="_blank" rel="noopener">p. 82</a>).</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f6-tabla-caras" data-nombre="Cara del corazón según la derivación">
+                <thead><tr><th>Derivaciones</th><th>Cara</th></tr></thead>
+                <tbody>
+                    <tr><td>DII, DIII, aVF</td><td>Inferior</td></tr>
+                    <tr><td>V1-V2</td><td>Septum</td></tr>
+                    <tr><td>V3-V4</td><td>Anterior</td></tr>
+                    <tr><td>V5-V6</td><td>Lateral</td></tr>
+                    <tr><td>V6, DI, aVL</td><td>Lateral alta</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Esquema de la <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=23" target="_blank" rel="noopener">p. 82</a>. Lesión de V3 a V6 = extensa (lateral y lateral alta; mira DI y aVL); lesión de V1-V3 = anteroseptal (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=24" target="_blank" rel="noopener">p. 83</a>). El autor avisa de que es una representación tradicional y didáctica, <strong>no estrictamente real</strong>; hoy se correlaciona con la arteria afectada (<button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f9">Ficha 9 · El ECG en el SCA →</button>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Infarto sin cambios en el ST <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=24" target="_blank" rel="noopener">p. 83</a></p>
+            <p id="ecg-f6-sin-st" style="font-size:0.85rem; color:var(--text-dim);">Con las troponinas se ha visto que hay infartos sin los cambios clásicos del ECG. El ECG por sí solo <span class="hl-rojo">nunca confirma ni descarta</span> la enfermedad coronaria: hay ECG normales con enfermedad importante y cambios en personas sanas. Sigue siendo una herramienta de primera mano en urgencias (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=24" target="_blank" rel="noopener">p. 83</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Imagen en espejo, infarto transmural y evolución <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=25" target="_blank" rel="noopener">pp. 84-86</a></p>
+            <p id="ecg-f6-espejo" style="font-size:0.85rem; color:var(--text-dim);">En la fase aguda del IAM, en un alto porcentaje hay <strong>depresión del ST en la pared opuesta</strong> (imagen en espejo), que no representa isquemia en esa cara (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=25" target="_blank" rel="noopener">p. 84</a>). El ST elevado en la cara anterior con complejos <strong>QS</strong> (sin R) indica <strong>infarto transmural</strong>: todo el espesor de la pared, con enfermedad coronaria severa (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=26" target="_blank" rel="noopener">p. 85</a>).</p>
+            <div class="article-figure" id="ecg-f6-fig-evolucion">
+                <img src="js/modules/pif-cardio/img/ecg/f6-evolucion-esquema.png" alt="Esquema de seis complejos: A normal, B isquemia, C lesión temprana, D lesión horas después, E necrosis, F necrosis semanas o meses después" loading="lazy">
+                <div class="article-figure-caption">Evolución: A normal · B isquemia (T picuda) · C lesión temprana · D lesión horas después, aparece la onda de necrosis · E necrosis, T negativa días después del IAM · F semanas o meses después, ondas Q con T positiva. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=27" target="_blank" rel="noopener">p. 86</a>.</div>
+            </div>
+            <p id="ecg-f6-evolucion-q" style="font-size:0.85rem; color:var(--text-dim);">Las Q pueden persistir años, pero <strong>entre el 15 y el 25 %</strong> de los pacientes no tienen onda Q 40 meses después del IAM (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=27" target="_blank" rel="noopener">p. 86</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <p id="ecg-f6-profundizar" style="font-size:0.85rem; color:var(--text-dim);">Derivaciones posteriores y derechas, bloqueo de rama en el infarto, localización por arteria y trombolisis: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f9">Ficha 9 · El ECG en el SCA →</button> Hipertrofia como causa de T invertida: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f5">Ficha 5 · Hipertrofias →</button></p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=30" target="_blank" rel="noopener">p. 89</a>): AHA/ACCF/HRS 2009 parte VI, <em>Circulation</em> 2009;119:e262-e270; Harrigan y Jones, <em>BMJ</em> 2002;324:1201-4; Constant 1976; Goldberger 1999; Khan 1997; Goldman 1987.</p>
 
 
             <!-- [HUECO B: ficha 6] -->
@@ -793,9 +1097,170 @@
 
         <div id="ecg-f7" class="tab-content">
             <h3 style="color: var(--accent-red);">Intervalos</h3>
-            <p class="fuente-ficha">En construcción.</p>
-            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
 
+            <p class="fuente-ficha">López Ramírez, cap. 7 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=32" target="_blank" rel="noopener">pp. 91-111</a>).</p>
+
+            <div class="card" id="ecg-f7-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> medir tres intervalos detecta bloqueos de la conducción. <span class="hl-azul">PR</span> (0,12-0,20 s) para el nodo AV, <span class="hl-azul">QRS</span> (hasta 0,10 s) para los bloqueos de rama y <span class="hl-azul">QT corregido</span> para el riesgo de arritmias ventriculares.</p>
+            </div>
+
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f7-tabla-resumen" data-nombre="Valores normales de los intervalos">
+                <thead><tr><th>Intervalo</th><th>Normal</th><th>Si se sale…</th></tr></thead>
+                <tbody>
+                    <tr><td>PR (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=33" target="_blank" rel="noopener">p. 92</a>)</td><td>0,12-0,20 s</td><td>&gt; 0,20 s: BAV de 1.er grado · &lt; 0,12 s: preexcitación</td></tr>
+                    <tr><td>QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=41" target="_blank" rel="noopener">pp. 100-101</a>)</td><td>hasta 0,10 s (2,5 mm)</td><td>&gt; 0,12 s: bloqueo completo de rama</td></tr>
+                    <tr><td>QTc (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=49" target="_blank" rel="noopener">p. 108</a>)</td><td>0,36-0,42 s (varón), hasta 0,43 s (mujer)</td><td>&gt; 0,45 s cuidado · &gt; 0,50 s alto riesgo</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p id="ecg-f7-causas" style="font-size:0.85rem; color:var(--text-dim);">Los trastornos de conducción tienen causas muy variadas: fármacos, enfermedad coronaria, cardiopatía estructural, infecciones, causas inmunológicas y degenerativas. Prolongan el PR el verapamilo y el diltiazem, los betabloqueantes y la digital. Chagas (frecuente BRDHH), lupus y carditis reumática (alargan el PR) y la enfermedad degenerativa de Lev-Lenègre (BAV completo) son ejemplos que cita el libro (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=32" target="_blank" rel="noopener">p. 91</a>).</p>
+
+            <p class="section-label" style="margin-top:16px;">Intervalo PR <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=33" target="_blank" rel="noopener">pp. 92-93</a></p>
+            <p id="ecg-f7-pr" style="font-size:0.85rem; color:var(--text-dim);">El PR mide la conducción AV, desde el inicio de la P hasta el inicio del QRS. <strong>Normal: 0,12-0,20 s</strong> (120-200 ms; ejemplo del libro: PR de 3,5 mm = 0,14 s, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=33" target="_blank" rel="noopener">pp. 92-93</a>).</p>
+            <dl class="kv-row" id="ecg-f7-bav1"><dt>BAV de 1.er grado</dt><dd><strong>PR &gt; 0,20 s</strong> (5 mm). Puede verse sin cardiopatía; es común en la fiebre reumática aguda y con digital y quinidina. Ejemplos del libro con PR de 0,28 s (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=34" target="_blank" rel="noopener">p. 93</a>).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">PR corto: preexcitación <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=34" target="_blank" rel="noopener">pp. 93-95</a></p>
+            <p id="ecg-f7-preexcitacion" style="font-size:0.85rem; color:var(--text-dim);">La preexcitación es la activación precoz del ventrículo por una vía accesoria, de origen congénito. Se sospecha con <strong>PR &lt; 0,12 s</strong>. Hay dos tipos: WPW y Lown-Ganong-Levine (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=34" target="_blank" rel="noopener">pp. 93-94</a>).</p>
+            <dl class="kv-row" id="ecg-f7-wpw"><dt>WPW</dt><dd>PR corto, <strong>onda delta</strong> y <strong>QRS &gt; 0,11 s</strong>. Hay una vía accesoria (haz de Kent) paralela al sistema normal y más rápida; estos pacientes suelen tener episodios de taquicardia paroxística supraventricular (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=35" target="_blank" rel="noopener">p. 94</a>).</dd></dl>
+            <div class="article-figure" id="ecg-f7-fig-wpw">
+                <img src="js/modules/pif-cardio/img/ecg/f7-wpw-v5-v6.png" alt="Dos derivaciones, V5 y V6, con PR corto, QRS ensanchado y melladura en la rama ascendente" loading="lazy">
+                <div class="article-figure-caption">WPW en V5 y V6: PR de 0,10 s, QRS ensanchado y una melladura en la rama ascendente, que es la onda delta. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=35" target="_blank" rel="noopener">p. 94</a>.</div>
+            </div>
+            <dl class="kv-row" id="ecg-f7-lgl"><dt>Lown-Ganong-Levine</dt><dd>PR corto pero <strong>sin onda delta</strong> y con QRS normal; la vía accesoria (haces de James) une la aurícula con el nodo AV (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=35" target="_blank" rel="noopener">p. 94</a>).</dd></dl>
+            <p id="ecg-f7-preexcitacion-riesgo" style="font-size:0.85rem; color:var(--text-dim);">El 60 % de los preexcitados presentará en algún momento una taquiarritmia, sobre todo TPSV o FA. El PR también es corto en los ritmos de la unión (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=36" target="_blank" rel="noopener">p. 95</a>).</p>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f7-wpw"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="wpw">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <details class="nota-plegable" id="ecg-f7-nota-wpw"><summary>Nota de fuentes: QRS en el WPW y LGL</summary>
+                <p>El libro da QRS &gt; 0,11 s (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=35" target="_blank" rel="noopener">p. 94</a>); la ESC 2019 sobre TSV da PR ≤ 120 ms, onda delta y QRS &gt; 120 ms (<a class="biblio-link" href="docs/esc-2019-taquicardias-supraventriculares.pdf#page=33" target="_blank" rel="noopener">ESC 2019 TSV, p. 687</a>). La ESC 2019 no nombra el síndrome de Lown-Ganong-Levine (solo «PR corto» dentro de la preexcitación), así que esa entidad es solo del libro.</p>
+            </details>
+            <details class="nota-plegable" id="ecg-f7-nota-lgl"><summary>Nota de fidelidad: erratas de la preexcitación</summary>
+                <p>El libro escribe «Long-Ganong-Levine» (p. 94) y, en el ejemplo de LGL, un PR de «0,9 segundos» (p. 95): un PR corto es &lt; 0,12 s, así que el valor probable es 0,09 s. Se reproducen tal cual (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=35" target="_blank" rel="noopener">pp. 94-95</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">BAV de 2.º grado <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=36" target="_blank" rel="noopener">pp. 95-97</a></p>
+            <dl class="kv-row" id="ecg-f7-mobitz1"><dt>Mobitz I (Wenckebach)</dt><dd>El PR se alarga latido a latido hasta que una P no conduce; luego el ciclo se reinicia. El defecto está en el <strong>nodo AV</strong>, por eso el QRS es estrecho (salvo bloqueo de rama previo). Aparece en personas sanas, con digital, betabloqueantes y algunos calcioantagonistas, y en el IAM, más a menudo <strong>inferior</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=36" target="_blank" rel="noopener">pp. 95-96</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f7-mobitz2"><dt>Mobitz II</dt><dd><strong>PR constante</strong>; algunas P no conducen (2:1, 3:1, 4:3…). La lesión está <strong>por debajo del nodo AV (His-Purkinje)</strong>, en IAM o lesión degenerativa, y el pronóstico es <strong>peor</strong> que el del Mobitz I (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=37" target="_blank" rel="noopener">pp. 96-97</a>). Ejemplo del libro con bloqueo 4:3: cuatro P y la cuarta bloqueada (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=38" target="_blank" rel="noopener">p. 97</a>).</dd></dl>
+            <P id="ecg-f7-analogia" >El libro usa la analogía de quien lanza piedras a un charco: el nodo sinusal es el lanzador, cada piedra una P y cada onda del agua un QRS; en el Wenckebach, la piedra cae cada vez más tarde hasta que una cae fuera del agua (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=36" target="_blank" rel="noopener">pp. 95-96</a>).</p>
+            <details class="nota-plegable" id="ecg-f7-nota-mobitz"><summary>Nota de fuentes: Mobitz II y bloqueo 2:1</summary>
+                <p>El libro trata el 2:1 como una forma de Mobitz II en este capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=37" target="_blank" rel="noopener">p. 96</a>); en el anexo de arritmias lo separa y define Mobitz II como ≥ 3 P por QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=58" target="_blank" rel="noopener">p. 117</a>). La ESC 2021 de estimulación agrupa Mobitz II, bloqueo 2:1 y BAV avanzado (≥ 3:1) en un mismo apartado (<a class="biblio-link" href="docs/esc-2021-estimulacion-cardiaca.pdf#page=27" target="_blank" rel="noopener">ESC 2021 estimulación, p. 26</a>) y deja el 2:1 aislado asintomático «caso a caso», distinguiendo el nivel nodal del infranodal.</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">BAV de 3.er grado (completo) <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=38" target="_blank" rel="noopener">pp. 97-98</a></p>
+            <p id="ecg-f7-bav3" style="font-size:0.85rem; color:var(--text-dim);">Las aurículas y los ventrículos laten de forma independiente: hay P que no generan QRS y el intervalo P-P es regular (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=38" target="_blank" rel="noopener">p. 97</a>).</p>
+            <div class="article-figure" id="ecg-f7-fig-bav3">
+                <img src="js/modules/pif-cardio/img/ecg/f7-bav3-p-83.png" alt="Tira de ECG con ondas P marcadas por flechas y QRS que no guardan relación con ellas" loading="lazy">
+                <div class="article-figure-caption">BAV completo. Entre cada P hay 18 mm: 1500/18 = 83 latidos por minuto en la aurícula, mientras la frecuencia ventricular es de 60. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=38" target="_blank" rel="noopener">p. 97</a>.</div>
+            </div>
+            <p id="ecg-f7-bav3-causas" style="font-size:0.85rem; color:var(--text-dim);">Los BAV de 2.º y 3.er grado suelen dar bradicardia &lt; 50 lpm: ante una bradicardia así, piensa en bloqueo. El BAV completo casi siempre es orgánico; causas principales: intoxicación digitálica y enfermedad coronaria (en el IAM por oclusión de la <strong>coronaria derecha</strong>, que irriga el nodo AV, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=39" target="_blank" rel="noopener">p. 98</a>). El Mobitz II y el 3.er grado «generalmente requieren marcapasos» (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=39" target="_blank" rel="noopener">p. 98</a>). <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f10">Ficha 10 · Marcapasos →</button></p>
+
+            <p class="section-label" style="margin-top:16px;">Bloqueo sinoauricular y síndrome del seno enfermo <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=39" target="_blank" rel="noopener">pp. 98-99</a></p>
+            <p id="ecg-f7-sa" style="font-size:0.85rem; color:var(--text-dim);"><strong>Bloqueo SA:</strong> fallo transitorio de la conducción del nodo sinusal a la aurícula. Hay pausas de duración <strong>doble del P-P</strong> y el PR es normal (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=39" target="_blank" rel="noopener">pp. 98-99</a>).</p>
+            <p id="ecg-f7-seno-enfermo" style="font-size:0.85rem; color:var(--text-dim);"><strong>Seno enfermo:</strong> propio de ancianos (coronaria, cirugía cardiaca, digital, degeneración y fibrosis). El ECG muestra bradicardia severa persistente, bloqueo SA, paro sinusal o escape de la unión o ventricular; o el <strong>síndrome bradicardia-taquicardia</strong>, con alternancia de taquiarritmias (FA o flúter) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=40" target="_blank" rel="noopener">p. 99</a>).</p>
+            <details class="nota-plegable" id="ecg-f7-nota-pausa"><summary>Nota de fuentes: duración de una pausa sinusal</summary>
+                <p>El libro usa 3 s como umbral de pausa sinusal en el anexo de arritmias (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=55" target="_blank" rel="noopener">p. 114</a>). La ESC 2021 de estimulación habla de pausa asistólica sintomática &gt; 3 s o asintomática &gt; 6 s (<a class="biblio-link" href="docs/esc-2021-estimulacion-cardiaca.pdf#page=31" target="_blank" rel="noopener">ESC 2021 estimulación, p. 30</a>).</p>
+            </details>
+            <details class="nota-plegable" id="ecg-f7-nota-errata-sa"><summary>Nota de fidelidad: unidades mal impresas en la p. 99</summary>
+                <p>El libro escribe «PR de 4,5 mm, es decir 0,18 milisegundos»; son 0,18 s (180 ms). Se reproduce tal cual (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=40" target="_blank" rel="noopener">p. 99</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Intervalo QRS y bloqueos de rama <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=41" target="_blank" rel="noopener">pp. 100-107</a></p>
+            <p id="ecg-f7-qrs" style="font-size:0.85rem; color:var(--text-dim);">El QRS se mide desde el inicio de la Q (o de la R) hasta el final de la S. <strong>Límite superior 0,10 s (2,5 mm)</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=41" target="_blank" rel="noopener">pp. 100-101</a>). Bajo el nodo AV el sistema se divide en el haz de His, la rama derecha y la rama izquierda, con su fascículo anterior (anterosuperior) y posterior (posteroinferior) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=42" target="_blank" rel="noopener">p. 101</a>).</p>
+            <dl class="kv-row" id="ecg-f7-bloqueo-completo"><dt>Bloqueo completo de rama</dt><dd>QRS con forma <strong>rSR'</strong>, <strong>QRS &gt; 0,12 s</strong> y ST deprimido con T invertidas. El <strong>incompleto</strong> tiene los mismos cambios con QRS &lt; 0,12 s (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=43" target="_blank" rel="noopener">p. 102</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f7-brd"><dt>BRDHH</dt><dd>Se ve en sanos y es relativamente frecuente; también en enfermedad coronaria, cardiopatía hipertensiva, Chagas, HVD y algunas cardiopatías congénitas. <strong>rSR' en V1-V2</strong> con T invertidas y <strong>S anchas en V5-V6 y DI</strong> (con muesca en la rama ascendente de la S, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=43" target="_blank" rel="noopener">pp. 102-103</a>).</dd></dl>
+            <div class="article-figure" id="ecg-f7-fig-brd">
+                <img src="js/modules/pif-cardio/img/ecg/f7-brd-v2.png" alt="Derivación V2 con QRS de dos picos y T negativa, típica de bloqueo de rama derecha" loading="lazy">
+                <div class="article-figure-caption">BRD en V2: QRS de dos picos y T negativa. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=44" target="_blank" rel="noopener">p. 103</a>.</div>
+            </div>
+            <dl class="kv-row" id="ecg-f7-bri"><dt>BRIHH</dt><dd>Aparece en múltiples cardiopatías, sobre todo coronaria e HVI. Mismos cambios pero en <strong>V4-V6</strong>, y parecidos en DI, aVL y aVF (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=45" target="_blank" rel="noopener">p. 104</a>).</dd></dl>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f7-rama"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="rama">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <details class="nota-plegable" id="ecg-f7-nota-bri"><summary>Nota de fuentes: bloqueo de rama izquierda y trombolisis</summary>
+                <p>El libro dice que un bloqueo transitorio de rama izquierda detectado a tiempo puede indicar la necesidad de trombolisis (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=32" target="_blank" rel="noopener">p. 91</a>). La ESC 2023 de SCA recomienda, con sospecha clínica alta, manejar como STEMI también el BRI, el BRD o el ritmo de marcapasos, porque impiden valorar el ST (<a class="biblio-link" href="docs/esc-2023-sca-parte1.pdf#page=19" target="_blank" rel="noopener">ESC 2023 SCA, p. 3738</a>).</p>
+            </details>
+            <p id="ecg-f7-hemibloqueos" style="font-size:0.85rem; color:var(--text-dim);"><strong>Hemibloqueos</strong> (fascículos de la rama izquierda, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=46" target="_blank" rel="noopener">pp. 105-106</a>):</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f7-tabla-hemibloqueos" data-nombre="Hemibloqueos de la rama izquierda">
+                <thead><tr><th></th><th>Anterior izquierdo (HBAI)</th><th>Posterior izquierdo (HBPI)</th></tr></thead>
+                <tbody>
+                    <tr><td>Morfología</td><td>r chica y S grande en DII, DIII y aVF</td><td>r chica y S grande en DI y aVL</td></tr>
+                    <tr><td>Eje</td><td>hacia arriba y a la izquierda</td><td>&gt; +110°</td></tr>
+                    <tr><td>QRS</td><td>no se ensancha</td><td>no se ensancha</td></tr>
+                    <tr><td>Se ve en</td><td>coronaria, HVI, enfisema, miocardiopatías</td><td>—</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=46" target="_blank" rel="noopener">pp. 105-106</a>. Ejemplo de HBPI del libro: eje de 120°, con isobifásica en aVR y su perpendicular DIII positiva. <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f4">Ficha 4 · Eje →</button></p>
+            <p id="ecg-f7-bifascicular" style="font-size:0.85rem; color:var(--text-dim);"><strong>Bifascicular</strong>: BRD más bloqueo de un fascículo. <strong>Trifascicular</strong> (según el libro): BRDHH + bloqueo de un fascículo + BAV de 1.er grado; ejemplo con PR de 220 ms, rSR' en V1 y HBAI. El riesgo de BAV de 3.er grado es alto, por ejemplo si se dan digital o betabloqueantes (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=47" target="_blank" rel="noopener">pp. 106-107</a>).</p>
+            <details class="nota-plegable" id="ecg-f7-nota-bifascicular"><summary>Nota de fuentes: bifascicular y trifascicular</summary>
+                <p>La ESC 2021 de estimulación define el bloqueo bifascicular como BRI, o BRD con hemibloqueo anterior o posterior (<a class="biblio-link" href="docs/esc-2021-estimulacion-cardiaca.pdf#page=29" target="_blank" rel="noopener">ESC 2021 estimulación, p. 28</a>). No define «trifascicular»: esa definición es solo del libro. Los criterios ECG de los hemibloqueos tampoco figuran en la guía.</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Intervalo QT y QTc <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=48" target="_blank" rel="noopener">pp. 107-111</a></p>
+            <p id="ecg-f7-qt" style="font-size:0.85rem; color:var(--text-dim);">El QT va del inicio de la Q al final de la T. Varía con la frecuencia, por eso se corrige: <strong>QTc = QT medido ÷ √RR</strong>, con QT y RR en segundos (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=48" target="_blank" rel="noopener">pp. 107-108</a>). Ejemplo del libro: QT de 9 mm = 0,36 s y RR de 20 mm = 0,8 s → 0,36 ÷ 0,89 = <strong>0,4 s</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=49" target="_blank" rel="noopener">p. 108</a>).</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f7-tabla-qtc" data-nombre="Valores del QTc y qué significan">
+                <thead><tr><th>QTc</th><th>Qué dice el libro</th></tr></thead>
+                <tbody>
+                    <tr><td>0,36-0,42 s (varón), hasta 0,43 s (mujer)</td><td>Normal (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=49" target="_blank" rel="noopener">p. 108</a>)</td></tr>
+                    <tr><td>&gt; 0,45 s</td><td>Merece cuidado (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a>)</td></tr>
+                    <tr><td>&gt; 0,50 s</td><td class="hl-rojo">Alto riesgo de arritmias ventriculares, sobre todo torsades de pointes (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a>)</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <dl class="kv-row" id="ecg-f7-qt-causas"><dt>Qué lo cambia</dt><dd>Se <strong>acorta</strong> en la hipercalcemia (p. ej. hiperparatiroidismo) y en la intoxicación digitálica. Se <strong>alarga</strong> en la hipocalcemia (p. ej. falla renal severa), la hipomagnesemia y la enfermedad isquémica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=49" target="_blank" rel="noopener">p. 108</a>). Ejemplo de hipocalcemia: QT 0,38 s con RR 0,64 s → QTc <strong>0,48 s</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a>).</dd></dl>
+            <dl class="kv-row" id="ecg-f7-qt-farmacos"><dt>Fármacos</dt><dd>Alargan el QT la tioridazina, los antihistamínicos como el astemizol, los procinéticos como la cisaprida y la amiodarona. Las mujeres son más propensas a taquiarritmias por QT largo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a>). El QT largo, a veces congénito, aumenta el riesgo de TV y muerte súbita, sobre todo con esos fármacos (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=32" target="_blank" rel="noopener">p. 91</a>).</dd></dl>
+            <p class="rtv-enlace-ficha" id="rtv-enlace-ecg-f7-torsade"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="torsade">⚡ Verlo latir en el corazón eléctrico →</button></p>
+            <details class="nota-plegable" id="ecg-f7-nota-qtc"><summary>Nota de fuentes: cortes del QTc</summary>
+                <p>El libro marca &gt; 0,45 s como «cuidado» y &gt; 0,50 s como alto riesgo. La AHA 2025 (parte 9) dice que el riesgo de torsades aumenta con QTc &gt; 500 ms y bradicardia (<a class="biblio-link" href="docs/aha-2025-parte9-soporte-vital-avanzado.pdf#page=27" target="_blank" rel="noopener">AHA 2025 parte 9, p. S564</a>); los demás cortes, y la elección de la fórmula de Bazett, son solo del libro. La calculadora de Merino Cardiología usa ≤ 0,44 s como normal: otra fuente, otro corte.</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">QT máximo según la frecuencia <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f7-tabla-qt-maximo" data-nombre="QT máximo según la frecuencia cardiaca">
+                <thead><tr><th>FC (lpm)</th><th>Máx. varones (s)</th><th>Máx. mujeres (s)</th></tr></thead>
+                <tbody>
+                    <tr><td>40</td><td>0,49</td><td>0,50</td></tr>
+                    <tr><td>50</td><td>0,45</td><td>0,46</td></tr>
+                    <tr><td>60</td><td>0,42</td><td>0,43</td></tr>
+                    <tr><td>66,5</td><td>0,404</td><td>0,414</td></tr>
+                    <tr><td>70,5</td><td>0,395</td><td>0,405</td></tr>
+                    <tr><td>75</td><td>0,384</td><td>0,394</td></tr>
+                    <tr><td>80</td><td>0,374</td><td>0,384</td></tr>
+                    <tr><td>86</td><td>0,36</td><td>0,37</td></tr>
+                    <tr><td>92,5</td><td>0,35</td><td>0,36</td></tr>
+                    <tr><td>100</td><td>0,338</td><td>0,347</td></tr>
+                    <tr><td>109</td><td>0,325</td><td>0,333</td></tr>
+                    <tr><td>120</td><td>0,30</td><td>0,317</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Tabla de la <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=50" target="_blank" rel="noopener">p. 109</a>; el libro no cita su origen. En el escaneo las cabeceras de las tres columnas de la derecha están borradas: se dan por iguales a las de la izquierda.</p>
+
+            <p class="section-label" style="margin-top:16px;">Calculadora del QTc</p>
+            <div class="card" id="ecg-f7-calc" data-nombre="Calculadora de QTc" style="padding:14px 16px;">
+                <p class="fuente-ficha" style="margin-top:0;">Origen: <strong>ficha</strong> (fórmula QTc = QT ÷ √RR y cortes de López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=49" target="_blank" rel="noopener">pp. 108-109</a>). Es una ayuda para practicar; no sustituye la lectura del trazado.</p>
+                <div class="form-group">
+                    <label for="ecg-f7-calc-qt-mm">QT en milímetros (papel a 25 mm/s: 1 mm = 0,04 s)</label>
+                    <input type="number" id="ecg-f7-calc-qt-mm" inputmode="decimal" min="5" max="40" step="0.5" placeholder="p. ej. 9">
+                </div>
+                <div class="form-group">
+                    <label for="ecg-f7-calc-rr-mm">Milímetros entre dos R (RR)</label>
+                    <input type="number" id="ecg-f7-calc-rr-mm" inputmode="decimal" min="6" max="75" step="0.5" placeholder="p. ej. 20">
+                </div>
+                <div class="form-group">
+                    <label for="ecg-f7-calc-sexo">Sexo</label>
+                    <select id="ecg-f7-calc-sexo">
+                        <option value="h">Varón (normal hasta 0,42 s)</option>
+                        <option value="m">Mujer (normal hasta 0,43 s)</option>
+                    </select>
+                </div>
+                <div class="result-box" id="ecg-f7-calc-resultado" style="text-align:left; margin-top:12px;">Escribe el QT y el RR en milímetros.</div>
+                <p class="fuente-ficha" style="margin-bottom:0;">Otra calculadora, con QT en ms y FC: <button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-otras-taqui" data-resaltar="#mc-qtc">Calculadora de QTc de Merino Cardiología</button>. Corta en 0,44 s: otra fuente.</p>
+            </div>
+            <p id="ecg-f7-nomograma" style="font-size:0.85rem; color:var(--text-dim);">El libro incluye también un <strong>nomograma</strong>: se une con una regla el QT y el RR y la regla corta la escala del QTc. Ejemplo: QT 0,4 s y RR 0,8 s → QTc 0,45 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=51" target="_blank" rel="noopener">pp. 110-111</a>). La calculadora de arriba hace lo mismo con la fórmula.</p>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <p id="ecg-f7-profundizar" style="font-size:0.85rem; color:var(--text-dim);">Las bradiarritmias y los ritmos de escape se desarrollan en el anexo: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8 · Arritmias →</button> El ECG con bloqueo de rama en el infarto: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f9">Ficha 9 · El ECG en el SCA →</button></p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=52" target="_blank" rel="noopener">p. 111</a>): Goldberger 1999; Da Costa, Brady y Edhouse, <em>BMJ</em> 2002;324:535; Goldman 1987; Castellano, Pérez de Juan y Attié, <em>Electrocardiografía clínica</em>, Elsevier 2004; Vélez 2006.</p>
 
 
             <!-- [HUECO B: ficha 7] -->
