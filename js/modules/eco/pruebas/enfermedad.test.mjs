@@ -7,6 +7,7 @@ import { crearMotor } from '../motor.mjs';
 import { baseGeometrica, construirCorazon } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor, aplanamientoSeptal, crearTablaFormas, instantesClave } from '../formas.mjs';
 import { medidasCorazon, medirVd } from '../ecografia.mjs';
+import { medirVd as medirVdAtlas } from '../atlas/vd.mjs';
 import { ESCENARIOS, CRITERIOS_FORMA, evaluarForma, ASENTAR_FORMA } from '../escenarios.mjs';
 
 const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); if (k !== 'normal') m.correr(ASENTAR_FORMA); return m; };
@@ -95,7 +96,14 @@ test('TEP: cumple los criterios de Lang del VD (basal, FAC, FE, TAPSE) y la rela
   }
 });
 
-test('TEP: tabique aplanado también en telesístole (sobrecarga de presión, Atlas 14)', { todo: 'F4 (parada 3): hoy el tabique se aplana solo en diástole; en sístole se curva' }, () => {
-  const m = correr('tep'), u = m.ultimo, sis = m.onda.filter(s => s.t > u.tAoAbre + 0.03 && s.t < u.tS2 - 0.03);
-  assert.ok(sis.every(s => aplanamientoSeptal(s) > 0.5), 'telesístole sin aplanar');
+// Índice de excentricidad del VI (IE = D2/D1 en el eje corto, D2 paralelo al tabique). Mukherjee 2025 (Tabla 2 y texto):
+// >1 anormal, y en sístole indica sobrecarga de presión; su cuadro de grupos usa >1,1 (las dos cifras se comprueban).
+// Ryan 1985 (Atlas · 14): 1,44 ± 0,16 en telesístole en la sobrecarga de presión. Telesístole = fin de la relajación
+// isovolumétrica del VI (VI en su volumen mínimo; atlas/vd.mjs, muestrasClave).
+test('índice de excentricidad: normal ≈ 1 en telediástole y telesístole; TEP > 1,1 en telesístole (Mukherjee 2025, Ryan 1985)', () => {
+  const n = medirVdAtlas(normal), t = medirVdAtlas(correr('tep'));
+  assert.ok(n.eiD <= 1.1 && n.eiS <= 1.1, `normal: TD ${n.eiD.toFixed(2)}, TS ${n.eiS.toFixed(2)}`);
+  assert.ok(t.eiS > 1.1, `TEP, telesístole: ${t.eiS.toFixed(2)} (> 1 Mukherjee; > 1,1 su cuadro de grupos)`);
+  assert.ok(t.eiS >= t.eiD - 0.01, `TEP: telesístole ${t.eiS.toFixed(2)} no menor que telediástole ${t.eiD.toFixed(2)}`);
+  assert.ok(Math.abs(t.eiS - 1.44) <= 0.16 + 0.1, `TEP: ${t.eiS.toFixed(2)} cerca de Ryan 1985 (1,44 ± 0,16)`);
 });
