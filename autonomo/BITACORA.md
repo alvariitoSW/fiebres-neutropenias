@@ -290,7 +290,7 @@ El resto del tablero sigue `aparcada`.
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
 - **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · Di Mario 2005 ·
-  ASE 2025 de corazón derecho · ASE/EACVI 2015 · temarios de Radiología de tórax y Neurorradiología.
+  ASE 2025 de corazón derecho · temarios de Radiología de tórax y Neurorradiología.
 - **✅ PDF de la ASE 2025 (27/10)**, en `docs/`:
   - `nagueh-2025-funcion-diastolica-hfpef-ase.pdf` (J Am Soc Echocardiogr 2025;38:537-569; página impresa = página
     del PDF + 536). **Lo había pedido**: el «ASE 2025 diastólica» de la fase 3 (`f3-calc-eco`, `echosuite.md` §4.6).
