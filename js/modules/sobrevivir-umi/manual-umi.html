@@ -1606,6 +1606,7 @@
             </table>
             </div>
             <p style="font-size:0.8rem; color:var(--text-muted);">Estima la presión de la aurícula derecha (equivalente aproximado de la PVC) — 3 / 8 / 15 mmHg según la banda.</p>
+            <p id="umi-vci-vm" style="font-size:0.8rem; color:var(--text-muted);">El manual no da bandas de PAD para VM (pág. 70): con VM, esta app no estima la PAD por la VCI.</p>
 
             <p class="section-label" style="margin-top:14px;">🧮 Calculadora: índice de colapsabilidad de la VCI</p>
             <div class="tfg-simulador">
@@ -1616,8 +1617,8 @@
                         <option value="vm-general">VM (fórmula general)</option>
                     </select>
                 </div>
-                <div class="form-group"><label for="umi-vci-dmax">Diámetro máximo (cm)</label><input type="number" id="umi-vci-dmax" step="0.1" min="0.3" max="4" value="2.2"></div>
-                <div class="form-group"><label for="umi-vci-dmin">Diámetro mínimo (cm)</label><input type="number" id="umi-vci-dmin" step="0.1" min="0" max="4" value="1.4"></div>
+                <div class="form-group"><label for="umi-vci-dmax">Diámetro máximo (cm)</label><input type="number" id="umi-vci-dmax" step="0.01" min="0.3" max="4" value="2.2"></div>
+                <div class="form-group"><label for="umi-vci-dmin">Diámetro mínimo (cm)</label><input type="number" id="umi-vci-dmin" step="0.01" min="0" max="4" value="1.4"></div>
                 <div id="umi-vci-resultado" class="tfg-estado tfg-estado-ok"></div>
             </div>
             <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-medir="vci">🫀 Medir el Dmáx y el Dmín de la VCI en el modo M del simulador (subcostal) →</button></p>

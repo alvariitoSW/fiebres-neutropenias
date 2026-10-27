@@ -102,12 +102,13 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
     ? { va: velDeY(A.y), vb: velDeY(B.y), ms: Math.abs(A.x - B.x) * barrido * 1000 }
     : { mm: Math.abs(A.y - B.y) * prof, ms: Math.abs(A.x - B.x) * barrido * 1000 });
 
-  // ---- tocar: el primer toque pone A, el segundo B; tocar cerca de uno lo arrastra; un tercero vuelve a empezar
+  // ---- tocar: el primer toque pone A, el segundo B; con los dos puestos, tocar cerca de uno lo arrastra; un tercero vuelve a empezar
   const punto = (ev) => { const r = capa.getBoundingClientRect(); return { x: Math.min(1, Math.max(0, (ev.clientX - r.left) / r.width)), y: Math.min(1, Math.max(0, (ev.clientY - r.top) / r.height)) }; };
   const cerca = (p, q) => q && Math.hypot((p.x - q.x) * capa.clientWidth, (p.y - q.y) * capa.clientHeight) < 22;
   capa.addEventListener('pointerdown', (ev) => {
     const p = punto(ev);
-    if (cerca(p, A)) activo = 'A'; else if (cerca(p, B)) activo = 'B';
+    // con un solo calibre, el segundo toque pone siempre B (la VCI mide ≈10 px/cm: dos paredes quedan a <22 px)
+    if (A && B && cerca(p, A)) activo = 'A'; else if (A && B && cerca(p, B)) activo = 'B';
     else if (!A || (A && B)) { A = p; B = null; activo = 'A'; } else { B = p; activo = 'B'; }
     if (activo === 'A') A = p; else B = p;
     capa.setPointerCapture?.(ev.pointerId); dibujarCapa(); onMedida?.(medida());

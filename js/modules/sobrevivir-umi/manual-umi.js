@@ -375,6 +375,11 @@ function calcVciColapso() {
         box.innerHTML = '⚠️ El diámetro mínimo no puede ser mayor que el máximo. Revisa los datos.';
         return;
     }
+    if (dmin < 0.2 && modoEl.value === 'vm-sin-esfuerzo') {
+        box.className = 'tfg-estado tfg-estado-warn';
+        box.innerHTML = '⚠️ Revisa los calibres: con un diámetro mínimo menor de 0,2 cm esta fórmula, que divide entre el Dmín, no da un número útil (control de la app).';
+        return;
+    }
     const modo = modoEl.value;
     let icvci, corte, etiqueta;
     if (modo === 'espontanea') {
@@ -388,9 +393,11 @@ function calcVciColapso() {
         corte = 12; etiqueta = 'VM, fórmula general';
     }
     if (Number.isNaN(icvci) || !Number.isFinite(icvci)) return;
-    const respondedor = icvci > corte;
+    const indice = Math.round(icvci); // se compara el valor que se muestra
+    const respondedor = indice > corte;
     box.className = `tfg-estado tfg-estado-${respondedor ? 'warn' : 'ok'}`;
-    box.innerHTML = `Índice de colapsabilidad (${etiqueta}): <strong>${icvci.toFixed(0)}%</strong> — ${respondedor ? `&gt;${corte}%, sugiere respuesta a volumen` : `≤${corte}%, no sugiere respuesta a volumen`}.`;
+    box.innerHTML = `Índice de colapsabilidad (${etiqueta}): <strong>${indice}%</strong> — ${respondedor ? `&gt;${corte}%, sugiere respuesta a volumen` : `≤${corte}%, no sugiere respuesta a volumen`}.`
+        + (modo === 'espontanea' ? '' : '<br><span class="cv-muted">Con ventilación mecánica no se usa el 40%: el manual da otros cortes. El manual no da bandas de PAD para VM (pág. 70): con VM, esta app no estima la PAD por la VCI.</span>');
 }
 
 // ---------------------------------------------------------------------

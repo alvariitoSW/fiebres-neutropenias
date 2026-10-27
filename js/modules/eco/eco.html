@@ -100,16 +100,24 @@
                     <button type="button" class="cv-mini" data-medir="vci">VCI (subcostal)</button>
                 </div>
                 <p class="cv-muted" id="cv-m-guia"></p>
-                <div class="tfg-estado" id="cv-m-resultado"></div>
-                <div class="cv-fila" id="cv-m-vi" hidden>
-                    <button type="button" class="cv-mini" id="cv-m-lvdd">Guardar como LVDd</button>
-                    <button type="button" class="cv-mini" id="cv-m-lvsd">Guardar como LVSd</button>
-                    <button type="button" class="cv-mini" id="cv-m-borrar">Borrar calibres</button>
+                <div class="cv-fila" id="cv-m-vci-resp-fila" hidden>
+                    <span class="cv-muted">Respiración</span>
+                    <div class="cv-chips cv-medir" id="cv-m-vci-resp" role="group" aria-label="Respiración del paciente">
+                        <button type="button" class="cv-mini on" data-vci-resp="espontanea">Espontánea</button>
+                        <button type="button" class="cv-mini" data-vci-resp="vm-sin-esfuerzo">VM sin esfuerzo</button>
+                        <button type="button" class="cv-mini" data-vci-resp="vm-general">VM fórmula general</button>
+                    </div>
                 </div>
                 <div class="cv-fila" id="cv-m-vci" hidden>
                     <button type="button" class="cv-mini" id="cv-m-dmax">Guardar como Dmáx</button>
                     <button type="button" class="cv-mini" id="cv-m-dmin">Guardar como Dmín</button>
                     <button type="button" class="cv-mini" id="cv-m-borrar-vci">Borrar calibres</button>
+                </div>
+                <div class="tfg-estado" id="cv-m-resultado"></div>
+                <div class="cv-fila" id="cv-m-vi" hidden>
+                    <button type="button" class="cv-mini" id="cv-m-lvdd">Guardar como LVDd</button>
+                    <button type="button" class="cv-mini" id="cv-m-lvsd">Guardar como LVSd</button>
+                    <button type="button" class="cv-mini" id="cv-m-borrar">Borrar calibres</button>
                 </div>
                 <div id="cv-m-enlaces"></div>
             </div>
