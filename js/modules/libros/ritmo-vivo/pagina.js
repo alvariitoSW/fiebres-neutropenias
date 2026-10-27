@@ -32,6 +32,7 @@ export const pend = () => !!est().pendiente;
 
 /* ---------- Arrancar un estado: un motor nuevo con su configuración, y 6 s de historia para llenar la tira ---------- */
 function ponerEstado(clave, extra = {}) {
+  if (typeof planoLupas !== 'undefined' && planoLupas.abierto) planoLupas.cerrar();
   resetS(clave); Object.assign(S, extra);
   arrancarMotor();
   if (est().fam && est().fam !== familia) familia = est().fam;
@@ -197,7 +198,7 @@ function cuartaCifra(L) {
 const umbralST = () => (S.deriv === 'II' ? 1 : S.sexo === 'm' ? 1.5 : 2);
 
 /* ---------- Los mandos (el dock): Ritmo · Tratar · Medir ---------- */
-const tog = (acc, t, small, extra = '') => `<button type="button" class="rtv-tog${extra.includes('rtv-peligro') ? ' rtv-peligro' : ''}" data-acc="${acc}" ${extra.replace(/class="[^"]*"/, '')}>${t}${small ? `<small>${small}</small>` : ''}</button>`;
+const tog = (acc, t, small, extra = '') => `<button type="button" class="rtv-tog${extra.includes('rtv-peligro') ? ' rtv-peligro' : ''}" data-acc="${acc}" ${extra.replace(/class="[^"]*"/, '')}>${t}${small ? `<small>${extra.includes('rtv-peligro') ? '⚠ ' : ''}${small}</small>` : ''}</button>`;
 const MINI = { nodal: ['av', 'El torniquete del nodo AV', 'Mira cómo la onda baja por un carril y vuelve por el otro; la adenosina echa el cerrojo.'], aberrancia: ['av', 'El torniquete del nodo AV', 'La reentrada nace aquí; la rama bloqueada ensancha el QRS.'], flutter: ['av', 'El torniquete del nodo AV', 'Deja pasar uno de cada dos o tres impulsos de la aurícula.'], fa: ['av', 'El torniquete del nodo AV', 'Deja pasar lo que encuentra rearmado: de ahí el R-R irregular.'], tam: ['av', 'El torniquete del nodo AV', 'Los impulsos llegan a destiempo y solo pasan los que lo encuentran rearmado.'], wpw: ['av', 'El atajo junto al nodo', 'El atajo no tiene torniquete: la onda llega antes al ventrículo.'], torsade: ['celula', 'La célula del ventrículo', 'Lo que alarga el potencial de acción alarga el QT.'], hiperk: ['celula', 'La célula del ventrículo', 'El potasio alto cambia el potencial y, con él, el ECG.'] };
 function pintarMini() {
   const m = MINI[S.clave], c = $('mini-lupa'); c.hidden = !m || pend(); if (!m || pend()) return;
@@ -566,6 +567,8 @@ function abrirLupas() {
   if (caja) caja.style.top = Math.min(Math.max(0, mon.getBoundingClientRect().bottom + 4), innerHeight * 0.5) + 'px';
 }
 $('lupas-grandes').addEventListener('click', abrirLupas);
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') planoLupas.cerrar(); });
+$('volver').addEventListener('click', () => planoLupas.cerrar());
 /* ---------- Cifras y gráficas tapadas (la Mayéutica de la parte 2: primero predices, luego compruebas) ---------- */
 function taparTodo(si, tira) {
   tapado = si; taparTira = !!tira;
@@ -576,7 +579,7 @@ function taparTodo(si, tira) {
 let modo = 'explorar';
 const mayeutica = crearMayeutica({ ponerEstado, taparTodo, accion, S, medirDock: () => medirDock(), setModo: m => setModo(m) });
 export function setModo(m) {
-  if (guia) cerrarGuia(); modo = m; S.medir = null; if (pausado) ponerPausa(false); borrarSenal();
+  planoLupas.cerrar(); if (guia) cerrarGuia(); modo = m; S.medir = null; if (pausado) ponerPausa(false); borrarSenal();
   $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-preguntas').setAttribute('aria-selected', String(m === 'preguntas'));
   $('zona-abajo').hidden = m !== 'explorar'; $('aparatos').hidden = m === 'preguntas'; $('explicame').hidden = m !== 'explorar';
   $('vista-preguntas').hidden = m !== 'preguntas'; $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';

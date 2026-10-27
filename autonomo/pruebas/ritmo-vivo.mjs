@@ -196,6 +196,18 @@ async function correr(ANCHO, REDUCIDO) {
     ok(await p.evaluate(() => window.__ritmo.modo === 'explorar' && window.__ritmo.S.clave === 'fa' && !document.getElementById('rtv-dock-explorar').hidden), 'caso: «Abrir el corazón de Teodoro» vuelve a Explorar en FA');
     ok((await desborde()) <= 0, 'Mayéutica → Explorar sin desborde');
   }
+  // 7b. El plano grande de las lupas se cierra por los 4 caminos (Escape, modo, estado, VOLVER)
+  {
+    const cerrado = () => p.evaluate(() => { const c = document.querySelector('.pg-cab'); if (!c) return true; const r = c.parentElement.getBoundingClientRect(); return c.parentElement.hidden || r.height === 0; });
+    const abrirL = async () => { await R('setModo', 'explorar').catch(() => {}); await p.evaluate(() => document.getElementById('rtv-lupas-grandes').click()); await espera(250); };
+    await abrirL(); ok(!(await cerrado()), 'plano de las lupas: se abre');
+    await p.keyboard.press('Escape'); await espera(150); ok(await cerrado(), 'plano de las lupas: Escape lo cierra');
+    await abrirL(); await p.evaluate(() => document.getElementById('rtv-modo-preguntas').click()); await espera(300); ok(await cerrado(), 'plano de las lupas: cerrado al pasar a Mayéutica');
+    await p.evaluate(() => document.getElementById('rtv-modo-explorar').click()); await espera(300);
+    await abrirL(); await p.evaluate(() => window.__ritmo.ponerEstado('fv', {})); await espera(200); ok(await cerrado(), 'plano de las lupas: cerrado al cambiar de estado');
+    await abrirL(); await p.evaluate(() => document.getElementById('rtv-volver').click()); await espera(300); ok(await cerrado(), 'plano de las lupas: cerrado con «← VOLVER»');
+    await abrir(''); await espera(500);
+  }
   // 8. Ids sin duplicar, bucle que se para al salir
   ok(await p.evaluate(() => { const v = {}; let d = 0; document.querySelectorAll('[id]').forEach(e => { if (v[e.id]) d++; v[e.id] = 1; }); return d === 0; }), 'ids sin duplicar en todo el DOM');
   if (!REDUCIDO) {
