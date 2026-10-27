@@ -48,7 +48,7 @@ export function aplanamientoSeptal(s) {
 }
 
 export function estadoGeo(s, extra = {}) {
-  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, ...extra };
+  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0, ...extra };
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }
@@ -70,8 +70,8 @@ export function valorEn(onda, t, k) {
 // menos de la mitad de la tolerancia. Así hay pocas formas en la diástole lenta y muchas donde todo cambia deprisa
 // (contracción auricular, apertura y cierre de las válvulas). Tope de separación: 60 ms.
 export function instantesClave(onda, { maxSeparacion = 0.06 } = {}) {
-  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi]; });
-  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2];
+  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi, e.eVd]; });
+  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2, TOLERANCIA.activacion / 2];
   const cabe = (i, j) => {
     if (onda[j].t - onda[i].t > maxSeparacion) return false;
     for (let k = i + 1; k < j; k++) { const w = (onda[k].t - onda[i].t) / (onda[j].t - onda[i].t);
@@ -157,7 +157,8 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       for (const k of VOLS) if (Math.abs(mix(A.est[k], B.est[k], w) - objetivo[k]) > TOLERANCIA.volumen) return null;
       for (const v of VALVULAS) if (Math.abs(mix(A.est[v.n], B.est[v.n], w) - objetivo[v.n]) > TOLERANCIA.apertura) return null;
       if (Math.abs(mix(A.est.septo, B.est.septo, w) - objetivo.septo) > TOLERANCIA.septo) return null;
-      if (Math.abs(mix(A.est.eVi, B.est.eVi, w) - objetivo.eVi) > TOLERANCIA.activacion) return null;   // fija la torsión
+      if (Math.abs(mix(A.est.eVi, B.est.eVi, w) - objetivo.eVi) > TOLERANCIA.activacion) return null;   // fija la torsión y los papilares
+      if (Math.abs(mix(A.est.eVd, B.est.eVd, w) - objetivo.eVd) > TOLERANCIA.activacion) return null;   // fija el grosor del VD
       if (Math.abs((extra?.feLatido ?? 0) - (A.est.feLatido ?? 0)) > 0.03) return null;               // contractilidad del latido (torsión)
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
       if ((extra?.mioVi ?? 1) !== (A.est.mioVi ?? 1)) return null;          // otra forma de enfermedad

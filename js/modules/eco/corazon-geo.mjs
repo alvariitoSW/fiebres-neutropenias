@@ -21,6 +21,7 @@ const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const mix = (a, b, t) => a + (b - a) * t;
 // mm de excursión del anillo tricuspídeo lateral por mL vaciado del VD (ver «TAPSE» en mover)
 export const TAPSE_POR_ML = 0.285;
+export const EXP_AREA_VD = 0.58;
 const paso = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
 const sum = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
 const res = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
@@ -529,11 +530,31 @@ export function construirCorazon(estado, opciones = {}) {
     // Músculos papilares del VI y cuerdas tendinosas (al borde libre de las valvas mitrales)
     const cuerdas = [];
     const papilares = [];
+    // B4: cada papilar nace de la pared (anterolateral y posteromedial), sigue pegado a ella en sus dos tercios inferiores y
+    // solo despega la punta, que apunta a las valvas. En sístole se acorta a LP_SIS de su largo (activación del VI, estado.eVi,
+    // la misma de la torsión) y se engruesa para conservar su volumen (radio ÷ √largo). La base cuelga de la pared de ese
+    // instante, así que baja y se mueve con ella. Largo telesistólico / telediastólico 0,75-0,9: ilustrativo (fisiología general)
+    // El largo cambia con vi.L (las fracciones zB/zT cuelgan de él), así que se compensa para que el largo total sea
+    // objetivo × el telediastólico. El radio sale del largo medido del trazado (÷ √ el cociente con el de telediástole),
+    // así que largo × radio² se conserva (B4).
+    const LP_SIS = 0.82, objetivo = 1 - (1 - LP_SIS) * clamp(estado.eVi ?? 0, 0, 1);
+    const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
+    const R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u);
+    // trazado del eje: pared(z) → [x, y, z] de la pared en el ángulo del papilar; viX: el VI de ese instante
+    const trazarPap = (pared, zB, zT, lpX, rB) => [0, 0.2, 0.4, 0.6, 0.8, 1].map((s) => {
+      const z = zB + (zT - zB) * s * lpX, W = pared(z), rW = Math.hypot(W[0], W[1]), rad = radioDe(rB);
+      // profundidad hacia el eje: 0 en la base (centro sobre la pared); pegado (60 % del radio) hasta el 85 %; punta al 40 % del radio
+      const dep = s <= 0.85 ? 0.6 * rad(s) * paso(0, 0.25, s) : mix(0.6 * rad(0.85), 0.4 * rW, paso(0.85, 1, s));
+      return [W[0] * (rW - dep) / rW, W[1] * (rW - dep) / rW, z]; });
+    const largoPap = (pts) => pts.slice(1).reduce((t, q, i) => t + Math.hypot(q[0] - pts[i][0], q[1] - pts[i][1], q[2] - pts[i][2]), 0);
     for (const [phP, nombre] of [[0.55, 'anterolateral'], [3.95, 'posteromedial']]) {
-      const zB = -vi.L * 0.6, zT = -vi.L * 0.28;
-      const base = endoVi(zB, phP), b2 = endoVi(zT, phP); const pc = [mix(b2[0], 0, 0.45), mix(b2[1], 0, 0.45), zT];
-      papilares.push(pc);
-      if (!corte || dentroCorte(phP)) anadir('Papilar ' + nombre, tubo([base, [mix(base[0], pc[0], 0.5), mix(base[1], pc[1], 0.5), mix(zB, zT, 0.5)], pc], 5.5, 10, u => 5.5 * (1 - 0.6 * u)), COLORES.papilar);
+      const zB = -vi.L * 0.6, zT = -vi.L * 0.28, zBd = -viTd.L * 0.6, zTd = -viTd.L * 0.28;
+      const paredTd = (z) => { const r = perfil(z, viTd.Rb, viTd.Rm, viTd.L); return [r * Math.cos(phP), r * Math.sin(phP), z]; };
+      const p0 = trazarPap((z) => endoVi(z, phP), zB, zT, lp, R0);
+      const rBase = R0 * Math.sqrt(largoPap(trazarPap(paredTd, zBd, zTd, 1, R0)) / largoPap(p0));
+      const pts = trazarPap((z) => endoVi(z, phP), zB, zT, lp, rBase);
+      papilares.push(pts[pts.length - 1]);
+      if (!corte || dentroCorte(phP)) anadir('Papilar ' + nombre, tubo(suave(pts, 3), rBase, 10, radioDe(rBase)), COLORES.papilar);
     }
     for (const v of valvasM) for (let j = 0; j < 4; j++) {
       const tip = puntoValva(v, 0.15 + 0.233 * j, 1);
@@ -562,7 +583,7 @@ export function construirCorazon(estado, opciones = {}) {
     // Cruza la cavidad del VD del tabique a la pared libre, en el tercio apical y en el plano de la vista apical de 4 cámaras
     // (phB ≈ 3,2: allí corta el A4C), un poco más baja en la pared libre (arqueada). Los extremos entran 1,5 mm en cada pared.
     { const zB = -Lvd * 0.64, phB = 3.2, entra = (p, d) => { const r = Math.hypot(p[0], p[1]); return [p[0] * (r + d) / r, p[1] * (r + d) / r, p[2]]; };
-      const a = entra(epiVi(zB, phB), -1.5), b = entra(endoVd(zB - 4, phB), 1.5), m = lerp(a, b, 0.5);
+      const a = entra(epiVi(zB, phB), -1.5), b = entra(endoVd(zB - 4, phB), Math.min(1.5, 0.5 * tvdW(wRV(zB - 4, phB)))), m = lerp(a, b, 0.5);   // el extremo entra 1,5 mm, o la mitad del grosor si la pared es fina
       if (!corte || dentroCorte(phB)) anadir('Banda moderadora', tubo([a, [m[0], m[1], m[2] - 3], b], 3.2, 8), COLORES.papilar); }
     // Coronarias: nacen de los senos de Valsalva y corren por los surcos
     const sobreEpi = (z, ph, extra) => {
@@ -756,7 +777,14 @@ export function baseGeometrica(estado) {
   const V = vvd * 1000;
   const A = C0 >= V ? 1 : Math.max(1, (-C1 + Math.sqrt(C1 * C1 - 4 * C2 * (C0 - V))) / (2 * C2));
   // pared libre del VD: más fina al dilatarse; mioVd la engrosa (hipertrofia del VD por sobrecarga de presión, Atlas · 14)
-  const tVd = REF.paredVd * Math.pow(REF.vVd / Math.max(40, vvd), 0.33) * (estado.mioVd ?? 1);
+  // B4: engrosa en sístole al activarse el VD (estado.eVd). La parte crónica (dilatación, mioVd) sigue al volumen
+  // telediastólico del latido; la sistólica, a la activación, y conserva el volumen de la pared: grosor × área constante, con el
+  // área de la pared libre ∝ volumen^EXP_AREA_VD (ilustrativo, se comprueba en las pruebas). Si la cavidad está por debajo de la mitad
+  // de su telediástole sin activación (estados extremos), la pared también está gruesa: el miocardio no cambia de volumen. Grosor sistólico del VD: hueco
+  // (la fuente da 1-5 mm en diástole, Lang 2015 Tabla 8, p. 20, y no dice cuánto engrosa). Sin estado.vvdTd no engrosa.
+  const vvdCro = Math.max(40, estado.vvdTd ?? vvd);
+  const engrosaVd = estado.vvdTd ? 1 + Math.max(paso(0.05, 0.5, estado.eVd ?? 0), paso(0.45, 0.75, 1 - vvd / estado.vvdTd)) * (clamp(Math.pow(estado.vvdTd / Math.max(vvd, 0.3 * estado.vvdTd), EXP_AREA_VD), 1, 1.8) - 1) : 1;
+  const tVd = REF.paredVd * Math.pow(REF.vVd / vvdCro, 0.33) * (estado.mioVd ?? 1) * engrosaVd;
   const tvdW = (w) => tVd * paso(0, 8, w);
   const wRV = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
   const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };

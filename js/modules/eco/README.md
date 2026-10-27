@@ -285,6 +285,18 @@ curva y la FE a la que el giro se anula, 0,24, son **ilustrativas**: la fuente d
 por separado (Mor-Avi solo da la neta); el retraso base-ápex no se modela. Pruebas: el `todo` de B3 pasó a prueba (la torsión no
 sube con el VI vacío), destorsión 50-70 % y rango normal, en `paciente-posible.test.mjs`.
 
+**Papilares anclados y pared libre del VD que engruesa (B4, eco-mega parada 2, octubre 2026).** Los dos papilares del VI
+(anterolateral y posteromedial) nacen de la pared del VI de cada instante, siguen pegados a ella hasta el 85 % de su altura y solo
+despega la punta, que apunta a las valvas; antes asomaban a 2-3 mm de la pared en el eje corto. En sístole se acortan y engruesan con la
+activación del VI (`estado.eVi`, la de la torsión): largo telesistólico / telediastólico **0,82 con eVi = 1** (rango 0,75-0,9,
+fisiología general, ilustrativo) y radio ÷ √(largo medido del trazado), así que largo × radio² se conserva (±1 % en los 8 escenarios).
+Pared libre del VD: el término crónico (dilatación, `mioVd`) sigue al volumen telediastólico del latido; el sistólico sigue a
+`estado.eVd` (nuevo en `estadoGeo`, y vigilado por la mezcla de `formas.mjs`) y conserva el volumen de la pared con el área ∝
+V^`EXP_AREA_VD` (0,62, ilustrativo): 4,0 → 6,0 mm en el normal. **Grosor sistólico del VD: hueco** (Lang 2015, Tabla 8, p. 20, da
+1-5 mm en diástole y no dice cuánto engruesa). Con 3 de 8 escenarios (hemorragia, derrame, vasoplejia) el volumen de la pared varía 6-9 %:
+la prueba exige ±3 % solo en el normal. Pruebas en `paciente-posible.test.mjs` (marca B4). **Pendiente, a propósito**: el plano
+`psaxPm` fija su altura al largo del VI de cada instante y no al del telediástole, y en sístole corta más cerca de la punta del papilar.
+
 arranque de la descendente (`vias.ao` termina en el arco).
 
 ## En la app

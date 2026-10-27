@@ -269,3 +269,70 @@ test('Normal: la banda moderadora va del tabique a la pared libre del VD (sus ex
   const z = -0.64 * g.Lvd, f = 3.2, septo = g.rEpiVi(z, f), libre = g.rEpiVi(z, f) + g.wRV(z, f);
   assert.ok(rMin <= septo + 1 && rMax >= libre - 6, `la banda va de ρ = ${fmt(rMin)} a ${fmt(rMax)} mm; la cavidad, de ${fmt(septo)} a ${fmt(libre)} mm`);
 });
+
+// ---- Papilares anclados que se acortan y pared libre del VD que engruesa (B4) ---------------------------------------------
+// Largo telesistólico / telediastólico del papilar 0,75-0,9 y volumen constante: fisiología general (ilustrativo). Grosor de la
+// pared libre del VD en diástole: 1-5 mm (Lang 2015, Tabla 8, p. 20). Grosor sistólico del VD: hueco (la fuente no lo da).
+const NOMBRES_PAP = ['Papilar anterolateral', 'Papilar posteromedial'], ANILLO = 11;     // 10 segmentos + 1 por anillo del tubo
+function anillos(p) {                 // centros y radios de los anillos del tubo
+  const n = p.pos.length / 3 / ANILLO, out = [];
+  for (let i = 0; i < n; i++) { const c = [0, 0, 0]; for (let j = 0; j < ANILLO; j++) for (let k = 0; k < 3; k++) c[k] += p.pos[(i * ANILLO + j) * 3 + k] / ANILLO;
+    let r = 0; for (let j = 0; j < ANILLO; j++) r += Math.hypot(p.pos[(i * ANILLO + j) * 3] - c[0], p.pos[(i * ANILLO + j) * 3 + 1] - c[1], p.pos[(i * ANILLO + j) * 3 + 2] - c[2]) / ANILLO;
+    out.push({ c, r }); }
+  return out;
+}
+const largoPap = (an) => an.slice(1).reduce((s, a, i) => s + Math.hypot(a.c[0] - an[i].c[0], a.c[1] - an[i].c[1], a.c[2] - an[i].c[2]), 0);
+const instantes = (m) => { const o = m.onda, td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a)); return { td, ts, ex: extraDeMotor(m) }; };
+
+test('papilares: nacen de la pared y siguen pegados a ella en su mitad inferior, en todo el latido y en todos los escenarios (B4)', () => {
+  for (const k of Object.keys(ESCENARIOS)) {
+    const m = correr(k), o = m.onda, ex = extraDeMotor(m);
+    for (let i = 0; i < o.length; i += Math.floor(o.length / 12)) {
+      const c = construirCorazon(estadoGeo(o[i], ex), { detalle: true }), endo = c.partes.find(p => p.nombre === 'VI endocardio').pos;
+      for (const nom of NOMBRES_PAP) {
+        const p = c.partes.find(q => q.nombre === nom), an = anillos(p);
+        let peor = 0;
+        for (let a = 0; a < Math.floor(an.length * 0.55); a++) {          // de la base hasta la mitad del cuerpo
+          let mn = Infinity;
+          for (let j = 0; j < ANILLO; j++) { const q = (a * ANILLO + j) * 3;
+            for (let e = 0; e < endo.length; e += 3) mn = Math.min(mn, Math.hypot(p.pos[q] - endo[e], p.pos[q + 1] - endo[e + 1], p.pos[q + 2] - endo[e + 2])); }
+          peor = Math.max(peor, mn);
+        }
+        assert.ok(peor <= 3, `${k}, muestra ${i}: ${nom} a ${fmt(peor)} mm de la pared`);
+      }
+    }
+  }
+});
+
+test('papilares: se acortan en sístole a 0,75-0,9 de su largo de diástole y engruesan sin perder volumen (±3 %) (B4)', () => {
+  for (const k of Object.keys(ESCENARIOS)) {
+    const m = correr(k), { td, ts, ex } = instantes(m);
+    const dato = (s, nom) => { const an = anillos(construirCorazon(estadoGeo(s, ex), { detalle: true }).partes.find(p => p.nombre === nom)); return { L: largoPap(an), r: an[0].r }; };
+    for (const nom of NOMBRES_PAP) {
+      const d = dato(td, nom), s = dato(ts, nom), razon = s.L / d.L;
+      assert.ok(razon >= 0.75 && razon <= 0.9, `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);
+      assert.ok(s.r > d.r, `${k}, ${nom}: no engruesa`);
+      const vol = (s.L * s.r * s.r) / (d.L * d.r * d.r);
+      assert.ok(Math.abs(vol - 1) <= 0.03, `${k}, ${nom}: volumen ×${fmt(vol)}`);
+    }
+  }
+});
+
+// Volumen de la pared libre del VD = grosor × área, en la media luna (antes de mover la malla)
+function volPared(est) {
+  const g = baseGeometrica(est); let v = 0; const nz = 30, nf = 40, span = REF.phiB - REF.phiA;
+  for (let i = 0; i < nz; i++) { const z = -g.Lvd * (i + 0.5) / nz;
+    for (let j = 0; j < nf; j++) { const f = REF.phiA + span * (j + 0.5) / nf, w = g.wRV(z, f); if (w <= 0.5) continue;
+      v += g.tvdW(w) * (g.rEpiVi(z, f) + w) * (span / nf) * (g.Lvd / nz); } }
+  return v;
+}
+test('pared libre del VD: 1-5 mm en diástole, engruesa en sístole y conserva su volumen (±3 %) en el normal (B4)', () => {
+  for (const k of Object.keys(ESCENARIOS)) {
+    const m = correr(k), { td, ts, ex } = instantes(m), gD = baseGeometrica(estadoGeo(td, ex)), gS = baseGeometrica(estadoGeo(ts, ex));
+    const tD = gD.tvdW(99), tS = gS.tvdW(99);
+    assert.ok(tD >= 1 && tD <= 5, `${k}: pared del VD ${fmt(tD)} mm en diástole (Lang p. 20: 1-5 mm)`);
+    assert.ok(tS > tD, `${k}: la pared del VD no engruesa (${fmt(tD)} → ${fmt(tS)} mm)`);
+  }
+  const m = correr('normal'), { td, ts, ex } = instantes(m), razon = volPared(estadoGeo(ts, ex)) / volPared(estadoGeo(td, ex));
+  assert.ok(Math.abs(razon - 1) <= 0.03, `volumen de la pared libre ×${fmt(razon)} entre diástole y sístole`);
+});
