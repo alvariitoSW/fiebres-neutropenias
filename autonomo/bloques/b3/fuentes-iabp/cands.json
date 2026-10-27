@@ -1,0 +1,65 @@
+[
+ {
+  "key": "PMID:39132456",
+  "verdict": "relevant",
+  "finding": "Inflado precoz: la válvula aórtica se cierra antes de tiempo, sube la poscarga, queda más volumen telesistólico, baja el GC; en la curva, el aumento diastólico cae antes de la muesca dicrótica y pierde la «V»",
+  "passage": "Early inflation will cause the IABP to inflate before the AV has closed. This has the potential to cause the AV to close prematurely, because of increased afterload, leading to impaired LV emptying and possibly aortic regurgitation. Incomplete LV emptying will lead to an increase in LV end-diastolic volume, LVEDP, and pulmonary capillary wedge pressure, which will increase myocardial oxygen demand. Early inflation will lead to diastolic augmentation occurring prior to the dicrotic notch with loss of the desired “V” shape. The diastolic augmentation may encroach onto the unassisted systolic peak to such a degree that the 2 peaks become difficult to differentiate.",
+  "passage_location": "Sección Early inflation",
+  "design_n": "Revisión narrativa (JSCAI 2024)",
+  "source_type": "secondary"
+ },
+ {
+  "key": "PMID:39132456",
+  "verdict": "relevant",
+  "finding": "Inflado tardío: aumento diastólico subóptimo con perfusión coronaria inadecuada; en la curva, el inflado ocurre bien después de la muesca dicrótica y se pierde la «V»",
+  "passage": "Late inflation of the IABP occurs well after closure of the AV. This has the potential to cause inadequate perfusion of the coronary arteries due to suboptimal diastolic augmentation. The arterial waveform will show IABP inflation occurring well after the dicrotic notch, again resulting in loss of the optimal V shape.",
+  "passage_location": "Sección Late inflation",
+  "design_n": "Revisión narrativa (JSCAI 2024)",
+  "source_type": "secondary"
+ },
+ {
+  "key": "PMID:39132456",
+  "verdict": "relevant",
+  "finding": "Desinflado precoz: menor reducción de poscarga y de demanda de O2; posible flujo coronario/carotídeo retrógrado; en la curva, caída brusca de presión justo tras el pico de aumento diastólico y PAS asistida >= no asistida",
+  "passage": "Early deflation of IABP during the diastolic phase ends before isovolumetric contraction occurs. This decreases the efficacy of the IABP to reduce afterload, reducing the boost in CPP and obviating the potential reduction in myocardial oxygen demand. Early deflation may lead to retrograde coronary and carotid blood flow due to the vacuum-like effect in mid-diastole. The arterial waveform will show a sharp drop in pressure soon after the peak of diastolic augmentation. The assisted SBP may be equal to or higher than the unassisted SBP and the assisted EDBP may be equal to or less than the unassisted EDBP.",
+  "passage_location": "Sección Early deflation",
+  "design_n": "Revisión narrativa (JSCAI 2024)",
+  "source_type": "secondary"
+ },
+ {
+  "key": "PMID:39132456",
+  "verdict": "relevant",
+  "finding": "Desinflado tardío: balón aún inflado tras abrirse la válvula; aumenta la poscarga, prolonga la contracción isovolumétrica y la demanda de O2; en la curva, PTD asistida >= no asistida y pico diastólico ensanchado",
+  "passage": "Deflation should end near the end of diastole, during isovolumetric contraction; if IABP deflation is prolonged, it may still be in the process of deflating after the AV has opened. In this scenario, rather than reducing afterload, the resistance from a still-inflated balloon during systole will increase afterload, interfering with LV ejection, and prolonging isovolumetric contraction. These effects will increase myocardial oxygen demand. The characteristic arterial waveform of late deflation will show an assisted end-diastolic pressure that is equal to or greater than the unassisted end-diastolic pressure (rather than appropriately decreased) and a widened augmented diastolic peak.",
+  "passage_location": "Sección Late deflation",
+  "design_n": "Revisión narrativa (JSCAI 2024)",
+  "source_type": "secondary"
+ },
+ {
+  "key": "PMID:36263076",
+  "verdict": "relevant",
+  "finding": "Resumen de los cuatro errores: inflado precoz o desinflado tardío aumentan poscarga y demanda de O2; inflado tardío o desinflado precoz no aumentan lo suficiente la perfusión coronaria (sin descripción de la curva)",
+  "passage": "Early inflation or late deflation leads to increased afterload and increased myocardial oxygen demand. Late inflation or early deflation does not sufficiently increase coronary perfusion.",
+  "passage_location": "Texto completo (sección de IABP)",
+  "design_n": "Revisión narrativa (Int J Heart Fail 2020)",
+  "source_type": "secondary"
+ },
+ {
+  "key": "PMID:36682892",
+  "verdict": "relevant",
+  "finding": "Matiz sobre el desinflado tardío: retrasarlo al inicio del QRS aumentó el flujo cerebral un 20 % y el GC un 15 % sin prolongar la contracción isovolumétrica (la «sensación de vacío» del desinflado causa inversión de flujo carotídeo)",
+  "passage": "Delaying IABP deflation trigger to the beginning of QRS effectively increased the cerebral blood flow by 20%, mostly by reducing the reverse component flow caused by the diastolic balloon deflation. Extending the deflation to the early systole was safe and favourably impacted on cardiac mechanics, increasing CO by 15% without prolonging LV isovolumetric contraction and ejection phases.",
+  "passage_location": "Abstract",
+  "design_n": "Estudio clínico hemodinámico",
+  "source_type": "primary"
+ },
+ {
+  "key": "PMID:21883317",
+  "verdict": "relevant",
+  "finding": "La curva de la consola llega con retraso y deformada (inflado ~74 ms y desinflado ~71 ms frente a la raíz aórtica; ~170 ms frente a la radial; 11 pacientes)",
+  "passage": "Delay and distortion of the arterial waveform was consistently found when measured through the IABP catheter lumen.",
+  "passage_location": "abstract",
+  "design_n": "Estudio clínico, n=11",
+  "source_type": "primary"
+ }
+]
