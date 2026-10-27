@@ -566,8 +566,13 @@ export function construirCorazon(estado, opciones = {}) {
   const u3 = [Math.cos(U), Math.sin(U), 0], uP3 = [-Math.sin(U), Math.cos(U), 0];
   // Mitral: anterior (1/3 del anillo, 2/3 del área) y posterior; cierran en una "sonrisa" desplazada hacia atrás
   const enAnilloM = (x, y) => [mc[0] + aM * x * u3[0] + bM * y * uP3[0], mc[1] + aM * x * u3[1] + bM * y * uP3[1], 0];
+  // P5a · Tenting (IM funcional): con el VI dilatado los papilares se desplazan y tiran de ambos velos hacia el ápex, y la
+  // línea de coaptación queda por debajo del plano del anillo (Zoghbi 2017, pp. 320-321). Zoghbi no da cifras de tenting
+  // (p. 321): la profundidad máxima, TENTING_MM, es ilustrativa. estado.tenting (0-1) lo da extraDeMotor (formas.mjs)
+  const TENTING_MM = 8;   // mm bajo el anillo a tenting 1 (ilustrativo)
+  const tentM = clamp(estado.tenting ?? 0, 0, 1) * TENTING_MM * (1 - ap('mitral'));
   const coapM = (t) => { const s0 = 1 - t, P0 = [0.508, 0.79], P1 = [-1.2, 0], P2 = [0.508, -0.79];
-    return enAnilloM(s0 * s0 * P0[0] + 2 * s0 * t * P1[0] + t * t * P2[0], s0 * s0 * P0[1] + 2 * s0 * t * P1[1] + t * t * P2[1]); };
+    const q = enAnilloM(s0 * s0 * P0[0] + 2 * s0 * t * P1[0] + t * t * P2[0], s0 * s0 * P0[1] + 2 * s0 * t * P1[1] + t * t * P2[1]); return [q[0], q[1], q[2] - tentM]; };
   const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: 1.2 };
   // C1 · Festones (Carpentier, Hahn 2013 p. 942-943): uu = 0 es la comisura posteromedial (ψ = 1) y uu = 1 la anterolateral
   // (ψ = −1), en las dos valvas, que cierran en la misma línea con el mismo uu: así A1-A3 quedan frente a P1-P3. Posterior:

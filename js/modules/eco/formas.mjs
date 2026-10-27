@@ -34,7 +34,8 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // mioVi: masa del VI de la forma de enfermedad elegida (escenarios.mjs; 1 = normal). mioVd: grosor de la pared libre del VD
 // (hipertrofia del VD, Atlas · 14; 1 = normal).
 // El derrame es el que ya hay en el saco (motor.s.liquidoPeri: entra a su ritmo), no el pedido (motor.p.liquidoPeri)
-export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
+export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, tenting: Math.min(1, (motor.p.eroaMitral ?? 0) / 0.35), eroaMitral: motor.p.eroaMitral ?? 0, vRegMitral: motor.ultimo?.vReg ?? 0,
+  vaiMax: motor.onda?.length ? Math.max(...motor.onda.map(m => m.vai)) : undefined, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
 
 // Cuánto se aplana el tabique (0-1) según el gradiente de presión transeptal VI−VD de este instante. Fuente de lo
 // que se ve (que el tabique se aplana cuando el VD se sobrecarga): Merino, Fig. 18.2 (septo aplanado en diástole) y

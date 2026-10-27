@@ -137,3 +137,23 @@ test('HP crónica: paciente posible desde el defecto hasta el tope (PA, FC, PVC 
   }
   assert.ok(pared[0] < 5 && pared[2] > 7, `pared ${pared.map(x => x.toFixed(1))}: de normal a moderada (>7 mm)`);
 });
+
+// P5a · AI dilatada medible (Lang 2015 pp. 25, 28: normal ≤34 mL/m²) e IM funcional (Zoghbi 2017 Tabla 8, p. 332).
+// Par: normal frente a dilatada. La coaptación se mide en la geometría: z de la línea de cierre de la mitral frente al anillo (z = 0)
+test('AI dilatada medible e IM funcional: normal frente a dilatada', () => {
+  const dil = correr('dilatada'), md = medidas(dil), geo = (m) => construirCorazon({ ...estadoGeo(td(m), extraDeMotor(m)), mitral: 0 });
+  assert.ok(md0.volAI < 34, `AI normal ${md0.volAI.toFixed(1)} mL/m² (Lang: ≤34)`);
+  assert.equal(md0.eroa, 0, 'el normal no regurgita');
+  assert.ok(md.volAI > 34, `AI dilatada ${md.volAI.toFixed(1)} mL/m² (Lang: >34)`);
+  assert.ok(md.eroa >= 0.2 && md.eroa < 0.4, `EROA ${md.eroa} cm² (Zoghbi: moderada 0,20-0,39)`);
+  assert.ok(md.volReg >= 30 && md.volReg < 60, `volumen regurgitante ${md.volReg.toFixed(0)} mL (Zoghbi: moderada 30-59)`);
+  assert.equal(md0.volReg, 0);
+  // paciente posible (defecto): PA, FC, PVC, PCP, GC
+  const u = dil.ultimo;
+  assert.ok(u.pas > 80 && u.pas < 140 && u.pam > 60 && u.fc > 55 && u.fc < 110 && u.pvc > 2 && u.pvc < 15 && u.pcp > 15 && u.pcp < 35 && u.gc > 3 && u.gc < 6, `constantes ${JSON.stringify([u.pas, u.pam, u.fc, u.pvc, u.pcp, u.gc])}`);
+  // tenting: el borde libre de las valvas cerradas (línea de coaptación) queda más abajo, hacia el ápex (z < 0), que en el normal
+  // (el anillo está en z = 0); la diferencia es la profundidad de tenting ilustrativa (8 mm a tenting 1)
+  const zCoap = (m) => { const v = geo(m).partes.find(p => p.nombre === 'Mitral posterior'); let z = 0; for (let i = 2; i < v.pos.length; i += 3) z = Math.min(z, v.pos[i]); return z; };
+  const z0 = zCoap(normal), z1 = zCoap(dil);
+  assert.ok(z1 < z0 - 5, `coaptación normal z ${z0.toFixed(1)} mm, dilatada z ${z1.toFixed(1)} mm (más abajo = hacia el ápex)`);
+});
