@@ -21,7 +21,7 @@ import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMot
 import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
+import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -527,13 +527,13 @@ export function montarSimulador(raiz, opc = {}) {
   let colorOn = false, nyq = 60, gate = null, ultimoTD = null, fuenteD = null, medD = null, latidoD = -1, frameD = 0, angD = null;
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
-  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad });
+  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral });
   const areasD = () => areasAnillo(refGeoTd.geo);
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
-    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
+    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
     // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
-    vci: { vista: 'scVci', vaso: 'vci' }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
+    vci: { vista: 'scVci', vaso: 'vci' }, vpulm: { vista: 'a4c', venaPulm: true }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
   // un punto de un vaso del abdomen dentro del corte: en la suprahepática, el más alejado de la VCI de los que
   // quedan a menos de 2,5 mm del plano (lejos de la confluencia, donde la muestra cogería la VCI)
@@ -564,8 +564,30 @@ export function montarSimulador(raiz, opc = {}) {
     if (!prepararPlanoEco()) return;
     let p;
     if (pr.vaso) p = puntoVaso(pr.vaso);
-    else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); p = sumV(j.c, escV(j.dir, pr.off)); }
+    else if (pr.venaPulm) {   // las venas pulmonares no caen en el corte A4C de serie: se inclina la sonda (como en la eco real) hasta cortar una
+      ponerSonda(SONDA_CERO); if (!prepararPlanoEco()) return;
+      const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), P0 = planoBase; let mejor = null;
+      for (let incl = -15; incl <= 15; incl++) { const Pl = planoLibre(P0, { ...SONDA_CERO, incl });
+        for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 1; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
+          const q = [0, 1, 2].map(c => vp.pts[i][c] + f * (vp.pts[i + 1][c] - vp.pts[i][c])), [u, v, z] = enPlano(Pl, q);
+          if (Math.abs(z) > 1.5 || v > Pl.prof - 5 || v < 20 || Math.abs(Math.atan2(u, v)) > Pl.mitad - 0.05) continue;
+          const g3 = [0, 1, 2].map(c => Pl.O[c] + Pl.r[c] * u + Pl.d[c] * v), haz = direccionHaz(Pl, Math.atan2(u, v));
+          const fu = fuenteEnMuestra(puntosMuestra(Pl, g3, haz), haz, F);
+          if (fu && fu.vasoTipo === 'pulmonar' && (!mejor || Math.abs(fu.factor) > mejor.fac)) mejor = { incl, fac: Math.abs(fu.factor) }; } }
+      if (!mejor) return;
+      ponerSonda({ incl: mejor.incl }); if (!prepararPlanoEco()) return;
+      let mp = null;   // dentro del corte ya inclinado: el punto de la vena que mejor la reconoce
+      for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 1; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
+        const q = [0, 1, 2].map(c => vp.pts[i][c] + f * (vp.pts[i + 1][c] - vp.pts[i][c])), [u, v, z] = enPlano(planoEco, q);
+        if (Math.abs(z) > 1.5 || v > planoEco.prof - 5 || v < 20 || Math.abs(Math.atan2(u, v)) > planoEco.mitad - 0.05) continue;
+        const g3 = [0, 1, 2].map(c => planoEco.O[c] + planoEco.r[c] * u + planoEco.d[c] * v), haz = direccionHaz(planoEco, Math.atan2(u, v));
+        const fu = fuenteEnMuestra(puntosMuestra(planoEco, g3, haz), haz, F);
+        if (fu && fu.vasoTipo === 'pulmonar' && (!mp || Math.abs(fu.factor) > mp.fac)) mp = { q, fac: Math.abs(fu.factor) }; }
+      if (!mp) return; p = mp.q;
+    }
+    else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
+    if (k === 'regmitral') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -606,6 +628,15 @@ export function montarSimulador(raiz, opc = {}) {
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
       return;
     }
+    if (medD.tipo === 'regurgitacion') {
+      const vOri = Math.max(...motor.onda.map(x => velRegMitral(x, motor.p.eroaMitral))), dp = 4 * Math.pow(vOri / 100, 2), vc = 2 * Math.sqrt(motor.p.eroaMitral / Math.PI);
+      poner('warn', cab + `Chorro sistólico hacia la AI (se aleja de la sonda): en la muestra, pico ${fx(medD.pico)} cm/s · ITV ${fx(medD.itv, 1)} cm`
+        + `<br>En el orificio el chorro llega a ${fx(vOri)} cm/s (ΔP VI−AI ≈ 4v² = ${fx(dp)} mmHg).`
+        + `<br><b>Vena contracta ${fx(vc, 2)} cm</b> (calculada del EROA como un orificio redondo, no medida en la imagen; Zoghbi: &lt;0,3 cm leve, ≥0,7 cm grave; ${vc < 0.3 ? 'leve' : vc >= 0.7 ? 'grave' : 'intermedia: los valores intermedios se solapan entre grados, confírmalo con otros métodos'}). Tras ella el chorro se abre en cono y arrastra sangre: ocupa más AI cuanto más EROA, pero el área del chorro no sirve sola para graduar. En la IM secundaria el orificio es elíptico y la vena contracta en 2D la subestima.`
+        + ` <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=26" target="_blank" rel="noopener">Zoghbi p. 328</a> · <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=6" target="_blank" rel="noopener">p. 308 (área del chorro)</a>`
+        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.</span>`);
+      return;
+    }
     if (medD.tipo === 'eyeccion') {
       const u = motor.ultimo, aCm2 = areasD()[fuenteD.n] / 100, gc = medD.itv * aCm2 * u.fc / 1000;
       if (fuenteD.n === 'aortica' && fuenteD.tubo) {
@@ -618,6 +649,9 @@ export function montarSimulador(raiz, opc = {}) {
           + `<br><span class="cv-muted">El pico es del modelo: su eyección es más afilada de lo normal (pendiente de calibrar); el ITV no depende de eso.</span>`);
       } else poner('', cab + `ITV ${fx(medD.itv, 1)} cm · pico ${fx(medD.pico)} cm/s · GC ≈ ${fx(gc, 1)} L/min<br><span class="cv-muted">${fuenteD.tubo ? 'En el tracto de salida.' : 'Por encima de la válvula: es la velocidad del chorro, no la del tracto de salida.'} Ilustrativo.</span>`);
       return;
+    }
+    if (medD.tipo === 'pulmonar') {
+      poner('', cab + `S ${fx(medD.S)} · D ${fx(medD.D)} cm/s hacia la AI · <b>S/D ${fx(medD.sd, 2)}</b> · Ar ${fx(medD.Ar)} cm/s hacia la vena<br><span class="cv-muted">S: relajación de la AI y sístole (el plano AV que baja); D: llenado rápido; Ar: la AI que se contrae empuja sangre hacia la vena. Salen del flujo de la AI del motor. Ilustrativo.</span>`); return;
     }
     if (medD.tipo === 'hepatica') {
       enl.innerHTML = enlace('Onda de la vena hepática (VExUS)', 'vexus-fisiologia-doppler', '#vexus-onda-hepatica', 'panel-vexus-tabs', 'uciPapers', 'vexus');
@@ -912,9 +946,9 @@ export function montarSimulador(raiz, opc = {}) {
   const chipEsc = ([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`;
   $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => !e.forma).map(chipEsc).join('');
   $('#cv-enfermedad').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => e.forma).map(chipEsc).join('');
-  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = shock a fondo. Se aplica al soltar
+  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = el fin de cada escenario (gravedad.fin). Se aplica al soltar
   let gravedad = null;
-  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, el shock a fondo.`;
+  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, ${ESCENARIOS[k].gravedad.fin}.`;
   function elegirEscenario(k, g) {
     if (!ESCENARIOS[k]) return;
     const mando = ESCENARIOS[k].gravedad;

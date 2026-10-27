@@ -2690,3 +2690,7 @@ criterio ilustrativo; aviso ámbar si el ECG siguió alterado tras sus 30-60 min
 (umbral de hiperpotasemia de la ficha, no un objetivo de tratamiento; aviso de límite de hipopotasemia si acaba en
 3,5) y «salida iniciada». Decisión: en la vuelta 2 el ✗ por tiempo sin protección suspendía a quien trataba bien
 (la ficha no dice repetir el calcio), y se cambió por el aviso ámbar. Prueba: `autonomo/pruebas/potasio-prioritario.mjs`.
+
+### Ácido-base vivo · aviso de tope sin pH imposible (27/10/2026, `topes-acidobase`)
+El juez de topes leyó «pH 6,36» tras «Bicarbonato IV» (HCO₃⁻ 5) y PaCO₂ 90. El mando ya se detenía; el texto del aviso
+escribía la cifra imposible. Ahora dice el límite cruzado («el pH bajaría de 6,80»). Parte `autonomo/partes/2026-10-27-topes-acidobase.md`.

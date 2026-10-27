@@ -56,7 +56,7 @@ export const ESCENARIO_TIPO = {
     fallo: 'cardiogénico',
     derrame: 'obstructivo (taponamiento)',
     vasoplejia: 'vasodilatador',
-    hipertrofia: null, dilatada: null, tep: null,
+    hipertrofia: null, dilatada: null, tep: null, hpcronica: null,
 };
 
 // Formas de enfermedad: de qué trata cada una (la cotejan, cifra a cifra, los criterios de escenarios.mjs)
@@ -64,4 +64,5 @@ export const FORMA_NOTA = {
     hipertrofia: 'Hipertrofia concéntrica del VI por sobrecarga de presión (HTA): pared gruesa y ventrículo rígido que se llena mal — insuficiencia cardíaca con FE preservada. Forma grave: PCP ~24 mmHg, PAPs ~37 y FE del VD ~31 %, con fallo derecho (cifras del modelo, ilustrativas).',
     dilatada: 'Miocardiopatía dilatada: contractilidad baja, VI grande con pared normal o fina y FE reducida. Forma grave: PCP ~23 mmHg, PAPs ~38 y FE del VD ~34 %, con fallo derecho (cifras del modelo, ilustrativas).',
     tep: 'TEP de riesgo intermedio: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo), todavía sin hipotensión. Criterios de Lang 2015 del VD que cumple: VD basal >41 mm (p. 17), FAC <35 %, FE del VD <45 % y TAPSE <17 mm (p. 23); debajo, las cifras de este VD, medidas en vivo.',
+    hpcronica: 'Hipertensión pulmonar crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta. A diferencia del TEP agudo, su pared libre es gruesa en telediástole (>5 mm; Mukherjee 2025, p. 145), y esa pared hipertrófica sostiene presiones pulmonares altas. El tabique se aplana en telesístole (índice de excentricidad >1: sobrecarga de presión). Hacia la gravedad máxima el VD se dilata y falla (cifras del modelo, ilustrativas).',
 };

@@ -7,6 +7,7 @@ import { crearMotor } from '../motor.mjs';
 import { baseGeometrica, construirCorazon } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor, aplanamientoSeptal, crearTablaFormas, instantesClave } from '../formas.mjs';
 import { medidasCorazon, medirVd } from '../ecografia.mjs';
+import { medirVd as medirVdAtlas } from '../atlas/vd.mjs';
 import { ESCENARIOS, CRITERIOS_FORMA, evaluarForma, ASENTAR_FORMA } from '../escenarios.mjs';
 
 const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); if (k !== 'normal') m.correr(ASENTAR_FORMA); return m; };
@@ -95,7 +96,64 @@ test('TEP: cumple los criterios de Lang del VD (basal, FAC, FE, TAPSE) y la rela
   }
 });
 
-test('TEP: tabique aplanado también en telesístole (sobrecarga de presión, Atlas 14)', { todo: 'F4 (parada 3): hoy el tabique se aplana solo en diástole; en sístole se curva' }, () => {
-  const m = correr('tep'), u = m.ultimo, sis = m.onda.filter(s => s.t > u.tAoAbre + 0.03 && s.t < u.tS2 - 0.03);
-  assert.ok(sis.every(s => aplanamientoSeptal(s) > 0.5), 'telesístole sin aplanar');
+// Índice de excentricidad del VI (IE = D2/D1 en el eje corto, D2 paralelo al tabique). Mukherjee 2025 (Tabla 2 y texto):
+// >1 anormal, y en sístole indica sobrecarga de presión; su cuadro de grupos usa >1,1 (las dos cifras se comprueban).
+// Ryan 1985 (Atlas · 14): 1,44 ± 0,16 en telesístole en la sobrecarga de presión. Telesístole = fin de la relajación
+// isovolumétrica del VI (VI en su volumen mínimo; atlas/vd.mjs, muestrasClave).
+test('índice de excentricidad: normal ≈ 1 en telediástole y telesístole; TEP > 1,1 en telesístole (Mukherjee 2025, Ryan 1985)', () => {
+  const n = medirVdAtlas(normal), t = medirVdAtlas(correr('tep'));
+  assert.ok(n.eiD <= 1.1 && n.eiS <= 1.1, `normal: TD ${n.eiD.toFixed(2)}, TS ${n.eiS.toFixed(2)}`);
+  assert.ok(t.eiS > 1.1, `TEP, telesístole: ${t.eiS.toFixed(2)} (> 1 Mukherjee; > 1,1 su cuadro de grupos)`);
+  assert.ok(t.eiS >= t.eiD - 0.01, `TEP: telesístole ${t.eiS.toFixed(2)} no menor que telediástole ${t.eiD.toFixed(2)}`);
+  assert.ok(Math.abs(t.eiS - 1.44) <= 0.16 + 0.1, `TEP: ${t.eiS.toFixed(2)} cerca de Ryan 1985 (1,44 ± 0,16)`);
+});
+
+// P6 · HP crónica frente a TEP agudo. Pared libre del VD (RVWT) en telediástole: normal <5 mm, leve 5-7, moderada >7-9, grave >9
+// (Mukherjee 2025, Tabla 5, p. 145; Lang 2015, Tabla 8, p. 20: 1-5 mm). La sobrecarga crónica engruesa la pared; la aguda, no.
+// IE en telesístole >1 = sobrecarga de presión (Mukherjee p. 149-150); PAPs normal ≤34 (p. 145).
+test('HP crónica frente a TEP agudo: pared del VD gruesa en la crónica y fina en la aguda; presión pulmonar mayor; tabique aplanado en telesístole', () => {
+  const hp = correr('hpcronica'), tep = correr('tep');
+  const mh = medidas(hp), mt = medidas(tep), ih = medirVdAtlas(hp), it = medirVdAtlas(tep);
+  assert.ok(md0.paredVd < 5, `normal: pared del VD ${md0.paredVd.toFixed(1)} mm (<5)`);
+  assert.ok(mh.paredVd > 5, `HP crónica: pared del VD ${mh.paredVd.toFixed(1)} mm (>5 mm, Mukherjee p. 145)`);
+  assert.ok(mt.paredVd <= 5, `TEP agudo: pared del VD ${mt.paredVd.toFixed(1)} mm (≤5: pared fina)`);
+  assert.ok(ih.eiS > 1.1, `HP crónica: IE en telesístole ${ih.eiS.toFixed(2)} (>1 sobrecarga de presión)`);
+  assert.ok(hp.ultimo.paps > tep.ultimo.paps + 10 && hp.ultimo.paps > 34, `PAPs ${hp.ultimo.paps.toFixed(0)} (HP) frente a ${tep.ultimo.paps.toFixed(0)} (TEP); normal ≤34`);
+  assert.ok(it.eiS > 1.1, 'TEP: también aplana el tabique, así que no es el IE lo que los distingue');
+});
+
+test('HP crónica: paciente posible desde el defecto hasta el tope (PA, FC, PVC y GC razonables; la pared deja de crecer al dilatarse el VD)', () => {
+  let pared = [];
+  for (const g of [0, 0.25, undefined, 0.8, 1]) {
+    const m = crearMotor(); m.correr(12); ESCENARIOS.hpcronica.aplicar(m, g); m.correr(ASENTAR_FORMA);
+    const u = m.ultimo, md = medidas(m), t = `g=${g}`;
+    for (const k of ['pam', 'fc', 'pvc', 'gc', 'paps', 'papd', 'edvD']) assert.ok(Number.isFinite(u[k]), `${t}: ${k}`);
+    assert.ok(u.pam >= 60 && u.pam <= 100, `${t}: PAM ${u.pam.toFixed(0)}`);
+    assert.ok(u.fc >= 55 && u.fc <= 110, `${t}: FC ${u.fc.toFixed(0)}`);
+    assert.ok(u.pvc >= 2 && u.pvc <= 16, `${t}: PVC ${u.pvc.toFixed(1)}`);
+    assert.ok(u.gc >= 2.5 && u.gc <= 6, `${t}: GC ${u.gc.toFixed(1)}`);
+    assert.ok(u.paps <= 110, `${t}: PAPs ${u.paps.toFixed(0)}`);
+    pared.push(md.paredVd);
+  }
+  assert.ok(pared[0] < 5 && pared[2] > 7, `pared ${pared.map(x => x.toFixed(1))}: de normal a moderada (>7 mm)`);
+});
+
+// P5a · AI dilatada medible (Lang 2015 pp. 25, 28: normal ≤34 mL/m²) e IM funcional (Zoghbi 2017 Tabla 8, p. 332).
+// Par: normal frente a dilatada. La coaptación se mide en la geometría: z de la línea de cierre de la mitral frente al anillo (z = 0)
+test('AI dilatada medible e IM funcional: normal frente a dilatada', () => {
+  const dil = correr('dilatada'), md = medidas(dil), geo = (m) => construirCorazon({ ...estadoGeo(td(m), extraDeMotor(m)), mitral: 0 });
+  assert.ok(md0.volAI < 34, `AI normal ${md0.volAI.toFixed(1)} mL/m² (Lang: ≤34)`);
+  assert.equal(md0.eroa, 0, 'el normal no regurgita');
+  assert.ok(md.volAI > 34, `AI dilatada ${md.volAI.toFixed(1)} mL/m² (Lang: >34)`);
+  assert.ok(md.eroa >= 0.2 && md.eroa < 0.4, `EROA ${md.eroa} cm² (Zoghbi: moderada 0,20-0,39)`);
+  assert.ok(md.volReg >= 30 && md.volReg < 60, `volumen regurgitante ${md.volReg.toFixed(0)} mL (Zoghbi: moderada 30-59)`);
+  assert.equal(md0.volReg, 0);
+  // paciente posible (defecto): PA, FC, PVC, PCP, GC
+  const u = dil.ultimo;
+  assert.ok(u.pas > 80 && u.pas < 140 && u.pam > 60 && u.fc > 55 && u.fc < 110 && u.pvc > 2 && u.pvc < 15 && u.pcp > 15 && u.pcp < 35 && u.gc > 3 && u.gc < 6, `constantes ${JSON.stringify([u.pas, u.pam, u.fc, u.pvc, u.pcp, u.gc])}`);
+  // tenting: el borde libre de las valvas cerradas (línea de coaptación) queda más abajo, hacia el ápex (z < 0), que en el normal
+  // (el anillo está en z = 0); la diferencia es la profundidad de tenting ilustrativa (8 mm a tenting 1)
+  const zCoap = (m) => { const v = geo(m).partes.find(p => p.nombre === 'Mitral posterior'); let z = 0; for (let i = 2; i < v.pos.length; i += 3) z = Math.min(z, v.pos[i]); return z; };
+  const z0 = zCoap(normal), z1 = zCoap(dil);
+  assert.ok(z1 < z0 - 5, `coaptación normal z ${z0.toFixed(1)} mm, dilatada z ${z1.toFixed(1)} mm (más abajo = hacia el ápex)`);
 });

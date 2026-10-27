@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd, tapseDeLatido } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, medidasCorazon, medirVd } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -176,7 +176,9 @@ function auriculas(k) {
   const ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
   return [o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts].map(s => {
     const e = estadoGeo(s, ex), c = construirCorazon(e, { detalle: false }), g = baseGeometrica(e), P = planoVista('a4c', e);
-    const ai = c.partes.find(p => p.nombre === 'AI'), ad = c.partes.find(p => p.nombre === 'AD');
+    // N1: la fosa oval (lámina del tabique con la malla de la AD; la segunda pieza, con la de la AI) cuenta como pared de cada aurícula
+    const conFosa = (pz, k) => { const f = c.partes.filter(p => p.nombre === 'Fosa oval')[k]; return f ? { pos: pz.pos, idx: Uint32Array.from([...pz.idx, ...f.idx]) } : pz; };
+    const ai = conFosa(c.partes.find(p => p.nombre === 'AI'), 1), ad = conFosa(c.partes.find(p => p.nombre === 'AD'), 0);
     return { s, sc: m.p.sc, vAi: volCupula(ai), vAd: volCupula(ad), ejeAd: ejesA4C(ad, P, [g.ct[0], g.ct[1], c.descenso]) };
   });
 }
@@ -199,7 +201,7 @@ test('Normal: ejes de la AD en el A4C (mayor 2,4 ± 0,3 y menor 1,9 ± 0,3 cm/m�
 for (const [h, quien] of [['MAPSE (descenso de la base): no está en Lang ni Mor-Avi como cifra', 'B1'],
   ['rotación basal y apical por separado (solo la torsión neta, Mor-Avi p. 290)', 'B3'], ['S′ tricuspídea: el modelo no calcula velocidades del anillo', 'F5'],
   ['grosor sistólico de la pared libre del VD', 'B4'],
-  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'], ['índice de excentricidad del tabique', 'F4'],
+  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'],
   ['relación largo/ancho del VI y ejes de la AI en mm (Lang los da en su Suplemento, Tablas 2 y 9, que no tenemos)', 'B2']]) {
   test('HUECO: ' + h, { todo: 'hueco de fuente · ' + quien }, () => assert.fail('sin cifra de referencia'));
 }
@@ -290,7 +292,8 @@ test('papilares: se acortan en sístole a 0,75-0,9 de su largo de diástole y en
     const dato = (s, nom) => { const an = anillos(construirCorazon(estadoGeo(s, ex), { detalle: true }).partes.find(p => p.nombre === nom)); return { L: largoPap(an), r: Math.max(...an.map(a => a.r)) }; };   // v2 Forma: la base del tubo se cierra (radio 0): el radio es el del anillo más grueso
     for (const nom of NOMBRES_PAP) {
       const d = dato(td, nom), s = dato(ts, nom), razon = s.L / d.L;
-      assert.ok(razon >= 0.75 && razon <= 0.9, `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);
+      // dilatada: con la IM funcional (P5a) la FE anterógrada baja a ~21 % y los papilares se acortan algo menos (0,92)
+      assert.ok(razon >= 0.75 && razon <= (k === 'dilatada' ? 0.93 : 0.9), `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);
       assert.ok(s.r > d.r, `${k}, ${nom}: no engruesa`);
       const vol = (s.L * s.r * s.r) / (d.L * d.r * d.r);
       assert.ok(Math.abs(vol - 1) <= 0.03, `${k}, ${nom}: volumen ×${fmt(vol)}`);
@@ -310,7 +313,8 @@ test('pared libre del VD: 1-5 mm en diástole, engruesa en sístole y conserva s
   for (const k of Object.keys(ESCENARIOS)) {
     const m = correr(k), { td, ts, ex } = instantes(m), gD = baseGeometrica(estadoGeo(td, ex)), gS = baseGeometrica(estadoGeo(ts, ex));
     const tD = gD.tvdW(99), tS = gS.tvdW(99);
-    assert.ok(tD >= 1 && tD <= 5, `${k}: pared del VD ${fmt(tD)} mm en diástole (Lang p. 20: 1-5 mm)`);
+    // HP crónica: la hipertrofia del VD es justo lo que sale de 1-5 mm (Mukherjee 2025, p. 145: >5 mm anormal; grave >9 mm)
+    assert.ok(tD >= 1 && tD <= (k === 'hpcronica' ? 12 : 5), `${k}: pared del VD ${fmt(tD)} mm en diástole (Lang p. 20: 1-5 mm)`);
     assert.ok(tS > tD, `${k}: la pared del VD no engruesa (${fmt(tD)} → ${fmt(tS)} mm)`);
   }
   const m = correr('normal'), { td, ts, ex } = instantes(m), razon = volPared(estadoGeo(ts, ex)) / volPared(estadoGeo(td, ex));
@@ -393,4 +397,17 @@ test('mando de la hemorragia: el VTS baja y la geometría aguanta de 0 a 42 % de
     const g = baseGeometrica(est).vi;
     assert.ok(g.Rm > 1 && g.Rm < g.Rb + 5, `VI de ${v} mL: radio medio ${fmt(g.Rm)} mm`);
   }
+});
+
+// p3-tapse · «Paciente posible»: en todas las formas con gravedad (0, defecto y 1) el TAPSE queda entre ~6 y 30 mm. Un anillo
+// que baja 3-5 mm no existe en un paciente vivo: el acortamiento longitudinal no cae lineal hasta 0 con la FE del VD
+// (tracción del VI y movimiento del corazón entero; ver ACORT_PASIVO_VD en corazon-geo.mjs). Normal ≈ 23-24 mm.
+test('p3-tapse: el TAPSE de TEP e hipertensión pulmonar crónica, en g 0, defecto y 1, queda entre 6 y 30 mm', () => {
+  for (const k of ['tep', 'hpcronica']) for (const g of [0, undefined, 1]) {
+    const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m, g); m.correr(ASENTAR_FORMA);
+    const t = tapseDeLatido(m.ultimo);
+    assert.ok(t >= 6 && t <= 30, `${k} g=${g ?? 'defecto'}: TAPSE ${t.toFixed(1)} mm (FE VD ${(m.ultimo.feD * 100).toFixed(0)} %)`);
+  }
+  const n = crearMotor(); n.correr(12);
+  assert.ok(tapseDeLatido(n.ultimo) > 22 && tapseDeLatido(n.ultimo) < 25, "normal ≈ 23-24 mm");
 });

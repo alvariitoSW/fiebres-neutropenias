@@ -12,6 +12,7 @@
 //   (home/index.js llama a abrir() a través de la API de Nefrología).
 import { cargarMotion, sinMovimiento } from '../../core/motion.js';
 import { pintarParticula, svgParticula, leyendaParticulas } from '../../core/particulas.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { nombreFicha } from '../../core/corkboard.js';
 import { rutaDePanel } from '../../core/search.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
@@ -1274,7 +1275,7 @@ function mandar(campo, v, base = E) {
   if (e.cl < 80 || e.cl > 120) return { error: 'No cabe: el Cl⁻ saldría de 80-120 mEq/L. Combinación no fisiológica.' };
   if (e.paco2 < 10 || e.paco2 > 90) return { error: 'La PaCO₂ del laboratorio va de 10 a 90 mmHg.' };
   const ph = r2(calcPH(e.paco2, e.hco3));
-  if (ph < 6.8 || ph > 7.8) return { error: `pH ${fmt(ph, 2)}: fuera de 6,80-7,80, no es un paciente posible. El mando se detiene.` };
+  if (ph < 6.8 || ph > 7.8) return { error: `No cabe: con PaCO₂ ${fmtA(e.paco2)} y HCO₃⁻ ${fmtA(e.hco3)}, el pH ${ph < 6.8 ? 'bajaría de 6,80' : 'subiría de 7,80'}. No es un paciente posible: el mando se detiene.` };   // sin escribir el pH imposible: el paciente nunca lo tiene
   return e;
 }
 let avisoT = null;
@@ -1444,11 +1445,7 @@ function subirAlEstudio() {
   if (modo === 'explorar') verFrase();
 }
 // La frase viva nunca queda bajo el dock: si su sitio natural (bajo el instrumento) cae detrás, la página sube lo justo.
-function verFrase() {
-  const f = $('#abv-frase'), d = $('#abv-dock'); if (!f.offsetParent || !d.offsetHeight) return;
-  const dy = f.getBoundingClientRect().bottom - (innerHeight - d.offsetHeight - 6);
-  if (dy > 0) window.scrollBy(0, dy);
-}
+const verFrase = () => verFraseComun($('#abv-frase'), { dock: $('#abv-dock'), techo: -1e9 });
 function dockEstudio(n, actual, marca, txt) {
   html('#abv-est-prog').innerHTML = Array.from({ length: n }, (_, i) => `<i class="${marca(i) ? 'abv-' + marca(i) : ''}${i === actual ? ' abv-ahora' : ''}"></i>`).join('');
   $('#abv-est-txt').textContent = txt;

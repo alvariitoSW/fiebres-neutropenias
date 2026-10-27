@@ -41,6 +41,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     rellenar huecos con lo que «suena bien» («el fondaparinux no envuelve el FP4», «CK ↑»). El constructor entrega la
     lista de sus frases nuevas con su página; lo que no tenga página va rotulado «fisiología general» o se quita, y
     el auditor coteja esa lista frase por frase.
+    **También en los «Piensa»** (aprobado por el usuario, 27/10/2026, `reglas-27-10`): toda frase de mecanismo de un
+    «Piensa», de su explicación y de cada distractor lleva su origen, igual que el texto de la ficha.
 12. **Las cifras del libro, en el contexto del libro** (lección 2). Una cifra cierta puesta donde no toca es un error
     (100 mL/s es de un 14 G, no de una luz de 18 G). En los casos, cada paso es un paciente posible (§1.7): las cifras
     encajan entre sí (p. ej. el enclavamiento nunca por encima de la diastólica pulmonar).
@@ -58,9 +60,15 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       el mando se apaga y la frase viva lo dice. No basta con «se encharca un poco»: cambian todas las constantes que
       cambiarían en la realidad (PVC, PCP, SpO₂, PA…), y si el paciente no lo sobreviviría, la pantalla lo dice.
     - **Ningún estado da una cifra imposible** (§1.7): si pasa, se corrige el motor, no se tapa con el tope.
+    - **Ni con el dibujo** (aprobado por el usuario, 27/10/2026, `reglas-27-10`): un constructor que ve una cifra
+      mala del motor no la tapa con un ajuste del dibujo (en el `b3`, venas a 2,5 cm² para esconderla); para e
+      informa con la cifra y el estado que la da, y el arreglo va al motor.
     - **La prueba del modelo lleva cada mando a su tope** (y las acciones repetidas, a su máximo) y comprueba que sale
       el sello y que las cifras siguen siendo de un paciente posible. La pieza común es
       `js/core/tope.js` (aviso y sello).
+    - **Un modelo vivo nuevo con sello propio añade su ajuste a `autonomo/jueces-topes.mjs`** (aprobado el
+      27/10/2026, `reglas-27-10`), no un arnés de topes suelto: así `jueces.mjs --modelo <clave>` lo comprueba
+      siempre.
 15. **Lo que la ficha no dice, se busca y se cita** (el usuario, 27/10/2026: «lo que la fuente no dice, todo eso
     habría que buscarlo e incluirlo y minimizar ese apartado a un par de chorradas que falten; hay que mejorar esa fuga
     de info»). Un mecanismo, distractor, explicación, tope o cifra que hoy saldría rotulado `fisiología general`, «la
@@ -138,9 +146,18 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      27/10/2026): el primer paso del encargo es `git fetch origin auto/<bN> && git checkout -B <rama> origin/auto/<bN>`.
      El aislamiento automático de los agentes sale de `main`; en el `b3` dos constructores partieron una versión vieja
      y hubo que rehacerlo (≈1 M de gasto). Si cada agente tiene sus propios archivos, mejor sin carpeta aparte.
+   - **Cada constructor, en su propio `git worktree`** que sale de la rama del bloque (aprobado por el usuario,
+     27/10/2026, `reglas-27-10`), cuando hay más de uno trabajando a la vez: así no se pisan ni las pruebas ni el
+     servidor.
+   - **Pruebas: cada constructor pasa las suyas y las de lo que tocó; la suite entera la pasa el director una vez,
+     al fusionar** (aprobado el 27/10/2026, `reglas-27-10`). Nunca más de **2 agentes con pruebas largas** (jueces,
+     navegador) a la vez.
    - **Nunca `git stash` ni `pkill`/`kill` amplios en la carpeta compartida** (aprobado por el usuario, 27/10/2026): un
      stash arrastra el trabajo sin guardar de otro agente y un `pkill -f` amplio mata procesos ajenos (también la
      terminal del director). Cada agente para solo su propio servidor, por su puerto.
+   - **Los arneses cierran su servidor por su número de proceso** (el que guardaron al lanzarlo), nunca con
+     `pgrep -f … | xargs kill` (aprobado el 27/10/2026, `reglas-27-10`): en el `b3` un constructor se mató su propia
+     orden.
    - **Los arneses de prueba leen el puerto de `PUERTO=`** (aprobado el 27/10): nunca un puerto fijo, que choca entre
      agentes.
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
@@ -151,6 +168,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      tablero de otra sesión), no la empieza: no toca nada, se lo dice al usuario y termina. Antes de abrir la
      sesión siguiente con `create_session`, la misma comprobación. El 27/10 dos sesiones arrancaron `movil-existente`
      a la vez (las abrieron `jueces-movil` y `jueces-topes`, cada una por su lado).
+   - **Citas o arreglos que cruzan archivos de otra sesión activa** (aprobado el 27/10/2026, `reglas-27-10`): una
+     rama `wt/<bloque>-<modelo>` por modelo, que fusiona y versiona la sesión dueña de esos archivos. Así lo hizo
+     `fuentes-b3` con las maquetas del `b3` mientras la parada 2 trabajaba en ellas.
 
 7. **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que
    hacer que la siguiente nos intente costar un poco menos»; vale para todas las sesiones y tareas). Un agente paga en
@@ -166,6 +186,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    - **Constructor**: encargos con dirección exacta (archivo y función, o línea) que da el juez; archivos de **≤700
      líneas** por pieza (una maqueta o un modelo que pase de ahí se parte en módulos antes de la vuelta siguiente,
      como `autonomo/maquetas/b3-shock/`); lee solo la función que toca (`graft` o `sed -n`), nunca el archivo entero.
+   - **Un encargo que nombra más de una estructura anatómica o más de un fenómeno del motor se parte** antes de
+     lanzarlo, en encargos de **≤60 pasos** (aprobado por el usuario, 27/10/2026, `reglas-27-10`): los que pasaron de
+     60 pasos llevaban dos piezas.
    - **Lo hecho no se repite**: los programas de prueba y arneses que escribe un agente se guardan en
      `autonomo/bloques/<bN>/herramientas/` (o `autonomo/pruebas/`) con un `LEEME.md`, y el siguiente los reutiliza.
    - **Reanudar mejor que relanzar**: si un agente se para (límite de uso, pausa), se reanuda con SendMessage; antes
@@ -176,7 +199,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    vueltas de media).
    - **R1 · Prueba del móvil antes de entregar**: a 390 y 360 px, la frase viva y el enunciado no quedan tapados por
      la barra de abajo, la imagen sigue a la vista al tocar sus mandos, ninguna frase sale cortada con «…» y ningún
-     rótulo baja de 8 px (el usuario lo bajó de 9 a 8 el 27/10/2026). La pasa el constructor con capturas antes de entregar; cuando exista, la pasa
+     rótulo baja de 8 px (el usuario lo bajó de 9 a 8 el 27/10/2026). Los 8 px son en la pantalla: el SVG se pinta
+     a escala (≈ 0,86 a 360 px), así que en coordenadas del dibujo el suelo es 8 / escala, **≈ 9,3** (aprobado el
+     27/10/2026, `propuestas-movil`). La frase viva se trae a la vista con la pieza común `js/core/frase-vista.js`, no
+     con una solución propia de cada modelo. La pasa el constructor con capturas antes de entregar; cuando exista, la pasa
      `jueces.mjs` (tarea `jueces-movil` del tablero).
    - **R2 · Lista de «lo que hace la maqueta»**: al aprobarse una maqueta, el profesor escribe la lista de lo que
      hace (cada mando, cada estado, lo que queda fijo en pantalla). El constructor que la lleva a la app la tacha
@@ -209,7 +235,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 4. **Lo que no se pudo leer es un hueco, no un hecho**: si una fuente no se abre (web bloqueada, PDF ilegible), la
    tarea no se marca hecha ni se salta en silencio; el informe dice qué faltó.
 5. **«No había nada que hacer» no es un fallo**: si no queda tarea pendiente, el informe lo dice así.
-6. **Límite de gasto**: si la sesión llega al límite del tablero, se para y deja el estado como está.
+6. **Límite de gasto**: si la sesión llega al límite del tablero, se para y deja el estado como está. Desde el
+   27/10/2026 hay también un **límite por día**, sumando todas las sesiones: como mucho el **18 % del uso semanal**
+   (tablero, «Límite de gasto por día»).
 
 ## 6. Cómo crecen estas reglas
 

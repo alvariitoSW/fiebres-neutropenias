@@ -353,3 +353,49 @@ Tras el juez del móvil (`jueces-movil`), cinco constructores sonnet arreglaron 
 Fundamentos: frases vivas sin recorte «…», frase y «Siguiente» fuera de la barra de abajo, figura a la vista al tocar
 mandos y letra SVG ≥ 8 px (suelo de 9,3 en coordenadas del dibujo, porque a 360 px se pinta al ~88 %). Receta del
 catéter copiada en telar, inmersión y vaso. Detalle y gasto en `autonomo/partes/2026-10-27-movil-existente.md`.
+
+## Tres propuestas del móvil (`propuestas-movil`, 27/10/2026)
+
+El usuario aprobó las tres propuestas del parte `2026-10-27-movil-existente.md` («Apruebo las 3 propuestas»):
+- **Pieza común `js/core/frase-vista.js`**: lleva la frase viva a la vista tras tocar un mando, para todos los modelos
+  vivos, en vez de tres soluciones distintas (margen, frase pegada, scroll).
+- **Suelo de letra SVG**: en la lista del constructor y en `REGLAS.md` §4.8 R1, «8 px en pantalla = 8 / escala a
+  360 px (≈ 9,3) en coordenadas del dibujo», no 8 a secas.
+- **El director fusiona `main` a la vista** (skill `plan-socialista`, «Entregas sin esperar»): nunca en segundo plano;
+  mira los conflictos y que no queden marcas antes de seguir.
+
+
+## 27/10/2026 · Cierre solo, /ahorro y bitácora diaria (sesión fuentes-b3)
+
+- **Graft**: su configuración de `.claude/` (versión 0.26.0) se sube a `main` una vez, a petición del usuario. Antes,
+  cada sesión arrancaba con esos archivos «sin guardar» y el gancho de parada hacía dar al director unas 15 vueltas
+  vacías por sesión.
+- **Skill `/ahorro`** (`.claude/skills/ahorro/`, registro en `autonomo/ahorro/registro.md`): lee solo «Gasto»,
+  «Vueltas» y «Propuestas sobre las reglas» de los partes nuevos, busca patrones que se repiten en 2 o más tareas y
+  propone como mucho 3 cambios en la bitácora (sección 5). No aplica nada: el usuario aprueba con `/bitacora`.
+- **`/plan-socialista`, cierre**: pasos 6 (pasar `/ahorro`) y 7 (la sesión se archiva sola cuando todo está hecho,
+  subido, con parte, sin agentes y sin esperas; si queda algo, `send_later` a 1 hora y se vuelve a mirar).
+- **Tarea programada «Bitácora diaria»** (`trig_01XfdVjv5Bd5qeWQ6ZRRwkB1`): a las 13:43 y 21:43 (hora de Madrid)
+  abre una sesión que solo informa (qué se hizo, sesiones cerradas, qué espera al usuario, qué sigue, propuestas de
+  ahorro), con aviso al móvil, y se archiva sola.
+
+## Reglas del 27/10 y límite de gasto diario (`reglas-27-10`, 27/10/2026)
+
+El usuario aprobó el 27/10 con `/bitacora` las 3 propuestas de ahorro de `/ahorro` y 5 reglas sacadas de los partes
+del día, más un límite de gasto diario. Dónde quedan:
+- **Pruebas** (ahorro 1): cada constructor pasa las suyas y las de lo que tocó; la suite entera, el director una vez al
+  fusionar; nunca más de 2 agentes con pruebas largas a la vez. `REGLAS.md` §4.6, constructor y skill.
+- **Un `git worktree` por constructor** que sale de la rama del bloque (ahorro 2). §4.6, constructor y skill.
+- **Encargos partidos en ≤60 pasos** si nombran más de una estructura anatómica o más de un fenómeno del motor
+  (ahorro 3; los encargos que pasaron de 60 pasos llevaban dos piezas). §4.7 y skill.
+- **Citas en los «Piensa»**, también explicaciones y distractores. §1.11 y constructor.
+- **Arneses que cierran su servidor por número de proceso**, nunca `pgrep -f … | xargs kill` (parte `b3-pantallas`).
+  §4.6 y constructor.
+- **Una cifra mala del motor no se tapa con el dibujo** (registro de `/ahorro`: venas a 2,5 cm² en el `b3`). §1.14 y
+  constructor.
+- **Sello propio de un modelo vivo nuevo → ajuste en `autonomo/jueces-topes.mjs`**, no un arnés suelto. §1.14 y
+  constructor.
+- **Citas que cruzan archivos de otra sesión activa**: una rama `wt/…` por modelo que fusiona la sesión dueña (parte
+  `fuentes-b3`). §4.6 y skill.
+- **Límite de gasto por día**: como mucho el 18 % del uso semanal del plan, sumando sesiones (tablero; skill §0 paso 3;
+  `REGLAS.md` §5.6). La equivalencia en millones de `gasto.mjs` queda por calibrar.

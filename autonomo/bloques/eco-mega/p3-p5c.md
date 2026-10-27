@@ -1,0 +1,13 @@
+# P3 · P5c — el chorro de la IM como chorro libre (color y espectral)
+
+**Archivos**: `js/modules/eco/doppler.mjs` (`CONO_CHORRO`, `chorroLibreAncho`, `chorroLibreEje`, rama `libre` en `velocidad`, marca `libre` en `regMitral`), `simulador.mjs` (vena contracta y enlaces a Zoghbi en el panel del chorro), `pruebas/doppler.test.mjs` (+1 prueba; una cota del test de P5b baja de 0,9 a 0,8 v0 a 1,5 mm, porque el eje ya cae).
+
+**Cómo es**: tras el orificio el chorro se abre en cono (semiángulo 20°, tan 0,37; ilustrativo); radio a mitad de altura = a + 0,37·s; velocidad del eje = v0 / (1 + s/3a) (~1/distancia aguas abajo; Zoghbi p. 308 dice «centerline velocity drops off inversely with distance»); perfil gaussiano. En s = 0 vale v0 (Bernoulli del motor, sin cambio: 399 cm/s). Convergencia (PISA) en el lado del VI: la de antes. En el A4C de la dilatada, sístole, es una llama central que se abre en la AI con mosaico en el origen.
+**Panel**: «Vena contracta 0,56 cm» (= Ø de un orificio circular de área EROA; no es una medida del plano) con los grados de Zoghbi (<0,3 leve, ≥0,7 grave; pdf 26, impresa 328), la nota de que en la secundaria el orificio es elíptico y la VC 2D subestima (misma página), y la de que el área del chorro no sirve sola para graduar (impresa 308, pdf 6: «sole reliance on this parameter can be misleading»). Enlaces al PDF en ambas páginas.
+**Pruebas**: `doppler.test.mjs` 15/15: ancho a 2 cm ≥ 3× el del orificio y eje 0,15-0,4 v0; v0 del orificio sin cambio; área (v > 30 cm/s) crece con EROA 0,15 < 0,25 < 0,4. Suite entera: 457 pruebas, 446 ✅, 0 ❌ (11 todo/hueco previos; con la cota de 0,45 antes de bajar el cono a 0,37, solo cambió la constante).
+**Capturas**: `/tmp/plan-socialista/eco-mega/capturas/p5c-color-0…5.png` (0-2 sístole; antes: `p5b-color-1.png`), `p5c-espectral*.png`. Script: `/tmp/plan-socialista/eco-mega/p5c/captura.mjs`. Sin errores de consola ni desborde a 390.
+
+**Frases nuevas**: «el chorro se abre en cono y arrastra sangre; ocupa más AI cuanto más EROA» = fisiología general + Zoghbi p. 308; «el área del chorro no sirve sola para graduar» = Zoghbi p. 308; VC leve/grave = Zoghbi p. 328; «orificio elíptico, VC 2D subestima» = Zoghbi p. 328. Ángulo del cono y forma gaussiana: ilustrativo.
+
+**Huecos**: la vena contracta es la del orificio circular, no medida en el plano; Zoghbi no da área de color por EROA (no hay cifra de área para validar).
+**No comprobado / riesgo**: no probado a 360 px ni en A2C/PLAX; la llama llena buena parte de la AI en EROA altas (0,4) sin recorte por el color; el espectral (muestra en el chorro) cambia: a 2 cm la velocidad es ~1/3 y el panel de P5b podría leer menos pico. Sin `?v=` ni push.

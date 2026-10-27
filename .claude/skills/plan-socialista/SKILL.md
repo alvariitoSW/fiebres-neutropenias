@@ -22,6 +22,10 @@ tablero y el último parte, sin trabajar.
    que está en `autonomo/BITACORA.md` sin aprobar no se toca, aunque parezca urgente.
 3. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
    tarea `pendiente`, escribe el parte «sin tareas» y termina: no es un fallo.
+   **Límite de gasto por día** (aprobado por el usuario el 27/10/2026): como mucho el **18 % del uso semanal** del
+   plan en un día, sumando todas las sesiones. Mientras no esté calibrada su equivalencia en millones de
+   `gasto.mjs` (tablero), avisa al usuario antes de lanzar algo que haga pasar el día de ~15 M y no encadenes otra
+   tarea sin preguntar. Al llegar al límite, paras y lo dices.
 4. **¿La lleva ya otra sesión?** (`REGLAS.md` §4.6, «Una tarea, una sola sesión»). Mira `list_sessions` (`mine:
    true`) y la rama remota `auto/<clave>`: si otra sesión activa ya trabaja esta tarea, no empieces; díselo al usuario
    y termina sin tocar nada. Haz la misma comprobación antes de abrir una sesión nueva con `create_session`.
@@ -145,6 +149,20 @@ es la base de cómo se trabaja ahora.
 - **Dependencias entre ramas**: si una pieza necesita un modelo de otra rama aún sin fusionar, deja el enlace
   preparado (`modeloFuturo`/`modeloVivo`) y conéctalo al unir.
 
+### Reglas del 27/10/2026 (`reglas-27-10`, aprobadas por el usuario)
+
+`autonomo/REGLAS.md` §1.11, §1.14, §4.6 y §4.7. En resumen:
+- **Pruebas**: cada constructor pasa las suyas y las de lo que tocó; la suite entera la pasas tú una vez, al
+  fusionar. Nunca más de 2 agentes con pruebas largas a la vez.
+- **Un `git worktree` por constructor** cuando trabajan varios a la vez, siempre desde la rama del bloque.
+- **Encargos partidos**: si nombra más de una estructura anatómica o más de un fenómeno del motor, pártelo antes de
+  lanzarlo en encargos de ≤60 pasos.
+- **Citas en los «Piensa»**: también explicaciones y distractores llevan su origen.
+- **Arneses**: cierran su servidor por número de proceso, nunca `pgrep -f … | xargs kill`.
+- **Cifra mala del motor**: el constructor no la tapa con el dibujo; para e informa, y el arreglo va al motor.
+- **Sello propio de un modelo vivo nuevo**: su ajuste va a `autonomo/jueces-topes.mjs`, no a un arnés suelto.
+- **Citas que cruzan archivos de otra sesión activa**: una rama `wt/…` por modelo, que fusiona la sesión dueña.
+
 ### Ahorro medido (aprobado por el usuario el 25/10/2026)
 
 Medido con `autonomo/gasto.mjs` sobre la sesión del 10 al 25/10: el director gastó **la mitad** de todo (cada paso
@@ -219,6 +237,12 @@ cambios, se atienden en la vuelta siguiente.
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
 `git worktree remove /tmp/wt-<clave>`. `jueces.mjs` elige solo un puerto libre, así que se puede pasar en las dos.
 
+**Fusionar `main` en una rama, siempre a la vista** (aprobado por el usuario el 27/10/2026, `propuestas-movil`):
+nunca dentro de un comando en segundo plano ni encadenado con `&&` a otros pasos. Primero `git merge origin/main`
+solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos, resuélvelos y comprueba con
+`git grep -n '^<<<<<<<'` que no queda ninguna marca antes de commit, jueces o push. Si no, un conflicto pasa sin verse
+(en `movil-existente` el tablero quedó con marcas de conflicto en un commit intermedio).
+
 ### Cierre del ciclo
 
 8. **Revisor** (`revisor`) → `revision.md`. Objeciones de redacción o reglas: una última vuelta corta del constructor.
@@ -250,6 +274,16 @@ origin/main`), con su propio servidor en otro puerto; así no se pisan los archi
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.
+6. **Ahorro** (aprobado por el usuario el 27/10/2026): tras escribir el parte, pasa `/ahorro` tú mismo (2-3
+   llamadas, sin agentes). Al usuario, una línea si propone algo.
+7. **Cerrar la sesión sola** (aprobado por el usuario el 27/10/2026). Se cierra cuando: la tarea está hecha, subida
+   (y en `main` o con su PR), el parte escrito, ningún agente trabajando y nadie espera nada de esta sesión (ni otra
+   sesión a la que entregaste algo ni una respuesta pendiente del usuario). Entonces mandas al usuario el resumen
+   final terminado en «Sesión cerrada; para seguir, abre otra con `/plan-socialista <clave>`» y, en la misma
+   respuesta, la archivas con `archive_session` (sin `session_id`, o el de esta sesión). Si queda algo pendiente
+   (otra sesión tiene que fusionar, falta un PDF del usuario), **no se cierra**: lo dices en una línea y programas
+   una comprobación con `send_later` a 1 hora; cuando llega, miras si ya está y, si está, cierras. El usuario se
+   entera por el resumen final y por el informe diario de la bitácora (tarea programada «Bitácora diaria»).
 
 ## 3. Lo que nunca haces
 

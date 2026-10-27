@@ -4,7 +4,10 @@
 // pared libre de la AD es de los signos más precoces y precede al colapso diastólico del VD; El Libro Azul, parte 2,
 // p. 65 del PDF) y Marino, cap. 21 (p. 64 del PDF: «diastolic collapse of the right ventricle»). El umbral de 1 mmHg, la
 // «≥1/3 del ciclo» y el reparto del líquido son ilustrativos (plan de ideas, P1); la guía de pericardio de la ASE
-// (Klein 2013) no está en docs/: hueco.
+// (Klein 2013, docs/klein-2013-pericardio-multimodal-ase.pdf) mide el derrame por el espacio libre de eco en telediástole:
+// p. 981 impresa = PDF 17: pequeño <10 mm, moderado 10-20, grande >20. Los mm de ESTA prueba NO son ese espacio libre: son el
+// crecimiento del saco en el corazón normal (radio con derrame menos sin él). Lo que ve el residente en el modelo taponado es
+// una mediana de ~15-16 mm (moderado) y >20 mm por detrás (según el profesor).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
@@ -101,7 +104,9 @@ test('P1 · el pliegue se dibuja: la pared libre de la AD y la del VD se hunden 
   const pd = paciente('derrame', ESCENARIOS.derrame.gravedad.defecto);
   const s = pd.o.filter((x, i) => pd.e[i].pliegueAd > 0.6).reduce((a, b) => (b.vad > a.vad ? b : a)), e = estadoGeo(s, pd.ex);
   assert.ok(s.vad > 20 && e.pliegueAd > 0.6, `AD de ${s.vad.toFixed(0)} mL plegada ${e.pliegueAd.toFixed(2)}`);
-  const ad = construirCorazon(e, { detalle: false }).partes.find(x => x.nombre === 'AD');
+  // N1: la fosa oval (una lámina del tabique, pieza aparte con la malla de la AD) cuenta como pared de la AD
+  const gAd = construirCorazon(e, { detalle: false }), ad0 = gAd.partes.find(x => x.nombre === 'AD'), fosaAd = gAd.partes.find(x => x.nombre === 'Fosa oval');
+  const ad = { pos: ad0.pos, idx: Uint32Array.from([...ad0.idx, ...(fosaAd ? fosaAd.idx : [])]) };
   const P = ad.pos, I = ad.idx; let zMin = Infinity; for (let i = 2; i < P.length; i += 3) zMin = Math.min(zMin, P[i]);
   let n = 0, zs = 0; for (let i = 2; i < P.length; i += 3) if (P[i] < zMin + 2) { zs += P[i]; n++; }
   const z0 = zs / n; let v = 0;
@@ -121,7 +126,7 @@ function radioEn(pz, z0, f0) {
     const tt = (A[0] * ey - A[1] * ex) / den, ss = (A[0] * dy - A[1] * dx) / den; if (tt > 0 && ss >= 0 && ss <= 1) best = Math.max(best, tt); }
   return best;
 }
-// grosor del líquido en una dirección: radio del saco con derrame menos sin derrame, a una altura dada
+// grosor del líquido en una dirección (crecimiento del saco en el corazón normal, no el espacio libre de eco de Klein 2013): radio del saco con derrame menos sin derrame, a una altura dada
 function grosor(liq, z0, f0) {
   const p = paciente('normal'), s = p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a));
   const radio = (L) => radioEn(construirCorazon({ ...estadoGeo(s, p.ex), liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), z0, f0);
@@ -132,9 +137,10 @@ test('P1 · el líquido empieza por detrás (lo declive con el paciente tumbado)
   const zV = -30;   // tercio medio de los ventrículos (el corazón ya movido: el saco se mide tal como se ve)
   const atras = grosor(60, zV, -Math.PI / 2), delante = grosor(60, zV, Math.PI / 2);
   assert.ok(atras > 2 * delante && atras > 3, `60 mL: detrás ${atras.toFixed(1)} mm, delante ${delante.toFixed(1)} mm`);
+  // R1b: el saco sigue la silueta del corazón (ya no hay hueco de envolvente convexa): delante 5,2 mm y detrás 8,2 mm a 388 mL (antes > 8)
   const atrasG = grosor(388, zV, -Math.PI / 2), delanteG = grosor(388, zV, Math.PI / 2), ad = grosor(388, 15, Math.PI);
-  assert.ok(delanteG > 8, `388 mL: delante ${delanteG.toFixed(1)} mm (detrás ${atrasG.toFixed(1)})`);
-  assert.ok(ad > 6, `388 mL: junto a la AD ${ad.toFixed(1)} mm`);
+  assert.ok(delanteG > 4.5, `388 mL: delante ${delanteG.toFixed(1)} mm (detrás ${atrasG.toFixed(1)})`);
+  assert.ok(ad > 5, `388 mL: junto a la AD ${ad.toFixed(1)} mm`);
 });
 
 test('P1 · el líquido dibujado es el del motor (±10 %)', () => {
@@ -184,4 +190,73 @@ test('P1 · el saco cubre las aurículas en todas las vistas (sin derrame, con d
     }
   }
   assert.ok(vistas_con_auricula > 20, `se cortan aurículas en ${vistas_con_auricula} casos`);
+});
+
+// R1 (eco-mega, parada 3) · el saco del derrame grande es una lámina lisa que abraza al corazón: en los cortes de la eco no hay
+// esquinas (la caja del subcostal 4C, la V del apical 4C) ni saltos de la distancia al corazón. Con poco líquido sigue pegado.
+import { tramoGiro } from '../../../../autonomo/bloques/eco-mega/herramientas/r1b-medir.mjs';
+import { cortes, estadoGeo as estadoGeoR1, pacienteDerrame, telediastole } from '../../../../autonomo/bloques/eco-mega/herramientas/saco-contorno.mjs';
+test('R1 · a 388 mL, el contorno del saco en A4C, SC4C y PLAX no tiene esquinas (<120° a 12 mm) ni saltos de distancia al corazón', () => {
+  const p = pacienteDerrame(1), e = estadoGeoR1(telediastole(p), p.ex);
+  for (const v of ['a4c', 'sc4c', 'plax']) {
+    const c = cortes(1, v, e), n = c.pts.length;
+    assert.ok(n > 100, `${v}: contorno de ${n} puntos`);
+    const mn = Math.min(...c.ang); assert.ok(mn >= 130, `${v}: esquina de ${mn.toFixed(0)}°`);   // R1b: 130° (antes 120°); A4C y SC4C salen a 137°
+    const rg = tramoGiro(c.ang); assert.ok(rg <= 50, `${v}: tramo casi recto de ${rg} mm`);   // R1b: antes 51-57 mm
+    let salto = 0; for (let i = 0; i < n; i++) salto = Math.max(salto, Math.abs(c.dist[i] - c.dist[(i + 1) % n]));
+    assert.ok(salto <= 4.5, `${v}: la distancia saco-corazón salta ${salto.toFixed(1)} mm en 3 mm de contorno`);
+  }
+});
+
+test('R1 · con poco líquido (60 mL) el saco sigue pegado: detrás crece menos de 7 mm frente a sin derrame', () => {
+  const p = paciente('normal'), e = estadoGeo(p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), p.ex);
+  const radio = (L) => radioEn(construirCorazon({ ...e, liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), -30, -Math.PI / 2);
+  const d60 = radio(60) - radio(0); assert.ok(d60 < 7, `60 mL: el saco crece ${d60.toFixed(1)} mm detrás`);
+});
+
+// R1b · sin derrame, el tejado del saco queda a ≤ 8 mm de lo más alto que hay dentro (antes un cono dejaba 33 mm de negro sobre el corazón)
+test('R1b · sin derrame, el tejado del saco queda a ≤ 8 mm de lo más alto de dentro en todo el latido (cierre fijo: la AI sube y baja 8 mm)', () => {
+  const p = paciente('normal'), zmax = (pz) => { let m = -1e9; for (let i = 2; i < pz.pos.length; i += 3) m = Math.max(m, pz.pos[i]); return m; };
+  let altoMax = -1e9, peri = 0;
+  for (let k = 0; k < p.o.length; k += 8) { const g = construirCorazon({ ...estadoGeo(p.o[k], p.ex), liquidoPeri: 0 }, OP);
+    const dentro = g.partes.filter(pz => pz.pos && /^(VD borde|Base V|AI$|AD$|Orejuela|Infundíbulo|Raíz aórtica|Grasa|Coronaria|Seno coronario)/.test(pz.nombre));
+    altoMax = Math.max(altoMax, ...dentro.map(zmax)); peri = Math.max(peri, zmax(g.partes.find(x => x.nombre === 'Pericardio'))); }
+  assert.ok(peri - altoMax <= 8 && peri - altoMax >= 0, `tejado a ${(peri - altoMax).toFixed(1)} mm de lo más alto de todo el latido`);
+});
+
+// R2 · la pared libre de la AD y la del VD se INVAGINAN (concavidad hacia la luz, con sangre a los dos lados del pliegue)
+// en vez de borrar la cámara. Utilidades de contorno: autonomo/bloques/eco-mega/herramientas/r2-contorno.mjs
+import { contornoPared, area } from '../../../../autonomo/bloques/eco-mega/herramientas/r2-contorno.mjs';
+const giro = (b, i, k = 4) => { const n = b.length, a = b[(i + n - k) % n], q = b[i], c = b[(i + k) % n];
+  const u = [q[0] - a[0], q[1] - a[1]], v = [c[0] - q[0], c[1] - q[1]]; return Math.atan2(u[0] * v[1] - u[1] * v[0], u[0] * v[0] + u[1] * v[1]); };
+const orient = (b) => Math.sign(b.reduce((s, p, i) => s + p[0] * b[(i + 1) % b.length][1] - b[(i + 1) % b.length][0] * p[1], 0));
+const distA = (q, b) => Math.min(...b.map(p => Math.hypot(p[0] - q[0], p[1] - q[1])));
+for (const [k, pieza, vista] of [['pliegueAd', 'AD', 'a4c'], ['pliegueVd', 'VD', 'psaxPm']]) {
+  test(`R2 · a 388 mL, la pared libre de la ${pieza} en ${vista} se invagina: cóncava hacia la luz, con luz a los dos lados`, async () => {
+    const p = paciente('derrame', 1), s = p.o[instanteMax(p, k)], e = estadoGeo(s, p.ex);
+    assert.ok(e[k] > 0.9, `pliegue ${e[k].toFixed(2)}`);
+    const f = (await contornoPared(e, pieza, vista)).pts, s0 = (await contornoPared({ ...e, [k]: 0 }, pieza, vista)).pts;
+    // puntos desplazados por el pliegue (entran en la luz del corte sin plegar, > 40 % del máximo hundimiento): la mayor tanda seguida, y su tercio medio
+    const dentro = (q, b) => { let c = false; for (let i = 0, j = b.length - 1; i < b.length; j = i++) if ((b[i][1] > q[1]) !== (b[j][1] > q[1]) && q[0] < (b[j][0] - b[i][0]) * (q[1] - b[i][1]) / (b[j][1] - b[i][1]) + b[i][0]) c = !c; return c; };
+    const dd = f.map(q => dentro(q, s0) ? distA(q, s0) : 0), dm = Math.max(...dd), des = dd.map(x => x > 0.4 * dm), n = f.length;
+    assert.ok(dm > 3, `hundimiento máximo ${dm.toFixed(1)} mm`);
+    let ini = 0, lon = 0; for (let i = 0; i < n; i++) { if (!des[i]) continue; let l = 0; while (l < n && des[(i + l) % n]) l++; if (l > lon && l < n) { lon = l; ini = i; } }
+    assert.ok(lon >= 6, `tanda desplazada de ${lon} puntos`);
+    const medio = Array.from({ length: Math.max(1, Math.floor(lon / 3)) }, (_, j) => (ini + Math.floor(lon / 3) + j) % n);
+    const sig = orient(f), cur = medio.map(i => giro(f, i) * sig).reduce((a, b) => a + b, 0) / medio.length;   // < 0: cóncavo hacia la luz
+    assert.ok(cur < -0.05, `curvatura media del tercio medio ${cur.toFixed(3)} rad (cóncava < 0)`);
+    // la cámara sigue con luz a los lados: conserva al menos el 35 % del área del mismo corte sin pliegue y el hundimiento no la parte en dos (el volumen es el del motor: lo que pierde en el pliegue lo recoloca en los extremos, por eso el área puede subir)
+    const a = area(f), a0 = area(s0);
+    assert.ok(a / a0 > 0.35 && a / a0 < 1.25, `área ${a.toFixed(0)} frente a ${a0.toFixed(0)} mm² sin pliegue`);
+    const punta = f[medio[Math.floor(medio.length / 2)]], lejos = f.filter((_, i) => { const d = Math.min((i - ini + n) % n, (ini - i + n) % n); return d > n / 4; });
+    assert.ok(distA(punta, lejos) > 2, `la punta del pliegue queda a ${distA(punta, lejos).toFixed(1)} mm de la pared de enfrente`);
+  });
+}
+
+test('R2 · el pliegue de la AD es local: solo se mueve la pared libre (≤12 % de la malla más de 1 mm) y el hundimiento llega a ≥6 mm', () => {
+  const p = paciente('derrame', 1), e = estadoGeo(p.o[instanteMax(p, 'pliegueAd')], p.ex);
+  const a = construirCorazon(e, { detalle: false }).partes.find(x => x.nombre === 'AD').pos, b = construirCorazon({ ...e, pliegueAd: 0 }, { detalle: false }).partes.find(x => x.nombre === 'AD').pos;
+  let n = 0, mx = 0; for (let i = 0; i < a.length; i += 3) { const d = Math.hypot(a[i] - b[i], a[i + 1] - b[i + 1]); if (d > 1) n++; mx = Math.max(mx, d); }
+  assert.ok(n / (a.length / 3) <= 0.12, `${(100 * n / (a.length / 3)).toFixed(0)} % de la malla movida`);
+  assert.ok(mx >= 6, `hundimiento ${mx.toFixed(1)} mm`);
 });

@@ -24,13 +24,23 @@ const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
 // cae en g ≈ 0,93. Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
 // ella daba una pulmonar media de 54 mmHg, que un VD sin hipertrofia no sostiene. A fondo, ~40/33 (media ~36). Ilustrativo
 const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) / Math.log(TEP_RPUL_MAX);
+const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
+const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
+// HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
+// más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14
+// (atlas/vd.mjs, ajustesVd 'presion'; aquí se repite porque ese archivo es de dibujo y no se carga en el motor): g = su
+// punto s de 0 a 1. Todos los parámetros, ilustrativos; lo que se exige son las cifras de CRITERIOS_FORMA.hpcronica
+const HPC_DEFECTO = 0.55;
+const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
+  return { k: 1 + 11 * x, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
+    mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 700 * c01((x - 0.6) / 0.4), b: 1 + 0.2 * x, v0: 160 * c01((x - 0.5) / 0.5) ** 1.5 }; };
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
     nombre: 'Hemorragia', tipo: 'hipovolemico',
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
-    gravedad: { defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
+    gravedad: { fin: 'el shock hemorrágico a fondo', defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
     aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; },
   },
@@ -38,14 +48,17 @@ export const ESCENARIOS = {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
     // contractilidad del VI (Ees) de la normal a EES_VI_MIN, en escala logarítmica (cada paso la multiplica por lo mismo).
     // El defecto, Ees 0,9
-    gravedad: { defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
+    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
     aplicar: (m, g = Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN)) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g; },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
+    // Qué se ve: Klein 2013 (p. 981 impresa = PDF 17) mide el derrame por el espacio libre de eco en telediástole: pequeño <10 mm,
+    // moderado 10-20, grande >20. Aquí los mm son el crecimiento del saco en el corazón normal (taponamiento.test.mjs); el modelo
+    // taponado da una mediana de ~15-16 mm (moderado) y >20 mm por detrás.
     // líquido en el saco, de 0 a DERRAME_ML_MAX (entra a su ritmo: motor.mjs, ritmoDerrame). El defecto, 260 mL
-    gravedad: { defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
+    gravedad: { fin: 'el taponamiento a fondo', defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
     aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); },
   },
   vasoplejia: {
@@ -72,7 +85,14 @@ export const ESCENARIOS = {
     nombre: 'Miocardiopatía dilatada', forma: true,
     // contractilidad baja, ventrículo que se dilata y retención de líquidos (Ficha 3: el círculo vicioso de la
     // retención); algo más de masa con la pared normal (hipertrofia excéntrica, Ficha 3)
-    aplicar: (m) => { m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = 60; m.s.vven += 700; },
+    // P5a · IM funcional (secundaria): ni los velos ni las cuerdas están enfermos; el VI dilatado desplaza los papilares y
+    // tira de ambos velos hacia el ápex, y el anillo dilatado deja más área que cubrir (Zoghbi 2017, pp. 320-321). El orificio
+    // regurgitante crece con la dilatación del VI por encima de la normal (v0 de reposo, ilustrativo) y se topa en 0,35 cm²
+    // (Zoghbi Tabla 8, p. 332: moderada 0,20-0,39); la AI recibe el reflujo y se remodela (más volumen sin tensión, más
+    // distensible) hasta una AI «generalmente grave» (Tabla 6, p. 320). Parámetros ilustrativos.
+    aplicar: (m) => { const dil = (DILATADA_V0 - BASE.vi.v0) / 50;   // 1 = la dilatación de siempre (+50 mL de volumen sin tensión)
+      m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
+      m.p.eroaMitral = Math.min(EROA_IM_TOPE, EROA_IM_POR_DIL * dil); m.p.ai.v0 = BASE.ai.v0 + AI_V0_POR_DIL * dil; },
   },
   tep: {
     // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~67) es la EP de riesgo intermedio
@@ -84,8 +104,20 @@ export const ESCENARIOS = {
     // tabique hacia el VI (Fisiopatología UCI · Cardiología, Fichas 8 y 9; Merino, IC derecha)
     // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
     // (~0,93) es el de siempre: ×8 y ×0,65
-    gravedad: { defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
+    gravedad: { fin: 'el TEP de alto riesgo a fondo', defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
     aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
+  },
+  hpcronica: {
+    // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
+    // en telediástole (>5 mm; Mukherjee 2025 Tabla 1, p. 145; Lang 2015 Tabla 8, p. 20: normal 1-5 mm) y por unas presiones
+    // pulmonares altas que ese VD hipertrófico sí sostiene (el TEP agudo, con VD de pared fina, no pasa de ~40/33)
+    nombre: 'Hipertensión pulmonar crónica (VD)', forma: true,
+    // gravedad: el punto de la enfermedad (0 = normal; el defecto, un VD hipertrófico y algo dilatado: pared gruesa, tabique
+    // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
+    gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
+    aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
+      m.p.rPul *= r.k; m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; },
   },
 };
 
@@ -115,7 +147,11 @@ const MERINO_FIG = { ...MERINO_FE, sel: '#mc-fig-18-2', ficha: 'Merino · Figura
 const MERINO_SEPTO = { ...MERINO_FE, sel: '#mc-vd-septo', ficha: 'Merino · IC derecha (ETT)' };
 const F11_VD = { sel: '#cardio-eco-vd', especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-interaccion-corazon-pulmon', ficha: 'Fisiopatología UCI · Cardiología · Ficha 11' };
 const F11_COR = { ...F11_VD, sel: '#cardio-cor-pulmonale' };
+const MUKHERJEE_PDF = (p, texto) => ({ href: `docs/mukherjee-2025-corazon-derecho-hp-ase.pdf#page=${p}`, texto });
 const LANG_PDF = (p, texto) => ({ href: `docs/lang-2015-cuantificacion-camaras-ase.pdf#page=${p}`, texto });
+const ZOGHBI_PDF = (p, texto) => ({ href: `docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=${p}`, texto });
+const ATLAS_PRESION = { atlas: 'pressure', ficha: 'Atlas 8 · Hemodinámica por Doppler' };
+const ATLAS_DIASTOLE = { atlas: 'fill', ficha: 'Atlas 10 · Función diastólica' };
 const mm = (x) => x.toFixed(1).replace('.', ',') + ' mm';
 export const CRITERIOS_FORMA = {
   hipertrofia: [
@@ -131,6 +167,12 @@ export const CRITERIOS_FORMA = {
     { texto: 'VI en diástole >5,5 cm (normal 3,5-5,5 cm)', valor: (c) => mm(c.md.lvdd), cumple: (c) => c.md.lvdd > 55, fuente: FATE },
     { texto: 'FEVI ≤40 % (FE reducida)', valor: (c) => Math.round(c.u.fe * 100) + ' %', cumple: (c) => c.u.fe <= 0.4, fuente: MERINO_FE },
     { texto: 'Pared posterior en rango normal (6-10 mm)', valor: (c) => mm(c.md.paredPost), cumple: (c) => c.md.paredPost >= 6 && c.md.paredPost <= 10, fuente: FATE },
+    { texto: 'Volumen máximo de la AI >34 mL/m² (normal ≤34)', valor: (c) => Math.round(c.md.volAI) + ' mL/m²', cumple: (c) => c.md.volAI > 34,
+      fuente: ATLAS_DIASTOLE, pdf: LANG_PDF(25, 'Lang p. 25 y 28'),
+      nota: 'Lang 2015: el límite superior normal del volumen de la AI indexado es 34 mL/m² (antes 28), medido en telesístole por discos (pp. 25, 28). Se divide por la superficie corporal del paciente simulado (1,85 m² si no hay otra). Normal del modelo: ~27 mL/m²' },
+    { texto: 'IM funcional: orificio regurgitante (EROA) ≥0,20 cm² (al menos moderada)', valor: (c) => `${c.md.eroa.toFixed(2).replace('.', ',')} cm² · ${Math.round(c.md.volReg)} mL por latido`,
+      cumple: (c) => c.md.eroa >= 0.2, fuente: ATLAS_PRESION, pdf: ZOGHBI_PDF(30, 'Zoghbi p. 332'),
+      nota: 'Zoghbi 2017, Tabla 8 (p. 332): EROA leve <0,20, moderada 0,20-0,39 y grave ≥0,40 cm²; volumen regurgitante moderado 30-59 mL, grave ≥60 mL. En la secundaria un corte de 0,30 cm² puede ser ya grave por PISA 2D (p. 334). Zoghbi también cita que ≥0,2 cm² empeora el pronóstico, pero NO redefine con él la IM grave secundaria (p. 334): el criterio de arriba es solo «al menos moderada». Origen del modelo: velos sanos; el anillo dilatado y la tracción de los papilares (tenting, ilustrativo: Zoghbi no da cifras, p. 321) abren el orificio' },
   ],
   tep: [
     { texto: 'Área del VD / área del VI >0,6 (cor pulmonale agudo)', valor: (c) => c.md.areaVdVi.toFixed(2).replace('.', ',') + ` (normal ${c.md0.areaVdVi.toFixed(2).replace('.', ',')})`,
@@ -153,6 +195,20 @@ export const CRITERIOS_FORMA = {
       cumple: (c) => !!c.vd && (c.vd.td.area - c.vd.ts.area) / c.vd.td.area * 100 < 35, fuente: F11_VD, pdf: LANG_PDF(23, 'Lang p. 23'),
       nota: 'FAC = (área telediastólica − telesistólica) ÷ telediastólica del VD en el A4C' },
     { texto: 'FE del VD (3D) <45 % aprox. (normal 58 ± 6,5)', valor: (c) => `${Math.round(c.u.feD * 100)} %`, cumple: (c) => c.u.feD * 100 < 45, fuente: MERINO_VD, pdf: LANG_PDF(23, 'Lang p. 23'), nota: 'Lang da el 45 % como valor aproximado; aquí se compara con la FE del VD del motor (no una medida 3D de la imagen)' },
+  ],
+  // HP crónica: lo que la distingue del TEP agudo es la pared libre del VD gruesa. Cifras de Mukherjee 2025 (Tabla 1, p. 145 impresa = PDF 5)
+  // y Lang 2015 (Tabla 8, p. 20). El índice de excentricidad no entra aquí (lo mide la prueba con el plano del Atlas · 14)
+  hpcronica: [
+    { texto: 'Pared libre del VD en telediástole >5 mm (normal <5 mm; Lang: 1-5)', valor: (c) => mm(c.md.paredVd), cumple: (c) => c.md.paredVd > 5,
+      fuente: { atlas: 'vd', ficha: 'Atlas 14 · El VD' }, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
+      nota: 'Mukherjee 2025, Tabla 1: leve 5-7 mm, moderada >7-9 mm y grave >9 mm; la mide en la subcostal, en telediástole, sin trabéculas ni papilares. Lang 2015, Tabla 8 (p. 20): normal 1-5 mm. En el TEP agudo la pared sigue fina (≤5 mm; fisiología general: no da tiempo a hipertrofiarse)' },
+    { texto: 'Presión sistólica pulmonar (PAPs) >34 mmHg (normal ≤34)', valor: (c) => Math.round(c.u.paps) + ' mmHg', cumple: (c) => c.u.paps > 34,
+      fuente: { atlas: 'vd', ficha: 'Atlas 14 · El VD' }, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
+      nota: 'Es la presión del motor en la pulmonar. El VD hipertrófico la sostiene alta; el de pared fina del TEP agudo no pasa de ~40 mmHg (fisiología general)' },
+    { texto: 'Área del VD / área del VI >0,6 (VD agrandado)', valor: (c) => c.md.areaVdVi.toFixed(2).replace('.', ',') + ` (normal ${c.md0.areaVdVi.toFixed(2).replace('.', ',')})`,
+      cumple: (c) => c.md.areaVdVi > 0.6, fuente: F11_COR, nota: 'plano apical de 4 cámaras del modelo; el corte de 0,6 es el de la Ficha 11 para el cor pulmonale' },
+    { texto: 'TAPSE >10 mm: el VD aún no ha fallado del todo (normal >17 mm)', valor: (c) => mm(c.tapse), cumple: (c) => c.tapse > 10, fuente: F11_VD, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
+      nota: 'Mukherjee 2025: TAPSE normal >1,7 cm; leve ≤1,7-1,3; moderado ≤1,3-1,0; grave ≤1,0 cm. Mukherjee (PDF p. 31): en la HP la función basal suele estar conservada y el TAPSE cae ya en las fases tempranas del remodelado; hacia el fallo cae más' },
   ],
 };
 
