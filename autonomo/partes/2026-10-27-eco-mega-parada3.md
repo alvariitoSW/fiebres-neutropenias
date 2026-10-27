@@ -1,6 +1,6 @@
 # 2026-10-27 · eco-mega, parada 3 (retoques + N1, F3, F4, P5, P6)
 
-**Resultado:** en revisión (PR en borrador, enlace abajo) · **Vueltas:** 2 (piezas + arreglos baratos) · **Jueces:**
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/34) · **Vueltas:** 2 (piezas + arreglos baratos) · **Jueces:**
 `jueces.mjs --eco` ✅ (448 pruebas, 11 pendientes marcadas; 390/360 sin ids repetidos ni errores) · **Auditor:** 0
 graves, 5 menores (corregidos), 2 huecos · **Profesor:** ✅ 8,6 / 8,7 / 8,6 / 8,5 / 8,5 / 8,5 (antes 8,3-8,4; meta 8).
 
