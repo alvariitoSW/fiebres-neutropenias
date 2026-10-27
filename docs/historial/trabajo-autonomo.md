@@ -410,5 +410,5 @@ Salen del parte `autonomo/partes/2026-10-27-b3-parada2.md`.
 - **Botones estables** en los modelos vivos (si se rehacen en cada cuadro, «mando no tocable»): lista del constructor.
 - **Maqueta a la app en dos encargos**: el modelo con su prueba (90 / 2,0 M) y su Mayéutica (50 / 1,2 M). `REGLAS.md`
   §4.7 y skill (Modo bloque, paso 3).
-- El entorno bloqueó al director la edición de `.claude/` (skill y constructor): esa parte espera el permiso del
-  usuario (parte `2026-10-27-reglas-b3p2.md`).
+- El entorno bloqueó al director la edición de `.claude/` (skill y constructor) hasta que el usuario dio permiso en la
+  sesión; después se escribió (parte `2026-10-27-reglas-b3p2.md`).
