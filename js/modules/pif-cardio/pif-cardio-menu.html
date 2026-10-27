@@ -1,0 +1,30 @@
+    <button class="back-btn btn-volver-pif-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-red); text-shadow: var(--glow-red);">Cardiología · PIF</h2>
+        <p>Objetivos de la rotación de Cardiología</p>
+    </div>
+
+    <p class="section-label">Elige un objetivo</p>
+
+    <div class="constellation" style="--const-accent: var(--accent-red);">
+        <button class="const-node" id="btn-pif-ecg">
+            <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(255,80,80,0.4);">🫀</span>
+            <span class="const-card">
+                <span class="const-title">ECG y arritmias</span>
+                <span class="const-desc">Método FREHIII: frecuencia, ritmo, eje, hipertrofias, isquemia e infarto, intervalos; arritmias, SCA y marcapasos</span>
+                <span class="const-tag" style="--orb-color: var(--accent-red);">Ver →</span>
+            </span>
+        </button>
+    </div>
+
+    <p class="section-label">Pendientes de la rotación</p>
+    <ul class="term-chips" style="list-style:none; padding:0; display:grid; gap:8px;">
+        <li><strong>Historia clínica cardiológica</strong> <span class="fuente-ficha">· pendiente</span></li>
+        <li><strong>Insuficiencia cardíaca aguda</strong> <span class="fuente-ficha">· pendiente. Mientras tanto:</span>
+            <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="cardiologia" data-view="insuficienciaCardiaca">🔗 Insuficiencia cardíaca (Cardiología, ESC 2026) →</button>
+            <button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="cardiologia">🔗 Fisiopatología UCI → Cardiología →</button></span></li>
+        <li><strong>Síndrome coronario agudo</strong> <span class="fuente-ficha">· pendiente. El ECG del SCA está en el cuaderno «ECG y arritmias».</span></li>
+        <li><strong>Endocarditis, pericarditis, miocarditis</strong> <span class="fuente-ficha">· pendiente</span></li>
+        <li><strong>Ecocardiografía y cateterismo básicos</strong> <span class="fuente-ficha">· pendiente. Mientras tanto:</span>
+            <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c">🫀 Eco cardíaca: simulador →</button></span></li>
+    </ul>

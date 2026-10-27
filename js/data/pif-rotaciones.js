@@ -74,7 +74,8 @@ export const rotacionesPif = {
         {
             id: 'cardio-pif', nombre: 'Cardiología (rotación PIF)', periodo: 'Nov–Dic 2026',
             inicio: '2026-11-01', fin: '2026-12-31',
-            construido: false,
+            construido: true,
+            destino: { botonId: 'btn-pif-cardio' },
             objetivos: [
                 'Historia clínica cardiológica',
                 'Insuficiencia cardíaca aguda',

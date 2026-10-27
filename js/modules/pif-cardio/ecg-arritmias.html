@@ -1,0 +1,463 @@
+    <button class="back-btn btn-volver-pif-cardio-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-red); text-shadow: var(--glow-red);">ECG y arritmias</h2>
+        <p>Cómo leer el electrocardiograma con el método FREHIII</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-pif-ecg-repasar" data-quiz-asignatura="Cardiología · PIF" data-quiz-elegir data-quiz-bloque="ECG y arritmias" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Cuaderno de campo</p>
+    <div class="corkboard" id="pif-ecg-corkboard">
+        <div class="field-card" data-tab="ecg-f1">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="18" fill="none" stroke="var(--accent-red)" stroke-width="2"/><path d="M18,30 h10 l4,-14 l5,28 l4,-14 h18" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Introducción y método</div>
+                    <div class="field-hook">Un ECG normal no descarta una arritmia paroxística: ¿qué orden fijo de lectura evita pasar por alto lo simple?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">FREHIII: Frecuencia, Ritmo, Eje, Hipertrofias, Isquemia, Infarto, Intervalos — siempre en ese orden, también el cardiólogo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f2">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M12,34 h12 l4,-18 l6,34 l4,-16 h8 l4,-10 l4,10 h8" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Frecuencia</div>
+                    <div class="field-hook">Una R cae en la tercera raya gruesa tras la anterior: ¿qué frecuencia tiene, y cuándo ese truco no sirve?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">100 lpm. La regla 300-150-100-75-60-50 no sirve con ritmo muy irregular (FA) ni con FC por encima de 150.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f3">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="6" fill="var(--accent-red)"/><circle cx="40" cy="28" r="14" fill="none" stroke="var(--accent-red)" stroke-width="1.6"/><circle cx="40" cy="28" r="22" fill="none" stroke="var(--accent-red)" stroke-width="1.2"/></svg>
+                    <div class="field-name">Ritmo</div>
+                    <div class="field-hook">Si el nodo sinusal falla, ¿quién manda y a qué frecuencia?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La unión aurículo-ventricular (40-60 lpm) y, si falla, los ventrículos (20-40 lpm): el marcapasos más rápido domina.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f4">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><line x1="14" y1="28" x2="66" y2="28" stroke="var(--accent-red)" stroke-width="2"/><line x1="40" y1="6" x2="40" y2="50" stroke="var(--accent-red)" stroke-width="2"/><path d="M40,28 L58,42" stroke="var(--accent-red)" stroke-width="2.4"/></svg>
+                    <div class="field-name">Eje</div>
+                    <div class="field-hook">¿Qué derivación mira a los pies y es perpendicular a DI?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">AVF (+90°). Para hallar el eje: QRS más isobifásico, su perpendicular y su polaridad.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f5">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,10 C22,14 18,40 40,48 C62,40 58,14 40,10 Z" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Hipertrofias</div>
+                    <div class="field-hook">¿Qué signo del ECG de un hipertenso avisa de daño en órgano blanco?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El crecimiento de la aurícula izquierda, un hallazgo precoz (se mide en la onda P).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f6">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M14,34 h12 l4,-16 l6,30 l4,-14 h8 l8,-6 h6" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Isquemia e infarto</div>
+                    <div class="field-hook">¿Qué cambios del ST y de la T separan la isquemia del infarto?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Capítulo 6 del libro: ficha en construcción.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f7">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><line x1="16" y1="40" x2="64" y2="40" stroke="var(--accent-red)" stroke-width="2"/><path d="M22,40 v-14 M58,40 v-14 M22,32 h36" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Intervalos</div>
+                    <div class="field-hook">¿Cómo se reconoce un bloqueo de rama derecha en V1 o V2?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">QRS con dos picos (R R′) y T negativa en V2 (López Ramírez, p. 35).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f8">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 8</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M10,30 h8 l3,-12 l4,24 l3,-12 h6 l3,-10 l3,20 l3,-10 h8 l3,-8 l3,8 h6" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Arritmias</div>
+                    <div class="field-hook">¿Cómo distingue el ECG una extrasístole ventricular de una supraventricular?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Por la pausa compensatoria completa, que solo aparece en la ventricular, y por el QRS ancho con morfología de bloqueo de rama.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f9">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 9</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M12,36 h12 l4,-14 l5,28 l4,-14 h6 q8,-14 14,-8 h8" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">El ECG en el SCA</div>
+                    <div class="field-hook">¿Por qué un infarto inferior desvía el eje hacia la izquierda?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La necrosis es un silencio eléctrico y el eje se aleja de ella (p. 56).</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f10">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 10</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><rect x="26" y="16" width="28" height="24" rx="6" fill="none" stroke="var(--accent-red)" stroke-width="2"/><path d="M54,28 h10 M26,28 h-10" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Marcapasos</div>
+                    <div class="field-hook">¿Qué se puede valorar en el ECG de un paciente con marcapasos?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">La función del marcapasos implantado (pp. 1-2); el libro la desarrolla en su anexo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="panel-pif-ecg-tabs">
+
+        <div id="ecg-f1" class="tab-content">
+            <h3 style="color: var(--accent-red);">Introducción y método</h3>
+            <p class="fuente-ficha">López Ramírez, <em>La alegría de leer el electrocardiograma</em>, cap. 1 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=11" target="_blank" rel="noopener">pp. 1-6</a>).</p>
+
+            <div class="card" id="ecg1-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> el ECG registra la actividad eléctrica del corazón y se lee <span class="hl-azul">siempre con el mismo orden, FREHIII</span>, y siempre junto a la clínica, nunca aislado.</p>
+            </div>
+
+            <div class="article-figure" id="ecg1-fig-ciclo">
+                <img src="js/modules/pif-cardio/img/ecg/f1-ciclo-pqrst.png" alt="Un latido de ECG sobre papel milimetrado con las ondas P, Q, R, S y T rotuladas" loading="lazy">
+                <div class="article-figure-caption">Un ciclo con sus ondas: P, complejo QRS (Q, R, S) y T. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=12" target="_blank" rel="noopener">p. 2</a>.</div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Qué es y hasta dónde llega <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=11" target="_blank" rel="noopener">pp. 1-2</a></p>
+            <dl class="kv-row" id="ecg1-que-es"><dt>Qué es</dt><dd>El registro gráfico de los potenciales eléctricos del corazón. Como toda ayuda diagnóstica tiene ventajas y limitaciones: <span class="hl-rojo">no se usa aislado, siempre se correlaciona con la clínica</span>.</dd></dl>
+            <dl class="kv-row" id="ecg1-limites"><dt>Ejemplos de límite</dt><dd>Una taquiarritmia paroxística puede dar un trazo normal fuera del episodio. Un cambio del ST en un joven asintomático puede ser normal, pero el mismo trazado en un adulto con factores de riesgo coronario exige otro abordaje.</dd></dl>
+            <dl class="kv-row" id="ecg1-utilidad"><dt>Para qué sirve</dt><dd><ul class="term-chips"><li>Crecimiento auricular y ventricular</li><li>Urgencias: síndrome coronario agudo, taquiarritmias, pericarditis</li><li>Bloqueos</li><li>Efecto o contraindicación de fármacos</li><li>Alteraciones electrolíticas</li><li>Función de marcapasos</li></ul></dd></dl>
+            <dl class="kv-row" id="ecg1-alcance"><dt>Alcance del libro</dt><dd>El ECG de 12 derivaciones. No trata la prueba de esfuerzo, el Holter ni los monitores de cuidados críticos. Sigue en parte el método de Dubin y no discute fuerzas vectoriales ni potenciales; el autor calcula <strong>6-8 horas</strong> para integrar lo esencial si ya se tienen nociones de electrofisiología o de ECG (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=12" target="_blank" rel="noopener">p. 2</a>).</dd></dl>
+            <dl class="kv-row" id="ecg1-historia"><dt>Historia</dt><dd>Waller registró el primer ECG humano en 1887 (solo dos deflexiones). Einthoven diseñó el electrocardiógrafo (Nobel 1924), puso las letras PQRST (intermedias, para poder añadir ondas antes y después) y años después descubrió la onda U (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=11" target="_blank" rel="noopener">p. 1</a>).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Las ondas y lo que registran <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=13" target="_blank" rel="noopener">pp. 2-3</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg1-tabla-ondas" data-nombre="Ondas del ECG">
+                <thead><tr><th>Onda</th><th>Registra</th><th>Detalle del libro</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>P</strong></td><td>Despolarización auricular</td><td>Primera mitad: aurícula derecha; segunda mitad: izquierda. Positiva en casi todas las derivaciones, <span class="hl-rojo">siempre negativa en AVR</span> y generalmente isobifásica en V1.</td></tr>
+                    <tr><td><strong>QRS</strong></td><td>Despolarización ventricular</td><td>Va del endocardio al epicardio. Los primeros 0,01 s son el septo interventricular; luego el endocardio de ambos ventrículos (algo más el derecho); al final, la porción basal del izquierdo. Primera onda negativa = Q; primera positiva = R; negativa posterior a la R = S; minúscula o mayúscula según el tamaño.</td></tr>
+                    <tr><td><strong>T</strong></td><td>Repolarización ventricular</td><td>Del epicardio al endocardio, con un vector de dirección similar al del QRS. Positiva en todas las derivaciones salvo AVR, con muchas variantes normales.</td></tr>
+                    <tr><td><strong>U</strong></td><td>Repolarización de las células de His-Purkinje</td><td>Positiva, tras la T y <strong>siempre de menor voltaje que la T</strong>; ocasional, más visible en precordiales. Se postula que las U patológicas son un segundo componente de una T interrumpida.</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Páginas <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=12" target="_blank" rel="noopener">p. 2</a>-<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=13" target="_blank" rel="noopener">3</a>.</p>
+
+            <p class="section-label" style="margin-top:16px;">El papel: tiempo y voltaje <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=13" target="_blank" rel="noopener">pp. 3-4</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg1-tabla-papel" data-nombre="Cuadrícula del papel">
+                <thead><tr><th>Medida en el papel</th><th>Equivale a</th></tr></thead>
+                <tbody>
+                    <tr><td>1 mm de largo</td><td>0,04 s (40 ms)</td></tr>
+                    <tr><td>Línea gruesa cada 5 mm</td><td>0,2 s</td></tr>
+                    <tr><td>Marca del margen superior cada 25 mm (5 líneas gruesas)</td><td>1 s, a la velocidad estándar de 25 mm/s</td></tr>
+                    <tr><td>1 mm de alto</td><td>0,1 mV</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Tiempos <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=13" target="_blank" rel="noopener">p. 3</a>; voltaje <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=14" target="_blank" rel="noopener">p. 4</a>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Las 12 derivaciones <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=14" target="_blank" rel="noopener">pp. 4-5</a></p>
+            <dl class="kv-row" id="ecg1-derivaciones-frontales"><dt>Plano frontal (6)</dt><dd><ul class="term-chips"><li>DI, DII, DIII (bipolares)</li><li>AVR (R = right)</li><li>AVL (L = left)</li><li>AVF (F = foot)</li></ul></dd></dl>
+            <dl class="kv-row" id="ecg1-derivaciones-precordiales"><dt>Plano horizontal (6)</dt><dd>Las precordiales <strong>V1 a V6</strong>.</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">El método: FREHIII <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=15" target="_blank" rel="noopener">p. 5</a></p>
+            <p id="ecg1-frehiii" data-nombre="Método FREHIII" style="font-size:0.85rem; color:var(--text-dim);">Se pronuncia «fre-hache-triple I». El autor insiste en seguirlo siempre, <span class="hl-azul">incluso siendo cardiólogo, para no pasar por alto detalles simples</span>.</p>
+            <ol id="ecg1-frehiii-pasos" style="font-size:0.85rem; color:var(--text-dim); padding-left:20px;">
+                <li><strong>F</strong>recuencia <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f2">Ficha 2 →</button></span></li>
+                <li><strong>R</strong>itmo <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f3">Ficha 3 →</button></span></li>
+                <li><strong>E</strong>je <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f4">Ficha 4 →</button></span></li>
+                <li><strong>H</strong>ipertrofias <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f5">Ficha 5 →</button></span></li>
+                <li><strong>I</strong>squemia y <strong>I</strong>nfarto <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f6">Ficha 6 →</button></span></li>
+                <li><strong>I</strong>ntervalos <span class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7 →</button></span></li>
+            </ol>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar </p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Las arritmias en detalle, el ECG en el síndrome coronario agudo y los marcapasos son los anexos del libro: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8 · Arritmias</button> <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f9">Ficha 9 · SCA</button> <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f10">Ficha 10 · Marcapasos</button></p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=16" target="_blank" rel="noopener">p. 6</a>): Dubin, <em>Rapid Interpretation of EKGs</em>; Goldman, <em>Principios de electrocardiografía clínica</em>, 1987; Hurst, <em>Circulation</em> 1998;98:1937-42.</p>
+        </div>
+
+        <div id="ecg-f2" class="tab-content">
+            <h3 style="color: var(--accent-red);">Frecuencia</h3>
+            <p class="fuente-ficha">López Ramírez, cap. 2 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=17" target="_blank" rel="noopener">pp. 7-12</a>).</p>
+
+            <div class="card" id="ecg2-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> tres maneras de sacar la frecuencia, según el ritmo. Con ritmo regular y FC ≤150, las rayas gruesas; con cualquier FC regular, <span class="hl-azul">1500 ÷ mm entre R y R</span>; con ritmo muy irregular (FA), contar QRS en 5 s y multiplicar por 12.</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Valores <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=17" target="_blank" rel="noopener">p. 7</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg2-tabla-valores" data-nombre="Valores de frecuencia">
+                <thead><tr><th>Frecuencia (adulto)</th><th>Nombre</th></tr></thead>
+                <tbody>
+                    <tr><td>≤ 59 lpm</td><td>Bradicardia</td></tr>
+                    <tr><td>60-99 lpm</td><td>Normal (en ancianos hay una ligera tendencia a bajar; normal hasta 90)</td></tr>
+                    <tr><td>≥ 100 lpm</td><td>Taquicardia</td></tr>
+                </tbody>
+            </table>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Método 1: las rayas gruesas <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=17" target="_blank" rel="noopener">pp. 7-10</a></p>
+            <p id="ecg2-metodo1" data-nombre="Método de las rayas gruesas" style="font-size:0.85rem; color:var(--text-dim);">Se toma como referencia 300 y sus divisiones (300/1, 300/2…). Se busca una R sobre una raya gruesa y se mira en qué raya posterior cae la siguiente R.</p>
+            <div class="article-figure" id="ecg2-fig-rayas">
+                <img src="js/modules/pif-cardio/img/ecg/f2-r-150-100.png" alt="Dos tiras de ECG con la R sobre una raya gruesa; en la primera la segunda R cae a 150 y en la segunda a 100" loading="lazy">
+                <div class="article-figure-caption">Izquierda: la segunda R cae en la segunda raya, FC 150. Derecha: cae en la tercera, FC 100. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=17" target="_blank" rel="noopener">p. 7</a>.</div>
+            </div>
+
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg2-tabla-rayas" data-nombre="Raya donde cae la segunda R">
+                <thead><tr><th>La siguiente R cae en la raya</th><th>1.ª</th><th>2.ª</th><th>3.ª</th><th>4.ª</th><th>5.ª</th><th>6.ª</th></tr></thead>
+                <tbody><tr><td><strong>FC (lpm)</strong></td><td>300 <small>(rara)</small></td><td>150</td><td>100</td><td>75</td><td>60</td><td>50</td></tr></tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=17" target="_blank" rel="noopener">p. 7</a>.</p>
+            <p id="ecg2-interpolar" data-nombre="Si la R no cae en una raya" style="font-size:0.85rem; color:var(--text-dim);"><strong>Si la R no cae en una raya</strong> se interpola: entre dos rayas hay 5 mm y cada milímetro vale lo que indica la tabla (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=18" target="_blank" rel="noopener">p. 8</a>). Ejemplo del libro: R entre 100 y 75 → 100-95-90-85-80-75, unos <strong>85</strong>.</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg2-tabla-interpolacion" data-nombre="Valor de cada milímetro">
+                <thead><tr><th>Entre rayas</th><th>Latidos en 5 mm</th><th>Cada mm vale</th></tr></thead>
+                <tbody>
+                    <tr><td>150 → 100</td><td>50</td><td>10 lpm</td></tr>
+                    <tr><td>100 → 75</td><td>25</td><td>5 lpm</td></tr>
+                    <tr><td>75 → 60</td><td>15</td><td>3 lpm</td></tr>
+                    <tr><td>60 → 50</td><td>10</td><td>2 lpm</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=18" target="_blank" rel="noopener">p. 8</a>.</p>
+            <p id="ecg2-esquema-impreso" style="font-size:0.85rem; color:var(--text-dim);"><strong>El esquema impreso del libro</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=19" target="_blank" rel="noopener">p. 9</a>), con cada milímetro entre rayas:</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg2-tabla-esquema" data-nombre="Esquema de interpolación del libro">
+                <thead><tr><th>Desde la raya</th><th>1 mm</th><th>2 mm</th><th>3 mm</th><th>4 mm</th><th>Siguiente raya</th></tr></thead>
+                <tbody>
+                    <tr><td>150</td><td>140</td><td>130</td><td>120</td><td>110</td><td>100</td></tr>
+                    <tr><td>100</td><td>95</td><td>90</td><td>85</td><td>80</td><td>75</td></tr>
+                    <tr><td>75</td><td>72</td><td>69</td><td>63 *</td><td>66 *</td><td>60</td></tr>
+                    <tr><td>60</td><td>58</td><td>56</td><td>54</td><td>52</td><td>50</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <details class="nota-plegable" id="ecg2-errata-esquema"><summary>* Nota de fidelidad: errata del esquema impreso</summary>
+                <p>En la fila de 75 a 60 el libro imprime «72, 69, 63, 66, 60». La secuencia lógica (cada mm resta 3) es 72, 69, <strong>66, 63</strong>, 60: el 63 y el 66 están intercambiados. Se reproduce tal cual está impreso (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=19" target="_blank" rel="noopener">p. 9</a>).</p>
+            </details>
+            <p id="ecg2-valores-exactos" style="font-size:0.85rem; color:var(--text-dim);"><strong>«El momento de las confesiones»:</strong> el método no es exacto. Las frecuencias exactas, según el gráfico adaptado de Dubin, son:</p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg2-tabla-exactas" data-nombre="Frecuencias exactas (Dubin)">
+                <thead><tr><th>Desde la raya</th><th>1 mm</th><th>2 mm</th><th>3 mm</th><th>4 mm</th></tr></thead>
+                <tbody>
+                    <tr><td>300</td><td>250</td><td>214</td><td>187</td><td>167</td></tr>
+                    <tr><td>150</td><td>138</td><td>126</td><td>115</td><td>107</td></tr>
+                    <tr><td>100</td><td>94</td><td>88</td><td>83</td><td>79</td></tr>
+                    <tr><td>75</td><td>71</td><td>68</td><td>65</td><td>62</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha">Gráfico adaptado de Dubin, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=19" target="_blank" rel="noopener">p. 9</a>. Ejemplos del autor (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">p. 10</a>): por el método 1, 120 es en realidad 115 y 72 es 71. Esas diferencias no importan clínicamente, <span class="hl-rojo">salvo por encima de 150: ahí el método 1 no debe utilizarse</span>.</p>
+            <div class="card" id="ecg2-advertencia" style="padding:10px 14px; border-left:4px solid var(--accent-yellow);">
+                <p style="margin:0; font-size:0.85rem;"><strong>Advertencia del libro:</strong> el método de las rayas no sirve con un ritmo muy irregular (como la fibrilación auricular) ni con una frecuencia mayor de 150 por minuto (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">p. 10</a>).</p>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Método 2: 1500 entre los mm RR <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">p. 10</a></p>
+            <p id="ecg2-metodo2" data-nombre="Método 1500 entre milímetros" style="font-size:0.85rem; color:var(--text-dim);">Se cuentan los milímetros entre dos R y se divide <strong>1500</strong> entre ese número: 1500/5 = 300; 1500/10 = 150; 1500/15 = 100. El autor lo ve atractivo porque casi todo estudiante tiene calculadora en el móvil, pero «los celulares se descargan».</p>
+            <div class="article-figure" id="ecg2-fig-14mm">
+                <img src="js/modules/pif-cardio/img/ecg/f2-rr-14mm.png" alt="Dos QRS sobre una cuadrícula con 14 mm entre las dos R" loading="lazy">
+                <div class="article-figure-caption">Entre R y R hay 14 mm: 1500/14 = 107 lpm aproximadamente (el método 1 habría dado 110). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">p. 10</a>.</div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Método 3: ritmo muy irregular (FA) <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">pp. 10-11</a></p>
+            <p id="ecg2-metodo3" data-nombre="Método de contar QRS en 5 segundos" style="font-size:0.85rem; color:var(--text-dim);">En el margen blanco superior del papel hay una marca cada 5 rayas gruesas (25 mm), es decir, <strong>1 s</strong> si el papel va a 25 mm/s. Se cuentan los QRS en <strong>5 s y se multiplican por 12</strong>, o en <strong>6 s por 10</strong>. En muchos centros se toma una derivación larga, normalmente DII.</p>
+            <div class="article-figure" id="ecg2-fig-5s">
+                <img src="js/modules/pif-cardio/img/ecg/f2-fa-5s-x12.png" alt="Tira de ECG con marcas de 1 a 5 segundos y siete QRS" loading="lazy">
+                <div class="article-figure-caption">7 QRS en 5 s: 7 × 12 = 84 lpm. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=21" target="_blank" rel="noopener">p. 11</a>.</div>
+            </div>
+
+            <p id="ecg2-metodo3-ejemplos" style="font-size:0.85rem; color:var(--text-dim);">Segundo ejemplo del libro: 16 QRS en 5 s → 16 × 12 = <strong>192</strong> lpm. El método es muy inexacto y <span class="hl-rojo">se reserva para la fibrilación auricular</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=21" target="_blank" rel="noopener">p. 11</a>).</p>
+            <details class="nota-plegable" id="ecg2-errata-5x12"><summary>Nota de fidelidad: «5 × 12 = 60 segundos»</summary>
+                <p>El libro escribe «(5 × 12 = 60 segundos; 16 × 12 = 192 latidos / minuto)». Debe leerse 5 s × 12 = 60 s, es decir, un minuto. Se reproduce tal cual (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=21" target="_blank" rel="noopener">p. 11</a>).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Calculadora de la frecuencia </p>
+            <div class="card" id="ecg2-calc" data-nombre="Calculadora de frecuencia cardiaca" style="padding:14px 16px;">
+                <p class="fuente-ficha" style="margin-top:0;">Origen: <strong>ficha</strong> (métodos 2 y 3 de López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=20" target="_blank" rel="noopener">pp. 10-11</a>). Es una ayuda para practicar; no sustituye la lectura del trazado.</p>
+                <div class="form-group">
+                    <label for="ecg2-calc-mm">Milímetros entre dos R (método 2: 1500 ÷ mm)</label>
+                    <input type="number" id="ecg2-calc-mm" inputmode="decimal" min="3" max="100" step="1" placeholder="p. ej. 14">
+                </div>
+                <div class="form-group">
+                    <label for="ecg2-calc-qrs">QRS contados (método 3, ritmo irregular)</label>
+                    <input type="number" id="ecg2-calc-qrs" inputmode="numeric" min="0" max="80" step="1" placeholder="p. ej. 16">
+                </div>
+                <div class="form-group">
+                    <label for="ecg2-calc-ventana">Ventana en la que los contaste</label>
+                    <select id="ecg2-calc-ventana">
+                        <option value="12">5 segundos (× 12)</option>
+                        <option value="10">6 segundos (× 10)</option>
+                    </select>
+                </div>
+                <div class="result-box" id="ecg2-calc-resultado" style="text-align:left; margin-top:12px;">Escribe los milímetros entre dos R, o los QRS contados.</div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar </p>
+            <p style="font-size:0.85rem; color:var(--text-dim);">Qué ritmo es y por qué la frecuencia lo sugiere: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f3">Ficha 3 · Ritmo</button>.</p>
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=22" target="_blank" rel="noopener">p. 12</a>): Dubin, <em>Electrocardiografía práctica</em>, Interamericana 1976; Jenkins y Gerred, <em>ECG en ejemplos</em>, 2.ª ed., Elsevier 2006.</p>
+        </div>
+
+        <div id="ecg-f3" class="tab-content">
+            <h3 style="color: var(--accent-red);">Ritmo</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO B: ficha 3] -->
+
+
+
+        </div>
+
+        <div id="ecg-f4" class="tab-content">
+            <h3 style="color: var(--accent-red);">Eje</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO B: ficha 4] -->
+
+
+
+        </div>
+
+        <div id="ecg-f5" class="tab-content">
+            <h3 style="color: var(--accent-red);">Hipertrofias</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO B: ficha 5] -->
+
+
+
+        </div>
+
+        <div id="ecg-f6" class="tab-content">
+            <h3 style="color: var(--accent-red);">Isquemia e infarto</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO B: ficha 6] -->
+
+
+
+        </div>
+
+        <div id="ecg-f7" class="tab-content">
+            <h3 style="color: var(--accent-red);">Intervalos</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO B: ficha 7] -->
+
+
+
+        </div>
+
+        <div id="ecg-f8" class="tab-content">
+            <h3 style="color: var(--accent-red);">Arritmias</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO C: ficha 8] -->
+
+
+
+        </div>
+
+        <div id="ecg-f9" class="tab-content">
+            <h3 style="color: var(--accent-red);">El ECG en el SCA</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO C: ficha 9] -->
+
+
+
+        </div>
+
+        <div id="ecg-f10" class="tab-content">
+            <h3 style="color: var(--accent-red);">Marcapasos</h3>
+            <p class="fuente-ficha">En construcción.</p>
+            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+
+
+
+            <!-- [HUECO C: ficha 10] -->
+
+
+
+        </div>
+
+    </div>

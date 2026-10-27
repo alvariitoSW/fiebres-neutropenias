@@ -21,6 +21,7 @@ import * as uciPapers from './modules/uci-papers/index.js';
 import * as fisioUci from './modules/fisio-uci/index.js';
 import * as cardiologia from './modules/cardiologia/index.js';
 import * as neumologia from './modules/neumologia/index.js';
+import * as pifCardio from './modules/pif-cardio/index.js';
 import * as sobrevivirUmi from './modules/sobrevivir-umi/index.js';
 import * as eco from './modules/eco/index.js';
 import * as libros from './modules/libros/index.js';
@@ -41,7 +42,7 @@ async function start() {
     // Especialidades con switcher medio propio: cada init() devuelve
     // { volverAlMenu, irAFicha }, que home registra bajo la misma clave que
     // su vista raíz (ver registrarEspecialidad en home/index.js).
-    const especialidades = { nefrologia, uciPapers, fisioUci, cardiologia, neumologia, sobrevivirUmi, eco, libros };
+    const especialidades = { nefrologia, uciPapers, fisioUci, cardiologia, neumologia, pifCardio, sobrevivirUmi, eco, libros };
     Object.entries(especialidades).forEach(([key, mod]) => arrancar(key, () => home.registrarEspecialidad(key, mod.init())));
 
     // Única llamada a initQuiz() de toda la app — el modal
