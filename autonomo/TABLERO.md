@@ -683,6 +683,53 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 - Qué quiero: el monitor común de `autonomo/maquetas/comun/` pasado a `js/core/` con el bloque 3; después, en capilar (sustituye su tablero), eco (lee el motor), receptores (PA y FC por fármaco, cualitativo 0-3) y cama 7.
 - Lo que NO quiero: monitor en la nefrona, el filtro, el catéter ni la muralla (no tienen constantes).
 
+## Objetivo I · Integración: lo que llega de la ingeniería inversa (rumbo del Radar)
+
+Aprobado por el usuario el 25/10/2026 como rumbo («estoy de acuerdo con todo») y **pasado a tareas el 27/10/2026**
+(«sí, pásalo al tablero»). Sale de la hoja de ruta (`autonomo/radar/HOJA-DE-RUTA.md`), del informe «Del simulador a la
+cama» (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee) y del plan de integración (`docs/historial/radar.md` §6).
+**Regla de oro**: el constructor trabaja solo con nuestro informe de ingeniería inversa y nuestras fuentes; nunca abre
+la web ajena. Orden propuesto por la bitácora el 27/10 y aceptado: **Fase 1** (la rotación de Cardiología empieza el
+01/11) → **Fase 0** → **G1** → el resto, según lleguen los PDF. Marino (Objetivo M5) sigue siendo el carril del
+corazón: lo que ya es parte de `b3` no se repite aquí.
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | aparcada (espera PDF) | Falta el PDF de ECG básico de la rotación (01/11). En cuanto llegue, pasa a `pendiente`. La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
+| 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
+| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | aparcada (espera PDF) | Falta la ESC 2021 de estimulación (mejor Rev Esp Cardiol 2022;75:370-410). Hoy sus estados están vacíos, «pendiente de fuente» |
+| 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
+| 5 | `culprit-b` | Fase 1 · Preguntas «predice el ECG» y «coloca el trombo» (B-026, B) | aparcada hasta terminar Marino | Va detrás de `culprit-a`. C (modelo 2D) espera a las coronarias del motor; D, tras C |
+| 6 | `f0-cifras` | Fase 0 · Calculadoras: la cifra nunca contradice su grado + «la fórmula con tus números» | pendiente | Usa la pieza de `formula-comun` (ya en `js/core/`). Juez `--calc` (cambio previo 5 del plan) |
+| 7 | `f0-origen` | Fase 0 · Origen y licencia a la vista en simuladores, calculadoras e imágenes | pendiente | CLAUDE.md §7.4. Juez `--origen` |
+| 8 | `f0-eco-color` | Fase 0 · Eco: colores por estructura | pendiente | Las cuatro `f0-eco-*`: **un solo constructor en serie**. Antes, mirar qué hicieron ya las paradas 1-2 de `eco-mega` (p. ej. «Señálalo») para no repetir |
+| 9 | `f0-eco-rotulos` | Fase 0 · Eco: rótulos que marcan la estructura en el corte y en el 3D | pendiente | Ver nota de `f0-eco-color` |
+| 10 | `f0-eco-viaje` | Fase 0 · Eco: la sonda viaja animada entre vistas | pendiente | Idea 3 de `anesthbeta.md` §6 |
+| 11 | `f0-eco-guia` | Fase 0 · Eco: ayuda en vivo al mover la sonda | pendiente | Sobre `vistaMasParecida()`; idea de EchoSuite |
+| 12 | `f0-movil` | Fase 0 · Calidad automática en el móvil (peso de la página y fps de la eco) | pendiente | Técnica, directo a `main`. Cambio previo 5 del plan |
+| 13 | `f0-ra-biblio` | Fase 0 · Bibliografía de The Radiology Assistant en el PIF de Radiología | pendiente | Solo enlaces verificados (CLAUDE.md §7.2); sus figuras, no (decidido 25/10) |
+| 14 | `g1-shock` | G1 · Puerta «Guardia» en la raíz y su primera situación: shock e hipotensión | pendiente | Tras la fase 0. Cadena VCI → PAD → VS → GC → E/e′ → VExUS, cada paso con su fórmula (`NORTE.md`). Fuentes: Manual UMI (FATE) y VExUS en `docs/`. Maqueta antes para elegir. Sin guardar datos del paciente |
+| 15 | `g2-paro` | G2 · Arritmia inestable y paro | aparcada (espera PDF) | Falta AHA 2025 (heart.org cerrado en la red) |
+| 16 | `g3-sca` | G3 · Dolor torácico y SCA (y marcapasos) | aparcada (espera PDF) | Falta Di Mario 2005 y ESC 2021 de estimulación; la ESC 2023 de SCA ya está |
+| 17 | `g4-dispositivo` | G4 · Tras colocar un dispositivo (placa, punta del tubo o la vía, neumotórax) | aparcada | Antes, comprobar qué cubren Marino, Merino Neumología y Técnicas R1; faltan casos con licencia |
+| 18 | `g5-neuro` | G5 · Neurocrítico (TC de cráneo en 5 preguntas) | aparcada (espera PDF) | Falta el temario de Neurorradiología |
+| 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | aparcada (espera PDF) | Falta ASE/SCA 2013 de ETE (Hahn) |
+| 20 | `f2-coronarias` | Fase 2 · Coronarias por segmentos con dominancia en el motor | aparcada | Abre `culprit` C y la pared por regiones (C2 de `rea-eco`) |
+| 21 | `f2-angio` | Fase 2 · Coronariografía que late (arco en C, vista óptima) y «cómo leer un informe de cateterismo» | aparcada (espera PDF) | Tras `f2-coronarias`. Falta Di Mario y Sutaria 2005 |
+| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | aparcada (espera PDF) | Falta ASE/SCA 2013 de ETE. Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6 |
+| 23 | `f3-calc-eco` | Fase 3 · Calculadoras de eco para la UCI con catálogo único y «¿cómo se mide?» | aparcada (espera PDF) | Faltan ASE 2025 (corazón derecho y diastólica) y ASE/EACVI 2015. Ideas en `echosuite.md` y `echosuite-2.md` |
+| 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
+| 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
+| 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual; y temarios de Radiología de tórax y Neurorradiología |
+
+**Encargo común del Objetivo I** (cada tarea lo concreta su director con su informe de ingeniería inversa):
+- Para qué: ayudar en la guardia y estudiar (`autonomo/radar/NORTE.md`).
+- Modelo «así sí»: las piezas de la app que ya existen (eco, motor del latido, `formula-comun`, cuaderno de campo,
+  Mayéutica). Lo nuevo con maqueta antes para que el usuario elija.
+- Lo que NO quiero: copiar código, texto o imágenes de las webs estudiadas; cifras sin fuente; guardar datos de
+  pacientes; librerías nuevas sin que el usuario las elija (three.js sigue sin decidir).
+- Fuente: la que dice cada fila; sin PDF, la tarea se queda `aparcada`.
+
 ## Lo que aún no está aprobado
 
 Vive en `autonomo/BITACORA.md` (skill `/bitacora`): lo apuntado que espera el visto bueno del usuario, lo que espera
