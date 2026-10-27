@@ -79,7 +79,7 @@ if (QUE === 'shock' || QUE === 'todo') {
 
 if (QUE === 'pulmon' || QUE === 'todo') {
   await ir('b3-pulmon'); await page.waitForTimeout(1800);
-  const C = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"] .g`)?.textContent.trim(); const o = {}; for (const k of ['pico', 'meseta', 'peeptot', 'vtkg', 'vm', 'vt']) o[k] = g(k); o.sello = [...document.querySelectorAll('.tope-sello')].map((e) => e.firstChild.textContent.replace('⛔', '').trim()).join('|') || '-'; o.avisos = [...document.querySelectorAll('.tope-aviso b')].map((e) => e.textContent.trim()).join('|') || '-'; return o; });
+  const C = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim(); const o = {}; for (const k of ['pico', 'meseta', 'peeptot', 'vtkg', 'vm', 'vt']) o[k] = g(k); o.sello = [...document.querySelectorAll('.tope-sello')].map((e) => e.firstChild.textContent.replace('⛔', '').trim()).join('|') || '-'; o.avisos = [...document.querySelectorAll('.tope-aviso b')].map((e) => e.textContent.trim()).join('|') || '-'; return o; });
   // Con el monitor congelado (#pausa) cada mando rellena el modelo ya estable (35 s de calentamiento, pagina.js
   // llenarMonitor): la lectura es la del estado estacionario y no una de un ciclo a medias (a FR 8 un ciclo dura 7,5 s).
   const M = async (k, v) => { const r = await range(`input[data-m="${k}"]`, v, ['input']); await page.waitForTimeout(250); return r; };
@@ -185,7 +185,7 @@ if (QUE === 'ritmo' || QUE === 'todo') {
   // --- Vuelta de topes (profesor, 26/10 noche): repetición de cada acción, con espera para separar el efecto transitorio
   //     (el bolo que acaba de caer) del tope que falta. accN cuenta cuántas veces existía el botón al pulsarlo.
   const CAP = '/tmp/plan-socialista/b3/limites/'; await import('node:fs').then((fs) => fs.mkdirSync(CAP, { recursive: true }));
-  const accN = async (a, n = 1, ms = 250) => { let hits = 0; for (let i = 0; i < n; i++) { if (a.startsWith('ade')) await page.waitForFunction(() => window.__ritmo.simT >= window.__ritmo.mo.m.cerrojoFin, null, { timeout: 15000 }).catch(() => {}); hits += await page.evaluate((a) => { const b = document.querySelector(`[data-acc="${a}"]`); if (!b || b.disabled) return 0; b.click(); return 1; }, a); await page.waitForTimeout(ms); } return hits; };
+  const accN = async (a, n = 1, ms = 250) => { let hits = 0; for (let i = 0; i < n; i++) { if (a.startsWith('ade')) { await page.waitForFunction(() => window.__ritmo.simT >= window.__ritmo.mo.m.cerrojoFin, null, { timeout: 15000 }).catch(() => {}); await page.waitForTimeout(550); } hits += await page.evaluate((a) => { const b = document.querySelector(`[data-acc="${a}"]`); if (!b || b.disabled) return 0; b.click(); return 1; }, a); await page.waitForTimeout(ms); } return hits; };
   const topes = () => page.evaluate(() => ({ sellos: document.querySelectorAll('.tope-sello').length, avisos: document.querySelectorAll('.tope-aviso').length, apagados: document.querySelectorAll('[data-acc]:disabled, [data-acc].tope-apagado').length, bomba: document.querySelector('#bomba, .bomba')?.textContent.replace(/\s+/g, ' ').slice(0, 60) || '-' }));
   const L2 = async (t, esperas = [800, 3000, 6000]) => { let prev = 0; for (const ms of esperas) { await page.waitForTimeout(ms - prev); prev = ms; fila(`${t} +${ms / 1000} s`, await L()); } console.log('   topes', JSON.stringify(await topes())); };
   console.log('¿usa tope.js?', await page.evaluate(() => !!document.querySelector('.tope-mon, .tope-avisos')));
