@@ -410,9 +410,9 @@ El resto del tablero sigue `aparcada`.
 - **Eco, paradas 1 y 2 ya en main (27/10)**: mirarlas en el móvil (Eco cardíaca → simulador: A4C, subcostal,
   «Derrame» y «Hemorragia» a fondo, TEP, «Señálalo → Festones y cúspides»). La parada 3 (F3, F4, N1, P5, P6) espera
   los PDF de los huecos. Si tienes la **ASE 2025** en PDF, también daría la PAD con ventilación mecánica.
-- **Propuesta tuya (26/10), para la skill del plan**: al terminar una tarea, el director cierra su propia sesión sin
-  esperar a que la valides, y te llega un informe de las sesiones cerradas (qué se hizo, qué quedó, qué decidir).
-  ¿La apunto como tarea?
+- **Sesiones cerradas (hecho el 27/10)**: las sesiones del plan se cierran solas y cada una deja su fila en
+  `autonomo/SESIONES.md` (tarea, qué salió, informe o PR, qué te toca, parte y enlace a la sesión archivada). El
+  informe «Bitácora diaria» lo lee y ya no se archiva a sí mismo.
 - **Propuestas de regla de los partes (25-27/10)**, ¿las apruebas?
   - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
   - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).

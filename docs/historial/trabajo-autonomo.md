@@ -426,3 +426,11 @@ B-031» (27/10).
   fuente, cifra que debe salir en cada forma o caso, «lo que NO quiero», fuentes con página y qué juez mide cada
   punto. Y, de su «clarify», **como mucho 5 preguntas** por encargo, las más importantes primero. `REGLAS.md` §4.9 y
   skill `bitacora` (Apuntar y Aprobar).
+
+## Registro de sesiones cerradas (27/10/2026)
+
+El usuario no encontraba las sesiones que se cierran solas (la regla del 27/10 las archiva y en la app desaparecen o
+salen como «fallida» si se archivan a media respuesta, como `eco-calibra`). Pidió «un sitio donde ver las sesiones
+cerradas, qué han hecho y qué informe han seguido». Se creó `autonomo/SESIONES.md` (una fila por sesión, rellenado a
+mano para el 27/10), el paso 7 del cierre de `plan-socialista` escribe su fila antes de archivar y archiva como última
+llamada, y la tarea programada «Bitácora diaria» lee el registro y ya no se archiva (su informe también se perdía).
