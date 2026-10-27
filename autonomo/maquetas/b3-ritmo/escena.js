@@ -1,5 +1,5 @@
 // El dibujo vivo de la maqueta b3-ritmo: tinta, torniquete, célula y aparatos leen el motor en cada fotograma.
-import { embolo } from '../comun/bomba.js';
+import { embolo } from '../../../js/core/bomba.js';
 import { CABLES, CAMINO, G, OB, TORN, VOLT, angV, aparatosEstatico, bombaDe, canalHtml, contornoBanda, dibujoEstatico, f1, fase, pintarTorniquete, polyTesela, potencial, yPA } from './dibujo.js';
 import { S, ecgEn, latidos, mo, pend } from './pagina.js';
 import { $, NS, clamp } from './datos.js';

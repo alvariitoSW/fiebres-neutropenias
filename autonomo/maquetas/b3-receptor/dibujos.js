@@ -1,9 +1,9 @@
 // Los dibujos de la lámina 1 (maqueta b3-receptor): el tubo, el calibre, el mastocito, el banco del miocito, el haz y la vía.
 import { svgParticula } from '../../../js/core/particulas.js';
-import * as I from '../comun/dibujo-iso.js';
+import * as I from '../../../js/core/dibujo-iso.js';
 import { $, FARMACOS, RECEPTORES, clamp, n1 } from './datos.js';
 /* ============================================================
-   5. El grabado: la pieza común (comun/dibujo-iso.js), en su proyección oblicua: un punto (x, y, z) del mundo cae en
+   5. El grabado: la pieza común (js/core/dibujo-iso.js), en su proyección oblicua: un punto (x, y, z) del mundo cae en
    (x + 0,42·y, −z − 0,34·y). Aquí solo se dice dónde cae cada caja en la lámina (ox, oy: la esquina de delante, abajo a
    la izquierda) y se añaden las formas propias del receptor: la llave y la cerradura.
    ============================================================ */

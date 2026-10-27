@@ -1,6 +1,6 @@
 // Los topes de los mandos del corazón eléctrico (autonomo/bloques/b3/limites-ritmo.md). Una función pura: del estado
 // de la sesión (S), el reloj (simT) y el motor (mo) sale lo que toca poner. pagina.js lo pasa a la pieza común
-// comun/tope.js (avisos y sellos) y apaga los botones de `off`. Cada tope lleva su origen tal como lo da la tabla.
+// js/core/tope.js (avisos y sellos) y apaga los botones de `off`. Cada tope lleva su origen tal como lo da la tabla.
 import { C } from './datos.js';
 export const ADE = ['ade6', 'ade12', 'ade-tv', 'ade-ab'];
 export const CHOQUES = ['cv-fa', 'cv-wpw', 'desf-wpw', 'cv-tv', 'desf-tdp', 'choque'];

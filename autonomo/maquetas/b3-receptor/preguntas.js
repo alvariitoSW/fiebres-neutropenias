@@ -1,5 +1,5 @@
 // Las preguntas y el caso de la Mayéutica del receptor (maqueta b3-receptor). Solo datos.
-import * as I from '../comun/dibujo-iso.js';
+import * as I from '../../../js/core/dibujo-iso.js';
 import { $, C, cita, coma, efecto } from './datos.js';
 import { L, seguir } from './lupa.js';
 import { monitor, tapado } from './trazas.js';

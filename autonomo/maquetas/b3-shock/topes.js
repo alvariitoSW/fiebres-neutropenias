@@ -1,5 +1,5 @@
 // Los topes de los mandos del shock (autonomo/bloques/b3/limites-shock.md). Una función pura: de la lectura y los mandos
-// sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común comun/tope.js.
+// sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común js/core/tope.js.
 // Cada tope lleva su origen tal como lo da la tabla: ficha (con página), «fisiología general» o «ilustrativo».
 import * as D from './datos.js';
 const { C, TOPES: T } = D;

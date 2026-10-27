@@ -1,4 +1,4 @@
-// El corazón en corte de cinco cámaras (pieza común de las maquetas; pensada para pasar a js/core/corazon-corte.js).
+// El corazón en corte de cinco cámaras (pieza común de la app).
 // Grabado como el corte del corazón eléctrico (crema y trama sobre fondo oscuro), pero PARAMÉTRICO: lo mueve el estado
 // de un motor (volúmenes de las cuatro cámaras, válvulas abiertas o cerradas, tabique, derrame del saco, PVC). Lo usan la
 // cabecera del shock (el paciente, el circuito del ECMO y el recorrido de los aparatos).

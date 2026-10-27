@@ -1,5 +1,5 @@
 // Los topes de los mandos del pulmón (autonomo/bloques/b3/limites-pulmon.md). Funciones puras: de la lectura y los
-// mandos sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común comun/tope.js.
+// mandos sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común js/core/tope.js.
 // Cada tope lleva su origen como lo da la tabla: ficha (con página), «fisiología general» o «ilustrativo».
 // Solo topes del modelo: la pantalla del respirador se rehará más adelante.
 import { simular } from './pulmon.mjs';

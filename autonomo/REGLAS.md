@@ -60,7 +60,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     - **Ningún estado da una cifra imposible** (§1.7): si pasa, se corrige el motor, no se tapa con el tope.
     - **La prueba del modelo lleva cada mando a su tope** (y las acciones repetidas, a su máximo) y comprueba que sale
       el sello y que las cifras siguen siendo de un paciente posible. La pieza común es
-      `autonomo/maquetas/comun/tope.js` (aviso y sello).
+      `js/core/tope.js` (aviso y sello).
 15. **Lo que la ficha no dice, se busca y se cita** (el usuario, 27/10/2026: «lo que la fuente no dice, todo eso
     habría que buscarlo e incluirlo y minimizar ese apartado a un par de chorradas que falten; hay que mejorar esa fuga
     de info»). Un mecanismo, distractor, explicación, tope o cifra que hoy saldría rotulado `fisiología general`, «la

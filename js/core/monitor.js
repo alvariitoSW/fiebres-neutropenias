@@ -1,4 +1,4 @@
-// El monitor de cabecera: UNA pieza para todas las maquetas (maqueta; pensada para pasar a js/core/monitor-uci.js).
+// El monitor de cabecera: UNA pieza para todas las maquetas (pieza común de la app).
 // La usan la cabecera del shock (lee el motor del latido), el corazón eléctrico (lee su grafo de conducción, con el papel
 // milimetrado del ECG) y el receptor vivo (lee efecto()). La pieza no calcula nada: dibuja lo que le dan.
 //

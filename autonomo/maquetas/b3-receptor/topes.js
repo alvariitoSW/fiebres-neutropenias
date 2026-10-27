@@ -1,5 +1,5 @@
 // Los topes de los mandos del receptor (autonomo/bloques/b3/limites-receptor.md). Una función pura: del estado sale el
-// conjunto de topes que toca poner; pagina.js los pasa a la pieza común comun/tope.js.
+// conjunto de topes que toca poner; pagina.js los pasa a la pieza común js/core/tope.js.
 // Cada tope lleva su origen tal como lo da la tabla: ficha (con página) o «fisiología general». Las cifras: las de la ficha.
 import { C, ESTADO, FARMACOS, coma } from './datos.js';
 

@@ -1,12 +1,12 @@
 // Los tres aparatos del soporte mecánico como objetos reales (maqueta b3-shock v2; en la app irán a
-// js/modules/eco/soporte/{balon,impella,ecmo}.js). Método Anatomy con la pieza propia comun/dibujo-iso.js.
+// js/modules/eco/soporte/{balon,impella,ecmo}.js). Método Anatomy con la pieza propia js/core/dibujo-iso.js.
 // Cada aparato tiene tres planos: «Dentro» (el corte del corazón y la aorta con el aparato funcionando, movido por el
 // MISMO motor que pinta el monitor), «Despiece» (el aparato solo, desmontado en sus conjuntos, con su leyenda numerada)
 // y «Recorrido» (por dónde entra y dónde queda la punta). Lo que la fuente no da («pide fuente») no se dibuja.
 // El paciente va en grabado (tonos crema y sangre); la máquina, en isométrico técnico (gris cálido, una pieza en oro).
-import * as I from '../comun/dibujo-iso.js';
+import * as I from '../../../js/core/dibujo-iso.js';
 import { montarFrente, estadoCorte } from './corazon.js';
-import { crearCorazonCorte } from '../comun/corazon-corte.js';
+import { crearCorazonCorte } from '../../../js/core/corazon-corte.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const f1 = I.f1;

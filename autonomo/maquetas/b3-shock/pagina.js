@@ -1,14 +1,14 @@
 // La página de la maqueta b3-shock v2: une el motor (soporte.mjs sobre js/modules/eco/motor.mjs), el monitor, la
 // escena (el paciente en grabado o el aparato) y los modos Explorar, «¿Qué shock es?» y Mayéutica.
-import { instalarIso } from '../comun/dibujo-iso.js';
+import { instalarIso } from '../../../js/core/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
 import { monitorDelShock, CANALES } from './canales.js';
-import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
-import { crearDock } from '../comun/dock.js';
+import { instalarMonitor, pintarCifras as pintarColumna } from '../../../js/core/monitor.js';
+import { crearDock } from '../../../js/core/dock.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
 import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
-import { crearTope } from '../comun/tope.js';
+import { crearTope } from '../../../js/core/tope.js';
 import * as D from './datos.js';
 import { crearConsolaBalon } from './consola-balon.js';
 import { calcularTopes, bolosQueNoCaben } from './topes.js';

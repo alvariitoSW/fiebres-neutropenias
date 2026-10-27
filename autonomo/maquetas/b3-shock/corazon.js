@@ -1,10 +1,10 @@
-// El paciente (maqueta b3-shock v2): el corazón en corte de cinco cámaras (la pieza común comun/corazon-corte.js) movido
+// El paciente (maqueta b3-shock v2): el corazón en corte de cinco cámaras (la pieza común js/core/corazon-corte.js) movido
 // por el MISMO motor que el monitor (volúmenes de las cuatro cámaras, válvulas, tabique, derrame del saco, PVC), con los
 // pulmones y su edema, la VCI y una arteriola en su lupa (la resistencia del motor). El «Recorrido» de cada aparato, en
 // un torso de frente con su caja torácica, la aorta entera y las venas. Y la eco de «¿Qué shock es?»: el ecógrafo de la
 // app (js/modules/eco/ecografia.mjs) sobre el corazón de la app, en apical de cuatro cámaras, del mismo motor.
-import { crearCorazonCorte, instalarCorazonCorte } from '../comun/corazon-corte.js';
-import { suave2 } from '../comun/dibujo-iso.js';
+import { crearCorazonCorte, instalarCorazonCorte } from '../../../js/core/corazon-corte.js';
+import { suave2 } from '../../../js/core/dibujo-iso.js';
 import { aplanamientoSeptal, estadoGeo, extraDeMotor } from '../../../js/modules/eco/formas.mjs';
 import { modeloVci } from '../../../js/modules/eco/abdomen.mjs';
 import { planoVista, crearEcografo } from '../../../js/modules/eco/ecografia.mjs';

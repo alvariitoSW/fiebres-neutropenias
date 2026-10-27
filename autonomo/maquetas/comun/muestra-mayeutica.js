@@ -6,7 +6,7 @@
 // crearMuestra({ cont, dock: { pasos, izq, der }, recorrido, caso: { titulo, pasos, llevas, vuelta }, grupos,
 //   preparar(q) (pone el modelo en el estado de la pregunta y tapa lo que se predice), destapar(q) (enseña el modelo),
 //   tocar(q, hecho) («compruébalo» en el modelo; hecho(html) al acabar), cita(c), chip(c), medir() (el dock), alVolver(c) })
-import { instalarCss } from './dibujo-iso.js';
+import { instalarCss } from '../../../js/core/dibujo-iso.js';
 
 const CSS = `
 .mm-punto { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }

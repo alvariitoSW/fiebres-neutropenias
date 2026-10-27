@@ -1,12 +1,12 @@
 // La página de la maqueta b3-ritmo: estado de la sesión, monitor, mandos, explicación guiada, Mayéutica y bucle.
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
-import { crearPlanoGrande } from '../comun/plano-grande.js';
-import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from '../comun/monitor.js';
+import { crearPlanoGrande } from '../../../js/core/plano-grande.js';
+import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from '../../../js/core/monitor.js';
 import { $, C, CASO, CRECE, ESC_2021, ESTADOS, F195, FAMILIAS, FICHAS, GUIAS, IMG, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, NS, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, RECORRIDO, REDUCIR, aplicarK, cita, clamp, coma, fcFig, navParaFC, org, qtExtra } from './datos.js';
 import { pintarGraficas } from './graficas.js';
 import { montarEscena, pintarAparatos, pintarEscena, pintarEscenaPendiente, reiniciarD } from './escena.js';
 import { MOTOR } from './motor.js';
-import { crearTope } from '../comun/tope.js';
+import { crearTope } from '../../../js/core/tope.js';
 import { ENERGIA_TV, ADE, MAX, calcularTopes, cargando } from './topes.js';
 import { G, f1 } from './dibujo.js';
 instalarMonitor();
@@ -46,7 +46,7 @@ function arrancarMotor() {
   montarMonitor(); llenarEstatico(); reiniciarD(); pintarEscena(simT);
 }
 
-/* ---------- El monitor: la pieza común (comun/monitor.js). Aquí, qué lee cada tira; el papel es el del ECG ---------- */
+/* ---------- El monitor: la pieza común (js/core/monitor.js). Aquí, qué lee cada tira; el papel es el del ECG ---------- */
 const PXS = 110;          // píxeles por segundo: 0,04 s = 4,4 px (1 mm del papel a 25 mm/s)
 const MM = 4.4;           // 1 mm en la tira (también 0,1 mV en vertical: 10 mm/mV)
 const yEcg = v => 52 - v * 10 * MM, yArt = v => 43 - clamp(v - 20, 0, 130) / 130 * 40, yCo2 = v => 37 - clamp(v, 0, 50) / 50 * 33;

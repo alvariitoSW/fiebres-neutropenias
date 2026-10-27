@@ -1,7 +1,7 @@
 // Los datos del receptor vivo (maqueta b3-receptor v2): citas, tablas RECEPTORES / CELULAS / FARMACOS, PACIENTES, ESTADOS y la función efecto().
 // Sin dibujo. Partido sin cambiar lo que hace: el resto de archivos de esta carpeta lo importan.
-import * as I from '../comun/dibujo-iso.js';
-import { instalarMonitor } from '../comun/monitor.js';
+import * as I from '../../../js/core/dibujo-iso.js';
+import { instalarMonitor } from '../../../js/core/monitor.js';
 I.instalarGrabado(); instalarMonitor();
 export const $ = id => document.getElementById(id);
 export const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;

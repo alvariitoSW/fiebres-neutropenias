@@ -1,4 +1,4 @@
-// El dock fijo de abajo: UNA pieza para las maquetas (pensada para pasar a js/core/dock.js). Lo que ya tiene cada
+// El dock fijo de abajo: UNA pieza para las maquetas. Lo que ya tiene cada
 // maqueta (la frase, las pestañas, el panel de mandos) se queda; esta pieza solo añade el plegado:
 //   · un asa de 44 px («Mandos ▾ / ▴») que pliega el dock a la frase sola, para que el dibujo y el monitor quepan en la
 //     pantalla del móvil (v3: la frase y los mandos se comían 260 de 844 px);

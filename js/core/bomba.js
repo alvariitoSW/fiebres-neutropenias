@@ -1,6 +1,6 @@
-// La bomba de jeringa: UNA pieza para todas las maquetas (maqueta; pensada para pasar a js/core/bomba.js). La usan el
+// La bomba de jeringa: UNA pieza para todas las maquetas (pieza común de la app). La usan el
 // carro de aparatos del corazón eléctrico (en isométrica, piel plana) y las bombas del dock del receptor vivo (de
-// frente, piel de grabado). Se dibuja con comun/dibujo-iso.js (caja3, caraMatriz): cualquier cámara vale.
+// frente, piel de grabado). Se dibuja con js/core/dibujo-iso.js (caja3, caraMatriz): cualquier cámara vale.
 //
 // Coordenadas propias (unidades ≈ px con k = 1): el cuerpo va de [0, 0, 0] a [100, 34, 28]; el frente es la cara y = 34
 // (pantalla de dos líneas y teclado); encima, la cuna, la jeringa graduada (x 8-66) y el émbolo con su empujador, que

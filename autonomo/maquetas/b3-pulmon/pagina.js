@@ -1,14 +1,14 @@
 // El pulmón con respirador, pieza 1: la página (maqueta; en la app, js/modules/libros/pulmon-vivo.js sobre el motor de
-// la Mayéutica). Une el modelo (pulmon.mjs), el monitor común (comun/monitor.js), la escena (escena.js), los datos
+// la Mayéutica). Une el modelo (pulmon.mjs), el monitor común (js/core/monitor.js), la escena (escena.js), los datos
 // (datos.js) y la Mayéutica de muestra (comun/muestra-mayeutica.js). El modelo corre en vivo y el monitor dibuja
 // muestra a muestra, con un barrido de 12 s.
-import { instalarMonitor, instalarMonitorResp } from '../comun/monitor.js';
+import { instalarMonitor, instalarMonitorResp } from '../../../js/core/monitor.js';
 import { montarPantalla, flujoTope } from './pantalla.js';
-import { instalarCss } from '../comun/dibujo-iso.js';
-import { crearDock } from '../comun/dock.js';
+import { instalarCss } from '../../../js/core/dibujo-iso.js';
+import { crearDock } from '../../../js/core/dock.js';
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
 import { crearPulmon, pbw, ORIGEN_MODELO, T_PAUSA, T_OCLUSION } from './pulmon.mjs';
-import { crearTope } from '../comun/tope.js';
+import { crearTope } from '../../../js/core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from './datos.js';

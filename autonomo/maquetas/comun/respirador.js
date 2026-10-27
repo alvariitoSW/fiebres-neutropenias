@@ -7,7 +7,7 @@
 //   crearRespirador(cont, cfg) → { el, mon, curvas, montar(), pintarCurvas(), casillas(valores), mandos(valores),
 //                                  modo(k), alarmas(lista), tecla(k, pulsada), info(txt), velo }
 //   cfg:
-//     canales: los canales del monitor (crearMonitor de comun/monitor.js); por defecto canalesPantalla()
+//     canales: los canales del monitor (crearMonitor de js/core/monitor.js); por defecto canalesPantalla()
 //     modos:   [{ k, et, apagado }]            apagado: el rótulo de por qué no está viva («no en este modelo…»)
 //     casillas:[{ k, et, u, org, ilu }]        k = data-fila (la guía y las pruebas la buscan así); ilu: cifra ilustrativa
 //     mandos:  [{ k, et, u, min, max, paso, org, nota }]   el rango y la nota los da la página en mandos(valores)
@@ -17,8 +17,8 @@
 //   casillas({ k: { v, lim, estado, sub } })   estado: '' | 'aviso' | 'alarma' | 'vacia'
 //   mandos({ k: { v, txt, min, max, paso, apagado, nota } })   apagado: texto del porqué (el mando no se toca)
 //   alarmas([{ k, nivel: 'alarma' | 'aviso', texto }])   la barra de arriba (campana, sin sonido)
-import { crearMonitor, instalarMonitor, instalarMonitorResp } from './monitor.js';
-import { instalarCss } from './dibujo-iso.js';
+import { crearMonitor, instalarMonitor, instalarMonitorResp } from '../../../js/core/monitor.js';
+import { instalarCss } from '../../../js/core/dibujo-iso.js';
 
 const f1 = (n) => Math.round(n * 10) / 10;
 

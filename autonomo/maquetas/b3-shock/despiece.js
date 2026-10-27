@@ -1,8 +1,8 @@
 // El «Despiece» de cada aparato (maqueta b3-shock v2): el aparato solo, sobre su banco, desmontado en sus conjuntos,
 // con la leyenda numerada que ilumina cada pieza (una sola en oro). Isométrico técnico con la pieza propia
-// comun/dibujo-iso.js. Lo que la fuente no da no se dibuja (p. ej. el sensor de presión del Impella, la cánula de
+// js/core/dibujo-iso.js. Lo que la fuente no da no se dibuja (p. ej. el sensor de presión del Impella, la cánula de
 // reperfusión del ECMO, el marcador radioopaco del balón).
-import * as I from '../comun/dibujo-iso.js';
+import * as I from '../../../js/core/dibujo-iso.js';
 import { consola, W, H } from './aparatos.js';
 const f1 = I.f1;
 const coma = (x, d = 0) => (+x).toFixed(d).replace('.', ',');

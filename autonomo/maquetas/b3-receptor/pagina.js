@@ -1,14 +1,14 @@
 // La página del receptor vivo (maqueta b3-receptor): estado, mandos, dock, guía, fichas, bucle y Mayéutica. Es el punto de entrada.
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
-import { crearPlanoGrande } from '../comun/plano-grande.js';
-import * as I from '../comun/dibujo-iso.js';
-import { bombaMini } from '../comun/bomba.js';
+import { crearPlanoGrande } from '../../../js/core/plano-grande.js';
+import * as I from '../../../js/core/dibujo-iso.js';
+import { bombaMini } from '../../../js/core/bomba.js';
 import { $, C, CELULAS, ESTADO, ESTADOS, FAMILIAS, FARMACOS, FICHA, IMG52, NS, OBJETIVOS, PACIENTES, RECEPTORES, REDUCIR, UMI, chip, cita, citaCorta, clamp, coma, efecto, org, pag } from './datos.js';
 import { AC, BANCO, R_REF, VIA, actualizarEscena, cilindro, cuenta, dibHaz, f2, geomTubo, icoForma, llaveMini, marcas, montarEscena, part } from './dibujos.js';
 import { animarLupa, aplicarCascada, granulos, heroe, heroeActual, heroeDe, lupaCel, lupaHecha, montarLupa, objetivosLupa, prensa, seguir, setHeroe, setLupaCel } from './lupa.js';
 import { R, SEG, llenarEstatico, monitor, montarTrazas, muestra, pausado, pintarCifras, pintarTrazas, seguirLactato, setPausado, setR, setTapado, tapado } from './trazas.js';
 import { CASO, PREG_RECORRIDO } from './preguntas.js';
-import { crearTope } from '../comun/tope.js';
+import { crearTope } from '../../../js/core/tope.js';
 import { calcularTopes, fraseTope } from './topes.js';
 /* ============================================================
    9. Estados, lupas, bombas (pieza común dibujada), frase viva, explicación guiada, fichas y notas
@@ -112,7 +112,7 @@ $('paso-a-paso').addEventListener('click', () => {
   pasoI = 0; darPaso(); $('paso-a-paso').textContent = '■ Parar';
   pasoTimer = setInterval(() => { if (darPaso()) { setTimeout(pararPasoAPaso, 2400); clearInterval(pasoTimer); } }, 2600);
 });
-/* ---- Las bombas de jeringa: la pieza común (comun/bomba.js), de frente; aquí, los tramos de la fuente, el conversor
+/* ---- Las bombas de jeringa: la pieza común (js/core/bomba.js), de frente; aquí, los tramos de la fuente, el conversor
    por kilo y el candado ---- */
 export const bombaDib = (valorTxt, unidad, avance, candado) => bombaMini({ l1: unidad, l2: valorTxt, avance, candado });
 // El HTML de la bomba (o del interruptor) de un fármaco del estado: lo usan el dock y la explicación guiada

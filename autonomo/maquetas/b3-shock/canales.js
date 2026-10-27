@@ -1,12 +1,12 @@
 // Los canales del monitor de la cabecera del shock y cómo lee cada uno el motor (maqueta; en la app, la parte del shock
-// de js/core/monitor-uci.js). El DIBUJO del monitor es la pieza común (comun/monitor.js): aquí solo se dice qué canal
+// de js/core/monitor-uci.js). El DIBUJO del monitor es la pieza común (js/core/monitor.js): aquí solo se dice qué canal
 // lee qué. Cada canal lee el MISMO motor que mueve el corazón y los aparatos, muestra a muestra: la presión de la raíz
 // aórtica (ART), la de la arteria pulmonar o, al enclavar, la de las venas pulmonares (PAP / PCP, como el catéter vivo:
 // js/modules/eco/lecturas.mjs) y la de la aurícula derecha (PVC). El ECG (ecgLatido de la pieza común), la
 // pletismografía y la capnografía son formas ilustrativas sincronizadas con el latido y la respiración del modelo. Con el
 // balón, la curva punteada es la aórtica sin el volumen del balón; las marcas de disparo (onda R) y de inflado y vaciado
 // van encima de su curva.
-import { crearMonitor as crearPieza, ecgLatido } from '../comun/monitor.js';
+import { crearMonitor as crearPieza, ecgLatido } from '../../../js/core/monitor.js';
 
 export const CANALES = [
   { k: 'ecg', rot: 'II', alto: 26, col: 'var(--accent-green)', base: 0.7, gan: 0.6 },

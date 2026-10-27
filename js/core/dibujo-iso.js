@@ -1,4 +1,4 @@
-// Dibujo isométrico: pieza propia (maqueta; pensada para pasar a js/core/dibujo-iso.js).
+// Dibujo isométrico: pieza propia (pieza común de la app).
 // Sigue el MÉTODO «Anatomy» (github.com/wheresryan22/anatomy, MIT): el objeto real es la explicación, sólidos (no
 // alambres) con cuatro tonos por orientación, orden del pintor de atrás adelante, líneas que acaban en algo, una sola
 // pieza iluminada y movimiento tranquilo basado en el tiempo. El CÓDIGO es propio (decisión del usuario, 21/10/2026: «kit

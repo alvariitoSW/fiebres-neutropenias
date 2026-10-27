@@ -4,6 +4,6 @@ body{margin:0;background:var(--bg-main);color:var(--text-main);font:14px var(--s
 <body><div id="mon">monitor</div>
 <div class="dock" id="dock"><div class="dock-in"><div class="frase">Frase viva</div><button id="b1" data-vol>+250 mL</button> <button id="b2" data-vol>+500 mL</button></div></div>
 <script type="module">
-import { crearTope } from '../../../maquetas/comun/tope.js';
+import { crearTope } from '../../../../js/core/tope.js';
 window.tope = crearTope({ monitor: document.getElementById('mon'), dock: document.getElementById('dock'), cita: (c) => `<button type="button" class="cita-ir">Ver en la ficha: ${c.sitio}</button>` });
 </script></body></html>

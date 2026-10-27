@@ -5,7 +5,7 @@
 // Origen de cada cosa: presión arterial y aumento = modelo (fisiología general); el ECG (P-QRS-T) y la forma del balón = ilustrativos;
 // volumen 35-40 mL, hinchar en diástole y vaciar en la contracción isovolumétrica = ficha (Marino cap. 16, PDF p. 45).
 // Disparo, modo, temporización, alarma, baterías y helio: interfaz ilustrativa. Temporización: sin fuente en la app.
-import { instalarCss } from '../comun/dibujo-iso.js';
+import { instalarCss } from '../../../js/core/dibujo-iso.js';
 
 const NP = 180, HUECO = 10;   // la goma de barrido: 10 muestras, para que se lea como goma y no como un corte
 const ALTO = { ecg: 44, art: 74, bal: 40 }, PAD = 3, MARGEN = 24;

@@ -1,6 +1,6 @@
 // El dibujo estático de la maqueta b3-ritmo: el corte del corazón, las dos lupas (nodo AV y célula) y los aparatos.
-import * as I from '../comun/dibujo-iso.js';
-import { bomba, SALIDA } from '../comun/bomba.js';
+import * as I from '../../../js/core/dibujo-iso.js';
+import { bomba, SALIDA } from '../../../js/core/bomba.js';
 import { MOTOR } from './motor.js';
 import { $, clamp } from './datos.js';
 /* ============================================================
@@ -288,7 +288,7 @@ export function fase(tau, apd, nodo) {
   if (tau < 0 || tau >= apd) return 4; if (tau < 0.003) return 0; if (tau < 0.014) return 1; if (tau < 0.62 * apd) return 2; return 3;
 }
 
-// ---------- 4. Los aparatos: el grabado rápido y la bomba de las piezas comunes (comun/dibujo-iso.js, comun/bomba.js).
+// ---------- 4. Los aparatos: el grabado rápido y la bomba de las piezas comunes (js/core/dibujo-iso.js, js/core/bomba.js).
 // Isometría de 30°; aquí solo se colocan (OB: la bomba; OD: el desfibrilador) y se pasan las cajas a la pieza común.
 export const OB = I.isometrica({ x: 64, y: 56 }), OD = I.isometrica({ x: 246, y: 44 });
 const isoP = (o, x, y, z) => o.iso([x, y, z]);

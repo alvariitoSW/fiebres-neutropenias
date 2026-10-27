@@ -1,4 +1,4 @@
-// El tope de un mando: UNA pieza para las cuatro maquetas del bloque 3 (maqueta; pensada para pasar a js/core/tope.js).
+// El tope de un mando: UNA pieza para las cuatro maquetas del bloque 3 (pieza común de la app).
 // Cada mando tiene un tope escrito y con origen. Al acercarse avisa; al llegar, se apaga y sale un sello con la consecuencia.
 //
 //   crearTope({ monitor, dock, cita }) → { poner(clave, opciones), quitar(clave), activos() }

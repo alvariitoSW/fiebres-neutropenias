@@ -1,10 +1,10 @@
 // El monitor del receptor (maqueta b3-receptor): curvas, cifras y el estado compartido (R, pausa, tapa).
-import { crearMonitor, pintarCifras as pintarColumna, ecgLatido } from '../comun/monitor.js';
+import { crearMonitor, pintarCifras as pintarColumna, ecgLatido } from '../../../js/core/monitor.js';
 import { $, C, OBJETIVOS, chip, cita, coma, org, sat } from './datos.js';
 import { L, seguir } from './lupa.js';
 import { ST, medirDock } from './pagina.js';
 /* ============================================================
-   8. El monitor de cabecera: la pieza común (comun/monitor.js), en su forma corta (ECG y ART) o con las 5 curvas.
+   8. El monitor de cabecera: la pieza común (js/core/monitor.js), en su forma corta (ECG y ART) o con las 5 curvas.
    Aquí, qué lee cada curva: formas ilustrativas (el ECG, el latido común de la pieza); las cifras salen de efecto().
    ============================================================ */
 export const gauss = (x, m, s) => Math.exp(-((x - m) * (x - m)) / (2 * s * s));
