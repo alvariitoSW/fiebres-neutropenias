@@ -3191,8 +3191,8 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
 .cpv-raiz .cpv-celda { background: var(--bg-card); border: 1px solid var(--cpv-card2); border-radius: 8px; padding: 3px 4px 4px; min-width: 0; display: grid; align-content: start; gap: 0; }
 .cpv-raiz .cpv-celda .cpv-k { font: 600 .6rem/1.15 var(--cpv-sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .cpv-raiz .cpv-celda b { font: 700 .98rem/1.15 var(--cpv-serif); font-variant-numeric: tabular-nums; color: var(--text-main); white-space: nowrap; overflow: hidden; }
-.cpv-raiz .cpv-celda .cpv-u { font: .55rem/1.1 var(--cpv-sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.cpv-raiz .cpv-celda .cpv-sub { font: .55rem/1.15 var(--cpv-sans); color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cpv-raiz .cpv-celda .cpv-u { font: .55rem/1.1 var(--cpv-sans); color: var(--text-muted); white-space: normal; overflow-wrap: anywhere; }
+.cpv-raiz .cpv-celda .cpv-sub { font: .55rem/1.15 var(--cpv-sans); color: var(--text-dim); white-space: normal; overflow-wrap: anywhere; }
 .cpv-raiz .cpv-celda .cpv-o { font: .5rem/1.25 var(--cpv-sans); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 0 3px; justify-self: start; margin-top: 2px; white-space: nowrap; max-width: 100%; overflow: hidden; }
 .cpv-raiz .cpv-celda .cpv-o.cpv-ilu { border-style: dashed; }
 .cpv-raiz .cpv-celda.cpv-fuera b { color: var(--accent-red); }
@@ -3227,6 +3227,7 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
 .cpv-raiz input[type="range"] { width: 100%; min-width: 0; height: 44px; accent-color: var(--accent-yellow); margin: 0; background: transparent; }
 
 /* Dock fijo abajo, con la frase viva encima de los mandos */
+.cpv-raiz [data-accion="sig"], .cpv-raiz .cpv-consecuencia { scroll-margin-bottom: calc(var(--cpv-dock-h, 190px) + 16px); }
 .cpv-raiz .cpv-dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); isolation: isolate; border-top: 1px solid var(--border-color);
   padding: 6px max(10px, env(safe-area-inset-left, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)); }
 .cpv-raiz .cpv-dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; }
@@ -3254,7 +3255,7 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
   border-radius: 12px; cursor: pointer; text-align: left; font: 600 .76rem/1.1 var(--cpv-sans); white-space: nowrap; }
 .cpv-raiz .cpv-chip-f small { display: block; font: .62rem/1.1 var(--cpv-sans); color: var(--text-muted); }
 .cpv-raiz .cpv-chip-f[aria-pressed="true"] { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .18); box-shadow: inset 0 0 0 1px var(--accent-yellow); }
-.cpv-raiz .cpv-grafica .cpv-gr-fila { display: grid; grid-template-columns: minmax(0, 1fr) 60px; gap: 8px; align-items: start; }
+.cpv-raiz .cpv-grafica .cpv-gr-fila { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; align-items: start; }
 .cpv-raiz .cpv-grafica svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 8px; }
 .cpv-raiz .cpv-grafica .cpv-para { margin-top: 6px; }
 .cpv-raiz .cpv-leyenda { display: grid; grid-template-columns: minmax(0, 1fr); gap: 6px; margin: 0; padding: 0; list-style: none; font: .8rem/1.35 var(--cpv-sans); color: var(--text-dim); }
