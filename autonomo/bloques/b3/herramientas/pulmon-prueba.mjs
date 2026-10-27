@@ -9,7 +9,8 @@ const page = await ctx.newPage();
 page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()); }); page.on('pageerror', (e) => errores.push('pageerror: ' + e.message));
 const desb = async (t) => { const d = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `desborde ${d} px en ${t}`); };
 const cap = (n) => page.screenshot({ path: `${CAP}${n}-${ANCHO}.png` });
-const tap = async (sel) => { const el = page.locator(sel).first(); await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' })); await el.tap(); await page.waitForTimeout(150); };
+const tap = async (sel) => { if (sel === '#btn-guia' && await page.evaluate(() => document.getElementById('dock').classList.contains('dock-plegado'))) { await page.locator('.dock-asa').tap(); await page.waitForTimeout(300); }   // dock plegado: el primer toque lo despliega (comun/dock.js) y el click de Guía se pierde
+  const el = page.locator(sel).first(); await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' })); await el.tap(); await page.waitForTimeout(150); };
 const cifras = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim(); return ['pico', 'flujofin', 'vt', 'meseta', 'pres', 'peeptot', 'cstat', 'dp', 'vtkg', 'vm', 'ie'].map(g).join(' | ') + ' || ' + document.getElementById('consola').textContent.trim().slice(0, 80); });
 const frase = () => page.evaluate(() => document.getElementById('frase-txt').textContent.replace(/\s+/g, ' ').slice(0, 220) + ' ## ' + document.getElementById('ficha-pac').textContent);
 const mando = async (k, v) => { await page.evaluate(([k, v]) => { const i = document.querySelector(`input[data-m="${k}"]`); if (!i) return; i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); }, [k, v]); await page.waitForTimeout(2600); };

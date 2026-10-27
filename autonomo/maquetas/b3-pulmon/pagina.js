@@ -310,5 +310,3 @@ $('modo-may').addEventListener('click', () => ponerModo('may'));
 mon.montar(); ponerEstado('normal-vcv');
 addEventListener('resize', () => { mon.montar(); llenarMonitor(); pintarTodo(); });
 if (!REDUCIR) requestAnimationFrame(bucle);
-// El dock cambia de alto (mandos, guía): el hueco de abajo y el scroll-padding siguen su alto real para que ningún botón quede tapado.
-if (window.ResizeObserver && $('dock')) new ResizeObserver(() => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px')).observe($('dock'));
