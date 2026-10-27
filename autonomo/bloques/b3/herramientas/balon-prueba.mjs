@@ -27,6 +27,13 @@ for (const [pac, g] of [['aurelio', null], ['aurelio', 100], ['aurelio', 30]]) {
   ok(b.razon === 2 && b.picoNo != null && b.teleNo != null, `${pac} 1:2: sin lectura no asistida`);
   ok(b.pico > b.picoNo + 5, `${pac} 1:2: el pico asistido (${b.pico}) no supera al no asistido (${b.picoNo})`);
   ok(b.tele < b.teleNo, `${pac} 1:2: la telediastólica asistida (${b.tele}) no es menor que la no asistida (${b.teleNo})`);
+  await page.waitForTimeout(2500);   // la tira entera (4 s) ya es de 1:2
+  { const m = await page.evaluate(() => ({ des: document.querySelectorAll('#iabp .des-mk').length, inf: document.querySelectorAll('#iabp .inf-mk').length, L: [...document.querySelectorAll('#iabp .lat')].map((t) => [+t.getAttribute('x'), t.textContent]).sort((a, b) => a[0] - b[0]), tel: !!document.querySelector('#iabp-tel'), mes: !!document.querySelector('#iabp-meseta'), frase: !!document.querySelector('#iabp-frase') }));
+    console.log(pac, 'marcas', JSON.stringify(m)); ok(m.des > 0, `${pac} 1:2: no hay marcador de desinflado`); ok(m.inf > 0 && m.tel && m.mes && m.frase, `${pac} 1:2: faltan inflado, rótulo de telediastólica, meseta o frase`);
+    const xs = m.L.map((l) => l[0]), A = m.L.map((l) => l[1]).join(''); const mn = Math.min(...xs.slice(1).map((x, k) => x - xs[k])); for (let k = 1; k < xs.length; k++) if (xs[k] - xs[k - 1] < mn * 1.3) ok(A[k] !== A[k - 1], `${pac} 1:2: dos letras iguales seguidas (${A})`); ok(new Set(xs.map((x) => Math.round(x / 4))).size === xs.length, `${pac} 1:2: letras pisadas`); }
+  if (g == null) { await tap('#btn-guia'); await page.waitForTimeout(400); const tit = await page.evaluate(() => document.querySelector('#guia, .guia')?.innerText.slice(0, 80)); console.log('guía 1:2:', tit);
+    for (let k = 0; k < 4; k++) { const n = await page.evaluate(() => document.querySelectorAll('.guia-anillo').length); ok(n > 0, `guía 1:2 paso ${k + 1}: nada señalado en #iabp-svg`); const nx = page.locator('#guia-sig'); if (!(await nx.count())) break; await nx.evaluate((e) => e.click()); await page.waitForTimeout(250); }
+    await page.evaluate(() => document.getElementById('guia-x')?.click()); await page.waitForTimeout(300); }
   if (g == null) await cap('consola-1a2');
   await tap('[data-razon="3"]'); await page.waitForTimeout(2500); const c = await L(); console.log(pac, '1:3', JSON.stringify(c)); ok(c.razon === 3 && c.picoNo != null, `${pac} 1:3 sin no asistido`);
   await tap('[data-razon="1"]'); await page.waitForTimeout(1500);

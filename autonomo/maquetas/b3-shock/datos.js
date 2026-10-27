@@ -158,7 +158,7 @@ export function nombreEstado(R, X) {
   const s = X.aparato ?? X.ajuste.soporte;
   if (s !== 'no') {
     if (!indicacion(X.pac, s).ok) return 'soporte-no';
-    if (s === 'balon') return 'balon';
+    if (s === 'balon') return X.ajuste.razon > 1 && X.ajuste.balon > 0 ? 'balon-1a2' : 'balon';
     if (s === 'impella') return bombaNoLlega(R) ? 'impella-vacio' : R.aoDe && R.aoAbre === 0 ? 'impella-alto' : 'impella';
     if (X.ajuste.venteo !== 'no') return 'ecmo-venteo';
     if (bombaEcmoNoLlega(R)) return 'ecmo-vacio';
@@ -284,6 +284,11 @@ export const ESTADOS = {
       { t: 'Se hincha al empezar la diástole, al cerrarse la aórtica: la segunda joroba de la curva arterial. Sube el pico diastólico y la PAM.', s: ['#tr-art'], c: C.f163 },
       { t: 'Se vacía en la contracción isovolumétrica: la presión cae justo antes de que se abra la aórtica. La punteada es la curva sin balón.', s: ['#tr-art'], c: C.f163 },
       { t: 'No mejora la supervivencia. Está contraindicado con insuficiencia aórtica o disección.', s: ['.p-balon'], c: C.iabp }] },
+  'balon-1a2': { tit: 'Balón 1:2: un latido sí, otro no', frase: (R, X) => `El balón asiste un latido de cada ${X.ajuste.razon}: el asistido (A) tiene aumento ${R.picoDia ?? '—'} y telediastólica ${R.teleDia ?? '—'}; el no asistido (n), pico ${R.picoNo ?? '—'} y telediastólica ${R.teleNo ?? '—'}. PAM ${R.pam}.`, org: 'ficha · p. 45-46 · las cifras: modelo',
+    guia: [{ t: 'La consola dibuja la presión arterial con dos clases de latido seguidos: A (asistido) y n (no asistido). Mira las letras bajo cada diástole.', s: ['#iabp-svg .lat'], c: C.iabp, org: 'la comparación: modelo' },
+      { t: (R) => `En el latido A el balón se hincha al cerrarse la aórtica y la meseta sube a ${R.picoDia ?? '—'} mmHg: es el aumento diastólico.`, s: ['#iabp-meseta'], c: C.iabp, org: 'el valor: modelo' },
+      { t: (R) => `En el latido n no hay balón: la diástole baja sin aumento (pico ${R.picoNo ?? '—'}). Compara las dos mesetas.`, s: ['#iabp-svg .lat.no'], c: C.iabp, org: 'el valor: modelo' },
+      { t: (R) => `Al final del latido A el balón se vacía antes de la sístole: la telediastólica baja (${R.teleDia ?? '—'} frente a ${R.teleNo ?? '—'}). En este modelo el descenso es pequeño; el libro solo dice que baja la poscarga.`, s: ['#iabp-tel'], c: C.iabp, org: 'la cifra: modelo' }] },
   impella: { tit: 'Impella', frase: (R) => `La hélice saca ${c1(R.imp)} L/min del VI a la aorta sin esperar a la sístole: el VI se vacía y la PCP baja a ${R.pcp}. El corazón da ${c1(R.icNat * 1.85)}; el gasto total, ${c1(R.gcTotal)} L/min.`, org: 'ficha · p. 47-48',
     guia: [{ t: 'Un catéter entra por la arteria femoral y cruza la válvula aórtica: la punta en «pigtail» queda en el VI.', s: ['.p-pigtail', '.p-canula'], c: C.f164 },
       { t: 'La hélice gira dentro de la jaula y crea un flujo no pulsátil: aspira por la entrada y suelta en la aorta (giro ralentizado).', s: ['.p-jaula', '.p-entrada'], c: C.impella },
@@ -392,6 +397,32 @@ export const PREGUNTAS = [
       { t: 'En la contracción auricular, ya al final de la diástole.', porque: 'Ahí es cuando el balón se vacía, no cuando se hincha: perdería casi toda la diástole y el pico diastólico apenas subiría en Aurelio.' }],
     explica: 'Se hincha al empezar la diástole, justo tras cerrarse la aórtica, y se vacía en la contracción isovolumétrica, antes de que se abra (p. 45; Fig. 16.3).', cita: C.iabp,
     comprueba: { txt: 'Compruébalo: enciende el balón', ajuste: { soporte: 'balon' }, mira: 'Mira la curva arterial: la segunda joroba sale tras la muesca del cierre aórtico, y la punteada es la curva sin balón.', cifras: ['pam', 'pad', 'picoDia'] } },
+  { id: 'G4', grupo: 'guia', predice: true, prepara: { pac: 'aurelio', ajuste: { soporte: 'balon', razon: 2 }, escena: 'balon' },
+    enunciado: 'Aurelio lleva el balón en 1:2: un latido asistido y el siguiente no. <b>¿Cuál de los dos tiene la presión diastólica más alta, y por qué?</b>',
+    opciones: [
+      { t: 'El asistido: el balón lleno empuja la sangre.', ok: true },
+      { t: 'El no asistido: sin balón, la aorta se vacía hacia los vasos de forma natural y mantiene la presión.', porque: 'Sin balón la aorta solo se vacía hacia los vasos y la presión baja de forma gradual: Aurelio no tendría el aumento que perfunde sus coronarias.' },
+      { t: 'Los dos igual: el balón solo cambia la presión durante la sístole, no la diástole.', porque: 'El balón actúa en la diástole, no en la sístole; pensar que no la toca te haría ignorar el aumento diastólico que busca el aparato.' },
+      { t: 'El no asistido: el vaciado del balón deja la aorta con más sangre.', porque: 'Al revés: el vaciado quita volumen de la aorta y la presión previa a la sístole baja, no sube. Aurelio eyectaría contra menos carga, no contra más.' }],
+    explica: 'El balón se hincha al empezar la diástole y desplaza sangre: la presión diastólica del latido asistido sube (p. 45). Con 1:2 los dos latidos se comparan en la misma tira; las cifras son del modelo.', cita: C.iabp,
+    comprueba: { txt: 'Compruébalo: mira la consola', ajuste: { razon: 2 }, mira: 'Mira la meseta de los latidos A frente a los n, y la telediastólica al final del A.', cifras: ['picoDia', 'picoNo', 'teleDia', 'teleNo'] } },
+  { id: 'G5', grupo: 'guia', predice: true, prepara: { pac: 'aurelio', ajuste: { soporte: 'balon' }, escena: 'balon' },
+    enunciado: 'En la consola, Aurelio con el balón en 1:1 muestra un «Aumento» de cifra mayor que su sistólica. <b>¿Qué presión mide el Aumento y por qué puede superar la sistólica?</b>',
+    opciones: [
+      { t: 'La máxima de la aorta en diástole, con el balón hinchado.', ok: true },
+      { t: 'La presión máxima en la sístole: el balón ayuda al VI a eyectar y la sube por encima de la propia.', porque: 'En la sístole el balón está vacío: no ayuda a eyectar y el VI lo hace contra menos carga. Si lo creyeras, buscarías el aumento donde no está.' },
+      { t: 'La presión del helio dentro del balón, por eso es mayor que la de la arteria.', porque: 'El aumento es una presión de la arteria del paciente, no del gas. Confundirlas te haría subir el volumen de helio sin mirar al paciente.' },
+      { t: 'La presión media: el balón la sube al apretar las arteriolas.', porque: 'El balón no aprieta arteriolas ni cambia la resistencia: lo que sube es el pico diastólico. La media apenas se mueve.' }],
+    explica: 'El aumento es el pico de la presión arterial en la diástole, con el balón hinchado; puede quedar por encima de la sistólica propia porque se suma el volumen desplazado (p. 45; las cifras, del modelo).', cita: C.iabp,
+    comprueba: { txt: 'Compruébalo: mira el Aumento', ajuste: {}, mira: 'La barra del Aumento pasa la marca roja de la sistólica propia.', cifras: ['pam', 'pad', 'picoDia'] } },
+  { id: 'G6', grupo: 'guia', predice: false, prepara: { pac: 'joaquin', ajuste: { soporte: 'balon' }, escena: 'balon' },
+    enunciado: 'Joaquín tiene una disección aórtica y la app le pone al balón el sello «Contraindicado». <b>¿Qué otra contraindicación del balón da el Marino?</b>',
+    opciones: [
+      { t: 'La insuficiencia aórtica.', ok: true },
+      { t: 'La estenosis mitral: el balón dificultaría el llenado del ventrículo izquierdo.', porque: 'El balón actúa en la aorta, lejos de la mitral; el libro no la cita. Si la dieras por buena, negarías el balón a un paciente que podría usarlo.' },
+      { t: 'La fibrilación auricular: el balón necesita un ritmo regular.', porque: 'La fuente no lo da como contraindicación. Rechazar el balón por esto dejaría sin soporte a un paciente que lo necesita.' },
+      { t: 'La hipotensión: el aumento bajaría la PAM.', porque: 'Al contrario: el aumento sube la PAM (del modelo), así que la hipotensión no frena el balón. Dejarías sin soporte a un paciente que sí puede usarlo.' }],
+    explica: 'El Marino contraindica el balón en la insuficiencia aórtica y en la disección aórtica (p. 45-46): hinchado en diástole, en la insuficiencia empujaría más sangre de vuelta al VI.', cita: C.iabp },
   { id: 'G2', grupo: 'guia', predice: true, prepara: { pac: 'aurelio', volumen: 250, ajuste: { soporte: 'impella', impella: 2.5 }, escena: 'impella' },
     enunciado: 'En el modelo, el corazón de Aurelio ya lleno (tras 250 mL) lleva un Impella a 2,5 L/min. Lo subes a 5,5. <b>¿Qué esperas en la PCP y en la curva arterial?</b>',
     opciones: [

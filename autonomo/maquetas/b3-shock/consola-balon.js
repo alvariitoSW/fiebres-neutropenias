@@ -2,12 +2,12 @@
 // Pantalla oscura con tres trazados (ECG con las marcas de disparo e inflado, presión arterial con el pico de aumento
 // diastólico, presión del balón) y el panel táctil de debajo. NO calcula: dibuja lo que da el motor (canales.js le pasa cada
 // muestra) y la lectura por latido de soporte.mjs (picoDia/teleDia asistidos y picoNo/teleNo sin asistir).
-// Origen de cada cosa: ECG, presión arterial y aumento = modelo (fisiología general); la forma del balón = ilustrativa;
+// Origen de cada cosa: presión arterial y aumento = modelo (fisiología general); el ECG (P-QRS-T) y la forma del balón = ilustrativos;
 // volumen 35-40 mL, hinchar en diástole y vaciar en la contracción isovolumétrica = ficha (Marino cap. 16, PDF p. 45).
 // Disparo, modo, temporización, alarma, baterías y helio: interfaz ilustrativa. Temporización: sin fuente en la app.
 import { instalarCss } from '../comun/dibujo-iso.js';
 
-const NP = 180, HUECO = 6;
+const NP = 180, HUECO = 10;   // la goma de barrido: 10 muestras, para que se lea como goma y no como un corte
 const ALTO = { ecg: 44, art: 74, bal: 40 }, PAD = 3, MARGEN = 24;
 const ART_MIN = 20, ART_MAX = 140;
 const CSS = `
@@ -23,7 +23,9 @@ const CSS = `
 .iabp-trazas .t-ecg, .iabp-trazas .t-art, .iabp-trazas .t-bal { fill: none; stroke-width: 1.5; stroke-linejoin: round; }
 .iabp-trazas .t-ecg { stroke: var(--iabp-ecg); } .iabp-trazas .t-art { stroke: var(--iabp-art); } .iabp-trazas .t-bal { stroke: var(--iabp-balon); }
 .iabp-trazas .r-mk { fill: var(--iabp-tinta); } .iabp-trazas .inf-mk, .iabp-trazas .des-mk { fill: var(--iabp-balon); }
-.iabp-trazas .lat { font: 700 9px var(--sans); fill: var(--iabp-tinta); } .iabp-trazas .lat.no { fill: var(--iabp-apagado); }
+.iabp-trazas .tel { font: 700 8px var(--sans); fill: var(--iabp-balon); } .iabp-trazas .tel-mk { fill: var(--iabp-balon); }
+.iabp-frase { margin: 0; padding: 4px 8px; font: .66rem/1.35 var(--sans); color: var(--iabp-tinta); border-bottom: 1px solid var(--iabp-apagado); }
+.iabp-trazas .lat { font: 700 9px var(--sans); fill: var(--iabp-tinta); text-anchor: middle; } .iabp-trazas .lat.no { fill: var(--iabp-apagado); }
 .iabp-cifras { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1px; background: var(--iabp-apagado); border-top: 1px solid var(--iabp-apagado); }
 .iabp-cifras > div { background: var(--iabp-fondo); padding: 3px 5px; min-width: 0; }
 .iabp-cifras .n { font: .56rem/1.2 var(--sans); color: var(--iabp-apagado); text-transform: uppercase; letter-spacing: .04em; }
@@ -61,7 +63,7 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
   const f0 = (x) => (x == null || !isFinite(x) ? '—' : String(Math.round(x)));
   const buf = { ecg: new Array(NP).fill(null), art: new Array(NP).fill(null), bal: new Array(NP).fill(null), mk: new Array(NP).fill(null), lat: new Array(NP).fill(null) };
   let cur = 0, W = 300, vol = 40;
-  el.innerHTML = `<div class="iabp-cab"><span>Contrapulsación · disparo: ECG</span><span class="est" id="iabp-est">En marcha</span></div>
+  el.innerHTML = `<p class="iabp-frase" id="iabp-frase"><b>El balón trabaja a contratiempo del corazón:</b> se hincha en la diástole y se vacía justo antes de la sístole. ${org('ficha, p. 45', false)}</p><div class="iabp-cab"><span>Contrapulsación · disparo: ECG</span><span class="est" id="iabp-est">En marcha</span></div>
     <svg class="iabp-trazas" id="iabp-svg" role="img" aria-label="Tres trazados de la consola: ECG con marcas de disparo e inflado, presión arterial con el pico de aumento diastólico y presión del balón"></svg>
     <div class="iabp-cifras" id="iabp-cifras"></div>
     <div class="iabp-panel" id="iabp-panel">
@@ -94,17 +96,19 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
   const yBal = (v) => yA.bal + ALTO.bal * (1 - Math.min(1.05, Math.max(0, v)) * 0.9) - 2;
 
   // una muestra del motor (la manda canales.js, en el mismo orden que al monitor)
-  let ultInf = false, desdeR = 99;
+  let ultInf = false, desdeR = 99, dInf = 14, iR = -1;
   function muestra(m) {
     const a = cab().ajuste, i = cur;
     buf.ecg[i] = m.ecg; buf.art[i] = m.art; buf.bal[i] = a.balon > 0 ? m.vBalon / a.balon : 0;
-    const infla = m.vBalon > 20; let mk = null;
+    const infla = m.vBalon > 20, mk = [];
     desdeR++;
-    if (m.r && desdeR >= 8) { mk = 'r'; desdeR = 0; } else if (infla && !ultInf) mk = 'inf'; else if (!infla && ultInf) mk = 'des';
-    // (un latido real dura más de 8 muestras, 0,2 s: así no hay doble disparo al rellenar la pantalla)
+    if (infla && !ultInf) { mk.push('inf'); if (desdeR >= 3 && desdeR < 60) { dInf = desdeR; if (iR >= 0 && buf.lat[iR]) buf.lat[iR].d = desdeR; } } else if (!infla && ultInf) mk.push('des');
+    // (un latido real dura más de 13 muestras: así no hay doble disparo al rellenar la pantalla)
+    if (m.r && desdeR >= 13) { mk.push('r'); desdeR = 0; }
     ultInf = infla;
-    buf.mk[i] = mk;
-    buf.lat[i] = mk === 'r' ? { n: m.lat } : null;
+    buf.mk[i] = mk.length ? mk : null;                       // una muestra puede llevar dos marcas (el vaciado coincide con la R)
+    buf.lat[i] = mk.includes('r') ? { n: m.lat, d: dInf } : null; if (mk.includes('r')) iR = i;
+    // la goma se lleva también la letra que cuelga de una R futura (se dibuja dInf muestras después de su R)
     for (let k = 1; k <= HUECO; k++) { const j = (i + k) % NP; buf.ecg[j] = buf.art[j] = buf.bal[j] = buf.mk[j] = buf.lat[j] = null; }
     cur = (i + 1) % NP;
   }
@@ -115,16 +119,32 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
   }
   function pintar() {
     if (el.hidden) return;
+    const wReal = Math.round(svg.getBoundingClientRect().width); if (wReal > 100 && Math.abs(wReal - W) > 2) montar();   // el ancho real, tras el primer layout
     const g = (id) => svg.querySelector('#' + id); if (!g('iabp-pe')) return;
     g('iabp-pe').setAttribute('d', traza(buf.ecg, yEcg)); g('iabp-pa').setAttribute('d', traza(buf.art, yArtV)); g('iabp-pb').setAttribute('d', traza(buf.bal, yBal));
-    let h = '', hl = '';
-    const razon = cab().ajuste.razon;
+    let h = '', hl = '', zona = null;
+    const razon = cab().ajuste.razon, L = cab().lectura, en = cab().ajuste.balon > 0;
+    let ultDes = -1, iInf = -1;
     for (let i = 0; i < NP; i++) {
-      const mk = buf.mk[i], x = xDe(i).toFixed(1); if (!mk) continue;
-      if (mk === 'r') h += `<path class="r-mk" d="M${x} ${yA.ecg} l-2.4 -0.1 l2.4 4.4 l2.4 -4.4z"/>`;
-      else if (mk === 'inf') h += `<path class="inf-mk" d="M${x} ${yA.ecg + ALTO.ecg + 1} l-3 4.4 h6z"/>`;
-      else h += `<path class="des-mk" d="M${x} ${yA.ecg + ALTO.ecg + 5.4} l-3 -4.4 h6z"/>`;
-      if (mk === 'r' && razon > 1 && buf.lat[i]) { const asis = (((buf.lat[i].n % razon) + razon) % razon) === 0; hl += `<text class="lat ${asis ? '' : 'no'}" x="${(+x + 14).toFixed(1)}" y="${yA.art + 9}">${asis ? 'A' : 'n'}</text>`; }
+      const mks = buf.mk[i], x = xDe(i).toFixed(1);
+      if (mks) for (const mk of mks) {
+        if (mk === 'r') h += `<path class="r-mk" d="M${x} ${yA.ecg} l-2.4 -0.1 l2.4 4.4 l2.4 -4.4z"/>`;
+        else if (mk === 'inf') { h += `<path class="inf-mk" d="M${x} ${yA.ecg + ALTO.ecg + 1} l-3 4.4 h6z"/>`; iInf = i; }
+        else { h += `<path class="des-mk" d="M${x} ${yA.ecg + ALTO.ecg + 5.4} l-3 -4.4 h6z"/>`; ultDes = i; if (iInf >= 0 && i > iInf && razon > 1) zona = [iInf, i]; }
+      }
+      // la letra A/n cuelga de su diástole: dInf muestras después de su R, y solo cuando el barrido ya llegó ahí
+      const lt = buf.lat[i];
+      const d = lt ? Math.min(lt.d, NP - 1 - i) : 0;   // en el borde derecho no da la vuelta (caería sobre el trazado nuevo): se arrima al final
+      if (lt && razon > 1 && ((cur - i + NP) % NP) > d + 1) {
+        const asis = (((lt.n % razon) + razon) % razon) === 0, xl = xDe(i + d);
+        hl += `<text class="lat ${asis ? '' : 'no'}" x="${xl.toFixed(1)}" y="${yA.art + 9}"${xl > W - 8 ? ' style="text-anchor:end"' : ''}>${asis ? 'A' : 'n'}</text>`;
+      }
+    }
+    // la meseta del latido asistido (para señalarla) y la telediastólica: el pico del aumento entre el inflado y el vaciado
+    if (zona && L && L.picoDia) hl += `<rect id="iabp-meseta" fill="none" x="${xDe(zona[0]).toFixed(1)}" y="${yArtV(L.picoDia + 4).toFixed(1)}" width="${Math.max(6, xDe(zona[1]) - xDe(zona[0])).toFixed(1)}" height="${(yArtV(L.picoDia - 10) - yArtV(L.picoDia + 4)).toFixed(1)}"/>`;
+    if (ultDes >= 0 && razon > 1 && en && L && L.teleDia != null && L.teleNo != null) {
+      const xd = xDe(ultDes), yb = yA.art + ALTO.art - 1, anc = xd > W - 62 ? 'end' : 'start';
+      hl += `<path class="tel-mk" d="M${xd.toFixed(1)} ${yArtV(L.teleDia).toFixed(1)} l-3 -4.4 h6z"/><text class="tel" id="iabp-tel" x="${(anc === 'end' ? xd + 3 : xd - 3).toFixed(1)}" y="${yb}" text-anchor="${anc === 'end' ? 'end' : 'start'}">tele ${f0(L.teleDia)} ← ${f0(L.teleNo)}</text>`;
     }
     g('iabp-mk').innerHTML = h; g('iabp-lat').innerHTML = hl;
   }
@@ -141,7 +161,7 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
     const lineaSis = svg.querySelector('#iabp-sis'); if (lineaSis) { const y = yArtV(sis).toFixed(1); lineaSis.setAttribute('y1', y); lineaSis.setAttribute('y2', y); }
     const mas = en && aum != null && aum > sis;
     let aparte = '';
-    if (en && a.razon > 1) aparte = `<div class="iabp-aparte">Latido <b>asistido</b> (A): aumento <b>${f0(L.picoDia)}</b>, telediastólica <b>${f0(L.teleDia)}</b> · latido <span class="no">no asistido (n)</span>: pico diastólico ${f0(L.picoNo)}, telediastólica ${f0(L.teleNo)} mmHg (modelo)</div>`;
+    if (en && a.razon > 1) aparte = `<div class="iabp-aparte">Latido <b>asistido</b> (A): aumento <b>${f0(L.picoDia)}</b>, telediastólica <b>${f0(L.teleDia)}</b> · latido <span class="no">no asistido (n)</span>: pico diastólico ${f0(L.picoNo)}, telediastólica ${f0(L.teleNo)} mmHg (modelo). La telediastólica asistida baja poco en este modelo: el balón se vacía en una fracción de segundo.</div>`;
     el.querySelector('#iabp-cifras').innerHTML = `<div class="c-ecg"><div class="n">FC</div><div class="v">${f0(u.fc)}<small>lpm</small></div></div>`
       + `<div class="c-fre"><div class="n">Frecuencia</div><div class="v">1:${a.razon}</div></div>`
       + `<div class="c-art"><div class="n">Presión arterial · sis / dia (media)</div><div class="v">${f0(sis)}/${f0(dia)} (${f0(pam)})<small>mmHg</small></div></div>`
@@ -152,7 +172,7 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
       + `<div class="iabp-ilu"><span>Alarma aumento: no en este modelo</span><span>Batería ▮▮▮▮ · ▮▮▮▮</span><span>Helio ▮▮▮▮</span><span>(ilustrativo)</span></div>`;
   }
   function pie() {
-    el.querySelector('#iabp-pie').innerHTML = `${org('cifras y trazados: el modelo', false)}${org('forma del balón, batería, helio, disparo: ilustrativo')}${org('volumen 35-40 mL y momento: ficha, p. 45', false)}`
+    el.querySelector('#iabp-pie').innerHTML = `${org('presión, aumento y cifras: el modelo', false)}${org('ECG, forma del balón, batería, helio, disparo: ilustrativo')}${org('volumen 35-40 mL y momento: ficha, p. 45', false)}`
       + `<span>El aumento diastólico sube el flujo coronario y la PAM; el vaciado antes de la sístole baja la poscarga (Marino cap. 16). Las cifras de aumento son del modelo: el libro no las da. La temporización (inflar pronto o tarde) no está en ninguna fuente de la app.</span>${cita(citaIabp)}`;
   }
 
@@ -164,5 +184,5 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
     else if (b.id === 'iabp-llenado') { const t = el.querySelector('#iabp-tubo'); t.classList.remove('llena'); void t.offsetWidth; t.classList.add('llena'); }
   });
   montar(); pie();
-  return { muestra, pintar, cifras, montar, borrar() { for (const k in buf) buf[k].fill(null); cur = 0; ultInf = false; desdeR = 99; } };
+  return { muestra, pintar, cifras, montar, borrar() { for (const k in buf) buf[k].fill(null); cur = 0; ultInf = false; desdeR = 99; iR = -1; } };
 }
