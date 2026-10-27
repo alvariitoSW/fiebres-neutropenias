@@ -201,3 +201,12 @@ pantalla arriba y panel táctil abajo).
 corto de las dos pantallas (qué cifras salen del modelo, qué es interfaz `ilustrativo`); constructor potente para la
 pantalla del respirador (pieza nueva, reutilizable para la VNI y el weaning: `comun/respirador.js`) y constructor barato
 para la consola del balón copiando el patrón. Presupuestos según REGLAS §4.7.
+
+### Decisiones del usuario (27/10/2026, sobre las pantallas como las reales)
+
+- **Pantallas del respirador y del balón: aprobadas** («se parece bastante, en principio no cambiaría nada»). Entran en
+  `main` como maquetas; lo que haya que pulir, en otra sesión.
+- **Errores de temporización del balón**: buscar bibliografía (inflado y desinflado precoz o tardío), comprobar las
+  citas y subir la fuente a `docs/`; con fuente, se construyen en la consola.
+- **Sí a todo lo pendiente de la parada 1**: shock, corazón eléctrico y receptor **pasan a la app** (parada 2); en el
+  receptor, el deslizador sigue encendido con el sello (para poder bajar la dosis); el esquema del pulmón vale.
