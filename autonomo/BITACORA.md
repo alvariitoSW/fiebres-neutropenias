@@ -204,6 +204,29 @@ esta sección.
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
 
+### B-033 · ECG: aprender a leerlo desde cero y leerlo juntos en la guardia · apuntado 2026-10-27
+- **Lo que dijiste** (27/10, tras ver la PR #36 de `pif-ecg`): «cumple la función del test, pero […] lo ideal sería
+  reconvertirlo en dos formas. Uno, aprender a leer electro de cero y que con la matemática aprendas […] usando la
+  skill […] Anatomy […] para explicar cómo funciona cada parte. Luego otra función guapa sería poder interpretar un
+  electro: estoy en una guardia y tengo dudas, abrir la aplicación […] y leer juntos el electro y que me vaya
+  preguntando cómo está la onda, cómo está tal […]. Habría que pensar con el profesor la parte artística, si hubiera
+  que hacer algún modelo vivo […] tenemos un corazón […]. Hacer un plan socialista para tener un plan y poder
+  mejorarlo […], apuntarlo en bitácora y luego realizar la tarea. Para ahorrar costes y ver qué puede costar».
+- **Cómo lo entiendo**: dos caminos nuevos sobre el cuaderno «ECG y arritmias» (PR #36, López Ramírez):
+  1. **Aprender desde cero**: del vector a la derivación, con su matemática (proyección del vector del corazón sobre
+     cada derivación, eje, por qué cada onda es como es), explicado con el método **Anatomy**
+     (https://github.com/wheresryan22/anatomy, MIT; ya usado como referencia en `b3`: «el objeto es la explicación»)
+     y con un **modelo vivo** que una el corazón eléctrico con un ECG de 12 derivaciones (la mejora 6 del debate de
+     profesores: `autonomo/ideas/ingenieria-inversa/ritmolab-3.md`).
+  2. **Leer juntos en la guardia**: subes o eliges el trazado mentalmente y la app te pregunta paso a paso (frecuencia,
+     ritmo, P, PR, QRS, eje, ST, T, QT) y al final te dice qué puede ser, con su página. Sin guardar datos del paciente.
+  Antes de construir: **un plan** del profesor (arte, modelos vivos, piezas, orden y **gasto estimado** de cada
+  pieza), para que elijas.
+- **Decisiones tuyas que saldrán en el plan**: instalar Anatomy como skill del proyecto (hoy es solo una referencia
+  clonada en `/tmp/ajeno/anatomy`; tocar `.claude/skills/` necesita tu permiso) y un modelo vivo nuevo o ampliar el
+  corazón eléctrico (toca el motor de `b3`).
+- **Estado**: el plan, aprobado por ti el 27/10 (tablero: `ecg-plan`); la construcción, cuando elijas en el plan.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
