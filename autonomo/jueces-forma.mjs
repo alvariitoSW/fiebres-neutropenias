@@ -39,6 +39,7 @@ export const BANCOS = [
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3a-shock.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
 ];
@@ -66,8 +67,8 @@ export const MODELOS = {
     // El vaso que sangra: Explorar | Mayéutica (sin Conceptos: cada estado lleva su explicación guiada)
     'vaso-vivo': { raiz: '#vso-raiz', enlace: { especialidad: 'libros', view: 'vasoVivo' }, clave: 'vasoVivo', modo: { explorar: '#vso-modo-explorar', mayeutica: '#vso-modo-preguntas' },
         estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
-    // El shock a pie de cama (bloque 3, parte 1: el modelo; la Mayéutica va en la parte 2): Explorar | ¿Qué shock es?
-    'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar' },
+    // El shock a pie de cama (bloque 3): Explorar | ¿Qué shock es? | Mayéutica
+    'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar', mayeutica: '#shv-modo-may' },
         estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
     // El corazón eléctrico (parte 1: sin Mayéutica todavía, por eso sin botones de modo): el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar' },

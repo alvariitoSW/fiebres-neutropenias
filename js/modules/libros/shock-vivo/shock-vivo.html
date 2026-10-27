@@ -12,7 +12,7 @@
   <div class="interruptor" role="tablist" aria-label="Modo">
     <button type="button" role="tab" id="shv-modo-explorar" aria-selected="true">Explorar</button>
     <button type="button" role="tab" id="shv-modo-qs" aria-selected="false">¿Qué shock es?</button>
-    <!-- [HUECO shock parte 2: Mayéutica] la pestaña «Mayéutica» y su zona (#shv-zona-may) -->
+    <button type="button" role="tab" id="shv-modo-may" aria-selected="false">Mayéutica</button>
   </div>
   <section id="shv-zona-pac" aria-label="Pacientes"><div class="pacientes" id="shv-pacientes"></div><p class="ficha-pac" id="shv-ficha-pac"></p></section>
 
@@ -49,6 +49,7 @@
 
 
   <section id="shv-abajo" style="display:grid; gap:6px">
+    <details class="plegable" id="shv-real"><summary>Así se ve de verdad</summary><figure class="shv-lamina" id="shv-real-fig"></figure></details>
     <details class="plegable" id="shv-pleg-lab" open><summary>Laboratorio y tendencias, con su hora</summary><div class="lab" id="shv-lab"></div><svg class="tendencia" id="shv-tend" viewBox="0 0 360 64" role="img" aria-label="Tendencias por hora"></svg><p class="para" id="shv-lab-nota"></p></details>
     <details class="plegable"><summary>Las fuentes de este estado</summary><ul class="lista" id="shv-fuentes"></ul></details>
     <details class="plegable"><summary>Notas: lo que discrepa y lo que la fuente no dice</summary><div id="shv-notas" style="display:grid; gap:6px"></div></details>
