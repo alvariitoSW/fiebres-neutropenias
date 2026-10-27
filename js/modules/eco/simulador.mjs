@@ -9,7 +9,8 @@
 // mientras corre, o una muestra del último latido al revisar) y con ese objeto se construye la geometría y se
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
-import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from './corazon-geo.mjs';
+import { faltaParaAsentar } from './maniobras.mjs';
+import { construirCorazon, LIMITES, tapseDeLatido, recortar, planoCorte } from './corazon-geo.mjs';
 import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
@@ -17,8 +18,9 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
+import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
@@ -94,16 +96,19 @@ export function montarSimulador(raiz, opc = {}) {
   }
 
   // ---- Barra del ciclo: fases A-G del último latido, con su duración real, y un cursor en el instante actual
-  let cicloLatido = -1, cicloPeriodo = 0.857, cicloSeg = [];
+  let cicloFases = '', cicloLatido = -1, cicloPeriodo = 0.857, cicloSeg = [];
   function construirCiclo() {
     const o = motor.onda, u = motor.ultimo; if (!o.length || !u) return;
     cicloLatido = motor.s.nLatido; cicloPeriodo = u.periodo;
     const seg = segmentosFase(o, cicloPeriodo); cicloSeg = seg;
     const pc = (t) => (t / cicloPeriodo * 100).toFixed(2) + '%';
-    $('#cv-ciclo').innerHTML = seg.map(g => `<button type="button" data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cv-cur" id="cv-ciclo-cur"></div>';
+    // con las mismas fases solo se ajustan los anchos: un botón que se sustituye mientras se toca pierde el toque
+    const fases = seg.map(g => g.f).join(''), btns = $$('#cv-ciclo button');
+    if (fases === cicloFases && btns.length === seg.length) seg.forEach((g, i) => { btns[i].style.width = pc(g.t1 - g.t0); const t = (g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''; if (btns[i].textContent !== t) btns[i].textContent = t; });
+    else { cicloFases = fases; $('#cv-ciclo').innerHTML = seg.map(g => `<button type="button" data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cv-cur" id="cv-ciclo-cur"></div>'; }
     const tB = seg.find(g => g.f === 'B')?.t0, tE = seg.find(g => g.f === 'E')?.t0;
     $('#cv-ciclo-pie').innerHTML = (tB != null && tE != null)
-      ? `<span style="left:${pc(tB)}">▲S1</span><span style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
+      ? `<span style="left:${pc(tB)}">▲S1</span><span class="cv-fase-txt" style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span class="cv-fase-txt" style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
   }
   $('#cv-ciclo').addEventListener('click', (e) => { const b = e.target.closest('button[data-fase]'); if (b) irAFase(b.dataset.fase); });
   function pintarCiclo(e) {
@@ -149,7 +154,7 @@ export function montarSimulador(raiz, opc = {}) {
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
   function elegirVista(k) {
     if (!VISTAS[k]) return;
-    vistaEco = k; claveTd = ''; ecoPendiente = true;
+    vistaEco = k; claveTd = ''; ecoPendiente = true; img.prof = null; ponerMandosImg();
     $$('[data-eco]').forEach(b => b.classList.toggle('on', b.dataset.eco === k));
     // la muestra Doppler estaba en el plano de la vista anterior: se quita y, en modo D, va a la de esta vista
     reto = null; gate = null; marcarPreset(null); ponerSonda(SONDA_CERO);
@@ -159,10 +164,214 @@ export function montarSimulador(raiz, opc = {}) {
     opc.onVista?.(k);
   }
   $('#cv-vistas').addEventListener('click', (e) => { const b = e.target.closest('[data-eco]'); if (b) elegirVista(b.dataset.eco); });
+  // calidad automática de la imagen: cuatro niveles de haces × muestras; si la imagen tarda más de 40 ms (25 por segundo),
+  // baja un nivel, y sube si el de arriba cabría en 32 ms. No cuenta el fotograma que construye la rejilla.
+  const NIVELES_ECO = [{ nb: 192, ns: 448 }, { nb: 160, ns: 384 }, { nb: 128, ns: 320 }, { nb: 96, ns: 256 }];
+  let ecosNivel = [], nivelEco = 0, emaEco = 0, desdeCambioEco = 0;
+  const ecoDeNivel = () => (ecosNivel[nivelEco] ||= crearEcografo({ ancho: ecoC.width, alto: ecoC.height, ...NIVELES_ECO[nivelEco] }));
+  function calidadAutomaticaEco(ms) {
+    emaEco = emaEco ? emaEco * 0.7 + ms * 0.3 : ms; desdeCambioEco++;
+    if (desdeCambioEco < 6) return;
+    const coste = (n) => NIVELES_ECO[n].nb * NIVELES_ECO[n].ns;
+    if (emaEco > 40 && nivelEco < NIVELES_ECO.length - 1) nivelEco++;
+    else if (nivelEco > 0 && emaEco * coste(nivelEco - 1) / coste(nivelEco) < 32) nivelEco--;
+    else return;
+    emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoPendiente = true;
+  }
+  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: ilustrativo y fisiología general.
+  const img = { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null, ventana: false, senal: null };
+  const FRASES_SENAL = {
+    sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
+    refuerzo: 'Refuerzo: el líquido apenas frena el sonido y lo de detrás brilla más. No es tejido más denso.',
+    reverb: 'Rebotes del sonido entre la sonda y la pared del tórax. Se quedan quietos en la pantalla y no se mueven con la pared del corazón; un trombo sí se mueve con ella.',
+    especular: 'Pared lateral gris: reflexión especular. El haz le pasa paralelo y vuelve poco eco (dropout). Puede ser artefacto: confírmalo en otra vista antes de decir que no se contrae.',
+    especularOtra: 'El haz pasa paralelo a este músculo y se ve más gris (reflexión especular, dropout). Puede ser artefacto: confírmalo en otra vista.',
+    foco: 'Foco: el haz es más estrecho a esta profundidad y la imagen es más nítida. Por delante, por detrás y hacia los bordes se ensancha y emborrona.',
+    ventana: 'Aire del pulmón: tapa el sonido. La ganancia no lo arregla; cambia de ventana.',
+  };
+  const ROTULOS_SENAL = { sombra: 'sombra de la costilla', refuerzo: 'refuerzo detrás de la sangre', reverb: 'rebotes a 2× y 3× la pared', ventana: 'pulmón' };
+  const FRASE_VENTANA = 'Paciente obeso o ventilado: la grasa y el pulmón se interponen. Llega menos señal y hay más ruido y neblina; el pulmón tapa un lado de la imagen y entra y sale con la respiración. La ganancia y la profundidad ayudan algo; si el pulmón tapa la imagen, cambia de ventana o recoloca al paciente.';
+  const cm = (mm) => (mm / 10).toFixed(0) + ' cm', signo = (v) => (v > 0 ? '+' : '') + v;
+  function ponerMandosImg() {
+    $('#cv-img-gan').value = img.gan; $('#cv-img-gan-v').textContent = signo(img.gan) + ' dB';
+    const pr = img.prof ?? VISTAS[vistaEco].prof; $('#cv-img-prof').value = pr; $('#cv-img-prof-v').textContent = cm(pr);
+    $('#cv-img-foco').value = img.foco; $('#cv-img-foco-v').textContent = cm(img.foco);
+    img.tgc.forEach((v, i) => { $('#cv-img-tgc' + i).value = v; $('#cv-img-tgc' + i + '-v').textContent = signo(v); });
+  }
+  function mandoImg(id, fn) { $(id).addEventListener('input', (e) => { fn(+e.target.value); ponerMandosImg(); ecoPendiente = true; }); }
+  // leyenda de brillo: sale de la misma tabla que usa la imagen (js/data/eco-tejidos.js)
+  const tabLey = $('#cv-tejidos-tabla');
+  if (tabLey) tabLey.innerHTML = Object.values(TEJIDOS).sort((a, b) => a.db - b.db)
+    .map((t) => `<tr><td>${t.nombre}</td><td>${t.db > 0 ? '+' : ''}${t.db} dB</td><td>${t.origen === 'ilustrativo' ? 'ilustrativo' : 'orden: ' + t.origen + '; dB: ilustrativo'}</td></tr>`).join('');
+  mandoImg('#cv-img-gan', (v) => { img.gan = v; });
+  mandoImg('#cv-img-prof', (v) => { img.prof = v === VISTAS[vistaEco].prof ? null : v; });
+  mandoImg('#cv-img-foco', (v) => { img.foco = v; });
+  for (let i = 0; i < 4; i++) mandoImg('#cv-img-tgc' + i, (v) => { img.tgc[i] = v; });
+  $('#cv-img-cero').addEventListener('click', () => { Object.assign(img, { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null }); ponerMandosImg(); ecoPendiente = true; });
+  function ponerVentana(on) {
+    img.ventana = on; const b = $('#cv-img-ventana');
+    b.setAttribute('aria-pressed', String(on)); b.textContent = '🫁 Ventana pobre: ' + (on ? 'encendida' : 'apagada');
+    $('#cv-img-ventana-txt').hidden = !on; $('#cv-img-ventana-txt').textContent = on ? FRASE_VENTANA : '';
+    $('#cv-senalalo [data-senal="ventana"]').hidden = !on; if (!on && img.senal === 'ventana') ponerSenal(null);
+    ecoPendiente = true;
+  }
+  $('#cv-img-ventana').addEventListener('click', () => ponerVentana(!img.ventana));
+  function ponerSenal(k) {
+    img.senal = img.senal === k ? null : k;
+    $$('#cv-senalalo [data-senal]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.senal === img.senal)));
+    if (!img.senal) { $('#cv-senal-frase').hidden = true; $('#cv-senal-frase').textContent = ''; }
+    ecoPendiente = true;
+  }
+  $('#cv-senalalo').addEventListener('click', (e) => { const b = e.target.closest('[data-senal]'); if (!b) return; ponerSenal(b.dataset.senal);
+    if (img.senal && !$('#cv-mandos-img').open) $('#cv-eco-fijo').scrollIntoView({ block: 'nearest' }); });
+  const ficha = (n) => getComputedStyle(document.body).getPropertyValue(n).trim();
+  // marca del foco: un triángulo pequeño en el borde izquierdo del abanico, a la profundidad del foco
+  function marcaFoco(im, P) {
+    const px = ecoC.width / ecoC.clientWidth, r = Math.min(img.foco, P.prof - 6), dx = Math.sin(P.mitad), dy = Math.cos(P.mitad);
+    const x = im.cx - r * dx * im.escala - 3 * px, y = im.arriba + r * dy * im.escala, t = 5 * px;
+    ecoCtx.save(); ecoCtx.fillStyle = ficha('--accent-yellow') || 'white';
+    ecoCtx.beginPath(); ecoCtx.moveTo(x, y); ecoCtx.lineTo(x - t * 1.3, y - t); ecoCtx.lineTo(x - t * 1.3, y + t); ecoCtx.closePath(); ecoCtx.fill(); ecoCtx.restore();
+  }
+  // celda del canvas (x, y) con corazón (tejido o sangre) o con la escala de centímetros: 1; libre: 0
+  function ocupadoEco(b, px) {
+    const M = b.mitad;
+    return (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba);
+      // la escala de centímetros (junto al borde derecho del abanico) cuenta como ocupada
+      const dx = x - b.cx, dy = y - b.arriba, along = dx * Math.sin(M) + dy * Math.cos(M), perp = dx * Math.cos(M) - dy * Math.sin(M);
+      if (perp > 0 && perp < 30 * px && along > 0 && along < b.prof * b.escala) return 1;
+      if (rr >= b.prof || Math.abs(th) >= M) return 0;
+      const i = Math.min(b.nb - 1, ((th + M) / b.dth) | 0), j = Math.min(b.ns - 1, (rr / b.dr) | 0); return b.tag[j * b.nb + i] ? 1 : 0; };
+  }
+  // C1 · «Señálalo · Válvulas»: nombra el festón de la mitral y la cúspide o valva que corta el plano (valvasEnPlano, de la
+  // geometría de este fotograma). Rótulos cortos en la imagen, cada uno donde menos corazón tapa y sin pisar a otro, con una
+  // línea fina a su tramo; el nombre largo y la fuente (Hahn 2013), en la frase de debajo.
+  const CORTO_VALVA = { 'coronaria derecha': 'CD', 'coronaria izquierda': 'CI', 'no coronaria': 'NC', anterior: 'T ant', posterior: 'T post', septal: 'T sept' };
+  // la frase de debajo de la imagen, corta (va en la parte fija de arriba); la leyenda y la nota de la fuente, en el texto de Señálalo
+  const FRASE_VISTA_VALVAS = {
+    plax: 'Eje largo: P2-A2 (Hahn 2013, p. 937). Aórtica: delante, siempre la coronaria derecha; detrás, la no coronaria o la izquierda (p. 946).',
+    a3c: 'Eje largo: P2-A2 (Hahn 2013, p. 937). Aórtica: delante, siempre la coronaria derecha; detrás, la no coronaria o la izquierda (p. 946).',
+    a4c: '4 cámaras: A3-A2 y P2-P1 (Hahn 2013, p. 932). Tricúspide: la septal y la posterior (p. 932) o la anterior (p. 950): la guía da las dos.',
+    a2c: '2 cámaras: P3 y A3-A2-A1 (Hahn 2013, p. 937).',
+    psaxMv: 'Eje corto mitral: los festones que corta el plano; al abrirse, las valvas hacen la «boca de pez» (Hahn 2013, p. 939, que solo la nombra).',
+    psaxAo: 'Eje corto aórtico: la no coronaria junto al tabique interauricular; la coronaria derecha, delante (Hahn 2013, p. 939 y 946).',
+  };
+  function senalarValvas(b, partes) {
+    const px = ecoC.width / ecoC.clientWidth, W = ecoC.width, H = ecoC.height, ocupado = ocupadoEco(b, px);
+    const lista = valvasEnPlano(partes, planoEco), cajas = [];
+    const caja = $('#cv-senal-frase'); caja.hidden = false;
+    // la frase junta lo cortado en el último segundo y medio (el corazón entra y sale del plano en cada latido)
+    const ahora = performance.now(), clave = vistaEco + (sondaMovida(sonda) ? '*' : '');
+    if (vistosValvas.clave !== clave) { vistosValvas.clave = clave; vistosValvas.m.clear(); }
+    const corto = (x) => (x.valvula === 'Mitral' ? x.nombre : CORTO_VALVA[x.nombre]);
+    for (const x of lista) vistosValvas.m.set(corto(x), ahora);
+    const vistos = [...vistosValvas.m].filter(([, t]) => ahora - t < 1500).map(([n]) => n);
+    const frase = (vistos.length ? 'Corta: ' + vistos.join(', ') + '. ' : 'Ahora el plano no corta ninguna valva. ') + (sondaMovida(sonda) ? 'Con la sonda movida, el plano ya no es el de la vista.' : (FRASE_VISTA_VALVAS[vistaEco] || ''));
+    if (caja.textContent !== frase) caja.textContent = frase;
+    ecoCtx.save(); ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; ecoCtx.textBaseline = 'middle'; ecoCtx.textAlign = 'left';
+    const amarillo = ficha('--accent-yellow') || 'white', fondo = ficha('--bg-main') || 'black';
+    // de izquierda a derecha según su tramo: las líneas no se cruzan tanto; cruzar otra línea cuesta como tapar corazón
+    const cruza = (p1, p2, q1, q2) => { const o = (a, b, c) => Math.sign((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]));
+      return o(p1, p2, q1) !== o(p1, p2, q2) && o(q1, q2, p1) !== o(q1, q2, p2); };
+    for (const x of lista.slice().sort((a, b) => a.u - b.u)) {
+      const texto = corto(x), w = ecoCtx.measureText(texto).width + 10 * px, h = 18 * px;
+      const ax = b.cx + x.u * b.escala, ay = b.arriba + x.v * b.escala, previa = memValvas.get(texto); let mejor = null;
+      for (let y = 6 * px; y <= H - 26 * px - h; y += 6 * px) for (let xx = 3 * px; xx <= W - w - 3 * px; xx += 6 * px) {
+        let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 4; ix++) n += ocupado(xx + w * (ix + 0.5) / 4, y + h * (iy + 0.5) / 3);
+        const choca = cajas.some(c => xx < c.x + c.w + 3 * px && xx + w + 3 * px > c.x && y < c.y + c.h + 2 * px && y + h + 2 * px > c.y) ? 1 : 0;
+        const vertice = Math.abs(xx + w / 2 - b.cx) < w / 2 + 14 * px && y < b.arriba + 24 * px ? 1 : 0;
+        const pie = [Math.max(xx, Math.min(xx + w, ax)), Math.max(y, Math.min(y + h, ay))], cruces = cajas.reduce((t, c) => t + (cruza(pie, [ax, ay], c.pie, [c.ax, c.ay]) ? 1 : 0), 0);
+        const costo = choca * 1e6 + cruces * 3000 + n * 300 + vertice * 5000 + 3 * Math.hypot(xx + w / 2 - ax, y + h / 2 - ay) + (previa ? 4 * Math.hypot(xx - previa.x, y - previa.y) : 0);
+        if (!mejor || costo < mejor.costo) mejor = { x: xx, y, costo };
+      }
+      if (!mejor) continue;
+      cajas.push({ x: mejor.x, y: mejor.y, w, h, ax, ay, texto, pie: [Math.max(mejor.x, Math.min(mejor.x + w, ax)), Math.max(mejor.y, Math.min(mejor.y + h, ay))] }); memValvas.set(texto, { x: mejor.x, y: mejor.y });
+    }
+    // primero las líneas (debajo de todas las cajas) y la marca del tramo; luego las cajas
+    ecoCtx.strokeStyle = amarillo; ecoCtx.fillStyle = amarillo; ecoCtx.lineWidth = px; ecoCtx.globalAlpha = 0.85;
+    for (const c of cajas) { ecoCtx.beginPath(); ecoCtx.moveTo(c.pie[0], c.pie[1]); ecoCtx.lineTo(c.ax, c.ay); ecoCtx.stroke();
+      ecoCtx.beginPath(); ecoCtx.arc(c.ax, c.ay, 2 * px, 0, 2 * Math.PI); ecoCtx.fill(); }
+    for (const c of cajas) { ecoCtx.globalAlpha = 0.85; ecoCtx.fillStyle = fondo; ecoCtx.fillRect(c.x, c.y, c.w, c.h);
+      ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = amarillo; ecoCtx.fillText(c.texto, c.x + 5 * px, c.y + c.h / 2 + px); }
+    ecoCtx.restore();
+    return cajas;
+  }
+  const memValvas = new Map(), vistosValvas = { clave: null, m: new Map() };
+  // «Señálalo»: contorno de la zona del artefacto y un rótulo que se coloca donde menos corazón tapa
+  function senalar(tipo, b, partes) {
+    if (tipo === 'valvas') return senalarValvas(b, partes);
+    const px = ecoC.width / ecoC.clientWidth, W = ecoC.width, H = ecoC.height;
+    const pt = (r, th) => [b.cx + b.escala * r * Math.sin(th), b.arriba + b.escala * r * Math.cos(th)];
+    const sector = (t0, t1, r0, r1) => { const p = []; for (let k = 0; k <= 12; k++) p.push(pt(r0, t0 + (t1 - t0) * k / 12)); for (let k = 12; k >= 0; k--) p.push(pt(r1, t0 + (t1 - t0) * k / 12)); return p; };
+    const M = b.mitad, sub = VISTAS[vistaEco].ventana === 'subcostal', a4 = vistaEco === 'a4c';
+    let forma = null, aviso = '', rotulo = ROTULOS_SENAL[tipo], ancla = null;
+    if (tipo === 'sombra') { if (sub) aviso = 'En la subcostal el haz no cruza costillas: mira otra vista.'; else { forma = sector(-M, -0.74 * M, b.pared - 6, b.prof - 2); ancla = pt(b.prof * 0.55, -0.9 * M); } }
+    else if (tipo === 'reverb') { forma = { varias: [2, 3].map(k => sector(-0.95 * M, 0.95 * M, k * b.pared - 3, k * b.pared + 3)) }; ancla = pt(3 * b.pared, -0.95 * M); }
+    else if (tipo === 'ventana') { if (!b.pulmon) aviso = 'En esta vista el pulmón no se interpone.'; else { forma = sector(b.pulmon.borde * M, M, b.pulmon.rl, b.prof - 2); ancla = pt(b.prof * 0.6, 0.9 * M); } }
+    else if (tipo === 'foco') {
+      const r = Math.min(img.foco, b.prof - 6), arco = []; for (let k = 0; k <= 24; k++) arco.push(pt(r, -M + 2 * M * k / 24));
+      forma = { linea: arco }; rotulo = 'foco a ' + cm(img.foco); ancla = pt(r, -0.9 * M);
+    } else if (tipo === 'refuerzo') {
+      // la tira más larga de haces centrales con sangre: de 3 a 28 mm por debajo de la sangre más profunda
+      const tiras = [[]];
+      for (let i = 0; i < b.nb; i++) { const e = (i + 0.5) / b.nb * 2 - 1; let jj = -1;
+        if (Math.abs(e) < 0.6) for (let j = b.ns - 1; j >= 0; j--) if (b.tag[j * b.nb + i] === 255) { jj = j; break; }
+        if (jj < 0) { if (tiras.at(-1).length) tiras.push([]); continue; }
+        tiras.at(-1).push([-M + (i + 0.5) * b.dth, (jj + 0.5) * b.dr]); }
+      const t = tiras.reduce((a, x) => (x.length > a.length ? x : a), []);
+      if (t.length > 3) { forma = t.map(([th, r]) => pt(Math.min(b.prof - 2, r + 3), th)).concat(t.slice().reverse().map(([th, r]) => pt(Math.min(b.prof - 2, r + 28), th))); ancla = forma[Math.floor(forma.length / 4)]; }
+      else aviso = 'Sin sangre en el centro de la imagen: no hay refuerzo que señalar.';
+    } else if (tipo === 'especular') {
+      // músculo que el haz roza en paralelo. En el apical de 4 cámaras, solo la pared lateral del VI; en las demás vistas, el lado con más
+      const tVi = b.etiquetas && b.etiquetas.get('VI'), a4v = a4 && tVi, P2 = [];
+      let sx0 = 0, n0 = 0;
+      if (a4v) for (let q = 0; q < b.tag.length; q++) if (b.tag[q] === tVi) { sx0 += pt(((q / b.nb) | 0) * b.dr, -M + (q % b.nb + 0.5) * b.dth)[0]; n0++; }
+      const xc = n0 ? sx0 / n0 : 0, lado = [[], []];
+      for (let q = 0; q < b.tag.length; q++) if (b.apagado(q)) { const i = q % b.nb, j = (q / b.nb) | 0, p = pt((j + 0.5) * b.dr, -M + (i + 0.5) * b.dth);
+        if (a4v) { if (b.tag[q] === tVi && p[0] > xc + 6) P2.push(p); } else lado[i < b.nb / 2 ? 0 : 1].push(p); }
+      const L = a4v ? P2 : (lado[1].length >= lado[0].length ? lado[1] : lado[0]);
+      rotulo = a4v ? 'pared lateral del VI' : 'músculo paralelo al haz';
+      if (L.length > 20) { const mx = L.reduce((a, p) => a + p[0], 0) / L.length, my = L.reduce((a, p) => a + p[1], 0) / L.length;
+        const sx = Math.sqrt(L.reduce((a, p) => a + (p[0] - mx) ** 2, 0) / L.length), sy = Math.sqrt(L.reduce((a, p) => a + (p[1] - my) ** 2, 0) / L.length);
+        forma = { elipse: [mx, my, Math.max(10 * px, 1.8 * sx), Math.max(14 * px, 1.8 * sy)] }; ancla = [mx, my]; }
+      else aviso = 'En esta vista ninguna pared queda paralela al haz.';
+    }
+    const caja = $('#cv-senal-frase'); caja.hidden = false;
+    const estructura = { apical: 'el tabique', paraesternal: 'las paredes del VI' }[VISTAS[vistaEco].ventana] || 'la estructura que quieres medir';
+    caja.textContent = aviso || (tipo === 'especular' && !a4 ? FRASES_SENAL.especularOtra : FRASES_SENAL[tipo]) + (tipo === 'foco' ? ` Mueve el foco de 4 a 12 cm y mira ${estructura}.` : '');
+    if (!forma) return;
+    ecoCtx.save(); ecoCtx.strokeStyle = ficha('--accent-yellow') || 'white'; ecoCtx.lineWidth = 2 * px; ecoCtx.setLineDash([6 * px, 4 * px]); ecoCtx.beginPath();
+    if (forma.elipse) { const [x, y, rx, ry] = forma.elipse; ecoCtx.ellipse(x, y, rx, ry, 0, 0, 2 * Math.PI); }
+    else if (forma.linea) forma.linea.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y)));
+    else for (const f of forma.varias || [forma]) { f.forEach(([x, y], k) => (k ? ecoCtx.lineTo(x, y) : ecoCtx.moveTo(x, y))); ecoCtx.closePath(); }
+    ecoCtx.stroke(); ecoCtx.setLineDash([]);
+    if (tipo === 'sombra') {   // el borde del abanico, tenue: la zona negra está dentro de la imagen
+      ecoCtx.strokeStyle = ficha('--text-muted') || 'gray'; ecoCtx.globalAlpha = 0.6; ecoCtx.lineWidth = px; ecoCtx.beginPath();
+      const [x0, y0] = pt(0, 0), [x1, y1] = pt(b.prof, -M), [x2, y2] = pt(b.prof, M);
+      ecoCtx.moveTo(x1, y1); ecoCtx.lineTo(x0, y0); ecoCtx.lineTo(x2, y2); ecoCtx.arc(b.cx, b.arriba, b.prof * b.escala, Math.PI / 2 - M, Math.PI / 2 + M); ecoCtx.stroke(); ecoCtx.globalAlpha = 1;
+    }
+    // rótulo: se prueba una rejilla de sitios y gana el que tapa menos corazón (celdas con tejido o sangre), sin pisar las
+    // esquinas de abajo (título y fase de la imagen), el vértice ni el borde; entre los que tapan igual, el más cercano al sitio
+    ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; const w = ecoCtx.measureText(rotulo).width + 10 * px, h = 18 * px;
+    const ocupado = ocupadoEco(b, px);
+    const [ax, ay] = ancla || [W / 2, H / 2]; let mejor = null;
+    for (let y = 6 * px; y <= H - 26 * px - h; y += 8 * px) for (let x = 3 * px; x <= W - w - 3 * px; x += 10 * px) {
+      let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 6; ix++) n += ocupado(x + w * (ix + 0.5) / 6, y + h * (iy + 0.5) / 3);
+      const vertice = Math.abs(x + w / 2 - b.cx) < w / 2 + 14 * px && y < b.arriba + 24 * px ? 1 : 0;
+      const costo = n * 1000 + vertice * 5000 + 3 * Math.hypot(x + w / 2 - ax, y + h / 2 - ay);
+      if (!mejor || costo < mejor.costo) mejor = { x, y, costo };
+    }
+    const { x: lx, y: ly } = mejor || { x: 3 * px, y: 6 * px };
+    if (ancla && Math.hypot(lx + w / 2 - ax, ly + h / 2 - ay) > 30 * px) {   // línea fina del rótulo a su zona
+      ecoCtx.strokeStyle = ficha('--accent-yellow') || 'white'; ecoCtx.lineWidth = px; ecoCtx.globalAlpha = 0.8;
+      ecoCtx.beginPath(); ecoCtx.moveTo(Math.max(lx, Math.min(lx + w, ax)), Math.max(ly, Math.min(ly + h, ay))); ecoCtx.lineTo(ax, ay); ecoCtx.stroke(); ecoCtx.globalAlpha = 1;
+    }
+    ecoCtx.fillStyle = ficha('--bg-main') || 'black'; ecoCtx.globalAlpha = 0.8; ecoCtx.fillRect(lx, ly, w, h);
+    ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = ficha('--accent-yellow') || 'white'; ecoCtx.textAlign = 'left'; ecoCtx.textBaseline = 'middle'; ecoCtx.fillText(rotulo, lx + 5 * px, ly + h / 2 + px); ecoCtx.restore();
+  }
   function ajustarEco() {
     const w = Math.round(ecoC.clientWidth * Math.min(dpr(), 1.5)), h = Math.round(w * 0.8);
     if (!w || (ecografo && ecoC.width === w)) return;
-    ecoC.width = w; ecoC.height = h; ecografo = crearEcografo({ ancho: w, alto: h }); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
+    ecoC.width = w; ecoC.height = h; ecosNivel = []; nivelEco = 0; emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
   }
   // ---- Modo M (modo-m.mjs): una línea del modo B a lo largo del tiempo, con calibres
   let modoEco = 'B', thetaM = 0, medir = 'libre', ultimoTM = null, ecoGeom = null;
@@ -219,11 +428,11 @@ export function montarSimulador(raiz, opc = {}) {
     if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
     // TAPSE: las dos cifras de normalidad que cita la app; y lo que hace el modelo en este latido
     const t = m.mm, u = motor.ultimo, dir = planoEco ? direccionHaz(planoEco, thetaM) : [0, 0, 1];
-    const exc = u ? Math.min(35, TAPSE_POR_ML * (u.edvD - u.esvD)) : 0;
+    const exc = u ? tapseDeLatido(u) : 0;
     const lectura = t > 17 ? ['ok', 'por encima de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).']
       : t > 16 ? ['warn', 'entre las dos cifras de la app: normal según la Ficha 5 (&gt;16 mm), no según la Ficha 11 (&gt;17 mm).']
       : ['danger', 'por debajo de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).'];
-    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale de lo que se vacía el VD, así que también baja si baja la precarga (hemorragia, vasoplejía): el simulador aún no tiene un escenario de fallo del VD. Ilustrativo.</span>`);
+    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale del acortamiento de la pared libre del VD, que depende de cuánto se vacía (con su poscarga): baja en el TEP, donde el VD se vacía mal; en la hemorragia, el derrame y el fallo del VI se queda dentro de lo normal del modelo. Ilustrativo.</span>`);
   }
   function textoVi() {
     const d = guardado.lvdd, sv = guardado.lvsd, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
@@ -476,10 +685,11 @@ export function montarSimulador(raiz, opc = {}) {
     if (!motor.onda.length) return null;
     // la muestra telediastólica, con la masa del VI de la forma de enfermedad (fija la posición del ápex)
     const mioVi = motor.p.mioVi ?? 1, td = { ...muestraTd(), mioVi };
-    const clave = [vistaEco, Math.round(td.vvi / 3), Math.round(td.vvd / 3), mioVi, sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
+    const clave = [vistaEco, img.prof, Math.round(td.vvi / 3), Math.round(td.vvd / 3), mioVi, sonda.rot, sonda.incl, sonda.bal, sonda.desl].join('|');
     if (clave !== claveTd) {
       // el plano de la vista estándar y, encima, el movimiento de la sonda (sonda libre)
       planoBase = planoVista(vistaEco, td); planoEco = planoLibre(planoBase, sonda); claveTd = clave;
+      if (img.prof) planoEco = { ...planoEco, prof: img.prof };   // el mando de profundidad
       fanEco = abanicoVista(planoEco); fanBase = sondaMovida(sonda) ? abanicoVista(planoBase) : null;
       modoM.setProf(planoEco.prof); estadoSonda(td);
     }
@@ -500,7 +710,7 @@ export function montarSimulador(raiz, opc = {}) {
     const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
     // el corte lleva siempre el abdomen (aunque en el 3D esté oculto): es anatomía, no una opción de dibujo
     const abdEco = !propia && abd ? abd : construirAbdomen(geoEco, datosVci(s));
-    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0 });
+    const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0, ventanaVista: VISTAS[vistaEco].ventana, ganancia: img.gan, tgc: img.tgc, focoMm: img.foco, m: { ventana: img.ventana ? 0.7 : 0 } });
     // Doppler: las velocidades de este instante (las mismas piezas, el mismo estado)
     const Fd = colorOn || (modoEco === 'D' && gate) ? fuentesFlujo(geoEco.flujo, s, areasD(), abdEco.vasos, datosFlujo()) : null;
     if (colorOn) ecografo.colorear(mapaColor(planoEco, im, Fd), nyq);
@@ -527,6 +737,7 @@ export function montarSimulador(raiz, opc = {}) {
       ecoCtx.restore();
     }
     ecoMs = 0.8 * ecoMs + 0.2 * im.tiempos.total; ultimoEco = ahora; ecoPendiente = false;
+    if (!im.geometriaNueva) calidadAutomaticaEco(im.tiempos.total);
     const P = planoEco, k = im.escala, X = (u) => im.cx + u * k, Y = (v) => im.arriba + v * k, px = ecoC.width / ecoC.clientWidth;
     ecoCtx.font = `${Math.round(11 * px)}px system-ui,sans-serif`; ecoCtx.textAlign = 'center'; ecoCtx.textBaseline = 'middle';
     // escala de profundidad: un punto por centímetro junto al borde derecho del sector; cifra cada 5 cm
@@ -534,6 +745,7 @@ export function montarSimulador(raiz, opc = {}) {
     for (let cm = 1; cm * 10 < P.prof; cm++) { const r = cm * 10, x = X(r * dx) + 6 * px, y = Y(r * dy);
       ecoCtx.fillStyle = 'rgba(220,214,196,.8)'; ecoCtx.fillRect(x - 1, y - 1, cm % 5 ? 2 : 4, 2);
       if (cm % 5 === 0) { const dentro = x + 20 * px < ecoC.width; ecoCtx.textAlign = dentro ? 'left' : 'right'; ecoCtx.fillText(cm + '', dentro ? x + 6 * px : x - 4 * px, y - (dentro ? 0 : 9 * px)); ecoCtx.textAlign = 'center'; } }
+    marcaFoco(im, P);
     // marca de orientación (el lado de la muesca del transductor) a la derecha del vértice
     ecoCtx.fillStyle = '#d4af37'; ecoCtx.beginPath(); ecoCtx.arc(im.cx + 18 * px, im.arriba + 8 * px, 3 * px, 0, Math.PI * 2); ecoCtx.fill();
     // rótulos de las cavidades que el plano corta (centros que se mueven con las paredes)
@@ -550,15 +762,17 @@ export function montarSimulador(raiz, opc = {}) {
         ...(VISTAS[vistaEco].ventana === 'subcostal' ? [['VCI', puntoVci(-25)]] : []),
         ...(VISTAS[vistaEco].ventana === 'supraesternal' ? [['Arco', T([0, -14, 75])], ['APD', T([-12, -15, 56])]] : [])];
       for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
-        if (Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
-        rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
+        if ((n === 'VI' && s.vvi < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
+        rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.4)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
+    const cajasValvas = img.senal ? senalar(img.senal, im, geoEco.partes) : null;
     $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco] + (sondaMovida(sonda) ? ' · sonda libre' : '');
     ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
     $('#cv-eco-fase').textContent = `${s.fase} · ${FASES[s.fase]}`;
     $('#cv-eco-nombre').textContent = VISTAS[vistaEco].nombre;
     ecoInfo = { t: s.tLatido, tMotor: s.t, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos, modo: modoEco, theta: thetaM, sonda: { ...sonda }, plano: planoEco,
+      valvas: Array.isArray(cajasValvas) ? cajasValvas.map(c => ({ texto: c.texto, x: c.x, y: c.y, w: c.w, h: c.h })) : null,
       color: colorOn, muestra: gate ? { ...gate } : null, fuente: fuenteD ? fuenteD.nombre : null, medidas: medD };
   }
 
@@ -579,7 +793,7 @@ export function montarSimulador(raiz, opc = {}) {
     if (rgl && abierto('#cv-plegable-3d')) {
       // al revisar un instante pasado, la sangre (que vive en el tiempo del motor) no se dibuja
       const puntos = verSangre && !revision ? sangre.puntos(g.flujo, { vistaBase: opciones.vistaBase }) : null;
-      let partes = verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes;
+      let partes = (verSangre ? g.partes.filter(p => !p.nombre.endsWith('sangre')) : g.partes).filter(p => !p.soloEco);
       if (abd3d.length) partes = partes.concat(abd3d);
       let conPlano = partes;
       if ($('#cv-eco-plano').checked && fanEco) {
@@ -625,16 +839,23 @@ export function montarSimulador(raiz, opc = {}) {
   // frente a los criterios de las fichas (escenarios.mjs, CRITERIOS_FORMA). La referencia normal se calcula una vez.
   let normalRef = null;
   const medidasDe = (m) => medidasCorazon(estadoGeo(m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), m.onda[0]), extraDeMotor(m)), m.p.sc);
+  let vdCache = null;
+  const vdDe = (m) => { const o = m.onda, ex = extraDeMotor(m), est = (s) => estadoGeo(s, ex);
+    return { td: medirVd(est(o.reduce((a, b) => (b.vvi > a.vvi ? b : a), o[0]))), ts: medirVd(est(o.reduce((a, b) => (b.vvi < a.vvi ? b : a), o[0]))) }; };
   function pintarForma(u) {
     const caja = $('#cv-forma-medidas');
     if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }
-    if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0) }; }
-    const res = evaluarForma(escenario, u, medidasDe(motor), normalRef.u, normalRef.md);
+    if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0), vd: vdDe(m0) }; }
+    // el VD del A4C (basal, FAC) cuesta ~60 ms: se mide a lo sumo una vez por segundo (y al cambiar de escenario)
+    const ahora = performance.now();
+    if (!vdCache || vdCache.escenario !== escenario || ahora - vdCache.t > 1000) vdCache = { escenario, t: ahora, vd: vdDe(motor) };
+    const res = evaluarForma(escenario, u, medidasDe(motor), normalRef.u, normalRef.md, vdCache.vd, normalRef.vd);
     caja.hidden = false;
     caja.innerHTML = `<p class="cv-titulo">Lo que mide el modelo frente a las fichas</p>` + res.map(r =>
       `<div class="cv-criterio${r.ok ? ' ok' : ''}"><span class="cv-criterio-marca">${r.ok ? '✅' : '⚠️'}</span>
         <span class="cv-criterio-txt">${r.texto}: <b>${r.v}</b>${r.nota ? `<br><span class="cv-muted">${r.nota}</span>` : ''}</span>
-        <button type="button" class="especialidad-link cv-criterio-ir" data-especialidad="${r.fuente.especialidad}" data-view="${r.fuente.view}" data-panel="${r.fuente.panel}" data-tab="${r.fuente.tab}" data-resaltar="${r.fuente.sel}">${r.fuente.ficha} →</button></div>`).join('') +
+        ${r.fuente.atlas ? `<button type="button" class="especialidad-link cv-criterio-ir" data-eco-atlas="${r.fuente.atlas}">${r.fuente.ficha} →</button>`
+          : `<button type="button" class="especialidad-link cv-criterio-ir" data-especialidad="${r.fuente.especialidad}" data-view="${r.fuente.view}" data-panel="${r.fuente.panel}" data-tab="${r.fuente.tab}" data-resaltar="${r.fuente.sel}">${r.fuente.ficha} →</button>`}${r.pdf ? ` <a class="cv-criterio-ir cv-muted" href="${r.pdf.href}" target="_blank" rel="noopener">${r.pdf.texto} ↗</a>` : ''}</div>`).join('') +
       `<p class="cv-muted">Las cifras se cotejan con las fichas; los parámetros del modelo que producen la forma (masa, rigidez, contractilidad, resistencias, volumen retenido) son ilustrativos.</p>`;
   }
 
@@ -691,18 +912,29 @@ export function montarSimulador(raiz, opc = {}) {
   const chipEsc = ([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`;
   $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => !e.forma).map(chipEsc).join('');
   $('#cv-enfermedad').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => e.forma).map(chipEsc).join('');
-  function elegirEscenario(k) {
+  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = shock a fondo. Se aplica al soltar
+  let gravedad = null;
+  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, el shock a fondo.`;
+  function elegirEscenario(k, g) {
     if (!ESCENARIOS[k]) return;
+    const mando = ESCENARIOS[k].gravedad;
+    if (!mando || (g == null && k !== escenario)) gravedad = null;     // otro escenario: vuelve a su gravedad de siempre
+    if (mando) gravedad = g ?? gravedad ?? mando.defecto;
     escenario = k;
+    $('#cv-gravedad').hidden = !mando;
+    if (mando) { $('#cv-grav').value = Math.round(gravedad * 100); $('#cv-grav-v').textContent = Math.round(gravedad * 100) + ' %'; $('#cv-grav-txt').textContent = textoGravedad(k, gravedad); }
     // que se vea ya el efecto (y el barorreflejo respondiendo); una forma de enfermedad, ya asentada (escenarios.mjs)
-    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); aplicarEscenario(motor, k);
+    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); aplicarEscenario(motor, k, mando ? gravedad : undefined);
+    if (mando && g != null) motor.correr(faltaParaAsentar(motor));    // con el mando movido, el paciente ya asentado (como lo comprueban las pruebas)
     if (opc.depuracion) window.__motor = motor;
     revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM(); reiniciarD();
     paneles?.alCambiarMotor();
     $$('[data-c]').forEach(x => x.classList.toggle('on', x.dataset.c === k));
     opc.onEscenario?.(k);
   }
-  for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) elegirEscenario(b.dataset.c); });
+  for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) { if (b.dataset.c === escenario) gravedad = null; elegirEscenario(b.dataset.c); } });
+  $('#cv-grav').addEventListener('input', () => { const g = $('#cv-grav').value / 100; $('#cv-grav-v').textContent = Math.round(g * 100) + ' %'; if (ESCENARIOS[escenario].gravedad) $('#cv-grav-txt').textContent = textoGravedad(escenario, g); });
+  $('#cv-grav').addEventListener('change', () => { if (ESCENARIOS[escenario].gravedad) elegirEscenario(escenario, $('#cv-grav').value / 100); });
   $('#cv-baro').addEventListener('change', () => { motor.p.barorreflejo = $('#cv-baro').checked; });
   function avanzarSeg(seg) { revision = null; ponerPausa(false); motor.correr(seg); sangre.reiniciar(); latidoTexto = -1; ensuciar(); }
   $('#cv-avanzar').addEventListener('click', () => avanzarSeg(10));

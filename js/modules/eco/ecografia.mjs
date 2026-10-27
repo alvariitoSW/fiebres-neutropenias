@@ -18,6 +18,7 @@
 import { baseGeometrica, REF } from './corazon-geo.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
+import { TEJIDOS, DB_IMAGEN } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -87,8 +88,14 @@ export function planoVista(clave, est) {
     const apex = [0, 0, -vi.Le], mit = A(g.mc, 0), tri = A(g.ct, 0), ai = [g.mc[0], g.mc[1] - 10, 18], ad = [g.ct[0] - 5, g.ct[1], 16];
     if (clave === 'sc4c') {
       // el plano que mejor pasa por el ápex, las dos válvulas AV y las dos aurículas; el ápex a la derecha
-      const pts = [apex, mit, tri, ai, ad], c = esc(pts.reduce(sum), 1 / pts.length);
-      ajustado(piel, pts, c, apex);
+      // eco-mega p2b (vuelta 2b): el plano pasaba por la piel y cortaba el VD de refilón (una rendija, la AD con un gancho).
+      // Ahora es paralelo al del A4C (el mismo plano de las cuatro cámaras) y la sonda se lleva a él desde la piel bajo el
+      // xifoides (~34 mm, ~13°): el VD sale ancho, bajo el hígado y con la pared libre horizontal. Ilustrativo
+      const c = A(mix2(g.ct, g.mc, 0.55), 0), T = A(mix2(g.ct, g.mc, 0.55), 8), d4 = nrm(res(T, [0, 0, -vi.Le - HUECO]));
+      const n4 = nrm(cruz(perp([g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], d4), d4));
+      O = res(piel, esc(n4, dot(res(piel, c), n4)));
+      const dv = res(res(c, O), esc(n4, dot(res(c, O), n4))); d = nrm(dv);
+      r = nrm(cruz(d, n4)); if (dot(r, res(apex, c)) < 0) r = esc(r, -1);
     } else {
       // por el eje de la VCI, de 45 mm bajo el hiato (izquierda de la imagen) a la AD (derecha). La sonda, más
       // vertical: sobre la piel delante del tramo de la VCI que se mira (a la altura del xifoides en profundidad,
@@ -122,7 +129,10 @@ export function planoVista(clave, est) {
     else {
       // eje corto: plano perpendicular al eje del VI; a la derecha la pared lateral (lejos del tabique),
       // como se ve desde el ápex
-      const z = v.nivel(vi); O = sum(A([0, 0], z), esc(u, D));
+      // F5: el nivel se fija con el largo del VI en telediástole (el transductor no sigue a la base cuando baja en sístole):
+      // así el corte de los papilares pasa por su cuerpo pegado a la pared y no por la punta libre
+      const viN = est.vviTd ? baseGeometrica({ ...est, vvi: est.vviTd, septo: 0 }).vi : vi;
+      const z = v.nivel(viN); O = sum(A([0, 0], z), esc(u, D));
       r = [-u[1], u[0], 0]; const fs = (REF.phiA + REF.phiB) / 2;
       if (r[0] * Math.cos(fs) + r[1] * Math.sin(fs) > 0) r = esc(r, -1);
     }
@@ -131,6 +141,31 @@ export function planoVista(clave, est) {
 }
 
 // ---------------------------------------------------------------------------- medidas del corazón
+// (Movida aquí desde paciente-posible.test.mjs en P4: la usan la prueba y el simulador. basalVi = anchura máxima de la cavidad
+// del VI en el mismo tercio de la base y el mismo plano.)
+// VD en el plano apical de 4 cámaras (vista enfocada al VD, Lang Tabla 8): se cuentan las celdas del plano que caen
+// en la cavidad del VD. Basal = la mayor anchura del tercio de la base; medio = la del tercio medio; longitudinal =
+// de la base al ápex del VD; área en cm². Para el FAC se usa el área en telediástole y en telesístole.
+// (N2: la profundidad v crece desde el transductor, en el ápex, hacia la base; antes «basal» se leía en el tercio del
+// ápex y daba ~16 mm. Era un fallo de la medida, no del modelo; con el tercio de la base da ~30 mm. Las referencias no se tocan.)
+export function medirVd(est) {
+  const g = baseGeometrica(est), vi = g.vi, P = planoVista('a4c', est), h = 0.8, filas = new Map(), filasVi = new Map(); let n = 0;
+  for (let v = 0; v <= P.prof; v += h) { let mn = Infinity, mx = -Infinity, nn = Infinity, nx = -Infinity;
+    for (let u = -70; u <= 70; u += h) {
+      const p = sum(P.O, sum(esc(P.r, u), esc(P.d, v))), zp = p[2]; if (zp >= 0) continue;
+      const rho = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
+      if (zp > -vi.L && rho < g.rEndoVi(zp, f)) { nn = Math.min(nn, u); nx = Math.max(nx, u); continue; }
+      if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { n++; mn = Math.min(mn, u); mx = Math.max(mx, u); } }
+    }
+    if (mx > mn) filas.set(v, mx - mn);
+    if (nx > nn) filasVi.set(v, nx - nn); }
+  const vs = [...filas.keys()], v0 = vs[0], L = vs[vs.length - 1] - v0;
+  const ancho = (a, b) => Math.max(...vs.filter(v => v >= v0 + L * a && v <= v0 + L * b).map(v => filas.get(v)));
+  const basalVi = Math.max(...vs.filter(v => v >= v0 + L * 2 / 3 && v <= v0 + L).map(v => filasVi.get(v) || 0));
+  return { area: n * h * h / 100, largo: L, basalVi, basal: ancho(2 / 3, 1), medio: ancho(1 / 3, 2 / 3), apice: ancho(0, 1 / 3), filas };
+}
+
+
 /**
  * Lo que mediría un ecografista en la forma de este estado (normalmente el telediastólico), para cotejar las formas de
  * enfermedad (escenarios.mjs) con las cifras de las fichas. Todo en mm salvo lo indicado.
@@ -199,6 +234,24 @@ export function vistaMasParecida(P, est, ventana) {
   return mejor;
 }
 
+/** Distancia (mm) de un punto del plano al segmento más cercano de una lista [x0,y0,x1,y1,…]. */
+export function distSeg(x, y, seg) {
+  let best = Infinity;
+  for (let i = 0; i < seg.length; i += 4) {
+    const ax = seg[i], ay = seg[i + 1], ux = seg[i + 2] - ax, uy = seg[i + 3] - ay, l2 = ux * ux + uy * uy || 1e-9;
+    const t = Math.max(0, Math.min(1, ((x - ax) * ux + (y - ay) * uy) / l2)), d = Math.hypot(x - ax - t * ux, y - ay - t * uy);
+    if (d < best) best = d;
+  }
+  return best;
+}
+
+/** Distancia mínima (mm) de los extremos de una lista de segmentos a otra lista de segmentos. */
+export function distMin(seg, pared) {
+  let m = Infinity;
+  for (let i = 0; i < seg.length; i += 2) m = Math.min(m, distSeg(seg[i], seg[i + 1], pared));
+  return m;
+}
+
 /** Un punto del corazón en el plano: [u, v, distancia al plano]. */
 export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(q, P.d), dot(q, P.n)]; }
 
@@ -206,32 +259,40 @@ export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(
 // clase: pared (miocardio de dos superficies, endo y epi: se rellena lo de en medio), tubo (relleno si su
 // corte cierra; si no, línea), linea (pared fina de una sola superficie: aurículas, vasos), valva,
 // pericardio. db: ecogenicidad frente al miocardio. ancho (mm) de las líneas.
+const T = TEJIDOS;
 const TIPOS = [
-  [/^VI (endo|epi)cardio$/, { grupo: 'VI', clase: 'pared', db: 0 }],
-  [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: 0 }],
-  [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: 0 }],
-  [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: 1, ancho: 3.5 }],
-  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -1, ancho: 2.6 }],
-  [/^Base V[ID]$/, { clase: 'linea', db: 0, ancho: 2 }],
-  [/^Raíz aórtica$/, { clase: 'linea', db: 6, ancho: 2.2 }],
+  [/^VI (endo|epi)cardio$/, { grupo: 'VI', clase: 'pared', db: T.miocardio.db }],
+  [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: T.miocardio.db }],
+  [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: T.miocardio.db }],
+  [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: T.papilar.db, ancho: T.papilar.ancho }],
+  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: T.auricula.db, ancho: T.auricula.ancho }],
+  [/^Base V[ID]$/, { clase: 'linea', db: T.baseV.db, ancho: T.baseV.ancho }],
+  [/^Raíz aórtica$/, { clase: 'linea', db: T.raiz.db, ancho: T.raiz.ancho }],
   // grandes vasos: luz con sangre aunque salgan del pericardio (el arco en la supraesternal, la aorta descendente
   // detrás de la AI en el eje largo)
-  [/^(Aorta|Tronco pulmonar|AP )/, { clase: 'vaso', db: 6, ancho: 2.2 }],
+  [/^(Aorta|Tronco pulmonar|AP )/, { clase: 'vaso', db: T.vaso.db, ancho: T.vaso.ancho }],
   // abdomen (abdomen.mjs): hígado y diafragma se rellenan como una pared (el diafragma, una banda muy ecogénica);
   // los vasos de dentro, luz con sangre y una pared fina (brillante en la porta, por su vaina fibrosa)
-  [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: 1 }],
-  [/^Diafragma$/, { grupo: 'Diafragma', clase: 'pared', db: 9 }],
-  [/^Apófisis xifoides$/, { grupo: 'Xifoides', clase: 'pared', db: 12 }],
-  [/^Vena cava inferior$/, { clase: 'vaso', db: 1, ancho: 1.2 }],
-  [/^Vena suprahepática/, { clase: 'vaso', db: -2, ancho: 0.8 }],
-  [/^(Vena porta|Rama portal)/, { clase: 'vaso', db: 9, ancho: 1.3 }],
-  [/^(Vena|Seno coronario)/, { clase: 'linea', db: -3, ancho: 1.3 }],
-  [/^Grasa/, { clase: 'linea', db: 3, ancho: 3.5 }],
-  [/^Coronaria/, { clase: 'linea', db: 5, ancho: 1.4 }],
-  [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: 13, ancho: 1.4 }],
-  [/^Pericardio$/, { clase: 'pericardio', db: 14, ancho: 2 }],
+  [/^Hígado$/, { grupo: 'Hígado', clase: 'pared', db: T.higado.db }],
+  [/^Diafragma$/, { grupo: 'Diafragma', clase: 'pared', db: T.diafragma.db }],
+  [/^Apófisis xifoides$/, { grupo: 'Xifoides', clase: 'pared', db: T.xifoides.db }],
+  [/^Vena cava inferior$/, { clase: 'vaso', db: T.vci.db, ancho: T.vci.ancho }],
+  [/^Vena suprahepática/, { clase: 'vaso', db: T.suprahepatica.db, ancho: T.suprahepatica.ancho }],
+  [/^(Vena porta|Rama portal)/, { clase: 'vaso', db: T.porta.db, ancho: T.porta.ancho }],
+  [/^(Vena|Seno coronario)/, { clase: 'linea', db: T.venaPared.db, ancho: T.venaPared.ancho }],
+  [/^Grasa/, { clase: 'linea', db: T.grasa.db, ancho: T.grasa.ancho }],
+  [/^Coronaria/, { clase: 'linea', db: T.coronaria.db, ancho: T.coronaria.ancho }],
+  [/^Cortina aorto-mitral$/, { clase: 'linea', db: T.fibroso.db, ancho: T.fibroso.ancho }],
+  [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: T.valva.db, ancho: T.valva.ancho }],
+  // tórax (torax.mjs): el hueso brilla y da sombra; la pleura brilla y deja líneas A detrás (ver formar)
+  [/^Vértebra/, { clase: 'linea', db: T.hueso.db, ancho: T.hueso.ancho }],
+  [/^Pulmón/, { clase: 'linea', db: T.pleura.db, ancho: T.pleura.ancho }],
+  [/^Pericardio$/, { clase: 'pericardio', db: T.pericardio.db, ancho: T.pericardio.ancho }],
 ];
-export const DB = { sangre: -42, extracardiaco: -20, borde: -9, especular: 9 };
+export const CUERDA_H = 4;      // medio grosor (mm) de la losa en que las cuerdas entran en la imagen
+/** Un papilar cortado se desvanece entre PAPILAR_FADE[0] y [1] mm de distancia mínima a la pared del VI: más lejos, suelto, ya no hay tejido. */
+export const PAPILAR_FADE = [3, 6];
+export const DB = { sangre: T.sangre.db, extracardiaco: T.extracardiaco.db, borde: DB_IMAGEN.borde.db, especular: DB_IMAGEN.especular.db };
 const tipoDe = (nombre) => { for (const [re, t] of TIPOS) if (re.test(nombre)) return t; return null; };
 
 // posición del vértice i de una pieza (mezclada si viene de las formas precalculadas)
@@ -246,6 +307,34 @@ const lector = (p) => {
  * referencia (misma topología), dónde estaban esos mismos puntos materiales: con eso el moteado viaja con
  * el tejido. Se descartan los triángulos casi paralelos al plano (su corte sería un borrón).
  */
+/**
+ * C1 · Qué festones de la mitral y qué cúspides o valvas (aórtica, tricúspide) corta el plano P. Lee la marca `segmentos`
+ * ([nombre, uu0, uu1]) y `malla` ([ni, nj]) que corazon-geo.mjs pone en cada valva; cada triángulo que cruza el plano dentro
+ * del sector suma su tramo al segmento de su columna uu. Devuelve [{ valvula, nombre, largo (mm), u, v }] (u, v: centro del
+ * tramo en el plano), solo los de al menos `minimo` mm, en el orden de las piezas.
+ */
+export function valvasEnPlano(partes, P, minimo = 1.5) {
+  const out = [];
+  for (const p of partes) {
+    if (!p.segmentos || !p.malla || !p.idx) continue;
+    const [ni, nj] = p.malla; if (p.pos.length !== (ni + 1) * (nj + 1) * 3) continue;   // recortada (corte 3D): sin rótulo
+    const acc = p.segmentos.map(() => ({ l: 0, u: 0, v: 0 })), q = (k) => enPlano(P, [p.pos[k * 3], p.pos[k * 3 + 1], p.pos[k * 3 + 2]]);
+    for (let t = 0; t < p.idx.length; t += 3) {
+      const ks = [p.idx[t], p.idx[t + 1], p.idx[t + 2]], e = ks.map(q), cruces = [];
+      for (let a = 0; a < 3; a++) { const A = e[a], B = e[(a + 1) % 3]; if ((A[2] < 0) !== (B[2] < 0)) { const f = A[2] / (A[2] - B[2]); cruces.push([A[0] + f * (B[0] - A[0]), A[1] + f * (B[1] - A[1])]); } }
+      if (cruces.length !== 2) continue;
+      const mu = (cruces[0][0] + cruces[1][0]) / 2, mv = (cruces[0][1] + cruces[1][1]) / 2;
+      if (mv <= 0 || Math.hypot(mu, mv) > P.prof || Math.abs(Math.atan2(mu, mv)) > P.mitad) continue;
+      const uu = ks.reduce((s, k) => s + Math.floor(k / (nj + 1)), 0) / 3 / ni;
+      const i = p.segmentos.findIndex(([, a, b]) => uu >= a && uu <= b); if (i < 0) continue;
+      const l = Math.hypot(cruces[1][0] - cruces[0][0], cruces[1][1] - cruces[0][1]);
+      acc[i].l += l; acc[i].u += mu * l; acc[i].v += mv * l;
+    }
+    p.segmentos.forEach(([nombre], i) => { const a = acc[i]; if (a.l >= minimo) out.push({ valvula: p.nombre.split(' ')[0], nombre, largo: a.l, u: a.u / a.l, v: a.v / a.l }); });
+  }
+  return out;
+}
+
 export function cortarPieza(p, P, ref = null, base = 0) {
   const pos = lector(p), n = p.pos.length / 3, I = p.idx;
   const { O, r, d } = P, nn = P.n;
@@ -308,7 +397,7 @@ function cerrarExtremos(trozos, maxPuente = 30) {
   return { puentes, puentesRef, abiertos };
 }
 
-/** Segmentos de las cuerdas (líneas 3D) dentro de ±h mm del plano, proyectados; con su distancia. */
+/** Segmentos de las cuerdas (líneas 3D) dentro de ±h mm del plano, proyectados; con su distancia (0-1 del grosor del corte). */
 function cortarLineas(p, P, h = 2) {
   const L = p.lineas, out = [];
   for (let i = 0; i < L.length; i += 6) {
@@ -336,12 +425,16 @@ function cortarLineas(p, P, h = 2) {
  * puntos / puntosRef: pares (actual, referencia) para que el moteado siga al tejido.
  * ref: las mismas piezas en la forma de referencia (telediástole), o null.
  */
-export function elementosDelCorte(partes, P, ref = null) {
+export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = true } = {}) {
   const grupos = new Map(), lineas = [], valvas = [], tubos = [], mascara = { tipo: 'mascara', seg: [] }, peri = [];
   let base = 0;
   partes.forEach((p, k) => {
     if (p.lineas) {
-      if (p.nombre === 'Cuerdas') for (const [a, b, f] of cortarLineas(p, P)) valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 4 - 6 * f, ancho: 0.9, grupo: 'Cuerdas' });
+      // cuerdas como losa de ±CUERDA_H mm: brillan al cruzar el centro del plano (8 dB, siempre por debajo de la valva)
+      // y se apagan con la distancia: a 3 mm ya están 7,5 dB más oscuras; de ahí al borde de la losa, mucho más rápido
+      if (p.nombre === 'Cuerdas' && !cuerdasYPapilares) for (const [a, b, f] of cortarLineas(p, P)) valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: 4 - 6 * f, ancho: 0.9, grupo: 'Cuerdas' });   // la línea fina de antes
+      else if (p.nombre === 'Cuerdas') for (const [a, b, f] of cortarLineas(p, P, CUERDA_H)) { const mm = f * CUERDA_H;
+        valvas.push({ tipo: 'linea', seg: [a[0], a[1], b[0], b[1]], db: T.cuerda.db - 2.5 * mm - (mm > 3 ? 10 * (mm - 3) : 0), ancho: 0.7 + 0.8 * (1 - f), grupo: 'Cuerdas' }); }
       return;
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
@@ -368,6 +461,8 @@ export function elementosDelCorte(partes, P, ref = null) {
     // borde de la pared: más brillante donde el haz le da de frente (reflexión especular)
     out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g });
   }
+  // papilares y trabéculas: nacen de la pared, así que lo que queda lejos de ella se desvanece (en formar)
+  const paredVI = cuerdasYPapilares && grupos.has('VI') ? grupos.get('VI').trozos.flatMap(x => x.seg) : null;
   for (const x of tubos) {
     // cerrado: cada extremo suelto tiene otro en el mismo sitio (la costura de la rejilla del tubo)
     const cerrado = cerrarExtremos([x], 0.6).abiertos === 0;
@@ -379,7 +474,7 @@ export function elementosDelCorte(partes, P, ref = null) {
       out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
       continue;
     }
-    out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0 }
+    out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0, distPared: paredVI && /^Papilar/.test(x.nombre) ? distMin(x.seg, paredVI) : null }
       : { tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
   }
   return out.concat(lineas, valvas, peri);
@@ -392,16 +487,17 @@ export function elementosDelCorte(partes, P, ref = null) {
 const NG = 1 << 16, GR = new Float32Array(NG), GI = new Float32Array(NG);
 { let a = 0x9e3779b9 >>> 0; const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   for (let i = 0; i < NG; i++) { const m = Math.sqrt(-2 * Math.log(rnd() + 1e-12)) / Math.SQRT2, f = 2 * Math.PI * rnd(); GR[i] = m * Math.cos(f); GI[i] = m * Math.sin(f); } }
-const RET = 1 / 0.15;
-// ruido de valor suave (retícula de 5 mm, interpolación bilineal suavizada): factor de amplitud de 0,8 a 1,25
-const VL = new Float32Array(NG); for (let i = 0; i < NG; i++) VL[i] = Math.pow(10, (GR[i] * 1.6) / 20);
+// retícula y variación lenta (ver las mejoras de moteado)
+const hash = (i, j) => { let h = Math.imul(i, 0x27d4eb2d) ^ Math.imul(j, 0x165667b1); h = Math.imul(h ^ (h >>> 15), 0x2c1b3c6d); h ^= h >>> 13; return h & (NG - 1); };
+// variación lenta del tejido (retícula de 5 mm), con su intensidad: tabla por exponente
+let VLk = -1, VL = new Float32Array(NG);
+function tablaLenta(k) { if (k === VLk) return; VLk = k; for (let i = 0; i < NG; i++) VL[i] = Math.pow(10, (GR[i] * 1.6 * k) / 20); }
 function lento(x, y) {
   const fx = x / 5, fy = y / 5, ix = Math.floor(fx), iy = Math.floor(fy); let tx = fx - ix, ty = fy - iy;
   tx = tx * tx * (3 - 2 * tx); ty = ty * ty * (3 - 2 * ty);
   const a = VL[hash(ix, iy)], b = VL[hash(ix + 1, iy)], c = VL[hash(ix, iy + 1)], d = VL[hash(ix + 1, iy + 1)];
   return a + (b - a) * tx + (c - a) * ty + (a - b - c + d) * tx * ty;
 }
-const hash = (i, j) => { let h = Math.imul(i, 0x27d4eb2d) ^ Math.imul(j, 0x165667b1); h = Math.imul(h ^ (h >>> 15), 0x2c1b3c6d); h ^= h >>> 13; return h & (NG - 1); };
 
 /**
  * Ajuste afín (mínimos cuadrados con un tirón hacia «sin deformación») que lleva los puntos del corte
@@ -467,46 +563,96 @@ export function ajusteAfin(seg, segRef) {
 // ---------------------------------------------------------------------------- formación de la imagen
 // Haz (2,5 MHz con armónicos, ilustrativo): ~0,3 mm de resolución axial (σ) y lateral que crece con la
 // profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
-const SIG_AX = 0.3, SIG_LAT = (r) => Math.max(0.45, 0.0085 * r), DB_LO = -34, DB_HI = 30;
 
-function gauss(sig, cap) { const r = Math.min(cap, Math.max(1, Math.ceil(sig * 2.5))); const k = new Float32Array(2 * r + 1); let s = 0;
-  for (let i = -r; i <= r; i++) { const v = Math.exp(-(i * i) / (2 * sig * sig)); k[i + r] = v; s += v; } for (let i = 0; i < k.length; i++) k[i] /= s; return k; }
+// ---------------------------------------------------------------------------- formación de la imagen
+// Haz (2,5 MHz con armónicos, ilustrativo): ~0,3 mm de resolución axial (σ) y lateral que crece con la
+// profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
+const SIG_AX = 0.3, DB_LO = -34, DB_HI = 30;
+const SIG_LAT0 = (r) => Math.max(0.45, 0.0085 * r);
+// pulso axial: pesos de una campana por recurrencia (cada peso sale del anterior: w(i+1) = w(i)·q^(2i+1), con
+// q = e^(−1/2σ²)), simétricos, hasta 2,5 σ (como mucho «tope» muestras a cada lado), y que suman 1
+function pulsoAxial(sig, tope) {
+  const media = clamp(Math.ceil(2.5 * sig), 1, tope), q = Math.exp(-0.5 / (sig * sig)), mitad = [1];
+  for (let i = 0; i < media; i++) mitad.push(mitad[i] * Math.pow(q, 2 * i + 1));
+  const total = mitad.reduce((a, w, i) => a + (i ? 2 * w : w), 0), pesos = new Float32Array(2 * media + 1);
+  mitad.forEach((w, i) => { pesos[media + i] = pesos[media - i] = w / total; });
+  return pesos;
+}
+// potencia del ruido tras dos cajas de semiancho h (para devolverla a 1)
+const S2 = Array.from({ length: 16 }, (_, h) => { const w = 2 * h + 1; let s = 0; for (let t = -2 * h; t <= 2 * h; t++) { const c = (w - Math.abs(t)) / (w * w); s += c * c; } return s; });
 
 /**
- * Un ecógrafo de NB haces por NS muestras. formar() devuelve la imagen del sector en un búfer RGBA de
- * ancho × alto píxeles (vértice del sector arriba en el centro) y la rejilla polar en dB (para pruebas).
+ * Las mejoras de la imagen (todo ilustrativo, física general de los ultrasonidos), cada una con su intensidad de 0 a 1;
+ * con 0 el ecógrafo da exactamente la imagen de antes de las mejoras:
+ *   paredes   · el borde de la pared ya no es una línea brillante: interfase fina y músculo gris medio
+ *   moteado   · los dispersores se interpolan entre los nudos de su retícula: el moteado se desliza con la pared en
+ *               vez de «hervir», la sangre deriva despacio y el tejido es más heterogéneo
+ *   sombra    · cada haz pierde energía al cruzar lo muy ecogénico (pericardio, valvas, costilla) y menos en la sangre
+ *               que en el tejido: sombra detrás de lo brillante, refuerzo detrás del líquido
+ *   reverb    · neblina de campo cercano y bandas de reverberación de la pared torácica a 2×, 3× y 4× su profundidad,
+ *               fijas en la pantalla (no se mueven con el corazón)
+ *   especular · el borde brilla más cuando el haz lo corta de frente y se apaga cuando le pasa paralelo (anisotropía)
+ *   tgc       · ganancia por profundidad con 4 mandos (o.tgc, en dB); 0 la ignora
+ *   foco      · el haz es más estrecho en el foco (o.focoMm) y se ensancha por delante, por detrás y hacia los bordes
+ *   ventana   · ventana pobre: pared más gruesa, más pérdida, más ruido; con más intensidad, el borde del pulmón tapa un
+ *               lado del sector y entra y sale con la respiración (por defecto apagada: es un reto)
+ */
+export const MEJORAS_CERO = Object.freeze({ paredes: 0, moteado: 0, sombra: 0, reverb: 0, especular: 0, tgc: 0, foco: 0, ventana: 0, trabeculas: 0 });
+export const MEJORAS_DEFECTO = Object.freeze({ trabeculas: 1, paredes: 0.9, moteado: 0.7, sombra: 0.7, reverb: 0.6, especular: 0.7, tgc: 1, foco: 0.7, ventana: 0 });
+
+/**
+ * Un ecógrafo de NB haces por NS muestras. formar() devuelve la imagen del sector en un búfer RGBA de ancho × alto
+ * píxeles (vértice del sector arriba en el centro) y la rejilla polar en dB (para pruebas).
+ * formar(partes, P, o): partes, las del corazón en este fotograma; P, el plano; o.ref, las piezas de la forma de
+ * referencia (para el moteado); o.t, tiempo (s); o.ganancia (dB); o.m, intensidades 0..1 de cada mejora (MEJORAS_DEFECTO);
+ * o.calcio, regexp (o texto) con el nombre de las piezas calcificadas, p. ej. /^Aórtica/ (sombra acústica detrás; sin ella, nada cambia); o.tgc, 4 dB de arriba abajo; o.focoMm, profundidad del foco; o.ventanaVista, 'apical', 'paraesternal', 'subcostal'…
  */
 export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = {}) {
-  let G = null;
-  const geometria = (P) => {
-    const clave = [P.prof, P.mitad.toFixed(4), ancho, alto].join('|');
+  let G = null, geoNueva = false;      // geoNueva: este fotograma ha tenido que construir la rejilla (tarda más de lo normal)
+  const geometria = (P, o) => {
+    const m = o.m, clave = [P.prof, P.mitad.toFixed(4), ancho, alto, m.reverb, m.foco, o.focoMm, m.ventana, m.sombra > 0, o.ventanaVista, m.moteado].join('|');
     if (G && G.clave === clave) return G;
+    geoNueva = true;
     const N = nb * ns, dth = 2 * P.mitad / nb, dr = P.prof / ns;
-    const X = new Float32Array(N), Y = new Float32Array(N);
-    for (let j = 0; j < ns; j++) { const rr = (j + 0.5) * dr; for (let i = 0; i < nb; i++) { const th = -P.mitad + (i + 0.5) * dth; X[j * nb + i] = rr * Math.sin(th); Y[j * nb + i] = rr * Math.cos(th); } }
-    // desenfoque: lateral por fila (en haces) y axial; NORM devuelve la potencia media a 1 por fila
-    const kAx = gauss(SIG_AX / dr, 6); let s2a = 0; for (const w of kAx) s2a += w * w;
-    // lateral: dos pasadas de caja (media móvil) por fila, de semiancho HB, con la varianza de la gaussiana del
-    // haz a esa profundidad (2·h·(h+1)/3 = σ²); NORM devuelve la potencia media del ruido a 1 en cada fila
-    const HB = new Int16Array(ns), NORM = new Float32Array(ns);
+    const X = new Float32Array(N), Y = new Float32Array(N), Rr = new Float32Array(ns), EB = new Float32Array(nb);
+    for (let j = 0; j < ns; j++) { const rr = (j + 0.5) * dr; Rr[j] = rr; for (let i = 0; i < nb; i++) { const th = -P.mitad + (i + 0.5) * dth; X[j * nb + i] = rr * Math.sin(th); Y[j * nb + i] = rr * Math.cos(th); } }
+    for (let i = 0; i < nb; i++) EB[i] = (-P.mitad + (i + 0.5) * dth) / P.mitad;
+    const kAx = pulsoAxial(SIG_AX / dr, 6); let s2a = 0; for (const w of kAx) s2a += w * w;
+    // desenfoque lateral por muestra: sin la mejora, el de hoy (solo la profundidad); con ella, foco y bordes
+    const HB = new Uint8Array(N), NORM = new Float32Array(N), I = m.foco, f = o.focoMm ?? 80;
     for (let j = 0; j < ns; j++) {
-      const rr = Math.max(4, (j + 0.5) * dr), sg = SIG_LAT(rr) / (rr * dth), h = Math.max(0, Math.min(12, Math.round((Math.sqrt(1 + 6 * sg * sg) - 1) / 2)));
-      HB[j] = h; const w = 2 * h + 1; let s2 = 0;
-      for (let t = -2 * h; t <= 2 * h; t++) { const c = (w - Math.abs(t)) / (w * w); s2 += c * c; }
-      NORM[j] = 1 / (s2 * s2a);
+      const rr = Math.max(4, Rr[j]), s0 = SIG_LAT0(rr), sF = Math.max(0.45, 0.55 + 0.012 * Math.abs(rr - f) + 0.004 * rr);
+      for (let i = 0; i < nb; i++) {
+        const e = EB[i], M = m.moteado;
+        // con el grano real, el haz nunca baja de ~1 mm de ancho: el grano sale alargado de lado y corto en profundidad
+        const sig = Math.max(0.45 + 0.6 * M, ((1 - I) * s0 + I * sF) * (1 + 0.25 * M)) * (1 + 0.9 * I * e * e);
+        const sg = sig / (rr * dth), h = Math.max(0, Math.min(15, Math.round((Math.sqrt(1 + 6 * sg * sg) - 1) / 2)));
+        HB[j * nb + i] = h; NORM[j * nb + i] = 1 / (S2[h] * s2a);
+      }
     }
-    // pared torácica bajo el transductor (fija): piel, grasa, músculo con estrías, fascia; −1 = no es pared
-    // reverberaciones de la pared torácica: una neblina fija en los primeros centímetros (no se mueve con el corazón)
-    const CL = new Float32Array(N);
-    for (let q = 0; q < N; q++) { const y = Y[q]; if (y >= PARED && y < 50) CL[q] = amp(-18 - 0.55 * (y - PARED)); }
-    const PT = new Float32Array(N).fill(-1);
-    for (let q = 0; q < N; q++) { const y = Y[q]; if (y >= PARED) continue; const x = X[q], f = y / PARED + 0.04 * Math.sin(x * 0.9);
-      PT[q] = amp(y < 1 ? 4 : f < 0.35 ? -13 : f < 0.85 ? -4 + 3 * Math.sin(y * 3.1 + x * 0.3) : 7); }
-    // ganancia que no depende del tejido: caída suave con la profundidad y en los bordes del sector
+    // pared torácica: con ventana pobre, más gruesa (la grasa crece) y con más pérdida
+    const W = m.ventana, pared = PARED + 8 * W, grasa = 0.35 + 0.25 * W;
+    const PT = new Float32Array(N).fill(-1), ABS = new Uint8Array(N);
+    for (let q = 0; q < N; q++) { const y = Y[q]; if (y >= pared) continue; const x = X[q], fr = y / pared + 0.04 * Math.sin(x * 0.9);
+      PT[q] = amp(y < 1 ? 4 : fr < grasa ? -13 - 3 * W : fr < 0.85 ? -4 + 3 * Math.sin(y * 3.1 + x * 0.3) : 7); }
+    // costilla (con la sombra, fuera de la subcostal): un arco brillante en el borde izquierdo del sector
+    if (m.sombra > 0 && o.ventanaVista !== 'subcostal') for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) {
+      const q = j * nb + i, r = Rr[j], e = EB[i];
+      if (e < -0.74 && r > pared - 6 && r < pared - 1) { PT[q] = amp(12); ABS[q] = 1; }
+    }
+    // neblina y reverberación: fijas en la pantalla (el ruido de su moteado no se mueve con el corazón)
+    const R = m.reverb, CL = new Float32Array(N), kW = 1 + 1.5 * W;
+    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) {
+      const q = j * nb + i, y = Y[q], r = Rr[j]; let c = 0;
+      if (y >= pared && y < 50 + 40 * R) c = amp(-18 + 6 * R - (0.55 - 0.3 * R) * (y - pared));
+      // en el apical el ápex cae en el campo cercano: más niebla en los primeros 3-4 cm
+      if (R > 0 && o.ventanaVista === 'apical' && y >= pared && y < pared + 40) c += R * amp(-15 - 0.35 * (y - pared));
+      if (R > 0) for (let k = 2; k <= 4; k++) { const d = r - k * pared; if (Math.abs(d) < 4) c += R * amp(4 - 6 * k) * Math.exp(-(d * d) / 3.5); }
+      CL[q] = c * kW;
+    }
+    // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
     const GAN = new Float32Array(N);
-    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const rr = (j + 0.5) * dr, e = (-P.mitad + (i + 0.5) * dth) / P.mitad;
-      GAN[j * nb + i] = -0.025 * Math.max(0, rr - 60) - 6 * Math.pow(e, 8); }
-    // conversión a la pantalla (píxeles dentro del sector → posición en la rejilla polar)
+    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = -0.025 * Math.max(0, Rr[j] - 60) - 6 * Math.pow(e, 8); }
     const k = Math.min((alto - 8) / P.prof, (ancho - 6) / (2 * P.prof * Math.sin(P.mitad))), cx = ancho / 2, top = 4;
     const PIX = [], FB = [], FS = [];
     for (let py = 0; py < alto; py++) for (let px = 0; px < ancho; px++) {
@@ -514,22 +660,20 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       const rr = Math.hypot(x, y), th = Math.atan2(x, y); if (rr >= P.prof || Math.abs(th) >= P.mitad) continue;
       PIX.push(py * ancho + px); FB.push(clamp((th + P.mitad) / dth - 0.5, 0, nb - 1.001)); FS.push(clamp(rr / dr - 0.5, 0, ns - 1.001));
     }
-    G = { clave, N, dth, dr, X, Y, PT, CL, kAx, HB, NORM, GAN, k, cx, top, PIX: Int32Array.from(PIX), FB: Float32Array.from(FB), FS: Float32Array.from(FS),
-      A: new Float32Array(N), TAG: new Uint8Array(N), DEN: new Uint8Array(N), I: new Float32Array(N), Q: new Float32Array(N), T: new Float32Array(N), E: new Float32Array(N),
+    G = { clave, N, dth, dr, X, Y, Rr, EB, PT, ABS, CL, kAx, HB, NORM, GAN, pared, k, cx, top,
+      PIX: Int32Array.from(PIX), FB: Float32Array.from(FB), FS: Float32Array.from(FS),
+      A: new Float32Array(N), TAG: new Uint8Array(N), DEN: new Uint8Array(N), FILL: new Uint8Array(N), OR: new Float32Array(N), OD: new Float32Array(N),
+      I: new Float32Array(N), Q: new Float32Array(N), T: new Float32Array(N), E: new Float32Array(N), PS: new Float64Array(nb + 1),
       pix: new Uint8ClampedArray(ancho * alto * 4), filas: Array.from({ length: ns }, () => []) };
     return G;
   };
-  // tabla de grises: 1024 niveles, con una pizca de calor como un monitor
   const LUT = new Uint8Array(1024 * 3);
   for (let i = 0; i < 1024; i++) { const v = Math.pow(i / 1023, 1.35); LUT[3 * i] = 6 + v * 244; LUT[3 * i + 1] = 6 + v * 240; LUT[3 * i + 2] = 8 + v * 230; }
 
-  // ---- rasterizado en la rejilla polar
   const aRejilla = (P, u, v) => [(Math.atan2(u, Math.max(v, 1e-3)) + P.mitad) / G.dth - 0.5, Math.hypot(u, v) / G.dr - 0.5];
-  /** Relleno por paridad de una sopa de segmentos (no hace falta que estén ordenados). */
   function rellenar(P, seg, fn) {
     const filas = G.filas; for (const f of filas) f.length = 0;
     for (let i = 0; i < seg.length; i += 4) {
-      // los segmentos rectos del plano son curvos en la rejilla polar: se trocean cada ~1 mm
       const L = Math.hypot(seg[i + 2] - seg[i], seg[i + 3] - seg[i + 1]), m = Math.max(1, Math.ceil(L / 1));
       let [pb, ps] = aRejilla(P, seg[i], seg[i + 1]);
       for (let q = 1; q <= m; q++) {
@@ -542,102 +686,187 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     for (let j = 0; j < ns; j++) { const f = filas[j]; if (f.length < 2) continue; f.sort((a, b) => a - b);
       for (let q = 0; q + 1 < f.length; q += 2) { const i0 = Math.max(0, Math.ceil(f[q])), i1 = Math.min(nb - 1, Math.floor(f[q + 1])); for (let i = i0; i <= i1; i++) fn(j * nb + i); } }
   }
-  /** Línea gruesa: cada segmento como una cápsula, con el borde suavizado (~0,35 mm). */
-  function trazar(P, seg, ancho, dbBase, espec, tag) {
-    const { A, TAG, X, Y, dth, dr } = G, h = ancho / 2;
+  /**
+   * Línea gruesa. espec: brillo extra de frente (dB); S: intensidad de la mejora especular (0 = la fórmula de hoy,
+   * cos⁴). Con S > 0, apunta además en una franja de 5 mm la orientación del borde (para la anisotropía del músculo).
+   */
+  function trazar(P, seg, ancho, dbBase, espec, tag, S, realce = 1, etiquetar = false) {
+    const { A, TAG, X, Y, OR, OD, FILL, dth, dr } = G, h = ancho / 2, banda = espec && S > 0 ? 6 : 0, hh = Math.max(h + 0.35, banda);
     for (let i = 0; i < seg.length; i += 4) {
       const ax = seg[i], ay = seg[i + 1], bx = seg[i + 2], by = seg[i + 3];
-      let db = dbBase;
+      let db = dbBase, c = 1;
       if (espec) {
         const tx = bx - ax, ty = by - ay, tl = Math.hypot(tx, ty) || 1, mx = (ax + bx) / 2, my = (ay + by) / 2, ml = Math.hypot(mx, my) || 1;
-        const c = Math.abs((-ty * mx + tx * my) / (tl * ml)), c4 = c * c * c * c;
-        db += espec * c4;
+        c = Math.abs((-ty * mx + tx * my) / (tl * ml));
+        const p = 4 + 4 * S;
+        db += (espec + 4 * S * realce) * Math.pow(c, p) - 6 * S * (1 - c) * (1 - c);
       }
       const a = amp(db);
       const ra = Math.hypot(ax, ay), rb = Math.hypot(bx, by), ta = Math.atan2(ax, ay), tb = Math.atan2(bx, by);
-      const rmin = Math.max(1, Math.min(ra, rb) - h), mth = Math.asin(Math.min(1, h / rmin)) + dth;
+      const rmin = Math.max(1, Math.min(ra, rb) - hh), mth = Math.asin(Math.min(1, hh / rmin)) + dth;
       const i0 = Math.max(0, Math.floor((Math.min(ta, tb) - mth + P.mitad) / dth)), i1 = Math.min(nb - 1, Math.ceil((Math.max(ta, tb) + mth + P.mitad) / dth));
-      const j0 = Math.max(0, Math.floor((Math.min(ra, rb) - h) / dr - 1)), j1 = Math.min(ns - 1, Math.ceil((Math.max(ra, rb) + h) / dr));
+      const j0 = Math.max(0, Math.floor((Math.min(ra, rb) - hh) / dr - 1)), j1 = Math.min(ns - 1, Math.ceil((Math.max(ra, rb) + hh) / dr));
       const ux = bx - ax, uy = by - ay, l2 = ux * ux + uy * uy || 1e-9;
       for (let j = j0; j <= j1; j++) for (let ii = i0; ii <= i1; ii++) {
         const q = j * nb + ii;
         const px = X[q] - ax, py = Y[q] - ay;
         const t = clamp((px * ux + py * uy) / l2, 0, 1), dx = px - t * ux, dy = py - t * uy, dd = Math.sqrt(dx * dx + dy * dy);
+        if (banda && dd < banda && dd < OD[q]) { OD[q] = dd; OR[q] = c; }
         if (dd >= h + 0.35) continue;
-        const c = clamp((h - dd) / 0.35 + 0.5, 0, 1);
-        if (espec) { if (c * a > A[q]) A[q] = c * a; }       // el borde solo suma brillo, nunca oscurece la pared
-        else { A[q] += c * (a - A[q]); if (c >= 0.5) TAG[q] = tag; }
+        const cc = clamp((h - dd) / 0.35 + 0.5, 0, 1);
+        if (espec) { if (cc * a > A[q]) A[q] = cc * a; if (cc >= 0.5) { FILL[q] = 0; if (etiquetar && !TAG[q]) TAG[q] = tag; } }
+        else { A[q] += cc * (a - A[q]); if (cc >= 0.5) { TAG[q] = tag; FILL[q] = 0; } }
+      }
+    }
+  }
+  // desenfoque lateral con semiancho propio en cada muestra: dos cajas por fila con sumas acumuladas
+  function desenfocar(F) {
+    const T = G.T, HB = G.HB, PS = G.PS;
+    for (let j = 0; j < ns; j++) {
+      const o = j * nb;
+      for (let pasada = 0; pasada < 2; pasada++) {
+        const src = pasada ? T : F, dst = pasada ? F : T;
+        PS[0] = 0; for (let i = 0; i < nb; i++) PS[i + 1] = PS[i] + src[o + i];
+        for (let i = 0; i < nb; i++) { const h = HB[o + i], a = Math.max(0, i - h), b = Math.min(nb, i + h + 1); dst[o + i] = (PS[b] - PS[a]) / (b - a); }
       }
     }
   }
 
-  /**
-   * partes: las del corazón en este fotograma (exactas o mezcladas); P: el plano; o.ref: las piezas de la
-   * forma de referencia (para el moteado), o.t: tiempo (s; la sangre y el ruido cambian con él), o.ganancia (dB).
-   */
   function formar(partes, P, o = {}) {
-    geometria(P);
-    const { N, A, TAG, DEN, X, Y } = G, reloj = [performance.now()];
-    const els = elementosDelCorte(partes, P, o.ref || null); reloj.push(performance.now());
-    // fondo: dentro del pericardio, sangre (o espacio pericárdico); fuera, tejido extracardíaco; arriba, la
-    // pared torácica en capas (piel, grasa, músculo con estrías, fascia)
+    const m = { ...MEJORAS_DEFECTO, ...(o.m || {}) };
+    geoNueva = false; geometria(P, { ...o, m });
+    const { N, A, TAG, DEN, FILL, OR, OD, X, Y, Rr, EB } = G, reloj = [performance.now()];
+    const els = elementosDelCorte(partes, P, o.ref || null, { cuerdasYPapilares: m.trabeculas > 0 }); reloj.push(performance.now());
     DEN.fill(0); rellenar(P, els[0].seg, (q) => { DEN[q] = 1; });
-    const aS = amp(DB.sangre), aE = amp(DB.extracardiaco);
-    const PT = G.PT;
+    // grano real: la sangre no es negro absoluto; un eco muy bajo que asoma al subir la ganancia
+    const aS = amp(DB.sangre + 4 * m.moteado), aE = amp(DB.extracardiaco), PT = G.PT;
     for (let q = 0; q < N; q++) {
       if (PT[q] >= 0) { A[q] = PT[q]; TAG[q] = 0; }
       else if (DEN[q]) { A[q] = aS; TAG[q] = 255; } else { A[q] = aE; TAG[q] = 0; }
     }
-    // estructuras: cada grupo con su etiqueta y su ajuste de movimiento
-    const mov = [null]; const etiqueta = new Map();
-    const campo = [null];
+    FILL.fill(0); OD.fill(1e9); OR.fill(1);
+    const mov = [null], etiqueta = new Map(), campo = [null]; let abiertos = 0;
+    const reCal = o.calcio ? (o.calcio instanceof RegExp ? o.calcio : new RegExp(o.calcio)) : null, esCal = new Uint8Array(256); let hayCal = false;
+    const esPl = new Uint8Array(256); let hayPl = false;
     const tagDe = (el) => { if (!etiqueta.has(el.grupo)) { etiqueta.set(el.grupo, mov.length); mov.push(ajusteAfin(el.seg, el.segRef)); campo.push(campoDesplazamiento(el.seg, el.segRef)); } return etiqueta.get(el.grupo); };
-    let abiertos = 0;
     for (const el of els.slice(1)) {
-      // la luz de un vaso es sangre (etiqueta 255): no registra el movimiento de su grupo, que lo da su pared
       if (el.tipo === 'relleno' && el.sangre) { const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = 255; }); continue; }
       const tag = Math.min(254, tagDe(el));
-      if (el.tipo === 'relleno') { abiertos += el.abiertos; const a = amp(el.db); rellenar(P, el.seg, (q) => { A[q] = a; TAG[q] = tag; }); }
-      else trazar(P, el.seg, el.ancho, el.db, el.especular, tag);
+      if (el.tipo === 'relleno') { abiertos += el.abiertos; const mus = el.db <= 1, a = amp(el.db - (mus ? (7 + (el.grupo === 'VD' ? 3 : 0)) * m.paredes : 0));   // paredes reales: músculo gris medio (la pared libre del VD, más fina, algo más tenue)
+        // papilar o trabécula sin pared cerca: se funde con la sangre entero (nace de la pared; suelto sería un «trombo»)
+        const [f0, f1] = PAPILAR_FADE, u = el.distPared == null ? 0 : clamp((el.distPared - f0) / (f1 - f0), 0, 1);
+        if (u < 1) { const a2 = u > 0 ? amp((el.db - (mus ? 7 * m.paredes : 0)) * (1 - u) + (DB.sangre + 4 * m.moteado) * u) : a;
+          rellenar(P, el.seg, (q) => { A[q] = a2; TAG[q] = tag; FILL[q] = u === 0 && mus ? 1 : 0; }); } }
+      else {
+        // con la mejora especular, también el pericardio depende del ángulo
+        // calcio (o.calcio: nombre de las piezas calcificadas): muy brillante y con la atenuación de su fila de la tabla
+        if (reCal && el.tipo === 'linea' && reCal.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.calcio.ancho, TEJIDOS.calcio.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
+        // hueso (columna): como el calcio, con su fila de la tabla; pleura: línea brillante que marca dónde empiezan las líneas A
+        if (el.tipo === 'linea' && /^Vértebra/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.hueso.ancho, TEJIDOS.hueso.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
+        if (el.tipo === 'linea' && /^Pulmón/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.pleura.ancho, TEJIDOS.pleura.db, 0, tag, 0); esPl[tag] = 1; hayPl = true; continue; }
+        const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
+        // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
+        // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
+        const W2 = m.paredes, borde = !!el.especular && W2 > 0;
+        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), el.db - (el.grupo === 'VD' ? 7 : 3) * W2, espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
+        // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
+        else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
+        else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio');   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
+      }
+    }
+    // anisotropía: el músculo paralelo al haz devuelve menos eco
+    if (m.especular > 0) { const k = -(22 - 5 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
+    // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
+    const W = m.ventana;
+    let pulmon = null;
+    if (W > 0.25 && o.ventanaVista !== 'subcostal') {
+      const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;
+      pulmon = { borde, rl };
+      for (let i = 0; i < nb; i++) { if (EB[i] < borde) continue;
+        for (let j = 0; j < ns; j++) { const r = Rr[j]; if (r < rl) continue; const q = j * nb + i, k = Math.round(r / rl), d = r - k * rl;
+          A[q] = (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
     }
     reloj.push(performance.now());
-    // dispersores: tejido con los suyos (siguen al tejido), sangre y pared torácica aparte
-    const { I, Q, CL } = G, fr = Math.floor((o.t || 0) / 0.02);
-    const offU = (Math.imul(fr, 7919) & 1023) * 0.37, offV = (Math.imul(fr, 104729) & 1023) * 0.53, ruido = amp(-40);
-    for (let q = 0; q < N; q++) {
-      const tg = TAG[q]; let mu = X[q], mv = Y[q];
-      if (tg === 255) { mu += offU; mv += offV; }
-      else if (tg) { const F = campo[tg], d = F ? desplazar(F, mu, mv) : null;
-        if (d) { mu = d[0]; mv = d[1]; }
-        else { const m = mov[tg]; if (m) { const x = mu - m[0], y = mv - m[1]; mu = m[2] + m[4] * x + m[5] * y; mv = m[3] + m[6] * x + m[7] * y; } } }
-      const h = hash(Math.floor(mu * RET), Math.floor(mv * RET)), hn = hash(q, fr + 17), hc = hash(q, 3);
-      // el tejido no es uniforme: una variación lenta (±2 dB, a escala de varios mm) que también viaja con él
-      const a = tg && tg !== 255 ? A[q] * lento(mu, mv) : A[q], c = CL[q];
-      I[q] = a * GR[h] + ruido * GR[hn] + c * GR[hc]; Q[q] = a * GI[h] + ruido * GI[hn] + c * GI[hc];
+    // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
+    const S = m.sombra;
+    if (S > 0 || W > 0 || hayCal || hayPl) {
+      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6, tope = amp(12);
+      for (let i = 0; i < nb; i++) { let at = 1, rp = 0;
+        for (let j = 0, q = i; j < ns; j++, q += nb) {
+          // detrás de la pleura no hay tejido: líneas A a múltiplos de su profundidad y el resto, negro
+          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
+          else if (hayPl && esPl[TAG[q]] && A[q] > a6) rp = Rr[j];
+          const a = A[q]; A[q] = a * at;
+          if (Rr[j] < G.pared) at *= fT;
+          if (hayCal && esCal[TAG[q]] && a > a6) at *= fC;   // sombra acústica: el calcio no deja pasar el haz
+          if (S > 0) {
+            if (ABS[q]) at *= fH;
+            else if (a > a6) at *= Math.pow(a / a6, kb);      // lo muy ecogénico refleja y deja pasar menos
+            else if (TAG[q] === 255 && at < tope) at *= fB;   // la sangre atenúa menos que el tejido (refuerzo)
+          }
+        }
+      }
+    }
+    reloj.push(performance.now());
+    // dispersores
+    const { I, Q, CL } = G, t = o.t || 0, fr = Math.floor(t / 0.02), M = m.moteado;
+    tablaLenta(1 + 1.5 * M);
+    const ruido = amp(-40 + 8 * W);
+    if (M > 0) {
+      // retícula de 0,3 mm con interpolación bilineal: el patrón se desliza con el tejido
+      const RT = 1 / 0.3, du = t * 9, dv = t * 5;
+      for (let q = 0; q < N; q++) {
+        const tg = TAG[q]; let mu = X[q], mv = Y[q];
+        if (tg === 255) { mu += du; mv += dv; }
+        else if (tg) { const F = campo[tg], d = F ? desplazar(F, mu, mv) : null;
+          if (d) { mu = d[0]; mv = d[1]; }
+          else { const mm = mov[tg]; if (mm) { const x = mu - mm[0], y = mv - mm[1]; mu = mm[2] + mm[4] * x + mm[5] * y; mv = mm[3] + mm[6] * x + mm[7] * y; } } }
+        const gx = mu * RT, gy = mv * RT, ix = Math.floor(gx), iy = Math.floor(gy), tx = gx - ix, ty = gy - iy;
+        const h00 = hash(ix, iy), h10 = hash(ix + 1, iy), h01 = hash(ix, iy + 1), h11 = hash(ix + 1, iy + 1);
+        const w00 = (1 - tx) * (1 - ty), w10 = tx * (1 - ty), w01 = (1 - tx) * ty, w11 = tx * ty, wn = 1 / Math.sqrt(w00 * w00 + w10 * w10 + w01 * w01 + w11 * w11);
+        const sr = (GR[h00] * w00 + GR[h10] * w10 + GR[h01] * w01 + GR[h11] * w11) * wn, si = (GI[h00] * w00 + GI[h10] * w10 + GI[h01] * w01 + GI[h11] * w11) * wn;
+        const hn = hash(q, fr + 17), hc = hash(q, 3);
+        const a = tg && tg !== 255 ? A[q] * lento(mu, mv) : A[q], c = CL[q];
+        I[q] = a * sr + ruido * GR[hn] + c * GR[hc]; Q[q] = a * si + ruido * GI[hn] + c * GI[hc];
+      }
+    } else {
+      // el de hoy: una celda de 0,15 mm por muestra; la sangre salta a otro patrón cada 20 ms
+      const RET = 1 / 0.15, offU = (Math.imul(fr, 7919) & 1023) * 0.37, offV = (Math.imul(fr, 104729) & 1023) * 0.53;
+      for (let q = 0; q < N; q++) {
+        const tg = TAG[q]; let mu = X[q], mv = Y[q];
+        if (tg === 255) { mu += offU; mv += offV; }
+        else if (tg) { const F = campo[tg], d = F ? desplazar(F, mu, mv) : null;
+          if (d) { mu = d[0]; mv = d[1]; }
+          else { const mm = mov[tg]; if (mm) { const x = mu - mm[0], y = mv - mm[1]; mu = mm[2] + mm[4] * x + mm[5] * y; mv = mm[3] + mm[6] * x + mm[7] * y; } } }
+        const h = hash(Math.floor(mu * RET), Math.floor(mv * RET)), hn = hash(q, fr + 17), hc = hash(q, 3);
+        const a = tg && tg !== 255 ? A[q] * lento(mu, mv) : A[q], c = CL[q];
+        I[q] = a * GR[h] + ruido * GR[hn] + c * GR[hc]; Q[q] = a * GI[h] + ruido * GI[hn] + c * GI[hc];
+      }
     }
     reloj.push(performance.now());
     desenfocar(I); desenfocar(Q); reloj.push(performance.now());
-    // envolvente, a dB, con la ganancia propia de cada muestra
-    // axial: por filas (los haces son contiguos en memoria); después, envolvente en dB con la ganancia
+    // ganancia por profundidad: 4 mandos repartidos de arriba abajo, interpolados
+    const TG = new Float32Array(ns);
+    if (m.tgc > 0 && o.tgc) for (let j = 0; j < ns; j++) { const f = j / (ns - 1) * 3, k = Math.min(2, Math.floor(f)), u = f - k; TG[j] = o.tgc[k] + (o.tgc[k + 1] - o.tgc[k]) * u; }
     const { E, T, NORM, GAN } = G, kAx = G.kAx, ra = (kAx.length - 1) >> 1;
     for (let j = 0; j < ns; j++) {
-      const o = j * nb; E.fill(0, o, o + nb); T.fill(0, o, o + nb);
-      for (let p = -ra; p <= ra; p++) { const w = kAx[p + ra], o2 = clamp(j + p, 0, ns - 1) * nb; for (let i = 0; i < nb; i++) { E[o + i] += w * I[o2 + i]; T[o + i] += w * Q[o2 + i]; } }
-      const nm = NORM[j];
-      for (let i = 0; i < nb; i++) { const a = E[o + i], b = T[o + i]; E[o + i] = 4.342944819 * Math.log((a * a + b * b) * nm + 1e-12) + GAN[o + i]; }
+      const oo = j * nb; E.fill(0, oo, oo + nb); T.fill(0, oo, oo + nb);
+      for (let p = -ra; p <= ra; p++) { const w = kAx[p + ra], o2 = clamp(j + p, 0, ns - 1) * nb; for (let i = 0; i < nb; i++) { E[oo + i] += w * I[o2 + i]; T[oo + i] += w * Q[o2 + i]; } }
+      const tg = TG[j];
+      for (let i = 0; i < nb; i++) { const a = E[oo + i], b = T[oo + i]; E[oo + i] = 4.342944819 * Math.log((a * a + b * b) * NORM[oo + i] + 1e-12) + GAN[oo + i] + tg; }
     }
     reloj.push(performance.now());
-    // a la pantalla
     const { PIX, FB, FS, pix } = G, lo = DB_LO - (o.ganancia || 0), esc = 1023 / (DB_HI - DB_LO);
     pix.fill(0);
-    for (let m = 0; m < PIX.length; m++) {
-      const fb = FB[m], fs = FS[m], b = fb | 0, s = fs | 0, tb = fb - b, ts = fs - s, q = s * nb + b;
+    for (let mm = 0; mm < PIX.length; mm++) {
+      const fb = FB[mm], fs = FS[mm], b = fb | 0, s = fs | 0, tb = fb - b, ts = fs - s, q = s * nb + b;
       const e0 = E[q] + (E[q + 1] - E[q]) * tb, e1 = E[q + nb] + (E[q + nb + 1] - E[q + nb]) * tb;
-      const kk = clamp(((e0 + (e1 - e0) * ts - lo) * esc) | 0, 0, 1023) * 3, o4 = 4 * PIX[m];
+      const kk = clamp(((e0 + (e1 - e0) * ts - lo) * esc) | 0, 0, 1023) * 3, o4 = 4 * PIX[mm];
       pix[o4] = LUT[kk]; pix[o4 + 1] = LUT[kk + 1]; pix[o4 + 2] = LUT[kk + 2]; pix[o4 + 3] = 255;
     }
     reloj.push(performance.now());
-    const tiempos = { corte: reloj[1] - reloj[0], raster: reloj[2] - reloj[1], moteado: reloj[3] - reloj[2], haz: reloj[4] - reloj[3], envolvente: reloj[5] - reloj[4], pantalla: reloj[6] - reloj[5], total: reloj[6] - reloj[0] };
+    const tiempos = { corte: reloj[1] - reloj[0], raster: reloj[2] - reloj[1], sombra: reloj[3] - reloj[2], moteado: reloj[4] - reloj[3], haz: reloj[5] - reloj[4], envolvente: reloj[6] - reloj[5], pantalla: reloj[7] - reloj[6], total: reloj[7] - reloj[0] };
+
     /**
      * Modo M: la columna de ESTA imagen a lo largo del haz de ángulo theta (rad, 0 = centro del sector, + a la
      * derecha), de 0 a P.prof mm en `filas` filas, con la misma escala de grises que la imagen. RGB por fila.
@@ -653,25 +882,10 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       }
       return out;
     };
-    return { tiempos, columna, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els };
+    return { tiempos, columna, tag: TAG, etiquetas: etiqueta, campos: campo, x: X, y: Y, pix, ancho, alto, escala: G.k, cx: G.cx, arriba: G.top, db: E, nb, ns, dth: G.dth, dr: G.dr, abiertos, elementos: els, geometriaNueva: geoNueva,
+      mitad: P.mitad, prof: P.prof, pared: G.pared, pulmon, apagado: (q) => FILL[q] && OD[q] < 6 && OR[q] < 0.35 };
   }
-  // desenfoque lateral: dos medias móviles por fila (semiancho HB[j]) sobre F, usando T de apoyo
-  function desenfocar(F) {
-    const T = G.T, HB = G.HB;
-    for (let j = 0; j < ns; j++) {
-      const h = HB[j], o = j * nb; if (!h) continue;
-      for (let pasada = 0; pasada < 2; pasada++) {
-        const src = pasada ? T : F, dst = pasada ? F : T; let s = 0, c = 0;
-        for (let i = 0; i <= h && i < nb; i++) { s += src[o + i]; c++; }
-        for (let i = 0; i < nb; i++) {
-          dst[o + i] = s / c;
-          const ia = i + h + 1, ir = i - h;
-          if (ia < nb) { s += src[o + ia]; c++; }
-          if (ir >= 0) { s -= src[o + ir]; c--; }
-        }
-      }
-    }
-  }
+
   /**
    * Doppler color sobre la última imagen: vel[q] = velocidad hacia la sonda (cm/s) de cada celda, NaN sin color.
    * Rojo-amarillo hacia la sonda, azul-cian alejándose; por encima de ±nyq la velocidad se "enrolla" al color
@@ -686,8 +900,9 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       if (w > 0) { pix[o4] = fuerte; pix[o4 + 1] = claro; pix[o4 + 2] = 12; } else { pix[o4] = 12; pix[o4 + 1] = claro * 0.9; pix[o4 + 2] = fuerte; }
     }
   }
-  return { formar, colorear, rejilla: (P) => geometria(P) };
+  return { formar, colorear, rejilla: (P) => geometria(P, { m: MEJORAS_DEFECTO }), nb, ns };
 }
+
 
 /** Dirección (en el corazón) del haz de ángulo theta de un plano: d·cos θ + r·sin θ. */
 export function direccionHaz(P, theta) { return nrm(sum(esc(P.d, Math.cos(theta)), esc(P.r, Math.sin(theta)))); }

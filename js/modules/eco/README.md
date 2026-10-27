@@ -191,6 +191,14 @@ Idea tomada de *The Heart by Ultrasound* (ver «Créditos»), estudiada a fondo 
 - **Ilustrativo:** ecogenicidades (dB frente al miocardio), resolución, ganancia y la pared torácica.
 - **Defecto de la geometría encontrado al hacerlo, ya corregido** (tocando la anatomía, con permiso explícito del
   usuario): ver «Pericardio» más abajo.
+- **Imagen más realista (eco-mega, parada 1, 25/10/2026):** las mejoras aprobadas en la maqueta
+  `autonomo/maquetas/eco-imagen.html` están en `crearEcografo()`, encendidas por defecto: paredes de músculo, moteado,
+  sombra y refuerzo posterior, reverberación, especular, ganancia/TGC y foco; la ventana pobre existe a 0 (reto).
+  `formar()` acepta `o.m` (intensidades 0..1; `MEJORAS_CERO` las apaga), `o.tgc`, `o.focoMm` y `o.ventanaVista`.
+  Con todo a 0 la imagen es la de antes (`pruebas/ecografia-antes.mjs`, copia congelada). El simulador tiene
+  «Mandos de imagen» (ganancia, profundidad, foco con su marca, 4 TGC, ventana pobre) y «Señálalo» de 5 artefactos,
+  y calidad automática en 4 niveles de haces × muestras (baja por encima de 40 ms). Coste: 19-29 ms por imagen en
+  Node con todo encendido, 9-13 ms en el nivel más bajo. La maqueta importa ya este módulo (una sola copia).
 
 ## Pericardio
 
@@ -210,7 +218,23 @@ en la ecografía, la línea del pericardio cortaba la pared). Ahora:
 - **El derrame**, a las mismas alturas que el saco y 1,5 mm por dentro, así queda dentro fila a fila.
 - La ecografía ya no necesita evitar pintar el pericardio sobre una pared (se quitó ese parche).
 - Coste: ~2 ms más por fotograma con geometría exacta (los fotogramas con formas precalculadas no lo pagan).
-- La holgura (3 mm más ~0,06 mm por mL de derrame) sigue siendo ilustrativa.
+- La holgura (3 mm) sigue siendo ilustrativa.
+
+**P1 (eco-mega, 27/10/2026): taponamiento con colapso y un saco más real.** El motor da la presión **transmural** de la
+AD y del VD (`ptmAd`, `ptmVd` = cámara − saco; la de cada cámara ya lleva `pperi` dentro, por eso «saco > cámara» nunca
+se cumplía). `formas.mjs` (`plieguePared`) la convierte en un pliegue 0-1 de la pared libre cuando cae por debajo de lo
+que empuja el saco (umbral 1 mmHg y capa de líquido de 40 mL: ilustrativos; sin líquido, ningún pliegue: el saco tenso
+de la dilatada no hunde nada). `corazon-geo.mjs` hunde la pared lateral de la AD (hasta 85 %) y el tercio medio de la
+pared libre del VD (hasta 90 %), y las dos cavidades conservan el volumen del motor. Resultado: la AD se pliega desde
+~140 mL (telediástole y sístole) y el VD desde ~330-360 mL (empieza al final de la relajación y en el llenado rápido);
+a fondo (388 mL) la AD está plegada el 88 % del ciclo. Fuentes de lo que se ve: Fisiopatología UCI · Cardiología,
+Ficha 11 (El Libro Azul, parte 2, p. 65) y Marino cap. 21 (p. 64). El **saco** ya no es una cúpula de 56 mm sobre las
+aurículas: en cada altura es la envolvente convexa de lo que va dentro (lámina tensa, sin hundirse más de 1 mm por mm
+entre alturas, con un máximo suave para que no salte al latir), se cierra en tejado sobre las raíces y no se hunde con
+los pliegues. El **derrame** se reparte con la gravedad (detrás primero; circunferencial al crecer), queda fino detrás
+de la AI (seno oblicuo) y se adelgaza arriba (reflexiones); el volumen dibujado es el del motor (±3 %). Pruebas:
+`pruebas/taponamiento.test.mjs`. Pendiente: pulso paradójico (el motor no respira) y la guía de pericardio de la ASE
+(Klein 2013, no está en `docs/`).
 
 ## Huella de las aurículas sin saltos
 
@@ -220,6 +244,125 @@ hasta el primer obstáculo. Con un corte de sí o no, un rayo casi tangente a la
 cortan de forma continua (`cortarRayo`): un rayo que pasa a menos de R del centro se para en el borde; uno que pasa
 entre R y R + 5 mm llega más lejos poco a poco. Salto máximo en un latido: AI 8,0 → 0,7 mm, AD 5,7 → 1,1 mm (prueba
 en `geometria.test.mjs`, umbral 2 mm).
+
+**Forma del VI y de las aurículas (B2, eco-mega parada 2, octubre 2026).** Antes, cada aurícula ocupaba todo el
+surco AV («torta» de ~63 mm de ancho y ~24 de alto) y su altura salía de una fórmula fija: la cúpula dibujada tenía
+~2 veces los mL de la aurícula del motor. Ahora la huella se recorta a un **cuello** (anillo + 3 mm), la **altura sale
+del volumen del motor** (`alturaAu`, contando cómo estira la cúpula el descenso de la base y, en la AD, el del anillo
+tricuspídeo lateral) y el **bulto** se elige para que alto / ancho sea el de los ejes de la AD del varón de Lang 2015,
+p. 30 (2,4 / 1,9 cm/m²; `formaAu`). La AI usa la misma proporción: sus ejes están en el Suplemento de Lang (hueco).
+El VI se estrecha desde el tercio basal hasta un ápex más estrecho (`EXP_BALA` 2,0 / 0,6; antes 2,3 / 0,55, casi
+media elipse con lados paralelos) y `REF.lVi` pasa de 78 a 80 mm para el mismo volumen y la misma pared (≤10 mm);
+`lVdRel` 0,82 → 0,80 deja el VD con su largo (lo rehace N2). La relación largo/ancho normal del VI no tiene fuente
+(Suplemento de Lang): hueco; hoy ~1,5-1,6 en telediástole. Pruebas en `paciente-posible.test.mjs`: volumen dibujado
+de la AI y la AD = motor ±12 % en 7 escenarios y ejes de la AD del normal en la banda de Lang p. 30.
+
+**VD en U y TSVD (N2, eco-mega parada 2, octubre 2026).** El VD ya era una media luna que abraza al VI en el eje corto y lo
+mueve el motor (`A` sale del volumen). Cambia su perfil de la base al ápex (`PERFIL_VD` 1,5 / 0,85; antes 2,2 / 0,6, un
+tubo de lados paralelos y ápex romo): en el A4C sale triangular, ancho en la base y estrecho en el ápex (Mitchell 2019,
+p. 26). `lVdRel` 0,80 → 0,83: el ápex trabeculado llega cerca del ápex del VI (~78 mm de largo, Lang Tabla 8 p. 20: 71 ± 6).
+La **banda moderadora** se dibuja ahora en el plano del A4C (ϕ ≈ 3,2), del tabique a la pared libre en el tercio apical, con
+los extremos dentro de las paredes (antes quedaba a un lado del plano y casi no se veía). El **TSVD** (`RVOT`: semiejes
+10 / 11,5 mm, radio 12 en la pulmonar; la base del VD se ensancha hacia el infundíbulo (+5 en la huella) para que quepa) sale en Lang p. 20: PLAX 25 ± 2,5 (medido a media altura del tubo), proximal 28 ± 3,5 (23 mm: en la mitad baja de la banda), distal 22 ± 2,5; se mide con
+`diametrosTSVD(geo)` sobre el mismo tubo que se dibuja (método nuestro, ilustrativo). Corrección de una medida, no del
+modelo: la prueba leía el diámetro «basal» en el tercio del ápex (la profundidad crece desde el transductor) y daba
+~16 mm; en el tercio de la base da ~30 mm (Lang 25-41). Referencias sin tocar. En hemorragia y derrame el VD basal baja a
+24,8 mm (justo bajo el 25): se marca como efecto de la enfermedad (`libre`). El área VD/VI normal sigue <0,6 (Ficha 11).
+
+**Aorta descendente, columna y pleura-pulmón (N3, eco-mega parada 2, octubre 2026; descongela la anatomía con permiso
+del usuario).** Nuevo `torax.mjs`: tres piezas del cuerpo que `construirCorazon` añade al final, tras bajar la base
+(sin la vista de la base). Todo **ilustrativo**: Mitchell 2019 p. 61 solo dice dónde buscar la aorta descendente
+(detrás de la AI en el eje largo paraesternal y en el supraesternal); ningún diámetro ni posición tiene página (hueco).
+· **Aorta descendente** (`Aorta descendente`): el arco ya no acaba en un muñón a media altura; su último punto es el
+arranque de un tubo que baja por la izquierda (`TORAX.latAo`) a lo largo del eje vertical del cuerpo, de ~18 mm de
+diámetro, **apoyado detrás del saco** (cálculo cerrado sobre todos los vértices; pasos de 2 mm para que no tiemble). Así
+en la PLAX es un corte oval (el plano la corta oblicua, ~17 × 38 mm) detrás de la AI, y el derrame queda entre el corazón
+y ella: la referencia para distinguir el derrame pericárdico (delante de la aorta) del pleural (detrás/lateral). Con el
+derrame grande la aorta se aleja con el saco (el cuerpo real no se aparta; compromiso ilustrativo). En el A4C, el plano
+pasa por delante de ella (no se ve sin inclinar la sonda hacia atrás).
+· **Columna**: ocho cuerpos vertebrales (elipses de 34 × 26 mm, 22 mm de alto con 4 de disco) detrás de la aorta. Tejido
+nuevo `hueso` (24 dB, atenuación 20 dB/mm como el calcio): brilla y da sombra negra detrás (A3). Se ve en la
+supraesternal, la PSAX profunda y con la profundidad aumentada en el eje largo; el plano del A4C y el subcostal 4C no
+la cortan.
+· **Pleura-pulmón**: dos láminas verticales detrás y a los lados del saco (de 100° a 175° desde la línea media delantera,
+a 4 mm del saco), `soloEco` (no se dibujan en el 3D). Tejido nuevo `pleura` (20 dB): línea brillante y, detrás, líneas A a
+múltiplos de su profundidad en lugar de tejido (como la «ventana pobre»). Delante no hay pulmón: ahí están las ventanas.
+Prueba en `pruebas/geometria.test.mjs` (aorta detrás de la AI, sin cruzar nada en 9 escenarios con derrame de 500 mL,
+columna detrás de la aorta, pulmón solo detrás y en los bordes del A4C). La sangre del flujo 3D sigue acabando en el
+**Torsión con fuente (B3, eco-mega parada 2, octubre 2026).** `tau` en `corazon-geo.mjs` ya no va con el volumen
+(`0,12 × (120 − VTS)/75`, que subía a ~10° en el TEP y la hemorragia): sale de la **contracción del motor**. Es la
+activación del VI (`estado.eVi`, la misma que mueve la elastancia; `estadoGeo` la pasa y las formas precalculadas la
+vigilan) por la contractilidad del latido (`estado.feLatido`, la FE del último latido, desde `extraDeMotor`). Cifras:
+giro neto máximo ápex − base **7,7° (Mor-Avi 2011, PDF 14, p. 290)**; destorsión `eVi^0,35`, que deshace el 59 % del giro entre
+el pico y la apertura de la mitral (Mor-Avi PDF 12, p. 288: 50-70 % en la relajación isovolumétrica; la forma de la
+curva y la FE a la que el giro se anula, 0,24, son **ilustrativas**: la fuente dice que cae con la FE, sin cifra). Sentido:
+ápex antihorario y base horaria vistos desde el ápex. Torsión en telesístole (antes → después): normal 9,0 → 7,1°, hemorragia
+9,7 → 6,8, TEP 10,4 → 4,7, fallo 2,9 → 1,7, dilatada 0 → 0,2, derrame 10,2 → 6,5, hipertrofia 9,9 → 5,9. Hueco: rotación basal y apical
+por separado (Mor-Avi solo da la neta); el retraso base-ápex no se modela. Pruebas: el `todo` de B3 pasó a prueba (la torsión no
+sube con el VI vacío), destorsión 50-70 % y rango normal, en `paciente-posible.test.mjs`.
+
+**Papilares anclados y pared libre del VD que engruesa (B4, eco-mega parada 2, octubre 2026).** Los dos papilares del VI
+(anterolateral y posteromedial) nacen de la pared del VI de cada instante, siguen pegados a ella hasta el 85 % de su altura y solo
+despega la punta, que apunta a las valvas; antes asomaban a 2-3 mm de la pared en el eje corto. En sístole se acortan y engruesan con la
+activación del VI (`estado.eVi`, la de la torsión): largo telesistólico / telediastólico **0,82 con eVi = 1** (rango 0,75-0,9,
+fisiología general, ilustrativo) y radio ÷ √(largo medido del trazado), así que largo × radio² se conserva (±1 % en los 8 escenarios).
+Pared libre del VD: el término crónico (dilatación, `mioVd`) sigue al volumen telediastólico del latido; el sistólico sigue a
+`estado.eVd` (nuevo en `estadoGeo`, y vigilado por la mezcla de `formas.mjs`) y conserva el volumen de la pared con el área ∝
+V^`EXP_AREA_VD` (0,62, ilustrativo): 4,0 → 6,0 mm en el normal. **Grosor sistólico del VD: hueco** (Lang 2015, Tabla 8, p. 20, da
+1-5 mm en diástole y no dice cuánto engruesa). Con 3 de 8 escenarios (hemorragia, derrame, vasoplejia) el volumen de la pared varía 6-9 %:
+la prueba exige ±3 % solo en el normal. Pruebas en `paciente-posible.test.mjs` (marca B4). (El plano `psaxPm` por instante, resuelto en F5.)
+
+**El VD que late como VD (F5, eco-mega parada 2, octubre 2026).** El TAPSE ya no es «0,285 mm por mL vaciado»: es el
+acortamiento longitudinal de la pared libre del VD. `acortamientoVd(FE del VD)` = 24/71 (TAPSE normal, Lang 2015 Tabla 10 p. 23,
+sobre el largo base-ápex del VD, Tabla 8 p. 20) × eyección alcanzada / 58 % (FE normal del VD, Lang p. 23), aplicado al largo
+telediastólico del VD (`Lvd`). La eyección ya contiene la activación `eVd` y la poscarga del motor: en el TEP el VD no vacía y el anillo
+apenas baja. `tapseDeLatido(u)` lo da a `escenarios.mjs` y al simulador (antes `TAPSE_POR_ML`). El infundíbulo (TSVD) se
+estrecha un 20 % de su diámetro con la eyección normal (`CONTRAE_TSVD`; **hueco**: la fuente no da cifra), salvo la válvula.
+La FAC se mide en el A4C del modelo (áreas td y ts del VD, `medirVd` de `paciente-posible.test.mjs`); no hay lectura en la app (pendiente).
+**Hueco**: S′ tricuspídea (el modelo no calcula velocidades). Los `todo` de F5 del TAPSE pasan a pruebas: normal 21,5 mm,
+hemorragia 22,9, derrame 21,2 (la fuente no dice que el TAPSE caiga con la precarga) y fallo del VI 18,7. `planoVista('psaxPm')`
+fija el nivel con el largo del VI del telediástole (`vviTd`), y en telesístole el corte atraviesa los papilares pegados a la pared.
+
+**TEP con los criterios de Lang (P4, eco-mega parada 2, octubre 2026).** `medirVd` (VD del A4C: basal, medio, área) pasó de la prueba a
+`ecografia.mjs` y mide también la anchura basal del VI (`basalVi`); la usan la prueba y el simulador. `CRITERIOS_FORMA.tep` suma cuatro
+criterios, cada uno con su página del PDF de Lang 2015 (enlace `#page=N`) y su ficha: VD basal >41 mm (p. 20; TEP 42), relación de diámetros
+basales VD/VI >1,0 (Ficha 11 y guía ESC en el Atlas 14; TEP 1,04, normal 0,58), FAC <35 % (p. 23; TEP ~10 %, normal 42 %) y FE del VD
+<45 % (p. 23; 13 %). `evaluarForma` recibe además `vd` y `vd0` (`{ td, ts }`); el simulador los mide como mucho una vez por segundo
+(~60 ms) y la FAC ya se ve en la lectura. La nota «Qué mirar» del TEP (`FORMA_NOTA`) nombra los criterios con su página. Pruebas en
+`enfermedad.test.mjs`: el TEP cumple los seis (los cuatro de Lang, VD/VI de áreas y de diámetros) y el normal ninguno. `todo`: tabique
+aplanado en telesístole (Atlas 14, sobrecarga de presión; hoy solo en diástole): F4, parada 3. Sin cifra del «60/60» ni McConnell (Atlas 14: espera a C2a).
+
+**Cortina aorto-mitral (B5, eco-mega parada 2, octubre 2026).** Pieza nueva `Cortina aorto-mitral` en `corazon-geo.mjs`: una cinta
+(8 × 6 vértices) entre la raíz aórtica (a 3 mm de la base, donde cuelga el anillo valvular) y el anillo mitral (z = 0), en el tramo
+de la valva anterior de ψ ±0,75 (separación 1,5-9 mm con la raíz). Sale del anillo y de la raíz del latido y pasa por `mover`, así que
+late con la base. Eco: clase `linea` con el tejido `fibroso` de `js/data/eco-tejidos.js` (11 dB, 1,8 mm, **ilustrativo**; anatomía,
+fisiología general). Prueba en `geometria.test.mjs` (marca B5): sus bordes tocan la raíz y la valva anterior, no baja del anillo y
+no mide más de 14 mm, en 8 escenarios × el latido.
+
+**Festones de la mitral y cúspides con nombre (C1, eco-mega parada 2, octubre 2026).** En `corazon-geo.mjs` cada valva lleva la marca
+`segmentos` ([nombre, uu0, uu1]) y `malla` ([ni, nj]). Mitral: las dos valvas (rejilla 20 × 7) se parten en A1-A3 y P1-P3 por el mismo
+uu (0 = comisura posteromedial, 1 = anterolateral; límites 0,3 y 0,7, **ilustrativos**; P2 el mayor, Hahn 2013 p. 942), así que cada A
+queda frente a su P en la línea de cierre. La posterior tiene dos hendiduras (el borde libre se acorta un 35 % × la apertura en
+uu 0,3 y 0,7: abierta se ven los festones; cerrada, sin hueco). Cuerdas: dos por festón al borde libre, del papilar de su mitad
+(anterolateral la lateral, posteromedial la medial; Hahn p. 942-943). Aórtica: coronaria derecha, no coronaria e izquierda, por el
+ostio coronario de su seno. Tricúspide: anterior, posterior y septal con su anchura en el anillo 1 : 0,75 : 1 (Hahn p. 950). El
+corazón devuelve `comisuras` (anterolateral, posteromedial y el centro de la línea de cierre, ya movidos). `valvasEnPlano(partes, P)`
+(`ecografia.mjs`) dice qué segmentos corta un plano y dónde. En el simulador, «Señálalo · Festones y cúspides» los rotula (A2, P2,
+CD, CI, NC, T ant/sept/post) donde menos corazón tapan, sin pisarse ni cruzar sus líneas, y la frase cita lo que Hahn da para el plano
+transesofágico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p. 932), 2 cámaras P3-A3A2A1 (p. 937), eje corto basal
+con los seis (p. 939). Pruebas en `geometria.test.mjs` (marca C1): qué festones corta cada vista y el plano comisural (P3-A2-P1,
+p. 935), posición de cúspides y valvas, sin cruces entre valvas ni con la cortina, hendiduras solo abierta, apertura y cierre a su
+tiempo y cuerdas desde su papilar. Pendiente: color por festón en el 3D y la pulmonar con nombre.
+
+**Hipovolemia con «beso de papilares» (P2, eco-mega parada 2, octubre 2026).** `LIMITES.vi` baja de [35, 320] a [8, 320]: el dibujo ya sigue
+al motor hasta cavidades de ~10 mL (a 8 mL el radio medio aún es 5,9 mm y la pared de volumen constante llega a 24 mm; sin cruces).
+Los papilares se hunden hacia el eje (`DEP_PAP` = 1,0 × su radio, antes 0,6; siguen a ≤3 mm de la pared en su mitad inferior, prueba de B4).
+El motor no cambia: la hemorragia a fondo (42 %, asentada 40 s) da VTD 44 / VTS 23 mL, PAM 53, FC 124 (el tope era solo de la geometría).
+Los papilares quedan a 1,1 mm en un corte del eje corto en telesístole (9,7 mm en el corazón normal). **Cifra del VTS del «beso»: hueco**
+(Leung y Levine 1994, pendiente); el criterio de la prueba es el VTS indexado bajo la media de Lang p. 7 (21 mL/m²). La hemorragia de 1 L
+se mide ya sangrada (12,5 s a 80 mL/s): con 10 s solo había salido el 80 %. Pruebas en `paciente-posible.test.mjs` (marca P2). Límite conocido: con un VI <18 mL y el VD en su mínimo de 45 mL el VD epicárdico se sale del saco pericárdico unos mm (`todo` en `geometria.test.mjs`; el motor no llega: VTS ≥21 mL).
+
+arranque de la descendente (`vias.ao` termina en el arco).
 
 ## En la app
 
@@ -657,6 +800,8 @@ integración: limitar a 60 fps (ahorra batería sin que se note) y animar solo c
 
 ## Créditos
 
+- **Eco real de uso libre** (Wikimedia Commons; tarjeta «Eco real» del simulador, `eco-real.mjs`): *Echocardiogram 4chambers.jpg* (sin autor, dominio público); bucle A4C de Fruehaufsteher2 (CC BY-SA 3.0, convertido a vídeo, misma licencia); PLAX recortado de *LeftParasternalLongAxis.gif*, Patrick J. Lynch y C. Carl Jaffe, Yale (CC BY 2.5).
+
 Varias ideas vienen de ***The Heart by Ultrasound***, de **David Ouyang** (`douyang/echodemo`, grupo EchoNet), que
 dio permiso para usar su trabajo. Aun así **se reconstruyen sobre nuestro motor, sin copiar código ni modelos**:
 un estado por fotograma, las formas precalculadas que solo se mezclan, las valvas con tres formas a lo largo de un
@@ -712,3 +857,15 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).
+
+**Imagen/UI, segunda vuelta de la parada 2 (eco-mega, 27/10/2026).** Mando de gravedad en el simulador: un deslizador «Gravedad»
+(`#cv-gravedad`, en `eco.html`) que aparece en los escenarios con `ESCENARIOS[k].gravedad` (hemorragia, fallo del VI, derrame y TEP) y
+muestra lo que mide en cada uno (mL de derrame, mL y % de volemia perdida…). Se aplica al soltar: `elegirEscenario(k, g)` rehace el motor
+y lo deja asentado (`faltaParaAsentar`, como las pruebas de `escenarios.test.mjs`, que ya comprueban paciente posible en 0, 50 y 100 %).
+Con el derrame a fondo (388 mL) el VD colapsa y con la hemorragia a fondo (42 %) los papilares se besan. Prueba: `navegador.test.mjs`.
+Además: líneas A del pulmón menos y más tenues (`ecografia.mjs`, ventana pobre); pared auricular −5 dB (antes −1; la referencia
+congelada `ecografia-antes.mjs` sigue la misma cifra); cortina aorto-mitral con su cita (Hahn pp. 942-943); VD/VI rotulado como unión de
+dos fuentes; «VD basal >41» a Lang p. 17 (rango en la Tabla 8, p. 20); renglón que distingue «VD en diástole» (FATE) de «VD basal» (Lang);
+FE del VD «aprox.»; leyendas de festones con sus páginas (tricúspide p. 950, cúspides aórticas p. 946) y de brillo con su orden real.
+**Hueco**: la banda brillante dentro de la AD no viene de la tabla de tejidos (solo se bajó la pared); sin comprobar el aplanamiento del
+tabique en el PSAX (pieza Forma).

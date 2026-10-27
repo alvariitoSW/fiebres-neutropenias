@@ -83,6 +83,24 @@ test('un escenario de la página cambia la circulación (hemorragia: sube la FC)
   await pg.close();
 });
 
+test('mando de gravedad: aparece en los escenarios que lo tienen, se aplica al soltar y el derrame a fondo colapsa el VD', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html?depuracion=1');
+  assert.equal(await pg.locator('#cv-gravedad').isHidden(), true, 'oculto en el escenario normal');
+  await pg.click('[data-c="vasoplejia"]'); assert.equal(await pg.locator('#cv-gravedad').isHidden(), true, 'la vasoplejía no tiene mando');
+  await pg.click('[data-c="derrame"]');
+  assert.equal(await pg.locator('#cv-gravedad').isVisible(), true);
+  assert.match(await pg.textContent('#cv-grav-txt'), /260 mL de derrame/);
+  const poner = async (v) => { await pg.$eval('#cv-grav', (el, x) => { el.value = x; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, v); await pg.waitForTimeout(300); };
+  await poner(100); assert.match(await pg.textContent('#cv-grav-txt'), /388 mL de derrame/);
+  const pam = await pg.evaluate(() => window.__motor.ultimo.pam), liq = await pg.evaluate(() => window.__motor.p.liquidoPeri);
+  assert.ok(Math.abs(liq - 388) < 1e-6, `líquido ${liq}`); assert.ok(pam >= 45 && pam <= 60, `PAM ${pam}`);
+  await poner(0); assert.equal(await pg.evaluate(() => window.__motor.p.liquidoPeri), 0);
+  await pg.click('[data-c="hemorragia"]'); assert.match(await pg.textContent('#cv-grav-txt'), /1000 mL perdidos/);
+  assert.ok(await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'sin desborde');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
 // La regla de la sincronización: en cada fotograma, el corazón, el cursor del Wiggers y el punto del asa
 // salen del mismo estado (window.__ultimoDibujo lo guarda al dibujar).
 const ultimoDibujo = (pg) => pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(() => {

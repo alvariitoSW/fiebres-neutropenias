@@ -358,6 +358,16 @@ Ahora la arteria pulmonar se endurece por encima de 24 mmHg y el TEP llega a ×9
 Punto de entrada `p.soporte` (balón, Impella, ECMO y venteo). Se reajustaron el Atlas · 14 (`atlas/vd.mjs`) y la
 vasoplejía (×0,55) para no contar dos veces lo nuevo. Pruebas nuevas en `motor.test.mjs` y `escenarios.test.mjs`.
 
+## Imagen de eco más realista en la app (eco-mega, parada 1, paso 2 · 25/10/2026)
+
+El usuario aprobó todas las mejoras de la maqueta «antes / después» (0-8; ventana pobre como reto apagado). Pasaron
+a `ecografia.mjs` (pieza 1) y al simulador con sus mandos y «Señálalo» (pieza 2), con constructor barato. Profesor:
+vuelta 1 suspendida por un punto (7,4: en el móvil, al tocar Señálalo, la imagen quedaba fuera de la pantalla);
+vuelta 2, 8,5/8,8/8,7/8,8/8,8 con la imagen fija arriba. Auditor: 0 graves, 4 frases afinadas (especular = «puede
+ser artefacto: confírmalo en otra vista»; un trombo sí se mueve con la pared). Contraste miocardio-sangre de ~28 a
+~14 dB a propósito: las pruebas de contraste miden ahora los dos casos. Queda para la parada 2 (anatomía): la pared
+lateral de la AD, lo más blanco del lado izquierdo. Parte: `autonomo/partes/2026-10-25-eco-mega-2.md`.
+
 ## VCI «retenida» con ventilación mecánica (27/10/2026, `eco-vci-retenido`, B-021)
 Encargo del Objetivo V. El Manual UMI (parte 2, pág. 70) separa tres fórmulas y cortes por modo (40 / 18 / 12 %) y
 da la tabla de PAD con el colapso respiratorio, pero no dice nada de la PAD con VM ni explica el porqué: el «no
@@ -366,3 +376,14 @@ estimar la PAD por la VCI con VM» se rotula como cautela de la app. Marino (cap
 escribió fisiología de la VCI en VM sin fuente (también se quitó de la explicación de `umi-q068`). La ASE 2025 quedó
 fuera (no está en `docs/`). De paso se arregló el modo M: el segundo toque movía el primer calibre y la VCI no se podía
 medir con dos toques en el móvil. Dos preguntas nuevas (`umi-q068b`, `umi-q068c`). 3 vueltas; profesor v2 ≥8,75 en todo.
+
+## Parada 2 de eco-mega: anatomía, fisiología y patología (26-27/10/2026)
+
+16 encargos sobre el plan «Un corazón más real» y la ampliación B-025 (informe de Fable 5.1), con cifras de Lang 2015,
+Mor-Avi 2011, Hahn 2013 y Mitchell 2019 en `docs/`. Imagen (cuerdas, tabla de brillo, sombra del calcio, eco real de
+uso libre), forma (VI en bala, aurículas con su volumen y un solo tabique, VD en U con banda moderadora, aorta
+descendente, pleura y columna, torsión desde la contracción, papilares anclados, TAPSE desde el vaciado del VD,
+cortina aorto-mitral) y patología (beso de papilares, festones y cúspides con nombre, taponamiento desde la presión
+transmural con el saco que abraza las aurículas, TEP con los criterios de Lang, mando de gravedad). Profesor v1 ❌ por
+anatomía (tabique doble, VD en rendija en el subcostal); v2 ✅ 8,1-8,4. Auditor: 0 graves. Fusionado en `main` el
+27/10 con permiso del usuario. Parte: `autonomo/partes/2026-10-27-eco-mega-parada2.md`.

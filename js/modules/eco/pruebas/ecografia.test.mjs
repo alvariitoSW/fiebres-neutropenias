@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { construirCorazon, baseGeometrica, REF } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista } from '../ecografia.mjs';
+import { VISTAS, planoVista, enPlano, cortarPieza, elementosDelCorte, crearEcografo, ajusteAfin, campoDesplazamiento, desplazar, abanicoVista, distSeg, distMin, PAPILAR_FADE, MEJORAS_CERO } from '../ecografia.mjs';
 import { construirAbdomen, anatomiaAbdomen, dentroMalla, ARRIBA } from '../abdomen.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
 
@@ -78,13 +78,18 @@ test('en el 4 cámaras, la cavidad del VI y la AI son sangre (las paredes no se 
   assert.equal(tagMuestra(im, P, f.transformar(f.enCamara.ai([0.45, 0, 0]))), 255, 'centro de la AI');
 });
 
-test('contraste: el miocardio brilla mucho más que la sangre y el pericardio más que el miocardio', () => {
-  const P = planoVista('psaxPm', td), im = ec.formar(gTd.partes, P);
-  const media = (fn) => { let s = 0, n = 0; for (let q = 0; q < im.tag.length; q++) if (fn(im.tag[q])) { s += im.db[q]; n++; } return s / n; };
-  const vi = im.etiquetas.get('VI'), peri = im.etiquetas.get('Pericardio');
-  const dMio = media(t => t === vi), dSangre = media(t => t === 255), dPeri = media(t => t === peri);
-  assert.ok(dMio - dSangre > 25, `miocardio ${dMio.toFixed(0)} dB, sangre ${dSangre.toFixed(0)} dB`);
-  assert.ok(dPeri > dMio + 4, `pericardio ${dPeri.toFixed(0)} dB, miocardio ${dMio.toFixed(0)} dB`);
+test('contraste: el miocardio brilla mucho más que la sangre y el pericardio más que el miocardio', async () => {
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
+  // con las mejoras a 0, el contraste de siempre (>25 dB); con las de por defecto, la sangre deja de ser negro absoluto
+  // (su grano y la neblina del campo cercano) y el músculo se ve gris medio a propósito: el contraste baja pero sigue siendo grande
+  for (const [nombre, m, minimo] of [['mejoras a 0', MEJORAS_CERO, 25], ['mejoras por defecto', undefined, 10]]) {
+    const P = planoVista('psaxPm', td), im = ec.formar(gTd.partes, P, { m });
+    const media = (fn) => { let s = 0, n = 0; for (let q = 0; q < im.tag.length; q++) if (fn(im.tag[q])) { s += im.db[q]; n++; } return s / n; };
+    const vi = im.etiquetas.get('VI'), peri = im.etiquetas.get('Pericardio');
+    const dMio = media(t => t === vi), dSangre = media(t => t === 255), dPeri = media(t => t === peri);
+    assert.ok(dMio - dSangre > minimo, `${nombre}: miocardio ${dMio.toFixed(0)} dB, sangre ${dSangre.toFixed(0)} dB`);
+    assert.ok(dPeri > dMio + 4, `${nombre}: pericardio ${dPeri.toFixed(0)} dB, miocardio ${dMio.toFixed(0)} dB`);
+  }
 });
 
 test('el moteado sigue al tejido: el campo de desplazamiento predice dónde estaba en telediástole lo que se ve en sístole', () => {
@@ -110,15 +115,20 @@ test('el moteado sigue al tejido: el campo de desplazamiento predice dónde esta
   const I = ajusteAfin(vi.seg, vi.seg); assert.ok(Math.abs(I[4] - 1) < 1e-9 && Math.abs(I[5]) < 1e-9 && Math.abs(I[7] - 1) < 1e-9);
 });
 
-test('la imagen es determinista para un mismo estado y la sangre cambia con el tiempo; el tejido, no', () => {
+test('la imagen es determinista para un mismo estado y la sangre cambia con el tiempo; el tejido, no', async () => {
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
   const P = planoVista('a4c', td);
-  const a = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1 }).db), b = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1 }).db);
-  assert.deepEqual(a, b);
-  const im = ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1.5 }), vi = im.etiquetas.get('VI');
-  let dT = 0, nT = 0, dS = 0, nS = 0;
-  for (let q = 0; q < a.length; q++) { const d = Math.abs(im.db[q] - a[q]); if (im.tag[q] === vi) { dT += d; nT++; } else if (im.tag[q] === 255) { dS += d; nS++; } }
-  assert.ok(dT / nT < 1, `el moteado del miocardio cambia sin moverse (${(dT / nT).toFixed(1)} dB)`);
-  assert.ok(dS / nS > 3, `el ruido de la sangre no cambia con el tiempo (${(dS / nS).toFixed(1)} dB)`);
+  // con las mejoras a 0 el tejido apenas cambia (<1 dB); con las de por defecto, algo más (la sombra y la pared gris
+  // lo acercan al ruido de fondo, que sí cambia con el tiempo), pero mucho menos que la sangre
+  for (const [m, tope] of [[MEJORAS_CERO, 1], [undefined, 2]]) {
+    const a = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1, m }).db), b = Float32Array.from(ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1, m }).db);
+    assert.deepEqual(a, b);
+    const im = ec.formar(gTd.partes, P, { ref: gTd.partes, t: 1.5, m }), vi = im.etiquetas.get('VI');
+    let dT = 0, nT = 0, dS = 0, nS = 0;
+    for (let q = 0; q < a.length; q++) { const d = Math.abs(im.db[q] - a[q]); if (im.tag[q] === vi) { dT += d; nT++; } else if (im.tag[q] === 255) { dS += d; nS++; } }
+    assert.ok(dT / nT < tope, `el moteado del miocardio cambia sin moverse (${(dT / nT).toFixed(1)} dB)`);
+    assert.ok(dS / nS > 3 && dS > 2 * dT * nS / nT, `el ruido de la sangre no cambia con el tiempo (${(dS / nS).toFixed(1)} dB)`);
+  }
 });
 
 // Modo M: la columna es la misma imagen a lo largo de un haz (mismos grises que la imagen B) y, sobre el anillo
@@ -219,5 +229,137 @@ test('fase 5: las paredes quedan cerradas en las vistas nuevas también en los e
     for (const k of ['sc4c', 'scVci', 'sse']) { const P = planoVista(k, t0);
       for (let i = 0; i < oo.length; i += 80) for (const e of elementosDelCorte(construirCorazon(estadoGeo(oo[i], ex), OP).partes, P))
         if (e.tipo === 'relleno') assert.equal(e.abiertos, 0, `${esc} · ${k}: ${e.grupo} sin cerrar`); }
+  }
+});
+
+// Las mejoras de la imagen (paredes, moteado, sombra, reverberación, especular, TGC, foco, ventana): con todas las
+// intensidades a 0, la imagen es la de antes (referencia congelada en ecografia-antes.mjs).
+test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris ≈ 0) y con ellas encendidas, cambia', async () => {
+  const { crearEcografo: crearAntes } = await import('./ecografia-antes.mjs');
+  const { MEJORAS_CERO } = await import('../ecografia.mjs');
+  const antes = crearAntes({ ancho: 300, alto: 250 }), nuevo = crearEcografo({ ancho: 300, alto: 250 });
+  for (const v of ['plax', 'psaxPm', 'a4c', 'sc4c']) {
+    // sin hueso ni pleura (N3): el ecógrafo de antes no los conoce; lo que se compara son las mejoras de la imagen
+    const sinTorax = (g) => g.partes.filter(p => !/^(Vértebra|Pulmón)/.test(p.nombre));
+    const P = planoVista(v, td), opc = { ref: sinTorax(gTd), t: 1.3 };
+    const a = antes.formar(sinTorax(gTs), P, opc).pix, b = nuevo.formar(sinTorax(gTs), P, { ...opc, m: MEJORAS_CERO, ventanaVista: VISTAS[v].ventana }).pix, c = nuevo.formar(gTs.partes, P, { ...opc, ventanaVista: VISTAS[v].ventana }).pix;
+    let d0 = 0, d1 = 0, n = 0;
+    for (let i = 0; i < a.length; i += 4) { d0 += Math.abs(a[i] - b[i]); d1 += Math.abs(a[i] - c[i]); n++; }
+    assert.ok(d0 / n < 0.05, `${v}: con las mejoras a 0 la imagen difiere ${(d0 / n).toFixed(3)} niveles de gris`);
+    assert.ok(d1 / n > 3, `${v}: con las mejoras por defecto la imagen apenas cambia (${(d1 / n).toFixed(2)} niveles)`);
+  }
+});
+
+// ---- A1 (parada 2 de eco-mega): cuerdas como losa y papilares que se desvanecen lejos de la pared
+test('cuerdas: en el 4 cámaras en diástole se ven, con menos brillo que la valva', () => {
+  const els = elementosDelCorte(gTd.partes, planoVista('a4c', td)), cu = els.filter(e => e.grupo === 'Cuerdas');
+  assert.ok(cu.length >= 1, 'ninguna cuerda en la imagen');
+  const valva = Math.max(...els.filter(e => /^(Mitral|Tricúspide)/.test(e.grupo || '')).map(e => e.db));
+  for (const c of cu) assert.ok(c.db <= valva, `cuerda ${c.db.toFixed(1)} dB por encima de la valva ${valva}`);
+});
+
+test('cuerdas: brillo máximo en el centro del plano y al menos 6 dB menos a 3 mm o más', () => {
+  const P = { O: [0, 0, 0], d: [0, 1, 0], r: [1, 0, 0], n: [0, 0, 1] };
+  const cuerdaA = (z) => elementosDelCorte([{ nombre: 'Cuerdas', lineas: new Float32Array([0, 5, z, 0, 15, z]) }], P).filter(e => e.grupo === 'Cuerdas');
+  const db = (z) => { const c = cuerdaA(z); return c.length ? Math.max(...c.map(e => e.db)) : -Infinity; };
+  assert.ok(db(0) >= db(1) && db(1) >= db(2), 'el brillo no baja de forma continua');
+  for (const z of [3, 3.5, 4]) assert.ok(db(z) <= db(0) - 6, `a ${z} mm: ${db(z)} frente a ${db(0)} dB en el centro`);
+  assert.equal(cuerdaA(5).length, 0, 'fuera de la losa no debe verse');
+  assert.ok(cuerdaA(0)[0].ancho > cuerdaA(3)[0].ancho, 'la cuerda del centro es más gruesa que la del borde');
+});
+
+test('papilares: los que nacen de la pared se ven; el que queda suelto a más de 6 mm se funde con la sangre', () => {
+  const P = planoVista('psaxPm', td);
+  for (const [nom, g] of [['telesístole', gTs], ['telediástole', gTd]]) {
+    const im = ec.formar(g.partes, P), vi = im.elementos.filter(e => e.grupo === 'VI' && e.tipo === 'relleno').flatMap(e => e.seg);
+    const pap = im.elementos.filter(e => /^Papilar/.test(e.grupo || '') && e.tipo === 'relleno' && !/ del VD$/.test(e.grupo));
+    assert.ok(pap.length >= 1, `${nom}: no hay papilares en el corte`);
+    for (const e of pap) {
+      assert.ok(distMin(e.seg, vi) <= PAPILAR_FADE[1], `${nom}: ${e.grupo} suelto a ${distMin(e.seg, vi).toFixed(1)} mm`);
+      let n = 0; const t = im.etiquetas.get(e.grupo); for (let q = 0; q < im.tag.length; q++) if (im.tag[q] === t) n++;
+      assert.ok(n > 20, `${nom}: ${e.grupo} desapareció (${n} píxeles)`);
+    }
+  }
+  // papilar suelto: el mismo corte con el músculo apartado de la pared (hacia el centro de la cavidad)
+  const lejos = gTs.partes.map(p => /^Papilar (anterolateral|posteromedial)$/.test(p.nombre) ? { ...p, pos: p.pos.map((v, i) => (i % 3 === 2 ? v : v * 0.15)) } : p);
+  const im = ec.formar(lejos, P), vi = im.elementos.filter(e => e.grupo === 'VI' && e.tipo === 'relleno').flatMap(e => e.seg);
+  const sueltos = im.elementos.filter(e => /^Papilar (anterolateral|posteromedial)$/.test(e.grupo || '') && e.tipo === 'relleno' && e.distPared > PAPILAR_FADE[1]);
+  assert.ok(sueltos.length >= 1, 'la prueba no logró soltar ningún papilar');
+  for (const e of sueltos) { const t = im.etiquetas.get(e.grupo); let n = 0; for (let q = 0; q < im.tag.length; q++) if (im.tag[q] === t) n++; assert.equal(n, 0, `${e.grupo} suelto a ${e.distPared.toFixed(1)} mm sigue en la imagen`); }
+});
+
+test('tabla de tejidos: orden de brillo, origen en cada fila y la imagen lee de ella', async () => {
+  const { TEJIDOS, DB_IMAGEN } = await import('../../../data/eco-tejidos.js');
+  const { DB } = await import('../ecografia.mjs');
+  const T = TEJIDOS;
+  assert.ok(T.sangre.db < T.miocardio.db && T.miocardio.db < T.cuerda.db && T.cuerda.db < T.valva.db && T.valva.db < T.pericardio.db, 'sangre < miocardio < cuerda < valva < pericardio');
+  for (const [k, t] of Object.entries(T)) {
+    assert.ok(['ilustrativo', 'fisiología general', 'ficha'].includes(t.origen), `origen de ${k}`);
+    assert.ok(t.nombre && Number.isFinite(t.db), `nombre y dB de ${k}`);
+  }
+  assert.equal(DB.sangre, T.sangre.db); assert.equal(DB.extracardiaco, T.extracardiaco.db);
+  assert.equal(DB.borde, DB_IMAGEN.borde.db); assert.equal(DB.especular, DB_IMAGEN.especular.db);
+});
+
+// ---- A3 (parada 2 de eco-mega): sombra acústica detrás del calcio
+/** Con y sin calcio en la valva aórtica (PLAX): dB medios de lo que hay detrás, solo en haces con valva y tejido detrás. */
+function sombraDetras(calcio, mejoras = {}) {
+  const P = planoVista('plax', td), opc = { ref: gTd.partes, t: 1.3, ventanaVista: VISTAS.plax.ventana, m: mejoras };
+  const foto = (r) => ({ db: Float32Array.from(r.db), tag: Uint8Array.from(r.tag), pix: Uint8Array.from(r.pix), etiquetas: r.etiquetas, nb: r.nb, ns: r.ns, dr: r.dr });   // el ecógrafo reutiliza sus búferes
+  const sin = foto(ec.formar(gTd.partes, P, opc)), con = foto(ec.formar(gTd.partes, P, { ...opc, calcio }));
+  const tag = con.etiquetas.get('Aórtica');
+  let n = 0, dSin = 0, dCon = 0;
+  for (let i = 0; i < con.nb; i++) {
+    let jv = -1; for (let j = 0; j < con.ns; j++) if (con.tag[j * con.nb + i] === tag) jv = j;
+    if (jv < 0) continue;
+    for (let j = jv + Math.ceil(4 / con.dr); j < Math.min(con.ns, jv + Math.ceil(14 / con.dr)); j++) {
+      const q = j * con.nb + i; if (sin.db[q] < -8) continue;     // solo donde la imagen sin calcio tiene tejido claro (más abajo, la sombra choca con el ruido de fondo, hacia -40 dB)
+      dSin += sin.db[q]; dCon += con.db[q]; n++;
+    }
+  }
+  return { n, sin: dSin / n, con: dCon / n };
+}
+
+test('calcio: detrás de la valva aórtica calcificada (PLAX) la imagen es ≥30 dB más oscura que sin calcio', () => {
+  const r = sombraDetras('^Aórtica');
+  assert.ok(r.n > 30, `muy pocas muestras detrás de la valva (${r.n})`);
+  assert.ok(r.sin - r.con >= 30, `solo ${(r.sin - r.con).toFixed(1)} dB de sombra`);
+});
+
+test('calcio: la valva calcificada brilla más que la sana y que el pericardio; sin calcio, imagen idéntica a la de hoy', () => {
+  const P = planoVista('plax', td), opc = { ref: gTd.partes, t: 1.3, ventanaVista: VISTAS.plax.ventana };
+  const foto = (r) => ({ db: Float32Array.from(r.db), tag: Uint8Array.from(r.tag), pix: Uint8Array.from(r.pix), etiquetas: r.etiquetas });   // el ecógrafo reutiliza sus búferes
+  const a = foto(ec.formar(gTd.partes, P, opc)), b = foto(ec.formar(gTd.partes, P, { ...opc, calcio: null })), c = foto(ec.formar(gTd.partes, P, { ...opc, calcio: /^Aórtica/ }));
+  assert.deepEqual(Array.from(a.pix), Array.from(b.pix), 'sin calcio la imagen cambió');
+  // la cara de entrada es la que brilla (detrás, el calcio ya está en sombra): se compara el máximo de la valva
+  const max = (r) => { const t = r.etiquetas.get('Aórtica'); let m = -Infinity; for (let q = 0; q < r.tag.length; q++) if (r.tag[q] === t && r.db[q] > m) m = r.db[q]; return m; };
+  assert.ok(max(c) > max(a) + 3, `la valva calcificada (${max(c).toFixed(1)} dB) no brilla más que la sana (${max(a).toFixed(1)})`);
+});
+
+test('calcio: también hay sombra con las mejoras a 0 y no toca lo que queda delante', () => {
+  const r = sombraDetras('^Aórtica', MEJORAS_CERO);
+  assert.ok(r.n > 30 && r.sin - r.con >= 30, `sombra con mejoras a 0: ${(r.sin - r.con).toFixed(1)} dB`);
+});
+
+test('tabla de tejidos: el calcio es el más brillante, con su atenuación y su origen', async () => {
+  const { TEJIDOS } = await import('../../../data/eco-tejidos.js');
+  const c = TEJIDOS.calcio;
+  assert.ok(c && Object.entries(TEJIDOS).every(([k, t]) => k === 'calcio' || t.db < c.db), 'el calcio no es el más brillante');
+  assert.ok(c.atenuacion > 0 && c.origen === 'ilustrativo');
+});
+
+// F5 (Imagen): el corte del eje corto de los papilares se fija con el largo del VI en telediástole; en telesístole sigue
+// cortando el cuerpo de los papilares, pegado a la pared, y no su punta libre (antes caía 8 mm más arriba, en la punta).
+test('PSAX de los papilares: en telesístole el corte atraviesa papilares que tocan la pared (nivel relativo a la telediástole)', () => {
+  const ex = extra, eT = estadoGeo(td, ex), eS = estadoGeo(ts, ex);
+  const zT = planoVista('psaxPm', eT).O[2], zS = planoVista('psaxPm', eS).O[2];
+  assert.ok(Math.abs(zT - zS) < 0.5, `el nivel del corte cambia entre td (${zT.toFixed(1)}) y ts (${zS.toFixed(1)}) mm`);
+  const endo = gTs.partes.find(p => p.nombre === 'VI endocardio').pos;
+  for (const nom of ['Papilar anterolateral', 'Papilar posteromedial']) {
+    const p = gTs.partes.find(q => q.nombre === nom).pos; let mn = Infinity, n = 0;
+    for (let i = 0; i < p.length; i += 3) { if (Math.abs(p[i + 2] - zS) > 1.5) continue; n++;
+      for (let j = 0; j < endo.length; j += 3) mn = Math.min(mn, Math.hypot(p[i] - endo[j], p[i + 1] - endo[j + 1], p[i + 2] - endo[j + 2])); }
+    assert.ok(n >= 15, `${nom}: el corte solo atraviesa ${n} puntos del papilar (la punta)`);
+    assert.ok(mn <= 2, `${nom}: el papilar cortado queda a ${mn.toFixed(1)} mm de la pared en telesístole`);
   }
 });

@@ -1,4 +1,4 @@
-import { TAPSE_POR_ML } from './corazon-geo.mjs';
+import { tapseDeLatido } from './corazon-geo.mjs';
 import { BASE } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
@@ -28,7 +28,7 @@ const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
-    nombre: 'Hemorragia de 1 L', tipo: 'hipovolemico',
+    nombre: 'Hemorragia', tipo: 'hipovolemico',
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
     gravedad: { defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
@@ -115,6 +115,7 @@ const MERINO_FIG = { ...MERINO_FE, sel: '#mc-fig-18-2', ficha: 'Merino · Figura
 const MERINO_SEPTO = { ...MERINO_FE, sel: '#mc-vd-septo', ficha: 'Merino · IC derecha (ETT)' };
 const F11_VD = { sel: '#cardio-eco-vd', especialidad: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', tab: 'cardio-interaccion-corazon-pulmon', ficha: 'Fisiopatología UCI · Cardiología · Ficha 11' };
 const F11_COR = { ...F11_VD, sel: '#cardio-cor-pulmonale' };
+const LANG_PDF = (p, texto) => ({ href: `docs/lang-2015-cuantificacion-camaras-ase.pdf#page=${p}`, texto });
 const mm = (x) => x.toFixed(1).replace('.', ',') + ' mm';
 export const CRITERIOS_FORMA = {
   hipertrofia: [
@@ -135,11 +136,23 @@ export const CRITERIOS_FORMA = {
     { texto: 'Área del VD / área del VI >0,6 (cor pulmonale agudo)', valor: (c) => c.md.areaVdVi.toFixed(2).replace('.', ',') + ` (normal ${c.md0.areaVdVi.toFixed(2).replace('.', ',')})`,
       cumple: (c) => c.md.areaVdVi > 0.6, fuente: F11_COR,
       nota: 'medida en el plano apical de 4 cámaras del modelo. Ojo: Merino da como normal un VD de ~2/3 del tamaño del VI (sin decir si es área o diámetro), que con esta cifra ya sería cor pulmonale; las dos fuentes de la app no casan' },
-    { texto: 'VD en diástole >3,0 cm (normal 0,6-3,0 cm)', valor: (c) => mm(c.md.vdDiam), cumple: (c) => c.md.vdDiam > 30, fuente: FATE },
+    { texto: 'VD en diástole >3,0 cm (normal 0,6-3,0 cm)', valor: (c) => mm(c.md.vdDiam), cumple: (c) => c.md.vdDiam > 30, fuente: FATE,
+      nota: 'Medida de FATE (Manual UMI): el diámetro del VD en diástole, con su corte de 3,0 cm. No es el «VD basal» de Lang (más abajo): ese es el diámetro basal del VD en el A4C enfocado al VD, con su propio corte (>41 mm). Dos medidas y dos fuentes, por eso las cifras no coinciden' },
     { texto: 'El VI se hace más pequeño (el tabique lo empuja)', valor: (c) => `${mm(c.md.lvdd)} (normal ${mm(c.md0.lvdd)})`, cumple: (c) => c.md.lvdd < c.md0.lvdd - 5, fuente: MERINO_SEPTO },
-    { texto: 'Tabique aplanado en diástole', valor: (c) => c.md.septo >= 0.5 ? 'sí' : 'no', cumple: (c) => c.md.septo >= 0.5, fuente: MERINO_FIG },
+    { texto: 'Tabique aplanado en diástole (fases F-A)', valor: (c) => c.md.septo >= 0.5 ? 'sí' : 'no', cumple: (c) => c.md.septo >= 0.5, fuente: MERINO_FIG,
+      nota: 'Es el aplanamiento que calcula el modelo en telediástole (septo ≥ 0,5); en el eje corto de papilares se ve el VI en D en el llenado (fase F, hasta la A); en la contracción isovolumétrica (B) el VI ya supera al VD y el tabique vuelve a curvarse' },
     { texto: 'TAPSE <17 mm', valor: (c) => mm(c.tapse), cumple: (c) => c.tapse < 17, fuente: F11_VD },
     { texto: 'Sube el volumen telediastólico del VD', valor: (c) => `${Math.round(c.u.edvD)} mL (normal ${Math.round(c.u0.edvD)})`, cumple: (c) => c.u.edvD > c.u0.edvD, fuente: MERINO_VD },
+    // Criterios de Lang 2015 (PDF en docs/), medidos en el plano apical de 4 cámaras del modelo (ecografia.mjs, medirVd).
+    // c.vd = { td, ts } (medirVd en telediástole y telesístole); sin él, no se pueden medir y no se cumplen
+    { texto: 'VD basal >41 mm (normal 25-41)', valor: (c) => c.vd ? `${Math.round(c.vd.td.basal)} mm` : 'sin medir', cumple: (c) => !!c.vd && c.vd.td.basal > 41,
+      fuente: { atlas: 'vd', ficha: 'Atlas 14 · El VD' }, pdf: LANG_PDF(17, 'Lang p. 17'), nota: 'Lang 2015: «dilatado >41 mm» está en el texto (p. 17); el rango normal 25-41 (33 ± 4) es de la Tabla 8 (p. 20)' },
+    { texto: 'Relación de diámetros basales VD/VI >1,0 (unión de dos fuentes)', valor: (c) => c.vd ? `${coma(c.vd.td.basal / c.vd.td.basalVi, 2)} ${c.vd0 ? ` (normal ${coma(c.vd0.td.basal / c.vd0.td.basalVi, 2)})` : ''}` : 'sin medir',
+      cumple: (c) => !!c.vd && c.vd.td.basal / c.vd.td.basalVi > 1, fuente: F11_VD, nota: 'Dos fuentes, dos umbrales: la Ficha 11 dice que la relación VD/VI es normal por debajo de 1 en la ventana apical (sin decir qué diámetros), y el Atlas 14 (guía ESC) pide un cociente de diámetros basales de 1,0 o más. Aquí se usa el cociente de diámetros basales >1,0' },
+    { texto: 'FAC del VD <35 % (normal 49 ± 7)', valor: (c) => c.vd ? `${Math.round((c.vd.td.area - c.vd.ts.area) / c.vd.td.area * 100)} %` : 'sin medir',
+      cumple: (c) => !!c.vd && (c.vd.td.area - c.vd.ts.area) / c.vd.td.area * 100 < 35, fuente: F11_VD, pdf: LANG_PDF(23, 'Lang p. 23'),
+      nota: 'FAC = (área telediastólica − telesistólica) ÷ telediastólica del VD en el A4C' },
+    { texto: 'FE del VD (3D) <45 % aprox. (normal 58 ± 6,5)', valor: (c) => `${Math.round(c.u.feD * 100)} %`, cumple: (c) => c.u.feD * 100 < 45, fuente: MERINO_VD, pdf: LANG_PDF(23, 'Lang p. 23'), nota: 'Lang da el 45 % como valor aproximado; aquí se compara con la FE del VD del motor (no una medida 3D de la imagen)' },
   ],
 };
 
@@ -167,8 +180,9 @@ export function direccion(var_, normal, actual) {
 export const cumple = (esperado, obtenido) => esperado === 'N/↑' ? obtenido !== '↓' : esperado === obtenido;
 
 // Evalúa los criterios de una forma: u/u0 = motor.ultimo de la forma y del normal; md/md0 = medidasCorazon.
-// El TAPSE es la excursión del anillo tricuspídeo lateral del modelo (corazon-geo: TAPSE_POR_ML × lo que se vacía el VD).
-export function evaluarForma(clave, u, md, u0, md0) {
-  const c = { u, md, u0, md0, tapse: Math.min(35, TAPSE_POR_ML * (u.edvD - u.esvD)) };
+// El TAPSE es la excursión del anillo tricuspídeo lateral del modelo (corazon-geo, F5: acortamiento longitudinal de la pared libre del VD, según su eyección).
+// vd, vd0: { td, ts } de medirVd (ecografia.mjs) en la forma y en el normal; opcionales (sin ellos, los criterios de Lang del A4C salen «sin medir»)
+export function evaluarForma(clave, u, md, u0, md0, vd, vd0) {
+  const c = { u, md, u0, md0, vd, vd0, tapse: tapseDeLatido(u) };
   return (CRITERIOS_FORMA[clave] || []).map(k => ({ ...k, ok: k.cumple(c), v: k.valor(c) }));
 }

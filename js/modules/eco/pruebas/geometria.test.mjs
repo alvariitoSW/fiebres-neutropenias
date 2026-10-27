@@ -4,6 +4,11 @@ import assert from 'node:assert/strict';
 import { baseGeometrica, construirCorazon, LIMITES, puntoValva } from '../corazon-geo.mjs';
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
+import { estadoGeo, extraDeMotor } from '../formas.mjs';
+import { planoVista, cortarPieza, valvasEnPlano } from '../ecografia.mjs';
+import { aplicarEscenario } from '../escenarios.mjs';
+import { TORAX, aEje } from '../torax.mjs';
+import { TEJIDOS } from '../../../data/eco-tejidos.js';
 
 const TAU = Math.PI * 2;
 
@@ -112,7 +117,9 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
   // los grandes vasos salen por arriba (ahí se refleja el pericardio)
   const dentro = /^(VI |VD |Infundíbulo|AI$|AD$|Orejuela|Base V|Raíz aórtica|Papilar|Banda|Grasa|Coronaria|Seno coronario)/;
   const m = crearMotor(); m.correr(12);
-  const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e }))];
+  // P2: con un VI de menos de ~18 mL y el VD en su mínimo (45 mL) el VD epicárdico se sale del saco unos mm (ver la prueba todo de abajo);
+  // el motor no llega ahí (hemorragia a fondo: VTS ≥ 21 mL), así que el estado extremo bajo se prueba en el VI mínimo que el saco aguanta
+  const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e, vvi: Math.max(e.vvi, 18) }))];
   for (const liquidoPeri of [0, 10, 150]) for (const s of est) {
     const g = construirCorazon({ ...s, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri }, { pericardio: true, detalle: true });
     const saco = g.partes.find(p => p.nombre === 'Pericardio'), derrame = g.partes.find(p => p.nombre === 'Derrame');
@@ -133,7 +140,7 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
 // el VD. Referencia de la app: TAPSE normal >16 mm (Fisiopatología UCI · Cardiología, Ficha 5) y >17 mm (Ficha 11).
 // El valor exacto del modelo es ilustrativo (calibrado ~21 mm); se exige que el normal pase las dos referencias,
 // que supere al MAPSE y que caiga cuando el VD expulsa menos.
-test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el volumen sistólico del VD', async () => {
+test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; sigue siendo normal en hemorragia y derrame y cae en el TEP (F5)', async () => {
   const { estadoGeo, extraDeMotor } = await import('../formas.mjs');
   const { ESCENARIOS } = await import('../escenarios.mjs');
   const medir = (k) => {
@@ -148,8 +155,15 @@ test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el 
   const n = medir('normal');
   assert.ok(n.tapse > 17 && n.tapse < 26, `TAPSE normal ${n.tapse.toFixed(1)} mm`);
   assert.ok(n.tapse > n.mapse + 4, `TAPSE ${n.tapse.toFixed(1)} frente a MAPSE ${n.mapse.toFixed(1)}`);
+  // F5: el TAPSE es el acortamiento de la pared libre (no los mL vaciados). Con la FE del VD conservada, la hemorragia y el
+  // derrame mantienen un TAPSE normal (la fuente, Lang p. 19 y 23, no dice que caiga con la precarga); el TEP lo hunde.
   for (const k of ['hemorragia', 'derrame']) { const r = medir(k);
-    assert.ok(r.vsD < n.vsD && r.tapse < n.tapse - 4, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
+    assert.ok(r.vsD < n.vsD && r.tapse >= 17, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
+  const { ASENTAR_FORMA } = await import('../escenarios.mjs');
+  const tep = (() => { const m = crearMotor(); m.correr(12); ESCENARIOS.tep.aplicar(m); m.correr(ASENTAR_FORMA); const ex = extraDeMotor(m); let a = Infinity, b = -Infinity;
+    for (const [i, s] of m.onda.entries()) { if (i % 5) continue; const z = construirCorazon(estadoGeo(s, ex), { pericardio: false, detalle: false, calidad: 0.5 }).anilloTricLateral[2]; a = Math.min(a, z); b = Math.max(b, z); }
+    return b - a; })();
+  assert.ok(tep < 17, `TEP: TAPSE ${tep.toFixed(1)} mm`);
 });
 
 test('las aurículas no saltan entre dos fotogramas seguidos (rayos casi tangentes a la aorta y al tabique)', () => {
@@ -164,4 +178,223 @@ test('las aurículas no saltan entre dos fotogramas seguidos (rayos casi tangent
     prev = cur;
   }
   assert.ok(peor < 2, `salto máximo ${peor.toFixed(2)} mm`);
+});
+
+// ---- N3: aorta descendente, columna y pleura-pulmón (torax.mjs) ----
+const corazonDe = (k, liquido) => { const m = crearMotor(); m.correr(12); aplicarEscenario(m, k);
+  const td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ex = extraDeMotor(m); if (liquido != null) ex.liquidoPeri = liquido;
+  return { g: construirCorazon(estadoGeo(td, ex), { pericardio: true, detalle: true }), td }; };
+const rango = (seg) => { const r = [Infinity, -Infinity, Infinity, -Infinity]; for (let i = 0; i < seg.length; i += 2) { r[0] = Math.min(r[0], seg[i]); r[1] = Math.max(r[1], seg[i]); r[2] = Math.min(r[2], seg[i + 1]); r[3] = Math.max(r[3], seg[i + 1]); } return r; };
+const pieza = (g, n) => g.partes.find(p => p.nombre === n);
+
+test('N3: en la PLAX la aorta descendente es un círculo detrás de la AI, de unos 20 mm (ilustrativo)', () => {
+  const { g, td } = corazonDe('normal'), P = planoVista('plax', td);
+  const ao = rango(cortarPieza(pieza(g, 'Aorta descendente'), P).seg), ai = rango(cortarPieza(pieza(g, 'AI'), P).seg);
+  assert.ok(ao[2] > ai[3], `la aorta (d ${ao[2].toFixed(0)}) empieza detrás de la AI (d hasta ${ai[3].toFixed(0)})`);
+  assert.ok(ao[0] < ai[1] && ao[1] > ai[0], 'a la altura de la AI (su rango en el plano se solapa)');
+  assert.ok(ao[3] <= P.prof + 3, 'cabe en la profundidad de la vista');
+  const diametro = Math.min(ao[1] - ao[0], ao[3] - ao[2]); assert.ok(diametro > 10 && diametro < 24, `diámetro del corte ${diametro.toFixed(1)} mm`);
+});
+
+test('N3: la aorta descendente no cruza ninguna pieza del corazón ni el saco, ni con el derrame grande', () => {
+  const casos = [['normal'], ['hemorragia'], ['fallo'], ['derrame'], ['derrame', 500], ['tep'], ['dilatada'], ['hipertrofia'], ['vasoplejia']];
+  for (const [k, liq] of casos) {
+    const { g } = corazonDe(k, liq), ao = pieza(g, 'Aorta descendente'), R = TORAX.rAo, nSeg = 16;
+    const anillos = ao.pos.length / 3 / (nSeg + 1); let peor = Infinity;
+    for (let a = 3; a < anillos; a++) { const c = [0, 0, 0]; for (let j = 0; j <= nSeg; j++) for (let t = 0; t < 3; t++) c[t] += ao.pos[(a * (nSeg + 1) + j) * 3 + t] / (nSeg + 1);
+      for (const p of g.partes) { if (!p.pos || /^(Aorta|Derrame|Vértebra|Pulmón)/.test(p.nombre) || /sangre$/.test(p.nombre)) continue;
+        for (let i = 0; i < p.pos.length; i += 3) peor = Math.min(peor, Math.hypot(p.pos[i] - c[0], p.pos[i + 1] - c[1], p.pos[i + 2] - c[2])); } }
+    assert.ok(peor >= R - 1.5, `${k}${liq ? ' ' + liq : ''}: el eje de la aorta queda a ${peor.toFixed(1)} mm de otra pieza (radio ${R})`);
+  }
+});
+
+test('N3: la columna va detrás de la aorta y la corta la supraesternal; el pulmón solo detrás y a los lados', () => {
+  const { g, td } = corazonDe('normal'), vert = g.partes.filter(p => /^Vértebra/.test(p.nombre));
+  assert.equal(vert.length, TORAX.vertebra.n);
+  const ant = (p) => { let s = 0; for (let i = 0; i < p.pos.length; i += 3) s += aEje([p.pos[i], p.pos[i + 1], p.pos[i + 2]])[1]; return s / (p.pos.length / 3); };
+  const aoAnt = ant(pieza(g, 'Aorta descendente')); // media del tubo: la parte vertical domina
+  for (const v of vert) assert.ok(ant(v) < aoAnt, 'la vértebra queda detrás de la aorta');
+  const P = planoVista('sse', td);
+  assert.ok(vert.filter(v => cortarPieza(v, P).seg.length).length >= 3, 'la supraesternal corta varias vértebras');
+  // pulmón: ningún punto delante del centro del corazón (ahí están las ventanas)
+  for (const n of ['Pulmón izquierdo', 'Pulmón derecho']) { const p = pieza(g, n); let maxAnt = -Infinity;
+    for (let i = 0; i < p.pos.length; i += 3) maxAnt = Math.max(maxAnt, aEje([p.pos[i], p.pos[i + 1], p.pos[i + 2]])[1]);
+    assert.ok(maxAnt < 10, `${n}: no pasa a la parte de delante (ant máx ${maxAnt.toFixed(0)})`); }
+  // en el apical, lo que el pulmón corta dentro del sector queda en los bordes o en el fondo (último 10 %), nunca delante del corazón
+  const A = planoVista('a4c', td);
+  for (const n of ['Pulmón izquierdo', 'Pulmón derecho']) { const s = cortarPieza(pieza(g, n), A).seg;
+    for (let i = 0; i < s.length; i += 2) if (s[i + 1] > 0 && s[i + 1] < 0.9 * A.prof) assert.ok(Math.abs(Math.atan2(s[i], s[i + 1])) > 0.45, `${n}: en el A4C solo en los bordes del sector o en el fondo`); }
+});
+
+test('B5: la cortina aorto-mitral une la raíz aórtica con la valva anterior de la mitral en todo el latido y todos los escenarios, sin cruzar la cavidad', () => {
+  const casos = ['normal', 'hemorragia', 'fallo', 'derrame', 'vasoplejia', 'hipertrofia', 'dilatada', 'tep'];
+  const cerca = (A, B) => { let peor = 0; for (let i = 0; i < A.length; i += 3) { let d = Infinity;
+    for (let k = 0; k < B.length; k += 3) d = Math.min(d, Math.hypot(A[i] - B[k], A[i + 1] - B[k + 1], A[i + 2] - B[k + 2])); peor = Math.max(peor, d); } return peor; };
+  for (const k of casos) {
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(10);
+    const ex = extraDeMotor(m);
+    for (const s of m.onda.filter((_, i) => i % 100 === 0)) {
+      const g = construirCorazon(estadoGeo(s, { ...ex, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }), { pericardio: true, detalle: true });
+      const c = pieza(g, 'Cortina aorto-mitral'), raiz = pieza(g, 'Raíz aórtica'), ant = pieza(g, 'Mitral anterior');
+      assert.ok(c && raiz && ant, `${k}: faltan piezas`);
+      const lado = (j) => { const o = []; for (let i = 0; i <= 8; i++) o.push(...c.pos.slice((i * 7 + j) * 3, (i * 7 + j) * 3 + 3)); return o; };
+      const dRaiz = cerca(lado(0), raiz.pos), dMitral = cerca(lado(6), ant.pos);
+      assert.ok(dRaiz < 2.5, `${k}: el borde de la cortina está a ${dRaiz.toFixed(2)} mm de la raíz aórtica`);
+      assert.ok(dMitral < 4.5, `${k}: el otro borde está a ${dMitral.toFixed(2)} mm de la valva anterior (rejilla de 4 mm)`);
+      // sin cruzar la cavidad: ningún vértice por debajo del anillo mitral (el plano de la base, ya movido con el latido)
+      let zMin = Infinity, zAnillo = Infinity; for (let i = 2; i < c.pos.length; i += 3) zMin = Math.min(zMin, c.pos[i]);
+      for (let i = 0; i <= 12; i++) zAnillo = Math.min(zAnillo, ant.pos[(i * 8) * 3 + 2]);
+      assert.ok(zMin >= zAnillo - 0.5, `${k}: la cortina baja a z ${zMin.toFixed(2)}, bajo el anillo (${zAnillo.toFixed(2)})`);
+      // ancho: entre la raíz y el anillo (separación 1-10 mm + el desnivel de 3 mm), nunca un puente largo
+      let anchoMax = 0; for (let i = 0; i <= 8; i++) { const a = (i * 7) * 3, b = (i * 7 + 6) * 3; anchoMax = Math.max(anchoMax, Math.hypot(c.pos[a] - c.pos[b], c.pos[a + 1] - c.pos[b + 1], c.pos[a + 2] - c.pos[b + 2])); }
+      assert.ok(anchoMax < 14, `${k}: ancho de la cortina ${anchoMax.toFixed(1)} mm`);
+    }
+  }
+});
+
+test('pericardio con el VI por debajo de ~18 mL y el VD en su mínimo (P2)', { todo: 'P2: el VD epicárdico se sale del saco unos mm con un VI de 8-16 mL; el motor no llega ahí' }, () => {
+  const m = crearMotor(); m.correr(12);
+  const g = construirCorazon({ ...m.onda[0], vvi: 10, vvd: 5, vai: 2, vad: 2, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, { pericardio: true, detalle: true });
+  const enSaco = dentroDeMalla(g.partes.find(p => p.nombre === 'Pericardio')), vd = g.partes.find(p => p.nombre === 'VD epicardio');
+  for (let i = 0; i < vd.pos.length; i += 3) assert.ok(enSaco([vd.pos[i], vd.pos[i + 1], vd.pos[i + 2]]), 'VD epicardio fuera del saco');
+});
+
+// ---- C1: festones de la mitral (Carpentier) y cúspides con nombre. Qué corta cada vista: Hahn 2013 (ETE), con el plano
+// transtorácico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p. 932), 2 cámaras P3-A3A2A1 (p. 937),
+// comisural P3-A2-P1 (p. 935), eje corto basal con los seis (p. 939). La propia fuente avisa de que varía (p. 938).
+const latidoC1 = (k = 'normal', cada = 40) => { const m = crearMotor(); m.correr(12); if (k !== 'normal') { aplicarEscenario(m, k); m.correr(10); }
+  const ex = { ...extraDeMotor(m), vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }, td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a));
+  return { td: { ...td, vviTd: m.ultimo.edv }, instantes: m.onda.filter((_, i) => i % cada === 0).map(s => { const e = estadoGeo(s, ex); return { e, g: construirCorazon(e, { detalle: true }) }; }) }; };
+const cortados = (g, P, valvula) => valvasEnPlano(g.partes, P).filter(x => x.valvula === valvula);
+
+test('C1: cada vista corta los festones de la mitral que da Hahn 2013 para su plano', () => {
+  const { td, instantes } = latidoC1(), vistas = Object.fromEntries(['plax', 'a3c', 'a4c', 'a2c', 'psaxMv'].map(v => [v, planoVista(v, td)]));
+  let seis = 0;
+  for (const { g } of instantes) {
+    const n = (v) => new Set(cortados(g, vistas[v], 'Mitral').map(x => x.nombre));
+    for (const v of ['plax', 'a3c']) assert.deepEqual([...n(v)].sort(), ['A2', 'P2'], `${v}: P2-A2 (p. 937)`);
+    const c4 = n('a4c'); assert.ok(c4.has('A2') && (c4.has('P2') || c4.has('P1')) && !c4.has('P3'), `A4C: A3A2 / P2P1 (p. 932): ${[...c4]}`);
+    const c2 = n('a2c'); assert.ok(c2.has('P3') && c2.has('A2') && !c2.has('P1') && !c2.has('P2'), `A2C: P3-A3A2A1 (p. 937): ${[...c2]}`);
+    if (n('psaxMv').size === 6) seis++;
+  }
+  assert.ok(seis >= 2, `el eje corto mitral corta los seis festones en algún momento del latido (${seis} instantes)`);
+});
+
+test('C1: el plano por las dos comisuras corta P3-A2-P1 (vista comisural, Hahn p. 935), con el A1-A3 como mucho de lado', () => {
+  const { instantes } = latidoC1();
+  for (const { e, g } of instantes.filter(x => x.e.mitral === 0)) {   // la vista se describe con la válvula cerrada
+    // paralelo a la línea entre comisuras, a un 40 % del camino hacia el centro de la línea de cierre: corta esa línea dos veces
+    const a = g.comisuras.anterolateral, b = g.comisuras.posteromedial, o = g.comisuras.centro, c = [0, 1, 2].map(t => 0.6 * (a[t] + b[t]) / 2 + 0.4 * o[t]);
+    const r = [a[0] - b[0], a[1] - b[1], 0], lr = Math.hypot(r[0], r[1]), rr = [r[0] / lr, r[1] / lr, 0];
+    const P = { O: [c[0], c[1], c[2] + 30], d: [0, 0, -1], r: rr, n: [-rr[1], rr[0], 0], prof: 80, mitad: 1.2 };
+    const n = new Set(cortados(g, P, 'Mitral').map(x => x.nombre));
+    assert.ok(n.has('P3') && n.has('A2') && n.has('P1') && !n.has('P2'), `comisural (mitral ${e.mitral}): ${[...n]}`);
+  }
+});
+
+test('C1: cúspides aórticas y valvas tricuspídeas en su sitio (Hahn p. 939, 946, 950) y en el eje largo la anterior es la derecha', () => {
+  const { td, instantes } = latidoC1(), P = planoVista('plax', td);
+  for (const { g } of instantes) {
+    const centro = (re, nombre) => { const p = g.partes.find(q => re.test(q.nombre) && q.segmentos?.[0][0] === nombre); const s = [0, 0, 0];
+      for (let i = 0; i < p.pos.length; i += 3) for (let t = 0; t < 3; t++) s[t] += p.pos[i + t] * 3 / p.pos.length; return s; };
+    const d = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]);
+    const ao = Object.fromEntries(['coronaria derecha', 'coronaria izquierda', 'no coronaria'].map(k => [k, centro(/^Aórtica/, k)]));
+    const tri = Object.fromEntries(['anterior', 'posterior', 'septal'].map(k => [k, centro(/^Tricúspide/, k)]));
+    const rvot = g.flujo.valvulas.pulmonar, septoAur = [(g.flujo.valvulas.mitral[0] + g.flujo.valvulas.tricus[0]) / 2, (g.flujo.valvulas.mitral[1] + g.flujo.valvulas.tricus[1]) / 2];
+    assert.ok(d(ao['coronaria derecha'], rvot) < Math.min(d(ao['no coronaria'], rvot), d(ao['coronaria izquierda'], rvot)), 'la derecha, junto al TSVD');
+    assert.ok(d(ao['no coronaria'], septoAur) < Math.min(d(ao['coronaria derecha'], septoAur), d(ao['coronaria izquierda'], septoAur)), 'la no coronaria, junto al tabique interauricular');
+    assert.ok(Math.hypot(...tri.septal.slice(0, 2)) < Math.min(Math.hypot(...tri.anterior.slice(0, 2)), Math.hypot(...tri.posterior.slice(0, 2))), 'la septal, la más cerca del VI');
+    assert.ok(d(tri.anterior, rvot) < Math.min(d(tri.septal, rvot), d(tri.posterior, rvot)), 'la anterior, hacia el infundíbulo');
+    const c = cortados(g, P, 'Aórtica'), der = c.find(x => x.nombre === 'coronaria derecha');
+    assert.ok(der && c.length >= 2, `PLAX: dos cúspides, una la derecha (${c.map(x => x.nombre)})`);
+    for (const x of c) if (x !== der) assert.ok(der.v < x.v, 'la derecha es la anterior (más cerca de la sonda)');
+    assert.ok(cortados(g, planoVista('a4c', td), 'Tricúspide').some(x => x.nombre === 'septal'), 'A4C: la septal junto al tabique');
+  }
+});
+
+test('C1: los festones no se cruzan entre valvas ni con la cortina, las hendiduras solo con la valva abierta y la mitral abre y cierra a su tiempo', () => {
+  for (const k of ['normal', 'fallo', 'dilatada', 'hipertrofia']) {
+    const { instantes } = latidoC1(k, 60);
+    let abre = 0, cierra = 0;
+    for (const { e, g } of instantes) {
+      const ant = g.partes.find(p => p.nombre === 'Mitral anterior'), pos = g.partes.find(p => p.nombre === 'Mitral posterior'), cor = g.partes.find(p => p.nombre === 'Cortina aorto-mitral');
+      const [ni, nj] = ant.malla, v = (p, i, j) => [p.pos[(i * (nj + 1) + j) * 3], p.pos[(i * (nj + 1) + j) * 3 + 1], p.pos[(i * (nj + 1) + j) * 3 + 2]];
+      const dd = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+      // la cortina queda por encima del anillo; ningún punto de la valva anterior (salvo la bisagra) sube por encima de él
+      let zAn = Infinity, zCor = Infinity, zMax = -Infinity; for (let i = 0; i <= ni; i++) { zAn = Math.min(zAn, v(ant, i, 0)[2]); for (let j = 1; j <= nj; j++) zMax = Math.max(zMax, v(ant, i, j)[2] - v(ant, i, 0)[2]); }
+      for (let i = 2; i < cor.pos.length; i += 3) zCor = Math.min(zCor, cor.pos[i]);
+      // (cerrada se abomba hacia la AI con la carga, hacia dentro del anillo: hasta ~1 mm por encima de la bisagra)
+      assert.ok(zMax < 1.5 && zCor >= zAn - 0.5, `${k}: la valva anterior no sube a la cortina (${zMax.toFixed(2)} mm)`);
+      // bordes libres de A2 y P2 (centro): juntos cerrada, separados abierta; entre las valvas, sin cruces fuera de la línea de cierre
+      const sep = dd(v(ant, ni / 2, nj), v(pos, ni / 2, nj));
+      if (e.mitral === 0) { cierra++; assert.ok(sep < 2, `${k}: cerrada, A2 y P2 se juntan (${sep.toFixed(1)} mm)`); }
+      if (e.mitral > 0.8) { abre++; assert.ok(sep > 10, `${k}: abierta, A2 y P2 separadas (${sep.toFixed(1)} mm)`);
+        let min = Infinity; for (let i = 3; i <= ni - 3; i++) for (let j = 2; j <= nj; j++) for (let i2 = 3; i2 <= ni - 3; i2++) min = Math.min(min, dd(v(ant, i, j), v(pos, i2, j)));
+        assert.ok(min > 2, `${k}: abiertas, las valvas no se tocan (${min.toFixed(1)} mm)`);
+        const largoBorde = (i) => dd(v(pos, i, 0), v(pos, i, nj));
+        for (const h of [0.3, 0.7]) { const i = Math.round(h * ni), lado = Math.min(largoBorde(i - 2), largoBorde(i + 2));
+          assert.ok(largoBorde(i) < 0.85 * lado, `${k}: hendidura en ${h} (${largoBorde(i).toFixed(1)} frente a ${lado.toFixed(1)} mm)`); } }
+      if (e.mitral === 0) for (const h of [0.3, 0.7]) { const i = Math.round(h * ni); assert.ok(dd(v(pos, i, nj), v(pos, i + 1, nj)) < 3, `${k}: cerrada, sin hueco en la hendidura`); }
+    }
+    assert.ok(abre && cierra, `${k}: el latido pasa por la mitral abierta y cerrada`);
+  }
+});
+
+test('C1: dos cuerdas por festón, cada una desde el papilar de su lado (Hahn p. 942-943)', () => {
+  const { instantes } = latidoC1();
+  for (const { g } of instantes) {
+    const c = g.partes.find(p => p.nombre === 'Cuerdas').lineas, al = g.comisuras.anterolateral, pm = g.comisuras.posteromedial;
+    assert.equal(c.length / 6, 12 + 9, '12 cuerdas mitrales y 9 tricuspídeas');
+    const d = (p, i) => Math.hypot(p[0] - c[i], p[1] - c[i + 1], p[2] - c[i + 2]);
+    const lados = [0, 0];
+    for (let k = 0; k < 12; k++) { const pc = k * 6, tip = pc + 3, lateral = d(al, tip) < d(pm, tip);
+      const papLado = d(al, pc) < d(pm, pc); assert.equal(papLado, lateral, `cuerda ${k}: el papilar de su lado`); lados[lateral ? 0 : 1]++; }
+    assert.deepEqual(lados, [6, 6], 'seis de cada papilar');
+  }
+});
+
+// ---- v2 Forma: un solo tabique interauricular (A4C) ----
+// En cada fila de profundidad del A4C donde están las dos aurículas, el borde de la AD que mira al tabique y el de la AI caen
+// en la misma línea (≤ 2,6 mm entre las dos, el ancho de la pared dibujada: las dos líneas se tocan), así que entre ellas no queda sangre ni una franja
+// negra. Se mira en la altura que comparten (desde el suelo más alto de las dos), desde 16 mm o el 30 % (debajo está el triángulo de la cruz) al 85 % y a ≥ 4 mm del techo (encima, el techo de la
+// aurícula más baja se curva), en telediástole, telesístole y cuatro instantes más, en cuatro escenarios (derrame con su saco)
+// por cada fila entera de profundidad v, el menor y el mayor u donde el contorno cortado cruza esa fila
+const filasAu = (pz, P) => { const s = cortarPieza(pz, P).seg, f = new Map();
+  for (let i = 0; i < s.length; i += 4) { const [ua, va, ub, vb] = [s[i], s[i + 1], s[i + 2], s[i + 3]];
+    for (let b = Math.ceil(Math.min(va, vb)); b <= Math.max(va, vb); b++) { const t = vb === va ? 0 : (b - va) / (vb - va), u = ua + (ub - ua) * t;
+      const e = f.get(b) || [Infinity, -Infinity]; f.set(b, [Math.min(e[0], u), Math.max(e[1], u)]); } }
+  return f; };
+for (const k of ['normal', 'derrame', 'tep', 'hemorragia']) {
+  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => {
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(k === 'normal' ? 2 : 12);
+    const o = m.onda, ex = extraDeMotor(m), td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), P = planoVista('a4c', estadoGeo(td, ex));
+    let filas = 0;
+    for (let j = 0; j < 6; j++) { const s = o[Math.floor(j / 6 * o.length)];
+      const g = construirCorazon(estadoGeo(s, ex), { pericardio: true, detalle: false });
+      const ad = filasAu(g.partes.find(p => p.nombre === 'AD'), P), ai = filasAu(g.partes.find(p => p.nombre === 'AI'), P);
+      const comunes = [...ad.keys()].filter(b => ai.has(b)), v0 = Math.max(Math.min(...ad.keys()), Math.min(...ai.keys())), v1 = Math.min(Math.max(...ad.keys()), Math.max(...ai.keys()));
+      for (const b of comunes) { if (b < v0 + Math.max(16, 0.3 * (v1 - v0)) || b > v1 - Math.max(4, 0.15 * (v1 - v0))) continue; filas++;
+        const hueco = ai.get(b)[0] - ad.get(b)[1];
+        assert.ok(Math.abs(hueco) <= TEJIDOS.auricula.ancho, `t = ${s.t.toFixed(2)} s, profundidad ${b} mm: entre la pared de la AD y la de la AI hay ${hueco.toFixed(1)} mm`); }
+    }
+    assert.ok(filas >= 30, `pocas filas con las dos aurículas (${filas})`);
+  });
+}
+// Subcostal 4C: el VD ancho, pegado al hígado. Depende del plano de la vista (planoVista('sc4c') en ecografia.mjs, de la pieza
+// Imagen): con la sonda obligada a pasar por la piel bajo el xifoides, el plano corta el VD de refilón (una rendija de 3-4 mm).
+// Con el plano del A4C y la sonda llevada a él (~34 mm), el VD sale ancho y bajo el hígado (hondo: 19 mm, medido al hacer la prueba; mínimo 18).
+test('v2 Forma · SC4C: el VD toca la cara del hígado (≤ 6 mm del diafragma) y su luz mide 20-45 mm de ancho', () => {
+  const m = crearMotor(); m.correr(12); const ex = extraDeMotor(m), td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), e = estadoGeo(td, ex);
+  const P = planoVista('sc4c', e), g = construirCorazon(e, { detalle: false }), vd = filasAu(g.partes.find(p => p.nombre === 'VD endocardio'), P);
+  let ancho = 0; for (const [, [a, c]] of vd) ancho = Math.max(ancho, c - a);
+  const filas = [...vd.keys()], hondo = Math.max(...filas) - Math.min(...filas);
+  assert.ok(hondo >= 18 && ancho >= 20 && ancho <= 45, `VD en el SC4C: ${hondo} mm de hondo y ${ancho.toFixed(0)} de ancho`);
+});
+// TEP: el papilar cortado de refilón en el A4C de telesístole era un lazo (tubo abierto). Ahora sus dos extremos se cierran
+test('v2 Forma: los papilares del VI son tubos cerrados (radio 0 en la base y en la punta)', () => {
+  const g = construirCorazon({ vvi: 120, vvd: 140, vai: 40, vad: 35 }, { detalle: true });
+  for (const n of ['Papilar anterolateral', 'Papilar posteromedial']) { const p = g.partes.find(x => x.nombre === n).pos, N = p.length / 3, anillo = 11;
+    const radio = (i0) => { let cx = 0, cy = 0, cz = 0; for (let i = i0; i < i0 + anillo; i++) { cx += p[3 * i]; cy += p[3 * i + 1]; cz += p[3 * i + 2]; } cx /= anillo; cy /= anillo; cz /= anillo;
+      let r = 0; for (let i = i0; i < i0 + anillo; i++) r = Math.max(r, Math.hypot(p[3 * i] - cx, p[3 * i + 1] - cy, p[3 * i + 2] - cz)); return r; };
+    assert.ok(radio(0) < 0.05 && radio(N - anillo) < 0.05, `${n}: radio en la base ${radio(0).toFixed(2)}, en la punta ${radio(N - anillo).toFixed(2)}`); }
 });

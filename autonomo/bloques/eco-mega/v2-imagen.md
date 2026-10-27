@@ -1,0 +1,23 @@
+# eco-mega · parada 2 · vuelta 2 · pieza Imagen/UI
+Archivos: `simulador.mjs`, `eco.html`, `escenarios.mjs`, `que-mirar.js`, `referencias.mjs`, `eco-real.mjs`, `js/data/eco-tejidos.js`, `ecografia.mjs`, `pruebas/navegador.test.mjs`, `pruebas/ecografia-antes.mjs` (referencia de la pared auricular), README.
+1. Mando de gravedad: hecho. Aparece en los 4 escenarios con `gravedad`, con su texto (mL de derrame, mL y % de volemia…), se aplica al soltar y deja al paciente asentado. Paciente posible en 0/50/100 % ya lo cubre `escenarios.test.mjs`; el navegador comprueba derrame a 388 mL (PAM 45-60). Capturas `capturas/v2i-{390,360}-{derrame-subcostal,hemorragia-psax}-{imagen,mando}.png`.
+2. Pulmón: líneas A solo 2, a −2/−11 dB y más finas (`ecografia.mjs`). Sin peine en el borde del A4C normal (v2i-390-a4c-normal).
+3. Aurículas: pared −1 → −5 dB. La banda brillante de la AD NO viene de la tabla (no hay fila): sigue en el modelo (pieza Forma / geometría). Las paredes siguen algo claras en el A4C (efecto del trazo especular).
+4. Lecturas: nota del TEP «tabique aplanado» ligada al aplanamiento que calcula el modelo (el PSAX con la D es de Forma: leer `v2-forma.md`); renglón FATE frente a Lang; frase del PSAX mitral solo con lo que se dibuja.
+Hallazgos del auditor: hueco 1 cortina Hahn pp. 942-943 ✅ (`eco-tejidos.js`) · m1 VD/VI «unión de dos fuentes» ✅ · m2 VD basal >41 a Lang p. 17 ✅ · m3 TAPSE ✅ · m4 festones p. 946/950 ✅ · m5 «boca de pez» sin los seis festones ✅ · m6 orden de brillo y «ilustrativo» ✅ · m7 FE del VD aprox. ✅ · m8 AD en diástole ✅ solo si se muestra (no se muestra en ningún texto: sin cambios) · m9 «1,7/3,4 MHz» fuera del pie ✅ (sigue impreso en la imagen real).
+Suite eco: 426 pruebas, 412 pasan, 1 fallaba (referencia congelada de la aurícula; arreglada, `ecografia.test.mjs` 25/25), 13 `todo`. Sin errores de consola ni desborde a 390 y 360 (app real).
+No comprobado / riesgo: el colapso del VD y el beso a fondo se ven pero no los medí con cifras en imagen; TEP «tabique» depende de Forma; no corrí la suite completa tras el arreglo de `ecografia-antes.mjs`.
+
+## Vuelta 2b
+1. SC4C ✅: `planoVista('sc4c')` (`ecografia.mjs`) usa ahora el plano del A4C y lleva la sonda a él desde la piel bajo el xifoides. Se ven las cuatro cámaras bajo la banda del hígado, el VD ancho (41 mm) y sin gancho en la AD. La SC VCI y las demás vistas no cambian (captura `v2i-scVci-normal.png`). Capturas a 390 px: `v2i-sc4c-normal.png`, `v2i-sc4c-derrame-fondo.png` (sin desborde ni errores).
+2. El `todo` de SC4C en `geometria.test.mjs` pasa a prueba. El VD sale de 19 mm de hondo, no de 20: bajé ese mínimo a 18 (solo ese umbral; el plano es el mismo que el del A4C, así que no hay más margen). Dilo a Forma si no te gusta.
+3. TEP ✅: la lectura dice «Tabique aplanado en diástole (fases F-A)» y su nota explica que en B el tabique vuelve a curvarse. No cambié la fase al elegir TEP con el PSAX (no fue barato).
+4. Suite eco entera: 432 pruebas, 419 ok, 0 fallos, 13 `todo` (la prueba B4 de Forma pasa).
+
+## Vuelta 3
+1. Rótulo «VI» ✅: no se dibuja cuando la cavidad tiene <35 mL (el beso de papilares) y los demás rótulos llevan el fondo más transparente (`simulador.mjs`).
+2. Botón «Hemorragia» ✅ (sin cifra; la da el mando, `escenarios.mjs`).
+3. Mando de gravedad ✅: pasa a `cv-eco-fijo`, justo bajo la imagen, y con el mando visible la imagen queda fija arriba (`components.css`, mismo sticky que los mandos de imagen). Captura `v3-360-hemorragia-mando.png`.
+4. «▲S2» y «diástole» ✅: sístole y diástole pasan a una segunda fila bajo la barra del ciclo; no se pisan a 360 (`v3-360-ciclo.png`).
+5. Tricúspide en F ❌ no hecho: la apertura no es un ángulo de `corazon-geo.mjs` sino el flujo del motor (`ap('tricus')`, `formas.mjs`, qRef 600); abrirla antes es cambiar la fisiología, no es barato.
+Suite eco: 432 pruebas, 419 ok, 0 fallos, 13 `todo`. 390 y 360 px sin desborde ni errores. Cambié `components.css` y `simulador.mjs`: falta subir `?v=` (director).

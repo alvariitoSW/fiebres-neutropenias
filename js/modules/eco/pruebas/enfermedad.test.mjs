@@ -6,13 +6,15 @@ import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { baseGeometrica, construirCorazon } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor, aplanamientoSeptal, crearTablaFormas, instantesClave } from '../formas.mjs';
-import { medidasCorazon } from '../ecografia.mjs';
+import { medidasCorazon, medirVd } from '../ecografia.mjs';
 import { ESCENARIOS, CRITERIOS_FORMA, evaluarForma, ASENTAR_FORMA } from '../escenarios.mjs';
 
 const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m); if (k !== 'normal') m.correr(ASENTAR_FORMA); return m; };
 const td = (m) => m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), m.onda[0]);
 const medidas = (m) => medidasCorazon(estadoGeo(td(m), extraDeMotor(m)), m.p.sc);
-const normal = correr('normal'), md0 = medidas(normal);
+const vdDe = (m) => { const est = (s) => estadoGeo(s, extraDeMotor(m)), o = m.onda;
+  return { td: medirVd(est(td(m))), ts: medirVd(est(o.reduce((a, b) => (b.vvi < a.vvi ? b : a), o[0]))) }; };
+const normal = correr('normal'), md0 = medidas(normal), vd0 = vdDe(normal);
 
 test('el corazón normal está dentro de los rangos normales de FATE y de la guía ESC', () => {
   assert.ok(md0.paredPost >= 6 && md0.paredPost <= 10, `pared posterior ${md0.paredPost.toFixed(1)} mm (FATE 6-10)`);
@@ -28,13 +30,13 @@ test('el corazón normal está dentro de los rangos normales de FATE y de la gu�
 for (const k of Object.keys(CRITERIOS_FORMA)) {
   test(`forma «${ESCENARIOS[k].nombre}»: cumple los criterios de las fichas`, () => {
     const m = correr(k);
-    for (const r of evaluarForma(k, m.ultimo, medidas(m), normal.ultimo, md0)) assert.ok(r.ok, `${r.texto}: ${r.v} (${r.fuente.ficha})`);
+    for (const r of evaluarForma(k, m.ultimo, medidas(m), normal.ultimo, md0, vdDe(m), vd0)) assert.ok(r.ok, `${r.texto}: ${r.v} (${r.fuente.ficha})`);
   });
 }
 
 test('el corazón normal no cumple todos los criterios de ninguna forma de enfermedad', () => {
   for (const k of Object.keys(CRITERIOS_FORMA)) {
-    const r = evaluarForma(k, normal.ultimo, md0, normal.ultimo, md0);
+    const r = evaluarForma(k, normal.ultimo, md0, normal.ultimo, md0, vd0, vd0);
     assert.ok(r.some(x => !x.ok), `el normal cumple todos los criterios de ${k}`);
   }
 });
@@ -77,4 +79,23 @@ test('las formas de enfermedad se construyen sin coordenadas no finitas y se pre
     assert.ok(usadas >= muestras.length - 2, `${k}: mezcla usada en ${usadas}/${muestras.length}`);
     assert.equal(tabla.mezclar({ ...muestras[0], tLatido: muestras[0].t }, { ...ex, mioVi: 1.01 }), null, `${k}: mezcló otra masa`);
   }
+});
+
+// P4 · TEP con los criterios de Lang 2015 (VD basal >41 mm p. 20, FAC <35 % p. 23, FE del VD <45 % p. 23, TAPSE <17 mm p. 23)
+// y la relación VD/VI (Ficha 11: normal <1). El TEP por defecto cumple todos; el normal, ninguno.
+const LANG_TEP = ['VD basal', 'Relación de diámetros', 'FAC del VD', 'FE del VD', 'TAPSE', 'Área del VD / área del VI'];
+test('TEP: cumple los criterios de Lang del VD (basal, FAC, FE, TAPSE) y la relación VD/VI; el normal, ninguno', () => {
+  const m = correr('tep'), tep = evaluarForma('tep', m.ultimo, medidas(m), normal.ultimo, md0, vdDe(m), vd0);
+  const sano = evaluarForma('tep', normal.ultimo, md0, normal.ultimo, md0, vd0, vd0);
+  for (const nombre of LANG_TEP) {
+    const t = tep.find(r => r.texto.startsWith(nombre)), n = sano.find(r => r.texto.startsWith(nombre));
+    assert.ok(t, `falta el criterio «${nombre}»`);
+    assert.ok(t.ok, `TEP: ${t.texto}: ${t.v}`);
+    assert.ok(!n.ok, `normal: ${n.texto}: ${n.v}`);
+  }
+});
+
+test('TEP: tabique aplanado también en telesístole (sobrecarga de presión, Atlas 14)', { todo: 'F4 (parada 3): hoy el tabique se aplana solo en diástole; en sístole se curva' }, () => {
+  const m = correr('tep'), u = m.ultimo, sis = m.onda.filter(s => s.t > u.tAoAbre + 0.03 && s.t < u.tS2 - 0.03);
+  assert.ok(sis.every(s => aplanamientoSeptal(s) > 0.5), 'telesístole sin aplanar');
 });

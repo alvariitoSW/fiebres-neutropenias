@@ -1,14 +1,13 @@
 // La maqueta «antes / después» de la imagen de eco. Un solo estado por fotograma: el mismo motor del latido, la misma
-// geometría y el mismo plano para las dos imágenes; «antes» es el ecógrafo de la app tal cual (js/modules/eco/
-// ecografia.mjs) y «después», la copia de trabajo (ecografia-v2.mjs). Con todas las mejoras apagadas, las dos imágenes
-// son idénticas (comprobado en Node: diferencia media de gris 0,0).
+// geometría y el mismo plano para las dos imágenes; los dos son el ecógrafo de la app (js/modules/eco/ecografia.mjs):
+// «antes» con todas las mejoras a 0 y «después» con las que elige el panel. Con todas apagadas, las dos imágenes son
+// idénticas (la prueba de ecografia.test.mjs lo comprueba contra el ecógrafo anterior congelado).
 import { crearMotor } from '../../../js/modules/eco/motor.mjs';
 import { construirCorazon } from '../../../js/modules/eco/corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../../../js/modules/eco/formas.mjs';
-import { planoVista, crearEcografo, VISTAS } from '../../../js/modules/eco/ecografia.mjs';
+import { planoVista, crearEcografo, VISTAS, MEJORAS_CERO } from '../../../js/modules/eco/ecografia.mjs';
 import { construirAbdomen } from '../../../js/modules/eco/abdomen.mjs';
 import { ESCENARIOS, aplicarEscenario } from '../../../js/modules/eco/escenarios.mjs';
-import { crearEcografoV2 } from './ecografia-v2.mjs';
 
 const $ = (s) => document.querySelector(s);
 const ANCHO = 360, ALTO = 300, NFOT = 20, OP = { pericardio: true, detalle: true };
@@ -48,7 +47,7 @@ function plano() {
 // ---- los dos ecógrafos
 const antes = crearEcografo({ ancho: ANCHO, alto: ALTO });
 const despues = NIVELES.map(n => null); let nivel = 0, ema = 0, desdeCambio = 0;
-const ec2 = () => (despues[nivel] ||= crearEcografoV2({ ancho: ANCHO, alto: ALTO, nb: NIVELES[nivel].nb, ns: NIVELES[nivel].ns }));
+const ec2 = () => (despues[nivel] ||= crearEcografo({ ancho: ANCHO, alto: ALTO, nb: NIVELES[nivel].nb, ns: NIVELES[nivel].ns }));
 const tA = [], tB = [];
 const mediana = (a) => { const b = [...a].sort((x, y) => x - y); return b.length ? b[b.length >> 1] : 0; };
 const guarda = (a, x) => { a.push(x); if (a.length > 15) a.shift(); };
@@ -141,7 +140,7 @@ function ponerSenal(tipo) {
 }
 function pintar() {
   const f = fotograma(st.fase), P = plano(), t = f.s.t + vueltas * (pac.onda.at(-1).t - pac.onda[0].t);     // un solo reloj: el del latido
-  const a = antes.formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia });
+  const a = antes.formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia, m: MEJORAS_CERO });
   dA.data.set(a.pix); xA.putImageData(dA, 0, 0); guarda(tA, a.tiempos.total);
   const b = ultimoB = ec2().formar(f.partes, P, { ref: pac.ref, t, ganancia: st.ganancia, m: mejorasActivas(), tgc: st.tgc, focoMm: st.focoMm, ventanaVista: VISTAS[st.vista].ventana });
   dB.data.set(b.pix); xB.putImageData(dB, 0, 0); guarda(tB, b.tiempos.total);
