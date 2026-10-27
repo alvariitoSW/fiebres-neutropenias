@@ -335,3 +335,6 @@ todos los mandos al tope), en el modo juzgar del profesor (fallo grave, nota <8)
 En la vuelta de límites del bloque 3, el aislamiento automático de los agentes (`git worktree`) salió de `main` y dos
 constructores partieron una versión vieja de las maquetas; hubo que rehacerlo. El usuario aprobó la regla: toda carpeta
 aparte sale de `origin/auto/<bN>` (`REGLAS.md` §4.6, lista del constructor y skill del plan socialista).
+El mismo día aprobó las demás propuestas del parte: nada de `git stash` ni `pkill` amplios en la carpeta compartida, el
+puerto de los arneses por `PUERTO=` (REGLAS §4.6 y constructor), y la tarea `jueces-topes` del tablero (que
+`jueces.mjs --modelo` lleve cada mando a su tope).
