@@ -15,16 +15,16 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
       ? { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PCP ${R.pcp}: pasa el techo de 18-20 de la ficha; más volumen ya no sube el gasto y encharca el pulmón.${ed}`,
           cita: C.llenado, origen: 'ficha · p. 42 y p. 11', deshabilita: VOL }
       : { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PVC ${R.pvc} (entró con ${R.pvc0}): por encima de 12 es raro que más volumen suba el gasto; las venas no lo admiten.${ed}`,
-          origen: 'fisiología general', deshabilita: VOL };
+          origen: 'ilustrativo (el 12). La PVC predice mal la respuesta a volumen: Marik 2008, PMID 18628220; Marik 2013, PMID 23774337', deshabilita: VOL };
   } else if (D.avisoVolumen(R)) {
     out.sobrecarga = { nivel: 'aviso', titulo: 'Cerca del techo',
       texto: porPcp ? `PCP ${R.pcp}: la ficha para en 18-20.${ed}` : `PVC ${R.pvc}: por encima de 12 es raro que más volumen suba el gasto.`,
-      cita: porPcp ? C.llenado : undefined, origen: porPcp ? 'ficha · p. 42' : 'fisiología general', bajo: '#shv-dock-panel .rejilla' };
+      cita: porPcp ? C.llenado : undefined, origen: porPcp ? 'ficha · p. 42' : 'ilustrativo (el 12). La PVC predice mal la respuesta a volumen: Marik 2008, PMID 18628220', bajo: '#shv-dock-panel .rejilla' };
   }
   // 1b) el pulmón encharcado: con el edema por encima de 1.000 mL y la SpO₂ cayendo, el paciente no lo aguanta sin ventilar
   if (R.edema >= T.edemaSello) out.edema = { nivel: 'sello', titulo: 'Edema de pulmón',
     texto: `${mL(R.edema)} mL de líquido en el pulmón y SpO₂ ${R.spo2} %${R.spo2 >= 95 ? ' (el oxigenador del ECMO tapa la caída)' : ''}: así no se sostiene; necesitaría intubación y ventilación con PEEP, y diurético o ultrafiltración.`,
-    origen: 'fisiología general (el líquido y la SpO₂: ilustrativos)', deshabilita: VOL };
+    origen: 'el edema por presión de llenado alta: Zanza 2023, PMID 37887077 · los 1.000 mL y la SpO₂: ilustrativos', deshabilita: VOL };
   // 2) el TEP: 500 mL con la PVC normal (4-6)
   if (tipo === 'tep') {
     if (inf.cris >= T.tepMl) out.tep = { nivel: 'sello', titulo: 'Tope de 500 mL',
@@ -47,9 +47,9 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   // 4) el vasopresor en un paciente que no lo necesita
   if (D.hipertensionVaso(R, X)) out.vaso = { nivel: 'sello', titulo: 'Hipertensión por vasopresor',
     texto: `PAM ${R.pam} con ${X.ajuste.na ? `noradrenalina a ${X.ajuste.na} µg/min` : 'vasopresina'}: baja la dosis.`,
-    cita: C.na, origen: 'fisiología general (el 110) · el fármaco: ficha p. 12-13' };
+    cita: C.na, origen: 'ilustrativo (el 110). Los ensayos no ven beneficio por encima de 65-70 y hay más fibrilación auricular: Asfar 2014, PMID 24635770; Mendes 2025, PMID 41276856 · el fármaco: ficha p. 12-13' };
   else if (R.pam > 100 && (X.ajuste.na > 0 || X.ajuste.vaso)) out.vaso = { nivel: 'aviso', titulo: 'Presión alta con vasopresor',
-    texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'fisiología general · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
+    texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'ilustrativo (el 110). Sin beneficio por encima de 65-70: Asfar 2014, PMID 24635770 · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
   // 5) el reloj: 48 h
   if (horas >= T.horas) out.reloj = { nivel: 'sello', titulo: 'Reloj agotado',
     texto: 'Dos días de seguimiento: el lactato y la diuresis ya no cuentan nada nuevo.', origen: 'ilustrativo', deshabilita: ['[data-h]'] };

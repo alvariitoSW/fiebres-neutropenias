@@ -207,7 +207,7 @@ const EXPLICA = {
 $('monitor').addEventListener('click', (ev) => {
   const c = ev.target.closest('[data-fila]'); if (!c || est.tapado) return;
   const [t, ci] = EXPLICA[c.dataset.fila] || []; if (!t) return;
-  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}` + (c.dataset.fila === 'spo2' ? '<span>Con ECMO el valor es una mezcla: fisiología general, la ficha no lo dice.</span><button type="button" class="chip-b" data-nota="spo2-ecmo">Ver la nota</button>' : '');
+  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}` + (c.dataset.fila === 'spo2' ? '<span>Con ECMO el valor es una mezcla: la ficha no lo dice; ver la revisión de Torre y Pirri 2025 en la nota.</span><button type="button" class="chip-b" data-nota="spo2-ecmo">Ver la nota</button>' : '');
 });
 
 // ---------------------------------------------------------------- la escena
@@ -340,7 +340,7 @@ function pintarLab() {
   }
   s += '<text x="2" y="10" class="tend-t">PAM · lactato · diuresis</text>';
   $('tend').innerHTML = s;
-  $('lab-nota').innerHTML = `Lactato y diuresis: de laboratorio y de la bolsa de orina, con su hora (${horaTxt()}). El lactato tarda en bajar. ${org('lactato y diuresis: ilustrativo (la fuente no da fórmula)')}`;
+  $('lab-nota').innerHTML = `Lactato y diuresis: de laboratorio y de la bolsa de orina, con su hora (${horaTxt()}). El lactato tarda en bajar. ${org('lactato y diuresis: ilustrativo (la fuente no da fórmula). La diuresis se sostiene hasta una PAM de 70: Marino cap. 18, p. 7')}`;
 }
 
 // ---------------------------------------------------------------- el dock de Explorar
