@@ -204,45 +204,6 @@ esta sección.
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
 
-### B-033 · ECG: aprender a leerlo desde cero y leerlo juntos en la guardia · apuntado 2026-10-27
-- **Lo que dijiste** (27/10, tras ver la PR #36 de `pif-ecg`): «cumple la función del test, pero […] lo ideal sería
-  reconvertirlo en dos formas. Uno, aprender a leer electro de cero y que con la matemática aprendas […] usando la
-  skill […] Anatomy […] para explicar cómo funciona cada parte. Luego otra función guapa sería poder interpretar un
-  electro: estoy en una guardia y tengo dudas, abrir la aplicación […] y leer juntos el electro y que me vaya
-  preguntando cómo está la onda, cómo está tal […]. Habría que pensar con el profesor la parte artística, si hubiera
-  que hacer algún modelo vivo […] tenemos un corazón […]. Hacer un plan socialista para tener un plan y poder
-  mejorarlo […], apuntarlo en bitácora y luego realizar la tarea. Para ahorrar costes y ver qué puede costar».
-- **Cómo lo entiendo**: dos caminos nuevos sobre el cuaderno «ECG y arritmias» (PR #36, López Ramírez):
-  1. **Aprender desde cero**: del vector a la derivación, con su matemática (proyección del vector del corazón sobre
-     cada derivación, eje, por qué cada onda es como es), explicado con el método **Anatomy**
-     (https://github.com/wheresryan22/anatomy, MIT; ya usado como referencia en `b3`: «el objeto es la explicación»)
-     y con un **modelo vivo** que una el corazón eléctrico con un ECG de 12 derivaciones (la mejora 6 del debate de
-     profesores: `autonomo/ideas/ingenieria-inversa/ritmolab-3.md`).
-  2. **Leer juntos en la guardia**: subes o eliges el trazado mentalmente y la app te pregunta paso a paso (frecuencia,
-     ritmo, P, PR, QRS, eje, ST, T, QT) y al final te dice qué puede ser, con su página. Sin guardar datos del paciente.
-  Antes de construir: **un plan** del profesor (arte, modelos vivos, piezas, orden y **gasto estimado** de cada
-  pieza), para que elijas.
-- **Decisiones tuyas que saldrán en el plan**: instalar Anatomy como skill del proyecto (hoy es solo una referencia
-  clonada en `/tmp/ajeno/anatomy`; tocar `.claude/skills/` necesita tu permiso) y un modelo vivo nuevo o ampliar el
-  corazón eléctrico (toca el motor de `b3`).
-- **Estado**: plan hecho el 27/10 (`ecg-plan`): https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c (copia en
-  `autonomo/planes/ecg-plan.html`). **Espera tus 4 elecciones**: (1) ampliar el corazón eléctrico (recomendado) o
-  modelo nuevo; (2) Anatomy como skill del proyecto, solo el método (recomendado sí); (3) cierre del asistente: lista
-  de criterios con página (recomendado) o también nombre del cuadro; (4) orden: guardia primero (recomendado).
-  Piezas (M equivalentes): 1 skill Anatomy 0,25 · 2 estados↔ficha/página/trazado 0,25 · 3 asistente de guardia 0,9 ·
-  4 auditor de criterios 0,55 · 5 juicio y arreglos 0,66 · 6 maqueta del vector y 6 derivaciones 1,1 · 7 su juicio
-  0,9 · 8 llevarla a la app 2,0 · 9 Mayéutica y 2 casos 1,2 · 10 auditor y juicio 1,55 · 11 director 3 paradas 2,4.
-  Camino 2 ≈ 2,9 M · Camino 1 ≈ 8,4 M · mínimo útil (1-7) ≈ 6,2 M · todo ≈ 12,6 M. Depende de que la PR #36 entre en
-  `main`. Las piezas que elijas pasan al tablero.
-  **Versión 2 (27/10, tras tu aviso):** añadido el **Camino 3 · Laboratorio de arritmias** (puerta «Arritmias» de
-  RitmoLab: paciente + monitor + corazón eléctrico; ¿pulso?/¿estable?, vagal, adenosina, diltiazem/β, amiodarona,
-  magnesio, SYNC, desfibrilar, atropina, transcutáneo, RCP con consecuencia en el grafo; modos Estudio y Guardia;
-  6 casos). Converge `b3-bradi`, `b3-ritmo-motor` y `g2-paro`. Piezas: L0 lector AHA/ESC 0,55 · L1 maqueta (opus)
-  1,2 · L2 bradis y captura 1,1 · L3 juicio 1,25 · L4 a la app 2,0 · L5 modos 0,9 · L6 casos 1,2 · L7 juicio 1,55 ·
-  L8 director 2,4 = **12,2 M**. Plan entero ≈ 24 M; mínimo útil ≈ 9,6 M. Decisiones nuevas: (5) una sola pieza viva
-  con tres caras (recomendado) o tres; (6) leer la AHA antes de la maqueta (recomendado). Orden: comunes → Camino 2 →
-  maqueta del laboratorio → laboratorio en la app → maqueta del Camino 1 → casos → Camino 1 en la app.
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -272,6 +233,7 @@ esta sección.
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
+| `ecg-guardia`, `arritmias-*`, `ecg-vector-*` | **B-033 · ECG en tres caminos** (leer juntos en la guardia, laboratorio de arritmias, vector y 12 derivaciones). Plan: https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c | aprobado el 27/10: 6 tareas en el tablero (Objetivo I, filas 28-33); Anatomy instalado como skill el 27/10; las 2 primeras, programadas para el 28/10 por la mañana | 2026-10-27 | «guarda el informe en tareas para hacer […] y que se programe para mañana por la mañana» (27/10). Decisiones: las recomendadas del plan (supongo; cámbialas antes de que arranquen si quieres otra) |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
 | `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1, 2 y 3 **hechas y en main** (PR #30 y #34, 27/10). Siguiente: informe `eco-calibra` (B-027 + B-029, aprobado el 27/10) | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
