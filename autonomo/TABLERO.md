@@ -765,7 +765,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 15 | `g2-paro` | G2 · Arritmia inestable y paro | pendiente | Fuente ya en `docs/` (27/10): `aha-2025-parte9-soporte-vital-avanzado.pdf` (paro, taquiarritmia y bradicardia con pulso, cardioversión; página impresa S = PDF + 537) y `aha-2025-novedades-rcp.pdf`. Después de G1 |
 | 16 | `g3-sca` | G3 · Dolor torácico y SCA (y marcapasos) | aparcada (espera PDF) | Falta Di Mario 2005 (de pago, 60 €: el usuario no lo manda, 27/10; buscar una fuente libre de las proyecciones o dejar hueco); la ESC 2023 de SCA y la ESC 2021 de estimulación ya están en `docs/` |
 | 17 | `g4-dispositivo` | G4 · Tras colocar un dispositivo (placa, punta del tubo o la vía, neumotórax) | aparcada | Antes, comprobar qué cubren Marino, Merino Neumología y Técnicas R1; faltan casos con licencia |
-| 18 | `g5-neuro` | G5 · Neurocrítico (TC de cráneo en 5 preguntas) | pendiente | No hay temario en PDF (dicho por el usuario el 27/10): el temario son los objetivos de Neurorradiología en `js/data/pif-rotaciones.js`; las cifras se buscan y se citan (REGLAS §1.15). El Libro Azul, sección VIII (neurología), ya en `docs/` (27/10) |
+| 18 | `g5-neuro` | G5 · Neurocrítico (TC de cráneo en 5 preguntas) | aparcada | Ya no espera PDF: no hay temario de Neurorradiología (27/10); pasa al enfoque de B-005 (cada objetivo de `js/data/pif-rotaciones.js` es una pregunta de búsqueda) cuando lo apruebes. El Libro Azul, sección VIII (neurología), ya en `docs/` (27/10) |
 | 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | pendiente | Fuente ya en `docs/` (`hahn-2013-ete-completa-ase-sca.pdf`). Después de G1 |
 | 20 | `f2-coronarias` | Fase 2 · Coronarias por segmentos con dominancia en el motor | aparcada | Abre `culprit` C y la pared por regiones (C2 de `rea-eco`) |
 | 21 | `f2-angio` | Fase 2 · Coronariografía que late (arco en C, vista óptima) y «cómo leer un informe de cateterismo» | aparcada (espera PDF) | Tras `f2-coronarias`. Falta Di Mario y Sutaria 2005 (de pago: buscar una fuente libre) |
@@ -773,7 +773,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 23 | `f3-calc-eco` | Fase 3 · Calculadoras de eco para la UCI con catálogo único y «¿cómo se mide?» | aparcada (espera PDF) | Fuentes completas en `docs/` desde el 27/10: corazón derecho (Mukherjee 2025), cámaras (Lang 2015) y la diastólica, Nagueh 2025, y el informe estandarizado, Taub 2025, ya en `docs/` desde el 27/10). Ideas en `echosuite.md` y `echosuite-2.md` |
 | 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
 | 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
-| 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual (los temarios ya no se esperan: son los objetivos de `js/data/pif-rotaciones.js`, 27/10) |
+| 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual (los temarios ya no se esperan: ver B-005, 27/10) |
 
 **Encargo común del Objetivo I** (cada tarea lo concreta su director con su informe de ingeniería inversa):
 - Para qué: ayudar en la guardia y estudiar (`autonomo/radar/NORTE.md`).
