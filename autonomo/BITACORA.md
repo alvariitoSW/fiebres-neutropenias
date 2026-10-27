@@ -340,8 +340,9 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · guía de amiloidosis cardíaca ·
-  fuente del MAPSE · Leung y Levine 1994 (opcional) · temarios de Radiología de tórax y Neurorradiología.
+- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · Leung y Levine 1994
+  (opcional) · temarios de Radiología de tórax y Neurorradiología. (La guía de amiloidosis y el MAPSE ya están en
+  `docs/` desde el 27/10.)
 - **✅ PDF de la ASE 2025 (27/10)**, en `docs/`:
   - `nagueh-2025-funcion-diastolica-hfpef-ase.pdf` (J Am Soc Echocardiogr 2025;38:537-569; página impresa = página
     del PDF + 536). **Lo había pedido**: el «ASE 2025 diastólica» de la fase 3 (`f3-calc-eco`, `echosuite.md` §4.6).
