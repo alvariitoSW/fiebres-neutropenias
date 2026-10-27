@@ -202,8 +202,10 @@ esta sección.
 - **Cómo lo entiendo**: hoy el moteado, las sombras, la reverberación, la ganancia y el desenfoque del haz son
   «fisiología general» o «ilustrativo». Un libro de física de los ultrasonidos con figuras (p. ej. un manual de
   principios e instrumentación de la ecografía) daría cifras y página a esas decisiones. Lo que más falta, por orden:
-  (1) ese libro; (2) los PDF de siempre: ESC/ERS 2022 de HP, amiloidosis, MAPSE, Leung y Levine 1994.
-- **Espera**: que subas los PDF a `docs/` cuando quieras; no corre prisa.
+  (1) ese libro; (2) Leung y Levine 1994 (opcional). **Ya en `docs/` (27/10, en `main`)**: ESC/ERS 2022 de HP (2
+  partes), ESC 2021 de amiloidosis, MAPSE (Cirin 2024, Falconer 2025): llenan los huecos de la parada 3 de `eco-mega`
+  (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
+- **Espera**: el libro de física, cuando quieras; no corre prisa.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 

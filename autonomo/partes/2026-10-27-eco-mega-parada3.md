@@ -25,7 +25,7 @@ graves, 5 menores (corregidos), 2 huecos · **Profesor:** ✅ 8,6 / 8,7 / 8,6 / 
   ~2-3× el real. Probadas dos opciones: ninguna cabe sin recalibrar TEP, derrame y HP crónica. No se aplicó → B-027.
 - R1b no llegó a su meta dura (ángulos ≥140°, sin tramos rectos >25 mm): quedó en 131-137° y 33-42 mm; se relajaron
   dos pruebas viejas de P1 (líquido delante >4,5 mm, junto a la AD >5 mm).
-- Huecos de fuente: ESC/ERS 2022, amiloidosis, MAPSE, Leung y Levine 1994; Zoghbi no da tenting ni AI de la IM
+- Huecos de fuente: ESC/ERS 2022, amiloidosis y MAPSE llegaron a `main` al final de la sesión (no usados: parada 4); Leung y Levine 1994 sigue faltando; Zoghbi no da tenting ni AI de la IM
   secundaria; Klein no describe el corazón que oscila en eco.
 
 ## Para el usuario
