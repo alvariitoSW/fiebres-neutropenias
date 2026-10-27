@@ -337,7 +337,7 @@ río y mar) → 39-44 → 45-53.
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
-| 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | pendiente (paso 4: estudio en las 26 fichas; el 3A ya lo tiene. **Plan del paso 4 escrito el 27/10; el usuario eligió la opción A (las 17 piezas nuevas, ≈36 M) el 27/10, sin construir aún**: `autonomo/bloques/b3/plan-paso4.md`, 17 fichas en 6 grupos y 17 piezas de modelo, ≈35-40 M; el usuario decide si se hacen todas las piezas; parte `2026-10-27-b3-plan-paso4.md`). **Parada 2 hecha: PR #35 fusionada en `main` por el usuario (2026-10-27)**; antes, PR https://github.com/alvariitoSW/fiebres-neutropenias/pull/35 (parte `autonomo/partes/2026-10-27-b3-parada2.md`; notas mínimas ≥8,75 tras rejuicio) (antes: parada 1, 2026-10-26): el usuario pide una **vuelta de límites** en las cuatro maquetas antes de la app (sueros sin tope, etc.; paquete §4 «Decisiones del usuario (26/10/2026, sobre las maquetas v3)»); neumotórax a tensión aprobado como escena aparte; esquema del pulmón por revisar. PR en borrador https://github.com/alvariitoSW/fiebres-neutropenias/pull/32 · página https://claude.ai/artifact/BLVPCGzFXLYnXKqoLjBGK6. **Vuelta de límites hecha (27/10)**: shock 8,3 · ritmo 8,5 · receptor 8,8 · pulmón 8,6; pieza común `comun/tope.js`; regla §1.14 (parte `autonomo/partes/2026-10-27-b3-limites.md`). **27/10, el usuario: sí a todo** (shock, ritmo y receptor a la app = parada 2, siguiente; deslizador del receptor como está; esquema del pulmón vale; buscar fuente de los errores de temporización del balón). **Pantallas como las reales (respirador y consola del balón): aprobadas por el usuario (27/10), en `main` como maquetas**, respirador 8,7 · balón 8,7; pieza común `comun/respirador.js`; hueco: errores de temporización del balón sin fuente (parte `autonomo/partes/2026-10-27-b3-pantallas.md`) | Paquete: `autonomo/bloques/b3/encargo.md` |
+| 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | pendiente (paso 4: estudio en las 26 fichas; el 3A ya lo tiene. **Plan del paso 4 escrito el 27/10, sin construir**: `autonomo/bloques/b3/plan-paso4.md`, 17 fichas en 6 grupos y 17 piezas de modelo, ≈35-40 M; el usuario decide si se hacen todas las piezas; parte `2026-10-27-b3-plan-paso4.md`). **Parada 2 hecha: PR #35 fusionada en `main` por el usuario (2026-10-27)**; antes, PR https://github.com/alvariitoSW/fiebres-neutropenias/pull/35 (parte `autonomo/partes/2026-10-27-b3-parada2.md`; notas mínimas ≥8,75 tras rejuicio) (antes: parada 1, 2026-10-26): el usuario pide una **vuelta de límites** en las cuatro maquetas antes de la app (sueros sin tope, etc.; paquete §4 «Decisiones del usuario (26/10/2026, sobre las maquetas v3)»); neumotórax a tensión aprobado como escena aparte; esquema del pulmón por revisar. PR en borrador https://github.com/alvariitoSW/fiebres-neutropenias/pull/32 · página https://claude.ai/artifact/BLVPCGzFXLYnXKqoLjBGK6. **Vuelta de límites hecha (27/10)**: shock 8,3 · ritmo 8,5 · receptor 8,8 · pulmón 8,6; pieza común `comun/tope.js`; regla §1.14 (parte `autonomo/partes/2026-10-27-b3-limites.md`). **27/10, el usuario: sí a todo** (shock, ritmo y receptor a la app = parada 2, siguiente; deslizador del receptor como está; esquema del pulmón vale; buscar fuente de los errores de temporización del balón). **Pantallas como las reales (respirador y consola del balón): aprobadas por el usuario (27/10), en `main` como maquetas**, respirador 8,7 · balón 8,7; pieza común `comun/respirador.js`; hueco: errores de temporización del balón sin fuente (parte `autonomo/partes/2026-10-27-b3-pantallas.md`) | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
@@ -793,9 +793,9 @@ construcción es otra tarea.
 
 | # | Clave | Qué | Estado | Nota |
 |---|---|---|---|---|
-| 1 | `b3-paso4-opciones` | Bloque 3, paso 4: **todas las piezas nuevas o aligerarlo**, con el gasto de cada opción | hecha (2026-10-27): informe https://claude.ai/artifact/HnYNUdSSrtvzdq8QhSj4Qw, **el usuario eligió la A (las 17 piezas nuevas, ≈36 M, 10-12 sesiones) el 27/10** | Parte de `autonomo/bloques/b3/plan-paso4.md` (17 fichas, 17 piezas, ≈35-40 M) |
-| 2 | `eco-calibra` | **B-027 + B-029**: motor diastólico de la eco (E/A, AI, venas pulmonares) y HP crónica que deforma el corazón | hecha (informe, 27/10; espera elección A/B/C) | Informe: https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · parte `2026-10-27-eco-calibra.md` |
-| 3 | `competencias-r` | **B-032**: mapa de lo que un residente debe manejar cada año (R1-R5), camino a la guardia de R2 | hecha a medias (27/10, en main): R1 y «antes de tu primera guardia»; **R2-R5 necesita humano** (BOE y CoBaTrICE bloqueados por el proxy: faltan los PDF de la Orden PJC/564/2026 y del programa CoBaTrICE) | Informe: `autonomo/ideas/competencias-r.html` (https://claude.ai/artifact/PzttLXc1yuWpSdwiQE5R2N). Sin documento de R2; le preocupan shock, vía aérea, parada y neurocrítico |
+| 1 | `b3-paso4-opciones` | Bloque 3, paso 4: **todas las piezas nuevas o aligerarlo**, con el gasto de cada opción | hecha (2026-10-27): informe https://claude.ai/artifact/HnYNUdSSrtvzdq8QhSj4Qw. **27/10: primero dejó la elección al profesor; después, en otra sesión, eligió él la A (las 17 piezas, ≈36 M)** → tarea `b3-paso4` | Parte de `autonomo/bloques/b3/plan-paso4.md` (17 fichas, 17 piezas, ≈35-40 M) |
+| 2 | `eco-calibra` | **B-027 + B-029**: motor diastólico de la eco (E/A, AI, venas pulmonares) y HP crónica que deforma el corazón | hecha (informe, 27/10). **27/10: el usuario elige la A** → tarea `eco-calibra-a` | Informe: https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · parte `2026-10-27-eco-calibra.md` |
+| 3 | `competencias-r` | **B-032**: mapa de lo que un residente debe manejar cada año (R1-R5), camino a la guardia de R2 | hecha a medias (27/10, en main): R1 y «antes de tu primera guardia»; R2-R5 → tarea `competencias-r2r5` (27/10: no habrá PDF; antes «necesita humano») (BOE y CoBaTrICE bloqueados por el proxy: faltan los PDF de la Orden PJC/564/2026 y del programa CoBaTrICE) | Informe: `autonomo/ideas/competencias-r.html` (https://claude.ai/artifact/PzttLXc1yuWpSdwiQE5R2N). Sin documento de R2; le preocupan shock, vía aérea, parada y neurocrítico |
 
 **Encargo `b3-paso4-opciones`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
 - Qué quiero: con el plan del paso 4 ya escrito, dos o tres opciones claras: (A) las 17 piezas nuevas; (B) aligerado:
@@ -831,6 +831,51 @@ construcción es otra tarea.
   preocupa más de la guardia sola con el adjunto?
 - Lo que NO quiero: competencias sin fuente; repetir contenido que ya existe (se enlaza); construir nada aún.
 - Hecho: página con el mapa y la propuesta de tareas que salen de los huecos, con su gasto + parte.
+
+## Decisiones del usuario sobre los informes del Objetivo P (27/10/2026)
+
+El usuario, el 27/10 por la tarde: «Me quedo con la opción A de arreglo completo eco-calibra · hipertrofia, lo que
+decida el profesor · paso 4 del bloque 3: que decida el profesor · competencias de R2 a R5: no voy a pasar los PDF».
+Para R2-R5 eligió, tras avisarle de `CLAUDE.md` §7.1: **otras fuentes que se abran y citadas; lo que no tenga fuente,
+marcado como «propuesta, sin fuente oficial»**. Empiezan el 28/10 (el 27/10 ya iba por encima del aviso de gasto),
+una sesión cada una, a horas distintas (sesiones programadas).
+
+| # | Clave | Qué | Estado | Nota |
+|---|---|---|---|---|
+| 1 | `eco-calibra-a` | Opción A del informe `eco-calibra`: arreglar las 5 piezas del motor de la eco y los dos jueces nuevos | pendiente (empieza el 28/10) | ≈5,5 M en 2 sesiones. Informe https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · copia `autonomo/bloques/eco-mega/calibra-informe.html` |
+| 2 | `b3-paso4` | Paso 4 del bloque 3: **opción A** (las 17 piezas nuevas, elegida por el usuario el 27/10) construida por grupos | pendiente (empieza el 28/10) | Informe https://claude.ai/artifact/HnYNUdSSrtvzdq8QhSj4Qw · plan `autonomo/bloques/b3/plan-paso4.md`. Rama `auto/b3` |
+| 3 | `competencias-r2r5` | Completar el mapa de competencias de R2 a R5 | pendiente (empieza el 28/10) | Sobre `autonomo/ideas/competencias-r.html`; informe, no toca la app |
+
+**Encargo `eco-calibra-a`** · tipo: arreglo del motor (técnico; a `main` con los jueces en verde) · aprobado el 27/10/2026
+- Qué quiero: la opción A entera del informe: (1) la AI y la AD suman su contracción a la pasiva; (2) el freno de las
+  venas pulmonares, sin reflujo de ~500 mL/s; (3) e′ que cambia con la relajación de cada forma; (4) HP crónica a
+  fondo sin aplastar el VD ni pasar del tope del dibujo; (5) a fondo, E nunca 0. Y los dos jueces: «paciente posible
+  del Doppler» por forma (E/A, E/e′, S/D, TAPSE, velocidades) y cada forma al 100 % sin el aviso de recorte.
+- **Hipertrofia**: grado I, grado II o mando de I a II lo **decide el profesor** (potente, modo diseñar) antes de
+  construir, con su fuente (Nagueh 2025), y lo escribe en el plan.
+- Cifras objetivo: las del informe, con su página. Lo que el informe dejó sin cifra se busca y se cita (REGLAS §1.15);
+  si no aparece, hueco con nota, nunca inventado. Las discrepancias (LVEI >1 frente a >1,1; DT de Mukherjee) con nota.
+- Lo que NO quiero: tapar una cifra mala con el dibujo; tocar otras formas fuera de la lista; romper las pruebas de la
+  eco (`node --test 'js/modules/eco/pruebas/*.test.mjs'`, que se recalibran con su fuente, no se borran).
+- Hecho: las 9 formas a 0, defecto y 100 % dentro del «paciente posible» (tabla con `calibra-tabla.mjs`), los dos
+  jueces en `jueces.mjs --eco` en verde, la hipertrofia enseña E/A <1 si el profesor elige grado I, parte.
+
+**Encargo `b3-paso4`** · tipo: bloque (M5) · aprobado el 27/10/2026
+- Qué quiero: la **opción A** del informe (las 17 piezas nuevas, ≈36 M, 10-12 sesiones), **elegida por el usuario el
+  27/10** (sustituye a «que elija el profesor»: ya no hace falta ese paso). Se construye por grupos de fichas, una sesión por modelo o grupo (REGLAS §4.7),
+  respetando el límite de gasto diario.
+- Lo que NO quiero: pasar del límite de gasto del día.
+- Hecho: el de las paradas del bloque `b3` (parada 3: el bloque entero, con el usuario).
+
+**Encargo `competencias-r2r5`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
+- Qué quiero: R2, R3, R4 y R5 en el mapa de `competencias-r`, con lo que la app ya tiene para cada competencia
+  (✅ / 🟡 / ❌, con enlace).
+- Fuentes: el BOE y CoBaTrICE no se abren desde el entorno y el usuario no los pasará. Buscar otras que sí se abran
+  (SEMICYUC, ESICM, itinerarios formativos de Medicina Intensiva publicados por hospitales docentes) y citarlas con
+  URL literal. **Lo que no tenga fuente va marcado, a la vista, como «propuesta, sin fuente oficial»** (decisión del
+  usuario del 27/10, excepción acotada a este mapa).
+- Lo que NO quiero: presentar una propuesta como si fuera el programa oficial; construir nada en la app.
+- Hecho: página actualizada (mismo Artifact), parte y fila en `autonomo/SESIONES.md`.
 
 ## Lo que aún no está aprobado
 
