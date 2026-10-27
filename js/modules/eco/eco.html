@@ -105,16 +105,18 @@
                 <label class="cv-sonda-fila"><span>Fondo</span><input type="range" id="cv-img-tgc3" min="-12" max="12" step="1" value="0"><b id="cv-img-tgc3-v">0</b></label>
                 <div class="cv-fila"><button type="button" class="cv-mini cv-mini-grande" id="cv-img-cero">↺ Mandos a cero</button></div>
                 <p class="cv-muted">El triángulo del borde izquierdo de la imagen marca la profundidad del foco: ahí el haz es más estrecho y la imagen, más nítida.</p>
-                <p class="cv-muted"><b>Señálalo</b>: marca en la imagen de arriba qué es cada artefacto. Vuelve a tocar el botón para quitarlo.</p>
-                <div class="cv-chips" id="cv-senalalo" role="group" aria-label="Señalar un artefacto en la imagen">
+                <p class="cv-muted"><b>Señálalo</b>: marca en la imagen de arriba qué es cada artefacto, o qué festón de la mitral y qué cúspide corta el plano. Vuelve a tocar el botón para quitarlo.</p>
+                <div class="cv-chips" id="cv-senalalo" role="group" aria-label="Señalar un artefacto o una válvula en la imagen">
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="sombra" aria-pressed="false">Sombra</button>
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="refuerzo" aria-pressed="false">Refuerzo</button>
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="reverb" aria-pressed="false">Rebotes</button>
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="especular" aria-pressed="false">Pared apagada</button>
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="foco" aria-pressed="false">Foco</button>
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="ventana" aria-pressed="false" hidden>Pulmón</button>
+                    <button type="button" class="cv-mini cv-mini-grande" data-senal="valvas" aria-pressed="false">Festones y cúspides</button>
                 </div>
                 <p class="cv-muted">Origen de las frases: fisiología general (física de los ultrasonidos). Ilustrativo, sin ficha.</p>
+                <p class="cv-muted"><b>Festones y cúspides</b>: A, valva anterior de la mitral; P, posterior; 1 lateral (junto a la comisura anterolateral), 2 central y 3 medial (junto a la posteromedial), según Carpentier. CD, CI y NC: cúspides aórticas coronaria derecha, izquierda y no coronaria; T ant, T sept y T post: valvas anterior, septal y posterior de la tricúspide. Fuente: <a class="biblio-link" href="docs/hahn-2013-ete-completa-ase-sca.pdf#page=22" target="_blank" rel="noopener">Hahn 2013, guía de eco transesofágica de la ASE, p. 942</a>. Es una guía de eco transesofágica: aquí se usa el plano transtorácico equivalente (fisiología general), y qué festón entra cambia con la posición de la sonda (p. 938).</p>
                 <p class="cv-muted"><b>Reto: ventana pobre</b> (apagado). Pruébalo para ver qué pasa en un paciente difícil.</p>
                 <div class="cv-fila"><button type="button" class="cv-mini cv-mini-grande" id="cv-img-ventana" aria-pressed="false">🫁 Ventana pobre: apagada</button></div>
                 <div class="tfg-estado tfg-estado-warn" id="cv-img-ventana-txt" hidden></div>

@@ -17,7 +17,7 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
@@ -231,8 +231,73 @@ export function montarSimulador(raiz, opc = {}) {
     ecoCtx.save(); ecoCtx.fillStyle = ficha('--accent-yellow') || 'white';
     ecoCtx.beginPath(); ecoCtx.moveTo(x, y); ecoCtx.lineTo(x - t * 1.3, y - t); ecoCtx.lineTo(x - t * 1.3, y + t); ecoCtx.closePath(); ecoCtx.fill(); ecoCtx.restore();
   }
+  // celda del canvas (x, y) con corazón (tejido o sangre) o con la escala de centímetros: 1; libre: 0
+  function ocupadoEco(b, px) {
+    const M = b.mitad;
+    return (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba);
+      // la escala de centímetros (junto al borde derecho del abanico) cuenta como ocupada
+      const dx = x - b.cx, dy = y - b.arriba, along = dx * Math.sin(M) + dy * Math.cos(M), perp = dx * Math.cos(M) - dy * Math.sin(M);
+      if (perp > 0 && perp < 30 * px && along > 0 && along < b.prof * b.escala) return 1;
+      if (rr >= b.prof || Math.abs(th) >= M) return 0;
+      const i = Math.min(b.nb - 1, ((th + M) / b.dth) | 0), j = Math.min(b.ns - 1, (rr / b.dr) | 0); return b.tag[j * b.nb + i] ? 1 : 0; };
+  }
+  // C1 · «Señálalo · Válvulas»: nombra el festón de la mitral y la cúspide o valva que corta el plano (valvasEnPlano, de la
+  // geometría de este fotograma). Rótulos cortos en la imagen, cada uno donde menos corazón tapa y sin pisar a otro, con una
+  // línea fina a su tramo; el nombre largo y la fuente (Hahn 2013), en la frase de debajo.
+  const CORTO_VALVA = { 'coronaria derecha': 'CD', 'coronaria izquierda': 'CI', 'no coronaria': 'NC', anterior: 'T ant', posterior: 'T post', septal: 'T sept' };
+  // la frase de debajo de la imagen, corta (va en la parte fija de arriba); la leyenda y la nota de la fuente, en el texto de Señálalo
+  const FRASE_VISTA_VALVAS = {
+    plax: 'Eje largo: P2-A2 (Hahn 2013, p. 937). Aórtica: delante, siempre la coronaria derecha; detrás, la no coronaria o la izquierda (p. 946).',
+    a3c: 'Eje largo: P2-A2 (Hahn 2013, p. 937). Aórtica: delante, siempre la coronaria derecha; detrás, la no coronaria o la izquierda (p. 946).',
+    a4c: '4 cámaras: A3-A2 y P2-P1 (Hahn 2013, p. 932). Tricúspide: la septal y la posterior (p. 932) o la anterior (p. 950): la guía da las dos.',
+    a2c: '2 cámaras: P3 y A3-A2-A1 (Hahn 2013, p. 937).',
+    psaxMv: 'Eje corto mitral: los seis festones, en «boca de pez», cuando las valvas pasan por el plano (Hahn 2013, p. 939).',
+    psaxAo: 'Eje corto aórtico: la no coronaria junto al tabique interauricular; la coronaria derecha, delante (Hahn 2013, p. 939 y 946).',
+  };
+  function senalarValvas(b, partes) {
+    const px = ecoC.width / ecoC.clientWidth, W = ecoC.width, H = ecoC.height, ocupado = ocupadoEco(b, px);
+    const lista = valvasEnPlano(partes, planoEco), cajas = [];
+    const caja = $('#cv-senal-frase'); caja.hidden = false;
+    // la frase junta lo cortado en el último segundo y medio (el corazón entra y sale del plano en cada latido)
+    const ahora = performance.now(), clave = vistaEco + (sondaMovida(sonda) ? '*' : '');
+    if (vistosValvas.clave !== clave) { vistosValvas.clave = clave; vistosValvas.m.clear(); }
+    const corto = (x) => (x.valvula === 'Mitral' ? x.nombre : CORTO_VALVA[x.nombre]);
+    for (const x of lista) vistosValvas.m.set(corto(x), ahora);
+    const vistos = [...vistosValvas.m].filter(([, t]) => ahora - t < 1500).map(([n]) => n);
+    const frase = (vistos.length ? 'Corta: ' + vistos.join(', ') + '. ' : 'Ahora el plano no corta ninguna valva. ') + (sondaMovida(sonda) ? 'Con la sonda movida, el plano ya no es el de la vista.' : (FRASE_VISTA_VALVAS[vistaEco] || ''));
+    if (caja.textContent !== frase) caja.textContent = frase;
+    ecoCtx.save(); ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; ecoCtx.textBaseline = 'middle'; ecoCtx.textAlign = 'left';
+    const amarillo = ficha('--accent-yellow') || 'white', fondo = ficha('--bg-main') || 'black';
+    // de izquierda a derecha según su tramo: las líneas no se cruzan tanto; cruzar otra línea cuesta como tapar corazón
+    const cruza = (p1, p2, q1, q2) => { const o = (a, b, c) => Math.sign((b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]));
+      return o(p1, p2, q1) !== o(p1, p2, q2) && o(q1, q2, p1) !== o(q1, q2, p2); };
+    for (const x of lista.slice().sort((a, b) => a.u - b.u)) {
+      const texto = corto(x), w = ecoCtx.measureText(texto).width + 10 * px, h = 18 * px;
+      const ax = b.cx + x.u * b.escala, ay = b.arriba + x.v * b.escala, previa = memValvas.get(texto); let mejor = null;
+      for (let y = 6 * px; y <= H - 26 * px - h; y += 6 * px) for (let xx = 3 * px; xx <= W - w - 3 * px; xx += 6 * px) {
+        let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 4; ix++) n += ocupado(xx + w * (ix + 0.5) / 4, y + h * (iy + 0.5) / 3);
+        const choca = cajas.some(c => xx < c.x + c.w + 3 * px && xx + w + 3 * px > c.x && y < c.y + c.h + 2 * px && y + h + 2 * px > c.y) ? 1 : 0;
+        const vertice = Math.abs(xx + w / 2 - b.cx) < w / 2 + 14 * px && y < b.arriba + 24 * px ? 1 : 0;
+        const pie = [Math.max(xx, Math.min(xx + w, ax)), Math.max(y, Math.min(y + h, ay))], cruces = cajas.reduce((t, c) => t + (cruza(pie, [ax, ay], c.pie, [c.ax, c.ay]) ? 1 : 0), 0);
+        const costo = choca * 1e6 + cruces * 3000 + n * 300 + vertice * 5000 + 3 * Math.hypot(xx + w / 2 - ax, y + h / 2 - ay) + (previa ? 4 * Math.hypot(xx - previa.x, y - previa.y) : 0);
+        if (!mejor || costo < mejor.costo) mejor = { x: xx, y, costo };
+      }
+      if (!mejor) continue;
+      cajas.push({ x: mejor.x, y: mejor.y, w, h, ax, ay, texto, pie: [Math.max(mejor.x, Math.min(mejor.x + w, ax)), Math.max(mejor.y, Math.min(mejor.y + h, ay))] }); memValvas.set(texto, { x: mejor.x, y: mejor.y });
+    }
+    // primero las líneas (debajo de todas las cajas) y la marca del tramo; luego las cajas
+    ecoCtx.strokeStyle = amarillo; ecoCtx.fillStyle = amarillo; ecoCtx.lineWidth = px; ecoCtx.globalAlpha = 0.85;
+    for (const c of cajas) { ecoCtx.beginPath(); ecoCtx.moveTo(c.pie[0], c.pie[1]); ecoCtx.lineTo(c.ax, c.ay); ecoCtx.stroke();
+      ecoCtx.beginPath(); ecoCtx.arc(c.ax, c.ay, 2 * px, 0, 2 * Math.PI); ecoCtx.fill(); }
+    for (const c of cajas) { ecoCtx.globalAlpha = 0.85; ecoCtx.fillStyle = fondo; ecoCtx.fillRect(c.x, c.y, c.w, c.h);
+      ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = amarillo; ecoCtx.fillText(c.texto, c.x + 5 * px, c.y + c.h / 2 + px); }
+    ecoCtx.restore();
+    return cajas;
+  }
+  const memValvas = new Map(), vistosValvas = { clave: null, m: new Map() };
   // «Señálalo»: contorno de la zona del artefacto y un rótulo que se coloca donde menos corazón tapa
-  function senalar(tipo, b) {
+  function senalar(tipo, b, partes) {
+    if (tipo === 'valvas') return senalarValvas(b, partes);
     const px = ecoC.width / ecoC.clientWidth, W = ecoC.width, H = ecoC.height;
     const pt = (r, th) => [b.cx + b.escala * r * Math.sin(th), b.arriba + b.escala * r * Math.cos(th)];
     const sector = (t0, t1, r0, r1) => { const p = []; for (let k = 0; k <= 12; k++) p.push(pt(r0, t0 + (t1 - t0) * k / 12)); for (let k = 12; k >= 0; k--) p.push(pt(r1, t0 + (t1 - t0) * k / 12)); return p; };
@@ -286,12 +351,7 @@ export function montarSimulador(raiz, opc = {}) {
     // rótulo: se prueba una rejilla de sitios y gana el que tapa menos corazón (celdas con tejido o sangre), sin pisar las
     // esquinas de abajo (título y fase de la imagen), el vértice ni el borde; entre los que tapan igual, el más cercano al sitio
     ecoCtx.font = `600 ${Math.round(12 * px)}px system-ui, sans-serif`; const w = ecoCtx.measureText(rotulo).width + 10 * px, h = 18 * px;
-    const ocupado = (x, y) => { const rr = Math.hypot(x - b.cx, y - b.arriba) / b.escala, th = Math.atan2(x - b.cx, y - b.arriba);
-      // la escala de centímetros (junto al borde derecho del abanico) cuenta como ocupada
-      const dx = x - b.cx, dy = y - b.arriba, along = dx * Math.sin(M) + dy * Math.cos(M), perp = dx * Math.cos(M) - dy * Math.sin(M);
-      if (perp > 0 && perp < 30 * px && along > 0 && along < b.prof * b.escala) return 1;
-      if (rr >= b.prof || Math.abs(th) >= M) return 0;
-      const i = Math.min(b.nb - 1, ((th + M) / b.dth) | 0), j = Math.min(b.ns - 1, (rr / b.dr) | 0); return b.tag[j * b.nb + i] ? 1 : 0; };
+    const ocupado = ocupadoEco(b, px);
     const [ax, ay] = ancla || [W / 2, H / 2]; let mejor = null;
     for (let y = 6 * px; y <= H - 26 * px - h; y += 8 * px) for (let x = 3 * px; x <= W - w - 3 * px; x += 10 * px) {
       let n = 0; for (let iy = 0; iy < 3; iy++) for (let ix = 0; ix < 6; ix++) n += ocupado(x + w * (ix + 0.5) / 6, y + h * (iy + 0.5) / 3);
@@ -673,12 +733,13 @@ export function montarSimulador(raiz, opc = {}) {
         rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
-    if (img.senal) senalar(img.senal, im);
+    const cajasValvas = img.senal ? senalar(img.senal, im, geoEco.partes) : null;
     $('#cv-eco-titulo').textContent = NOMBRE_VISTA[vistaEco] + (sondaMovida(sonda) ? ' · sonda libre' : '');
     ecoC.setAttribute('aria-label', `Ecografía reconstruida, ${VISTAS[vistaEco].nombre}, fase ${s.fase}`);
     $('#cv-eco-fase').textContent = `${s.fase} · ${FASES[s.fase]}`;
     $('#cv-eco-nombre').textContent = VISTAS[vistaEco].nombre;
     ecoInfo = { t: s.tLatido, tMotor: s.t, vista: vistaEco, rotulos: rot, propia, abiertos: im.abiertos, modo: modoEco, theta: thetaM, sonda: { ...sonda }, plano: planoEco,
+      valvas: Array.isArray(cajasValvas) ? cajasValvas.map(c => ({ texto: c.texto, x: c.x, y: c.y, w: c.w, h: c.h })) : null,
       color: colorOn, muestra: gate ? { ...gate } : null, fuente: fuenteD ? fuenteD.nombre : null, medidas: medD };
   }
 

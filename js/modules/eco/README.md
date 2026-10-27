@@ -314,6 +314,21 @@ late con la base. Eco: clase `linea` con el tejido `fibroso` de `js/data/eco-tej
 fisiología general). Prueba en `geometria.test.mjs` (marca B5): sus bordes tocan la raíz y la valva anterior, no baja del anillo y
 no mide más de 14 mm, en 8 escenarios × el latido.
 
+**Festones de la mitral y cúspides con nombre (C1, eco-mega parada 2, octubre 2026).** En `corazon-geo.mjs` cada valva lleva la marca
+`segmentos` ([nombre, uu0, uu1]) y `malla` ([ni, nj]). Mitral: las dos valvas (rejilla 20 × 7) se parten en A1-A3 y P1-P3 por el mismo
+uu (0 = comisura posteromedial, 1 = anterolateral; límites 0,3 y 0,7, **ilustrativos**; P2 el mayor, Hahn 2013 p. 942), así que cada A
+queda frente a su P en la línea de cierre. La posterior tiene dos hendiduras (el borde libre se acorta un 35 % × la apertura en
+uu 0,3 y 0,7: abierta se ven los festones; cerrada, sin hueco). Cuerdas: dos por festón al borde libre, del papilar de su mitad
+(anterolateral la lateral, posteromedial la medial; Hahn p. 942-943). Aórtica: coronaria derecha, no coronaria e izquierda, por el
+ostio coronario de su seno. Tricúspide: anterior, posterior y septal con su anchura en el anillo 1 : 0,75 : 1 (Hahn p. 950). El
+corazón devuelve `comisuras` (anterolateral, posteromedial y el centro de la línea de cierre, ya movidos). `valvasEnPlano(partes, P)`
+(`ecografia.mjs`) dice qué segmentos corta un plano y dónde. En el simulador, «Señálalo · Festones y cúspides» los rotula (A2, P2,
+CD, CI, NC, T ant/sept/post) donde menos corazón tapan, sin pisarse ni cruzar sus líneas, y la frase cita lo que Hahn da para el plano
+transesofágico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p. 932), 2 cámaras P3-A3A2A1 (p. 937), eje corto basal
+con los seis (p. 939). Pruebas en `geometria.test.mjs` (marca C1): qué festones corta cada vista y el plano comisural (P3-A2-P1,
+p. 935), posición de cúspides y valvas, sin cruces entre valvas ni con la cortina, hendiduras solo abierta, apertura y cierre a su
+tiempo y cuerdas desde su papilar. Pendiente: color por festón en el 3D y la pulmonar con nombre.
+
 **Hipovolemia con «beso de papilares» (P2, eco-mega parada 2, octubre 2026).** `LIMITES.vi` baja de [35, 320] a [8, 320]: el dibujo ya sigue
 al motor hasta cavidades de ~10 mL (a 8 mL el radio medio aún es 5,9 mm y la pared de volumen constante llega a 24 mm; sin cruces).
 Los papilares se hunden hacia el eje (`DEP_PAP` = 1,0 × su radio, antes 0,6; siguen a ≤3 mm de la pared en su mitad inferior, prueba de B4).
