@@ -47,6 +47,8 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
   clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
 - [ ] **Carpeta aparte** (REGLAS §4.6): si trabajas en un `git worktree`, lo primero es
   `git checkout -B <tu rama> origin/auto/<bN>`; nunca partas de `main` ni de una versión vieja.
+- [ ] **Carpeta compartida** (REGLAS §4.6): nunca `git stash` ni `pkill`/`kill` amplios; para solo tu servidor, por
+  su puerto, y lee el puerto de `PUERTO=`.
 - [ ] **Pacientes de la lista del bloque** (encargo): sin nombres repetidos con otros datos.
 - [ ] Mayéutica (REGLAS §8):
   - Guía socrática y Examen;
