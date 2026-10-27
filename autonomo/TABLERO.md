@@ -783,6 +783,55 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
   pacientes; librerías nuevas sin que el usuario las elija (three.js sigue sin decidir).
 - Fuente: la que dice cada fila; sin PDF, la tarea se queda `aparcada`.
 
+## Objetivo P · Informes con gasto antes de construir (aprobado el 27/10/2026)
+
+El usuario, el 27/10: «Apruebo que se empiece esto, pero antes hay que hacer su /plan-socialista con sus gastos y su
+informe sobre qué hacer para que lo apruebe y empecemos». Cada tarea es **solo un informe**: no toca la app. Sale una
+página para el móvil (Artifact) con qué se haría, en qué orden, las opciones y el **gasto estimado de cada opción**
+(con `gasto.mjs` y los presupuestos de arriba), y un parte. Directo a `main`. Cuando el usuario elija, la
+construcción es otra tarea.
+
+| # | Clave | Qué | Estado | Nota |
+|---|---|---|---|---|
+| 1 | `b3-paso4-opciones` | Bloque 3, paso 4: **todas las piezas nuevas o aligerarlo**, con el gasto de cada opción | pendiente | Parte de `autonomo/bloques/b3/plan-paso4.md` (17 fichas, 17 piezas, ≈35-40 M) |
+| 2 | `eco-calibra` | **B-027 + B-029**: motor diastólico de la eco (E/A, AI, venas pulmonares) y HP crónica que deforma el corazón | pendiente | Solo el paso 1 (informe); la recalibración, si el usuario la aprueba |
+| 3 | `competencias-r` | **B-032**: mapa de lo que un residente debe manejar cada año (R1-R5), camino a la guardia de R2 | pendiente | Las dudas de B-032 siguen abiertas: se le preguntan al empezar |
+
+**Encargo `b3-paso4-opciones`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
+- Qué quiero: con el plan del paso 4 ya escrito, dos o tres opciones claras: (A) las 17 piezas nuevas; (B) aligerado:
+  cada ficha que pueda, con un modelo que ya existe (estado nuevo en vez de pieza nueva); (C) intermedia, si tiene
+  sentido. Por cada ficha: qué modelo usa, qué se pierde para estudiar si se aligera, y gasto y sesiones.
+- Para qué: que el usuario decida cuánto gastar en el paso 4 sabiendo qué gana.
+- Antes de estimar, contar las piezas en el código (propuesta de ahorro de la bitácora, 27/10): sacar con `node -e`
+  las claves de estado de cada modelo y cruzarlas con la cobertura.
+- Lo que NO quiero: construir nada; estimar sin contar.
+- Fuente: `autonomo/bloques/b3/plan-paso4.md`, `cobertura` del b3, la tabla de presupuestos de este tablero.
+- Hecho: página con las opciones y su gasto + parte; el usuario elige.
+
+**Encargo `eco-calibra`** · tipo: informe (no toca la app) · aprobado el 27/10/2026 (B-027 y B-029)
+- Qué quiero: el informe que pide B-027 y el punto (1) de B-029. Qué está mal (E/A 10 en la hipertrofia y 3,9 en la
+  dilatada; flujo de venas pulmonares ×2-3; onda a de la AI ~15 mmHg; D venosa del TEP 0; AD igual; `hpcronica` a
+  fondo aplasta el VD y el dibujo recorta el volumen), la calibración objetivo con su fuente y página (Nagueh 2025,
+  Lang 2015 p. 24, Mukherjee 2025, ESC/ERS 2022, ya en `docs/`), el orden, qué pruebas hay que recalibrar y el
+  **gasto estimado**. Incluir las dos propuestas de juez: «paciente posible del Doppler» por forma (E/A, E/e′, S/D,
+  TAPSE, velocidades) y cada forma al 100 % sin el aviso de recorte del dibujo.
+- Para qué: que la eco enseñe la lección bien (con mala relajación, E/A <1) y no salgan corazones imposibles.
+- Lo que NO quiero: tocar el motor en esta tarea; cifras sin página.
+- Fuente: `autonomo/bloques/eco-mega/p3-f3b.md`, `profesor-p3.md`, `js/modules/eco/README.md` y los PDF citados.
+- Hecho: página con el diagnóstico, la cifra objetivo de cada forma, las opciones y su gasto + parte.
+
+**Encargo `competencias-r`** · tipo: mapa (informe, no toca la app) · aprobado el 27/10/2026 (B-032)
+- Qué quiero: mapa de competencias por año (R1 a R5) con lo que
+  tiene ya la app para cada una (✅ / 🟡 / ❌, con enlace), y arriba «lo que necesitas antes de tu primera guardia
+  sin R mayor».
+- Fuente: el PIF de R1 (`js/data/pif-rotaciones.js`, PFI-UMI-R1-01); para R2-R5, buscar y citar (supongo) el
+  programa oficial de la especialidad de Medicina Intensiva (BOE) y el marco europeo CoBaTrICE (URL verificada o
+  PDF en `docs/`); si no se encuentran, hueco. Usa el inventario de estudio (B-014) y «La UCI en el bolsillo» (G1-G6).
+- Al empezar, preguntar al usuario (como mucho estas dos): ¿tiene un documento del hospital para R2? ¿qué le
+  preocupa más de la guardia sola con el adjunto?
+- Lo que NO quiero: competencias sin fuente; repetir contenido que ya existe (se enlaza); construir nada aún.
+- Hecho: página con el mapa y la propuesta de tareas que salen de los huecos, con su gasto + parte.
+
 ## Lo que aún no está aprobado
 
 Vive en `autonomo/BITACORA.md` (skill `/bitacora`): lo apuntado que espera el visto bueno del usuario, lo que espera
