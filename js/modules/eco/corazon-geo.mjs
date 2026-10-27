@@ -25,7 +25,15 @@ const mix = (a, b, t) => a + (b - a) * t;
 // la poscarga del motor) respecto a la FE normal del VD (58 %, Lang p. 23). Ilustrativo: la fuente no da la relación.
 export const ACORT_LONG_VD = 24 / 71, FE_VD_REF = 0.58;
 export const CONTRAE_TSVD = 0.2;      // fracción del diámetro del infundíbulo que se cierra con la eyección normal (ilustrativo)
-export const acortamientoVd = (feVd) => ACORT_LONG_VD * clamp(feVd / FE_VD_REF, 0, 1.3);
+// p3-tapse · El acortamiento longitudinal NO cae lineal hasta 0 con la FE del VD: aunque la pared libre apenas se contraiga
+// (sobrecarga de presión, FE del VD de 10-15 %), el anillo tricuspídeo sigue bajando por la tracción del VI (tabique y
+// plano AV comunes) y por el movimiento del corazón entero. Por eso el TAPSE del fallo grave del VD queda en unos 8-12 mm y
+// no en 3-5 mm. Curva cóncava (FE/FE normal)^0,58: vale 0 sin eyección (el anillo no baja en telediástole), ~0,95 con la FE
+// normal y ~0,4 con una FE de 13 %. Ilustrativa (fisiología general; las fuentes de `docs/` dan el umbral, no la ley:
+// Lang p. 23 <17 mm anormal; Mukherjee 2025 p. 145 llama grave a ≤10 mm, no a 4 mm). Exponente elegido para que
+// la FE normal del motor dé 24 mm y el fallo grave (FE 9-13 %) 8-9 mm.
+export const EXP_ACORT_VD = 0.58;
+export const acortamientoVd = (feVd) => ACORT_LONG_VD * Math.pow(clamp(feVd / FE_VD_REF, 0, 1.3), EXP_ACORT_VD);
 /** TAPSE (mm) de un latido del motor (motor.ultimo): acortamiento × largo telediastólico del VD. */
 export const tapseDeLatido = (u, mio = 1) => Math.min(35, acortamientoVd(u.feD) * geomVi(u.edv, mio).Le * REF.lVdRel);
 export const EXP_AREA_VD = 0.58;
