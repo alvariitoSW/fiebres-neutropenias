@@ -42,10 +42,10 @@ export function bomba(P, { l1 = '', l2 = '', avance = 0.35, candado = false, pie
   const ajusta = (txt, px) => { const n = String(txt).length || 1, fs = Math.max(8.2 / e, Math.min(px / e, ANCHO / (n * 0.6))); return { fs: f1(fs), lt: n * 0.6 * fs > ANCHO ? ` textLength="${ANCHO}" lengthAdjust="spacingAndGlyphs"` : '' }; };
   const a1 = ajusta(l1, 8.4), a2 = ajusta(l2, 10.6);
   // las dos líneas, una debajo de otra dentro de la pantalla (22 de alto): si la escala agranda la letra, la segunda
-  // cede tamaño (no baja del mínimo) para no pisar a la primera
-  const y1 = f1(0.8 * a1.fs), hueco = 22.5 - y1 - 0.25 * a1.fs;
+  // cede tamaño (no baja del mínimo) para no pisar a la primera; el hueco es amplio porque el texto va inclinado (isométrico)
+  const y1 = f1(0.8 * a1.fs), hueco = 24 - y1 - 0.6 * a1.fs;
   if (a2.fs > hueco / 0.95) a2.fs = f1(Math.max(8.2 / e, hueco / 0.95));
-  const y2 = f1(Math.min(23.5, y1 + 0.25 * a1.fs + 0.95 * a2.fs));
+  const y2 = f1(y1 + 0.6 * a1.fs + 0.95 * a2.fs);
   const linea = (a, b, extra) => { const p = P.iso(a), q = P.iso(b); return `<line x1="${f1(p[0])}" y1="${f1(p[1])}" x2="${f1(q[0])}" y2="${f1(q[1])}" ${extra}/>`; };
   const cara = (pts) => camino(pts.map(P.iso), true);
   let h = `<g${id ? ` id="${id}"` : ''} class="bomba-jeringa">`;
