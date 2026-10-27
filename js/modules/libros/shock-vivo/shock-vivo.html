@@ -1,13 +1,81 @@
     <button class="back-btn btn-volver-libros-menu" id="shv-volver">← VOLVER</button>
-    <!-- El shock a pie de cama: monitor y soporte (Marino caps. 14-17). Modelo vivo de Libros, en construcción: el constructor llena el hueco. Sus fichas son las de
-         Merino Cardiología. Lógica en shock-vivo/index.js. Prefijo de clases e ids: shv-. -->
+    <!-- El shock a pie de cama: monitor y soporte (Marino caps. 14-17). Modelo vivo de Libros; sus fichas son las de
+         Merino Cardiología. Viene de la maqueta aprobada autonomo/maquetas/b3-shock.html. Lógica en shock-vivo/ (index.js
+         arranca; pagina.js es el modelo), datos en js/data/shock-vivo-data.js, CSS acotado en estilos.js.
+         Prefijo de clases propias e ids: shv-. -->
     <div class="shv-raiz" id="shv-raiz" data-modelo-vivo>
       <header class="shv-cabecera">
         <p class="shv-eyebrow">Modelo vivo · Marino caps. 14-17</p>
         <h2 class="shv-titulo">El shock a pie de cama: <em>monitor y soporte</em></h2>
       </header>
-      <div id="shv-modelo">
-        <!-- [HUECO constructor shock: el modelo] -->
-        <p class="shv-construccion">En construcción</p>
-      </div>
+      <div class="shv-main" id="shv-modelo">
+  <div class="interruptor" role="tablist" aria-label="Modo">
+    <button type="button" role="tab" id="shv-modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="shv-modo-qs" aria-selected="false">¿Qué shock es?</button>
+    <!-- [HUECO shock parte 2: Mayéutica] la pestaña «Mayéutica» y su zona (#shv-zona-may) -->
+  </div>
+  <section id="shv-zona-pac" aria-label="Pacientes"><div class="pacientes" id="shv-pacientes"></div><p class="ficha-pac" id="shv-ficha-pac"></p></section>
+
+  <section class="monitor" id="shv-monitor" aria-label="Monitor de cabecera">
+    <div class="mon-cab"><span class="quien" id="shv-mon-quien">Monitor</span>
+      <button type="button" class="chip-b" id="shv-obj-marino" aria-pressed="true" aria-label="Objetivos de Marino">Marino</button><button type="button" class="chip-b" id="shv-obj-umi" aria-pressed="false" aria-label="Objetivos del Manual UMI">UMI</button>
+      <button type="button" class="chip-b" id="shv-enclavar" aria-pressed="false" aria-label="Enclavar: inflar el balón del catéter y leer la PCP">Cuña</button>
+      <button type="button" class="chip-b" id="shv-pausa" aria-pressed="false" aria-label="Pausa">❚❚</button></div>
+    <div class="mon-cuerpo"><svg id="shv-trazas" class="mon-trazas" role="img" aria-label="Curvas del monitor: ECG, presión arterial, presión de la arteria pulmonar, PVC, pletismografía y capnografía"></svg><div class="cifras" id="shv-cifras"></div></div>
+    <div class="calc" id="shv-calc"></div>
+    <div class="discrepa" id="shv-discrepa" hidden></div>
+    <div class="consola-tira" id="shv-consola" hidden></div>
+    <div class="detalle-fila" id="shv-detalle" hidden></div>
+    <div class="velo-tapa" id="shv-velo-mon" hidden>Primero predices. El monitor sale al contestar.</div>
+  </section>
+
+  <section class="iabp" id="shv-iabp" aria-label="Consola del balón de contrapulsación" hidden></section>
+  <section id="shv-zona-qs" class="formato" hidden aria-live="polite"></section>
+  <section id="shv-zona-may" class="formato" hidden aria-live="polite"></section>
+  <section class="escena-caja" id="shv-escena" aria-label="Dentro del paciente" data-dock-pliega>
+    <div class="esc-pest" id="shv-esc-pest"></div>
+    <svg id="shv-esc-svg" class="escena-aparato" role="img" aria-label="El paciente o el aparato, movido por el mismo motor que el monitor"></svg>
+    <canvas id="shv-esc-eco" hidden role="img" aria-label="Ecocardiograma en apical de cuatro cámaras, formado con el ecógrafo de la app sobre el mismo motor"></canvas>
+    <span class="fig-esq" id="shv-fig-esq" hidden></span>
+    <div class="sello" id="shv-sello" hidden></div>
+    <div class="velo-tapa" id="shv-velo-esc" hidden>El dibujo, al contestar.</div>
+  </section>
+  <section id="shv-bajo-escena" style="display:grid; gap:6px">
+    <div id="shv-mandos"></div>
+    <div class="discrepa" id="shv-discrepa-ap" hidden></div>
+    <div class="leyenda" id="shv-leyenda"></div><p class="leyenda-txt" id="shv-leyenda-txt"></p>
+    <div id="shv-pierna" hidden></div>
+  </section>
+
+
+  <section id="shv-abajo" style="display:grid; gap:6px">
+    <details class="plegable" id="shv-pleg-lab" open><summary>Laboratorio y tendencias, con su hora</summary><div class="lab" id="shv-lab"></div><svg class="tendencia" id="shv-tend" viewBox="0 0 360 64" role="img" aria-label="Tendencias por hora"></svg><p class="para" id="shv-lab-nota"></p></details>
+    <details class="plegable"><summary>Las fuentes de este estado</summary><ul class="lista" id="shv-fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que discrepa y lo que la fuente no dice</summary><div id="shv-notas" style="display:grid; gap:6px"></div></details>
+    <details class="plegable"><summary>Así lo dibuja el libro</summary><div class="tira" id="shv-tira"></div></details>
+    <details class="plegable"><summary>Para profundizar</summary><ul class="lista" id="shv-profundizar"></ul></details>
+  </section>
+
+</div>
+
+
+<div class="dock" id="shv-dock" data-dock-min="160">
+  <div class="dock-in" id="shv-dock-explorar">
+    <div class="frase" id="shv-frase"><span class="frase-txt" id="shv-frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="shv-btn-guia" aria-label="Explicación guiada de este estado">Guía</button></div>
+    <div class="dock-tabs" role="tablist" id="shv-dock-tabs">
+      <button type="button" role="tab" data-pest="grav" aria-selected="true">Gravedad</button>
+      <button type="button" role="tab" data-pest="vol" aria-selected="false">Volumen</button>
+      <button type="button" role="tab" data-pest="far" aria-selected="false">Fármacos</button>
+      <button type="button" role="tab" data-pest="sop" aria-selected="false">Soporte</button>
+      <button type="button" role="tab" data-pest="reloj" aria-selected="false">Reloj</button>
+    </div>
+    <div class="dock-panel" id="shv-dock-panel"></div>
+  </div>
+  <div class="dock-in" id="shv-dock-guia" hidden></div>
+  <div class="dock-in" id="shv-dock-est" hidden><div class="pasos" id="shv-dock-pasos"></div><div class="dock-est-txt"><span id="shv-dock-est-izq"></span><span id="shv-dock-est-der"></span></div></div>
+</div>
+<dialog id="shv-visor"><img id="shv-visor-img" alt=""><p id="shv-visor-txt"></p><div class="fila" style="justify-content:space-between; margin-top:6px"><span id="shv-visor-cita"></span><button type="button" class="b" id="shv-visor-cerrar">Cerrar</button></div></dialog>
+
+
+
     </div>

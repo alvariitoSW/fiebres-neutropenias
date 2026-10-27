@@ -18,7 +18,7 @@ const LETRA_MIN = 8;
 // motor común core/mayeutica-motor.js; el ácido-base vivo pinta el suyo con la clase abv-pregunta). Todos tienen frase.
 const FRASES = {
     'agua-viva': '#agv-frase', 'acidobase-vivo': '#abv-frase', 'capilar-vivo': '#cpv-frase', 'cateter-vivo': '#ctv-frase',
-    'muralla-viva': '#mur-frase', 'telar-vivo': '#tel-frase', 'inmersion-viva': '#inm-frase', 'vaso-vivo': '#vso-frase',
+    'muralla-viva': '#mur-frase', 'telar-vivo': '#tel-frase', 'inmersion-viva': '#inm-frase', 'vaso-vivo': '#vso-frase', 'shock-vivo': '#shv-frase-txt',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';

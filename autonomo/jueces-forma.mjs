@@ -66,6 +66,9 @@ export const MODELOS = {
     // El vaso que sangra: Explorar | Mayéutica (sin Conceptos: cada estado lleva su explicación guiada)
     'vaso-vivo': { raiz: '#vso-raiz', enlace: { especialidad: 'libros', view: 'vasoVivo' }, clave: 'vasoVivo', modo: { explorar: '#vso-modo-explorar', mayeutica: '#vso-modo-preguntas' },
         estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
+    // El shock a pie de cama (bloque 3, parte 1: el modelo; la Mayéutica va en la parte 2): Explorar | ¿Qué shock es?
+    'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar' },
+        estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
