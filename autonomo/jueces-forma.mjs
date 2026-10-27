@@ -69,6 +69,9 @@ export const MODELOS = {
     // El shock a pie de cama (bloque 3, parte 1: el modelo; la Mayéutica va en la parte 2): Explorar | ¿Qué shock es?
     'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar' },
         estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
+    // El corazón eléctrico (parte 1: sin Mayéutica todavía, por eso sin botones de modo): el estado va en data-ritmo-vivo
+    'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar' },
+        estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
