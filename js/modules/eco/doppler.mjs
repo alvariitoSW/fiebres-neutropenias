@@ -32,6 +32,12 @@ export function velOrificio(n, s, areas) {
   return q / (areas[n] / 100 * Math.max(0.15, ap));
 }
 
+/**
+ * Velocidad (cm/s) del chorro regurgitante mitral en una muestra del motor: Q / EROA, con Q = EROA · 50 · √ΔP (motor.mjs),
+ * es decir v = 50·√ΔP cm/s (= √ΔP/2 m/s: Bernoulli, ΔP = 4v²; ~5 m/s con ΔP VI−AI de 100 mmHg). 0 sin reflujo.
+ */
+export const velRegMitral = (s, eroa) => (eroa > 0 && (s.qMitReg || 0) > 0 ? s.qMitReg / eroa : 0);
+
 /** Velocidad media en el anillo (cm/s): la del tracto de salida bajo una sigmoidea abierta. */
 export const velTubo = (n, s, areas) => Math.max(0, s[VALV[n].q] || 0) / (areas[n] / 100);
 
@@ -58,6 +64,14 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
     const ap = Math.max(0.15, apertura(VALV[n], s));
     // vTubo: en el tracto de salida, por debajo de la válvula, la sangre llena todo el anillo (Q / área)
     valvulas.push({ n, c, dir, a: Math.sqrt(areas[n] * ap / Math.PI), aTubo: Math.sqrt(areas[n] / Math.PI), v0, vTubo: velTubo(n, s, areas), salida: !!SALIDA[n] });
+  }
+  // P5b · chorro de la insuficiencia mitral: VI → AI desde la coaptación (central en la IM funcional). Existe en geom si hay
+  // EROA (para reconocerlo con la muestra) y en valvulas solo en sístole, con la mitral cerrada. Q y v son los del motor.
+  const eroa = m.eroaMitral || 0;
+  if (eroa > 0 && flujo.coaptacionMitral) {
+    const c = T(flujo.coaptacionMitral), dir = nrm(res(T(flujo.enCamara.ai([0.5, 0, 0])), c)), a = Math.sqrt(eroa * 100 / Math.PI);   // orificio: EROA en mm²
+    geom.push({ n: 'regMitral', c, dir, a, v0: 1, vTubo: 1, salida: false });
+    const v0 = velRegMitral(s, eroa); if (v0 > 0 && !s.vMit) valvulas.push({ n: 'regMitral', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false });
   }
   // vasos: velocidad media a lo largo del eje (signo: en el sentido de sus puntos)
   return { valvulas, vasos: vasos.map(x => ({ ...x, vm: velVaso(x.tipo, x.r, s, m) })), geom };
@@ -164,6 +178,7 @@ export function mapaColor(P, im, F) {
  * factor: cuánto de su velocidad llega a la muestra en el fotograma actual (forma del chorro y ángulo con el haz).
  */
 export function curvaLatido(onda, fuente, factor, areas, m) {
+  if (fuente.n === 'regMitral') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velRegMitral(s, m.eroaMitral) }));
   if (fuente.tipo === 'valvula') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * (fuente.tubo ? velTubo(fuente.n, s, areas) : velOrificio(fuente.n, s, areas)) }));
   return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velVaso(fuente.vasoTipo, fuente.r, s, m) }));
 }
@@ -175,8 +190,11 @@ export function fuenteEnMuestra(pts, haz, F) {
   // a velocidad 1: u es directamente el factor (forma del chorro o del perfil, y ángulo con el haz)
   const g = pts[0 + 4];        // el centro de la muestra (puntosMuestra lo pone en el índice 4)
   for (const j of F.geom) { const u = medir({ valvulas: [j], vasos: [] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor))
-    mejor = { tipo: 'valvula', n: j.n, nombre: NOMBRE_FUENTE[j.n] + (j.salida && dot(res(g, j.c), j.dir) < 0 ? ' · tracto de salida' : ''), tubo: j.salida && dot(res(g, j.c), j.dir) < 0, factor: u }; }
+    mejor = { tipo: 'valvula', n: j.n, nombre: (NOMBRE_FUENTE[j.n] ?? 'Insuficiencia mitral · chorro') + (j.salida && dot(res(g, j.c), j.dir) < 0 ? ' · tracto de salida' : ''), tubo: j.salida && dot(res(g, j.c), j.dir) < 0, factor: u }; }
   for (const v of F.vasos) { const u = medir({ valvulas: [], vasos: [{ ...v, vm: 1 }] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor)) mejor = { tipo: 'vaso', vasoTipo: v.tipo, nombre: v.nombre, r: v.r, factor: u }; }
+  // el chorro regurgitante, si la muestra cae de verdad en él, manda sobre la convergencia de la mitral (que no sabe de cierres)
+  const reg = F.geom.find(j => j.n === 'regMitral');
+  if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: u }; }
   return mejor && Math.abs(mejor.factor) > 0.08 ? mejor : null;
 }
 
@@ -211,6 +229,10 @@ export function medidasLatido(curva, fuente) {
   const sg = Math.sign(fuente.factor || 0) || Math.sign(curva.reduce((a, c) => (Math.abs(c.v) > Math.abs(a) ? c.v : a), 0)) || 1;
   const en = (fs) => curva.filter(c => fs.includes(c.fase));
   const pico = (xs) => xs.reduce((a, c) => (sg * c.v > sg * a.v ? c : a), { v: 0, t: 0 });
+  if (fuente.n === 'regMitral') {   // sístole: pico del chorro (v = 4v² → ΔP VI−AI) e integral velocidad-tiempo
+    let itv = 0; for (let i = 1; i < curva.length; i++) itv += Math.abs(curva[i].v) * (curva[i].t - curva[i - 1].t);
+    return { tipo: 'regurgitacion', pico: Math.abs(pico(curva).v), itv };
+  }
   if (fuente.tipo === 'valvula' && !SALIDA[fuente.n]) {
     const E = pico(en('FG')), A = pico(en('A'));
     return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: tdeDe(curva, curva.indexOf(E), sg) };

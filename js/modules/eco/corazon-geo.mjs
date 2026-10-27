@@ -876,6 +876,9 @@ export function construirCorazon(estado, opciones = {}) {
   const viaPorNombre = (n) => n.startsWith('vp') ? vias.vp[+n.slice(2)] : vias[n];
   const flujo = {
     enCamara, valvulas,
+    // P5b · origen del chorro de la IM funcional (central): el eje del anillo mitral, a la profundidad de la coaptación (con el
+    // tenting de este fotograma). La línea de cierre se desplaza ~4 mm hacia atrás del centro; el chorro sale por el centro (ilustrativo)
+    coaptacionMitral: [mc[0], mc[1], -tentM],
     largo: (n) => largos[n] ?? (largos[n] = largoVia(viaPorNombre(n))),
     enVia: (n, t) => { const pts = viaPorNombre(n), L = flujo.largo(n) * clamp(t, 0, 1); let acc = 0;
       for (let i = 1; i < pts.length; i++) { const d = largo(res(pts[i], pts[i - 1])); if (acc + d >= L) return lerp(pts[i - 1], pts[i], d ? (L - acc) / d : 0); acc += d; }

@@ -206,6 +206,7 @@ export function mezclarFlujo(fa, fb, w) {
   return {
     enCamara: Object.fromEntries(Object.keys(fa.enCamara).map(c => [c, (n) => L(fa.enCamara[c](n), fb.enCamara[c](n))])),
     valvulas: Object.fromEntries(Object.keys(fa.valvulas).map(k => [k, L(fa.valvulas[k], fb.valvulas[k])])),
+    coaptacionMitral: fa.coaptacionMitral && fb.coaptacionMitral ? L(fa.coaptacionMitral, fb.coaptacionMitral) : undefined,
     largo: (n) => mix(fa.largo(n), fb.largo(n), w),
     enVia: (n, t) => L(fa.enVia(n, t), fb.enVia(n, t)),
     transformar: (p) => L(fa.transformar(p), fb.transformar(p)),
