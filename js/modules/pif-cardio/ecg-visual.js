@@ -85,7 +85,7 @@ const EKG1 = {
         { paso: 'I', etiqueta: '↓ST en V5', derivs: ['V5'], frase: '↓ST en V5.', pagina: 137, fuente: '#ecg9-tabla-ekg' },
         { paso: 'I', etiqueta: '↓ST inferior', derivs: ['II', 'III', 'aVF'], frase: '↓ST inferior ≥ 0,1 mV.', pagina: 137, fuente: '#ecg9-tabla-ekg' },
         { paso: 'I', etiqueta: 'Q en aVL', derivs: ['aVL', 'I'], frase: 'Q en aVL con ↑ST en DI-aVL.', pagina: 137, fuente: '#ecg9-tabla-ekg' },
-        { paso: 'I', etiqueta: 'Qué arteria', frase: 'EKG 1: infarto anterior por oclusión de la DA antes de la 1.ª septal y la 1.ª diagonal.', pagina: 136, fuente: '#ecg9-tabla-ekg' }
+        { paso: 'I', etiqueta: 'Qué arteria', derivs: ['V1', 'V2', 'V3', 'V4', 'aVR', 'I', 'aVL'], frase: 'EKG 1: infarto anterior por oclusión de la DA antes de la 1.ª septal y la 1.ª diagonal.', pagina: 136, fuente: '#ecg9-tabla-ekg' }
     ]
 };
 const TV = {
@@ -94,9 +94,9 @@ const TV = {
     libro: 'Rápida, ancha y regular. Con disociación AV (P ocasionales que deforman el QRS: la muesca de los complejos pares) es TV.'
 };
 const FA = {
-    figura: '#ecg8-fig-fa', grupo: 'guardia', pregunta: 'Mira el trazado y elige las tres antes de comprobar.', fuente: '#ecg8-tabla-estrechas', pagina: 120,
-    respuesta: { ritmo: 'Rápido', qrs: 'Estrecho', rr: 'Irregular' },
-    libro: 'Rápida, estrecha e irregular. Fibrilación auricular: R-R irregulares y sin P (la línea de base lleva ondas f).'
+    figura: '#ecg8-fig-fa', grupo: 'guardia', pregunta: 'Mira el trazado y elige las dos antes de comprobar.', fuente: '#ecg8-tabla-estrechas', pagina: 120,
+    respuesta: { qrs: 'Estrecho', rr: 'Irregular' },
+    libro: 'Estrecha e irregular. Fibrilación auricular: R-R irregulares y sin P (la línea de base lleva ondas f).'
 };
 
 const ayuda = (n, etq, c) => ({ fuente: `css:#ecg8-pasos li:nth-child(${n})`, etiqueta: etq, color: c });

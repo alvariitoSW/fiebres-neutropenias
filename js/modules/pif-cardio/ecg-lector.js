@@ -130,12 +130,13 @@ export function crearLectorEcg(cuerpo, def, ctx = {}) {
     }
 
     // ---------- grupo guardia: primero eliges, luego se comprueba ----------
-    const PREGUNTAS = [
+    const PREGUNTAS_TODAS = [
         { clave: 'ritmo', texto: '¿Rápido o lento?', opciones: ['Rápido', 'Lento'] },
         { clave: 'qrs', texto: '¿QRS estrecho o ancho?', opciones: ['Estrecho', 'Ancho'] },
         { clave: 'rr', texto: '¿R-R regular o irregular?', opciones: ['Regular', 'Irregular'] }
     ];
     function montarGuardia() {
+        const PREGUNTAS = PREGUNTAS_TODAS.filter(p => def.respuesta[p.clave]);
         const elegido = {};
         let comprobado = false;
         chipsEl.classList.add('ecg-lector-guardia');

@@ -14,8 +14,8 @@ const el = (tag, attrs = {}, html = '') => { const e = document.createElement(ta
 // ---------- Tarjeta de guardia (ficha 8) ----------
 const hoja = (nombre, pags, tab, ref, vivo, extra = '') =>
     `${nombre}</strong><div style="font-weight:400;font-size:0.82rem;margin-top:6px;">${pags.map(([parte, p]) => pg(parte, p)).join(' · ')} ${extra}<div style="margin-top:6px;display:flex;flex-wrap:wrap;gap:6px;">${verFicha(tab, ref)}${latir(vivo)}</div></div><strong></strong>`;
-const FV = { estado: 'tfg-estado-danger', final: hoja('Fibrilación ventricular: actividad caótica sin P-QRS-T', [[1, 37]], 'ecg-f3', '#ecg-f3-fv-que', 'fv') };
-const TV = { estado: 'tfg-estado-danger', final: hoja('Taquicardia ventricular', [[2, 123], [2, 125]], 'ecg-f8', '#ecg8-brugada', 'tv', '<br>Nota de fuentes sobre los pasos de Brugada (ESC 2019) en la ficha.') };
+const FV = { estado: 'tfg-estado-danger', final: hoja('Fibrilación ventricular: actividad caótica sin P-QRS-T', [[1, 39], [1, 41]], 'ecg-f3', '#ecg-f3-fv-que', 'fv', 'Si el paciente tiene pulso, piensa en artefacto (temblor, p. 41).') };
+const TV = { estado: 'tfg-estado-danger', final: hoja('Taquicardia ventricular', [[2, 122], [2, 125]], 'ecg-f8', '#ecg8-brugada', 'tv', '<br>Nota de fuentes sobre los pasos de Brugada (ESC 2019) en la ficha.') };
 const hojaNeutra = (n, pags, tab, ref, vivo, extra) => ({ estado: 'tfg-estado-neutro', final: hoja(n, pags, tab, ref, vivo, extra) });
 const ARBOL = {
     inicio: { pregunta: '¿Se identifican QRS en el trazado?', si: 'fc', no: FV },
@@ -29,8 +29,8 @@ const ARBOL = {
     wenck: { pregunta: '¿El PR se alarga latido a latido hasta que una P no conduce?',
         si: hojaNeutra('BAV de 2.º grado Mobitz I (Wenckebach)', [[2, 117]], 'ecg-f8', '#ecg8-fig-bav2', ''), no: 'relacion' },
     relacion: { pregunta: '¿Las P que conducen llevan siempre el mismo PR?',
-        si: { estado: 'tfg-estado-danger', final: hoja('BAV de 2.º grado Mobitz II: requiere marcapasos según el libro', [[2, 117], [2, 98]], 'ecg-f7', '#ecg-f7-bav3-causas', '', 'Con 2:1 mira la nota de la ficha.') },
-        no: { estado: 'tfg-estado-danger', final: hoja('BAV completo: disociación entre P y QRS; requiere marcapasos según el libro', [[2, 117], [2, 98]], 'ecg-f7', '#ecg-f7-bav3-causas', '') } },
+        si: { estado: 'tfg-estado-danger', final: hoja('BAV de 2.º grado Mobitz II: generalmente requiere marcapasos (p. 98)', [[2, 117], [2, 98]], 'ecg-f7', '#ecg-f7-bav3-causas', '', 'Con 2:1 mira la nota de la ficha.') },
+        no: { estado: 'tfg-estado-danger', final: hoja('BAV completo: disociación entre P y QRS; generalmente requiere marcapasos (p. 98)', [[2, 117], [2, 98]], 'ecg-f7', '#ecg-f7-bav3-causas', '') } },
     qrs: { pregunta: '¿El QRS es estrecho (menos de 120 ms = 3 mm)?', si: 'rr', no: 'irr' },
     rr: { pregunta: '¿Los R-R son regulares?', si: 'f150', no: 'pmulti' },
     pmulti: { pregunta: '¿Hay tres o más formas de P, con PR variable?',
@@ -42,9 +42,9 @@ const ARBOL = {
         si: hojaNeutra('Flúter auricular con conducción 2:1', [[2, 119]], 'ecg-f8', '#ecg8-sospecha-flutter', 'flutter'), no: 'pnormal' },
     pnormal: { pregunta: '¿Hay una P normal (positiva en DII) antes de cada QRS?',
         si: { estado: 'tfg-estado-ok', final: hoja('Taquicardia sinusal', [[2, 118]], 'ecg-f3', '#ecg-f3-ts-que', 'taquiSinusal') },
-        no: hojaNeutra('TPSV: reentrada nodal (r′ en V1, pseudo-S inferior) u ortodrómica (P negativa tras el QRS, RP > 100 ms)', [[2, 120], [2, 121]], 'ecg-f8', '#ecg8-circuito-nodo', 'nodal') },
+        no: hojaNeutra('TPSV: reentrada nodal (r′ en V1, pseudo-S inferior) u ortodrómica (P negativa tras el QRS, RP > 100 ms); o taquicardia auricular unifocal si la P es de otra morfología que la sinusal', [[2, 120], [2, 121], [1, 21]], 'ecg-f8', '#ecg8-circuito-nodo', 'nodal') },
     irr: { pregunta: '¿Los R-R son irregulares?',
-        si: hojaNeutra('FA con bloqueo de rama o con preexcitación', [[2, 121], [2, 122]], 'ecg-f8', '#ecg8-ancho-def', 'wpwFa'), no: 'b1' },
+        si: hojaNeutra('QRS ancho e irregular: el libro no da un camino para este caso. Piensa en TV polimorfa o torsade (la fuente no lo dice para la FA con bloqueo de rama o preexcitación)', [[1, 37], [1, 38]], 'ecg-f3', '#ecg-f3-tor-que', 'torsade'), no: 'b1' },
     b1: { pregunta: 'Brugada 1: ¿falta el patrón R/S en todas las precordiales?', si: TV, no: 'b2' },
     b2: { pregunta: 'Brugada 2: ¿del inicio de la R al nadir de la S pasan más de 100 ms en alguna precordial?', si: TV, no: 'b3' },
     b3: { pregunta: 'Brugada 3: ¿hay disociación AV?', si: TV, no: 'b4' },
@@ -56,26 +56,29 @@ const ARBOL = {
 function montarChips(cont, chips) {
     const EJES = [['fc', 'Frecuencia', ['rápida', 'lenta']], ['qrs', 'QRS', ['estrecha', 'ancha']], ['rr', 'R-R', ['regular', 'irregular']]].filter(([k]) => chips[k]);
     const elegido = {}; const fila = el('div', { style: 'display:flex;flex-direction:column;gap:6px;margin:8px 0;' });
-    const frase = el('p', { 'aria-live': 'polite', style: 'font-size:0.8rem;margin:4px 0;color:var(--text-dim);' }, 'Primero elige; luego se comprueba.');
+    const frase = el('p', { 'aria-live': 'polite', style: 'font-size:0.8rem;margin:4px 0;color:var(--text-dim);' }, 'Primero elige; el libro se muestra al pulsar «Ya lo tengo».');
     EJES.forEach(([k, nombre, vals]) => {
         const f = el('div', { style: 'display:flex;gap:6px;align-items:center;flex-wrap:wrap;' }, `<span style="font-size:0.78rem;min-width:78px;">${nombre}</span>`);
         vals.forEach(v => {
             const b = el('button', { type: 'button', class: 'quiz-opcion', 'aria-pressed': 'false', style: 'padding:6px 10px;' }, v);
             b.addEventListener('click', () => {
                 elegido[k] = v; f.querySelectorAll('button').forEach(x => { const on = x === b; x.setAttribute('aria-pressed', on); x.style.borderColor = on ? 'var(--accent-yellow)' : ''; });
-                if (EJES.every(([kk]) => elegido[kk])) {
-                    const ok = EJES.every(([kk]) => elegido[kk] === chips[kk]);
-                    frase.innerHTML = ok ? `<strong>Coincide con el libro:</strong> ${EJES.map(([kk]) => chips[kk]).join(' · ')}.` : `<strong>El libro:</strong> ${EJES.map(([kk]) => chips[kk]).join(' · ')}. Tú elegiste ${EJES.map(([kk]) => elegido[kk]).join(' · ')}: revisa la tira.`;
-                }
+                if (EJES.every(([kk]) => elegido[kk])) frase.textContent = 'Elegiste las tres. Pulsa «Ya lo tengo» para ver qué dice el libro.';
             });
             f.appendChild(b);
         });
         fila.appendChild(f);
     });
     cont.append(fila, frase);
+    return () => {
+        const libro = EJES.map(([kk]) => chips[kk]).join(' · ');
+        if (!EJES.every(([kk]) => elegido[kk])) { frase.innerHTML = `<strong>El libro:</strong> ${libro}.`; return; }
+        const ok = EJES.every(([kk]) => elegido[kk] === chips[kk]);
+        frase.innerHTML = ok ? `<strong>Coincide con el libro:</strong> ${libro}.` : `<strong>El libro:</strong> ${libro}. Tú elegiste ${EJES.map(([kk]) => elegido[kk]).join(' · ')}: revisa la tira.`;
+    };
 }
 
-function montarTest(cont, d, extra = '', alAcabar = () => {}) {
+function montarTest(cont, d, extra = '', alAcabar = () => {}, revelar = null) {
     const caja = el('div', { class: 'card', style: 'padding:12px 14px;margin:8px 0;' });
     caja.appendChild(el('p', { style: 'font-size:0.88rem;margin:0 0 8px;' }, d.enun));
     const ver = el('button', { type: 'button', class: 'quiz-siguiente' }, 'Ya lo tengo: ver opciones');
@@ -89,7 +92,7 @@ function montarTest(cont, d, extra = '', alAcabar = () => {}) {
         });
         lista.appendChild(b); return b;
     });
-    ver.addEventListener('click', () => { lista.hidden = false; ver.hidden = true; });
+    ver.addEventListener('click', () => { lista.hidden = false; ver.hidden = true; if (revelar) revelar(); });
     caja.append(ver, lista, out); cont.appendChild(caja);
 }
 
@@ -137,19 +140,20 @@ const figura = (n, pagT, parte = 3, alt) => `<figure class="article-figure" styl
 const extraDe = (d) => `${pg(3, d.pagR, `Respuesta del libro, p. ${d.pagR}`)} ${verFicha(d.tab, d.id || d.ref)} ${latir(d.vivo)}`;
 const plegable = (titulo, abierto = false) => { const d = el('details', { class: 'nota-plegable', style: 'margin:8px 0;' }); if (abierto) d.open = true; d.appendChild(el('summary', { style: 'font-size:0.88rem;color:var(--text-main);padding:8px 0;' }, titulo)); return d; };
 
+const miniatura = n => `<img loading="lazy" src="${imgSrc(n)}" alt="" style="height:36px;max-width:45%;object-fit:cover;object-position:left;vertical-align:middle;margin-right:8px;border-radius:4px;background:#fff;">`;
 function seccionEjercicios(cont) {
     cont.appendChild(el('p', { class: 'section-label' }, 'Ejercicios del libro'));
     EJERCICIOS.forEach(e => {
-        const d = plegable(`Ejercicio ${e.n}`); d.id = `ecg-f11-ej-${e.n}`;
+        const d = plegable(`${miniatura(e.n)}Ejercicio ${e.n}`); d.id = `ecg-f11-ej-${e.n}`;
         d.appendChild(el('div', {}, figura(e.n, e.pagT, e.parteT)));
-        if (e.chips) montarChips(d, e.chips);
-        montarTest(d, e, extraDe(e)); cont.appendChild(d);
+        const rev = e.chips ? montarChips(d, e.chips) : null;
+        montarTest(d, e, extraDe(e), undefined, rev); cont.appendChild(d);
     });
 }
 function seccionErrores(cont) {
     cont.appendChild(el('p', { class: 'section-label', style: 'margin-top:16px;' }, 'Encuentra el error'));
     ERRORES.forEach(e => {
-        const d = plegable(`Informe sobre el ejercicio ${e.n}`); d.id = `ecg-f11-error-${e.id}`;
+        const d = plegable(`${miniatura(e.img)}Informe sobre el ejercicio ${e.n}`); d.id = `ecg-f11-error-${e.id}`;
         d.appendChild(el('div', {}, figura(e.img, e.pagT, 3)));
         montarError(d, e, `${pg(3, e.pagR, `Respuesta del libro, p. ${e.pagR}`)} ${verFicha(e.tab, e.ref)}`); cont.appendChild(d);
     });
@@ -182,14 +186,14 @@ function montarCaso(cont, c) {
         cabeza.textContent = `Paso ${k + 1} de ${c.pasos.length} · ${p.momento}`; paso.innerHTML = ''; sig.hidden = true;
         paso.appendChild(el('p', { style: 'font-size:0.85rem;margin:6px 0;' }, `<strong>${p.ficha}</strong>`));
         if (p.img) paso.appendChild(el('div', {}, figura(p.img, p.pagT, typeof p.img === 'string' ? 3 : 3)));
-        if (p.chips) montarChips(paso, p.chips);
+        const rev = p.chips ? montarChips(paso, p.chips) : null;
         if (p.calc) paso.appendChild(el('div', { style: 'margin:6px 0;' }, verFicha(p.calc.tab, p.calc.ref, `🧮 ${p.calc.txt}`)));
         const extra = `${verFicha(p.tab, p.ref)} ${latir(p.vivo)}`;
         const alAcabar = () => {
             if (k + 1 < c.pasos.length) sig.hidden = false;
             else { fin.hidden = false; fin.innerHTML = `<div class="quiz-explicacion"><strong>Lo que te llevas</strong><ul style="margin:6px 0;padding-left:18px;">${c.llevas.map(x => `<li>${x}</li>`).join('')}</ul><div style="display:flex;flex-wrap:wrap;gap:6px;">${verFicha(c.vuelta.tab, c.id === 'c2' ? '#ecg-guardia-pregunta' : '#ecg9-tabla-ekg', c.vuelta.txt)} ${latir(c.vuelta.vivo, '⚡ Ver el estado en el corazón →')}</div></div>`; }
         };
-        (p.tipo === 'error' ? montarError : p.tipo === 'destapa' ? montarDestapa : montarTest)(paso, p, extra, alAcabar);
+        (p.tipo === 'error' ? montarError : p.tipo === 'destapa' ? montarDestapa : montarTest)(paso, p, extra, alAcabar, rev);
     }
     sig.addEventListener('click', ir); ir(); cont.appendChild(caja);
 }

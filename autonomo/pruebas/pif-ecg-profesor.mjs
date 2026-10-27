@@ -77,7 +77,7 @@ console.log('F8-HOJA', JSON.stringify(await pag.evaluate(() => { const r = docum
 await pag.evaluate(() => document.getElementById('ecg-guardia').scrollIntoView()); await cap('04-f8-tarjeta-hoja');
 // todas las hojas: recorrido exhaustivo por fuerza bruta de sí/no hasta profundidad 9
 const hojas = new Set(); let pendientes = [[]]; let n = 0;
-while (pendientes.length && n < 80) {
+while (pendientes.length && n < 400) {
     const camino = pendientes.shift(); n++;
     await pag.click('#ecg-guardia-reset').catch(() => {}); await pag.waitForTimeout(80);
     for (const r of camino) await paso(r);
@@ -97,7 +97,7 @@ await vista('ecg-f9', 'visual');
 const lect9 = await pag.$$('#ecg-f9 .ecg-lector');
 if (lect9[0]) {
     const chips = await lect9[0].$$('.ecg-chip'); const info = [];
-    for (let c = 0; c < chips.length; c++) { await chips[c].click(); await pag.waitForTimeout(120); info.push(await lect9[0].evaluate(e => ({ et: e.querySelector('.ecg-chip[aria-pressed="true"]')?.textContent.trim(), frase: e.querySelector('.ecg-lector-frase')?.textContent.slice(0, 90), zonas: e.querySelectorAll('svg rect, svg path, svg polygon').length, rej: !!e.querySelector('.ecg-rejilla, [data-rejilla], svg g') }))); if (c === 1) { await lect9[0].scrollIntoViewIfNeeded(); await lect9[0].screenshot({ path: `${out}/05-f9-ekg1-chip.jpg`, type: 'jpeg', quality: 60 }); } }
+    for (let c = 0; c < chips.length; c++) { await chips[c].click(); await pag.waitForTimeout(120); info.push(await lect9[0].evaluate(e => ({ et: e.querySelector('.ecg-chip[aria-pressed="true"]')?.textContent.trim(), frase: e.querySelector('.ecg-lector-frase')?.textContent.slice(0, 90), zonas: e.querySelectorAll('svg rect, svg path, svg polygon').length, rej: e.querySelectorAll("span.ecg-celda").length }))); if (c === 1) { await lect9[0].scrollIntoViewIfNeeded(); await lect9[0].screenshot({ path: `${out}/05-f9-ekg1-chip.jpg`, type: 'jpeg', quality: 60 }); } }
     console.log('F9-CHIPS', chips.length, JSON.stringify(info));
 }
 console.log('F9-VISUAL desborde', await desborde());
