@@ -748,7 +748,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | pendiente | PDF recibido el 27/10: López Ramírez, *La alegría de leer el electrocardiograma*, 3.ª ed., 2012 (`docs/lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`; desplazamientos en la bitácora §3). La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
+| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | en curso (2026-10-27) | PDF recibido el 27/10: López Ramírez, *La alegría de leer el electrocardiograma*, 3.ª ed., 2012 (`docs/lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`; desplazamientos en la bitácora §3). La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
 | 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
 | 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
 | 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
