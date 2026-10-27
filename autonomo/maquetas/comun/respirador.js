@@ -104,7 +104,11 @@ export const RESPIRADOR_CSS = `
 .resp-modos .detener { margin-left: auto; border-radius: 8px; border-color: var(--resp-alarma); color: var(--resp-alarma); }
 .resp-modos .detener[aria-pressed="true"] { background: var(--resp-alarma); color: var(--resp-blanco); }
 .resp-pie { padding: 3px 6px 5px; font: .6rem/1.3 var(--sans); color: var(--resp-tenue); border-top: 1px solid var(--resp-raya); }
-.resp .tope-linea { display: none; }   /* los avisos van en la barra de alarmas, como en el aparato */
+.resp .tope-linea { display: none; }
+/* solo lectura (la Mayéutica): sin mandos, teclas ni modos; el velo de «primero predices» tapa entero y la pantalla encoge */
+.resp.solo-lectura .resp-mandos, .resp.solo-lectura .resp-desl, .resp.solo-lectura .resp-teclas, .resp.solo-lectura .resp-modos, .resp.solo-lectura .resp-info { display: none; }
+.resp:has(> .velo-tapa:not([hidden])) { max-height: 150px; }
+.resp > .velo-tapa { background: var(--bg-main); }   /* los avisos van en la barra de alarmas, como en el aparato */
 @media (max-width: 370px) { .resp-c .v { font-size: 1.1rem; } .resp-modo { font-size: .9rem; } }
 `;
 
@@ -229,6 +233,7 @@ export function crearRespirador(cont, cfg) {
   return {
     el: cont, mon, curvas: q('curvas'), montar: () => mon.montar(), pintarCurvas, casillas, mandos, modo, alarmas, tecla, info,
     congelado: (on) => cont.classList.toggle('congelado', !!on),
+    soloLectura: (on) => cont.classList.toggle('solo-lectura', !!on),
     ver: (lista) => { mon.ver(lista); },
     cerrarMando: () => { abierto = null; mandos(ultimos); },
     porK,

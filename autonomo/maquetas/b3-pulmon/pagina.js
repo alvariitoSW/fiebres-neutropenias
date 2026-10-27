@@ -333,6 +333,7 @@ function ponerModo(m) {
   $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-may').setAttribute('aria-selected', String(m === 'may'));
   $('zona-may').hidden = m !== 'may'; $('zona-pac').hidden = m !== 'explorar'; $('bajo-escena').hidden = m !== 'explorar';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-est').hidden = m !== 'may';
+  PANT.R.soloLectura(m === 'may');
   if (m === 'may') may.empezar(); else { est.tapado = false; $('velo-mon').hidden = true; pintarCifrasTodo(); taparEscena(); }
   dock.asa.hidden = m !== 'explorar'; dock.plegar(m === 'explorar'); scrollTo({ top: 0 });
 }
