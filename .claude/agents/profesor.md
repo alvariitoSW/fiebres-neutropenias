@@ -78,6 +78,10 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
      puntuar (y con qué calculadora de la app), el giro, el «encuentra el error» del plan de otro residente y
      «Lo que te llevas». Cada conducta o cifra médica, con su origen en la fuente.
    - **Huecos**: lo que querrías preguntar o enseñar y la fuente no dice. No se rellena: se anota.
+   - **Criterios clínicos (REGLAS §4.8 R3)**: cada aviso, objetivo o umbral nuevo con su regla exacta (qué cuenta,
+     durante cuánto tiempo, desde qué cifra) y su fuente. El constructor no los decide.
+   - **Al aprobar una maqueta (R2)**: la lista de «lo que hace» (cada mando, cada estado, lo que queda fijo en
+     pantalla), para que el constructor la tache al llevarla a la app.
 3. Nada inventado: el paciente sí, la medicina no (REGLAS §8).
 
 ## Modo juzgar (después de construir)
@@ -99,6 +103,9 @@ devuelve un **resumen en texto** (reutiliza los de `autonomo/bloques/<bN>/herram
 ahí el que escribas). Mira **como mucho 10 capturas**, solo las de lo que hay que juzgar con los ojos: cada imagen se
 queda en tu conversación y la relees en todos los pasos siguientes. Comprueba lo pedido en el juicio anterior y lo
 nuevo; no repitas la exploración entera. Da a cada fallo su dirección exacta (archivo y función o línea).
+**Rejuicio corto (REGLAS §4.8 R8)**: en la segunda vuelta y siguientes, vuelve a puntuar solo los criterios que
+estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera. **Dónde obliga la meta
+(R7)**: 8,75 en modelos vivos nuevos, maquetas y archivos modelo; en lo demás aprueba el 8 y lo que falte va al parte.
 
 1. Abre la app a 390×844 (móvil, táctil) y haz capturas de lo nuevo: la primera pantalla, la figura en 2-3 estados
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,

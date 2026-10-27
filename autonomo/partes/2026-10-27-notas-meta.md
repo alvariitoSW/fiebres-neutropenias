@@ -23,7 +23,9 @@ las vueltas · meta 8,75 solo en lo que se copia · rejuicio corto · tabla «Vu
 TAPSE 4,8 mm con PAM 67 en la parada 2 de `eco-mega` sigue abierto (lo apunta su parte).
 
 ## Propuestas sobre las reglas
-R1-R9 de la página; ninguna aplicada.
+R1-R9 de la página: **aprobadas por el usuario el 27/10** («apruebo todas las propuestas de regla de R1 a R9»).
+Entran en `REGLAS.md` §4.8 (y en §6, reglas nacidas de fallos), en la lista del constructor, en el modo diseñar y
+juzgar del profesor, en la skill del plan y en `partes/LEEME.md` (tabla «Vueltas»). R1 automático: tarea `jueces-movil`.
 
 ## Gasto
 Auditor sonnet: 18 herramientas, 89 k tokens (presupuesto 35 pasos / 0,55 M: muy por debajo; tarea de lectura de

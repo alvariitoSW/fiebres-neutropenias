@@ -153,6 +153,34 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    - **Reanudar mejor que relanzar**: si un agente se para (límite de uso, pausa), se reanuda con SendMessage; antes
      de una pausa larga escribe un apunte de 5 líneas que el director copia al repositorio.
 
+8. **Llegar al 8,75 a la primera** (R1-R9 de `notas-meta`, aprobadas por el usuario el 27/10/2026; datos en
+   `autonomo/bloques/notas-meta/datos.md`: 1 de 7 tareas aprobaba a la primera, 0 de 7 llegaban a la meta, 2,4
+   vueltas de media).
+   - **R1 · Prueba del móvil antes de entregar**: a 390 y 360 px, la frase viva y el enunciado no quedan tapados por
+     la barra de abajo, la imagen sigue a la vista al tocar sus mandos, ninguna frase sale cortada con «…» y ningún
+     rótulo baja de 9 px. La pasa el constructor con capturas antes de entregar; cuando exista, la pasa
+     `jueces.mjs` (tarea `jueces-movil` del tablero).
+   - **R2 · Lista de «lo que hace la maqueta»**: al aprobarse una maqueta, el profesor escribe la lista de lo que
+     hace (cada mando, cada estado, lo que queda fijo en pantalla). El constructor que la lleva a la app la tacha
+     punto por punto, con una captura de cada uno, y la entrega.
+   - **R3 · El criterio clínico, escrito antes de construir**: todo aviso, objetivo o umbral nuevo lleva en el plan
+     del profesor su regla exacta y su fuente (qué cuenta, durante cuánto tiempo, desde qué cifra). El constructor no
+     lo decide; si falta, lo pide.
+   - **R4 · Captura al lado de la imagen real**: en la eco y en los modelos con anatomía, el constructor entrega cada
+     plano junto a una imagen real de uso libre (las de D1 de `eco-mega`) y se autopuntúa con la rúbrica (§7) antes
+     de entregar.
+   - **R5 · Vueltas de arreglo con un constructor nuevo**: la vuelta la hace un constructor sonnet nuevo con la lista
+     exacta de fallos (archivo y función). Solo se continúa el mismo (SendMessage) si lleva menos de 60 pasos.
+   - **R6 · Nada de opus en las vueltas**: opus solo en la primera vuelta de un modelo vivo nuevo. Si un arreglo
+     necesita pensar, lo piensa el profesor en una lista y lo hace sonnet.
+   - **R7 · Dónde obliga la meta**: el 8,75 obliga en lo que se copia después (modelos vivos nuevos, maquetas y los
+     archivos modelo de `CLAUDE.md` §6). En fichas que siguen un modelo, arreglos e informes basta con 8; lo que falte
+     hasta 8,75 va al parte si no cabe en una vuelta corta (≤15 pasos de constructor).
+   - **R8 · Rejuicio corto**: en la segunda vuelta y siguientes, el profesor solo vuelve a puntuar los criterios que
+     estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera.
+   - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, el modelo, los pasos y los tokens de cada
+     vuelta (formato en `autonomo/partes/LEEME.md`).
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
@@ -176,6 +204,8 @@ vez:
 3. Cada regla nacida así se apunta en la lista de abajo, con la tarea donde se vio.
 
 **Reglas nacidas de fallos**
+- §4.8 (llegar al 8,75 a la primera, R1-R9): medida de `notas-meta` (27/10/2026), aprobadas por el usuario
+  («apruebo todas las propuestas de regla de R1 a R9»).
 - §4.6 (carpeta aparte desde la rama del bloque; nada de `git stash` ni `pkill` amplios; puerto por `PUERTO=`):
   vuelta de límites del `b3` (27/10/2026), aprobadas por el usuario.
 - §1.14 (topes y consecuencias): maquetas v3 del bloque 3 (`b3`, 26/10/2026). El usuario infundió 23 L de suero en el

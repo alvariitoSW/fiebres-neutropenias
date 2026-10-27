@@ -24,6 +24,10 @@ Problemas encontrados fuera de la tarea.
 ## Propuestas sobre las reglas
 Si alguna regla falló o faltó (el agente no las edita; las propone aquí).
 
+## Vueltas
+Una fila por vuelta (REGLAS §4.8 R9): pieza · vuelta · nota mínima del profesor (y su criterio) · modelo del
+constructor · pasos · tokens equivalentes · qué falló.
+
 ## Gasto
 `node autonomo/gasto.mjs --clave <clave>`: total en tokens equivalentes, la tabla «Por papel» y los 3 agentes que más
 gastaron. Una línea: dónde se fue el gasto y cómo se ahorraría la próxima vez.
