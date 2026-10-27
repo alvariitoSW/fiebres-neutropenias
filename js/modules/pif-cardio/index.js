@@ -6,12 +6,15 @@ import { temasPifEcgA, preguntasPifEcgA } from '../../data/pif-ecg-preguntas-a.j
 import { temasPifEcgB, preguntasPifEcgB } from '../../data/pif-ecg-preguntas-b.js';
 import { temasPifEcgC, preguntasPifEcgC } from '../../data/pif-ecg-preguntas-c.js';
 import { temasPifEcgD, preguntasPifEcgD } from '../../data/pif-ecg-preguntas-d.js';
+import { temasPifEcgE, preguntasPifEcgE } from '../../data/pif-ecg-ejercicios.js';
 import { init as initEcg } from './ecg-arritmias.js';
+import { init as initEjercicios } from './ecg-ejercicios.js';
+import { arrancar } from '../../core/ui.js';
 
 export const quizTriggerId = ['btn-pif-ecg-repasar'];
-export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgD, ...preguntasPifEcgC];
+export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgD, ...preguntasPifEcgC, ...preguntasPifEcgE];
 const ASIGNATURA = 'Cardiología · PIF';
-export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...temasPifEcgC]
+export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...temasPifEcgC, ...temasPifEcgE]
     .map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'ECG y arritmias' }));
 
 export function init() {
@@ -22,6 +25,7 @@ export function init() {
     document.getElementById('btn-pif-ecg').addEventListener('click', () => nivel.show('ecgArritmias'));
     document.querySelectorAll('.btn-volver-pif-cardio-menu').forEach(b => b.addEventListener('click', () => nivel.show('menu')));
     initEcg();
+    arrancar('pif-ecg-ejercicios', initEjercicios);
     nivel.show('menu');
     return {
         volverAlMenu: () => nivel.show('menu'),
