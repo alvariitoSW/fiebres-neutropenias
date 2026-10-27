@@ -364,3 +364,17 @@ El usuario aprobó las tres propuestas del parte `2026-10-27-movil-existente.md`
 - **El director fusiona `main` a la vista** (skill `plan-socialista`, «Entregas sin esperar»): nunca en segundo plano;
   mira los conflictos y que no queden marcas antes de seguir.
 
+
+## 27/10/2026 · Cierre solo, /ahorro y bitácora diaria (sesión fuentes-b3)
+
+- **Graft**: su configuración de `.claude/` (versión 0.26.0) se sube a `main` una vez, a petición del usuario. Antes,
+  cada sesión arrancaba con esos archivos «sin guardar» y el gancho de parada hacía dar al director unas 15 vueltas
+  vacías por sesión.
+- **Skill `/ahorro`** (`.claude/skills/ahorro/`, registro en `autonomo/ahorro/registro.md`): lee solo «Gasto»,
+  «Vueltas» y «Propuestas sobre las reglas» de los partes nuevos, busca patrones que se repiten en 2 o más tareas y
+  propone como mucho 3 cambios en la bitácora (sección 5). No aplica nada: el usuario aprueba con `/bitacora`.
+- **`/plan-socialista`, cierre**: pasos 6 (pasar `/ahorro`) y 7 (la sesión se archiva sola cuando todo está hecho,
+  subido, con parte, sin agentes y sin esperas; si queda algo, `send_later` a 1 hora y se vuelve a mirar).
+- **Tarea programada «Bitácora diaria»** (`trig_01XfdVjv5Bd5qeWQ6ZRRwkB1`): a las 13:43 y 21:43 (hora de Madrid)
+  abre una sesión que solo informa (qué se hizo, sesiones cerradas, qué espera al usuario, qué sigue, propuestas de
+  ahorro), con aviso al móvil, y se archiva sola.

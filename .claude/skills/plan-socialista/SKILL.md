@@ -256,6 +256,16 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.
+6. **Ahorro** (aprobado por el usuario el 27/10/2026): tras escribir el parte, pasa `/ahorro` tú mismo (2-3
+   llamadas, sin agentes). Al usuario, una línea si propone algo.
+7. **Cerrar la sesión sola** (aprobado por el usuario el 27/10/2026). Se cierra cuando: la tarea está hecha, subida
+   (y en `main` o con su PR), el parte escrito, ningún agente trabajando y nadie espera nada de esta sesión (ni otra
+   sesión a la que entregaste algo ni una respuesta pendiente del usuario). Entonces mandas al usuario el resumen
+   final terminado en «Sesión cerrada; para seguir, abre otra con `/plan-socialista <clave>`» y, en la misma
+   respuesta, la archivas con `archive_session` (sin `session_id`, o el de esta sesión). Si queda algo pendiente
+   (otra sesión tiene que fusionar, falta un PDF del usuario), **no se cierra**: lo dices en una línea y programas
+   una comprobación con `send_later` a 1 hora; cuando llega, miras si ya está y, si está, cierras. El usuario se
+   entera por el resumen final y por el informe diario de la bitácora (tarea programada «Bitácora diaria»).
 
 ## 3. Lo que nunca haces
 
