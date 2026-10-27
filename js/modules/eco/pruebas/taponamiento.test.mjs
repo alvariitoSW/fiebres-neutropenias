@@ -185,3 +185,23 @@ test('P1 · el saco cubre las aurículas en todas las vistas (sin derrame, con d
   }
   assert.ok(vistas_con_auricula > 20, `se cortan aurículas en ${vistas_con_auricula} casos`);
 });
+
+// R1 (eco-mega, parada 3) · el saco del derrame grande es una lámina lisa que abraza al corazón: en los cortes de la eco no hay
+// esquinas (la caja del subcostal 4C, la V del apical 4C) ni saltos de la distancia al corazón. Con poco líquido sigue pegado.
+import { cortes, estadoGeo as estadoGeoR1, pacienteDerrame, telediastole } from '../../../../autonomo/bloques/eco-mega/herramientas/saco-contorno.mjs';
+test('R1 · a 388 mL, el contorno del saco en A4C, SC4C y PLAX no tiene esquinas (<120° a 12 mm) ni saltos de distancia al corazón', () => {
+  const p = pacienteDerrame(1), e = estadoGeoR1(telediastole(p), p.ex);
+  for (const v of ['a4c', 'sc4c', 'plax']) {
+    const c = cortes(1, v, e), n = c.pts.length;
+    assert.ok(n > 100, `${v}: contorno de ${n} puntos`);
+    const mn = Math.min(...c.ang); assert.ok(mn >= 120, `${v}: esquina de ${mn.toFixed(0)}°`);
+    let salto = 0; for (let i = 0; i < n; i++) salto = Math.max(salto, Math.abs(c.dist[i] - c.dist[(i + 1) % n]));
+    assert.ok(salto <= 4.5, `${v}: la distancia saco-corazón salta ${salto.toFixed(1)} mm en 3 mm de contorno`);
+  }
+});
+
+test('R1 · con poco líquido (60 mL) el saco sigue pegado: detrás crece menos de 7 mm frente a sin derrame', () => {
+  const p = paciente('normal'), e = estadoGeo(p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), p.ex);
+  const radio = (L) => radioEn(construirCorazon({ ...e, liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), -30, -Math.PI / 2);
+  const d60 = radio(60) - radio(0); assert.ok(d60 < 7, `60 mL: el saco crece ${d60.toFixed(1)} mm detrás`);
+});
