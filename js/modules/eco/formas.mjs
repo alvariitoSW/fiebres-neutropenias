@@ -11,7 +11,7 @@
 // tras un escenario, o el corte cambia la topología), el fotograma se construye entero como antes.
 // La mezcla de posiciones y normales la hace la tarjeta gráfica (render-webgl.mjs): por fotograma no se crea
 // ningún array grande ni se sube nada.
-import { construirCorazon } from './corazon-geo.mjs';
+import { construirCorazon, acortamientoVd } from './corazon-geo.mjs';
 import { normalesSuaves } from './render-webgl.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -74,7 +74,7 @@ export function estadoGeo(s, extra = {}) {
 }
 
 // Tolerancia de la mezcla frente al estado mostrado
-export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1, pliegue: 0.15 };
+export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1, pliegue: 0.15, acortVd: 0.007 };   // acortVd: fracción del largo del VD (0,007 ≈ 0,5 mm de TAPSE); la curva del TAPSE no es lineal en vvd, hay que vigilarla
 const VOLS = ['vvi', 'vvd', 'vai', 'vad'];
 
 // Valor de una muestra del latido en el instante t, interpolando entre las dos muestras vecinas (cada 2 ms)
@@ -90,8 +90,9 @@ export function valorEn(onda, t, k) {
 // menos de la mitad de la tolerancia. Así hay pocas formas en la diástole lenta y muchas donde todo cambia deprisa
 // (contracción auricular, apertura y cierre de las válvulas). Tope de separación: 60 ms.
 export function instantesClave(onda, { maxSeparacion = 0.06 } = {}) {
-  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi, e.eVd, e.pliegueAd, e.pliegueVd]; });
-  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2, TOLERANCIA.activacion / 2, TOLERANCIA.pliegue / 2, TOLERANCIA.pliegue / 2];
+  const vdTd = Math.max(...onda.map(m => m.vvd));
+  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi, e.eVd, e.pliegueAd, e.pliegueVd, acortamientoVd(1 - e.vvd / vdTd)]; });
+  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2, TOLERANCIA.activacion / 2, TOLERANCIA.pliegue / 2, TOLERANCIA.pliegue / 2, TOLERANCIA.acortVd / 2];
   const cabe = (i, j) => {
     if (onda[j].t - onda[i].t > maxSeparacion) return false;
     for (let k = i + 1; k < j; k++) { const w = (onda[k].t - onda[i].t) / (onda[j].t - onda[i].t);
@@ -179,6 +180,7 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       if (Math.abs(mix(A.est.septo, B.est.septo, w) - objetivo.septo) > TOLERANCIA.septo) return null;
       if (Math.abs(mix(A.est.eVi, B.est.eVi, w) - objetivo.eVi) > TOLERANCIA.activacion) return null;   // fija la torsión y los papilares
       if (Math.abs(mix(A.est.eVd, B.est.eVd, w) - objetivo.eVd) > TOLERANCIA.activacion) return null;   // fija el grosor del VD
+      { const ac = (e) => acortamientoVd(1 - e.vvd / (e.vvdTd ?? 140)); if (Math.abs(mix(ac(A.est), ac(B.est), w) - ac(objetivo)) > TOLERANCIA.acortVd) return null; }   // TAPSE (p3-tapse)
       for (const k of ['pliegueAd', 'pliegueVd']) if (Math.abs(mix(A.est[k] ?? 0, B.est[k] ?? 0, w) - (objetivo[k] ?? 0)) > TOLERANCIA.pliegue) return null;   // P1
       if (Math.abs((extra?.feLatido ?? 0) - (A.est.feLatido ?? 0)) > 0.03) return null;               // contractilidad del latido (torsión)
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
