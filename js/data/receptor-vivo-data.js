@@ -48,6 +48,7 @@ export const org = (t, ilu) => `<span class="rcv-org${ilu ? ' rcv-ilu' : ''}">${
 
 // Las citas (los ids son los que se pondrán en las fichas; las páginas, del PDF)
 export const C = {
+  betaPas: { f: 'mc-sca-tratamiento', id: 'mc-betabloqueo-sca-pas', sitio: 'Betabloqueantes: evitar si PAS <120', p: 47 },
   t145: { f: 'mc-definiciones', id: 'mc-tabla-14-5', sitio: 'Tabla 14.5', p: 17 },
   pam: { f: 'mc-definiciones', id: 'mc-shock-ecuacion', sitio: 'Ecuación de la PAM', p: '2-3' },
   vaso: { f: 'mc-vasopresores', id: 'mc-vasopresores-intro', sitio: 'Los vasopresores', p: 12 },
@@ -231,7 +232,7 @@ export const FARMACOS = {
     regimen: { sca: { tog: true, txt: 'Contraindicado aquí; se pone para ver por qué', chip: 'ficha · cap. 20, p. 47' } },
     ficha: { receptores: [['<b>Tapón</b> de los β. En la isquemia por cocaína deja la vasoconstricción α sin oposición.', C.cocaina]],
       dosis: [['No se da en este caso: está contraindicado.', C.cocaina]],
-      funcion: ['Contraindicado en la isquemia por cocaína.', C.cocaina], adversos: ['Con PAS &lt;120 mmHg, más riesgo de shock cardiogénico.', C.cocaina], umi: null } },
+      funcion: ['Contraindicado en la isquemia por cocaína.', C.cocaina], adversos: ['Con PAS &lt;120 mmHg, más riesgo de shock cardiogénico.', C.betaPas], umi: null } },
   albuterol: { nombre: 'Albuterol (salbutamol)', corto: 'Albuterol', sub: 'β₂ del bronquio, inhalado', unidad: 'on', via: 'inhalada',
     llaves: [{ rec: 'beta2', tipo: 'ag', occ: d => d > 0 ? 0.85 : 0, cel: ['liso-bronquio'] }],
     sist: { fc: d => d > 0 ? 8 : 0, k: d => d > 0 ? -0.4 : 0 },
@@ -244,7 +245,7 @@ export const FARMACOS = {
     llaves: [{ rec: 'musc', tipo: 'tap', occ: d => d > 0 ? 0.85 : 0 }],
     regimen: { asma: { tog: true, txt: '0,5 mg nebulizado', chip: 'ficha · cap. 23, p. 22' } },
     ficha: { receptores: [['Derivado de la atropina que <b>bloquea los receptores muscarínicos</b> de las vías aéreas.', C.ipra]],
-      dosis: [['0,5 mg cada 20 min, 3 dosis; luego según necesidad.', C.ipra]],
+      dosis: [['0,5 mg cada 20 min, 3 dosis.', C.ipra]],
       funcion: ['Solo si la respuesta al albuterol no basta; sin beneficio más allá de las primeras horas.', C.ipra], adversos: ['Absorción mínima: poco riesgo de efectos anticolinérgicos.', C.ipra], umi: null } },
 };
 

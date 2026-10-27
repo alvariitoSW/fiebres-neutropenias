@@ -112,6 +112,7 @@ const CSS = `
   font: .84rem/1.3 var(--rcv-serif); color: var(--rcv-fg); padding: 5px max(14px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--rcv-oro); cursor: pointer; }
 .rcv-frase-txt { display: block; max-height: 30vh; overflow-y: auto; }
 .rcv-frase-txt .rcv-org { white-space: normal; }
+.rcv-frase:not(.rcv-abierta) .rcv-resto { display: none; }
 .rcv-raiz button.rcv-b { min-height: 44px; font: 600 .86rem/1.2 var(--rcv-sans); background: var(--rcv-card2); color: var(--rcv-fg); border: 1px solid var(--rcv-line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
 .rcv-raiz button.rcv-b.rcv-prim { background: var(--rcv-oro); color: var(--rcv-bg); border-color: var(--rcv-oro); }
 .rcv-raiz button.rcv-b:disabled { opacity: .55; cursor: default; }
@@ -229,6 +230,7 @@ const CSS = `
 .rcv-raiz dl.rcv-paciente dd.rcv-cambia { color: var(--rcv-rojo); font-weight: 600; }
 .rcv-dib text { font-family: var(--rcv-serif); }
 .rcv-dib .rcv-rot { fill: var(--text-dim); font-style: italic; }
+.rcv-dib .rcv-espasmo { fill: var(--accent-red); font: 700 8px var(--rcv-sans); font-style: normal; }
 .rcv-dib .rcv-fondo { fill: var(--bg-main); }
 .rcv-dib .rcv-punto { fill: var(--text-dim); }
 .rcv-dib .rcv-halo-s { fill: var(--bg-main); opacity: .7; }

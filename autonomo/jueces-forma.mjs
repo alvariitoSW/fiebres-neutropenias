@@ -77,6 +77,8 @@ export const MODELOS = {
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
+        // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa
+        figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
