@@ -38,12 +38,17 @@
 //         «diseño», «REGLAS», «cobertura», «encargo», «Caso A1», rutas de archivo, <code>) en cada modo del modelo
 //         (Explorar en varios estados, Conceptos, Mayéutica tras contestar) y en cada vista de la ficha.
 //      C. Mismos momentos: en los SVG, cada rótulo <text> visible mide ≥ 7,5 px de alto y ningún par se pisa > 30 %.
+//   8. El móvil (autonomo/jueces-movil.mjs; REGLAS §4.8 R1), con --ficha, --modelo y --forma, a 390 y 360 px:
+//      (1) nada del modelo o la ficha queda bajo la barra fija de abajo (el dock), ni la frase viva, el enunciado o
+//      «Siguiente» más de un 30 %; (2) tras tocar hasta 6 mandos, la figura principal sigue ≥ 50 % a la vista y la
+//      frase viva se ve; (3) ninguna frase cortada con «…» (ellipsis, line-clamp, rótulo de SVG); (4) letra ≥ 9 px.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import { createServer } from 'node:net';
 import { juzgarFormaPreguntas, juzgarFormaNavegador } from './jueces-forma.mjs';
+import { juzgarMovil } from './jueces-movil.mjs';
 
 const RAIZ = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const args = process.argv.slice(2);
@@ -232,6 +237,8 @@ if (!pide('--sin-navegador')) {
         }
         // ---- 7B-C. Nombres internos y rótulos (jueces-forma.mjs)
         await juzgarFormaNavegador({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
+        // ---- 8. El móvil: barra de abajo, imagen a la vista, «…» y letra ≥ 9 px (jueces-movil.mjs)
+        await juzgarMovil({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
         await nav.close();
         // ---- 6. Modelos vivos: su prueba de navegador, con este mismo servidor
         for (const clave of valores('--modelo')) {
