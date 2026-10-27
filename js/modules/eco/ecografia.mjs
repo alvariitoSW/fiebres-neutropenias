@@ -778,7 +778,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       pulmon = { borde, rl };
       for (let i = 0; i < nb; i++) { if (EB[i] < borde) continue;
         for (let j = 0; j < ns; j++) { const r = Rr[j]; if (r < rl) continue; const q = j * nb + i, k = Math.round(r / rl), d = r - k * rl;
-          A[q] = Math.abs(d) < 1.2 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; } }
+          A[q] = (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
     }
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa

@@ -116,7 +116,7 @@
                     <button type="button" class="cv-mini cv-mini-grande" data-senal="valvas" aria-pressed="false">Festones y cúspides</button>
                 </div>
                 <p class="cv-muted">Origen de las frases: fisiología general (física de los ultrasonidos). Ilustrativo, sin ficha.</p>
-                <p class="cv-muted"><b>Festones y cúspides</b>: A, valva anterior de la mitral; P, posterior; 1 lateral (junto a la comisura anterolateral), 2 central y 3 medial (junto a la posteromedial), según Carpentier. CD, CI y NC: cúspides aórticas coronaria derecha, izquierda y no coronaria; T ant, T sept y T post: valvas anterior, septal y posterior de la tricúspide. Fuente: <a class="biblio-link" href="docs/hahn-2013-ete-completa-ase-sca.pdf#page=22" target="_blank" rel="noopener">Hahn 2013, guía de eco transesofágica de la ASE, p. 942</a>. Es una guía de eco transesofágica: aquí se usa el plano transtorácico equivalente (fisiología general), y qué festón entra cambia con la posición de la sonda (p. 938).</p>
+                <p class="cv-muted"><b>Festones y cúspides</b>: A, valva anterior de la mitral; P, posterior; 1 lateral (junto a la comisura anterolateral), 2 central y 3 medial (junto a la posteromedial), según Carpentier. CD, CI y NC: cúspides aórticas coronaria derecha, izquierda y no coronaria; T ant, T sept y T post: valvas anterior, septal y posterior de la tricúspide. Fuente: <a class="biblio-link" href="docs/hahn-2013-ete-completa-ase-sca.pdf#page=22" target="_blank" rel="noopener">Hahn 2013, guía de eco transesofágica de la ASE, p. 942</a> (mitral); cúspides aórticas, <a class="biblio-link" href="docs/hahn-2013-ete-completa-ase-sca.pdf#page=26" target="_blank" rel="noopener">p. 946</a>; tricúspide, <a class="biblio-link" href="docs/hahn-2013-ete-completa-ase-sca.pdf#page=30" target="_blank" rel="noopener">p. 950</a>. Es una guía de eco transesofágica: aquí se usa el plano transtorácico equivalente (fisiología general), y qué festón entra cambia con la posición de la sonda (p. 938).</p>
                 <p class="cv-muted"><b>Reto: ventana pobre</b> (apagado). Pruébalo para ver qué pasa en un paciente difícil.</p>
                 <div class="cv-fila"><button type="button" class="cv-mini cv-mini-grande" id="cv-img-ventana" aria-pressed="false">🫁 Ventana pobre: apagada</button></div>
                 <div class="tfg-estado tfg-estado-warn" id="cv-img-ventana-txt" hidden></div>
@@ -182,7 +182,7 @@
             </details>
             <details class="nota-plegable" id="cv-tejidos-ley">
                 <summary>¿Qué brilla más en la imagen?</summary>
-                <p class="cv-muted">Brillo de cada tejido frente al miocardio (0 dB): la sangre, casi negra; el pericardio y las valvas, lo más brillante. Los dB son ilustrativos; solo el orden es fisiología general.</p>
+                <p class="cv-muted">Brillo de cada tejido frente al miocardio (0 dB): la sangre, casi negra; de menos a más brillante, la sangre, el miocardio, las valvas y el pericardio; por encima de todos, el calcio, el hueso y el aire del pulmón (pleura). Los dB son ilustrativos; solo el orden sangre &lt; miocardio &lt; valva &lt; pericardio es fisiología general.</p>
                 <div style="overflow-x:auto"><table class="data-table"><thead><tr><th>Tejido</th><th>Brillo</th><th>Origen</th></tr></thead><tbody id="cv-tejidos-tabla"></tbody></table></div>
             </details>
             <div class="cv-ciclo" id="cv-ciclo" aria-label="Ciclo cardíaco: toca una fase para ir a ella"></div>
@@ -204,6 +204,10 @@
             <p class="cv-titulo">Formas de enfermedad</p>
             <div class="cv-chips" id="cv-enfermedad"></div>
             <p class="cv-muted" id="cv-escenario-nota"></p>
+            <div id="cv-gravedad" hidden>
+                <label class="cv-sonda-fila"><span>Gravedad</span><input type="range" id="cv-grav" min="0" max="100" step="1" value="100" aria-label="Gravedad del escenario"><b id="cv-grav-v">100 %</b></label>
+                <p class="cv-muted" id="cv-grav-txt"></p>
+            </div>
             <div id="cv-forma-medidas" hidden></div>
             <div class="cv-fila">
                 <button type="button" class="cv-mini" id="cv-avanzar">⏩ Avanzar 10 s</button>

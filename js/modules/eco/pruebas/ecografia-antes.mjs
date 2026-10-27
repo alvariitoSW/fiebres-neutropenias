@@ -213,7 +213,7 @@ const TIPOS = [
   [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: 0 }],
   [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: 0 }],
   [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: 1, ancho: 3.5 }],
-  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -1, ancho: 2.6 }],
+  [/^(AI|AD|Orejuela)/, { clase: 'linea', db: -5, ancho: 2.6 }], // -5 dB desde eco-mega p2b (antes -1): la pared auricular ya no brilla más que el miocardio, igual que js/data/eco-tejidos.js
   [/^Base V[ID]$/, { clase: 'linea', db: 0, ancho: 2 }],
   [/^Raíz aórtica$/, { clase: 'linea', db: 6, ancho: 2.2 }],
   // grandes vasos: luz con sangre aunque salgan del pericardio (el arco en la supraesternal, la aorta descendente

@@ -850,3 +850,15 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
 - **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).
+
+**Imagen/UI, segunda vuelta de la parada 2 (eco-mega, 27/10/2026).** Mando de gravedad en el simulador: un deslizador «Gravedad»
+(`#cv-gravedad`, en `eco.html`) que aparece en los escenarios con `ESCENARIOS[k].gravedad` (hemorragia, fallo del VI, derrame y TEP) y
+muestra lo que mide en cada uno (mL de derrame, mL y % de volemia perdida…). Se aplica al soltar: `elegirEscenario(k, g)` rehace el motor
+y lo deja asentado (`faltaParaAsentar`, como las pruebas de `escenarios.test.mjs`, que ya comprueban paciente posible en 0, 50 y 100 %).
+Con el derrame a fondo (388 mL) el VD colapsa y con la hemorragia a fondo (42 %) los papilares se besan. Prueba: `navegador.test.mjs`.
+Además: líneas A del pulmón menos y más tenues (`ecografia.mjs`, ventana pobre); pared auricular −5 dB (antes −1; la referencia
+congelada `ecografia-antes.mjs` sigue la misma cifra); cortina aorto-mitral con su cita (Hahn pp. 942-943); VD/VI rotulado como unión de
+dos fuentes; «VD basal >41» a Lang p. 17 (rango en la Tabla 8, p. 20); renglón que distingue «VD en diástole» (FATE) de «VD basal» (Lang);
+FE del VD «aprox.»; leyendas de festones con sus páginas (tricúspide p. 950, cúspides aórticas p. 946) y de brillo con su orden real.
+**Hueco**: la banda brillante dentro de la AD no viene de la tabla de tejidos (solo se bajó la pared); sin comprobar el aplanamiento del
+tabique en el PSAX (pieza Forma).

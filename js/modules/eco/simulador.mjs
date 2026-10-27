@@ -9,6 +9,7 @@
 // mientras corre, o una muestra del último latido al revisar) y con ese objeto se construye la geometría y se
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
+import { faltaParaAsentar } from './maniobras.mjs';
 import { construirCorazon, LIMITES, tapseDeLatido, recortar, planoCorte } from './corazon-geo.mjs';
 import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
@@ -201,7 +202,7 @@ export function montarSimulador(raiz, opc = {}) {
   // leyenda de brillo: sale de la misma tabla que usa la imagen (js/data/eco-tejidos.js)
   const tabLey = $('#cv-tejidos-tabla');
   if (tabLey) tabLey.innerHTML = Object.values(TEJIDOS).sort((a, b) => a.db - b.db)
-    .map((t) => `<tr><td>${t.nombre}</td><td>${t.db > 0 ? '+' : ''}${t.db} dB</td><td>${t.origen}</td></tr>`).join('');
+    .map((t) => `<tr><td>${t.nombre}</td><td>${t.db > 0 ? '+' : ''}${t.db} dB</td><td>${t.origen === 'ilustrativo' ? 'ilustrativo' : 'orden: ' + t.origen + '; dB: ilustrativo'}</td></tr>`).join('');
   mandoImg('#cv-img-gan', (v) => { img.gan = v; });
   mandoImg('#cv-img-prof', (v) => { img.prof = v === VISTAS[vistaEco].prof ? null : v; });
   mandoImg('#cv-img-foco', (v) => { img.foco = v; });
@@ -251,7 +252,7 @@ export function montarSimulador(raiz, opc = {}) {
     a3c: 'Eje largo: P2-A2 (Hahn 2013, p. 937). Aórtica: delante, siempre la coronaria derecha; detrás, la no coronaria o la izquierda (p. 946).',
     a4c: '4 cámaras: A3-A2 y P2-P1 (Hahn 2013, p. 932). Tricúspide: la septal y la posterior (p. 932) o la anterior (p. 950): la guía da las dos.',
     a2c: '2 cámaras: P3 y A3-A2-A1 (Hahn 2013, p. 937).',
-    psaxMv: 'Eje corto mitral: los seis festones, en «boca de pez», cuando las valvas pasan por el plano (Hahn 2013, p. 939).',
+    psaxMv: 'Eje corto mitral: los festones que corta el plano; al abrirse, las valvas hacen la «boca de pez» (Hahn 2013, p. 939, que solo la nombra).',
     psaxAo: 'Eje corto aórtico: la no coronaria junto al tabique interauricular; la coronaria derecha, delante (Hahn 2013, p. 939 y 946).',
   };
   function senalarValvas(b, partes) {
@@ -430,7 +431,7 @@ export function montarSimulador(raiz, opc = {}) {
     const lectura = t > 17 ? ['ok', 'por encima de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).']
       : t > 16 ? ['warn', 'entre las dos cifras de la app: normal según la Ficha 5 (&gt;16 mm), no según la Ficha 11 (&gt;17 mm).']
       : ['danger', 'por debajo de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).'];
-    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale del acortamiento de la pared libre del VD, que depende de cuánto se vacía (con su poscarga): baja en el TEP y algo con la precarga. Ilustrativo.</span>`);
+    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale del acortamiento de la pared libre del VD, que depende de cuánto se vacía (con su poscarga): baja en el TEP, donde el VD se vacía mal; en la hemorragia, el derrame y el fallo del VI se queda dentro de lo normal del modelo. Ilustrativo.</span>`);
   }
   function textoVi() {
     const d = guardado.lvdd, sv = guardado.lvsd, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
@@ -879,18 +880,29 @@ export function montarSimulador(raiz, opc = {}) {
   const chipEsc = ([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`;
   $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => !e.forma).map(chipEsc).join('');
   $('#cv-enfermedad').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => e.forma).map(chipEsc).join('');
-  function elegirEscenario(k) {
+  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = shock a fondo. Se aplica al soltar
+  let gravedad = null;
+  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, el shock a fondo.`;
+  function elegirEscenario(k, g) {
     if (!ESCENARIOS[k]) return;
+    const mando = ESCENARIOS[k].gravedad;
+    if (!mando || (g == null && k !== escenario)) gravedad = null;     // otro escenario: vuelve a su gravedad de siempre
+    if (mando) gravedad = g ?? gravedad ?? mando.defecto;
     escenario = k;
+    $('#cv-gravedad').hidden = !mando;
+    if (mando) { $('#cv-grav').value = Math.round(gravedad * 100); $('#cv-grav-v').textContent = Math.round(gravedad * 100) + ' %'; $('#cv-grav-txt').textContent = textoGravedad(k, gravedad); }
     // que se vea ya el efecto (y el barorreflejo respondiendo); una forma de enfermedad, ya asentada (escenarios.mjs)
-    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); aplicarEscenario(motor, k);
+    motor = crearMotor({ barorreflejo: $('#cv-baro').checked }); motor.correr(12); aplicarEscenario(motor, k, mando ? gravedad : undefined);
+    if (mando && g != null) motor.correr(faltaParaAsentar(motor));    // con el mando movido, el paciente ya asentado (como lo comprueban las pruebas)
     if (opc.depuracion) window.__motor = motor;
     revision = null; ponerPausa(false); sangre.reiniciar(); latidoTexto = -1; claveTd = ''; ensuciar(); colocarLineaM(); reiniciarD();
     paneles?.alCambiarMotor();
     $$('[data-c]').forEach(x => x.classList.toggle('on', x.dataset.c === k));
     opc.onEscenario?.(k);
   }
-  for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) elegirEscenario(b.dataset.c); });
+  for (const id of ['#cv-escenarios', '#cv-enfermedad']) $(id).addEventListener('click', (e) => { const b = e.target.closest('[data-c]'); if (b) { if (b.dataset.c === escenario) gravedad = null; elegirEscenario(b.dataset.c); } });
+  $('#cv-grav').addEventListener('input', () => { const g = $('#cv-grav').value / 100; $('#cv-grav-v').textContent = Math.round(g * 100) + ' %'; if (ESCENARIOS[escenario].gravedad) $('#cv-grav-txt').textContent = textoGravedad(escenario, g); });
+  $('#cv-grav').addEventListener('change', () => { if (ESCENARIOS[escenario].gravedad) elegirEscenario(escenario, $('#cv-grav').value / 100); });
   $('#cv-baro').addEventListener('change', () => { motor.p.barorreflejo = $('#cv-baro').checked; });
   function avanzarSeg(seg) { revision = null; ponerPausa(false); motor.correr(seg); sangre.reiniciar(); latidoTexto = -1; ensuciar(); }
   $('#cv-avanzar').addEventListener('click', () => avanzarSeg(10));

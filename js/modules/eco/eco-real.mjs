@@ -4,7 +4,7 @@ const COMMONS = 'https://commons.wikimedia.org/wiki/File:';
 export const ECO_REAL = {
   a4c: [
     { tipo: 'imagen', src: 'img/real/a4c-dominio-publico.jpg', ancho: 636, alto: 434,
-      pie: 'Apical de 4 cámaras, eco real (sonda de 1,7/3,4 MHz). Ventrículos amplios: no es un corazón normal de referencia.',
+      pie: 'Apical de 4 cámaras, eco real. Ventrículos amplios: no es un corazón normal de referencia.',
       autor: 'sin autor en la página del archivo', licencia: 'dominio público', licenciaUrl: '',
       original: COMMONS + 'Echocardiogram_4chambers.jpg', archivo: 'Echocardiogram 4chambers.jpg' },
     { tipo: 'video', src: ['img/real/a4c-latido.webm', 'img/real/a4c-latido.mp4'], poster: 'img/real/a4c-dominio-publico.jpg',
