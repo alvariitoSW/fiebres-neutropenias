@@ -169,6 +169,7 @@ export function dibTubo(R, rl) {
   // la fuga: el agua sale entre las células del endotelio y empapa la adventicia (anafilaxia)
   const fugaA = R.P.mediadores ? R.A.maq.mastocito.suelta : 0;
   if (fugaA > 0.35) for (let i = 0; i < Math.round(fugaA * 5); i++) { const [x, y] = pol(cx, cy, g.ao + 4 + (i % 2) * 5, rad(70 + i * 22)); h += part('agua', x, y, 2.4); }
+  if (R.S.id === 'cocaina' && R.S.f.betabloqueante) h += `<text class="rcv-rot rcv-espasmo" x="${cx}" y="${f2(cy - g.ao - 7)}" font-size="8" text-anchor="middle">espasmo coronario</text>`;
   h += `</g>`;
   return { svg: h, g };
 }

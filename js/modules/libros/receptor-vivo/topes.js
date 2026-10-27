@@ -41,5 +41,7 @@ export function calcularTopes(ST) {
 // La frase viva en el tope: el primer sello en una línea
 export function fraseTope(topes) {
   const s = Object.values(topes).find((t) => t.nivel === 'sello');
-  return s ? ` <b>${s.titulo}.</b> ${s.frase || s.texto}` : '';
+  if (!s) return '';
+  const t = s.frase || s.texto, i = t.indexOf('. '), pri = i < 0 ? t : t.slice(0, i + 1), resto = i < 0 ? '' : t.slice(i + 1);
+  return ` <b class="hl-rojo">${s.titulo}.</b> ${pri}${resto ? `<span class="rcv-resto">${resto}</span>` : ''}`;
 }

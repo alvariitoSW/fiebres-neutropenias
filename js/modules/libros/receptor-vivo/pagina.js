@@ -163,17 +163,19 @@ export function conversor(k, d, reg, P) {
   if (F.unidad === 'µg/min') return `= ${coma(d / P.peso, 2)} µg/kg/min con ${P.peso} kg`;
   return '';
 }
+// Al deslizar una dosis con el monitor o la Fig. 1 a la vista no se salta (se está mirando el efecto); al tocar botones, sí.
 // En el móvil, lo que cambia al tocar un mando (la lupa) tiene que verse sin desplazarse: si queda bajo el pliegue o bajo la barra, se acerca de golpe
-function verLupa() {
+function verLupa(mirando) {
+  const visto = (id) => { const r = $(id).getBoundingClientRect(); return r.height > 0 && Math.max(0, Math.min(r.bottom, innerHeight) - Math.max(r.top, 0)) / r.height >= 0.5; };
+  if (mirando && (visto('monitor') || visto('fig1'))) return;
   const f = $('fig2').getBoundingClientRect(), tope = $('frase').getBoundingClientRect().top;
   const vis = Math.max(0, Math.min(f.bottom, tope) - Math.max(f.top, 0)) / f.height;
   if (vis >= 0.6) return;
   const libre = tope; scrollBy({ top: f.top - Math.max(0, (libre - f.height) / 2), behavior: 'instant' });
 }
 ['dock-explorar'].forEach(id => $(id).addEventListener('click', () => verLupa()));
-$('monitor').addEventListener('click', () => verLupa());
 $('dock-explorar').addEventListener('input', ev => {
-  verLupa();
+  verLupa(true);
   const i = ev.target.closest('[data-dosis]'); if (!i) return;
   ST.f[i.dataset.dosis] = +i.value; actualizar(); refrescarBomba(i.dataset.dosis);
 });
@@ -211,7 +213,8 @@ export function lecturas() {
   if (bron) { const c = cuenta(R, cel, 'beta2', 10); $('fig1-lect').innerHTML = `β₂ con llave ${c.llaves}/10<small>luz ${Math.round(100 * R.radioB)} % de la de un bronquio relajado · ilustrativo</small>`; }
   else { const a = cuenta(R, cel, 'alfa1', 12), b = cuenta(R, 'miocito', 'beta1', 6);
     const txt = (nom, c, n) => c.tapones ? `${nom} tapadas ${c.tapones}/${n}` : `${nom} ${c.llaves}/${n}`;
-    $('fig1-lect').innerHTML = `${txt('α₁', a, 12)} · ${txt('β₁', b, 6)}<small>radio ${Math.round(100 * R.radio)} % · fuerza ×${coma(R.F, 2)} · ilustrativo</small>`; }
+    $('fig1-lect').innerHTML = `${txt('α₁', a, 12)} · ${txt('β₁', b, 6)}<small>radio ${Math.round(100 * R.radio)} % · fuerza ×${coma(R.F, 2)} · ilustrativo</small>`;
+    if (R.P.lecho === 'coronaria' && R.S.f.betabloqueante) $('fig1-lect').innerHTML += `<span class="hl-rojo">radio ${Math.round(100 * R.radio)} % → flujo ≈ ${Math.round(100 * Math.pow(Math.round(100 * R.radio) / 100, 4))} %</span><small>flujo ≈ radio⁴ · fisiología general ${chip(C.cocaina)}</small>`; }
   const O = objetivosLupa(R), est = O.tapon ? 'tapada' : O.llave && O.giro ? 'gira' : O.llave ? 'llave sin giro' : 'cerrada';
   const m = R.A.maq[lupaCel] || {}, maq = CELULAS[lupaCel].maquinaria;
   const sub = maq === 'gs' ? `AMPc ×${coma(m.ampc / 0.2, 1)}` : maq === 'gq' ? `calcio del depósito ×${coma((m.ca ?? 0.2) / 0.2, 1)}` : maq === 'gs-relaja' ? `AMPc ×${coma(m.ampc / 0.2, 1)}` : `gránulos fuera ${Math.round(100 * R.A.maq.mastocito.suelta)} %`;

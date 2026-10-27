@@ -110,5 +110,6 @@ $('monitor').addEventListener('click', ev => {
   const c = ev.target.closest('[data-fila]'); if (!c || tapado) return;
   const [t, ci] = EXPLICA_FILA[c.dataset.fila] || []; if (!t) return;
   const d = $('detalle-fila'); d.hidden = false; d.innerHTML = `<span>${t}${ci ? ' ' + chip(ci) : ' ' + org('ilustrativo', true)}</span>${ci ? cita(ci) : ''}`;
+  d.scrollIntoView({ block: 'nearest', behavior: 'instant' });
 });
 
