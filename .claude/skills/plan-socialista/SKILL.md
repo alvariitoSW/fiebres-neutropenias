@@ -22,6 +22,10 @@ tablero y el último parte, sin trabajar.
    que está en `autonomo/BITACORA.md` sin aprobar no se toca, aunque parezca urgente.
 3. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
    tarea `pendiente`, escribe el parte «sin tareas» y termina: no es un fallo.
+   **Límite de gasto por día** (aprobado por el usuario el 27/10/2026): como mucho el **18 % del uso semanal** del
+   plan en un día, sumando todas las sesiones. Mientras no esté calibrada su equivalencia en millones de
+   `gasto.mjs` (tablero), avisa al usuario antes de lanzar algo que haga pasar el día de ~15 M y no encadenes otra
+   tarea sin preguntar. Al llegar al límite, paras y lo dices.
 4. **¿La lleva ya otra sesión?** (`REGLAS.md` §4.6, «Una tarea, una sola sesión»). Mira `list_sessions` (`mine:
    true`) y la rama remota `auto/<clave>`: si otra sesión activa ya trabaja esta tarea, no empieces; díselo al usuario
    y termina sin tocar nada. Haz la misma comprobación antes de abrir una sesión nueva con `create_session`.
@@ -144,6 +148,20 @@ es la base de cómo se trabaja ahora.
   (`[HUECO <quién>: …]`), sube tú el `?v=` y decide el orden de fusión. Cada agente, en su subcarpeta temporal.
 - **Dependencias entre ramas**: si una pieza necesita un modelo de otra rama aún sin fusionar, deja el enlace
   preparado (`modeloFuturo`/`modeloVivo`) y conéctalo al unir.
+
+### Reglas del 27/10/2026 (`reglas-27-10`, aprobadas por el usuario)
+
+`autonomo/REGLAS.md` §1.11, §1.14, §4.6 y §4.7. En resumen:
+- **Pruebas**: cada constructor pasa las suyas y las de lo que tocó; la suite entera la pasas tú una vez, al
+  fusionar. Nunca más de 2 agentes con pruebas largas a la vez.
+- **Un `git worktree` por constructor** cuando trabajan varios a la vez, siempre desde la rama del bloque.
+- **Encargos partidos**: si nombra más de una estructura anatómica o más de un fenómeno del motor, pártelo antes de
+  lanzarlo en encargos de ≤60 pasos.
+- **Citas en los «Piensa»**: también explicaciones y distractores llevan su origen.
+- **Arneses**: cierran su servidor por número de proceso, nunca `pgrep -f … | xargs kill`.
+- **Cifra mala del motor**: el constructor no la tapa con el dibujo; para e informa, y el arreglo va al motor.
+- **Sello propio de un modelo vivo nuevo**: su ajuste va a `autonomo/jueces-topes.mjs`, no a un arnés suelto.
+- **Citas que cruzan archivos de otra sesión activa**: una rama `wt/…` por modelo, que fusiona la sesión dueña.
 
 ### Ahorro medido (aprobado por el usuario el 25/10/2026)
 

@@ -378,3 +378,24 @@ El usuario aprobó las tres propuestas del parte `2026-10-27-movil-existente.md`
 - **Tarea programada «Bitácora diaria»** (`trig_01XfdVjv5Bd5qeWQ6ZRRwkB1`): a las 13:43 y 21:43 (hora de Madrid)
   abre una sesión que solo informa (qué se hizo, sesiones cerradas, qué espera al usuario, qué sigue, propuestas de
   ahorro), con aviso al móvil, y se archiva sola.
+
+## Reglas del 27/10 y límite de gasto diario (`reglas-27-10`, 27/10/2026)
+
+El usuario aprobó el 27/10 con `/bitacora` las 3 propuestas de ahorro de `/ahorro` y 5 reglas sacadas de los partes
+del día, más un límite de gasto diario. Dónde quedan:
+- **Pruebas** (ahorro 1): cada constructor pasa las suyas y las de lo que tocó; la suite entera, el director una vez al
+  fusionar; nunca más de 2 agentes con pruebas largas a la vez. `REGLAS.md` §4.6, constructor y skill.
+- **Un `git worktree` por constructor** que sale de la rama del bloque (ahorro 2). §4.6, constructor y skill.
+- **Encargos partidos en ≤60 pasos** si nombran más de una estructura anatómica o más de un fenómeno del motor
+  (ahorro 3; los encargos que pasaron de 60 pasos llevaban dos piezas). §4.7 y skill.
+- **Citas en los «Piensa»**, también explicaciones y distractores. §1.11 y constructor.
+- **Arneses que cierran su servidor por número de proceso**, nunca `pgrep -f … | xargs kill` (parte `b3-pantallas`).
+  §4.6 y constructor.
+- **Una cifra mala del motor no se tapa con el dibujo** (registro de `/ahorro`: venas a 2,5 cm² en el `b3`). §1.14 y
+  constructor.
+- **Sello propio de un modelo vivo nuevo → ajuste en `autonomo/jueces-topes.mjs`**, no un arnés suelto. §1.14 y
+  constructor.
+- **Citas que cruzan archivos de otra sesión activa**: una rama `wt/…` por modelo que fusiona la sesión dueña (parte
+  `fuentes-b3`). §4.6 y skill.
+- **Límite de gasto por día**: como mucho el 18 % del uso semanal del plan, sumando sesiones (tablero; skill §0 paso 3;
+  `REGLAS.md` §5.6). La equivalencia en millones de `gasto.mjs` queda por calibrar.
