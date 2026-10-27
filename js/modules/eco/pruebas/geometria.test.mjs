@@ -116,7 +116,9 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
   // los grandes vasos salen por arriba (ahí se refleja el pericardio)
   const dentro = /^(VI |VD |Infundíbulo|AI$|AD$|Orejuela|Base V|Raíz aórtica|Papilar|Banda|Grasa|Coronaria|Seno coronario)/;
   const m = crearMotor(); m.correr(12);
-  const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e }))];
+  // P2: con un VI de menos de ~18 mL y el VD en su mínimo (45 mL) el VD epicárdico se sale del saco unos mm (ver la prueba todo de abajo);
+  // el motor no llega ahí (hemorragia a fondo: VTS ≥ 21 mL), así que el estado extremo bajo se prueba en el VI mínimo que el saco aguanta
+  const est = [...m.onda.filter((_, i) => i % 120 === 0), ...ESTADOS.map(e => ({ ...m.onda[0], ...e, vvi: Math.max(e.vvi, 18) }))];
   for (const liquidoPeri of [0, 10, 150]) for (const s of est) {
     const g = construirCorazon({ ...s, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri }, { pericardio: true, detalle: true });
     const saco = g.partes.find(p => p.nombre === 'Pericardio'), derrame = g.partes.find(p => p.nombre === 'Derrame');
@@ -247,4 +249,11 @@ test('B5: la cortina aorto-mitral une la raíz aórtica con la valva anterior de
       assert.ok(anchoMax < 14, `${k}: ancho de la cortina ${anchoMax.toFixed(1)} mm`);
     }
   }
+});
+
+test('pericardio con el VI por debajo de ~18 mL y el VD en su mínimo (P2)', { todo: 'P2: el VD epicárdico se sale del saco unos mm con un VI de 8-16 mL; el motor no llega ahí' }, () => {
+  const m = crearMotor(); m.correr(12);
+  const g = construirCorazon({ ...m.onda[0], vvi: 10, vvd: 5, vai: 2, vad: 2, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, { pericardio: true, detalle: true });
+  const enSaco = dentroDeMalla(g.partes.find(p => p.nombre === 'Pericardio')), vd = g.partes.find(p => p.nombre === 'VD epicardio');
+  for (let i = 0; i < vd.pos.length; i += 3) assert.ok(enSaco([vd.pos[i], vd.pos[i + 1], vd.pos[i + 2]]), 'VD epicardio fuera del saco');
 });

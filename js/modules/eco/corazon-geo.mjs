@@ -99,7 +99,7 @@ export const PHI_SEPTO = (REF.phiA + REF.phiB) / 2;
 // 1,44 ± 0,16 en telesístole en la sobrecarga de presión; Atlas · 14). Ilustrativo
 const ALFA_SEPTO = 1.1;
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
-export const LIMITES = { vi: [35, 320], vd: [45, 330], au: [15, 140] };
+export const LIMITES = { vi: [8, 320], vd: [45, 330], au: [15, 140] };
 // margen del cuello de cada aurícula sobre su anillo AV (mm, ilustrativo)
 const MARGEN_AU = { ai: 3, ad: 3 };
 // alto / ancho de las aurículas: eje mayor / eje menor de la AD del varón en Lang 2015, p. 30 (Tabla 13): 2,4 / 1,9 cm/m².
@@ -556,12 +556,12 @@ export function construirCorazon(estado, opciones = {}) {
     // así que largo × radio² se conserva (B4).
     const LP_SIS = 0.82, objetivo = 1 - (1 - LP_SIS) * clamp(estado.eVi ?? 0, 0, 1);
     const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
-    const R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u);
+    const DEP_PAP = 1.0, R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u);
     // trazado del eje: pared(z) → [x, y, z] de la pared en el ángulo del papilar; viX: el VI de ese instante
     const trazarPap = (pared, zB, zT, lpX, rB) => [0, 0.2, 0.4, 0.6, 0.8, 1].map((s) => {
       const z = zB + (zT - zB) * s * lpX, W = pared(z), rW = Math.hypot(W[0], W[1]), rad = radioDe(rB);
       // profundidad hacia el eje: 0 en la base (centro sobre la pared); pegado (60 % del radio) hasta el 85 %; punta al 40 % del radio
-      const dep = s <= 0.85 ? 0.6 * rad(s) * paso(0, 0.25, s) : mix(0.6 * rad(0.85), 0.4 * rW, paso(0.85, 1, s));
+      const dep = s <= 0.85 ? DEP_PAP * rad(s) * paso(0, 0.25, s) : mix(DEP_PAP * rad(0.85), 0.4 * rW, paso(0.85, 1, s));
       return [W[0] * (rW - dep) / rW, W[1] * (rW - dep) / rW, z]; });
     const largoPap = (pts) => pts.slice(1).reduce((t, q, i) => t + Math.hypot(q[0] - pts[i][0], q[1] - pts[i][1], q[2] - pts[i][2]), 0);
     for (const [phP, nombre] of [[0.55, 'anterolateral'], [3.95, 'posteromedial']]) {

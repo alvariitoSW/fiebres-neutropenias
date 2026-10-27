@@ -314,6 +314,14 @@ late con la base. Eco: clase `linea` con el tejido `fibroso` de `js/data/eco-tej
 fisiología general). Prueba en `geometria.test.mjs` (marca B5): sus bordes tocan la raíz y la valva anterior, no baja del anillo y
 no mide más de 14 mm, en 8 escenarios × el latido.
 
+**Hipovolemia con «beso de papilares» (P2, eco-mega parada 2, octubre 2026).** `LIMITES.vi` baja de [35, 320] a [8, 320]: el dibujo ya sigue
+al motor hasta cavidades de ~10 mL (a 8 mL el radio medio aún es 5,9 mm y la pared de volumen constante llega a 24 mm; sin cruces).
+Los papilares se hunden hacia el eje (`DEP_PAP` = 1,0 × su radio, antes 0,6; siguen a ≤3 mm de la pared en su mitad inferior, prueba de B4).
+El motor no cambia: la hemorragia a fondo (42 %, asentada 40 s) da VTD 44 / VTS 23 mL, PAM 53, FC 124 (el tope era solo de la geometría).
+Los papilares quedan a 1,1 mm en un corte del eje corto en telesístole (9,7 mm en el corazón normal). **Cifra del VTS del «beso»: hueco**
+(Leung y Levine 1994, pendiente); el criterio de la prueba es el VTS indexado bajo la media de Lang p. 7 (21 mL/m²). La hemorragia de 1 L
+se mide ya sangrada (12,5 s a 80 mL/s): con 10 s solo había salido el 80 %. Pruebas en `paciente-posible.test.mjs` (marca P2). Límite conocido: con un VI <18 mL y el VD en su mínimo de 45 mL el VD epicárdico se sale del saco pericárdico unos mm (`todo` en `geometria.test.mjs`; el motor no llega: VTS ≥21 mL).
+
 arranque de la descendente (`vias.ao` termina en el arco).
 
 ## En la app

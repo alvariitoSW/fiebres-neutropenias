@@ -23,7 +23,7 @@ const ENGROSAMIENTO = { id: 'vi-engrosa', nombre: 'VI: engrosamiento sistólico 
   fuente: 'Mor-Avi 2011 (docs/mor-avi-2011-mecanica-cardiaca-ase.pdf, p. PDF 11 = impresa 287)' };
 
 const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m);
-  if (k !== 'normal') m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 10); return m; };
+  if (k !== 'normal') m.correr(ESCENARIOS[k].forma || k === 'hemorragia' ? ASENTAR_FORMA : 10); return m; };   // hemorragia: 1 L entran a 80 mL/s (12,5 s); se mide ya sangrada (P2)
 
 // VD en el plano apical de 4 cámaras (vista enfocada al VD, Lang Tabla 8): se cuentan las celdas del plano que caen
 // en la cavidad del VD. Basal = la mayor anchura del tercio de la base; medio = la del tercio medio; longitudinal =
@@ -88,7 +88,7 @@ const PREVISTO = {
   hemorragia: {
     'vd-basal': { libre: 'hipovolemia: el VD se llena menos (24,8 mm: justo bajo el 25)' }, 'rvot-prox': { libre: 'hipovolemia: el orificio del TSVD se contrae con el volumen del VD (19 mm; ilustrativo)' }, 'vd-medio': { libre: 'hipovolemia: el VD se llena menos' }, 'vd-area-td-h': { libre: 'hipovolemia: el VD se llena menos' },
     'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared (Lang p. 17)' },
-    'vi-septo-h': { todo: 'sin encargo: con el VI en 100 mL la pared telediastólica sale de 10,5 mm (miocardio de volumen constante)' },
+    'vi-septo-h': { todo: 'sin encargo: con el VI en 89 mL la pared telediastólica sale de 11,2 mm (miocardio de volumen constante)' },
   },
   fallo: {
     'vi-vts-h': { libre: 'FE baja: el VI no se vacía' }, 'vi-vtsi-h': { libre: 'FE baja' },
@@ -129,7 +129,7 @@ const SIGNOS = [
   { k: 'hipertrofia', id: 'vi-septo-h', ok: (x) => x > 1.0, texto: 'grosor de pared >1,0 cm (Lang p. 17)' },
   { k: 'hipertrofia', id: 'vi-rwt-h', ok: (x) => x > 0.42, texto: 'RWT >0,42, concéntrica (Lang p. 16)' },
   { k: 'hipertrofia', id: 'vi-masa-h', ok: (x) => x > 102, texto: 'masa >102 g/m² (Lang p. 17)' },
-  { k: 'hemorragia', id: 'vi-vtsi-h', ok: (x) => x < 21, texto: 'VTS indexado por debajo de la media (21 mL/m²; Lang p. 7)', todo: 'P2 (beso de papilares: VTS ≤15-20 mL)' },
+  { k: 'hemorragia', id: 'vi-vtsi-h', ok: (x) => x < 21, texto: 'VTS indexado por debajo de la media (21 mL/m²; Lang p. 7)' },
 ];
 for (const c of SIGNOS) {
   const prueba = (t) => { const x = de(c.k).v[c.id];
@@ -369,4 +369,48 @@ test('F5: el infundíbulo (TSVD) se contrae en sístole; menos en el TEP, donde 
   }
   assert.ok(rel.normal < 0.95 && rel.normal > 0.7, `normal: el TSVD queda a ×${fmt(rel.normal)} de su diámetro de diástole`);
   assert.ok(rel.tep > rel.normal, `TEP ×${fmt(rel.tep)} no se contrae menos que el normal ×${fmt(rel.normal)}`);
+});
+
+// ---- P2 · hipovolemia con «beso de papilares» ------------------------------------------------------------------------
+// El VTS de beso no tiene cifra en docs/ (hueco: Leung y Levine 1994 pendiente). Criterio: VTS indexado por debajo de la media
+// de Lang p. 7 (21 mL/m²), PAM 45-60 con FC alta en la hemorragia a fondo (paciente posible), y los dos papilares a <2 mm en
+// algún corte del eje corto en telesístole (Manual UMI, FATE; Marino cap. 14-17: signo de «dale volumen»).
+const gapPapilares = (c) => {          // separación mínima (mm) entre los dos papilares en un mismo corte del eje corto
+  const a = anillos(c.partes.find(p => p.nombre === NOMBRES_PAP[0])), b = anillos(c.partes.find(p => p.nombre === NOMBRES_PAP[1]));
+  let mn = Infinity;
+  for (const x of a) for (const y of b) if (Math.abs(x.c[2] - y.c[2]) < 1.5) mn = Math.min(mn, Math.hypot(x.c[0] - y.c[0], x.c[1] - y.c[1]) - x.r - y.r);
+  return mn;
+};
+const hemorragiaA = (g) => { const m = crearMotor(); m.correr(12); ESCENARIOS.hemorragia.aplicar(m, g); m.correr(ASENTAR_FORMA); return m; };
+test('hemorragia a fondo (42 % de la volemia, asentada): VTS por debajo de la media de Lang, paciente posible y papilares a <2 mm en telesístole (P2)', () => {
+  const m = hemorragiaA(1), u = m.ultimo, { td, ts, ex } = instantes(m);
+  assert.ok(u.esv / m.p.sc < 21, `VTSi ${fmt(u.esv / m.p.sc)} mL/m²`);
+  assert.ok(u.pam >= 45 && u.pam <= 60, `PAM ${fmt(u.pam)}`);
+  assert.ok(u.fc > 110 && u.fc < 150, `FC ${fmt(u.fc)}`);
+  assert.ok(u.gc > 1.5 && u.gc < 3.5, `GC ${fmt(u.gc)}`);
+  const gapS = gapPapilares(construirCorazon(estadoGeo(ts, ex), { detalle: true })), gapD = gapPapilares(construirCorazon(estadoGeo(td, ex), { detalle: true }));
+  assert.ok(gapS < 2, `papilares a ${fmt(gapS)} mm en telesístole`);
+  assert.ok(gapD > gapS, `en telediástole (${fmt(gapD)} mm) no más cerca que en telesístole`);
+});
+test('corazón normal: los papilares no se tocan ni en telesístole (≥6 mm) (P2)', () => {
+  const m = correr('normal'), { ts, ex } = instantes(m), g = gapPapilares(construirCorazon(estadoGeo(ts, ex), { detalle: true }));
+  assert.ok(g >= 6, `papilares a ${fmt(g)} mm en un corazón normal`);
+});
+test('mando de la hemorragia: el VTS baja y la geometría aguanta de 0 a 42 % de la volemia y cavidades de ~10 mL (P2)', () => {
+  let prev = Infinity;
+  for (const g of [0, 0.25, 0.5, 0.75, 1]) {
+    const m = hemorragiaA(g), u = m.ultimo, { ts, ex } = instantes(m);
+    assert.ok(u.esv <= prev + 0.5, `g=${g}: VTS ${fmt(u.esv)} sube`); prev = u.esv;
+    assert.ok(u.pam > 40 && u.fc < 150 && u.gc > 1.4, `g=${g}: PAM ${fmt(u.pam)}, FC ${fmt(u.fc)}, GC ${fmt(u.gc)}`);
+    const c = construirCorazon(estadoGeo(ts, ex), { detalle: true });
+    assert.ok(c.partes.every(p => (p.pos ? p.pos.every(Number.isFinite) : true)), `g=${g}: malla con valores no finitos`);
+  }
+  const mf = hemorragiaA(1), tsf = instantes(mf).ts, exf = extraDeMotor(mf);
+  for (const v of [LIMITES.vi[0], 10, 12, 15]) {
+    const est = estadoGeo({ ...tsf, vvi: v }, exf);
+    const c = construirCorazon(est, { detalle: true });
+    assert.ok(c.partes.every(p => (p.pos ? p.pos.every(Number.isFinite) : true)), `VI de ${v} mL: malla con valores no finitos`);
+    const g = baseGeometrica(est).vi;
+    assert.ok(g.Rm > 1 && g.Rm < g.Rb + 5, `VI de ${v} mL: radio medio ${fmt(g.Rm)} mm`);
+  }
 });
