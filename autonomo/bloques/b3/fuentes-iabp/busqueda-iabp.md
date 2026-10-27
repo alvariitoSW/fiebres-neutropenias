@@ -20,6 +20,6 @@ No encontrado con esta busqueda: ninguno de los 4 errores falta; no se hallo en 
 
 ## Elección del usuario y verificación (27/10/2026)
 - El usuario eligió las cuatro: JSCAI 2024 (principal, PMID 39132456, PMC11307388, CC BY-NC-ND 4.0), Int J Heart Fail 2020 (PMID 36263076, segunda cita), J Heart Lung Transplant 2023 (PMID 36682892, matiz del desinflado tardío) y Artif Organs 2011 (PMID 21883317, retraso de la curva de la consola). Tabla: `iabp-temporizacion.xlsx` (7 filas, pasajes literales comprobados por `cc.py`); lista Vancouver: `referencias.md`.
-- Verificación: título, autores, año y DOI salen del registro de PubMed (eutils). La comprobación cruzada con Crossref/OpenAlex (`/citation-verification`) no se pudo hacer: `api.crossref.org` está bloqueado en la red del entorno.
-- PDF de la principal: no se pudo bajar (pmc.ncbi.nlm.nih.gov y europepmc.org bloqueados). Falta subirlo a `docs/` para enlazar con `#page=`.
+- Verificación: título, autores, año y DOI del registro de PubMed (eutils) y, con `/citation-verification` (Crossref), **las 4 verificadas** (27/10, tras abrir el usuario `api.crossref.org`).
+- PDF de la principal: lo subió el usuario → `docs/gillespie-2024-balon-contrapulsacion-jscai.pdf` (11 p.; página del PDF = página del artículo). **Fig. 7, p. 6**: curvas normal y de los 4 errores; **«Timing errors», p. 8**; complicaciones y errores de temporización también en p. 10.
 - Pendiente (tarea `fuentes-b3`): construir los cuatro errores en la consola del balón con esta fuente (curvas recreadas, no la figura del artículo: licencia ND y regla de recrear gráficos).
