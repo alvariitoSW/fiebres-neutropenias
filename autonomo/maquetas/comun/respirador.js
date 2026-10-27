@@ -28,7 +28,7 @@ export function canalesPantalla({ peep = () => 5, pmax = () => 40, pawMin = -10,
   return [
     { k: 'paw', rot: 'Paw mbar', alto: 110, min: pawMin, max: pawMax, base0: 0, marcas: [0, 20], col: 'var(--resp-curva)', lineas: [{ k: 'pmax', v: pmax, clase: 'resp-pmax', rot: 'Pmáx' }, { k: 'peep', v: peep, clase: 'resp-peep', rot: 'PEEP' }] },
     { k: 'flujo', rot: 'Flujo L/min', alto: 90, min: -flujoMax, max: flujoMax, base0: 0, marcas: [-50, 0, 50], col: 'var(--resp-curva)' },
-    { k: 'vol', rot: 'Volumen mL', alto: 60, min: 0, max: volMax, base0: 0, marcas: [500], col: 'var(--resp-curva)' },
+    { k: 'vol', rot: 'Vol mL', alto: 60, min: 0, max: volMax, base0: 0, marcas: [500], col: 'var(--resp-curva)' },
   ];
 }
 
@@ -44,6 +44,7 @@ export const RESPIRADOR_CSS = `
 .resp-alarma::-webkit-scrollbar { display: none; }
 .resp-alarma .al { display: inline-block; border-radius: 4px; padding: 3px 6px; margin-right: 4px; }
 .resp-alarma .al.al-alarma { background: var(--resp-alarma); color: var(--resp-blanco); }
+.resp-alarma .al.al-mas { background: var(--resp-barra); border: 1px solid var(--resp-tenue); color: var(--resp-tinta); }
 .resp-alarma .al.al-aviso { background: var(--resp-aviso); color: var(--resp-tinta); }
 .resp-hora { flex: none; font: 600 .62rem/1.1 var(--sans); color: var(--resp-tenue); text-align: right; }
 .resp-curvas { position: relative; padding: 2px 2px 0; }
@@ -68,7 +69,7 @@ export const RESPIRADOR_CSS = `
 .resp-c { position: relative; display: grid; grid-template-rows: auto 1fr; min-height: 50px; background: var(--resp-blanco); border: 1px solid var(--resp-raya); border-radius: 6px; padding: 2px 4px 2px; cursor: pointer; min-width: 0; text-align: left; font: inherit; color: inherit; }
 .resp-c .et { display: flex; justify-content: space-between; gap: 2px; font: 600 .6rem/1.15 var(--sans); color: var(--resp-tenue); white-space: nowrap; min-width: 0; }
 .resp-c .et span:first-child { overflow: hidden; text-overflow: ellipsis; color: var(--resp-tinta); }
-.resp-c .lim { position: absolute; left: 4px; bottom: 2px; font: .55rem/1.15 var(--sans); color: var(--resp-tenue); display: grid; }
+.resp-c .lim { position: absolute; left: 4px; bottom: 2px; font: .55rem/1.1 var(--sans); color: var(--resp-tenue); display: grid; gap: 1px; }
 .resp-c .v { align-self: end; justify-self: end; font: 700 1.25rem/1 var(--sans); font-variant-numeric: tabular-nums; color: var(--resp-tinta); white-space: nowrap; }
 .resp-c .sub { position: absolute; right: 4px; top: 13px; font: .55rem/1.1 var(--sans); color: var(--resp-tenue); white-space: nowrap; }
 .resp-c.ilu .v { color: var(--resp-tenue); font-weight: 600; }
@@ -209,7 +210,7 @@ export function crearRespirador(cont, cfg) {
   function alarmas(lista) {
     const el = q('alarma');
     const orden = [...lista].sort((a, b) => (a.nivel === 'alarma' ? 0 : 1) - (b.nivel === 'alarma' ? 0 : 1));
-    const h = orden.map((a) => `<span class="al al-${a.nivel}">🔔 ${a.texto}</span>`).join('');
+    const h = orden.slice(0, 1).map((a) => `<span class="al al-${a.nivel}">🔔 ${a.texto}</span>`).join('') + (orden.length > 1 ? `<span class="al al-mas">+${orden.length - 1}</span>` : '');
     if (el.dataset.h !== h) { el.dataset.h = h; el.innerHTML = h || 'Sin alarmas'; }
   }
 

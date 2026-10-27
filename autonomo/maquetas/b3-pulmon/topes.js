@@ -7,7 +7,7 @@ import * as D from './datos.js';
 const { C } = D;
 const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 
-export const T = { vmAviso: 16, vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50 };
+export const T = { vmAviso: 16, vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50, pmaxMin: 20, tiMin: 0.2 };
 const ORG_VT = 'ficha · Tabla 27.1 (cap. 27 p. 14) y cap. 23 p. 29';
 const ORG_12 = 'ficha · tradicional 12-15 mL/kg y normal 6-7 (cap. 24 p. 46) · el tope de 12: ilustrativo';
 

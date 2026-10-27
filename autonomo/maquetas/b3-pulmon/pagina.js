@@ -3,7 +3,7 @@
 // (datos.js) y la Mayéutica de muestra (comun/muestra-mayeutica.js). El modelo corre en vivo y el monitor dibuja
 // muestra a muestra, con un barrido de 12 s.
 import { instalarMonitor, instalarMonitorResp } from '../comun/monitor.js';
-import { montarPantalla } from './pantalla.js';
+import { montarPantalla, flujoTope } from './pantalla.js';
 import { instalarCss } from '../comun/dibujo-iso.js';
 import { crearDock } from '../comun/dock.js';
 import { crearMuestra } from '../comun/muestra-mayeutica.js';
@@ -109,7 +109,7 @@ function marcasFlujo() {
   const F = mon.dato('fase'), Q = mon.dato('flujo'), NP = mon.NP; let h = '';
   for (let i = 1; i < NP; i++) if (F[i - 1] === 'esp' && F[i] && F[i] !== 'esp' && Q[i - 1] != null) {
     const y = mon.yDe('flujo', Q[i - 1]), v = Q[i - 1];
-    h += `<path class="mon-marca" d="M${mon.x(i - 1)} ${f1(y + 2).replace(',', '.')}l-3 5h6z"/>` + (v < -2 ? `<text class="mon-marca-txt" x="${mon.x(i - 1) + 4}" y="${f1(y + 9).replace(',', '.')}">${f0(v)}</text>` : '');
+    if (v < -2) h += `<path class="mon-marca" d="M${mon.x(i - 1)} ${f1(y + 2).replace(',', '.')}l-3 5h6z"/><text class="mon-marca-txt" x="${mon.x(i - 1) + 4}" y="${f1(y + 9).replace(',', '.')}">fin esp. ${f0(v)}</text>`;
   }
   g.innerHTML = h;
 }
@@ -183,9 +183,9 @@ function pintarMandos() {
   let h = '';
   if (est.pest === 'resp') {
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button></div>`;
-    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12`) + desl('flujo', 'Flujo', r.flujo, 30, 100, 5, 'L/min', 'ficha: 60, ≥80 si distrés');
+    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha: 5-8 de inicio') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, 30, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
+    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
   } else if (est.pest === 'pulmon') {
     h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha: SDRA <25' : pu.c >= 50 ? 'ficha: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'fisiología general');
     h += `<div class="seg" aria-label="Resistencia espiratoria"><button type="button" data-m="fesp" data-v="1" aria-pressed="${est.factorEsp === 1}">Esp. = insp.<small>pulmón sano</small></button><button type="button" data-m="fesp" data-v="2" aria-pressed="${est.factorEsp === 2}">Esp. ×2<small>EPOC</small></button><button type="button" data-m="fesp" data-v="3" aria-pressed="${est.factorEsp === 3}">Esp. ×3<small>asma (ilustrativo)</small></button></div>`;
@@ -213,6 +213,7 @@ function cambiarMando(k, v) {
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
   guardarTope(k, antes);
+  if (k === 'vt' && P.S.resp.modo === 'vcv' && P.S.resp.flujo > flujoTope(P.S.resp.vt)) P.ajustar({ flujo: flujoTope(P.S.resp.vt) });   // Ti mínimo (ilustrativo)
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor();
 }
@@ -237,7 +238,7 @@ function detener(on) {
   est.detenido = on;
   if (on) {
     llenarMonitor();
-    tope.poner('detenido', { nivel: 'sello', titulo: 'Sin ventilación', texto: 'El respirador no da ninguna respiración y en este modelo el paciente no respira por su cuenta: el CO₂ sube y la saturación cae en minutos. Pulsa otra vez para reanudar.', origen: 'fisiología general' });
+    tope.poner('detenido', { nivel: 'sello', titulo: 'Sin ventilación', texto: 'El respirador no da ninguna respiración y en este modelo el paciente no respira por su cuenta: el CO₂ sube y la saturación cae en minutos (no se calcula en el modelo). Pulsa otra vez para reanudar.', origen: 'fisiología general' });
   } else { tope.quitar('detenido'); llenarMonitor(); }
   pintarTodo();
 }

@@ -27,7 +27,7 @@ export const CASILLAS = [
   { k: 'pmedia', et: 'Pmedia', u: 'mbar', que: 'Presión media de la vía aérea durante el ciclo.', c: C.pMedia },
   { k: 'frmand', et: 'FRmand', u: '/min', que: 'La frecuencia que pones (mandatoria). Sin límite de alarma: la ficha no da uno.', c: C.t271 },
   { k: 'fr', et: 'FR', u: '/min', que: 'La frecuencia real: si la espiración no cabe, el ciclo se alarga y baja. Sin límite de alarma: la ficha no da uno.', c: C.flujoIE },
-  { k: 'vt', et: 'VTe', u: 'mL', que: 'Volumen corriente espirado (y por kg de peso ideal). Límite 12 mL/kg: ilustrativo (normal 6-7, ficha).', c: C.t271 },
+  { k: 'vt', et: 'VTe', u: 'mL', que: 'Volumen corriente espirado (y por kg de peso ideal). Límite 12 mL/kg: ilustrativo (normal 6-7: ficha, cap. 24 p. 46).', c: C.t271 },
   { k: 'vm', et: 'VMe', u: 'L/min', que: 'Volumen minuto espirado = VTe × FR. Límites 2 y 20: fisiología general.', c: C.t271 },
   { k: 'ie', et: 'I:E', u: '', que: 'Relación inspiración:espiración. La ficha pide 1:2 o más.', c: C.flujoIE },
   { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, que: 'Copia el mando FiO₂. Este modelo no tiene gases: no cambia nada (ilustrativo).' },
@@ -39,12 +39,12 @@ const MANDOS = [
   { k: 'vt', et: 'VT', u: 'mL', min: 200, max: 800, paso: 10 },
   { k: 'ti', et: 'Ti', u: 's' },
   { k: 'fr', et: 'FR', u: '/min', min: 8, max: 35, paso: 1, nota: 'Ficha: no pasar de 35.' },
-  { k: 'peep', et: 'PEEP', u: 'mbar', min: 0, max: 20, paso: 1, nota: 'Ficha: 5-8 de inicio.' },
+  { k: 'peep', et: 'PEEP', u: 'mbar', min: 0, max: 20, paso: 1, nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5.' },
   { k: 'dpsop', et: 'ΔPsop', u: 'mbar' },
   { k: 'rampa', et: 'Rampa', u: 's' },
   { k: 'flujo', et: 'Flujo', u: 'L/min', min: 30, max: 100, paso: 5, nota: 'Ficha: 60 L/min, ≥80 si hay distrés.' },
   { k: 'pinsp', et: 'Pinsp', u: 'mbar', min: 5, max: 30, paso: 1, nota: 'Presión de insuflación, sobre la PEEP.' },
-  { k: 'pmax', et: 'Pmáx', u: 'mbar', min: 30, max: TOPE.pmaxMax, paso: 5, nota: 'Límite de presión: al llegar, el respirador corta la insuflación (ilustrativo; la ficha quiere la meseta ≤30).' },
+  { k: 'pmax', et: 'Pmáx', u: 'mbar', min: TOPE.pmaxMin, max: TOPE.pmaxMax, paso: 5, nota: `Límite de presión: al llegar, el respirador corta la insuflación. Rango ${TOPE.pmaxMin}-${TOPE.pmaxMax}: ilustrativo (la ficha quiere la meseta ≤30); con 20 el corte se ve también en un pulmón sano.` },
 ];
 const TECLAS = [
   { k: 'alarmas', et: 'Alarmas', ico: '🔔', tipo: 'accion' },
@@ -58,12 +58,13 @@ const TECLAS = [
   { k: 'o2', et: 'O₂ succión', ico: 'O₂', tipo: 'deco' },
   { k: 'nebu', et: 'Nebulización', ico: '≋', tipo: 'deco' },
 ];
-const PIE = `Curvas y casillas: el modelo (${ORIGEN_MODELO}, un compartimento). Límites de alarma: cada uno con su origen (toca una casilla). FiO₂, hora, batería, iconos y teclas grises: ilustrativo. Unidades en mbar: 1 mbar ≈ 1 cmH₂O; el Marino usa cmH₂O (la cifra es la misma).`;
+const PIE = `Curvas y casillas: el modelo (${ORIGEN_MODELO}, un compartimento). Límites de alarma: cada uno con su origen (toca una casilla). FiO₂, hora, batería, iconos y teclas grises: ilustrativo. Unidades en mbar: 1 mbar ≈ 1 cmH₂O; el Marino usa cmH₂O (la cifra es la misma). El volumen (Vistas) es el del modelo sobre la CRF: el aparato real lo pone a cero en cada ciclo; en Jacinto no vuelve a 0 porque queda aire atrapado. Lo que ves en la pantalla del respirador es el pulmón de tu paciente: aprende a leerlo.`;
 
 // Los topes (claves de topes.js) → casilla y texto de la barra de alarmas
 const SELLO_A = { sinvent: ['vm', 'VMe bajo'], vmalto: ['vm', 'VMe alto'], vtalto: ['vt', 'VTe alto'], hiper: ['peeptot', 'PEEP total alta'] };
 const AVISO_A = { vm: ['vm', 'VMe alto'], vtkg: ['vt', null], meseta: ['meseta', 'EIP > 30'], pmax: ['pico', 'Pmáx muy alta'], cabe: ['ie', 'No cabe la espiración'] };
 
+export const flujoTope = (vt) => Math.max(30, Math.min(100, Math.floor(vt * 0.06 / TOPE.tiMin / 5) * 5));
 export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, alTecla }) {
   const R = crearRespirador(cont, {
     canales: canalesPantalla({ peep: () => P.S.resp.peep, pmax: () => P.S.resp.pmax ?? 40 }),
@@ -100,7 +101,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       frmand: { v: f0(r.fr) },
       fr: { v: v(f0(l.frReal)) },
       vt: { v: v(f0(l.vtExh)), sub: tapado || l.vtExh == null ? '' : `${f1(l.vtExh / kg)} /kg`, lim: `≤${vtMax}` },
-      vm: { v: v(f1(l.vm)), lim: `<span>${TOPE.vmMax}</span><span>${TOPE.vmMin}</span>` },
+      vm: { v: v(f1(l.vm)), lim: `<span>≤${TOPE.vmMax}</span><span>≥${TOPE.vmMin}</span>` },
       ie: { v: v(l.ie != null && isFinite(l.ie) ? `1:${f1(l.ie)}` : null) },
       fio2: { v: f0(est.fio2) }, frespon: {}, vmespon: {},
     };
@@ -111,14 +112,14 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
     const vtTope = Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10));
     R.mandos({
       fio2: { v: est.fio2 },
-      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ilustrativo; normal 6-7 (ficha).` } : { v: r.vt, apagado: 'En PC-AC no se fija el volumen: se fija la presión.' },
-      ti: vcv ? { v: f1(ti), txt: f1(ti), et: 'Flujo (mueve el Ti)', mueve: 'flujo', vRango: r.flujo, txtDesl: `${r.flujo} L/min`, min: 30, max: 100, paso: 5, u: '', nota: `Ti ${f1(ti)} s. En este modelo el Ti sale del flujo: Ti = VT ÷ flujo (sube el flujo y el Ti se acorta). Ficha: 60 L/min, ≥80 si hay distrés.` }
+      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ilustrativo; normal 6-7: ficha, cap. 24 p. 46.` } : { v: r.vt, apagado: 'En PC-AC no se fija el volumen: se fija la presión.' },
+      ti: vcv ? { v: f1(ti), txt: f1(ti), et: 'Flujo (mueve el Ti)', mueve: 'flujo', vRango: r.flujo, txtDesl: `${r.flujo} L/min`, min: 30, max: flujoTope(r.vt), paso: 5, u: '', nota: `Ti ${f1(ti)} s. En este modelo el Ti sale del flujo: Ti = VT ÷ flujo (sube el flujo y el Ti se acorta). Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` }
         : { v: f1(ti), txt: f1(ti), et: 'I:E (mueve el Ti)', mueve: 'ie', vRango: r.ie, txtDesl: `1:${f1(r.ie)}`, min: 1, max: 4, paso: 0.5, u: '', nota: `Ti ${f1(ti)} s · I:E 1:${f1(r.ie)}. En este modelo el Ti sale de la relación I:E y de la FR.` },
-      fr: { v: r.fr }, peep: { v: r.peep },
+      fr: { v: r.fr }, peep: { v: r.peep, ...(vcv ? {} : { nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' }) },
       dpsop: { v: null, txt: '—', apagado: 'Presión de soporte: para la respiración espontánea; no en este modelo.' },
       rampa: { v: null, txt: '—', apagado: 'Rampa: no en este modelo (ilustrativo).' },
       flujo: vcv ? { v: r.flujo } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
-      pinsp: vcv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp },
+      pinsp: vcv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });
     R.modo(r.modo, { detenido });
@@ -128,7 +129,8 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
     const t = alarmasVivas.length ? alarmasVivas.map((a) => `${a.nivel === 'alarma' ? '⛔' : '⚠'} ${a.texto}`).join(' · ') : 'Sin alarmas';
     R.info(`<b>Alarmas</b> · ${t}. Límites: VMe ${TOPE.vmMin}-${TOPE.vmMax} L/min y PEEP total ≤${TOPE.peepTotMax} (fisiología general); EIP ≤${TOPE.meseta} (ficha); VTe ≤12 mL/kg (ilustrativo); Ppico ≤ tu Pmáx. FR: sin límite (la ficha no lo da). ${cita(C.riesgo)}`);
   }
-  let conVol = true;
+  let conVol = false;
+  R.ver(['paw', 'flujo']);
   function vistas() { conVol = !conVol; R.ver(conVol ? ['paw', 'flujo', 'vol'] : ['paw', 'flujo']); R.info(`<b>Vistas</b> · ${conVol ? 'Paw, flujo y volumen' : 'Paw y flujo (sin la curva de volumen)'}.`); }
   return { R, mon: R.mon, pintar, infoAlarmas, vistas };
 }

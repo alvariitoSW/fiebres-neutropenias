@@ -93,7 +93,7 @@ export function crearMonitor(svg, { canales, margen = 26, hueco = 4, borrar = 6,
       for (const { l, y } of ls) { const el = gc.querySelector(`[data-linea="${l.k}"]`); if (el) { el.setAttribute('y1', f1(y)); el.setAttribute('y2', f1(y)); el.toggleAttribute('hidden', !isFinite(y)); } }
       const rots = ls.filter(({ l }) => l.rot).sort((a, b) => a.y - b.y);
       let previo = -99;
-      for (const it of rots) { const el = gc.querySelector(`[data-linea-rot="${it.l.k}"]`); if (!el) continue; const yy = Math.max(it.y + 3, previo + 10); el.setAttribute('y', f1(yy)); previo = yy; }
+      for (const it of rots) { const el = gc.querySelector(`[data-linea-rot="${it.l.k}"]`); if (!el) continue; el.toggleAttribute('hidden', (c.marcas || []).some((m) => Math.abs(yLocal(c, m) - it.y) < 7)); const yy = Math.max(it.y + 3, previo + 10); el.setAttribute('y', f1(yy)); previo = yy; }
     }
     const br = svg.querySelector('.mon-barrido'); if (br) { const x = margen + ((cursor - 1 + NP) % NP); br.setAttribute('x1', x); br.setAttribute('x2', x); }
   }
