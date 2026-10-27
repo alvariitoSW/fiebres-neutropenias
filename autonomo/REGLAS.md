@@ -122,6 +122,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      compartidos (`[HUECO <quién>: …]` en CSS, `index.html`, `index.js`, menús) y cada uno escribe solo en el suyo.
    - **Solo el director sube el `?v=`** de `index.html` y decide el **orden de fusión** de las ramas.
    - **Cada agente, en su subcarpeta temporal** (`/tmp/plan-socialista/<bloque>/<agente>/`): nunca en una común.
+   - **Una carpeta aparte (`git worktree`) sale siempre de la rama del bloque**, no de `main` (aprobado por el usuario,
+     27/10/2026): el primer paso del encargo es `git fetch origin auto/<bN> && git checkout -B <rama> origin/auto/<bN>`.
+     El aislamiento automático de los agentes sale de `main`; en el `b3` dos constructores partieron una versión vieja
+     y hubo que rehacerlo (≈1 M de gasto). Si cada agente tiene sus propios archivos, mejor sin carpeta aparte.
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
      darlo por roto (con la máquina cargada fallan pruebas que están bien).
 
@@ -167,6 +171,7 @@ vez:
 3. Cada regla nacida así se apunta en la lista de abajo, con la tarea donde se vio.
 
 **Reglas nacidas de fallos**
+- §4.6 (carpeta aparte desde la rama del bloque): vuelta de límites del `b3` (27/10/2026), aprobada por el usuario.
 - §1.14 (topes y consecuencias): maquetas v3 del bloque 3 (`b3`, 26/10/2026). El usuario infundió 23 L de suero en el
   shock (PVC 87, edema de 7,6 L y la frase seguía en «Tras el cristaloide»); el pulmón dejaba Vt de 2.924 mL y el ritmo
   FC 0 sin aviso. Ningún juez lo vio porque las pruebas no llevaban los mandos al tope. Entró en el profesor, el
