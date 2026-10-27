@@ -310,7 +310,8 @@ test('pared libre del VD: 1-5 mm en diástole, engruesa en sístole y conserva s
   for (const k of Object.keys(ESCENARIOS)) {
     const m = correr(k), { td, ts, ex } = instantes(m), gD = baseGeometrica(estadoGeo(td, ex)), gS = baseGeometrica(estadoGeo(ts, ex));
     const tD = gD.tvdW(99), tS = gS.tvdW(99);
-    assert.ok(tD >= 1 && tD <= 5, `${k}: pared del VD ${fmt(tD)} mm en diástole (Lang p. 20: 1-5 mm)`);
+    // HP crónica: la hipertrofia del VD es justo lo que sale de 1-5 mm (Mukherjee 2025, p. 145: >5 mm anormal; grave >9 mm)
+    assert.ok(tD >= 1 && tD <= (k === 'hpcronica' ? 12 : 5), `${k}: pared del VD ${fmt(tD)} mm en diástole (Lang p. 20: 1-5 mm)`);
     assert.ok(tS > tD, `${k}: la pared del VD no engruesa (${fmt(tD)} → ${fmt(tS)} mm)`);
   }
   const m = correr('normal'), { td, ts, ex } = instantes(m), razon = volPared(estadoGeo(ts, ex)) / volPared(estadoGeo(td, ex));

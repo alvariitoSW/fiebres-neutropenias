@@ -188,7 +188,8 @@ export function medidasCorazon(est, sc = 1.85) {
     if (zp > -vi.L && rho < g.rEndoVi(zp, f)) { nVi++; continue; }
     if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) nVd++; }
   }
-  return { tabique: pared(U), paredPost, lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
+  // paredVd: pared libre del VD en esta muestra (mm); medida en la telediástole es el RVWT de Mukherjee 2025 (p. 144)
+  return { tabique: pared(U), paredPost, paredVd: g.tvdW(20), lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
     masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo };
 }
 

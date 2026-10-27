@@ -107,3 +107,33 @@ test('índice de excentricidad: normal ≈ 1 en telediástole y telesístole; TE
   assert.ok(t.eiS >= t.eiD - 0.01, `TEP: telesístole ${t.eiS.toFixed(2)} no menor que telediástole ${t.eiD.toFixed(2)}`);
   assert.ok(Math.abs(t.eiS - 1.44) <= 0.16 + 0.1, `TEP: ${t.eiS.toFixed(2)} cerca de Ryan 1985 (1,44 ± 0,16)`);
 });
+
+// P6 · HP crónica frente a TEP agudo. Pared libre del VD (RVWT) en telediástole: normal <5 mm, leve 5-7, moderada >7-9, grave >9
+// (Mukherjee 2025, Tabla 5, p. 145; Lang 2015, Tabla 8, p. 20: 1-5 mm). La sobrecarga crónica engruesa la pared; la aguda, no.
+// IE en telesístole >1 = sobrecarga de presión (Mukherjee p. 149-150); PAPs normal ≤34 (p. 145).
+test('HP crónica frente a TEP agudo: pared del VD gruesa en la crónica y fina en la aguda; presión pulmonar mayor; tabique aplanado en telesístole', () => {
+  const hp = correr('hpcronica'), tep = correr('tep');
+  const mh = medidas(hp), mt = medidas(tep), ih = medirVdAtlas(hp), it = medirVdAtlas(tep);
+  assert.ok(md0.paredVd < 5, `normal: pared del VD ${md0.paredVd.toFixed(1)} mm (<5)`);
+  assert.ok(mh.paredVd > 5, `HP crónica: pared del VD ${mh.paredVd.toFixed(1)} mm (>5 mm, Mukherjee p. 145)`);
+  assert.ok(mt.paredVd <= 5, `TEP agudo: pared del VD ${mt.paredVd.toFixed(1)} mm (≤5: pared fina)`);
+  assert.ok(ih.eiS > 1.1, `HP crónica: IE en telesístole ${ih.eiS.toFixed(2)} (>1 sobrecarga de presión)`);
+  assert.ok(hp.ultimo.paps > tep.ultimo.paps + 10 && hp.ultimo.paps > 34, `PAPs ${hp.ultimo.paps.toFixed(0)} (HP) frente a ${tep.ultimo.paps.toFixed(0)} (TEP); normal ≤34`);
+  assert.ok(it.eiS > 1.1, 'TEP: también aplana el tabique, así que no es el IE lo que los distingue');
+});
+
+test('HP crónica: paciente posible desde el defecto hasta el tope (PA, FC, PVC y GC razonables; la pared deja de crecer al dilatarse el VD)', () => {
+  let pared = [];
+  for (const g of [0, 0.25, undefined, 0.8, 1]) {
+    const m = crearMotor(); m.correr(12); ESCENARIOS.hpcronica.aplicar(m, g); m.correr(ASENTAR_FORMA);
+    const u = m.ultimo, md = medidas(m), t = `g=${g}`;
+    for (const k of ['pam', 'fc', 'pvc', 'gc', 'paps', 'papd', 'edvD']) assert.ok(Number.isFinite(u[k]), `${t}: ${k}`);
+    assert.ok(u.pam >= 60 && u.pam <= 100, `${t}: PAM ${u.pam.toFixed(0)}`);
+    assert.ok(u.fc >= 55 && u.fc <= 110, `${t}: FC ${u.fc.toFixed(0)}`);
+    assert.ok(u.pvc >= 2 && u.pvc <= 16, `${t}: PVC ${u.pvc.toFixed(1)}`);
+    assert.ok(u.gc >= 2.5 && u.gc <= 6, `${t}: GC ${u.gc.toFixed(1)}`);
+    assert.ok(u.paps <= 110, `${t}: PAPs ${u.paps.toFixed(0)}`);
+    pared.push(md.paredVd);
+  }
+  assert.ok(pared[0] < 5 && pared[2] > 7, `pared ${pared.map(x => x.toFixed(1))}: de normal a moderada (>7 mm)`);
+});
