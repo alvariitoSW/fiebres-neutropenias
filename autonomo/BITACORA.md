@@ -308,7 +308,7 @@ El resto del tablero sigue `aparcada`.
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
   C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. **Falta**: el PDF de la ESC 2023
-  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191) y el de ECG de la rotación . Ya en `docs/`: ESC 2023 de SCA (2 partes),
+  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191). El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
   de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). También Wagner 2009 (AHA, territorios) y Thygesen
   2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
 
@@ -340,9 +340,34 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · Leung y Levine 1994
-  (opcional) · temarios de Radiología de tórax y Neurorradiología. (La guía de amiloidosis y el MAPSE ya están en
-  `docs/` desde el 27/10.)
+- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · temarios de Radiología de tórax y
+  Neurorradiología. (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
+  3.ª tanda.)
+- **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
+  - `lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`: López Ramírez JH. *La alegría de leer el
+    electrocardiograma*, 3.ª ed. Bogotá: Celsus; 2012 (ISBN 978-958-9327-44-9). Pp. 1-195; parte 1: PDF − 10 (pdf 20
+    = p. 10); parte 2: PDF + 59 (pdf 20 = p. 79); parte 3: PDF + 127 (pdf 20 = p. 147). Lo mandaste como el ECG
+    básico: `pif-ecg` pasa a `pendiente` (si no es el de la rotación, dilo y se busca el otro).
+  - `esc-2019-taquicardias-supraventriculares.pdf`: Brugada J, Katritsis DG, et al. 2019 ESC Guidelines for the
+    management of patients with supraventricular tachycardia. Eur Heart J 2020;41:655-720
+    (doi:10.1093/eurheartj/ehz467). Página impresa = PDF + 654 (pdf 10 = 664; pdf 40 = 694). Hueco de `fuentes-b3`.
+  - `esc-2023-miocardiopatias-parte1/2.pdf`: Arbelo E, Protonotarios A, et al. 2023 ESC Guidelines for the management
+    of cardiomyopathies. Eur Heart J 2023;44:3503-3626 (doi:10.1093/eurheartj/ehad194). Parte 1: PDF + 3501 (pdf 1 es
+    la portada del repositorio; pdf 10 = 3511, pdf 40 = 3541); parte 2: PDF + 3564 (pdf 10 = 3574, pdf 40 = 3604).
+    Hueco de `fuentes-b3`; sirve también a `hcm` (obstrucción del TSVI).
+  - `tamagnone-pocus-ecografia-critica-muestra-parte1/2/3.pdf`: **muestra**, no el libro entero, sin año impreso.
+    Junta: *POCUS. Manual práctico de ultrasonografía crítica*, 2.ª ed. (Tamagnone, Previgliano, Merlo, Benay; Corpus):
+    cap. 2 «Funciones del equipo / Knobología» y el principio del cap. 3 (parte 1, pdf 3-19; impresa = PDF + 32);
+    *POCUS II. Ecocardiografía crítica* (Merlo, Tamagnone, Benay; ASARUC): cap. 1 introducción (pdf 22-24, impresa =
+    PDF + 0), cap. 3 técnicas y cuantificación de cavidades (parte 1 pdf 26 → parte 2 pdf 5, p. 33-65; impresa parte 1
+    = PDF + 8 (pdf 28 = 36), parte 2 = PDF + 60 (pdf 3 = 63)), cap. 11 eco en el weaning (parte 2 pdf 7-17, p. 183-194, impresa = PDF + 177: pdf 9 = 186, pdf 12 = 189) y
+    cap. 13 valoración hemodinámica del shock séptico por ETT (parte 2 pdf 19-46, p. 201-229, impresa = PDF + 183: pdf 20 = 203, pdf 40 = 223);
+    y ~12 artículos de Cheong, Tamagnone y cols. (2021-2022: TEP en prono con *speckle tracking*, carótida en la UCI,
+    elevación pasiva de piernas con ITV del TSVD subcostal, ITV del TSVI subcostal modificado, ETT en prono COVID,
+    absceso pulmonar, *heart point* y *lung point* en neumotórax, sinusitis maxilar, disección carotídea, ventana
+    paraesternal transhepática derecha), cada uno con su propia paginación de revista. Entre medias, páginas de
+    publicidad de cursos. **No estaba pedido** y no es el libro de física de B-028; útil para Eco cardíaca (cavidades,
+    weaning, shock séptico) cuando se apruebe algo que lo use.
 - **✅ PDF de la ASE 2025 (27/10)**, en `docs/`:
   - `nagueh-2025-funcion-diastolica-hfpef-ase.pdf` (J Am Soc Echocardiogr 2025;38:537-569; página impresa = página
     del PDF + 536). **Lo había pedido**: el «ASE 2025 diastólica» de la fase 3 (`f3-calc-eco`, `echosuite.md` §4.6).
@@ -401,9 +426,9 @@ El resto del tablero sigue `aparcada`.
 - **Propuesta de regla nueva** (`topes-acidobase`, 27/10): un aviso de tope no escribe la cifra imposible, sino el
   límite que se habría cruzado (o que el juez de topes distinga un aviso de rechazo de una cifra del paciente).
   ¿La apruebas?
-- **4 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): ESC 2019 de taquicardias supraventriculares,
-  AHA 2020 de soporte vital (o ERC 2021), ESC 2023 de miocardiopatías y el consenso SCAI 2015. Sin ellos, esos puntos
-  quedan marcados como hueco.
+- **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
+  consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
+  miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
 
