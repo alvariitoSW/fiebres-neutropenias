@@ -47,7 +47,8 @@ export const C = {
   t151: { f: 'mc-hemorragico-clasificacion', id: 'mc-tabla-15-1', sitio: 'Tabla 15.1', p: 22 },
   claseIII: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-iii', sitio: 'Clase III', p: 23 },
   claseIV: { f: 'mc-hemorragico-clasificacion', id: 'mc-clase-iv', sitio: 'Clase IV', p: 23 },
-  hb: { f: 'mc-hemorragico-clasificacion', id: 'mc-hb-trampa', sitio: 'Hemoglobina: una trampa', p: 23 },
+  hb: { f: 'mc-hemorragico-clasificacion', id: 'mc-hto-trampa', sitio: 'Hemoglobina: una trampa', p: 23 },
+  hbFluido: { f: 'mc-hemorragico-clasificacion', id: 'mc-hto-fluido', sitio: 'Hemoglobina: el fluido de reanimación', p: 23 },
   f156: { f: 'mc-hemorragico-clasificacion', id: 'mc-fig-15-6', sitio: 'Fig. 15.6', p: 34 },
   csHemo: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos', p: 40 },
   csExc: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-excepciones', sitio: 'Excepciones', p: 40 },
@@ -219,7 +220,7 @@ export const ESTADOS = {
   'hemo-salino': { tit: 'Tras el cristaloide', frase: (R, X) => `Llevas ${X.infundido.cris.toLocaleString('es-ES')} mL de cristaloide: la PA sube ahora, pero 3/4 se irán al intersticio en la próxima hora.`, org: 'ficha · p. 11',
     guia: [{ t: 'De cada litro de cristaloide, solo un 25 % se queda en el plasma; el 75 % pasa al intersticio.', s: ['[data-pest="reloj"]'], c: C.volIni },
       { t: (R) => `En el momento del bolo la PVC y la PA suben (PAM ${R.pam}). Pasa el reloj a la hora 1 y mira cuánto queda.`, s: ['[data-fila="pa"]', '[data-fila="pvc"]', '[data-pest="reloj"]'], c: C.volIni, org: 'cuánto: el modelo' },
-      { t: 'El salino añade plasma, no hematíes: diluye la Hb. Refleja la reanimación, no la pérdida.', s: ['#shv-lab'], c: C.hb }] },
+      { t: 'El salino añade plasma, no hematíes: diluye la Hb. Refleja la reanimación, no la pérdida.', s: ['#shv-lab'], c: C.hbFluido }] },
   septico: { tit: 'Shock séptico', frase: (R) => `Vasos abiertos (IRVS ${R.irvs}) y un gasto alto (IC ${c1(R.ic)}): la ScvO₂ alta (${R.ven} %) no tranquiliza; el gap de PCO₂ sí sirve.`, org: 'ficha · p. 10, 57-59',
     guia: [{ t: (R) => `Mira la arteriola: abierta. IRVS ${R.irvs}: la resistencia baja define el shock vasodilatador (Tabla 14.1).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.t141 },
       { t: (R) => `El gasto no está bajo: IC ${c1(R.ic)}. La taquicardia (${R.fc}) y la poscarga baja lo suben.`, s: ['[data-fila="ic"]', '[data-fila="fc"]'], c: C.sepHemo },
@@ -284,7 +285,7 @@ export const ESTADOS = {
       { t: 'Se hincha al empezar la diástole, al cerrarse la aórtica: la segunda joroba de la curva arterial. Sube el pico diastólico y la PAM.', s: ['#tr-art'], c: C.f163 },
       { t: 'Se vacía en la contracción isovolumétrica: la presión cae justo antes de que se abra la aórtica. La punteada es la curva sin balón.', s: ['#tr-art'], c: C.f163 },
       { t: 'No mejora la supervivencia. Está contraindicado con insuficiencia aórtica o disección.', s: ['.p-balon'], c: C.iabp }] },
-  'balon-1a2': { tit: 'Balón 1:2: un latido sí, otro no', frase: (R, X) => `El balón asiste un latido de cada ${X.ajuste.razon}: el asistido (A) tiene aumento ${R.picoDia ?? '—'} y telediastólica ${R.teleDia ?? '—'}; el no asistido (n), pico ${R.picoNo ?? '—'} y telediastólica ${R.teleNo ?? '—'}. PAM ${R.pam}.`, org: 'ficha · p. 45-46 · las cifras: modelo',
+  'balon-1a2': { tit: (R, X) => X.ajuste.razon === 2 ? 'Balón 1:2: un latido sí, otro no' : `Balón 1:${X.ajuste.razon}: un latido de cada ${X.ajuste.razon}`, frase: (R, X) => `El balón asiste un latido de cada ${X.ajuste.razon}: el asistido (A) tiene aumento ${R.picoDia ?? '—'} y telediastólica ${R.teleDia ?? '—'}; el no asistido (n), pico ${R.picoNo ?? '—'} y telediastólica ${R.teleNo ?? '—'}. PAM ${R.pam}.`, org: 'ficha · p. 45-46 · las cifras: modelo',
     guia: [{ t: 'La consola dibuja la presión arterial con dos clases de latido seguidos: A (asistido) y n (no asistido). Mira las letras bajo cada diástole.', s: ['#iabp-svg .lat'], c: C.iabp, org: 'la comparación: modelo' },
       { t: (R) => `En el latido A el balón se hincha al cerrarse la aórtica y la meseta sube a ${R.picoDia ?? '—'} mmHg: es el aumento diastólico.`, s: ['#iabp-meseta'], c: C.iabp, org: 'el valor: modelo' },
       { t: (R) => `En el latido n no hay balón: la diástole baja sin aumento (pico ${R.picoNo ?? '—'}). Compara las dos mesetas.`, s: ['#iabp-svg .lat.no'], c: C.iabp, org: 'el valor: modelo' },
@@ -519,7 +520,7 @@ export const CASO = {
         // la buena, la del monitor (la cuenta con las cifras redondeadas da ±1); las falsas, los tres errores de la cuenta
         const v = R.irvs, sinPvc = R.pam / R.ic, porGc = (R.pam - R.pvc) / R.gcTotal, meta = (x) => x < 25 ? 'bajo la meta (25-30)' : x <= 30 ? 'en la meta (25-30)' : 'sobre la meta (25-30)';
         return [
-          { t: `≈ ${Math.round(sinPvc)}: aprieta de más; bajo la noradrenalina.`, porque: `Te has olvidado de restar la PVC: la ecuación 14.2 usa PAM − PVC. Y aunque salga alta, bajar la noradrenalina dejaría la PAM de Aurelio por debajo de 65.` },
+          { t: `≈ ${Math.round(sinPvc)}, ${meta(sinPvc)}: aprieta de más; bajo la noradrenalina.`, porque: `Te has olvidado de restar la PVC: la ecuación 14.2 usa PAM − PVC. Y aunque salga alta, bajar la noradrenalina dejaría la PAM de Aurelio por debajo de 65.` },
           { t: `≈ ${Math.round(porGc)}, ${meta(porGc)}: subo la noradrenalina.`, porque: `Has dividido por el gasto en L/min, no por el índice (L/min/m²): eso es la RVS, no la IRVS. Subirías la noradrenalina y la poscarga de un VI que ya no puede con ella.` },
           { t: `≈ ${Math.round((R.pam - R.pvc) * R.ic)}: altísima; añado un vasodilatador.`, porque: 'La resistencia es presión dividida por flujo (ecuación 14.2), no multiplicada. Un vasodilatador con la PAM justa en 65 hundiría a Aurelio.' },
           { t: `≈ ${v}, ${meta(v)}: falta flujo, no presión.`, ok: true }];
@@ -527,7 +528,7 @@ export const CASO = {
       explica: 'IRVS = (PAM − PVC) / IC, de la ecuación 14.2 (gasto = (PAM − PAD) / RVS), en unidades Wood por m²; la meta del shock cardiogénico es 25-30 (Tabla 16.2). Con la presión sostenida por la noradrenalina y el IC aún bajo, lo que toca es el gasto: el inotrópico.', cita: C.ecuacion, cita2: C.t162 },
     { dia: 'Hora 1 · el plan del residente', prepara: { pac: 'aurelio', volumen: 250, ajuste: { na: 5 }, escena: 'corazon', canales: 'todos' }, tipo: 'error',
       ficha: (R) => [['Hora 1', `NA 5 µg/min · PAM ${R.pam} · IC ${c1(R.ic)} · lactato ${c1(R.lact)}`, 1]],
-      enunciado: 'La PA sube, pero el gasto sigue bajo. El R1 escribe el plan del inotrópico. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
+      enunciado: 'La PA sube, pero el gasto sigue bajo. El R1 escribe el plan del inotrópico. <b>Puede haber 0, 1 o 2 errores.</b>',
       frases: [
         { t: 'Empiezo milrinona, que da menos taquicardia: es la mejor con hipotensión.', mal: true, buena: 'La milrinona es vasodilatadora: su principal desventaja en el shock cardiogénico es la hipotensión (p. 44).', cita: C.milri },
         { t: 'Mejor dobutamina, a 3-5 µg/kg/min.', cita: C.dobuta },

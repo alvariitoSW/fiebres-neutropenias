@@ -6,11 +6,17 @@ const { C, TOPES: T } = D;
 const VOL = ['[data-vol]', '[data-sangre]'];
 const mL = (x) => Math.round(x).toLocaleString('es-ES');
 
+let dadoVisto = 0;   // lo infundido en el cálculo anterior: distingue un bolo nuevo de un ECMO que sube la PCP solo
 export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const out = {}, inf = X.infundido, dado = inf.cris + inf.sangre, tipo = X.pac.tipo;
+  const boloNuevo = dado > dadoVisto; dadoVisto = dado;
   // 1) volumen: PCP ≥ 20, o PVC > 12 habiendo subido ≥ 4 sobre la de entrada (aviso desde PCP 15 o PVC 11)
   const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
-  if (D.sobrecarga(R)) {
+  if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
+    // con el ECMO y sin volumen nuevo, la PCP sube por la poscarga del VI, no por el suero
+    out.sobrecarga = { nivel: 'sello', titulo: 'El ECMO sube la poscarga del VI', texto: `PCP ${R.pcp}: el flujo retrógrado del ECMO le sube la poscarga al VI y el pulmón se encharca; ventea (un balón o un Impella a la vez, o drenar el VI).${ed}`,
+      cita: C.ecmoPoscarga, origen: 'ficha · p. 48-49 · la cifra: modelo', deshabilita: VOL };
+  } else if (D.sobrecarga(R)) {
     out.sobrecarga = R.pcp >= T.pcp
       ? { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PCP ${R.pcp}: pasa el techo de 18-20 de la ficha; más volumen ya no sube el gasto y encharca el pulmón.${ed}`,
           cita: C.llenado, origen: 'ficha · p. 42 y p. 11', deshabilita: VOL }
