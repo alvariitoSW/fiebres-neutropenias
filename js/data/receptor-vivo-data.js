@@ -305,7 +305,7 @@ export const ESTADOS = [
       { t: 'Por encima de 10 manda el α: las cerraduras α₁ del anillo de la arteriola se llenan.', set: { f: { na: 25 } }, r: ['#rcv-e-anillo'], c: C.naDosis },
       { t: 'Cada célula lisa se acorta y el anillo se cierra: el calibre mide una luz más estrecha.', r: ['#rcv-e-anillo', '#rcv-e-cal'], c: C.naRec },
       { t: 'Pocos micrómetros bastan: la resistencia sube con la cuarta potencia del radio. Suben la IRVS y la PAM.', r: ['#rcv-e-cal', '[data-fila="irvs"]', '[data-fila="pa"]'], c: C.pam, org: 'fisiología general' },
-      { t: 'Con lupa: la llave α₁ gira el cilindro, el carro lleva el IP₃ al depósito y el calcio hace tirar a la miosina. Esa cadena es fisiología general.', set: { lupa: 'liso-arteriola', cas: 'completa' }, r: ['#rcv-l-cerr', '#rcv-l-ret', '#rcv-l-trinq'], c: C.naRec, org: 'fisiología general' },
+      { t: 'Con lupa: la llave α₁ gira el cilindro, el carro lleva el IP₃ al depósito y el calcio hace tirar a la miosina. Esa cadena es fisiología general.', set: { lupa: 'liso-arteriola', cas: 'completa' }, r: ['#rcv-l-cerr', '#rcv-l-ret', '#rcv-l-trinq'], c: C.naRec, org: 'Gq y fosfolipasa C: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/32473788/" target="_blank" rel="noopener">Motiejunaite 2021, PMID 32473788</a>. IP₃ y calcio: fisiología general' },
       { t: 'El β₁ del corazón sigue con sus llaves, pero ya no manda.', r: ['#rcv-e-mio'], c: C.naDosis }] } },
   { id: 'na-techo', fam: 'vaso', tit: 'NA en el techo', sub: '30 y más', pac: 'paulino', f: { na: 30 }, reg: { na: 'shock' }, lupa: 'liso-arteriola',
     frase: (S, R) => fraseNA(S, R),
@@ -322,13 +322,13 @@ export const ESTADOS = [
       { t: 'La misma célula se aprieta por otra cerradura: la PA sube y hace falta menos noradrenalina.', r: ['#rcv-e-anillo', '[data-fila="pa"]'], c: C.vasopresina },
       { t: 'Su bomba sale con candado: 0,03-0,04 U por minuto, sin titular. El libro imprime «U/h»: ver la nota.', r: ['#rcv-bomba-vasopresina'], c: C.vasoDosis },
       { t: 'Baja la noradrenalina a 15: con la vasopresina, la PAM se sostiene. Cuánto se puede bajar aquí es ilustrativo.', set: { f: { na: 15, vasopresina: 0.03 } }, r: ['#rcv-bomba-na', '[data-fila="pa"]'], c: C.vasopresina, org: 'ilustrativo' },
-      { t: 'Con lupa: el V₁ y el α₁ empujan el mismo carro hacia el depósito de calcio. Que compartan esa cadena es fisiología general.', set: { lupa: 'liso-arteriola', cas: 'completa' }, r: ['#rcv-l-sec-v1', '#rcv-l-carro', '#rcv-l-ret'], c: C.vasopresina, org: 'fisiología general' }] } },
+      { t: 'Con lupa: el V₁ y el α₁ empujan el mismo carro hacia el depósito de calcio. Que compartan esa cadena es fisiología general.', set: { lupa: 'liso-arteriola', cas: 'completa' }, r: ['#rcv-l-sec-v1', '#rcv-l-carro', '#rcv-l-ret'], c: C.vasopresina, org: 'Gq y fosfolipasa C: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/32473788/" target="_blank" rel="noopener">Motiejunaite 2021, PMID 32473788</a>. Que compartan esa cadena: fisiología general' }] } },
   { id: 'vasopresina-sano', fam: 'vaso', tit: 'Vasopresina en el sano', sub: 'no sube la PA', pac: 'paulino', f: { na: 0, vasopresina: 0.03 }, reg: { vasopresina: 'septico' }, lupa: 'liso-arteriola', pacientes: ['paulino', 'sano'],
     frase: (S, R) => S.pac === 'sano' ? ['En el voluntario sano, la vasopresina no sube la PA; en el shock vasodilatador, sí. Por qué, el libro no lo explica.', C.vasopresina]
       : ['En Amparo, con los vasos abiertos, la vasopresina sola sube la PA: otra cerradura, la V₁.', C.vasopresina],
     guia: { tit: 'La vasopresina: vasodilatado frente a sano', pasos: [
       { t: 'Amparo, con el vaso abierto por la sepsis: la vasopresina encaja en el V₁ y la PA sube.', set: { pac: 'paulino' }, r: ['#rcv-e-anillo [data-cerr="v1"]', '[data-fila="pa"]'], c: C.vasopresina },
-      { t: 'La misma dosis en un voluntario sano: la PA no sube. Lo dice el libro; por qué, no lo explica.', set: { pac: 'sano' }, r: ['[data-fila="pa"]', '#rcv-e-cal'], c: C.vasopresina, org: 'la fuente no lo dice' },
+      { t: 'La misma dosis en un voluntario sano: la PA no sube. Lo dice el libro; por qué, no lo explica.', set: { pac: 'sano' }, r: ['[data-fila="pa"]', '#rcv-e-cal'], c: C.vasopresina, org: 'la fuente no lo dice. En el sano, dosis que no cambian la PA: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/17133186/" target="_blank" rel="noopener">Barrett 2007, PMID 17133186</a>' },
       { t: 'Donde más aprieta: la piel, el músculo y el territorio esplácnico.', r: ['#rcv-e-anillo'], c: C.vasopresina },
       { t: 'Aquí solo se dibuja el V₁. La misma hormona abre el V₂ del túbulo distal (reabsorbe agua) y el V₃ de la hipófisis anterior (libera ACTH).', r: ['#rcv-e-anillo [data-cerr="v1"]'], c: C.vasopresina }] } },
   { id: 'dopamina', fam: 'vaso', tit: 'Dopamina', sub: 'tres tramos', pac: 'paulino', f: { dopamina: 2 }, reg: { dopamina: 'septico' }, lupa: 'liso-arteriola',
@@ -338,7 +338,7 @@ export const ESTADOS = [
         : d <= 10 ? ['Entre 3 y 10, el β₁ del corazón: sube el volumen latido. Y más taquicardia que con los demás vasopresores.', C.dopa]
         : ['Por encima de 10, el α: sube la RVS, y esa poscarga puede deshacer la subida del volumen latido.', C.dopa]; },
     guia: { tit: 'Amparo: la dopamina, tramo a tramo', pasos: [
-      { t: 'A 2 µg/kg/min solo encajan las cerraduras de la dopamina, la estrella, de las arteriolas del riñón y del intestino: sube su flujo.', set: { f: { dopamina: 2 } }, r: ['#rcv-e-anillo [data-cerr="dopa"]'], c: C.dopa },
+      { t: 'A 2 µg/kg/min solo encajan las cerraduras de la dopamina, la estrella, de las arteriolas del riñón y del intestino: sube su flujo.', set: { f: { dopamina: 2 } }, r: ['#rcv-e-anillo [data-cerr="dopa"]'], c: C.dopa, org: 'la dosis «renal» no cambió la creatinina pico frente a placebo: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/11191541/" target="_blank" rel="noopener">Bellomo 2000, PMID 11191541</a>' },
       { t: 'Entre 3 y 10, el β₁ del miocito: sube el volumen latido.', set: { f: { dopamina: 7 } }, r: ['#rcv-e-mio', '[data-fila="ic"]'], c: C.dopa },
       { t: 'Por encima de 10, el α₁ del anillo: sube la RVS, y esa poscarga puede deshacer la subida del volumen latido.', set: { f: { dopamina: 15 } }, r: ['#rcv-e-anillo', '[data-fila="irvs"]'], c: C.dopa },
       { t: 'El precio: más taquicardia y arritmias, como la FA, que con los demás vasopresores. Hoy está en desuso en el séptico y en el cardiogénico.', r: ['#rcv-e-nodo', '[data-fila="fc"]'], c: C.dopa }] } },
@@ -348,7 +348,7 @@ export const ESTADOS = [
     guia: { tit: 'Amparo, hora 10: la adrenalina', pasos: [
       { t: 'La adrenalina es un β potente y además abre el α: llaves en el β₁ del miocito y en el α₁ del anillo. El β₂ de los vasos lo da el Manual UMI.', set: { f: { na: 26, vasopresina: 0.03, adrenalina: 0.1 } }, r: ['#rcv-e-mio', '#rcv-e-anillo'], c: C.adre, c2: C.umi },
       { t: 'Se encienden dos cifras del laboratorio: el lactato, por más producción aeróbica, y la glucemia, porque el α frena la insulina.', r: ['[data-fila="lact"]', '[data-fila="glu"]'], c: C.adre },
-      { t: 'Ese lactato engaña: no es hipoperfusión.', r: ['[data-fila="lact"]'], c: C.adre },
+      { t: 'Ese lactato engaña: no es hipoperfusión.', r: ['[data-fila="lact"]'], c: C.adre, org: 'glucólisis aerobia por la bomba Na-K: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/15752531/" target="_blank" rel="noopener">Levy 2005, PMID 15752531</a>. El resumen no nombra la adrenalina' },
       { t: 'El α también aprieta el lecho esplácnico: puede dañar la barrera de la mucosa del intestino.', r: ['#rcv-e-anillo'], c: C.adre },
       { t: 'En el séptico es de segunda línea (cap. 14) o de tercera (Tabla 17.2): las fuentes discrepan.', r: ['#rcv-bomba-adrenalina'], c: C.adre, c2: C.t172 }] } },
   { id: 'fenilefrina', fam: 'vaso', tit: 'Fenilefrina', sub: 'la FC baja', pac: 'anestesia', f: { fenilefrina: 35 }, reg: { fenilefrina: 'anestesia' }, lupa: 'nodo',
@@ -390,10 +390,10 @@ export const ESTADOS = [
       : ['Con el β tapado, el glucagón entra por otra cerradura: el corazón responde.', C.glucMec],
     guia: { tit: 'Begoña: el betabloqueado', pasos: [
       { t: 'Sin betabloqueante, la adrenalina encaja en el β del mastocito y los gránulos se quedan dentro: es el único fármaco que para la reacción.', set: { f: { adrenalina: 10, bisoprolol: 0, glucagon: 0 }, lupa: 'mastocito' }, r: ['#rcv-e-mast'], c: C.anaAdre, c2: C.anaGluc },
-      { t: 'Begoña toma bisoprolol: un tapón metido en la cerradura β. Entra, no alinea los pines y no gira; la llave de la adrenalina rebota.', set: { f: { adrenalina: 10, bisoprolol: 1, glucagon: 0 }, lupa: 'mastocito' }, r: ['#rcv-l-cerr', '#rcv-l-llave'], c: C.anaGluc },
+      { t: 'Begoña toma bisoprolol: un tapón metido en la cerradura β. Entra, no alinea los pines y no gira; la llave de la adrenalina rebota.', set: { f: { adrenalina: 10, bisoprolol: 1, glucagon: 0 }, lupa: 'mastocito' }, r: ['#rcv-l-cerr', '#rcv-l-llave'], c: C.anaGluc, org: 'qué β tapa el bisoprolol: fisiología general' },
       { t: 'Los gránulos siguen saliendo: el vaso se abre y la PA no sube.', r: ['#rcv-e-mast', '#rcv-e-anillo', '[data-fila="pa"]'], c: C.anaGluc },
       { t: 'Entra el glucagón por su propia cerradura: activa la misma adenilato ciclasa y el corazón responde aunque el β esté tapado.', set: { f: { adrenalina: 10, bisoprolol: 1, glucagon: 1 }, lupa: 'miocito', cas: 'completa' }, r: ['#rcv-l-sec-gluc', '#rcv-l-prensa'], c: C.glucMec },
-      { t: 'En el mastocito puede devolver la respuesta a la adrenalina; cómo lo hace allí, la fuente no lo dice. Dosis: 1-5 mg IV en 5 min y 5-15 µg/min. Puede dar vómitos: de lado.', set: { lupa: 'mastocito' }, r: ['#rcv-l-duda'], c: C.anaGluc, org: 'la fuente no lo dice' }] } },
+      { t: 'En el mastocito puede devolver la respuesta a la adrenalina; cómo lo hace allí, la fuente no lo dice. Dosis: 1-5 mg IV en 5 min y 5-15 µg/min. Puede dar vómitos: de lado.', set: { lupa: 'mastocito' }, r: ['#rcv-l-duda'], c: C.anaGluc, org: 'cómo, la fuente no lo dice. Glucagón en anafilaxia resistente con betabloqueante: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/41932748/" target="_blank" rel="noopener">Ellis 2026, PMID 41932748</a>' }] } },
   { id: 'cocaina', fam: 'freno', tit: 'Cocaína y betabloqueo', sub: 'el α sin nadie enfrente', pac: 'cocaina', f: { betabloqueante: 0 }, reg: { betabloqueante: 'sca' }, lupa: 'liso-arteriola',
     frase: (S, R) => S.f.betabloqueante ? ['Tapar el β deja al α sin nadie enfrente: el anillo, también el de la coronaria, se cierra más.', C.cocaina] : ['La noradrenalina del propio cuerpo (fisiología general) ocupa α y β. Pon el betabloqueante y mira el anillo.', C.cocaina],
     guia: { tit: 'La isquemia por cocaína', pasos: [
