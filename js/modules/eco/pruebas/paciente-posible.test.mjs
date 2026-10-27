@@ -409,5 +409,5 @@ test('p3-tapse: el TAPSE de TEP e hipertensión pulmonar crónica, en g 0, defec
     assert.ok(t >= 6 && t <= 30, `${k} g=${g ?? 'defecto'}: TAPSE ${t.toFixed(1)} mm (FE VD ${(m.ultimo.feD * 100).toFixed(0)} %)`);
   }
   const n = crearMotor(); n.correr(12);
-  assert.ok(tapseDeLatido(n.ultimo) > 22 && tapseDeLatido(n.ultimo) < 26, "normal ≈ 24-25 mm");
+  assert.ok(tapseDeLatido(n.ultimo) > 22 && tapseDeLatido(n.ultimo) < 25, "normal ≈ 23-24 mm");
 });
