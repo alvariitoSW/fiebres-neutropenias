@@ -292,12 +292,19 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    llamadas, sin agentes). Al usuario, una línea si propone algo.
 7. **Cerrar la sesión sola** (aprobado por el usuario el 27/10/2026). Se cierra cuando: la tarea está hecha, subida
    (y en `main` o con su PR), el parte escrito, ningún agente trabajando y nadie espera nada de esta sesión (ni otra
-   sesión a la que entregaste algo ni una respuesta pendiente del usuario). Entonces mandas al usuario el resumen
-   final terminado en «Sesión cerrada; para seguir, abre otra con `/plan-socialista <clave>`» y, en la misma
-   respuesta, la archivas con `archive_session` (sin `session_id`, o el de esta sesión). Si queda algo pendiente
+   sesión a la que entregaste algo ni una respuesta pendiente del usuario). **Antes de archivar, deja su fila en
+   `autonomo/SESIONES.md`** (pedido por el usuario el 27/10/2026: las sesiones archivadas no se ven en la app y
+   necesita un sitio donde ver qué hizo cada una y qué informe dejó): arriba de la tabla, hora peninsular, clave, qué
+   salió en una línea, enlace al informe o la PR, «Para ti» (lo que decide o manda el usuario, o «—»), el parte y el
+   enlace `https://claude.ai/code/<id>` de esta sesión (`get_session` sin `session_id`). Commit y push a `main`
+   (con la misma ida y vuelta de la rama que el parte). Después mandas al usuario el resumen final con el enlace
+   `https://github.com/alvariitoSW/fiebres-neutropenias/blob/main/autonomo/SESIONES.md`, terminado en «Sesión
+   cerrada; para seguir, abre otra con `/plan-socialista <clave>`», y archivas con `archive_session` (sin
+   `session_id`, o el de esta sesión) como **última** llamada, sin nada detrás. Si queda algo pendiente
    (otra sesión tiene que fusionar, falta un PDF del usuario), **no se cierra**: lo dices en una línea y programas
    una comprobación con `send_later` a 1 hora; cuando llega, miras si ya está y, si está, cierras. El usuario se
-   entera por el resumen final y por el informe diario de la bitácora (tarea programada «Bitácora diaria»).
+   entera por el resumen final, por `autonomo/SESIONES.md` y por el informe diario de la bitácora (tarea programada
+   «Bitácora diaria», que lee ese registro).
 
 ## 3. Lo que nunca haces
 

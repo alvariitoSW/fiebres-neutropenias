@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-27-b3-plan-paso4.md` (tercera pasada, 27/10).
+**Último parte revisado:** `2026-10-27-eco-calibra.md` (cuarta pasada, 27/10: 660 k, sin patrones nuevos; reutilizar la herramienta F3b abarató el medidor).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.

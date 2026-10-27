@@ -1,0 +1,183 @@
+<title>Mapa del residente UCI</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: una columna de lectura, tiras por bloque; estado por chip con icono y texto (nunca solo color) */
+:root{
+  --bg:#f3f5f4; --panel:#ffffff; --fg:#17201d; --muted:#56635e; --line:#d5dcd9;
+  --accent:#0b6e63; --ok:#1d7a3e; --warn:#a36400; --bad:#b3261e; --okbg:#e3f2e8; --warnbg:#fbf0dc; --badbg:#fbe5e3;
+  --display:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0f1513; --panel:#17201d; --fg:#e6ece9; --muted:#9aa8a2; --line:#2a3632;
+  --accent:#4fc2b2; --ok:#6fd08f; --warn:#f0b54d; --bad:#ff8a80; --okbg:#173225; --warnbg:#33280f; --badbg:#3a1a18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --panel:#17201d; --fg:#e6ece9; --muted:#9aa8a2; --line:#2a3632;
+  --accent:#4fc2b2; --ok:#6fd08f; --warn:#f0b54d; --bad:#ff8a80; --okbg:#173225; --warnbg:#33280f; --badbg:#3a1a18; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+main{max-width:680px;margin:0 auto;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:30px} h2{font-size:21px} h3{font-size:16px}
+p{margin:0} .muted{color:var(--muted)}
+.eyebrow{font:500 11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+header{display:grid;gap:8px}
+section{display:grid;gap:12px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:14px;display:grid;gap:8px;min-width:0}
+.guardia{border-left:4px solid var(--accent)}
+.chip{display:inline-flex;align-items:center;gap:4px;font:600 12px var(--body);padding:2px 8px;border-radius:99px;white-space:nowrap}
+.ok{background:var(--okbg);color:var(--ok)} .warn{background:var(--warnbg);color:var(--warn)} .bad{background:var(--badbg);color:var(--bad)}
+.row{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;justify-content:space-between}
+ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.ruta{font:500 12.5px var(--mono);color:var(--muted);overflow-wrap:anywhere}
+.tabla{overflow-x:auto;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:13.5px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font:600 12px var(--body);color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+tr:last-child td{border-bottom:0}
+.num{font-variant-numeric:tabular-nums;white-space:nowrap;font-family:var(--mono)}
+a{color:var(--accent)} a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.aviso{background:var(--warnbg);border-radius:8px;padding:12px 14px;display:grid;gap:6px}
+.aviso strong{color:var(--warn)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+summary{cursor:pointer;font-weight:600}
+</style>
+
+<main>
+<header>
+  <span class="eyebrow">Informe · tarea competencias-r · 27/10/2026</span>
+  <h1>Mapa del residente UCI, de R1 a R5</h1>
+  <p class="muted">Qué tienes que saber manejar cada año y qué tiene ya la app para ello. No toca la app: tú eliges qué se construye.</p>
+  <p class="muted">Leyenda: <span class="chip ok">✅ hay</span> <span class="chip warn">🟡 a medias</span> <span class="chip bad">❌ falta</span> · App: <a href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/index.html">abrir en el móvil</a> (debajo de cada cosa, dónde tocar).</p>
+</header>
+
+<section>
+  <h2>Antes de tu primera guardia sin R mayor</h2>
+  <p class="muted">Lo que marcaste que te preocupa. Todo lo de «hay» ya está en la app; lo de «falta» son las tareas del final.</p>
+
+  <div class="card guardia">
+    <div class="row"><h3>Shock</h3><span class="chip warn">🟡 texto sí, guía rápida no</span></div>
+    <ul>
+      <li>Definiciones, séptico, cardiogénico, hemorrágico, vasopresores <span class="ruta">Fisiopatología UCI → Cardiología → Merino</span></li>
+      <li>Shock séptico del manual y vasoactivos <span class="ruta">Sobrevivir a la UMI → Manual UMI</span></li>
+      <li>Modelo vivo del shock y río y mar (fluidos) <span class="ruta">Libros → Marino</span></li>
+    </ul>
+    <p><span class="chip bad">❌</span> Falta la cadena de cabecera: VCI → PAD → volumen latido → gasto → E/e′ → VExUS, en 30 s (tarea G1).</p>
+  </div>
+
+  <div class="card guardia">
+    <div class="row"><h3>Vía aérea</h3><span class="chip warn">🟡 sin paso a paso</span></div>
+    <ul>
+      <li>Secuencia rápida de intubación y extubación <span class="ruta">Sobrevivir a la UMI → Manual UMI</span></li>
+      <li>Vías aéreas artificiales, VMNI, modos y ajuste del respirador <span class="ruta">Neumología → Merino</span></li>
+      <li>Algoritmo de extubación y laringoespasmo <span class="ruta">UCI / Papers Tuiter</span></li>
+    </ul>
+    <p><span class="chip bad">❌</span> Falta una lista de cabecera «voy a intubar» (material, plan A-B-C, fármacos y dosis, qué hacer si desatura). No hay tarea aún.</p>
+  </div>
+
+  <div class="card guardia">
+    <div class="row"><h3>Parada</h3><span class="chip warn">🟡 sin reloj ni algoritmo vivo</span></div>
+    <ul>
+      <li>Soporte vital, monitorización y cuidados tras la parada <span class="ruta">Cardiología → Merino</span></li>
+      <li>Posparada del manual <span class="ruta">Sobrevivir a la UMI → Manual UMI</span></li>
+      <li>Ritmo vivo (arritmias) y taquiarritmias <span class="ruta">Libros · Cardiología → Merino</span></li>
+    </ul>
+    <p><span class="chip bad">❌</span> Falta el algoritmo con reloj de paro, sincronizado y energía, marcapasos (tarea G2; la guía AHA 2025 ya está en <span class="ruta">docs/</span>).</p>
+  </div>
+
+  <div class="card guardia">
+    <div class="row"><h3>Neurocrítico</h3><span class="chip warn">🟡 texto sí, imagen no</span></div>
+    <ul>
+      <li>TCE, PIC y su onda, HSA, vaina del óptico, hidrocefalia, meningitis <span class="ruta">Sobrevivir a la UMI → Manual UMI</span></li>
+      <li>Coma, estatus, ictus, HIC, muerte encefálica, Guillain-Barré, miastenia <span class="ruta">Libros → Marino neuro</span></li>
+    </ul>
+    <p><span class="chip bad">❌</span> Falta leer un TC de cráneo en 5 preguntas (tarea G5, aparcada). Coincide con tu rotación de Neurorradiología de octubre.</p>
+  </div>
+</section>
+
+<section>
+  <h2>R1 · tu plan del hospital</h2>
+  <p class="muted">Fuente: PFI-UMI-R1-01 (rev. 1, junio 2016), ya en la app como PIF. Es la única fuente leída de este mapa.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Rotación</th><th>Cuándo</th><th>En la app</th></tr></thead>
+    <tbody>
+      <tr><td>Hematología</td><td class="num">jul-26</td><td><span class="chip ok">✅ completa</span> PIF → Hematología</td></tr>
+      <tr><td>Nefrología</td><td class="num">ago-26</td><td><span class="chip ok">✅ completa</span> PIF → Nefrología</td></tr>
+      <tr><td>Radiología de tórax</td><td class="num">sep-26</td><td><span class="chip bad">❌</span> sin cuaderno (Rx, colocación de tubos y vías: G4, aparcada)</td></tr>
+      <tr><td>Neurorradiología</td><td class="num">oct-26</td><td><span class="chip bad">❌</span> sin cuaderno (G5, aparcada)</td></tr>
+      <tr><td>Cardiología</td><td class="num">nov-dic 26</td><td><span class="chip warn">🟡</span> Merino y guía ESC de IC sí; ECG en curso (tarea pif-ecg)</td></tr>
+      <tr><td>Medicina Interna</td><td class="num">ene-feb 27</td><td><span class="chip warn">🟡</span> séptico en planta en Merino y Manual UMI; sin cuaderno PIF</td></tr>
+      <tr><td>Infecciosas</td><td class="num">mar-27</td><td><span class="chip warn">🟡</span> infección en Marino, Manual UMI y Neumología; sin cuaderno PIF</td></tr>
+      <tr><td>Neurología</td><td class="num">abr-27</td><td><span class="chip warn">🟡</span> Marino neuro; sin punción lumbar ni código ictus paso a paso</td></tr>
+      <tr><td>Neumología</td><td class="num">may-jun 27</td><td><span class="chip ok">✅</span> Merino Neumología (IRA, neumonías, TEP, VMNI)</td></tr>
+    </tbody>
+  </table></div>
+</section>
+
+<section>
+  <h2>R2 a R5 · aún sin fuente leída</h2>
+  <div class="aviso">
+    <p><strong>Hueco.</strong> Las webs del BOE y de la sociedad europea están bloqueadas desde donde trabajo. Encontré las dos fuentes, pero no pude abrirlas, y no pongo competencias sin leerlas.</p>
+  </div>
+  <div class="card">
+    <h3>Programa oficial nuevo (2026)</h3>
+    <p>Orden PJC/564/2026, de 4 de junio, programa formativo de Medicina Intensiva (BOE del 6/6/2026). Según las noticias: 51 competencias específicas en 7 dominios, más 13 dominios comunes a todas las especialidades. <span class="muted">Sin confirmar en el texto.</span></p>
+    <p><a href="https://boe.es/boe/dias/2026/06/06/">Sumario del BOE del 6/6/2026</a> · busca «Medicina Intensiva» y descarga el PDF.</p>
+  </div>
+  <div class="card">
+    <h3>Marco europeo CoBaTrICE</h3>
+    <p>102 competencias en 12 dominios (reanimación, diagnóstico, manejo de la enfermedad, tratamientos, procedimientos, perioperatorio, confort, final de la vida, pediatría, transporte, seguridad y gestión, más ciencias básicas). <span class="muted">Sin confirmar en el texto.</span></p>
+    <p><a href="https://pubmed.ncbi.nlm.nih.gov/16841214">Intensive Care Med 2006;32:1371-83 (PubMed)</a> · <a href="https://cobatrice.esicm.org/images/COBATRICE_SYLLABUS_2006_with_2021_updates.pdf">programa con cambios de 2021 (PDF)</a></p>
+  </div>
+  <p><strong>Lo que necesito de ti:</strong> manda esos dos PDF (el de la Orden y el de CoBaTrICE) y relleno R2-R5 con su página.</p>
+
+  <details>
+    <summary>Mientras tanto: temas de UCI que ya cubre la app (sin año asignado)</summary>
+    <div class="tabla" style="margin-top:10px"><table>
+      <thead><tr><th>Tema</th><th>Estado</th></tr></thead>
+      <tbody>
+        <tr><td>Respirador, VMNI, oxígeno, destete</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Sedoanalgesia y delirio</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Fluidos, ácido-base, electrolitos</td><td><span class="chip ok">✅</span> con modelos vivos</td></tr>
+        <tr><td>FRA y técnicas de reemplazo renal</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Nutrición</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Infección y antibióticos</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Hemoterapia y coagulación</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Intoxicaciones</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Fallo hepático y pancreatitis</td><td><span class="chip ok">✅</span></td></tr>
+        <tr><td>Eco cardíaca y ecografía a pie de cama</td><td><span class="chip ok">✅</span> ETE ❌</td></tr>
+        <tr><td>Vías centrales y catéteres</td><td><span class="chip warn">🟡</span> sin drenaje torácico ni punción lumbar paso a paso</td></tr>
+        <tr><td>Síndrome coronario agudo</td><td><span class="chip warn">🟡</span> sin ECG ni cateterismo</td></tr>
+        <tr><td>Cetoacidosis y endocrino</td><td><span class="chip warn">🟡</span></td></tr>
+        <tr><td>Trauma grave</td><td><span class="chip warn">🟡</span> solo hemorrágico y control de daños</td></tr>
+        <tr><td>Traslado del paciente crítico</td><td><span class="chip warn">🟡</span></td></tr>
+        <tr><td>Donación y mantenimiento del donante</td><td><span class="chip bad">❌</span></td></tr>
+        <tr><td>Limitación del esfuerzo y final de la vida</td><td><span class="chip bad">❌</span></td></tr>
+        <tr><td>Quemados</td><td><span class="chip bad">❌</span></td></tr>
+      </tbody>
+    </table></div>
+  </details>
+</section>
+
+<section>
+  <h2>Tareas que salen de los huecos</h2>
+  <p class="muted">En orden de prioridad para tu guardia. Gasto en millones de tokens, con los presupuestos medidos del tablero (aproximado). Hoy ya se gastó mucho: nada de esto empieza hasta que lo apruebes.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>#</th><th>Tarea</th><th>Gasto</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>G2 Parada</strong>: algoritmo con reloj, sincronizado, energía y marcapasos (ya aprobada, pendiente)</td><td class="num">≈ 6-8 M</td></tr>
+      <tr><td class="num">2</td><td><strong>G1 Shock</strong>: la cadena de cabecera en 30 s (ya aprobada, pendiente)</td><td class="num">≈ 6-8 M</td></tr>
+      <tr><td class="num">3</td><td><strong>Vía aérea «voy a intubar»</strong>: lista de cabecera con el Manual UMI y Merino, sin modelo nuevo (nueva)</td><td class="num">≈ 2-3 M</td></tr>
+      <tr><td class="num">4</td><td><strong>G5 Neurocrítico</strong>: TC de cráneo en 5 preguntas (aparcada; necesita imágenes reales con licencia)</td><td class="num">≈ 5-7 M</td></tr>
+      <tr><td class="num">5</td><td><strong>Mapa R2-R5</strong> con la Orden y CoBaTrICE, cuando mandes los PDF (nueva)</td><td class="num">≈ 1-1,5 M</td></tr>
+      <tr><td class="num">6</td><td>Huecos de R3-R5 (donación, final de la vida, quemados, trauma, traslado): se ordenan cuando sepamos en qué año van</td><td class="num">tras la 5</td></tr>
+    </tbody>
+  </table></div>
+  <details>
+    <summary>Cómo se estimó</summary>
+    <p style="margin-top:8px">Un modelo nuevo de guardia: profesor (≈0,9 M) + maqueta (≈1,2 M) + llevarla a la app (≈2,0 M) + preguntas (≈1,2 M) + juicio y arreglos (≈1,1 M) + director (≈0,9 M). Una lista de cabecera sin modelo: constructor (≈0,9 M) + auditor (≈0,5 M) + juicio (≈0,3 M) + director. El mapa R2-R5: lector de la fuente y director.</p>
+  </details>
+</section>
+</main>

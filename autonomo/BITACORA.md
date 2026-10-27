@@ -194,24 +194,6 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
-### B-027 · Eco: el motor diastólico (E/A, aurícula y venas pulmonares) · apuntado 2026-10-27
-- **Lo que dijiste** (27/10, al saber del E/A): «habría que hacer un informe sobre cómo mejorarlo mediante
-  /plan-socialista, ver el gasto que supondría y aprender de este fallo que hemos ido arrastrando».
-- **El fallo** (parada 3 de `eco-mega`, `autonomo/bloques/eco-mega/p3-f3b.md` y `profesor-p3.md`): en el panel del
-  Doppler mitral, el E/A sale **10** en la hipertrofia (onda A casi nula: enseña la lección al revés; con mala
-  relajación debería ser <1) y **3,9** en la dilatada (restrictivo posible). Además, el flujo de las venas pulmonares
-  del motor es ~2-3 veces el real (pico de `qVp` ~600 mL/s; el área de las venas está achicada a 2,5 cm²
-  «ilustrativo» para disimularlo), la onda a de la AI llega a ~15 mmHg, la D venosa del TEP sale 0 y la AD tiene el
-  mismo defecto. Arreglarlo exige recalibrar la AI (contracción sumada a la curva pasiva, `rVp`, `rPul`) y, con
-  ello, el TEP, el derrame y la HP crónica, que se calibraron encima (opción 1 de F3b: ~7 pruebas a recalibrar).
-- **Cómo lo entiendo**: tipo `arreglo` grande del motor, en dos pasos. (1) **Informe** con `/plan-socialista`:
-  qué está mal, la calibración objetivo con su fuente (Nagueh 2025, ya en `docs/`: patrones de llenado, E/A, S/D,
-  Ar; Lang 2015 p. 24: bomba auricular 15-30 %), el orden y el **gasto estimado**. (2) La recalibración, si la
-  apruebas. **Lección** para las reglas: ninguna prueba pedía un E/A ni un flujo venoso de paciente posible por
-  forma, así que cada pieza se calibró sobre un error de base y se fue arrastrando; propuesta: una red «paciente
-  posible del Doppler» (E/A, E/e′, S/D, TAPSE, velocidades) por forma, como la de PA y FC.
-- **Depende de**: nada (las fuentes ya están). **Tamaño**: informe pequeño; la recalibración, 1 sesión.
-
 ### B-028 · Eco: bibliografía de física de los ultrasonidos para el realismo de la imagen · apuntado 2026-10-27
 - **Lo que dijiste**: «¿Debería subir bibliografía sobre la ecografía para mejorar el realismo de las imágenes?».
 - **Cómo lo entiendo**: hoy el moteado, las sombras, la reverberación, la ganancia y el desenfoque del haz son
@@ -221,48 +203,6 @@ esta sección.
   partes), ESC 2021 de amiloidosis, MAPSE (Cirin 2024, Falconer 2025): llenan los huecos de la parada 3 de `eco-mega`
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
-
-### B-029 · Eco: la HP crónica a fondo deforma el corazón (y el dibujo recorta el volumen) · apuntado 2026-10-27
-- **Lo que dijiste** (27/10, con dos capturas del móvil: HP crónica con la gravedad al 100 %, A4C con sonda libre y
-  corazón 3D): «ha deformado el corazón que parece una nave espacial y aquí falla con una regla y es que esto no es
-  ni anatómico ni fisiológico […] hay que hacer muchas más mejoras en la parte de eco».
-- **Lo que se ve**: a fondo, el 3D enseña el corazón aplastado en un disco con el aviso «⚠ volumen fuera del rango del
-  dibujo: se muestra en su límite», y el A4C pierde la forma de las cámaras. Rompe `CLAUDE.md` §12: una cifra que se
-  sale no se recorta en el dibujo; se busca el error en su origen (la resistencia pulmonar ×12 y la pared del VD ×2,4
-  de la forma `hpcronica` llevan el VD a volúmenes que la geometría no sabe dibujar, y la FE del VD del TEP y la HP
-  graves ya era de 9-13 %: ver §4, punto 7). Ningún juez lo cazó porque las pruebas miden cifras, no la silueta 3D
-  a fondo.
-- **Cómo lo entiendo**: tipo `arreglo` de la eco, con informe primero (va junto a B-027, el motor diastólico, porque
-  los dos son calibración del motor y del dibujo en los extremos): (1) recalibrar `hpcronica` a fondo a un VD posible
-  (Mukherjee 2025, ESC/ERS 2022 ya en `docs/`); (2) que el dibujo cubra todo el rango del motor sin recortar;
-  (3) una prueba nueva: cada forma, a g 0, defecto y 1, sin el aviso de «fuera del rango del dibujo» y con la
-  silueta 3D dentro de unos límites de forma; (4) repasar las demás formas a fondo con capturas del 3D.
-- **Propuesta de regla**: los jueces de la eco abren cada forma al 100 % y fallan si sale el aviso de recorte.
-
-### B-032 · Lo que un residente debe manejar cada año (camino a la guardia de R2) · apuntado 2026-10-27
-- **Lo que dijiste**: «que me sirva para aprender lo que un residente de medicina intensiva puede y debe manejar
-  según qué año, que ya a finales de R2 las guardias las hago solo con los adjuntos y ya se vuelve chungo».
-- **Cómo lo entiendo**: tipo `mapa` (informe primero, sin construir).
-  - **Qué quiero**: un mapa de competencias por año (R1 a R5) con lo que hay que saber manejar, y al lado qué
-    tiene ya la app para cada una (✅ hay ficha o modelo, 🟡 a medias, ❌ falta).
-  - **Para qué**: llegar a final de R2 preparado para la guardia sin residente mayor. Lo de la guardia va primero.
-  - **Fuente**: el PIF del hospital solo tiene R1 (PFI-UMI-R1-01, ya en la app). Para R2-R5, (supongo) el programa
-    oficial de la especialidad de Medicina Intensiva publicado en el BOE y el marco europeo de competencias
-    CoBaTrICE: hay que buscarlos y citarlos (URL verificada o PDF en `docs/`). Si no se encuentran, hueco.
-  - **Modelo «así sí»**: el inventario de estudio (`inventario`, B-014) para saber qué tiene la app; el megaproyecto
-    «La UCI en el bolsillo» (situaciones de guardia G1-G6) para lo urgente.
-  - **Visual**: (supongo) una página para el móvil con una fila por competencia, filtrable por año, cada fila
-    enlazada a su ficha o modelo; arriba, «lo que necesitas antes de tu primera guardia sin R mayor».
-  - **Lo que NO quiero**: inventar competencias sin fuente; repetir contenido que ya existe (se enlaza).
-  - **Preguntas**: no (es un mapa). Después, cada hueco se convierte en tarea aparte.
-- **Depende de**: nada. Usa el inventario ya hecho.
-- **Tamaño**: informe mediano (una sesión). Luego, las tareas que salgan.
-- **Lista de calidad**: sin simulador (topes no aplica) · cifra por caso: no aplica · «lo que NO quiero»: sí ·
-  fuente con archivo y página: falta encontrar el programa · juez: sin juez automático, lo mira el usuario.
-- **Dudas**:
-  1. ¿Tienes algún documento del hospital para R2 (como el de R1), o me baso en el programa oficial?
-  2. ¿Qué te preocupa más de la guardia sola con el adjunto (shock, vía aérea, paro, neurocrítico…)? Así ordeno el
-     mapa (supongo: lo de «La UCI en el bolsillo»).
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -295,9 +235,11 @@ esta sección.
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
-| `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1, 2 y 3 **hechas y en main** (PR #30 y #34, 27/10). Siguiente, sin aprobar: B-027 y B-029 | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
+| `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1, 2 y 3 **hechas y en main** (PR #30 y #34, 27/10). Siguiente: informe `eco-calibra` (B-027 + B-029, aprobado el 27/10) | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
 | `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
 | `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
+| `b3-paso4-opciones`, `eco-calibra`, `competencias-r` | **Objetivo P**: informes con gasto antes de construir: paso 4 del `b3` (todas las piezas o aligerar), **B-027 + B-029** (motor diastólico y HP crónica de la eco) y **B-032** (competencias por año) | pendiente | 2026-10-27 | «Apruebo que se empiece esto, pero antes hay que hacer su /plan-socialista con sus gastos y su informe» (27/10) |
+| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | en curso (sesión abierta el 27/10) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -343,7 +285,8 @@ El resto del tablero sigue `aparcada`.
   Faltan 17 fichas y **17 piezas nuevas** en los modelos (vagal, FA en el motor, adrenalina en la RCP, posparo,
   rotura del papilar y del septo, IAM de VD, etapas de la IC, CPAP, placa coronaria, trombólisis, disección, TEP con
   lisis, TVP con eco de compresión…): **≈35-40 M en 10-12 sesiones**. ¿Se hacen todas, o alguna ficha se queda con
-  un modelo que ya existe (más barato)?
+  un modelo que ya existe (más barato)? **27/10: primero un informe con las opciones y su gasto** (`b3-paso4-opciones`,
+  Objetivo P del tablero); después eliges.
 
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
@@ -380,7 +323,7 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · Sección IV del Libro Azul (Respiratorio) (los temarios del PIF no
+- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) (los temarios del PIF no
   existen: ver B-005). (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
   3.ª tanda.)
 - **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
@@ -432,8 +375,8 @@ El resto del tablero sigue `aparcada`.
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
   («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12
   derivaciones. Antes de construir, maqueta para elegir. Detalle en `docs/historial/cardiologia.md`.
-- **El Libro Azul**: solo falta la **Sección IV, Aparato Respiratorio** (caps. 24-36, pp. ~387-608). Las V, VI,
-  VIII, IX y X llegaron el 27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
+- **El Libro Azul**: **completo** en `docs/` (secciones I a X, caps. 1-61). Las IV, V, VI, VIII, IX y X llegaron el
+  27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
   de R1.
 - **✅ El Libro Azul, 27/10 (4.ª tanda)**, en `docs/`. Fuente: *El libro azul. Bases fisiopatológicas de la medicina
   crítica* (Medicucheando). Página impresa = página del PDF + desplazamiento (comprobado en dos páginas de cada uno):
@@ -452,6 +395,12 @@ El resto del tablero sigue `aparcada`.
     973, pdf 14 = 982).
   - `libro-azul-seccion-x-miscelaneos.pdf`: caps. 58-61 (caquexia, RCP, control de daños, gran quemado),
     pp. 983-1044; +982 (pdf 5 = 987, pdf 31 = 1013, pdf 62 = 1044).
+  - `libro-azul-seccion-iv-respiratorio-parte1.pdf`: caps. 24-29 (fisiología respiratoria, hipoxemia e
+    hipercapnia, IRA, EPOC, SDRA, NAV), pp. 385-464; +384 (pdf 5 = 389, pdf 60 = 444, pdf 80 = 464).
+  - `libro-azul-seccion-iv-respiratorio-parte2.pdf`: caps. 30-33 (diafragma, ventilación mecánica y sus modos, modos
+    nuevos, monitorización respiratoria), pp. 465-564; +464 (pdf 1 = 465, pdf 30 = 494, pdf 60 = 524).
+  - `libro-azul-seccion-iv-respiratorio-parte3.pdf`: caps. 34-36 (bases de las técnicas, trabajo respiratorio,
+    retirada de la ventilación mecánica), pp. 565-608; +564 (pdf 1 = 565, pdf 21 = 585, pdf 40 = 604).
   Desbloquea la segunda parte de B-004 (secciones nuevas, cuando la apruebes).
 - **PIF de R1**: ya no se espera ningún PDF de temario (27/10): ver B-005.
 - **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
@@ -461,9 +410,9 @@ El resto del tablero sigue `aparcada`.
 - **Eco, paradas 1 y 2 ya en main (27/10)**: mirarlas en el móvil (Eco cardíaca → simulador: A4C, subcostal,
   «Derrame» y «Hemorragia» a fondo, TEP, «Señálalo → Festones y cúspides»). La parada 3 (F3, F4, N1, P5, P6) espera
   los PDF de los huecos. Si tienes la **ASE 2025** en PDF, también daría la PAD con ventilación mecánica.
-- **Propuesta tuya (26/10), para la skill del plan**: al terminar una tarea, el director cierra su propia sesión sin
-  esperar a que la valides, y te llega un informe de las sesiones cerradas (qué se hizo, qué quedó, qué decidir).
-  ¿La apunto como tarea?
+- **Sesiones cerradas (hecho el 27/10)**: las sesiones del plan se cierran solas y cada una deja su fila en
+  `autonomo/SESIONES.md` (tarea, qué salió, informe o PR, qué te toca, parte y enlace a la sesión archivada). El
+  informe «Bitácora diaria» lo lee y ya no se archiva a sí mismo.
 - **Propuestas de regla de los partes (25-27/10)**, ¿las apruebas?
   - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
   - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).
