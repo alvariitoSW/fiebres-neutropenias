@@ -176,7 +176,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    vueltas de media).
    - **R1 · Prueba del móvil antes de entregar**: a 390 y 360 px, la frase viva y el enunciado no quedan tapados por
      la barra de abajo, la imagen sigue a la vista al tocar sus mandos, ninguna frase sale cortada con «…» y ningún
-     rótulo baja de 8 px (el usuario lo bajó de 9 a 8 el 27/10/2026). La pasa el constructor con capturas antes de entregar; cuando exista, la pasa
+     rótulo baja de 8 px (el usuario lo bajó de 9 a 8 el 27/10/2026). Los 8 px son en la pantalla: el SVG se pinta
+     a escala (≈ 0,86 a 360 px), así que en coordenadas del dibujo el suelo es 8 / escala, **≈ 9,3** (aprobado el
+     27/10/2026, `propuestas-movil`). La frase viva se trae a la vista con la pieza común `js/core/frase-vista.js`, no
+     con una solución propia de cada modelo. La pasa el constructor con capturas antes de entregar; cuando exista, la pasa
      `jueces.mjs` (tarea `jueces-movil` del tablero).
    - **R2 · Lista de «lo que hace la maqueta»**: al aprobarse una maqueta, el profesor escribe la lista de lo que
      hace (cada mando, cada estado, lo que queda fijo en pantalla). El constructor que la lleva a la app la tacha

@@ -353,3 +353,14 @@ Tras el juez del móvil (`jueces-movil`), cinco constructores sonnet arreglaron 
 Fundamentos: frases vivas sin recorte «…», frase y «Siguiente» fuera de la barra de abajo, figura a la vista al tocar
 mandos y letra SVG ≥ 8 px (suelo de 9,3 en coordenadas del dibujo, porque a 360 px se pinta al ~88 %). Receta del
 catéter copiada en telar, inmersión y vaso. Detalle y gasto en `autonomo/partes/2026-10-27-movil-existente.md`.
+
+## Tres propuestas del móvil (`propuestas-movil`, 27/10/2026)
+
+El usuario aprobó las tres propuestas del parte `2026-10-27-movil-existente.md` («Apruebo las 3 propuestas»):
+- **Pieza común `js/core/frase-vista.js`**: lleva la frase viva a la vista tras tocar un mando, para todos los modelos
+  vivos, en vez de tres soluciones distintas (margen, frase pegada, scroll).
+- **Suelo de letra SVG**: en la lista del constructor y en `REGLAS.md` §4.8 R1, «8 px en pantalla = 8 / escala a
+  360 px (≈ 9,3) en coordenadas del dibujo», no 8 a secas.
+- **El director fusiona `main` a la vista** (skill `plan-socialista`, «Entregas sin esperar»): nunca en segundo plano;
+  mira los conflictos y que no queden marcas antes de seguir.
+

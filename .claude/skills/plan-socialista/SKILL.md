@@ -219,6 +219,12 @@ cambios, se atienden en la vuelta siguiente.
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
 `git worktree remove /tmp/wt-<clave>`. `jueces.mjs` elige solo un puerto libre, así que se puede pasar en las dos.
 
+**Fusionar `main` en una rama, siempre a la vista** (aprobado por el usuario el 27/10/2026, `propuestas-movil`):
+nunca dentro de un comando en segundo plano ni encadenado con `&&` a otros pasos. Primero `git merge origin/main`
+solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos, resuélvelos y comprueba con
+`git grep -n '^<<<<<<<'` que no queda ninguna marca antes de commit, jueces o push. Si no, un conflicto pasa sin verse
+(en `movil-existente` el tablero quedó con marcas de conflicto en un commit intermedio).
+
 ### Cierre del ciclo
 
 8. **Revisor** (`revisor`) → `revision.md`. Objeciones de redacción o reglas: una última vuelta corta del constructor.
