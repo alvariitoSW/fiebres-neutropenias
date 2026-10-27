@@ -176,7 +176,9 @@ function auriculas(k) {
   const ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
   return [o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts].map(s => {
     const e = estadoGeo(s, ex), c = construirCorazon(e, { detalle: false }), g = baseGeometrica(e), P = planoVista('a4c', e);
-    const ai = c.partes.find(p => p.nombre === 'AI'), ad = c.partes.find(p => p.nombre === 'AD');
+    // N1: la fosa oval (lámina del tabique con la malla de la AD; la segunda pieza, con la de la AI) cuenta como pared de cada aurícula
+    const conFosa = (pz, k) => { const f = c.partes.filter(p => p.nombre === 'Fosa oval')[k]; return f ? { pos: pz.pos, idx: Uint32Array.from([...pz.idx, ...f.idx]) } : pz; };
+    const ai = conFosa(c.partes.find(p => p.nombre === 'AI'), 1), ad = conFosa(c.partes.find(p => p.nombre === 'AD'), 0);
     return { s, sc: m.p.sc, vAi: volCupula(ai), vAd: volCupula(ad), ejeAd: ejesA4C(ad, P, [g.ct[0], g.ct[1], c.descenso]) };
   });
 }

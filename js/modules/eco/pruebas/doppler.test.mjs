@@ -155,3 +155,25 @@ test('IM funcional: la geometría mezclada de las formas precalculadas conserva 
   assert.deepEqual(mz.coaptacionMitral.map(Math.round), g.flujo.coaptacionMitral.map(Math.round));
   assert.ok(D.fuentesFlujo(mz, t, D.areasAnillo(baseGeometrica(t)), [], MD(m)).valvulas.some(j => j.n === 'regMitral'));
 });
+
+// F3 · venas pulmonares: S (relajación de la AI + sístole), D y Ar reversa, del flujo de la AI del motor [Lang 2015 p. 24: reservorio / conducto / bomba; Nagueh 2025: S, D, Ar]
+function pulmonarEn(m) {
+  const t = td(m), areas = D.areasAnillo(baseGeometrica(t)), g = construirCorazon(estadoGeo(t, {}), { detalle: true });
+  const F = D.fuentesFlujo(g.flujo, t, areas, [], { rRetorno: m.p.rRetorno, pvc: m.ultimo.pvc }), v = F.vasos.find(x => x.tipo === 'pulmonar');
+  const i = Math.floor(v.pts.length / 2), c = v.pts[i], haz = nrm(v.pts[i + 1].map((x, k) => x - v.pts[i - 1][k])).map(x => -x);
+  const n = nrm(cruz(haz, Math.abs(haz[2]) < 0.9 ? [0, 0, 1] : [1, 0, 0])), fu = D.fuenteEnMuestra(D.puntosMuestra({ O: c, n }, c, haz), haz, F);
+  return { fu, med: D.medidasLatido(D.curvaLatido(m.onda, fu, fu.factor, areas, { rRetorno: m.p.rRetorno, pvc: m.ultimo.pvc }), fu), F };
+}
+test('venas pulmonares (normal): cuatro venas; S ≥ D y A reversa pequeña (Ar < 35 cm/s, Nagueh 2025)', () => {
+  const { fu, med, F } = pulmonarEn(motorEn());
+  assert.equal(F.vasos.filter(v => v.tipo === 'pulmonar').length, 4);
+  assert.equal(fu.vasoTipo, 'pulmonar'); assert.equal(med.tipo, 'pulmonar');
+  assert.ok(med.S >= med.D && med.D > 0, JSON.stringify(med));
+  assert.ok(med.Ar > 0 && med.Ar < 35 && med.Ar < med.S / 2, JSON.stringify(med));
+});
+test('venas pulmonares: la A es reversa (hacia las venas) en la contracción auricular y el flujo va hacia la AI el resto del latido', () => {
+  const m = motorEn(), s = { qVp: -300 }, e = { qVp: 300 };
+  assert.ok(D.velVaso('pulmonar', 5, s) < 0 && D.velVaso('pulmonar', 5, e) > 0);
+  const A = m.onda.filter(x => x.fase === 'A'), mn = A.reduce((a, b) => (b.qVp < a.qVp ? b : a));
+  assert.ok(mn.qVp < 0 && m.onda.filter(x => 'FG'.includes(x.fase)).every(x => x.qVp > 0));
+});

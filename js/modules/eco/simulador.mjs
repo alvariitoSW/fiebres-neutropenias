@@ -627,6 +627,9 @@ export function montarSimulador(raiz, opc = {}) {
       } else poner('', cab + `ITV ${fx(medD.itv, 1)} cm · pico ${fx(medD.pico)} cm/s · GC ≈ ${fx(gc, 1)} L/min<br><span class="cv-muted">${fuenteD.tubo ? 'En el tracto de salida.' : 'Por encima de la válvula: es la velocidad del chorro, no la del tracto de salida.'} Ilustrativo.</span>`);
       return;
     }
+    if (medD.tipo === 'pulmonar') {
+      poner('', cab + `S ${fx(medD.S)} · D ${fx(medD.D)} cm/s hacia la AI · <b>S/D ${fx(medD.sd, 2)}</b> · Ar ${fx(medD.Ar)} cm/s hacia la vena<br><span class="cv-muted">S: relajación de la AI y sístole (el plano AV que baja); D: llenado rápido; Ar: la AI que se contrae empuja sangre hacia la vena. Salen del flujo de la AI del motor. Ilustrativo.</span>`); return;
+    }
     if (medD.tipo === 'hepatica') {
       enl.innerHTML = enlace('Onda de la vena hepática (VExUS)', 'vexus-fisiologia-doppler', '#vexus-onda-hepatica', 'panel-vexus-tabs', 'uciPapers', 'vexus');
       poner('', cab + `S ${fx(medD.S)} · D ${fx(medD.D)} cm/s hacia el corazón · A ${fx(medD.A)} cm/s retrógrada<br><span class="cv-muted">Sale de la onda de presión de la AD del motor. Ilustrativo.</span>`); return;

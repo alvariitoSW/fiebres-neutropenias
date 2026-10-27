@@ -101,7 +101,9 @@ test('P1 · el pliegue se dibuja: la pared libre de la AD y la del VD se hunden 
   const pd = paciente('derrame', ESCENARIOS.derrame.gravedad.defecto);
   const s = pd.o.filter((x, i) => pd.e[i].pliegueAd > 0.6).reduce((a, b) => (b.vad > a.vad ? b : a)), e = estadoGeo(s, pd.ex);
   assert.ok(s.vad > 20 && e.pliegueAd > 0.6, `AD de ${s.vad.toFixed(0)} mL plegada ${e.pliegueAd.toFixed(2)}`);
-  const ad = construirCorazon(e, { detalle: false }).partes.find(x => x.nombre === 'AD');
+  // N1: la fosa oval (una lámina del tabique, pieza aparte con la malla de la AD) cuenta como pared de la AD
+  const gAd = construirCorazon(e, { detalle: false }), ad0 = gAd.partes.find(x => x.nombre === 'AD'), fosaAd = gAd.partes.find(x => x.nombre === 'Fosa oval');
+  const ad = { pos: ad0.pos, idx: Uint32Array.from([...ad0.idx, ...(fosaAd ? fosaAd.idx : [])]) };
   const P = ad.pos, I = ad.idx; let zMin = Infinity; for (let i = 2; i < P.length; i += 3) zMin = Math.min(zMin, P[i]);
   let n = 0, zs = 0; for (let i = 2; i < P.length; i += 3) if (P[i] < zMin + 2) { zs += P[i]; n++; }
   const z0 = zs / n; let v = 0;

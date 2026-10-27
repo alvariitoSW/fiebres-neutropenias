@@ -19,6 +19,8 @@ const esc = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
 const largo = (a) => Math.hypot(a[0], a[1], a[2]);
 
 export const VALV = Object.fromEntries(VALVULAS.map(v => [v.n, v]));
+// radio de cada vena pulmonar (mm), el que dibuja corazon-geo (tubo de radio 5; ilustrativo). Amortiguación de la A reversa: ilustrativo
+export const R_VENA_PULMONAR = 5, AMORTIGUA_AR = 0.35, AREA_VENA_PULMONAR = 2.5;
 export const NOMBRE_FUENTE = { mitral: 'Mitral', tricus: 'Tricúspide', aortica: 'Aórtica', pulmonar: 'Pulmonar' };
 const SALIDA = { aortica: true, pulmonar: true };
 
@@ -73,8 +75,13 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
     geom.push({ n: 'regMitral', c, dir, a, v0: 1, vTubo: 1, salida: false });
     const v0 = velRegMitral(s, eroa); if (v0 > 0 && !s.vMit) valvulas.push({ n: 'regMitral', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false });
   }
+  // F3 · las 4 venas pulmonares (eje en el sentido del flujo, hacia la AI; las mismas que dibuja la geometría y mueve el latido)
+  const vp = [];
+  if (flujo.enVia) for (let k = 0; k < 4; k++) {
+    try { vp.push({ nombre: 'Vena pulmonar', tipo: 'pulmonar', r: R_VENA_PULMONAR, pts: [0, 0.25, 0.5, 0.75, 1].map(t => T(flujo.enVia('vp' + k, t))) }); } catch { break; }
+  }
   // vasos: velocidad media a lo largo del eje (signo: en el sentido de sus puntos)
-  return { valvulas, vasos: vasos.map(x => ({ ...x, vm: velVaso(x.tipo, x.r, s, m) })), geom };
+  return { valvulas, vasos: [...vasos, ...vp].map(x => ({ ...x, vm: velVaso(x.tipo, x.r, s, m) })), geom };
 }
 
 /**
@@ -83,6 +90,11 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
  * m: { rRetorno, pvc }. Una sola copia para el espectro, el color y las medidas del latido.
  */
 export function velVaso(tipo, r, s, m = {}) {
+  // Venas pulmonares: el flujo de la AI que da el motor (qVp, mL/s, + hacia la AI), repartido entre las 4 venas. La A reversa
+  // (qVp < 0, la aurícula que se contrae empuja sangre hacia las venas) se amortigua: la distensibilidad de las venas absorbe parte (ilustrativo)
+  // Área efectiva por vena: ajustada para que el S del normal quede cerca de 60 cm/s (el flujo de la AI del motor tiene picos de ~600 mL/s,
+  // mayores que los reales: con el área anatómica daría ~200 cm/s). Ilustrativo; pendiente de calibrar la AI del motor.
+  if (tipo === 'pulmonar') { const q = (s.qVp || 0) / 4; return (q < 0 ? AMORTIGUA_AR * q : q) / AREA_VENA_PULMONAR; }
   const pvc = m.pvc ?? s.pad, q = m.rRetorno ? (s.pven - s.pad) / m.rRetorno : 0, area = Math.PI * (r / 10) * (r / 10);
   if (tipo === 'vci') return 0.67 * q / area;
   if (tipo === 'hepatica') return q / 15 / area;
@@ -245,6 +257,14 @@ export function medidasLatido(curva, fuente) {
     // hacia el corazón (S y D) es el sentido de sg; la A va al revés
     const S = pico(en('BCD')), D = pico(en('EFG')), A = en('A').reduce((a, c) => (-sg * c.v > -sg * a.v ? c : a), { v: 0 });
     return { tipo: 'hepatica', S: sg * S.v, D: sg * D.v, A: -sg * A.v };
+  }
+  if (fuente.vasoTipo === 'pulmonar') {
+    // Ar: el mayor flujo hacia las venas en la contracción auricular (A). S (suma de S1 y S2, Nagueh 2025): el mayor hacia la AI
+    // desde que acaba la A reversa hasta que abre la mitral (relajación auricular + sístole ventricular); D: el de la diástole (E-G)
+    const iA = curva.reduce((a, c, i) => (c.fase === 'A' && (a < 0 || -sg * c.v > -sg * curva[a].v) ? i : a), -1);
+    const S = curva.filter((c, i) => (c.fase === 'A' ? i > iA : 'BCDE'.includes(c.fase))).reduce((a, c) => Math.max(a, sg * c.v), 0);
+    const D = en('FG').reduce((a, c) => Math.max(a, sg * c.v), 0), Ar = iA >= 0 ? Math.max(0, -sg * curva[iA].v) : 0;
+    return { tipo: 'pulmonar', S, D, Ar, sd: D > 0 ? S / D : null };
   }
   const vs = curva.map(c => sg * c.v), max = Math.max(...vs), min = Math.min(...vs);
   return { tipo: 'vena', media: vs.reduce((a, b) => a + b, 0) / vs.length, pulsatilidad: max > 0 ? (max - min) / max : null };

@@ -106,6 +106,8 @@ export const PHI_SEPTO = (REF.phiA + REF.phiB) / 2;
 // medio ángulo del tabique aplanado del todo (rad): con 1,1, el índice de excentricidad del VI llega a ~1,4 (Ryan 1985:
 // 1,44 ± 0,16 en telesístole en la sobrecarga de presión; Atlas · 14). Ilustrativo
 const ALFA_SEPTO = 1.1;
+const FOSA = { a: 7, b: 3 };            // semiejes (mm) de la fosa oval en el tabique interauricular (ilustrativo, N1)
+const EUSTAQUIO = { radio: 8, largo: 12 };   // orificio de la cava inferior y largo del pliegue (mm, ilustrativo, N1)
 const ANCHO_UNION = 1.05, KERNEL_UNION = 1.0;   // rad: hasta dónde se redondea y cuánto promedia (ver radioConCuerda)
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
 export const LIMITES = { vi: [8, 320], vd: [45, 330], au: [15, 140] };
@@ -541,6 +543,29 @@ export function construirCorazon(estado, opciones = {}) {
     anadirR('AI sangre', cupula(mc, rhoAi, HAi, incAi, bAi, 2, 0, sepAi), COLORES.sangreOx, { alfa: 0.3, dobleCara: true });
     anadirR('AD sangre', cupula(ct, rhoAd, HAd, incAd, bAd, 2, pliAd, sepAd), COLORES.sangreVen, { alfa: 0.3, dobleCara: true });
   }
+  // N1 · Fosa oval: la zona central del tabique interauricular donde la pared es más fina (una sola lámina, no dos). Se quita
+  // el parche de triángulos del tabique (los que están en el plano, dentro de una elipse) a la AI y a la AD, y la AD lo aporta
+  // como pieza «Fosa oval» (misma malla, se mueve con ella), que la imagen dibuja más fina y débil (TEJIDOS.fosaOval).
+  // Mitchell 2019, p. 25 (PSAX, «interatrial septum», PDF 25) y p. 31 (subcostal 4C, PDF 31: «particularly important to assess
+  // the interatrial ... septa for defects»): el tabique se ve y se evalúa en esas vistas; el libro no da tamaño ni grosor de la
+  // fosa: FOSA (semiejes 7 × 3 mm más 4 mm de borde) y su altura son ilustrativos. Se centra donde el A4C corta el tabique (plano por mc y ct).
+  if (!corte) {
+    const ai = partes.find(p => p.nombre === 'AI'), ad = partes.find(p => p.nombre === 'AD');
+    if (ai && ad) {
+      const tauDe = (x, y) => -x * nTab[1] + y * nTab[0], tau0 = tauDe(mc[0], mc[1]), z0 = Math.max(13, 0.42 * Math.min(HAi, HAd));
+      const enParche = (pos, idx, t, m = 0) => { let sx = 0, sy = 0, sz = 0;
+        for (let j = 0; j < 3; j++) { const i = idx[t + j] * 3; if (Math.abs(ladoTab(pos.subarray(i, i + 2)) - RTAB) > 0.4) return false; sx += pos[i]; sy += pos[i + 1]; sz += pos[i + 2]; }
+        const du = (tauDe(sx / 3, sy / 3) - tau0) / (FOSA.a + m), dz = (sz / 3 - z0) / (FOSA.b + m); return du * du + dz * dz < 1; };
+      const triangulos = (pz, dentro) => { const v = []; for (let t = 0; t < pz.idx.length; t += 3) if (dentro(t)) v.push(pz.idx[t], pz.idx[t + 1], pz.idx[t + 2]); return new Uint32Array(v); };
+      // la lámina de la fosa (de la malla de la AD) cubre además un anillo de 4 mm: el borde grueso de la fosa, el limbo (anatomía
+      // general). La AD cede a la lámina todo ese anillo (la AD y su lámina suman la malla de antes: mismo volumen); la AI solo cede la
+      // elipse y la lámina tapa su agujero aunque las mallas de las dos aurículas no coincidan vértice a vértice
+      const lamina = triangulos(ad, t => enParche(ad.pos, ad.idx, t, 4)), huecoAi = triangulos(ai, t => enParche(ai.pos, ai.idx, t));
+      ad.idx = triangulos(ad, t => !enParche(ad.pos, ad.idx, t, 4)); ai.idx = triangulos(ai, t => !enParche(ai.pos, ai.idx, t));
+      if (lamina.length) anadir('Fosa oval', { pos: new Float32Array(ad.pos), idx: lamina, ao: ad.ao }, COLORES.auricula, { dobleCara: true });
+      if (huecoAi.length) anadir('Fosa oval', { pos: new Float32Array(ai.pos), idx: huecoAi, ao: ai.ao }, COLORES.auricula, { dobleCara: true });
+    }
+  }
   const enAi = (a, psi) => cupulaPunto(mc, rhoAi, HAi, incAi, bAi, a, psi, 0, 0, sepAi);
   const enAd = (a, psi) => cupulaPunto(ct, rhoAd, HAd, incAd, bAd, a, psi, 0, pliAd, sepAd);
   const vasoDesde = (p, d, tramos) => { const pts = [res(p, esc(d, 4)), p]; for (const [dist, dz] of tramos) pts.push(sum(sum(p, esc(d, dist)), [0, 0, dz])); return suave(pts); };
@@ -566,7 +591,15 @@ export function construirCorazon(estado, opciones = {}) {
   // de la sangre: la malla (calibre que cambia con la PVC y la respiración) la dibuja abdomen.mjs, porque por debajo
   // del diafragma la vena está fija al cuerpo y no puede moverse con el latido
   { const p = enAd(0.18, -1.75), d = norm(res(PUNTOS_ABDOMEN.hiato, p));
-    vias.vci = [sum(p, esc(d, 14)), sum(p, esc(d, 7)), p, res(p, esc(d, 4))]; }
+    vias.vci = [sum(p, esc(d, 14)), sum(p, esc(d, 7)), p, res(p, esc(d, 4))];
+    // N1 · Válvula de Eustaquio: pliegue fino en forma de media luna en el borde anterior del orificio de la cava inferior,
+    // inclinado hacia el tabique (la fosa oval). Mitchell 2019, p. 26 (PDF 26, vista del seno coronario: «the Eustachian valve may be visualized
+    // in the right atrium») y p. 25 (vista de entrada del VD: «Eustachian valve, Eustachian ridge, coronary sinus ... proximal
+    // inferior vena cava»). Tamaño (orificio de 8 mm de radio, pliegue de 12 mm): ilustrativo
+    if (!opciones.vistaBase) {
+      const delante = [0, 1, 0], e1 = norm(res(delante, esc(d, pto(delante, d)))), e2 = cruz(d, e1);
+      anadirR('Válvula de Eustaquio', rejilla(Math.round(4 * q), Math.round(16 * q), (u, v) => { const a = (v - 0.5) * Math.PI, h = u * EUSTAQUIO.largo * Math.cos(a);
+        const r = EUSTAQUIO.radio; return [0, 1, 2].map(k => p[k] + r * (Math.cos(a) * e1[k] + Math.sin(a) * e2[k]) - h * d[k] - 0.3 * h * nTab[k]); }), COLORES.valva, { dobleCara: true }); } }
 
   // --- Raíz aórtica con 3 senos de Valsalva, aorta ---
   const zST = 20;

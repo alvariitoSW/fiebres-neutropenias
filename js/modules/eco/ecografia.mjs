@@ -269,6 +269,8 @@ const TIPOS = [
   [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: T.miocardio.db }],
   [/^Infundíbulo/, { grupo: 'Infundíbulo', clase: 'pared', db: T.miocardio.db }],
   [/^(Papilar|Banda moderadora)/, { clase: 'tubo', db: T.papilar.db, ancho: T.papilar.ancho }],
+  [/^Fosa oval$/, { clase: 'linea', db: T.fosaOval.db, ancho: T.fosaOval.ancho }],
+  [/^Válvula de Eustaquio$/, { clase: 'linea', db: T.eustaquio.db, ancho: T.eustaquio.ancho }],
   [/^(AI|AD|Orejuela)/, { clase: 'linea', db: T.auricula.db, ancho: T.auricula.ancho }],
   [/^Base V[ID]$/, { clase: 'linea', db: T.baseV.db, ancho: T.baseV.ancho }],
   [/^Raíz aórtica$/, { clase: 'linea', db: T.raiz.db, ancho: T.raiz.ancho }],
