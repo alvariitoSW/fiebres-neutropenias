@@ -193,6 +193,13 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      `autonomo/bloques/<bN>/herramientas/` (o `autonomo/pruebas/`) con un `LEEME.md`, y el siguiente los reutiliza.
    - **Reanudar mejor que relanzar**: si un agente se para (límite de uso, pausa), se reanuda con SendMessage; antes
      de una pausa larga escribe un apunte de 5 líneas que el director copia al repositorio.
+   - **Una parada con varios modelos vivos, una sesión por modelo** (aprobado por el usuario, 27/10/2026,
+     `reglas-b3p2`): cada modelo se lleva a la app en su propia sesión de director, y la sesión del bloque solo junta
+     las ramas al final. El director de la parada 2 del `b3` gastó 5,1 M (frente a 0,8 M de una parada de un modelo)
+     por fusionar 12 ramas en una sola conversación.
+   - **Llevar una maqueta aprobada a la app son dos encargos** (mismo día, `reglas-b3p2`): primero el modelo, con su
+     prueba (`autonomo/pruebas/<clave>.mjs`), y después su Mayéutica. Presupuestos de la parada 2 del `b3`: modelo
+     sonnet 90 pasos / 2,0 M; Mayéutica sonnet 50 / 1,2 M.
 
 8. **Llegar al 8,75 a la primera** (R1-R9 de `notas-meta`, aprobadas por el usuario el 27/10/2026; datos en
    `autonomo/bloques/notas-meta/datos.md`: 1 de 7 tareas aprobaba a la primera, 0 de 7 llegaban a la meta, 2,4
@@ -229,6 +236,12 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
    módulos) ni sus propias instrucciones. Si cree que una regla falla, lo propone en su informe y el usuario decide.
+   **Qué son «sus instrucciones» en `.claude/`** (aprobado por el usuario, 27/10/2026, `reglas-b3p2`): la prohibición
+   vale para `.claude/agents/` y las skills del proyecto (`plan-socialista`, `bitacora`, `ahorro`, `radar`…). Lo que
+   reescribe una herramienta instalada (graft en `.claude/settings.json` y su propia skill) lo sube el director en un
+   **commit aparte**, después de comprobar con `git diff` que no se pierde ninguna orden del proyecto (si se perdió
+   una, la vuelve a poner antes del commit). El entorno bloquea al agente su propia configuración: ese commit necesita
+   el permiso del usuario en la sesión.
 2. **El estado sí lo escribe**: los estados de `autonomo/TABLERO.md` y su parte en `autonomo/partes/`.
 3. **No avanzar sin prueba**: una tarea solo pasa a `en revisión` cuando la PR existe en GitHub (con su enlace en el
    informe). Si el push o la PR fallan o no está claro que salieron, el estado no cambia y el informe lo dice.

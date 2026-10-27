@@ -120,7 +120,9 @@ es la base de cómo se trabaja ahora.
 3. **Modelos en la app** · constructor potente, uno por modelo, cada uno en su carpeta (`git worktree`, que sale de
    `origin/auto/<bN>`, nunca de `main`: REGLAS §4.6) y con dueño
    fijo de cada archivo compartido. Copia el patrón del río y mar (`js/modules/libros/agua-viva*`) y añade su prueba
-   en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`.
+   en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`. **Llevar una maqueta aprobada a la app son dos encargos**
+   (aprobado el 27/10/2026, `reglas-b3p2`; REGLAS §4.7): primero el modelo con su prueba (sonnet, 90 pasos / 2,0 M) y
+   después su Mayéutica (sonnet, 50 pasos / 1,2 M); presupuestos del tablero, `b3` parada 2.
 4. **Estudio en las fichas** · constructor, por grupos de fichas, siguiendo el modelo ya hecho: interruptor
    **Texto | Estudiar** (recorrido Mira → Juega → Piensa → Examínate → Caso, y «Para profundizar» al final), con los
    datos en `js/data/mayeutica/<bN>-<grupo>.js`.
@@ -171,7 +173,10 @@ por agente que los baratos; los más caros, 150-230 pasos). Cuatro reglas:
 
 1. **Sesiones cortas.** Una sesión por tarea, o por parada de un bloque. Al cerrarla (parte y gasto escritos), no
    encadenes la siguiente en la misma conversación: abre tú una sesión nueva con `create_session` (mismo repositorio
-   y entorno; mensaje `/plan-socialista <clave>`), solo si ninguna otra sesión activa lleva ya esa tarea (§0, paso 4), y díselo al usuario. Tú no lees PDF, código largo ni informes de más
+   y entorno; mensaje `/plan-socialista <clave>`), solo si ninguna otra sesión activa lleva ya esa tarea (§0, paso 4), y díselo al usuario. **Una parada con varios
+   modelos vivos va en una sesión por modelo** (aprobado el 27/10/2026, `reglas-b3p2`; REGLAS §4.7): la del bloque
+   solo junta las ramas al final (el director de la parada 2 del `b3` gastó 5,1 M por fusionar 12 ramas en una
+   conversación). Tú no lees PDF, código largo ni informes de más
    de 40 líneas: eso lo leen los agentes, y tú lees su informe.
 2. **Encargos de una pieza.** Cada encargo de constructor es una sola pieza (un modelo, un grupo de fichas, una tanda de
    arreglos). Si un constructor llega a **unos 100 pasos** sin terminar, se para y entrega lo hecho con la lista de lo
@@ -287,7 +292,10 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
 
 ## 3. Lo que nunca haces
 
-- Editar `CLAUDE.md`, `autonomo/REGLAS.md`, `.claude/` (ni esta skill): si una regla falla, lo propones en el parte.
+- Editar `CLAUDE.md`, `autonomo/REGLAS.md`, `.claude/agents/` ni las skills del proyecto (ni esta): si una regla
+  falla, lo propones en el parte. Lo que reescribe una herramienta instalada (graft en `.claude/settings.json` y su
+  skill) sí lo subes, en un commit aparte, tras comprobar con `git diff` que no se pierde ninguna orden del proyecto
+  (y volver a ponerla si se perdió); necesita el permiso del usuario en la sesión (REGLAS §5.1, aprobado el 27/10/2026).
 - Dar por hecha una tarea sin los jueces, o con una fuente que no se pudo leer.
 - Dar por hecha una tarea `visual` o `estudio` con texto en muro, una figura de tarjetas de números o un esquema
   donde la app ya tiene (o puede tener) la imagen real, o con preguntas que se aciertan sin estudiar.

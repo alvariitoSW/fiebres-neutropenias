@@ -73,6 +73,9 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
       está escrita, la pides, no la decides tú.
 - [ ] **Anatomía (R4)**: en la eco y en los modelos con anatomía, cada plano al lado de su imagen real de uso libre,
       con tu autopuntuación de la rúbrica (§7) en la entrega.
+- [ ] **Botones estables** (aprobado por el usuario, 27/10/2026, `reglas-b3p2`): en un modelo vivo, los botones se
+      crean una vez y se repintan en su sitio (cambias su texto, su clase o su marca); nunca se rehacen en cada cuadro
+      o cada cambio de estado. Si se rehacen, los jueces dan «mando no tocable».
 - [ ] Ids nuevos sin duplicar (grep en todo `js/` e `index.html`); solo tokens de color; formas de `particulas.js`.
 - [ ] **Nada interno a la vista** (REGLAS §2.7): ni «mar-…», ni «§», ni «Caso E1», ni «maqueta/diseño/REGLAS», ni
       rutas, ni notas de trabajo. **Rótulos** de los dibujos ≥ 7,5 px a 390 y sin pisarse (§2.8).
