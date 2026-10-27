@@ -173,20 +173,22 @@ test('6 · tres medidas seguidas del motor difieren ≤10 % (y la regla las da p
 
 // ---- 7. Paciente posible en cada maniobra (extremos y punto medio)
 const HUMANO = { pas: [60, 200], pad_: [35, 120], pvc: [-2, 25], pvp: [0, 40], pcp: [0, 40], gc: [1.5, 10], fc: [40, 180], paps: [10, 70] };
-function humano(etiqueta, x) {
-  for (const [k, [a, b]] of Object.entries(HUMANO)) assert.ok(x[k] >= a && x[k] <= b, `${etiqueta}: ${k} = ${x[k].toFixed(1)} (humano ${a}-${b})`);
+// HP crónica: un VD hipertrófico sostiene PAPs por encima de 70 (el de pared fina del TEP, no); tope 110, ilustrativo (fisiología general; sin cifra en las fuentes de la app)
+const HUMANO_HPC = { ...HUMANO, paps: [10, 110] };
+function humano(etiqueta, x, rangos = HUMANO) {
+  for (const [k, [a, b]] of Object.entries(rangos)) assert.ok(x[k] >= a && x[k] <= b, `${etiqueta}: ${k} = ${x[k].toFixed(1)} (humano ${a}-${b})`);
 }
 for (const k of Object.keys(ESCENARIOS)) {
   test(`7 · «${ESCENARIOS[k].nombre}»: presiones, volúmenes y GC de un humano con EPP y con bolos de 250 a 1.500 mL`, () => {
-    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k);   // como lo ve la app
-    humano('recién elegido', m.ultimo);
-    m.correr(faltaParaAsentar(m)); humano('basal (asentado, como antes de la primera maniobra)', m.ultimo);
-    epp(m, true); m.correr(SEGUNDOS_MANIOBRA); humano('EPP', m.ultimo);
-    epp(m, false); m.correr(SEGUNDOS_MANIOBRA); humano('EPP quitada', m.ultimo);
-    bolo(m, 250); m.correr(SEGUNDOS_MANIOBRA); humano('bolo 250', m.ultimo);
+    const R = k === 'hpcronica' ? HUMANO_HPC : HUMANO, m = crearMotor(); m.correr(12); aplicarEscenario(m, k);   // como lo ve la app
+    humano('recién elegido', m.ultimo, R);
+    m.correr(faltaParaAsentar(m)); humano('basal (asentado, como antes de la primera maniobra)', m.ultimo, R);
+    epp(m, true); m.correr(SEGUNDOS_MANIOBRA); humano('EPP', m.ultimo, R);
+    epp(m, false); m.correr(SEGUNDOS_MANIOBRA); humano('EPP quitada', m.ultimo, R);
+    bolo(m, 250); m.correr(SEGUNDOS_MANIOBRA); humano('bolo 250', m.ultimo, R);
     for (let i = 0; i < 2; i++) { bolo(m, 500); m.correr(SEGUNDOS_MANIOBRA); }
-    bolo(m, 250); m.correr(SEGUNDOS_MANIOBRA); humano('bolos 1.500 mL', m.ultimo);
-    epp(m, true); m.correr(SEGUNDOS_MANIOBRA); humano('bolos 1.500 mL + EPP', m.ultimo);
+    bolo(m, 250); m.correr(SEGUNDOS_MANIOBRA); humano('bolos 1.500 mL', m.ultimo, R);
+    epp(m, true); m.correr(SEGUNDOS_MANIOBRA); humano('bolos 1.500 mL + EPP', m.ultimo, R);
     for (const x of m.onda) assert.ok(x.vvi > 10 && x.vvi < 300 && x.vvd > 20 && x.vvd < 320, `volúmenes ${x.vvi.toFixed(0)}/${x.vvd.toFixed(0)}`);
   });
 }
