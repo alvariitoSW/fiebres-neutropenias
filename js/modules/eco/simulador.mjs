@@ -21,7 +21,7 @@ import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMot
 import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
+import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -527,11 +527,11 @@ export function montarSimulador(raiz, opc = {}) {
   let colorOn = false, nyq = 60, gate = null, ultimoTD = null, fuenteD = null, medD = null, latidoD = -1, frameD = 0, angD = null;
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
-  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad });
+  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral });
   const areasD = () => areasAnillo(refGeoTd.geo);
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
-    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
+    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
     // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
     vci: { vista: 'scVci', vaso: 'vci' }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
@@ -564,8 +564,9 @@ export function montarSimulador(raiz, opc = {}) {
     if (!prepararPlanoEco()) return;
     let p;
     if (pr.vaso) p = puntoVaso(pr.vaso);
-    else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); p = sumV(j.c, escV(j.dir, pr.off)); }
+    else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
+    if (k === 'regmitral') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -604,6 +605,13 @@ export function montarSimulador(raiz, opc = {}) {
         poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5) · TDE ${fx(medD.tde)} ms (normal 140-250)`
           + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).</span>`);
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
+      return;
+    }
+    if (medD.tipo === 'regurgitacion') {
+      const vOri = Math.max(...motor.onda.map(x => velRegMitral(x, motor.p.eroaMitral))), dp = 4 * Math.pow(vOri / 100, 2);
+      poner('warn', cab + `Chorro sistólico hacia la AI (se aleja de la sonda): en la muestra, pico ${fx(medD.pico)} cm/s · ITV ${fx(medD.itv, 1)} cm`
+        + `<br>En el orificio el chorro llega a ${fx(vOri)} cm/s (ΔP VI−AI ≈ 4v² = ${fx(dp)} mmHg).`
+        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.</span>`);
       return;
     }
     if (medD.tipo === 'eyeccion') {
