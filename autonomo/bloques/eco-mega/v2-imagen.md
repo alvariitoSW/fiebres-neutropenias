@@ -13,3 +13,11 @@ No comprobado / riesgo: el colapso del VD y el beso a fondo se ven pero no los m
 2. El `todo` de SC4C en `geometria.test.mjs` pasa a prueba. El VD sale de 19 mm de hondo, no de 20: bajé ese mínimo a 18 (solo ese umbral; el plano es el mismo que el del A4C, así que no hay más margen). Dilo a Forma si no te gusta.
 3. TEP ✅: la lectura dice «Tabique aplanado en diástole (fases F-A)» y su nota explica que en B el tabique vuelve a curvarse. No cambié la fase al elegir TEP con el PSAX (no fue barato).
 4. Suite eco entera: 432 pruebas, 419 ok, 0 fallos, 13 `todo` (la prueba B4 de Forma pasa).
+
+## Vuelta 3
+1. Rótulo «VI» ✅: no se dibuja cuando la cavidad tiene <35 mL (el beso de papilares) y los demás rótulos llevan el fondo más transparente (`simulador.mjs`).
+2. Botón «Hemorragia» ✅ (sin cifra; la da el mando, `escenarios.mjs`).
+3. Mando de gravedad ✅: pasa a `cv-eco-fijo`, justo bajo la imagen, y con el mando visible la imagen queda fija arriba (`components.css`, mismo sticky que los mandos de imagen). Captura `v3-360-hemorragia-mando.png`.
+4. «▲S2» y «diástole» ✅: sístole y diástole pasan a una segunda fila bajo la barra del ciclo; no se pisan a 360 (`v3-360-ciclo.png`).
+5. Tricúspide en F ❌ no hecho: la apertura no es un ángulo de `corazon-geo.mjs` sino el flujo del motor (`ap('tricus')`, `formas.mjs`, qRef 600); abrirla antes es cambiar la fisiología, no es barato.
+Suite eco: 432 pruebas, 419 ok, 0 fallos, 13 `todo`. 390 y 360 px sin desborde ni errores. Cambié `components.css` y `simulador.mjs`: falta subir `?v=` (director).

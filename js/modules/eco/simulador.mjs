@@ -108,7 +108,7 @@ export function montarSimulador(raiz, opc = {}) {
     else { cicloFases = fases; $('#cv-ciclo').innerHTML = seg.map(g => `<button type="button" data-fase="${g.f}" style="width:${pc(g.t1 - g.t0)};background:${COLOR_FASE[g.f]}" title="${g.f} · ${FASES[g.f]}" aria-label="Ir a ${g.f}: ${FASES[g.f]}">${(g.t1 - g.t0) / cicloPeriodo > 0.045 ? g.f : ''}</button>`).join('') + '<div class="cv-cur" id="cv-ciclo-cur"></div>'; }
     const tB = seg.find(g => g.f === 'B')?.t0, tE = seg.find(g => g.f === 'E')?.t0;
     $('#cv-ciclo-pie').innerHTML = (tB != null && tE != null)
-      ? `<span style="left:${pc(tB)}">▲S1</span><span style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
+      ? `<span style="left:${pc(tB)}">▲S1</span><span class="cv-fase-txt" style="left:calc(${pc((tB + tE) / 2)} - 2.2em)">sístole</span><span style="left:${pc(tE)}">▲S2</span><span class="cv-fase-txt" style="left:calc(${pc((tE + cicloPeriodo) / 2)} - 2.4em)">diástole</span>` : '';
   }
   $('#cv-ciclo').addEventListener('click', (e) => { const b = e.target.closest('button[data-fase]'); if (b) irAFase(b.dataset.fase); });
   function pintarCiclo(e) {
@@ -730,8 +730,8 @@ export function montarSimulador(raiz, opc = {}) {
         ...(VISTAS[vistaEco].ventana === 'subcostal' ? [['VCI', puntoVci(-25)]] : []),
         ...(VISTAS[vistaEco].ventana === 'supraesternal' ? [['Arco', T([0, -14, 75])], ['APD', T([-12, -15, 56])]] : [])];
       for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
-        if (Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
-        rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.55)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
+        if ((n === 'VI' && s.vvi < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
+        rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.4)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
     const cajasValvas = img.senal ? senalar(img.senal, im, geoEco.partes) : null;

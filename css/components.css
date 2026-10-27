@@ -2386,8 +2386,9 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-ciclo button { border: 0; flex: none; font: inherit; font-size: 0.78rem; font-weight: 700; color: #1d1b16; cursor: pointer; padding: 0; min-width: 0; overflow: hidden; touch-action: manipulation; }
 .cv-ciclo button.on { box-shadow: inset 0 0 0 2px #fff; }
 .cv-ciclo .cv-cur { position: absolute; top: 0; bottom: 0; width: 3px; margin-left: -1px; background: var(--text-main); box-shadow: 0 0 4px rgba(0,0,0,.6); pointer-events: none; }
-.cv-ciclo-pie { position: relative; height: 18px; font-size: 0.7rem; color: var(--text-muted); }
+.cv-ciclo-pie { position: relative; height: 34px; font-size: 0.7rem; color: var(--text-muted); }
 .cv-ciclo-pie span { position: absolute; top: 2px; white-space: nowrap; }
+.cv-ciclo-pie span.cv-fase-txt { top: 17px; }   /* sístole y diástole en una segunda fila: a 360 px no se pisan con ▲S1 y ▲S2 */
 
 .cv-plegable > summary { cursor: pointer; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.5px; color: var(--accent-blue); list-style: none; padding: 2px 0; }
 .cv-plegable > summary::-webkit-details-marker { display: none; }
@@ -2454,9 +2455,9 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-mandos-img .cv-mini[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 700; }
 .cv-senal-frase { margin: 6px 0 0; padding: 6px 10px; border-left: 3px solid var(--accent-yellow); font-size: 0.8rem; color: var(--text-main); }
 /* con los mandos abiertos, la imagen y la frase de Señálalo quedan fijas arriba mientras se bajan los deslizadores */
-.cv-eco-fijo:has(~ .cv-mandos-img[open]) { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding-bottom: 4px; }
-.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-eco canvas { width: min(100%, 37.5vh); height: auto; margin: 0 auto; }
-.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-senal-frase { font-size: 0.74rem; padding: 4px 8px; }
+.cv-eco-fijo:has(~ .cv-mandos-img[open]), .cv-eco-fijo:has(.cv-gravedad:not([hidden])) { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding-bottom: 4px; }
+.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-eco canvas, .cv-eco-fijo:has(.cv-gravedad:not([hidden])) .cv-eco canvas { width: min(100%, 37.5vh); height: auto; margin: 0 auto; }
+.cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-senal-frase, .cv-eco-fijo:has(.cv-gravedad:not([hidden])) .cv-senal-frase { font-size: 0.74rem; padding: 4px 8px; }
 /* que la imagen fija no tape el mando al que salta la página */
 .cv-mandos-img[open] :is(input, button, .cv-sonda-fila) { scroll-margin-top: 46vh; }
 

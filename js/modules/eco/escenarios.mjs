@@ -28,7 +28,7 @@ const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
-    nombre: 'Hemorragia de 1 L', tipo: 'hipovolemico',
+    nombre: 'Hemorragia', tipo: 'hipovolemico',
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
     gravedad: { defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
