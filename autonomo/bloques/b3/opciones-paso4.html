@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Paso 4: opciones</title>
+<style>
+:root{--bg:#f7f6f2;--card:#fff;--tx:#1d1d1b;--mut:#62605a;--line:#e2dfd6;--ok:#2f7a45;--warn:#9a6a00;--bad:#a8322d;--acc:#2c5c8f;--chip:#efece4}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15161a;--card:#1f2026;--tx:#ecebe6;--mut:#a3a19a;--line:#33343c;--ok:#6cc58a;--warn:#e0b54f;--bad:#ef7d75;--acc:#82b1e6;--chip:#2a2b33}}
+:root[data-theme="dark"]{--bg:#15161a;--card:#1f2026;--tx:#ecebe6;--mut:#a3a19a;--line:#33343c;--ok:#6cc58a;--warn:#e0b54f;--bad:#ef7d75;--acc:#82b1e6;--chip:#2a2b33}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font-size:1.35rem;margin:.2em 0 .1em}h2{font-size:1.1rem;margin:1.6em 0 .5em}
+p{margin:.5em 0}.mut{color:var(--mut);font-size:.9rem}
+.cards{display:grid;gap:10px}
+.op{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.op h3{margin:0 0 4px;font-size:1.02rem}
+.op.rec{border:2px solid var(--acc)}
+.big{font-size:1.5rem;font-weight:700}
+.row{display:flex;gap:14px;flex-wrap:wrap;margin:6px 0}
+.row div{min-width:80px}
+.tag{display:inline-block;font-size:.75rem;padding:1px 8px;border-radius:99px;background:var(--chip);margin-right:4px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;margin:8px 0;padding:8px 12px}
+summary{font-weight:600;cursor:pointer}
+ul{padding-left:1.1em;margin:.4em 0}li{margin:.35em 0}
+.k{font-family:ui-monospace,monospace;font-size:.85em;background:var(--chip);padding:0 4px;border-radius:4px;word-break:break-word}
+.A{color:var(--acc)}.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.leg{font-size:.85rem;color:var(--mut)}
+</style>
+</head>
+<body><main>
+<h1>Bloque 3 · paso 4: ¿cuánto construir?</h1>
+<p class="mut">Informe del 27/10/2026. No toca la app. Faltan 17 fichas (corazón y parada). El plan pedía 17 piezas nuevas en los modelos vivos. Aquí, tres maneras de hacerlo y lo que cuesta cada una.</p>
+
+<h2>Lo que conté en el código</h2>
+<ul>
+<li><b>1 pieza ya existe</b>: la warfarina en el vaso vivo (<span class="k">vaso-vivo · warfarina</span>). Coste 0.</li>
+<li><b>3 tienen algo muy parecido ya hecho</b>: la eco de compresión (en el catéter vivo), la insuficiencia mitral (<span class="k">eroaMitral</span> en el motor de la eco) y la pierna inmóvil (telar vivo).</li>
+<li><b>13 no existen</b> en ningún modelo: vagal, FA en la circulación, RCP con adrenalina, posparo, reperfusión, rotura del septo, IAM de VD, etapas de la IC, CPAP, congestión del riñón, placa, trombólisis, disección.</li>
+</ul>
+
+<h2>Las tres opciones</h2>
+<div class="cards">
+<div class="op"><h3>A · Todas las piezas</h3>
+<div class="row"><div><span class="big">≈ 36 M</span><br><span class="mut">gasto</span></div><div><span class="big">10-12</span><br><span class="mut">sesiones</span></div><div><span class="big">3 días</span><br><span class="mut">mínimo</span></div></div>
+<p>Cada ficha con su mecanismo animado. Lo más caro es la <b>placa coronaria</b> (anatomía nueva, ≈ 2,7 M con antiagregantes y trombólisis).</p></div>
+
+<div class="op rec"><h3>C · Intermedia <span class="tag">recomendada</span></h3>
+<div class="row"><div><span class="big">≈ 28 M</span><br><span class="mut">gasto</span></div><div><span class="big">8</span><br><span class="mut">sesiones</span></div><div><span class="big">2 días</span></div></div>
+<p>Solo las <b>6 piezas</b> que enseñan algo que ningún modelo enseña hoy: FA en la circulación, RCP con adrenalina e insuflaciones, rotura del papilar, IAM de VD, etapas de la IC y disección. El resto, con modelos que ya existen.</p></div>
+
+<div class="op"><h3>B · Aligerado</h3>
+<div class="row"><div><span class="big">≈ 23 M</span><br><span class="mut">gasto</span></div><div><span class="big">6-7</span><br><span class="mut">sesiones</span></div><div><span class="big">2 días</span></div></div>
+<p>Ninguna pieza nueva. Cada ficha usa el estado más cercano que ya existe; lo que falte, texto y figura real del libro.</p></div>
+</div>
+<p class="mut">M = millones de tokens medidos con <span class="k">gasto.mjs</span>, con los presupuestos del tablero. Límite del día: ~15 M. La base de las 3 opciones (Estudiar, auditor, profesor y director de las 6 sesiones de grupo, y partir el archivo del shock) son ≈ 23 M; cada pieza suma ≈ 0,75 M (la placa, 1,2 M en opus). La <b>CPAP</b> se construye igual en el bloque 3D (el respirador la necesita): en B y C se aplaza allí, no se pierde.</p>
+
+<h2>Ficha a ficha: qué se pierde si se aligera</h2>
+<p class="leg"><b class="ok">A, B y C</b> = qué opción la construye. «Aligerado» = qué estado ya hecho se usa en su lugar.</p>
+
+<details open><summary>1 · Taquiarritmias (4 fichas)</summary><ul>
+<li><b>Maniobra vagal</b> · aligerado: <span class="k">ritmo-vivo · nodal</span> + guía <span class="k">adenosina</span> (mismo mecanismo: frena el nodo AV). <span class="ok">Pierdes poco.</span> Solo en A.</li>
+<li><b>FA en la circulación</b> (sin patada auricular, pulso irregular) · aligerado: <span class="k">fa</span> del ritmo vivo, que solo pinta el ECG. <span class="bad">Pierdes mucho</span>: no se ve por qué cae el gasto en la FA con hipertrofia. A y C.</li>
+<li><b>Warfarina</b> · ya existe en el vaso vivo. Gratis en las tres.</li>
+</ul></details>
+
+<details><summary>2 · La parada (3 fichas)</summary><ul>
+<li><b>RCP con adrenalina e insuflaciones</b> · aligerado: guía <span class="k">rcp</span> con ETCO₂ y capilar <span class="k">capno-rcp</span>. <span class="bad">Pierdes</span> ver cómo la adrenalina sube la presión de perfusión y cómo insuflar de más quita retorno. A y C.</li>
+<li><b>Posparo</b> en el shock vivo · aligerado: <span class="k">rce</span> del ritmo vivo + texto. <span class="warn">Pierdes algo</span>: la hemodinámica tras el pulso. Solo en A.</li>
+<li><b>Reperfusión</b> (lupa del neutrófilo) · aligerado: texto y figura. <span class="warn">Pierdes algo.</span> Solo en A.</li>
+</ul></details>
+
+<details><summary>3 · Cardiogénico y soporte (3 fichas)</summary><ul>
+<li><b>Rotura del papilar</b> · el motor ya tiene <span class="k">eroaMitral</span>: es la pieza más barata. <span class="bad">Sin ella</span> se queda el parche del caso de Aurelio y sin caso propio (lo decidiste el 25/10). A y C.</li>
+<li><b>Rotura del septo</b> · aligerado: texto. <span class="warn">Pierdes</span> ver el salto de saturación del cortocircuito. Solo en A.</li>
+<li><b>IAM de VD</b> · aligerado: <span class="k">cardio</span> + texto. <span class="bad">Pierdes mucho</span>: el VD que depende de precarga con pulmones limpios es una pregunta de guardia. A y C.</li>
+<li>Rotura de pared libre = <span class="k">tapon</span>, ya existe.</li>
+</ul></details>
+
+<details><summary>4 · Insuficiencia cardiaca (2 fichas)</summary><ul>
+<li><b>Etapas de la IC</b> · aligerado: eco <span class="k">dilatada</span>, <span class="k">hipertrofia</span> y shock <span class="k">sobrecarga</span>. <span class="warn">Pierdes</span> la progresión paso a paso en un mismo corazón. A y C.</li>
+<li><b>CPAP</b> · se aplaza al respirador del 3D en B y C.</li>
+<li><b>Congestión del riñón</b> · aligerado: nefrona <span class="k">furosemida</span>. <span class="warn">Pierdes</span> ver cómo la presión venosa baja el filtrado. Solo en A.</li>
+</ul></details>
+
+<details><summary>5 · SCA y disección (3 fichas)</summary><ul>
+<li><b>Placa coronaria</b> + antiagregantes + trombólisis (3 piezas, la más cara) · aligerado: Fig. 20.1 real del Marino al lado del vaso vivo (<span class="k">sano</span>, <span class="k">herida</span>) y <span class="k">stemi</span> del ritmo. <span class="warn">Pierdes</span> la rotura de la placa animada. Solo en A.</li>
+<li><b>Disección</b> (esmolol antes que nicardipino) · aligerado: <span class="k">receptor-vivo · betabloqueo</span> + texto. <span class="bad">Pierdes</span> el porqué del orden, que es lo que mata si se hace al revés. A y C.</li>
+</ul></details>
+
+<details><summary>6 · TEP (2 fichas)</summary><ul>
+<li><b>Lisis del TEP</b> · aligerado: <span class="k">tep-alto</span> y <span class="k">tep-intermedio</span> del shock vivo. <span class="ok">Pierdes poco.</span> Solo en A.</li>
+<li><b>TVP con eco de compresión</b> · aligerado: telar <span class="k">inmovil</span> + catéter <span class="k">eco-compresion</span>. <span class="ok">Pierdes poco.</span> Solo en A.</li>
+</ul></details>
+
+<h2>Qué recomiendo</h2>
+<p><b>C, la intermedia.</b> Las 6 piezas que construye son las que sostienen una pregunta de guardia (FA que tumba el gasto, RCP, papilar, VD, IC, disección). Las 11 que aplaza se pueden añadir después, una a una, si al estudiar echas en falta alguna. Ahorra ≈ 8 M (medio día de gasto) frente a A.</p>
+<p class="mut">El orden no cambia: primero partir el archivo del shock, luego taquiarritmias, parada, cardiogénico, IC, SCA y TEP. Una sesión por grupo; las piezas, cada una en su sesión antes de su grupo.</p>
+<p><b>Tú eliges: A, B o C</b> (o C cambiando alguna pieza). La construcción será otra tarea.</p>
+</main></body></html>
