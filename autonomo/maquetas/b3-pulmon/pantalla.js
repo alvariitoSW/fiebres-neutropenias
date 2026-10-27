@@ -118,7 +118,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       fr: { v: r.fr }, peep: { v: r.peep, ...(vcv ? {} : { nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' }) },
       dpsop: { v: null, txt: '—', apagado: 'Presión de soporte: para la respiración espontánea; no en este modelo.' },
       rampa: { v: null, txt: '—', apagado: 'Rampa: no en este modelo (ilustrativo).' },
-      flujo: vcv ? { v: r.flujo } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
+      flujo: vcv ? { v: r.flujo, max: flujoTope(r.vt), nota: `Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
       pinsp: vcv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });

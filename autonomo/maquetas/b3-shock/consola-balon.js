@@ -134,8 +134,8 @@ export function crearConsolaBalon(el, { cab, cita, org, alCambiar, citaIabp }) {
       }
       // la letra A/n cuelga de su diástole: dInf muestras después de su R, y solo cuando el barrido ya llegó ahí
       const lt = buf.lat[i];
-      const d = lt ? Math.min(lt.d, NP - 1 - i) : 0;   // en el borde derecho no da la vuelta (caería sobre el trazado nuevo): se arrima al final
-      if (lt && razon > 1 && ((cur - i + NP) % NP) > d + 1) {
+      const d = lt ? lt.d : 0;   // si su diástole queda fuera de la tira, no se dibuja la letra (no se arrima al borde: se amontonaba)
+      if (lt && razon > 1 && i + d <= NP - 1 && ((cur - i + NP) % NP) > d + 1) {
         const asis = (((lt.n % razon) + razon) % razon) === 0, xl = xDe(i + d);
         hl += `<text class="lat ${asis ? '' : 'no'}" x="${xl.toFixed(1)}" y="${yA.art + 9}"${xl > W - 8 ? ' style="text-anchor:end"' : ''}>${asis ? 'A' : 'n'}</text>`;
       }
