@@ -38,19 +38,19 @@ export function calcularTopes(S, simT, mo) {
   // 5) los tres frenos del WPW con FA: uno ya es el error
   if (S.wpwNodo) { apaga('w-dilt', 'w-bb', 'w-digo'); T.freno = { nivel: 'aviso', titulo: 'No sigas frenando', texto: 'Un freno del nodo ya es el error que enseña esta pantalla: más no frenan el atajo y pueden precipitar una FV.', cita: C.wpw, origen: 'ficha · p. 28' }; }
   // 6) TAM: magnesio una pauta; metoprolol 3 dosis; verapamilo hasta 20 mg
-  if ((D['mg-tam'] || 0) >= 1) { apaga('mg-tam'); T.mg = { nivel: 'aviso', titulo: 'Pauta completa', texto: '2 g en 15 min y 6 g en 6 h son la pauta. Repetirla sería hipermagnesemia.', cita: C.tam, origen: 'ficha · p. 28 · la hipermagnesemia: fisiología general' }; }
-  if ((D['mg-tdp'] || 0) >= 1) { apaga('mg-tdp'); T.mgTdp = { nivel: 'aviso', titulo: 'Pauta completa', texto: 'Una pauta de 1-2 g en 15 min (la dosis no tiene consenso). Repetirla sin que vuelva la torsade sería hipermagnesemia.', cita: C.tdpManejo, origen: 'ficha · p. 35 · el tope y la hipermagnesemia: fisiología general' }; }
+  if ((D['mg-tam'] || 0) >= 1) { apaga('mg-tam'); T.mg = { nivel: 'aviso', titulo: 'Pauta completa', texto: '2 g en 15 min y 6 g en 6 h son la pauta. Repetirla sería hipermagnesemia.', cita: C.tam, origen: 'ficha · p. 28 · la hipermagnesemia: ilustrativo; una revisión de 2025 no halló efectos graves del magnesio (0 de 46; Sangawa, PMID 41216399)' }; }
+  if ((D['mg-tdp'] || 0) >= 1) { apaga('mg-tdp'); T.mgTdp = { nivel: 'aviso', titulo: 'Pauta completa', texto: 'Una pauta de 1-2 g en 15 min (la dosis no tiene consenso). Repetirla sin que vuelva la torsade sería hipermagnesemia.', cita: C.tdpManejo, origen: 'ficha · p. 35 · el tope y la hipermagnesemia: ilustrativo; una revisión de 2025 no halló efectos graves del magnesio (0 de 46; Sangawa, PMID 41216399)' }; }
   const nM = D['meto-tam'] || 0;
   if (nM) rot['meto-tam'] = `dosis ${Math.min(nM, MAX.meto)}/${MAX.meto} · 2,5-5 mg`;
   if (nM >= MAX.meto) { apaga('meto-tam'); T.meto = { nivel: 'aviso', titulo: 'Tope de metoprolol', texto: 'Tres dosis de 2,5-5 mg IV: ya no se da más.', cita: C.t191, origen: 'ficha · Tabla 19.1, p. 23' }; }
   const mgV = (D['vera-tam'] || 0) * MAX.veraPorToque;
   if (mgV) rot['vera-tam'] = `hasta ${mgV}/${MAX.veraMg} mg`;
-  if (mgV >= MAX.veraMg) { apaga('vera-tam'); T.vera = { nivel: 'sello', titulo: 'Tope de verapamilo', texto: '20 mg es el máximo de la ficha: dar más no está previsto (es inotrópico negativo; bradicardia e hipotensión, por fisiología general).', cita: C.tam, origen: 'ficha · p. 28 (total 20 mg) · bradicardia e hipotensión: fisiología general' }; }
+  if (mgV >= MAX.veraMg) { apaga('vera-tam'); T.vera = { nivel: 'sello', titulo: 'Tope de verapamilo', texto: '20 mg es el máximo de la ficha: dar más no está previsto (es inotrópico negativo; bradicardia e hipotensión, por fisiología general).', cita: C.tam, origen: 'ficha · p. 28 (total 20 mg) · bradicardia e hipotensión: fisiología general; en la TSV estable la hipotensión por verapamilo es rara (Cochrane 2017, Alabed, PMID 29025197)' }; }
   else if (mgV >= 15) T.vera = { nivel: 'aviso', titulo: 'Cerca del tope', texto: `Vas por ${mgV} de los 20 mg de verapamilo: más es inotrópico negativo.`, cita: C.tam, origen: 'ficha · p. 28 (inotrópico negativo; total 20 mg)' };
   // 7) amiodarona de la TV: 150 mg, repetible una vez
   const nT = D['amio-tv'] || 0;
   if (nT) rot['amio-tv'] = nT >= MAX.amioTv ? '2/2 dosis' : '150 mg · repetible 1 vez';
-  if (nT >= MAX.amioTv) { apaga('amio-tv'); T.amioTv = { nivel: 'aviso', titulo: 'Bolos completos', texto: 'Dos bolos de 150 mg en 10 min: sigue 1 mg/min 6 h y 0,5 mg/min 18 h, sin pasar de 2,2 g al día. La ficha admite dosis extra de 150 mg cada 10 min si hace falta: el límite de dos bolos es de esta pantalla.', cita: C.f198, origen: 'ficha · Fig. 19.8, p. 33 · el tope de 2 bolos: ilustrativo' }; }
+  if (nT >= MAX.amioTv) { apaga('amio-tv'); T.amioTv = { nivel: 'aviso', titulo: 'Bolos completos', texto: 'Dos bolos de 150 mg en 10 min: sigue 1 mg/min 6 h y 0,5 mg/min 18 h, sin pasar de 2,2 g al día. La ficha admite dosis extra de 150 mg cada 10 min si hace falta: el límite de dos bolos es de esta pantalla.', cita: C.f198, origen: 'ficha · Fig. 19.8, p. 33 · el tope de 2 bolos: ilustrativo (ninguna guía lo fija)' }; }
   // 8) la parada: adrenalina cada 3-5 min del reloj, amiodarona 300 + 150, reloj con tope y nada tras el pulso
   if (p) {
     const adre = ['adre'], amio = ['amio-pcr'];
@@ -59,8 +59,8 @@ export function calcularTopes(S, simT, mo) {
       if (p.adreReloj != null && p.reloj - p.adreReloj < MAX.intervaloAdre) { apaga(adre); rot.adre = `siguiente en ${mmss(MAX.intervaloAdre - (p.reloj - p.adreReloj))}`; T.adre = { nivel: 'aviso', titulo: 'Adrenalina cada 3-5 min', texto: 'Aún no toca la siguiente dosis de 1 mg (el reloj de la parada va 10 veces más deprisa).', cita: C.adrenalina, origen: 'ficha · p. 59-60' }; }
       if ((p.amio || 0) >= MAX.amioPcr) { apaga(amio); T.amioPcr = { nivel: 'aviso', titulo: 'Amiodarona completa', texto: '300 mg y 150 mg: son las dos dosis de la ficha.', cita: C.algoritmo, origen: 'ficha · p. 59' }; }
       if (S.clave === 'fv' && p.escenario === 'refractaria' && p.choques >= 3) T.refractaria = { nivel: 'sello', titulo: 'FV refractaria', texto: `${p.choques} choques sin éxito: buen resultado solo en el 5 %; ECMO si se dispone.`, cita: C.refractaria, origen: 'ficha · p. 59-60' };
-      if (p.reloj >= MAX.parada) { apaga(adre, amio, 'comp', 'choque', 'causa-0', 'causa-1', 'causa-2', 'causa-3'); T.reloj = { nivel: 'sello', titulo: 'Sin RCE a los 30 min', texto: 'Media hora de reanimación sin recuperar el pulso: el caso se detiene. Tras tres choques sin éxito, el buen resultado es del 5 %.', cita: C.refractaria, origen: 'ficha · p. 60 · los 30 min: ilustrativo' }; }
-      else if (p.reloj >= MAX.paradaAviso) T.reloj = { nivel: 'aviso', titulo: 'Veinte minutos', texto: 'Más de 20 min de parada sin pulso; a los 30 min se acaba el caso.', origen: 'ilustrativo' };
+      if (p.reloj >= MAX.parada) { apaga(adre, amio, 'comp', 'choque', 'causa-0', 'causa-1', 'causa-2', 'causa-3'); T.reloj = { nivel: 'sello', titulo: 'Sin RCE a los 30 min', texto: 'Media hora de reanimación sin recuperar el pulso: el caso se detiene. Tras tres choques sin éxito, el buen resultado es del 5 %.', cita: C.refractaria, origen: 'ficha · p. 60 · los 30 min: ilustrativo; Goldberger 2012 (PMID 22958912) no puede definir una duración óptima de la reanimación' }; }
+      else if (p.reloj >= MAX.paradaAviso) T.reloj = { nivel: 'aviso', titulo: 'Veinte minutos', texto: 'Más de 20 min de parada sin pulso; a los 30 min se acaba el caso.', origen: 'ilustrativo; el orden de magnitud sale de Goldberger 2012 (PMID 22958912): mediana de 20 min en los que no sobreviven' };
     }
   }
   const sello = T.reloj?.nivel === 'sello' ? T.reloj : Object.values(T).find((t) => t.nivel === 'sello');
