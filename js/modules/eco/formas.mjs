@@ -47,14 +47,31 @@ export function aplanamientoSeptal(s) {
   return t * t * (3 - 2 * t);
 }
 
+// P1 · Pliegue (0-1) de la pared libre de la AD o del VD en el taponamiento, desde la presión TRANSMURAL del motor
+// (cámara − saco; motor.mjs, ptmAd/ptmVd). Lo que se ve: el colapso pasivo de la pared libre de la AD es de los signos
+// más precoces y precede al colapso diastólico del VD (Fisiopatología UCI · Cardiología, Ficha 11, «Taponamiento
+// cardíaco»; El Libro Azul, parte 2, p. 65; Marino, cap. 21, p. 64 del PDF: «diastolic collapse of the right
+// ventricle»). Que lo decida la transmural es fisiología general: la pared se hunde cuando lo que la mantiene abierta
+// (la transmural) cae por debajo de lo que la empuja (el saco). Umbral de 1 mmHg: ilustrativo (plan de ideas, P1). Con
+// el saco sin tensión (pperi < 1 mmHg, el corazón normal) no hay nada que la empuje: min(pperi, 1). Y sin líquido
+// tampoco: el saco tenso de un corazón grande (fallo, dilatada) toca la pared y no puede meterse en ella; hace falta
+// una capa de líquido entre los dos (hasta LIQUIDO_PLIEGUE mL, ilustrativo, el pliegue crece con ella).
+export const UMBRAL_PLIEGUE = 1, LIQUIDO_PLIEGUE = 40;
+export function plieguePared(ptm, pperi, liquido) {
+  if (ptm == null || pperi == null || !(liquido > 0)) return 0;
+  const t = clamp((Math.min(pperi, UMBRAL_PLIEGUE) - ptm) / UMBRAL_PLIEGUE, 0, 1) * clamp(liquido / LIQUIDO_PLIEGUE, 0, 1);
+  return t * t * (3 - 2 * t);
+}
+
 export function estadoGeo(s, extra = {}) {
-  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0, ...extra };
+  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0,
+    pliegueAd: plieguePared(s.ptmAd, s.pperi, s.liquidoPeri), pliegueVd: plieguePared(s.ptmVd, s.pperi, s.liquidoPeri), ...extra };
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }
 
 // Tolerancia de la mezcla frente al estado mostrado
-export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1 };
+export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1, pliegue: 0.15 };
 const VOLS = ['vvi', 'vvd', 'vai', 'vad'];
 
 // Valor de una muestra del latido en el instante t, interpolando entre las dos muestras vecinas (cada 2 ms)
@@ -70,8 +87,8 @@ export function valorEn(onda, t, k) {
 // menos de la mitad de la tolerancia. Así hay pocas formas en la diástole lenta y muchas donde todo cambia deprisa
 // (contracción auricular, apertura y cierre de las válvulas). Tope de separación: 60 ms.
 export function instantesClave(onda, { maxSeparacion = 0.06 } = {}) {
-  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi, e.eVd]; });
-  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2, TOLERANCIA.activacion / 2];
+  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi, e.eVd, e.pliegueAd, e.pliegueVd]; });
+  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2, TOLERANCIA.activacion / 2, TOLERANCIA.pliegue / 2, TOLERANCIA.pliegue / 2];
   const cabe = (i, j) => {
     if (onda[j].t - onda[i].t > maxSeparacion) return false;
     for (let k = i + 1; k < j; k++) { const w = (onda[k].t - onda[i].t) / (onda[j].t - onda[i].t);
@@ -159,6 +176,7 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       if (Math.abs(mix(A.est.septo, B.est.septo, w) - objetivo.septo) > TOLERANCIA.septo) return null;
       if (Math.abs(mix(A.est.eVi, B.est.eVi, w) - objetivo.eVi) > TOLERANCIA.activacion) return null;   // fija la torsión y los papilares
       if (Math.abs(mix(A.est.eVd, B.est.eVd, w) - objetivo.eVd) > TOLERANCIA.activacion) return null;   // fija el grosor del VD
+      for (const k of ['pliegueAd', 'pliegueVd']) if (Math.abs(mix(A.est[k] ?? 0, B.est[k] ?? 0, w) - (objetivo[k] ?? 0)) > TOLERANCIA.pliegue) return null;   // P1
       if (Math.abs((extra?.feLatido ?? 0) - (A.est.feLatido ?? 0)) > 0.03) return null;               // contractilidad del latido (torsión)
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
       if ((extra?.mioVi ?? 1) !== (A.est.mioVi ?? 1)) return null;          // otra forma de enfermedad

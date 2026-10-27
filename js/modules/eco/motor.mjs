@@ -248,7 +248,7 @@ export function crearMotor(ajustes = {}) {
     // arranca cerca del régimen estable (principio de un latido normal), para no esperar al asentamiento
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
-    pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0,
+    pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
     qMit: 0, qMitReg: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
@@ -309,6 +309,10 @@ export function crearMotor(ajustes = {}) {
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
     s.pai = presionCamara(p.ai, s.vai, eAur, s.pperi);
     s.pad = presionCamara(p.ad, s.vad, eAur, s.pperi);
+    // P1 · presión TRANSMURAL de las cavidades derechas (la de dentro menos la del saco): la que mantiene la pared abierta.
+    // La presión de cada cámara ya lleva pperi dentro, así que pperi − pad nunca es > 0; lo que se acerca a 0 en el
+    // taponamiento es la transmural (formas.mjs, plieguePared, la convierte en el pliegue de la pared libre)
+    s.ptmAd = s.pad - s.pperi; s.ptmVd = s.pvd - s.pperi;
     // s.paoDist: presión del depósito elástico; s.pao: la de la raíz (la que se mide y ve la válvula)
     s.paoDist = Math.max(0, (s.vao + s.vBalon - p.vuAo) / p.cAo);
     s.pao = s.paoDist + p.zAo * s.qAo;
@@ -453,7 +457,7 @@ export function crearMotor(ajustes = {}) {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
       qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, qTriReg: s.qTriReg, pven: s.pven, pvp: s.pvp,
-      pperi: s.pperi, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
+      pperi: s.pperi, ptmAd: s.ptmAd, ptmVd: s.ptmVd, liquidoPeri: s.liquidoPeri, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul, vBalon: s.vBalon, qImp: s.qImp, qEcmo: s.qEcmo,
     };
   }
