@@ -9,7 +9,7 @@ guía que no se puede abrir desde aquí queda **pendiente del usuario** (PDF a `
 ## Pulmón (solo maqueta `autonomo/maquetas/b3-pulmon/`) → lo aplica `wt/b3-citas`
 | Id | Qué se hace |
 |---|---|
-| P3 | 12 mL/kg: cita ARDS Network NEJM 2000 (PMID 10793162; brazo tradicional, 12 inicial) + Marino cap. 22 p. 46 (12-15). Fuera «ilustrativo». |
+| P3 | 12 mL/kg: cita ARDS Network NEJM 2000 (PMID 10793162; brazo tradicional, 12 inicial) + Marino cap. 24 p. 46 del PDF caps. 22-26 (12-15). Fuera «ilustrativo». |
 | P5 | FR 35: Marino cap. 27 p. 14 (tabla 27.1). Por encima: Marino p. 55 (hiperinflación, auto-PEEP, menos gasto) + Tuxen 1987 (PMID 3662241). |
 | P8 | Compliance 50-80 normal y <25 en edema/SDRA: Marino cap. 27 p. 6. El suelo 15: «ilustrativo». |
 | P7 | Detener ventilación: cae la SpO₂ y sube el CO₂ en minutos: Farmery 1996 (PMID 8777112), Benumof 1997 (PMID 9357902), Eger 1961 (PMID 13725901). Sin cifras por minuto. |
