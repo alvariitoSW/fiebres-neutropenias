@@ -9,6 +9,10 @@
         <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
     </button>
 
+    <div id="ecg-atajos" style="display:flex; gap:8px; margin:10px 0;">
+        <button type="button" class="especialidad-link" style="flex:1;padding:12px;" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8" data-resaltar="#ecg-guardia-pregunta">🧭 ¿Rápido o lento? Tarjeta de guardia</button>
+        <button type="button" class="especialidad-link" style="flex:1;padding:12px;" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f11">🔎 Lee este trazado</button>
+    </div>
     <p class="section-label">Cuaderno de campo</p>
     <div class="corkboard" id="pif-ecg-corkboard">
         <div class="field-card" data-tab="ecg-f1">
@@ -157,6 +161,21 @@
                 </div>
                 <div class="card-face back">
                     <div class="back-hook">La función del marcapasos implantado (pp. 1-2); el libro la desarrolla en su anexo.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="ecg-f11">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 11</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M6,30 h14 l4,-14 l6,28 l5,-14 h10 l4,-6 l5,6 h20" fill="none" stroke="var(--accent-red)" stroke-width="2"/></svg>
+                    <div class="field-name">Lee este trazado</div>
+                    <div class="field-hook">Ejercicios, informes con errores y dos casos con trazados reales del libro.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Primero tú, luego las opciones: ritmo, infarto, intervalos y arritmias (caps. 11-12).</div>
                     <div class="back-cta">Ver contenido completo →</div>
                 </div>
             </div>
@@ -1276,6 +1295,14 @@
             <div class="card" id="ecg8-idea" style="padding:12px 14px;"><p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> ante una arritmia se hacen tres preguntas en orden: <span class="hl-azul">¿rápida o lenta? ¿QRS estrecho o ancho? ¿R-R regular o irregular?</span> Con la respuesta y la forma de la P casi siempre se llega al ritmo. (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a>, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=59" target="_blank" rel="noopener">p. 118</a>)</p></div>
             <p class="section-label" style="margin-top:16px;">Secuencia para leer una arritmia <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a> · <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=59" target="_blank" rel="noopener">p. 118</a></p>
             <ol id="ecg8-pasos" style="font-size:0.85rem; color:var(--text-dim); padding-left:20px;"><li><strong>Frecuencia</strong> (la de los QRS): menos de 60 lpm es bradiarritmia; más de 100, taquiarritmia. Puede haber arritmia con FC normal si el impulso nace fuera del seno (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a>).</li><li><strong>Si es lenta</strong>: hay solo dos causas, disfunción sinusal o bloqueo AV. Se mira si cada P va seguida de QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a>, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=57" target="_blank" rel="noopener">p. 116</a>).</li><li><strong>Si es rápida</strong>: ¿QRS estrecho (&lt; 120 ms) o ancho (≥ 120 ms)? El estrecho nace por encima del His; el ancho es taquicardia ventricular o supraventricular con bloqueo de rama (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=59" target="_blank" rel="noopener">p. 118</a>, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=62" target="_blank" rel="noopener">p. 121</a>).</li><li><strong>R-R regulares o irregulares</strong> y <strong>qué hace la P</strong>: ausente, oculta en el QRS, tras el QRS o con varias morfologías (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=59" target="_blank" rel="noopener">pp. 118-121</a>).</li><li><strong>Si el QRS es ancho</strong>: algoritmo de Brugada de 4 pasos para separar TV de TSV con aberrancia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=63" target="_blank" rel="noopener">pp. 122-125</a>).</li></ol>
+            <p class="section-label" id="ecg-guardia-titulo" style="margin-top:14px;">🧭 Tarjeta de guardia: ¿rápido o lento? ¿Estable?</p>
+            <div class="card" id="ecg-guardia" style="padding:14px 16px;">
+                <div id="ecg-guardia-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="ecg-guardia-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="ecg-guardia-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="ecg-guardia-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+            <p id="ecg-guardia-nota" style="font-size:0.8rem; color:var(--text-dim);">Solo reconoce el ritmo, con los criterios del libro (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">pp. 113-125</a>). El libro no da criterios de estabilidad ni conducta: no se inventan aquí.</p>
             <div class="article-figure" id="ecg8-fig-tv"><img src="js/modules/pif-cardio/img/ecg/f8-tv-disociacion.png" alt="Tira de taquicardia ventricular con QRS ancho y muescas en los complejos pares" loading="lazy"><div class="article-figure-caption">Taquicardia de QRS ancho con disociación AV: los complejos pares tienen una muesca que deforma el QRS. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=64" target="_blank" rel="noopener">p. 123</a>.</div></div>
             <p class="section-label" style="margin-top:16px;">Ritmo sinusal y definiciones <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a></p>
             <dl class="kv-row" id="ecg8-sinusal"><dt>Ritmo sinusal</dt><dd>Las células P del nodo sinusal (pared lateral de la aurícula derecha, en la desembocadura de la cava superior) se despolarizan a <strong>60-100 por minuto</strong>. Las aurículas se despolarizan de arriba abajo y de derecha a izquierda: P positiva en DII, DIII y AVF, negativa en AVR, cada P seguida de QRS, con R-R y P-P regulares (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf#page=54" target="_blank" rel="noopener">p. 113</a>).</dd></dl>
@@ -1405,6 +1432,7 @@
 
         </div>
 
+        <div id="ecg-f11" class="tab-content"></div>
         <div id="ecg-f10" class="tab-content">
             <h3 style="color: var(--accent-red);">Marcapasos</h3>
 
