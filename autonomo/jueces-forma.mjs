@@ -41,6 +41,7 @@ export const BANCOS = [
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3a-shock.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -69,8 +70,8 @@ export const MODELOS = {
     // El shock a pie de cama (bloque 3, parte 1: el modelo; la Mayéutica va en la parte 2): Explorar | ¿Qué shock es?
     'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar' },
         estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
-    // El corazón eléctrico (parte 1: sin Mayéutica todavía, por eso sin botones de modo): el estado va en data-ritmo-vivo
-    'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar' },
+    // El corazón eléctrico: el estado va en data-ritmo-vivo
+    'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
@@ -119,6 +120,7 @@ function cadenasVisibles(o, out = [], vistos = new Set()) {
     if (typeof o === 'string') { out.push(o); return out; }
     if (!o || typeof o !== 'object' || vistos.has(o)) return out;
     vistos.add(o);
+    if (o.f && o.id && o.sitio) return out;   // una cita {f, id, sitio, p}: lleva ids de ficha, no texto que se enseñe
     if (Array.isArray(o)) o.forEach(x => cadenasVisibles(x, out, vistos));
     else for (const [k, v] of Object.entries(o)) if (!INTERNAS.has(k)) cadenasVisibles(v, out, vistos);
     return out;

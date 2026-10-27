@@ -10,6 +10,7 @@ import { MOTOR } from './motor.js';
 import { crearTope } from '../../../core/tope.js';
 import { ENERGIA_TV, ADE, MAX, calcularTopes, cargando } from './topes.js';
 import { G, f1 } from './dibujo.js';
+import { crearMayeutica } from './mayeutica.js';
 instalarMonitor();
 /* ============================================================
    LA PÁGINA: estado de la sesión, el monitor (tiras generadas), el dibujo vivo, los mandos, la explicación guiada,
@@ -558,7 +559,11 @@ function abrirLupas() {
   // el dock y la frase de este modelo son fijos y propios: el plano grande se queda por encima de los dos, no debajo
   document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px');
   document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px');
+  // el monitor (con su «Pausa») se queda a la vista por encima del plano: se mira el ECG mientras se mira la lupa
+  const mon = $('monitor'); scrollTo({ top: scrollY + mon.getBoundingClientRect().top - 4, behavior: 'instant' });
   planoLupas.abrir();
+  const caja = document.querySelector('.plano-grande[aria-label="El nodo AV y la célula, de cerca"]');
+  if (caja) caja.style.top = Math.min(Math.max(0, mon.getBoundingClientRect().bottom + 4), innerHeight * 0.5) + 'px';
 }
 $('lupas-grandes').addEventListener('click', abrirLupas);
 /* ---------- Cifras y gráficas tapadas (la Mayéutica de la parte 2: primero predices, luego compruebas) ---------- */
@@ -567,11 +572,27 @@ function taparTodo(si, tira) {
   const tp = $('tapa-tira'), tt = $('tapa-tira-txt'); if (tp) { tp.toggleAttribute('hidden', !taparTira); tt.toggleAttribute('hidden', !taparTira); }
   pintarCifras(); pintarGraficas();
 }
-// [HUECO ritmo parte 2: Mayéutica]
+/* ---------- Mayéutica: el interruptor Explorar | Mayéutica (el motor común, enganchado en mayeutica.js) ---------- */
+let modo = 'explorar';
+const mayeutica = crearMayeutica({ ponerEstado, taparTodo, accion, S, medirDock: () => medirDock(), setModo: m => setModo(m) });
+export function setModo(m) {
+  if (guia) cerrarGuia(); modo = m; S.medir = null; if (pausado) ponerPausa(false); borrarSenal();
+  $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-preguntas').setAttribute('aria-selected', String(m === 'preguntas'));
+  $('zona-abajo').hidden = m !== 'explorar'; $('aparatos').hidden = m === 'preguntas'; $('explicame').hidden = m !== 'explorar';
+  $('vista-preguntas').hidden = m !== 'preguntas'; $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m !== 'preguntas';
+  $('frase').hidden = m !== 'explorar'; $('peligro').hidden = true; $('raiz').classList.toggle('rtv-mayeutica', m === 'preguntas');
+  taparTodo(false);
+  if (m === 'explorar') ponerEstado('sinusal');
+  else { $('escena').before($('vista-preguntas')); mayeutica.entrar(); }
+  medirDock();
+}
+$('modo-explorar').addEventListener('click', () => { if (modo !== 'explorar') setModo('explorar'); });
+$('modo-preguntas').addEventListener('click', () => { if (modo !== 'preguntas') setModo('preguntas'); });
 
 /* ---------- Los oyentes ---------- */
 $('dock-panel').addEventListener('click', ev => {
   const b = ev.target.closest('button'); if (!b || b.disabled) return;
+  if (b.dataset.fam || b.dataset.estado) verFigura();
   if (b.dataset.fam) { familia = b.dataset.fam; pintarDock(); return; }
   if (b.dataset.estado) { S.medir = null; if (pausado) ponerPausa(false); ponerEstado(b.dataset.estado); pintarDock(); if (REDUCIR) pintarEscena(simT); return; }
   if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) { ponerPausa(true); S.pausaMedir = true; } if (!S.medir) dejarDeMedir(); pintarTiras(); pintarCalibre(); pintarDock(); return; }
@@ -585,6 +606,11 @@ $('dock-panel').addEventListener('click', ev => {
   if (b.dataset.deriv) { S.deriv = b.dataset.deriv; $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`; montarMonitor(); llenarEstatico(); pintarDock(); return; }
   if (b.dataset.acc) accion(b.dataset.acc, b);
 });
+// Al cambiar de ritmo, el corazón queda a la vista sobre el dock (si estaba medio tapado, se sube lo justo)
+function verFigura() {
+  requestAnimationFrame(() => { const f = $('svg').getBoundingClientRect(), d = $('dock').getBoundingClientRect(), vis = Math.min(f.bottom, d.top) - Math.max(f.top, 0);
+    if (vis / f.height < 0.75 && f.height < d.top) scrollTo({ top: scrollY + f.bottom - d.top + 8, behavior: REDUCIR ? 'auto' : 'smooth' }); });
+}
 // Dejar de medir: el calibrador se va y, si la tira se paró para medir, vuelve a correr
 function dejarDeMedir() { S.medir = null; pintarCalibre(); if (S.pausaMedir) { S.pausaMedir = false; if (pausado) ponerPausa(false); } }
 document.querySelector('.rtv-dock-tabs').addEventListener('click', ev => { const b = ev.target.closest('[data-pest]'); if (!b) return; pest = b.dataset.pest; if (pest !== 'medir' && (S.medir || S.pausaMedir)) dejarDeMedir(); pintarDock(); });
@@ -621,6 +647,7 @@ export function arrancarBucle() { if (REDUCIR || corriendo) return; corriendo = 
 /* ---------- Abrir en un estado (lo llama index.js: «sinusal», «fa:dilt»…) ---------- */
 export function abrirEstado(clave, extra = {}) {
   if (!ESTADOS[clave]) clave = 'sinusal';
+  if (modo !== 'explorar') setModo('explorar');
   S.medir = null; if (pausado) ponerPausa(false);
   ponerEstado(clave, extra);
   if (clave === 'fa' && extra.farmaco) ponerFarmaco(extra.farmaco);
@@ -632,4 +659,4 @@ export function abrirEstado(clave, extra = {}) {
 montarEscena(); pintarFijos(); resetS('sinusal'); ponerEstado('sinusal');
 if (REDUCIR) { const b = mo.latidosV[mo.latidosV.length - 1]; pintarEscena(b ? Math.min(simT, b.t0 + 0.05) : simT); }
 medirDock();
-window.__ritmo = { get pausado() { return pausado; }, get corriendo() { return corriendo; }, ponerEstado, accion, S, leer, est, aplicarFarmacoFA, get simT() { return simT; }, get mo() { return mo; }, tras, avanzarHasta, pintarCifras, pintarFrase, taparTodo, arrancarBucle, abrirEstado };
+window.__ritmo = { get modo() { return modo; }, setModo, mayeutica, get pausado() { return pausado; }, get corriendo() { return corriendo; }, ponerEstado, accion, S, leer, est, aplicarFarmacoFA, get simT() { return simT; }, get mo() { return mo; }, tras, avanzarHasta, pintarCifras, pintarFrase, taparTodo, arrancarBucle, abrirEstado };
