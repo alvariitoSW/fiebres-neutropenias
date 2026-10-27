@@ -457,3 +457,28 @@ test('v2 Forma: los papilares del VI son tubos cerrados (radio 0 en la base y en
       let r = 0; for (let i = i0; i < i0 + anillo; i++) r = Math.max(r, Math.hypot(p[3 * i] - cx, p[3 * i + 1] - cy, p[3 * i + 2] - cz)); return r; };
     assert.ok(radio(0) < 0.05 && radio(N - anillo) < 0.05, `${n}: radio en la base ${radio(0).toFixed(2)}, en la punta ${radio(N - anillo).toFixed(2)}`); }
 });
+
+// F3 · bomba auricular y reservorio [Lang 2015 p. 24: la AI es bomba (15-30 % del llenado), reservorio en la sístole y conducto]
+// Volumen de una cúpula auricular (malla abierta por el suelo, cerrada con el plano del suelo) y altura de su techo
+function volAu(pa) {
+  const P = pa.pos, I = pa.idx; let zMin = Infinity, zMax = -Infinity; for (let i = 2; i < P.length; i += 3) { zMin = Math.min(zMin, P[i]); zMax = Math.max(zMax, P[i]); }
+  let n = 0, zs = 0; for (let i = 2; i < P.length; i += 3) if (P[i] < zMin + 2) { zs += P[i]; n++; }
+  const z0 = zs / n; let v = 0;
+  for (let i = 0; i < I.length; i += 3) { const [a, b, c] = [I[i] * 3, I[i + 1] * 3, I[i + 2] * 3];
+    const A = [P[a], P[a + 1], P[a + 2] - z0], B = [P[b], P[b + 1], P[b + 2] - z0], C = [P[c], P[c + 1], P[c + 2] - z0];
+    v += A[0] * (B[1] * C[2] - B[2] * C[1]) - A[1] * (B[0] * C[2] - B[2] * C[0]) + A[2] * (B[0] * C[1] - B[1] * C[0]); }
+  return { vol: Math.abs(v) / 6000, techo: zMax };
+}
+test('bomba auricular: en la fase A la AI dibujada se vacía y su techo baja con ella; en la sístole ventricular la base baja y la AI se llena', () => {
+  const m = crearMotor(); m.correr(12); const ex = extraDeMotor(m);
+  const en = (s) => { const g = construirCorazon(estadoGeo(s, ex), { detalle: false }), r = volAu(g.partes.find(p => p.nombre === 'AI')); return { ...r, motor: s.vai, desc: g.descenso }; };
+  const A = m.onda.filter(s => s.fase === 'A'), ini = en(A[0]), nadir = en(A.reduce((a, b) => (b.vai < a.vai ? b : a)));
+  assert.ok(nadir.vol < 0.6 * ini.vol, `volumen ${ini.vol.toFixed(1)} → ${nadir.vol.toFixed(1)} mL`);
+  assert.ok(nadir.techo < ini.techo - 8, `techo ${ini.techo.toFixed(1)} → ${nadir.techo.toFixed(1)} mm`);   // la pared se mueve: >8 mm, no un reescalado
+  for (const x of [ini, nadir]) assert.ok(Math.abs(x.vol - x.motor) <= 0.12 * x.motor + 1, `dibujado ${x.vol.toFixed(1)} vs motor ${x.motor.toFixed(1)}`);
+  // sístole: del fin de la B al fin de la D el plano AV baja y la AI crece (reservorio)
+  const B = m.onda.filter(s => s.fase === 'B').at(-1), Dd = m.onda.filter(s => s.fase === 'D').at(-1), b = en(B), d = en(Dd);
+  assert.ok(d.desc < b.desc - 5, `descenso ${b.desc.toFixed(1)} → ${d.desc.toFixed(1)} mm`);
+  assert.ok(d.vol > b.vol + 2, `AI ${b.vol.toFixed(1)} → ${d.vol.toFixed(1)} mL`);
+  assert.ok(Math.abs(d.vol - d.motor) <= 0.12 * d.motor + 1);
+});
