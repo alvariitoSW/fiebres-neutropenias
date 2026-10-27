@@ -164,7 +164,7 @@ const NOMBRE_LASTRE = { plomo: 'propofol', esponja: 'midazolam', barril: 'loraze
 export function lastreSVG(tipo, esc = 1, horas = 24, conNombre = true) {
     if (!tipo) return '';
     const cuerda = `<path class="inm-cuerda" d="M11 42 Q21 44 30 50" style="fill:none;stroke:var(--text-muted);stroke-width:1.3"/>`;
-    const nombre = y => conNombre ? T(31, y, NOMBRE_LASTRE[tipo], { a: 'middle', s: 9, b: 1, c: '--text-dim', sans: 1 }) : '';
+    const nombre = y => conNombre ? T(31, y, NOMBRE_LASTRE[tipo], { a: 'middle', s: 11.5, b: 1, c: '--text-dim', sans: 1 }) : '';
     const lingote = (x, y, k = 1) => `<g transform="translate(${x} ${y}) scale(${k})"><path d="M-15 -8 H15 L12 8 H-12Z" style="fill:var(--text-muted);stroke:var(--bg-main);stroke-width:1.2"/><path d="M-11 -3.5 H11 M-10 .5 H8 M-9 4.5 H5" style="stroke:var(--text-main);stroke-width:.8;opacity:.55"/><path d="M-15 -8 H15" style="stroke:var(--text-main);stroke-width:1.3"/></g>`;
     if (tipo === 'plomo') return cuerda + lingote(31, 58) + nombre(78);
     if (tipo === 'esponja') {

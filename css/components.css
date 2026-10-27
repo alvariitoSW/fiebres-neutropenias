@@ -4414,7 +4414,7 @@ body.study-mode-on .tel-dock { padding-right: 82px; }
 .inm-raiz .inm-celda b { font: 700 .98rem/1.15 var(--inm-serif); font-variant-numeric: tabular-nums; color: var(--text-main); display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .inm-raiz .inm-celda.inm-fuera b { color: var(--accent-red); }
 .inm-raiz .inm-celda.inm-bien b { color: var(--accent-green); }
-.inm-raiz .inm-celda .inm-u { font: .58rem/1.15 var(--inm-sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.inm-raiz .inm-celda .inm-u { font: .58rem/1.15 var(--inm-sans); color: var(--text-muted); white-space: normal; overflow-wrap: anywhere; }
 .inm-raiz .inm-celda.inm-mira { box-shadow: 0 0 0 2px var(--accent-blue); border-color: var(--accent-blue); }
 .inm-raiz .inm-celda .inm-o { font: .54rem/1.25 var(--inm-sans); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 0 3px; justify-self: start; margin-top: 2px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 .inm-raiz .inm-celda .inm-o.inm-ilu { border-style: dashed; }
