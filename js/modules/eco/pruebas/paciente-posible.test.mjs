@@ -199,7 +199,7 @@ test('Normal: ejes de la AD en el A4C (mayor 2,4 ± 0,3 y menor 1,9 ± 0,3 cm/m�
 for (const [h, quien] of [['MAPSE (descenso de la base): no está en Lang ni Mor-Avi como cifra', 'B1'],
   ['rotación basal y apical por separado (solo la torsión neta, Mor-Avi p. 290)', 'B3'], ['S′ tricuspídea: el modelo no calcula velocidades del anillo', 'F5'],
   ['grosor sistólico de la pared libre del VD', 'B4'],
-  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'], ['índice de excentricidad del tabique', 'F4'],
+  ['volumen mínimo de la AI y de la AD (Lang solo da el máximo)', 'B2'],
   ['relación largo/ancho del VI y ejes de la AI en mm (Lang los da en su Suplemento, Tablas 2 y 9, que no tenemos)', 'B2']]) {
   test('HUECO: ' + h, { todo: 'hueco de fuente · ' + quien }, () => assert.fail('sin cifra de referencia'));
 }
