@@ -19,7 +19,7 @@ export function estable(resp, pulmon) {
 export function pasaDeTope(l, kg, mando = 'el último') {
   if (!l) return null;
   const kgVt = l.vtExh / kg;
-  if (kgVt > T.vtkgMax) return { titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal (${Math.round(l.vtExh)} mL): más del doble del volumen normal (6-7); el daño por volumen se explica en el SDRA. Mando «${mando}»: se queda donde estaba.`, cita: C.vtTrad, origen: ORG_12 };
+  if (kgVt > T.vtkgMax) return { titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal (${Math.round(l.vtExh)} mL): el doble del volumen normal (6-7); el daño por volumen se explica en el SDRA. Mando «${mando}»: se queda donde estaba.`, cita: C.vtTrad, origen: ORG_12 };
   if (l.vm > T.vmMax) return { titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene. Mando «${mando}»: se queda donde estaba.`, cita: C.t271, origen: 'fisiología general' };
   return null;
 }
@@ -42,7 +42,7 @@ export function calcularTopes(S, l, kg) {
   const sellos = [];
   if (l.vm != null && l.vm < T.vmMin) sellos.push({ k: 'sinvent', titulo: 'Sin ventilación eficaz', texto: `Vt ${f1(l.vtExh)} mL y volumen minuto ${f1(l.vm)} L/min: el paciente no se ventila y el CO₂ sube. Baja la resistencia o sube la alarma de presión.`, cita: C.t245, origen: 'fisiología general (la ficha no da un mínimo de VM)' });
   if (l.vm != null && l.vm > T.vmMax) sellos.push({ k: 'vmalto', titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene.`, cita: C.t271, origen: 'fisiología general' });
-  if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: más del doble del volumen normal (6-7); el daño por volumen se explica en el SDRA.`, cita: C.vtTrad, origen: ORG_12 });
+  if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: el doble del volumen normal (6-7); el daño por volumen se explica en el SDRA.`, cita: C.vtTrad, origen: ORG_12 });
   const pt = l.palvFinEsp;
   if (pt != null && pt > T.peepTotMax && pt - r.peep >= 2) sellos.push({ k: 'hiper', titulo: 'Hiperinflación', texto: `PEEP total ${f1(pt)} cmH₂O (${f1(pt - r.peep)} de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.`, cita: C.vppConsec, origen: 'ficha · cap. 23 p. 28; cap. 28 p. 31 · el 20 y la oculta ≥ 2: fisiología general' });
   const [s1, ...resto] = sellos;
