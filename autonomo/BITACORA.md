@@ -224,6 +224,31 @@ esta sección.
   silueta 3D dentro de unos límites de forma; (4) repasar las demás formas a fondo con capturas del 3D.
 - **Propuesta de regla**: los jueces de la eco abren cada forma al 100 % y fallan si sale el aviso de recorte.
 
+### B-031 · Dos ideas de Spec Kit (GitHub) para el plan: revisar el encargo antes de gastar · apuntado 2026-10-27
+- **Lo que dijiste**: «mira este repositorio a ver si nos puede venir bien al proyecto
+  https://github.com/github/spec-kit» y, tras el informe, «me parece muy bien […] apunta […] lo que has dicho del
+  repositorio».
+- **Qué es Spec Kit** (leído el 27/10, licencia MIT): método para que un asistente programe por pasos (constitución →
+  especificar → aclarar → planificar → tareas → analizar → construir → comprobar). Lo nuestro ya hace casi lo mismo
+  (`CLAUDE.md`/`REGLAS.md` = constitución; bitácora = especificar y aclarar; tablero = tareas; plan socialista y
+  jueces = construir y comprobar). **No se instala** (programa aparte en Python con `uv`, carpeta `.specify/` y comandos
+  en inglés que duplican los nuestros); se traen dos ideas, reescritas a nuestra manera (sin copiar su texto).
+- **Cómo lo entiendo**: tipo `arreglo` (reglas y skills, no toca la app).
+  1. **Analizar el encargo antes de construir** (su `/speckit-analyze`): un paso de solo lectura, barato, al empezar
+     cada tarea de `/plan-socialista`, que cruza el encargo con el plan del director y la lista de piezas, y busca
+     huecos, contradicciones y **lo que ningún juez va a medir** (la lección del E/A de la eco, B-027: ningún encargo
+     pedía un E/A de paciente posible por forma). Lo grave para la tarea y se le pregunta al usuario.
+  2. **Lista de calidad del encargo** (su `checklist`: «pruebas unitarias del texto del encargo», no del resultado) en
+     `/bitacora`, al apuntar y al aprobar: ¿cada mando tiene tope con fuente?, ¿se dice qué cifra debe salir en cada
+     forma o caso?, ¿está «lo que NO quiero»?, ¿la fuente tiene página?, ¿qué juez comprobará cada cosa? Más su tope
+     de **5 preguntas como mucho** al usuario por encargo (su `clarify`), las más importantes primero.
+  - Dónde (supongo): `autonomo/REGLAS.md`, `.claude/skills/bitacora/SKILL.md` y `.claude/skills/plan-socialista/SKILL.md`
+    (editar `.claude/` necesita tu permiso en esa sesión, REGLAS §5.1); historia en `docs/historial/trabajo-autonomo.md`.
+- **Lo que NO quiero** (supongo): instalar Spec Kit ni sus carpetas; otro paso caro (la revisión del encargo, con el
+  modelo barato y ~10 pasos).
+- **Depende de**: nada. **Tamaño**: pequeña (una sesión barata).
+- **Dudas**: ninguna; si de verdad quieres instalar el programa Spec Kit, dímelo (yo no lo recomiendo).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
