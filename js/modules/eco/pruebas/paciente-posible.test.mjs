@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd, tapseDeLatido } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, medidasCorazon, medirVd } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -397,4 +397,17 @@ test('mando de la hemorragia: el VTS baja y la geometría aguanta de 0 a 42 % de
     const g = baseGeometrica(est).vi;
     assert.ok(g.Rm > 1 && g.Rm < g.Rb + 5, `VI de ${v} mL: radio medio ${fmt(g.Rm)} mm`);
   }
+});
+
+// p3-tapse · «Paciente posible»: en todas las formas con gravedad (0, defecto y 1) el TAPSE queda entre ~6 y 30 mm. Un anillo
+// que baja 3-5 mm no existe en un paciente vivo: el acortamiento longitudinal no cae lineal hasta 0 con la FE del VD
+// (tracción del VI y movimiento del corazón entero; ver ACORT_PASIVO_VD en corazon-geo.mjs). Normal ≈ 23-24 mm.
+test('p3-tapse: el TAPSE de TEP e hipertensión pulmonar crónica, en g 0, defecto y 1, queda entre 6 y 30 mm', () => {
+  for (const k of ['tep', 'hpcronica']) for (const g of [0, undefined, 1]) {
+    const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m, g); m.correr(ASENTAR_FORMA);
+    const t = tapseDeLatido(m.ultimo);
+    assert.ok(t >= 6 && t <= 30, `${k} g=${g ?? 'defecto'}: TAPSE ${t.toFixed(1)} mm (FE VD ${(m.ultimo.feD * 100).toFixed(0)} %)`);
+  }
+  const n = crearMotor(); n.correr(12);
+  assert.ok(tapseDeLatido(n.ultimo) > 22 && tapseDeLatido(n.ultimo) < 25, "normal ≈ 23-24 mm");
 });
