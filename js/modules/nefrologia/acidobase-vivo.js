@@ -1275,7 +1275,7 @@ function mandar(campo, v, base = E) {
   if (e.cl < 80 || e.cl > 120) return { error: 'No cabe: el Cl⁻ saldría de 80-120 mEq/L. Combinación no fisiológica.' };
   if (e.paco2 < 10 || e.paco2 > 90) return { error: 'La PaCO₂ del laboratorio va de 10 a 90 mmHg.' };
   const ph = r2(calcPH(e.paco2, e.hco3));
-  if (ph < 6.8 || ph > 7.8) return { error: `pH ${fmt(ph, 2)}: fuera de 6,80-7,80, no es un paciente posible. El mando se detiene.` };
+  if (ph < 6.8 || ph > 7.8) return { error: `No cabe: con PaCO₂ ${fmtA(e.paco2)} y HCO₃⁻ ${fmtA(e.hco3)}, el pH ${ph < 6.8 ? 'bajaría de 6,80' : 'subiría de 7,80'}. No es un paciente posible: el mando se detiene.` };   // sin escribir el pH imposible: el paciente nunca lo tiene
   return e;
 }
 let avisoT = null;
