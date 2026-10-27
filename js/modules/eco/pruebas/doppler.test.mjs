@@ -5,7 +5,7 @@ import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS } from '../escenarios.mjs';
 import { construirCorazon, baseGeometrica } from '../corazon-geo.mjs';
 import { construirAbdomen } from '../abdomen.mjs';
-import { estadoGeo } from '../formas.mjs';
+import { estadoGeo, mezclarFlujo } from '../formas.mjs';
 import { planoVista, enPlano, direccionHaz } from '../ecografia.mjs';
 import * as D from '../doppler.mjs';
 import { nrm, cruz } from '../mat.mjs';
@@ -100,4 +100,58 @@ test('velVaso: una sola fórmula para el espectro (fuentesFlujo) y para las medi
   assert.equal(F.vasos[1].vm, D.velVaso('vci', 10, s, m));
   const c = D.curvaLatido([{ t: 0, fase: 'A', ...s }], { tipo: 'vaso', vasoTipo: 'vci', r: 10 }, 0.5, {}, m);
   assert.equal(c[0].v, 0.5 * D.velVaso('vci', 10, s, m));
+});
+
+// ---- P5b · chorro de la insuficiencia mitral (Zoghbi 2017; Q y v del motor)
+const MD = (m) => ({ rRetorno: m.p.rRetorno, pvc: m.ultimo.pvc, eroaMitral: m.p.eroaMitral });
+const flujoEn = (m, t) => { const g = construirCorazon(estadoGeo(t, { tenting: Math.min(1, m.p.eroaMitral / 0.35) }), { detalle: true }); return { g, F: D.fuentesFlujo(g.flujo, t, D.areasAnillo(baseGeometrica(t)), [], MD(m)) }; };
+const sistole = (m) => m.onda.reduce((a, b) => (b.qMitReg > a.qMitReg ? b : a));
+
+test('IM funcional: el normal (EROA 0) no tiene chorro regurgitante y la AI está quieta en sístole', () => {
+  const m = motorEn(), t = m.onda.reduce((a, b) => (b.pvi > a.pvi ? b : a)), { g, F } = flujoEn(m, t);
+  assert.equal(m.p.eroaMitral, 0);
+  assert.ok(!F.valvulas.some(j => j.n === 'regMitral') && !F.geom.some(j => j.n === 'regMitral'));
+  const p = g.flujo.transformar(g.flujo.enCamara.ai([0.5, 0, 0]));
+  assert.ok(Math.hypot(...D.velocidad(p, F)) < 5, 'sin flujo en la AI en sístole');
+});
+
+test('IM funcional (dilatada): en sístole el flujo VI→AI en la AI es de 4-6 m/s y el caudal cuadra con vRegMitral', () => {
+  const m = motorEn('dilatada'), eroa = m.p.eroaMitral, t = sistole(m), { g, F } = flujoEn(m, t);
+  assert.ok(eroa > 0);
+  const j = F.valvulas.find(x => x.n === 'regMitral'); assert.ok(j, 'chorro presente en sístole');
+  assert.ok(!t.vMit, 'mitral cerrada');
+  assert.ok(j.v0 >= 400 && j.v0 <= 600, `v0 ${j.v0} cm/s`);
+  // Bernoulli: 4v² ≈ ΔP VI−AI (fisiología general)
+  assert.ok(Math.abs(4 * (j.v0 / 100) ** 2 - (t.pvi - t.pai)) / (t.pvi - t.pai) < 0.05, 'v = √ΔP / 2');
+  // el chorro, un poco aguas abajo de la coaptación (ya en la AI), va hacia la AI = se aleja del ápex, a v0
+  const p = [0, 1, 2].map(k => j.c[k] + j.dir[k] * 1.5), v = D.velocidad(p, F);
+  assert.ok(Math.hypot(...v) > 0.9 * j.v0 && Math.hypot(...v) < 1.05 * j.v0);
+  const haz = nrm([p[0] - 0, p[1] - 0, p[2] - 0]);   // (la dirección exacta del haz no importa: solo el sentido hacia la AI)
+  assert.ok(v[0] * j.dir[0] + v[1] * j.dir[1] + v[2] * j.dir[2] > 0 && haz.length === 3);
+  // la AI queda por encima de la coaptación: el chorro apunta hacia su centro
+  const ai = g.flujo.transformar(g.flujo.enCamara.ai([0.5, 0, 0])), hacia = [0, 1, 2].map(k => ai[k] - j.c[k]);
+  assert.ok(hacia[0] * j.dir[0] + hacia[1] * j.dir[1] + hacia[2] * j.dir[2] > 0);
+  // caudal coherente: ∫ v · EROA dt de las muestras del latido = volumen regurgitante del motor
+  let vol = 0; for (let i = 1; i < m.onda.length; i++) vol += D.velRegMitral(m.onda[i], eroa) * eroa * (m.onda[i].t - m.onda[i - 1].t);
+  assert.ok(m.ultimo.vReg > 20 && Math.abs(vol - m.ultimo.vReg) / m.ultimo.vReg < 0.08, `∫Q ${vol} frente a vReg ${m.ultimo.vReg}`);
+});
+
+test('IM funcional: en diástole no hay chorro regurgitante; la muestra en el chorro lee velocidad negativa (se aleja de la sonda)', () => {
+  const m = motorEn('dilatada'), dia = td(m), s = sistole(m);
+  assert.ok(!flujoEn(m, dia).F.valvulas.some(j => j.n === 'regMitral'));
+  const { g, F } = flujoEn(m, s), j = F.valvulas.find(x => x.n === 'regMitral');
+  const P = planoVista('a4c', s), gp = [0, 1, 2].map(k => j.c[k] + j.dir[k] * 4), [u, w] = enPlano(P, gp);
+  const g2 = [0, 1, 2].map(k => P.O[k] + P.r[k] * u + P.d[k] * w), haz = direccionHaz(P, Math.atan2(u, w));
+  const us = D.velocidadesMuestra(D.puntosMuestra(P, g2, haz), haz, F), media = us.reduce((a, b) => a + b, 0) / us.length;
+  assert.ok(media < -100, `velocidad media en la muestra ${media} cm/s`);
+  const fu = D.fuenteEnMuestra(D.puntosMuestra(P, g2, haz), haz, F);
+  assert.equal(fu.n, 'regMitral'); assert.ok(fu.factor < 0);
+  const med = D.medidasLatido(D.curvaLatido(m.onda, fu, fu.factor, D.areasAnillo(baseGeometrica(s)), MD(m)), fu);
+  assert.equal(med.tipo, 'regurgitacion'); assert.ok(med.pico > 100 && med.pico <= j.v0 * 1.01, `pico ${med.pico}`);
+});
+
+test('IM funcional: la geometría mezclada de las formas precalculadas conserva el origen del chorro', () => {
+  const m = motorEn('dilatada'), t = sistole(m), { g } = flujoEn(m, t), mz = mezclarFlujo(g.flujo, g.flujo, 0.5);
+  assert.deepEqual(mz.coaptacionMitral.map(Math.round), g.flujo.coaptacionMitral.map(Math.round));
+  assert.ok(D.fuentesFlujo(mz, t, D.areasAnillo(baseGeometrica(t)), [], MD(m)).valvulas.some(j => j.n === 'regMitral'));
 });

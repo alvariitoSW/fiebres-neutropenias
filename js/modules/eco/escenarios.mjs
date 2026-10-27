@@ -24,6 +24,8 @@ const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
 // cae en g ≈ 0,93. Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
 // ella daba una pulmonar media de 54 mmHg, que un VD sin hipertrofia no sostiene. A fondo, ~40/33 (media ~36). Ilustrativo
 const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) / Math.log(TEP_RPUL_MAX);
+const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
+const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
 // más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14
@@ -80,7 +82,14 @@ export const ESCENARIOS = {
     nombre: 'Miocardiopatía dilatada', forma: true,
     // contractilidad baja, ventrículo que se dilata y retención de líquidos (Ficha 3: el círculo vicioso de la
     // retención); algo más de masa con la pared normal (hipertrofia excéntrica, Ficha 3)
-    aplicar: (m) => { m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = 60; m.s.vven += 700; },
+    // P5a · IM funcional (secundaria): ni los velos ni las cuerdas están enfermos; el VI dilatado desplaza los papilares y
+    // tira de ambos velos hacia el ápex, y el anillo dilatado deja más área que cubrir (Zoghbi 2017, pp. 320-321). El orificio
+    // regurgitante crece con la dilatación del VI por encima de la normal (v0 de reposo, ilustrativo) y se topa en 0,35 cm²
+    // (Zoghbi Tabla 8, p. 332: moderada 0,20-0,39); la AI recibe el reflujo y se remodela (más volumen sin tensión, más
+    // distensible) hasta una AI «generalmente grave» (Tabla 6, p. 320). Parámetros ilustrativos.
+    aplicar: (m) => { const dil = (DILATADA_V0 - BASE.vi.v0) / 50;   // 1 = la dilatación de siempre (+50 mL de volumen sin tensión)
+      m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
+      m.p.eroaMitral = Math.min(EROA_IM_TOPE, EROA_IM_POR_DIL * dil); m.p.ai.v0 = BASE.ai.v0 + AI_V0_POR_DIL * dil; },
   },
   tep: {
     // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~67) es la EP de riesgo intermedio
@@ -137,6 +146,9 @@ const F11_VD = { sel: '#cardio-eco-vd', especialidad: 'fisioUci', view: 'cardiol
 const F11_COR = { ...F11_VD, sel: '#cardio-cor-pulmonale' };
 const MUKHERJEE_PDF = (p, texto) => ({ href: `docs/mukherjee-2025-corazon-derecho-hp-ase.pdf#page=${p}`, texto });
 const LANG_PDF = (p, texto) => ({ href: `docs/lang-2015-cuantificacion-camaras-ase.pdf#page=${p}`, texto });
+const ZOGHBI_PDF = (p, texto) => ({ href: `docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=${p}`, texto });
+const ATLAS_PRESION = { atlas: 'pressure', ficha: 'Atlas 8 · Hemodinámica por Doppler' };
+const ATLAS_DIASTOLE = { atlas: 'fill', ficha: 'Atlas 10 · Función diastólica' };
 const mm = (x) => x.toFixed(1).replace('.', ',') + ' mm';
 export const CRITERIOS_FORMA = {
   hipertrofia: [
@@ -152,6 +164,12 @@ export const CRITERIOS_FORMA = {
     { texto: 'VI en diástole >5,5 cm (normal 3,5-5,5 cm)', valor: (c) => mm(c.md.lvdd), cumple: (c) => c.md.lvdd > 55, fuente: FATE },
     { texto: 'FEVI ≤40 % (FE reducida)', valor: (c) => Math.round(c.u.fe * 100) + ' %', cumple: (c) => c.u.fe <= 0.4, fuente: MERINO_FE },
     { texto: 'Pared posterior en rango normal (6-10 mm)', valor: (c) => mm(c.md.paredPost), cumple: (c) => c.md.paredPost >= 6 && c.md.paredPost <= 10, fuente: FATE },
+    { texto: 'Volumen máximo de la AI >34 mL/m² (normal ≤34)', valor: (c) => Math.round(c.md.volAI) + ' mL/m²', cumple: (c) => c.md.volAI > 34,
+      fuente: ATLAS_DIASTOLE, pdf: LANG_PDF(25, 'Lang p. 25 y 28'),
+      nota: 'Lang 2015: el límite superior normal del volumen de la AI indexado es 34 mL/m² (antes 28), medido en telesístole por discos (pp. 25, 28). Se divide por la superficie corporal del paciente simulado (1,85 m² si no hay otra). Normal del modelo: ~27 mL/m²' },
+    { texto: 'IM funcional: orificio regurgitante (EROA) ≥0,20 cm² (al menos moderada)', valor: (c) => `${c.md.eroa.toFixed(2).replace('.', ',')} cm² · ${Math.round(c.md.volReg)} mL por latido`,
+      cumple: (c) => c.md.eroa >= 0.2, fuente: ATLAS_PRESION, pdf: ZOGHBI_PDF(30, 'Zoghbi p. 332'),
+      nota: 'Zoghbi 2017, Tabla 8 (p. 332): EROA leve <0,20, moderada 0,20-0,39 y grave ≥0,40 cm²; volumen regurgitante moderado 30-59 mL, grave ≥60 mL. En la secundaria un corte de 0,30 cm² puede ser ya grave por PISA 2D (p. 334). Zoghbi también cita que ≥0,2 cm² empeora el pronóstico, pero NO redefine con él la IM grave secundaria (p. 334): el criterio de arriba es solo «al menos moderada». Origen del modelo: velos sanos; el anillo dilatado y la tracción de los papilares (tenting, ilustrativo: Zoghbi no da cifras, p. 321) abren el orificio' },
   ],
   tep: [
     { texto: 'Área del VD / área del VI >0,6 (cor pulmonale agudo)', valor: (c) => c.md.areaVdVi.toFixed(2).replace('.', ',') + ` (normal ${c.md0.areaVdVi.toFixed(2).replace('.', ',')})`,

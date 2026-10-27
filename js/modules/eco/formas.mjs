@@ -20,9 +20,11 @@ const lerp3 = (a, b, t) => [mix(a[0], b[0], t), mix(a[1], b[1], t), mix(a[2], b[
 
 // Apertura según el flujo que pasa (raíz: a poco flujo ya se separan las valvas) y carga según el gradiente
 // inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo. Función pura del estado.
+// R3 · La tricúspide usa qRef 250 mL/s (no 600): su llenado rápido (F) es de ~130-280 mL/s en el motor, la mitad que el de la mitral;
+// con 600 apenas separaba las valvas (3 mm). Ilustrativo.
 export const VALVULAS = [
   { n: 'mitral', abierta: 'vMit', q: 'qMit', arriba: 'pai', abajo: 'pvi', qRef: 600, pRef: 100, nombre: 'Mitral' },
-  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 600, pRef: 20, nombre: 'Tricúspide' },
+  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 250, pRef: 20, nombre: 'Tricúspide' },
   { n: 'aortica', abierta: 'vAo', q: 'qAo', arriba: 'pvi', abajo: 'pao', qRef: 500, pRef: 100, nombre: 'Aórtica' },
   { n: 'pulmonar', abierta: 'vPul', q: 'qPul', arriba: 'pvd', abajo: 'pap', qRef: 350, pRef: 20, nombre: 'Pulmonar' },
 ];
@@ -34,7 +36,8 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // mioVi: masa del VI de la forma de enfermedad elegida (escenarios.mjs; 1 = normal). mioVd: grosor de la pared libre del VD
 // (hipertrofia del VD, Atlas · 14; 1 = normal).
 // El derrame es el que ya hay en el saco (motor.s.liquidoPeri: entra a su ritmo), no el pedido (motor.p.liquidoPeri)
-export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
+export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, tenting: Math.min(1, (motor.p.eroaMitral ?? 0) / 0.35), eroaMitral: motor.p.eroaMitral ?? 0, vRegMitral: motor.ultimo?.vReg ?? 0,
+  vaiMax: motor.onda?.length ? Math.max(...motor.onda.map(m => m.vai)) : undefined, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
 
 // Cuánto se aplana el tabique (0-1) según el gradiente de presión transeptal VI−VD de este instante. Fuente de lo
 // que se ve (que el tabique se aplana cuando el VD se sobrecarga): Merino, Fig. 18.2 (septo aplanado en diástole) y
@@ -205,6 +208,7 @@ export function mezclarFlujo(fa, fb, w) {
   return {
     enCamara: Object.fromEntries(Object.keys(fa.enCamara).map(c => [c, (n) => L(fa.enCamara[c](n), fb.enCamara[c](n))])),
     valvulas: Object.fromEntries(Object.keys(fa.valvulas).map(k => [k, L(fa.valvulas[k], fb.valvulas[k])])),
+    coaptacionMitral: fa.coaptacionMitral && fb.coaptacionMitral ? L(fa.coaptacionMitral, fb.coaptacionMitral) : undefined,
     largo: (n) => mix(fa.largo(n), fb.largo(n), w),
     enVia: (n, t) => L(fa.enVia(n, t), fb.enVia(n, t)),
     transformar: (p) => L(fa.transformar(p), fb.transformar(p)),

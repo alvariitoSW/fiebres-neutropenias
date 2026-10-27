@@ -290,7 +290,8 @@ test('papilares: se acortan en sístole a 0,75-0,9 de su largo de diástole y en
     const dato = (s, nom) => { const an = anillos(construirCorazon(estadoGeo(s, ex), { detalle: true }).partes.find(p => p.nombre === nom)); return { L: largoPap(an), r: Math.max(...an.map(a => a.r)) }; };   // v2 Forma: la base del tubo se cierra (radio 0): el radio es el del anillo más grueso
     for (const nom of NOMBRES_PAP) {
       const d = dato(td, nom), s = dato(ts, nom), razon = s.L / d.L;
-      assert.ok(razon >= 0.75 && razon <= 0.9, `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);
+      // dilatada: con la IM funcional (P5a) la FE anterógrada baja a ~21 % y los papilares se acortan algo menos (0,92)
+      assert.ok(razon >= 0.75 && razon <= (k === 'dilatada' ? 0.93 : 0.9), `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);
       assert.ok(s.r > d.r, `${k}, ${nom}: no engruesa`);
       const vol = (s.L * s.r * s.r) / (d.L * d.r * d.r);
       assert.ok(Math.abs(vol - 1) <= 0.03, `${k}, ${nom}: volumen ×${fmt(vol)}`);

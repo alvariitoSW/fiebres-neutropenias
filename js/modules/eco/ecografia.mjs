@@ -175,7 +175,7 @@ export function medirVd(est) {
  * - masaIndice (g/m²): volumen de miocardio del VI × 1,05 g/mL (densidad del miocardio: fisiología general) / superficie.
  * - areaVdVi: área de la cavidad del VD sobre la del VI en el plano apical de 4 cámaras (Ficha 11: relación VD/VI).
  */
-export function medidasCorazon(est, sc = 1.85) {
+export function medidasCorazon(est, sc = 1.85) {   // est.vaiMax / eroaMitral / vRegMitral: extraDeMotor (formas.mjs)
   const g = baseGeometrica(est), vi = g.vi, z = -0.3 * vi.L, U = g.U, Up = U + Math.PI;
   const pared = (f) => g.rEpiVi(z, f) - g.rEndoVi(z, f);
   const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), paredPost = pared(Up);
@@ -190,7 +190,10 @@ export function medidasCorazon(est, sc = 1.85) {
   }
   // paredVd: pared libre del VD en esta muestra (mm); medida en la telediástole es el RVWT de Mukherjee 2025 (p. 144)
   return { tabique: pared(U), paredPost, paredVd: g.tvdW(20), lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
-    masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo };
+    masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo,
+    // P5a · AI: el volumen máximo (telesístole, Lang 2015 p. 25) indexado a la superficie corporal (sc, m²; la del paciente del
+    // motor, 1,85 por defecto); IM: orificio regurgitante efectivo (cm²) y volumen regurgitante por latido (mL), del motor
+    volAI: (est.vaiMax ?? est.vai) / sc, eroa: est.eroaMitral ?? 0, volReg: est.vRegMitral ?? 0 };
 }
 
 // ---------------------------------------------------------------------------- sonda libre
