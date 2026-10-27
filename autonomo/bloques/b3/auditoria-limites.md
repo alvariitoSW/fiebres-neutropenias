@@ -20,3 +20,10 @@ Texto visible = lista: coincide salvo «Adenosina actuando» (el código dice «
 
 ## No comprobado / riesgo
 Receptor: no llegó mensaje; sin auditar. «Sin RCE a los 30 min» (p. 60): la ficha no da 30 min (rotulado ilustrativo ✅). No abrí `pagina.js` completo (solo celda I:E y consola, coinciden). Maqueta shock: no verifiqué el texto de los estados nuevos más allá de sobrecarga/hemo-tope/hipertensión.
+
+## Receptor (cotejado con shock p. 13-15, 43-44, 66-67 y cardio p. 47)
+✅ NA 40 µg/min: isquemia (miocardio, cerebro, miembro), arritmias taqui/bradi ~10 %, no sube desde 30 (p. 13) · Dopamina: taquicardia y taquiarritmias (FA) (p. 14) · Adrenalina: taquicardia, arritmias, hipoperfusión esplácnica por α (p. 14; el texto cita pp. 13-14, vale) · Dobutamina: FC +5-15, a veces >30, más consumo de O₂ (p. 43) · Milrinona: hipotensión como gran inconveniente (p. 44) · Begoña adrenalina 5-15 µg/min (pp. 66-67 ✅; «pasarlo da taquiarritmias e isquemia» no está en la ficha, ya rotulado «la consecuencia: del caso»).
+✅ Duda fenilefrina: p. 15 dice literalmente «bradicardia, menos gasto/volumen latido (sobre todo con disfunción cardíaca) e hipoperfusión de riñones e intestino». Se puede quitar el «sin comprobar»; añadir «sobre todo si hay disfunción cardíaca».
+✅ Duda cocaína: cardio p. 47: «β-bloqueantes contraindicados en isquemia por cocaína porque promueven vasoconstricción α sin oposición». «Más isquemia coronaria» es paráfrasis fiel (el libro habla de isquemia inducida por cocaína). Cita cap. 20 p. 47 correcta.
+❌ MENOR · `b3-receptor/preguntas.js:125-126`: «FC 84 lpm» / «la FC no pasa de 84» (base de Begoña `datos.js:283`, fc 84). Con la sensibilidad del nodo 0,3 (`datos.js:503`) el modelo da 86 en ese estado (dato del constructor; no ejecuté el modelo). Corrección: o poner 86 en la pregunta, o fijar `base.fc` para que el estado dé 84. Revisar igual otras cifras de FC en los casos tras el cambio 0,2→0,3 y milrinona 0,7→0,5: el único texto con FC fija que encontré con grep es éste.
+Sin comprobar: TSVI con dobutamina «contraindicada» (pp. 42-43) y candado bisoprolol «de casa» (p. 66): solo leí la lista, no la ficha.
