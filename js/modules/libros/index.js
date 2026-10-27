@@ -32,6 +32,9 @@ import { init as initMurallaViva } from './muralla-viva.js';
 import { init as initTelarVivo } from './telar-vivo.js';
 import { init as initInmersionViva } from './inmersion-viva.js';
 import { init as initVasoVivo } from './vaso-vivo.js';
+import { init as initShockVivo } from './shock-vivo/index.js';
+import { init as initRitmoVivo } from './ritmo-vivo/index.js';
+import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -64,7 +67,7 @@ const BLOQUES = {
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
-const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo']);
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'ritmoVivo', 'receptorVivo']);
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -116,6 +119,10 @@ export function init() {
         inmersionViva: document.getElementById('inmersion-viva-view'),
         // Modelo vivo: el vaso que sangra (la herida y la red), junto al bloque 2 (cap. 13; fichas en Merino HEMATO)
         vasoVivo: document.getElementById('vaso-vivo-view'),
+        // Modelos vivos del bloque 3 (caps. 14-19; fichas en Merino Cardiología): shock, corazón eléctrico y receptor
+        shockVivo: document.getElementById('shock-vivo-view'),
+        ritmoVivo: document.getElementById('ritmo-vivo-view'),
+        receptorVivo: document.getElementById('receptor-vivo-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -208,6 +215,9 @@ export function init() {
     const telarVivo = arrancar('telar', initTelarVivo);
     const inmersionViva = arrancar('inmersión', initInmersionViva);
     const vasoVivo = arrancar('vaso que sangra', initVasoVivo);
+    const shockVivo = arrancar('shock', initShockVivo);
+    const ritmoVivo = arrancar('ritmo', initRitmoVivo);
+    const receptorVivo = arrancar('receptor', initReceptorVivo);
 
     librosLevel.show('menu');
 
@@ -226,6 +236,9 @@ export function init() {
             inmersionViva: (estadoClave, origen) => inmersionViva?.abrir(estadoClave, origen),
             // data-vaso-vivo="<estado>", el vaso que sangra
             vasoVivo: (estadoClave, origen) => vasoVivo?.abrir(estadoClave, origen),
+            shockVivo: (estadoClave, origen) => shockVivo?.abrir(estadoClave, origen),
+            ritmoVivo: (estadoClave, origen) => ritmoVivo?.abrir(estadoClave, origen),
+            receptorVivo: (estadoClave, origen) => receptorVivo?.abrir(estadoClave, origen),
         },
     };
 }
