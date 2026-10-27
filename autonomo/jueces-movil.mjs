@@ -6,7 +6,8 @@
 //      botón del modelo queda bajo la barra, o (b) la frase viva, el enunciado o «Siguiente» quedan tapados > 30 %
 //      en la posición en que el usuario los ve (tras tocar un mando; tras contestar).
 //   2. La imagen sigue a la vista: tras tocar hasta 6 mandos (botones, range con una flecha del teclado), la figura
-//      principal (el svg/canvas más grande) tiene ≥ 50 % de su alto en pantalla y sobre la barra, y la frase viva se ve.
+//      principal (el svg/canvas más grande, o una de las `figuras` que declare el modelo) tiene ≥ 50 % de su alto en
+//      pantalla y sobre la barra, y la frase viva se ve.
 //   3. Frase cortada con «…»: text-overflow:ellipsis con scrollWidth > clientWidth + 1, -webkit-line-clamp con
 //      scrollHeight > clientHeight + 1, y <text> de SVG visible que acaba en «…» o «...».
 //   4. Letra ≥ 8 px (decisión del usuario, 27/10/2026; antes 9): <text> de SVG (cuerpo × escala de getScreenCTM) y texto HTML (font-size calculado).
@@ -63,6 +64,12 @@ function medir(o) {
         const f = [...R.querySelectorAll('svg, canvas')].filter(e => visible(e) && !e.closest('button, [aria-hidden="true"]'))
             .map(e => ({ e, r: e.getBoundingClientRect() })).sort((a, b) => b.r.width * b.r.height - a.r.width * a.r.height)[0];
         res.figura = f ? { ve: seVe(f.r), id: f.e.id || f.e.closest('[id]')?.id || f.e.tagName } : { ausente: true };
+        // Un modelo puede declarar otras imágenes que también valen (`figuras` en MODELOS): el monitor del receptor
+        // es la imagen de sus cifras; si alguna se ve al menos a la mitad, la imagen sigue a la vista
+        for (const sel of o.figuras || []) {
+            const e = R.querySelector(sel);
+            if (e && visible(e)) { const v = seVe(e.getBoundingClientRect()); if (res.figura.ausente || v > res.figura.ve) res.figura = { ve: v, id: e.id || sel }; }
+        }
     }
     // (a) al final de la página: nada del modelo queda bajo la barra
     if (o.final && barras.length) {
@@ -206,7 +213,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
         };
 
         for (const k of claves) {
-            const M = MODELOS[k], J = juez(), o = { raiz: M.raiz, frase: FRASES[k], figura: true, final: true };
+            const M = MODELOS[k], J = juez(), o = { raiz: M.raiz, frase: FRASES[k], figura: true, figuras: M.figuras, final: true };
             let i = 0;
             for (const estado of M.estados) {
                 await pulsarEnlace({ ...M.enlace, [M.clave]: estado });
