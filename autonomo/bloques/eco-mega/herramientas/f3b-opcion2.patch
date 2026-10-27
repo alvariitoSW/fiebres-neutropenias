@@ -1,0 +1,41 @@
+diff --git a/js/modules/eco/motor.mjs b/js/modules/eco/motor.mjs
+index 24327da..43897d4 100644
+--- a/js/modules/eco/motor.mjs
++++ b/js/modules/eco/motor.mjs
+@@ -37,7 +37,9 @@ export const BASE = {
+   // VD: a 2,0 → 1,9 (calibración del 20/10/2026, con la AD, vuVen y rRetorno: su presión telediastólica tiene que bajar
+   // con la PVC, porque el catéter las lee iguales, #mar-termodilucion). Ilustrativo
+   vd: { ees: 0.50, v0: 25, a: 1.9, b: 0.012 },
+-  ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
++  // F3b: contracción SUMADA a la pasiva (ver presionCamara); Ees 0,70 → 0,50 y A 0,20 → 0,15. Bomba ≈ 21 % del llenado del VI
++  // (Lang 2015, p. 24: 15-30 %); la hipertrofia y la dilatada recuperan su onda A. Ilustrativo
++  ai: { ees: 0.5, v0: 5,  a: 0.15, b: 0.090 },
+   // AD: reservorio más distensible (a 0,15 → 0,13; b 0,090 → 0,080; calibración del 20/10/2026, ilustrativo). Con la
+   // curva de antes, la AD se llenaba en la sístole ventricular hasta la presión de las venas y el retorno se paraba: la
+   // meseta de ~6,5 mmHg de toda la sístole subía la PVC media a 5,02 (Tabla 8.1 de Marino: 0-5). Ahora, 4,19. Más baja
+@@ -280,11 +282,15 @@ export function crearMotor(ajustes = {}) {
+   // vaciarse más. Antes, la curva diastólica se quedaba en −a por debajo de V0 y, con el saco a tensión, una cámara
+   // seguía vaciándose hasta volúmenes negativos (AD −133 mL con 550 mL de derrame). Nunca actúa en un latido normal
+   // (los volúmenes mínimos son de decenas de mL). Fisiología general; los números, ilustrativos
+-  function presionCamara(c, v, e, pperi, ees = c.ees) {
++  function presionCamara(c, v, e, pperi, ees = c.ees, aur = false) {
+     const dv = v - c.v0;
+     const sis = ees * dv;
+     const dia = c.a * (Math.exp(c.b * dv) - 1);
+     const colapso = v < VCOLAPSO ? -KCOLAPSO * (VCOLAPSO - v) ** 2 : 0;
++    // F3b: en la aurícula la contracción se SUMA a la pasiva (presión = pasiva + e·Ees·(V−V0)). Con la mezcla de abajo, una AI
++    // muy distendida (hipertrofia, dilatada) tenía la recta de la sístole bajo la curva pasiva y «contraerse» la relajaba.
++    // Fisiología general; ilustrativo
++    if (aur) return dia + e * sis + colapso + pperi;
+     return e * sis + (1 - e) * dia + colapso + pperi;
+   }
+ 
+@@ -307,7 +313,7 @@ export function crearMotor(ajustes = {}) {
+     // tabique: cada ventrículo "siente" una fracción de la presión del otro
+     s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
+     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
+-    s.pai = presionCamara(p.ai, s.vai, eAur, s.pperi);
++    s.pai = presionCamara(p.ai, s.vai, eAur, s.pperi, p.ai.ees, true);
+     s.pad = presionCamara(p.ad, s.vad, eAur, s.pperi);
+     // P1 · presión TRANSMURAL de las cavidades derechas (la de dentro menos la del saco): la que mantiene la pared abierta.
+     // La presión de cada cámara ya lleva pperi dentro, así que pperi − pad nunca es > 0; lo que se acerca a 0 en el

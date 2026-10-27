@@ -22,3 +22,11 @@ Con ella, la suite pequeña (paciente-posible, escenarios, enfermedad, motor) pa
 Fuentes: Lang 2015 p. 24 (15-30 %); resto, fisiología general / ilustrativo. Ninguna frase nueva visible (no toqué la app).
 ## No comprobado / riesgo
 La propuesta se midió con 4 pruebas del motor (no la suite entera ni el navegador); no probé `doppler.mjs` con el área 4,9 cm²; la AD sin medir con la propuesta.
+
+## Segunda tanda: opción 2 (solo la contracción de la AI sumada a la pasiva) — probada, NO aplicada: deja 1 fallo
+Parche: `herramientas/f3b-opcion2.patch` (AI Ees 0,70 → 0,50, A 0,20 → 0,15; `rVp` y `rPul` sin tocar; AD sin tocar). `doppler.mjs` sigue en 2,5 cm² («ilustrativo»). El flujo de las venas pulmonares del motor es ~2× el real; recalibración del motor (opción 1) pendiente.
+Medido (antes → opción 2, Ees 0,50): normal PAM 86→86, PCP 7,5→7,7, PVC 4,3→4,3, GC 5,01→5,01, E/A 1,24→1,34, bomba 23→22 %. Hipertrofia PCP 23,6→23,6, GC 3,58→3,58, E/A 33→35, bomba 1→1 %. Dilatada PCP 26,7→26,6, GC 3,82→3,81, E/A 6,5→7,0, bomba 5→5 %. TEP GC 2,78→2,78, D 17 mL/s (>0). Hemorragia PCP 3,6→3,6, E/A 0,66→0,67. Derrame PCP 9,7→9,7, E/A 1,09→1,10, bomba 30 %. Onda a normal 14,7→14,0 mmHg; reflujo 593→523 mL/s: **apenas cambia**.
+- **No logra el objetivo**: la hipertrofia no recupera la A (19 mL/s). Motivo (medido): su VI rígido llega a 28 mmHg al acabar la E y la AI (24-28 mmHg) ya está igualada a él; lo que empuja la A vuelve a las venas (Ar −461 mL/s). El techo es la PCP de 23,6 mmHg de la hipertrofia (calibrada así), no la contracción de la AI.
+- **Fallos según Ees** (4 archivos de motor + atlas): Ees 0,45 → derrame IC 1,19 y prueba de balón (50 vs 53 mmHg); Ees 0,50 → solo «Derrame pericárdico paciente posible»: IC 1,19 (mínimo 1,2; por 0,01); Ees 0,55 → todo verde en esos 4 archivos, pero el atlas 10 Diastólica (restrictivo) sale grado 2 por E/A 1,89 (pide ≥ 2). No hay Ees que pase ambos (derrame pide ≥ ~0,52; restrictivo ≤ ~0,505). No toqué ningún umbral.
+- Resto de pruebas (atlas, doppler, geometría, etc.): 164 ok, 0 fallos. `navegador.test.mjs` no terminó en 500 s (no medido).
+No comprobado / riesgo: la suite entera nunca terminó de una vez (se partió en dos); AD sin medir con la contracción sumada.
