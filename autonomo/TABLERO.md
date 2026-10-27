@@ -774,7 +774,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
 | 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
 | 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual (los temarios ya no se esperan: ver B-005, 27/10) |
-| 27 | `ecg-plan` | B-033 · Plan del ECG en dos caminos (aprender desde cero con Anatomy y modelo vivo; leer juntos en la guardia): solo el plan, con piezas y gasto estimado | pendiente | Aprobado por el usuario el 27/10 (solo el plan). Tipo: plan (sin construir). Profesor en modo cobertura (fable) sobre la PR #36 (`auto/pif-ecg`), `ritmolab-3.md`, el corazón eléctrico y el método Anatomy; informe Artifact para el móvil con opciones y coste por pieza (`gasto.mjs` y presupuestos vigentes). Las piezas elegidas vuelven a la bitácora |
+| 27 | `ecg-plan` | B-033 · Plan del ECG en dos caminos (aprender desde cero con Anatomy y modelo vivo; leer juntos en la guardia): solo el plan, con piezas y gasto estimado | en curso | Aprobado por el usuario el 27/10 (solo el plan). Tipo: plan (sin construir). Profesor en modo cobertura (fable) sobre la PR #36 (`auto/pif-ecg`), `ritmolab-3.md`, el corazón eléctrico y el método Anatomy; informe Artifact para el móvil con opciones y coste por pieza (`gasto.mjs` y presupuestos vigentes). Las piezas elegidas vuelven a la bitácora |
 
 **Encargo común del Objetivo I** (cada tarea lo concreta su director con su informe de ingeniería inversa):
 - Para qué: ayudar en la guardia y estudiar (`autonomo/radar/NORTE.md`).
