@@ -4826,6 +4826,15 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
 .rtv-raiz .rtv-ficha-pac { font: .76rem/1.35 var(--sans); color: var(--dim); }
 .rtv-raiz .rtv-ficha-pac b { color: var(--fg); }
 /* [FIN HUECO ritmo] */
+/* [HUECO ritmo: el sello y las cifras del monitor parten línea en vez de cortarse (360 px)] */
+.rtv-raiz .tope-sello .cita button { white-space: normal; text-overflow: clip; overflow: visible; overflow-wrap: anywhere; line-height: 1.25; }
+.rtv-raiz .tope-sello { max-height: none; }
+.rtv-raiz .cifra .obj { white-space: normal; text-overflow: clip; overflow: visible; }
+.rtv-raiz .cifra { flex: 1 0 auto; overflow: visible; }   /* la columna crece con su texto: el monitor no corta la 4.ª cifra */
+/* [FIN HUECO ritmo] */
 /* [HUECO ritmo: con el Modo Estudio, el dock deja sitio al reloj] */
 body.study-mode-on .rtv-dock { padding-right: 82px; }
+/* [FIN HUECO ritmo] */
+/* [HUECO ritmo: cuatro mandos en una fila a 360 px] */
+.rtv-raiz .rtv-rejilla[style*="--n:4"] .rtv-tog { font-size: .62rem; padding: 2px 2px; overflow-wrap: break-word; }
 /* [FIN HUECO ritmo] */
