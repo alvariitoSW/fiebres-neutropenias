@@ -267,5 +267,29 @@ const CSS = `
 .rcv-dib .rcv-marca-pin { stroke: var(--accent-red); stroke-width: 1; stroke-dasharray: 2 2; }
 .rcv-org, .rcv-frase .rcv-org, .rcv-para .rcv-org, .rcv-nota-fuentes .rcv-org, .rcv-lead .rcv-org, .rcv-cas-txt .rcv-org, .rcv-raiz dd .rcv-org, .rcv-pieza-info .rcv-org, .rcv-ficha-pac .rcv-org, .rcv-guia-txt .rcv-org, .rcv-frase-txt .rcv-org { display: inline-block; white-space: nowrap; overflow-wrap: normal; max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
 
+.rcv-formato [data-accion], .rcv-formato button { scroll-margin-bottom: calc(var(--rcv-dock-h, 190px) + 16px); }
+.rcv-eyebrow { font: 600 .68rem var(--rcv-sans); letter-spacing: .08em; text-transform: uppercase; color: var(--rcv-muted); }
+.rcv-h { font: 600 1.15rem/1.25 var(--rcv-serif); margin: 2px 0 6px; }
+.rcv-ruta { font: .84rem/1.5 var(--rcv-sans); color: var(--rcv-dim); display: grid; gap: 4px; }
+.rcv-punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--rcv-serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+.rcv-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+.rcv-raiz .rcv-frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--rcv-serif); background: transparent; color: var(--text-main); border: 1px solid var(--rcv-card2); border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+.rcv-frase-e .rcv-n { font: 700 .76rem var(--rcv-sans); color: var(--rcv-muted); padding-top: 3px; }
+.rcv-frase-e.rcv-marcada { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .1); }
+.rcv-frase-e.rcv-acierto { border-color: var(--accent-green); }
+.rcv-frase-e.rcv-fallo { border-color: var(--accent-red); background: rgba(184, 92, 62, .12); }
+.rcv-correccion { font: .88rem/1.45 var(--rcv-sans); color: var(--rcv-dim); padding: 2px 0 0 26px; }
+.rcv-mando { border: 1px dashed var(--accent-yellow); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+.rcv-mando .rcv-pista { font: .84rem/1.4 var(--rcv-sans); color: var(--accent-yellow); }
+.rcv-fuente-p { font: .72rem/1.6 var(--rcv-sans); color: var(--rcv-muted); }
+.rcv-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+.rcv-lleva li { font: .94rem/1.45 var(--rcv-serif); }
+.rcv-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.rcv-casos-lista { display: grid; gap: 8px; }
+.rcv-casos-lista button small { display: block; font-weight: 400; color: var(--rcv-muted); }
+.rcv-raiz button.rcv-b.rcv-link { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; background: transparent; border-style: dashed; color: var(--accent-yellow); }
+.rcv-nuevo { font: 700 .62rem var(--rcv-sans); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--rcv-rojo); border-radius: 4px; padding: 0 4px; }
+.rcv-consecuencia p { margin: 2px 0 0; }
+@media (prefers-reduced-motion: reduce) { .rcv-entra { animation: none; } }
 `;
 export const instalarCssReceptor = () => instalarCss('receptor-vivo', CSS);

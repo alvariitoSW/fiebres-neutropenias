@@ -27,7 +27,7 @@ export const CASILLAS = [
   { k: 'pmedia', et: 'Pmedia', u: 'mbar', que: 'Presión media de la vía aérea durante el ciclo.', c: C.pMedia },
   { k: 'frmand', et: 'FRmand', u: '/min', que: 'La frecuencia que pones (mandatoria). Sin límite de alarma: la ficha no da uno.', c: C.t271 },
   { k: 'fr', et: 'FR', u: '/min', que: 'La frecuencia real: si la espiración no cabe, el ciclo se alarga y baja. Sin límite de alarma: la ficha no da uno.', c: C.flujoIE },
-  { k: 'vt', et: 'VTe', u: 'mL', que: 'Volumen corriente espirado (y por kg de peso ideal). Límite 12 mL/kg: ilustrativo (normal 6-7: ficha, cap. 24 p. 46).', c: C.t271 },
+  { k: 'vt', et: 'VTe', u: 'mL', que: 'Volumen corriente espirado (y por kg de peso ideal). Límite 12 mL/kg: brazo tradicional de ARDS Network 2000 (PMID 10793162); ficha, cap. 24 p. 46: 12-15, normal 6-7.', c: C.t271 },
   { k: 'vm', et: 'VMe', u: 'L/min', que: 'Volumen minuto espirado = VTe × FR. Límites 2 y 20: fisiología general.', c: C.t271 },
   { k: 'ie', et: 'I:E', u: '', que: 'Relación inspiración:espiración. La ficha pide 1:2 o más.', c: C.flujoIE },
   { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, que: 'Copia el mando FiO₂. Este modelo no tiene gases: no cambia nada (ilustrativo).' },
@@ -44,7 +44,7 @@ const MANDOS = [
   { k: 'rampa', et: 'Rampa', u: 's' },
   { k: 'flujo', et: 'Flujo', u: 'L/min', min: 30, max: 100, paso: 5, nota: 'Ficha: 60 L/min, ≥80 si hay distrés.' },
   { k: 'pinsp', et: 'Pinsp', u: 'mbar', min: 5, max: 30, paso: 1, nota: 'Presión de insuflación, sobre la PEEP.' },
-  { k: 'pmax', et: 'Pmáx', u: 'mbar', min: TOPE.pmaxMin, max: TOPE.pmaxMax, paso: 5, nota: `Límite de presión: al llegar, el respirador corta la insuflación. Rango ${TOPE.pmaxMin}-${TOPE.pmaxMax}: ilustrativo (la ficha quiere la meseta ≤30); con 20 el corte se ve también en un pulmón sano.` },
+  { k: 'pmax', et: 'Pmáx', u: 'mbar', min: TOPE.pmaxMin, max: TOPE.pmaxMax, paso: 5, nota: `Límite de presión: al llegar, el respirador corta la insuflación. Rango ${TOPE.pmaxMin}-${TOPE.pmaxMax}: ilustrativo (ninguna fuente da una alarma de pico; la ficha quiere la meseta ≤30, cap. 27 p. 14; el pico no es la meseta: Tuxen 1987, PMID 3662241); con 20 el corte se ve también en un pulmón sano.` },
 ];
 const TECLAS = [
   { k: 'alarmas', et: 'Alarmas', ico: '🔔', tipo: 'accion' },
@@ -112,13 +112,13 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
     const vtTope = Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10));
     R.mandos({
       fio2: { v: est.fio2 },
-      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ilustrativo; normal 6-7: ficha, cap. 24 p. 46.` } : { v: r.vt, apagado: 'En PC-AC no se fija el volumen: se fija la presión.' },
+      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ARDS Network 2000 (PMID 10793162, 12 inicial); ficha, cap. 24 p. 46: tradicional 12-15, normal 6-7.` } : { v: r.vt, apagado: 'En PC-AC no se fija el volumen: se fija la presión.' },
       ti: vcv ? { v: f1(ti), txt: f1(ti), et: 'Flujo (mueve el Ti)', mueve: 'flujo', vRango: r.flujo, txtDesl: `${r.flujo} L/min`, min: 30, max: flujoTope(r.vt), paso: 5, u: '', nota: `Ti ${f1(ti)} s. En este modelo el Ti sale del flujo: Ti = VT ÷ flujo (sube el flujo y el Ti se acorta). Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` }
         : { v: f1(ti), txt: f1(ti), et: 'I:E (mueve el Ti)', mueve: 'ie', vRango: r.ie, txtDesl: `1:${f1(r.ie)}`, min: 1, max: 4, paso: 0.5, u: '', nota: `Ti ${f1(ti)} s · I:E 1:${f1(r.ie)}. En este modelo el Ti sale de la relación I:E y de la FR.` },
       fr: { v: r.fr }, peep: { v: r.peep, ...(vcv ? {} : { nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' }) },
       dpsop: { v: null, txt: '—', apagado: 'Presión de soporte: para la respiración espontánea; no en este modelo.' },
       rampa: { v: null, txt: '—', apagado: 'Rampa: no en este modelo (ilustrativo).' },
-      flujo: vcv ? { v: r.flujo, max: flujoTope(r.vt), nota: `Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
+      flujo: vcv ? { v: r.flujo, max: flujoTope(r.vt), nota: `Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo, límite técnico del modelo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés; I:E ≥1:2 (cap. 27 p. 14).` } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
       pinsp: vcv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });
@@ -127,7 +127,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
   }
   function infoAlarmas() {
     const t = alarmasVivas.length ? alarmasVivas.map((a) => `${a.nivel === 'alarma' ? '⛔' : '⚠'} ${a.texto}`).join(' · ') : 'Sin alarmas';
-    R.info(`<b>Alarmas</b> · ${t}. Límites: VMe ${TOPE.vmMin}-${TOPE.vmMax} L/min y PEEP total ≤${TOPE.peepTotMax} (fisiología general); EIP ≤${TOPE.meseta} (ficha); VTe ≤12 mL/kg (ilustrativo); Ppico ≤ tu Pmáx. FR: sin límite (la ficha no lo da). ${cita(C.riesgo)}`);
+    R.info(`<b>Alarmas</b> · ${t}. Límites: VMe ${TOPE.vmMin}-${TOPE.vmMax} L/min y PEEP total ≤${TOPE.peepTotMax} (ilustrativo; la ficha no da esas cifras); EIP ≤${TOPE.meseta} (ficha, cap. 27 p. 14); VTe ≤12 mL/kg (ARDS Network 2000, PMID 10793162; ficha 12-15); Ppico ≤ tu Pmáx (ilustrativo). FR ≤35 (ficha, cap. 27 p. 14). ${cita(C.riesgo)}`);
   }
   let conVol = false;
   R.ver(['paw', 'flujo']);
