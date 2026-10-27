@@ -1,0 +1,4 @@
+1. Gillespie LE, Lane BH, Shaw CR, Gorder K, Grisoli A, Lavallee M, et al. The Intra-aortic Balloon Pump: A Focused Review of Physiology, Transport Logistics, Mechanics, and Complications. J Soc Cardiovasc Angiogr Interv. 2024;3(5):101337. doi:10.1016/j.jscai.2024.101337
+2. Choi MS, Shim H, Cho YH. Mechanical Circulatory Support for Acute Heart Failure Complicated by Cardiogenic Shock. Int J Heart Fail. 2020;2(1):23-44. doi:10.36628/ijhf.2019.0015
+3. Boccellino A, Sacchi S, Pazzanese V, Calvo F, Gramegna M, Ingallina G, et al. Effects of Intra-Aortic Balloon Pump delayed deflation timing on carotid blood flow and cardiac mechanics: An ultrasound and haemodynamic study. J Heart Lung Transplant. 2023;42(4):451-455. doi:10.1016/j.healun.2022.12.007
+4. Pantalos GM, Koenig SC, Gillars KJ, Haugh GS, Dowling RD, Gray LA Jr. Intraaortic balloon pump timing discrepancies in adult patients. Artif Organs. 2011;35(9):857-66. doi:10.1111/j.1525-1594.2011.01292.x

@@ -338,3 +338,18 @@ aparte sale de `origin/auto/<bN>` (`REGLAS.md` §4.6, lista del constructor y sk
 El mismo día aprobó las demás propuestas del parte: nada de `git stash` ni `pkill` amplios en la carpeta compartida, el
 puerto de los arneses por `PUERTO=` (REGLAS §4.6 y constructor), y la tarea `jueces-topes` del tablero (que
 `jueces.mjs --modelo` lleve cada mando a su tope).
+
+## Una tarea, una sola sesión (27/10/2026)
+
+Dos sesiones arrancaron `movil-existente` a la vez: al cerrar, `jueces-movil` y `jueces-topes` abrieron cada una la
+sesión siguiente por su lado. La segunda lo vio al subir la marca «en curso» (la rama remota ya la tenía) y paró sin
+tocar la app. Regla nueva, aprobada por el usuario: antes de empezar una tarea, y antes de abrir la sesión siguiente,
+el director mira las sesiones activas y la rama `auto/<clave>`; si otra ya la lleva, no empieza
+(`autonomo/REGLAS.md` §4.6 y paso 4 de la skill `plan-socialista`).
+
+## Arreglos del móvil en lo ya construido (`movil-existente`, 27/10/2026)
+
+Tras el juez del móvil (`jueces-movil`), cinco constructores sonnet arreglaron los 8 modelos vivos y Marino ·
+Fundamentos: frases vivas sin recorte «…», frase y «Siguiente» fuera de la barra de abajo, figura a la vista al tocar
+mandos y letra SVG ≥ 8 px (suelo de 9,3 en coordenadas del dibujo, porque a 360 px se pinta al ~88 %). Receta del
+catéter copiada en telar, inmersión y vaso. Detalle y gasto en `autonomo/partes/2026-10-27-movil-existente.md`.

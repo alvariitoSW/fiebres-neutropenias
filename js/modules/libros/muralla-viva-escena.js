@@ -136,9 +136,9 @@ const DEFS = `<defs>
     <pattern id="mur-p-rojo" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(60)"><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-red)" stroke-opacity=".6" stroke-width=".8"/></pattern>
     <pattern id="mur-p-sabana" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:var(--text-dim)" stroke-opacity=".28" stroke-width=".7"/></pattern>
 </defs>`;
-const LETRA_MIN = 8.4;
+const LETRA_MIN = 9.3;
 const T = (x, y, txt, { size = 8, color = '--text-dim', anchor = 'start', peso = 400, italic = false, plato = false, extra = '' } = {}) => {
-    size = Math.max(size, LETRA_MIN);   // a 390 px la lámina se ve al ~87-92 %: así ningún rótulo baja de 7,5 px
+    size = Math.max(size, LETRA_MIN);   // a 360 px la lámina se ve al ~88 %: así ningún rótulo baja de 8 px
     const tt = `<text x="${x}" y="${y}" text-anchor="${anchor}" style="font:${italic ? 'italic ' : ''}${peso} ${size}px Georgia, serif;fill:var(${color})"${extra}>${txt}</text>`;
     if (!plato) return tt;
     const w = String(txt).replace(/<[^>]+>/g, '').length * size * 0.5 + 6, x0 = anchor === 'end' ? x - w + 3 : anchor === 'middle' ? x - w / 2 : x - 3;

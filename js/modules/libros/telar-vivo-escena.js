@@ -24,7 +24,7 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const P = (clave, x, y, r, { rot, ...opc } = {}) => rot ? `<g transform="translate(${n2(x)} ${n2(y)}) rotate(${rot})">${svgParticula(clave, 0, 0, r, opc)}</g>` : svgParticula(clave, x, y, r, opc);
 // Un rótulo de la lámina: nunca por debajo de 8 px. `plato`: fondo para que se lea sobre lo que se mueve.
 const T = (x, y, txt, { s = 8, c = 'text-muted', a = 'start', i = true, w = '', id = '', plato = false } = {}) => {
-    const fs = Math.max(8, s);
+    const fs = Math.max(9.3, s);
     const tt = `<text${id ? ` id="tel-${id}"` : ''} x="${n2(x)}" y="${n2(y)}" font-size="${fs}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
     if (!plato) return tt;
     const ancho = String(txt).replace(/<[^>]+>/g, '').length * fs * 0.5 + 6, x0 = a === 'end' ? x - ancho + 3 : a === 'middle' ? x - ancho / 2 : x - 3;
@@ -117,7 +117,7 @@ function construirLamina() {
     ${T(76, 9, '↑ cava', { c: 'text-dim' })}
     ${T(4, 326, 'pierna, de lado', { c: 'text-muted' })}
     ${T(72, 46, 'femoral', { c: 'accent-purple', w: 600 })}
-    <text id="tel-rot-arteria" x="52" y="46" font-size="8" text-anchor="end" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic">arteria</text>
+    <text id="tel-rot-arteria" x="52" y="46" font-size="9.3" text-anchor="end" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic">arteria</text>
   </g>
   <path d="M${VALV[0] + 4} ${VALV[1] - 4} L${n2(p1[0])} ${n2(p1[1])} M${VALV[0] + 4} ${VALV[1] + 4} L${n2(p2[0])} ${n2(p2[1])}" style="stroke:var(--accent-blue)" stroke-width=".7" stroke-dasharray="3 2" opacity=".75"/>
   <circle cx="${VALV[0]}" cy="${VALV[1]}" r="7" style="fill:none;stroke:var(--accent-blue)" stroke-width="1.2"/>
@@ -245,10 +245,10 @@ export function svgMaquinaTrombina({ pre = 'tel', xa = XA, ii = II, iia = IIA0, 
       <path d="M${ii[0] - 2} ${ii[1] + 7} C${ii[0] - 4} ${ii[1] + 36} ${ii[0] - 12} ${ii[1] + 60} ${iia[0] + 4} ${iia[1] - 38}" style="fill:none;stroke:var(--text-dim)" stroke-width=".9" stroke-dasharray="2.5 2" opacity=".7"/>
       <path d="M${xa[0] - 14} ${xa[1] + 8} C${xa[0] - 22} ${xa[1] + 22} ${xa[0] - 36} ${xa[1] + 30} ${xa[0] - 44} ${xa[1] + 36}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1" opacity=".8"/>
       <path d="M${xa[0] - 46} ${xa[1] + 33} L${xa[0] - 44} ${xa[1] + 38} L${xa[0] - 40} ${xa[1] + 34}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1"/>
-      <g transform="translate(${ii[0]} ${ii[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${R(0, 3, 'II', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
+      <g transform="translate(${ii[0]} ${ii[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${R(0, 4, 'II', { s: 10.6, a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
       ${R(ii[0], ii[1] + 17, 'protrombina', { a: 'middle', c: 'text-dim', plato: true })}
       <g transform="translate(${xa[0]} ${xa[1]})"><path id="${pre}-xa-rueda" d="${engranaje(11)}" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><circle r="5.5" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/></g>
-      ${R(xa[0], xa[1] + 3, 'Xa', { a: 'middle', i: false, c: 'text-main', w: 700 })}
+      ${R(xa[0], xa[1] + 4, 'Xa', { s: 10.6, a: 'middle', i: false, c: 'text-main', w: 700 })}
       <g id="${pre}-g-spools"></g>
       <g id="${pre}-iia"${pre === 'tel' ? '' : ` transform="translate(${iia[0]} ${iia[1]}) rotate(-35)"`}><path d="M-14 0 Q0 -9 14 0 Q0 9 -14 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-13 0 L-18 -1 M13 0 L18 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${R(0, 3, 'IIa', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
       <path id="${pre}-iia-hilo" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".8" stroke-dasharray="2 1.5"/>
@@ -368,7 +368,7 @@ function pintarFarmaco() {
 }
 function etiq(x, y, num, uni) {
     const w = Math.max(num.length * 5.2 + 5, 30);
-    return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9.5" width="${n2(w)}" height="22" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${T(1.5, 0, num, { c: 'accent-yellow', i: false, w: 700 })}<text x="1.5" y="9.5" font-size="8" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`;
+    return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9.5" width="${n2(w)}" height="22" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${T(1.5, 0, num, { c: 'accent-yellow', i: false, w: 700 })}<text x="1.5" y="9.5" font-size="9.3" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`;
 }
 function pintarMangas() {
     const e = estado;
@@ -462,7 +462,7 @@ function pintarReloj() {
     $('reloj-neutros').setAttribute('display', oc ? 'inline' : 'none');
     $('reloj-luces').innerHTML = ORDEN_NEURO.map(k => {
         const [lx, ly] = ptH(h, RELOJ.radios[k]), ok = D.reloj[k], c = oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red';
-        return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${c})" stroke-width="1.6"/><text y="3" font-size="8" text-anchor="middle" style="fill:var(${c});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`;
+        return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${c})" stroke-width="1.6"/><text y="3" font-size="9.3" text-anchor="middle" style="fill:var(${c});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`;
     }).join('');
 }
 
