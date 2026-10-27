@@ -121,7 +121,7 @@ dialog#visor::backdrop { background: color-mix(in srgb, var(--bg-main) 85%, tran
 
 /* Dock fijo: la frase (entera), las pestañas y los mandos */
 .dock { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line); padding: 4px max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
-.dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 3px; }
+.dock-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; }
 .frase { display: flex; gap: 6px; align-items: flex-start; font: .8rem/1.32 var(--serif); color: var(--text-main); box-shadow: inset 3px 0 0 var(--accent-yellow); padding: 2px 0 2px 8px; }
 .frase-txt { flex: 1; min-width: 0; }
 .frase-txt .org { white-space: nowrap; }
@@ -152,14 +152,18 @@ dialog#visor::backdrop { background: color-mix(in srgb, var(--bg-main) 85%, tran
 .dock-est-txt { font: .72rem/1.3 var(--sans); color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; }
 
 /* Explicación guiada (en el dock) */
-.guia { display: grid; gap: 5px; font: .86rem/1.4 var(--serif); }
+.guia { display: grid; grid-template-columns: minmax(0, 1fr); gap: 5px; font: .86rem/1.4 var(--serif); }
+.guia > *, .dock-in > * { min-width: 0; }
+.guia .cita-ir { white-space: normal; text-align: left; }
 .guia-cab { display: flex; align-items: center; gap: 8px; }
 .guia-n { font: 700 .64rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-yellow); white-space: nowrap; }
 .guia-tit { flex: 1; min-width: 0; font: 600 .8rem/1.2 var(--sans); color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
 .guia-txt { margin: 0; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; max-height: 24vh; overflow-y: auto; }
-.guia-nav { display: grid; grid-template-columns: auto 1fr auto; gap: 8px; align-items: center; }
-.guia-b { min-height: 44px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: 600 .82rem var(--sans); cursor: pointer; }
+.guia-nav { display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto); gap: 6px; align-items: center; }
+.guia-puntos { min-width: 0; overflow: hidden; }
+@media (max-width: 370px) { .guia-txt { max-height: 20vh; } }
+.guia-b { min-height: 44px; padding: 0 10px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: 600 .82rem var(--sans); cursor: pointer; }
 .guia-b:disabled { opacity: .45; }
 .guia-b.prim { background: var(--accent-yellow); border-color: var(--accent-yellow); color: var(--bg-main); }
 .guia-puntos { display: flex; justify-content: center; gap: 5px; }

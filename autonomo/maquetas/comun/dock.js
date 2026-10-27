@@ -2,7 +2,8 @@
 // maqueta (la frase, las pestañas, el panel de mandos) se queda; esta pieza solo añade el plegado:
 //   · un asa de 44 px («Mandos ▾ / ▴») que pliega el dock a la frase sola, para que el dibujo y el monitor quepan en la
 //     pantalla del móvil (v3: la frase y los mandos se comían 260 de 844 px);
-//   · se pliega solo al tocar la escena (cualquier elemento con data-dock-pliega) y se despliega al tocar una pestaña;
+//   · se pliega solo al tocar la escena (cualquier elemento con data-dock-pliega) y se despliega al tocar el dock fuera
+//     de un botón (un botón visible plegado, como «Guía», funciona al primer toque);
 //   · mide su altura y la deja en --dock-h (el cuerpo de la página reserva ese hueco abajo).
 //   crearDock(dock, { plegables, alMedir }) → { plegar(on), get plegado, medir() }
 //     dock: el elemento fijo; plegables: lo que desaparece al plegar (por defecto, todo lo que no sea .frase ni el asa);
@@ -36,8 +37,12 @@ export function crearDock(dock, { plegables = null, alMedir = null } = {}) {
   // tocar la escena pliega; tocar una pestaña del dock despliega
   document.addEventListener('pointerdown', (ev) => {
     if (ev.target.closest('[data-dock-pliega]') && !plegado && !dock.contains(ev.target)) plegar(true);
-    else if (dock.contains(ev.target) && plegado && !ev.target.closest('.dock-asa')) plegar(false);
+    // un botón visible con el dock plegado (la «Guía» de la frase) hace lo suyo al primer toque: si desplegara aquí, el dock
+    // cambiaría de altura bajo el dedo y el click se perdería (hacían falta dos toques). Solo despliega tocar fuera de un botón.
+    else if (dock.contains(ev.target) && plegado && !ev.target.closest('.dock-asa') && !ev.target.closest('button')) plegar(false);
   }, { passive: true });
+  // cualquier cambio de altura del dock (la guía que crece, un aviso nuevo) vuelve a medir el hueco de abajo
+  if (typeof ResizeObserver !== 'undefined') { let h0 = 0; new ResizeObserver(() => { if (dock.offsetHeight !== h0) { h0 = dock.offsetHeight; medir(); } }).observe(dock); }
   medir();
   return { plegar, get plegado() { return plegado; }, medir, marcar, asa };
 }
