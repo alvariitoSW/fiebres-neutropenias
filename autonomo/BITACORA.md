@@ -210,7 +210,7 @@ esta sección.
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
 | `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1 y 2 **hechas y en main** (PR #30, 27/10); la parada 3 espera los PDF de los huecos | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
 | `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
-| `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 10 `pendiente`, 16 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
+| `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | pendiente (aprobada 27/10) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -247,7 +247,7 @@ esta sección.
 - **Siguiente, tras su «ok»**: construir en la app la cabecera del shock (pasar `comun/` a `js/core/`), el receptor
   vivo y el corazón eléctrico (sub-bloques 3A → 3B → 3C), con jueces, auditor y profesor; el hueco del caso de Amparo
   (control del foco, p. 11).
-- **Lo que falta de él**: el PDF de la guía ESC 2021 de marcapasos (bradicardias y bloqueos AV).
+- **Lo que falta de él**: nada de fuentes (la ESC 2021 de marcapasos ya está en `docs/` desde el 26/10).
 - Documentos: `autonomo/bloques/b3/` (encargo, cobertura, farmacos, megaproyecto-*, juicio-maquetas-v2, auditoria-3a).
 
 El resto del tablero sigue `aparcada`.
@@ -289,15 +289,10 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · ESC 2021 de
-  estimulación · ESC de SCA · Di Mario 2005 · ASE 2025 de corazón derecho y diastólica · ASE/EACVI 2015 · ASE/SCA 2013
-  de ETE · temarios de Radiología de tórax y Neurorradiología.
-- **🔴 PDF de la guía de marcapasos (bradicardias y bloqueos AV)** · apuntado 21/10: el corazón eléctrico del bloque 3
-  no puede enseñar bloqueos AV ni bradicardias sin fuente, y ninguna de la app los trae. Localizada: **2021 ESC
-  Guidelines on cardiac pacing and cardiac resynchronization therapy** (Eur Heart J 2021;42:3427-3520), mejor la
-  versión en español de Rev Esp Cardiol 2022;75:370-410. La red del entorno no deja descargarla. **Tú**: mandar el PDF
-  cuando puedas (dijiste el 21/10: «cuando pueda, te mando los PDFs»). Hasta entonces sus estados quedan preparados y
-  vacíos, rotulados «pendiente de fuente». Encaja también con la puerta de Arritmias (siguiente punto).
+- **🔴 PDF que hacen falta**, por urgencia: ECG básico de tu rotación de Cardiología (01/11) · AHA 2025 · Di Mario 2005 ·
+  ASE 2025 de corazón derecho y diastólica · ASE/EACVI 2015 · temarios de Radiología de tórax y Neurorradiología.
+- **✅ PDF de la guía de marcapasos**: ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10). `b3-bradi` pasa a
+  `pendiente`.
 - **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
   («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12

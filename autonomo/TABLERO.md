@@ -697,7 +697,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 |---|---|---|---|---|
 | 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | aparcada (espera PDF) | Falta el PDF de ECG básico de la rotación (01/11). En cuanto llegue, pasa a `pendiente`. La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
 | 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
-| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | aparcada (espera PDF) | Falta la ESC 2021 de estimulación (mejor Rev Esp Cardiol 2022;75:370-410). Hoy sus estados están vacíos, «pendiente de fuente» |
+| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
 | 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
 | 5 | `culprit-b` | Fase 1 · Preguntas «predice el ECG» y «coloca el trombo» (B-026, B) | aparcada hasta terminar Marino | Va detrás de `culprit-a`. C (modelo 2D) espera a las coronarias del motor; D, tras C |
 | 6 | `f0-cifras` | Fase 0 · Calculadoras: la cifra nunca contradice su grado + «la fórmula con tus números» | pendiente | Usa la pieza de `formula-comun` (ya en `js/core/`). Juez `--calc` (cambio previo 5 del plan) |
@@ -710,13 +710,13 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 13 | `f0-ra-biblio` | Fase 0 · Bibliografía de The Radiology Assistant en el PIF de Radiología | pendiente | Solo enlaces verificados (CLAUDE.md §7.2); sus figuras, no (decidido 25/10) |
 | 14 | `g1-shock` | G1 · Puerta «Guardia» en la raíz y su primera situación: shock e hipotensión | pendiente | Tras la fase 0. Cadena VCI → PAD → VS → GC → E/e′ → VExUS, cada paso con su fórmula (`NORTE.md`). Fuentes: Manual UMI (FATE) y VExUS en `docs/`. Maqueta antes para elegir. Sin guardar datos del paciente |
 | 15 | `g2-paro` | G2 · Arritmia inestable y paro | aparcada (espera PDF) | Falta AHA 2025 (heart.org cerrado en la red) |
-| 16 | `g3-sca` | G3 · Dolor torácico y SCA (y marcapasos) | aparcada (espera PDF) | Falta Di Mario 2005 y ESC 2021 de estimulación; la ESC 2023 de SCA ya está |
+| 16 | `g3-sca` | G3 · Dolor torácico y SCA (y marcapasos) | aparcada (espera PDF) | Falta Di Mario 2005; la ESC 2023 de SCA y la ESC 2021 de estimulación ya están en `docs/` |
 | 17 | `g4-dispositivo` | G4 · Tras colocar un dispositivo (placa, punta del tubo o la vía, neumotórax) | aparcada | Antes, comprobar qué cubren Marino, Merino Neumología y Técnicas R1; faltan casos con licencia |
 | 18 | `g5-neuro` | G5 · Neurocrítico (TC de cráneo en 5 preguntas) | aparcada (espera PDF) | Falta el temario de Neurorradiología |
-| 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | aparcada (espera PDF) | Falta ASE/SCA 2013 de ETE (Hahn) |
+| 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | pendiente | Fuente ya en `docs/` (`hahn-2013-ete-completa-ase-sca.pdf`). Después de G1 |
 | 20 | `f2-coronarias` | Fase 2 · Coronarias por segmentos con dominancia en el motor | aparcada | Abre `culprit` C y la pared por regiones (C2 de `rea-eco`) |
 | 21 | `f2-angio` | Fase 2 · Coronariografía que late (arco en C, vista óptima) y «cómo leer un informe de cateterismo» | aparcada (espera PDF) | Tras `f2-coronarias`. Falta Di Mario y Sutaria 2005 |
-| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | aparcada (espera PDF) | Falta ASE/SCA 2013 de ETE. Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6 |
+| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | pendiente | Fuente ya en `docs/` (Hahn 2013). Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6; decidido el 25/10 tocar la anatomía (esófago, valvas por segmentos) |
 | 23 | `f3-calc-eco` | Fase 3 · Calculadoras de eco para la UCI con catálogo único y «¿cómo se mide?» | aparcada (espera PDF) | Faltan ASE 2025 (corazón derecho y diastólica) y ASE/EACVI 2015. Ideas en `echosuite.md` y `echosuite-2.md` |
 | 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
 | 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
