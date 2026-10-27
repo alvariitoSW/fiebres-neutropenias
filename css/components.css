@@ -3749,7 +3749,7 @@ body.study-mode-on .vso-dock { padding-right: 82px; }
   padding: 4px max(10px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
 .ctv-raiz .ctv-dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 4px; }
 .ctv-raiz .ctv-frase { font: .84rem/1.3 var(--ctv-serif); color: var(--text-main); border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; margin: 0 0 2px; cursor: pointer; }
-.ctv-raiz .ctv-frase-txt { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ctv-raiz .ctv-frase-txt { display: block; }
 .ctv-raiz .ctv-frase.ctv-abierta .ctv-frase-txt { display: block; max-height: 40vh; overflow-y: auto; }
 .ctv-raiz .ctv-frase .ctv-org { font-size: .6rem; }
 .ctv-raiz .ctv-dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
