@@ -125,7 +125,7 @@ test('IM funcional (dilatada): en sístole el flujo VI→AI en la AI es de 4-6 m
   assert.ok(Math.abs(4 * (j.v0 / 100) ** 2 - (t.pvi - t.pai)) / (t.pvi - t.pai) < 0.05, 'v = √ΔP / 2');
   // el chorro, un poco aguas abajo de la coaptación (ya en la AI), va hacia la AI = se aleja del ápex, a v0
   const p = [0, 1, 2].map(k => j.c[k] + j.dir[k] * 1.5), v = D.velocidad(p, F);
-  assert.ok(Math.hypot(...v) > 0.9 * j.v0 && Math.hypot(...v) < 1.05 * j.v0);
+  assert.ok(Math.hypot(...v) > 0.8 * j.v0 && Math.hypot(...v) < 1.05 * j.v0);
   const haz = nrm([p[0] - 0, p[1] - 0, p[2] - 0]);   // (la dirección exacta del haz no importa: solo el sentido hacia la AI)
   assert.ok(v[0] * j.dir[0] + v[1] * j.dir[1] + v[2] * j.dir[2] > 0 && haz.length === 3);
   // la AI queda por encima de la coaptación: el chorro apunta hacia su centro
@@ -176,4 +176,22 @@ test('venas pulmonares: la A es reversa (hacia las venas) en la contracción aur
   assert.ok(D.velVaso('pulmonar', 5, s) < 0 && D.velVaso('pulmonar', 5, e) > 0);
   const A = m.onda.filter(x => x.fase === 'A'), mn = A.reduce((a, b) => (b.qVp < a.qVp ? b : a));
   assert.ok(mn.qVp < 0 && m.onda.filter(x => 'FG'.includes(x.fase)).every(x => x.qVp > 0));
+});
+
+// ---- P5c · el chorro de la IM es un chorro libre: se abre en cono y la velocidad del eje cae con la distancia
+const anchoMedio = (j, F, s) => {   // ancho (mm) a mitad de la velocidad del eje, a s mm del orificio, en el plano perpendicular
+  const base = [0, 1, 2].map(k => j.c[k] + j.dir[k] * s), l = nrm(cruz(j.dir, [0, 0, 1])), vz = (r) => Math.hypot(...D.velocidad(base.map((x, k) => x + l[k] * r), F));
+  const v0 = vz(0); let r = 0; while (vz(r) > v0 / 2 && r < 60) r += 0.1; return { ancho: 2 * r, eje: v0 };
+};
+test('IM funcional (dilatada): a 2 cm el chorro es ≥3× más ancho que en el orificio y el eje cae; el área crece con la EROA', () => {
+  const m = motorEn('dilatada'), { F } = flujoEn(m, sistole(m)), j = F.valvulas.find(x => x.n === 'regMitral');
+  const a0 = anchoMedio(j, F, 0.3), a2 = anchoMedio(j, F, 20);
+  assert.ok(a2.ancho >= 3 * a0.ancho, `ancho ${a0.ancho} → ${a2.ancho}`);
+  assert.ok(a2.eje < 0.4 * a0.eje && a2.eje > 0.15 * a0.eje, 'eje ~1/distancia');
+  assert.ok(Math.abs(a0.eje - j.v0) / j.v0 < 0.1, 'v en el orificio sin cambio');
+  // área de la sección con v > 30 cm/s a 2 cm (≈ área de color): crece con la EROA
+  const area = (eroa) => { const mm = motorEn('dilatada'); mm.p.eroaMitral = eroa; mm.correr(4); const t = sistole(mm), { F: FF } = flujoEn(mm, t), jj = FF.valvulas.find(x => x.n === 'regMitral'); if (!jj) return 0;
+    let n = 0; for (let s = 0; s <= 60; s += 2) for (let r = -40; r <= 40; r += 2) { const l = nrm(cruz(jj.dir, [0, 0, 1])), p = [0, 1, 2].map(k => jj.c[k] + jj.dir[k] * s + l[k] * r); if (Math.hypot(...D.velocidad(p, FF)) > 30) n++; } return n; };
+  const A1 = area(0.15), A2 = area(0.25), A3 = area(0.4);
+  assert.ok(A1 > 0 && A2 > A1 && A3 > A2, `áreas ${A1} ${A2} ${A3}`);
 });
