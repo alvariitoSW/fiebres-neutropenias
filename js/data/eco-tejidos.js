@@ -21,6 +21,7 @@ export const TEJIDOS = {
   porta:         { nombre: 'Vena porta (vaina fibrosa)',   db: 9, ancho: 1.3, origen: 'ilustrativo' },
   diafragma:     { nombre: 'Diafragma',                    db: 9, origen: 'ilustrativo' },
   xifoides:      { nombre: 'Apófisis xifoides',            db: 12, origen: 'ilustrativo' },
+  fibroso:       { nombre: 'Cortina aorto-mitral (continuidad fibrosa)', db: 11, ancho: 1.8, origen: 'ilustrativo', nota: 'Tejido fibroso denso: algo más brillante que la raíz y menos que la valva.' },
   valva:         { nombre: 'Valvas',                       db: 13, ancho: 1.4, origen: 'ilustrativo' },
   calcio:        { nombre: 'Calcio (valva o anillo calcificados)', db: 24, ancho: 2.4, atenuacion: 20, origen: 'ilustrativo', nota: 'Brilla mucho y no deja pasar el haz: sombra negra detrás. atenuacion: dB perdidos por mm de calcio.' },
   hueso:         { nombre: 'Hueso (columna, costilla)',   db: 22, ancho: 2.4, atenuacion: 20, origen: 'ilustrativo', nota: 'Cortical: brilla en su cara de delante y no deja pasar el haz (sombra negra detrás).' },

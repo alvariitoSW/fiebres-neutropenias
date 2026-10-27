@@ -512,6 +512,13 @@ export function construirCorazon(estado, opciones = {}) {
   const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: 1.2 };
   const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t }, { ...baseM, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t }];
   for (const v of valvasM) anadirR(v.nombre, valva(v), COLORES.valva, { dobleCara: true });
+  // B5 · Cortina aorto-mitral: la continuidad fibrosa entre la raíz aórtica (cúspides no coronaria e izquierda) y la valva
+  // anterior de la mitral. Una cinta que parte de la raíz (a 3 mm, donde cuelga el anillo valvular aórtico) y llega al anillo
+  // mitral (z = 0), en el tramo de la valva anterior más cercano a la raíz (ψ ±0,75 de 1: hasta 6-9 mm de separación). Se
+  // mueve con el resto (mover) y su geometría sale del anillo mitral y de la raíz del propio latido: anatomía, fisiología general.
+  anadirR('Cortina aorto-mitral', rejilla(8, 6, (uu, vv) => { const m = anilloMitral(-0.75 + 1.5 * uu), a = Math.atan2(m[1] - ac[1], m[0] - ac[0]),
+    r = rRaiz(3, a), R = [ac[0] + r * Math.cos(a), ac[1] + r * Math.sin(a)];
+    return [R[0] + (m[0] - R[0]) * vv, R[1] + (m[1] - R[1]) * vv, 3 * (1 - vv) * (1 - vv)]; }), COLORES.valva, { dobleCara: true });
   // Valvas en estrella (tricúspide y semilunares): cada una cierra contra las dos vecinas en el centro
   const estrella = (anillo, centro, a, b, ins) => {
     const Ca = lerp(centro, anillo(a), ins), Cb = lerp(centro, anillo(b), ins);

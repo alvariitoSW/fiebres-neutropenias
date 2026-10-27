@@ -307,6 +307,13 @@ La FAC se mide en el A4C del modelo (áreas td y ts del VD, `medirVd` de `pacien
 hemorragia 22,9, derrame 21,2 (la fuente no dice que el TAPSE caiga con la precarga) y fallo del VI 18,7. `planoVista('psaxPm')`
 fija el nivel con el largo del VI del telediástole (`vviTd`), y en telesístole el corte atraviesa los papilares pegados a la pared.
 
+**Cortina aorto-mitral (B5, eco-mega parada 2, octubre 2026).** Pieza nueva `Cortina aorto-mitral` en `corazon-geo.mjs`: una cinta
+(8 × 6 vértices) entre la raíz aórtica (a 3 mm de la base, donde cuelga el anillo valvular) y el anillo mitral (z = 0), en el tramo
+de la valva anterior de ψ ±0,75 (separación 1,5-9 mm con la raíz). Sale del anillo y de la raíz del latido y pasa por `mover`, así que
+late con la base. Eco: clase `linea` con el tejido `fibroso` de `js/data/eco-tejidos.js` (11 dB, 1,8 mm, **ilustrativo**; anatomía,
+fisiología general). Prueba en `geometria.test.mjs` (marca B5): sus bordes tocan la raíz y la valva anterior, no baja del anillo y
+no mide más de 14 mm, en 8 escenarios × el latido.
+
 arranque de la descendente (`vias.ao` termina en el arco).
 
 ## En la app

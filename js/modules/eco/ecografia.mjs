@@ -251,6 +251,7 @@ const TIPOS = [
   [/^(Vena|Seno coronario)/, { clase: 'linea', db: T.venaPared.db, ancho: T.venaPared.ancho }],
   [/^Grasa/, { clase: 'linea', db: T.grasa.db, ancho: T.grasa.ancho }],
   [/^Coronaria/, { clase: 'linea', db: T.coronaria.db, ancho: T.coronaria.ancho }],
+  [/^Cortina aorto-mitral$/, { clase: 'linea', db: T.fibroso.db, ancho: T.fibroso.ancho }],
   [/^(Mitral|Tricúspide|Aórtica|Pulmonar)/, { clase: 'valva', db: T.valva.db, ancho: T.valva.ancho }],
   // tórax (torax.mjs): el hueso brilla y da sombra; la pleura brilla y deja líneas A detrás (ver formar)
   [/^Vértebra/, { clase: 'linea', db: T.hueso.db, ancho: T.hueso.ancho }],

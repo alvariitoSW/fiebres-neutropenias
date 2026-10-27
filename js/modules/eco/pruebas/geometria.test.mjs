@@ -222,3 +222,29 @@ test('N3: la columna va detrás de la aorta y la corta la supraesternal; el pulm
   for (const n of ['Pulmón izquierdo', 'Pulmón derecho']) { const s = cortarPieza(pieza(g, n), A).seg;
     for (let i = 0; i < s.length; i += 2) if (s[i + 1] > 0 && s[i + 1] < 0.9 * A.prof) assert.ok(Math.abs(Math.atan2(s[i], s[i + 1])) > 0.45, `${n}: en el A4C solo en los bordes del sector o en el fondo`); }
 });
+
+test('B5: la cortina aorto-mitral une la raíz aórtica con la valva anterior de la mitral en todo el latido y todos los escenarios, sin cruzar la cavidad', () => {
+  const casos = ['normal', 'hemorragia', 'fallo', 'derrame', 'vasoplejia', 'hipertrofia', 'dilatada', 'tep'];
+  const cerca = (A, B) => { let peor = 0; for (let i = 0; i < A.length; i += 3) { let d = Infinity;
+    for (let k = 0; k < B.length; k += 3) d = Math.min(d, Math.hypot(A[i] - B[k], A[i + 1] - B[k + 1], A[i + 2] - B[k + 2])); peor = Math.max(peor, d); } return peor; };
+  for (const k of casos) {
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(10);
+    const ex = extraDeMotor(m);
+    for (const s of m.onda.filter((_, i) => i % 100 === 0)) {
+      const g = construirCorazon(estadoGeo(s, { ...ex, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }), { pericardio: true, detalle: true });
+      const c = pieza(g, 'Cortina aorto-mitral'), raiz = pieza(g, 'Raíz aórtica'), ant = pieza(g, 'Mitral anterior');
+      assert.ok(c && raiz && ant, `${k}: faltan piezas`);
+      const lado = (j) => { const o = []; for (let i = 0; i <= 8; i++) o.push(...c.pos.slice((i * 7 + j) * 3, (i * 7 + j) * 3 + 3)); return o; };
+      const dRaiz = cerca(lado(0), raiz.pos), dMitral = cerca(lado(6), ant.pos);
+      assert.ok(dRaiz < 2.5, `${k}: el borde de la cortina está a ${dRaiz.toFixed(2)} mm de la raíz aórtica`);
+      assert.ok(dMitral < 4.5, `${k}: el otro borde está a ${dMitral.toFixed(2)} mm de la valva anterior (rejilla de 4 mm)`);
+      // sin cruzar la cavidad: ningún vértice por debajo del anillo mitral (el plano de la base, ya movido con el latido)
+      let zMin = Infinity, zAnillo = Infinity; for (let i = 2; i < c.pos.length; i += 3) zMin = Math.min(zMin, c.pos[i]);
+      for (let i = 0; i <= 12; i++) zAnillo = Math.min(zAnillo, ant.pos[(i * 8) * 3 + 2]);
+      assert.ok(zMin >= zAnillo - 0.5, `${k}: la cortina baja a z ${zMin.toFixed(2)}, bajo el anillo (${zAnillo.toFixed(2)})`);
+      // ancho: entre la raíz y el anillo (separación 1-10 mm + el desnivel de 3 mm), nunca un puente largo
+      let anchoMax = 0; for (let i = 0; i <= 8; i++) { const a = (i * 7) * 3, b = (i * 7 + 6) * 3; anchoMax = Math.max(anchoMax, Math.hypot(c.pos[a] - c.pos[b], c.pos[a + 1] - c.pos[b + 1], c.pos[a + 2] - c.pos[b + 2])); }
+      assert.ok(anchoMax < 14, `${k}: ancho de la cortina ${anchoMax.toFixed(1)} mm`);
+    }
+  }
+});
