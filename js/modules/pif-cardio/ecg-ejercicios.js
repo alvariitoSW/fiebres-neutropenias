@@ -159,7 +159,7 @@ function seccionGaleria(cont) {
     cont.appendChild(el('p', { style: 'font-size:0.82rem;color:var(--text-dim);margin:0 0 8px;' }, 'Mira cada trazado, di tu lectura y despliega la respuesta del libro.'));
     const tira = el('div', { id: 'ecg-f11-galeria', style: 'display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;' });
     GALERIA.forEach(g => {
-        const t = el('div', { class: 'card', style: 'flex:0 0 86%;scroll-snap-align:start;padding:10px 12px;' }, `<strong style="font-size:0.85rem;">Ejercicio ${g.n}</strong>${figura(g.n, g.pagT, 3)}`);
+        const t = el('div', { class: 'card', style: 'flex:0 0 86%;scroll-snap-align:start;padding:10px 12px;' }, `<strong style="font-size:0.85rem;">Ejercicio ${g.n}</strong>${figura(g.n, g.pagT, g.parteT || 3)}`);
         const det = el('details', { class: 'nota-plegable' }, `<summary>Respuesta del libro</summary><p style="font-size:0.82rem;margin:4px 0;">${g.resp}</p><div style="display:flex;flex-wrap:wrap;gap:6px;">${pg(3, g.pagR, `Respuesta, p. ${g.pagR}`)} ${verFicha(g.tab, g.id)}</div>`);
         t.appendChild(det); tira.appendChild(t);
     });
