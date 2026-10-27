@@ -2518,7 +2518,7 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .vk-figura .article-figure img { width: 100%; height: 100%; object-fit: contain; }
 .vk-figura-pie { display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; padding: 8px 10px; font-size: 0.72rem; line-height: 1.35; color: var(--text-muted); }
 .vk-figura-pie b { color: var(--text-main); }
-.vk-figura-pie span { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; min-width: 0; }
+.vk-figura-pie span { min-width: 0; }
 .vk-figura-pie .visual-link { flex: 0 0 auto; margin: 0; }
 
 /* Úlcera de estrés: niveles de riesgo de la Tabla 4.2 con la línea de la profilaxis. */
