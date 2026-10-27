@@ -40,6 +40,11 @@ export function velOrificio(n, s, areas) {
  */
 export const velRegMitral = (s, eroa) => (eroa > 0 && (s.qMitReg || 0) > 0 ? s.qMitReg / eroa : 0);
 
+/** Chorro libre de la IM (ilustrativo): tangente del semiángulo del cono (20°), radio a mitad de altura a la distancia s (mm) y velocidad del eje / v0. */
+export const CONO_CHORRO = 0.37;
+export const chorroLibreAncho = (a, s) => a + CONO_CHORRO * s;
+export const chorroLibreEje = (a, s) => 1 / (1 + s / (3 * a));
+
 /** Velocidad media en el anillo (cm/s): la del tracto de salida bajo una sigmoidea abierta. */
 export const velTubo = (n, s, areas) => Math.max(0, s[VALV[n].q] || 0) / (areas[n] / 100);
 
@@ -72,8 +77,8 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
   const eroa = m.eroaMitral || 0;
   if (eroa > 0 && flujo.coaptacionMitral) {
     const c = T(flujo.coaptacionMitral), dir = nrm(res(T(flujo.enCamara.ai([0.5, 0, 0])), c)), a = Math.sqrt(eroa * 100 / Math.PI);   // orificio: EROA en mm²
-    geom.push({ n: 'regMitral', c, dir, a, v0: 1, vTubo: 1, salida: false });
-    const v0 = velRegMitral(s, eroa); if (v0 > 0 && !s.vMit) valvulas.push({ n: 'regMitral', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false });
+    geom.push({ n: 'regMitral', c, dir, a, v0: 1, vTubo: 1, salida: false, libre: true });
+    const v0 = velRegMitral(s, eroa); if (v0 > 0 && !s.vMit) valvulas.push({ n: 'regMitral', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false, libre: true });
   }
   // F3 · las 4 venas pulmonares (eje en el sentido del flujo, hacia la AI; las mismas que dibuja la geometría y mueve el latido)
   const vp = [];
@@ -107,7 +112,12 @@ export function velocidad(p, F) {
   for (const j of F.valvulas) {
     const d = res(p, j.c), s = dot(d, j.dir), lat = res(d, esc(j.dir, s)), rho = largo(lat);
     let mag = 0, dir = j.dir;
-    if (s >= 0 && j.salida) {
+    if (s >= 0 && j.libre) {
+      // chorro libre turbulento (IM): tras la vena contracta se abre en cono y arrastra sangre; el ancho crece con la distancia y la
+      // velocidad del eje cae ~1/distancia (Zoghbi 2017 p. 308: fisiología general); perfil gaussiano de ancho a mitad de altura 2w
+      const w = chorroLibreAncho(j.a, s); if (s > 100 || rho > 2.2 * w) continue;
+      mag = j.v0 * chorroLibreEje(j.a, s) * Math.exp(-Math.LN2 * (rho / w) * (rho / w));
+    } else if (s >= 0 && j.salida) {
       // pasada la sigmoidea, el chorro va por la raíz (aórtica o tronco pulmonar): un tubo corto, sin abrirse
       const a = j.aTubo ?? j.a; if (s > 35 || rho > 1.15 * a) continue;
       mag = j.v0 * Math.exp(-Math.pow(rho / (1.05 * j.a + 0.15 * s), 4)) * Math.exp(-s / 90);
