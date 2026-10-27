@@ -1,5 +1,5 @@
-// Prueba de navegador del shock a pie de cama (juez de autonomo/jueces.mjs --modelo shock-vivo). Parte 1: el modelo
-// (sin Mayéutica). Uso: node autonomo/pruebas/shock-vivo.mjs <url-base> [--capturas <carpeta>]
+// Prueba de navegador del shock a pie de cama (juez de autonomo/jueces.mjs --modelo shock-vivo). El modelo y su
+// Mayéutica (guía, examen acertando y fallando, repaso y el caso de Aurelio, midiendo desborde y que el «Siguiente» no quede bajo el dock). Uso: node autonomo/pruebas/shock-vivo.mjs <url-base> [--capturas <carpeta>]
 // Recorre, a 390 px (con movimiento) y a 360 px (con «reducir movimiento»): los accesos (enlace cruzado de cada estado
 // de la tabla F y desde la ficha, con su «← VOLVER»), los 5 pacientes a gravedad 0 / 50 / 100 con cifras de paciente
 // posible, TODOS los mandos a su tope (volumen, sangre, edema, TEP, hemorragia, noradrenalina, vasopresina, dobutamina,
@@ -13,6 +13,8 @@ const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
 const b = await chromium.launch();
+const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
+const { PREGUNTAS: PREG, CASOS: CASOS_D } = await import(new URL('../../js/data/shock-vivo-mayeutica.js', import.meta.url));
 const fallosTotales = [];
 
 async function correr(ANCHO, REDUCIDO) {
@@ -164,6 +166,95 @@ for (let i = 0; i < 3; i++) {
 // ───────── G. Rótulos de los dibujos y letras
 await abrir('ecmo'); await espera(900);
 { const m = await p.evaluate(() => { let min = 99, who = ''; for (const t of document.querySelectorAll('#shv-raiz svg text')) { const r = t.getBoundingClientRect(); if (!r.width || !r.height) continue; const sv = t.ownerSVGElement, vb = sv.viewBox.baseVal; const esc = vb && vb.width ? sv.getBoundingClientRect().width / vb.width : 1; const px = parseFloat(getComputedStyle(t).fontSize) * esc; if (px < min) { min = px; who = t.textContent.slice(0, 20); } } return [Math.round(min * 10) / 10, who]; }); ok(m[0] >= 7.5, `rótulos de los dibujos ≥ 7,5 px (el menor: ${m[0]} px «${m[1]}»)`); }
+// ───────── I. Mayéutica: guía, examen (acertando y fallando), repaso y el caso
+{
+const Z = '#shv-zona-may';
+const visibleSig = () => p.evaluate(() => { const b = document.querySelector('#shv-zona-may [data-accion="sig"]'); if (!b) return 'no hay Siguiente'; b.scrollIntoView({ block: 'nearest' });
+    const r = b.getBoundingClientRect(), d = document.getElementById('shv-dock').getBoundingClientRect(); return r.top >= 0 && r.bottom <= d.top + 1 ? '' : `Siguiente fuera de vista o bajo el dock (arriba ${Math.round(r.top)}, abajo ${Math.round(r.bottom)}, dock ${Math.round(d.top)})`; });
+const velo = () => p.evaluate(() => !document.getElementById('shv-velo-mon').hidden && !document.getElementById('shv-velo-esc').hidden);
+const citasOk = () => p.evaluate(() => { const bad = [...document.querySelectorAll('#shv-zona-may [data-resaltar]')].filter(c => !document.querySelector(c.dataset.resaltar)).map(c => c.dataset.resaltar); return { bad, n: document.querySelectorAll('#shv-zona-may [data-resaltar]').length }; });
+const NaNs = () => p.evaluate(() => /NaN|undefined|Infinity/.test(document.getElementById('shv-zona-may').innerText));
+async function medir(t, esperaSig = true) {
+    const d = await desborde(); ok(d <= 0, `${t}: desborde ${d}`);
+    ok(!(await NaNs()), `${t}: sin NaN/undefined`);
+    if (esperaSig) { const v = await visibleSig(); ok(v === '', `${t}: ${v || 'Siguiente a la vista, sobre el dock'}`); }
+}
+async function responder(q, { bien = true, repaso = false, foto: f = null } = {}) {
+    const tag = `${q.id}${bien ? '' : ' (fallando)'}${repaso ? ' en el repaso' : ''}`;
+    if (q.predice && !repaso) ok(await velo(), `${tag}: el monitor y el dibujo están tapados antes de contestar («primero predices»)`);
+    if (repaso && q.predice) ok(!(await velo()), `${tag}: en el repaso no hay velo`);
+    if (q.tipo === 'test') {
+        ok(await p.evaluate(Z => !document.querySelector(Z + ' [data-op]'), Z), `${tag}: las opciones no están en el HTML antes de «Ya lo tengo»`);
+        await clic(`${Z} [data-accion="ops"]`); await espera(150);
+        const orden = barajar(q.opciones, q.id); const k = bien ? orden.findIndex(o => o.ok) : orden.findIndex(o => !o.ok);
+        if (f) await foto(f + '-opciones');
+        await clic(`${Z} [data-op="${k}"]`); await espera(250);
+        const t = await p.evaluate(Z => document.querySelector(Z + ' .shv-respuesta')?.innerText || '', Z);
+        ok(bien ? /✓ Bien/.test(t) : /Qué le habría pasado al paciente/.test(t), `${tag}: respuesta ${bien ? 'buena' : 'mala con su «qué le habría pasado»'}`);
+    } else if (q.tipo === 'destapa') {
+        await clic(`${Z} [data-accion="destapa"]`); await espera(150);
+        await p.evaluate(([Z, bien]) => document.querySelectorAll(Z + ' input[data-p]').forEach((x, i) => { if (bien || i > 0) x.checked = true; }), [Z, bien]);
+        await clic(`${Z} [data-accion="puntos"]`); await espera(250);
+    } else {
+        const malas = q.frases.map((x, i) => x.mal ? i : -1).filter(i => i >= 0);
+        for (const i of (bien ? malas : [0, 1, 2, 3].filter(i => !malas.includes(i)).slice(0, 1))) await clic(`${Z} [data-fr="${i}"]`);
+        await clic(`${Z} [data-accion="corregir"]`); await espera(200);
+        for (const i of malas) await clic(`${Z} [data-ver="${i}"]`);
+        await espera(150);
+        ok(await p.evaluate(Z => !!document.querySelector(Z + ' .shv-correccion .cita-ir'), Z) || malas.length === 0, `${tag}: la frase buena lleva su «Ver en la ficha»`);
+    }
+    const c = await citasOk(); ok(c.n > 0 && c.bad.length === 0, `${tag}: ${c.n} «Ver en la ficha» y todas llegan a un párrafo que existe ${c.bad.join(', ')}`);
+    if (q.comprobar && !repaso) {
+        if (q.predice) ok(await velo(), `${tag}: tras contestar y antes de «Compruébalo», el monitor sigue tapado`);
+        await clic(`${Z} [data-comprueba]`); await espera(700);
+        ok(!(await velo()), `${tag}: «Compruébalo» destapa el modelo`);
+        ok(await p.evaluate(Z => !!document.querySelector(Z + ' .shv-para .shv-ok'), Z), `${tag}: dice qué mirar en el modelo`);
+        if (q.comprobar.cifras) ok(await p.evaluate(Z => /→/.test(document.querySelector(Z + ' dl.antes-despues')?.innerText || ''), Z), `${tag}: cifras antes → después`);
+    } else ok(!(await velo()), `${tag}: nada tapado tras contestar`);
+    await medir(tag); if (f) await foto(f);
+    await clic(`${Z} [data-accion="sig"]`); await espera(350);
+}
+await abrir('hemo'); await espera(700);
+await clic('#shv-modo-may'); await espera(600);
+ok(await p.evaluate(() => !document.getElementById('shv-zona-may').hidden && !document.getElementById('shv-dock-est').hidden && document.getElementById('shv-modo-may').getAttribute('aria-selected') === 'true'), 'Mayéutica: su zona y su dock están a la vista');
+await medir('Mayéutica · inicio', false); await foto('may-inicio');
+await clic(`${Z} [data-ir="recorrido"]`); await espera(500);
+for (let i = 0; i < PREG.length; i++) {
+    const q = PREG[i];
+    const num = await p.evaluate(Z => document.querySelector(Z + ' .shv-num')?.textContent, Z);
+    ok(+num === i + 1, `pregunta ${q.id}: es la número ${i + 1} del recorrido (${num})`);
+    const fallar = ['E2', 'E4', 'E5'].includes(q.id);
+    await responder(q, { bien: !fallar, foto: q.id === 'G1' ? 'may-g1' : q.id === 'E2' ? 'may-e2-mal' : q.id === 'G6' ? 'may-g6' : null });
+}
+// el repaso: las 3 falladas, otra vez, y cada acierto la saca
+ok(await p.evaluate(Z => document.querySelectorAll(Z + ' [data-rep]').length, Z) === 3, 'repaso: vuelven las 3 falladas (E2, E4, E5)');
+await medir('repaso · lista', false); await foto('may-repaso');
+for (const id of ['E2', 'E4', 'E5']) {
+    await clic(`${Z} [data-rep="${id}"]`); await espera(300);
+    await responder(PREG.find(x => x.id === id), { bien: true, repaso: true });
+}
+ok(await p.evaluate(Z => document.querySelectorAll(Z + ' [data-rep]').length, Z) === 0 && await p.evaluate(Z => /No queda nada por repasar/.test(document.querySelector(Z).innerText), Z), 'repaso: acertadas las tres, no queda nada');
+await clic(`${Z} [data-ir="casos"]`); await espera(400);
+await clic(`${Z} [data-caso="0"]`); await espera(700);
+const pasosC = CASOS_D[0].pasos;
+for (let k = 0; k < pasosC.length; k++) {
+    const q = pasosC[k].pregunta;
+    const ficha = await p.evaluate(Z => ({ filas: document.querySelectorAll(Z + ' dl.shv-paciente dd').length, nuevas: document.querySelectorAll(Z + ' dl.shv-paciente dd.shv-cambia').length }), Z);
+    ok(ficha.filas >= 3 && ficha.nuevas >= 1, `caso paso ${k + 1}: la ficha del paciente tiene ${ficha.filas} filas, ${ficha.nuevas} nuevas`);
+    await medir(`caso paso ${k + 1} · ficha`, false);
+    await responder(q, { bien: k !== 2, foto: k === 0 ? 'may-caso-1' : k === 3 ? 'may-caso-4' : k === 6 ? 'may-caso-7' : null });
+}
+ok(await p.evaluate(Z => /lo que te llevas/i.test(document.querySelector(Z).innerText) && document.querySelectorAll(Z + ' ol.shv-lleva li').length === 3, Z), 'caso: «Lo que te llevas» con sus 3 ideas');
+{ const c = await citasOk(); ok(c.n >= 4 && c.bad.length === 0, `caso: el final lleva ${c.n} citas y todas llegan ${c.bad.join(', ')}`); }
+await medir('caso · final', false); await foto('may-caso-final');
+await clic(`${Z} [data-fin="modelo"]`); await espera(900);
+{ const r = await S(); ok(r.aparato === 'ecmo' && await p.evaluate(() => document.getElementById('shv-modo-explorar').getAttribute('aria-selected') === 'true'), 'caso: «Abrir el modelo con Aurelio en ECMO» abre Explorar con el ECMO'); }
+await medir('Explorar tras el caso', false);
+// la lámina «Así se ve de verdad»
+await clic('#shv-real summary'); await espera(600);
+ok(await p.evaluate(() => { const i = document.querySelector('#shv-real-fig img'); return i && i.naturalWidth > 0 && /Licencia/.test(document.getElementById('shv-real-fig').innerText) && /Autor/.test(document.getElementById('shv-real-fig').innerText); }), 'R4: la eco real carga (naturalWidth > 0) con autor, licencia y original en su pie'); await foto('real');
+await medir('lámina real', false);
+}
 // ───────── H. Desde la ficha y de vuelta; el bucle se para al salir
 await abrir('hemo'); await espera(500);
 await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab: 'mc-soporte-mecanico' }); document.body.append(t); t.click(); t.remove(); }); await espera(600);

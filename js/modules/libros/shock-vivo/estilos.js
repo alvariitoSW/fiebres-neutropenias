@@ -304,4 +304,53 @@ export const SHV_CSS = `
 .shv-raiz #shv-esc-svg .cc-rot { font-size: 11px; }
 .shv-raiz .mon-cab .quien { white-space: normal; }
 .shv-raiz .tope-sello .cita button { white-space: normal; overflow: visible; text-overflow: clip; text-align: center; }
+/* Mayéutica (motor común: clases con prefijo shv-) */
+.shv-raiz .shv-h { font-size: 1.04rem; margin: 0; color: var(--accent-yellow); font-weight: normal; }
+.shv-raiz .formato .shv-eyebrow { font: 600 .68rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); display: block; }
+.shv-raiz .shv-cab-preg { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
+.shv-raiz .shv-num { font: 700 .74rem var(--sans); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
+.shv-raiz .shv-tipo { font: 600 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--text-muted); }
+.shv-raiz .shv-serie { font: 700 .64rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--text-dim); border-radius: 6px; padding: 1px 6px; }
+.shv-raiz .shv-serie.shv-examen { background: var(--accent-red); color: var(--text-main); }
+.shv-raiz .shv-pregunta { font-size: .98rem; line-height: 1.45; }
+.shv-raiz .shv-op, .shv-raiz .shv-fmt, .shv-raiz .shv-res, .shv-raiz .shv-mando { display: grid; gap: 6px; min-width: 0; }
+.shv-raiz .shv-op[hidden], .shv-raiz .shv-mando[hidden] { display: none; }
+.shv-raiz button.shv-b, .shv-raiz button.shv-frase-e { min-height: 44px; font: 600 .82rem/1.25 var(--sans); background: var(--card2); color: var(--text-main); border: 1px solid var(--line); border-radius: 10px; padding: 8px 11px; cursor: pointer; text-align: left; }
+.shv-raiz button.shv-frase-e { display: flex; gap: 8px; align-items: baseline; width: 100%; }
+.shv-raiz button.shv-b.shv-prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.shv-raiz button.shv-b.shv-link { background: transparent; color: var(--accent-yellow); }
+.shv-raiz button.shv-b:disabled, .shv-raiz button.shv-frase-e:disabled { opacity: .7; cursor: default; }
+.shv-raiz button.shv-elegida-ok, .shv-raiz button.shv-acierto { border-color: var(--accent-green); box-shadow: inset 3px 0 0 var(--accent-green); }
+.shv-raiz button.shv-elegida-mal, .shv-raiz button.shv-fallo { border-color: var(--accent-red); box-shadow: inset 3px 0 0 var(--accent-red); }
+.shv-raiz button.shv-frase-e.shv-marcada { border-color: var(--accent-yellow); background: color-mix(in srgb, var(--accent-yellow) 18%, var(--card2)); }
+.shv-raiz .shv-n { font: 700 .72rem var(--sans); color: var(--accent-yellow); flex: none; }
+.shv-raiz .shv-fila { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.shv-raiz .shv-respuesta { background: var(--card2); border-radius: 10px; padding: 10px; display: grid; gap: 6px; font: .88rem/1.45 var(--serif); min-width: 0; }
+.shv-raiz .shv-respuesta p { margin: 0; }
+.shv-raiz .shv-ok { color: var(--accent-green); font: 600 .86rem var(--sans); }
+.shv-raiz .shv-mal { color: var(--accent-red); font: 600 .86rem var(--sans); }
+.shv-raiz .shv-para, .shv-raiz .shv-pista, .shv-raiz .shv-correccion { font: .8rem/1.45 var(--sans); color: var(--text-muted); }
+.shv-raiz .shv-correccion { color: var(--text-main); background: var(--card2); border-radius: 8px; padding: 6px 8px; }
+.shv-raiz .shv-nota-fuentes { font: .8rem/1.4 var(--sans); color: var(--text-muted); }
+.shv-raiz .shv-dia { font: 700 .72rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-purple); }
+.shv-raiz dl.shv-paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .8rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 7px 9px; }
+.shv-raiz dl.shv-paciente dt { color: var(--text-muted); }
+.shv-raiz dl.shv-paciente dd { margin: 0; min-width: 0; }
+.shv-raiz dl.shv-paciente dd.shv-cambia { color: var(--accent-red); font-weight: 600; }
+.shv-raiz .shv-nuevo { font: 700 .6rem var(--sans); text-transform: uppercase; border: 1px solid var(--accent-red); border-radius: 6px; padding: 0 4px; }
+.shv-raiz .shv-punto { display: flex; gap: 8px; align-items: flex-start; font: .86rem/1.4 var(--serif); min-height: 36px; }
+.shv-raiz .shv-punto input { width: 22px; height: 22px; flex: none; margin-top: 2px; }
+.shv-raiz .shv-ruta { display: grid; gap: 6px; font: .86rem/1.4 var(--sans); }
+.shv-raiz .shv-repaso-chips, .shv-raiz .shv-casos-lista { display: grid; gap: 6px; }
+.shv-raiz .shv-casos-lista small { display: block; font-weight: 400; color: var(--text-muted); }
+.shv-raiz ol.shv-lleva { margin: 0; padding-left: 20px; display: grid; gap: 4px; font: .88rem/1.45 var(--serif); }
+.shv-raiz .pasos i.shv-on { background: var(--accent-green); }
+.shv-raiz .pasos i.shv-mal { background: var(--accent-red); }
+.shv-raiz .pasos i.shv-aqui { box-shadow: 0 0 0 2px var(--accent-blue); }
+.shv-raiz .shv-lamina { display: grid; gap: 4px; }
+.shv-raiz .shv-lamina img { display: block; width: 100%; height: auto; background: var(--bg-main); border-radius: 6px; }
+.shv-raiz .shv-lamina figcaption { font: .72rem/1.35 var(--sans); color: var(--text-muted); }
+.shv-raiz .shv-lamina a { color: var(--accent-yellow); }
+.shv-raiz .shv-fila, .shv-raiz .shv-respuesta, .shv-raiz .shv-res, .shv-raiz .shv-mando, .shv-raiz .shv-lleva { scroll-margin-bottom: calc(var(--dock-h, 190px) + 14px); }
+.shv-raiz button.shv-b, .shv-raiz .shv-consecuencia { scroll-margin-bottom: calc(var(--dock-h, 190px) + 14px); }
 `;
