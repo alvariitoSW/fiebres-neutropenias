@@ -564,12 +564,26 @@ export function montarSimulador(raiz, opc = {}) {
     if (!prepararPlanoEco()) return;
     let p;
     if (pr.vaso) p = puntoVaso(pr.vaso);
-    else if (pr.venaPulm) {   // el punto de las venas pulmonares que más cerca cae del plano, hacia la AI (donde se pone la muestra)
-      const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()); let mejor = null;
-      for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 0; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
-        const q = [0, 1, 2].map(k => vp.pts[i][k] + f * (vp.pts[i + 1][k] - vp.pts[i][k])), dd = Math.abs(enPlano(planoEco, q)[2]) + 0.5 * (1 - (i + f) / (vp.pts.length - 1));
-        if (!mejor || dd < mejor.dd) mejor = { q, dd }; }
-      if (!mejor) return; p = mejor.q;
+    else if (pr.venaPulm) {   // las venas pulmonares no caen en el corte A4C de serie: se inclina la sonda (como en la eco real) hasta cortar una
+      ponerSonda(SONDA_CERO); if (!prepararPlanoEco()) return;
+      const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), P0 = planoBase; let mejor = null;
+      for (let incl = -15; incl <= 15; incl++) { const Pl = planoLibre(P0, { ...SONDA_CERO, incl });
+        for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 1; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
+          const q = [0, 1, 2].map(c => vp.pts[i][c] + f * (vp.pts[i + 1][c] - vp.pts[i][c])), [u, v, z] = enPlano(Pl, q);
+          if (Math.abs(z) > 1.5 || v > Pl.prof - 5 || v < 20 || Math.abs(Math.atan2(u, v)) > Pl.mitad - 0.05) continue;
+          const g3 = [0, 1, 2].map(c => Pl.O[c] + Pl.r[c] * u + Pl.d[c] * v), haz = direccionHaz(Pl, Math.atan2(u, v));
+          const fu = fuenteEnMuestra(puntosMuestra(Pl, g3, haz), haz, F);
+          if (fu && fu.vasoTipo === 'pulmonar' && (!mejor || Math.abs(fu.factor) > mejor.fac)) mejor = { incl, fac: Math.abs(fu.factor) }; } }
+      if (!mejor) return;
+      ponerSonda({ incl: mejor.incl }); if (!prepararPlanoEco()) return;
+      let mp = null;   // dentro del corte ya inclinado: el punto de la vena que mejor la reconoce
+      for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 1; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
+        const q = [0, 1, 2].map(c => vp.pts[i][c] + f * (vp.pts[i + 1][c] - vp.pts[i][c])), [u, v, z] = enPlano(planoEco, q);
+        if (Math.abs(z) > 1.5 || v > planoEco.prof - 5 || v < 20 || Math.abs(Math.atan2(u, v)) > planoEco.mitad - 0.05) continue;
+        const g3 = [0, 1, 2].map(c => planoEco.O[c] + planoEco.r[c] * u + planoEco.d[c] * v), haz = direccionHaz(planoEco, Math.atan2(u, v));
+        const fu = fuenteEnMuestra(puntosMuestra(planoEco, g3, haz), haz, F);
+        if (fu && fu.vasoTipo === 'pulmonar' && (!mp || Math.abs(fu.factor) > mp.fac)) mp = { q, fac: Math.abs(fu.factor) }; }
+      if (!mp) return; p = mp.q;
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);

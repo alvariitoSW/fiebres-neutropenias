@@ -195,3 +195,19 @@ test('IM funcional (dilatada): a 2 cm el chorro es ≥3× más ancho que en el o
   const A1 = area(0.15), A2 = area(0.25), A3 = area(0.4);
   assert.ok(A1 > 0 && A2 > A1 && A3 > A2, `áreas ${A1} ${A2} ${A3}`);
 });
+
+// Preset «Vena pulmonar (A4C)»: el A4C de serie no corta las venas pulmonares; inclinando la sonda ≤15° la muestra cae en una
+// y fuenteEnMuestra la reconoce como pulmonar (el panel enseña S, D, S/D y Ar)
+test('vena pulmonar: inclinando la sonda ≤15° en el A4C, la muestra cae en una vena y se reconoce como pulmonar', async () => {
+  const { planoLibre, SONDA_CERO } = await import('../ecografia.mjs');
+  const m = motorEn(), t = td(m), areas = D.areasAnillo(baseGeometrica(t)), g = construirCorazon(estadoGeo(t, {}), { detalle: true });
+  const F = D.fuentesFlujo(g.flujo, t, areas, [], { rRetorno: m.p.rRetorno, pvc: m.ultimo.pvc }), P0 = planoVista('a4c', t);
+  let hallada = null;
+  for (let incl = -15; incl <= 15 && !hallada; incl++) { const Pl = planoLibre(P0, { ...SONDA_CERO, incl });
+    for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 1; i < vp.pts.length - 1 && !hallada; i++) {
+      const q = vp.pts[i], [u, v, z] = enPlano(Pl, q); if (Math.abs(z) > 1.5 || v < 20 || v > Pl.prof - 5 || Math.abs(Math.atan2(u, v)) > Pl.mitad - 0.05) continue;
+      const gp = [0, 1, 2].map(k => Pl.O[k] + Pl.r[k] * u + Pl.d[k] * v), haz = direccionHaz(Pl, Math.atan2(u, v));
+      const fu = D.fuenteEnMuestra(D.puntosMuestra(Pl, gp, haz), haz, F); if (fu && fu.vasoTipo === 'pulmonar') hallada = { incl, fu }; } }
+  assert.ok(hallada, 'ninguna vena pulmonar se corta con ≤15° de inclinación');
+  assert.equal(hallada.fu.nombre, 'Vena pulmonar');
+});
