@@ -1,0 +1,160 @@
+<title>Plan del ECG</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Papel milimetrado de ECG: rejilla rosa tenue de fondo, trazo como acento, tarjetas por camino */
+:root{
+  --bg:#fbf7f6; --fg:#22181a; --muted:#6b5a5d; --grid:#f0d9dc; --line:#e2c3c8;
+  --trace:#b3263a; --card:#ffffff; --ok:#2f6b3f; --warn:#8a5a00; --chip:#f6e8ea;
+  --f-display:"Fraunces",Georgia,serif; --f-body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171213; --fg:#f2e9ea; --muted:#b9a7aa; --grid:#2a1f21; --line:#3f2e31;
+  --trace:#ff6b7f; --card:#1f1819; --ok:#7fcf93; --warn:#f0b54a; --chip:#2b2022; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171213; --fg:#f2e9ea; --muted:#b9a7aa; --grid:#2a1f21; --line:#3f2e31;
+  --trace:#ff6b7f; --card:#1f1819; --ok:#7fcf93; --warn:#f0b54a; --chip:#2b2022; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1.5;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:20px 20px;}
+.wrap{max-width:680px;margin:0 auto;padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:22px}
+h1{font-family:var(--f-display);font-size:2rem;line-height:1.1;margin:0;text-wrap:balance}
+h2{font-family:var(--f-display);font-size:1.35rem;margin:0;text-wrap:balance}
+h3{font-size:1rem;margin:0}
+p{margin:0}
+.sub{color:var(--muted)}
+svg.trazo{width:100%;height:46px;display:block}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.tag{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--trace)}
+ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.tabla{overflow-x:auto;border:1px solid var(--line);border-radius:8px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;background:var(--card)}
+th,td{padding:7px 9px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+td.m{font-family:var(--f-mono);white-space:nowrap;text-align:right}
+tr.tot td{font-weight:700}
+.dec{border-left:4px solid var(--trace);background:var(--chip);padding:12px 14px;border-radius:0 8px 8px 0;display:flex;flex-direction:column;gap:6px}
+.dec b.rec{color:var(--ok)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips span{background:var(--chip);border:1px solid var(--line);border-radius:999px;padding:2px 10px;font-size:.85rem}
+.res{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.res div{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px}
+.res .v{font-family:var(--f-mono);font-size:1.4rem;color:var(--trace)}
+.aviso{color:var(--warn);font-weight:700}
+details summary{cursor:pointer;font-weight:700}
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <span class="tag">Plan socialista · ecg-plan · 27/10/2026</span>
+    <h1>Plan del ECG: aprenderlo y leerlo juntos</h1>
+    <svg class="trazo" viewBox="0 0 400 46" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="var(--trace)" stroke-width="2" points="0,30 40,30 50,26 60,30 80,30 86,34 92,4 98,40 104,30 130,30 145,22 160,30 200,30 210,26 220,30 240,30 246,34 252,4 258,40 264,30 290,30 305,22 320,30 400,30"/></svg>
+    <p class="sub">Solo es el plan. Hoy no se construye nada. Lo diseñó el profesor sobre el cuaderno «ECG y arritmias» (PR #36). Tú eliges abajo qué se hace y en qué orden.</p>
+  </header>
+
+  <section class="res" aria-label="Coste">
+    <div><p class="sub">Camino 2 · guardia</p><p class="v">≈2,9 M</p></div>
+    <div><p class="sub">Camino 1 · desde cero</p><p class="v">≈8,4 M</p></div>
+    <div><p class="sub">Mínimo útil</p><p class="v">≈6,2 M</p></div>
+    <div><p class="sub">Todo</p><p class="v">≈12,6 M</p></div>
+  </section>
+  <p class="sub">M = millones de tokens, la medida de gasto de la app. Tu tope diario es ~15 M. Este plan costó ~0,1 M (8 pasos del profesor).</p>
+
+  <section class="card">
+    <span class="tag">Lo que ya hay y se aprovecha</span>
+    <ul>
+      <li>El lector de ECG sobre trazados reales del libro y las calculadoras de FC, FC máxima y QTc.</li>
+      <li>La tarjeta «¿Rápido o lento?» (preguntas Sí/No).</li>
+      <li>24 botones «Verlo latir» que abren el corazón eléctrico de Marino en su estado (sinusal, bloqueo de rama, WPW, IAMCEST, hiperpotasemia…).</li>
+      <li>El corazón eléctrico ya calcula el voltaje en una derivación según hacia dónde va el frente. Hoy solo conoce II, V2 y V3.</li>
+    </ul>
+  </section>
+
+  <section class="card">
+    <span class="tag">Camino 1</span>
+    <h2>Aprender a leer el ECG desde cero</h2>
+    <p><b>Lo que verás:</b> el corazón del modelo en el centro de un anillo con las 6 derivaciones de los miembros (I, II, III, aVR, aVL, aVF). Del frente eléctrico sale una <b>flecha</b>. Su sombra sobre cada derivación es lo que dibuja su tira. Se ve sin fórmulas: si el frente se acerca, la onda sube; si va de lado, la tira queda plana.</p>
+    <p>Debajo, la tira grande de la derivación que toques y una frase que explica el momento («el tabique se activa de izquierda a derecha: por eso I y aVL empiezan con una q pequeña»). Los mandos son los mismos estados del corazón. El eje no se dibuja a mano: sale solo del corazón.</p>
+    <h3>Lo que aprendes, en orden (preguntas de la Mayéutica)</h3>
+    <ul>
+      <li>Frente que se acerca, onda positiva; que se aleja, negativa; perpendicular, bifásica.</li>
+      <li>La onda P: por qué es positiva en II y negativa en aVR.</li>
+      <li>El QRS en tres tiempos: tabique, pared libre y base.</li>
+      <li>aVR mira desde el hombro derecho: todo negativo.</li>
+      <li>El eje: la derivación bifásica es perpendicular a él. Rango normal del libro (−30° a +110°) con nota frente a la guía ESC.</li>
+      <li>Bloqueo de rama: QRS ancho y T al revés, viéndolo en el modelo.</li>
+      <li>Lesión: ST que sube en las derivaciones de la zona y baja en las opuestas.</li>
+    </ul>
+    <p>Dos casos clínicos con trazados reales del libro: un dolor torácico que evoluciona a IAM inferior y un síncope con QRS ancho y QT largo.</p>
+    <p class="sub">Límite: el modelo es un corte casi frontal. Las precordiales (V1-V6) no salen de él. Se muestran las del trazado real del libro, con su página. Las precordiales vivas serían otra tarea.</p>
+  </section>
+
+  <section class="card">
+    <span class="tag">Camino 2</span>
+    <h2>Leer juntos un ECG en la guardia</h2>
+    <p>Una pantalla nueva en el cuaderno. Te pregunta en 9 pasos, con botones (sin escribir): frecuencia, ritmo, P, PR, QRS, eje, ST, T y QT. La FC y el QTc los calculas en las calculadoras que ya hay.</p>
+    <div class="chips" aria-label="Pasos"><span>1 FC</span><span>2 Ritmo</span><span>3 P</span><span>4 PR</span><span>5 QRS</span><span>6 Eje</span><span>7 ST</span><span>8 T</span><span>9 QT</span></div>
+    <p><b>Al final</b> no te da un diagnóstico. Te enseña <b>los criterios del libro que cumple lo que has marcado</b>, cada uno con su página, «Ver en la ficha» y «Verlo latir». Debajo, «Lo que te falta por mirar». Si encajan dos cuadros, salen los dos. Sin fármacos ni dosis.</p>
+    <p>No guarda nada del paciente: «Nueva lectura» lo borra todo.</p>
+  </section>
+
+  <section class="card">
+    <span class="tag">Las piezas, en orden</span>
+    <div class="tabla"><table>
+      <thead><tr><th>#</th><th>Pieza</th><th>M</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Anatomy como habilidad del proyecto (solo el método)</td><td class="m">0,25</td></tr>
+        <tr><td>2</td><td>Enlazar cada estado del corazón con su ficha, página y trazado</td><td class="m">0,25</td></tr>
+        <tr><td>3</td><td><b>Camino 2:</b> asistente de 9 pasos y criterios con página</td><td class="m">0,9</td></tr>
+        <tr><td>4</td><td>Auditor: cada criterio contra el PDF</td><td class="m">0,55</td></tr>
+        <tr><td>5</td><td>Juicio del profesor, arreglos y rejuicio</td><td class="m">0,66</td></tr>
+        <tr><td>6</td><td><b>Camino 1, maqueta:</b> anillo, 6 derivaciones y flecha, con prueba del eje</td><td class="m">1,1</td></tr>
+        <tr><td>7</td><td>Juicio de la maqueta, arreglos y rejuicio</td><td class="m">0,9</td></tr>
+        <tr><td>8</td><td>Llevarla a la app (en dos encargos)</td><td class="m">2,0</td></tr>
+        <tr><td>9</td><td>Preguntas, examen y los 2 casos</td><td class="m">1,2</td></tr>
+        <tr><td>10</td><td>Auditor, juicio, arreglos y rejuicio</td><td class="m">1,55</td></tr>
+        <tr><td>11</td><td>Director: 3 paradas para que lo veas</td><td class="m">2,4</td></tr>
+        <tr class="tot"><td></td><td>Total</td><td class="m">≈12,6</td></tr>
+      </tbody>
+    </table></div>
+    <p class="sub"><b>Mínimo útil (≈6,2 M):</b> piezas 1 a 7. El asistente de guardia queda listo y ves la maqueta del vector antes de gastar en llevarla a la app. Cabe en un día con tope de ~15 M, pero no hoy.</p>
+  </section>
+
+  <section style="display:flex;flex-direction:column;gap:12px">
+    <h2>Lo que decides tú</h2>
+    <div class="dec"><h3>1 · ¿Ampliar el corazón eléctrico o hacer un modelo nuevo?</h3>
+      <p><b class="rec">Recomendado: ampliar.</b> Es la misma verdad para todo: el bloqueo de rama ya ensancha el QRS y el eje cambia solo. Los 24 «Verlo latir» ya apuntan ahí. Un modelo nuevo sería un segundo simulador de ritmo, repetiría trabajo y costaría ~1 M más.</p></div>
+    <div class="dec"><h3>2 · ¿Instalar Anatomy como habilidad del proyecto?</h3>
+      <p><b class="rec">Recomendado: sí</b>, solo el método («el objeto es la explicación», comprobar con capturas, nada de esquemas de cajas), sin su kit de código. Hoy cada agente lo tendría que descargar y leer otra vez. Toca la carpeta de habilidades: necesita tu permiso.</p></div>
+    <div class="dec"><h3>3 · ¿Cómo cierra el asistente de guardia?</h3>
+      <p><b class="rec">Recomendado: lista de criterios cumplidos, cada uno con su página.</b> La otra opción añade el nombre del cuadro («compatible con…»), solo si es un título del libro con página y salen todos los que encajen.</p></div>
+    <div class="dec"><h3>4 · ¿Qué va primero?</h3>
+      <p><b class="rec">Recomendado: el Camino 2.</b> Es barato y te sirve a las 3 de la mañana. Después, la maqueta del Camino 1. La otra opción es empezar por la maqueta.</p></div>
+  </section>
+
+  <section class="card">
+    <span class="tag">Riesgos</span>
+    <ul>
+      <li><b>El eje del modelo puede no coincidir con el del libro</b> en algún estado. La maqueta lo mide estado por estado. Si no encaja, la flecha se rotula «ilustrativa» y no se enseña como regla.</li>
+      <li><b>Libro frente a ESC</b> en el eje normal: se muestran las dos fuentes, sin elegir ganadora.</li>
+      <li><b>Que el asistente se convierta en un diagnosticador:</b> cada salida es un par criterio → página, y el auditor lo coteja.</li>
+      <li><b>Casos:</b> FC, PR, QRS y QTc salen del trazado real del libro, no de cifras sueltas.</li>
+    </ul>
+  </section>
+
+  <details class="card">
+    <summary>Detalle técnico (para el equipo)</summary>
+    <ul class="sub">
+      <li>`motor.js`: `DERIV` con las 6 frontales como vectores unitarios; nueva `vectorNeto(mo,t)` (eje medio del QRS, «ilustrativo»).</li>
+      <li>`pagina.js` (665 líneas, tope 700): `abrirEstado` acepta `extra.medir` y `extra.derivacion`; lo nuevo, en `ritmo-vivo/derivaciones.js` (≤300).</li>
+      <li>Datos del asistente: `js/data/pif-ecg-criterios.js` (criterio, id, página, estado). Sin `localStorage`.</li>
+      <li>Depende de que la PR #36 entre en main. Pasar `autonomo/pruebas/ritmo-vivo` antes y después de tocar `DERIV`.</li>
+    </ul>
+  </details>
+
+  <p class="sub">Contesta en el chat con tus 4 elecciones (por ejemplo «1 ampliar, 2 sí, 3 criterios, 4 guardia primero»). Las piezas que elijas pasan a la bitácora (B-033) y se construyen otro día.</p>
+</div>

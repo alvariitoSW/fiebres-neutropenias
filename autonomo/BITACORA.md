@@ -225,7 +225,15 @@ esta sección.
 - **Decisiones tuyas que saldrán en el plan**: instalar Anatomy como skill del proyecto (hoy es solo una referencia
   clonada en `/tmp/ajeno/anatomy`; tocar `.claude/skills/` necesita tu permiso) y un modelo vivo nuevo o ampliar el
   corazón eléctrico (toca el motor de `b3`).
-- **Estado**: el plan, aprobado por ti el 27/10 (tablero: `ecg-plan`); la construcción, cuando elijas en el plan.
+- **Estado**: plan hecho el 27/10 (`ecg-plan`): https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c (copia en
+  `autonomo/planes/ecg-plan.html`). **Espera tus 4 elecciones**: (1) ampliar el corazón eléctrico (recomendado) o
+  modelo nuevo; (2) Anatomy como skill del proyecto, solo el método (recomendado sí); (3) cierre del asistente: lista
+  de criterios con página (recomendado) o también nombre del cuadro; (4) orden: guardia primero (recomendado).
+  Piezas (M equivalentes): 1 skill Anatomy 0,25 · 2 estados↔ficha/página/trazado 0,25 · 3 asistente de guardia 0,9 ·
+  4 auditor de criterios 0,55 · 5 juicio y arreglos 0,66 · 6 maqueta del vector y 6 derivaciones 1,1 · 7 su juicio
+  0,9 · 8 llevarla a la app 2,0 · 9 Mayéutica y 2 casos 1,2 · 10 auditor y juicio 1,55 · 11 director 3 paradas 2,4.
+  Camino 2 ≈ 2,9 M · Camino 1 ≈ 8,4 M · mínimo útil (1-7) ≈ 6,2 M · todo ≈ 12,6 M. Depende de que la PR #36 entre en
+  `main`. Las piezas que elijas pasan al tablero.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
