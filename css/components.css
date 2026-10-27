@@ -2961,7 +2961,7 @@ body.study-mode-on .abv-dock { padding-right: 82px; }
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
 .agv-raiz .agv-mareas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
 .agv-raiz .agv-marea { background: var(--bg-card); border: 1px solid var(--agv-card2); border-radius: 10px; padding: 4px 7px; min-width: 0; }
-.agv-raiz .agv-marea .agv-nom { font: .8rem/1.2 var(--agv-serif); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agv-raiz .agv-marea .agv-nom { font: .8rem/1.2 var(--agv-serif); color: var(--text-main); overflow-wrap: anywhere; }
 .agv-raiz .agv-marea .agv-nom small { font: .6rem/1.2 var(--agv-sans); color: var(--text-muted); margin-left: 3px; }
 .agv-raiz .agv-marea .agv-tot { font: .92rem/1.2 var(--agv-serif); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .agv-raiz .agv-marea .agv-dl { font: 600 .72rem/1.2 var(--agv-sans); font-variant-numeric: tabular-nums; color: var(--text-muted); overflow-wrap: anywhere; }
