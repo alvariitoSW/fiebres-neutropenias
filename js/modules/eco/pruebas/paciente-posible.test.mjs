@@ -144,8 +144,24 @@ test('fallo del VI: la torsión es menor que la del corazón normal (Mor-Avi p. 
 test('hemorragia: el VI telediastólico y el sistólico son menores que los del normal (precarga baja)', () => {
   assert.ok(de('hemorragia').v['vi-vtd-h'] < de('normal').v['vi-vtd-h']);
 });
-test('TEP: la torsión no debería subir con un VI vacío', { todo: 'B3 (torsión con fuente; hoy sube a ~10°, sin fuente)' }, () => {
+test('TEP y hemorragia: la torsión no sube con un VI vacío (sale de la contracción, no del volumen)', () => {
+  assert.ok(de('hemorragia').v.torsion <= de('normal').v.torsion + 0.3, `${fmt(de('hemorragia').v.torsion)}° frente a ${fmt(de('normal').v.torsion)}°`);
   assert.ok(de('tep').v.torsion <= de('normal').v.torsion, `${fmt(de('tep').v.torsion)}° frente a ${fmt(de('normal').v.torsion)}°`);
+});
+
+// Destorsión (B3): Mor-Avi PDF 12 (p. 288): el 50-70 % se deshace en la relajación isovolumétrica, antes de abrir la mitral
+test('normal: entre el pico y la apertura de la mitral se deshace el 50-70 % del giro (Mor-Avi p. 288)', () => {
+  const m = correr('normal'), o = m.onda, ex = extraDeMotor(m), u = m.ultimo;
+  const tors = (s) => { const c = construirCorazon(estadoGeo(s, ex), { detalle: false });
+    const ang = (z) => { const p = c.flujo.transformar([40, 0, z]); return Math.atan2(p[1], p[0]) * 180 / Math.PI; };
+    return ang(-0.95 * c.vi.Le) - ang(-1); };
+  const pico = Math.max(...o.filter(s => s.t > u.tS1 && s.t < u.tS2 + 0.05).map(tors));
+  const mit = tors(o.find(s => s.t >= u.tMitAbre));
+  const frac = (pico - mit) / pico;
+  assert.ok(frac >= 0.5 && frac <= 0.7, `se deshace el ${(frac * 100).toFixed(0)} % (pico ${fmt(pico)}°, a la mitral ${fmt(mit)}°)`);
+});
+test('el giro neto máximo del normal es el de Mor-Avi (7,7 ± 3,5°) y el ápex gira en sentido contrario a la base', () => {
+  const t = de('normal').v.torsion; assert.ok(t > 4.2 && t < 11.2, `${fmt(t)}°`);
 });
 
 // ---- Aurículas dibujadas (B2) ------------------------------------------------------------------------------------------

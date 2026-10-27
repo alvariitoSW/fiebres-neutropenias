@@ -34,7 +34,7 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // mioVi: masa del VI de la forma de enfermedad elegida (escenarios.mjs; 1 = normal). mioVd: grosor de la pared libre del VD
 // (hipertrofia del VD, Atlas · 14; 1 = normal).
 // El derrame es el que ya hay en el saco (motor.s.liquidoPeri: entra a su ritmo), no el pedido (motor.p.liquidoPeri)
-export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
+export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
 
 // Cuánto se aplana el tabique (0-1) según el gradiente de presión transeptal VI−VD de este instante. Fuente de lo
 // que se ve (que el tabique se aplana cuando el VD se sobrecarga): Merino, Fig. 18.2 (septo aplanado en diástole) y
@@ -48,13 +48,13 @@ export function aplanamientoSeptal(s) {
 }
 
 export function estadoGeo(s, extra = {}) {
-  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), ...extra };
+  const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, ...extra };
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }
 
 // Tolerancia de la mezcla frente al estado mostrado
-export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15 };
+export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1 };
 const VOLS = ['vvi', 'vvd', 'vai', 'vad'];
 
 // Valor de una muestra del latido en el instante t, interpolando entre las dos muestras vecinas (cada 2 ms)
@@ -70,8 +70,8 @@ export function valorEn(onda, t, k) {
 // menos de la mitad de la tolerancia. Así hay pocas formas en la diástole lenta y muchas donde todo cambia deprisa
 // (contracción auricular, apertura y cierre de las válvulas). Tope de separación: 60 ms.
 export function instantesClave(onda, { maxSeparacion = 0.06 } = {}) {
-  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo]; });
-  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2];
+  const vals = onda.map(m => { const e = estadoGeo(m); return [...VOLS.map(k => e[k]), ...VALVULAS.map(v => e[v.n]), e.septo, e.eVi]; });
+  const tol = [...VOLS.map(() => TOLERANCIA.volumen / 2), ...VALVULAS.map(() => TOLERANCIA.apertura / 2), TOLERANCIA.septo / 2, TOLERANCIA.activacion / 2];
   const cabe = (i, j) => {
     if (onda[j].t - onda[i].t > maxSeparacion) return false;
     for (let k = i + 1; k < j; k++) { const w = (onda[k].t - onda[i].t) / (onda[j].t - onda[i].t);
@@ -157,6 +157,8 @@ export function crearTablaFormas({ construir = construirCorazon, porFotograma = 
       for (const k of VOLS) if (Math.abs(mix(A.est[k], B.est[k], w) - objetivo[k]) > TOLERANCIA.volumen) return null;
       for (const v of VALVULAS) if (Math.abs(mix(A.est[v.n], B.est[v.n], w) - objetivo[v.n]) > TOLERANCIA.apertura) return null;
       if (Math.abs(mix(A.est.septo, B.est.septo, w) - objetivo.septo) > TOLERANCIA.septo) return null;
+      if (Math.abs(mix(A.est.eVi, B.est.eVi, w) - objetivo.eVi) > TOLERANCIA.activacion) return null;   // fija la torsión
+      if (Math.abs((extra?.feLatido ?? 0) - (A.est.feLatido ?? 0)) > 0.03) return null;               // contractilidad del latido (torsión)
       if ((extra?.liquidoPeri || 0) !== (A.est.liquidoPeri || 0)) return null;
       if ((extra?.mioVi ?? 1) !== (A.est.mioVi ?? 1)) return null;          // otra forma de enfermedad
       if (Math.abs((extra?.vviTd ?? 0) - (A.est.vviTd ?? 0)) > TOLERANCIA.volumen) return null;   // fija el descenso de la base

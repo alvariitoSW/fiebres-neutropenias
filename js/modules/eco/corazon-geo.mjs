@@ -633,7 +633,18 @@ export function construirCorazon(estado, opciones = {}) {
   // (el estiramiento auricular es el que las llena en la sístole ventricular); los vasos de arriba no se mueven.
   // El descenso se mide desde el telediástole del propio corazón (estado.vviTd, el del último latido): un
   // corazón pequeño no queda con la base hundida, sino entero más corto. Acotado por si acaso.
-  const contr = clamp((REF.vVi - estado.vvi) / 75, 0, 1.15), tau = 0.12 * contr;   // ~7° al final de la sístole
+  // TORSIÓN (B3). Sale de la contracción del motor, no del volumen: la activación del VI (estado.eVi, la misma que mueve
+  // la elastancia) por la contractilidad del latido (FE del último latido, estado.feLatido). Así un VI vacío por
+  // precarga (TEP, hemorragia) con FE normal no gira más, y el fallo y la dilatada (FE baja) giran menos.
+  // · Giro neto máximo ápex − base = 7,7° (Mor-Avi 2011, PDF 14, p. 290; voluntarios sanos), con FE normal del modelo (0,62).
+  // · Destorsión: tau sigue a eVi^0,35. Esa forma (ilustrativa) deja que se deshaga el 59 % del giro entre el pico y la
+  //   apertura de la mitral, dentro del 50-70 % en la relajación isovolumétrica de Mor-Avi (PDF 12, p. 288); el resto, en el llenado precoz.
+  // · La FE a la que el giro se anula (0,24) es ilustrativa: Mor-Avi (p. 15) dice que cae con la FE, sin cifra.
+  // · Rotación basal y apical por separado: hueco (la fuente solo da el giro neto). Sentido: ápex antihorario y base
+  //   horaria vistos desde el ápex (aquí ápex +, base −). El perfil de mover() da neto = 1,33 × tau.
+  const FE_NORMAL = 0.62, FE_CERO = 0.24, TORSION_NETA = 7.7 * Math.PI / 180, PERFIL_NETO = 1.33;
+  const contrFe = clamp(((estado.feLatido ?? FE_NORMAL) - FE_CERO) / (FE_NORMAL - FE_CERO), 0, 1.15);
+  const tau = TORSION_NETA / PERFIL_NETO * contrFe * Math.pow(clamp(estado.eVi ?? 0, 0, 1), 0.35);
   // La pared libre del VD (y el anillo tricuspídeo lateral, donde se mide el TAPSE) baja más que el plano AV
   // común: el VD se vacía sobre todo acortándose. Su excursión sale de lo que se ha vaciado el VD desde su
   // telediástole (estado.vvdTd), así que cae si cae el volumen sistólico del VD. TAPSE_POR_ML está calibrado

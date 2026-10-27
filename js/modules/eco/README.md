@@ -273,6 +273,18 @@ a 4 mm del saco), `soloEco` (no se dibujan en el 3D). Tejido nuevo `pleura` (20 
 múltiplos de su profundidad en lugar de tejido (como la «ventana pobre»). Delante no hay pulmón: ahí están las ventanas.
 Prueba en `pruebas/geometria.test.mjs` (aorta detrás de la AI, sin cruzar nada en 9 escenarios con derrame de 500 mL,
 columna detrás de la aorta, pulmón solo detrás y en los bordes del A4C). La sangre del flujo 3D sigue acabando en el
+**Torsión con fuente (B3, eco-mega parada 2, octubre 2026).** `tau` en `corazon-geo.mjs` ya no va con el volumen
+(`0,12 × (120 − VTS)/75`, que subía a ~10° en el TEP y la hemorragia): sale de la **contracción del motor**. Es la
+activación del VI (`estado.eVi`, la misma que mueve la elastancia; `estadoGeo` la pasa y las formas precalculadas la
+vigilan) por la contractilidad del latido (`estado.feLatido`, la FE del último latido, desde `extraDeMotor`). Cifras:
+giro neto máximo ápex − base **7,7° (Mor-Avi 2011, PDF 14, p. 290)**; destorsión `eVi^0,35`, que deshace el 59 % del giro entre
+el pico y la apertura de la mitral (Mor-Avi PDF 12, p. 288: 50-70 % en la relajación isovolumétrica; la forma de la
+curva y la FE a la que el giro se anula, 0,24, son **ilustrativas**: la fuente dice que cae con la FE, sin cifra). Sentido:
+ápex antihorario y base horaria vistos desde el ápex. Torsión en telesístole (antes → después): normal 9,0 → 7,1°, hemorragia
+9,7 → 6,8, TEP 10,4 → 4,7, fallo 2,9 → 1,7, dilatada 0 → 0,2, derrame 10,2 → 6,5, hipertrofia 9,9 → 5,9. Hueco: rotación basal y apical
+por separado (Mor-Avi solo da la neta); el retraso base-ápex no se modela. Pruebas: el `todo` de B3 pasó a prueba (la torsión no
+sube con el VI vacío), destorsión 50-70 % y rango normal, en `paciente-posible.test.mjs`.
+
 arranque de la descendente (`vias.ao` termina en el arco).
 
 ## En la app
