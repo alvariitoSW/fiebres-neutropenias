@@ -34,3 +34,14 @@ Base: `node autonomo/pruebas/shock-vivo.mjs` (todo en verde a 390 y 360 px: tope
 - No leí E1-E5 ni G2-G6 con los ojos (solo G1, C4, C5 y el final); la dificultad de los exámenes va por la prueba y el banco.
 - La temporización nueva: miré «Correcta» e «Inflado precoz» (texto y trazado); los otros tres errores, no. Las cifras «15-20 mmHg» y «5 mmHg» son de Gillespie p. 8 según el dato; no lo coteje con el PDF.
 - Las notas de la consola «el modelo no alcanza los 15-20 mmHg de bajada» están bien dichas; el auditor debería confirmar que Gillespie p. 8 dice eso tal cual.
+
+## Rejuicio (R8) · versión 20261027-62 · 27/10/2026
+Prueba `shock-vivo.mjs` en verde (ahora 18 preguntas: B1-B7 dentro, en orden 3-4 y 12-16); sonda `herramientas/shock-caso-sonda.mjs` + 4 capturas (B1, B7, paso 7, final).
+| Criterio | Antes | Ahora | Por qué |
+|---|---|---|---|
+| §7.5 Interactivo | 8,5 | **9** | ✅ Título del balón sigue a la razón («Balón 1:3: un latido de cada 3», `shock-vivo-data.js` l. 289); la temporización mueve la curva de verdad. |
+| §8 Dificultad | 8,5 | **9** | ✅ C4: los tres distractores son cuentas equivocadas reales (sin restar la PVC, por el gasto en vez del índice, multiplicar). ✅ B3-B6: cada distractor es otro error de temporización con lo que le pasaría a Aurelio; B7 con 1 error real. |
+| §8 Caso | 8,5 | **8,75** | ✅ Final con «AURELIO · AHORA» hora 0 sin sellos. ✅ Sello del paso 7 ya dice «El ECMO sube la poscarga del VI». ❌ Pero **se montan**: «Edema de pulmón» (top 546, alto 109) tapa al del ECMO (top 558, alto 98): solo se lee su chip. Causa: `js/core/tope.js` l. 22, `.tope-sello { position:absolute; bottom:24px }`: todos los sellos caen en el mismo sitio. Arreglo: en `crearTope()` de `js/core/tope.js` (l. 39, la pieza que pinta los sellos que le pasa `pagina.js` desde `calcularTopes`) {), cuando haya 2, apilarlos (el segundo con `bottom` = alto del primero + 8 px, o un contenedor en columna) y, si no caben (`max-height 62 %`), dejar el segundo solo como chip. |
+| B1-B7 (nuevas) | — | **8,75** | Predice → destapa → «Compruébalo» en la consola; citas Gillespie p. 6/8 y «el modelo no alcanza los 15-20 mmHg» dicho. Flojo: el «antes → después» de B1 compara el mismo estado (88 → 89, 53 → 53): o se quita o compara «sin balón → con balón». B7 (`shock-vivo-mayeutica.js` l. 78) repite «Toca las frases que creas falsas», que el motor ya pone debajo (mismo arreglo que C5). |
+
+**Nota mínima: 8,75** (meta alcanzada en lo rejuzgado). Queda: los dos sellos montados en el paso 7 (vuelta corta, afecta a cualquier modelo con dos sellos a la vez) y los dos retoques de B1 y B7; al parte si no caben.
