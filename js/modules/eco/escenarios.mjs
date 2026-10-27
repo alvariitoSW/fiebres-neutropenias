@@ -40,7 +40,7 @@ export const ESCENARIOS = {
   hemorragia: {
     nombre: 'Hemorragia', tipo: 'hipovolemico',
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
-    gravedad: { defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
+    gravedad: { fin: 'el shock hemorrágico a fondo', defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
     aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; },
   },
@@ -48,14 +48,17 @@ export const ESCENARIOS = {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
     // contractilidad del VI (Ees) de la normal a EES_VI_MIN, en escala logarítmica (cada paso la multiplica por lo mismo).
     // El defecto, Ees 0,9
-    gravedad: { defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
+    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
     aplicar: (m, g = Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN)) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g; },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
+    // Qué se ve: Klein 2013 (p. 981 impresa = PDF 17) mide el derrame por el espacio libre de eco en telediástole: pequeño <10 mm,
+    // moderado 10-20, grande >20. Aquí los mm son el crecimiento del saco en el corazón normal (taponamiento.test.mjs); el modelo
+    // taponado da una mediana de ~15-16 mm (moderado) y >20 mm por detrás.
     // líquido en el saco, de 0 a DERRAME_ML_MAX (entra a su ritmo: motor.mjs, ritmoDerrame). El defecto, 260 mL
-    gravedad: { defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
+    gravedad: { fin: 'el taponamiento a fondo', defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
     aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); },
   },
   vasoplejia: {
@@ -101,7 +104,7 @@ export const ESCENARIOS = {
     // tabique hacia el VI (Fisiopatología UCI · Cardiología, Fichas 8 y 9; Merino, IC derecha)
     // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
     // (~0,93) es el de siempre: ×8 y ×0,65
-    gravedad: { defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
+    gravedad: { fin: 'el TEP de alto riesgo a fondo', defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
     aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
   },
   hpcronica: {
@@ -111,7 +114,7 @@ export const ESCENARIOS = {
     nombre: 'Hipertensión pulmonar crónica (VD)', forma: true,
     // gravedad: el punto de la enfermedad (0 = normal; el defecto, un VD hipertrófico y algo dilatado: pared gruesa, tabique
     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
-    gravedad: { defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
+    gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
       m.p.rPul *= r.k; m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
       m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; },

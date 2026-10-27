@@ -4,7 +4,10 @@
 // pared libre de la AD es de los signos más precoces y precede al colapso diastólico del VD; El Libro Azul, parte 2,
 // p. 65 del PDF) y Marino, cap. 21 (p. 64 del PDF: «diastolic collapse of the right ventricle»). El umbral de 1 mmHg, la
 // «≥1/3 del ciclo» y el reparto del líquido son ilustrativos (plan de ideas, P1); la guía de pericardio de la ASE
-// (Klein 2013) no está en docs/: hueco.
+// (Klein 2013, docs/klein-2013-pericardio-multimodal-ase.pdf) mide el derrame por el espacio libre de eco en telediástole:
+// p. 981 impresa = PDF 17: pequeño <10 mm, moderado 10-20, grande >20. Los mm de ESTA prueba NO son ese espacio libre: son el
+// crecimiento del saco en el corazón normal (radio con derrame menos sin él). Lo que ve el residente en el modelo taponado es
+// una mediana de ~15-16 mm (moderado) y >20 mm por detrás (según el profesor).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
@@ -123,7 +126,7 @@ function radioEn(pz, z0, f0) {
     const tt = (A[0] * ey - A[1] * ex) / den, ss = (A[0] * dy - A[1] * dx) / den; if (tt > 0 && ss >= 0 && ss <= 1) best = Math.max(best, tt); }
   return best;
 }
-// grosor del líquido en una dirección: radio del saco con derrame menos sin derrame, a una altura dada
+// grosor del líquido en una dirección (crecimiento del saco en el corazón normal, no el espacio libre de eco de Klein 2013): radio del saco con derrame menos sin derrame, a una altura dada
 function grosor(liq, z0, f0) {
   const p = paciente('normal'), s = p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a));
   const radio = (L) => radioEn(construirCorazon({ ...estadoGeo(s, p.ex), liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), z0, f0);

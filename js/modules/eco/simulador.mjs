@@ -533,7 +533,7 @@ export function montarSimulador(raiz, opc = {}) {
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
     tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
     // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
-    vci: { vista: 'scVci', vaso: 'vci' }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
+    vci: { vista: 'scVci', vaso: 'vci' }, vpulm: { vista: 'a4c', venaPulm: true }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
   // un punto de un vaso del abdomen dentro del corte: en la suprahepática, el más alejado de la VCI de los que
   // quedan a menos de 2,5 mm del plano (lejos de la confluencia, donde la muestra cogería la VCI)
@@ -564,6 +564,13 @@ export function montarSimulador(raiz, opc = {}) {
     if (!prepararPlanoEco()) return;
     let p;
     if (pr.vaso) p = puntoVaso(pr.vaso);
+    else if (pr.venaPulm) {   // el punto de las venas pulmonares que más cerca cae del plano, hacia la AI (donde se pone la muestra)
+      const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()); let mejor = null;
+      for (const vp of F.vasos.filter(x => x.tipo === 'pulmonar')) for (let i = 0; i < vp.pts.length - 1; i++) for (let f = 0; f < 1; f += 0.1) {
+        const q = [0, 1, 2].map(k => vp.pts[i][k] + f * (vp.pts[i + 1][k] - vp.pts[i][k])), dd = Math.abs(enPlano(planoEco, q)[2]) + 0.5 * (1 - (i + f) / (vp.pts.length - 1));
+        if (!mejor || dd < mejor.dd) mejor = { q, dd }; }
+      if (!mejor) return; p = mejor.q;
+    }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
     if (k === 'regmitral') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
@@ -925,9 +932,9 @@ export function montarSimulador(raiz, opc = {}) {
   const chipEsc = ([k, e]) => `<button type="button" class="cv-mini${k === 'normal' ? ' on' : ''}" data-c="${k}">${e.nombre}</button>`;
   $('#cv-escenarios').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => !e.forma).map(chipEsc).join('');
   $('#cv-enfermedad').innerHTML = Object.entries(ESCENARIOS).filter(([, e]) => e.forma).map(chipEsc).join('');
-  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = shock a fondo. Se aplica al soltar
+  // Mando de gravedad (escenarios.mjs, ESCENARIOS[k].gravedad): 0 % = corazón normal, 100 % = el fin de cada escenario (gravedad.fin). Se aplica al soltar
   let gravedad = null;
-  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, el shock a fondo.`;
+  const textoGravedad = (k, g) => `${ESCENARIOS[k].gravedad.texto(g)}. Ilustrativo: 0 % es el corazón normal y 100 %, ${ESCENARIOS[k].gravedad.fin}.`;
   function elegirEscenario(k, g) {
     if (!ESCENARIOS[k]) return;
     const mando = ESCENARIOS[k].gravedad;
