@@ -234,6 +234,14 @@ esta sección.
   0,9 · 8 llevarla a la app 2,0 · 9 Mayéutica y 2 casos 1,2 · 10 auditor y juicio 1,55 · 11 director 3 paradas 2,4.
   Camino 2 ≈ 2,9 M · Camino 1 ≈ 8,4 M · mínimo útil (1-7) ≈ 6,2 M · todo ≈ 12,6 M. Depende de que la PR #36 entre en
   `main`. Las piezas que elijas pasan al tablero.
+  **Versión 2 (27/10, tras tu aviso):** añadido el **Camino 3 · Laboratorio de arritmias** (puerta «Arritmias» de
+  RitmoLab: paciente + monitor + corazón eléctrico; ¿pulso?/¿estable?, vagal, adenosina, diltiazem/β, amiodarona,
+  magnesio, SYNC, desfibrilar, atropina, transcutáneo, RCP con consecuencia en el grafo; modos Estudio y Guardia;
+  6 casos). Converge `b3-bradi`, `b3-ritmo-motor` y `g2-paro`. Piezas: L0 lector AHA/ESC 0,55 · L1 maqueta (opus)
+  1,2 · L2 bradis y captura 1,1 · L3 juicio 1,25 · L4 a la app 2,0 · L5 modos 0,9 · L6 casos 1,2 · L7 juicio 1,55 ·
+  L8 director 2,4 = **12,2 M**. Plan entero ≈ 24 M; mínimo útil ≈ 9,6 M. Decisiones nuevas: (5) una sola pieza viva
+  con tres caras (recomendado) o tres; (6) leer la AHA antes de la maqueta (recomendado). Orden: comunes → Camino 2 →
+  maqueta del laboratorio → laboratorio en la app → maqueta del Camino 1 → casos → Camino 1 en la app.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 

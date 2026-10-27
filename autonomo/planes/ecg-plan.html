@@ -57,12 +57,13 @@ details summary{cursor:pointer;font-weight:700}
   </header>
 
   <section class="res" aria-label="Coste">
-    <div><p class="sub">Camino 2 · guardia</p><p class="v">≈2,9 M</p></div>
+    <div><p class="sub">Camino 2 · leer en la guardia</p><p class="v">≈2,9 M</p></div>
+    <div><p class="sub">Camino 3 · laboratorio</p><p class="v">≈12,2 M</p></div>
     <div><p class="sub">Camino 1 · desde cero</p><p class="v">≈8,4 M</p></div>
-    <div><p class="sub">Mínimo útil</p><p class="v">≈6,2 M</p></div>
-    <div><p class="sub">Todo</p><p class="v">≈12,6 M</p></div>
+    <div><p class="sub">Mínimo útil (3 maquetas para elegir)</p><p class="v">≈9,6 M</p></div>
   </section>
-  <p class="sub">M = millones de tokens, la medida de gasto de la app. Tu tope diario es ~15 M. Este plan costó ~0,1 M (8 pasos del profesor).</p>
+  <p class="sub">M = millones de tokens, la medida de gasto de la app. Tu tope diario es ~15 M. Todo el plan: ≈24 M, repartido en varios días. Este plan costó ~0,3 M.</p>
+  <p class="sub"><b>Versión 2:</b> añadido el Camino 3, el laboratorio de arritmias que salió de la ingeniería inversa de RitmoLab. Faltaba en la versión 1.</p>
 
   <section class="card">
     <span class="tag">Lo que ya hay y se aprovecha</span>
@@ -75,7 +76,34 @@ details summary{cursor:pointer;font-weight:700}
   </section>
 
   <section class="card">
-    <span class="tag">Camino 1</span>
+    <span class="tag">Camino 3 · el modelo vivo para trabajar</span>
+    <h2>Laboratorio de arritmias</h2>
+    <p>Es la puerta «Arritmias» que ya decidiste: propia en el menú principal y enlazada desde Cardiología del PIF. <b>Tratas al paciente y ves qué pasa.</b> No es un simulador nuevo: funciona sobre el mismo corazón eléctrico de Marino, que ya tiene 17 ritmos (TSV, FA, flúter, WPW, TV, torsade, FV, AESP, asistolia…).</p>
+    <h3>Lo que verás, de arriba abajo</h3>
+    <ul>
+      <li><b>El paciente</b>, en dos líneas, y las dos preguntas de las 3 de la mañana: <b>¿Pulso?</b> y <b>¿Estable?</b></li>
+      <li><b>El monitor</b>: ECG que corre, curva de pulso, PA latido a latido, SpO₂ y FC. En la FA la PA baila; en la TV cae; en la FV la curva de pulso queda plana. Con SYNC encendido, una marca sobre cada R.</li>
+      <li><b>El corazón eléctrico</b> debajo: un toque y ves por qué pasa lo que pasa.</li>
+      <li><b>Las acciones</b>, abajo, en el orden de la AHA: vagal, adenosina, diltiazem o β, amiodarona, magnesio, SYNC + energía, desfibrilar, atropina, marcapasos transcutáneo y RCP.</li>
+    </ul>
+    <h3>Cada acción tiene su consecuencia en el corazón</h3>
+    <div class="tabla"><table>
+      <thead><tr><th>Haces</th><th>Ves</th></tr></thead>
+      <tbody>
+        <tr><td>Adenosina</td><td>Corta la TSV por reentrada nodal. En el flúter frena el ritmo y descubre las ondas F. En la TV no hace nada.</td></tr>
+        <tr><td>Diltiazem en WPW con FA</td><td>Pasa a FV: el error tiene consecuencia.</td></tr>
+        <tr><td>Amiodarona en torsade</td><td>Empeora. Con magnesio, cesa.</td></tr>
+        <tr><td>Descarga sin SYNC sobre la T</td><td>Pasa a FV. Con SYNC, sale a sinusal.</td></tr>
+        <tr><td>Marcapasos transcutáneo</td><td>Espiga y QRS ancho (captura eléctrica), pero el pulso puede no aparecer: hay que comprobar la captura mecánica.</td></tr>
+      </tbody>
+    </table></div>
+    <p><b>Dos modos.</b> <b>Estudio</b>: los pasos de la AHA arriba, con el siguiente iluminado y «Ver en la ficha». <b>Guardia</b>: sin ruta, el reloj corre y el paciente evoluciona solo. Al final, una revisión de lo que faltó (¿comprobaste el pulso? ¿SYNC antes de cardiovertir?), con su página. Sin nota y sin guardar nada.</p>
+    <p><b>Seis casos</b> (fase 2): TSV en una joven, FA rápida con PA 86/50, WPW con FA, TV que pierde el pulso, Mobitz II a 38 lpm y torsade por QT largo.</p>
+    <p class="sub"><b>Las cifras</b> (julios, mA del marcapasos, atropina, signos de inestabilidad) salen solo de la AHA 2025 y de las guías ESC de taquicardias supraventriculares (2019) y de estimulación cardíaca (2021), ya en `docs/`, con su página. Antes de la maqueta, un lector las saca a una tabla. Donde la AHA y Marino/Merino no coincidan, se muestran las dos. Hoy faltan en el corazón eléctrico las bradicardias, los bloqueos, la atropina y el marcapasos: se añaden aquí (es la tarea `b3-bradi`).</p>
+  </section>
+
+  <section class="card">
+    <span class="tag">Camino 1 · fase 3 del laboratorio</span>
     <h2>Aprender a leer el ECG desde cero</h2>
     <p><b>Lo que verás:</b> el corazón del modelo en el centro de un anillo con las 6 derivaciones de los miembros (I, II, III, aVR, aVL, aVF). Del frente eléctrico sale una <b>flecha</b>. Su sombra sobre cada derivación es lo que dibuja su tira. Se ve sin fórmulas: si el frente se acerca, la onda sube; si va de lado, la tira queda plana.</p>
     <p>Debajo, la tira grande de la derivación que toques y una frase que explica el momento («el tabique se activa de izquierda a derecha: por eso I y aVL empiezan con una q pequeña»). Los mandos son los mismos estados del corazón. El eje no se dibuja a mano: sale solo del corazón.</p>
@@ -112,16 +140,26 @@ details summary{cursor:pointer;font-weight:700}
         <tr><td>3</td><td><b>Camino 2:</b> asistente de 9 pasos y criterios con página</td><td class="m">0,9</td></tr>
         <tr><td>4</td><td>Auditor: cada criterio contra el PDF</td><td class="m">0,55</td></tr>
         <tr><td>5</td><td>Juicio del profesor, arreglos y rejuicio</td><td class="m">0,66</td></tr>
+        <tr><td>L0</td><td><b>Camino 3:</b> lector de la AHA y las ESC: tabla de julios, mA, atropina y signos de inestabilidad, con página</td><td class="m">0,55</td></tr>
+        <tr><td>L1</td><td>Maqueta del laboratorio: paciente, monitor, ¿pulso?/¿estable?, SYNC y marcapasos</td><td class="m">1,2</td></tr>
+        <tr><td>L2</td><td>Bradicardias, bloqueos, atropina y captura en el corazón</td><td class="m">1,1</td></tr>
+        <tr><td>L3</td><td>Juicio de la maqueta, arreglos y rejuicio · <b>parada: la ves</b></td><td class="m">1,25</td></tr>
+        <tr><td>L4</td><td>Llevarla a la app (en dos encargos)</td><td class="m">2,0</td></tr>
+        <tr><td>L5</td><td>Modos Estudio y Guardia, con la revisión final</td><td class="m">0,9</td></tr>
+        <tr><td>L6</td><td>Los 6 casos</td><td class="m">1,2</td></tr>
+        <tr><td>L7</td><td>Auditor, juicio, arreglos y rejuicio</td><td class="m">1,55</td></tr>
+        <tr><td>L8</td><td>Director: 3 paradas</td><td class="m">2,4</td></tr>
         <tr><td>6</td><td><b>Camino 1, maqueta:</b> anillo, 6 derivaciones y flecha, con prueba del eje</td><td class="m">1,1</td></tr>
         <tr><td>7</td><td>Juicio de la maqueta, arreglos y rejuicio</td><td class="m">0,9</td></tr>
         <tr><td>8</td><td>Llevarla a la app (en dos encargos)</td><td class="m">2,0</td></tr>
         <tr><td>9</td><td>Preguntas, examen y los 2 casos</td><td class="m">1,2</td></tr>
         <tr><td>10</td><td>Auditor, juicio, arreglos y rejuicio</td><td class="m">1,55</td></tr>
-        <tr><td>11</td><td>Director: 3 paradas para que lo veas</td><td class="m">2,4</td></tr>
-        <tr class="tot"><td></td><td>Total</td><td class="m">≈12,6</td></tr>
+        <tr><td>11</td><td>Director: 3 paradas</td><td class="m">2,4</td></tr>
+        <tr class="tot"><td></td><td>Total</td><td class="m">≈24</td></tr>
       </tbody>
     </table></div>
-    <p class="sub"><b>Mínimo útil (≈6,2 M):</b> piezas 1 a 7. El asistente de guardia queda listo y ves la maqueta del vector antes de gastar en llevarla a la app. Cabe en un día con tope de ~15 M, pero no hoy.</p>
+    <p><b>Orden recomendado:</b> piezas 1-2 → Camino 2 (3-5, listo para el 01/11) → <b>maqueta del laboratorio</b> (L0-L3) → laboratorio en la app (L4-L5) → maqueta del Camino 1 (6-7) → casos del laboratorio (L6) → Camino 1 en la app (8-10).</p>
+    <p class="sub"><b>Mínimo útil (≈9,6 M):</b> piezas 1-5, el Camino 2 terminado y las maquetas del laboratorio y del Camino 1, para que elijas viéndolas. Va en dos o tres días con tope de ~15 M; hoy no.</p>
   </section>
 
   <section style="display:flex;flex-direction:column;gap:12px">
@@ -133,7 +171,11 @@ details summary{cursor:pointer;font-weight:700}
     <div class="dec"><h3>3 · ¿Cómo cierra el asistente de guardia?</h3>
       <p><b class="rec">Recomendado: lista de criterios cumplidos, cada uno con su página.</b> La otra opción añade el nombre del cuadro («compatible con…»), solo si es un título del libro con página y salen todos los que encajen.</p></div>
     <div class="dec"><h3>4 · ¿Qué va primero?</h3>
-      <p><b class="rec">Recomendado: el Camino 2.</b> Es barato y te sirve a las 3 de la mañana. Después, la maqueta del Camino 1. La otra opción es empezar por la maqueta.</p></div>
+      <p><b class="rec">Recomendado: el Camino 2</b>, que es barato y te sirve a las 3 de la mañana. Después, la maqueta del laboratorio, y la del Camino 1 detrás. Si solo hay presupuesto para una maqueta, la del laboratorio.</p></div>
+    <div class="dec"><h3>5 · ¿Una sola pieza o tres?</h3>
+      <p><b class="rec">Recomendado: una.</b> Un único corazón eléctrico con tres caras: el laboratorio, las derivaciones del Camino 1 y el enlace «Vive este caso» desde el cuaderno de ECG. Con tres piezas habría tres motores que acabarían diciendo cosas distintas.</p></div>
+    <div class="dec"><h3>6 · ¿Leer antes las cifras de la AHA?</h3>
+      <p><b class="rec">Recomendado: sí</b> (pieza L0, 0,55 M). Los julios, el marcapasos y los signos de inestabilidad aún no tienen fuente en la app. La otra opción es maquetar ya con las cifras de Marino/Merino y añadir la AHA después como nota.</p></div>
   </section>
 
   <section class="card">
@@ -156,5 +198,5 @@ details summary{cursor:pointer;font-weight:700}
     </ul>
   </details>
 
-  <p class="sub">Contesta en el chat con tus 4 elecciones (por ejemplo «1 ampliar, 2 sí, 3 criterios, 4 guardia primero»). Las piezas que elijas pasan a la bitácora (B-033) y se construyen otro día.</p>
+  <p class="sub">Contesta en el chat con tus 6 elecciones (por ejemplo «1 ampliar, 2 sí, 3 criterios, 4 guardia primero, 5 una, 6 sí»). Las piezas que elijas pasan a la bitácora (B-033) y se construyen otro día.</p>
 </div>
