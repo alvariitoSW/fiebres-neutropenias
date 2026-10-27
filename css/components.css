@@ -2661,17 +2661,22 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .abv-teorico { position: absolute; top: 0; left: 0; max-width: 118px; font: italic .74rem/1.25 var(--abv-serif); color: var(--abv-rojo); border: 1px dashed var(--abv-rojo); border-radius: 8px; padding: 3px 7px; background: var(--bg-main); z-index: 2; }
 .abv-inst-aviso { font: .76rem/1.35 var(--abv-sans); color: var(--abv-rojo); text-align: center; }
 :where(.abv-raiz) svg text { font-family: var(--abv-serif); }
-.abv-t-cap { font: 600 8.5px var(--abv-sans); letter-spacing: .16em; }
+.abv-t-cap { font: 600 9.6px var(--abv-sans); letter-spacing: .16em; }
 
 /* En Conceptos y Preguntas, el instrumento queda arriba fijo y compacto */
 .abv-estudio .abv-instrumento { position: sticky; top: 0; z-index: 8; background: var(--bg-main); margin: 0 -12px; padding: 4px 12px 6px; border-bottom: 1px solid var(--abv-line); box-shadow: 0 8px 14px -10px var(--bg-main); }
 .abv-estudio #abv-inst { height: 240px; width: auto; }
 /* En el estudio la esfera se ve al ~73 %: sus rótulos crecen para no bajar de 7,5 px a 390 */
-.abv-estudio #abv-inst .abv-t-h { font-size: 10.6px; }
-.abv-estudio #abv-inst .abv-t-ph { font-size: 10.8px; }
-.abv-estudio #abv-inst .abv-t-lado { font-size: 10.8px; }
-.abv-estudio #abv-inst .abv-t-sub { font-size: 10.6px; }
-.abv-estudio #abv-inst #abv-i-pal { font-size: 10.6px; letter-spacing: .4px; }
+#abv-inst .abv-t-h { font-size: 9.4px; }
+#abv-inst .abv-t-ph { font-size: 11.2px; }
+#abv-inst .abv-t-lado { font-size: 10.6px; }
+#abv-inst .abv-t-sub { font-size: 10px; }
+#abv-inst #abv-i-pal { font-size: 9.5px; }
+.abv-estudio #abv-inst .abv-t-h { font-size: 11.4px; }
+.abv-estudio #abv-inst .abv-t-ph { font-size: 11.4px; }
+.abv-estudio #abv-inst .abv-t-lado { font-size: 11.4px; }
+.abv-estudio #abv-inst .abv-t-sub { font-size: 11.4px; }
+.abv-estudio #abv-inst #abv-i-pal { font-size: 11.4px; letter-spacing: .4px; }
 .abv-estudio .abv-cociente { font-size: .84rem; }
 .abv-estudio .abv-teorico { font-size: .66rem; max-width: 96px; top: 4px; left: 12px; }
 
@@ -2718,6 +2723,9 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .abv-paso-tit b { font-weight: normal; font-size: 1.1rem; color: var(--abv-fg); }
 .abv-paso-tit span { font: .82rem var(--abv-sans); color: var(--abv-muted); }
 .abv-frase { position: relative; margin: 0; padding: 10px 12px 10px 14px; border-left: 2px solid var(--abv-oro); background: linear-gradient(90deg, color-mix(in srgb, var(--accent-blue) 9%, transparent), transparent 85%); font-size: 1.02rem; line-height: 1.5; color: var(--abv-fg); text-wrap: pretty; }
+#abv-m-explorar > .abv-frase { position: sticky; top: 52px; z-index: 7; background: var(--bg-main); padding: 5px 10px 5px 12px; font-size: .9rem; line-height: 1.38; box-shadow: 0 8px 12px -10px var(--bg-main); }
+/* Un mando que se trae a la vista no queda bajo la frase pegada ni bajo el dock */
+.abv-raiz:not(.abv-estudio) :is(button, input, select, summary, svg) { scroll-margin-top: calc(var(--abv-frase-h, 110px) + 60px); scroll-margin-bottom: calc(var(--abv-dock) + 14px); }
 .abv-datos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border-top: 1px solid var(--abv-line); border-bottom: 1px solid var(--abv-line); margin: 0; }
 .abv-datos div { padding: 5px 2px 4px; text-align: center; border-right: 1px dotted var(--abv-line); border-bottom: 1px dotted var(--abv-line); min-width: 0; }
 .abv-datos div:nth-child(4n) { border-right: 0; }
@@ -2961,7 +2969,7 @@ body.study-mode-on .abv-dock { padding-right: 82px; }
   box-shadow: 0 0 0 4px rgba(212, 175, 55, .18); pointer-events: none; z-index: 4; }
 .agv-raiz .agv-mareas { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
 .agv-raiz .agv-marea { background: var(--bg-card); border: 1px solid var(--agv-card2); border-radius: 10px; padding: 4px 7px; min-width: 0; }
-.agv-raiz .agv-marea .agv-nom { font: .8rem/1.2 var(--agv-serif); color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.agv-raiz .agv-marea .agv-nom { font: .8rem/1.2 var(--agv-serif); color: var(--text-main); overflow-wrap: anywhere; }
 .agv-raiz .agv-marea .agv-nom small { font: .6rem/1.2 var(--agv-sans); color: var(--text-muted); margin-left: 3px; }
 .agv-raiz .agv-marea .agv-tot { font: .92rem/1.2 var(--agv-serif); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .agv-raiz .agv-marea .agv-dl { font: 600 .72rem/1.2 var(--agv-sans); font-variant-numeric: tabular-nums; color: var(--text-muted); overflow-wrap: anywhere; }
