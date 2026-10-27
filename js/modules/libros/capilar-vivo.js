@@ -198,7 +198,7 @@ function engancharDock() {
     $('m-util').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.util = b.dataset.v; }); });
     $('m-toma').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.toma = b.dataset.v; }); });
     $('m-sensor').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) cambiar(e => { e.sensor = b.dataset.v; }); });
-    $('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-cpv-estado]'); if (b) ponerEnEstado(b.dataset.cpvEstado); });
+    $('chips-estado').addEventListener('click', ev => { const b = ev.target.closest('[data-cpv-estado]'); if (b) { ponerEnEstado(b.dataset.cpvEstado); requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' })); } });
     enRaiz('[data-cpv-lupa]').forEach(b => b.addEventListener('click', () => {
         if (Lupa.abierta === b.dataset.cpvLupa) { Lupa.cerrar(); return; }
         // la lupa del tubo sin un tubo puesto enseña el de la Fig. 12.1, de pie
