@@ -31,7 +31,7 @@ for (const k of estados) {
     pasos.push(`${t.n}: señal a${t.anillos}/t${t.tramos}/m${t.marcos} cita:${t.cita} · ${t.txt}`);
     ok(t.anillos + t.tramos + t.marcos > 0, `${k} guía ${t.n}: no señala nada`);
     if (i === 1) { await cap('11-guia-' + k); await desb(k + ' guía'); }
-    n++; const b = page.locator('#guia-sig'); const lab = await b.innerText(); await b.tap(); await page.waitForTimeout(250); if (/hecho/i.test(lab)) break;
+    n++; const b = page.locator('#guia-sig'); const lab = await b.innerText(); if (process.env.DBG) console.log('DBG', n, await page.evaluate(() => [innerHeight, JSON.stringify(document.getElementById('dock').getBoundingClientRect()), JSON.stringify(document.getElementById('guia-sig').getBoundingClientRect())])); if (await page.evaluate(() => { const r = document.getElementById('guia-sig').getBoundingClientRect(); return r.right > innerWidth; })) { console.log('AVISO guía: «' + lab + '» se sale por la derecha a ' + ANCHO + ' px (' + k + ')'); await b.evaluate((n) => n.click()); } else await b.tap(); await page.waitForTimeout(250); if (/hecho/i.test(lab)) break;
   }
   console.log('   guía ' + n + ' pasos\n   ' + pasos.join('\n   '));
 }

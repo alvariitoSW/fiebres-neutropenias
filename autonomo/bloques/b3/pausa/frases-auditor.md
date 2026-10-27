@@ -64,3 +64,11 @@ Ritmo, vuelta 2 (frases cambiadas)
 - Amiodarona TV: «Dos bolos de 150 mg en 10 min: sigue 1 mg/min 6 h y 0,5 mg/min 18 h, sin pasar de 2,2 g al día. La ficha admite dosis extra de 150 mg cada 10 min si hace falta: el límite de dos bolos es de esta pantalla.» (Fig. 19.8, p. 33; tope ilustrativo)
 - Verapamilo: «20 mg es el máximo de la ficha…» (p. 28; bradicardia e hipotensión: fisiología general)
 - Pausa tras el choque: «Pausa tras el choque: el sinusal tarda un latido en arrancar.» (fisiología general)
+
+Shock, vuelta 2 (frases cambiadas, 27/10)
+- Umbral del edema en PCP 18 (extremo bajo del 18-20, p. 42); K_EDEMA 4 ilustrativo; SpO₂ baja 1 mmHg de PaO₂ por 10 mL de edema (ilustrativo)
+- Sello por PCP: «PCP X: pasa el techo de 18-20 de la ficha; más volumen ya no sube el gasto y encharca el pulmón. Edema en el pulmón: N mL (SpO₂ Y %).» (p. 42 y p. 11)
+- Sello por PVC: «PVC X (entró con Y): por encima de 12 es raro que más volumen suba el gasto; las venas no lo admiten.» (fisiología general)
+- Aviso por PVC: «PVC X: por encima de 12 es raro que más volumen suba el gasto.»
+- Sello «Edema de pulmón» (≥1.000 mL): «N mL de líquido en el pulmón y SpO₂ Y % [(el oxigenador del ECMO tapa la caída)]: así no se sostiene; necesitaría intubación y ventilación con PEEP, y diurético o ultrafiltración.» (fisiología general; cifras ilustrativas)
+- Guía: «Mira el pulmón: con la PCP por encima de 18 se encharca (gotas) y la SpO₂ baja.»
