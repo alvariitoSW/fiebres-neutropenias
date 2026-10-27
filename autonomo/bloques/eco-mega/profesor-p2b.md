@@ -28,3 +28,21 @@ App real (1dd909a, v. 20261027-36) frente a fec885d, cada una servida aparte, a 
 - La torsión y el colapso en movimiento: solo vi fotogramas fijos. Hipertrofia, dilatada, fallo, vasoplejía, A2C, A3C, SC VCI y supraesternal: sin recorrer.
 - Sin mando de gravedad, el VD que colapsa y el beso completo los he juzgado por las cifras de P1 y P2, no en la app.
 - La tarjeta de eco real solo existe en 4 vistas. La de la PLAX es de baja resolución.
+
+## Vuelta 2 (2150568, versión 20261027-37) · app real a 390 px (los v2i a 360), navegador nuevo, 0 errores de consola, sin desborde
+Capturas `prof-p2c-*`: `mosaico-normal`, `zoom-normal` (A4C, SC4C y PSAX, comparado con p2b), `mosaico-derrame100`, `zoom-derrame100`, `mosaico-hem-tep`, `zoom-beso-tepF`.
+
+| Punto | V1 | V2 | Por qué |
+|---|---|---|---|
+| 1. Anatomía | 7,4 | **8,3** ✅ | El A4C ya parece un corazón: un solo tabique interauricular, la cruz y la AD limpia. El SC 4C enseña las 4 cámaras con el VD bajo el hígado. En el PSAX quedan pocos bultos. Pegas: con el derrame a fondo, el saco es una caja de esquinas rectas (SC 4C) o una V (A4C), no sigue al corazón, y el VI del TEP sale facetado, como un polígono |
+| 2. Fisiología | 8,4 | **8,4** ✅ | Sin cambios. La tricúspide en F no la he vuelto a mirar |
+| 3. Patología | 7,6 | **8,3** ✅ | El mando funciona: 388 mL dan un derrame negro enorme, la AD desaparece y el VD queda en rendija (PA 64/52, FC 120). La D del TEP se ve en F. Pegas: (a) a 2.037 mL el rótulo «VI» tapa la cavidad, justo donde ocurre el beso (`hem100-psaxPm-E`); (b) el colapso se ve como una cámara que se borra, no como una pared que se dobla hacia dentro; (c) el botón sigue diciendo «Hemorragia de 1 L» con el mando a 2.037 mL |
+| 4. Móvil | 8,7 | **8,4** ✅ | El mando de gravedad queda lejos de la imagen: al moverlo no se ve el corazón (`v2i-360-hemorragia-psax-mando`). A 360, bajo la barra del ciclo, «diástole» y «▲S2» se pisan («di▲S2le») |
+| 5. Paciente posible | 8,3 | **8,4** ✅ | Derrame y hemorragia a fondo cuadran (60/47, FC 124, PVC 0). El renglón «VD en diástole (FATE)» frente a «VD basal (Lang)» ya está. Sigue sin resolver el TAPSE de 4,8 mm del TEP con PAM 67 |
+| 6. Parecido con D1 | 7,2 | **8,1** ✅ | El A4C normal se parece ya a la eco real (cruz, tabique fino, sin peine de pulmón). Las paredes de las aurículas siguen algo más brillantes que en la real y el anillo del pericardio pesa en el SC 4C |
+
+**Veredicto: ✅ PASA** (todo ≥8). Ninguna nota llega a la meta de 8,75.
+- **3 → 8,75.** Barato: en `simulador.mjs`, quitar o mover el rótulo «VI» cuando la cavidad mida <15 mm. Que el botón diga «Hemorragia» y que la cifra la dé el mando. Al elegir el TEP en el PSAX, saltar a la fase F. Medio: que la AD y el VD se doblen hacia dentro antes de borrarse (`plieguePared`).
+- **4 → 8,75.** Barato: al mover `#cv-grav`, que la imagen quede fija arriba como con los mandos de imagen (el `sticky` de `.cv-eco-fijo`), o poner el mando bajo la imagen. Separar «▲S2» de «diástole» a 360.
+- **1 y 6 → 8,75.** Medio: que el saco del derrame grande siga al corazón (sin esquinas) y que el VI se suavice (más vértices en la sección); bajar 2 dB más la pared de las aurículas. **5:** buscar la fuente del TAPSE en el TEP intermedio, o subir la contractilidad del VD por defecto. **2:** que la tricúspide abra en F (barato).
+- **No comprobado:** el mando en fallo y vasoplejía, el movimiento (solo fotogramas fijos), A2C, A3C y supraesternal.
