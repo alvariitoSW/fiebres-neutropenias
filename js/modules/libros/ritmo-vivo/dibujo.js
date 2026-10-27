@@ -97,8 +97,8 @@ export function dibujoEstatico() {
   h += `<g id="rtv-his" class="rtv-pieza" data-pieza="his"><path d="M150 153 L156 158 L164 168 L170 174" fill="none" stroke="transparent" stroke-width="8"/></g>`;
   h += `<g id="rtv-ramas" class="rtv-pieza" data-pieza="ramas"><path d="M170 174 L165 190 L168 208 L152 220 L108 228 L64 232 M170 174 L182 179 L212 190 L244 200 L276 222 M182 179 L192 212 L202 234 L218 254" fill="none" stroke="transparent" stroke-width="8"/><g id="rtv-rama-tachada"></g></g>`;
   // Rótulos grabados (pocos; el resto, al tocar)
-  h += `<g font-size="9" fill="var(--text-muted)" font-weight="600" letter-spacing=".06em" pointer-events="none"><text x="76" y="104">AD</text><text x="214" y="102">AI</text><text x="96" y="252">VD</text><text x="240" y="256">VI</text></g>
-    <text x="306" y="172" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">anillo</text><text x="306" y="181" font-size="8" fill="var(--text-dim)" font-style="italic" pointer-events="none">fibroso</text>`;
+  h += `<g font-size="10" fill="var(--text-muted)" font-weight="600" letter-spacing=".06em" pointer-events="none"><text x="76" y="104">AD</text><text x="214" y="102">AI</text><text x="96" y="252">VD</text><text x="240" y="256">VI</text></g>
+    <text x="306" y="172" font-size="9.5" fill="var(--text-dim)" font-style="italic" pointer-events="none">anillo</text><text x="306" y="181" font-size="9.5" fill="var(--text-dim)" font-style="italic" pointer-events="none">fibroso</text>`;
   // las arterias coronarias en el surco AV (cortadas de través): derecha y circunfleja
   h += [[27, 160], [304, 157]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="4.2" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".7"/><circle cx="${x}" cy="${y}" r="2.2" fill="var(--bg-main)" stroke="var(--accent-red)" stroke-opacity=".7" stroke-width=".5"/>`).join('');
   // Gota del bolo (adenosina) y parches del desfibrilador
@@ -181,8 +181,8 @@ function lupaAvEstatica() {
   return `<rect x="0" y="0" width="174" height="108" rx="9" fill="var(--card2)" stroke="var(--border-color)"/>
     <rect x="8" y="14" width="158" height="90" rx="6" fill="var(--bg-main)" stroke="var(--text-main)" stroke-opacity=".5" stroke-width=".7"/>
     ${[[5, 5], [169, 5], [5, 103], [169, 103]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2" fill="none" stroke="var(--text-muted)" stroke-width=".6"/><circle cx="${x}" cy="${y}" r=".6" fill="var(--text-muted)"/>`).join('')}
-    <text x="12" y="10.5" font-size="8" fill="var(--text-dim)" font-weight="600" letter-spacing=".05em">EL NODO AV, DE CERCA</text>
-    <text id="rtv-txt-puente" x="140" y="10.5" font-size="8" fill="var(--text-dim)" opacity="0">atajo</text>
+    <text x="12" y="10.5" font-size="9.5" fill="var(--text-dim)" font-weight="600" letter-spacing=".05em">EL NODO AV, DE CERCA</text>
+    <text id="rtv-txt-puente" x="140" y="10.5" font-size="9.5" fill="var(--text-dim)" opacity="0">atajo</text>
     <g clip-path="url(#rtv-clip-av)">
       <rect x="8" y="14" width="158" height="29" fill="url(#rtv-trama)"/>
       <rect x="8" y="62" width="158" height="44" fill="url(#rtv-trama)" opacity=".55"/>
@@ -199,7 +199,7 @@ function lupaAvEstatica() {
       <g id="rtv-cerrojo" opacity="0"><rect x="30" y="42.6" width="98" height="3.2" rx="1.4" fill="var(--text-main)" stroke="var(--bg-main)" stroke-width=".5"/><rect x="126" y="38" width="11" height="12" rx="1.8" fill="var(--text-dim)" stroke="var(--text-main)" stroke-width=".6"/><path d="M128.6 38 C128.6 32.5 134.4 32.5 134.4 38" fill="none" stroke="var(--text-main)" stroke-width="1.2"/><circle cx="131.5" cy="44" r="1.1" fill="var(--bg-main)"/></g>
       <g id="rtv-fichas"></g>
     </g>
-    <g font-size="8" fill="var(--text-dim)" pointer-events="none"><text x="12" y="76">lenta</text><text x="110" y="74">rápida</text><text x="82" y="101">His</text></g>`;
+    <g font-size="9.5" fill="var(--text-dim)" pointer-events="none"><text x="12" y="76">lenta</text><text x="110" y="74">rápida</text><text x="82" y="101">His</text></g>`;
 }
 // Brazos (3 a 120°) y muelle de cada torniquete según el motor
 export function pintarTorniquete(k, ang, rearme, dureza, luz, cerrado) {
@@ -233,7 +233,7 @@ function celulaEstatica() {
   let h = `<rect x="0" y="0" width="174" height="108" rx="9" fill="var(--card2)" stroke="var(--border-color)"/>
     <rect x="8" y="14" width="158" height="90" rx="6" fill="var(--bg-main)" stroke="var(--text-main)" stroke-opacity=".5" stroke-width=".7"/>
     ${[[5, 5], [169, 5], [5, 103], [169, 103]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2" fill="none" stroke="var(--text-muted)" stroke-width=".6"/><circle cx="${x}" cy="${y}" r=".6" fill="var(--text-muted)"/>`).join('')}
-    <text id="rtv-cel-tit" x="12" y="10.5" font-size="8" fill="var(--text-dim)" font-weight="600" letter-spacing=".05em">LA CÉLULA DEL VENTRÍCULO</text>
+    <text id="rtv-cel-tit" x="12" y="10.5" font-size="9.5" fill="var(--text-dim)" font-weight="600" letter-spacing=".05em">LA CÉLULA DEL VENTRÍCULO</text>
     <g id="rtv-volt">
       <circle cx="${VOLT.x}" cy="${VOLT.y + 2}" r="${VOLT.r + 4}" fill="var(--bg-main)" fill-opacity=".6"/>
       <circle cx="${VOLT.x}" cy="${VOLT.y}" r="${VOLT.r + 3}" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".6"/>
@@ -241,9 +241,9 @@ function celulaEstatica() {
   for (let v = -100; v <= 50; v += 10) { const a = angV(v), M = v % 50 === 0, r0 = VOLT.r - (M ? 6 : 3.5); h += `<line x1="${f1(VOLT.x + r0 * Math.cos(a))}" y1="${f1(VOLT.y + r0 * Math.sin(a))}" x2="${f1(VOLT.x + (VOLT.r - 1) * Math.cos(a))}" y2="${f1(VOLT.y + (VOLT.r - 1) * Math.sin(a))}" stroke="var(--bg-main)" stroke-width="${M ? 1 : .5}"/>`; }
   const arco = (v0, v1, r) => { const a0 = angV(v0), a1 = angV(v1); return `M${f1(VOLT.x + r * Math.cos(a0))} ${f1(VOLT.y + r * Math.sin(a0))} A${r} ${r} 0 0 1 ${f1(VOLT.x + r * Math.cos(a1))} ${f1(VOLT.y + r * Math.sin(a1))}`; };
   h += `<path d="${arco(-100, 50, VOLT.r - 1)}" fill="none" stroke="var(--bg-main)" stroke-width=".6"/>
-      <text x="${VOLT.x}" y="${VOLT.y + 14}" font-size="8" fill="var(--bg-main)" text-anchor="middle">mV</text>
-      <text x="${f1(VOLT.x + 13 * Math.cos(angV(-90)))}" y="${f1(VOLT.y + 13 * Math.sin(angV(-90)) + 3)}" font-size="8" fill="var(--bg-main)" text-anchor="middle">-90</text>
-      <text x="${f1(VOLT.x + 13 * Math.cos(angV(0)))}" y="${f1(VOLT.y + 13 * Math.sin(angV(0)) + 3)}" font-size="8" fill="var(--bg-main)" text-anchor="middle">0</text>
+      <text x="${VOLT.x}" y="${VOLT.y + 14}" font-size="9.5" fill="var(--bg-main)" text-anchor="middle">mV</text>
+      <text x="${f1(VOLT.x + 13 * Math.cos(angV(-90)))}" y="${f1(VOLT.y + 13 * Math.sin(angV(-90)) + 3)}" font-size="9.5" fill="var(--bg-main)" text-anchor="middle">-90</text>
+      <text x="${f1(VOLT.x + 13 * Math.cos(angV(0)))}" y="${f1(VOLT.y + 13 * Math.sin(angV(0)) + 3)}" font-size="9.5" fill="var(--bg-main)" text-anchor="middle">0</text>
       <path id="rtv-aguja" d="" stroke="var(--bg-main)" stroke-width="1.4" stroke-linecap="round"/>
       <circle cx="${VOLT.x}" cy="${VOLT.y}" r="2.6" fill="var(--accent-yellow)" stroke="var(--bg-main)" stroke-width=".6"/>
       <rect x="${VOLT.x - 12}" y="${VOLT.y + VOLT.r + 3}" width="24" height="7" rx="1.5" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".4"/>
@@ -252,13 +252,13 @@ function celulaEstatica() {
     <g id="rtv-pa-traza"><rect x="70" y="17" width="92" height="46" rx="3" fill="var(--card2)" stroke="var(--text-main)" stroke-opacity=".35" stroke-width=".5"/>
       <line x1="72" y1="${yPA(0)}" x2="160" y2="${yPA(0)}" stroke="var(--text-muted)" stroke-width=".4" stroke-dasharray="2 2"/>
       <path id="rtv-pa-linea" d="" fill="none" stroke="var(--accent-yellow)" stroke-width="1.2" stroke-linejoin="round"/>
-      <g id="rtv-pa-fases" font-size="8" fill="var(--text-main)" text-anchor="middle"></g></g>
+      <g id="rtv-pa-fases" font-size="9.5" fill="var(--text-main)" text-anchor="middle"></g></g>
     <g id="rtv-canales">
       <rect x="70" y="72" width="92" height="12" fill="var(--text-dim)" fill-opacity=".22"/>
       <line x1="70" y1="72" x2="162" y2="72" stroke="var(--text-main)" stroke-width=".6"/><line x1="70" y1="84" x2="162" y2="84" stroke="var(--text-main)" stroke-width=".6"/>
       ${Array.from({ length: 23 }, (_, i) => `<circle cx="${72 + i * 4}" cy="73.6" r="1" fill="var(--text-dim)" fill-opacity=".55"/><circle cx="${72 + i * 4}" cy="82.4" r="1" fill="var(--text-dim)" fill-opacity=".55"/>`).join('')}
       ${['na', 'ca', 'k'].map((c, i) => `<g id="rtv-canal-${c}" transform="translate(${88 + i * 30} 78)"></g>`).join('')}
-      <g font-size="8" fill="var(--text-dim)" text-anchor="middle"><text x="88" y="96">Na⁺</text><text x="118" y="96">Ca²⁺</text><text x="148" y="96">K⁺</text></g>
+      <g font-size="9.5" fill="var(--text-dim)" text-anchor="middle"><text x="88" y="96">Na⁺</text><text x="118" y="96">Ca²⁺</text><text x="148" y="96">K⁺</text></g>
     </g>`;
   return h;
 }
@@ -291,7 +291,7 @@ export function fase(tau, apd, nodo) {
 
 // ---------- 4. Los aparatos: el grabado rápido y la bomba de las piezas comunes (js/core/dibujo-iso.js, js/core/bomba.js).
 // Isometría de 30°; aquí solo se colocan (OB: la bomba; OD: el desfibrilador) y se pasan las cajas a la pieza común.
-export const OB = I.isometrica({ x: 64, y: 56 }), OD = I.isometrica({ x: 246, y: 44 });
+export const OB = I.isometrica({ x: 66, y: 60, k: 1.18 }), OD = I.isometrica({ x: 246, y: 44 });
 const isoP = (o, x, y, z) => o.iso([x, y, z]);
 const isoPath = (o, ps) => I.camino(ps.map(o.iso), true);
 const caja = (o, x, y, z, w, d, hh, t = {}) => I.caja3(o, [x, y, z], [w, d, hh], { tonos: { sup: t.top, supOp: t.topOp, claro: t.izq, oscuro: t.der } });
@@ -319,7 +319,7 @@ export function aparatosEstatico() {
   h += caja(OD, 10, 16, 32, 4, 8, 9) + caja(OD, 70, 16, 32, 4, 8, 9) + caja(OD, 10, 16, 41, 64, 8, 3, { top: 'var(--text-dim)', topOp: .5 });
   // pantalla (con su ECG en miniatura), mando de energía y botones
   h += `<path d="${isoPath(OD, [[5, 40, 9], [44, 40, 9], [44, 40, 28], [5, 40, 28]])}" fill="var(--bg-main)" stroke="var(--text-main)" stroke-width=".5"/>
-    <g transform="${caraY(OD, 7, 40, 25)}"><text id="rtv-desfib-txt1" x="0" y="0" font-size="9" fill="var(--text-main)" font-weight="700">APAGADO</text><path id="rtv-desfib-ecg" d="" fill="none" stroke="var(--accent-green)" stroke-width=".8" transform="translate(0 3)"/></g>`;
+    <g transform="${caraY(OD, 7, 40, 25)}"><text id="rtv-desfib-txt1" x="0" y="0" font-size="10" fill="var(--text-main)" font-weight="700">APAGADO</text><path id="rtv-desfib-ecg" d="" fill="none" stroke="var(--accent-green)" stroke-width=".8" transform="translate(0 3)"/></g>`;
   { const c = isoP(OD, 58, 40, 20); h += `<g transform="${caraY(OD, 58, 40, 20)}"><circle cx="0" cy="0" r="7" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".6"/>${Array.from({ length: 18 }, (_, i) => { const a = i / 18 * 2 * Math.PI; return `<line x1="${f1(6 * Math.cos(a))}" y1="${f1(6 * Math.sin(a))}" x2="${f1(7 * Math.cos(a))}" y2="${f1(7 * Math.sin(a))}" stroke="var(--bg-main)" stroke-width=".4"/>`; }).join('')}<line id="rtv-mando" x1="0" y1="0" x2="0" y2="-5.5" stroke="var(--bg-main)" stroke-width="1.2" stroke-linecap="round"/>${[-120, -60, 0, 60, 120].map(a => `<line x1="${f1(8.4 * Math.sin(a * Math.PI / 180))}" y1="${f1(-8.4 * Math.cos(a * Math.PI / 180))}" x2="${f1(10 * Math.sin(a * Math.PI / 180))}" y2="${f1(-10 * Math.cos(a * Math.PI / 180))}" stroke="var(--text-main)" stroke-width=".5"/>`).join('')}</g>`; void c; }
   h += [['CARGA', 49, 6], ['CHOQUE', 62, 6], ['SINC', 75, 6]].map(([t, x, z], i) => `<path id="rtv-btn-${i}" d="${isoPath(OD, [[x, 40, z], [x + 10, 40, z], [x + 10, 40, z + 6], [x, 40, z + 6]])}" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".45"/>`).join('');
   // tomas de los cables en la cara derecha; cables a los parches

@@ -145,9 +145,9 @@ function pintarCelula(t) {
   const u = ultimaAct(k, t), apd = apdDe(u), tau = t - u; let hf = '';
   if (tau >= 0 && tau < ventana - 0.05) {
     const xt = s => x0 + (x1 - x0) * (s - (t - ventana)) / ventana;
-    const marcas = nodo ? [[0, 0.025, 4], [3, apd * 0.75, 6], [4, apd + 0.1, 0]] : [[0, 0.001, 0], [1, 0.009, -6], [2, apd * 0.35, -5], [3, apd * 0.9, 2], [4, apd + 0.12, 0]];
+    const marcas = nodo ? [[0, 0.025, 4], [3, apd * 0.75, 6], [4, apd + 0.1, 0]] : [[0, 0.001, 0], [1, 0.009, -6], [2, apd * 0.6, -5], [3, apd * 0.9, 2], [4, apd + 0.12, 0]];
     for (const [n, s, dy] of marcas) { const ss = u + s; if (ss > t) continue; const x = clamp(xt(ss) + (n === 0 ? -5 : 0), 77, 157), y = clamp(yPA(potencial(s, apd, nodo, S.clave === 'hiperk' ? S.k : 4.2)) + dy - 6, 24, 57);
-      hf += `<circle cx="${f1(x)}" cy="${f1(y)}" r="4.6" fill="var(--bg-main)" stroke="var(--accent-yellow)" stroke-width=".6"/><text x="${f1(x)}" y="${f1(y + 2.8)}">${n}</text>`; }
+      hf += `<circle cx="${f1(x)}" cy="${f1(y)}" r="5.2" fill="var(--bg-main)" stroke="var(--accent-yellow)" stroke-width=".6"/><text x="${f1(x)}" y="${f1(y + 2.8)}">${n}</text>`; }
   }
   $('rtv-pa-fases').innerHTML = hf;
   const fz = fase(tau, apd, nodo), luzF = tau >= 0 && tau < 0.03;

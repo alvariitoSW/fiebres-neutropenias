@@ -204,7 +204,23 @@ function pintarMini() {
   $('mini-lupa-svg').setAttribute('viewBox', vb); $('mini-lupa-svg').innerHTML = `<use href="#${id}"/>`;
   $('mini-tit').textContent = m[1]; $('mini-txt').textContent = m[2];
 }
-$('mini-grande').addEventListener('click', () => planoLupas.abrir());
+$('mini-grande').addEventListener('click', () => abrirLupas());
+/* El dock se repinta muchas veces: si la forma es la misma (solo cambian textos, pulsados, apagados), se ajustan los nodos que hay
+   en vez de sustituirlos, para no perder el botón que el dedo tiene delante a mitad de un toque. */
+function igualarNodo(a, b) {
+  if (a.nodeType !== b.nodeType || a.nodeName !== b.nodeName) return false;
+  if (a.nodeType === 3) { if (a.data !== b.data) a.data = b.data; return true; }
+  if (a.nodeType !== 1 || a.childNodes.length !== b.childNodes.length) return false;
+  for (const at of [...a.attributes]) if (!b.hasAttribute(at.name) && !at.name.startsWith('data-jm')) a.removeAttribute(at.name);
+  for (const at of b.attributes) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+  if (a.nodeName === 'INPUT') a.value = b.value;
+  return [...a.childNodes].every((c, i) => igualarNodo(c, b.childNodes[i]));
+}
+function igualarDock(caja, html) {
+  const t = document.createElement('div'); t.innerHTML = html;
+  if (caja.childNodes.length === t.childNodes.length && caja.childNodes.length && [...caja.childNodes].every((c, i) => igualarNodo(c, t.childNodes[i]))) return;
+  caja.innerHTML = html;
+}
 function pintarDock() {
   document.querySelectorAll('.rtv-dock-tabs [data-pest]').forEach(b => b.setAttribute('aria-selected', String(b.dataset.pest === pest)));
   const h = [];
@@ -213,7 +229,7 @@ function pintarDock() {
     h.push(`<div class="rtv-chips" role="group" aria-label="Ritmos">${Object.entries(ESTADOS).filter(([, e]) => e.fam === familia).map(([k, e]) => `<button type="button" data-estado="${k}" class="${e.pendiente ? 'pend' : ''}" aria-pressed="${S.clave === k}">${e.corto}${e.pendiente ? '<small>pendiente de fuente</small>' : ''}</button>`).join('')}</div>`);
   } else if (pest === 'tratar') h.push(mandosTratar());
   else h.push(mandosMedir());
-  $('dock-panel').innerHTML = h.join('');
+  igualarDock($('dock-panel'), h.join(''));
   for (const r of $('dock-panel').querySelectorAll('input[type=range]')) r.oninput = e => deslizar(e.target);
   aplicarTopes(); tope.refrescar();   // el dock se rehízo: los botones nuevos vuelven a apagarse
   medirDock();
@@ -268,7 +284,7 @@ function mandosMedir() {
 }
 
 /* El fármaco de la FA (Fig. 19.5): lo usan el dock y abrirEstado(«fa:dilt») */
-function ponerFarmaco(k) { S.farmaco = k || null; S.horas = S.farmaco ? Math.max(S.horas, 1) : 0; if (S.farmaco) infusion({ dilt: 'DILTIAZEM', amio: 'AMIODARONA', digo: 'DIGOXINA' }[S.farmaco], { dilt: '0,25 mg/kg+5-15', amio: '150 mg + 1 mg/min', digo: '0,25 mg/2 h' }[S.farmaco], { dilt: 'diltiazem 0,25 mg/kg en 2 min y 5-15 mg/h', amio: 'amiodarona 150 mg en 10 min y 1 mg/min', digo: 'digoxina 0,25 mg cada 2 h' }[S.farmaco]); else { S.bomba = null; pintarAparatos(); } aplicarFarmacoFA(); pintarDock(); pintarGraficas(); pintarFuentes(); pintarFrase(); }
+function ponerFarmaco(k) { S.farmaco = k || null; S.horas = S.farmaco ? Math.max(S.horas, 1) : 0; if (S.farmaco) infusion({ dilt: 'DILTIAZEM', amio: 'AMIODARONA', digo: 'DIGOXINA' }[S.farmaco], { dilt: '0,25 mg/kg', amio: '150 mg + 1 mg/min', digo: '0,25 mg/2 h' }[S.farmaco], { dilt: 'diltiazem 0,25 mg/kg en 2 min y 5-15 mg/h', amio: 'amiodarona 150 mg en 10 min y 1 mg/min', digo: 'digoxina 0,25 mg cada 2 h' }[S.farmaco]); else { S.bomba = null; pintarAparatos(); } aplicarFarmacoFA(); pintarDock(); pintarGraficas(); pintarFuentes(); pintarFrase(); }
 /* ---------- Medir: el calibrador sobre la tira (los tiempos salen del motor) ---------- */
 function medidas() {
   const L = leer(); if (!L || !L.ult) return null;
@@ -538,7 +554,13 @@ function pintarFijos() {
 /* ---------- Las lupas en grande: un plano a pantalla completa por encima del dock (la pieza común) ---------- */
 const planoLupas = crearPlanoGrande({ titulo: 'El nodo AV y la célula, de cerca', nota: 'Siguen moviéndose con el ritmo: cámbialo abajo, en los mandos.',
   piezas: [{ nodo: () => $('rtv-lupa-av'), viewBox: '4 312 174 108', etiqueta: 'El nodo AV de cerca: los dos carriles y su torniquete' }, { nodo: () => $('rtv-celula'), viewBox: '182 312 174 108', etiqueta: 'La célula del ventrículo: voltímetro, potencial de acción y canales' }] });
-$('lupas-grandes').addEventListener('click', () => planoLupas.abrir());
+function abrirLupas() {
+  // el dock y la frase de este modelo son fijos y propios: el plano grande se queda por encima de los dos, no debajo
+  document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px');
+  document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px');
+  planoLupas.abrir();
+}
+$('lupas-grandes').addEventListener('click', abrirLupas);
 /* ---------- Cifras y gráficas tapadas (la Mayéutica de la parte 2: primero predices, luego compruebas) ---------- */
 function taparTodo(si, tira) {
   tapado = si; taparTira = !!tira;

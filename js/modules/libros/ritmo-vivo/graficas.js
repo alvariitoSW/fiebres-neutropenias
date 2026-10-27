@@ -3,7 +3,7 @@ import { $, clamp, org } from './ayudas.js';
 import { F195, F211, F213, F214, NOMBRE_F, fcFig, sup211 } from '../../../data/ritmo-vivo-data.js';
 import { S, tapado } from './pagina.js';
 /* ---------- Las gráficas vivas (lecturas de las figuras del libro) ---------- */
-const tx = (x, y, t, a = 'start', c = 'var(--text-muted)', fw = '') => `<text x="${x}" y="${y}" font-size="9" fill="${c}" text-anchor="${a}" font-family="system-ui, sans-serif" ${fw}>${t}</text>`;
+const tx = (x, y, t, a = 'start', c = 'var(--text-muted)', fw = '') => `<text x="${x}" y="${y}" font-size="10" fill="${c}" text-anchor="${a}" font-family="system-ui, sans-serif" ${fw}>${t}</text>`;
 export function pintarGraficas() {
   let h = '';
   if (tapado) { $('graficas').innerHTML = ''; return; }
