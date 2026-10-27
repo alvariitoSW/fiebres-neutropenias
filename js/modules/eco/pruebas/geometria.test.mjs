@@ -364,22 +364,81 @@ const filasAu = (pz, P) => { const s = cortarPieza(pz, P).seg, f = new Map();
     for (let b = Math.ceil(Math.min(va, vb)); b <= Math.max(va, vb); b++) { const t = vb === va ? 0 : (b - va) / (vb - va), u = ua + (ub - ua) * t;
       const e = f.get(b) || [Infinity, -Infinity]; f.set(b, [Math.min(e[0], u), Math.max(e[1], u)]); } }
   return f; };
+// N1: la fosa oval es parte del tabique (una sola lámina, más fina): se suma a cada lado de la comparación
+const filasUnion = (g, nombres, P) => { const f = new Map();
+  for (const pz of g.partes.filter(p => nombres.includes(p.nombre))) for (const [b, [a, c]] of filasAu(pz, P)) { const e = f.get(b) || [Infinity, -Infinity]; f.set(b, [Math.min(e[0], a), Math.max(e[1], c)]); }
+  return f; };
+const tabiqueUnico = (vista, k, minFilas) => {
+  const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(k === 'normal' ? 2 : 12);
+  const o = m.onda, ex = extraDeMotor(m), td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), P = planoVista(vista, estadoGeo(td, ex));
+  let filas = 0;
+  for (let j = 0; j < 6; j++) { const s = o[Math.floor(j / 6 * o.length)];
+    const g = construirCorazon(estadoGeo(s, ex), { pericardio: true, detalle: false });
+    const ad = filasUnion(g, ['AD', 'Fosa oval'], P), ai = filasUnion(g, ['AI', 'Fosa oval'], P);
+    const comunes = [...ad.keys()].filter(b => ai.has(b)), v0 = Math.max(Math.min(...ad.keys()), Math.min(...ai.keys())), v1 = Math.min(Math.max(...ad.keys()), Math.max(...ai.keys()));
+    for (const b of comunes) { if (b < v0 + Math.max(16, 0.3 * (v1 - v0)) || b > v1 - Math.max(4, 0.15 * (v1 - v0))) continue; filas++;
+      const hueco = ai.get(b)[0] - ad.get(b)[1];
+      assert.ok(Math.abs(hueco) <= TEJIDOS.auricula.ancho, `${vista}, t = ${s.t.toFixed(2)} s, profundidad ${b} mm: entre la pared de la AD y la de la AI hay ${hueco.toFixed(1)} mm`); }
+  }
+  assert.ok(filas >= minFilas, `pocas filas con las dos aurículas (${filas})`);
+};
 for (const k of ['normal', 'derrame', 'tep', 'hemorragia']) {
-  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => {
+  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => tabiqueUnico('a4c', k, 30));
+}
+// N1 · SC4C: el plano de la subcostal corta el tabique en diagonal, así que no se compara fila a fila: las paredes de la AD (con la
+// fosa) y de la AI se tocan a lo largo de ≥ 10 mm de profundidad (un solo tabique, Mitchell 2019, p. 31, PDF 31) y sin saltos de más de 4 mm
+// en ese contacto (sin agujero con sangre entre las dos)
+const puntosCorte = (g, nombres, P) => { const pts = []; for (const pz of g.partes.filter(p => nombres.includes(p.nombre))) { const sg = cortarPieza(pz, P).seg;
+  for (let i = 0; i < sg.length; i += 4) pts.push([sg[i], sg[i + 1]], [(sg[i] + sg[i + 2]) / 2, (sg[i + 1] + sg[i + 3]) / 2], [sg[i + 2], sg[i + 3]]); } return pts; };
+for (const k of ['normal', 'tep']) {
+  test(`N1 · ${k}: en el SC4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => {
     const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(k === 'normal' ? 2 : 12);
-    const o = m.onda, ex = extraDeMotor(m), td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), P = planoVista('a4c', estadoGeo(td, ex));
-    let filas = 0;
-    for (let j = 0; j < 6; j++) { const s = o[Math.floor(j / 6 * o.length)];
-      const g = construirCorazon(estadoGeo(s, ex), { pericardio: true, detalle: false });
-      const ad = filasAu(g.partes.find(p => p.nombre === 'AD'), P), ai = filasAu(g.partes.find(p => p.nombre === 'AI'), P);
-      const comunes = [...ad.keys()].filter(b => ai.has(b)), v0 = Math.max(Math.min(...ad.keys()), Math.min(...ai.keys())), v1 = Math.min(Math.max(...ad.keys()), Math.max(...ai.keys()));
-      for (const b of comunes) { if (b < v0 + Math.max(16, 0.3 * (v1 - v0)) || b > v1 - Math.max(4, 0.15 * (v1 - v0))) continue; filas++;
-        const hueco = ai.get(b)[0] - ad.get(b)[1];
-        assert.ok(Math.abs(hueco) <= TEJIDOS.auricula.ancho, `t = ${s.t.toFixed(2)} s, profundidad ${b} mm: entre la pared de la AD y la de la AI hay ${hueco.toFixed(1)} mm`); }
+    const o = m.onda, ex = extraDeMotor(m), td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), P = planoVista('sc4c', estadoGeo(td, ex));
+    for (let j = 0; j < 6; j++) { const s = o[Math.floor(j / 6 * o.length)], g = construirCorazon(estadoGeo(s, ex), { pericardio: true, detalle: false });
+      const ad = puntosCorte(g, ['AD', 'Fosa oval'], P), ai = puntosCorte(g, ['AI', 'Fosa oval'], P);
+      const d = (p) => ad.reduce((m2, q) => Math.min(m2, Math.hypot(p[0] - q[0], p[1] - q[1])), Infinity);
+      const toca = ai.filter(p => d(p) <= TEJIDOS.auricula.ancho), vs = toca.map(p => p[1]);
+      assert.ok(vs.length && Math.max(...vs) - Math.min(...vs) >= 10, `t = ${s.t.toFixed(2)} s: las paredes se tocan a lo largo de ${vs.length ? (Math.max(...vs) - Math.min(...vs)).toFixed(0) : 0} mm de profundidad (≥ 10)`);
+      const orden = [...vs].sort((a, b) => a - b); let salto = 0; for (let q = 1; q < orden.length; q++) salto = Math.max(salto, orden[q] - orden[q - 1]);
+      assert.ok(salto <= 4, `t = ${s.t.toFixed(2)} s: el contacto entre las paredes tiene un salto de ${salto.toFixed(1)} mm (la fosa u otro agujero deja sangre entre las dos)`);
     }
-    assert.ok(filas >= 30, `pocas filas con las dos aurículas (${filas})`);
   });
 }
+// N1 · Fosa oval: en el A4C hay filas del tabique con una sola lámina (la fosa, más fina y débil) y filas con las dos paredes
+test('N1 · fosa oval: una lámina más fina y débil que el resto del tabique, rodeada de tabique con sus dos paredes (A4C)', () => {
+  assert.ok(TEJIDOS.fosaOval.ancho < TEJIDOS.auricula.ancho && TEJIDOS.fosaOval.db < TEJIDOS.auricula.db, 'la fosa, más fina y más débil que la pared de la aurícula');
+  const m = crearMotor(); m.correr(12); const ex = extraDeMotor(m), td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), e = estadoGeo(td, ex);
+  const g = construirCorazon(e, { pericardio: true, detalle: false }), P = planoVista('a4c', e);
+  const fosa = filasUnion(g, ['Fosa oval'], P), ad = filasAu(g.partes.find(p => p.nombre === 'AD'), P), ai = filasAu(g.partes.find(p => p.nombre === 'AI'), P);
+  const uF = [...fosa.values()].map(([a, c]) => (a + c) / 2).reduce((a, b) => a + b, 0) / fosa.size;
+  const cerca = (mapa, b) => mapa.has(b) && Math.abs((mapa.get(b)[0] + mapa.get(b)[1]) / 2 - uF) < 6 && (mapa.get(b)[1] - mapa.get(b)[0]) < 12;   // fila con pared en la línea del tabique
+  let sola = 0, doble = 0;
+  for (const b of fosa.keys()) if (!ad.has(b) || ad.get(b)[1] < uF - 4) sola++;
+  for (const b of ad.keys()) if (ai.has(b) && Math.abs(ad.get(b)[1] - uF) < 4 && Math.abs(ai.get(b)[0] - uF) < 4) doble++;
+  assert.ok(fosa.size >= 8, `la fosa cruza ${fosa.size} filas del A4C (≥ 8 mm)`);
+  assert.ok(sola >= 5 || fosa.size - doble >= 5, `filas de lámina única: ${sola}`);
+  assert.ok(doble >= 3, `filas del tabique con las dos paredes (AD y AI): ${doble}`);
+  void cerca;
+});
+// N1 · Válvula de Eustaquio y seno coronario
+test('N1 · válvula de Eustaquio en la desembocadura de la cava inferior (la corta la subcostal de la cava) y seno coronario en el PLAX, detrás del anillo mitral', () => {
+  const m = crearMotor(); m.correr(12); const ex = extraDeMotor(m), td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), e = estadoGeo(td, ex);
+  const g = construirCorazon(e, { pericardio: true, detalle: true });
+  const eus = g.partes.find(p => p.nombre === 'Válvula de Eustaquio'), ad = g.partes.find(p => p.nombre === 'AD');
+  assert.ok(eus && eus.idx.length >= 3, 'hay válvula de Eustaquio');
+  assert.ok(cortarPieza(eus, planoVista('scVci', e)).seg.length >= 4, 'la subcostal de la cava corta la válvula de Eustaquio');
+  // pegada a la pared de la AD (el pliegue nace del borde del orificio de la cava)
+  const dmin = (pos, q) => { let d = Infinity; for (let i = 0; i < pos.length; i += 3) d = Math.min(d, Math.hypot(pos[i] - q[0], pos[i + 1] - q[1], pos[i + 2] - q[2])); return d; };
+  const c = [0, 0, 0]; for (let i = 0; i < eus.pos.length; i += 3) for (let k = 0; k < 3; k++) c[k] += eus.pos[i + k] / (eus.pos.length / 3);
+  assert.ok(dmin(ad.pos, c) <= 20, `la válvula está a ${dmin(ad.pos, c).toFixed(0)} mm de la pared de la AD`);
+  const P = planoVista('plax', e), sc = cortarPieza(g.partes.find(p => p.nombre === 'Seno coronario'), P).seg, mp = cortarPieza(g.partes.find(p => p.nombre === 'Mitral posterior'), P).seg;
+  assert.ok(sc.length >= 8, 'el PLAX corta el seno coronario');
+  let u0 = Infinity, u1 = -Infinity, v0 = Infinity, v1 = -Infinity, vm = -Infinity;
+  for (let i = 0; i < sc.length; i += 4) { u0 = Math.min(u0, sc[i], sc[i + 2]); u1 = Math.max(u1, sc[i], sc[i + 2]); v0 = Math.min(v0, sc[i + 1], sc[i + 3]); v1 = Math.max(v1, sc[i + 1], sc[i + 3]); }
+  for (let i = 0; i < mp.length; i += 4) vm = Math.max(vm, mp[i + 1], mp[i + 3]);
+  assert.ok(u1 - u0 <= 12 && v1 - v0 <= 12, `el seno coronario es un círculo pequeño en el PLAX (${(u1 - u0).toFixed(0)} × ${(v1 - v0).toFixed(0)} mm)`);
+  assert.ok(v0 >= vm - 1 && v0 - vm <= 30, `el seno coronario va detrás del anillo mitral (mitral hasta ${vm.toFixed(0)} mm, seno desde ${v0.toFixed(0)})`);
+});
 // Subcostal 4C: el VD ancho, pegado al hígado. Depende del plano de la vista (planoVista('sc4c') en ecografia.mjs, de la pieza
 // Imagen): con la sonda obligada a pasar por la piel bajo el xifoides, el plano corta el VD de refilón (una rendija de 3-4 mm).
 // Con el plano del A4C y la sonda llevada a él (~34 mm), el VD sale ancho y bajo el hígado (hondo: 19 mm, medido al hacer la prueba; mínimo 18).

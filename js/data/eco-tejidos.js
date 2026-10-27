@@ -8,6 +8,8 @@ export const TEJIDOS = {
   suprahepatica: { nombre: 'Vena suprahepática',           db: -2, ancho: 0.8, origen: 'ilustrativo' },
   venaPared:     { nombre: 'Venas y seno coronario',       db: -3, ancho: 1.3, origen: 'ilustrativo' },
   auricula:      { nombre: 'Pared de aurícula',            db: -5, ancho: 2.6, origen: 'ilustrativo' },
+  fosaOval:      { nombre: 'Fosa oval (tabique interauricular fino)', db: -16, ancho: 0.8, origen: 'ilustrativo', nota: 'Una sola lámina: más fina y débil que el resto del tabique. El grosor no lo da la fuente.' },
+  eustaquio:     { nombre: 'Válvula de Eustaquio',         db: -2, ancho: 0.9, origen: 'ilustrativo', nota: 'Pliegue fino en la desembocadura de la cava inferior.' },
   miocardio:     { nombre: 'Miocardio (VI, VD, infundíbulo)', db: 0, origen: 'fisiología general', nota: 'Gris medio: la referencia de 0 dB.' },
   baseV:         { nombre: 'Base ventricular',             db: 0, ancho: 2, origen: 'ilustrativo' },
   papilar:       { nombre: 'Papilares y banda moderadora', db: 1, ancho: 3.5, origen: 'ilustrativo' },
