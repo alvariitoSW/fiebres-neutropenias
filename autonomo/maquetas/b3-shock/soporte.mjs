@@ -150,7 +150,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (s.nLatido !== ultimoLat) { ultimoLat = s.nLatido; cerrar(); }
   }
   function cerrar() {
-    const u = m.ultimo; if (!u) { acum = nuevo(); return; }
+    let u = m.ultimo; if (!u) { acum = nuevo(); return; }
+    // La PVC no pasa a la PCP si el VD no falla (fisiología general; solo el TEP y el taponamiento las igualan o la invierten,
+    // ficha cap. 18 p. 4): el motor sube la aurícula derecha con el volumen y en la sepsis la pasaba (PVC 22-24 con PCP 19).
+    if (rec.esc !== 'tep' && rec.esc !== 'derrame' && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
     historiaAo.push(acum.aoAbre); if (historiaAo.length > 6) historiaAo.shift();
     // el motor separa el gasto: por la válvula (gcValvula, ≥0), el Impella, el ECMO (con el venteo dentro) y el total (gc)
     const gcNativo = u.gcValvula, imp = u.gcImpella, ecmo = u.gcEcmo, vent = u.gcVenteo, gcTotal = u.gc;

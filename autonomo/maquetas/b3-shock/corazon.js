@@ -35,8 +35,10 @@ function pulmones() {
 }
 // gotas del edema: en las bases, más cuanto más edema calcula el motor
 function gotas(vEdema) {
-  const n = Math.min(46, Math.round((vEdema || 0) / 22)); let h = '';
-  for (let j = 0; j < n; j++) { const izq = j % 2 === 0, k = Math.floor(j / 2), x = izq ? 22 + (k * 17) % 58 : 284 + (k * 13) % 56, y = 262 - ((k * 23) % 70) - (k > 10 ? 30 : 0); h += `<circle cx="${x}" cy="${y}" r="1.7" class="gota"/>`; }
+  const v = vEdema || 0, n = Math.min(60, Math.round(v / 12)), r = (2.6 + Math.min(2.4, v / 400)).toFixed(1); let h = '';
+  // desde ~1.000 mL, un velo en las bases (el pulmón anegado); las gotas, más y mayores cuanto más edema
+  if (v >= 1000) h += '<ellipse cx="50" cy="250" rx="42" ry="22" class="gota" opacity=".28"/><ellipse cx="312" cy="250" rx="42" ry="22" class="gota" opacity=".28"/>';
+  for (let j = 0; j < n; j++) { const izq = j % 2 === 0, k = Math.floor(j / 2), x = izq ? 22 + (k * 17) % 58 : 284 + (k * 13) % 56, y = 262 - ((k * 23) % 70) - (k > 10 ? 30 : 0); h += `<circle cx="${x}" cy="${y}" r="${r}" class="gota"/>`; }
   return h;
 }
 // la arteriola de cerca: adventicia, media con sus células musculares, endotelio y la luz con dos hematíes
@@ -65,7 +67,7 @@ export function montarCorazon(svg) {
     pintar(cab, dt = 1 / 60, quieto = false) {
       if (!cab?.m) return;
       c.pintar(estadoCorte(cab), dt, quieto);
-      const L = cab.lectura, ed = Math.round((L?.u?.vEdema || 0) / 22);
+      const L = cab.lectura, ed = Math.round((L?.u?.vEdema || 0) / 12) + (L?.u?.vEdema >= 1000 ? 1000 : 0);
       if (ed !== edPrev) { edPrev = ed; gg.innerHTML = gotas(L?.u?.vEdema); }
       // la luz de la arteriola con la resistencia (Poiseuille: r ∝ R^-1/4; fisiología general)
       const r = f1(cl(12 * Math.pow(1488 / Math.max(300, L?.u?.rvs ?? 1488), 0.25), 4, 17));

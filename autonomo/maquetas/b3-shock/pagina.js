@@ -288,7 +288,7 @@ let claveActual = '';
 function pintarFrase() {
   const k = D.nombreEstado(R, ctxX()), E = D.ESTADOS[k]; claveActual = k;
   if (!E) return;
-  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase(R, ctxX())} ${org(E.org, false)}`;
+  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase(R, ctxX())} ${org(typeof E.org === 'function' ? E.org(R) : E.org, false)}`;
   const vistas = new Set(), lis = [];
   for (const p of E.guia) { const c = p.c; const kk = c.f + c.id + c.sitio; if (vistas.has(kk)) continue; vistas.add(kk); lis.push(c); }
   const T = D.OBJETIVOS[tablaActual()].cita; lis.push(T);

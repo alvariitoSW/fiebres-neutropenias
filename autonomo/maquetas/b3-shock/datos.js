@@ -121,7 +121,7 @@ export const PACIENTES = [
 ];
 // La gravedad de cada paciente, con nombre (el mando mueve la «g» del escenario del motor)
 export const GRAVEDAD = {
-  hemo: { min: 0, max: 1, paso: 0.01, texto: (g, pac) => { const pct = Math.round(g * 42), ml = Math.round(pct / 100 * 66 * pac.peso / 50) * 50; return [`${pct} % de la volemia`, `≈ ${ml.toLocaleString('es-ES')} mL de ${(66 * pac.peso / 1000).toFixed(1).replace('.', ',')} L · clase ${clase(pct)}`]; }, nota: 'Sangre perdida (Tabla 15.1; 66 mL/kg en el varón, p. 21)', cita: C.t151 },
+  hemo: { min: 0, max: 1, paso: 0.01, texto: (g, pac) => { const pct = Math.round(g * 42), ml = Math.round(pct / 100 * mlKg(pac) * pac.peso / 50) * 50; return [`${pct} % de la volemia`, `≈ ${ml.toLocaleString('es-ES')} mL de ${(mlKg(pac) * pac.peso / 1000).toFixed(1).replace('.', ',')} L · clase ${clase(pct)}`]; }, nota: 'Sangre perdida (Tabla 15.1; 66 mL/kg en el varón, p. 21)', cita: C.t151 },
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
   cardio: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VI ${(3.1 * (0.3 / 3.1) ** g).toFixed(2).replace('.', ',')}`, `contractilidad al ${Math.round(100 * (0.3 / 3.1) ** g)} %`], nota: 'Contractilidad del VI (modelo)', cita: C.csHemo },
   // el derrame y el émbolo: el texto de la gravedad lo da el motor (escenarios.mjs), así no se separan
@@ -149,7 +149,8 @@ export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4,
 // encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
 export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
 export const avisoVolumen = (R) => R.pcp >= TOPES.pcpAviso || (R.pvc >= TOPES.pvcAviso && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube - 2);
-export const perdidoMl = (pac, R) => Math.round(R.perdida / 100 * 66 * pac.peso);
+export const mlKg = (pac) => pac.sexo === 'mujer' ? 60 : 66;   // volemia, ficha p. 21: 66 mL/kg el varón, 60 la mujer (peso magro)
+export const perdidoMl = (pac, R) => Math.round(R.perdida / 100 * mlKg(pac) * pac.peso);
 // lo que se puede reponer: 1,5 veces lo perdido (el ×1,5: ilustrativo); solo en la hemorragia con pérdida
 export const topeRepos = (R, X) => X.pac.tipo === 'hemo' && R.perdida > 0 ? TOPES.reposicion * perdidoMl(X.pac, R) : null;
 export const hipertensionVaso = (R, X) => (X.ajuste.na > 0 || X.ajuste.vaso) && R.pam > TOPES.pamVaso;
@@ -198,7 +199,7 @@ export const ESTADOS = {
       { t: 'Mira la arteriola: se cierra. La vasoconstricción sostiene la PA.', s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.compens },
       { t: (R) => `PAM ${R.pam}: aún por encima de 65. La orina y el lactato tardan en moverse (Tabla 15.1).`, s: ['[data-fila="pa"]', '#lab'], c: C.t151 }] },
   'hemo-iii': { tit: 'Hemorragia, clase III', frase: (R) => `Clase III (${R.perdida} %): apretar ya no basta. PA ${R.pas}/${R.pad} y FC ${R.fc}: es el shock hemorrágico. Se repone con sangre.`, org: 'ficha · p. 22-23 (la clase: % perdido; el nombre por FC y PA, ilustrativo)',
-    guia: [{ t: (R, X) => `${X.pac.nombre} ha perdido un ${R.perdida} %: ${X.texto} (66 mL/kg × ${X.pac.peso} kg). Es la clase III (31-40 %).`, s: ['#cor-cav'], c: C.volemia, org: 'cuánto se pierde: el mando' },
+    guia: [{ t: (R, X) => `${X.pac.nombre} ha perdido un ${R.perdida} %: ${X.texto} (${mlKg(X.pac)} mL/kg × ${X.pac.peso} kg). Es la clase III (31-40 %).`, s: ['#cor-cav'], c: C.volemia, org: 'cuánto se pierde: el mando' },
       { t: (R) => `La PVC está en ${R.pvc} y las cavidades, pequeñas: falta volumen.`, s: ['[data-fila="pvc"]', '#cor-cav'], c: C.t141 },
       { t: (R) => `La arteriola, cerrada (IRVS ${R.irvs}). La vasoconstricción sostuvo la PA en la clase II; en la III ya no basta.`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.claseIII },
       { t: (R) => `La curva arterial es estrecha: PAS ${R.pas}, PAD ${R.pad}. Es el ventrículo que se vacía.`, s: ['#tr-art'], c: C.t141, org: 'la forma: fisiología general' },
@@ -260,14 +261,14 @@ export const ESTADOS = {
     guia: [{ t: 'El VD se dilata contra el émbolo.', s: ['#cor-vd'], c: C.tepEco },
       { t: (R) => `PAM ${R.pam}: sin inestabilidad hemodinámica no es el alto riesgo.`, s: ['[data-fila="pa"]'], c: C.tepRiesgo },
       { t: 'Sube la gravedad del émbolo para ver el paso al alto riesgo.', s: ['#dock'], c: C.tepRiesgo }] },
-  'sobrecarga': { tit: 'Sobrecarga de volumen', frase: (R) => `${R.pcp >= TOPES.pcp ? `PCP ${R.pcp}: pasa el techo de 18-20` : `PVC ${R.pvc}, ${R.pvc - R.pvc0} más que al llegar: las venas ya no admiten más`} y más volumen no sube el gasto (IC ${c1(R.ic)})${R.edema > 50 ? `; ${Math.round(R.edema).toLocaleString('es-ES')} mL de edema en el pulmón (SpO₂ ${R.spo2} %)` : ''}. Los botones de volumen se apagan.`, org: 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general',
+  'sobrecarga': { tit: 'Sobrecarga de volumen', frase: (R) => `${R.pcp >= TOPES.pcp ? `PCP ${R.pcp}: pasa el techo de 18-20` : `PVC ${R.pvc}, ${R.pvc - R.pvc0} más que al llegar: las venas ya no admiten más`} y más volumen no sube el gasto (IC ${c1(R.ic)})${R.edema > 50 ? `; ${Math.round(R.edema).toLocaleString('es-ES')} mL de edema en el pulmón (SpO₂ ${R.spo2} %)` : ''}. Los botones de volumen se apagan.`, org: (R) => R.pcp >= TOPES.pcp ? 'ficha · p. 42 (PCP 18-20) y p. 11' : 'ficha · p. 42 y p. 11 · el 12 de PVC: fisiología general',
     guia: [{ t: (R) => R.pcp >= TOPES.pcp ? `PCP ${R.pcp}: pasa el techo de la presión de llenado de la ficha (18-20).` : `PCP ${R.pcp}: aún por debajo del techo de 18-20 de la ficha.`, s: ['[data-fila="pcp"]'], c: C.llenado },
       { t: (R) => `PVC ${R.pvc} (entró con ${R.pvc0}): por encima de 12 es raro que más volumen suba el gasto (fisiología general, no de la ficha).`, s: ['[data-fila="pvc"]'], c: C.llenado, org: 'el 12: fisiología general' },
       { t: (R) => `El gasto no mejora (IC ${c1(R.ic)}): pasado el techo, más volumen no sube el gasto.`, s: ['[data-fila="ic"]'], c: C.llenado },
       { t: 'Mira el pulmón: con la PCP por encima de 18 se encharca (gotas) y la SpO₂ baja.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' },
       { t: 'Pasa el reloj: 3/4 del cristaloide se van al intersticio y los botones vuelven a encenderse.', s: ['[data-pest="reloj"]'], c: C.volIni }] },
   'hemo-tope': { tit: 'Repuesto más de lo perdido', frase: (R, X) => `Has dado ${(X.infundido.cris + X.infundido.sangre).toLocaleString('es-ES')} mL: más de 1,5 veces lo perdido (≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL, ${R.perdida} % de la volemia). Los botones de volumen se apagan.`, org: 'ficha · p. 21-23 (la volemia) · el ×1,5: ilustrativo',
-    guia: [{ t: (R, X) => `Perdió ${R.perdida} % de la volemia: ≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL (66 mL/kg × ${X.pac.peso} kg).`, s: ['#cor-cav'], c: C.volemia },
+    guia: [{ t: (R, X) => `Perdió ${R.perdida} % de la volemia: ≈ ${perdidoMl(X.pac, R).toLocaleString('es-ES')} mL (${mlKg(X.pac)} mL/kg × ${X.pac.peso} kg).`, s: ['#cor-cav'], c: C.volemia },
       { t: 'La sangre repone hematíes y volumen; el cristaloide, solo volumen, y 3/4 se van al intersticio.', s: ['[data-pest="vol"]'], c: C.volIni },
       { t: (R) => `PVC ${R.pvc} y PCP ${R.pcp}: reponer más de lo perdido solo sobrecarga.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.t151, org: 'el tope ×1,5: ilustrativo' }] },
   'hipertension-vaso': { tit: 'Hipertensión por vasopresor', frase: (R, X) => `PAM ${R.pam} con ${X.ajuste.na ? `noradrenalina a ${X.ajuste.na} µg/min` : 'vasopresina'}${X.ajuste.na && X.ajuste.vaso ? ' y vasopresina' : ''}: este paciente no estaba en shock y el vasopresor lo pasa de largo. Baja la dosis.`, org: 'ficha · p. 12-13 (el fármaco) · el 110: fisiología general',
