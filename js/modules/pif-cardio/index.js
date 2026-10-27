@@ -5,12 +5,13 @@ import { createViewSwitcher } from '../../core/navigation.js';
 import { temasPifEcgA, preguntasPifEcgA } from '../../data/pif-ecg-preguntas-a.js';
 import { temasPifEcgB, preguntasPifEcgB } from '../../data/pif-ecg-preguntas-b.js';
 import { temasPifEcgC, preguntasPifEcgC } from '../../data/pif-ecg-preguntas-c.js';
+import { temasPifEcgD, preguntasPifEcgD } from '../../data/pif-ecg-preguntas-d.js';
 import { init as initEcg } from './ecg-arritmias.js';
 
 export const quizTriggerId = ['btn-pif-ecg-repasar'];
-export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgC];
+export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgD, ...preguntasPifEcgC];
 const ASIGNATURA = 'Cardiología · PIF';
-export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgC]
+export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...temasPifEcgC]
     .map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'ECG y arritmias' }));
 
 export function init() {
