@@ -13,6 +13,7 @@
 //     cita: lo que entiende la función cita() de la página; origen: 'ficha · p. 45' | 'fisiología general' | 'ilustrativo'
 //     deshabilita: selectores CSS de los botones que se apagan mientras dure el tope (se vuelven a encender al quitarlo)
 //     bajo: selector del mando bajo el que va el aviso (por defecto, al final del dock)
+//     (con 'sello' o con 'aviso'). refrescar(): vuelve a aplicar deshabilita tras repintar el dock (los selectores se guardan, no los nodos).
 //   Poner una clave que ya existe la reemplaza. quitar() de una clave que no está no hace nada.
 import { instalarCss } from './dibujo-iso.js';
 
@@ -41,7 +42,7 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
   const avisos = document.createElement('div'); avisos.className = 'tope-avisos'; avisos.setAttribute('role', 'status');
   avisos.classList.add('dock-pliega');
   (dock?.querySelector('.dock-in') || dock)?.append(avisos);
-  const activos = new Map();       // clave → { nivel, nodos, off }
+  const activos = new Map();       // clave → { nivel, nodos, off, sels }
   const apagados = new Map();      // botón → cuántos topes lo apagan
 
   const apagar = (el) => { const n = apagados.get(el) || 0; apagados.set(el, n + 1); if (!n) { el.dataset.topeAntes = el.disabled ? '1' : ''; el.disabled = true; el.classList.add('tope-apagado'); } };
@@ -55,6 +56,12 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
     const t = activos.get(clave); if (!t) return;
     t.nodos.forEach((n) => n.remove()); t.off.forEach(encender); activos.delete(clave);
   }
+  // Guarda los SELECTORES, no los nodos: si la página repinta el dock, refrescar() vuelve a apagar los botones nuevos.
+  function aplicarOff(t) {
+    t.off = t.off.filter((el) => { if (el.isConnected) return true; encender(el); return false; });
+    for (const sel of t.sels) for (const el of document.querySelectorAll(sel)) if (!t.off.includes(el)) { apagar(el); t.off.push(el); }
+  }
+  function refrescar() { for (const t of activos.values()) if (t.sels.length) aplicarOff(t); }
   function poner(clave, { nivel = 'aviso', titulo = '', texto = '', cita: c = null, origen = '', deshabilita = [], bajo = null } = {}) {
     quitar(clave);
     const nodos = [], off = [];
@@ -65,7 +72,6 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
       const s = document.createElement('div'); s.className = 'tope-sello'; s.dataset.tope = clave; s.setAttribute('role', 'alert');
       s.innerHTML = `⛔ ${esc(titulo)}<small>${esc(texto)}</small>${pie ? `<small>${pie}</small>` : ''}`;
       mon.append(s); nodos.push(s);
-      for (const sel of [].concat(deshabilita)) for (const el of document.querySelectorAll(sel)) { apagar(el); off.push(el); }
     } else {
       const a = document.createElement('div'); a.className = 'tope-aviso'; a.dataset.tope = clave;
       a.innerHTML = `⚠ ${cuerpo}${pie ? `<small>${pie}</small>` : ''}`;
@@ -74,7 +80,8 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
       nodos.push(a);
     }
     linea.append(lin); nodos.push(lin);
-    activos.set(clave, { nivel, nodos, off });
+    const t = { nivel, nodos, off, sels: [].concat(deshabilita || []) };
+    activos.set(clave, t); aplicarOff(t);
   }
-  return { poner, quitar, activos: () => [...activos].map(([clave, t]) => ({ clave, nivel: t.nivel })) };
+  return { poner, quitar, refrescar, activos: () => [...activos].map(([clave, t]) => ({ clave, nivel: t.nivel })) };
 }

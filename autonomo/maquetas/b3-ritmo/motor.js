@@ -270,10 +270,10 @@ export const MOTOR = (() => {
         if (m.fa) tg = Math.min(tg, proxFA);
         if (m.fv) tg = Math.min(tg, proxFV);
         if (m.foco) tg = Math.min(tg, proxFoco);
-        // El escape de la unión: con el nodo AV cerrado (adenosina), si pasan 1,2 s sin QRS, el His late solo (~50/min;
+        // El escape de la unión: con el nodo AV cerrado (adenosina), si pasa 1 s sin QRS, el His late solo (~50/min;
         // fisiología general: la unión AV escapa a 40-60/min). Sin él, el cerrojo dejaba el ventrículo sin ritmo.
         let proxEsc = Infinity;
-        if (m.cerrojoFin > m.cerrojo && m.cerrojo >= 0) { const u = latidosV.length ? latidosV[latidosV.length - 1].t0 : -1e9; proxEsc = Math.max(m.cerrojo, u + 1.2, escUlt + 1.2); if (proxEsc < m.cerrojoFin) tg = Math.min(tg, proxEsc); else proxEsc = Infinity; }
+        if (m.cerrojoFin > m.cerrojo && m.cerrojo >= 0) { const u = latidosV.length ? latidosV[latidosV.length - 1].t0 : -1e9; proxEsc = Math.max(m.cerrojo, u + 1.0, escUlt + 1.0); if (proxEsc < m.cerrojoFin) tg = Math.min(tg, proxEsc); else proxEsc = Infinity; }
         const te = heap.length ? heap[0].t : Infinity;
         const t = Math.min(tg, te);
         if (t > hasta) break;

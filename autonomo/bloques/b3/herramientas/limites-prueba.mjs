@@ -2,7 +2,7 @@
 // (cifras imposibles, mandos sin tope, sin consecuencia visible, errores de consola, desborde).
 // Uso: python3 -m http.server 8796 (en la raíz del repo) y  node limites-prueba.mjs [shock|pulmon|receptor|ritmo|todo]
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
-const BASE = 'http://127.0.0.1:8796/autonomo/maquetas/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8796}/autonomo/maquetas/`;
 const QUE = process.argv[2] || 'todo';
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
@@ -30,6 +30,29 @@ if (QUE === 'shock' || QUE === 'todo') {
     if (k === 'mateo') { for (let i = 1; i <= 10; i++) { await tap('[data-sangre="1000"]'); await page.waitForTimeout(300); } fila('  +10 L sangre', await R()); }
     console.log('  desborde', await desb(), 'NaN', await nan());
   }
+  // 1b) bolos pequeños (+500) hasta el sello: antes del sello el pulmón tiene que encharcarse y la SpO₂ caer (vuelta 2, 27/10/2026).
+  // Mateo (reposición ×1,5) y Consuelo (TEP, 500 mL de la ficha) paran por otro tope de la ficha y no llegan al edema: se anotan, no se exigen.
+  const fallos = [];
+  for (const k of ['amparo', 'aurelio', 'joaquin', 'mateo', 'consuelo']) {
+    await tap(`[data-pac="${k}"]`); await page.waitForTimeout(250); await tap('[data-pest="grav"]'); await grav(100); await page.waitForTimeout(400); await tap('[data-pest="vol"]');
+    let n = 0, r = await R();
+    for (; n < 40; n++) {
+      const ok = await page.evaluate(() => { const b = document.querySelector('[data-vol="500"]'); if (!b || b.disabled) return false; b.click(); return true; });
+      if (!ok) break; await page.waitForTimeout(300); r = await R();
+    }
+    fila(`${k} +500 ×${n} hasta el sello`, r);
+    if (['amparo', 'aurelio', 'joaquin'].includes(k) && !(r.edema > 0 && r.spo2 < 95)) fallos.push(`${k}: edema ${r.edema}, SpO₂ ${r.spo2} al sello`);
+  }
+  // 1c) Aurelio con ECMO 6 L/min y 6 L, y el reloj 24 h encima: el pulmón no puede mejorar solo con el VI distendido
+  await tap('[data-pac="aurelio"]'); await page.waitForTimeout(250); await tap('[data-pest="grav"]'); await grav(100); await page.waitForTimeout(400);
+  await tap('[data-pest="sop"]'); await tap('[data-sop="impella"]'); await page.waitForTimeout(500); await range('#d-imp', 55, ['change']); await page.waitForTimeout(500);
+  await tap('.dock-asa'); await tap('[data-pest="vol"]'); for (let i = 0; i < 3; i++) { await tap('[data-vol="2000"]'); await page.waitForTimeout(300); }
+  await tap('[data-pest="sop"]'); await tap('[data-sop="ecmo"]'); await page.waitForTimeout(500); await range('#d-ecmo', 60, ['change']); await page.waitForTimeout(800);
+  const e0 = await R(); fila('Aurelio ECMO 6 + 6 L', e0);
+  await tap('.dock-asa'); await tap('[data-pest="reloj"]'); await tap('[data-h="18"]'); await page.waitForTimeout(400); await tap('[data-h="5"]'); await page.waitForTimeout(400); await tap('[data-h="1"]'); await page.waitForTimeout(500);
+  const e24 = await R(); fila('  reloj +24 h', e24);
+  if (!(e0.edema > 0)) fallos.push('ECMO: sin edema tras 6 L'); if (!(e24.edema >= e0.edema) || !/Edema de pulmón/.test(e24.topes)) fallos.push(`ECMO +24 h: edema ${e0.edema} → ${e24.edema}, sellos ${e24.topes}`);
+  console.log(fallos.length ? 'FALLOS EDEMA: ' + fallos.join(' | ') : 'EDEMA antes del sello: bien');
   // 2) el reloj sin fin: Amparo, +18 h × 20 (15 días)
   await tap('[data-pac="amparo"]'); await page.waitForTimeout(250); await tap('[data-pest="reloj"]');
   for (let i = 1; i <= 20; i++) { await tap('[data-h="18"]'); await page.waitForTimeout(250); if ([1, 5, 20].includes(i)) fila(`Amparo reloj +${18 * i} h`, await R()); }
@@ -162,12 +185,13 @@ if (QUE === 'ritmo' || QUE === 'todo') {
   // --- Vuelta de topes (profesor, 26/10 noche): repetición de cada acción, con espera para separar el efecto transitorio
   //     (el bolo que acaba de caer) del tope que falta. accN cuenta cuántas veces existía el botón al pulsarlo.
   const CAP = '/tmp/plan-socialista/b3/limites/'; await import('node:fs').then((fs) => fs.mkdirSync(CAP, { recursive: true }));
-  const accN = async (a, n = 1, ms = 250) => { let hits = 0; for (let i = 0; i < n; i++) { hits += await page.evaluate((a) => { const b = document.querySelector(`[data-acc="${a}"]`); if (!b || b.disabled) return 0; b.click(); return 1; }, a); await page.waitForTimeout(ms); } return hits; };
+  const accN = async (a, n = 1, ms = 250) => { let hits = 0; for (let i = 0; i < n; i++) { if (a.startsWith('ade')) await page.waitForFunction(() => window.__ritmo.simT >= window.__ritmo.mo.m.cerrojoFin, null, { timeout: 15000 }).catch(() => {}); hits += await page.evaluate((a) => { const b = document.querySelector(`[data-acc="${a}"]`); if (!b || b.disabled) return 0; b.click(); return 1; }, a); await page.waitForTimeout(ms); } return hits; };
   const topes = () => page.evaluate(() => ({ sellos: document.querySelectorAll('.tope-sello').length, avisos: document.querySelectorAll('.tope-aviso').length, apagados: document.querySelectorAll('[data-acc]:disabled, [data-acc].tope-apagado').length, bomba: document.querySelector('#bomba, .bomba')?.textContent.replace(/\s+/g, ' ').slice(0, 60) || '-' }));
   const L2 = async (t, esperas = [800, 3000, 6000]) => { let prev = 0; for (const ms of esperas) { await page.waitForTimeout(ms - prev); prev = ms; fila(`${t} +${ms / 1000} s`, await L()); } console.log('   topes', JSON.stringify(await topes())); };
   console.log('¿usa tope.js?', await page.evaluate(() => !!document.querySelector('.tope-mon, .tope-avisos')));
   await pon('nodal'); console.log('nodal ade6 ×1 hits', await accN('ade6', 1)); await L2('  ade6 ×1');
   await pon('nodal'); console.log('nodal ade6 ×1 + ade12 ×6 hits', await accN('ade6', 1), await accN('ade12', 6)); await L2('  ade12 ×6', [800, 2000, 4000, 7000]);
+  console.log('  sello ade (3 bolos) →', await page.evaluate(() => !!document.querySelector('.tope-sello[data-tope="ade"]')), '| botones ade apagados →', await page.evaluate(() => [...document.querySelectorAll('[data-acc^="ade"]')].every((b) => b.disabled)));
   await page.screenshot({ path: CAP + 'ritmo-01-nodal-ade12x6.png' });
   await pon('nodal'); console.log('nodal dilt ×3 hits', await accN('dilt-nodo', 3)); await L2('  dilt ×3 solo');
   await pon('nodal'); console.log('nodal vagal-c ×10 hits', await accN('vagal-c', 10)); await L2('  masaje ×10', [800, 3000]);
@@ -180,7 +204,8 @@ if (QUE === 'ritmo' || QUE === 'todo') {
   await pon('fa'); console.log('fa cv-fa ×5 hits', await accN('cv-fa', 5, 400)); await L2('  cv ×5', [800, 3000]);
   await pon('torsade'); for (const k of ['haloperidol', 'claritromicina', 'amiodarona', 'kBajo', 'mgBajo', 'caBajo']) if (!(await page.evaluate((k) => window.__ritmo.S.qt[k], k))) await accN('qt-' + k);   // el estado «torsade» ya trae 4 factores puestos: pulsar los 6 apagaba 4 (no era un doble toggle) await page.waitForTimeout(3000); fila('torsade 6 factores (3 s)', await L());
   console.log('  tdp disabled?', await page.evaluate(() => document.querySelector('[data-acc="tdp"]')?.disabled), 'hits', await accN('tdp', 1)); await page.waitForTimeout(1500);
-  console.log('  mg-tdp ×5 hits', await accN('mg-tdp', 5), 'desf-tdp ×5 hits', await accN('desf-tdp', 5, 400)); await L2('  tdp Mg×5 desf×5', [800, 3000]);
+  console.log('  mg-tdp ×5 hits', await accN('mg-tdp', 5), 'desf-tdp ×5 hits', await accN('desf-tdp', 5, 400));
+  console.log('  Mg torsade: aviso →', await page.evaluate(() => !!document.querySelector('[data-tope="mgTdp"]')), '| botón apagado →', await page.evaluate(() => document.querySelector('[data-acc="mg-tdp"]')?.disabled)); await L2('  tdp Mg×5 desf×5', [800, 3000]);
   await pon('fv'); await accN('comp'); console.log('fv responde: choque ×1 hits', await accN('choque', 1)); await page.waitForTimeout(2500); fila('  tras 1 choque', await L());
   console.log('  choque ×4 más hits', await accN('choque', 4, 400), 'adre ×15 hits', await accN('adre', 15, 120), 'amio ×5 hits', await accN('amio-pcr', 5, 120));
   await page.waitForTimeout(1500); fila('  tras RCE: choque×4 adre×15 amio×5', await L()); console.log('   parada', await page.evaluate(() => { const p = window.__ritmo.S.parada; return JSON.stringify({ choques: p.choques, rce: p.rce, adre: p.adrenalina.length, amio: p.amio, reloj: Math.round(p.reloj) }); }));

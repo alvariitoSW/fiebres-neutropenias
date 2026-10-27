@@ -133,12 +133,13 @@ function leer() {
   const midiendo = desde > simT - ven && elec.length < 2 && !(mo.m.fv || (mo.m.foco && S.tdp));
   // la FC del monitor: media de los últimos latidos (en la FA, de toda la ventana: es irregular); si se hace una pausa,
   // cae con ella (no va detrás del dibujo)
-  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return 0; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
+  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return null; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
   let fc = ritmo(elec, b => b.t0);
   const caos = mo.m.fv || (mo.m.foco && S.tdp);
   const lat = latidos(t).filter(b => b.t > desde && b.t <= t);
   const palp = lat.filter(b => b.amp >= 12);
-  let pul = 0; if (palp.length && lat.length) { const u = lat.slice(-8), pu = u.filter(b => b.amp >= 12); pul = Math.min(fc, Math.round(fc * pu.length / Math.max(1, u.length))); }
+  // el pulso se mide en la misma ventana que la FC (los últimos 6 latidos; en la FA, toda la ventana) y solo se separa de ella en la FA (déficit de pulso)
+  let pul = 0; if (fc != null && palp.length && lat.length) { if (mo.m.fa) { const w0 = elec.length ? elec[0].t0 - 0.05 : desde, u = lat.filter(b => b.t >= w0), pu = u.filter(b => b.amp >= 12); pul = Math.min(fc, Math.round(fc * pu.length / Math.max(1, u.length))); } else pul = fc; }
   // la PA, latido a latido como el monitor: la sistólica, el pico de cada uno de los últimos 4 latidos que mueven sangre;
   // la diastólica, la presión justo antes de su subida. En la parada o sin latidos, lo más alto y lo más bajo de 3 s
   let pas = 0, pad = 999;
@@ -161,7 +162,7 @@ function leer() {
     const rrQ = elec.length >= 3 ? fin.t0 - elec[elec.length - 3].t0 : rr || 0.8;
     qtc = qt / Math.sqrt(rrQ);
   }
-  return { midiendo, fc: caos ? null : fc, pul: caos ? 0 : pul, pas: Math.round(pas), pad: Math.round(pad), qrs, pr, qt, qtc, rr, ult, prev, caos };
+  return { midiendo, fa: !!mo.m.fa, fc: caos ? null : fc, pul: caos ? 0 : pul, pas: Math.round(pas), pad: Math.round(pad), qrs, pr, qt, qtc, rr, ult, prev, caos };
 }
 function anchoKernel(b) {   // ¿llegó por His-Purkinje (estrecho) o por el músculo (ancho)? Lo dice el registro del motor
   let p = 0, m = 0; for (const a of mo.reg) { if (a.t < b.t0 - 0.001 || a.t > b.fin + 0.001) continue; const nd = G.nodos[a.k]; if (nd.tipo !== 'v') continue; if (a.et === 1) p++; else m++; }
@@ -174,11 +175,11 @@ function pintarCifras() {
   const L = leer(); ultLect = L; const p = P_();
   const cel = (k, cls, et, v, u, o, estado = '') => ({ k, cls, et, v, u, obj: o, estado });
   const parada = p && !p.rce;
-  const celdas = [cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.midiendo ? '—' : L.fc, 'lpm', 'del ECG · ilustrativo')];
+  const celdas = [cel('fc', 'c-ecg', 'FC', L.caos ? (mo.m.fv ? 'FV' : 'TV') : L.midiendo || L.fc == null ? '—' : L.fc, 'lpm', 'del ECG · ilustrativo')];
   const sinPulso = parada ? !p.comp : L.midiendo ? false : L.pas - L.pad < 6;
   celdas.push(cel('art', 'c-art', 'ART', sinPulso || L.midiendo ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : L.midiendo ? 'midiendo…' : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : ''));
-  const def = L.fc && !parada ? Math.max(0, L.fc - L.pul) : 0;
-  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.midiendo ? '—' : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
+  const def = L.fa && L.fc && !parada ? Math.max(0, L.fc - L.pul) : 0;
+  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.midiendo || L.fc == null ? '—' : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
   const k4 = cuartaCifra(L);
   celdas.push(cel(k4.k, 'c-co2', k4.et, k4.v, k4.u, k4.o, k4.cls || ''));
   pintarColumna(c, celdas, { tapado });
@@ -213,7 +214,7 @@ function pintarDock() {
   else h.push(mandosMedir());
   $('dock-panel').innerHTML = h.join('');
   for (const r of $('dock-panel').querySelectorAll('input[type=range]')) r.oninput = e => deslizar(e.target);
-  aplicarTopes(true);
+  aplicarTopes(); tope.refrescar();   // el dock se rehízo: los botones nuevos vuelven a apagarse
   medirDock();
 }
 function mandosTratar() {
@@ -329,7 +330,7 @@ function accion(a, b) {
     const r = calcularTopes(S, simT, mo);
     if (r.off.has(a)) { avisar(`Tope: ${Object.values(r.T).map(x => x.titulo).join(' · ')}. ${Object.values(r.T).map(x => x.texto).join(' ')}`); pintarDock(); return; }
     if (ADE.includes(a)) S.dosis.ade = (S.dosis.ade || 0) + 1;
-    else if (['dilt-nodo', 'vagal-v', 'vagal-m', 'vagal-c', 'mg-tam', 'meto-tam', 'vera-tam', 'amio-tv'].includes(a)) S.dosis[a] = (S.dosis[a] || 0) + 1;
+    else if (['dilt-nodo', 'vagal-v', 'vagal-m', 'vagal-c', 'mg-tam', 'mg-tdp', 'meto-tam', 'vera-tam', 'amio-tv'].includes(a)) S.dosis[a] = (S.dosis[a] || 0) + 1;
   }
   switch (a) {
     case 'reinicio': ponerEstado(c, c === 'fa' ? { fcFA: S.fcFA } : {}); return;
@@ -426,7 +427,6 @@ function aplicarTopes(forzar) {
   if (nuevo) { S.mensaje = null; pintarFrase(); }   // un sello nuevo manda sobre la frase vieja
   for (const b of document.querySelectorAll('#dock-panel [data-acc]')) {
     const a = b.dataset.acc, sm = b.querySelector('small');
-    if (r.off.has(a)) { if (!b.disabled) { b.disabled = true; b.classList.add('tope-apagado'); } } else if (b.classList.contains('tope-apagado')) { b.disabled = false; b.classList.remove('tope-apagado'); }
     if (sm) { if (b.dataset.small0 == null) b.dataset.small0 = sm.textContent; sm.textContent = a in r.rot ? r.rot[a] : b.dataset.small0; }
   }
 }
@@ -454,6 +454,7 @@ function pintarFrase() {
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
   if (p && !p.rce && p.comp) extra = p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
+  if (mo && ultLect && ultLect.fc == null && !ultLect.caos && S.sinusal && !(p && !p.rce)) [t, o] = ['Pausa tras el choque: el sinusal tarda un latido en arrancar.', 'fisiología general'];
   if (!S.mensaje && topeFrase) { t = topeFrase[0]; o = topeFrase[1]; extra = ''; }
   $('frase-txt').innerHTML = S.mensaje ? `${S.mensaje}` : `${t} ${org(o)}${extra}`;
   medirDock();
