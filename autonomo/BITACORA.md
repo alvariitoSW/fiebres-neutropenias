@@ -323,7 +323,7 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · caps. 34-36 del Libro Azul (Sección IV, pp. 565-608) (los temarios del PIF no
+- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) (los temarios del PIF no
   existen: ver B-005). (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
   3.ª tanda.)
 - **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
@@ -375,9 +375,8 @@ El resto del tablero sigue `aparcada`.
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
   («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12
   derivaciones. Antes de construir, maqueta para elegir. Detalle en `docs/historial/cardiologia.md`.
-- **El Libro Azul**: solo faltan los **caps. 34-36 de la Sección IV** (Respiratorio, pp. 565-608: la parte 2 acaba
-  en la p. 564 con la bibliografía del cap. 33, y la Sección V empieza en la p. 609 con el cap. 37). Las IV (caps.
-  24-33), V, VI, VIII, IX y X llegaron el 27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
+- **El Libro Azul**: **completo** en `docs/` (secciones I a X, caps. 1-61). Las IV, V, VI, VIII, IX y X llegaron el
+  27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
   de R1.
 - **✅ El Libro Azul, 27/10 (4.ª tanda)**, en `docs/`. Fuente: *El libro azul. Bases fisiopatológicas de la medicina
   crítica* (Medicucheando). Página impresa = página del PDF + desplazamiento (comprobado en dos páginas de cada uno):
@@ -400,6 +399,8 @@ El resto del tablero sigue `aparcada`.
     hipercapnia, IRA, EPOC, SDRA, NAV), pp. 385-464; +384 (pdf 5 = 389, pdf 60 = 444, pdf 80 = 464).
   - `libro-azul-seccion-iv-respiratorio-parte2.pdf`: caps. 30-33 (diafragma, ventilación mecánica y sus modos, modos
     nuevos, monitorización respiratoria), pp. 465-564; +464 (pdf 1 = 465, pdf 30 = 494, pdf 60 = 524).
+  - `libro-azul-seccion-iv-respiratorio-parte3.pdf`: caps. 34-36 (bases de las técnicas, trabajo respiratorio,
+    retirada de la ventilación mecánica), pp. 565-608; +564 (pdf 1 = 565, pdf 21 = 585, pdf 40 = 604).
   Desbloquea la segunda parte de B-004 (secciones nuevas, cuando la apruebes).
 - **PIF de R1**: ya no se espera ningún PDF de temario (27/10): ver B-005.
 - **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
