@@ -39,7 +39,7 @@ export const C = {
   final: cf('mc-fa-frecuencia', 'mc-fa-punto-final', 'Punto final del control', 25),
   cv: cf('mc-fa-cardioversion', 'mc-cardioversion', 'Cardioversión eléctrica', 25),
   cha: cf('mc-fa-cardioversion', 'mc-tabla-19-2', 'Tabla 19.2', 26),
-  valv: cf('mc-fa-cardioversion', 'mc-fa-valvular', 'FA valvular', '26-27'),
+  valv: cf('mc-fa-cardioversion', 'mc-tabla-19-2-indicacion', 'FA valvular', '26-27'),
   warf: cf('mc-fa-cardioversion', 'mc-tabla-19-3', 'Warfarina y ACOD', 27),
   wpw: cf('mc-fa-cardioversion', 'mc-wpw', 'Síndrome de WPW', '27-28'),
   tam: cf('mc-otras-taqui', 'mc-tam', 'Taquicardia auricular multifocal', 28),

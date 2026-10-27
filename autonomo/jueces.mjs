@@ -112,7 +112,7 @@ function archivos(dir, ext, fuera = []) {
     for (const p of preguntas) if (p.id) ids.set(p.id, (ids.get(p.id) || 0) + 1);
     const dupl = [...ids].filter(([, c]) => c > 1).map(([k]) => k);
     dupl.length ? mal(`Quiz: ids de pregunta repetidos: ${dupl.join(', ')}`) : ok('Quiz: ids de pregunta únicos');
-    const rango = preguntas.filter(p => p.tipo !== 'redactar' && (!Array.isArray(p.opciones) || p.correcta < 0 || p.correcta >= p.opciones.length));
+    const rango = preguntas.filter(p => !['redactar', 'destapa', 'error'].includes(p.tipo) && (!Array.isArray(p.opciones) || p.correcta < 0 || p.correcta >= p.opciones.length));
     rango.length ? mal(`Quiz: «correcta» fuera de rango en ${rango.map(p => p.id).join(', ')}`) : ok('Quiz: respuestas correctas dentro de rango');
 }
 

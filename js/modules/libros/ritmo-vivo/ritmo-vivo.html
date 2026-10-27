@@ -8,6 +8,11 @@
         <h2 class="rtv-titulo">El corazón eléctrico</h2>
       </header>
 
+      <div class="rtv-interruptor" role="tablist" aria-label="Qué hacer con el modelo">
+        <button type="button" role="tab" id="rtv-modo-explorar" aria-selected="true">Explorar</button>
+        <button type="button" role="tab" id="rtv-modo-preguntas" aria-selected="false">Mayéutica</button>
+      </div>
+
       <section class="monitor" id="rtv-monitor" aria-label="Monitor de cabecera">
         <div class="mon-cab"><span id="rtv-mon-tit">Monitor · derivación II</span><span class="rtv-der"><span class="rtv-mon-reloj" id="rtv-mon-reloj" hidden></span><button type="button" id="rtv-pausa" aria-pressed="false">Pausa</button></span></div>
         <div class="mon-cuerpo">
@@ -42,7 +47,9 @@
 
       <div class="rtv-graficas" id="rtv-graficas"></div>
 
-      <!-- [HUECO ritmo parte 2: Mayéutica] -->
+      <div id="rtv-vista-preguntas" class="rtv-bloque" hidden>
+        <div id="rtv-preg" class="rtv-formato rtv-entra"></div>
+      </div>
 
       <section id="rtv-zona-abajo" class="rtv-bloque">
         <details class="rtv-plegable"><summary>Las fuentes de este estado</summary><ul class="rtv-lista" id="rtv-lista-fuentes"></ul></details>
@@ -65,6 +72,10 @@
           <div class="rtv-dock-panel" id="rtv-dock-panel"></div>
         </div>
         <div class="dock-in" id="rtv-dock-guia" hidden></div>
+        <div class="dock-in rtv-dock-estudio" id="rtv-dock-estudio" hidden>
+          <div class="rtv-pasos" id="rtv-dock-pasos"></div>
+          <div class="rtv-dock-est-txt"><span id="rtv-dock-est-izq"></span><span id="rtv-dock-est-der"></span></div>
+        </div>
       </div>
 
       <dialog id="rtv-visor"><div class="rtv-caja-img"><img id="rtv-visor-img" alt=""></div><p id="rtv-visor-txt"></p><div class="rtv-fila" style="margin-top:8px; justify-content:space-between"><span id="rtv-visor-cita"></span><button type="button" class="rtv-b" id="rtv-visor-cerrar">Cerrar</button></div></dialog>

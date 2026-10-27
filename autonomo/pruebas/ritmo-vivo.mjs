@@ -1,4 +1,4 @@
-// Prueba de navegador del corazón eléctrico (juez de autonomo/jueces.mjs --modelo ritmo-vivo). Parte 1: el modelo (sin Mayéutica).
+// Prueba de navegador del corazón eléctrico (juez de autonomo/jueces.mjs --modelo ritmo-vivo). Parte 2: también la Mayéutica (las 10 preguntas acertando y fallando, el repaso y el caso de Teodoro entero).
 // Uso: node autonomo/pruebas/ritmo-vivo.mjs <url-base> [--capturas <carpeta>]
 // Recorre a 390 px (con movimiento) y a 360 px (con «reducir movimiento»), cada uno en un contexto limpio: accesos (menú de
 // Libros y los 4 botones de Merino Cardiología, cada uno en su estado, con su «← VOLVER» a la ficha), todos los estados con
@@ -9,6 +9,7 @@
 // Mide el desborde lateral (0 px) tras cada paso. Sale con código 1 si algo falla.
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const { ESTADOS, GUIAS, C, FICHAS } = await import(new URL('../../js/data/ritmo-vivo-data.js', import.meta.url));
+const { PREGUNTAS, CASOS } = await import(new URL('../../js/data/ritmo-vivo-preguntas.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -116,6 +117,85 @@ async function correr(ANCHO, REDUCIDO) {
   await p.evaluate(() => document.getElementById('rtv-pausa').click()); ok(await R('pausado'), 'Pausa'); await p.evaluate(() => document.getElementById('rtv-pausa').click());
   await p.evaluate(() => document.querySelector('#rtv-laminas [data-lam]')?.click()); await p.waitForTimeout(300);
   ok(await p.evaluate(() => document.getElementById('rtv-visor').open && document.getElementById('rtv-visor-img').naturalWidth > 0), 'una lámina del libro abre su visor con la imagen cargada'); await p.evaluate(() => document.getElementById('rtv-visor-cerrar').click());
+  // 7b. La Mayéutica: las 10 preguntas (acertando y fallando), el repaso y el caso entero; sin desborde y sin nada tapado tras cada respuesta
+  {
+    await abrir(''); await p.waitForTimeout(500);
+    const clic = sel => p.evaluate(sel => { const e = document.querySelector(sel); if (!e) return false; e.click(); return true; }, sel);
+    const cuenta = sel => p.evaluate(sel => document.querySelectorAll(sel).length, sel);
+    const libre = async (tag2) => { // el botón «Siguiente» (o el último elemento de la respuesta) queda a la vista, sobre el dock, y sin desborde lateral
+      await p.waitForTimeout(REDUCIDO ? 120 : 700);
+      const r = await p.evaluate(() => { const s = document.querySelector('#rtv-preg [data-accion="sig"]') || document.querySelector('#rtv-preg [data-accion="comprobar"]'); const d = document.getElementById('rtv-dock').getBoundingClientRect(); if (!s) return { sin: true }; const b = s.getBoundingClientRect(); return { top: b.top, bottom: b.bottom, dock: d.top }; });
+      const dd = await desborde();
+      ok(dd <= 0 && (r.sin || (r.top >= 0 && r.bottom <= r.dock + 1)), `${tag2}: sin desborde y «Siguiente» a la vista sobre el dock${r.sin ? '' : ` (bottom ${Math.round(r.bottom)} / dock ${Math.round(r.dock)})`}`);
+    };
+    const textoDe = html => p.evaluate(h => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent.trim(); }, html);
+    async function contestar(q, bien, etiqueta) {
+      if (q.tipo === 'test') {
+        ok((await cuenta('#rtv-preg [data-op]')) === 0, `${etiqueta}: las opciones no están en el HTML antes de «Ya lo tengo»`);
+        await clic('#rtv-preg [data-accion="ops"]');
+        const quiero = q.opciones.find(o => !!o.ok === bien) || q.opciones[0], txt = await textoDe(quiero.t);
+        const hecho = await p.evaluate(txt => { const b = [...document.querySelectorAll('#rtv-preg [data-op]')].find(x => x.textContent.trim() === txt); if (!b) return false; b.click(); return true; }, txt);
+        ok(hecho, `${etiqueta}: elige una opción ${bien ? 'buena' : 'mala'}`);
+        ok(await p.evaluate(b => !!document.querySelector('#rtv-preg .rtv-' + (b ? 'ok' : 'mal')), bien), `${etiqueta}: dice ${bien ? '«Bien»' : 'qué le habría pasado al paciente'}`);
+        if (q.tocar) { await clic('#rtv-preg [data-mando="ade6"]'); await p.waitForTimeout(200); await clic('#rtv-preg [data-accion="comprobar"]'); await p.waitForTimeout(200); ok(await R('S').then(S => !!(S && S.adeno)), `${etiqueta}: la adenosina se puso en el modelo`); }
+      } else if (q.tipo === 'destapa') {
+        ok((await cuenta('#rtv-preg input[type=checkbox]')) === 0, `${etiqueta}: los puntos no están en el HTML antes de destapar`);
+        await clic('#rtv-preg [data-accion="destapa"]');
+        await p.evaluate(b => { document.querySelectorAll('#rtv-preg input[type=checkbox]').forEach(c => { if (b) c.checked = true; }); }, bien);
+        await clic('#rtv-preg [data-accion="puntos"]');
+      } else if (q.tipo === 'error') {
+        await p.evaluate(([b, mal]) => { document.querySelectorAll('#rtv-preg [data-fr]').forEach((x, i) => { if (b === mal[i]) x.click(); }); }, [true, q.frases.map(f => !!f.mal)]);
+        if (!bien) await p.evaluate(() => document.querySelector('#rtv-preg [data-fr]').click());
+        await clic('#rtv-preg [data-accion="corregir"]');
+        await clic('#rtv-preg [data-ver]');
+      }
+      await libre(etiqueta);
+    }
+    const hecho390 = [];
+    await clic('#rtv-modo-preguntas'); await p.waitForTimeout(400);
+    ok(await p.evaluate(() => !document.getElementById('rtv-vista-preguntas').hidden && document.getElementById('rtv-dock-explorar').hidden && !document.getElementById('rtv-dock-estudio').hidden), 'Mayéutica: se abre la vista de preguntas y el dock de progreso');
+    ok((await desborde()) <= 0, 'Mayéutica: inicio sin desborde'); await foto('may-inicio');
+    await clic('[data-ir="recorrido"]'); await p.waitForTimeout(300);
+    for (let i = 0; i < PREGUNTAS.length; i++) {
+      const q = PREGUNTAS[i], bien = i % 2 === 0;
+      const enun = await p.evaluate(() => document.querySelector('#rtv-preg .rtv-pregunta')?.textContent || '');
+      ok(enun.length > 20, `pregunta ${i + 1} de 10 (${q.num}) a la vista`);
+      if (i === 0) await foto('may-pregunta');
+      await contestar(q, bien, `${q.num} ${bien ? 'acertada' : 'fallada'}`);
+      if (i === 1) await foto('may-respuesta');
+      await clic('#rtv-preg [data-accion="sig"]'); await p.waitForTimeout(250);
+    }
+    // el repaso: solo lo fallado (5 test fallados), cada una vuelve y un acierto la saca
+    const nRep = await cuenta('#rtv-preg [data-rep]');
+    ok(nRep === 5, `repaso: vuelven las 5 falladas (salen ${nRep})`); await foto('may-repaso');
+    for (let k = 0; k < 5; k++) {
+      const id = await p.evaluate(() => document.querySelector('#rtv-preg [data-rep]')?.dataset.rep); if (!id) break;
+      await clic(`#rtv-preg [data-rep="${id}"]`); await p.waitForTimeout(250);
+      await contestar(PREGUNTAS.find(q => q.id === id), true, `repaso ${id}`);
+      await clic('#rtv-preg [data-accion="sig"]'); await p.waitForTimeout(250);
+    }
+    ok((await cuenta('#rtv-preg [data-rep]')) === 0 && /No queda nada/.test(await p.evaluate(() => document.getElementById('rtv-preg').innerText)), 'repaso: tras acertar las 5, no queda nada');
+    await clic('#rtv-preg [data-ir="casos"]'); await p.waitForTimeout(250);
+    ok((await desborde()) <= 0, 'casos: lista sin desborde'); await clic('#rtv-preg [data-caso="0"]'); await p.waitForTimeout(300);
+    const C0 = CASOS[0];
+    for (let i = 0; i < C0.pasos.length; i++) {
+      const q = C0.pasos[i].pregunta, bien = i !== 1;
+      ok(await p.evaluate(() => !!document.querySelector('#rtv-preg dl.rtv-paciente') && !!document.querySelector('#rtv-preg .rtv-dia')), `caso paso ${i + 1}: la ficha del paciente y el momento`);
+      if (i === 2) await foto('may-caso-paso3');
+      await contestar(q, bien, `caso paso ${i + 1}`);
+      await clic('#rtv-preg [data-accion="sig"]'); await p.waitForTimeout(300);
+    }
+    ok(/lo que te llevas/i.test(await p.evaluate(() => document.getElementById('rtv-preg').innerText)) && (await cuenta('#rtv-preg .rtv-lleva li')) === 3, 'caso: el final con «Lo que te llevas» (3 puntos)');
+    ok(await p.evaluate(() => !!document.querySelector('#rtv-preg [data-fin="modelo"]') && !!document.querySelector('#rtv-preg [data-especialidad][data-resaltar]')), 'caso: botón del modelo y «Repasar en la ficha» con su párrafo');
+    ok(await p.evaluate(() => { const b = document.querySelector('#rtv-preg [data-especialidad][data-resaltar]'); return !!document.querySelector(b.dataset.resaltar); }), 'caso: el «Repasar en la ficha» apunta a un párrafo que existe');
+    ok((await desborde()) <= 0, 'caso: final sin desborde'); await foto('may-caso-fin');
+    // cada cita de las preguntas lleva a un párrafo que existe
+    const mal = []; for (const q of [...PREGUNTAS, ...C0.pasos.map(x => x.pregunta)]) for (const c of [q.fuente, q.fuente2, ...(q.puntos || []).map(x => x.c), ...(q.frases || []).map(f => f.cita)].filter(Boolean)) if (!(await p.evaluate(id => !!document.getElementById(id), c.id))) mal.push(q.id + ':' + c.id);
+    ok(mal.length === 0, `todas las citas de las preguntas llevan a un párrafo que existe${mal.length ? ' · faltan ' + mal.join(', ') : ''}`);
+    await clic('#rtv-preg [data-fin="modelo"]'); await p.waitForTimeout(400);
+    ok(await p.evaluate(() => window.__ritmo.modo === 'explorar' && window.__ritmo.S.clave === 'fa' && !document.getElementById('rtv-dock-explorar').hidden), 'caso: «Abrir el corazón de Teodoro» vuelve a Explorar en FA');
+    ok((await desborde()) <= 0, 'Mayéutica → Explorar sin desborde');
+  }
   // 8. Ids sin duplicar, bucle que se para al salir
   ok(await p.evaluate(() => { const v = {}; let d = 0; document.querySelectorAll('[id]').forEach(e => { if (v[e.id]) d++; v[e.id] = 1; }); return d === 0; }), 'ids sin duplicar en todo el DOM');
   if (!REDUCIDO) {

@@ -55,6 +55,7 @@ const MODELOS = {
     telarVivo: { especialidad: 'libros', view: 'telarVivo', nombre: '🧵 el telar vivo' },
     inmersionViva: { especialidad: 'libros', view: 'inmersionViva', nombre: '🤿 la inmersión' },
     vasoVivo: { especialidad: 'libros', view: 'vasoVivo', nombre: '🩹 el vaso que sangra' },
+    ritmoVivo: { especialidad: 'libros', view: 'ritmoVivo', nombre: '⚡ el corazón eléctrico' },
 };
 // modeloVivo (el modelo grande de la pregunta) sale primero; modelo (p. ej. la vista Visual de la ficha), detrás.
 const modelosDe = o => [].concat(o?.modeloVivo || [], o?.modelo || []);
