@@ -96,8 +96,11 @@ test('P1 · el pliegue se dibuja: la pared libre de la AD y la del VD se hunden 
     let hundido = 0; for (let i = 0; i < a.length; i += 3) hundido = Math.max(hundido, Math.hypot(a[i] - b[i], a[i + 1] - b[i + 1], a[i + 2] - b[i + 2]));
     assert.ok(hundido > 4, `${pieza}: la pared se mueve ${hundido.toFixed(1)} mm`);
   }
-  // la AD plegada tiene los mL de la AD del motor (como sin pliegue, B2: ±12 %)
-  const s = p.o[instanteMax(p, 'pliegueAd')], e = estadoGeo(s, p.ex);
+  // la AD plegada tiene los mL de la AD del motor (como sin pliegue, B2: ±12 %), medida en la AD más llena de las plegadas
+  // del derrame por defecto (con el taponamiento a fondo la AD plegada está en el mínimo que se dibuja, 15 mL)
+  const pd = paciente('derrame', ESCENARIOS.derrame.gravedad.defecto);
+  const s = pd.o.filter((x, i) => pd.e[i].pliegueAd > 0.6).reduce((a, b) => (b.vad > a.vad ? b : a)), e = estadoGeo(s, pd.ex);
+  assert.ok(s.vad > 20 && e.pliegueAd > 0.6, `AD de ${s.vad.toFixed(0)} mL plegada ${e.pliegueAd.toFixed(2)}`);
   const ad = construirCorazon(e, { detalle: false }).partes.find(x => x.nombre === 'AD');
   const P = ad.pos, I = ad.idx; let zMin = Infinity; for (let i = 2; i < P.length; i += 3) zMin = Math.min(zMin, P[i]);
   let n = 0, zs = 0; for (let i = 2; i < P.length; i += 3) if (P[i] < zMin + 2) { zs += P[i]; n++; }
@@ -109,17 +112,24 @@ test('P1 · el pliegue se dibuja: la pared libre de la AD y la del VD se hunden 
   assert.ok(Math.abs(vAd - vMotor) / vMotor < 0.12, `AD dibujada ${vAd.toFixed(1)} mL, motor ${s.vad.toFixed(1)} (dibujo desde 15)`);
 });
 
-// grosor del líquido en una dirección: radio del saco con derrame menos sin derrame, a una altura dada (antes de mover)
+// radio de una malla en el plano horizontal z0, en la dirección f0 (rayo desde el eje), tal como se dibuja (ya movida)
+function radioEn(pz, z0, f0) {
+  const P = pz.pos, I = pz.idx, dx = Math.cos(f0), dy = Math.sin(f0); let best = 0;
+  for (let k = 0; k < I.length; k += 3) { const t = [0, 1, 2].map(j => [P[3 * I[k + j]], P[3 * I[k + j] + 1], P[3 * I[k + j] + 2]]), q = [];
+    for (let e = 0; e < 3; e++) { const a = t[e], b = t[(e + 1) % 3]; if ((a[2] < z0) !== (b[2] < z0)) { const f = (z0 - a[2]) / (b[2] - a[2]); q.push([a[0] + f * (b[0] - a[0]), a[1] + f * (b[1] - a[1])]); } }
+    if (q.length !== 2) continue; const [A, B] = q, ex = B[0] - A[0], ey = B[1] - A[1], den = dx * ey - dy * ex; if (Math.abs(den) < 1e-12) continue;
+    const tt = (A[0] * ey - A[1] * ex) / den, ss = (A[0] * dy - A[1] * dx) / den; if (tt > 0 && ss >= 0 && ss <= 1) best = Math.max(best, tt); }
+  return best;
+}
+// grosor del líquido en una dirección: radio del saco con derrame menos sin derrame, a una altura dada
 function grosor(liq, z0, f0) {
   const p = paciente('normal'), s = p.o.reduce((a, b) => (b.vvi > a.vvi ? b : a));
-  const radio = (L) => { const g = construirCorazon({ ...estadoGeo(s, p.ex), liquidoPeri: L, vviTd: s.vvi }, OP), P = g.partes.find(x => x.nombre === 'Pericardio').pos;
-    let best = null; for (let i = 0; i < P.length; i += 3) { const d = Math.abs(P[i + 2] - z0) / 4 + Math.abs(Math.atan2(Math.sin(Math.atan2(P[i + 1], P[i]) - f0), Math.cos(Math.atan2(P[i + 1], P[i]) - f0)));
-      if (!best || d < best[0]) best = [d, Math.hypot(P[i], P[i + 1])]; } return best[1]; };
+  const radio = (L) => radioEn(construirCorazon({ ...estadoGeo(s, p.ex), liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), z0, f0);
   return radio(liq) - radio(0);
 }
 
 test('P1 · el líquido empieza por detrás (lo declive con el paciente tumbado) y al crecer rodea al VD y a la AD', () => {
-  const zV = -40;   // tercio medio de los ventrículos (el corazón ya movido: el saco se mide tal como se ve)
+  const zV = -30;   // tercio medio de los ventrículos (el corazón ya movido: el saco se mide tal como se ve)
   const atras = grosor(60, zV, -Math.PI / 2), delante = grosor(60, zV, Math.PI / 2);
   assert.ok(atras > 2 * delante && atras > 3, `60 mL: detrás ${atras.toFixed(1)} mm, delante ${delante.toFixed(1)} mm`);
   const atrasG = grosor(388, zV, -Math.PI / 2), delanteG = grosor(388, zV, Math.PI / 2), ad = grosor(388, 15, Math.PI);

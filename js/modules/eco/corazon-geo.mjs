@@ -383,12 +383,12 @@ export function construirCorazon(estado, opciones = {}) {
   const kAi = kAu(estado.vai, REF.vAi), kAd = kAu(estado.vad, REF.vAd);
   // forma de la cúpula: a = 0 en el suelo, π/2 en el techo
   // P1 · Colapso de la pared libre de la AD (formas.mjs, plieguePared, desde la presión transmural del motor): la pared
-  // lateral, la que no toca el tabique (hacia fuera del anillo tricúspide, ángulo phiT), se hunde hasta un 60 % a media
+  // lateral, la que no toca el tabique (hacia fuera del anillo tricúspide, ángulo phiT), se hunde hasta un 85 % a media
   // altura; ni el suelo (el anillo) ni el techo (las cavas) se mueven. Forma y profundidad: ilustrativas
   const PSI_PLIEGUE_AD = 3.23;
   const factorPliegue = (psi, a, plg) => { if (!(plg > 0)) return 1;
     const d = Math.atan2(Math.sin(psi - PSI_PLIEGUE_AD), Math.cos(psi - PSI_PLIEGUE_AD));
-    return 1 - 0.6 * plg * Math.exp(-(d / 0.75) * (d / 0.75)) * Math.pow(Math.sin(2 * a), 1.5); };
+    return 1 - 0.85 * plg * Math.exp(-(d / 0.6) * (d / 0.6)) * Math.sin(2 * a); };
   const cupulaPunto = (c, rho, H, inclin, bulto, a, psi, encoger = 0, plg = 0) => {
     const k = ((psi / TAU) * NR % NR + NR) % NR, k0 = Math.floor(k), f = k - k0;
     const rr = mix(rho[k0], rho[(k0 + 1) % NR], f) * Math.pow(Math.cos(a), 0.5) * (1 + bulto * Math.sin(2 * a)) * factorPliegue(psi, a, plg) - encoger;
@@ -735,10 +735,11 @@ export function construirCorazon(estado, opciones = {}) {
     // DERRAME: peso de cada punto del saco (ilustrativo). post: 1 detrás (−y, lo declive con el paciente tumbado), 0 delante.
     // circ: parte circunferencial, que crece con el volumen (de ~20 % con poco líquido a ~80 % con mucho)
     const circ = 0.2 + 0.6 * paso(60, 300, liq);
-    const cAi = [mc[0] - centroSaco(10)[0], mc[1] - centroSaco(10)[1]], fAi = Math.atan2(cAi[1], cAi[0]);
+    // seno oblicuo: detrás de la AI (−y), un poco hacia la izquierda del paciente (+x), que es donde queda la AI
+    const fSeno = Math.atan2(-1, 0.45);
     const peso = (z, f) => {
-      const post = 0.5 * (1 - Math.sin(f)), d = Math.atan2(Math.sin(f - fAi), Math.cos(f - fAi));
-      const senoOblicuo = 1 - 0.75 * paso(2, 14, z) * Math.exp(-(d / 0.8) * (d / 0.8));
+      const post = 0.5 * (1 - Math.sin(f)), d = Math.atan2(Math.sin(f - fSeno), Math.cos(f - fSeno));
+      const senoOblicuo = 1 - 0.8 * paso(2, 14, z) * Math.exp(-(d / 0.6) * (d / 0.6));
       const reflexion = 1 - paso(zMax - 22, zMax, z);
       return ((1 - circ) * post * post + circ) * senoOblicuo * reflexion;
     };
@@ -891,11 +892,11 @@ export function baseGeometrica(estado) {
   // La pared libre (de delante a la cara diafragmática, la que ven el paraesternal y el subcostal) se hunde hacia el
   // tabique en el tercio medio; ni la base (anillo, infundíbulo) ni el ápex se mueven. Como el pliegue entra en la
   // cuadrática de A, el resto de la cavidad se abomba lo justo para que el VD siga teniendo el volumen del motor.
-  // Forma, centro (2,4 rad), anchura y profundidad (80 %): ilustrativos
+  // Forma, centro (2,4 rad), anchura y profundidad (90 %): ilustrativos
   const pliVd = clamp(estado.pliegueVd ?? 0, 0, 1);
   const plieg = pliVd > 0 ? memo((f) => Math.exp(-Math.pow((anguloNorm(f) - 2.4) / 0.75, 2))) : null;
   const pliegZ = (z) => { const sv = -z / Lvd; return paso(0.04, 0.25, sv) * (1 - paso(0.6, 0.9, sv)); };
-  const fVd = pliVd > 0 ? (z, f) => 1 - 0.8 * pliVd * plieg(f) * pliegZ(z) : () => 1;
+  const fVd = pliVd > 0 ? (z, f) => 1 - 0.9 * pliVd * plieg(f) * pliegZ(z) : () => 1;
   // volumen del VD = C0 + C1·A + C2·A² (cuadrática exacta en A)
   let C0 = 0, C1 = 0, C2 = 0;
   { const nz = 20, nf = 40, span = REF.phiB - REF.phiA, df = span / nf, dz = Lvd / nz;

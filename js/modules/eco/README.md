@@ -218,7 +218,23 @@ en la ecografía, la línea del pericardio cortaba la pared). Ahora:
 - **El derrame**, a las mismas alturas que el saco y 1,5 mm por dentro, así queda dentro fila a fila.
 - La ecografía ya no necesita evitar pintar el pericardio sobre una pared (se quitó ese parche).
 - Coste: ~2 ms más por fotograma con geometría exacta (los fotogramas con formas precalculadas no lo pagan).
-- La holgura (3 mm más ~0,06 mm por mL de derrame) sigue siendo ilustrativa.
+- La holgura (3 mm) sigue siendo ilustrativa.
+
+**P1 (eco-mega, 27/10/2026): taponamiento con colapso y un saco más real.** El motor da la presión **transmural** de la
+AD y del VD (`ptmAd`, `ptmVd` = cámara − saco; la de cada cámara ya lleva `pperi` dentro, por eso «saco > cámara» nunca
+se cumplía). `formas.mjs` (`plieguePared`) la convierte en un pliegue 0-1 de la pared libre cuando cae por debajo de lo
+que empuja el saco (umbral 1 mmHg y capa de líquido de 40 mL: ilustrativos; sin líquido, ningún pliegue: el saco tenso
+de la dilatada no hunde nada). `corazon-geo.mjs` hunde la pared lateral de la AD (hasta 85 %) y el tercio medio de la
+pared libre del VD (hasta 90 %), y las dos cavidades conservan el volumen del motor. Resultado: la AD se pliega desde
+~140 mL (telediástole y sístole) y el VD desde ~330-360 mL (empieza al final de la relajación y en el llenado rápido);
+a fondo (388 mL) la AD está plegada el 88 % del ciclo. Fuentes de lo que se ve: Fisiopatología UCI · Cardiología,
+Ficha 11 (El Libro Azul, parte 2, p. 65) y Marino cap. 21 (p. 64). El **saco** ya no es una cúpula de 56 mm sobre las
+aurículas: en cada altura es la envolvente convexa de lo que va dentro (lámina tensa, sin hundirse más de 1 mm por mm
+entre alturas, con un máximo suave para que no salte al latir), se cierra en tejado sobre las raíces y no se hunde con
+los pliegues. El **derrame** se reparte con la gravedad (detrás primero; circunferencial al crecer), queda fino detrás
+de la AI (seno oblicuo) y se adelgaza arriba (reflexiones); el volumen dibujado es el del motor (±3 %). Pruebas:
+`pruebas/taponamiento.test.mjs`. Pendiente: pulso paradójico (el motor no respira) y la guía de pericardio de la ASE
+(Klein 2013, no está en `docs/`).
 
 ## Huella de las aurículas sin saltos
 
