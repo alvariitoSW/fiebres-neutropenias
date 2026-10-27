@@ -447,6 +447,23 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · La suite entera, una vez por fusión** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3
+  (TAPSE 1,9 M y 61 pasos en 2 h: cada suite de la eco tardaba 14 min con 3 constructores a la vez, y dio fallos
+  falsos del navegador que hubo que repetir) y b3-pantallas (consola 0,97 M, por encima de presupuesto por pruebas
+  de >2 min) · Cambio: el constructor pasa sus pruebas par y las de los archivos que tocó; la suite entera la pasa el
+  director una vez al fusionar cada rama, y nunca más de 2 agentes con pruebas largas a la vez · Ahorro esperado:
+  ~2-3 M por parada de la eco.
+- **Ahorro · Cada constructor en su propia carpeta** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3
+  (unas 10 vueltas del director solo para contestar al aviso de «cambios sin guardar» mientras un constructor
+  trabajaba en la carpeta principal; el director gastó 2,0 M) y eco-mega parada 2 (director 4,9 M; dos constructores
+  en la misma carpeta se rompieron la suite el uno al otro) · Cambio: todo constructor trabaja en un `git worktree`
+  propio que sale de la rama del bloque, y la carpeta principal queda limpia para el director · Ahorro esperado:
+  ~0,3-0,5 M de director por parada y menos vueltas por suites rotas.
+- **Ahorro · Partir por estructura antes de lanzar** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3
+  (N1 = fosa oval + seno coronario + Eustaquio: 98 pasos, 1,6 M; R1b 108 pasos) y objetivos-casos (vuelta 2 que
+  mezcló motor y 4 modelos: 1,4 M, 75 herramientas) · Cambio: si un encargo nombra más de una estructura anatómica o
+  más de un fenómeno del motor, se parte en encargos de ≤60 pasos antes de lanzarlo · Ahorro esperado: ~0,5-1 M por
+  parada (menos relectura de caché en conversaciones largas).
 - (27/10: ya está en la PR #32, en borrador; falta que la mires) (26/10) **Publicar ya lo hecho del bloque 3.** La rama `auto/b3` tiene, sin PR desde el 23/10: las 26 fichas de
   Merino Cardiología y Neumología con sus páginas, la vista Visual y Texto | Estudiar en las 9 fichas del shock (152
   preguntas, 4 casos, auditadas con 0 graves). Hoy no lo ves en el móvil porque espera a las maquetas. Propongo
