@@ -61,6 +61,18 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     - **La prueba del modelo lleva cada mando a su tope** (y las acciones repetidas, a su máximo) y comprueba que sale
       el sello y que las cifras siguen siendo de un paciente posible. La pieza común es
       `autonomo/maquetas/comun/tope.js` (aviso y sello).
+15. **Lo que la ficha no dice, se busca y se cita** (el usuario, 27/10/2026: «lo que la fuente no dice, todo eso
+    habría que buscarlo e incluirlo y minimizar ese apartado a un par de chorradas que falten; hay que mejorar esa fuga
+    de info»). Un mecanismo, distractor, explicación, tope o cifra que hoy saldría rotulado `fisiología general`, «la
+    fuente no lo dice» o «hueco» **se busca antes**: otro PDF de `docs/`, una guía o un artículo (§7.2 de `CLAUDE.md`:
+    URL que salga literal en los resultados; con `/claim-check` y `/citation-verification` si hay acceso a PubMed), y
+    se escribe con su cita. Si la fuente nueva es un PDF de acceso abierto, va a `docs/` con su `#page=`.
+    - `fisiología general` sin cita queda **solo para lo trivial** (aritmética, definiciones de manual: VMe = VT × FR).
+    - Un **hueco** solo cuando se buscó y no se encontró: el parte dice qué se buscó y dónde.
+    - Las fuentes nuevas no se mezclan con la ficha (CLAUDE §2): van como segunda cita o nota de fuentes, con el nombre
+      de la fuente a la vista.
+    - El constructor entrega, junto a la lista de frases nuevas, la lista de las que quedan sin cita; el auditor marca
+      **grave** una sin cita que no sea trivial.
 
 ## 2. La app
 
@@ -133,6 +145,12 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      agentes.
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
      darlo por roto (con la máquina cargada fallan pruebas que están bien).
+   - **Una tarea, una sola sesión** (aprobado por el usuario, 27/10/2026): antes de empezar una tarea, el director
+     mira las sesiones activas (`list_sessions` con `mine: true`, y `get_session` de las que trabajan) y la rama
+     remota `auto/<clave>`. Si otra sesión activa ya lleva esa tarea (por su título, su rama o un «en curso» del
+     tablero de otra sesión), no la empieza: no toca nada, se lo dice al usuario y termina. Antes de abrir la
+     sesión siguiente con `create_session`, la misma comprobación. El 27/10 dos sesiones arrancaron `movil-existente`
+     a la vez (las abrieron `jueces-movil` y `jueces-topes`, cada una por su lado).
 
 7. **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que
    hacer que la siguiente nos intente costar un poco menos»; vale para todas las sesiones y tareas). Un agente paga en
@@ -204,6 +222,8 @@ vez:
 3. Cada regla nacida así se apunta en la lista de abajo, con la tarea donde se vio.
 
 **Reglas nacidas de fallos**
+- §1.15 (lo que la ficha no dice, se busca y se cita): pantallas del `b3` (27/10/2026); la auditoría encontró
+  mecanismos y distractores sin fuente rotulados «fisiología general» o «el libro no lo dice». Pedida por el usuario.
 - §4.8 (llegar al 8,75 a la primera, R1-R9): medida de `notas-meta` (27/10/2026), aprobadas por el usuario
   («apruebo todas las propuestas de regla de R1 a R9»).
 - §4.6 (carpeta aparte desde la rama del bloque; nada de `git stash` ni `pkill` amplios; puerto por `PUERTO=`):

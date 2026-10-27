@@ -4,10 +4,14 @@ import { instalarIso } from '../comun/dibujo-iso.js';
 import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
 import { monitorDelShock, CANALES } from './canales.js';
 import { instalarMonitor, pintarCifras as pintarColumna } from '../comun/monitor.js';
+import { crearDock } from '../comun/dock.js';
 import { montarImpella, montarBalon, montarEcmo } from './aparatos.js';
 import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA_IMPELLA, LEYENDA_BALON, LEYENDA_ECMO } from './despiece.js';
 import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
+import { crearTope } from '../comun/tope.js';
 import * as D from './datos.js';
+import { crearConsolaBalon } from './consola-balon.js';
+import { calcularTopes, bolosQueNoCaben } from './topes.js';
 
 const $ = (id) => document.getElementById(id);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -38,6 +42,7 @@ const est = { modo: 'explorar', pac: D.PACIENTES[0], g: D.PACIENTES[0].rec.g, re
   pausa: false, tapado: false, canales: 'todos', pest: 'grav', historia: [] };
 let cab = null, R = null;
 const monitor = monitorDelShock($('trazas'));
+const iabp = crearConsolaBalon($('iabp'), { cab: () => cab, cita, org, citaIabp: D.C.iabp, alCambiar: (c) => trabajar(() => cab.ajustar(c)) }); monitor.alMuestrear(iabp.muestra);
 
 function recDe(pac, extra = {}) { return { ...pac.rec, g: est.g, ...extra }; }
 function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asentar = 30 } = {}) {
@@ -62,11 +67,17 @@ function reconstruir() {   // al cambiar la gravedad: mismo paciente, mismos man
   est.rec = recDe(est.pac);
   cab.ajustar({ na: aj.na, vaso: aj.vaso, dobuta: aj.dobuta, soporte: aj.soporte, impella: aj.impella, ecmo: aj.ecmo, venteo: aj.venteo, total: aj.total });
   if (inf.cris) cab.volumen(inf.cris); if (inf.sangre) cab.volumen(inf.sangre, 'sangre');
-  cab.correr(8); est.horas = h;
+  cab.correr(8);
+  // la gravedad define al paciente que llega: el laboratorio vuelve a ser el de la hora 0 (v3: antes la clase I llegaba con el
+  // lactato de la clase III)
+  est.horas = 0; est.historia = [];
+  const P0 = perfusion(cab.lectura, est.rec);
+  est.lab = { lact: P0.lactObj, diur: P0.diurObj };
+  apuntarHistoria();
 }
 function avanzarReloj(horas, { silencioso = false } = {}) {
   cab.redistribuir(); cab.correr(8);
-  est.lab = avanzarLab(est.lab, perfusion(cab.lectura, est.rec), horas);
+  est.lab = avanzarLab(est.lab, perfusion(cab.lectura, est.rec), horas, { pam: cab.lectura.u.pam });
   est.horas += horas;
   apuntarHistoria();
   if (!silencioso) refrescar(true);
@@ -77,16 +88,16 @@ function apuntarHistoria() { const u = cab.lectura.u; est.historia.push({ h: est
 function leer() {
   const L = cab.lectura, u = L.u, P = perfusion(L, est.rec);
   const r = {
-    fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pcp: Math.round(u.pvp),
+    fc: Math.round(u.fc), pas: Math.round(u.pas), pad: Math.round(u.pad_), pam: Math.round(u.pam), pvc: Math.round(u.pvc), pvc0: Math.round(L.pvc0), pcp: Math.round(u.pvp),
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
-    imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
+    imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), picoNo: L.picoNo != null ? Math.round(L.picoNo) : null, teleNo: L.teleNo != null ? Math.round(L.teleNo) : null, teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
   return r;
 }
-const ctxX = () => ({ pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
+const ctxX = () => ({ g: est.g, pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
 function ctxMon() {
   const P = cab.lectura ? perfusion(cab.lectura, est.rec) : { petco2: 35 };
   return { fr: est.pac.fr || 16, etco2: P.petco2, amplPleth: est.pac.tipo === 'septico' ? 1 : 0.65, voltajeBajo: est.pac.tipo === 'tapon' ? 0.6 : null };
@@ -153,7 +164,8 @@ function pintarCifras() {
 const horaTxt = () => est.horas === 0 ? 'ahora' : est.horas >= 24 ? `+${Math.floor(est.horas / 24)} d ${est.horas % 24 ? (est.horas % 24) + ' h' : ''}`.trim() : `+${est.horas} h`;
 function pintarConsola() {
   const ap = cab.ajuste.soporte, el = $('consola');
-  if (ap === 'no' || est.tapado) { el.hidden = true; return; }
+  const consolaBalon = ap === 'balon' && !est.tapado; $('iabp').hidden = !consolaBalon; if (consolaBalon) { iabp.cifras(); iabp.pintar(); }
+  if (ap === 'no' || est.tapado || consolaBalon) { el.hidden = true; return; }
   el.hidden = false;
   if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span>${R.totalPide != null ? `<span>total pedido <b>${coma(R.totalPide, 1)}</b></span>` : ''}<span>bomba <b>${coma(R.imp, 1)}</b>${D.bombaNoLlega(R) ? ` de ${coma(R.impPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`
     + (D.bombaNoLlega(R) ? `<span class="consola-aviso">⚠ La bomba no llega: el VI está casi vacío. Llénalo antes (pestaña Volumen).</span>` : '');
@@ -175,7 +187,7 @@ const EXPLICA = {
 $('monitor').addEventListener('click', (ev) => {
   const c = ev.target.closest('[data-fila]'); if (!c || est.tapado) return;
   const [t, ci] = EXPLICA[c.dataset.fila] || []; if (!t) return;
-  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}`;
+  const d = $('detalle'); d.hidden = false; d.innerHTML = `<span>${t}</span>${cita(ci)}` + (c.dataset.fila === 'spo2' ? '<span>Con ECMO el valor es una mezcla: fisiología general, la ficha no lo dice.</span><button type="button" class="chip-b" data-nota="spo2-ecmo">Ver la nota</button>' : '');
 });
 
 // ---------------------------------------------------------------- la escena
@@ -279,7 +291,7 @@ let claveActual = '';
 function pintarFrase() {
   const k = D.nombreEstado(R, ctxX()), E = D.ESTADOS[k]; claveActual = k;
   if (!E) return;
-  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase(R, ctxX())} ${org(E.org, false)}`;
+  $('frase-txt').innerHTML = `<span class="estado">${E.tit}</span>${E.frase(R, ctxX())} ${org(typeof E.org === 'function' ? E.org(R) : E.org, false)}`;
   const vistas = new Set(), lis = [];
   for (const p of E.guia) { const c = p.c; const kk = c.f + c.id + c.sitio; if (vistas.has(kk)) continue; vistas.add(kk); lis.push(c); }
   const T = D.OBJETIVOS[tablaActual()].cita; lis.push(T);
@@ -317,7 +329,8 @@ function pintarDock() {
     const G = D.GRAVEDAD[t], [a, b] = G.texto(est.g, p);
     h.push(`<div class="deslizador"><input type="range" id="d-grav" min="0" max="100" step="1" value="${Math.round(est.g * 100)}" aria-label="Gravedad"><output id="o-grav">${a}<small>${b}</small></output></div><p class="dock-nota">${G.nota} ${org('la escala del mando: el modelo')}</p>`);
   } else if (est.pest === 'vol') {
-    h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button" class="tog" data-vol="250">+250 mL<small>cristaloide</small></button><button type="button" class="tog" data-vol="500">+500 mL<small>cristaloide</small></button><button type="button" class="tog" data-vol="2000">+2 L<small>cristaloide</small></button>${t === 'hemo' ? '<button type="button" class="tog" data-sangre="1000">+1 L<small>sangre completa</small></button>' : ''}</div>`);
+    const no = bolosQueNoCaben(R, ctxX()), off = (mL) => no(mL) ? ' disabled class="tog tope-apagado"' : ' class="tog"';
+    h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button"${off(250)} data-vol="250">+250 mL<small>cristaloide</small></button><button type="button"${off(500)} data-vol="500">+500 mL<small>cristaloide</small></button><button type="button"${off(2000)} data-vol="2000">+2 L<small>cristaloide</small></button>${t === 'hemo' ? `<button type="button"${off(1000)} data-sangre="1000">+1 L<small>sangre completa</small></button>` : ''}</div>`);
     h.push(`<p class="dock-nota">Llevas ${cab.infundido.cris.toLocaleString('es-ES')} mL de cristaloide${cab.infundido.sangre ? ` y ${cab.infundido.sangre} mL de sangre` : ''}. Al pasar la hora, 3/4 del cristaloide se van al intersticio (p. 11).</p>`);
   } else if (est.pest === 'far') {
     h.push(`<div class="seg" role="group" aria-label="Noradrenalina">${[0, 5, 10, 25, 30].map((d) => `<button type="button" data-na="${d}" aria-pressed="${aj.na === d}">${d}<small>${d ? 'µg/min' : 'sin NA'}</small></button>`).join('')}</div>`);
@@ -329,9 +342,10 @@ function pintarDock() {
     if (!ok && est.aparato !== 'no') h.push(`<p class="dock-nota">${D.indicacion(p, est.aparato).txt}</p>`);
     if (est.aparato === 'no') h.push(`<p class="dock-nota">La fuente lo reserva para el shock cardiogénico refractario (p. 45): pruébalo con Aurelio.</p>`);
   } else {
-    h.push(`<div class="rejilla" style="--n:3"><button type="button" class="tog" data-h="1">+1 hora</button><button type="button" class="tog" data-h="5">+5 horas</button><button type="button" class="tog" data-h="18">+18 horas</button></div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
+    h.push(`<div class="rejilla" style="--n:3">${[[1, '+1 hora'], [5, '+5 horas'], [18, '+18 horas']].map(([n, tx]) => `<button type="button"${est.horas + n > D.TOPES.horas ? ' disabled class="tog tope-apagado"' : ' class="tog"'} data-h="${n}">${tx}</button>`).join('')}</div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
   }
   $('dock-panel').innerHTML = h.join('');
+  aplicarTopes(true);
   const dg = $('d-grav');
   if (dg) { dg.oninput = () => { est.g = +dg.value / 100; const [a, b] = D.GRAVEDAD[t].texto(est.g, p); $('o-grav').innerHTML = `${a}<small>${b}</small>`; }; dg.onchange = () => { trabajar(() => reconstruir()); }; }
   medirDock();
@@ -344,7 +358,7 @@ function pintarMandos() {
     h.push(`<div class="deslizador"><input type="range" id="d-imp" min="25" max="55" step="1" value="${Math.round(aj.impella * 10)}" aria-label="Flujo del Impella" ${aj.total != null ? 'disabled' : ''}><output>${coma(aj.impella, 1)} L/min<small>2,5-5,5 según el catéter (p. 47)</small></output></div>`);
     h.push(`<button type="button" class="tog" data-total="1" aria-pressed="${aj.total != null}">Gasto total pedido: 5,0 L/min<small>mide el gasto propio y ajusta la bomba (p. 47)</small></button>`);
   }
-  if (ok && ap === 'ecmo') h.push(`<div class="deslizador"><input type="range" id="d-ecmo" min="0" max="60" step="1" value="${Math.round(aj.ecmo * 10)}" aria-label="Flujo del ECMO"><output>${coma(aj.ecmo, 1)} L/min<small>hasta 5-6 (p. 48)</small></output></div><div class="seg" role="group" aria-label="Venteo del VI">${[['no', 'Sin venteo'], ['balon', 'Balón'], ['impella', 'Impella'], ['drenaje', 'Drenaje']].map(([k, n]) => `<button type="button" data-vent="${k}" aria-pressed="${aj.venteo === k}">${n}</button>`).join('')}</div><p class="dock-nota">Venteo: un balón o un Impella a la vez, o drenar el VI (p. 48-49). Por dónde se drena, la fuente no lo dice.</p>`);
+  if (ok && ap === 'ecmo') h.push(`<div class="deslizador"><input type="range" id="d-ecmo" min="10" max="60" step="1" value="${Math.round(aj.ecmo * 10)}" aria-label="Flujo del ECMO"><output>${coma(aj.ecmo, 1)} L/min<small>hasta 5-6 (p. 48)</small></output></div><div class="seg" role="group" aria-label="Venteo del VI">${[['no', 'Sin venteo'], ['balon', 'Balón'], ['impella', 'Impella'], ['drenaje', 'Drenaje']].map(([k, n]) => `<button type="button" data-vent="${k}" aria-pressed="${aj.venteo === k}">${n}</button>`).join('')}</div><p class="dock-nota">Venteo: un balón o un Impella a la vez, o drenar el VI (p. 48-49). Por dónde se drena, la fuente no lo dice.</p>`);
   if (ok && ap === 'balon') h.push(`<div class="seg" role="group" aria-label="Volumen del balón">${[35, 40].map((v) => `<button type="button" data-bal="${v}" aria-pressed="${aj.balon === v}">${v} mL<small>de helio (p. 45)</small></button>`).join('')}</div>`);
   $('mandos').innerHTML = h.length ? `<div class="formato" style="gap:5px"><span class="tipo">Los mandos del aparato</span>${h.join('')}</div>` : '';
   const di = $('d-imp'); if (di) di.onchange = () => trabajar(() => cab.ajustar({ impella: +di.value / 10 }));
@@ -364,7 +378,8 @@ $('dock-panel').addEventListener('click', (ev) => {
   if (d.sangre) trabajar(() => cab.volumen(+d.sangre, 'sangre'), 20);
   if (d.na) trabajar(() => cab.ajustar({ na: +d.na }));
   if (d.far) trabajar(() => cab.ajustar({ [d.far]: !cab.ajuste[d.far] }));
-  if (d.sop) { est.aparato = d.sop; est.vista = d.sop === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro'; trabajar(() => cab.ajustar({ soporte: D.indicacion(est.pac, d.sop).ok || d.sop === 'no' ? d.sop : 'no' })); monitor.llenar(cab, ctxMon()); monitor.pintar(); }
+  if (d.sop) { est.aparato = d.sop; est.vista = d.sop === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro'; trabajar(() => cab.ajustar({ soporte: D.indicacion(est.pac, d.sop).ok || d.sop === 'no' ? d.sop : 'no' })); monitor.llenar(cab, ctxMon()); monitor.pintar();
+    if (d.sop !== 'no') { dock.plegar(true); $('escena').scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' }); } }
   if (d.h) trabajar(() => avanzarReloj(+d.h, { silencioso: true }));
 });
 // Un cambio: asienta el motor unos segundos (el barorreflejo tarda ~10 s) y repinta
@@ -374,7 +389,7 @@ function trabajar(f, seg = 8) { f(); cab.correr(seg); refrescar(true); pintarDoc
 function refrescar(todo) {
   if (!cab?.lectura) return;
   R = leer();
-  pintarCifras(); pintarConsola();
+  pintarCifras(); pintarConsola(); aplicarTopes(false);
   if (est.modo === 'explorar') { pintarFrase(); pintarLab(); }
   if (todo) { montarEscena(); pintarPestEscena(); escena.actualizar(cab, 0, true, infoEscena()); if (REDUCIR || est.pausa) monitor.llenar(cab, ctxMon()); monitor.pintar(); pintarMandos(); }
   $('obj-umi').disabled = est.pac.tipo !== 'septico' || est.modo === 'qs';
@@ -385,7 +400,20 @@ $('obj-marino').onclick = () => { est.tabla = 'marino'; $('obj-marino').setAttri
 $('obj-umi').onclick = () => { est.tabla = 'umi'; $('obj-umi').setAttribute('aria-pressed', 'true'); $('obj-marino').setAttribute('aria-pressed', 'false'); refrescar(false); };
 $('enclavar').onclick = () => { monitor.enclavar(!monitor.enclavado); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); monitor.pintar(); refrescar(false); };
 $('pausa').onclick = () => { est.pausa = !est.pausa; $('pausa').setAttribute('aria-pressed', String(est.pausa)); $('pausa').textContent = est.pausa ? 'Seguir' : 'Pausa'; };
-function medirDock() { requestAnimationFrame(() => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px')); }
+const dock = crearDock($('dock'), { plegables: [$('dock-tabs'), $('dock-panel')] });
+// Los topes de los mandos (topes.js): avisos ámbar bajo el mando y sellos en el monitor, con su origen
+const tope = crearTope({ monitor: $('monitor'), dock: $('dock'), cita });
+const topeVisto = {};
+function aplicarTopes(forzar) {
+  if (!cab?.lectura || !R) return;
+  const hay = est.modo === 'qs' ? {} : calcularTopes(R, ctxX(), est.horas, horaTxt);
+  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj']) {
+    const t = hay[k], firma = t ? JSON.stringify(t) : '';
+    if (!forzar && topeVisto[k] === firma) continue;
+    topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
+  }
+}
+function medirDock() { dock.medir(); }
 
 // ---------------------------------------------------------------- pacientes (Explorar)
 function pintarPacientes() {
@@ -405,12 +433,12 @@ let guia = null, gi = 0;
 function abrirGuia(E, alSalir) {
   guia = { E, alSalir }; gi = 0;
   $('dock-explorar').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false;
-  pintarGuia();
+  dock.plegar(false); dock.asa.hidden = true; pintarGuia();
 }
 function cerrarGuia() {
   borrarSenal(); const f = guia?.alSalir; guia = null; $('dock-guia').hidden = true;
   if (est.modo === 'explorar') $('dock-explorar').hidden = false; else if (est.modo === 'may') $('dock-est').hidden = false;
-  medirDock(); f?.();
+  dock.asa.hidden = est.modo !== 'explorar'; medirDock(); f?.();
 }
 function pintarGuia() {
   const E = guia.E, p = E.guia[gi], n = E.guia.length;
@@ -511,6 +539,10 @@ $('zona-qs').addEventListener('click', (ev) => {
   if (b.id === 'qs-sig') { borrarSenal(); qs.i++; qs.etapa = 0; qs.hecho = false; est.vista = 'paciente'; pintarQS(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); }
 });
 
+// Las cifras del «Compruébalo» (antes → después): etiqueta y formato de cada clave de la lectura R
+const CIFRA_ET = { pam: 'PAM', pas: 'PAS', pad: 'PAD', pcp: 'PCP', pvc: 'PVC', ic: 'IC', irvs: 'IRVS', fc: 'FC', spo2: 'SpO₂', imp: 'bomba (L/min)', ecmo: 'ECMO (L/min)', aoAbre: 'aórtica abre', edema: 'edema (mL)', picoDia: 'pico diastólico' };
+function cifraTxt(k, r) { const v = r[k]; if (v == null) return '—'; if (k === 'aoAbre') return `${v} de ${r.aoDe}`; if (k === 'ic' || k === 'imp' || k === 'ecmo') return coma(v, 1); return coma(v, 0); }
+
 // ---------------------------------------------------------------- Mayéutica: guía socrática, examen y el caso
 // Las tres partes de REGLAS §8: el recorrido (guía y examen), «Otra vez lo que fallaste» (se arma al acabar el
 // recorrido, con las opciones en otro orden) y el caso de Aurelio.
@@ -580,10 +612,14 @@ $('zona-may').addEventListener('click', (ev) => {
   if (acc === 'sig') { may.i++; pintarMay(); scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (acc === 'comprueba') {
     const c = q.comprueba; tapar(false);
+    const antes = R ? { ...R } : null;
     trabajar(() => { if (c.ajuste) { if (c.ajuste.soporte) { est.aparato = c.ajuste.soporte; est.vista = 'aparato'; } cab.ajustar(c.ajuste); } if (c.volumen) cab.volumen(c.volumen); }, c.volumen ? 20 : 10);
-    b.closest('.fila').outerHTML = `<p class="para"><span class="ok">Mira el modelo:</span> ${c.mira}</p><div class="fila"><button type="button" class="b prim" data-acc="sig">Siguiente →</button></div>`;
+    // las cifras que nombra «mira», antes → después, aquí mismo (el monitor queda arriba): v3
+    const cifras = antes && c.cifras ? `<dl class="antes-despues">${c.cifras.map((k) => `<dt>${CIFRA_ET[k] || k}</dt><dd>${cifraTxt(k, antes)} <span class="flecha">→</span> <b>${cifraTxt(k, R)}</b></dd>`).join('')}</dl>` : '';
+    b.closest('.fila').outerHTML = `<p class="para"><span class="ok">Mira el modelo:</span> ${c.mira}</p>${cifras}<div class="fila"><button type="button" class="b" data-acc="monitor">Ver el monitor</button><button type="button" class="b prim" data-acc="sig">Siguiente →</button></div>`;
     return;
   }
+  if (acc === 'monitor') { $('monitor').scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' }); return; }
   if (b.dataset.op && !b.disabled) {
     const o = may.ops[+b.dataset.op]; may.res[may.i] = !!o.ok;
     document.querySelectorAll('#ops button').forEach((x, i) => { x.disabled = true; if (may.ops[i].ok) x.classList.add('bien'); });
@@ -624,7 +660,7 @@ function setModo(m) {
   $('zona-pac').hidden = m !== 'explorar'; $('abajo').hidden = m !== 'explorar';
   $('zona-qs').hidden = m !== 'qs'; $('zona-may').hidden = m !== 'may';
   $('dock-explorar').hidden = m !== 'explorar'; $('dock-est').hidden = m !== 'may';
-  $('dock').hidden = m === 'qs';
+  $('dock').hidden = m === 'qs'; dock.asa.hidden = m !== 'explorar'; dock.plegar(false);   // el asa solo pliega los mandos de Explorar
   $('velo-esc').hidden = true; est.canales = 'todos'; monitor.ver(CANALES.map((x) => x.k));
   if (m === 'explorar') { est.aparato = 'no'; est.vista = 'paciente'; nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock(); }
   if (m === 'qs') empezarQS();
@@ -634,14 +670,14 @@ function setModo(m) {
 $('modo-explorar').onclick = () => setModo('explorar');
 $('modo-qs').onclick = () => setModo('qs');
 $('modo-may').onclick = () => setModo('may');
-addEventListener('resize', () => { monitor.montar(); if (cab) { monitor.llenar(cab, ctxMon()); monitor.pintar(); } medirDock(); });
+addEventListener('resize', () => { monitor.montar(); iabp.montar(); if (cab) { monitor.llenar(cab, ctxMon()); monitor.pintar(); } medirDock(); });
 
 // ---------------------------------------------------------------- el bucle: un reloj, el del motor
 let ultimo = 0, cuenta = 0;
 function bucle(t) {
   const dt = ultimo ? Math.min(1 / 30, (t - ultimo) / 1000) : 1 / 60; ultimo = t;
   if (cab && !est.pausa && !document.hidden) {
-    monitor.avanzar(cab, dt, ctxMon()); monitor.pintar();
+    monitor.avanzar(cab, dt, ctxMon()); monitor.pintar(); iabp.pintar();
     if (!est.tapado) escena.actualizar(cab, dt, false, infoEscena());
     cuenta += dt; if (cuenta > 0.35) { cuenta = 0; R = leer(); pintarCifras(); pintarConsola(); if (est.modo === 'explorar') { pintarFrase(); } }
   }

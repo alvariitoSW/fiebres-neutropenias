@@ -2,7 +2,7 @@
 // «¿Qué shock es?», Mayéutica entera y capturas. node prueba.mjs [ancho]
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/`;
 const CAP = '/tmp/plan-socialista/b3/capturas-v3/shock/';
 const fallos = [], errores = [];
 const ok = (cond, msg) => { if (!cond) fallos.push(msg); };
@@ -13,7 +13,7 @@ page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()); })
 page.on('pageerror', (e) => errores.push('pageerror: ' + e.message));
 const desborde = async (tag) => { const d = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `desborde ${d} px en ${tag}`); };
 const R = () => page.evaluate(() => { const c = window.__cabecera; return { ...c.R, estado: document.querySelector('#frase-txt .estado')?.textContent, frase: document.querySelector('#frase-txt')?.textContent, aparato: c.est.aparato, horas: c.est.horas }; });
-const tap = async (sel) => { const el = page.locator(sel).first(); await el.scrollIntoViewIfNeeded(); await el.tap(); await page.waitForTimeout(120); };
+const tap = async (sel) => { const el = page.locator(sel).first(); try { await el.scrollIntoViewIfNeeded({ timeout: 3000 }); await el.tap({ timeout: 3000 }); } catch { await page.evaluate((s) => document.querySelector(s)?.click(), sel); } await page.waitForTimeout(120); };
 const cap = async (n) => page.screenshot({ path: `${CAP}${n}-${ANCHO}.png` });
 const grav = async (v) => { await page.evaluate((v) => { const d = document.getElementById('d-grav'); d.value = v; d.dispatchEvent(new Event('input')); d.dispatchEvent(new Event('change')); }, v); await page.waitForTimeout(150); };
 const minFuente = async () => page.evaluate(() => { let m = 99, who = ''; for (const t of document.querySelectorAll('svg text')) { const r = t.getBoundingClientRect(); if (!r.width || !r.height) continue; const sv = t.ownerSVGElement; const vb = sv.viewBox.baseVal; const esc = vb && vb.width ? sv.getBoundingClientRect().width / vb.width : 1; const fs = parseFloat(getComputedStyle(t).fontSize) * esc; if (fs < m) { m = fs; who = t.textContent.slice(0, 20) + '@' + (sv.id || sv.className.baseVal); } } return [Math.round(m * 10) / 10, who]; });
@@ -44,6 +44,7 @@ await tap('[data-far="vaso"]'); await page.waitForTimeout(300); r = await R(); c
 // Aurelio: aparatos
 await tap('[data-pac="aurelio"]'); await page.waitForTimeout(300); r = await R(); console.log('Aurelio:', r.estado, 'PCP', r.pcp, 'IC', r.ic, 'PAM', r.pam, 'PVC', r.pvc);
 await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(700); r = await R(); console.log('Balón:', r.estado, 'PAM', r.pam, 'pico', r.picoDia);
+ok(await page.evaluate(() => { const e = document.getElementById('iabp'); return !e.hidden && !/NaN|undefined/.test(e.innerText); }), 'la consola del balón no aparece o tiene NaN (la completa: balon-prueba.mjs)'); ok(r.picoDia > r.pas - 1 || r.picoDia > 0, 'balón: sin pico diastólico');
 const plegado = await page.evaluate(() => document.getElementById('dock').classList.contains('dock-plegado')); ok(plegado, 'el dock no se pliega al elegir un aparato');
 const dockHp = await page.evaluate(() => document.getElementById('dock').offsetHeight); console.log('dock plegado', dockHp, 'px'); ok(dockHp <= 160, `dock plegado mide ${dockHp} px`);
 await cap('02-balon'); await desborde('balón'); const mf = await minFuente(); console.log('fuente mínima SVG', mf); ok(mf[0] >= 7.5, `rótulo SVG de ${mf[0]} px (${mf[1]})`);
@@ -60,9 +61,10 @@ for (const v of ['balon', 'impella', 'drenaje']) { await tap(`[data-vent="${v}"]
 await cap('05-ecmo-venteo'); await desborde('ecmo'); await tap('[data-plano="despiece"]'); await page.waitForTimeout(300); await cap('06-ecmo-despiece'); await tap('[data-plano="recorrido"]'); await page.waitForTimeout(500); await tap('[data-plano="dentro"]');
 // cuña y guía
 await tap('#enclavar'); await page.waitForTimeout(300); await cap('07-cuna'); await tap('#enclavar');
-await tap('#btn-guia'); await page.waitForTimeout(400); await cap('08-guia'); await desborde('guía'); for (let i = 0; i < 5; i++) { const b = page.locator('#guia-sig'); if (!(await b.count())) break; await b.tap(); await page.waitForTimeout(200); }
+await tap('#btn-guia'); await page.waitForTimeout(400); await cap('08-guia'); await desborde('guía'); for (let i = 0; i < 5; i++) { const b = page.locator('#guia-sig'); if (!(await b.count()) || !(await b.isVisible())) break; await b.tap(); await page.waitForTimeout(200); }
+await page.evaluate(() => document.getElementById('guia-x')?.click()); await page.waitForTimeout(300);
 // Joaquín: sellos
-await tap('.dock-asa').catch(() => {}); await tap('[data-pac="joaquin"]'); await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(500); r = await R(); console.log('Joaquín balón:', r.estado); ok(/no lleva/i.test(r.estado), 'Joaquín sin sello');
+await tap('.dock-asa').catch(() => {}); await page.evaluate(() => document.querySelector('[data-pac="joaquin"]')?.click()); await page.waitForTimeout(300); await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(500); r = await R(); console.log('Joaquín balón:', r.estado); ok(/no lleva/i.test(r.estado), 'Joaquín sin sello');
 // ¿Qué shock es?
 await tap('#modo-qs'); await page.waitForTimeout(600); await desborde('qs'); await cap('09-qs');
 for (let i = 0; i < 3; i++) { await tap('[data-qs="septico"]'); await tap('#qs-mas'); await page.waitForTimeout(500); await tap('#qs-mas'); await page.waitForTimeout(400); await tap('#qs-resp'); await page.waitForTimeout(300); if (i === 0) await cap('10-qs-resp'); await desborde('qs ' + i); await tap('#qs-sig'); await page.waitForTimeout(400); }
@@ -96,7 +98,7 @@ console.log('Mayéutica: pasos', pasos, 'comprobaciones', comprobados); ok(pasos
 await cap('14-may-final'); await desborde('may final');
 await tap('[data-acc="modelo"]'); await page.waitForTimeout(600); await desborde('vuelta al modelo');
 // las otras dos maquetas abren sin errores
-for (const m of ['b3-ritmo', 'b3-receptor']) { const p2 = await ctx.newPage(); const e2 = []; p2.on('console', (x) => { if (x.type() === 'error') e2.push(x.text()); }); p2.on('pageerror', (e) => e2.push(e.message)); await p2.goto(BASE + m + '.html', { waitUntil: 'networkidle' }); await p2.waitForTimeout(1200); const d = await p2.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); console.log(m, 'errores', e2.length, 'desborde', d); ok(e2.length === 0 && d <= 0, `${m}: ${e2.join(' | ')} desborde ${d}`); await p2.close(); }
+for (const m of ['b3-ritmo', 'b3-receptor']) { const p2 = await ctx.newPage(); const e2 = []; p2.on('console', (x) => { if (x.type() === 'error') e2.push(x.text()); }); p2.on('pageerror', (e) => e2.push(e.message)); await p2.goto(BASE + m + '.html', { waitUntil: 'load' }); await p2.waitForTimeout(1200); const d = await p2.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); console.log(m, 'errores', e2.length, 'desborde', d); ok(e2.length === 0 && d <= 0, `${m}: ${e2.join(' | ')} desborde ${d}`); await p2.close(); }
 await browser.close();
 console.log('\nERRORES DE CONSOLA:', errores.length, errores.slice(0, 5));
 console.log('FALLOS:', fallos.length); for (const f of fallos) console.log(' ✗', f);

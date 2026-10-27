@@ -54,7 +54,7 @@
 .escena-aparato .cav.ven { fill: color-mix(in srgb, var(--accent-purple) 26%, var(--bg-main)); }
 .escena-aparato .tabique { fill: none; stroke: var(--text-main); stroke-width: 1.2; }
 .escena-aparato .valva { fill: none; stroke: var(--text-main); stroke-width: 1.3; stroke-linecap: round; }
-.escena-aparato .rot-g { font: 600 8.5px system-ui, sans-serif; fill: var(--text-dim); }
+.escena-aparato .rot-g { font: 600 9px system-ui, sans-serif; fill: var(--text-dim); }
 .escena-aparato .rot-g.dim { fill: var(--text-muted); font-weight: 400; }
 .escena-aparato .lupa-aro { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: 1; }
 .escena-aparato .art-pared { fill: color-mix(in srgb, var(--accent-red) 30%, var(--bg-main)); stroke: var(--text-dim); stroke-width: .6; }

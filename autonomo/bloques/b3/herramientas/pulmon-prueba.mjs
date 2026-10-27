@@ -1,7 +1,7 @@
 // Juicio rápido v3 · pulmón (M3): estados, cifras, guía por estado, mandos, Mayéutica entera, capturas, desborde.
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/b3-pulmon.html', CAP = '/tmp/plan-socialista/b3/capturas-v3/pulmon/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/b3-pulmon.html`, CAP = '/tmp/plan-socialista/b3/capturas-v3/pulmon/';
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
@@ -9,7 +9,8 @@ const page = await ctx.newPage();
 page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()); }); page.on('pageerror', (e) => errores.push('pageerror: ' + e.message));
 const desb = async (t) => { const d = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `desborde ${d} px en ${t}`); };
 const cap = (n) => page.screenshot({ path: `${CAP}${n}-${ANCHO}.png` });
-const tap = async (sel) => { const el = page.locator(sel).first(); await el.scrollIntoViewIfNeeded(); await el.tap(); await page.waitForTimeout(150); };
+const tap = async (sel) => { if (sel === '#btn-guia' && await page.evaluate(() => document.getElementById('dock').classList.contains('dock-plegado'))) { await page.locator('.dock-asa').tap(); await page.waitForTimeout(300); }   // dock plegado: el primer toque lo despliega (comun/dock.js) y el click de Guía se pierde
+  const el = page.locator(sel).first(); await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' })); await el.tap(); await page.waitForTimeout(150); };
 const cifras = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim(); return ['pico', 'flujofin', 'vt', 'meseta', 'pres', 'peeptot', 'cstat', 'dp', 'vtkg', 'vm', 'ie'].map(g).join(' | ') + ' || ' + document.getElementById('consola').textContent.trim().slice(0, 80); });
 const frase = () => page.evaluate(() => document.getElementById('frase-txt').textContent.replace(/\s+/g, ' ').slice(0, 220) + ' ## ' + document.getElementById('ficha-pac').textContent);
 const mando = async (k, v) => { await page.evaluate(([k, v]) => { const i = document.querySelector(`input[data-m="${k}"]`); if (!i) return; i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); }, [k, v]); await page.waitForTimeout(2600); };
@@ -30,7 +31,7 @@ for (const k of estados) {
     pasos.push(`${t.n}: señal a${t.anillos}/t${t.tramos}/m${t.marcos} cita:${t.cita} · ${t.txt}`);
     ok(t.anillos + t.tramos + t.marcos > 0, `${k} guía ${t.n}: no señala nada`);
     if (i === 1) { await cap('11-guia-' + k); await desb(k + ' guía'); }
-    n++; const b = page.locator('#guia-sig'); const lab = await b.innerText(); await b.tap(); await page.waitForTimeout(250); if (/hecho/i.test(lab)) break;
+    n++; const b = page.locator('#guia-sig'); const lab = await b.innerText(); if (process.env.DBG) console.log('DBG', n, await page.evaluate(() => [innerHeight, JSON.stringify(document.getElementById('dock').getBoundingClientRect()), JSON.stringify(document.getElementById('guia-sig').getBoundingClientRect())])); if (await page.evaluate(() => { const r = document.getElementById('guia-sig').getBoundingClientRect(); return r.right > innerWidth; })) { console.log('AVISO guía: «' + lab + '» se sale por la derecha a ' + ANCHO + ' px (' + k + ')'); await b.evaluate((n) => n.click()); } else await b.tap(); await page.waitForTimeout(250); if (/hecho/i.test(lab)) break;
   }
   console.log('   guía ' + n + ' pasos\n   ' + pasos.join('\n   '));
 }

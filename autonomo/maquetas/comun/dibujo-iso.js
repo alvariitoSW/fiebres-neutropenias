@@ -338,6 +338,8 @@ export const tornillos = (pts, r = 0.55) => pts.map((p) => tornillo(p[0], p[1], 
 
 // El CSS de la pieza: tonos hechos con dos tokens cada uno (papel = fondo de la app)
 export const ISO_CSS = `
+/* la pastilla de origen («ficha · p. 22», «ilustrativo»): una línea, recortada con puntos si no cabe (las tres maquetas) */
+.org { display: inline-block; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; vertical-align: bottom; }
 .iso { --iso-oscuro: var(--bg-main); --iso-claro: color-mix(in srgb, var(--text-main) 46%, var(--bg-main));
   --lit-oscuro: color-mix(in srgb, var(--accent-yellow) 30%, var(--bg-main)); --lit-claro: var(--accent-blue);
   --sangre-oscuro: color-mix(in srgb, var(--accent-red) 40%, var(--bg-main)); --sangre-claro: color-mix(in srgb, var(--accent-red) 80%, var(--text-main));

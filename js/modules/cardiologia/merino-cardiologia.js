@@ -4,8 +4,11 @@
 // Cap. 14-17.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
-import { pintarGauge, clamp } from '../../core/ui.js';
+import { pintarGauge, clamp, arrancar } from '../../core/ui.js';
 import { crearEscenaReceptores } from './receptores-animados.js';
+import { init as initVisual } from './visual.js';
+import { montarMayeutica } from '../../core/mayeutica.js';
+import { MAYEUTICA_B3 } from '../../data/mayeutica/b3.js';
 
 // Tabla 15.1 — clasificador de shock hemorrágico por % de volumen perdido.
 function calcClaseHemorragia() {
@@ -1006,4 +1009,10 @@ export function init() {
     initObjetivosCardiogenico();
     initSiNoWizard('mc-mat-wizard', MC_MAT_WIZARD);
     initTtmTemp();
+    // Vista Visual de las 24 fichas (Marino caps. 14-21, bloque 3) y, encima, Texto | Estudiar en las que ya tienen
+    // su Mayéutica (sub-bloque 3A, el shock). Cada una arranca por separado: si falla, el cuaderno sigue.
+    arrancar('vista Visual de Merino Cardiología', initVisual);
+    arrancar('Estudiar en Merino Cardiología', () => Object.entries(MAYEUTICA_B3)
+        .filter(([ficha]) => ficha.startsWith('mc-'))
+        .forEach(([ficha, datos]) => montarMayeutica(ficha, datos)));
 }

@@ -14,6 +14,8 @@
 //                                                      con el servidor de los jueces; tarda unos minutos
 //   node autonomo/jueces.mjs --forma                 + nombres internos y rótulos (B y C, abajo) en los 7 modelos
 //                                                      vivos y en las 23 fichas de Marino · Fundamentos (unos minutos)
+//                                                      y, en cada modelo vivo, todos sus mandos a los extremos
+//                                                      (jueces-topes.mjs; REGLAS §1.14), con --modelo y --forma
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
@@ -49,6 +51,7 @@ import { pathToFileURL } from 'node:url';
 import { createServer } from 'node:net';
 import { juzgarFormaPreguntas, juzgarFormaNavegador } from './jueces-forma.mjs';
 import { juzgarMovil } from './jueces-movil.mjs';
+import { juzgarTopes } from './jueces-topes.mjs';
 
 const RAIZ = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const args = process.argv.slice(2);
@@ -239,6 +242,8 @@ if (!pide('--sin-navegador')) {
         await juzgarFormaNavegador({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
         // ---- 8. El móvil: barra de abajo, imagen a la vista, «…» y letra ≥ 8 px (jueces-movil.mjs)
         await juzgarMovil({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
+        // ---- 9. Los topes (REGLAS §1.14): cada mando de cada modelo vivo a sus extremos (jueces-topes.mjs)
+        await juzgarTopes({ nav, base, ok, mal, modelos: valores('--modelo'), todo: pide('--forma') });
         await nav.close();
         // ---- 6. Modelos vivos: su prueba de navegador, con este mismo servidor
         for (const clave of valores('--modelo')) {

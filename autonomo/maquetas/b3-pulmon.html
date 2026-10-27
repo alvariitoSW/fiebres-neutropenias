@@ -1,0 +1,86 @@
+<!-- PROPUESTA PARA ELEGIR (plan socialista, bloque 3, maquetas v3, maqueta M3, primera pieza). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b3-pulmon.html
+     El pulmón con respirador, pieza 1: el ciclo respiratorio en el monitor común (comun/monitor.js, canales paw, flujo
+     y vol), movido por un pulmón de un compartimento (b3-pulmon/pulmon.mjs: fisiología general; Marino no da R ni τ),
+     en volumen y presión control, con pausa inspiratoria y oclusión espiratoria; la escena (respirador, tubo, tórax y
+     racimo) y 9 estados con nombre, cada uno con su explicación guiada y sus fuentes. Especificación:
+     autonomo/bloques/b3/cobertura-3d.md §3. Fuentes: docs/marino-2024-respiratory-management-caps22-26.pdf y
+     caps27-30.pdf (las páginas citadas son las del PDF, comprobadas con pdftotext). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El pulmón con respirador · para elegir</title>
+<link rel="stylesheet" href="b3-pulmon/base.css">
+<style>
+.interruptor { grid-template-columns: repeat(2, 1fr); }
+.lema { font: .9rem/1.35 var(--serif); color: var(--text-dim); }
+.mon-quien { font: 600 .7rem/1.2 var(--sans); color: var(--text-muted); letter-spacing: .04em; text-transform: uppercase; }
+.calc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.lupa[open] { padding: 2px 4px 6px; }
+.calc .celda .t { display: block; }
+.escena-caja { padding: 0; }
+#esc-svg { display: block; width: 84%; height: auto; margin: 0 auto; }
+.leyenda button { min-height: 40px; }
+.dock-tabs { grid-auto-columns: minmax(0, 1fr); }
+.deslizador output b { color: var(--accent-yellow); }
+.dock-nota .org { white-space: normal; }
+.cambia { color: var(--accent-red); font-weight: 600; }
+.elegida-bien { border-color: var(--accent-green) !important; box-shadow: inset 3px 0 0 var(--accent-green); }
+.elegida-mal { border-color: var(--accent-red) !important; box-shadow: inset 3px 0 0 var(--accent-red); }
+.entra { animation: entra .25s ease-out; }
+@keyframes entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .entra { animation: none; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="cab"><h1>El pulmón con respirador</h1><span class="aviso">Para elegir · no está en la app</span></div>
+  <div class="interruptor" role="tablist" aria-label="Modo">
+    <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+    <button type="button" role="tab" id="modo-may" aria-selected="false">Mayéutica</button>
+  </div>
+  <section id="zona-pac" aria-label="Pacientes"><div class="pacientes" id="pacientes"></div><p class="ficha-pac" id="ficha-pac"></p></section>
+
+  <p class="mon-quien" id="mon-quien"></p>
+  <section id="monitor" aria-label="Pantalla del respirador"></section>
+  <div class="velo-tapa" id="velo-mon" hidden>Primero predices. La pantalla sale al contestar.</div>
+  <div class="calc" id="calc" aria-label="Mecánica: lo que calcula la pantalla con la pausa y la oclusión"></div>
+  <div class="consola-tira" id="consola" hidden></div>
+
+  <section id="zona-may" class="formato" hidden aria-live="polite"></section>
+  <details class="plegable lupa" id="lupa">
+    <summary>Ver el pulmón (la lupa): respirador, tubo, tórax y alvéolos</summary>
+    <section class="escena-caja" id="escena" data-dock-pliega aria-label="El respirador, el tubo y el tórax">
+      <svg id="esc-svg" role="img" aria-label="Respirador con su pantalla, rama inspiratoria y espiratoria, válvula espiratoria, tubo con cuff, tórax con pleura y diafragma y el racimo de alvéolos"></svg>
+      <span class="fig-esq">Un compartimento · fisiología general</span>
+    </section>
+  </details>
+  <section id="bajo-escena" style="display:grid; gap:6px">
+    <div class="leyenda" id="leyenda"></div>
+    <p class="leyenda-txt">Elige un estado y pulsa <b>Guía</b>: cada paso señala el tramo de la curva, la casilla o la pieza del dibujo de la que habla. En la pantalla, <b>Insp. mantenida</b> enseña la meseta (EIP) y <b>Esp. mantenida</b>, la PEEP oculta.</p>
+  </section>
+
+  <section id="abajo" style="display:grid; gap:6px">
+    <details class="plegable" open><summary>Las fuentes de este estado</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que discrepa y lo que la fuente no dice</summary><div id="notas" style="display:grid; gap:6px"></div></details>
+    <details class="plegable"><summary>Para profundizar (lo que esta pieza no cubre)</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+
+<div class="dock" id="dock">
+  <div class="dock-in" id="dock-explorar">
+    <div class="frase" id="frase"><span class="frase-txt" id="frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="btn-guia" aria-label="Explicación guiada de este estado">Guía</button></div>
+    <div class="dock-tabs" role="tablist" id="dock-tabs">
+      <button type="button" role="tab" data-pest="resp" aria-selected="true">Respirador</button>
+      <button type="button" role="tab" data-pest="pulmon" aria-selected="false">Pulmón</button>
+      <button type="button" role="tab" data-pest="man" aria-selected="false">Maniobras</button>
+    </div>
+    <div class="dock-panel" id="dock-panel"></div>
+  </div>
+  <div class="dock-in" id="dock-guia" hidden></div>
+  <div class="dock-in" id="dock-est" hidden><div class="pasos" id="dock-pasos"></div><div class="dock-est-txt"><span id="dock-est-izq"></span><span id="dock-est-der"></span></div></div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script type="module" src="b3-pulmon/pagina.js"></script>
+</body>
+</html>

@@ -134,8 +134,9 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
 
 ## 7. Contenido clínico
 
-1. **Nunca inventes.** Toda cifra, dosis o afirmación sale de una fuente que se puede abrir. Si no está, se anota
-   como hueco; no se rellena con conocimiento general sin decirlo.
+1. **Nunca inventes.** Toda cifra, dosis o afirmación sale de una fuente que se puede abrir. Si la ficha no lo dice,
+   **se busca otra fuente y se cita** (`autonomo/REGLAS.md` §1.15); «fisiología general» sin cita solo para lo
+   trivial, y hueco solo si se buscó y no se encontró.
 2. **Fuentes**: el PDF va a `docs/` y se enlaza con `#page=N` (calcula el desplazamiento entre página impresa y
    página del PDF, y compruébalo). Webs: solo URLs verificadas (que salgan literalmente en los resultados de
    búsqueda), nunca un buscador genérico en lugar del artículo; si no se encuentra, se omite.
