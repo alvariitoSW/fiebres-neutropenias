@@ -294,8 +294,18 @@ Pared libre del VD: el término crónico (dilatación, `mioVd`) sigue al volumen
 `estado.eVd` (nuevo en `estadoGeo`, y vigilado por la mezcla de `formas.mjs`) y conserva el volumen de la pared con el área ∝
 V^`EXP_AREA_VD` (0,62, ilustrativo): 4,0 → 6,0 mm en el normal. **Grosor sistólico del VD: hueco** (Lang 2015, Tabla 8, p. 20, da
 1-5 mm en diástole y no dice cuánto engruesa). Con 3 de 8 escenarios (hemorragia, derrame, vasoplejia) el volumen de la pared varía 6-9 %:
-la prueba exige ±3 % solo en el normal. Pruebas en `paciente-posible.test.mjs` (marca B4). **Pendiente, a propósito**: el plano
-`psaxPm` fija su altura al largo del VI de cada instante y no al del telediástole, y en sístole corta más cerca de la punta del papilar.
+la prueba exige ±3 % solo en el normal. Pruebas en `paciente-posible.test.mjs` (marca B4). (El plano `psaxPm` por instante, resuelto en F5.)
+
+**El VD que late como VD (F5, eco-mega parada 2, octubre 2026).** El TAPSE ya no es «0,285 mm por mL vaciado»: es el
+acortamiento longitudinal de la pared libre del VD. `acortamientoVd(FE del VD)` = 24/71 (TAPSE normal, Lang 2015 Tabla 10 p. 23,
+sobre el largo base-ápex del VD, Tabla 8 p. 20) × eyección alcanzada / 58 % (FE normal del VD, Lang p. 23), aplicado al largo
+telediastólico del VD (`Lvd`). La eyección ya contiene la activación `eVd` y la poscarga del motor: en el TEP el VD no vacía y el anillo
+apenas baja. `tapseDeLatido(u)` lo da a `escenarios.mjs` y al simulador (antes `TAPSE_POR_ML`). El infundíbulo (TSVD) se
+estrecha un 20 % de su diámetro con la eyección normal (`CONTRAE_TSVD`; **hueco**: la fuente no da cifra), salvo la válvula.
+La FAC se mide en el A4C del modelo (áreas td y ts del VD, `medirVd` de `paciente-posible.test.mjs`); no hay lectura en la app (pendiente).
+**Hueco**: S′ tricuspídea (el modelo no calcula velocidades). Los `todo` de F5 del TAPSE pasan a pruebas: normal 21,5 mm,
+hemorragia 22,9, derrame 21,2 (la fuente no dice que el TAPSE caiga con la precarga) y fallo del VI 18,7. `planoVista('psaxPm')`
+fija el nivel con el largo del VI del telediástole (`vviTd`), y en telesístole el corte atraviesa los papilares pegados a la pared.
 
 arranque de la descendente (`vias.ao` termina en el arco).
 

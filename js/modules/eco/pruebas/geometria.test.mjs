@@ -137,7 +137,7 @@ test('el corazón queda dentro del saco pericárdico (y el derrame, entre los do
 // el VD. Referencia de la app: TAPSE normal >16 mm (Fisiopatología UCI · Cardiología, Ficha 5) y >17 mm (Ficha 11).
 // El valor exacto del modelo es ilustrativo (calibrado ~21 mm); se exige que el normal pase las dos referencias,
 // que supere al MAPSE y que caiga cuando el VD expulsa menos.
-test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el volumen sistólico del VD', async () => {
+test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; sigue siendo normal en hemorragia y derrame y cae en el TEP (F5)', async () => {
   const { estadoGeo, extraDeMotor } = await import('../formas.mjs');
   const { ESCENARIOS } = await import('../escenarios.mjs');
   const medir = (k) => {
@@ -152,8 +152,15 @@ test('TAPSE: normal por encima de 17 mm y mayor que el MAPSE; cae cuando cae el 
   const n = medir('normal');
   assert.ok(n.tapse > 17 && n.tapse < 26, `TAPSE normal ${n.tapse.toFixed(1)} mm`);
   assert.ok(n.tapse > n.mapse + 4, `TAPSE ${n.tapse.toFixed(1)} frente a MAPSE ${n.mapse.toFixed(1)}`);
+  // F5: el TAPSE es el acortamiento de la pared libre (no los mL vaciados). Con la FE del VD conservada, la hemorragia y el
+  // derrame mantienen un TAPSE normal (la fuente, Lang p. 19 y 23, no dice que caiga con la precarga); el TEP lo hunde.
   for (const k of ['hemorragia', 'derrame']) { const r = medir(k);
-    assert.ok(r.vsD < n.vsD && r.tapse < n.tapse - 4, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
+    assert.ok(r.vsD < n.vsD && r.tapse >= 17, `${k}: TAPSE ${r.tapse.toFixed(1)} mm con VS del VD ${r.vsD.toFixed(0)} mL`); }
+  const { ASENTAR_FORMA } = await import('../escenarios.mjs');
+  const tep = (() => { const m = crearMotor(); m.correr(12); ESCENARIOS.tep.aplicar(m); m.correr(ASENTAR_FORMA); const ex = extraDeMotor(m); let a = Infinity, b = -Infinity;
+    for (const [i, s] of m.onda.entries()) { if (i % 5) continue; const z = construirCorazon(estadoGeo(s, ex), { pericardio: false, detalle: false, calidad: 0.5 }).anilloTricLateral[2]; a = Math.min(a, z); b = Math.max(b, z); }
+    return b - a; })();
+  assert.ok(tep < 17, `TEP: TAPSE ${tep.toFixed(1)} mm`);
 });
 
 test('las aurículas no saltan entre dos fotogramas seguidos (rayos casi tangentes a la aorta y al tabique)', () => {

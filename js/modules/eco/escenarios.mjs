@@ -1,4 +1,4 @@
-import { TAPSE_POR_ML } from './corazon-geo.mjs';
+import { tapseDeLatido } from './corazon-geo.mjs';
 import { BASE } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
@@ -167,8 +167,8 @@ export function direccion(var_, normal, actual) {
 export const cumple = (esperado, obtenido) => esperado === 'N/↑' ? obtenido !== '↓' : esperado === obtenido;
 
 // Evalúa los criterios de una forma: u/u0 = motor.ultimo de la forma y del normal; md/md0 = medidasCorazon.
-// El TAPSE es la excursión del anillo tricuspídeo lateral del modelo (corazon-geo: TAPSE_POR_ML × lo que se vacía el VD).
+// El TAPSE es la excursión del anillo tricuspídeo lateral del modelo (corazon-geo, F5: acortamiento longitudinal de la pared libre del VD, según su eyección).
 export function evaluarForma(clave, u, md, u0, md0) {
-  const c = { u, md, u0, md0, tapse: Math.min(35, TAPSE_POR_ML * (u.edvD - u.esvD)) };
+  const c = { u, md, u0, md0, tapse: tapseDeLatido(u) };
   return (CRITERIOS_FORMA[clave] || []).map(k => ({ ...k, ok: k.cumple(c), v: k.valor(c) }));
 }

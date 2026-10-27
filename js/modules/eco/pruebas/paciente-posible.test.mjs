@@ -9,7 +9,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
-import { baseGeometrica, construirCorazon, diametrosTSVD, REF, TAPSE_POR_ML, LIMITES } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, medidasCorazon } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -87,18 +87,18 @@ const PREVISTO = {
   normal: {},
   hemorragia: {
     'vd-basal': { libre: 'hipovolemia: el VD se llena menos (24,8 mm: justo bajo el 25)' }, 'rvot-prox': { libre: 'hipovolemia: el orificio del TSVD se contrae con el volumen del VD (19 mm; ilustrativo)' }, 'vd-medio': { libre: 'hipovolemia: el VD se llena menos' }, 'vd-area-td-h': { libre: 'hipovolemia: el VD se llena menos' },
-    'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared (Lang p. 17)' }, 'tapse': { todo: 'F5 (el TAPSE debe salir del acortamiento de la pared libre; hoy ∝ mL vaciados)' },
+    'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared (Lang p. 17)' },
     'vi-septo-h': { todo: 'sin encargo: con el VI en 100 mL la pared telediastólica sale de 10,5 mm (miocardio de volumen constante)' },
   },
   fallo: {
-    'tapse': { todo: 'F5' }, 'vi-vts-h': { libre: 'FE baja: el VI no se vacía' }, 'vi-vtsi-h': { libre: 'FE baja' },
+    'vi-vts-h': { libre: 'FE baja: el VI no se vacía' }, 'vi-vtsi-h': { libre: 'FE baja' },
     'vi-fe-h': { libre: 'es el fallo del VI' }, 'vi-engrosa': { libre: 'contractilidad baja' }, 'torsion': { libre: 'Mor-Avi p. 15: la torsión cae con la FE' },
     'vd-fe3d': { libre: 'el fallo del VI arrastra al VD' }, 'vd-fac': { libre: 'el fallo del VI arrastra al VD' }, 'vi-rwt-h': { libre: 'cavidad dilatada con pared sin engrosar' },
     'vi-vtdi-h': { libre: 'VI dilatado' }, 'vi-vtd-h': { libre: 'VI dilatado' }, 'vi-dtd-h': { libre: 'VI dilatado' }, 'vi-dts-h': { libre: 'VI dilatado' }, 'ai-vol': { libre: 'PCP alta' },
   },
   derrame: {
     'vd-basal': { libre: 'taponamiento: el VD se llena menos' }, 'rvot-prox': { libre: 'taponamiento: el orificio del TSVD se contrae con el volumen del VD' }, 'vd-medio': { libre: 'taponamiento: el VD se llena menos' }, 'vd-area-td-h': { libre: 'taponamiento: el VD se llena menos' },
-    'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared' }, 'tapse': { todo: 'F5' },
+    'vi-rwt-h': { libre: 'cavidad más pequeña con la misma pared' },
     'vi-septo-h': { todo: 'sin encargo: pared telediastólica de 11,3 mm con el VI en 85 mL (miocardio de volumen constante)' },
     'vi-engrosa': { todo: 'sin encargo: engrosamiento de 39,4 % frente a >40 % con la pared ya gruesa en diástole' },
   },
@@ -335,4 +335,38 @@ test('pared libre del VD: 1-5 mm en diástole, engruesa en sístole y conserva s
   }
   const m = correr('normal'), { td, ts, ex } = instantes(m), razon = volPared(estadoGeo(ts, ex)) / volPared(estadoGeo(td, ex));
   assert.ok(Math.abs(razon - 1) <= 0.03, `volumen de la pared libre ×${fmt(razon)} entre diástole y sístole`);
+});
+
+// ---- El VD que late como VD (F5) -------------------------------------------------------------------------------------------
+// TAPSE = acortamiento longitudinal de la pared libre del VD: fracción del largo base-ápex (24/71: Lang 2015, Tablas 10 y 8,
+// pp. 23 y 20) escalada por lo que el VD llega a vaciarse. La fuente da la normalidad (24 ± 3,5; anormal <17), no la relación:
+// en la hemorragia, el derrame y el fallo del VI el TAPSE sigue ≥17 mm porque el VD sigue vaciándose (FE 44-56 %) y la
+// fuente no dice que el TAPSE caiga con la precarga ni con el fallo del VI; en el TEP cae porque el VD no puede vaciar.
+test('F5: el TAPSE del dibujo es el acortamiento de la pared libre (fracción del largo del VD × eyección), no mL vaciados', () => {
+  for (const k of Object.keys(ESCENARIOS)) {
+    const m = correr(k), { td, ts, ex } = instantes(m), v = de(k).v;
+    const Ltd = baseGeometrica(estadoGeo(td, ex)).Lvd, esperado = acortamientoVd(1 - ts.vvd / de(k).u.edvD) * Ltd;   // eyección del VD en el instante telesistólico del VI
+    assert.ok(Math.abs(v.tapse - esperado) <= 1.5, `${k}: TAPSE del dibujo ${fmt(v.tapse)} mm, acortamiento ${fmt(esperado)} mm`);
+  }
+});
+test('F5: el TAPSE cae por debajo de 17 mm cuando el VD no puede vaciar (TEP) y es normal con la eyección normal del VD', () => {
+  assert.ok(de('tep').v.tapse < 17, `TEP: TAPSE ${fmt(de('tep').v.tapse)}`);
+  for (const k of ['normal', 'hemorragia', 'derrame']) assert.ok(de(k).v.tapse >= 17, `${k}: TAPSE ${fmt(de(k).v.tapse)}`);
+  assert.ok(de('tep').v['vd-fac'] < 35 && de('normal').v['vd-fac'] >= 35, 'FAC medida en el A4C: cae en el TEP, normal ≥35 %');
+});
+function diametroAnillo(c, nombre, i) {            // mayor distancia entre los puntos del anillo i del tubo (41 puntos por anillo)
+  const p = c.partes.find(q => q.nombre === nombre).pos, n = 41; let mx = 0;
+  for (let a = 0; a < n; a++) for (let b = a + 1; b < n; b++)
+    mx = Math.max(mx, Math.hypot(p[(i * n + a) * 3] - p[(i * n + b) * 3], p[(i * n + a) * 3 + 1] - p[(i * n + b) * 3 + 1], p[(i * n + a) * 3 + 2] - p[(i * n + b) * 3 + 2]));
+  return mx;
+}
+test('F5: el infundíbulo (TSVD) se contrae en sístole; menos en el TEP, donde el VD apenas se vacía', () => {
+  const rel = {};
+  for (const k of ['normal', 'tep']) {
+    const m = correr(k), { td, ts, ex } = instantes(m);
+    const cT = construirCorazon(estadoGeo(td, ex), { detalle: false }), cS = construirCorazon(estadoGeo(ts, ex), { detalle: false });
+    rel[k] = diametroAnillo(cS, 'Infundíbulo', 5) / diametroAnillo(cT, 'Infundíbulo', 5);
+  }
+  assert.ok(rel.normal < 0.95 && rel.normal > 0.7, `normal: el TSVD queda a ×${fmt(rel.normal)} de su diámetro de diástole`);
+  assert.ok(rel.tep > rel.normal, `TEP ×${fmt(rel.tep)} no se contrae menos que el normal ×${fmt(rel.normal)}`);
 });

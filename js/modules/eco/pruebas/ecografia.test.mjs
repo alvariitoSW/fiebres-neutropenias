@@ -347,3 +347,19 @@ test('tabla de tejidos: el calcio es el más brillante, con su atenuación y su 
   assert.ok(c && Object.entries(TEJIDOS).every(([k, t]) => k === 'calcio' || t.db < c.db), 'el calcio no es el más brillante');
   assert.ok(c.atenuacion > 0 && c.origen === 'ilustrativo');
 });
+
+// F5 (Imagen): el corte del eje corto de los papilares se fija con el largo del VI en telediástole; en telesístole sigue
+// cortando el cuerpo de los papilares, pegado a la pared, y no su punta libre (antes caía 8 mm más arriba, en la punta).
+test('PSAX de los papilares: en telesístole el corte atraviesa papilares que tocan la pared (nivel relativo a la telediástole)', () => {
+  const ex = extra, eT = estadoGeo(td, ex), eS = estadoGeo(ts, ex);
+  const zT = planoVista('psaxPm', eT).O[2], zS = planoVista('psaxPm', eS).O[2];
+  assert.ok(Math.abs(zT - zS) < 0.5, `el nivel del corte cambia entre td (${zT.toFixed(1)}) y ts (${zS.toFixed(1)}) mm`);
+  const endo = gTs.partes.find(p => p.nombre === 'VI endocardio').pos;
+  for (const nom of ['Papilar anterolateral', 'Papilar posteromedial']) {
+    const p = gTs.partes.find(q => q.nombre === nom).pos; let mn = Infinity, n = 0;
+    for (let i = 0; i < p.length; i += 3) { if (Math.abs(p[i + 2] - zS) > 1.5) continue; n++;
+      for (let j = 0; j < endo.length; j += 3) mn = Math.min(mn, Math.hypot(p[i] - endo[j], p[i + 1] - endo[j + 1], p[i + 2] - endo[j + 2])); }
+    assert.ok(n >= 15, `${nom}: el corte solo atraviesa ${n} puntos del papilar (la punta)`);
+    assert.ok(mn <= 2, `${nom}: el papilar cortado queda a ${mn.toFixed(1)} mm de la pared en telesístole`);
+  }
+});

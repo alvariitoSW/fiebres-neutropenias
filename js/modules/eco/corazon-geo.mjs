@@ -19,8 +19,15 @@ import { construirTorax } from './torax.mjs';
 const TAU = Math.PI * 2;
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const mix = (a, b, t) => a + (b - a) * t;
-// mm de excursión del anillo tricuspídeo lateral por mL vaciado del VD (ver «TAPSE» en mover)
-export const TAPSE_POR_ML = 0.285;
+// F5 · TAPSE = acortamiento longitudinal de la pared libre del VD (ver «TAPSE» en mover). Fracción del largo base-ápex
+// del VD que baja el anillo lateral con la eyección normal: 24 mm de TAPSE (Lang 2015, Tabla 10, p. 23) sobre 71 mm de
+// largo del VD (Tabla 8, p. 20) = 0,34. Se escala con lo que el VD llega a vaciarse (que ya contiene su activación eVd y
+// la poscarga del motor) respecto a la FE normal del VD (58 %, Lang p. 23). Ilustrativo: la fuente no da la relación.
+export const ACORT_LONG_VD = 24 / 71, FE_VD_REF = 0.58;
+export const CONTRAE_TSVD = 0.2;      // fracción del diámetro del infundíbulo que se cierra con la eyección normal (ilustrativo)
+export const acortamientoVd = (feVd) => ACORT_LONG_VD * clamp(feVd / FE_VD_REF, 0, 1.3);
+/** TAPSE (mm) de un latido del motor (motor.ultimo): acortamiento × largo telediastólico del VD. */
+export const tapseDeLatido = (u, mio = 1) => Math.min(35, acortamientoVd(u.feD) * geomVi(u.edv, mio).Le * REF.lVdRel);
 export const EXP_AREA_VD = 0.58;
 const paso = (e0, e1, x) => { const t = clamp((x - e0) / (e1 - e0), 0, 1); return t * t * (3 - 2 * t); };
 const sum = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
@@ -358,7 +365,9 @@ export function construirCorazon(estado, opciones = {}) {
   const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
   const descenso = clamp(vi.Le - LeTd, -18, 6);
   // (el TAPSE: la pared libre del VD baja más; explicado en «mover»)
-  const excVd = clamp(TAPSE_POR_ML * ((estado.vvdTd ?? REF.vVd) - estado.vvd), 0, 35);
+  // F5: acortamiento longitudinal de la pared libre = fracción del largo telediastólico del VD, según lo que el VD se ha vaciado
+  const LvdTd = (estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : vi.Le) * REF.lVdRel, vdTd = estado.vvdTd ?? REF.vVd;
+  const excVd = clamp(acortamientoVd(1 - estado.vvd / vdTd) * LvdTd, 0, 35);
   const extraVd = clamp(-excVd - descenso, -25, 6);
   const angTric = Math.atan2(geo.ct[1], geo.ct[0]), ReBase = geo.ReB;
   const pesoVd = (x, y, z) => {
@@ -475,7 +484,8 @@ export function construirCorazon(estado, opciones = {}) {
   anadirR('Aorta', tubo(aorta, rA, 16, u => rA * (1 + 0.14 * paso(0, 0.08, u) - 0.22 * paso(0.35, 0.7, u))), COLORES.arteria, { dobleCara: true });
 
   // --- Infundíbulo del VD (tracto de salida) y tronco pulmonar ---
-  const inf = infundibulo(geo, rhoInf, NR);
+  // F5: el infundíbulo (TSVD) se contrae con la eyección del VD (estrechamiento ilustrativo: la fuente no da cifra, hueco)
+  const inf = infundibulo(geo, rhoInf, NR, CONTRAE_TSVD * clamp((estado.vvdTd ? 1 - estado.vvd / estado.vvdTd : 0) / FE_VD_REF, 0, 1.3));
   const NK = inf.marcos.length - 1, paredInf = 3;
   anadirR('Infundíbulo', rejilla(NK, NR, (u, v, i) => inf.anillo(i, v * TAU, 0)), COLORES.endocardio, { dobleCara: true });
   anadirR('Infundíbulo epicardio', rejilla(NK, NR, (u, v, i) => inf.anilloExt(i, v * TAU, paredInf)), COLORES.miocardio, { dobleCara: true });
@@ -666,11 +676,10 @@ export function construirCorazon(estado, opciones = {}) {
   const FE_NORMAL = 0.62, FE_CERO = 0.24, TORSION_NETA = 7.7 * Math.PI / 180, PERFIL_NETO = 1.33;
   const contrFe = clamp(((estado.feLatido ?? FE_NORMAL) - FE_CERO) / (FE_NORMAL - FE_CERO), 0, 1.15);
   const tau = TORSION_NETA / PERFIL_NETO * contrFe * Math.pow(clamp(estado.eVi ?? 0, 0, 1), 0.35);
-  // La pared libre del VD (y el anillo tricuspídeo lateral, donde se mide el TAPSE) baja más que el plano AV
-  // común: el VD se vacía sobre todo acortándose. Su excursión sale de lo que se ha vaciado el VD desde su
-  // telediástole (estado.vvdTd), así que cae si cae el volumen sistólico del VD. TAPSE_POR_ML está calibrado
-  // para ~21 mm con el VS del VD normal del motor (~74 mL); ilustrativo (la app cita TAPSE normal >16 mm en la
-  // Ficha 5 y >17 mm en la Ficha 11 de Fisiopatología UCI · Cardiología). El exceso sobre el descenso común se
+  // F5 · La pared libre del VD (y el anillo tricuspídeo lateral, donde se mide el TAPSE) se acorta en sentido longitudinal
+  // más que el plano AV común: el TAPSE es ese acortamiento, la fracción ACORT_LONG_VD del largo del VD multiplicada por lo
+  // que el VD llega a vaciarse (su activación eVd y la poscarga ya están en ese vaciado: en el TEP no puede vaciar y el
+  // anillo apenas baja). Normal ≈ 24 mm (Lang 2015, Tabla 10, p. 23; anormal <17). El exceso sobre el descenso común se
   // reparte con un peso: máximo en la pared libre junto al anillo tricuspídeo, nulo en el tabique, el resto del
   // VI, el infundíbulo y el ápex del VD.
   const mover = (pos) => {
@@ -805,7 +814,7 @@ export function baseGeometrica(estado) {
 
 // Infundíbulo: tubo desde el orificio de salida del VD (z = 0) hasta el anillo pulmonar,
 // con marcos por transporte paralelo para que la elipse de abajo pase a círculo arriba sin girar.
-function infundibulo(g, rhoInf, NR) {
+function infundibulo(g, rhoInf, NR, contraccion = 0) {
   const rP = RVOT.rP, P = [g.cR[0] + 2, g.cR[1] - 10, 26], nTop = norm([0.05, -0.35, 0.94]);
   const C0 = [g.cR[0], g.cR[1], 0], C1 = [g.cR[0], g.cR[1], 12], C2 = res(P, esc(nTop, 10)), C3 = P;
   const bez = (t) => { const s = 1 - t; return [0, 1, 2].map(c => s * s * s * C0[c] + 3 * s * s * t * C1[c] + 3 * s * t * t * C2[c] + t * t * t * C3[c]); };
@@ -819,7 +828,8 @@ function infundibulo(g, rhoInf, NR) {
   }
   const anillo = (k, psi, extra) => {
     const m = marcos[k], s = paso(0, 1, m.t);
-    const a = mix(g.aR, rP, s) + extra, b = mix(g.bR, rP, s) + extra;
+    const kc = 1 - contraccion * (1 - paso(0.8, 1, m.t));        // F5: el cuerpo del infundíbulo se estrecha en sístole; la válvula no
+    const a = mix(g.aR, rP, s) * kc + extra, b = mix(g.bR, rP, s) * kc + extra;
     return sum(m.c, sum(esc(m.e1, a * Math.cos(psi)), esc(m.e2, b * Math.sin(psi))));
   };
   // cara externa: en la base sigue la huella del hombro y se funde con el tubo hacia la mitad

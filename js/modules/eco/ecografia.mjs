@@ -123,7 +123,10 @@ export function planoVista(clave, est) {
     else {
       // eje corto: plano perpendicular al eje del VI; a la derecha la pared lateral (lejos del tabique),
       // como se ve desde el ápex
-      const z = v.nivel(vi); O = sum(A([0, 0], z), esc(u, D));
+      // F5: el nivel se fija con el largo del VI en telediástole (el transductor no sigue a la base cuando baja en sístole):
+      // así el corte de los papilares pasa por su cuerpo pegado a la pared y no por la punta libre
+      const viN = est.vviTd ? baseGeometrica({ ...est, vvi: est.vviTd, septo: 0 }).vi : vi;
+      const z = v.nivel(viN); O = sum(A([0, 0], z), esc(u, D));
       r = [-u[1], u[0], 0]; const fs = (REF.phiA + REF.phiB) / 2;
       if (r[0] * Math.cos(fs) + r[1] * Math.sin(fs) > 0) r = esc(r, -1);
     }

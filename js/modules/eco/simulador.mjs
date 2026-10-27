@@ -9,7 +9,7 @@
 // mientras corre, o una muestra del último latido al revisar) y con ese objeto se construye la geometría y se
 // dibujan la eco, el cursor del Wiggers, el punto del asa, la barra A-G y las cifras.
 import { crearMotor, FASES } from './motor.mjs';
-import { construirCorazon, LIMITES, TAPSE_POR_ML, recortar, planoCorte } from './corazon-geo.mjs';
+import { construirCorazon, LIMITES, tapseDeLatido, recortar, planoCorte } from './corazon-geo.mjs';
 import { construirAbdomen, anatomiaAbdomen, modeloVci, ARRIBA } from './abdomen.mjs';
 import { crearCamara, m4, MODELO, nrm } from './mat.mjs';
 import { crearWebGL } from './render-webgl.mjs';
@@ -366,11 +366,11 @@ export function montarSimulador(raiz, opc = {}) {
     if (medir === 'vi') { poner('', `Medida: <b>${f1(m.mm)} mm</b> (${f1(m.mm / 10)} cm) · Δ tiempo ${Math.round(m.ms)} ms<br>` + textoVi()); return; }
     // TAPSE: las dos cifras de normalidad que cita la app; y lo que hace el modelo en este latido
     const t = m.mm, u = motor.ultimo, dir = planoEco ? direccionHaz(planoEco, thetaM) : [0, 0, 1];
-    const exc = u ? Math.min(35, TAPSE_POR_ML * (u.edvD - u.esvD)) : 0;
+    const exc = u ? tapseDeLatido(u) : 0;
     const lectura = t > 17 ? ['ok', 'por encima de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).']
       : t > 16 ? ['warn', 'entre las dos cifras de la app: normal según la Ficha 5 (&gt;16 mm), no según la Ficha 11 (&gt;17 mm).']
       : ['danger', 'por debajo de las dos cifras de normalidad que cita la app (&gt;16 mm, Ficha 5; &gt;17 mm, Ficha 11).'];
-    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale de lo que se vacía el VD, así que también baja si baja la precarga (hemorragia, vasoplejía): el simulador aún no tiene un escenario de fallo del VD. Ilustrativo.</span>`);
+    poner(lectura[0], `TAPSE medido: <b>${f1(t)} mm</b> — ${lectura[1]}<br><span class="cv-muted">En el modelo, el anillo lateral recorre ${f1(exc)} mm en este latido (${f1(exc * Math.abs(dir[2]))} mm a lo largo de esta línea). Su TAPSE sale del acortamiento de la pared libre del VD, que depende de cuánto se vacía (con su poscarga): baja en el TEP y algo con la precarga. Ilustrativo.</span>`);
   }
   function textoVi() {
     const d = guardado.lvdd, sv = guardado.lvsd, cm = (x) => x == null ? '—' : f1(x / 10) + ' cm';
