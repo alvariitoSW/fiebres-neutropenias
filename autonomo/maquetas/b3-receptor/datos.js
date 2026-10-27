@@ -500,7 +500,7 @@ export function efecto(S) {
   const dT = A.maq['liso-arteriola'].tono - A0.maq['liso-arteriola'].tono;
   const irvs = B.irvs * Math.exp(P.kR * dT);
   const fcBase = B.fcSinBeta && !S.f.bisoprolol ? B.fcSinBeta : B.fc;
-  const fcIntr = fcBase * (1 + 0.2 * (A.maq.nodo.ampc - A0.maq.nodo.ampc)) + A.sist.fc;
+  const fcIntr = fcBase * (1 + 0.3 * (A.maq.nodo.ampc - A0.maq.nodo.ampc)) + A.sist.fc;
   const pvc = B.pvc + (P.mediadores ? 2 * (1 - A.maq.mastocito.suelta) : 0);
   const pam0 = B.pvc + B.ic * B.irvs;
   const baro = P.baro ?? 0.6;

@@ -8,6 +8,8 @@ import { AC, BANCO, R_REF, VIA, actualizarEscena, cilindro, cuenta, dibHaz, f2, 
 import { animarLupa, aplicarCascada, granulos, heroe, heroeActual, heroeDe, lupaCel, lupaHecha, montarLupa, objetivosLupa, prensa, seguir, setHeroe, setLupaCel } from './lupa.js';
 import { R, SEG, llenarEstatico, monitor, montarTrazas, muestra, pausado, pintarCifras, pintarTrazas, seguirLactato, setPausado, setR, setTapado, tapado } from './trazas.js';
 import { CASO, PREG_RECORRIDO } from './preguntas.js';
+import { crearTope } from '../comun/tope.js';
+import { calcularTopes, fraseTope } from './topes.js';
 /* ============================================================
    9. Estados, lupas, bombas (pieza común dibujada), frase viva, explicación guiada, fichas y notas
    ============================================================ */
@@ -184,7 +186,7 @@ export function pintarFrase() {
   let extra = '';
   if (ST.id === 'vasopresina-sano' && ST.pac === 'paulino') extra = ' (En el séptico se añade a la noradrenalina; aquí va sola para ver su efecto.)';
   if (ST.id === 'vasopresina-sano' && ST.pac === 'sano') extra = ' La dosis de los voluntarios, la fuente no la da.';
-  $('frase-txt').innerHTML = `${t}${extra} ${chip(c)}`;
+  $('frase-txt').innerHTML = `${t}${extra} ${chip(c)}${fraseTope(calcularTopes(ST))}`;
   medirDock();
 }
 export function lecturas() {
@@ -199,6 +201,19 @@ export function lecturas() {
   const sub = maq === 'gs' ? `AMPc ×${coma(m.ampc / 0.2, 1)}` : maq === 'gq' ? `calcio del depósito ×${coma((m.ca ?? 0.2) / 0.2, 1)}` : maq === 'gs-relaja' ? `AMPc ×${coma(m.ampc / 0.2, 1)}` : `gránulos fuera ${Math.round(100 * R.A.maq.mastocito.suelta)} %`;
   $('fig2-lect').innerHTML = `${RECEPTORES[heroeActual].nombre}: ${est}<small>${sub} · ilustrativo</small>`;
 }
+// Los topes de los mandos (topes.js): avisos ámbar bajo los mandos y sellos en el monitor, con su origen
+const cajaTope = document.createElement('div'); cajaTope.className = 'dock-in'; cajaTope.id = 'dock-topes'; $('dock').append(cajaTope);
+const tope = crearTope({ monitor: $('monitor'), dock: cajaTope, cita });
+const topeVisto = {};
+function aplicarTopes() {
+  const hay = calcularTopes(ST), claves = new Set([...Object.keys(hay), ...Object.keys(topeVisto)]);
+  for (const k of claves) {
+    const t = hay[k], firma = t ? JSON.stringify(t) : '';
+    if (topeVisto[k] === firma || (!t && !topeVisto[k])) continue;
+    if (t) { topeVisto[k] = firma; tope.poner(k, t); } else { delete topeVisto[k]; tope.quitar(k); }
+  }
+  medirDock();
+}
 export function actualizar() {
   setR(efecto(ST));
   pintarCifras();
@@ -207,7 +222,7 @@ export function actualizar() {
   $('mon-quien').textContent = `Monitor · ${R.P.nombre}`;
   $('ficha-pac').innerHTML = `${R.P.corta} ${org(R.P.del === 'caso' ? 'cifras de partida: del caso' : 'cifras: ilustrativo', true)}`;
   $('fig1-tit').textContent = R.P.organo === 'bronquio' ? 'El bronquio y el corazón, una misma vía' : R.P.lecho === 'coronaria' ? 'La coronaria y el corazón' : R.P.mediadores ? 'Arteriola con su mastocito, y el corazón' : 'Dos órganos, una misma vía';
-  lecturas(); pintarLeyenda();
+  lecturas(); pintarLeyenda(); aplicarTopes();
   if (REDUCIR || pausado) { llenarEstatico(); }
 }
 /* ---- La explicación guiada (como core/explicacion-guiada.js): cada paso pone el estado y señala el dibujo ---- */
