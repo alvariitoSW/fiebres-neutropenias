@@ -1,4 +1,135 @@
 // Banco de repaso — PIF Cardiología · «ECG y arritmias», fichas 3-7. Lo rellena la pieza B.
 // Regla: nunca declarar un tema sin preguntas.
-export const temasPifEcgB = [];
-export const preguntasPifEcgB = [];
+// Ficha 3 · Ritmo. Fuente: López Ramírez JH. La alegría de leer el electrocardiograma, 3.ª ed. Celsus; 2012, cap. 3.
+export const temasPifEcgB = [
+    { key: 'ecg-ritmo', etiqueta: '3 · Ritmo' },
+];
+
+export const preguntasPifEcgB = [
+    {
+        id: 'pif-ecg-b-q301', tema: 'ecg-ritmo',
+        enunciado: 'Un trazado muestra una onda P de la misma forma antes de cada QRS. ¿Qué ritmo es?',
+        opciones: ['Sinusal', 'De la unión, porque el QRS es estrecho', 'Idioventricular, porque la P es regular', 'Fibrilación auricular, con ondas P pequeñas'],
+        correcta: 0,
+        explicacion: 'Ritmo sinusal = ondas P de igual morfología antes de cada QRS. En el ritmo de la unión la P falta, se oculta o es negativa; en el idioventricular no hay P; y en la FA no hay P regulares. Llamarlo FA llevaría a anticoagular o frenar un ritmo normal. López Ramírez, pp. 13-14.',
+    },
+    {
+        id: 'pif-ecg-b-q302', tema: 'ecg-ritmo',
+        enunciado: 'No hay onda P en ninguna derivación y el RR es variable. ¿Qué más exige el libro para decir fibrilación auricular?',
+        opciones: ['Nada más: basta con que no se vea ninguna P para diagnosticarla', 'Ondas f minúsculas: se requieren los tres criterios', 'Una FC ventricular mayor de 150 lpm sostenida', 'QRS ensanchado'],
+        correcta: 1,
+        explicacion: 'FA = ausencia de P + RR variable + ondas f minúsculas. Hay que pedir los tres, porque con frecuencia se confunde un trazo «vibrado» (artefacto) con ondas f; tomar un artefacto por FA expone a tratar una arritmia que no existe. López Ramírez, p. 14.',
+    },
+    {
+        id: 'pif-ecg-b-q303', tema: 'ecg-ritmo',
+        enunciado: 'Un joven sano tiene P normales y un RR que acorta al inspirar y se alarga al espirar. ¿Qué conducta es correcta?',
+        opciones: ['Es un bloqueo auriculoventricular de alto grado: valorar marcapasos', 'Es una FA paroxística: iniciar anticoagulación', 'Es una arritmia sinusal fisiológica: no requiere tratamiento', 'Es una extrasistolia auricular frecuente: iniciar un antiarrítmico'],
+        correcta: 2,
+        explicacion: 'Con P normales y RR ligeramente variable ligado a la respiración es arritmia sinusal, condición fisiológica más frecuente en niños y jóvenes («la INspiración INcrementa la FC»). Tratarla como FA o como bloqueo sometería al paciente a fármacos o dispositivos sin necesidad. López Ramírez, p. 14.',
+    },
+    {
+        id: 'pif-ecg-b-q304', tema: 'ecg-ritmo',
+        enunciado: 'Si el nodo sinusal y el nodo AV dejan de disparar, ¿qué estructura marca el ritmo y a qué frecuencia?',
+        opciones: ['Las aurículas, a 20-40 lpm', 'La unión, a 60-100 lpm, como el nodo sinusal', 'Los ventrículos, a 40-60 lpm', 'Los ventrículos, a 20-40 lpm'],
+        correcta: 3,
+        explicacion: 'Manda el marcapaso inferior que sigue: nodo sinusal 60-100, nodo AV (unión) 40-60, ventrículos 20-40 (ritmo idioventricular, de escape). Esperar 60-100 lpm de un escape ventricular haría pasar por alto un paciente con FC muy baja y QRS anchos. López Ramírez, p. 13.',
+    },
+    {
+        id: 'pif-ecg-b-q305', tema: 'ecg-ritmo',
+        enunciado: 'Un ECG muestra una FC de 180 lpm con una P normal antes de cada QRS y RR regular. ¿En qué paciente cuadra con taquicardia sinusal según la fórmula del libro?',
+        opciones: ['En un hombre de 30 años', 'En una mujer de 45 años', 'En un hombre de 70 años', 'En cualquier edad, si la P es normal'],
+        correcta: 0,
+        explicacion: 'FC máx = 220 − edad: a los 30 años es 190 y 180 cabe; a los 45 es 175 y a los 70 es 150, así que 180 lpm obliga a buscar otra arritmia (el libro: 180 sugiere TS en ≤ 39 años; en ≥ 45 años hay que buscar otra). Aceptarla como sinusal a los 70 años dejaría sin diagnosticar la arritmia real. López Ramírez, p. 16.',
+    },
+    {
+        id: 'pif-ecg-b-q306', tema: 'ecg-ritmo',
+        enunciado: 'Un paciente tiene ondas F regulares a 320/min y un pulso de 80. ¿Qué lo explica?',
+        opciones: ['Flúter auricular con bloqueo 2:1', 'Flúter auricular con bloqueo 4:1', 'Fibrilación auricular con respuesta lenta', 'Taquicardia sinusal con bloqueo 2:1'],
+        correcta: 1,
+        explicacion: 'En el flúter la FC ventricular es la mitad (2:1) o la cuarta parte (4:1) de la auricular: 320 ÷ 4 = 80. Con 2:1 el pulso sería de 160 lpm, y la FA no tiene ondas F regulares. López Ramírez, pp. 17-18.',
+    },
+    {
+        id: 'pif-ecg-b-q307', tema: 'ecg-ritmo',
+        enunciado: 'En AVF hay 6 mm entre cada onda F y 1 QRS por cada 4 ondas F. ¿Cuáles son las frecuencias auricular y ventricular?',
+        opciones: ['Auricular 250 y ventricular 250 lpm', 'Auricular 150 y ventricular ≈ 38 lpm', 'Auricular 250 y ventricular ≈ 63 lpm', 'Auricular 63 y ventricular 250 lpm'],
+        correcta: 2,
+        explicacion: 'Auricular = 1500 ÷ 6 = 250 por minuto (F-F). El nodo AV deja pasar 1 de cada 4: 250 ÷ 4 = 62,5. Confundir F-F con R-R daría una FC ventricular de 250 lpm y se trataría un paciente estable como si estuviera en una taquicardia extrema. López Ramírez, p. 18.',
+    },
+    {
+        id: 'pif-ecg-b-q308', tema: 'ecg-ritmo',
+        enunciado: 'En un trazado de FA aparecen dos latidos distintos, de QRS estrecho y sin pausa compensatoria. ¿Qué son?',
+        opciones: ['Un ritmo idioventricular acelerado', 'Contracciones ventriculares prematuras', 'Una CAP bloqueada', 'Latidos aberrantes'],
+        correcta: 3,
+        explicacion: 'La conducción aberrante se distingue de la CVP porque el QRS es estrecho y no hay pausa compensatoria; la CVP lleva QRS ensanchado y pausa postextrasistólica. Tomarlos por CVP llevaría a tratar una extrasistolia ventricular inexistente. López Ramírez, p. 20.',
+    },
+    {
+        id: 'pif-ecg-b-q309', tema: 'ecg-ritmo',
+        enunciado: 'Un adulto joven sano llega a urgencias con taquicardia regular de QRS estrecho a ~187 lpm, sin P visibles, tras mucho café. ¿Qué ritmo describe el libro?',
+        opciones: ['TPSV, casi siempre con conducción AV 1:1', 'Taquicardia sinusal: sube la FC con la cafeína', 'Fibrilación auricular con respuesta rápida', 'Taquicardia ventricular monomorfa sostenida'],
+        correcta: 0,
+        explicacion: 'TPSV: ritmo auricular regular de 160-250 (cuadro de la p.15: 150-250), paroxístico, QRS habitualmente estrecho y P ocultas; aparece tras alcohol, cafeína, estrés o cigarrillo. La TS no pasa de 100-160 lpm y la FA es irregular. Si el QRS fuera ancho habría que descartar TV. López Ramírez, pp. 20-21.',
+    },
+    {
+        id: 'pif-ecg-b-q310', tema: 'ecg-ritmo',
+        enunciado: 'Un anciano con EPOC y digital tiene varias P de morfología distinta y PR variable. ¿Qué arritmia es?',
+        opciones: ['Taquicardia sinusal con P normales', 'Taquicardia auricular multifocal con bloqueo', 'Flúter auricular con bloqueo 2:1', 'TPSV con QRS ancho por aberrancia'],
+        correcta: 1,
+        explicacion: 'Varios focos auriculares dan P de morfología variable y PR variable; no es rara en ancianos con neumopatía crónica o que reciben digital. La taquicardia sinusal tiene P iguales y el flúter, ondas F regulares en dientes de sierra. López Ramírez, p. 22.',
+    },
+    {
+        id: 'pif-ecg-b-q311', tema: 'ecg-ritmo',
+        enunciado: 'En un ritmo sinusal aparece un latido prematuro con P distinta y QRS igual a los demás, sin pausa compensatoria. ¿Qué es?',
+        opciones: ['Un latido de escape de la unión', 'Una extrasístole ventricular con pausa compensatoria', 'Una contracción auricular prematura', 'Un artefacto por temblor'],
+        correcta: 2,
+        explicacion: 'CAP: foco ectópico auricular, P de morfología diferente, QRS parecido al de base y sin pausa compensatoria (rasgo de las ventriculares). Una CVP traería QRS ensanchado y no tendría P delante. Si la CAP llega al nodo AV refractario no conduce: aparece una onda extraña seguida de pausa larga. López Ramírez, pp. 22-23.',
+    },
+    {
+        id: 'pif-ecg-b-q312', tema: 'ecg-ritmo',
+        enunciado: 'Con la técnica del papel, la tercera marca cae exactamente sobre la R que sigue al latido prematuro. ¿Qué indica?',
+        opciones: ['Un ritmo idioventricular acelerado', 'Ausencia de pausa compensatoria: es extrasístole auricular', 'Una CAP bloqueada', 'Pausa compensatoria: seguramente es extrasístole ventricular'],
+        correcta: 3,
+        explicacion: 'Si la tercera marca coincide con la R esperada hay pausa compensatoria completa, propia de la CVP («uno de los datos más confiables para la diferenciación»). Si la tercera y la cuarta no coinciden con una R, es extrasistolia supraventricular. López Ramírez, pp. 31-33.',
+    },
+    {
+        id: 'pif-ecg-b-q313', tema: 'ecg-ritmo',
+        enunciado: 'Una CVP muestra morfología de bloqueo de rama derecha. ¿De qué ventrículo procede, y qué se espera?',
+        opciones: ['Del izquierdo, más ligada a daño estructural o enfermedad coronaria', 'Del derecho, de mejor pronóstico y sin patología estructural', 'Del derecho, ligada a enfermedad coronaria', 'Del izquierdo, de mejor pronóstico y casi siempre benigna'],
+        correcta: 0,
+        explicacion: 'Las CVP del VI adoptan morfología de BRD y las del VD, de BRI (lo opuesto); las del VI aparecen más con daño estructural o enfermedad coronaria y las del VD suelen tener mejor pronóstico. Cambiar el lado haría tranquilizar a un paciente con cardiopatía estructural. López Ramírez, pp. 33-34.',
+    },
+    {
+        id: 'pif-ecg-b-q314', tema: 'ecg-ritmo',
+        enunciado: 'Una dupleta de CVP cae sobre la onda T del QRS precedente. ¿Por qué importa?',
+        opciones: ['Indica un bigeminismo por intoxicación digitálica', 'Cae en la repolarización ventricular: factor de riesgo para fibrilación ventricular', 'Es una CAP bloqueada que no se conduce al ventrículo', 'Indica un ritmo de escape de la unión por fallo del nodo'],
+        correcta: 1,
+        explicacion: 'Es el fenómeno de R en T: la extrasístole se origina durante la repolarización y se considera factor de riesgo para desencadenar FV. Pasarlo por alto dejaría sin vigilar a un paciente con riesgo de arritmia maligna. López Ramírez, p. 35.',
+    },
+    {
+        id: 'pif-ecg-b-q315', tema: 'ecg-ritmo',
+        enunciado: 'Cinco CVP seguidas en un paciente en ritmo sinusal, que luego recupera el ritmo de base. ¿Cómo se llama?',
+        opciones: ['Torsades de pointes con QT largo', 'Ritmo idioventricular acelerado con QRS anchos', 'Taquicardia ventricular no sostenida', 'Fibrilación ventricular sin QRS definidos'],
+        correcta: 2,
+        explicacion: 'Tres o más CVP seguidas son TV; si termina sola y vuelve el ritmo de base, es no sostenida. La FV no tiene QRS reconocibles y el paciente está en paro; las torsades son una TV polimorfa con QT previo prolongado. López Ramírez, pp. 36-37.',
+    },
+    {
+        id: 'pif-ecg-b-q316', tema: 'ecg-ritmo',
+        enunciado: 'Un paciente con QT largo tiene una TV polimorfa cuyos QRS suben y bajan de voltaje como una hélice. ¿Qué es?',
+        opciones: ['Ritmo idioventricular acelerado', 'Fibrilación ventricular', 'Taquicardia auricular multifocal', 'Torsades de pointes'],
+        correcta: 3,
+        explicacion: 'Las torsades de pointes (TV helicoidal) son una TV polimorfa que suele aparecer con QT previamente prolongado. En la FV no se distingue ningún QRS verdadero. López Ramírez, pp. 37-38.',
+    },
+    {
+        id: 'pif-ecg-b-q317', tema: 'ecg-ritmo',
+        enunciado: 'El monitor muestra un trazado caótico, sin P, QRS ni T distinguibles, y el paciente está inconsciente y sin pulso. ¿Qué es?',
+        opciones: ['Fibrilación ventricular', 'Artefacto por interferencia eléctrica', 'Ritmo de la unión', 'Taquicardia ventricular no sostenida'],
+        correcta: 0,
+        explicacion: 'FV: ritmo rápido e irregular (150-500 lpm) en un paciente sin signos vitales, con caos de frecuencia y forma. Un artefacto por interferencia o temblor se parece al ritmo, pero el paciente está vivo; confundirlo con un ritmo benigno retrasaría la respuesta ante un paro. López Ramírez, pp. 39 y 41-42.',
+    },
+    {
+        id: 'pif-ecg-b-q318', tema: 'ecg-ritmo',
+        enunciado: 'En DII, DIII y AVF hay P negativa antes de un QRS normal y un PR de 0,10 s, a 55 lpm. ¿Qué ritmo es?',
+        opciones: ['Ritmo sinusal con PR corto por preexcitación', 'Ritmo de la unión superior', 'Ritmo de la unión baja con P tras el QRS', 'Ritmo nodal medio con P oculta en el QRS'],
+        correcta: 1,
+        explicacion: 'Unión superior: P negativa en DII, DIII y AVF (donde normalmente es positiva) y PR menor de 0,12 s. En la unión baja la P negativa va después del QRS; en el nodal medio no se ve la P. López Ramírez, p. 41.',
+    },
+];

@@ -358,14 +358,397 @@
 
         <div id="ecg-f3" class="tab-content">
             <h3 style="color: var(--accent-red);">Ritmo</h3>
-            <p class="fuente-ficha">En construcción.</p>
-            <p class="fuente-ficha">Esta ficha se está escribiendo a partir del libro; vuelve pronto.</p>
+            <p class="fuente-ficha">López Ramírez, <em>La alegría de leer el electrocardiograma</em>, cap. 3 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">pp. 13-44</a>).</p>
 
+            <div class="card" id="ecg-f3-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> el ritmo se lee con una pregunta: <span class="hl-azul">¿hay una onda P de igual forma delante de cada QRS?</span> Si la hay, es sinusal. Si no, se mira si el RR es regular o variable, la forma del QRS (estrecho o ensanchado) y la frecuencia, y con eso se ubica la arritmia en su familia.</p>
+            </div>
+            <div class="article-figure" id="ecg-f3-fig-sinusal">
+                <img src="js/modules/pif-cardio/img/ecg/f3-sinusal.png" alt="Tira de ECG con una onda P de igual aspecto delante de cada complejo QRS" loading="lazy">
+                <div class="article-figure-caption">Ritmo sinusal: antes de cada QRS hay una P y todas se parecen. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=24" target="_blank" rel="noopener">p. 14</a>.</div>
+            </div>
+            <p class="rtv-enlace-ficha" id="ecg-f3-rtv-sinusal"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="sinusal">⚡ Verlo latir en el corazón eléctrico →</button></p>
 
+            <p class="section-label" style="margin-top:16px;">Quién manda en el ritmo <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">pp. 13-14</a></p>
+
+            <p id="ecg-f3-automatismo" style="font-size:0.85rem; color:var(--text-dim);">Todo el corazón tiene automatismo; el ritmo de base lo da el <strong>nodo sinusal</strong> (pared posterior de la aurícula derecha) porque es el más rápido. Si falla, manda la siguiente estructura. El marcapaso más rápido es el dominante e inhibe a los inferiores («supresión por sobreestimulación») (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">p. 13</a>).</p>
+
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f3-tabla-automatismo" data-nombre="Automatismo del corazón">
+                <thead><tr><th>Estructura</th><th>Frecuencia (lpm)</th><th>Nombre del ritmo</th></tr></thead>
+                <tbody><tr><td>Nodo sinusal</td><td>60-100</td><td>Sinusal</td></tr><tr><td>Nodo aurículo-ventricular</td><td>40-60</td><td>De la unión</td></tr><tr><td>Ventrículos</td><td>20-40</td><td>Idioventricular</td></tr></tbody>
+            </table>
+            </div>
+
+            <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">p. 13</a>.</p>
+
+            <p class="section-label" style="margin-top:16px;">Primer paso: ¿es sinusal? <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">pp. 13-14</a></p>
+
+            <dl class="kv-row" id="ecg-f3-es-sinusal"><dt>Ritmo sinusal</dt><dd><span class="hl-verde">Ondas P de igual morfología antes de cada QRS</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=23" target="_blank" rel="noopener">pp. 13-14</a>).</dd></dl>
+
+            <dl class="kv-row" id="ecg-f3-sin-p"><dt>Si no hay P en ninguna derivación</dt><dd>Se mira si los QRS tienen un RR regular (distancia igual o casi igual entre R) o variable. <span class="hl-rojo">FA = ausencia de P + RR variable + ondas f minúsculas: se exigen los tres criterios</span>. No basta con las ondas f, porque se confunden con un trazo «vibrado» (artefacto); se ven mejor con lupa (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=24" target="_blank" rel="noopener">p. 14</a>).</dd></dl>
+
+            <div class="article-figure" id="ecg-f3-fig-fa-p14">
+                <img src="js/modules/pif-cardio/img/ecg/f3-fa.png" alt="Tira de ECG sin ondas P, con RR variable y pequeñas oscilaciones irregulares entre los QRS" loading="lazy">
+                <div class="article-figure-caption">Fibrilación auricular: sin P, RR variable y ondas f. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=24" target="_blank" rel="noopener">p. 14</a>.</div>
+            </div>
+
+            <dl class="kv-row" id="ecg-f3-arritmia-sinusal"><dt>Arritmia sinusal</dt><dd>P normales con un RR ligeramente variable. Es <strong>fisiológica</strong>, más frecuente y marcada en niños y jóvenes pero posible a cualquier edad. Alterna períodos de FC lenta y rápida ligados a la respiración: sube al inspirar y baja al espirar. Regla del libro: «la <strong>IN</strong>spiración <strong>IN</strong>crementa la FC» (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=24" target="_blank" rel="noopener">p. 14</a>).</dd></dl>
+
+            <p class="section-label" style="margin-top:16px;">Clasificación y cuadro de frecuencias <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a></p>
+
+            <p id="ecg-f3-clasificacion" style="font-size:0.85rem; color:var(--text-dim);">Bradiarritmias (FC &lt; 60) y taquiarritmias (&gt; 100). Supraventriculares (por encima del nodo AV) y ventriculares (por debajo). Las más frecuentes son la taquicardia sinusal, la taquicardia paroxística supraventricular, el flúter auricular, la FA y la TV: <strong>todas supraventriculares salvo la TV</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>). El libro desarrolla las arritmias en su anexo (<button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8 · Arritmias</button>).</p>
+
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f3-tabla-frecuencias" data-nombre="Cuadro de frecuencias de las arritmias">
+                <thead><tr><th>Arritmia</th><th>FC (lpm)</th><th>Origen</th><th>Contexto</th></tr></thead>
+                <tbody><tr><td>Taquicardia sinusal</td><td>100-160</td><td>Supraventricular</td><td>Ejercicio, cafeína, estrés emocional</td></tr><tr><td>TPSV</td><td>150-250 <sup>1</sup></td><td>Supraventricular</td><td>Predomina en adultos jóvenes</td></tr><tr><td>Flúter auricular</td><td>250-350</td><td>Supraventricular</td><td>Enfermedad coronaria, TEP</td></tr><tr><td>Fibrilación auricular</td><td>350-450</td><td>Supraventricular</td><td>Cerca del 10 % de los mayores de 80 años</td></tr><tr><td>Taquicardia ventricular</td><td>120-250 <sup>2</sup></td><td>Ventricular</td><td>Enfermedad coronaria, cardiopatía estructural</td></tr></tbody>
+            </table>
+            </div>
+
+            <p class="fuente-ficha">Cuadro del libro, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>. Las notas 1 y 2 están en cada arritmia: el libro da otras cifras en su texto.</p>
+
+            <p class="section-label" style="margin-top:16px;">Las arritmias, por familias <span style="font-weight:400;">(toca para abrir)</span></p>
+
+            <div class="micro-prof-list" id="ecg-f3-familias">
+
+            <div id="ecg-f3-ts" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Taquicardia sinusal</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-ts-que"><dt>Qué es</dt><dd>FC generalmente <strong>100-160</strong> lpm, RR regular y una P normal antes de cada QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=26" target="_blank" rel="noopener">p. 16</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-ts">
+                <img src="js/modules/pif-cardio/img/ecg/f3-ts.png" alt="Tira de ECG a unos 120 lpm con una P de igual forma delante de cada QRS y RR regular" loading="lazy">
+                <div class="article-figure-caption">Taquicardia sinusal a 120 lpm. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=27" target="_blank" rel="noopener">p. 17</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-ts-fcmax"><dt>FC máxima</dt><dd>Con la edad baja la FC máxima: <strong>FC máx = 220 − edad</strong>. Una FC de 180 sugiere taquicardia sinusal en personas de 39 años o menos, pero en alguien de 45 años o más debe buscarse otra arritmia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=26" target="_blank" rel="noopener">p. 16</a>).</dd></dl>
+                <div class="card" id="ecg-f3-calc" data-nombre="FC máxima según la edad" style="padding:14px 16px;">
+                    <p class="section-label" style="margin:0 0 8px;">¿La FC cabe en una taquicardia sinusal? <span style="font-weight:400;">· origen: ficha (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=26" target="_blank" rel="noopener">p. 16</a>)</span></p>
+                    <div class="input-group"><label for="ecg-f3-calc-edad">Edad (años)</label><input type="number" id="ecg-f3-calc-edad" inputmode="numeric" min="1" max="110" step="1" placeholder="p. ej. 50"></div>
+                    <div class="input-group"><label for="ecg-f3-calc-fc">FC del trazado (lpm)</label><input type="number" id="ecg-f3-calc-fc" inputmode="numeric" min="30" max="400" step="1" placeholder="p. ej. 180"></div>
+                    <div id="ecg-f3-calc-resultado" class="result-box" aria-live="polite">Escribe la edad y la FC.</div>
+                </div>
+                <dl class="kv-row" id="ecg-f3-ts-causas"><dt>Causas</dt><dd><ul class="term-chips"><li>Fisiológicas: neonatos e infantes, ejercicio, ansiedad, excitación, emociones</li><li>Patológicas: algunos infartos, hiperdinamia, fiebre, hipoxia, hemorragia, hipotensión, choque, hipertiroidismo, anemia, embolia pulmonar, insuficiencia cardíaca</li><li>Fármacos: adrenalina, atropina, efedrina, isoproterenol, salbutamol, terbutalina, hidralazina <sup>*</sup>, alcohol, cafeína, cigarrillo</li></ul></dd></dl>
+                <details class="nota-plegable" id="ecg-f3-nota-hidralacina"><summary>* Nota de fidelidad: «hidralacina»</summary>
+                <p>El libro escribe «hidralacina»; es la hidralazina (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=27" target="_blank" rel="noopener">p. 17</a>).</p>
+            </details>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-ts"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="taquiSinusal">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-bs" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🐢 Bradicardia sinusal</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<div class="article-figure" id="ecg-f3-fig-bs">
+                <img src="js/modules/pif-cardio/img/ecg/f3-bs.png" alt="Tira de ECG con ritmo sinusal lento, una P antes de cada QRS y unos 50 lpm" loading="lazy">
+                <div class="article-figure-caption">Bradicardia sinusal a 50 lpm. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=34" target="_blank" rel="noopener">p. 24</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-bs-que"><dt>Qué es</dt><dd>Ritmo de base sinusal de morfología normal con FC <strong>&lt; 60</strong> lpm. Hallazgo frecuente; puede indicar buena salud (deportistas), pero también ser la primera manifestación de una enfermedad del nodo sinusal por enfermedad coronaria (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=34" target="_blank" rel="noopener">p. 24</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-bs-iam"><dt>En el infarto</dt><dd>Es común en el IAM de cara inferior: <span class="hl-rojo">40 % en las primeras 24 h</span>, y es reversible al estabilizarse el paciente (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=34" target="_blank" rel="noopener">p. 24</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-bs-causas"><dt>Otras causas</dt><dd>Reacción vagal natural (masaje del seno carotídeo, presión sobre los globos oculares, maniobra de Valsalva); fármacos (digital, betabloqueadores, morfina, clonidina, verapamilo, diltiazem); hipotiroidismo e hipotermia (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=34" target="_blank" rel="noopener">p. 24</a>).</dd></dl>
+                <p id="ecg-f3-bs-ejemplo" style="font-size:0.85rem; color:var(--text-dim);">Segundo ejemplo del libro: FC ≈ 45 lpm (1500 ÷ 33 mm = 45) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=34" target="_blank" rel="noopener">p. 24</a>).</p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-fl" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🪚 Flúter auricular</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-fl-que"><dt>Qué es</dt><dd>Hay que distinguir FA de flúter (FLA); ambas son supraventriculares y pueden coexistir. En el FLA aparecen <strong>ondas F mayúsculas regulares, 250-350 por minuto</strong>. Se bloquean 2:1 o 4:1 al llegar al nodo AV <sup>*</sup>, de modo que la FC ventricular es la mitad o la cuarta parte de la auricular: auricular 320 con bloqueo 4:1 = pulso de 80. El RR puede ser regular o irregular, pero en general no tan irregular como en la FA (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=27" target="_blank" rel="noopener">pp. 17-18</a>).</dd></dl>
+                <details class="nota-plegable" id="ecg-f3-nota-fl-sa"><summary>* Nota de fidelidad: «nodo SA» en el flúter</summary>
+                <p>El libro dice «al llegar al nodo SA» (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=27" target="_blank" rel="noopener">p. 17</a>); por el sentido (la página siguiente habla del nodo AV como filtro, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=28" target="_blank" rel="noopener">p. 18</a>) debe leerse nodo aurículo-ventricular. Se reproduce lo impreso.</p>
+            </details>
+                <div class="article-figure" id="ecg-f3-fig-fl">
+                <img src="js/modules/pif-cardio/img/ecg/f3-flutter.png" alt="Derivación AVF con ondas F en dientes de sierra, una marcada con un círculo, y QRS cada pocas ondas" loading="lazy">
+                <div class="article-figure-caption">Flúter en AVF: 6 mm entre ondas F = 1500 ÷ 6 = 250 por minuto; el nodo AV deja pasar 1 de cada 4 (250 ÷ 4 = 62,5). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=28" target="_blank" rel="noopener">p. 18</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-fl-regla"><dt>Qué intervalo da qué frecuencia</dt><dd>R-R da la FC ventricular; P-P la auricular en ritmo sinusal; f-f la auricular en la FA; F-F la auricular en el flúter (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=28" target="_blank" rel="noopener">p. 18</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-fl-causas"><dt>Causas</dt><dd>La principal es la cardiopatía isquémica; también complicación de patologías agudas, valvulopatía reumática (la estenosis mitral, una de las principales), embolia pulmonar y pacientes que reciben quinidina por una FA. Suelen coincidir con las de la FA (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=28" target="_blank" rel="noopener">p. 18</a>).</dd></dl>
+                <div style="overflow-x:auto;">
+            <table class="data-table comparativa-fuentes" id="ecg-f3-cmp-flutter" data-nombre="Flúter: frecuencia auricular según cada fuente">
+                <thead><tr><th>Fuente</th><th>Frecuencia auricular del flúter</th></tr></thead>
+                <tbody><tr><td>López Ramírez (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=27" target="_blank" rel="noopener">p. 17</a>)</td><td>250-350 lpm</td></tr><tr><td>Guía ESC 2019 de taquicardias supraventriculares (<a class="biblio-link" href="docs/esc-2019-taquicardias-supraventriculares.pdf#page=13" target="_blank" rel="noopener">p. 667</a>)</td><td>250-330 lpm; sospechar flúter 2:1 si la FC ventricular ronda 150 lpm</td></tr></tbody>
+            </table>
+            </div>
+                <p class="fuente-ficha">Las fuentes discrepan en el techo del rango; se muestran las dos.</p>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-fl"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="flutter">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-fa" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 Fibrilación auricular</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-fa-que"><dt>Qué es</dt><dd>ECG: ondas f, RR variable y ninguna P regular delante de cada QRS. La FC auricular suele ser &gt; 350 por minuto y la ventricular generalmente &gt; 100 lpm, sobre todo sin digital ni betabloqueadores (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=28" target="_blank" rel="noopener">pp. 18-19</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-fa">
+                <img src="js/modules/pif-cardio/img/ecg/f3-fa.png" alt="Tira de ECG con QRS irregulares, sin ondas P y con pequeñas ondas f entre ellos" loading="lazy">
+                <div class="article-figure-caption">Fibrilación auricular: ninguna P regular, gran variabilidad del RR y ondas f. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=29" target="_blank" rel="noopener">p. 19</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-fa-coexiste"><dt>Coexistencia</dt><dd>Con cierta frecuencia se aprecian FLA y FA en el mismo trazado (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=29" target="_blank" rel="noopener">p. 19</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-fa-causas"><dt>Causas y riesgo</dt><dd>Valvulopatía mitral reumática, hipertensión arterial, enfermedad coronaria e hipertiroidismo. En jóvenes sin enfermedad, la «FA solitaria» da episodios paroxísticos de horas o días. Cerca del <strong>10 %</strong> de los mayores de 80 años la padecen, y es <span class="hl-rojo">causa importante de embolia cerebral</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=29" target="_blank" rel="noopener">p. 19</a>).</dd></dl>
+                <p class="section-label" style="margin-top:12px;">Latido aberrante o extrasístole ventricular dentro de una FA <span style="font-weight:400;"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a></span></p>
+                <div class="article-figure" id="ecg-f3-fig-aberrante">
+                <img src="js/modules/pif-cardio/img/ecg/f3-aberrante.png" alt="Derivación V1 con fibrilación auricular y dos latidos distintos de QRS estrecho, el cuarto y el último" loading="lazy">
+                <div class="article-figure-caption">FA con dos latidos distintos (4.º y 12.º): conducción aberrante. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>.</div>
+            </div>
+                <p id="ecg-f3-fa-aberrante" style="font-size:0.85rem; color:var(--text-dim);">Esos dos latidos se deben a <strong>conducción aberrante</strong>. Se distinguen de la extrasístole ventricular porque <span class="hl-azul">el QRS es estrecho y no hay pausa compensatoria</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>).</p>
+                <div class="article-figure" id="ecg-f3-fig-cvp-en-fa">
+                <img src="js/modules/pif-cardio/img/ecg/f3-cvp-en-fa.png" alt="Tira de ECG con fibrilación auricular y dos latidos ensanchados seguidos de una pausa" loading="lazy">
+                <div class="article-figure-caption">FA con dos latidos distintos (6.º y 8.º): contracción ventricular prematura con pausa postextrasistólica. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>.</div>
+            </div>
+                <p id="ecg-f3-fa-cvp" style="font-size:0.85rem; color:var(--text-dim);">En este segundo ejemplo los latidos distintos son contracciones ventriculares prematuras (CVP) <strong>con pausa postextrasistólica</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>).</p>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-fa"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="fa">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-aberrancia"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="aberrancia">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-tpsv" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⏱️ Taquicardia paroxística supraventricular (TPSV)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-tpsv-que"><dt>Qué es</dt><dd>Episodios <strong>paroxísticos</strong>, motivo frecuente de consulta en urgencias. ECG: ritmo auricular regular de <strong>160-250</strong> por minuto <sup>*</sup>, casi siempre con conducción AV 1:1: la FC ventricular o de pulso es igual a la auricular (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>).</dd></dl>
+                <details class="nota-plegable" id="ecg-f3-nota-tpsv"><summary>* Nota de fidelidad: dos rangos en el libro</summary>
+                <p>El cuadro de frecuencias (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>) da 150-250 y el texto (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=30" target="_blank" rel="noopener">p. 20</a>) da 160-250. Se reproducen los dos tal como están impresos.</p>
+            </details>
+                <div class="article-figure" id="ecg-f3-fig-tpsv">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tpsv.png" alt="Derivación V6 con QRS estrechos regulares y rápidos, sin onda P visible" loading="lazy">
+                <div class="article-figure-caption">TPSV en V6 a unos 187 lpm (1500 ÷ 8 mm = 187,5). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=31" target="_blank" rel="noopener">p. 21</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-tpsv-ejemplo2"><dt>Otro ejemplo</dt><dd>FC ventricular ≈ 215 lpm, sin P visibles y QRS estrechos: las P están muy probablemente ocultas en el QRS; a veces se ven justo después del QRS (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=31" target="_blank" rel="noopener">p. 21</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-tpsv-contexto"><dt>Contexto</dt><dd>Personas sanas sin cardiopatía tras alcohol, cafeína, estrés o cigarrillo; también síndrome de Wolff-Parkinson-White, embolia pulmonar, enfermedad coronaria, intoxicación digitálica y tirotoxicosis (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=31" target="_blank" rel="noopener">p. 21</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-tpsv-ancho"><dt>QRS</dt><dd>Habitualmente <strong>estrecho</strong>. En algunos casos es ensanchado, y eso <span class="hl-rojo">obliga al diagnóstico diferencial con la taquicardia ventricular</span>; el libro lo amplía en su anexo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=31" target="_blank" rel="noopener">p. 21</a>, <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8</button>).</dd></dl>
+                <div style="overflow-x:auto;">
+            <table class="data-table comparativa-fuentes" id="ecg-f3-cmp-tpsv" data-nombre="TPSV: nomenclatura">
+                <thead><tr><th>Fuente</th><th>Cómo lo llama</th></tr></thead>
+                <tbody><tr><td>López Ramírez (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>)</td><td>«TPSV», con rango de FC propio</td></tr><tr><td>Guía ESC 2019 (<a class="biblio-link" href="docs/esc-2019-taquicardias-supraventriculares.pdf#page=12" target="_blank" rel="noopener">pp. 666-667</a>)</td><td>«TSV», dividida por mecanismo (AVNRT, AVRT, taquicardia auricular); no da un rango único de FC</td></tr></tbody>
+            </table>
+            </div>
+                </div>
+            </div>
+
+            <div id="ecg-f3-ta" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🎯 Taquicardia auricular</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-ta-que"><dt>Qué es</dt><dd>Hay ondas P, pero de <strong>morfología anormal</strong> (el foco ectópico está en el músculo auricular, no en el nodo sinusal). RR suele ser regular. Frecuencia auricular entre 100 y 250 por minuto según la viñeta y entre 150 y 250 según el texto, «algo menos que la auricular del flúter» <sup>*</sup> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=31" target="_blank" rel="noopener">pp. 21-22</a>).</dd></dl>
+                <details class="nota-plegable" id="ecg-f3-nota-ta"><summary>* Nota de fidelidad: dos rangos en la misma página</summary>
+                <p>La viñeta dice 100-250 y el párrafo siguiente 150-250 (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">p. 22</a>). Se reproducen los dos.</p>
+            </details>
+                <div class="article-figure" id="ecg-f3-fig-ta">
+                <img src="js/modules/pif-cardio/img/ecg/f3-ta.png" alt="Tira de ECG con taquicardia auricular, una onda P negativa antes de cada QRS y bloqueo 2:1" loading="lazy">
+                <div class="article-figure-caption">Taquicardia auricular con bloqueo 2:1: P negativa antes del QRS; seguramente hay otra P oculta sobre cada T (la FC de P es el doble de la ventricular). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">p. 22</a>.</div>
+            </div>
+                <p class="section-label" style="margin-top:12px;">Taquicardia auricular multifocal con bloqueo <span style="font-weight:400;"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">p. 22</a></span></p>
+                <p id="ecg-f3-tam-que" style="font-size:0.85rem; color:var(--text-dim);">No del todo rara en ancianos con neumopatía crónica o que reciben digital. Hay varios focos auriculares: <strong>P de morfología variable</strong> y <strong>PR variable</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">p. 22</a>).</p>
+                <div class="article-figure" id="ecg-f3-fig-tam">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tam.png" alt="Tira de ECG con varias ondas P de forma distinta, algunas dentro del QRS, y PR variable" loading="lazy">
+                <div class="article-figure-caption">Taquicardia auricular multifocal con bloqueo: múltiples P de morfología variable, algunas insertadas en el QRS. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">p. 22</a>.</div>
+            </div>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-tam"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="tam">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-esv" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>➕ Extrasístoles supraventriculares (CAP)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-esv-que"><dt>Cómo se reconoce</dt><dd>Su nombre más correcto es <strong>contracción auricular prematura (CAP)</strong>: nace de un foco ectópico en las aurículas. Se ve una <strong>P de morfología distinta</strong> a la de base, seguida de un QRS similar al de base y <span class="hl-azul">sin pausa compensatoria</span> (que sí suele estar en las ventriculares) (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=32" target="_blank" rel="noopener">pp. 22-23</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-esv">
+                <img src="js/modules/pif-cardio/img/ecg/f3-esv.png" alt="Dos derivaciones con un cuarto complejo prematuro cuyo QRS se parece a los demás" loading="lazy">
+                <div class="article-figure-caption">ESV: el cuarto complejo es prematuro, con QRS parecido a los demás pero P diferente. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=33" target="_blank" rel="noopener">p. 23</a>.</div>
+            </div>
+                <div class="article-figure" id="ecg-f3-fig-cap-bloqueada">
+                <img src="js/modules/pif-cardio/img/ecg/f3-cap-bloqueada.png" alt="Tira de ECG con tres QRS precedidos de P y una onda extraña seguida de una pausa larga" loading="lazy">
+                <div class="article-figure-caption">CAP bloqueada: llegó al nodo AV en periodo refractario y no se conduce al ventrículo. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=33" target="_blank" rel="noopener">p. 23</a>.</div>
+            </div>
+                <p id="ecg-f3-cap-bloq" style="font-size:0.85rem; color:var(--text-dim);">En la <strong>CAP bloqueada</strong>, tras tres QRS con P aparece una onda «extraña» seguida de una pausa larga y luego reaparece el ritmo de base. Esa onda es una contracción auricular prematura que encontró al nodo AV en periodo refractario: la P no se transmitió y no hubo despolarización ventricular (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=33" target="_blank" rel="noopener">p. 23</a>).</p>
+                <dl class="kv-row" id="ecg-f3-esv-contexto"><dt>Contexto</dt><dd>Individuos sanos tras cafeína y tabaco, estrés emocional y cardiopatía de base. Pueden anteceder a una taquiarritmia supraventricular o a una FA, y se presentan en cerca de la mitad de los pacientes con infarto agudo de miocardio (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=33" target="_blank" rel="noopener">p. 23</a>).</dd></dl>
+                </div>
+            </div>
+
+            <div id="ecg-f3-cvp" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔻 Extrasístoles ventriculares (CVP)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-cvp-que"><dt>Qué es</dt><dd>Contracción ventricular prematura (CVP) o extrasístole ventricular: <strong>QRS ensanchado y distorsionado</strong> con morfología de bloqueo de rama (QRS &gt; 0,12 s = 3 mm, ondas T negativas), en formas «rR» o «RR'». El estudiante solo debe fijarse en la morfología de bloqueo; los bloqueos se tratan en el capítulo de intervalos (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=38" target="_blank" rel="noopener">pp. 28-29</a>, <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7</button>). Analogía del libro: un musulmán en una iglesia católica se ve «extraño», como una CVP en un ritmo sinusal (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=38" target="_blank" rel="noopener">p. 28</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-cvp">
+                <img src="js/modules/pif-cardio/img/ecg/f3-cvp.png" alt="Tira de ECG con ritmo sinusal y un latido ensanchado y distorsionado seguido de onda T negativa" loading="lazy">
+                <div class="article-figure-caption">CVP en un ritmo sinusal: un QRS extraño entre latidos normales. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=38" target="_blank" rel="noopener">p. 28</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-cvp-polaridad"><dt>Polaridad</dt><dd>Aunque no siempre, suele ser opuesta a la del QRS de base: si los complejos son positivos, la extrasístole es de predominio negativo, y al revés. Usualmente hay una <strong>pausa compensatoria</strong> posterior (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=39" target="_blank" rel="noopener">p. 29</a>).</dd></dl>
+                <p class="section-label" style="margin-top:12px;">Patrones <span style="font-weight:400;"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=39" target="_blank" rel="noopener">pp. 29-31</a></span></p>
+                <div class="article-figure" id="ecg-f3-fig-bigeminismo">
+                <img src="js/modules/pif-cardio/img/ecg/f3-bigeminismo.png" alt="Tira de ECG con un latido normal alternando con una CVP ensanchada" loading="lazy">
+                <div class="article-figure-caption">Bigeminismo: una CVP alternando con una contracción normal. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=39" target="_blank" rel="noopener">p. 29</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-bigeminismo-t"><dt>Bigeminismo</dt><dd>CVP alternando con una contracción normal. Frecuente, aunque no exclusivo, en la intoxicación digitálica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=39" target="_blank" rel="noopener">p. 29</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-trigeminismo">
+                <img src="js/modules/pif-cardio/img/ecg/f3-trigeminismo.png" alt="Tira de ECG con dos latidos normales y un tercero ensanchado de forma cíclica" loading="lazy">
+                <div class="article-figure-caption">Trigeminismo: dos contracciones normales y una CVP. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">p. 30</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-trigeminismo-t"><dt>Trigeminismo</dt><dd>Dos contracciones normales y la tercera una CVP, de forma cíclica (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">p. 30</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-polimorfas">
+                <img src="js/modules/pif-cardio/img/ecg/f3-polimorfas.png" alt="Tira de ECG con varias CVP de morfologías distintas" loading="lazy">
+                <div class="article-figure-caption">CVP de varias morfologías. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">p. 30</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-polimorfas-t"><dt>Multifocal o polimorfa</dt><dd>QRS de varias morfologías. El autor prefiere «CVP polimorfas», porque puede ser un solo foco con QRS distintos; si provienen de sitios diferentes, <span class="hl-rojo">entraña mayor riesgo de arritmia maligna como la fibrilación ventricular</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">pp. 30-31</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-dupleta">
+                <img src="js/modules/pif-cardio/img/ecg/f3-dupleta.png" alt="Tira de ECG con dos CVP monomorfas consecutivas" loading="lazy">
+                <div class="article-figure-caption">Dupleta: dos CVP monomorfas seguidas. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">p. 30</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-dupleta-t"><dt>Dupleta</dt><dd>Dos CVP monomorfas consecutivas, muy seguramente del mismo sitio del ventrículo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=40" target="_blank" rel="noopener">p. 30</a>).</dd></dl>
+                <p class="section-label" style="margin-top:12px;">CAP o CVP: cómo distinguirlas <span style="font-weight:400;"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=41" target="_blank" rel="noopener">p. 31</a></span></p>
+                <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f3-tabla-cap-cvp" data-nombre="Contracción auricular prematura frente a ventricular">
+                <thead><tr><th>Característica</th><th>CAP</th><th>CVP</th></tr></thead>
+                <tbody><tr><td>Onda P antes del QRS</td><td>Sí</td><td>No</td></tr><tr><td>Morfología del QRS</td><td>Similar al de base</td><td>Muy diferente</td></tr><tr><td>Polaridad del QRS</td><td>Igual a la de base</td><td>A veces al contrario</td></tr><tr><td>Aspecto del QRS</td><td>Estrecho</td><td>Ensanchado (morfología de bloqueo de rama)</td></tr><tr><td>Pausa compensatoria completa</td><td>No</td><td><span class="hl-rojo">Sí</span>: «uno de los datos más confiables para la diferenciación»</td></tr></tbody>
+            </table>
+            </div>
+                <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=41" target="_blank" rel="noopener">p. 31</a>.</p>
+                <p class="section-label" style="margin-top:12px;">Cómo medir la pausa compensatoria <span style="font-weight:400;"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=42" target="_blank" rel="noopener">pp. 32-33</a></span></p>
+                <ol id="ecg-f3-pausa-pasos" style="font-size:0.85rem; color:var(--text-dim); padding-left:20px;">
+                    <li>Toma un papel en blanco y un lápiz.</li>
+                    <li>Marca sobre el papel las R de 3-4 ciclos normales.</li>
+                    <li>Coloca la primera marca sobre la R del ciclo normal que precede al latido prematuro.</li>
+                    <li>Si la <strong>tercera marca cae exactamente sobre la R que sigue</strong> al prematuro, hay pausa compensatoria y seguramente es una extrasístole ventricular.</li>
+                    <li>Si la tercera y la cuarta marca no coinciden con una R, es extrasistolia supraventricular.</li>
+                </ol>
+                <div class="article-figure" id="ecg-f3-fig-pausa">
+                <img src="js/modules/pif-cardio/img/ecg/f3-pausa.png" alt="Tira de ECG con marquillas sobre las R: la tercera y cuarta caen exactamente sobre la R que sigue a la CVP" loading="lazy">
+                <div class="article-figure-caption">Con CVP: la tercera y la cuarta marquilla caen sobre la R esperada, pausa compensatoria completa. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=43" target="_blank" rel="noopener">p. 33</a>.</div>
+            </div>
+                <div class="article-figure" id="ecg-f3-fig-sin-pausa">
+                <img src="js/modules/pif-cardio/img/ecg/f3-supra-sin-pausa.png" alt="Tira de ECG con marquillas que no coinciden con una R tras el latido prematuro" loading="lazy">
+                <div class="article-figure-caption">Extrasistolia supraventricular: la tercera y la cuarta marquilla no coinciden con una R. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=43" target="_blank" rel="noopener">p. 33</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-vd-vi"><dt>De qué ventrículo viene</dt><dd>Las CVP del <strong>ventrículo derecho</strong> suelen tener mejor pronóstico y rara vez denotan patología estructural severa (también son comunes en patología pulmonar); las del <strong>izquierdo</strong> aparecen más con daño estructural o enfermedad coronaria. Las del VD adoptan morfología de <strong>BRI</strong> (lo opuesto) y las del VI, de <strong>BRD</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=43" target="_blank" rel="noopener">pp. 33-34</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-br-donde"><dt>Dónde mirar el bloqueo</dt><dd>BRI: el patrón de bloqueo se ve en V5, V6 o DI. BRD: se ve en V1 o V2, con QRS de dos picos (R R') y T negativa en V2; en V6, QRS predominantemente positivo con onda S ascendente «melladurada» y T positiva (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=44" target="_blank" rel="noopener">pp. 34-35</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-r-en-t">
+                <img src="js/modules/pif-cardio/img/ecg/f3-r-en-t.png" alt="Tira de ECG con una dupleta de CVP que cae sobre la onda T del latido anterior" loading="lazy">
+                <div class="article-figure-caption">Fenómeno de R en T: una dupleta de CVP distorsiona por completo la T del QRS precedente. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=45" target="_blank" rel="noopener">p. 35</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-r-en-t-t"><dt>Fenómeno de R en T</dt><dd>Una CVP que cae sobre la onda T del QRS que la precede se origina durante la repolarización ventricular y se considera <span class="hl-rojo">factor de riesgo para desencadenar una fibrilación ventricular</span> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=45" target="_blank" rel="noopener">p. 35</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-cvp-epi"><dt>Frecuencia y entidades</dt><dd>Hallazgo común: en el Holter de 24 h aparecen en cerca del <strong>60 %</strong> de individuos sanos. Entidades: enfermedad coronaria, miocardiopatías, digital y quinidina (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=45" target="_blank" rel="noopener">p. 35</a>).</dd></dl>
+                </div>
+            </div>
+
+            <div id="ecg-f3-iv" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🪫 Ritmo idioventricular</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<div class="article-figure" id="ecg-f3-fig-idioventricular">
+                <img src="js/modules/pif-cardio/img/ecg/f3-idioventricular.png" alt="Derivación DII con QRS anchos regulares a unos 75 lpm sin onda P" loading="lazy">
+                <div class="article-figure-caption">Ritmo idioventricular acelerado a unos 75 lpm. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-iv-que"><dt>Qué es</dt><dd>Ritmo de <strong>escape</strong> originado en los ventrículos cuando ni el nodo sinusal ni el nodo AV disparan. FC muy baja, <strong>20-40</strong> lpm, sin P y con QRS anchos de morfología de bloqueo de rama. Si es rápido (<strong>60-120</strong> lpm) se llama <strong>ritmo idioventricular acelerado</strong> (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=45" target="_blank" rel="noopener">pp. 35-36</a>); el ejemplo del libro va a unos 75 lpm (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>).</dd></dl>
+                </div>
+            </div>
+
+            <div id="ecg-f3-tv" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚠️ Taquicardia ventricular (TV)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-tv-que"><dt>Qué es</dt><dd>Tres o más CVP seguidas. La FC ventricular suele oscilar entre <strong>140 y 250</strong> por minuto <sup>*</sup>. Se puede encontrar en la fase aguda de un infarto, en la cardiopatía crónica isquémica e hipertensiva, y con digital y quinidina (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>).</dd></dl>
+                <details class="nota-plegable" id="ecg-f3-nota-tv"><summary>* Nota de fidelidad: tres cifras en el libro</summary>
+                <p>El cuadro de frecuencias (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>) da 120-250; el texto (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>) da 140-250; y el ejemplo de esa misma página está rotulado «TV con FC de 130 × minuto». Se reproducen tal como están impresos.</p>
+            </details>
+                <div class="article-figure" id="ecg-f3-fig-tv">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tv.png" alt="Tres derivaciones con taquicardia ventricular a 130 lpm, QRS anchos regulares" loading="lazy">
+                <div class="article-figure-caption">TV con FC de 130 por minuto (DII y otras derivaciones). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>.</div>
+            </div>
+                <div class="article-figure" id="ecg-f3-fig-tv-salto">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tv-salto.png" alt="Tres derivaciones con ritmo sinusal que pasa bruscamente a taquicardia ventricular" loading="lazy">
+                <div class="article-figure-caption">Paso brusco de ritmo sinusal a TV. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=47" target="_blank" rel="noopener">p. 37</a>.</div>
+            </div>
+                <div class="article-figure" id="ecg-f3-fig-tv-ns">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tv-nosostenida.png" alt="Tira de ECG con ritmo sinusal, cinco CVP seguidas y regreso al ritmo de base" loading="lazy">
+                <div class="article-figure-caption">TV no sostenida: cinco CVP y vuelta al ritmo de base. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=47" target="_blank" rel="noopener">p. 37</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-tv-ns-t"><dt>No sostenida</dt><dd>Paciente en ritmo sinusal que hace 5 CVP y regresa al ritmo de base (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=47" target="_blank" rel="noopener">p. 37</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-tv-grave"><dt>Gravedad</dt><dd>En general es una arritmia grave y sugiere patología cardíaca subyacente. Puede ser <span class="hl-rojo">premonitoria de fibrilación ventricular</span>: el libro muestra una TV con FC cercana a 300 que degenera en FV (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=48" target="_blank" rel="noopener">p. 38</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-tv-fv">
+                <img src="js/modules/pif-cardio/img/ecg/f3-tv-fv.png" alt="Tira de ECG con taquicardia ventricular muy rápida que al final se desorganiza en fibrilación ventricular" loading="lazy">
+                <div class="article-figure-caption">TV con FC cercana a 300 que degenera en fibrilación ventricular. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=48" target="_blank" rel="noopener">p. 38</a>.</div>
+            </div>
+                <div style="overflow-x:auto;">
+            <table class="data-table comparativa-fuentes" id="ecg-f3-cmp-tv" data-nombre="Taquicardia de QRS ancho: criterio de frecuencia">
+                <thead><tr><th>Fuente</th><th>Qué dice</th></tr></thead>
+                <tbody><tr><td>López Ramírez (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=25" target="_blank" rel="noopener">p. 15</a>, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=46" target="_blank" rel="noopener">p. 36</a>)</td><td>TV a 120-250 (cuadro) o 140-250 (texto)</td></tr><tr><td>AHA 2025, parte 9 (<a class="biblio-link" href="docs/aha-2025-parte9-soporte-vital-avanzado.pdf#page=25" target="_blank" rel="noopener">p. S562</a>)</td><td>Taquicardia de QRS ancho: ritmo &gt; 150/min con QRS ≥ 0,12 s</td></tr><tr><td>Guía ESC 2019 (<a class="biblio-link" href="docs/esc-2019-taquicardias-supraventriculares.pdf#page=14" target="_blank" rel="noopener">p. 668</a>)</td><td>QRS ancho = &gt; 120 ms</td></tr></tbody>
+            </table>
+            </div>
+                <p class="fuente-ficha">Las fuentes discrepan en el corte de frecuencia; se muestran todas.</p>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-tv"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="tv">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-torsade" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌪️ Torsades de pointes</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-tor-que"><dt>Qué es</dt><dd>Un tipo especial de TV: <strong>TV polimorfa</strong> que suele ocurrir cuando el paciente tenía antes un <span class="hl-rojo">intervalo QT prolongado</span>. Se llama «helicoidal» porque la irregularidad del voltaje de los QRS simula una hélice: complejos de alto voltaje que disminuyen y luego aumentan sucesivamente (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=47" target="_blank" rel="noopener">pp. 37-38</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-torsade">
+                <img src="js/modules/pif-cardio/img/ecg/f3-torsade.png" alt="Tira de ECG con complejos QRS cuya altura sube y baja sucesivamente como una hélice" loading="lazy">
+                <div class="article-figure-caption">Torsades de pointes («puntas torcidas»). López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=47" target="_blank" rel="noopener">p. 37</a>.</div>
+            </div>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-torsade"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="torsade">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-fv" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🛑 Fibrilación ventricular (FV)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<div class="article-figure" id="ecg-f3-fig-fv">
+                <img src="js/modules/pif-cardio/img/ecg/f3-fv.png" alt="Tira de ECG caótica sin ondas P, QRS ni T identificables" loading="lazy">
+                <div class="article-figure-caption">Fibrilación ventricular: irregularidad y caos de frecuencia y forma. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=49" target="_blank" rel="noopener">p. 39</a>.</div>
+            </div>
+                <dl class="kv-row" id="ecg-f3-fv-que"><dt>Qué es</dt><dd>La más temida de las arritmias: ritmo rápido e irregular en el que el paciente está <span class="hl-rojo">sin signos vitales (paro cardíaco)</span>. FC entre <strong>150 y 500</strong> por minuto. No se distinguen ondas P, ni un verdadero QRS, ni ondas T: predominan la irregularidad y el caos en frecuencia y forma (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=49" target="_blank" rel="noopener">p. 39</a>).</dd></dl>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-fv"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="fv">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-union" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔗 Ritmos de la unión (nodales)</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<dl class="kv-row" id="ecg-f3-un-que"><dt>Qué es</dt><dd>El tejido de la unión es la zona entre la parte baja de la aurícula derecha, el nodo AV y la parte proximal del haz de His antes de bifurcarse. Cuando el nodo sinusal se deprime o no dispara bien, este tejido (automatismo <strong>40-60</strong> lpm) toma el mando: es el <strong>fenómeno de escape</strong>, un mecanismo de defensa. Si su automatismo aumenta patológicamente y supera al nodo sinusal hay un ritmo acelerado de la unión o taquicardia de la unión (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=50" target="_blank" rel="noopener">pp. 40-41</a>).</dd></dl>
+                <dl class="kv-row" id="ecg-f3-un-ecg"><dt>En el ECG</dt><dd>QRS de aspecto normal, FC &lt; 60 lpm, y la P puede estar <strong>antes, oculta o después</strong> del QRS según el origen sea proximal, medio o distal (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=50" target="_blank" rel="noopener">pp. 40-41</a>).</dd></dl>
+                <div class="article-figure" id="ecg-f3-fig-union">
+                <img src="js/modules/pif-cardio/img/ecg/f3-union-abc.png" alt="Tres derivaciones: A con P negativa antes del QRS, B sin P visible y C con P negativa después del QRS" loading="lazy">
+                <div class="article-figure-caption">Ritmo de la unión: A superior, B medio, C bajo. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=51" target="_blank" rel="noopener">p. 41</a>.</div>
+            </div>
+                <div style="overflow-x:auto;">
+            <table class="data-table" id="ecg-f3-tabla-union" data-nombre="Ritmos de la unión según el origen">
+                <thead><tr><th>Trazado</th><th>Origen</th><th>Qué se ve</th></tr></thead>
+                <tbody><tr><td>A</td><td>Unión superior</td><td>P <strong>negativa en DII, DIII y AVF</strong> (donde normalmente es positiva) y PR corto &lt; 0,12 s</td></tr><tr><td>B</td><td>Nodal medio</td><td>No se ve la P (oculta en el QRS)</td></tr><tr><td>C</td><td>Unión baja</td><td>P negativa <strong>después</strong> del QRS</td></tr></tbody>
+            </table>
+            </div>
+                <p class="fuente-ficha"><a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=51" target="_blank" rel="noopener">p. 41</a>.</p>
+                <div class="article-figure" id="ecg-f3-fig-union-43">
+                <img src="js/modules/pif-cardio/img/ecg/f3-union-43.png" alt="Tira de ECG con QRS estrechos lentos sin onda P" loading="lazy">
+                <div class="article-figure-caption">Ritmo de la unión con bradicardia extrema. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=51" target="_blank" rel="noopener">p. 41</a>.</div>
+            </div>
+                <p id="ecg-f3-un-ejemplo" style="font-size:0.85rem; color:var(--text-dim);">Ejemplo del libro: bradicardia extrema (FC 43), sin onda P y con QRS estrecho (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=51" target="_blank" rel="noopener">p. 41</a>).</p>
+                <p class="rtv-enlace-ficha" id="ecg-f3-rtv-nodal"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="nodal">⚡ Verlo latir en el corazón eléctrico →</button></p>
+                </div>
+            </div>
+
+            <div id="ecg-f3-artificios" class="micro-prof-item">
+                <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔌 Artificios</span> <span class="toggle-icon">+</span></div>
+                <div class="micro-prof-body">
+<p id="ecg-f3-art-que" style="font-size:0.85rem; color:var(--text-dim);">Algunas imágenes parecen arritmias a primera vista y son <strong>artificios</strong>: por interferencia eléctrica de dispositivos cercanos o por temblor del paciente (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=51" target="_blank" rel="noopener">pp. 41-42</a>).</p>
+                <div class="article-figure" id="ecg-f3-fig-interferencia">
+                <img src="js/modules/pif-cardio/img/ecg/f3-interferencia.png" alt="Tira de ECG con una línea superior muy irregular por interferencia sobre un trazado normal" loading="lazy">
+                <div class="article-figure-caption">Interferencia eléctrica. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=52" target="_blank" rel="noopener">p. 42</a>.</div>
+            </div>
+                <div class="article-figure" id="ecg-f3-fig-temblor">
+                <img src="js/modules/pif-cardio/img/ecg/f3-temblor.png" alt="Tira de ECG con una línea de base temblorosa por movimiento muscular" loading="lazy">
+                <div class="article-figure-caption">Temblor muscular. López Ramírez, <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=52" target="_blank" rel="noopener">p. 42</a>.</div>
+            </div>
+                </div>
+            </div>
+
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Ejercicios del libro <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=35" target="_blank" rel="noopener">pp. 25-27</a> · <a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=52" target="_blank" rel="noopener">pp. 42-44</a></p>
+
+            <p id="ecg-f3-ejercicios" style="font-size:0.85rem; color:var(--text-dim);">El capítulo propone los ejercicios 4-12 (pp. 25-27) y 13-18 (pp. 42-44) con trazados reales; sus respuestas están en el capítulo final del libro. Los trazados de esta ficha son los ejemplos explicados; los ejercicios se plantean en el apartado de preguntas.</p>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar </p>
+
+            <p id="ecg-f3-profundizar" style="font-size:0.85rem; color:var(--text-dim);">El diagnóstico diferencial de las taquicardias de QRS ancho y el resto de arritmias están en el anexo: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8">Ficha 8 · Arritmias</button>. Los bloqueos de rama que dan su forma a la CVP: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f7">Ficha 7 · Intervalos</button>. La frecuencia y su cálculo: <button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f2">Ficha 2 · Frecuencia</button>.</p>
+
+            <p class="fuente-ficha">Bibliografía del capítulo (<a class="biblio-link" href="docs/lopez-ramirez-2012-alegria-leer-ecg-parte1.pdf#page=54" target="_blank" rel="noopener">p. 44</a>): Goldberger, <em>Clinical Electrocardiography: A Simplified Approach</em>, 6.ª ed., Mosby 1999; Goodacre S, Irons R, ABC of clinical electrocardiography. Atrial arrhythmias, <em>BMJ</em> 2002;324:593; Edhouse J, Morris F, ABC… Broad complex tachycardia Part I, <em>BMJ</em> 2002;324:719; Goldman MJ 1987; Castellano C, Pérez de Juan M, Attie F, <em>Electrocardiografía clínica</em>, Elsevier 2004; Vélez D, <em>ECG. Pautas de electrocardiografía</em>, Marbán 2006.</p>
 
             <!-- [HUECO B: ficha 3] -->
-
-
 
         </div>
 
