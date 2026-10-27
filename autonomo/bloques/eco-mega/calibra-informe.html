@@ -1,0 +1,159 @@
+<title>Calibrar la eco</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+/* Hoja de informe clínico: columna única, tablas de "hoy → objetivo" como un informe de eco */
+:root{
+  --bg:#f6f7f8; --panel:#ffffff; --fg:#1b2329; --mut:#5a6870; --line:#d7dde1;
+  --acc:#0d6e7a; --bad:#b3261e; --warn:#8a5a00; --ok:#2e6b34; --badbg:#fbe9e7; --okbg:#e8f3e9; --warnbg:#fbf1dc;
+  --disp:"Source Serif 4",Georgia,serif; --body:"IBM Plex Sans",system-ui,sans-serif; --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#11171b; --panel:#182126; --fg:#e3e9ec; --mut:#9aa8b0; --line:#2b373e;
+  --acc:#5cc3cf; --bad:#ff8a80; --warn:#f2c46b; --ok:#8fd19a; --badbg:#3a1f1d; --okbg:#1d3322; --warnbg:#3a2e14; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#11171b; --panel:#182126; --fg:#e3e9ec; --mut:#9aa8b0; --line:#2b373e;
+  --acc:#5cc3cf; --bad:#ff8a80; --warn:#f2c46b; --ok:#8fd19a; --badbg:#3a1f1d; --okbg:#1d3322; --warnbg:#3a2e14; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--body)}
+main{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px;display:grid;gap:28px}
+h1,h2{font-family:var(--disp);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:1.75rem}
+h2{font-size:1.3rem;margin-bottom:8px}
+h3{font-size:1rem;margin:14px 0 4px}
+p{margin:0 0 10px}
+.eyebrow{font:600 .72rem var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--acc)}
+.mut{color:var(--mut);font-size:.88rem}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px}
+.scroll{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;font-size:.84rem;font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{font:600 .72rem var(--mono);text-transform:uppercase;letter-spacing:.05em;color:var(--mut);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+.hoy{color:var(--bad);font-weight:600}
+.obj{color:var(--ok);font-weight:600}
+.src{font-family:var(--mono);font-size:.75rem;color:var(--mut)}
+.chip{display:inline-block;font:600 .7rem var(--mono);padding:1px 6px;border-radius:3px;margin-right:4px}
+.chip.bad{background:var(--badbg);color:var(--bad)} .chip.ok{background:var(--okbg);color:var(--ok)} .chip.warn{background:var(--warnbg);color:var(--warn)}
+ol,ul{margin:0;padding-left:20px;display:grid;gap:6px}
+.opts{display:grid;gap:12px}
+.opt{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;display:grid;gap:6px}
+.opt.rec{border:2px solid var(--acc)}
+.opt h3{margin:0;font-family:var(--disp);font-size:1.1rem}
+.cost{font:600 1.05rem var(--mono);color:var(--acc)}
+.ask{border-left:4px solid var(--acc);padding:10px 12px;background:var(--panel)}
+</style>
+<main>
+<header>
+  <div class="eyebrow">Informe · eco-calibra · 27/10/2026</div>
+  <h1>Calibrar la eco: el llenado del corazón y la HP crónica</h1>
+  <p class="mut">B-027 + B-029. Solo informe: no se ha tocado el motor ni la app. Tú eliges la opción y después se construye.</p>
+</header>
+
+<section class="box">
+  <h2>En una frase</h2>
+  <p>El simulador da hoy <strong>Doppler imposibles</strong> en varias formas: la hipertrofia sale con un patrón restrictivo extremo (E/A 10) cuando debería enseñar mala relajación, el TEP no tiene onda E (E/A 0,09) y la HP crónica a fondo hincha el VD hasta 330 mL, el tope del dibujo, por eso sale «nave espacial».</p>
+  <p>La causa está en <strong>cinco piezas del motor</strong>, no en el dibujo. Antes de arreglar, propongo poner los <strong>dos jueces</strong> que miden esto, para que no vuelva a pasar.</p>
+</section>
+
+<section>
+  <h2>1 · Qué está mal (medido hoy) y a dónde debe ir</h2>
+  <p class="mut">Medido en el motor con las mismas fórmulas del panel Doppler, 40 s asentado. «def» = el mando en su punto de defecto; «100 %» = a fondo. Fuentes: N = Nagueh 2025, L = Lang 2015, M = Mukherjee 2025, E = ESC/ERS 2022 (página impresa, entre paréntesis la del PDF).</p>
+  <div class="scroll"><table>
+    <thead><tr><th>Forma</th><th>Hoy</th><th>Objetivo</th><th>Fuente</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Normal</strong></td><td>E/A 1,15 · DT 180 · E/e′ 8,8 · bomba AI 23 % · <span class="hoy">S/D 1,7, flujo de venas ×2-3, onda a de la AI 7-15 mmHg</span></td><td class="obj">E/A 0,88-2,73 (20-39 años) · E/e′ 4-9 · bomba AI 15-30 %</td><td class="src">N p.551 (15) · L p.24 (24)</td></tr>
+      <tr><td><strong>Hipertrofia</strong></td><td class="hoy">E/A 10,2 · A 16 cm/s · DT 80 ms · bomba AI 1 % · e′ igual que el normal</td><td class="obj">Grado II: E/A &gt;0,8 y &lt;2, E/e′ ≥14, e′ septal ≤6 <br><span class="mut">o grado I si bajamos la PCP: E/A ≤0,8 con E/e′ normal (pregunta abajo)</span></td><td class="src">N p.554 (18)</td></tr>
+      <tr><td><strong>Dilatada</strong></td><td>E/A 3,9 · DT 100 · S/D 0,75 · <span class="hoy">bomba AI 5 %</span></td><td class="obj">Grado III: E/A ≥2, DT &lt;140 ms, S/D &lt;1 (ya cumple); falta que la AI aún contraiga algo y e′ bajo</td><td class="src">N p.554 (18), p.547 (11), p.549 (13)</td></tr>
+      <tr><td><strong>TEP</strong> (def)</td><td class="hoy">E/A 0,09 · D venosa 2 cm/s · S/D 21,7 · bomba AI 100 %</td><td class="obj">E presente (VI poco lleno: E/A bajo pero no cero) · D &gt;0 · TAPSE &lt;17 (cumple: 8,4) · VD/VI &gt;1 (cumple)</td><td class="src">E p.3645 (28); E/A del TEP: <em>hueco, ninguna fuente</em></td></tr>
+      <tr><td><strong>HP crónica</strong> (100 %)</td><td class="hoy">VD 330 mL (tope del dibujo) · VD/VI 5,4 · FE VD 10 % · E/A 0,29 · S/D 11,6</td><td class="obj">VD grave pero posible: basal &gt;4,9 cm, área TD &gt;32 cm², pared &gt;0,9 cm, AD &gt;24 cm², TAPSE ≤10, PAPs ≥70, TAPSE/PAPs &lt;0,19</td><td class="src">M Tabla 1 p.145 (5) · E p.3657 (40)</td></tr>
+      <tr><td><strong>Hemorragia y derrame</strong> (100 %)</td><td class="hoy">E = 0 (no hay llenado pasivo) · VD &lt;45 mL y AI &lt;15 mL: aviso de recorte por abajo</td><td class="obj">E pequeña pero presente</td><td class="src"><em>hueco: estas fuentes no lo tratan</em></td></tr>
+      <tr><td><strong>Todas</strong></td><td class="hoy">e′ y E/e′ no cambian nunca (e′ 10,8 fijo)</td><td class="obj">e′ baja en hipertrofia y dilatada: septal ≤6, lateral ≤7</td><td class="src">N p.554 (18)</td></tr>
+    </tbody>
+  </table></div>
+  <p class="mut" style="margin-top:8px">Otros sin fuente en los PDF de <code>docs/</code>: DT mitral normal, S/D y Ar normales en la vena pulmonar, onda a de la AI en mmHg, bomba de la AD, tamaño máximo de un VD, McConnell y 60/60. Se buscan en otra fuente al construir o quedan como «fisiología general» con aviso.</p>
+</section>
+
+<section>
+  <h2>2 · Por qué pasa (las cinco piezas)</h2>
+  <ol>
+    <li><strong>La AI no suma su contracción a lo que ya tiene.</strong> Si está distendida (hipertrofia, dilatada), «contraer» la relaja y la onda A desaparece. La AD tiene el mismo defecto.</li>
+    <li><strong>El freno de las venas pulmonares es flojo.</strong> Cada latido la AI empuja ~500 mL/s hacia atrás: flujo de venas 2-3 veces el real y onda a de la AI alta.</li>
+    <li><strong>e′ está fijo</strong>: sale de una «relajación» que vale 1 en todas las formas. E/e′ nunca enseña nada.</li>
+    <li><strong>HP crónica</strong>: resistencia pulmonar ×12 y pared del VD ×2,4 llevan el VD a 330 mL, justo el tope del dibujo.</li>
+    <li><strong>A fondo, el VI casi vacío</strong> (TEP, hemorragia, derrame) no tiene llenado pasivo: E = 0.</li>
+  </ol>
+  <p class="mut" style="margin-top:8px">Ya se intentó (parada 3, F3b): arreglar la pieza 1 sola rompe 7 pruebas (PAP diastólica, TEP, derrame, HP crónica), porque estaban calibradas con el defecto. Por eso hay que hacerlo <strong>en bloque y en orden</strong>.</p>
+</section>
+
+<section>
+  <h2>3 · Los dos jueces nuevos (van primero)</h2>
+  <div class="box" style="display:grid;gap:10px">
+    <div><span class="chip ok">Juez 1</span><strong>Doppler de paciente posible por forma.</strong> Cada forma, con el mando a 0, en su defecto y a fondo, debe dar E/A, E/e′, S/D, TAPSE, bomba AI y velocidades dentro de la banda de la tabla de arriba. Falla si sale E = 0, un E/A de restrictivo en la hipertrofia o un S/D de 20.</div>
+    <div><span class="chip ok">Juez 2</span><strong>Cada forma al 100 % sin aviso de recorte.</strong> Ninguna cámara fuera de los límites del dibujo. Hoy fallaría en 7 formas, y casi todas <em>por abajo</em> (VD &lt;45 mL, AI &lt;15 mL); solo la HP crónica toca el tope de arriba.</div>
+    <p class="mut" style="margin:0">El día que se pongan, saldrán en rojo: es lo esperado. Marcan la meta del arreglo.</p>
+  </div>
+</section>
+
+<section>
+  <h2>4 · Orden de trabajo</h2>
+  <ol>
+    <li>Jueces 1 y 2 (en rojo, como meta).</li>
+    <li>AI y venas pulmonares: contracción sumada + freno de las venas (piezas 1 y 2), recalibrando a la vez TEP, derrame y HP crónica.</li>
+    <li>e′ por forma (pieza 3): hipertrofia y dilatada.</li>
+    <li>HP crónica a un VD grave pero posible (pieza 4) y límites del dibujo revisados.</li>
+    <li>E presente a fondo (pieza 5) y la AD.</li>
+    <li>Velocidad de las venas pulmonares en el panel (área real de 4 venas, hoy «ilustrativo»).</li>
+  </ol>
+</section>
+
+<section>
+  <h2>5 · Pruebas que habrá que recalibrar</h2>
+  <p class="mut">Hoy la suite de la eco pasa entera en 54 s (432 pruebas). Estas fijan la calibración actual y se tocarán:</p>
+  <ul>
+    <li><code>doppler.test</code>: E/A y DT del normal, venas pulmonares (S ≥ D, Ar &lt; S/2).</li>
+    <li><code>atlas.test</code>: atlas 10 Diastólica (los 4 grados) y atlas 14 TEP.</li>
+    <li><code>escenarios.test</code>: PAP diastólica y PAM del TEP, PVC del derrame.</li>
+    <li><code>motor.test</code>: PAP del normal 20-25 / 6-12.</li>
+    <li><code>enfermedad.test</code>: PAPs de la HP crónica, constantes de la dilatada.</li>
+    <li><code>geometria.test</code>: bomba auricular dibujada; <code>paciente-posible.test</code>: VD del TEP y pared del VD.</li>
+    <li><code>taponamiento.test</code>: orden del colapso AD → VD.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>6 · Opciones y gasto</h2>
+  <p class="mut">Gasto estimado con los presupuestos vigentes del tablero (M = millones de tokens equivalentes de <code>gasto.mjs</code>). Hoy el día ya va cargado: cualquiera de las tres empezaría mañana.</p>
+  <div class="opts">
+    <div class="opt rec">
+      <span class="chip ok">Recomendada</span>
+      <h3>A · Completa (pasos 1-6)</h3>
+      <div class="cost">≈ 5,5 M · 2 sesiones</div>
+      <p>Jueces (sonnet 0,5 M) · AI y venas + recalibrar TEP, derrame y HP (2 encargos sonnet, 2,4 M) · e′ por forma (0,4 M) · HP crónica y dibujo (1,0 M) · auditor y juicio rápido del profesor (0,5 M) · director (0,8 M).</p>
+      <p><span class="chip ok">Gana</span>todas las formas con Doppler de libro, la HP crónica posible y el atlas 10 enseñando bien los grados.</p>
+      <p><span class="chip warn">Riesgo</span>medio: en la parada 3, 80 combinaciones no cuadraron todo a la vez. Si no cuadra, el constructor para y lo dice, sin tapar.</p>
+    </div>
+    <div class="opt">
+      <h3>B · Media (1, 3, 4 y la hipertrofia)</h3>
+      <div class="cost">≈ 3,0 M · 1 sesión</div>
+      <p>Jueces, e′ por forma, HP crónica posible y la hipertrofia arreglada desde su rigidez (no desde la AI). Las venas pulmonares se quedan marcadas «ilustrativo».</p>
+      <p><span class="chip warn">Pierde</span>las venas siguen 2-3 veces el real, el TEP sigue sin E y a fondo sigue saliendo E = 0. El Juez 1 queda en rojo en esas formas.</p>
+    </div>
+    <div class="opt">
+      <h3>C · Mínima (jueces + HP crónica)</h3>
+      <div class="cost">≈ 1,6 M · 1 sesión</div>
+      <p>Solo lo que te saltó a la vista (B-029) y los jueces que lo vigilan.</p>
+      <p><span class="chip bad">Pierde</span>la hipertrofia sigue enseñando la lección equivocada (E/A 10).</p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>7 · Lo que necesito que decidas</h2>
+  <div class="ask" style="display:grid;gap:10px">
+    <p style="margin:0"><strong>1. ¿Qué opción: A, B o C?</strong> Yo haría la A.</p>
+    <p style="margin:0"><strong>2. La hipertrofia, ¿qué debe enseñar?</strong> Hoy tiene la PCP en 24 mmHg. Con esa presión, Nagueh dice <strong>grado II (seudonormal)</strong>: E/A 0,8-2 con E/e′ ≥14. Si quieres que enseñe la <strong>mala relajación clásica (grado I, E/A ≤0,8)</strong>, hay que bajarle la PCP a valores normales. Yo dejaría el mando: al principio grado I y a fondo grado II.</p>
+  </div>
+</section>
+
+<footer class="mut">Medido con <code>/tmp/plan-socialista/eco-calibra/medir/tabla.mjs</code> sobre el motor de <code>main</code>. Fuentes leídas por páginas: Nagueh 2025 (pp. 547-557), Lang 2015 (pp. 10, 20-30), Mukherjee 2025 (pp. 145-173), ESC/ERS 2022 parte 1 (pp. 3644-3657).</footer>
+</main>

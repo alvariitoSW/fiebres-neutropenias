@@ -794,7 +794,7 @@ construcción es otra tarea.
 | # | Clave | Qué | Estado | Nota |
 |---|---|---|---|---|
 | 1 | `b3-paso4-opciones` | Bloque 3, paso 4: **todas las piezas nuevas o aligerarlo**, con el gasto de cada opción | pendiente | Parte de `autonomo/bloques/b3/plan-paso4.md` (17 fichas, 17 piezas, ≈35-40 M) |
-| 2 | `eco-calibra` | **B-027 + B-029**: motor diastólico de la eco (E/A, AI, venas pulmonares) y HP crónica que deforma el corazón | en curso | Solo el paso 1 (informe); la recalibración, si el usuario la aprueba |
+| 2 | `eco-calibra` | **B-027 + B-029**: motor diastólico de la eco (E/A, AI, venas pulmonares) y HP crónica que deforma el corazón | hecha (informe, 27/10; espera elección A/B/C) | Informe: https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · parte `2026-10-27-eco-calibra.md` |
 | 3 | `competencias-r` | **B-032**: mapa de lo que un residente debe manejar cada año (R1-R5), camino a la guardia de R2 | pendiente | Las dudas de B-032 siguen abiertas: se le preguntan al empezar |
 
 **Encargo `b3-paso4-opciones`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
