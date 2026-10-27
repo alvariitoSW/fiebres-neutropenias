@@ -263,7 +263,7 @@ esta sección.
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | hecha (27/10, PR #33): R1-R9 aprobadas y en `REGLAS.md` §4.8; R1 automático, tarea `jueces-movil` | 2026-10-25 | «apruebo todas las propuestas de regla de R1 a R9» (27/10) |
 | `jueces-movil` | Juez automático del móvil (R1 de `notas-meta`) | hecha (27/10, en main) | 2026-10-27 | Técnica: directo a main |
 | `movil-existente`, `propuestas-movil` | Arreglar en el móvil lo que cazó el juez nuevo (8 modelos vivos y Marino · Fundamentos) y la pieza común `verFrase()` | hechas (27/10, en main) | 2026-10-27 | |
-| `reglas-27-10` | Las 3 propuestas de ahorro y las 5 reglas de los partes del 27/10, a las reglas del plan; límite de gasto: 18 % del uso semanal al día | pendiente (aprobada 27/10) | 2026-10-27 | Antes de la parada 2 del `b3` |
+| `reglas-27-10` | Las 3 propuestas de ahorro y las 5 reglas de los partes del 27/10, a las reglas del plan; límite de gasto: 18 % del uso semanal al día | hecha (27/10, en main) | 2026-10-27 | Antes de la parada 2 del `b3` |
 | `topes-acidobase` | Ácido-base vivo: el pH 6,36 con varios mandos a tope, arreglado en su origen | pendiente (aprobada 27/10) | 2026-10-27 | Pequeña, constructor barato |
 | `fuentes-b3` | Buscar y citar lo que la ficha no dice en las maquetas del `b3` (balón, distractores, topes) | hecha en `auto/b3` (27/10); entra en main con la PR del bloque | 2026-10-27 | Quedan 4 PDF (ver «Esperando algo tuyo») |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |

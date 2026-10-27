@@ -39,16 +39,22 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
 - [ ] **Lista de frases nuevas** (REGLAS §1.11): cada frase de mecanismo o conducta que escribiste tú (no copiada de
       la ficha), con su página. Sin página → **se busca otra fuente y se cita** (REGLAS §1.15); `fisiología general`
       solo para lo trivial. La lista va en tu entrega, con las que quedan sin cita aparte: el auditor la coteja.
+      **También los «Piensa»**: su enunciado, su explicación y cada distractor (REGLAS §1.11).
 - [ ] **Cifras en su contexto** (§1.12): cada cifra del libro, para el mismo caso que en el libro; en los casos, cada
       paso es un paciente posible y sus cifras encajan entre sí.
 - [ ] **Notas con su tipo** (§1.13): «las fuentes discrepan», «la fuente no lo dice» u «opinión del autor». Nada de lo
       que el libro afirma se marca como error.
 - [ ] **Topes** (REGLAS §1.14): cada mando con tope y origen; aviso al acercarse; al pasarse, sello con la consecuencia
   clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
-- [ ] **Carpeta aparte** (REGLAS §4.6): si trabajas en un `git worktree`, lo primero es
-  `git checkout -B <tu rama> origin/auto/<bN>`; nunca partas de `main` ni de una versión vieja.
+  Si el modelo vivo es nuevo y tiene sello propio, su ajuste va en `autonomo/jueces-topes.mjs`, no en un arnés suelto.
+- [ ] **Cifra mala del motor** (REGLAS §1.14): nunca la tapes con un ajuste del dibujo; para y dilo en tu entrega
+  (la cifra y el estado que la da).
+- [ ] **Carpeta aparte** (REGLAS §4.6): si hay otro constructor a la vez, trabajas en tu propio `git worktree`, y lo
+  primero es `git checkout -B <tu rama> origin/auto/<bN>`; nunca partas de `main` ni de una versión vieja.
 - [ ] **Carpeta compartida** (REGLAS §4.6): nunca `git stash` ni `pkill`/`kill` amplios; para solo tu servidor, por
-  su puerto, y lee el puerto de `PUERTO=`.
+  su número de proceso (el que guardaste al lanzarlo; nunca `pgrep -f … | xargs kill`), y lee el puerto de `PUERTO=`.
+- [ ] **Pruebas** (REGLAS §4.6): pasa las tuyas y las de lo que tocaste; la suite entera la pasa el director al
+  fusionar.
 - [ ] **Pacientes de la lista del bloque** (encargo): sin nombres repetidos con otros datos.
 - [ ] Mayéutica (REGLAS §8):
   - Guía socrática y Examen;
