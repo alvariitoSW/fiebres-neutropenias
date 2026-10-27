@@ -357,3 +357,12 @@ Ahora la arteria pulmonar se endurece por encima de 24 mmHg y el TEP llega a ×9
 (4) `ultimo.gc` podía salir negativo con el reflujo de cierre: `vs` y `gcValvula`, netos y ≥0; `gc` = válvula + bombas.
 Punto de entrada `p.soporte` (balón, Impella, ECMO y venteo). Se reajustaron el Atlas · 14 (`atlas/vd.mjs`) y la
 vasoplejía (×0,55) para no contar dos veces lo nuevo. Pruebas nuevas en `motor.test.mjs` y `escenarios.test.mjs`.
+
+## VCI «retenida» con ventilación mecánica (27/10/2026, `eco-vci-retenido`, B-021)
+Encargo del Objetivo V. El Manual UMI (parte 2, pág. 70) separa tres fórmulas y cortes por modo (40 / 18 / 12 %) y
+da la tabla de PAD con el colapso respiratorio, pero no dice nada de la PAD con VM ni explica el porqué: el «no
+estimar la PAD por la VCI con VM» se rotula como cautela de la app. Marino (cap. 11, pág. 27 del PDF) va como matiz
+(«proved to be unreliable»); Barbier 2004 y Feissel 2004, verificados en la web, como origen de los cortes de VM. No se
+escribió fisiología de la VCI en VM sin fuente (también se quitó de la explicación de `umi-q068`). La ASE 2025 quedó
+fuera (no está en `docs/`). De paso se arregló el modo M: el segundo toque movía el primer calibre y la VCI no se podía
+medir con dos toques en el móvil. Dos preguntas nuevas (`umi-q068b`, `umi-q068c`). 3 vueltas; profesor v2 ≥8,75 en todo.
