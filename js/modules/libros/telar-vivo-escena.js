@@ -662,7 +662,7 @@ export function pintarTablero() {
             celda('Tratamiento de la TIH', 'tih', 'argatrobán', 'mar-fondaparinux (p. 8)');
             celda('Con el FP4', 'fp4', 'sin dato', '!la ficha no lo dice');
         } else {
-            celda('Plaquetas', 'tih', D.plaquetasCaen ? 'caen' : '—', 'consumo · ilustrativo', D.plaquetasCaen ? 'alarma' : '');
+            celda('Plaquetas', 'tih', D.plaquetasCaen ? 'caen' : e.sospechaTih && !e.tih && (e.farmaco === 'hnf' || ES_HBPM(e.farmaco)) ? 'bajan · sin agregados aún' : '—', 'consumo · ilustrativo', D.plaquetasCaen ? 'alarma' : '');
             celda('TIH', 'tih', D.tih.incidencia != null ? String(D.tih.incidencia).replace('.', ',') + ' %' : '—', e.farmaco === 'hnf' || ES_HBPM(e.farmaco) ? 'mar-hbpm (p. 7)' : '!sin heparina');
             celda('Con la dosis', 'tih', 'no depende', 'mar-hnf (p. 5)');
         }

@@ -12,6 +12,19 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
 - **Modo git y paradas** (`REGLAS.md` §2.3, desde el 20/10/2026): el contenido de un bloque, en una rama `auto/<bN>`
   con una sola PR en borrador y 4-5 paradas del usuario por bloque; los arreglos y lo técnico, directo a `main` con
   los jueces en verde
+- **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que hacer
+  que la siguiente nos intente costar un poco menos»): cada encargo lleva su **presupuesto** (pasos y tokens
+  equivalentes) = el 90 % del último agente del mismo papel y modelo en una pieza parecida (tabla de abajo); al llegar
+  al presupuesto, el agente para y entrega lo hecho con lo que falta. El parte compara gasto con presupuesto, dice por
+  qué se pasó o cómo ahorró, y actualiza la tabla. Las pruebas y arneses que escribe un agente se guardan en el
+  repositorio (`autonomo/bloques/<bN>/herramientas/`) para que el siguiente los reutilice. Fable solo para pensar
+  (profesor, cobertura); constructores, arreglos y auditor, en sonnet; opus solo para el primer modelo vivo de algo
+  nuevo (decisión del usuario, 26/10/2026). Reglas completas en `autonomo/REGLAS.md` §4.7
+- **Presupuestos vigentes** (medidos el 26/10 en `b3`; equivalentes de `gasto.mjs`): profesor juzgar a fondo · fable
+  60 pasos / 1,3 M (medido 107 / 2,3 M) · profesor juicio rápido · fable 60 / 1,0 M (75 / 1,1 M) · profesor cobertura ·
+  fable 40 / 0,85 M (41 / 0,93 M) · constructor maqueta · sonnet 60 / 1,1 M (72 / 1,3-1,6 M) · constructor arreglos
+  cortos · sonnet 15 / 90 k (9-12 / 0,1 M) · auditor · sonnet 35 / 0,55 M (32-44 / 0,46-0,77 M) · director, una parada:
+  0,9 M (0,98 M)
 - **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
@@ -321,7 +334,7 @@ río y mar) → 39-44 → 45-53.
 | 4 | `b1-estudio` | Bloque 1: Texto \| Visual \| Mayéutica en las 23 fichas, ruta y «Para profundizar» | hecha (2026-10-20) · 23 fichas, auditadas (PR #19), en main | Sustituye a B-001 (preguntas) para este bloque |
 | 5 | `b2` | Bloque 2 (caps. 12-13, 6 fichas de Merino HEMATO): cobertura, maquetas, modelos y estudio | hecha (2026-10-21) · PR #26 aprobada por el usuario, en main | Paquete: `autonomo/bloques/b2/encargo.md`. Una sola rama `auto/b2` y 4-5 paradas (REGLAS §2.3) |
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
-| 7 | `b3` | Bloque 3 (caps. 14-22, 26 fichas de Merino Cardiología y Neumología) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3`. Informe y plan con gasto (26/10): https://claude.ai/artifact/Rw8ZKfAZdYgjBogGxuCP9w (`autonomo/bloques/b3/informe-plan-b3-b4.html`), 4 preguntas al usuario | Paquete: `autonomo/bloques/b3/encargo.md` |
+| 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | en curso, ⏸ parado en la parada 1 (2026-10-23): maquetas v2 esperando al usuario; fichas en `auto/b3`. Informe y plan con gasto (26/10): https://claude.ai/artifact/Rw8ZKfAZdYgjBogGxuCP9w; el usuario contestó (26/10): maquetas v3, pulmón fusionado (3D), Fable para pensar y medir (ver paquete §4). Siguiente: maquetas v3 + cobertura del 3D | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
@@ -340,11 +353,12 @@ río y mar) → 39-44 → 45-53.
 | 10 | `vuelta-modelos` | B-016 · Vuelta por los 14 modelos vivos: qué mecánica nueva encaja en cada uno | hecha (2026-10-25): PR #29; el usuario aprobó las 5 mejoras («me parece todo perfecto»), que pasan al Objetivo V |  Corta, de solo lectura; antes que B-015 |
 | 11 | `eco-mega` | B-015 · Megaproyecto de la eco: modelo, imagen realista y lo mejor de las webs | en revisión (2026-10-25): parada 1 hecha (imagen realista, mandos de imagen y Señálalo; profesor 8,5-8,8), PR #30 en borrador: https://github.com/alvariitoSW/fiebres-neutropenias/pull/30 · maqueta https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b. Siguiente: **parada 2**, ya decidida (26/10; ver «Parada 2 de `eco-mega`» abajo) | Empieza por una maqueta «antes / después» de la imagen |
 | 12 | `inventario` | B-014 · Inventario de estudio de las ~724 fichas | hecha (2026-10-26) · PR #31, en main · informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir | Corta, de solo lectura |
-| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | aparcada (aprobada 2026-10-25) | Después del bloque 3, como bloque 4 de Marino. Propuesta de atajo (26/10, en el informe del `b3`): cobertura y maqueta M3 durante la parada 2 del `b3`; la presión del tórax (M8) hecha una vez para CPAP y respirador; el pulmón entra en la app a la vez que el 3C. Espera la elección del usuario |
+| 13 | `pulmon-respirador` | B-013 · Pulmón con respirador (modelo vivo) | fusionada en `b3` (2026-10-26, decisión del usuario: sub-bloque 3D) | Antes: bloque 4 de Marino. Propuesta de atajo (26/10, en el informe del `b3`): cobertura y maqueta M3 durante la parada 2 del `b3`; la presión del tórax (M8) hecha una vez para CPAP y respirador; el pulmón entra en la app a la vez que el 3C. Espera la elección del usuario |
 | 14 | `bandeja` | B-017 · Bandeja del Radar: enlaces desde el móvil (issue #27) procesados a diario | necesita humano (2026-10-25): la tarea creada desde la sesión no tenía el repositorio; pausada. El usuario la crea desde la app con el proyecto elegido | Texto para pegar en `autonomo/radar/LEEME.md`; después, borrar `trig_01SJ6yy2dka8BFevHR5aCNnF` |
 | 15 | `notas-meta` | B-023 · Llegar al 8,75 sin gastar de más: modelos, tokens y vueltas | pendiente (aprobada 2026-10-25) | Corta, de solo lectura; mejor con 2-3 tareas ya juzgadas sobre 10 (la primera, `eco-mega`) |
 | 16 | `rea-eco` | B-024 · Ingeniería inversa de las webs de eco para un corazón más real (forma, paredes, valvas, latido) y referencias de eco reales de uso libre | hecha (2026-10-26): informe «Un corazón más real» v2 (plan de 13 encargos, ~24 M, `autonomo/ideas/ingenieria-inversa/corazon-mas-real-plan.md`), https://claude.ai/artifact/LPr9m96QTCK7D53wJ4vkcg; el usuario eligió y los PDF de la ASE ya están en `docs/`. Lo elegido pasa a la parada 2 de `eco-mega` | Va antes de la parada 2 de `eco-mega` (anatomía) |
 | 17 | `eco-anatomia` | B-025 · Corazón real (anatomía, fisiología y patología): informe de ingeniería inversa con Fable 5.1 sobre las webs de eco ya estudiadas + plan socialista con su gasto estimado y optimizado | hecha (2026-10-26): informe https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi; el usuario eligió el núcleo, que entra en la parada 2 de `eco-mega` | Pedido por el usuario el 26/10; amplía `rea-eco` (no lo repite) y alimenta la parada 2 de `eco-mega` |
+| 18 | `rea-culprit` | B-026 · Ingeniería inversa de Coronary Culprit (Cliff Reid): ocluir una coronaria y ver el ECG de 12 y la eco | hecha la fase 1 (2026-10-26): el usuario eligió la opción 1 (A + B en la Fase 1 tras Marino; C cuando la eco tenga coronarias; D tras C); falta el PDF de la ESC 2023 de SCA y el de ECG. Informe «Arteria culpable», https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw; detalle en `autonomo/ideas/ingenieria-inversa/culprit.md` | Pedido por el usuario el 26/10; lo que se construya va después de Marino (Objetivo M5) |
 
 **Encargo `notas-meta`** · tipo: auditoria (solo lectura, no toca la app)
 - Qué quiero: medir en las tareas ya hechas qué nota sacó cada vuelta, con qué modelo y cuántos tokens costó
@@ -634,8 +648,8 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 |---|---|---|---|---|
 | 1 | `formula-comun` | B-018 · «La fórmula con tus números»: pieza común en `js/core/` y su uso en capilar, río y mar, glomérulo, filtro y eco | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña; los cálculos ya existen |
 | 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña-mediana |
-| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | en curso (2026-10-26), rama `auto/objetivos-casos` (motor, inmersión, telar, vaso y muralla a medias) | Mediana; llega a inmersión, muralla, telar y vaso |
-| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | pendiente (aprobada 2026-10-25) | Pequeña; umbrales del Manual UMI |
+| 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | hecha (2026-10-26) · en main, sin PR (Objetivo V) | Mediana; llega a inmersión, muralla, telar y vaso |
+| 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | hecha (2026-10-27) · en main, sin PR (Objetivo V) | Pequeña; umbrales del Manual UMI |
 | 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
 
 **Encargo `formula-comun`** · tipo: visual (mejora de lo existente)

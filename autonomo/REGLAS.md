@@ -47,6 +47,20 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 13. **Tres tipos de nota, cada una con su nombre** (lección 3): **las fuentes discrepan** (dicen cosas distintas),
     **la fuente no lo dice** (calla: no es una discrepancia) y **opinión del autor** (no es una regla). Nunca se marca
     como error algo que el libro afirma literalmente.
+14. **Cada mando tiene su tope y su consecuencia** (el usuario, 26/10/2026: «si se pueden modificar los datos hasta el
+    punto de superar lo real, es un fallo […] no puedes meter 20 litros a un paciente, se muere antes»). Vale para
+    todo modelo vivo, simulador, maqueta y calculadora con mandos (volumen, fármacos y dosis, aparatos, reloj,
+    respirador, gravedad…):
+    - **Tope escrito y con origen**: la dosis o el límite de la ficha (con página); si la ficha no lo da, la
+      fisiología (`fisiología general`) o `ilustrativo`, rotulado. Nada ilimitado.
+    - **Al acercarse, avisa** (≈80 % del tope); **al pasarse, el paciente responde como un paciente real**: el sello
+      con la consecuencia clínica y su cita (sobrecarga, edema, hipoxemia, crisis hipertensiva, «sin ventilación»…),
+      el mando se apaga y la frase viva lo dice. No basta con «se encharca un poco»: cambian todas las constantes que
+      cambiarían en la realidad (PVC, PCP, SpO₂, PA…), y si el paciente no lo sobreviviría, la pantalla lo dice.
+    - **Ningún estado da una cifra imposible** (§1.7): si pasa, se corrige el motor, no se tapa con el tope.
+    - **La prueba del modelo lleva cada mando a su tope** (y las acciones repetidas, a su máximo) y comprueba que sale
+      el sello y que las cifras siguen siendo de un paciente posible. La pieza común es
+      `autonomo/maquetas/comun/tope.js` (aviso y sello).
 
 ## 2. La app
 
@@ -111,6 +125,25 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
      darlo por roto (con la máquina cargada fallan pruebas que están bien).
 
+7. **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que
+   hacer que la siguiente nos intente costar un poco menos»; vale para todas las sesiones y tareas). Un agente paga en
+   cada paso releer todo lo que lleva en su conversación: 100 pasos cuestan mucho más del doble que 50.
+   - **Presupuesto en cada encargo**: pasos y tokens equivalentes, el 90 % del último agente del mismo papel y modelo
+     en una pieza parecida (tabla «Presupuestos vigentes» del tablero). Al llegar, el agente para y entrega lo hecho
+     con lo que falta. El parte compara gasto y presupuesto, explica la diferencia y actualiza la tabla.
+   - **Modelos**: Fable solo para pensar (profesor, cobertura). Constructores, arreglos, auditor y revisores, en sonnet;
+     el primer modelo vivo de algo nuevo, en opus y con presupuesto.
+   - **Profesor**: un agente por maqueta o pieza (no uno para todas); las cifras y los mandos los recorre un programa
+     de prueba que devuelve un resumen en texto, y el profesor mira **como mucho 10 capturas**, las de lo que hay que ver
+     con los ojos; comprueba lo pedido en el juicio anterior y lo nuevo, sin repetir la exploración entera.
+   - **Constructor**: encargos con dirección exacta (archivo y función, o línea) que da el juez; archivos de **≤700
+     líneas** por pieza (una maqueta o un modelo que pase de ahí se parte en módulos antes de la vuelta siguiente,
+     como `autonomo/maquetas/b3-shock/`); lee solo la función que toca (`graft` o `sed -n`), nunca el archivo entero.
+   - **Lo hecho no se repite**: los programas de prueba y arneses que escribe un agente se guardan en
+     `autonomo/bloques/<bN>/herramientas/` (o `autonomo/pruebas/`) con un `LEEME.md`, y el siguiente los reutiliza.
+   - **Reanudar mejor que relanzar**: si un agente se para (límite de uso, pausa), se reanuda con SendMessage; antes
+     de una pausa larga escribe un apunte de 5 líneas que el director copia al repositorio.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
@@ -134,6 +167,10 @@ vez:
 3. Cada regla nacida así se apunta en la lista de abajo, con la tarea donde se vio.
 
 **Reglas nacidas de fallos**
+- §1.14 (topes y consecuencias): maquetas v3 del bloque 3 (`b3`, 26/10/2026). El usuario infundió 23 L de suero en el
+  shock (PVC 87, edema de 7,6 L y la frase seguía en «Tras el cristaloide»); el pulmón dejaba Vt de 2.924 mL y el ritmo
+  FC 0 sin aviso. Ningún juez lo vio porque las pruebas no llevaban los mandos al tope. Entró en el profesor, el
+  constructor y `CLAUDE.md` §12, por petición expresa del usuario.
 - §1.7 (paciente posible): capítulo 18 del atlas, `mr` (octubre 2026). Con el EROA máximo la figura daba PAS 73 mmHg
   y un chorro de 3,4 m/s; los dos jueces la aprobaron porque las cifras iban «en la dirección del texto». Lo vio el
   director en una captura. Entró en el verificador y en `CLAUDE.md` §12.

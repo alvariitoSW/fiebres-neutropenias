@@ -518,7 +518,31 @@ export const preguntasManualUmi = [
         enunciado: 'En ventilación mecánica sin esfuerzo respiratorio, ¿a partir de qué índice de colapsabilidad de la VCI se considera al paciente respondedor a volumen?',
         opciones: ['>18%', '>40%', '>5%', '>90%'],
         correcta: 0,
-        explicacion: 'En VM sin esfuerzo respiratorio el corte es >18% (fórmula (Dmáx−Dmín)×100/Dmín) — distinto del >40% que se usa en ventilación espontánea, porque la fisiología del llenado de la VCI cambia con la presión intratorácica positiva.',
+        explicacion: 'En VM sin esfuerzo respiratorio el corte es >18% (fórmula (Dmáx−Dmín)×100/Dmín) — distinto del >40% que se usa en ventilación espontánea: el manual separa fórmula y corte por modo (pág. 70).',
+    },
+    {
+        id: 'umi-q068b', tema: 'umi-fate',
+        enunciado: 'Encuentra el error. Paciente en VM sin esfuerzo respiratorio; VCI subcostal: Dmáx 2,0 cm y Dmín 1,7 cm. El residente calcula (2,0−1,7)/2,0 = 15 %, "no llega al 40 %: no responde a volumen". ¿Dónde está el error de su razonamiento?',
+        opciones: [
+            'Usó la fórmula y el corte de espontánea: en VM sin esfuerzo da 17,6 %, no supera el 18 %',
+            'Dividió entre el Dmáx: dividiendo entre el Dmín da 17,6 %, por encima del 12 %',
+            'Nada: el 40 % vale igual en VM y la cuenta es correcta',
+            'Debería haber estimado la PAD con el diámetro de 2,0 cm de la tabla del FATE y haber dado 15 mmHg como resultado',
+        ],
+        correcta: 0,
+        explicacion: 'El >40 % es el corte de la ventilación espontánea. En VM sin esfuerzo respiratorio el manual (pág. 70) usa (Dmáx−Dmín)×100/Dmín: (2,0−1,7)×100/1,7 = 17,6 %, que toca la fila del 18 % y no la supera. El 12 % no se compara con la fórmula del Dmín: cada fórmula tiene su corte. Ojo: con estos diámetros la fórmula general del manual, (2,0−1,7)×100/[0,5×(1,7+2,0)] = 16,2 %, sí supera su 12 %, y el manual no dice cuál de las dos filas de VM manda cuando discrepan. Con la cuenta de espontánea, otros diámetros (2,0 y 1,6 cm) habrían dado 20 %, bajo el 40 %, cuando el índice de VM es 25 %, sobre el 18 %.',
+    },
+    {
+        id: 'umi-q068c', tema: 'umi-fate',
+        enunciado: 'Paciente en VM con VCI de 2,4 cm. El residente quiere dar una PAD de 15 mmHg con la tabla de diámetro y colapso respiratorio del FATE. ¿Qué respondes?',
+        opciones: [
+            'El manual no da bandas de PAD para VM (pág. 70): con VM no se estima la PAD por la VCI',
+            'Es correcto: la tabla de diámetro y colapso vale igual en cualquier modo ventilatorio, también con VM',
+            'Es correcto si además el índice de VM supera el 18 %, porque entonces la VCI refleja la presión auricular',
+            'Vale si la VCI colapsa más del 50 % con cada insuflación',
+        ],
+        correcta: 0,
+        explicacion: 'El manual no da bandas de PAD para VM (pág. 70): con VM, esta app no estima la PAD por la VCI. Para la VM el manual solo da fórmulas e índices de colapsabilidad (>18 % y >12 %); las bandas de PAD (3 / 8 / 15 mmHg) del Cuadro I se basan en el colapso respiratorio y no tienen versión para VM. El manual tampoco da ningún factor de corrección.',
     },
     {
         id: 'umi-q069', tema: 'umi-fate',

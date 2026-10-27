@@ -425,6 +425,13 @@ de anatomía de GitHub** en vez de modelarlos desde cero; se estudiará antes de
   al mezclar formas). Normal: TAPSE 21,2 mm y MAPSE 13,3 mm. Como sale del volumen sistólico del VD, también baja
   con la precarga (hemorragia 11,5 mm, vasoplejía 10,2 mm); falta un escenario de fallo del VD.
 
+**VCI con ventilación mecánica (27/10/2026, `eco-vci-retenido`).** En Medir → VCI, el selector «Respiración»
+(Espontánea · VM sin esfuerzo · VM fórmula general, `respVci` en `simulador.mjs`). Con VM, la lectura por colapso
+queda «⚠ Retenido» (el >40 % y la banda de PAD son de espontánea; el Manual UMI no da bandas de PAD para VM, pág. 70)
+y sale el índice de VM del manual (>18 % / >12 %) con la cuenta y los mismos números redondeados que se muestran.
+«Llevar a la calculadora» pasa el modo y los cm con 2 decimales. El trazado no simula la VM (el modelo respira solo) y
+lo dice. Con un solo calibre puesto, el segundo toque pone siempre el B (`modo-m.mjs`): la VCI mide 10-20 px a 390.
+
 ## Sonda libre (fase 3)
 
 - **Cuatro movimientos a partir de la vista estándar** (`planoLibre()` en `ecografia.mjs`), los que se enseñan con

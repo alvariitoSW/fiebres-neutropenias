@@ -367,3 +367,12 @@ vuelta 2, 8,5/8,8/8,7/8,8/8,8 con la imagen fija arriba. Auditor: 0 graves, 4 fr
 ser artefacto: confírmalo en otra vista»; un trombo sí se mueve con la pared). Contraste miocardio-sangre de ~28 a
 ~14 dB a propósito: las pruebas de contraste miden ahora los dos casos. Queda para la parada 2 (anatomía): la pared
 lateral de la AD, lo más blanco del lado izquierdo. Parte: `autonomo/partes/2026-10-25-eco-mega-2.md`.
+
+## VCI «retenida» con ventilación mecánica (27/10/2026, `eco-vci-retenido`, B-021)
+Encargo del Objetivo V. El Manual UMI (parte 2, pág. 70) separa tres fórmulas y cortes por modo (40 / 18 / 12 %) y
+da la tabla de PAD con el colapso respiratorio, pero no dice nada de la PAD con VM ni explica el porqué: el «no
+estimar la PAD por la VCI con VM» se rotula como cautela de la app. Marino (cap. 11, pág. 27 del PDF) va como matiz
+(«proved to be unreliable»); Barbier 2004 y Feissel 2004, verificados en la web, como origen de los cortes de VM. No se
+escribió fisiología de la VCI en VM sin fuente (también se quitó de la explicación de `umi-q068`). La ASE 2025 quedó
+fuera (no está en `docs/`). De paso se arregló el modo M: el segundo toque movía el primer calibre y la VCI no se podía
+medir con dos toques en el móvil. Dos preguntas nuevas (`umi-q068b`, `umi-q068c`). 3 vueltas; profesor v2 ≥8,75 en todo.

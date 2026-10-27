@@ -15,6 +15,12 @@ ya hecho).
 
 `CLAUDE.md` ya lo tienes cargado. `autonomo/REGLAS.md` solo en la sección que te cite el encargo.
 
+**Gasto que baja** (`autonomo/REGLAS.md` §4.7, decisión del usuario del 26/10/2026): respeta el **presupuesto** de pasos
+del encargo; al llegar, para y entrega lo hecho con la lista de lo que falta. Lee solo la función o el tramo que vas a
+tocar (`graft` o `sed -n` con las líneas que da el encargo), nunca un archivo grande entero. Antes de escribir una
+prueba, busca una que sirva en `autonomo/bloques/<bN>/herramientas/` o `autonomo/pruebas/`; la que escribas, guárdala
+ahí. Si un archivo que creas pasa de 700 líneas, pártelo en módulos.
+
 **Antes de escribir código, la escalera** (para no escribir de más). Quédate en el primer escalón que sirva:
 1. ¿Hace falta de verdad para el encargo?
 2. ¿Ya existe en la app (`CLAUDE.md` §5: enlace cruzado, `particulas.js`, `visual-kit`, Mayéutica del río y mar…)? Úsalo.
@@ -37,6 +43,8 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
       paso es un paciente posible y sus cifras encajan entre sí.
 - [ ] **Notas con su tipo** (§1.13): «las fuentes discrepan», «la fuente no lo dice» u «opinión del autor». Nada de lo
       que el libro afirma se marca como error.
+- [ ] **Topes** (REGLAS §1.14): cada mando con tope y origen; aviso al acercarse; al pasarse, sello con la consecuencia
+  clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
 - [ ] **Pacientes de la lista del bloque** (encargo): sin nombres repetidos con otros datos.
 - [ ] Mayéutica (REGLAS §8):
   - Guía socrática y Examen;

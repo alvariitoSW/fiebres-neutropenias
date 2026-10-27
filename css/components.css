@@ -880,6 +880,13 @@ select:focus, input[type="number"]:focus, input[type="text"]:focus, input[type="
 .tfg-estado-warn { background: rgba(207,154,62,0.14); border-color: var(--accent-yellow); color: var(--text-main); }
 .tfg-estado-danger { background: rgba(184,92,62,0.16); border-color: var(--accent-red); color: var(--text-main); }
 .tfg-estado-neutro { background: rgba(212,175,55,0.08); border-color: var(--border-color); color: var(--text-main); }
+/* Casos de la Mayéutica (core/mayeutica-motor.js): «Revisión por objetivos» y «Lo que acaba de pasar», sobre .tfg-estado */
+.agv-objetivos, .cpv-objetivos, .ctv-objetivos, .mur-objetivos, .tel-objetivos, .inm-objetivos, .vso-objetivos, .may-objetivos { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 8px; }
+.agv-objetivo, .cpv-objetivo, .ctv-objetivo, .mur-objetivo, .tel-objetivo, .inm-objetivo, .vso-objetivo, .may-objetivo { display: grid; gap: 4px; font-size: .86rem; overflow-wrap: anywhere; }
+.agv-objetivo small, .cpv-objetivo small, .ctv-objetivo small, .mur-objetivo small, .tel-objetivo small, .inm-objetivo small, .vso-objetivo small, .may-objetivo small { color: var(--text-dim); }
+.agv-objetivo-ver summary, .cpv-objetivo-ver summary, .ctv-objetivo-ver summary, .mur-objetivo-ver summary, .tel-objetivo-ver summary, .inm-objetivo-ver summary, .vso-objetivo-ver summary, .may-objetivo-ver summary { cursor: pointer; color: var(--accent-yellow); font-size: .84rem; padding: 4px 0; }
+.agv-consecuencia, .cpv-consecuencia, .ctv-consecuencia, .mur-consecuencia, .tel-consecuencia, .inm-consecuencia, .vso-consecuencia, .may-consecuencia { display: grid; gap: 4px; font-size: .86rem; overflow-wrap: anywhere; }
+.agv-consecuencia p, .cpv-consecuencia p, .ctv-consecuencia p, .mur-consecuencia p, .tel-consecuencia p, .inm-consecuencia p, .vso-consecuencia p, .may-consecuencia p { margin: 0; }
 
 /* Rejilla compacta de 2 columnas para los inputs numéricos de una       */
 /* calculadora con muchos campos (Fick, resistencias vasculares) — evita */

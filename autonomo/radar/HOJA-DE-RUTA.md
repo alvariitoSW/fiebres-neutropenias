@@ -30,8 +30,10 @@ fase 0 → resto. Paradas del usuario: las 5 del plan, más una cuando esté G1.
   los 3 modelos (shock, corazón eléctrico, receptor, con monitor común) está **aprobada el 25/10**; las claves de
   arriba **aún no son filas del tablero**.
 - **Falta**: PDF de ECG básico de la rotación, AHA 2025, ESC 2021 de estimulación (marcapasos; la red no deja
-  descargarla), ESC de SCA, ASE/EACVI 2015.
-- **La alimentan**: RitmoLab (`ritmolab.md`, `ritmolab-2.md`).
+  descargarla), ASE/EACVI 2015. Ya en `docs/` (26/10): ESC 2023 de SCA, Wagner 2009 (territorios en el ECG),
+  Thygesen 2018, de Winter 2008, CONFIRM 2015 y Tamura 2014 (aVR).
+- **La alimentan**: RitmoLab (`ritmolab.md`, `ritmolab-2.md`) y Culprit (`culprit.md`: fichas A y B elegidas el 26/10,
+  después de Marino).
 
 ## Fase 2 · verlo desde todos los ángulos
 - **Qué es**: coronarias por segmentos con dominancia y coronariografía que late (arco en C, vista óptima); ETE
