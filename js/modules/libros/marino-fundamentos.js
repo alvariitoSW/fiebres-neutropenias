@@ -431,12 +431,12 @@ function simDo2Vo2() {
             <line x1="${X0}" y1="${Y0}" x2="${X1}" y2="${Y0}" stroke="var(--text-muted)"/><line x1="${X0}" y1="${Y0}" x2="${X0}" y2="${Y1}" stroke="var(--text-muted)"/>
             <rect x="${X0}" y="${Y1}" width="${x(crit) - X0}" height="${Y0 - Y1}" fill="var(--accent-red)" opacity="0.08"/>
             <line x1="${x(crit)}" y1="${Y1}" x2="${x(crit)}" y2="${Y0}" stroke="var(--accent-red)" stroke-dasharray="4 3"/>
-            <text x="${x(crit) + 4}" y="${Y1 + 10}" font-size="9" fill="var(--accent-red)">aporte crítico</text>
+            <text x="${x(crit) + 4}" y="${Y1 + 10}" font-size="10" fill="var(--accent-red)">aporte crítico</text>
             <path d="${path}" fill="none" stroke="var(--accent-blue)" stroke-width="2.4"/>
             <circle id="mar-dv-punto" r="5" fill="var(--accent-yellow)" stroke="var(--bg-main)" stroke-width="1.5"/>
             <text x="${(X0 + X1) / 2}" y="174" text-anchor="middle" font-size="10" fill="var(--text-muted)">Aporte de O₂ (mL/min/m²)</text>
             <text x="12" y="${(Y0 + Y1) / 2}" font-size="10" fill="var(--text-muted)" transform="rotate(-90 12 ${(Y0 + Y1) / 2})" text-anchor="middle">Consumo</text>
-            ${[0, 200, 400, 600, 800].map(d => `<text x="${x(d)}" y="${Y0 + 12}" font-size="8" text-anchor="middle" fill="var(--text-muted)">${d}</text>`).join('')}
+            ${[0, 200, 400, 600, 800].map(d => `<text x="${x(d)}" y="${Y0 + 12}" font-size="10" text-anchor="middle" fill="var(--text-muted)">${d}</text>`).join('')}
         </svg>
         <div class="form-group"><label for="mar-dv-do2">Aporte de O₂: <strong id="mar-dv-do2-val"></strong> mL/min/m²</label><input type="range" id="mar-dv-do2" min="200" max="800" step="10" value="550"></div>
         <div class="tfg-estado tfg-estado-ok" id="mar-dv-resultado"></div>`);
@@ -525,7 +525,7 @@ function simRetorno() {
             <circle id="mar-rs-punto" r="5" fill="var(--accent-yellow)" stroke="var(--bg-main)" stroke-width="1.5"/>
             <text x="${(X0 + X1) / 2}" y="174" text-anchor="middle" font-size="10" fill="var(--text-muted)">Presión en la aurícula derecha (mmHg)</text>
             <text x="12" y="${(Y0 + Y1) / 2}" font-size="10" fill="var(--text-muted)" transform="rotate(-90 12 ${(Y0 + Y1) / 2})" text-anchor="middle">Retorno venoso</text>
-            ${[0, 2, 4, 6, 8, 10, 12, 14].map(p => `<text x="${x(p)}" y="${Y0 + 12}" font-size="8" text-anchor="middle" fill="var(--text-muted)">${p}</text>`).join('')}
+            ${[0, 2, 4, 6, 8, 10, 12, 14].map(p => `<text x="${x(p)}" y="${Y0 + 12}" font-size="10" text-anchor="middle" fill="var(--text-muted)">${p}</text>`).join('')}
         </svg>
         <div class="form-group"><label for="mar-rs-pms">Pms (presión sistémica media): <strong id="mar-rs-pms-val"></strong> mmHg</label><input type="range" id="mar-rs-pms" min="3" max="14" step="0.5" value="7"></div>
         <div class="form-group"><label for="mar-rs-pad">PAD / PVC: <strong id="mar-rs-pad-val"></strong> mmHg</label><input type="range" id="mar-rs-pad" min="0" max="14" step="0.5" value="0"></div>

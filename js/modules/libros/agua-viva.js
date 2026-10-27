@@ -33,6 +33,12 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
    Frase viva, aplicar un estado y frases de cada cambio
    ============================================================ */
 let fraseActual = '';
+// Que la frase viva quede a la vista sobre el dock (si no, sube la página lo justo).
+function verFrase() {
+    const f = $('frase'), d = $('dock'); if (!f || !d.offsetHeight || !f.offsetParent) return;
+    const exceso = f.getBoundingClientRect().bottom - (innerHeight - d.offsetHeight - 6);
+    if (exceso > 0) scrollBy({ top: exceso, behavior: 'instant' });
+}
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');
@@ -40,6 +46,7 @@ function decir(html, fuente) {
     const nuevo = `${guiaBtn}${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
+    verFrase();
     $('lienzo').setAttribute('aria-label', fraseEl.textContent);
     if (!REDUCIR && fraseEl.animate) fraseEl.animate([{ opacity: 0.3, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
 }
@@ -527,6 +534,7 @@ export function init() {
     // El dock mide lo que mide: la página deja ese hueco abajo (y el reloj del Modo Estudio sube).
     const dock = $('dock');
     new ResizeObserver(() => { if (dock.offsetHeight) document.documentElement.style.setProperty('--agv-dock-h', dock.offsetHeight + 'px'); }).observe(dock);
+    raiz.addEventListener('click', () => requestAnimationFrame(() => requestAnimationFrame(verFrase)));
     // La vista se ve o deja de verse (todas las vistas están en el DOM): medir al aparecer.
     let anchoPrevio = 0, anchoVisible = 0, motionPedido = false;
     const lienzo = $('lienzo');
