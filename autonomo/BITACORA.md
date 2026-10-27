@@ -5,8 +5,8 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27, noche (PR #32 y #35 del `b3` fusionadas en main: parada 2 hecha; `topes-acidobase`
-y `reglas-b3p2` hechas en main).
+Última sincronización: 2026-10-27, noche (2.ª): `encargo-revisado` (B-031) hecha en main; plan del paso 4 del `b3`
+escrito, sin construir, esperando tu decisión.
 
 ---
 
@@ -247,9 +247,9 @@ esta sección.
 |---|---|---|---|---|
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
-| `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10): shock, corazón eléctrico y receptor ya en la app (Libros → Marino → Modelos vivos), notas ≥8,75. **Siguiente: paso 4**, estudio en las 26 fichas | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
+| `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10). **Paso 4: plan escrito, sin construir** (`autonomo/bloques/b3/plan-paso4.md`): 17 fichas en 6 grupos, 17 piezas nuevas, ≈35-40 M en 10-12 sesiones; espera tu decisión | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `reglas-b3p2` | Las 4 reglas de la parada 2 del `b3` (`.claude/`, una sesión por modelo, botones estables, maqueta a la app en dos encargos) | hecha (27/10, en main) | 2026-10-27 | aprobadas por el usuario el 27/10 |
-| `encargo-revisado` | **B-031**, dos ideas de Spec Kit: revisar el encargo antes de gastar y lista de calidad del encargo (sin instalar Spec Kit) | pendiente | 2026-10-27 | «vamos solamente con la B-031» (27/10) |
+| `encargo-revisado` | **B-031**, dos ideas de Spec Kit: revisar el encargo antes de gastar y lista de calidad del encargo (sin instalar Spec Kit) | hecha (27/10, en main) | 2026-10-27 | «vamos solamente con la B-031» (27/10) |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
@@ -288,8 +288,9 @@ esta sección.
   Texto | Estudiar en las 9 del shock; y los tres modelos vivos en Libros → Marino → Modelos vivos (shock con
   Impella, balón y ECMO; corazón eléctrico; receptor vivo), cada uno con su Mayéutica, su caso y su prueba. Se abren
   también desde las fichas de Merino Cardiología. Notas del profesor ≥8,75; auditoría, 0 graves.
-- **Siguiente: paso 4**, estudio en las 26 fichas (`/plan-socialista b3` en una sesión nueva), y el pulmón con
-  respirador. Después, `b3-bradi` (bradicardias y bloqueos, guía ya en `docs/`) y `b3-ritmo-motor`.
+- **Siguiente: paso 4**, estudio en las fichas (`/plan-socialista b3` en una sesión nueva, con el día a cero), y el
+  pulmón con respirador. El 3A (9 fichas) ya tiene su Estudiar; faltan 17, en 6 grupos (plan del 27/10,
+  `autonomo/bloques/b3/plan-paso4.md`, revisado con B-031: 6 graves corregidos en el plan). Después, `b3-bradi` (bradicardias y bloqueos, guía ya en `docs/`) y `b3-ritmo-motor`.
 - **Huecos**: los topes del ritmo (2 bolos, 30 min, 3 vagales) y los cortes por clase del shock siguen
   «ilustrativo» (ninguna guía los da); el hueco del caso de Amparo (control del foco, p. 11).
 - Documentos: `autonomo/bloques/b3/` (encargo, cobertura, listas R2, juicio-app-*, auditoria-app).
@@ -297,6 +298,12 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **🔴 Bloque 3, paso 4** (plan del 27/10, `autonomo/bloques/b3/plan-paso4.md`): es más grande de lo que parecía.
+  Faltan 17 fichas y **17 piezas nuevas** en los modelos (vagal, FA en el motor, adrenalina en la RCP, posparo,
+  rotura del papilar y del septo, IAM de VD, etapas de la IC, CPAP, placa coronaria, trombólisis, disección, TEP con
+  lisis, TVP con eco de compresión…): **≈35-40 M en 10-12 sesiones**. ¿Se hacen todas, o alguna ficha se queda con
+  un modelo que ya existe (más barato)?
 
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
@@ -494,6 +501,9 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-27 · **Revisar el encargo antes de gastar** (`encargo-revisado`, B-031, en main): cada tarea empieza con
+  una revisión corta del encargo; `/bitacora` pasa una lista de calidad y te hace como mucho 5 preguntas.
 
 - 2026-10-27 · **Bloque 3, parada 2** (`b3`, PR #35, en main): shock, corazón eléctrico y receptor ya son modelos
   vivos de la app, con Mayéutica y caso; los errores de temporización del balón, con fuente (Gillespie 2024).
