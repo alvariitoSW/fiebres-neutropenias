@@ -84,3 +84,29 @@ Formato: `AAAA-MM-DD · hecho|descartado · qué · PR o motivo`
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` y `heart.org`, y 6 decisiones grandes.
 - Los informes parciales del 23/10 («Ritmo vivo y placa guiada», «Un paciente, todas las pruebas» y tee-inversa con sus
   paquetes A, B y C) quedan **dentro del informe final**; su detalle, en `docs/historial/radar.md` y en los partes del 23/10.
+
+## Salido de la bitácora el 2026-10-27 (hecho hace más de 7 días)
+
+- 2026-10-19 · **Ácido-base vivo y río y mar en la app** (PR #18), aprobados.
+  - Dónde están:
+    - el ácido-base, en PIF → Nefrología;
+    - el río y mar, en Libros → Marino;
+    - los dos, en el bloque «Modelos vivos» de los dos menús, en el buscador y con botones desde las fichas.
+  - Mayéutica con 14 + 14 preguntas y 4 + 3 casos.
+  - «← VOLVER A LA FICHA» lleva a la ficha de origen.
+  - El título «HUD Clínico UCI», más pequeño, lleva al menú principal.
+  - Regla nueva: los jueces miden el desborde también tras contestar (`--modelo`).
+
+- 2026-10-19 · **Plan Marino, fase 2: mapa visual y maquetas v2** (PR #16), aprobado.
+  - Ácido-base vivo unificado (A+B+C) y río y mar en crema y oro, con su Mayéutica.
+  - Están en `autonomo/maquetas/`.
+- 2026-10-19 · **Jueces con la vista Visual**: `jueces.mjs --ficha` abre también la vista Visual de cada bloque
+  (regla aprobada).
+  - Arreglados los 2 px de «Nefronas que quedan».
+  - El salicilato ionizado y el no ionizado, que se distinguían solo por el color, ahora también por la forma.
+
+- 2026-10-19 · **Una sola leyenda de formas de iones** en los modelos vivos (PR #17), aprobada y en la app.
+  - Una tabla única (`js/data/formas-iones.js`) y un dibujo común (`js/core/particulas.js`), que usan la nefrona viva,
+    el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
+  - Leyenda nueva en tres modelos.
+  - Arreglada la célula de la nefrona viva que se quedaba congelada.
