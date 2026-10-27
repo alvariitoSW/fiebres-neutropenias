@@ -12,6 +12,7 @@
 // fallos en localStorage (como el quiz), con su clave propia y siempre dentro
 // de try/catch.
 import { cargarMotion } from '../../core/motion.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
@@ -33,6 +34,8 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
    Frase viva, aplicar un estado y frases de cada cambio
    ============================================================ */
 let fraseActual = '';
+// Que la frase viva quede a la vista sobre el dock (si no, sube la página lo justo).
+const verFrase = () => verFraseComun($('frase'), { dock: $('dock'), margen: 6 });
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');
@@ -40,6 +43,7 @@ function decir(html, fuente) {
     const nuevo = `${guiaBtn}${html} ${fuente ? `<span class="agv-org${ilu ? ' agv-ilu' : ''}">${origenHTML(fuente)}</span>` : ''}`;
     if (nuevo === fraseActual) return; fraseActual = nuevo;
     fraseEl.innerHTML = nuevo;
+    verFrase();
     $('lienzo').setAttribute('aria-label', fraseEl.textContent);
     if (!REDUCIR && fraseEl.animate) fraseEl.animate([{ opacity: 0.3, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
 }
@@ -527,6 +531,7 @@ export function init() {
     // El dock mide lo que mide: la página deja ese hueco abajo (y el reloj del Modo Estudio sube).
     const dock = $('dock');
     new ResizeObserver(() => { if (dock.offsetHeight) document.documentElement.style.setProperty('--agv-dock-h', dock.offsetHeight + 'px'); }).observe(dock);
+    raiz.addEventListener('click', () => requestAnimationFrame(() => requestAnimationFrame(verFrase)));
     // La vista se ve o deja de verse (todas las vistas están en el DOM): medir al aparecer.
     let anchoPrevio = 0, anchoVisible = 0, motionPedido = false;
     const lienzo = $('lienzo');

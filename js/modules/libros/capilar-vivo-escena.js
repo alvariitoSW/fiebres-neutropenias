@@ -331,7 +331,7 @@ export const Lupa = {
     },
 };
 
-const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${o.s || 8.5}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--cpv-sans);' : ''}">${t}</text>`;
+const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${Math.max(o.s || 8.5, 7.5)}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--cpv-sans);' : ''}">${t}</text>`;
 let tuboAnim = 1;      // 0 → 1: el plasma del tubo de la derecha crece (un número y el bucle; sin Motion)
 // El tubo (pieza común, core/tubo.js): la columna roja (la masa) es la misma en los dos; el plasma crece hasta dar el Hto.
 function lupaTubo(e) {

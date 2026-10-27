@@ -1,7 +1,7 @@
 // Juicio rápido v3 · ritmo: QRS por estado, ventana tras evento, tira (ondas F/f, K), FA+dilt, lupa junto al monitor, dock, Mayéutica, capturas.
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/b3-ritmo.html', CAP = '/tmp/plan-socialista/b3/capturas-v3/ritmo/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/b3-ritmo.html`, CAP = '/tmp/plan-socialista/b3/capturas-v3/ritmo/';
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });

@@ -1,7 +1,7 @@
 // Juicio rápido v3 · receptor: Mayéutica arriba, NA 0-30, dopamina, dobutamina, milrinona, Begoña adrenalina, lactato, .org, página, capturas.
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/b3-receptor.html', CAP = '/tmp/plan-socialista/b3/capturas-v3/receptor/';
+const BASE = 'http://127.0.0.1:8796/autonomo/maquetas/b3-receptor.html', CAP = '/tmp/plan-socialista/b3/capturas-v3/receptor/';
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
@@ -25,16 +25,16 @@ for (const v of [0, 5, 10, 17, 25, 30]) { await dosis('na', v); const r = await 
 await desb('na');
 // dopamina 5-10-20
 await page.evaluate(() => window.__receptor.ponerEstado('dopamina')); await page.waitForTimeout(500);
-for (const v of [3, 10, 20]) { await dosis('dopa', v); const r = await R(); console.log(`dopa ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs}`); }
+for (const v of [3, 10, 20]) { await dosis('dopamina', v); const r = await R(); console.log(`dopa ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs}`); }
 await cap('02-dopa20'); await desb('dopa');
 // dobutamina y milrinona
 await page.evaluate(() => window.__receptor.ponerEstado('dobutamina')); await page.waitForTimeout(500);
-const r0 = await R(); for (const v of [5, 20]) { await dosis('dobu', v); const r = await R(); console.log(`dobu ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs} (base PAM ${r0.pam} FC ${r0.fc} IRVS ${r0.irvs})`); if (v === 20) ok(r.irvs < r0.irvs, 'dobutamina 20 no baja la IRVS'); }
+const r0 = await R(); for (const v of [5, 20]) { await dosis('dobutamina', v); const r = await R(); console.log(`dobu ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs} (base PAM ${r0.pam} FC ${r0.fc} IRVS ${r0.irvs})`); if (v === 20) ok(r.irvs < r0.irvs, 'dobutamina 20 no baja la IRVS'); }
 await page.evaluate(() => window.__receptor.ponerEstado('milrinona')); await page.waitForTimeout(3500); let r = await R(); console.log(`milrinona: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs}`);
 // Begoña
 await page.evaluate(() => window.__receptor.ponerEstado('betabloqueo')); await page.waitForTimeout(3500); r = await R(); console.log('Begoña base:', JSON.stringify(r));
 const sl2 = await page.evaluate(() => [...document.querySelectorAll('input[data-dosis]')].map((i) => i.dataset.dosis)); console.log('Begoña sliders', sl2);
-for (const v of [5, 10]) { await dosis('adre', v); r = await R(); console.log(`Begoña adre ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs} lact ${r.lact}`); }
+for (const v of [5, 10]) { await dosis('adrenalina', v); r = await R(); console.log(`Begoña adre ${v}: PAM ${r.pam} FC ${r.fc} IC ${r.ic} IRVS ${r.irvs} lact ${r.lact}`); }
 await cap('03-begona'); await desb('begoña');
 const toggles = await page.evaluate(() => [...document.querySelectorAll('#dock-panel button')].map((b) => b.textContent.trim().slice(0, 25))); console.log('botones Begoña', toggles);
 // guía y lupa

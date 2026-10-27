@@ -12,6 +12,7 @@
 //   (home/index.js llama a abrir() a través de la API de Nefrología).
 import { cargarMotion, sinMovimiento } from '../../core/motion.js';
 import { pintarParticula, svgParticula, leyendaParticulas } from '../../core/particulas.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { nombreFicha } from '../../core/corkboard.js';
 import { rutaDePanel } from '../../core/search.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
@@ -180,7 +181,7 @@ function construirInstrumento() {
   // disco del pH (el número grande, con su palabra y su icono: nunca solo color)
   t += `<circle id="abv-i-disco" cx="${HUB.x}" cy="${HUB.y}" r="50" fill="${C.fondo}" stroke="${C.oro}" stroke-width="1.3"/>
     <circle cx="${HUB.x}" cy="${HUB.y}" r="45.5" fill="none" stroke="${C.oro}" stroke-width=".4" opacity=".7"/>
-    <text x="${HUB.x}" y="${HUB.y - 25}" text-anchor="middle" font-size="11" font-style="italic" fill="${C.muted}">pH</text>
+    <text x="${HUB.x}" y="${HUB.y - 25}" text-anchor="middle" font-size="12.5" font-style="italic" fill="${C.muted}">pH</text>
     <text id="abv-i-ph" x="${HUB.x}" y="${HUB.y + 14}" text-anchor="middle" font-size="46" fill="${C.crema}" style="font-variant-numeric:tabular-nums">7,40</text>
     <g id="abv-i-pal-ico" transform="translate(${HUB.x - 30} ${HUB.y + 28})"></g>
     <text id="abv-i-pal" x="${HUB.x + 5}" y="${HUB.y + 31}" text-anchor="middle" font-size="8" letter-spacing="1.2" fill="${C.dim}" style="font-family:${'system-ui, sans-serif'};font-weight:600">NORMAL</text>`;
@@ -438,7 +439,7 @@ function construirPlasma() {
     <rect x="0" y="${y0 - 6}" width="360" height="6" fill="url(#abv-p-ray)"/><rect x="0" y="${y1}" width="360" height="6" fill="url(#abv-p-ray)"/>
     <path d="M0 ${y0}H360M0 ${y1}H360" stroke="${C.oro}" stroke-width=".9"/>
     <path d="M0 ${y0 - 6}H360M0 ${y1 + 6}H360" stroke="${C.oro}" stroke-width=".4" opacity=".6"/>
-    <text x="356" y="${y1 + 18}" text-anchor="end" font-size="9" font-style="italic" fill="${C.muted}">← la sangre lleva el CO₂ al pulmón</text>
+    <text x="356" y="${y1 + 18}" text-anchor="end" font-size="9.6" font-style="italic" fill="${C.muted}">← la sangre lleva el CO₂ al pulmón</text>
     <text id="abv-p-entra" x="6" y="${y1 + 18}" font-size="9.5" font-style="italic" fill="${C.ciruela}"></text>
     <text x="${PLA.xC + PLA.w / 2}" y="348" text-anchor="middle" class="abv-t-cap" fill="${C.oro}">CATIONES</text>
     <text x="${PLA.xA + PLA.w / 2}" y="348" text-anchor="middle" class="abv-t-cap" fill="${C.oro}">ANIONES</text>
@@ -492,7 +493,7 @@ function pintarColumna(g, lista, x, lado) {
       if (n.modoT !== modoT) {
         n.modoT = modoT;
         if (dentro) { n.t.setAttribute('x', x + PLA.w / 2 + (b.forma ? 5 : 0)); n.t.setAttribute('text-anchor', 'middle'); n.t.setAttribute('font-size', 10.5); n.t.setAttribute('fill', C.crema); }
-        else { n.t.setAttribute('x', x - 6); n.t.setAttribute('text-anchor', 'end'); n.t.setAttribute('font-size', b.hex ? 9.5 : 9); n.t.setAttribute('fill', b.hex ? C.ocre : C.dim); }
+        else { n.t.setAttribute('x', x - 6); n.t.setAttribute('text-anchor', 'end'); n.t.setAttribute('font-size', b.hex ? 9.8 : 9.6); n.t.setAttribute('fill', b.hex ? C.ocre : C.dim); }
       }
       n.t.setAttribute('y', (dentro ? y + Math.min(h / 2, 14) + 3.6 : y + h / 2 + 3).toFixed(1));
       if (n.ultimo !== b.et) { n.t.textContent = b.et; n.ultimo = b.et; }
@@ -644,8 +645,8 @@ function pintarOsmoles(d) {
     <text x="${((64 + X(na2)) / 2).toFixed(1)}" y="38" text-anchor="middle" font-size="10" fill="${C.crema}">2 × Na⁺${oc('osm') ? '' : ' = ' + fmtA(na2)}</text>
     <rect x="${X(na2).toFixed(1)}" y="22" width="${(X(na2 + g) - X(na2)).toFixed(1)}" height="24" fill="${alfa(C.ocre, .3)}" stroke="${C.ocre}" stroke-width=".7"/>
     <rect x="${X(na2 + g).toFixed(1)}" y="22" width="${(X(calc) - X(na2 + g)).toFixed(1)}" height="24" fill="${alfa(C.muted, .3)}" stroke="${C.muted}" stroke-width=".7"/>
-    <text x="${(X(calc) + 4).toFixed(1)}" y="31" font-size="8.6" fill="${C.muted}">+ glucosa/18 ${fmt(g, 0)}</text>
-    <text x="${(X(calc) + 4).toFixed(1)}" y="42" font-size="8.6" fill="${C.muted}">+ BUN/2,8 ${fmt(u, 0)}</text>
+    <text x="${(X(calc) + 4).toFixed(1)}" y="31" font-size="9.6" fill="${C.muted}">+ glucosa/18 ${fmt(g, 0)}</text>
+    <text x="${(X(calc) + 4).toFixed(1)}" y="42" font-size="9.6" fill="${C.muted}">+ BUN/2,8 ${fmt(u, 0)}</text>
     <g transform="translate(${((X(na2 + g) + X(calc)) / 2).toFixed(1)} 34)">${icono('urea', .55)}</g>
     <text x="${X(calc).toFixed(1)}" y="16" text-anchor="middle" font-size="12" fill="${C.crema}">${oc('osm') ? '?' : fmtA(calc)}</text>`;
   if (med == null) t += `<text x="70" y="86" font-size="10" font-style="italic" fill="${C.muted}">sin osmolalidad medida: mueve el mando</text>`;
@@ -661,8 +662,8 @@ function pintarOsmoles(d) {
     t += `<text x="${X(med).toFixed(1)}" y="110" text-anchor="middle" font-size="12" fill="${C.crema}">${fmtA(med)}</text>`;
     if (med > calc + .5) t += `<text x="${Math.min(352, X(med) + 4).toFixed(1)}" y="64" text-anchor="end" font-size="11" font-style="italic" fill="${C.oro}">hiato ${oc('osm') ? '?' : fmtA(med - calc)}</text>`;
   }
-  for (const v of [250, 270, 290, 310, 330]) t += `<path d="M${X(v).toFixed(1)} 118v4" stroke="${C.muted}"/><text x="${X(v).toFixed(1)}" y="132" text-anchor="middle" font-size="8.6" fill="${C.muted}">${v}</text>`;
-  t += `<text x="352" y="148" text-anchor="end" font-size="8.6" font-style="italic" fill="${C.muted}">mOsm/kg H₂O (eje cortado)</text>`;
+  for (const v of [250, 270, 290, 310, 330]) t += `<path d="M${X(v).toFixed(1)} 118v4" stroke="${C.muted}"/><text x="${X(v).toFixed(1)}" y="132" text-anchor="middle" font-size="9.6" fill="${C.muted}">${v}</text>`;
+  t += `<text x="352" y="148" text-anchor="end" font-size="9.6" font-style="italic" fill="${C.muted}">mOsm/kg H₂O (eje cortado)</text>`;
   $('#abv-svg-osm').innerHTML = t;
   $('#abv-osm-col').value = med ?? Math.round(calc); $('#abv-osm-col-out').textContent = med == null ? '—' : fmtA(med);
   const gap = d.osmGap;
@@ -927,7 +928,7 @@ function construirCarta() {
     if (p0 >= p1) continue;
     t += `<path d="M${MX(p0).toFixed(1)} ${MY(h(p0)).toFixed(1)}L${MX(p1).toFixed(1)} ${MY(h(p1)).toFixed(1)}" stroke="${es ? C.oro : C.muted}" stroke-width="${es ? .7 : .45}" ${es ? 'stroke-dasharray="3 3"' : ''} opacity="${es ? .8 : .45}" fill="none"/>`;
     const lx = p1 < 90 ? MX(p1) - 3 : 336, ly = p1 < 90 ? 24 : MY(h(90)) - 3;
-    t += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="end" font-size="8.4" font-style="italic" fill="${es ? C.oro : C.muted}">${fmt(ph, 1)}</text>`;
+    t += `<text x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="end" font-size="9.6" font-style="italic" fill="${es ? C.oro : C.muted}">${fmt(ph, 1)}</text>`;
   }
   // rosa de los vientos
   t += `<g transform="translate(80 58)" opacity=".9"><circle r="21" fill="none" stroke="${C.oro}" stroke-width=".5"/><circle r="16" fill="none" stroke="${C.oro}" stroke-width=".35" stroke-dasharray="1 2"/>
@@ -935,7 +936,7 @@ function construirCarta() {
       ${[0, 1, 2, 3].map(i => `<path d="M0 -14L2 -2L0 0L-2 -2Z" fill="none" stroke="${C.oro}" stroke-width=".5" transform="rotate(${45 + i * 90})"/>`).join('')}</g>`;
   // el puerto: rangos normales (pH 7,36-7,44 · PaCO₂ 36-44 · HCO₃⁻ 22-26)
   t += `<rect x="${MX(36)}" y="${MY(26)}" width="${(MX(44) - MX(36)).toFixed(1)}" height="${(MY(22) - MY(26)).toFixed(1)}" fill="url(#abv-k-ray)" stroke="${C.verde}" stroke-width=".9"/>
-        <text x="${MX(44) + 3}" y="${MY(22) + 1}" font-size="8.4" font-style="italic" fill="${C.verde}">● normal</text>`;
+        <text x="${MX(44) + 3}" y="${MY(22) + 1}" font-size="9.6" font-style="italic" fill="${C.verde}">● normal</text>`;
   t += `<g id="abv-k-lineas"></g><path id="abv-k-brillo" d="" stroke="${C.oro}" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/>
         <path id="abv-k-estela" d="" stroke="${C.oro}" stroke-width="1.1" fill="none" stroke-dasharray="1.2 3" stroke-linecap="round"/>
         <g id="abv-k-marcas"></g><g id="abv-k-cola"></g><path id="abv-k-tend" d="" stroke="${C.verde}" stroke-width="2.2" fill="none" stroke-dasharray="5 4" stroke-linecap="round" opacity="0"/>
@@ -945,7 +946,7 @@ function construirCarta() {
   t += `<g transform="translate(306 236)"><path d="M-12 -22H12M-12 22H12" stroke="${C.oro}" stroke-width="1.5"/>
       <path d="M-10 -22C-10 -7 -2 -4 -2 0C-2 4 -10 7 -10 22M10 -22C10 -7 2 -4 2 0C2 4 10 7 10 22" stroke="${C.oro}" stroke-width=".9" fill="${alfa(C.fondo, .7)}"/>
       <path id="abv-k-arriba" d="" fill="${C.ocre}"/><path id="abv-k-abajo" d="" fill="${C.ocre}"/>
-      <text y="36" text-anchor="middle" font-size="8.4"><tspan id="abv-k-r0">min</tspan> · <tspan id="abv-k-r1">h</tspan> · <tspan id="abv-k-r2">días</tspan></text></g>`;
+      <text y="36" text-anchor="middle" font-size="9.6"><tspan id="abv-k-r0">min</tspan> · <tspan id="abv-k-r1">h</tspan> · <tspan id="abv-k-r2">días</tspan></text></g>`;
   svg.innerHTML = t;
   ['k-lineas', 'k-brillo', 'k-estela', 'k-marcas', 'k-cola', 'k-tend', 'k-punto', 'k-punto-t', 'k-arriba', 'k-abajo'].forEach(id => CARTA.nodos[id] = svg.querySelector('#abv-' + id));
   pintarLineas();
@@ -969,10 +970,10 @@ function pintarLineas() {
   if (fuenteLineas === E.fuente) return; fuenteLineas = E.fuente;
   const L = lineasDe(E.fuente);
   CARTA.nodos['k-lineas'].innerHTML = L.map(l => `<path id="abv-k-l-${l.id}" d="${l.d}" stroke="${l.col}" stroke-width="${l.id === 'acid' || l.id === 'alc' ? 1.7 : .9}" fill="${l.banda ? alfa(l.col, .14) : 'none'}" ${l.dash ? 'stroke-dasharray="4 3"' : ''}/>`).join('')
-    + `<text x="${MX(17)}" y="${MY(4.8)}" font-size="9" font-style="italic" fill="${C.rojo}">acidosis metabólica</text>
-       <text x="${MX(47) + 6}" y="${MY(42) + 3}" font-size="9" font-style="italic" fill="${C.ocre}">alcalosis metabólica</text>
-       <text x="${MX(66)}" y="${MY(34.6) - 4}" font-size="8.4" font-style="italic" fill="${C.muted}">crónica</text>
-       <text x="${MX(70)}" y="${MY(27) + 10}" font-size="8.4" font-style="italic" fill="${C.muted}">aguda</text>`;
+    + `<text x="${MX(17)}" y="${MY(4.8)}" font-size="9.6" font-style="italic" fill="${C.rojo}">acidosis metabólica</text>
+       <text x="${MX(47) + 6}" y="${MY(42) + 3}" font-size="9.6" font-style="italic" fill="${C.ocre}">alcalosis metabólica</text>
+       <text x="${MX(66)}" y="${MY(34.6) - 4}" font-size="9.6" font-style="italic" fill="${C.muted}">crónica</text>
+       <text x="${MX(70)}" y="${MY(27) + 10}" font-size="9.6" font-style="italic" fill="${C.muted}">aguda</text>`;
   $('#abv-leyenda-lineas').innerHTML = L.map(l => `<span><i class="${l.dash ? 'abv-dash' : ''}" style="--c:${l.col}"></i>${l.txt}</span>`).join('') + `<span><i class="abv-dash" style="--c:${C.oro}"></i>isolíneas de pH</span>`;
 }
 function pintarArena(f) {
@@ -1441,7 +1442,10 @@ function subirAlEstudio() {
   if (!R.offsetParent) return;
   const y = modo === 'explorar' ? R.parentElement.getBoundingClientRect().top : $('.abv-interruptor').getBoundingClientRect().bottom + 12;
   window.scrollTo(0, Math.max(0, window.scrollY + y - (modo === 'explorar' ? 8 : 0)));
+  if (modo === 'explorar') verFrase();
 }
+// La frase viva nunca queda bajo el dock: si su sitio natural (bajo el instrumento) cae detrás, la página sube lo justo.
+const verFrase = () => verFraseComun($('#abv-frase'), { dock: $('#abv-dock'), techo: -1e9 });
 function dockEstudio(n, actual, marca, txt) {
   html('#abv-est-prog').innerHTML = Array.from({ length: n }, (_, i) => `<i class="${marca(i) ? 'abv-' + marca(i) : ''}${i === actual ? ' abv-ahora' : ''}"></i>`).join('');
   $('#abv-est-txt').textContent = txt;
@@ -1768,6 +1772,24 @@ function construir() {
   // cabecera mini: aparece al salir el instrumento de la pantalla (solo en Explorar)
   new IntersectionObserver(es => es.forEach(e => $('#abv-mini').classList.toggle('abv-on', !!R.offsetParent && !e.isIntersecting && modo === 'explorar' && e.boundingClientRect.top < 0)), { threshold: 0 }).observe($('#abv-instrumento'));
   escucharMandos(); escucharEstudio(); escucharPreguntas();
+  // La frase viva va pegada arriba: su alto (más la cabecera mini) es el margen de lo que se trae a la vista.
+  const fraseViva = $('#abv-frase');
+  new ResizeObserver(() => { if (fraseViva.offsetHeight) R.style.setProperty('--abv-frase-h', fraseViva.offsetHeight + 'px'); }).observe(fraseViva);
+  // Al tocar un mando, la figura principal (la más grande) sube a la vista si quedó fuera, bajo la frase pegada y sobre el dock;
+  // si se ve de sobra, solo se cuida que la frase no quede bajo el dock.
+  const verFigura = () => setTimeout(() => {
+    if (modo !== 'explorar' || !R.offsetParent) return;
+    const f = [...R.querySelectorAll('svg, canvas')].filter(e => e.getClientRects().length && !e.closest('button, [aria-hidden="true"], details:not([open])'))
+      .map(e => ({ e, r: e.getBoundingClientRect() })).sort((a, b) => b.r.width * b.r.height - a.r.width * a.r.height)[0];
+    if (f) {
+      const techo = f.e.id === 'abv-inst' ? 0 : 52 + fraseViva.offsetHeight + 6, suelo = innerHeight - $('#abv-dock').offsetHeight - 6;
+      const ve = Math.max(0, Math.min(f.r.bottom, suelo) - Math.max(f.r.top, techo)) / f.r.height;
+      if (ve < 0.7) { scrollBy({ top: f.r.top - techo, behavior: 'instant' }); return; }
+    }
+    verFrase();
+  }, 170);   // las vistas del paso aparecen a los pocos fotogramas
+  R.addEventListener('click', ev => { if (ev.target.closest('button')) verFigura(); });
+  R.addEventListener('input', verFigura);
   $('#abv-de-donde-det').addEventListener('toggle', () => { if ($('#abv-de-donde-det').open) pintarTextos(); });
   $('#abv-lab').addEventListener('toggle', () => { if ($('#abv-lab').open) frasesLab(); });
   // los rótulos «ficha …» escritos en el partial, también como botón a su ficha
@@ -1811,7 +1833,7 @@ async function abrir(ancla = '', origen) {
     if (m) irPaso(i); else irCausa(causa);
     foco = m ? (m[1] === '0' ? null : focoDe(PASO_E[i], 'paso-' + m[1])) : focoDe(estadoDe(CAUSA[causa].e), causa);
   }
-  if (!foco) { requestAnimationFrame(subirAlEstudio); return; }
+  if (!foco) { requestAnimationFrame(() => { subirAlEstudio(); requestAnimationFrame(() => modo === 'explorar' && verFrase()); }); return; }
   // La vista del tema se abre a los cuatro fotogramas (irPaso / irCausa): se baja hasta ella después y se marca lo clave
   quitarAnillo();
   enFotograma(6, () => {

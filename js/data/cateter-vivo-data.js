@@ -258,7 +258,7 @@ export const GUIAS = {
     infusor: [
         { t: 'Las bombas ajustan la presión (hasta 15 psi) para dar el ritmo programado. Una volumétrica no pasa de 1.000 mL/h: sirve para dosificar.', e: { bomba: 'volumetrica', cat: 'pc' }, resalta: '#ctv-g-bomba', cita: FLU('mar-bombas', 5) },
         { t: 'Para la hemorragia masiva están los infusores rápidos: fluidos o hemoderivados calientes, <span class="hl">hasta 1,5 L/min</span> según el cap. 1.', resalta: ['#ctv-g-bomba', '#ctv-lectura'], cita: FLU('mar-bombas', 5) },
-        { t: 'Las fuentes discrepan en la cifra: el cap. 15 da <span class="hl">hasta 1 L/min</span> con los sistemas de infusión rápida, y 1.000 mL/min con un catéter de 7 Fr. Se dan las dos y no se elige.', resalta: ['#ctv-g-bomba', '#ctv-lectura'], cita: [FLU('mar-bombas', 5), SH('mc-sistemas-infusion-rapida', 28), SH('mc-tabla-15-3', 29)], org: 'las fuentes discrepan' },
+        { t: 'Las fuentes discrepan en la cifra: el cap. 15 da <span class="hl">hasta 1 L/min</span> con los sistemas de infusión rápida, y 1.000 mL/min con un catéter de 7 Fr. Se dan las dos y no se elige.', resalta: ['#ctv-g-bomba', '#ctv-lectura'], cita: [FLU('mar-bombas', 5), SH('mc-sistemas-infusion-rapida', 28), SH('mc-tabla-15-3', 28)], org: 'las fuentes discrepan' },
         { t: 'Piden su catéter: el «de infusión rápida», de 7-8 Fr y 2-2,5 pulgadas de largo. Corto y grueso, como dice Hagen-Poiseuille.', resalta: '#ctv-g-cat-brazo', cita: [FLU('mar-bombas', 5), FLU('mar-corto-grueso', 4)] },
     ],
     intraosea: [

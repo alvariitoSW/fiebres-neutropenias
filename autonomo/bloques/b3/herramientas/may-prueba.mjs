@@ -1,7 +1,7 @@
 // Mayéutica entera (pulmón o ritmo) con el bucle completo: ops, destapar+tenia, error+corregir+buena, tocar, comprueba, sig. node may-prueba.mjs b3-pulmon
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const M = process.argv[2] || 'b3-pulmon', W = +(process.argv[3] || 390), H = W === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/', CAP = `/tmp/plan-socialista/b3/capturas-v3/${M.slice(3)}/`;
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/`, CAP = `/tmp/plan-socialista/b3/capturas-v3/${M.slice(3)}/`;
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: W, height: H }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });

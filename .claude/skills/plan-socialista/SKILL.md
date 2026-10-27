@@ -22,18 +22,21 @@ tablero y el último parte, sin trabajar.
    que está en `autonomo/BITACORA.md` sin aprobar no se toca, aunque parezca urgente.
 3. Respeta los límites del tablero (tareas por sesión, vueltas máximas, parar si…, gasto). Si no queda ninguna
    tarea `pendiente`, escribe el parte «sin tareas» y termina: no es un fallo.
-4. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. **Si la tarea continúa una PR sin
+4. **¿La lleva ya otra sesión?** (`REGLAS.md` §4.6, «Una tarea, una sola sesión»). Mira `list_sessions` (`mine:
+   true`) y la rama remota `auto/<clave>`: si otra sesión activa ya trabaja esta tarea, no empieces; díselo al usuario
+   y termina sin tocar nada. Haz la misma comprobación antes de abrir una sesión nueva con `create_session`.
+5. Rama: `git fetch origin main && git checkout -B auto/<clave> origin/main`. **Si la tarea continúa una PR sin
    fusionar** (lo dice su fila del tablero), se trabaja sobre esa rama (`git fetch origin auto/<clave> && git
    checkout auto/<clave>`, fusionando antes `origin/main` si va por detrás) y se completa la misma PR. Carpeta de trabajo:
    `/tmp/plan-socialista/<clave>/` (borrador: no va al repositorio).
-5. Prepara la fuente (si es el atlas: `git clone --depth 1 https://github.com/douyang/echodemo /tmp/echodemo`).
+6. Prepara la fuente (si es el atlas: `git clone --depth 1 https://github.com/douyang/echodemo /tmp/echodemo`).
    **Si una fuente no se puede abrir, la tarea pasa a `necesita humano`**, con lo que falta; no se improvisa.
-6. **El encargo.** Mira el tipo de la tarea (`visual`, `estudio`, `auditoria`, `arreglo`; tabla «Tipos de tarea» del
+7. **El encargo.** Mira el tipo de la tarea (`visual`, `estudio`, `auditoria`, `arreglo`; tabla «Tipos de tarea» del
    tablero) y su **ficha de encargo** (sección «Encargos»). Su «hecho» es el del objetivo **más** el del tipo. Si no
    hay ficha o le falta un campo, rellénala tú con tu mejor criterio a partir de los modelos «así sí» de
    `autonomo/REGLAS.md` §7, escríbela en `/tmp/plan-socialista/<clave>/encargo.md` y cópiala al parte. **No pares a
    preguntar**: el usuario eligió trabajar sin frenos; lo revisará en la PR.
-7. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
+8. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
 ## 1. El ciclo
 
@@ -150,7 +153,7 @@ por agente que los baratos; los más caros, 150-230 pasos). Cuatro reglas:
 
 1. **Sesiones cortas.** Una sesión por tarea, o por parada de un bloque. Al cerrarla (parte y gasto escritos), no
    encadenes la siguiente en la misma conversación: abre tú una sesión nueva con `create_session` (mismo repositorio
-   y entorno; mensaje `/plan-socialista <clave>`) y díselo al usuario. Tú no lees PDF, código largo ni informes de más
+   y entorno; mensaje `/plan-socialista <clave>`), solo si ninguna otra sesión activa lleva ya esa tarea (§0, paso 4), y díselo al usuario. Tú no lees PDF, código largo ni informes de más
    de 40 líneas: eso lo leen los agentes, y tú lees su informe.
 2. **Encargos de una pieza.** Cada encargo de constructor es una sola pieza (un modelo, un grupo de fichas, una tanda de
    arreglos). Si un constructor llega a **unos 100 pasos** sin terminar, se para y entrega lo hecho con la lista de lo
@@ -215,6 +218,12 @@ cambios, se atienden en la vuelta siguiente.
 **Dos tareas a la vez**: la segunda trabaja en una carpeta aparte (`git worktree add /tmp/wt-<clave> -B auto/<clave>
 origin/main`), con su propio servidor en otro puerto; así no se pisan los archivos. Al cerrarla,
 `git worktree remove /tmp/wt-<clave>`. `jueces.mjs` elige solo un puerto libre, así que se puede pasar en las dos.
+
+**Fusionar `main` en una rama, siempre a la vista** (aprobado por el usuario el 27/10/2026, `propuestas-movil`):
+nunca dentro de un comando en segundo plano ni encadenado con `&&` a otros pasos. Primero `git merge origin/main`
+solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos, resuélvelos y comprueba con
+`git grep -n '^<<<<<<<'` que no queda ninguna marca antes de commit, jueces o push. Si no, un conflicto pasa sin verse
+(en `movil-existente` el tablero quedó con marcas de conflicto en un commit intermedio).
 
 ### Cierre del ciclo
 

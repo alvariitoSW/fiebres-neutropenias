@@ -1,0 +1,74 @@
+Frases nuevas del pulmón (constructor, vuelta de límites 26/10)
+1. Aviso «Volumen alto»: «N mL/kg de peso ideal: la ficha parte de 8 y baja a 6; en EPOC y asma, 6-8 como mucho.» (Tabla 27.1, cap. 27 p. 14; cap. 23 p. 29)
+2. Aviso «Volumen bajo»: «N mL/kg: por debajo del mínimo del protocolo (4 mL/kg).» (Tabla 27.1, cap. 27 p. 14)
+3. Aviso «Meseta alta»: «Meseta N cmH₂O: por encima de 30 hay riesgo de rotura alveolar.» (cap. 27 p. 4; cap. 24 p. 48)
+4. Aviso «Alarma muy alta» (pmax ≥45): «…deja pasar presiones que la ficha no acepta: quiere la meseta ≤30.» (ilustrativo; 30: cap. 27 p. 4)
+5. Sello «Sin ventilación eficaz»: «Vt N mL y volumen minuto N L/min: el paciente no se ventila y el CO₂ sube. Baja la resistencia o sube la alarma de presión.» (fisiología general)
+6. Sello «Combinación no fisiológica» (VM >20): «…por encima de 20 casi nadie lo mantiene.» (fisiología general)
+7. Sello «Volumen no fisiológico» (Vt >12 mL/kg): «…un pulmón sano no tolera tanto y se rompe.» (Tabla 27.1; 12 fisiología general)
+8. Sello «Hiperinflación»: «PEEP total N (N de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.» (cap. 23 p. 28; cap. 28 p. 31; 20 fisiología general). Exige además PEEP oculta ≥2 (desvío de la tabla).
+9. Mando revertido: «… El mando se queda donde estaba.»
+10. Celda I:E: «no cabe la esp. · FR real N».
+Motor: pmax limita en PCV; pulmonAjustar reescala V; aviso sin ventilación (VM<2). pruebas.mjs 49/49.
+Pendiente: pulmon-prueba.mjs — el botón Guía no abre la explicación (fallaba también antes).
+Frases nuevas del shock (constructor, vuelta de límites 26/10)
+- Sello «Sobrecarga de volumen»: «PCP X y PVC Y: la ficha para en 18-20 y más volumen ya no sube el gasto. Edema: N mL.» (ficha p. 42 y p. 11; PVC 12 fisiología general)
+- Aviso «Cerca del techo» (PCP ≥15 o PVC ≥11): «PCP X: la ficha para en 18-20.» (p. 42) / «PVC Y: por encima de 12 las venas no admiten más.» (fisiología general)
+- Aviso «Volumen en el TEP» (≥250 mL): «Llevas X de los 500 mL que pone la ficha como tope.»
+- Sello «Tope de 500 mL» (TEP): «Con el VD que no puede, la ficha limita el volumen a 500 mL con la PVC normal (4-6); aquí la PVC es X.» (cap. 22, p. 10-11)
+- Aviso «Reposición»: «Repuesto X mL de ≈ Y mL perdidos: el tope es 1,5 veces lo perdido.» (p. 21-23; ×1,5 ilustrativo)
+- Sello «Más de lo perdido»: «Has dado X mL y perdió ≈ Y mL: más de 1,5 veces lo perdido solo sobrecarga.»
+- Aviso «Presión alta con vasopresor» (PAM >100): «PAM X: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.» (110 fisiología general; fármaco p. 12-13)
+- Sello «Hipertensión por vasopresor» (PAM >110): «PAM X con noradrenalina a N µg/min: baja la dosis.»
+- Aviso «Casi dos días» (≥42 h) / Sello «Reloj agotado» (48 h): ilustrativo.
+- Estados nuevos (datos.js): sobrecarga, hemo-tope, hipertension-vaso, tep-bolo («Tope de 500 mL»): «…el VD que no puede se dilata, empuja el tabique y el VI se llena menos…»
+- Motor: soporte.mjs redistribuir() corregido (descuenta edema, no baja venas del basal, 6 tramos).
+
+Frases nuevas del ritmo (constructor, 27/10)
+1. Sello «Tope de adenosina»: «Tres bolos (6, 12 y 12 mg) ya son el tope: si el ritmo sigue, no es una reentrada por el nodo. Más dosis solo alargan las pausas.» (Tabla 19.4, p. 30)
+2. Aviso «Adenosina actuando»: «…la ficha deja 2 min entre ellos.» (Tabla 19.4, p. 30)
+3. Aviso «Última dosis»: «Tras 6 y 12 mg queda un último bolo de 12 mg; por vía central, la mitad.» (Tabla 19.4, p. 30)
+4. «Un solo bolo»: «Bolo de 0,25 mg/kg y luego perfusión de 5-15 mg/h. Otro bolo no está en la ficha, y el diltiazem baja la presión (hipotensión en el 20-30 %).» (Tabla 19.1, p. 22-23)
+5. «No insistas»: tres intentos de maniobra vagal (p. 29; el 3, ilustrativo)
+6. «Cargando»: un choque por carga (ilustrativo)
+7. Sello «Ya en sinusal»: «Un choque ahora puede inducir una FV.» (fisiología general)
+8. Sello «Tope de energía»: «Tres choques (100, 100 bifásico y 200 J): nunca 360 J, que daña el miocardio.» (p. 32)
+9. «Último choque»: «El siguiente es de 200 J, el último: no se usan 360 J.» (p. 32)
+10. «No sigas frenando»: «…más no frenan el atajo y pueden precipitar una FV.» (p. 28)
+11. «Pauta completa»: «2 g en 15 min y 6 g en 6 h son la pauta. Repetirla sería hipermagnesemia.» (p. 28; hipermagnesemia fisiología general)
+12. «Tope de metoprolol»: «Tres dosis de 2,5-5 mg IV» (Tabla 19.1, p. 23)
+13. Sello «Tope de verapamilo»: «Más de 20 mg: bradicardia e hipotensión (es inotrópico negativo).» (p. 28) · 14. aviso a 15 mg (ilustrativo)
+15. «Bolos completos»: «Dos bolos de 150 mg: sigue 1 mg/min, sin pasar de 2,2 g en 24 h.» (p. 24-25)
+16. «Ya hay pulso»: adrenalina con pulso → taquiarritmia (p. 59 y 62; fisiología general)
+17. «Adrenalina cada 3-5 min» (p. 59-60) · 18. «Amiodarona completa. 300 mg y 150 mg» (p. 59)
+19. Sello «FV refractaria»: «N choques sin éxito: buen resultado solo en el 5 %; ECMO si se dispone.» (p. 59-60)
+20. Sello «Sin RCE a los 30 min» (p. 60; 30 min ilustrativo) · 21. aviso «Veinte minutos» (ilustrativo)
+- Frase del cerrojo: «Si pasa más de 1 s sin QRS, la unión AV escapa a unos 50/min.» (fisiología general; el motor usa 1,2 s: unificar)
+
+Frases nuevas del receptor (constructor, 27/10) — texto en `b3-receptor/topes.js` (SELLOS)
+- NA 40 «Isquemia y arritmias»: «A 40 µg/min: isquemia del miocardio, del cerebro o de un miembro, y arritmias (taqui y bradi) en ~10 %. La respuesta ya no sube desde 30: toca un segundo vasopresor.» (p. 13)
+- NA >30 aviso «Más dosis apenas aprieta»: «Por encima de 30 µg/min la ficha añade un segundo vasopresor (vasopresina)…» (p. 13)
+- Dopamina 20 «Taquicardia y taquiarritmias»: «…(p. ej. FA), más que con los demás vasopresores.» (p. 14)
+- Adrenalina séptico 0,5: «taquicardia y arritmias, e hipoperfusión esplácnica por el α.» (pp. 13-14)
+- Adrenalina Begoña 15: «A 15 µg/min, el máximo de la ficha: pasarlo da taquiarritmias y una isquemia.» (pp. 66-67)
+- Fenilefrina 200 «Bradicardia refleja»: «…y menos volumen latido; menos riego en el riñón y el intestino.» (p. 15; lo del riñón e intestino, sin comprobar)
+- Dobutamina 20: «la FC sube 5-15 lpm (a veces más de 30) y el corazón gasta más oxígeno.» (p. 43)
+- Milrinona 0,75 «Hipotensión»: «su gran inconveniente es la hipotensión; la PAM baja.» (p. 44)
+- TSVI con dobutamina «Contraindicada» (pp. 42-43) · Cocaína con betabloqueante: «…deja la vasoconstricción α sin oposición: más isquemia coronaria.» (cap. 20 p. 47; paráfrasis)
+- Candado bisoprolol: «Lo toma de casa: no se quita» (p. 66)
+- Cambios de modelo: milrinona (fuerza PDE 0,7→0,5) y sensibilidad FC del nodo 0,2→0,3: cambia FC de varios estados (Begoña 86 frente a 84 del caso).
+
+Ritmo, vuelta 2 (frases cambiadas)
+- Mg torsade «Pauta completa»: «Una pauta de 1-2 g en 15 min (la dosis no tiene consenso). Repetirla sin que vuelva la torsade sería hipermagnesemia.» (p. 35; tope e hipermagnesemia: fisiología general)
+- Adenosina: «Tres bolos (6, 12 y 12 mg) son las dosis de la tabla: la ficha no da una cuarta. Si el ritmo sigue, la adenosina ya no lo corta.» (Tabla 19.4, p. 30)
+- Amiodarona TV: «Dos bolos de 150 mg en 10 min: sigue 1 mg/min 6 h y 0,5 mg/min 18 h, sin pasar de 2,2 g al día. La ficha admite dosis extra de 150 mg cada 10 min si hace falta: el límite de dos bolos es de esta pantalla.» (Fig. 19.8, p. 33; tope ilustrativo)
+- Verapamilo: «20 mg es el máximo de la ficha…» (p. 28; bradicardia e hipotensión: fisiología general)
+- Pausa tras el choque: «Pausa tras el choque: el sinusal tarda un latido en arrancar.» (fisiología general)
+
+Shock, vuelta 2 (frases cambiadas, 27/10)
+- Umbral del edema en PCP 18 (extremo bajo del 18-20, p. 42); K_EDEMA 4 ilustrativo; SpO₂ baja 1 mmHg de PaO₂ por 10 mL de edema (ilustrativo)
+- Sello por PCP: «PCP X: pasa el techo de 18-20 de la ficha; más volumen ya no sube el gasto y encharca el pulmón. Edema en el pulmón: N mL (SpO₂ Y %).» (p. 42 y p. 11)
+- Sello por PVC: «PVC X (entró con Y): por encima de 12 es raro que más volumen suba el gasto; las venas no lo admiten.» (fisiología general)
+- Aviso por PVC: «PVC X: por encima de 12 es raro que más volumen suba el gasto.»
+- Sello «Edema de pulmón» (≥1.000 mL): «N mL de líquido en el pulmón y SpO₂ Y % [(el oxigenador del ECMO tapa la caída)]: así no se sostiene; necesitaría intubación y ventilación con PEEP, y diurético o ultrafiltración.» (fisiología general; cifras ilustrativas)
+- Guía: «Mira el pulmón: con la PCP por encima de 18 se encharca (gotas) y la SpO₂ baja.»

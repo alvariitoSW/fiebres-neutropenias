@@ -1,0 +1,122 @@
+<title>Maquetas v3 del bloque 3</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Source+Sans+3:wght@400;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Un pliego de grabado como la app: una columna estrecha de cuatro láminas, cada una con su nota y su enlace */
+:root {
+  --bg: #17140f; --card: #241e16; --line: rgba(196,154,74,.35);
+  --fg: #ece3cc; --muted: #a5967c; --gold: #d4af37; --ok: #90a06a; --warn: #cf9a3e; --red: #b85c3e;
+  --f-disp: "Cormorant Garamond", Georgia, serif;
+  --f-body: "Source Sans 3", system-ui, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--f-body); }
+.wrap { max-width: 640px; margin: 0 auto; padding-block: 24px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 20px; }
+h1, h2 { font-family: var(--f-disp); text-wrap: balance; margin: 0; line-height: 1.15; }
+h1 { font-size: 2rem; color: var(--gold); }
+h2 { font-size: 1.45rem; }
+p { margin: 0; }
+.eyebrow { font: 500 .72rem var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.intro { display: flex; flex-direction: column; gap: 10px; }
+.lamina { background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.cab { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.nota { font: 500 1rem var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.nota b { font-size: 1.35rem; }
+.nota.ok b { color: var(--ok); } .nota.casi b { color: var(--warn); }
+.nota small { color: var(--muted); }
+.estado { font-size: .85rem; color: var(--muted); }
+ul { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; }
+li { min-width: 0; }
+.prueba { border-left: 2px solid var(--gold); padding-left: 10px; font-size: .95rem; }
+.prueba strong { color: var(--gold); }
+a.abrir { display: block; text-align: center; padding: 12px; border-radius: 6px; background: var(--gold); color: #17140f; font-weight: 600; text-decoration: none; }
+a.abrir:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+.preguntas { display: flex; flex-direction: column; gap: 10px; }
+.preguntas ol { margin: 0; padding-left: 1.3em; display: flex; flex-direction: column; gap: 8px; }
+.pie { font-size: .85rem; color: var(--muted); }
+</style>
+
+<div class="wrap">
+  <header class="intro">
+    <span class="eyebrow">Bloque 3 · parada 1 · vuelta de límites · 27/10/2026</span>
+    <h1>Maquetas v3: shock, corazón eléctrico, receptor y pulmón</h1>
+    <p>Te pedías que las v2 subieran más de nivel. El profesor las juzgó a fondo, cada constructor arregló la suya y un auditor cotejó con el Marino lo nuevo (los errores graves que encontró ya están corregidos). La del pulmón con respirador es nueva. Ábrelas en el móvil y dime con cuáles seguimos.</p>
+    <p class="estado">Nota del profesor sobre 10 (la meta es 8,75 y entre paréntesis va la de la v2).</p>
+  </header>
+
+  <section class="lamina">
+    <div class="cab"><h2>Nuevo: cada mando tiene su tope</h2><span class="eyebrow">27/10</span></div>
+    <p>Llegaste a meter 23 L de suero. Ahora ningún mando es ilimitado: al acercarse al tope sale un aviso ⚠, y al pasarlo un sello ⛔ con la consecuencia clínica, su origen (página de la ficha, «fisiología general» o «ilustrativo») y «Ver en la ficha»; el botón se apaga. Se arreglaron de paso los cálculos que daban cifras imposibles. Es ya una regla para todos los modelos vivos (REGLAS §1.14).</p>
+    <ul>
+      <li><strong>Shock · 8,3</strong>: con mucho suero el pulmón se encharca (gotas, SpO₂ que baja) y el sello llega con la PCP pasando 18-20 (p. 42). Aurelio para con 0,5 L, Joaquín con 2 L, Amparo con 4 L; Mateo, al reponer 1,5 veces lo perdido; el TEP, a los 500 mL. El vasopresor en un paciente sano da «Hipertensión»; el reloj, 48 h.</li>
+      <li><strong>Corazón eléctrico · 8,5</strong>: adenosina 6-12-12 mg y ya; el corazón escapa a ~50/min si el nodo se cierra; tres choques (100, 100, 200 J, nunca 360); el desfibrilador no descarga mientras carga; metoprolol, verapamilo 20 mg, amiodarona 300 + 150, magnesio con su pauta; la parada termina a los 30 min.</li>
+      <li><strong>Receptor · 8,8</strong>: cada fármaco para en su dosis de la ficha y, al llegar, el monitor lo enseña (la FC sube con NA, dopamina o adrenalina; la milrinona baja la PAM). El bisoprolol de Begoña ya no se puede quitar.</li>
+      <li><strong>Pulmón · 8,6</strong>: el Vt ya no llega a 2.924 mL (máximo 12 mL/kg, y el mando se queda donde estaba); meseta >30, «sin ventilación» (volumen minuto <2), hiperinflación y volumen minuto >20, con sello.</li>
+    </ul>
+    <p class="prueba"><strong>Prueba:</strong> en el shock, Aurelio: pulsa +500 mL hasta que salga el sello y mira el pulmón y la SpO₂. En el corazón eléctrico, adenosina cuatro veces. En el respirador, sube la presión con el pulmón muy distensible.</p>
+  </section>
+
+  <section class="lamina">
+    <div class="cab"><h2>Shock con su monitor</h2><span class="nota casi"><b>8,6</b> <small>(7,4)</small></span></div>
+    <ul>
+      <li>Los pacientes ya son posibles: Aurelio está «lleno» (PCP 15) y el Impella le sube el gasto de 1,9 a 2,9.</li>
+      <li>La hemorragia se reconoce por la FC y la PA, y hay estado «repuesta».</li>
+      <li>El ECMO y el Impella juntos ya no dan un gasto imposible. El lactato sigue a la gravedad y a las horas.</li>
+      <li>Los mandos van en una barra que se pliega (102 px) y dejan ver la escena.</li>
+    </ul>
+    <p class="prueba"><strong>Prueba:</strong> Aurelio → Impella 2,5 → 5,5 → «Gasto total»; luego Mayéutica, paso 2, y «Compruébalo».</p>
+    <p class="estado">Queda: en la Mayéutica el monitor sigue encima de la pregunta, y faltan los despieces del balón y del ECMO.</p>
+    <a class="abrir" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/autonomo/maquetas/b3-shock.html">Abrir el shock</a>
+  </section>
+
+  <section class="lamina">
+    <div class="cab"><h2>Corazón eléctrico</h2><span class="nota ok"><b>8,8</b> <small>(7,8)</small></span></div>
+    <ul>
+      <li>El ECG dice la verdad: QRS estable en la TV, dientes de sierra en el flúter, ondas f en la FA y la onda sinusoidal del K⁺ 8,2.</li>
+      <li>La FC se recalcula tras el choque o la adenosina, en vez de dar cifras falsas.</li>
+      <li>Lupa del nodo o de la célula junto al monitor en 8 ritmos. Pasa de 4 a 10 preguntas, con el caso de Teodoro.</li>
+    </ul>
+    <p class="prueba"><strong>Prueba:</strong> flúter y K⁺ alto en la tira, la lupa junto al monitor y el caso de Teodoro.</p>
+    <p class="estado">Queda: el pulso tarda 5-6 s en ponerse al día tras la adenosina, y la ficha del caso repite filas.</p>
+    <a class="abrir" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/autonomo/maquetas/b3-ritmo.html">Abrir el corazón eléctrico</a>
+  </section>
+
+  <section class="lamina">
+    <div class="cab"><h2>Receptor vivo</h2><span class="nota ok"><b>8,8</b> <small>(7,9)</small></span></div>
+    <ul>
+      <li>La noradrenalina ya mueve de verdad: de 0 a 30 µg/min la PAM sube de 51 a 72 y las resistencias suben.</li>
+      <li>La dopamina alta baja el gasto. Begoña (con betabloqueo) no responde a la adrenalina y sí al glucagón.</li>
+      <li>En las preguntas, la pregunta va arriba y el dibujo sale al contestar. Pasa de 4 a 10 preguntas, con caso.</li>
+    </ul>
+    <p class="prueba"><strong>Prueba:</strong> NA 5 → 25 mirando las resistencias y la PAM; luego Begoña con glucagón.</p>
+    <p class="estado">Queda: la dobutamina se nota poco y el lactato de Begoña no cuadra con la adrenalina.</p>
+    <a class="abrir" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/autonomo/maquetas/b3-receptor.html">Abrir el receptor</a>
+  </section>
+
+  <section class="lamina">
+    <div class="cab"><h2>Pulmón con respirador <span class="eyebrow">nuevo · primera pieza</span></h2><span class="nota casi"><b>7,8</b> <small>(nueva)</small></span></div>
+    <ul>
+      <li>Curvas de presión, flujo y volumen en el mismo monitor que el shock, en VCV y PCV, con pausa (meseta) y oclusión (auto-PEEP).</li>
+      <li>9 situaciones con pacientes posibles: SDRA de Isidro (meseta 32 → 28,7 al bajar el volumen), EPOC de Jacinto y asma de Eulalia (auto-PEEP 14 → 1,6).</li>
+      <li>Cada paso de la guía señala el tramo de la curva. Lleva preguntas de muestra y el caso de Eulalia.</li>
+    </ul>
+    <p class="prueba"><strong>Prueba:</strong> Jacinto, «el flujo no llega a cero» → «Explícame» → «Dale tiempo».</p>
+    <p class="estado">Arreglado tras el juicio: los mandos van en la barra plegable y ya se ve la escena al abrir, y sale un aviso si el volumen pasa de 8 mL/kg de peso ideal o la combinación no es fisiológica. El dibujo (respirador, tórax y alvéolos) es todavía un esquema: es la primera pieza.</p>
+    <a class="abrir" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/autonomo/maquetas/b3-pulmon.html">Abrir el pulmón</a>
+  </section>
+
+  <section class="lamina preguntas">
+    <h2>Para decidir</h2>
+    <ol>
+      <li><strong>Shock, corazón eléctrico y receptor</strong>: con los topes puestos, ¿pasan ya a la app (parada 2) o quieres otra vuelta?</li>
+      <li><strong>Receptor</strong>: al llegar al tope, el deslizador no se apaga (para que puedas bajar la dosis). La regla dice «se apaga». ¿Lo dejamos así?</li>
+      <li><strong>Pulmón</strong>: ¿te vale este esquema para decidir, o prefieres ver antes el dibujo real del respirador y los alvéolos?</li>
+      <li>¿Algo que no te guste o que eches en falta en cualquiera de las cuatro?</li>
+    </ol>
+  </section>
+
+  <p class="pie">Las maquetas se abren en vivo desde la rama del bloque: si se arregla algo, el enlace ya lo enseña. La guía de marcapasos sigue sin poder descargarse, así que no hay nada de bloqueos AV.</p>
+</div>

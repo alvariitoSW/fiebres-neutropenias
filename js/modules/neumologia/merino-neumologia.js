@@ -2,7 +2,10 @@
 // ventilación no invasiva en el paciente crítico (cuaderno de campo).
 // Fuente: Marino PL. The ICU Book, 5.ª ed., Cap. 22-26.
 import { initCorkboard } from '../../core/corkboard.js';
-import { clamp } from '../../core/ui.js';
+import { clamp, arrancar } from '../../core/ui.js';
+import { init as initVisual } from './visual.js';
+import { montarMayeutica } from '../../core/mayeutica.js';
+import { MAYEUTICA_B3 } from '../../data/mayeutica/b3.js';
 
 // Número con coma decimal (es-ES) y sin separador de miles. Si el valor
 // redondeado es 0 sale «0», nunca «−0,0».
@@ -778,4 +781,9 @@ export function init() {
     initSbtChecklist();
     initSbtPredictores();
     initVniRespuesta();
+    // Vista Visual de las fichas de embolia pulmonar (Marino cap. 22, bloque 3): arranca por separado.
+    arrancar('vista Visual de Merino Neumología', initVisual);
+    arrancar('Estudiar en Merino Neumología', () => Object.entries(MAYEUTICA_B3)
+        .filter(([ficha]) => ficha.startsWith('neumo-'))
+        .forEach(([ficha, datos]) => montarMayeutica(ficha, datos)));
 }

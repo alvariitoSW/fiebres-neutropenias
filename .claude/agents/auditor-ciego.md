@@ -25,7 +25,9 @@ preguntas (enunciado, opciones, correcta y explicación), casos, conceptos, fras
 modelos y «Para profundizar». El paciente se inventa; la medicina, no. Mira también si alguna pregunta tiene **otra
 opción también correcta** según la fuente.
 - **La lista de frases nuevas del constructor** (REGLAS §1.11): cotéjala frase por frase; una frase sin apoyo en la
-  fuente y sin rótulo «fisiología general» es grave.
+  fuente y sin rótulo «fisiología general» es grave. Y desde el 27/10 (REGLAS §1.15): una frase no trivial rotulada
+  «fisiología general», «la fuente no lo dice» o «hueco» sin haberse buscado otra fuente también es grave; propón
+  dónde buscarla.
 - **Cifras en su contexto** (§1.12): una cifra cierta aplicada a otro caso (otro calibre, otro paciente) es grave.
 - **Tipo de cada nota** (§1.13): «discrepan» cuando la fuente solo calla, u «opinión del autor» presentada como regla,
   es menor (grave si cambia la conducta).
