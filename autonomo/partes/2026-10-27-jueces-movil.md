@@ -53,3 +53,7 @@ Total 657 k equivalentes (presupuesto del constructor 60 pasos / 1,1 M: gastó 4
 El gasto se fue en pasar `--forma` entero (~25 min) para cazar falsas alarmas. Se ahorraría pasando 2 modelos
 mientras se calibra y `--forma` una sola vez al final. Presupuesto nuevo para «constructor de un juez» · sonnet:
 45 pasos / 0,55 M.
+
+## Decisión del usuario (27/10, al cerrar)
+«Apruebo la 1 y la 2»: (1) tarea `movil-existente` en el tablero (fila 21) para arreglar lo ya construido; (2) el
+mínimo de letra baja de 9 a 8 px (`LETRA_MIN` en `jueces-movil.mjs`, REGLAS §4.8 R1 y lista del constructor).

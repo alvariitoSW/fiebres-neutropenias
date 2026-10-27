@@ -34,7 +34,7 @@ try {
         ['1 tapado por la barra (1a o 1b)', /\n\s+1[ab] .*(tapad)/],
         ['2 la imagen sale de la pantalla al tocar un mando', /\n\s+2 al tocar .*figura/],
         ['3 frase cortada con «…»', /\n\s+3 cortada: .*corta por la derecha/],
-        ['4 rótulo de menos de 9 px', /rótulo pequeño: «[^»]*» [0-4]\.\d px/],
+        ['4 rótulo de menos de 8 px', /rótulo pequeño: «[^»]*» [0-4]\.\d px/],
     ];
     for (const [nombre, re] of señales) {
         const enTrampa = re.test(trampa), enLimpio = re.test(limpio);

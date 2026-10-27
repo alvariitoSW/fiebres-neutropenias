@@ -59,7 +59,7 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
   - el modelo no enseña la cifra antes de contestar (primero predices, luego compruebas).
 - [ ] «Para profundizar» con lo que no se cubre, y un enlace a su sitio en el texto.
 - [ ] **Móvil (REGLAS §4.8 R1)**: capturas a 390 y 360 px: la frase viva y el enunciado no quedan bajo la barra de
-      abajo, la imagen sigue a la vista al tocar sus mandos, ninguna frase cortada con «…», ningún rótulo de menos de 9 px.
+      abajo, la imagen sigue a la vista al tocar sus mandos, ninguna frase cortada con «…», ningún rótulo de menos de 8 px.
 - [ ] **Maqueta portada (R2)**: si llevas una maqueta aprobada a la app, tacha su lista de «lo que hace» punto por
       punto, con una captura de cada uno.
 - [ ] **Criterio clínico (R3)**: cada aviso, objetivo o umbral sigue la regla y la fuente del plan del profesor; si no

@@ -43,7 +43,7 @@
 //   8. El móvil (autonomo/jueces-movil.mjs; REGLAS §4.8 R1), con --ficha, --modelo y --forma, a 390 y 360 px:
 //      (1) nada del modelo o la ficha queda bajo la barra fija de abajo (el dock), ni la frase viva, el enunciado o
 //      «Siguiente» más de un 30 %; (2) tras tocar hasta 6 mandos, la figura principal sigue ≥ 50 % a la vista y la
-//      frase viva se ve; (3) ninguna frase cortada con «…» (ellipsis, line-clamp, rótulo de SVG); (4) letra ≥ 9 px.
+//      frase viva se ve; (3) ninguna frase cortada con «…» (ellipsis, line-clamp, rótulo de SVG); (4) letra ≥ 8 px.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
@@ -240,7 +240,7 @@ if (!pide('--sin-navegador')) {
         }
         // ---- 7B-C. Nombres internos y rótulos (jueces-forma.mjs)
         await juzgarFormaNavegador({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
-        // ---- 8. El móvil: barra de abajo, imagen a la vista, «…» y letra ≥ 9 px (jueces-movil.mjs)
+        // ---- 8. El móvil: barra de abajo, imagen a la vista, «…» y letra ≥ 8 px (jueces-movil.mjs)
         await juzgarMovil({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
         // ---- 9. Los topes (REGLAS §1.14): cada mando de cada modelo vivo a sus extremos (jueces-topes.mjs)
         await juzgarTopes({ nav, base, ok, mal, modelos: valores('--modelo'), todo: pide('--forma') });
