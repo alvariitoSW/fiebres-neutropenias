@@ -14,7 +14,10 @@ import { MODELOS } from './jueces-forma.mjs';
 import { RANGOS, NO_NEGATIVOS } from './jueces-topes-rangos.mjs';
 
 // Ajustes propios de un modelo si hicieran falta: { raiz: '#x', noPulsar: /^Texto del botón/ }. Vacío por defecto.
-const AJUSTES = {};
+const AJUSTES = {
+    // El «Paso a paso» de la lupa recorre piezas: no es un mando que acumule
+    'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
+};
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
 const NO_MANDO = '[data-especialidad], [data-view], [data-resaltar], [data-volver], [data-modo], .back-btn, [class*="-org-ir"], [class*="-ir"], [id$="-lupa-cerrar"], [id*="-modo-"], [id$="-guia-abrir"], [data-accion]';
 const NO_PULSAR = '^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←)';

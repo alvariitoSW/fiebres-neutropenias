@@ -60,7 +60,7 @@ const CSS = `
 .rcv-estados button[aria-pressed="true"] small { color: var(--rcv-bg); }
 .rcv-raiz .monitor { --mon-cifras: 104px; --mon-v: 1.3rem; border-radius: 14px; padding: 6px; gap: 4px; box-shadow: inset 0 0 0 1px rgba(23, 20, 15, 1), inset 0 0 18px rgba(23, 20, 15, .9); }
 .rcv-raiz .mon-cab { font-size: .66rem; }
-#rcv-mon-quien { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#rcv-mon-quien { min-width: 0; overflow-wrap: anywhere; }
 .rcv-pieza-info:empty { display: none; }
 .rcv-raiz .mon-cab .rcv-pausa { white-space: nowrap; min-height: 32px; min-width: 44px; border: 1px solid var(--rcv-line); background: transparent; color: var(--rcv-dim); border-radius: 8px; font: 600 .68rem var(--rcv-sans); cursor: pointer; text-transform: none; letter-spacing: 0; position: relative; }
 .rcv-raiz .mon-cab .rcv-pausa::after { content: ''; position: absolute; inset: -6px 0; }
