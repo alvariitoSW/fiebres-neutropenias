@@ -22,7 +22,7 @@ export const TEMPORIZACION = [
     corregir: 'Se corrige inflando en la muesca dícrota (mejor, el modo automático).' },
   { k: 'desPre', boton: 'Desinflado precoz', tim: { des: -0.10 }, p: 8, p2: 6,
     ve: 'Tras el pico del aumento la presión cae en picado. La sistólica asistida es igual o mayor que la no asistida y la telediastólica asistida es igual o menor que la no asistida.',
-    paciente: 'El balón se vacía antes de la contracción isovolumétrica: casi no reduce la poscarga ni el consumo de oxígeno, y casi no sube la presión de perfusión coronaria. El vacío de la mitad de la diástole puede invertir el flujo en coronarias y carótidas.',
+    paciente: 'El balón se vacía antes de la contracción isovolumétrica: casi no reduce la poscarga ni el consumo de oxígeno, y reduce el aumento de la presión de perfusión coronaria. El vacío de la mitad de la diástole puede invertir el flujo en coronarias y carótidas.',
     corregir: 'Se corrige alargando el tiempo de inflado; el modo automático suele corregirlo.' },
   { k: 'desTar', boton: 'Desinflado tardío', tim: { des: 0.09 }, p: 8, p2: 6,
     ve: 'La telediastólica asistida es igual o mayor que la no asistida (en vez de menor) y el pico del aumento diastólico se ensancha.',
