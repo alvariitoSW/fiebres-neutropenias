@@ -412,3 +412,17 @@ Salen del parte `autonomo/partes/2026-10-27-b3-parada2.md`.
   §4.7 y skill (Modo bloque, paso 3).
 - El entorno bloqueó al director la edición de `.claude/` (skill y constructor) hasta que el usuario dio permiso en la
   sesión; después se escribió (parte `2026-10-27-reglas-b3p2.md`).
+
+### Encargo revisado antes de gastar (`encargo-revisado`, B-031, aprobado por el usuario el 27/10/2026)
+
+Dos ideas de Spec Kit (https://github.com/github/spec-kit, MIT), reescritas a nuestra manera y **sin instalarlo**
+(ni `uv`, ni `.specify/`, ni sus comandos, ni su texto). Origen: el E/A de la eco (B-027), que ningún encargo pedía
+con cifra de paciente posible por forma y por eso ningún juez midió. Aprobación del usuario: «vamos solamente con la
+B-031» (27/10).
+- **Revisión del encargo antes de construir** (de su paso «analyze»): al empezar cada tarea de `/plan-socialista`, un
+  agente de solo lectura y barato (sonnet, ~10 pasos) cruza encargo, plan y piezas; lo grave para y se pregunta al
+  usuario. `REGLAS.md` §4.9 y skill `plan-socialista` §0 paso 8.
+- **Lista de calidad del encargo** (de su «checklist», que prueba el texto del encargo y no el resultado): topes con
+  fuente, cifra que debe salir en cada forma o caso, «lo que NO quiero», fuentes con página y qué juez mide cada
+  punto. Y, de su «clarify», **como mucho 5 preguntas** por encargo, las más importantes primero. `REGLAS.md` §4.9 y
+  skill `bitacora` (Apuntar y Aprobar).

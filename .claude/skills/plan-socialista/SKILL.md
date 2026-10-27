@@ -39,8 +39,17 @@ tablero y el último parte, sin trabajar.
    tablero) y su **ficha de encargo** (sección «Encargos»). Su «hecho» es el del objetivo **más** el del tipo. Si no
    hay ficha o le falta un campo, rellénala tú con tu mejor criterio a partir de los modelos «así sí» de
    `autonomo/REGLAS.md` §7, escríbela en `/tmp/plan-socialista/<clave>/encargo.md` y cópiala al parte. **No pares a
-   preguntar**: el usuario eligió trabajar sin frenos; lo revisará en la PR.
-8. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
+   preguntar**: el usuario eligió trabajar sin frenos; lo revisará en la PR (salvo lo grave del paso 8).
+8. **Revisa el encargo antes de gastar** (`autonomo/REGLAS.md` §4.9, B-031, aprobado el 27/10/2026). Un agente de
+   solo lectura y barato (`Explore`, `model: "sonnet"`, ~10 pasos / 0,15 M; que devuelva el informe en su respuesta)
+   cruza el encargo, tu plan y la lista de piezas con la **lista de calidad del encargo** (topes con fuente, cifra que
+   debe salir en cada forma o caso, «lo que NO quiero», fuentes con página, qué juez mide cada punto del «hecho») y
+   busca huecos, contradicciones y **lo que ningún juez va a medir**. Guárdalo en
+   `/tmp/plan-socialista/<clave>/revision-encargo.md` (≤20 líneas). **Lo grave para la tarea**: pregunta al usuario,
+   como mucho 5 preguntas, las más importantes primero. Lo menor, al plan y sigues. En un `arreglo` pequeño que no toca
+   la app, lo haces tú con la misma lista, sin agente. En un bloque, se revisa el paquete y cada encargo de modelo
+   antes de lanzar su constructor. Una línea del resultado va al parte («Qué se hizo»).
+9. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
 ## 1. El ciclo
 

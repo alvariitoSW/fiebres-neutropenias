@@ -66,7 +66,12 @@ El usuario puede contar varias cosas, en uno o varios días. Para cada una:
      «(supongo)».
    - **Depende de**: otra tarea, un PDF, una decisión.
    - **Tamaño**: pequeña (una sesión), mediana (varias) o grande (hay que trocearla: propón los trozos).
-   - **Dudas**: lo que solo él puede decidir.
+   - **Dudas**: lo que solo él puede decidir. **Como mucho 5**, las más importantes primero (las que más cambian el
+     resultado o más cuesta deshacer); lo demás lo decides tú y queda «(supongo)» (`autonomo/REGLAS.md` §4.9).
+   - **Lista de calidad** (`autonomo/REGLAS.md` §4.9; prueba el texto del encargo, no el resultado): ¿cada mando
+     tiene tope con fuente? (si hay simulador o modelo vivo) · ¿dice qué cifra debe salir en cada forma o caso? ·
+     ¿está «lo que NO quiero»? · ¿cada fuente tiene archivo y página? · ¿qué juez comprobará cada punto del «hecho»?
+     Lo que puedas, lo completas tú («(supongo)»); lo que no, va a «Dudas» o se marca «sin juez: lo mira …».
 2. Si se parece a algo ya apuntado o en el tablero, **no dupliques**: añádelo a lo existente y díselo.
 3. Devuélvele lo que has entendido, una línea por tarea, y las dudas. **No preguntes más de lo necesario**: lo
    pequeño, lo decides tú y queda marcado «(supongo)».
@@ -78,6 +83,9 @@ Solo con una orden clara del usuario («apruebo la B-003», «vale, esa sí, as�
    `pendiente`. Si no, pásala al tablero: elige una clave corta, ponla en la tabla del objetivo que le toque (o crea un objetivo
    nuevo si no encaja), en el sitio de la cola que diga el usuario (por defecto, al final), con estado `pendiente`
    y su **Encargo** debajo, copiado de la bitácora.
+   Antes, vuelve a pasar la **lista de calidad** sobre el encargo con lo que el usuario haya dicho: si falla algo de
+   la lista, díselo en una línea con lo que propones (o pregunta, sin pasar de 5 preguntas); la aprobación sigue
+   siendo suya.
 2. En la bitácora, la entrada sale de «Apuntado» y queda una línea en «En marcha» con la clave del tablero y la
    fecha.
 3. Si es grande, se aprueban sus trozos (cada uno, una tarea).

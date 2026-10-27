@@ -232,6 +232,30 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, el modelo, los pasos y los tokens de cada
      vuelta (formato en `autonomo/partes/LEEME.md`).
 
+9. **El encargo, revisado antes de gastar** (B-031 `encargo-revisado`, aprobado por el usuario el 27/10/2026; dos
+   ideas de Spec Kit, https://github.com/github/spec-kit, MIT, reescritas aquí sin instalarlo). Un fallo del encargo
+   sale caro después: en el E/A de la eco (B-027) ningún encargo pedía un E/A de paciente posible por forma, así que
+   ningún juez lo midió.
+   - **Lista de calidad del encargo** (prueba el texto del encargo, no el resultado). La pasa `/bitacora` al apuntar
+     y al aprobar, y el director al revisar el encargo:
+     1. ¿Cada mando tiene **tope con fuente** y qué pasa al pasarse (§1.14)? (Solo si hay simulador o modelo vivo.)
+     2. ¿Dice **qué cifra debe salir** en cada forma, estado o caso (valor o rango, con su fuente)?
+     3. ¿Está **«lo que NO quiero»**?
+     4. ¿Cada **fuente** tiene archivo (o URL verificada) y **página**?
+     5. ¿**Qué juez comprueba** cada punto del «hecho» (`jueces.mjs` y sus opciones, topes, móvil, auditor,
+        profesor)? Lo que ninguno mide se marca y se dice quién lo mira.
+   - **Como mucho 5 preguntas al usuario por encargo**, las más importantes primero (las que más cambian el resultado
+     o más cuesta deshacer). Lo demás lo decide quien escribe el encargo y lo marca «(supongo)».
+   - **Revisión del encargo antes de construir**: al empezar cada tarea de `/plan-socialista` (y en un bloque, el
+     paquete y cada encargo de modelo antes de lanzar su constructor), un paso de **solo lectura, barato** (sonnet,
+     ~10 pasos / 0,15 M) cruza el encargo, el plan del director y la lista de piezas: huecos, contradicciones entre
+     ellos o con estas reglas, la lista de calidad y, sobre todo, **lo que ningún juez va a medir**. Informe de ≤20
+     líneas en la carpeta de trabajo (`revision-encargo.md`). **Lo grave para la tarea y se pregunta al usuario** (con
+     el tope de 5 preguntas): una contradicción, una fuente que no se puede abrir o sin página, un simulador sin la
+     cifra que debe salir o sin topes, algo del «hecho» de un modelo vivo que nadie mide. Lo menor se anota en el plan
+     y se sigue. En un `arreglo` pequeño que no toca la app, la revisión la hace el propio director con la misma
+     lista, sin agente.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
