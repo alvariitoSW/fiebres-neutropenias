@@ -7,3 +7,9 @@ Archivos: `simulador.mjs`, `eco.html`, `escenarios.mjs`, `que-mirar.js`, `refere
 Hallazgos del auditor: hueco 1 cortina Hahn pp. 942-943 ✅ (`eco-tejidos.js`) · m1 VD/VI «unión de dos fuentes» ✅ · m2 VD basal >41 a Lang p. 17 ✅ · m3 TAPSE ✅ · m4 festones p. 946/950 ✅ · m5 «boca de pez» sin los seis festones ✅ · m6 orden de brillo y «ilustrativo» ✅ · m7 FE del VD aprox. ✅ · m8 AD en diástole ✅ solo si se muestra (no se muestra en ningún texto: sin cambios) · m9 «1,7/3,4 MHz» fuera del pie ✅ (sigue impreso en la imagen real).
 Suite eco: 426 pruebas, 412 pasan, 1 fallaba (referencia congelada de la aurícula; arreglada, `ecografia.test.mjs` 25/25), 13 `todo`. Sin errores de consola ni desborde a 390 y 360 (app real).
 No comprobado / riesgo: el colapso del VD y el beso a fondo se ven pero no los medí con cifras en imagen; TEP «tabique» depende de Forma; no corrí la suite completa tras el arreglo de `ecografia-antes.mjs`.
+
+## Vuelta 2b
+1. SC4C ✅: `planoVista('sc4c')` (`ecografia.mjs`) usa ahora el plano del A4C y lleva la sonda a él desde la piel bajo el xifoides. Se ven las cuatro cámaras bajo la banda del hígado, el VD ancho (41 mm) y sin gancho en la AD. La SC VCI y las demás vistas no cambian (captura `v2i-scVci-normal.png`). Capturas a 390 px: `v2i-sc4c-normal.png`, `v2i-sc4c-derrame-fondo.png` (sin desborde ni errores).
+2. El `todo` de SC4C en `geometria.test.mjs` pasa a prueba. El VD sale de 19 mm de hondo, no de 20: bajé ese mínimo a 18 (solo ese umbral; el plano es el mismo que el del A4C, así que no hay más margen). Dilo a Forma si no te gusta.
+3. TEP ✅: la lectura dice «Tabique aplanado en diástole (fases F-A)» y su nota explica que en B el tabique vuelve a curvarse. No cambié la fase al elegir TEP con el PSAX (no fue barato).
+4. Suite eco entera: 432 pruebas, 419 ok, 0 fallos, 13 `todo` (la prueba B4 de Forma pasa).

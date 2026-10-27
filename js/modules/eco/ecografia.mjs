@@ -88,8 +88,14 @@ export function planoVista(clave, est) {
     const apex = [0, 0, -vi.Le], mit = A(g.mc, 0), tri = A(g.ct, 0), ai = [g.mc[0], g.mc[1] - 10, 18], ad = [g.ct[0] - 5, g.ct[1], 16];
     if (clave === 'sc4c') {
       // el plano que mejor pasa por el ápex, las dos válvulas AV y las dos aurículas; el ápex a la derecha
-      const pts = [apex, mit, tri, ai, ad], c = esc(pts.reduce(sum), 1 / pts.length);
-      ajustado(piel, pts, c, apex);
+      // eco-mega p2b (vuelta 2b): el plano pasaba por la piel y cortaba el VD de refilón (una rendija, la AD con un gancho).
+      // Ahora es paralelo al del A4C (el mismo plano de las cuatro cámaras) y la sonda se lleva a él desde la piel bajo el
+      // xifoides (~34 mm, ~13°): el VD sale ancho, bajo el hígado y con la pared libre horizontal. Ilustrativo
+      const c = A(mix2(g.ct, g.mc, 0.55), 0), T = A(mix2(g.ct, g.mc, 0.55), 8), d4 = nrm(res(T, [0, 0, -vi.Le - HUECO]));
+      const n4 = nrm(cruz(perp([g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], d4), d4));
+      O = res(piel, esc(n4, dot(res(piel, c), n4)));
+      const dv = res(res(c, O), esc(n4, dot(res(c, O), n4))); d = nrm(dv);
+      r = nrm(cruz(d, n4)); if (dot(r, res(apex, c)) < 0) r = esc(r, -1);
     } else {
       // por el eje de la VCI, de 45 mm bajo el hiato (izquierda de la imagen) a la AD (derecha). La sonda, más
       // vertical: sobre la piel delante del tramo de la VCI que se mira (a la altura del xifoides en profundidad,

@@ -139,8 +139,8 @@ export const CRITERIOS_FORMA = {
     { texto: 'VD en diástole >3,0 cm (normal 0,6-3,0 cm)', valor: (c) => mm(c.md.vdDiam), cumple: (c) => c.md.vdDiam > 30, fuente: FATE,
       nota: 'Medida de FATE (Manual UMI): el diámetro del VD en diástole, con su corte de 3,0 cm. No es el «VD basal» de Lang (más abajo): ese es el diámetro basal del VD en el A4C enfocado al VD, con su propio corte (>41 mm). Dos medidas y dos fuentes, por eso las cifras no coinciden' },
     { texto: 'El VI se hace más pequeño (el tabique lo empuja)', valor: (c) => `${mm(c.md.lvdd)} (normal ${mm(c.md0.lvdd)})`, cumple: (c) => c.md.lvdd < c.md0.lvdd - 5, fuente: MERINO_SEPTO },
-    { texto: 'Tabique aplanado en diástole', valor: (c) => c.md.septo >= 0.5 ? 'sí' : 'no', cumple: (c) => c.md.septo >= 0.5, fuente: MERINO_FIG,
-      nota: 'Es el aplanamiento que calcula el modelo en telediástole (septo ≥ 0,5); la imagen lo dibuja con la forma de la cavidad, y se aprecia mejor en el eje corto de papilares' },
+    { texto: 'Tabique aplanado en diástole (fases F-A)', valor: (c) => c.md.septo >= 0.5 ? 'sí' : 'no', cumple: (c) => c.md.septo >= 0.5, fuente: MERINO_FIG,
+      nota: 'Es el aplanamiento que calcula el modelo en telediástole (septo ≥ 0,5); en el eje corto de papilares se ve el VI en D en el llenado (fase F, hasta la A); en la contracción isovolumétrica (B) el VI ya supera al VD y el tabique vuelve a curvarse' },
     { texto: 'TAPSE <17 mm', valor: (c) => mm(c.tapse), cumple: (c) => c.tapse < 17, fuente: F11_VD },
     { texto: 'Sube el volumen telediastólico del VD', valor: (c) => `${Math.round(c.u.edvD)} mL (normal ${Math.round(c.u0.edvD)})`, cumple: (c) => c.u.edvD > c.u0.edvD, fuente: MERINO_VD },
     // Criterios de Lang 2015 (PDF en docs/), medidos en el plano apical de 4 cámaras del modelo (ecografia.mjs, medirVd).
