@@ -205,3 +205,40 @@ test('R1 · con poco líquido (60 mL) el saco sigue pegado: detrás crece menos 
   const radio = (L) => radioEn(construirCorazon({ ...e, liquidoPeri: L }, OP).partes.find(x => x.nombre === 'Pericardio'), -30, -Math.PI / 2);
   const d60 = radio(60) - radio(0); assert.ok(d60 < 7, `60 mL: el saco crece ${d60.toFixed(1)} mm detrás`);
 });
+
+// R2 · la pared libre de la AD y la del VD se INVAGINAN (concavidad hacia la luz, con sangre a los dos lados del pliegue)
+// en vez de borrar la cámara. Utilidades de contorno: autonomo/bloques/eco-mega/herramientas/r2-contorno.mjs
+import { contornoPared, area } from '../../../../autonomo/bloques/eco-mega/herramientas/r2-contorno.mjs';
+const giro = (b, i, k = 4) => { const n = b.length, a = b[(i + n - k) % n], q = b[i], c = b[(i + k) % n];
+  const u = [q[0] - a[0], q[1] - a[1]], v = [c[0] - q[0], c[1] - q[1]]; return Math.atan2(u[0] * v[1] - u[1] * v[0], u[0] * v[0] + u[1] * v[1]); };
+const orient = (b) => Math.sign(b.reduce((s, p, i) => s + p[0] * b[(i + 1) % b.length][1] - b[(i + 1) % b.length][0] * p[1], 0));
+const distA = (q, b) => Math.min(...b.map(p => Math.hypot(p[0] - q[0], p[1] - q[1])));
+for (const [k, pieza, vista] of [['pliegueAd', 'AD', 'a4c'], ['pliegueVd', 'VD', 'psaxPm']]) {
+  test(`R2 · a 388 mL, la pared libre de la ${pieza} en ${vista} se invagina: cóncava hacia la luz, con luz a los dos lados`, async () => {
+    const p = paciente('derrame', 1), s = p.o[instanteMax(p, k)], e = estadoGeo(s, p.ex);
+    assert.ok(e[k] > 0.9, `pliegue ${e[k].toFixed(2)}`);
+    const f = (await contornoPared(e, pieza, vista)).pts, s0 = (await contornoPared({ ...e, [k]: 0 }, pieza, vista)).pts;
+    // puntos desplazados por el pliegue (entran en la luz del corte sin plegar, > 40 % del máximo hundimiento): la mayor tanda seguida, y su tercio medio
+    const dentro = (q, b) => { let c = false; for (let i = 0, j = b.length - 1; i < b.length; j = i++) if ((b[i][1] > q[1]) !== (b[j][1] > q[1]) && q[0] < (b[j][0] - b[i][0]) * (q[1] - b[i][1]) / (b[j][1] - b[i][1]) + b[i][0]) c = !c; return c; };
+    const dd = f.map(q => dentro(q, s0) ? distA(q, s0) : 0), dm = Math.max(...dd), des = dd.map(x => x > 0.4 * dm), n = f.length;
+    assert.ok(dm > 3, `hundimiento máximo ${dm.toFixed(1)} mm`);
+    let ini = 0, lon = 0; for (let i = 0; i < n; i++) { if (!des[i]) continue; let l = 0; while (l < n && des[(i + l) % n]) l++; if (l > lon && l < n) { lon = l; ini = i; } }
+    assert.ok(lon >= 6, `tanda desplazada de ${lon} puntos`);
+    const medio = Array.from({ length: Math.max(1, Math.floor(lon / 3)) }, (_, j) => (ini + Math.floor(lon / 3) + j) % n);
+    const sig = orient(f), cur = medio.map(i => giro(f, i) * sig).reduce((a, b) => a + b, 0) / medio.length;   // < 0: cóncavo hacia la luz
+    assert.ok(cur < -0.05, `curvatura media del tercio medio ${cur.toFixed(3)} rad (cóncava < 0)`);
+    // la cámara sigue con luz a los lados: conserva al menos el 35 % del área del mismo corte sin pliegue y el hundimiento no la parte en dos (el volumen es el del motor: lo que pierde en el pliegue lo recoloca en los extremos, por eso el área puede subir)
+    const a = area(f), a0 = area(s0);
+    assert.ok(a / a0 > 0.35 && a / a0 < 1.25, `área ${a.toFixed(0)} frente a ${a0.toFixed(0)} mm² sin pliegue`);
+    const punta = f[medio[Math.floor(medio.length / 2)]], lejos = f.filter((_, i) => { const d = Math.min((i - ini + n) % n, (ini - i + n) % n); return d > n / 4; });
+    assert.ok(distA(punta, lejos) > 2, `la punta del pliegue queda a ${distA(punta, lejos).toFixed(1)} mm de la pared de enfrente`);
+  });
+}
+
+test('R2 · el pliegue de la AD es local: solo se mueve la pared libre (≤12 % de la malla más de 1 mm) y el hundimiento llega a ≥6 mm', () => {
+  const p = paciente('derrame', 1), e = estadoGeo(p.o[instanteMax(p, 'pliegueAd')], p.ex);
+  const a = construirCorazon(e, { detalle: false }).partes.find(x => x.nombre === 'AD').pos, b = construirCorazon({ ...e, pliegueAd: 0 }, { detalle: false }).partes.find(x => x.nombre === 'AD').pos;
+  let n = 0, mx = 0; for (let i = 0; i < a.length; i += 3) { const d = Math.hypot(a[i] - b[i], a[i + 1] - b[i + 1]); if (d > 1) n++; mx = Math.max(mx, d); }
+  assert.ok(n / (a.length / 3) <= 0.12, `${(100 * n / (a.length / 3)).toFixed(0)} % de la malla movida`);
+  assert.ok(mx >= 6, `hundimiento ${mx.toFixed(1)} mm`);
+});

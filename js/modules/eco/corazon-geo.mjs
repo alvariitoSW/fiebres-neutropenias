@@ -406,13 +406,17 @@ export function construirCorazon(estado, opciones = {}) {
   const kAu = (v, ref) => Math.pow(clamp(v, LIMITES.au[0], LIMITES.au[1]) / ref, 0.45);
   const kAi = kAu(estado.vai, REF.vAi), kAd = kAu(estado.vad, REF.vAd);
   // forma de la cúpula: a = 0 en el suelo, π/2 en el techo
-  // P1 · Colapso de la pared libre de la AD (formas.mjs, plieguePared, desde la presión transmural del motor): la pared
-  // lateral, la que no toca el tabique (hacia fuera del anillo tricúspide, ángulo phiT), se hunde hasta un 85 % a media
-  // altura; ni el suelo (el anillo) ni el techo (las cavas) se mueven. Forma y profundidad: ilustrativas
+  // P1 · Colapso de la pared libre de la AD (formas.mjs, plieguePared, desde la presión transmural del motor) · R2: la pared
+  // libre se INVAGINA, no se borra la cámara. Un hundimiento en campana, local, centrado en el tercio medio de la pared
+  // lateral (la que no toca el tabique, hacia fuera del anillo tricúspide, ángulo phiT; σ de 0,45 rad y de 0,3 rad de
+  // altura): la pared entra hacia la luz hasta el 80 % de su radio (≈40 % del diámetro de la cámara a pliegue 1) y deja
+  // luz a los lados, arriba y abajo del pliegue; el tabique, el suelo (anillo) y el techo (cavas) no se mueven. Es el
+  // colapso de la AD de Klein 2013 (p. 987, p. 23 del PDF: la duración del colapso de la AD «excede un tercio del ciclo», ver
+  // fuente-p3.md); su duración sale del motor. Forma, anchura y profundidad: ilustrativas
   const PSI_PLIEGUE_AD = 3.23;
   const factorPliegue = (psi, a, plg) => { if (!(plg > 0)) return 1;
-    const d = Math.atan2(Math.sin(psi - PSI_PLIEGUE_AD), Math.cos(psi - PSI_PLIEGUE_AD));
-    return 1 - 0.85 * plg * Math.exp(-(d / 0.6) * (d / 0.6)) * Math.sin(2 * a); };
+    const d = Math.atan2(Math.sin(psi - PSI_PLIEGUE_AD), Math.cos(psi - PSI_PLIEGUE_AD)), e = (a - 0.62) / 0.3;
+    return 1 - 0.8 * plg * Math.exp(-(d / 0.45) * (d / 0.45)) * Math.exp(-e * e); };
   // v2 Forma · Tabique interauricular: un solo plano vertical que comparten la AI y la AD, perpendicular a la línea que une
   // los centros de la mitral y la tricúspide, a media pared del tabique interventricular (ReB − t/2: el tabique de las
   // aurículas sigue al de los ventrículos en la cruz del corazón). Cada aurícula llega a él con su pared septal y ninguna
@@ -980,15 +984,17 @@ export function baseGeometrica(estado) {
   const Wb = memo((f) => kT * Math.sqrt(ventana(f)) * (18 + 13 * gauss(f, 3.23, 0.66) + 15 * gauss(f, 1.72, 0.38)));
   const perfilZ = memo((z) => Math.pow(Math.max(0, 1 - Math.pow(-z / Lvd, PERFIL_VD[0])), PERFIL_VD[1]));
   const SBR = 0.40, wz = (z) => paso(0, SBR, -z / Lvd);
-  // P1 · Colapso diastólico de la pared libre del VD (formas.mjs, plieguePared: sale de la presión transmural del motor).
-  // La pared libre (de delante a la cara diafragmática, la que ven el paraesternal y el subcostal) se hunde hacia el
-  // tabique en el tercio medio; ni la base (anillo, infundíbulo) ni el ápex se mueven. Como el pliegue entra en la
-  // cuadrática de A, el resto de la cavidad se abomba lo justo para que el VD siga teniendo el volumen del motor.
-  // Forma, centro (2,4 rad), anchura y profundidad (90 %): ilustrativos
+  // P1 · Colapso diastólico de la pared libre del VD (formas.mjs, plieguePared: sale de la presión transmural del motor) ·
+  // R2: la pared libre (de delante a la cara diafragmática, la que ven el paraesternal y el subcostal) se INVAGINA hacia el
+  // tabique en el tercio medio: un hundimiento en campana (σ de 0,35 rad en el contorno y de 0,2 de la altura, centrado a
+  // 0,4 de la altura) hasta el 75 % de la luz a pliegue 1; la luz queda a los lados, arriba y abajo del pliegue. Ni la base
+  // (anillo, infundíbulo) ni el ápex se mueven. Como el pliegue entra en la cuadrática de A, el resto de la cavidad se
+  // abomba lo justo para que el VD siga teniendo el volumen del motor. Forma, centro (2,4 rad), anchura y profundidad:
+  // ilustrativos
   const pliVd = clamp(estado.pliegueVd ?? 0, 0, 1);
-  const plieg = pliVd > 0 ? memo((f) => Math.exp(-Math.pow((anguloNorm(f) - 2.4) / 0.75, 2))) : null;
-  const pliegZ = (z) => { const sv = -z / Lvd; return paso(0.04, 0.25, sv) * (1 - paso(0.6, 0.9, sv)); };
-  const fVd = pliVd > 0 ? (z, f) => 1 - 0.9 * pliVd * plieg(f) * pliegZ(z) : () => 1;
+  const plieg = pliVd > 0 ? memo((f) => Math.exp(-Math.pow((anguloNorm(f) - 2.4) / 0.35, 2))) : null;
+  const pliegZ = (z) => { const e = (-z / Lvd - 0.4) / 0.2; return Math.exp(-e * e); };
+  const fVd = pliVd > 0 ? (z, f) => 1 - 0.75 * pliVd * plieg(f) * pliegZ(z) : () => 1;
   // volumen del VD = C0 + C1·A + C2·A² (cuadrática exacta en A)
   let C0 = 0, C1 = 0, C2 = 0;
   { const nz = 20, nf = 40, span = REF.phiB - REF.phiA, df = span / nf, dz = Lvd / nz;
