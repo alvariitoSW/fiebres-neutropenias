@@ -41,6 +41,11 @@ export function bomba(P, { l1 = '', l2 = '', avance = 0.35, candado = false, pie
   // el rótulo cabe en la pantalla: baja de tamaño hasta 8,2 px en pantalla (7,5 a 360 px de ancho) y, si aún no cabe, se aprieta
   const ajusta = (txt, px) => { const n = String(txt).length || 1, fs = Math.max(8.2 / e, Math.min(px / e, ANCHO / (n * 0.6))); return { fs: f1(fs), lt: n * 0.6 * fs > ANCHO ? ` textLength="${ANCHO}" lengthAdjust="spacingAndGlyphs"` : '' }; };
   const a1 = ajusta(l1, 8.4), a2 = ajusta(l2, 10.6);
+  // las dos líneas, una debajo de otra dentro de la pantalla (22 de alto): si la escala agranda la letra, la segunda
+  // cede tamaño (no baja del mínimo) para no pisar a la primera
+  const y1 = f1(0.8 * a1.fs), hueco = 22.5 - y1 - 0.25 * a1.fs;
+  if (a2.fs > hueco / 0.95) a2.fs = f1(Math.max(8.2 / e, hueco / 0.95));
+  const y2 = f1(Math.min(23.5, y1 + 0.25 * a1.fs + 0.95 * a2.fs));
   const linea = (a, b, extra) => { const p = P.iso(a), q = P.iso(b); return `<line x1="${f1(p[0])}" y1="${f1(p[1])}" x2="${f1(q[0])}" y2="${f1(q[1])}" ${extra}/>`; };
   const cara = (pts) => camino(pts.map(P.iso), true);
   let h = `<g${id ? ` id="${id}"` : ''} class="bomba-jeringa">`;
@@ -55,8 +60,8 @@ export function bomba(P, { l1 = '', l2 = '', avance = 0.35, candado = false, pie
   // la pantalla (dos líneas: qué y cuánto) y el teclado
   h += `<path d="${cara([[5, 34, 4], [66, 34, 4], [66, 34, 26], [5, 34, 26]])}" fill="var(--bg-main)" stroke="var(--text-main)" stroke-width=".5"/>`;
   h += `<g transform="${caraMatriz(P, [7.5, 34, 26], [1, 0, 0], [0, 0, -1])}">`
-    + `<text${idL1 ? ` id="${idL1}"` : ''} x="0" y="9" font-size="${a1.fs}"${a1.lt} fill="var(--text-dim)" font-weight="600" style="font-family:system-ui, sans-serif">${l1}</text>`
-    + `<text${idL2 ? ` id="${idL2}"` : ''} x="0" y="19.5" font-size="${a2.fs}"${a2.lt} fill="var(--accent-blue)" font-weight="700" style="font-family:system-ui, sans-serif">${l2}</text>`;
+    + `<text${idL1 ? ` id="${idL1}"` : ''} x="0" y="${y1}" font-size="${a1.fs}"${a1.lt} fill="var(--text-dim)" font-weight="600" style="font-family:system-ui, sans-serif">${l1}</text>`
+    + `<text${idL2 ? ` id="${idL2}"` : ''} x="0" y="${y2}" font-size="${a2.fs}"${a2.lt} fill="var(--accent-blue)" font-weight="700" style="font-family:system-ui, sans-serif">${l2}</text>`;
   if (candado) h += `<g transform="translate(52 6) scale(${f1(1 / e)})"><path d="M-3.4 0v-3a3.4 3.4 0 0 1 6.8 0v3" style="fill:none;stroke:var(--accent-blue);stroke-width:1.4"/><rect x="-5" y="0" width="10" height="7.5" rx="1.5" style="fill:var(--accent-blue)"/><circle cx="0" cy="3.6" r="1.1" style="fill:var(--bg-main)"/></g>`;
   h += `</g>`;
   for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) h += `<path d="${cara([[70 + i * 9, 34, 7 + j * 9], [77 + i * 9, 34, 7 + j * 9], [77 + i * 9, 34, 13 + j * 9], [70 + i * 9, 34, 13 + j * 9]])}" fill="var(--text-muted)" stroke="var(--text-main)" stroke-width=".4"/>`;

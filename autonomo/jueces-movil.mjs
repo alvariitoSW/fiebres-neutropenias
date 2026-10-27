@@ -185,6 +185,8 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
             for (const md of elegidos) {
                 const loc = pag.locator(`${o.raiz} [data-jm="${md.i}"]`).first();
                 const m = `${momento}→${md.t || 'mando ' + md.i}`;
+                // El toque anterior pudo rehacer la barra (otra familia, otro ritmo): el mando numerado ya no existe
+                if (!(await loc.count())) continue;
                 try {
                     await loc.tap({ timeout: 2500 });
                     if (md.range) await pag.keyboard.press('ArrowRight');
