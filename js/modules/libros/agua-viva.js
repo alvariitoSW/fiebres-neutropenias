@@ -12,6 +12,7 @@
 // fallos en localStorage (como el quiz), con su clave propia y siempre dentro
 // de try/catch.
 import { cargarMotion } from '../../core/motion.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
@@ -34,11 +35,7 @@ const enRaiz = sel => raiz.querySelectorAll(sel);
    ============================================================ */
 let fraseActual = '';
 // Que la frase viva quede a la vista sobre el dock (si no, sube la página lo justo).
-function verFrase() {
-    const f = $('frase'), d = $('dock'); if (!f || !d.offsetHeight || !f.offsetParent) return;
-    const exceso = f.getBoundingClientRect().bottom - (innerHeight - d.offsetHeight - 6);
-    if (exceso > 0) scrollBy({ top: exceso, behavior: 'instant' });
-}
+const verFrase = () => verFraseComun($('frase'), { dock: $('dock'), margen: 6 });
 function decir(html, fuente) {
     const fraseEl = $('frase');
     const ilu = /ilustrativo|sin cifra/.test(fuente || '');

@@ -12,6 +12,7 @@
 //   (home/index.js llama a abrir() a través de la API de Nefrología).
 import { cargarMotion, sinMovimiento } from '../../core/motion.js';
 import { pintarParticula, svgParticula, leyendaParticulas } from '../../core/particulas.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { nombreFicha } from '../../core/corkboard.js';
 import { rutaDePanel } from '../../core/search.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
@@ -1444,11 +1445,7 @@ function subirAlEstudio() {
   if (modo === 'explorar') verFrase();
 }
 // La frase viva nunca queda bajo el dock: si su sitio natural (bajo el instrumento) cae detrás, la página sube lo justo.
-function verFrase() {
-  const f = $('#abv-frase'), d = $('#abv-dock'); if (!f.offsetParent || !d.offsetHeight) return;
-  const dy = f.getBoundingClientRect().bottom - (innerHeight - d.offsetHeight - 6);
-  if (dy > 0) window.scrollBy(0, dy);
-}
+const verFrase = () => verFraseComun($('#abv-frase'), { dock: $('#abv-dock'), techo: -1e9 });
 function dockEstudio(n, actual, marca, txt) {
   html('#abv-est-prog').innerHTML = Array.from({ length: n }, (_, i) => `<i class="${marca(i) ? 'abv-' + marca(i) : ''}${i === actual ? ' abv-ahora' : ''}"></i>`).join('');
   $('#abv-est-txt').textContent = txt;

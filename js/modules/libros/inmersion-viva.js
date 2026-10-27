@@ -11,6 +11,7 @@
 // (core/volver-ficha.js). La Mayéutica guarda aciertos y fallos en localStorage (como el quiz y la muralla), con
 // clave propia y siempre dentro de try/catch.
 import { cargarMotion } from '../../core/motion.js';
+import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
 import { citaHTML, citaExacta, hrefPdf } from '../../core/citas.js';
@@ -273,13 +274,7 @@ function ponerModelo(q) {
 }
 const pintarDock = (items, izq, der) => pintarDockComun('inm', items, izq, der);
 // Deja el elemento a la vista entre la escena fija de arriba y el dock de abajo (scrollIntoView no cuenta con el dock)
-function asomar(el) {
-    if (!el) return;
-    const r = el.getBoundingClientRect(), abajo = innerHeight - $('dock').offsetHeight - 12;
-    const arriba = raiz.classList.contains('inm-estudio') ? $('escena-bloque').getBoundingClientRect().bottom + 8 : 8;
-    const d = r.bottom > abajo ? Math.min(r.bottom - abajo, r.top - arriba) : r.top < arriba ? r.top - arriba : 0;
-    if (Math.abs(d) > 1) window.scrollBy({ top: d, behavior: REDUCIR ? 'auto' : 'smooth' });
-}
+const asomar = el => verFraseComun(el, { dock: $('dock'), margen: 12, subir: true, suave: true, techo: () => raiz.classList.contains('inm-estudio') ? $('escena-bloque').getBoundingClientRect().bottom + 8 : 8 });
 
 const SEGS = { estimulo: [['reposo', 'En reposo'], ['mover', 'Moverle en la cama']], prof: [['ligera', 'Ligera (−1/−2)'], ['profunda', 'Profunda (−4)']], horas: [['24', '24 h'], ['72', '72 h'], ['168', '7 días'], ['336', '14 días']] };
 function mandoHTML(t) {
