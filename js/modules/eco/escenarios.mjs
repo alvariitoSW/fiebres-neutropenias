@@ -106,7 +106,7 @@ export const ESCENARIOS = {
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
-    // en telediástole (>5 mm; Mukherjee 2025 Tabla 5, p. 145; Lang 2015 Tabla 8, p. 20: normal 1-5 mm) y por unas presiones
+    // en telediástole (>5 mm; Mukherjee 2025 Tabla 1, p. 145; Lang 2015 Tabla 8, p. 20: normal 1-5 mm) y por unas presiones
     // pulmonares altas que ese VD hipertrófico sí sostiene (el TEP agudo, con VD de pared fina, no pasa de ~40/33)
     nombre: 'Hipertensión pulmonar crónica (VD)', forma: true,
     // gravedad: el punto de la enfermedad (0 = normal; el defecto, un VD hipertrófico y algo dilatado: pared gruesa, tabique
@@ -193,19 +193,19 @@ export const CRITERIOS_FORMA = {
       nota: 'FAC = (área telediastólica − telesistólica) ÷ telediastólica del VD en el A4C' },
     { texto: 'FE del VD (3D) <45 % aprox. (normal 58 ± 6,5)', valor: (c) => `${Math.round(c.u.feD * 100)} %`, cumple: (c) => c.u.feD * 100 < 45, fuente: MERINO_VD, pdf: LANG_PDF(23, 'Lang p. 23'), nota: 'Lang da el 45 % como valor aproximado; aquí se compara con la FE del VD del motor (no una medida 3D de la imagen)' },
   ],
-  // HP crónica: lo que la distingue del TEP agudo es la pared libre del VD gruesa. Cifras de Mukherjee 2025 (Tabla 5, p. 145 impresa = PDF 5)
+  // HP crónica: lo que la distingue del TEP agudo es la pared libre del VD gruesa. Cifras de Mukherjee 2025 (Tabla 1, p. 145 impresa = PDF 5)
   // y Lang 2015 (Tabla 8, p. 20). El índice de excentricidad no entra aquí (lo mide la prueba con el plano del Atlas · 14)
   hpcronica: [
     { texto: 'Pared libre del VD en telediástole >5 mm (normal <5 mm; Lang: 1-5)', valor: (c) => mm(c.md.paredVd), cumple: (c) => c.md.paredVd > 5,
       fuente: { atlas: 'vd', ficha: 'Atlas 14 · El VD' }, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
-      nota: 'Mukherjee 2025, Tabla 5: leve 5-7 mm, moderada >7-9 mm y grave >9 mm; la mide en la subcostal, en telediástole, sin trabéculas ni papilares. Lang 2015, Tabla 8 (p. 20): normal 1-5 mm. En el TEP agudo la pared sigue fina (≤5 mm)' },
+      nota: 'Mukherjee 2025, Tabla 1: leve 5-7 mm, moderada >7-9 mm y grave >9 mm; la mide en la subcostal, en telediástole, sin trabéculas ni papilares. Lang 2015, Tabla 8 (p. 20): normal 1-5 mm. En el TEP agudo la pared sigue fina (≤5 mm; fisiología general: no da tiempo a hipertrofiarse)' },
     { texto: 'Presión sistólica pulmonar (PAPs) >34 mmHg (normal ≤34)', valor: (c) => Math.round(c.u.paps) + ' mmHg', cumple: (c) => c.u.paps > 34,
       fuente: { atlas: 'vd', ficha: 'Atlas 14 · El VD' }, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
       nota: 'Es la presión del motor en la pulmonar. El VD hipertrófico la sostiene alta; el de pared fina del TEP agudo no pasa de ~40 mmHg (fisiología general)' },
     { texto: 'Área del VD / área del VI >0,6 (VD agrandado)', valor: (c) => c.md.areaVdVi.toFixed(2).replace('.', ',') + ` (normal ${c.md0.areaVdVi.toFixed(2).replace('.', ',')})`,
       cumple: (c) => c.md.areaVdVi > 0.6, fuente: F11_COR, nota: 'plano apical de 4 cámaras del modelo; el corte de 0,6 es el de la Ficha 11 para el cor pulmonale' },
     { texto: 'TAPSE >10 mm: el VD aún no ha fallado del todo (normal >17 mm)', valor: (c) => mm(c.tapse), cumple: (c) => c.tapse > 10, fuente: F11_VD, pdf: MUKHERJEE_PDF(5, 'Mukherjee p. 145'),
-      nota: 'Mukherjee 2025: TAPSE normal >1,7 cm; leve ≤1,7-1,3; moderado ≤1,3-1,0; grave ≤1,0 cm. El VD adaptado de la HP crónica puede conservarlo o tenerlo algo bajo; hacia el fallo cae' },
+      nota: 'Mukherjee 2025: TAPSE normal >1,7 cm; leve ≤1,7-1,3; moderado ≤1,3-1,0; grave ≤1,0 cm. Mukherjee (PDF p. 31): en la HP la función basal suele estar conservada y el TAPSE cae ya en las fases tempranas del remodelado; hacia el fallo cae más' },
   ],
 };
 
