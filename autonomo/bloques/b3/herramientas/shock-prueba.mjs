@@ -61,8 +61,9 @@ await cap('05-ecmo-venteo'); await desborde('ecmo'); await tap('[data-plano="des
 // cuña y guía
 await tap('#enclavar'); await page.waitForTimeout(300); await cap('07-cuna'); await tap('#enclavar');
 await tap('#btn-guia'); await page.waitForTimeout(400); await cap('08-guia'); await desborde('guía'); for (let i = 0; i < 5; i++) { const b = page.locator('#guia-sig'); if (!(await b.count())) break; await b.tap(); await page.waitForTimeout(200); }
+await page.evaluate(() => document.getElementById('guia-x')?.click()); await page.waitForTimeout(300);
 // Joaquín: sellos
-await tap('.dock-asa').catch(() => {}); await tap('[data-pac="joaquin"]'); await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(500); r = await R(); console.log('Joaquín balón:', r.estado); ok(/no lleva/i.test(r.estado), 'Joaquín sin sello');
+await tap('.dock-asa').catch(() => {}); await page.evaluate(() => document.querySelector('[data-pac="joaquin"]')?.click()); await page.waitForTimeout(300); await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(500); r = await R(); console.log('Joaquín balón:', r.estado); ok(/no lleva/i.test(r.estado), 'Joaquín sin sello');
 // ¿Qué shock es?
 await tap('#modo-qs'); await page.waitForTimeout(600); await desborde('qs'); await cap('09-qs');
 for (let i = 0; i < 3; i++) { await tap('[data-qs="septico"]'); await tap('#qs-mas'); await page.waitForTimeout(500); await tap('#qs-mas'); await page.waitForTimeout(400); await tap('#qs-resp'); await page.waitForTimeout(300); if (i === 0) await cap('10-qs-resp'); await desborde('qs ' + i); await tap('#qs-sig'); await page.waitForTimeout(400); }
