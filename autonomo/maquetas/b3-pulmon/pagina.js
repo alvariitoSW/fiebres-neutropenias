@@ -183,11 +183,11 @@ function pintarMandos() {
   let h = '';
   if (est.pest === 'resp') {
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button></div>`;
-    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
+    if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
+    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
   } else if (est.pest === 'pulmon') {
-    h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha: SDRA <25' : pu.c >= 50 ? 'ficha: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'fisiología general');
+    h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha cap. 27 p. 6: SDRA <25 (mínimo 15: ilustrativo)' : pu.c >= 50 ? 'ficha cap. 27 p. 6: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'ilustrativo (la ficha no da R)');
     h += `<div class="seg" aria-label="Resistencia espiratoria"><button type="button" data-m="fesp" data-v="1" aria-pressed="${est.factorEsp === 1}">Esp. = insp.<small>pulmón sano</small></button><button type="button" data-m="fesp" data-v="2" aria-pressed="${est.factorEsp === 2}">Esp. ×2<small>EPOC</small></button><button type="button" data-m="fesp" data-v="3" aria-pressed="${est.factorEsp === 3}">Esp. ×3<small>asma (ilustrativo)</small></button></div>`;
     h += `<p class="dock-nota">τ = R·C = ${f1(pu.r * pu.c / 1000)} s (insp.) · ${f1((pu.rEsp ?? pu.r) * pu.c / 1000)} s (esp.): en 3 τ sale el 95 % del aire. ${org('fisiología general')}</p>`;
   } else if (est.pest === 'man') {
@@ -238,7 +238,7 @@ function detener(on) {
   est.detenido = on;
   if (on) {
     llenarMonitor();
-    tope.poner('detenido', { nivel: 'sello', titulo: 'Sin ventilación', texto: 'El respirador no da ninguna respiración y en este modelo el paciente no respira por su cuenta: el CO₂ sube y la saturación cae en minutos (no se calcula en el modelo). Pulsa otra vez para reanudar.', origen: 'fisiología general' });
+    tope.poner('detenido', { nivel: 'sello', titulo: 'Sin ventilación', texto: 'El respirador no da ninguna respiración y en este modelo el paciente no respira por su cuenta: el CO₂ sube y la saturación cae en minutos (no se calcula en el modelo; sin cifra por minuto). Pulsa otra vez para reanudar.', origen: 'Farmery 1996 (PMID 8777112); Benumof 1997 (PMID 9357902); Eger 1961 (PMID 13725901)' });
   } else { tope.quitar('detenido'); llenarMonitor(); }
   pintarTodo();
 }
@@ -314,6 +314,7 @@ document.addEventListener('click', (ev) => {
   n.closest('details').open = true; n.scrollIntoView({ block: 'center', behavior: REDUCIR ? 'auto' : 'smooth' }); n.classList.add('guia-marco'); setTimeout(() => n.classList.remove('guia-marco'), 2400);
 });
 $('notas').innerHTML = D.NOTAS.map((n) => `<div class="nota" id="nota-${n.k}"><span class="nota-tipo ${D.NOTA_TIPO[n.tipo][1]}">${D.NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.citas.map(cita).join('')}</div>`).join('');
+$('referencias').innerHTML = D.REFS.map(([t, pm, doi]) => `<li><span>${t} PMID ${pm}.</span><span class="cita"><a class="cita-pdf" href="https://pubmed.ncbi.nlm.nih.gov/${pm}/" target="_blank" rel="noopener">PubMed</a><a class="cita-pdf" href="https://doi.org/${doi}" target="_blank" rel="noopener">DOI</a></span></li>`).join('');
 $('profundizar').innerHTML = D.PROFUNDIZAR.map((p) => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
 
 // ---------------------------------------------------------------- modos: Explorar | Mayéutica
