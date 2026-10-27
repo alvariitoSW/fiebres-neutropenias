@@ -45,6 +45,8 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
       que el libro afirma se marca como error.
 - [ ] **Topes** (REGLAS §1.14): cada mando con tope y origen; aviso al acercarse; al pasarse, sello con la consecuencia
   clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
+- [ ] **Carpeta aparte** (REGLAS §4.6): si trabajas en un `git worktree`, lo primero es
+  `git checkout -B <tu rama> origin/auto/<bN>`; nunca partas de `main` ni de una versión vieja.
 - [ ] **Pacientes de la lista del bloque** (encargo): sin nombres repetidos con otros datos.
 - [ ] Mayéutica (REGLAS §8):
   - Guía socrática y Examen;

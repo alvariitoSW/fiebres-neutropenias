@@ -329,3 +329,9 @@ que esté en las reglas: un mando que deja superar lo real es un fallo, y el pro
 revisiones. Entró como `REGLAS.md` §1.14 (tope con origen, aviso, sello con consecuencia de paciente real, prueba con
 todos los mandos al tope), en el modo juzgar del profesor (fallo grave, nota <8), en la lista del constructor y en
 `CLAUDE.md` §12. La pieza común es `autonomo/maquetas/comun/tope.js`.
+
+### Carpetas aparte desde la rama del bloque (27/10/2026)
+
+En la vuelta de límites del bloque 3, el aislamiento automático de los agentes (`git worktree`) salió de `main` y dos
+constructores partieron una versión vieja de las maquetas; hubo que rehacerlo. El usuario aprobó la regla: toda carpeta
+aparte sale de `origin/auto/<bN>` (`REGLAS.md` §4.6, lista del constructor y skill del plan socialista).

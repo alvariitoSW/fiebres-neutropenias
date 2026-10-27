@@ -110,7 +110,8 @@ es la base de cómo se trabaja ahora.
 2. **Maquetas** de los modelos nuevos → `autonomo/maquetas/`. Primero la **pieza común** (un constructor); después,
    las escenas que la copian (≤3 constructores a la vez). Revisión con auditor (con la lista de frases nuevas de cada
    constructor) y profesor a la vez; vuelta 2. Publícalas como Artifact y espera la elección del usuario.
-3. **Modelos en la app** · constructor potente, uno por modelo, cada uno en su carpeta (`git worktree`) y con dueño
+3. **Modelos en la app** · constructor potente, uno por modelo, cada uno en su carpeta (`git worktree`, que sale de
+   `origin/auto/<bN>`, nunca de `main`: REGLAS §4.6) y con dueño
    fijo de cada archivo compartido. Copia el patrón del río y mar (`js/modules/libros/agua-viva*`) y añade su prueba
    en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`.
 4. **Estudio en las fichas** · constructor, por grupos de fichas, siguiendo el modelo ya hecho: interruptor
