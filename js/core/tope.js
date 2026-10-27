@@ -19,7 +19,10 @@ import { instalarCss } from './dibujo-iso.js';
 
 export const TOPE_CSS = `
 .tope-mon { position: absolute; inset: 0; pointer-events: none; z-index: 5; }
-.tope-sello { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%) rotate(-2deg); border: 2px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 88%, transparent); font: 800 .8rem/1.15 var(--sans, system-ui, sans-serif); letter-spacing: .03em; text-transform: uppercase; padding: 4px 8px; border-radius: 8px; text-align: center; width: max-content; max-width: 92%; max-height: 62%; overflow: hidden; box-sizing: border-box; overflow-wrap: normal; word-break: normal; hyphens: none; pointer-events: auto; }
+.tope-sellos { position: absolute; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 4px 0; box-sizing: content-box; width: max-content; max-width: 92%; max-height: 62%; overflow: hidden; pointer-events: none; }
+.tope-sello[hidden] { display: none; }
+.tope-sello.tope-compacto small { display: none; }
+.tope-sello { flex: none; transform: rotate(-2deg); border: 2px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 88%, transparent); font: 800 .8rem/1.15 var(--sans, system-ui, sans-serif); letter-spacing: .03em; text-transform: uppercase; padding: 4px 8px; border-radius: 8px; text-align: center; width: max-content; max-width: 100%; overflow: hidden; box-sizing: border-box; overflow-wrap: normal; word-break: normal; hyphens: none; pointer-events: auto; }
 .tope-sello small, .tope-aviso small { display: block; font: 600 .62rem/1.2 var(--sans, system-ui, sans-serif); letter-spacing: 0; text-transform: none; color: var(--text-main); }
 .tope-sello .cita { display: flex; flex-wrap: wrap; gap: 0 8px; justify-content: center; align-items: baseline; margin: 1px 0 0; }
 .tope-sello .cita a { display: none; }
@@ -41,7 +44,10 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
   if (monitor && getComputedStyle(monitor).position === 'static') monitor.style.position = 'relative';
   const mon = document.createElement('div'); mon.className = 'tope-mon';
   const linea = document.createElement('div'); linea.className = 'tope-linea'; linea.setAttribute('role', 'status');
-  mon.append(linea); monitor?.append(mon);
+  const sellos = document.createElement('div'); sellos.className = 'tope-sellos';
+  mon.append(sellos, linea); monitor?.append(mon);
+  // Con varios sellos a la vez se apilan; el que no cabe se queda solo como chip en la línea.
+  const ajustar = () => { const l = [...sellos.children]; l.forEach((n) => { n.hidden = false; n.classList.remove('tope-compacto'); }); const tope = mon.clientHeight * 0.62; const suma = () => l.filter((n) => !n.hidden).reduce((a, n, i) => a + n.offsetHeight + (i ? 6 : 0), 8); for (let i = l.length - 1; i > 0 && suma() > tope; i--) l[i].classList.add('tope-compacto'); for (let i = l.length - 1; i > 0 && suma() > tope; i--) l[i].hidden = true; };
   const avisos = document.createElement('div'); avisos.className = 'tope-avisos'; avisos.setAttribute('role', 'status');
   avisos.classList.add('dock-pliega');
   (dock?.querySelector('.dock-in') || dock)?.append(avisos);
@@ -57,7 +63,7 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
   };
   function quitar(clave) {
     const t = activos.get(clave); if (!t) return;
-    t.nodos.forEach((n) => n.remove()); t.off.forEach(encender); activos.delete(clave);
+    t.nodos.forEach((n) => n.remove()); t.off.forEach(encender); activos.delete(clave); ajustar();
   }
   // Guarda los SELECTORES, no los nodos: si la página repinta el dock, refrescar() vuelve a apagar los botones nuevos.
   function aplicarOff(t) {
@@ -74,7 +80,7 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
     if (nivel === 'sello') {
       const s = document.createElement('div'); s.className = 'tope-sello'; s.dataset.tope = clave; s.setAttribute('role', 'alert');
       s.innerHTML = `⛔ ${esc(titulo)}<small>${esc(texto)}</small>${pie ? `<small>${pie}</small>` : ''}`;
-      mon.append(s); nodos.push(s);
+      sellos.append(s); nodos.push(s);
     } else {
       const a = document.createElement('div'); a.className = 'tope-aviso'; a.dataset.tope = clave;
       a.innerHTML = `⚠ ${cuerpo}${pie ? `<small>${pie}</small>` : ''}`;
@@ -84,7 +90,7 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
     }
     linea.append(lin); nodos.push(lin);
     const t = { nivel, nodos, off, sels: [].concat(deshabilita || []) };
-    activos.set(clave, t); aplicarOff(t);
+    activos.set(clave, t); aplicarOff(t); ajustar();
   }
   return { poner, quitar, refrescar, activos: () => [...activos].map(([clave, t]) => ({ clave, nivel: t.nivel })) };
 }

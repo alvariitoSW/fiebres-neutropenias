@@ -26,7 +26,7 @@ const BALON_NUEVAS = [
       { t: 'En la muesca; la telediastólica asistida sale igual o mayor que la no asistida.', porque: 'Con la sincronización correcta baja; que no baje es la señal del desinflado tardío, con el balón aún hinchado cuando se abre la aórtica.' }],
     explica: 'Inflado en la muesca dícrota (cierre de la aórtica): «V» marcada, aumento por encima de la sistólica anterior y telediastólica asistida más baja; así el balón mejora la perfusión coronaria y baja la poscarga.', cita: C.iabp,
     org: gp(8) + ': la «V», el aumento más alto y la telediastólica 15-20 mmHg más baja. En este modelo baja menos de 15-20 mmHg: la fuente da la cifra, el modelo no la alcanza',
-    comprueba: CMP('ok', 'Compruébalo: mira la curva en 1:2', 'Mira el latido asistido junto al no asistido: la «V» en la muesca, el aumento sobre la sistólica y la telediastólica más baja.') },
+    comprueba: { ...CMP('ok', 'Compruébalo: mira la curva en 1:2', 'Mira el latido asistido junto al no asistido: la «V» en la muesca, el aumento sobre la sistólica y la telediastólica más baja.'), cifras: null } },
   { id: 'B2', grupo: 'guia', tipo: 'destapa', predice: false, prepara: PB('ok'),
     enunciado: 'Ahora juega con la consola: <b>pulsa «Inflado precoz» en «Temporización» y mira la curva.</b> ¿Qué dos cosas cambian? Son dos.',
     puntos: [
@@ -75,7 +75,7 @@ const BALON_NUEVAS = [
     org: gp(8) + ': la caída en picado y la corrección. ' + ILU + ' Aviso: el vacío de la mitad de la diástole puede invertir el flujo en coronarias y carótidas (misma página)',
     comprueba: CMP('desPre', 'Compruébalo en la consola', 'Mira la caída en picado tras el pico del aumento y la telediastólica del latido asistido.') },
   { id: 'B7', grupo: 'examen', tipo: 'error', prepara: PB('infPre'),
-    enunciado: 'El R1 anota lo que ve con el balón de Aurelio en 1:2 con «Inflado precoz». <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
+    enunciado: 'El R1 anota lo que ve con el balón de Aurelio en 1:2 con «Inflado precoz». <b>Puede haber 0, 1 o 2 errores.</b>',
     frases: [
       { t: 'Con el balón bien sincronizado, se hincha en la muesca dícrota y deja una «V» marcada.' },
       { t: 'Con inflado precoz, el aumento se monta sobre el pico sistólico y se pierde la «V».' },
