@@ -9,8 +9,10 @@
 //      principal (el svg/canvas más grande) tiene ≥ 50 % de su alto en pantalla y sobre la barra, y la frase viva se ve.
 //   3. Frase cortada con «…»: text-overflow:ellipsis con scrollWidth > clientWidth + 1, -webkit-line-clamp con
 //      scrollHeight > clientHeight + 1, y <text> de SVG visible que acaba en «…» o «...».
-//   4. Letra ≥ 9 px: <text> de SVG (cuerpo × escala de getScreenCTM) y texto HTML (font-size calculado).
+//   4. Letra ≥ 8 px (decisión del usuario, 27/10/2026; antes 9): <text> de SVG (cuerpo × escala de getScreenCTM) y texto HTML (font-size calculado).
 import { MODELOS, B1 } from './jueces-forma.mjs';
+// Letra mínima en pantalla (REGLAS §4.8 R1): 8 px, decisión del usuario del 27/10/2026 (con 9 salían cientos de rótulos).
+const LETRA_MIN = 8;
 
 // Frase viva y enunciado de cada modelo (leídos de sus .html: <p id="xxx-frase"> y el <p class="xxx-pregunta"> del
 // motor común core/mayeutica-motor.js; el ácido-base vivo pinta el suyo con la clase abv-pregunta). Todos tienen frase.
@@ -24,6 +26,7 @@ const SIGUIENTE = '[data-accion="sig"]';
 /* ---------- En la página ---------- */
 // Lo que se mide en un momento. `o`: { raiz, frase, enunciado, siguiente, figura, final }
 function medir(o) {
+    const LETRA_MIN = o.letraMin;   // medir corre en la página: la constante llega por el argumento
     const R = document.querySelector(o.raiz); if (!R) return null;
     const cerrados = [...R.querySelectorAll('details:not([open])')]; cerrados.forEach(d => { d.open = true; });
     const visible = el => {
@@ -98,14 +101,14 @@ function medir(o) {
         const s = t.textContent.trim();
         if (/(…|\.\.\.)$/.test(s)) res.elipsis.push(`«${s.slice(0, 30)}» rótulo de SVG recortado por código (${nombreDibujo(svg)})`);
         const m = t.getScreenCTM(), letra = m ? parseFloat(getComputedStyle(t).fontSize) * Math.hypot(m.a, m.b) : 0;
-        if (letra < 9) res.pequenos.push(`«${s.slice(0, 24)}» ${letra.toFixed(1)} px (${nombreDibujo(svg)})`);
+        if (letra < LETRA_MIN) res.pequenos.push(`«${s.slice(0, 24)}» ${letra.toFixed(1)} px (${nombreDibujo(svg)})`);
     }
     const vistos = new Set();
     for (const e of R.querySelectorAll('*')) {
         if (e.closest('svg') || !visible(e)) continue;
         if (![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) continue;
         const px = parseFloat(getComputedStyle(e).fontSize);
-        if (px < 9) { const k = `«${txt(e)}» ${px.toFixed(2)} px (${e.tagName.toLowerCase()}${e.id ? '#' + e.id : '.' + ([...e.classList][0] || '')})`; if (!vistos.has(k)) { vistos.add(k); res.letraHtml.push(k); } }
+        if (px < LETRA_MIN) { const k = `«${txt(e)}» ${px.toFixed(2)} px (${e.tagName.toLowerCase()}${e.id ? '#' + e.id : '.' + ([...e.classList][0] || '')})`; if (!vistos.has(k)) { vistos.add(k); res.letraHtml.push(k); } }
     }
     cerrados.forEach(d => { d.open = false; });
     return res;
@@ -156,7 +159,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
                     // hasta 2 por categoría (para que 100 rótulos pequeños no escondan un «…»), y el resto hasta el máximo
                     const vistos = {}, primeros = ord.filter(([h]) => { const c = h.match(/^\d[ab]?/)[0]; vistos[c] = (vistos[c] || 0) + 1; return vistos[c] <= Math.max(2, Math.floor(maxLineas / 5)); });
                     const l = primeros.slice(0, maxLineas).map(([h, ms]) => `${h}  [${ms.length === momentos.length && ms.length > 1 ? 'en todos' : ms.slice(0, 4).join(', ') + (ms.length > 4 ? '…' : '')}]`).concat(mapa.size > maxLineas ? [`… y ${mapa.size - maxLineas} más`] : []);
-                    mapa.size ? mal(`Móvil ${ancho}px · ${quien} (${Object.entries(cuenta).map(([c, n]) => c + ':' + n).join(' ')}):\n   ${l.join('\n   ')}`) : ok(`Móvil ${ancho}px · ${quien}: nada tapado, imagen a la vista, sin «…» y letra ≥ 9 px en ${momentos.length} momentos y ${toques} toques`);
+                    mapa.size ? mal(`Móvil ${ancho}px · ${quien} (${Object.entries(cuenta).map(([c, n]) => c + ':' + n).join(' ')}):\n   ${l.join('\n   ')}`) : ok(`Móvil ${ancho}px · ${quien}: nada tapado, imagen a la vista, sin «…» y letra ≥ ${LETRA_MIN} px en ${momentos.length} momentos y ${toques} toques`);
                 },
             };
         };
@@ -189,7 +192,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
                     J.anotar(`2 mando no tocable «${md.t}» (${String(e.message).split('\n').slice(-4).join(' ').replace(/\s+/g, ' ').slice(-200)})`, m); continue; }
                 J.toca();
                 await pag.waitForTimeout(250);
-                const r = await pag.evaluate(medir, { ...o, final: false });
+                const r = await pag.evaluate(medir, { ...o, final: false, letraMin: LETRA_MIN });
                 await pag.evaluate(() => document.querySelectorAll('dialog[open]').forEach(d => d.close()));
                 if (!r) continue;
                 volcar(J, m, { ...r, elipsis: [], pequenos: [], letraHtml: [], tapado: [] });
@@ -206,7 +209,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
                 await pag.waitForTimeout(900);
                 if (await pag.evaluate(s => { const b = document.querySelector(s); if (b && b.getAttribute('aria-selected') !== 'true') { b.click(); return true; } return false; }, M.modo.explorar)) await pag.waitForTimeout(400);
                 if (!(await pag.evaluate(r => !!document.querySelector(r)?.offsetParent, M.raiz))) { mal(`Móvil ${ancho}px · ${k}: no se abre con «${estado}»`); continue; }
-                volcar(J, `Explorar·${estado}`, await pag.evaluate(medir, o));
+                volcar(J, `Explorar·${estado}`, await pag.evaluate(medir, { ...o, letraMin: LETRA_MIN }));
                 await tocar(J, `Explorar·${estado}`, o, i === 0 ? 6 : 3, i); i++;
             }
             for (const modo of ['conceptos', 'mayeutica']) {
@@ -214,7 +217,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
                 await pag.waitForTimeout(500);
                 const oo = { raiz: M.raiz, frase: null, final: true };
                 if (modo === 'mayeutica') { await contestarPrimera(M.raiz); oo.enunciado = ENUNCIADO; oo.siguiente = SIGUIENTE; }
-                volcar(J, modo === 'mayeutica' ? 'Mayéutica' : 'Conceptos', await pag.evaluate(medir, oo));
+                volcar(J, modo === 'mayeutica' ? 'Mayéutica' : 'Conceptos', await pag.evaluate(medir, { ...oo, letraMin: LETRA_MIN }));
             }
             await clic(M.modo.explorar);
             J.cerrar(k);
@@ -237,7 +240,7 @@ export async function juzgarMovil({ nav, base, ok, mal, fichas = [], modelos = [
                 const o = { raiz, final: true, figura: v === 'visual' };
                 if (v === 'mayeutica' || v === 'estudiar') { await contestarPrimera(raiz); o.enunciado = ENUNCIADO; o.siguiente = SIGUIENTE; }
                 const nom = v === 'mayeutica' ? 'Mayéutica' : v === 'estudiar' ? 'Estudiar' : v === 'visual' ? 'Visual' : 'Texto';
-                volcar(J, nom, await pag.evaluate(medir, o));
+                volcar(J, nom, await pag.evaluate(medir, { ...o, letraMin: LETRA_MIN }));
                 if (v === 'visual') await tocar(J, nom, { raiz: `${raiz} .vista-visual`, figura: true }, 6);
             }
             await pag.evaluate(t => document.querySelectorAll(`#${t} .vista-toggle button[data-vista="texto"]`).forEach(b => b.click()), f.tab);
