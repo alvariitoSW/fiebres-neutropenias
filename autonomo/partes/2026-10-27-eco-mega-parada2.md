@@ -67,3 +67,4 @@ hecho: ~24 M optimizado; real ~26,6 M. Dónde se fue: la vuelta 2 de Forma arreg
   de la v1 (tabique doble, VD en rendija) se veían a simple vista y ninguna prueba los pedía.
 - Los constructores que trabajan a la vez no deben dar por mala la suite cuando el otro está a medias (pasó con A2/B2):
   pasar la suite solo con el árbol limpio o en su propia copia.
+- El enlace «Ver en el móvil» a `main` en raw.githack puede servir piezas viejas mezcladas (el usuario vio «No se pudo cargar el simulador» el 27/10; con el enlace fijado al commit cargó bien). Propuesta: en las PR y los partes, el enlace lleva el commit completo, no el nombre de la rama.
