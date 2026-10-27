@@ -234,21 +234,21 @@ export function montarSimulador(raiz, opc = {}) {
   // VCI: las dos tablas de FATE (Manual UMI): banda de la PAD por diámetro y colapso, y el índice de colapsabilidad
   // en ventilación espontánea (el modelo respira solo); y lo que hace el modelo con su PVC
   const mm1 = (x) => Math.round(x * 10) / 10, fmm = (x) => x == null ? '—' : f1(x) + ' mm';
-  // medidas imposibles (calibres mal puestos): se avisa como «combinación no fisiológica», sin veredicto clínico
+  // la fórmula de VM sin esfuerzo divide entre el Dmín: con un Dmín casi nulo (calibres mal puestos) el índice se
+  // dispara. Control de la app, no umbral clínico: en espontánea un colapso casi total es posible y sí se calcula.
   const avisoVci = (a, b) => a && b && b < 2
-    ? ['warn', `<b>Revisa los calibres:</b> un Dmín de ${fmm(b)} no es una medida creíble de la VCI. Sin veredicto clínico.`] : null;
+    ? ['warn', `<b>Revisa los calibres:</b> con un Dmín de ${fmm(b)} esta fórmula, que divide entre el Dmín, no da un número útil. Control de la app, sin veredicto clínico.`] : null;
   function textoVci() {
     const A = guardado.dmax && mm1(guardado.dmax), B = guardado.dmin && mm1(guardado.dmin);
     if (respVci !== 'espontanea') return textoVciVm(A, B);
     let t = `Dmáx ${fmm(A)} · Dmín ${fmm(B)}`, estado = '';
     if (A && B && A > B) {
-      const col = (A - B) / A * 100, r = Math.round(col), aviso = avisoVci(A, B);
-      if (aviso) return [aviso[0], t + '<br>' + aviso[1]];
+      const col = (A - B) / A * 100, r = Math.round(col);
       const ancha = A > 21, colapsa = r > 50;
       const banda = !ancha && colapsa ? 'normal (0-5 mmHg; PAD ≈ 3)' : ancha && !colapsa ? 'alta (10-20 mmHg; PAD ≈ 15)' : 'intermedia (5-10 mmHg; PAD ≈ 8)';
       estado = !ancha && colapsa ? 'ok' : ancha && !colapsa ? 'danger' : 'warn';
       t += ` · <b>colapso ${r}%</b> = (${f1(A)}−${f1(B)})×100/${f1(A)} → banda ${banda} (FATE: diámetro &lt;2,1 / &gt;2,1 cm y colapso &gt;50 / &lt;50%)`
-        + `<br>Índice de colapsabilidad en ventilación espontánea ${r}%: ${r > 40 ? 'por encima' : 'por debajo'} del 40% con el que FATE considera al paciente respondedor a volumen.`;
+        + `<br>Índice de colapsabilidad en ventilación espontánea ${r}%: ${r > 40 ? 'supera el' : 'no supera el'} 40% con el que FATE considera al paciente respondedor a volumen.`;
     } else if (A && B) t += ' · Dmín tiene que ser menor que Dmáx.';
     const u = motor.ultimo; if (u) { const v = modeloVci(u.pvc);
       t += `<br><span class="cv-muted">En el modelo, con PVC ${f1(u.pvc)} mmHg: Dmáx ${f1(v.dmax)} mm y colapso ${Math.round(v.colapso * 100)}% (calibre ilustrativo, elegido para caer en las bandas de FATE).</span>`; }
@@ -261,9 +261,9 @@ export function montarSimulador(raiz, opc = {}) {
     let h = '<b>⚠ Retenido: con ventilación mecánica no uses el colapso solo.</b>'
       + `<br>Dmáx ${fmm(A)} · Dmín ${fmm(B)}`;
     if (A && B && A > B) {
-      const idx = sinEsf ? (A - B) * 100 / B : (A - B) * 100 / (0.5 * (A + B)), r = Math.round(idx), aviso = avisoVci(A, B);
+      const idx = sinEsf ? (A - B) * 100 / B : (A - B) * 100 / (0.5 * (A + B)), r = Math.round(idx), aviso = sinEsf ? avisoVci(A, B) : null;
       if (aviso) return [aviso[0], h + '<br>' + aviso[1]];
-      h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> = ${sinEsf ? `(${f1(A)}−${f1(B)})×100/${f1(B)}` : `(${f1(A)}−${f1(B)})×100/[0,5×(${f1(B)}+${f1(A)})]`}: ${r > corte ? 'por encima' : 'por debajo'} del ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
+      h += `<br><b>Índice de VM ${sinEsf ? 'sin esfuerzo respiratorio' : '(fórmula general)'}: ${r}%</b> = ${sinEsf ? `(${f1(A)}−${f1(B)})×100/${f1(B)}` : `(${f1(A)}−${f1(B)})×100/[0,5×(${f1(B)}+${f1(A)})]`}: ${r > corte ? 'supera el' : 'no supera el'} ${corte}% con el que el manual considera al paciente respondedor a volumen.`;
     } else if (A && B) h += '<br>Dmín tiene que ser menor que Dmáx.';
     else h += '<br>Guarda Dmáx y Dmín para calcular el índice de VM.';
     h += '<br>El &gt;40% es para ventilación espontánea; con VM el manual usa otras fórmulas y otros cortes. El manual no da bandas de PAD para VM (pág. 70): con VM, esta app no estima la PAD por la VCI.'

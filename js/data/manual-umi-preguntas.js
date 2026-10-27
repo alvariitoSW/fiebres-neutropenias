@@ -524,13 +524,13 @@ export const preguntasManualUmi = [
         id: 'umi-q068b', tema: 'umi-fate',
         enunciado: 'Encuentra el error. Paciente en VM sin esfuerzo respiratorio; VCI subcostal: Dmáx 2,0 cm y Dmín 1,7 cm. El residente calcula (2,0−1,7)/2,0 = 15 %, "no llega al 40 %: no responde a volumen". ¿Dónde está el error de su razonamiento?',
         opciones: [
-            'Usó la fórmula y el corte de espontánea: en VM sin esfuerzo da 17,6 %, bajo el 18 %',
-            'Con la fórmula general da 16 %, más del 12 %: sí responde',
+            'Usó la fórmula y el corte de espontánea: en VM sin esfuerzo da 17,6 %, no supera el 18 %',
+            'Dividió entre el Dmáx: dividiendo entre el Dmín da 17,6 %, por encima del 12 %',
             'Nada: el 40 % vale igual en VM y la cuenta es correcta',
             'Debería haber estimado la PAD con el diámetro de 2,0 cm de la tabla del FATE y haber dado 15 mmHg como resultado',
         ],
         correcta: 0,
-        explicacion: 'El >40 % es el corte de la ventilación espontánea. En VM sin esfuerzo respiratorio el manual (pág. 70) usa (Dmáx−Dmín)×100/Dmín: (2,0−1,7)×100/1,7 = 17,6 %, que toca la fila del 18 % y no la supera. Con estos diámetros las dos filas de VM dan veredictos distintos: la fórmula general, (2,0−1,7)×100/[0,5×(1,7+2,0)] = 16,2 %, supera el 12 %; pero esa fila no es la de este paciente, que no hace esfuerzo. Con la cuenta de espontánea, otros diámetros (2,0 y 1,6 cm) habrían dado 20 %, bajo el 40 %, cuando el índice de VM es 25 %, sobre el 18 %.',
+        explicacion: 'El >40 % es el corte de la ventilación espontánea. En VM sin esfuerzo respiratorio el manual (pág. 70) usa (Dmáx−Dmín)×100/Dmín: (2,0−1,7)×100/1,7 = 17,6 %, que toca la fila del 18 % y no la supera. El 12 % no se compara con la fórmula del Dmín: cada fórmula tiene su corte. Ojo: con estos diámetros la fórmula general del manual, (2,0−1,7)×100/[0,5×(1,7+2,0)] = 16,2 %, sí supera su 12 %, y el manual no dice cuál de las dos filas de VM manda cuando discrepan. Con la cuenta de espontánea, otros diámetros (2,0 y 1,6 cm) habrían dado 20 %, bajo el 40 %, cuando el índice de VM es 25 %, sobre el 18 %.',
     },
     {
         id: 'umi-q068c', tema: 'umi-fate',

@@ -375,9 +375,9 @@ function calcVciColapso() {
         box.innerHTML = '⚠️ El diámetro mínimo no puede ser mayor que el máximo. Revisa los datos.';
         return;
     }
-    if (dmin < 0.2) {
+    if (dmin < 0.2 && modoEl.value === 'vm-sin-esfuerzo') {
         box.className = 'tfg-estado tfg-estado-warn';
-        box.innerHTML = '⚠️ Revisa los calibres: un diámetro mínimo de la VCI menor de 0,2 cm no es una medida creíble.';
+        box.innerHTML = '⚠️ Revisa los calibres: con un diámetro mínimo menor de 0,2 cm esta fórmula, que divide entre el Dmín, no da un número útil (control de la app).';
         return;
     }
     const modo = modoEl.value;
