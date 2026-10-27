@@ -50,9 +50,12 @@ export const C = {
 };
 export const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'], errata: ['Errata de la fuente', 'errata'] };
 export const NOTAS = [
-  { k: 'r-tau', tipo: 'calla', txt: 'Marino no da la resistencia de la vía aérea, la constante de tiempo (τ = R·C) ni una cifra de PEEP oculta por paciente. El modelo las pone como fisiología general: R 5 cmH₂O por L/s en el pulmón normal, 20 en el broncoespasmo; y en el broncoespasmo hace la resistencia espiratoria mayor que la inspiratoria (ilustrativo), que es lo que deja el pulmón sin vaciarse.', citas: [C.defOculta] },
+  { k: 'r-tau', tipo: 'calla', txt: 'Marino no da la resistencia de la vía aérea, la constante de tiempo (τ = R·C) ni una cifra de PEEP oculta por paciente. El modelo las pone como ilustrativo: R 5 cmH₂O por L/s en el pulmón normal, 20 en el broncoespasmo (ninguna fuente de este plan da esas cifras; solo se apoya en que la presión pico suma resistencia y elastancia, cap. 27 p. 3, y en Tuxen 1987); y en el broncoespasmo hace la resistencia espiratoria mayor que la inspiratoria (ilustrativo), que es lo que deja el pulmón sin vaciarse.', citas: [C.defOculta] },
   { k: 'oclusion-insp', tipo: 'errata', txt: 'En los ajustes del cap. 27 el libro dice «medir la PEEP oculta con el método de oclusión al final de la inspiración» (p. 15); en el mismo capítulo (p. 6) y en el cap. 28 (p. 31-32) la maniobra es al final de la espiración, que es la que mide la PEEP oculta (la inspiratoria mide la meseta). La maqueta sigue la espiratoria y lo deja anotado.', citas: [C.ocultaAjuste, C.oclusion28] },
   { k: 'meseta-30', tipo: 'discrepan', txt: 'El objetivo de meseta es «≤30 cmH₂O» en el texto (cap. 24 p. 48; cap. 27 p. 4) y la Tabla 24.5 baja el Vt «hasta meseta <30». La maqueta marca en rojo por encima de 30 y muestra las dos formas.', citas: [C.protectora, C.t245] },
+  { k: 'cifras-ilu', tipo: 'calla', txt: 'Ninguna fuente da estas cifras de tope, que son ilustrativas: volumen minuto 2-20 L/min (lo más cercano: «VM alta ≥10 L/min», cap. 27 p. 14; Tuxen 1987 ventiló a 10, 16 y 26 L/min en obstrucción grave), PEEP total ≤20 (el mecanismo está en cap. 28 p. 31-33; Marini 2011 como lectura), alarma de presión 45/50 (el 50 de ARDS Network 2000 es la meseta del brazo tradicional, no un pico; la ficha quiere la meseta ≤30, cap. 27 p. 14), Ti mínimo 0,2 s (sale de Ti = VT ÷ flujo; la ficha pide I:E ≥1:2), compliance mínima 15 (la ficha dice «<25», sin suelo) y resistencia 5/20. Nota: la presión pico depende sobre todo del flujo inspiratorio y no refleja el volumen pulmonar (Tuxen 1987).', citas: [C.t271] },
+  { k: 'fr-35', tipo: 'calla', txt: 'La ficha pide no pasar de 35 respiraciones por minuto (cap. 27 p. 14, tabla 27.1). Por encima, el libro advierte de que la respiración rápida favorece la hiperinflación y la PEEP intrínseca, y eso puede bajar el gasto cardíaco (cap. 27 p. 55; lo dice a propósito de las pruebas de respiración espontánea). Tuxen 1987 (PMID 3662241): al subir la frecuencia, menos tiempo espiratorio, más hiperinflación e hipotensión.', citas: [C.t271] },
+  { k: 'apnea', tipo: 'calla', txt: 'Al detener la ventilación, la saturación cae y el CO₂ sube en minutos (Farmery 1996; Benumof 1997; Eger 1961). La velocidad depende de la oxigenación previa, el consumo de O₂, el volumen alveolar y el shunt, y es peor en obesos. El modelo no calcula gases y no da cifras por minuto: ninguna de las fuentes abiertas aquí las trae.', citas: [] },
   { k: 'peep-lineal', tipo: 'calla', txt: 'La PEEP aplicada «justo por debajo de la oculta» reduce la hiperinflación porque sostiene abiertas las vías pequeñas que se colapsan (p. 32-33). Un pulmón de un compartimento no tiene ese colapso: en esta pieza la PEEP aplicada no reduce la oculta. Va en la pieza siguiente (racimo con vías que se cierran). Y el propio libro añade que reducir la PEEP oculta con PEEP aplicada «probablemente no merece la pena» (p. 33).', citas: [C.peepAplicada, C.noMerece] },
 ];
 
@@ -76,7 +79,7 @@ export const ESTADOS = {
       { t: 'El respirador entrega el volumen marcado (500 mL) a flujo constante: la curva de flujo es un escalón de 60 L/min, y el volumen sube en línea recta.', s: ['flujo:insp', 'vol:insp'], c: C.vcv },
       { t: 'La presión en la vía aérea la decide el pulmón: sube en rampa porque cada mL que entra tensa más el tórax (Pel) y, encima, hay que empujar el aire por la vía aérea (Pres). Pico = Pres + Pel.', s: ['paw:insp'], c: C.ec271 },
       { t: 'La espiración es pasiva: el respirador abre la válvula espiratoria y el pulmón se vacía solo, con un flujo que decae hasta cero antes del siguiente ciclo. La presión cae hasta la PEEP, 5 cmH₂O.', s: ['flujo:esp', 'paw:esp', '#esc-valvula-esp'], c: C.finEsp },
-      { t: 'Con 500 mL en un tórax de compliance 60 mL/cmH₂O y 5 cmH₂O de resistencia a 1 L/s, el pico ronda 18 cmH₂O. Es un pulmón sano: Cstat de 50 a 80.', org: 'fisiología general (R y C) · ficha (Cstat 50-80)', s: ['[data-fila="pico"]', '#esc-racimo'], c: C.cstat },
+      { t: 'Con 500 mL en un tórax de compliance 60 mL/cmH₂O y 5 cmH₂O de resistencia a 1 L/s, el pico ronda 18 cmH₂O. Es un pulmón sano: Cstat de 50 a 80.', org: 'ilustrativo (R y C) · ficha, cap. 27 p. 6 (Cstat 50-80)', s: ['[data-fila="pico"]', '#esc-racimo'], c: C.cstat },
     ],
     fuentes: [C.vcv, C.fig271, C.ec271, C.finEsp, C.cstat],
   },
@@ -97,7 +100,7 @@ export const ESTADOS = {
     guia: [
       { t: 'Al final de la insuflación el respirador cierra la válvula espiratoria medio segundo (pausa o «inflation hold»): no entra ni sale aire.', s: ['#esc-valvula-esp', 'flujo:pausa'], c: C.fig272 },
       { t: 'La presión cae del pico y se queda en una meseta: sin flujo, la presión proximal se iguala con la del alvéolo. Meseta = Palv = Pel.', s: ['paw:pausa', '[data-fila="meseta"]'], c: C.meseta },
-      { t: 'Pico − meseta = la presión gastada en la resistencia de la vía aérea (Pres). Aquí ≈ 5 cmH₂O: R 5 × 1 L/s.', org: 'fisiología general (R)', s: ['paw:pico', '[data-fila="pres"]'], c: C.meseta },
+      { t: 'Pico − meseta = la presión gastada en la resistencia de la vía aérea (Pres). Aquí ≈ 5 cmH₂O: R 5 × 1 L/s.', org: 'ilustrativo (R)', s: ['paw:pico', '[data-fila="pres"]'], c: C.meseta },
       { t: 'Con la meseta ya puedes calcular la compliance estática: Vt / (meseta − PEEP total). Ojo: la PEEP se resta, y al Vt se le quita lo que se queda en la tubuladura (3 mL por cmH₂O): (500 − 25) / (13 − 5) ≈ 57 mL/cmH₂O.', s: ['[data-fila="cstat"]'], c: C.cstat },
       { t: 'Sin esa corrección saldrían 60: en un pulmón sano es poco; con una meseta de 40 se pierden 120 mL y la compliance se sobreestima.', s: ['[data-fila="cstat"]'], c: C.tubuladura },
       { t: 'La que importa para el alvéolo es la meseta, no el pico: el riesgo de rotura es insignificante si la meseta es ≤30 cmH₂O.', s: ['[data-fila="meseta"]', '#esc-racimo'], c: C.riesgo },
@@ -282,3 +285,13 @@ export const CASO = {
   vuelta: C.fig235,
   modelo: { txt: 'Ver a Eulalia bien ajustada en el modelo', estado: 'eulalia-ajustada' },
 };
+
+// Referencias de los orígenes (PMID/DOI comprobados en PubMed y Crossref, 27/10/2026)
+export const REFS = [
+  ['ARDS Network. Ventilation with lower tidal volumes as compared with traditional tidal volumes for acute lung injury and the ARDS. N Engl J Med. 2000;342(18):1301-8.', '10793162', '10.1056/NEJM200005043421801'],
+  ['Tuxen DV, Lane S. Effects of ventilatory pattern on hyperinflation, airway pressures, and circulation in mechanical ventilation of patients with severe air-flow obstruction. Am Rev Respir Dis. 1987;136(4):872-9.', '3662241', '10.1164/ajrccm/136.4.872'],
+  ['Marini JJ. Dynamic hyperinflation and auto-PEEP: lessons learned over 30 years. Am J Respir Crit Care Med. 2011;184(7):756-62.', '21700908', '10.1164/rccm.201102-0226PP'],
+  ['Farmery AD, Roe PG. A model to describe the rate of oxyhaemoglobin desaturation during apnoea. Br J Anaesth. 1996;76(2):284-91.', '8777112', '10.1093/bja/76.2.284'],
+  ['Benumof JL, Dagg R, Benumof R. Critical hemoglobin desaturation will occur before return to an unparalyzed state following 1 mg/kg intravenous succinylcholine. Anesthesiology. 1997;87(4):979-82.', '9357902', '10.1097/00000542-199710000-00034'],
+  ['Eger EI, Severinghaus JW. The rate of rise of PaCO2 in the apneic anesthetized patient. Anesthesiology. 1961;22:419-25.', '13725901', '10.1097/00000542-196105000-00013'],
+];
