@@ -122,7 +122,7 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 |---|---|---|---|
 | 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b3/cobertura.md` | hecha (≈92 %) |
 | 2 · Maquetas (parada 1) | constructor potente | `autonomo/maquetas/b3-*.html` | v1 hecha; el usuario pide subir el nivel: v2 en curso (`megaproyecto-*.md`) |
-| 3 · Modelos en la app (parada 2: el primero nuevo) | constructor potente | rama `auto/b3` | pendiente |
+| 3 · Modelos en la app (parada 2: shock, ritmo y receptor) | constructores | rama `auto/b3` | en curso (27/10) |
 | 4 · Estudio en las 26 fichas | constructor, por grupos | rama `auto/b3` | pendiente |
 | 5 · Jueces, auditor y profesor (parada 3) | — | `autonomo/bloques/b3/*.md`, una sola PR | pendiente |
 
@@ -210,3 +210,20 @@ para la consola del balón copiando el patrón. Presupuestos según REGLAS §4.7
   citas y subir la fuente a `docs/`; con fuente, se construyen en la consola.
 - **Sí a todo lo pendiente de la parada 1**: shock, corazón eléctrico y receptor **pasan a la app** (parada 2); en el
   receptor, el deslizador sigue encendido con el sello (para poder bajar la dosis); el esquema del pulmón vale.
+
+### Parada 2 (27/10/2026): shock, corazón eléctrico y receptor a la app (lo decide el director)
+
+- **Dónde viven**: en Libros, como el vaso que sangra del bloque 2 (`js/modules/libros/vaso-vivo*`, el patrón): una
+  vista por modelo con su «← VOLVER» a la ficha de origen, su nodo en la portada de Marino (pestaña Modelos vivos) y
+  su clave en `modelosVivos`: `data-shock-vivo`, `data-ritmo-vivo`, `data-receptor-vivo` (`="<estado>"`). Cada modelo
+  en su carpeta `js/modules/libros/{shock-vivo,ritmo-vivo,receptor-vivo}/` (archivos ≤700 líneas, como en la maqueta).
+  Se abren desde las fichas de Merino Cardiología con botones `.especialidad-link` (enlace cruzado).
+- **Piezas comunes**: las de `autonomo/maquetas/comun/` que usan las tres pasan a `js/core/` (una sola copia: las
+  maquetas, también la del pulmón, importan desde allí). `muestra-mayeutica.js` no: en la app, las preguntas van con
+  `js/core/mayeutica-motor.js` (`crearMayeuticaModelo`), como el capilar vivo.
+- **El soporte** (Impella, balón, ECMO) sigue dentro del shock, sobre el motor del latido real (`js/modules/eco/motor.mjs`),
+  como en la maqueta; `data-eco-soporte` queda para cuando la Circulación viva lo necesite.
+- **Receptor**: el deslizador sigue encendido con el sello (decisión del 27/10).
+- **R2**: un profesor por maqueta escribe la lista de lo que hace (`autonomo/bloques/b3/lista-<maqueta>.md`); el
+  constructor la tacha con capturas. Prueba de cada modelo en `autonomo/pruebas/<clave>.mjs` para `jueces --modelo`.
+- **Errores de temporización del balón**: siguen sin fuente; la búsqueda bibliográfica es otra tarea (no esta parada).
