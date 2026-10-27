@@ -8,6 +8,7 @@ import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, cortarPieza, valvasEnPlano } from '../ecografia.mjs';
 import { aplicarEscenario } from '../escenarios.mjs';
 import { TORAX, aEje } from '../torax.mjs';
+import { TEJIDOS } from '../../../data/eco-tejidos.js';
 
 const TAU = Math.PI * 2;
 
@@ -350,4 +351,50 @@ test('C1: dos cuerdas por festón, cada una desde el papilar de su lado (Hahn p.
       const papLado = d(al, pc) < d(pm, pc); assert.equal(papLado, lateral, `cuerda ${k}: el papilar de su lado`); lados[lateral ? 0 : 1]++; }
     assert.deepEqual(lados, [6, 6], 'seis de cada papilar');
   }
+});
+
+// ---- v2 Forma: un solo tabique interauricular (A4C) ----
+// En cada fila de profundidad del A4C donde están las dos aurículas, el borde de la AD que mira al tabique y el de la AI caen
+// en la misma línea (≤ 2,6 mm entre las dos, el ancho de la pared dibujada: las dos líneas se tocan), así que entre ellas no queda sangre ni una franja
+// negra. Se mira en la altura que comparten (desde el suelo más alto de las dos), desde 16 mm o el 30 % (debajo está el triángulo de la cruz) al 85 % y a ≥ 4 mm del techo (encima, el techo de la
+// aurícula más baja se curva), en telediástole, telesístole y cuatro instantes más, en cuatro escenarios (derrame con su saco)
+// por cada fila entera de profundidad v, el menor y el mayor u donde el contorno cortado cruza esa fila
+const filasAu = (pz, P) => { const s = cortarPieza(pz, P).seg, f = new Map();
+  for (let i = 0; i < s.length; i += 4) { const [ua, va, ub, vb] = [s[i], s[i + 1], s[i + 2], s[i + 3]];
+    for (let b = Math.ceil(Math.min(va, vb)); b <= Math.max(va, vb); b++) { const t = vb === va ? 0 : (b - va) / (vb - va), u = ua + (ub - ua) * t;
+      const e = f.get(b) || [Infinity, -Infinity]; f.set(b, [Math.min(e[0], u), Math.max(e[1], u)]); } }
+  return f; };
+for (const k of ['normal', 'derrame', 'tep', 'hemorragia']) {
+  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => {
+    const m = crearMotor(); m.correr(12); aplicarEscenario(m, k); m.correr(k === 'normal' ? 2 : 12);
+    const o = m.onda, ex = extraDeMotor(m), td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), P = planoVista('a4c', estadoGeo(td, ex));
+    let filas = 0;
+    for (let j = 0; j < 6; j++) { const s = o[Math.floor(j / 6 * o.length)];
+      const g = construirCorazon(estadoGeo(s, ex), { pericardio: true, detalle: false });
+      const ad = filasAu(g.partes.find(p => p.nombre === 'AD'), P), ai = filasAu(g.partes.find(p => p.nombre === 'AI'), P);
+      const comunes = [...ad.keys()].filter(b => ai.has(b)), v0 = Math.max(Math.min(...ad.keys()), Math.min(...ai.keys())), v1 = Math.min(Math.max(...ad.keys()), Math.max(...ai.keys()));
+      for (const b of comunes) { if (b < v0 + Math.max(16, 0.3 * (v1 - v0)) || b > v1 - Math.max(4, 0.15 * (v1 - v0))) continue; filas++;
+        const hueco = ai.get(b)[0] - ad.get(b)[1];
+        assert.ok(Math.abs(hueco) <= TEJIDOS.auricula.ancho, `t = ${s.t.toFixed(2)} s, profundidad ${b} mm: entre la pared de la AD y la de la AI hay ${hueco.toFixed(1)} mm`); }
+    }
+    assert.ok(filas >= 30, `pocas filas con las dos aurículas (${filas})`);
+  });
+}
+// Subcostal 4C: el VD ancho, pegado al hígado. Depende del plano de la vista (planoVista('sc4c') en ecografia.mjs, de la pieza
+// Imagen): con la sonda obligada a pasar por la piel bajo el xifoides, el plano corta el VD de refilón (una rendija de 3-4 mm).
+// Con un plano paralelo al A4C y la sonda llevada a él (~34 mm), el VD sale ancho y bajo el hígado. Queda pendiente de ese cambio
+test('v2 Forma · SC4C: el VD toca la cara del hígado (≤ 6 mm del diafragma) y su luz mide 20-45 mm de ancho', { todo: 'plano de la subcostal en ecografia.mjs (pieza Imagen)' }, () => {
+  const m = crearMotor(); m.correr(12); const ex = extraDeMotor(m), td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a)), e = estadoGeo(td, ex);
+  const P = planoVista('sc4c', e), g = construirCorazon(e, { detalle: false }), vd = filasAu(g.partes.find(p => p.nombre === 'VD endocardio'), P);
+  let ancho = 0; for (const [, [a, c]] of vd) ancho = Math.max(ancho, c - a);
+  const filas = [...vd.keys()], hondo = Math.max(...filas) - Math.min(...filas);
+  assert.ok(hondo >= 20 && ancho >= 20 && ancho <= 45, `VD en el SC4C: ${hondo} mm de hondo y ${ancho.toFixed(0)} de ancho`);
+});
+// TEP: el papilar cortado de refilón en el A4C de telesístole era un lazo (tubo abierto). Ahora sus dos extremos se cierran
+test('v2 Forma: los papilares del VI son tubos cerrados (radio 0 en la base y en la punta)', () => {
+  const g = construirCorazon({ vvi: 120, vvd: 140, vai: 40, vad: 35 }, { detalle: true });
+  for (const n of ['Papilar anterolateral', 'Papilar posteromedial']) { const p = g.partes.find(x => x.nombre === n).pos, N = p.length / 3, anillo = 11;
+    const radio = (i0) => { let cx = 0, cy = 0, cz = 0; for (let i = i0; i < i0 + anillo; i++) { cx += p[3 * i]; cy += p[3 * i + 1]; cz += p[3 * i + 2]; } cx /= anillo; cy /= anillo; cz /= anillo;
+      let r = 0; for (let i = i0; i < i0 + anillo; i++) r = Math.max(r, Math.hypot(p[3 * i] - cx, p[3 * i + 1] - cy, p[3 * i + 2] - cz)); return r; };
+    assert.ok(radio(0) < 0.05 && radio(N - anillo) < 0.05, `${n}: radio en la base ${radio(0).toFixed(2)}, en la punta ${radio(N - anillo).toFixed(2)}`); }
 });

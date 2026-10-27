@@ -287,7 +287,7 @@ test('papilares: nacen de la pared y siguen pegados a ella en su mitad inferior,
 test('papilares: se acortan en sístole a 0,75-0,9 de su largo de diástole y engruesan sin perder volumen (±3 %) (B4)', () => {
   for (const k of Object.keys(ESCENARIOS)) {
     const m = correr(k), { td, ts, ex } = instantes(m);
-    const dato = (s, nom) => { const an = anillos(construirCorazon(estadoGeo(s, ex), { detalle: true }).partes.find(p => p.nombre === nom)); return { L: largoPap(an), r: an[0].r }; };
+    const dato = (s, nom) => { const an = anillos(construirCorazon(estadoGeo(s, ex), { detalle: true }).partes.find(p => p.nombre === nom)); return { L: largoPap(an), r: Math.max(...an.map(a => a.r)) }; };   // v2 Forma: la base del tubo se cierra (radio 0): el radio es el del anillo más grueso
     for (const nom of NOMBRES_PAP) {
       const d = dato(td, nom), s = dato(ts, nom), razon = s.L / d.L;
       assert.ok(razon >= 0.75 && razon <= 0.9, `${k}, ${nom}: largo ${fmt(razon)} del de diástole`);

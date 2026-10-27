@@ -400,7 +400,7 @@ export function construirCorazon(estado, opciones = {}) {
   // al plano a ~1 cm sobre el plano AV (A_CRUZ, ángulo de la cúpula): debajo queda el triángulo fibroso de la cruz, entre las
   // dos paredes y la base (anatomía general). Si el suelo llegara entero al tabique, el volumen del motor dejaba las
   // aurículas bajas y anchas. Ilustrativo
-  const SUELO_CRUZ = 0, A_CRUZ = 0.5;
+  const SUELO_CRUZ = 0, A_CRUZ = 0.15;
   const ladoTab = (p) => p[0] * nTab[0] + p[1] * nTab[1];          // > RTAB: lado de la AD
   // distancia desde c al tabique en la dirección psi (Infinity si en esa dirección no se llega)
   const hastaTabique = (c0, c1, psi) => { const den = Math.cos(psi) * nTab[0] + Math.sin(psi) * nTab[1], L = (RTAB - c0 * nTab[0] - c1 * nTab[1]) / den; return L > 0 ? L : Infinity; };
@@ -411,7 +411,7 @@ export function construirCorazon(estado, opciones = {}) {
     let rr = mix(rho[k0], rho[(k0 + 1) % NR], f) * Math.pow(Math.cos(a), 0.5) * (1 + bulto * Math.sin(2 * a)) * factorPliegue(psi, a, plg) - encoger;
     const s = Math.sin(a), cx = c[0] + inclin[0] * s, cy = c[1] + inclin[1] * s;
     if (sep) { const L = hastaTabique(cx, cy, psi) - encoger;
-      if (L < Infinity) { const ws = mix(sep.w[k0], sep.w[(k0 + 1) % NR], f) * paso(0, A_CRUZ, a) * (1 - paso(0.72, 1, a / (Math.PI / 2))); rr = Math.min(mix(rr, L, ws), L); } }
+      if (L < Infinity) { const ws = mix(sep.w[k0], sep.w[(k0 + 1) % NR], f) * paso(0, A_CRUZ, a) * (1 - paso(0.86, 1, a / (Math.PI / 2))); rr = Math.min(mix(rr, L, ws), L); } }
     return [cx + rr * Math.cos(psi), cy + rr * Math.sin(psi), 0.3 + (H - encoger) * Math.pow(s, 0.85)];
   };
   // Pared septal del suelo: el tabique ocupa la cuerda del plano dentro del VI (sin la raíz aórtica). En las direcciones del
@@ -422,7 +422,7 @@ export function construirCorazon(estado, opciones = {}) {
       const dx = Math.cos(psi), dy = Math.sin(psi), hx = c[0] + L * dx, hy = c[1] + L * dy, tau = -hx * nTab[1] + hy * nTab[0];
       const t = clamp((ac[0] - c[0]) * dx + (ac[1] - c[1]) * dy, 0, L), dAo = Math.hypot(c[0] + t * dx - ac[0], c[1] + t * dy - ac[1]);
       return (1 - paso(medioTab - 2, medioTab + 4, Math.abs(tau))) * paso(rA, rA + 3, dAo); });
-    w = w.map((x, k) => Math.max(x, 0.5 * Math.max(w[(k + NR - 1) % NR], w[(k + 1) % NR])));
+    w = w.map((x, k) => Math.max(x, w[(k + NR - 1) % NR], w[(k + 1) % NR]));
     const rho = rhoCuello.map((r, k) => { const L = hastaTabique(c[0], c[1], k / NR * TAU); return L < Infinity ? Math.min(mix(r, L, SUELO_CRUZ * w[k]), L) : r; });
     return { rho, sep: { w } };
   };
@@ -495,7 +495,6 @@ export function construirCorazon(estado, opciones = {}) {
   const pliAd = clamp(estado.pliegueAd ?? 0, 0, 1);
   const { b: bAd, H: HAd } = formaAu(estado.vad, rhoAd, bajaAd, pliAd, { c: ct, inclin: incAd, sep: sepAd, rho0: cuelloAd });
   const aoAur = (x, y, z) => 0.72 + 0.28 * paso(0, 9, z);
-  if (globalThis.DBG_TAB) console.log("HAi", HAi, "bAi", bAi, "HAd", HAd, "bAd", bAd);
   anadirR('AI', conAO(cupula(mc, rhoAi, HAi, incAi, bAi, 0, 0, sepAi), aoAur), COLORES.auricula, { dobleCara: true });
   anadirR('AD', conAO(cupula(ct, rhoAd, HAd, incAd, bAd, 0, pliAd, sepAd), aoAur), COLORES.auricula, { dobleCara: true });
   // el saco no se hunde con el pliegue (el líquido llena el hueco): para su envolvente, la AD sin plegar
@@ -630,7 +629,9 @@ export function construirCorazon(estado, opciones = {}) {
     // así que largo × radio² se conserva (B4).
     const LP_SIS = 0.82, objetivo = 1 - (1 - LP_SIS) * clamp(estado.eVi ?? 0, 0, 1);
     const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
-    const DEP_PAP = 1.0, R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u);
+    // v2 Forma: la punta se cierra en el último 15 % y la base en el primer 6 %, metida en la pared (radio → 0): con la punta abierta, un corte oblicuo no cerraba y el papilar se
+    // dibujaba como un lazo en S dentro del VI (A4C del TEP en telesístole); cerrado, el corte es una mancha rellena
+    const DEP_PAP = 1.0, R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u) * Math.sqrt(Math.max(0, 1 - Math.pow(paso(0.85, 1, u), 2))) * Math.sqrt(Math.max(0, 1 - Math.pow(1 - paso(0, 0.06, u), 2)));
     // trazado del eje: pared(z) → [x, y, z] de la pared en el ángulo del papilar; viX: el VI de ese instante
     const trazarPap = (pared, zB, zT, lpX, rB) => [0, 0.2, 0.4, 0.6, 0.8, 1].map((s) => {
       const z = zB + (zT - zB) * s * lpX, W = pared(z), rW = Math.hypot(W[0], W[1]), rad = radioDe(rB);
@@ -689,16 +690,18 @@ export function construirCorazon(estado, opciones = {}) {
     const oL = ostio(-0.44), oR = ostio(1.66);
     const bifurc = enSurcoVi(0.52, 4);
     const tronCI = [oL, [oL[0] + 6, oL[1] + 3, 10], [mix(oL[0], bifurc[0], 0.6), mix(oL[1], bifurc[1], 0.6), 7], bifurc];
-    const da = [bifurc, sobreEpi(1, REF.phiA - 0.06, 3.8)]; for (let i = 1; i <= 12; i++) da.push(sobreEpi(-vi.Le * 0.92 * i / 12, REF.phiA - 0.06 - 0.12 * i / 12, 3.8));
+    const da = [bifurc, sobreEpi(1, REF.phiA - 0.06, 3.8)]; for (let i = 1; i <= 12; i++) da.push(sobreEpi(-vi.Le * 0.92 * i / 12, REF.phiA - 0.06 - 0.12 * i / 12, 2.0));
     const cx = [bifurc]; for (let i = 1; i <= 10; i++) cx.push(enSurcoVi(mix(0.52, -1.45, i / 10)));
-    const om = [enSurcoVi(-0.3)]; for (let i = 1; i <= 7; i++) om.push(sobreEpi(-vi.Le * 0.6 * i / 7, -0.3 - 0.05 * i / 7, 2.2));
+    const om = [enSurcoVi(-0.3)]; for (let i = 1; i <= 7; i++) om.push(sobreEpi(-vi.Le * 0.6 * i / 7, -0.3 - 0.05 * i / 7, 1.3));
     const cd = [oR, [oR[0] - 3, oR[1] + 7, 9]]; for (let i = 0; i <= 12; i++) cd.push(enSurcoVd(mix(1.95, REF.phiB - 0.05, i / 12)));
-    for (let i = 1; i <= 9; i++) cd.push(sobreEpi(-vi.Le * 0.72 * i / 9, REF.phiB + 0.03, 3.8));
-    const mg = [enSurcoVd(3.45)]; for (let i = 1; i <= 7; i++) mg.push(sobreEpi(-Lvd * 0.55 * i / 7, 3.45, 2.2));
-    const daGrasa = []; for (let i = 0; i <= 12; i++) daGrasa.push(sobreEpi(-vi.Le * 0.9 * i / 12, REF.phiA - 0.06 - 0.12 * i / 12, 1.0));
-    const dpGrasa = []; for (let i = 0; i <= 9; i++) dpGrasa.push(sobreEpi(-vi.Le * 0.7 * i / 9, REF.phiB + 0.03, 1.0));
-    anadirR('Grasa del surco interventricular anterior', tubo(suave(daGrasa, 3), 3.4, 8), COLORES.grasa);
-    anadirR('Grasa del surco interventricular posterior', tubo(suave(dpGrasa, 3), 3.4, 8), COLORES.grasa);
+    for (let i = 1; i <= 9; i++) cd.push(sobreEpi(-vi.Le * 0.72 * i / 9, REF.phiB + 0.03, 2.0));
+    const mg = [enSurcoVd(3.45)]; for (let i = 1; i <= 7; i++) mg.push(sobreEpi(-Lvd * 0.55 * i / 7, 3.45, 1.3));
+    const daGrasa = []; for (let i = 0; i <= 12; i++) daGrasa.push(sobreEpi(-vi.Le * 0.9 * i / 12, REF.phiA - 0.06 - 0.12 * i / 12, 0.3));
+    const dpGrasa = []; for (let i = 0; i <= 9; i++) dpGrasa.push(sobreEpi(-vi.Le * 0.7 * i / 9, REF.phiB + 0.03, 0.3));
+    // v2 Forma: las arterias y la grasa de los surcos van hundidas en el epicardio (antes, 2-4 mm por fuera y la grasa de 3,4 mm de
+    // radio): en el eje corto de los papilares salían como bultos redondos fuera del anillo del VI. Ilustrativo
+    anadirR('Grasa del surco interventricular anterior', tubo(suave(daGrasa, 3), 2.6, 8), COLORES.grasa);
+    anadirR('Grasa del surco interventricular posterior', tubo(suave(dpGrasa, 3), 2.6, 8), COLORES.grasa);
     for (const [n, p, r] of [['Tronco coronario izquierdo', tronCI, 2.2], ['Descendente anterior', da, 1.7], ['Circunfleja', cx, 1.7], ['Obtusa marginal', om, 1.2], ['Coronaria derecha', cd, 1.8], ['Marginal aguda', mg, 1.2]])
       anadirR('Coronaria · ' + n, tubo(suave(p, 3), r, 7), COLORES.coronaria);
     // Seno coronario: por el surco AV posterior hasta la AD, junto a la cava inferior
