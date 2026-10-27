@@ -345,12 +345,14 @@ El resto del tablero sigue `aparcada`.
   **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
 - **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
   `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
-- **🔴 Bandeja del Radar no funciona (diagnóstico del 27/10, noche)**: la tarea diaria se lanza **sin el repositorio
-  y sin permiso de escritura en GitHub** (su última vuelta, el 27/10 a las 15:11: «GitHub access not enabled»). Leyó
-  tus 4 tuits nuevos del issue #27 (CritCareReviews, DrSateeshPCCM, RitikaTuliMD, WithAScalpel) pero no pudo hacer
-  nada. Además `x.com` está cerrado en la red. Arreglo: crear la tarea **desde la app de Claude con el repositorio
-  elegido**, o que la dispare una sesión que sí lo tenga (el mismo truco que el aviso de `b3-paso4`). **Ojo: las
-  sesiones programadas para el 28/10 se crearon igual y pueden fallar del mismo modo.**
+- **Bandeja del Radar, arreglada el 27/10 (noche), por comprobar el 28/10**: la tarea diaria se lanzaba sin el
+  repositorio ni permiso de escritura en GitHub. Borrada; la nueva (6:42 de Canarias) dispara en una sesión que sí lo
+  tiene y abre la sesión de trabajo con el repositorio. Esperan 4 tuits del issue #27. `x.com` sigue cerrado en la red.
+- **Tareas programadas hasta el domingo** (27/10, noche, «sí a todo»), todas con ese mismo arreglo: 28/10 7:40 abre
+  `b3-paso4` (grupo 1) y `eco-calibra-a` · 29 y 30/10 7:40, el siguiente grupo y la eco si falta · 31/10 8:13,
+  `azul-cobertura`, `radio-informe` y el `b3` si falta. Los grupos del `b3` además se encadenan solos.
+  **Queda una vieja sin borrar**, `arritmias-maqueta` (28/10, 7:52): el sistema de permisos no me dejó borrarla.
+  Bórrala tú desde la app (Tareas programadas) o dime «bórrala» y lo intento otra vez.
 - **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
   pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
   de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
