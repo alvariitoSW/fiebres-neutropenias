@@ -1,7 +1,7 @@
 // Juicio rápido v3 · pulmón (M3): estados, cifras, guía por estado, mandos, Mayéutica entera, capturas, desborde.
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/b3-pulmon.html', CAP = '/tmp/plan-socialista/b3/capturas-v3/pulmon/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/b3-pulmon.html`, CAP = '/tmp/plan-socialista/b3/capturas-v3/pulmon/';
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: ALTO }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
@@ -9,7 +9,7 @@ const page = await ctx.newPage();
 page.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()); }); page.on('pageerror', (e) => errores.push('pageerror: ' + e.message));
 const desb = async (t) => { const d = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `desborde ${d} px en ${t}`); };
 const cap = (n) => page.screenshot({ path: `${CAP}${n}-${ANCHO}.png` });
-const tap = async (sel) => { const el = page.locator(sel).first(); await el.scrollIntoViewIfNeeded(); await el.tap(); await page.waitForTimeout(150); };
+const tap = async (sel) => { const el = page.locator(sel).first(); await el.evaluate((n) => n.scrollIntoView({ block: 'center', behavior: 'instant' })); await el.tap(); await page.waitForTimeout(150); };
 const cifras = () => page.evaluate(() => { const g = (k) => document.querySelector(`[data-fila="${k}"]`)?.textContent.replace(/\s+/g, ' ').trim(); return ['pico', 'flujofin', 'vt', 'meseta', 'pres', 'peeptot', 'cstat', 'dp', 'vtkg', 'vm', 'ie'].map(g).join(' | ') + ' || ' + document.getElementById('consola').textContent.trim().slice(0, 80); });
 const frase = () => page.evaluate(() => document.getElementById('frase-txt').textContent.replace(/\s+/g, ' ').slice(0, 220) + ' ## ' + document.getElementById('ficha-pac').textContent);
 const mando = async (k, v) => { await page.evaluate(([k, v]) => { const i = document.querySelector(`input[data-m="${k}"]`); if (!i) return; i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); }, [k, v]); await page.waitForTimeout(2600); };

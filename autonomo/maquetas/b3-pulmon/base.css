@@ -10,7 +10,7 @@
   --dock-h: 190px;
 }
 * { box-sizing: border-box; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-bottom: calc(var(--dock-h) + 8px); }
 body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 16px/1.45 var(--serif);
   padding: 6px max(10px, env(safe-area-inset-right, 0px)) calc(var(--dock-h) + 14px) max(10px, env(safe-area-inset-left, 0px)); }
 main { max-width: 560px; margin: 0 auto; display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }

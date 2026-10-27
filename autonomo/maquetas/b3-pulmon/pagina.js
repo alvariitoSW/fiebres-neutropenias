@@ -49,6 +49,7 @@ let tSim = 0, tProx = 0, L = null;
 
 const pacDe = (k) => D.PACIENTES.find((p) => p.k === k);
 const PBW = () => pbw(est.pac.talla, est.pac.sexo);
+const NOMBRE_MANDO = { vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo' };
 
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
@@ -122,9 +123,9 @@ function pintarCifrasTodo() {
     celda('vm', 'Vol. minuto', f1(l.vm), 'L/min'),
     celda('ie', 'I:E', l.ie != null ? `1:${f1(l.ie)}` : '—', l.cabe === false ? `no cabe la esp. · FR real ${f0(l.frReal)}` : 'objetivo ≥ 1:2', l.ie != null && l.ie < 2 ? 'no' : ''),
   ].join('');
-  $('consola').hidden = !(l.alarmaPresion || l.cabe === false);
-  $('consola').innerHTML = (l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Combinación no fisiológica: baja el flujo, el Vt o la resistencia.</span>`
-    : l.cabe === false ? `<span class="consola-aviso">Combinación no fisiológica: con este Vt, flujo y frecuencia no cabe la espiración en el ciclo.</span>` : '');
+  $('consola').hidden = !l.alarmaPresion;
+  $('consola').innerHTML = (l.alarmaPresion ? `<span class="consola-aviso">Alarma de presión (${r.pmax ?? 40} cmH₂O): el respirador corta la insuflación y el Vt no llega entero. Baja el flujo, el Vt o la resistencia.</span>`
+    : '');
 }
 function pintarFrase() {
   const E = D.ESTADOS[est.clave];
@@ -193,7 +194,7 @@ function pintarMandos() {
 // El tope duro: si el cambio lleva a un estado que un paciente no aguanta (Vt > 12 mL/kg PBW, VM > 20 L/min), el mando
 // se queda donde estaba y sale el sello. Si el cambio es válido, el sello se quita.
 function guardarTope(k, antes) {
-  const l = estable(P.S.resp, P.S.pulmon), t = pasaDeTope(l, PBW());
+  const l = estable(P.S.resp, P.S.pulmon), t = pasaDeTope(l, PBW(), NOMBRE_MANDO[k] || k);
   if (!t) { topeMando = null; return; }
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: antes }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: antes });
   topeMando = t;
@@ -309,3 +310,5 @@ $('modo-may').addEventListener('click', () => ponerModo('may'));
 mon.montar(); ponerEstado('normal-vcv');
 addEventListener('resize', () => { mon.montar(); llenarMonitor(); pintarTodo(); });
 if (!REDUCIR) requestAnimationFrame(bucle);
+// El dock cambia de alto (mandos, guía): el hueco de abajo y el scroll-padding siguen su alto real para que ningún botón quede tapado.
+if (window.ResizeObserver && $('dock')) new ResizeObserver(() => document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px')).observe($('dock'));

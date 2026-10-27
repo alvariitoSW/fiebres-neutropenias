@@ -7,20 +7,20 @@ import * as D from './datos.js';
 const { C } = D;
 const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 
-export const T = { vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50 };
+export const T = { vmAviso: 16, vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50 };
 const ORG_VT = 'ficha · Tabla 27.1 (cap. 27 p. 14) y cap. 23 p. 29';
-const ORG_12 = 'ficha · Tabla 27.1 (cap. 27 p. 14) · el 12 mL/kg: fisiología general';
+const ORG_12 = 'ficha · tradicional 12-15 mL/kg y normal 6-7 (cap. 24 p. 46) · el tope de 12: ilustrativo';
 
 // Estado estable de unos ajustes (sin maniobras): para decidir si un cambio de mando se acepta.
 export function estable(resp, pulmon) {
   return simular(resp, { ...pulmon, rEsp: pulmon.rEsp ?? pulmon.r }, {}, { ciclos: 10, ventana: 0.01 }).lectura;
 }
 // ¿Pasa el tope duro? (el mando que lo rompe se queda donde estaba). Devuelve null o el tope que se pasa.
-export function pasaDeTope(l, kg) {
+export function pasaDeTope(l, kg, mando = 'el último') {
   if (!l) return null;
   const kgVt = l.vtExh / kg;
-  if (kgVt > T.vtkgMax) return { titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal (${Math.round(l.vtExh)} mL): un pulmón no tolera tanto. El mando se queda donde estaba.`, cita: C.t271, origen: ORG_12 };
-  if (l.vm > T.vmMax) return { titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene. El mando se queda donde estaba.`, cita: C.t271, origen: 'fisiología general' };
+  if (kgVt > T.vtkgMax) return { titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal (${Math.round(l.vtExh)} mL): más del doble del volumen normal (6-7); el daño por volumen se explica en el SDRA. Mando «${mando}»: se queda donde estaba.`, cita: C.vtTrad, origen: ORG_12 };
+  if (l.vm > T.vmMax) return { titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene. Mando «${mando}»: se queda donde estaba.`, cita: C.t271, origen: 'fisiología general' };
   return null;
 }
 
@@ -35,13 +35,16 @@ export function calcularTopes(S, l, kg) {
   if (l.meseta != null && l.meseta > T.meseta) out.meseta = { nivel: 'aviso', titulo: 'Meseta alta', texto: `Meseta ${f1(l.meseta)} cmH₂O: por encima de 30 hay riesgo de rotura alveolar.`, cita: C.riesgo, origen: 'ficha · cap. 27 p. 4; cap. 24 p. 48' };
   // 3) alarma de presión alta
   if ((r.pmax ?? 40) >= T.pmaxAviso) out.pmax = { nivel: 'aviso', titulo: 'Alarma muy alta', texto: `Con la alarma en ${r.pmax} cmH₂O deja pasar presiones que la ficha no acepta: quiere la meseta ≤30.`, cita: C.riesgo, origen: 'ilustrativo · el 30: ficha, cap. 27 p. 4' };
+  // 3b) acercándose al tope de volumen minuto (80 % de 20 L/min) y espiración que no cabe (I:E ≥ 1:2)
+  if (l.vm != null && l.vm >= T.vmAviso && l.vm <= T.vmMax) out.vm = { nivel: 'aviso', titulo: 'Volumen minuto muy alto', texto: `${f1(l.vm)} L/min: cerca del tope de ${T.vmMax}; por encima casi nadie lo mantiene.`, cita: C.t271, origen: 'fisiología general · el 80 % del tope (16): ilustrativo' };
+  if (l.cabe === false) out.cabe = { nivel: 'aviso', titulo: 'No cabe la espiración', texto: `Con este Vt, flujo y frecuencia la espiración no cabe en el ciclo (FR real ${f1(l.frReal)}): el pulmón no se vacía.`, cita: C.flujoIE, origen: 'ficha · I:E ≥ 1:2, cap. 27 p. 14' };
   // 4) los sellos: uno solo a la vez (el más grave); los demás bajan a aviso
   const sellos = [];
   if (l.vm != null && l.vm < T.vmMin) sellos.push({ k: 'sinvent', titulo: 'Sin ventilación eficaz', texto: `Vt ${f1(l.vtExh)} mL y volumen minuto ${f1(l.vm)} L/min: el paciente no se ventila y el CO₂ sube. Baja la resistencia o sube la alarma de presión.`, cita: C.t245, origen: 'fisiología general (la ficha no da un mínimo de VM)' });
   if (l.vm != null && l.vm > T.vmMax) sellos.push({ k: 'vmalto', titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene.`, cita: C.t271, origen: 'fisiología general' });
-  if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: un pulmón sano no tolera tanto y se rompe.`, cita: C.t271, origen: ORG_12 });
+  if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: más del doble del volumen normal (6-7); el daño por volumen se explica en el SDRA.`, cita: C.vtTrad, origen: ORG_12 });
   const pt = l.palvFinEsp;
-  if (pt != null && pt > T.peepTotMax && pt - r.peep >= 2) sellos.push({ k: 'hiper', titulo: 'Hiperinflación', texto: `PEEP total ${f1(pt)} cmH₂O (${f1(pt - r.peep)} de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.`, cita: C.vppConsec, origen: 'ficha · cap. 23 p. 28; cap. 28 p. 31 · el 20: fisiología general' });
+  if (pt != null && pt > T.peepTotMax && pt - r.peep >= 2) sellos.push({ k: 'hiper', titulo: 'Hiperinflación', texto: `PEEP total ${f1(pt)} cmH₂O (${f1(pt - r.peep)} de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.`, cita: C.vppConsec, origen: 'ficha · cap. 23 p. 28; cap. 28 p. 31 · el 20 y la oculta ≥ 2: fisiología general' });
   const [s1, ...resto] = sellos;
   if (s1) out.sello = { nivel: 'sello', titulo: s1.titulo, texto: s1.texto, cita: s1.cita, origen: s1.origen };
   resto.forEach((s, i) => { out['sello' + (i + 2)] = { nivel: 'aviso', titulo: s.titulo, texto: s.texto, cita: s.cita, origen: s.origen }; });
