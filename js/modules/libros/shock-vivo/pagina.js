@@ -21,6 +21,26 @@ const IMG = 'js/modules/cardiologia/img/';
 instalarIso(); instalarMonitor();
 export const pagTxt = (p) => /[-,]/.test(String(p)) ? `pp. ${p}` : `p. ${p}`;
 
+// Repinta un contenedor SIN rehacer lo que no cambia: los botones y mandos siguen siendo los mismos nodos (el foco, el
+// toque en curso y los marcadores de las pruebas no se pierden). Si la forma cambia, se reemplaza esa parte.
+function parchear(dest, html) {
+  const nuevo = document.createElement('div'); nuevo.innerHTML = html;
+  const igual = (a, b) => {
+    if (a.nodeType !== b.nodeType) return false;
+    if (a.nodeType !== 1) { if (a.nodeValue !== b.nodeValue) a.nodeValue = b.nodeValue; return true; }
+    if (a.tagName !== b.tagName || a.childNodes.length !== b.childNodes.length) return false;
+    for (const at of [...a.attributes]) if (!b.hasAttribute(at.name) && !at.name.startsWith('data-j')) a.removeAttribute(at.name);
+    for (const at of [...b.attributes]) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+    if (a.tagName === 'INPUT' && a.value !== b.getAttribute('value')) a.value = b.getAttribute('value');
+    const hijos = [...a.childNodes];
+    [...b.childNodes].forEach((x, i) => { if (!igual(hijos[i], x)) a.replaceChild(x.cloneNode(true), hijos[i]); });
+    return true;
+  };
+  const a = [...dest.childNodes], b = [...nuevo.childNodes];
+  if (a.length !== b.length) { dest.innerHTML = html; return; }
+  b.forEach((x, i) => { if (!igual(a[i], x)) dest.replaceChild(x.cloneNode(true), a[i]); });
+}
+
 export function montarShock(raiz) {
 const $ = (id) => document.getElementById('shv-' + id);
 
@@ -143,20 +163,20 @@ function pintarCifras() {
   }), { tapado: tap });
   const T = D.OBJETIVOS[tablaActual()];
   $('calc').hidden = est.canales === 'cabecera';
-  $('calc').innerHTML = CALC.map((p) => {
+  parchear($('calc'), CALC.map((p) => {
     const v = R[p.k], m = tap ? { cls: '', html: '' } : marca(p.k, v);
     const et = p.k === 'ven' ? T.venosa : p.et;
     let t = T.filas[p.k] ? 'obj. ' + T.filas[p.k][0] : 'sin objetivo en esta tabla';
     if (p.k === 'ven' && tablaActual() === 'umi-sepsis-6h') t = 'obj. ≥70 % · Marino >50 % ⚖';
     if (p.k === 'ic' && conSoporte()) t = 'total: bomba + corazón';
     return `<button type="button" class="celda ${m.cls}" data-fila="${p.k}" title="${t}"><span class="k"><span>${et}</span>${m.html}</span><span class="g">${tap ? '?' : coma(v, p.d || 0)}<small>${p.u}</small></span><span class="t">${t}</span></button>`;
-  }).join('');
+  }).join(''));
   // las fuentes que discrepan, a la vista (no solo en las notas)
   const dis = $('discrepa');
   dis.hidden = tap || tablaActual() !== 'umi-sepsis-6h';
   if (!dis.hidden) dis.innerHTML = `<span class="nota-tipo">Las fuentes discrepan</span><span>ScvO₂ ≥70 % (Manual UMI) frente a >50 % (Marino); PAM ≥65-70 frente a ≥65. El monitor no elige.</span><button type="button" class="chip-b" data-nota="scvo2-fuentes">Ver la nota</button>`;
   remarcar();
-  $('mon-quien').textContent = est.modo === 'qs' ? 'Monitor · paciente sin nombre' : `Monitor · ${est.pac.nombre} · ${horaTxt()}`;
+  $('mon-quien').textContent = est.modo === 'qs' ? 'Paciente sin nombre' : `${est.pac.nombre} · ${horaTxt()}`;
 }
 const horaTxt = () => est.horas === 0 ? 'ahora' : est.horas >= 24 ? `+${Math.floor(est.horas / 24)} d ${est.horas % 24 ? (est.horas % 24) + ' h' : ''}`.trim() : `+${est.horas} h`;
 function pintarConsola() {
@@ -343,7 +363,7 @@ function pintarDock() {
   } else {
     h.push(`<div class="rejilla" style="--n:3">${[[1, '+1 hora'], [5, '+5 horas'], [18, '+18 horas']].map(([n, tx]) => `<button type="button"${est.horas + n > D.TOPES.horas ? ' disabled class="tog tope-apagado"' : ' class="tog"'} data-h="${n}">${tx}</button>`).join('')}</div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
   }
-  $('dock-panel').innerHTML = h.join('');
+  parchear($('dock-panel'), h.join(''));
   aplicarTopes(true);
   const dg = $('d-grav');
   if (dg) { dg.oninput = () => { est.g = +dg.value / 100; const [a, b] = D.GRAVEDAD[t].texto(est.g, p); $('o-grav').innerHTML = `${a}<small>${b}</small>`; }; dg.onchange = () => { trabajar(() => reconstruir()); }; }
@@ -359,7 +379,7 @@ function pintarMandos() {
   }
   if (ok && ap === 'ecmo') h.push(`<div class="deslizador"><input type="range" id="shv-d-ecmo" min="10" max="60" step="1" value="${Math.round(aj.ecmo * 10)}" aria-label="Flujo del ECMO"><output>${coma(aj.ecmo, 1)} L/min<small>hasta 5-6 (p. 48)</small></output></div><div class="seg" role="group" aria-label="Venteo del VI">${[['no', 'Sin venteo'], ['balon', 'Balón'], ['impella', 'Impella'], ['drenaje', 'Drenaje']].map(([k, n]) => `<button type="button" data-vent="${k}" aria-pressed="${aj.venteo === k}">${n}</button>`).join('')}</div><p class="dock-nota">Venteo: un balón o un Impella a la vez, o drenar el VI (p. 48-49). Por dónde se drena, la fuente no lo dice.</p>`);
   if (ok && ap === 'balon') h.push(`<div class="seg" role="group" aria-label="Volumen del balón">${[35, 40].map((v) => `<button type="button" data-bal="${v}" aria-pressed="${aj.balon === v}">${v} mL<small>de helio (p. 45)</small></button>`).join('')}</div>`);
-  $('mandos').innerHTML = h.length ? `<div class="formato" style="gap:5px"><span class="tipo">Los mandos del aparato</span>${h.join('')}</div>` : '';
+  parchear($('mandos'), h.length ? `<div class="formato" style="gap:5px"><span class="tipo">Los mandos del aparato</span>${h.join('')}</div>` : '');
   const di = $('d-imp'); if (di) di.onchange = () => trabajar(() => cab.ajustar({ impella: +di.value / 10 }));
   const de = $('d-ecmo'); if (de) de.onchange = () => trabajar(() => cab.ajustar({ ecmo: +de.value / 10 }));
 }
@@ -413,10 +433,26 @@ function aplicarTopes(forzar) {
   }
 }
 function medirDock() { dock.medir(); }
+// La figura sigue a la vista al tocar un mando (REGLAS §4.8 R1): si menos de la mitad de la escena se ve sobre el dock, se
+// sube o se baja la página lo justo para verla entera.
+function verEscena(forzar) {
+  if (guia && !forzar) return;
+  if (est.modo !== 'explorar') return;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const e = $('escena'), r = e.getBoundingClientRect(), tope = $('dock').getBoundingClientRect().top;
+    if (!r.height || raiz.getClientRects().length === 0) return;
+    const ve = Math.max(0, Math.min(r.bottom, tope) - Math.max(r.top, 0)) / r.height;
+    if (ve >= 0.6) return;
+    scrollBy({ top: r.top < 0 ? r.top - 8 : r.bottom - tope + 8, behavior: 'instant' });
+  }));
+}
+$('dock').addEventListener('click', () => verEscena());
+$('pacientes').addEventListener('click', () => verEscena());
+$('mandos').addEventListener('click', () => verEscena());
 
 // ---------------------------------------------------------------- pacientes (Explorar)
 function pintarPacientes() {
-  $('pacientes').innerHTML = D.PACIENTES.map((p) => `<button type="button" data-pac="${p.k}" aria-pressed="${est.pac === p}">${p.nombre}<small>${p.chip}</small></button>`).join('');
+  parchear($('pacientes'), D.PACIENTES.map((p) => `<button type="button" data-pac="${p.k}" aria-pressed="${est.pac === p}">${p.nombre}<small>${p.chip}</small></button>`).join(''));
   const G = D.GRAVEDAD[est.pac.tipo];
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
 }
@@ -431,12 +467,12 @@ $('pacientes').addEventListener('click', (ev) => {
 let guia = null, gi = 0;
 function abrirGuia(E, alSalir) {
   guia = { E, alSalir }; gi = 0;
-  $('dock-explorar').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false;
+  $('dock-tabs').hidden = true; $('dock-panel').hidden = true; $('btn-guia').hidden = true; $('dock-est').hidden = true; $('dock-guia').hidden = false;   // la frase viva se queda a la vista
   dock.plegar(false); dock.asa.hidden = true; pintarGuia();
 }
 function cerrarGuia() {
   borrarSenal(); const f = guia?.alSalir; guia = null; $('dock-guia').hidden = true;
-  if (est.modo === 'explorar') $('dock-explorar').hidden = false;
+  $('dock-tabs').hidden = false; $('dock-panel').hidden = false; $('btn-guia').hidden = false; if (est.modo === 'explorar') $('dock-explorar').hidden = false;
   dock.asa.hidden = est.modo !== 'explorar'; medirDock(); f?.();
 }
 function pintarGuia() {
@@ -447,7 +483,7 @@ function pintarGuia() {
     <div class="guia-nav"><button type="button" class="guia-b" id="shv-guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${E.guia.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="shv-guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
   $('guia-x').onclick = cerrarGuia; $('guia-ant').onclick = () => { gi--; pintarGuia(); };
   $('guia-sig').onclick = () => { if (gi === n - 1) cerrarGuia(); else { gi++; pintarGuia(); } };
-  medirDock(); requestAnimationFrame(() => senalar(p.s));
+  medirDock(); requestAnimationFrame(() => senalar(p.s)); if (gi === 0) verEscena(true);
 }
 let senalActual = null;
 function borrarSenal() { senalActual = null; raiz.querySelectorAll('.guia-anillo').forEach((e) => e.remove()); raiz.querySelectorAll('.guia-marco').forEach((e) => e.classList.remove('guia-marco')); }

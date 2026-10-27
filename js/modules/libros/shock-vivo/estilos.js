@@ -13,7 +13,7 @@ export const SHV_CSS = `
 .shv-raiz p { margin: 0; }
 .shv-raiz button { font-family: inherit; }
 .shv-raiz h2 { font-size: 1.04rem; margin: 0 0 4px; color: var(--accent-yellow); font-weight: normal; }
-.shv-raiz .org { font: .66rem/1.25 var(--sans); color: var(--text-muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
+.shv-raiz .org { font: .66rem/1.25 var(--sans); color: var(--text-muted); border: 1px solid var(--line); border-radius: 10px; padding: 0 6px; white-space: normal; }
 .shv-raiz .org.ilu { border-style: dashed; }
 .shv-raiz .hl-azul, .shv-raiz .hl-verde, .shv-raiz .hl-rojo { padding: 0 2px; border-radius: 2px; font-weight: 600; }
 .shv-raiz .hl-azul { background: linear-gradient(to bottom, transparent 58%, color-mix(in srgb, var(--accent-blue) 32%, transparent) 58%); color: var(--accent-blue); }
@@ -29,7 +29,7 @@ export const SHV_CSS = `
 .shv-raiz .pacientes button small { display: block; font-weight: 400; font-size: .62rem; color: var(--text-muted); }
 .shv-raiz .pacientes button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
 .shv-raiz .pacientes button[aria-pressed="true"] small { color: var(--bg-main); }
-.shv-raiz .ficha-pac { font: .72rem/1.3 var(--sans); color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.shv-raiz .ficha-pac { font: .72rem/1.3 var(--sans); color: var(--text-dim); }
 .shv-raiz .ficha-pac b { color: var(--text-main); }
 /* El monitor: la pieza común (js/core/monitor.js pone su CSS). Aquí, solo lo propio de la cabecera del shock */
 .shv-raiz .mon-cab { overflow: hidden; justify-content: flex-start; gap: 5px; text-transform: none; letter-spacing: .03em; }
@@ -86,7 +86,7 @@ export const SHV_CSS = `
 .shv-raiz .lab .celda { cursor: default; }
 .shv-raiz .tendencia { width: 100%; height: 64px; display: block; }
 .shv-raiz .tend-l { fill: none; stroke-width: 1.4; }
-.shv-raiz .tend-t { font: 9.5px var(--sans); fill: var(--text-muted); }
+.shv-raiz .tend-t { font: 10.5px var(--sans); fill: var(--text-muted); }
 .shv-raiz ul.lista { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .8rem/1.45 var(--sans); color: var(--text-dim); }
 .shv-raiz ul.lista li { border-left: 2px solid var(--line); padding-left: 8px; min-width: 0; overflow-wrap: anywhere; display: grid; gap: 2px; }
 .shv-raiz .nota { border-left: 3px solid var(--accent-purple); background: var(--bg-card); border-radius: 0 10px 10px 0; padding: 7px 9px; font: .78rem/1.45 var(--sans); color: var(--text-dim); display: grid; gap: 3px; }
@@ -250,7 +250,7 @@ export const SHV_CSS = `
 .shv-raiz .escena-aparato .cav.ven { fill: color-mix(in srgb, var(--accent-purple) 26%, var(--bg-main)); }
 .shv-raiz .escena-aparato .tabique { fill: none; stroke: var(--text-main); stroke-width: 1.2; }
 .shv-raiz .escena-aparato .valva { fill: none; stroke: var(--text-main); stroke-width: 1.3; stroke-linecap: round; }
-.shv-raiz .escena-aparato .rot-g { font: 600 9px system-ui, sans-serif; fill: var(--text-dim); }
+.shv-raiz .escena-aparato .rot-g { font: 600 10.5px system-ui, sans-serif; fill: var(--text-dim); }
 .shv-raiz .escena-aparato .rot-g.dim { fill: var(--text-muted); font-weight: 400; }
 .shv-raiz .escena-aparato .lupa-aro { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: 1; }
 .shv-raiz .escena-aparato .art-pared { fill: color-mix(in srgb, var(--accent-red) 30%, var(--bg-main)); stroke: var(--text-dim); stroke-width: .6; }
@@ -301,5 +301,7 @@ export const SHV_CSS = `
 .shv-raiz .escena-aparato .lupa-linea { fill: none; stroke: var(--text-muted); stroke-width: .7; stroke-dasharray: 1.6 2; }
 .shv-raiz .escena-aparato .lupa-marca { fill: none; stroke: var(--text-muted); stroke-width: .7; }
 .shv-raiz .escena-aparato .lupa-fondo { fill: var(--bg-main); }
-
+.shv-raiz #shv-esc-svg .cc-rot { font-size: 11px; }
+.shv-raiz .mon-cab .quien { white-space: normal; }
+.shv-raiz .tope-sello .cita button { white-space: normal; overflow: visible; text-overflow: clip; text-align: center; }
 `;
