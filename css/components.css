@@ -4072,7 +4072,7 @@ button.cvh-org { color: var(--accent-yellow); cursor: pointer; }
 .mur-raiz #mur-dock-explorar { display: grid; gap: 4px; }
 .mur-raiz #mur-dock-explorar[hidden] { display: none; }
 .mur-raiz .mur-frase { font: .84rem/1.3 var(--mur-serif); color: var(--text-main); border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; margin: 0; cursor: pointer;
-  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+  min-height: 2.6em; }
 .mur-raiz .mur-frase.mur-abierta { display: block; max-height: 40vh; overflow-y: auto; }
 .mur-raiz .mur-frase .mur-org { font-size: .6rem; }
 .mur-raiz .mur-dock-tabs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; }
