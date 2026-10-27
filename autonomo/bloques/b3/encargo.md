@@ -122,7 +122,7 @@ Objetivo M5 del tablero. Empieza el 21/10/2026, con los bloques 1 y 2 en main. A
 |---|---|---|---|
 | 1 · Cobertura | profesor (modo cobertura) | `autonomo/bloques/b3/cobertura.md` | hecha (≈92 %) |
 | 2 · Maquetas (parada 1) | constructor potente | `autonomo/maquetas/b3-*.html` | v1 hecha; el usuario pide subir el nivel: v2 en curso (`megaproyecto-*.md`) |
-| 3 · Modelos en la app (parada 2: shock, ritmo y receptor) | constructores | rama `auto/b3` | en curso (27/10) |
+| 3 · Modelos en la app (parada 2: shock, ritmo y receptor) | constructores | rama `auto/b3` | hecho (27/10, PR #35) |
 | 4 · Estudio en las 26 fichas | constructor, por grupos | rama `auto/b3` | pendiente |
 | 5 · Jueces, auditor y profesor (parada 3) | — | `autonomo/bloques/b3/*.md`, una sola PR | pendiente |
 
