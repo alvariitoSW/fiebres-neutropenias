@@ -35,7 +35,7 @@ let tCambio = 0, tLupa = 0, lupaPrevia = null;
 
 // Rótulo con halo del color del fondo (se lee sobre la trama). Nunca por debajo de 7,6 de cuerpo.
 function tx(x, y, t, { s = 8.2, c = 'text-dim', a = 'start', it = true, b = false, id = '' } = {}) {
-    s = Math.max(7.6, s);
+    s = Math.max(9.3, s);
     return `<text${id ? ` id="vso-${id}"` : ''} x="${n2(x)}" y="${n2(y)}" font-size="${s}" text-anchor="${a}" style="fill:var(--${c});font-family:${it ? 'Georgia,serif;font-style:italic' : 'system-ui,sans-serif'}${b ? ';font-weight:700' : ''};paint-order:stroke;stroke:var(--bg-main);stroke-width:2.6;stroke-linejoin:round">${t}</text>`;
 }
 const DEFS = `<defs>

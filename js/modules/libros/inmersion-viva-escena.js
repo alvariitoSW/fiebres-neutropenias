@@ -43,7 +43,7 @@ const VENT = [304, 27];                // entrada del ventilador
 const MED = [311, 198, 38];            // el medallón de la cara
 // Texto de la lámina: s (tamaño, nunca por debajo de LETRA_MIN), a (anclaje), c (color), i (cursiva), b (negrita), sans
 // Ningún rótulo por debajo de 8,3: a 390 px la lámina se ve al ~91-97 % y así no baja de 7,5 px.
-const LETRA_MIN = 8.3;
+const LETRA_MIN = 9.3;
 const T = (x, y, t, o = {}) => `<text x="${x}" y="${y}"${o.a ? ` text-anchor="${o.a}"` : ''} style="font-size:${Math.max(o.s || 7.5, LETRA_MIN)}px;fill:var(${o.c || '--text-dim'});${o.i ? 'font-style:italic;' : ''}${o.b ? 'font-weight:700;' : ''}${o.sans ? 'font-family:var(--inm-sans);' : 'font-family:var(--inm-serif);'}"${o.id ? ` id="inm-${o.id}"` : ''}>${t}</text>`;
 
 const ESQUELETO = `<defs>

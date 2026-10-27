@@ -24,7 +24,7 @@ const SVGNS = 'http://www.w3.org/2000/svg';
 const P = (clave, x, y, r, { rot, ...opc } = {}) => rot ? `<g transform="translate(${n2(x)} ${n2(y)}) rotate(${rot})">${svgParticula(clave, 0, 0, r, opc)}</g>` : svgParticula(clave, x, y, r, opc);
 // Un rótulo de la lámina: nunca por debajo de 8 px. `plato`: fondo para que se lea sobre lo que se mueve.
 const T = (x, y, txt, { s = 8, c = 'text-muted', a = 'start', i = true, w = '', id = '', plato = false } = {}) => {
-    const fs = Math.max(8, s);
+    const fs = Math.max(9.3, s);
     const tt = `<text${id ? ` id="tel-${id}"` : ''} x="${n2(x)}" y="${n2(y)}" font-size="${fs}" text-anchor="${a}" style="fill:var(--${c});font-family:Georgia,serif${i ? ';font-style:italic' : ''}${w ? ';font-weight:' + w : ''}">${txt}</text>`;
     if (!plato) return tt;
     const ancho = String(txt).replace(/<[^>]+>/g, '').length * fs * 0.5 + 6, x0 = a === 'end' ? x - ancho + 3 : a === 'middle' ? x - ancho / 2 : x - 3;
@@ -117,7 +117,7 @@ function construirLamina() {
     ${T(76, 9, '↑ cava', { c: 'text-dim' })}
     ${T(4, 326, 'pierna, de lado', { c: 'text-muted' })}
     ${T(72, 46, 'femoral', { c: 'accent-purple', w: 600 })}
-    <text id="tel-rot-arteria" x="52" y="46" font-size="8" text-anchor="end" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic">arteria</text>
+    <text id="tel-rot-arteria" x="52" y="46" font-size="9.3" text-anchor="end" style="fill:var(--accent-red);font-family:Georgia,serif;font-style:italic">arteria</text>
   </g>
   <path d="M${VALV[0] + 4} ${VALV[1] - 4} L${n2(p1[0])} ${n2(p1[1])} M${VALV[0] + 4} ${VALV[1] + 4} L${n2(p2[0])} ${n2(p2[1])}" style="stroke:var(--accent-blue)" stroke-width=".7" stroke-dasharray="3 2" opacity=".75"/>
   <circle cx="${VALV[0]}" cy="${VALV[1]}" r="7" style="fill:none;stroke:var(--accent-blue)" stroke-width="1.2"/>
@@ -368,7 +368,7 @@ function pintarFarmaco() {
 }
 function etiq(x, y, num, uni) {
     const w = Math.max(num.length * 5.2 + 5, 30);
-    return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9.5" width="${n2(w)}" height="22" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${T(1.5, 0, num, { c: 'accent-yellow', i: false, w: 700 })}<text x="1.5" y="9.5" font-size="8" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`;
+    return `<g transform="translate(${x} ${y})"><rect x="-1" y="-9.5" width="${n2(w)}" height="22" rx="3" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/>${T(1.5, 0, num, { c: 'accent-yellow', i: false, w: 700 })}<text x="1.5" y="9.5" font-size="9.3" style="fill:var(--text-dim);font-family:system-ui,sans-serif">${uni}</text></g>`;
 }
 function pintarMangas() {
     const e = estado;
@@ -462,7 +462,7 @@ function pintarReloj() {
     $('reloj-neutros').setAttribute('display', oc ? 'inline' : 'none');
     $('reloj-luces').innerHTML = ORDEN_NEURO.map(k => {
         const [lx, ly] = ptH(h, RELOJ.radios[k]), ok = D.reloj[k], c = oc ? '--text-muted' : ok ? '--accent-green' : '--accent-red';
-        return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${c})" stroke-width="1.6"/><text y="3" font-size="8" text-anchor="middle" style="fill:var(${c});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`;
+        return `<g transform="translate(${n2(lx)} ${n2(ly)})"><circle r="5.6" style="fill:var(--bg-main);stroke:var(${c})" stroke-width="1.6"/><text y="3" font-size="9.3" text-anchor="middle" style="fill:var(${c});font-family:system-ui,sans-serif;font-weight:700">${oc ? '?' : ok ? '✓' : '✗'}</text></g>`;
     }).join('');
 }
 
