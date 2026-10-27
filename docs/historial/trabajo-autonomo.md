@@ -338,3 +338,11 @@ aparte sale de `origin/auto/<bN>` (`REGLAS.md` §4.6, lista del constructor y sk
 El mismo día aprobó las demás propuestas del parte: nada de `git stash` ni `pkill` amplios en la carpeta compartida, el
 puerto de los arneses por `PUERTO=` (REGLAS §4.6 y constructor), y la tarea `jueces-topes` del tablero (que
 `jueces.mjs --modelo` lleve cada mando a su tope).
+
+## Una tarea, una sola sesión (27/10/2026)
+
+Dos sesiones arrancaron `movil-existente` a la vez: al cerrar, `jueces-movil` y `jueces-topes` abrieron cada una la
+sesión siguiente por su lado. La segunda lo vio al subir la marca «en curso» (la rama remota ya la tenía) y paró sin
+tocar la app. Regla nueva, aprobada por el usuario: antes de empezar una tarea, y antes de abrir la sesión siguiente,
+el director mira las sesiones activas y la rama `auto/<clave>`; si otra ya la lleva, no empieza
+(`autonomo/REGLAS.md` §4.6 y paso 4 de la skill `plan-socialista`).

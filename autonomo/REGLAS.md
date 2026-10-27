@@ -145,6 +145,12 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      agentes.
    - **Los jueces completos, al final y sin otros agentes trabajando**. Un fallo de navegador se repite solo antes de
      darlo por roto (con la máquina cargada fallan pruebas que están bien).
+   - **Una tarea, una sola sesión** (aprobado por el usuario, 27/10/2026): antes de empezar una tarea, el director
+     mira las sesiones activas (`list_sessions` con `mine: true`, y `get_session` de las que trabajan) y la rama
+     remota `auto/<clave>`. Si otra sesión activa ya lleva esa tarea (por su título, su rama o un «en curso» del
+     tablero de otra sesión), no la empieza: no toca nada, se lo dice al usuario y termina. Antes de abrir la
+     sesión siguiente con `create_session`, la misma comprobación. El 27/10 dos sesiones arrancaron `movil-existente`
+     a la vez (las abrieron `jueces-movil` y `jueces-topes`, cada una por su lado).
 
 7. **Gasto que baja** (decisión del usuario, 26/10/2026: «cada operación que hacemos que cueste X tokens, hay que
    hacer que la siguiente nos intente costar un poco menos»; vale para todas las sesiones y tareas). Un agente paga en
