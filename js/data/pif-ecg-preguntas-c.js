@@ -90,7 +90,7 @@ export const preguntasPifEcgC = [
             "Taquicardia ventricular y fin del algoritmo",
         ],
         correcta: 3,
-        explicacion: "La ausencia de R/S en todas las precordiales basta para diagnosticar TV en el paso 1 de Brugada. Tomarla por TSV llevaría a tratar con una pauta de supraventricular un ritmo ventricular. López Ramírez, p. 122.",
+        explicacion: "La ausencia de R/S en todas las precordiales basta para diagnosticar TV en el paso 1 de Brugada. López Ramírez, p. 122.",
     },
     {
         id: "pif-ecg-c-q008", tema: "ecg-arritmias",
@@ -135,7 +135,7 @@ export const preguntasPifEcgC = [
             "Hemorragia intracraneal, que cursa con QT largo y U prominente",
             "Pericarditis crónica, que no produce T picudas",
             "Hipertrofia ventricular derecha, que produce T negativas en V1-V3",
-            "Hiperpotasemia, que acorta el QT y es reversible",
+            "Hiperpotasemia, que acorta el QT",
         ],
         correcta: 3,
         explicacion: "La T hiperaguda aparece en el infarto muy temprano antes de los cambios del ST; en el diagnóstico diferencial, la hiperpotasemia acorta el QT y la hemorragia intracraneal lo alarga con U prominente. López Ramírez, pp. 132-133.",
@@ -222,11 +222,11 @@ export const preguntasPifEcgC = [
             "Q en DI y aVL, que descarta el SCA",
         ],
         correcta: 0,
-        explicacion: "Kosuge: T negativas en DIII, aVF y V1-V4 más frecuentes en el TEP; en DI, aVL y V1-V6 más características del SCA. Un diagnóstico erróneo cambiaría la anticoagulación frente a la reperfusión. López Ramírez, pp. 151-152.",
+        explicacion: "Kosuge: T negativas en DIII, aVF y V1-V4 más frecuentes en el TEP; en DI, aVL y V1-V6 más características del SCA. López Ramírez, pp. 151-152.",
     },
     {
         id: "pif-ecg-c-q019", tema: "ecg-sca",
-        enunciado: "Según el libro, ¿qué hallazgo distingue la oclusión del tronco izquierdo de la DA proximal?",
+        enunciado: "Según el párrafo final de la p. 152 del libro (su lista de la misma página dice lo contrario), ¿qué hallazgo distingue la oclusión del tronco izquierdo de la DA proximal?",
         opciones: [
             "El ↑ST en V1 mayor que en aVR (sensibilidad 98 %)",
             "La Q en V4-V6 con ↑ST aislado en DIII",
@@ -270,7 +270,7 @@ export const preguntasPifEcgC = [
             "El marcapasos es resincronizador, y por eso no hay espigas",
         ],
         correcta: 0,
-        explicacion: "Un ritmo propio más rápido que el del marcapasos lo inhibe: no es disfunción. Diagnosticar fallo llevaría a reintervenir un aparato sano. López Ramírez, p. 161.",
+        explicacion: "Un ritmo propio más rápido que el del marcapasos lo inhibe: no es disfunción. López Ramírez, p. 161.",
     },
     {
         id: "pif-ecg-c-q023", tema: "ecg-marcapasos",

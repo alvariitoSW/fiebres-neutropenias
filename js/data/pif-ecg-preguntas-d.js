@@ -114,7 +114,7 @@ export const preguntasPifEcgD = [
         enunciado: 'Un paciente con elevación del ST. ¿Qué morfología sugiere lesión aguda y cuál pericarditis aguda?',
         opciones: ['Convexa hacia arriba: lesión; cóncava hacia arriba: pericarditis', 'Cóncava hacia arriba: lesión; convexa hacia arriba: pericarditis', 'Ambas se distinguen solo por la troponina, no por el ECG', 'Las dos son convexas; solo difiere la altura'],
         correcta: 0,
-        explicacion: 'La lesión aguda tiene ST convexo y la pericarditis aguda ST cóncavo hacia arriba. Confundirlas llevaría a anticoagular o reperfundir una pericarditis, o a tranquilizar un infarto. López Ramírez, p. 78.',
+        explicacion: 'La lesión aguda tiene ST convexo y la pericarditis aguda ST cóncavo hacia arriba. López Ramírez, p. 78.',
     },
     {
         id: 'pif-ecg-d-q016', tema: 'ecg-isquemia',
@@ -140,7 +140,7 @@ export const preguntasPifEcgD = [
     {
         id: 'pif-ecg-d-q019', tema: 'ecg-isquemia',
         enunciado: 'En un infarto inferior agudo aparece depresión del ST en DI y aVL. ¿Qué es?',
-        opciones: ['Imagen en espejo: no representa isquemia en esa cara', 'Isquemia subendocárdica lateral independiente que obligaría a buscar otra arteria enferma', 'Digital', 'Un segundo infarto lateral, lo que cambiaría la localización y la actitud'],
+        opciones: ['Imagen en espejo: no representa isquemia en esa cara', 'Isquemia subendocárdica lateral independiente que obligaría a buscar otra arteria enferma', 'Efecto digitálico sobre el ST, que explicaría la depresión en esas derivaciones', 'Un segundo infarto lateral, que cambiaría la localización del infarto'],
         correcta: 0,
         explicacion: 'En la fase aguda hay depresión del ST en la pared opuesta (imagen en espejo) en un alto porcentaje; no indica isquemia en esa cara. Tratarla como un segundo infarto confundiría la localización. López Ramírez, p. 84.',
     },
@@ -204,7 +204,7 @@ export const preguntasPifEcgD = [
     {
         id: 'pif-ecg-d-q028', tema: 'ecg-intervalos',
         enunciado: 'Una paciente con insuficiencia renal grave tiene QT de 0,38 s y RR de 0,64 s. ¿Qué QTc tiene y qué riesgo implica?',
-        opciones: ['0,48 s: QTc > 0,45, que merece cuidado, y se alarga con la hipocalcemia', '0,38 s: se leería el QT sin corregir por la frecuencia y se infravaloraría el riesgo', '0,60 s: ya es torsades y habría que desfibrilar al paciente', '0,30 s: QT corto por hipercalcemia, lo contrario de una hipocalcemia'],
+        opciones: ['0,48 s: QTc > 0,45, que merece cuidado, y se alarga con la hipocalcemia', '0,38 s: se leería el QT sin corregir por la frecuencia y se infravaloraría el riesgo', '0,60 s: QTc mayor de 0,50, con alto riesgo de torsades', '0,30 s: QT corto por hipercalcemia, lo contrario de una hipocalcemia'],
         correcta: 0,
         explicacion: '0,38 ÷ √0,64 = 0,38 ÷ 0,8 = 0,475, que se redondea a 0,48 s: el ejemplo del libro de la hipocalcemia. Por encima de 0,45 s hay que tener cuidado; por encima de 0,50, alto riesgo de torsades. López Ramírez, pp. 108-109.',
     },
