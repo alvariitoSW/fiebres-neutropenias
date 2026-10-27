@@ -1,6 +1,6 @@
 # 2026-10-27 · notas-meta
 
-**Resultado:** en revisión (PR: ver tablero) · informe https://claude.ai/artifact/2DyGXcvYEMTXfT85YZESDs
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/33) · informe https://claude.ai/artifact/2DyGXcvYEMTXfT85YZESDs
 **Vueltas:** 1 · **Jueces:** no aplica (solo lectura, no toca la app) · auditoría de datos ✓
 
 ## Qué se hizo
