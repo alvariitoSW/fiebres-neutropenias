@@ -224,31 +224,6 @@ esta sección.
   silueta 3D dentro de unos límites de forma; (4) repasar las demás formas a fondo con capturas del 3D.
 - **Propuesta de regla**: los jueces de la eco abren cada forma al 100 % y fallan si sale el aviso de recorte.
 
-### B-031 · Dos ideas de Spec Kit (GitHub) para el plan: revisar el encargo antes de gastar · apuntado 2026-10-27
-- **Lo que dijiste**: «mira este repositorio a ver si nos puede venir bien al proyecto
-  https://github.com/github/spec-kit» y, tras el informe, «me parece muy bien […] apunta […] lo que has dicho del
-  repositorio».
-- **Qué es Spec Kit** (leído el 27/10, licencia MIT): método para que un asistente programe por pasos (constitución →
-  especificar → aclarar → planificar → tareas → analizar → construir → comprobar). Lo nuestro ya hace casi lo mismo
-  (`CLAUDE.md`/`REGLAS.md` = constitución; bitácora = especificar y aclarar; tablero = tareas; plan socialista y
-  jueces = construir y comprobar). **No se instala** (programa aparte en Python con `uv`, carpeta `.specify/` y comandos
-  en inglés que duplican los nuestros); se traen dos ideas, reescritas a nuestra manera (sin copiar su texto).
-- **Cómo lo entiendo**: tipo `arreglo` (reglas y skills, no toca la app).
-  1. **Analizar el encargo antes de construir** (su `/speckit-analyze`): un paso de solo lectura, barato, al empezar
-     cada tarea de `/plan-socialista`, que cruza el encargo con el plan del director y la lista de piezas, y busca
-     huecos, contradicciones y **lo que ningún juez va a medir** (la lección del E/A de la eco, B-027: ningún encargo
-     pedía un E/A de paciente posible por forma). Lo grave para la tarea y se le pregunta al usuario.
-  2. **Lista de calidad del encargo** (su `checklist`: «pruebas unitarias del texto del encargo», no del resultado) en
-     `/bitacora`, al apuntar y al aprobar: ¿cada mando tiene tope con fuente?, ¿se dice qué cifra debe salir en cada
-     forma o caso?, ¿está «lo que NO quiero»?, ¿la fuente tiene página?, ¿qué juez comprobará cada cosa? Más su tope
-     de **5 preguntas como mucho** al usuario por encargo (su `clarify`), las más importantes primero.
-  - Dónde (supongo): `autonomo/REGLAS.md`, `.claude/skills/bitacora/SKILL.md` y `.claude/skills/plan-socialista/SKILL.md`
-    (editar `.claude/` necesita tu permiso en esa sesión, REGLAS §5.1); historia en `docs/historial/trabajo-autonomo.md`.
-- **Lo que NO quiero** (supongo): instalar Spec Kit ni sus carpetas; otro paso caro (la revisión del encargo, con el
-  modelo barato y ~10 pasos).
-- **Depende de**: nada. **Tamaño**: pequeña (una sesión barata).
-- **Dudas**: ninguna; si de verdad quieres instalar el programa Spec Kit, dímelo (yo no lo recomiendo).
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -274,6 +249,7 @@ esta sección.
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10): shock, corazón eléctrico y receptor ya en la app (Libros → Marino → Modelos vivos), notas ≥8,75. **Siguiente: paso 4**, estudio en las 26 fichas | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `reglas-b3p2` | Las 4 reglas de la parada 2 del `b3` (`.claude/`, una sesión por modelo, botones estables, maqueta a la app en dos encargos) | hecha (27/10, en main) | 2026-10-27 | aprobadas por el usuario el 27/10 |
+| `encargo-revisado` | **B-031**, dos ideas de Spec Kit: revisar el encargo antes de gastar y lista de calidad del encargo (sin instalar Spec Kit) | pendiente | 2026-10-27 | «vamos solamente con la B-031» (27/10) |
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |

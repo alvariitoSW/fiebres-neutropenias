@@ -370,6 +370,24 @@ río y mar) → 39-44 → 45-53.
 | 24 | `reglas-27-10` | Escribir las 8 reglas aprobadas el 27/10 (ver su encargo) en `REGLAS.md`, `.claude/agents/constructor.md` y la skill `plan-socialista`, citando la aprobación en `docs/historial/trabajo-autonomo.md` | hecha (2026-10-27): directo a `main`; reglas en `REGLAS.md` §1.11, §1.14, §4.6, §4.7 y §5.6, lista del constructor y skill (límite diario en §0); parte `2026-10-27-reglas-27-10.md` | Tipo `arreglo` (solo reglas, directo a `main`). Lo hace la propia sesión, sin agentes. Antes que la parada 2 del `b3`, para que ya la use |
 | 25 | `topes-acidobase` | Ácido-base vivo: con la albúmina y la osmolalidad a sus extremos, la PaCO₂ a 90 da pH 6,36 (desde el inicio, 7,05). Buscar qué combinación lo produce y arreglarlo en su origen, no recortándolo | hecha (2026-10-27): no era la albúmina sino «Bicarbonato IV» + PaCO₂ 90; el modelo ya lo rechazaba, pero el aviso escribía el pH imposible. Aviso reescrito, directo a `main`; parte `2026-10-27-topes-acidobase.md` | Tipo `arreglo` (directo a `main` con `jueces-topes` y `--modelo acidobase-vivo` en verde). Constructor sonnet, ~25 pasos / 0,5 M. Hallazgo en `autonomo/partes/2026-10-27-jueces-topes.md` |
 | 26 | `reglas-b3p2` | Escribir las 4 reglas aprobadas el 27/10 tras la parada 2 del `b3` (ver su encargo) en `REGLAS.md`, `.claude/agents/constructor.md` y la skill `plan-socialista`, citando la aprobación en `docs/historial/trabajo-autonomo.md` | hecha (2026-10-27): REGLAS §4.7 y §5.1, constructor y skill `plan-socialista`, directo a `main` (parte `autonomo/partes/2026-10-27-reglas-b3p2.md`) | Tipo `arreglo` (reglas, no toca la app). Directo a `main` |
+| 27 | `encargo-revisado` | B-031 · Dos ideas de Spec Kit: (1) revisar el encargo antes de construir (solo lectura, barato) en `/plan-socialista`; (2) lista de calidad del encargo y tope de 5 preguntas al usuario en `/bitacora` | pendiente (aprobada por el usuario el 27/10) | Tipo `arreglo` (reglas y skills, no toca la app). Directo a `main`. Editar `.claude/` necesita el permiso del usuario en la sesión (REGLAS §5.1) |
+
+**Encargo `encargo-revisado`** · tipo: arreglo (reglas y skills, no toca la app) · aprobado por el usuario el 27/10/2026 (B-031)
+- Qué quiero: traer dos ideas de Spec Kit (https://github.com/github/spec-kit, MIT), reescritas a nuestra manera, **sin
+  instalarlo** (ni `uv`, ni `.specify/`, ni sus comandos) y sin copiar su texto.
+- (1) **Revisar el encargo antes de construir** (idea de su paso «analyze»): al empezar cada tarea de
+  `/plan-socialista`, un paso de solo lectura con el modelo barato (~10 pasos) que cruza el encargo, el plan del
+  director y la lista de piezas, y busca huecos, contradicciones y **lo que ningún juez va a medir** (lección del E/A
+  de la eco, B-027: ningún encargo pedía un E/A de paciente posible por forma). Lo grave para la tarea y se pregunta
+  al usuario; lo menor se anota en el plan.
+- (2) **Lista de calidad del encargo** (idea de su «checklist», que prueba el texto del encargo, no el resultado) en
+  `/bitacora`, al apuntar y al aprobar: ¿cada mando tiene tope con fuente?, ¿se dice qué cifra debe salir en cada forma
+  o caso?, ¿está «lo que NO quiero»?, ¿la fuente tiene página?, ¿qué juez comprobará cada cosa? Y, de su «clarify»,
+  **como mucho 5 preguntas** al usuario por encargo, las más importantes primero.
+- Dónde: `autonomo/REGLAS.md`, `.claude/skills/bitacora/SKILL.md`, `.claude/skills/plan-socialista/SKILL.md`; la
+  aprobación, en `docs/historial/trabajo-autonomo.md`.
+- Lo que NO quiero: instalar Spec Kit; un paso caro (la revisión, barata y corta).
+- Tamaño: pequeña, una sesión barata.
 
 **Encargo `reglas-27-10`** · tipo: arreglo (reglas, no toca la app) · aprobado por el usuario el 27/10/2026
 - Ahorro (de `/ahorro`, en la bitácora): (1) el constructor pasa sus pruebas y las de lo que tocó; la suite entera la
