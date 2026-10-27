@@ -276,6 +276,34 @@ const lector = (p) => {
  * referencia (misma topología), dónde estaban esos mismos puntos materiales: con eso el moteado viaja con
  * el tejido. Se descartan los triángulos casi paralelos al plano (su corte sería un borrón).
  */
+/**
+ * C1 · Qué festones de la mitral y qué cúspides o valvas (aórtica, tricúspide) corta el plano P. Lee la marca `segmentos`
+ * ([nombre, uu0, uu1]) y `malla` ([ni, nj]) que corazon-geo.mjs pone en cada valva; cada triángulo que cruza el plano dentro
+ * del sector suma su tramo al segmento de su columna uu. Devuelve [{ valvula, nombre, largo (mm), u, v }] (u, v: centro del
+ * tramo en el plano), solo los de al menos `minimo` mm, en el orden de las piezas.
+ */
+export function valvasEnPlano(partes, P, minimo = 1.5) {
+  const out = [];
+  for (const p of partes) {
+    if (!p.segmentos || !p.malla || !p.idx) continue;
+    const [ni, nj] = p.malla; if (p.pos.length !== (ni + 1) * (nj + 1) * 3) continue;   // recortada (corte 3D): sin rótulo
+    const acc = p.segmentos.map(() => ({ l: 0, u: 0, v: 0 })), q = (k) => enPlano(P, [p.pos[k * 3], p.pos[k * 3 + 1], p.pos[k * 3 + 2]]);
+    for (let t = 0; t < p.idx.length; t += 3) {
+      const ks = [p.idx[t], p.idx[t + 1], p.idx[t + 2]], e = ks.map(q), cruces = [];
+      for (let a = 0; a < 3; a++) { const A = e[a], B = e[(a + 1) % 3]; if ((A[2] < 0) !== (B[2] < 0)) { const f = A[2] / (A[2] - B[2]); cruces.push([A[0] + f * (B[0] - A[0]), A[1] + f * (B[1] - A[1])]); } }
+      if (cruces.length !== 2) continue;
+      const mu = (cruces[0][0] + cruces[1][0]) / 2, mv = (cruces[0][1] + cruces[1][1]) / 2;
+      if (mv <= 0 || Math.hypot(mu, mv) > P.prof || Math.abs(Math.atan2(mu, mv)) > P.mitad) continue;
+      const uu = ks.reduce((s, k) => s + Math.floor(k / (nj + 1)), 0) / 3 / ni;
+      const i = p.segmentos.findIndex(([, a, b]) => uu >= a && uu <= b); if (i < 0) continue;
+      const l = Math.hypot(cruces[1][0] - cruces[0][0], cruces[1][1] - cruces[0][1]);
+      acc[i].l += l; acc[i].u += mu * l; acc[i].v += mv * l;
+    }
+    p.segmentos.forEach(([nombre], i) => { const a = acc[i]; if (a.l >= minimo) out.push({ valvula: p.nombre.split(' ')[0], nombre, largo: a.l, u: a.u / a.l, v: a.v / a.l }); });
+  }
+  return out;
+}
+
 export function cortarPieza(p, P, ref = null, base = 0) {
   const pos = lector(p), n = p.pos.length / 3, I = p.idx;
   const { O, r, d } = P, nn = P.n;

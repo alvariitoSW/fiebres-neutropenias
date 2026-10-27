@@ -5,7 +5,7 @@ import { baseGeometrica, construirCorazon, LIMITES, puntoValva } from '../corazo
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { planoVista, cortarPieza } from '../ecografia.mjs';
+import { planoVista, cortarPieza, valvasEnPlano } from '../ecografia.mjs';
 import { aplicarEscenario } from '../escenarios.mjs';
 import { TORAX, aEje } from '../torax.mjs';
 
@@ -256,4 +256,98 @@ test('pericardio con el VI por debajo de ~18 mL y el VD en su mínimo (P2)', { t
   const g = construirCorazon({ ...m.onda[0], vvi: 10, vvd: 5, vai: 2, vad: 2, vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, { pericardio: true, detalle: true });
   const enSaco = dentroDeMalla(g.partes.find(p => p.nombre === 'Pericardio')), vd = g.partes.find(p => p.nombre === 'VD epicardio');
   for (let i = 0; i < vd.pos.length; i += 3) assert.ok(enSaco([vd.pos[i], vd.pos[i + 1], vd.pos[i + 2]]), 'VD epicardio fuera del saco');
+});
+
+// ---- C1: festones de la mitral (Carpentier) y cúspides con nombre. Qué corta cada vista: Hahn 2013 (ETE), con el plano
+// transtorácico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p. 932), 2 cámaras P3-A3A2A1 (p. 937),
+// comisural P3-A2-P1 (p. 935), eje corto basal con los seis (p. 939). La propia fuente avisa de que varía (p. 938).
+const latidoC1 = (k = 'normal', cada = 40) => { const m = crearMotor(); m.correr(12); if (k !== 'normal') { aplicarEscenario(m, k); m.correr(10); }
+  const ex = { ...extraDeMotor(m), vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }, td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a));
+  return { td: { ...td, vviTd: m.ultimo.edv }, instantes: m.onda.filter((_, i) => i % cada === 0).map(s => { const e = estadoGeo(s, ex); return { e, g: construirCorazon(e, { detalle: true }) }; }) }; };
+const cortados = (g, P, valvula) => valvasEnPlano(g.partes, P).filter(x => x.valvula === valvula);
+
+test('C1: cada vista corta los festones de la mitral que da Hahn 2013 para su plano', () => {
+  const { td, instantes } = latidoC1(), vistas = Object.fromEntries(['plax', 'a3c', 'a4c', 'a2c', 'psaxMv'].map(v => [v, planoVista(v, td)]));
+  let seis = 0;
+  for (const { g } of instantes) {
+    const n = (v) => new Set(cortados(g, vistas[v], 'Mitral').map(x => x.nombre));
+    for (const v of ['plax', 'a3c']) assert.deepEqual([...n(v)].sort(), ['A2', 'P2'], `${v}: P2-A2 (p. 937)`);
+    const c4 = n('a4c'); assert.ok(c4.has('A2') && (c4.has('P2') || c4.has('P1')) && !c4.has('P3'), `A4C: A3A2 / P2P1 (p. 932): ${[...c4]}`);
+    const c2 = n('a2c'); assert.ok(c2.has('P3') && c2.has('A2') && !c2.has('P1') && !c2.has('P2'), `A2C: P3-A3A2A1 (p. 937): ${[...c2]}`);
+    if (n('psaxMv').size === 6) seis++;
+  }
+  assert.ok(seis >= 2, `el eje corto mitral corta los seis festones en algún momento del latido (${seis} instantes)`);
+});
+
+test('C1: el plano por las dos comisuras corta P3-A2-P1 (vista comisural, Hahn p. 935), con el A1-A3 como mucho de lado', () => {
+  const { instantes } = latidoC1();
+  for (const { e, g } of instantes.filter(x => x.e.mitral === 0)) {   // la vista se describe con la válvula cerrada
+    // paralelo a la línea entre comisuras, a un 40 % del camino hacia el centro de la línea de cierre: corta esa línea dos veces
+    const a = g.comisuras.anterolateral, b = g.comisuras.posteromedial, o = g.comisuras.centro, c = [0, 1, 2].map(t => 0.6 * (a[t] + b[t]) / 2 + 0.4 * o[t]);
+    const r = [a[0] - b[0], a[1] - b[1], 0], lr = Math.hypot(r[0], r[1]), rr = [r[0] / lr, r[1] / lr, 0];
+    const P = { O: [c[0], c[1], c[2] + 30], d: [0, 0, -1], r: rr, n: [-rr[1], rr[0], 0], prof: 80, mitad: 1.2 };
+    const n = new Set(cortados(g, P, 'Mitral').map(x => x.nombre));
+    assert.ok(n.has('P3') && n.has('A2') && n.has('P1') && !n.has('P2'), `comisural (mitral ${e.mitral}): ${[...n]}`);
+  }
+});
+
+test('C1: cúspides aórticas y valvas tricuspídeas en su sitio (Hahn p. 939, 946, 950) y en el eje largo la anterior es la derecha', () => {
+  const { td, instantes } = latidoC1(), P = planoVista('plax', td);
+  for (const { g } of instantes) {
+    const centro = (re, nombre) => { const p = g.partes.find(q => re.test(q.nombre) && q.segmentos?.[0][0] === nombre); const s = [0, 0, 0];
+      for (let i = 0; i < p.pos.length; i += 3) for (let t = 0; t < 3; t++) s[t] += p.pos[i + t] * 3 / p.pos.length; return s; };
+    const d = (p, q) => Math.hypot(p[0] - q[0], p[1] - q[1]);
+    const ao = Object.fromEntries(['coronaria derecha', 'coronaria izquierda', 'no coronaria'].map(k => [k, centro(/^Aórtica/, k)]));
+    const tri = Object.fromEntries(['anterior', 'posterior', 'septal'].map(k => [k, centro(/^Tricúspide/, k)]));
+    const rvot = g.flujo.valvulas.pulmonar, septoAur = [(g.flujo.valvulas.mitral[0] + g.flujo.valvulas.tricus[0]) / 2, (g.flujo.valvulas.mitral[1] + g.flujo.valvulas.tricus[1]) / 2];
+    assert.ok(d(ao['coronaria derecha'], rvot) < Math.min(d(ao['no coronaria'], rvot), d(ao['coronaria izquierda'], rvot)), 'la derecha, junto al TSVD');
+    assert.ok(d(ao['no coronaria'], septoAur) < Math.min(d(ao['coronaria derecha'], septoAur), d(ao['coronaria izquierda'], septoAur)), 'la no coronaria, junto al tabique interauricular');
+    assert.ok(Math.hypot(...tri.septal.slice(0, 2)) < Math.min(Math.hypot(...tri.anterior.slice(0, 2)), Math.hypot(...tri.posterior.slice(0, 2))), 'la septal, la más cerca del VI');
+    assert.ok(d(tri.anterior, rvot) < Math.min(d(tri.septal, rvot), d(tri.posterior, rvot)), 'la anterior, hacia el infundíbulo');
+    const c = cortados(g, P, 'Aórtica'), der = c.find(x => x.nombre === 'coronaria derecha');
+    assert.ok(der && c.length >= 2, `PLAX: dos cúspides, una la derecha (${c.map(x => x.nombre)})`);
+    for (const x of c) if (x !== der) assert.ok(der.v < x.v, 'la derecha es la anterior (más cerca de la sonda)');
+    assert.ok(cortados(g, planoVista('a4c', td), 'Tricúspide').some(x => x.nombre === 'septal'), 'A4C: la septal junto al tabique');
+  }
+});
+
+test('C1: los festones no se cruzan entre valvas ni con la cortina, las hendiduras solo con la valva abierta y la mitral abre y cierra a su tiempo', () => {
+  for (const k of ['normal', 'fallo', 'dilatada', 'hipertrofia']) {
+    const { instantes } = latidoC1(k, 60);
+    let abre = 0, cierra = 0;
+    for (const { e, g } of instantes) {
+      const ant = g.partes.find(p => p.nombre === 'Mitral anterior'), pos = g.partes.find(p => p.nombre === 'Mitral posterior'), cor = g.partes.find(p => p.nombre === 'Cortina aorto-mitral');
+      const [ni, nj] = ant.malla, v = (p, i, j) => [p.pos[(i * (nj + 1) + j) * 3], p.pos[(i * (nj + 1) + j) * 3 + 1], p.pos[(i * (nj + 1) + j) * 3 + 2]];
+      const dd = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]);
+      // la cortina queda por encima del anillo; ningún punto de la valva anterior (salvo la bisagra) sube por encima de él
+      let zAn = Infinity, zCor = Infinity, zMax = -Infinity; for (let i = 0; i <= ni; i++) { zAn = Math.min(zAn, v(ant, i, 0)[2]); for (let j = 1; j <= nj; j++) zMax = Math.max(zMax, v(ant, i, j)[2] - v(ant, i, 0)[2]); }
+      for (let i = 2; i < cor.pos.length; i += 3) zCor = Math.min(zCor, cor.pos[i]);
+      // (cerrada se abomba hacia la AI con la carga, hacia dentro del anillo: hasta ~1 mm por encima de la bisagra)
+      assert.ok(zMax < 1.5 && zCor >= zAn - 0.5, `${k}: la valva anterior no sube a la cortina (${zMax.toFixed(2)} mm)`);
+      // bordes libres de A2 y P2 (centro): juntos cerrada, separados abierta; entre las valvas, sin cruces fuera de la línea de cierre
+      const sep = dd(v(ant, ni / 2, nj), v(pos, ni / 2, nj));
+      if (e.mitral === 0) { cierra++; assert.ok(sep < 2, `${k}: cerrada, A2 y P2 se juntan (${sep.toFixed(1)} mm)`); }
+      if (e.mitral > 0.8) { abre++; assert.ok(sep > 10, `${k}: abierta, A2 y P2 separadas (${sep.toFixed(1)} mm)`);
+        let min = Infinity; for (let i = 3; i <= ni - 3; i++) for (let j = 2; j <= nj; j++) for (let i2 = 3; i2 <= ni - 3; i2++) min = Math.min(min, dd(v(ant, i, j), v(pos, i2, j)));
+        assert.ok(min > 2, `${k}: abiertas, las valvas no se tocan (${min.toFixed(1)} mm)`);
+        const largoBorde = (i) => dd(v(pos, i, 0), v(pos, i, nj));
+        for (const h of [0.3, 0.7]) { const i = Math.round(h * ni), lado = Math.min(largoBorde(i - 2), largoBorde(i + 2));
+          assert.ok(largoBorde(i) < 0.85 * lado, `${k}: hendidura en ${h} (${largoBorde(i).toFixed(1)} frente a ${lado.toFixed(1)} mm)`); } }
+      if (e.mitral === 0) for (const h of [0.3, 0.7]) { const i = Math.round(h * ni); assert.ok(dd(v(pos, i, nj), v(pos, i + 1, nj)) < 3, `${k}: cerrada, sin hueco en la hendidura`); }
+    }
+    assert.ok(abre && cierra, `${k}: el latido pasa por la mitral abierta y cerrada`);
+  }
+});
+
+test('C1: dos cuerdas por festón, cada una desde el papilar de su lado (Hahn p. 942-943)', () => {
+  const { instantes } = latidoC1();
+  for (const { g } of instantes) {
+    const c = g.partes.find(p => p.nombre === 'Cuerdas').lineas, al = g.comisuras.anterolateral, pm = g.comisuras.posteromedial;
+    assert.equal(c.length / 6, 12 + 9, '12 cuerdas mitrales y 9 tricuspídeas');
+    const d = (p, i) => Math.hypot(p[0] - c[i], p[1] - c[i + 1], p[2] - c[i + 2]);
+    const lados = [0, 0];
+    for (let k = 0; k < 12; k++) { const pc = k * 6, tip = pc + 3, lateral = d(al, tip) < d(pm, tip);
+      const papLado = d(al, pc) < d(pm, pc); assert.equal(papLado, lateral, `cuerda ${k}: el papilar de su lado`); lados[lateral ? 0 : 1]++; }
+    assert.deepEqual(lados, [6, 6], 'seis de cada papilar');
+  }
 });

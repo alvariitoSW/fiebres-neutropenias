@@ -510,8 +510,17 @@ export function construirCorazon(estado, opciones = {}) {
   const coapM = (t) => { const s0 = 1 - t, P0 = [0.508, 0.79], P1 = [-1.2, 0], P2 = [0.508, -0.79];
     return enAnilloM(s0 * s0 * P0[0] + 2 * s0 * t * P1[0] + t * t * P2[0], s0 * s0 * P0[1] + 2 * s0 * t * P1[1] + t * t * P2[1]); };
   const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: 1.2 };
-  const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t }, { ...baseM, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t }];
-  for (const v of valvasM) anadirR(v.nombre, valva(v), COLORES.valva, { dobleCara: true });
+  // C1 · Festones (Carpentier, Hahn 2013 p. 942-943): uu = 0 es la comisura posteromedial (ψ = 1) y uu = 1 la anterolateral
+  // (ψ = −1), en las dos valvas, que cierran en la misma línea con el mismo uu: así A1-A3 quedan frente a P1-P3. Posterior:
+  // tres festones con dos hendiduras (P2, el central, el mayor); anterior: sin hendiduras, solo las mismas tres regiones.
+  // Límites 0,3 / 0,7 (P2 el 40 %) y hondura de la hendidura (35 % del largo, solo con la valva abierta): ilustrativos.
+  const FESTONES_M = (l) => [[l + '3', 0, 0.3], [l + '2', 0.3, 0.7], [l + '1', 0.7, 1]];
+  const HENDIDURA = 0.35, ANCHO_HEND = 0.05, NU_M = 20;
+  const hendidura = (v) => v.hendido ? (uu) => 1 - HENDIDURA * v.apertura * Math.max(0, ...[0.3, 0.7].map(s => 1 - Math.abs(uu - s) / ANCHO_HEND)) : () => 1;
+  const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t, festones: FESTONES_M('A') },
+    { ...baseM, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
+  for (const v of valvasM) { v.alto = hendidura(v); v.borde = (uu) => puntoValva(v, uu, v.alto(uu));
+    anadirR(v.nombre, rejilla(NU_M, 7, (uu, vv) => puntoValva(v, uu, vv * v.alto(uu))), COLORES.valva, { dobleCara: true, segmentos: v.festones, malla: [NU_M, 7] }); }
   // B5 · Cortina aorto-mitral: la continuidad fibrosa entre la raíz aórtica (cúspides no coronaria e izquierda) y la valva
   // anterior de la mitral. Una cinta que parte de la raíz (a 3 mm, donde cuelga el anillo valvular aórtico) y llega al anillo
   // mitral (z = 0), en el tramo de la valva anterior más cercano a la raíz (ψ ±0,75 de 1: hasta 6-9 mm de separación). Se
@@ -525,13 +534,18 @@ export function construirCorazon(estado, opciones = {}) {
     return (t) => t < 0.5 ? lerp(Ca, centro, 2 * t) : lerp(centro, Cb, 2 * t - 1);
   };
   const cT3 = [ct[0], ct[1], 0], valvasT = [];
-  for (let k = 0; k < 3; k++) { const a = 0.4 + k * TAU / 3, b = a + TAU / 3;
+  // C1 · Valvas con nombre (Hahn 2013 p. 950): anterior (hacia el infundíbulo), posterior (pared inferior) y septal (junto al
+  // tabique), con su proporción en el anillo 1 : 0,75 : 1 (anterior : posterior : septal), Hahn p. 950.
+  const VALVAS_T = [['anterior', 0.4, 2.685], ['posterior', 2.685, 4.399], ['septal', 4.399, 0.4 + TAU]];
+  for (const [nombreT, a, b] of VALVAS_T) {
     const v = { anillo: anilloTricus, psi: (t) => mix(a, b, t), cierre: estrella(anilloTricus, cT3, a, b, 0.88), n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 1.5, apertura: ap('tricus'), carga: cg('tricus'), thAbierta: 1.2 };
-    valvasT.push(v); anadirR('Tricúspide', valva(v), COLORES.valva, { dobleCara: true }); }
+    valvasT.push(v); anadirR('Tricúspide', valva(v), COLORES.valva, { dobleCara: true, segmentos: [[nombreT, 0, 1]], malla: [12, 7] }); }
   const anilloAoV = (psi) => [ac[0] + (rA - 0.4) * Math.cos(psi), ac[1] + (rA - 0.4) * Math.sin(psi), 3];
   const cAo3 = [ac[0], ac[1], 3];
+  // C1 · Cúspides con nombre (Hahn 2013 p. 945): cada una por la coronaria que nace de su seno (ostios en ψ 1,66 y −0,44, abajo)
+  const CUSPIDES_AO = ['coronaria derecha', 'no coronaria', 'coronaria izquierda'];
   for (let k = 0; k < 3; k++) { const a = Math.PI / 6 + k * TAU / 3, b = a + TAU / 3;
-    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: 2.5, pot: 3, hundir: 2, abomba: 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true }); }
+    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: 2.5, pot: 3, hundir: 2, abomba: 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true, segmentos: [[CUSPIDES_AO[k], 0, 1]], malla: [12, 7] }); }
   const mT = inf.marcos[NK];
   const anilloPuV = (psi) => sum(P, sum(esc(mT.e1, (rP - 0.4) * Math.cos(psi)), esc(mT.e2, (rP - 0.4) * Math.sin(psi))));
   for (let k = 0; k < 3; k++) { const a = k * TAU / 3, b = a + TAU / 3;
@@ -573,9 +587,11 @@ export function construirCorazon(estado, opciones = {}) {
       papilares.push(pts[pts.length - 1]);
       if (!corte || dentroCorte(phP)) anadir('Papilar ' + nombre, tubo(suave(pts, 3), rBase, 10, radioDe(rBase)), COLORES.papilar);
     }
-    for (const v of valvasM) for (let j = 0; j < 4; j++) {
-      const tip = puntoValva(v, 0.15 + 0.233 * j, 1);
-      const pc = papilares.reduce((m, p) => Math.hypot(p[0] - tip[0], p[1] - tip[1]) < Math.hypot(m[0] - tip[0], m[1] - tip[1]) ? p : m);
+    // C1 · Cuerdas por festón (Hahn 2013 p. 942-943): el papilar anterolateral da cuerdas a la mitad lateral de las dos valvas
+    // y el posteromedial a la mitad medial; dos por festón (a ¼ y ¾ de su anchura), al borde libre: A2 y P2 reciben de los dos.
+    const PAP_DE = (uu) => uu >= 0.5 ? papilares[0] : papilares[1];
+    for (const v of valvasM) for (const [, a, b] of v.festones) for (const f of [0.25, 0.75]) {
+      const uu = a + (b - a) * f, tip = v.borde(uu), pc = PAP_DE(uu);
       const enCorte = !corte || (corte.nx * tip[0] + corte.ny * tip[1] >= 0 && corte.nx * pc[0] + corte.ny * pc[1] >= 0);
       if (enCorte) cuerdas.push(pc, tip);
     }
@@ -732,7 +748,10 @@ export function construirCorazon(estado, opciones = {}) {
   // el anillo tricuspídeo lateral (el punto más alejado del VI), ya movido: es donde se mide el TAPSE
   const tl = Math.hypot(geo.ct[0], geo.ct[1]), anilloTricLateral = [geo.ct[0] * (1 + geo.rT / tl), geo.ct[1] * (1 + geo.rT / tl), 0];
   mover(anilloTricLateral);
-  return { partes, vi, A, Lvd, geo, descenso, descensoVd: -excVd, anilloTricLateral, flujo };
+  // C1 · comisuras de la mitral (los extremos de la línea de cierre, junto al anillo), ya movidas
+  // y el punto más hondo de esa línea (el centro de la «sonrisa», frente a A2 y P2)
+  const comisuras = { anterolateral: coapM(1), posteromedial: coapM(0), centro: coapM(0.5) }; for (const p of Object.values(comisuras)) mover(p);
+  return { partes, vi, A, Lvd, geo, descenso, descensoVd: -excVd, anilloTricLateral, flujo, comisuras };
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
