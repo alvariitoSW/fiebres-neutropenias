@@ -486,6 +486,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.

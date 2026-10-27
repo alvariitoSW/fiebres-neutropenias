@@ -2,12 +2,12 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-27-encargo-revisado.md` (segunda pasada, 27/10: `b3-parada2`, `reglas-27-10`,
-`reglas-b3p2`, `topes-acidobase`, `encargo-revisado`).
+**Último parte revisado:** `2026-10-27-b3-plan-paso4.md` (tercera pasada, 27/10).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
-- El estimado de una parada no cuenta las piezas que surgen en marcha (eco-mega parada 3: +70 %, 5,2 M de piezas
-  nuevas). Si se repite: reservar un 30 % en la propuesta.
+- (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
+- Revisor del encargo por encima de su presupuesto (b3 plan del paso 4: 10 pasos / 173 k frente a 0,15 M) por releer
+  archivos de datos. Si se repite: darle las claves ya sacadas.
 - Un lector de fuente o investigador gasta sin poder abrir lo que necesita (rea-eco: dominio bloqueado; eco-vci:
   escaneo girado). Si se repite: comprobar el acceso o la página exacta antes de lanzar.
 - Un constructor tapa una cifra mala del motor con un parámetro de dibujo (F3: venas a 2,5 cm²) y otra pieza lo
@@ -24,3 +24,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-27 | La suite entera, una vez por fusión | propuesta |
 | 2026-10-27 | Cada constructor en su propia carpeta | propuesta |
 | 2026-10-27 | Partir por estructura antes de lanzar | propuesta |
+| 2026-10-27 | Contar las piezas en el código, no en la cobertura | propuesta |
