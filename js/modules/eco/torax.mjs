@@ -33,7 +33,8 @@ export const TORAX = {
   rAo: 9,                // diámetro ~18 mm (el plan decía ~20: hueco; Mitchell p. 61 no da cifra)
   paso: 2,               // la posición se redondea a pasos de 2 mm para que no tiemble con el latido
   vertebra: { semiLat: 17, semiAnt: 13, alto: 22, paso: 26, n: 8, altBase: -150, hueco: 5, antes: 16 },
-  pulmon: { desde: 100, hasta: 175, holgura: 4 },   // grados desde delante; mm de separación del saco
+  pulmon: { desde: 105, hasta: 175, holgura: 4 },   // grados desde delante; mm de separación del saco (v2 Forma: de 100 a 105°, con la AD
+                                                    // apoyada en el tabique el borde del pulmón derecho asomaba en el fondo del A4C)
   origen: 'ilustrativo',
 };
 
