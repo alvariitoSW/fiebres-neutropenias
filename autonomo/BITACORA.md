@@ -142,6 +142,11 @@ esta sección.
     miocardiopatías, AHA 2025 y la ESC 2021 de estimulación en `docs/` (encaja con `pif-ecg`, ya `pendiente`).
     Las tareas del tablero que decían «falta el temario» (`g5-neuro`, `f4-recorridos`) pasan a este enfoque cuando
     apruebes B-005.
+  - **27/10, noche, cambia otra vez**: «lo suyo sería que el contenido de marino y del libro azul con los modelos
+    vivos […] poder rehacer así el contenido del PIF, con nuestro propio contenido». El PIF se monta **al final**,
+    sobre lo de intensiva que ya habrá (Marino, El Libro Azul, modelos vivos, eco): cada objetivo de la rotación
+    enlaza a esas fichas y modelos; solo lo que no cubran se busca fuera, **con pocas fuentes** (no mil).
+    Cardiología ya no es prioridad («son 2 meses de rotación»).
 - **Depende de**: B-001 (las preguntas). Ya no de tus PDF.
 - **Dudas**:
   1. ¿«Completar el PIF» incluía repasar lo que ya está (Hematología y Nefrología), o solo las 7 rotaciones?
@@ -203,6 +208,27 @@ esta sección.
   partes), ESC 2021 de amiloidosis, MAPSE (Cirin 2024, Falconer 2025): llenan los huecos de la parada 3 de `eco-mega`
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
+
+### B-034 · PIF de Radiología: temario corto para estudiar y para mirar rápido en la guardia · apuntado 2026-10-27
+- **Lo que dijiste**: «de radiología faltaría también hacer lo de la ingeniería reversa a las páginas web que he
+  mandado de radiología y de Radiology Assistant, y por lo menos hacerles un pequeño temario de lo importante […]
+  tanto para estudiar como para mirar así rápido en la guardia […]. No hace falta tampoco poner 1000 fuentes».
+- **Cómo lo entiendo**: tipo `plan` primero (informe), después `contenido`. La ingeniería inversa **ya está hecha**
+  (23/10: Radiology Assistant, https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5; NavRad, en el informe conjunto
+  https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS). Falta convertirla en el cuaderno del PIF de Radiología (tórax y
+  neurorradiología, objetivos de `js/data/pif-rotaciones.js`): un **temario corto** (lo que un R1 de UCI tiene que
+  saber leer: Rx de tórax de UCI, dispositivos, TC de cráneo urgente…) y una **tarjeta de guardia** por situación
+  (supongo). Reúne `f0-ra-biblio`, `g5-neuro` y `f4-recorridos`.
+- **Modelo «así sí»**: cuaderno de campo + «lee este trazado» del ECG (PR #36), cambiando el trazado por la placa.
+- **Lo que NO quiero**: mil fuentes (una o dos por tema, de acceso libre: Radiology Assistant como bibliografía
+  enlazada, una revisión o guía si hace falta); copiar sus textos o figuras; imágenes de pacientes sin licencia.
+- **Depende de**: casos de imagen con licencia (zenodo, TCIA, Radiopaedia, cerrados en la red del entorno). Sin ellos,
+  esquemas recreados (supongo).
+- **Tamaño**: mediana (informe ≈1 M; cuaderno, 2-3 sesiones).
+- **Dudas**: (1) ¿tórax y neuro a la vez, o primero tórax? (supongo: tórax). (2) ¿Antes o después de El Libro Azul?
+  (supongo: después, como el resto del PIF, salvo el informe, que es barato).
+- **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
+  Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -317,6 +343,18 @@ El resto del tablero sigue `aparcada`.
   **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
 - **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
   `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
+- **🔴 Bandeja del Radar no funciona (diagnóstico del 27/10, noche)**: la tarea diaria se lanza **sin el repositorio
+  y sin permiso de escritura en GitHub** (su última vuelta, el 27/10 a las 15:11: «GitHub access not enabled»). Leyó
+  tus 4 tuits nuevos del issue #27 (CritCareReviews, DrSateeshPCCM, RitikaTuliMD, WithAScalpel) pero no pudo hacer
+  nada. Además `x.com` está cerrado en la red. Arreglo: crear la tarea **desde la app de Claude con el repositorio
+  elegido**, o que la dispare una sesión que sí lo tenga (el mismo truco que el aviso de `b3-paso4`). **Ojo: las
+  sesiones programadas para el 28/10 se crearon igual y pueden fallar del mismo modo.**
+- **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
+  pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
+  de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
+- **Prioridad nueva (27/10, noche)**: Marino → El Libro Azul → lo de las webs (ingeniería inversa: eco, AngioView,
+  RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
+  Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
