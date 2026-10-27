@@ -131,8 +131,23 @@ esta sección.
     Nefrología ya tiene la nefrona viva: el profesor la aprovecha.
   - **Las 7 rotaciones sin contenido** (Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
     Infecciosas, Neurología, Neumología): las dos fases completas cuando mandes sus PDF.
-- **Depende de**: B-001. Las rotaciones nuevas, de tus PDF.
-- **Dudas**: ¿«completar el PIF» incluía repasar lo que ya está (Hematología y Nefrología), o solo las 7 rotaciones?
+  - **27/10, cambia**: «lo del pif no hay temario […] solo tengo las frases esas de conceptos que debo manejar y ya
+    me busco la vida para aprender eso, que es el fin también de este repositorio». **No hay temario que esperar.**
+    Lo que hay son los objetivos de cada rotación (ya en la app: `js/data/pif-rotaciones.js`, del documento
+    PFI-UMI-R1-01). Nuevo enfoque: **cada objetivo es una pregunta de búsqueda**. Por rotación: (1) mirar qué
+    cubren ya los libros de `docs/` (Marino, Merino, Manual UMI, El Libro Azul, guías ESC/AHA/ASE) y enlazarlo;
+    (2) para lo que no cubran, buscar la fuente (guía de sociedad o revisión de acceso libre) y citarla con su
+    página (CLAUDE.md §7.1-7.2); (3) construir el cuaderno de la rotación con las fases A y B. Primero Cardiología
+    (rotación desde el 01/11): ya tiene «La alegría de leer el ECG», ESC 2023 de SCA, ESC 2019 de TSV, ESC 2023 de
+    miocardiopatías, AHA 2025 y la ESC 2021 de estimulación en `docs/` (encaja con `pif-ecg`, ya `pendiente`).
+    Las tareas del tablero que decían «falta el temario» (`g5-neuro`, `f4-recorridos`) pasan a este enfoque cuando
+    apruebes B-005.
+- **Depende de**: B-001 (las preguntas). Ya no de tus PDF.
+- **Dudas**:
+  1. ¿«Completar el PIF» incluía repasar lo que ya está (Hematología y Nefrología), o solo las 7 rotaciones?
+  2. ¿La fuente que falte la busco yo (guías y revisiones libres, que tú revisas) o la buscas tú y me la mandas?
+     (supongo: la busco yo, y si es de pago te la pido).
+  3. ¿Empiezo por Cardiología por la fecha de la rotación? (supongo: sí).
 
 ### B-006 · Atlas de eco: los 20 capítulos que faltan · apuntado 2026-10-14
 - **Lo que dijiste**: (aprobado antes como Objetivo 1; con el método nuevo, lo vuelvo a poner a tu visto bueno).
@@ -223,6 +238,31 @@ esta sección.
   (3) una prueba nueva: cada forma, a g 0, defecto y 1, sin el aviso de «fuera del rango del dibujo» y con la
   silueta 3D dentro de unos límites de forma; (4) repasar las demás formas a fondo con capturas del 3D.
 - **Propuesta de regla**: los jueces de la eco abren cada forma al 100 % y fallan si sale el aviso de recorte.
+
+### B-032 · Lo que un residente debe manejar cada año (camino a la guardia de R2) · apuntado 2026-10-27
+- **Lo que dijiste**: «que me sirva para aprender lo que un residente de medicina intensiva puede y debe manejar
+  según qué año, que ya a finales de R2 las guardias las hago solo con los adjuntos y ya se vuelve chungo».
+- **Cómo lo entiendo**: tipo `mapa` (informe primero, sin construir).
+  - **Qué quiero**: un mapa de competencias por año (R1 a R5) con lo que hay que saber manejar, y al lado qué
+    tiene ya la app para cada una (✅ hay ficha o modelo, 🟡 a medias, ❌ falta).
+  - **Para qué**: llegar a final de R2 preparado para la guardia sin residente mayor. Lo de la guardia va primero.
+  - **Fuente**: el PIF del hospital solo tiene R1 (PFI-UMI-R1-01, ya en la app). Para R2-R5, (supongo) el programa
+    oficial de la especialidad de Medicina Intensiva publicado en el BOE y el marco europeo de competencias
+    CoBaTrICE: hay que buscarlos y citarlos (URL verificada o PDF en `docs/`). Si no se encuentran, hueco.
+  - **Modelo «así sí»**: el inventario de estudio (`inventario`, B-014) para saber qué tiene la app; el megaproyecto
+    «La UCI en el bolsillo» (situaciones de guardia G1-G6) para lo urgente.
+  - **Visual**: (supongo) una página para el móvil con una fila por competencia, filtrable por año, cada fila
+    enlazada a su ficha o modelo; arriba, «lo que necesitas antes de tu primera guardia sin R mayor».
+  - **Lo que NO quiero**: inventar competencias sin fuente; repetir contenido que ya existe (se enlaza).
+  - **Preguntas**: no (es un mapa). Después, cada hueco se convierte en tarea aparte.
+- **Depende de**: nada. Usa el inventario ya hecho.
+- **Tamaño**: informe mediano (una sesión). Luego, las tareas que salgan.
+- **Lista de calidad**: sin simulador (topes no aplica) · cifra por caso: no aplica · «lo que NO quiero»: sí ·
+  fuente con archivo y página: falta encontrar el programa · juez: sin juez automático, lo mira el usuario.
+- **Dudas**:
+  1. ¿Tienes algún documento del hospital para R2 (como el de R1), o me baso en el programa oficial?
+  2. ¿Qué te preocupa más de la guardia sola con el adjunto (shock, vía aérea, paro, neurocrítico…)? Así ordeno el
+     mapa (supongo: lo de «La UCI en el bolsillo»).
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -340,8 +380,8 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · temarios de Radiología de tórax y
-  Neurorradiología. (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
+- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) (los temarios del PIF no
+  existen: ver B-005). (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
   3.ª tanda.)
 - **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
   - `lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`: López Ramírez JH. *La alegría de leer el
@@ -394,8 +434,6 @@ El resto del tablero sigue `aparcada`.
   derivaciones. Antes de construir, maqueta para elegir. Detalle en `docs/historial/cardiologia.md`.
 - **El Libro Azul**: los PDF de las secciones que faltan (hay I, II, III y VII). Orden que pediste: Marino (hecho),
   después El Libro Azul y después el PIF de R1.
-- **PIF de R1**: los PDF de las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología, Cardiología,
-  Medicina Interna, Infecciosas, Neurología, Neumología).
 - **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
 - **Panel de subida**: la clave de la API y desplegar el Worker (`backend/README.md`).
 - **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
