@@ -20,9 +20,11 @@ const lerp3 = (a, b, t) => [mix(a[0], b[0], t), mix(a[1], b[1], t), mix(a[2], b[
 
 // Apertura según el flujo que pasa (raíz: a poco flujo ya se separan las valvas) y carga según el gradiente
 // inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo. Función pura del estado.
+// R3 · La tricúspide usa qRef 250 mL/s (no 600): su llenado rápido (F) es de ~130-280 mL/s en el motor, la mitad que el de la mitral;
+// con 600 apenas separaba las valvas (3 mm). Ilustrativo.
 export const VALVULAS = [
   { n: 'mitral', abierta: 'vMit', q: 'qMit', arriba: 'pai', abajo: 'pvi', qRef: 600, pRef: 100, nombre: 'Mitral' },
-  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 600, pRef: 20, nombre: 'Tricúspide' },
+  { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 250, pRef: 20, nombre: 'Tricúspide' },
   { n: 'aortica', abierta: 'vAo', q: 'qAo', arriba: 'pvi', abajo: 'pao', qRef: 500, pRef: 100, nombre: 'Aórtica' },
   { n: 'pulmonar', abierta: 'vPul', q: 'qPul', arriba: 'pvd', abajo: 'pap', qRef: 350, pRef: 20, nombre: 'Pulmonar' },
 ];

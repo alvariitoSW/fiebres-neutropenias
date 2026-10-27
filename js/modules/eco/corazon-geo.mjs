@@ -98,6 +98,7 @@ export const PHI_SEPTO = (REF.phiA + REF.phiB) / 2;
 // medio ángulo del tabique aplanado del todo (rad): con 1,1, el índice de excentricidad del VI llega a ~1,4 (Ryan 1985:
 // 1,44 ± 0,16 en telesístole en la sobrecarga de presión; Atlas · 14). Ilustrativo
 const ALFA_SEPTO = 1.1;
+const ANCHO_UNION = 1.05, KERNEL_UNION = 1.0;   // rad: hasta dónde se redondea y cuánto promedia (ver radioConCuerda)
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
 export const LIMITES = { vi: [8, 320], vd: [45, 330], au: [15, 140] };
 // margen del cuello de cada aurícula sobre su anillo AV (mm, ilustrativo)
@@ -312,7 +313,8 @@ export function construirCorazon(estado, opciones = {}) {
   // cerca del ápex la cavidad se cierra: las trabéculas se desvanecen con el radio (si no, quedaba una "aguja")
   const endoViT = (z, f) => { const re = rEndoVi(z, f), r = Math.max(0, re - trabVi(z, f) * Math.pow(clamp(re / 7, 0, 1), 2)); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const endoVdT = (z, f) => { const re = rEpiVi(z, f), w = wRV(z, f); const r = re + Math.max(0.3 * w, w - trabVd(z, f) * clamp(w / 6, 0, 1)); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const NZe = corte ? Math.round(44 * q) : NZ, NPe = corte ? Math.round(110 * q) : NP, NPVe = corte ? Math.round(84 * q) : NPV;
+  const NZe = corte ? Math.round(44 * q) : NZ, NPe = corte ? Math.round(110 * q) : Math.round(96 * q),   // R3: 96 columnas en el VI (con 48 el eje corto del TEP salía de 7,5° en 7,5°, como un polígono)
+     NPVe = corte ? Math.round(84 * q) : NPV;
   // oclusión: la cavidad se oscurece hacia el ápex; el epicardio, en los surcos interventriculares
   const aoEndoVi = (x, y, z) => 0.55 + 0.45 * Math.pow(1 - clamp(-z / vi.L, 0, 1), 0.7);
   const aoEndoVd = (x, y, z) => 0.6 + 0.4 * Math.pow(1 - clamp(-z / Lvd, 0, 1), 0.7);
@@ -324,7 +326,7 @@ export function construirCorazon(estado, opciones = {}) {
   const zEndo = (u) => -vi.L * (1 - Math.pow(1 - u, 1.6));
   const zEpi = (u) => -vi.Le * (1 - Math.pow(1 - u, 1.6));
   anadir('VI endocardio', conAO(invertir(rejilla(NZe, NPe, (u, v) => endoViT(zEndo(u), phi0 + v * span))), aoEndoVi), COLORES.endocardio, { dobleCara: true });
-  anadir('VI epicardio', conAO(rejilla(NZ, NP, (u, v) => epiVi(zEpi(u), phi0 + v * span)), aoEpiVi), COLORES.miocardio);
+  anadir('VI epicardio', conAO(rejilla(NZ, NPe, (u, v) => epiVi(zEpi(u), phi0 + v * span)), aoEpiVi), COLORES.miocardio);
   if (corte) {
     for (const ph of [phi0, phi0 + Math.PI])
       anadir('VI tapa', rejilla(NZe, 1, (u, v) => { const z = zEndo(u); return lerp(endoViT(z, ph), epiVi(z * vi.Le / vi.L, ph), v); }), COLORES.tapa, { dobleCara: true });
@@ -936,6 +938,26 @@ export function construirCorazon(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
+// R3 · Radio de un contorno redondo de radio r al que una cuerda (a distancia `num` del centro, medio ángulo a, centrada en
+// PHI_SEPTO) le quita el segmento. El mínimo simple deja dos esquinas de ~117° (el VI del TEP salía facetado, como un
+// polígono): se redondean con un promedio del radio en ±KERNEL_UNION rad alrededor de cada unión (peso coseno, 17 muestras);
+// el centro de la cuerda (donde se mide el índice de excentricidad) y el resto del círculo no cambian. Ilustrativo.
+export function radioConCuerda(r, num, a, f) {
+  const crudo = (g) => { const c = Math.cos(g - PHI_SEPTO); return c > 0 ? Math.min(r, num / c) : r; };
+  const d = Math.abs(Math.abs(Math.atan2(Math.sin(f - PHI_SEPTO), Math.cos(f - PHI_SEPTO))) - a), w = 1 - paso(0, ANCHO_UNION, d);
+  if (w <= 0) return crudo(f);
+  let sum = 0, ws = 0; for (let i = -8; i <= 8; i++) { const k = 1 + Math.cos(Math.PI * i / 9); sum += k * crudo(f + i * KERNEL_UNION / 8); ws += k; }
+  return mix(crudo(f), sum / ws, w);
+}
+// Área (por r², rad) que la cuerda redondeada le quita al círculo unidad según su medio ángulo a: tabla de 0 a ALFA_SEPTO, calculada una vez
+let TABLA_CUERDA = null;
+function areaCuerda(a) {
+  if (!TABLA_CUERDA) { const N = 40, NA = 120; TABLA_CUERDA = [];
+    for (let i = 0; i <= N; i++) { const ai = ALFA_SEPTO * i / N; let q = 0;
+      for (let j = 0; j < NA; j++) { const f = PHI_SEPTO + (j + 0.5) / NA * TAU - Math.PI, rs = radioConCuerda(1, Math.cos(ai), ai, f); q += 0.5 * (1 - rs * rs) * TAU / NA; }
+      TABLA_CUERDA.push(q); } }
+  const x = clamp(a / ALFA_SEPTO, 0, 1) * 40, i = Math.min(39, Math.floor(x)); return TABLA_CUERDA[i] + (TABLA_CUERDA[i + 1] - TABLA_CUERDA[i]) * (x - i);
+}
 export function baseGeometrica(estado) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
@@ -947,7 +969,9 @@ export function baseGeometrica(estado) {
   if (septo > 0) {            // lo que la cuerda le quita a la cavidad se devuelve al radio, para que el volumen siga al motor
     let quitado = 0; const dz = vi.L / N_VOL;
     for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
-      quitado += r * r * (a - Math.sin(a) * Math.cos(a)) * dz; }
+      if (a <= 0) continue;
+      const q = r * r * areaCuerda(a);
+      quitado += q * dz; }
     vi = geomVi(estado.vvi, mio, quitado / 1000);
   }
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
@@ -956,10 +980,11 @@ export function baseGeometrica(estado) {
   const rEpiViC = memo((z) => perfil(Math.max(z, -vi.Le), vi.ReB, vi.Rme, vi.Le));
   const alfaZ = memo((z) => alfa(z, vi.L));
   // radio del VI en (z, ángulo), con el tabique aplanado si toca
+  // el tabique aplanado se une al círculo con uniones redondeadas (radioConCuerda, R3)
   const rEndoVi = (z, f) => { const r = rEndoViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    const c = Math.cos(f - PHI_SEPTO); return c > 0 ? Math.min(r, r * Math.cos(a) / c) : r; };
+    return radioConCuerda(r, r * Math.cos(a), a, f); };
   const rEpiVi = (z, f) => { const r = rEpiViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    const c = Math.cos(f - PHI_SEPTO); return c > 0 ? Math.min(r, (r - rEndoViC(z) * (1 - Math.cos(a))) / c) : r; };
+    return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f); };
   const endoVi = (z, f) => { const r = rEndoVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const epiVi = (z, f) => { const r = rEpiVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const ReB = vi.ReB;
