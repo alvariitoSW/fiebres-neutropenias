@@ -119,7 +119,7 @@ esta sección.
   - **Lo que ya está** (secciones I Cardiovascular, II Hematología, III Inmunitario y VII Vías Urinarias; ~33
     fichas): igual que B-003, con comprobación de fuentes y fase B. En la sección I, el motor del latido y el
     ecógrafo (supongo). Unas 6 tareas.
-  - **Lo que falta**: cuando mandes los PDF del resto del temario, cada sección hace las dos fases completas (leer
+  - **Lo que falta**: secciones V, VI, VIII, IX y X ya en `docs/` (27/10); falta la IV (Respiratorio). Con sus PDF, cada sección hace las dos fases completas (leer
     la fuente, construir, auditar; después, estudio).
 - **Depende de**: B-001. La segunda parte, de tus PDF.
 
@@ -130,7 +130,8 @@ esta sección.
     Nefrología: fisiología, HTA, ERC, FRA, TRR, trasplante renal): comprobación de fuentes y fase B (supongo).
     Nefrología ya tiene la nefrona viva: el profesor la aprovecha.
   - **Las 7 rotaciones sin contenido** (Radiología de tórax, Neurorradiología, Cardiología, Medicina Interna,
-    Infecciosas, Neurología, Neumología): las dos fases completas cuando mandes sus PDF.
+    Infecciosas, Neurología, Neumología): las dos fases completas. No hay PDF de temario (27/10): el temario son los
+    objetivos de `js/data/pif-rotaciones.js` y las fuentes se buscan y se citan.
 - **Depende de**: B-001. Las rotaciones nuevas, de tus PDF.
 - **Dudas**: ¿«completar el PIF» incluía repasar lo que ya está (Hematología y Nefrología), o solo las 7 rotaciones?
 
@@ -340,8 +341,8 @@ El resto del tablero sigue `aparcada`.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · temarios de Radiología de tórax y
-  Neurorradiología. (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
+- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) · Sección IV del Libro Azul (Respiratorio).
+  (Los temarios del PIF no llegarán como PDF: son los objetivos de `js/data/pif-rotaciones.js`, 27/10.) (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
   3.ª tanda.)
 - **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
   - `lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`: López Ramírez JH. *La alegría de leer el
@@ -392,10 +393,30 @@ El resto del tablero sigue `aparcada`.
   parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
   («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12
   derivaciones. Antes de construir, maqueta para elegir. Detalle en `docs/historial/cardiologia.md`.
-- **El Libro Azul**: los PDF de las secciones que faltan (hay I, II, III y VII). Orden que pediste: Marino (hecho),
-  después El Libro Azul y después el PIF de R1.
-- **PIF de R1**: los PDF de las 7 rotaciones sin contenido (Radiología de tórax, Neurorradiología, Cardiología,
-  Medicina Interna, Infecciosas, Neurología, Neumología).
+- **El Libro Azul**: solo falta la **Sección IV, Aparato Respiratorio** (caps. 24-36, pp. ~387-608). Las V, VI,
+  VIII, IX y X llegaron el 27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
+  de R1.
+- **✅ El Libro Azul, 27/10 (4.ª tanda)**, en `docs/`. Fuente: *El libro azul. Bases fisiopatológicas de la medicina
+  crítica* (Medicucheando). Página impresa = página del PDF + desplazamiento (comprobado en dos páginas de cada uno):
+  - `libro-azul-seccion-v-digestivo-parte1.pdf`: caps. 37-39 (tracto GI, ictericia, hepática), pp. 609-690; +608
+    (pdf 5 = 613, pdf 41 = 649).
+  - `libro-azul-seccion-v-digestivo-parte2.pdf`: caps. 40-42 (pancreatitis, sangrado digestivo, HIA), pp. 691-722;
+    +690 (pdf 1 = 691, pdf 16 = 706).
+  - `libro-azul-seccion-v-digestivo-parte3.pdf`: caps. 43-44 (nutrición según la fisiopatología, monitorización
+    nutricional), pp. 723-808; +722 (pdf 5 = 727, pdf 43 = 765).
+  - `libro-azul-seccion-vi-endocrino.pdf`: cap. 45 (respuesta endocrina al estrés), pp. 807-814; +806 (pdf 5 = 811).
+  - `libro-azul-seccion-viii-neurologia-parte1.pdf`: caps. 49-52 (HTIC, hipoxia tisular cerebral, isquemia, edema),
+    pp. 859-920; +858 (pdf 5 = 863, pdf 31 = 889, pdf 62 = 920).
+  - `libro-azul-seccion-viii-neurologia-parte2.pdf`: caps. 53-56 (estado epiléptico, hemorragia cerebral, TCE,
+    neuromonitorización multimodal), pp. 921-970; +920 (pdf 5 = 925, pdf 25 = 945).
+  - `libro-azul-seccion-ix-embarazo.pdf`: cap. 57 (trastornos hemorrágicos del embarazo), pp. 969-982; +968 (pdf 5 =
+    973, pdf 14 = 982).
+  - `libro-azul-seccion-x-miscelaneos.pdf`: caps. 58-61 (caquexia, RCP, control de daños, gran quemado),
+    pp. 983-1044; +982 (pdf 5 = 987, pdf 31 = 1013, pdf 62 = 1044).
+  Desbloquea la segunda parte de B-004 (secciones nuevas, cuando la apruebes).
+- **PIF de R1**: **ya no se espera ningún PDF** (dicho por el usuario el 27/10): no hay temario oficial; el temario
+  son los objetivos de cada rotación que ya están en la app (`js/data/pif-rotaciones.js`, sacados del PFI-UMI-R1-01).
+  El contenido de cada rotación se busca y se cita en guías y libros (REGLAS §1.15).
 - **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
 - **Panel de subida**: la clave de la API y desplegar el Worker (`backend/README.md`).
 - **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
