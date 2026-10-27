@@ -173,7 +173,7 @@ function verLupa(mirando) {
   if (vis >= 0.6) return;
   const libre = tope; scrollBy({ top: f.top - Math.max(0, (libre - f.height) / 2), behavior: 'instant' });
 }
-['dock-explorar'].forEach(id => $(id).addEventListener('click', () => verLupa()));
+['dock-explorar'].forEach(id => $(id).addEventListener('click', ev => verLupa(!!ev.target.closest('[data-tog]'))));
 $('dock-explorar').addEventListener('input', ev => {
   verLupa(true);
   const i = ev.target.closest('[data-dosis]'); if (!i) return;
