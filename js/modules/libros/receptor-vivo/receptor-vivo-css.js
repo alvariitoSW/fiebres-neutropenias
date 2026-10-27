@@ -86,7 +86,8 @@ const CSS = `
 .rcv-fig-cab .rcv-n { color: var(--rcv-oro); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; }
 .rcv-fig-cab .rcv-t { color: var(--rcv-dim); text-align: right; font-weight: 600; min-width: 0; }
 .rcv-fig-pie { padding: 0 10px 7px; font-weight: 400; align-items: flex-end; }
-.rcv-fig-pie .rcv-pista { color: var(--rcv-muted); font-style: italic; min-width: 0; }
+.rcv-fig-pie { flex-wrap: wrap; }
+.rcv-fig-pie .rcv-pista { color: var(--rcv-muted); font-style: italic; min-width: 0; flex: 1 1 15em; }
 .rcv-fig-pie .rcv-lect { color: var(--rcv-fg); font: 600 .7rem/1.3 var(--rcv-sans); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
 .rcv-fig-pie .rcv-lect small { display: block; color: var(--rcv-muted); font-weight: 400; }
 .rcv-fig svg { display: block; width: 100%; height: auto; touch-action: manipulation; }
@@ -230,7 +231,7 @@ const CSS = `
 .rcv-raiz dl.rcv-paciente dd.rcv-cambia { color: var(--rcv-rojo); font-weight: 600; }
 .rcv-dib text { font-family: var(--rcv-serif); }
 .rcv-dib .rcv-rot { fill: var(--text-dim); font-style: italic; }
-.rcv-dib .rcv-espasmo { fill: var(--accent-red); font: 700 8px var(--rcv-sans); font-style: normal; }
+.rcv-dib .rcv-espasmo { fill: var(--accent-red); font: 700 12px var(--rcv-sans); font-style: normal; }
 .rcv-dib .rcv-fondo { fill: var(--bg-main); }
 .rcv-dib .rcv-punto { fill: var(--text-dim); }
 .rcv-dib .rcv-halo-s { fill: var(--bg-main); opacity: .7; }

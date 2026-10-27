@@ -9,7 +9,7 @@ const RECORRIDO_BASE = [
     enunciado: 'La onda da vueltas dentro del nodo AV. Vas a poner 6 mg de adenosina. Antes de mirar: <b>¿qué verás en la tira mientras actúa?</b>',
     opciones: [
       { t: 'QRS anchos: la adenosina desvía la onda por las ramas.', porque: 'La adenosina enlentece el nodo AV y da un bloqueo AV transitorio (p. 29-30); no cambia el camino por las ramas. Si esperas QRS anchos, tomarás la pausa esperada (bradicardia o bloqueo AV en la mitad de los casos, Tabla 19.4) por un problema nuevo.' },
-      { t: 'Ondas P sin su QRS durante unos segundos, y luego el sinusal.', ok: true },
+      { t: 'Ondas P sin QRS unos segundos, y luego el sinusal.', ok: true },
       { t: 'La misma taquicardia, más lenta, durante horas.', porque: 'Su efecto dura 1-2 min y lo que hace es cortar el circuito (p. 30). Si esperas horas de efecto, no repetirás 12 mg a los 2 min cuando no responde (Tabla 19.4).' },
       { t: 'Nada: la adenosina actúa en las aurículas, no en el nodo.', porque: 'Actúa en el nodo AV, justo por donde pasa este circuito (p. 29-30). Si crees que no sirve, cardiovertirás a un paciente que casi nunca está inestable con esta arritmia (p. 29).' }],
     explicacion: 'La adenosina da un bloqueo AV transitorio: salen P sin QRS unos segundos. El circuito pasaba por el nodo AV: se rompe y vuelve el sinusal (p. 29-30).', fuente: C.adeno,
