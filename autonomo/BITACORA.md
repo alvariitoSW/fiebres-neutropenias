@@ -179,6 +179,32 @@ esta sección.
   primeros: el corazón eléctrico, el receptor vivo y el monitor del shock con el soporte mecánico.
 - **Espera**: tu visto bueno para empezar a llenarlos con las otras fuentes, cuando Marino esté terminado.
 
+### B-027 · Eco: el motor diastólico (E/A, aurícula y venas pulmonares) · apuntado 2026-10-27
+- **Lo que dijiste** (27/10, al saber del E/A): «habría que hacer un informe sobre cómo mejorarlo mediante
+  /plan-socialista, ver el gasto que supondría y aprender de este fallo que hemos ido arrastrando».
+- **El fallo** (parada 3 de `eco-mega`, `autonomo/bloques/eco-mega/p3-f3b.md` y `profesor-p3.md`): en el panel del
+  Doppler mitral, el E/A sale **10** en la hipertrofia (onda A casi nula: enseña la lección al revés; con mala
+  relajación debería ser <1) y **3,9** en la dilatada (restrictivo posible). Además, el flujo de las venas pulmonares
+  del motor es ~2-3 veces el real (pico de `qVp` ~600 mL/s; el área de las venas está achicada a 2,5 cm²
+  «ilustrativo» para disimularlo), la onda a de la AI llega a ~15 mmHg, la D venosa del TEP sale 0 y la AD tiene el
+  mismo defecto. Arreglarlo exige recalibrar la AI (contracción sumada a la curva pasiva, `rVp`, `rPul`) y, con
+  ello, el TEP, el derrame y la HP crónica, que se calibraron encima (opción 1 de F3b: ~7 pruebas a recalibrar).
+- **Cómo lo entiendo**: tipo `arreglo` grande del motor, en dos pasos. (1) **Informe** con `/plan-socialista`:
+  qué está mal, la calibración objetivo con su fuente (Nagueh 2025, ya en `docs/`: patrones de llenado, E/A, S/D,
+  Ar; Lang 2015 p. 24: bomba auricular 15-30 %), el orden y el **gasto estimado**. (2) La recalibración, si la
+  apruebas. **Lección** para las reglas: ninguna prueba pedía un E/A ni un flujo venoso de paciente posible por
+  forma, así que cada pieza se calibró sobre un error de base y se fue arrastrando; propuesta: una red «paciente
+  posible del Doppler» (E/A, E/e′, S/D, TAPSE, velocidades) por forma, como la de PA y FC.
+- **Depende de**: nada (las fuentes ya están). **Tamaño**: informe pequeño; la recalibración, 1 sesión.
+
+### B-028 · Eco: bibliografía de física de los ultrasonidos para el realismo de la imagen · apuntado 2026-10-27
+- **Lo que dijiste**: «¿Debería subir bibliografía sobre la ecografía para mejorar el realismo de las imágenes?».
+- **Cómo lo entiendo**: hoy el moteado, las sombras, la reverberación, la ganancia y el desenfoque del haz son
+  «fisiología general» o «ilustrativo». Un libro de física de los ultrasonidos con figuras (p. ej. un manual de
+  principios e instrumentación de la ecografía) daría cifras y página a esas decisiones. Lo que más falta, por orden:
+  (1) ese libro; (2) los PDF de siempre: ESC/ERS 2022 de HP, amiloidosis, MAPSE, Leung y Levine 1994.
+- **Espera**: que subas los PDF a `docs/` cuando quieras; no corre prisa.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -351,6 +377,15 @@ El resto del tablero sigue `aparcada`.
   aún**; cuando se monte, hace falta que fijes un límite de gasto.
 
 ## 4. Mejoras de lo que ya existe
+
+- **Eco, lo que dejó la parada 3 de `eco-mega`** (27/10; detalle en `autonomo/bloques/eco-mega/profesor-p3.md` y
+  `p3-*.md`). Coste medio, para una parada 4 o un arreglo: (1) que el pliegue de la AD/VD del taponamiento se vea a
+  390 px (frase viva, flecha o un modo M por la pared libre); (2) el índice de excentricidad en los criterios de la HP
+  crónica; (3) el espectral de la IM continuo; (4) la válvula de Eustaquio casi no se ve (el plano `scVci` no pasa
+  por el orificio de la VCI); (5) la «grasa del surco AV» tapa el seno coronario en el PLAX; (6) en el TEP el IE es
+  igual en diástole y en sístole (debería ser algo mayor en sístole); (7) la FE del VD del TEP grave es 9-13 % con
+  VTD del VD 200-330 mL; (8) el saco del derrame grande aún tiene un tramo recto largo en la pared inferior; (9) con
+  el derrame a fondo, el botón de fase salta de E a A (no salen F ni G); (10) el TAPSE usa una curva ilustrativa.
 
 - **Que cada versión nueva descargue todas sus piezas a la vez.** El 19/10, tras publicar los modelos vivos (PR #18),
   la app no arrancaba en el móvil del usuario: la portada se veía, pero tocar PIF no hacía nada. Se arregló sola al
