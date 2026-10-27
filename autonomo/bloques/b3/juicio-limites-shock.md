@@ -11,3 +11,14 @@ Medido con `limites-prueba.mjs shock` (0 errores, 0 desborde, 0 NaN) y una sonda
 - ⚠ Número flojo, no imposible: Amparo sana (g 0) con NA 30 + vasopresina da PAM 101 y FC 51 (solo aviso; el sello pide 10 L encima). `soporte.mjs` `aplicarFarmacos()` l. 116-121: con g 0 la NA a 30 debería pasar de 110. Y `datos.js` `nombreEstado()` la sigue llamando «Shock séptico con noradrenalina» con lactato 1 y diuresis 1.
 - ⚠ Frase del ECMO (captura s3): «aún abre (6 de 6), pero eyecta poco (0,0 L/min)»: abre y eyecta 0,0 no casan; redondear a una décima o decir «casi nada».
 - ⚠ `limites-prueba.mjs` solo pulsa +2 L (que se apaga antes): añade el bucle de +500 hasta apagarse y el reloj sobre el sello (la sonda está en `/tmp/plan-socialista/b3/limites/sonda.mjs`; cópiala a `herramientas/`).
+
+## Vuelta 2 — profesor, 27/10/2026 · **8,3 / 10** (pasa; meta 8,75 no)
+
+Medido con `limites-prueba.mjs shock` (0 errores, 0 desborde, 0 NaN, «EDEMA antes del sello: bien») y 3 capturas (`/tmp/plan-socialista/b3/limites/v2-0*.png`). Sí: un residente ya ve que pasarse encharca y baja la SpO₂: el sello y la frase viva dicen «Edema en el pulmón: 297 mL (SpO₂ 89 %)» y el monitor marca SpO₂ 89 con PCP 20 (Joaquín, 2 L; Aurelio 0,5 L: 199 mL/93 %; Amparo 4,5 L: 295 mL/90 %).
+- ✅ El sello ya no corta en seco: edema y SpO₂ bajan antes y al sello en los tres pacientes de volumen; umbral PCP 18 con p. 42; Mateo y Consuelo paran por su tope de la ficha (correcto).
+- ✅ El reloj mueve la fisiología: Aurelio ECMO 6 + 6 L, edema 1.079 → 2.381 mL a las 24 h, sello «Edema de pulmón» con la nota del oxigenador (SpO₂ 97-98) y «fisiología general; ilustrativo». Bien.
+- ✅ Texto del sello ramificado: Joaquín/Aurelio por PCP (p. 42, «Ver en la ficha»); Amparo por PVC («PVC 22, entró con 3», fisiología general); Consuelo ya solo «Tope de 500 mL» + aviso de PVC.
+- ⚠ **Amparo con PVC 22-24 y PCP 19 no es un paciente posible sin fallo del VD**: en una sepsis la PVC no supera a la PCP (eso es VD que falla o hipertensión pulmonar, y ni el modelo ni la frase lo dicen). O la PVC se queda por debajo de la PCP (`b3-shock/soporte.mjs`, donde calcula `pvc` con el volumen) o la frase nombra el VD. Número flojo, no grave.
+- ⚠ Las gotas del pulmón no se ven: 8 círculos de 3 px con 300 mL (captura v2-03; `corazon.js` l. 62, `#cor-gotas`): la Guía dice «mira el pulmón, se encharca» y el ojo no lo encuentra. Gotas más grandes y más desde ~150 mL, y un velo en las bases con ≥1.000 mL.
+- ⚠ En el ECMO los dos sellos se montan uno sobre otro y tapan el «Ver en la ficha» del primero (captura v2-02; CSS de `.tope-sello` en `b3-shock.html`): apilarlos o que «Edema de pulmón» sustituya a «Sobrecarga».
+- ⚠ La frase viva por PCP sigue firmando «el 12 de PVC: fisiología general» (`datos.js` l. 263, `org` fijo): el origen debe ir por rama como el sello.
