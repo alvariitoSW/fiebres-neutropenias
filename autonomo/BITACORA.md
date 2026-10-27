@@ -435,7 +435,7 @@ El resto del tablero sigue `aparcada`.
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
 - **🔴 PR #36 · `pif-ecg` (ECG y arritmias)**: mírala en el móvil y fusiónala si te gusta. Se construyó con lo
   recomendado en las 3 preguntas de su informe (eje fuera, tarjeta sin dosis, ejercicios con pareja como pregunta y
-  el resto en galería). Desbloquea B-033 (el plan del ECG depende de que entre en `main`).
+  el resto en galería). `ecg-guardia` (mañana) continúa sobre esa rama, y `ecg-vector-app` espera a que entre en `main`.
 - **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
   - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
   - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
@@ -550,7 +550,7 @@ El resto del tablero sigue `aparcada`.
 ## 6. Hecho (últimos 7 días)
 
 - 2026-10-27 · **Plan del ECG** (`ecg-plan`, B-033): 3 caminos (guardia, desde cero, laboratorio de arritmias) con
-  piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Espera tus 6 elecciones.
+  piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Aprobado: 6 tareas en el tablero; Anatomy, skill.
 - 2026-10-27 · **Informes con gasto** (Objetivo P): paso 4 del `b3`, `eco-calibra` y competencias R1. Elegiste la A en
   los dos primeros.
 
