@@ -133,7 +133,7 @@ function leer() {
   const midiendo = desde > simT - ven && elec.length < 2 && !(mo.m.fv || (mo.m.foco && S.tdp));
   // la FC del monitor: media de los últimos latidos (en la FA, de toda la ventana: es irregular); si se hace una pausa,
   // cae con ella (no va detrás del dibujo)
-  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return null; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : 0; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return Math.round(f); };
+  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return null; let f = u.length >= 2 ? 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])) : null; const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return f == null ? null : Math.round(f); };
   let fc = ritmo(elec, b => b.t0);
   const caos = mo.m.fv || (mo.m.foco && S.tdp);
   const lat = latidos(t).filter(b => b.t > desde && b.t <= t);

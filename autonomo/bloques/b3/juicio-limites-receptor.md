@@ -12,3 +12,11 @@ Medido con `limites-prueba.mjs receptor` (14 estados, PUERTO=8811) y `receptor-p
 - ❌ Menor: cocaína con betabloqueante baja la PAM 105→102 (`datos.js` `efecto()`, `PACIENTES.cocaina.lecho: 'coronaria'` no pinta nada): la lección «α sin nadie enfrente» la lleva solo el sello; valdría una PA que no cae o la coronaria del dibujo cerrándose.
 
 No comprobado: la Mayéutica entera con los sellos puestos (el «Compruébalo» de Begoña), ni 360 px. Para pasar (≥8): los dos primeros ❌; para la meta (8,75), los cuatro.
+
+## Vuelta 2 (profesor, 27/10/2026) — **8,8 / 10: pasa y llega a la meta**
+
+Medido con `limites-prueba.mjs receptor` (PUERTO 8823: 0 errores, 0 px de desborde, `fuera` vacío) y 2 capturas a 360 px (`/tmp/plan-socialista/b3/limites/v2-360-na40.png`, `v2-360-cocaina-bb.png`).
+- ✅ El monitor respalda los sellos: NA 30→40 FC 106→116 (PA 102/70→106/73, origen «el monitor: fisiología general»); dopamina 10→20 FC 120→126; adrenalina séptico 0,1→0,4→0,5 FC 111→121→124 (sube, ya no plana). Begoña: con bisoprolol quitado, mismas cifras (candado). Cocaína + betabloqueante PAM 105→110 (α sin oposición, `kR` 0,6 ilustrativo). `preguntas.js` FC 87 = la que da el modelo (87).
+- ✅ Sello: título de una línea sin partir («⛔ ISQUEMIA Y ARRITMIAS», «⛔ CONTRAINDICADO»), texto corto + origen + «Ver en la ficha», abajo del monitor (73 px de alto, dentro de él); **no tapa ni FC ni PA**; la frase larga va a la frase viva. Tapa la fila IC/IRVS/PVC y el pie «curvas y cambios», que a tope importan menos: aceptable.
+- Pendiente del usuario (no puntúa): el deslizador no se apaga en el sello (§1.14 dice «se apaga»; el constructor lo deja activo para poder bajar).
+- Menor, fuera de esta vuelta: a 360 px la caja ART del monitor recorta «mmHg» y «(110)» en cocaína (`b3-receptor.html` `#monitor`, CSS del valor ART), sin sello también.
