@@ -399,3 +399,16 @@ del día, más un límite de gasto diario. Dónde quedan:
   `fuentes-b3`). §4.6 y skill.
 - **Límite de gasto por día**: como mucho el 18 % del uso semanal del plan, sumando sesiones (tablero; skill §0 paso 3;
   `REGLAS.md` §5.6). La equivalencia en millones de `gasto.mjs` queda por calibrar.
+
+### Reglas de la parada 2 del `b3` (`reglas-b3p2`, aprobadas por el usuario el 27/10/2026)
+
+Salen del parte `autonomo/partes/2026-10-27-b3-parada2.md`.
+- **`.claude/`**: la prohibición de tocarla vale para `CLAUDE.md`, `REGLAS.md`, `.claude/agents/` y las skills del
+  proyecto. Lo que reescribe una herramienta instalada (graft en `settings.json` y su skill) lo sube el director en un
+  commit aparte, tras comprobar con `git diff` que no se pierde ninguna orden del proyecto. `REGLAS.md` §5.1.
+- **Una parada con varios modelos vivos, una sesión por modelo** (5,1 M frente a 0,8 M). `REGLAS.md` §4.7.
+- **Botones estables** en los modelos vivos (si se rehacen en cada cuadro, «mando no tocable»): lista del constructor.
+- **Maqueta a la app en dos encargos**: el modelo con su prueba (90 / 2,0 M) y su Mayéutica (50 / 1,2 M). `REGLAS.md`
+  §4.7 y skill (Modo bloque, paso 3).
+- El entorno bloqueó al director la edición de `.claude/` (skill y constructor): esa parte espera el permiso del
+  usuario (parte `2026-10-27-reglas-b3p2.md`).
