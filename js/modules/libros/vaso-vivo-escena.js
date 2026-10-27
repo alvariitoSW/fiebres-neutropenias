@@ -35,7 +35,7 @@ let tCambio = 0, tLupa = 0, lupaPrevia = null;
 
 // Rótulo con halo del color del fondo (se lee sobre la trama). Nunca por debajo de 7,6 de cuerpo.
 function tx(x, y, t, { s = 8.2, c = 'text-dim', a = 'start', it = true, b = false, id = '' } = {}) {
-    s = Math.max(9.3, s);
+    s = Math.max(10, s);
     return `<text${id ? ` id="vso-${id}"` : ''} x="${n2(x)}" y="${n2(y)}" font-size="${s}" text-anchor="${a}" style="fill:var(--${c});font-family:${it ? 'Georgia,serif;font-style:italic' : 'system-ui,sans-serif'}${b ? ';font-weight:700' : ''};paint-order:stroke;stroke:var(--bg-main);stroke-width:2.6;stroke-linejoin:round">${t}</text>`;
 }
 const DEFS = `<defs>
@@ -186,7 +186,7 @@ function rios(G) {
     h += `<path d="${c.tf}" class="vso-rio" stroke-dasharray="${n2(5 * s)} ${n2(3 * s)}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="${n2(3.4 * s)}" stroke-opacity=".55" stroke-linecap="round"/>`;
     h += `<path d="${c.ct}" class="vso-rio" stroke-dasharray="${n2(3 * s)} ${n2(3 * s)}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="${n2(1.1 * s)}" stroke-opacity=".7" stroke-linecap="round"/>`;
     [[ga + 10 * s, G.endo[0] + 4 * s], [gb - 8 * s, G.endo[0] + 2 * s], [(ga + gb) / 2 + 14 * s, G.endo[0] - 2 * s]].forEach(([x, y]) => { h += P('ft', x, y, 1.9 * s); });
-    h += P('fII', c.ii[0], c.ii[1], 8);
+    h += P('fII', c.ii[0], c.ii[1], 11);
     h += `<path d="M${n2(c.ii[0] + 10)} ${n2(c.ii[1] - 3)}L${n2(c.iia[0] - 16)} ${n2(c.iia[1] + 2)}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="${n2(0.8 * s)}" stroke-dasharray="${n2(1.6 * s)} ${n2(1.2 * s)}"/>`;
     h += `<g transform="translate(${c.iia[0]} ${c.iia[1]}) scale(${n2(0.62 * s)}) rotate(-28)"><path d="M-13 0Q0 -8.5 13 0Q0 8.5 -13 0Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.3"/><path d="M-12 0L-17 -1M12 0L17 1" style="stroke:var(--accent-yellow)" stroke-width="1.1"/></g>`;
     h += `<path d="${c.hilo}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="${n2(0.8 * s)}" stroke-dasharray="${n2(2 * s)} ${n2(1.4 * s)}" class="vso-rio"/>`;
@@ -407,7 +407,7 @@ function lupaCascada() {
     h += '<g id="vso-cas-rios">';
     h += '<path d="M60 88C110 96 160 104 196 124" class="vso-rio" stroke-dasharray="6 4" style="fill:none;stroke:var(--accent-yellow)" stroke-width="6" stroke-opacity=".55" stroke-linecap="round"/>';
     h += '<path d="M302 92C276 100 248 110 226 122" class="vso-rio" stroke-dasharray="3 3" style="fill:none;stroke:var(--accent-yellow)" stroke-width="2" stroke-opacity=".75" stroke-linecap="round"/>';
-    h += tx(92, 120, 'vía del factor tisular', { s: 8.2, c: 'accent-yellow' }) + tx(96, 131, '(la principal)', { s: 7.8, c: 'text-dim' }) + tx(272, 124, 'de contacto', { s: 8.2, c: 'accent-yellow', a: 'end' });
+    h += tx(44, 128, 'vía del factor tisular', { s: 8.2, c: 'accent-yellow' }) + tx(48, 139, '(la principal)', { s: 7.8, c: 'text-dim' }) + tx(272, 124, 'de contacto', { s: 8.2, c: 'accent-yellow', a: 'end' });
     h += '</g>';
     h += `<g id="vso-cas-maquina">${svgMaquinaTrombina({ pre: 'vso', xa, ii, iia })}</g>`;
     // de la tejedora sale la fibrina: el fibrinógeno (I) se hace hilo
@@ -415,7 +415,7 @@ function lupaCascada() {
     if (arg) h += `<g id="vso-cas-arg"><path d="M${iia[0] - 11} ${iia[1] - 11}L${iia[0] + 11} ${iia[1] + 11}M${iia[0] + 11} ${iia[1] - 11}L${iia[0] - 11} ${iia[1] + 11}" style="stroke:var(--bg-main)" stroke-width="5.5" stroke-linecap="round"/><path d="M${iia[0] - 11} ${iia[1] - 11}L${iia[0] + 11} ${iia[1] + 11}M${iia[0] + 11} ${iia[1] - 11}L${iia[0] - 11} ${iia[1] + 11}" style="stroke:var(--accent-red)" stroke-width="2.8" stroke-linecap="round"/>${tx(100, 206, 'argatrobán:', { s: 8.4, c: 'accent-red', a: 'middle', b: true })}${tx(100, 217, 'frena la IIa', { s: 8.2, c: 'accent-red', a: 'middle' })}</g>`;
     // la despensa de la vitamina K
     h += `<g id="vso-cas-despensa">${tx(180, 286, warf ? 'warfarina: la despensa, vacía' : ccp ? 'CCP4F: la despensa, llena' : 'dependen de la vitamina K', { s: 8, c: warf ? 'accent-red' : ccp ? 'accent-green' : 'text-muted', a: 'middle', b: warf || ccp })}`;
-    ['fII', 'fVII', 'fIX', 'fX'].forEach((f, i) => { h += P(f, 132 + i * 32, 304, 9, warf ? { hueco: true } : {}); });
+    ['fII', 'fVII', 'fIX', 'fX'].forEach((f, i) => { h += P(f, 132 + i * 32, 304, 11, warf ? { hueco: true } : {}); });
     h += '</g>';
     h += tx(180, 96, 'la máquina del telar', { s: 7.8, c: 'text-muted', a: 'middle' });
     return h;
@@ -431,7 +431,7 @@ function pie() {
     const h = [], e = estado;
     if (D.pie === 'fig132') {
         // la bolsa de plaquetas (pieza común 2) y la gráfica: barras a la hora y a las 24 h, con la banda del texto
-        h.push(`<g id="vso-bolsa">${svgBolsa('plaquetas', { x: 30, y: 20, tubo: 20, rotulo: 'der', id: 'vso-bolsa-plaq', gota: 0 })}</g>`);
+        h.push(`<g id="vso-bolsa">${svgBolsa('plaquetas', { x: 30, y: 20, tubo: 20, rotulo: false, id: 'vso-bolsa-plaq', gota: 0 })}</g>`, tx(45, 35, '1 Plaquetas', { s: 10.5, c: 'text-main', it: false, b: true }), tx(45, 47, '260 mL', { s: 10, c: 'text-muted', it: false }));   // 260 mL: volumen de la ficha (hemoderivados-data)
         const y0 = 112, k = 1.15, X = { 1: 170, 3: 238, 5: 306 }, x0 = 128, x1 = 346;
         h.push(tx(x0, 10, 'miles/µL', { s: 7.6, c: 'text-muted', it: false }));
         [0, 20, 40, 60].forEach(v => { h.push(`<path d="M${x0} ${n2(y0 - v * k)}H${x1}" style="stroke:var(--text-muted)" stroke-width=".4" stroke-opacity=".5"/>`, tx(x0 - 4, y0 - v * k + 3, String(v), { s: 7.6, c: 'text-muted', a: 'end', it: false })); });
@@ -454,7 +454,7 @@ function pie() {
         let g = `<g id="vso-b-fiel" transform="rotate(${giro} 180 46)"><path d="M66 46H294" style="stroke:var(--accent-yellow)" stroke-width="2.4"/><circle cx="180" cy="46" r="3.4" style="fill:var(--accent-yellow)"/>`;
         g += '<path d="M66 46L36 80M66 46L96 80M294 46L264 80M294 46L324 80" style="stroke:var(--text-dim)" stroke-width=".7"/>';
         g += '<g id="vso-b-izq"><path d="M30 80Q66 94 102 80Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width="1"/>';
-        [['fII', 54, 72], ['fVII', 78, 72], ['fIX', 54, 56], ['fX', 78, 56]].forEach(([f, x, y]) => { g += P(f, x, y, 8, vacio ? { hueco: true } : {}); });
+        [['fII', 49, 74], ['fVII', 79, 74], ['fIX', 49, 52], ['fX', 79, 52]].forEach(([f, x, y]) => { g += P(f, x, y, 11, vacio ? { hueco: true } : {}); });
         g += '</g><g id="vso-b-der"><path d="M258 80Q294 94 330 80Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width="1"/>';
         g += P('at', 276, 70, 6.4) + `<circle cx="300" cy="72" r="7.6" style="fill:var(--bg-card);stroke:var(--accent-blue)" stroke-width="1.2"/><circle cx="318" cy="66" r="7.6" style="fill:var(--bg-card);stroke:var(--accent-blue)" stroke-width="1.2"/>`;
         g += tx(300, 75, 'C', { s: 8, c: 'accent-blue', a: 'middle', it: false, b: true }) + tx(318, 69, 'S', { s: 8, c: 'accent-blue', a: 'middle', it: false, b: true }) + (pfc ? P('at', 288, 56, 6.4) : '') + '</g></g>';
@@ -613,7 +613,7 @@ function poolLuz(G, flujo, gotas, tag, conGotas) {
     add('rbc', G.n.rbc, G.n.rbc, i => P(mat && i % 3 === 0 ? 'esquisto' : 'rbc', 0, 0, G.rR, { giro: (hashN(i) - 0.5) * 40 }));
     add('plaq', G.n.plaq, Math.max(estado.plaq >= 5000 ? 1 : 0, Math.round(G.n.plaq * D.fPlaq)), () => (hit ? `<g>${P('plaquetaActiva', 0, 0, G.rP)}${P('igg', G.rP * 1.6, -G.rP * 1.4, G.rP * 0.8, { giro: 30 })}</g>` : P('plaqueta', 0, 0, G.rP)));
     add('at', G.n.at, G.n.at, () => P('at', 0, 0, G.rP * 1.05));
-    add('factor', G.n.factor, Math.round(G.n.factor * D.fFactor), i => P(['fII', 'fX', 'fVII'][i % 3], 0, 0, 7.6, D.factorHueco ? { hueco: true } : {}));
+    add('factor', G.n.factor, Math.round(G.n.factor * D.fFactor), i => P(['fII', 'fX', 'fVII'][i % 3], 0, 0, 11, D.factorHueco ? { hueco: true } : {}));
     add('dim', G.n.dim, estado.causa === 'cid' ? G.n.dim : 0, i => P('dimero', 0, 0, G.rP * 0.95, { giro: hashN(i) * 90 }));
     add('fib', G.n.fib, estado.causa === 'cid' ? G.n.fib : 0, i => P('fibrina', 0, 0, G.rP * 2.1, { giro: hashN(i, 4) * 120 }));
     add('ft', G.n.ft, estado.causa === 'cid' ? G.n.ft : 0, () => P('ft', 0, 0, G.rP * 1.3));

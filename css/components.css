@@ -3511,6 +3511,7 @@ body.study-mode-on .cpv-dock { padding-right: 82px; }
 
 /* Capa de estudio: el aspecto del modelo aprobado */
 .vso-raiz .vso-formato { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.vso-raiz .vso-formato [data-accion], .vso-raiz .vso-formato button { scroll-margin-bottom: calc(var(--vso-dock-h, 190px) + 16px); }
 .vso-raiz .vso-cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
 .vso-raiz .vso-num { font: 700 .76rem var(--vso-sans); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
 .vso-raiz .vso-serie { font: 700 .66rem var(--vso-sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--text-dim); border-radius: 4px; padding: 1px 6px; }
@@ -3578,7 +3579,7 @@ body.study-mode-on .vso-dock { padding-right: 82px; }
 .vso-raiz .vso-celda .vso-k { font: 600 .6rem/1.15 var(--vso-sans); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vso-raiz .vso-celda b { font: 700 .92rem/1.2 var(--vso-serif); font-variant-numeric: tabular-nums; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .vso-raiz .vso-celda .vso-u { font: .56rem/1.15 var(--vso-sans); color: var(--text-dim); display: block; min-height: 1.15em; }
-.vso-raiz .vso-celda .vso-o { font: .5rem/1.25 var(--vso-sans); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 0 4px; justify-self: start; margin-top: 2px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+.vso-raiz .vso-celda .vso-o { font: .5rem/1.25 var(--vso-sans); color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 8px; padding: 0 4px; justify-self: start; margin-top: 2px; white-space: normal; overflow-wrap: anywhere; max-width: 100%; }
 .vso-raiz .vso-celda .vso-o.vso-ilu { border-style: dashed; }
 .vso-raiz .vso-celda.vso-alarma b { color: var(--accent-red); }
 .vso-raiz .vso-celda.vso-alarma { border-color: rgba(184, 92, 62, .55); }

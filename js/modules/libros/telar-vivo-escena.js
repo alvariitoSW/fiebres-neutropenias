@@ -245,10 +245,10 @@ export function svgMaquinaTrombina({ pre = 'tel', xa = XA, ii = II, iia = IIA0, 
       <path d="M${ii[0] - 2} ${ii[1] + 7} C${ii[0] - 4} ${ii[1] + 36} ${ii[0] - 12} ${ii[1] + 60} ${iia[0] + 4} ${iia[1] - 38}" style="fill:none;stroke:var(--text-dim)" stroke-width=".9" stroke-dasharray="2.5 2" opacity=".7"/>
       <path d="M${xa[0] - 14} ${xa[1] + 8} C${xa[0] - 22} ${xa[1] + 22} ${xa[0] - 36} ${xa[1] + 30} ${xa[0] - 44} ${xa[1] + 36}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1" opacity=".8"/>
       <path d="M${xa[0] - 46} ${xa[1] + 33} L${xa[0] - 44} ${xa[1] + 38} L${xa[0] - 40} ${xa[1] + 34}" style="fill:none;stroke:var(--accent-yellow)" stroke-width="1"/>
-      <g transform="translate(${ii[0]} ${ii[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${R(0, 3, 'II', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
+      <g transform="translate(${ii[0]} ${ii[1]})"><path d="M-9 -6 L9 -6 L6 0 L9 6 L-9 6 L-6 0 Z" style="fill:var(--bg-card);stroke:var(--text-dim)" stroke-width=".9"/>${R(0, 4, 'II', { s: 10.6, a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
       ${R(ii[0], ii[1] + 17, 'protrombina', { a: 'middle', c: 'text-dim', plato: true })}
       <g transform="translate(${xa[0]} ${xa[1]})"><path id="${pre}-xa-rueda" d="${engranaje(11)}" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><circle r="5.5" style="fill:var(--bg-main);stroke:var(--accent-yellow)" stroke-width=".7"/></g>
-      ${R(xa[0], xa[1] + 3, 'Xa', { a: 'middle', i: false, c: 'text-main', w: 700 })}
+      ${R(xa[0], xa[1] + 4, 'Xa', { s: 10.6, a: 'middle', i: false, c: 'text-main', w: 700 })}
       <g id="${pre}-g-spools"></g>
       <g id="${pre}-iia"${pre === 'tel' ? '' : ` transform="translate(${iia[0]} ${iia[1]}) rotate(-35)"`}><path d="M-14 0 Q0 -9 14 0 Q0 9 -14 0 Z" style="fill:var(--bg-card);stroke:var(--accent-yellow)" stroke-width="1.1"/><path d="M-13 0 L-18 -1 M13 0 L18 1" style="stroke:var(--accent-yellow)" stroke-width=".8"/>${R(0, 3, 'IIa', { a: 'middle', i: false, c: 'text-main', w: 700 })}</g>
       <path id="${pre}-iia-hilo" d="" style="fill:none;stroke:var(--accent-yellow)" stroke-width=".8" stroke-dasharray="2 1.5"/>
