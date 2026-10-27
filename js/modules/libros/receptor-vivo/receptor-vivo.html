@@ -1,13 +1,88 @@
     <button class="back-btn btn-volver-libros-menu" id="rcv-volver">← VOLVER</button>
-    <!-- El receptor vivo: vasopresores e inotrópicos (Marino caps. 14 y 16). Modelo vivo de Libros, en construcción: el constructor llena el hueco. Sus fichas son las de
-         Merino Cardiología. Lógica en receptor-vivo/index.js. Prefijo de clases e ids: rcv-. -->
+    <!-- El receptor vivo: vasopresores e inotrópicos (Marino caps. 14 y 16). Modelo vivo de Libros; sus fichas son las de Merino Cardiología.
+         Lógica en receptor-vivo/index.js (se monta al primer abrir) y pagina.js. Prefijo de clases, ids y tramas: rcv-. -->
     <div class="rcv-raiz" id="rcv-raiz" data-modelo-vivo>
-      <header class="rcv-cabecera">
-        <p class="rcv-eyebrow">Modelo vivo · Marino caps. 14 y 16</p>
-        <h2 class="rcv-titulo">El receptor vivo: <em>vasopresores e inotrópicos</em></h2>
-      </header>
-      <div id="rcv-modelo">
-        <!-- [HUECO constructor receptor: el modelo] -->
-        <p class="rcv-construccion">En construcción</p>
+      <p class="rcv-eyebrow">Modelo vivo · Marino caps. 14 y 16</p>
+      <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+        <defs>
+          <pattern id="rcv-g-fina" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)"><rect width="4" height="4" style="fill:var(--rcv-bg-main)"/><line x1="0" y1="0" x2="0" y2="4" style="stroke:var(--accent-yellow)" stroke-opacity=".22" stroke-width=".5"/></pattern>
+          <pattern id="rcv-g-liso" width="2.6" height="2.6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)"><rect width="2.6" height="2.6" style="fill:var(--rcv-card2)"/><line x1="0" y1="0" x2="0" y2="2.6" style="stroke:var(--accent-red)" stroke-opacity=".38" stroke-width=".55"/></pattern>
+          <pattern id="rcv-g-liso-on" width="1.8" height="1.8" patternUnits="userSpaceOnUse" patternTransform="rotate(80)"><rect width="1.8" height="1.8" style="fill:var(--rcv-card2)"/><line x1="0" y1="0" x2="0" y2="1.8" style="stroke:var(--accent-red)" stroke-opacity=".7" stroke-width=".6"/></pattern>
+          <pattern id="rcv-g-miocito" width="3" height="3" patternUnits="userSpaceOnUse"><rect width="3" height="3" style="fill:var(--rcv-card2)"/><line x1="1.5" y1="0" x2="1.5" y2="3" style="stroke:var(--accent-red)" stroke-opacity=".3" stroke-width=".5"/></pattern>
+          <pattern id="rcv-g-punteado" width="4" height="3.4" patternUnits="userSpaceOnUse"><rect width="4" height="3.4" style="fill:var(--rcv-bg-main)"/><circle cx="1" cy="1" r=".55" style="fill:var(--text-dim)" fill-opacity=".55"/><circle cx="3" cy="2.6" r=".45" style="fill:var(--text-dim)" fill-opacity=".4"/></pattern>
+        </defs>
+      </svg>
+      <div class="rcv-main">
+        <header class="rcv-cabecera">
+          <h2 class="rcv-titulo">El receptor vivo <em>· llave, cerradura y monitor</em></h2>
+          <p class="rcv-lead">Cada fármaco es una <span class="rcv-hl-azul">llave</span> que abre (o tapa) <span class="rcv-hl-a">cerraduras</span> de unas células; lo que hace la célula sale en el monitor. <span class="rcv-org">ficha · p. 12</span> <span class="rcv-org">fisiología general</span></p>
+          <p class="rcv-ficha-pac" id="rcv-ficha-pac"></p>
+        </header>
+      
+        <!-- [HUECO receptor parte 2: interruptor Explorar | Mayéutica] -->
+        <!-- [HUECO receptor parte 2: Mayéutica] -->
+        <section id="rcv-vista-preguntas" class="rcv-bloque" hidden aria-live="polite"><div class="rcv-formato" id="rcv-preg"></div><p class="rcv-para" id="rcv-aviso-tapa" hidden>El monitor y el dibujo salen cuando contestes.</p></section>
+      
+        <section class="monitor" id="rcv-monitor" aria-label="Monitor de cabecera">
+          <div class="mon-cab"><span id="rcv-mon-quien">Monitor</span><span class="rcv-mon-botones"><button type="button" class="rcv-pausa" id="rcv-cinco" aria-pressed="false">5 curvas</button><button type="button" class="rcv-pausa" id="rcv-pausa" aria-pressed="false">Pausa</button></span></div>
+          <div class="mon-cuerpo">
+            <svg id="rcv-trazas" class="mon-trazas" role="img" aria-label="Curvas del monitor: ECG y presión arterial"></svg>
+            <div class="cifras" id="rcv-cifras"></div>
+          </div>
+          <div class="rcv-perfusion" id="rcv-perfusion"></div>
+          <div class="rcv-mon-pie" id="rcv-mon-pie"></div>
+          <div class="rcv-detalle-fila" id="rcv-detalle-fila" hidden></div>
+        </section>
+      
+        <section class="rcv-fig" id="rcv-fig1" aria-label="Lámina 1: dos órganos, una misma vía">
+          <div class="rcv-fig-cab"><span class="rcv-n">Fig. 1</span><span class="rcv-t" id="rcv-fig1-tit">Dos órganos, una misma vía</span></div>
+          <svg id="rcv-escena" class="dib rcv-dib" viewBox="0 0 360 276" role="img" aria-label="La vía de la bomba lleva las llaves a la arteriola y al banco del corazón"></svg>
+          <div class="rcv-fig-pie"><span class="rcv-pista" id="rcv-fig1-pista">Toca una célula para verla con lupa</span><span class="rcv-lect" id="rcv-fig1-lect"></span></div>
+        </section>
+      
+      
+      
+        <div class="rcv-fila" id="rcv-fila-explicame"><button type="button" class="rcv-b rcv-prim" id="rcv-explicame">Explícame este estado</button><span class="rcv-para" id="rcv-explicame-txt"></span></div>
+      
+        <section class="rcv-bloque" id="rcv-zona-estados" aria-label="Estados con nombre">
+          <h3>Elige un estado</h3>
+          <div class="rcv-familias" id="rcv-familias"></div>
+        </section>
+      
+        <section class="rcv-bloque" id="rcv-zona-lupa" aria-label="La cerradura con lupa">
+          <div class="rcv-celulas" id="rcv-celulas" role="group" aria-label="Qué célula ver con lupa"></div>
+          <section class="rcv-fig" id="rcv-fig2" aria-label="Lámina 2: la cerradura y su maquinaria">
+            <div class="rcv-fig-cab"><span class="rcv-n">Fig. 2</span><span class="rcv-t" id="rcv-fig2-tit">La cerradura y su maquinaria</span></div>
+            <svg id="rcv-lupa" class="dib rcv-dib" viewBox="0 0 360 372" role="img" aria-label="La célula con sus cerraduras y la maquinaria de dentro"></svg>
+            <div class="rcv-fig-pie"><span class="rcv-pista" id="rcv-fig2-pista">Toca una pieza: su nombre sale abajo</span><span class="rcv-lect" id="rcv-fig2-lect"></span></div>
+            <div class="rcv-fig-pie"><button type="button" class="btn-plano" id="rcv-lupa-grande">⤢ La lupa, a pantalla completa</button></div>
+          </section>
+          <div class="rcv-barra-lupa">
+            <div class="rcv-seg" role="group" aria-label="Cómo se ve la maquinaria"><button type="button" data-cas="facil" aria-pressed="true">Fácil<small>llave, palanca, efecto</small></button><button type="button" data-cas="completa" aria-pressed="false">Completa<small>cada máquina</small></button></div>
+            <button type="button" class="rcv-b" id="rcv-paso-a-paso">▶ Paso a paso</button>
+          </div>
+          <div class="rcv-pieza-info" id="rcv-pieza-info" aria-live="polite"></div>
+          <div class="rcv-leyenda" id="rcv-leyenda"></div>
+          <button type="button" class="rcv-lamina-ancha" id="rcv-fig524" hidden><span class="rcv-caja"><img src="js/modules/libros/img/mar-fig52-4-glucagon.jpg" alt="Fig. 52.4 de Marino: receptores de glucagón y β, adenilato ciclasa, AMPc, PDE, canal de calcio y proteínas contráctiles" loading="lazy"></span><span><b>Así lo dibuja el libro: Fig. 52.4.</b> El mismo miocito: receptor de glucagón y β, AMPc, PDE y canal de calcio. Tócala para verla grande.</span></button>
+        </section>
+      
+        <section id="rcv-zona-abajo" class="rcv-bloque">
+          <details class="rcv-plegable" id="rcv-plegable-fichas"><summary>La ficha de cada fármaco de este estado</summary><div class="rcv-bloque" id="rcv-fichas-farmaco"></div></details>
+          <details class="rcv-plegable" id="rcv-fuentes-estado"><summary>Las fuentes de este estado</summary><ul class="rcv-lista" id="rcv-lista-fuentes"></ul></details>
+          <details class="rcv-plegable"><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div class="rcv-bloque" id="rcv-lista-notas"></div></details>
+          <details class="rcv-plegable"><summary>Para profundizar: lo que este modelo aún no enseña</summary><ul class="rcv-lista" id="rcv-lista-profundizar"></ul></details>
+          <details class="rcv-plegable"><summary>Cómo crecerá: otras fuentes de la app</summary><div class="rcv-envuelve"><table class="rcv-tabla-crece" id="rcv-tabla-crece"></table></div></details>
+        </section>
       </div>
+      
+      <p class="rcv-frase" id="rcv-frase" role="status" aria-live="polite"><span class="rcv-frase-txt" id="rcv-frase-txt"></span></p>
+      
+      <div class="rcv-dock" id="rcv-dock">
+        <div class="rcv-dock-in" id="rcv-dock-explorar"></div>
+        <div class="rcv-dock-in" id="rcv-dock-guia" hidden></div>
+        <div class="rcv-dock-in rcv-dock-est" id="rcv-dock-estudio" hidden><div class="rcv-pasos" id="rcv-dock-pasos"></div><div class="rcv-dock-est-txt"><span id="rcv-dock-est-izq"></span><span id="rcv-dock-est-der"></span></div></div>
+      </div>
+      
+      <dialog id="rcv-visor"><div class="rcv-caja-img"><img id="rcv-visor-img" alt=""></div><p id="rcv-visor-txt"></p><div class="rcv-fila" style="margin-top:8px; justify-content:space-between"><span id="rcv-visor-cita"></span><button type="button" class="rcv-b" id="rcv-visor-cerrar">Cerrar</button></div></dialog>
+      
     </div>

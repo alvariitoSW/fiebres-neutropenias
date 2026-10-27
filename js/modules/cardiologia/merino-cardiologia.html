@@ -612,7 +612,7 @@
         <div id="mc-vasopresores" class="tab-content">
             <h3 style="color: var(--accent-purple);">Vasopresores en el shock: fármacos y dosis</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 14.</p>
-            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-vasopresores"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
+            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-vasopresores"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="na-alta">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
 
             <div id="mc-vasopresores-intro" data-nombre="Los vasopresores" class="micro-profiles">
                 <div id="mc-norepinefrina" class="micro-prof-item">
@@ -701,6 +701,7 @@
                         <option value="angio2">Angiotensina II</option>
                     </select>
                 </div>
+                <p class="rcv-enlace-ficha" style="margin:6px 0 0;" id="rcv-enlace-mc-receptores"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="na-alta">💉 Verlo vivo: este fármaco en el receptor →</button></p>
                 <div class="form-group" id="mc-receptor-dosis-wrap" style="display:none;">
                     <label for="mc-receptor-dosis">Rango de dosis</label>
                     <select id="mc-receptor-dosis"></select>
@@ -1139,7 +1140,7 @@
             <div class="micro-profiles">
                 <div id="mc-tsvi-dinamico" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🌀 Obstrucción dinámica del tracto de salida</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body"><p class="fuente-ficha" style="margin:0 0 6px;"><a class="biblio-link" href="docs/marino-2024-shock-caps14-17.pdf#page=39" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 39</a></p>En la miocardiopatía hipertrófica, el flujo a través del tracto de salida del VI estrechado crea un efecto de succión que atrae anteriormente los velos de la válvula mitral, y el contacto mesosistólico entre la válvula mitral y el septo interventricular crea una "obstrucción dinámica del tracto de salida del VI". El diagnóstico se hace con ecografía Doppler de onda continua en la vista apical de 4 cámaras, calculando el gradiente de presión sistólica pico a través de la región subaórtica del VI. Reconocer esta condición es importante porque se trata de forma distinta: el objetivo es enlentecer la frecuencia cardíaca y aumentar el llenado diastólico, usando betabloqueantes no vasodilatadores (ej. metoprolol, nadolol).</div>
+                    <div class="micro-prof-body"><p class="rcv-enlace-ficha" id="rcv-enlace-mc-tsvi-dinamico"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="tsvi">💉 Verlo vivo: dobutamina contraindicada, fenilefrina →</button></p><p class="fuente-ficha" style="margin:0 0 6px;"><a class="biblio-link" href="docs/marino-2024-shock-caps14-17.pdf#page=39" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 39</a></p>En la miocardiopatía hipertrófica, el flujo a través del tracto de salida del VI estrechado crea un efecto de succión que atrae anteriormente los velos de la válvula mitral, y el contacto mesosistólico entre la válvula mitral y el septo interventricular crea una "obstrucción dinámica del tracto de salida del VI". El diagnóstico se hace con ecografía Doppler de onda continua en la vista apical de 4 cámaras, calculando el gradiente de presión sistólica pico a través de la región subaórtica del VI. Reconocer esta condición es importante porque se trata de forma distinta: el objetivo es enlentecer la frecuencia cardíaca y aumentar el llenado diastólico, usando betabloqueantes no vasodilatadores (ej. metoprolol, nadolol).</div>
                 </div>
                 <div id="mc-postcardiotomia" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🏥 Cirugía cardíaca</span> <span class="toggle-icon">+</span></div>
@@ -1198,7 +1199,7 @@
         <div id="mc-cardiogenico-farmaco" class="tab-content">
             <h3 style="color: var(--accent-blue);">Shock cardiogénico: soporte farmacológico</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 16.</p>
-            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-cardiogenico-farmaco"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
+            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-cardiogenico-farmaco"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="dobutamina">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
 
             <p class="section-label">Manejo <a class="biblio-link" href="docs/marino-2024-shock-caps14-17.pdf#page=41" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 41</a></p>
             <p style="font-size:0.85rem; color:var(--text-dim);">La mayoría de los casos de shock cardiogénico se asocian a IAM, así que el manejo suele incluir medidas de revascularización coronaria (angioplastia, cirugía de bypass, terapia antitrombótica) — el foco aquí es en las medidas que promueven la perfusión tisular. <button id="mc-link-a-sca-tratamiento" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="mc-sca-tratamiento" style="background:none; border:none; padding:0; font:inherit; font-size:0.85rem; color:var(--accent-blue); text-decoration:underline; cursor:pointer;">🔗 Ver estrategias de reperfusión completas (Síndromes coronarios agudos: reperfusión) →</button></p>
@@ -1419,6 +1420,7 @@
             <h3 style="color: var(--accent-red);">Shock séptico: definiciones y manejo</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 17.</p>
             <p class="shv-enlace-ficha" id="shv-enlace-mc-shock-septico"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="shockVivo" data-shock-vivo="">🫀 El shock a pie de cama: monitor y soporte →</button></p>
+            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-shock-septico"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="na-alta">💉 Verlo vivo: la noradrenalina sobre el receptor →</button></p>
             <p><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="a4c" data-eco-escenario="vasoplejia">🫀 Ver la vasoplejía en el simulador de eco →</button></p>
 
             <p id="mc-sepsis-epidemiologia" data-nombre="Lo que mata en la sepsis" style="font-size:0.85rem; color:var(--text-dim);">La sepsis es responsable de 1 de cada 2-3 muertes intrahospitalarias en EE. UU., y de 1 de cada 5 muertes a nivel mundial. La mortalidad varía por edad y localización geográfica: en EE. UU., ~30% cuando el shock séptico está presente al ingreso, y ~50% cuando se desarrolla tras el ingreso. Pese a que se presume que la sepsis es infección, <span class="hl-rojo">la mortalidad en sepsis NO se relaciona con el organismo causal</span>, incluidos los microorganismos multirresistentes — observación consistente con la noción de que el problema principal en sepsis no es la infección en sí, sino la respuesta del huésped a la infección. <a class="biblio-link" href="docs/marino-2024-shock-caps14-17.pdf#page=57" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 57</a></p>
@@ -1563,7 +1565,7 @@
         <div id="mc-anafilaxia" class="tab-content">
             <h3 style="color: var(--accent-blue);">Anafilaxia y shock anafiláctico</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 17.</p>
-            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-anafilaxia"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
+            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-anafilaxia"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="betabloqueo">💉 El receptor vivo: vasopresores e inotrópicos →</button></p>
 
             <dl id="mc-anafilaxia-def" class="kv-row"><dt>Definición</dt><dd><span class="hl-purpura">Síndrome agudo de disfunción multiorgánica producido por la liberación inmunogénica de mediadores inflamatorios de basófilos y mastocitos. El rasgo característico es una respuesta exagerada de inmunoglobulina E (IgE) a un antígeno externo — una <em>reacción de hipersensibilidad</em></span>. Involucra típicamente piel, pulmones, tracto gastrointestinal y sistema cardiovascular; desencadenantes frecuentes: fármacos (especialmente antimicrobianos), alimentos y picaduras de insecto. Al contrario de la percepción popular, las muertes por anafilaxia son raras, con una tasa de mortalidad del 0,25-0,33%. <a class="biblio-link" href="docs/marino-2024-shock-caps14-17.pdf#page=64" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 64</a></dd></dl>
 
@@ -2302,7 +2304,7 @@
                     <tr><td>Oxígeno</td><td>Solo si SaO₂ &lt;90% — el O₂ suplementario NO beneficia si la saturación es normal; promueve vasoconstricción coronaria y especies reactivas de O₂ en la reperfusión.</td></tr>
                     <tr><td>Nitroglicerina</td><td>Dolor: 0,4 mg sublingual/spray cada 5 min ×3. Dolor recurrente/HTA/IC: infusión 5 μg/min, titular. Taquifilaxia común con infusiones prolongadas (&gt;24h). Evitar en infarto de VD, estenosis aórtica, y 24-48h tras inhibidores de fosfodiesterasa.</td></tr>
                     <tr><td>Morfina</td><td>4-8 mg IV, luego 2-8 mg cada 5-15 min. Fármaco de elección si el dolor es refractario a nitroglicerina. Puede reducir el efecto antiplaquetario de los inhibidores P2Y12 (significado clínico incierto).</td></tr>
-                    <tr><td>Metoprolol</td><td>4-8 mg IV, luego 2-8 mg cada 5-15 min. Evitar uso precoz en IC aguda; contraindicado en isquemia por cocaína (vasoconstricción α no antagonizada).</td></tr>
+                    <tr id="mc-betabloqueo-sca"><td>Metoprolol</td><td>4-8 mg IV, luego 2-8 mg cada 5-15 min. Evitar uso precoz en IC aguda; contraindicado en isquemia por cocaína (vasoconstricción α no antagonizada).</td></tr>
                 </tbody>
             </table>
             <details class="nota-plegable" id="mc-r5-nota-metoprolol-morfina"><summary>Nota de fidelidad: metoprolol y morfina con la misma dosis</summary>
@@ -2310,6 +2312,7 @@
                 <p><a class="biblio-link" href="docs/marino-2024-cardiac-disorders-caps18-21.pdf#page=46" target="_blank" rel="noopener">Marino cap. 20, Tabla 20.3 (PDF, pág. 46)</a></p>
             </details>
             <p style="font-size:0.85rem; color:var(--text-dim); margin-top:6px;">Betabloqueantes: <span class="hl-rojo">evitar si PAS &lt;120 mmHg</span> (aumenta el riesgo de shock cardiogénico). Tras estabilizar, se recomiendan a largo plazo para HFrEF.</p>
+            <p class="rcv-enlace-ficha" id="rcv-enlace-mc-sca-tratamiento"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="cocaina">💉 Verlo vivo: el betabloqueante en la isquemia por cocaína →</button></p>
 
             <p class="section-label" style="margin-top:16px;">Tabla 20.4 — Medidas antitrombóticas <a class="biblio-link" href="docs/marino-2024-cardiac-disorders-caps18-21.pdf#page=47" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem; white-space:nowrap;">pág. 47-48</a></p>
             <table id="mc-tabla-20-4" class="data-table">
