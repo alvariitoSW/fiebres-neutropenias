@@ -31,7 +31,7 @@ graves, 5 menores (corregidos), 2 huecos · **Profesor:** ✅ 8,6 / 8,7 / 8,6 / 
 ## Para el usuario
 - Mirar: Eco cardíaca → simulador → «Formas de enfermedad»: «Hipertensión pulmonar crónica», «Dilatada» con color
   (botón «Chorro de IM») y «Derrame» con el mando a fondo (A4C y subcostal).
-- Decidir: fusionar la parada 3 a `main`; B-027 (informe del motor diastólico) y B-028 (bibliografía) en la bitácora.
+- 27/10: el usuario la fusiona a `main` y ve en el móvil la HP crónica a fondo deformada (B-029). Decidir: B-027 (informe del motor diastólico) y B-028 (bibliografía) en la bitácora.
 
 ## Visto de paso (no tocado)
 En la bitácora, §4 «Eco, lo que dejó la parada 3» (10 puntos: pliegue poco visible a 390, IE en criterios, Eustaquio,

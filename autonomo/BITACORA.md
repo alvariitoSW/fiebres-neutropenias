@@ -207,6 +207,23 @@ esta sección.
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
 
+### B-029 · Eco: la HP crónica a fondo deforma el corazón (y el dibujo recorta el volumen) · apuntado 2026-10-27
+- **Lo que dijiste** (27/10, con dos capturas del móvil: HP crónica con la gravedad al 100 %, A4C con sonda libre y
+  corazón 3D): «ha deformado el corazón que parece una nave espacial y aquí falla con una regla y es que esto no es
+  ni anatómico ni fisiológico […] hay que hacer muchas más mejoras en la parte de eco».
+- **Lo que se ve**: a fondo, el 3D enseña el corazón aplastado en un disco con el aviso «⚠ volumen fuera del rango del
+  dibujo: se muestra en su límite», y el A4C pierde la forma de las cámaras. Rompe `CLAUDE.md` §12: una cifra que se
+  sale no se recorta en el dibujo; se busca el error en su origen (la resistencia pulmonar ×12 y la pared del VD ×2,4
+  de la forma `hpcronica` llevan el VD a volúmenes que la geometría no sabe dibujar, y la FE del VD del TEP y la HP
+  graves ya era de 9-13 %: ver §4, punto 7). Ningún juez lo cazó porque las pruebas miden cifras, no la silueta 3D
+  a fondo.
+- **Cómo lo entiendo**: tipo `arreglo` de la eco, con informe primero (va junto a B-027, el motor diastólico, porque
+  los dos son calibración del motor y del dibujo en los extremos): (1) recalibrar `hpcronica` a fondo a un VD posible
+  (Mukherjee 2025, ESC/ERS 2022 ya en `docs/`); (2) que el dibujo cubra todo el rango del motor sin recortar;
+  (3) una prueba nueva: cada forma, a g 0, defecto y 1, sin el aviso de «fuera del rango del dibujo» y con la
+  silueta 3D dentro de unos límites de forma; (4) repasar las demás formas a fondo con capturas del 3D.
+- **Propuesta de regla**: los jueces de la eco abren cada forma al 100 % y fallan si sale el aviso de recorte.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -476,6 +493,9 @@ El resto del tablero sigue `aparcada`.
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-27 · **Eco, parada 3** (`eco-mega`, B-015, PR #34, en main): saco y colapso del taponamiento, tricúspide,
+  HP crónica, AI dilatada con chorro de IM, venas pulmonares, fosa oval y TAPSE posible. Profesor 8,5-8,7; auditor
+  0 graves. Pendiente: B-027 y B-029.
 - 2026-10-27 · **Eco, paradas 1 y 2** (`eco-mega`, B-015, PR #30, en main): imagen realista con mandos de imagen y
   «Señálalo»; corazón con aurículas y tabique, pericardio, festones y cúspides, derrame, hemorragia y TEP.
   Profesor 8,1-8,4; auditor, 0 graves.
