@@ -63,5 +63,5 @@ export const ESCENARIO_TIPO = {
 export const FORMA_NOTA = {
     hipertrofia: 'Hipertrofia concéntrica del VI por sobrecarga de presión (HTA): pared gruesa y ventrículo rígido que se llena mal — insuficiencia cardíaca con FE preservada. Forma grave: PCP ~24 mmHg, PAPs ~37 y FE del VD ~31 %, con fallo derecho (cifras del modelo, ilustrativas).',
     dilatada: 'Miocardiopatía dilatada: contractilidad baja, VI grande con pared normal o fina y FE reducida. Forma grave: PCP ~23 mmHg, PAPs ~38 y FE del VD ~34 %, con fallo derecho (cifras del modelo, ilustrativas).',
-    tep: 'TEP de riesgo intermedio: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo), todavía sin hipotensión.',
+    tep: 'TEP de riesgo intermedio: la resistencia pulmonar sube de golpe y el VD se dilata, se vacía mal y aplana el tabique en diástole (cor pulmonale agudo), todavía sin hipotensión. Criterios de Lang 2015 del VD que cumple: VD basal >41 mm (p. 20), FAC <35 %, FE del VD <45 % y TAPSE <17 mm (p. 23); debajo, las cifras de este VD, medidas en vivo.',
 };

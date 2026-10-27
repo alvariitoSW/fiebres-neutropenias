@@ -17,7 +17,7 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor } from './doppler.mjs';
@@ -806,16 +806,23 @@ export function montarSimulador(raiz, opc = {}) {
   // frente a los criterios de las fichas (escenarios.mjs, CRITERIOS_FORMA). La referencia normal se calcula una vez.
   let normalRef = null;
   const medidasDe = (m) => medidasCorazon(estadoGeo(m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a), m.onda[0]), extraDeMotor(m)), m.p.sc);
+  let vdCache = null;
+  const vdDe = (m) => { const o = m.onda, ex = extraDeMotor(m), est = (s) => estadoGeo(s, ex);
+    return { td: medirVd(est(o.reduce((a, b) => (b.vvi > a.vvi ? b : a), o[0]))), ts: medirVd(est(o.reduce((a, b) => (b.vvi < a.vvi ? b : a), o[0]))) }; };
   function pintarForma(u) {
     const caja = $('#cv-forma-medidas');
     if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }
-    if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0) }; }
-    const res = evaluarForma(escenario, u, medidasDe(motor), normalRef.u, normalRef.md);
+    if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0), vd: vdDe(m0) }; }
+    // el VD del A4C (basal, FAC) cuesta ~60 ms: se mide a lo sumo una vez por segundo (y al cambiar de escenario)
+    const ahora = performance.now();
+    if (!vdCache || vdCache.escenario !== escenario || ahora - vdCache.t > 1000) vdCache = { escenario, t: ahora, vd: vdDe(motor) };
+    const res = evaluarForma(escenario, u, medidasDe(motor), normalRef.u, normalRef.md, vdCache.vd, normalRef.vd);
     caja.hidden = false;
     caja.innerHTML = `<p class="cv-titulo">Lo que mide el modelo frente a las fichas</p>` + res.map(r =>
       `<div class="cv-criterio${r.ok ? ' ok' : ''}"><span class="cv-criterio-marca">${r.ok ? '✅' : '⚠️'}</span>
         <span class="cv-criterio-txt">${r.texto}: <b>${r.v}</b>${r.nota ? `<br><span class="cv-muted">${r.nota}</span>` : ''}</span>
-        <button type="button" class="especialidad-link cv-criterio-ir" data-especialidad="${r.fuente.especialidad}" data-view="${r.fuente.view}" data-panel="${r.fuente.panel}" data-tab="${r.fuente.tab}" data-resaltar="${r.fuente.sel}">${r.fuente.ficha} →</button></div>`).join('') +
+        ${r.fuente.atlas ? `<button type="button" class="especialidad-link cv-criterio-ir" data-eco-atlas="${r.fuente.atlas}">${r.fuente.ficha} →</button>`
+          : `<button type="button" class="especialidad-link cv-criterio-ir" data-especialidad="${r.fuente.especialidad}" data-view="${r.fuente.view}" data-panel="${r.fuente.panel}" data-tab="${r.fuente.tab}" data-resaltar="${r.fuente.sel}">${r.fuente.ficha} →</button>`}${r.pdf ? ` <a class="cv-criterio-ir cv-muted" href="${r.pdf.href}" target="_blank" rel="noopener">${r.pdf.texto} ↗</a>` : ''}</div>`).join('') +
       `<p class="cv-muted">Las cifras se cotejan con las fichas; los parámetros del modelo que producen la forma (masa, rigidez, contractilidad, resistencias, volumen retenido) son ilustrativos.</p>`;
   }
 

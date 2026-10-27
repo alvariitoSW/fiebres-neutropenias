@@ -323,6 +323,15 @@ La FAC se mide en el A4C del modelo (áreas td y ts del VD, `medirVd` de `pacien
 hemorragia 22,9, derrame 21,2 (la fuente no dice que el TAPSE caiga con la precarga) y fallo del VI 18,7. `planoVista('psaxPm')`
 fija el nivel con el largo del VI del telediástole (`vviTd`), y en telesístole el corte atraviesa los papilares pegados a la pared.
 
+**TEP con los criterios de Lang (P4, eco-mega parada 2, octubre 2026).** `medirVd` (VD del A4C: basal, medio, área) pasó de la prueba a
+`ecografia.mjs` y mide también la anchura basal del VI (`basalVi`); la usan la prueba y el simulador. `CRITERIOS_FORMA.tep` suma cuatro
+criterios, cada uno con su página del PDF de Lang 2015 (enlace `#page=N`) y su ficha: VD basal >41 mm (p. 20; TEP 42), relación de diámetros
+basales VD/VI >1,0 (Ficha 11 y guía ESC en el Atlas 14; TEP 1,04, normal 0,58), FAC <35 % (p. 23; TEP ~10 %, normal 42 %) y FE del VD
+<45 % (p. 23; 13 %). `evaluarForma` recibe además `vd` y `vd0` (`{ td, ts }`); el simulador los mide como mucho una vez por segundo
+(~60 ms) y la FAC ya se ve en la lectura. La nota «Qué mirar» del TEP (`FORMA_NOTA`) nombra los criterios con su página. Pruebas en
+`enfermedad.test.mjs`: el TEP cumple los seis (los cuatro de Lang, VD/VI de áreas y de diámetros) y el normal ninguno. `todo`: tabique
+aplanado en telesístole (Atlas 14, sobrecarga de presión; hoy solo en diástole): F4, parada 3. Sin cifra del «60/60» ni McConnell (Atlas 14: espera a C2a).
+
 **Cortina aorto-mitral (B5, eco-mega parada 2, octubre 2026).** Pieza nueva `Cortina aorto-mitral` en `corazon-geo.mjs`: una cinta
 (8 × 6 vértices) entre la raíz aórtica (a 3 mm de la base, donde cuelga el anillo valvular) y el anillo mitral (z = 0), en el tramo
 de la valva anterior de ψ ±0,75 (separación 1,5-9 mm con la raíz). Sale del anillo y de la raíz del latido y pasa por `mover`, así que

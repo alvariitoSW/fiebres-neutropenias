@@ -11,7 +11,7 @@ import assert from 'node:assert/strict';
 import { crearMotor } from '../motor.mjs';
 import { baseGeometrica, construirCorazon, diametrosTSVD, REF, LIMITES, acortamientoVd } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { planoVista, medidasCorazon } from '../ecografia.mjs';
+import { planoVista, medidasCorazon, medirVd } from '../ecografia.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
 import { REFERENCIAS, REFERENCIAS_FORMA } from '../referencias.mjs';
 
@@ -24,26 +24,6 @@ const ENGROSAMIENTO = { id: 'vi-engrosa', nombre: 'VI: engrosamiento sistólico 
 
 const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m);
   if (k !== 'normal') m.correr(ESCENARIOS[k].forma || k === 'hemorragia' ? ASENTAR_FORMA : 10); return m; };   // hemorragia: 1 L entran a 80 mL/s (12,5 s); se mide ya sangrada (P2)
-
-// VD en el plano apical de 4 cámaras (vista enfocada al VD, Lang Tabla 8): se cuentan las celdas del plano que caen
-// en la cavidad del VD. Basal = la mayor anchura del tercio de la base; medio = la del tercio medio; longitudinal =
-// de la base al ápex del VD; área en cm². Para el FAC se usa el área en telediástole y en telesístole.
-// (N2: la profundidad v crece desde el transductor, en el ápex, hacia la base; antes «basal» se leía en el tercio del
-// ápex y daba ~16 mm. Era un fallo de la medida, no del modelo; con el tercio de la base da ~30 mm. Las referencias no se tocan.)
-function medirVd(est) {
-  const g = baseGeometrica(est), vi = g.vi, P = planoVista('a4c', est), h = 0.8, filas = new Map(); let n = 0;
-  for (let v = 0; v <= P.prof; v += h) { let mn = Infinity, mx = -Infinity;
-    for (let u = -70; u <= 70; u += h) {
-      const p = sum(P.O, sum(esc(P.r, u), esc(P.d, v))), zp = p[2]; if (zp >= 0) continue;
-      const rho = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
-      if (zp > -vi.L && rho < g.rEndoVi(zp, f)) continue;
-      if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { n++; mn = Math.min(mn, u); mx = Math.max(mx, u); } }
-    }
-    if (mx > mn) filas.set(v, mx - mn); }
-  const vs = [...filas.keys()], v0 = vs[0], L = vs[vs.length - 1] - v0;
-  const ancho = (a, b) => Math.max(...vs.filter(v => v >= v0 + L * a && v <= v0 + L * b).map(v => filas.get(v)));
-  return { area: n * h * h / 100, largo: L, basal: ancho(2 / 3, 1), medio: ancho(1 / 3, 2 / 3), apice: ancho(0, 1 / 3), filas };
-}
 
 // Todo lo que se mide de un escenario (clave = id de REFERENCIAS_FORMA / REFERENCIAS, o del engrosamiento)
 function medir(k) {
