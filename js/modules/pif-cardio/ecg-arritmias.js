@@ -4,6 +4,7 @@ import { initCorkboard } from '../../core/corkboard.js';
 import { clamp } from '../../core/ui.js';
 import { init as initF3 } from './ecg-f3.js';
 import { init as initF7 } from './ecg-f7.js';
+import { init as initVisual } from './ecg-visual.js';
 
 // Método 2 (1500 / mm entre R y R) y método 3 (QRS en 5 s × 12, o en 6 s × 10).
 // Un campo vacío nunca es 0. Los umbrales (60 y 100) se comparan con el valor redondeado.
@@ -50,4 +51,5 @@ export function init() {
     document.getElementById('ecg2-calc-ventana')?.addEventListener('change', calcFrecuencia);
     initF3();
     initF7();
+    initVisual();
 }
