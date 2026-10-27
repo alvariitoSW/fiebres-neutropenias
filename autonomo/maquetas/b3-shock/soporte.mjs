@@ -105,14 +105,19 @@ export function prepararMotor(rec, segundos = 40) {
 export function crearCabecera(rec, { asentar = 40 } = {}) {
   const m = prepararMotor(rec);
   const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
-  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, na: 0, vaso: false, dobuta: false };
+  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false };
   // lo que miran los dibujos: el balón y las bombas, del motor; lo que pide el Impella y las vueltas, de la maqueta
   const ms = m.s;
   const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
     get vBalon() { return ms.vBalon; }, get qImp() { return ms.qImp; }, get qEcmo() { return ms.qEcmo; }, get qVent() { return ms.qVent; } };
   let acum = nuevo(), ultimoLat = m.s.nLatido, lectura = null, historiaAo = [];
   let cris = 0, sangre = 0, crisTotal = 0, edemaVisto = 0, vvenBase = 0, pvc0 = 0;
-  function nuevo() { return { aoAbre: false, picoDia: 0, teleDia: null, aoAntes: false }; }
+  function nuevo() { return { aoAbre: false, picoDia: 0, picoD: 0, sis: 0, teleDia: null, aoAntes: false }; }
+  // Balón 1:2 y 1:3: solo se asiste uno de cada «razon» latidos. Se asiste la diástole del latido n (tras su sístole); antes de
+  // la onda R (tLatido < pr) todavía es la diástole del latido anterior. Lo no asistido se lee aparte (ilustrativo: el reparto
+  // es de la consola; la ficha, p. 45, solo dice que se hincha en cada diástole que se elige)
+  const asiste = (n) => ajuste.razon <= 1 || ((n % ajuste.razon) + ajuste.razon) % ajuste.razon === 0;
+  const ult = { sis: 0, as: { pico: null, tele: null }, no: { pico: null, tele: null } };
 
   // Fármacos y vasopresores: multiplicadores sobre lo basal del paciente (dirección de la ficha; magnitud ilustrativa)
   function aplicarFarmacos() {
@@ -136,7 +141,8 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (conImp && ajuste.total != null && ajuste.soporte === 'impella') st.qImpObj += (st.impTotalObj - st.qImpObj) * dt / TAU_TOTAL;
     else st.qImpObj = ajuste.impella * LMIN;
     const fPos = factorPoscarga(m.s.pamSensor);   // la presión media que vence la bomba (el sensor del barorreflejo ya la filtra)
-    m.p.soporte = conBalon || conImp || conEcmo ? { balon: conBalon ? ajuste.balon : 0, impella: conImp ? st.qImpObj / LMIN * fPos : 0,
+    const nDias = m.s.nLatido - (m.s.tLatido < m.p.pr ? 1 : 0);
+    m.p.soporte = conBalon || conImp || conEcmo ? { balon: conBalon && asiste(nDias) ? ajuste.balon : 0, impella: conImp ? st.qImpObj / LMIN * fPos : 0,
       ecmo: conEcmo ? ajuste.ecmo * fPos : 0, venteo: conEcmo && ajuste.venteo === 'drenaje' ? VENTEO_DRENAJE : 0 } : null;
     m.paso(dt);
     const s = m.s;
@@ -144,7 +150,9 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (conEcmo) st.rodete += ajuste.ecmo * dt * 0.6;
     // por latido: si abre la aórtica, el pico diastólico con el balón y la presión de la aorta al abrirse la válvula
     if (s.vAo && s.qAo > 2) acum.aoAbre = true;
-    if (s.vBalon > 20) acum.picoDia = Math.max(acum.picoDia, s.pao);
+    if (s.vBalon > 20 && s.tLatido >= m.p.pr) acum.picoDia = Math.max(acum.picoDia, s.pao);
+    if (s.vAo) acum.sis = Math.max(acum.sis, s.pao);   // la sistólica propia del paciente (durante la eyección)
+    if (acum.aoAbre && !s.vAo && s.tLatido >= m.p.pr) acum.picoD = Math.max(acum.picoD, s.pao);   // el máximo de la diástole
     if (s.vAo && !acum.aoAntes && acum.teleDia == null) acum.teleDia = s.paoDist;
     acum.aoAntes = s.vAo;
     if (s.nLatido !== ultimoLat) { ultimoLat = s.nLatido; cerrar(); }
@@ -154,6 +162,15 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     // La PVC no pasa a la PCP si el VD no falla (fisiología general; solo el TEP y el taponamiento las igualan o la invierten,
     // ficha cap. 18 p. 4): el motor sube la aurícula derecha con el volumen y en la sepsis la pasaba (PVC 22-24 con PCP 19).
     if (rec.esc !== 'tep' && rec.esc !== 'derrame' && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
+    // lo asistido y lo no asistido (el latido que se cierra es el nLatido − 1; su teledistólica viene de la diástole del anterior)
+    const nCerrado = m.s.nLatido - 1, conBalon = ajuste.soporte === 'balon' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'balon');
+    if (!conBalon) { ult.as = { pico: acum.picoDia || null, tele: acum.teleDia }; ult.no = { pico: null, tele: null }; }
+    else {
+      if (acum.picoD > 0) { if (asiste(nCerrado)) ult.as.pico = acum.picoD; else ult.no.pico = acum.picoD; }
+      if (acum.teleDia != null) { if (asiste(nCerrado - 1)) ult.as.tele = acum.teleDia; else ult.no.tele = acum.teleDia; }
+      if (ajuste.razon <= 1) ult.no = { pico: null, tele: null };
+    }
+    if (acum.sis > 0) ult.sis = acum.sis;
     historiaAo.push(acum.aoAbre); if (historiaAo.length > 6) historiaAo.shift();
     // el motor separa el gasto: por la válvula (gcValvula, ≥0), el Impella, el ECMO (con el venteo dentro) y el total (gc)
     const gcNativo = u.gcValvula, imp = u.gcImpella, ecmo = u.gcEcmo, vent = u.gcVenteo, gcTotal = u.gc;
@@ -163,7 +180,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     const ecmoPide = ajuste.soporte === 'ecmo' ? ajuste.ecmo : 0;
     lectura = { u, gcNativo, gcTotal, icTotal: gcTotal / m.p.sc, imp, ecmo, vent, impPide, ecmoPide, totalPide: ajuste.soporte === 'impella' ? ajuste.total : null, balon: u.balon,
       aoAbre: historiaAo.filter(Boolean).length, aoDe: historiaAo.length, pcp: u.pvp, edema: u.vEdema, get pvc0() { return pvc0; },
-      picoDia: acum.picoDia, teleDia: acum.teleDia };
+      picoDia: ult.as.pico ?? acum.picoDia, teleDia: ult.as.tele, sisPropia: ult.sis, picoNo: ult.no.pico, teleNo: ult.no.tele, razon: ajuste.razon };
     acum = nuevo();
   }
   function correr(seg, dt = 0.0001) { const n = Math.round(seg / dt); for (let i = 0; i < n; i++) paso(dt); return lectura; }

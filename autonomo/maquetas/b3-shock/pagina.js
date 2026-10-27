@@ -10,6 +10,7 @@ import { montarDespieceImpella, montarDespieceBalon, montarDespieceEcmo, LEYENDA
 import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
 import { crearTope } from '../comun/tope.js';
 import * as D from './datos.js';
+import { crearConsolaBalon } from './consola-balon.js';
 import { calcularTopes, bolosQueNoCaben } from './topes.js';
 
 const $ = (id) => document.getElementById(id);
@@ -41,6 +42,7 @@ const est = { modo: 'explorar', pac: D.PACIENTES[0], g: D.PACIENTES[0].rec.g, re
   pausa: false, tapado: false, canales: 'todos', pest: 'grav', historia: [] };
 let cab = null, R = null;
 const monitor = monitorDelShock($('trazas'));
+const iabp = crearConsolaBalon($('iabp'), { cab: () => cab, cita, org, citaIabp: D.C.iabp, alCambiar: (c) => trabajar(() => cab.ajustar(c)) }); monitor.alMuestrear(iabp.muestra);
 
 function recDe(pac, extra = {}) { return { ...pac.rec, g: est.g, ...extra }; }
 function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asentar = 30 } = {}) {
@@ -162,7 +164,8 @@ function pintarCifras() {
 const horaTxt = () => est.horas === 0 ? 'ahora' : est.horas >= 24 ? `+${Math.floor(est.horas / 24)} d ${est.horas % 24 ? (est.horas % 24) + ' h' : ''}`.trim() : `+${est.horas} h`;
 function pintarConsola() {
   const ap = cab.ajuste.soporte, el = $('consola');
-  if (ap === 'no' || est.tapado) { el.hidden = true; return; }
+  const consolaBalon = ap === 'balon' && !est.tapado; $('iabp').hidden = !consolaBalon; if (consolaBalon) { iabp.cifras(); iabp.pintar(); }
+  if (ap === 'no' || est.tapado || consolaBalon) { el.hidden = true; return; }
   el.hidden = false;
   if (ap === 'impella') el.innerHTML = `<span>IMPELLA</span>${R.totalPide != null ? `<span>total pedido <b>${coma(R.totalPide, 1)}</b></span>` : ''}<span>bomba <b>${coma(R.imp, 1)}</b>${D.bombaNoLlega(R) ? ` de ${coma(R.impPide, 1)}` : ''}</span><span>corazón <b>${coma(R.icNat * 1.85, 1)}</b></span><span>total <b>${coma(R.gcTotal, 1)}</b> L/min</span><span>aórtica ${R.aoAbre}/${R.aoDe}</span>`
     + (D.bombaNoLlega(R) ? `<span class="consola-aviso">⚠ La bomba no llega: el VI está casi vacío. Llénalo antes (pestaña Volumen).</span>` : '');
@@ -667,14 +670,14 @@ function setModo(m) {
 $('modo-explorar').onclick = () => setModo('explorar');
 $('modo-qs').onclick = () => setModo('qs');
 $('modo-may').onclick = () => setModo('may');
-addEventListener('resize', () => { monitor.montar(); if (cab) { monitor.llenar(cab, ctxMon()); monitor.pintar(); } medirDock(); });
+addEventListener('resize', () => { monitor.montar(); iabp.montar(); if (cab) { monitor.llenar(cab, ctxMon()); monitor.pintar(); } medirDock(); });
 
 // ---------------------------------------------------------------- el bucle: un reloj, el del motor
 let ultimo = 0, cuenta = 0;
 function bucle(t) {
   const dt = ultimo ? Math.min(1 / 30, (t - ultimo) / 1000) : 1 / 60; ultimo = t;
   if (cab && !est.pausa && !document.hidden) {
-    monitor.avanzar(cab, dt, ctxMon()); monitor.pintar();
+    monitor.avanzar(cab, dt, ctxMon()); monitor.pintar(); iabp.pintar();
     if (!est.tapado) escena.actualizar(cab, dt, false, infoEscena());
     cuenta += dt; if (cuenta > 0.35) { cuenta = 0; R = leer(); pintarCifras(); pintarConsola(); if (est.modo === 'explorar') { pintarFrase(); } }
   }

@@ -2,7 +2,7 @@
 // «¿Qué shock es?», Mayéutica entera y capturas. node prueba.mjs [ancho]
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const ANCHO = +(process.argv[2] || 390), ALTO = ANCHO === 390 ? 844 : 780;
-const BASE = 'http://127.0.0.1:8795/autonomo/maquetas/';
+const BASE = `http://127.0.0.1:${process.env.PUERTO || 8795}/autonomo/maquetas/`;
 const CAP = '/tmp/plan-socialista/b3/capturas-v3/shock/';
 const fallos = [], errores = [];
 const ok = (cond, msg) => { if (!cond) fallos.push(msg); };
@@ -44,6 +44,7 @@ await tap('[data-far="vaso"]'); await page.waitForTimeout(300); r = await R(); c
 // Aurelio: aparatos
 await tap('[data-pac="aurelio"]'); await page.waitForTimeout(300); r = await R(); console.log('Aurelio:', r.estado, 'PCP', r.pcp, 'IC', r.ic, 'PAM', r.pam, 'PVC', r.pvc);
 await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(700); r = await R(); console.log('Balón:', r.estado, 'PAM', r.pam, 'pico', r.picoDia);
+ok(await page.evaluate(() => { const e = document.getElementById('iabp'); return !e.hidden && !/NaN|undefined/.test(e.innerText); }), 'la consola del balón no aparece o tiene NaN (la completa: balon-prueba.mjs)'); ok(r.picoDia > r.pas - 1 || r.picoDia > 0, 'balón: sin pico diastólico');
 const plegado = await page.evaluate(() => document.getElementById('dock').classList.contains('dock-plegado')); ok(plegado, 'el dock no se pliega al elegir un aparato');
 const dockHp = await page.evaluate(() => document.getElementById('dock').offsetHeight); console.log('dock plegado', dockHp, 'px'); ok(dockHp <= 160, `dock plegado mide ${dockHp} px`);
 await cap('02-balon'); await desborde('balón'); const mf = await minFuente(); console.log('fuente mínima SVG', mf); ok(mf[0] >= 7.5, `rótulo SVG de ${mf[0]} px (${mf[1]})`);
@@ -60,7 +61,7 @@ for (const v of ['balon', 'impella', 'drenaje']) { await tap(`[data-vent="${v}"]
 await cap('05-ecmo-venteo'); await desborde('ecmo'); await tap('[data-plano="despiece"]'); await page.waitForTimeout(300); await cap('06-ecmo-despiece'); await tap('[data-plano="recorrido"]'); await page.waitForTimeout(500); await tap('[data-plano="dentro"]');
 // cuña y guía
 await tap('#enclavar'); await page.waitForTimeout(300); await cap('07-cuna'); await tap('#enclavar');
-await tap('#btn-guia'); await page.waitForTimeout(400); await cap('08-guia'); await desborde('guía'); for (let i = 0; i < 5; i++) { const b = page.locator('#guia-sig'); if (!(await b.count())) break; await b.tap(); await page.waitForTimeout(200); }
+await tap('#btn-guia'); await page.waitForTimeout(400); await cap('08-guia'); await desborde('guía'); for (let i = 0; i < 5; i++) { const b = page.locator('#guia-sig'); if (!(await b.count()) || !(await b.isVisible())) break; await b.tap(); await page.waitForTimeout(200); }
 await page.evaluate(() => document.getElementById('guia-x')?.click()); await page.waitForTimeout(300);
 // Joaquín: sellos
 await tap('.dock-asa').catch(() => {}); await page.evaluate(() => document.querySelector('[data-pac="joaquin"]')?.click()); await page.waitForTimeout(300); await tap('[data-pest="sop"]'); await tap('[data-sop="balon"]'); await page.waitForTimeout(500); r = await R(); console.log('Joaquín balón:', r.estado); ok(/no lleva/i.test(r.estado), 'Joaquín sin sello');

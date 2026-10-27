@@ -20,7 +20,7 @@ const SEG = 4.5;
 
 export function monitorDelShock(svg) {
   const mon = crearPieza(svg, { canales: CANALES, margen: 26, hueco: 4, borrar: 6 });
-  let tSim = 0, tProx = 0, faseResp = 0, nLat = -1, ultimoV = 0, enclavado = false, conBalon = false;
+  let oyente = null, tSim = 0, tProx = 0, faseResp = 0, nLat = -1, ultimoV = 0, enclavado = false, conBalon = false;
   // Una muestra del instante del motor (cab: la cabecera; ctx: FR, EtCO₂, etc.)
   function muestra(cab, ctx) {
     const s = cab.m.s, p = cab.m.p, T = cab.m.periodo, tl = s.tLatido;
@@ -38,7 +38,7 @@ export function monitorDelShock(svg) {
     return {
       ecg, art: s.pao, artRef: conBalon && cab.st.vBalon > 0.5 ? s.pao - cab.st.vBalon / p.cAo : null,
       pap: enclavado ? s.pvp : s.pap, pvc: s.pad, pleth: Math.max(0, Math.min(1.1, ultimoV)) * (ctx.amplPleth ?? 1), co2,
-      r: esR && conBalon, ciclo: conBalon && cab.st.vBalon > 20 ? 1 : 0,
+      lat: s.nLatido, vBalon: s.vBalon, r: esR && conBalon, ciclo: conBalon && cab.st.vBalon > 20 ? 1 : 0,
     };
   }
   // las marcas del balón: el disparo sobre la onda R y el inflado y el vaciado sobre la curva arterial
@@ -52,17 +52,17 @@ export function monitorDelShock(svg) {
   function avanzar(cab, dt, ctx) {
     const paso = 0.0001, n = Math.round(dt / paso), cada = SEG / mon.NP;
     conBalon = cab.ajuste.soporte === 'balon' || (cab.ajuste.soporte === 'ecmo' && cab.ajuste.venteo === 'balon');
-    for (let i = 0; i < n; i++) { cab.paso(paso); tSim += paso; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra(cab, ctx)); } }
+    for (let i = 0; i < n; i++) { cab.paso(paso); tSim += paso; if (tSim >= tProx) { tProx += cada; const mu = muestra(cab, ctx); mon.empujar(mu); oyente?.(mu); } }
   }
   // Llena la pantalla de golpe (al cambiar de paciente, con «reducir movimiento» o en pausa)
   function llenar(cab, ctx) {
     conBalon = cab.ajuste.soporte === 'balon' || (cab.ajuste.soporte === 'ecmo' && cab.ajuste.venteo === 'balon');
     const n = Math.round(SEG / mon.NP / 0.0001);
-    mon.llenar(() => { for (let j = 0; j < n; j++) cab.paso(0.0001); return muestra(cab, ctx); });
+    mon.llenar(() => { for (let j = 0; j < n; j++) cab.paso(0.0001); const mu = muestra(cab, ctx); oyente?.(mu); return mu; });
     tProx = tSim;
   }
   return {
-    montar: mon.montar, avanzar, llenar, pintar,
+    alMuestrear(fn) { oyente = fn; }, montar: mon.montar, avanzar, llenar, pintar,
     ver(lista) { mon.ver(lista); },
     enclavar(on) { enclavado = !!on; mon.rotulo('pap', enclavado ? 'PCP' : 'PAP'); },
     get enclavado() { return enclavado; },
