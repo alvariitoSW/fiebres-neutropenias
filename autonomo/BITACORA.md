@@ -349,6 +349,9 @@ El resto del tablero sigue `aparcada`.
   repositorio ni permiso de escritura en GitHub. Borrada; la nueva (6:42 de Canarias) dispara en una sesión que sí lo
   tiene y abre la sesión de trabajo con el repositorio. Esperan 4 tuits del issue #27. `x.com` abierto el 27/10 (comprobado: se lee el texto del tuit); `twitter.com`,
   `*.twimg.com` y `threadreaderapp.com` siguen cerrados (no hacen falta para leer un tuit suelto).
+  **Comprobado el 28/10**: la tarea corrió y leyó los 4 tuits (el texto va dentro de la página de `x.com`). No
+  se pueden abrir `t.co`, `doi.org`, PubMed, Europe PMC ni criticalcarereviews.com: los papers se buscan por título
+  en la web y, si no aparecen o son de pago, se pide el PDF en el issue. 2 papers esperan PDF/enlace del usuario.
 - **Tareas programadas hasta el domingo** (27/10, noche, «sí a todo»), todas con ese mismo arreglo: 28/10 7:40 abre
   `b3-paso4` (grupo 1) y `eco-calibra-a` · 29 y 30/10 7:40, el siguiente grupo y la eco si falta · 31/10 8:13,
   `azul-cobertura`, `radio-informe` y el `b3` si falta. Los grupos del `b3` además se encadenan solos.
