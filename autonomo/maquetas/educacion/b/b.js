@@ -51,7 +51,7 @@ const K = { fc: $$('#k-fc'), pa: $$('#k-pa'), pvc: $$('#k-pvc') };
 const bloquear = v => [mT, mS, mP].forEach(b => { b.disabled = v; });
 let segunda = false;   // ya pasó la 1.ª bolsa
 let apuesta = null, antes2 = null, ramaDos = false;   // apuesta tapada de P2, cifras de antes de la 2.ª bolsa, rama «dos bolsas seguidas»
-const celdas = () => Object.fromEntries(['do2', 'vo2', 'o2er', 'hb'].map(k => [k, $$(`#cpv-c-${k} b`).textContent.trim()]));
+const celdas = () => Object.fromEntries(['do2', 'vo2', 'o2er', 'hb'].map(k => [k, $$(`#cpv-c-${k} b`).textContent.replace(/[↑↓]/g, '').trim()]));
 
 // «Transfundir 1 CH»: la Hb sube 1 g/dL (p. 10) con el gasto quieto; gotea 2 h (2 s en pantalla)
 function transfundir(fin) {
@@ -94,7 +94,7 @@ function tablaApuesta() {
     if (t.hidden) return;
     $$('#ap-t1').textContent = APUESTAS[apuesta];
     $$('#ap-t2').innerHTML = `Hb ${a.hb} → ${d.hb}. DO₂ ${a.do2} → ${d.do2} · VO₂ ${a.vo2} → ${d.vo2} · extracción ${a.o2er} → ${d.o2er} %.`;
-    $$('#ap-t3').innerHTML = (apuesta === 1 ? '<b>Acertaste.</b> ' : '<b>No era eso.</b> ') + `La Hb subió 1 g/dL, pero con el pulmón encharcado (SaO₂ ${$$('#cpv-c-sao2 b').textContent.trim()}) la bolsa no mejoró el O₂ que llega al tejido. En la 1.ª bolsa sí subió el aporte y cayó la extracción (${pg(10, 'p. 10-11')}); ahora la hipoxemia se lleva la ganancia. Cifras del motor: <span class="org ilu">ilustrativo</span>.`;
+    $$('#ap-t3').innerHTML = (apuesta === 1 ? '<b>Acertaste.</b> ' : '<b>No era eso.</b> ') + `La Hb subió 1 g/dL, pero con el pulmón encharcado (SaO₂ ${$$('#cpv-c-sao2 b').textContent.replace(/[↑↓]/g, '').trim()} %) la bolsa no mejoró el O₂ que llega al tejido. En la 1.ª bolsa sí subió el aporte y cayó la extracción (${pg(10, 'p. 10-11')}); ahora la hipoxemia se lleva la ganancia. Cifras del motor: <span class="org ilu">ilustrativo</span>.`;
 }
 
 // El sello: modelo en TACO con la lupa del alvéolo abierta, mando apagado
