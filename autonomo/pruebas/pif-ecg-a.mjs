@@ -1,0 +1,30 @@
+// Prueba de la calculadora de FC y la ficha 2 de «ECG y arritmias» (PIF). Uso: node autonomo/pruebas/pif-ecg-a.mjs [carpeta de capturas]
+import { spawn } from 'node:child_process';
+const { chromium } = await import('/opt/node22/lib/node_modules/playwright/index.mjs');
+const out = process.argv[2] || '/tmp/plan-socialista/pif-ecg/tmp-a';
+const puerto = 34000 + Math.floor(Math.random() * 1000);
+const srv = spawn('python3', ['-m', 'http.server', String(puerto)], { stdio: 'ignore' });
+await new Promise(r => setTimeout(r, 1000));
+const nav = await chromium.launch();
+const pag = await nav.newPage({ viewport: { width: 390, height: 844 } });
+const errs = []; pag.on('pageerror', e => errs.push(e.message));
+await pag.goto(`http://localhost:${puerto}/`); await pag.waitForFunction(() => window.__appLista);
+await pag.evaluate(() => document.getElementById('btn-pif').click());
+await pag.evaluate(() => document.getElementById('btn-pif-cardio').click());
+await pag.evaluate(() => document.getElementById('btn-pif-ecg').click());
+await pag.evaluate(() => {
+    const b = document.createElement('button'); b.className = 'especialidad-link';
+    b.dataset.especialidad = 'pifCardio'; b.dataset.view = 'ecgArritmias'; b.dataset.panel = 'panel-pif-ecg-tabs'; b.dataset.tab = 'ecg-f2';
+    document.body.append(b); b.click();
+});
+await pag.waitForTimeout(800);
+await pag.fill('#ecg2-calc-mm', '14'); await pag.fill('#ecg2-calc-qrs', '16');
+console.log(await pag.innerText('#ecg2-calc-resultado'));
+await pag.fill('#ecg2-calc-mm', '4');
+console.log(await pag.innerText('#ecg2-calc-resultado'));
+await pag.evaluate(() => document.getElementById('ecg2-calc').scrollIntoView());
+await pag.screenshot({ path: `${out}/calc.png` });
+await pag.evaluate(() => document.getElementById('ecg2-tabla-esquema').scrollIntoView());
+await pag.screenshot({ path: `${out}/tabla.png` });
+console.log('errores:', errs);
+await nav.close(); srv.kill();

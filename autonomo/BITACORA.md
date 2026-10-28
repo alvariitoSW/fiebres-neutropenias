@@ -5,8 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27, noche (3.ª): `pif-ecg` en revisión (PR #36); su parte, leído. Los informes del
-Objetivo P, hechos y decididos: `eco-calibra-a`, `b3-paso4` y `competencias-r2r5` empiezan el 28/10.
+Última sincronización: 2026-10-28, mañana: PR #36 (`pif-ecg`) aprobada por el usuario y en main.
 
 ---
 
@@ -269,7 +268,7 @@ esta sección.
 | `eco-calibra-a`, `b3-paso4` | Arreglar el motor de la eco (≈5,5 M, 28-29/10) y paso 4 del `b3` por grupos encadenados (≈36 M, grupos 1-6 del 28 al 30/10; parada 3 contigo el 31/10) | pendiente (programadas) |
 | `azul-cobertura`, `radio-informe` | **Objetivo P2**: mapa de El Libro Azul frente a Marino y propuesta del PIF de Radiología (B-034), solo informes | pendiente (31/10) | 2026-10-27 | «Sí a todo» (27/10, noche) |
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
-| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **en revisión**: [PR #36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36) (11 fichas, ~60 trazados reales, lector, 28 ejercicios, tarjeta «¿Rápido o lento?»; profesor 8,25-9) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
+| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -478,9 +477,6 @@ El resto del tablero sigue `aparcada`.
 - **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
   consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
-- **🔴 PR #36 · `pif-ecg` (ECG y arritmias)**: mírala en el móvil y fusiónala si te gusta. Se construyó con lo
-  recomendado en las 3 preguntas de su informe (eje fuera, tarjeta sin dosis, ejercicios con pareja como pregunta y
-  el resto en galería). `ecg-guardia` (mañana) continúa sobre esa rama, y `ecg-vector-app` espera a que entre en `main`.
 - **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
   - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
   - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
@@ -587,6 +583,8 @@ El resto del tablero sigue `aparcada`.
 
 - **Ahorro · Calibrar el motor con una rejilla, no a mano** (propuesto 2026-10-28 por /ahorro) · Visto en: eco-mega F3b (~80 combinaciones a mano, 1,5 M, sin solución) y eco-calibra-a s1 (constructor «AI y venas», 72 pasos / 1,3 M frente a 60 / 1,2 M, ~20 combinaciones a mano) · Cambio: en todo encargo que recalibre parámetros del motor, el director da la rejilla (parámetros y rangos) y el constructor la corre de una vez con `herramientas/barrido.sh` + `calibra-tabla.mjs`, lee la tabla y elige; presupuesto del encargo 50 pasos / 0,9 M · Ahorro esperado: ~0,3-0,5 M por encargo de calibración.
 - **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
+- **Ahorro · Comprobar el acceso antes de lanzar al que busca** (propuesto 2026-10-27 por /ahorro) · Visto en: competencias-r (búsqueda web 109 k sin abrir nada, proxy), rea-eco y eco-vci-retenido (dominio bloqueado, escaneo girado) · Cambio: antes de lanzar un lector o investigador, el director prueba en 1 llamada que la fuente se abre (un `curl` de 1 s, o `pdftotext` de la página exacta); si no, pide el PDF al usuario en la pregunta del arranque · Ahorro esperado: 0,1-0,3 M por tarea afectada.
+- **Ahorro · Petición nueva a mitad de tarea, a otra sesión** (propuesto 2026-10-27 por /ahorro) · Visto en: pif-ecg (director 2,1 M; la ingeniería inversa entró en medio y alargó la conversación), b3 parada 2 (director 5,1 M) · Cambio: si el usuario pide algo distinto con la tarea en marcha, el director abre una sesión con `create_session` para eso y sigue con lo suyo · Ahorro esperado: 0,5-1 M de director por tarea.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.
@@ -594,6 +592,10 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-28 · **Cuaderno «ECG y arritmias»** (`pif-ecg`, PR #36, en main): PIF → Cardiología, 11 fichas del libro
+  de López Ramírez con ~60 trazados reales, lector de ECG, 28 ejercicios, tarjeta «¿Rápido o lento?» y 125
+  preguntas. Profesor 8,25-9; auditores, graves corregidos.
 
 - 2026-10-27 · **Plan del ECG** (`ecg-plan`, B-033): 3 caminos (guardia, desde cero, laboratorio de arritmias) con
   piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Aprobado: 6 tareas en el tablero; Anatomy, skill.

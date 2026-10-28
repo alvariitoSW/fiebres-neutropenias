@@ -61,6 +61,7 @@ const BOTONES_ESPECIALIDAD = {
     fisioUci: 'btn-fisio-uci',
     cardiologia: 'btn-cardiologia',
     neumologia: 'btn-neumologia',
+    pifCardio: 'btn-pif-cardio',
     sobrevivirUmi: 'btn-sobrevivir-umi',
     libros: 'btn-libros',
 };
@@ -89,6 +90,7 @@ export function init() {
         fisioUci: document.getElementById('fisio-uci-view'),
         cardiologia: document.getElementById('cardiologia-view'),
         neumologia: document.getElementById('neumologia-view'),
+        pifCardio: document.getElementById('pif-cardio-view'),
         sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
         eco: document.getElementById('eco-view'),
         libros: document.getElementById('libros-view'),
