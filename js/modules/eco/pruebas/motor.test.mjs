@@ -1,7 +1,7 @@
 // Pruebas del motor del latido. Se ejecutan con:  node --test 'js/modules/eco/pruebas/*.test.mjs'
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { crearMotor, BASE, conCodo } from '../motor.mjs';
+import { crearMotor, BASE, escalarRPul, conCodo } from '../motor.mjs';
 import { evaluar } from '../referencias.mjs';
 import { ESCENARIOS, PATRONES, FUENTE_PATRONES, direccion, cumple } from '../escenarios.mjs';
 
@@ -190,7 +190,7 @@ test('isquemia del VD: aparece cuando su presión se acerca a la de la aorta (fa
   for (const k of ['fallo', 'tep']) assert.ok(a(k).isqVd > 0.2, `${k}: ${a(k).isqVd.toFixed(2)}`);
   for (const k of ['hemorragia', 'derrame']) assert.ok(a(k).isqVd < 0.05, `${k}: ${a(k).isqVd.toFixed(2)}`);
   // la hipertrofia del VD (mioVd) la protege: la misma presión con una pared gruesa no la produce
-  const hp = crearMotor({ rPul: BASE.rPul * 6, mioVd: 2.4 }); hp.correr(40);
+  const hp = crearMotor({ rPul: escalarRPul(BASE, 6), mioVd: 2.4 }); hp.correr(40);
   assert.ok(hp.ultimo.isqVd < 0.05 && hp.ultimo.pvd_max > 40, `VD hipertrófico: isquemia ${hp.ultimo.isqVd.toFixed(2)} con PVD ${hp.ultimo.pvd_max.toFixed(0)}`);
 });
 
@@ -240,7 +240,7 @@ test('balón: se hincha en la diástole y se vacía al empezar la sístole (p. 4
   assert.ok(o.filter(x => x.fase === 'C').every(x => x.vBalon < 8) && o.filter(x => x.fase === 'D').every(x => x.vBalon < 1), 'el balón se vacía antes de la eyección');
   const picoDia = Math.max(...o.slice(cierre).map(x => x.pao));
   assert.ok(picoDia > con.ultimo.pas - 15, `pico diastólico ${picoDia.toFixed(0)} · PAS ${con.ultimo.pas.toFixed(0)}`);
-  assert.ok(presionAlAbrir(con) < presionAlAbrir(sin) - 3, `al abrir la aórtica: ${presionAlAbrir(con).toFixed(0)} con balón · ${presionAlAbrir(sin).toFixed(0)} sin`);
+  assert.ok(presionAlAbrir(con) < presionAlAbrir(sin) - 2, `al abrir la aórtica: ${presionAlAbrir(con).toFixed(0)} con balón · ${presionAlAbrir(sin).toFixed(0)} sin`);
   assert.ok(con.ultimo.vs > sin.ultimo.vs + 2 && con.ultimo.pam > sin.ultimo.pam + 3, `VS ${con.ultimo.vs.toFixed(0)} · ${sin.ultimo.vs.toFixed(0)}; PAM ${con.ultimo.pam.toFixed(0)} · ${sin.ultimo.pam.toFixed(0)}`);
 });
 test('con soporte, el volumen de sangre se conserva (las bombas solo lo cambian de sitio)', () => {

@@ -30,6 +30,11 @@ export const FASES = {
   E: 'Relajación isovolumétrica', F: 'Llenado rápido', G: 'Diástasis',
 };
 
+/** Resistencia de las arterias pulmonares (rPul) de una enfermedad que multiplica por k la resistencia pulmonar de referencia (0,095
+ * mmHg·s/mL: el valor único que había antes de separar las venas): rPul normal + 0,095·(k − 1). k = 1 es el normal. El TEP y la
+ * hipertensión pulmonar quedan con la misma resistencia total (arterias + venas) que antes de separar las venas. */
+export const escalarRPul = (p, k) => BASE.rPul + 0.095 * (k - 1);
+
 export const BASE = {
   fc: 70,
   // cámaras: Ees sistólica (mmHg/mL), V0, A y B de la curva diastólica
@@ -37,13 +42,15 @@ export const BASE = {
   // VD: a 2,0 → 1,9 (calibración del 20/10/2026, con la AD, vuVen y rRetorno: su presión telediastólica tiene que bajar
   // con la PVC, porque el catéter las lee iguales, #mar-termodilucion). Ilustrativo
   vd: { ees: 0.50, v0: 25, a: 1.9, b: 0.012 },
-  ai: { ees: 0.70, v0: 5,  a: 0.20, b: 0.090 },
+  // AI: la contracción se SUMA a la pasiva (presionAurícula): Ees 0,70 → 0,37 y A 0,20 → 0,25 (eco-calibra-a, 28/10/2026). Bomba ≈ 25 %
+  // del llenado del VI (Lang 2015, p. 24: 15-30 %) y la onda A sobrevive en la AI dilatada. Ilustrativo
+  ai: { ees: 0.37, v0: 5,  a: 0.25, b: 0.090 },
   // AD: reservorio más distensible (a 0,15 → 0,13; b 0,090 → 0,080; calibración del 20/10/2026, ilustrativo). Con la
   // curva de antes, la AD se llenaba en la sístole ventricular hasta la presión de las venas y el retorno se paraba: la
   // meseta de ~6,5 mmHg de toda la sístole subía la PVC media a 5,02 (Tabla 8.1 de Marino: 0-5). Ahora, 4,19. Más baja
   // no cabe sin sacar la VD sistólica de 20-25 (Ficha 5) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con
   // 1,5 L y EPP (pruebas/maniobras.test.mjs, paciente posible)
-  ad: { ees: 0.70, v0: 5,  a: 0.13, b: 0.080 },
+  ad: { ees: 0.70, v0: 8,  a: 0.13, b: 0.080 },   // v0 5 → 8: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
   // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
@@ -182,7 +189,9 @@ export const BASE = {
   // 119 → 106, bajaba de 20 (Ficha 5: 20-25). Con 0,095 la RVP del normal es ~1,75 unidades Wood (IRVP ~3,2): dentro de la
   // Ficha 10, 250-340 dyn·s·m²/cm⁵ (3,1-4,3), y por encima de la Tabla 8.1, 1-2 (las fuentes discrepan; ya con 0,08 era ~2,6,
   // fuera de la Tabla 8.1). Ilustrativo)
-  cAp: 4.0, vuAp: 100, rPul: 0.095, cVp: 8.0, vuVp: 200, rVp: 0.01, codoPul: 3,
+  cAp: 4.0, vuAp: 100, rPul: 0.08, cVp: 8.0, vuVp: 200, rVp: 0.02, codoPul: 3,
+  // RESISTENCIA PULMONAR TOTAL = rPul + rVp (0,100; antes 0,095 + 0,01 = 0,105; la PAP diastólica sube con la AI más rígida). rVp (venas) frena el reflujo de la contracción
+  // auricular hacia las venas (Ar de ~590 → ~200 mL/s). Una enfermedad que sube la resistencia pulmonar la multiplica entera: ver escalarRPul.
   // RIGIDEZ DE LA ARTERIA PULMONAR (mmHg): por encima de rigAp la arteria se distiende cada vez menos (exponencial con la
   // misma pendiente en el punto: sin salto). La distensibilidad a la presión P es cAp · kRigAp / (P − rigAp + kRigAp): ~4 mL/mmHg
   // en el normal (la sistólica, 22, no llega a rigAp), ~1,5 a 40 mmHg. Que la arteria pulmonar se haga más rígida al subir su
@@ -287,6 +296,14 @@ export function crearMotor(ajustes = {}) {
     const colapso = v < VCOLAPSO ? -KCOLAPSO * (VCOLAPSO - v) ** 2 : 0;
     return e * sis + (1 - e) * dia + colapso + pperi;
   }
+  // Aurícula: la contracción se SUMA a la pasiva (P = pasiva + e·Ees·(V−V0)). Con la mezcla de arriba, una aurícula muy
+  // distendida (hipertrofia, dilatada) tenía la recta de la sístole bajo la curva pasiva y «contraerse» la relajaba: la onda A
+  // desaparecía. Fisiología general; los números, ilustrativos
+  function presionAurícula(c, v, e, pperi) {
+    const dv = v - c.v0;
+    const colapso = v < VCOLAPSO ? -KCOLAPSO * (VCOLAPSO - v) ** 2 : 0;
+    return c.a * (Math.exp(c.b * dv) - 1) + e * c.ees * dv + colapso + pperi;
+  }
 
   function presiones() {
     const T = periodo, k = Math.sqrt(T / (60 / 70));
@@ -307,8 +324,8 @@ export function crearMotor(ajustes = {}) {
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
     s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
-    s.pai = presionCamara(p.ai, s.vai, eAur, s.pperi);
-    s.pad = presionCamara(p.ad, s.vad, eAur, s.pperi);
+    s.pai = presionAurícula(p.ai, s.vai, eAur, s.pperi);
+    s.pad = presionAurícula(p.ad, s.vad, eAur, s.pperi);
     // P1 · presión TRANSMURAL de las cavidades derechas (la de dentro menos la del saco): la que mantiene la pared abierta.
     // La presión de cada cámara ya lleva pperi dentro, así que pperi − pad nunca es > 0; lo que se acerca a 0 en el
     // taponamiento es la transmural (formas.mjs, plieguePared, la convierte en el pliegue de la pared libre)

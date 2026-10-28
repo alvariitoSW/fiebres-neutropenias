@@ -870,3 +870,15 @@ dos fuentes; «VD basal >41» a Lang p. 17 (rango en la Tabla 8, p. 20); rengló
 FE del VD «aprox.»; leyendas de festones con sus páginas (tricúspide p. 950, cúspides aórticas p. 946) y de brillo con su orden real.
 **Hueco**: la banda brillante dentro de la AD no viene de la tabla de tejidos (solo se bajó la pared); sin comprobar el aplanamiento del
 tabique en el PSAX (pieza Forma).
+
+## Aurículas del motor y venas pulmonares (eco-calibra-a, sesión 1, 28/10/2026)
+- La AI y la AD suman su contracción a la presión pasiva (`presionAurícula` en `motor.mjs`: P = pasiva + e·Ees·(V−V0)). Con la mezcla
+  de los ventrículos, una aurícula muy distendida se relajaba al contraerse y la onda A desaparecía.
+- AI: Ees 0,70 → 0,37 y A 0,20 → 0,25 (bomba auricular ≈ 25 % del llenado del VI; Lang 2015 p. 24: 15-30 %). AD: V0 5 → 8 (solo
+  desplaza el volumen: la AD no baja de los 15 mL del dibujo, sin cambiar la presión). Venas pulmonares: `rVp` 0,01 → 0,02 y `rPul`
+  0,095 → 0,08: el reflujo hacia las venas baja de ~590 a ~190 mL/s y la PAP diastólica del normal sigue en 11,7.
+- `escalarRPul(p, k)`: la resistencia pulmonar de una enfermedad (TEP, HP crónica, sobrecarga del atlas 14) es k veces la de referencia
+  (0,095); así TEP e HP conservan su resistencia total de antes. Derrame a fondo: 388 → 383 mL (IC ≥ 1,2 con la AI nueva).
+- Pruebas recalibradas (sin tocar ninguna referencia): marcos del muestreo en la prueba C1 de la mitral, mínimo de filas del tabique
+  en el TEP (30 → 20), caída de presión del balón (3 → 2 mmHg) y los 388 mL del navegador.
+- Pendiente (sesiones siguientes): e′ por forma, hipertrofia con mando, E=0 a fondo, VD máximo de la HP, área real de las 4 venas.

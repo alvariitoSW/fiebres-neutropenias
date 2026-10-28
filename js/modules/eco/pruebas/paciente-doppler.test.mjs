@@ -8,10 +8,10 @@ import { medirForma } from './medir-forma.mjs';
 import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
 
 const PENDIENTES = new Set([
-  // causa: ver la salida de la prueba. J1: A normal 82,9>82 (normal y 0 %); e′ fijo en dilatada/fallo/hipertrofia; E=0 a fondo
-  // (hemorragia, derrame, tep); S/D de fallo; hipertrofia sin mando (E/A 10). J2: AI/AD o VD por debajo de LIMITES.
-  'J1:normal', 'J1:dilatada', 'J1:hemorragia:0', 'J1:fallo:0', 'J1:derrame:0', 'J1:tep:0', 'J1:hpcronica:0', 'J1:hemorragia:1', 'J1:fallo:def', 'J1:fallo:1', 'J1:derrame:1', 'J1:tep:1', 'J1:hipertrofia:0', 'J1:hipertrofia:def', 'J1:hipertrofia:1',
-  'J2:normal', 'J2:vasoplejia', 'J2:hemorragia:0', 'J2:fallo:0', 'J2:derrame:0', 'J2:tep:0', 'J2:hpcronica:0', 'J2:hemorragia:def', 'J2:hemorragia:1', 'J2:derrame:def', 'J2:derrame:1', 'J2:tep:def', 'J2:tep:1', 'J2:hpcronica:def', 'J2:hpcronica:1',
+  // causa: ver la salida de la prueba. Quedan, de la sesión 1: e′ fijo (10,8) en dilatada, fallo, hipertrofia y hpcronica:def (E/e′ 8,1 frente a <8);
+  // E=0 a fondo (hemorragia, derrame, tep: piezas 4-5); S/D de fallo; hipertrofia sin mando (E/A 10). J2: AI/AD o VD por debajo de LIMITES.
+  'J1:dilatada', 'J1:hpcronica:def', 'J1:hemorragia:1', 'J1:fallo:def', 'J1:fallo:1', 'J1:derrame:1', 'J1:tep:1', 'J1:hipertrofia:0', 'J1:hipertrofia:def', 'J1:hipertrofia:1',
+  'J2:vasoplejia', 'J2:hemorragia:def', 'J2:hemorragia:1', 'J2:derrame:def', 'J2:derrame:1', 'J2:tep:def', 'J2:tep:1', 'J2:hpcronica:1',
 ]);
 const todo = { todo: 'eco-calibra-a' };
 

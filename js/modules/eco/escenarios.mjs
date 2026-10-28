@@ -1,5 +1,5 @@
 import { tapseDeLatido } from './corazon-geo.mjs';
-import { BASE } from './motor.mjs';
+import { BASE, escalarRPul } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
 // Cada escenario parte del estado normal estable y cambia lo mínimo para provocar su tipo de shock.
@@ -14,8 +14,8 @@ const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 %
 const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
 const EES_VI_MIN = 0.3;                        // mmHg/mL, ~10 % de la normal (3,1)
 // mL; con el pericardio del modelo, el taponamiento (derrame agudo). 390 → 388 con la RVS calibrada (octubre 2026, segunda
-// vuelta): con 390 el IC a fondo bajaba a 1,19. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
-const DERRAME_ML_MAX = 388;
+// vuelta): con 390 el IC a fondo bajaba a 1,19; 388 → 383 con la AI que suma su contracción (eco-calibra-a, 28/10/2026): con 388, 1,15. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
+const DERRAME_ML_MAX = 383;
 // el derrame va en parábola (mL = máx · (1 − (1 − g)²)): la presión del saco crece en exponencial con el volumen, así que
 // cerca del final cada paso del mando añade menos líquido y la PA no cae a saltos
 const derrameMl = (g) => DERRAME_ML_MAX * (1 - (1 - g) ** 2);
@@ -105,7 +105,7 @@ export const ESCENARIOS = {
     // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
     // (~0,93) es el de siempre: ×8 y ×0,65
     gravedad: { fin: 'el TEP de alto riesgo a fondo', defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
-    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
+    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** g); m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
@@ -116,7 +116,7 @@ export const ESCENARIOS = {
     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
-      m.p.rPul *= r.k; m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
       m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; },
   },
 };
