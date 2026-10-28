@@ -631,3 +631,10 @@ todo queda como antes; el ácido-base, con motor propio, fuera):
   muralla E1 (mantener el IBP hasta la extubación → colonización y aspiración, «se cree que»).
 - Jueces: auditor 0 graves (2 vueltas); profesor v1 8,0-8,6 → v2 8,75-9,0. Pruebas de los 4 modelos con recorrido
   bien, con fallo y con la consecuencia (caja dentro de la pantalla).
+
+### Texto | Mayéutica | Estudiar (28/10/2026, `mayeutica-pestana`)
+Encargo del Consejo del 28/10: la guía socrática estaba escondida tras «Estudiar → Piensa» (el usuario la buscó en la
+FA). Ahora cada ficha con Mayéutica tiene un tercer botón «Mayéutica» que abre esa misma guía (misma instancia de
+Estudiar, en modo `modo-mayeutica`, que oculta la lista de pasos): los resultados se comparten con Piensa y al acabar
+ofrece «Sigue en Estudiar → Examínate». Prueba ampliada en `autonomo/pruebas/mayeutica-fichas.mjs`
+(`casoPestanaMayeutica`). Versión 20261028-3.
