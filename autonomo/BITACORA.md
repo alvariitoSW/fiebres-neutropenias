@@ -229,6 +229,62 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
+### B-037 · Consejo de Ministros (cómo decide el gobierno) · apuntado 2026-10-28
+- **Lo que dijiste**: «que TODO esto lo estudie el consejo de ministros y lo aprueben ellos»; «deberíamos hacer una
+  reforma integral con un consejo de ministros para abordarlo bien»; «el informe del simulador del ETE queda aprobado
+  para su paso por el consejo de ministros».
+- **Cómo lo entiendo** (supongo, a falta de tu sí): una sesión que se reúne cuando hay asuntos (como mucho una al día,
+  después del informe de las 13:43). Cada ministerio da su dictamen en ≤15 líneas, con un agente barato cada uno:
+  Interior (`/plan-socialista`: se puede hacer, cómo, con qué modelos), Hacienda (`/ahorro`: cuánto cuesta y qué se
+  recorta), Educación (`/mayeutica`, B-038: si sirve para estudiar), Justicia (jueces y reglas: si choca con
+  `CLAUDE.md` o REGLAS) y Transportes (`/bitacora`: prioridad y calendario); Ciencia y Exteriores, si el asunto es suyo.
+  Sale un **acta** (`autonomo/consejo/AAAA-MM-DD.md`) con lo acordado, y lo acordado entra en el tablero sin pasar por
+  ti, dentro de sus poderes. Coste por reunión: ~1-2 M (supongo).
+- **Poderes** (propuesta): el Consejo aprueba dudas de los planes, orden, tareas y opciones de informes **dentro del
+  presupuesto que apruebes**. Se reservan al gobierno central: el presupuesto total, la arquitectura (`CLAUDE.md` §2),
+  quitar contenido y la última parada de cada bloque (lo pruebas en el móvil antes de `main`).
+- **Primer orden del día**: (1) las 5 dudas de B-035; (2) el paquete del informe del ETE (`tee-inversa`); (3) la
+  reforma de la eco (B-039), solo estudio; (4) la Mayéutica de las fichas del bloque 3 (lo que viste en la FA).
+- **Depende de**: tu sí a los poderes. **Tamaño**: pequeña (escribir la skill y el apartado de REGLAS) + una reunión.
+- **Lista de calidad**: sin simulador · «lo que NO quiero»: que el Consejo apruebe lo reservado o pase del presupuesto
+  · juez: el acta (lo mira el gobierno central en el informe diario).
+
+### B-038 · Ministerio de Educación: skill `/mayeutica` · apuntado 2026-10-28
+- **Lo que dijiste**: «quiero crear el ministerio de educación /mayéutica para encargarse de la escolarización
+  completa de la app con su departamento de arte para creación de modelos vivos […] un departamento de ideas para
+  plantear varias maquetas de modelos vivos ayudándose de todos los recursos a su alcance con /anatomy
+  /ingenieria-reversa /literature-review /claim-check /radar […] los mejores modelos vivos que existen en el mundo».
+- **Cómo lo entiendo**: una skill nueva, `/mayeutica`, dueña de **todo lo que es estudiar** en la app (todos los
+  libros, no solo Marino): mapa de qué ficha tiene Estudiar y Mayéutica, rutas, casos, y la rúbrica (REGLAS §7-§8).
+  - **Escuela**: diseña el estudio de cada ficha (Mira → Juega → Piensa → Examínate → Caso, guía socrática) y lo juzga
+    (el agente `profesor` pasa a ser su funcionario).
+  - **Departamento de arte**: los modelos vivos (dirección artística, método de `/anatomy`, maquetas, límites de
+    paciente posible).
+  - **Departamento de ideas**: para cada modelo nuevo, **2-3 maquetas distintas** para elegir, buscando antes lo mejor
+    del mundo con `/ingenieria-reversa` (webs y simuladores), `/radar` (lo que mandas), `/literature-review` y
+    `/claim-check` (fuentes y cifras), y `/anatomy` (el dibujo).
+  - Interior sigue **construyendo**; Educación **diseña y juzga**. Hacienda le revisa el gasto como a todos.
+- **Depende de**: B-037 (se sienta en el Consejo). **Tamaño**: pequeña (la skill) y después, su trabajo.
+- **Lista de calidad**: «lo que NO quiero»: copiar código o imágenes ajenas (CLAUDE §7.9), cifras sin fuente, un
+  segundo quiz · juez: la rúbrica del profesor (≥8, meta 8,75).
+
+### B-039 · Reforma integral de la eco: un motor para el corazón y otro para la imagen · apuntado 2026-10-28
+- **Lo que dijiste**: «con el TEP o lo de HTP máxima sale así, esto ya ha perdido la intención de una sola
+  fisiología porque esto no es fisiología […] quizá habría que tener el modelo del corazón vivo así en 3D pero luego
+  la parte de la eco tenga otro motor diferente para hacerla más parecida a la realidad y sea un verdadero simulador
+  de eco». Captura del 28/10: el corazón 3D deformado (FC 119, «Eyección lenta»).
+- **Cómo lo entiendo**: hoy el motor del latido mueve a la vez el corazón 3D, el shock vivo y la imagen de eco; al
+  llevar una forma a fondo, la imagen hereda lo imposible. Propuesta a estudiar: (A) **dos motores** con un contrato
+  entre ellos: el de fisiología (corazón 3D, shock, ritmo) y uno de **imagen de eco** calibrado con valores reales
+  por patología (como EchoSuite y los simuladores estudiados: `autonomo/ideas/ingenieria-inversa/`), que nunca pinta
+  algo imposible; (B) un solo motor con topes de paciente real por forma; (C) mezcla. Es **arquitectura**: el Consejo
+  hace el informe (opciones, qué se rehace, qué se aprovecha de lo hecho, gasto) y el sí final es tuyo.
+- **Depende de**: B-037. Fuera de Marino: va en la cola de la eco (prioridad 27/10: pulir la eco, después del Libro
+  Azul), salvo que el Consejo proponga adelantarla. **Tamaño**: grande (informe primero).
+- **Lista de calidad**: cifras objetivo por forma con fuente y página (Lang 2015, Nagueh 2025, Mukherjee 2025, ya en
+  `docs/`) · «lo que NO quiero»: perder lo calibrado (505 pruebas), copiar código ajeno · juez: `jueces --eco` y el
+  «paciente posible» del Doppler (J1, J2).
+
 ### B-035 · Plan Marino 100 % (The ICU Book entero con Estudiar) · apuntado 2026-10-28
 - **Lo que dijiste**: «Esta sesión solo DISEÑA el plan para terminar The ICU Book (Marino) al 100 %… Nada entra en el
   tablero ni se programa sin mi "apruebo"».
@@ -394,7 +450,8 @@ El resto del tablero sigue `aparcada`.
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
-- **B-035 · Plan Marino 100 %**: espera la respuesta a sus 5 dudas (28/10).
+- **B-035 · Plan Marino 100 %**: sus 5 dudas, al Consejo de Ministros (lo pediste el 28/10; espera B-037).
+- **`tee-inversa`**: aprobado por ti para que el Consejo elija el paquete (28/10).
 
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
