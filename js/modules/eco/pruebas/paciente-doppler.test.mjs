@@ -8,10 +8,10 @@ import { medirForma } from './medir-forma.mjs';
 import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
 
 const PENDIENTES = new Set([
-  // causa (e′ por forma, hipertrofia con mando, dilatada con la restitución de e′ y hpcronica ya pasan en la s2):
+  // causa (e′ por forma, hipertrofia con mando, dilatada con la restitución de e′, hpcronica y E>0 a fondo ya pasan en la s2):
   // fallo:def E/e′ 13,4 (≥14) y S/D 1,42 (<1): pide rigidez con la gravedad, que rompe 9 pruebas del fallo (s2-dilfallo.md); fallo:1 E/e′ 8,5
-  // (fusión a FC 120, E 30); E=0 a fondo (hemorragia, derrame, tep: piezas 4-5). J2: AI/AD o VD por debajo de LIMITES.
-  'J1:hemorragia:1', 'J1:fallo:def', 'J1:fallo:1', 'J1:derrame:1', 'J1:tep:1',
+  // (fusión a FC 120). J2: VD o AI/AD de shock por debajo de LIMITES (s2-fondo.md).
+  'J1:fallo:def', 'J1:fallo:1',
   'J2:vasoplejia', 'J2:hemorragia:def', 'J2:hemorragia:1', 'J2:derrame:def', 'J2:derrame:1', 'J2:tep:def', 'J2:tep:1',
 ]);
 const todo = { todo: 'eco-calibra-a' };

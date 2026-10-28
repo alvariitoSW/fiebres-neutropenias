@@ -258,7 +258,10 @@ export function medidasLatido(curva, fuente) {
   }
   if (fuente.tipo === 'valvula' && !SALIDA[fuente.n]) {
     const E = pico(en('FG')), A = pico(en('A'));
-    return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: tdeDe(curva, curva.indexOf(E), sg) };
+    // fusión E-A: el «pico» de E es el primer punto tras la A y la onda ya venía más alta (la E cuelga de la rama descendente de
+    // la A): no hay pico precoz propio y no se mide el TDE (Nagueh 2025, p. 547 (11): no medir el TDE con fusión)
+    const iE = curva.indexOf(E), fusion = iE > 0 && curva[iE - 1].fase === 'A' && sg * curva[iE - 1].v >= sg * E.v;
+    return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: fusion ? null : tdeDe(curva, iE, sg), fusion };
   }
   if (fuente.tipo === 'valvula') {
     let itv = 0; for (let i = 1; i < curva.length; i++) { const v = sg * curva[i].v; if (v > 0) itv += v * (curva[i].t - curva[i - 1].t); }
