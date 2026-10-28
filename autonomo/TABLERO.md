@@ -748,7 +748,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | en revisión (2026-10-27): PR https://github.com/alvariitoSW/fiebres-neutropenias/pull/36 | PDF recibido el 27/10: López Ramírez, *La alegría de leer el electrocardiograma*, 3.ª ed., 2012 (`docs/lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`; desplazamientos en la bitácora §3). La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
+| 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | en revisión (PR [#36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36), 27/10) | PDF recibido el 27/10: López Ramírez, *La alegría de leer el electrocardiograma*, 3.ª ed., 2012 (`docs/lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`; desplazamientos en la bitácora §3). La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
 | 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
 | 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
 | 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
@@ -774,7 +774,14 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
 | 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
 | 26 | `f4-recorridos` | Fase 4 · Recorridos fijos (Rx de UCI, TC de cráneo en el coma, TEP) | aparcada | Igual (los temarios ya no se esperan: ver B-005, 27/10) |
+| 27 | `ecg-plan` | B-033 · Plan del ECG en dos caminos (aprender desde cero con Anatomy y modelo vivo; leer juntos en la guardia): solo el plan, con piezas y gasto estimado | hecha (2026-10-27) | Aprobado por el usuario el 27/10 (solo el plan). Tipo: plan (sin construir). Profesor en modo cobertura (fable) sobre la PR #36 (`auto/pif-ecg`), `ritmolab-3.md`, el corazón eléctrico y el método Anatomy; informe Artifact para el móvil con opciones y coste por pieza (`gasto.mjs` y presupuestos vigentes). Las piezas elegidas vuelven a la bitácora · **Hecho**: plan publicado (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c, copia `autonomo/planes/ecg-plan.html`); las 4 decisiones y las piezas, en B-033 |
 
+| 28 | `ecg-guardia` | B-033 · Camino 2 · «Leer juntos en la guardia» (asistente de 9 pasos que cierra con criterios del libro y página) + enlaces estado ↔ ficha/página/trazado (piezas 2-5 del plan) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | **Continúa la PR #36** (rama `auto/pif-ecg`, sin fusionar). Presupuesto ≈ 2,9 M. Programada para el 28/10 por la mañana |
+| 29 | `arritmias-maqueta` | B-033 · Camino 3 · Maqueta del **laboratorio de arritmias** (puerta «Arritmias»): lector AHA 2025/ESC 2019/2021 → tabla de cifras con página; paciente + monitor + ¿pulso?/¿estable?, SYNC, marcapasos transcutáneo; bradis/BAV/atropina en el grafo (L0-L3) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | Sobre `autonomo/maquetas/b3-ritmo/`. Hace la parte de maqueta de `b3-bradi`. ≈ 3,4 M + parada (el usuario la ve y elige). Programada para el 28/10 por la mañana |
+| 30 | `arritmias-app` | B-033 · Camino 3 · Laboratorio en la app: monitor + acciones, estados nuevos y modos Estudio/Guardia con revisión sin nota (L4-L5) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | Tras aprobar la maqueta de `arritmias-maqueta`. Absorbe la parte en la app de `b3-bradi` y prepara `g2-paro`. ≈ 2,9 M + director |
+| 31 | `arritmias-casos` | B-033 · Camino 3 · Los 6 casos del laboratorio + auditor y juicio (L6-L7) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | Tras `arritmias-app`. ≈ 2,75 M |
+| 32 | `ecg-vector-maqueta` | B-033 · Camino 1 · Maqueta del vector y las 6 derivaciones de los miembros en el corazón eléctrico, con prueba del eje por estado (piezas 6-7) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | Tras `arritmias-maqueta` (reutiliza su monitor). ≈ 2,0 M + parada |
+| 33 | `ecg-vector-app` | B-033 · Camino 1 · Derivaciones en la app + Mayéutica «desde cero» y 2 casos + auditor y juicio (piezas 8-10) | aparcada (27/10, noche: el usuario prioriza Marino y El Libro Azul; vuelve con los modelos vivos) | Tras aprobar `ecg-vector-maqueta` y fusionar la PR #36. ≈ 4,75 M + director |
 **Encargo común del Objetivo I** (cada tarea lo concreta su director con su informe de ingeniería inversa):
 - Para qué: ayudar en la guardia y estudiar (`autonomo/radar/NORTE.md`).
 - Modelo «así sí»: las piezas de la app que ya existen (eco, motor del latido, `formula-comun`, cuaderno de campo,
@@ -782,6 +789,20 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 - Lo que NO quiero: copiar código, texto o imágenes de las webs estudiadas; cifras sin fuente; guardar datos de
   pacientes; librerías nuevas sin que el usuario las elija (three.js sigue sin decidir).
 - Fuente: la que dice cada fila; sin PDF, la tarea se queda `aparcada`.
+
+
+**Encargo de las tareas 28-33 (B-033, aprobado el 27/10/2026)**: el plan entero, con arte, piezas, presupuestos,
+casos y riesgos, está en `autonomo/planes/ecg-plan.html` (Artifact https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c)
+y en el parte `autonomo/partes/2026-10-27-ecg-plan.md`. Decisiones (las recomendadas del plan; el usuario no eligió
+otras): ampliar el corazón eléctrico (`ritmo-vivo`), no un modelo nuevo; **una sola pieza viva con tres caras**
+(laboratorio, derivaciones, «Vive este caso» desde el cuaderno); el asistente cierra con la **lista de criterios
+cumplidos con página**, nunca un diagnóstico ni dosis; orden guardia → laboratorio → vector; **la tabla de cifras de
+AHA/ESC (L0) antes de la maqueta**. Método Anatomy: skill del proyecto `anatomy` (`.claude/skills/anatomy/`, instalada el 27/10; método sí, kit no). Lo que
+NO quiero: cifras sin página (julios, mA, atropina, signos de inestabilidad solo de AHA 2025 parte 9, S = PDF + 537,
+ESC 2019 TSV, PDF + 654, ESC 2021 estimulación); constantes en línea recta; guardar datos del paciente; un segundo
+simulador; precordiales de tabla fija presentadas como fisiología; tocar `pagina.js` (665 líneas): lo nuevo, en
+módulos aparte (`ritmo-vivo/laboratorio/`, `ritmo-vivo/derivaciones.js`). Juez: `--modelo ritmo-vivo` y un programa
+de prueba estado × acción que devuelva PA, FC y pulso en texto (paciente posible en los 17 estados).
 
 ## Objetivo P · Informes con gasto antes de construir (aprobado el 27/10/2026)
 
@@ -842,9 +863,9 @@ una sesión cada una, a horas distintas (sesiones programadas).
 
 | # | Clave | Qué | Estado | Nota |
 |---|---|---|---|---|
-| 1 | `eco-calibra-a` | Opción A del informe `eco-calibra`: arreglar las 5 piezas del motor de la eco y los dos jueces nuevos | pendiente (empieza el 28/10) | ≈5,5 M en 2 sesiones. Informe https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · copia `autonomo/bloques/eco-mega/calibra-informe.html` |
+| 1 | `eco-calibra-a` | Opción A del informe `eco-calibra`: arreglar las 5 piezas del motor de la eco y los dos jueces nuevos | en curso (28/10: sesión 1 hecha en la rama `auto/eco-calibra-a`; sesión 2 sigue con `autonomo/bloques/eco-mega/calibra-a/sesion2.md`) | ≈5,5 M en 2 sesiones. Informe https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · copia `autonomo/bloques/eco-mega/calibra-informe.html` |
 | 2 | `b3-paso4` | Paso 4 del bloque 3: **opción A** (las 17 piezas nuevas, elegida por el usuario el 27/10) construida por grupos | pendiente (empieza el 28/10) | Informe https://claude.ai/artifact/HnYNUdSSrtvzdq8QhSj4Qw · plan `autonomo/bloques/b3/plan-paso4.md`. Rama `auto/b3` |
-| 3 | `competencias-r2r5` | Completar el mapa de competencias de R2 a R5 | pendiente (empieza el 28/10) | Sobre `autonomo/ideas/competencias-r.html`; informe, no toca la app |
+| 3 | `competencias-r2r5` | Completar el mapa de competencias de R2 a R5 | aparcada (27/10, noche: no corre prisa) | Sobre `autonomo/ideas/competencias-r.html`; informe, no toca la app |
 
 **Encargo `eco-calibra-a`** · tipo: arreglo del motor (técnico; a `main` con los jueces en verde) · aprobado el 27/10/2026
 - Qué quiero: la opción A entera del informe: (1) la AI y la AD suman su contracción a la pasiva; (2) el freno de las
@@ -865,6 +886,11 @@ una sesión cada una, a horas distintas (sesiones programadas).
   27/10** (sustituye a «que elija el profesor»: ya no hace falta ese paso). Se construye por grupos de fichas, una sesión por modelo o grupo (REGLAS §4.7),
   respetando el límite de gasto diario.
 - Lo que NO quiero: pasar del límite de gasto del día.
+- **Encadenado (27/10, noche, «sí a todo»)**: un grupo por sesión, en el orden del plan (1 → 6), siempre en la rama
+  `auto/b3`. Al cerrar un grupo, si el gasto del día (`gasto.mjs`, todas las sesiones) va por debajo de ~15 M, el
+  director abre el siguiente con `create_session` (source_url https://github.com/alvariitoSW/fiebres-neutropenias,
+  prompt «/plan-socialista b3-paso4»); si no, lo deja para el aviso de la mañana siguiente. Nunca dos grupos a la vez.
+  Al acabar el grupo 6, la parada 3 (el bloque entero, con el usuario). Meta: grupos 1-6 hechos el 30/10.
 - Hecho: el de las paradas del bloque `b3` (parada 3: el bloque entero, con el usuario).
 
 **Encargo `competencias-r2r5`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
@@ -876,6 +902,33 @@ una sesión cada una, a horas distintas (sesiones programadas).
   usuario del 27/10, excepción acotada a este mapa).
 - Lo que NO quiero: presentar una propuesta como si fuera el programa oficial; construir nada en la app.
 - Hecho: página actualizada (mismo Artifact), parte y fila en `autonomo/SESIONES.md`.
+
+## Objetivo P2 · Preparar lo siguiente mientras se termina Marino (aprobado el 27/10/2026, noche)
+
+El usuario, el 27/10: prioridad Marino → El Libro Azul → webs e ingeniería inversa y modelos vivos → pulir la eco →
+PIF rehecho con lo nuestro. «Sí a todo» al calendario hasta el 01/11. Dos informes baratos, sin tocar la app, a
+`main`, con página para el móvil y parte. Programados para el 31/10.
+
+| # | Clave | Qué | Estado | Nota |
+|---|---|---|---|---|
+| 1 | `azul-cobertura` | El Libro Azul: qué cubren ya Marino y los modelos vivos, capítulo a capítulo, y el plan por bloques (como el Objetivo M5) con su gasto | pendiente (31/10) | B-004. Secciones I-X en `docs/` |
+| 2 | `radio-informe` | B-034: temario corto del PIF de Radiología (tórax y neuro) para estudiar y para la guardia, con lo de Radiology Assistant y NavRad | pendiente (31/10) | Encargo en la bitácora (B-034) |
+
+**Encargo `azul-cobertura`** · tipo: mapa (informe) · aprobado el 27/10/2026
+- Qué quiero: por cada capítulo de El Libro Azul (1-61), qué ficha de Marino, Merino o qué modelo vivo ya lo explica
+  (y en qué estado), qué es nuevo y qué modelo vivo nuevo haría falta; agrupado en bloques con su orden y el gasto
+  estimado de cada uno (`gasto.mjs` y presupuestos del tablero).
+- Para qué: que El Libro Azul arranque en cuanto se cierre Marino, sin repetir lo que ya está (se enlaza).
+- Lo que NO quiero: construir nada; fusionar contenido de los dos libros (CLAUDE.md §2: se enlazan).
+- Fuente: `docs/libro-azul-*.pdf` (índices; desplazamientos en la bitácora §3), `autonomo/bloques/*/cobertura*`.
+- Hecho: página para el móvil con el mapa y los bloques + parte. Juez: ninguno (lo mira el usuario).
+
+**Encargo `radio-informe`** · tipo: plan (informe) · aprobado el 27/10/2026
+- Qué quiero: B-034 hecho propuesta: los temas imprescindibles de Rx de tórax de UCI y TC de cráneo urgente para un
+  R1 (de los objetivos de `js/data/pif-rotaciones.js`), qué ficha y qué tarjeta de guardia tendría cada uno, qué
+  ideas de Radiology Assistant y NavRad entran (de sus informes del 23/10, sin abrir las webs) y el gasto.
+- Lo que NO quiero: mil fuentes (una o dos por tema, de acceso libre); copiar textos o figuras; construir nada.
+- Hecho: página para el móvil + parte; el usuario elige.
 
 ## Lo que aún no está aprobado
 

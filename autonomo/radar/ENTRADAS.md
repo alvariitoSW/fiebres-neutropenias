@@ -24,9 +24,71 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 (Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
 
-## Fichas de triaje (las 14 entradas, la más reciente arriba)
+- 2026-10-28 · Bandeja #27 · paper HSA (presión crítica de cierre): espera el enlace o el PDF del usuario
+- 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
+- 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
+- 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
+
+## Fichas de triaje (las 18 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Lazo presión-volumen #1: precarga y distensibilidad (@WithAScalpel) + CardioRender
+- **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás); en una respuesta, una web
+- **Enlace**: https://x.com/WithAScalpel/status/2115036104977940880 · la web citada en las respuestas: https://cardiorender.com
+- **Dijo**: solo el enlace
+- **Qué es**: primer tuit de una serie docente con vídeo: el lazo presión-volumen del ventrículo (llenado, contracción
+  isovolumétrica, eyección, relajación) y cómo más precarga desplaza el volumen telediastólico a la derecha y sube el
+  volumen latido. Un tercero recomienda en las respuestas CardioRender, un simulador de hemodinámica (no abierto:
+  no se le ha hecho ingeniería inversa)
+- **Sirve a**: fase 2 (verlo desde todos los ángulos); ya hay lazos P-V en Fisiopatología UCI (Cardiología), en
+  Circulación viva (eco) y en Merino Neumología: sería una mejora de lo que existe, no algo nuevo
+- **Fuente**: ninguna; el tuit no cita paper. Si se usa, la fisiología sale de Marino o del Libro Azul (`docs/`)
+- **Licencia**: tuit y vídeo ajenos, no se reproducen. CardioRender: no consta
+- **Coste**: 0 €
+- **Veredicto**: idea suelta para fase 2; ingeniería inversa de CardioRender solo si el usuario la pide
+
+### ¿Por qué el ejercicio dispara la TV del tracto de salida del VD? (@RitikaTuliMD)
+- **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás)
+- **Enlace**: https://x.com/RitikaTuliMD/status/2115035277752463816
+- **Dijo**: solo el enlace
+- **Qué es**: «CardioNugget» con imagen: catecolaminas → más estímulo β → más AMPc → más calcio dentro de la célula →
+  postpotenciales tardíos (DAD), con salida espontánea de calcio del retículo tras repolarizar. Mecanismo de
+  actividad desencadenada, buen candidato a mecanismo animado paso a paso (como los receptores animados)
+- **Sirve a**: fase 1 (el ritmo entra en el paciente, bloque 3 de arritmias, ahora aparcado en el tablero)
+- **Fuente**: ninguna; el tuit no cita paper. Para usarlo hace falta una fuente que se pueda abrir (guía o libro)
+- **Licencia**: imagen ajena, no se reproduce
+- **Coste**: 0 €
+- **Veredicto**: idea suelta para el bloque 3 (fase 1), cuando se retome
+
+### Asincronías en la fase de disparo (@DrSateeshPCCM) → Mireles-Cabodevila 2022
+- **Fecha / tipo**: 2026-10-28 (comentario del 26/10) · tuit → paper
+- **Enlace**: https://x.com/DrSateeshPCCM/status/2114702193098105204
+- **Dijo**: solo el enlace
+- **Qué es**: hilo con 5 curvas de ventilación por presión: disparo normal, precoz (reverse triggering), retrasado
+  (> 100 ms), autodisparo y esfuerzo ineficaz, con la presión muscular (Pmus) dibujada. El paper que cita:
+  Mireles-Cabodevila E, Siuba MT, Chatburn RL. *A Taxonomy for Patient-Ventilator Interactions and a Method to Read
+  Ventilator Waveforms*. Respir Care. 2022;67(1):129-148. doi:10.4187/respcare.09316. PMID 34470804
+- **Sirve a**: UCI / Papers Tuiter (un paper = una vista) y, con enlaces cruzados, Neumología; también el carril de
+  modelos vivos (curvas de ventilador que se leen). En la app no hay nada aún de autodisparo ni esfuerzo ineficaz
+- **Fuente**: el paper; no es de acceso abierto (de pago en la revista y en SAGE)
+- **Licencia**: artículo con copyright; figuras se recrean, no se copian
+- **Coste**: 0 € si el usuario tiene el PDF
+- **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el PDF (pedido en el issue #27 el 28/10)
+
+### Más allá de la PPC: presión crítica de cierre y fallo microcirculatorio en la HSA (Critical Care Reviews)
+- **Fecha / tipo**: 2026-10-28 (comentario del 26/10) · tuit → paper
+- **Enlace**: https://x.com/CritCareReviews/status/2114035385928192242
+- **Dijo**: solo el enlace
+- **Qué es**: «Paper of the Day» de Critical Care Reviews: *Beyond Cerebral Perfusion Pressure: Critical Closing
+  Pressure and Microcirculatory Failure in Aneurysmal Subarachnoid Haemorrhage*. El enlace del tuit es acortado
+  (t.co) y desde la sesión no se puede abrir; buscado por título el 28/10 sin encontrarlo (seguramente muy reciente)
+- **Sirve a**: UCI / Papers Tuiter; enlaza con la presión crítica de cierre que ya sale en el paper de shock séptico
+  y con la HSA de Sobrevivir a la UMI
+- **Fuente**: no consta (falta el paper)
+- **Licencia**: no consta
+- **Coste**: 0 €
+- **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el enlace o el PDF (pedido en el issue #27 el 28/10)
 
 ### Impeccable (pbakaus)
 - **Fecha / tipo**: 2026-10-26 · repositorio (herramienta para el agente, no para la app)

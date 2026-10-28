@@ -5,8 +5,8 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27, noche (2.ª): `encargo-revisado` (B-031) hecha en main; plan del paso 4 del `b3`
-escrito, sin construir, esperando tu decisión.
+Última sincronización: 2026-10-27, noche (3.ª): `pif-ecg` en revisión (PR #36); su parte, leído. Los informes del
+Objetivo P, hechos y decididos: `eco-calibra-a`, `b3-paso4` y `competencias-r2r5` empiezan el 28/10.
 
 ---
 
@@ -142,6 +142,11 @@ esta sección.
     miocardiopatías, AHA 2025 y la ESC 2021 de estimulación en `docs/` (encaja con `pif-ecg`, ya `pendiente`).
     Las tareas del tablero que decían «falta el temario» (`g5-neuro`, `f4-recorridos`) pasan a este enfoque cuando
     apruebes B-005.
+  - **27/10, noche, cambia otra vez**: «lo suyo sería que el contenido de marino y del libro azul con los modelos
+    vivos […] poder rehacer así el contenido del PIF, con nuestro propio contenido». El PIF se monta **al final**,
+    sobre lo de intensiva que ya habrá (Marino, El Libro Azul, modelos vivos, eco): cada objetivo de la rotación
+    enlaza a esas fichas y modelos; solo lo que no cubran se busca fuera, **con pocas fuentes** (no mil).
+    Cardiología ya no es prioridad («son 2 meses de rotación»).
 - **Depende de**: B-001 (las preguntas). Ya no de tus PDF.
 - **Dudas**:
   1. ¿«Completar el PIF» incluía repasar lo que ya está (Hematología y Nefrología), o solo las 7 rotaciones?
@@ -204,6 +209,27 @@ esta sección.
   (IE >1,1 de la HP, forma «amiloidosis», MAPSE), para una parada 4 cuando la apruebes.
 - **Espera**: el libro de física, cuando quieras; no corre prisa.
 
+### B-034 · PIF de Radiología: temario corto para estudiar y para mirar rápido en la guardia · apuntado 2026-10-27
+- **Lo que dijiste**: «de radiología faltaría también hacer lo de la ingeniería reversa a las páginas web que he
+  mandado de radiología y de Radiology Assistant, y por lo menos hacerles un pequeño temario de lo importante […]
+  tanto para estudiar como para mirar así rápido en la guardia […]. No hace falta tampoco poner 1000 fuentes».
+- **Cómo lo entiendo**: tipo `plan` primero (informe), después `contenido`. La ingeniería inversa **ya está hecha**
+  (23/10: Radiology Assistant, https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5; NavRad, en el informe conjunto
+  https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS). Falta convertirla en el cuaderno del PIF de Radiología (tórax y
+  neurorradiología, objetivos de `js/data/pif-rotaciones.js`): un **temario corto** (lo que un R1 de UCI tiene que
+  saber leer: Rx de tórax de UCI, dispositivos, TC de cráneo urgente…) y una **tarjeta de guardia** por situación
+  (supongo). Reúne `f0-ra-biblio`, `g5-neuro` y `f4-recorridos`.
+- **Modelo «así sí»**: cuaderno de campo + «lee este trazado» del ECG (PR #36), cambiando el trazado por la placa.
+- **Lo que NO quiero**: mil fuentes (una o dos por tema, de acceso libre: Radiology Assistant como bibliografía
+  enlazada, una revisión o guía si hace falta); copiar sus textos o figuras; imágenes de pacientes sin licencia.
+- **Depende de**: casos de imagen con licencia (zenodo, TCIA, Radiopaedia, cerrados en la red del entorno). Sin ellos,
+  esquemas recreados (supongo).
+- **Tamaño**: mediana (informe ≈1 M; cuaderno, 2-3 sesiones).
+- **Dudas**: (1) ¿tórax y neuro a la vez, o primero tórax? (supongo: tórax). (2) ¿Antes o después de El Libro Azul?
+  (supongo: después, como el resto del PIF, salvo el informe, que es barato).
+- **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
+  Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -233,13 +259,17 @@ esta sección.
 | `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
+| `ecg-guardia`, `arritmias-*`, `ecg-vector-*` | **B-033 · ECG en tres caminos** (leer juntos en la guardia, laboratorio de arritmias, vector y 12 derivaciones). Plan: https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c | aprobado el 27/10: 6 tareas en el tablero (Objetivo I, filas 28-33); Anatomy instalado como skill el 27/10; las 2 primeras, programadas para el 28/10 por la mañana | 2026-10-27 | «guarda el informe en tareas para hacer […] y que se programe para mañana por la mañana» (27/10). Decisiones: las recomendadas del plan (supongo; cámbialas antes de que arranquen si quieres otra) |
 | `rea-2` | **Segunda pasada de las 6 webs + NV-Reason-CT** (método v2): megaproyecto «La UCI en el bolsillo» | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-25 | Pedido el 25/10: «un megaproyecto faraónico para incluirlas y poder usarlas en la vida real… como médico intensivista y para estudiar» |
 | `radar`, `vuelta-modelos` | **B-012 y B-016** | hechas (PR #28 y #29, en main) | 2026-10-25 | |
 | `eco-mega` | **B-015 · Megaproyecto de la eco** | paradas 1, 2 y 3 **hechas y en main** (PR #30 y #34, 27/10). Siguiente: informe `eco-calibra` (B-027 + B-029, aprobado el 27/10) | 2026-10-25 | Maqueta: https://claude.ai/artifact/DMwoT6wzupV4e48KNN2R4b |
 | `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
 | `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
-| `b3-paso4-opciones`, `eco-calibra`, `competencias-r` | **Objetivo P**: informes con gasto antes de construir: paso 4 del `b3` (todas las piezas o aligerar), **B-027 + B-029** (motor diastólico y HP crónica de la eco) y **B-032** (competencias por año) | pendiente | 2026-10-27 | «Apruebo que se empiece esto, pero antes hay que hacer su /plan-socialista con sus gastos y su informe» (27/10) |
-| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | en curso (sesión abierta el 27/10) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
+| `b3-paso4-opciones`, `eco-calibra`, `competencias-r` | **Objetivo P**: informes con gasto antes de construir: paso 4 del `b3`, **B-027 + B-029** (motor diastólico y HP crónica de la eco) y **B-032** (competencias por año) | hechos (27/10); R2-R5 de competencias, a medias | 2026-10-27 | Elegiste: paso 4 opción A (17 piezas, ≈36 M) y eco opción A |
+| `eco-calibra-a`, `b3-paso4` | Arreglar el motor de la eco (≈5,5 M, 28-29/10) y paso 4 del `b3` por grupos encadenados (≈36 M, grupos 1-6 del 28 al 30/10; parada 3 contigo el 31/10) | pendiente (programadas) |
+| `azul-cobertura`, `radio-informe` | **Objetivo P2**: mapa de El Libro Azul frente a Marino y propuesta del PIF de Radiología (B-034), solo informes | pendiente (31/10) | 2026-10-27 | «Sí a todo» (27/10, noche) |
+| `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
+| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **en revisión**: [PR #36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36) (11 fichas, ~60 trazados reales, lector, 28 ejercicios, tarjeta «¿Rápido o lento?»; profesor 8,25-9) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -281,12 +311,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **🔴 Bloque 3, paso 4** (plan del 27/10, `autonomo/bloques/b3/plan-paso4.md`): es más grande de lo que parecía.
-  Faltan 17 fichas y **17 piezas nuevas** en los modelos (vagal, FA en el motor, adrenalina en la RCP, posparo,
-  rotura del papilar y del septo, IAM de VD, etapas de la IC, CPAP, placa coronaria, trombólisis, disección, TEP con
-  lisis, TVP con eco de compresión…): **≈35-40 M en 10-12 sesiones**. ¿Se hacen todas, o alguna ficha se queda con
-  un modelo que ya existe (más barato)? **27/10: primero un informe con las opciones y su gasto** (`b3-paso4-opciones`,
-  Objetivo P del tablero); después eliges.
+- **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
 
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
@@ -320,6 +345,23 @@ El resto del tablero sigue `aparcada`.
   **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
 - **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
   `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
+- **Bandeja del Radar, arreglada el 27/10 (noche), por comprobar el 28/10**: la tarea diaria se lanzaba sin el
+  repositorio ni permiso de escritura en GitHub. Borrada; la nueva (6:42 de Canarias) dispara en una sesión que sí lo
+  tiene y abre la sesión de trabajo con el repositorio. Esperan 4 tuits del issue #27. `x.com` abierto el 27/10 (comprobado: se lee el texto del tuit); `twitter.com`,
+  `*.twimg.com` y `threadreaderapp.com` siguen cerrados (no hacen falta para leer un tuit suelto).
+  **Comprobado el 28/10**: la tarea corrió y leyó los 4 tuits (el texto va dentro de la página de `x.com`). No
+  se pueden abrir `t.co`, `doi.org`, PubMed, Europe PMC ni criticalcarereviews.com: los papers se buscan por título
+  en la web y, si no aparecen o son de pago, se pide el PDF en el issue. 2 papers esperan PDF/enlace del usuario.
+- **Tareas programadas hasta el domingo** (27/10, noche, «sí a todo»), todas con ese mismo arreglo: 28/10 7:40 abre
+  `b3-paso4` (grupo 1) y `eco-calibra-a` · 29 y 30/10 7:40, el siguiente grupo y la eco si falta · 31/10 8:13,
+  `azul-cobertura`, `radio-informe` y el `b3` si falta. Los grupos del `b3` además se encadenan solos.
+  La vieja de `arritmias-maqueta` la borró el usuario el 27/10 (comprobado).
+- **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
+  pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
+  de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
+- **Prioridad nueva (27/10, noche)**: Marino → El Libro Azul → lo de las webs (ingeniería inversa: eco, AngioView,
+  RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
+  Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
@@ -436,6 +478,14 @@ El resto del tablero sigue `aparcada`.
 - **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
   consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
+- **🔴 PR #36 · `pif-ecg` (ECG y arritmias)**: mírala en el móvil y fusiónala si te gusta. Se construyó con lo
+  recomendado en las 3 preguntas de su informe (eje fuera, tarjeta sin dosis, ejercicios con pareja como pregunta y
+  el resto en galería). `ecg-guardia` (mañana) continúa sobre esa rama, y `ecg-vector-app` espera a que entre en `main`.
+- **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
+  - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
+  - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
+  - «El enunciado no nombra lo que se pregunta» (7 de 28 ejercicios describían la respuesta).
+  - Ahorro: una petición nueva a mitad de tarea va a otra sesión; recortar figuras y escribir preguntas, dos encargos.
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
 
@@ -524,11 +574,21 @@ El resto del tablero sigue `aparcada`.
   - Receptor: su explicación guiada es copia de la maqueta, no la pieza común `core/explicacion-guiada.js`.
   - Shock: «Siguiente» se ve antes de «Compruébalo» (es del motor común de la Mayéutica: afecta a todos).
 
+- **Visto de paso (`pif-ecg`, 27/10)**:
+  - El quiz no admite imagen en el enunciado: los ejercicios con trazado viven en la ficha 11 y el quiz lleva la
+    versión en texto.
+  - López Ramírez, parte 3: las pp. 149-150 están repetidas (desplazamiento + 127 hasta la 150 y + 125 desde la 151).
+  - Recortes `ej-74.png` y `ej-80.png` con texto del enunciado dentro; «Long-Ganong-Levine» (sic) sin nota visible en
+    el caso 2.
+  - Para `b3`: `abrirEstado` no acepta `extra.medir`; la tabla estado → ficha → página → trazado está lista para el
+    corazón eléctrico (mejora 4 del debate).
+
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · Calibrar el motor con una rejilla, no a mano** (propuesto 2026-10-28 por /ahorro) · Visto en: eco-mega F3b (~80 combinaciones a mano, 1,5 M, sin solución) y eco-calibra-a s1 (constructor «AI y venas», 72 pasos / 1,3 M frente a 60 / 1,2 M, ~20 combinaciones a mano) · Cambio: en todo encargo que recalibre parámetros del motor, el director da la rejilla (parámetros y rangos) y el constructor la corre de una vez con `herramientas/barrido.sh` + `calibra-tabla.mjs`, lee la tabla y elige; presupuesto del encargo 50 pasos / 0,9 M · Ahorro esperado: ~0,3-0,5 M por encargo de calibración.
+- **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
 - **Ahorro · Comprobar el acceso antes de lanzar al que busca** (propuesto 2026-10-27 por /ahorro) · Visto en: competencias-r (búsqueda web 109 k sin abrir nada, proxy), rea-eco y eco-vci-retenido (dominio bloqueado, escaneo girado) · Cambio: antes de lanzar un lector o investigador, el director prueba en 1 llamada que la fuente se abre (un `curl` de 1 s, o `pdftotext` de la página exacta); si no, pide el PDF al usuario en la pregunta del arranque · Ahorro esperado: 0,1-0,3 M por tarea afectada.
 - **Ahorro · Petición nueva a mitad de tarea, a otra sesión** (propuesto 2026-10-27 por /ahorro) · Visto en: pif-ecg (director 2,1 M; la ingeniería inversa entró en medio y alargó la conversación), b3 parada 2 (director 5,1 M) · Cambio: si el usuario pide algo distinto con la tarea en marcha, el director abre una sesión con `create_session` para eso y sigue con lo suyo · Ahorro esperado: 0,5-1 M de director por tarea.
-- **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.
@@ -536,6 +596,11 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-27 · **Plan del ECG** (`ecg-plan`, B-033): 3 caminos (guardia, desde cero, laboratorio de arritmias) con
+  piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Aprobado: 6 tareas en el tablero; Anatomy, skill.
+- 2026-10-27 · **Informes con gasto** (Objetivo P): paso 4 del `b3`, `eco-calibra` y competencias R1. Elegiste la A en
+  los dos primeros.
 
 - 2026-10-27 · **Revisar el encargo antes de gastar** (`encargo-revisado`, B-031, en main): cada tarea empieza con
   una revisión corta del encargo; `/bitacora` pasa una lista de calidad y te hace como mucho 5 preguntas.

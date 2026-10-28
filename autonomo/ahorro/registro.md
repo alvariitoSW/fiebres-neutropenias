@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-27-pif-ecg.md` (quinta pasada, 27/10: pif-ecg 13,4 M, competencias-r 348 k, b3-paso4-opciones ≈0,3 M).
+**Último parte revisado:** `2026-10-28-eco-calibra-a-s1.md` (quinta pasada, 28/10: 3,6 M; el barrido del motor a mano se repite → propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
@@ -18,9 +18,6 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 - Lo que sí se repite y ya está en las reglas: un `arreglo` de una línea o solo de reglas lo hace el director sin
   agente (≈0,3-0,4 M en 4 partes); `REGLAS.md` §4.9 lo recoge para la revisión del encargo. Sin propuesta nueva.
 
-- Una pieza con dos trabajos (recortar 80 trazados + escribir preguntas) entrega a medias y obliga a otra (pif-ecg B-2 → B-3, 0,6 M). Si se repite: partir «recortes» y «preguntas».
-- Agentes en paralelo que comparten la carpeta temporal se pisan (pif-ecg, lectores): refuerza la propuesta «Cada constructor en su propia carpeta» (vale también para lectores).
-
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
@@ -30,3 +27,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-27 | Contar las piezas en el código, no en la cobertura | propuesta |
 | 2026-10-27 | Comprobar el acceso antes de lanzar al que busca | propuesta |
 | 2026-10-27 | Petición nueva a mitad de tarea, a otra sesión | propuesta |
+| 2026-10-28 | Calibrar el motor con una rejilla, no a mano | propuesta |
