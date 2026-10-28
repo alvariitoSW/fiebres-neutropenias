@@ -279,6 +279,10 @@ esta sección.
   por patología (como EchoSuite y los simuladores estudiados: `autonomo/ideas/ingenieria-inversa/`), que nunca pinta
   algo imposible; (B) un solo motor con topes de paciente real por forma; (C) mezcla. Es **arquitectura**: el Consejo
   hace el informe (opciones, qué se rehace, qué se aprovecha de lo hecho, gasto) y el sí final es tuyo.
+- **Apunte del usuario (28/10)**: estudiar con `/ingenieria-reversa`, antes del informe, el simulador
+  https://www.pulmonarypocus.com/phone-cp-sim («para que el consejo de ministros y sobre todo el ministerio de
+  educación pueda estudiar bien la mejora integral de la ecografía de la app»). Sin abrir aún: probar antes que la red
+  lo deja abrir (REGLAS §4.11).
 - **Depende de**: B-037. Fuera de Marino: va en la cola de la eco (prioridad 27/10: pulir la eco, después del Libro
   Azul), salvo que el Consejo proponga adelantarla. **Tamaño**: grande (informe primero).
 - **Lista de calidad**: cifras objetivo por forma con fuente y página (Lang 2015, Nagueh 2025, Mukherjee 2025, ya en
