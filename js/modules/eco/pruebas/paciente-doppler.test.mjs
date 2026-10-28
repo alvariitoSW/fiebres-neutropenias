@@ -8,10 +8,10 @@ import { medirForma } from './medir-forma.mjs';
 import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
 
 const PENDIENTES = new Set([
-  // causa (e′ por forma ya hecho, hipertrofia con mando pasa): dilatada E/A 1,38 (≥2) y E/e′ 13,5 (≥14) con e′ en banda; hpcronica:def E/e′ 8,1 (<8);
+  // causa (e′ por forma ya hecho, hipertrofia con mando pasa): dilatada E/A 1,38 (≥2) y E/e′ 13,5 (≥14) con e′ en banda; hpcronica ya pasa (sesión 2: k más empinado al principio, tabique y volumen en la fase de claudicación);
   // fallo:def E/e′ 10,0 y S/D 1,42; fallo:1 E/e′ 5,1; E=0 a fondo (hemorragia, derrame, tep: piezas 4-5). J2: AI/AD o VD por debajo de LIMITES.
-  'J1:dilatada', 'J1:hpcronica:def', 'J1:hemorragia:1', 'J1:fallo:def', 'J1:fallo:1', 'J1:derrame:1', 'J1:tep:1',
-  'J2:vasoplejia', 'J2:hemorragia:def', 'J2:hemorragia:1', 'J2:derrame:def', 'J2:derrame:1', 'J2:tep:def', 'J2:tep:1', 'J2:hpcronica:1',
+  'J1:dilatada', 'J1:hemorragia:1', 'J1:fallo:def', 'J1:fallo:1', 'J1:derrame:1', 'J1:tep:1',
+  'J2:vasoplejia', 'J2:hemorragia:def', 'J2:hemorragia:1', 'J2:derrame:def', 'J2:derrame:1', 'J2:tep:def', 'J2:tep:1',
 ]);
 const todo = { todo: 'eco-calibra-a' };
 

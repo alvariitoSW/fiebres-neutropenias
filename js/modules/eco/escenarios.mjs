@@ -37,9 +37,14 @@ const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // (atlas/vd.mjs, ajustesVd 'presion'; aquí se repite porque ese archivo es de dibujo y no se carga en el motor): g = su
 // punto s de 0 a 1. Todos los parámetros, ilustrativos; lo que se exige son las cifras de CRITERIOS_FORMA.hpcronica
 const HPC_DEFECTO = 0.55;
+// Sesión 2 (eco-calibra-a): la resistencia sube más deprisa al principio (×8,4 en el defecto: el VI recibe menos y E/e′ <8, grupo 1
+// precapilar: Nagueh 2025 p. 548; Mukherjee 2025 p. 173 T8) y llega al mismo ×12 a fondo. En la fase de claudicación (x >0,6) el VD se
+// dilata menos (v0 +60, no +160, y más rígido: VTD ~230 mL, grave >170 mL: Mukherjee p. 145 T1) y se retiene líquido (+1.200 mL: PVC
+// ~16 mmHg, «RAP ≥15 grave» ibíd.) y el tabique transmite más presión del VD al VI (0,05 → 0,20: interdependencia ventricular
+// con el VD dilatado), que mantiene llena la AI (≥15 mL del dibujo). Parámetros ilustrativos; lo exigido son las bandas de los jueces
 const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
-  return { k: 1 + 11 * x, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
-    mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 700 * c01((x - 0.6) / 0.4), b: 1 + 0.2 * x, v0: 160 * c01((x - 0.5) / 0.5) ** 1.5 }; };
+  return { k: x < 0.55 ? 1 + 13.5 * x : 8.425 + (12 - 8.425) * (x - 0.55) / 0.45, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
+    mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 1200 * c01((x - 0.6) / 0.4), b: 1 + 0.4 * x, tab: 0.05 + 0.15 * c01((x - 0.6) / 0.4), v0: 60 * c01((x - 0.5) / 0.5) ** 1.5 }; };
 // Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
 const HVI_DEFECTO = 0.2;
 const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
@@ -132,7 +137,7 @@ export const ESCENARIOS = {
     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
       m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
-      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; },
+      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
   },
 };
 
