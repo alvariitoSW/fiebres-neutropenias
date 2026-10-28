@@ -61,9 +61,9 @@ clase de hemorragia es y con qué se reanima?»
   cambia (S pág. 23); esperar deja sin reponer una pérdida que ya taquicardiza.
 - «Clase II: taquicardia con PA mantenida y sin oliguria; cristaloides» → **correcta**.
 - «Clase III: una FC >100 ya es shock; pedir sangre» → porque: la clase III es hipotensión, oliguria (<0,5 mL/kg/h, S
-  pág. 2 y 17) y lactato alto (S pág. 22); transfundir aquí es tratar un shock que no tiene.
+  pág. 2 y 17) y lactato alto (Tabla 15.1, S pág. 22-23); transfundir aquí es tratar un shock que no tiene.
 Explicación: volemia 60 mL/kg → 3,6 L (S pág. 21); clase II = 15-30 % (S pág. 22): FC ↑, PA sostenida por
-vasoconstricción, lactato ↔ (Tabla 15.1, S pág. 22); se reanima con cristaloides (S pág. 26). Se destapa el Hto: 45 %.
+vasoconstricción, lactato ↔ (Tabla 15.1, S pág. 22; la clase II no llega a oliguria, S pág. 23); se reanima con cristaloides (S pág. 26). Nota: la Tabla 15.1 pone FC ↑, pero F pág. 27 matiza que la taquicardia en decúbito es insensible (ausente en la mayoría con déficit hasta 25 %). Se destapa el Hto: 45 %.
 
 ## Pantalla 3 · Cuánto, y adónde va lo que puso el R1 (pasos 2 y 3 · «hora 0-1»)
 **P2 · test con calculadora** («Volumen de reanimación», ficha `mc-hemorragico-fluidos`, botón que abre `mc-vr-peso`).
@@ -100,10 +100,10 @@ Na⁺/Cl⁻/HCO₃⁻ 140/116/18 · PaCO₂ 37 · pH 7,31 · Lactato 1,6. El R1:
 ## Pantalla 5 · El plan de guardia y el día 2 (pasos 5 y 6)
 **P5 · encuentra el error** («hay 0, 1 o 2 errores»). «Plan que deja escrito el R1 a las 4 h:»
 1. «Hto 38 %: sigue sangrando; pido 2 concentrados ya.» → **error**; frase buena: el Hto a las 4 h refleja el salino,
-   no la pérdida (S pág. 23); la clase II se reanima con cristaloides y la sangre es de la clase III (S pág. 22 y 26).
+   no la pérdida (S pág. 23); la clase II se reanima con cristaloides y la sangre es de la clase III (Tabla 15.1, S pág. 22) y los cristaloides de la II (S pág. 26).
 2. «Cambio el salino por Ringer lactato: su cloro (109) no produce acidosis hiperclorémica.» → verdadera (F pág. 7).
 3. «El Ringer no: lleva 28 mmol/L de lactato y le subirá el lactato.» → **error**; frase buena: el hígado aclara unos
-   100 mmol/h, lo que llevan 3,5 L de Ringer por hora (F pág. 8).
+   100 mmol/h, lo que llevan 3,5 L de Ringer por hora (F pág. 8); matiz: el aclaramiento con Ringer no se ha estudiado en críticos con shock o fallo hepático (F pág. 8), y Teresa es clase II sin shock.
 4. «Si repito el lactato, no lo saco por la vía del Ringer: sale falsamente alto.» → verdadera (F pág. 8).
 5. «Si aparecen hipotensión, oliguria o lactato alto, pasa a clase III y se reanima con sangre.» → verdadera (S pág. 22).
 Tras corregir, cada error pide pensar la frase buena antes de verla.

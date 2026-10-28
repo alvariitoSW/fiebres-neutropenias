@@ -41,7 +41,7 @@ Se ve: el mando se desliza a 100 % (animación o dos fotogramas con «reducir mo
 Tabla antes → después (cifras reales del modelo): PAM 87 → **54** · FC 71 → **123** · PVC 4 → **3** · IC 2,8 → **3,1** · IRVS 30 → **17** ·
 ScvO₂ 90 → 90 · lactato 1,0 → **4,0** · diuresis 1,0 → **0,4**. Estado del modelo: «Shock séptico» y su frase viva (p. 10, 57-59).
 Veredicto (una línea): «Acertaste: PVC baja, IC alto, IRVS baja.» o «Tu apuesta decía (a)/(c): la PVC bajó, pero el IC subió y la IRVS cayó.»
-Chips rojos bajo la tabla: PAM 54 (<65), lactato 4,0 (>2), diuresis 0,4 (<0,5): «los tres objetivos de la Tabla 14.5 fallan: está en shock» (p. 17).
+Chips rojos bajo la tabla: PAM 54 (<65), lactato 4,0 (>2), diuresis 0,4 (<0,5): «los tres objetivos de reanimación de la Tabla 14.5 fallan (p. 17); la definición de shock (PAS <90 o PAM <70, lactato >2, oliguria <0,5 mL/kg/h) está en p. 2».
 - **Pregunta A2** (autoexplicación, test con opciones). Enunciado: «Amparo está en shock y, sin embargo, su gasto ha subido (IC 2,8 → 3,1). ¿Por qué?»
   (a) «El corazón compensa la fuga capilar bombeando con más fuerza» → porque: «La sepsis deprime el miocardio, no lo refuerza. Si crees que el
   corazón “va sobrado”, no vigilarás la disfunción miocárdica que el libro describe.» (b) «Taquicardia y poscarga baja: los vasos abiertos dejan
@@ -50,7 +50,7 @@ Chips rojos bajo la tabla: PAM 54 (<65), lactato 4,0 (>2), diuresis 0,4 (<0,5): 
   por vasodilatación sistémica; pese a la disfunción miocárdica, el gasto suele subir por la taquicardia y la caída de la poscarga del VI. El
   endotelio dañado deja salir líquido: hipovolemia (PVC 3).» Fuente: p. 57-58 (`mc-sepsis-hemodinamica`, ficha `mc-shock-septico`); ScvO₂ ≥80 %
   característica del séptico: p. 9-10 (`#mc-scvo2`). Un paso más: «Mira la arteriola abierta: IRVS 17. Eso es lo que la ecuación llama RVS baja
-  (PAM = GC × RVS + PAD, p. 2-3, `#mc-shock-ecuacion`).»
+  (PAM = GC × RVS + PVC (presión de la aurícula derecha, «RAP» en la fuente), p. 2-3, `#mc-shock-ecuacion`).»
 
 ## Pantalla 3 · Condición cambiada: Mateo. Predicción 2 y explicación 2
 Se ve: ficha nueva (Mateo, 34 años, 78 kg, herida abdominal por arma blanca; ha perdido el 35 % de la volemia = clase III, 66 mL/kg × 78 kg,
@@ -60,8 +60,8 @@ p. 21-23). Monitor **con velo**. Texto: «Mismo monitor, otra herida. Apuesta an
   te parecerá “un corazón que falla” y pensarás en inotrópicos cuando lo que falta es sangre.» Porque de (c): «La PVC alta es del corazón que no
   se vacía o del que no se llena; Mateo tiene las cavidades vacías (PVC 1). Buscar un taponamiento aquí retrasa la transfusión.»
   Fuente: p. 3 (Tabla 14.1), p. 22-23 (`#mc-clase-iii`, ficha `mc-hemorragico-clasificacion`).
-Observación 2 (cae el velo; arteriola **cerrada**, cavidades pequeñas): PA 78/63 (PAM 71), FC 135, PVC 1, IC 1,8, IRVS 38, ScvO₂ 65, gap 6,
-lactato 3,0, diuresis 0,9, Hb 13,8. Estado: «Hemorragia, clase III» (p. 22-23). Frase: «La Hb aún no baja: pierde sangre entera; no baja hasta
+Observación 2 (cae el velo; arteriola **cerrada**, cavidades pequeñas): PA 78/63 (PAM 71), FC 135, PVC 1, IC 1,8, IRVS 38, ScvO₂ 65 (ilustrativo; cae en el rango normal 65-75 %, p. 9: no avisa de bajo flujo), gap 5 (ilustrativo; 2-5 normal, patológico >6, p. 10),
+lactato 3,0, diuresis 0,9 mL/kg/h, Hb 13,8. Estado: «Hemorragia, clase III» (p. 22-23). Frase: «La Hb aún no baja: pierde sangre entera; no baja hasta
 las 8-12 h» (p. 23, `#mc-hto-trampa`).
 - **Pregunta A4** (autoexplicación, test). Enunciado: «Amparo y Mateo tienen los dos la PVC baja. ¿Por qué la IRVS de Mateo es 38 y la de Amparo 17?»
   (a) «En el bajo flujo, el simpático y la renina-angiotensina cierran la arteriola para sostener la PA; en la sepsis lo que falla es la propia
@@ -136,6 +136,6 @@ Se ve: Amparo, hora 1 (PAM 63, IRVS 17, IC 3,5). Mando de noradrenalina: 5 → 1
 - POE en médicos: sin estudios (evidencia §1). Se mide con la prueba de 3 días (rúbrica).
 
 ## Criterios clínicos (REGLAS §4.8 R3) y topes
-Shock = fallan los objetivos de la Tabla 14.5 (PAM <65, lactato >2, diuresis <0,5; p. 17). Volumen inicial séptico ≥30 mL/kg peso ideal en 3 h
+Shock = PAS <90 o PAM <70, lactato >2, oliguria <0,5 mL/kg/h (p. 2). Metas de reanimación (Tabla 14.5): PAM ≥65, lactato <2, diuresis >0,5 mL/kg/h (p. 17). Volumen inicial séptico ≥30 mL/kg peso ideal en 3 h
 (p. 11). Vasopresor si la PA objetivo no se alcanza y hay otra evidencia de compromiso (p. 11). Noradrenalina: α >10 µg/min, techo 30 (p. 12-13).
 Topes de la maqueta: los mandos están **fijos a los pasos del guion** (no se pueden pasar); el +2 L y la NA 30 salen apagados con la nota «fuera del guion».

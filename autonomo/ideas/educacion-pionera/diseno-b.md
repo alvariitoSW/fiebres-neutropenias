@@ -22,7 +22,7 @@ más probable el TACO (p. 15). Con una vía central normal (sin oximetría conti
 - **Aviso (≈80 %)**: tras la 1.ª bolsa, chip gris en el mando, sin consejo: «Hb 8,4 · umbrales de las guías: 7 y 8 g/dL (p. 8)».
   Es el dato que trae la hoja de laboratorio, no una pista socrática (los prompts de Klein eran de autoexplicación).
 - **Consecuencia al pasarse (2.ª bolsa)**: sello **TACO**: edema pulmonar hidrostático con insuficiencia respiratoria
-  hipoxémica en las primeras 6 h (p. 15-16); incidencia ≈1 %, más frecuente con IC o IR previas (p. 15); **sin relación con
+  hipoxémica en las primeras 6 h (p. 15-16); incidencia ≈1 %, más frecuente con IC o insuficiencia renal previas (p. 15-16); **sin relación con
   el número de unidades** (p. 15: el riesgo lo corrió en cada bolsa, también en la que no hacía falta); mortalidad 20 % y
   ventilación mecánica en 3 de cada 4 (p. 15-16). Tratamiento: parar la transfusión, avisar al banco, diurético de asa
   i.v., soporte (p. 16). El mando se apaga y la frase viva lo dice.
@@ -37,7 +37,7 @@ VO₂ 250 · extracción 34 % · ScvO₂ 65 % · lactato 1,0. Constantes a la de
 (repetible) · **[Pedir ScvO₂ de control]** (solo redibuja el dato) · **[Dejar así y seguir la guardia]**.
 Texto exacto: «3:00. Te llama la enfermera: "Carmen tiene la Hb en 7,4, ¿le pongo sangre?". Nadie más despierto.
 Decide con el modelo.» Nada más: ni explicación, ni pregunta, ni «piensa antes».
-**P2 · Gotea la 1.ª bolsa (2 h, p. 10).** La bolsa gotea; el gasto se queda quieto (Fig. 12.4, ilustrativo). Tablero:
+**P2 · Gotea la 1.ª bolsa (2 h, p. 10).** La bolsa gotea; el gasto se queda quieto (fisiología general, ilustrativo; la Fig. 12.4 solo muestra DO₂ y VO₂). Tablero:
 Hb 8,4 · DO₂ 843 · VO₂ 250 · extracción 30 % · ScvO₂ 69 %. Constantes iguales (FC 92, PA 120/66, SpO₂ 98, PVC 10:
 ilustrativas). Aviso §1.14 (chip gris del tope, texto arriba). Mandos: **[Transfundir otro CH]** · **[Parar aquí]**.
 Texto exacto: «5:10. Pasó la primera bolsa. Hb de control 8,4.» Si pulsa «Parar aquí» o «Dejar así» en P1, pasa a P3
@@ -45,7 +45,7 @@ con una línea: «El R1 de la mañana la ve "todavía baja" y cuelga otra bolsa 
 **P3 · El sello (4 h después de empezar la 2.ª bolsa).** Modelo en `{hb: 9.4, gcFijo: 7.6, pao2: 55, alveolo: 'taco'}`
 con la lupa del alvéolo abierta (agua que cruza): Hb 9,4 · DO₂ 830 · extracción 30 % · SaO₂ 86 %. Constantes en rojo
 (fisiología general / ilustrativas): FR 30, SpO₂ 86 % con gafas, FC 110, PA 152/90, PVC 16, crepitantes bilaterales,
-Rx con infiltrados bilaterales (p. 16). Sello grande: «TACO · sobrecarga circulatoria por la transfusión · edema
+Rx con edema pulmonar (p. 16). Sello grande: «TACO · sobrecarga circulatoria por la transfusión · edema
 hidrostático en las primeras 6 h · ≈1 %, más con IC previa · mortalidad 20 %, VM en 3 de 4 (Marino cap. 12, p. 15-16)».
 Mando «Transfundir» apagado. Frase viva: «La transfusión que no hacía falta le ha llenado el pulmón de agua.»
 Veredicto corto, sin reproche (webs, idea 10): «Pasó. Ahora, por qué.» Botón **[Entender qué pasó]**.
@@ -54,7 +54,7 @@ Veredicto corto, sin reproche (webs, idea 10): «Pasó. Ahora, por qué.» Botó
    cardiopatía isquémica, p. 8). 2. Si dudas, mira al tejido, no a la Hb: extracción 34 %, lejos del 50 % que Marino
    propone como disparador (p. 6 y 8); ScvO₂ 65 %: algunas guías proponen <70 % (p. 8-9). **Las dos reglas no
    coinciden del todo en Carmen; el libro no las reconcilia** (nota de fuentes). Tras la 1.ª bolsa (ScvO₂ 69, ext.
-   30 %) ninguna justificaba la 2.ª. 3. Transfundir sube el aporte (742 → 843), no el consumo (250): cae la extracción
+   30 %) la extracción sigue lejos del 50 %; la ScvO₂ 69 % aún roza el 70 % propuesto: las reglas siguen sin coincidir (el libro no las reconcilia). 3. Transfundir sube el aporte (742 → 843), no el consumo (250): cae la extracción
    (Fig. 12.4, p. 10-11); «no es un método absoluto para oxigenar» (p. 11). 4. En 42 de 45 estudios los riesgos
    superan los beneficios; en 17 de 18, la transfusión fue factor de riesgo independiente (p. 16). 5. Lo que sí
    amenaza al tejido es la hipovolemia, no la anemia (p. 16-17). 6. TACO: parar, avisar al banco, diurético de asa
@@ -75,8 +75,8 @@ infarto sin elevación del ST, estable, Hb 7,6 g/dL, no sangra. ¿Qué haces?» 
   p. 10).*
 - C. Transfundir 2 CH para pasar de 9. *(error previsto: el estándar de 10 g/dL de 1942 que duró 60 años, p. 7-8; la
   2.ª bolsa no está indicada y suma riesgo, p. 16).*
-- D. Pedir ScvO₂ y transfundir solo si <50 %. *(error previsto: confunde el disparador de ScvO₂ <70 % con la
-  extracción del 50 %, p. 8-9).*
+- D. Pedir ScvO₂ y no transfundir mientras sea ≥50 %. *(error previsto: ignora que con coronariopatía la guía
+  indica transfundir a Hb <8 (p. 8); la extracción del 50 % es un disparador propuesto (p. 8), no anula el umbral).*
 Explicación: umbral 8 con cardiopatía isquémica o cirugía cardíaca/ortopédica; 7 en el resto del crítico estable (p. 8).
 **2 · Piensa y destapa.** «Son las 4 h de la 2.ª bolsa de Carmen: disnea y SpO₂ 86 %. El adjunto, por teléfono: "¿TACO
 o TRALI, y qué haces ya?". Son cuatro cosas.» Destapa, uno a uno:
@@ -108,12 +108,12 @@ después, el error solo no enseña.» (Referencias completas con DOI en `evidenc
 | Aviso | tras la 1.ª bolsa, chip con los umbrales 7 y 8 | p. 8 |
 | Sello | a las 4 h de la 2.ª bolsa; apaga el mando | p. 15-16 (`#mh-taco`) |
 | Subida por bolsa | Hb +1 g/dL, Hto +3 %, ≈2 h por unidad | p. 10 |
-| Modelo durante el goteo | gasto quieto (`gcFijo`), estado `transfusion` | Fig. 12.4, p. 10-11, ilustrativo |
+| Modelo durante el goteo | gasto quieto (`gcFijo`), estado `transfusion` | fisiología general, ilustrativo (Fig. 12.4: solo DO₂ y VO₂) |
 | TACO en el modelo | `pao2: 55, alveolo: 'taco'` (PaO₂ ilustrativa, ya rotulada en el modelo) | `ESTADOS.taco` |
 
 ## Huecos (no se rellenan; se anotan)
 - Las constantes del edema (FR 30, PA 152/90, PVC 16, FC 110) y las de partida son fisiología general/ilustrativas:
-  el libro solo da hipoxemia en 6 h, Rx con infiltrados y la IC previa (p. 15-16). Rotularlas.
+  el libro solo da hipoxemia en 6 h, Rx con edema pulmonar y la IC previa (p. 15-16). Rotularlas.
 - En el TACO el modelo deja el gasto en 7,6; en una IC real caería. El motor no modela el corazón que se encharca.
 - ScvO₂ <70 % (algunas guías, p. 8-9) frente a extracción 50 % (Marino, p. 6-8): discrepan en Carmen (65 %, 34 %);
   se muestra la discrepancia, no se elige.
