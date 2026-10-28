@@ -44,7 +44,11 @@ const sinEscena = () => { g('agv-raiz').hidden = true; ponerVisible(false); };
 // ---------- Piezas de interfaz ----------
 const nodo = (html, tag = 'div', cls = '') => { const e = document.createElement(tag); if (cls) e.className = cls; e.innerHTML = html; return e; };
 const enlaces = fs => fs.map(([d, p, txt]) => `<a class="biblio-link" href="${PDF[d]}#page=${p}" target="_blank" rel="noopener">${NOM[d]}, pág. ${p}</a>${txt ? ` <span class="c-peq">(${txt})</span>` : ''}`).join(' · ');
-const fuentesHTML = fs => `<p class="c-ver"><b>Ver en el texto:</b> ${enlaces(fs)}</p>`;
+// «Ver en la ficha»: en la app abre la ficha de origen y resalta el párrafo (data-resaltar); aquí es inerte y avisa.
+const FICHA = { F: ['libros', 'marinoFundamentos', 'panel-marino-fund-tabs', 'mar-cristaloides'], S: ['cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs', 'mc-hemorragico-clasificacion'] };
+const verFicha = ([d, p]) => `<button type="button" class="c-fch" data-especialidad="${FICHA[d][0]}" data-view="${FICHA[d][1]}" data-panel="${FICHA[d][2]}" data-tab="${FICHA[d][3]}" data-resaltar="#${d.toLowerCase()}-pag-${p}">Ver en la ficha</button>`;
+const fuentesHTML = fs => `<div class="c-ver"><b>Ver en el texto:</b><ul class="c-vl">${fs.map(f => `<li>${enlaces([f])} ${verFicha(f)}</li>`).join('')}</ul></div>`;
+document.addEventListener('click', e => { const b = e.target.closest('.c-fch'); if (!b || b.dataset.t) return; const t0 = b.textContent; b.textContent = 'En la app abre la ficha'; b.dataset.t = '1'; setTimeout(() => { b.textContent = t0; delete b.dataset.t; }, 2200); });
 const notaHTML = (titulo, texto, abierta) => `<details class="nota-plegable"${abierta ? ' open' : ''}><summary>${titulo}</summary><p class="c-nota">${texto}</p></details>`;
 function datos(filas, tit = 'Datos de Teresa (inventada; la medicina es del libro)') {
   return `<dl class="c-paciente" aria-label="${tit}">${filas.map(([k, v, nuevo, org]) => `<dt>${k}</dt><dd class="${nuevo ? 'c-nuevo' : ''}">${v}${org ? ` <span class="c-org">${org}</span>` : ''}</dd>`).join('')}</dl>`;
@@ -62,7 +66,7 @@ function lineaVuelve(q, ok) {
 }
 
 /* Una pregunta (test, destapa o error). Los botones se crean una vez; después solo cambian de clase. */
-function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
+function pregunta(q, { chip, etiqueta, alResponder, comprueba, alFallar } = {}) {
   const art = nodo('', 'article', 'c-preg');
   const cab = [];
   if (chip) cab.push(`<span class="c-chip">${chip}</span>`);
@@ -71,6 +75,8 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
   const fin = nodo('', 'div', 'c-fin'); fin.hidden = true;
   const expl = nodo(`<p>${q.explicacion}</p>${q.fuentes ? fuentesHTML(q.fuentes) : ''}${q.nota ? notaHTML(q.nota[0], q.nota[1]) : ''}${(q.notas || []).map(n => notaHTML(n[0], n[1])).join('')}`, 'div', 'c-expl');
   const linea = nodo('', 'p', 'c-vuelve');
+  const cons = nodo('', 'p', 'c-cons'); cons.hidden = true;
+  const ocultables = [];   // los porqués: en el caso, tras fallar, primero la consecuencia
   const verd = nodo('', 'p', 'c-veredicto');
   let cerrado = false;
   const terminar = ok => {
@@ -79,11 +85,21 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
     linea.hidden = !chip;
     verd.textContent = ok ? 'Acertada.' : 'Fallada.'; verd.className = 'c-veredicto ' + (ok ? 'c-vok' : 'c-vno');
     const seguir = () => { fin.hidden = false; alResponder && alResponder(ok); };
-    if (comprueba) {
-      const b = nodo(comprueba.texto, 'button', 'c-b c-prim'); b.type = 'button';
-      art.append(b);
-      b.addEventListener('click', () => { b.hidden = true; comprueba.fn(); seguir(); });
-    } else seguir();
+    const sigue = () => {
+      if (comprueba) {
+        const b = nodo(comprueba.texto, 'button', 'c-b c-prim'); b.type = 'button';
+        art.append(b);
+        b.addEventListener('click', () => { b.hidden = true; comprueba.fn(); seguir(); });
+      } else seguir();
+    };
+    if (!ok && q.fallo && alFallar) {
+      alFallar();
+      cons.innerHTML = '<b>Lo que le pasa a Teresa: </b>' + q.fallo; cons.hidden = false;
+      const hid = ocultables.filter(e => !e.hidden); hid.forEach(e => { e.hidden = true; });
+      expl.hidden = true; fin.hidden = false;
+      const por = nodo('Por qué', 'button', 'c-b c-prim'); por.type = 'button'; fin.insertBefore(por, expl);
+      por.addEventListener('click', () => { por.hidden = true; hid.forEach(e => { e.hidden = false; }); expl.hidden = false; sigue(); });
+    } else sigue();
   };
   const cuerpo = nodo('', 'div', 'c-cuerpo');
   const pensar = (texto, mostrar) => {
@@ -95,6 +111,7 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
     const ops = q.opciones.map((o, i) => {
       const b = nodo(`<span>${o.t}</span>`, 'button', 'c-op'); b.type = 'button';
       const por = nodo(o.ok ? '' : o.porque, 'p', 'c-porque'); por.hidden = true;
+      ocultables.push(por);
       return { o, b, por, w: nodo('', 'div', 'c-opw') };
     });
     ops.forEach(x => { x.w.append(x.b, x.por); cuerpo.append(x.w); });
@@ -116,7 +133,7 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
     const fr = q.frases.map((f, i) => {
       const b = nodo(`<span class="c-n">${i + 1}</span><span>${f.t}</span>`, 'button', 'c-frase'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
       const cor = nodo('', 'div', 'c-corr'); cor.hidden = true;
-      const w = nodo('', 'div', 'c-opw'); w.append(b, cor); cuerpo.append(w);
+      const w = nodo('', 'div', 'c-opw'); w.append(b, cor); cuerpo.append(w); ocultables.push(cor);
       b.addEventListener('click', () => { if (cerrado) return; const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('c-marcada', on); });
       return { f, b, cor };
     });
@@ -145,9 +162,22 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba } = {}) {
     });
     art.append(cuerpo);
   }
-  fin.append(verd, expl, linea);
+  fin.append(verd, cons, expl, linea);
   art.append(fin);
   return art;
+}
+
+/* Apuesta (N1): la lectura del modelo va tapada; eliges entre 3 y luego ves «Tu apuesta | Lo que pasó». No puntúa. */
+function apuesta({ titulo, opciones, real, textoReal, alVer }) {
+  const w = nodo(`<p class="c-enun"><b>Apuesta antes de mirar.</b> ${titulo}</p>`, 'section', 'c-preg c-apuesta');
+  const bs = opciones.map((t, i) => { const b = nodo(t, 'button', 'c-op'); b.type = 'button'; w.append(b); return b; });
+  bs.forEach((b, i) => b.addEventListener('click', () => {
+    if (w.dataset.hecha) return; w.dataset.hecha = '1';
+    bs.forEach(x => x.setAttribute('aria-disabled', 'true')); b.classList.add('c-elegida');
+    w.append(nodo(`<div><b>Tu apuesta</b><br>${opciones[i]}</div><div><b>Lo que pasó</b><br>${textoReal}</div>`, 'div', 'c-apu'));
+    alVer();
+  }));
+  return w;
 }
 
 // ---------- Pantallas ----------
@@ -163,7 +193,7 @@ function abrir(n, html) {
 }
 
 function p1() {
-  const r = abrir(1, cabecera(1, 'Antes de empezar: cinco de días atrás', 'Repaso · pregunta 1 de 5') +
+  const r = abrir(1, cabecera(1, 'Antes de empezar: cinco de días atrás', 'Repaso · pregunta <span id="c-rep-n">1</span> de 5') +
     '<p class="c-lead">Cinco preguntas de fichas que ya estudiaste. Volver a contestar días después fija más que releer (Larsen 2009, d = 0,91 en residentes; Kerfoot 2010, 724 residentes). Las elige la fecha de tu último intento.</p>');
   sinEscena();
   const hueco = nodo('', 'div', 'c-hueco'); r.append(hueco);
@@ -173,6 +203,7 @@ function p1() {
   const una = i => {
     if (i >= REPASO.length) { fin.hidden = false; return; }
     const q = REPASO[i];
+    g('c-rep-n').textContent = i + 1;
     g('c-nummero').textContent = `Pantalla 1 de 6 · repaso ${i + 1}/5`;
     const hoy = fechaES(sumarDias(HOY, -q.dias));
     const art = pregunta(q, { chip: `${q.chip} (último intento ${hoy})`, etiqueta: `${q.ficha} · ${i + 1}/5`, alResponder: () => {
@@ -196,7 +227,9 @@ function p2() {
   const fila = [...P_BASE, ['Hto', '?', 0, 'dato del caso; la Fig. 15.1 parte de 45 %, S pág. 24']];
   const d = nodo(datos(fila), 'div'); r.append(d);
   escena(TERESA, { ocultos: ['hto'], mirar: 'herida' });
-  const art = pregunta(CASO.P1, { etiqueta: 'Pregunta 1 · piensa antes', alResponder: () => {
+  const art = pregunta(CASO.P1, { etiqueta: 'Pregunta 1 · piensa antes',
+    alFallar: () => { escena({ ...TERESA, hemorragia: 30, reloj: '8-12h' }, { ocultos: ['hto'], mirar: 'rio' }); d.innerHTML = datos(fila.map(f => f[0] === 'FC' ? ['FC', 'más alta (sube)', 1] : f)); },
+    alResponder: () => {
     escena(TERESA, { ocultos: [], mirar: null });
     d.innerHTML = datos(fila.map(f => f[0] === 'Hto' ? ['Hto', '45 %', 0, 'dato del caso; Fig. 15.1, S pág. 24'] : f));
     botonSig('Siguiente: cuánto, y adónde va', p3, art).hidden = false;
@@ -209,10 +242,11 @@ function p3() {
   escena(TERESA, { ocultos: [] });
   const fila = [['Peso', '60 kg'], ['Pérdida estimada', '20 % (clase II)', 1]];
   const d = nodo(datos(fila), 'div'); r.append(d);
-  const art2 = pregunta(CASO.P2, { etiqueta: 'Pregunta 2 · piensa antes', alResponder: () => {
+  const art2 = pregunta(CASO.P2, { etiqueta: 'Pregunta 2 · piensa antes', alFallar: () => escena({ ...TERESA, reloj: '8-12h' }, { ocultos: [], mirar: 'rio' }), alResponder: () => {
     d.innerHTML = datos([...fila.map(f => [f[0], f[1], 0]), ['Fluidos', 'el R1 de guardia puso 2 L de salino 0,9 % a chorro', 1]]);
     escena(TERESA, { ocultos: ['rio', 'marisma', 'mar'], mirar: 'rio' });
     const art3 = pregunta(CASO.P3, { etiqueta: 'Pregunta 3 · piensa antes y comprueba en el modelo',
+      alFallar: () => escena({ ...TERESA, infusiones: [{ f: 'salino', ml: 4000 }] }, { ocultos: [], mirar: 'marisma' }),
       comprueba: { texto: 'Compruébalo: infundir 2 L de salino', fn: () => { escena({ ...TERESA, infusiones: SALINO }, { ocultos: [], mirar: 'marisma' }); art3.insertAdjacentHTML('beforeend', `<p class="c-conf">${CASO.P3.confirma}</p>`); } },
       alResponder: () => botonSig('Siguiente: el giro', p4, art3).hidden = false });
     r.append(art3);
@@ -226,10 +260,17 @@ function p3() {
 
 function p4() {
   const r = pantallaConEscena(4, 'El giro', 'Hora 4');
-  escena({ ...TERESA, infusiones: SALINO }, { mirar: 'lectura' });
-  r.append(nodo(datos([['FC', '118', 1], ['PA', '108/64', 1], ['Hto', '38 %', 1, 'cálculo del modelo · fisiología general'], ['Na⁺/Cl⁻/HCO₃⁻', '140/116/18', 1], ['PaCO₂', '37', 1], ['pH', '7,31', 1], ['Lactato', '1,6', 1], ['Fluidos', '2 L de salino 0,9 %']]), 'div'));
-  const art = pregunta(CASO.P4, { etiqueta: 'Pregunta 4 · piensa y destapa', alResponder: () => botonSig('Siguiente: el plan y el día 2', p5, art).hidden = false });
-  r.append(art);
+  const S4 = { ...TERESA, infusiones: SALINO };
+  escena(S4, { ocultos: ['hto'], mirar: 'lectura' });
+  const fila = hto => [['FC', '112'], ['PA', '112/68'], ['Hto', hto, 1, hto === '?' ? '' : 'cálculo del modelo · fisiología general'], ['Na⁺/Cl⁻/HCO₃⁻', '140/116/18', 1], ['PaCO₂', '37', 1], ['pH', '7,31', 1], ['Lactato', '1,6', 1], ['Fluidos', '2 L de salino 0,9 %']];
+  const d = nodo(datos(fila('?')), 'div'); r.append(d);
+  const art = pregunta(CASO.P4, { etiqueta: 'Pregunta 4 · piensa y destapa',
+    alFallar: () => escena({ ...TERESA, infusiones: [{ f: 'salino', ml: 4000 }] }, { mirar: 'rio' }),
+    alResponder: () => botonSig('Siguiente: el plan y el día 2', p5, art).hidden = false });
+  art.hidden = true;
+  const ap = apuesta({ titulo: 'Tras 2 L de salino, el Hto de Teresa (45 % al llegar) ahora…', opciones: ['Sube por encima de 45 %', 'Se queda en 45 %', 'Baja por debajo de 45 %'], textoReal: '38 %: el salino diluye los hematíes (cálculo del modelo).',
+    alVer: () => { escena(S4, { ocultos: [], mirar: 'lectura' }); d.innerHTML = datos(fila('38 %')); art.hidden = false; } });
+  r.append(ap, art);
 }
 
 function p5() {
@@ -238,13 +279,18 @@ function p5() {
   const q5 = { ...CASO.P5, piensaCorreccion: true };
   const dia2 = () => {
     const sub = nodo('<span class="c-eyebrow">Día 2</span>', 'div', 'c-dia');
-    sub.append(nodo(datos([['Endoscopia', 'úlcera tratada, no sangra', 1], ['FC', '88', 1], ['PA', '120/70', 1], ['Hto', '31 %', 1, 'cálculo del caso · fisiología general']]), 'div'));
+    const D2 = { ...TERESA, infusiones: SALINO, reloj: 'dias' };
+    const fila2 = h => [['Endoscopia', 'úlcera tratada, no sangra', 1], ['FC', '88', 1], ['PA', '120/70', 1], ['Hto', h, 1, h === '?' ? '' : 'cálculo del caso · fisiología general']];
+    const dd = nodo(datos(fila2('?')), 'div'); sub.append(dd);
     r.append(sub);
-    escena({ ...TERESA, infusiones: SALINO, reloj: 'dias' }, { mirar: 'marisma' });
-    const art6 = pregunta(CASO.P6, { etiqueta: 'Pregunta 6 · piensa antes', alResponder: () => botonSig('Siguiente: lo que te llevas', p6, art6).hidden = false });
-    sub.append(art6); sub.scrollIntoView({ block: 'start' });
+    escena(D2, { ocultos: ['hto'], mirar: 'marisma' });
+    const art6 = pregunta(CASO.P6, { etiqueta: 'Pregunta 6 · piensa antes', alFallar: () => escena(D2, { mirar: 'rio' }), alResponder: () => botonSig('Siguiente: lo que te llevas', p6, art6).hidden = false });
+    art6.hidden = true;
+    const ap = apuesta({ titulo: 'Hto de las 4 h: 38 %. Al día 2, sin sangrado, el Hto…', opciones: ['Sube de nuevo', 'Se queda en 38 %', 'Baja más'], textoReal: '31 %: baja más, por el relleno desde el intersticio.',
+      alVer: () => { escena(D2, { ocultos: [], mirar: 'marisma' }); dd.innerHTML = datos(fila2('31 %')); art6.hidden = false; } });
+    sub.append(ap, art6); sub.scrollIntoView({ block: 'start' });
   };
-  const art5 = pregunta(q5, { etiqueta: 'Pregunta 5 · encuentra el error', alResponder: () => botonSig('Pasar al día 2', dia2, art5).hidden = false });
+  const art5 = pregunta(q5, { etiqueta: 'Pregunta 5 · encuentra el error', alFallar: () => escena({ ...TERESA, infusiones: [...SALINO, { f: 'sangre', ml: 600 }] }, { mirar: 'rio' }), alResponder: () => botonSig('Pasar al día 2', dia2, art5).hidden = false });
   r.append(art5);
 }
 

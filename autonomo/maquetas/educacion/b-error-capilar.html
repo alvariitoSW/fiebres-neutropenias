@@ -67,6 +67,12 @@ h1 { font-size: 1.15rem; line-height: 1.2; margin: 0; color: var(--accent-yellow
 .pie a { text-align: center; padding: 10px 4px; border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); text-decoration: none; font: 600 .86rem/1.25 system-ui, sans-serif; min-height: 44px; }
 .pie a.aqui { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
 .pie a small { display: block; font-weight: 400; font-size: .68rem; }
+.tapa #cpv-c-do2 b, .tapa #cpv-c-vo2 b, .tapa #cpv-c-o2er b, .tapa #cpv-c-do2 .cpv-sub, .tapa #cpv-c-vo2 .cpv-sub, .tapa #cpv-c-o2er .cpv-sub { visibility: hidden; }
+.tabla-ap { width: 100%; border-collapse: collapse; font: .82rem/1.35 system-ui, sans-serif; }
+.tabla-ap th, .tabla-ap td { border: 1px solid var(--border-color); padding: 6px 8px; text-align: left; vertical-align: top; }
+.tabla-ap th { color: var(--text-muted); font-weight: 600; font-size: .72rem; }
+.punto { display: flex; gap: 8px; align-items: flex-start; font: .84rem/1.35 system-ui, sans-serif; min-height: 36px; }
+.punto input { width: 22px; height: 22px; flex: none; accent-color: var(--accent-yellow); }
 ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92rem; }
 </style></head>
 <body>
@@ -80,6 +86,7 @@ ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92re
     <div class="caja">
       <p class="txt">Estable, sin vasoactivos, gafas nasales 2 L, no sangra. Insuficiencia cardíaca crónica (FEVI 35 %), sin cardiopatía isquémica. Hb de las 3:00: <b>7,4 g/dL</b> (ayer 7,9). Vía central normal.</p>
       <span class="org ilu">paciente inventada · constantes ilustrativas</span>
+      <p class="peq">El gasto de 7,6 L/min con FEVI 35 % lo calcula el motor del modelo: <span class="org ilu">ilustrativo</span>, no sale de la ficha.</p>
     </div>
     <p class="txt">«3:00. Te llama la enfermera: "Carmen tiene la Hb en 7,4, ¿le pongo sangre?". Nadie más despierto. Decide con el modelo.»</p>
   </section>
@@ -89,6 +96,15 @@ ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92re
     <div class="prog">Pantalla 2 de 6 · Guardia, 5:10</div>
     <p class="txt">«5:10. Pasó la primera bolsa. Hb de control 8,4.»</p>
     <p class="peq">La bolsa goteó unas 2 h (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">p. 10</a>). El gasto se queda quieto mientras gotea: <span class="org ilu">fisiología general · ilustrativo</span> (la Fig. 12.4, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">p. 10-11</a>, solo muestra DO₂ y VO₂).</p>
+    <div class="caja" id="apuesta">
+      <span class="paso-n">Antes de la 2.ª bolsa · apuesta</span>
+      <p class="txt">Hemos tapado el aporte (DO₂), el consumo (VO₂) y la extracción de O₂. Si cuelgas otra bolsa, ¿qué pasará con ellos? No se corrige: lo verás después.</p>
+      <div class="opc" id="ap-ops">
+        <button class="btn" type="button" data-ap="0" aria-pressed="false"><b>A.</b> El aporte sube otra vez y la extracción baja.</button>
+        <button class="btn" type="button" data-ap="1" aria-pressed="false"><b>B.</b> Casi nada se mueve: aporte, consumo y extracción se quedan donde estaban.</button>
+        <button class="btn" type="button" data-ap="2" aria-pressed="false"><b>C.</b> El aporte sube y el tejido consume más.</button>
+      </div>
+    </div>
   </section>
 
   <!-- ===== P3 · El sello ===== -->
@@ -105,7 +121,17 @@ ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92re
     <p class="peq">Crepitantes bilaterales; Rx con edema pulmonar (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">p. 16</a>). Las constantes son <span class="org ilu">fisiología general · ilustrativo</span>: el libro solo da la hipoxemia en 6 h, la Rx y la IC previa.</p>
     <p class="frase-b">La transfusión que no hacía falta le ha llenado el pulmón de agua.</p>
     <details class="nota-plegable"><summary>Nota de fidelidad: qué castiga el sello</summary>
-      <p>El libro no dice que 2 bolsas den más TACO que 1: el TACO no se relaciona con el número de unidades (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">p. 15</a>). Lo que se castiga es transfundir sin indicación (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8</a>) a una paciente con el pulmón más fácil de encharcar. Además, el modelo deja el gasto en 7,6 L/min; en una IC real caería: el motor no modela el corazón que se encharca.</p></details>
+      <p>El libro no dice que 2 bolsas den más TACO que 1: el TACO no se relaciona con el número de unidades (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">p. 15</a>). Lo que se castiga es transfundir sin indicación (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8</a>) a una paciente con el pulmón más fácil de encharcar. Además, el gasto de 7,6 L/min con FEVI 35 % lo calcula el motor del modelo (<span class="org ilu">ilustrativo</span>, no de la ficha) y se queda quieto; en una IC real caería: el motor no modela el corazón que se encharca.</p></details>
+    <div class="caja" id="ap-tabla" hidden>
+      <span class="paso-n">Tu apuesta frente a lo que pasó</span>
+      <table class="tabla-ap"><thead><tr><th>Tu apuesta</th><th>Lo que pasó</th></tr></thead><tbody><tr><td id="ap-t1"></td><td id="ap-t2"></td></tr></tbody></table>
+      <p class="peq" id="ap-t3"></p>
+    </div>
+    <div class="caja" id="resto-caso">
+      <span class="paso-n">Momentos 4 y 5 del caso</span>
+      <p class="txt"><b>Una hora después.</b> Transfusión parada y banco de sangre avisado; diurético de asa i.v. y soporte respiratorio (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">p. 16</a>). Se anota el balance de líquidos: es positivo.</p>
+      <p class="txt"><b>Día 4.</b> Sin sangrado, la Hb se mantiene por encima de 7 (<span class="org ilu">ilustrativo</span>): no se vuelve a transfundir sin indicación (umbral 7, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8</a>) y, antes de cualquier otra transfusión, se corrige el balance positivo con diuréticos (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">p. 16</a>).</p>
+    </div>
     <p class="txt"><b>Pasó. Ahora, por qué.</b></p>
   </section>
 
@@ -134,6 +160,8 @@ ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92re
     <div class="caja">
       <span class="paso-n" id="p4-n"></span>
       <h2 style="font-size:1rem;margin:0;color:var(--accent-yellow);font-weight:normal" id="p4-t"></h2>
+      <div class="opc" id="p4-ops" hidden></div>
+      <div class="opc" id="p4-res" hidden></div>
       <p class="txt" id="p4-txt"></p>
       <p class="peq" id="p4-src"></p>
       <details class="nota-plegable" id="p4-disc" hidden><summary>Las fuentes discrepan</summary>
