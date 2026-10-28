@@ -395,7 +395,7 @@ export const MAYEUTICA_SHOCK_2 = {
           { t: 'Ese O₂ no sirve para fabricar ATP, sino tóxicos', ok: true },
           { t: 'Porque lo hacen los pulmones, no el neutrófilo', porque: 'Lo hace el propio neutrófilo, en su membrana. La palabra «respiratorio» es la que engaña: no hay respiración celular.' }],
         explicacion: 'El consumo de O₂ no produce ATP (no es respiración celular): genera <span class="hl-azul">derivados tóxicos del oxígeno</span> para matar microbios. Sube <span class="hl">hasta 20 veces</span> durante 15-20 min.' },
-      { id: 'ros-g2', corto: 'un electrón', tipo: 'test', fuente: 'mc-fig-17-1', modelo: visual('mc-inflamacion-ros', '👁️ El estallido respiratorio paso a paso (vista Visual)'), modeloFuturo: { capilarVivo: 'neutrofilo' },
+      { id: 'ros-g2', corto: 'un electrón', tipo: 'test', fuente: 'mc-fig-17-1', modelo: visual('mc-inflamacion-ros', '👁️ El estallido respiratorio paso a paso (vista Visual)'), modeloVivo: { capilarVivo: 'neutrofilo', texto: '🩸 El estallido del neutrófilo, en el capilar vivo' },
         enunciado: 'Predice (Fig. 17.1): la NADPH oxidasa añade electrones al O₂ de uno en uno. ¿Qué sale primero?',
         opciones: [
           { t: 'El radical superóxido (O₂·)', ok: true },
@@ -423,7 +423,7 @@ export const MAYEUTICA_SHOCK_2 = {
           { t: 'Pierde el NO que abre el vaso y gana peroxinitrito', ok: true },
           { t: 'Nada: el superóxido y el NO no reaccionan', porque: 'Reaccionan (O₂· + NO· → ONOO⁻), y esa reacción explica parte de la disfunción endotelial.' }],
         explicacion: '<span class="hl">O₂· + NO· → ONOO⁻</span>: se pierden los efectos del NO que favorecen el flujo y nace el <span class="hl-rojo">peroxinitrito</span>, una toxina oxidativa potente. Además, el estrés oxidante sube la permeabilidad capilar: edema.' },
-      { id: 'ros-g6', corto: 'el daño viaja', tipo: 'test', fuente: 'mc-lesion-oxidante-foco', modeloFuturo: { capilarVivo: 'reperfusion' },
+      { id: 'ros-g6', corto: 'el daño viaja', tipo: 'test', fuente: 'mc-lesion-oxidante-foco', modeloVivo: { capilarVivo: 'reperfusion', texto: '🩸 El H₂O₂ que viaja a otro órgano, en el capilar vivo' },
         enunciado: 'Predice: ¿cómo puede el daño oxidante de un foco alcanzar un órgano lejano?',
         opciones: [
           { t: 'El superóxido viaja por la sangre sin cambiar', porque: 'La ficha atribuye el viaje al H₂O₂, que se mueve libremente y entra en las células.' },

@@ -14,6 +14,7 @@
 // explicación guiada (core/explicacion-guiada.js, «Explícame este estado») y cada cita lleva a su sitio de la ficha
 // (core/citas.js).
 import { cargarMotion } from '../../core/motion.js';
+import { crearTope } from '../../core/tope.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
 import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExacta } from '../../core/citas.js';
@@ -44,9 +45,20 @@ function decir(html, fuente, ilu) {
     $('lamina').setAttribute('aria-label', fraseEl.textContent);
     if (!REDUCIR && fraseEl.animate) fraseEl.animate([{ opacity: 0.3, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
 }
+// El tope del O₂ (Tabla 21.4, p. 66-67): en los estados de las ROS, O₂ de más con SaO₂ ≥90 % agrava la lesión neurológica
+let tope = null, topeVisto = '';
+function topeOxigeno() {
+    if (!tope) return;
+    const exceso = !!estado.ros && estado.pao2 > estadoBase().pao2 && D.R.sao2 >= 90;
+    const firma = estado.ros ? (exceso ? 'sello' : 'aviso') : '';
+    if (firma === topeVisto) return; topeVisto = firma;
+    tope.quitar('hiperoxia');
+    if (firma === 'sello') tope.poner('hiperoxia', { nivel: 'sello', titulo: 'Hiperoxia', texto: `Con SaO₂ ${D.R.sao2} % el O₂ de más agrava la lesión neurológica tras la parada. Baja la PaO₂.`, cita: 'mc-posresucitacion#mc-tabla-21-4', origen: 'ficha · cap. 21, p. 66-67 · PaO₂ 91-100: ilustrativa' });
+    else if (firma === 'aviso') tope.poner('hiperoxia', { nivel: 'aviso', titulo: 'No subas el O₂', texto: 'Solo si la SaO₂ es <90 % (Tabla 21.4).', cita: 'mc-posresucitacion#mc-tabla-21-4', origen: 'ficha · cap. 21, p. 66-67' });
+}
 function aplicar(nuevo, op = {}) {
     const viejo = aplicarModelo(nuevo);
-    sincronizarMandos();
+    sincronizarMandos(); topeOxigeno();
     if (op.frase !== false && modo === 'explorar') decir(...fraseDe(viejo, nuevo));
 }
 const cambiar = (fn, op) => { const e = copia(estado); fn(e); aplicar(e, op); };
@@ -55,6 +67,10 @@ function fraseDe(prev, e) {
     // sin estado anterior (al abrir en un estado), se cuenta lo que cambia respecto al sano
     if (!prev && JSON.stringify(e) !== JSON.stringify(estadoBase())) return fraseDe(estadoBase(), e);
     const R = D.R, cambio = k => prev && JSON.stringify(prev[k]) !== JSON.stringify(e[k]);
+    // ---- Cap. 17: el neutrófilo y las ROS (el modelo no calcula nada nuevo: es la lupa y el tope del O₂) ----
+    if (e.ros && cambio('ros')) return e.ros === 'neutrofilo'
+        ? ['El neutrófilo <span class="hl-rojo">multiplica por 20 su consumo de O₂</span> durante 15-20 min, pero <span class="hl">no fabrica ATP</span>: la NADPH oxidasa añade electrones al O₂ de uno en uno (superóxido → H₂O₂) y de ahí salen hidroxilo (con Fe²⁺) o hipoclorito (con mieloperoxidasa).', 'ficha · mc-inflamacion-ros#mc-estallido · #mc-fig-17-1 · p. 53-54']
+        : ['El H₂O₂ <span class="hl">cruza membranas</span> y viaja por la sangre hasta <span class="hl-rojo">otro órgano</span>, donde el Fe²⁺ lo vuelve radical hidroxilo. El O₂ de más aquí daña: hiperoxia y ROS de reperfusión.', 'ficha · mc-inflamacion-ros#mc-lesion-oxidante-foco · p. 55 · mc-posresucitacion#mc-tabla-21-4 · p. 66'];
     // ---- Cap. 12: anemia y transfusión ----
     const FA = 'ficha · merino-anemia', FU = 'ficha · merino-transfusion', FR = 'ficha · merino-riesgos';
     if (e.alveolo && cambio('alveolo')) return e.alveolo === 'trali'
@@ -96,6 +112,7 @@ function fraseDe(prev, e) {
     // La anemia con el gasto fijo (la cuenta del cap. 9): el cap. 12 dice que el corazón compensa (corrección del bloque 2)
     const siCompensa = ' <button type="button" class="cpv-ir-estado" data-cpv-ir-estado="anemia-compensada">¿Y si el corazón compensa? →</button>';
     if (cambio('hb')) return e.hb === 7.5 && e.pao2 === 90 ? [`Con la Hb a la mitad, <span class="hl-rojo">la fila tiene huecos</span> y el contenido cae a la mitad: de 20 a ${Math.round(D.cao2)} mL/dL. <b>Con el gasto fijo</b> (si el corazón no compensara), cada hematíe soltaría más: la extracción llegaría al ${R.dif} %.${siCompensa}`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2) · la fila: ilustrativa'] : [`Hb ${dec(e.hb, 1)} con el gasto fijo: CaO₂ ${dec(R.cao2, 1)} mL/dL y aporte ${mil(R.do2)} mL/min (con Hb 15, 20 y 985).${e.hb < 15 ? siCompensa : ''}`, 'ficha · mar-cao2-9 · mar-do2'];
+    if (e.ros && cambio('pao2') && e.pao2 > estadoBase().pao2 && R.sao2 >= 90) return [`PaO₂ ${e.pao2}, SaO₂ ${R.sao2} %: <span class="hl-rojo">el O₂ de más no ayuda y daña</span>; tras la parada agrava la lesión neurológica. El O₂ solo si la SaO₂ es &lt;90 %.`, 'ficha · mc-posresucitacion#mc-tabla-21-4 · p. 66-67 · PaO₂ 91-100: ilustrativa'];
     if (cambio('pao2')) return e.pao2 === 45 ? [`PaO₂ a la mitad: SaO₂ ${R.sao2} %, CaO₂ ${Math.round(D.cao2)} mL/dL: <span class="hl">solo un 20 % menos</span>.`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2)'] : e.pao2 >= 60 ? [`PaO₂ ${e.pao2}: SaO₂ ${R.sao2} %. <span class="hl">Casi no cambia: estás en la parte plana</span> de la curva.`, 'ficha · mar-curva-forma · curva: fisiología general'] : [`PaO₂ ${e.pao2}: ya en la parte empinada; la SaO₂ cae deprisa (${R.sao2} %).`, 'ficha · mar-curva-forma · curva: fisiología general'];
     if (cambio('gc') || (prev && prev.frio !== e.frio)) {
         if (D.porAporte) return [`El aporte cayó a ${mil(R.do2)} mL/min: los hematíes <span class="hl-rojo">salen con la mitad de las perlas vacías</span> (extracción del 50 %, SvO₂ ${R.svo2} %) y el consumo ya depende del aporte (VO₂ ${R.vo2}).`, 'ficha · mar-extraccion-curva (Fig. 9.3)'];
@@ -494,6 +511,7 @@ export function init() {
     raiz = document.getElementById('cpv-raiz');
     if (!raiz) return null;
     initEscena();
+    tope = crearTope({ monitor: $('lamina-caja'), dock: $('dock'), cita: c => enlacesFuente(c, { clase: 'cpv-ir-texto', claseOrg: 'cpv-org', prefijo: 'Ver en la ficha: ' }) });
     leyendas(); engancharDock(); crearGuia();
     enlazarOrigenes(raiz);
     enRaiz('[data-cpv-fuente]').forEach(sp => { sp.innerHTML = enlacesFuente(sp.dataset.cpvFuente, { clase: 'cpv-ir-texto', claseOrg: 'cpv-org' }); });
