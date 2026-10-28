@@ -1,6 +1,6 @@
 // Medidor de una forma de paciente en un punto de su mando: lo usan el juez J1/J2 (paciente-doppler.test.mjs) y
 // la tabla de autonomo/bloques/eco-mega/herramientas/calibra-tabla.mjs. Un solo sitio para la medida.
-// medirForma('tep', 'def' | 0 | 1) → { E, A, ea, dt, eSep, eLat, eAvg, eE, S, D, Ar, sd, bombaAI, bombaAD, tapse,
+// medirForma('tep', 'def' | 0 | 1) → { E, A, ea, dt, fusion, eSep, eLat, eAvg, eE, S, D, Ar, sd, bombaAI, bombaAD, tapse,
 //   vdTd, vdTs, viTd, pam, fc, pcp, paps, pvc, gc, aAI, aAD, fuera: [texto de cada muestra fuera de LIMITES] }
 import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
@@ -33,7 +33,7 @@ export function medirForma(k, g) {
   ch('AI/AD', o.flatMap(x => [x.vai, x.vad]), LIMITES.au);
   const feVd = 100 * (vdTd - vdTs) / vdTd;
   return {
-    E: mit.E, A: mit.A, ea: mit.ea, dt: mit.tde, eSep: e.sep, eLat: e.lat, eAvg: e.avg, eE: mit.E / e.avg,
+    E: mit.E, A: mit.A, ea: mit.ea, dt: mit.tde, fusion: !!mit.fusion, eSep: e.sep, eLat: e.lat, eAvg: e.avg, eE: mit.E / e.avg,
     S: pv.S, D: pv.D, Ar: pv.Ar, sd: pv.sd, bombaAI: bomba('qMit'), bombaAD: bomba('qTri'),
     tapse: tapseDeLatido(u), vdTd, vdTs, viTd, pam: u.pam, fc: u.fc, pcp: u.pcp, paps: u.paps, pvc: u.pvc, gc: u.gc,
     aAI: aW('pai'), aAD: aW('pad'), feVd, tapsePaps: tapseDeLatido(u) / u.paps, fuera,

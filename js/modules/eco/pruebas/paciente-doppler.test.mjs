@@ -23,6 +23,7 @@ const medida = (clave) => { if (!cache.has(clave)) cache.set(clave, medirForma(.
 function fallosJ1(clave) {
   const r = medida(clave), fallos = [], diagn = [];
   for (const b of [...HUECO_MINIMOS.map(x => ({ ...x, min_excl: true })), ...BANDAS[clave]]) {
+    if (b.sinFusion && r.fusion) continue;
     const v = r[b.medida], ok = (b.min_excl || b.max_excl ? dentro(v, b) : (Number.isFinite(v) && v >= b.min && v <= b.max));
     const txt = `${b.medida} ${fmt(v)} ${UNIDADES[b.medida] ?? ''} fuera de ${banda(b)} (${b.fuente}${b.nota ? '; ' + b.nota : ''})`;
     if (!ok) (b.diagnostico ? diagn : fallos).push(txt);

@@ -622,8 +622,13 @@ export function montarSimulador(raiz, opc = {}) {
     if (medD.tipo === 'llenado') {
       if (fuenteD.n === 'mitral') {
         enl.innerHTML = enlace('E/A y TDE en la Ficha 5', 'cardio-monitorizacion-hemodinamica', '#cardio-eco-diastolica');
+        if (medD.fusion) {   // E y A fundidas por la FC alta: ni E/A ni TDE se miden (Nagueh 2025 p. 547 y T7 p. 557)
+          poner('warn', cab + `<b>Fusión E-A (FC alta): E/A y TDE no medibles.</b> Velocidad pico de la onda fundida ${fx(Math.max(medD.E, medD.A))} cm/s`
+            + `<br><span class="cv-muted">Con la FC alta la contracción auricular empieza antes de que acabe el llenado rápido y las dos ondas se funden en una: no se separa la E de la A ni se mide el tiempo de desaceleración. <a href="docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=11" target="_blank" rel="noopener">Nagueh 2025 p. 547</a> · <a href="docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=21" target="_blank" rel="noopener">p. 557 (tabla 7)</a>. Origen: ficha.</span>`);
+          return;
+        }
         const okEA = medD.ea >= 1 && medD.ea <= 1.5, okT = medD.tde >= 140 && medD.tde <= 250;
-        poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5) · TDE ${fx(medD.tde)} ms (normal 140-250)`
+        poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en <a href="docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=15" target="_blank" rel="noopener">Nagueh 2025 p. 551</a>: dos fuentes, sin elegir ganadora) · TDE ${fx(medD.tde)} ms (normal 140-250)`
           + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).</span>`);
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
       return;

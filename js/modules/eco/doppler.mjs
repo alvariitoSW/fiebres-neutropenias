@@ -260,7 +260,9 @@ export function medidasLatido(curva, fuente) {
     const E = pico(en('FG')), A = pico(en('A'));
     // fusión E-A: el «pico» de E es el primer punto tras la A y la onda ya venía más alta (la E cuelga de la rama descendente de
     // la A): no hay pico precoz propio y no se mide el TDE (Nagueh 2025, p. 547 (11): no medir el TDE con fusión)
-    const iE = curva.indexOf(E), fusion = iE > 0 && curva[iE - 1].fase === 'A' && sg * curva[iE - 1].v >= sg * E.v;
+    // ni (circular) cuando la E sube hasta el final del latido y la onda sigue subiendo hacia la A del latido siguiente (FC alta: la mitral abre dentro de la contracción auricular)
+    const iE = curva.indexOf(E), sig = curva[(iE + 1) % curva.length];
+    const fusion = (iE > 0 && curva[iE - 1].fase === 'A' && sg * curva[iE - 1].v >= sg * E.v) || (iE === curva.length - 1 && sig.fase === 'A' && sg * sig.v >= sg * E.v);
     return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: fusion ? null : tdeDe(curva, iE, sg), fusion };
   }
   if (fuente.tipo === 'valvula') {

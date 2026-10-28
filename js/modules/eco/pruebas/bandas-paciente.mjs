@@ -61,5 +61,8 @@ export const BANDAS = {
   'hipertrofia:1': [c('ea', 0.8, 2, N(554) + ' (18)'), ...eBaja(), c('eE', 14, INF, N(554) + ' (18)'), dt140(), c('pcp', 15, INF, N(550) + ' (14)'),
     diag('paps', 35, INF, N(554), '«IT ≥2,8 o PAPs ≥35»: basta una')],
 };
+// Suelos duros de todas las formas, solo SIN fusión E-A (con fusión no se mide E/A ni E/e′: Nagueh 2025 p.547 (11), T7 p.557 (21))
+const SUELOS = [c('eE', 4, INF, N(551) + ' (15) T5', { sinFusion: true }), c('ea', 0.5, INF, N(551) + ' (15), 60-80 años', { sinFusion: true })];
+for (const k of Object.keys(BANDAS)) BANDAS[k] = [...BANDAS[k], ...SUELOS];
 export const HUECO_MINIMOS = HUECO;
 export const UNIDADES = { E: 'cm/s', A: 'cm/s', ea: '', dt: 'ms', eSep: 'cm/s', eLat: 'cm/s', eAvg: 'cm/s', eE: '', S: 'cm/s', D: 'cm/s', Ar: 'cm/s', sd: '', bombaAI: '%', tapse: 'mm', pcp: 'mmHg', paps: 'mmHg', feVd: '%', tapsePaps: 'mm/mmHg', pvc: 'mmHg' };
