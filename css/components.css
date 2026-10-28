@@ -4665,6 +4665,12 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
 [data-visual] > .vista-estudiar { display: none; }
 [data-visual].modo-estudiar > .vista-estudiar { display: grid; }
 [data-visual].modo-estudiar > .vista-texto { display: none; }
+/* Modo Mayéutica: solo la guía (paso Piensa); sin cabeza, lista de pasos, título del paso, pie ni «Para profundizar». */
+[data-visual].modo-mayeutica > .vista-estudiar .est-cabeza,
+[data-visual].modo-mayeutica > .vista-estudiar .est-resumen,
+[data-visual].modo-mayeutica > .vista-estudiar .est-paso-t,
+[data-visual].modo-mayeutica > .vista-estudiar .est-pie,
+[data-visual].modo-mayeutica > .vista-estudiar .may-profundizar { display: none; }
 .est-cabeza { display: grid; gap: 4px; min-width: 0; }
 .est-resumen { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 .est-resumen li { min-width: 0; }

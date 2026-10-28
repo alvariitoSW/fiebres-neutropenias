@@ -7,7 +7,7 @@
 //    «destapa» y 3 «Lo que te llevas»; la buena es la opción más larga en ≤ ⅓ de los tests (y, por archivo de grupo, también la más corta en ≤ ⅓) y no siempre en el mismo
 //    sitio; ids únicos; toda `fuente` y todo «Para profundizar» apuntan a un id que existe.
 // 2. En el navegador, a 390 px y a 360 px (con «reducir movimiento»), en un contexto limpio: cada ficha con
-//    Mayéutica abre con Texto | Estudiar (y una ficha sin ella sigue con Texto | Visual); Estudiar enseña el resumen
+//    Mayéutica abre con Texto | Mayéutica | Estudiar (y una ficha sin ella sigue con Texto | Visual); Estudiar enseña el resumen
 //    de los 5 pasos y abre en «Mira», con la vista Visual de la ficha dentro; «Juega» trae los botones a los modelos
 //    vivos (y en una ficha, el modelo y su «← VOLVER» al paso Juega); «Piensa» (la guía) y «Examínate» (el examen y
 //    el repaso hasta vaciarlo) enteros, fallando algunas (sin las respuestas en el HTML, sin el botón del modelo
@@ -159,7 +159,7 @@ async function correr(ANCHO, REDUCIDO) {
         await abrirFicha(ficha); await p.waitForTimeout(500);
         ok(await fichaAbierta(ficha), `${ficha}: la ficha abre`);
         const botones = await p.evaluate(f => [...document.querySelectorAll(`#${f} > .vista-toggle button`)].map(b => b.textContent).join('|'), ficha);
-        ok(botones === 'Texto|Estudiar', `${ficha}: interruptor «${botones}»`);
+        ok(botones === 'Texto|Mayéutica|Estudiar', `${ficha}: interruptor «${botones}»`);
         ok(await p.evaluate(f => !document.querySelector(`#${f} .est-resumen, #${f} .may-zona`), ficha), `${ficha}: Estudiar no se construye hasta pulsarlo (no hay preguntas en el HTML)`);
         if (nf === 0) await foto('00b-interruptor', `#${ficha} > .vista-toggle`);
         await pulsar(`#${ficha} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(400);
@@ -362,9 +362,69 @@ async function correr(ANCHO, REDUCIDO) {
     fallosTotales.push(...fallos.map(f => `${tag}: ${f}`));
 }
 
+/* ---------- 3. La pestaña «Mayéutica»: la guía sola, con los resultados compartidos con Estudiar ---------- */
+async function casoPestanaMayeutica(ANCHO) {
+    console.log(`\n── ${ANCHO} px · pestaña Mayéutica`);
+    const ctx = await b.newContext({ viewport: { width: ANCHO, height: 844 }, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    const errores = [];
+    p.on('console', m => { if (m.type() === 'error' && !/favicon/.test(m.text())) errores.push(m.text()); });
+    p.on('pageerror', e => errores.push('PAGE ' + e.message));
+    const ok = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallosTotales.push(`${ANCHO}px mayéutica: ${t}`); };
+    const pulsar = sel => p.evaluate(s => { const e = document.querySelector(s); if (!e) throw new Error('no hay ' + s); e.click(); }, sel);
+    const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    const ficha = FICHAS[0], d = MAYEUTICA_B1[ficha];
+    await p.goto(BASE + 'index.html');
+    await p.waitForFunction(f => document.getElementById(f)?.querySelector(':scope > .vista-estudiar'), ficha, { timeout: 15000 });
+    await p.evaluate(([t, nav]) => { const x = document.createElement('button'); Object.assign(x.dataset, { ...nav, tab: t }); document.body.append(x); x.click(); x.remove(); }, [ficha, navDe(ficha)]);
+    await p.waitForTimeout(500);
+    const T = `#${ficha} > .vista-toggle`;
+    const caja = await p.evaluate(t => { const e = document.querySelector(t), r = e.getBoundingClientRect(); return { n: e.querySelectorAll('button').length, der: r.right, ancho: innerWidth, texto: [...e.querySelectorAll('button')].map(x => x.textContent).join('|'), sc: document.documentElement.scrollWidth - innerWidth }; }, T);
+    ok(caja.texto === 'Texto|Mayéutica|Estudiar' && caja.der <= caja.ancho && caja.sc <= 0, `los tres botones caben y no desbordan (${JSON.stringify(caja)})`);
+    await pulsar(`${T} [data-vista="mayeutica"]`); await p.waitForTimeout(400);
+    const v = await p.evaluate(f => { const t = document.getElementById(f), vis = s => { const e = t.querySelector(s); return !!e && !!e.offsetParent; };
+        return { guia: vis('.est-paso[data-paso="piensa"] .may-zona'), lista: vis('.est-resumen'), cabeza: vis('.est-cabeza'), pasoT: vis('.est-paso[data-paso="piensa"] .est-paso-t'), texto: vis('.vista-texto'), activo: t.querySelector(':scope > .vista-toggle button.active')?.textContent }; }, ficha);
+    ok(v.guia && !v.lista && !v.cabeza && !v.pasoT && !v.texto && v.activo === 'Mayéutica', `Mayéutica enseña la guía y no la lista de pasos (${JSON.stringify(v)})`);
+    // Contesta a la primera pregunta bien (tests: la buena; destapa: marca todos; error: marca los errores)
+    const Z = `#${ficha} .est-paso[data-paso="piensa"] .may-zona`;
+    const responder = async q => {
+        if (q.tipo === 'test') { await pulsar(`${Z} [data-accion="ops"]`); await pulsar(`${Z} [data-op="${barajar(q.opciones, q.id).findIndex(o => o.ok)}"]`); }
+        else if (q.tipo === 'destapa') {
+            if (await p.evaluate(z => !!document.querySelector(z + ' [data-accion="destapa"]'), Z)) await pulsar(`${Z} [data-accion="destapa"]`);
+            await p.evaluate(z => document.querySelectorAll(z + ' .may-pts input').forEach(c => { c.checked = true; }), Z);
+            await pulsar(`${Z} [data-accion="puntos"]`);
+        } else {
+            for (const i of q.frases.map((f, j) => f.mal ? j : -1).filter(j => j >= 0)) await pulsar(`${Z} [data-fr="${i}"]`);
+            await pulsar(`${Z} [data-accion="corregir"]`);
+        }
+        await p.waitForTimeout(60);
+    };
+    await pulsar(`${Z} [data-ir="seguir"]`); await p.waitForTimeout(100);
+    await responder(d.guia[0]);
+    ok(await desborde() <= 0, 'sin desborde tras contestar en Mayéutica');
+    await pulsar(`${Z} [data-accion="sig"]`);
+    // De Mayéutica a Estudiar: esa pregunta sale contestada en Piensa
+    await pulsar(`${T} [data-vista="estudiar"]`); await p.waitForTimeout(300);
+    const e = await p.evaluate(f => { const t = document.getElementById(f); return { lista: !!t.querySelector('.est-resumen').offsetParent, sub: t.querySelector('.est-ir[data-ir-paso="piensa"] small').textContent, activo: t.querySelector(':scope > .vista-toggle button.active').textContent }; }, ficha);
+    ok(e.lista && e.activo === 'Estudiar' && new RegExp(`llevas 1\\b`).test(e.sub) , `Estudiar enseña la lista de pasos y Piensa recuerda la pregunta contestada en Mayéutica («${e.sub}»)`);
+    // Vuelta a Mayéutica y fin de la guía: «Sigue en Estudiar → Examínate»
+    await pulsar(`${T} [data-vista="mayeutica"]`); await p.waitForTimeout(300);
+    for (const q of d.guia.slice(1)) { await responder(q); await pulsar(`${Z} [data-accion="sig"]`); await p.waitForTimeout(40); }
+    const fin = await p.evaluate(f => { const b = document.querySelector(`#${f} .est-paso[data-paso="piensa"] .may-zona [data-ir-paso="examen"]`); return b && b.offsetParent ? b.textContent : null; }, ficha);
+    ok(/Sigue en Estudiar/.test(fin || ''), `al acabar la guía en Mayéutica aparece «${fin}»`);
+    ok(await desborde() <= 0, 'sin desborde en el fin de la guía');
+    await pulsar(`#${ficha} .est-paso[data-paso="piensa"] .may-zona [data-ir-paso="examen"]`); await p.waitForTimeout(300);
+    const ex = await p.evaluate(f => { const t = document.getElementById(f), s = t.querySelector('.est-paso[data-paso="examen"]'); return { examen: !s.hidden && !!s.offsetParent, lista: !!t.querySelector('.est-resumen').offsetParent, activo: t.querySelector(':scope > .vista-toggle button.active').textContent }; }, ficha);
+    ok(ex.examen && ex.lista && ex.activo === 'Estudiar', `el botón lleva a Estudiar → Examínate (${JSON.stringify(ex)})`);
+    ok(errores.length === 0, `0 errores de consola (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
+    await ctx.close();
+}
+
 try {
     await correr(390, false);
     await correr(360, true);
+    await casoPestanaMayeutica(390);
+    await casoPestanaMayeutica(360);
 } catch (e) { fallosTotales.push('la prueba se cortó: ' + e.message); console.log('❌ ' + e.message); }
 await b.close();
 console.log(fallosTotales.length ? `\n❌ ${fallosTotales.length} fallo(s)` : '\n✅ Mayéutica de las fichas: todo bien');
