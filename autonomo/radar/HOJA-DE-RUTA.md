@@ -44,7 +44,8 @@ fase 0 → resto. Paradas del usuario: las 5 del plan, más una cuando esté G1.
   «antes / después». Decidido: tocar la anatomía congelada (esófago, valvas por segmentos, coronarias); mallas abiertas
   con cita, se decide viendo la maqueta.
 - **Falta**: Di Mario y Sutaria 2005; ASE/SCA 2013 de ETE.
-- **La alimentan**: AngioView, anesthbeta, EchoSuite (Probe Lab).
+- **La alimentan**: AngioView, anesthbeta, EchoSuite (Probe Lab), Easy LA Segmentator (28/10: qué enseñar en una
+  vista 3D de la aurícula izquierda con venas, ostia y orejuela, para el motor de la imagen de B-039 y `f2-ete`).
 
 ## Fase 3 · calculadoras de eco para la UCI
 - **Qué es**: biblioteca con catálogo único (VCI y PAD, VS y GC, E/e′, PSVD, TAPSE/PAPS, FEVI, derrame, VExUS);

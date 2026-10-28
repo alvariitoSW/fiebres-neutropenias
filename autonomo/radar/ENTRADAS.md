@@ -29,9 +29,32 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
 
-## Fichas de triaje (las 18 entradas, la más reciente arriba)
+## Fichas de triaje (las 19 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Easy LA Segmentator (Mikael Laredo, Pitié-Salpêtrière)
+- **Fecha / tipo**: 2026-10-28 · repositorio
+- **Enlace**: https://github.com/mikaellaredo/easy-la-segmentator
+- **Dijo**: «Mira a ver si este repositorio de GitHub nos puede ayudar a montar el motor real del corazón»; tras la
+  valoración, «sí, apúntalo»
+- **Qué es**: programa de escritorio para electrofisiólogos (Windows y Mac, instalador de 1,4 GB). Con un TAC cardíaco
+  dibuja en 3D la aurícula izquierda, las venas pulmonares y la orejuela con TotalSegmentator; nombra cada vena, mide
+  cada ostium (diámetros y área), marca variantes (tronco común, vena accesoria o media) y exporta a CARTO, EnSite y
+  OPAL. El repositorio solo tiene el README y 9 capturas: **no publica código**
+- **Sirve a**: nivel 1 (estudiar), G6 (quirófano cardíaco y ETE). **No sirve al motor hemodinámico** (`motor.mjs`:
+  presiones, volúmenes, elastancia): es anatomía quieta, sin latido ni flujo. Sí como referencia de qué enseñar en una
+  futura vista 3D de la aurícula izquierda para el motor de la imagen de B-039 (`eco-reforma`) o `f2-ete`: las cuatro
+  venas con su ostium, la orejuela aparte, las variantes y las vistas de electrofisiología (AP, PA, OAI, OAD,
+  izquierda, derecha). Dibujado por nosotros, sin copiar sus imágenes
+- **Fuente**: ninguna; es una herramienta, no una fuente. La anatomía saldría de un libro o guía en `docs/`. Su
+  validación (README): 27 TAC públicos de HOCMvalvesSeg, Dice mediano 0,93
+- **Licencia**: README: «free for non-commercial research use»; el modelo *heartchambers_highres* de TotalSegmentator,
+  solo no comercial y con clave por usuario; capturas hechas con HOCMvalvesSeg (CC BY-NC 4.0) y la muestra de 3D
+  Slicer. No se usa nada suyo (REGLAS del proyecto §7.9)
+- **Coste**: 0 €; no aporta código, solo ideas
+- **Veredicto**: fase 2, como referencia del motor de la imagen (B-039 y `f2-ete`); descartado para el motor del
+  corazón
 
 ### Lazo presión-volumen #1: precarga y distensibilidad (@WithAScalpel) + CardioRender
 - **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás); en una respuesta, una web
