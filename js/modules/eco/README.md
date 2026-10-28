@@ -566,6 +566,11 @@ telediástole (`medidasCorazon` en `ecografia.mjs`) y un botón a la línea de l
 - **Accesos** `data-eco-escenario="hipertrofia|dilatada|tep"` desde Fisiopatología UCI · Cardiología (Ficha 3 y las del
   VD), Merino Cardiología (IC aguda) y Merino Neumología (ecocardiografía en la EP).
 
+Fusión E-A (eco-calibra-a, sesión 2): a más de ~120 lpm la relajación del VI no termina antes de la P y la mitral abre ya dentro de la
+contracción auricular. `motor.mjs` (`fase()`, marca `_fusion`) etiqueta como F/G lo que pasa por la mitral cuando la aurícula ya se
+relaja (tras `tsAur`), así que la E se mide como el pico precoz de la onda fundida (Nagueh 2025, p. 547 y p. 557 T7) y la D de las venas
+pulmonares ya no sale 0. `doppler.mjs` (`medidasLatido`) no da TDE si la E cuelga de la rama descendente de la A (`fusion: true`).
+
 ## Atlas de ecocardiografía (`atlas/`, octubre 2026)
 
 A petición explícita del usuario («haz ingeniería reversa para conseguir unificar ambos proyectos y ponerlo en

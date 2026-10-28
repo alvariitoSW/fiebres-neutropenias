@@ -462,6 +462,7 @@ export function crearMotor(ajustes = {}) {
     if (s.tLatido >= periodo) {
       s.tLatido -= periodo;
       s._aoAbrio = s._aoCerro = s._mitAbrio = s._picoLlenado = false;
+      s._fusion = !s.vMit;   // la mitral aún cerrada al empezar el latido: la A y el llenado van juntos (fase())
       ultimo = cerrarLatido();
       ondaUltima = onda; onda = [];
       s.nLatido++;
@@ -476,7 +477,16 @@ export function crearMotor(ajustes = {}) {
     if (s._aoAbrio && !s.vAo) s._aoCerro = true;
     if (s._aoCerro && s.vMit) s._mitAbrio = true;
     let f;
-    if (!s._aoAbrio) f = s.tLatido < p.pr ? 'A' : 'B';
+    if (!s._aoAbrio) {
+      f = s.tLatido < p.pr ? 'A' : 'B';
+      // FUSIÓN E-A: si la mitral abre ya dentro de la contracción auricular (taquicardia: la relajación del VI no termina
+      // antes de la P), lo que pasa por ella cuando la aurícula ya se relaja (pasada la duración de su activación) es llenado
+      // ventricular, no onda A: F/G. Así la E se mide como el pico precoz de la onda fundida (Nagueh 2025, p. 547 (11) y
+      // p. 557 T7) y la D de las venas pulmonares no queda en cero. Con la mitral ya abierta al empezar el latido (llenado
+      // normal), la A sigue siendo A hasta el QRS. Fisiología general
+      if (f === 'A' && s._fusion && s.vMit && s.tLatido >= p.tsAur * Math.sqrt(periodo / (60 / 70))) {
+        if (s.qMit > 120) s._picoLlenado = true; f = (!s._picoLlenado || s.qMit > 120) ? 'F' : 'G'; }
+    }
     else if (!s._aoCerro) f = s.pvi >= s._pviPrev ? 'C' : 'D';
     else if (!s._mitAbrio) f = 'E';
     else { if (s.qMit > 120) s._picoLlenado = true; f = (!s._picoLlenado || s.qMit > 120) ? 'F' : 'G'; }
