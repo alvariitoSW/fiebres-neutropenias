@@ -863,7 +863,7 @@ una sesión cada una, a horas distintas (sesiones programadas).
 
 | # | Clave | Qué | Estado | Nota |
 |---|---|---|---|---|
-| 1 | `eco-calibra-a` | Opción A del informe `eco-calibra`: arreglar las 5 piezas del motor de la eco y los dos jueces nuevos | en curso (28/10: sesión 1 hecha; sesión 2 en marcha con `autonomo/bloques/eco-mega/calibra-a/sesion2.md`) | ≈5,5 M en 2 sesiones. Informe https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · copia `autonomo/bloques/eco-mega/calibra-informe.html` |
+| 1 | `eco-calibra-a` | Opción A del informe `eco-calibra`: arreglar las 5 piezas del motor de la eco y los dos jueces nuevos | hecha (2026-10-28, arreglo técnico en `main`; parte `autonomo/partes/2026-10-28-eco-calibra-a-s2.md`; 3 huecos propuestos a la bitácora) | ≈5,5 M en 2 sesiones. Informe https://claude.ai/artifact/SFfwNewLsWiwuRPxSRXCpw · copia `autonomo/bloques/eco-mega/calibra-informe.html` |
 | 2 | `b3-paso4` | Paso 4 del bloque 3: **opción A** (las 17 piezas nuevas, elegida por el usuario el 27/10) construida por grupos | en curso (28/10: paso previo y **grupo 1 hecho** en `auto/b3`, parte `autonomo/partes/2026-10-28-b3-paso4-g1.md`; siguiente: grupo 2 · la parada, en otra sesión) | Informe https://claude.ai/artifact/HnYNUdSSrtvzdq8QhSj4Qw · plan `autonomo/bloques/b3/plan-paso4.md`. Rama `auto/b3` |
 | 3 | `competencias-r2r5` | Completar el mapa de competencias de R2 a R5 | aparcada (27/10, noche: no corre prisa) | Sobre `autonomo/ideas/competencias-r.html`; informe, no toca la app |
 

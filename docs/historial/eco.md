@@ -399,7 +399,8 @@ con AI rígida (S/D <1) y E/e′ ≥14; HP crónica grave sin pasar del tope del
 abre dentro de la contracción auricular y eso ya se cuenta como E fundida, no como A (E >0 en el shock, sin DT); un
 «suelo» de volumen sin tensión de AI y AD en el shock (sin mover presiones); el piso del VD en el dibujo baja de 45 a
 20 mL, porque el VD de 23 mL de la hemorragia es el del motor y de un paciente real (subirlo daba FEVD 29 %); la
-velocidad de las venas pulmonares, con el calibre de la vena superior derecha (Cronin 2007, PMID 17236990). Umbrales
+velocidad de las venas pulmonares, con el calibre de la vena superior derecha (Cronin 2007, PMID 17236990). Tras el juicio del profesor, el panel
+dice «Fusión E-A (FC alta): E/A y TDE no medibles» (Nagueh p.547) en vez de un E/A imposible. Umbrales
 ilustrativos aflojados, cada uno con su razón escrita (balón 3 → 2 mmHg, pliegue del VD del taponamiento). Huecos que
 quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e′ ~2 cm/s en el shock cardiogénico
 (Nagueh p.561 da 3-4 en el grado III avanzado; extrapolación declarada); bomba AI 88 % de la vasoplejia (artefacto de
