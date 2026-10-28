@@ -252,6 +252,7 @@ esta sección.
 |---|---|---|---|---|
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M · **fase 1 hecha** (28/10, adelantada por ti: 1,3 M; `autonomo/ideas/educacion-pionera/`) · **fase 2 en marcha** (28/10, sesión nueva) | 2026-10-28 | Fase 3 (las maquetas) el 02/11; **parada contigo el 04/11** |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
+| `eco-calibra-b`, `capilar-transfundir` | Los 3 huecos de la eco (TEP con escalón, shock cardiogénico coherente, DT del grado 1) y el tope del mando «Transfundir» del capilar vivo | aprobadas por el Consejo (28/10, 3.ª), **aparcadas**: la 1.ª espera el informe `eco-reforma`, la 2.ª la parada del 04/11 | 2026-10-28 | ≈3,5 M y ≈0,5 M. Acta `autonomo/consejo/2026-10-28-3.md` |
 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | aprobado el 28/10; programado el 01/11 (4-6 M) | 2026-10-28 | La decisión de arquitectura, después, es tuya. `f0-eco-*`, `f2-ete`, `b3-ritmo-motor` y el atlas esperan |
 | `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
 | `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
@@ -315,29 +316,31 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Para la fase 2-3 de Educación (opcional)**: si quieres que vea webs de verdad y artículos completos, permite en la red
-  del entorno phet.colorado.edu, brilliant.org y las editoriales (link.springer.com, tandfonline.com, psycnet.apa.org).
-  La fase 1 solo pudo entrar en GitHub y PubMed.
-- **Propuesta de regla (fase 1 de `educacion-pionera`)**: antes de una ingeniería inversa en la nube, mirar qué webs deja
-  abrir la red (`$HTTPS_PROXY/__agentproxy/status`) y elegir de ahí, o pedirte que las abras antes. ¿La apruebas?
+- **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
+  consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
+  aviso B de Educación: `capilar-transfundir` aparcada hasta el 04/11 · ESC 2023 de SCA y repaso espaciado: cerrados ·
+  three.js: va como opción en el informe `eco-reforma` · los 2 papers de pago: dejan de recordarse (aparcados en el Radar).
+- **Para la fase 3 de Educación (opcional, antes del 02/11)**: abrir en la red del entorno **phet.colorado.edu**
+  (recomendación del Consejo; comprobado el 28/10 que sigue cerrada). Brilliant, si quieres (casi todo de pago); las
+  editoriales no hacen falta (la evidencia sale de PubMed).
 - **Tareas programadas (revisadas el 28/10, 17:25)**: 29/10 7:40 `mayeutica-pestana` → grupos del `b3` · 30/10 7:40 siguiente
   grupo del `b3` · 31/10 8:13 informes de El Libro Azul y Radiología (+ `b3`) · 01/11 `eco-reforma` · 02/11 fase 3 de
   Educación · 04/11 recordatorio de los puntos 18-22 y parada de Educación · cada día 13:43 y 21:43 el informe de la
   bitácora con la línea «Marino N de 155» · 6:42 la Bandeja del Radar. Las de esta sesión se pasaron a sesiones nuevas
   para poder cerrarla. Queda pausada (no salta) la vieja del 29/10.
-- **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
-  de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
-  (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
+- **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde. Ya resueltos por el Consejo (28/10,
+  3.ª): los 2 papers, abrir sitios, three.js y repaso espaciado. Quedan para el aviso del 04/11: PDF opcionales (AHA
+  2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida, velocidad del plan y rutina nocturna, y la
+  elección de maqueta de Educación (A, B o C).
 
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
 
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
-  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. **Falta**: el PDF de la ESC 2023
-  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191). El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
+  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
   de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). También Wagner 2009 (AHA, territorios) y Thygesen
-  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
+  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). three.js y repaso espaciado: resueltos por el Consejo del 28/10 (3.ª).
 
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
@@ -476,9 +479,8 @@ El resto del tablero sigue `aparcada`.
 
 ## 4. Mejoras de lo que ya existe
 
-- **Eco, tres huecos que dejó `eco-calibra-a`** (28/10, para la sesión de la eco, no la de Marino): el fallo al 100 %
-  (shock cardiogénico) no es coherente (profesor 5,5); el TEP no tiene escalón submasivo → masivo (6); la hipertrofia
-  grado 1 da DT ~420 ms (7,5). Visto de paso: el taponamiento no muestra la variación respiratoria de la E.
+- **Eco, visto de paso en `eco-calibra-a`** (28/10): el taponamiento no muestra la variación respiratoria de la E. (Los
+  tres huecos de ese parte ya son la tarea `eco-calibra-b`, Consejo del 28/10.)
 - **Corazón eléctrico, visto en el grupo 1 del `b3`** (28/10): el estado `tv` marca «Pulso 0» con ART 102/79; el enlace
   `ritmoVivo` no puede abrir la FA con «Llenado malo» ya puesto; `mayeutica-fichas.mjs` con 1-2 fichas da 2 rojos
   falsos; `--modelo mayeutica-fichas` tarda ~25 min por ficha.

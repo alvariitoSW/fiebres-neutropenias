@@ -980,7 +980,9 @@ PIF rehecho con lo nuestro. «Sí a todo» al calendario hasta el 01/11. Dos inf
 |---|---|---|---|---|
 | 1 | `azul-cobertura` | El Libro Azul: qué cubren ya Marino y los modelos vivos, capítulo a capítulo, y el plan por bloques (como el Objetivo M5) con su gasto | pendiente (31/10) | B-004. Secciones I-X en `docs/` |
 | 2 | `radio-informe` | B-034: temario corto del PIF de Radiología (tórax y neuro) para estudiar y para la guardia, con lo de Radiology Assistant y NavRad | pendiente (31/10) | Encargo en la bitácora (B-034) |
-| 3 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con **maquetas visuales** de cómo separar el motor del corazón y el de la imagen, y del plan de la reforma | pendiente (01/11) | Aprobado por el usuario el 28/10 (Consejo, recomendación). 4-6 M. La decisión de arquitectura, después, es del usuario |
+| 3 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con **maquetas visuales** de cómo separar el motor del corazón y el de la imagen, y del plan de la reforma | pendiente (01/11) | Aprobado por el usuario el 28/10 (Consejo, recomendación). 4-6 M. La decisión de arquitectura, después, es del usuario. **Añadido por el Consejo (28/10, 3.ª)**: presenta three.js como una opción más, con su peso y coste |
+| 4 | `eco-calibra-b` | Los 3 huecos de `eco-calibra-a`: TEP con escalón submasivo → masivo, shock cardiogénico coherente y DT de la hipertrofia grado 1 | aparcada (espera el informe `eco-reforma` y la decisión del usuario sobre él) | (Consejo, 28/10, 3.ª). ≈3,5 M, tope 4 M. Acta `autonomo/consejo/2026-10-28-3.md` |
+| 5 | `capilar-transfundir` | Arreglo §1.14: tope con fuente y sello visible en el mando «Transfundir» del capilar vivo | aparcada (espera la parada de Educación del 04/11) | (Consejo, 28/10, 3.ª). ≈0,5 M. Si gana la maqueta B, usa su sello |
 
 **Encargo `azul-cobertura`** · tipo: mapa (informe) · aprobado el 27/10/2026
 - Qué quiero: por cada capítulo de El Libro Azul (1-61), qué ficha de Marino, Merino o qué modelo vivo ya lo explica
@@ -1016,6 +1018,38 @@ PIF rehecho con lo nuestro. «Sí a todo» al calendario hasta el 01/11. Dos inf
   usuario: es arquitectura, `CLAUDE.md` §2).
 - Gobierno: presupuesto de Interior recortado por Hacienda; 4-6 M (informe ≈1,5 M + maquetas).
 - Hecho: página para el móvil (Artifact) con las maquetas y las opciones + parte; las maquetas en `autonomo/maquetas/eco-reforma/`.
+
+**Encargo `eco-calibra-b`** · tipo: arreglo del motor (técnico; a `main` con los jueces en verde) · aprobado por el
+Consejo el 28/10/2026 (3.ª reunión; el usuario: «que lo apruebe todo el consejo»)
+- Antes de lanzarla: si el usuario elige con `eco-reforma` un motor nuevo, este encargo se reescribe sobre él.
+- Qué quiero, en este orden (lo que más enseña a un R1, según Educación):
+  1. **TEP con escalón**: hoy el defecto ya es extremo (FEVD 13 %, TAPSE 8,4; profesor 6/10). Que el mando pase por
+     riesgo intermedio (submasivo: VD dilatado, sin hipotensión) antes del alto riesgo (masivo: hipotensión). Fuente:
+     Marino, `docs/marino-2024-respiratory-management-caps22-26.pdf`, pdf 7 (sacar la página impresa con pdftotext).
+  2. **Shock cardiogénico coherente** (el fallo al 100 %; profesor 5,5/10): hoy PCP 33 con E 35 (sale como fusión),
+     e′ septal 2,0 cm/s, S pulmonar 1 cm/s, FEVD 11 % con PVC 6,4, Ar 2 cm/s con PCP 23. Que sea un «shock
+     cardiogénico restrictivo» posible: e′ septal 3-4 cm/s (Nagueh 2025, `docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf`,
+     p. 561) y el resto coherente con su fuente y página.
+  3. **DT de la hipertrofia grado 1**: hoy ~420 ms (lo habitual en la docencia, 220-300) y e′ que sube al empeorar.
+     **Solo con una fuente citable** (§1.15; la guía ASE/EAE 2009 no se abrió desde la red); si no aparece, hueco
+     declarado y no se toca la cifra.
+- Rejilla (REGLAS §4.11): el encargo trae los parámetros y rangos de cada pieza y el constructor la corre de una vez
+  (`herramientas/barrido.sh` + `calibra-tabla.mjs`).
+- Lo que NO quiero: ninguna cifra imposible (§1.14); que un arreglo empeore otra cifra de la tabla de la forma; citas
+  «de memoria» con página; romper la prueba del balón (`motor.test`, llenado >38 mL, hoy a 38,05) sin decirlo.
+- Hecho: notas del profesor de TEP y fallo ≥8; jueces de la eco y `node --test 'js/modules/eco/pruebas/*.test.mjs'`
+  en verde; captura de cada forma junto a la eco real. Juez: los de la eco + el profesor.
+- Gobierno: constructor sonnet, revisión del encargo barata (≈0,15 M), profesor para la nota. ≈3,5 M, tope 4 M.
+- Fuente del encargo: `autonomo/partes/2026-10-28-eco-calibra-a-s2.md` («Para el usuario»).
+
+**Encargo `capilar-transfundir`** · tipo: arreglo (técnico; a `main` con jueces) · aprobado por el Consejo el 28/10/2026
+(3.ª reunión)
+- Qué quiero: el mando «Transfundir» del capilar vivo hoy no tiene tope ni sello (choca con REGLAS §1.14). Tope con
+  fuente y consecuencia visible de paciente real. Si el usuario elige el 04/11 la maqueta B, el sello es el suyo.
+- Fuente: la de la maqueta B (`autonomo/ideas/educacion-pionera/diseno-b.md`: Hb ≥7 sin indicación, p. 8; el TACO no
+  depende del número de unidades, p. 15).
+- Lo que NO quiero: castigar «la 3.ª bolsa» (el sello castiga transfundir sin indicación); cifras sin página.
+- Hecho: `node autonomo/jueces.mjs --modelo capilar-vivo` en verde; probado a 390 y 360 px. ≈0,5 M, sonnet.
 
 ## Lo que aún no está aprobado
 
