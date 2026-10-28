@@ -26,6 +26,7 @@ const tapse = () => c('tapse', 17, INF, L(23) + ' (23); ' + M(145) + ' (5)');
 const bomba = () => c('bombaAI', 15, 30, L(24) + ' (24)');
 const ar = () => diag('Ar', 0, 35, N(549) + ' (13), ' + N(555) + ' (19)', 'inferido de «Ar >35 = LVEDP alta»');
 const g = () => [c('E', 47, 111, N(551) + ' (15)'), c('A', 24, 82, N(551) + ' (15)')];
+const dt200 = () => diag('dt', 200, INF, 'Nagueh 2009 (ASE, Tabla/Fig. 4): relajación alterada DT >200 ms; página sin verificar (web no accesible)', 'DT del grado I: fuente no abierta; fisiología general hasta cotejarla');
 const dt140 = () => diag('dt', 140, INF, N(547) + ' (11)', 'inferido: <140 ms = signo restrictivo');
 
 const NORMAL = [a(), b(), ...e_(), dt140(), ar(), tapse(), bomba(), ...g()];
@@ -53,8 +54,8 @@ export const BANDAS = {
     c('tapse', 0, 10, M(145) + ' (5) grave'), c('tapsePaps', 0, 0.19, ESC(3657) + ' (40)'), c('paps', 70, INF, M(145) + ' (5)'),
     c('feVd', 0, 32, M(145) + ' (5) FEVD 3D <32 %'), diag('pvc', 15, INF, M(145) + ' (5)', 'RAP ≥15 (estimada, no es la PVC media)')],
   // Hipertrofia: tabla del profesor (plan-hipertrofia.md), cortes de Nagueh 2025 p.554 (18), PCP>15 en p.550 (14)
-  'hipertrofia:0': [c('ea', 0, 0.8, N(554) + ' (18)'), ...eBaja(), c('eE', 0, 14, N(554) + ' (18)'), dt140(), c('pcp', 0, 15, N(550) + ' (14)'), c('paps', 0, 35, N(554) + ' (18)')],
-  'hipertrofia:def': [c('ea', 0, 0.8, N(554) + ' (18)'), ...eBaja(), c('eE', 0, 14, N(554) + ' (18)'), dt140(), c('pcp', 0, 15, N(550) + ' (14)'), c('paps', 0, 35, N(554) + ' (18)'),
+  'hipertrofia:0': [c('ea', 0, 0.8, N(554) + ' (18)'), ...eBaja(), c('eE', 0, 14, N(554) + ' (18)'), dt140(), dt200(), c('pcp', 0, 15, N(550) + ' (14)'), c('paps', 0, 35, N(554) + ' (18)')],
+  'hipertrofia:def': [c('ea', 0, 0.8, N(554) + ' (18)'), ...eBaja(), c('eE', 0, 14, N(554) + ' (18)'), dt140(), dt200(), c('pcp', 0, 15, N(550) + ' (14)'), c('paps', 0, 35, N(554) + ' (18)'),
     diag('ea', 0, 0.75, N(554), 'claramente invertido (ilustrativo)')],
   'hipertrofia:1': [c('ea', 0.8, 2, N(554) + ' (18)'), ...eBaja(), c('eE', 14, INF, N(554) + ' (18)'), dt140(), c('pcp', 15, INF, N(550) + ' (14)'),
     diag('paps', 35, INF, N(554), '«IT ≥2,8 o PAPs ≥35»: basta una')],
