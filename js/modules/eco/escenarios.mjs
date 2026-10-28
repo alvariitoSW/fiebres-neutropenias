@@ -59,6 +59,16 @@ const HVI_DEFECTO = 0.2;
 // antes (TDE ~410-430 ms en el grado 1, antes 550-580) con E/A ≤0,8, e′ baja y PCP <15; al 100 % queda rigidez ×2,2 y +300 mL (TDE ~215 ms)
 const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
   return { relajacion: 3.4 - 0.4 * x, b: 1.6 + 0.6 * x * x, vSangre: -300 + 600 * x * x }; };
+// Suelo de volumen en el shock (eco-calibra-a, sesión 2): un VD de 23 mL al final de la sístole o una aurícula de 6-9 mL no son de un
+// paciente real, ni en un shock a fondo (el dibujo exige VD ≥45 mL y aurículas ≥15 mL: LIMITES, corazon-geo.mjs). Se sube el volumen sin
+// tensión (v0) de cada cámara lo que pide la gravedad; la presión depende de V−V0, así que la presión no cambia. Para que tampoco cambie
+// ninguna otra presión, el mismo volumen se resta al volumen sin tensión de las venas (vuVen: la sangre total no cambia) y se suma al del saco pericárdico (v0Peri). Subirlo en la base (el normal)
+// ensanchaba el VD normal a ~160 mL, con una luz de 47 mm en el SC4C, por encima de los 41 mm de dilatación (Lang 2015, p. 17: «un diámetro >41 mm en la base indica dilatación del VD»; VTD normal 3D 87 mL/m² en varones)
+// y hacía fallar seis pruebas del normal. Los mL, ilustrativos: lo que fija el suelo son los límites del dibujo
+const suelo = (m, vd, ai, ad) => { m.p.vd.v0 += vd; m.p.ai.v0 += ai; m.p.ad.v0 += ad; const t = vd + ai + ad; m.p.v0Peri += t; m.p.vuVen -= t; };
+const SUELO_HEM = [26, 9, 8], SUELO_DER = [6, 10, 8], SUELO_TEP = [0, 6, 0], SUELO_VASO = [8, 5, 3];
+const sueloG = (m, dosis, g) => suelo(m, dosis[0] * g, dosis[1] * g, dosis[2] * g);
+
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
@@ -66,7 +76,7 @@ export const ESCENARIOS = {
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
     gravedad: { fin: 'el shock hemorrágico a fondo', defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
-    aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; },
+    aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; sueloG(m, SUELO_HEM, g); },
   },
   fallo: {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
@@ -84,7 +94,7 @@ export const ESCENARIOS = {
     // taponado da una mediana de ~15-16 mm (moderado) y >20 mm por detrás.
     // líquido en el saco, de 0 a DERRAME_ML_MAX (entra a su ritmo: motor.mjs, ritmoDerrame). El defecto, 260 mL
     gravedad: { fin: 'el taponamiento a fondo', defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
-    aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); },
+    aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); sueloG(m, SUELO_DER, g); },
   },
   vasoplejia: {
     nombre: 'Vasoplejía', tipo: 'vasodilatador',
@@ -94,7 +104,7 @@ export const ESCENARIOS = {
     // gravedad del shock), ×0,5 deja la misma PA: ~52 a los 10 s y ~66 asentada. Con la RVS calibrada (rSis 1,05 → 0,90) y el
     // techo de +35 % (motor.mjs, 21/10/2026), ×0,5 la dejaba en ~49 a los 10 s (sistólica 59) y ×0,55 da otra vez ~53 y ~69,
     // con una resistencia absoluta parecida a la de antes. Ilustrativo)
-    aplicar: (m) => { m.p.rSis *= 0.55; m.p.vuVen *= 1.5; },
+    aplicar: (m) => { m.p.rSis *= 0.55; m.p.vuVen *= 1.5; suelo(m, ...SUELO_VASO); },
   },
   // --- Formas de enfermedad: cambian la anatomía además del latido (excepción a «anatomía congelada», a petición
   // del usuario: «hazlas según la bibliografía de la aplicación»). Lo que se exige son las cifras de CRITERIOS_FORMA,
@@ -135,7 +145,7 @@ export const ESCENARIOS = {
     // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
     // (~0,93) es el de siempre: ×8 y ×0,65
     gravedad: { fin: 'el TEP de alto riesgo a fondo', defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
-    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** g); m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
+    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** g); m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; sueloG(m, SUELO_TEP, g); },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
