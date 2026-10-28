@@ -269,6 +269,11 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       baje la nota (8,75) ni la fidelidad. Cada recorte queda escrito en el parte («Hacienda: qué recortó y cuánto»)
       para que el gobierno central lo vea; si discrepa, se habla y se cambia. Al cerrar un bloque, un balance y una o
       dos propuestas. Sigue revisando lo ya gastado como antes.
+      Hacienda **cuida también su propio gasto** (el usuario, 28/10: «si aparece constantemente y gasta dinero porque sí,
+      tiene que valorar mejor cuándo aparecer»): el modo presupuesto solo en tareas de **2 M o más** (en las menores, el
+      director aplica él mismo la lista de recortes, sin llamarla); la pasada de después, solo si la tarea se desvió
+      **más de un 10 %** o al cerrar un bloque; nunca dos veces sobre lo mismo. Lo que gasta Hacienda va en «Cuentas» y
+      no pasa del **2 %** de lo que revisa; si un recorte no compensa lo que cuesta buscarlo, no se busca.
     - **Transportes = `/bitacora`**: rumbo, cola y calendario. El informe diario es el Consejo de Ministros por
       escrito: dice el gasto del día, el acumulado frente al presupuesto y lo que recortó Hacienda.
     - **Exteriores = `/radar`** · **Ciencia = `/ingenieria-reversa`** · **Educación = `/mayeutica`** (con el profesor) · **Justicia = los

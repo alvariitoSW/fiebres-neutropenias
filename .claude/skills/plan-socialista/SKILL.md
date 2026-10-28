@@ -52,8 +52,8 @@ tablero y el último parte, sin trabajar.
 9. **Presupuesto (eres el Ministerio del Interior; REGLAS §4.10, aprobado el 28/10/2026).** Con el encargo revisado,
    escribe el presupuesto de la tarea en `/tmp/plan-socialista/<clave>/presupuesto.md` (≤15 líneas): cada pieza con
    su agente, modelo, pasos y millones (tabla «Presupuestos vigentes» del tablero; cuenta antes las piezas en el
-   código), el total y lo que queda del presupuesto del bloque. Pasa tú mismo `/ahorro presupuesto` (Hacienda, 2-3
-   llamadas, sin agentes): recorta sola lo que no baja la nota ni la fidelidad y deja escrito qué recortó. Trabajas con
+   código), el total y lo que queda del presupuesto del bloque. Si la tarea es de **2 M o más**, pasa tú mismo `/ahorro presupuesto` (Hacienda, 2-3
+   llamadas, sin agentes; en las menores aplicas tú la lista de recortes, sin llamarla): recorta sola lo que no baja la nota ni la fidelidad y deja escrito qué recortó. Trabajas con
    el presupuesto ya recortado y lo copias al parte. Si la tarea no cabe en lo que queda del bloque, comparece antes de
    empezar.
 10. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
@@ -300,8 +300,9 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
    revisar o decidir, solo si es una de las paradas del bloque. Lo que ya subiste a `main`, en una línea.
-6. **Ahorro** (aprobado por el usuario el 27/10/2026): tras escribir el parte, pasa `/ahorro` tú mismo (2-3
-   llamadas, sin agentes). Al usuario, una línea si propone algo.
+6. **Ahorro** (aprobado por el usuario el 27/10/2026; 28/10: solo cuando compensa): tras escribir el parte, pasa
+   `/ahorro` tú mismo (2-3 llamadas, sin agentes) **solo si la tarea se desvió más de un 10 %** de su presupuesto o
+   cierra un bloque. Al usuario, una línea si propone algo.
 7. **Cerrar la sesión sola** (aprobado por el usuario el 27/10/2026). Se cierra cuando: la tarea está hecha, subida
    (y en `main` o con su PR), el parte escrito, ningún agente trabajando y nadie espera nada de esta sesión (ni otra
    sesión a la que entregaste algo ni una respuesta pendiente del usuario). **Antes de archivar, deja su fila en
