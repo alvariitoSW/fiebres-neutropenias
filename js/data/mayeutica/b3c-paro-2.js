@@ -1,14 +1,14 @@
 // Mayéutica del bloque 3, sub-bloque 3C · La parada, parte 2 (Marino cap. 21, págs. 64-68): ficha 24 (posresucitación y pronóstico) y
 // la tercera parte del caso C5 (Leandro). Datos puros; el formato está en la cabecera de b1-fluidos.js.
-// Modelos: ritmoVivo `rce`; shockVivo `posparo` y capilarVivo `reperfusion` (modeloFuturo: los construyen 2b y 2c).
+// Modelos: ritmoVivo `rce`; shockVivo `posparo` y capilarVivo `reperfusion` (modeloVivo).
 const PDF = 'docs/marino-2024-cardiac-disorders-caps18-21.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
 const p = n => pag(n, `pág. ${n}`);
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado de siempre al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 const rv = (clave, texto) => ({ ritmoVivo: clave, texto });
-const posparo = { shockVivo: 'posparo' };
-const reperfusion = { capilarVivo: 'reperfusion' };
+const posparo = { shockVivo: 'posparo', texto: '⚡ El aturdimiento, en el shock vivo' };
+const reperfusion = { capilarVivo: 'reperfusion', texto: '🧪 El oxígeno de más, en el capilar vivo' };
 
 export const MAYEUTICA_PARO_2 = {
   /* =================================================================================================
@@ -21,10 +21,10 @@ export const MAYEUTICA_PARO_2 = {
         enunciado: 'Un paciente recupera el pulso, pero cerca del 70 % de los que sobreviven a la reanimación no sobreviven a la hospitalización. ¿Qué manifestación del síndrome posparo es la más frecuente?',
         opciones: [
           { t: 'El fallo del corazón aturdido, que causa shock cardiogénico en la mayoría', porque: `La disfunción cardíaca puede progresar a shock cardiogénico en horas, pero el aturdimiento suele resolverse en 72 h (${p(65)}). La más frecuente es la lesión cerebral; mirar solo al corazón deja sin vigilar el cerebro.` },
-          { t: 'La respuesta inflamatoria: casi universal, y la causa de la mayoría de las muertes', porque: `Es casi universal y puede dar fallo multiorgánico (${p(65)}), pero el libro señala la lesión cerebral como la manifestación más frecuente (${p(64)}).` },
+          { t: 'La respuesta inflamatoria: casi universal, y la causa de la mayoría de las muertes', porque: `Es casi universal y puede dar fallo multiorgánico (${p(65)}), pero el libro señala la lesión cerebral como la manifestación más frecuente (${p(64)}); no ordena por frecuencia las otras ni dice que sea la causa de la mayoría de las muertes.` },
           { t: 'La lesión cerebral: responsable del 23-68 % de las muertes tras el paro', ok: true }],
         explicacion: `Tras el RCE hay lesión isquémica por el paro y <span class="hl-azul">lesión de reperfusión</span>. La <span class="hl-rojo">lesión cerebral</span> es la manifestación más frecuente (23-68 % de las muertes); le siguen la disfunción cardíaca y la respuesta inflamatoria sistémica (${p(64)}-65). Cerca del 70 % de los reanimados no sobrevive a la hospitalización (${p(64)}).` },
-      { id: 'prp-g2', corto: 'el aturdimiento', tipo: 'test', fuente: 'mc-posparo', modeloFuturo: posparo,
+      { id: 'prp-g2', corto: 'el aturdimiento', tipo: 'test', fuente: 'mc-posparo', modeloVivo: posparo,
         enunciado: 'Predice, y luego lo compruebas en el modelo: el corazón de un paciente reanimado está aturdido y su presión es baja. ¿Cuánto tarda en recuperarse el aturdimiento?',
         opciones: [
           { t: 'Hacia las 72 horas', ok: true },
@@ -32,13 +32,13 @@ export const MAYEUTICA_PARO_2 = {
           { t: 'Semanas: es una miocardiopatía establecida', porque: `La fuente lo describe como «aturdimiento», una forma de lesión de reperfusión que suele resolverse en 72 h (${p(65)}). Tratarlo como definitivo llevaría a decisiones de limitación sin base.` }],
         explicacion: `El problema de fondo es el <span class="hl">aturdimiento miocárdico</span> (lesión de reperfusión): disfunción sistólica y diastólica que puede progresar a shock cardiogénico en horas y <span class="hl">suele resolverse en 72 h</span> (${p(65)}).`,
         nota: `<b>La fuente no lo dice así.</b> El libro da el plazo (72 h) pero no la forma de la recuperación; la curva del modelo es <i>ilustrativa</i>. Si a las 72 h el corazón sigue mal, el libro no dice más.` },
-      { id: 'prp-g3', corto: 'el oxígeno de más', tipo: 'test', fuente: 'mc-tabla-21-4', modeloFuturo: reperfusion,
-        enunciado: 'Tras el RCE, la SaO₂ es 97 % con FiO₂ 1,0. ¿Por qué se baja el oxígeno hasta SaO₂ ≥90 %?',
+      { id: 'prp-g3', corto: 'el oxígeno de más', tipo: 'test', fuente: 'mc-tabla-21-4', modeloVivo: reperfusion,
+        enunciado: 'Tras el RCE, la SaO₂ es 97 % con FiO₂ 1,0. ¿Por qué no se mantiene el oxígeno al máximo si la SaO₂ ya es 97 %?',
         opciones: [
           { t: 'Porque el oxígeno en exceso baja la temperatura del paciente y complica el control de la temperatura', porque: `La fuente no relaciona el O₂ con la temperatura. La razón es neurológica: la hiperoxia agrava la lesión (${p(66)}).` },
           { t: 'La hiperoxia agrava la lesión neurológica y las especies reactivas del O₂ la reperfusión', ok: true },
           { t: 'Porque con SaO₂ ≥90 % el cerebro ya no consume oxígeno', porque: `El cerebro sigue consumiéndolo; el O₂ solo se usa para corregir la hipoxemia (SaO₂ <90 %) (${p(66)}). Mantener FiO₂ 1,0 «por seguridad» expone a una lesión añadida.` }],
-        explicacion: `La hiperoxia agrava la lesión neurológica tras el paro: el O₂ <span class="hl">solo se usa para corregir la hipoxemia (SaO₂ <90 %)</span>. Las especies reactivas de oxígeno participan en la lesión de reperfusión, otra razón para limitarlo (${p(66)}).`,
+        explicacion: `La hiperoxia agrava la lesión neurológica tras el paro: el O₂ <span class="hl">solo se usa para corregir la hipoxemia (SaO₂ <90 %)</span>; con 97 % no hay indicación de FiO₂ 1,0 (bajarla es una consecuencia razonable, no una cifra objetivo escrita). Las especies reactivas de oxígeno participan en la lesión de reperfusión, otra razón para limitarlo (${p(66)}).`,
         nota: `<b>La fuente no lo dice.</b> El libro no da una PaO₂ ni una FiO₂ concretas para el posparo: solo el umbral de SaO₂ <90 % (${p(66)}).` },
       { id: 'prp-g4', corto: 'del frío a la normotermia', tipo: 'test', fuente: 'mc-posparo · mc-tabla-21-3',
         enunciado: 'Primero se enfriaba a 32-34 °C; luego se vio que 36 °C era equivalente, y después que 37,5 °C también. ¿Qué enseña esa historia?',
@@ -60,7 +60,7 @@ export const MAYEUTICA_PARO_2 = {
           { t: 'PAM ≥65 mmHg con adrenalina, porque es la que ya se usaba en la parada', porque: `Hay tendencia a seguir con adrenalina, pero la noradrenalina se asocia a menos muertes cardiovasculares y mejor resultado neurológico (${p(67)}). El 65 es la cifra habitual del shock (cap. 14), no la de aquí.` },
           { t: 'PAM ≥75 mmHg con noradrenalina', ok: true },
           { t: 'PAM ≥90 mmHg con vasopresina, para asegurar la perfusión cerebral', porque: `El libro propone ≥75 como cifra razonable (${p(67)}); no da el 90 ni la vasopresina para este fin.` }],
-        explicacion: `La autorregulación cerebral está dañada y el flujo depende de la presión arterial: se trata la hipotensión sin demora (${p(67)}). Un objetivo de PAM <span class="hl">≥75 mmHg</span> es razonable en las primeras horas, y la <span class="hl">noradrenalina</span> se prefiere a la adrenalina (${p(66)}-67).`,
+        explicacion: `La autorregulación cerebral está dañada y el flujo depende de la presión arterial: se trata la hipotensión sin demora (${p(67)}). Una PAM <span class="hl">≥75 mmHg</span> es una consideración razonable en las primeras horas (el libro la da como ejemplo, con estudios observacionales), y la <span class="hl">noradrenalina</span> se prefiere a la adrenalina (${p(66)}-67).`,
         nota: `<b>Nota de fuentes.</b> El ≥65 mmHg habitual del shock es del cap. 14 (${p(67)}); aquí el libro propone ≥75 «como ejemplo». Son dos objetivos de dos contextos: no se elige ganador.` },
       { id: 'prp-g7', corto: 'el calendario del pronóstico', tipo: 'destapa', cuantas: 'son tres momentos', fuente: 'mc-tabla-21-5 · mc-pron-1',
         enunciado: 'Un comatoso tras el RCE. ¿Qué hallazgos clave de la Tabla 21.5 se miran, y cuándo?',
@@ -83,7 +83,7 @@ export const MAYEUTICA_PARO_2 = {
         opciones: [
           { t: 'Subir la noradrenalina hasta PAM ≥75 mmHg', ok: true },
           { t: 'Cambiar a adrenalina, que ya se usaba en la parada', porque: `La noradrenalina se prefiere: menos muertes cardiovasculares y mejor resultado neurológico (${p(67)}).` },
-          { t: 'Nada: está por encima de 65, que es el objetivo del shock', porque: `Para estos pacientes el libro propone una PAM más alta que la habitual (≥75) en las primeras horas (${p(67)}). Quedarte en 66 deja un cerebro con autorregulación dañada con menos presión de la que necesita.` }],
+          { t: 'Nada: está por encima de 65, que es el objetivo del shock', porque: `Para estos pacientes el libro considera razonable una PAM más alta que la habitual (≥75, «e.g.») en las primeras horas (${p(67)}). Quedarte en 66 deja un cerebro con autorregulación dañada con menos presión de la que necesita.` }],
         explicacion: `Ejemplo del libro: PAM <span class="hl">≥75 mmHg</span> en las primeras horas (${p(67)}).` },
       { id: 'prp-e3', corto: 'glucemia 110', tipo: 'test', fuente: 'mc-tabla-21-4',
         enunciado: 'Tras el RCE, glucemia de 110 mg/dL con insulina. La enfermera dice «bien controlada». ¿Lo es?',
@@ -103,15 +103,15 @@ export const MAYEUTICA_PARO_2 = {
         enunciado: 'Un comatoso tras el RCE responde al dolor con postura de descerebración. ¿Qué valor tiene?',
         opciones: [
           { t: 'Predice con alto grado de certeza un mal resultado', porque: `Contra lo que se cree, la respuesta extensora anómala al dolor no es muy predictiva de mala recuperación neurológica (${p(68)}). Retirar medidas por ella sería un error.` },
-          { t: 'Solo predice mal resultado si se acompaña de mioclonías aisladas', porque: `Las mioclonías aisladas son desfavorables pero no descartan la recuperación (${p(68)}); no convierten la descerebración en un predictor.` },
+          { t: 'Solo predice mal resultado si se acompaña de mioclonías precoces', porque: `Las mioclonías precoces son desfavorables pero no descartan la recuperación (${p(68)}); no convierten la descerebración en un predictor.` },
           { t: 'No es muy predictiva de mal resultado, al contrario de la percepción popular', ok: true }],
         explicacion: `La postura de descerebración <span class="hl">no es muy predictiva</span> de mala recuperación (${p(68)}).` },
       { id: 'prp-e6', corto: 'los apuntes del pronóstico', tipo: 'error', fuente: 'mc-tabla-21-5 · mc-despertar · mc-pronostico-texto',
         enunciado: 'Apuntes de un compañero sobre el pronóstico neurológico. Hay dos errores: encuéntralos.',
         frases: [
           { t: 'El estatus mioclónico, en cualquier momento tras el RCE, predice mal resultado con casi total certeza.' },
-          { t: 'Las mioclonías aisladas precoces son desfavorables, pero no excluyen la recuperación.' },
-          { t: 'Si a las 72 h no despierta, el pronóstico es malo: el 80-95 % ya está despierto.', mal: true, c: `Del 80-95 % que recupera la consciencia, la mayoría despierta en 72 h, pero puede tardar <span class="hl">5 días o más</span>; el tiempo hasta despertar es mal predictor en la primera semana, sobre todo con sedación intensa (${p(68)}).` },
+          { t: 'Las mioclonías precoces son desfavorables, pero no excluyen la recuperación.' },
+          { t: 'Si a las 72 h no despierta, el pronóstico es malo: el 80-95 % ya está despierto.', mal: true, c: `Entre los pacientes que recuperan la consciencia, el 80-95 % ya está despierto a las 72 h, pero el resto puede tardar <span class="hl">5 días o más</span>; el tiempo hasta despertar es mal predictor en la primera semana, sobre todo con sedación intensa (${p(68)}).` },
           { t: 'La ausencia bilateral del pico N20 es un predictor de mal resultado.' },
           { t: 'La TC con edema cerebral difuso predice peor resultado si se hace el día 1.', mal: true, c: `Predice peor resultado <span class="hl">sobre todo si está presente el día 2 o después</span> (${p(68)}).` }],
         explicacion: 'Dos errores: dar por malo al que no despierta a las 72 h y situar el edema de la TC el día 1.' },
@@ -128,13 +128,13 @@ export const MAYEUTICA_PARO_2 = {
         paciente: { Edad: '49 años, varón', Peso: '84 kg', Antecedentes: 'sin cardiopatía conocida', Motivo: 'RCE a las 03:59 tras una FV en planta (día 3 de una pancreatitis aguda)' },
         pasos: [
           { momento: 'Hora 1 · UCI', datos: { Estado: 'comatoso', Constantes: 'PA 84/50 (PAM 61) · FC 110 sinusal', Oxigenación: 'SaO₂ 97 % con FiO₂ 1,0', Temperatura: '35,4 °C (vejiga)', Analítica: 'glucemia 232 mg/dL · lactato 6,0 mmol/L', Ecografía: 'FEVI 30 % · IC 1,9 L/min/m² · PCP 20 mmHg' }, nuevo: ['Estado', 'Constantes', 'Oxigenación', 'Temperatura', 'Analítica', 'Ecografía'],
-            pregunta: { id: 'c5c-1', tipo: 'test', fuente: 'mc-tabla-21-4', modeloFuturo: posparo,
+            pregunta: { id: 'c5c-1', tipo: 'test', fuente: 'mc-tabla-21-4', modeloVivo: posparo,
               enunciado: 'Leandro llega comatoso a UCI con esas cifras. ¿Qué haces con el oxígeno y con la presión?',
               opciones: [
                 { t: 'Bajar la FiO₂ hasta SaO₂ 80 % para limitar al máximo las especies reactivas de oxígeno', porque: `El umbral es SaO₂ <90 %: por debajo habría hipoxemia (${p(66)}). Dejarlo en 80 % añade isquemia a un cerebro ya lesionado.` },
                 { t: 'Mantener FiO₂ 1,0 por seguridad y subir adrenalina hasta PAM ≥65 mmHg', porque: `La hiperoxia agrava la lesión neurológica: el O₂ es solo para SaO₂ <90 % (${p(66)}); la noradrenalina se prefiere a la adrenalina (${p(67)}) y el objetivo es más alto que 65 (${p(67)}). Con ese plan, Leandro recibiría más O₂ y menos presión de los necesarios.` },
-                { t: 'Bajar la FiO₂ hasta SaO₂ ≥90 % y subir noradrenalina hasta PAM ≥75 mmHg', ok: true }],
-              explicacion: `O₂ solo si SaO₂ <90 % (hiperoxia agrava la lesión neurológica) y PAM <span class="hl">≥75 mmHg</span> con <span class="hl">noradrenalina</span> en las primeras horas (${p(66)}-67).` } },
+                { t: 'Dar O₂ solo si SaO₂ <90 % y considerar noradrenalina con PAM ≥75 mmHg', ok: true }],
+              explicacion: `O₂ solo si SaO₂ <90 % (hiperoxia agrava la lesión neurológica) y PAM <span class="hl">≥75 mmHg</span> como consideración razonable («e.g.»), con <span class="hl">noradrenalina</span> preferida, en las primeras horas (${p(66)}-67).` } },
           { momento: 'Hora 1 · el plan del R1', datos: { Plan: 'la hoja del residente de guardia' }, nuevo: ['Plan'],
             pregunta: { id: 'c5c-2', tipo: 'error', fuente: 'mc-tabla-21-3 · mc-tabla-21-4',
               enunciado: 'El R1 escribe el plan de las primeras horas de Leandro. Hay dos errores: encuéntralos.',
@@ -146,7 +146,7 @@ export const MAYEUTICA_PARO_2 = {
                 { t: 'Como vasopresor de elección, adrenalina en infusión, porque ya la usamos en la parada.', mal: true, c: `La <span class="hl">noradrenalina</span> se asocia a menos muertes cardiovasculares y mejor resultado neurológico que la adrenalina (${p(67)}).` }],
               explicacion: 'Dos errores: la FiO₂ innecesariamente alta y la adrenalina como vasopresor.' } },
           { momento: 'Hora 30 · fiebre', datos: { Temperatura: '38,0 °C (vejiga)', Constantes: 'PA 104/62 (PAM 76) con noradrenalina 5 µg/min', Ecografía: 'FEVI 45 % · IC 2,4 L/min/m² · PCP 15 mmHg' }, nuevo: ['Temperatura', 'Constantes', 'Ecografía'], calculadora: { ir: 'mc-ttm-temp', nombre: 'Control de la temperatura' },
-            pregunta: { id: 'c5c-3', tipo: 'test', fuente: 'mc-tabla-21-3 · mc-ttm-temp', modeloFuturo: posparo,
+            pregunta: { id: 'c5c-3', tipo: 'test', fuente: 'mc-tabla-21-3 · mc-ttm-temp', modeloVivo: posparo,
               enunciado: 'Abre la calculadora si quieres. La temperatura de Leandro sube a 38,0 °C. La enfermera dice «con 37,6 no habríamos usado el enfriador». ¿Qué toca ahora?',
               opciones: [
                 { t: 'Enfriamiento activo de superficie, objetivo 37,5 °C, hasta 72 h desde el RCE', ok: true },
@@ -154,19 +154,19 @@ export const MAYEUTICA_PARO_2 = {
                 { t: 'Hipotermia inducida a 33 °C, porque la guía la deja como opción', porque: `La guía actual es normotérmica (${p(66)}). La opción de 33 °C queda sin resolver y añade hipotensión y escalofríos.` }],
               explicacion: `Por encima de <span class="hl-rojo">37,7 °C</span>, enfriamiento activo con objetivo 37,5 °C; el de superficie es aceptable, hasta 72 h desde el RCE o hasta que despierte (Tabla 21.3, ${p(65)}-66). Con 37,6 °C: paracetamol y ambiente.` } },
           { momento: 'Hora 30 · la familia', datos: { Pregunta: 'la mujer de Leandro: «ayer estaba en shock y hoy mejora; ¿se ha curado el corazón?»' }, nuevo: ['Pregunta'],
-            pregunta: { id: 'c5c-4', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-posparo', modeloFuturo: posparo,
+            pregunta: { id: 'c5c-4', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-posparo', modeloVivo: posparo,
               enunciado: 'Le explicas a la familia por qué el corazón de Leandro está mejor. ¿Qué le cuentas?',
               puntos: [
                 `Fue un <span class="hl">aturdimiento</span> del corazón, una forma de lesión de reperfusión (${p(65)}).`,
                 `Puede <span class="hl-rojo">progresar a shock cardiogénico</span> en las primeras horas, por eso se vigila la presión (${p(65)}).`,
                 `Suele <span class="hl-verde">resolverse en unas 72 h</span> (${p(65)}).`],
               explicacion: `Disfunción sistólica y diastólica por aturdimiento, que suele resolverse en 72 h (${p(65)}). Si siguiera mal a las 72 h, el libro no dice más.` } },
-          { momento: 'Día 2 · hora 40 · mioclonías', datos: { Exploración: 'mioclonías breves y aisladas', Pregunta: 'un compañero: «esto es un estatus mioclónico: hablad con la familia»' }, nuevo: ['Exploración', 'Pregunta'],
+          { momento: 'Día 2 · hora 40 · mioclonías', datos: { Exploración: 'mioclonías precoces breves', Pregunta: 'un compañero: «esto es un estatus mioclónico: hablad con la familia»' }, nuevo: ['Exploración', 'Pregunta'],
             pregunta: { id: 'c5c-5', tipo: 'test', fuente: 'mc-pronostico-texto · mc-tabla-21-5',
               enunciado: 'Es el giro. ¿Qué le respondes al compañero?',
               opciones: [
                 { t: 'Tiene razón: las mioclonías precoces predicen mal resultado con certeza y hay que avisar a la familia', porque: `Las mioclonías precoces son desfavorables, pero no eliminan la posibilidad de recuperación (${p(68)}). Hablar de pronóstico fatal ahora sería prematuro.` },
-                { t: 'Las mioclonías aisladas no excluyen la recuperación; el estatus sí, y hoy valen el oculocefálico y el nauseoso', ok: true },
+                { t: 'Las mioclonías precoces no excluyen la recuperación; el estatus mioclónico sí, y hoy valen el oculocefálico y el nauseoso', ok: true },
                 { t: 'Hay que mirar ya las pupilas y las córneas: si están abolidas, es definitivo', porque: `Pupilas y córneas valen el día 4 (${p(67)}). Hoy (día 2) solo valen los reflejos oculocefálico y nauseoso.` }],
               explicacion: `Las mioclonías precoces son <span class="hl-rojo">desfavorables, pero no excluyen la recuperación</span>; el <span class="hl">estatus mioclónico</span> sí predice mal resultado con casi 100 % de certeza (${p(68)}). Día 2: reflejos oculocefálico y nauseoso; día 4: pupilas y córneas (${p(67)}).` } },
           { momento: 'Día 4 · despierta', datos: { Estado: 'abre los ojos y obedece órdenes', Constantes: 'PA 118/70 (PAM 86) sin noradrenalina', Ecografía: 'FEVI 55 % · IC 2,9 L/min/m² · PCP 10 mmHg' }, nuevo: ['Estado', 'Constantes', 'Ecografía'],
@@ -174,15 +174,15 @@ export const MAYEUTICA_PARO_2 = {
               enunciado: 'Leandro despierta el día 4, pasadas las 72 h. ¿Qué enseña?',
               opciones: [
                 { t: 'Que el despertar puede tardar 5 días o más, y el tiempo hasta despertar es un mal predictor en la primera semana', ok: true },
-                { t: 'Que lo normal es despertar a las 72 h: pasado ese tiempo, el despertar ya es excepcional y no hay que esperar más', porque: `Del 80-95 % que despierta, la mayoría lo hace a las 72 h, pero puede tardar 5 días o más (${p(68)}). Retirar medidas a las 72 h dejaría sin oportunidad a quien tarda más.` },
+                { t: 'Que lo normal es despertar a las 72 h: pasado ese tiempo, el despertar ya es excepcional y no hay que esperar más', porque: `Entre los que recuperan la consciencia, el 80-95 % ya está despierto a las 72 h, pero algunos tardan 5 días o más (${p(68)}). Retirar medidas a las 72 h dejaría sin oportunidad a quien tarda más.` },
                 { t: 'Que despertó porque se le enfrió a 33 °C', porque: `El caso lleva normotermia, ≤37,5 °C, que resultó equivalente a 33 °C (${p(65)}).` }],
               explicacion: `El 80-95 % de los que recuperan la consciencia está despierto a las 72 h, pero puede tardar <span class="hl">5 días o incluso más</span>; el tiempo hasta despertar es mal predictor en la primera semana (${p(68)}).` } },
         ],
         lleva: [
           'Tras el RCE: O₂ solo para SaO₂ <90 %, PAM ≥75 con noradrenalina y glucemia 145-180 sin dextrosa.',
           'Temperatura: no recalentar de 32-36 °C; por encima de 37,7 °C, enfriamiento activo con objetivo 37,5 °C hasta 72 h o hasta que despierte.',
-          'Mioclonías aisladas no son un estatus; pupilas y córneas, el día 4. Espera: despertar puede tardar 5 días o más.'],
-        volver: { nombre: 'Predicción de la recuperación neurológica', ancla: 'mc-pronostico-texto', modeloVivo: rv('rce', '⚡ El RCE de Leandro: ETCO₂ 42') } },
+          'Mioclonías precoces no son un estatus mioclónico; pupilas y córneas, el día 4. Espera: despertar puede tardar 5 días o más.'],
+        volver: { nombre: 'Predicción de la recuperación neurológica', ancla: 'mc-pronostico-texto', modeloVivo: posparo } },
     ],
     profundizar: [
       { id: 'mc-pronostico-texto', titulo: 'EEG isoeléctrico y TC en el pronóstico (texto del capítulo)' },

@@ -443,6 +443,7 @@ function relojParada(dt) {
 /* ---------- Los topes de los mandos (topes.js): avisos ámbar y sellos en el monitor; los botones se apagan ---------- */
 const tope = crearTope({ monitor: $('rtv-monitor'), dock: $('dock'), cita });
 const topeVisto = {}; let topeFrase = null;
+$('rtv-monitor').addEventListener('click', (e) => { const sl = e.target.closest('.tope-sello'); if (!sl || e.target.closest('button, a')) return; if (sl.dataset.abierto) delete sl.dataset.abierto; else sl.dataset.abierto = '1'; sl.classList.toggle('tope-compacto', !sl.dataset.abierto); });
 function aplicarTopes(forzar) {
   const quitarTodo = () => { for (const { clave } of tope.activos()) { tope.quitar(clave); delete topeVisto[clave]; } topeFrase = null; };
   if (!mo || pend()) { quitarTodo(); return; }
@@ -451,6 +452,7 @@ function aplicarTopes(forzar) {
   let nuevo = false;
   for (const [k, t] of Object.entries(r.T)) { const f = JSON.stringify([t.nivel, t.titulo, t.texto]); if (!forzar && topeVisto[k] === f) continue; if (t.nivel === 'sello' && k !== 'sinusal' && topeVisto[k] !== f) nuevo = true; topeVisto[k] = f; tope.poner(k, t); }
   if (nuevo) { S.mensaje = null; pintarFrase(); }   // un sello nuevo manda sobre la frase vieja
+  for (const sl of $('rtv-monitor').querySelectorAll('.tope-sello')) sl.classList.toggle('tope-compacto', !sl.dataset.abierto);   // el sello nace plegado (solo el título): no tapa las cifras; al tocarlo se abre
   for (const b of document.querySelectorAll('#rtv-dock-panel [data-acc]')) {
     const a = b.dataset.acc, sm = b.querySelector('small');
     if (sm) { if (b.dataset.small0 == null) b.dataset.small0 = sm.textContent; sm.textContent = a in r.rot ? r.rot[a] : b.dataset.small0; }
@@ -479,7 +481,8 @@ function pintarFrase() {
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
-  if (p && !p.rce && p.comp) extra = p.insufl === 30 && adrenalinaActiva(simT) ? ' Con 30 insuflaciones/min la PPC y la ETCO₂ bajan, y la adrenalina no lo compensa.' : p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
+  if (p && !p.rce && p.comp && p.insufl !== 30 && p.adrenalina.length) [t, o] = ['Adrenalina: la presión de perfusión coronaria sube un 30 % (22 → 29 mmHg en el modelo) y el efecto dura al menos 3 min, el intervalo entre dosis.', 'ficha · p. 62 (el +30 % es del texto; la Fig. 21.3 llega a ~33)'];
+  if (p && !p.rce && p.comp) extra = p.insufl === 30 && adrenalinaActiva(simT) ? ' Con 30 insuflaciones/min la PPC y la ETCO₂ bajan; que la adrenalina no lo compense es ilustrativo (la fuente no lo dice).' : p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
   if (mo && ultLect && ultLect.fc == null && !ultLect.caos && S.sinusal && !(p && !p.rce)) [t, o] = ['Pausa tras el choque: el sinusal tarda un latido en arrancar.', 'fisiología general'];
   if (!S.mensaje && topeFrase) { t = topeFrase[0]; o = topeFrase[1]; extra = ''; }
   $('frase-txt').innerHTML = S.mensaje ? `${S.mensaje}` : `${t} ${org(o)}${extra}`;
