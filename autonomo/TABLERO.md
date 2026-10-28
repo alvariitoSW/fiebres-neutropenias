@@ -926,7 +926,9 @@ Consejo de Ministros, `autonomo/consejo/2026-10-28.md`)** · tipo: bloque (M5)
   atrás). Cada una: 1 ficha, 1 caso completo, ≤6 pantallas a 390 px, con A/B/C al final.
 - Se mide: rúbrica §7-§8 con 3 criterios nuevos (predecir antes de ver; explicar el porqué; error con consecuencia y
   después enseñanza), meta 8,75; y la prueba de 3 días con el usuario (dos fichas gemelas, 6 preguntas de transferencia).
-- Lo que NO quiero: cifras sin página; texto libre en las respuestas (solo los tres formatos de §8); guardar nada nuevo
+- Repaso espaciado: el usuario permite (28/10) guardar la **fecha del último intento** en el registro de aciertos y fallos
+  que ya existe (`CLAUDE.md` §2); nada más.
+- Lo que NO quiero: cifras sin página; texto libre en las respuestas (solo los tres formatos de §8); guardar nada más
   en las maquetas; tutor que conversa; otra librería; copiar webs ajenas.
 - Gobierno: Hacienda revisa cada fase (pasa de 2 M), sin recortar la calidad de las maquetas. ≈6 M, tope 8 M.
 - Hecho: página para el móvil (Artifact) con el diagnóstico, la evidencia, las 3 maquetas y la propuesta de rúbrica +

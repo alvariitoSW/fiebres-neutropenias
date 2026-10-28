@@ -315,7 +315,6 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Repaso espaciado (Consejo, 28/10)**: ¿guardar la fecha del último intento dentro del registro que ya guarda la Mayéutica, o nada nuevo?
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
@@ -581,6 +580,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-28 · **Repaso espaciado**: decidiste guardar la fecha del último intento en el mismo registro de aciertos y fallos (en tu móvil; `CLAUDE.md` §2). **2.º Consejo**: encargo de Educación pionera (3 maquetas, ≈6 M; 30/10 y 02/11; parada el 04/11).
 - 2026-10-28 · **Primer Consejo de Ministros** (acta `autonomo/consejo/2026-10-28.md`): resueltas las 5 dudas de Marino, el ETE se queda como fuente de lo que ya está en el tablero, informe de la eco recomendado y pestaña «Mayéutica» en toda la app (29/10). ≈0,5 M.
 - 2026-10-28 · **Consejo de Ministros y Ministerio de Educación** (B-037, B-038, en main): REGLAS §4.12 y skill `/mayeutica`.
 - 2026-10-28 · **Reforma del gobierno** (B-036, en main): `/plan-socialista` presenta presupuesto y rinde cuentas,
