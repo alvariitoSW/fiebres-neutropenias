@@ -484,6 +484,10 @@ El resto del tablero sigue `aparcada`.
 - **Corazón eléctrico, visto en el grupo 1 del `b3`** (28/10): el estado `tv` marca «Pulso 0» con ART 102/79; el enlace
   `ritmoVivo` no puede abrir la FA con «Llenado malo» ya puesto; `mayeutica-fichas.mjs` con 1-2 fichas da 2 rojos
   falsos; `--modelo mayeutica-fichas` tarda ~25 min por ficha.
+- **Shock vivo, posparo de Virginia, visto en el grupo 2 del `b3`** (28/10): la PVC se queda en 2-4 mmHg y el plan
+  pedía ≈12 (`autonomo/bloques/b3/plan-paso4-g2.md`). El modelo de la circulación solo sube la PVC si falla el
+  ventrículo derecho; al endurecerlo caen la PCP y el IC. Hoy el aturdimiento es solo del izquierdo y no se ha tapado
+  (REGLAS §1.11). Para que sea de los dos ventrículos (Marino cap. 21, p. 64) hay que cambiar ese modelo.
 
 - **Eco, lo que dejó la parada 3 de `eco-mega`** (27/10; detalle en `autonomo/bloques/eco-mega/profesor-p3.md` y
   `p3-*.md`). Coste medio, para una parada 4 o un arreglo: (1) que el pliegue de la AD/VD del taponamiento se vea a
