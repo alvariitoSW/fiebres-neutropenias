@@ -89,11 +89,26 @@ async function correr(ANCHO, REDUCIDO) {
   ok(await p.evaluate(() => document.querySelector('#rtv-dock-panel [data-acc="cv-tv"]')?.disabled), 'TV: con 3 choques, la cardioversión se apaga («nunca 360 J»)');
   await R('ponerEstado', 'tam', {}); await pestana('tratar'); await acc('vera-tam', 4); await espera(300); await topeSello('verapamilo ×4 (20 mg)', null); await foto('03-sello-verapamilo');
   await R('ponerEstado', 'tam', {}); await pestana('tratar'); await acc('mg-tam', 2); ok(await p.evaluate(() => document.querySelector('#rtv-dock-panel [data-acc="mg-tam"]')?.disabled), 'magnesio TAM: una pauta y se apaga');
-  await R('ponerEstado', 'fv', { }); await pestana('tratar'); await acc('comp'); await acc('adre', 3); await acc('amio-pcr', 3); await espera(200);
+  await R('ponerEstado', 'fv', { }); await pestana('tratar'); await acc('comp'); await acc('adre'); await acc('amio-pcr', 3); await espera(200);
   ok(await p.evaluate(() => document.querySelector('#rtv-dock-panel [data-acc="amio-pcr"]')?.disabled), 'parada: amiodarona 300 + 150 y basta');
   await p.evaluate(() => document.querySelector('#rtv-dock-panel [data-esc="refractaria"]')?.click()); await acc('choque', 3); await espera(300); await topeSello('FV refractaria tras 3 choques', null);
   await R('avanzarHasta', (await R('simT')) + 200); await R('pintarCifras'); await R('pintarFrase'); await espera(300); await topeSello('parada a los 30 min sin pulso', null); await foto('04-sello-30min');
   ok((await desborde()) <= 0, 'sin desborde con los sellos');
+  // 5b. Las claves de la RCP: «fv:rcp», «fv:rcp-adre», «fv:rcp-insufl» abren la FV con compresiones y muestran su PPC y ETCO₂
+  for (const [clave, ppc, et, guiaK] of [['fv:rcp', 22, 20, 'rcp'], ['fv:rcp-adre', 29, 20, 'rcpAdre'], ['fv:rcp-insufl', 18, 13, 'rcpInsufl']]) {
+    await abrir(clave); await espera(500); await R('avanzarHasta', (await R('simT')) + 1.5); await R('pintarCifras'); await R('pintarFrase'); await espera(200);
+    const c = await cifras(), pp = c.find(x => /^PPC/.test(x)) || '', ec = c.find(x => /^ETCO/.test(x)) || '';
+    ok(new RegExp(`\\b${ppc}\\b`).test(pp) && new RegExp(`\\b${et}\\b`).test(ec), `${clave}: PPC ${ppc} y ETCO₂ ${et} en el monitor (${pp} | ${ec})`);
+    ok(await p.evaluate(() => window.__ritmo.S.clave === 'fv' && window.__ritmo.S.parada.comp), `${clave}: FV con compresiones en marcha`);
+    ok(!!GUIAS[guiaK] && /rcp/i.test(guiaK), `${clave}: su guía existe (${guiaK})`);
+    ok((await desborde()) <= 0, `${clave}: sin desborde`); await foto('rcp-' + clave.replace(/\W/g, '-'));
+  }
+  await abrir('fv:rcp-adre'); await pestana('tratar'); await R('avanzarHasta', (await R('simT')) + 1);
+  await acc('adre'); await espera(200); await R('pintarCifras');
+  ok(/\b29\b/.test((await cifras()).find(x => /^PPC/.test(x)) || ''), 'adrenalina repetida antes de 3 min: la PPC se queda en 29 (no sube más)');
+  await topeSello('adrenalina repetida antes de 3 min', null);
+  ok(/fuera de pauta/i.test((await sellos()).map(x => x.txt).join(' ')), 'sello «fuera de pauta» a la vista');
+  await abrir('fv:rcp-insufl'); await espera(300); await topeSello('30 insuflaciones/min', null);
   // 6. Las explicaciones guiadas: cada paso señala el dibujo y su cita lleva a un párrafo que existe
   let pasosGuia = 0, malasCitas = [];
   for (const k of Object.keys(GUIAS)) for (const [i, paso] of GUIAS[k].pasos.entries()) { pasosGuia++; const c = paso.c; if (!c || !(await p.evaluate(id => !!document.getElementById(id), c.id))) malasCitas.push(`${k}#${i}:${c && c.id}`); }
