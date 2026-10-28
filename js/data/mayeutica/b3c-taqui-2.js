@@ -50,7 +50,7 @@ export const MAYEUTICA_TAQUI_2 = {
         opciones: [
           { t: 'Bloquea el factor Xa ya circulante, como un ACOD; el INR mide ese bloqueo', porque: `Eso hacen los anticoagulantes orales directos de la Tabla 19.3 (${p(27)}), que se dan a dosis fija sin controlar la hemostasia. La warfarina actúa antes: frena la síntesis de los factores dependientes de vitamina K (${p(26)}), y por eso se ajusta con el INR.` },
           { t: 'Frena la síntesis de II, VII, IX y X (vitamina K); ventana estrecha: se vigila con el INR', ok: true },
-          { t: 'Inhibe la trombina ya formada, como la heparina, y el INR mide ese efecto directo', porque: `Actúa antes, frenando la síntesis de los factores dependientes de vitamina K (${p(26)}); no inhibe la trombina ya formada. Pensar que lo hace te llevaría a esperar un efecto inmediato en vez del retraso propio de bajar los factores.` }],
+          { t: 'Inhibe la trombina ya formada, como la heparina, y el INR mide ese efecto directo', porque: `Actúa antes, frenando la síntesis de los factores dependientes de vitamina K (${p(26)}); no inhibe la trombina ya formada. Pensar que lo hace te llevaría a esperar un efecto inmediato en vez del retraso propio de bajar los factores (<i>deducción; la fuente no lo dice</i>).` }],
         explicacion: `La warfarina <span class="hl-azul">inhibe la síntesis de los factores dependientes de vitamina K (II, VII, IX y X)</span> y reduce el ictus hasta un 65 %. Su <span class="hl-rojo">ventana terapéutica es estrecha</span> (riesgo de anticoagulación insuficiente o excesiva), así que exige controles rutinarios con el INR (${p(26)}); la dosis habitual de inicio es 5 mg/día, ajustada a un INR de 2-3 (${p(27)}).` },
       { id: 'ccv-g6', corto: 'WPW con FA', tipo: 'test', fuente: 'mc-wpw', modeloVivo: ritmo('wpw', 'El WPW y su FA en el corazón eléctrico (pulsa «FA» en su panel)'), origen: 'ficha; la frecuencia de 207 lpm es la del modelo (ilustrativo)',
         enunciado: 'Paciente con ondas delta que entra en FA a 207 lpm con QRS ancho. Quieres bajar la frecuencia: ¿qué pasa si bloqueas el nodo AV con diltiazem, betabloqueante o digoxina?',
@@ -142,7 +142,7 @@ export const MAYEUTICA_TAQUI_2 = {
               enunciado: 'Abre la calculadora si quieres. ¿Cuántos puntos tiene Nieves y qué indica la tabla en una mujer?',
               opciones: [
                 { t: '3 puntos: es la cifra mínima para una indicación definida en la mujer', porque: `Faltan puntos: HTA 1 + insuficiencia cardíaca 1 + edad >75 años 2 + sexo femenino 1 suman 5 (${p(26)}). Quedarte en 3 subestima su riesgo, aunque la conducta sea la misma.` },
-                { t: '4 puntos: la edad >75 años solo suma 1', porque: `La edad >75 años suma 2; solo la franja de 65-74 suma 1 (${p(26)}). Con 4 pensarías que el sexo femenino no cuenta.` },
+                { t: '4 puntos: la edad >75 años solo suma 1', porque: `La edad >75 años suma 2; solo la franja de 65-74 suma 1 (${p(26)}). Con ese error la suma da 1 + 1 + 1 + 1 = 4 y se subestima su riesgo.` },
                 { t: '5 puntos: indicación definida de anticoagular', ok: true }],
               explicacion: `Tabla 19.2 (${p(26)}): insuficiencia cardíaca 1 + HTA 1 + edad >75 años 2 + sexo femenino 1 = <span class="hl-verde">5</span>. En la mujer es definida con ≥3 (considerar con 2). Riesgo de ictus al menos 5 veces mayor (${p(26)}).` } },
           { momento: 'Día 4 · 11:00', datos: { Analítica: 'plaquetas 42.000/μL', Pregunta: 'el adjunto: ¿empiezas el ACOD?' }, nuevo: ['Analítica', 'Pregunta'],
@@ -150,8 +150,8 @@ export const MAYEUTICA_TAQUI_2 = {
               enunciado: 'La analítica trae plaquetas de 42.000/μL. Con una puntuación de 5, ¿qué haces con la anticoagulación?',
               opciones: [
                 { t: 'La empiezo ya: con 5 puntos la indicación es definida y manda sobre la analítica', porque: `Las plaquetas por debajo de 50.000 son una contraindicación (${p(26)}). La puntuación dice a quién conviene anticoagular, no sobrepasa una contraindicación; con 42.000 se arriesga un sangrado.` },
-                { t: 'No la empiezo mientras sigan por debajo de 50.000: es una contraindicación', ok: true },
-                { t: 'La empiezo con la mitad de la dosis para compensar el riesgo', porque: `La ficha reduce la dosis de los ACOD por función renal (${p(27)}), no por plaquetas; una dosis reducida no hace que la contraindicación desaparezca.` }],
+                { t: 'No la empiezo: la cifra de plaquetas es una contraindicación', ok: true },
+                { t: 'La empiezo con la mitad de la dosis para compensar el riesgo', porque: `La Tabla 19.3 reduce la dosis por ClCr, edad ≥80 años, peso ≤60 kg, creatinina ≥1,5 mg/dL, eritromicina o ketoconazol (${p(27)}), no por plaquetas; una dosis reducida no hace que la contraindicación desaparezca.` }],
               explicacion: `Contraindican: hemorragia activa, hemorragia intracerebral previa, tumor intracraneal, sangrado recurrente de una lesión presente y <span class="hl-rojo">plaquetas <50.000</span> (${p(26)}).`,
               nota: `<b>La fuente no lo dice.</b> El libro no da la causa de esas plaquetas ni cuándo reiniciar: «reevaluarla cuando suban» es una deducción de que la contraindicación depende de la cifra (${p(26)}).` } },
           { momento: 'Día 4 · la nota del R1', datos: { 'Nota del R1': 'resumen del episodio' }, nuevo: ['Nota del R1'],
@@ -161,8 +161,9 @@ export const MAYEUTICA_TAQUI_2 = {
                 { t: 'Cardioversión sincronizada con 100 J bifásicos por inestabilidad hemodinámica.' },
                 { t: 'No se anticoaguló antes del choque porque la FA llevaba menos de 48 h.' },
                 { t: 'Con 5 puntos y plaquetas de 42.000, se anticoagula igual: la puntuación es lo que cuenta.', mal: true, c: `Las plaquetas <50.000 son una <span class="hl-rojo">contraindicación</span> (${p(26)}).` },
-                { t: 'Cuando se anticoagule, un ACOD a dosis fija vale: no se ajusta por la función renal.', mal: true, c: `Los ACOD <span class="hl">se reducen con ClCr <30</span> y se evitan con ClCr <15 (${p(27)}); Nieves tiene creatinina 1,9.` }],
-              explicacion: 'Dos errores: anticoagular con plaquetas <50.000 y olvidar el ajuste renal de los ACOD.' } },
+                { t: 'Cuando se anticoagule, un ACOD a dosis fija vale: no se ajusta por la función renal.', mal: true, c: `Con ClCr <30 el texto pide reducir los ACOD y se evitan con ClCr <15 (${p(27)}). Con 79 años, 62 kg, mujer y creatinina 1,9, Cockcroft-Gault da ≈ 23 mL/min ((140 − 79) × 62 / (72 × 1,9) × 0,85; fórmula de la app, no de Marino): hay que ajustar. Calcúlalo en la app.` + ' <button type="button" class="especialidad-link" data-especialidad="fisioUci" data-view="viasUrinarias" data-panel="panel-vu-tabs" data-tab="vu-monitorizacion" data-resaltar="#vu-cg-peso">Calculadora Cockcroft-Gault ↗</button>' }],
+              explicacion: 'Dos errores: anticoagular con plaquetas <50.000 y olvidar el ajuste renal de los ACOD.',
+              nota: `<b>La fuente no lo concilia.</b> El texto (${p(27)}) reduce <i>todos</i> los ACOD con ClCr <30, pero la Tabla 19.3 reduce el apixabán con 2 de 3 criterios (edad ≥80 años, peso ≤60 kg, creatinina ≥1,5 mg/dL) y Nieves cumple solo 1 (creatinina 1,9; tiene 79 años y 62 kg). Se muestran las dos y no se elige una.` } },
         ],
         lleva: [
           'La cardioversión sincronizada se reserva a la FA inestable: 100 J bifásicos, energía fija. Estable, se frena la frecuencia.',
@@ -265,9 +266,9 @@ export const MAYEUTICA_TAQUI_2 = {
         enunciado: 'La adenosina figura contraindicada en el asma. Un asmático con PSVT. ¿Qué matiza la ficha?',
         opciones: [
           { t: 'Que produce sensación de disnea, pero no broncoespasmo real', ok: true },
-          { t: 'Que provoca un broncoespasmo grave en el asmático, por lo que se prefiere otro fármaco', porque: `La ficha dice que la disnea es una sensación sin broncoespasmo real, lo que matiza esa contraindicación (${p(30)}). Negársela le deja sin el fármaco de elección tras las maniobras vagales.` },
+          { t: 'Que provoca un broncoespasmo grave en el asmático, por lo que se prefiere otro fármaco', porque: `La ficha dice que la disnea es una sensación sin broncoespasmo real, lo que matiza esa contraindicación (${p(31)}). Negársela le deja sin el fármaco de elección tras las maniobras vagales.` },
           { t: 'Que la teofilina del asmático la potencia', porque: `La teofilina hace lo contrario: bloquea sus receptores y le quita efecto (${p(30)}). Esperar un efecto exagerado de la adenosina en quien toma teofilina te llevaría a infradosificar.` }],
-        explicacion: `Contraindicaciones: asma, bloqueo AV de 2.º o 3.er grado y síndrome del seno enfermo; en el asma la <span class="hl">disnea es una sensación, no un broncoespasmo</span>. Efectos adversos: bloqueo AV o bradicardia 50 %, rubor 20 %, disnea 12 %, opresión torácica 7 % (${p(30)}).` },
+        explicacion: `Contraindicaciones: asma, bloqueo AV de 2.º o 3.er grado y síndrome del seno enfermo; en el asma la <span class="hl">disnea es una sensación, no un broncoespasmo</span> (${p(31)}). Efectos adversos: bloqueo AV o bradicardia 50 %, rubor 20 %, disnea 12 %, opresión torácica 7 % (${p(30)}).` },
       { id: 'otq-e5', corto: 'TV o aberrante', tipo: 'test', fuente: 'mc-tv-vs-svt',
         enunciado: 'En un ECG de QRS ancho regular, ¿cuáles son las dos claves que identifican la TV?',
         opciones: [
@@ -355,7 +356,7 @@ export const MAYEUTICA_TAQUI_2 = {
               enunciado: 'Aparece una torsade sostenida sin pulso. ¿Qué haces?',
               opciones: [
                 { t: 'Cardioversión sincronizada de 100 J como en la TV, y Mg 1-2 g en 15 min', porque: `La TV polimórfica sostenida sin pulso pide desfibrilación, no cardioversión sincronizada (${p(35)}). El magnesio está bien, pero con un choque mal elegido el paciente sigue sin pulso.` },
-                { t: 'Desfibrilar sin sincronizar y dar Mg 1-2 g, pero mantener el haloperidol y la claritromicina por ahora', porque: `Esos fármacos prolongan el QT y mantienen el sustrato: la ficha manda suspender los de alto riesgo y corregir K⁺ y Mg²⁺ (${p(35)}). Con ellos puestos, la torsade vuelve a salir tras el choque.` },
+                { t: 'Desfibrilar sin sincronizar y dar Mg 1-2 g, pero mantener el haloperidol y la claritromicina por ahora', porque: `Esos fármacos prolongan el QT y mantienen el sustrato: la ficha manda suspender los de alto riesgo y corregir K⁺ y Mg²⁺ (${p(35)}). Con ellos puestos, el sustrato sigue y la torsade puede volver tras el choque (<i>deducción; la fuente no lo dice</i>).` },
                 { t: 'Desfibrilar sin sincronizar, Mg 1-2 g en 15 min, corregir K⁺ y Mg²⁺ y retirar haloperidol y claritromicina', ok: true }],
               explicacion: `<span class="hl-rojo">Desfibrilación no sincronizada</span>, <span class="hl">MgSO₄ 1-2 g IV en 15 min</span> (ACLS; sin consenso de dosis) combinable con el choque, corregir la hipopotasemia y la hipomagnesemia y suspender los fármacos de alto riesgo (${p(35)}).` } },
           { momento: 'Día 5', datos: { Evolución: 'K⁺ y Mg²⁺ repuestos, fármacos retirados; QTc 0,43 s', Ritmo: 'TV polimórfica breve, QT normal' }, nuevo: ['Evolución', 'Ritmo'],

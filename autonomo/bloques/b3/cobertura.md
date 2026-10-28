@@ -481,6 +481,8 @@ corazón eléctrico (3C). Prefijos de ids libres: `cvs-` (cabecera), `rtm-` (cor
 | Joaquín | 56, varón, 84 kg | Dolor torácico: STEMI que resulta disección tipo A | C4 |
 | Leandro | 49, varón | Pancreatitis en planta: parada por FV | C5 |
 | Consuelo | 63, mujer, 142 kg, 1,60 m (ideal 52, del caso) | Día 5 de prótesis de cadera: TEP intermedio que pasa a alto riesgo | C6 |
+| Celia | 66, mujer, 58 kg; HTA, sin cardiopatía conocida | Infección urinaria con fiebre: sinusal y luego reentrada nodal (adenosina por catéter central) | C2r (ficha 15) |
+| Nieves | 79, mujer, 62 kg; HTA, IC con FEVI conservada, Cr 1,9 (ClCr ≈23 mL/min por Cockcroft-Gault) | Ingresada por infección: FA que se cardiovierte; plaquetas 42.000 | C2s (ficha 17) |
 
 Ninguno de estos nombres sale hoy en `js/`, `autonomo/bloques/` ni `autonomo/maquetas/` (comprobado con grep). No repiten
 a Andrés (62), la Sra. R. (64), Fermín (71), Rocío (67), Gonzalo (66), Inés (41) ni Salvador (47); S1 no repite la pelvis
