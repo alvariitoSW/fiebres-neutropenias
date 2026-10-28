@@ -109,7 +109,7 @@ async function recorre(ancho) {
   await p.locator('.c-dia .c-apuesta .c-op').nth(2).click(); await p.waitForTimeout(500);
   const l6 = await txt('#agv-lectura'); ok(/31\s*%/.test(l6), 'Hto 31 % el día 2: ' + l6);
   ok((await txt('.c-dia .c-apu')).includes('Lo que pasó'), 'P6: Tu apuesta | Lo que pasó');
-  await clic('.c-dia .c-b.c-prim:has-text("Ya lo pensé")'); await clic('.c-dia .c-op', 1);
+  await clic('.c-dia .c-b.c-prim:has-text("Ya lo pensé")'); await p.locator('.c-dia .c-preg:not(.c-apuesta) .c-op').nth(1).click(); await p.waitForTimeout(120);
   await foto('p5-dia2'); await desborde('p5 día 2');
   await clic('.c-b.c-prim:has-text("Siguiente: lo que te llevas")');
   // Pantalla 6
