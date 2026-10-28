@@ -28,12 +28,12 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
-| 2026-10-27 | La suite entera, una vez por fusión | propuesta |
-| 2026-10-27 | Cada constructor en su propia carpeta | propuesta |
-| 2026-10-27 | Partir por estructura antes de lanzar | propuesta |
-| 2026-10-27 | Contar las piezas en el código, no en la cobertura | propuesta |
-| 2026-10-27 | Comprobar el acceso antes de lanzar al que busca | propuesta |
-| 2026-10-27 | Petición nueva a mitad de tarea, a otra sesión | propuesta |
-| 2026-10-28 | Calibrar el motor con una rejilla, no a mano | propuesta |
-| 2026-10-28 | Suite corta para iterar, la entera al entregar | propuesta |
-| 2026-10-28 | Una cifra mala no se tapa con otro parámetro | propuesta |
+| 2026-10-27 | La suite entera, una vez por fusión | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-27 | Cada constructor en su propia carpeta | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-27 | Partir por estructura antes de lanzar | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-27 | Contar las piezas en el código, no en la cobertura | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-27 | Comprobar el acceso antes de lanzar al que busca | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-27 | Petición nueva a mitad de tarea, a otra sesión | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-28 | Calibrar el motor con una rejilla, no a mano | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-28 | Suite corta para iterar, la entera al entregar | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-28 | Una cifra mala no se tapa con otro parámetro | aprobada (28/10, REGLAS §4.6-4.11) |

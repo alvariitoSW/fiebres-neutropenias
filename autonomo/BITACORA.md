@@ -309,41 +309,6 @@ esta sección.
   auditor y profesor (≥8, meta 8,75); sin juez: «paciente posible» de cada caso (lo mira el profesor con su programa
   de prueba).
 
-### B-036 · Trabajar como un gobierno (prueba) · apuntado 2026-10-28
-- **Lo que dijiste**: «Vamos a trabajar a partir de ahora como un gobierno socialista. Yo soy el gobierno central
-  junto contigo, el ministerio del interior básicamente es /plan-socialista […] tiene un gasto que lo tiene que
-  justificar ante el gobierno mayor (yo) y el ministerio de hacienda que es la skill de /ahorro […] tiene que estudiar
-  qué se puede ahorrar de ese plan […] /bitacora es el ministerio de transporte que dirige a dónde va el gobierno».
-- **Cómo lo entiendo** (supongo; es una prueba, se puede deshacer):
-  - **Gobierno central**: tú (presidente) y yo, esta sesión. Aprobáis los **presupuestos** (cuánto se gasta en cada
-    bloque) y las paradas. Nadie más aprueba nada.
-  - **Interior = `/plan-socialista`**: antes de gastar, presenta su **presupuesto de la tarea** (qué hará, qué agente y
-    qué modelo en cada pieza, cuántos pasos y millones, en ≤15 líneas). Al acabar, **rinde cuentas**: gastado frente a
-    presupuestado y por qué.
-  - **Hacienda = `/ahorro`**: hoy solo mira lo ya gastado. Cambio: también **revisa el presupuesto antes** (una pasada
-    barata, sonnet ~10 pasos / 0,15 M) y propone recortes (modelo más barato, pieza que ya existe, prueba corta). Lo
-    que recorta se aplica solo si no baja la calidad (8,75 y fidelidad no se negocian).
-  - **Transportes = `/bitacora`**: el rumbo, la cola y el calendario; el informe diario de las 13:43 y 21:43 es el
-    «Consejo de Ministros» por escrito.
-  - **Exteriores = `/radar`** (lo que llega de fuera: webs, tuits, papers) · **Ciencia = `/ingenieria-reversa`** ·
-    **Educación = el profesor** (diseña y juzga el estudio) · **Justicia = jueces automáticos y auditor ciego**
-    (independientes: no los nombra ni los paga Interior por su cuenta).
-  - **Reglas del dinero**: (1) tú apruebas el **presupuesto de cada bloque** (p. ej. el bloque 4, 45-72 M), no cada
-    tarea; (2) dentro de él, Interior gasta sin pedir permiso; (3) si una tarea se va a pasar más de un **25 %**, para
-    y «comparece» (una línea en el chat o en el informe diario) antes de seguir; (4) Hacienda cierra cada bloque con
-    un balance y una o dos propuestas; (5) el tope de ~15 M al día sigue igual.
-- **La prueba**: con el grupo 2 del `b3-paso4` (29/10). Si sale bien, se queda para todo Marino (B-035).
-- **Choques con las reglas**: los agentes no pueden cambiar sus propias skills (REGLAS §5.1). Hay que reescribir
-  `plan-socialista`, `ahorro` y `bitacora` y añadir un apartado a REGLAS: lo haría esta sesión, con tu permiso, en un
-  commit aparte. Y añade un paso (Hacienda antes de gastar, ~0,15 M por tarea).
-- **Depende de**: tu «apruebo». Va antes de B-035 (así Marino arranca ya con presupuestos).
-- **Tamaño**: pequeña (una sesión, sin tocar la app).
-- **Dudas**: (1) ¿umbral para comparecer, 25 %?; (2) ¿apruebas por bloque o por tarea?; (3) ¿Hacienda puede recortar
-  sola o solo propone?
-- **Lista de calidad**: sin simulador · cifras: los presupuestos de la tabla del tablero · «lo que NO quiero»: más
-  paradas para ti, bajar la nota o la fidelidad · fuentes: no aplica · juez: `gasto.mjs` (gastado frente a presupuesto
-  en cada parte); sin juez automático la calidad del recorte: la mira el profesor.
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -365,6 +330,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10). **Paso 4: plan escrito, sin construir** (`autonomo/bloques/b3/plan-paso4.md`): 17 fichas en 6 grupos, 17 piezas nuevas, ≈35-40 M en 10-12 sesiones; espera tu decisión | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
@@ -425,12 +391,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Propuestas de regla de los partes del 28/10** (sin responder): (1) `jueces --ficha` corre también la forma de
-  `mayeutica-fichas` de esa ficha (el grupo 1 dio «todo verde» con dos fichas sin caso); (2) la cobertura pega el `grep`
-  de cada clave de estado que cita (5 de 12 no existían); (3) la cobertura deja 2-3 pacientes de reserva por grupo;
-  (4) en un encargo, «no se toca» lleva su razón y, si cumplirlo rompe el «paciente posible» (§1.14), manda §1.14;
-  (5) una cita que no se pudo abrir se escribe como hueco, nunca con página. Partes `2026-10-28-b3-paso4-g1.md` y
-  `2026-10-28-eco-calibra-a-s2.md`. ¿Las apruebas?
+- **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
+  de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
+  (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
+- **B-035 · Plan Marino 100 %**: espera la respuesta a sus 5 dudas (28/10).
+
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
 
@@ -446,8 +411,6 @@ El resto del tablero sigue `aparcada`.
   Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
 - **Optimizar los agentes del plan** (pedido del usuario el 19/10: más fluido, menos gasto, mejor trabajo): propuesta
   en el chat, esperando su visto bueno.
-- **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
-  Salió en R5. ¿La apruebas?
 
 - **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
   PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
@@ -576,34 +539,9 @@ El resto del tablero sigue `aparcada`.
 - **Sesiones cerradas (hecho el 27/10)**: las sesiones del plan se cierran solas y cada una deja su fila en
   `autonomo/SESIONES.md` (tarea, qué salió, informe o PR, qué te toca, parte y enlace a la sesión archivada). El
   informe «Bitácora diaria» lo lee y ya no se archiva a sí mismo.
-- **Propuestas de regla de los partes (25-27/10)**, ¿las apruebas?
-  - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
-  - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).
-  - En `/ingenieria-reversa`, probar antes el acceso a cada web; si está cerrada, pedirte abrirla (rea-eco).
-  - Una skill nueva pedida en una tarea aprobada va en la PR de esa tarea (Radar).
-  - Las vueltas de arreglo de una maqueta, con el modelo barato (eco-mega; lo mide `notas-meta`).
-  - Al pasar una maqueta a la app, probarla en la app real con toque a 390 px, al lado de la maqueta (eco-mega).
-  - Cada encargo de forma de la eco entrega una captura de cada vista junto a la eco real (eco-mega, parada 2).
-  - Dos constructores a la vez: la suite de pruebas solo con el árbol limpio o en su propia copia (eco-mega).
-  - El enlace «Ver en el móvil» lleva el commit completo, no el nombre de la rama (el 27/10 viste «No se pudo cargar
-    el simulador» por piezas viejas mezcladas).
-  - Los avisos de «medida imposible» se rotulan «control de la app» y solo cubren lo que rompe la fórmula
-    (eco-vci-retenido).
-  - Las pruebas miden la posición de una caja justo al contestar, no después de centrarla; y avisar al constructor
-    de los commits suyos ya hechos (objetivos-casos).
-  - Al pausar por límite de uso, los apuntes de los agentes se copian al repositorio (b3).
-  - ¿Guardar en `autonomo/` el script del inventario para repetirlo cada cierto tiempo? (inventario).
-- **Propuesta de regla nueva** (`topes-acidobase`, 27/10): un aviso de tope no escribe la cifra imposible, sino el
-  límite que se habría cruzado (o que el juez de topes distinga un aviso de rechazo de una cifra del paciente).
-  ¿La apruebas?
 - **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
   consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
-- **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
-  - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
-  - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
-  - «El enunciado no nombra lo que se pregunta» (7 de 28 ejercicios describían la respuesta).
-  - Ahorro: una petición nueva a mitad de tarea va a otra sesión; recortar figuras y escribir preguntas, dos encargos.
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
 
@@ -710,20 +648,20 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Ahorro · Calibrar el motor con una rejilla, no a mano** (propuesto 2026-10-28 por /ahorro) · Visto en: eco-mega F3b (~80 combinaciones a mano, 1,5 M, sin solución) y eco-calibra-a s1 (constructor «AI y venas», 72 pasos / 1,3 M frente a 60 / 1,2 M, ~20 combinaciones a mano) · Cambio: en todo encargo que recalibre parámetros del motor, el director da la rejilla (parámetros y rangos) y el constructor la corre de una vez con `herramientas/barrido.sh` + `calibra-tabla.mjs`, lee la tabla y elige; presupuesto del encargo 50 pasos / 0,9 M · Ahorro esperado: ~0,3-0,5 M por encargo de calibración.
-- **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
-- **Ahorro · Comprobar el acceso antes de lanzar al que busca** (propuesto 2026-10-27 por /ahorro) · Visto en: competencias-r (búsqueda web 109 k sin abrir nada, proxy), rea-eco y eco-vci-retenido (dominio bloqueado, escaneo girado) · Cambio: antes de lanzar un lector o investigador, el director prueba en 1 llamada que la fuente se abre (un `curl` de 1 s, o `pdftotext` de la página exacta); si no, pide el PDF al usuario en la pregunta del arranque · Ahorro esperado: 0,1-0,3 M por tarea afectada.
-- **Ahorro · Petición nueva a mitad de tarea, a otra sesión** (propuesto 2026-10-27 por /ahorro) · Visto en: pif-ecg (director 2,1 M; la ingeniería inversa entró en medio y alargó la conversación), b3 parada 2 (director 5,1 M) · Cambio: si el usuario pide algo distinto con la tarea en marcha, el director abre una sesión con `create_session` para eso y sigue con lo suyo · Ahorro esperado: 0,5-1 M de director por tarea.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.
 - (23/10) Las dos propuestas que había (pulmón con respirador e inventario de estudio) te gustaron y pasan a
   «Apuntado» como B-013 y B-014.
 
-- **Ahorro · Suite corta para iterar, la entera al entregar** (propuesto 2026-10-28 por /ahorro) · Visto en: b3-paso4 g1 (vuelta 3, 0,71 M frente a 0,4 M por relanzar jueces de 25 min) y eco-calibra-a s2 (8 constructores sonnet, 7,0 M; cada uno relanzaba la suite eco de >10 min varias veces) · Cambio: cada encargo nombra la prueba corta con la que se itera (p. ej. `paciente-doppler` + las pruebas del archivo que toca) y la suite entera se pasa una sola vez, al entregar · Ahorro esperado: ≈0,3 M por constructor que calibra (≈2 M en una tarea como eco-calibra-a).
-- **Ahorro · Una cifra mala no se tapa con otro parámetro** (propuesto 2026-10-28 por /ahorro) · Visto en: eco-mega F3 (venas a 2,5 cm², destapado por F3b, 1,5 M) y eco-calibra-a s2 (un «suelo» del VD para no salir del dibujo daba FEVD 29 % en la hemorragia; hubo que deshacerlo con otro encargo, ≈1,8 M entre los dos) · Cambio: en la lista del constructor, antes de entregar, «¿mi arreglo empeora otra cifra de la tabla de la forma (FE, TAPSE, PVC)?»; si sí, para e informa en vez de entregar · Ahorro esperado: una vuelta de arreglo (≈0,4-1,5 M) cada vez que pase.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-28 · **Reforma del gobierno** (B-036, en main): `/plan-socialista` presenta presupuesto y rinde cuentas,
+  `/ahorro` recorta sola antes de gastar (queda escrito), `/bitacora` lleva el rumbo con el gasto; apruebas por
+  bloque; comparecer si se pasa más de un 25 % (REGLAS §4.10).
+- 2026-10-28 · **24 reglas y 6 ahorros aprobados** (los puntos 7-12): en REGLAS §4.11 (jueces, cobertura, fuentes,
+  constructores, sesiones).
 
 - 2026-10-28 · **Cuaderno «ECG y arritmias»** (`pif-ecg`, PR #36, en main): PIF → Cardiología, 11 fichas del libro
   de López Ramírez con ~60 trazados reales, lector de ECG, 28 ejercicios, tarjeta «¿Rápido o lento?» y 125

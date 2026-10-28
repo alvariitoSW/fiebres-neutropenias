@@ -256,6 +256,55 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      y se sigue. En un `arreglo` pequeño que no toca la app, la revisión la hace el propio director con la misma
      lista, sin agente.
 
+10. **El gobierno** (B-036, aprobado por el usuario el 28/10/2026: «apruebo la reforma de gobierno […] la constitución
+    ha sido aprobada por el pueblo»). Cada pieza del plan tiene un papel y unas cuentas:
+    - **Gobierno central**: el usuario, con la sesión de la bitácora. Aprueba el **presupuesto de cada bloque** (no
+      de cada tarea) y las paradas. Nadie más aprueba.
+    - **Interior = `/plan-socialista`**: antes de gastar, escribe el **presupuesto de la tarea** (≤15 líneas: qué hará,
+      qué agente y qué modelo en cada pieza, pasos y millones, y el total frente a lo que queda del bloque). Dentro del
+      presupuesto del bloque gasta sin pedir permiso. Al cerrar, **rinde cuentas** en el parte («Cuentas»: previsto,
+      gastado, desvío y por qué).
+    - **Hacienda = `/ahorro`**: revisa el presupuesto **antes** de gastar (modo presupuesto, sin agentes, ≤0,1 M) y
+      **puede recortar sola** (modelo más barato, pieza que ya existe, prueba corta, encargo partido), siempre que no
+      baje la nota (8,75) ni la fidelidad. Cada recorte queda escrito en el parte («Hacienda: qué recortó y cuánto»)
+      para que el gobierno central lo vea; si discrepa, se habla y se cambia. Al cerrar un bloque, un balance y una o
+      dos propuestas. Sigue revisando lo ya gastado como antes.
+    - **Transportes = `/bitacora`**: rumbo, cola y calendario. El informe diario es el Consejo de Ministros por
+      escrito: dice el gasto del día, el acumulado frente al presupuesto y lo que recortó Hacienda.
+    - **Exteriores = `/radar`** · **Ciencia = `/ingenieria-reversa`** · **Educación = el profesor** · **Justicia = los
+      jueces automáticos y el auditor ciego** (independientes: Hacienda no puede recortarlos ni saltarlos).
+    - **Comparecer**: si una tarea va a pasarse **más de un 25 %** de su presupuesto, el director para antes de
+      seguir y lo explica en una línea (al usuario, en el chat o en el informe diario). El tope de gasto por día
+      (§5.6) sigue igual.
+11. **Reglas aprobadas el 28/10/2026** (partes del 25 al 28/10 y `/ahorro`; el usuario: «del 7 al 12 se aprueban
+    todas»):
+    - **Jueces y pruebas**: `jueces --ficha` corre también la forma de `mayeutica-fichas` de esa ficha · los jueces
+      miden también las tablas que se salen de su tarjeta, no solo la página · un simulador con revisión por
+      objetivos se prueba con un camino incompleto y uno correcto · un modelo que pausa su animación fuera de la vista
+      se pone a la vista antes de medir · las pruebas miden una caja justo al contestar, no después de centrarla ·
+      mientras se itera, solo la prueba corta que nombra el encargo; la suite entera, una vez al entregar · la suite,
+      con el árbol limpio o en la copia propia de cada constructor.
+    - **Cobertura y encargos**: la cobertura pega el `grep` de cada clave de estado que cita · deja 2-3 pacientes de
+      reserva (nombre y perfil) por grupo · antes de estimar, el director cuenta las piezas en el código (`node -e`
+      con las claves de cada modelo) y la lista de lo que falta va al encargo · un «no se toca» lleva su razón; si
+      cumplirlo rompe el paciente posible (§1.14), manda §1.14 y el parte lo dice · recortar figuras y escribir
+      preguntas, dos encargos · un encargo que recalibra el motor trae su **rejilla** (parámetros y rangos) y el
+      constructor la corre de una vez (`herramientas/barrido.sh` + `calibra-tabla.mjs`).
+    - **Fuentes**: una cita que no se pudo abrir es un hueco, nunca con página · una consecuencia en un distractor
+      también lleva página, o no va · el enunciado no nombra lo que se pregunta · antes de lanzar a quien busca una
+      fuente o estudia una web, el director prueba en una llamada que se abre; si no, la pide al usuario.
+    - **Constructores**: antes de entregar, «¿mi arreglo empeora otra cifra de la tabla de la forma?»; si sí, para e
+      informa (una cifra mala no se tapa con otro parámetro) · un aviso de tope escribe el límite que se habría
+      cruzado, nunca la cifra imposible · los avisos de «medida imposible» se rotulan «control de la app» y solo
+      cubren lo que rompe la fórmula · cada lector en paralelo, en su subcarpeta · las vueltas de arreglo de una
+      maqueta, con el modelo barato · al pasar una maqueta a la app, se prueba en la app real con toque a 390 px al
+      lado de la maqueta · cada encargo de forma de la eco entrega una captura de cada vista junto a la eco real.
+    - **Sesiones y entrega**: lo que pida el usuario a mitad de una tarea va a otra sesión (`create_session`) · al
+      pausar por límite de uso, los apuntes de los agentes se copian al repositorio · el enlace «Ver en el móvil» lleva
+      el commit completo, no el nombre de la rama · avisar al constructor de los commits suyos ya hechos · una skill
+      nueva pedida en una tarea aprobada va en la PR de esa tarea · el script del inventario se guarda en `autonomo/`
+      para repetirlo.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los

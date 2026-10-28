@@ -434,3 +434,15 @@ salen como «fallida» si se archivan a media respuesta, como `eco-calibra`). Pi
 cerradas, qué han hecho y qué informe han seguido». Se creó `autonomo/SESIONES.md` (una fila por sesión, rellenado a
 mano para el 27/10), el paso 7 del cierre de `plan-socialista` escribe su fila antes de archivar y archiva como última
 llamada, y la tarea programada «Bitácora diaria» lee el registro y ya no se archiva (su informe también se perdía).
+
+## Reforma del gobierno (28/10/2026, B-036)
+
+El usuario, desde la sesión «Plan Marino 100 %»: «Vamos a trabajar a partir de ahora como un gobierno socialista». Lo
+aprobó entero («apruebo la reforma de gobierno […] umbral 25 %, por bloques, y Hacienda puede recortar sola pero deberá
+quedar registrado en el informe»). Papeles: gobierno central (el usuario con la bitácora), Interior (`/plan-socialista`:
+presupuesto antes de gastar y «Cuentas» en el parte), Hacienda (`/ahorro`: modo presupuesto que recorta solo y lo
+escribe, y balance al cerrar bloque), Transportes (`/bitacora`: rumbo con el gasto), Exteriores (`/radar`), Ciencia
+(`/ingenieria-reversa`), Educación (profesor) y Justicia (jueces y auditor, que no se recortan). Comparecer si una tarea
+va a pasarse más de un 25 %. En `REGLAS.md` §4.10 y en las tres skills. El mismo día aprobó las 24 propuestas de regla y
+de ahorro pendientes (§4.11). Primera prueba: grupo 2 de `b3-paso4`, 29/10.
+

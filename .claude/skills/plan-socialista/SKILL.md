@@ -49,7 +49,14 @@ tablero y el último parte, sin trabajar.
    como mucho 5 preguntas, las más importantes primero. Lo menor, al plan y sigues. En un `arreglo` pequeño que no toca
    la app, lo haces tú con la misma lista, sin agente. En un bloque, se revisa el paquete y cada encargo de modelo
    antes de lanzar su constructor. Una línea del resultado va al parte («Qué se hizo»).
-9. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
+9. **Presupuesto (eres el Ministerio del Interior; REGLAS §4.10, aprobado el 28/10/2026).** Con el encargo revisado,
+   escribe el presupuesto de la tarea en `/tmp/plan-socialista/<clave>/presupuesto.md` (≤15 líneas): cada pieza con
+   su agente, modelo, pasos y millones (tabla «Presupuestos vigentes» del tablero; cuenta antes las piezas en el
+   código), el total y lo que queda del presupuesto del bloque. Pasa tú mismo `/ahorro presupuesto` (Hacienda, 2-3
+   llamadas, sin agentes): recorta sola lo que no baja la nota ni la fidelidad y deja escrito qué recortó. Trabajas con
+   el presupuesto ya recortado y lo copias al parte. Si la tarea no cabe en lo que queda del bloque, comparece antes de
+   empezar.
+10. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
 ## 1. El ciclo
 
@@ -280,10 +287,15 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    y los arreglos, directo con los jueces en verde (`REGLAS.md` §2.3).
 3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
    rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
-4. **Gasto de la tarea**: `node autonomo/gasto.mjs --clave <clave>` (lee las transcripciones de esta sesión; tarda
+4. **Comparecer** (REGLAS §4.10): durante el ciclo, si vas a pasar del presupuesto más de un **25 %**, para antes de
+   seguir y dilo en una línea al usuario (qué se pasa, cuánto y por qué); sigues solo con su sí, o con el recorte que
+   proponga Hacienda.
+   **Gasto de la tarea**: `node autonomo/gasto.mjs --clave <clave>` (lee las transcripciones de esta sesión; tarda
    1-2 minutos si la sesión es larga). Copia al parte, en «Gasto», el total, la tabla «Por papel» y los 3 agentes que
    más gastaron, con una línea de **dónde se fue y cómo se ahorraría la próxima vez** (p. ej. «el constructor dio 200
    pasos: el encargo tenía 3 piezas; partirlo»). Si ves un patrón que se repite, va a «Propuestas sobre las reglas».
+   **Rinde cuentas** en el parte, sección «Cuentas»: presupuesto, recortes de Hacienda, gastado, desvío (%) y por qué,
+   y lo que queda del presupuesto del bloque.
 5. Escribe el parte en `autonomo/partes/AAAA-MM-DD.md` (formato en `autonomo/partes/LEEME.md`) y súbelo en la rama.
    Lo que necesites del usuario y las propuestas de regla, bien visibles: la bitácora los recoge de ahí.
 5. Al usuario, en llano: qué se hizo, **el enlace «Ver en el móvil»** y el de la PR, dónde tocar, y qué tiene que
@@ -318,3 +330,4 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
 - Escribir preguntas de redactar, de completar huecos o de emparejar (REGLAS §8).
 - Arreglar de paso cosas fuera de la tarea (van al parte, «Visto de paso»).
 - Seguir si se alcanza el límite de gasto o de vueltas: paras y lo dices.
+- Empezar a gastar sin presupuesto, o pasar de él más de un 25 % sin comparecer (REGLAS §4.10).
