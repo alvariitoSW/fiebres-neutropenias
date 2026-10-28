@@ -889,3 +889,11 @@ relajación^0,6). Cada forma la lleva en `escenarios.mjs`: dilatada 2,8 (e′ 5,
 hipertrofia de 3,2 a 2,8; hemorragia, derrame, TEP, HP crónica y vasoplejía, 1 (e′ normal, Nagueh 2025 p. 551-553). La hipertrofia tiene mando
 (`hviRecorrido`): g bajo = grado 1 (E/A ≤0,8, PCP normal), g alto = rigidez ×2,2 y 300 mL retenidos (PCP 26, E/A 1,6, E/e′ 16: seudonormal, grado 2;
 Nagueh p. 554); masa y pared fijas. Cifras del modelo: ilustrativas. Tablas de Guyton regeneradas.
+
+**Dilatada en grado 3 y fuerzas de restitución de e′ (eco-calibra-a, sesión 2, 28/10/2026).** e′ depende de la relajación, de las
+fuerzas de restitución y de la carga (Nagueh 2025 p. 553). `ePrima(relajacion, fe)` multiplica ahora e′ por la restitución: 1 con FE ≥40 %
+y FE ÷ 0,40 por debajo, con suelo 0,6 (ilustrativo; solo cambia la dilatada y el fallo, las demás formas tienen FE >40 %). Con eso la
+dilatada ya no necesita la relajación de la hipertrofia (2,8, que con su VI grande dejaba la presión del VI alta en el llenado rápido:
+E/A 1,38, TDE 220): relajación 1,3 y rigidez ×1,05 dan E 103, A 44, E/A 2,35, TDE 132, e′ 4,9/6,2, E/e′ 18,6, S/D 0,49, PCP 29, PAM 80:
+grado 3 con el algoritmo ASE (prueba en `atlas.test.mjs`). El fallo sigue pendiente: su defecto pide rigidez ×1,3 con la gravedad
+(E/e′ 14,2, S/D 0,84), que rompe 9 pruebas del fallo (IC a fondo <1,2, TAPSE, VD, Impella, balón); al 100 %, fusión E-A a FC 120.
