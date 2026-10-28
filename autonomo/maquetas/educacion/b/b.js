@@ -332,10 +332,11 @@ const MINI = [
         ['Cuelgo la bolsa más despacio y vigilo la saturación.', 'Sigue sumando volumen a un pulmón ya encharcado: el TACO empeora.'],
         ['Corrijo el balance positivo con diurético de asa.', null],
         ['Espero a que el balance se corrija solo con las horas.', 'Sin diurético el volumen sigue en el pulmón; la hipoxemia no cede.']], p: 16 },
-    { id: 'mt5', q: 'Día 4: Hb 7,6 g/dL, sin sangrado. ¿Transfundes?', ops: [
+    { id: 'mt5', q: 'Día 4: Hb 8,6 g/dL, sin sangrado. ¿Transfundes?', ops: [
         ['Sí, una bolsa para llevarla a 10 g/dL.', 'Fuera de indicación: Hb por encima de 7 sin sangrado; arriesga otro TACO sin beneficio.'],
         ['Sí, una sola bolsa por si acaso.', 'Sin indicación, «por si acaso» solo añade riesgo de transfusión.'],
-        ['No: está por encima del umbral 7 y no sangra.', null]], p: 8 }
+        ['No: está por encima del umbral 7 y no sangra.', null]], p: 8,
+      bien: 'Sin sangrado y por encima del umbral 7 no hay indicación; antes de cualquier otra transfusión se corrige el balance positivo con diuréticos (p. 16).' }
 ];
 MINI.forEach(m => {
     const c = document.getElementById(m.id); if (!c) return;
@@ -345,7 +346,7 @@ MINI.forEach(m => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = tx;
         b.addEventListener('click', () => {
             c.querySelectorAll('button').forEach(x => { x.disabled = true; });
-            r.innerHTML = (porque ? '<b>No.</b> ' + porque : '<b>Bien.</b> ') + ` Fuente: ${pg(m.p)}.`; r.hidden = false;
+            r.innerHTML = (porque ? '<b>No.</b> ' + porque : '<b>Bien.</b> ' + (m.bien || '')) + ` Fuente: ${pg(m.p)}.`; r.hidden = false;
         });
         c.append(b);
     });

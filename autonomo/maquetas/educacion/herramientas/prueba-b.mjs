@@ -50,6 +50,7 @@ async function correr(W, red) {
     ok(await p.isVisible('#ap-tabla') && (await p.textContent('#ap-tabla')).includes('Tu apuesta') && (await p.textContent('#ap-tabla')).includes('Lo que pasó') && (await p.textContent('#ap-t3')).includes('Acertaste'), 'P3: tabla «Tu apuesta | Lo que pasó» con la apuesta B acertada');
     console.log('  tabla', (await p.textContent('#ap-t2')).trim());
     ok((await p.textContent('#resto-caso')).includes('Día 4'), 'P3: momentos 4 y 5');
+    for (const m of ['mt4', 'mt5']) { ok((await p.$$('#' + m + ' button')).length === 3 && !(await p.textContent('#' + m)).includes('Bien.'), m + ': 3 opciones sin respuesta'); await p.click('#' + m + ' button >> nth=' + (m === 'mt4' ? 1 : 2)); ok((await p.textContent('#' + m)).includes('Bien.'), m + ': correcta'); await desborde(m); }
     const c3 = { hb: await cel('hb'), do2: await cel('do2'), o2er: await cel('o2er'), sao2: await cel('sao2') };
     console.log('  P3', JSON.stringify(c3));
     ok(c3.hb.startsWith('9,4') && c3.do2.replace('.', '').startsWith('830') && c3.o2er.startsWith('30') && c3.sao2.startsWith('86'), 'cifras P3');
