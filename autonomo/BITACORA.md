@@ -323,7 +323,7 @@ El resto del tablero sigue `aparcada`.
 - **Para la fase 3 de Educación (opcional, antes del 02/11)**: abrir en la red del entorno **phet.colorado.edu**
   (recomendación del Consejo; comprobado el 28/10 que sigue cerrada). Brilliant, si quieres (casi todo de pago); las
   editoriales no hacen falta (la evidencia sale de PubMed).
-- **Tareas programadas (revisadas el 28/10, 17:25)**: 29/10 7:40 `mayeutica-pestana` → grupos del `b3` · 30/10 7:40 siguiente
+- **Tareas programadas (revisadas el 28/10, 17:25)**: 28/10 (noche) `mayeutica-pestana`, adelantada por el usuario · 29/10 7:40 grupo siguiente del `b3` · 30/10 7:40 siguiente
   grupo del `b3` · 31/10 8:13 informes de El Libro Azul y Radiología (+ `b3`) · 01/11 `eco-reforma` · 02/11 fase 3 de
   Educación · 04/11 recordatorio de los puntos 18-22 y parada de Educación · cada día 13:43 y 21:43 el informe de la
   bitácora con la línea «Marino N de 155» · 6:42 la Bandeja del Radar. Las de esta sesión se pasaron a sesiones nuevas
