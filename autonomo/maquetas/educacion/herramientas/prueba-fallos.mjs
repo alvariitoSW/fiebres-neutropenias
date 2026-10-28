@@ -16,6 +16,10 @@ const vis = (p, sel) => p.locator(sel).filter({ visible: true });
   const t = await p.evaluate(() => document.querySelector('#pant').innerText);
   console.log('A P2 tras fallar A1 · orden:', ['Shock séptico', 'Tu apuesta decía', 'Si hubieras apostado', 'Tabla 14.1', 'Ver en la ficha'].map(s => `${s}@${t.indexOf(s)}`).join(' '));
   await foto(p, 'a-p2-fallo', true);
+  await p.locator('.porque-btn:visible').first().click(); await p.waitForTimeout(100);
+  const t2 = await p.evaluate(() => document.querySelector('#pant').innerText);
+  console.log('A P2 tras abrir Por qué · orden:', ['Tu apuesta decía', 'Con tu plan', 'Si hubieras apostado', 'Tabla 14.1', 'Ver en la ficha'].map(s => `${s}@${t2.indexOf(s)}`).join(' '));
+  console.log('A P2 ¿tabla Tu apuesta | Lo que pasó?:', /Tu apuesta/.test(await p.evaluate(() => [...document.querySelectorAll('#pant table')].map(t => t.innerText).join(' '))));
   await clic(/Ahora explica: ¿por qué el gasto/); await apuesta(0); await clic(/Seguir: otra herida/);
   const velo = await p.evaluate(() => document.querySelector('#mon').innerText.replace(/\s/g, '').slice(0, 80)); console.log('A P3 monitor velado:', velo);
   console.log('A P3 apuesta visible sin scroll:', await p.evaluate(() => document.querySelector('#pant .q .btn').getBoundingClientRect().top < innerHeight));
@@ -28,10 +32,11 @@ const vis = (p, sel) => p.locator(sel).filter({ visible: true });
   console.log('B P1: el mando «Transfundir» está en y =', y);
   await p.click('#m-transf'); await p.waitForFunction(() => window.__B.pant === 2);
   const pistas = await p.evaluate(() => document.querySelector('#pantallas').innerText.match(/umbral[^\n]{0,80}/gi)); console.log('B P2 pistas visibles:', JSON.stringify(pistas));
-  await p.click('#m-transf'); await p.waitForFunction(() => window.__B.pant === 3);
+  await p.click('#ap-ops [data-ap="0"]'); await p.click('#m-transf'); await p.waitForFunction(() => window.__B.pant === 3);
   const o = await p.evaluate(() => { const t = document.body.innerText; return ['TACO', 'llenado el pulmón', 'Pasó. Ahora, por qué', 'umbral es 7'].map(s => `${s}@${t.indexOf(s)}`).join(' '); });
   console.log('B P3 orden (consecuencia antes que enseñanza):', o);
-  await p.click('#entender'); for (let i = 0; i < 6; i++) await p.click('#p4-sig');
+  await p.click('#entender'); let tests4 = 0; for (let i = 0; i < 6; i++) { if (await p.isVisible('#p4-ops')) { tests4++; await p.click('#p4-ops [data-k="0"]'); } await p.click('#p4-sig'); await p.waitForTimeout(100); }
+  console.log('B P4: pasos con test antes de mostrarse =', tests4);
   await p.click('#q-ya'); await p.click('#q-cuerpo button[data-k="0"]');
   const r = await p.evaluate(() => document.querySelector('#q-res').innerText.slice(0, 300)); console.log('B Q1 fallada:', r.replace(/\n/g, ' | '));
   await foto(p, 'b-q1-fallo', true);
@@ -39,7 +44,9 @@ const vis = (p, sel) => p.locator(sel).filter({ visible: true });
   for (let k = 0; k < 4; k++) await p.click(`#q-cuerpo button[data-k="${k}"]`); await p.click('#q-sig');
   await p.click('#q-cuerpo button[data-k="1"]'); await p.click('#q-comp');
   console.log('B error marcando una buena:', (await p.evaluate(() => document.querySelector('#q-res').innerText)).replace(/\n/g, ' | ').slice(0, 260));
-  console.log('B ¿hay repaso de lo fallado?:', /otra vez|repaso/i.test(await p.evaluate(() => document.body.innerText)));
+  const tb = await p.evaluate(() => document.body.innerText);
+  console.log('B ¿hay repaso de lo fallado?:', /otra vez|repaso/i.test(tb), '· momentos del caso:', (tb.match(/Día \d|Hora \d|h \d|\d{1,2}:\d{2}/g) || []).slice(0, 8).join(', '));
+  await foto(p, 'b-error-fallo', true);
   console.log('B errores:', p.__e.length); }
 // ---------- C: falla las preguntas del repaso 2 y 3 y la P1 y P3 del caso
 { const p = await nueva(); await p.goto(BASE + 'c-entrelazado-rio.html'); await p.waitForTimeout(800);
