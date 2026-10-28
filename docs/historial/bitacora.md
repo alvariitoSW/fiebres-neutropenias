@@ -110,3 +110,16 @@ Formato: `AAAA-MM-DD · hecho|descartado · qué · PR o motivo`
     el glomérulo, el filtro de la TRR, las nefronas que quedan y el potasio.
   - Leyenda nueva en tres modelos.
   - Arreglada la célula de la nefrona viva que se quedaba congelada.
+
+### Salido de la bitácora el 2026-10-28 (hecho hace más de 7 días)
+
+- 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
+  - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
+  - 11 formas nuevas en la tabla única. Si un modelo vivo falla, el resto de Libros sigue funcionando.
+  - PVC normal 4,2 mmHg; elevación de piernas en la hemorragia +20 %.
+
+- 2026-10-20 · **Marino, bloque 1 en modelos vivos** (PR #19, #20 y #21), aprobados y en main.
+  - Mayéutica en las 23 fichas de Fundamentos (botón Texto | Visual | Mayéutica).
+  - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
+  - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
+  - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).

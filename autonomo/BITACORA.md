@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-28, mañana: PR #36 (`pif-ecg`) aprobada por el usuario y en main.
+Última sincronización: 2026-10-28, tarde (sesión «Plan Marino 100 %»): partes del grupo 1 de `b3-paso4` y de `eco-calibra-a` (sesión 2) leídos; ninguna tarea en revisión.
 
 ---
 
@@ -229,6 +229,86 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
+### B-035 · Plan Marino 100 % (The ICU Book entero con Estudiar) · apuntado 2026-10-28
+- **Lo que dijiste**: «Esta sesión solo DISEÑA el plan para terminar The ICU Book (Marino) al 100 %… Nada entra en el
+  tablero ni se programa sin mi "apruebo"».
+- **Punto de partida, contado en el código** (28/10; `js/data/libros-indice.js` cruzado con las claves de
+  `js/data/mayeutica/*.js` en `main` y en `auto/b3`). «Estudiar» = guía + examen + caso + «Para profundizar»; las 42
+  que lo tienen traen las cuatro cosas.
+
+  | Bloque | Fichas | Con Estudiar | Faltan | Ruta del bloque | Modelos vivos que hay | Modelos que faltan |
+  |---|---|---|---|---|---|---|
+  | 1 · caps. 1-11 | 23 | 23 | 0 | sí | río y mar, capilar, catéter, muralla, telar, inmersión, motor del latido | — |
+  | 2 · caps. 12-13 | 6 | 6 | 0 | sí | vaso que sangra, capilar | — |
+  | 3 · caps. 14-22 | 26 | 13 (9 en `main` + 4 del grupo 1 en `auto/b3`) | 13 | no | shock vivo, corazón eléctrico, receptor vivo | 15 estados nuevos (abajo) |
+  | 3D · caps. 23-30 (pulmón) | 21 | 0 | 21 | no | — (maqueta v3, límites 8,6 y pantalla del respirador 8,7, sin app) | **pulmón con respirador** + presión intratorácica (M8) |
+  | 4 · caps. 31-38 | 23 | 0 | 23 | no | ácido-base vivo, nefrona, glomérulo, filtro, potasio, río y mar | magnesio, calcio y fósforo en la escena del potasio (supongo) |
+  | 5 · caps. 39-44 | 17 | 0 | 17 | no | glomérulo (para el hepatorrenal) | **hepatocito vivo**, **termostato** |
+  | 6 · caps. 45-53 y apéndices | 39 | 0 | 39 | no | capilar (CO), receptor | **cráneo vivo**, unión neuromuscular, eje hormonal (Motion); hepatocito para tóxicos |
+  | **Total** | **155** | **42 (27 %)** | **113** | 2 de 6 | 13 | 3 grandes + 3 pequeños |
+
+  Piezas que faltan en el bloque 3 (grep en `*-vivo-data.js` de `auto/b3`): grupo 2, RCP con adrenalina e
+  insuflaciones, `posparo`, `reperfusion` (0 de 3 existen); grupo 3, papilar (solo una cita), septo, `iam-vd` (0 de 3);
+  grupo 4, etapas de IC, CPAP/presión pleural (M8, la usa también el pulmón), `congestion` (0 de 3); grupo 5, placa,
+  antiagregantes, trombolisis, `diseccion` (0 de 4); grupo 6, `tep-lisis`, `tvp` (0 de 2). El corazón eléctrico ya
+  tiene `pend-bradi`, `pend-bav1-3` y `pend-mp` vacíos (los llena `b3-bradi`).
+- **Cómo lo entiendo** (el plan; orden de M5, REGLAS §4.3 y §8): cada bloque, sus 5 pasos (cobertura → maquetas →
+  modelos → Estudiar por grupos → jueces y PR) y como mucho 4 paradas contigo.
+
+  | # | Tarea (clave) | Qué | Paradas contigo | Gasto (M) |
+  |---|---|---|---|---|
+  | 1 | `b3-paso4` g2-g6 (en el tablero) | 13 fichas, 15 piezas, un grupo por sesión, encadenados | — | 25-38 |
+  | 2 | `b3-bradi` (en el tablero) | bradicardias, BAV y marcapasos en el corazón eléctrico (sin el laboratorio de arritmias) | — | 4-7 |
+  | 3 | `b3-ritmo-motor` (en el tablero) | el ritmo mueve el motor del latido | — | 3-5 |
+  | 4 | `b3-pulmon-app` (nueva) | el pulmón con respirador a la app en 4 encargos (ciclo y 3 canales del monitor, racimo, enganche a M8, paciente y maniobras + neumotórax) y su Mayéutica | parada 2 del 3D | 10-15 |
+  | 5 | `b3-pulmon-estudio` (nueva) | 21 fichas en 5 grupos (ruta de `cobertura-3d.md`) + 21 recetas Visual de Neumología | — | 30-40 |
+  | 6 | `b3-cierre` (nueva) | parada 3 (el bloque 3 entero en el móvil) y 4 (tus cambios), ruta del bloque, PR | 3 y 4 | 8-14 |
+  | 7 | `b4` (nueva) | cobertura, piezas (Mg, Ca, P), Estudiar en 23 fichas en 4 grupos, PR | 1, 3 y 4 | 45-72 |
+  | 8 | `b5` (nueva) | cobertura, maquetas del hepatocito y del termostato, modelos, 17 fichas, PR | 1, 2, 3 y 4 | 45-63 |
+  | 9 | `b6a` (nueva) | caps. 45-47 (14 fichas): cráneo vivo y unión neuromuscular | 1, 2, 3 y 4 | 30-45 |
+  | 10 | `b6b` (nueva) | caps. 48-53 y apéndices (25 fichas): nutrición y tóxicos, casi todo consulta con casos | 1, 3 y 4 | 30-45 |
+  | | **Total** | 113 fichas, 3 modelos grandes, ~30 piezas | ~19 paradas | **230-345** |
+
+- **Cómo se estimó** (REGLAS §4.7, contar antes de estimar): lo medido, no lo previsto. Estudiar con modelo hecho:
+  1,6 M por ficha (grupo 1: 6,5 M en 4 fichas, previsto 3,6); ficha de consulta sin modelo: ~1,1 M (supongo);
+  estado nuevo de un modelo: 0,8-1,3 M (previsto 0,75 con desvío medio ×1,5); modelo grande de cero (maqueta,
+  límites, app y Mayéutica): 10-15 M (bloque 3: 13,1 + 18,6 + 21,5 M para 3-4 modelos); cobertura 1,5-2 M; cada
+  parada 0,8-1 M de director. Cada tarea empieza con su revisión del encargo (0,15 M). El mínimo cuenta con las
+  propuestas de /ahorro aprobadas y con que ~⅓ de las piezas ya existan (como en el grupo 1).
+- **Días**: con ≈15 M al día, 15-23 días de trabajo. Pero 15 M al día son ~18 % del uso semanal: la semana da para
+  ~5,5 días al límite (≈83 M). Marino 100 % se come **todo el uso de 3-4 semanas** y El Libro Azul y lo demás esperan.
+  Con tus paradas, **fin entre el 22/11 y el 05/12** (supongo que respondes a cada parada en un día).
+- **Calendario** (supongo; nada se programa sin tu «apruebo»):
+  - 29-31/10: `b3-paso4` g2-g6, encadenados (ya programados 29/10 y 30/10 a las 7:40; 31/10 a las 8:13 también abre
+    `azul-cobertura` y `radio-informe`, ya aprobados).
+  - 01-02/11: `b3-bradi` y `b3-ritmo-motor` · 02-04/11: `b3-pulmon-app` → **parada 2 del 3D** (necesita tu ok).
+  - 04-08/11: `b3-pulmon-estudio` · 08-09/11: `b3-cierre` → **paradas 3 y 4 del bloque 3** (PR).
+  - ~10-15/11: `b4` · ~15-22/11: `b5` · ~22/11-05/12: `b6a` y `b6b`. Cada bloque, con sus paradas.
+  - Encadenado: al cerrar una sesión, si el día va por debajo de ~15 M, el director abre la siguiente de la lista con
+    `create_session` (como ya hace `b3-paso4`); si no, la abre la tarea programada de la mañana siguiente (una
+    diaria, a las 7:40). Una tarea, una sesión; nunca dos de Marino a la vez (REGLAS §4.6).
+- **Cómo te llega**: una fila por sesión en `autonomo/SESIONES.md` (ya existe) y el informe diario «¿a dónde nos
+  dirigimos?» (la tarea «Bitácora diaria», 13:43 y 21:43) con una línea nueva arriba: «Marino: N de 155 fichas con
+  Estudiar · gasto de hoy X M y acumulado Y M de 230-345 · espera algo tuyo: …».
+- **Lo que NO quiero**: tocar la eco, el PIF o El Libro Azul; empezar un bloque sin el anterior aprobado; pasar de
+  ~15 M al día; dos sesiones de Marino a la vez.
+- **Depende de**: tu «apruebo» y las dudas de abajo. PDF: ninguno imprescindible (los cuatro que faltan del bloque 3,
+  ESC 2019 TSV, AHA 2020/ERC 2021, ESC 2023 miocardiopatías y SCAI 2015, son opcionales: sin ellos se cita solo Marino).
+- **Tamaño**: grande, ya troceado en 10 tareas (arriba).
+- **Choques con las reglas** (dichos antes de proponer):
+  1. `b3-ritmo-motor` toca el motor del latido, que vive en la eco (`js/modules/eco/`) y pide `jueces --eco`; me
+     dijiste que esta sesión no toque la eco.
+  2. Objetivo M5: «un bloque no empieza hasta que el anterior está aprobado». Preparar la cobertura del siguiente
+     (solo informe) mientras esperas una parada ahorraría ~1 día por bloque, pero lo rompe.
+  3. `b3-bradi` estaba atado a `arritmias-maqueta` (aparcada): hacerlo ahora es la versión corta, sin el laboratorio.
+  4. Partir el bloque 6 en dos (45-47 y 48-53) no cambia el orden de M5, pero son dos PR y más paradas.
+- **Dudas** (como mucho 5): ver el chat del 28/10; se copian aquí al responder.
+- **Lista de calidad**: topes con fuente → en cada encargo de pieza (lo escribe el profesor en su plan corto, como en
+  `plan-paso4.md`) · cifra por estado y caso → cobertura de cada bloque · «lo que NO quiero» → sí · fuentes → los PDF
+  de Marino en `docs/` con su página (`libros-indice.js`) · jueces → `--ficha`, `--modelo`, `--forma`, topes y móvil;
+  auditor y profesor (≥8, meta 8,75); sin juez: «paciente posible» de cada caso (lo mira el profesor con su programa
+  de prueba).
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -309,6 +389,13 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **Propuestas de regla de los partes del 28/10** (sin responder): (1) `jueces --ficha` corre también la forma de
+  `mayeutica-fichas` de esa ficha (el grupo 1 dio «todo verde» con dos fichas sin caso); (2) la cobertura pega el `grep`
+  de cada clave de estado que cita (5 de 12 no existían); (3) la cobertura deja 2-3 pacientes de reserva por grupo;
+  (4) en un encargo, «no se toca» lleva su razón y, si cumplirlo rompe el «paciente posible» (§1.14), manda §1.14;
+  (5) una cita que no se pudo abrir se escribe como hueco, nunca con página. Partes `2026-10-28-b3-paso4-g1.md` y
+  `2026-10-28-eco-calibra-a-s2.md`. ¿Las apruebas?
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
 
@@ -487,6 +574,13 @@ El resto del tablero sigue `aparcada`.
 
 ## 4. Mejoras de lo que ya existe
 
+- **Eco, tres huecos que dejó `eco-calibra-a`** (28/10, para la sesión de la eco, no la de Marino): el fallo al 100 %
+  (shock cardiogénico) no es coherente (profesor 5,5); el TEP no tiene escalón submasivo → masivo (6); la hipertrofia
+  grado 1 da DT ~420 ms (7,5). Visto de paso: el taponamiento no muestra la variación respiratoria de la E.
+- **Corazón eléctrico, visto en el grupo 1 del `b3`** (28/10): el estado `tv` marca «Pulso 0» con ART 102/79; el enlace
+  `ritmoVivo` no puede abrir la FA con «Llenado malo» ya puesto; `mayeutica-fichas.mjs` con 1-2 fichas da 2 rojos
+  falsos; `--modelo mayeutica-fichas` tarda ~25 min por ficha.
+
 - **Eco, lo que dejó la parada 3 de `eco-mega`** (27/10; detalle en `autonomo/bloques/eco-mega/profesor-p3.md` y
   `p3-*.md`). Coste medio, para una parada 4 o un arreglo: (1) que el pliegue de la AD/VD del taponamiento se vea a
   390 px (frase viva, flecha o un modo M por la pared libre); (2) el índice de excentricidad en los criterios de la HP
@@ -656,14 +750,3 @@ El resto del tablero sigue `aparcada`.
   (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
   (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
   no cambió.
-
-- 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
-  - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
-  - 11 formas nuevas en la tabla única. Si un modelo vivo falla, el resto de Libros sigue funcionando.
-  - PVC normal 4,2 mmHg; elevación de piernas en la hemorragia +20 %.
-
-- 2026-10-20 · **Marino, bloque 1 en modelos vivos** (PR #19, #20 y #21), aprobados y en main.
-  - Mayéutica en las 23 fichas de Fundamentos (botón Texto | Visual | Mayéutica).
-  - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
-  - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
-  - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).
