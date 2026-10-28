@@ -309,6 +309,41 @@ esta sección.
   auditor y profesor (≥8, meta 8,75); sin juez: «paciente posible» de cada caso (lo mira el profesor con su programa
   de prueba).
 
+### B-036 · Trabajar como un gobierno (prueba) · apuntado 2026-10-28
+- **Lo que dijiste**: «Vamos a trabajar a partir de ahora como un gobierno socialista. Yo soy el gobierno central
+  junto contigo, el ministerio del interior básicamente es /plan-socialista […] tiene un gasto que lo tiene que
+  justificar ante el gobierno mayor (yo) y el ministerio de hacienda que es la skill de /ahorro […] tiene que estudiar
+  qué se puede ahorrar de ese plan […] /bitacora es el ministerio de transporte que dirige a dónde va el gobierno».
+- **Cómo lo entiendo** (supongo; es una prueba, se puede deshacer):
+  - **Gobierno central**: tú (presidente) y yo, esta sesión. Aprobáis los **presupuestos** (cuánto se gasta en cada
+    bloque) y las paradas. Nadie más aprueba nada.
+  - **Interior = `/plan-socialista`**: antes de gastar, presenta su **presupuesto de la tarea** (qué hará, qué agente y
+    qué modelo en cada pieza, cuántos pasos y millones, en ≤15 líneas). Al acabar, **rinde cuentas**: gastado frente a
+    presupuestado y por qué.
+  - **Hacienda = `/ahorro`**: hoy solo mira lo ya gastado. Cambio: también **revisa el presupuesto antes** (una pasada
+    barata, sonnet ~10 pasos / 0,15 M) y propone recortes (modelo más barato, pieza que ya existe, prueba corta). Lo
+    que recorta se aplica solo si no baja la calidad (8,75 y fidelidad no se negocian).
+  - **Transportes = `/bitacora`**: el rumbo, la cola y el calendario; el informe diario de las 13:43 y 21:43 es el
+    «Consejo de Ministros» por escrito.
+  - **Exteriores = `/radar`** (lo que llega de fuera: webs, tuits, papers) · **Ciencia = `/ingenieria-reversa`** ·
+    **Educación = el profesor** (diseña y juzga el estudio) · **Justicia = jueces automáticos y auditor ciego**
+    (independientes: no los nombra ni los paga Interior por su cuenta).
+  - **Reglas del dinero**: (1) tú apruebas el **presupuesto de cada bloque** (p. ej. el bloque 4, 45-72 M), no cada
+    tarea; (2) dentro de él, Interior gasta sin pedir permiso; (3) si una tarea se va a pasar más de un **25 %**, para
+    y «comparece» (una línea en el chat o en el informe diario) antes de seguir; (4) Hacienda cierra cada bloque con
+    un balance y una o dos propuestas; (5) el tope de ~15 M al día sigue igual.
+- **La prueba**: con el grupo 2 del `b3-paso4` (29/10). Si sale bien, se queda para todo Marino (B-035).
+- **Choques con las reglas**: los agentes no pueden cambiar sus propias skills (REGLAS §5.1). Hay que reescribir
+  `plan-socialista`, `ahorro` y `bitacora` y añadir un apartado a REGLAS: lo haría esta sesión, con tu permiso, en un
+  commit aparte. Y añade un paso (Hacienda antes de gastar, ~0,15 M por tarea).
+- **Depende de**: tu «apruebo». Va antes de B-035 (así Marino arranca ya con presupuestos).
+- **Tamaño**: pequeña (una sesión, sin tocar la app).
+- **Dudas**: (1) ¿umbral para comparecer, 25 %?; (2) ¿apruebas por bloque o por tarea?; (3) ¿Hacienda puede recortar
+  sola o solo propone?
+- **Lista de calidad**: sin simulador · cifras: los presupuestos de la tabla del tablero · «lo que NO quiero»: más
+  paradas para ti, bajar la nota o la fidelidad · fuentes: no aplica · juez: `gasto.mjs` (gastado frente a presupuesto
+  en cada parte); sin juez automático la calidad del recorte: la mira el profesor.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
