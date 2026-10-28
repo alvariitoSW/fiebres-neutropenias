@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-28-eco-calibra-a-s2.md` (séptima pasada, 28/10: 10,9 M en la sesión, 14,5 M en las dos frente a ≈5,5 M; dos patrones pasan a propuesta).
+**Último parte revisado:** `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
@@ -25,6 +25,11 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 - Confirmado (sin propuesta nueva, ya está «Contar las piezas en el código»): en b3-paso4 g1 el plan daba 3 piezas y
   solo faltaba una pequeña; la revisión del encargo (0,14 M) lo vio y ahorró ≈1,5 M.
 
+- Revisor del encargo otra vez por encima (b3-paso4 g2: 13 pasos / 0,24 M frente a 0,15 M), pero cazó 4 graves: compensa.
+  Si se repite una tercera: subir su presupuesto a 0,25 M en vez de recortarlo.
+- El director no comparece al pasar del 25 % cuando el desvío sale al medir al final (b3-paso4 g2). Si se repite: medir
+  `gasto.mjs` a mitad de tarea (tras las piezas).
+
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
@@ -37,3 +42,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-28 | Calibrar el motor con una rejilla, no a mano | aprobada (28/10, REGLAS §4.6-4.11) |
 | 2026-10-28 | Suite corta para iterar, la entera al entregar | aprobada (28/10, REGLAS §4.6-4.11) |
 | 2026-10-28 | Una cifra mala no se tapa con otro parámetro | aprobada (28/10, REGLAS §4.6-4.11) |
+| 2026-10-28 | Una pieza se presupuesta por lo que falta en el código | propuesta |

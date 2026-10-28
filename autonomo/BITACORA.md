@@ -579,6 +579,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · Una pieza se presupuesta por lo que falta en el código** (propuesto 2026-10-28 por /ahorro) · Visto en: `b3-paso4` g1 (la cobertura citaba 5 estados que no existían; −1,5 M sobre lo previsto) y g2 (la «lupa reperfusion» era una lupa entera nueva: 1,2 M frente a 0,6; `posparo` era un tipo de paciente nuevo: 1,1 M frente a 0,6; desvío del grupo +29 %) · Cambio: antes de presupuestar, la revisión del encargo pega el `grep` de cada estado, lupa y escenario, y cada pieza se presupuesta como **estado** (0,5 M) solo si su lupa o su tipo ya existen; si no, como **modelo** (1,2 M); y el director mide antes las cifras del motor con un programa corto y da al constructor el objetivo que el motor puede dar · Ahorro esperado: no ahorra tokens de golpe, pero evita desvíos de 1-2 M por grupo (4 grupos quedan) y una comparecencia por grupo.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.
