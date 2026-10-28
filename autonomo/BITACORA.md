@@ -5,8 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27, noche (3.ª): `pif-ecg` en revisión (PR #36); su parte, leído. Los informes del
-Objetivo P, hechos y decididos: `eco-calibra-a`, `b3-paso4` y `competencias-r2r5` empiezan el 28/10.
+Última sincronización: 2026-10-28, mañana: PR #36 (`pif-ecg`) aprobada por el usuario y en main.
 
 ---
 
@@ -269,7 +268,7 @@ esta sección.
 | `eco-calibra-a`, `b3-paso4` | Arreglar el motor de la eco (≈5,5 M, 28-29/10) y paso 4 del `b3` por grupos encadenados (≈36 M, grupos 1-6 del 28 al 30/10; parada 3 contigo el 31/10) | pendiente (programadas) |
 | `azul-cobertura`, `radio-informe` | **Objetivo P2**: mapa de El Libro Azul frente a Marino y propuesta del PIF de Radiología (B-034), solo informes | pendiente (31/10) | 2026-10-27 | «Sí a todo» (27/10, noche) |
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
-| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **en revisión**: [PR #36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36) (11 fichas, ~60 trazados reales, lector, 28 ejercicios, tarjeta «¿Rápido o lento?»; profesor 8,25-9) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
+| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -478,9 +477,6 @@ El resto del tablero sigue `aparcada`.
 - **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
   consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
-- **🔴 PR #36 · `pif-ecg` (ECG y arritmias)**: mírala en el móvil y fusiónala si te gusta. Se construyó con lo
-  recomendado en las 3 preguntas de su informe (eje fuera, tarjeta sin dosis, ejercicios con pareja como pregunta y
-  el resto en galería). `ecg-guardia` (mañana) continúa sobre esa rama, y `ecg-vector-app` espera a que entre en `main`.
 - **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
   - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
   - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
@@ -596,6 +592,10 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-28 · **Cuaderno «ECG y arritmias»** (`pif-ecg`, PR #36, en main): PIF → Cardiología, 11 fichas del libro
+  de López Ramírez con ~60 trazados reales, lector de ECG, 28 ejercicios, tarjeta «¿Rápido o lento?» y 125
+  preguntas. Profesor 8,25-9; auditores, graves corregidos.
 
 - 2026-10-27 · **Plan del ECG** (`ecg-plan`, B-033): 3 caminos (guardia, desde cero, laboratorio de arritmias) con
   piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Aprobado: 6 tareas en el tablero; Anatomy, skill.
