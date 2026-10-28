@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-28, tarde (sesión «Plan Marino 100 %»): partes del grupo 1 de `b3-paso4` y de `eco-calibra-a` (sesión 2) leídos; ninguna tarea en revisión.
+Última sincronización: 2026-10-28, 17:25 (cierre de la sesión «Plan Marino 100 %»): parte de la fase 1 de `educacion-pionera` leído; fase 2 en marcha; tareas programadas revisadas; ninguna tarea en revisión.
 
 ---
 
@@ -250,7 +250,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M | 2026-10-28 | Fase 1 el 30/10, fases 2-3 el 02/11; **parada contigo el 04/11** con 3 maquetas |
+| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M · **fase 1 hecha** (28/10, adelantada por ti: 1,3 M; `autonomo/ideas/educacion-pionera/`) · **fase 2 en marcha** (28/10, sesión nueva) | 2026-10-28 | Fase 3 (las maquetas) el 02/11; **parada contigo el 04/11** |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | aprobado el 28/10; programado el 01/11 (4-6 M) | 2026-10-28 | La decisión de arquitectura, después, es tuya. `f0-eco-*`, `f2-ete`, `b3-ritmo-motor` y el atlas esperan |
 | `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
@@ -315,6 +315,16 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **Para la fase 2-3 de Educación (opcional)**: si quieres que vea webs de verdad y artículos completos, permite en la red
+  del entorno phet.colorado.edu, brilliant.org y las editoriales (link.springer.com, tandfonline.com, psycnet.apa.org).
+  La fase 1 solo pudo entrar en GitHub y PubMed.
+- **Propuesta de regla (fase 1 de `educacion-pionera`)**: antes de una ingeniería inversa en la nube, mirar qué webs deja
+  abrir la red (`$HTTPS_PROXY/__agentproxy/status`) y elegir de ahí, o pedirte que las abras antes. ¿La apruebas?
+- **Tareas programadas (revisadas el 28/10, 17:25)**: 29/10 7:40 `mayeutica-pestana` → grupos del `b3` · 30/10 7:40 siguiente
+  grupo del `b3` · 31/10 8:13 informes de El Libro Azul y Radiología (+ `b3`) · 01/11 `eco-reforma` · 02/11 fase 3 de
+  Educación · 04/11 recordatorio de los puntos 18-22 y parada de Educación · cada día 13:43 y 21:43 el informe de la
+  bitácora con la línea «Marino N de 155» · 6:42 la Bandeja del Radar. Las de esta sesión se pasaron a sesiones nuevas
+  para poder cerrarla. Queda pausada (no salta) la vieja del 29/10.
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
@@ -359,10 +369,6 @@ El resto del tablero sigue `aparcada`.
   **Comprobado el 28/10**: la tarea corrió y leyó los 4 tuits (el texto va dentro de la página de `x.com`). No
   se pueden abrir `t.co`, `doi.org`, PubMed, Europe PMC ni criticalcarereviews.com: los papers se buscan por título
   en la web y, si no aparecen o son de pago, se pide el PDF en el issue. 2 papers esperan PDF/enlace del usuario.
-- **Tareas programadas hasta el domingo** (27/10, noche, «sí a todo»), todas con ese mismo arreglo: 28/10 7:40 abre
-  `b3-paso4` (grupo 1) y `eco-calibra-a` · 29 y 30/10 7:40, el siguiente grupo y la eco si falta · 31/10 8:13,
-  `azul-cobertura`, `radio-informe` y el `b3` si falta. Los grupos del `b3` además se encadenan solos.
-  La vieja de `arritmias-maqueta` la borró el usuario el 27/10 (comprobado).
 - **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
   pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
   de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
