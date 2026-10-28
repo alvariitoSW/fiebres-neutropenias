@@ -112,7 +112,7 @@ const FOSA = { a: 7, b: 3 };            // semiejes (mm) de la fosa oval en el t
 const EUSTAQUIO = { radio: 8, largo: 12 };   // orificio de la cava inferior y largo del pliegue (mm, ilustrativo, N1)
 const ANCHO_UNION = 1.05, KERNEL_UNION = 1.0;   // rad: hasta dónde se redondea y cuánto promedia (ver radioConCuerda)
 // Límites de la geometría: fuera de ellos el dibujo deja de seguir al motor (se avisa en la página).
-export const LIMITES = { vi: [8, 320], vd: [45, 330], au: [15, 140] };
+export const LIMITES = { vi: [8, 320], vd: [20, 330], au: [15, 140] };
 // margen del cuello de cada aurícula sobre su anillo AV (mm, ilustrativo)
 const MARGEN_AU = { ai: 3, ad: 3 };
 // alto / ancho de las aurículas: eje mayor / eje menor de la AD del varón en Lang 2015, p. 30 (Tabla 13): 2,4 / 1,9 cm/m².

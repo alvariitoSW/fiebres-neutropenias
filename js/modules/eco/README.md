@@ -566,6 +566,11 @@ telediástole (`medidasCorazon` en `ecografia.mjs`) y un botón a la línea de l
 - **Accesos** `data-eco-escenario="hipertrofia|dilatada|tep"` desde Fisiopatología UCI · Cardiología (Ficha 3 y las del
   VD), Merino Cardiología (IC aguda) y Merino Neumología (ecocardiografía en la EP).
 
+Fusión E-A (eco-calibra-a, sesión 2): a más de ~120 lpm la relajación del VI no termina antes de la P y la mitral abre ya dentro de la
+contracción auricular. `motor.mjs` (`fase()`, marca `_fusion`) etiqueta como F/G lo que pasa por la mitral cuando la aurícula ya se
+relaja (tras `tsAur`), así que la E se mide como el pico precoz de la onda fundida (Nagueh 2025, p. 547 y p. 557 T7) y la D de las venas
+pulmonares ya no sale 0. `doppler.mjs` (`medidasLatido`) no da TDE si la E cuelga de la rama descendente de la A (`fusion: true`).
+
 ## Atlas de ecocardiografía (`atlas/`, octubre 2026)
 
 A petición explícita del usuario («haz ingeniería reversa para conseguir unificar ambos proyectos y ponerlo en
@@ -870,3 +875,37 @@ dos fuentes; «VD basal >41» a Lang p. 17 (rango en la Tabla 8, p. 20); rengló
 FE del VD «aprox.»; leyendas de festones con sus páginas (tricúspide p. 950, cúspides aórticas p. 946) y de brillo con su orden real.
 **Hueco**: la banda brillante dentro de la AD no viene de la tabla de tejidos (solo se bajó la pared); sin comprobar el aplanamiento del
 tabique en el PSAX (pieza Forma).
+
+## Aurículas del motor y venas pulmonares (eco-calibra-a, sesión 1, 28/10/2026)
+- La AI y la AD suman su contracción a la presión pasiva (`presionAurícula` en `motor.mjs`: P = pasiva + e·Ees·(V−V0)). Con la mezcla
+  de los ventrículos, una aurícula muy distendida se relajaba al contraerse y la onda A desaparecía.
+- AI: Ees 0,70 → 0,37 y A 0,20 → 0,25 (bomba auricular ≈ 25 % del llenado del VI; Lang 2015 p. 24: 15-30 %). AD: V0 5 → 8 (solo
+  desplaza el volumen: la AD no baja de los 15 mL del dibujo, sin cambiar la presión). Venas pulmonares: `rVp` 0,01 → 0,02 y `rPul`
+  0,095 → 0,08: el reflujo hacia las venas baja de ~590 a ~190 mL/s y la PAP diastólica del normal sigue en 11,7.
+- `escalarRPul(p, k)`: la resistencia pulmonar de una enfermedad (TEP, HP crónica, sobrecarga del atlas 14) es k veces la de referencia
+  (0,095); así TEP e HP conservan su resistencia total de antes. Derrame a fondo: 388 → 383 mL (IC ≥ 1,2 con la AI nueva).
+- Pruebas recalibradas (sin tocar ninguna referencia): marcos del muestreo en la prueba C1 de la mitral, mínimo de filas del tabique
+  en el TEP (30 → 20), caída de presión del balón (3 → 2 mmHg) y los 388 mL del navegador.
+- Pendiente (sesiones siguientes): e′ por forma, hipertrofia con mando, E=0 a fondo, VD máximo de la HP, área real de las 4 venas.
+
+**e′ por forma y hipertrofia con mando (eco-calibra-a, 28/10/2026).** La relajación lenta del VI es una sola cosa en el motor: `relajacion`
+alarga la cola de la activación del VI (cae E, pesa la A) y es lo que baja e′ en el Doppler tisular (`atlas/diastolica.mjs`, `ePrima`: e′ lateral = 12 ÷
+relajación^0,6). Cada forma la lleva en `escenarios.mjs`: dilatada 2,8 (e′ 5,2 septal / 6,5 lateral), fallo del VI de 1 a 2,8 hasta su defecto,
+hipertrofia de 3,2 a 2,8; hemorragia, derrame, TEP, HP crónica y vasoplejía, 1 (e′ normal, Nagueh 2025 p. 551-553). La hipertrofia tiene mando
+(`hviRecorrido`): g bajo = grado 1 (E/A ≤0,8, PCP normal), g alto = rigidez ×2,2 y 300 mL retenidos (PCP 26, E/A 1,6, E/e′ 16: seudonormal, grado 2;
+Nagueh p. 554); masa y pared fijas. Cifras del modelo: ilustrativas. Tablas de Guyton regeneradas.
+
+**Dilatada en grado 3 y fuerzas de restitución de e′ (eco-calibra-a, sesión 2, 28/10/2026).** e′ depende de la relajación, de las
+fuerzas de restitución y de la carga (Nagueh 2025 p. 553). `ePrima(relajacion, fe)` multiplica ahora e′ por la restitución: 1 con FE ≥40 %
+y FE ÷ 0,40 por debajo, con suelo 0,6 (ilustrativo; solo cambia la dilatada y el fallo, las demás formas tienen FE >40 %). Con eso la
+dilatada ya no necesita la relajación de la hipertrofia (2,8, que con su VI grande dejaba la presión del VI alta en el llenado rápido:
+E/A 1,38, TDE 220): relajación 1,3 y rigidez ×1,05 dan E 103, A 44, E/A 2,35, TDE 132, e′ 4,9/6,2, E/e′ 18,6, S/D 0,49, PCP 29, PAM 80:
+grado 3 con el algoritmo ASE (prueba en `atlas.test.mjs`). El fallo sigue pendiente: su defecto pide rigidez ×1,3 con la gravedad
+(E/e′ 14,2, S/D 0,84), que rompe 9 pruebas del fallo (IC a fondo <1,2, TAPSE, VD, Impella, balón); al 100 %, fusión E-A a FC 120.
+
+**Fallo del VI: E/e′ ≥14 y S/D <1 (eco-calibra-a, sesión 2, 28/10/2026).** La relajación del fallo sube de 1 a 2,3 en su defecto (antes 2,8) y la AI se
+vuelve 1,3 veces más rígida con la gravedad (`escenarios.mjs`, `FALLO_RELAJACION`, `FALLO_AI_RIGIDEZ`): la S venosa pulmonar baja (S/D 0,75) sin tocar
+la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora con (FE ÷ 0,40)^1,5 y tiene suelo 0,35: e′ septal ~2 cm/s con FE ≈10 %
+(ilustrativo, extrapolación: Nagueh 2025 p. 561 da 3-4 en el grado 3 avanzado). Motor común sin cambios: la eyección del modelo (200 ms a FC 120) ya sigue
+la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
+Tablas de Guyton regeneradas.

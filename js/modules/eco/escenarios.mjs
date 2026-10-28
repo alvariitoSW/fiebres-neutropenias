@@ -1,5 +1,5 @@
 import { tapseDeLatido } from './corazon-geo.mjs';
-import { BASE } from './motor.mjs';
+import { BASE, escalarRPul } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
 // Cada escenario parte del estado normal estable y cambia lo mínimo para provocar su tipo de shock.
@@ -12,10 +12,11 @@ import { BASE } from './motor.mjs';
 // la aplica de golpe y el barorreflejo tarda ~10 s en responder. Los topes de cada mando, ilustrativos salvo lo que se cita.
 const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 % (Marino, Tabla 15.1, cap. 15, p. 22)
 const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
-const EES_VI_MIN = 0.3;                        // mmHg/mL, ~10 % de la normal (3,1)
+const EES_VI_MIN = 0.3;
+const FALLO_DEFECTO = Math.log(3.1 / 0.9) / Math.log(3.1 / EES_VI_MIN);   // Ees 0,9 (ver «fallo»)                        // mmHg/mL, ~10 % de la normal (3,1)
 // mL; con el pericardio del modelo, el taponamiento (derrame agudo). 390 → 388 con la RVS calibrada (octubre 2026, segunda
-// vuelta): con 390 el IC a fondo bajaba a 1,19. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
-const DERRAME_ML_MAX = 388;
+// vuelta): con 390 el IC a fondo bajaba a 1,19; 388 → 383 con la AI que suma su contracción (eco-calibra-a, 28/10/2026): con 388, 1,15. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
+const DERRAME_ML_MAX = 383;
 // el derrame va en parábola (mL = máx · (1 − (1 − g)²)): la presión del saco crece en exponencial con el volumen, así que
 // cerca del final cada paso del mando añade menos líquido y la PA no cae a saltos
 const derrameMl = (g) => DERRAME_ML_MAX * (1 - (1 - g) ** 2);
@@ -26,15 +27,51 @@ const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
 const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) / Math.log(TEP_RPUL_MAX);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
+// Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
+// (atlas/diastolica.mjs, ePrima): e′ = 12 ÷ relajación^0,6 (× la restitución si la FE es baja). Ilustrativo; las formas que no son
+// del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c). El fallo llega a 2,3 en su defecto
+// (2,8 en la sesión 1, 2,3 en la sesión 2: ver FALLO_RELAJACION); la dilatada usaba 2,8 y ahora RELAJACION_FER (abajo)
+// Fallo del VI (eco-calibra-a s2, fallo): relajación 1 → 2,3 y AI 1,3 veces más rígida con la gravedad (ilustrativos). Con 2,8 la cola de
+// activación de un VI grande dejaba su presión alta en el llenado rápido y la E no subía; 2,3 con la restitución de e′ (FE ≈30 %)
+// da E/e′ ≥14 (Nagueh 2025 p. 554). La AI con presión alta es más rígida: llena menos en la sístole (S/D <1, p. 549, Tabla 4)
+const FALLO_RELAJACION = 2.3, FALLO_AI_RIGIDEZ = 1.3;
+// FE reducida (dilatada; eco-calibra-a s2, 28/10/2026): su e′ baja por la relajación Y por la pérdida de las fuerzas de
+// restitución (atlas/diastolica.mjs, restitucion; Nagueh 2025 p. 553), así que no hace falta la relajación de la hipertrofia.
+// Con 2,8, la cola de la activación del VI dilatado (que multiplica un volumen grande) dejaba la presión del VI alta en todo el
+// llenado rápido: con PAI 28 la E no subía (E/A 1,38) y el TDE era de 220 ms. Con 1,3 (τ del modelo ~33 ms frente a ~28 del
+// normal) y una cámara algo más rígida (el TDE <140 ms con la FE baja es la PTDVI alta, y el TDE depende de la relajación y la
+// rigidez del VI: Nagueh 2025 p. 547, Tabla 4) sale el llenado restrictivo con la PAI alta (grado 3, p. 554). Valores ilustrativos
+const RELAJACION_FER = 1.3, RIGIDEZ_DIL = 1.05;
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
 // más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14
 // (atlas/vd.mjs, ajustesVd 'presion'; aquí se repite porque ese archivo es de dibujo y no se carga en el motor): g = su
 // punto s de 0 a 1. Todos los parámetros, ilustrativos; lo que se exige son las cifras de CRITERIOS_FORMA.hpcronica
 const HPC_DEFECTO = 0.55;
+// Sesión 2 (eco-calibra-a): la resistencia sube más deprisa al principio (×8,4 en el defecto: el VI recibe menos y E/e′ <8, grupo 1
+// precapilar: Nagueh 2025 p. 548; Mukherjee 2025 p. 173 T8) y llega al mismo ×12 a fondo. En la fase de claudicación (x >0,6) el VD se
+// dilata menos (v0 +60, no +160, y más rígido: VTD ~230 mL, grave >170 mL: Mukherjee p. 145 T1) y se retiene líquido (+1.200 mL: PVC
+// ~16 mmHg, «RAP ≥15 grave» ibíd.) y el tabique transmite más presión del VD al VI (0,05 → 0,20: interdependencia ventricular
+// con el VD dilatado), que mantiene llena la AI (≥15 mL del dibujo). Parámetros ilustrativos; lo exigido son las bandas de los jueces
 const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
-  return { k: 1 + 11 * x, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
-    mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 700 * c01((x - 0.6) / 0.4), b: 1 + 0.2 * x, v0: 160 * c01((x - 0.5) / 0.5) ** 1.5 }; };
+  return { k: x < 0.55 ? 1 + 13.5 * x : 8.425 + (12 - 8.425) * (x - 0.55) / 0.45, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
+    mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 1200 * c01((x - 0.6) / 0.4), b: 1 + 0.4 * x, tab: 0.05 + 0.15 * c01((x - 0.6) / 0.4), v0: 60 * c01((x - 0.5) / 0.5) ** 1.5 }; };
+// Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
+const HVI_DEFECTO = 0.2;
+// Sesión 2: la relajación sube a 3,4 y la rigidez de partida a ×1,6 con 300 mL menos de volumen (euvolemia tratada, ilustrativo): la E decelera
+// antes (TDE ~410-430 ms en el grado 1, antes 550-580) con E/A ≤0,8, e′ baja y PCP <15; al 100 % queda rigidez ×2,2 y +300 mL (TDE ~215 ms)
+const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
+  return { relajacion: 3.4 - 0.4 * x, b: 1.6 + 0.6 * x * x, vSangre: -300 + 600 * x * x }; };
+// Suelo de volumen en el shock (eco-calibra-a, sesión 2): un VD de 23 mL al final de la sístole o una aurícula de 6-9 mL no son de un
+// paciente real, ni en un shock a fondo (el dibujo exige aurículas ≥15 mL y VD ≥20 mL: LIMITES, corazon-geo.mjs; el VD no lleva suelo: un VD hipovolémico real conserva su FE, y el dibujo admite 20 mL). Se sube el volumen sin
+// tensión (v0) de cada cámara lo que pide la gravedad; la presión depende de V−V0, así que la presión no cambia. Para que tampoco cambie
+// ninguna otra presión, el mismo volumen se resta al volumen sin tensión de las venas (vuVen: la sangre total no cambia) y se suma al del saco pericárdico (v0Peri). Subirlo en la base (el normal)
+// ensanchaba el VD normal a ~160 mL, con una luz de 47 mm en el SC4C, por encima de los 41 mm de dilatación (Lang 2015, p. 17: «un diámetro >41 mm en la base indica dilatación del VD»; VTD normal 3D 87 mL/m² en varones)
+// y hacía fallar seis pruebas del normal. Los mL, ilustrativos: lo que fija el suelo son los límites del dibujo
+const suelo = (m, vd, ai, ad) => { m.p.vd.v0 += vd; m.p.ai.v0 += ai; m.p.ad.v0 += ad; const t = vd + ai + ad; m.p.v0Peri += t; m.p.vuVen -= t; };
+const SUELO_HEM = [0, 9, 8], SUELO_DER = [0, 10, 8], SUELO_TEP = [0, 6, 0], SUELO_VASO = [0, 5, 3];
+const sueloG = (m, dosis, g) => suelo(m, dosis[0] * g, dosis[1] * g, dosis[2] * g);
+
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
@@ -42,15 +79,19 @@ export const ESCENARIOS = {
     // sangre perdida, de 0 al 42 % de la volemia. El defecto, 1 L (el 21 %: Clase II)
     gravedad: { fin: 'el shock hemorrágico a fondo', defecto: 1000 / HEM_ML_MAX, texto: (g) => `${Math.round(g * HEM_ML_MAX)} mL perdidos (${Math.round(g * HEM_FRACCION_MAX * 100)} % de la volemia)` },
     // (se va a su ritmo: motor.mjs, ritmoHemorragia)
-    aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; },
+    aplicar: (m, g = 1000 / HEM_ML_MAX) => { m.p.hemorragia = g * HEM_ML_MAX; sueloG(m, SUELO_HEM, g); },
   },
   fallo: {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
     // contractilidad del VI (Ees) de la normal a EES_VI_MIN, en escala logarítmica (cada paso la multiplica por lo mismo).
     // El defecto, Ees 0,9
-    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
+    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: FALLO_DEFECTO,
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
-    aplicar: (m, g = Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN)) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g; },
+    aplicar: (m, g = FALLO_DEFECTO) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g;
+      const u = Math.min(1, g / FALLO_DEFECTO);
+      m.p.relajacion = 1 + (FALLO_RELAJACION - 1) * u;
+      // AI con presión alta: pared más rígida, S venosa pulmonar menor (S/D < 1)
+      m.p.ai.b *= 1 + (FALLO_AI_RIGIDEZ - 1) * u; },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
@@ -59,7 +100,7 @@ export const ESCENARIOS = {
     // taponado da una mediana de ~15-16 mm (moderado) y >20 mm por detrás.
     // líquido en el saco, de 0 a DERRAME_ML_MAX (entra a su ritmo: motor.mjs, ritmoDerrame). El defecto, 260 mL
     gravedad: { fin: 'el taponamiento a fondo', defecto: DERRAME_DEFECTO, texto: (g) => `${Math.round(derrameMl(g))} mL de derrame` },
-    aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); },
+    aplicar: (m, g = DERRAME_DEFECTO) => { m.p.liquidoPeri = derrameMl(g); sueloG(m, SUELO_DER, g); },
   },
   vasoplejia: {
     nombre: 'Vasoplejía', tipo: 'vasodilatador',
@@ -69,7 +110,7 @@ export const ESCENARIOS = {
     // gravedad del shock), ×0,5 deja la misma PA: ~52 a los 10 s y ~66 asentada. Con la RVS calibrada (rSis 1,05 → 0,90) y el
     // techo de +35 % (motor.mjs, 21/10/2026), ×0,5 la dejaba en ~49 a los 10 s (sistólica 59) y ×0,55 da otra vez ~53 y ~69,
     // con una resistencia absoluta parecida a la de antes. Ilustrativo)
-    aplicar: (m) => { m.p.rSis *= 0.55; m.p.vuVen *= 1.5; },
+    aplicar: (m) => { m.p.rSis *= 0.55; m.p.vuVen *= 1.5; suelo(m, ...SUELO_VASO); },
   },
   // --- Formas de enfermedad: cambian la anatomía además del latido (excepción a «anatomía congelada», a petición
   // del usuario: «hazlas según la bibliografía de la aplicación»). Lo que se exige son las cifras de CRITERIOS_FORMA,
@@ -79,7 +120,12 @@ export const ESCENARIOS = {
     nombre: 'Hipertrofia del VI', forma: true,
     // sobrecarga de presión (HTA): más masa (pared gruesa), ventrículo rígido y más resistencia sistémica.
     // Fisiopatología UCI · Cardiología, Ficha 3: la sobrecarga de presión produce hipertrofia del VI y rigidez
-    aplicar: (m) => { m.p.mioVi = 1.6; m.p.vi.b *= 2.2; m.p.rSis *= 1.25; },
+    // gravedad (mando de grado 1 a grado 2; masa y pared fijas en todo el recorrido): con g bajo manda la relajación lenta (e′ baja,
+    // E cae, la A pesa: E/A ≤0,8, PCP normal = grado 1); al subir g crecen la rigidez (vi.b) y el volumen retenido, la PAI pasa de 15 y E
+    // se recupera (E/A >0,8 y <2 con e′ baja y E/e′ ≥14 = seudonormal, grado 2; Nagueh 2025 p. 554, PCP >15 p. 550). Ilustrativo
+    gravedad: { fin: 'el grado 2 (seudonormal)', defecto: HVI_DEFECTO, texto: (g) => { const r = hviRecorrido(g), v = Math.round(r.vSangre / 10) * 10; return `rigidez ×${coma(r.b, 1)}, volumen ${v < 0 ? 'bajo la volemia normal ' + Math.abs(v) : v > 0 ? 'retenido ' + v : 'normal'}${v === 0 ? '' : ' mL'}`; } },
+    aplicar: (m, g = HVI_DEFECTO) => { const r = hviRecorrido(g);
+      m.p.mioVi = 1.6; m.p.vi.b *= r.b; m.p.rSis *= 1.25; m.p.relajacion = r.relajacion; m.s.vven += r.vSangre; },
   },
   dilatada: {
     nombre: 'Miocardiopatía dilatada', forma: true,
@@ -91,7 +137,7 @@ export const ESCENARIOS = {
     // (Zoghbi Tabla 8, p. 332: moderada 0,20-0,39); la AI recibe el reflujo y se remodela (más volumen sin tensión, más
     // distensible) hasta una AI «generalmente grave» (Tabla 6, p. 320). Parámetros ilustrativos.
     aplicar: (m) => { const dil = (DILATADA_V0 - BASE.vi.v0) / 50;   // 1 = la dilatación de siempre (+50 mL de volumen sin tensión)
-      m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
+      m.p.relajacion = RELAJACION_FER; m.p.vi.b *= RIGIDEZ_DIL; m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
       m.p.eroaMitral = Math.min(EROA_IM_TOPE, EROA_IM_POR_DIL * dil); m.p.ai.v0 = BASE.ai.v0 + AI_V0_POR_DIL * dil; },
   },
   tep: {
@@ -105,7 +151,7 @@ export const ESCENARIOS = {
     // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
     // (~0,93) es el de siempre: ×8 y ×0,65
     gravedad: { fin: 'el TEP de alto riesgo a fondo', defecto: TEP_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** g, 1)}` },
-    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul *= TEP_RPUL_MAX ** g; m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; },
+    aplicar: (m, g = TEP_DEFECTO) => { m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** g); m.p.vd.ees *= 1 - TEP_EES_VD_DEFECTO / TEP_DEFECTO * g; sueloG(m, SUELO_TEP, g); },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
@@ -116,8 +162,8 @@ export const ESCENARIOS = {
     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
-      m.p.rPul *= r.k; m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
-      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; },
+      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
   },
 };
 

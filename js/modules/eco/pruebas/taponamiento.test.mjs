@@ -97,7 +97,10 @@ test('P1 · el pliegue se dibuja: la pared libre de la AD y la del VD se hunden 
     const g = construirCorazon(e, { detalle: false }), g0 = construirCorazon(e0, { detalle: false });
     const a = g.partes.find(x => x.nombre === pieza).pos, b = g0.partes.find(x => x.nombre === pieza).pos;
     let hundido = 0; for (let i = 0; i < a.length; i += 3) hundido = Math.max(hundido, Math.hypot(a[i] - b[i], a[i + 1] - b[i + 1], a[i + 2] - b[i + 2]));
-    assert.ok(hundido > 4, `${pieza}: la pared se mueve ${hundido.toFixed(1)} mm`);
+    // umbral ilustrativo: 4 mm en la AD; en el VD, 1,5 mm (eco-calibra-a s2: a fondo el VD del motor tiene ~27 mL y su luz en el centro
+    // del pliegue mide ~2,8 mm; los 4 mm se fijaron cuando el dibujo inflaba el VD a 45 mL, que no era el del motor)
+    const min = pieza === 'AD' ? 4 : 1.5;
+    assert.ok(hundido > min, `${pieza}: la pared se mueve ${hundido.toFixed(1)} mm`);
   }
   // la AD plegada tiene los mL de la AD del motor (como sin pliegue, B2: ±12 %), medida en la AD más llena de las plegadas
   // del derrame por defecto (con el taponamiento a fondo la AD plegada está en el mínimo que se dibuja, 15 mL)
@@ -239,15 +242,16 @@ for (const [k, pieza, vista] of [['pliegueAd', 'AD', 'a4c'], ['pliegueVd', 'VD',
     // puntos desplazados por el pliegue (entran en la luz del corte sin plegar, > 40 % del máximo hundimiento): la mayor tanda seguida, y su tercio medio
     const dentro = (q, b) => { let c = false; for (let i = 0, j = b.length - 1; i < b.length; j = i++) if ((b[i][1] > q[1]) !== (b[j][1] > q[1]) && q[0] < (b[j][0] - b[i][0]) * (q[1] - b[i][1]) / (b[j][1] - b[i][1]) + b[i][0]) c = !c; return c; };
     const dd = f.map(q => dentro(q, s0) ? distA(q, s0) : 0), dm = Math.max(...dd), des = dd.map(x => x > 0.4 * dm), n = f.length;
-    assert.ok(dm > 3, `hundimiento máximo ${dm.toFixed(1)} mm`);
+    // ilustrativo: 3 mm en la AD; en el VD, 1 mm (su luz a fondo es de ~2,8 mm: ver «el pliegue se dibuja»)
+    assert.ok(dm > (pieza === 'AD' ? 3 : 1), `hundimiento máximo ${dm.toFixed(1)} mm`);
     let ini = 0, lon = 0; for (let i = 0; i < n; i++) { if (!des[i]) continue; let l = 0; while (l < n && des[(i + l) % n]) l++; if (l > lon && l < n) { lon = l; ini = i; } }
     assert.ok(lon >= 6, `tanda desplazada de ${lon} puntos`);
     const medio = Array.from({ length: Math.max(1, Math.floor(lon / 3)) }, (_, j) => (ini + Math.floor(lon / 3) + j) % n);
     const sig = orient(f), cur = medio.map(i => giro(f, i) * sig).reduce((a, b) => a + b, 0) / medio.length;   // < 0: cóncavo hacia la luz
     assert.ok(cur < -0.05, `curvatura media del tercio medio ${cur.toFixed(3)} rad (cóncava < 0)`);
-    // la cámara sigue con luz a los lados: conserva al menos el 35 % del área del mismo corte sin pliegue y el hundimiento no la parte en dos (el volumen es el del motor: lo que pierde en el pliegue lo recoloca en los extremos, por eso el área puede subir)
+    // la cámara sigue con luz a los lados: conserva al menos el 35 % del área del mismo corte sin pliegue y el hundimiento no la parte en dos (el volumen es el del motor: lo que pierde en el pliegue lo recoloca en los extremos, por eso el área puede subir; tope 1,25 → 1,35 en la s2 de eco-calibra-a: con el VD real del shock, ~27 mL, lo recolocado pesa más; ilustrativo)
     const a = area(f), a0 = area(s0);
-    assert.ok(a / a0 > 0.35 && a / a0 < 1.25, `área ${a.toFixed(0)} frente a ${a0.toFixed(0)} mm² sin pliegue`);
+    assert.ok(a / a0 > 0.35 && a / a0 < 1.35, `área ${a.toFixed(0)} frente a ${a0.toFixed(0)} mm² sin pliegue`);
     const punta = f[medio[Math.floor(medio.length / 2)]], lejos = f.filter((_, i) => { const d = Math.min((i - ini + n) % n, (ini - i + n) % n); return d > n / 4; });
     assert.ok(distA(punta, lejos) > 2, `la punta del pliegue queda a ${distA(punta, lejos).toFixed(1)} mm de la pared de enfrente`);
   });

@@ -5,8 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-27, noche (3.ª): `pif-ecg` en revisión (PR #36); su parte, leído. Los informes del
-Objetivo P, hechos y decididos: `eco-calibra-a`, `b3-paso4` y `competencias-r2r5` empiezan el 28/10.
+Última sincronización: 2026-10-28, 17:25 (cierre de la sesión «Plan Marino 100 %»): parte de la fase 1 de `educacion-pionera` leído; fase 2 en marcha; tareas programadas revisadas; ninguna tarea en revisión.
 
 ---
 
@@ -251,6 +250,12 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M · **fase 1 hecha** (28/10, adelantada por ti: 1,3 M; `autonomo/ideas/educacion-pionera/`) · **fase 2 en marcha** (28/10, sesión nueva) | 2026-10-28 | Fase 3 (las maquetas) el 02/11; **parada contigo el 04/11** |
+| `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
+| `eco-calibra-b`, `capilar-transfundir` | Los 3 huecos de la eco (TEP con escalón, shock cardiogénico coherente, DT del grado 1) y el tope del mando «Transfundir» del capilar vivo | aprobadas por el Consejo (28/10, 3.ª), **aparcadas**: la 1.ª espera el informe `eco-reforma`, la 2.ª la parada del 04/11 | 2026-10-28 | ≈3,5 M y ≈0,5 M. Acta `autonomo/consejo/2026-10-28-3.md` |
+| `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | aprobado el 28/10; programado el 01/11 (4-6 M) | 2026-10-28 | La decisión de arquitectura, después, es tuya. `f0-eco-*`, `f2-ete`, `b3-ritmo-motor` y el atlas esperan |
+| `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
+| `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
 | `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10). **Paso 4: plan escrito, sin construir** (`autonomo/bloques/b3/plan-paso4.md`): 17 fichas en 6 grupos, 17 piezas nuevas, ≈35-40 M en 10-12 sesiones; espera tu decisión | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
@@ -269,7 +274,7 @@ esta sección.
 | `eco-calibra-a`, `b3-paso4` | Arreglar el motor de la eco (≈5,5 M, 28-29/10) y paso 4 del `b3` por grupos encadenados (≈36 M, grupos 1-6 del 28 al 30/10; parada 3 contigo el 31/10) | pendiente (programadas) |
 | `azul-cobertura`, `radio-informe` | **Objetivo P2**: mapa de El Libro Azul frente a Marino y propuesta del PIF de Radiología (B-034), solo informes | pendiente (31/10) | 2026-10-27 | «Sí a todo» (27/10, noche) |
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
-| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **en revisión**: [PR #36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36) (11 fichas, ~60 trazados reales, lector, 28 ejercicios, tarjeta «¿Rápido o lento?»; profesor 8,25-9) | 2026-10-27 | Recomendado por la bitácora: la rotación empieza el 01/11 |
+| `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
 | `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
@@ -311,22 +316,37 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
+  consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
+  aviso B de Educación: `capilar-transfundir` aparcada hasta el 04/11 · ESC 2023 de SCA y repaso espaciado: cerrados ·
+  three.js: va como opción en el informe `eco-reforma` · los 2 papers de pago: dejan de recordarse (aparcados en el Radar).
+- **Para la fase 3 de Educación (opcional, antes del 02/11)**: abrir en la red del entorno **phet.colorado.edu**
+  (recomendación del Consejo; comprobado el 28/10 que sigue cerrada). Brilliant, si quieres (casi todo de pago); las
+  editoriales no hacen falta (la evidencia sale de PubMed).
+- **Tareas programadas (revisadas el 28/10, 17:25)**: 28/10 (noche) `mayeutica-pestana`, adelantada por el usuario · 29/10 7:40 grupo siguiente del `b3` · 30/10 7:40 siguiente
+  grupo del `b3` · 31/10 8:13 informes de El Libro Azul y Radiología (+ `b3`) · 01/11 `eco-reforma` · 02/11 fase 3 de
+  Educación · 04/11 recordatorio de los puntos 18-22 y parada de Educación · cada día 13:43 y 21:43 el informe de la
+  bitácora con la línea «Marino N de 155» · 6:42 la Bandeja del Radar. Las de esta sesión se pasaron a sesiones nuevas
+  para poder cerrarla. Queda pausada (no salta) la vieja del 29/10.
+- **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde. Ya resueltos por el Consejo (28/10,
+  3.ª): los 2 papers, abrir sitios, three.js y repaso espaciado. Quedan para el aviso del 04/11: PDF opcionales (AHA
+  2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida, velocidad del plan y rutina nocturna, y la
+  elección de maqueta de Educación (A, B o C).
+
+
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
 
 - **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
   vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
-  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. **Falta**: el PDF de la ESC 2023
-  de SCA (Byrne, Eur Heart J 2023;44:3720-3826, doi:10.1093/eurheartj/ehad191). El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
+  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
   de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). También Wagner 2009 (AHA, territorios) y Thygesen
-  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). Pendiente de su respuesta: three.js (3D) y el repaso espaciado (4.ª excepción de `localStorage`).
+  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). three.js y repaso espaciado: resueltos por el Consejo del 28/10 (3.ª).
 
 
 - **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
   Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
 - **Optimizar los agentes del plan** (pedido del usuario el 19/10: más fluido, menos gasto, mejor trabajo): propuesta
   en el chat, esperando su visto bueno.
-- **Regla sin respuesta**: que los jueces midan también las tablas que se salen de su tarjeta (no solo la página).
-  Salió en R5. ¿La apruebas?
 
 - **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
   PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
@@ -352,10 +372,6 @@ El resto del tablero sigue `aparcada`.
   **Comprobado el 28/10**: la tarea corrió y leyó los 4 tuits (el texto va dentro de la página de `x.com`). No
   se pueden abrir `t.co`, `doi.org`, PubMed, Europe PMC ni criticalcarereviews.com: los papers se buscan por título
   en la web y, si no aparecen o son de pago, se pide el PDF en el issue. 2 papers esperan PDF/enlace del usuario.
-- **Tareas programadas hasta el domingo** (27/10, noche, «sí a todo»), todas con ese mismo arreglo: 28/10 7:40 abre
-  `b3-paso4` (grupo 1) y `eco-calibra-a` · 29 y 30/10 7:40, el siguiente grupo y la eco si falta · 31/10 8:13,
-  `azul-cobertura`, `radio-informe` y el `b3` si falta. Los grupos del `b3` además se encadenan solos.
-  La vieja de `arritmias-maqueta` la borró el usuario el 27/10 (comprobado).
 - **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
   pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
   de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
@@ -455,41 +471,19 @@ El resto del tablero sigue `aparcada`.
 - **Sesiones cerradas (hecho el 27/10)**: las sesiones del plan se cierran solas y cada una deja su fila en
   `autonomo/SESIONES.md` (tarea, qué salió, informe o PR, qué te toca, parte y enlace a la sesión archivada). El
   informe «Bitácora diaria» lo lee y ya no se archiva a sí mismo.
-- **Propuestas de regla de los partes (25-27/10)**, ¿las apruebas?
-  - Simuladores con revisión por objetivos: su prueba recorre un camino incompleto y uno correcto (potasio).
-  - Un modelo que pausa su animación fuera de la vista: su prueba lo pone a la vista antes de medir (fórmula común).
-  - En `/ingenieria-reversa`, probar antes el acceso a cada web; si está cerrada, pedirte abrirla (rea-eco).
-  - Una skill nueva pedida en una tarea aprobada va en la PR de esa tarea (Radar).
-  - Las vueltas de arreglo de una maqueta, con el modelo barato (eco-mega; lo mide `notas-meta`).
-  - Al pasar una maqueta a la app, probarla en la app real con toque a 390 px, al lado de la maqueta (eco-mega).
-  - Cada encargo de forma de la eco entrega una captura de cada vista junto a la eco real (eco-mega, parada 2).
-  - Dos constructores a la vez: la suite de pruebas solo con el árbol limpio o en su propia copia (eco-mega).
-  - El enlace «Ver en el móvil» lleva el commit completo, no el nombre de la rama (el 27/10 viste «No se pudo cargar
-    el simulador» por piezas viejas mezcladas).
-  - Los avisos de «medida imposible» se rotulan «control de la app» y solo cubren lo que rompe la fórmula
-    (eco-vci-retenido).
-  - Las pruebas miden la posición de una caja justo al contestar, no después de centrarla; y avisar al constructor
-    de los commits suyos ya hechos (objetivos-casos).
-  - Al pausar por límite de uso, los apuntes de los agentes se copian al repositorio (b3).
-  - ¿Guardar en `autonomo/` el script del inventario para repetirlo cada cierto tiempo? (inventario).
-- **Propuesta de regla nueva** (`topes-acidobase`, 27/10): un aviso de tope no escribe la cifra imposible, sino el
-  límite que se habría cruzado (o que el juez de topes distinga un aviso de rechazo de una cifra del paciente).
-  ¿La apruebas?
 - **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
   consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
-- **🔴 PR #36 · `pif-ecg` (ECG y arritmias)**: mírala en el móvil y fusiónala si te gusta. Se construyó con lo
-  recomendado en las 3 preguntas de su informe (eje fuera, tarjeta sin dosis, ejercicios con pareja como pregunta y
-  el resto en galería). `ecg-guardia` (mañana) continúa sobre esa rama, y `ecg-vector-app` espera a que entre en `main`.
-- **Propuestas de regla de `pif-ecg`** (27/10), ¿las apruebas?
-  - Cada lector de fuente en paralelo, con su propia subcarpeta temporal (uno pisó los archivos de otro).
-  - «Una consecuencia en un distractor también lleva página, o no va» (10 distractores sin fuente en la fase A).
-  - «El enunciado no nombra lo que se pregunta» (7 de 28 ejercicios describían la respuesta).
-  - Ahorro: una petición nueva a mitad de tarea va a otra sesión; recortar figuras y escribir preguntas, dos encargos.
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
 
 ## 4. Mejoras de lo que ya existe
+
+- **Eco, visto de paso en `eco-calibra-a`** (28/10): el taponamiento no muestra la variación respiratoria de la E. (Los
+  tres huecos de ese parte ya son la tarea `eco-calibra-b`, Consejo del 28/10.)
+- **Corazón eléctrico, visto en el grupo 1 del `b3`** (28/10): el estado `tv` marca «Pulso 0» con ART 102/79; el enlace
+  `ritmoVivo` no puede abrir la FA con «Llenado malo» ya puesto; `mayeutica-fichas.mjs` con 1-2 fichas da 2 rojos
+  falsos; `--modelo mayeutica-fichas` tarda ~25 min por ficha.
 
 - **Eco, lo que dejó la parada 3 de `eco-mega`** (27/10; detalle en `autonomo/bloques/eco-mega/profesor-p3.md` y
   `p3-*.md`). Coste medio, para una parada 4 o un arreglo: (1) que el pliegue de la AD/VD del taponamiento se vea a
@@ -585,14 +579,27 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Ahorro · Contar las piezas en el código, no en la cobertura** (propuesto 2026-10-27 por /ahorro) · Visto en: eco-mega parada 3 (+70 %, 5,2 M de piezas que salieron en marcha) y b3 plan del paso 4 (la revisión del encargo pasó de 6 a 17 piezas: estimado de 22-26 M a 35-40 M) · Cambio: antes de estimar una parada o un paso, el director saca con `node -e` las claves de estado que ya tiene cada modelo y las cruza con lo que pide la cobertura; la lista de lo que falta va al encargo y al revisor del encargo (que así no relee los archivos de datos: 115 % de su presupuesto hoy) · Ahorro esperado: evita paradas que se alargan un 50-70 % sin aviso (1-5 M por parada) y ~0,05 M en cada revisión del encargo.
 - (26/10, sigue en pie: toca ahora, en el paso 4) **Las preguntas viejas del bloque 3, a la vez.** Merino Cardiología (48) y Neumología (46) son los bancos con
   más preguntas «de redactar» (`js/data/merino-*-preguntas.js`) y son justo las fichas del bloque 3: reconvertirlas en
   la misma tanda evita tocar esas fichas dos veces.
 - (23/10) Las dos propuestas que había (pulmón con respirador e inventario de estudio) te gustaron y pasan a
   «Apuntado» como B-013 y B-014.
 
+
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-28 · **Repaso espaciado**: decidiste guardar la fecha del último intento en el mismo registro de aciertos y fallos (en tu móvil; `CLAUDE.md` §2). **2.º Consejo**: encargo de Educación pionera (3 maquetas, ≈6 M; 30/10 y 02/11; parada el 04/11).
+- 2026-10-28 · **Primer Consejo de Ministros** (acta `autonomo/consejo/2026-10-28.md`): resueltas las 5 dudas de Marino, el ETE se queda como fuente de lo que ya está en el tablero, informe de la eco recomendado y pestaña «Mayéutica» en toda la app (29/10). ≈0,5 M.
+- 2026-10-28 · **Consejo de Ministros y Ministerio de Educación** (B-037, B-038, en main): REGLAS §4.12 y skill `/mayeutica`.
+- 2026-10-28 · **Reforma del gobierno** (B-036, en main): `/plan-socialista` presenta presupuesto y rinde cuentas,
+  `/ahorro` recorta sola antes de gastar (queda escrito), `/bitacora` lleva el rumbo con el gasto; apruebas por
+  bloque; comparecer si se pasa más de un 25 % (REGLAS §4.10).
+- 2026-10-28 · **24 reglas y 6 ahorros aprobados** (los puntos 7-12): en REGLAS §4.11 (jueces, cobertura, fuentes,
+  constructores, sesiones).
+
+- 2026-10-28 · **Cuaderno «ECG y arritmias»** (`pif-ecg`, PR #36, en main): PIF → Cardiología, 11 fichas del libro
+  de López Ramírez con ~60 trazados reales, lector de ECG, 28 ejercicios, tarjeta «¿Rápido o lento?» y 125
+  preguntas. Profesor 8,25-9; auditores, graves corregidos.
 
 - 2026-10-27 · **Plan del ECG** (`ecg-plan`, B-033): 3 caminos (guardia, desde cero, laboratorio de arritmias) con
   piezas y gasto (https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c). Aprobado: 6 tareas en el tablero; Anatomy, skill.
@@ -650,14 +657,3 @@ El resto del tablero sigue `aparcada`.
   (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
   (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
   no cambió.
-
-- 2026-10-20 · **«La cama 7» en la app** (PR #23) y **motor calibrado** (PR #22), aprobados y en main.
-  - Muralla, telar e inmersión en Libros → Marino → Modelos vivos, con la misma cama y desde sus 5 fichas.
-  - 11 formas nuevas en la tabla única. Si un modelo vivo falla, el resto de Libros sigue funcionando.
-  - PVC normal 4,2 mmHg; elevación de piernas en la hemorragia +20 %.
-
-- 2026-10-20 · **Marino, bloque 1 en modelos vivos** (PR #19, #20 y #21), aprobados y en main.
-  - Mayéutica en las 23 fichas de Fundamentos (botón Texto | Visual | Mayéutica).
-  - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
-  - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
-  - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).

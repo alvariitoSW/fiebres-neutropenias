@@ -4665,6 +4665,12 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
 [data-visual] > .vista-estudiar { display: none; }
 [data-visual].modo-estudiar > .vista-estudiar { display: grid; }
 [data-visual].modo-estudiar > .vista-texto { display: none; }
+/* Modo Mayéutica: solo la guía (paso Piensa); sin cabeza, lista de pasos, título del paso, pie ni «Para profundizar». */
+[data-visual].modo-mayeutica > .vista-estudiar .est-cabeza,
+[data-visual].modo-mayeutica > .vista-estudiar .est-resumen,
+[data-visual].modo-mayeutica > .vista-estudiar .est-paso-t,
+[data-visual].modo-mayeutica > .vista-estudiar .est-pie,
+[data-visual].modo-mayeutica > .vista-estudiar .may-profundizar { display: none; }
 .est-cabeza { display: grid; gap: 4px; min-width: 0; }
 .est-resumen { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
 .est-resumen li { min-width: 0; }
@@ -4920,3 +4926,35 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .rtv-raiz .rtv-formato [data-accion], .rtv-raiz .rtv-formato .rtv-mando, .rtv-raiz .rtv-formato .rtv-respuesta { scroll-margin-bottom: calc(var(--rtv-dock-h, 170px) + 16px); }
 .rtv-raiz.rtv-mayeutica .rtv-mini-cap > b, .rtv-raiz.rtv-mayeutica .rtv-mini-cap > span { display: none; }   /* el rótulo de la lupa nombra el ritmo: daría la respuesta */
 /* [FIN HUECO ritmo parte 2] */
+
+/* ---- Lector de ECG (PIF Cardiología · vista Visual): trazado real + chips que encienden derivaciones o zonas ---- */
+.ecg-lector { display: flex; flex-direction: column; gap: 8px; }
+.ecg-lector-fig { position: relative; background: #fff; border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; }
+.ecg-lector-fig img { display: block; width: 100%; height: auto; }
+.ecg-lector-capa { position: absolute; inset: 0; pointer-events: none; }
+.ecg-celda { position: absolute; box-sizing: border-box; border: 1px dashed var(--text-muted); }
+.ecg-celda::before, .ecg-zona::before { content: ''; position: absolute; inset: 0; background: var(--bg-main); opacity: 0; transition: opacity .2s; }
+.ecg-celda.atenuada::before { opacity: .6; }
+.ecg-celda.encendida { border: 2px solid var(--accent-red); }
+.ecg-celda.encendida::before { background: var(--accent-yellow); opacity: .3; }
+.ecg-zona { position: absolute; box-sizing: border-box; border: 2px solid var(--accent-red); border-radius: 4px; }
+.ecg-zona::before { background: var(--accent-yellow); opacity: .25; }
+.ecg-celda-rotulo { position: absolute; left: 1px; bottom: 1px; z-index: 1; padding: 0 3px; border-radius: 3px; background: var(--bg-main); color: var(--text-main); font-size: .6rem; line-height: 1.3; font-weight: bold; }
+.ecg-zona .ecg-celda-rotulo { top: 1px; bottom: auto; }
+.ecg-lector-titulo { margin: 0; font-size: .8rem; color: var(--text-muted); }
+.ecg-lector-frase { margin: 0; min-height: 2.8em; font-size: .86rem; line-height: 1.4; color: var(--text-main); }
+.ecg-lector-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ecg-chip { min-height: 40px; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border-color); background: transparent; color: var(--text-main); font: inherit; font-size: .78rem; cursor: pointer; touch-action: manipulation; }
+.ecg-chip.active, .ecg-chip[aria-pressed="true"] { border-color: var(--accent-yellow); background: rgba(255,255,255,0.1); font-weight: bold; box-shadow: inset 0 -3px 0 var(--accent-yellow); }
+.ecg-chip-paso { margin-right: 2px; color: var(--accent-yellow); }
+.ecg-lector-calculo { margin: 0; padding: 8px 10px; border: 1px dashed var(--border-color); border-radius: 8px; font-size: .8rem; }
+.ecg-lector-calculo-rot { display: block; font-size: .65rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); }
+.ecg-lector-pie { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ecg-lector-pagina { font-size: .75rem; }
+.ecg-lector-guardia { flex-direction: column; align-items: stretch; }
+.ecg-guardia-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ecg-guardia-pregunta { flex-basis: 100%; font-size: .75rem; color: var(--text-muted); }
+.ecg-comprobar { min-height: 44px; border-radius: 8px; border: 1px solid var(--accent-yellow); background: transparent; color: var(--accent-yellow); font: inherit; font-size: .82rem; cursor: pointer; touch-action: manipulation; }
+.ecg-comprobar:disabled { opacity: .4; cursor: default; }
+.ecg-chip.ecg-correcta { border-color: var(--accent-green); box-shadow: inset 0 -3px 0 var(--accent-green); }
+.ecg-chip.ecg-fallada { border-color: var(--accent-red); text-decoration: line-through; }

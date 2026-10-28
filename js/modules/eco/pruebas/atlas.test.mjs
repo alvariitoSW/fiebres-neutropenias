@@ -142,6 +142,16 @@ test('10 Diastólica: el algoritmo con los casos del texto (grado 1, grado 3, si
   assert.equal(algoritmoAse({ ...base, ea: 1.1, lavi: 40 }).grado, 2);
 });
 
+// 10 Diastólica · la miocardiopatía dilatada del simulador es un grado 3 (restrictivo) con el mismo algoritmo (eco-calibra-a s2):
+// E/A ≥2 y PAI elevada (Nagueh 2025 p. 554), TDE <140 ms con la FE baja (p. 547, Tabla 4), e′ baja (p. 554) y PAI del motor >15
+test('10 Diastólica: la miocardiopatía dilatada sale grado 3 (restrictivo) con el algoritmo ASE 2025', async () => {
+  const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
+  const m = crearMotor(); m.correr(12); ESCENARIOS.dilatada.aplicar(m); m.correr(ASENTAR_FORMA);
+  const v = medirLlenado(m), r = algoritmoAse(v);
+  assert.equal(r.grado, 3, JSON.stringify([r.rama, r.pai, v.ea, v.eeAvg, v.vTr]));
+  assert.ok(v.ea >= 2 && v.tde < 140 && v.avg <= 6.5 && v.pai > 15 && v.fe <= 0.4, `E/A ${v.ea} TDE ${v.tde} e′ ${v.avg} PAI ${v.pai} FE ${v.fe}`);
+});
+
 // 09 Función sistólica: el biplano sobre la geometría de la app se acerca al volumen real del motor, el acortamiento del
 // ápex infraestima los dos volúmenes, y las bandas de FEVI y el acortamiento del borde van en el sentido de cada corazón
 test('09 Sistólica: biplano ≈ volumen del motor, el ápex acortado infraestima, y FEVI y strain por corazón', () => {

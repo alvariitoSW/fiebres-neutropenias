@@ -15,7 +15,7 @@
 // modelo mueve el anillo según lo que se vacía el VD y esa velocidad queda por debajo de la real), la muesca
 // mesosistólica del flujo pulmonar (hace falta reflexión de ondas, y el lecho pulmonar es un compartimento), el signo de
 // McConnell (movimiento regional de la pared libre) y los trombos. Las magnitudes de cada sobrecarga son ilustrativas.
-import { crearMotor, BASE } from '../motor.mjs';
+import { crearMotor, BASE, escalarRPul } from '../motor.mjs';
 import { baseGeometrica, construirCorazon, PHI_SEPTO } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, crearEcografo, enPlano, VISTAS } from '../ecografia.mjs';
@@ -48,7 +48,7 @@ export function ajustesVd(carga, s) {
   if (carga === 'presion') {
     const k = 1 + 11 * x;                                           // resistencia pulmonar ×1 a ×12
     const ees = x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4;   // se adapta y después falla
-    return { motor: { rPul: B.rPul * k, cAp: B.cAp / k ** 0.5, durVd: 1 + 0.25 * x, mioVd: 1 + 1.4 * Math.min(1, x / 0.7),
+    return { motor: { rPul: escalarRPul(B, k), cAp: B.cAp / k ** 0.5, durVd: 1 + 0.25 * x, mioVd: 1 + 1.4 * Math.min(1, x / 0.7),
       vSangre: B.vSangre + 700 * c01((x - 0.6) / 0.4),
       vd: { ees: B.vd.ees * ees, b: B.vd.b * (1 + 0.2 * x), v0: B.vd.v0 + 160 * c01((x - 0.5) / 0.5) ** 1.5 } } };
   }
@@ -56,7 +56,7 @@ export function ajustesVd(carga, s) {
     return { motor: { eroaTricus: 1.0 * x, vSangre: B.vSangre + 900 * x,
       vd: { v0: B.vd.v0 + 50 * x, b: B.vd.b * (1 + 0.7 * x) }, ad: { v0: B.ad.v0 + 10 * x } } };
   }
-  return { motor: {}, agudo: (m) => { m.p.rPul *= 1 + 7 * x; m.p.cAp /= 1 + 3 * x; m.p.vd.ees *= 1 - 0.4 * x; } };
+  return { motor: {}, agudo: (m) => { m.p.rPul = escalarRPul(m.p, 1 + 7 * x); m.p.cAp /= 1 + 3 * x; m.p.vd.ees *= 1 - 0.4 * x; } };
 }
 
 /** Motor asentado en el punto s de una sobrecarga (con el barorreflejo, como un paciente). */

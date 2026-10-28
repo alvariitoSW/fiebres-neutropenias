@@ -25,7 +25,11 @@ quedan para el día siguiente, para no gastar demasiado del límite de uso del p
 2. **Paper** → se integra en *UCI / Papers Tuiter* con las reglas de siempre (`CLAUDE.md` y
    `js/modules/uci-papers/CLAUDE.md`; las preguntas nuevas siguen `CLAUDE.md` §8: nada de redactar). Necesita el
    **texto completo**: si es de acceso abierto y se puede descargar, a `docs/`; si no, se pide al usuario que adjunte
-   el PDF en la propia bandeja. Rama `auto/bandeja-<AAAA-MM-DD>-<n>` y **PR en borrador**; nunca a `main` directamente.
+   el PDF en la propia bandeja
+   (un PDF por comentario, con una línea que diga a qué paper corresponde; la tarea lo descarga del adjunto de
+   GitHub). Red de la sesión abierta el 28/10 para `www.ebi.ac.uk` (Europe PMC: la búsqueda que mejor funciona),
+   `pubmed.ncbi.nlm.nih.gov`, `t.co`, `rc.rcjournal.com`, `journals.sagepub.com`, `criticalcarereviews.com` (con
+   control anti-robots: no se lee) y `doi.org` (aún cerrado ese día). Rama `auto/bandeja-<AAAA-MM-DD>-<n>` y **PR en borrador**; nunca a `main` directamente.
 3. **Tuit** → no es fuente. Se busca el **paper original** (DOI/PubMed; skills `paper-lookup` y `claim-check`) y se
    sigue como un paper. Si no hay paper detrás, va al Radar como idea.
 4. **Web, app o repositorio** → se apunta en `ENTRADAS.md` con su ficha de triaje; la ingeniería inversa

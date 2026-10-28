@@ -47,9 +47,17 @@ export function motorLlenado(f, segundos = 12) {
 
 // e′ del anillo lateral normal (cm/s) y cuánto cae con la relajación lenta: e′ = 12 / relajación^0,6. El septal, el
 // 80% del lateral. Ilustrativo (fisiología general: e′ depende sobre todo de la relajación; el septal es menor)
+// Fuerzas de restitución (eco-calibra-a s2, 28/10/2026): e′ depende de la relajación, de las fuerzas de restitución (el muelle
+// que la sístole comprime y que en la diástole se suelta: la succión) y de la carga de llenado (Nagueh 2025, p. 553). Con la FE
+// reducida (≤40 %, Merino) el VI apenas se comprime y la succión se pierde: e′ se multiplica por la restitución (primera versión: FE ÷ 0,40, suelo 0,6)
+// (e′ septal ~3-4 cm/s, la del grado 3 avanzado de Nagueh 2025, p. 561). Proporción y suelo, ilustrativos. Sin fe, como antes.
+// Curva y suelo (eco-calibra-a s2, fallo): la restitución cae con (FE ÷ 0,40)^1,5 y el suelo es 0,35. Con FE ≈10 % (shock cardiogénico) e′ septal ~2 cm/s, por debajo del ejemplo de p. 561 (extrapolación
+// ilustrativa: el libro no da e′ con FE tan baja); sin ese suelo el E/e′ del shock no llega a 14 (Nagueh 2025 p. 557, Tabla 7: >14 en taquicardia)
 export const E_PRIMA_NORMAL = 12, E_PRIMA_EXP = 0.6, SEPTAL = 0.8;
-export function ePrima(relajacion) {
-  const lat = E_PRIMA_NORMAL / Math.pow(relajacion, E_PRIMA_EXP), sep = SEPTAL * lat;
+export const FE_RESTITUCION = 0.40, RESTITUCION_MIN = 0.35, RESTITUCION_EXP = 1.5;
+export const restitucion = (fe) => (fe == null || fe >= FE_RESTITUCION) ? 1 : Math.max(RESTITUCION_MIN, (fe / FE_RESTITUCION) ** RESTITUCION_EXP);
+export function ePrima(relajacion, fe) {
+  const lat = restitucion(fe) * E_PRIMA_NORMAL / Math.pow(relajacion, E_PRIMA_EXP), sep = SEPTAL * lat;
   return { lat, sep, avg: (lat + sep) / 2 };
 }
 
@@ -66,7 +74,7 @@ export function curvasLlenado(m) {
   let anillo = o.map((x, i) => { const a = le[(i - 1 + o.length) % o.length], b = le[(i + 1) % o.length];
     return { t: desdeR(x.t), v: -(b - a) / (2 * 0.002) / 10, fase: x.fase }; }).sort((a, b) => a.t - b.t);
   const tMvo = desdeR(u.tMitAbre), finE = anillo.filter(x => x.t > tMvo && (x.fase === 'F' || x.fase === 'E'));
-  const picoE = finE.reduce((a, x) => Math.max(a, -x.v), 0), e = ePrima(m.p.relajacion);
+  const picoE = finE.reduce((a, x) => Math.max(a, -x.v), 0), e = ePrima(m.p.relajacion, u.fe);
   if (picoE > 0) { const k = e.lat / picoE; const fin = finE.length ? finE[finE.length - 1].t : tMvo;
     anillo = anillo.map(x => (x.t >= tMvo && x.t <= fin + 0.04 && x.v < 0 ? { ...x, v: x.v * (x.t <= fin ? k : mix(k, 1, (x.t - fin) / 0.04)) } : x)); }
   return { mitral, anillo, T, tMvo, tAvc: desdeR(u.tS2), tAvo: desdeR(u.tAoAbre), tS1: desdeR(u.tS1) };
@@ -78,7 +86,7 @@ export function medirLlenado(m) {
   const pico = (xs) => xs.reduce((a, x) => (x.v > a.v ? x : a), { v: 0, t: 0 });
   const enF = (fs) => c.mitral.filter(x => fs.includes(x.fase));
   const E = pico(enF('FG')), A = pico(enF('A'));
-  const e = ePrima(m.p.relajacion);
+  const e = ePrima(m.p.relajacion, u.fe);
   const vaiMax = Math.max(...o.map(x => x.vai)), vaiMin = Math.min(...o.map(x => x.vai));
   const dtr = Math.max(0, ...o.filter(x => x.eVen > 0).map(x => x.pvd - x.pad));
   return {

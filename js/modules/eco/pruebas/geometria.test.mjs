@@ -1,7 +1,7 @@
 // Pruebas de la geometría del corazón y del flujo de sangre (sin navegador).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { baseGeometrica, construirCorazon, LIMITES, puntoValva } from '../corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, LIMITES, REF, puntoValva } from '../corazon-geo.mjs';
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
@@ -45,6 +45,28 @@ test('ninguna pieza tiene coordenadas no finitas ni índices fuera de rango (tam
       if (p.idx) { const n = p.pos.length / 3; for (let i = 0; i < p.idx.length; i++) assert.ok(p.idx[i] < n, `${p.nombre}: índice fuera de rango`); }
     }
     assert.ok(g.descenso >= -18 && g.descenso <= 6, `descenso ${g.descenso}`);
+  }
+});
+
+test('un VD vacío (20 mL, el límite inferior: shock hemorrágico) se dibuja con luz, sin cruzar el tabique ni la pared', () => {
+  assert.equal(LIMITES.vd[0], 20);
+  const g = baseGeometrica({ vvi: 120, vvd: LIMITES.vd[0] }), m = (REF.phiA + REF.phiB) / 2;
+  assert.ok(g.Wb(m) > 8, `luz del VD en la base ${g.Wb(m).toFixed(1)} mm`);
+  for (const z of [-5, -10, -20, -30, -45, -60]) for (const f of [0.2, 0.5, 0.8]) {
+    const ph = REF.phiA + (REF.phiB - REF.phiA) * f, w = g.wRV(z, ph);
+    assert.ok(Number.isFinite(w) && w >= 0, `luz del VD z=${z}: ${w}`);
+    assert.ok(g.rEpiVi(z, ph) > 0 && g.endoVd(z, ph) !== undefined);
+  }
+  assert.ok(g.wRV(-20, m) >= 3, `luz del VD a media altura ${g.wRV(-20, m).toFixed(1)} mm`);
+  let rv = Infinity;
+  for (const f of [g.anilloTricus, g.anilloRVOT]) for (let k = 0; k < 120; k++) {
+    const p = f(k / 120 * TAU), r = Math.hypot(p[0], p[1]), ph = Math.atan2(p[1], p[0]);
+    rv = Math.min(rv, r - g.ReB, g.ReB + g.Wb(ph) - r);
+  }
+  assert.ok(rv >= 1.5, `margen VD ${rv.toFixed(2)} mm`);
+  for (const op of OPCIONES) {
+    const c = construirCorazon({ vvi: 120, vvd: LIMITES.vd[0], vai: 40, vad: 35 }, op);
+    for (const pz of c.partes) for (const x of (pz.pos || pz.lineas)) assert.ok(Number.isFinite(x), `${pz.nombre}: coordenada no finita`);
   }
 });
 
@@ -262,9 +284,10 @@ test('pericardio con el VI por debajo de ~18 mL y el VD en su mínimo (P2)', { t
 // ---- C1: festones de la mitral (Carpentier) y cúspides con nombre. Qué corta cada vista: Hahn 2013 (ETE), con el plano
 // transtorácico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p. 932), 2 cámaras P3-A3A2A1 (p. 937),
 // comisural P3-A2-P1 (p. 935), eje corto basal con los seis (p. 939). La propia fuente avisa de que varía (p. 938).
+// (se incluye el instante de mayor flujo mitral: la prueba exige verla abierta y el muestreo fijo dependía de la fase del latido)
 const latidoC1 = (k = 'normal', cada = 40) => { const m = crearMotor(); m.correr(12); if (k !== 'normal') { aplicarEscenario(m, k); m.correr(10); }
-  const ex = { ...extraDeMotor(m), vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }, td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a));
-  return { td: { ...td, vviTd: m.ultimo.edv }, instantes: m.onda.filter((_, i) => i % cada === 0).map(s => { const e = estadoGeo(s, ex); return { e, g: construirCorazon(e, { detalle: true }) }; }) }; };
+  const picoMit = m.onda.reduce((a, b) => (b.qMit > a.qMit ? b : a)), ex = { ...extraDeMotor(m), vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD }, td = m.onda.reduce((a, b) => (b.vvi > a.vvi ? b : a));
+  return { td: { ...td, vviTd: m.ultimo.edv }, instantes: m.onda.filter((x, i) => i % cada === 0 || x === picoMit).map(s => { const e = estadoGeo(s, ex); return { e, g: construirCorazon(e, { detalle: true }) }; }) }; };
 const cortados = (g, P, valvula) => valvasEnPlano(g.partes, P).filter(x => x.valvula === valvula);
 
 test('C1: cada vista corta los festones de la mitral que da Hahn 2013 para su plano', () => {
@@ -383,7 +406,7 @@ const tabiqueUnico = (vista, k, minFilas) => {
   assert.ok(filas >= minFilas, `pocas filas con las dos aurículas (${filas})`);
 };
 for (const k of ['normal', 'derrame', 'tep', 'hemorragia']) {
-  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => tabiqueUnico('a4c', k, 30));
+  test(`v2 Forma · ${k}: en el A4C la AD y la AI comparten un solo tabique (sin sangre entre ellas) en todo el ciclo`, () => tabiqueUnico('a4c', k, k === 'tep' ? 20 : 30));   // el mínimo solo asegura que se midió algo; en el TEP las filas comunes dependen del tamaño de la AI en cada instante (13-26 según su calibración)
 }
 // N1 · SC4C: el plano de la subcostal corta el tabique en diagonal, así que no se compara fila a fila: las paredes de la AD (con la
 // fosa) y de la AI se tocan a lo largo de ≥ 10 mm de profundidad (un solo tabique, Mitchell 2019, p. 31, PDF 31) y sin saltos de más de 4 mm

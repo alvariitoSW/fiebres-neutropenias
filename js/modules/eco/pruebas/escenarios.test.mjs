@@ -5,7 +5,7 @@
 // sin ceros, NaN ni RVS negativa. El estado de una gravedad se lee asentado: 40 s después de aplicarla, como las maniobras.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { crearMotor, BASE } from '../motor.mjs';
+import { crearMotor, BASE, escalarRPul } from '../motor.mjs';
 import { ESCENARIOS, aplicarEscenario } from '../escenarios.mjs';
 import { faltaParaAsentar } from '../maniobras.mjs';
 
@@ -61,7 +61,7 @@ for (const k of CON_GRAVEDAD) {
     const d = crearMotor(); esc.aplicar(d);
     const esperado = { hemorragia: () => d.p.hemorragia === 1000, fallo: () => Math.abs(d.p.vi.ees - 0.9) < 1e-9,
       derrame: () => Math.abs(d.p.liquidoPeri - 260) < 1e-9,
-      tep: () => Math.abs(d.p.rPul / BASE.rPul - 8) < 1e-9 && Math.abs(d.p.vd.ees / BASE.vd.ees - 0.65) < 1e-9 };
+      tep: () => Math.abs(d.p.rPul - escalarRPul(BASE, 8)) < 1e-9 && Math.abs(d.p.vd.ees / BASE.vd.ees - 0.65) < 1e-9 };
     assert.ok(esperado[k](), 'el defecto no reproduce el escenario de antes');
   });
 

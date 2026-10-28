@@ -91,9 +91,9 @@ test('mando de gravedad: aparece en los escenarios que lo tienen, se aplica al s
   assert.equal(await pg.locator('#cv-gravedad').isVisible(), true);
   assert.match(await pg.textContent('#cv-grav-txt'), /260 mL de derrame/);
   const poner = async (v) => { await pg.$eval('#cv-grav', (el, x) => { el.value = x; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, v); await pg.waitForTimeout(300); };
-  await poner(100); assert.match(await pg.textContent('#cv-grav-txt'), /388 mL de derrame/);
+  await poner(100); assert.match(await pg.textContent('#cv-grav-txt'), /383 mL de derrame/);
   const pam = await pg.evaluate(() => window.__motor.ultimo.pam), liq = await pg.evaluate(() => window.__motor.p.liquidoPeri);
-  assert.ok(Math.abs(liq - 388) < 1e-6, `líquido ${liq}`); assert.ok(pam >= 45 && pam <= 60, `PAM ${pam}`);
+  assert.ok(Math.abs(liq - 383) < 1e-6, `líquido ${liq}`); assert.ok(pam >= 45 && pam <= 60, `PAM ${pam}`);
   await poner(0); assert.equal(await pg.evaluate(() => window.__motor.p.liquidoPeri), 0);
   await pg.click('[data-c="hemorragia"]'); assert.match(await pg.textContent('#cv-grav-txt'), /1000 mL perdidos/);
   assert.ok(await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'sin desborde');
@@ -270,6 +270,20 @@ test('sonda libre: los mandos mueven el corte, se reconoce la vista y el reto se
   await pg.click('[data-eco="plax"]'); await pg.waitForTimeout(400);
   assert.equal(await pg.inputValue('#cv-sonda-rot'), '0'); assert.equal(await pg.locator('#cv-sonda-reto-txt').isVisible(), false);
   assert.ok(!(await pg.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth)), 'desborda en horizontal');
+  assert.deepEqual(errores, []);
+  await pg.close();
+});
+
+test('Doppler con fusión E-A (TEP, FC alta): el panel dice que E/A y TDE no son medibles y no imprime E/A', { skip: omitir }, async () => {
+  const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
+  await pg.locator('[data-modo="D"]').tap(); await pg.waitForTimeout(300);
+  await pg.evaluate(async () => { const { ESCENARIOS, ASENTAR_FORMA } = await import('./escenarios.mjs'); ESCENARIOS.tep.aplicar(window.__motor); window.__motor.correr(ESCENARIOS.tep.forma ? ASENTAR_FORMA : 40); });
+  await pg.locator('[data-muestra="mitral"]').tap(); await pg.waitForTimeout(3500);
+  const info = await pg.evaluate(() => window.__eco.info());
+  assert.equal(info.medidas.fusion, true);
+  const txt = await pg.textContent('#cv-d-resultado');
+  assert.match(txt, /Fusión E-A/); assert.doesNotMatch(txt, /<b>E\/A <\/b>|E\/A \d/);
+  assert.match(txt, /E\/A y TDE no medibles/);
   assert.deepEqual(errores, []);
   await pg.close();
 });

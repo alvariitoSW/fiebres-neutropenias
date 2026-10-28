@@ -1,7 +1,10 @@
-// Estudiar: el recorrido de una ficha (REGLAS §8). El segundo botón del interruptor Texto | Estudiar.
+// Estudiar: el recorrido de una ficha (REGLAS §8). El interruptor de la ficha es Texto | Mayéutica | Estudiar.
+// «Mayéutica» es la misma raíz y la misma instancia de Estudiar en modo «solo guía» (clase modo-mayeutica en la ficha):
+// enseña solo el paso Piensa (la Guía socrática), sin la lista de pasos; lo que contestas ahí sale hecho en Estudiar → Piensa
+// y al revés. Al acabar la guía ofrece «Sigue en Estudiar → Examínate».
 //
 // Decisión del usuario (20/10/2026, «opción 2: recorrido por pasos»), en las fichas del bloque 1: el interruptor
-// «Texto | Visual | Mayéutica» pasa a «Texto | Estudiar». Estudiar es una lista de cinco pasos, con su marca de
+// «Texto | Visual | Mayéutica» pasa a «Texto | Mayéutica | Estudiar». Estudiar es una lista de cinco pasos, con su marca de
 // hecho, que abre lo que ya existía sin rehacerlo:
 //   1. Mira: la vista Visual de la ficha, la misma de siempre, metida dentro del paso (el nodo `.vista-visual` se
 //      mueve aquí la primera vez y se construye entonces: evento vistachange con `mira: true`, core/visual-kit.js).
@@ -195,6 +198,13 @@ class Estudiar {
         this.sec = Object.fromEntries([...raiz.querySelectorAll('.est-paso')].map(s => [s.dataset.paso, s]));
         raiz.querySelector('.may-profundizar')?.addEventListener('toggle', e => { if (e.target.open) this.profundizar(); });
         raiz.addEventListener('click', e => {
+            // En modo Mayéutica solo se ve la guía: cualquier salto a otro paso cambia antes a la vista Estudiar.
+            const salto = e.target.closest('[data-ir-paso], [data-ir-prof]');
+            if (salto && this.modoMayeutica && salto.dataset.irPaso !== 'piensa') {
+                const d = salto.dataset.irPaso;
+                this.aEstudiar(d || null);
+                if (d) return;
+            }
             // «Ver en el texto» dentro de la propia ficha: vuelve a Texto y resalta la línea.
             const t = e.target.closest('[data-may-texto]');
             if (t) {
@@ -211,6 +221,12 @@ class Estudiar {
                 det.open = true; det.scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' });
             }
         });
+    }
+    get modoMayeutica() { return this.tab.classList.contains('modo-mayeutica'); }
+    // Pasa del modo Mayéutica a Estudiar (el botón del interruptor) y abre el paso pedido.
+    aEstudiar(paso) {
+        this.tab.querySelector(':scope > .vista-toggle button[data-vista="estudiar"]')?.click();
+        if (paso) this.abrir(paso);
     }
     // Lo guardado de las preguntas de la ficha (el Progreso del motor).
     get resultados() { return this.prog.resultados; }
@@ -361,7 +377,7 @@ class Estudiar {
         const bien = G.filter(q => this.resultados[q.id] === 'on').length, nF = G.filter(q => this.fallos[q.id]).length;
         zona.innerHTML = `<span class="may-eyebrow">Guía socrática hecha</span><h4 class="may-titulo">${bien} de ${G.length} a la primera</h4>
             <p class="may-para">Ahora, el <b>Examen</b>: ${this.d.examen.length} preguntas de nivel MIR. Las opciones falsas son las confusiones que la propia ficha aclara.${nF ? ` Lo que fallaste aquí (${nF}) vuelve después del examen.` : ''}</p>
-            <div class="may-fila"><button class="may-b may-prim" type="button" data-ir-paso="examen">Paso 4 · ${this.titulos.examen} →</button></div>`;
+            <div class="may-fila"><button class="may-b may-prim" type="button" data-ir-paso="examen">${this.modoMayeutica ? `Sigue en Estudiar → ${this.titulos.examen}` : `Paso 4 · ${this.titulos.examen} →`}</button></div>`;
         entrar(zona); zona.onclick = null;
         this.barra('piensa', G.map(q => this.resultados[q.id] === 'mal' ? 'mal' : 'on'), 'Guía socrática hecha');
     }
@@ -440,6 +456,12 @@ export function montarMayeutica(tabId, datos) {
     let estudiar = null;
     const abrir = paso => { estudiar ??= new Estudiar(tab, raiz, datos); estudiar.entrar(paso); };
     // vista 'estudiar' (con paso: 'mira' si se pidió la Visual); el aviso con mira: true es el propio paso Mira.
-    tab.addEventListener('vistachange', e => { if (e.detail.vista === 'estudiar' && !e.detail.mira) abrir(e.detail.paso); });
-    if (tab.classList.contains('modo-estudiar')) abrir();
+    // vista 'mayeutica': la misma instancia, abierta en el paso Piensa y en modo solo guía (el CSS esconde el resto).
+    tab.addEventListener('vistachange', e => {
+        if (e.detail.mira) return;
+        if (e.detail.vista === 'mayeutica') abrir('piensa');
+        else if (e.detail.vista === 'estudiar') abrir(e.detail.paso);
+    });
+    if (tab.classList.contains('modo-mayeutica')) abrir('piensa');
+    else if (tab.classList.contains('modo-estudiar')) abrir();
 }

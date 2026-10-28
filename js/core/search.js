@@ -25,10 +25,11 @@ const ESPECIALIDADES = {
     fisioUci: { nombre: 'Fisiopatología UCI', icono: '🧬', color: 'var(--accent-yellow)' },
     cardiologia: { nombre: 'Cardiología', icono: '🫀', color: 'var(--accent-blue)' },
     neumologia: { nombre: 'Neumología', icono: '🫁', color: 'var(--accent-green)' },
+    pifCardio: { nombre: 'Cardiología · PIF', icono: '🫀', color: 'var(--accent-red)' },
     sobrevivirUmi: { nombre: 'Sobrevivir a la UMI', icono: '📋', color: 'var(--accent-purple)' },
     libros: { nombre: 'Libros', icono: '📚', color: 'var(--accent-purple)' },
 };
-const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'cardiologia', 'neumologia', 'sobrevivirUmi', 'libros'];
+const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'cardiologia', 'neumologia', 'pifCardio', 'sobrevivirUmi', 'libros'];
 
 // panelId (el mismo que ya recibe openCorkboardTopic) → cómo llegar hasta
 // él: especialidad + clave de vista de su switcher medio (y, solo para
@@ -75,6 +76,9 @@ const PANEL_NAV = {
 
     // Neumología
     'panel-merino-neumo-tabs': { especialidad: 'neumologia', view: 'merinoNeumologia', bloque: 'Merino Neumología' },
+
+    // Cardiología · PIF
+    'panel-pif-ecg-tabs': { especialidad: 'pifCardio', view: 'ecgArritmias', bloque: 'ECG y arritmias' },
 
     // Libros
     'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },
