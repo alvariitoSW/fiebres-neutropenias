@@ -42,6 +42,7 @@ export const BANDAS = {
   'hemorragia:1': [diag('eE', 0, 11.5, N(551), 'inferido'), ...e_(), ar(), c('tapse', 0, INF, 'mínimo de hueco (TAPSE>0)', { min_excl: true })],
   'fallo:def': [c('ea', 0.8, INF, N(554) + ' (18)'), c('eE', 14, INF, N(554) + ' (18)'), ...eBaja(), c('sd', 0, 1, N(549) + ' (13)'),
     c('tapse', 0, INF, 'mínimo de hueco (TAPSE>0)', { min_excl: true })],
+  // S/D: aquí ≤0,67 (N 554, grado 3 a fondo); la dilatada exige <1 (N 549) y deja ≤0,67 como diagnóstico. Discrepancia 3 (referencias.mjs, DISCREPANCIAS_DOPPLER): no se elige ganadora
   'fallo:1': [c('eE', 14, INF, N(557) + ' (21)'), ...eBaja(), c('sd', 0, 0.67, N(557) + ' (21), ' + N(554) + ' (18)'),
     diag('ea', 2, INF, N(557) + ' (21) T7', '≥2 o fusión'), c('tapse', 0, INF, 'mínimo de hueco (TAPSE>0)', { min_excl: true })],
   'derrame:def': [a(), b(), ...e_(), ar(), diag('bombaAI', 15, 30, L(24), 'hueco para derrame'), c('tapse', 0, INF, 'mínimo de hueco (TAPSE>0)', { min_excl: true })],

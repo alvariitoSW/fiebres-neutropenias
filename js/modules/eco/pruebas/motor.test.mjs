@@ -240,6 +240,8 @@ test('balón: se hincha en la diástole y se vacía al empezar la sístole (p. 4
   assert.ok(o.filter(x => x.fase === 'C').every(x => x.vBalon < 8) && o.filter(x => x.fase === 'D').every(x => x.vBalon < 1), 'el balón se vacía antes de la eyección');
   const picoDia = Math.max(...o.slice(cierre).map(x => x.pao));
   assert.ok(picoDia > con.ultimo.pas - 15, `pico diastólico ${picoDia.toFixed(0)} · PAS ${con.ultimo.pas.toFixed(0)}`);
+  // umbral ilustrativo, sin fuente (el libro, pp. 45-46, solo dice que la presión al abrir la aórtica baja): 3 → 2 mmHg en eco-calibra-a,
+  // porque la AI que suma su contracción deja la caída en 2,9 mmHg (antes 3,07)
   assert.ok(presionAlAbrir(con) < presionAlAbrir(sin) - 2, `al abrir la aórtica: ${presionAlAbrir(con).toFixed(0)} con balón · ${presionAlAbrir(sin).toFixed(0)} sin`);
   assert.ok(con.ultimo.vs > sin.ultimo.vs + 2 && con.ultimo.pam > sin.ultimo.pam + 3, `VS ${con.ultimo.vs.toFixed(0)} · ${sin.ultimo.vs.toFixed(0)}; PAM ${con.ultimo.pam.toFixed(0)} · ${sin.ultimo.pam.toFixed(0)}`);
 });

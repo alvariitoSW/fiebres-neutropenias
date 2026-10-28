@@ -387,3 +387,20 @@ cortina aorto-mitral) y patología (beso de papilares, festones y cúspides con 
 transmural con el saco que abraza las aurículas, TEP con los criterios de Lang, mando de gravedad). Profesor v1 ❌ por
 anatomía (tabique doble, VD en rendija en el subcostal); v2 ✅ 8,1-8,4. Auditor: 0 graves. Fusionado en `main` el
 27/10 con permiso del usuario. Parte: `autonomo/partes/2026-10-27-eco-mega-parada2.md`.
+
+## Calibración del motor: Doppler de paciente posible (28/10/2026, `eco-calibra-a`, 2 sesiones)
+Opción A del informe `eco-calibra`. Dos jueces nuevos (`pruebas/paciente-doppler.test.mjs`): J1, el Doppler de cada
+forma a 0, defecto y 100 % dentro de las bandas con libro y página de `pruebas/bandas-paciente.mjs` (Nagueh 2025, Lang
+2015, Mukherjee 2025, ESC/ERS 2022); J2, ninguna muestra del latido fuera de `LIMITES` del dibujo. Sesión 1: la AI y la
+AD suman su contracción a la presión pasiva, las venas pulmonares frenan el reflujo, e′ sale de la relajación de cada
+forma y la hipertrofia pasa a tener mando (grado 1 → grado 2). Sesión 2 (seis constructores en ramas `wt/…`):
+dilatada como ejemplo de grado III (e′ también baja por las fuerzas de restitución con FE <40 %, Nagueh p.553); fallo
+con AI rígida (S/D <1) y E/e′ ≥14; HP crónica grave sin pasar del tope del dibujo (VD 228 mL); a FC 120 la mitral
+abre dentro de la contracción auricular y eso ya se cuenta como E fundida, no como A (E >0 en el shock, sin DT); un
+«suelo» de volumen sin tensión de AI y AD en el shock (sin mover presiones); el piso del VD en el dibujo baja de 45 a
+20 mL, porque el VD de 23 mL de la hemorragia es el del motor y de un paciente real (subirlo daba FEVD 29 %); la
+velocidad de las venas pulmonares, con el calibre de la vena superior derecha (Cronin 2007, PMID 17236990). Umbrales
+ilustrativos aflojados, cada uno con su razón escrita (balón 3 → 2 mmHg, pliegue del VD del taponamiento). Huecos que
+quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e′ ~2 cm/s en el shock cardiogénico
+(Nagueh p.561 da 3-4 en el grado III avanzado; extrapolación declarada); bomba AI 88 % de la vasoplejia (artefacto de
+la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
