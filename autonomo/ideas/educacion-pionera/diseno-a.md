@@ -60,7 +60,7 @@ p. 21-23). Monitor **con velo**. Texto: «Mismo monitor, otra herida. Apuesta an
   te parecerá “un corazón que falla” y pensarás en inotrópicos cuando lo que falta es sangre.» Porque de (c): «La PVC alta es del corazón que no
   se vacía o del que no se llena; Mateo tiene las cavidades vacías (PVC 1). Buscar un taponamiento aquí retrasa la transfusión.»
   Fuente: p. 3 (Tabla 14.1), p. 22-23 (`#mc-clase-iii`, ficha `mc-hemorragico-clasificacion`).
-Observación 2 (cae el velo; arteriola **cerrada**, cavidades pequeñas): PA 78/63 (PAM 71), FC 135, PVC 1, IC 1,8, IRVS 38, ScvO₂ 65 (ilustrativo; cae en el rango normal 65-75 %, p. 9: no avisa de bajo flujo), gap 5 (ilustrativo; 2-5 normal, patológico >6, p. 10),
+Observación 2 (cae el velo; arteriola **cerrada**, cavidades pequeñas): PA 78/63 (PAM 71), FC 135, PVC 1, IC 1,8, IRVS 38, ScvO₂ 65 (ilustrativo; cae en el rango normal 65-75 %, p. 9: no avisa de bajo flujo), gap 6 (ilustrativo, valor del modelo: la fuente da 2-5 normal y >6 patológico, p. 10; 6 queda en el límite y no se rotula como patológico),
 lactato 3,0, diuresis 0,9 mL/kg/h, Hb 13,8. Estado: «Hemorragia, clase III» (p. 22-23). Frase: «La Hb aún no baja: pierde sangre entera; no baja hasta
 las 8-12 h» (p. 23, `#mc-hto-trampa`).
 - **Pregunta A4** (autoexplicación, test). Enunciado: «Amparo y Mateo tienen los dos la PVC baja. ¿Por qué la IRVS de Mateo es 38 y la de Amparo 17?»
