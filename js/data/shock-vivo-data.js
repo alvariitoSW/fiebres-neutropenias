@@ -122,9 +122,10 @@ export const PACIENTES = [
   { k: 'amparo', nombre: 'Amparo', chip: 'sepsis', tipo: 'septico', peso: 76, ideal: 58, edad: 58, sexo: 'mujer', hb: 12.4, fr: 26, t: 39.2, obj: 'marino-14-5',
     rec: { esc: 'sepsis', g: 1, util: 'sepsis', hb: 12.4 }, linea: '58 años, 76 kg (ideal 58) · pielonefritis obstructiva · urgencias' },
   { k: 'aurelio', nombre: 'Aurelio', chip: 'infarto', tipo: 'cardio', peso: 82, edad: 67, sexo: 'varón', hb: 14, fr: 24, t: 36.7, obj: 'marino-16-2',
-    // la PCP no está alta (≈14, el 30 % de la p. 40) con la PVC normal: un VI que aún admite volumen (viDiast) y algo menos de
-    // volemia; tras 250 mL, PCP ≈18 (el caso S3 de la cobertura)
-    rec: { esc: 'fallo', g: 0.9, viDiast: 0.7, volemia: -1150, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
+    // la PCP no está alta (≈14, el 30 % de la p. 40) con la PVC normal: un VI que aún admite volumen (viDiast) y el VD tocado por
+    // el infarto anterior que llega al tabique (eesVd: la PVC sube, p. 40); volemia entera (M0, b3-paso4 g3: antes −1150 mL
+    // tapaban un edema demasiado rápido del motor). Cuánto viDiast y eesVd: ilustrativo; tras 250 mL, PCP ≈16
+    rec: { esc: 'fallo', g: 0.8, viDiast: 0.6, eesVd: 0.3, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
   { k: 'joaquin', nombre: 'Joaquín', chip: 'taponamiento', tipo: 'tapon', peso: 84, edad: 56, sexo: 'varón', hb: 13.5, fr: 24, t: 36.8, obj: 'marino-14-5',
     rec: { esc: 'derrame', g: 0.85, hb: 13.5 }, linea: '56 años, 84 kg · disección aórtica tipo A que sangra al pericardio' },
   // Virginia: la FV extrahospitalaria con RCE (1.er choque a los 6 min). El peso y la edad: del caso; FR, T y Hb, ilustrativos.

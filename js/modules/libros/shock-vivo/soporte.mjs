@@ -43,7 +43,10 @@ const SUCCION_VI = [12, 60];                   // mL del VI entre los que la bom
 const SUCCION_VEN = [0.3, 2.2];                    // mmHg de las venas entre los que el ECMO pierde su flujo
 // El pulmón empieza a encharcarse en las venas pulmonares por encima de P_EDEMA: 18, el extremo bajo de la «presión de llenado
 // óptima» de 18-20 de la ficha (Marino, cap. 16, p. 42: la más alta que sube el gasto sin edema). Cuánto líquido pasa por cada
-// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1)
+// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1). OJO (M0, b3-paso4 g3): con 4 mL/s por mmHg, un
+// paciente que entra con la PCP del VI por encima de 18 (fallo del VI solo a fondo) pierde ~1,3 L al pulmón en los 40 s de
+// entrada: la PCP queda clavada en 18-19 y la PVC cae a 1-2. Con 0,3 eso se arregla, pero el sello de sobrecarga llega sin edema
+// (SpO₂ 98): las dos cosas piden ritmos distintos; queda para decidir. Aurelio y Virginia entran con la PCP < 18 (eesVd)
 const P_EDEMA = 18, K_EDEMA = 4;
 const TEP_CAP = 0.85;                           // la arteria pulmonar del TEP a fondo, un 20 % de distensible (ilustrativo)
 const HEM_SIMPATICO = 0.35;
@@ -81,7 +84,7 @@ export const ESCENARIOS_EXTRA = {
   posparo: {
     nombre: 'Posparo cardíaco', tipo: 'cardiogenico',
     texto: (g) => `horas tras la RCE: ${Math.round(horasDePosparo(g))}`,
-    aplicar: (m, g = POSPARO_G0) => { ESCENARIOS.fallo.aplicar(m, g); m.p.rSis *= 1 - POSPARO_VASODILATACION * (g / POSPARO_G0); m.s.vven -= POSPARO_FUGA * (g / POSPARO_G0); },
+    aplicar: (m, g = POSPARO_G0) => { ESCENARIOS.fallo.aplicar(m, g); m.p.vd.ees = BASE.vd.ees * (1 - (1 - POSPARO_VD0) * g / POSPARO_G0); m.p.rSis *= 1 - POSPARO_VASODILATACION * (g / POSPARO_G0); m.s.vven -= POSPARO_FUGA * (g / POSPARO_G0); },
   },
   anafilaxia: {
     nombre: 'Shock anafiláctico', tipo: 'vasodilatador',
@@ -92,7 +95,11 @@ export const ESCENARIOS_EXTRA = {
 };
 // El reloj del posparo: la gravedad de la Ees (g, como en el «fallo») cae con las horas desde la RCE hasta 0 a las 72 h («suele
 // resolverse en 72 h», p. 65). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
-export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25, POSPARO_FUGA = 1100;
+export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25;
+// El aturdimiento es BIVENTRICULAR (cap. 21, p. 64): la Ees del VD cae con la misma curva que la del VI y vuelve a la normal a
+// las 72 h; a las 0 h, POSPARO_VD0 de la normal (cuánto: ilustrativo). La fuga capilar de la respuesta inflamatoria (POSPARO_FUGA,
+// mL a las 0 h): ilustrativa. Antes era 1100 mL y, con el edema rápido, la PVC de Virginia quedaba en 1,5 (M0, b3-paso4 g3)
+export const POSPARO_FUGA = 300, POSPARO_VD0 = 0.3;
 export const gDePosparo = (h) => POSPARO_G0 * (1 - Math.min(POSPARO_H, Math.max(0, h)) / POSPARO_H);
 export const horasDePosparo = (g) => POSPARO_H * (1 - Math.max(0, g) / POSPARO_G0);
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
@@ -109,6 +116,10 @@ export function prepararMotor(rec, segundos = 40) {
   ESC[rec.esc]?.aplicar(m, rec.g);
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
   if (rec.volemia) m.s.vven += rec.volemia;
+  // eesVd: la Ees del VD como fracción de la normal (1 = normal; 0,5 = la mitad). Un VD infartado o aturdido (cap. 16, p. 40:
+  // sube la PVC o la PCP «según el ventrículo que falle»). Se pide como p.vd.ees y el motor la sigue con su tauContractilidad,
+  // antes del barorreflejo (motor.mjs, barorreflejo). Por debajo de 0,1 no es un paciente (ilustrativo)
+  if (rec.eesVd != null) m.p.vd.ees = BASE.vd.ees * Math.max(0.1, Math.min(1, rec.eesVd));
   if (rec.eroaMitral) m.p.eroaMitral = rec.eroaMitral;   // rotura del papilar: insuficiencia mitral aguda (cap. 16, p. 38); el orificio, ilustrativo
   m.p.tEscenario = m.s.t;
   return m;
@@ -174,7 +185,9 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     let u = m.ultimo; if (!u) { acum = nuevo(); return; }
     // La PVC no pasa a la PCP si el VD no falla (fisiología general; solo el TEP y el taponamiento las igualan o la invierten,
     // ficha cap. 18 p. 4): el motor sube la aurícula derecha con el volumen y en la sepsis la pasaba (PVC 22-24 con PCP 19).
-    if (rec.esc !== 'tep' && rec.esc !== 'derrame' && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
+    // Con el VD que falla (rec.eesVd < 1: IAM del VD) no se toca: ahí la PVC pasa a la PCP (cap. 16, p. 40)
+    const vdFalla = rec.eesVd != null && rec.eesVd < 1;
+    if (rec.esc !== 'tep' && rec.esc !== 'derrame' && !vdFalla && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
     // lo asistido y lo no asistido (el latido que se cierra es el nLatido − 1; su teledistólica viene de la diástole del anterior)
     const nCerrado = m.s.nLatido - 1, conBalon = ajuste.soporte === 'balon' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'balon');
     if (!conBalon) { ult.as = { pico: acum.picoDia || null, tele: acum.teleDia }; ult.no = { pico: null, tele: null }; }
