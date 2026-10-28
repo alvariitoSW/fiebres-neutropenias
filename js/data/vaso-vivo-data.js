@@ -268,6 +268,9 @@ const PPL = (id, pag) => ({ ...L13, ficha: 'merino-plaquetas-plasma', id, pag })
 // La máquina del telar: la Fig. 5.2 del cap. 5 (el Xa convierte la protrombina en trombina; la trombina, el fibrinógeno en fibrina)
 const FIG52 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 5', pdf: 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', ficha: 'mar-tromboprofilaxis-farmacos', id: 'mar-img-5-2', pag: '4-6' };
 
+// Warfarina: Marino cap. 19 (fibrilación auricular), p. 26 (mecanismo, ventana estrecha) y Tabla 19.3, p. 27 (INR 2-3)
+const MAR19 = (id, pag) => ({ libro: 'Marino, The ICU Book (5.ª ed.), cap. 19', pdf: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf', ficha: 'mc-fa-cardioversion', id, pag });
+
 export const GUIAS = {
     sano: [
         { t: 'El endotelio está cubierto por el glucocálix (la hierba dorada), una malla de mucopolisacáridos: una superficie que resiste la trombosis.', resalta: '#vso-zona-glucocalix', cita: TRB('mh-glucocalix', '20') },
@@ -363,6 +366,8 @@ export const GUIAS = {
         { t: 'Pero la antitrombina subió del 38 al 50 %: el fiel casi no se mueve. Y el PFC profiláctico no ha demostrado reducir el sangrado.', resalta: '#vso-b-fiel', cita: [PPL('mh-fig-13-3', '34'), PPL('mh-pfc-profilactico', '33')] },
     ],
     warfarina: [
+        { t: 'La warfarina no toca la máquina: frena en el hígado la síntesis de los cuatro factores que dependen de la vitamina K (II, VII, IX y X). Aquí, la despensa vacía.', lupa: 'cascada', resalta: '#vso-cas-despensa', cita: [MAR19('mc-warfarina', '26'), PPL('mh-pfc-warfarina', '33')] },
+        { t: 'Su ventana terapéutica es estrecha: por eso se vigila con el INR, que mira justo ese plato (II, VII, IX y X) y no los anticoagulantes del plasma; objetivo 2-3.', lupa: 'cascada', resalta: '#vso-cas-despensa', cita: [MAR19('mc-warfarina', '26'), MAR19('mc-tabla-19-3', '27'), PPL('mh-trampa-inr', '33')] },
         { t: 'Con warfarina, el plasma sirve para reponer factores de coagulación; los que trae el CCP4F son los que dependen de la vitamina K (II, VII, IX y X): aquí, huecos.', resalta: '#vso-b-izq', cita: PPL('mh-pfc-warfarina', '33') },
         { t: 'Primero, vitamina K, para cortar la anticoagulación que sigue en curso.', resalta: '#vso-b-vitk', cita: PPL('mh-pfc-warfarina', '33') },
         { t: 'Después, PFC 10-15 mL/kg para devolver el INR a la normalidad: hay que descongelarlo, lo que retrasa el tratamiento, y su volumen puede agravar el sangrado.', resalta: '#vso-b-pfc', cita: PPL('mh-pfc-warfarina', '33') },
