@@ -132,3 +132,25 @@ export const DISCREPANCIAS_DOPPLER = [
   { id: 'sd-pai', texto: 'S/D con presión de la AI alta: <1 (Nagueh 2025 p.549) frente a ≤0,67 (Nagueh p.554)' },
   { id: 'tapse', texto: 'TAPSE anormal: <17 mm (Lang 2015 p.23; Mukherjee p.145) frente a <18 mm (ESC/ERS 2022 p.3644)' },
 ];
+
+// ---------------------------------------------------------------------------------------------------------------
+// Vena pulmonar del Doppler (eco-calibra-a, sesión 2). El Doppler se mide en UNA vena (la superior derecha, 1-2 cm
+// dentro): velocidad = flujo de esa vena / su sección.
+//  · Diámetro: Cronin 2007, Acad Radiol 14(2):178-88 (PMID 17236990; TC de 200 adultos, edad media 52,8 a). Vena
+//    superior derecha, en el ostio: 14,5 mm (IC 95 % 13,64-15,36); izquierda superior 16,6; inferior derecha 17,1;
+//    inferior izquierda 14,8. Distancia hasta la primera bifurcación de la superior derecha: 17,6 mm, es decir, a 1-2 cm
+//    sigue siendo un tronco único. ERRATA DE LA FUENTE: el resumen imprime «right superior 17.6 (13.64-15.36) mm» para el
+//    diámetro y «14.5 (17.02-18.23)» para la distancia; los intervalos solo cuadran con las cifras cruzadas (14,5 y 17,6).
+//  · Reparto: 1/4 del retorno por vena (82 % de los adultos tiene 4 venas, Cronin). Es el reparto del motor: la fuente
+//    no da qué fracción del flujo lleva cada vena (origen: fisiología general; aviso).
+//  · Velocidad normal: S 64 ± 14 cm/s en mujeres y 57 ± 11 en varones sanos (Wierzbowska-Drabik 2010, Menopause
+//    17(3):560-5, PMID 20042894; edad ~52 a). D normal en cm/s: no encontrada en fuente abierta (la ASE Nagueh 2025 solo da S/D).
+export const VENA_PULMONAR_REF = {
+  diametroMm: 14.5, // vena pulmonar superior derecha, ostio (Cronin 2007)
+  nVenas: 4,
+  sNormalCms: [57, 64], // media en varones / mujeres sanos (Wierzbowska-Drabik 2010)
+  origen: 'ficha',
+  fuente: 'Cronin 2007 (Acad Radiol 14:178, PMID 17236990) · Wierzbowska-Drabik 2010 (Menopause 17:560, PMID 20042894)',
+};
+// sección de esa vena (cm²): π (d/2)²
+export const AREA_VENA_PULMONAR_CM2 = Math.PI * (VENA_PULMONAR_REF.diametroMm / 20) ** 2;
