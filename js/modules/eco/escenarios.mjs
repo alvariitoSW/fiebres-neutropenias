@@ -29,9 +29,12 @@ const DILATADA_V0 = 60;                        // mL, volumen sin tensión del V
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 // Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
 // (atlas/diastolica.mjs, ePrima): e′ = 12 ÷ relajación^0,6 (× la restitución si la FE es baja). Ilustrativo; las formas que no son
-// del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c). El fallo llega a 2,8 en su defecto
-// (sesión 1); la dilatada usaba 2,8 y ahora RELAJACION_FER (abajo)
-const RELAJACION_LENTA = 2.8;
+// del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c). El fallo llega a 2,3 en su defecto
+// (2,8 en la sesión 1, 2,3 en la sesión 2: ver FALLO_RELAJACION); la dilatada usaba 2,8 y ahora RELAJACION_FER (abajo)
+// Fallo del VI (eco-calibra-a s2, fallo): relajación 1 → 2,3 y AI 1,3 veces más rígida con la gravedad (ilustrativos). Con 2,8 la cola de
+// activación de un VI grande dejaba su presión alta en el llenado rápido y la E no subía; 2,3 con la restitución de e′ (FE ≈30 %)
+// da E/e′ ≥14 (Nagueh 2025 p. 554). La AI con presión alta es más rígida: llena menos en la sístole (S/D <1, p. 549, Tabla 4)
+const FALLO_RELAJACION = 2.3, FALLO_AI_RIGIDEZ = 1.3;
 // FE reducida (dilatada; eco-calibra-a s2, 28/10/2026): su e′ baja por la relajación Y por la pérdida de las fuerzas de
 // restitución (atlas/diastolica.mjs, restitucion; Nagueh 2025 p. 553), así que no hace falta la relajación de la hipertrofia.
 // Con 2,8, la cola de la activación del VI dilatado (que multiplica un volumen grande) dejaba la presión del VI alta en todo el
@@ -75,7 +78,10 @@ export const ESCENARIOS = {
     gravedad: { fin: 'el shock cardiogénico a fondo', defecto: FALLO_DEFECTO,
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
     aplicar: (m, g = FALLO_DEFECTO) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g;
-      m.p.relajacion = 1 + (RELAJACION_LENTA - 1) * Math.min(1, g / FALLO_DEFECTO); },
+      const u = Math.min(1, g / FALLO_DEFECTO);
+      m.p.relajacion = 1 + (FALLO_RELAJACION - 1) * u;
+      // AI con presión alta: pared más rígida, S venosa pulmonar menor (S/D < 1)
+      m.p.ai.b *= 1 + (FALLO_AI_RIGIDEZ - 1) * u; },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
