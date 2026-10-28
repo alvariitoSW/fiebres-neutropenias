@@ -447,7 +447,7 @@ export const GUIAS = {
         { t: 'El peróxido de hidrógeno se mueve libremente por los tejidos y puede entrar en el torrente sanguíneo.', resalta: '#cpv-lupa-vaso', cita: ROS('mc-lesion-oxidante-foco', '55') },
         { t: 'Por la sangre alcanza órganos distantes, donde puede entrar en las células.', resalta: '#cpv-lupa-organo', cita: ROS('mc-lesion-oxidante-foco', '55') },
         { t: 'Allí, al encontrar hierro en estado reducido (Fe²⁺), genera radicales hidroxilo: un posible mecanismo del fallo multiorgánico en la lesión pulmonar inflamatoria, la sepsis o tras la reperfusión diseminada que sigue a un paro cardíaco.', resalta: '#cpv-lupa-fe', cita: ROS('mc-lesion-oxidante-foco', '55') },
-        { t: 'Tras la parada, el O₂ de más tampoco ayuda: la hiperoxia agrava la lesión neurológica y el O₂ se usa solo para corregir una SaO₂ <90 %. Sube la PaO₂ con la SaO₂ ya sobre 90 % y mira el sello.', mirar: 'sao2', cita: POS('mc-tabla-21-4', '66-67'), org: 'PaO₂ 91-100: ilustrativa' },
+        { t: 'Tras la parada, el O₂ se usa solo para corregir una SaO₂ <90 % (Tabla 21.4). Sube la PaO₂ con la SaO₂ ya sobre 90 % y mira el aviso.', mirar: 'sao2', cita: POS('mc-tabla-21-4', '66-67'), org: 'la PaO₂ que subes: ilustrativa' },
     ],
 };
 // Las fuentes de cada estado (REGLAS §7.11): la lista de sus citas, sin repetir, en el orden de la explicación. Otro
