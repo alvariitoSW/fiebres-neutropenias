@@ -591,6 +591,9 @@ El resto del tablero sigue `aparcada`.
 - (23/10) Las dos propuestas que había (pulmón con respirador e inventario de estudio) te gustaron y pasan a
   «Apuntado» como B-013 y B-014.
 
+- **Ahorro · Suite corta para iterar, la entera al entregar** (propuesto 2026-10-28 por /ahorro) · Visto en: b3-paso4 g1 (vuelta 3, 0,71 M frente a 0,4 M por relanzar jueces de 25 min) y eco-calibra-a s2 (8 constructores sonnet, 7,0 M; cada uno relanzaba la suite eco de >10 min varias veces) · Cambio: cada encargo nombra la prueba corta con la que se itera (p. ej. `paciente-doppler` + las pruebas del archivo que toca) y la suite entera se pasa una sola vez, al entregar · Ahorro esperado: ≈0,3 M por constructor que calibra (≈2 M en una tarea como eco-calibra-a).
+- **Ahorro · Una cifra mala no se tapa con otro parámetro** (propuesto 2026-10-28 por /ahorro) · Visto en: eco-mega F3 (venas a 2,5 cm², destapado por F3b, 1,5 M) y eco-calibra-a s2 (un «suelo» del VD para no salir del dibujo daba FEVD 29 % en la hemorragia; hubo que deshacerlo con otro encargo, ≈1,8 M entre los dos) · Cambio: en la lista del constructor, antes de entregar, «¿mi arreglo empeora otra cifra de la tabla de la forma (FE, TAPSE, PVC)?»; si sí, para e informa en vez de entregar · Ahorro esperado: una vuelta de arreglo (≈0,4-1,5 M) cada vez que pase.
+
 ## 6. Hecho (últimos 7 días)
 
 - 2026-10-28 · **Cuaderno «ECG y arritmias»** (`pif-ecg`, PR #36, en main): PIF → Cardiología, 11 fichas del libro
