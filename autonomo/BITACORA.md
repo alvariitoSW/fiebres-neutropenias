@@ -229,45 +229,6 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-037 · Consejo de Ministros (cómo decide el gobierno) · apuntado 2026-10-28
-- **Lo que dijiste**: «que TODO esto lo estudie el consejo de ministros y lo aprueben ellos»; «deberíamos hacer una
-  reforma integral con un consejo de ministros para abordarlo bien»; «el informe del simulador del ETE queda aprobado
-  para su paso por el consejo de ministros».
-- **Cómo lo entiendo** (supongo, a falta de tu sí): una sesión que se reúne cuando hay asuntos (como mucho una al día,
-  después del informe de las 13:43). Cada ministerio da su dictamen en ≤15 líneas, con un agente barato cada uno:
-  Interior (`/plan-socialista`: se puede hacer, cómo, con qué modelos), Hacienda (`/ahorro`: cuánto cuesta y qué se
-  recorta), Educación (`/mayeutica`, B-038: si sirve para estudiar), Justicia (jueces y reglas: si choca con
-  `CLAUDE.md` o REGLAS) y Transportes (`/bitacora`: prioridad y calendario); Ciencia y Exteriores, si el asunto es suyo.
-  Sale un **acta** (`autonomo/consejo/AAAA-MM-DD.md`) con lo acordado, y lo acordado entra en el tablero sin pasar por
-  ti, dentro de sus poderes. Coste por reunión: ~1-2 M (supongo).
-- **Poderes** (propuesta): el Consejo aprueba dudas de los planes, orden, tareas y opciones de informes **dentro del
-  presupuesto que apruebes**. Se reservan al gobierno central: el presupuesto total, la arquitectura (`CLAUDE.md` §2),
-  quitar contenido y la última parada de cada bloque (lo pruebas en el móvil antes de `main`).
-- **Primer orden del día**: (1) las 5 dudas de B-035; (2) el paquete del informe del ETE (`tee-inversa`); (3) la
-  reforma de la eco (B-039), solo estudio; (4) la Mayéutica de las fichas del bloque 3 (lo que viste en la FA).
-- **Depende de**: tu sí a los poderes. **Tamaño**: pequeña (escribir la skill y el apartado de REGLAS) + una reunión.
-- **Lista de calidad**: sin simulador · «lo que NO quiero»: que el Consejo apruebe lo reservado o pase del presupuesto
-  · juez: el acta (lo mira el gobierno central en el informe diario).
-
-### B-038 · Ministerio de Educación: skill `/mayeutica` · apuntado 2026-10-28
-- **Lo que dijiste**: «quiero crear el ministerio de educación /mayéutica para encargarse de la escolarización
-  completa de la app con su departamento de arte para creación de modelos vivos […] un departamento de ideas para
-  plantear varias maquetas de modelos vivos ayudándose de todos los recursos a su alcance con /anatomy
-  /ingenieria-reversa /literature-review /claim-check /radar […] los mejores modelos vivos que existen en el mundo».
-- **Cómo lo entiendo**: una skill nueva, `/mayeutica`, dueña de **todo lo que es estudiar** en la app (todos los
-  libros, no solo Marino): mapa de qué ficha tiene Estudiar y Mayéutica, rutas, casos, y la rúbrica (REGLAS §7-§8).
-  - **Escuela**: diseña el estudio de cada ficha (Mira → Juega → Piensa → Examínate → Caso, guía socrática) y lo juzga
-    (el agente `profesor` pasa a ser su funcionario).
-  - **Departamento de arte**: los modelos vivos (dirección artística, método de `/anatomy`, maquetas, límites de
-    paciente posible).
-  - **Departamento de ideas**: para cada modelo nuevo, **2-3 maquetas distintas** para elegir, buscando antes lo mejor
-    del mundo con `/ingenieria-reversa` (webs y simuladores), `/radar` (lo que mandas), `/literature-review` y
-    `/claim-check` (fuentes y cifras), y `/anatomy` (el dibujo).
-  - Interior sigue **construyendo**; Educación **diseña y juzga**. Hacienda le revisa el gasto como a todos.
-- **Depende de**: B-037 (se sienta en el Consejo). **Tamaño**: pequeña (la skill) y después, su trabajo.
-- **Lista de calidad**: «lo que NO quiero»: copiar código o imágenes ajenas (CLAUDE §7.9), cifras sin fuente, un
-  segundo quiz · juez: la rúbrica del profesor (≥8, meta 8,75).
-
 ### B-039 · Reforma integral de la eco: un motor para el corazón y otro para la imagen · apuntado 2026-10-28
 - **Lo que dijiste**: «con el TEP o lo de HTP máxima sale así, esto ya ha perdido la intención de una sola
   fisiología porque esto no es fisiología […] quizá habría que tener el modelo del corazón vivo así en 3D pero luego
@@ -283,7 +244,8 @@ esta sección.
   https://www.pulmonarypocus.com/phone-cp-sim («para que el consejo de ministros y sobre todo el ministerio de
   educación pueda estudiar bien la mejora integral de la ecografía de la app»). Sin abrir aún: probar antes que la red
   lo deja abrir (REGLAS §4.11).
-- **Depende de**: B-037. Fuera de Marino: va en la cola de la eco (prioridad 27/10: pulir la eco, después del Libro
+- **Consejo (28/10)**: recomienda el informe `eco-reforma` (≤1,5 M, el 31/10, sin tocar la app); `b3-ritmo-motor` y `f2-ete` esperan. **Espera tu sí.**
+- **Depende de**: B-037 (hecha). Fuera de Marino: va en la cola de la eco (prioridad 27/10: pulir la eco, después del Libro
   Azul), salvo que el Consejo proponga adelantarla. **Tamaño**: grande (informe primero).
 - **Lista de calidad**: cifras objetivo por forma con fuente y página (Lang 2015, Nagueh 2025, Mukherjee 2025, ya en
   `docs/`) · «lo que NO quiero»: perder lo calibrado (505 pruebas), copiar código ajeno · juez: `jueces --eco` y el
@@ -362,7 +324,7 @@ esta sección.
      (solo informe) mientras esperas una parada ahorraría ~1 día por bloque, pero lo rompe.
   3. `b3-bradi` estaba atado a `arritmias-maqueta` (aparcada): hacerlo ahora es la versión corta, sin el laboratorio.
   4. Partir el bloque 6 en dos (45-47 y 48-53) no cambia el orden de M5, pero son dos PR y más paradas.
-- **Dudas** (como mucho 5): ver el chat del 28/10; se copian aquí al responder.
+- **Dudas**: resueltas por el Consejo de Ministros el 28/10 (`autonomo/consejo/2026-10-28.md`): `b3-ritmo-motor` aparcada hasta B-039; cobertura del bloque siguiente en paralelo, sí (solo informe, «provisional»); `b3-bradi` corta; bloque 6 en dos (`b6a`, `b6b`); consulta, Estudiar corto con un caso por bloque. Presupuesto nuevo: **≈212-328 M** (espera tu sí: es tuyo).
 - **Lista de calidad**: topes con fuente → en cada encargo de pieza (lo escribe el profesor en su plan corto, como en
   `plan-paso4.md`) · cifra por estado y caso → cobertura de cada bloque · «lo que NO quiero» → sí · fuentes → los PDF
   de Marino en `docs/` con su página (`libros-indice.js`) · jueces → `--ficha`, `--modelo`, `--forma`, topes y móvil;
@@ -390,6 +352,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
 | `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
 | `b2` | **Bloque 2** (caps. 12-13) | hecho el 21/10 (PR #26) | 2026-10-20 | |
@@ -454,8 +417,7 @@ El resto del tablero sigue `aparcada`.
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
-- **B-035 · Plan Marino 100 %**: sus 5 dudas, al Consejo de Ministros (lo pediste el 28/10; espera B-037).
-- **`tee-inversa`**: aprobado por ti para que el Consejo elija el paquete (28/10).
+- **Del Consejo del 28/10, lo reservado a ti** (`autonomo/consejo/2026-10-28.md`): (1) presupuesto total de Marino, ≈212-328 M por bloques; (2) informe `eco-reforma` (≤1,5 M, 31/10).
 
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
@@ -718,6 +680,8 @@ El resto del tablero sigue `aparcada`.
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-28 · **Primer Consejo de Ministros** (acta `autonomo/consejo/2026-10-28.md`): resueltas las 5 dudas de Marino, el ETE se queda como fuente de lo que ya está en el tablero, informe de la eco recomendado y pestaña «Mayéutica» en toda la app (29/10). ≈0,5 M.
+- 2026-10-28 · **Consejo de Ministros y Ministerio de Educación** (B-037, B-038, en main): REGLAS §4.12 y skill `/mayeutica`.
 - 2026-10-28 · **Reforma del gobierno** (B-036, en main): `/plan-socialista` presenta presupuesto y rinde cuentas,
   `/ahorro` recorta sola antes de gastar (queda escrito), `/bitacora` lleva el rumbo con el gasto; apruebas por
   bloque; comparecer si se pasa más de un 25 % (REGLAS §4.10).

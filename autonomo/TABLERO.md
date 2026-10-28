@@ -344,6 +344,7 @@ río y mar) → 39-44 → 45-53.
 | 6 | `motor-mayeutica` | Un solo motor de Mayéutica para fichas y modelos vivos (lección del bloque 1) | hecha (2026-10-20) · `core/mayeutica-motor.js`, en main | Tarea técnica: va directo a main con los jueces en verde |
 | 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | pendiente (paso 4: estudio en las 26 fichas; el 3A ya lo tiene. **Plan del paso 4 escrito el 27/10, sin construir**: `autonomo/bloques/b3/plan-paso4.md`, 17 fichas en 6 grupos y 17 piezas de modelo, ≈35-40 M; el usuario decide si se hacen todas las piezas; parte `2026-10-27-b3-plan-paso4.md`). **Parada 2 hecha: PR #35 fusionada en `main` por el usuario (2026-10-27)**; antes, PR https://github.com/alvariitoSW/fiebres-neutropenias/pull/35 (parte `autonomo/partes/2026-10-27-b3-parada2.md`; notas mínimas ≥8,75 tras rejuicio) (antes: parada 1, 2026-10-26): el usuario pide una **vuelta de límites** en las cuatro maquetas antes de la app (sueros sin tope, etc.; paquete §4 «Decisiones del usuario (26/10/2026, sobre las maquetas v3)»); neumotórax a tensión aprobado como escena aparte; esquema del pulmón por revisar. PR en borrador https://github.com/alvariitoSW/fiebres-neutropenias/pull/32 · página https://claude.ai/artifact/BLVPCGzFXLYnXKqoLjBGK6. **Vuelta de límites hecha (27/10)**: shock 8,3 · ritmo 8,5 · receptor 8,8 · pulmón 8,6; pieza común `comun/tope.js`; regla §1.14 (parte `autonomo/partes/2026-10-27-b3-limites.md`). **27/10, el usuario: sí a todo** (shock, ritmo y receptor a la app = parada 2, siguiente; deslizador del receptor como está; esquema del pulmón vale; buscar fuente de los errores de temporización del balón). **Pantallas como las reales (respirador y consola del balón): aprobadas por el usuario (27/10), en `main` como maquetas**, respirador 8,7 · balón 8,7; pieza común `comun/respirador.js`; hueco: errores de temporización del balón sin fuente (parte `autonomo/partes/2026-10-27-b3-pantallas.md`) | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
+| 9 | `mayeutica-pestana` | Guía socrática a un toque en toda la app: interruptor **Texto \| Mayéutica \| Estudiar** (Consejo, 28/10) | pendiente · **29/10, antes del grupo 2 de `b3-paso4`** | ≈0,8 M, cargado al presupuesto de `b3-paso4`. Técnica: a `main` con jueces. Acta `autonomo/consejo/2026-10-28.md` |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
 
@@ -754,8 +755,8 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
 | 1 | `pif-ecg` | Fase 1 · Cuaderno «ECG y arritmias» en PIF → Cardiología, enlazado al corazón eléctrico | hecha (2026-10-28): PR [#36](https://github.com/alvariitoSW/fiebres-neutropenias/pull/36) aprobada por el usuario y en `main` | PDF recibido el 27/10: López Ramírez, *La alegría de leer el electrocardiograma*, 3.ª ed., 2012 (`docs/lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`; desplazamientos en la bitácora §3). La v3 del corazón eléctrico (`b3-ritmo-v3`) y su paso a la app (`b3-3c`) **ya van dentro de `b3`** |
-| 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | pendiente | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
-| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
+| 2 | `b3-ritmo-motor` | Fase 1 · El ritmo del corazón eléctrico mueve el motor del latido (FC, llenado, gasto) | aparcada (Consejo, 28/10: hasta que el usuario decida la reforma de la eco, B-039) | Después del 3C de `b3`. Técnica sobre lo que ya existe; a `main` con jueces `--eco` y `--modelo` |
+| 3 | `b3-bradi` | Fase 1 · Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico | pendiente · **versión corta** (Consejo, 28/10): los 5 estados `pend-` con ECG, frase viva y página de la ESC 2021; 3-4 M; el marcapasos a fondo, con `arritmias-*` | Fuente ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10; su índice de páginas, en el encargo de `b3`). Va después del 3C de `b3` |
 | 4 | `culprit-a` | Fase 1 · Ficha «Del vaso a la derivación» (arteria ↔ derivaciones ↔ pared) (B-026, A) | aparcada hasta terminar Marino | Decisión del usuario del 26/10. Fuentes ya en `docs/` (ESC 2023 de SCA, Wagner 2009, Thygesen 2018, de Winter 2008, CONFIRM 2015, Tamura 2014). Detalle: `autonomo/ideas/ingenieria-inversa/culprit.md` |
 | 5 | `culprit-b` | Fase 1 · Preguntas «predice el ECG» y «coloca el trombo» (B-026, B) | aparcada hasta terminar Marino | Va detrás de `culprit-a`. C (modelo 2D) espera a las coronarias del motor; D, tras C |
 | 6 | `f0-cifras` | Fase 0 · Calculadoras: la cifra nunca contradice su grado + «la fórmula con tus números» | pendiente | Usa la pieza de `formula-comun` (ya en `js/core/`). Juez `--calc` (cambio previo 5 del plan) |
@@ -774,7 +775,7 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 19 | `g6-ete` | G6 · Quirófano cardíaco y ETE | pendiente | Fuente ya en `docs/` (`hahn-2013-ete-completa-ase-sca.pdf`). Después de G1 |
 | 20 | `f2-coronarias` | Fase 2 · Coronarias por segmentos con dominancia en el motor | aparcada | Abre `culprit` C y la pared por regiones (C2 de `rea-eco`) |
 | 21 | `f2-angio` | Fase 2 · Coronariografía que late (arco en C, vista óptima) y «cómo leer un informe de cateterismo» | aparcada (espera PDF) | Tras `f2-coronarias`. Falta Di Mario y Sutaria 2005 (de pago: buscar una fuente libre) |
-| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | pendiente | Fuente ya en `docs/` (Hahn 2013). Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6; decidido el 25/10 tocar la anatomía (esófago, valvas por segmentos) |
+| 22 | `f2-ete` | Fase 2 · ETE medioesofágico y transgástrico con reto de sonda y banco de la mitral A1-P3 | pendiente · espera la decisión de B-039 (Consejo, 28/10) | Fuente ya en `docs/` (Hahn 2013). Ideas 1, 2, 4 y 7 de `anesthbeta.md` §6; decidido el 25/10 tocar la anatomía (esófago, valvas por segmentos) |
 | 23 | `f3-calc-eco` | Fase 3 · Calculadoras de eco para la UCI con catálogo único y «¿cómo se mide?» | aparcada (espera PDF) | Fuentes completas en `docs/` desde el 27/10: corazón derecho (Mukherjee 2025), cámaras (Lang 2015) y la diastólica, Nagueh 2025, y el informe estandarizado, Taub 2025, ya en `docs/` desde el 27/10). Ideas en `echosuite.md` y `echosuite-2.md` |
 | 24 | `f4-visor` | Fase 4 · Visor ligero de cortes de TC | aparcada | Faltan casos con licencia (zenodo, TCIA, Radiopaedia, AWS cerrados en la red) |
 | 25 | `f4-punta` | Fase 4 · «¿Dónde está la punta?» puntuado | aparcada | Igual que `f4-visor` |
@@ -885,6 +886,20 @@ una sesión cada una, a horas distintas (sesiones programadas).
   eco (`node --test 'js/modules/eco/pruebas/*.test.mjs'`, que se recalibran con su fuente, no se borran).
 - Hecho: las 9 formas a 0, defecto y 100 % dentro del «paciente posible» (tabla con `calibra-tabla.mjs`), los dos
   jueces en `jueces.mjs --eco` en verde, la hipertrofia enseña E/A <1 si el profesor elige grado I, parte.
+
+**Encargo `mayeutica-pestana`** · tipo: arreglo de interfaz (técnico, a `main`) · Consejo de Ministros, 28/10/2026
+- Qué quiero: en cada ficha con Mayéutica, el interruptor pasa a **Texto | Mayéutica | Estudiar**. «Mayéutica» abre
+  directamente la guía socrática (los mismos datos `guia` de `js/data/mayeutica/*.js`, el mismo motor
+  `core/mayeutica-motor.js`); al acabar, «Sigue en Estudiar → Examínate». Comparte resultados con el paso Piensa (si
+  la haces en un sitio, sale hecha en el otro). Estudiar se queda como está. En toda la app (las 42 fichas lo heredan
+  sin tocar sus datos).
+- Para qué: estudiar; el usuario la buscó en la FA y estaba escondida tras «Estudiar → Piensa».
+- Modelo «así sí»: el botón «Mayéutica» del ácido-base vivo (`js/modules/nefrologia/acidobase-vivo.html`).
+- Lo que NO quiero: quitar la guía de «Piensa» (quitar contenido es del usuario); duplicar datos o preguntas; un
+  listener nuevo por módulo; que los tres botones desborden a 360 px.
+- Presupuesto: constructor sonnet 30 pasos / 0,5 M · juicio corto del profesor (solo §8 y móvil) 0,2 M · director.
+- Hecho: `jueces --ficha` de una ficha de cada especialidad con Mayéutica (Fundamentos, Merino HEMATO, Merino
+  Cardiología) a 390 y 360 px; prueba `mayeutica-fichas` ampliada con «abrir la pestaña y contestar una guía».
 
 **Encargo `b3-paso4`** · tipo: bloque (M5) · aprobado el 27/10/2026
 - Qué quiero: la **opción A** del informe (las 17 piezas nuevas, ≈36 M, 10-12 sesiones), **elegida por el usuario el
