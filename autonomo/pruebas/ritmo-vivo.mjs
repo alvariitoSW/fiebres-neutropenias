@@ -107,6 +107,12 @@ async function correr(ANCHO, REDUCIDO) {
     ok(vistos === n && desb === 0 && anillos >= 1, `guía «${k}»: ${n} pasos, señala el dibujo, sin desborde`);
     await p.evaluate(() => document.getElementById('rtv-guia-x')?.click());
   }
+  // 6b. «Llenado malo»: sin patada auricular (FA) la PAS cae; en sinusal no cambia (la aurícula sigue aportando)
+  const pasMedia = async (k, ex) => { await R('ponerEstado', k, ex); let v = []; for (let i = 0; i < 12; i++) { await R('avanzarHasta', (await R('simT')) + 1); v.push(await p.evaluate(() => window.__ritmo.leer(window.__ritmo.simT).pas)); } return v.slice(4).reduce((a, b) => a + b, 0) / 8; };
+  const faB = await pasMedia('fa', { fcFA: 120 }), faM = await pasMedia('fa', { fcFA: 120, llenadoMalo: true });
+  ok(faM < faB - 3, `FA: con «Llenado malo» la PAS media baja (${faB.toFixed(0)} → ${faM.toFixed(0)})`);
+  const siB = await pasMedia('sinusal', {}), siM = await pasMedia('sinusal', { llenadoMalo: true });
+  ok(Math.abs(siM - siB) <= 2, `sinusal: «Llenado malo» no cambia la PAS (${siB.toFixed(0)} → ${siM.toFixed(0)})`);
   // 7. Lentos (sin fuente), Medir, Pausa, láminas
   await R('ponerEstado', 'pend-bradi', {}); await espera(200);
   const lent = await cifras(); ok(lent.every(x => /—/.test(x)) && /Pendiente de fuente/i.test(await p.evaluate(() => document.getElementById('rtv-mon-pendiente').innerText)), 'Lentos: monitor en «—» y «Pendiente de fuente», sin cifras');

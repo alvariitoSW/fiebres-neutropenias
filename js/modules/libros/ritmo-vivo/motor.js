@@ -314,7 +314,8 @@ export const MOTOR = (() => {
         if (!efectivo(b)) continue;
         const rr = prev ? b.t0 - prev.t0 : 1.0; prev = b; const salto = rr / rrPrev; rrPrev = rr;
         if (b.t0 < desde - 1.2 || b.t0 > hasta) continue;
-        const a = latidosA.find(x => x.n >= 0.6 * x.total && x.fin - x.t0 < 0.16 && x.t0 > b.t0 - 0.32 && x.t0 < b.t0 - 0.05);
+        const a = m.fa ? null : latidosA.find(x => x.n >= 0.6 * x.total && x.fin - x.t0 < 0.16 && x.t0 > b.t0 - 0.32 && x.t0 < b.t0 - 0.05);
+        // en la FA las ondas f no contraen la aurícula: no hay patada (p. 21)
         // llenado: un latido que llega pronto se llena poco (Fig. 19.4); la patada auricular, ~25 % del llenado, solo
         // se nota si el llenado ya está comprometido (p. 21). Magnitudes: ilustrativas.
         // y si llega mucho antes que el anterior (dos latidos muy juntos, como en la FA), se llena mucho menos
