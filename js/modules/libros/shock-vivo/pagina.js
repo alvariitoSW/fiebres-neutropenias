@@ -2,7 +2,7 @@
 // escena (el paciente en grabado o el aparato) y los modos Explorar y «¿Qué shock es?». Y la Mayéutica (guía, examen, repaso y el caso).
 // montarShock(raiz) se llama una vez, al primer abrir (index.js): lo pesado (ecógrafo, bucle) no corre al arrancar la app.
 import { instalarIso } from '../../../core/dibujo-iso.js';
-import { crearCabecera, perfusion, avanzarLab, textoGravedad } from './soporte.mjs';
+import { crearCabecera, perfusion, avanzarLab, textoGravedad, gDePosparo, horasDePosparo, POSPARO_H } from './soporte.mjs';
 import { monitorDelShock, CANALES } from './canales.js';
 import { instalarMonitor, pintarCifras as pintarColumna } from '../../../core/monitor.js';
 import { crearDock } from '../../../core/dock.js';
@@ -79,7 +79,7 @@ function nuevoPaciente(pac, { g, rec, ajuste = {}, volumen = 0, horas = 0, asent
   if (horas) avanzarReloj(horas, { silencioso: true });
   monitor.montar(); monitor.llenar(cab, ctxMon());
 }
-function reconstruir() {   // al cambiar la gravedad: mismo paciente, mismos mandos
+function reconstruir(conservar = false) {   // al cambiar la gravedad: mismo paciente, mismos mandos (conservar: sigue el reloj y el laboratorio)
   const aj = { ...cab.ajuste }, inf = cab.infundido, h = est.horas;
   cab = crearCabecera(recDe(est.pac), { asentar: 24 });
   est.rec = recDe(est.pac);
@@ -88,12 +88,16 @@ function reconstruir() {   // al cambiar la gravedad: mismo paciente, mismos man
   cab.correr(8);
   // la gravedad define al paciente que llega: el laboratorio vuelve a ser el de la hora 0 (v3: antes la clase I llegaba con el
   // lactato de la clase III)
+  if (conservar) return;
   est.horas = 0; est.historia = [];
   const P0 = perfusion(cab.lectura, est.rec);
   est.lab = { lact: P0.lactObj, diur: P0.diurObj };
   apuntarHistoria();
 }
+// Posparo: el reloj de la RCE es el de la Ees (horasDePosparo); al pasar las horas, el aturdimiento se recupera hasta las 72 h
+const hPosparo = () => est.pac.tipo === 'posparo' ? horasDePosparo(est.g) : 0;
 function avanzarReloj(horas, { silencioso = false } = {}) {
+  if (est.pac.tipo === 'posparo') { est.g = gDePosparo(Math.min(POSPARO_H, hPosparo() + horas)); reconstruir(true); }
   cab.redistribuir(); cab.correr(8);
   est.lab = avanzarLab(est.lab, perfusion(cab.lectura, est.rec), horas, { pam: cab.lectura.u.pam });
   est.horas += horas;
@@ -115,7 +119,7 @@ function leer() {
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
   return r;
 }
-const ctxX = () => ({ g: est.g, pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
+const ctxX = () => ({ g: est.g, hPos: hPosparo(), pac: est.pac, aparato: est.aparato, ajuste: cab.ajuste, infundido: cab.infundido, texto: D.GRAVEDAD[est.pac.tipo]?.texto(est.g, est.pac)[1] || '' });
 function ctxMon() {
   const P = cab.lectura ? perfusion(cab.lectura, est.rec) : { petco2: 35 };
   return { fr: est.pac.fr || 16, etco2: P.petco2, amplPleth: est.pac.tipo === 'septico' ? 1 : 0.65, voltajeBajo: est.pac.tipo === 'tapon' ? 0.6 : null };
@@ -348,7 +352,7 @@ function pintarDock() {
   const p = est.pac, t = p.tipo, h = [], aj = cab.ajuste;
   if (est.pest === 'grav') {
     const G = D.GRAVEDAD[t], [a, b] = G.texto(est.g, p);
-    h.push(`<div class="deslizador"><input type="range" id="shv-d-grav" min="0" max="100" step="1" value="${Math.round(est.g * 100)}" aria-label="Gravedad"><output id="shv-o-grav">${a}<small>${b}</small></output></div><p class="dock-nota">${G.nota} ${org('la escala del mando: el modelo')}</p>`);
+    h.push(`<div class="deslizador"><input type="range" id="shv-d-grav" min="0" max="${G.horas ? G.max : 100}" step="1" value="${G.horas ? Math.round(horasDePosparo(est.g)) : Math.round(est.g * 100)}" aria-label="Gravedad"><output id="shv-o-grav">${a}<small>${b}</small></output></div><p class="dock-nota">${G.nota} ${org('la escala del mando: el modelo')}</p>`);
   } else if (est.pest === 'vol') {
     const no = bolosQueNoCaben(R, ctxX()), off = (mL) => no(mL) ? ' disabled class="tog tope-apagado"' : ' class="tog"';
     h.push(`<div class="rejilla" style="--n:${t === 'hemo' ? 4 : 3}"><button type="button"${off(250)} data-vol="250">+250 mL<small>cristaloide</small></button><button type="button"${off(500)} data-vol="500">+500 mL<small>cristaloide</small></button><button type="button"${off(2000)} data-vol="2000">+2 L<small>cristaloide</small></button>${t === 'hemo' ? `<button type="button"${off(1000)} data-sangre="1000">+1 L<small>sangre completa</small></button>` : ''}</div>`);
@@ -363,12 +367,12 @@ function pintarDock() {
     if (!ok && est.aparato !== 'no') h.push(`<p class="dock-nota">${D.indicacion(p, est.aparato).txt}</p>`);
     if (est.aparato === 'no') h.push(`<p class="dock-nota">La fuente lo reserva para el shock cardiogénico refractario (p. 45): pruébalo con Aurelio.</p>`);
   } else {
-    h.push(`<div class="rejilla" style="--n:3">${[[1, '+1 hora'], [5, '+5 horas'], [18, '+18 horas']].map(([n, tx]) => `<button type="button"${est.horas + n > D.TOPES.horas ? ' disabled class="tog tope-apagado"' : ' class="tog"'} data-h="${n}">${tx}</button>`).join('')}</div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
+    h.push(`<div class="rejilla" style="--n:3">${[[1, '+1 hora'], [5, '+5 horas'], [18, '+18 horas']].map(([n, tx]) => `<button type="button"${(t === 'posparo' ? hPosparo() + n > D.TOPES.horasPosparo + 0.01 : est.horas + n > D.TOPES.horas) ? ' disabled class="tog tope-apagado"' : ' class="tog"'} data-h="${n}">${tx}</button>`).join('')}</div><p class="dock-nota">Ahora: ${horaTxt()}. El lactato tarda; la diuresis va por horas. ${org('el ritmo: ilustrativo')}</p>`);
   }
   parchear($('dock-panel'), h.join(''));
   aplicarTopes(true);
   const dg = $('d-grav');
-  if (dg) { dg.oninput = () => { est.g = +dg.value / 100; const [a, b] = D.GRAVEDAD[t].texto(est.g, p); $('o-grav').innerHTML = `${a}<small>${b}</small>`; }; dg.onchange = () => { trabajar(() => reconstruir()); }; }
+  if (dg) { dg.oninput = () => { est.g = D.GRAVEDAD[t].horas ? gDePosparo(+dg.value) : +dg.value / 100; const [a, b] = D.GRAVEDAD[t].texto(est.g, p); $('o-grav').innerHTML = `${a}<small>${b}</small>`; }; dg.onchange = () => { trabajar(() => reconstruir()); }; }
   medirDock();
 }
 // Los mandos del aparato (bajo su dibujo): flujo del Impella y su modo de gasto total, flujo del ECMO y su venteo,
@@ -642,7 +646,7 @@ nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock();
 reanudar();
 
 // Abrir en un estado de la tabla F de la lista del bloque (hemo, septico, cardio, tapon, tep, balon, impella, ecmo, qs)
-const ESTADO_PAC = { hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
+const ESTADO_PAC = { posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
 function abrirEstado(clave) {
   if (!clave) { reanudar(); medirDock(); return; }
   setModo(clave === 'qs' ? 'qs' : 'explorar');
@@ -650,7 +654,7 @@ function abrirEstado(clave) {
   const p = D.PACIENTES.find((x) => x.k === ESTADO_PAC[clave]); if (!p) { reanudar(); return; }
   const ap = ['balon', 'impella', 'ecmo'].includes(clave) ? clave : 'no';
   est.aparato = ap; est.vista = ap === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro';
-  est.pest = { hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
+  est.pest = { posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
   nuevoPaciente(p, { ajuste: ap === 'no' ? {} : { soporte: ap } });
   if (clave === 'tapon') est.vista = 'eco';
   if (monitor.enclavado !== (clave === 'cardio')) { monitor.enclavar(clave === 'cardio'); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); }

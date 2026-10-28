@@ -50,7 +50,7 @@ await p.goto(BASE, { waitUntil: 'networkidle' }); await p.waitForTimeout(600);
 ok(await p.evaluate(() => !window.__shvPruebas), 'al arrancar la app el modelo NO está montado (lo pesado se monta al primer abrir)');
 
 // ───────── A. Accesos: cada estado de la tabla F
-const F = { hemo: ['mateo', 'vol'], septico: ['amparo', 'far'], cardio: ['aurelio', 'vol'], tapon: ['joaquin', 'grav'], tep: ['consuelo', 'vol'], balon: ['aurelio', 'sop'], impella: ['aurelio', 'sop'], ecmo: ['aurelio', 'sop'] };
+const F = { posparo: ['virginia', 'grav'], hemo: ['mateo', 'vol'], septico: ['amparo', 'far'], cardio: ['aurelio', 'vol'], tapon: ['joaquin', 'grav'], tep: ['consuelo', 'vol'], balon: ['aurelio', 'sop'], impella: ['aurelio', 'sop'], ecmo: ['aurelio', 'sop'] };
 for (const [k, [pc, pt]] of Object.entries(F)) {
     await abrir(k); await espera(1800);
     const r = await S();
@@ -66,9 +66,40 @@ await abrir('qs'); await espera(900);
 ok(await p.evaluate(() => !document.getElementById('shv-zona-qs').hidden), 'acceso «qs»: «¿Qué shock es?» a la vista'); await limpio('acceso qs'); await foto('qs');
 await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un estado desconocido abre el modelo igualmente');
 
+// ───────── A2. Posparo: el mando es «horas tras la RCE» (0 → 72 h); la Ees se recupera con él (Marino cap. 21, p. 64)
+{
+    await abrir('posparo'); await espera(1500); await pest('grav');
+    const rango = await p.evaluate(() => { const d = document.getElementById('shv-d-grav'); return [d.min, d.max]; });
+    ok(rango[0] === '0' && rango[1] === '72', `posparo: el mando de gravedad va de 0 a 72 h (${rango.join('-')})`);
+    const entre = (v, a, b) => v >= a && v <= b;
+    // 0 h, sin noradrenalina: shock cardiogénico (IC <2,2, Tabla 14.1), PAM <65, PCP por debajo de la diastólica pulmonar
+    await grav(0); let r = await S();
+    ok(entre(r.pam, 50, 66) && entre(r.ic, 1.6, 2.1) && entre(r.pcp, 16, 20) && r.papd >= r.pcp && entre(r.fc, 100, 130) && r.lact >= 3, `posparo 0 h: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp} (PAPd ${r.papd}) lactato ${r.lact}`);
+    ok(r.estado === 'Posparo: miocardio aturdido', `posparo 0 h: el estado se llama «${r.estado}»`);
+    posible(r, 'posparo 0 h');
+    // 24 h con noradrenalina 5 µg/min
+    await grav(24); await pest('far'); await clic('#shv-dock-panel [data-na="5"]'); await espera(1500); r = await S();
+    ok(entre(r.pam, 72, 84) && entre(r.ic, 2.1, 2.7) && entre(r.pcp, 13, 19) && r.papd >= r.pcp && r.na === 5, `posparo 24 h + NA 5: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp} (PAPd ${r.papd})`);
+    // 72 h sin noradrenalina
+    await clic('#shv-dock-panel [data-na="0"]'); await pest('grav'); await grav(72); await espera(500); r = await S();
+    ok(entre(r.pam, 80, 95) && entre(r.pas, 100, 125) && entre(r.ic, 2.6, 3.1) && entre(r.pcp, 8, 12) && entre(r.fc, 65, 90) && r.na === 0, `posparo 72 h: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp}`);
+    ok(r.estado === 'Posparo: a las 72 h', `posparo 72 h: el estado se llama «${r.estado}»`);
+    const sello = await p.evaluate(() => /Pasadas las 72 h/.test(document.getElementById('shv-raiz').innerText)); ok(sello, 'posparo 72 h: sello «Pasadas las 72 h» con su consecuencia');
+    // 80 h: el mando no pasa de 72 y las cifras no cambian
+    await grav(80); const r80 = await S();
+    ok(r80.pam === r.pam && r80.ic === r.ic && r80.pcp === r.pcp, `posparo 80 h: igual que a las 72 h (IC ${r80.ic}, PAM ${r80.pam}, PCP ${r80.pcp})`);
+    // el reloj de la RCE: desde 0 h, +18 h x4 llega a 72 y el botón se apaga
+    await grav(0); await pest('reloj'); let veces = 0;
+    for (; veces < 6; veces++) { const hay = await p.evaluate(() => { const b = document.querySelector('#shv-dock-panel [data-h="18"]'); if (!b || b.disabled) return false; b.click(); return true; }); if (!hay) break; await espera(400); }
+    r = await S(); ok(veces === 4 && r.ic >= 2.6 && r.pcp <= 12, `posparo: +18 h ×${veces} lleva el reloj a las 72 h y apaga el botón (IC ${r.ic}, PCP ${r.pcp})`);
+    ok(r.pam >= 35, 'posparo: PAM posible tras el reloj'); await limpio('posparo');
+    // el monitor marca la PAM con ≥75 (Tabla 21.4)
+    await pest('grav'); await grav(0); const marca = await p.evaluate(() => document.querySelector('#shv-raiz [data-fila="pa"]')?.innerText || ''); ok(/75/.test(marca), `posparo: la PAM se compara con ≥75 (${marca.replace(/\s+/g, ' ').trim().slice(0, 50)})`);
+}
+
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
-for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
+for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
     await pac(k); await pest('grav');
     for (const g of [0, 50, 100]) { await grav(g); const r = await S(); posible(r, `${k} gravedad ${g} %`); ok(!/undefined|NaN/.test(r.frase), `${k} g${g}: la frase viva sin undefined/NaN`); }
     await limpio(`paciente ${k}`);
@@ -76,7 +107,7 @@ for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
 
 // ───────── C. Topes: cada mando a su tope (REGLAS §1.14)
 // Volumen: +2 L hasta que el botón se apaga (o 12 veces), con sello, y constantes posibles
-for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
+for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
     await abrir('hemo'); await pac(k); await pest('grav'); await grav(100); await pest('vol');
     let n = 0; for (; n < 12; n++) { const hay = await p.evaluate(() => { const b = document.querySelector('#shv-dock-panel [data-vol="2000"]'); if (!b || b.disabled) return false; b.click(); return true; }); if (!hay) break; await espera(250); }
     const r = await S(); posible(r, `${k} +2 L ×${n}`);
@@ -138,7 +169,7 @@ for (const [k, n] of [['impella', 8], ['balon', 5], ['ecmo', 5]]) {
     await clic('#shv-esc-pest [data-plano="recorrido"]'); await espera(500); await limpio('recorrido ' + k);
 }
 // ───────── E. Explicación guiada: señala y cada cita llega a un párrafo que existe
-for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo']) {
+for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo']) {
     await abrir(k); await espera(900); await clic('#shv-btn-guia'); await espera(500);
     let pasos = 0, sinSenal = 0, citasRotas = [];
     for (; pasos < 8; pasos++) {

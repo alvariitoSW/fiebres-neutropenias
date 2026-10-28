@@ -57,7 +57,13 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   else if (R.pam > 100 && (X.ajuste.na > 0 || X.ajuste.vaso)) out.vaso = { nivel: 'aviso', titulo: 'Presión alta con vasopresor',
     texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
   // 5) el reloj: 48 h
-  if (horas >= T.horas) out.reloj = { nivel: 'sello', titulo: 'Reloj agotado',
+  if (tipo === 'posparo') {
+    // el reloj es el de la RCE: 72 h («suele resolverse en 72 h», p. 64); pasado, las cifras ya no cambian
+    if (X.hPos >= T.horasPosparo) out.reloj = { nivel: 'sello', titulo: 'Pasadas las 72 h',
+      texto: 'El aturdimiento suele estar resuelto y las cifras ya no cambian. Si el paciente siguiera en shock, ya no sería aturdimiento: la fuente no dice más.', cita: C.posparo, origen: 'ficha · p. 64', deshabilita: ['[data-h]'] };
+    else if (X.hPos >= T.horasPosparoAviso) out.reloj = { nivel: 'aviso', titulo: 'Casi 72 horas',
+      texto: `${Math.round(X.hPos)} h tras la RCE: a las 72 h el aturdimiento suele estar resuelto.`, cita: C.posparo, origen: 'ficha · p. 64', bajo: '#shv-dock-panel .rejilla' };
+  } else if (horas >= T.horas) out.reloj = { nivel: 'sello', titulo: 'Reloj agotado',
     texto: 'Dos días de seguimiento: el lactato y la diuresis ya no cuentan nada nuevo.', origen: 'ilustrativo', deshabilita: ['[data-h]'] };
   else if (horas >= T.horasAviso) out.reloj = { nivel: 'aviso', titulo: 'Casi dos días',
     texto: `${horaTxt()}: el lactato ya no cuenta nada nuevo.`, origen: 'ilustrativo', bajo: '#shv-dock-panel .rejilla' };
