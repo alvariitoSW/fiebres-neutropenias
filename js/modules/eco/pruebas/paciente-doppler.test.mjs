@@ -10,8 +10,8 @@ import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
 const PENDIENTES = new Set([
   // causa (e′ por forma, hipertrofia con mando, dilatada con la restitución de e′, hpcronica y E>0 a fondo ya pasan en la s2):
   // fallo:def E/e′ 13,4 (≥14) y S/D 1,42 (<1): pide rigidez con la gravedad, que rompe 9 pruebas del fallo (s2-dilfallo.md); fallo:1 E/e′ 8,5
-  // (fusión a FC 120). J2 por abajo ya pasa en todas las formas salvo derrame:1: su VD de fin de sístole sale 32 mL (<45); subirlo 20 mL deja el pliegue del VD en 2,8 mm (taponamiento.test R2 exige >3), ver s2-j2.md.
-  'J1:fallo:def', 'J1:fallo:1', 'J2:derrame:1',
+  // (fusión a FC 120). J2 por abajo ya pasa en todas las formas: sin suelo de VD, y con LIMITES.vd[0] = 20 mL el dibujo admite el VD vacío (s2-vd.md).
+  'J1:fallo:def', 'J1:fallo:1',
 ]);
 const todo = { todo: 'eco-calibra-a' };
 
