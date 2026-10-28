@@ -28,7 +28,7 @@ export const N_DISCOS = 20;
 /** Motor asentado con un corazón del simulador (sin escenario o con uno de escenarios.mjs). */
 export function motorSistolico(clave = 'normal') {
   const m = crearMotor(); m.correr(10);
-  const e = ESCENARIOS[clave]; e.aplicar(m);
+  const e = ESCENARIOS[clave]; e.aplicar(m, clave === 'hipertrofia' ? 1 : undefined);   // la HVI con PAI alta (grado 2), la de siempre: su strain reducido con FE conservada
   m.correr(e.forma ? ASENTAR_FORMA : 12);
   return m;
 }

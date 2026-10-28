@@ -40,7 +40,7 @@ export function medirForma(k, g) {
   };
 }
 
-// Las 12 formas/puntos de la tabla: 4 fijas y 5 con mando × (0, def, 1) más la hipertrofia (sin mando aún: 1 punto)
-export const CASOS_FORMA = [['normal'], ['vasoplejia'], ['hipertrofia'], ['dilatada']];
-for (const k of ['hemorragia', 'fallo', 'derrame', 'tep', 'hpcronica']) CASOS_FORMA.push([k, 0], [k, 'def'], [k, 1]);
+// Las 12 formas/puntos de la tabla: 3 fijas y 6 con mando × (0, def, 1)
+export const CASOS_FORMA = [['normal'], ['vasoplejia'], ['dilatada']];
+for (const k of ['hemorragia', 'fallo', 'derrame', 'tep', 'hpcronica', 'hipertrofia']) CASOS_FORMA.push([k, 0], [k, 'def'], [k, 1]);
 export const claveCaso = (k, g) => `${k}:${g ?? '-'}`;

@@ -59,6 +59,5 @@ export const BANDAS = {
   'hipertrofia:1': [c('ea', 0.8, 2, N(554) + ' (18)'), ...eBaja(), c('eE', 14, INF, N(554) + ' (18)'), dt140(), c('pcp', 15, INF, N(550) + ' (14)'),
     diag('paps', 35, INF, N(554), '«IT ≥2,8 o PAPs ≥35»: basta una')],
 };
-// Con mando en el motor hoy: hipertrofia aún no lo tiene (sus tres puntos miden lo mismo hasta que se le dé)
 export const HUECO_MINIMOS = HUECO;
 export const UNIDADES = { E: 'cm/s', A: 'cm/s', ea: '', dt: 'ms', eSep: 'cm/s', eLat: 'cm/s', eAvg: 'cm/s', eE: '', S: 'cm/s', D: 'cm/s', Ar: 'cm/s', sd: '', bombaAI: '%', tapse: 'mm', pcp: 'mmHg', paps: 'mmHg', feVd: '%', tapsePaps: 'mm/mmHg', pvc: 'mmHg' };

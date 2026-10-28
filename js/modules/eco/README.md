@@ -882,3 +882,10 @@ tabique en el PSAX (pieza Forma).
 - Pruebas recalibradas (sin tocar ninguna referencia): marcos del muestreo en la prueba C1 de la mitral, mínimo de filas del tabique
   en el TEP (30 → 20), caída de presión del balón (3 → 2 mmHg) y los 388 mL del navegador.
 - Pendiente (sesiones siguientes): e′ por forma, hipertrofia con mando, E=0 a fondo, VD máximo de la HP, área real de las 4 venas.
+
+**e′ por forma y hipertrofia con mando (eco-calibra-a, 28/10/2026).** La relajación lenta del VI es una sola cosa en el motor: `relajacion`
+alarga la cola de la activación del VI (cae E, pesa la A) y es lo que baja e′ en el Doppler tisular (`atlas/diastolica.mjs`, `ePrima`: e′ lateral = 12 ÷
+relajación^0,6). Cada forma la lleva en `escenarios.mjs`: dilatada 2,8 (e′ 5,2 septal / 6,5 lateral), fallo del VI de 1 a 2,8 hasta su defecto,
+hipertrofia de 3,2 a 2,8; hemorragia, derrame, TEP, HP crónica y vasoplejía, 1 (e′ normal, Nagueh 2025 p. 551-553). La hipertrofia tiene mando
+(`hviRecorrido`): g bajo = grado 1 (E/A ≤0,8, PCP normal), g alto = rigidez ×2,2 y 300 mL retenidos (PCP 26, E/A 1,6, E/e′ 16: seudonormal, grado 2;
+Nagueh p. 554); masa y pared fijas. Cifras del modelo: ilustrativas. Tablas de Guyton regeneradas.

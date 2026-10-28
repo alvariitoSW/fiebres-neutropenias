@@ -12,7 +12,8 @@ import { BASE, escalarRPul } from './motor.mjs';
 // la aplica de golpe y el barorreflejo tarda ~10 s en responder. Los topes de cada mando, ilustrativos salvo lo que se cita.
 const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 % (Marino, Tabla 15.1, cap. 15, p. 22)
 const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
-const EES_VI_MIN = 0.3;                        // mmHg/mL, ~10 % de la normal (3,1)
+const EES_VI_MIN = 0.3;
+const FALLO_DEFECTO = Math.log(3.1 / 0.9) / Math.log(3.1 / EES_VI_MIN);   // Ees 0,9 (ver «fallo»)                        // mmHg/mL, ~10 % de la normal (3,1)
 // mL; con el pericardio del modelo, el taponamiento (derrame agudo). 390 → 388 con la RVS calibrada (octubre 2026, segunda
 // vuelta): con 390 el IC a fondo bajaba a 1,19; 388 → 383 con la AI que suma su contracción (eco-calibra-a, 28/10/2026): con 388, 1,15. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
 const DERRAME_ML_MAX = 383;
@@ -26,6 +27,10 @@ const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
 const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) / Math.log(TEP_RPUL_MAX);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
+// Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
+// (atlas/diastolica.mjs, ePrima): e′ = 12 ÷ relajación^0,6 → con 2,8, e′ lateral 6,5 y septal 5,2 cm/s (≤7 / ≤6: Nagueh 2025 p. 554).
+// Ilustrativo; las formas que no son del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c)
+const RELAJACION_LENTA = 2.8;
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
 // más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14
@@ -35,6 +40,10 @@ const HPC_DEFECTO = 0.55;
 const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
   return { k: 1 + 11 * x, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
     mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 700 * c01((x - 0.6) / 0.4), b: 1 + 0.2 * x, v0: 160 * c01((x - 0.5) / 0.5) ** 1.5 }; };
+// Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
+const HVI_DEFECTO = 0.2;
+const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
+  return { relajacion: 3.2 - 0.4 * x, b: 1 + 1.2 * x * x, vSangre: 300 * x * x }; };
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
@@ -48,9 +57,10 @@ export const ESCENARIOS = {
     nombre: 'Fallo del VI', tipo: 'cardiogenico',
     // contractilidad del VI (Ees) de la normal a EES_VI_MIN, en escala logarítmica (cada paso la multiplica por lo mismo).
     // El defecto, Ees 0,9
-    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN),
+    gravedad: { fin: 'el shock cardiogénico a fondo', defecto: FALLO_DEFECTO,
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
-    aplicar: (m, g = Math.log(BASE.vi.ees / 0.9) / Math.log(BASE.vi.ees / EES_VI_MIN)) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g; },
+    aplicar: (m, g = FALLO_DEFECTO) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g;
+      m.p.relajacion = 1 + (RELAJACION_LENTA - 1) * Math.min(1, g / FALLO_DEFECTO); },
   },
   derrame: {
     nombre: 'Derrame pericárdico', tipo: 'obstructivo',
@@ -79,7 +89,12 @@ export const ESCENARIOS = {
     nombre: 'Hipertrofia del VI', forma: true,
     // sobrecarga de presión (HTA): más masa (pared gruesa), ventrículo rígido y más resistencia sistémica.
     // Fisiopatología UCI · Cardiología, Ficha 3: la sobrecarga de presión produce hipertrofia del VI y rigidez
-    aplicar: (m) => { m.p.mioVi = 1.6; m.p.vi.b *= 2.2; m.p.rSis *= 1.25; },
+    // gravedad (mando de grado 1 a grado 2; masa y pared fijas en todo el recorrido): con g bajo manda la relajación lenta (e′ baja,
+    // E cae, la A pesa: E/A ≤0,8, PCP normal = grado 1); al subir g crecen la rigidez (vi.b) y el volumen retenido, la PAI pasa de 15 y E
+    // se recupera (E/A >0,8 y <2 con e′ baja y E/e′ ≥14 = seudonormal, grado 2; Nagueh 2025 p. 554, PCP >15 p. 550). Ilustrativo
+    gravedad: { fin: 'el grado 2 (seudonormal)', defecto: HVI_DEFECTO, texto: (g) => `rigidez ×${coma(hviRecorrido(g).b, 1)}, volumen retenido ${Math.round(hviRecorrido(g).vSangre)} mL` },
+    aplicar: (m, g = HVI_DEFECTO) => { const r = hviRecorrido(g);
+      m.p.mioVi = 1.6; m.p.vi.b *= r.b; m.p.rSis *= 1.25; m.p.relajacion = r.relajacion; m.s.vven += r.vSangre; },
   },
   dilatada: {
     nombre: 'Miocardiopatía dilatada', forma: true,
@@ -91,7 +106,7 @@ export const ESCENARIOS = {
     // (Zoghbi Tabla 8, p. 332: moderada 0,20-0,39); la AI recibe el reflujo y se remodela (más volumen sin tensión, más
     // distensible) hasta una AI «generalmente grave» (Tabla 6, p. 320). Parámetros ilustrativos.
     aplicar: (m) => { const dil = (DILATADA_V0 - BASE.vi.v0) / 50;   // 1 = la dilatación de siempre (+50 mL de volumen sin tensión)
-      m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
+      m.p.relajacion = RELAJACION_LENTA; m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
       m.p.eroaMitral = Math.min(EROA_IM_TOPE, EROA_IM_POR_DIL * dil); m.p.ai.v0 = BASE.ai.v0 + AI_V0_POR_DIL * dil; },
   },
   tep: {
