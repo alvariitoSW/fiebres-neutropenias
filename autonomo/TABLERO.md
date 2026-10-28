@@ -356,6 +356,7 @@ río y mar) → 39-44 → 45-53.
 | 14 | `b5` | Bloque 5 (caps. 39-44, 17 fichas): cobertura, maquetas del **hepatocito** y del **termostato** (Educación, 2-3 por modelo), modelos, Estudiar, paradas 1-4 | pendiente · tras aprobar el `b4` | 45-63 M |
 | 15 | `b6a` | Bloque 6a (caps. 45-47, 14 fichas): **cráneo vivo** y unión neuromuscular, Estudiar, paradas 1-4 | pendiente · tras aprobar el `b5` | 30-45 M |
 | 16 | `b6b` | Bloque 6b (caps. 48-53 y apéndices, 25 fichas): eje hormonal (Motion), hepatocito para tóxicos; las fichas de consulta con Estudiar corto y un caso por grupo | pendiente · tras aprobar el `b6a` | 30-45 M |
+| 17 | `educacion-pionera` | **B-040 · Educación pionera**: propuesta de cómo se estudia con modelos vivos y preguntas socráticas (POE, error productivo, autoexplicación, entrelazado, repaso espaciado) con 3 maquetas y la prueba de 3 días con el usuario (Consejo, 28/10) | pendiente · fase 1 el 30/10 · fases 2-3 el 02/11 · **parada contigo el 04/11** | ≈6 M, tope 8 M, del margen de Educación. Acta `autonomo/consejo/2026-10-28-2.md` |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
 
@@ -912,6 +913,24 @@ Consejo de Ministros, `autonomo/consejo/2026-10-28.md`)** · tipo: bloque (M5)
 - Fuentes: los PDF de Marino en `docs/` con su página (`js/data/libros-indice.js`).
 - Hecho: el del Objetivo M5 (jueces `--ficha`, `--modelo`, topes y móvil; auditor; profesor ≥8, meta 8,75; PR con «Ver en
   el móvil» en la última parada de cada bloque) y el contador «N de 155» en el parte de cada sesión.
+
+**Encargo `educacion-pionera`** · tipo: informe con maquetas (no toca la app) · B-040, encargo fijado por el Consejo el
+28/10 (acta `autonomo/consejo/2026-10-28-2.md`)
+- Qué quiero: que la app sea pionera en estudiar con modelos vivos y preguntas socráticas (la IA diseña; la app no
+  conversa). Tres fases, una sesión cada una: (1) investigación (sonnet ×2: `/literature-review` + `/claim-check`, y
+  `/ingenieria-reversa` de 2-3 webs que se abran) con la evidencia y su página; (2) diseño y rúbrica (profesor, Fable,
+  skill `/mayeutica`); (3) tres maquetas HTML en `autonomo/maquetas/educacion/` y su juicio.
+- Maquetas: **A** predicción-observación-explicación en el shock vivo (ficha de tipos de shock) · **B** error productivo
+  en el capilar vivo (el residente trata sin guía, se pasa, sello de paciente real, después la guía) · **C** entrelazado
+  y repaso espaciado en el río y mar (caso de cristaloides que cruza con la hemorragia clase II + 5 preguntas de días
+  atrás). Cada una: 1 ficha, 1 caso completo, ≤6 pantallas a 390 px, con A/B/C al final.
+- Se mide: rúbrica §7-§8 con 3 criterios nuevos (predecir antes de ver; explicar el porqué; error con consecuencia y
+  después enseñanza), meta 8,75; y la prueba de 3 días con el usuario (dos fichas gemelas, 6 preguntas de transferencia).
+- Lo que NO quiero: cifras sin página; texto libre en las respuestas (solo los tres formatos de §8); guardar nada nuevo
+  en las maquetas; tutor que conversa; otra librería; copiar webs ajenas.
+- Gobierno: Hacienda revisa cada fase (pasa de 2 M), sin recortar la calidad de las maquetas. ≈6 M, tope 8 M.
+- Hecho: página para el móvil (Artifact) con el diagnóstico, la evidencia, las 3 maquetas y la propuesta de rúbrica +
+  parte; el usuario elige el 04/11.
 
 **Encargo `mayeutica-pestana`** · tipo: arreglo de interfaz (técnico, a `main`) · Consejo de Ministros, 28/10/2026
 - Qué quiero: en cada ficha con Mayéutica, el interruptor pasa a **Texto | Mayéutica | Estudiar**. «Mayéutica» abre

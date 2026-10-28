@@ -229,25 +229,6 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-040 · Educación pionera: estudiar con modelos vivos y preguntas socráticas · apuntado 2026-10-28
-- **Lo que dijiste**: «el aumento del techo de gastos es para el ministerio de educación en la parte de mayéutica,
-  quiero que se lo curren bien y sean capaces de darle una vuelta a la educación con IA para poder estudiar con modelos
-  vivos, con preguntas socráticas, quiero que ayuden a llegar a entender muy bien todos los conceptos y quiero ser
-  pionero mundial en evolucionar la manera de estudiar, quiero que esto lo valore también el consejo de ministros».
-- **Cómo lo entiendo**: Educación (`/mayeutica`, departamento de ideas) prepara una **propuesta de cómo se estudia en la
-  app de aquí en adelante**: qué hacen hoy los mejores en el mundo (búsqueda con `/literature-review`, `/claim-check`,
-  `/ingenieria-reversa` y `/radar`: tutores socráticos, práctica de recuperación, repaso espaciado, simulación), qué
-  tenemos ya (modelos vivos, Mayéutica, casos que evolucionan) y 2-3 **maquetas** de una forma nueva de estudiar una
-  ficha con un modelo vivo y preguntas socráticas. Con su gasto. El Consejo la valora y lo que apruebe se aplica a todo
-  Marino (y después, al resto). El margen de 328 a 400 M del techo queda para esto.
-- **Choque con una regla**: «con IA» puede ser dos cosas. (a) Que la IA **diseñe** las preguntas y los modelos (lo que
-  ya hacemos): cabe en las reglas. (b) Un tutor de IA **dentro de la app** que conversa contigo: necesita un servidor
-  y una clave de pago, y la app es «sin backend» (`CLAUDE.md` §2): es arquitectura, solo tú puedes abrirla. La propuesta
-  traería las dos, con su coste, y tú eliges.
-- **Depende de**: nada; el Consejo la valora al recibirla. **Tamaño**: mediana (propuesta con maquetas, 4-6 M, supongo).
-- **Lista de calidad**: «lo que NO quiero»: bajar la fidelidad, cifras sin página, guardar datos sin pedirlo (REGLAS
-  §2: tres excepciones de `localStorage`) · juez: profesor (rúbrica §7-§8) y el Consejo.
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -269,6 +250,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M | 2026-10-28 | Fase 1 el 30/10, fases 2-3 el 02/11; **parada contigo el 04/11** con 3 maquetas |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | aprobado el 28/10; programado el 01/11 (4-6 M) | 2026-10-28 | La decisión de arquitectura, después, es tuya. `f0-eco-*`, `f2-ete`, `b3-ritmo-motor` y el atlas esperan |
 | `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
@@ -333,6 +315,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **Repaso espaciado (Consejo, 28/10)**: ¿guardar la fecha del último intento dentro del registro que ya guarda la Mayéutica, o nada nuevo?
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
