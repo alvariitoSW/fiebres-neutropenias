@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-27-eco-calibra.md` (cuarta pasada, 27/10: 660 k, sin patrones nuevos; reutilizar la herramienta F3b abarató el medidor).
+**Último parte revisado:** `2026-10-28-eco-calibra-a-s1.md` (quinta pasada, 28/10: 3,6 M; el barrido del motor a mano se repite → propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
@@ -25,3 +25,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-27 | Cada constructor en su propia carpeta | propuesta |
 | 2026-10-27 | Partir por estructura antes de lanzar | propuesta |
 | 2026-10-27 | Contar las piezas en el código, no en la cobertura | propuesta |
+| 2026-10-28 | Calibrar el motor con una rejilla, no a mano | propuesta |
