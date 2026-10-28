@@ -1,0 +1,193 @@
+<!-- PROPUESTA PARA ELEGIR (educacion-pionera, fase 3). No es parte de la app.
+     Maqueta B · error productivo en el capilar vivo: Carmen recibe sangre sin guía, se pasa, sale el sello de TACO y
+     solo después viene la enseñanza. Ábrela con el servidor de la app, desde la raíz del repositorio:
+       python3 -m http.server 8000  →  http://localhost:8000/autonomo/maquetas/educacion/b-error-capilar.html
+     Usa el capilar vivo real (js/modules/libros/capilar-vivo-escena.js, js/data/capilar-vivo-data.js, derivar()) y los
+     estilos reales de la app. El tope y el sello viven solo aquí. Lógica en b/b.js. No guarda nada.
+     Fuente: docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf (cap. 12; página del PDF = página del libro).
+     Carmen (71 años) es inventada; la medicina, del libro. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Capilar vivo: decide sin guía (maqueta B)</title>
+<link rel="stylesheet" href="../../../css/variables.css">
+<link rel="stylesheet" href="../../../css/components.css">
+<style>
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 16px/1.5 Georgia, 'Times New Roman', serif;
+  padding: 8px max(12px, env(safe-area-inset-right, 0px)) 40px max(12px, env(safe-area-inset-left, 0px)); }
+[hidden] { display: none !important; }
+#cpv-raiz { max-width: 560px; margin: 0 auto; padding-bottom: 0; gap: 8px; }
+#cpv-raiz.cpv-estudio .cpv-escena-bloque:has(.cpv-escena.cpv-con-lupa) { position: static; }
+#pantallas { display: grid; gap: 10px; min-width: 0; }
+.sans { font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; }
+.prog { font: 600 .68rem system-ui, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+.pant { display: grid; gap: 10px; min-width: 0; }
+.pant > * { min-width: 0; }
+h1 { font-size: 1.15rem; line-height: 1.2; margin: 0; color: var(--accent-yellow); font-weight: normal; }
+.caja { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: grid; gap: 6px; }
+.txt { font-size: .95rem; line-height: 1.45; }
+.peq { font: .8rem/1.4 system-ui, sans-serif; color: var(--text-dim); }
+.org { font: .66rem/1.25 system-ui, sans-serif; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 0 6px; white-space: nowrap; }
+.org.ilu { border-style: dashed; }
+.pdf { color: var(--accent-yellow); font: .8rem system-ui, sans-serif; }
+.hl-a { background: linear-gradient(to bottom, transparent 58%, rgba(207,154,62,.34) 58%); padding: 0 2px; font-weight: 600; }
+.hl-r { background: linear-gradient(to bottom, transparent 58%, rgba(184,92,62,.4) 58%); padding: 0 2px; font-weight: 600; }
+.consts { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; }
+.consts div { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; padding: 3px; text-align: center; min-width: 0; }
+.consts small { display: block; font: .6rem system-ui, sans-serif; color: var(--text-muted); }
+.consts b { font: 700 .9rem Georgia, serif; white-space: nowrap; }
+.consts.rojo b { color: var(--accent-red); }
+.fila { display: grid; gap: 6px; }
+.btn { min-height: 44px; font: 600 .9rem/1.2 system-ui, sans-serif; background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-color); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: center; }
+.btn.prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.btn.suave { background: transparent; color: var(--accent-yellow); border-style: dashed; }
+.btn:disabled { opacity: .55; cursor: default; }
+.btn[aria-pressed="true"] { border-color: var(--accent-yellow); background: rgba(207,154,62,.14); }
+.btn:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+.chip-tope { font: .76rem/1.3 system-ui, sans-serif; color: var(--text-dim); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 999px; padding: 4px 10px; width: fit-content; max-width: 100%; }
+.sello { border: 3px solid var(--accent-red); border-radius: 12px; padding: 10px 12px; display: grid; gap: 4px; background: rgba(184,92,62,.12); }
+.sello .gr { font: 800 1.6rem/1 system-ui, sans-serif; letter-spacing: .1em; color: var(--accent-red); }
+.sello p { font: .86rem/1.4 system-ui, sans-serif; }
+.frase-b { font: .9rem/1.35 Georgia, serif; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; }
+.paso-n { font: 600 .72rem system-ui, sans-serif; color: var(--text-muted); }
+.ver-ficha { font: .78rem system-ui, sans-serif; color: var(--accent-yellow); background: transparent; border: 1px dashed var(--border-color); border-radius: 8px; padding: 6px 10px; min-height: 36px; cursor: pointer; }
+.aviso-app { font: .76rem/1.35 system-ui, sans-serif; color: var(--text-dim); background: var(--bg-card); border-left: 3px solid var(--accent-yellow); padding: 5px 8px; border-radius: 4px; }
+.opc { display: grid; gap: 6px; }
+.opc .btn { text-align: left; font-weight: 400; font-family: Georgia, serif; font-size: .92rem; }
+.opc .btn.ok { border-color: var(--accent-green); }
+.opc .btn.mal { border-color: var(--accent-red); background: rgba(184,92,62,.12); }
+.expl { background: var(--bg-card); border-radius: 8px; padding: 8px 10px; font: .84rem/1.4 system-ui, sans-serif; }
+.expl > .si, .expl > .no, .expl > .peq { display: block; margin-bottom: 3px; }
+.expl .si { color: var(--accent-green); font-weight: 600; } .expl .no { color: var(--accent-red); font-weight: 600; }
+.nota-plegable { margin: 0; } .nota-plegable > p { font: .8rem/1.4 system-ui, sans-serif; color: var(--text-dim); padding: 2px 0 6px; }
+.nota-plegable > summary { font-size: .8rem; min-height: 32px; display: flex; align-items: center; }
+.pie { border: 1px solid var(--accent-yellow); border-radius: 12px; padding: 10px 12px; display: grid; gap: 8px; }
+.pie .abc { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.pie a { text-align: center; padding: 10px 4px; border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-main); text-decoration: none; font: 600 .86rem/1.25 system-ui, sans-serif; min-height: 44px; }
+.pie a.aqui { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+.pie a small { display: block; font-weight: 400; font-size: .68rem; }
+ul.ll { margin: 0; padding-left: 18px; display: grid; gap: 6px; font-size: .92rem; }
+</style></head>
+<body>
+<div class="cpv-raiz cpv-estudio" id="cpv-raiz">
+  <div id="pantallas">
+
+  <!-- ===== P1 · Decide tú ===== -->
+  <section class="pant" data-p="1">
+    <div class="prog">Pantalla 1 de 6 · Guardia, 3:00</div>
+    <h1>Carmen, 71 años, neumonía día 3</h1>
+    <div class="caja">
+      <p class="txt">Estable, sin vasoactivos, gafas nasales 2 L, no sangra. Insuficiencia cardíaca crónica (FEVI 35 %), sin cardiopatía isquémica. Hb de las 3:00: <b>7,4 g/dL</b> (ayer 7,9). Vía central normal.</p>
+      <span class="org ilu">paciente inventada · constantes ilustrativas</span>
+    </div>
+    <p class="txt">«3:00. Te llama la enfermera: "Carmen tiene la Hb en 7,4, ¿le pongo sangre?". Nadie más despierto. Decide con el modelo.»</p>
+  </section>
+
+  <!-- ===== P2 · Gotea la 1.ª bolsa ===== -->
+  <section class="pant" data-p="2" hidden>
+    <div class="prog">Pantalla 2 de 6 · Guardia, 5:10</div>
+    <p class="txt">«5:10. Pasó la primera bolsa. Hb de control 8,4.»</p>
+    <p class="peq">La bolsa goteó unas 2 h (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">p. 10</a>). El gasto se queda quieto mientras gotea: <span class="org ilu">fisiología general · ilustrativo</span> (la Fig. 12.4, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">p. 10-11</a>, solo muestra DO₂ y VO₂).</p>
+  </section>
+
+  <!-- ===== P3 · El sello ===== -->
+  <section class="pant" data-p="3" hidden>
+    <div class="prog">Pantalla 3 de 6 · 4 h después de empezar la 2.ª bolsa</div>
+    <p class="peq" id="rama-txt" hidden></p>
+    <div class="sello" role="status">
+      <span class="gr">TACO</span>
+      <p><b>Sobrecarga circulatoria por la transfusión</b> · edema pulmonar hidrostático con insuficiencia respiratoria hipoxémica en las primeras 6 h · ≈1 %, más frecuente con insuficiencia cardíaca previa · mortalidad 20 %, ventilación mecánica en 3 de cada 4 (Marino cap. 12, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">p. 15</a>-<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">16</a>).</p>
+    </div>
+    <div class="consts rojo" aria-label="Constantes de Carmen">
+      <div><small>FR</small><b>30</b></div><div><small>SpO₂</small><b>86 %</b></div><div><small>FC</small><b>110</b></div><div><small>PA</small><b>152/90</b></div><div><small>PVC</small><b>16</b></div>
+    </div>
+    <p class="peq">Crepitantes bilaterales; Rx con edema pulmonar (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">p. 16</a>). Las constantes son <span class="org ilu">fisiología general · ilustrativo</span>: el libro solo da la hipoxemia en 6 h, la Rx y la IC previa.</p>
+    <p class="frase-b">La transfusión que no hacía falta le ha llenado el pulmón de agua.</p>
+    <details class="nota-plegable"><summary>Nota de fidelidad: qué castiga el sello</summary>
+      <p>El libro no dice que 2 bolsas den más TACO que 1: el TACO no se relaciona con el número de unidades (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">p. 15</a>). Lo que se castiga es transfundir sin indicación (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8</a>) a una paciente con el pulmón más fácil de encharcar. Además, el modelo deja el gasto en 7,6 L/min; en una IC real caería: el motor no modela el corazón que se encharca.</p></details>
+    <p class="txt"><b>Pasó. Ahora, por qué.</b></p>
+  </section>
+
+  <!-- ===== Mandos y constantes de P1 y P2 (se crean una vez) ===== -->
+  <div class="pant" id="mandos-caja">
+    <div class="consts" id="consts" aria-label="Constantes de Carmen">
+      <div><small>FC</small><b id="k-fc">92</b></div><div><small>PA</small><b id="k-pa">118/64</b></div><div><small>FR</small><b>20</b></div><div><small>SpO₂</small><b>98 %</b></div><div><small>PVC</small><b id="k-pvc">8</b></div>
+    </div>
+    <span class="org ilu" style="width:fit-content">constantes: ilustrativo</span>
+    <div class="chip-tope" id="chip-tope" hidden></div>
+    <p class="peq" id="scv-txt" hidden></p>
+    <div class="fila" id="mandos">
+      <button class="btn prim" id="m-transf" type="button">Transfundir 1 CH</button>
+      <button class="btn" id="m-scv" type="button">Pedir ScvO₂ de control</button>
+      <button class="btn" id="m-parar" type="button">Dejar así y seguir la guardia</button>
+    </div>
+  </div>
+
+  <button class="btn prim" id="entender" type="button" hidden>Entender qué pasó</button>
+
+  <!-- ===== P4 · La enseñanza ===== -->
+  <section class="pant" data-p="4" hidden>
+    <div class="prog" id="p4-prog">Pantalla 4 de 6 · Ejemplo resuelto</div>
+    <details class="nota-plegable"><summary>Por qué te dejamos equivocarte primero</summary>
+      <p>Resolver sin ayuda y recibir la explicación después mejora la comprensión (fracaso productivo; evidencia <b>moderada</b>: 53 estudios, g 0,36, Sinha y Kapur 2021, Rev Educ Res). En medicina solo hay un ensayo pequeño (42 estudiantes, sutura, Willis 2020, J Surg Educ). Durante el intento no te dimos pistas porque añadirlas no mejoró el aprendizaje de los errores (Klein 2019, Adv Health Sci Educ). Sin esta explicación después, el error solo no enseña.</p></details>
+    <div class="caja">
+      <span class="paso-n" id="p4-n"></span>
+      <h2 style="font-size:1rem;margin:0;color:var(--accent-yellow);font-weight:normal" id="p4-t"></h2>
+      <p class="txt" id="p4-txt"></p>
+      <p class="peq" id="p4-src"></p>
+      <details class="nota-plegable" id="p4-disc" hidden><summary>Las fuentes discrepan</summary>
+        <p>Extracción del 50 % (Marino, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=6" target="_blank" rel="noopener">p. 6</a> y <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">8</a>) frente a ScvO₂ &lt;70 % (algunas guías, <a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8-9</a>): en Carmen no coinciden del todo (extracción 34 %, ScvO₂ 65 %). El libro no las reconcilia y aquí tampoco se elige una.</p></details>
+      <button class="ver-ficha" id="p4-ficha" type="button" data-resaltar="">Ver en la ficha</button>
+      <div class="aviso-app" id="p4-aviso" hidden>En la app, este botón abre la ficha «Transfusión» en el párrafo exacto.</div>
+    </div>
+    <div class="fila" style="grid-template-columns:1fr 1fr">
+      <button class="btn" id="p4-ant" type="button">← Paso anterior</button>
+      <button class="btn prim" id="p4-sig" type="button">Siguiente paso →</button>
+    </div>
+  </section>
+
+  <!-- ===== P5 · Recuperación con feedback ===== -->
+  <section class="pant" data-p="5" hidden>
+    <div class="prog" id="p5-prog">Pantalla 5 de 6 · Pregunta 1 de 3</div>
+    <div class="caja" id="q-caja">
+      <span class="paso-n" id="q-fmt"></span>
+      <p class="txt" id="q-enun"></p>
+      <div id="q-cuerpo" class="opc"></div>
+      <div id="q-res" class="opc"></div>
+    </div>
+    <button class="btn prim" id="q-sig" type="button" hidden>Siguiente</button>
+  </section>
+
+  <!-- ===== P6 · Lo que te llevas ===== -->
+  <section class="pant" data-p="6" hidden>
+    <div class="prog">Pantalla 6 de 6 · Lo que te llevas</div>
+    <ul class="ll">
+      <li>La Hb no dice si el tejido recibe O₂: <span class="hl-a">umbral 7, u 8 con cardiopatía isquémica</span> (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=8" target="_blank" rel="noopener">p. 8</a>).</li>
+      <li>Transfundir <span class="hl-a">sube el aporte, no el consumo</span> (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=10" target="_blank" rel="noopener">p. 10-11</a>), y en el crítico sus riesgos pesan más que sus beneficios (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">p. 16</a>).</li>
+      <li><span class="hl-r">TACO</span> en 6 h, más con IC previa, sin relación con el número de bolsas; parar y diurético de asa (<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=15" target="_blank" rel="noopener">p. 15</a>-<a class="pdf" href="../../../docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf#page=16" target="_blank" rel="noopener">16</a>).</li>
+    </ul>
+    <div class="fila" style="grid-template-columns:1fr 1fr">
+      <button class="ver-ficha" type="button" data-capilar-vivo="umbral-7">Abrir el modelo: Umbral 7</button>
+      <button class="ver-ficha" type="button" data-capilar-vivo="taco">Abrir el modelo: TACO</button>
+      <button class="ver-ficha" type="button" data-resaltar="#mh-umbral-7">Ver en la ficha: umbral</button>
+      <button class="ver-ficha" type="button" data-resaltar="#mh-efecto-transfusion">Ver en la ficha: efecto</button>
+      <button class="ver-ficha" type="button" data-resaltar="#mh-taco">Ver en la ficha: TACO</button>
+    </div>
+    <div class="aviso-app" id="p6-aviso" hidden>En la app, estos botones abren el modelo en ese estado o la ficha en el párrafo exacto.</div>
+    <p class="txt"><b>¿Con cuál estudiarías tú?</b> A · B · C (o mezcla).</p>
+    <div class="pie" id="pie-comun">
+      <b class="sans" style="font-size:.84rem">Elige: A · B · C</b>
+      <div class="abc">
+        <a href="a-poe-shock.html">A<small>predecir antes de ver</small></a>
+        <a href="b-error-capilar.html" class="aqui" aria-current="page">B<small>estás aquí</small></a>
+        <a href="c-entrelazado-rio.html">C<small>entrelazar y repasar</small></a>
+      </div>
+      <p class="peq">Esta maqueta (B) mide el N3: error con consecuencia y después enseñanza.</p>
+    </div>
+  </section>
+
+  </div>
+</div>
+<script type="module" src="b/b.js"></script>
+</body></html>
