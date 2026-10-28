@@ -33,6 +33,7 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   de gastar y rinde cuentas en el parte («Cuentas»); `/ahorro` (Hacienda) recorta sola lo que no baja la calidad y lo
   deja escrito; si una tarea va a pasarse más de un **25 %**, el director para y comparece antes de seguir
   · **Presupuestos de bloque aprobados**: `b3-paso4` 36 M (opción A, 27/10; gastado 6,5 M en el grupo 1, quedan ≈29,5 M)
+  · **Marino 100 %** (B-035, aprobado por el usuario el 28/10): objetivo ≈212-328 M, **techo 400 M**. «Hacienda debería estar muy presente vigilando el ahorro […] que lo baje lo máximo que pueda […] un equilibrio, sobre todo para futuras sesiones ahorrar mejor»: Hacienda pasa en **cada** tarea (antes y después) y al cerrar cada bloque deja su balance y el presupuesto del bloque siguiente ajustado con lo medido
 - **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
@@ -132,6 +133,8 @@ Va primero: sin el botón «Preguntas» y sus formatos, ninguna tarea puede entr
 ---
 
 ## Objetivo 1 · Terminar el atlas de Eco cardíaca
+
+**28/10**: además de esperar a Marino, los capítulos esperan la decisión de la reforma de la eco (B-039, informe `eco-reforma`): se escribirían sobre un motor que puede cambiar.
 
 *The Heart by Ultrasound* (David Ouyang) en español, dentro de Eco cardíaca → Atlas. Hoy hay **9 de 30** capítulos.
 Marcador: capítulos con estado `hecha`.
@@ -345,6 +348,13 @@ río y mar) → 39-44 → 45-53.
 | 7 | `b3` | Bloque 3 (caps. 14-30 desde el 26/10: 26 fichas de Merino Cardiología y Neumología + 21 del pulmón con respirador) | pendiente (paso 4: estudio en las 26 fichas; el 3A ya lo tiene. **Plan del paso 4 escrito el 27/10, sin construir**: `autonomo/bloques/b3/plan-paso4.md`, 17 fichas en 6 grupos y 17 piezas de modelo, ≈35-40 M; el usuario decide si se hacen todas las piezas; parte `2026-10-27-b3-plan-paso4.md`). **Parada 2 hecha: PR #35 fusionada en `main` por el usuario (2026-10-27)**; antes, PR https://github.com/alvariitoSW/fiebres-neutropenias/pull/35 (parte `autonomo/partes/2026-10-27-b3-parada2.md`; notas mínimas ≥8,75 tras rejuicio) (antes: parada 1, 2026-10-26): el usuario pide una **vuelta de límites** en las cuatro maquetas antes de la app (sueros sin tope, etc.; paquete §4 «Decisiones del usuario (26/10/2026, sobre las maquetas v3)»); neumotórax a tensión aprobado como escena aparte; esquema del pulmón por revisar. PR en borrador https://github.com/alvariitoSW/fiebres-neutropenias/pull/32 · página https://claude.ai/artifact/BLVPCGzFXLYnXKqoLjBGK6. **Vuelta de límites hecha (27/10)**: shock 8,3 · ritmo 8,5 · receptor 8,8 · pulmón 8,6; pieza común `comun/tope.js`; regla §1.14 (parte `autonomo/partes/2026-10-27-b3-limites.md`). **27/10, el usuario: sí a todo** (shock, ritmo y receptor a la app = parada 2, siguiente; deslizador del receptor como está; esquema del pulmón vale; buscar fuente de los errores de temporización del balón). **Pantallas como las reales (respirador y consola del balón): aprobadas por el usuario (27/10), en `main` como maquetas**, respirador 8,7 · balón 8,7; pieza común `comun/respirador.js`; hueco: errores de temporización del balón sin fuente (parte `autonomo/partes/2026-10-27-b3-pantallas.md`) | Paquete: `autonomo/bloques/b3/encargo.md` |
 | 8 | `b1-guias` | Llevar «Ver en la ficha» y la explicación guiada (REGLAS §7.9-7.10) a los modelos del bloque 1 | hecha (2026-10-21) · 5 modelos, 314 pasos, en main (el ácido-base, en la bitácora) | Lo pidió el usuario el 20/10 para todos los modelos; mejora de lo existente: a main con jueces y auditor |
 | 9 | `mayeutica-pestana` | Guía socrática a un toque en toda la app: interruptor **Texto \| Mayéutica \| Estudiar** (Consejo, 28/10) | pendiente · **29/10, antes del grupo 2 de `b3-paso4`** | ≈0,8 M, cargado al presupuesto de `b3-paso4`. Técnica: a `main` con jueces. Acta `autonomo/consejo/2026-10-28.md` |
+| 10 | `b3-pulmon-app` | Bloque 3D: el pulmón con respirador a la app en 4 encargos (ciclo y canales `paw`, `flujo`, `vol` del monitor común; racimo de alvéolos; enganche a la presión intratorácica M8; paciente que respira, maniobras y neumotórax a tensión) y su Mayéutica | pendiente · tras `b3-bradi` · **parada 2 del 3D** | 10-15 M. Maqueta aprobada `autonomo/maquetas/b3-pulmon/`; cobertura `autonomo/bloques/b3/cobertura-3d.md`. Absorbe `monitor-comun` (sus canales) |
+| 11 | `b3-pulmon-estudio` | Bloque 3D: Estudiar (y Mayéutica) en las 21 fichas del pulmón, 5 grupos en el orden de la ruta de `cobertura-3d.md`, y las 21 recetas de la vista Visual de Neumología | pendiente · tras la parada 2 del 3D | 30-40 M |
+| 12 | `b3-cierre` | Bloque 3 entero: ruta del bloque, jueces, auditor y profesor; **paradas 3 y 4** (lo pruebas en el móvil y tus cambios); PR de `auto/b3` | pendiente · tras `b3-pulmon-estudio` | 8-14 M |
+| 13 | `b4` | Bloque 4 (caps. 31-38, 23 fichas): cobertura (puede prepararse durante la parada 3 del `b3`, «provisional»), piezas de Mg, Ca y P, Estudiar en 4 grupos, paradas 1, 3 y 4 | pendiente · tras aprobar el `b3` | 45-72 M |
+| 14 | `b5` | Bloque 5 (caps. 39-44, 17 fichas): cobertura, maquetas del **hepatocito** y del **termostato** (Educación, 2-3 por modelo), modelos, Estudiar, paradas 1-4 | pendiente · tras aprobar el `b4` | 45-63 M |
+| 15 | `b6a` | Bloque 6a (caps. 45-47, 14 fichas): **cráneo vivo** y unión neuromuscular, Estudiar, paradas 1-4 | pendiente · tras aprobar el `b5` | 30-45 M |
+| 16 | `b6b` | Bloque 6b (caps. 48-53 y apéndices, 25 fichas): eje hormonal (Motion), hepatocito para tóxicos; las fichas de consulta con Estudiar corto y un caso por grupo | pendiente · tras aprobar el `b6a` | 30-45 M |
 
 ## Objetivo E · Mejorar el simulador de eco con lo que hacen otros
 
@@ -710,7 +720,7 @@ de cada modelo tocado. Antes de construir, comprobar en la ficha cada cifra marc
 | 2 | `potasio-prioritario` | B-019 · Potasio: «mecanismo prioritario» y revisión por objetivos al acabar el reloj | hecha (2026-10-25) · en main, sin PR (Objetivo V) | Pequeña-mediana |
 | 3 | `objetivos-casos` | B-020 · Revisión final por objetivos en los casos del motor común (`core/mayeutica-motor.js`) | hecha (2026-10-26) · en main, sin PR (Objetivo V) | Mediana; llega a inmersión, muralla, telar y vaso |
 | 4 | `eco-vci-retenido` | B-021 · Eco: «retenido» de la VCI con ventilación mecánica | hecha (2026-10-27) · en main, sin PR (Objetivo V) | Pequeña; umbrales del Manual UMI |
-| 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
+| 5 | `monitor-comun` | B-022 · Monitor común en los modelos (capilar, eco, receptores, cama 7) | aparcada (aprobada 2026-10-25; 28/10: sus canales de respirador van en `b3-pulmon-app`; llevarlo a capilar, receptores y cama 7, después de Marino; a la eco, tras B-039) | Se hace con el bloque 3 (su monitor común ya está decidido); después, llevarlo a los demás |
 
 **Encargo `formula-comun`** · tipo: visual (mejora de lo existente)
 - Qué quiero: al mover un mando, un renglón «fórmula → tus números → resultado» (p. ej. CaO₂ = 1,34 × 7 × 0,97 + 0,003 × 90).
@@ -761,10 +771,10 @@ corazón: lo que ya es parte de `b3` no se repite aquí.
 | 5 | `culprit-b` | Fase 1 · Preguntas «predice el ECG» y «coloca el trombo» (B-026, B) | aparcada hasta terminar Marino | Va detrás de `culprit-a`. C (modelo 2D) espera a las coronarias del motor; D, tras C |
 | 6 | `f0-cifras` | Fase 0 · Calculadoras: la cifra nunca contradice su grado + «la fórmula con tus números» | pendiente | Usa la pieza de `formula-comun` (ya en `js/core/`). Juez `--calc` (cambio previo 5 del plan) |
 | 7 | `f0-origen` | Fase 0 · Origen y licencia a la vista en simuladores, calculadoras e imágenes | pendiente | CLAUDE.md §7.4. Juez `--origen` |
-| 8 | `f0-eco-color` | Fase 0 · Eco: colores por estructura | pendiente | Las cuatro `f0-eco-*`: **un solo constructor en serie**. Antes, mirar qué hicieron ya las paradas 1-2 de `eco-mega` (p. ej. «Señálalo») para no repetir |
-| 9 | `f0-eco-rotulos` | Fase 0 · Eco: rótulos que marcan la estructura en el corte y en el 3D | pendiente | Ver nota de `f0-eco-color` |
-| 10 | `f0-eco-viaje` | Fase 0 · Eco: la sonda viaja animada entre vistas | pendiente | Idea 3 de `anesthbeta.md` §6 |
-| 11 | `f0-eco-guia` | Fase 0 · Eco: ayuda en vivo al mover la sonda | pendiente | Sobre `vistaMasParecida()`; idea de EchoSuite |
+| 8 | `f0-eco-color` | Fase 0 · Eco: colores por estructura | aparcada (28/10: espera la reforma de la eco, B-039; el informe `tee-inversa` es su fuente) | Las cuatro `f0-eco-*`: **un solo constructor en serie**. Antes, mirar qué hicieron ya las paradas 1-2 de `eco-mega` (p. ej. «Señálalo») para no repetir |
+| 9 | `f0-eco-rotulos` | Fase 0 · Eco: rótulos que marcan la estructura en el corte y en el 3D | aparcada (28/10: espera la reforma de la eco, B-039; el informe `tee-inversa` es su fuente) | Ver nota de `f0-eco-color` |
+| 10 | `f0-eco-viaje` | Fase 0 · Eco: la sonda viaja animada entre vistas | aparcada (28/10: espera la reforma de la eco, B-039; el informe `tee-inversa` es su fuente) | Idea 3 de `anesthbeta.md` §6 |
+| 11 | `f0-eco-guia` | Fase 0 · Eco: ayuda en vivo al mover la sonda | aparcada (28/10: espera la reforma de la eco, B-039; el informe `tee-inversa` es su fuente) | Sobre `vistaMasParecida()`; idea de EchoSuite |
 | 12 | `f0-movil` | Fase 0 · Calidad automática en el móvil (peso de la página y fps de la eco) | pendiente | Técnica, directo a `main`. Cambio previo 5 del plan |
 | 13 | `f0-ra-biblio` | Fase 0 · Bibliografía de The Radiology Assistant en el PIF de Radiología | pendiente | Solo enlaces verificados (CLAUDE.md §7.2); sus figuras, no (decidido 25/10) |
 | 14 | `g1-shock` | G1 · Puerta «Guardia» en la raíz y su primera situación: shock e hipotensión | pendiente | Tras la fase 0. Cadena VCI → PAD → VS → GC → E/e′ → VExUS, cada paso con su fórmula (`NORTE.md`). Fuentes: Manual UMI (FATE) y VExUS en `docs/`. Maqueta antes para elegir. Sin guardar datos del paciente |
@@ -887,6 +897,21 @@ una sesión cada una, a horas distintas (sesiones programadas).
 - Hecho: las 9 formas a 0, defecto y 100 % dentro del «paciente posible» (tabla con `calibra-tabla.mjs`), los dos
   jueces en `jueces.mjs --eco` en verde, la hipertrofia enseña E/A <1 si el profesor elige grado I, parte.
 
+**Encargo común de las filas 10-16 (Plan Marino 100 %, B-035, aprobado por el usuario el 28/10; dudas resueltas por el
+Consejo de Ministros, `autonomo/consejo/2026-10-28.md`)** · tipo: bloque (M5)
+- Qué quiero: las 155 fichas de Marino con Texto | Mayéutica | Estudiar, ruta del bloque y «Para profundizar»; los
+  modelos que faltan (pulmón con respirador, hepatocito, termostato, cráneo vivo, unión neuromuscular, eje hormonal).
+- Cómo: cada bloque, sus 5 pasos y como mucho 4 paradas del usuario (REGLAS §4.3); un grupo de fichas o un modelo por
+  sesión; encadenadas: al cerrar, si el día va por debajo de ~15 M, el director abre la siguiente fila con
+  `create_session`. La cobertura del bloque siguiente puede hacerse durante una parada (solo informe, «provisional»).
+- Gobierno: cada tarea, con presupuesto (Interior) revisado y recortado por Hacienda antes de gastar, y «Cuentas» en el
+  parte; comparecer si se pasa >25 %. Las maquetas de los modelos nuevos, del Ministerio de Educación (2-3 por modelo).
+- Lo que NO quiero: tocar la eco (el motor del latido espera a B-039), el PIF o El Libro Azul; pasar de ~15 M al día; dos
+  sesiones de Marino a la vez; empezar un bloque sin el anterior aprobado por el usuario.
+- Fuentes: los PDF de Marino en `docs/` con su página (`js/data/libros-indice.js`).
+- Hecho: el del Objetivo M5 (jueces `--ficha`, `--modelo`, topes y móvil; auditor; profesor ≥8, meta 8,75; PR con «Ver en
+  el móvil» en la última parada de cada bloque) y el contador «N de 155» en el parte de cada sesión.
+
 **Encargo `mayeutica-pestana`** · tipo: arreglo de interfaz (técnico, a `main`) · Consejo de Ministros, 28/10/2026
 - Qué quiero: en cada ficha con Mayéutica, el interruptor pasa a **Texto | Mayéutica | Estudiar**. «Mayéutica» abre
   directamente la guía socrática (los mismos datos `guia` de `js/data/mayeutica/*.js`, el mismo motor
@@ -910,7 +935,7 @@ una sesión cada una, a horas distintas (sesiones programadas).
   `auto/b3`. Al cerrar un grupo, si el gasto del día (`gasto.mjs`, todas las sesiones) va por debajo de ~15 M, el
   director abre el siguiente con `create_session` (source_url https://github.com/alvariitoSW/fiebres-neutropenias,
   prompt «/plan-socialista b3-paso4»); si no, lo deja para el aviso de la mañana siguiente. Nunca dos grupos a la vez.
-  Al acabar el grupo 6, la parada 3 (el bloque entero, con el usuario). Meta: grupos 1-6 hechos el 30/10.
+  Al acabar el grupo 6 **ya no se para** (Plan Marino 100 %, 28/10): sigue con `b3-bradi` y el pulmón (filas 10-12 del Objetivo M5); la parada 3 llega con `b3-cierre`. Meta: grupos 2-6 hechos el 31/10.
 - Hecho: el de las paradas del bloque `b3` (parada 3: el bloque entero, con el usuario).
 
 **Encargo `competencias-r2r5`** · tipo: informe (no toca la app) · aprobado el 27/10/2026
@@ -933,6 +958,7 @@ PIF rehecho con lo nuestro. «Sí a todo» al calendario hasta el 01/11. Dos inf
 |---|---|---|---|---|
 | 1 | `azul-cobertura` | El Libro Azul: qué cubren ya Marino y los modelos vivos, capítulo a capítulo, y el plan por bloques (como el Objetivo M5) con su gasto | pendiente (31/10) | B-004. Secciones I-X en `docs/` |
 | 2 | `radio-informe` | B-034: temario corto del PIF de Radiología (tórax y neuro) para estudiar y para la guardia, con lo de Radiology Assistant y NavRad | pendiente (31/10) | Encargo en la bitácora (B-034) |
+| 3 | `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con **maquetas visuales** de cómo separar el motor del corazón y el de la imagen, y del plan de la reforma | pendiente (01/11) | Aprobado por el usuario el 28/10 (Consejo, recomendación). 4-6 M. La decisión de arquitectura, después, es del usuario |
 
 **Encargo `azul-cobertura`** · tipo: mapa (informe) · aprobado el 27/10/2026
 - Qué quiero: por cada capítulo de El Libro Azul (1-61), qué ficha de Marino, Merino o qué modelo vivo ya lo explica
@@ -949,6 +975,25 @@ PIF rehecho con lo nuestro. «Sí a todo» al calendario hasta el 01/11. Dos inf
   ideas de Radiology Assistant y NavRad entran (de sus informes del 23/10, sin abrir las webs) y el gasto.
 - Lo que NO quiero: mil fuentes (una o dos por tema, de acceso libre); copiar textos o figuras; construir nada.
 - Hecho: página para el móvil + parte; el usuario elige.
+
+**Encargo `eco-reforma`** · tipo: informe con maquetas (no toca la app) · aprobado por el usuario el 28/10/2026 (B-039)
+- Lo que dijo: «del informe de la eco espero mucho y espero maquetas visuales que quiero ver bien: cómo separar esos
+  motores y cómo hacer la reforma integral».
+- Qué quiero: (1) ingeniería inversa de https://www.pulmonarypocus.com/phone-cp-sim (y lo ya estudiado: EchoSuite,
+  anesthbeta, `autonomo/ideas/ingenieria-inversa/`), probando antes que la web se abre; (2) un mapa de quién usa hoy
+  `js/modules/eco/motor.mjs` (corazón 3D, shock vivo, atlas, imagen de eco, Wiggers) y qué sale imposible a fondo
+  (TEP, HP crónica: captura del usuario del 28/10); (3) las opciones A (dos motores con contrato), B (un motor con
+  topes) y C (mezcla), con qué se aprovecha, qué se rehace, el gasto y el orden; (4) **2-3 maquetas visuales** del
+  Ministerio de Educación (departamento de arte e ideas, método `/anatomy`): cómo se vería cada motor por separado,
+  el contrato entre ellos y la misma patología (TEP grave) en las dos piezas, con cifras de paciente real.
+- Lo que debe mirar para que la eco enseñe (dictamen de Educación): los 3-5 signos de cada forma con cifra y página
+  (Lang 2015, Nagueh 2025, Mukherjee 2025, en `docs/`); que sobrevivan las frases vivas y los «Compruébalo en…»; topes
+  de paciente real en cada extremo (conservar las 505 pruebas y J1-J2); qué fichas de Marino y del atlas quedarían sin
+  explicar durante la obra.
+- Lo que NO quiero: tocar la app; copiar código o imágenes ajenas; cifras sin página; elegir la opción (la elige el
+  usuario: es arquitectura, `CLAUDE.md` §2).
+- Gobierno: presupuesto de Interior recortado por Hacienda; 4-6 M (informe ≈1,5 M + maquetas).
+- Hecho: página para el móvil (Artifact) con las maquetas y las opciones + parte; las maquetas en `autonomo/maquetas/eco-reforma/`.
 
 ## Lo que aún no está aprobado
 

@@ -229,108 +229,6 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-039 · Reforma integral de la eco: un motor para el corazón y otro para la imagen · apuntado 2026-10-28
-- **Lo que dijiste**: «con el TEP o lo de HTP máxima sale así, esto ya ha perdido la intención de una sola
-  fisiología porque esto no es fisiología […] quizá habría que tener el modelo del corazón vivo así en 3D pero luego
-  la parte de la eco tenga otro motor diferente para hacerla más parecida a la realidad y sea un verdadero simulador
-  de eco». Captura del 28/10: el corazón 3D deformado (FC 119, «Eyección lenta»).
-- **Cómo lo entiendo**: hoy el motor del latido mueve a la vez el corazón 3D, el shock vivo y la imagen de eco; al
-  llevar una forma a fondo, la imagen hereda lo imposible. Propuesta a estudiar: (A) **dos motores** con un contrato
-  entre ellos: el de fisiología (corazón 3D, shock, ritmo) y uno de **imagen de eco** calibrado con valores reales
-  por patología (como EchoSuite y los simuladores estudiados: `autonomo/ideas/ingenieria-inversa/`), que nunca pinta
-  algo imposible; (B) un solo motor con topes de paciente real por forma; (C) mezcla. Es **arquitectura**: el Consejo
-  hace el informe (opciones, qué se rehace, qué se aprovecha de lo hecho, gasto) y el sí final es tuyo.
-- **Apunte del usuario (28/10)**: estudiar con `/ingenieria-reversa`, antes del informe, el simulador
-  https://www.pulmonarypocus.com/phone-cp-sim («para que el consejo de ministros y sobre todo el ministerio de
-  educación pueda estudiar bien la mejora integral de la ecografía de la app»). Sin abrir aún: probar antes que la red
-  lo deja abrir (REGLAS §4.11).
-- **Consejo (28/10)**: recomienda el informe `eco-reforma` (≤1,5 M, el 31/10, sin tocar la app); `b3-ritmo-motor` y `f2-ete` esperan. **Espera tu sí.**
-- **Depende de**: B-037 (hecha). Fuera de Marino: va en la cola de la eco (prioridad 27/10: pulir la eco, después del Libro
-  Azul), salvo que el Consejo proponga adelantarla. **Tamaño**: grande (informe primero).
-- **Lista de calidad**: cifras objetivo por forma con fuente y página (Lang 2015, Nagueh 2025, Mukherjee 2025, ya en
-  `docs/`) · «lo que NO quiero»: perder lo calibrado (505 pruebas), copiar código ajeno · juez: `jueces --eco` y el
-  «paciente posible» del Doppler (J1, J2).
-
-### B-035 · Plan Marino 100 % (The ICU Book entero con Estudiar) · apuntado 2026-10-28
-- **Lo que dijiste**: «Esta sesión solo DISEÑA el plan para terminar The ICU Book (Marino) al 100 %… Nada entra en el
-  tablero ni se programa sin mi "apruebo"».
-- **Punto de partida, contado en el código** (28/10; `js/data/libros-indice.js` cruzado con las claves de
-  `js/data/mayeutica/*.js` en `main` y en `auto/b3`). «Estudiar» = guía + examen + caso + «Para profundizar»; las 42
-  que lo tienen traen las cuatro cosas.
-
-  | Bloque | Fichas | Con Estudiar | Faltan | Ruta del bloque | Modelos vivos que hay | Modelos que faltan |
-  |---|---|---|---|---|---|---|
-  | 1 · caps. 1-11 | 23 | 23 | 0 | sí | río y mar, capilar, catéter, muralla, telar, inmersión, motor del latido | — |
-  | 2 · caps. 12-13 | 6 | 6 | 0 | sí | vaso que sangra, capilar | — |
-  | 3 · caps. 14-22 | 26 | 13 (9 en `main` + 4 del grupo 1 en `auto/b3`) | 13 | no | shock vivo, corazón eléctrico, receptor vivo | 15 estados nuevos (abajo) |
-  | 3D · caps. 23-30 (pulmón) | 21 | 0 | 21 | no | — (maqueta v3, límites 8,6 y pantalla del respirador 8,7, sin app) | **pulmón con respirador** + presión intratorácica (M8) |
-  | 4 · caps. 31-38 | 23 | 0 | 23 | no | ácido-base vivo, nefrona, glomérulo, filtro, potasio, río y mar | magnesio, calcio y fósforo en la escena del potasio (supongo) |
-  | 5 · caps. 39-44 | 17 | 0 | 17 | no | glomérulo (para el hepatorrenal) | **hepatocito vivo**, **termostato** |
-  | 6 · caps. 45-53 y apéndices | 39 | 0 | 39 | no | capilar (CO), receptor | **cráneo vivo**, unión neuromuscular, eje hormonal (Motion); hepatocito para tóxicos |
-  | **Total** | **155** | **42 (27 %)** | **113** | 2 de 6 | 13 | 3 grandes + 3 pequeños |
-
-  Piezas que faltan en el bloque 3 (grep en `*-vivo-data.js` de `auto/b3`): grupo 2, RCP con adrenalina e
-  insuflaciones, `posparo`, `reperfusion` (0 de 3 existen); grupo 3, papilar (solo una cita), septo, `iam-vd` (0 de 3);
-  grupo 4, etapas de IC, CPAP/presión pleural (M8, la usa también el pulmón), `congestion` (0 de 3); grupo 5, placa,
-  antiagregantes, trombolisis, `diseccion` (0 de 4); grupo 6, `tep-lisis`, `tvp` (0 de 2). El corazón eléctrico ya
-  tiene `pend-bradi`, `pend-bav1-3` y `pend-mp` vacíos (los llena `b3-bradi`).
-- **Cómo lo entiendo** (el plan; orden de M5, REGLAS §4.3 y §8): cada bloque, sus 5 pasos (cobertura → maquetas →
-  modelos → Estudiar por grupos → jueces y PR) y como mucho 4 paradas contigo.
-
-  | # | Tarea (clave) | Qué | Paradas contigo | Gasto (M) |
-  |---|---|---|---|---|
-  | 1 | `b3-paso4` g2-g6 (en el tablero) | 13 fichas, 15 piezas, un grupo por sesión, encadenados | — | 25-38 |
-  | 2 | `b3-bradi` (en el tablero) | bradicardias, BAV y marcapasos en el corazón eléctrico (sin el laboratorio de arritmias) | — | 4-7 |
-  | 3 | `b3-ritmo-motor` (en el tablero) | el ritmo mueve el motor del latido | — | 3-5 |
-  | 4 | `b3-pulmon-app` (nueva) | el pulmón con respirador a la app en 4 encargos (ciclo y 3 canales del monitor, racimo, enganche a M8, paciente y maniobras + neumotórax) y su Mayéutica | parada 2 del 3D | 10-15 |
-  | 5 | `b3-pulmon-estudio` (nueva) | 21 fichas en 5 grupos (ruta de `cobertura-3d.md`) + 21 recetas Visual de Neumología | — | 30-40 |
-  | 6 | `b3-cierre` (nueva) | parada 3 (el bloque 3 entero en el móvil) y 4 (tus cambios), ruta del bloque, PR | 3 y 4 | 8-14 |
-  | 7 | `b4` (nueva) | cobertura, piezas (Mg, Ca, P), Estudiar en 23 fichas en 4 grupos, PR | 1, 3 y 4 | 45-72 |
-  | 8 | `b5` (nueva) | cobertura, maquetas del hepatocito y del termostato, modelos, 17 fichas, PR | 1, 2, 3 y 4 | 45-63 |
-  | 9 | `b6a` (nueva) | caps. 45-47 (14 fichas): cráneo vivo y unión neuromuscular | 1, 2, 3 y 4 | 30-45 |
-  | 10 | `b6b` (nueva) | caps. 48-53 y apéndices (25 fichas): nutrición y tóxicos, casi todo consulta con casos | 1, 3 y 4 | 30-45 |
-  | | **Total** | 113 fichas, 3 modelos grandes, ~30 piezas | ~19 paradas | **230-345** |
-
-- **Cómo se estimó** (REGLAS §4.7, contar antes de estimar): lo medido, no lo previsto. Estudiar con modelo hecho:
-  1,6 M por ficha (grupo 1: 6,5 M en 4 fichas, previsto 3,6); ficha de consulta sin modelo: ~1,1 M (supongo);
-  estado nuevo de un modelo: 0,8-1,3 M (previsto 0,75 con desvío medio ×1,5); modelo grande de cero (maqueta,
-  límites, app y Mayéutica): 10-15 M (bloque 3: 13,1 + 18,6 + 21,5 M para 3-4 modelos); cobertura 1,5-2 M; cada
-  parada 0,8-1 M de director. Cada tarea empieza con su revisión del encargo (0,15 M). El mínimo cuenta con las
-  propuestas de /ahorro aprobadas y con que ~⅓ de las piezas ya existan (como en el grupo 1).
-- **Días**: con ≈15 M al día, 15-23 días de trabajo. Pero 15 M al día son ~18 % del uso semanal: la semana da para
-  ~5,5 días al límite (≈83 M). Marino 100 % se come **todo el uso de 3-4 semanas** y El Libro Azul y lo demás esperan.
-  Con tus paradas, **fin entre el 22/11 y el 05/12** (supongo que respondes a cada parada en un día).
-- **Calendario** (supongo; nada se programa sin tu «apruebo»):
-  - 29-31/10: `b3-paso4` g2-g6, encadenados (ya programados 29/10 y 30/10 a las 7:40; 31/10 a las 8:13 también abre
-    `azul-cobertura` y `radio-informe`, ya aprobados).
-  - 01-02/11: `b3-bradi` y `b3-ritmo-motor` · 02-04/11: `b3-pulmon-app` → **parada 2 del 3D** (necesita tu ok).
-  - 04-08/11: `b3-pulmon-estudio` · 08-09/11: `b3-cierre` → **paradas 3 y 4 del bloque 3** (PR).
-  - ~10-15/11: `b4` · ~15-22/11: `b5` · ~22/11-05/12: `b6a` y `b6b`. Cada bloque, con sus paradas.
-  - Encadenado: al cerrar una sesión, si el día va por debajo de ~15 M, el director abre la siguiente de la lista con
-    `create_session` (como ya hace `b3-paso4`); si no, la abre la tarea programada de la mañana siguiente (una
-    diaria, a las 7:40). Una tarea, una sesión; nunca dos de Marino a la vez (REGLAS §4.6).
-- **Cómo te llega**: una fila por sesión en `autonomo/SESIONES.md` (ya existe) y el informe diario «¿a dónde nos
-  dirigimos?» (la tarea «Bitácora diaria», 13:43 y 21:43) con una línea nueva arriba: «Marino: N de 155 fichas con
-  Estudiar · gasto de hoy X M y acumulado Y M de 230-345 · espera algo tuyo: …».
-- **Lo que NO quiero**: tocar la eco, el PIF o El Libro Azul; empezar un bloque sin el anterior aprobado; pasar de
-  ~15 M al día; dos sesiones de Marino a la vez.
-- **Depende de**: tu «apruebo» y las dudas de abajo. PDF: ninguno imprescindible (los cuatro que faltan del bloque 3,
-  ESC 2019 TSV, AHA 2020/ERC 2021, ESC 2023 miocardiopatías y SCAI 2015, son opcionales: sin ellos se cita solo Marino).
-- **Tamaño**: grande, ya troceado en 10 tareas (arriba).
-- **Choques con las reglas** (dichos antes de proponer):
-  1. `b3-ritmo-motor` toca el motor del latido, que vive en la eco (`js/modules/eco/`) y pide `jueces --eco`; me
-     dijiste que esta sesión no toque la eco.
-  2. Objetivo M5: «un bloque no empieza hasta que el anterior está aprobado». Preparar la cobertura del siguiente
-     (solo informe) mientras esperas una parada ahorraría ~1 día por bloque, pero lo rompe.
-  3. `b3-bradi` estaba atado a `arritmias-maqueta` (aparcada): hacerlo ahora es la versión corta, sin el laboratorio.
-  4. Partir el bloque 6 en dos (45-47 y 48-53) no cambia el orden de M5, pero son dos PR y más paradas.
-- **Dudas**: resueltas por el Consejo de Ministros el 28/10 (`autonomo/consejo/2026-10-28.md`): `b3-ritmo-motor` aparcada hasta B-039; cobertura del bloque siguiente en paralelo, sí (solo informe, «provisional»); `b3-bradi` corta; bloque 6 en dos (`b6a`, `b6b`); consulta, Estudiar corto con un caso por bloque. Presupuesto nuevo: **≈212-328 M** (espera tu sí: es tuyo).
-- **Lista de calidad**: topes con fuente → en cada encargo de pieza (lo escribe el profesor en su plan corto, como en
-  `plan-paso4.md`) · cifra por estado y caso → cobertura de cada bloque · «lo que NO quiero» → sí · fuentes → los PDF
-  de Marino en `docs/` con su página (`libros-indice.js`) · jueces → `--ficha`, `--modelo`, `--forma`, topes y móvil;
-  auditor y profesor (≥8, meta 8,75); sin juez: «paciente posible» de cada caso (lo mira el profesor con su programa
-  de prueba).
-
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -352,6 +250,8 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
+| `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | aprobado el 28/10; programado el 01/11 (4-6 M) | 2026-10-28 | La decisión de arquitectura, después, es tuya. `f0-eco-*`, `f2-ete`, `b3-ritmo-motor` y el atlas esperan |
 | `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
 | `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
@@ -417,7 +317,6 @@ El resto del tablero sigue `aparcada`.
 - **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde: 2 papers del issue #27, abrir sitios
   de la red, PDF opcionales (AHA 2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida y temas viejos
   (three.js, repaso espaciado, velocidad del plan, rutina nocturna). Aviso programado para el 04/11.
-- **Del Consejo del 28/10, lo reservado a ti** (`autonomo/consejo/2026-10-28.md`): (1) presupuesto total de Marino, ≈212-328 M por bloques; (2) informe `eco-reforma` (≤1,5 M, 31/10).
 
 
 - **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
