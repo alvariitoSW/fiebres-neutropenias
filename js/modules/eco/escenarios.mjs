@@ -55,8 +55,10 @@ const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) =
     mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 1200 * c01((x - 0.6) / 0.4), b: 1 + 0.4 * x, tab: 0.05 + 0.15 * c01((x - 0.6) / 0.4), v0: 60 * c01((x - 0.5) / 0.5) ** 1.5 }; };
 // Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
 const HVI_DEFECTO = 0.2;
+// Sesión 2: la relajación sube a 3,4 y la rigidez de partida a ×1,6 con 300 mL menos de volumen (euvolemia tratada, ilustrativo): la E decelera
+// antes (TDE ~410-430 ms en el grado 1, antes 550-580) con E/A ≤0,8, e′ baja y PCP <15; al 100 % queda rigidez ×2,2 y +300 mL (TDE ~215 ms)
 const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
-  return { relajacion: 3.2 - 0.4 * x, b: 1 + 1.2 * x * x, vSangre: 300 * x * x }; };
+  return { relajacion: 3.4 - 0.4 * x, b: 1.6 + 0.6 * x * x, vSangre: -300 + 600 * x * x }; };
 export const ESCENARIOS = {
   normal: { nombre: 'Normal', aplicar: () => {} },
   hemorragia: {
@@ -105,7 +107,7 @@ export const ESCENARIOS = {
     // gravedad (mando de grado 1 a grado 2; masa y pared fijas en todo el recorrido): con g bajo manda la relajación lenta (e′ baja,
     // E cae, la A pesa: E/A ≤0,8, PCP normal = grado 1); al subir g crecen la rigidez (vi.b) y el volumen retenido, la PAI pasa de 15 y E
     // se recupera (E/A >0,8 y <2 con e′ baja y E/e′ ≥14 = seudonormal, grado 2; Nagueh 2025 p. 554, PCP >15 p. 550). Ilustrativo
-    gravedad: { fin: 'el grado 2 (seudonormal)', defecto: HVI_DEFECTO, texto: (g) => `rigidez ×${coma(hviRecorrido(g).b, 1)}, volumen retenido ${Math.round(hviRecorrido(g).vSangre)} mL` },
+    gravedad: { fin: 'el grado 2 (seudonormal)', defecto: HVI_DEFECTO, texto: (g) => { const r = hviRecorrido(g), v = Math.round(r.vSangre / 10) * 10; return `rigidez ×${coma(r.b, 1)}, volumen ${v < 0 ? 'bajo la volemia normal ' + Math.abs(v) : v > 0 ? 'retenido ' + v : 'normal'}${v === 0 ? '' : ' mL'}`; } },
     aplicar: (m, g = HVI_DEFECTO) => { const r = hviRecorrido(g);
       m.p.mioVi = 1.6; m.p.vi.b *= r.b; m.p.rSis *= 1.25; m.p.relajacion = r.relajacion; m.s.vven += r.vSangre; },
   },

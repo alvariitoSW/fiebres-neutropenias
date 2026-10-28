@@ -1,0 +1,3 @@
+hipertrofia:0 | PAM85 FC74 PVC3.4 PCP13.7 GC3.95 | E68 A95 E/A0.72 DT432 | e'sep4.6 lat5.8 avg5.2 E/e'avg13.1 | VP S60 D30 Ar6 S/D2.02 | mL/s S603 D298 Ar159 | aAI4.6 aAD5.9 | bombaAI34% AD56% | TAPSE18.3 VDtd123 VDts69 FEvd44% VD/VI1.28 | fuera:no
+hipertrofia:def | PAM85 FC74 PVC3.5 PCP14.1 GC3.95 | E69 A92 E/A0.76 DT416 | e'sep4.7 lat5.8 avg5.3 E/e'avg13.2 | VP S59 D31 Ar6 S/D1.92 | mL/s S593 D308 Ar167 | aAI4.7 aAD6.0 | bombaAI32% AD56% | TAPSE18.0 VDtd124 VDts71 FEvd43% VD/VI1.30 | fuera:no
+hipertrofia:1 | PAM84 FC76 PVC6.5 PCP26.3 GC3.62 | E92 A62 E/A1.48 DT216 | e'sep5.0 lat6.2 avg5.6 E/e'avg16.5 | VP S42 D46 Ar6 S/D0.92 | mL/s S423 D459 Ar177 | aAI3.4 aAD6.6 | bombaAI15% AD63% | TAPSE13.5 VDtd162 VDts115 FEvd29% VD/VI1.85 | fuera:no
