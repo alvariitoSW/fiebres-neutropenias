@@ -126,6 +126,7 @@ async function correr(W, red) {
     ok(f1.includes('7,4') && f1.includes('dos CH seguidos') && !f1.includes('8,4'), 'q3 rama «dos bolsas»: frase 1 con Hb 7,4: ' + f1.slice(0, 60));
     await p.click('#q-cuerpo [data-k="0"]'); await p.click('#q-cuerpo [data-k="3"]'); await p.click('#q-comp'); await p.click('#q-sig'); await esperaPant(6);
     ok(true, 'sin fallos: directo a P6');
+    await cargar(); await p.click('#m-parar'); await esperaPant(3); await p.waitForTimeout(400);
     // rótulos del SVG a pantalla (suelo 7,5 px)
     const peq = await p.evaluate(() => { const s = document.getElementById('cpv-lamina'); const k = s.getBoundingClientRect().width / 360; return [...s.querySelectorAll('text')].filter(t => t.getBBox && parseFloat(getComputedStyle(t).fontSize) * k < 7.4 && t.textContent.trim()).length; });
     ok(peq === 0, `rótulos de la lámina <7,5 px a pantalla: ${peq}`);
