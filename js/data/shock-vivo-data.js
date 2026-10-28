@@ -26,6 +26,7 @@ export const FICHA = {
   'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica', PDF_C, 'Marino 2024'],
   'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar: diagnóstico', 'Embolia pulmonar', PDF_R, 'Marino 2024'],
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar: manejo', 'Embolia pulmonar: manejo', PDF_R, 'Marino 2024'],
+  'mar-cateter-ap': [['libros', 'marinoFundamentos', 'panel-marino-fund-tabs'], 'El catéter de arteria pulmonar y la presión de enclavamiento', 'Catéter de arteria pulmonar', 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', 'Marino 2024'],
   // otras fuentes de la app (solo enlace; nunca se funden con Marino)
   'ic-descompensada': [['cardiologia', 'insuficienciaCardiaca', 'panel-cardio-ic-tabs'], 'Guía ESC 2026 de IC: IC descompensada', 'Guía ESC de IC', null, 'Guía ESC 2026 de IC'],
   'umi-shock-septico': [['sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs'], 'Manual UMI: shock séptico', 'Manual UMI', null, 'Manual UMI'],
@@ -33,6 +34,7 @@ export const FICHA = {
 // Citas que se repiten (ids de párrafo: los de la cobertura del bloque, §3; los que aún no existen en la ficha se
 // ponen al llevar el modelo a la app)
 export const C = {
+  pcpDiast: { f: 'mar-cateter-ap', id: 'mar-cateter-ap', sitio: 'La presión de enclavamiento (cap. 8)', p: 53 },
   t141: { f: 'mc-definiciones', id: 'mc-tabla-14-1', sitio: 'Tabla 14.1', p: 3 },
   ecuacion: { f: 'mc-definiciones', id: 'mc-shock-ecuacion', sitio: 'La ecuación de la PAM', p: '2-3' },
   t143: { f: 'mc-definiciones', id: 'mc-tabla-14-3', sitio: 'Tabla 14.3', p: 10 },
@@ -138,9 +140,9 @@ export const GRAVEDAD = {
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
   cardio: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VI ${(3.1 * (0.3 / 3.1) ** g).toFixed(2).replace('.', ',')}`, `contractilidad al ${Math.round(100 * (0.3 / 3.1) ** g)} %`], nota: 'Contractilidad del VI (modelo)', cita: C.csHemo },
   // el derrame y el émbolo: el texto de la gravedad lo da el motor (escenarios.mjs), así no se separan
-  // el mando de gravedad es el reloj desde la RCE (horas): la Ees se recupera con él; la curva, ilustrativa; el 72, de la p. 64
+  // el mando de gravedad es el reloj desde la RCE (horas): la Ees se recupera con él; la curva, ilustrativa; el 72, de la p. 65
   posparo: { min: 0, max: POSPARO_H, paso: 1, horas: true, texto: (g) => [`${Math.round(horasDePosparo(g))} h tras la RCE`, `contractilidad del VI al ${Math.round(100 * (0.3 / 3.1) ** g)} %`],
-    nota: 'Horas desde la recuperación de la circulación: el aturdimiento suele resolverse en 72 h (p. 64); la forma de la curva, ilustrativa', cita: C.posparo },
+    nota: 'Horas desde la recuperación de la circulación: el aturdimiento suele resolverse en 72 h (p. 65); la forma de la curva, ilustrativa', cita: C.posparo },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -258,13 +260,13 @@ export const ESTADOS = {
       { t: 'Por encima de ahí, más volumen apenas sube el gasto y encharca el pulmón.', s: ['[data-fila="ic"]'], c: C.llenado, org: 'que ya no suba: fisiología general' },
       { t: 'Vasopresor de elección: la noradrenalina. Y un inotrópico: la dobutamina.', s: ['[data-fila="pa"]'], c: C.csNa },
       { t: 'Los fármacos suben el trabajo del corazón que falla: si no basta, no retrases el soporte mecánico.', s: ['#shv-dock'], c: C.trabajo }] },
-  posparo: { tit: 'Posparo: miocardio aturdido', frase: (R) => `IC ${c1(R.ic)}, PCP ${R.pcp} y PAM ${R.pam}: el VI está aturdido tras la parada. Suele recuperarse en 72 h; mientras, PAM de 75 o más.`, org: 'ficha · p. 64, 66-67',
+  posparo: { tit: 'Posparo: miocardio aturdido', frase: (R) => `IC ${c1(R.ic)}, PCP ${R.pcp} y PAM ${R.pam}: el VI está aturdido tras la parada. Suele recuperarse en 72 h; mientras, PAM de 75 o más.`, org: 'ficha · p. 65, 66-67',
     guia: [{ t: (R) => `El VI está aturdido: IC ${c1(R.ic)}. Es una disfunción sistólica y diastólica que puede llegar al shock cardiogénico en horas tras la RCE.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
       { t: (R, X) => `Es una lesión de reperfusión: suele resolverse en 72 h. Ahora, ${Math.round(horasDePosparo(X.g))} h tras la RCE; mueve el reloj y mira cómo se recupera.`, s: ['#shv-dock'], c: C.posparo, org: 'el 72: ficha · la forma de la curva: ilustrativo' },
-      { t: (R) => `La PCP (${R.pcp}) queda por debajo de la presión diastólica de la arteria pulmonar (${R.papd}), como en un pulmón sin obstáculo.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo, org: 'la relación: fisiología general' },
+      { t: (R) => `La PCP (${R.pcp}) está cerca de la presión diastólica de la arteria pulmonar (${R.papd}): al nivel de ella, salvo que haya hipertensión pulmonar, donde queda por debajo.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.pcpDiast, org: 'la relación: ficha (cap. 8); la diferencia de unos mmHg es del modelo' },
       { t: (R) => `Objetivo de PAM: de 75 o más en las primeras horas (Tabla 21.4); ahora ${R.pam}. El 65 habitual es del capítulo 14.`, s: ['[data-fila="pa"]'], c: C.t214 },
       { t: 'Si hace falta vasopresor, noradrenalina mejor que adrenalina: menos muertes cardiovasculares y mejor resultado neurológico.', s: ['#shv-dock'], c: C.t214 }] },
-  'posparo-72': { tit: 'Posparo: a las 72 h', frase: (R) => `A las 72 h: IC ${c1(R.ic)}, PCP ${R.pcp}. El aturdimiento suele estar resuelto; si el shock sigue, ya no es solo aturdimiento.`, org: 'ficha · p. 64 (lo que sigue, la fuente no lo dice)',
+  'posparo-72': { tit: 'Posparo: a las 72 h', frase: (R) => `A las 72 h: IC ${c1(R.ic)}, PCP ${R.pcp}. El aturdimiento suele estar resuelto; si el shock sigue, ya no es solo aturdimiento.`, org: 'ficha · p. 65 (lo que sigue, la fuente no lo dice)',
     guia: [{ t: (R) => `Han pasado 72 h: el miocardio aturdido suele recuperarse. IC ${c1(R.ic)}, PCP ${R.pcp}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
       { t: 'Si a las 72 h sigue en shock, ya no es aturdimiento: la fuente no dice más. Busca otra causa.', s: ['#shv-dock'], c: C.posparo, org: 'la fuente solo da las 72 h; el resto no lo dice' },
       { t: (R) => `PAM ${R.pam} sin vasopresor: el objetivo de 75 o más era de las primeras horas.`, s: ['[data-fila="pa"]'], c: C.t214 }] },

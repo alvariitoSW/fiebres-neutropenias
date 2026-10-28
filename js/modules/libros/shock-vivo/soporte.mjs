@@ -75,7 +75,7 @@ export const ESCENARIOS_EXTRA = {
     // estrecharse (v3: antes 66/41, más estrecho que el sano)
     aplicar: (m, g = 0.7) => { m.p.rSis *= 1 - 0.6 * g; m.p.vuVen *= 1 + 0.35 * g; m.p.hemorragia = 0.06 * g * BASE.vSangre; m.p.cAo *= 1 - 0.45 * g; },
   },
-  // Posparo (Marino cap. 21, p. 64): el VI aturdido (Ees baja, como el «fallo» del motor) que «suele resolverse en 72 h», más la
+  // Posparo (Marino cap. 21, p. 65): el VI aturdido (Ees baja, como el «fallo» del motor) que «suele resolverse en 72 h», más la
   // respuesta inflamatoria sistémica «casi universal» tras el paro, que puede dar shock circulatorio (resistencias algo más
   // bajas). La Ees sigue a g; la vasodilatación inflamatoria, a g también (se va con el aturdimiento). La magnitud: ilustrativa
   posparo: {
@@ -91,7 +91,7 @@ export const ESCENARIOS_EXTRA = {
   },
 };
 // El reloj del posparo: la gravedad de la Ees (g, como en el «fallo») cae con las horas desde la RCE hasta 0 a las 72 h («suele
-// resolverse en 72 h», p. 64). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
+// resolverse en 72 h», p. 65). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
 export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25, POSPARO_FUGA = 1100;
 export const gDePosparo = (h) => POSPARO_G0 * (1 - Math.min(POSPARO_H, Math.max(0, h)) / POSPARO_H);
 export const horasDePosparo = (g) => POSPARO_H * (1 - Math.max(0, g) / POSPARO_G0);
