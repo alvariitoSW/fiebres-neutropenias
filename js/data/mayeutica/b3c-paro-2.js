@@ -127,7 +127,7 @@ export const MAYEUTICA_PARO_2 = {
       { id: 'c5c', titulo: 'Leandro, 49 años: después de la parada', corto: 'Caso · Leandro (el posparo)', sub: 'de la hora 1 al día 4',
         paciente: { Edad: '49 años, varón', Peso: '84 kg', Antecedentes: 'sin cardiopatía conocida', Motivo: 'RCE a las 03:59 tras una FV en planta (día 3 de una pancreatitis aguda)' },
         pasos: [
-          { momento: 'Hora 1 · UCI', datos: { Estado: 'comatoso', Constantes: 'PA 84/50 (PAM 61) · FC 110 sinusal', Oxigenación: 'SaO₂ 97 % con FiO₂ 1,0', Temperatura: '35,4 °C (vejiga)', Analítica: 'glucemia 232 mg/dL · lactato 6,0 mmol/L', Ecografía: 'FEVI 30 % · IC 1,9 L/min/m² · PCP 20 mmHg' }, nuevo: ['Estado', 'Constantes', 'Oxigenación', 'Temperatura', 'Analítica', 'Ecografía'],
+          { momento: 'Hora 1 · UCI', datos: { Estado: 'comatoso', Constantes: 'PA 63/47 (PAM 54) · FC 122 sinusal', Oxigenación: 'SaO₂ 97 % con FiO₂ 1,0', Temperatura: '35,4 °C (vejiga)', Analítica: 'glucemia 232 mg/dL · lactato 6,0 mmol/L', Ecografía: 'FEVI 18 % · IC 1,8 L/min/m² · PCP 18 mmHg' }, nuevo: ['Estado', 'Constantes', 'Oxigenación', 'Temperatura', 'Analítica', 'Ecografía'],
             pregunta: { id: 'c5c-1', tipo: 'test', fuente: 'mc-tabla-21-4', modeloVivo: posparo,
               enunciado: 'Leandro llega comatoso a UCI con esas cifras. ¿Qué haces con el oxígeno y con la presión?',
               opciones: [
@@ -145,7 +145,7 @@ export const MAYEUTICA_PARO_2 = {
                 { t: 'Glucemia 232: insulina con objetivo 145-180 mg/dL y sin soluciones con dextrosa.' },
                 { t: 'Como vasopresor de elección, adrenalina en infusión, porque ya la usamos en la parada.', mal: true, c: `La <span class="hl">noradrenalina</span> se asocia a menos muertes cardiovasculares y mejor resultado neurológico que la adrenalina (${p(67)}).` }],
               explicacion: 'Dos errores: la FiO₂ innecesariamente alta y la adrenalina como vasopresor.' } },
-          { momento: 'Hora 30 · fiebre', datos: { Temperatura: '38,0 °C (vejiga)', Constantes: 'PA 104/62 (PAM 76) con noradrenalina 5 µg/min', Ecografía: 'FEVI 45 % · IC 2,4 L/min/m² · PCP 15 mmHg' }, nuevo: ['Temperatura', 'Constantes', 'Ecografía'], calculadora: { ir: 'mc-ttm-temp', nombre: 'Control de la temperatura' },
+          { momento: 'Hora 30 · fiebre', datos: { Temperatura: '38,0 °C (vejiga)', Constantes: 'PA 90/65 (PAM 77) con noradrenalina 5 µg/min', Ecografía: 'FEVI 31 % · IC 2,3 L/min/m² · PCP 17 mmHg' }, nuevo: ['Temperatura', 'Constantes', 'Ecografía'], calculadora: { ir: 'mc-ttm-temp', nombre: 'Control de la temperatura' },
             pregunta: { id: 'c5c-3', tipo: 'test', fuente: 'mc-tabla-21-3 · mc-ttm-temp', modeloVivo: posparo,
               enunciado: 'Abre la calculadora si quieres. La temperatura de Leandro sube a 38,0 °C. La enfermera dice «con 37,6 no habríamos usado el enfriador». ¿Qué toca ahora?',
               opciones: [
@@ -169,7 +169,7 @@ export const MAYEUTICA_PARO_2 = {
                 { t: 'Las mioclonías precoces no excluyen la recuperación; el estatus mioclónico sí, y hoy valen el oculocefálico y el nauseoso', ok: true },
                 { t: 'Hay que mirar ya las pupilas y las córneas: si están abolidas, es definitivo', porque: `Pupilas y córneas valen el día 4 (${p(67)}). Hoy (día 2) solo valen los reflejos oculocefálico y nauseoso.` }],
               explicacion: `Las mioclonías precoces son <span class="hl-rojo">desfavorables, pero no excluyen la recuperación</span>; el <span class="hl">estatus mioclónico</span> sí predice mal resultado con casi 100 % de certeza (${p(68)}). Día 2: reflejos oculocefálico y nauseoso; día 4: pupilas y córneas (${p(67)}).` } },
-          { momento: 'Día 4 · despierta', datos: { Estado: 'abre los ojos y obedece órdenes', Constantes: 'PA 118/70 (PAM 86) sin noradrenalina', Ecografía: 'FEVI 55 % · IC 2,9 L/min/m² · PCP 10 mmHg' }, nuevo: ['Estado', 'Constantes', 'Ecografía'],
+          { momento: 'Día 4 · despierta', datos: { Estado: 'abre los ojos y obedece órdenes', Constantes: 'PA 106/67 (PAM 87) sin noradrenalina', Ecografía: 'FEVI 61 % · IC 2,8 L/min/m² · PCP 10 mmHg' }, nuevo: ['Estado', 'Constantes', 'Ecografía'],
             pregunta: { id: 'c5c-6', tipo: 'test', fuente: 'mc-despertar',
               enunciado: 'Leandro despierta el día 4, pasadas las 72 h. ¿Qué enseña?',
               opciones: [
