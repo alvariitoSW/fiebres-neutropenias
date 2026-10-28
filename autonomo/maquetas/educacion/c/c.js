@@ -94,11 +94,14 @@ function pregunta(q, { chip, etiqueta, alResponder, comprueba, alFallar } = {}) 
     };
     if (!ok && q.fallo && alFallar) {
       alFallar();
-      cons.innerHTML = '<b>Lo que le pasa a Teresa: </b>' + q.fallo; cons.hidden = false;
       const hid = ocultables.filter(e => !e.hidden); hid.forEach(e => { e.hidden = true; });
-      expl.hidden = true; fin.hidden = false;
+      expl.hidden = true;
       const por = nodo('Por qué', 'button', 'c-b c-prim'); por.type = 'button'; fin.insertBefore(por, expl);
       por.addEventListener('click', () => { por.hidden = true; hid.forEach(e => { e.hidden = false; }); expl.hidden = false; sigue(); });
+      const muestra = () => { cons.innerHTML = '<b>Lo que le pasa a Teresa: </b>' + q.fallo; cons.hidden = false; fin.hidden = false; };
+      por.hidden = true; fin.hidden = true;
+      const espera = matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 1000;
+      setTimeout(() => { por.hidden = false; muestra(); }, espera);
     } else sigue();
   };
   const cuerpo = nodo('', 'div', 'c-cuerpo');

@@ -34,7 +34,7 @@ async function correr(W, red) {
     await p.click('#m-transf'); await esperaPant(2); await p.waitForTimeout(300);
     // apuesta tapada: DO2, VO2 y extracción ocultos; sin apostar no se cuelga la bolsa
     ok(!(await p.isVisible('#cpv-c-do2 b')) && !(await p.isVisible('#cpv-c-vo2 b')) && !(await p.isVisible('#cpv-c-o2er b')), 'P2: DO2, VO2 y extracción tapados');
-    ok((await p.$$('#ap-ops button')).length === 3, 'P2: 3 opciones de apuesta');
+    ok((await p.$$('#ap-ops button')).length === 4, 'P2: 4 opciones de apuesta');
     ok(await p.isDisabled('#m-transf'), 'P2: sin apuesta no hay segunda bolsa');
     ok(!/Acertaste|No era eso/.test(await p.textContent('#apuesta')), 'P2: la apuesta no corrige');
     await desborde('P2 apuesta'); await cap('2-apuesta');

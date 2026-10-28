@@ -87,7 +87,7 @@ $$('#ap-ops').addEventListener('click', ev => {
     $$('#ap-ops').querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
     mT.disabled = false; mT.title = '';
 });
-const APUESTAS = ['El aporte sube otra vez y la extracción baja.', 'Casi nada se mueve: aporte, consumo y extracción se quedan donde estaban.', 'El aporte sube y el tejido consume más.'];
+const APUESTAS = ['El aporte sube otra vez y la extracción baja bastante.', 'El aporte casi no cambia; consumo y extracción siguen igual.', 'El aporte casi no cambia, pero la extracción cae a la mitad.', 'El aporte sube y el tejido consume bastante más oxígeno.'];
 function tablaApuesta() {
     const d = celdas(), a = antes2, t = $$('#ap-tabla');
     t.hidden = apuesta === null || !a;
@@ -325,3 +325,29 @@ qSig.addEventListener('click', () => {
     mostrar(1);
     window.__B = { get falla() { return falla; }, get pant() { return pant; }, get paso4() { return paso4; }, D: () => D };
 })();
+
+// Momentos 4 y 5: un dato que interpretar, test de 3 opciones (la respuesta no está escrita en el HTML hasta contestar)
+const MINI = [
+    { id: 'mt4', q: 'Balance de la hora 1: +1.200 mL. ¿Qué haces antes de otra bolsa?', ops: [
+        ['Cuelgo la bolsa más despacio y vigilo la saturación.', 'Sigue sumando volumen a un pulmón ya encharcado: el TACO empeora.'],
+        ['Corrijo el balance positivo con diurético de asa.', null],
+        ['Espero a que el balance se corrija solo con las horas.', 'Sin diurético el volumen sigue en el pulmón; la hipoxemia no cede.']], p: 16 },
+    { id: 'mt5', q: 'Día 4: Hb 7,6 g/dL, sin sangrado. ¿Transfundes?', ops: [
+        ['Sí, una bolsa para llevarla a 10 g/dL.', 'Fuera de indicación: Hb por encima de 7 sin sangrado; arriesga otro TACO sin beneficio.'],
+        ['Sí, una sola bolsa por si acaso.', 'Sin indicación, «por si acaso» solo añade riesgo de transfusión.'],
+        ['No: está por encima del umbral 7 y no sangra.', null]], p: 8 }
+];
+MINI.forEach(m => {
+    const c = document.getElementById(m.id); if (!c) return;
+    const t = document.createElement('p'); t.className = 'txt'; t.innerHTML = '<b>Piensa:</b> ' + m.q; c.append(t);
+    const r = document.createElement('p'); r.className = 'peq'; r.hidden = true;
+    m.ops.forEach(([tx, porque]) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'btn'; b.textContent = tx;
+        b.addEventListener('click', () => {
+            c.querySelectorAll('button').forEach(x => { x.disabled = true; });
+            r.innerHTML = (porque ? '<b>No.</b> ' + porque : '<b>Bien.</b> ') + ` Fuente: ${pg(m.p)}.`; r.hidden = false;
+        });
+        c.append(b);
+    });
+    c.append(r);
+});
