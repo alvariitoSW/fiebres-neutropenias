@@ -902,3 +902,10 @@ dilatada ya no necesita la relajación de la hipertrofia (2,8, que con su VI gra
 E/A 1,38, TDE 220): relajación 1,3 y rigidez ×1,05 dan E 103, A 44, E/A 2,35, TDE 132, e′ 4,9/6,2, E/e′ 18,6, S/D 0,49, PCP 29, PAM 80:
 grado 3 con el algoritmo ASE (prueba en `atlas.test.mjs`). El fallo sigue pendiente: su defecto pide rigidez ×1,3 con la gravedad
 (E/e′ 14,2, S/D 0,84), que rompe 9 pruebas del fallo (IC a fondo <1,2, TAPSE, VD, Impella, balón); al 100 %, fusión E-A a FC 120.
+
+**Fallo del VI: E/e′ ≥14 y S/D <1 (eco-calibra-a, sesión 2, 28/10/2026).** La relajación del fallo sube de 1 a 2,3 en su defecto (antes 2,8) y la AI se
+vuelve 1,3 veces más rígida con la gravedad (`escenarios.mjs`, `FALLO_RELAJACION`, `FALLO_AI_RIGIDEZ`): la S venosa pulmonar baja (S/D 0,75) sin tocar
+la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora con (FE ÷ 0,40)^1,5 y tiene suelo 0,35: e′ septal ~2 cm/s con FE ≈10 %
+(ilustrativo, extrapolación: Nagueh 2025 p. 561 da 3-4 en el grado 3 avanzado). Motor común sin cambios: la eyección del modelo (200 ms a FC 120) ya sigue
+la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
+Tablas de Guyton regeneradas.

@@ -8,10 +8,7 @@ import { medirForma } from './medir-forma.mjs';
 import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
 
 const PENDIENTES = new Set([
-  // causa (e′ por forma, hipertrofia con mando, dilatada con la restitución de e′, hpcronica y E>0 a fondo ya pasan en la s2):
-  // fallo:def E/e′ 13,4 (≥14) y S/D 1,42 (<1): pide rigidez con la gravedad, que rompe 9 pruebas del fallo (s2-dilfallo.md); fallo:1 E/e′ 8,5
-  // (fusión a FC 120). J2 por abajo ya pasa en todas las formas: sin suelo de VD, y con LIMITES.vd[0] = 20 mL el dibujo admite el VD vacío (s2-vd.md).
-  'J1:fallo:def', 'J1:fallo:1',
+  // vacío: todo lo que fallaba al empezar eco-calibra-a ya pasa (sesión 2). Lo que se añada aquí debe salir antes de ir a main.
 ]);
 const todo = { todo: 'eco-calibra-a' };
 
