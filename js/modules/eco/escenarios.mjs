@@ -28,9 +28,17 @@ const TEP_RPUL_MAX = 9.3, TEP_EES_VD_DEFECTO = 0.35, TEP_DEFECTO = Math.log(8) /
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 // Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
-// (atlas/diastolica.mjs, ePrima): e′ = 12 ÷ relajación^0,6 → con 2,8, e′ lateral 6,5 y septal 5,2 cm/s (≤7 / ≤6: Nagueh 2025 p. 554).
-// Ilustrativo; las formas que no son del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c)
+// (atlas/diastolica.mjs, ePrima): e′ = 12 ÷ relajación^0,6 (× la restitución si la FE es baja). Ilustrativo; las formas que no son
+// del VI (hemorragia, derrame, TEP, HP crónica, vasoplejía) la dejan en 1 (e′ normal, banda c). El fallo llega a 2,8 en su defecto
+// (sesión 1); la dilatada usaba 2,8 y ahora RELAJACION_FER (abajo)
 const RELAJACION_LENTA = 2.8;
+// FE reducida (dilatada; eco-calibra-a s2, 28/10/2026): su e′ baja por la relajación Y por la pérdida de las fuerzas de
+// restitución (atlas/diastolica.mjs, restitucion; Nagueh 2025 p. 553), así que no hace falta la relajación de la hipertrofia.
+// Con 2,8, la cola de la activación del VI dilatado (que multiplica un volumen grande) dejaba la presión del VI alta en todo el
+// llenado rápido: con PAI 28 la E no subía (E/A 1,38) y el TDE era de 220 ms. Con 1,3 (τ del modelo ~33 ms frente a ~28 del
+// normal) y una cámara algo más rígida (el TDE <140 ms con la FE baja es la PTDVI alta, y el TDE depende de la relajación y la
+// rigidez del VI: Nagueh 2025 p. 547, Tabla 4) sale el llenado restrictivo con la PAI alta (grado 3, p. 554). Valores ilustrativos
+const RELAJACION_FER = 1.3, RIGIDEZ_DIL = 1.05;
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
 // más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14
@@ -111,7 +119,7 @@ export const ESCENARIOS = {
     // (Zoghbi Tabla 8, p. 332: moderada 0,20-0,39); la AI recibe el reflujo y se remodela (más volumen sin tensión, más
     // distensible) hasta una AI «generalmente grave» (Tabla 6, p. 320). Parámetros ilustrativos.
     aplicar: (m) => { const dil = (DILATADA_V0 - BASE.vi.v0) / 50;   // 1 = la dilatación de siempre (+50 mL de volumen sin tensión)
-      m.p.relajacion = RELAJACION_LENTA; m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
+      m.p.relajacion = RELAJACION_FER; m.p.vi.b *= RIGIDEZ_DIL; m.p.mioVi = 1.4; m.p.vi.ees = 1.0; m.p.vi.v0 = DILATADA_V0; m.s.vven += 700;
       m.p.eroaMitral = Math.min(EROA_IM_TOPE, EROA_IM_POR_DIL * dil); m.p.ai.v0 = BASE.ai.v0 + AI_V0_POR_DIL * dil; },
   },
   tep: {
