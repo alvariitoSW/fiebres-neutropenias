@@ -24,7 +24,7 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 (Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
 
-- 2026-10-28 · Bandeja #27 · paper HSA (presión crítica de cierre): espera el enlace o el PDF del usuario
+- 2026-10-28 · Bandeja #27 · paper HSA (Carden 2026, Neurocrit Care; de pago): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
@@ -81,14 +81,15 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Enlace**: https://x.com/CritCareReviews/status/2114035385928192242
 - **Dijo**: solo el enlace
 - **Qué es**: «Paper of the Day» de Critical Care Reviews: *Beyond Cerebral Perfusion Pressure: Critical Closing
-  Pressure and Microcirculatory Failure in Aneurysmal Subarachnoid Haemorrhage*. El enlace del tuit es acortado
-  (t.co) y desde la sesión no se puede abrir; buscado por título el 28/10 sin encontrarlo (seguramente muy reciente)
+  Pressure and Microcirculatory Failure in Aneurysmal Subarachnoid Haemorrhage*. Encontrado el 28/10 en Europe PMC
+  (tras abrir la red): Carden R, Watson X, Santi M, Zoumprouli A. Neurocrit Care, 23/10/2026.
+  doi:10.1007/s12028-026-02704-y · PMID 42920038
 - **Sirve a**: UCI / Papers Tuiter; enlaza con la presión crítica de cierre que ya sale en el paper de shock séptico
   y con la HSA de Sobrevivir a la UMI
-- **Fuente**: no consta (falta el paper)
-- **Licencia**: no consta
+- **Fuente**: el paper; no es de acceso abierto (de pago, Springer)
+- **Licencia**: artículo con copyright; figuras se recrean
 - **Coste**: 0 €
-- **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el enlace o el PDF (pedido en el issue #27 el 28/10)
+- **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el PDF (pedido en el issue #27 el 28/10)
 
 ### Impeccable (pbakaus)
 - **Fecha / tipo**: 2026-10-26 · repositorio (herramienta para el agente, no para la app)
