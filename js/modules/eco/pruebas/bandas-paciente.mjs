@@ -26,7 +26,7 @@ const tapse = () => c('tapse', 17, INF, L(23) + ' (23); ' + M(145) + ' (5)');
 const bomba = () => c('bombaAI', 15, 30, L(24) + ' (24)');
 const ar = () => diag('Ar', 0, 35, N(549) + ' (13), ' + N(555) + ' (19)', 'inferido de «Ar >35 = LVEDP alta»');
 const g = () => [c('E', 47, 111, N(551) + ' (15)'), c('A', 24, 82, N(551) + ' (15)')];
-const dt200 = () => diag('dt', 200, INF, 'Nagueh 2009 (ASE, Tabla/Fig. 4): relajación alterada DT >200 ms; página sin verificar (web no accesible)', 'DT del grado I: fuente no abierta; fisiología general hasta cotejarla');
+const dt200 = () => diag('dt', 200, INF, 'hueco: DT de la relajación alterada sin cifra en los PDF de docs/ (Nagueh 2025 solo da <140 ms restrictivo, p.547 (11)); la guía ASE/EAE 2009 (Nagueh, PMID 19187853) no se pudo abrir', 'solo diagnóstico, no falla: no es banda de libro hasta abrir una fuente con la cifra');
 const dt140 = () => diag('dt', 140, INF, N(547) + ' (11)', 'inferido: <140 ms = signo restrictivo');
 
 const NORMAL = [a(), b(), ...e_(), dt140(), ar(), tapse(), bomba(), ...g()];
