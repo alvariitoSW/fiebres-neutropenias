@@ -34,6 +34,7 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   deja escrito; si una tarea va a pasarse más de un **25 %**, el director para y comparece antes de seguir
   · **Presupuestos de bloque aprobados**: `b3-paso4` 36 M (opción A, 27/10; gastado 6,5 M en el grupo 1, quedan ≈29,5 M)
   · **Marino 100 %** (B-035, aprobado por el usuario el 28/10): objetivo ≈212-328 M, **techo 400 M**. «Hacienda debería estar muy presente vigilando el ahorro […] que lo baje lo máximo que pueda […] un equilibrio, sobre todo para futuras sesiones ahorrar mejor»: Hacienda pasa en **cada** tarea (antes y después) y al cerrar cada bloque deja su balance y el presupuesto del bloque siguiente ajustado con lo medido
+  · **El margen hasta el techo (de ≈328 a 400 M) es sobre todo para Educación** (el usuario, 28/10: «quiero que se lo curren bien y sean capaces de darle una vuelta a la educación con IA para poder estudiar con modelos vivos, con preguntas socráticas […] ser pionero mundial en evolucionar la manera de estudiar»): Hacienda no recorta la calidad de la Mayéutica; recorta en todo lo demás. Lo valora el Consejo (B-040)
 - **Una tarea solo pasa a `en revisión`** con el enlace de su PR anotado; sin enlace, no avanza
 
 Estados: `pendiente` · `en curso` · `en revisión` (PR abierta) · `hecha` (PR aprobada) · `necesita humano` · `aparcada`
