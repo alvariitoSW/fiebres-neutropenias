@@ -271,7 +271,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       dos propuestas. Sigue revisando lo ya gastado como antes.
     - **Transportes = `/bitacora`**: rumbo, cola y calendario. El informe diario es el Consejo de Ministros por
       escrito: dice el gasto del día, el acumulado frente al presupuesto y lo que recortó Hacienda.
-    - **Exteriores = `/radar`** · **Ciencia = `/ingenieria-reversa`** · **Educación = el profesor** · **Justicia = los
+    - **Exteriores = `/radar`** · **Ciencia = `/ingenieria-reversa`** · **Educación = `/mayeutica`** (con el profesor) · **Justicia = los
       jueces automáticos y el auditor ciego** (independientes: Hacienda no puede recortarlos ni saltarlos).
     - **Comparecer**: si una tarea va a pasarse **más de un 25 %** de su presupuesto, el director para antes de
       seguir y lo explica en una línea (al usuario, en el chat o en el informe diario). El tope de gasto por día
@@ -304,6 +304,21 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       el commit completo, no el nombre de la rama · avisar al constructor de los commits suyos ya hechos · una skill
       nueva pedida en una tarea aprobada va en la PR de esa tarea · el script del inventario se guarda en `autonomo/`
       para repetirlo.
+
+12. **El Consejo de Ministros** (B-037, aprobado por el usuario el 28/10/2026: poderes «todo menos 4 cosas»). Se
+    reúne cuando hay asuntos (como mucho una vez al día; el primero, el 28/10). Lo convoca la bitácora (Transportes),
+    que preside, fija el orden del día y escribe el acta en `autonomo/consejo/AAAA-MM-DD.md` (formato en su `LEEME.md`).
+    - **Dictámenes** (≤15 líneas por asunto): Interior (`/plan-socialista`: si se puede hacer, cómo y con qué
+      modelos), Hacienda (`/ahorro`: cuánto cuesta y qué recorta), Educación (`/mayeutica`: si sirve para estudiar),
+      Justicia (si choca con `CLAUDE.md` o REGLAS) y Transportes (prioridad y calendario). Ciencia (`/ingenieria-reversa`)
+      y Exteriores (`/radar`), si el asunto es suyo. Para ahorrar, un mismo agente barato puede dar dos dictámenes, y
+      Hacienda y Transportes los da quien preside, sin agente. Gasto de una reunión: ≤2 M.
+    - **Aprueba sin pasar por el usuario**: dudas de los planes, orden, tareas, opciones de los informes y cambios de
+      estudio, **dentro del presupuesto que apruebe el usuario**. Lo acordado entra en el tablero con «(Consejo, fecha)».
+    - **Reservado al gobierno central (el usuario)**: el presupuesto total, la arquitectura (`CLAUDE.md` §2, p. ej.
+      separar motores), quitar contenido y la última parada de cada bloque (lo prueba en el móvil antes de `main`).
+      En esos asuntos, el Consejo estudia y recomienda.
+    - Si los ministerios no se ponen de acuerdo, decide quien preside y el acta lo dice; el usuario puede reabrirlo.
 
 ## 5. Lo que el agente puede y no puede tocar
 
