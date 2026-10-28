@@ -75,6 +75,14 @@ export const ESCENARIOS_EXTRA = {
     // estrecharse (v3: antes 66/41, más estrecho que el sano)
     aplicar: (m, g = 0.7) => { m.p.rSis *= 1 - 0.6 * g; m.p.vuVen *= 1 + 0.35 * g; m.p.hemorragia = 0.06 * g * BASE.vSangre; m.p.cAo *= 1 - 0.45 * g; },
   },
+  // Posparo (Marino cap. 21, p. 64): el VI aturdido (Ees baja, como el «fallo» del motor) que «suele resolverse en 72 h», más la
+  // respuesta inflamatoria sistémica «casi universal» tras el paro, que puede dar shock circulatorio (resistencias algo más
+  // bajas). La Ees sigue a g; la vasodilatación inflamatoria, a g también (se va con el aturdimiento). La magnitud: ilustrativa
+  posparo: {
+    nombre: 'Posparo cardíaco', tipo: 'cardiogenico',
+    texto: (g) => `horas tras la RCE: ${Math.round(horasDePosparo(g))}`,
+    aplicar: (m, g = POSPARO_G0) => { ESCENARIOS.fallo.aplicar(m, g); m.p.rSis *= 1 - POSPARO_VASODILATACION * (g / POSPARO_G0); m.s.vven -= POSPARO_FUGA * (g / POSPARO_G0); },
+  },
   anafilaxia: {
     nombre: 'Shock anafiláctico', tipo: 'vasodilatador',
     // vasodilatación y una fuga capilar que puede llevarse hasta el 35 % del volumen intravascular (cap. 17, p. 66-67)
@@ -82,6 +90,11 @@ export const ESCENARIOS_EXTRA = {
     aplicar: (m, g = 0.6) => { m.p.rSis *= 1 - 0.45 * g; m.p.vuVen *= 1 + 0.4 * g; m.p.hemorragia = 0.35 * g * BASE.vSangre * 0.55; },
   },
 };
+// El reloj del posparo: la gravedad de la Ees (g, como en el «fallo») cae con las horas desde la RCE hasta 0 a las 72 h («suele
+// resolverse en 72 h», p. 64). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
+export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25, POSPARO_FUGA = 1100;
+export const gDePosparo = (h) => POSPARO_G0 * (1 - Math.min(POSPARO_H, Math.max(0, h)) / POSPARO_H);
+export const horasDePosparo = (g) => POSPARO_H * (1 - Math.max(0, g) / POSPARO_G0);
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 

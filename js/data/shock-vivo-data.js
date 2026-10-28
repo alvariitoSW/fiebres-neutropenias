@@ -1,7 +1,8 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
-import { textoGravedad } from '../modules/libros/shock-vivo/soporte.mjs';
+import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0 } from '../modules/libros/shock-vivo/soporte.mjs';
+export { gDePosparo, horasDePosparo, POSPARO_H };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
 const PM = (id, t) => `<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener">${t}</a>`;
@@ -20,6 +21,7 @@ export const FICHA = {
   'mc-soporte-mecanico': [CARDIO, 'Soporte circulatorio mecánico', 'Soporte mecánico', PDF_S, 'Marino 2024'],
   'mc-shock-septico': [CARDIO, 'Shock séptico', 'Shock séptico', PDF_S, 'Marino 2024'],
   'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S, 'Marino 2024'],
+  'mc-posresucitacion': [CARDIO, 'Cuidados posparo: el síndrome posparo cardíaco', 'Posparo', PDF_C, 'Marino 2024'],
   'mc-ic-tipos': [CARDIO, 'Insuficiencia cardíaca aguda: tipos', 'IC aguda', PDF_C, 'Marino 2024'],
   'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica', PDF_C, 'Marino 2024'],
   'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar: diagnóstico', 'Embolia pulmonar', PDF_R, 'Marino 2024'],
@@ -86,6 +88,8 @@ export const C = {
   tepRiesgo: { f: 'neumo-ep-manejo', id: 'nep-riesgo', sitio: 'Estratificación del riesgo', p: 7 },
   tepHemo: { f: 'neumo-ep-manejo', id: 'nep-hemodinamica', sitio: 'Manejo hemodinámico', p: '10-11' },
   escMcs: { f: 'ic-descompensada', id: 'ic-mcs-temporal', sitio: 'Soporte circulatorio mecánico temporal' },
+  posparo: { f: 'mc-posresucitacion', id: 'mc-posparo', sitio: 'Síndrome posparo cardíaco', p: 64 },
+  t214: { f: 'mc-posresucitacion', id: 'mc-tabla-21-4', sitio: 'Tabla 21.4', p: '66-67' },
   umi6h: { f: 'umi-shock-septico', id: 'umi-objetivos-6h', sitio: 'Objetivos de las primeras 6 horas' },
 };
 
@@ -101,6 +105,9 @@ export const OBJETIVOS = {
   // Manual UMI (Sobrevivir a la UMI): objetivos de las primeras 6 h del shock SÉPTICO (solo en el séptico)
   'umi-sepsis-6h': { fuente: 'Manual UMI', nombre: 'Primeras 6 h', largo: 'objetivos del shock séptico', cita: C.umi6h, venosa: 'ScvO₂', solo: 'septico',
     filas: { pam: ['≥65-70', (v) => v >= 65], pvc: ['8-12', (v) => v >= 8 && v <= 12], diur: ['≥0,5', (v) => v >= 0.5], ven: ['≥70 %', (v) => v >= 70] } },
+  // Tras la parada, Marino sube el objetivo de PAM en las primeras horas (Tabla 21.4, p. 66-67); solo da esa cifra
+  'marino-21-4': { fuente: 'Marino', nombre: 'Tabla 21.4', largo: 'objetivo de PAM tras la parada', cita: C.t214, venosa: 'ScvO₂',
+    filas: { pam: ['≥75', (v) => v >= 75] } },
 };
 // celdas en las que las dos fuentes no dicen lo mismo (se marca la celda y se enlaza la nota)
 export const DISCREPAN = { ven: 'scvo2-fuentes', pam: 'pam-fuentes' };
@@ -118,6 +125,10 @@ export const PACIENTES = [
     rec: { esc: 'fallo', g: 0.9, viDiast: 0.7, volemia: -1150, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
   { k: 'joaquin', nombre: 'Joaquín', chip: 'taponamiento', tipo: 'tapon', peso: 84, edad: 56, sexo: 'varón', hb: 13.5, fr: 24, t: 36.8, obj: 'marino-14-5',
     rec: { esc: 'derrame', g: 0.85, hb: 13.5 }, linea: '56 años, 84 kg · disección aórtica tipo A que sangra al pericardio' },
+  // Virginia: la FV extrahospitalaria con RCE (1.er choque a los 6 min). El peso y la edad: del caso; FR, T y Hb, ilustrativos.
+  // La Hb del caso se toma sin pérdida; la FR es la de una paciente ventilada y la T la de quien se mantiene ≤37,5 °C (p. 65)
+  { k: 'virginia', nombre: 'Virginia', chip: 'posparo', tipo: 'posparo', peso: 64, edad: 58, sexo: 'mujer', hb: 12.6, fr: 16, t: 36.8, obj: 'marino-21-4',
+    rec: { esc: 'posparo', g: POSPARO_G0, hb: 12.6 }, linea: '58 años, 64 kg · fibrilación ventricular extrahospitalaria, primer choque a los 6 min · hora 0 tras la RCE' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
     rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
 ];
@@ -127,6 +138,9 @@ export const GRAVEDAD = {
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
   cardio: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VI ${(3.1 * (0.3 / 3.1) ** g).toFixed(2).replace('.', ',')}`, `contractilidad al ${Math.round(100 * (0.3 / 3.1) ** g)} %`], nota: 'Contractilidad del VI (modelo)', cita: C.csHemo },
   // el derrame y el émbolo: el texto de la gravedad lo da el motor (escenarios.mjs), así no se separan
+  // el mando de gravedad es el reloj desde la RCE (horas): la Ees se recupera con él; la curva, ilustrativa; el 72, de la p. 64
+  posparo: { min: 0, max: POSPARO_H, paso: 1, horas: true, texto: (g) => [`${Math.round(horasDePosparo(g))} h tras la RCE`, `contractilidad del VI al ${Math.round(100 * (0.3 / 3.1) ** g)} %`],
+    nota: 'Horas desde la recuperación de la circulación: el aturdimiento suele resolverse en 72 h (p. 64); la forma de la curva, ilustrativa', cita: C.posparo },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -146,7 +160,7 @@ export function indicacion(pac, tipoAparato) {
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 // Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
-export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+export const TOPES = { horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
 // Sobrecarga: la PCP en el techo de la ficha, o la PVC por encima de 12 habiendo subido ≥ 4 sobre la de entrada y el pulmón ya
 // encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
 export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
@@ -180,6 +194,7 @@ export function nombreEstado(R, X) {
   }
   if (t === 'septico') { if (X.ajuste.na >= 10) return 'septico-na'; return R.irvs >= 25 && R.pam >= 65 ? 'sin-shock' : 'septico'; }
   if (t === 'cardio') { if (R.pam >= 65 && R.ic >= 2.2) return 'sin-shock'; return R.pcp < 18 ? 'cardio-pcp-baja' : R.pcp <= 20 ? 'cardio-pcp-optima' : 'cardio'; }
+  if (t === 'posparo') return X.g <= 0.005 ? 'posparo-72' : 'posparo';
   if (t === 'tapon') return Math.abs(R.pvc - R.pcp) > 3 ? 'sin-shock' : 'tapon';
   if (t === 'tep') return X.infundido.cris >= TOPES.tepMl ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
   return t;
@@ -243,6 +258,16 @@ export const ESTADOS = {
       { t: 'Por encima de ahí, más volumen apenas sube el gasto y encharca el pulmón.', s: ['[data-fila="ic"]'], c: C.llenado, org: 'que ya no suba: fisiología general' },
       { t: 'Vasopresor de elección: la noradrenalina. Y un inotrópico: la dobutamina.', s: ['[data-fila="pa"]'], c: C.csNa },
       { t: 'Los fármacos suben el trabajo del corazón que falla: si no basta, no retrases el soporte mecánico.', s: ['#shv-dock'], c: C.trabajo }] },
+  posparo: { tit: 'Posparo: miocardio aturdido', frase: (R) => `IC ${c1(R.ic)}, PCP ${R.pcp} y PAM ${R.pam}: el VI está aturdido tras la parada. Suele recuperarse en 72 h; mientras, PAM de 75 o más.`, org: 'ficha · p. 64, 66-67',
+    guia: [{ t: (R) => `El VI está aturdido: IC ${c1(R.ic)}. Es una disfunción sistólica y diastólica que puede llegar al shock cardiogénico en horas tras la RCE.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
+      { t: (R, X) => `Es una lesión de reperfusión: suele resolverse en 72 h. Ahora, ${Math.round(horasDePosparo(X.g))} h tras la RCE; mueve el reloj y mira cómo se recupera.`, s: ['#shv-dock'], c: C.posparo, org: 'el 72: ficha · la forma de la curva: ilustrativo' },
+      { t: (R) => `La PCP (${R.pcp}) queda por debajo de la presión diastólica de la arteria pulmonar (${R.papd}), como en un pulmón sin obstáculo.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo, org: 'la relación: fisiología general' },
+      { t: (R) => `Objetivo de PAM: de 75 o más en las primeras horas (Tabla 21.4); ahora ${R.pam}. El 65 habitual es del capítulo 14.`, s: ['[data-fila="pa"]'], c: C.t214 },
+      { t: 'Si hace falta vasopresor, noradrenalina mejor que adrenalina: menos muertes cardiovasculares y mejor resultado neurológico.', s: ['#shv-dock'], c: C.t214 }] },
+  'posparo-72': { tit: 'Posparo: a las 72 h', frase: (R) => `A las 72 h: IC ${c1(R.ic)}, PCP ${R.pcp}. El aturdimiento suele estar resuelto; si el shock sigue, ya no es solo aturdimiento.`, org: 'ficha · p. 64 (lo que sigue, la fuente no lo dice)',
+    guia: [{ t: (R) => `Han pasado 72 h: el miocardio aturdido suele recuperarse. IC ${c1(R.ic)}, PCP ${R.pcp}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
+      { t: 'Si a las 72 h sigue en shock, ya no es aturdimiento: la fuente no dice más. Busca otra causa.', s: ['#shv-dock'], c: C.posparo, org: 'la fuente solo da las 72 h; el resto no lo dice' },
+      { t: (R) => `PAM ${R.pam} sin vasopresor: el objetivo de 75 o más era de las primeras horas.`, s: ['[data-fila="pa"]'], c: C.t214 }] },
   cardio: { tit: 'Shock cardiogénico', frase: (R) => `El corazón no bombea: IC ${c1(R.ic)}, PCP ${R.pcp} y la arteriola cerrada. Lo que lo separa de la IC es la hipoperfusión.`, org: 'ficha · p. 40',
     guia: [{ t: (R) => `El VI no bombea: IC ${c1(R.ic)}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.csExc },
       { t: (R) => `Sube la presión de llenado del que falla: PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20' : ''}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo },
@@ -339,7 +364,7 @@ export const NOTAS = [
   { k: 'clase-cortes', tipo: 'calla', txt: '<b>Los cortes de FC y PA por clase.</b> La Tabla 15.1 de Marino (p. 22) da el % de volemia perdido y solo flechas para la FC (↔, ↑, ↑↑, ↑↑↓) y la PA (↔, ↔↓, ↓, ↓↓). Las cifras con que el modelo nombra la clase de cada paciente (FC 95, 120 y 140; PAS 90 y 70) son ilustrativas, no de la ficha. En la práctica, la FC y la PAS cambian menos que esta tabla: en traumatismos graves la FC mediana pasó de 82 (clase 1 estimada) a 95 (clase 4) y la PAS de 135 a 120 (' + PM(21349628, 'Guly 2011') + '); solo el 9,3 % de los traumatizados encajó en una clase ATLS (' + PM(25284231, 'Mutschler 2014') + ').', citas: [C.t151] },
   { k: 'impella-fuentes', tipo: 'discrepan', txt: '<b>¿Qué bomba lleva el Impella?</b> Marino la llama «bomba centrífuga miniatura» y da 2,5-5,5 L/min según el catéter (p. 47). La Guía ESC 2026 de IC de la app habla de «bombas de flujo microaxial (hasta 4-5,5 l/min)». El dibujo enseña la hélice que describen las dos; el nombre del tipo de bomba no se elige.', citas: [C.impella, C.escMcs] },
   { k: 'scvo2-fuentes', tipo: 'discrepan', txt: '<b>ScvO₂ objetivo.</b> Marino (Tabla 14.5): ScvO₂ >50 %. El Manual UMI, para el shock séptico en sus 6 primeras horas: ScvO₂ ≥70 % (o SvO₂ ≥65 %). El monitor enseña las dos y no elige.', citas: [C.t145, C.umi6h] },
-  { k: 'pam-fuentes', tipo: 'discrepan', txt: '<b>PAM objetivo.</b> Marino: ≥65 mmHg (Tabla 14.5). El Manual UMI: TAM ≥65-70 mmHg en el séptico. El monitor marca con ≥65 y lo dice.', citas: [C.t145, C.umi6h] },
+  { k: 'pam-fuentes', tipo: 'discrepan', txt: '<b>PAM objetivo.</b> Marino: ≥65 mmHg (Tabla 14.5). El Manual UMI: TAM ≥65-70 mmHg en el séptico. El monitor marca con ≥65 y lo dice. Tras una parada, Marino sube el objetivo a ≥75 en las primeras horas (Tabla 21.4, p. 66-67): con Virginia, el monitor marca con ≥75.', citas: [C.t145, C.umi6h, C.t214] },
   { k: 'pcp-fuentes', tipo: 'discrepan', txt: '<b>PCP óptima.</b> La Tabla 16.2 da 19-20 mmHg; el texto de la misma página, 18-20. El monitor da por buena 18-20 y lo dice.', citas: [C.t162] },
   { k: 'hidrocortisona', tipo: 'discrepan', txt: '<b>Hidrocortisona y vasopresina en el séptico.</b> La Tabla 17.2 pide hidrocortisona con noradrenalina «>0,25 µg/kg/min»; el texto, «≥0,25». Para la vasopresina, la p. 15 dice «≥0,2» y la Tabla 17.2, «0,25-0,5».', citas: [C.t172, C.vasopresina] },
   { k: 'vasopresina-u', tipo: 'errata', txt: '<b>Unidad de la vasopresina.</b> El libro imprime «U/h» (Tabla 14.4, p. 13; p. 16). El mando usa 0,03 U/min, la dosis habitual (conocimiento general, no del libro).', citas: [C.vasopresina] },
