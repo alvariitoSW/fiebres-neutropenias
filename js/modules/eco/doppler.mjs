@@ -11,6 +11,7 @@
 // fotogramas: así no depende de cuántas imágenes por segundo dé el móvil. El espectro y el color sí van por fotograma.
 import { nrm, dot, cruz } from './mat.mjs';
 import { VALVULAS, apertura } from './formas.mjs';
+import { AREA_VENA_PULMONAR_CM2 } from './referencias.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const sum = (a, b) => [a[0] + b[0], a[1] + b[1], a[2] + b[2]];
@@ -19,8 +20,8 @@ const esc = (a, k) => [a[0] * k, a[1] * k, a[2] * k];
 const largo = (a) => Math.hypot(a[0], a[1], a[2]);
 
 export const VALV = Object.fromEntries(VALVULAS.map(v => [v.n, v]));
-// radio de cada vena pulmonar (mm), el que dibuja corazon-geo (tubo de radio 5; ilustrativo). Amortiguación de la A reversa: ilustrativo
-export const R_VENA_PULMONAR = 5, AMORTIGUA_AR = 0.35, AREA_VENA_PULMONAR = 2.5;
+// radio de cada vena pulmonar (mm), el que dibuja corazon-geo (tubo de radio 5; ilustrativo). Sección de la vena medida (cm²): vena pulmonar superior derecha, 14,5 mm de diámetro (ficha: Cronin 2007, ver referencias.mjs). Amortiguación de la A reversa: ilustrativo
+export const R_VENA_PULMONAR = 5, AMORTIGUA_AR = 0.35, AREA_VENA_PULMONAR = AREA_VENA_PULMONAR_CM2;
 export const NOMBRE_FUENTE = { mitral: 'Mitral', tricus: 'Tricúspide', aortica: 'Aórtica', pulmonar: 'Pulmonar' };
 const SALIDA = { aortica: true, pulmonar: true };
 
@@ -97,8 +98,8 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
 export function velVaso(tipo, r, s, m = {}) {
   // Venas pulmonares: el flujo de la AI que da el motor (qVp, mL/s, + hacia la AI), repartido entre las 4 venas. La A reversa
   // (qVp < 0, la aurícula que se contrae empuja sangre hacia las venas) se amortigua: la distensibilidad de las venas absorbe parte (ilustrativo)
-  // Área efectiva por vena: ajustada para que el S del normal quede cerca de 60 cm/s (el flujo de la AI del motor tiene picos de ~600 mL/s,
-  // mayores que los reales: con el área anatómica daría ~200 cm/s). Ilustrativo; pendiente de calibrar la AI del motor.
+  // Área de la vena: la real de la superior derecha (1,65 cm², Cronin 2007; origen ficha). Con ella el S del normal sale ~50 cm/s frente a
+  // 57-64 de varones y mujeres sanos (Wierzbowska-Drabik 2010): el ~12 % que falta es del flujo de la AI del motor, no del área.
   if (tipo === 'pulmonar') { const q = (s.qVp || 0) / 4; return (q < 0 ? AMORTIGUA_AR * q : q) / AREA_VENA_PULMONAR; }
   const pvc = m.pvc ?? s.pad, q = m.rRetorno ? (s.pven - s.pad) / m.rRetorno : 0, area = Math.PI * (r / 10) * (r / 10);
   if (tipo === 'vci') return 0.67 * q / area;
