@@ -129,14 +129,16 @@ const mayuscula = t => t.replace(/^([^\p{L}\p{N}]*)(\p{L})/u, (_, a, c) => a + c
 // Lista de { clave, datos (atributos del enlace cruzado), que: ['qué mirar'…], deFicha }, sin estados repetidos.
 function estadosParaJugar(tab, d) {
     const lista = [], vistos = new Map();
-    const poner = (datos, que, deFicha, texto) => {
+    const poner = (datos, que, deFicha, texto, generico) => {
         const clave = claveDe(datos);
         if (!clave) return;
         const id = `${clave}=${datos[clave]}${datos.ecoPanel ? '/' + datos.ecoPanel : ''}`;
         const ya = vistos.get(id);
         // Un estado que ya enlaza la ficha se queda con el texto de la ficha.
-        if (ya) { if (ya.deFicha === deFicha && !ya.que.includes(que)) ya.que.push(que); if (texto && !ya.texto) ya.texto = texto; return; }
-        const e = { clave, datos, que: [que], deFicha, texto };
+        // Si el enlace de la ficha solo dice el nombre del modelo, el texto de la pregunta lo distingue de los otros estados (fa, fa:dilt…).
+        if (ya) { if (ya.generico && texto && !deFicha) { ya.que = [texto]; ya.generico = false; return; }
+            if (ya.deFicha === deFicha && !ya.que.includes(que)) ya.que.push(que); if (texto && !ya.texto) ya.texto = texto; return; }
+        const e = { clave, datos, que: [que], deFicha, texto, generico };
         vistos.set(id, e); lista.push(e);
     };
     // 1. Los enlaces de la propia ficha, en el orden del texto: su texto ya dice qué mirar
@@ -146,7 +148,7 @@ function estadosParaJugar(tab, d) {
         if (!claveDe(datos)) return;
         const t = limpio(b.textContent).replace(/\s*→\s*$/, '');
         const tras = t.match(/^\S+\s+Ver en [^:]+:\s*(.+)$/);
-        poner(datos, mayuscula(tras ? tras[1] : sinAdorno(t)), true);
+        poner(datos, mayuscula(tras ? tras[1] : sinAdorno(t)), true, null, !tras && sinAdorno(t).toLowerCase() === sinAdorno(MODELOS[claveDe(datos)].nombre).toLowerCase());
     });
     // 2. Los de las preguntas que no estén ya: su qué mirar es el texto de su botón o, si no lo tiene, la pregunta
     //    que lo usa («Guía 4 («el cloro»)»).
