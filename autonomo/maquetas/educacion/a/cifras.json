@@ -1,11 +1,11 @@
 {
-  "_origen": "Constantes leidas del modelo real del shock vivo (js/modules/libros/shock-vivo/) con autonomo/ideas/educacion-pionera/herramientas/lee-shock.mjs el 28/10/2026. La direccion de cada cifra es la de la Tabla 14.1 (p. 3); las magnitudes, del modelo (ilustrativas).",
+  "_origen": "Constantes leidas del modelo real del shock vivo (js/modules/libros/shock-vivo/) con autonomo/ideas/educacion-pionera/herramientas/lee-shock.mjs el 28/10/2026. na5, na10 y na25: Amparo a la hora 1, con los 1.750 mL puestos (vuelta 2). La direccion de cada cifra es la de la Tabla 14.1 (p. 3); las magnitudes, del modelo (ilustrativas).",
   "amparo0":   {"pam":87,"pas":106,"pad":67,"fc":71,"pvc":4,"pcp":10,"ic":2.8,"irvs":30,"scvo2":90,"gap":4,"lact":1.0,"diur":1.0,"hb":null},
   "amparo100": {"pam":54,"pas":73,"pad":34,"fc":123,"pvc":3,"pcp":6,"ic":3.1,"irvs":17,"scvo2":90,"gap":4,"lact":4.0,"diur":0.4,"hb":null},
   "vol0":      {"pam":77,"pas":111,"pad":43,"fc":93,"pvc":11,"pcp":14,"ic":4.2,"irvs":16,"scvo2":90,"gap":3,"lact":4.0,"diur":0.4,"hb":null},
   "vol1":      {"pam":63,"pas":86,"pad":39,"fc":114,"pvc":5,"pcp":8,"ic":3.5,"irvs":17,"scvo2":90,"gap":3,"lact":4.2,"diur":0.7,"hb":null},
-  "na5":       {"pam":59,"pas":79,"pad":38,"fc":123,"pvc":3,"pcp":6,"ic":3.2,"irvs":18,"scvo2":90,"gap":3,"lact":4.0,"diur":0.4,"hb":null},
-  "na10":      {"pam":63,"pas":84,"pad":41,"fc":122,"pvc":4,"pcp":7,"ic":3.3,"irvs":18,"scvo2":90,"gap":3,"lact":4.0,"diur":0.4,"hb":null},
-  "na25":      {"pam":78,"pas":105,"pad":50,"fc":94,"pvc":4,"pcp":8,"ic":3.3,"irvs":22,"scvo2":90,"gap":3,"lact":4.0,"diur":0.4,"hb":null},
+  "na5":       {"pam":68,"pas":92,"pad":42,"fc":112,"pvc":5,"pcp":8,"ic":3.6,"irvs":17,"scvo2":90,"gap":3,"lact":4.2,"diur":0.7,"hb":null},
+  "na10":      {"pam":71,"pas":97,"pad":45,"fc":109,"pvc":6,"pcp":9,"ic":3.7,"irvs":18,"scvo2":90,"gap":3,"lact":4.2,"diur":0.7,"hb":null},
+  "na25":      {"pam":81,"pas":113,"pad":48,"fc":87,"pvc":6,"pcp":11,"ic":3.6,"irvs":21,"scvo2":90,"gap":3,"lact":4.2,"diur":0.7,"hb":null},
   "mateo":     {"pam":71,"pas":78,"pad":63,"fc":135,"pvc":1,"pcp":3,"ic":1.8,"irvs":38,"scvo2":65,"gap":6,"lact":3.0,"diur":0.9,"hb":13.8}
 }

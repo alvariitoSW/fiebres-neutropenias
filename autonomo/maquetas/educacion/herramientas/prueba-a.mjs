@@ -16,7 +16,19 @@ for (const w of [390, 360]) {
   const esp = async (id, v, t) => { const g = await vals(); for (const k in v) ok(g['v-' + k] === v[k], `${w}px ${t}: ${k} ${g['v-' + k]} != ${v[k]}`); };
   // P1: velo y cifras de Amparo 0 % visibles (sin velo)
   await esp(0, { pam: '87', pa: '106/67', fc: '71', pvc: '4', ic: '2,8', irvs: '30', scvo2: '90', lact: '1,0', diur: '1,0' }, 'p1');
-  await desborde('p1'); await apuesta(1); ok(/Apuesta cerrada: \(b\)/.test(await txt()), 'p1 apuesta cerrada');
+  const y = await p.evaluate(() => { const r = document.querySelector('#pant .q .btn').getBoundingClientRect(); return [r.bottom, innerHeight]; });
+  ok(y[0] <= y[1], `${w}px p1: la pregunta A1 no se ve sin scroll (botón en y=${Math.round(y[0])} de ${y[1]})`);
+  await desborde('p1');
+  { // camino de fallo: monitor y consecuencia antes del porqué
+    const p2 = await (await b.newContext({ viewport: { width: w, height: 800 }, reducedMotion: 'reduce' })).newPage();
+    await p2.goto(URL); await p2.waitForSelector('#pant .q'); await p2.locator('button:visible', { hasText: /Ya lo tengo/ }).click(); await p2.locator('#pant .q .op').nth(0).click();
+    await p2.locator('button:visible', { hasText: /Subir la sepsis/ }).click(); await p2.waitForTimeout(200);
+    const r = await p2.evaluate(() => ({ pam: document.querySelector('#v-pam').textContent, plan: /Con tu plan \(a\)/.test(document.body.innerText), oculto: document.querySelector('.porque-box').hidden, orden: !!(document.querySelector('.ver.mal')?.compareDocumentPosition(document.querySelector('.porque-btn')) & 4), apuesta: /Tu apuesta/.test(document.body.innerText) && /Lo que pasó/.test(document.body.innerText) }));
+    ok(r.pam === '54' && r.plan && r.oculto && r.orden && r.apuesta, `${w}px fallo: ${JSON.stringify(r)}`);
+    await p2.locator('.porque-btn').click(); ok(!(await p2.evaluate(() => document.querySelector('.porque-box').hidden)), 'Por qué abre los porqués');
+    const d2 = await p2.evaluate(() => document.documentElement.scrollWidth <= innerWidth); ok(d2, `${w}px fallo: desborde`); await p2.close();
+  }
+  await apuesta(1); ok(/Apuesta cerrada: \(b\)/.test(await txt()), 'p1 apuesta cerrada');
   await clic(/Subir la sepsis/); await p.waitForTimeout(200);
   // P2
   await esp(0, { pam: '54', pa: '73/34', fc: '123', pvc: '3', pcp: '6', ic: '3,1', irvs: '17', lact: '4,0', diur: '0,4' }, 'p2');
@@ -37,8 +49,8 @@ for (const w of [390, 360]) {
   await clic(/Ahora explica: ¿por qué la PAM volvió/); await clic(/Ya lo pensé/); await p.locator('.punto input').first().check(); await desborde('p4 A6'); await clic(/Seguir: la noradrenalina/);
   // P5
   ok((await vals())['v-pam'] === '···', 'p5 velo'); await apuesta(0); await clic(/Subir la noradrenalina/);
-  await esp(0, { pam: '78', pa: '105/50', fc: '94', pvc: '4', ic: '3,3', irvs: '22' }, 'p5');
-  ok(/59/.test(await p.locator('table').last().innerText()) && /78/.test(await p.locator('table').last().innerText()), 'p5 tabla NA'); await desborde('p5');
+  await esp(0, { pam: '81', pa: '113/48', fc: '87', pvc: '6', ic: '3,6', irvs: '21' }, 'p5');
+  { const tb = await p.locator('table').last().innerText(); ok(/68/.test(tb) && /71/.test(tb) && /81/.test(tb) && /Tu apuesta/.test(tb), 'p5 tabla NA'); }; await desborde('p5');
   await clic(/encuentra el error/); await p.locator('.fr').nth(1).click(); await p.locator('.fr').nth(4).click(); await clic(/^Comprobar/);
   ok(/Sin fallos/.test(await txt()), 'p5 A8 sin fallos'); await clic(/Ver la frase buena de la 2/); await desborde('p5 A8'); await clic(/Seguir: lo que te llevas/);
   // P6

@@ -20,6 +20,7 @@ await abrir('septico'); await espera(1200); await q('#shv-pacientes [data-pac="a
 for (const v of [500, 500, 500, 250]) { await q(`#shv-dock-panel [data-vol="${v}"]`); }
 await espera(800); await S('Amparo +1750 h0');
 await q('#shv-dock-tabs [data-pest="reloj"]'); await q('#shv-dock-panel [data-h="1"]'); await espera(1500); await S('Amparo +1750 h1');
-await q('#shv-dock-tabs [data-pest="far"]'); await q('#shv-dock-panel [data-na="10"]'); await espera(1200); await S('Amparo +1750 h1 NA10');
+await q('#shv-dock-tabs [data-pest="far"]');
+for (const n of [5, 10, 25]) { await q(`#shv-dock-panel [data-na="${n}"]`); await espera(1200); await S(`Amparo +1750 h1 NA${n}`); }
 await q('#shv-dock-tabs [data-pest="vol"]'); for (let i = 0; i < 3; i++) await q('#shv-dock-panel [data-vol="2000"]'); await espera(800); await S('Amparo +1750+6000');
 await b.close();
