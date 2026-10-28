@@ -114,3 +114,21 @@ export const REFERENCIAS_FORMA = [
   { id: 'vd-fac', nombre: 'VD: cambio fraccional de área (FAC)', unidad: '%', valor: SIN_MEDIR, min: 35, max: 63, texto: '49 ± 7; anormal <35', origen: 'ficha', fuente: LANG(23), nota: 'tope 63 = media + 2 DE calculado aquí' },
   { id: 'torsion', nombre: 'VI: torsión máxima (giro neto ápex − base)', unidad: '°', valor: SIN_MEDIR, min: 0.7, max: 14.7, texto: '7,7 ± 3,5', origen: 'ficha', fuente: MOR(14, 290), nota: 'rango = media ± 2 DE calculado aquí. Por edad: <40 años 6,7 ± 2,9; 40-60 8,0 ± 3,0; >60 10,8 ± 4,9. Rotación basal y apical por separado: hueco' },
 ];
+
+// ---------------------------------------------------------------------------------------------------------------
+// Discrepancias entre fuentes del Doppler de paciente (eco-calibra-a, 28/10/2026). Se muestran las dos; no se elige
+// ganadora. Las bandas del juez J1 están en pruebas/bandas-paciente.mjs. Páginas impresas.
+//  1. LVEI (índice de excentricidad del VI): anormal >1 en Mukherjee 2025 p.149 (pie de la Tabla 2) y p.150, frente a
+//     >1,1 en Mukherjee p.164 y p.173 (Tabla 8) y ESC/ERS 2022 p.3645 (Tabla 10). Mukherjee p.173 da además «normal <1,2» en el grupo 2.
+//  2. DT del VD con relajación alterada: Mukherjee Tabla 1 (p.145) ≥87 a <120 ms (seudonormal ≥57 a <87; restrictivo <57;
+//     normal ≥120-≤230) frente a Mukherjee Tabla 6 (p.169) >230 ms (seudonormal 120-230; restrictivo <120). Es el VD, no la mitral.
+//  3. S/D de las venas pulmonares con presión de la AI alta: <1 (Nagueh 2025 p.549, Tabla 4) frente a ≤0,67
+//     (Nagueh p.554, Figura 3 y texto; fracción sistólica ≤40 %).
+//  4. TAPSE anormal: <17 mm (Lang 2015 p.23; Mukherjee p.145) frente a <18 mm (ESC/ERS 2022 p.3644, Figura 4).
+//     TAPSE/PAPs: <0,55 (ESC p.3645; Mukherjee p.173), 0,3-0,4 (Mukherjee p.152/173), <0,19 (ESC p.3657).
+export const DISCREPANCIAS_DOPPLER = [
+  { id: 'lvei', texto: 'LVEI anormal: >1 (Mukherjee 2025 p.149-150) frente a >1,1 (Mukherjee p.164 y 173; ESC/ERS 2022 p.3645)' },
+  { id: 'dt-vd', texto: 'DT del VD con relajación alterada: ≥87 a <120 ms (Mukherjee Tabla 1, p.145) frente a >230 ms (Mukherjee Tabla 6, p.169)' },
+  { id: 'sd-pai', texto: 'S/D con presión de la AI alta: <1 (Nagueh 2025 p.549) frente a ≤0,67 (Nagueh p.554)' },
+  { id: 'tapse', texto: 'TAPSE anormal: <17 mm (Lang 2015 p.23; Mukherjee p.145) frente a <18 mm (ESC/ERS 2022 p.3644)' },
+];
