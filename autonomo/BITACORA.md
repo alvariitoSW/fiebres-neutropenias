@@ -229,6 +229,19 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
+### B-041 · Raíz aórtica en la eco · apuntado 2026-10-29
+- **De dónde sale**: Consejo de Ministros del 29/10 (2.ª reunión, acta `autonomo/consejo/2026-10-29-2.md`), sobre el
+  informe del visor de la raíz aórtica (`autonomo/ideas/ingenieria-inversa/raiz-aortica.md`, cerrado).
+- **Cómo lo entiendo**: tipo `contenido`. Ficha de la raíz aórtica (anillo, senos, unión sinotubular, ascendente) con la
+  Tabla 14 de Lang 2015 (`docs/lang-2015-cuantificacion-camaras-ase.pdf`, pdf 32) y una calculadora de z simple
+  ((medido − media) / DE, por sexo) con el aviso de que el corte z = 2 puede caer dentro del error de medida. Pregunta
+  de guardia: «aorta de 4,5 cm en un Marfan con dolor torácico: ¿qué no esperas a medir?».
+- **Lo que NO quiero**: 3D, PDF, guardar datos, lector de informes; umbrales quirúrgicos sin su guía abierta.
+- **Depende de**: `eco-reforma` (Ley de Ciencia art. 1). Los umbrales, de la ESC 2024 y la ACC/AHA 2022 de aorta (no
+  están en `docs/`); la z ajustada por edad y SC, de Devereux 2012 (sin cotejar).
+- **Tamaño**: pequeña (0,8-1,2 M solo con Lang; ≈3-4 M más con las guías).
+- **Dudas**: ¿la quieres, y en la eco o en Cardiología?
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -316,6 +329,11 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+- **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
+  entra `shock-scai` (dentro del bloque 3) y las ideas de VentLoop en `b3-pulmon-app`. **Espera de ti**: (1) subir la
+  horquilla de `b3-pulmon-app` a ≈12-18 M (en la parada 2 del 3D); (2) B-041, raíz aórtica; (3) PDF opcionales: DanGer
+  Shock (NEJM 2024), ESC 2024 y ACC/AHA 2022 de aorta, Devereux 2012 y Hickling 2001.
 
 - **✅ Ley de Ciencia validada entera el 29/10** («valido todo para que el congreso empiece a implementar»; acta
   `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). Pasa al tablero como Objetivo L. **Esperando tus 3 PDF**
