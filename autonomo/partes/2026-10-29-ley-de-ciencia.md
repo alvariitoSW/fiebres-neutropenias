@@ -22,3 +22,12 @@
 - Previsto: ≤2 M (REGLAS §4.12). Gastado: ≈1,6 M equivalentes (`gasto.mjs`): presidencia 1,1 M, agentes 0,5 M.
   Desvío: dentro del tope. Hacienda: sin agente (lo da quien preside); recorte aplicado: los 7 temas en vez de 27
   asuntos, y un dosier común para que los agentes no leyeran los 27 informes.
+
+## Validación (29/10, tarde)
+- El usuario: «Valido la ley entera, y valido todo para que el congreso empiece a implementar la ley de ciencia, y los
+  3 PDF que me los escriba y ahora se los mando».
+- Hecho: Objetivo L en el tablero (8 tareas); filas absorbidas marcadas (`culprit-a/b`, `g1-shock`, `f3-calc-eco`, las 6
+  de B-033); notas en `f0-origen`, `radio-informe`, `eco-reforma` y `b3-pulmon-app`; bitácora (en marcha y esperando los
+  3 PDF; resueltas las preguntas de Ventriculus, PIF final, Techartist y LFM3); hoja de ruta del Radar refrescada
+  (`radar-hoja`, hecha); aviso programado el 30/10 18:37 UTC para lanzar `pif-cardio-minimo` (la tarea programada directa
+  se borró: salía sin el repositorio).

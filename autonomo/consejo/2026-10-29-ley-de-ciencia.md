@@ -9,7 +9,7 @@ Preside Transportes (`/bitacora`). Asunto: los **27 informes de ingeniería inve
 Justicia (sonnet), Educación (sonnet) y Ciencia + Exteriores (sonnet). Hacienda y Transportes, quien preside. Base común:
 el dosier de la presidencia (estado de cada informe en el tablero y la bitácora).
 
-**Estado de todo lo acordado: proyecto de ley, pendiente de validación del gobierno central.** Nada entra en el tablero
+**Validada entera por el gobierno central el 29/10/2026** («Valido la ley entera, y valido todo para que el congreso empiece a implementar la ley de ciencia»), con las opciones recomendadas (mínimo de Cardiología y profundidad en el grafo). Pasa al tablero como Objetivo L. Antes de validar decía: proyecto de ley, pendiente de validación del gobierno central. Nada entra en el tablero
 hasta que el usuario lo valide. Lo reservado al usuario (arquitectura de `CLAUDE.md` §2, presupuesto total, quitar
 contenido, prioridad entre libros) va como «recomendación al gobierno central».
 

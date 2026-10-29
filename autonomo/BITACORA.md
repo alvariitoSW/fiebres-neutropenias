@@ -250,6 +250,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` programada el 30/10, el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | aprobado: encargo del Consejo del 28/10 (2.ª reunión); ≈6 M, tope 8 M · **fase 1 hecha** (28/10, adelantada por ti: 1,3 M; `autonomo/ideas/educacion-pionera/`) · **fase 2 en marcha** (28/10, sesión nueva) | 2026-10-28 | Fase 3 (las maquetas) el 02/11; **parada contigo el 04/11** |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
 | `eco-calibra-b`, `capilar-transfundir` | Los 3 huecos de la eco (TEP con escalón, shock cardiogénico coherente, DT del grado 1) y el tope del mando «Transfundir» del capilar vivo | aprobadas por el Consejo (28/10, 3.ª), **aparcadas**: la 1.ª espera el informe `eco-reforma`, la 2.ª la parada del 04/11 | 2026-10-28 | ≈3,5 M y ≈0,5 M. Acta `autonomo/consejo/2026-10-28-3.md` |
@@ -316,16 +317,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **📜 Ley de Ciencia (Consejo extraordinario, 29/10)**: los 27 informes de ingeniería inversa pasaron por el Consejo
-  (acta `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). **Proyecto de ley, pendiente de tu
-  validación**: nada entra en el tablero hasta que digas. 7 proyectos: eco como un solo expediente que espera a
-  `eco-reforma`; «Guardia: shock» (`f3-calc-eco` + `g1-shock` + EchoSuite); «Arteria culpable» (Culprit + tabla de
-  AngioView); bloque `pif-cardio` (B-033 + Ventriculus, 3 paradas); Radiología a `radio-informe`; ideas de estudio para el
-  04/11; Techartist para el pulmón (lámina de entrada de `b3-pulmon-app`); IA y voz fuera de la app. ≈92-114 M en total,
-  ≈17-23 M nuevos. **Decide**: (1) validar entera, por artículos o cambiar; (2) `pif-cardio-minimo` para la rotación de
-  noviembre (≈3-3,5 M) o PIF al final; (3) profundidad en el corazón eléctrico o segundo motor; (4) opcional: 3 PDF
-  (semiología, ESC 2023 endocarditis, ESC 2025 miocarditis-pericarditis) y abrir `physionet.org`. Esto sustituye las
-  preguntas pendientes de Ventriculus, PIF Cardiología final, Techartist y LFM3 de abajo.
+- **✅ Ley de Ciencia validada entera el 29/10** («valido todo para que el congreso empiece a implementar»; acta
+  `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). Pasa al tablero como Objetivo L. **Esperando tus 3 PDF**
+  (para el bloque `pif-cardio`, no corren prisa): (1) semiología cardíaca (exploración y auscultación); (2) guía ESC 2023
+  de endocarditis; (3) guía ESC 2025 de miocarditis y pericarditis. Títulos exactos en el chat del 29/10.
+- **Resueltos por la Ley de Ciencia (29/10)**: las preguntas de Ventriculus, del informe final del PIF de Cardiología, de Techartist y de LFM3 (ver Objetivo L del tablero).
 - **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
   consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
   aviso B de Educación: `capilar-transfundir` aparcada hasta el 04/11 · ESC 2023 de SCA y repaso espaciado: cerrados ·
@@ -388,35 +384,6 @@ El resto del tablero sigue `aparcada`.
 - **Prioridad nueva (27/10, noche)**: Marino → El Libro Azul → lo de las webs (ingeniería inversa: eco, AngioView,
   RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
   Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
-- **Ventriculus (https://ventriculus.org/), pedido el 29/10** (`/ingenieria-reversa`): «es justamente lo que me
-  gustaría hacer en cardiología pif, que esté así puesto para poder estudiar bien». **Informe hecho (29/10)**:
-  https://claude.ai/artifact/MKY1M2QsghdRuxS5GYMjVi (copia `autonomo/ideas/ingenieria-inversa/ventriculus.md`).
-  **Esperando algo tuyo**: (1) qué ideas quieres (recomiendo la 3, trazado vivo arriba de cada ficha, y la 5,
-  laboratorio para combinar hallazgos; la 1 y la 2 salen casi solas); (2) si se apuntan en las tareas aparcadas del
-  ECG (`ecg-vector-*`, `arritmias-*`) y en B-005 sin adelantarlas a Marino y El Libro Azul; (3) soplos: solo con un
-  PDF de semiología cardíaca.
-- **PIF Cardiología, informe final de desarrollo (29/10)**: «el informe final […] mezclado ventrículous y el
-  laboratorio de arritmias, obviamente lo de un electro y que se vean las 12 derivaciones como debería verse […] después
-  lo debatirá el gabinete». **Hecho**: https://claude.ai/artifact/ADJBdNHTMRBQyLfE4x3zvd (copia
-  `autonomo/ideas/ingenieria-inversa/pif-cardio-final.md`). **Esperando al gabinete** (5 preguntas): orden de fases y PIF
-  al final; 12 derivaciones con profundidad en nuestro motor (recomendado) o segundo motor; juntar las 6 tareas B-033 y
-  Ventriculus en un bloque `pif-cardio` con 3 paradas; pedir PDF (semiología, ESC 2023 endocarditis, ESC 2025
-  miocarditis-pericarditis); abrir `ecgsim.org`, `litfl.com`, `ecg.bidmc.harvard.edu`, `physionet.org`.
-- **iamtechartist.com, «Breathing and respiration», pedido el 29/10**
-  (https://iamtechartist.com/breathing-and-respiration/): «esta página también habría que tenerla en cuenta para el
-  tema de modelos vivos». **Informe hecho (29/10)**: https://claude.ai/artifact/XQuCdHBBJWUe8qTLXGfZ99 (copia
-  `autonomo/ideas/ingenieria-inversa/iamtechartist-respiracion.md`). **Esperando algo tuyo**: (1) si la receta de sala
-  (visita de 5 frases → un gesto → 2 tarjetas) y el anillo de escala se apuntan para todos los modelos vivos
-  (Educación, `/mayeutica`) y el viaje de escala dentro de B-013 (pulmón con respirador); (2) si algún día quieres 3D de
-  verdad (three.js, rompe la regla de una sola librería) o se descarta.
-- **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
-  informe hecho el 29/10 (https://claude.ai/artifact/QBbCmftfj8r1CoQPfD3LCT; técnico en
-  `autonomo/ideas/ingenieria-inversa/lfm3-audio-2b.md`). Modelo de voz de 2B (voz a texto, texto a voz, conversación),
-  español incluido pero sin medir en vocabulario médico; licencia LFM Open v1.0 (gratis salvo empresas ≥ 10 M$);
-  1,4 GB en el ordenador (llama.cpp) o ≈ 2,4 GB en el navegador (WebGPU + `onnxruntime-web`, librería nueva). **Elige**:
-  1 no traerlo (dictar con el micrófono del teclado, ya hoy; recomendado), 2 botón «Escuchar» en las fichas con la
-  voz del propio móvil (pequeño, sin librería), 3 probarlo tú en el ordenador con 5 frases médicas, 4 dentro de la app
-  (grande, cambia §2; esperar a que madure). Nunca como fuente clínica.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
