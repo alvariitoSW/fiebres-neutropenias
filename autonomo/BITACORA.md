@@ -378,6 +378,10 @@ El resto del tablero sigue `aparcada`.
 - **Prioridad nueva (27/10, noche)**: Marino → El Libro Azul → lo de las webs (ingeniería inversa: eco, AngioView,
   RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
   Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
+- **Ventriculus (https://ventriculus.org/), pedido el 29/10** (`/ingenieria-reversa`): «es justamente lo que me
+  gustaría hacer en cardiología pif, que esté así puesto para poder estudiar bien». Sin empezar: `ventriculus.org`
+  cerrado en la red. Se hará en una sesión propia en cuanto lo abras. Encaja con B-005 (PIF rehecho) y con
+  `pif-ecg` (PR #36).
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
   sin empezar. `huggingface.co` sigue cerrado en la red y la búsqueda web no encuentra ese nombre (solo
   LFM2-Audio-1.5B y LFM2.5-Audio-1.5B). Espera: abrir `huggingface.co` y confirmar el enlace. Ojo: «instalarlo» en
