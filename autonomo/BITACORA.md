@@ -330,6 +330,12 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
+  puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
+  el ministerio de educación». **Bloqueada por la red**: el entorno no deja entrar en `atlas-of-physics.vercel.app`
+  (el túnel responde 403 y el lector web no resuelve el nombre). **Esperando algo tuyo**: añadir ese dominio en Allowed
+  domains de la red del entorno (ajustes del entorno → Network access). Después se hace el informe para Educación
+  (`/mayeutica`), comparándolo con `formula-comun` («la fórmula con tus números») y los modelos vivos.
 - **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
   `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
   Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
