@@ -334,6 +334,9 @@ El resto del tablero sigue `aparcada`.
   `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
   Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
   reforma (≈25-60 M); pegar el texto de 7 tuits; abrir pulmonarypocus.com en la red.
+  **Enmienda del 29/10 (4.ª reunión, `autonomo/consejo/2026-10-29-carriles.md`)**: dos carriles, Marino primero y
+  modelos vivos con webs y guías en paralelo (semáforo por modelo, 70/30 del gasto diario). Espera de ti: dónde queda
+  El Libro Azul (recomendado: tras los modelos), el artículo 13 y el presupuesto del carril 2 (≈25-40 M).
 
 - **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
   entra `shock-scai` (dentro del bloque 3) y las ideas de VentLoop en `b3-pulmon-app`. **Espera de ti**: (1) subir la
