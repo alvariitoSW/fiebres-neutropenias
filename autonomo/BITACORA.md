@@ -330,6 +330,12 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
+  puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
+  el ministerio de educación». **Bloqueada por la red**: el entorno no deja entrar en `atlas-of-physics.vercel.app`
+  (el túnel responde 403 y el lector web no resuelve el nombre). **Esperando algo tuyo**: añadir ese dominio en Allowed
+  domains de la red del entorno (ajustes del entorno → Network access). Después se hace el informe para Educación
+  (`/mayeutica`), comparándolo con `formula-comun` («la fórmula con tus números») y los modelos vivos.
 - **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
   `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
   Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
@@ -349,9 +355,10 @@ El resto del tablero sigue `aparcada`.
   Shock (NEJM 2024), ESC 2024 y ACC/AHA 2022 de aorta, Devereux 2012 y Hickling 2001.
 
 - **✅ Ley de Ciencia validada entera el 29/10** («valido todo para que el congreso empiece a implementar»; acta
-  `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). Pasa al tablero como Objetivo L. **Esperando tus 3 PDF**
-  (para el bloque `pif-cardio`, no corren prisa): (1) semiología cardíaca (exploración y auscultación); (2) guía ESC 2023
-  de endocarditis; (3) guía ESC 2025 de miocarditis y pericarditis. Títulos exactos en el chat del 29/10.
+  `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). Pasa al tablero como Objetivo L. **PDF**: recibidos el 29/10 y en `docs/` (página impresa = PDF + desplazamiento): `esc-2023-endocarditis.pdf`
+  (Delgado V et al., Eur Heart J 2023;44:3948-4042; PDF + 3947) y `esc-2025-miocarditis-pericarditis.pdf`
+  (Schulz-Menger J, Imazio M et al., Eur Heart J 2025;46:3952-4041; PDF + 3951). **Falta 1**: el capítulo cardiovascular
+  de un libro de semiología (Bates o Surós), para la exploración y la auscultación del bloque `pif-cardio`; no corre prisa.
 - **Resueltos por la Ley de Ciencia (29/10)**: las preguntas de Ventriculus, del informe final del PIF de Cardiología, de Techartist y de LFM3 (ver Objetivo L del tablero).
 - **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
   consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
