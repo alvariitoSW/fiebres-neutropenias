@@ -35,18 +35,24 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
 
-### Atlas de anatomía de procedimientos (Pridgen) · sin leer
-- **Fecha / tipo**: 2026-10-29 (chat) · web
-- **Enlace**: https://t.co/SUDGmhtskz → https://anatomy-atlas.pridgenmd.chatgpt.site/procedures/proximal-phalanx-fracture/
-- **Dijo**: «mira ahora y también di si esta nos sirve de algo»
-- **Qué es**: no consta. Por la dirección: un atlas de anatomía para procedimientos, de un autor «Pridgen MD», hecho como
-  sitio en `chatgpt.site`; la página enlazada es una fractura de falange proximal (mano)
-- **Sirve a**: no consta; solo serviría si trae procedimientos de UCI (vías, arterial, drenaje torácico, punciones)
-- **Fuente**: no es fuente clínica (web ajena; REGLAS §4.13)
-- **Licencia**: no consta
-- **Coste**: 0 €
-- **Veredicto**: NO SE PUDO LEER (el host está cerrado en la red del entorno: proxy 403 y el lector web no lo resuelve).
-  Pendiente de que el usuario lo abra en la red o pegue la lista de procedimientos
+### Anatomy Atlas (Brian Pridgen, MD)
+- **Fecha / tipo**: 2026-10-29 (chat) · web/simulador 3D
+- **Enlace**: https://t.co/SUDGmhtskz → https://anatomy-atlas.pridgenmd.chatgpt.site/ (página enlazada:
+  `/procedures/proximal-phalanx-fracture/`)
+- **Dijo**: «mira ahora y también di si esta nos sirve de algo» (abrió el dominio en la red el 29/10)
+- **Qué es** (visto el 29/10, solo la portada y una página): visor 3D de anatomía de cuerpo entero (Three.js) con
+  disección por capas, cortes axial, sagital y coronal, «toca e identifica» cada estructura y vistas sólido/rayos X.
+  Modelos de Open 3D Model / **Z-Anatomy** con BodyParts3D (CC BY-SA 4.0; Z-Anatomy ya se usa en la eco). Una
+  demostración de procedimiento (tornillos en una falange: pasos, reproducir, velocidad, dos técnicas a elegir y un
+  «Acerca de y fuentes» que dice qué es ilustrativo). Trae yugular, subclavia, femoral, radial y cricotiroides.
+  No hay lista de procedimientos de UCI (`/procedures/` da 404)
+- **Sirve a**: nivel 1 (estudiar): anatomía de las vías centrales y la arterial (catéter vivo, Técnicas R1); cortes
+  como puente a la eco y la TC (G4, G6); el formato «procedimiento paso a paso con técnicas a elegir y fuentes» para
+  Técnicas R1; pesa en la decisión del 3D de `eco-reforma` (01/11)
+- **Fuente**: no es fuente clínica; las mallas se toman de su origen (Z-Anatomy), no de esta web
+- **Licencia**: mallas CC BY-SA 4.0 (atribución y compartir igual); el código del visor no declara licencia: solo ideas
+- **Coste**: 0 €; informe de ingeniería inversa ≈0,5 M (sonnet)
+- **Veredicto**: SÍ sirve, como ideas y como prueba para la decisión del 3D. Propuesto: informe corto antes del 01/11
 
 ### Cuatro tuits sin leer (Bandeja del 29/10)
 - **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
