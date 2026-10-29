@@ -2,7 +2,7 @@
 
 **Cómo se actualiza**: en cada tanda del Radar (`/radar tanda`, semanal) se revisan los estados contra
 `autonomo/TABLERO.md` (aquí solo se copian, nunca se cambian allí), se encajan las entradas nuevas de `ENTRADAS.md` en
-una fase (sin duplicar) y se anota la fecha. Última revisión: **25/10/2026**. Norte: `NORTE.md`.
+una fase (sin duplicar) y se anota la fecha. Última revisión: **29/10/2026** (Ley de Ciencia). Norte: `NORTE.md`.
 
 Fuentes: informe «Del simulador a la cama» (23/10, https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee), megaproyecto
 «La UCI en el bolsillo» (25/10, https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU), plan de integración
@@ -10,6 +10,18 @@ Fuentes: informe «Del simulador a la cama» (23/10, https://claude.ai/artifact/
 
 **Orden aprobado el 25/10**: etapa A (preparar el plan, incluido el Radar) → fase 0 y v3 del bloque 3 → G1 tras la
 fase 0 → resto. Paradas del usuario: las 5 del plan, más una cuando esté G1.
+
+
+**Ley de Ciencia (29/10/2026, validada por el usuario)**: manda sobre las fases de abajo, que se dejan como historia.
+Acta `autonomo/consejo/2026-10-29-ley-de-ciencia.md`; tareas en el Objetivo L del tablero. Cómo encajan:
+- Fase 0 → `f0-cifras` y `f0-origen` (con el estado de revisión visible), tras Marino y El Libro Azul.
+- Fase 1 (ritmo y PIF de Cardiología) → `pif-cardio-minimo` (noviembre) y el bloque `pif-cardio` (3 paradas, al
+  final), con profundidad en el grafo del corazón eléctrico. `b3-bradi` sigue en Marino.
+- Fase 2 (coronarias, ETE, angio) → `arteria-culpable` (fase 1 tras Marino); `f2-coronarias`, `f2-ete` y `eco-sueltas`
+  tras la decisión de motor de `eco-reforma`.
+- Fase 3 (calculadoras de eco) y G1 → `guardia-shock` (dos paradas).
+- Fase 4 (imagen real) → `radio-informe` (31/10) y `radio-baratas`; visor, casos con licencia y NV-Reason, aparcados.
+- Respiración → lámina de entrada de `b3-pulmon-app` (método Techartist). IA y voz: fuera de la app.
 
 ## Fase 0 · acabado de producto en lo que ya existe
 - **Qué es**: cifra que no contradice su grado + fórmula con tus números en las calculadoras; origen y licencia a la
@@ -44,7 +56,8 @@ fase 0 → resto. Paradas del usuario: las 5 del plan, más una cuando esté G1.
   «antes / después». Decidido: tocar la anatomía congelada (esófago, valvas por segmentos, coronarias); mallas abiertas
   con cita, se decide viendo la maqueta.
 - **Falta**: Di Mario y Sutaria 2005; ASE/SCA 2013 de ETE.
-- **La alimentan**: AngioView, anesthbeta, EchoSuite (Probe Lab).
+- **La alimentan**: AngioView, anesthbeta, EchoSuite (Probe Lab), Easy LA Segmentator (28/10: qué enseñar en una
+  vista 3D de la aurícula izquierda con venas, ostia y orejuela, para el motor de la imagen de B-039 y `f2-ete`).
 
 ## Fase 3 · calculadoras de eco para la UCI
 - **Qué es**: biblioteca con catálogo único (VCI y PAD, VS y GC, E/e′, PSVD, TAPSE/PAPS, FEVI, derrame, VExUS);

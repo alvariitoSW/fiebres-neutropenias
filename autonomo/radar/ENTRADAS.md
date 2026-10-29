@@ -28,10 +28,86 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
+- 2026-10-29 · Bandeja #27 · 4 tuits sin leer (x.com cerrado: 402): espera enlace del paper o captura del usuario
+- 2026-10-29 · Bandeja #27 · web CardioTeca, tablas de dosis de anticoagulantes y antiarrítmicos: ¿bibliografía de fase 3?
 
-## Fichas de triaje (las 18 entradas, la más reciente arriba)
+## Fichas de triaje (las 24 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Anatomy Atlas (Brian Pridgen, MD)
+- **Fecha / tipo**: 2026-10-29 (chat) · web/simulador 3D
+- **Enlace**: https://t.co/SUDGmhtskz → https://anatomy-atlas.pridgenmd.chatgpt.site/ (página enlazada:
+  `/procedures/proximal-phalanx-fracture/`)
+- **Dijo**: «mira ahora y también di si esta nos sirve de algo» (abrió el dominio en la red el 29/10)
+- **Qué es** (visto el 29/10, solo la portada y una página): visor 3D de anatomía de cuerpo entero (Three.js) con
+  disección por capas, cortes axial, sagital y coronal, «toca e identifica» cada estructura y vistas sólido/rayos X.
+  Modelos de Open 3D Model / **Z-Anatomy** con BodyParts3D (CC BY-SA 4.0; Z-Anatomy ya se usa en la eco). Una
+  demostración de procedimiento (tornillos en una falange: pasos, reproducir, velocidad, dos técnicas a elegir y un
+  «Acerca de y fuentes» que dice qué es ilustrativo). Trae yugular, subclavia, femoral, radial y cricotiroides.
+  No hay lista de procedimientos de UCI (`/procedures/` da 404)
+- **Sirve a**: nivel 1 (estudiar): anatomía de las vías centrales y la arterial (catéter vivo, Técnicas R1); cortes
+  como puente a la eco y la TC (G4, G6); el formato «procedimiento paso a paso con técnicas a elegir y fuentes» para
+  Técnicas R1; pesa en la decisión del 3D de `eco-reforma` (01/11)
+- **Fuente**: no es fuente clínica; las mallas se toman de su origen (Z-Anatomy), no de esta web
+- **Licencia**: mallas CC BY-SA 4.0 (atribución y compartir igual); el código del visor no declara licencia: solo ideas
+- **Coste**: 0 €; informe de ingeniería inversa ≈0,5 M (sonnet)
+- **Veredicto**: SÍ sirve, como ideas y como prueba para la decisión del 3D. Propuesto: informe corto antes del 01/11
+
+### Cuatro tuits sin leer (Bandeja del 29/10)
+- **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
+- **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
+  https://x.com/shinriha_pt/status/2115396011443323199 · https://x.com/WithAScalpel/status/2115405654915514531 ·
+  https://x.com/sindenzu1/status/2115270279207481772
+- **Dijo**: solo los enlaces
+- **Qué es**: no consta. Desde la sesión, x.com responde 402 y la búsqueda web no los indexa. El de @WithAScalpel
+  quizá sea la continuación de su serie de lazos presión-volumen (ficha de abajo); sin leerlo, no se da por hecho
+- **Sirve a**: no consta
+- **Fuente**: no consta; se pidió en el issue #27 el enlace del paper, el texto o una captura
+- **Licencia**: tuits ajenos, no se reproducen
+- **Coste**: 0 €
+- **Veredicto**: pendiente de que el usuario pegue el paper o una captura
+
+### CardioTeca · Espacio Arritmias: dosis de anticoagulantes y antiarrítmicos (tablas)
+- **Fecha / tipo**: 2026-10-29 (comentario del 28/10) · web
+- **Enlace**: https://www.cardioteca.com/espacio-arritmias/9091-dosis-de-los-anticoagulantes-y-los-antiarritmicos-tablas-por.html
+- **Dijo**: solo el enlace
+- **Qué es**: sección de una web española de cardiología con tablas de dosis de anticoagulantes orales directos
+  (rivaroxabán, apixabán, edoxabán, dabigatrán) y antiarrítmicos por indicación y ajuste por función renal, edad y
+  peso; la misma web tiene fichas por fármaco (p. ej. amiodarona), una página de manejo práctico, otra de mecanismo
+  de acción y calculadoras de arritmias (una de dosis de ACOD con Cockcroft-Gault). Visto solo por la búsqueda web:
+  `www.cardioteca.com` no está en la red de la sesión y no se pudo abrir la página
+- **Sirve a**: fase 3 (calculadoras) y la guardia (dosis de ACOD con insuficiencia renal, amiodarona IV); enlazaría
+  con el bloque de arritmias (fase 1) y con nefrotoxicidad/ajuste renal de Nefrología
+- **Fuente**: no consta de qué guía salen sus tablas (sin abrir la página). Una web divulgativa no es fuente de
+  dosis: las cifras saldrían de la ficha técnica o de la guía ESC/EHRA, con su página
+- **Licencia**: no consta
+- **Coste**: web gratis (no consta si hay parte de pago)
+- **Veredicto**: idea suelta para fase 3 (calculadora de dosis de ACOD por función renal, con la guía como fuente);
+  CardioTeca, como bibliografía. Para ver la página hace falta abrir `www.cardioteca.com` en la red de la sesión
+
+### Easy LA Segmentator (Mikael Laredo, Pitié-Salpêtrière)
+- **Fecha / tipo**: 2026-10-28 · repositorio
+- **Enlace**: https://github.com/mikaellaredo/easy-la-segmentator
+- **Dijo**: «Mira a ver si este repositorio de GitHub nos puede ayudar a montar el motor real del corazón»; tras la
+  valoración, «sí, apúntalo»
+- **Qué es**: programa de escritorio para electrofisiólogos (Windows y Mac, instalador de 1,4 GB). Con un TAC cardíaco
+  dibuja en 3D la aurícula izquierda, las venas pulmonares y la orejuela con TotalSegmentator; nombra cada vena, mide
+  cada ostium (diámetros y área), marca variantes (tronco común, vena accesoria o media) y exporta a CARTO, EnSite y
+  OPAL. El repositorio solo tiene el README y 9 capturas: **no publica código**
+- **Sirve a**: nivel 1 (estudiar), G6 (quirófano cardíaco y ETE). **No sirve al motor hemodinámico** (`motor.mjs`:
+  presiones, volúmenes, elastancia): es anatomía quieta, sin latido ni flujo. Sí como referencia de qué enseñar en una
+  futura vista 3D de la aurícula izquierda para el motor de la imagen de B-039 (`eco-reforma`) o `f2-ete`: las cuatro
+  venas con su ostium, la orejuela aparte, las variantes y las vistas de electrofisiología (AP, PA, OAI, OAD,
+  izquierda, derecha). Dibujado por nosotros, sin copiar sus imágenes
+- **Fuente**: ninguna; es una herramienta, no una fuente. La anatomía saldría de un libro o guía en `docs/`. Su
+  validación (README): 27 TAC públicos de HOCMvalvesSeg, Dice mediano 0,93
+- **Licencia**: README: «free for non-commercial research use»; el modelo *heartchambers_highres* de TotalSegmentator,
+  solo no comercial y con clave por usuario; capturas hechas con HOCMvalvesSeg (CC BY-NC 4.0) y la muestra de 3D
+  Slicer. No se usa nada suyo (REGLAS del proyecto §7.9)
+- **Coste**: 0 €; no aporta código, solo ideas
+- **Veredicto**: fase 2, como referencia del motor de la imagen (B-039 y `f2-ete`); descartado para el motor del
+  corazón
 
 ### Lazo presión-volumen #1: precarga y distensibilidad (@WithAScalpel) + CardioRender
 - **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás); en una respuesta, una web
