@@ -392,6 +392,12 @@ El resto del tablero sigue `aparcada`.
   al final; 12 derivaciones con profundidad en nuestro motor (recomendado) o segundo motor; juntar las 6 tareas B-033 y
   Ventriculus en un bloque `pif-cardio` con 3 paradas; pedir PDF (semiología, ESC 2023 endocarditis, ESC 2025
   miocarditis-pericarditis); abrir `ecgsim.org`, `litfl.com`, `ecg.bidmc.harvard.edu`, `physionet.org`.
+- **iamtechartist.com, «Breathing and respiration», pedido el 29/10**
+  (https://iamtechartist.com/breathing-and-respiration/): «esta página también habría que tenerla en cuenta para el
+  tema de modelos vivos». Sin empezar: `iamtechartist.com` cerrado en la red (`ERR_TUNNEL_CONNECTION_FAILED`).
+  Espera: abrir `iamtechartist.com` (o `*.iamtechartist.com`). Después, `/ingenieria-reversa` con la mirada de los
+  modelos vivos de respiración (Marino caps. 22-30, El Libro Azul sección IV) y su sitio en el Ministerio de Educación
+  (`/mayeutica`, departamento de arte).
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
   informe hecho el 29/10 (https://claude.ai/artifact/QBbCmftfj8r1CoQPfD3LCT; técnico en
   `autonomo/ideas/ingenieria-inversa/lfm3-audio-2b.md`). Modelo de voz de 2B (voz a texto, texto a voz, conversación),
