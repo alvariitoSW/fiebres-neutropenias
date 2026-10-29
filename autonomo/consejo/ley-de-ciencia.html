@@ -1,0 +1,193 @@
+<title>Ley de Ciencia</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&family=IBM+Plex+Sans+Condensed:wght@500;600&display=swap">
+<style>
+/* Layout: proyecto de ley en una columna; cada artículo es un pliego con sello de estado y su tabla de coste. */
+:root{
+  --papel:#f3f5f7; --hoja:#ffffff; --tinta:#16212e; --tenue:#566375; --regla:#d6dce3;
+  --sello:#7a2e4a; --sello-suave:#f3e6ec; --ok:#2f6b4a; --ok-suave:#e3f0e8; --aviso:#8a5a12; --aviso-suave:#f6ecd9;
+  --f-titulo:"Literata",Georgia,"Times New Roman",serif; --f-texto:"Literata",Georgia,serif;
+  --f-rotulo:"IBM Plex Sans Condensed","Arial Narrow",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --papel:#0f141b; --hoja:#171e27; --tinta:#e6ebf1; --tenue:#9aa6b5; --regla:#2b3542;
+  --sello:#e08aa9; --sello-suave:#36202b; --ok:#7cc79c; --ok-suave:#1b2e24; --aviso:#e3b264; --aviso-suave:#33291a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --papel:#0f141b; --hoja:#171e27; --tinta:#e6ebf1; --tenue:#9aa6b5; --regla:#2b3542;
+  --sello:#e08aa9; --sello-suave:#36202b; --ok:#7cc79c; --ok-suave:#1b2e24; --aviso:#e3b264; --aviso-suave:#33291a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--papel);color:var(--tinta);font:16px/1.55 var(--f-texto);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+main{max-width:680px;margin:0 auto;display:flex;flex-direction:column;gap:22px}
+h1,h2,h3{font-family:var(--f-titulo);text-wrap:balance;line-height:1.2;margin:0}
+h1{font-size:2.1rem;font-weight:700}
+h2{font-size:1.3rem;font-weight:700}
+h3{font-size:1rem;font-weight:600}
+p{margin:0}
+.rotulo{font-family:var(--f-rotulo);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase;color:var(--tenue);font-weight:600}
+.cabecera{display:flex;flex-direction:column;gap:10px;border-bottom:3px double var(--regla);padding-bottom:18px}
+.frase{font-size:1.12rem;border-left:4px solid var(--sello);padding-left:14px}
+.estado{display:inline-block;font-family:var(--f-rotulo);font-weight:600;font-size:.8rem;padding:3px 9px;border-radius:3px;
+  background:var(--sello-suave);color:var(--sello);border:1px solid var(--sello)}
+.resumen{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.cifra{background:var(--hoja);border:1px solid var(--regla);padding:10px;display:flex;flex-direction:column;gap:2px}
+.cifra b{font-family:var(--f-titulo);font-size:1.5rem;font-variant-numeric:tabular-nums}
+.cifra span{font-family:var(--f-rotulo);font-size:.78rem;color:var(--tenue)}
+.art{background:var(--hoja);border:1px solid var(--regla);padding:16px;display:flex;flex-direction:column;gap:10px}
+.art-cab{display:flex;flex-direction:column;gap:4px}
+.une{font-size:.92rem;color:var(--tenue)}
+.datos{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:0;font-size:.95rem}
+.datos dt{font-family:var(--f-rotulo);font-size:.8rem;color:var(--tenue);padding-top:2px}
+.datos dd{margin:0;min-width:0}
+ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:4px}
+details{border-top:1px solid var(--regla);padding-top:8px}
+summary{cursor:pointer;font-family:var(--f-rotulo);font-weight:600;color:var(--sello);font-size:.9rem}
+summary:focus-visible,a:focus-visible{outline:2px solid var(--sello);outline-offset:2px}
+.voces{margin-top:8px;display:flex;flex-direction:column;gap:6px;font-size:.93rem}
+.voces p b{font-family:var(--f-rotulo);font-weight:600}
+.chip{font-family:var(--f-rotulo);font-size:.75rem;font-weight:600;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.chip.tuyo{background:var(--aviso-suave);color:var(--aviso)}
+.chip.acuerdo{background:var(--ok-suave);color:var(--ok)}
+.reco{background:var(--aviso-suave);padding:10px 12px;font-size:.93rem;border-left:3px solid var(--aviso)}
+.tabla{overflow-x:auto;border:1px solid var(--regla);background:var(--hoja)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.88rem}
+th,td{padding:7px 9px;border-bottom:1px solid var(--regla);text-align:left;vertical-align:top}
+th{font-family:var(--f-rotulo);font-size:.78rem;color:var(--tenue);text-transform:uppercase;letter-spacing:.04em}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pide{background:var(--hoja);border:2px solid var(--sello);padding:16px;display:flex;flex-direction:column;gap:12px}
+.pide ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
+.pie{font-size:.85rem;color:var(--tenue)}
+code{font-family:ui-monospace,monospace;font-size:.86em}
+@media (max-width:400px){.resumen{grid-template-columns:1fr 1fr}.resumen .cifra:last-child{grid-column:1 / -1}h1{font-size:1.8rem}}
+</style>
+
+<main>
+<header class="cabecera">
+  <span class="rotulo">Consejo de Ministros extraordinario · 29/10/2026</span>
+  <h1>Ley de Ciencia</h1>
+  <span><span class="estado">Proyecto de ley · pendiente de que lo valides</span></span>
+  <p class="frase">Los 27 informes de ingeniería inversa se cierran en 7 proyectos, uno por parte de la app. Nada se construye antes de terminar Marino, salvo un mínimo opcional para tu rotación de Cardiología. Todo lo que dependa del motor de la eco espera a que elijas en el informe de la reforma (01/11).</p>
+</header>
+
+<section class="resumen" aria-label="Resumen">
+  <div class="cifra"><b>23</b><span>informes cerrados</span></div>
+  <div class="cifra"><b>4</b><span>siguen vivos (falta algo)</span></div>
+  <div class="cifra"><b>≈17-23 M</b><span>de gasto nuevo; el resto ya lo habías aprobado</span></div>
+</section>
+
+<p class="pie">Nada entra en el tablero hasta que digas. Las cifras son millones de tokens estimados (±30 %). Votaron Interior + Justicia, Educación y Ciencia + Exteriores; Hacienda y Transportes los dio quien presidía.</p>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 1 · Eco cardíaca</span><h2>Un solo expediente que espera a la reforma</h2>
+  <p class="une">Une 8 informes: corazón más real, fisiopatología, echodemo, EchoSuite (×2) y su anatomía, anesthbeta y ecos reales.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>Casi todo ya está en la app (paradas 1-3). Lo que sobra alimenta el informe <code>eco-reforma</code> del 01/11. Proyecto pequeño nuevo <code>eco-sueltas</code>: ficha «¿Qué ETE pido y qué veo?», cartilla de qué válvula está abierta en cada fase y guardar la postura de la sonda en el enlace.</dd>
+  <dt>Cuándo</dt><dd>Tras elegir el motor</dd><dt>Coste</dt><dd>≈2 M nuevo; ≈32-42 M de la fase de motor, ya aprobada</dd></dl>
+  <p class="reco"><b>Para ti:</b> elegir el motor con el informe del 01/11. three.js solo si tú lo quieres.</p>
+  <details><summary>Qué opinó cada ministerio</summary><div class="voces">
+    <p><b>Ciencia:</b> faltaban 3 ideas sueltas de anesthbeta y una repetida en dos informes (marcar si una cifra está revisada). Esa va a la tarea de «origen visible», ya pendiente.</p>
+    <p><b>Justicia:</b> elegir motor es arquitectura: el Consejo solo recomienda.</p>
+    <p><b>Educación:</b> lo que más enseña de la eco es el artículo 1 bis, no la imagen.</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 1 bis · Guardia</span><h2>«Guardia: shock»</h2>
+  <p class="une">Une las calculadoras de eco (<code>f3-calc-eco</code>), la primera situación de guardia (<code>g1-shock</code>) y 4 ideas de EchoSuite.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>Parada 1: la cadena VCI → PAD → volumen sistólico → gasto → E/e′ → VExUS, cada paso con su fórmula y una pregunta «piensa antes». Parada 2: el veredicto de shock con aviso de «combinación incoherente».</dd>
+  <dt>Cuándo</dt><dd>Tras Marino y El Libro Azul</dd><dt>Coste</dt><dd>≈14-18 M (≈3-4 M menos que por separado)</dd></dl>
+  <details><summary>Qué opinó cada ministerio</summary><div class="voces">
+    <p><b>Educación:</b> es lo más útil de guardia; pidió partirlo en dos paradas.</p>
+    <p><b>Hacienda:</b> los PDF que esperaba <code>f3-calc-eco</code> ya están en <code>docs/</code>: se desaparca.</p>
+    <p><b>Ciencia:</b> el veredicto de shock no sale de EchoSuite: necesita guías de shock con página.</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 2 · Coronarias y SCA</span><h2>«Arteria culpable»</h2>
+  <p class="une">Une Coronary Culprit y AngioView (×2).</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>Primero, la ficha «Del vaso a la derivación», la tabla vaso → ECG → pared → complicación y las preguntas «predice el ECG» y «coloca el trombo». Después, cuando el motor tenga coronarias: el infarto en el corazón que late y el caso de shock cardiogénico.</dd>
+  <dt>Cuándo</dt><dd>Fase 1 tras Marino; fase 2 tras la reforma</dd><dt>Coste</dt><dd>≈7-8,5 M la fase 1</dd></dl>
+  <details><summary>Qué opinó cada ministerio</summary><div class="voces">
+    <p><b>Ciencia</b> corrigió a la presidencia: «leer un informe de cateterismo» necesita Di Mario 2005 (de pago). Se queda aparcada; solo la tabla entra ya.</p>
+    <p><b>Interior:</b> la tabla va una sola vez en los datos y la usan la ficha y las preguntas.</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 3 · ECG y PIF de Cardiología</span><h2>Un bloque <code>pif-cardio</code> con 3 paradas</h2>
+  <p class="une">Une RitmoLab (×3), Ventriculus y el informe final del PIF, con las 6 tareas del ECG que ya aprobaste (B-033).</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>(1) Esqueleto por objetivos y «léelo en orden». (2) Las 12 derivaciones de verdad, el ECG vivo arriba de cada ficha y preguntas que dibujan su propio ECG. (3) El laboratorio de arritmias con la puerta «Construye un ECG».</dd>
+  <dt>Cuándo</dt><dd>Al final, tras Marino y El Libro Azul</dd><dt>Coste</dt><dd>≈21-22 M (18,7 ya aprobados)</dd></dl>
+  <p class="reco"><b>Discrepancia.</b> Tu rotación es en noviembre y diciembre, y el bloque llega después. Interior quería adelantar solo el esqueleto; Educación, esqueleto + tabla + preguntas; Ciencia, también el asistente de guardia; Exteriores, nada sin que tú lo digas. Quien presidía decidió ofrecerte un <b>mínimo opcional</b> (<code>pif-cardio-minimo</code>, ≈3-3,5 M): esqueleto, «léelo en orden», tabla vaso → ECG y 6-8 preguntas «predice el ECG».</p>
+  <details><summary>Más votos</summary><div class="voces">
+    <p><b>Ciencia:</b> Ventriculus exagera lo de «fisiología, no dibujos» (es un modelo sencillo y todo está en borrador). Sus cifras no son fuente.</p>
+    <p><b>Justicia:</b> dar profundidad al corazón eléctrico toca un motor: lo decides tú.</p>
+    <p><b>Exteriores:</b> de las 4 webs que pedía el informe, solo vale la pena abrir PhysioNet (ECG reales con licencia abierta).</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 4 · Radiología</span><h2>Todo al informe del 31/10</h2>
+  <p class="une">Une NavRad (×3), Radiology Assistant (×2) y NV-Reason-CT.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>El informe <code>radio-informe</code> (31/10) recibe las ideas. Primeras piezas cuando elijas: bibliografía de Radiology Assistant, rótulos encima de las 14 Rx y TC que ya tiene Merino Neumología y la TC de cráneo en 5 preguntas.</dd>
+  <dt>Cuándo</dt><dd>Tras el informe y tu elección</dd><dt>Coste</dt><dd>≈4-6 M</dd></dl>
+  <p class="reco"><b>Para ti:</b> el visor de cortes de TC espera a tener casos con licencia. La IA de NVIDIA no entra en la app; usarla en el hospital queda descartado mientras no haya servidor.</p>
+  <details><summary>Qué opinó cada ministerio</summary><div class="voces">
+    <p><b>Ciencia</b> corrigió a la presidencia: la lista de 64 hallazgos de NVIDIA es de TC de tórax y abdomen, no de Rx ni de cráneo. Fuera. Sí entra la pregunta de estudio «¿qué no puede ver esta IA?».</p>
+    <p><b>Educación:</b> tus rotaciones ya pasaron, pero la Rx de UCI y la TC de cráneo siguen siendo de guardia.</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 5 · Cómo se estudia</span><h2>Ideas para la parada del 04/11</h2>
+  <p class="une">Une Anki, Oppia y Nicky Case (ya fueron la fase 1 de Educación pionera) y la receta de Techartist.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>El 04/11 eliges entre las maquetas A, B y C. Se suman como candidatas: la «receta de sala» (5 frases, un gesto, 2 tarjetas) en un solo modelo, el anillo de escala donde cambia el tamaño, el repaso de 2-3 preguntas al empezar y no repetir la misma ficha seguida.</dd>
+  <dt>Cuándo</dt><dd>04/11</dd><dt>Coste</dt><dd>≈3-4 M si las eliges</dd></dl>
+  <details><summary>Qué opinó cada ministerio</summary><div class="voces">
+    <p><b>Educación:</b> la receta no debe ser norma para todos los modelos (repite lo que ya hace Explorar), y la apuesta va antes del gesto.</p>
+    <p><b>Justicia:</b> ninguna forma nueva de guardar datos: solo la fecha del último intento que ya aprobaste.</p></div></details>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 6 · Respiración</span><h2>Techartist sí, para el pulmón</h2>
+  <p class="une">Usa el informe de iamtechartist para el pulmón con respirador de Marino, que ya está aprobado.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>Una lámina de entrada que viaja del tórax a la vía aérea, el alvéolo, la membrana y el capilar, con el anillo de escala del artículo 5. Cada nivel responde a una pregunta de guardia («¿en qué nivel se rompe el intercambio en el SDRA?»). Las cifras salen de Marino caps. 22-30 y El Libro Azul, nunca de Techartist. No se rehace la maqueta que ya aprobaste.</dd>
+  <dt>Cuándo</dt><dd>Parada 2 del pulmón (dentro de Marino)</dd><dt>Coste</dt><dd>≈2,5-3,5 M</dd></dl>
+  <p class="reco"><b>Para ti:</b> el 3D de verdad (three.js) queda descartado por ahora; el 2D enseña lo mismo.</p>
+</article>
+
+<article class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 7 · IA y voz</span><h2>Nada dentro de la app</h2>
+  <p class="une">LFM3-Audio (voz de Liquid AI) y NV-Reason-CT.</p></div>
+  <dl class="datos"><dt>Qué se hace</dt><dd>LFM3 no se trae. Para dictar dudas, el micrófono del teclado ya funciona. Si tienes curiosidad, puedes probarlo en tu ordenador con las 5 frases médicas del informe.</dd><dt>Coste</dt><dd>0 M</dd></dl>
+  <p class="reco"><b>Para ti:</b> el botón «Escuchar la ficha» con la voz del móvil, no por ahora. Educación votó en contra (oír no es practicar) e Interior avisa de que lee mal siglas y dosis.</p>
+</article>
+
+<section class="art">
+  <div class="art-cab"><span class="rotulo">Artículo 8 · Calendario y presupuesto</span><h2>Orden y coste de cada proyecto</h2></div>
+  <div class="tabla"><table>
+    <thead><tr><th>Proyecto</th><th>Cuándo</th><th>Coste (M)</th><th>¿Ya lo aprobaste?</th></tr></thead>
+    <tbody>
+      <tr><td>Informes ya fijados (Radiología, reforma de la eco, maquetas de Educación)</td><td>31/10 - 04/11</td><td class="n">—</td><td>sí</td></tr>
+      <tr><td><code>pif-cardio-minimo</code></td><td>noviembre (opción)</td><td class="n">3-3,5</td><td>no</td></tr>
+      <tr><td>Lámina del pulmón</td><td>dentro de Marino</td><td class="n">2,5-3,5</td><td>el pulmón sí</td></tr>
+      <tr><td>Candidatas del 04/11</td><td>si las eliges</td><td class="n">3-4</td><td>Educación sí</td></tr>
+      <tr><td>Cifras y origen visibles</td><td>tras Marino y El Libro Azul</td><td class="n">3-4</td><td>sí</td></tr>
+      <tr><td><code>arteria-culpable</code></td><td>tras Marino y El Libro Azul</td><td class="n">7-8,5</td><td>casi todo</td></tr>
+      <tr><td><code>guardia-shock</code></td><td>tras Marino y El Libro Azul</td><td class="n">14-18</td><td>sí</td></tr>
+      <tr><td>Radiología, piezas baratas</td><td>tras <code>radio-informe</code></td><td class="n">4-6</td><td>en parte</td></tr>
+      <tr><td>Bloque <code>pif-cardio</code></td><td>al final</td><td class="n">21-22</td><td>18,7 sí</td></tr>
+      <tr><td><code>eco-sueltas</code></td><td>tras la reforma</td><td class="n">≈2</td><td>no</td></tr>
+      <tr><td>Fase de motor (eco, ETE, coronarias)</td><td>tras la reforma</td><td class="n">32-42</td><td>sí</td></tr>
+    </tbody>
+  </table></div>
+  <p>Total ≈92-114 M, todo fuera del techo de Marino (400 M). Lo nuevo de verdad son ≈17-23 M; lo demás ya lo habías aprobado y la ley solo lo ordena y le pone cifra. La fecha de «tras El Libro Azul» la dará el mapa del 31/10.</p>
+</section>
+
+<section class="pide" aria-labelledby="pide-t">
+  <h2 id="pide-t">Lo que necesito de ti</h2>
+  <ol>
+    <li><b>Validar</b>: escribe «valido la ley entera», «valido los artículos 1, 2…» o dime qué cambias.</li>
+    <li><b>Rotación de Cardiología</b>: ¿hacemos el mínimo de noviembre (≈3-3,5 M) o mantienes «PIF al final»?</li>
+    <li><b>12 derivaciones</b>: ¿dar profundidad al corazón eléctrico (recomendado, un solo motor) o un segundo motor?</li>
+    <li><b>Opcional</b>: tres PDF (semiología cardíaca, ESC 2023 de endocarditis, ESC 2025 de miocarditis y pericarditis) y abrir <code>physionet.org</code> en la red.</li>
+  </ol>
+  <p class="pie">Cuando valides, todo entra en el tablero con «(Consejo, 29/10, Ley de Ciencia)». Acta completa: <code>autonomo/consejo/2026-10-29-ley-de-ciencia.md</code>.</p>
+</section>
+</main>

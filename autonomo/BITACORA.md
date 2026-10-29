@@ -316,6 +316,16 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **📜 Ley de Ciencia (Consejo extraordinario, 29/10)**: los 27 informes de ingeniería inversa pasaron por el Consejo
+  (acta `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). **Proyecto de ley, pendiente de tu
+  validación**: nada entra en el tablero hasta que digas. 7 proyectos: eco como un solo expediente que espera a
+  `eco-reforma`; «Guardia: shock» (`f3-calc-eco` + `g1-shock` + EchoSuite); «Arteria culpable» (Culprit + tabla de
+  AngioView); bloque `pif-cardio` (B-033 + Ventriculus, 3 paradas); Radiología a `radio-informe`; ideas de estudio para el
+  04/11; Techartist para el pulmón (lámina de entrada de `b3-pulmon-app`); IA y voz fuera de la app. ≈92-114 M en total,
+  ≈17-23 M nuevos. **Decide**: (1) validar entera, por artículos o cambiar; (2) `pif-cardio-minimo` para la rotación de
+  noviembre (≈3-3,5 M) o PIF al final; (3) profundidad en el corazón eléctrico o segundo motor; (4) opcional: 3 PDF
+  (semiología, ESC 2023 endocarditis, ESC 2025 miocarditis-pericarditis) y abrir `physionet.org`. Esto sustituye las
+  preguntas pendientes de Ventriculus, PIF Cardiología final, Techartist y LFM3 de abajo.
 - **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
   consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
   aviso B de Educación: `capilar-transfundir` aparcada hasta el 04/11 · ESC 2023 de SCA y repaso espaciado: cerrados ·
