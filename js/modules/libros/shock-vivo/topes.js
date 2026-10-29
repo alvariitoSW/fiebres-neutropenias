@@ -2,9 +2,11 @@
 // sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común js/core/tope.js.
 // Cada tope lleva su origen tal como lo da la tabla: ficha (con página), «fisiología general» o «ilustrativo».
 import * as D from '../../../data/shock-vivo-data.js';
+import { eroaDeG, civDeG, eesVdDeG } from './soporte.mjs';
 const { C, TOPES: T } = D;
 const VOL = ['[data-vol]', '[data-sangre]'];
 const mL = (x) => Math.round(x).toLocaleString('es-ES');
+const c2 = (x, d = 2) => (+x).toFixed(d).replace('.', ',');
 
 let dadoVisto = 0;   // lo infundido en el cálculo anterior: distingue un bolo nuevo de un ECMO que sube la PCP solo
 export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
@@ -12,7 +14,12 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const boloNuevo = dado > dadoVisto; dadoVisto = dado;
   // 1) volumen: PCP ≥ 20, o PVC > 12 habiendo subido ≥ 4 sobre la de entrada (aviso desde PCP 15 o PVC 11)
   const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
-  if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
+  // el papilar y el septo llegan con la PCP en 20-30 sin volumen: es su cuadro; el sello llega con el primer bolo
+  const llegaAlta = (tipo === 'papilar' || tipo === 'septo') && dado === 0;
+  if (D.sobrecarga(R) && llegaAlta) {
+    out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
+      cita: C.llenado, origen: 'ficha · p. 42 · la PCP de este paciente: modelo', bajo: '#shv-dock-panel .rejilla' };
+  } else if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
     // con el ECMO y sin volumen nuevo, la PCP sube por la poscarga del VI, no por el suero
     out.sobrecarga = { nivel: 'sello', titulo: 'El ECMO sube la poscarga del VI', texto: `PCP ${R.pcp}: el flujo retrógrado del ECMO le sube la poscarga al VI y el pulmón se encharca; ventea (un balón o un Impella a la vez, o drenar el VI).${ed}`,
       cita: C.ecmoPoscarga, origen: 'ficha · p. 48-49 · la cifra: modelo', deshabilita: VOL };
@@ -27,6 +34,29 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
     out.sobrecarga = { nivel: 'aviso', titulo: sinVol ? `PCP ${R.pcp}: sin volumen` : 'Cerca del techo',
       texto: sinVol ? `Llega con la PCP en ${R.pcp} sin haber dado volumen (el VI aturdido): la ficha para el volumen en 18-20; no des más.` : porPcp ? `PCP ${R.pcp}: la ficha para en 18-20.${ed}` : `PVC ${R.pvc}: la PVC predice mal la respuesta a volumen (Marik); el 12 es del modelo.`,
       cita: porPcp ? C.llenado : undefined, origen: porPcp ? 'ficha · p. 42' : 'ilustrativo (el 12). La PVC predice mal la respuesta a volumen: Marik 2008, PMID 18628220', bajo: '#shv-dock-panel .rejilla' };
+  }
+  // 1a) el mando de gravedad de los tres del infarto: aviso al acercarse al tope y sello al pasarlo
+  if (tipo === 'papilar') {
+    const e = eroaDeG(X.g);
+    if (e > T.eroa) out.gravedad = { nivel: 'sello', titulo: 'Insuficiencia mitral masiva',
+      texto: `Orificio de ${c2(e)} cm², más de ${c2(T.eroa, 1)}: PAM ${R.pam}, IC ${c2(R.ic, 1)}, PCP ${R.pcp}. La ficha solo dice que la IM aguda amenaza la vida.`,
+      cita: C.papilar, origen: 'ficha · p. 38 (amenaza la vida) · el orificio y las cifras: ilustrativo', deshabilita: VOL };
+    else if (e >= T.eroaAviso) out.gravedad = { nivel: 'aviso', titulo: 'En el tope del orificio',
+      texto: `Orificio de ${c2(e)} cm²: el modelo llega a ${c2(T.eroa, 1)}; por encima, la IM ya es masiva.`, origen: 'ilustrativo (los cm²). La fuente solo da «insuficiencia mitral aguda» (p. 38)', bajo: '#shv-dock-panel .deslizador' };
+  } else if (tipo === 'septo') {
+    const c = civDeG(X.g);
+    if (c >= T.civ - 1e-9) out.gravedad = { nivel: 'sello', titulo: 'Cortocircuito masivo: colapso',
+      texto: `Orificio de ${c2(c)} cm²: Qp/Qs ${c2(R.qpqs, 1)}, PAM ${R.pam}, IC ${c2(R.ic, 1)}. El pulmón recibe ${c2(R.qpqs, 1)} veces lo que sale por la aorta.`,
+      cita: C.septo, origen: 'ficha · p. 38 (desvía flujo de la circulación sistémica) · el orificio y las cifras: ilustrativo', deshabilita: VOL };
+    else if (c >= T.civAviso) out.gravedad = { nivel: 'aviso', titulo: 'Cerca del cortocircuito masivo',
+      texto: `Orificio de ${c2(c)} cm²: Qp/Qs ${c2(R.qpqs, 1)}; el sello llega con ${c2(T.civ, 1)} cm².`, origen: 'ilustrativo (los cm²). La fuente solo da «gran shunt izquierda-derecha» (p. 38)', bajo: '#shv-dock-panel .deslizador' };
+  } else if (tipo === 'vd') {
+    const ees = eesVdDeG(X.g);
+    if (ees <= 0.1 + 1e-9) out.gravedad = { nivel: 'sello', titulo: 'VD sin fuerza',
+      texto: `Ees del VD al ${Math.round(ees * 100)} % de la normal: PVC ${R.pvc}, PCP ${R.pcp}, IC ${c2(R.ic, 1)}. Por debajo, el modelo ya no es un paciente.`,
+      cita: C.vd, origen: 'ficha · p. 40 (la dirección: sube la PVC) · el 10 % y las cifras: ilustrativo', deshabilita: VOL };
+    else if (X.g >= T.vdGAviso) out.gravedad = { nivel: 'aviso', titulo: 'Cerca del límite del VD',
+      texto: `Ees del VD al ${Math.round(ees * 100)} % de la normal: el modelo llega al 10 %.`, origen: 'ilustrativo (el 10 %). La fuente solo da la dirección (p. 40)', bajo: '#shv-dock-panel .deslizador' };
   }
   // 1b) el pulmón encharcado: con el edema por encima de 1.000 mL y la SpO₂ cayendo, el paciente no lo aguanta sin ventilar
   if (R.edema >= T.edemaSello) out.edema = { nivel: 'sello', titulo: 'Edema de pulmón',

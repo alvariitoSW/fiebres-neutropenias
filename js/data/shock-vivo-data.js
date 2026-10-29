@@ -1,7 +1,7 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
-import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0 } from '../modules/libros/shock-vivo/soporte.mjs';
+import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, eroaDeG, eesVdDeG, liquidosDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
 export { gDePosparo, horasDePosparo, POSPARO_H };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
@@ -58,6 +58,10 @@ export const C = {
   csHemo: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos', p: 40 },
   csExc: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-excepciones', sitio: 'Excepciones', p: 40 },
   papilar: { f: 'mc-cardiogenico-fisio', id: 'mc-papilar', sitio: 'Rotura del papilar', p: 38 },
+  septo: { f: 'mc-cardiogenico-fisio', id: 'mc-septo-rotura', sitio: 'Rotura del septo', p: 38 },
+  fig161: { f: 'mc-cardiogenico-fisio', id: 'mc-fig-16-1', sitio: 'Fig. 16.1', p: 38 },
+  roturas24: { f: 'mc-cardiogenico-fisio', id: 'mc-roturas-24h', sitio: 'Las roturas: primeras 24 h', p: 38 },
+  vd: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-vd', sitio: 'Fallo del corazón derecho', p: 40 },
   f162: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos (Fig. 16.2)', p: 40 },
   obstr: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-obstructivo', sitio: 'Shock obstructivo', p: 39 },
   t162: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-2', sitio: 'Tabla 16.2', p: 42 },
@@ -132,10 +136,19 @@ export const PACIENTES = [
   // La Hb del caso se toma sin pérdida; la FR es la de una paciente ventilada y la T la de quien se mantiene ≤37,5 °C (p. 65)
   { k: 'virginia', nombre: 'Virginia', chip: 'posparo', tipo: 'posparo', peso: 64, edad: 58, sexo: 'mujer', hb: 12.6, fr: 16, t: 36.8, obj: 'marino-21-4',
     rec: { esc: 'posparo', g: POSPARO_G0, hb: 12.6 }, linea: '58 años, 64 kg · fibrilación ventricular extrahospitalaria, primer choque a los 6 min · hora 0 tras la RCE' },
+  // Benito, Fermín y Remedios (b3-paso4 g3): los tres del infarto con su mando de gravedad propio (soporte.mjs: RECETA_*).
+  // Edad, peso y hora: del caso; FR, T y Hb, ilustrativos (FR alta por el edema; T normal)
+  { k: 'benito', nombre: 'Benito', chip: 'rotura del papilar', tipo: 'papilar', peso: 78, edad: 66, sexo: 'varón', hb: 14, fr: 28, t: 36.8, obj: 'marino-16-2',
+    rec: RECETA_BENITO, linea: '66 años, 78 kg · IAM · hora 14 · soplo nuevo y SpO₂ baja' },
+  { k: 'fermin', nombre: 'Fermín', chip: 'infarto del VD', tipo: 'vd', peso: 80, edad: 70, sexo: 'varón', hb: 14, fr: 18, t: 36.7, obj: 'marino-16-2',
+    rec: RECETA_FERMIN, linea: '70 años, 80 kg · IAM inferior con afectación del VD · hemodinámica, hora 2' },
+  { k: 'remedios', nombre: 'Remedios', chip: 'rotura del septo', tipo: 'septo', peso: 62, edad: 74, sexo: 'mujer', hb: 13, fr: 26, t: 36.6, obj: 'marino-16-2',
+    rec: RECETA_REMEDIOS, linea: '74 años, 62 kg · IAM anterior · hora 20 · soplo holosistólico nuevo con frémito' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
     rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
 ];
 // La gravedad de cada paciente, con nombre (el mando mueve la «g» del escenario del motor)
+const coma2 = (x, d = 2) => (+x).toFixed(d).replace('.', ',');
 export const GRAVEDAD = {
   hemo: { min: 0, max: 1, paso: 0.01, texto: (g, pac) => { const pct = Math.round(g * 42), ml = Math.round(pct / 100 * mlKg(pac) * pac.peso / 50) * 50; return [`${pct} % de la volemia`, `≈ ${ml.toLocaleString('es-ES')} mL de ${(mlKg(pac) * pac.peso / 1000).toFixed(1).replace('.', ',')} L · clase ${clase(pct)}`]; }, nota: 'Sangre perdida (Tabla 15.1; 66 mL/kg en el varón, p. 21)', cita: C.t151 },
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
@@ -144,6 +157,13 @@ export const GRAVEDAD = {
   // el mando de gravedad es el reloj desde la RCE (horas): la Ees se recupera con él; la curva, ilustrativa; el 72, de la p. 65
   posparo: { min: 0, max: POSPARO_H, paso: 1, horas: true, texto: (g) => [`${Math.round(horasDePosparo(g))} h tras la RCE`, `contractilidad del VI al ${Math.round(100 * (0.3 / 3.1) ** g)} %`],
     nota: 'Horas desde la recuperación de la circulación: el aturdimiento suele resolverse en 72 h (p. 65); la forma de la curva, ilustrativa', cita: C.posparo },
+  // Los tres del infarto: el deslizador mueve una pieza del motor (soporte.mjs); el fallo del VI queda como llega el paciente
+  papilar: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio mitral ${coma2(eroaDeG(g))} cm²`, `${eroaDeG(g) >= 0.5 ? 'valva en flail' : 'insuficiencia mitral moderada'} · tope ${coma2(EROA_TOPE,1)} cm²`],
+    nota: 'Orificio de la mitral: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.papilar },
+  vd: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VD al ${Math.round(100 * eesVdDeG(g))} % de la normal`, `+${liquidosDeG(g).toLocaleString('es-ES')} mL de líquidos`],
+    nota: 'Contractilidad del VD (de la normal) y líquidos: del modelo; la ficha (p. 40) da la dirección', cita: C.vd },
+  septo: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio del septo ${coma2(civDeG(g))} cm²`, 'cortocircuito VI → VD'],
+    nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.septo },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -154,7 +174,7 @@ export const claseClinica = (R) => R.pas < 70 || R.fc > 140 ? 'IV' : R.pas < 90 
 
 // ---------------------------------------------------------------- soporte: para quién (p. 45, 48)
 export function indicacion(pac, tipoAparato) {
-  if (pac.tipo === 'cardio') return { ok: true };
+  if (pac.tipo === 'cardio' || pac.tipo === 'papilar' || pac.tipo === 'septo') return { ok: true };   // el soporte, para el cardiogénico refractario (p. 45)
   if (pac.k === 'joaquin' && tipoAparato === 'balon') return { ok: false, sello: 'Contraindicado', txt: 'Disección aórtica: el balón está contraindicado (p. 45).', cita: C.iabp };
   if (pac.k === 'joaquin' && tipoAparato === 'impella') return { ok: false, sello: 'Contraindicado', txt: 'Valvulopatía aórtica: el Impella está contraindicado (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50).', cita: C.impellaEf };
   return { ok: false, sello: 'No indicado', txt: 'La fuente reserva el soporte mecánico para el shock cardiogénico refractario (p. 45). En este paciente no se pone.', cita: C.mcs };
@@ -163,7 +183,7 @@ export function indicacion(pac, tipoAparato) {
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 // Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
-export const TOPES = { horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+export const TOPES = { eroa: EROA_TOPE, eroaAviso: 0.7, civ: CIV_TOPE, civAviso: 0.5, vdG: 0.99, vdGAviso: VD_G_RECETA + 0.01, horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
 // Sobrecarga: la PCP en el techo de la ficha, o la PVC por encima de 12 habiendo subido ≥ 4 sobre la de entrada y el pulmón ya
 // encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
 export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
@@ -184,10 +204,11 @@ export function nombreEstado(R, X) {
     return R.aoAbre <= 2 ? 'ecmo-cerrada' : R.pcp >= 22 ? 'ecmo-carga' : 'ecmo';
   }
   if (hipertensionVaso(R, X)) return 'hipertension-vaso';
-  if (sobrecarga(R)) return 'sobrecarga';
+  // el papilar y el septo llegan con la PCP en 20-30 sin que nadie haya dado volumen: es su cuadro, no una sobrecarga
+  const t = X.pac.tipo, llegaAsi = (t === 'papilar' || t === 'septo') && X.infundido.cris + X.infundido.sangre === 0;
+  if (!llegaAsi && sobrecarga(R)) return 'sobrecarga';
   const tr = topeRepos(R, X);
   if (tr != null && X.infundido.cris + X.infundido.sangre >= tr) return 'hemo-tope';
-  const t = X.pac.tipo;
   // la hemorragia se nombra por lo que enseña el paciente (FC y PA de la Tabla 15.1), no solo por lo perdido
   if (t === 'hemo') {
     if (X.infundido.cris > 0) return 'hemo-salino';
@@ -198,6 +219,9 @@ export function nombreEstado(R, X) {
   if (t === 'septico') { if (X.ajuste.na >= 10) return 'septico-na'; return R.irvs >= 25 && R.pam >= 65 ? 'sin-shock' : 'septico'; }
   if (t === 'cardio') { if (R.pam >= 65 && R.ic >= 2.2) return 'sin-shock'; return R.pcp < 18 ? 'cardio-pcp-baja' : R.pcp <= 20 ? 'cardio-pcp-optima' : 'cardio'; }
   if (t === 'posparo') return X.g <= 0.005 ? 'posparo-72' : 'posparo';
+  if (t === 'papilar') return 'rotura-papilar';
+  if (t === 'vd') return R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'iam-vd';
+  if (t === 'septo') return R.qpqs >= 1.2 ? 'rotura-septo' : R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'cardio';
   if (t === 'tapon') return Math.abs(R.pvc - R.pcp) > 3 ? 'sin-shock' : 'tapon';
   if (t === 'tep') return X.infundido.cris >= TOPES.tepMl ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
   return t;
@@ -276,6 +300,24 @@ export const ESTADOS = {
       { t: (R) => `Sube la presión de llenado del que falla: PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20' : ''}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo },
       { t: (R) => `La arteriola se cierra: IRVS ${R.irvs} (Fig. 16.2).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.f162 },
       { t: 'Con la PCP por encima de 18-20 el pulmón se encharca: mira las gotas en el pulmón y la SpO₂.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' }] },
+  'rotura-papilar': { tit: 'Rotura del músculo papilar', frase: (R) => `La sangre vuelve a la aurícula en cada sístole: IC ${c1(R.ic)}, PCP ${R.pcp} y SpO₂ ${R.spo2} %. Es una insuficiencia mitral aguda: el 7 % de los shocks del infarto, y llega en las primeras 24 h, no tarde.`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'El músculo papilar roto suelta la valva mitral: en la sístole la valva se va a la aurícula y la válvula no cierra. Es una insuficiencia mitral aguda, y amenaza la vida.', s: ['#cor-mitral'], c: C.papilar },
+      { t: (R) => `Mira el chorro rojo: en cada sístole parte de la sangre del VI vuelve a la aurícula. Fracción regurgitante ${R.frmit} %.`, s: ['.cc-chorro', '[data-fila="frmit"]'], c: C.papilar, org: 'la fracción y su tamaño: modelo (fisiología general)' },
+      { t: (R) => `La aurícula izquierda recibe ese chorro y la PCP se dispara: ${R.pcp}, a la altura de la diastólica de la arteria pulmonar (${R.papd}).`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.pcpDiast, org: 'el mecanismo: fisiología general · la relación PCP-diastólica: ficha (cap. 8) · cuánto: modelo' },
+      { t: (R) => `El pulmón se encharca: SpO₂ ${R.spo2} %. Con la PCP por encima de 18-20 el líquido pasa al alvéolo.`, s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' },
+      { t: (R) => `El gasto cae (IC ${c1(R.ic)}, por debajo de 2,2) aunque el VI se vacía: parte de lo que sale va hacia atrás. Por eso aparece en las primeras 24 h y no es una complicación tardía.`, s: ['[data-fila="ic"]'], c: C.roturas24 }] },
+  'iam-vd': { tit: 'Infarto del ventrículo derecho', frase: (R) => `Falla el derecho: la PVC (${R.pvc}) sube más que la PCP (${R.pcp}) y el VD dilatado empuja el tabique. FEVI ${R.fevi} %, conservada. Tiene menos mortalidad que el fallo del VI.`, org: 'ficha · p. 40 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: (R) => `El VD infartado no empuja: se dilata (su volumen telediastólico es ${coma2(R.vdvi, 1)} veces el del VI) y la PVC sube: ${R.pvc}.`, s: ['#cor-vd', '[data-fila="pvc"]'], c: C.vd, org: 'cuánto: modelo' },
+      { t: (R) => `La PCP no sube igual: ${R.pcp}. Lo que lo identifica es el cociente PVC/PCP (${coma2(R.pvc / Math.max(1, R.pcp), 1)}), no una cifra suelta.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vd },
+      { t: (R) => `El VI casi no falla: FEVI ${R.fevi} %, conservada. Un VD dilatado con el VI normal es otro rasgo del fallo derecho.`, s: ['[data-fila="fevi"]', '#cor-cav'], c: C.vd, org: 'el valor: modelo' },
+      { t: (R) => `El VD dilatado empuja el tabique hacia la cámara del VI: el VI se llena menos y el gasto cae (IC ${c1(R.ic)}).`, s: ['#cor-tabique', '[data-fila="ic"]'], c: C.vd },
+      { t: 'El shock por fallo del VD tiene menos mortalidad que el del VI. Los líquidos del panel son una carga de volumen del modelo; el diagnóstico y el manejo del fallo derecho están en el capítulo 18 y aquí no se simulan.', s: ['#shv-dock'], c: C.vd, org: 'los líquidos: ilustrativo (la fuente no da la cifra)' }] },
+  'rotura-septo': { tit: 'Rotura del tabique interventricular', frase: (R) => `Parte de cada latido vuelve al VD: Qp/Qs ${coma2(R.qpqs, 1)}, saturación ${R.satAd} % en la AD y ${R.satAp} % en la AP. El pulmón se inunda y la aorta se queda sin él (IC ${c1(R.ic)}).`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'El tabique roto abre un paso entre el VI, de presión alta, y el VD, de presión baja: en cada latido pasa sangre de izquierda a derecha. Es un gran shunt izquierda-derecha.', s: ['#cor-tabique'], c: C.septo, org: 'la dirección: ficha · por qué va a la derecha (presión): fisiología general' },
+      { t: (R) => `El VD recibe el doble: Qp/Qs ${coma2(R.qpqs, 1)}. Por el pulmón pasa ${coma2(R.qpqs, 1)} veces lo que sale por la aorta.`, s: ['[data-fila="qpqs"]'], c: C.septo, org: 'el cociente: modelo (su definición, fisiología general)' },
+      { t: (R) => `Esa sangre llega oxigenada: la saturación sube de ${R.satAd} % en la AD a ${R.satAp} % en la AP. El salto de saturación es la huella del cortocircuito.`, s: ['[data-fila="satad"]', '[data-fila="satap"]'], c: C.septo, org: 'el salto: fisiología general · el umbral numérico: la fuente no lo dice · las cifras: modelo' },
+      { t: (R) => `El pulmón se inunda: PAP ${R.paps}/${R.papd} y PCP ${R.pcp}.`, s: ['#tr-pap', '#cor-pulmon'], c: C.septo, org: 'cuánto: modelo' },
+      { t: (R) => `La aorta se queda sin ese flujo: IC ${c1(R.ic)}, PAM ${R.pam}. La FEVI (${R.fevi} %) cuenta lo que el VI expulsa a la aorta y al VD.`, s: ['[data-fila="ic"]', '[data-fila="fevi"]'], c: C.septo, org: 'la FEVI por volúmenes: fisiología general' }] },
   tapon: { tit: 'Taponamiento', frase: (R) => `El líquido del saco no deja llenarse al corazón: PVC ${R.pvc} y PCP ${R.pcp} se igualan. La eco lo separa del fallo del VD.`, org: 'ficha · p. 3; cap. 18, p. 4',
     guia: [{ t: 'La disección tipo A puede propagarse hacia atrás y sangrar al pericardio: taponamiento.', s: ['#cor-saco'], c: C.disec },
       { t: (R) => `El líquido no deja llenarse al corazón: shock obstructivo, con el patrón del cardiogénico (PVC ${R.pvc}, IC ${c1(R.ic)}, IRVS ${R.irvs}).`, s: ['[data-fila="pvc"]', '[data-fila="ic"]'], c: C.t141 },

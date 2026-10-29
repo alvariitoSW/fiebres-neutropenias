@@ -71,7 +71,7 @@ export const MODELOS = {
         estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
     // El shock a pie de cama (bloque 3): Explorar | ¿Qué shock es? | Mayéutica
     'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar', mayeutica: '#shv-modo-may' },
-        estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
+        estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs', 'rotura-papilar', 'iam-vd', 'rotura-septo'] },
     // El corazón eléctrico: el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },

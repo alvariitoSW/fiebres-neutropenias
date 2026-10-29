@@ -113,6 +113,23 @@ const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
 // con él el motor da IC 0,9 y PAM ≈ 42 (colapso); el motor no deja pasar de ahí
 export const RECETA_ROTURA_SEPTO = { esc: 'fallo', g: 0.7, civ: 0.3, hb: 14 };
 export const CIV_TOPE = 0.7, CIV_COLAPSO = 1.0;
+// Los tres estados del infarto con el mando de gravedad propio (b3-paso4 g3): el deslizador (g de 0 a 1) mueve una pieza del motor
+// y el fallo del VI (gEsc) queda fijo. Todo ilustrativo salvo la dirección (Marino cap. 16, p. 38 y 40); medido con
+// autonomo/bloques/b3/herramientas/g3-estados-cifras.mjs
+//  · papilar (Benito): orificio mitral de 0,3 a 1,0 cm²; el 0,8 es el que ya usa el motor (EROA_TOPE): por encima, sello
+//  · vd (Fermín): Ees del VD de 0,6 (g 0) a 0,10 (g 1) de la normal; con g 0,9 (0,15) van los 1.250 mL de líquidos de RECETA_IAM_VD
+//    (la receta del M0c); por debajo de 0,1 el motor no es un paciente. Los líquidos crecen con g hasta g 0,9
+//  · septo (Remedios): orificio de 0 a CIV_COLAPSO (1,0 cm²); CIV_TOPE (0,7) es el del sello
+export const EROA_MIN = 0.3, EROA_MAX = 1.0, EROA_TOPE = 0.8;
+export const VD_G_RECETA = 0.9, VD_EES_0 = 0.6, VD_EES_1 = 0.1, VD_LIQUIDOS = 1250;
+const red2 = (x) => Math.round(x * 100) / 100;
+export const eroaDeG = (g) => red2(EROA_MIN + (EROA_MAX - EROA_MIN) * g);
+export const eesVdDeG = (g) => red2(VD_EES_0 - (VD_EES_0 - VD_EES_1) * g);
+export const liquidosDeG = (g) => Math.round(VD_LIQUIDOS * Math.min(1, g / VD_G_RECETA) / 25) * 25;
+export const civDeG = (g) => red2(CIV_COLAPSO * g);
+export const RECETA_BENITO = { esc: 'fallo', gEsc: 0.75, mando: 'papilar', g: 0.71, hb: 14 };       // eroa 0,80
+export const RECETA_FERMIN = { esc: 'fallo', gEsc: 0.05, mando: 'vd', g: VD_G_RECETA, hb: 14 };       // eesVd 0,15 + 1.250 mL
+export const RECETA_REMEDIOS = { esc: 'fallo', gEsc: 0.7, mando: 'septo', g: 0.3, hb: 14 };           // civ 0,3
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
 // Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
@@ -130,7 +147,12 @@ export function prepararMotor(rec, segundos = 40) {
   m.correr(12);
   m.p.kEdema = rec.kEdema ?? K_EDEMA; m.p.pEdema = rec.pEdema ?? P_EDEMA;
   m.p.succionVi = SUCCION_VI; m.p.succionVen = SUCCION_VEN;
-  ESC[rec.esc]?.aplicar(m, rec.g);
+  ESC[rec.esc]?.aplicar(m, rec.gEsc ?? rec.g);
+  if (rec.mando) {                            // el mando de gravedad de los estados del infarto (ver arriba)
+    if (rec.mando === 'papilar') rec = { ...rec, eroaMitral: eroaDeG(rec.g) };
+    else if (rec.mando === 'vd') rec = { ...rec, eesVd: eesVdDeG(rec.g), volemia: liquidosDeG(rec.g) };
+    else if (rec.mando === 'septo') rec = { ...rec, civ: civDeG(rec.g) };
+  }
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
   if (rec.volemia) m.s.vven += rec.volemia;
   // eesVd: la Ees del VD como fracción de la normal (1 = normal; 0,5 = la mitad). Un VD infartado o aturdido (cap. 16, p. 40:
@@ -205,7 +227,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     // La PVC no pasa a la PCP si el VD no falla (fisiología general; solo el TEP y el taponamiento las igualan o la invierten,
     // ficha cap. 18 p. 4): el motor sube la aurícula derecha con el volumen y en la sepsis la pasaba (PVC 22-24 con PCP 19).
     // Con el VD que falla (rec.eesVd < 1: IAM del VD) no se toca: ahí la PVC pasa a la PCP (cap. 16, p. 40)
-    const vdFalla = rec.eesVd != null && rec.eesVd < 1;
+    const vdFalla = rec.mando === 'vd' || (rec.eesVd != null && rec.eesVd < 1);
     if (rec.esc !== 'tep' && rec.esc !== 'derrame' && !vdFalla && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
     // lo asistido y lo no asistido (el latido que se cierra es el nLatido − 1; su teledistólica viene de la diástole del anterior)
     const nCerrado = m.s.nLatido - 1, conBalon = ajuste.soporte === 'balon' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'balon');

@@ -97,6 +97,53 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     await pest('grav'); await grav(0); const marca = await p.evaluate(() => document.querySelector('#shv-raiz [data-fila="pa"]')?.innerText || ''); ok(/75/.test(marca), `posparo: la PAM se compara con ≥75 (${marca.replace(/\s+/g, ' ').trim().slice(0, 50)})`);
 }
 
+// ───────── A3. Los tres del infarto (b3-paso4 g3): Benito (rotura del papilar), Fermín (infarto del VD), Remedios (rotura del septo)
+{
+    const esp = ms => espera(ms), entre = (v, a, b) => v >= a && v <= b;
+    const celda = k => p.evaluate(k => document.querySelector(`#shv-raiz [data-fila="${k}"]`)?.innerText.replace(/\s+/g, ' ') || '', k);
+    // Benito: IM aguda; el chorro del corte, PCP a la altura de la diastólica de la AP, FR ≥50 %, SpO₂ baja
+    await abrir('rotura-papilar'); await esp(1800);
+    let r = await S();
+    ok(await vista() && r.pac === 'benito' && r.estado === 'Rotura del músculo papilar', `rotura-papilar: abre Benito, estado «${r.estado}»`);
+    ok(r.ic < 2.2 && r.pcp >= 25 && r.pcp <= r.papd && r.frmit >= 50 && r.spo2 >= 78 && r.spo2 <= 90 && r.pam >= 55, `Benito: IC ${r.ic} PCP ${r.pcp} ≤ PAPd ${r.papd} FR mitral ${r.frmit} % SpO₂ ${r.spo2} PAM ${r.pam}`);
+    // el chorro se pinta solo en la sístole (y con «reducir movimiento» el fotograma puede ser de diástole): se exige el dato (flail) y, con movimiento, verlo
+    const eroa = await p.evaluate(() => window.__shvPruebas().cab.m.p.eroaMitral);
+    let chorro = false; for (let i = 0; i < 80 && !chorro && !REDUCIDO; i++) { chorro = await p.evaluate(() => !!document.querySelector('#shv-raiz .cc-chorro')); if (!chorro) await p.waitForTimeout(90); }
+    ok(eroa >= 0.5 && (chorro || REDUCIDO), `Benito: orificio ${eroa} cm² (flail ≥0,5) y el corte dibuja el chorro de la insuficiencia mitral${REDUCIDO ? ' (con «reducir movimiento» solo el dato)' : ''}`);
+    ok(/FR mitral/.test(await celda('frmit')) && /FEVI/.test(await celda('fevi')), 'Benito: las celdas FR mitral y FEVI en el monitor');
+    posible(r, 'Benito 0,80 cm²'); await limpio('Benito'); await foto('benito');
+    await pest('grav'); await desplegar();
+    ok(entre(r.pam, 55, 70) && await p.evaluate(() => /0,80 cm²/.test(document.getElementById('shv-o-grav').innerText)), 'Benito: el mando dice «orificio mitral 0,80 cm²» y la PAM aguanta');
+    await grav(100); r = await S(); posible(r, 'Benito orificio 1,0 cm²');
+    ok(r.sellos.some(t => /Insuficiencia mitral masiva/.test(t)), `Benito 1,0 cm²: sello «Insuficiencia mitral masiva» (${r.sellos.join(' | ')})`);
+    await pest('vol'); ok(/3\/3/.test(await apagados('#shv-dock-panel [data-vol]')), 'Benito 1,0 cm²: los botones de volumen se apagan'); await limpio('Benito tope'); await foto('benito-tope');
+    await pest('grav'); await grav(71); r = await S(); ok(!r.sellos.some(t => /masiva/.test(t)), 'Benito: de vuelta a 0,80 cm² el sello se va');
+    await pest('vol'); await clic('#shv-dock-panel [data-vol="250"]'); await esp(900); r = await S();
+    ok(r.estado === 'Sobrecarga de volumen' && r.sellos.some(t => /Sobrecarga/.test(t)), `Benito: con el primer bolo, sello de sobrecarga (PCP ${r.pcp})`); posible(r, 'Benito +250');
+    // Fermín: falla el derecho; PVC > PCP, FEVI conservada, VD dilatado, líquidos rotulados
+    await abrir('iam-vd'); await esp(1800); r = await S();
+    ok(r.pac === 'fermin' && r.estado === 'Infarto del ventrículo derecho', `iam-vd: abre Fermín, estado «${r.estado}»`);
+    ok(r.pvc > r.pcp && r.pvc >= 12 && r.pvc <= 18 && r.fevi >= 50 && r.vdvi >= 1 && r.ic < 2.2 && r.ic >= 1.6 && r.pcp <= 12, `Fermín: PVC ${r.pvc} > PCP ${r.pcp}, FEVI ${r.fevi} %, VD/VI ${r.vdvi}, IC ${r.ic}`);
+    posible(r, 'Fermín'); await limpio('Fermín'); await foto('fermin');
+    await pest('grav'); await desplegar();
+    ok(await p.evaluate(() => /Ees del VD al 15 % de la normal/.test(document.getElementById('shv-o-grav').innerText) && /1\.?250 mL de líquidos/.test(document.getElementById('shv-o-grav').innerText)), 'Fermín: el mando rotula la Ees (15 %) y los 1.250 mL de líquidos');
+    ok(/VD\/VI/.test(await celda('vdvi')) && /PVC\/PCP/.test(await celda('pvcpcp')), 'Fermín: las celdas VTD VD/VI y PVC/PCP');
+    await grav(0); r = await S(); ok(r.estado === 'Sin shock' && r.pvc < r.pcp + 1 && r.ic >= 2.2, `Fermín sano (Ees 60 %, sin líquidos): ${r.estado}, PVC ${r.pvc}, PCP ${r.pcp}, IC ${r.ic}`);
+    await grav(100); r = await S(); posible(r, 'Fermín Ees 10 %');
+    ok(r.sellos.some(t => /VD sin fuerza/.test(t)), `Fermín Ees 10 %: sello «VD sin fuerza» (${r.sellos.join(' | ')})`); await limpio('Fermín tope');
+    // Remedios: Qp/Qs y el salto de saturación AD → AP; FEVI que cuenta la aorta y el VD
+    await abrir('rotura-septo'); await esp(1800); r = await S();
+    ok(r.pac === 'remedios' && r.estado === 'Rotura del tabique interventricular', `rotura-septo: abre Remedios, estado «${r.estado}»`);
+    ok(r.qpqs >= 2 && r.qpqs <= 2.6 && r.satAp - r.satAd >= 20 && r.satAp >= 70 && r.satAp <= 82 && r.ic < 2.2 && r.pcp <= r.papd && r.fevi >= 28, `Remedios: Qp/Qs ${r.qpqs}, SatAD ${r.satAd} → SatAP ${r.satAp}, IC ${r.ic}, PCP ${r.pcp} ≤ PAPd ${r.papd}, FEVI ${r.fevi} %`);
+    ok(/Qp:Qs/.test(await celda('qpqs')) && /AD/.test(await celda('satad')) && /AP/.test(await celda('satap')), 'Remedios: Qp:Qs y las dos saturaciones en el monitor');
+    posible(r, 'Remedios 0,3 cm²'); await limpio('Remedios'); await foto('remedios');
+    await pest('grav'); await desplegar(); await grav(50); r = await S(); ok(!r.sellos.some(t => /colapso/i.test(t)) && r.avisos.some(t => /Cerca/.test(t)), `Remedios 0,5 cm²: aviso «Cerca del cortocircuito masivo» (${r.avisos.join(' | ')})`);
+    await grav(70); r = await S(); posible(r, 'Remedios 0,7 cm²');
+    ok(r.sellos.some(t => /Cortocircuito masivo: colapso/.test(t)) && r.qpqs >= 3, `Remedios 0,7 cm²: sello «colapso», Qp/Qs ${r.qpqs}`);
+    await grav(100); r = await S(); posible(r, 'Remedios 1,0 cm²'); ok(r.pam >= 35 && r.pam < 60, `Remedios 1,0 cm²: PAM ${r.pam} (colapso)`); await limpio('Remedios tope'); await foto('remedios-tope');
+    await pest('far'); await limpio('Remedios farmacos');
+}
+
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
 for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
@@ -169,7 +216,7 @@ for (const [k, n] of [['impella', 8], ['balon', 5], ['ecmo', 5]]) {
     await clic('#shv-esc-pest [data-plano="recorrido"]'); await espera(500); await limpio('recorrido ' + k);
 }
 // ───────── E. Explicación guiada: señala y cada cita llega a un párrafo que existe
-for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo']) {
+for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo']) {
     await abrir(k); await espera(900); await clic('#shv-btn-guia'); await espera(500);
     let pasos = 0, sinSenal = 0, citasRotas = [];
     for (; pasos < 8; pasos++) {

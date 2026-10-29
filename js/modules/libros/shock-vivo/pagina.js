@@ -114,6 +114,7 @@ function leer() {
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
     imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), picoNo: L.picoNo != null ? Math.round(L.picoNo) : null, teleNo: L.teleNo != null ? Math.round(L.teleNo) : null, teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
+    fevi: Math.round(u.feTotal * 100), frmit: Math.round(u.fr * 100), qpqs: +u.qpqs.toFixed(2), satAd: Math.round(u.satAd * 100), satAp: Math.round(u.satAp * 100), vdvi: +(u.edvD / Math.max(1, u.edv)).toFixed(2),
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
@@ -150,6 +151,13 @@ const FILAS_MON = [
   { k: 'fr', canal: 'co2', cls: 'c-co2', et: ['EtCO₂', 'FR'] },
 ];
 const CALC = [{ k: 'ic', et: 'IC', u: 'L/min/m²', d: 1, cat: true }, { k: 'irvs', et: 'IRVS', u: 'UW·m²', cat: true }, { k: 'ven', et: 'ScvO₂', u: '%', cat: true }, { k: 'gap', et: 'Gap CO₂', u: 'mmHg', cat: true }];
+// Lo propio de cada estado del infarto: celdas de más bajo las del IC (el origen de cada una, al tocarla)
+const EXTRA = {
+  papilar: [{ k: 'frmit', et: 'FR mitral', u: '%', t: 'fracción regurgitante' }, { k: 'fevi', et: 'FEVI', u: '%', t: 'por volúmenes' }],
+  vd: [{ k: 'fevi', et: 'FEVI', u: '%', t: 'por volúmenes' }, { k: 'vdvi', et: 'VTD VD/VI', u: '×', d: 1, t: 'volumen del VD sobre el del VI' }, { k: 'pvcpcp', et: 'PVC/PCP', u: '', d: 1, t: 'cociente' }],
+  septo: [{ k: 'qpqs', et: 'Qp:Qs', u: '', d: 1, t: 'flujo pulmonar sobre sistémico' }, { k: 'satad', et: 'SatO₂ AD', u: '%', t: 'sangre venosa mixta' }, { k: 'satap', et: 'SatO₂ AP', u: '%', t: 'tras el cortocircuito' }, { k: 'fevi', et: 'FEVI', u: '%', t: 'a la aorta y al VD' }],
+};
+const calcDe = () => [...CALC, ...(EXTRA[est.pac.tipo] || [])];
 function canalesVisibles() { return est.canales === 'cabecera' ? ['ecg', 'art', 'pleth', 'co2'] : CANALES.map((c) => c.k); }
 function pintarCifras() {
   const tap = est.tapado, vis = new Set(canalesVisibles());
@@ -169,10 +177,10 @@ function pintarCifras() {
   }), { tapado: tap });
   const T = D.OBJETIVOS[tablaActual()];
   $('calc').hidden = est.canales === 'cabecera';
-  parchear($('calc'), CALC.map((p) => {
-    const v = R[p.k], m = tap ? { cls: '', html: '' } : marca(p.k, v);
+  parchear($('calc'), calcDe().map((p) => {
+    const v = p.k === 'satad' ? R.satAd : p.k === 'satap' ? R.satAp : p.k === 'pvcpcp' ? +(R.pvc / Math.max(1, R.pcp)).toFixed(1) : R[p.k], m = tap ? { cls: '', html: '' } : marca(p.k, v);
     const et = p.k === 'ven' ? T.venosa : p.et;
-    let t = T.filas[p.k] ? 'obj. ' + T.filas[p.k][0] : 'sin objetivo en esta tabla';
+    let t = p.t ?? (T.filas[p.k] ? 'obj. ' + T.filas[p.k][0] : 'sin objetivo en esta tabla');
     if (p.k === 'ven' && tablaActual() === 'umi-sepsis-6h') t = 'obj. ≥70 % · Marino >50 % ⚖';
     if (p.k === 'ic' && conSoporte()) t = 'total: bomba + corazón';
     return `<button type="button" class="celda ${m.cls}" data-fila="${p.k}" title="${t}"><span class="k"><span>${et}</span>${m.html}</span><span class="g">${tap ? '?' : coma(v, p.d || 0)}<small>${p.u}</small></span><span class="t">${t}</span></button>`;
@@ -206,6 +214,13 @@ const EXPLICA = {
   irvs: ['IRVS = (PAM − PVC) / IC. Objetivo 25-30 solo en la Tabla 16.2. (Aquí la resistencia basal del modelo sale algo alta: valor ilustrativo.)', D.C.t162],
   ven: ['ScvO₂ >50 % (Tabla 14.5); ≥70 % en el Manual UMI para el séptico (ver la nota). En la sepsis engaña: sube aunque falte perfusión.', D.C.scvo2],
   gap: ['Gap de PCO₂ <6 mmHg; solo depende del flujo (p. 10).', D.C.gap],
+  frmit: ['Fracción regurgitante: la parte de lo que el VI expulsa que vuelve a la aurícula. Cifra del modelo (fisiología general); la ficha solo dice «insuficiencia mitral aguda» (p. 38).', D.C.papilar],
+  fevi: ['FEVI por volúmenes (telediastólico menos telesistólico): cuenta todo lo que sale del VI, por la aorta y por donde sea (la aurícula o el VD). Fisiología general; la cifra, del modelo. En el fallo del VD la ficha la da como normal (p. 40).', D.C.vd],
+  vdvi: ['Volumen telediastólico del VD sobre el del VI: sube cuando el VD se dilata. La ficha dice «VD dilatado» (p. 40) sin cifra; el sano del modelo ronda 1,2. Cifra: modelo.', D.C.vd],
+  pvcpcp: ['Cociente PVC/PCP: sube cuando falla el VD (p. 40). La ficha no da el valor; las cifras, del modelo.', D.C.vd],
+  qpqs: ['Qp:Qs: flujo pulmonar sobre flujo sistémico; 1 sin cortocircuito. La ficha solo dice «gran shunt izquierda-derecha» (p. 38). El cociente es del modelo (su definición, fisiología general).', D.C.septo],
+  satad: ['Saturación de la sangre venosa mixta que llega a la aurícula derecha. Cifra del modelo (fisiología general).', D.C.septo],
+  satap: ['Saturación en la arteria pulmonar: sube respecto a la AD porque llega sangre oxigenada del VI. El salto es la huella del cortocircuito; el umbral numérico no está en la ficha. Cifra: modelo.', D.C.septo],
 };
 $('monitor').addEventListener('click', (ev) => {
   const c = ev.target.closest('[data-fila]'); if (!c || est.tapado) return;
@@ -432,7 +447,7 @@ const topeVisto = {};
 function aplicarTopes(forzar) {
   if (!cab?.lectura || !R) return;
   const hay = est.modo === 'qs' ? {} : calcularTopes(R, ctxX(), est.horas, horaTxt);
-  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj']) {
+  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj', 'gravedad']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (!forzar && topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
@@ -646,7 +661,7 @@ nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock();
 reanudar();
 
 // Abrir en un estado de la tabla F de la lista del bloque (hemo, septico, cardio, tapon, tep, balon, impella, ecmo, qs)
-const ESTADO_PAC = { posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
+const ESTADO_PAC = { 'rotura-papilar': 'benito', 'iam-vd': 'fermin', 'rotura-septo': 'remedios', posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
 function abrirEstado(clave) {
   if (!clave) { reanudar(); medirDock(); return; }
   setModo(clave === 'qs' ? 'qs' : 'explorar');
@@ -654,7 +669,7 @@ function abrirEstado(clave) {
   const p = D.PACIENTES.find((x) => x.k === ESTADO_PAC[clave]); if (!p) { reanudar(); return; }
   const ap = ['balon', 'impella', 'ecmo'].includes(clave) ? clave : 'no';
   est.aparato = ap; est.vista = ap === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro';
-  est.pest = { posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
+  est.pest = { 'rotura-papilar': 'grav', 'iam-vd': 'grav', 'rotura-septo': 'grav', posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
   nuevoPaciente(p, { ajuste: ap === 'no' ? {} : { soporte: ap } });
   if (clave === 'tapon') est.vista = 'eco';
   if (monitor.enclavado !== (clave === 'cardio')) { monitor.enclavar(clave === 'cardio'); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); }
