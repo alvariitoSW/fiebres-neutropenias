@@ -21,7 +21,7 @@ export const W = 360, H = 270;
 export function estadoCorte(cab) {
   const m = cab.m, s = m.s, u = cab.lectura?.u;
   return { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vMit: s.vMit, vTri: s.vTri, vAo: s.vAo, septo: aplanamientoSeptal(s),
-    liquidoPeri: s.liquidoPeri ?? m.p.liquidoPeri ?? 0, dVci: modeloVci(u?.pvc ?? 4).dmax, flail: (m.p.eroaMitral || 0) >= 0.5, mioVi: m.p.mioVi ?? 1, mioVd: m.p.mioVd ?? 1 };
+    liquidoPeri: s.liquidoPeri ?? m.p.liquidoPeri ?? 0, dVci: modeloVci(u?.pvc ?? 4).dmax, flail: (m.p.eroaMitral || 0) >= 0.5, civ: (m.p.civ || 0) >= 0.2, mioVi: m.p.mioVi ?? 1, mioVd: m.p.mioVd ?? 1 };
 }
 
 // ---------------------------------------------------------------- los pulmones (grabado): lóbulos, cisuras, bronquios

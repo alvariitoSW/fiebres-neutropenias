@@ -127,7 +127,7 @@ export const eroaDeG = (g) => red2(EROA_MIN + (EROA_MAX - EROA_MIN) * g);
 export const eesVdDeG = (g) => red2(VD_EES_0 - (VD_EES_0 - VD_EES_1) * g);
 export const liquidosDeG = (g) => Math.round(VD_LIQUIDOS * Math.min(1, g / VD_G_RECETA) / 25) * 25;
 export const civDeG = (g) => red2(CIV_COLAPSO * g);
-export const RECETA_BENITO = { esc: 'fallo', gEsc: 0.75, mando: 'papilar', g: 0.71, hb: 14 };       // eroa 0,80
+export const RECETA_BENITO = { esc: 'fallo', gEsc: 0.65, mando: 'papilar', g: 0.5, hb: 14 };        // eroa 0,65
 export const RECETA_FERMIN = { esc: 'fallo', gEsc: 0.05, mando: 'vd', g: VD_G_RECETA, hb: 14 };       // eesVd 0,15 + 1.250 mL
 export const RECETA_REMEDIOS = { esc: 'fallo', gEsc: 0.7, mando: 'septo', g: 0.3, hb: 14 };           // civ 0,3
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';

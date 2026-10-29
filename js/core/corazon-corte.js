@@ -131,7 +131,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     <g id="${pre}-detras"></g><g id="${pre}-cav"></g><g id="${pre}-delante"></g>`;
   const $ = (k) => grupo.querySelector(`#${pre}-${k}`);
   if (!saco) $('saco-g').setAttribute('hidden', '');
-  const st = { fvi: 1, fvd: 1, fad: 1, fai: 1, septo: 0, liq: 0, mit: 1, tri: 1, ao: 0, flail: 0, dvci: 18 };
+  const st = { fvi: 1, fvd: 1, fad: 1, fai: 1, septo: 0, liq: 0, mit: 1, tri: 1, ao: 0, flail: 0, civ: 0, dvci: 18 };
   let ult = null;
 
   function pintar(e, dt = 1 / 60, quieto = false) {
@@ -140,7 +140,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     ir('fvi', cl(Math.cbrt((e.vvi ?? 120) / 120), 0.62, 1.42)); ir('fvd', cl(Math.cbrt((e.vvd ?? 130) / 130), 0.62, 1.5));
     ir('fad', cl(Math.cbrt((e.vad ?? 55) / 55), 0.7, 1.45)); ir('fai', cl(Math.cbrt((e.vai ?? 55) / 55), 0.7, 1.5));
     ir('septo', cl(e.septo ?? 0, 0, 1.35)); ir('liq', e.liquidoPeri ?? 0, quieto ? 1 : 1 - Math.exp(-dt / 0.3));
-    ir('mit', e.vMit ? 1 : 0, kv); ir('tri', e.vTri ? 1 : 0, kv); ir('ao', e.vAo ? 1 : 0, kv); ir('flail', e.flail ? 1 : 0);
+    ir('mit', e.vMit ? 1 : 0, kv); ir('tri', e.vTri ? 1 : 0, kv); ir('ao', e.vAo ? 1 : 0, kv); ir('flail', e.flail ? 1 : 0); ir('civ', e.civ ? 1 : 0);
     ir('dvci', cl(e.dVci ?? 18, 7, 28), quieto ? 1 : 1 - Math.exp(-dt / 0.4));
     const g = geometria(st, e);
     ult = g;
@@ -313,6 +313,14 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
       const o = [g.coapM[0] + 6, g.coapM[1] - 4]; let ch = '';
       for (const [dx, dy] of [[-10, -40], [2, -46], [14, -38], [-2, -30]]) ch += P(suave2([o, [o[0] + dx * 0.4, o[1] + dy * 0.45], [o[0] + dx, o[1] + dy]], 5));
       d += `<path class="cc-chorro" d="${ch}" opacity="${f1((1 - s.mit) * s.flail)}"/>`;
+    }
+    // chorro de la comunicación interventricular (CIV): en la sístole, del VI al VD a través del tabique (con su rótulo, no solo color)
+    if (s.civ > 0.3 && s.ao > 0.3) {
+      const cVi = mezcla(MB, enFraccion(g.cav, 0.5).p, 0.55), cVd = mezcla(enFraccion(g.sept, 0.38).p, enFraccion(g.libre, 0.38).p, 0.5);
+      const o = enFraccion(g.sept, 0.5).p, l = Math.hypot(cVd[0] - cVi[0], cVd[1] - cVi[1]) || 1, u = [(cVd[0] - cVi[0]) / l, (cVd[1] - cVi[1]) / l], w = [-u[1], u[0]];
+      const dd = Math.min(32, Math.hypot(cVd[0] - o[0], cVd[1] - o[1]) * 1.1); let ch = '';
+      for (const [t, k] of [[1, -9], [1.1, -2], [1, 5], [0.8, 11]]) { const fin = [o[0] + u[0] * dd * t + w[0] * k, o[1] + u[1] * dd * t + w[1] * k]; ch += P(suave2([[o[0] - u[0] * 5, o[1] - u[1] * 5], [o[0] + u[0] * dd * 0.5 + w[0] * k * 0.4, o[1] + u[1] * dd * 0.5 + w[1] * k * 0.4], fin], 5)); }
+      d += `<path class="cc-chorro" d="${ch}" opacity="${f1(s.civ * s.ao)}"/><text class="cc-rot" x="${f1(o[0] + u[0] * dd * 0.4 - w[0] * 16 - 6)}" y="${f1(o[1] + u[1] * dd * 0.4 - w[1] * 16 + 3)}" opacity="${f1(s.civ * s.ao)}">CIV</text>`;
     }
     // anillos fibrosos de las válvulas AV (nudos en las bisagras)
     for (const p of [g.TL, g.TS, MA, MP]) d += `<ellipse class="cc-anillo" cx="${f1(p[0])}" cy="${f1(p[1])}" rx="3" ry="2"/>`;

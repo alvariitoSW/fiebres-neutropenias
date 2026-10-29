@@ -114,7 +114,8 @@ function leer() {
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
     imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), picoNo: L.picoNo != null ? Math.round(L.picoNo) : null, teleNo: L.teleNo != null ? Math.round(L.teleNo) : null, teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
-    fevi: Math.round(u.feTotal * 100), frmit: Math.round(u.fr * 100), qpqs: +u.qpqs.toFixed(2), satAd: Math.round(u.satAd * 100), satAp: Math.round(u.satAp * 100), vdvi: +(u.edvD / Math.max(1, u.edv)).toFixed(2),
+    fevi: Math.round(u.feTotal * 100), frmit: Math.round(u.fr * 100), qpqs: +u.qpqs.toFixed(2), satAd: Math.round(u.satAd * 100), satAp: Math.round((u.qp > 0.05 && u.qsh > 0 ? (u.qs * u.satAd + u.qsh * P.sao2) / u.qp : u.satAp) * 100),   // la sangre que pasa del VI al VD lleva la saturación arterial del monitor, no la SaO₂ fija del motor
+    vdvi: +(u.edvD / Math.max(1, u.edv)).toFixed(2),
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
   r.irvs = Math.round((u.pam - u.pvc) / Math.max(0.3, L.icTotal));
@@ -480,8 +481,10 @@ function pintarPacientes() {
 $('pacientes').addEventListener('click', (ev) => {
   const b = ev.target.closest('[data-pac]'); if (!b) return;
   const p = D.PACIENTES.find((x) => x.k === b.dataset.pac);
+  if (guia) cerrarGuia();   // la explicación era del paciente anterior: se cierra y la figura vuelve a la vista
   est.vista = 'paciente'; est.aparato = 'no';
   nuevoPaciente(p); pintarPacientes(); refrescar(true); pintarDock(); pintarMandos();
+  verEscena(true);
 });
 
 // ---------------------------------------------------------------- explicación guiada

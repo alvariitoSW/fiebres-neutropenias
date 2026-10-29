@@ -111,13 +111,13 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     let chorro = false; for (let i = 0; i < 80 && !chorro && !REDUCIDO; i++) { chorro = await p.evaluate(() => !!document.querySelector('#shv-raiz .cc-chorro')); if (!chorro) await p.waitForTimeout(90); }
     ok(eroa >= 0.5 && (chorro || REDUCIDO), `Benito: orificio ${eroa} cm² (flail ≥0,5) y el corte dibuja el chorro de la insuficiencia mitral${REDUCIDO ? ' (con «reducir movimiento» solo el dato)' : ''}`);
     ok(/FR mitral/.test(await celda('frmit')) && /FEVI/.test(await celda('fevi')), 'Benito: las celdas FR mitral y FEVI en el monitor');
-    posible(r, 'Benito 0,80 cm²'); await limpio('Benito'); await foto('benito');
+    posible(r, 'Benito 0,65 cm²'); await limpio('Benito'); await foto('benito');
     await pest('grav'); await desplegar();
-    ok(entre(r.pam, 55, 70) && await p.evaluate(() => /0,80 cm²/.test(document.getElementById('shv-o-grav').innerText)), 'Benito: el mando dice «orificio mitral 0,80 cm²» y la PAM aguanta');
+    ok(entre(r.pam, 55, 70) && await p.evaluate(() => /0,65 cm²/.test(document.getElementById('shv-o-grav').innerText)), 'Benito: el mando dice «orificio mitral 0,65 cm²» y la PAM aguanta');
     await grav(100); r = await S(); posible(r, 'Benito orificio 1,0 cm²');
     ok(r.sellos.some(t => /Insuficiencia mitral masiva/.test(t)), `Benito 1,0 cm²: sello «Insuficiencia mitral masiva» (${r.sellos.join(' | ')})`);
     await pest('vol'); ok(/3\/3/.test(await apagados('#shv-dock-panel [data-vol]')), 'Benito 1,0 cm²: los botones de volumen se apagan'); await limpio('Benito tope'); await foto('benito-tope');
-    await pest('grav'); await grav(71); r = await S(); ok(!r.sellos.some(t => /masiva/.test(t)), 'Benito: de vuelta a 0,80 cm² el sello se va');
+    await pest('grav'); await grav(71); r = await S(); ok(!r.sellos.some(t => /masiva/.test(t)), 'Benito: de vuelta a 0,80 cm² (el tope) el sello se va');
     await pest('vol'); await clic('#shv-dock-panel [data-vol="250"]'); await esp(900); r = await S();
     ok(r.estado === 'Sobrecarga de volumen' && r.sellos.some(t => /Sobrecarga/.test(t)), `Benito: con el primer bolo, sello de sobrecarga (PCP ${r.pcp})`); posible(r, 'Benito +250');
     // Fermín: falla el derecho; PVC > PCP, FEVI conservada, VD dilatado, líquidos rotulados
@@ -134,7 +134,7 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     // Remedios: Qp/Qs y el salto de saturación AD → AP; FEVI que cuenta la aorta y el VD
     await abrir('rotura-septo'); await esp(1800); r = await S();
     ok(r.pac === 'remedios' && r.estado === 'Rotura del tabique interventricular', `rotura-septo: abre Remedios, estado «${r.estado}»`);
-    ok(r.qpqs >= 2 && r.qpqs <= 2.6 && r.satAp - r.satAd >= 20 && r.satAp >= 70 && r.satAp <= 82 && r.ic < 2.2 && r.pcp <= r.papd && r.fevi >= 28, `Remedios: Qp/Qs ${r.qpqs}, SatAD ${r.satAd} → SatAP ${r.satAp}, IC ${r.ic}, PCP ${r.pcp} ≤ PAPd ${r.papd}, FEVI ${r.fevi} %`);
+    ok(r.qpqs >= 2 && r.qpqs <= 2.6 && r.satAp - r.satAd >= 15 && r.satAp >= 65 && r.satAp <= 82 && r.ic < 2.2 && r.pcp <= r.papd && r.fevi >= 28, `Remedios: Qp/Qs ${r.qpqs}, SatAD ${r.satAd} → SatAP ${r.satAp}, IC ${r.ic}, PCP ${r.pcp} ≤ PAPd ${r.papd}, FEVI ${r.fevi} %`);
     ok(/Qp:Qs/.test(await celda('qpqs')) && /AD/.test(await celda('satad')) && /AP/.test(await celda('satap')), 'Remedios: Qp:Qs y las dos saturaciones en el monitor');
     posible(r, 'Remedios 0,3 cm²'); await limpio('Remedios'); await foto('remedios');
     await pest('grav'); await desplegar(); await grav(50); r = await S(); ok(!r.sellos.some(t => /colapso/i.test(t)) && r.avisos.some(t => /Cerca/.test(t)), `Remedios 0,5 cm²: aviso «Cerca del cortocircuito masivo» (${r.avisos.join(' | ')})`);
