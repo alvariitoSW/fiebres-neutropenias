@@ -1055,8 +1055,8 @@ Consejo el 28/10/2026 (3.ª reunión; el usuario: «que lo apruebe todo el conse
 
 El usuario, 29/10: «primero terminar Marino y segundo todo el tema de los modelos vivos con [...] las páginas web [...] y
 las guías», en paralelo mientras Marino se termina. Acta `autonomo/consejo/2026-10-29-carriles.md`; regla REGLAS §4.13.
-**Prioridad nueva** (el usuario: «lo que diga el Consejo de Ministros»): **Marino → modelos vivos (carril 2) → El Libro
-Azul → eco, menú, Guardia, PIF y Radiología**. El Libro Azul entra antes por los modelos: cada modelo del carril 2 cita
+**Prioridad nueva** (el usuario: «lo que diga el Consejo de Ministros»): **Marino → modelos vivos (carril 2, con el simulador
+de eco) → El Libro Azul → menú, Guardia, PIF y Radiología**. El Libro Azul entra antes por los modelos: cada modelo del carril 2 cita
 también su sección cuando trate lo mismo. Presupuesto: lo fija Hacienda por delegación (≈25-40 M estimados). Gasto
 diario: ≈30 %, solo lo que Marino no use.
 
@@ -1073,6 +1073,7 @@ inmersión, receptores animados y los modelos nuevos (arteria culpable, taponami
 | 5 | `mv-arteria-culpable` | Modelo nuevo: arteria culpable (Culprit, AngioView-2; ESC 2023 SCA, Wagner 2009, Thygesen 2018), 2-3 maquetas y después la app | pendiente (fase B: cuando `b3` marque el paso 4 hecho) | 🟢. Absorbe `arteria-culpable` del Objetivo L. ≈7-8,5 M |
 | 6 | `mv-verdes` | Fase B: una mejora con caso y preguntas en capilar (respondedor a volumen), telar (CID con la puntuación ISTH) y receptores animados | pendiente (fase B) | 🟢. ≈1-2 M cada una |
 | 7 | `mv-fase-c` | Fase C: shock, corazón eléctrico (ECG vivo), receptor y pulmón al fusionar el bloque 3; agua y ácido-base al fusionar el bloque 4 | aparcada (al fusionar cada bloque) | Lee los informes de la fase A |
+| 8 | `mv-eco` | **El simulador de eco entra en el carril 2** (el usuario, 29/10: «yo creo necesario meter el simulador eco en el carril de modelos vivos»): la reforma de la eco según el motor que el usuario elija con el informe `eco-reforma` (01/11): pulir el motor actual (≈10-12 M) o motor y dibujo nuevos (≈18-28 M; three.js solo si él lo elige, CLAUDE.md §2). Absorbe `f0-eco-*`, `eco-sueltas`, `f2-ete` y las calculadoras de `guardia-shock` que viven en la eco | aparcada (último paso del carril 2: cuando el bloque 3 esté en `main` y el usuario haya elegido motor) | 🔴 hasta fusionar el bloque 3 (motor compartido con el shock). Pasa por delante de El Libro Azul. Presupuesto: Hacienda. Pruebas de la eco y del shock en cada cambio del motor |
 
 ## Objetivo L · Ley de Ciencia (validada por el usuario el 29/10/2026)
 

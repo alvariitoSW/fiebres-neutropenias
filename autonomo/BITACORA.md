@@ -341,6 +341,7 @@ El resto del tablero sigue `aparcada`.
   delegado en Hacienda; los PDF se buscan en abierto antes de pedirlos. En el tablero como Objetivo C. Queda: Di Mario
   2005 es gratis en PubMed Central pero la red no lo baja: descárgalo de
   https://pmc.ncbi.nlm.nih.gov/articles/PMC1768997/ y súbelo a la Bandeja (#27) cuando puedas.
+  **✅ 29/10**: el simulador de eco entra en el carril 2 (`mv-eco`, último paso, tras el bloque 3 y tu elección de motor el 01/11).
 
 - **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
   entra `shock-scai` (dentro del bloque 3) y las ideas de VentLoop en `b3-pulmon-app`. **Espera de ti**: (1) subir la
