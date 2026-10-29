@@ -394,10 +394,11 @@ El resto del tablero sigue `aparcada`.
   miocarditis-pericarditis); abrir `ecgsim.org`, `litfl.com`, `ecg.bidmc.harvard.edu`, `physionet.org`.
 - **iamtechartist.com, «Breathing and respiration», pedido el 29/10**
   (https://iamtechartist.com/breathing-and-respiration/): «esta página también habría que tenerla en cuenta para el
-  tema de modelos vivos». Sin empezar: `iamtechartist.com` cerrado en la red (`ERR_TUNNEL_CONNECTION_FAILED`).
-  Espera: abrir `iamtechartist.com` (o `*.iamtechartist.com`). Después, `/ingenieria-reversa` con la mirada de los
-  modelos vivos de respiración (Marino caps. 22-30, El Libro Azul sección IV) y su sitio en el Ministerio de Educación
-  (`/mayeutica`, departamento de arte).
+  tema de modelos vivos». **Informe hecho (29/10)**: https://claude.ai/artifact/XQuCdHBBJWUe8qTLXGfZ99 (copia
+  `autonomo/ideas/ingenieria-inversa/iamtechartist-respiracion.md`). **Esperando algo tuyo**: (1) si la receta de sala
+  (visita de 5 frases → un gesto → 2 tarjetas) y el anillo de escala se apuntan para todos los modelos vivos
+  (Educación, `/mayeutica`) y el viaje de escala dentro de B-013 (pulmón con respirador); (2) si algún día quieres 3D de
+  verdad (three.js, rompe la regla de una sola librería) o se descarta.
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
   informe hecho el 29/10 (https://claude.ai/artifact/QBbCmftfj8r1CoQPfD3LCT; técnico en
   `autonomo/ideas/ingenieria-inversa/lfm3-audio-2b.md`). Modelo de voz de 2B (voz a texto, texto a voz, conversación),
