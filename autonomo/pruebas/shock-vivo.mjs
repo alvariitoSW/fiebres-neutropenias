@@ -126,9 +126,9 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     ok(r.pvc > r.pcp && r.pvc >= 12 && r.pvc <= 18 && r.fevi >= 50 && r.vdvi >= 1 && r.ic < 2.2 && r.ic >= 1.6 && r.pcp <= 12, `Fermín: PVC ${r.pvc} > PCP ${r.pcp}, FEVI ${r.fevi} %, VD/VI ${r.vdvi}, IC ${r.ic}`);
     posible(r, 'Fermín'); await limpio('Fermín'); await foto('fermin');
     await pest('grav'); await desplegar();
-    ok(await p.evaluate(() => /Ees del VD al 15 % de la normal/.test(document.getElementById('shv-o-grav').innerText) && /1\.?250 mL de líquidos/.test(document.getElementById('shv-o-grav').innerText)), 'Fermín: el mando rotula la Ees (15 %) y los 1.250 mL de líquidos');
+    ok(await p.evaluate(() => /Ees del VD al 15 % de la normal/.test(document.getElementById('shv-o-grav').innerText) && !/mL de líquidos/.test(document.getElementById('shv-o-grav').innerText) && /1\.250 mL de líquidos de urgencias \(ilustrativo\)/.test(document.getElementById('shv-frase').innerText)), 'Fermín: el mando rotula la Ees (15 %) y los 1.250 mL de líquidos van en la frase viva como partida, no en el mando');
     ok(/VD\/VI/.test(await celda('vdvi')) && /PVC\/PCP/.test(await celda('pvcpcp')), 'Fermín: las celdas VTD VD/VI y PVC/PCP');
-    await grav(0); r = await S(); ok(r.estado === 'Sin shock' && r.pvc < r.pcp + 1 && r.ic >= 2.2, `Fermín sano (Ees 60 %, sin líquidos): ${r.estado}, PVC ${r.pvc}, PCP ${r.pcp}, IC ${r.ic}`);
+    await grav(0); r = await S(); ok(r.estado === 'Sin shock' && r.pvc < r.pcp + 1 && r.ic >= 2.2, `Fermín sano (Ees 60 %, con los líquidos de partida): ${r.estado}, PVC ${r.pvc}, PCP ${r.pcp}, IC ${r.ic}`);
     await grav(100); r = await S(); posible(r, 'Fermín Ees 10 %');
     ok(r.sellos.some(t => /VD sin fuerza/.test(t)), `Fermín Ees 10 %: sello «VD sin fuerza» (${r.sellos.join(' | ')})`); await limpio('Fermín tope');
     // Remedios: Qp/Qs y el salto de saturación AD → AP; FEVI que cuenta la aorta y el VD
