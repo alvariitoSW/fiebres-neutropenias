@@ -379,11 +379,12 @@ El resto del tablero sigue `aparcada`.
   RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
   Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
 - **Ventriculus (https://ventriculus.org/), pedido el 29/10** (`/ingenieria-reversa`): «es justamente lo que me
-  gustaría hacer en cardiología pif, que esté así puesto para poder estudiar bien». 29/10: la portada
-  (`ventriculus.org`) ya abre, pero las 9 herramientas viven en subdominios que siguen cerrados
-  (`ecg.`, `exam.`, `echo.`, `pharmacy.`, `preop.`, `cath.`, `eplab.`, `ep.`, `sim.ventriculus.org`:
-  `ERR_TUNNEL_CONNECTION_FAILED`). Espera: añadir `*.ventriculus.org` (o al menos `ecg.ventriculus.org`) a la red. Encaja con B-005 (PIF rehecho) y con
-  `pif-ecg` (PR #36).
+  gustaría hacer en cardiología pif, que esté así puesto para poder estudiar bien». **Informe hecho (29/10)**:
+  https://claude.ai/artifact/MKY1M2QsghdRuxS5GYMjVi (copia `autonomo/ideas/ingenieria-inversa/ventriculus.md`).
+  **Esperando algo tuyo**: (1) qué ideas quieres (recomiendo la 3, trazado vivo arriba de cada ficha, y la 5,
+  laboratorio para combinar hallazgos; la 1 y la 2 salen casi solas); (2) si se apuntan en las tareas aparcadas del
+  ECG (`ecg-vector-*`, `arritmias-*`) y en B-005 sin adelantarlas a Marino y El Libro Azul; (3) soplos: solo con un
+  PDF de semiología cardíaca.
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
   sin empezar. `huggingface.co` sigue cerrado en la red y la búsqueda web no encuentra ese nombre (solo
   LFM2-Audio-1.5B y LFM2.5-Audio-1.5B). Espera: abrir `huggingface.co` y confirmar el enlace. Ojo: «instalarlo» en
