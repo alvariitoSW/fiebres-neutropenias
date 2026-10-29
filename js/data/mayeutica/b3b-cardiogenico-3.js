@@ -120,7 +120,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
       { id: 'c8r', titulo: 'Remedios, 74 años: un soplo nuevo tras el infarto', corto: 'Caso · Remedios (rotura del septo)', sub: 'del soplo al soporte mecánico',
         paciente: { Edad: '74 años, mujer', Peso: '62 kg', Antecedentes: 'sin valvulopatía conocida', Motivo: 'Infarto anterior; hora 20 del infarto, soplo holosistólico nuevo con frémito' },
         pasos: [
-          { momento: 'Hora 20 del infarto', datos: { Monitor: 'PA 75/60 (PAM 67) · FC 109 · IC 1,57', Catéter: 'PCP 24 · PVC 7 · Qp/Qs 2,2', Saturación: 'AD 52 % → AP 69 %', Exploración: 'soplo holosistólico nuevo con frémito' }, nuevo: ['Monitor', 'Catéter', 'Saturación', 'Exploración'],
+          { momento: 'Hora 20 del infarto', datos: { Monitor: 'PA 75/60 (PAM 67) · FC 109 · IC 1,57', Catéter: 'PCP 24 · PVC 7 · Qp/Qs 2,2', Saturación: 'AD 44 % → AP 65 %', Exploración: 'soplo holosistólico nuevo con frémito' }, nuevo: ['Monitor', 'Catéter', 'Saturación', 'Exploración'],
             pregunta: { id: 'c8r-1', tipo: 'test', fuente: 'mc-septo-rotura · mc-roturas-24h', modeloVivo: septo, origen: 'ilustrativo: cifras del modelo con su gravedad por defecto; la causa y la fisiopatología, de la ficha',
               enunciado: 'Veinte horas después de un infarto aparece un soplo nuevo. La sangre de la arteria pulmonar tiene mucha más saturación que la de la aurícula derecha y el gasto sistémico es bajo. ¿Qué ha pasado?',
               opciones: [
@@ -146,7 +146,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
                 { t: 'El ECMO veno-arterial se coloca por canulación percutánea de arteria y vena femorales.' },
                 { t: 'Como los otros aparatos, el ECMO necesita anticoagulación plena.' }],
               explicacion: `Balón: no con disección ni insuficiencia aórtica. Impella: no con prótesis o valvulopatía aórtica ni trombo del VI. ECMO: canulación femoral y anticoagulación plena (${p(48)}).` } },
-          { momento: 'Día 2 · ECMO a 4,5 L/min', datos: { Aparato: 'ECMO veno-arterial a 4,5 L/min', Monitor: 'PA 86/80 (PAM 84) · FC 78 · IC 2,6', Catéter: 'PCP 29 (antes 24) · PVC 4', Analítica: 'lactato 1,0 mmol/L' }, nuevo: ['Aparato', 'Monitor', 'Catéter', 'Analítica'],
+          { momento: 'Día 2 · ECMO a 4,5 L/min', datos: { Aparato: 'ECMO veno-arterial a 4,5 L/min', Monitor: 'PA 86/79 (PAM 84) · FC 80 · IC 2,6', Catéter: 'PCP 29 (antes 24) · PVC 5', Analítica: 'lactato 1,0 mmol/L' }, nuevo: ['Aparato', 'Monitor', 'Catéter', 'Analítica'],
             pregunta: { id: 'c8r-4', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ecmo-poscarga', modeloVivo: ecmo, origen: 'ilustrativo: cifras del modelo (Remedios con ECMO a 4,5 L/min; el lactato de 1,0 es del paciente); el mecanismo y el abordaje, de la ficha',
               enunciado: 'La perfusión ha mejorado (lactato 1,0), pero la PCP ha subido de 24 a 29 y la presión arterial casi no tiene pulso. ¿Qué está pasando y qué haces?',
               puntos: [

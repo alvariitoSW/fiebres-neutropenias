@@ -163,7 +163,7 @@ export const GRAVEDAD = {
   vd: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VD al ${Math.round(100 * eesVdDeG(g))} % de la normal`, 'contractilidad del ventrículo derecho'],
     nota: 'Contractilidad del VD (de la normal): del modelo; la ficha (p. 40) da la dirección. Los líquidos de partida no son del mando', cita: C.vd },
   septo: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio del septo ${coma2(civDeG(g))} cm²`, 'cortocircuito VI → VD'],
-    nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.septo },
+    nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección). Límite del modelo: aquí la PCP baja, en el paciente sube', cita: C.septo },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -316,7 +316,8 @@ export const ESTADOS = {
     guia: [{ t: 'El tabique roto abre un paso entre el VI, de presión alta, y el VD, de presión baja: en cada latido pasa sangre de izquierda a derecha. Es un gran shunt izquierda-derecha.', s: ['#cor-tabique'], c: C.septo, org: 'la dirección: ficha · por qué va a la derecha (presión): fisiología general' },
       { t: (R) => `El VD recibe más: Qp/Qs ${coma2(R.qpqs, 1)}. Por el pulmón pasa ${coma2(R.qpqs, 1)} veces lo que sale por la aorta.`, s: ['[data-fila="qpqs"]'], c: C.septo, org: 'el cociente: modelo (su definición, fisiología general)' },
       { t: (R) => `Esa sangre llega oxigenada: la saturación sube de ${R.satAd} % en la AD a ${R.satAp} % en la AP. El salto de saturación es la huella del cortocircuito.`, s: ['[data-fila="satad"]', '[data-fila="satap"]'], c: C.septo, org: 'el salto: fisiología general · el umbral numérico: la fuente no lo dice · las cifras: modelo' },
-      { t: (R) => `El pulmón recibe ese flujo de más: PAP ${R.paps}/${R.papd} y PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20: el pulmón se encharca' : ''}. Con un orificio grande el VI se descarga hacia el VD y la PCP no sube más: no la tomes como medida del cortocircuito.`, s: ['#tr-pap', '#cor-pulmon'], c: C.septo, org: 'cuánto: modelo' },
+      { t: (R) => `El pulmón recibe ese flujo de más: PAP ${R.paps}/${R.papd} y PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20: el pulmón se encharca' : ''}.`, s: ['#tr-pap', '#cor-pulmon'], c: C.septo, org: 'cuánto: modelo' },
+      { t: 'Límite del modelo: en el paciente la PCP y el edema suben con el cortocircuito (p. 38: inunda la circulación pulmonar); aquí bajan porque el modelo descarga el VI hacia el VD.', s: ['#tr-pap', '#cor-pulmon'], c: C.septo, org: 'límite del modelo' },
       { t: (R) => `La aorta se queda sin ese flujo: IC ${c1(R.ic)}, PAM ${R.pam}. La FEVI (${R.fevi} %) cuenta lo que el VI expulsa a la aorta y al VD.`, s: ['[data-fila="ic"]', '[data-fila="fevi"]'], c: C.septo, org: 'la FEVI por volúmenes: fisiología general' }] },
   tapon: { tit: 'Taponamiento', frase: (R) => `El líquido del saco no deja llenarse al corazón: PVC ${R.pvc} y PCP ${R.pcp} se igualan. La eco lo separa del fallo del VD.`, org: 'ficha · p. 3; cap. 18, p. 4',
     guia: [{ t: 'La disección tipo A puede propagarse hacia atrás y sangrar al pericardio: taponamiento.', s: ['#cor-saco'], c: C.disec },

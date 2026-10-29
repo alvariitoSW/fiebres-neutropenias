@@ -107,7 +107,7 @@ const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
 // Rotura del septo (estado rotura-septo; Marino cap. 16, p. 38 solo da la dirección: un gran cortocircuito izquierda-derecha que
 // inunda la circulación pulmonar y desvía flujo de la sistémica). Las cifras son fisiología general o ilustrativas:
 // RECETA_ROTURA_SEPTO: IAM con fallo del VI (g 0,7) y orificio de 0,3 cm² (ilustrativo; motor: civ, misma fórmula que eroaMitral).
-// Medido con autonomo/bloques/b3/herramientas/3b-barrido.mjs: PA 75/60 (PAM 67), FC 109, IC 1,57, Qp/Qs 2,2, SatAD 52 → SatAP 77 %
+// Medido con autonomo/bloques/b3/herramientas/3b-barrido.mjs: PA 75/60 (PAM 67), FC 109, IC 1,57, Qp/Qs 2,2, SvO₂ = SatAD 44 → SatAP 65 % (medido con g-estados-cifras)
 // (salto 25 puntos; el umbral numérico de «cortocircuito» no está en la ficha: ilustrativo), PCP 21, PVC 6,1, VD/VI 1,2.
 // CIV_TOPE (0,7 cm², ilustrativo): Qp/Qs 3,1 y PAM 58; por encima el sello «cortocircuito masivo». CIV_COLAPSO (1,0 cm², ilustrativo):
 // con él el motor da IC 0,9 y PAM ≈ 42 (colapso); el motor no deja pasar de ahí
