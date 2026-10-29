@@ -43,11 +43,12 @@ const SUCCION_VI = [12, 60];                   // mL del VI entre los que la bom
 const SUCCION_VEN = [0.3, 2.2];                    // mmHg de las venas entre los que el ECMO pierde su flujo
 // El pulmón empieza a encharcarse en las venas pulmonares por encima de P_EDEMA: 18, el extremo bajo de la «presión de llenado
 // óptima» de 18-20 de la ficha (Marino, cap. 16, p. 42: la más alta que sube el gasto sin edema). Cuánto líquido pasa por cada
-// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1). OJO (M0, b3-paso4 g3): con 4 mL/s por mmHg, un
-// paciente que entra con la PCP del VI por encima de 18 (fallo del VI solo a fondo) pierde ~1,3 L al pulmón en los 40 s de
-// entrada: la PCP queda clavada en 18-19 y la PVC cae a 1-2. Con 0,3 eso se arregla, pero el sello de sobrecarga llega sin edema
-// (SpO₂ 98): las dos cosas piden ritmos distintos; queda para decidir. Aurelio y Virginia entran con la PCP < 18 (eesVd)
-const P_EDEMA = 18, K_EDEMA = 4;
+// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1). Con 4 mL/s por mmHg un paciente que entra con la PCP
+// del VI por encima de 18 perdía ~1,3 L al pulmón en 40 s y la PVC caía a 1-2 (M0): el ritmo es ahora de minutos (0,3 mL/s por
+// mmHg: a PCP 25, ~2 mL/s ≈ 7 L/h, ilustrativo). Lo que empeora el intercambio de entrada es el agua del intersticio, que sigue a
+// la PCP y no al edema ya formado: la PaO₂ cae PAO2_PCP mmHg por cada mmHg de PCP sobre P_EDEMA (ver perfusion)
+const P_EDEMA = 18, K_EDEMA = 0.5;
+const PAO2_PCP = 10;                             // mmHg de PaO₂ por mmHg de PCP sobre P_EDEMA (ilustrativo)
 const TEP_CAP = 0.85;                           // la arteria pulmonar del TEP a fondo, un 20 % de distensible (ilustrativo)
 const HEM_SIMPATICO = 0.35;
 // Las bombas de flujo continuo (centrífuga del ECMO, microaxial del Impella) dan menos flujo cuanta más presión tienen que
@@ -245,11 +246,12 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 }
 
 // ---------------------------------------------------------------- perfusión (con la función del capilar vivo)
-// pao2 baja con el edema de pulmón que calcula el motor (ilustrativo: 10 mmHg por cada 100 mL); con ECMO, la sangre que
+// pao2 baja con el edema de pulmón que calcula el motor (ilustrativo: 10 mmHg por cada 100 mL) y con la PCP por encima de
+// P_EDEMA (agua intersticial: PAO2_PCP por mmHg, ilustrativo; la fuente no da la cifra); con ECMO, la sangre que
 // vuelve del oxigenador se toma como arterializada (98 %: ilustrativo, la fuente no da la saturación de salida)
 export function perfusion(L, rec) {
   const u = L.u;
-  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0));
+  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0) - PAO2_PCP * Math.max(0, (u.pvp ?? u.pcp ?? 0) - P_EDEMA));
   const satNativa = satDe(pao2);
   const sao2 = L.ecmo > 0 ? ((L.gcNativo + L.imp) * satNativa + L.ecmo * 0.98) / Math.max(0.1, L.gcTotal) : satNativa;
   const d = derivar(estadoDe({ hb: rec.hb ?? 14, pao2, gcFijo: L.gcTotal, util: rec.util || 'normal', espacio: rec.espacio || 'no' }));
