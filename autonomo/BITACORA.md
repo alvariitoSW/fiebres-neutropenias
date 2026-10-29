@@ -330,6 +330,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
+  `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
+  Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
+  reforma (≈25-60 M); pegar el texto de 7 tuits; abrir pulmonarypocus.com en la red.
+
 - **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
   entra `shock-scai` (dentro del bloque 3) y las ideas de VentLoop en `b3-pulmon-app`. **Espera de ti**: (1) subir la
   horquilla de `b3-pulmon-app` a ≈12-18 M (en la parada 2 del 3D); (2) B-041, raíz aórtica; (3) PDF opcionales: DanGer
