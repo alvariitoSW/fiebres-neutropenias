@@ -385,6 +385,13 @@ El resto del tablero sigue `aparcada`.
   laboratorio para combinar hallazgos; la 1 y la 2 salen casi solas); (2) si se apuntan en las tareas aparcadas del
   ECG (`ecg-vector-*`, `arritmias-*`) y en B-005 sin adelantarlas a Marino y El Libro Azul; (3) soplos: solo con un
   PDF de semiología cardíaca.
+- **PIF Cardiología, informe final de desarrollo (29/10)**: «el informe final […] mezclado ventrículous y el
+  laboratorio de arritmias, obviamente lo de un electro y que se vean las 12 derivaciones como debería verse […] después
+  lo debatirá el gabinete». **Hecho**: https://claude.ai/artifact/ADJBdNHTMRBQyLfE4x3zvd (copia
+  `autonomo/ideas/ingenieria-inversa/pif-cardio-final.md`). **Esperando al gabinete** (5 preguntas): orden de fases y PIF
+  al final; 12 derivaciones con profundidad en nuestro motor (recomendado) o segundo motor; juntar las 6 tareas B-033 y
+  Ventriculus en un bloque `pif-cardio` con 3 paradas; pedir PDF (semiología, ESC 2023 endocarditis, ESC 2025
+  miocarditis-pericarditis); abrir `ecgsim.org`, `litfl.com`, `ecg.bidmc.harvard.edu`, `physionet.org`.
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
   informe hecho el 29/10 (https://claude.ai/artifact/QBbCmftfj8r1CoQPfD3LCT; técnico en
   `autonomo/ideas/ingenieria-inversa/lfm3-audio-2b.md`). Modelo de voz de 2B (voz a texto, texto a voz, conversación),
