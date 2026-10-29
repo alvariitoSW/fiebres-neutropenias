@@ -35,6 +35,19 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
 
+### Atlas de anatomía de procedimientos (Pridgen) · sin leer
+- **Fecha / tipo**: 2026-10-29 (chat) · web
+- **Enlace**: https://t.co/SUDGmhtskz → https://anatomy-atlas.pridgenmd.chatgpt.site/procedures/proximal-phalanx-fracture/
+- **Dijo**: «mira ahora y también di si esta nos sirve de algo»
+- **Qué es**: no consta. Por la dirección: un atlas de anatomía para procedimientos, de un autor «Pridgen MD», hecho como
+  sitio en `chatgpt.site`; la página enlazada es una fractura de falange proximal (mano)
+- **Sirve a**: no consta; solo serviría si trae procedimientos de UCI (vías, arterial, drenaje torácico, punciones)
+- **Fuente**: no es fuente clínica (web ajena; REGLAS §4.13)
+- **Licencia**: no consta
+- **Coste**: 0 €
+- **Veredicto**: NO SE PUDO LEER (el host está cerrado en la red del entorno: proxy 403 y el lector web no lo resuelve).
+  Pendiente de que el usuario lo abra en la red o pegue la lista de procedimientos
+
 ### Cuatro tuits sin leer (Bandeja del 29/10)
 - **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
