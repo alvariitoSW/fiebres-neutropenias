@@ -28,10 +28,44 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
+- 2026-10-29 · Bandeja #27 · 4 tuits sin leer (x.com cerrado: 402): espera enlace del paper o captura del usuario
+- 2026-10-29 · Bandeja #27 · web CardioTeca, tablas de dosis de anticoagulantes y antiarrítmicos: ¿bibliografía de fase 3?
 
-## Fichas de triaje (las 19 entradas, la más reciente arriba)
+## Fichas de triaje (las 24 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Cuatro tuits sin leer (Bandeja del 29/10)
+- **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
+- **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
+  https://x.com/shinriha_pt/status/2115396011443323199 · https://x.com/WithAScalpel/status/2115405654915514531 ·
+  https://x.com/sindenzu1/status/2115270279207481772
+- **Dijo**: solo los enlaces
+- **Qué es**: no consta. Desde la sesión, x.com responde 402 y la búsqueda web no los indexa. El de @WithAScalpel
+  quizá sea la continuación de su serie de lazos presión-volumen (ficha de abajo); sin leerlo, no se da por hecho
+- **Sirve a**: no consta
+- **Fuente**: no consta; se pidió en el issue #27 el enlace del paper, el texto o una captura
+- **Licencia**: tuits ajenos, no se reproducen
+- **Coste**: 0 €
+- **Veredicto**: pendiente de que el usuario pegue el paper o una captura
+
+### CardioTeca · Espacio Arritmias: dosis de anticoagulantes y antiarrítmicos (tablas)
+- **Fecha / tipo**: 2026-10-29 (comentario del 28/10) · web
+- **Enlace**: https://www.cardioteca.com/espacio-arritmias/9091-dosis-de-los-anticoagulantes-y-los-antiarritmicos-tablas-por.html
+- **Dijo**: solo el enlace
+- **Qué es**: sección de una web española de cardiología con tablas de dosis de anticoagulantes orales directos
+  (rivaroxabán, apixabán, edoxabán, dabigatrán) y antiarrítmicos por indicación y ajuste por función renal, edad y
+  peso; la misma web tiene fichas por fármaco (p. ej. amiodarona), una página de manejo práctico, otra de mecanismo
+  de acción y calculadoras de arritmias (una de dosis de ACOD con Cockcroft-Gault). Visto solo por la búsqueda web:
+  `www.cardioteca.com` no está en la red de la sesión y no se pudo abrir la página
+- **Sirve a**: fase 3 (calculadoras) y la guardia (dosis de ACOD con insuficiencia renal, amiodarona IV); enlazaría
+  con el bloque de arritmias (fase 1) y con nefrotoxicidad/ajuste renal de Nefrología
+- **Fuente**: no consta de qué guía salen sus tablas (sin abrir la página). Una web divulgativa no es fuente de
+  dosis: las cifras saldrían de la ficha técnica o de la guía ESC/EHRA, con su página
+- **Licencia**: no consta
+- **Coste**: web gratis (no consta si hay parte de pago)
+- **Veredicto**: idea suelta para fase 3 (calculadora de dosis de ACOD por función renal, con la guía como fuente);
+  CardioTeca, como bibliografía. Para ver la página hace falta abrir `www.cardioteca.com` en la red de la sesión
 
 ### Easy LA Segmentator (Mikael Laredo, Pitié-Salpêtrière)
 - **Fecha / tipo**: 2026-10-28 · repositorio
