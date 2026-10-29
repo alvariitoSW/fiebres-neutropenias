@@ -138,6 +138,7 @@ function marca(k, v) {
   const T = D.OBJETIVOS[tablaActual()], f = T.filas[k];
   if (!f) return { cls: '', html: '' };
   if (k === 'pcp' && conSoporte()) return { cls: '', html: '<span class="marca sin" title="Con soporte mecánico, la fuente no da una PCP objetivo">—</span>', obj: 'con soporte: sin meta' };
+  if (k === 'pcp' && est.pac.tipo === 'septo') return { cls: '', html: '<span class="marca sin" title="Con el cortocircuito, el VI se descarga hacia el VD y la PCP no mide cuánto se inunda el pulmón">—</span>', obj: 'cortocircuito: sin meta' };
   const ok = f[1](v);
   return { cls: ok ? 'si' : 'no', html: `<span class="marca ${ok ? 'si' : 'no'}">${ok ? '✓' : '✗'}</span>`, obj: `obj. ${f[0]}` };
 }
