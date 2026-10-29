@@ -53,7 +53,12 @@ export const MANDOS = {
     obstruccion: 'Obstrucción urinaria',
     obstruccionMantenida: 'Obstrucción mantenida',
     albuminuria: 'Albuminuria (barrera dañada)',
+    congestion: 'Congestión venosa (PVC 20)',
 };
+// Presión venosa central con el mando de congestión (ilustrativo: un valor alto de insuficiencia cardiaca
+// congestiva; es también el tope del mando) y preajustes: cada clave de data-glomerulo puede fijar la PAM.
+export const PVC_CONGESTION = 20;
+const PREAJUSTE = { congestion: { pam: 80 } };
 
 // Presión capilar glomerular y resto del glomérulo para un estado dado.
 // Entre 80 y 180 mmHg la autorregulación mantiene la presión capilar en 55.
@@ -62,7 +67,8 @@ export const MANDOS = {
 // prostaglandinas dilatando la aferente (P): quitarlas con un IECA/ARA-II o un
 // AINE hace caer la presión. Por debajo de 80 la autorregulación se agota.
 function modelo(e) {
-    let pa = e.pam - (e.deplecion ? 20 : 0);
+    // Marino cap. 18 (PDF p. 7): la congestión reduce el gradiente arteriovenoso renal: perfusión = PAM − PVC.
+    let pa = e.pam - (e.deplecion ? 20 : 0) - (e.congestion ? PVC_CONGESTION : 0);
     if (e.estenosis) pa *= 0.85; // la ficha: la presión distal cae un 10-20%
     const obstr = e.obstruccion || e.obstruccionMantenida;
     const renina = pa < 90 || e.deplecion || e.estenosis || e.obstruccionMantenida;
@@ -109,7 +115,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
     const css = getComputedStyle(document.documentElement);
     const tk = v => css.getPropertyValue(v).trim();
     const C = { texto: tk('--text-main'), suave: tk('--text-muted'), verde: tk('--accent-green'), rojo: tk('--accent-red'), amarillo: tk('--accent-yellow'), oro: tk('--accent-blue'), purpura: tk('--accent-purple') };
-    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, ...opciones.inicial };
+    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, congestion: false, ...opciones.inicial };
     const textos = opciones.textos || {};
     const enlace = clave => textos[clave] ? ` <button type="button" class="visual-link" data-gl-ver="${textos[clave]}">Texto ↓</button>` : '';
     const toggles = opciones.mandos.filter(m => m !== 'pam');
@@ -299,6 +305,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             else if (e.estenosis) av.push(['danger', `Con la estenosis, el IECA/ARA-II hace caer el FG un ${Math.round(caida)}%: es el escenario en que el bloqueo del SRAA puede reducir drásticamente el filtrado.` + enlace('ieca-mas30')]);
             else av.push(['danger', `Al iniciar el IECA/ARA-II el FG baja un ${Math.round(caida)}%: 30% o más, buscar depleción de volumen, AINE o estenosis de arteria renal antes de suspender.` + enlace('ieca-mas30')]);
         }
+        if (e.congestion) av.push(['danger', `Presión de perfusión = PAM ${e.pam} − PVC ${PVC_CONGESTION} = ${Math.round(M.pa)} mmHg: la congestión venosa reduce el gradiente arteriovenoso renal: ${M.pa < 80 ? 'la autorregulación ya no alcanza y el filtrado cae' : 'la autorregulación aún lo compensa, pero queda sin reserva'} aunque el gasto cardiaco no baje; por eso el tratamiento principal es la diuresis. Fuente: Marino cap. 18, PDF p. 7 (PVC 20: ilustrativo).`]);
         if (e.isglt2) av.push(['ok', 'La retroalimentación tubuloglomerular contrae la aferente: baja la presión dentro del glomérulo.' + enlace('isglt2')]);
         if (e.estenosis) av.push(['warn', e.ieca ? 'Sin angiotensina II la eferente se relaja y la presión que sostenía el filtrado se pierde.' + enlace('estenosis') : 'Detrás de la estenosis la presión cae un 10-20%; la renina sube y la angiotensina II contrae la eferente para sostener el filtrado.' + enlace('estenosis')]);
         if (e.deplecion && !e.ieca) av.push(['warn', e.aine ? 'Con AINE no hay prostaglandinas que dilaten la aferente: solo queda la angiotensina II para sostener el filtrado.' + enlace('aine') : 'Con poco volumen, la angiotensina II (eferente) y las prostaglandinas (aferente) sostienen el filtrado.' + enlace('deplecion')]);
@@ -325,7 +332,12 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
     });
     montados.set(tab.id, {
         lienzo,
-        poner: mandos => { for (const k of toggles) e[k] = mandos.includes(k); if (e.obstruccionMantenida) e.obstruccion = true; actualizar(); },
+        poner: mandos => {
+            for (const k of toggles) e[k] = mandos.includes(k);
+            for (const k of mandos) if (PREAJUSTE[k] && PREAJUSTE[k].pam != null && opciones.mandos.includes('pam')) {
+                e.pam = PREAJUSTE[k].pam; cuerpo.querySelector('.gl-pam').value = e.pam; cuerpo.querySelector('.gl-pam-out').textContent = `${e.pam} mmHg`;
+            } if (e.obstruccionMantenida) e.obstruccion = true; actualizar();
+        },
     });
     const pam = cuerpo.querySelector('.gl-pam');
     if (pam) pam.addEventListener('input', () => { e.pam = +pam.value; cuerpo.querySelector('.gl-pam-out').textContent = `${e.pam} mmHg`; actualizar(); });
