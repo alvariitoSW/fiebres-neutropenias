@@ -330,6 +330,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **B-043 · Anatomy Atlas de Brian Pridgen (enlace `t.co/SUDGmhtskz`), pedido el 29/10** (`/ingenieria-reversa`):
+  informe hecho (29/10): https://claude.ai/artifact/5n2mC3NP4MUm4SsPoWed9C (notas de la otra sesión, más completas, en `autonomo/ideas/ingenieria-inversa/anatomy-atlas-pridgen.md`; esta página mira solo Técnicas R1). Atlas 3D
+  (three.js, código cerrado, anatomía CC BY-SA) y un procedimiento animado por capítulos. **Esperando algo tuyo**:
+  (1) si se apunta «procedimiento en capítulos» para Técnicas R1 (2D con Motion, una pregunta por paso y capas con
+  deslizador; tras Marino, por el Consejo); (2) por qué técnica empezar (vía central, arterial, intubación o drenaje).
 - **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
   puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
   el ministerio de educación». **Bloqueada por la red**: el entorno no deja entrar en `atlas-of-physics.vercel.app`
