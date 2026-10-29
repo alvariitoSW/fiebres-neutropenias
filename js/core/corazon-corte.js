@@ -159,7 +159,7 @@ export function crearCorazonCorte(grupo, { pre = 'cor', rotulos = true, vci = 11
     // ---- VD: su cara septal es la cara derecha del tabique (la pared del VI por fuera, de la cresta hacia la punta)
     const fin = cl(iApex + Math.round((nC - iApex) * (0.34 - 0.3 * cl(s.fvd - 1, -0.3, 1))), iApex + 1, iApex + 9);
     const sept = viExt.slice(fin, nC + 1).reverse();   // de la cresta (arriba) hacia la punta
-    const nS = sept.length - 1, W0 = 64 * (1 + 0.2 * (s.fvd - 1)), panza = cl(0.1 + 0.9 * (s.fvd - 1), -0.1, 0.75);
+    const nS = sept.length - 1, W0 = 64 * (1 + 0.55 * (s.fvd - 1)), panza = cl(0.1 + 0.9 * (s.fvd - 1), -0.1, 0.75);
     const libre = sept.map((p, i) => {
       const t = i / nS, nn = normal(sept, i), w = W0 * Math.pow(Math.max(0, 1 - Math.pow(t, 1.5)), 0.8) * (1 + panza * Math.sin(Math.PI * t));
       // en la base, la pared libre sale hacia fuera por el plano AV (la tricúspide, horizontal); más abajo, por la normal

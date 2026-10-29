@@ -1,7 +1,7 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
-import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, eroaDeG, eesVdDeG, liquidosDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
+import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, eroaDeG, eesVdDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
 export { gDePosparo, horasDePosparo, POSPARO_H };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
@@ -160,8 +160,8 @@ export const GRAVEDAD = {
   // Los tres del infarto: el deslizador mueve una pieza del motor (soporte.mjs); el fallo del VI queda como llega el paciente
   papilar: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio mitral ${coma2(eroaDeG(g))} cm²`, `${eroaDeG(g) >= 0.5 ? 'valva en flail' : 'insuficiencia mitral moderada'} (ilustrativo) · tope ${coma2(EROA_TOPE,1)} cm²`],
     nota: 'Orificio de la mitral: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.papilar },
-  vd: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VD al ${Math.round(100 * eesVdDeG(g))} % de la normal`, `+${liquidosDeG(g).toLocaleString('es-ES')} mL de líquidos`],
-    nota: 'Contractilidad del VD (de la normal) y líquidos: del modelo; la ficha (p. 40) da la dirección', cita: C.vd },
+  vd: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VD al ${Math.round(100 * eesVdDeG(g))} % de la normal`, 'contractilidad del ventrículo derecho'],
+    nota: 'Contractilidad del VD (de la normal): del modelo; la ficha (p. 40) da la dirección. Los líquidos de partida no son del mando', cita: C.vd },
   septo: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio del septo ${coma2(civDeG(g))} cm²`, 'cortocircuito VI → VD'],
     nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.septo },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
@@ -306,13 +306,18 @@ export const ESTADOS = {
       { t: (R) => `La aurícula izquierda recibe ese chorro y la PCP se dispara: ${R.pcp}, a la altura de la diastólica de la arteria pulmonar (${R.papd}).`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.pcpDiast, org: 'el mecanismo: fisiología general · la relación PCP-diastólica: ficha (cap. 8) · cuánto: modelo' },
       { t: (R) => `El pulmón se encharca: SpO₂ ${R.spo2} %. Con la PCP por encima de 18-20 el líquido pasa al alvéolo.`, s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'umbral 18-20: ficha p. 42 · cuánto: modelo' },
       { t: (R) => `El gasto cae (IC ${c1(R.ic)}, por debajo de 2,2) aunque el VI se vacía: parte de lo que sale va hacia atrás. Por eso aparece en las primeras 24 h y no es una complicación tardía.`, s: ['[data-fila="ic"]'], c: C.roturas24 }] },
-  'iam-vd': { tit: 'Infarto del ventrículo derecho', frase: (R) => `Falla el derecho: la PVC (${R.pvc}) sube más que la PCP (${R.pcp}) y el VD dilatado empuja el tabique. FEVI ${R.fevi} %, conservada. Tiene menos mortalidad que el fallo del VI.`, org: 'ficha · p. 40 (las cifras: modelo, ilustrativo)',
+  'iam-vd': { tit: 'Infarto del ventrículo derecho', frase: (R) => `Falla el derecho: ${R.pvc > R.pcp ? `la PVC (${R.pvc}) sube más que la PCP (${R.pcp})` : `la PVC (${R.pvc}) aún no pasa a la PCP (${R.pcp})`} y el VD dilatado empuja el tabique. FEVI ${R.fevi} %, conservada. Tiene menos mortalidad que el fallo del VI.${R.lact < 2 && R.pam >= 65 ? ` IC ${coma2(R.ic, 1)} (<2,2) sin hipoperfusión aún: todavía no es shock (p. 40).` : ''} Partida: 1.250 mL de líquidos de urgencias (ilustrativo).`, org: 'ficha · p. 40 (las cifras: modelo, ilustrativo)',
     guia: [{ t: (R) => `El VD infartado no empuja: se dilata (su volumen telediastólico es ${coma2(R.vdvi, 1)} veces el del VI) y la PVC sube: ${R.pvc}.`, s: ['#cor-vd', '[data-fila="pvc"]'], c: C.vd, org: 'cuánto: modelo' },
       { t: (R) => `La PCP no sube igual: ${R.pcp}. Uno de los rasgos que lo identifican es el cociente PVC/PCP (${coma2(R.pvc / Math.max(1, R.pcp), 1)}), no una cifra suelta.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vd },
       { t: (R) => `El VI casi no falla: FEVI ${R.fevi} %, conservada. Un VD dilatado con el VI normal es otro rasgo del fallo derecho.`, s: ['[data-fila="fevi"]', '#cor-cav'], c: C.vd, org: 'el valor: modelo' },
       { t: (R) => `El VD dilatado empuja el tabique hacia la cámara del VI: el VI se llena menos y el gasto cae (IC ${c1(R.ic)}).`, s: ['#cor-tabique', '[data-fila="ic"]'], c: C.vd },
+<<<<<<< HEAD
       { t: 'El shock por fallo del VD tiene menos mortalidad que el del VI. Los líquidos del panel son una carga de volumen del modelo; el diagnóstico y el manejo del fallo derecho están en el capítulo 18 y aquí no se simulan.', s: ['#shv-dock'], c: C.vd, org: 'los líquidos: ilustrativo (la fuente no da la cifra)' }] },
   'rotura-septo': { tit: 'Rotura del tabique interventricular', frase: (R) => `Parte de cada latido vuelve al VD: Qp/Qs ${coma2(R.qpqs, 1)}, saturación ${R.satAd} % en la AD y ${R.satAp} % en la AP. ${R.pcp > 20 ? 'El pulmón se encharca' : 'El pulmón recibe todo ese flujo'} y la aorta se queda sin él (IC ${c1(R.ic)}).`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+=======
+      { t: 'El shock por fallo del VD tiene menos mortalidad que el del VI. Los 1.250 mL de líquidos con que llega son de partida, no del mando: una carga de volumen del modelo; el diagnóstico y el manejo del fallo derecho están en el capítulo 18 y aquí no se simulan.', s: ['#shv-dock'], c: C.vd, org: 'los líquidos del servicio de urgencias: ilustrativo (la fuente no da la cifra)' }] },
+  'rotura-septo': { tit: 'Rotura del tabique interventricular', frase: (R) => `Parte de cada latido vuelve al VD: Qp/Qs ${coma2(R.qpqs, 1)}, saturación ${R.satAd} % en la AD y ${R.satAp} % en la AP. El pulmón se inunda y la aorta se queda sin él (IC ${c1(R.ic)}).`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+>>>>>>> origin/wt/g3-vd
     guia: [{ t: 'El tabique roto abre un paso entre el VI, de presión alta, y el VD, de presión baja: en cada latido pasa sangre de izquierda a derecha. Es un gran shunt izquierda-derecha.', s: ['#cor-tabique'], c: C.septo, org: 'la dirección: ficha · por qué va a la derecha (presión): fisiología general' },
       { t: (R) => `El VD recibe más: Qp/Qs ${coma2(R.qpqs, 1)}. Por el pulmón pasa ${coma2(R.qpqs, 1)} veces lo que sale por la aorta.`, s: ['[data-fila="qpqs"]'], c: C.septo, org: 'el cociente: modelo (su definición, fisiología general)' },
       { t: (R) => `Esa sangre llega oxigenada: la saturación sube de ${R.satAd} % en la AD a ${R.satAp} % en la AP. El salto de saturación es la huella del cortocircuito.`, s: ['[data-fila="satad"]', '[data-fila="satap"]'], c: C.septo, org: 'el salto: fisiología general · el umbral numérico: la fuente no lo dice · las cifras: modelo' },
