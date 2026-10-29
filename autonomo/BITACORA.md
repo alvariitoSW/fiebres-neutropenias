@@ -385,9 +385,13 @@ El resto del tablero sigue `aparcada`.
   `ERR_TUNNEL_CONNECTION_FAILED`). Espera: añadir `*.ventriculus.org` (o al menos `ecg.ventriculus.org`) a la red. Encaja con B-005 (PIF rehecho) y con
   `pif-ecg` (PR #36).
 - **LFM3-Audio-2B (Liquid AI), pedido el 29/10** (`/ingenieria-reversa https://huggingface.co/LiquidAI/LFM3-Audio-2B`):
-  sin empezar. `huggingface.co` sigue cerrado en la red y la búsqueda web no encuentra ese nombre (solo
-  LFM2-Audio-1.5B y LFM2.5-Audio-1.5B). Espera: abrir `huggingface.co` y confirmar el enlace. Ojo: «instalarlo» en
-  la app chocaría con CLAUDE.md §2 (sin servidor ni librerías nuevas); la skill solo hace el informe.
+  informe hecho el 29/10 (https://claude.ai/artifact/QBbCmftfj8r1CoQPfD3LCT; técnico en
+  `autonomo/ideas/ingenieria-inversa/lfm3-audio-2b.md`). Modelo de voz de 2B (voz a texto, texto a voz, conversación),
+  español incluido pero sin medir en vocabulario médico; licencia LFM Open v1.0 (gratis salvo empresas ≥ 10 M$);
+  1,4 GB en el ordenador (llama.cpp) o ≈ 2,4 GB en el navegador (WebGPU + `onnxruntime-web`, librería nueva). **Elige**:
+  1 no traerlo (dictar con el micrófono del teclado, ya hoy; recomendado), 2 botón «Escuchar» en las fichas con la
+  voz del propio móvil (pequeño, sin librería), 3 probarlo tú en el ordenador con 5 frases médicas, 4 dentro de la app
+  (grande, cambia §2; esperar a que madure). Nunca como fuente clínica.
 - **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
   hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
   `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
