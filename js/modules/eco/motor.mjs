@@ -78,6 +78,9 @@ export const BASE = {
   // insuficiencia mitral: orificio regurgitante efectivo (cm²). 0 = válvula competente. El chorro sigue la
   // ecuación del orificio con Bernoulli simplificado: v (m/s) = √(ΔP/4) → Q (mL/s) = EROA · 50 · √ΔP
   eroaMitral: 0,
+  // comunicación interventricular (rotura del septo): área del orificio VI → VD (cm²), con la misma fórmula que eroaMitral
+  // (Q = A·50·ΔP/√(ΔP+0,25); fisiología general). 0 = septo íntegro. Cap. 16 de Marino, p. 38, solo da la dirección
+  civ: 0,
   // estenosis aórtica: área efectiva del orificio (cm²; 0 = válvula normal, sin término de Bernoulli) y diámetro de
   // la aorta ascendente (cm), del que depende la recuperación de presión. En la vena contracta cae 4v² (v = Q ÷ área);
   // pasado el orificio, el chorro frena y recupera 4v² · 2r(1 − r), con r = área ÷ área de la aorta (Baumgartner 2017)
@@ -268,7 +271,7 @@ export function crearMotor(ajustes = {}) {
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
-    qMit: 0, qMitReg: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
+    qMit: 0, qMitReg: 0, qCiv: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
@@ -365,6 +368,9 @@ export function crearMotor(ajustes = {}) {
     // reflujo VI → AI por el orificio regurgitante (raíz suavizada cerca de 0 para no romper Euler)
     const dpReg = s.pvi - s.pai;
     s.qMitReg = p.eroaMitral > 0 && dpReg > 0 ? p.eroaMitral * 50 * dpReg / Math.sqrt(dpReg + 0.25) : 0;
+    // cortocircuito VI → VD por el tabique roto: mientras la presión del VI supera a la del VD (sobre todo en la sístole)
+    const dpCiv = s.pvi - s.pvd;
+    s.qCiv = p.civ > 0 && dpCiv > 0 ? p.civ * 50 * dpCiv / Math.sqrt(dpCiv + 0.25) : 0;
     const dpTri = s.pvd - s.pad;
     s.qTriReg = p.eroaTricus > 0 && dpTri > 0 ? p.eroaTricus * 50 * dpTri / Math.sqrt(dpTri + 0.25) : 0;
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
@@ -458,11 +464,11 @@ export function crearMotor(ajustes = {}) {
     // las bombas: Impella y venteo sacan del VI; el ECMO, el resto de las venas; todo vuelve a la aorta
     s.vvi -= (s.qImp + s.qVent) * dt; s.vven -= (s.qEcmo - s.qVent) * dt; s.vao += (s.qImp + s.qEcmo) * dt;
     s.vad += (s.qRet - s.qTri + s.qTriReg) * dt;
-    s.vvd += (s.qTri - s.qPul - s.qTriReg) * dt;
+    s.vvd += (s.qTri - s.qPul - s.qTriReg + s.qCiv) * dt;
     s.vap += (s.qPul - s.qPulm) * dt;
     s.vvp += (s.qPulm - s.qVp) * dt;
     s.vai += (s.qVp - s.qMit + s.qMitReg) * dt;
-    s.vvi += (s.qMit - s.qAo - s.qMitReg) * dt;
+    s.vvi += (s.qMit - s.qAo - s.qMitReg - s.qCiv) * dt;
     s.vao += (s.qAo - s.qSis) * dt;
     s.vven += (s.qSis - s.qRet) * dt;
     s.t += dt; s.tLatido += dt;
@@ -509,14 +515,14 @@ export function crearMotor(ajustes = {}) {
     return {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
-      qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qPul: s.qPul, qTri: s.qTri, qTriReg: s.qTriReg, pven: s.pven, pvp: s.pvp,
+      qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qCiv: s.qCiv, qPul: s.qPul, qTri: s.qTri, qTriReg: s.qTriReg, pven: s.pven, pvp: s.pvp,
       pperi: s.pperi, ptmAd: s.ptmAd, ptmVd: s.ptmVd, liquidoPeri: s.liquidoPeri, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul, vBalon: s.vBalon, qImp: s.qImp, qEcmo: s.qEcmo,
     };
   }
 
   function nuevoAcum() {
-    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qAoAnt: 0, qSis: 0, qPul: 0, qReg: 0, qRegT: 0,
+    return { dt: 0, pao: 0, pad: 0, pai: 0, pap: 0, pven: 0, pvp: 0, qAo: 0, qAoAnt: 0, qSis: 0, qPul: 0, qReg: 0, qRegT: 0, qCiv: 0,
       qImp: 0, qEcmo: 0, qVent: 0, balonMax: 0,
       paoMax: -1, paoMin: 1e9, papMax: -1, papMin: 1e9, pviMax: -1, pvdMax: -1,
       vviMax: -1, vviMin: 1e9, vvdMax: -1, vvdMin: 1e9, padMax: -1, paiMax: -1,
@@ -528,7 +534,7 @@ export function crearMotor(ajustes = {}) {
     const a = acum;
     a.dt += dt; a.pao += s.pao * dt; a.pad += s.pad * dt; a.pai += s.pai * dt; a.pap += s.pap * dt;
     a.pven += s.pven * dt; a.pvp += s.pvp * dt; a.qAo += s.qAo * dt; a.qAoAnt += Math.max(0, s.qAo) * dt;
-    a.qImp += s.qImp * dt; a.qEcmo += s.qEcmo * dt; a.qVent += s.qVent * dt; a.balonMax = Math.max(a.balonMax, s.vBalon); a.qSis += s.qSis * dt; a.qReg += s.qMitReg * dt; a.qRegT += s.qTriReg * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
+    a.qImp += s.qImp * dt; a.qEcmo += s.qEcmo * dt; a.qVent += s.qVent * dt; a.balonMax = Math.max(a.balonMax, s.vBalon); a.qSis += s.qSis * dt; a.qReg += s.qMitReg * dt; a.qRegT += s.qTriReg * dt; a.qCiv += s.qCiv * dt; a.qPul += s.qPul * dt; a.pperi += s.pperi * dt;
     a.paoMax = Math.max(a.paoMax, s.pao); a.paoMin = Math.min(a.paoMin, s.pao);
     a.papMax = Math.max(a.papMax, s.pap); a.papMin = Math.min(a.papMin, s.pap);
     a.pviMax = Math.max(a.pviMax, s.pvi); a.pvdMax = Math.max(a.pvdMax, s.pvd);
@@ -597,6 +603,11 @@ export function crearMotor(ajustes = {}) {
     // (sin aporte, la extracción tiende a su techo de 0,7: el límite, no 0/0)
     m.vo2 = Math.min(p.vo2, m.do2 * 0.7); m.er = m.do2 > 0 ? m.vo2 / m.do2 : 0.7;
     m.svo2 = p.sao2 * (1 - m.er);
+    // cortocircuito: Qs = lo que llega al cuerpo (gc), Qsh = lo que pasa del VI al VD, Qp = Qs + Qsh (el VD lo expulsa todo).
+    // SatAD = mezcla venosa (svo2); SatAP = (Qs·SvO₂ + Qsh·SaO₂)/Qp. Sin orificio, Qsh = 0, Qp/Qs = 1 y SatAP = SvO₂
+    m.qs = gc; m.qsh = a.qCiv / T * 60 / 1000; m.qp = m.qs + m.qsh; m.vCiv = a.qCiv;
+    m.qpqs = m.qs > 0.05 ? m.qp / m.qs : 1;
+    m.satAd = m.svo2; m.satAp = m.qp > 0.05 ? (m.qs * m.svo2 + m.qsh * p.sao2) / m.qp : m.svo2;
     // isquemia del VD: el margen de este latido fija hacia dónde va (ver isqDesde)
     const carga = m.pvd_max / (p.mioVd ?? 1) / Math.max(1, m.pam), u = clamp((carga - p.isqDesde) / p.isqAncho, 0, 1);
     s.isqVdObj = p.isqVdMax * u * u * (3 - 2 * u);

@@ -104,6 +104,15 @@ export const POSPARO_FUGA = 300, POSPARO_VD0 = 0.3;
 export const gDePosparo = (h) => POSPARO_G0 * (1 - Math.min(POSPARO_H, Math.max(0, h)) / POSPARO_H);
 export const horasDePosparo = (g) => POSPARO_H * (1 - Math.max(0, g) / POSPARO_G0);
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
+// Rotura del septo (estado rotura-septo; Marino cap. 16, p. 38 solo da la dirección: un gran cortocircuito izquierda-derecha que
+// inunda la circulación pulmonar y desvía flujo de la sistémica). Las cifras son fisiología general o ilustrativas:
+// RECETA_ROTURA_SEPTO: IAM con fallo del VI (g 0,7) y orificio de 0,3 cm² (ilustrativo; motor: civ, misma fórmula que eroaMitral).
+// Medido con autonomo/bloques/b3/herramientas/3b-barrido.mjs: PA 75/60 (PAM 67), FC 109, IC 1,57, Qp/Qs 2,2, SatAD 52 → SatAP 77 %
+// (salto 25 puntos; el umbral numérico de «cortocircuito» no está en la ficha: ilustrativo), PCP 21, PVC 6,1, VD/VI 1,2.
+// CIV_TOPE (0,7 cm², ilustrativo): Qp/Qs 3,1 y PAM 58; por encima el sello «cortocircuito masivo». CIV_COLAPSO (1,0 cm², ilustrativo):
+// con él el motor da IC 0,9 y PAM ≈ 42 (colapso); el motor no deja pasar de ahí
+export const RECETA_ROTURA_SEPTO = { esc: 'fallo', g: 0.7, civ: 0.3, hb: 14 };
+export const CIV_TOPE = 0.7, CIV_COLAPSO = 1.0;
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
 // Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
@@ -129,6 +138,8 @@ export function prepararMotor(rec, segundos = 40) {
   // antes del barorreflejo (motor.mjs, barorreflejo). Por debajo de 0,1 no es un paciente (ilustrativo)
   if (rec.eesVd != null) m.p.vd.ees = BASE.vd.ees * Math.max(0.1, Math.min(1, rec.eesVd));
   if (rec.eroaMitral) m.p.eroaMitral = rec.eroaMitral;   // rotura del papilar: insuficiencia mitral aguda (cap. 16, p. 38); el orificio, ilustrativo
+  // civ: orificio de la rotura del septo (cm²), cortocircuito VI → VD en el motor. Se recorta en CIV_COLAPSO (ver arriba)
+  if (rec.civ) m.p.civ = Math.min(rec.civ, CIV_COLAPSO);
   m.p.tEscenario = m.s.t;
   return m;
 }

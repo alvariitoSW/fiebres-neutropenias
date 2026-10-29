@@ -30,3 +30,9 @@ pac('fallo g.9 vol 0', { esc: 'fallo', g: 0.9, hb: 14 });
 for (const e of [0.6, 0.3, 0.15, 0.1]) pac(`iam-vd eesVd ${e}`, { esc: 'fallo', g: 0.05, eesVd: e, hb: 14 });
 for (const v of [1000, 1250, 2000]) pac(`iam-vd .15 +${v} mL`, { esc: "fallo", g: 0.05, eesVd: 0.15, volemia: v, hb: 14 });
 pac("iam-vd g0 .1 +1250 mL", { esc: "fallo", g: 0, eesVd: 0.1, volemia: 1250, hb: 14 });
+// 3b: la receta de Remedios (rotura del septo) y el recorte del orificio
+{
+  const c = S.crearCabecera(S.RECETA_ROTURA_SEPTO); c.correr(40); const u = c.m.ultimo;
+  fila('Remedios (rotura septo)', u, c.lectura.icTotal, u.pvc);
+  console.log(' '.repeat(26), `Qp/Qs ${f(u.qpqs, 2)} Qsh ${f(u.qsh, 2)} SatAD ${f(u.satAd * 100, 0)} SatAP ${f(u.satAp * 100, 0)}`);
+}

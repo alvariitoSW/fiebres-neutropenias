@@ -599,6 +599,10 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   - **Insuficiencia mitral.** El motor la gana como orificio regurgitante (`eroaMitral`, cm²). El flujo sigue la
     ecuación del orificio con Bernoulli: v = √(ΔP/4), y Q = EROA · 50 · √ΔP mL/s. Con 0,4 cm² da ~70 mL de volumen
     regurgitante. `ultimo` da `vReg`, `fr` y `feTotal`. Con 0 no cambia nada.
+  - **Rotura del septo (CIV).** `civ` (cm², 0 = nada cambia) es un orificio VI → VD con la misma fórmula que `eroaMitral`,
+    por el gradiente instantáneo PVI − PVD (sobre todo en la sístole): resta del VI y suma al VD. `ultimo` da `qs`, `qsh`, `qp`,
+    `qpqs`, `satAd` (= SvO₂) y `satAp` = (Qs·SvO₂ + Qsh·SaO₂)/Qp. Receta y topes: `RECETA_ROTURA_SEPTO`, `CIV_TOPE` y `CIV_COLAPSO`
+    en `shock-vivo/soporte.mjs` (cifras ilustrativas; Marino cap. 16, p. 38 solo da la dirección).
   - **Una prueba de TAPSE** muestreaba por el redondeo del tiempo y se quedaba sin muestras: ahora va por índice.
   - **Forma de la eyección (cap. 08).** El flujo aórtico picaba a los ~40 ms con ~850 mL/s (2,7 m/s en un TSVI de
     2 cm), y el capítulo 08 trabaja con velocidades y gradientes. El motor gana un **efecto de la eyección**
