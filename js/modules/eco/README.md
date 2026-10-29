@@ -236,6 +236,14 @@ de la AI (seno oblicuo) y se adelgaza arriba (reflexiones); el volumen dibujado 
 `pruebas/taponamiento.test.mjs`. Pendiente: pulso paradójico (el motor no respira) y la guía de pericardio de la ASE
 (Klein 2013, no está en `docs/`).
 
+**M0c (b3-paso4 g3, 29/10/2026): el VD dilatado aprieta al VI.** `motor.mjs` suma a la presión del VI
+`septoDesplaza · pperi²/(pperi² + septoP50²) · (1 − eVd) · clamp(pvdLibre − pviLibre, 0, septoTope)` (1; 0,6 mmHg; 8 mmHg,
+ilustrativos): cuando el VD relajado supera al VI y el saco está tenso, el tabique se curva hacia el VI y este se llena menos
+(dirección: Marino cap. 16, p. 40). Con el saco flojo no actúa: los nueve escenarios quedan igual (el TEP, PCP 2,1 → 2,3); el
+tope evita que, a +3 L, el VI se hunda a 30 mL con PCP 45. En el IAM del VD con líquidos (`RECETA_IAM_VD` de
+`shock-vivo/soporte.mjs`): PVC 14 > PCP 10, IC 2,0. La HP crónica con 1.500 mL + EPP pasa de PAPs 109,7 a 110,6: el tope
+ilustrativo de `maniobras.test.mjs` sube de 110 a 112.
+
 ## Huella de las aurículas sin saltos
 
 Las aurículas son cúpulas sobre una «huella» en el plano AV, que se mide lanzando rayos desde el centro del anillo

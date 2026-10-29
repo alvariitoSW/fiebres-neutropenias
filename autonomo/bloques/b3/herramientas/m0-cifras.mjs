@@ -28,4 +28,5 @@ pac('Benito (papilar)', { esc: 'fallo', g: 0.75, eroaMitral: 0.8, volemia: 0, hb
 for (const h of [0, 24, 72]) pac(`Virginia ${h} h`, { esc: 'posparo', g: S.gDePosparo(h), hb: 12.6 });
 pac('fallo g.9 vol 0', { esc: 'fallo', g: 0.9, hb: 14 });
 for (const e of [0.6, 0.3, 0.15, 0.1]) pac(`iam-vd eesVd ${e}`, { esc: 'fallo', g: 0.05, eesVd: e, hb: 14 });
-for (const v of [1000, 2000]) pac(`iam-vd .15 +${v} mL`, { esc: 'fallo', g: 0.05, eesVd: 0.15, volemia: v, hb: 14 });
+for (const v of [1000, 1250, 2000]) pac(`iam-vd .15 +${v} mL`, { esc: "fallo", g: 0.05, eesVd: 0.15, volemia: v, hb: 14 });
+pac("iam-vd g0 .1 +1250 mL", { esc: "fallo", g: 0, eesVd: 0.1, volemia: 1250, hb: 14 });

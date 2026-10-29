@@ -173,8 +173,10 @@ test('6 · tres medidas seguidas del motor difieren ≤10 % (y la regla las da p
 
 // ---- 7. Paciente posible en cada maniobra (extremos y punto medio)
 const HUMANO = { pas: [60, 200], pad_: [35, 120], pvc: [-2, 25], pvp: [0, 40], pcp: [0, 40], gc: [1.5, 10], fc: [40, 180], paps: [10, 70] };
-// HP crónica: un VD hipertrófico sostiene PAPs por encima de 70 (el de pared fina del TEP, no); tope 110, ilustrativo (fisiología general; sin cifra en las fuentes de la app)
-const HUMANO_HPC = { ...HUMANO, paps: [10, 110] };
+// HP crónica: un VD hipertrófico sostiene PAPs por encima de 70 (el de pared fina del TEP, no); tope 110 → 112, ilustrativo (fisiología
+// general; sin cifra en las fuentes de la app). M0c (29/10/2026): con el desplazamiento del tabique (motor.mjs, septoDesplaza), el VD
+// cargado con 1.500 mL + EPP sube la PCP de 6,3 a 8,8 y la PAPs de 109,7 a 110,6; antes ya estaba a 0,3 mmHg del tope
+const HUMANO_HPC = { ...HUMANO, paps: [10, 112] };
 function humano(etiqueta, x, rangos = HUMANO) {
   for (const [k, [a, b]] of Object.entries(rangos)) assert.ok(x[k] >= a && x[k] <= b, `${etiqueta}: ${k} = ${x[k].toFixed(1)} (humano ${a}-${b})`);
 }

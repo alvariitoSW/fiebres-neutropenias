@@ -59,6 +59,16 @@ export const BASE = {
   // pericardio: P = kPeri·exp((Vcorazón − v0Peri)/phiPeri); liquido = derrame extra
   kPeri: 0.1, v0Peri: 300, phiPeri: 40, liquidoPeri: 0,
   tabique: 0.05,            // fracción de la presión del otro ventrículo que se transmite
+  // DESPLAZAMIENTO DEL TABIQUE (M0c, 29/10/2026): cuando la presión libre del VD supera a la del VI en diástole (VD que
+  // falla o sobrecargado), el tabique se curva hacia el VI y le quita sitio: el VI se llena menos a la misma presión. Se
+  // modela sumando a la presión del VI una fracción del gradiente VD − VI (solo si es positivo y con el VD relajado,
+  // × (1 − eVd)). La fracción crece con la tensión del saco (pperi² / (pperi² + septoP50²), hasta septoDesplaza): con el
+  // pericardio flojo el VD dilatado crece hacia fuera; con el saco tenso, solo puede crecer a costa del VI. El gradiente que
+  // cuenta se topa en septoTope mmHg (el tabique ya plano no se curva más; sin tope, a +3 L el VI caía a 30 mL con PCP 45).
+  // Un corazón normal (VI siempre por encima del VD) no lo nota, ni el TEP ni la HP crónica (saco flojo, pperi ≈0,1).
+  // Dirección: Marino, cap. 16, p. 40 (fallo del VD: sube la PVC, el VD empuja el tabique y el VI se llena menos;
+  // docs/marino-2024-shock-caps14-17.pdf#page=40). Cuánto (1; 0,6 mmHg; 8 mmHg): ilustrativo
+  septoDesplaza: 1, septoP50: 0.6, septoTope: 8,
   // válvulas (mmHg·s/mL)
   rMitral: 0.005, rTricus: 0.005, rAortica: 0.004, rPulmonar: 0.004,
   // inercia de la sangre que cruza la mitral (mmHg·s²/mL; 0 = sin inercia). Sin ella, el flujo seguía al gradiente al
@@ -322,7 +332,7 @@ export function crearMotor(ajustes = {}) {
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
-    s.pvi = pviLibre + p.tabique * pvdLibre + s.pperi;
+    s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
     s.pai = presionAurícula(p.ai, s.vai, eAur, s.pperi);
     s.pad = presionAurícula(p.ad, s.vad, eAur, s.pperi);

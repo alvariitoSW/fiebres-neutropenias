@@ -109,6 +109,13 @@ export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.t
 // Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
 // eroaMitral (cm², la insuficiencia mitral del motor), viDiast (factor sobre la rigidez diastólica del VI: <1, un VI que
 // admite volumen con poca presión: el shock del infarto con la PCP no alta, el 30 % de la p. 40; ilustrativo) }
+// IAM del VD (estado iam-vd, M0c 29/10/2026): VI casi normal (fallo g 0,05), VD infartado (eesVd 0,15) y +1.250 mL de
+// LÍQUIDOS (volemia: la carga de volumen del fallo derecho; cuánto, ilustrativo). Sin ellos la PVC no pasa de ~7,4: la PVC
+// no supera la presión media de llenado (~7 + la venoconstricción del barorreflejo) si no entra volumen. Con ellos y el
+// tabique que se desplaza hacia el VI (motor.mjs, septoDesplaza; Marino cap. 16, p. 40): PVC 14,1 > PCP 9,7, IC 1,99,
+// PA 94/69, FEVI 52 %, VTD VD/VI 2,6 (medido con autonomo/bloques/b3/herramientas/m0-cifras.mjs)
+export const RECETA_IAM_VD = { esc: 'fallo', g: 0.05, eesVd: 0.15, volemia: 1250, hb: 14 };
+
 export function prepararMotor(rec, segundos = 40) {
   const m = crearMotor();
   m.correr(12);
