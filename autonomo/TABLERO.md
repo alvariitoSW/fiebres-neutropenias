@@ -1051,6 +1051,29 @@ Consejo el 28/10/2026 (3.ª reunión; el usuario: «que lo apruebe todo el conse
 - Lo que NO quiero: castigar «la 3.ª bolsa» (el sello castiga transfundir sin indicación); cifras sin página.
 - Hecho: `node autonomo/jueces.mjs --modelo capilar-vivo` en verde; probado a 390 y 360 px. ≈0,5 M, sonnet.
 
+## Objetivo C · Carril 2: modelos vivos con webs y guías (aprobado por el usuario el 29/10/2026)
+
+El usuario, 29/10: «primero terminar Marino y segundo todo el tema de los modelos vivos con [...] las páginas web [...] y
+las guías», en paralelo mientras Marino se termina. Acta `autonomo/consejo/2026-10-29-carriles.md`; regla REGLAS §4.13.
+**Prioridad nueva** (el usuario: «lo que diga el Consejo de Ministros»): **Marino → modelos vivos (carril 2) → El Libro
+Azul → eco, menú, Guardia, PIF y Radiología**. El Libro Azul entra antes por los modelos: cada modelo del carril 2 cita
+también su sección cuando trate lo mismo. Presupuesto: lo fija Hacienda por delegación (≈25-40 M estimados). Gasto
+diario: ≈30 %, solo lo que Marino no use.
+
+Semáforo (cambia al fusionar cada bloque a `main`): 🔴 shock, corazón eléctrico, receptor, pulmón con respirador, motor
+de la eco · 🟡 agua, ácido-base, potasio, nefrona, glomérulo, filtro · 🟢 capilar, catéter, vaso, muralla, telar,
+inmersión, receptores animados y los modelos nuevos (arteria culpable, taponamiento, VExUS).
+
+| # | Clave | Qué | Estado | Notas |
+|---|---|---|---|---|
+| 1 | `mv-papel-pulmon` | Fase A: informe y maqueta de mejoras del pulmón con respirador (VentLoop, clases de Antaa, Techartist; Marino 22-30, El Libro Azul IV) para que `b3-pulmon-app` las lea | pendiente (fase A, ya) | 🔴: sin código. ≈1-2 M |
+| 2 | `mv-papel-shock` | Fase A: shock cardiogénico en un IAM en 3 pasos y veredicto de 4 tipos de shock (Impella-Antaa, EchoSuite-2, AngioView-2 idea 8; Marino 14-17, Hernández 2026, ESC 2023 SCA) | pendiente (fase A, ya) | 🔴: sin código; se suma a `shock-scai`. ≈1-2 M |
+| 3 | `mv-papel-ritmo` | Fase A: ECG que se pinta bajo cada ficha y «construye un ECG» (RitmoLab, Ventriculus; ESC 2019, ESC 2021, López Ramírez) | pendiente (fase A, ya) | 🔴: sin código; alimenta `pif-cardio`. ≈1-2 M |
+| 4 | `pif-cardio-minimo` | El mínimo de Cardiología para la rotación (ya validado en el Objetivo L) | pasa al carril 2 | Ver Objetivo L, fila 1 |
+| 5 | `mv-arteria-culpable` | Modelo nuevo: arteria culpable (Culprit, AngioView-2; ESC 2023 SCA, Wagner 2009, Thygesen 2018), 2-3 maquetas y después la app | pendiente (fase B: cuando `b3` marque el paso 4 hecho) | 🟢. Absorbe `arteria-culpable` del Objetivo L. ≈7-8,5 M |
+| 6 | `mv-verdes` | Fase B: una mejora con caso y preguntas en capilar (respondedor a volumen), telar (CID con la puntuación ISTH) y receptores animados | pendiente (fase B) | 🟢. ≈1-2 M cada una |
+| 7 | `mv-fase-c` | Fase C: shock, corazón eléctrico (ECG vivo), receptor y pulmón al fusionar el bloque 3; agua y ácido-base al fusionar el bloque 4 | aparcada (al fusionar cada bloque) | Lee los informes de la fase A |
+
 ## Objetivo L · Ley de Ciencia (validada por el usuario el 29/10/2026)
 
 El usuario, el 29/10: «Valido la ley entera, y valido todo para que el congreso empiece a implementar la ley de

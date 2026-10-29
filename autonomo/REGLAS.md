@@ -324,6 +324,24 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       separar motores), quitar contenido y la última parada de cada bloque (lo prueba en el móvil antes de `main`).
       En esos asuntos, el Consejo estudia y recomienda.
     - Si los ministerios no se ponen de acuerdo, decide quien preside y el acta lo dice; el usuario puede reabrirlo.
+13. **Dos carriles** (artículo 13 del Consejo del 29/10/2026, aprobado por el usuario el 29/10: «bueno, se puede regular,
+    pero vale»; acta `autonomo/consejo/2026-10-29-carriles.md`). Mientras dure Marino puede haber **dos directores a la
+    vez**, en sesiones distintas:
+    - **Carril 1, Marino**: manda; ≈70 % del gasto del día.
+    - **Carril 2, modelos vivos con webs y guías**: como mucho ≈30 % del día y solo lo que Marino no use. Va por un
+      semáforo por modelo: **rojo** (Marino lo construye ahora) y **ámbar** (Marino lo usará), solo informe y maqueta;
+      **verde** (bloque cerrado o fuera de Marino), código por sus archivos propios. Nunca edita los motores compartidos
+      (`js/core/mayeutica-motor.js`, `js/modules/eco/motor.mjs`): eso va a una sesión «motor» sola. Rama
+      `auto/mv-<modelo>` desde `main`, una sesión por modelo; las ramas no tocan la versión (la sube quien fusiona); orden
+      de fusión: arreglos → carril 1 → carril 2. Antes de cada sesión, comparar sus archivos con las ramas abiertas de
+      Marino; si se solapan, para. El reparto se puede ajustar.
+    - **Presupuesto** (el usuario, 29/10: «puede ser variable, Hacienda y yo tenemos la última palabra y yo delego en
+      Hacienda»): el presupuesto del carril 2, y sus ajustes, los decide **Hacienda** (`/ahorro`) por delegación del
+      usuario, sin bajar la nota (8,75), la fidelidad ni los jueces, y lo deja en el parte. El tope diario del 18 % no cambia.
+    - **PDF** (el usuario, 29/10: «tienes que empezar a colaborar tú, no te puedo estar pasando constantemente PDF»): antes
+      de pedir un PDF al usuario, quien lo necesita lo busca en abierto (Europe PMC por `www.ebi.ac.uk`, PubMed Central,
+      la web del editor o de la sociedad) y anota dónde buscó. Solo se pide si es de pago o la red no lo deja bajar, y
+      entonces con el enlace exacto para descargarlo con un toque.
 
 ## 5. Lo que el agente puede y no puede tocar
 
