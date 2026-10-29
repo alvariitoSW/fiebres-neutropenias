@@ -38,8 +38,8 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
       { id: 'mcs-g3', corto: 'cuándo no', tipo: 'test', fuente: 'mc-iabp · mc-impella-efectos',
         enunciado: 'Cada aparato tiene sus contraindicaciones. Predice: ¿cuál de estos pacientes no puede llevar un balón de contrapulsación?',
         opciones: [
-          { t: 'Uno con una prótesis aórtica mecánica o con una valvulopatía aórtica', porque: `Esa es contraindicación del <b>Impella</b> (enfermedad o prótesis valvular aórtica, ${p(48)}); la del balón es la insuficiencia valvular aórtica o la disección (${p(45)}). Si las mezclas, negarás un balón útil.` },
-          { t: 'Uno con un trombo en el ventrículo izquierdo', porque: `El trombo del VI contraindica el <b>Impella</b>, que se introduce en el ventrículo (${p(48)}). Para el balón no figura (${p(45)}).` },
+          { t: 'Uno con una prótesis aórtica mecánica o con un trombo en el ventrículo izquierdo', porque: `Esas son contraindicaciones del <b>Impella</b> (prótesis valvular aórtica y trombo del VI, ${p(48)}); la del balón es la insuficiencia valvular aórtica o la disección (${p(45)}). Si las mezclas, negarás un balón útil.` },
+          { t: 'Uno en shock refractario con el VI muy deprimido', porque: `Es justo la indicación del balón: shock refractario en el que se espera mejoría de la función cardíaca (${p(45)}). Negárselo por la FEVI baja sería privarle de un aparato que reduce el trabajo del corazón.` },
           { t: 'Uno con insuficiencia valvular aórtica o con una disección aórtica', ok: true }],
         explicacion: `<span class="hl-rojo">Balón: insuficiencia valvular aórtica y disección aórtica</span> (${p(45)}). Impella: enfermedad o prótesis valvular aórtica y trombo del VI (${p(48)}).`,
         nota: `<b>La fuente no lo dice.</b> Marino enumera las contraindicaciones sin su mecanismo; aquí no se inventa.${enFicha('mc-soporte-mecanico', 'mc-iabp')}` },
@@ -65,7 +65,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
           { t: 'Añadir dobutamina a dosis altas para que el VI venza la poscarga', porque: `Los inotrópicos aumentan el trabajo del miocardio fallido, justo lo que la fuente desaconseja como único apoyo (${p(44)}); los aparatos están diseñados para reducirlo.` }],
         explicacion: `Dos vías (${p(48)}-49): <span class="hl">combinar balón o Impella con el ECMO</span> para bajar la poscarga, o <span class="hl">drenar sangre del VI</span> para bajar la presión telediastólica («venteo»).` },
       { id: 'mcs-g7', corto: 'cuál elegir', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ecmo · mc-mcs-seleccion', modeloVivo: ecmo,
-        enunciado: 'Shock cardiogénico con edema pulmonar y fallo respiratorio. ¿Qué aparato prefiere Marino y qué dos cosas hace que los otros no?',
+        enunciado: 'Shock cardiogénico con edema pulmonar y fallo respiratorio. ¿Qué aparato prefiere Marino y qué dos cosas hace que el balón no hace?',
         puntos: [
           `Prefiere el <span class="hl-verde">VA-ECMO</span>: es el método de elección cuando el shock cardiogénico se acompaña de fallo respiratorio (${p(48)}-49).`,
           `Porque da <span class="hl">soporte circulatorio</span> (incluso biventricular) y además <span class="hl-azul">oxigenación y eliminación de CO₂</span>.`],
@@ -120,7 +120,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
       { id: 'c8r', titulo: 'Remedios, 74 años: un soplo nuevo tras el infarto', corto: 'Caso · Remedios (rotura del septo)', sub: 'del soplo al soporte mecánico',
         paciente: { Edad: '74 años, mujer', Peso: '62 kg', Antecedentes: 'sin valvulopatía conocida', Motivo: 'Infarto anterior; hora 20 del infarto, soplo holosistólico nuevo con frémito' },
         pasos: [
-          { momento: 'Hora 20 del infarto', datos: { Monitor: 'PA 75/60 (PAM 67) · FC 109 · IC 1,57', Catéter: 'PCP 23 · PVC 6 · Qp/Qs 2,2', Saturación: 'AD 52 % → AP 77 %', Exploración: 'soplo holosistólico nuevo con frémito' }, nuevo: ['Monitor', 'Catéter', 'Saturación', 'Exploración'],
+          { momento: 'Hora 20 del infarto', datos: { Monitor: 'PA 75/60 (PAM 67) · FC 109 · IC 1,57', Catéter: 'PCP 24 · PVC 7 · Qp/Qs 2,2', Saturación: 'AD 52 % → AP 69 %', Exploración: 'soplo holosistólico nuevo con frémito' }, nuevo: ['Monitor', 'Catéter', 'Saturación', 'Exploración'],
             pregunta: { id: 'c8r-1', tipo: 'test', fuente: 'mc-septo-rotura · mc-roturas-24h', modeloVivo: septo, origen: 'ilustrativo: cifras del modelo con su gravedad por defecto; la causa y la fisiopatología, de la ficha',
               enunciado: 'Veinte horas después de un infarto aparece un soplo nuevo. La sangre de la arteria pulmonar tiene mucha más saturación que la de la aurícula derecha y el gasto sistémico es bajo. ¿Qué ha pasado?',
               opciones: [
@@ -134,7 +134,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
               enunciado: 'Con noradrenalina y dobutamina la presión no mejora y el lactato sigue en 5,8. ¿Cómo sigues?',
               opciones: [
                 { t: 'Subir la dobutamina hasta que mejore la presión', porque: `La farmacología aumenta el trabajo de un miocardio ya fallido (los vasopresores suben la poscarga y los inotrópicos la contractilidad, ${p(44)}) y rara vez lo recupera. Pierdes horas con la paciente empeorando.` },
-                { t: 'Esperar 24 h más: el soporte mecánico se reserva para cuando falle un órgano', porque: `Es lo contrario: el soporte iniciado tras el fallo multiorgánico se ha descrito como un «puente a ningún sitio» (${p(49)}).` },
+                { t: 'Esperar 24 h más: el soporte mecánico se reserva para cuando falle un órgano', porque: `Es lo contrario: el soporte iniciado tras el fallo multiorgánico se ha descrito como un «puente a ningún sitio» (${p(50)}).` },
                 { t: 'No retrasar el soporte mecánico: la mejoría con fármacos no es rápida', ok: true }],
               explicacion: `Los aparatos están diseñados para <span class="hl">reducir el trabajo cardíaco</span>; si no hay <span class="hl-rojo">mejoría rápida con fármacos</span>, hay que evitar retrasos en pasar a soporte mecánico (${p(44)}-45). Está indicado en el shock refractario donde se espera mejoría de la función cardíaca, o hay otra intervención planeada (${p(45)}).` } },
           { momento: 'Hora 24 · qué aparato', datos: { Pregunta: 'el equipo repasa los aparatos posibles' }, nuevo: ['Pregunta'],
@@ -146,9 +146,9 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
                 { t: 'El ECMO veno-arterial se coloca por canulación percutánea de arteria y vena femorales.' },
                 { t: 'Como los otros aparatos, el ECMO necesita anticoagulación plena.' }],
               explicacion: `Balón: no con disección ni insuficiencia aórtica. Impella: no con prótesis o valvulopatía aórtica ni trombo del VI. ECMO: canulación femoral y anticoagulación plena (${p(48)}).` } },
-          { momento: 'Día 2 · ECMO a 4,5 L/min', datos: { Aparato: 'ECMO veno-arterial a 4,5 L/min', Monitor: 'PA 86/79 (PAM 84) · FC 78 · IC 2,59', Catéter: 'PCP 29 (antes 23) · PVC 4', Analítica: 'lactato 1,0 mmol/L' }, nuevo: ['Aparato', 'Monitor', 'Catéter', 'Analítica'],
-            pregunta: { id: 'c8r-4', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ecmo-poscarga', modeloVivo: ecmo, origen: 'ilustrativo: cifras del modelo (Remedios con ECMO a 4,5 L/min); el mecanismo y el abordaje, de la ficha',
-              enunciado: 'La perfusión ha mejorado (lactato 1,0), pero la PCP ha subido de 23 a 29 y la presión arterial casi no tiene pulso. ¿Qué está pasando y qué haces?',
+          { momento: 'Día 2 · ECMO a 4,5 L/min', datos: { Aparato: 'ECMO veno-arterial a 4,5 L/min', Monitor: 'PA 86/80 (PAM 84) · FC 78 · IC 2,6', Catéter: 'PCP 29 (antes 24) · PVC 4', Analítica: 'lactato 1,0 mmol/L' }, nuevo: ['Aparato', 'Monitor', 'Catéter', 'Analítica'],
+            pregunta: { id: 'c8r-4', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ecmo-poscarga', modeloVivo: ecmo, origen: 'ilustrativo: cifras del modelo (Remedios con ECMO a 4,5 L/min; el lactato de 1,0 es del paciente); el mecanismo y el abordaje, de la ficha',
+              enunciado: 'La perfusión ha mejorado (lactato 1,0), pero la PCP ha subido de 24 a 29 y la presión arterial casi no tiene pulso. ¿Qué está pasando y qué haces?',
               puntos: [
                 `El flujo retrógrado del ECMO <span class="hl-rojo">aumenta la poscarga del VI</span>, y puede reducir su gasto y causar edema pulmonar agudo (${p(48)}).`,
                 `Se <span class="hl">combina un balón o un Impella con el ECMO</span> para bajar la poscarga, o se drena sangre del VI («venteo», ${p(48)}-49).`],
@@ -164,6 +164,10 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
               explicacion: `Isquemia de extremidad en el <span class="hl-rojo">17 %</span> del VA-ECMO, compartimental en el 10 % y amputación en el 5 % (${p(48)}). La regla «retirar si se pierde la función sensitivomotora» es del balón (${p(46)}).`,
               nota: `<b>La fuente no lo dice.</b> HUECO: Marino no da la conducta ante la pierna fría con ECMO (reperfusión distal, cirugía vascular). No se rellena aquí: queda para el protocolo del hospital.${enFicha('mc-soporte-mecanico', 'mc-ecmo-complic')}` } },
         ],
+        lleva: [
+          'El salto de saturación de la aurícula derecha a la arteria pulmonar apunta a la rotura del septo (p. 38).' + enFicha('mc-cardiogenico-fisio', 'mc-septo-rotura'),
+          'Si los fármacos no mejoran la perfusión con rapidez, no se retrasa el soporte mecánico (p. 44-45).' + enFicha('mc-soporte-mecanico', 'mc-mcs'),
+          'El ECMO veno-arterial oxigena, pero su flujo retrógrado aumenta la poscarga del VI: se combina con balón, Impella o drenaje (p. 48).' + enFicha('mc-soporte-mecanico', 'mc-ecmo-poscarga')],
         volver: { nombre: 'Soporte circulatorio mecánico', ancla: 'mc-mcs', modeloVivo: ecmo } },
     ],
     profundizar: [

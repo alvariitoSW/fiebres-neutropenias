@@ -7,6 +7,7 @@ const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="
 const p = n => pag(n, `pág. ${n}`);
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado de siempre al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const DED = '<i>Deducción; la fuente no lo dice.</i>';
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
 const FICHA = 'mc-cardiogenico-fisio';
 
@@ -96,10 +97,10 @@ export const MAYEUTICA_CARDIOGENICO_1 = {
       { id: 'cgf-e4', corto: 'obstrucción del TSVI', tipo: 'test', fuente: 'mc-tsvi-dinamico',
         enunciado: 'Una miocardiopatía hipertrófica con shock por obstrucción dinámica del tracto de salida del VI. ¿Cómo se diagnostica y qué grupo de fármacos se usa?',
         opciones: [
-          { t: 'Doppler continuo en el apical de 4 cámaras y dobutamina para subir la contractilidad y vencer la obstrucción', porque: `Los inotrópicos están contraindicados en esta forma de shock (${p(43)}); el objetivo es bajar la frecuencia y aumentar el llenado diastólico (${p(39)}). Con dobutamina aumentarías la obstrucción.` },
+          { t: 'Doppler continuo en el apical de 4 cámaras y dobutamina para subir la contractilidad y vencer la obstrucción', porque: `Los inotrópicos están contraindicados en esta forma de shock (${p(43)}); el objetivo es bajar la frecuencia y aumentar el llenado diastólico (${p(39)}). Con dobutamina aumentarías la obstrucción (${DED}).` },
           { t: 'Cateterismo derecho y vasodilatadores', porque: `El diagnóstico se hace con Doppler continuo (${p(39)}) y el tratamiento busca frecuencia baja y mayor llenado. Un vasodilatador iría contra el objetivo.` },
           { t: 'Doppler continuo apical de 4 cámaras (gradiente subaórtico); un betabloqueante no vasodilatador', ok: true }],
-        explicacion: `Diagnóstico con Doppler de onda continua en el apical de 4 cámaras (gradiente sistólico subaórtico). Objetivo: <span class="hl">frenar la frecuencia y aumentar el llenado diastólico</span> con betabloqueantes no vasodilatadores (metoprolol, nadolol) (${p(39)}). Inotrópicos contraindicados (${p(43)}).` + enFicha(FICHA, 'mc-tsvi-dinamico') },
+        explicacion: `Diagnóstico con Doppler de onda continua en el apical de 4 cámaras (gradiente sistólico subaórtico). Objetivo: <span class="hl">frenar la frecuencia y aumentar el llenado diastólico</span> con betabloqueantes no vasodilatadores (metoprolol, nadolol) (${p(39)}). Inotrópicos contraindicados (${p(43)}). <b>La fuente no lo dice:</b> por qué (Marino solo los da por contraindicados); que la dobutamina aumente la obstrucción es deducción.` + enFicha(FICHA, 'mc-tsvi-dinamico') },
       { id: 'cgf-e5', corto: 'IC 2,3', tipo: 'test', fuente: 'mc-cs-hemodinamica · mc-cs-excepciones', origen: 'ilustrativo: paciente inventado; las cifras de referencia son de la ficha',
         enunciado: 'Un infartado tiene un índice cardíaco de 2,3 L/min/m², PA 126/74, buena diuresis y lactato de 1,2. Un residente dice: «Con ese índice es un shock cardiogénico». ¿Y tú?',
         opciones: [
@@ -125,21 +126,22 @@ export const MAYEUTICA_CARDIOGENICO_1 = {
       { id: 'c6', titulo: 'Fermín, 70 años: yugulares llenas y pulmón limpio', corto: 'Caso · Fermín', sub: 'IAM inferior; 80 kg; el ventrículo derecho que no empuja',
         paciente: { Edad: '70 años, varón', Peso: '80 kg', Motivo: 'IAM inferior, hora 2 en hemodinámica' },
         pasos: [
-          { momento: 'Hora 2', datos: { Constantes: 'PA 94/69 (PAM 82), FC 82', Exploración: 'yugulares distendidas, sin crepitantes', Diuresis: '0,3 mL/kg/h', Lactato: '1,5 mmol/L' }, nuevo: ['Constantes', 'Exploración', 'Diuresis', 'Lactato'],
-            pregunta: { id: 'c6-1', tipo: 'test', fuente: 'mc-cs-hemodinamica · mc-cs-excepciones', origen: 'ilustrativo: la diuresis es del paciente; el resto sale de las cifras del caso',
-              enunciado: 'La PAM es 82: no hay hipotensión. ¿Descartas el shock cardiogénico?',
+          { momento: 'Hora 2', datos: { Constantes: 'PA 94/69 (PAM 82), FC 82', Exploración: 'yugulares distendidas, sin crepitantes', Diuresis: '1,0 mL/kg/h', Lactato: '1,5 mmol/L', Gasto: 'IC 2,0 L/min/m²' }, nuevo: ['Constantes', 'Exploración', 'Diuresis', 'Lactato', 'Gasto'],
+            pregunta: { id: 'c6-1', tipo: 'test', fuente: 'mc-cs-hemodinamica · mc-cs-excepciones', origen: 'ilustrativo: cifras del modelo de Fermín; la definición de shock, de la ficha',
+              enunciado: 'Fermín tiene la PAM en 82, diuresis de 1,0 mL/kg/h, lactato de 1,5 y un índice cardíaco de 2,0, por debajo de 2,2. Un residente dice: «Con ese índice ya es un shock cardiogénico». ¿Y tú?',
               opciones: [
-                { t: 'Sí: sin hipotensión no hay shock cardiogénico, porque la presión es lo que define la hipoperfusión', porque: `La hipotensión falta en cerca del 5 % de los shocks (${p(40)}), y el shock se define por la hipoperfusión, no por la presión. Dejarlo pasar te haría perder las horas en que aún se puede corregir.` },
-                { t: 'No: la diuresis baja es hipoperfusión, y todavía falta medir el gasto', ok: true },
-                { t: 'No: el lactato de 1,5 ya confirma el shock', porque: `El objetivo de lactato es <2 mmol/L (Tabla 16.2, ${p(42)}): 1,5 está dentro. La hipoperfusión de Fermín viene de la diuresis, no del lactato.` }],
-              explicacion: `El shock se distingue por la <span class="hl-azul">hipoperfusión tisular</span> (hipotensión, diuresis disminuida) y la oxigenación inadecuada (lactato) (${p(40)}). La hipotensión falta en ~5 % de los casos. Fermín tiene diuresis baja y lactato aún normal: toca medir el gasto.` } },
+                { t: 'Aún no: el índice bajo es solo una parte; falta la hipoperfusión, y de momento no la hay', ok: true },
+                { t: 'Sí: el índice es menor de 2,2 y eso es lo que define el shock', porque: `El índice típico del shock es <2,2 (${p(40)}), pero el libro lo define por la hipoperfusión, no por una cifra de gasto. Con ese criterio llamarías shock a quien aún perfunde bien.` },
+                { t: 'No: sin hipotensión no hay shock cardiogénico, porque la presión es lo que define la hipoperfusión', porque: `La hipotensión falta en cerca del 5 % de los shocks (${p(40)}), y el shock se define por la hipoperfusión, no por la presión. Fiarte de la PAM te haría perder el momento en que sí perfunda mal.` }],
+              explicacion: `El shock es <span class="hl-azul">gasto bajo más hipoperfusión tisular</span> (diuresis disminuida, lactato alto) (${p(40)}). Fermín tiene el índice bajo, pero diuresis y lactato normales: <span class="hl-rojo">aún no cumple</span> y toca vigilarlo.`,
+              nota: `<b>La fuente no lo dice.</b> Marino no da cada cuánto reevaluar a un paciente así; las cifras de esta hora son del modelo.` } },
           { momento: 'Hora 2 · catéter', datos: { Catéter: 'PVC 14, PCP 11, IC 2,0', Eco: 'FEVI 52 %' }, nuevo: ['Catéter', 'Eco'],
             pregunta: { id: 'c6-2', tipo: 'test', fuente: 'mc-cs-vd', modeloVivo: sv('iam-vd', '🫀 Fermín en el modelo'),
               enunciado: 'Con PVC 14, PCP 11 y FEVI 52 %, ¿qué ventrículo está fallando y qué lo dice?',
               opciones: [
                 { t: 'El derecho: la PVC supera a la PCP (14/11 ≈ 1,3) y la FEVI es normal', ok: true },
                 { t: 'El izquierdo: tiene la FEVI de 52 %, que ya es baja, y el IC de 2,0 es de bomba izquierda', porque: `En el fallo del VI la PCP estaría elevada; aquí es 11 y la FEVI normal. Los rasgos del fallo del VD son el cociente PVC/PCP aumentado, el VD dilatado y la FEVI normal (${p(40)}).` },
-                { t: 'Los dos por igual: el IC de 2,0 es la suma de ambos fallos', porque: `Si fallaran los dos, subiría también la PCP (${p(40)}). Aquí está por debajo del objetivo de 18-20 (${p(42)}).` }],
+                { t: 'Los dos por igual: el IC de 2,0 es la suma de ambos fallos', porque: `Si fallaran los dos, subiría también la PCP (${p(40)}). Aquí está por debajo del objetivo de 18-20 (${p(42)}). ${DED}` }],
               explicacion: `Cociente <span class="hl-rojo">PVC/PCP aumentado</span> (14/11 ≈ 1,3) y <span class="hl">FEVI normal</span>: fallo del VD (${p(40)}). El IC de 2,0 está por debajo de 2,2, el típico del shock.`,
               nota: `<b>La fuente no lo dice.</b> El libro no da un valor normal para el cociente PVC/PCP (${p(40)}); el 1,3 es la división de las cifras del paciente.` } },
           { momento: 'Hora 2 · eco', datos: { Eco: 'VD dilatado, mayor que el VI; el tabique se desplaza hacia el VI' }, nuevo: ['Eco'],
@@ -159,13 +161,13 @@ export const MAYEUTICA_CARDIOGENICO_1 = {
                 { t: 'El fallo del VD es más mortal que el del VI.', mal: true, c: `El shock por fallo del VD <span class="hl">tiene menor mortalidad</span> que el del VI (${p(40)}).` }],
               explicacion: 'Dos errores: descartar el shock por la PAM y decir que el fallo del VD mata más.',
               nota: `<b>La fuente no lo dice.</b> El libro no da la conducta del fallo del VD (la remite al capítulo 18, ${p(40)}); este caso no la cubre. La norepinefrina y la PAM ≥65 son de ${p(42)}-43.` } },
-          { momento: 'Hora 8 · el giro', datos: { Constantes: 'SpO₂ 86 %', Exploración: 'crepitantes nuevos', Catéter: 'PCP 21' }, nuevo: ['Constantes', 'Exploración', 'Catéter'],
-            pregunta: { id: 'c6-5', tipo: 'test', fuente: 'mc-cs-hemodinamica · mc-cs-vd', modeloVivo: sv('cardio', '🫀 Si falla también el VI: el modelo de Aurelio'),
+          { momento: 'Hora 8 · el giro', datos: { Constantes: 'SpO₂ 86 %', Exploración: 'crepitantes nuevos', Catéter: 'PCP 21', Diuresis: '0,3 mL/kg/h' }, nuevo: ['Constantes', 'Exploración', 'Catéter', 'Diuresis'],
+            pregunta: { id: 'c6-5', tipo: 'test', origen: 'ilustrativo: la diuresis de la hora 8 y la SpO₂ son del paciente; la definición de shock, de la ficha', fuente: 'mc-cs-hemodinamica · mc-cs-vd', modeloVivo: sv('cardio', '🫀 Si falla también el VI: el modelo de Aurelio'),
               enunciado: 'Seis horas después, Fermín tiene crepitantes y la PCP ha subido de 11 a 21. ¿Qué ha cambiado?',
               opciones: [
                 { t: 'Falla también el VI: sube su presión de llenado y el pulmón se llena', ok: true },
                 { t: 'Nada: la PCP no puede subir si el problema es del VD, así que es un error de medida', porque: `La PCP mide el llenado del VI: si sube, el VI también falla (${p(40)}). Atribuirla a un error te haría no ver el edema que ya se oye.` },
-                { t: 'El fallo del VD se ha resuelto y queda una insuficiencia cardíaca sin shock', porque: `La fuente distingue el shock por la hipoperfusión, no por el ventrículo (${p(40)}); sin datos de que la perfusión haya vuelto, no puedes dar el shock por resuelto.` }],
+                { t: 'El fallo del VD se ha resuelto y queda una insuficiencia cardíaca sin shock', porque: `La fuente distingue el shock por la hipoperfusión, no por el ventrículo (${p(40)}); con la PCP en 21, crepitantes y la diuresis cayendo a 0,3, la perfusión empeora: no puedes dar el cuadro por resuelto.` }],
               explicacion: `La presión de llenado sube en el ventrículo que falla (<span class="hl">PVC o PCP</span>, ${p(40)}): con la PCP en 21 y crepitantes, el VI también ha fallado. Es el patrón del fallo de bomba izquierda que viste al principio.`,
               nota: `<b>La fuente no lo dice.</b> El libro no describe la evolución del fallo del VD a biventricular; las cifras de esta hora son del paciente, no del modelo.` } },
         ],

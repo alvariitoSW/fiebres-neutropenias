@@ -97,7 +97,7 @@ export const ESCENARIOS_EXTRA = {
 // El reloj del posparo: la gravedad de la Ees (g, como en el «fallo») cae con las horas desde la RCE hasta 0 a las 72 h («suele
 // resolverse en 72 h», p. 65). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
 export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25;
-// El aturdimiento es BIVENTRICULAR (cap. 21, p. 64): la Ees del VD cae con la misma curva que la del VI y vuelve a la normal a
+// El aturdimiento es BIVENTRICULAR (cap. 21, p. 65; qué ventrículo: fisiología general, la ficha no lo dice): la Ees del VD cae con la misma curva que la del VI y vuelve a la normal a
 // las 72 h; a las 0 h, POSPARO_VD0 de la normal (cuánto: ilustrativo). La fuga capilar de la respuesta inflamatoria (POSPARO_FUGA,
 // mL a las 0 h): ilustrativa. Antes era 1100 mL y, con el edema rápido, la PVC de Virginia quedaba en 1,5 (M0, b3-paso4 g3)
 export const POSPARO_FUGA = 300, POSPARO_VD0 = 0.3;

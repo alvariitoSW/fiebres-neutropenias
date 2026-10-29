@@ -7,6 +7,7 @@ const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="
 const p = n => pag(n, `pág. ${n}`);
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado de siempre al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const DED = '<i>Deducción; la fuente no lo dice.</i>';
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
 const rc = (clave, texto) => ({ receptorVivo: clave, texto });
 const FICHA = 'mc-cardiogenico-farmaco';
@@ -19,7 +20,7 @@ export const MAYEUTICA_CARDIOGENICO_2 = {
     entrada: 'Hasta qué presión de llenado llenar, qué vasopresor y qué inotrópico elegir, qué cifras te dicen que vas bien, y por qué los fármacos son solo un puente.',
     guia: [
       { id: 'cgm-g1', corto: 'por qué 18-20', tipo: 'test', fuente: 'mc-llenado-optimo',
-        enunciado: 'El objetivo de presión de cuña en el shock cardiogénico es 18-20 mmHg, mucho más que la normal. Antes de leer la ficha: ¿qué marca el techo de esa cifra?',
+        enunciado: 'El objetivo de presión de cuña en el shock cardiogénico es 18-20 mmHg, mucho más que la normal (<i>deducción; la fuente no lo dice</i>). Antes de leer la ficha: ¿qué marca el techo de esa cifra?',
         opciones: [
           { t: 'La presión coloidosmótica del plasma: por encima se arriesga el edema de pulmón', ok: true },
           { t: 'El límite técnico del catéter: por encima de 20 mmHg la medida deja de ser fiable', porque: `No es un límite de la medida: el techo es el edema pulmonar, que depende de la presión coloidosmótica (${p(42)}). Pensar en el catéter te haría ignorar por qué 20 y no 25.` },
@@ -39,7 +40,7 @@ export const MAYEUTICA_CARDIOGENICO_2 = {
           { t: 'La frecuencia baja por reflejo, como con la fenilefrina, y el gasto cae por la bradicardia', porque: `La bradicardia refleja es de la fenilefrina, el vasoconstrictor puro (${p(42)}). La norepinefrina añade estimulación cardíaca leve.` },
           { t: 'La frecuencia se dispara y el gasto cae por la taquicardia', porque: `La preferencia por la norepinefrina viene de su menor riesgo de taquicardia y arritmias frente a epinefrina y dopamina (${p(43)}). Esperar una taquicardia fuerte te frenaría de usar la droga de elección.` },
           { t: 'Casi no cambia: la estimulación cardíaca es leve y el gasto tiende a conservarse', ok: true }],
-        explicacion: `Vasoconstricción sistémica más <span class="hl-azul">estimulación cardíaca leve</span>, que «tiende a preservar el gasto frente a la vasoconstricción, al menos en el rango de dosis bajo» (${p(43)}).` },
+        explicacion: `Vasoconstricción sistémica más <span class="hl-azul">estimulación cardíaca leve</span>, que «tiende a preservar el gasto frente a la vasoconstricción, al menos en el rango de dosis bajo» (${p(43)}). <i>Deducción; la fuente no lo dice:</i> que la frecuencia casi no cambie. Marino solo habla de estimulación cardíaca leve.` },
       { id: 'cgm-g4', corto: 'por qué no dopamina', tipo: 'test', fuente: 'mc-cs-norepi-preferencia',
         enunciado: 'Marino prefiere la norepinefrina a la epinefrina y a la dopamina en el shock cardiogénico. ¿En qué se apoya?',
         opciones: [
@@ -79,8 +80,8 @@ export const MAYEUTICA_CARDIOGENICO_2 = {
       { id: 'cgm-e2', corto: 'milrinona renal', tipo: 'test', fuente: 'mc-tabla-16-3', origen: 'ficha: Tabla 16.3',
         enunciado: 'Un paciente en shock cardiogénico con aclaramiento de creatinina de 30 mL/min/1,73 m². ¿Qué velocidad de infusión de milrinona da la Tabla 16.3?',
         opciones: [
-          { t: '0,43 μg/kg/min', porque: `Es la cifra de un aclaramiento de 50 (${p(44)}). Con 30, la infusión quedaría alta para su eliminación y aumentaría el riesgo de hipotensión.` },
-          { t: '0,28 μg/kg/min', porque: `Es la cifra de un aclaramiento de 20 (${p(44)}). Con 30 quedaría baja.` },
+          { t: '0,43 μg/kg/min', porque: `Es la cifra de un aclaramiento de 50 (${p(43)}). Con 30, la infusión quedaría alta para su eliminación y aumentaría el riesgo de hipotensión.` },
+          { t: '0,28 μg/kg/min', porque: `Es la cifra de un aclaramiento de 20 (${p(43)}). Con 30 quedaría baja.` },
           { t: '0,33 μg/kg/min', ok: true }],
         explicacion: `Tabla 16.3: ClCr 50 → 0,43; 40 → 0,38; <span class="hl">30 → 0,33</span>; 20 → 0,28 μg/kg/min. La semivida de 2,5 h se alarga en la insuficiencia renal (${p(44)}). Son recomendaciones del fabricante.` + enFicha(FICHA, 'mc-tabla-16-3') },
       { id: 'cgm-e3', corto: 'levosimendán', tipo: 'test', fuente: 'mc-levosimendan',
@@ -155,14 +156,14 @@ export const MAYEUTICA_CARDIOGENICO_2 = {
                 { t: 'Un nuevo infarto del VD: la PVC debería estar alta', porque: `En el fallo del VD sube la PVC por encima de la PCP (${p(40)}); aquí la PVC es 4 y la PCP 30.` },
                 { t: 'Rotura del papilar: insuficiencia mitral aguda dentro de las 24 h; no retrasar el soporte', ok: true }],
               explicacion: `La rotura del papilar (7 %) produce una <span class="hl-rojo">insuficiencia mitral aguda y potencialmente mortal</span> y aparece típicamente dentro de las primeras 24 h (${p(38)}). Sin mejoría rápida con fármacos, hay que evitar retrasos en pasar a soporte mecánico (${p(44)}-45).`,
-              nota: `<b>La fuente no lo dice.</b> El libro no da el tratamiento definitivo de la rotura del papilar ni la PCP esperable; las cifras de esta hora son las del estado del modelo para este paciente. Esta pregunta no cubre la cirugía.` + enFicha(FICHA, 'mc-carga-trabajo') } },
+              nota: `<b>La fuente no lo dice.</b> El soplo holosistólico no figura en el cap. 16 (es fisiología general); el libro tampoco da el tratamiento definitivo de la rotura del papilar ni la PCP esperable; las cifras de esta hora son las del estado del modelo para este paciente. Esta pregunta no cubre la cirugía.` + enFicha(FICHA, 'mc-carga-trabajo') } },
           { momento: 'Hora 15 · decisión', datos: { Respiración: 'SpO₂ 83 % con edema pulmonar', Pregunta: 'qué soporte y qué vigilas' }, nuevo: ['Respiración', 'Pregunta'],
             pregunta: { id: 'c7-5', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ecmo', modeloVivo: sv('rotura-papilar', '🫀 El soporte sobre el estado de Benito'),
               enunciado: 'Benito tiene fallo respiratorio además del cardiogénico. ¿Qué soporte prefiere Marino y qué vigilas? Tu respuesta tiene dos partes.',
               puntos: [
                 `El <span class="hl-verde">ECMO veno-arterial</span>: es el soporte preferido en el shock cardiogénico con fallo respiratorio, porque apoya la circulación y la oxigenación.`,
                 `Vigilas la <span class="hl-rojo">poscarga del VI</span>: el flujo retrógrado en la aorta puede reducir el gasto del VI y causar edema agudo de pulmón.`],
-              explicacion: `Se resuelve con balón o Impella combinados, o drenando el VI («venteo») (${p(48)}). Requiere anticoagulación completa.`,
+              explicacion: `Se resuelve con balón o Impella combinados, o drenando el VI («venteo») (${p(48)}-49). Requiere anticoagulación completa.`,
               nota: `<b>La fuente no lo dice.</b> El libro no dice si el soporte mecánico es el definitivo de la rotura del papilar; solo indica cuándo se usa y qué problema trae.` + enFicha('mc-soporte-mecanico', 'mc-ecmo') } },
         ],
         lleva: [
