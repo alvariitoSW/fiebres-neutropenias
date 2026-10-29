@@ -30,6 +30,10 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 - El director no comparece al pasar del 25 % cuando el desvío sale al medir al final (b3-paso4 g2). Si se repite: medir
   `gasto.mjs` a mitad de tarea (tras las piezas).
 
+- (29/10, b3-paso4 g3a) Encargos que juntan varias piezas: «estados» con 3 estados (73 pasos, 2,9 M frente a 1,0) y
+  «arreglos» con 6 arreglos (76 pasos, 1,5 M frente a 0,6). Si se repite en otro parte: un encargo por estado y tandas
+  de ≤3 arreglos. Confirmado: medir `gasto.mjs` a mitad de tarea funcionó (se compareció a 8,2 M, antes del Estudiar).
+
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
