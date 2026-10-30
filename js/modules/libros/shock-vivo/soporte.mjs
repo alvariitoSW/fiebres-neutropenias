@@ -130,6 +130,18 @@ export const civDeG = (g) => red2(CIV_COLAPSO * g);
 export const RECETA_BENITO = { esc: 'fallo', gEsc: 0.65, mando: 'papilar', g: 0.5, hb: 14 };        // eroa 0,65
 export const RECETA_FERMIN = { esc: 'fallo', gEsc: 0.05, mando: 'vd', g: VD_G_RECETA, liquidos: VD_LIQUIDOS, hb: 14 };       // eesVd 0,15 + 1.250 mL
 export const RECETA_REMEDIOS = { esc: 'fallo', gEsc: 0.7, mando: 'septo', g: 0.3, hb: 14 };           // civ 0,3
+// IC izquierda que se descompensa (estados ic-etapa-1/2/3; Marino cap. 18, p. 5-6, Fig. 18.3): el mando g de 0 a 1 es el reloj de 0 a 4 h
+// del postoperatorio. Cada hora lleva su fallo del VI (gEsc, la Ees) y su resistencia sistémica (rSis: factor sobre la de partida;
+// sube con el tiempo: la vasoconstricción que sostiene la PA, p. 6-7). Nodos medidos con autonomo/bloques/b3/herramientas/g4-etapas-cifras.mjs;
+// los factores y el volumen de partida (IC_VOLEMIA, mL), ilustrativos: se eligieron para que las cifras caigan en las franjas de la figura
+export const IC_NODOS = [[0, 0, 0.7], [0.25, 0.3, 0.65], [0.5, 0.45, 0.6], [0.75, 0.68, 0.75], [1, 0.77, 0.9]], IC_VOLEMIA = 600, IC_G_ETAPA = [0.25, 0.5, 1];
+export function icDeG(g) {
+  const x = Math.min(1, Math.max(0, g)); let i = 0; while (i < IC_NODOS.length - 2 && x > IC_NODOS[i + 1][0]) i++;
+  const [a, b] = [IC_NODOS[i], IC_NODOS[i + 1]], u = (x - a[0]) / (b[0] - a[0]);
+  return { gEsc: a[1] + (b[1] - a[1]) * u, rSis: a[2] + (b[2] - a[2]) * u };
+}
+export const horasDeIc = (g) => Math.round(4 * Math.min(1, Math.max(0, g)) * 10) / 10;
+export const RECETA_IC = { esc: 'fallo', mando: 'ic', g: 0.25, hb: 14 };
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
 // Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
@@ -147,6 +159,7 @@ export function prepararMotor(rec, segundos = 40) {
   m.correr(12);
   m.p.kEdema = rec.kEdema ?? K_EDEMA; m.p.pEdema = rec.pEdema ?? P_EDEMA;
   m.p.succionVi = SUCCION_VI; m.p.succionVen = SUCCION_VEN;
+  if (rec.mando === 'ic') { const q = icDeG(rec.g); rec = { ...rec, gEsc: q.gEsc, rSis: q.rSis, volemia: IC_VOLEMIA }; }
   ESC[rec.esc]?.aplicar(m, rec.gEsc ?? rec.g);
   if (rec.mando) {                            // el mando de gravedad de los estados del infarto (ver arriba)
     if (rec.mando === 'papilar') rec = { ...rec, eroaMitral: eroaDeG(rec.g) };
@@ -154,6 +167,7 @@ export function prepararMotor(rec, segundos = 40) {
     else if (rec.mando === 'septo') rec = { ...rec, civ: civDeG(rec.g) };
   }
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
+  if (rec.rSis) m.p.rSis *= rec.rSis;         // resistencia sistémica de partida (factor; ilustrativo: IC ic-etapa-1, ver RECETA_IC)
   if (rec.volemia) m.s.vven += rec.volemia;
   // eesVd: la Ees del VD como fracción de la normal (1 = normal; 0,5 = la mitad). Un VD infartado o aturdido (cap. 16, p. 40:
   // sube la PVC o la PCP «según el ventrículo que falle»). Se pide como p.vd.ees y el motor la sigue con su tauContractilidad,

@@ -1,8 +1,8 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
-import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, eroaDeG, eesVdDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
-export { gDePosparo, horasDePosparo, POSPARO_H };
+import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, RECETA_IC, IC_G_ETAPA, horasDeIc, eroaDeG, eesVdDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
+export { gDePosparo, horasDePosparo, POSPARO_H, IC_G_ETAPA };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
 const PM = (id, t) => `<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener">${t}</a>`;
@@ -87,6 +87,10 @@ export const C = {
   sepMon: { f: 'mc-shock-septico', id: 'mc-sepsis-monitorizacion', sitio: 'Monitorización', p: 59 },
   t172: { f: 'mc-shock-septico', id: 'mc-tabla-17-2', sitio: 'Tabla 17.2', p: 60 },
   vdMed: { f: 'mc-ic-tipos', id: 'mc-vd-medidas', sitio: 'Presiones de llenado', p: 4 },
+  icEtapas: { f: 'mc-ic-tipos', id: 'mc-ic-etapas', sitio: 'Etapas progresivas de la IC izquierda', p: 5 },
+  icFig: { f: 'mc-ic-tipos', id: 'mc-fig-18-3', sitio: 'Fig. 18.3', p: 6 },
+  icNeuro: { f: 'mc-ic-tipos', id: 'mc-neurohumoral', sitio: 'Respuestas neurohumorales', p: '5-6' },
+  icCongestion: { f: 'mc-ic-tipos', id: 'mc-congestion', sitio: 'Congestión venosa', p: '6-7' },
   autorreg: { f: 'mc-ic-tipos', id: 'mc-cardiorrenal', sitio: 'Síndrome cardiorrenal', p: 7 },
   disec: { f: 'mc-diseccion-aortica', id: 'mc-diseccion-fisio', sitio: 'Fisiopatología', p: 50 },
   tepClin: { f: 'neumo-ep-diagnostico', id: 'nep-tabla-22-1', sitio: 'Tabla 22.1', p: 2 },
@@ -144,6 +148,10 @@ export const PACIENTES = [
     rec: RECETA_FERMIN, linea: '70 años, 80 kg · IAM inferior con afectación del VD · hemodinámica, hora 2' },
   { k: 'remedios', nombre: 'Remedios', chip: 'rotura del septo', tipo: 'septo', peso: 62, edad: 74, sexo: 'mujer', hb: 13, fr: 26, t: 36.6, obj: 'marino-16-2',
     rec: RECETA_REMEDIOS, linea: '74 años, 62 kg · IAM anterior · hora 20 · soplo holosistólico nuevo con frémito' },
+  // Ramiro (b3-paso4 g4): la IC izquierda que se descompensa en el postoperatorio (Marino cap. 18, p. 5-6, Fig. 18.3). La figura es de
+  // «un paciente postoperatorio» sin más datos: edad, peso, FR, T y Hb, ilustrativos. El mando es el reloj de 0 a 4 h (soporte.mjs, RECETA_IC)
+  { k: 'ramiro', nombre: 'Ramiro', chip: 'IC izquierda', tipo: 'ic', peso: 74, edad: 68, sexo: 'varón', hb: 12.5, fr: 22, t: 36.8, obj: 'marino-14-5',
+    rec: RECETA_IC, linea: '68 años, 74 kg · postoperatorio · hora 1, IC izquierda que se descompensa' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
     rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
 ];
@@ -164,6 +172,8 @@ export const GRAVEDAD = {
     nota: 'Contractilidad del VD (de la normal): del modelo; la ficha (p. 40) da la dirección. Los líquidos de partida no son del mando', cita: C.vd },
   septo: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio del septo ${coma2(civDeG(g))} cm²`, 'cortocircuito VI → VD'],
     nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección). Límite del modelo: aquí la PCP baja, en el paciente sube', cita: C.septo },
+  ic: { min: 0, max: 1, paso: 0.01, texto: (g) => [`hora ${horasDeIc(g).toLocaleString('es-ES')} del postoperatorio`, 'IC izquierda: de 0 a 4 h (Fig. 18.3)'],
+    nota: 'El reloj de la Fig. 18.3 (p. 6): cada hora lleva su fallo del VI y su resistencia; las cifras son del modelo, la dirección, de la ficha', cita: C.icFig },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -205,7 +215,7 @@ export function nombreEstado(R, X) {
   }
   if (hipertensionVaso(R, X)) return 'hipertension-vaso';
   // el papilar y el septo llegan con la PCP en 20-30 sin que nadie haya dado volumen: es su cuadro, no una sobrecarga
-  const t = X.pac.tipo, llegaAsi = (t === 'papilar' || t === 'septo') && X.infundido.cris + X.infundido.sangre === 0;
+  const t = X.pac.tipo, llegaAsi = (t === 'papilar' || t === 'septo' || t === 'ic') && X.infundido.cris + X.infundido.sangre === 0;
   if (!llegaAsi && sobrecarga(R)) return 'sobrecarga';
   const tr = topeRepos(R, X);
   if (tr != null && X.infundido.cris + X.infundido.sangre >= tr) return 'hemo-tope';
@@ -219,6 +229,9 @@ export function nombreEstado(R, X) {
   if (t === 'septico') { if (X.ajuste.na >= 10) return 'septico-na'; return R.irvs >= 25 && R.pam >= 65 ? 'sin-shock' : 'septico'; }
   if (t === 'cardio') { if (R.pam >= 65 && R.ic >= 2.2) return 'sin-shock'; return R.pcp < 18 ? 'cardio-pcp-baja' : R.pcp <= 20 ? 'cardio-pcp-optima' : 'cardio'; }
   if (t === 'posparo') return X.g <= 0.005 ? 'posparo-72' : 'posparo';
+  // la IC izquierda se nombra por su etapa (Fig. 18.3): el gasto cae (3), la FC sube con el gasto conservado (2), o solo sube la PCP (1).
+  // Los cortes (IC 3,0 y FC 90) son ilustrativos: la figura no los da. Sin la PA sostenida (PAM <65) ya es el cardiogénico
+  if (t === 'ic') return R.ic < 3 ? (R.pam >= 65 ? 'ic-etapa-3' : 'cardio') : R.fc >= 90 ? 'ic-etapa-2' : 'ic-etapa-1';
   if (t === 'papilar') return 'rotura-papilar';
   if (t === 'vd') return R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'iam-vd';
   if (t === 'septo') return R.qpqs >= 1.2 ? 'rotura-septo' : R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'cardio';
@@ -300,6 +313,23 @@ export const ESTADOS = {
       { t: (R) => `Sube la presión de llenado del que falla: PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20' : ''}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo },
       { t: (R) => `La arteriola se cierra: IRVS ${R.irvs} (Fig. 16.2).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.f162 },
       { t: 'Con la PCP por encima de 18-20 el pulmón se encharca: mira las gotas en el pulmón y la SpO₂.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' }] },
+  'ic-etapa-1': { tit: 'IC izquierda, etapa 1', frase: (R) => `Etapa 1: la presión de llenado sube (PCP ${R.pcp}) y el volumen sistólico se mantiene (VS ${R.vs} mL, IC ${c1(R.ic)}), a costa de congestión del pulmón y disnea.`, org: 'ficha · p. 5 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El signo más precoz de la disfunción del VI es que sube la presión de llenado telediastólica, la presión de enclavamiento: PCP ${R.pcp}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.icEtapas },
+      { t: (R) => `El volumen sistólico se mantiene (${R.vs} mL) y el gasto también (IC ${c1(R.ic)}), pero a expensas de esa presión alta.`, s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: 'La presión alta congestiona la circulación venosa del pulmón y da la sensación de disnea: el primer síntoma.', s: ['#cor-pulmon'], c: C.icEtapas },
+      { t: (R) => `La FC aún no se mueve (${R.fc}): la taquicardia es de la etapa siguiente.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.icEtapas }] },
+  'ic-etapa-2': { tit: 'IC izquierda, etapa 2', frase: (R) => `Etapa 2: el volumen sistólico cae (VS ${R.vs} mL) y la FC sube (${R.fc}): la taquicardia lo compensa y el gasto se conserva (IC ${c1(R.ic)}).`, org: 'ficha · p. 5 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El VI se vacía peor: el volumen sistólico baja (${R.vs} mL).`, s: ['#cor-cav', '[data-fila="vs"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: 'Los barorreceptores notan el descenso del volumen sistólico y activan el simpático: más contractilidad, más frecuencia, vasoconstricción y activación del sistema renina-angiotensina-aldosterona.', s: ['#cor-arteriola'], c: C.icNeuro },
+      { t: (R) => `La frecuencia sube: FC ${R.fc}.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.icEtapas },
+      { t: (R) => `La taquicardia compensa la caída del volumen sistólico: el gasto se conserva (IC ${c1(R.ic)}).`, s: ['[data-fila="ic"]'], c: C.icEtapas },
+      { t: (R) => `La presión de llenado sigue alta (PCP ${R.pcp}): el pulmón, congestionado.`, s: ['[data-fila="pcp"]', '#cor-pulmon'], c: C.icEtapas }] },
+  'ic-etapa-3': { tit: 'IC izquierda, etapa 3', frase: (R) => `Etapa 3: el gasto cae (IC ${c1(R.ic)}) y la presión de llenado sube más (PCP ${R.pcp}). Es el paso de IC compensada a descompensada; la PA se sostiene (PAM ${R.pam}).`, org: 'ficha · p. 5-7 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El gasto cardíaco empieza a caer (IC ${c1(R.ic)}, VS ${R.vs} mL): el punto en que cae marca la transición de IC compensada a descompensada.`, s: ['[data-fila="ic"]', '[data-fila="vs"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: (R) => `La presión de llenado sube aún más: PCP ${R.pcp}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.icEtapas },
+      { t: (R) => `La vasoconstricción periférica basta para sostener la PA (PAM ${R.pam}) y la perfusión de los tejidos: mira la arteriola cerrada (IRVS ${R.irvs}).`, s: ['#cor-arteriola', '[data-fila="pa"]'], c: C.icCongestion },
+      { t: 'Por eso las manifestaciones de la IC aguda descompensada son las de la congestión venosa, no las del bajo gasto: disnea, crepitantes y edema de pulmón.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.icCongestion },
+      { t: 'El riñón sufre sobre todo por la presión venosa alta, no por el gasto: la autorregulación mantiene su flujo hasta que la PAM baja de 70.', s: ['[data-fila="pa"]'], c: C.autorreg }] },
   'rotura-papilar': { tit: 'Rotura del músculo papilar', frase: (R) => `La sangre vuelve a la aurícula en cada sístole: IC ${c1(R.ic)}, PCP ${R.pcp} y SpO₂ ${R.spo2} %. Es una insuficiencia mitral aguda: el 7 % de los shocks del infarto, y llega en las primeras 24 h, no tarde.`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
     guia: [{ t: 'El músculo papilar roto suelta la valva mitral: en la sístole la valva se va a la aurícula y la válvula no cierra. Es una insuficiencia mitral aguda, y amenaza la vida.', s: ['#cor-mitral'], c: C.papilar },
       { t: (R) => `Mira el chorro rojo: en cada sístole parte de la sangre del VI vuelve a la aurícula. Fracción regurgitante ${R.frmit} %.`, s: ['.cc-chorro', '[data-fila="frmit"]'], c: C.papilar, org: 'la fracción y su tamaño: modelo (fisiología general)' },
@@ -407,6 +437,7 @@ export const ESTADOS = {
 
 // ---------------------------------------------------------------- notas (con su tipo) y «Para profundizar»
 export const NOTAS = [
+  { k: 'ic-fig-18-3', tipo: 'calla', txt: '<b>Las cifras de la Fig. 18.3.</b> La figura (p. 6) es de «un paciente postoperatorio» (datos de observación personal del autor) y sus curvas no cuadran entre sí (un VS de 60 mL con FC 80 da 4,8 L/min, no un IC de 3,5 con una superficie normal). El texto (p. 5) solo da la dirección de cada etapa. Los cortes entre etapas (IC 3,0 y FC 90) y los números de Ramiro son del modelo: ilustrativos; el motor da un VS más alto y un IC algo menor que la figura.', citas: [C.icFig, C.icEtapas] },
   { k: 'clase-cortes', tipo: 'calla', txt: '<b>Los cortes de FC y PA por clase.</b> La Tabla 15.1 de Marino (p. 22) da el % de volemia perdido y solo flechas para la FC (↔, ↑, ↑↑, ↑↑↓) y la PA (↔, ↔↓, ↓, ↓↓). Las cifras con que el modelo nombra la clase de cada paciente (FC 95, 120 y 140; PAS 90 y 70) son ilustrativas, no de la ficha. En la práctica, la FC y la PAS cambian menos que esta tabla: en traumatismos graves la FC mediana pasó de 82 (clase 1 estimada) a 95 (clase 4) y la PAS de 135 a 120 (' + PM(21349628, 'Guly 2011') + '); solo el 9,3 % de los traumatizados encajó en una clase ATLS (' + PM(25284231, 'Mutschler 2014') + ').', citas: [C.t151] },
   { k: 'impella-fuentes', tipo: 'discrepan', txt: '<b>¿Qué bomba lleva el Impella?</b> Marino la llama «bomba centrífuga miniatura» y da 2,5-5,5 L/min según el catéter (p. 47). La Guía ESC 2026 de IC de la app habla de «bombas de flujo microaxial (hasta 4-5,5 l/min)». El dibujo enseña la hélice que describen las dos; el nombre del tipo de bomba no se elige.', citas: [C.impella, C.escMcs] },
   { k: 'scvo2-fuentes', tipo: 'discrepan', txt: '<b>ScvO₂ objetivo.</b> Marino (Tabla 14.5): ScvO₂ >50 %. El Manual UMI, para el shock séptico en sus 6 primeras horas: ScvO₂ ≥70 % (o SvO₂ ≥65 %). El monitor enseña las dos y no elige.', citas: [C.t145, C.umi6h] },

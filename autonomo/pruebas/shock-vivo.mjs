@@ -143,6 +143,20 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     await grav(100); r = await S(); posible(r, 'Remedios 1,0 cm²'); ok(r.pam >= 35 && r.pam < 60, `Remedios 1,0 cm²: PAM ${r.pam} (colapso)`); await limpio('Remedios tope'); await foto('remedios-tope');
     await pest('far'); await limpio('Remedios farmacos');
 }
+// Ramiro (b3-paso4 g4): las tres etapas de la IC izquierda (Fig. 18.3) por franjas, no por cifra exacta (las de la figura no cuadran entre sí)
+{
+    let r; const F = {
+        'ic-etapa-1': ['IC izquierda, etapa 1', r => r.pcp >= 18 && r.fc < 90 && r.ic >= 3.0],
+        'ic-etapa-2': ['IC izquierda, etapa 2', r => r.fc >= 90 && r.ic >= 3.0],
+        'ic-etapa-3': ['IC izquierda, etapa 3', r => r.ic >= 1.8 && r.ic <= 2.2 && r.pam >= 65 && r.pcp <= 32] };
+    for (const k of Object.keys(F)) {
+        await abrir(k); await espera(1800); r = await S();
+        ok(r.pac === 'ramiro' && r.estado === F[k][0] && F[k][1](r), `${k}: abre Ramiro, estado «${r.estado}», PCP ${r.pcp}, FC ${r.fc}, IC ${r.ic}, PAM ${r.pam}`);
+        posible(r, k); await limpio(k);
+    }
+    await pest('grav'); await desplegar();
+    for (const g of [0, 25, 50, 75, 100]) { await grav(g); r = await S(); posible(r, `Ramiro ${g} %`); ok(r.pcp <= 32 && r.pam >= 65, `Ramiro ${g} %: PCP ${r.pcp}, PAM ${r.pam}, estado «${r.estado}»`); await limpio('Ramiro ' + g); }
+}
 
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
@@ -216,7 +230,7 @@ for (const [k, n] of [['impella', 8], ['balon', 5], ['ecmo', 5]]) {
     await clic('#shv-esc-pest [data-plano="recorrido"]'); await espera(500); await limpio('recorrido ' + k);
 }
 // ───────── E. Explicación guiada: señala y cada cita llega a un párrafo que existe
-for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo']) {
+for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3']) {
     await abrir(k); await espera(900); await clic('#shv-btn-guia'); await espera(500);
     let pasos = 0, sinSenal = 0, citasRotas = [];
     for (; pasos < 8; pasos++) {

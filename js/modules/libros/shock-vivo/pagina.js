@@ -114,7 +114,7 @@ function leer() {
     paps: Math.round(u.paps), papd: Math.round(u.papd), papm: Math.round(u.papm), ic: +L.icTotal.toFixed(1), icNat: L.gcNativo / cab.m.p.sc, gcTotal: L.gcTotal,
     spo2: P.spo2, ven: P.scvo2, gap: P.gap, etco2: P.petco2, lact: +est.lab.lact.toFixed(1), diur: +est.lab.diur.toFixed(1),
     imp: L.imp, ecmo: L.ecmo, impPide: L.impPide, ecmoPide: L.ecmoPide, totalPide: L.totalPide, aoAbre: L.aoAbre, aoDe: L.aoDe, edema: u.vEdema, picoDia: Math.round(L.picoDia), picoNo: L.picoNo != null ? Math.round(L.picoNo) : null, teleNo: L.teleNo != null ? Math.round(L.teleNo) : null, teleDia: L.teleDia != null ? Math.round(L.teleDia) : null,
-    fevi: Math.round(u.feTotal * 100), frmit: Math.round(u.fr * 100), qpqs: +u.qpqs.toFixed(2), satAd: P.scvo2, satAp: Math.round((u.qp > 0.05 && u.qsh > 0 ? (u.qs * (P.scvo2 / 100) + u.qsh * P.sao2) / u.qp : P.scvo2 / 100) * 100),   // SatAD = la misma venosa que enseña el monitor (ScvO₂);   // la sangre que pasa del VI al VD lleva la saturación arterial del monitor, no la SaO₂ fija del motor
+    vs: Math.round(u.vs), fevi: Math.round(u.feTotal * 100), frmit: Math.round(u.fr * 100), qpqs: +u.qpqs.toFixed(2), satAd: P.scvo2, satAp: Math.round((u.qp > 0.05 && u.qsh > 0 ? (u.qs * (P.scvo2 / 100) + u.qsh * P.sao2) / u.qp : P.scvo2 / 100) * 100),   // SatAD = la misma venosa que enseña el monitor (ScvO₂);   // la sangre que pasa del VI al VD lleva la saturación arterial del monitor, no la SaO₂ fija del motor
     vdvi: +(u.edvD / Math.max(1, u.edv)).toFixed(2),
     perdida: Math.round((est.rec.esc === 'hemorragia' ? est.g * 42 : 0)),
   };
@@ -157,6 +157,7 @@ const CALC = [{ k: 'ic', et: 'IC', u: 'L/min/m²', d: 1, cat: true }, { k: 'irvs
 const EXTRA = {
   papilar: [{ k: 'frmit', et: 'FR mitral', u: '%', t: 'fracción regurgitante' }, { k: 'fevi', et: 'FEVI', u: '%', t: 'por volúmenes' }],
   vd: [{ k: 'fevi', et: 'FEVI', u: '%', t: 'por volúmenes' }, { k: 'vdvi', et: 'VTD VD/VI', u: '×', d: 1, t: 'volumen del VD sobre el del VI' }, { k: 'pvcpcp', et: 'PVC/PCP', u: '', d: 1, t: 'cociente' }],
+  ic: [{ k: 'vs', et: 'VS', u: 'mL', t: 'volumen sistólico, por latido' }],
   septo: [{ k: 'qpqs', et: 'Qp:Qs', u: '', d: 1, t: 'flujo pulmonar sobre sistémico' }, { k: 'satad', et: 'SatO₂ AD', u: '%', t: 'sangre venosa mixta' }, { k: 'satap', et: 'SatO₂ AP', u: '%', t: 'tras el cortocircuito' }, { k: 'fevi', et: 'FEVI', u: '%', t: 'a la aorta y al VD' }],
 };
 const calcDe = () => [...CALC, ...(EXTRA[est.pac.tipo] || [])];
@@ -217,6 +218,7 @@ const EXPLICA = {
   ven: ['ScvO₂ >50 % (Tabla 14.5); ≥70 % en el Manual UMI para el séptico (ver la nota). En la sepsis engaña: sube aunque falte perfusión.', D.C.scvo2],
   gap: ['Gap de PCO₂ <6 mmHg; solo depende del flujo (p. 10).', D.C.gap],
   frmit: ['Fracción regurgitante: la parte de lo que el VI expulsa que vuelve a la aurícula. Cifra del modelo (fisiología general); la ficha solo dice «insuficiencia mitral aguda» (p. 38).', D.C.papilar],
+  vs: ['Volumen sistólico: lo que el VI expulsa en cada latido (VTD − VTS). Cifra del modelo (fisiología general); el gasto es VS × FC. La Fig. 18.3 (p. 6) lo dibuja en mL, y sus cifras no cuadran entre sí con el índice cardíaco.', D.C.icFig],
   fevi: ['FEVI por volúmenes (telediastólico menos telesistólico): cuenta todo lo que sale del VI, por la aorta y por donde sea (la aurícula o el VD). Fisiología general; la cifra, del modelo. En el fallo del VD la ficha la da como normal (p. 40).', D.C.vd],
   vdvi: ['Volumen telediastólico del VD sobre el del VI: sube cuando el VD se dilata. La ficha dice «VD dilatado» (p. 40) sin cifra; el sano del modelo ronda 1,2. Cifra: modelo.', D.C.vd],
   pvcpcp: ['Cociente PVC/PCP: sube cuando falla el VD (p. 40). La ficha no da el valor; las cifras, del modelo.', D.C.vd],
@@ -665,7 +667,7 @@ nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock();
 reanudar();
 
 // Abrir en un estado de la tabla F de la lista del bloque (hemo, septico, cardio, tapon, tep, balon, impella, ecmo, qs)
-const ESTADO_PAC = { 'rotura-papilar': 'benito', 'iam-vd': 'fermin', 'rotura-septo': 'remedios', posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
+const ESTADO_PAC = { 'ic-etapa-1': 'ramiro', 'ic-etapa-2': 'ramiro', 'ic-etapa-3': 'ramiro', 'rotura-papilar': 'benito', 'iam-vd': 'fermin', 'rotura-septo': 'remedios', posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
 function abrirEstado(clave) {
   if (!clave) { reanudar(); medirDock(); return; }
   setModo(clave === 'qs' ? 'qs' : 'explorar');
@@ -673,8 +675,8 @@ function abrirEstado(clave) {
   const p = D.PACIENTES.find((x) => x.k === ESTADO_PAC[clave]); if (!p) { reanudar(); return; }
   const ap = ['balon', 'impella', 'ecmo'].includes(clave) ? clave : 'no';
   est.aparato = ap; est.vista = ap === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro';
-  est.pest = { 'rotura-papilar': 'grav', 'iam-vd': 'grav', 'rotura-septo': 'grav', posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
-  nuevoPaciente(p, { ajuste: ap === 'no' ? {} : { soporte: ap } });
+  est.pest = { 'ic-etapa-1': 'grav', 'ic-etapa-2': 'grav', 'ic-etapa-3': 'grav', 'rotura-papilar': 'grav', 'iam-vd': 'grav', 'rotura-septo': 'grav', posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
+  nuevoPaciente(p, { ajuste: ap === 'no' ? {} : { soporte: ap }, g: clave.startsWith('ic-etapa-') ? D.IC_G_ETAPA[+clave.slice(-1) - 1] : undefined });
   if (clave === 'tapon') est.vista = 'eco';
   if (monitor.enclavado !== (clave === 'cardio')) { monitor.enclavar(clave === 'cardio'); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); }
   pintarPacientes(); refrescar(true); pintarDock(); pintarMandos(); reanudar();
