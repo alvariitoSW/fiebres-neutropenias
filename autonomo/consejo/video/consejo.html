@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Consejo de Ministros</title>
+<style>
+:root{--bg:#17140f;--panel:#221d16;--panel2:#2c251c;--text:#ece3cc;--muted:#a5967c;--dim:#c9bda4;--gold:#d4af37;--yellow:#cf9a3e;--red:#b85c3e;--green:#90a06a;--purple:#9c5476}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:720px;height:1280px;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,"DejaVu Sans",sans-serif}
+#stage{position:relative;width:720px;height:1280px;background:radial-gradient(ellipse at 50% 32%,#2e2619 0%,#17140f 62%)}
+#header{position:absolute;top:30px;left:0;right:0;text-align:center}
+#header h1{font-family:"Inter Display",Inter,sans-serif;font-weight:800;font-size:44px;letter-spacing:4px;color:var(--gold)}
+#header p{margin-top:8px;font-size:21px;color:var(--muted);letter-spacing:1px}
+#table{position:absolute;left:110px;top:285px;width:500px;height:250px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 40%,#5a3f24,#3a2716 70%);box-shadow:0 0 0 10px #2a1d10,0 30px 60px rgba(0,0,0,.6)}
+#table .sello{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:20px;color:rgba(236,227,204,.35);letter-spacing:3px;font-weight:700;text-align:center}
+.seat{position:absolute;width:120px;margin-left:-60px;text-align:center}
+.av{width:86px;height:86px;margin:0 auto;border-radius:50%;background:var(--panel2);border:3px solid var(--muted);
+  display:flex;align-items:center;justify-content:center;font-size:44px;font-family:"Noto Color Emoji",sans-serif}
+.seat .lbl{margin-top:6px;font-size:16px;font-weight:700;color:var(--dim)}
+.seat .voto{position:absolute;top:-30px;left:50%;transform:translateX(-50%);background:var(--green);color:#17140f;font-weight:800;
+  font-size:17px;padding:3px 10px;border-radius:12px;opacity:0;white-space:nowrap}
+#gob .av{width:96px;height:96px;border-color:var(--gold);font-size:50px}
+#gob .lbl{color:var(--gold)}
+#card{position:absolute;left:28px;right:28px;top:690px;height:560px;background:var(--panel);border-radius:26px;border:2px solid #3a3124;padding:20px 24px}
+#card .top{display:flex;align-items:center;gap:20px}
+#card .big{width:84px;height:84px;border-radius:50%;background:var(--panel2);border:4px solid var(--gold);display:flex;align-items:center;justify-content:center;
+  font-size:44px;font-family:"Noto Color Emoji",sans-serif;flex:none}
+#card .nom{font-size:34px;font-weight:800}
+#card .tag{margin-top:6px;font-size:19px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+#lineas{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+.linea{background:var(--panel2);border-radius:16px;padding:10px 16px;border-left:6px solid var(--gold)}
+.linea .et{font-size:15px;font-weight:800;letter-spacing:2px;color:var(--muted);text-transform:uppercase}
+.linea .tx{margin-top:3px;font-size:21px;line-height:1.3}
+.linea.op{border-left-color:var(--purple)}
+.cursor{display:inline-block;width:3px;height:22px;background:var(--gold);vertical-align:-3px;margin-left:2px}
+#intro,#final{position:absolute;left:28px;right:28px;top:690px;height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0}
+#intro .mazo{font-size:110px;font-family:"Noto Color Emoji",sans-serif}
+#intro h2,#final h2{font-size:40px;font-weight:800;margin-top:18px}
+#intro p,#final p{font-size:24px;color:var(--dim);margin-top:14px;line-height:1.4}
+#marcador{font-size:84px;font-weight:900;color:var(--gold);letter-spacing:6px}
+#marcador small{display:block;font-size:20px;letter-spacing:3px;color:var(--muted);font-weight:700}
+#estampa{margin:26px 0 22px;border:5px solid var(--red);color:var(--red);font-weight:900;font-size:34px;padding:10px 22px;border-radius:10px;letter-spacing:3px;opacity:0}
+#pie{position:absolute;bottom:14px;left:0;right:0;text-align:center;font-size:15px;color:#5c5241}
+</style></head><body>
+<div id="stage">
+  <div id="header"><h1>CONSEJO DE MINISTROS</h1><p>Sala del Consejo · 30/10/2026 · sesión extraordinaria</p></div>
+  <div id="table"><div class="sello">HUD CLÍNICO UCI</div></div>
+  <div id="seats"></div>
+  <div id="intro"><div class="mazo">🔨</div><h2>El gobierno central convoca al Consejo</h2>
+    <p>Orden del día, punto único:<br>que cada ministerio se presente<br>y diga qué opina del gobernador.</p></div>
+  <div id="card"><div class="top"><div class="big" id="cAv"></div><div><div class="nom" id="cNom"></div><div class="tag" id="cTag"></div></div></div>
+    <div id="lineas"></div></div>
+  <div id="final"><div id="marcador"></div><div id="estampa">APROBADO POR UNANIMIDAD</div><p id="finTx"></p></div>
+  <div id="pie">Basado en las actas reales de autonomo/consejo/</div>
+</div>
+<script>
+const GOB={emoji:'🩺',lbl:'Gobernador (tú)'};
+const M=[
+ {id:'tra',emoji:'🚆',lbl:'Transportes',nom:'Transportes',tag:'/bitacora · preside',ang:90,l:[
+  'Buenas. Soy Transportes y presido este Consejo. Fijo el orden del día y escribo las actas: ya van 26.',
+  'Llevo la bitácora: lo pendiente, lo que espera tu visto bueno y hacia dónde vamos. El calendario es mío.',
+  'El gobernador pide mucho y rápido… y luego lo lee todo en el móvil, a 390 píxeles. Me obliga a ser breve. Se lo agradezco.']},
+ {id:'int',emoji:'🏗️',lbl:'Interior',nom:'Interior',tag:'/plan-socialista',ang:132,l:[
+  'Interior. Dirijo las obras: el plan socialista.',
+  'Reparto cada tarea entre siete agentes: lector, constructor, verificador, auditor ciego, profesor y dos revisores. Rama, PR y parte.',
+  'Tiene una virtud rara: dice «aplica todo» y confía en el equipo. Mi única queja es el calendario. La PR #51 me persigue en sueños.']},
+ {id:'hac',emoji:'💶',lbl:'Hacienda',nom:'Hacienda',tag:'/ahorro',ang:176,l:[
+  'Hacienda. Cuento cada token como si saliera de mi bolsillo.',
+  'Leo el gasto de cada parte, busco lo que se repite y propongo recortes. Vigilo el límite semanal, con su alarma.',
+  'Me delegó el presupuesto del carril 2… y luego desempató a favor de Educación. Lo acepto con elegancia. Más o menos.']},
+ {id:'edu',emoji:'🎓',lbl:'Educación',nom:'Educación',tag:'/mayeutica',ang:218,l:[
+  'Educación. Mi pregunta es siempre la misma: ¿esto sirve para estudiar?',
+  'Mayéutica, casos clínicos, modelos vivos y la nota del profesor: 8,75 como mínimo; 9,5 en los modelos nuevos.',
+  'Es R1 de Intensivos y estudia de verdad con esto. Por eso no le recorto ni una idea. Y me dio la razón con los bloques 6a y 6b. Gran gobernador.']},
+ {id:'jus',emoji:'⚖️',lbl:'Justicia',nom:'Justicia',tag:'jueces + auditor ciego',ang:4,l:[
+  'Justicia. Soy independiente: Hacienda no me recorta y nadie me salta.',
+  'Mis jueces miden cada ficha a 390 y 360 píxeles: desbordes, ids duplicados, imágenes rotas. El auditor ciego coteja cada cifra con su página.',
+  'Él escribió la primera ley: «Nunca inventes». La aplico con todos, también con él. Sus reglas me dan mucho trabajo, y está bien que así sea.']},
+ {id:'cie',emoji:'🔬',lbl:'Ciencia',nom:'Ciencia',tag:'/ingenieria-reversa',ang:50,l:[
+  'Ciencia. Estudio cómo están hechos los simuladores de los demás.',
+  'Desmonto la idea y nunca copio el código: lo reconstruimos sobre motores propios, con crédito y con permiso.',
+  'Me aprobó una ley entera de un plumazo: «Valido la ley entera». Pocos gobiernos se atreven. Gracias, gobernador.']},
+ {id:'ext',emoji:'🌍',lbl:'Exteriores',nom:'Exteriores',tag:'/radar',ang:-38,l:[
+  'Exteriores. Vigilo el mundo: webs, tuits, papers y repositorios.',
+  'Lo que el gobernador ve y quiere traer, lo trío contra el norte y lo encajo en la hoja de ruta, por tandas.',
+  'Tiene buen ojo y me manda cosas a cualquier hora. Ahora busco yo los PDF en abierto: «no te puedo estar pasando constantemente PDF». Mensaje recibido.']},
+];
+const ETQ=['Me presento','Lo que hago','Del gobernador'];
+const CX=360,CY=410,RX=290,RY=190;
+const seatsEl=document.getElementById('seats');
+function mkSeat(o,x,y,id){const d=document.createElement('div');d.className='seat';d.id=id;d.style.left=x+'px';d.style.top=(y-50)+'px';
+ d.innerHTML=`<div class="voto">SÍ ✋</div><div class="av">${o.emoji}</div><div class="lbl">${o.lbl}</div>`;seatsEl.appendChild(d);return d}
+const gobEl=mkSeat(GOB,CX,CY-RY-40,'gob');
+M.forEach(m=>{const a=m.ang*Math.PI/180;m.el=mkSeat(m,CX+RX*Math.cos(a),CY+RY*Math.sin(a),'s-'+m.id)});
+
+// línea de tiempo
+const CPS=30,HOLD=1.5,ENTRA=1.0;
+const INTRO=7.5;let t0=INTRO;
+M.forEach(m=>{m.t0=t0;let t=t0+ENTRA;m.lt=m.l.map(s=>{const a=t;t+=s.length/CPS+HOLD;return a});m.t1=t+1.2;t0=m.t1});
+const FIN0=t0,FINDUR=13;window.FIN0=FIN0;window.TOTAL=FIN0+FINDUR;
+
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+const cl=(x,a,b)=>Math.max(a,Math.min(b,x));
+const $=id=>document.getElementById(id);
+let ultimo=null,lineasHTML='';
+function render(t){
+ // asientos aparecen en la intro
+ M.forEach((m,i)=>{
+  const ap=ease((t-1.5-i*0.45)/0.6);
+  let s=0.6+0.4*ap,op=ap,glow=0,bob=0;
+  if(t>=INTRO&&t<FIN0){const act=t>=m.t0&&t<m.t1;
+   if(act){const k=ease((t-m.t0)/0.6)*ease((m.t1-t)/0.5);s=1+0.32*k;op=1;glow=k;
+     const tecleando=m.lt.some((a,j)=>t>=a&&t<a+m.l[j].length/CPS);if(tecleando)bob=Math.sin(t*14)*3}
+   else op=0.4}
+  m.el.style.opacity=op;m.el.style.transform=`translateY(${bob}px) scale(${s})`;m.el.style.zIndex=glow>0?5:1;
+  const av=m.el.querySelector('.av');av.style.borderColor=glow>0.05?'var(--gold)':'var(--muted)';
+  av.style.boxShadow=glow>0?`0 0 ${40*glow}px ${10*glow}px rgba(212,175,55,${0.55*glow})`:'none';
+  const v=m.el.querySelector('.voto');const vt=FIN0+2.2+i*0.55;const vk=ease((t-vt)/0.35);
+  v.style.opacity=vk;v.style.transform=`translateX(-50%) scale(${0.5+0.5*vk})`;
+ });
+ gobEl.style.opacity=ease((t-0.8)/0.8);
+ const gk=t>=FIN0?ease((t-FIN0-1)/0.8):0;
+ gobEl.querySelector('.av').style.boxShadow=`0 0 ${30+20*gk}px ${6+8*gk}px rgba(212,175,55,${0.25+0.4*gk})`;
+ // intro
+ const ik=ease(t/0.8)*ease((INTRO-t)/0.6);$('intro').style.opacity=t<INTRO?ik:0;
+ $('header').style.opacity=ease(t/1);
+ // tarjeta del que habla
+ const m=M.find(m=>t>=m.t0&&t<m.t1);
+ const card=$('card');
+ if(m){const k=ease((t-m.t0)/0.5)*ease((m.t1-t)/0.4);card.style.opacity=k;card.style.transform=`translateY(${(1-k)*30}px)`;
+  if(ultimo!==m){$('cAv').textContent=m.emoji;$('cNom').textContent='Ministerio de '+m.nom;$('cTag').textContent=m.tag;ultimo=m}
+  let h='';m.l.forEach((s,j)=>{const a=m.lt[j];if(t<a)return;const n=Math.min(s.length,Math.floor((t-a)*CPS));
+   const cur=n<s.length?'<span class="cursor"></span>':'';
+   h+=`<div class="linea${j==2?' op':''}"><div class="et">${ETQ[j]}</div><div class="tx">${s.slice(0,n)}${cur}</div></div>`});
+  if(h!==lineasHTML){$('lineas').innerHTML=h;lineasHTML=h}
+ }else card.style.opacity=0;
+ // final
+ const fk=ease((t-FIN0)/0.8);$('final').style.opacity=t>=FIN0?fk:0;
+ if(t>=FIN0){const sies=M.filter((_,i)=>t>=FIN0+2.2+i*0.55).length;
+  $('marcador').innerHTML=`<small>¿CONFÍA EL CONSEJO EN SU GOBERNADOR?</small>${sies} · 0`;
+  const ek=ease((t-FIN0-6.6)/0.4);const e=$('estampa');e.style.opacity=ek;e.style.transform=`rotate(-6deg) scale(${1.8-0.8*ek})`;
+  const ft=t-FIN0-8.2;$('finTx').innerHTML=('Se levanta la sesión.<br><span style="color:var(--muted);font-size:20px">Lo que espera al gobierno central: la captura de Uso, el sábado 31/10 por la noche.</span>');
+  $('finTx').style.opacity=ease(ft/0.8);
+ }
+}
+window.render=render;render(0);
+</script></body></html>
