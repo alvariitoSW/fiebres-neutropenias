@@ -319,6 +319,26 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **Consejo extraordinario del 30/10 (6.ª, con tu potestad delegada sobre este punto 3; acta
+  `autonomo/consejo/2026-10-30-6.md`)**. Decidido:
+  - **Comparecencias aceptadas**: grupo 5 del `b3` (+30 %) y `reglas-30-10` (+165 %). El presupuesto de `b3-paso4`
+    se corrige a **≈58 M** (el parte del grupo 5 ya contaba con 58; el tablero decía 51): el grupo 6 (TEP) tiene
+    **5,9 M de tope duro**. `formula-juez` (+19 %), solo anotada.
+  - **PR #38 (`compara-formulas`) y PR #39 (`radio-baratas`, día 1): fusionadas** con los jueces en verde (versión
+    20261030-10).
+  - **Radio**: el mínimo va **ya, en el carril 2** (no tras El Libro Azul), y **«Lee esta placa» entra**: día 2
+    (rótulos + TC de cráneo) desde el 31/10 y día 3 («Lee esta placa») al siguiente. Marino va primero cada día.
+  - **`educacion-app`**: sigue esperando al `b3`. **Cuando el `b3` esté en `main`, escribe «sigue»** en la sesión
+    «educacion-app · espera al bloque 3».
+  - **Semiología (Bates o Surós)**: opcional, sin prisa; sin cambios.
+- **🔔 Recordatorio, solo tú puedes hacerlo** (no está hecho): mirar en el móvil (1) el **SCA** y la **disección
+  aórtica** del grupo 5 (https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/index.html → Cardiología →
+  Merino Cardiología → «SCA» o «Disección aórtica» → Estudiar) y (2) **M3 de la eco con «HP crónica»**: el sello VD/VI
+  0,72 es un fallo conocido del motor (la guía espera >1,0) que arreglará `mv-eco`; mirarlo solo lo confirma.
+- **Espera tu sí (visto de paso de la PR #38)**: la ficha Fisiopatología UCI → Cardiología → Fisiología cardíaca
+  aplicada tiene rótulos de 5-6 px en la animación de Wiggers y se sale 30 px a 360 px (ya estaba antes). ¿Arreglo
+  directo a `main` (≈0,3 M)?
+
 - **✅ Decidido por ti el 30/10** (sobre el rumbo de hoy):
   - **Eco**: opción **A** (dos motores con contrato, 20-26 M; «la C también está bien»). three.js, no (no lo elegiste).
     La obra es `mv-eco`, tras fusionar el bloque 3; absorbe `eco-calibra-b`.
