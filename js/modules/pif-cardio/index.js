@@ -7,16 +7,18 @@ import { temasPifEcgB, preguntasPifEcgB } from '../../data/pif-ecg-preguntas-b.j
 import { temasPifEcgC, preguntasPifEcgC } from '../../data/pif-ecg-preguntas-c.js';
 import { temasPifEcgD, preguntasPifEcgD } from '../../data/pif-ecg-preguntas-d.js';
 import { temasPifEcgE, preguntasPifEcgE } from '../../data/pif-ecg-ejercicios.js';
+import { temasPifEcgF, preguntasPifEcgF } from '../../data/pif-ecg-preguntas-f.js';
+import { init as initSca } from './sca-tabla.js';
 import { init as initEcg } from './ecg-arritmias.js';
 import { init as initEjercicios } from './ecg-ejercicios.js';
 import { arrancar } from '../../core/ui.js';
 import { initCorkboard } from '../../core/corkboard.js';
 import { rotacionesPif } from '../../data/pif-rotaciones.js';
 
-export const quizTriggerId = ['btn-pif-ecg-repasar'];
-export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgD, ...preguntasPifEcgC, ...preguntasPifEcgE];
+export const quizTriggerId = ['btn-pif-ecg-repasar', 'btn-pif-sca-predice-repasar'];
+export const quizBanco = [...preguntasPifEcgA, ...preguntasPifEcgB, ...preguntasPifEcgD, ...preguntasPifEcgC, ...preguntasPifEcgE, ...preguntasPifEcgF];
 const ASIGNATURA = 'Cardiología · PIF';
-export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...temasPifEcgC, ...temasPifEcgE]
+export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...temasPifEcgC, ...temasPifEcgE, ...temasPifEcgF]
     .map(t => ({ ...t, asignatura: ASIGNATURA, bloque: 'ECG y arritmias' }));
 
 // El objetivo de cada capítulo se lee tal cual de los datos del PIF (nunca se copia a mano).
@@ -35,6 +37,7 @@ export function init() {
     document.getElementById('btn-pif-ecg').addEventListener('click', () => nivel.show('ecgArritmias'));
     document.querySelectorAll('.btn-volver-pif-cardio-menu').forEach(b => b.addEventListener('click', () => nivel.show('menu')));
     initEcg();
+    arrancar('pif-sca-tabla', initSca);
     arrancar('pif-cardio-objetivos', initObjetivos);
     arrancar('pif-ecg-ejercicios', initEjercicios);
     nivel.show('menu');
