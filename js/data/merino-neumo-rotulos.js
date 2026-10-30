@@ -28,7 +28,7 @@ export const ROTULOS_MERINO_NEUMO = {
         pdf: CAP22,
         rotulos: [
             { texto: 'Consolidación posterior', punto: [27, 33], et: { x: 8, y: 43, lado: 'l' }, ancho: 40, pag: 36, nota: 'texto del capítulo, panel superior: consolidación densa en las regiones pulmonares posteriores' },
-            { texto: 'Neumomediastino', punto: [73, 63.5], et: { x: 60, y: 53, lado: 'r' }, pag: 38, nota: 'pie de la figura 24.3, panel inferior: neumomediastino indicado por la flecha' },
+            { texto: 'Neumomediastino', punto: [73, 63.5], et: { x: 60, y: 53, lado: 'r' }, pag: 39, nota: 'pie de la figura 24.3, panel inferior: neumomediastino indicado por la flecha' },
         ],
     },
     'fig-28-1': {
