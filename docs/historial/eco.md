@@ -259,6 +259,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   - 30/10/2026: ya son 18 de 30; entra también solo con texto el 22 Miocardiopatía hipertrófica (definición y medida, SAM y su gravedad, gradiente del TSVI y provocación, chorro del TSVI frente al de la IM, riesgo y diagnóstico diferencial).
   - 30/10/2026: ya son 19 de 30; entra solo con texto el 23 Amiloidosis cardíaca (hallazgos estructurales, Doppler y signo 5-5-5, strain con respeto apical, criterios de la ESC 2021 con la puntuación de Boldrini y medida).
   - 30/10/2026: ya son 20 de 30; entra solo con texto el 20 Enfermedades de la aorta (medida de la raíz y valores de Lang, puntuación Z, dilatación y aneurisma con los umbrales de la ACC/AHA 2022 en válvula tricúspide y bicúspide, disección con luz verdadera y falsa, artefacto, insuficiencia aórtica y derrame, rendimiento de ETT y ETE, y coartación con los criterios de la ACC/AHA y la ESC).
+  - 30/10/2026: ya son 21 de 30; entra solo con texto el 04 Vistas transtorácicas (las cuatro ventanas y su posición, los movimientos de la sonda de la ASE, la tabla de lo que muestra y se adquiere en cada vista, el acortamiento apical, el conjunto mínimo de la BSE y la figura del original con su sonda libre).
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
