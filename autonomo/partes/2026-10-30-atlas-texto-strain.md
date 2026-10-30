@@ -1,6 +1,6 @@
 # 2026-10-30 · atlas-texto · cap. 13 Strain (fase A, solo texto)
 
-**Resultado:** fusionado a `main` por el cierre automático del tablero (PR en borrador abajo) · **Vueltas:** 2 · **Jueces:** `jueces --atlas strain` ✓ · auditoría ✓ (0 graves, 2 menores aplicados)
+**Resultado:** fusionado a `main` por el cierre automático del tablero ([PR #53](https://github.com/alvariitoSW/fiebres-neutropenias/pull/53)) · **Vueltas:** 2 · **Jueces:** `jueces --atlas strain` ✓ · auditoría ✓ (0 graves, 2 menores aplicados)
 
 ## Qué se hizo
 - `js/modules/eco/atlas/cap-strain.html`: traducción completa del cap. 12 del original (echodemo `index.html` #ch-strain, l. 2202-2269): strain y speckle tracking (S = (L − L0) ÷ L0), valores normales (−20 %; bandas −18/−16 % de Thomas 2025; 3,7 unidades entre fabricantes), FEVI de la mujer, patrones global, regional y de respeto apical (strain apical relativo ≥1,0, Phelan 2012; Cotella 2024), cardio-oncología (CTRCD leve, moderada y grave de la ESC 2022, biomarcadores, Plana 2014, SUCCOUR a 1 y 3 años). Carril «En 30 segundos», dos ecuaciones y puntos clave.
