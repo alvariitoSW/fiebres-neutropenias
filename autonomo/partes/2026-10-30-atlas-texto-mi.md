@@ -1,6 +1,6 @@
 # 2026-10-30 · atlas-texto · cap. B6 Complicaciones del infarto (fase A, solo texto)
 
-**Resultado:** hecho en un commit local de la rama `auto/atlas-texto-mi`; **sin subir**: esta sesión no tuvo permiso de escritura en el repositorio, así que no hubo PR ni fusión automática · **Vueltas:** 2 · **Jueces:** `jueces --atlas mi` ✓ · auditoría ciega ✓ (0 graves, 6 menores: 3 aplicados, 3 aceptados)
+**Resultado:** fusionado a `main` por el cierre automático del tablero ([PR #63](https://github.com/alvariitoSW/fiebres-neutropenias/pull/63), de `auto/atlas-texto-mi`); la subida se retrasó porque la sesión arrancó sin permiso de escritura y el usuario lo concedió después · **Vueltas:** 2 · **Jueces:** `jueces --atlas mi` ✓ · auditoría ciega ✓ (0 graves, 6 menores: 3 aplicados, 3 aceptados)
 
 ## Qué se hizo
 - `js/modules/eco/atlas/cap-mi.html`: traducción completa del capítulo (echodemo `index.html`, `<article id="ch-mi">`). Las complicaciones mecánicas (3-5 días, urgencias quirúrgicas), la rotura septal (<0,3 %, 80 % de mortalidad a 30 días sin reparación, DA frente a inferior, Doppler color 12 de 12 frente a 7, PSVD = PAS − 4V², Qp/Qs ≥1,5 y hasta 8:1, 13,9 ± 4,4 mm), la rotura papilar (0,05-0,26 %, posteromedial con irrigación única, dos cabezas, velo flotante, ETT 53,8 %, IM aguda grave con chorro lento y excéntrico, contorno triangular, PAI = PAS − gradiente), la rotura de la pared libre y el pseudoaneurisma (cuello ≤0,5 del saco frente a 0,9-1,0; 18,6 % no vistos por eco), el aneurisma verdadero (trombo en hasta el 50 %) y el infarto del VD (McConnell, límites de la S′).
@@ -8,12 +8,11 @@
 - `atlas.js` (entrada `mi` sin figura), README de la eco, `docs/historial/eco.md` (ya son 24 de 30), tablero y versión 20261030-49.
 
 ## Qué no se pudo hacer o leer
-- **Subir y fusionar**: se denegó adjuntar el repositorio con escritura y hacer `git push`. El trabajo está en un commit local y en el parche `autonomo-mi.patch` en la carpeta de la sesión.
-- Por lo mismo, no se abrió la sesión del capítulo siguiente (`endocarditis`): abrirla antes de que `mi` esté en `main` haría que su rama no lo tuviera.
 - La figura, las pruebas, las preguntas y el profesor esperan a `mv-eco-2a5`.
+- La sesión arrancó sin el repositorio con permiso de escritura: el trabajo se hizo en una copia de solo lectura y se subió cuando el usuario dio permiso.
 
 ## Para el usuario
-- Dar permiso de escritura para el repositorio (o subir la rama tú) y relanzar el cierre. Después, mirar el capítulo en el móvil (Eco cardíaca → Atlas → B6 · Complicaciones del infarto).
+- Mirar el capítulo en el móvil (Eco cardíaca → Atlas → B6 · Complicaciones del infarto). Es la fase A: no hace falta decidir nada.
 
 ## Visto de paso (no tocado)
 - Nada.
