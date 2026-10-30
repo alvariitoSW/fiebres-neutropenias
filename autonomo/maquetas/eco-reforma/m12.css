@@ -1,0 +1,29 @@
+/* Estilos comunes de M1 y M2 (maqueta, no es parte de la app). Solo tokens de css/variables.css. */
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+main { max-width: 640px; margin: 0 auto; padding: 14px 14px 120px; }
+h1 { font-size: 20px; margin: 4px 0 6px; }
+h2 { font-size: 16px; margin: 20px 0 8px; color: var(--accent-yellow); }
+p { margin: 6px 0; }
+.dim { color: var(--text-dim); }
+.mut { color: var(--text-muted); font-size: 13px; }
+button { font: inherit; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-height: 44px; padding: 6px 12px; cursor: pointer; }
+.fila { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+.chip[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+.chip[aria-pressed="true"]::before { content: "● "; }
+.origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 2px 9px; margin: 2px 4px 0 0; }
+.sello { display: block; border: 2px solid var(--accent-red); color: var(--accent-red); border-radius: 8px; padding: 6px 10px; font-weight: 700; font-size: 14px; margin: 8px 0; }
+.sello::before { content: "✕ "; }
+.sello.hueco { border-style: dashed; border-color: var(--text-muted); color: var(--text-muted); }
+.sello.hueco::before { content: "◌ "; }
+.sello.ilus { border-style: dashed; border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+.sello.ilus::before { content: "≈ "; }
+.tarjeta { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-card); padding: 8px 10px; margin: 8px 0; }
+svg text { font-family: inherit; }
+.pie { margin-top: 22px; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 10px; }
+.pie a, .volver { color: var(--accent-yellow); }
+a { color: var(--accent-yellow); }
+.volver { display: inline-flex; align-items: center; min-height: 44px; }
+.hl-rojo { color: var(--accent-red); font-weight: 700; }
+[hidden] { display: none !important; }

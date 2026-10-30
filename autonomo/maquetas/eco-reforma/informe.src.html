@@ -1,0 +1,208 @@
+<title>Reforma de la eco</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Informe de una sola columna para el móvil: lo que falla → lo aprendido → opciones → maquetas → obra → qué decides.
+   Paleta de la app (css/variables.css): mismo mundo que las maquetas. Una sola apariencia, oscura, a propósito. */
+:root {
+  --bg: #17140f; --card: #241e16; --line: rgba(196,154,74,.35);
+  --fg: #ece3cc; --dim: #c9bda4; --muted: #a5967c;
+  --oro: #cf9a3e; --rojo: #b85c3e; --verde: #90a06a; --purpura: #9c5476;
+  --f-texto: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-cifra: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 16px/1.5 var(--f-texto); margin: 0; }
+main { max-width: 680px; margin: 0 auto; padding-block: 18px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 26px; }
+h1 { font-size: 1.7rem; line-height: 1.15; margin: 0; text-wrap: balance; }
+h2 { font-size: 1.2rem; margin: 0 0 8px; color: var(--oro); text-wrap: balance; }
+h3 { font-size: 1rem; margin: 0 0 4px; }
+p { margin: 0 0 8px; }
+section { display: grid; gap: 10px; min-width: 0; }
+.ante { color: var(--muted); font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; margin: 0 0 6px; }
+.lead { color: var(--dim); font-size: 1.05rem; }
+.decide { border: 1px solid var(--oro); border-radius: 10px; padding: 12px 14px; background: var(--card); }
+.decide strong { color: var(--oro); }
+.tabla { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; min-width: 520px; }
+th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { color: var(--muted); font-weight: 600; font-size: .78rem; letter-spacing: .04em; }
+td.n { font-family: var(--f-cifra); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.mal { color: var(--rojo); font-weight: 600; }
+.mal::before { content: "⚠ "; }
+.opciones { display: grid; gap: 12px; }
+.op { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 6px; min-width: 0; }
+.op header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.op .letra { font: 700 1.6rem/1 var(--f-cifra); color: var(--oro); }
+.op .gasto { margin-left: auto; font-family: var(--f-cifra); color: var(--dim); font-size: .9rem; }
+.op dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 4px 10px; margin: 0; font-size: .92rem; }
+.op dt { color: var(--muted); }
+.op dd { margin: 0; min-width: 0; }
+.chip { display: inline-block; font-size: .78rem; border: 1px solid var(--line); border-radius: 999px; padding: 1px 9px; color: var(--dim); }
+.hilos { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .94rem; }
+.hilos b { color: var(--fg); }
+.maqueta { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; display: grid; }
+.maqueta .cuerpo { padding: 12px 14px; display: grid; gap: 6px; }
+.maqueta img { display: block; width: 100%; max-height: 520px; object-fit: cover; object-position: top; border-bottom: 1px solid var(--line); background: var(--bg); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 8px 14px; border-radius: 9px;
+  border: 1px solid var(--oro); color: var(--oro); text-decoration: none; font-weight: 600; justify-self: start; }
+.btn:focus-visible, a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+a { color: var(--oro); }
+.pasos { margin: 0; padding-left: 1.3em; display: grid; gap: 6px; }
+.nota { color: var(--muted); font-size: .85rem; }
+.preg { display: grid; gap: 8px; margin: 0; padding-left: 1.3em; }
+</style>
+
+<main>
+  <header>
+    <p class="ante">Informe eco-reforma · 30/10/2026 · propuesta, no decisión</p>
+    <h1>Reforma de la eco: separar el corazón de la imagen</h1>
+    <p class="lead">Hoy un solo motor hace a la vez la fisiología del corazón y el dibujo de la eco. Por eso, en los extremos, salen cifras imposibles. Aquí tienes qué falla, tres formas de arreglarlo y tres maquetas para verlo con tus ojos.</p>
+  </header>
+
+  <div class="decide"><strong>Lo decides tú:</strong> la opción A, B o C, y si entra three.js. Es arquitectura (CLAUDE.md §2). El Consejo propuso la B «por defecto» el 29/10; aquí no se da por elegida.</div>
+
+  <section>
+    <h2>1 · Qué falla hoy</h2>
+    <p>Lo medí con el motor real, llevando cada paciente al extremo del mando. Las cifras raras no son del corazón: salen de que el dibujo y la fisiología están mezclados.</p>
+    <div class="tabla"><table>
+      <thead><tr><th>Caso</th><th>Qué sale</th><th>Qué dice la guía</th></tr></thead>
+      <tbody>
+        <tr><td>TEP grave</td><td class="n mal">E/e′ 1,8</td><td>Normal según edad: 4,0-9,1 / 4,6-11,5 / 5,2-14,0 (Nagueh 2025, Tabla 5, p. 551). Ningún paciente baja de ~4.</td></tr>
+        <tr><td>TEP 100 %</td><td class="n">E/e′ 8,3</td><td>Salta de 1,8 a 8,3 al empeorar: no sigue a la enfermedad.</td></tr>
+        <tr><td>HP crónica</td><td class="n mal">VD/VI basal 0,72</td><td>&gt;1,0 en la HP (ESC/ERS 2022, Tabla 10, p. 3645).</td></tr>
+        <tr><td>HP crónica 100 %</td><td class="n mal">PSAP 95 fija, VD 228 mL</td><td>No sube más porque el dibujo no cabe: el tope es del dibujo, no del paciente.</td></tr>
+        <tr><td>TEP y HP</td><td class="n">Aplanamiento 1,0</td><td>Sale de golpe desde el 50 %: hoy es «sí o no», no una curva.</td></tr>
+        <tr><td>TEP</td><td class="n">Sin McConnell</td><td>Acinesia de pared libre con ápex normal, ~20 % (Marino, cap. 22, PDF 7). El motor no sabe de regiones.</td></tr>
+        <tr><td>HP</td><td class="n">Sin TA pulmonar</td><td>&lt;105 ms o muesca mesosistólica (ESC/ERS Tabla 10). El Doppler no lo mide.</td></tr>
+      </tbody>
+    </table></div>
+    <p>Tres sitios donde la imagen manda sobre el corazón (y debería ser al revés):</p>
+    <ul class="hilos">
+      <li><b>El volumen:</b> el dibujo retoca el volumen de las cámaras para que quepan en pantalla.</li>
+      <li><b>El TAPSE:</b> se mide sobre el dibujo; no lo calcula el corazón.</li>
+      <li><b>La e′:</b> sale de un capítulo del atlas, no del motor. De ahí el E/e′ de 1,8.</li>
+    </ul>
+    <p class="nota">Lo que protege hoy: 505 pruebas de la eco (494 pasan, 11 son huecos marcados como pendientes, 0 fallan), la prueba del shock vivo y 69 enlaces desde las fichas (24 de Fisiopatología UCI, 20 de Merino, 10 de Marino, 6 del Manual UMI…). La obra no puede romper nada de eso.</p>
+  </section>
+
+  <section>
+    <h2>2 · Lo que enseña pulmonarypocus.com</h2>
+    <p>Su «Phone CP SIM» es un laboratorio de Doppler color y espectral del corazón en el móvil (apical 4 y 5 cámaras, con los mandos de un Sonosite). Un solo archivo de 204 KB por la red, sin librerías, sin vídeos: lo dibuja todo en vivo.</p>
+    <p><strong>La idea que nos sirve:</strong> separa limpio el flujo de la imagen. Una pieza calcula la velocidad de la sangre en cada punto; el color y el espectro solo la leen. Por eso el ángulo y el aliasing salen solos. Su límite: el flujo no sale de un corazón con presiones, es un mando suelto. Nosotros ya tenemos ese corazón.</p>
+    <p class="nota">Solo ideas: no se copia su código ni sus imágenes. Informe completo en <code>autonomo/ideas/ingenieria-inversa/pulmonarypocus.md</code>.</p>
+  </section>
+
+  <section>
+    <h2>3 · Tres formas de hacerlo</h2>
+    <div class="opciones">
+      <article class="op">
+        <header><span class="letra">A</span><h3>Dos motores con un cable entre ellos</h3><span class="gasto">20-26 M</span></header>
+        <dl>
+          <dt>Qué es</dt><dd>El corazón solo calcula (presiones, volúmenes, flujos, paredes, septo, regiones). La imagen solo lee lo que le pasa el cable.</dd>
+          <dt>Se aprovecha</dt><dd>El motor entero (ya es fisiología pura), lecturas, curvas, atlas y el shock vivo.</dd>
+          <dt>Se rehace</dt><dd>Formas, Doppler, modo M y flujo, para que solo lean el cable.</dd>
+          <dt>Arregla</dt><dd>Todo lo de la tabla, incluidos McConnell y TA pulmonar.</dd>
+          <dt>Riesgo</dt><dd>Alto si se hace de golpe; bajo si el cable nace primero con su prueba.</dd>
+        </dl>
+      </article>
+      <article class="op">
+        <header><span class="letra">B</span><h3>Un motor, el de hoy, pulido</h3><span class="gasto">10-12 M</span></header>
+        <dl>
+          <dt>Qué es</dt><dd>Lo mismo que hay, con topes con cita y los fallos corregidos uno a uno.</dd>
+          <dt>Se aprovecha</dt><dd>Todo.</dd>
+          <dt>Se rehace</dt><dd>Nada de fondo: e′ al motor, aplanamiento con curva, límites del dibujo más anchos.</dd>
+          <dt>Arregla</dt><dd>E/e′, aplanamiento y topes. No McConnell ni TA pulmonar.</dd>
+          <dt>Riesgo</dt><dd>Bajo. Las tres mezclas siguen ahí.</dd>
+        </dl>
+      </article>
+      <article class="op">
+        <header><span class="letra">C</span><h3>Primero el cable, el dibujo después</h3><span class="gasto">≈7 M + 11-17 M</span></header>
+        <dl>
+          <dt>Qué es</dt><dd>Fase 1: el cable y los arreglos del motor, sin tocar el dibujo. Fase 2, cuando quieras: dibujo nuevo sobre el cable.</dd>
+          <dt>Se aprovecha</dt><dd>Lo mismo que A; el dibujo de hoy sigue hasta la fase 2.</dd>
+          <dt>Arregla</dt><dd>Fase 1: E/e′, aplanamiento, TRV y TA pulmonar como cifras. Fase 2: McConnell y el fin del recorte.</dd>
+          <dt>Riesgo</dt><dd>Bajo en la fase 1 (sirve sola); medio en la 2.</dd>
+        </dl>
+      </article>
+    </div>
+    <p><strong>¿Y three.js?</strong> Solo cambiaría el dibujo (en A o en la fase 2 de C), no la fisiología. Pesa ≈0,6-0,7 MB, ≈0,17 MB por la red (estimado), frente a 65 KB de Motion. En el atlas 3D de Pridgen, medido: 5,5 MB a 60 fps con piel y órganos centrales; 65 MB y 1 fps con el cuerpo entero (192 MB de memoria). Para nosotros, un corazón de ≤2 MB. Añadiría 6-10 M. Sería la segunda librería: rompe la regla de CLAUDE.md §2 y solo entra si tú lo dices. Nuestro 3D ya pinta el corazón: three.js aportaría luz y anatomía alrededor, no fisiología.</p>
+    <p class="nota">Gastos estimados por el profesor sobre los del Consejo (29/10). Qué enseña mejor: A deja ver la misma fisiología en números y en eco; B quita las cifras absurdas sin añadir signos; C es A en dos tiempos.</p>
+  </section>
+
+  <section>
+    <h2>4 · El cable (el contrato)</h2>
+    <p>Lo que el corazón le pasa a la imagen en cada instante. La imagen nunca calcula una presión, un volumen, un flujo ni una FE, y nunca retoca el corazón para que quepa: si algo no cabe, lo dice.</p>
+    <ol class="hilos">
+      <li><b>Volúmenes</b> de las 4 cámaras (mL).</li>
+      <li><b>Presiones</b> de cámaras, aorta y pulmonar (mmHg).</li>
+      <li><b>Flujos</b> por cada válvula, también los que regurgitan, y el área de cada anillo.</li>
+      <li><b>Pared y masa</b> de VI y VD: la hipertrofia es del corazón, no del dibujo.</li>
+      <li><b>Septo</b> de −1 a +1, continuo, con su fase (el «signo de la D» en sístole o en diástole).</li>
+      <li><b>Regiones</b>: 17 segmentos del VI y 3 del VD (aquí vive McConnell). Hoy, hueco.</li>
+      <li><b>Anillos</b>: TAPSE, MAPSE (hueco: sin fuente aún) y velocidades s′, e′, a′.</li>
+      <li><b>Tiempos</b>: TRIV, deceleración, TA pulmonar, contracción isovolumétrica.</li>
+      <li><b>Fuera del corazón</b>: derrame y VCI (la VCI hoy no la calcula el motor: hueco).</li>
+    </ol>
+    <p class="nota">Prueba de seguridad propuesta: con el motor de hoy, cada hilo da la misma cifra que la tabla del mapa (±2 %) antes de tocar nada.</p>
+  </section>
+
+  <section>
+    <h2>5 · Las maquetas</h2>
+    <p>Las tres usan el motor y el ecógrafo reales de la app, latiendo. Ábrelas en el móvil. Cada cifra dice de dónde sale: «motor de hoy», una guía con su página, o «ilustrativo».</p>
+
+    <article class="maqueta">
+      <img loading="lazy" src="CAPTURA_M1" alt="Maqueta 1: cuatro cubos que laten, uno por cámara, con su volumen y presión, y la barra de cifras abajo">
+      <div class="cuerpo">
+        <h3>M1 · El corazón solo</h3>
+        <p>El motor sin ninguna imagen: cada cámara es un cubo cuyo tamaño es su volumen y cuyo color es su presión. Cinco pacientes y la gravedad de 0 a 100 %. En TEP grave verás el E/e′ de 1,8 con su sello de «imposible».</p>
+        <a class="btn" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/eco-reforma/m1-corazon.html">Abrir M1</a>
+      </div>
+    </article>
+
+    <article class="maqueta">
+      <img loading="lazy" src="CAPTURA_M2" alt="Maqueta 2: el corazón a la izquierda y el ecógrafo a la derecha, unidos por un cable de nueve hilos; tres van en rojo y al revés">
+      <div class="cuerpo">
+        <h3>M2 · El cable</h3>
+        <p>Corazón y ecógrafo unidos por los 9 hilos del contrato. Toca un hilo y ves qué lleva y quién lo usa. Con «Hoy», tres hebras van en rojo y al revés; con «Opción A», todas van en un sentido. Debajo, qué cambia con B y con C.</p>
+        <a class="btn" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/eco-reforma/m2-contrato.html">Abrir M2</a>
+      </div>
+    </article>
+
+    <article class="maqueta">
+      <img loading="lazy" src="CAPTURA_M3" alt="Maqueta 3: la eco apical de cuatro cámaras en TEP grave y debajo cinco signos con su cifra, su umbral y su página">
+      <div class="cuerpo">
+        <h3>M3 · TEP grave frente a HP crónica</h3>
+        <p>La eco real de la app y cinco signos calculados al momento, cada uno con su umbral y su página: VD/VI basal, TAPSE, TAPSE/PSAP, pared libre del VD y TRV. Agudo: VD grande y de pared fina (3,5 mm). Crónico: pared de 8,2 mm y PSAP de 97. Abajo, tres tarjetas de lo que hoy no existe (McConnell, aplanamiento continuo, TA pulmonar).</p>
+        <a class="btn" href="https://raw.githack.com/alvariitoSW/fiebres-neutropenias/main/autonomo/maquetas/eco-reforma/m3-tep.html">Abrir M3</a>
+      </div>
+    </article>
+    <p class="nota">Notas del profesor (juicio rápido): M1 8,9 · M2 8,75 · M3 8,6, antes de una vuelta de arreglos que cerró lo que le bajaba la nota. Auditor: umbrales y páginas cotejados con los PDF; un fallo grave (la banda de E/e′) corregido.</p>
+  </section>
+
+  <section>
+    <h2>6 · Cómo se haría la obra sin romper nada</h2>
+    <p>Vale para A, B y C. Mientras dure, nada de esto se queda sin explicar: shock vivo (Marino caps. 14-17), atlas (ciclo, diastólica, VD, asa, hemodinámica, sistólica), simulador, laboratorio y los 69 enlaces de las fichas.</p>
+    <ol class="pasos">
+      <li>El cable nace <b>al lado</b> del motor, con una prueba que dice «da lo mismo que hoy».</li>
+      <li>Cada pieza que lo lee se cambia de una en una, y cada cambio pasa las 505 pruebas y la del shock antes de guardarse.</li>
+      <li>El dibujo nuevo vive en un archivo aparte con interruptor. El de hoy sigue en la app hasta que el nuevo pase todas las pruebas.</li>
+      <li>Antes de empezar, se congelan en una prueba las frases vivas del shock y de la eco, para que ninguna se pierda.</li>
+      <li>No cambian los nombres de las vistas, los pacientes ni los enlaces.</li>
+      <li>MAPSE, torsión y el techo de presión del VD agudo siguen como hueco hasta que haya fuente.</li>
+    </ol>
+  </section>
+
+  <section>
+    <h2>7 · Qué te toca decidir</h2>
+    <ol class="preg">
+      <li><b>¿A, B o C?</b> (C fase 1 sirve sola y deja la fase 2 para cuando quieras.)</li>
+      <li><b>¿three.js?</b> Solo tiene sentido con A o con la fase 2 de C.</li>
+      <li><b>¿Cuándo?</b> Va en el carril 2 (tarea <code>mv-eco</code>), después de que el bloque 3 de Marino esté en <code>main</code>. Hasta tu elección siguen aparcadas <code>eco-calibra-b</code> y <code>eco-sueltas</code>.</li>
+    </ol>
+  </section>
+
+  <footer class="nota">Fuentes: ESC/ERS 2022 HP (Tabla 10 y Fig. 5, p. 3645) · Lang 2015 (PDF 20 y 23) · Mukherjee 2025 (p. 144 y 173) · Nagueh 2025 (Tabla 5, p. 551) · Marino 2024, cap. 22 (PDF 7). Todo en <code>docs/</code>. Plan y mapa del motor en <code>autonomo/maquetas/eco-reforma/</code>.</footer>
+</main>

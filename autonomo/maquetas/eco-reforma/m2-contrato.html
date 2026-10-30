@@ -1,0 +1,61 @@
+<!-- PROPUESTA PARA REVISAR (eco-reforma): M2 «El cable» (el contrato entre el corazón y la imagen). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/eco-reforma/m2-contrato.html
+     Los valores de los hilos salen del motor real (motor.mjs, escenarios.mjs, tapseDeLatido, ePrima); el dibujo de las
+     piezas y la opción «A» son ilustrativos. Solo tokens de css/variables.css. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El cable (propuesta eco-reforma)</title>
+<link rel="stylesheet" href="../../../css/variables.css">
+<link rel="stylesheet" href="m12.css">
+<style>
+  main { padding-bottom: 40px; }
+  #m2-lienzo { display: block; width: 100%; height: auto; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-main); }
+  .solo-lee { position: sticky; top: 0; z-index: 5; background: var(--bg-main); border: 1px solid var(--accent-yellow); border-radius: 8px; padding: 6px 10px; margin: 8px 0; font-weight: 700; color: var(--accent-yellow); font-size: 14px; }
+  .hilos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 8px 0; }
+  .hilos button { min-height: 48px; padding: 4px 6px; font-size: 13px; line-height: 1.2; text-align: left; }
+  .hilos button[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+  .hilos button.rev { border-color: var(--accent-red); }
+  .hilos button.vacio { border-style: dashed; color: var(--text-muted); }
+  .hilos b { margin-right: 4px; }
+  #m2-valor { font-size: 17px; font-weight: 700; font-variant-numeric: tabular-nums; margin: 4px 0; word-break: break-word; }
+  #m2-nombre { font-size: 16px; font-weight: 700; margin: 0; }
+  .lista-rev { margin: 6px 0 0; padding-left: 0; list-style: none; font-size: 13px; }
+  .lista-rev li { margin: 4px 0; }
+  .flecha-rev { color: var(--accent-red); font-weight: 700; }
+</style></head><body>
+<main>
+<h1>El cable</h1>
+<p class="dim">Entre el corazón y el ecógrafo hay un cable con 9 hilos: lo único que la imagen puede leer. Toca un hilo.</p>
+<span class="origen">valores: motor de hoy</span><span class="origen">piezas y opción A: ilustrativo</span>
+<div class="solo-lee" id="m2-fijo">La imagen solo lee. Nada se calcula a la derecha del cable.</div>
+
+<div class="fila" id="m2-pac" role="group" aria-label="Paciente"></div>
+<div class="fila" role="group" aria-label="Cómo está hoy y cómo quedaría">
+  <button type="button" class="chip" data-modo="hoy" aria-pressed="true">Hoy</button>
+  <button type="button" class="chip" data-modo="A" aria-pressed="false">Opción A (un solo sentido)</button>
+</div>
+<p class="mut">B (pulir el motor): las 3 hebras siguen al revés, con topes más anchos y con cita.</p>
+<p class="mut">C (contrato primero): fase 1, los hilos ya van en un sentido pero el dibujo es el de hoy; fase 2, dibujo nuevo.</p>
+
+<svg id="m2-lienzo" viewBox="0 0 360 262" role="img" aria-label="Un corazón a la izquierda y un ecógrafo a la derecha unidos por un cable de nueve hilos"></svg>
+<p class="mut" id="m2-lista-t"></p>
+<ul class="lista-rev" id="m2-lista"></ul>
+<p class="mut" id="m2-cierre">Por eso en TEP el E/e′ sale 1,8, imposible (ver M1).</p>
+<details class="nota"><summary>Para el programador</summary><p class="mut">Hilo 1: <code>suelo()</code> de <code>escenarios.mjs</code>. Hilo 7: <code>tapseDeLatido</code> en <code>corazon-geo.mjs</code> y <code>ePrima</code> en <code>atlas/diastolica.mjs</code>.</p></details>
+
+<div class="hilos" id="m2-hilos"></div>
+
+<div class="tarjeta" id="m2-info" aria-live="polite">
+  <p id="m2-nombre">—</p>
+  <div id="m2-valor">—</div>
+  <p class="mut" id="m2-origen"></p>
+  <p><b>Quién lo usa:</b> <span id="m2-usa">—</span></p>
+  <p id="m2-notahoy"></p>
+  <div id="m2-sello" hidden class="sello hueco"></div>
+</div>
+
+<p class="pie">Valores: <code>motor.mjs</code> (volúmenes, presiones, caudales, derrame), <code>escenarios.mjs</code> (paciente), TAPSE de <code>corazon-geo.mjs</code>, e′ de <code>atlas/diastolica.mjs</code>, pared de <code>ecografia.mjs</code>. Los 9 grupos son el contrato de la opción A (plan, §2). Origen de las cifras: ficha/motor.<br>
+<a class="volver" href="index.html">← Volver al informe</a></p>
+</main>
+<script type="module" src="m2-contrato.js"></script>
+</body></html>

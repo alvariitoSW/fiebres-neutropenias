@@ -1,0 +1,92 @@
+<!-- PROPUESTA PARA REVISAR (eco-reforma). Maqueta M3 «TEP grave frente a HP crónica, en las dos piezas». No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/eco-reforma/m3-tep.html
+     Todo lo que se ve sale del motor y del ecógrafo reales de js/modules/eco/ (motor.mjs, escenarios.mjs, formas.mjs,
+     ecografia.mjs, corazon-geo.mjs). Los 5 signos se calculan en vivo con medirVd, medidasCorazon y tapseDeLatido.
+     «Antes» = lo que hace hoy la app. «Después (opción A)» = ilustrativo: sin cifras inventadas. Solo tokens de css/variables.css. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TEP grave frente a HP crónica</title>
+<link rel="stylesheet" href="../../../css/variables.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 14px 14px 40px; overflow-x: hidden; }
+  h1 { font-size: 20px; margin: 4px 0 6px; } h2 { font-size: 16px; margin: 20px 0 8px; color: var(--accent-yellow); }
+  p { margin: 6px 0; } .dim { color: var(--text-dim); } .nota { font-size: 13px; color: var(--text-muted); }
+  .idea { border-left: 3px solid var(--accent-yellow); padding: 4px 10px; margin: 8px 0; }
+  button, summary { font: inherit; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-height: 44px; padding: 6px 12px; cursor: pointer; }
+  .fila { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; } .fila > button { flex: 1 1 0; }
+  button[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+  button[aria-pressed="true"]::before { content: "● "; }
+  .mando { display: grid; grid-template-columns: 1fr 4.2em; align-items: center; gap: 8px; margin: 4px 0; }
+  .mando output { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-dim); }
+  input[type=range] { width: 100%; min-height: 40px; accent-color: var(--accent-yellow); }
+  .marco { border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; background: var(--bg-main); position: relative; }
+  #lienzo { display: block; width: 100%; height: auto; max-height: 300px; margin: 0 auto; background: var(--bg-main); }
+  #espera { position: absolute; inset: auto 0 8px 0; text-align: center; font-size: 13px; color: var(--text-dim); }
+  .sello { border: 2px solid var(--accent-red); color: var(--accent-red); border-radius: 8px; padding: 6px 10px; margin: 8px 0; font-weight: 600; font-size: 14px; }
+  .sello.hueco { border-color: var(--text-muted); color: var(--text-dim); border-style: dashed; }
+  .signo { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 12px; margin: 8px 0; }
+  .signo h3 { margin: 0 0 4px; font-size: 15px; } .cifra { font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .estado { display: inline-block; font-size: 13px; font-weight: 700; padding: 2px 8px; border-radius: 999px; border: 1px solid; margin-left: 6px; vertical-align: 3px; }
+  .est-pat { color: var(--accent-red); border-color: var(--accent-red); } .est-nor { color: var(--accent-green); border-color: var(--accent-green); } .est-int { color: var(--accent-yellow); border-color: var(--accent-yellow); }
+  .origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 1px 8px; margin: 2px 4px 0 0; }
+  .signo a, .signo .ficha, footer a { color: var(--accent-yellow); display: inline-block; padding: 10px 0; min-height: 44px; }
+  details { margin: 8px 0; } details > summary { list-style: none; } details[open] > summary { border-color: var(--accent-yellow); }
+  .ad { display: grid; gap: 8px; margin: 8px 0; } .ad > div { border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 10px; }
+  .ad b { display: block; color: var(--accent-yellow); font-size: 13px; }
+  footer { margin-top: 24px; border-top: 1px solid var(--border-color); padding-top: 10px; font-size: 13px; color: var(--text-muted); }
+  footer ul { padding-left: 18px; }
+</style></head><body><main>
+<h1>TEP grave frente a HP crónica</h1>
+<p class="idea">Agudo = VD dilatado y flojo con <b>pared fina</b>. Crónico = VD <b>grueso</b> con PSAP muy alta. Mira los dos en la eco y en cinco números.</p>
+<p class="nota">Cifras: <span class="origen">motor de la app</span> calculadas en vivo; umbrales: <span class="origen">ficha</span> con su página.</p>
+
+<div class="fila" id="patologias" role="group" aria-label="Paciente">
+  <button type="button" data-k="tep" aria-pressed="true">TEP grave</button>
+  <button type="button" data-k="hpcronica" aria-pressed="false">HP crónica</button>
+</div>
+<div class="mando"><label for="g">Gravedad del escenario <span class="nota">(0 normal · 100 el extremo de la app)</span></label><output id="g-v">93 %</output></div>
+<input type="range" id="g" min="0" max="100" step="1" value="93" aria-label="Gravedad de 0 a 100 %">
+<p class="nota" id="g-texto"></p>
+<div class="fila"><button type="button" id="defecto">Punto de la app (defecto)</button><button type="button" id="pausa">Parar el latido</button></div>
+
+<div class="fila" id="vistas" role="group" aria-label="Plano"><button type="button" data-k="a4c" aria-pressed="true">Apical 4 cámaras</button><button type="button" data-k="psaxPm" aria-pressed="false">Eje corto</button></div>
+<div class="marco"><canvas id="lienzo" width="360" height="300" aria-label="Imagen ecográfica del paciente elegido"></canvas><div id="espera">Calculando el paciente… (medio segundo: el motor recalcula los latidos)</div></div>
+<p class="nota" id="pie-imagen">Imagen: ecógrafo real de la app, sin retocar.</p>
+<div id="sellos"></div>
+
+<h2>Cinco signos, calculados ahora</h2>
+<div id="signos"></div>
+
+<div class="sello hueco" id="hueco-techo">Hueco: techo de presión del VD agudo. El código dice «~40/33» pero esa cifra no tiene fuente que se pueda abrir. No se pone ninguna.</div>
+
+<h2>Antes y después de la reforma</h2>
+<p class="nota">«Hoy» es lo que hace la app ahora. «Con la opción A» es ilustrativo: describe el cambio, sin cifras.</p>
+<details><summary>McConnell: pared libre quieta, ápex que late</summary>
+  <div class="ad"><div><b>Hoy</b>No existe. Todo el VD se acorta por igual; no hay acinesia regional.</div>
+  <div><b>Con la opción A (ilustrativo)</b>La pared libre se queda quieta y el ápex late. Sale de un campo regional del motor, no del dibujo.</div></div>
+  <p class="nota">Fuente: Marino cap. 22, <a href="../../../docs/marino-2024-respiratory-management-caps22-26.pdf#page=7" target="_blank" rel="noopener">PDF 7</a>: acinesia de la pared libre con ápex normal, en el 20 % de los casos. Dilatación del VD + troponina = pronóstico, no diagnóstico.</p></details>
+<details><summary>Aplanamiento del tabique</summary>
+  <div class="ad"><div><b>Hoy</b><span id="ad-septo">…</span></div>
+  <div><b>Con la opción A (ilustrativo)</b>Continuo: el tabique se aplana según la diferencia de presión entre VD y VI en cada instante. Número del índice de excentricidad: hueco.</div></div>
+  <p class="nota">Fuente: ESC/ERS 2022 Tabla 10, <a href="../../../docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf#page=28" target="_blank" rel="noopener">PDF 28</a>: aplanamiento septal, índice de excentricidad del VI >1,1.</p></details>
+<details><summary>Tiempo de aceleración pulmonar &lt;105 ms</summary>
+  <div class="ad"><div><b>Hoy</b>No se mide: el Doppler pulmonar no deduce el tiempo del flujo.</div>
+  <div><b>Con la opción A (ilustrativo)</b>Sale del caudal pulmonar de cada instante: se acorta y aparece la muesca mesosistólica. Sin cifra propia.</div></div>
+  <p class="nota">Fuente: ESC/ERS 2022 Tabla 10, <a href="../../../docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf#page=28" target="_blank" rel="noopener">PDF 28</a>: tiempo de aceleración pulmonar &lt;105 ms o muesca mesosistólica.</p></details>
+
+<footer>
+<p><b>Fuentes</b> (los PDF están en <code>docs/</code>)</p>
+<ul>
+<li>ESC/ERS 2022 HP, Tabla 10 y Fig. 5: <a href="../../../docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf#page=28" target="_blank" rel="noopener">PDF 28 (p. 3645)</a></li>
+<li>Lang 2015 (cámaras, ASE): <a href="../../../docs/lang-2015-cuantificacion-camaras-ase.pdf#page=23" target="_blank" rel="noopener">PDF 23 (p. 23)</a> · <a href="../../../docs/lang-2015-cuantificacion-camaras-ase.pdf#page=20" target="_blank" rel="noopener">PDF 20 (Tabla 8)</a></li>
+<li>Mukherjee 2025 (corazón derecho, ASE): <a href="../../../docs/mukherjee-2025-corazon-derecho-hp-ase.pdf#page=4" target="_blank" rel="noopener">PDF 4 (p. 144)</a> · <a href="../../../docs/mukherjee-2025-corazon-derecho-hp-ase.pdf#page=33" target="_blank" rel="noopener">PDF 33 (p. 173)</a></li>
+<li>Marino cap. 22: <a href="../../../docs/marino-2024-respiratory-management-caps22-26.pdf#page=7" target="_blank" rel="noopener">PDF 7</a></li>
+</ul>
+<p><a href="index.html">← Volver al informe</a></p>
+</footer>
+</main>
+<script type="module" src="m3-tep.js"></script>
+</body></html>

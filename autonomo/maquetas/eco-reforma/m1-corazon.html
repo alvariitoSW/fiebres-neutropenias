@@ -1,0 +1,87 @@
+<!-- PROPUESTA PARA REVISAR (eco-reforma): M1 «El corazón solo». No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/eco-reforma/m1-corazon.html
+     Importa el motor real (js/modules/eco/motor.mjs, escenarios.mjs) y no usa ninguna imagen de eco: las cifras
+     son las del motor de hoy. El dibujo de las cajas es ilustrativo. Solo tokens de css/variables.css. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El corazón solo (propuesta eco-reforma)</title>
+<link rel="stylesheet" href="../../../css/variables.css">
+<link rel="stylesheet" href="m12.css">
+<style>
+  #m1-lienzo { display: block; width: 100%; height: auto; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-main); }
+  .mando { display: grid; grid-template-columns: 6.5em 1fr 3.2em; align-items: center; gap: 8px; font-size: 14px; }
+  .mando output { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-dim); }
+  input[type=range] { width: 100%; min-height: 44px; accent-color: var(--accent-yellow); }
+  #m1-gtxt { font-size: 13px; color: var(--text-dim); min-height: 1.4em; margin: 0; }
+  .leyenda { display: grid; gap: 4px; font-size: 13px; color: var(--text-dim); margin: 8px 0; }
+  .rampa { height: 10px; border-radius: 5px; border: 1px solid var(--border-color); background: linear-gradient(to right, var(--accent-green), var(--accent-red)); }
+  .rampa-n { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+  .ee { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: baseline; }
+  .ee-v { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .ee-v.mal { color: var(--accent-red); }
+  .banda { position: relative; height: 22px; margin: 10px 0 2px; border-radius: 4px; background: var(--bg-main); border: 1px solid var(--border-color); }
+  .banda-ok { position: absolute; top: 0; bottom: 0; background: var(--accent-green); opacity: .45; border-left: 2px solid var(--accent-green); border-right: 2px solid var(--accent-green); }
+  .banda-pt { position: absolute; top: -5px; width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent; border-top: 11px solid var(--text-main); transform: translateX(-7px); }
+  .banda-pt.mal { border-top-color: var(--accent-red); }
+  .banda-n { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
+  .fijas { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--bg-main); border-top: 1px solid var(--accent-yellow); padding: 4px 6px calc(6px + env(safe-area-inset-bottom)); }
+  .fijas-t { font-size: 11px; color: var(--text-muted); text-align: center; margin: 0 0 2px; }
+  .fijas-g { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; max-width: 640px; margin: 0 auto; }
+  .fijas-g div { text-align: center; min-width: 0; }
+  .fijas-g b { display: block; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .fijas-g i { display: block; font-style: normal; font-size: 9.5px; color: var(--text-dim); white-space: nowrap; }
+  .fijas-g u { display: block; text-decoration: none; font-size: 10px; color: var(--text-muted); }
+  .huecos { display: grid; gap: 6px; }
+</style></head><body>
+<main>
+<h1>El corazón solo</h1>
+<p class="dim" id="m1-frase">El motor calcula; nada de lo que ves aquí sale de un dibujo.</p>
+<span class="origen">cifras: motor de hoy</span><span class="origen">cajas: ilustrativo</span>
+
+<div class="fila" id="m1-pac" role="group" aria-label="Paciente"></div>
+<div class="mando"><span>Gravedad</span><input id="m1-g" type="range" min="0" max="100" step="1" value="0" aria-label="Gravedad del escenario, 0 a 100 %"><output id="m1-gout">—</output></div>
+<p id="m1-gtxt"></p>
+<p class="mut">El deslizador llega al 100 %, el mismo límite que usa la app.</p>
+<div id="m1-sello100" hidden class="sello"></div>
+
+<svg id="m1-lienzo" viewBox="0 0 360 318" role="img" aria-label="Cuatro cámaras del corazón como cajas: el tamaño es el volumen y el color la presión"></svg>
+<div class="leyenda">
+  <div><b>Tamaño</b> = volumen (arista ∝ ³√mL). Cubo punteado = 100 mL, referencia de escala (ilustrativo).</div>
+  <div><b>Color</b> = presión de ese instante, y el número al lado:</div>
+  <div class="rampa"></div><div class="rampa-n"><span>0 mmHg</span><span>50</span><span>100 mmHg</span></div>
+  <div class="mut">Vista: el lado derecho del paciente (AD, VD) a la izquierda. Latido <span id="m1-lat">—</span>.</div>
+</div>
+
+<h2>E/e′ del motor</h2>
+<div class="tarjeta" id="m1-ee">
+  <div class="ee"><span class="ee-v" id="m1-eev">—</span><span>E/e′ medio · <span class="origen">motor de hoy</span></span></div>
+  <div class="banda"><div class="banda-ok" id="m1-banda-ok"></div><div class="banda-pt" id="m1-banda-pt"></div></div>
+  <div class="banda-n"><span>0</span><span>normal según edad, ≈4-14 (unión de los tres grupos)</span><span>25</span></div>
+  <div id="m1-ee-sello" hidden class="sello">Imposible: E/e′ promedio normal 4,0-9,1 (20-39 a), 4,6-11,5 (40-60 a), 5,2-14,0 (60-80 a): <a href="../../../docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=15" target="_blank" rel="noopener">Nagueh 2025, Tabla 5, p. 551 (PDF 15)</a>. El 1,8 está por debajo de todos los límites inferiores.</div>
+  <div id="m1-ee-A" hidden class="sello ilus">Lo que daría la opción A: e′ del motor, no del atlas. ilustrativo · sin cifra →  vuelve a la banda normal para su edad.</div>
+</div>
+
+<h2>Lo que el motor aún no tiene</h2>
+<div class="huecos">
+  <div class="sello hueco">hueco · MAPSE: sin fuente en docs/</div>
+  <div class="sello hueco">hueco · torsión (rotación basal/apical): sin fuente en docs/</div>
+  <div class="sello hueco">hueco · techo de presión del VD agudo: la nota «~40/33» del código no tiene cita</div>
+</div>
+
+<p class="pie">Cifras: <code>motor.mjs</code> y <code>escenarios.mjs</code> de hoy (FEVI, FEVD, presiones, PVC, GC) y TAPSE de <code>corazon-geo.mjs</code>; E/e′ con la fórmula del atlas diastólico. Umbral: Nagueh 2025, Tabla 5, p. 551 (PDF 15). Origen de todo: ficha/motor.<br>
+<a class="volver" href="index.html">← Volver al informe</a></p>
+</main>
+
+<div class="fijas" aria-label="Seis cifras del motor">
+  <p class="fijas-t">Cifras del motor de hoy · origen ficha/motor</p>
+  <div class="fijas-g">
+    <div><b id="f-fevi">—</b><i>FEVI</i><u>%</u></div>
+    <div><b id="f-fevd">—</b><i>FEVD</i><u>%</u></div>
+    <div><b id="f-pap">—</b><i>PSAP/PAPd</i><u>mmHg</u></div>
+    <div><b id="f-pvc">—</b><i>PVC</i><u>mmHg</u></div>
+    <div><b id="f-gc">—</b><i>GC</i><u>L/min</u></div>
+    <div><b id="f-tapse">—</b><i>TAPSE</i><u>mm</u></div>
+  </div>
+</div>
+<script type="module" src="m1-corazon.js"></script>
+</body></html>
