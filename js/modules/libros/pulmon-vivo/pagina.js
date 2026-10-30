@@ -18,7 +18,7 @@ export function montarPulmon(raiz) {
 const $ = (id) => document.getElementById('pul-' + id);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const NS = 'http://www.w3.org/2000/svg';
-const SEG = 12;   // segundos por pantalla (un ciclo tarda de 1,7 a 7,5 s)
+let SEG = 12;   // segundos por pantalla (E.seg lo cambia: las asincronías piden menos para ver el valle) (un ciclo tarda de 1,7 a 7,5 s)
 const f1 = (n) => (n == null || !isFinite(n) ? '—' : String(Math.round(n * 10) / 10).replace('.', ','));
 const f0 = (n) => (n == null || !isFinite(n) ? '—' : String(Math.round(n)));
 
@@ -47,13 +47,14 @@ let tSim = 0, tProx = 0, L = null;
 
 const pacDe = (k) => D.PACIENTES.find((p) => p.k === k);
 const PBW = () => pbw(est.pac.talla, est.pac.sexo);
-const NOMBRE_MANDO = { vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo', ps: 'P. soporte', frEsp: 'FR del paciente', fio2: 'FiO₂' };
+const NOMBRE_MANDO = { pmus: 'Esfuerzo (Pmus)', vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo', ps: 'P. soporte', frEsp: 'FR del paciente', fio2: 'FiO₂' };
 
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
-  P.ajustarYa({ ps: 10, frEsp: 16, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
+  P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
@@ -73,7 +74,7 @@ function llenarMonitor() {
   mon.llenar(() => { for (let j = 0; j < n; j++) P.paso(0.005); return muestra(); });
   L = P.lectura(); tProx = tSim;
 }
-const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase });
+const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase, pmus: P.pmus, disp: P.disparo ? 1 : 0 });
 function avanzar(dt) {
   const cada = SEG / mon.NP, n = Math.round(dt / 0.005);
   for (let i = 0; i < n; i++) { P.paso(0.005); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
@@ -101,20 +102,29 @@ function tramosUltimoCiclo() {
 function marcasFlujo() {
   // la marca «flujo al final de la espiración» (triángulo y cifra) en cada paso de espiración a inspiración u oclusión
   const g = mon.capa('flujo'); if (!g) return;
-  const F = mon.dato('fase'), Q = mon.dato('flujo'), NP = mon.NP; let h = '';
+  const F = mon.dato('fase'), Q = mon.dato('flujo'), NP = mon.NP; let h = '', xTxt = -99;   // el texto solo si cabe: con FR alta los rótulos se pisaban
   for (let i = 1; i < NP; i++) if (F[i - 1] === 'esp' && F[i] && F[i] !== 'esp' && Q[i - 1] != null) {
     const y = mon.yDe('flujo', Q[i - 1]), v = Q[i - 1];
-    if (v < -2) h += `<path class="mon-marca" d="M${mon.x(i - 1)} ${f1(y + 2).replace(',', '.')}l-3 5h6z"/><text class="mon-marca-txt" x="${mon.x(i - 1) + 4}" y="${f1(y + 9).replace(',', '.')}">fin esp. ${f0(v)}</text>`;
+    if (v < -2) { h += `<path class="mon-marca" d="M${mon.x(i - 1)} ${f1(y + 2).replace(',', '.')}l-3 5h6z"/>`; if (mon.x(i - 1) - xTxt >= 62) { xTxt = mon.x(i - 1); h += `<text class="mon-marca-txt" x="${mon.x(i - 1) + 4}" y="${f1(y + 9).replace(',', '.')}">fin esp. ${f0(v)}</text>`; } }
   }
   g.innerHTML = h;
 }
-function pintarMonitor() { PANT.R.pintarCurvas(); marcasFlujo(); }
+function marcasDisparo() {
+  // bajo la Paw, un triángulo con el pulmón por cada insuflación que dispara el paciente (solo en los estados con esfuerzo)
+  const g = mon.capa('paw'); if (!g) return;
+  if (!est.conPmus) { g.innerHTML = ''; return; }
+  const D1 = mon.dato('disp'), NP = mon.NP, y = f1(mon.yDe('paw', -7)).replace(',', '.'); let h = '';
+  for (let i = 0; i < NP; i++) if (D1[i] === 1) h += `<path class="mon-marca" d="M${mon.x(i)} ${y}l-4 -7h8z"><title>Disparo del paciente</title></path>`;
+  g.innerHTML = h;
+}
+function pintarMonitor() { PANT.R.pintarCurvas(); marcasFlujo(); marcasDisparo(); }
 const alarma30 = (v) => (v == null ? '' : v > 30 ? 'no' : 'si');
 function pintarCifrasTodo() {
   const r = P.S.resp, kg = PBW(), l = L || {};
   EX.pintar();
   const hay = aplicarTopes();
   PANT.pintar(L, hay, { tapado: est.tapado, detenido: est.detenido });
+  if (est.clave.startsWith('sbt') && l.vtExh > 0 && !est.tapado) { const fvt = (l.frReal || r.frEsp) / (l.vtExh / 1000); PANT.R.info(`<b>FR/Vt ${f0(fvt)}</b> resp/min por litro · FR ${f0(l.frReal || r.frEsp)} · Vt ${f0(l.vtExh)} mL (${f1(l.vtExh / kg)} mL/kg) · predictor de éxito: ${fvt <= 105 ? '≤105' : '>105: fracaso probable'} (Marino cap. 30 p. 52, Tabla 30.1) ${cita(D.C.sbt)}`); }
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
@@ -145,7 +155,7 @@ let topeMando = null;   // el sello de un mando que se pasó del tope y se qued�
 function aplicarTopes() {
   const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
   if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
-  for (const k of ['vtkg', 'meseta', 'pmax', 'sello', 'sello2', 'sello3', 'sello4']) {
+  for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'sello', 'sello2', 'sello3', 'sello4']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
@@ -197,6 +207,7 @@ function pintarMandos() {
     const psv = r.modo === 'psv', pend = P.pendientes().map((k) => NOMBRE_MANDO[k] || k);
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button><button type="button" data-m="modo" data-v="psv" aria-pressed="${psv}">PSV<small>presión de soporte</small></button></div>`;
     h += `<p class="dock-nota dock-grupo"><b>Ventilar</b> (CO₂): Vt × FR = ${f1(L?.vm)} L/min</p>`;
+    if (est.conPmus) h += desl('pmus', 'Esfuerzo (Pmus)', r.pmus ?? 0, 0, TOPE.pmusMax, 0.5, 'cmH₂O', `ilustrativo · aviso a ${TOPE.pmusAviso}; ecuación del movimiento: Libro azul IV p. 511`);
     if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
     else if (psv) h += desl('ps', 'P. soporte', r.ps, 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
@@ -328,7 +339,7 @@ function senalar(sels) {
   borrarSenal(); let primero = null; const T = tramosUltimoCiclo();
   const lista = [];
   for (const s of sels || []) {
-    const m = s.match(/^(paw|flujo|vol):(\w+)$/);
+    const m = s.match(/^(paw|flujo|vol|pmus):(\w+)$/);
     if (m) { const seg = T?.[m[2]]; if (seg) { const r = mon.tramo(m[1], m[2], seg[0], seg[1]); if (r) lista.push(r); } continue; }
     for (const el of raiz.querySelectorAll(s)) lista.push(el);
   }

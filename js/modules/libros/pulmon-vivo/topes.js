@@ -7,7 +7,7 @@ import * as D from '../../../data/pulmon-vivo-data.js';
 const { C } = D;
 const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 
-export const T = { vmAviso: 16, vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50, pmaxMin: 20, tiMin: 0.2 };
+export const T = { vmAviso: 16, vtkgAviso: 8, vtkgMax: 12, vtkgMin: 4, meseta: 30, pmaxAviso: 45, vmMin: 2, vmMax: 20, peepTotMax: 20, cMax: 80, pmaxMax: 50, pmaxMin: 20, tiMin: 0.2, pmusMax: 15, pmusAviso: 12, psili: 9.5 };
 const ORG_VT = 'ficha · Tabla 27.1 (cap. 27 p. 14) y cap. 23 p. 29';
 const ORG_12 = 'ARDS Network, NEJM 2000 (PMID 10793162): brazo tradicional, 12 mL/kg inicial · ficha, cap. 24 p. 46: tradicional 12-15, normal 6-7';
 
@@ -48,6 +48,9 @@ export function calcularTopes(S, l, kg) {
   if (pt != null && pt > T.peepTotMax && pt - r.peep >= 2) sellos.push({ k: 'hiper', titulo: 'Hiperinflación', texto: `PEEP total ${f1(pt)} cmH₂O (${f1(pt - r.peep)} de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.`, cita: C.vppConsec, origen: 'ficha · el mecanismo: cap. 23 p. 28; cap. 28 p. 31-33 · el 20 y la oculta ≥ 2: ilustrativo (lectura: Marini 2011, PMID 21700908)' });
   // el racimo (E2): unidades que se abren y se cierran en cada ciclo
   if (l.nAbreCierra > 0) sellos.push({ k: 'atelectrauma', titulo: 'Abre y cierra cada ciclo', texto: `${l.nAbreCierra} de 4 unidades se abren al inspirar y se colapsan al espirar: es el atelectrauma, que daña la vía aérea pequeña. La PEEP lo evita.`, cita: C.atelect, origen: 'ficha · cap. 24 p. 48 · presiones: ilustrativo' });
+  // el esfuerzo del paciente (E4a): ilustrativo, 0-15 con aviso a 12; en soporte, con Vt ≥9,5 mL/kg sale el P-SILI (Marino cap. 24 p. 40-42)
+  if ((r.pmus ?? 0) >= T.pmusAviso) out.pmus = { nivel: 'aviso', titulo: 'Esfuerzo muy alto', texto: `Pmus de ${f1(r.pmus)} cmH₂O: cerca del tope de ${T.pmusMax}; un esfuerzo así dispara dos veces o lesiona el pulmón.`, cita: C.ecMov, origen: 'ilustrativo · 0-15, aviso a 12 · ecuación del movimiento: Libro azul IV p. 511' };
+  if (r.modo === 'psv' && (r.pmus ?? 0) > 0 && kgVt != null && kgVt >= T.psili) sellos.push({ k: 'psili', titulo: 'P-SILI', texto: `Vt de ${f1(kgVt)} mL/kg de peso ideal con un esfuerzo de ${f1(r.pmus)} cmH₂O: respirar con tanto esfuerzo puede lesionar el pulmón. Baja el esfuerzo o intuba antes que después.`, cita: C.psili, origen: 'ficha · Vt ≥9,5 mL/kg: cap. 24 p. 40-42 · esfuerzo: ilustrativo' });
   const [s1, ...resto] = sellos;
   if (s1) out.sello = { k: s1.k, nivel: 'sello', titulo: s1.titulo, texto: s1.texto, cita: s1.cita, origen: s1.origen };
   resto.forEach((s, i) => { out['sello' + (i + 2)] = { k: s.k, nivel: 'aviso', titulo: s.titulo, texto: s.texto, cita: s.cita, origen: s.origen }; });

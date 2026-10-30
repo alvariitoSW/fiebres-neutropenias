@@ -26,6 +26,8 @@ const AJUSTES = {
     // El pulmón con respirador: sus mandos son los deslizadores del dock, los alternadores de maniobra y las teclas de la pantalla
     // (Insp./Esp. mantenida, Congelar: alternan, no acumulan). Los sellos de tope duro (Vt > 12 mL/kg, VM > 20 L/min) y de
     // «Hiperinflación» los comprueba pruebas/pulmon-vivo.mjs (par 10) con las constantes del paciente.
+    // E4a: el deslizador «Esfuerzo (Pmus)» (0-15, aviso a 12) y el sello P-SILI (Vt ≥9,5 mL/kg en presión de soporte) los lleva al tope
+    // pruebas/pulmon-vivo.mjs (bloque «E4a»): Pmus 15 en Elvira pasa el tope de 12 mL/kg y el mando vuelve; Pmus 9 conserva el P-SILI.
     'pulmon-vivo': {},
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
