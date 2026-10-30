@@ -67,7 +67,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
   de pago. Llevarse la idea: 0 €
 - **Veredicto**: **no instalar ni copiar**. Lo decidió el Consejo (30/10, `autonomo/consejo/2026-10-30-2.md`): la
   puerta (bloqueo por tipo de pregunta) se descarta; entra en `educacion-app` un indicador de «ideas firmes» (2
-  aciertos en días distintos; el criterio es nuestro, no de DeepTutor, que no lo publica). Espera el sí del usuario a
+  aciertos en días distintos; el criterio es nuestro, no de DeepTutor, que no lo publica). El usuario dio el sí el 30/10 a
   guardar los días con acierto
 
 ### Neuropronóstico tras parada cardíaca: el curso temporal de los marcadores (Critical Care Reviews)
