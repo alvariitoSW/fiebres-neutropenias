@@ -917,6 +917,7 @@ la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora co
 (ilustrativo, extrapolación: Nagueh 2025 p. 561 da 3-4 en el grado 3 avanzado). Motor común sin cambios: la eyección del modelo (200 ms a FC 120) ya sigue
 la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
 Tablas de Guyton regeneradas.
+- Atlas, capítulo 16 (insuficiencia aórtica): fase A, solo texto traducido (`atlas/cap-ar.html`), sin figura todavía.
 - Atlas, capítulo 21 (enfermedad pericárdica): fase A, solo texto traducido (`atlas/cap-peri.html`), sin figura todavía.
 - Atlas, capítulo 19 (insuficiencia tricuspídea): fase A, solo texto traducido (`atlas/cap-tr.html`), sin figura todavía.
 - Atlas, capítulo 17 (estenosis mitral): fase A, solo texto traducido (`atlas/cap-ms.html`), sin figura todavía.
