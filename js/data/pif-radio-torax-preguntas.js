@@ -61,7 +61,7 @@ export const preguntasPifRadioTorax = [
             'Sin trama pulmonar, mediastino centrado y diafragmas simétricos',
         ],
         correcta: 1,
-        explicacion: 'La tensión se reconoce por la ausencia de trama pulmonar en el hemitórax, el desplazamiento del mediastino hacia el lado contrario y el hemidiafragma deprimido (Origen: Marino, cap. 28, págs. 27-29, fig. 28.7). Un mediastino que tira hacia el mismo lado y un diafragma elevado son signos de pérdida de volumen, no de tensión, y confundirlos retrasa la descompresión de un shock obstructivo (Origen: Marino, cap. 28, pág. 28). Una silueta grande con derrame bilateral apunta a otra causa (razonamiento propio). Con el mediastino centrado y los diafragmas simétricos no hay tensión (Origen: Marino, cap. 28, pág. 28).',
+        explicacion: 'La tensión se reconoce por la ausencia de trama pulmonar en el hemitórax, el desplazamiento del mediastino hacia el lado contrario y el hemidiafragma deprimido (Origen: Marino, cap. 28, págs. 27-29, fig. 28.7). Un mediastino que tira hacia el mismo lado y un diafragma elevado son signos de pérdida de volumen, no de tensión (Origen: StatPearls, Lung Imaging, «Plain Films»); confundirlos retrasaría la descompresión de un shock obstructivo (razonamiento propio). Una silueta grande con derrame bilateral apunta a otra causa (razonamiento propio). La tensión es un diagnóstico clínico (hipoxemia o hipotensión sin causa), y una placa sin desvío no basta para descartarla; ante la duda, no se espera a la imagen (razonamiento propio sobre Marino, cap. 28, pág. 29).',
     },
     {
         id: 'pifradio-t1-q005', tema: 'pifradio-t1',
@@ -97,7 +97,7 @@ export const preguntasPifRadioTorax = [
             'Pincho a ciegas el 2.º espacio sin más pruebas y sin eco',
         ],
         correcta: 1,
-        explicacion: 'Hipoxemia o hipotensión sin explicar en un ventilado, tras un catéter, es la sospecha de neumotórax a tensión; la placa portátil se pierde hasta el 50 % y el aire en supino se esconde delante, y la eco es más sensible (Origen: Marino, cap. 28, págs. 26-28; cap. 2, págs. 34-35). Atribuirlo a sepsis mientras el neumotórax crece puede llevarlo a shock obstructivo (Origen: Marino, cap. 28, pág. 27). Esperar 6 horas es tiempo que el paciente no tiene (razonamiento propio sobre la misma fuente). El 2.º espacio falla más y no se punciona sin sospecha confirmada (Origen: Marino, cap. 28, pág. 29).',
+        explicacion: 'Hipoxemia o hipotensión sin explicar en un ventilado, tras un catéter, es la sospecha de neumotórax a tensión; la placa portátil se pierde hasta el 50 % y el aire en supino se esconde delante, y la eco es más sensible (Origen: Marino, cap. 28, págs. 26-28; cap. 2, págs. 34-35). Atribuirlo a sepsis mientras el neumotórax crece puede llevarlo a shock obstructivo (Origen: Marino, cap. 28, pág. 27). Esperar 6 horas es tiempo que el paciente no tiene (razonamiento propio sobre la misma fuente). El 2.º espacio falla más (Origen: Marino, cap. 28, pág. 29); por eso se elige el 5.º (razonamiento propio).',
     },
     {
         id: 'pifradio-t1-caso2', tema: 'pifradio-torax-caso',
@@ -133,7 +133,7 @@ export const preguntasPifRadioTorax = [
             'Solo vale si el infiltrado es bilateral y uniforme, porque entonces es neumonía',
         ],
         correcta: 1,
-        explicacion: 'El infiltrado tiene una sensibilidad del 89 % pero una especificidad de solo el 26 %, y la neumonía supone un tercio de los infiltrados en la UCI; el resto son atelectasia focal, edema o SDRA (Origen: Marino, cap. 29, págs. 40-41, tabla 29.4). Darlo por confirmación llevaría a tratar como neumonía un edema o un SDRA (Origen: Marino, cap. 29, pág. 40). Decir que nunca los muestra es falso: la sensibilidad es alta (Origen: Marino, cap. 29, pág. 40). Un infiltrado bilateral y uniforme es más propio del SDRA clásico que de una neumonía (Origen: Marino, cap. 24, pág. 36).',
+        explicacion: 'El infiltrado tiene una sensibilidad del 89 % pero una especificidad de solo el 26 %, y la neumonía supone un tercio de los infiltrados en la UCI; el resto son atelectasia focal, edema o SDRA (Origen: Marino, cap. 29, págs. 40-41, tabla 29.3; el texto de Marino la llama 29.4). Darlo por confirmación llevaría a tratar como neumonía un edema o un SDRA (Origen: Marino, cap. 29, pág. 40). Decir que nunca los muestra es falso: la sensibilidad es alta (Origen: Marino, cap. 29, pág. 40). El SDRA clásico es uniforme en todos los campos (Origen: Marino, cap. 24, pág. 36); que eso lo aleje de una neumonía es razonamiento propio.',
     },
     {
         id: 'pifradio-t2-q002', tema: 'pifradio-t2',
@@ -157,7 +157,7 @@ export const preguntasPifRadioTorax = [
             'Neumonía basal de la derecha, por la posición del paciente',
         ],
         correcta: 2,
-        explicacion: 'Los infiltrados que irradian desde los hilios son el rasgo que distingue el edema cardiogénico del no cardiogénico, y los derrames son frecuentes (Origen: Marino, cap. 18, pág. 8). El SDRA clásico es uniforme y sin derrame, y atribuirle esta placa dejaría sin tratar la congestión (Origen: Marino, cap. 24, pág. 36). La atelectasia por intubación selectiva es de un solo pulmón, no bilateral (Origen: Marino, cap. 28, pág. 19). Una neumonía basal por posición no explica infiltrados bilaterales hiliares (razonamiento propio sobre Marino, cap. 29, pág. 41).',
+        explicacion: 'Los infiltrados que irradian desde los hilios son el rasgo que distingue el edema cardiogénico del no cardiogénico, y los derrames son frecuentes (Origen: Marino, cap. 18, pág. 7). El SDRA clásico es uniforme y sin derrame, y atribuirle esta placa dejaría sin tratar la congestión (Origen: Marino, cap. 24, pág. 36). La atelectasia por intubación selectiva es de un solo pulmón, no bilateral (Origen: Marino, cap. 28, pág. 19). Una neumonía basal por posición no explica infiltrados bilaterales hiliares (razonamiento propio sobre Marino, cap. 29, pág. 41).',
     },
     {
         id: 'pifradio-t2-q004', tema: 'pifradio-t2',
@@ -181,7 +181,7 @@ export const preguntasPifRadioTorax = [
             'Edema cardiogénico, que desplaza el mediastino hacia el lado del edema',
         ],
         correcta: 1,
-        explicacion: 'La atelectasia se asocia a pérdida de volumen, desvío del mediastino hacia el lado afectado y elevación del diafragma, a diferencia de la consolidación, que suele conservar el volumen (Origen: StatPearls, Lung Imaging, «Plain Films»). Pensar en consolidación llevaría a buscar solo antibiótico cuando quizá haya un tapón o un tubo mal situado (Origen: Marino, cap. 28, págs. 19 y 23). En la tensión el mediastino se desplaza al lado contrario (Origen: Marino, cap. 28, pág. 28). El edema cardiogénico es bilateral y no desvía el mediastino (razonamiento propio sobre Marino, cap. 18, pág. 8).',
+        explicacion: 'La atelectasia se asocia a pérdida de volumen, desvío del mediastino hacia el lado afectado y elevación del diafragma, a diferencia de la consolidación, que suele conservar el volumen (Origen: StatPearls, Lung Imaging, «Plain Films»). Pensar en consolidación llevaría a buscar solo antibiótico cuando quizá haya un tapón o un tubo mal situado (Origen: Marino, cap. 28, págs. 19 y 23). En la tensión el mediastino se desplaza al lado contrario (Origen: Marino, cap. 28, pág. 28). El edema cardiogénico es bilateral y no desvía el mediastino (razonamiento propio sobre Marino, cap. 18, pág. 7).',
     },
     {
         id: 'pifradio-t3-q001', tema: 'pifradio-t3',
@@ -193,7 +193,7 @@ export const preguntasPifRadioTorax = [
             'Que la embolia es posible en la mitad de los casos y hay que repetir',
         ],
         correcta: 0,
-        explicacion: 'Una angio-TC normal elimina esencialmente la embolia pulmonar: su valor predictivo negativo es del 95 % (Origen: Marino, cap. 22, pág. 5). Decir que no sirve ignora que llega hasta el nivel subsegmentario (Origen: Marino, cap. 22, pág. 5). La gammagrafía no se favorece porque los infiltrados la hacen anormal, y pedirla de rutina retrasa el diagnóstico (Origen: Marino, cap. 22, pág. 6). La cifra de «la mitad» corresponde al valor de la placa en el SDRA, no a la angio-TC (Origen: Marino, cap. 24, pág. 36).',
+        explicacion: 'Una angio-TC normal elimina esencialmente la embolia pulmonar: su valor predictivo negativo es del 95 % (Origen: Marino, cap. 22, pág. 5). Decir que no sirve ignora que llega hasta el nivel subsegmentario (Origen: Marino, cap. 22, pág. 5). La gammagrafía no se favorece porque los infiltrados la hacen anormal, (Origen: Marino, cap. 22, pág. 6); pedirla de rutina retrasaría el diagnóstico (razonamiento propio). La cifra de «la mitad» corresponde al valor de la placa en el SDRA, no a la angio-TC (Origen: Marino, cap. 24, pág. 36).',
     },
     {
         id: 'pifradio-t3-q002', tema: 'pifradio-t3',
@@ -204,7 +204,7 @@ export const preguntasPifRadioTorax = [
             'Lo suficiente para saltarte la imagen cuando es muy alto',
             'Nada si es normal, aunque tampoco ayudaría si estuviera alto',
         ],
-        correcta: 2,
+        correcta: 1,
         explicacion: 'Hasta el 80 % de los pacientes de UCI tienen el D-dímero elevado, por eso no resulta útil en ellos; su valor predictivo positivo es del 27 % (Origen: Marino, cap. 22, pág. 3). Tomarlo como confirmación lleva a anticoagular sin diagnóstico (Origen: Marino, cap. 22, pág. 3). Saltarse la imagen por un valor alto repite ese error, y la angio-TC es el método de elección (Origen: Marino, cap. 22, págs. 3-4). Es una frase que no distingue lo que dice la fuente (razonamiento propio sobre Marino, cap. 22, pág. 3).',
     },
     {
@@ -217,7 +217,7 @@ export const preguntasPifRadioTorax = [
             'Agua 0 y aire −1000 unidades Hounsfield',
         ],
         correcta: 3,
-        explicacion: 'El agua destilada vale 0 y el aire −1000 unidades Hounsfield; el hueso llega hasta unos 1000 y los metales superan 3000 (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»). Invertirlos haría leer el pulmón aireado como denso y la consolidación como aire (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»). El valor de 1000 corresponde al hueso, no al agua (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»). El aire es el valor más bajo de la escala, no el más alto (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»).',
+        explicacion: 'El agua destilada vale 0 y el aire −1000 unidades Hounsfield; el hueso llega hasta unos 1000 y los metales superan 3000 (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»). Invertirlos haría leer el pulmón aireado como denso y la consolidación como aire (razonamiento propio). El valor de 1000 corresponde al hueso, no al agua (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»). El aire es el valor más bajo de la escala, no el más alto (Origen: StatPearls, Hounsfield Unit, «Definition/Introduction»).',
     },
     {
         id: 'pifradio-t3-q004', tema: 'pifradio-t3',
@@ -229,7 +229,7 @@ export const preguntasPifRadioTorax = [
             'Una ventana de nivel 0, que muestra todas las densidades por igual',
         ],
         correcta: 1,
-        explicacion: 'La ventana ancha (400-2000 HU) sirve para estructuras de densidades muy distintas, a costa de contraste: cuanto mayor la anchura, menos contraste (Origen: StatPearls, CT-scan Image Production Procedures, «Issues of Concern»). La estrecha (50-350 HU) es para densidades parecidas, y con ella las muy distintas se saturan (Origen: StatPearls, mismo artículo). La anchura sí cambia el contraste de la imagen (Origen: StatPearls, mismo artículo). El nivel es el punto medio de la escala de grises, no un modo de ver todo igual (Origen: StatPearls, CT Instrumentation and Physics, «Definition/Introduction»).',
+        explicacion: 'La ventana ancha (400-2000 HU) sirve para estructuras de densidades muy distintas, a costa de contraste: cuanto mayor la anchura, menos contraste (Origen: StatPearls, CT-scan Image Production Procedures, «Issues of Concern»). La estrecha (50-350 HU) es para densidades parecidas, y con ella las muy distintas se saturarían (razonamiento propio). La anchura sí cambia el contraste de la imagen (Origen: StatPearls, mismo artículo). El nivel es el punto medio de la escala de grises, no un modo de ver todo igual (Origen: StatPearls, CT Instrumentation and Physics, «Definition/Introduction»).',
     },
     {
         id: 'pifradio-t3-q005', tema: 'pifradio-t3',
@@ -253,7 +253,7 @@ export const preguntasPifRadioTorax = [
             'Neumonía asociada a la ventilación: infiltrado nuevo y fiebre la confirman',
         ],
         correcta: 2,
-        explicacion: 'Con infiltrados bilaterales y fiebre, la placa no separa los tres cuadros: el infiltrado tiene una especificidad del 26 % para neumonía, la placa tiene un valor predictivo negativo del 47 % en el SDRA y la distribución desde los hilios es solo orientativa (Origen: Marino, cap. 29, pág. 40; cap. 24, pág. 36; cap. 18, pág. 8). Dar el edema por seguro ignora que una cuña normal no lo excluye ni lo confirma, y puede llevar a diuréticos mientras hay una infección sin tratar (Origen: Marino, cap. 24, págs. 36-37). Dar el SDRA por confirmado olvida que el criterio exige que no haya evidencia de fallo izquierdo o sobrecarga, y aquí hay un balance de +3 L (Origen: Marino, cap. 24, pág. 35). Dar la neumonía por confirmada repite el error del 26 % de especificidad (Origen: Marino, cap. 29, pág. 40).',
+        explicacion: 'Con infiltrados bilaterales y fiebre, la placa no separa los tres cuadros: el infiltrado tiene una especificidad del 26 % para neumonía, la placa tiene un valor predictivo negativo del 47 % en el SDRA y la distribución desde los hilios es solo orientativa (Origen: Marino, cap. 29, pág. 40; cap. 24, pág. 36; cap. 18, pág. 7). Dar el edema por seguro ignora que una cuña normal no lo excluye (Origen: Marino, cap. 24, pág. 36), y puede llevar a diuréticos mientras hay una infección sin tratar (Origen: Marino, cap. 24, págs. 36-37). Dar el SDRA por confirmado olvida que el criterio exige que no haya evidencia de fallo izquierdo o sobrecarga (Origen: Marino, cap. 24, pág. 35); que un balance de +3 L lo pueda excluir es aplicación propia del caso. Dar la neumonía por confirmada repite el error del 26 % de especificidad (Origen: Marino, cap. 29, pág. 40).',
     },
     {
         id: 'pifradio-t3-caso5', tema: 'pifradio-torax-caso',
@@ -265,7 +265,7 @@ export const preguntasPifRadioTorax = [
             'Ver la consolidación posterior densa, a cambio de traslado y de 7 mSv',
         ],
         correcta: 3,
-        explicacion: 'La TC es la técnica más fiable en el SDRA y muestra la consolidación densa posterior de la fase precoz, que la placa pierde (valor predictivo negativo del 47 %); el precio es el traslado a radiología, un riesgo que Marino cita, y 7 mSv frente a 0,02 de una placa (Origen: Marino, cap. 24, págs. 36-38; cap. 22, pág. 4; apéndice 2, pág. 37). Decir que no aporta nada ignora ese 47 % (Origen: Marino, cap. 24, pág. 36). Una TC de tórax no lleva siempre contraste, y su dosis es mayor que la de la placa, no menor (Origen: Marino, apéndice 2, pág. 37). Sedado no es seguro: el traslado supone un riesgo (Origen: Marino, cap. 22, pág. 4).',
+        explicacion: 'La TC es la técnica más fiable en el SDRA y muestra la consolidación densa posterior que Marino ata a la fase precoz, que la placa pierde (valor predictivo negativo del 47 %); el precio es el traslado a radiología, un riesgo que Marino cita, y 7 mSv frente a 0,02 de una placa (Origen: Marino, cap. 24, págs. 36-38; cap. 22, pág. 4; apéndice 2, pág. 37). Decir que no aporta nada ignora ese 47 % (Origen: Marino, cap. 24, pág. 36). Su dosis es mayor que la de la placa, no menor (Origen: Marino, apéndice 2, pág. 37). Sedado no es seguro: el traslado supone un riesgo (Origen: Marino, cap. 22, pág. 4).',
     },
     {
         id: 'pifradio-t3-caso6', tema: 'pifradio-torax-caso',
@@ -289,6 +289,6 @@ export const preguntasPifRadioTorax = [
             'Pido solo la eco venosa de miembros inferiores: si es negativa, descarta la embolia',
         ],
         correcta: 1,
-        explicacion: 'La angio-TC es el método de elección y, con función renal conservada, el contraste no es obstáculo; normal, su valor predictivo negativo del 95 % elimina esencialmente la embolia (Origen: Marino, cap. 22, págs. 4-6). El D-dímero no sirve en la UCI porque hasta el 80 % lo tiene elevado, y anticoagular sin imagen expone a un riesgo sin diagnóstico (Origen: Marino, cap. 22, pág. 3). La gammagrafía no se favorece porque los infiltrados la hacen anormal (Origen: Marino, cap. 22, pág. 6). Una eco venosa negativa no excluye la embolia (Origen: Marino, cap. 22, pág. 4). Lo que te llevas: la placa orienta pero no separa edema, SDRA y neumonía; la TC ve lo que la placa se pierde, a cambio de radiación, contraste y traslado; y una angio-TC normal descarta la embolia, mientras que el D-dímero no ayuda en la UCI.',
+        explicacion: 'La angio-TC es el método de elección y, con función renal conservada, el contraste no es obstáculo; normal, su valor predictivo negativo del 95 % elimina esencialmente la embolia (Origen: Marino, cap. 22, págs. 4-6). El D-dímero no sirve en la UCI porque hasta el 80 % lo tiene elevado, y anticoagular sin imagen expone a un riesgo sin diagnóstico (Origen: Marino, cap. 22, pág. 3). La gammagrafía no se favorece porque los infiltrados la hacen anormal (Origen: Marino, cap. 22, pág. 6). Una eco venosa negativa no excluye la embolia (Origen: Marino, cap. 22, tabla 22.2, pág. 3). Lo que te llevas: la placa orienta pero no separa edema, SDRA y neumonía; la TC ve lo que la placa se pierde, a cambio de radiación, contraste y traslado; y una angio-TC normal elimina esencialmente la embolia, mientras que el D-dímero no ayuda en la UCI.',
     },
 ];
