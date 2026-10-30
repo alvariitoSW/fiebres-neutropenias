@@ -19,5 +19,14 @@ Analítica y anuncios bloqueados por la red del entorno (no hacían falta).
 Decidir si la lección «malla de IA ≠ referencia» va al encargo de `mv-eco-2a5` y si «aislar el corte» y los rótulos
 3D quedan para después de B-045 (bitácora, «Esperando algo tuyo», punto 6).
 
+## Después (30/10)
+- El usuario aprobó la lección «malla de IA ≠ referencia» → añadida al «Encargo B-045» del tablero.
+- 2.ª pasada: sin GPU en ningún modo, pero esperando 25 s tras cada pulsación se vieron el corte (quita media figura)
+  y las capas (malla en alambre).
+- «Que lo decida el ministerio del interior y el de educación»: dictámenes de un agente barato → `eco-3d-lectura`
+  (tablero, carril 2, tarea 15), aparcada hasta `mv-eco-2a5`.
+- Tarea programada «Vigía de eco-3d-lectura (tras mv-eco-2a5)», diaria a las 11:17: la abre cuando `mv-eco-2a5` esté
+  en `main` y se apaga sola.
+
 ## Gasto
-Director solo, sin agentes: ≈15 llamadas.
+Director ≈35 llamadas y 1 agente barato (dictámenes, 6 llamadas).
