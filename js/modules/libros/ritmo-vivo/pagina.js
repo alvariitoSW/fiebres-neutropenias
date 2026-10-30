@@ -3,7 +3,7 @@
 import { crearPlanoGrande } from '../../../core/plano-grande.js';
 import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from '../../../core/monitor.js';
 import { $, IMG, NS, REDUCIR, cita, clamp, coma, org } from './ayudas.js';
-import { C, CRECE, ESC_2021, ESTADOS, F195, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
+import { C, CRECE, ESC_2021, ESTADOS, F195, F213, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
 import { pintarGraficas } from './graficas.js';
 import { montarEscena, pintarAparatos, pintarEscena, pintarEscenaPendiente, reiniciarD } from './escena.js';
 import { MOTOR } from './motor.js';
@@ -93,9 +93,13 @@ function lesionMm() { const st = S.st; return { V2: st, V3: st * 1.04, II: 0.2 }
 let latCache = { t: -1, lat: [] };
 export function latidos(t) { if (Math.abs(latCache.t - t) > 0.05) latCache = { t, lat: mo.latidosMecanicos(t - 7, t + 0.1) }; return latCache.lat; }
 function adrenalinaActiva(t) { const p = P_(); return !!(p && p.adrenalina.some(a => t >= a && t < a + 18)); }   // ~3 min de la ficha, con el reloj ×10
+// Presión de perfusión coronaria (aórtica − AD entre compresiones, p. 61-62): 22 mmHg en RCP buena (lectura de la Fig. 21.3, p. 62);
+// con adrenalina ×1,3 (el +30 % del texto, p. 62); con 30 insuflaciones/min ×0,8 (la fuente solo dice que baja, p. 58: cuánto, ilustrativo)
+const PPC_BASE = F213[0][1];
+const ppcEn = t => PPC_BASE * (adrenalinaActiva(t) ? 1.3 : 1) * (P_() && P_().insufl === 30 ? 0.8 : 1);
 function artEn(t) {
   const p = P_();
-  if (p && !p.rce) { let v = 6; if (compresionesEn(t)) { const f = fasComp(t); v = 14 * (adrenalinaActiva(t) ? 1.3 : 1) + 34 * (f < 0.3 ? Math.sin(f / 0.3 * Math.PI) : 0) * (p.insufl === 30 ? 0.8 : 1); } return v; }
+  if (p && !p.rce) { let v = 6; if (compresionesEn(t)) { const f = fasComp(t); v = ppcEn(t) + 34 * (f < 0.3 ? Math.sin(f / 0.3 * Math.PI) : 0) * (p.insufl === 30 ? 0.8 : 1); } return v; }
   return mo.presion(t, latidos(t));
 }
 function etco2En(t) {
@@ -182,7 +186,8 @@ function pintarCifras() {
   const sinPulso = parada ? !p.comp : L.midiendo ? false : L.pas - L.pad < 6;
   celdas.push(cel('art', 'c-art', 'ART', sinPulso || L.midiendo ? '—' : `${L.pas}/${L.pad}`, 'mmHg', parada ? (p.comp ? 'tus manos · ilustrativo' : 'sin pulso') : L.midiendo ? 'midiendo…' : sinPulso ? 'sin pulso' : 'ilustrativo', parada || sinPulso || L.pas < 90 ? 'no' : ''));
   const def = L.fa && L.fc && !parada ? Math.max(0, L.fc - L.pul) : 0;
-  celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.midiendo || L.fc == null ? '—' : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
+  if (parada) { const ad = adrenalinaActiva(simT), ins = p.insufl === 30; celdas.push(cel('ppc', 'c-sat', 'PPC', p.comp ? Math.round(ppcEn(simT)) : '—', 'mmHg', !p.comp ? 'sin compresiones' : ad && ins ? 'ilustrativo' : ad ? '+30 % · p. 62' : ins ? 'ilustrativo' : 'lectura · p. 62', p.comp && ins ? 'ojo' : '')); }
+  else celdas.push(cel('pulso', 'c-sat', 'Pulso', parada ? 0 : L.midiendo || L.fc == null ? '—' : L.pul, def > 3 ? `déficit ${def}` : 'lpm', def > 3 ? 'Fig. 19.4 · p. 22' : 'en la muñeca', def > 3 ? 'no' : ''));
   const k4 = cuartaCifra(L);
   celdas.push(cel(k4.k, 'c-co2', k4.et, k4.v, k4.u, k4.o, k4.cls || ''));
   pintarColumna(c, celdas, { tapado });
@@ -388,7 +393,7 @@ function accion(a, b) {
     case 'comp': p.comp = !p.comp; if (p.comp && p.ciclo == null) { p.ciclo = p.reloj; p.avisoCiclo = false; } break;
     case 'choque': choque('asinc', '120-200 J', () => resultadoChoque()); break;
     case 'adre': {
-      bolo('ADRENALINA', '1 mg IV/IO', 'adrenalina 1 mg IV o IO cada 3-5 min'); p.adrenalina.push(t + 0.9); p.adreReloj = p.reloj;
+      bolo('ADRENALINA', '1 mg IV/IO', 'adrenalina 1 mg IV o IO cada 3-5 min'); if (p.adreReloj != null && p.reloj - p.adreReloj < MAX.intervaloAdre) p.adreFuera = true; p.adrenalina.push(t + 0.9); p.adreReloj = p.reloj;
       if (S.clave === 'fv' && p.choques < 2) avisar('La adrenalina empieza si hace falta un 2.º choque (p. 59). En la AESP y la asistolia, cuanto antes (p. 60-61).');
       else avisar('Adrenalina 1 mg: sube la presión de perfusión coronaria un 30 % durante al menos 3 min (p. 62). Mira la Fig. 21.3, abajo.');
       pintarGraficas(); break; }
@@ -438,6 +443,7 @@ function relojParada(dt) {
 /* ---------- Los topes de los mandos (topes.js): avisos ámbar y sellos en el monitor; los botones se apagan ---------- */
 const tope = crearTope({ monitor: $('rtv-monitor'), dock: $('dock'), cita });
 const topeVisto = {}; let topeFrase = null;
+$('rtv-monitor').addEventListener('click', (e) => { const sl = e.target.closest('.tope-sello'); if (!sl || e.target.closest('button, a')) return; if (sl.dataset.abierto) delete sl.dataset.abierto; else sl.dataset.abierto = '1'; sl.classList.toggle('tope-compacto', !sl.dataset.abierto); });
 function aplicarTopes(forzar) {
   const quitarTodo = () => { for (const { clave } of tope.activos()) { tope.quitar(clave); delete topeVisto[clave]; } topeFrase = null; };
   if (!mo || pend()) { quitarTodo(); return; }
@@ -446,6 +452,7 @@ function aplicarTopes(forzar) {
   let nuevo = false;
   for (const [k, t] of Object.entries(r.T)) { const f = JSON.stringify([t.nivel, t.titulo, t.texto]); if (!forzar && topeVisto[k] === f) continue; if (t.nivel === 'sello' && k !== 'sinusal' && topeVisto[k] !== f) nuevo = true; topeVisto[k] = f; tope.poner(k, t); }
   if (nuevo) { S.mensaje = null; pintarFrase(); }   // un sello nuevo manda sobre la frase vieja
+  for (const sl of $('rtv-monitor').querySelectorAll('.tope-sello')) sl.classList.toggle('tope-compacto', !sl.dataset.abierto);   // el sello nace plegado (solo el título): no tapa las cifras; al tocarlo se abre
   for (const b of document.querySelectorAll('#rtv-dock-panel [data-acc]')) {
     const a = b.dataset.acc, sm = b.querySelector('small');
     if (sm) { if (b.dataset.small0 == null) b.dataset.small0 = sm.textContent; sm.textContent = a in r.rot ? r.rot[a] : b.dataset.small0; }
@@ -458,7 +465,7 @@ function claveGuia() {
   if (c === 'nodal' && S.adeno) return 'adenosina';
   if (c === 'fa' && F195[S.farmaco]) return 'faF';
   if (c === 'wpw' && S.wpwFa) return 'wpwFa';
-  if (p) { if (p.rce) return 'rce'; if (c === 'fv' && p.choques >= 3 && p.escenario === 'refractaria') return 'refractaria'; if (c === 'fv' && p.comp) return 'rcp'; }
+  if (p) { if (p.rce) return 'rce'; if (c === 'fv' && p.choques >= 3 && p.escenario === 'refractaria') return 'refractaria'; if (c === 'fv' && p.comp) return p.insufl === 30 ? 'rcpInsufl' : p.adrenalina.length ? 'rcpAdre' : 'rcp'; }
   return GUIAS[c] ? c : 'sinusal';
 }
 function pintarFrase() {
@@ -474,7 +481,8 @@ function pintarFrase() {
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
-  if (p && !p.rce && p.comp) extra = p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
+  if (p && !p.rce && p.comp && p.insufl !== 30 && p.adrenalina.length) [t, o] = ['Adrenalina: la presión de perfusión coronaria sube un 30 % (22 → 29 mmHg en el modelo) y el efecto dura al menos 3 min, el intervalo entre dosis.', 'ficha · p. 62 (el +30 % es del texto; la Fig. 21.3 llega a ~33)'];
+  if (p && !p.rce && p.comp) extra = p.insufl === 30 && adrenalinaActiva(simT) ? ' Con 30 insuflaciones/min la PPC y la ETCO₂ bajan; que la adrenalina no lo compense es ilustrativo (la fuente no lo dice).' : p.insufl === 30 ? ' A 30 insuflaciones/min no da tiempo a vaciar el pulmón: la ETCO₂ cae.' : ' La ETCO₂ es el gasto que consiguen tus manos.';
   if (mo && ultLect && ultLect.fc == null && !ultLect.caos && S.sinusal && !(p && !p.rce)) [t, o] = ['Pausa tras el choque: el sinusal tarda un latido en arrancar.', 'fisiología general'];
   if (!S.mensaje && topeFrase) { t = topeFrase[0]; o = topeFrase[1]; extra = ''; }
   $('frase-txt').innerHTML = S.mensaje ? `${S.mensaje}` : `${t} ${org(o)}${extra}`;
@@ -650,10 +658,17 @@ export function arrancarBucle() { if (REDUCIR || corriendo) return; corriendo = 
 /* ---------- Abrir en un estado (lo llama index.js: «sinusal», «fa:dilt»…) ---------- */
 export function abrirEstado(clave, extra = {}) {
   if (!ESTADOS[clave]) clave = 'sinusal';
+  const rcp = extra.rcp; if (rcp) clave = 'fv';
   if (modo !== 'explorar') setModo('explorar');
   S.medir = null; if (pausado) ponerPausa(false);
   ponerEstado(clave, extra);
   if (clave === 'fa' && extra.farmaco) ponerFarmaco(extra.farmaco);
+  if (rcp && S.parada) {   // «fv:rcp», «fv:rcp-adre», «fv:rcp-insufl»: la FV con las compresiones en marcha
+    const p = S.parada; p.comp = true; p.ciclo = p.reloj;
+    if (rcp === 'adre') { p.adrenalina.push(simT + 0.9); p.adreReloj = p.reloj; }
+    if (rcp === 'insufl') p.insufl = 30;
+    pintarFrase();
+  }
   pintarDock(); if (REDUCIR) pintarEscena(simT); else arrancarBucle();
   medirDock();
 }

@@ -22,6 +22,7 @@ import { crearMotor, BASE } from '../../eco/motor.mjs';
 import { ESCENARIOS } from '../../eco/escenarios.mjs';
 import { bolo } from '../../eco/maniobras.mjs';
 import { derivar, estadoDe, satDe } from '../../../data/capilar-vivo-data.js';
+import { factoresDiseccion } from './diseccion-farmacos.mjs';
 
 export const LMIN = 1000 / 60;             // mL/s por cada L/min
 
@@ -43,8 +44,12 @@ const SUCCION_VI = [12, 60];                   // mL del VI entre los que la bom
 const SUCCION_VEN = [0.3, 2.2];                    // mmHg de las venas entre los que el ECMO pierde su flujo
 // El pulmón empieza a encharcarse en las venas pulmonares por encima de P_EDEMA: 18, el extremo bajo de la «presión de llenado
 // óptima» de 18-20 de la ficha (Marino, cap. 16, p. 42: la más alta que sube el gasto sin edema). Cuánto líquido pasa por cada
-// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1)
-const P_EDEMA = 18, K_EDEMA = 4;
+// mmHg de más (K_EDEMA) no lo da la fuente: ilustrativo (motor: 28 y 0,1). Con 4 mL/s por mmHg un paciente que entra con la PCP
+// del VI por encima de 18 perdía ~1,3 L al pulmón en 40 s y la PVC caía a 1-2 (M0): el ritmo es ahora de minutos (0,3 mL/s por
+// mmHg: a PCP 25, ~2 mL/s ≈ 7 L/h, ilustrativo). Lo que empeora el intercambio de entrada es el agua del intersticio, que sigue a
+// la PCP y no al edema ya formado: la PaO₂ cae PAO2_PCP mmHg por cada mmHg de PCP sobre P_EDEMA (ver perfusion)
+const P_EDEMA = 18, K_EDEMA = 0.5;
+const PAO2_PCP = 10;                             // mmHg de PaO₂ por mmHg de PCP sobre P_EDEMA (ilustrativo)
 const TEP_CAP = 0.85;                           // la arteria pulmonar del TEP a fondo, un 20 % de distensible (ilustrativo)
 const HEM_SIMPATICO = 0.35;
 // Las bombas de flujo continuo (centrífuga del ECMO, microaxial del Impella) dan menos flujo cuanta más presión tienen que
@@ -75,6 +80,14 @@ export const ESCENARIOS_EXTRA = {
     // estrecharse (v3: antes 66/41, más estrecho que el sano)
     aplicar: (m, g = 0.7) => { m.p.rSis *= 1 - 0.6 * g; m.p.vuVen *= 1 + 0.35 * g; m.p.hemorragia = 0.06 * g * BASE.vSangre; m.p.cAo *= 1 - 0.45 * g; },
   },
+  // Posparo (Marino cap. 21, p. 65): el VI aturdido (Ees baja, como el «fallo» del motor) que «suele resolverse en 72 h», más la
+  // respuesta inflamatoria sistémica «casi universal» tras el paro, que puede dar shock circulatorio (resistencias algo más
+  // bajas). La Ees sigue a g; la vasodilatación inflamatoria, a g también (se va con el aturdimiento). La magnitud: ilustrativa
+  posparo: {
+    nombre: 'Posparo cardíaco', tipo: 'cardiogenico',
+    texto: (g) => `horas tras la RCE: ${Math.round(horasDePosparo(g))}`,
+    aplicar: (m, g = POSPARO_G0) => { ESCENARIOS.fallo.aplicar(m, g); m.p.vd.ees = BASE.vd.ees * (1 - (1 - POSPARO_VD0) * g / POSPARO_G0); m.p.rSis *= 1 - POSPARO_VASODILATACION * (g / POSPARO_G0); m.s.vven -= POSPARO_FUGA * (g / POSPARO_G0); },
+  },
   anafilaxia: {
     nombre: 'Shock anafiláctico', tipo: 'vasodilatador',
     // vasodilatación y una fuga capilar que puede llevarse hasta el 35 % del volumen intravascular (cap. 17, p. 66-67)
@@ -82,21 +95,97 @@ export const ESCENARIOS_EXTRA = {
     aplicar: (m, g = 0.6) => { m.p.rSis *= 1 - 0.45 * g; m.p.vuVen *= 1 + 0.4 * g; m.p.hemorragia = 0.35 * g * BASE.vSangre * 0.55; },
   },
 };
+// El reloj del posparo: la gravedad de la Ees (g, como en el «fallo») cae con las horas desde la RCE hasta 0 a las 72 h («suele
+// resolverse en 72 h», p. 65). La forma de la curva (lineal) y la gravedad de partida: ilustrativas
+export const POSPARO_H = 72, POSPARO_G0 = 0.82, POSPARO_VASODILATACION = 0.25;
+// El aturdimiento es BIVENTRICULAR (cap. 21, p. 65; qué ventrículo: fisiología general, la ficha no lo dice): la Ees del VD cae con la misma curva que la del VI y vuelve a la normal a
+// las 72 h; a las 0 h, POSPARO_VD0 de la normal (cuánto: ilustrativo). La fuga capilar de la respuesta inflamatoria (POSPARO_FUGA,
+// mL a las 0 h): ilustrativa. Antes era 1100 mL y, con el edema rápido, la PVC de Virginia quedaba en 1,5 (M0, b3-paso4 g3)
+export const POSPARO_FUGA = 300, POSPARO_VD0 = 0.3;
+export const gDePosparo = (h) => POSPARO_G0 * (1 - Math.min(POSPARO_H, Math.max(0, h)) / POSPARO_H);
+export const horasDePosparo = (g) => POSPARO_H * (1 - Math.max(0, g) / POSPARO_G0);
 const ESC = { ...ESCENARIOS, ...ESCENARIOS_EXTRA };
+// Rotura del septo (estado rotura-septo; Marino cap. 16, p. 38 solo da la dirección: un gran cortocircuito izquierda-derecha que
+// inunda la circulación pulmonar y desvía flujo de la sistémica). Las cifras son fisiología general o ilustrativas:
+// RECETA_ROTURA_SEPTO: IAM con fallo del VI (g 0,7) y orificio de 0,3 cm² (ilustrativo; motor: civ, misma fórmula que eroaMitral).
+// Medido con autonomo/bloques/b3/herramientas/3b-barrido.mjs: PA 75/60 (PAM 67), FC 109, IC 1,57, Qp/Qs 2,2, SvO₂ = SatAD 44 → SatAP 65 % (medido con g-estados-cifras)
+// (salto 25 puntos; el umbral numérico de «cortocircuito» no está en la ficha: ilustrativo), PCP 21, PVC 6,1, VD/VI 1,2.
+// CIV_TOPE (0,7 cm², ilustrativo): Qp/Qs 3,1 y PAM 58; por encima el sello «cortocircuito masivo». CIV_COLAPSO (1,0 cm², ilustrativo):
+// con él el motor da IC 0,9 y PAM ≈ 42 (colapso); el motor no deja pasar de ahí
+export const RECETA_ROTURA_SEPTO = { esc: 'fallo', g: 0.7, civ: 0.3, hb: 14 };
+export const CIV_TOPE = 0.7, CIV_COLAPSO = 1.0;
+// Los tres estados del infarto con el mando de gravedad propio (b3-paso4 g3): el deslizador (g de 0 a 1) mueve una pieza del motor
+// y el fallo del VI (gEsc) queda fijo. Todo ilustrativo salvo la dirección (Marino cap. 16, p. 38 y 40); medido con
+// autonomo/bloques/b3/herramientas/g3-estados-cifras.mjs
+//  · papilar (Benito): orificio mitral de 0,3 a 1,0 cm²; el 0,8 es el que ya usa el motor (EROA_TOPE): por encima, sello
+//  · vd (Fermín): Ees del VD de 0,6 (g 0) a 0,10 (g 1) de la normal; con g 0,9 (0,15) van los 1.250 mL de líquidos de RECETA_IAM_VD
+//    (la receta del M0c); por debajo de 0,1 el motor no es un paciente. Los líquidos crecen con g hasta g 0,9
+//  · septo (Remedios): orificio de 0 a CIV_COLAPSO (1,0 cm²); CIV_TOPE (0,7) es el del sello
+export const EROA_MIN = 0.3, EROA_MAX = 1.0, EROA_TOPE = 0.8;
+export const VD_G_RECETA = 0.9, VD_EES_0 = 0.6, VD_EES_1 = 0.1, VD_LIQUIDOS = 1250;
+const red2 = (x) => Math.round(x * 100) / 100;
+export const eroaDeG = (g) => red2(EROA_MIN + (EROA_MAX - EROA_MIN) * g);
+export const eesVdDeG = (g) => red2(VD_EES_0 - (VD_EES_0 - VD_EES_1) * g);
+export const liquidosDeG = (g) => Math.round(VD_LIQUIDOS * Math.min(1, g / VD_G_RECETA) / 25) * 25;
+export const civDeG = (g) => red2(CIV_COLAPSO * g);
+export const RECETA_BENITO = { esc: 'fallo', gEsc: 0.65, mando: 'papilar', g: 0.5, hb: 14 };        // eroa 0,65
+export const RECETA_FERMIN = { esc: 'fallo', gEsc: 0.05, mando: 'vd', g: VD_G_RECETA, liquidos: VD_LIQUIDOS, hb: 14 };       // eesVd 0,15 + 1.250 mL
+export const RECETA_REMEDIOS = { esc: 'fallo', gEsc: 0.7, mando: 'septo', g: 0.3, hb: 14 };           // civ 0,3
+// IC izquierda que se descompensa (estados ic-etapa-1/2/3; Marino cap. 18, p. 5-6, Fig. 18.3): el mando g de 0 a 1 es el reloj de 0 a 4 h
+// del postoperatorio. Cada hora lleva su fallo del VI (gEsc, la Ees) y su resistencia sistémica (rSis: factor sobre la de partida;
+// sube con el tiempo: la vasoconstricción que sostiene la PA, p. 6-7). Nodos medidos con autonomo/bloques/b3/herramientas/g4-etapas-cifras.mjs;
+// los factores y el volumen de partida (IC_VOLEMIA, mL), ilustrativos: se eligieron para que las cifras caigan en las franjas de la figura
+export const IC_NODOS = [[0, 0, 0.7], [0.25, 0.3, 0.65], [0.5, 0.45, 0.6], [0.75, 0.68, 0.75], [1, 0.77, 0.9]], IC_VOLEMIA = 600, IC_G_ETAPA = [0.25, 0.5, 1];
+export function icDeG(g) {
+  const x = Math.min(1, Math.max(0, g)); let i = 0; while (i < IC_NODOS.length - 2 && x > IC_NODOS[i + 1][0]) i++;
+  const [a, b] = [IC_NODOS[i], IC_NODOS[i + 1]], u = (x - a[0]) / (b[0] - a[0]);
+  return { gEsc: a[1] + (b[1] - a[1]) * u, rSis: a[2] + (b[2] - a[2]) * u };
+}
+export const horasDeIc = (g) => Math.round(4 * Math.min(1, Math.max(0, g)) * 10) / 10;
+export const RECETA_IC = { esc: 'fallo', mando: 'ic', g: 0.25, hb: 14 };
 export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.texto?.(g) ?? '';
 
 // Receta del paciente: { esc, g, volemia (mL que faltan o sobran, ilustrativo), util: 'sepsis' | 'normal', pao2, hb,
 // eroaMitral (cm², la insuficiencia mitral del motor), viDiast (factor sobre la rigidez diastólica del VI: <1, un VI que
 // admite volumen con poca presión: el shock del infarto con la PCP no alta, el 30 % de la p. 40; ilustrativo) }
+// IAM del VD (estado iam-vd, M0c 29/10/2026): VI casi normal (fallo g 0,05), VD infartado (eesVd 0,15) y +1.250 mL de
+// LÍQUIDOS (volemia: la carga de volumen del fallo derecho; cuánto, ilustrativo). Sin ellos la PVC no pasa de ~7,4: la PVC
+// no supera la presión media de llenado (~7 + la venoconstricción del barorreflejo) si no entra volumen. Con ellos y el
+// tabique que se desplaza hacia el VI (motor.mjs, septoDesplaza; Marino cap. 16, p. 40): PVC 14,1 > PCP 9,7, IC 1,99,
+// PA 94/69, FEVI 52 %, VTD VD/VI 2,6 (medido con autonomo/bloques/b3/herramientas/m0-cifras.mjs)
+// Joaquín a las 08:25 (disección tipo A, b3-paso4 g5): base PA ~168/90, FC ~96, sin shock. HTA, dolor y simpático: resistencias ×1,9 y la
+// consigna del barorreflejo alta (se defiende una PAM de ~118, no de 87), arteria menos distensible (pulso ancho). Todo ilustrativo:
+// la ficha solo dice «HTA en el 50 %» (cap. 20, p. 50); la cifra 168/90 es del plan del profesor
+export const RECETA_DISECCION = { esc: 'normal', rSis: 1.6, consigna: 130, cAo: 0.36, fc: 96, baroR: 0.1, hb: 13.5 };
+export const RECETA_IAM_VD = { esc: 'fallo', g: 0.05, eesVd: 0.15, volemia: 1250, hb: 14 };
+
 export function prepararMotor(rec, segundos = 40) {
   const m = crearMotor();
   m.correr(12);
   m.p.kEdema = rec.kEdema ?? K_EDEMA; m.p.pEdema = rec.pEdema ?? P_EDEMA;
   m.p.succionVi = SUCCION_VI; m.p.succionVen = SUCCION_VEN;
-  ESC[rec.esc]?.aplicar(m, rec.g);
+  if (rec.mando === 'ic') { const q = icDeG(rec.g); rec = { ...rec, gEsc: q.gEsc, rSis: q.rSis, volemia: IC_VOLEMIA }; }
+  ESC[rec.esc]?.aplicar(m, rec.gEsc ?? rec.g);
+  if (rec.mando) {                            // el mando de gravedad de los estados del infarto (ver arriba)
+    if (rec.mando === 'papilar') rec = { ...rec, eroaMitral: eroaDeG(rec.g) };
+    else if (rec.mando === 'vd') rec = { ...rec, eesVd: eesVdDeG(rec.g), volemia: rec.liquidos ?? 0 };
+    else if (rec.mando === 'septo') rec = { ...rec, civ: civDeG(rec.g) };
+  }
+  if (rec.consigna) m.p.pamConsigna = rec.consigna;   // (solo Joaquín a las 08:25: la HTA y el dolor suben lo que defiende el barorreflejo)
+  if (rec.cAo) m.p.cAo *= rec.cAo;
+  if (rec.baroFc != null) m.p.baro = { ...m.p.baro, fc: { ...m.p.baro.fc, sube: m.p.baro.fc.sube * rec.baroFc } };
+  if (rec.baroR != null) m.p.baro = { ...m.p.baro, r: { ...m.p.baro.r, sube: m.p.baro.r.sube * rec.baroR, baja: m.p.baro.r.baja * rec.baroR }, vu: { ...m.p.baro.vu, sube: m.p.baro.vu.sube * rec.baroR, baja: m.p.baro.vu.baja * rec.baroR } };   // el reflejo del tono y de las venas, más flojo (HTA crónica: el barorreceptor se resetea; ilustrativo)
+  if (rec.fc) m.p.fc = rec.fc;
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
+  if (rec.rSis) m.p.rSis *= rec.rSis;         // resistencia sistémica de partida (factor; ilustrativo: IC ic-etapa-1, ver RECETA_IC)
   if (rec.volemia) m.s.vven += rec.volemia;
+  // eesVd: la Ees del VD como fracción de la normal (1 = normal; 0,5 = la mitad). Un VD infartado o aturdido (cap. 16, p. 40:
+  // sube la PVC o la PCP «según el ventrículo que falle»). Se pide como p.vd.ees y el motor la sigue con su tauContractilidad,
+  // antes del barorreflejo (motor.mjs, barorreflejo). Por debajo de 0,1 no es un paciente (ilustrativo)
+  if (rec.eesVd != null) m.p.vd.ees = BASE.vd.ees * Math.max(0.1, Math.min(1, rec.eesVd));
   if (rec.eroaMitral) m.p.eroaMitral = rec.eroaMitral;   // rotura del papilar: insuficiencia mitral aguda (cap. 16, p. 38); el orificio, ilustrativo
+  // civ: orificio de la rotura del septo (cm²), cortocircuito VI → VD en el motor. Se recorta en CIV_COLAPSO (ver arriba)
+  if (rec.civ) m.p.civ = Math.min(rec.civ, CIV_COLAPSO);
   m.p.tEscenario = m.s.t;
   return m;
 }
@@ -104,8 +193,8 @@ export function prepararMotor(rec, segundos = 40) {
 // ---------------------------------------------------------------- la envoltura: aparatos + fármacos sobre el motor
 export function crearCabecera(rec, { asentar = 40 } = {}) {
   const m = prepararMotor(rec);
-  const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
-  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false };
+  const base = { baroEesSube: m.p.baro.ees.sube, cAo: m.p.cAo, baroFcSube: m.p.baro.fc.sube, rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
+  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false, cpap: 0 };
   // lo que miran los dibujos: el balón y las bombas, del motor; lo que pide el Impella y las vueltas, de la maqueta
   const ms = m.s;
   const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
@@ -129,6 +218,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (ajuste.vaso) fR *= 1.25;                                                   // V1: vasoconstricción (p. 15-16)
     let dFc = 0;
     if (ajuste.dobuta) { fEes *= 1.25; dFc += 10; fR *= 0.92; }                    // p. 43 (FC +5-15); vasodilatadora (cap. 22, p. 11)
+    // disección (esmolol, labetalol, nicardipino, nitroprusiato, opioide): solo actúan si hay mando puesto (diseccion-farmacos.mjs)
+    const dz = factoresDiseccion(ajuste); fR *= dz.fR; fVu *= dz.fVu; fEes *= dz.fEes; fFc *= dz.fFc;
+    m.p.baro = { ...m.p.baro, fc: { ...m.p.baro.fc, sube: base.baroFcSube * (1 - dz.bloqueo) }, ees: { ...m.p.baro.ees, sube: base.baroEesSube * (1 - dz.bloqueo) } };   // (copia: el objeto es el mismo para todos los motores)
+    m.p.cAo = base.cAo * dz.fCao;
     m.p.rSis = base.rSis * fR; m.p.vuVen = base.vuVen * fVu;
     m.p.vi.ees = base.viEes * fEes; m.p.vd.ees = base.vdEes * fEes;
     m.p.fc = base.fc * fFc + dFc;
@@ -161,7 +254,9 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     let u = m.ultimo; if (!u) { acum = nuevo(); return; }
     // La PVC no pasa a la PCP si el VD no falla (fisiología general; solo el TEP y el taponamiento las igualan o la invierten,
     // ficha cap. 18 p. 4): el motor sube la aurícula derecha con el volumen y en la sepsis la pasaba (PVC 22-24 con PCP 19).
-    if (rec.esc !== 'tep' && rec.esc !== 'derrame' && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
+    // Con el VD que falla (rec.eesVd < 1: IAM del VD) no se toca: ahí la PVC pasa a la PCP (cap. 16, p. 40)
+    const vdFalla = rec.mando === 'vd' || (rec.eesVd != null && rec.eesVd < 1);
+    if (rec.esc !== 'tep' && rec.esc !== 'derrame' && !vdFalla && u.pvc >= u.pcp - 1) u = { ...u, pvc: Math.max(0, u.pcp - 1) };
     // lo asistido y lo no asistido (el latido que se cierra es el nLatido − 1; su teledistólica viene de la diástole del anterior)
     const nCerrado = m.s.nLatido - 1, conBalon = ajuste.soporte === 'balon' || (ajuste.soporte === 'ecmo' && ajuste.venteo === 'balon');
     if (!conBalon) { ult.as = { pico: acum.picoDia || null, tele: acum.teleDia }; ult.no = { pico: null, tele: null }; }
@@ -187,7 +282,8 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 
   function ajustar(cambio = {}) {
     Object.assign(ajuste, cambio);
-    if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio) aplicarFarmacos();
+    if ('cpap' in cambio) m.p.pTorax = Math.max(0, +ajuste.cpap || 0);   // CPAP (cmH₂O) = presión de la vía aérea; a la pleura llega fPleura de ella (motor.mjs, pTorax)
+    if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio || ['esmolol', 'nicardipino', 'labetalol', 'nitroprusiato', 'opioide'].some((x) => x in cambio)) aplicarFarmacos();
     if (ajuste.soporte !== 'impella') ajuste.total = ajuste.total;   // (el modo total solo actúa con el Impella solo)
     if (cambio.soporte && cambio.soporte !== 'ecmo') ajuste.venteo = 'no';
   }
@@ -219,11 +315,12 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 }
 
 // ---------------------------------------------------------------- perfusión (con la función del capilar vivo)
-// pao2 baja con el edema de pulmón que calcula el motor (ilustrativo: 10 mmHg por cada 100 mL); con ECMO, la sangre que
+// pao2 baja con el edema de pulmón que calcula el motor (ilustrativo: 10 mmHg por cada 100 mL) y con la PCP por encima de
+// P_EDEMA (agua intersticial: PAO2_PCP por mmHg, ilustrativo; la fuente no da la cifra); con ECMO, la sangre que
 // vuelve del oxigenador se toma como arterializada (98 %: ilustrativo, la fuente no da la saturación de salida)
 export function perfusion(L, rec) {
   const u = L.u;
-  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0));
+  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0) - PAO2_PCP * Math.max(0, (u.pvp ?? u.pcp ?? 0) - (u.pTorax || 0) - P_EDEMA));
   const satNativa = satDe(pao2);
   const sao2 = L.ecmo > 0 ? ((L.gcNativo + L.imp) * satNativa + L.ecmo * 0.98) / Math.max(0.1, L.gcTotal) : satNativa;
   const d = derivar(estadoDe({ hb: rec.hb ?? 14, pao2, gcFijo: L.gcTotal, util: rec.util || 'normal', espacio: rec.espacio || 'no' }));

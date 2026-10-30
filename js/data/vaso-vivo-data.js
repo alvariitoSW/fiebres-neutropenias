@@ -18,6 +18,10 @@
 // (pruebasVaso). La escena vive en js/modules/libros/vaso-vivo-escena.js y la interfaz en vaso-vivo.js.
 import { HEMODERIVADOS } from './hemoderivados-data.js';
 import { MAYEUTICA_HEMOSTASIA } from './mayeutica/b2-hemostasia.js';
+import { RELOJ, PESO, tnkMg, tableroPlaca, frasePlaca, GUIA_PLACA, GUIA_ANTIAG, GUIA_LISIS, topesReloj as topesSca } from './vaso-vivo-data-sca.js';
+import { BASE_TEP, tableroTep, fraseTep, topesTep, GUIA_TEP } from './vaso-vivo-data-tep.js';
+export { RELOJ, OCLUSIONES, OCL_ORDEN, PESO, tnkMg } from './vaso-vivo-data-sca.js';
+export const topesReloj = e => (e.emb ? topesTep(e) : topesSca(e));   // el émbolo (EP) tiene sus propios topes
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const copia = o => JSON.parse(JSON.stringify(o));
@@ -32,9 +36,10 @@ export const PDF = 'docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf';
 // saber aún cuál: solo en los casos); vari: la variante de la causa (CID séptica, obstétrica o fulminante; SHU típico o
 // atípico); hep: la heparina en la HIT ('curso' | 'retirada' | 'argatroban'); rep: lo que se repone ('plaquetas',
 // 'pfc', 'warf-pfc', 'ccp4f', 'masiva', 'crio', 'fibconc', 'recambio', 'lena'); previas: qué transfusión de plaquetas
-// es (1, 3 o 5); abo: plaquetas ABO-compatibles.
+// es (1, 3 o 5); abo: plaquetas ABO-compatibles. La arteria que se tapa (lesion 'placa'): ocl, horas y ntg, en
+// vaso-vivo-data-sca.js.
 export function estadoBase() {
-    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false };
+    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false, ocl: 'completa', horas: RELOJ.inicio, ntg: false, asa: false, p2y: null, iib: null, lisis: false, peso: PESO.inicio, hic: false, ictus: false, alasa: false, morfina: false, clcr: 0, ...BASE_TEP };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
 export const MAT = c => c === 'cid' || c === 'ptt' || c === 'shu' || c === 'mat';
@@ -90,7 +95,7 @@ export function derivar(e) {
     } else if (e.causa === 'mat') d.nudos = e.rep === 'lena' ? { pulmon: 2, rinon: 3, cerebro: 3 } : { pulmon: 1, rinon: 2, cerebro: 2 };   // reponer plaquetas «echa leña» a la microtrombosis (mh-plaq-indicaciones); cuánto, ilustrativo
     else if (e.lesion === 'ninguna' && e.plaq < 10000 && !e.rep) { d.organos.cerebro = 1; d.rotOrg.cerebro = 'HIC rara'; }
     // La lupa que se abre sola y lo que va bajo la arteriola en vez de la red
-    d.lupaAuto = e.causa === 'edta' ? 'tubo' : e.causa === 'hit' ? (e.hep === 'argatroban' ? 'cascada' : 'plaqueta')
+    d.lupaAuto = e.lesion === 'placa' ? 'placa' : e.causa === 'edta' ? 'tubo' : e.causa === 'hit' ? (e.hep === 'argatroban' ? 'cascada' : 'plaqueta')
         : e.causa === 'cid' || e.causa === 'mat' ? 'frotis' : e.causa === 'ptt' && e.rep !== 'recambio' ? 'plaqueta'
         : e.causa === 'shu' ? (e.vari === 'atipico' ? 'complemento' : 'frotis')
         : e.lesion !== 'ninguna' && !masiva && e.causa === 'ninguna' && !e.rep ? 'herida' : null;
@@ -110,6 +115,7 @@ export function derivar(e) {
    ============================================================ */
 export const CELDAS = ['plaq', 'tapon', 'inr', 'aptt', 'fib', 'dd', 'esq', 'amenaza'];
 export function tableroDe(e) {
+    if (e.lesion === 'placa') return e.emb ? tableroTep(e) : tableroPlaca(e);
     const d = derivar(e), mat = d.mat;
     const C = (n, v, u, o, cls = '', ilu = false) => ({ n, v, u, o, cls, ilu });
     const fis = n => C(n, 'normal', '', 'fisiol.', 'bien', true);
@@ -173,6 +179,7 @@ export function tableroDe(e) {
    ============================================================ */
 const F4 = 'ficha · merino-trombocitopenia', F5 = 'ficha · merino-microangiopatias', F6 = 'ficha · merino-plaquetas-plasma';
 export function fraseDe(e) {
+    if (e.lesion === 'placa') return e.emb ? fraseTep(e) : frasePlaca(e);
     const d = derivar(e);
     if (e.rep === 'recambio') return ['El tratamiento de la PTT es el <span class="hl-azul">recambio plasmático</span>: se separa y se desecha el plasma del paciente, y se le devuelven sus hematíes con plasma de un donante sano. Unas 1,5 veces el volumen de plasma cada día, hasta plaquetas normales <span class="hl">2 días seguidos</span>; si empieza en las primeras 48 h, <span class="hl-verde">sobrevive hasta el 90 %</span>.', `${F5}#mh-ptt · p. 28`];
     if (e.rep === 'lena' && e.causa === 'mat') return ['Las indicaciones de transfusión de plaquetas <span class="hl-rojo">no se aplican</span> a la trombocitopenia por consumo de las microangiopatías: transfundirlas puede agravar la microtrombosis. Cuántos nudos más: ilustrativo.', `${F6}#mh-plaq-indicaciones · p. 29`];
@@ -247,9 +254,13 @@ export const ESTADOS = {
     refractariedad: { n: 'Refractariedad', s: '5.ª transfusión', p: { rep: 'plaquetas', previas: 5, plaq: 20000 }, grupo: 'reponer', pestana: 'plaquetas', ficha: 'merino-plaquetas-plasma' },
     'pfc-inr': { n: 'El PFC y el INR', s: 'la balanza', p: { rep: 'pfc' }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
     warfarina: { n: 'Warfarina', s: 'vitamina K y CCP4F', p: { rep: 'warf-pfc' }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
+    placa: { n: 'La placa que se rompe', s: 'los 4 tiempos', p: { lesion: 'placa', t: 1 }, play: true, grupo: 'arteria', pestana: 'arteria', ficha: 'mc-sca-diagnostico' },
+    'placa-antiagregantes': { n: 'Los antiagregantes', s: 'tres interruptores', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 1, asa: true, p2y: 'ticagrelor', iib: 'eptifibatida' }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
+    'tep-lisis': { n: 'El émbolo y la lisis', s: 'evitar el siguiente', p: { lesion: 'placa', emb: true, t: 4, tto: 'heparina', horas: 6, peso: 80 }, grupo: 'arteria', pestana: 'tratar', ficha: 'neumo-ep-manejo' },
+    trombolisis: { n: 'La trombólisis', s: 'plasmina y reloj', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 2, lisis: true, peso: 80 }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
     'hemorragia-masiva': { n: 'Hemorragia masiva', s: 'el fibrinógeno', p: { rep: 'masiva', lesion: 'grande', t: 4, plaq: 46000 }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
 };
-export const GRUPOS_CHIPS = [['trombo', 'La herida y las plaquetas (trombocitopenia y HIT)'], ['mat', 'La red que se tapa (microangiopatías)'], ['reponer', 'Reponer (plaquetas y plasma)']];
+export const GRUPOS_CHIPS = [['trombo', 'La herida y las plaquetas (trombocitopenia y HIT)'], ['mat', 'La red que se tapa (microangiopatías)'], ['reponer', 'Reponer (plaquetas y plasma)'], ['arteria', 'La arteria que se tapa: SCA y EP']];
 // Qué estado con nombre es un estado cualquiera (o null)
 export function claveDe(e) {
     for (const [k, s] of Object.entries(ESTADOS)) if (JSON.stringify(estadoDe(s.p)) === JSON.stringify(e)) return k;
@@ -268,7 +279,14 @@ const PPL = (id, pag) => ({ ...L13, ficha: 'merino-plaquetas-plasma', id, pag })
 // La máquina del telar: la Fig. 5.2 del cap. 5 (el Xa convierte la protrombina en trombina; la trombina, el fibrinógeno en fibrina)
 const FIG52 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 5', pdf: 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', ficha: 'mar-tromboprofilaxis-farmacos', id: 'mar-img-5-2', pag: '4-6' };
 
+// Warfarina: Marino cap. 19 (fibrilación auricular), p. 26 (mecanismo, ventana estrecha) y Tabla 19.3, p. 27 (INR 2-3)
+const MAR19 = (id, pag) => ({ libro: 'Marino, The ICU Book (5.ª ed.), cap. 19', pdf: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf', ficha: 'mc-fa-cardioversion', id, pag });
+
 export const GUIAS = {
+    placa: GUIA_PLACA,
+    'placa-antiagregantes': GUIA_ANTIAG,
+    trombolisis: GUIA_LISIS,
+    'tep-lisis': GUIA_TEP,
     sano: [
         { t: 'El endotelio está cubierto por el glucocálix (la hierba dorada), una malla de mucopolisacáridos: una superficie que resiste la trombosis.', resalta: '#vso-zona-glucocalix', cita: TRB('mh-glucocalix', '20') },
         { t: 'Mantiene la sangre fluida: no deja que plaquetas ni leucocitos se peguen al endotelio. Mira cómo pasan las plaquetas sin tocar la pared.', resalta: '#vso-zona-luz', cita: TRB('mh-glucocalix', '20') },
@@ -363,6 +381,7 @@ export const GUIAS = {
         { t: 'Pero la antitrombina subió del 38 al 50 %: el fiel casi no se mueve. Y el PFC profiláctico no ha demostrado reducir el sangrado.', resalta: '#vso-b-fiel', cita: [PPL('mh-fig-13-3', '34'), PPL('mh-pfc-profilactico', '33')] },
     ],
     warfarina: [
+        { t: 'La warfarina no toca la máquina: frena en el hígado la síntesis de los cuatro factores que dependen de la vitamina K (II, VII, IX y X). Aquí, la despensa vacía. Su ventana es estrecha: se vigila con el INR (objetivo 2-3), que mira justo ese plato y no la antitrombina ni las proteínas C y S.', lupa: 'cascada', resalta: '#vso-cas-despensa', cita: [MAR19('mc-warfarina', '26'), MAR19('mc-tabla-19-3', '27'), PPL('mh-pfc-warfarina', '33'), PPL('mh-trampa-inr', '33')] },
         { t: 'Con warfarina, el plasma sirve para reponer factores de coagulación; los que trae el CCP4F son los que dependen de la vitamina K (II, VII, IX y X): aquí, huecos.', resalta: '#vso-b-izq', cita: PPL('mh-pfc-warfarina', '33') },
         { t: 'Primero, vitamina K, para cortar la anticoagulación que sigue en curso.', resalta: '#vso-b-vitk', cita: PPL('mh-pfc-warfarina', '33') },
         { t: 'Después, PFC 10-15 mL/kg para devolver el INR a la normalidad: hay que descongelarlo, lo que retrasa el tratamiento, y su volumen puede agravar el sangrado.', resalta: '#vso-b-pfc', cita: PPL('mh-pfc-warfarina', '33') },
@@ -517,6 +536,7 @@ const IMG = 'js/modules/merino-hemato/img/';
 export const LAMINAS = {
     frotis: [IMG + 'fig2-esquistocitos-cid.jpg', 'Figura 13.1 del libro (PDF p. 26): frotis de sangre de un paciente con CID; las flechas señalan esquistocitos, hematíes fragmentados, patognomónicos de una anemia hemolítica microangiopática.', 'Fig. 13.1: el frotis de una CID'],
     fig132: [IMG + 'fig13-2-respuesta-plaquetas.jpg', 'Figura 13.2 del libro (PDF p. 31): aumento medio de plaquetas a la hora y a las 24 h tras la 1.ª, la 3.ª y la 5.ª transfusión.', 'Fig. 13.2: la gráfica del libro'],
+    fig222: ['js/modules/neumologia/img/neumo-fig22-2-trombectomia-cateter.jpg', 'Figura 22.2 del libro (PDF p. 10): coágulo recuperado con un catéter de las arterias pulmonares en una EP aguda con sobrecarga del corazón derecho; la trombectomía saca mucho coágulo, y por eso la lisis ha tenido tan poco efecto en la EP que amenaza la vida.', 'Fig. 22.2: la foto del libro'],
     balanza: [IMG + 'fig13-3-pfc-inr-antitrombina.jpg', 'Figura 13.3 del libro (PDF p. 34): PFC 12 mL/kg en críticos sin sangrado; el INR baja de 1,8 a 1,4 y la antitrombina sube de 38 a 50 % (medianas).', 'Fig. 13.3: la gráfica del libro'],
 };
 
@@ -525,7 +545,7 @@ export const LAMINAS = {
    mando de las plaquetas, las explicaciones guiadas y la forma de la Mayéutica.
    ============================================================ */
 export function pruebasVaso() {
-    const r = { estados: [], extremos: null, guias: [], mayeutica: null, todoCoincide: true };
+    const r = { estados: [], extremos: null, guias: [], mayeutica: null, todoCoincide: true, reloj: [] };
     const mira = (estado, campo, valor, espera, tol = 0, nota = '') => {
         const ok = typeof espera === 'number' ? valor != null && Math.abs(valor - espera) <= tol + 1e-9 : valor === espera;
         if (!ok) r.todoCoincide = false;
@@ -569,6 +589,20 @@ export function pruebasVaso() {
     if (ex.min !== 5000 || ex.max !== 400000) ex.ok = false;
     if (!ex.ok) r.todoCoincide = false;
     r.extremos = ex;
+    // El reloj de la placa: 3 oclusiones × 0, 3, 12 y 24 h (troponina >p99 desde 3 h salvo a ratos; sello de la lisis a 12 h en la completa)
+    for (const ocl of ['intermitente', 'parcial', 'completa']) for (const horas of [0, 3, 12, 24]) {
+        const e = estadoDe({ lesion: 'placa', t: 4, ocl, horas }), T = tableroDe(e), sello = topesReloj(e).some(x => x.nivel === 'sello');
+        const tropo = ocl !== 'intermitente' && horas >= 3 ? '>p99' : ocl === 'intermitente' ? '?' : 'aún no';
+        const ok = T.aptt.v === tropo && sello === (ocl === 'completa' && horas > 12) && T.inr.v === (ocl === 'completa' ? 'sí' : 'no') && T.dd.v === `${horas} h`;
+        if (!ok) r.todoCoincide = false;
+        r.reloj.push({ ocl, horas, tropo: T.aptt.v, ecg: T.inr.v, sello, ok });
+    }
+    // 5c: el peso (40-120 kg) → tenecteplasa por tramos; 5b: tres interruptores × sus contraindicaciones = sellos
+    r.peso = [40, 59, 60, 69, 70, 79, 80, 89, 90, 120].map(p => ({ p, mg: tnkMg(p) }));
+    if (r.peso.map(x => x.mg).join() !== '30,30,35,35,40,40,45,45,50,50') r.todoCoincide = false;
+    const sellos = (extra) => topesReloj(estadoDe({ lesion: 'placa', t: 4, ...extra })).filter(x => x.nivel === 'sello').map(x => x.clave).join();
+    r.sellos = { asa: sellos({ asa: true, alasa: true }), tica: sellos({ p2y: 'ticagrelor', hic: true }), prasu: sellos({ p2y: 'prasugrel', ictus: true }), clopi: sellos({ p2y: 'clopidogrel', hic: true, ictus: true, alasa: true }), nstemi: sellos({ lisis: true, ocl: 'parcial' }), tarde: sellos({ lisis: true, horas: 13 }) };
+    if (r.sellos.asa !== 'tx-asa' || r.sellos.tica !== 'tx-tica' || r.sellos.prasu !== 'tx-prasu' || r.sellos.clopi !== '' || r.sellos.nstemi !== 'tx-nstemi' || r.sellos.tarde !== 'reloj-lisis') r.todoCoincide = false;
     // La explicación guiada: 3-5 pasos por estado, cada paso con su cita (ficha, página y PDF), las fuentes en lista
     for (const k of Object.keys(ESTADOS)) {
         const g = GUIAS[k] || [];

@@ -1,7 +1,7 @@
 // Capilar y oxígeno: la escena viva. El capilar del tejido en grabado (SVG), por el que desfilan hematíes con sus
 // 4 perlas (los 4 sitios del hemo): cuántos, según la Hb; a qué velocidad, según el gasto; las perlas se sueltan
-// como O₂ que cruza hacia las mitocondrias. Además: el tablero (como un monitor), las cinco lupas (el tubo, el
-// alvéolo, el dedo, la mitocondria y la boca), la bolsa que gotea al transfundir, las gráficas vivas (Figs. 12.3,
+// como O₂ que cruza hacia las mitocondrias. Además: el tablero (como un monitor), las seis lupas (el tubo, el
+// alvéolo, el dedo, la mitocondria, la boca y el neutrófilo), la bolsa que gotea al transfundir, las gráficas vivas (Figs. 12.3,
 // 12.4, 9.3, 9.1 y 9.2, y el antes y después de la anemia) y el bucle de dibujo. Un solo estado (`estado`) y lo que
 // se deriva de él (`D`, con derivar() de js/data/capilar-vivo-data.js). La interfaz y la capa de estudio viven en
 // capilar-vivo.js.
@@ -14,6 +14,7 @@ import { pintarFormula } from '../../core/formula.js';
 import { sinMovimiento } from '../../core/motion.js';
 import { svgBolsa, moverGota } from '../../core/bolsa.js';
 import { svgTubosHto, crecerPlasma } from '../../core/tubo.js';
+import { lupaNeutrofilo, pasoNeutrofilo, reiniciarNeutrofilo } from './capilar-vivo-neutrofilo.js';
 import {
     estadoBase, estadoDe, derivar, tabla94, satDe, clamp, lerp, dec, mil, SC, ESTADOS, TUBOS, estadoFinal,
 } from '../../data/capilar-vivo-data.js';
@@ -303,6 +304,8 @@ const LUPAS = {
         txt: 'Lámina del libro: Figs. 9.5 y 9.4.' },
     boca: { tit: 'La boca · capnograma (Fig. 7.6)', lams: [['mar-fig7-6-capnografia.jpg', 'Figura 7.6 (PDF p. 44): capnografía infrarroja y sus 4 fases.'], ['mar-fig7-8-etco2-gasto.jpg', 'Figura 7.8 (PDF p. 46): cambios de PETCO₂ frente a cambios del gasto (r = 0,87).']],
         txt: 'Lámina del libro: Figs. 7.6 y 7.8.' },
+    neutrofilo: { tit: 'El neutrófilo · estallido respiratorio (Fig. 17.1)', lams: [],
+        txt: 'Dibujo recreado de la Fig. 17.1 del libro (cap. 17, p. 53-55).' },
 };
 export const Lupa = {
     abierta: null, el: null, svg: null, btnX: null,
@@ -433,6 +436,9 @@ export function pintarLupa(forzar) {
         h += T(134, 170, 'Krebs · 2 ATP', { a: 'middle', s: 8, sans: 1, b: 1 }) + T(134, 182, 'cadena · 28 ATP', { a: 'middle', s: 8, sans: 1, b: 1 });
         h += svgParticula('co2', 204, 148, 3.4) + T(190, 136, 'CO₂', { s: 8, sans: 1 });
         h += '<g id="cpv-lupa-flujo"></g>';
+    } else if (tipo === 'neutrofilo') {
+        if (forzar) reiniciarNeutrofilo();
+        h += lupaNeutrofilo(e, T, { exceso: !!e.ros && e.pao2 > estadoBase().pao2 && R.sao2 >= 90 });
     } else if (tipo === 'boca') {
         const x0 = 36, y0 = 52, w = 156, hh = 100;
         const y = v => y0 + hh - clamp(v, 0, 60) / 60 * hh;
@@ -464,7 +470,7 @@ export function pintarLupa(forzar) {
         if (!e.esofago && !e.rcp && !tapado('petco2')) h += T(110, 197, `PaCO₂ − PETCO₂ = ${R.paco2 - R.petco2} mmHg`, { a: 'middle', s: 7.6, i: 1, c: '--text-muted' });
     }
     h += '</g>';
-    if (forzar || h !== lupaFija) { lupaFija = h; Lupa.svg.innerHTML = h; FLUJO.forEach(f => { f.el = null; }); }
+    if (forzar || h !== lupaFija) { lupaFija = h; Lupa.svg.innerHTML = h; FLUJO.forEach(f => { f.el = null; }); if (tipo === 'neutrofilo') pasoNeutrofilo(0, e, Lupa.svg, true); }
 }
 const FLUJO = [];   // puntitos que recorren la vía de la glucosa en la lupa de la mitocondria
 function pasoLupa(dt) {
@@ -497,6 +503,8 @@ function pasoLupa(dt) {
         }
         pleti.setAttribute('d', d);
         const art = $('lupa-arteria'); if (art) art.style.strokeWidth = String(n2((R.spo2 == null ? 2 : 4) + (R.spo2 == null ? 0 : 2.5) * Math.exp(-Math.pow((((tiempo * 1.1) % 1) - 0.2) / 0.1, 2))));
+    } else if (Lupa.abierta === 'neutrofilo') {
+        pasoNeutrofilo(dt, e, Lupa.svg, REDUCIR);
     } else if (Lupa.abierta === 'mito') {
         const g = $('lupa-flujo'); if (!g) return;
         if (FLUJO.length === 0) for (let i = 0; i < 10; i++) FLUJO.push({ t: i / 10, ruta: 0, el: null });

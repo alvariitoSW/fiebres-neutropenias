@@ -72,7 +72,7 @@ export const HB_POR_CH = HEMODERIVADOS.ch.sube.hb;
 export function estadoBase() {
     return { hb: 15, pao2: 90, gc: 5, co: false, espacio: 'no', sedacion: false, esofago: false, rcp: false, frio: false,
         consumo: 'reposo', util: 'normal', estres: false, toma: 'svo2', sensor: 'dedo',
-        compensa: false, volemia: 'mantenida', gcFijo: null, transf: null, dil: null, alveolo: null };
+        compensa: false, volemia: 'mantenida', gcFijo: null, transf: null, dil: null, alveolo: null, ros: null };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
 
@@ -170,6 +170,9 @@ export const ESTADOS = {
     'anemia-hipovolemia': { n: 'Anemia sin volumen', s: 'volemia baja', p: { hb: 7.5, compensa: true, volemia: 'baja', gc: 4 }, ficha: 'merino-transfusion', pestana: 'corazon', grupo: 'anemia' },
     trali: { n: 'TRALI', s: 'el alvéolo', p: { hb: 8, compensa: true, pao2: 55, alveolo: 'trali' }, ficha: 'merino-riesgos', lupa: 'alveolo', pestana: 'pulmon', grupo: 'anemia' },
     taco: { n: 'TACO', s: 'el alvéolo', p: { hb: 8, compensa: true, pao2: 55, alveolo: 'taco' }, ficha: 'merino-riesgos', lupa: 'alveolo', pestana: 'pulmon', grupo: 'anemia' },
+    // Cap. 17 (ficha «Fisiopatología de la inflamación: ROS»): `ros` solo cambia el dibujo de la lupa y el tope del O₂; no toca la fisiología
+    neutrofilo: { n: 'Estallido', s: 'el neutrófilo', p: { ros: 'neutrofilo' }, ficha: 'mc-inflamacion-ros', lupa: 'neutrofilo', pestana: 'pulmon', grupo: 'ros' },
+    reperfusion: { n: 'Reperfusión', s: 'otro órgano', p: { ros: 'reperfusion' }, ficha: 'mc-inflamacion-ros', lupa: 'neutrofilo', pestana: 'pulmon', grupo: 'ros' },
 };
 // El estado al que llega un estado con bolsa (la transfusión ya puesta): Hb de llegada con el gasto quieto.
 export function estadoFinal(clave) {
@@ -180,7 +183,7 @@ export function estadoFinal(clave) {
 }
 // Los que salen como chips en «Ir a un estado» (dual y capno-normal se abren desde sus fichas).
 export const ESTADOS_CHIPS = Object.keys(ESTADOS).filter(k => k !== 'dual' && k !== 'capno-normal');
-export const GRUPOS_CHIPS = [['o2', 'El oxígeno: del pulmón a la mitocondria'], ['anemia', 'Anemia y transfusión']];
+export const GRUPOS_CHIPS = [['o2', 'El oxígeno: del pulmón a la mitocondria'], ['anemia', 'Anemia y transfusión'], ['ros', 'El neutrófilo y las ROS']];
 
 /* ============================================================
    Conceptos (cada uno mueve el modelo)
@@ -284,6 +287,10 @@ const CAP = (id, pag) => ({ ...L9, ficha: 'mar-capnografia', id, pag });
 const ANE = (id, pag) => ({ ...L12, ficha: 'merino-anemia', id, pag });
 const TRA = (id, pag) => ({ ...L12, ficha: 'merino-transfusion', id, pag });
 const RIE = (id, pag) => ({ ...L12, ficha: 'merino-riesgos', id, pag });
+const L17 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 17', pdf: 'docs/marino-2024-shock-caps14-17.pdf' };
+const L21 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 21', pdf: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf' };
+const ROS = (id, pag) => ({ ...L17, ficha: 'mc-inflamacion-ros', id, pag });
+const POS = (id, pag) => ({ ...L21, ficha: 'mc-posresucitacion', id, pag });
 const ILU = 'cifras del modelo: ilustrativas';
 const INF = HEMODERIVADOS.ch.infusion;   // Tabla 12.4: tiempos de infusión por gravedad (p. 10)
 
@@ -428,6 +435,19 @@ export const GUIAS = {
         { t: 'No hay relación con el número de unidades. Mortalidad del 20 %; tres de cada cuatro necesitan ventilación mecánica.', mirar: 'spo2', cita: RIE('mh-taco', '15-16'), org: 'PaO₂ 55: ilustrativa' },
         { t: 'Puede ser indistinguible del TRALI: la misma ventana de 6 h, y fiebre en el 30 % de los casos. Orientan al TACO la insuficiencia cardíaca previa, la sobrecarga de líquido o la insuficiencia renal.', cita: RIE('mh-taco', '16') },
         { t: 'Qué hacer: parar la transfusión si no ha terminado, avisar al banco y poner un diurético de asa intravenoso; el resto es soporte, como en el TRALI. Antes de futuras transfusiones, se aconseja identificar y corregir el balance positivo con diuréticos.', cita: RIE('mh-taco', '16') },
+    ],
+    neutrofilo: [
+        { t: 'En la fase inicial de la inflamación, el neutrófilo multiplica hasta por 20 su consumo de O₂ durante 15-20 minutos: es el «estallido respiratorio».', resalta: '#cpv-lupa-neu-titulo', cita: ROS('mc-estallido', '53') },
+        { t: 'El nombre engaña: ese O₂ no se dedica a fabricar ATP (no es respiración celular), sino derivados nocivos del oxígeno para matar microbios. La NADPH oxidasa de la membrana se activa y añade electrones al O₂ de uno en uno.', resalta: '#cpv-lupa-nadph', cita: [ROS('mc-estallido', '53'), ROS('mc-fig-17-1', '54')] },
+        { t: 'O₂ → radical superóxido (O₂·) → con 2 H⁺ → peróxido de hidrógeno (H₂O₂).', resalta: '#cpv-lupa-cadena', cita: ROS('mc-fig-17-1', '54') },
+        { t: 'El H₂O₂ se bifurca: con Fe²⁺/Fe³⁺ da radical hidroxilo (HO·); con Cl⁻ y mieloperoxidasa, hipoclorito, el ingrediente activo de la lejía doméstica.', resalta: '#cpv-lupa-fork', cita: ROS('mc-fig-17-1', '54') },
+        { t: 'Son armas contra los microbios (sin NADPH oxidasa, en la enfermedad granulomatosa crónica, hay infecciones recurrentes), pero también dañan al huésped, incluidos el endotelio y su glucocálix, cuando las ROS superan a los antioxidantes: estrés oxidante.', cita: [ROS('mc-ros', '53-55'), ROS('mc-lesion-oxidante', '55')] },
+    ],
+    reperfusion: [
+        { t: 'El peróxido de hidrógeno se mueve libremente por los tejidos y puede entrar en el torrente sanguíneo.', resalta: '#cpv-lupa-vaso', cita: ROS('mc-lesion-oxidante-foco', '55') },
+        { t: 'Por la sangre alcanza órganos distantes, donde puede entrar en las células.', resalta: '#cpv-lupa-organo', cita: ROS('mc-lesion-oxidante-foco', '55') },
+        { t: 'Allí, al encontrar hierro en estado reducido (Fe²⁺), genera radicales hidroxilo: un posible mecanismo del fallo multiorgánico en la lesión pulmonar inflamatoria, la sepsis o tras la reperfusión diseminada que sigue a un paro cardíaco.', resalta: '#cpv-lupa-fe', cita: ROS('mc-lesion-oxidante-foco', '55') },
+        { t: 'Tras la parada, el O₂ se usa solo para corregir una SaO₂ <90 % (Tabla 21.4). Sube la PaO₂ con la SaO₂ ya sobre 90 % y mira el aviso.', mirar: 'sao2', cita: POS('mc-tabla-21-4', '66-67'), org: 'la PaO₂ que subes: ilustrativa' },
     ],
 };
 // Las fuentes de cada estado (REGLAS §7.11): la lista de sus citas, sin repetir, en el orden de la explicación. Otro
@@ -817,6 +837,12 @@ export function pruebasCapilar() {
     for (const [k, a, b2] of [['tumbado', 41.8, 37.7], ['bolo', 42.9, 38.7]]) {
         mira('dilucion · ' + k, 'Hto (Fig. 12.1)', TUBOS[k][1], b2, 0); mira('dilucion · ' + k, 'caída del Hto (4,1 y 4,2)', +(TUBOS[k][0] - TUBOS[k][1]).toFixed(1), k === 'tumbado' ? 4.1 : 4.2, 0);
         mira('dilucion · ' + k, 'Hb ≈ Hto / 3', hbDeHto(b2), +(b2 / 3).toFixed(1), 0); mira('dilucion · ' + k, 'Hb antes ≈ Hto / 3', hbDeHto(a), +(a / 3).toFixed(1), 0);
+    }
+    // Cap. 17: `ros` no toca la fisiología (mismas cifras que el normal) y el O₂ de más con SaO₂ ≥90 % es siempre un paciente posible
+    for (const k of ['neutrofilo', 'reperfusion']) {
+        mira(k, 'SaO₂ igual que el normal', D(k).R.sao2, D('normal').R.sao2, 0); mira(k, 'DO₂ igual que el normal', D(k).R.do2, D('normal').R.do2, 0);
+        const alto = derivar(estadoDe({ ...ESTADOS[k].p, pao2: 100 }));
+        mira(k, 'PaO₂ 100: SaO₂ ≥90 (hay sello)', alto.R.sao2 >= 90 ? 1 : 0, 1, 0);
     }
     // La explicación guiada: 3-5 pasos por estado, cada paso con su cita (ficha, página y PDF)
     for (const k of Object.keys(ESTADOS)) {

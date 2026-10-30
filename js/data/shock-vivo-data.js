@@ -1,7 +1,9 @@
 // Los datos de la cabecera del shock v2 (maqueta; en la app: js/data/shock-estados.js, objetivos-reanimacion.js y
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
-import { textoGravedad } from '../modules/libros/shock-vivo/soporte.mjs';
+import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, RECETA_IC, IC_G_ETAPA, horasDeIc, eroaDeG, eesVdDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
+import { PACIENTE_DISECCION, ESTADO_DISECCION } from './shock-vivo-diseccion.js';
+export { gDePosparo, horasDePosparo, POSPARO_H, IC_G_ETAPA };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
 const PM = (id, t) => `<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/${id}/" target="_blank" rel="noopener">${t}</a>`;
@@ -20,10 +22,14 @@ export const FICHA = {
   'mc-soporte-mecanico': [CARDIO, 'Soporte circulatorio mecánico', 'Soporte mecánico', PDF_S, 'Marino 2024'],
   'mc-shock-septico': [CARDIO, 'Shock séptico', 'Shock séptico', PDF_S, 'Marino 2024'],
   'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S, 'Marino 2024'],
+  'mc-posresucitacion': [CARDIO, 'Cuidados posparo: el síndrome posparo cardíaco', 'Posparo', PDF_C, 'Marino 2024'],
   'mc-ic-tipos': [CARDIO, 'Insuficiencia cardíaca aguda: tipos', 'IC aguda', PDF_C, 'Marino 2024'],
+  'mc-ic-manejo': [CARDIO, 'Insuficiencia cardíaca aguda: manejo', 'IC aguda: manejo', PDF_C, 'Marino 2024'],
   'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica', PDF_C, 'Marino 2024'],
+  'mc-sca-tratamiento': [CARDIO, 'SCA: tratamiento', 'SCA: tratamiento', PDF_C, 'Marino 2024'],
   'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar: diagnóstico', 'Embolia pulmonar', PDF_R, 'Marino 2024'],
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar: manejo', 'Embolia pulmonar: manejo', PDF_R, 'Marino 2024'],
+  'mar-cateter-ap': [['libros', 'marinoFundamentos', 'panel-marino-fund-tabs'], 'El catéter de arteria pulmonar y la presión de enclavamiento', 'Catéter de arteria pulmonar', 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', 'Marino 2024'],
   // otras fuentes de la app (solo enlace; nunca se funden con Marino)
   'ic-descompensada': [['cardiologia', 'insuficienciaCardiaca', 'panel-cardio-ic-tabs'], 'Guía ESC 2026 de IC: IC descompensada', 'Guía ESC de IC', null, 'Guía ESC 2026 de IC'],
   'umi-shock-septico': [['sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs'], 'Manual UMI: shock séptico', 'Manual UMI', null, 'Manual UMI'],
@@ -31,6 +37,7 @@ export const FICHA = {
 // Citas que se repiten (ids de párrafo: los de la cobertura del bloque, §3; los que aún no existen en la ficha se
 // ponen al llevar el modelo a la app)
 export const C = {
+  pcpDiast: { f: 'mar-cateter-ap', id: 'mar-cateter-ap', sitio: 'La presión de enclavamiento (cap. 8)', p: 53 },
   t141: { f: 'mc-definiciones', id: 'mc-tabla-14-1', sitio: 'Tabla 14.1', p: 3 },
   ecuacion: { f: 'mc-definiciones', id: 'mc-shock-ecuacion', sitio: 'La ecuación de la PAM', p: '2-3' },
   t143: { f: 'mc-definiciones', id: 'mc-tabla-14-3', sitio: 'Tabla 14.3', p: 10 },
@@ -54,6 +61,10 @@ export const C = {
   csHemo: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos', p: 40 },
   csExc: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-excepciones', sitio: 'Excepciones', p: 40 },
   papilar: { f: 'mc-cardiogenico-fisio', id: 'mc-papilar', sitio: 'Rotura del papilar', p: 38 },
+  septo: { f: 'mc-cardiogenico-fisio', id: 'mc-septo-rotura', sitio: 'Rotura del septo', p: 38 },
+  fig161: { f: 'mc-cardiogenico-fisio', id: 'mc-fig-16-1', sitio: 'Fig. 16.1', p: 38 },
+  roturas24: { f: 'mc-cardiogenico-fisio', id: 'mc-roturas-24h', sitio: 'Las roturas: primeras 24 h', p: 38 },
+  vd: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-vd', sitio: 'Fallo del corazón derecho', p: 40 },
   f162: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-hemodinamica', sitio: 'Cambios hemodinámicos (Fig. 16.2)', p: 40 },
   obstr: { f: 'mc-cardiogenico-fisio', id: 'mc-cs-obstructivo', sitio: 'Shock obstructivo', p: 39 },
   t162: { f: 'mc-cardiogenico-farmaco', id: 'mc-tabla-16-2', sitio: 'Tabla 16.2', p: 42 },
@@ -79,6 +90,12 @@ export const C = {
   sepMon: { f: 'mc-shock-septico', id: 'mc-sepsis-monitorizacion', sitio: 'Monitorización', p: 59 },
   t172: { f: 'mc-shock-septico', id: 'mc-tabla-17-2', sitio: 'Tabla 17.2', p: 60 },
   vdMed: { f: 'mc-ic-tipos', id: 'mc-vd-medidas', sitio: 'Presiones de llenado', p: 4 },
+  icEtapas: { f: 'mc-ic-tipos', id: 'mc-ic-etapas', sitio: 'Etapas progresivas de la IC izquierda', p: 5 },
+  icFig: { f: 'mc-ic-tipos', id: 'mc-fig-18-3', sitio: 'Fig. 18.3', p: 6 },
+  icNeuro: { f: 'mc-ic-tipos', id: 'mc-neurohumoral', sitio: 'Respuestas neurohumorales', p: '5-6' },
+  icCongestion: { f: 'mc-ic-tipos', id: 'mc-congestion', sitio: 'Congestión venosa', p: '6-7' },
+  pcpPeep: { f: 'mar-cateter-ap', id: 'mar-enclavamiento-peep', sitio: 'PEEP y enclavamiento (cap. 8)', p: 55 },
+  cpapIc: { f: 'mc-ic-manejo', id: 'mc-vpp', sitio: 'Ventilación con presión positiva', p: 14 },
   autorreg: { f: 'mc-ic-tipos', id: 'mc-cardiorrenal', sitio: 'Síndrome cardiorrenal', p: 7 },
   disec: { f: 'mc-diseccion-aortica', id: 'mc-diseccion-fisio', sitio: 'Fisiopatología', p: 50 },
   tepClin: { f: 'neumo-ep-diagnostico', id: 'nep-tabla-22-1', sitio: 'Tabla 22.1', p: 2 },
@@ -86,6 +103,8 @@ export const C = {
   tepRiesgo: { f: 'neumo-ep-manejo', id: 'nep-riesgo', sitio: 'Estratificación del riesgo', p: 7 },
   tepHemo: { f: 'neumo-ep-manejo', id: 'nep-hemodinamica', sitio: 'Manejo hemodinámico', p: '10-11' },
   escMcs: { f: 'ic-descompensada', id: 'ic-mcs-temporal', sitio: 'Soporte circulatorio mecánico temporal' },
+  posparo: { f: 'mc-posresucitacion', id: 'mc-posparo', sitio: 'Síndrome posparo cardíaco', p: 64 },
+  t214: { f: 'mc-posresucitacion', id: 'mc-tabla-21-4', sitio: 'Tabla 21.4', p: '66-67' },
   umi6h: { f: 'umi-shock-septico', id: 'umi-objetivos-6h', sitio: 'Objetivos de las primeras 6 horas' },
 };
 
@@ -101,6 +120,9 @@ export const OBJETIVOS = {
   // Manual UMI (Sobrevivir a la UMI): objetivos de las primeras 6 h del shock SÉPTICO (solo en el séptico)
   'umi-sepsis-6h': { fuente: 'Manual UMI', nombre: 'Primeras 6 h', largo: 'objetivos del shock séptico', cita: C.umi6h, venosa: 'ScvO₂', solo: 'septico',
     filas: { pam: ['≥65-70', (v) => v >= 65], pvc: ['8-12', (v) => v >= 8 && v <= 12], diur: ['≥0,5', (v) => v >= 0.5], ven: ['≥70 %', (v) => v >= 70] } },
+  // Tras la parada, Marino sube el objetivo de PAM en las primeras horas (Tabla 21.4, p. 66-67); solo da esa cifra
+  'marino-21-4': { fuente: 'Marino', nombre: 'Tabla 21.4', largo: 'objetivo de PAM tras la parada', cita: C.t214, venosa: 'ScvO₂',
+    filas: { pam: ['≥75', (v) => v >= 75] } },
 };
 // celdas en las que las dos fuentes no dicen lo mismo (se marca la celda y se enlaza la nota)
 export const DISCREPAN = { ven: 'scvo2-fuentes', pam: 'pam-fuentes' };
@@ -113,20 +135,52 @@ export const PACIENTES = [
   { k: 'amparo', nombre: 'Amparo', chip: 'sepsis', tipo: 'septico', peso: 76, ideal: 58, edad: 58, sexo: 'mujer', hb: 12.4, fr: 26, t: 39.2, obj: 'marino-14-5',
     rec: { esc: 'sepsis', g: 1, util: 'sepsis', hb: 12.4 }, linea: '58 años, 76 kg (ideal 58) · pielonefritis obstructiva · urgencias' },
   { k: 'aurelio', nombre: 'Aurelio', chip: 'infarto', tipo: 'cardio', peso: 82, edad: 67, sexo: 'varón', hb: 14, fr: 24, t: 36.7, obj: 'marino-16-2',
-    // la PCP no está alta (≈14, el 30 % de la p. 40) con la PVC normal: un VI que aún admite volumen (viDiast) y algo menos de
-    // volemia; tras 250 mL, PCP ≈18 (el caso S3 de la cobertura)
-    rec: { esc: 'fallo', g: 0.9, viDiast: 0.7, volemia: -1150, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
+    // la PCP no está alta (≈14, el 30 % de la p. 40) con la PVC normal: un VI que aún admite volumen (viDiast) y el VD tocado por
+    // el infarto anterior que llega al tabique (eesVd: la PVC sube, p. 40); volemia entera (M0, b3-paso4 g3: antes −1150 mL
+    // tapaban un edema demasiado rápido del motor). Cuánto viDiast y eesVd: ilustrativo; tras 250 mL, PCP ≈16
+    rec: { esc: 'fallo', g: 0.8, viDiast: 0.6, eesVd: 0.3, hb: 14 }, linea: '67 años, 82 kg · IAM anterior · hemodinámica, hora 0' },
   { k: 'joaquin', nombre: 'Joaquín', chip: 'taponamiento', tipo: 'tapon', peso: 84, edad: 56, sexo: 'varón', hb: 13.5, fr: 24, t: 36.8, obj: 'marino-14-5',
     rec: { esc: 'derrame', g: 0.85, hb: 13.5 }, linea: '56 años, 84 kg · disección aórtica tipo A que sangra al pericardio' },
+  // Virginia: la FV extrahospitalaria con RCE (1.er choque a los 6 min). El peso y la edad: del caso; FR, T y Hb, ilustrativos.
+  // La Hb del caso se toma sin pérdida; la FR es la de una paciente ventilada y la T la de quien se mantiene ≤37,5 °C (p. 65)
+  { k: 'virginia', nombre: 'Virginia', chip: 'posparo', tipo: 'posparo', peso: 64, edad: 58, sexo: 'mujer', hb: 12.6, fr: 16, t: 36.8, obj: 'marino-21-4',
+    rec: { esc: 'posparo', g: POSPARO_G0, hb: 12.6 }, linea: '58 años, 64 kg · fibrilación ventricular extrahospitalaria, primer choque a los 6 min · hora 0 tras la RCE' },
+  // Benito, Fermín y Remedios (b3-paso4 g3): los tres del infarto con su mando de gravedad propio (soporte.mjs: RECETA_*).
+  // Edad, peso y hora: del caso; FR, T y Hb, ilustrativos (FR alta por el edema; T normal)
+  { k: 'benito', nombre: 'Benito', chip: 'rotura del papilar', tipo: 'papilar', peso: 78, edad: 66, sexo: 'varón', hb: 14, fr: 28, t: 36.8, obj: 'marino-16-2',
+    rec: RECETA_BENITO, linea: '66 años, 78 kg · IAM · hora 14 · soplo nuevo y SpO₂ baja' },
+  { k: 'fermin', nombre: 'Fermín', chip: 'infarto del VD', tipo: 'vd', peso: 80, edad: 70, sexo: 'varón', hb: 14, fr: 18, t: 36.7, obj: 'marino-16-2',
+    rec: RECETA_FERMIN, linea: '70 años, 80 kg · IAM inferior con afectación del VD · hemodinámica, hora 2' },
+  { k: 'remedios', nombre: 'Remedios', chip: 'rotura del septo', tipo: 'septo', peso: 62, edad: 74, sexo: 'mujer', hb: 13, fr: 26, t: 36.6, obj: 'marino-16-2',
+    rec: RECETA_REMEDIOS, linea: '74 años, 62 kg · IAM anterior · hora 20 · soplo holosistólico nuevo con frémito' },
+  // Ramiro (b3-paso4 g4): la IC izquierda que se descompensa en el postoperatorio (Marino cap. 18, p. 5-6, Fig. 18.3). La figura es de
+  // «un paciente postoperatorio» sin más datos: edad, peso, FR, T y Hb, ilustrativos. El mando es el reloj de 0 a 4 h (soporte.mjs, RECETA_IC)
+  { k: 'ramiro', nombre: 'Ramiro', chip: 'IC izquierda', tipo: 'ic', peso: 74, edad: 68, sexo: 'varón', hb: 12.5, fr: 22, t: 36.8, obj: 'marino-14-5',
+    rec: RECETA_IC, linea: '68 años, 74 kg · postoperatorio · IC izquierda que se descompensa' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
     rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
+  PACIENTE_DISECCION,   // Joaquín a las 08:25 (js/data/shock-vivo-diseccion.js)
 ];
 // La gravedad de cada paciente, con nombre (el mando mueve la «g» del escenario del motor)
+const coma2 = (x, d = 2) => (+x).toFixed(d).replace('.', ',');
 export const GRAVEDAD = {
   hemo: { min: 0, max: 1, paso: 0.01, texto: (g, pac) => { const pct = Math.round(g * 42), ml = Math.round(pct / 100 * mlKg(pac) * pac.peso / 50) * 50; return [`${pct} % de la volemia`, `≈ ${ml.toLocaleString('es-ES')} mL de ${(mlKg(pac) * pac.peso / 1000).toFixed(1).replace('.', ',')} L · clase ${clase(pct)}`]; }, nota: 'Sangre perdida (Tabla 15.1; 66 mL/kg en el varón, p. 21)', cita: C.t151 },
   septico: { min: 0, max: 1, paso: 0.01, texto: (g) => [`${Math.round(g * 100)} %`, `resistencias al ${Math.round(100 * (1 - 0.6 * g))} %`], nota: 'Vasodilatación y fuga capilar', cita: C.sepHemo },
   cardio: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VI ${(3.1 * (0.3 / 3.1) ** g).toFixed(2).replace('.', ',')}`, `contractilidad al ${Math.round(100 * (0.3 / 3.1) ** g)} %`], nota: 'Contractilidad del VI (modelo)', cita: C.csHemo },
   // el derrame y el émbolo: el texto de la gravedad lo da el motor (escenarios.mjs), así no se separan
+  // el mando de gravedad es el reloj desde la RCE (horas): la Ees se recupera con él; la curva, ilustrativa; el 72, de la p. 65
+  posparo: { min: 0, max: POSPARO_H, paso: 1, horas: true, texto: (g) => [`${Math.round(horasDePosparo(g))} h tras la RCE`, `contractilidad del VI al ${Math.round(100 * (0.3 / 3.1) ** g)} %`],
+    nota: 'Horas desde la recuperación de la circulación: el aturdimiento suele resolverse en 72 h (p. 65); la forma de la curva, ilustrativa', cita: C.posparo },
+  // Los tres del infarto: el deslizador mueve una pieza del motor (soporte.mjs); el fallo del VI queda como llega el paciente
+  papilar: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio mitral ${coma2(eroaDeG(g))} cm²`, `${eroaDeG(g) >= 0.5 ? 'valva en flail' : 'insuficiencia mitral moderada'} (ilustrativo) · tope ${coma2(EROA_TOPE,1)} cm²`],
+    nota: 'Orificio de la mitral: los cm² son del modelo (la ficha, p. 38, solo da la dirección)', cita: C.papilar },
+  vd: { min: 0, max: 1, paso: 0.01, texto: (g) => [`Ees del VD al ${Math.round(100 * eesVdDeG(g))} % de la normal`, 'contractilidad del ventrículo derecho'],
+    nota: 'Contractilidad del VD (de la normal): del modelo; la ficha (p. 40) da la dirección. Los líquidos de partida no son del mando', cita: C.vd },
+  septo: { min: 0, max: 1, paso: 0.01, texto: (g) => [`orificio del septo ${coma2(civDeG(g))} cm²`, 'cortocircuito VI → VD'],
+    nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección). Modelo: la PCP queda alta (por encima de 18-20), algo por debajo de la de antes de la rotura porque el VI se descarga hacia el VD', cita: C.septo },
+  ic: { min: 0, max: 1, paso: 0.01, texto: (g) => [`hora ${horasDeIc(g).toLocaleString('es-ES')} del postoperatorio`, 'IC izquierda: de 0 a 4 h (Fig. 18.3)'],
+    nota: 'El reloj de la Fig. 18.3 (p. 6): cada hora lleva su fallo del VI y su resistencia; las cifras son del modelo, la dirección, de la ficha', cita: C.icFig },
+  diseccion: { min: 0, max: 1, paso: 0.01, sinMando: true, texto: () => ['Sin gravedad que mover', 'aquí mandan los fármacos'], nota: 'Joaquín llega con la PA alta: no hay un grado de gravedad. Prueba los fármacos (Marino cap. 20, p. 51-52)', cita: { f: 'mc-diseccion-aortica', id: 'mc-tabla-20-5', sitio: 'Tabla 20.5', p: '51-52' } },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -137,16 +191,16 @@ export const claseClinica = (R) => R.pas < 70 || R.fc > 140 ? 'IV' : R.pas < 90 
 
 // ---------------------------------------------------------------- soporte: para quién (p. 45, 48)
 export function indicacion(pac, tipoAparato) {
-  if (pac.tipo === 'cardio') return { ok: true };
-  if (pac.k === 'joaquin' && tipoAparato === 'balon') return { ok: false, sello: 'Contraindicado', txt: 'Disección aórtica: el balón está contraindicado (p. 45).', cita: C.iabp };
-  if (pac.k === 'joaquin' && tipoAparato === 'impella') return { ok: false, sello: 'Contraindicado', txt: 'Valvulopatía aórtica: el Impella está contraindicado (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50).', cita: C.impellaEf };
+  if (pac.tipo === 'cardio' || pac.tipo === 'papilar' || pac.tipo === 'septo') return { ok: true };   // el soporte, para el cardiogénico refractario (p. 45)
+  if (pac.k.startsWith('joaquin') && tipoAparato === 'balon') return { ok: false, sello: 'Contraindicado', txt: 'Disección aórtica: el balón está contraindicado (p. 45).', cita: C.iabp };
+  if (pac.k.startsWith('joaquin') && tipoAparato === 'impella') return { ok: false, sello: 'Contraindicado', txt: 'Valvulopatía aórtica: el Impella está contraindicado (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50).', cita: C.impellaEf };
   return { ok: false, sello: 'No indicado', txt: 'La fuente reserva el soporte mecánico para el shock cardiogénico refractario (p. 45). En este paciente no se pone.', cita: C.mcs };
 }
 
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 // Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
-export const TOPES = { pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+export const TOPES = { eroa: EROA_TOPE, eroaAviso: 0.7, civ: CIV_TOPE, civAviso: 0.5, vdG: 0.99, vdGAviso: VD_G_RECETA + 0.01, horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5, cpap: 10 };
 // Sobrecarga: la PCP en el techo de la ficha, o la PVC por encima de 12 habiendo subido ≥ 4 sobre la de entrada y el pulmón ya
 // encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
 export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
@@ -167,10 +221,11 @@ export function nombreEstado(R, X) {
     return R.aoAbre <= 2 ? 'ecmo-cerrada' : R.pcp >= 22 ? 'ecmo-carga' : 'ecmo';
   }
   if (hipertensionVaso(R, X)) return 'hipertension-vaso';
-  if (sobrecarga(R)) return 'sobrecarga';
+  // el papilar y el septo llegan con la PCP en 20-30 sin que nadie haya dado volumen: es su cuadro, no una sobrecarga
+  const t = X.pac.tipo, llegaAsi = (t === 'papilar' || t === 'septo' || t === 'ic') && X.infundido.cris + X.infundido.sangre === 0;
+  if (!llegaAsi && sobrecarga(R)) return 'sobrecarga';
   const tr = topeRepos(R, X);
   if (tr != null && X.infundido.cris + X.infundido.sangre >= tr) return 'hemo-tope';
-  const t = X.pac.tipo;
   // la hemorragia se nombra por lo que enseña el paciente (FC y PA de la Tabla 15.1), no solo por lo perdido
   if (t === 'hemo') {
     if (X.infundido.cris > 0) return 'hemo-salino';
@@ -180,6 +235,15 @@ export function nombreEstado(R, X) {
   }
   if (t === 'septico') { if (X.ajuste.na >= 10) return 'septico-na'; return R.irvs >= 25 && R.pam >= 65 ? 'sin-shock' : 'septico'; }
   if (t === 'cardio') { if (R.pam >= 65 && R.ic >= 2.2) return 'sin-shock'; return R.pcp < 18 ? 'cardio-pcp-baja' : R.pcp <= 20 ? 'cardio-pcp-optima' : 'cardio'; }
+  if (t === 'posparo') return X.g <= 0.005 ? 'posparo-72' : 'posparo';
+  // la IC izquierda se nombra por su etapa (Fig. 18.3): el gasto cae (3), la FC sube con el gasto conservado (2), o solo sube la PCP (1).
+  // Los cortes (IC 3,0 y FC 90) son ilustrativos: la figura no los da. Sin la PA sostenida (PAM <65) ya es el cardiogénico
+  if (t === 'ic' && X.ajuste.cpap > 0 && R.ic < 3 && R.pam >= 65) return 'ic-cpap';
+  if (t === 'ic') return R.ic < 3 ? (R.pam >= 65 ? 'ic-etapa-3' : 'cardio') : R.fc >= 90 ? 'ic-etapa-2' : 'ic-etapa-1';
+  if (t === 'papilar') return 'rotura-papilar';
+  if (t === 'vd') return R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'iam-vd';
+  if (t === 'septo') return R.qpqs >= 1.2 ? 'rotura-septo' : R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'cardio';
+  if (t === 'diseccion') return 'diseccion';
   if (t === 'tapon') return Math.abs(R.pvc - R.pcp) > 3 ? 'sin-shock' : 'tapon';
   if (t === 'tep') return X.infundido.cris >= TOPES.tepMl ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
   return t;
@@ -243,11 +307,64 @@ export const ESTADOS = {
       { t: 'Por encima de ahí, más volumen apenas sube el gasto y encharca el pulmón.', s: ['[data-fila="ic"]'], c: C.llenado, org: 'que ya no suba: fisiología general' },
       { t: 'Vasopresor de elección: la noradrenalina. Y un inotrópico: la dobutamina.', s: ['[data-fila="pa"]'], c: C.csNa },
       { t: 'Los fármacos suben el trabajo del corazón que falla: si no basta, no retrases el soporte mecánico.', s: ['#shv-dock'], c: C.trabajo }] },
+  posparo: { tit: 'Posparo: miocardio aturdido', frase: (R) => `IC ${c1(R.ic)}, PCP ${R.pcp} y PAM ${R.pam}: el VI está aturdido tras la parada. Suele recuperarse en 72 h; mientras, PAM de 75 o más.`, org: 'ficha · p. 65, 66-67',
+    guia: [{ t: (R) => `El VI está aturdido: IC ${c1(R.ic)}. Es una disfunción sistólica y diastólica que puede llegar al shock cardiogénico en horas tras la RCE.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
+      { t: (R, X) => `Es una lesión de reperfusión: suele resolverse en 72 h. Ahora, ${Math.round(horasDePosparo(X.g))} h tras la RCE; mueve el reloj y mira cómo se recupera.`, s: ['#shv-dock'], c: C.posparo, org: 'el 72: ficha · la forma de la curva: ilustrativo' },
+      { t: (R) => `La PCP (${R.pcp}) está cerca de la presión diastólica de la arteria pulmonar (${R.papd}): al nivel de ella, salvo que haya hipertensión pulmonar, donde queda por debajo.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.pcpDiast, org: 'la relación: ficha (cap. 8); la diferencia de unos mmHg es del modelo' },
+      { t: (R) => `Objetivo de PAM: de 75 o más en las primeras horas (Tabla 21.4); ahora ${R.pam}. El 65 habitual es del capítulo 14.`, s: ['[data-fila="pa"]'], c: C.t214 },
+      { t: 'Si hace falta vasopresor, noradrenalina mejor que adrenalina: menos muertes cardiovasculares y mejor resultado neurológico.', s: ['#shv-dock'], c: C.t214 }] },
+  'posparo-72': { tit: 'Posparo: a las 72 h', frase: (R) => `A las 72 h: IC ${c1(R.ic)}, PCP ${R.pcp}. El aturdimiento suele estar resuelto; si el shock sigue, ya no es solo aturdimiento.`, org: 'ficha · p. 65 (lo que sigue, la fuente no lo dice)',
+    guia: [{ t: (R) => `Han pasado 72 h: el miocardio aturdido suele recuperarse. IC ${c1(R.ic)}, PCP ${R.pcp}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.posparo },
+      { t: 'Si a las 72 h sigue en shock, ya no es aturdimiento: la fuente no dice más. Busca otra causa.', s: ['#shv-dock'], c: C.posparo, org: 'la fuente solo da las 72 h; el resto no lo dice' },
+      { t: (R) => `PAM ${R.pam} sin vasopresor: el objetivo de 75 o más era de las primeras horas.`, s: ['[data-fila="pa"]'], c: C.t214 }] },
   cardio: { tit: 'Shock cardiogénico', frase: (R) => `El corazón no bombea: IC ${c1(R.ic)}, PCP ${R.pcp} y la arteriola cerrada. Lo que lo separa de la IC es la hipoperfusión.`, org: 'ficha · p. 40',
     guia: [{ t: (R) => `El VI no bombea: IC ${c1(R.ic)}.`, s: ['#cor-cav', '[data-fila="ic"]'], c: C.csExc },
       { t: (R) => `Sube la presión de llenado del que falla: PCP ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20' : ''}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.csHemo },
       { t: (R) => `La arteriola se cierra: IRVS ${R.irvs} (Fig. 16.2).`, s: ['#cor-arteriola', '[data-fila="irvs"]'], c: C.f162 },
       { t: 'Con la PCP por encima de 18-20 el pulmón se encharca: mira las gotas en el pulmón y la SpO₂.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'cuánto: el modelo' }] },
+  'ic-etapa-1': { tit: 'IC izquierda, etapa 1', frase: (R) => `Etapa 1: la presión de llenado sube (PCP ${R.pcp}) y el volumen sistólico se mantiene (VS ${R.vs} mL, IC ${c1(R.ic)}), a costa de congestión del pulmón y disnea.`, org: 'ficha · p. 5 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El signo más precoz de la disfunción del VI es que sube la presión de llenado telediastólica, la presión de enclavamiento: PCP ${R.pcp}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.icEtapas },
+      { t: (R) => `El volumen sistólico se mantiene casi (${R.vs} mL) y el gasto también (IC ${c1(R.ic)}), pero a expensas de esa presión alta.`, s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: 'La presión alta congestiona la circulación venosa del pulmón y da la sensación de disnea: el primer síntoma.', s: ['#cor-pulmon'], c: C.icEtapas },
+      { t: (R) => `La FC apenas se mueve (${R.fc}): la taquicardia es de la etapa siguiente.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.icEtapas }] },
+  'ic-etapa-2': { tit: 'IC izquierda, etapa 2', frase: (R) => `Etapa 2: el volumen sistólico cae (VS ${R.vs} mL) y la FC sube (${R.fc}): la taquicardia lo compensa y el gasto se conserva (IC ${c1(R.ic)}).`, org: 'ficha · p. 5 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El VI se vacía peor: el volumen sistólico baja (${R.vs} mL).`, s: ['#cor-cav', '[data-fila="vs"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: 'Los barorreceptores notan el descenso del volumen sistólico y activan el simpático: más contractilidad, más frecuencia, vasoconstricción y activación del sistema renina-angiotensina-aldosterona.', s: ['#cor-arteriola'], c: C.icNeuro },
+      { t: (R) => `La frecuencia sube: FC ${R.fc}.`, s: ['[data-fila="fc"]', '#tr-ecg'], c: C.icEtapas },
+      { t: (R) => `La taquicardia compensa la caída del volumen sistólico: el gasto se conserva (IC ${c1(R.ic)}).`, s: ['[data-fila="ic"]'], c: C.icEtapas },
+      { t: (R) => `La presión de llenado sigue alta (PCP ${R.pcp}): el pulmón, congestionado.`, s: ['[data-fila="pcp"]', '#cor-pulmon'], c: C.icEtapas }] },
+  'ic-etapa-3': { tit: 'IC izquierda, etapa 3', frase: (R) => `Etapa 3: el gasto cae (IC ${c1(R.ic)}) y la presión de llenado sube más (PCP ${R.pcp}). Es el paso de IC compensada a descompensada; la PA se sostiene (PAM ${R.pam}).`, org: 'ficha · p. 5-7 (las cifras: lectura de la Fig. 18.3 y modelo, ilustrativo)',
+    guia: [{ t: (R) => `El gasto cardíaco empieza a caer (IC ${c1(R.ic)}, VS ${R.vs} mL): el punto en que cae marca la transición de IC compensada a descompensada.`, s: ['[data-fila="ic"]', '[data-fila="vs"]'], c: C.icEtapas, org: 'las cifras: lectura de la Fig. 18.3 (p. 6) y modelo' },
+      { t: (R) => `La presión de llenado sube aún más: PCP ${R.pcp}.`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.icEtapas },
+      { t: (R) => `La vasoconstricción periférica basta para sostener la PA (PAM ${R.pam}) y la perfusión de los tejidos: mira la arteriola cerrada (IRVS ${R.irvs}).`, s: ['#cor-arteriola', '[data-fila="pa"]'], c: C.icCongestion },
+      { t: 'Por eso las manifestaciones de la IC aguda descompensada son las de la congestión venosa, no las del bajo gasto: disnea, crepitantes y edema de pulmón.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.icCongestion },
+      { t: 'El riñón sufre sobre todo por la presión venosa alta, no por el gasto: la autorregulación mantiene su flujo hasta que la PAM baja de 70.', s: ['[data-fila="pa"]'], c: C.autorreg }] },
+  'ic-cpap': { tit: 'IC izquierda, etapa 3, con CPAP', frase: (R) => `Etapa 3 con CPAP: el gasto apenas cambia (VS ${R.vs} mL, IC ${c1(R.ic)}) y el edema crece más despacio que sin CPAP (${Math.round(R.edema)} mL, SpO₂ ${R.spo2} %). En el corazón que falla la CPAP no le quita gasto; en el seco, sí. Límite del modelo: Marino describe que el gasto puede subir (p. 83, 88); el modelo no lo reproduce.`, org: 'ficha · cap. 18, p. 14 y resp. p. 77, 83, 88 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'La presión positiva en el tórax baja la presión transmural que el VI desarrolla en sístole: es una menor poscarga, y la pared se mueve hacia dentro con más facilidad.', s: ['#cor-cav'], c: C.cpapIc },
+      { t: (R) => `El corazón que falla está en la parte plana de la curva de precarga: perder algo de llenado le cuesta poco gasto (VS ${R.vs} mL, IC ${c1(R.ic)}) y bajar la poscarga le ayuda (resp. p. 88).`, s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.cpapIc, org: 'la razón: ficha (resp. p. 88) · las cifras: modelo' },
+      { t: 'La PCP del monitor sube con la CPAP porque la presión del tórax llega también al catéter; la presión transmural, la que de verdad encharca el pulmón, baja. No es un exceso de volumen.', s: ['[data-fila="pcp"]'], c: C.pcpPeep, org: 'que la PEEP eleva falsamente el enclavamiento: ficha (cap. 8, PDF p. 55); que la presión transmural es la fisiológicamente importante: ficha (misma p. 55). Que baje con la CPAP: el modelo (la fuente no lo dice). Las cifras: modelo' },
+      { t: (R) => `El edema crece más despacio: la CPAP evita el colapso de las vías pequeñas y los alvéolos al final de la espiración (resp. p. 77) y es muy eficaz en el edema cardiogénico (resp. p. 83). Edema: ${Math.round(R.edema)} mL.`, s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.cpapIc, org: 'ficha (resp. p. 77, 83) · cuánto edema: modelo' },
+      { t: 'En el paciente seco ocurre lo contrario: la misma presión le frena el retorno venoso y baja la precarga, y el gasto cae (resp. p. 85, 88). Pruébalo con un paciente hemorrágico, con la CPAP en 10.', s: ['#shv-dock'], c: C.cpapIc, org: 'ficha (resp. p. 85, 88)' },
+      { t: 'Límite del modelo: Marino (p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 en 11 pacientes con PCP ≥12; con PCP <12 el gasto bajó, IC 3,14→2,89) describen que el gasto del corazón que falla puede subir; el modelo no lo reproduce (el motivo es del autor: otros mecanismos del paciente real, como la retirada simpática, no están en el modelo). Tampoco mejora la SpO₂: el modelo no reproduce la apertura de los alvéolos que Marino atribuye a la CPAP (resp. p. 77).', s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.cpapIc, org: 'límite del modelo' }] },
+  'rotura-papilar': { tit: 'Rotura del músculo papilar', frase: (R) => `La sangre vuelve a la aurícula en cada sístole: IC ${c1(R.ic)}, PCP ${R.pcp} y SpO₂ ${R.spo2} %. Es una insuficiencia mitral aguda: el 7 % de los shocks del infarto, y llega en las primeras 24 h, no tarde.`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'El músculo papilar roto suelta la valva mitral: en la sístole la valva se va a la aurícula y la válvula no cierra. Es una insuficiencia mitral aguda, y amenaza la vida.', s: ['#cor-mitral'], c: C.papilar },
+      { t: (R) => `Mira el chorro rojo: en cada sístole parte de la sangre del VI vuelve a la aurícula. Fracción regurgitante ${R.frmit} %.`, s: ['.cc-chorro', '[data-fila="frmit"]'], c: C.papilar, org: 'la fracción y su tamaño: modelo (fisiología general)' },
+      { t: (R) => `La aurícula izquierda recibe ese chorro y la PCP se dispara: ${R.pcp}, a la altura de la diastólica de la arteria pulmonar (${R.papd}).`, s: ['[data-fila="pcp"]', '#tr-pap'], c: C.pcpDiast, org: 'el mecanismo: fisiología general · la relación PCP-diastólica: ficha (cap. 8) · cuánto: modelo' },
+      { t: (R) => `El pulmón se encharca: SpO₂ ${R.spo2} %. Con la PCP por encima de 18-20 el líquido pasa al alvéolo.`, s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.llenado, org: 'umbral 18-20: ficha p. 42 · cuánto: modelo' },
+      { t: (R) => `El gasto cae (IC ${c1(R.ic)}, por debajo de 2,2) aunque el VI se vacía: parte de lo que sale va hacia atrás. Por eso aparece en las primeras 24 h y no es una complicación tardía.`, s: ['[data-fila="ic"]'], c: C.roturas24 }] },
+  'iam-vd': { tit: 'Infarto del ventrículo derecho', frase: (R) => `Falla el derecho: ${R.pvc > R.pcp ? `la PVC (${R.pvc}) sube más que la PCP (${R.pcp})` : `la PVC (${R.pvc}) aún no pasa a la PCP (${R.pcp})`} y el VD dilatado empuja el tabique. FEVI ${R.fevi} %, conservada. Tiene menos mortalidad que el fallo del VI.${R.lact < 2 && R.pam >= 65 ? ` IC ${coma2(R.ic, 1)} (<2,2) sin hipoperfusión aún: todavía no es shock (p. 40).` : ''} Partida: 1.250 mL de líquidos de urgencias (ilustrativo).`, org: 'ficha · p. 40 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: (R) => `El VD infartado no empuja: se dilata (su volumen telediastólico es ${coma2(R.vdvi, 1)} veces el del VI) y la PVC sube: ${R.pvc}.`, s: ['#cor-vd', '[data-fila="pvc"]'], c: C.vd, org: 'cuánto: modelo' },
+      { t: (R) => `La PCP no sube igual: ${R.pcp}. Uno de los rasgos que lo identifican es el cociente PVC/PCP (${coma2(R.pvc / Math.max(1, R.pcp), 1)}), no una cifra suelta.`, s: ['[data-fila="pvc"]', '[data-fila="pcp"]'], c: C.vd },
+      { t: (R) => `El VI casi no falla: FEVI ${R.fevi} %, conservada. Un VD dilatado con el VI normal es otro rasgo del fallo derecho.`, s: ['[data-fila="fevi"]', '#cor-cav'], c: C.vd, org: 'el valor: modelo' },
+      { t: (R) => `El VD dilatado empuja el tabique hacia la cámara del VI: el VI se llena menos y el gasto cae (IC ${c1(R.ic)}).`, s: ['#cor-tabique', '[data-fila="ic"]'], c: C.vd },
+      { t: 'El shock por fallo del VD tiene menos mortalidad que el del VI. Los 1.250 mL de líquidos con que llega son de partida, no del mando: una carga de volumen del modelo; el diagnóstico y el manejo del fallo derecho están en el capítulo 18 y aquí no se simulan.', s: ['#shv-dock'], c: C.vd, org: 'los líquidos del servicio de urgencias: ilustrativo (la fuente no da la cifra)' }] },
+  'rotura-septo': { tit: 'Rotura del tabique interventricular', frase: (R) => `Parte de cada latido vuelve al VD: Qp/Qs ${coma2(R.qpqs, 1)}, saturación ${R.satAd} % en la AD y ${R.satAp} % en la AP. ${R.pcp > 20 ? 'El pulmón se encharca' : 'El pulmón recibe todo ese flujo'} y la aorta se queda sin él (IC ${c1(R.ic)}).`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'El tabique roto abre un paso entre el VI, de presión alta, y el VD, de presión baja: en cada latido pasa sangre de izquierda a derecha. Es un gran shunt izquierda-derecha.', s: ['#cor-tabique'], c: C.septo, org: 'la dirección: ficha · por qué va a la derecha (presión): fisiología general' },
+      { t: (R) => `El VD recibe más: Qp/Qs ${coma2(R.qpqs, 1)}. Por el pulmón pasa ${coma2(R.qpqs, 1)} veces lo que sale por la aorta.`, s: ['[data-fila="qpqs"]'], c: C.septo, org: 'el cociente: modelo (su definición, fisiología general)' },
+      { t: (R) => `Esa sangre llega oxigenada: la saturación sube de ${R.satAd} % en la AD a ${R.satAp} % en la AP. El salto de saturación es la huella del cortocircuito.`, s: ['[data-fila="satad"]', '[data-fila="satap"]'], c: C.septo, org: 'el salto: fisiología general · el umbral numérico: la fuente no lo dice · las cifras: modelo' },
+      { t: (R) => `El pulmón recibe ese flujo de más: ${coma2(R.qpqs, 1)} veces el de la aorta. La PCP sigue alta, ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20: el pulmón se encharca' : ''} (PAP ${R.paps}/${R.papd}). Modelo: la PCP queda algo por debajo de la de antes de la rotura porque el VI se descarga hacia el VD; esa caída no la dice la fuente.`, s: ['[data-fila="qpqs"]', '[data-fila="pcp"]', '#cor-pulmon'], c: C.septo, org: 'inunda la circulación pulmonar: ficha p. 38 · el umbral 18-20: ficha p. 42 · las cifras y la caída de la PCP: modelo' },
+      { t: (R) => `La aorta se queda sin ese flujo: IC ${c1(R.ic)}, PAM ${R.pam}. La FEVI (${R.fevi} %) cuenta lo que el VI expulsa a la aorta y al VD.`, s: ['[data-fila="ic"]', '[data-fila="fevi"]'], c: C.septo, org: 'la FEVI por volúmenes: fisiología general' }] },
+  diseccion: ESTADO_DISECCION,   // js/data/shock-vivo-diseccion.js
   tapon: { tit: 'Taponamiento', frase: (R) => `El líquido del saco no deja llenarse al corazón: PVC ${R.pvc} y PCP ${R.pcp} se igualan. La eco lo separa del fallo del VD.`, org: 'ficha · p. 3; cap. 18, p. 4',
     guia: [{ t: 'La disección tipo A puede propagarse hacia atrás y sangrar al pericardio: taponamiento.', s: ['#cor-saco'], c: C.disec },
       { t: (R) => `El líquido no deja llenarse al corazón: shock obstructivo, con el patrón del cardiogénico (PVC ${R.pvc}, IC ${c1(R.ic)}, IRVS ${R.irvs}).`, s: ['[data-fila="pvc"]', '[data-fila="ic"]'], c: C.t141 },
@@ -336,10 +453,11 @@ export const ESTADOS = {
 
 // ---------------------------------------------------------------- notas (con su tipo) y «Para profundizar»
 export const NOTAS = [
+  { k: 'ic-fig-18-3', tipo: 'calla', txt: '<b>Las cifras de la Fig. 18.3.</b> La figura (p. 6) es de «un paciente postoperatorio» (datos de observación personal del autor) y sus curvas no cuadran entre sí (un VS de 60 mL con FC 80 da 4,8 L/min, no un IC de 3,5 con una superficie normal). El texto (p. 5) solo da la dirección de cada etapa. Los cortes entre etapas (IC 3,0 y FC 90) y los números de Ramiro son del modelo: ilustrativos; el motor da un VS más alto y un IC algo menor que la figura.', citas: [C.icFig, C.icEtapas] },
   { k: 'clase-cortes', tipo: 'calla', txt: '<b>Los cortes de FC y PA por clase.</b> La Tabla 15.1 de Marino (p. 22) da el % de volemia perdido y solo flechas para la FC (↔, ↑, ↑↑, ↑↑↓) y la PA (↔, ↔↓, ↓, ↓↓). Las cifras con que el modelo nombra la clase de cada paciente (FC 95, 120 y 140; PAS 90 y 70) son ilustrativas, no de la ficha. En la práctica, la FC y la PAS cambian menos que esta tabla: en traumatismos graves la FC mediana pasó de 82 (clase 1 estimada) a 95 (clase 4) y la PAS de 135 a 120 (' + PM(21349628, 'Guly 2011') + '); solo el 9,3 % de los traumatizados encajó en una clase ATLS (' + PM(25284231, 'Mutschler 2014') + ').', citas: [C.t151] },
   { k: 'impella-fuentes', tipo: 'discrepan', txt: '<b>¿Qué bomba lleva el Impella?</b> Marino la llama «bomba centrífuga miniatura» y da 2,5-5,5 L/min según el catéter (p. 47). La Guía ESC 2026 de IC de la app habla de «bombas de flujo microaxial (hasta 4-5,5 l/min)». El dibujo enseña la hélice que describen las dos; el nombre del tipo de bomba no se elige.', citas: [C.impella, C.escMcs] },
   { k: 'scvo2-fuentes', tipo: 'discrepan', txt: '<b>ScvO₂ objetivo.</b> Marino (Tabla 14.5): ScvO₂ >50 %. El Manual UMI, para el shock séptico en sus 6 primeras horas: ScvO₂ ≥70 % (o SvO₂ ≥65 %). El monitor enseña las dos y no elige.', citas: [C.t145, C.umi6h] },
-  { k: 'pam-fuentes', tipo: 'discrepan', txt: '<b>PAM objetivo.</b> Marino: ≥65 mmHg (Tabla 14.5). El Manual UMI: TAM ≥65-70 mmHg en el séptico. El monitor marca con ≥65 y lo dice.', citas: [C.t145, C.umi6h] },
+  { k: 'pam-fuentes', tipo: 'discrepan', txt: '<b>PAM objetivo.</b> Marino: ≥65 mmHg (Tabla 14.5). El Manual UMI: TAM ≥65-70 mmHg en el séptico. El monitor marca con ≥65 y lo dice. Tras una parada, Marino sube el objetivo a ≥75 en las primeras horas (Tabla 21.4, p. 66-67): con Virginia, el monitor marca con ≥75.', citas: [C.t145, C.umi6h, C.t214] },
   { k: 'pcp-fuentes', tipo: 'discrepan', txt: '<b>PCP óptima.</b> La Tabla 16.2 da 19-20 mmHg; el texto de la misma página, 18-20. El monitor da por buena 18-20 y lo dice.', citas: [C.t162] },
   { k: 'hidrocortisona', tipo: 'discrepan', txt: '<b>Hidrocortisona y vasopresina en el séptico.</b> La Tabla 17.2 pide hidrocortisona con noradrenalina «>0,25 µg/kg/min»; el texto, «≥0,25». Para la vasopresina, la p. 15 dice «≥0,2» y la Tabla 17.2, «0,25-0,5».', citas: [C.t172, C.vasopresina] },
   { k: 'vasopresina-u', tipo: 'errata', txt: '<b>Unidad de la vasopresina.</b> El libro imprime «U/h» (Tabla 14.4, p. 13; p. 16). El mando usa 0,03 U/min, la dosis habitual (conocimiento general, no del libro).', citas: [C.vasopresina] },

@@ -15,6 +15,7 @@
 // Formato de `fuente`: «mar-elemento · mar-elemento (p. N)»; la interfaz lo convierte en «Ver en el texto» (enlaces a
 // la ficha) y en el chip de origen («ficha · p. N»), sin ids a la vista.
 
+import { derivarEco, ESTADO_TVP, GUIA_TVP } from './telar-vivo-data-tvp.js';
 export const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 export const copia = o => JSON.parse(JSON.stringify(o));
 export const PDF = p => `docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=${p}`;
@@ -145,6 +146,7 @@ export function derivar(e) {
     // el reloj neuroaxial
     D.reloj = Object.fromEntries(ORDEN_NEURO.map(k => [k, e.horas >= NEURO[k]]));
     D.antiXa = e.antiXa && ES_HBPM(e.farmaco) ? { objetivo: HEP.antiXa } : null;
+    D.eco = derivarEco(e);                                 // el estado «tvp» (telar-vivo-data-tvp.js)
     return D;
 }
 
@@ -295,6 +297,7 @@ export const GUIAS = {
         { t: 'Dabigatrán y rivaroxabán, ≥48 h. Con función renal normal o algo reducida; más tiempo si la insuficiencia renal es más grave.', resalta: CELDA(3), cita: TP('mar-neuroeje') },
     ],
 };
+ESTADOS.tvp = ESTADO_TVP; GUIAS.tvp = GUIA_TVP;   // TVP: eco de compresión (Marino cap. 22), con sus datos aparte
 // Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
 // explicación. Otro libro puede añadir las suyas (ESTADOS[k].fuentes.push) sin rehacer el modelo; nunca se funden.
 for (const [k, s] of Object.entries(ESTADOS)) {

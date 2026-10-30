@@ -285,9 +285,19 @@ export const GUIAS = {
   rcp: { tit: 'La RCP y la ETCO₂', pasos: [
     { t: 'Tus manos dan un flujo pequeño: mira la presión con cada compresión.', r: ['#rtv-art'], c: C.compres, org: 'cuánto: ilustrativo' },
     { t: 'La ETCO₂ sigue al gasto: con la ventilación fija, cambia en la misma proporción.', r: ['#rtv-co2', '[data-fila="co2"]'], c: C.etco2 },
-    { t: 'Ventilar deprisa (30 por minuto, el triple) no deja vaciar el pulmón: PEEP intrínseca, menos retorno y menos presión de perfusión coronaria.', r: ['#rtv-co2'], c: C.insufl },
+    { t: 'Se ha descrito una tasa media de 30 por minuto, el triple: no deja vaciar el pulmón: PEEP intrínseca, menos retorno y menos presión de perfusión coronaria.', r: ['#rtv-co2'], c: C.insufl },
     { t: 'La adrenalina cierra la periferia: la presión de perfusión coronaria sube un 30 % y dura al menos 3 minutos.', r: ['#rtv-g213'], c: C.adrenalina },
     { t: 'Si a los 20 min la ETCO₂ no pasa de 10-15 mmHg, es improbable que vuelva el pulso.', r: ['#rtv-g214'], c: C.f214, org: 'lectura del gráfico' }] },
+  rcpAdre: { tit: 'La RCP con adrenalina', pasos: [
+    { t: 'La presión de perfusión coronaria (PPC) es la aórtica menos la de la aurícula derecha entre compresiones: lo que empuja la sangre por las coronarias. Con buena RCP, 22 mmHg.', r: ['[data-fila="ppc"]', '#rtv-art'], c: C.adrenalina, org: 'lectura de la Fig. 21.3, p. 62' },
+    { t: 'La adrenalina vasoconstriñe en todo el cuerpo: la PPC sube un 30 % (22 → 29) y el efecto dura al menos 3 minutos, el intervalo entre dosis. Después decae (cómo: ilustrativo).', r: ['[data-fila="ppc"]', '#rtv-g213'], c: C.adrenalina, org: 'la figura llega a ~33: las fuentes discrepan' },
+    { t: 'Su cara mala es la estimulación β del corazón: puede anular el beneficio y se ha implicado en la disfunción cardíaca tras la resucitación.', r: ['#rtv-ecg'], c: C.adrenalina },
+    { t: 'Sube la recuperación del pulso (RCE), pero su efecto en la supervivencia no es claro. La pauta es repetirla cada 3-5 min, porque el efecto dura al menos 3 min; la fuente no dice qué pasa si se adelanta (el modelo no sube más la PPC: ilustrativo).', r: ['#rtv-bomba'], c: C.refractaria }] },
+  rcpInsufl: { tit: 'La RCP con 30 insuflaciones por minuto', pasos: [
+    { t: 'Lo recomendado tras intubar: 10 por minuto, una cada 6 s, con 500-600 mL por insuflación (o lo que eleve visiblemente el tórax).', r: ['#rtv-co2'], c: C.t212 },
+    { t: 'Se ha descrito una tasa media de 30 por minuto, el triple. No da tiempo a vaciar el pulmón: se acumula PEEP intrínseca.', r: ['#rtv-co2'], c: C.insufl },
+    { t: 'Dos efectos: menos retorno venoso y menos presión de perfusión coronaria. Aquí la PPC baja de 22 a ≈18 (cuánto: ilustrativo; la fuente solo dice que baja).', r: ['[data-fila="ppc"]', '#rtv-art'], c: C.insufl, org: 'el cuánto: ilustrativo' },
+    { t: 'La ETCO₂ cae de 20 a 13, pero se deduce que ya no mide solo el gasto (el libro solo da la regla con ventilación constante, p. 62).', r: ['[data-fila="co2"]', '#rtv-co2'], c: C.etco2, org: 'las cifras: ilustrativo' }] },
   refractaria: { tit: 'FV que no cede', pasos: [
     { t: 'Tres choques sin éxito: un buen resultado solo en el 5 %.', r: ['#rtv-desfib'], c: C.refractaria },
     { t: 'Con ECMO disponible las 24 horas, es una opción: se han descrito mejores resultados.', r: ['#rtv-vents'], c: C.refractaria },
@@ -303,7 +313,7 @@ export const GUIAS = {
     { t: 'Un corazón quieto en la eco del trauma predijo la muerte en el 100 %, pero los médicos no coinciden al verlo: las guías no lo usan para parar.', r: ['#rtv-vents'], c: C.eco }] },
   rce: { tit: 'Vuelve el pulso', pasos: [
     { t: 'Tras el choque y las compresiones, el nodo sinusal vuelve a mandar: P, QRS y pulso.', r: ['#rtv-sa', '#rtv-ecg'], c: C.desfib },
-    { t: 'La ETCO₂ sube de golpe y se mantiene; suele llegar a 40 mmHg o más.', r: ['#rtv-co2'], c: C.f212 },
+    { t: 'La ETCO₂ sube de golpe y se mantiene: «aumento brusco y sostenido, típicamente ≥40 mmHg» (Fig. 21.2, p. 61).', r: ['#rtv-co2'], c: C.f212 },
     { t: 'Es el principio: cerca del 70 % de los que recuperan el pulso no sobreviven a la hospitalización.', r: ['#rtv-vents'], c: C.posparo }] },
   stemi: { tit: 'ST elevado', pasos: [
     { t: 'Una zona del ventrículo sin riego: su músculo lesionado crea una corriente que levanta el ST.', r: ['#rtv-lesion'], c: C.scaEcg, org: 'el mecanismo: fisiología general' },

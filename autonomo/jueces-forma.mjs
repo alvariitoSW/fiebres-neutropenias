@@ -38,7 +38,7 @@ export const BANCOS = [
     { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
-    { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3a-shock.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
@@ -71,7 +71,7 @@ export const MODELOS = {
         estados: ['sano', 'herida', 'hit-argatroban', 'cid', 'transfusion-plaquetas', 'pfc-inr', 'hemorragia-masiva'] },
     // El shock a pie de cama (bloque 3): Explorar | ¿Qué shock es? | Mayéutica
     'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar', mayeutica: '#shv-modo-may' },
-        estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs'] },
+        estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3', 'ic-cpap'] },
     // El corazón eléctrico: el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },

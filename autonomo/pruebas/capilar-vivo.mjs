@@ -136,6 +136,26 @@ for (const [k, compr, nota] of [
   if (await desborde() > 0) ok(false, `desborde en «${k}»`);
   if (['dilucion', 'anemia-compensada', 'transfusion', 'trali', 'taco'].includes(k)) { await p.evaluate(() => document.getElementById('cpv-escena-bloque').scrollIntoView({ block: 'start' })); await p.waitForTimeout(300); await foto('04b-' + k); }
 }
+// 4c. La lupa del neutrófilo (cap. 17): las dos claves abren la lupa y pintan la cadena; el tope del O₂ (Tabla 21.4)
+for (const k of ['neutrofilo', 'reperfusion']) {
+  await abrirModelo(k); await p.waitForTimeout(REDUCIDO ? 300 : 1200);
+  const q = await p.evaluate(() => { const sv = document.getElementById('cpv-lupa-svg'); const ids = ['cadena', 'nadph', 'sup', 'h2o2', 'neu-flujo', 'fork', 'vaso', 'organo', 'fe'].filter(i => sv.querySelector('#cpv-lupa-' + i)); const pt = sv.querySelectorAll('#cpv-lupa-neu-flujo circle').length; return { ids, pt, titulo: sv.querySelector('#cpv-lupa-neu-titulo')?.textContent || '' }; });
+  const t = await T();
+  const esperado = k === 'neutrofilo' ? ['cadena', 'nadph', 'sup', 'h2o2', 'fork', 'fe'] : ['cadena', 'nadph', 'vaso', 'organo', 'fe'];
+  ok(t.lupa === 'neutrofilo' && t.estado.ros === k && esperado.every(i => q.ids.includes(i)) && (k === 'reperfusion' ? !q.ids.includes('fork') : !q.ids.includes('organo')) && q.pt >= 6 && /×20/.test(q.titulo),
+    `«${k}» abre la lupa del neutrófilo (${q.ids.join(', ')}; ${q.pt} puntos; ${q.titulo.slice(0, 40)})`);
+  ok(await p.evaluate(() => !document.querySelector('.tope-sello') && !!document.querySelector('.tope-aviso[data-tope="hiperoxia"]')), `«${k}»: aviso «solo si SaO₂ <90 %» y sin sello con la PaO₂ normal`);
+  await deslizar('#cpv-m-pao2', 100); await p.waitForTimeout(200);
+  const s2 = await T();
+  ok(await p.evaluate(() => !document.querySelector('.tope-sello') && /sin indicación/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '') && !/iperoxia/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '')) && s2.R.sao2 >= 90 && s2.estado.pao2 === 100, `«${k}» con PaO₂ 100 (SaO₂ ${s2.R.sao2} %): solo aviso «O₂ sin indicación», sin sello ni «hiperoxia»`);
+  ok(await p.evaluate(() => { const b = document.querySelector('[data-cpv-lupa="neutrofilo"]'); return !!b && !b.hidden && b.getBoundingClientRect().width > 0; }), `«${k}»: el botón de lupa «Neutrófilo» está en la barra`);
+  ok(await p.evaluate(() => /más/.test(document.getElementById('cpv-lupa-svg').textContent)), `«${k}»: el dibujo dice que con O₂ de más hay más daño`);
+  if (await desborde() > 0) ok(false, `desborde en «${k}»`);
+  await p.evaluate(() => document.getElementById('cpv-escena-bloque').scrollIntoView({ block: 'start' })); await p.waitForTimeout(300); await foto('04c-' + k);
+  await deslizar('#cpv-m-pao2', 90); await p.waitForTimeout(200);
+  ok(await p.evaluate(() => !document.querySelector('.tope-sello')), `«${k}»: al bajar la PaO₂ a 90 el sello se quita`);
+  if (!REDUCIDO && k === 'neutrofilo') { await p.waitForTimeout(21000); ok(await p.evaluate(() => /se apaga/.test(document.getElementById('cpv-lupa-neu-sub').textContent)), 'tras 20 «minutos» la lupa dice «el estallido se apaga»'); }
+}
 // la anemia del bloque 1 (gasto fijo) dice que es con el gasto fijo y enlaza con el corazón que compensa
 await abrirModelo('anemia'); await p.waitForTimeout(500);
 ok(await p.evaluate(() => /gasto fijo/.test(document.getElementById('cpv-frase').textContent) && !!document.querySelector('#cpv-frase [data-cpv-ir-estado="anemia-compensada"]')), '«Anemia, gasto fijo»: la frase dice «con el gasto fijo» y ofrece «¿Y si el corazón compensa?»');
@@ -398,7 +418,7 @@ for (let i = 0; i < CONCEPTOS.length; i++) {
 ok(await desborde() <= 0, `sin desborde en los ${CONCEPTOS.length} conceptos`);
 await pulsar('#cpv-modo-explorar');
 // Las tres lupas abren y cierran sin desbordar
-for (const l of ['tubo', 'alveolo', 'dedo', 'mito', 'boca']) {
+for (const l of ['tubo', 'alveolo', 'dedo', 'mito', 'boca']) {   // la del neutrófilo no tiene botón: se abre con sus estados (4c)
   await pulsar(`[data-cpv-lupa="${l}"]`); await p.waitForTimeout(REDUCIDO ? 50 : 400);
   ok((await T()).lupa === l && await desborde() <= 0, `la lupa «${l}» abre sin desbordar`);
 }

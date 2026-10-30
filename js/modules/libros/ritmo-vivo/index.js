@@ -16,7 +16,8 @@ export async function abrirEstado(clave, origen) {
     cargando = cargando || import('./pagina.js').then(m => { pagina = m; });
     await cargando;
     const [estado, farmaco] = String(clave || '').split(':');
-    pagina.abrirEstado(estado || 'sinusal', farmaco ? { farmaco } : {});
+    const rcp = estado === 'fv' && /^rcp/.test(farmaco || '') ? farmaco.slice(4) || 'base' : null;   // «fv:rcp», «fv:rcp-adre», «fv:rcp-insufl»
+    pagina.abrirEstado(estado || 'sinusal', rcp ? { rcp } : farmaco ? { farmaco } : {});
     requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
 }
 

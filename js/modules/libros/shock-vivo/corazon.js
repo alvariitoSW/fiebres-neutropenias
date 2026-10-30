@@ -17,11 +17,14 @@ const mezcla = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]
 instalarCorazonCorte();
 export const W = 360, H = 270;
 
+// El tabique: aplanado por la presión (formas.mjs) y, si el VD tiene el doble de volumen que el VI (Marino cap. 16, p. 40:
+// el VD dilatado empuja el tabique hacia el VI), abombado hacia el VI (más allá de plano, hasta 1,35 del corte)
+const septoCorte = (s) => { const t = cl(((s.vvd ?? 0) / Math.max(1, s.vvi ?? 1) - 1.5) / 1.5, 0, 1); return aplanamientoSeptal(s) * (1 + 0.35 * t * t * (3 - 2 * t)); };
 // Lo que el corte lee del motor en este instante (una sola lectura por fotograma)
 export function estadoCorte(cab) {
   const m = cab.m, s = m.s, u = cab.lectura?.u;
-  return { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vMit: s.vMit, vTri: s.vTri, vAo: s.vAo, septo: aplanamientoSeptal(s),
-    liquidoPeri: s.liquidoPeri ?? m.p.liquidoPeri ?? 0, dVci: modeloVci(u?.pvc ?? 4).dmax, flail: (m.p.eroaMitral || 0) >= 0.5, mioVi: m.p.mioVi ?? 1, mioVd: m.p.mioVd ?? 1 };
+  return { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, vMit: s.vMit, vTri: s.vTri, vAo: s.vAo, septo: septoCorte(s),
+    liquidoPeri: s.liquidoPeri ?? m.p.liquidoPeri ?? 0, dVci: modeloVci(u?.pvc ?? 4).dmax, flail: (m.p.eroaMitral || 0) >= 0.5, civ: (m.p.civ || 0) >= 0.2, mioVi: m.p.mioVi ?? 1, mioVd: m.p.mioVd ?? 1 };
 }
 
 // ---------------------------------------------------------------- los pulmones (grabado): lóbulos, cisuras, bronquios

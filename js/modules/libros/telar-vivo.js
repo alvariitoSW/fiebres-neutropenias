@@ -17,6 +17,8 @@ import { crearMayeuticaModelo, barajar, rutaDe, atributosFicha, entrar, pintarDo
 import { citaHTML, citaExacta, hrefPdf } from '../../core/citas.js';
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
+import { FRASE_ECO } from '../../data/telar-vivo-data-tvp.js';
+import { montarMandosEco } from './telar-vivo-tvp.js';
 import { montarCama7 } from './cama7.js';
 import {
     ESTADOS, RIESGOS, FARMACOS, CONCEPTOS, PREGUNTAS, CASOS, PROFUNDIZAR, LAMINAS, NEURO, NEURO_NOMBRE, ORDEN_NEURO, ES_HBPM, ES_HEPARINA,
@@ -40,7 +42,7 @@ const ALIAS = { 'Fig. 5.2': 'mar-img-5-2', 'Fig. 5.1': 'mar-img-5-1' };
 function idsDe(fuente) {
     const ids = [];
     for (const t of String(fuente || '').split(' · ')) {
-        const m = t.trim().match(/^#?(mar-[a-z0-9-]+)/);
+        const m = t.trim().match(/^#?((?:mar|nep)-[a-z0-9-]+)/);
         if (m) ids.push(m[1]);
         for (const [k, id] of Object.entries(ALIAS)) if (t.includes(k)) ids.push(id);
     }
@@ -101,10 +103,12 @@ function fraseDosis(e) {
     return [txt, 'mar-tabla-5-2 · mar-tabla-5-3 · mar-profilaxis-calc (p. 4, 7-9)'];
 }
 const FRASE_VISTA = {
+    eco: FRASE_ECO.entrada,
     tih: () => ['TIH: la heparina se une al <span class="hl">factor plaquetario 4</span>; el complejo atrae <span class="hl-rojo">IgG</span> que activan la plaqueta: <span class="hl-rojo">trombosis y trombocitopenia</span>. No depende de la dosis.', 'mar-hnf (p. 5)'],
     reloj: () => ['El reloj neuroaxial: horas desde la última dosis antes de una punción o un catéter epidural. El riesgo: un hematoma espinal y la parálisis.', 'mar-neuroeje (p. 9-10)'],
 };
 function fraseDe(v, n) {
+    if (n.vista === 'eco' && v.vista === 'eco') return FRASE_ECO.cambio(v, n);
     if (v.vista !== n.vista) {
         if (FRASE_VISTA[n.vista]) return FRASE_VISTA[n.vista]();
         if (v.vista !== 'telar') return FRASE_INICIO();
@@ -510,6 +514,7 @@ export function init() {
     if (!raiz) return null;
     initEscena();
     ganchos.despues = pintarDosis;
+    montarMandosEco($('eco-mandos'), cambiar);
     leyendas(); engancharDock(); crearGuia();
     raiz.addEventListener('click', ev => { const g = ev.target.closest('[data-tel-guia]'); if (g && modo === 'explorar') explicar(g.dataset.telGuia); });
     $('guia-abrir').addEventListener('click', () => { if (claveActual) explicar(claveActual); });

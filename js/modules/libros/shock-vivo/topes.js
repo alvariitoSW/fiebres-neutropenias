@@ -2,9 +2,12 @@
 // sale el conjunto de topes que toca poner; pagina.js los pasa a la pieza común js/core/tope.js.
 // Cada tope lleva su origen tal como lo da la tabla: ficha (con página), «fisiología general» o «ilustrativo».
 import * as D from '../../../data/shock-vivo-data.js';
+import { eroaDeG, civDeG, eesVdDeG } from './soporte.mjs';
+import { topesDiseccion } from './diseccion.js';
 const { C, TOPES: T } = D;
 const VOL = ['[data-vol]', '[data-sangre]'];
 const mL = (x) => Math.round(x).toLocaleString('es-ES');
+const c2 = (x, d = 2) => (+x).toFixed(d).replace('.', ',');
 
 let dadoVisto = 0;   // lo infundido en el cálculo anterior: distingue un bolo nuevo de un ECMO que sube la PCP solo
 export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
@@ -12,7 +15,16 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const boloNuevo = dado > dadoVisto; dadoVisto = dado;
   // 1) volumen: PCP ≥ 20, o PVC > 12 habiendo subido ≥ 4 sobre la de entrada (aviso desde PCP 15 o PVC 11)
   const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
-  if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
+  // el papilar y el septo llegan con la PCP en 20-30 sin volumen: es su cuadro; el sello llega con el primer bolo
+  const llegaAlta = (tipo === 'papilar' || tipo === 'septo' || tipo === 'ic') && dado === 0;
+  // con CPAP el aviso de «sin volumen» no vale: la PCP del monitor sube por la presión del tórax, no por el volumen
+  const cpapIc = tipo === 'ic' && dado === 0 && (X.ajuste.cpap || 0) > 0;
+  // Joaquín a las 08:25 sin volumen dado: la PCP sube con el betabloqueo (menos contractilidad), no con el suero; el aviso de volumen no toca
+  if (cpapIc || (tipo === 'diseccion' && dado === 0)) { /* sin aviso: ver la guía de ic-cpap / diseccion */ }
+  else if (D.sobrecarga(R) && llegaAlta) {
+    out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : tipo === 'ic' ? 'el VI que falla y no vacía la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
+      cita: C.llenado, origen: 'ficha · p. 42 · la PCP de este paciente: modelo', bajo: '#shv-dock-panel .rejilla' };
+  } else if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
     // con el ECMO y sin volumen nuevo, la PCP sube por la poscarga del VI, no por el suero
     out.sobrecarga = { nivel: 'sello', titulo: 'El ECMO sube la poscarga del VI', texto: `PCP ${R.pcp}: el flujo retrógrado del ECMO le sube la poscarga al VI y el pulmón se encharca; ventea (un balón o un Impella a la vez, o drenar el VI).${ed}`,
       cita: C.ecmoPoscarga, origen: 'ficha · p. 48-49 · la cifra: modelo', deshabilita: VOL };
@@ -23,9 +35,33 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
       : { nivel: 'sello', titulo: 'Sobrecarga de volumen', texto: `PVC ${R.pvc} (entró con ${R.pvc0}): la PVC predice mal la respuesta a volumen (Marik); el 12 es del modelo.${ed}`,
           origen: 'ilustrativo (el 12). La PVC predice mal la respuesta a volumen: Marik 2008, PMID 18628220; Marik 2013, PMID 23774337', deshabilita: VOL };
   } else if (D.avisoVolumen(R)) {
-    out.sobrecarga = { nivel: 'aviso', titulo: 'Cerca del techo',
-      texto: porPcp ? `PCP ${R.pcp}: la ficha para en 18-20.${ed}` : `PVC ${R.pvc}: la PVC predice mal la respuesta a volumen (Marik); el 12 es del modelo.`,
+    const sinVol = tipo === 'posparo' && dado === 0 && porPcp;   // el aturdimiento ya llega con la PCP alta: no es consecuencia de un mando
+    out.sobrecarga = { nivel: 'aviso', titulo: sinVol ? `PCP ${R.pcp}: sin volumen` : 'Cerca del techo',
+      texto: sinVol ? `Llega con la PCP en ${R.pcp} sin haber dado volumen (el VI aturdido): la ficha para el volumen en 18-20; no des más.` : porPcp ? `PCP ${R.pcp}: la ficha para en 18-20.${ed}` : `PVC ${R.pvc}: la PVC predice mal la respuesta a volumen (Marik); el 12 es del modelo.`,
       cita: porPcp ? C.llenado : undefined, origen: porPcp ? 'ficha · p. 42' : 'ilustrativo (el 12). La PVC predice mal la respuesta a volumen: Marik 2008, PMID 18628220', bajo: '#shv-dock-panel .rejilla' };
+  }
+  // 1a) el mando de gravedad de los tres del infarto: aviso al acercarse al tope y sello al pasarlo
+  if (tipo === 'papilar') {
+    const e = eroaDeG(X.g);
+    if (e > T.eroa) out.gravedad = { nivel: 'sello', titulo: 'Insuficiencia mitral masiva',
+      texto: `Orificio de ${c2(e)} cm², más de ${c2(T.eroa, 1)}: PAM ${R.pam}, IC ${c2(R.ic, 1)}, PCP ${R.pcp}. La ficha solo dice que la IM aguda amenaza la vida.`,
+      cita: C.papilar, origen: 'ficha · p. 38 (amenaza la vida) · el orificio y las cifras: ilustrativo', deshabilita: VOL };
+    else if (e >= T.eroaAviso) out.gravedad = { nivel: 'aviso', titulo: 'En el tope del orificio',
+      texto: `Orificio de ${c2(e)} cm²: el modelo llega a ${c2(T.eroa, 1)}; por encima, la IM ya es masiva.`, origen: 'ilustrativo (los cm²). La fuente solo da «insuficiencia mitral aguda» (p. 38)', bajo: '#shv-dock-panel .deslizador' };
+  } else if (tipo === 'septo') {
+    const c = civDeG(X.g);
+    if (c >= T.civ - 1e-9) out.gravedad = { nivel: 'sello', titulo: 'Cortocircuito masivo: colapso',
+      texto: `Orificio de ${c2(c)} cm²: Qp/Qs ${c2(R.qpqs, 1)}, PAM ${R.pam}, IC ${c2(R.ic, 1)}. El pulmón recibe ${c2(R.qpqs, 1)} veces lo que sale por la aorta.`,
+      cita: C.septo, origen: 'ficha · p. 38 (desvía flujo de la circulación sistémica) · el orificio y las cifras: ilustrativo', deshabilita: VOL };
+    else if (c >= T.civAviso) out.gravedad = { nivel: 'aviso', titulo: 'Cerca del cortocircuito masivo',
+      texto: `Orificio de ${c2(c)} cm²: Qp/Qs ${c2(R.qpqs, 1)}; el sello llega con ${c2(T.civ, 1)} cm².`, origen: 'ilustrativo (los cm²). La fuente solo da «gran shunt izquierda-derecha» (p. 38)', bajo: '#shv-dock-panel .deslizador' };
+  } else if (tipo === 'vd') {
+    const ees = eesVdDeG(X.g);
+    if (ees <= 0.1 + 1e-9) out.gravedad = { nivel: 'sello', titulo: 'VD sin fuerza',
+      texto: `Ees del VD al ${Math.round(ees * 100)} % de la normal: PVC ${R.pvc}, PCP ${R.pcp}, IC ${c2(R.ic, 1)}. Por debajo, el modelo ya no es un paciente.`,
+      cita: C.vd, origen: 'ficha · p. 40 (la dirección: sube la PVC) · el 10 % y las cifras: ilustrativo', deshabilita: VOL };
+    else if (X.g >= T.vdGAviso) out.gravedad = { nivel: 'aviso', titulo: 'Cerca del límite del VD',
+      texto: `Ees del VD al ${Math.round(ees * 100)} % de la normal: el modelo llega al 10 %.`, origen: 'ilustrativo (el 10 %). La fuente solo da la dirección (p. 40)', bajo: '#shv-dock-panel .deslizador' };
   }
   // 1b) el pulmón encharcado: con el edema por encima de 1.000 mL y la SpO₂ cayendo, el paciente no lo aguanta sin ventilar
   if (R.edema >= T.edemaSello) out.edema = { nivel: 'sello', titulo: 'Edema de pulmón',
@@ -56,8 +92,23 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
     cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · el fármaco: ficha p. 12-13' };
   else if (R.pam > 100 && (X.ajuste.na > 0 || X.ajuste.vaso)) out.vaso = { nivel: 'aviso', titulo: 'Presión alta con vasopresor',
     texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
+  // 4b) la CPAP: usualmente 5-10 cmH₂O (resp. p. 77). «Mal tolerada y con fugas» es de la ventilación no invasiva con dos niveles, no de la CPAP: aquí el mismo tope es por analogía. En el seco, además, le quita el gasto (p. 85, 88)
+  const cp = X.ajuste.cpap || 0;
+  if (cp > T.cpap) out.cpap = { nivel: 'sello', titulo: 'CPAP por encima de 10',
+    texto: `CPAP ${cp}: Marino da 5-10 para la CPAP y, en la ventilación no invasiva con dos niveles, desaconseja presiones mayores (mal toleradas, fugas por la mascarilla); aquí se aplica el mismo límite por analogía. VS ${R.vs} mL, IC ${c2(R.ic, 1)}, PAM ${R.pam}, FC ${R.fc}${tipo === 'ic' ? '' : ': en quien no tiene el corazón enfermo, la presión le frena el retorno venoso y el gasto cae'}.`,
+    cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10 para la CPAP; la frase de mal tolerada y fugas es de la VNI con dos niveles; el tope, por analogía) y p. 85, 88 (la caída del gasto) · las cifras: modelo', deshabilita: ['[data-cpap="15"]'] };
+  else if (cp === T.cpap) out.cpap = { nivel: 'aviso', titulo: 'En el tope de la CPAP',
+    texto: `CPAP ${cp}: es el máximo habitual (5-10); por encima, la fuente no da cifra para la CPAP (en la VNI con dos niveles desaconseja subir: mal tolerada, fugas).`, cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10) · analogía con la VNI con dos niveles (la frase de mal tolerada y fugas es de esa)', bajo: '#shv-dock-panel [aria-label^="CPAP"]' };
+  // 4c) Joaquín a las 08:25: los topes de sus fármacos (diseccion.js)
+  if (tipo === 'diseccion') { Object.assign(out, topesDiseccion(R, X, horas, horaTxt)); return out; }
   // 5) el reloj: 48 h
-  if (horas >= T.horas) out.reloj = { nivel: 'sello', titulo: 'Reloj agotado',
+  if (tipo === 'posparo') {
+    // el reloj es el de la RCE: 72 h («suele resolverse en 72 h», p. 65); pasado, las cifras ya no cambian
+    if (X.hPos >= T.horasPosparo) out.reloj = { nivel: 'sello', titulo: 'Pasadas las 72 h',
+      texto: 'El aturdimiento suele estar resuelto y las cifras ya no cambian. Si el paciente siguiera en shock, ya no sería aturdimiento: la fuente no dice más.', cita: C.posparo, origen: 'ficha · p. 65', deshabilita: ['[data-h]'] };
+    else if (X.hPos >= T.horasPosparoAviso) out.reloj = { nivel: 'aviso', titulo: 'Casi 72 horas',
+      texto: `${Math.round(X.hPos)} h tras la RCE: a las 72 h el aturdimiento suele estar resuelto.`, cita: C.posparo, origen: 'ficha · p. 65', bajo: '#shv-dock-panel .rejilla' };
+  } else if (horas >= T.horas) out.reloj = { nivel: 'sello', titulo: 'Reloj agotado',
     texto: 'Dos días de seguimiento: el lactato y la diuresis ya no cuentan nada nuevo.', origen: 'ilustrativo', deshabilita: ['[data-h]'] };
   else if (horas >= T.horasAviso) out.reloj = { nivel: 'aviso', titulo: 'Casi dos días',
     texto: `${horaTxt()}: el lactato ya no cuenta nada nuevo.`, origen: 'ilustrativo', bajo: '#shv-dock-panel .rejilla' };

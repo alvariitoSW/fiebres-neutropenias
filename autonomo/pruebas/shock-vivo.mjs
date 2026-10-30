@@ -50,7 +50,7 @@ await p.goto(BASE, { waitUntil: 'networkidle' }); await p.waitForTimeout(600);
 ok(await p.evaluate(() => !window.__shvPruebas), 'al arrancar la app el modelo NO está montado (lo pesado se monta al primer abrir)');
 
 // ───────── A. Accesos: cada estado de la tabla F
-const F = { hemo: ['mateo', 'vol'], septico: ['amparo', 'far'], cardio: ['aurelio', 'vol'], tapon: ['joaquin', 'grav'], tep: ['consuelo', 'vol'], balon: ['aurelio', 'sop'], impella: ['aurelio', 'sop'], ecmo: ['aurelio', 'sop'] };
+const F = { posparo: ['virginia', 'grav'], hemo: ['mateo', 'vol'], septico: ['amparo', 'far'], cardio: ['aurelio', 'vol'], tapon: ['joaquin', 'grav'], tep: ['consuelo', 'vol'], balon: ['aurelio', 'sop'], impella: ['aurelio', 'sop'], ecmo: ['aurelio', 'sop'] };
 for (const [k, [pc, pt]] of Object.entries(F)) {
     await abrir(k); await espera(1800);
     const r = await S();
@@ -66,9 +66,142 @@ await abrir('qs'); await espera(900);
 ok(await p.evaluate(() => !document.getElementById('shv-zona-qs').hidden), 'acceso «qs»: «¿Qué shock es?» a la vista'); await limpio('acceso qs'); await foto('qs');
 await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un estado desconocido abre el modelo igualmente');
 
+// ───────── A2. Posparo: el mando es «horas tras la RCE» (0 → 72 h); la Ees se recupera con él (Marino cap. 21, p. 64)
+{
+    await abrir('posparo'); await espera(1500); await pest('grav');
+    const rango = await p.evaluate(() => { const d = document.getElementById('shv-d-grav'); return [d.min, d.max]; });
+    ok(rango[0] === '0' && rango[1] === '72', `posparo: el mando de gravedad va de 0 a 72 h (${rango.join('-')})`);
+    const entre = (v, a, b) => v >= a && v <= b;
+    // 0 h, sin noradrenalina: shock cardiogénico (IC <2,2, Tabla 14.1), PAM <65, PCP por debajo de la diastólica pulmonar
+    await grav(0); let r = await S();
+    ok(entre(r.pam, 50, 66) && entre(r.ic, 1.6, 2.1) && entre(r.pcp, 16, 20) && r.papd >= r.pcp && entre(r.fc, 100, 130) && r.lact >= 3, `posparo 0 h: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp} (PAPd ${r.papd}) lactato ${r.lact}`);
+    ok(r.estado === 'Posparo: miocardio aturdido', `posparo 0 h: el estado se llama «${r.estado}»`);
+    posible(r, 'posparo 0 h');
+    // 24 h con noradrenalina 5 µg/min
+    await grav(24); await pest('far'); await clic('#shv-dock-panel [data-na="5"]'); await espera(1500); r = await S();
+    ok(entre(r.pam, 72, 84) && entre(r.ic, 2.1, 2.7) && entre(r.pcp, 13, 19) && r.papd >= r.pcp && r.na === 5, `posparo 24 h + NA 5: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp} (PAPd ${r.papd})`);
+    // 72 h sin noradrenalina
+    await clic('#shv-dock-panel [data-na="0"]'); await pest('grav'); await grav(72); await espera(500); r = await S();
+    ok(entre(r.pam, 80, 95) && entre(r.pas, 100, 125) && entre(r.ic, 2.6, 3.1) && entre(r.pcp, 8, 12) && entre(r.fc, 65, 90) && r.na === 0, `posparo 72 h: PA ${r.pas}/${r.pad} PAM ${r.pam} FC ${r.fc} IC ${r.ic} PCP ${r.pcp}`);
+    ok(r.estado === 'Posparo: a las 72 h', `posparo 72 h: el estado se llama «${r.estado}»`);
+    const sello = await p.evaluate(() => /Pasadas las 72 h/.test(document.getElementById('shv-raiz').innerText)); ok(sello, 'posparo 72 h: sello «Pasadas las 72 h» con su consecuencia');
+    // 80 h: el mando no pasa de 72 y las cifras no cambian
+    await grav(80); const r80 = await S();
+    ok(r80.pam === r.pam && r80.ic === r.ic && r80.pcp === r.pcp, `posparo 80 h: igual que a las 72 h (IC ${r80.ic}, PAM ${r80.pam}, PCP ${r80.pcp})`);
+    // el reloj de la RCE: desde 0 h, +18 h x4 llega a 72 y el botón se apaga
+    await grav(0); await pest('reloj'); let veces = 0;
+    for (; veces < 6; veces++) { const hay = await p.evaluate(() => { const b = document.querySelector('#shv-dock-panel [data-h="18"]'); if (!b || b.disabled) return false; b.click(); return true; }); if (!hay) break; await espera(400); }
+    r = await S(); ok(veces === 4 && r.ic >= 2.6 && r.pcp <= 12, `posparo: +18 h ×${veces} lleva el reloj a las 72 h y apaga el botón (IC ${r.ic}, PCP ${r.pcp})`);
+    ok(r.pam >= 35, 'posparo: PAM posible tras el reloj'); await limpio('posparo');
+    // el monitor marca la PAM con ≥75 (Tabla 21.4)
+    await pest('grav'); await grav(0); const marca = await p.evaluate(() => document.querySelector('#shv-raiz [data-fila="pa"]')?.innerText || ''); ok(/75/.test(marca), `posparo: la PAM se compara con ≥75 (${marca.replace(/\s+/g, ' ').trim().slice(0, 50)})`);
+}
+
+// ───────── A3. Los tres del infarto (b3-paso4 g3): Benito (rotura del papilar), Fermín (infarto del VD), Remedios (rotura del septo)
+{
+    const esp = ms => espera(ms), entre = (v, a, b) => v >= a && v <= b;
+    const celda = k => p.evaluate(k => document.querySelector(`#shv-raiz [data-fila="${k}"]`)?.innerText.replace(/\s+/g, ' ') || '', k);
+    // Benito: IM aguda; el chorro del corte, PCP a la altura de la diastólica de la AP, FR ≥50 %, SpO₂ baja
+    await abrir('rotura-papilar'); await esp(1800);
+    let r = await S();
+    ok(await vista() && r.pac === 'benito' && r.estado === 'Rotura del músculo papilar', `rotura-papilar: abre Benito, estado «${r.estado}»`);
+    ok(r.ic < 2.2 && r.pcp >= 25 && r.pcp <= r.papd && r.frmit >= 50 && r.spo2 >= 78 && r.spo2 <= 90 && r.pam >= 55, `Benito: IC ${r.ic} PCP ${r.pcp} ≤ PAPd ${r.papd} FR mitral ${r.frmit} % SpO₂ ${r.spo2} PAM ${r.pam}`);
+    // el chorro se pinta solo en la sístole (y con «reducir movimiento» el fotograma puede ser de diástole): se exige el dato (flail) y, con movimiento, verlo
+    const eroa = await p.evaluate(() => window.__shvPruebas().cab.m.p.eroaMitral);
+    let chorro = false; for (let i = 0; i < 80 && !chorro && !REDUCIDO; i++) { chorro = await p.evaluate(() => !!document.querySelector('#shv-raiz .cc-chorro')); if (!chorro) await p.waitForTimeout(90); }
+    ok(eroa >= 0.5 && (chorro || REDUCIDO), `Benito: orificio ${eroa} cm² (flail ≥0,5) y el corte dibuja el chorro de la insuficiencia mitral${REDUCIDO ? ' (con «reducir movimiento» solo el dato)' : ''}`);
+    ok(/FR mitral/.test(await celda('frmit')) && /FEVI/.test(await celda('fevi')), 'Benito: las celdas FR mitral y FEVI en el monitor');
+    posible(r, 'Benito 0,65 cm²'); await limpio('Benito'); await foto('benito');
+    await pest('grav'); await desplegar();
+    ok(entre(r.pam, 55, 70) && await p.evaluate(() => /0,65 cm²/.test(document.getElementById('shv-o-grav').innerText)), 'Benito: el mando dice «orificio mitral 0,65 cm²» y la PAM aguanta');
+    await grav(100); r = await S(); posible(r, 'Benito orificio 1,0 cm²');
+    ok(r.sellos.some(t => /Insuficiencia mitral masiva/.test(t)), `Benito 1,0 cm²: sello «Insuficiencia mitral masiva» (${r.sellos.join(' | ')})`);
+    await pest('vol'); ok(/3\/3/.test(await apagados('#shv-dock-panel [data-vol]')), 'Benito 1,0 cm²: los botones de volumen se apagan'); await limpio('Benito tope'); await foto('benito-tope');
+    await pest('grav'); await grav(71); r = await S(); ok(!r.sellos.some(t => /masiva/.test(t)), 'Benito: de vuelta a 0,80 cm² (el tope) el sello se va');
+    await pest('vol'); await clic('#shv-dock-panel [data-vol="250"]'); await esp(900); r = await S();
+    ok(r.estado === 'Sobrecarga de volumen' && r.sellos.some(t => /Sobrecarga/.test(t)), `Benito: con el primer bolo, sello de sobrecarga (PCP ${r.pcp})`); posible(r, 'Benito +250');
+    // Fermín: falla el derecho; PVC > PCP, FEVI conservada, VD dilatado, líquidos rotulados
+    await abrir('iam-vd'); await esp(1800); r = await S();
+    ok(r.pac === 'fermin' && r.estado === 'Infarto del ventrículo derecho', `iam-vd: abre Fermín, estado «${r.estado}»`);
+    ok(r.pvc > r.pcp && r.pvc >= 12 && r.pvc <= 18 && r.fevi >= 50 && r.vdvi >= 1 && r.ic < 2.2 && r.ic >= 1.6 && r.pcp <= 12, `Fermín: PVC ${r.pvc} > PCP ${r.pcp}, FEVI ${r.fevi} %, VD/VI ${r.vdvi}, IC ${r.ic}`);
+    posible(r, 'Fermín'); await limpio('Fermín'); await foto('fermin');
+    await pest('grav'); await desplegar();
+    ok(await p.evaluate(() => /Ees del VD al 15 % de la normal/.test(document.getElementById('shv-o-grav').innerText) && !/mL de líquidos/.test(document.getElementById('shv-o-grav').innerText) && /1\.250 mL de líquidos de urgencias \(ilustrativo\)/.test(document.getElementById('shv-frase').innerText)), 'Fermín: el mando rotula la Ees (15 %) y los 1.250 mL de líquidos van en la frase viva como partida, no en el mando');
+    ok(/VD\/VI/.test(await celda('vdvi')) && /PVC\/PCP/.test(await celda('pvcpcp')), 'Fermín: las celdas VTD VD/VI y PVC/PCP');
+    await grav(0); r = await S(); ok(r.estado === 'Sin shock' && r.pvc < r.pcp + 1 && r.ic >= 2.2, `Fermín sano (Ees 60 %, con los líquidos de partida): ${r.estado}, PVC ${r.pvc}, PCP ${r.pcp}, IC ${r.ic}`);
+    await grav(100); r = await S(); posible(r, 'Fermín Ees 10 %');
+    ok(r.sellos.some(t => /VD sin fuerza/.test(t)), `Fermín Ees 10 %: sello «VD sin fuerza» (${r.sellos.join(' | ')})`); await limpio('Fermín tope');
+    // Remedios: Qp/Qs y el salto de saturación AD → AP; FEVI que cuenta la aorta y el VD
+    await abrir('rotura-septo'); await esp(1800); r = await S();
+    ok(r.pac === 'remedios' && r.estado === 'Rotura del tabique interventricular', `rotura-septo: abre Remedios, estado «${r.estado}»`);
+    ok(r.qpqs >= 2 && r.qpqs <= 2.6 && r.satAp - r.satAd >= 15 && r.satAp >= 65 && r.satAp <= 82 && r.ic < 2.2 && r.pcp <= r.papd && r.fevi >= 28, `Remedios: Qp/Qs ${r.qpqs}, SatAD ${r.satAd} → SatAP ${r.satAp}, IC ${r.ic}, PCP ${r.pcp} ≤ PAPd ${r.papd}, FEVI ${r.fevi} %`);
+    ok(/Qp:Qs/.test(await celda('qpqs')) && /AD/.test(await celda('satad')) && /AP/.test(await celda('satap')), 'Remedios: Qp:Qs y las dos saturaciones en el monitor');
+    posible(r, 'Remedios 0,3 cm²'); await limpio('Remedios'); await foto('remedios');
+    await pest('grav'); await desplegar(); await grav(50); r = await S(); ok(!r.sellos.some(t => /colapso/i.test(t)) && r.avisos.some(t => /Cerca/.test(t)), `Remedios 0,5 cm²: aviso «Cerca del cortocircuito masivo» (${r.avisos.join(' | ')})`);
+    await grav(70); r = await S(); posible(r, 'Remedios 0,7 cm²');
+    ok(r.sellos.some(t => /Cortocircuito masivo: colapso/.test(t)) && r.qpqs >= 3, `Remedios 0,7 cm²: sello «colapso», Qp/Qs ${r.qpqs}`);
+    await grav(100); r = await S(); posible(r, 'Remedios 1,0 cm²'); ok(r.pam >= 35 && r.pam < 60, `Remedios 1,0 cm²: PAM ${r.pam} (colapso)`); await limpio('Remedios tope'); await foto('remedios-tope');
+    await pest('far'); await limpio('Remedios farmacos');
+}
+// Ramiro (b3-paso4 g4): las tres etapas de la IC izquierda (Fig. 18.3) por franjas, no por cifra exacta (las de la figura no cuadran entre sí)
+{
+    let r; const F = {
+        'ic-etapa-1': ['IC izquierda, etapa 1', r => r.pcp >= 18 && r.fc < 90 && r.ic >= 3.0],
+        'ic-etapa-2': ['IC izquierda, etapa 2', r => r.fc >= 90 && r.ic >= 3.0],
+        'ic-etapa-3': ['IC izquierda, etapa 3', r => r.ic >= 1.8 && r.ic <= 2.2 && r.pam >= 65 && r.pcp <= 32] };
+    for (const k of Object.keys(F)) {
+        await abrir(k); await espera(1800); r = await S();
+        ok(r.pac === 'ramiro' && r.estado === F[k][0] && F[k][1](r), `${k}: abre Ramiro, estado «${r.estado}», PCP ${r.pcp}, FC ${r.fc}, IC ${r.ic}, PAM ${r.pam}`);
+        posible(r, k); await limpio(k);
+    }
+    await pest('grav'); await desplegar();
+    for (const g of [0, 25, 50, 75, 100]) { await grav(g); r = await S(); posible(r, `Ramiro ${g} %`); ok(r.pcp <= 32 && r.pam >= 65, `Ramiro ${g} %: PCP ${r.pcp}, PAM ${r.pam}, estado «${r.estado}»`); await limpio('Ramiro ' + g); }
+}
+// CPAP (b3-paso4 g4): Ramiro con CPAP 0 -> 10 -> 15. En el corazón que falla el gasto se sostiene y el edema baja; al pasar de 10, sello
+{
+    let r;
+    await abrir('ic-cpap'); await espera(1800); r = await S();
+    ok(r.pac === 'ramiro' && /con CPAP/.test(r.estado), `ic-cpap: abre Ramiro, estado «${r.estado}»`);
+    const e10 = await p.evaluate(() => window.__shvPruebas().R.edema); const vs10 = r.vs, ic10 = r.ic;
+    ok(r.ic >= 1.6 && r.ic <= 2.2 && r.pam >= 65 && r.pcp <= 34 && !r.sellos.some(t => /CPAP/.test(t)), `ic-cpap: IC ${r.ic}, VS ${r.vs}, PCP ${r.pcp}, PAM ${r.pam}, sellos [${r.sellos.join(' | ')}]`);
+    posible(r, 'ic-cpap'); await limpio('ic-cpap');
+    await pest('sop'); await clic('#shv-dock-panel [data-cpap="0"]'); await espera(1500); r = await S();
+    const e0 = await p.evaluate(() => window.__shvPruebas().R.edema);
+    ok(e0 > e10 && Math.abs(r.vs - vs10) <= 3, `Ramiro CPAP 0 -> 10: el edema baja (${Math.round(e0)} -> ${Math.round(e10)} mL) y el VS se sostiene (${r.vs} -> ${vs10})`);
+    await clic('#shv-dock-panel [data-cpap="15"]'); await espera(1500); r = await S(); posible(r, 'Ramiro CPAP 15');
+    ok(r.sellos.some(t => /CPAP por encima de 10/.test(t)), `Ramiro CPAP 15: sello (${r.sellos.join(' | ')})`);
+    ok(await p.evaluate(() => document.querySelector('#shv-dock-panel [data-cpap="15"]')?.disabled === true), 'Ramiro CPAP 15: el mando del 15 queda apagado');
+    await limpio('Ramiro CPAP 15'); await foto('cpap-15');
+    await abrir('hemo'); await espera(1200); await pest('sop'); r = await S();   // el mando CPAP solo aparece con Ramiro: en el seco no existe (paciente imposible, REGLAS 1.14)
+    ok(await p.evaluate(() => !document.querySelector('#shv-dock-panel [data-cpap]')), 'Mateo (hemorragia): sin mando CPAP en Soporte'); posible(r, 'hemo sin CPAP'); await limpio('hemo sin CPAP');
+}
+
+// ───────── A4. La disección (b3-paso4 g5, 5d): las 4 recetas con la DIRECCIÓN de la FC y los sellos (Marino cap. 20, p. 51-52)
+{
+    const dock = (ds, v) => p.evaluate(([ds, v]) => { const e = document.querySelector(`#shv-dock-panel [data-ds="${ds}"]${v != null ? `[data-v="${v}"]` : ''}`); if (!e) throw new Error('no hay ' + ds); if (e.disabled) return false; e.click(); return true; }, [ds, v]);
+    const sello = async re => { await espera(1300); return p.evaluate(re => [...document.querySelectorAll('#shv-raiz [class*="tope-sello"]')].some(e => e.getClientRects().length && new RegExp(re, 'i').test(e.textContent)), re.source); };
+    await abrir('diseccion'); await espera(1800);
+    const base = await S(); ok(base.pac === 'joaquin-0', 'disección: abre con Joaquín a las 08:25'); posible(base, 'disección base');
+    ok(!await sello(/Cizalla|Objetivo|tolerado/), 'disección base: sin sello');
+    await dock('ni-sube'); await dock('ni-sube'); await dock('ni-sube'); await espera(1300);
+    const ni = await S(); ok(ni.pas < base.pas && ni.fc > base.fc && ni.ic > base.ic, `receta 1, nicardipino solo: la PAS baja (${base.pas}→${ni.pas}) y la FC (${base.fc}→${ni.fc}) y el IC (${base.ic}→${ni.ic}) SUBEN`);
+    ok(await sello(/Cizalla/), 'receta 1: sello «Cizalla ↑»'); posible(ni, 'disección nicardipino solo'); await limpio('disección nicardipino solo'); await foto('diseccion-cizalla');
+    await dock('cero'); await dock('es-bolo'); await dock('es-sube'); for (let i = 0; i < 2; i++) { await dock('es-bolo'); await dock('es-sube'); } await espera(1300);
+    const es = await S(); ok(es.fc < base.fc && es.ic < base.ic && es.pas < base.pas, `receta 2, esmolol 100: la FC BAJA (${base.fc}→${es.fc}), el IC baja (${base.ic}→${es.ic}) y la PAS baja (${base.pas}→${es.pas})`);
+    ok(!await sello(/Cizalla/), 'receta 2: sin sello de cizalla'); posible(es, 'disección esmolol');
+    await dock('ni-sube'); await dock('ni-sube'); await espera(1300);
+    const dos = await S(); ok(dos.pas < es.pas && dos.pas >= 90 && dos.fc < base.fc, `receta 3, esmolol + nicardipino 7,5: PAS ${dos.pas} (≥90, bajo la de esmolol solo ${es.pas}) con FC ${dos.fc} que sigue baja`);
+    ok(await sello(/Objetivo/), 'receta 3: sello «Objetivo»'); posible(dos, 'disección esmolol + nicardipino'); await limpio('disección objetivo'); await foto('diseccion-objetivo');
+    for (let i = 0; i < 4; i++) await dock('ni-sube'); await dock('nit', '3'); await espera(1300);
+    const bajo = await S(); ok(bajo.pas < 90, `receta 4, de más: PAS ${bajo.pas} <90`); ok(await sello(/Por debajo de lo tolerado/), 'receta 4: sello «Por debajo de lo tolerado» con PAS <90'); posible(bajo, 'disección PAS <90'); await foto('diseccion-pas90');
+    ok(await p.evaluate(() => { const e = document.querySelector('#shv-dock-panel [data-ds="ni-sube"]'); return e && e.disabled; }), 'tope: el nicardipino en 15 mg/h apaga su botón de subir');
+    await dock('cero'); await dock('es-bolo'); await dock('es-sube'); for (let i = 0; i < 6; i++) { await dock('es-bolo'); await dock('es-sube'); } await espera(1000);
+    ok(await p.evaluate(() => { const e = document.querySelector('#shv-dock-panel [data-ds="es-sube"]'); return e && e.disabled; }), 'tope: el esmolol en 200 µg/kg/min apaga su botón de subir'); await limpio('disección esmolol al máximo');
+}
+
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
-for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
+for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
     await pac(k); await pest('grav');
     for (const g of [0, 50, 100]) { await grav(g); const r = await S(); posible(r, `${k} gravedad ${g} %`); ok(!/undefined|NaN/.test(r.frase), `${k} g${g}: la frase viva sin undefined/NaN`); }
     await limpio(`paciente ${k}`);
@@ -76,7 +209,7 @@ for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
 
 // ───────── C. Topes: cada mando a su tope (REGLAS §1.14)
 // Volumen: +2 L hasta que el botón se apaga (o 12 veces), con sello, y constantes posibles
-for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo']) {
+for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
     await abrir('hemo'); await pac(k); await pest('grav'); await grav(100); await pest('vol');
     let n = 0; for (; n < 12; n++) { const hay = await p.evaluate(() => { const b = document.querySelector('#shv-dock-panel [data-vol="2000"]'); if (!b || b.disabled) return false; b.click(); return true; }); if (!hay) break; await espera(250); }
     const r = await S(); posible(r, `${k} +2 L ×${n}`);
@@ -138,7 +271,7 @@ for (const [k, n] of [['impella', 8], ['balon', 5], ['ecmo', 5]]) {
     await clic('#shv-esc-pest [data-plano="recorrido"]'); await espera(500); await limpio('recorrido ' + k);
 }
 // ───────── E. Explicación guiada: señala y cada cita llega a un párrafo que existe
-for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo']) {
+for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3', 'ic-cpap']) {
     await abrir(k); await espera(900); await clic('#shv-btn-guia'); await espera(500);
     let pasos = 0, sinSenal = 0, citasRotas = [];
     for (; pasos < 8; pasos++) {
