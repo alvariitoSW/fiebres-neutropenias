@@ -40,7 +40,8 @@ export function calcularTopes(S, l, kg) {
   if (l.cabe === false) out.cabe = { nivel: 'aviso', titulo: 'No cabe la espiración', texto: `Con este Vt, flujo y frecuencia la espiración no cabe en el ciclo (FR real ${f1(l.frReal)}): el pulmón no se vacía.`, cita: C.flujoIE, origen: 'ficha · I:E ≥ 1:2, cap. 27 p. 14' };
   // 4) los sellos: uno solo a la vez (el más grave); los demás bajan a aviso
   const sellos = [];
-  if (l.vm != null && l.vm < T.vmMin) sellos.push({ k: 'sinvent', titulo: 'Sin ventilación eficaz', texto: `Vt ${f1(l.vtExh)} mL y volumen minuto ${f1(l.vm)} L/min: el paciente no se ventila y el CO₂ sube. Baja la resistencia o sube la alarma de presión.`, cita: C.t245, origen: 'ilustrativo · el 2: la ficha no da un mínimo de VM (cap. 27 p. 14 habla de VM alta ≥10 L/min)' });
+  // CPAP (psv con soporte 0, estado cpap-eap): el paciente respira por su cuenta y el modelo no calcula ese volumen; no es «sin ventilación»
+  if (l.vm != null && l.vm < T.vmMin && !(r.modo === 'psv' && r.ps === 0)) sellos.push({ k: 'sinvent', titulo: 'Sin ventilación eficaz', texto: `Vt ${f1(l.vtExh)} mL y volumen minuto ${f1(l.vm)} L/min: el paciente no se ventila y el CO₂ sube. Baja la resistencia o sube la alarma de presión.`, cita: C.t245, origen: 'ilustrativo · el 2: la ficha no da un mínimo de VM (cap. 27 p. 14 habla de VM alta ≥10 L/min)' });
   if (l.vm != null && l.vm > T.vmMax) sellos.push({ k: 'vmalto', titulo: 'Combinación no fisiológica', texto: `Volumen minuto de ${f1(l.vm)} L/min: por encima de 20 casi nadie lo mantiene.`, cita: C.t271, origen: 'ilustrativo · el 20: Tuxen 1987 (PMID 3662241) llegó a 26 L/min en obstrucción grave, con hipotensión' });
   if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: el doble del volumen normal (6-7); el daño por volumen se explica en el SDRA.`, cita: C.vtTrad, origen: ORG_12 });
   const pt = l.palvFinEsp;

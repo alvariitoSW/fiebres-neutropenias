@@ -202,6 +202,38 @@ for (const k of ORDEN_ESTADOS) {
   ok(!tapa.choca, `el sello no tapa el rótulo «PEEP» (${tapa.ns} sello(s), ${tapa.np} rótulo(s))`);
   await foto('racimo-peep0');
 }
+// E3-enganche
+// ───────── E3-enganche · el corazón con la presión del pulmón (par 7 de papel-pulmon.md §6), leído del panel de la app
+{
+  const cor = (k) => p.evaluate(k => { const e = document.querySelector(`#pul-corazon [data-fila="cor-${k}"]`); return e ? (e.querySelector('.v')?.textContent ?? '') : ''; }, k);
+  const nCor = async k => num(await cor(k));
+  const antes = () => p.evaluate(() => document.getElementById('pul-corazon').dataset.presion || '');
+  const llega = async (previa) => { try { await p.waitForFunction(pr => { const s = document.getElementById('pul-corazon'); return !s.hidden && s.dataset.presion && s.dataset.presion !== pr && !/…/.test(s.textContent); }, previa, { timeout: 12000 }); } catch {} await espera(150); };
+  // CPAP en el EAP: 0 → 5 → 10; VS, GC y PAM suben (Bradley 1992; Marino pdf 83-88)
+  await abrir('cpap-eap'); await espera(900); await llenar();
+  await llega('');
+  const v = { 0: await nCor('vs') }, g = { 0: await nCor('gc') }, pa = { 0: await nCor('pam') };
+  ok(await p.evaluate(() => !document.getElementById('pul-corazon').hidden) && (await p.evaluate(() => window.__pulPruebas().est.pac.k)) === 'herminia', 'cpap-eap: Herminia, y el panel del corazón se ve bajo la pantalla');
+  ok(await p.evaluate(() => document.getElementById('pul-monitor').getBoundingClientRect().bottom <= document.getElementById('pul-corazon').getBoundingClientRect().top + 1), 'el panel del corazón está debajo de la pantalla del respirador');
+  for (const x of [5, 10]) { const pr = await antes(); await pest('resp'); await mando('peep', x); await espera(300); await llega(pr); v[x] = await nCor('vs'); g[x] = await nCor('gc'); pa[x] = await nCor('pam'); }
+  ok(v[5] > v[0] * 1.05 && v[10] > v[5], `cpap-eap: el VS sube con la CPAP (${v[0]} → ${v[5]} → ${v[10]} mL; ${((v[5] / v[0] - 1) * 100).toFixed(0)} % con CPAP 5)`);
+  ok(g[10] > g[0] && pa[10] > pa[0], `cpap-eap: el GC (${g[0]} → ${g[10]} L/min) y la PAM (${pa[0]} → ${pa[10]}) suben`);
+  ok(/ilustrativo/.test(await p.evaluate(() => document.querySelector('#pul-corazon .org').textContent)), 'el panel del corazón lleva su origen visible');
+  ok(await p.evaluate(() => { const b = document.querySelector('#pul-corazon [data-shock-vivo="ic-cpap"]'); return !!b && b.dataset.view === 'shockVivo' && b.dataset.especialidad === 'libros'; }), 'botón «Ver en el shock vivo» (ic-cpap)');
+  // tope de la CPAP: 12 vuelve a 10 y sale el sello
+  await mando('peep', 12); try { await p.waitForFunction(() => [...document.querySelectorAll('.tope-sello')].some(e => /CPAP por encima de 10/.test(e.textContent) && e.getClientRects().length) && window.__pulPruebas().P.S.resp.peep === 10, null, { timeout: 12000 }); } catch {} await espera(200);
+  { const r = await p.evaluate(() => ({ peep: window.__pulPruebas().P.S.resp.peep, sello: [...document.querySelectorAll('#pul-raiz .tope-sello')].some(e => /CPAP por encima de 10/.test(e.textContent) && e.getClientRects().length) }));
+    ok(r.peep === 10 && r.sello, `tope de la CPAP: con 12 el mando vuelve a 10 (${r.peep}) y sale el sello`); }
+  ok((await desborde()) <= 0, 'cpap-eap: sin desborde lateral'); await limpio('cpap-eap'); await foto('cor-cpap-eap');
+  // la misma presión baja el VS del sano; PEEP 4 → 20 baja el GC (Fig. 26.7; Fig. 27.6)
+  await abrir('vpp-corazon-normal'); await espera(900); await llenar(); await llega('');
+  const n4 = { vs: await nCor('vs'), gc: await nCor('gc'), pam: await nCor('pam') };
+  { const pr = await antes(); await pest('resp'); await mando('peep', 20); await espera(300); await llega(pr); }
+  const n20 = { vs: await nCor('vs'), gc: await nCor('gc'), pam: await nCor('pam') };
+  ok(n20.vs < n4.vs * 0.8 && n20.gc < n4.gc * 0.85, `vpp-corazon-normal: PEEP 4 → 20 baja el VS (${n4.vs} → ${n20.vs} mL) y el GC (${n4.gc} → ${n20.gc} L/min)`);
+  ok(n20.pam > 60 && n20.pam < 110, `vpp-corazon-normal: PAM posible (${n4.pam} → ${n20.pam} mmHg)`);
+  ok((await desborde()) <= 0, 'vpp-corazon-normal: sin desborde lateral'); await limpio('vpp-corazon-normal'); await foto('cor-vpp-normal');
+}
 // Las citas de las fuentes y las notas
 await abrir('normal-vcv'); await espera(600);
 { const bad = await p.evaluate(() => [...document.querySelectorAll('#pul-raiz [data-resaltar]')].filter(c => !document.querySelector(c.dataset.resaltar)).map(c => c.dataset.resaltar)); ok(bad.length === 0, `todas las citas de la página llegan a un párrafo que existe${bad.length ? ': ' + [...new Set(bad)].join(', ') : ''}`); }

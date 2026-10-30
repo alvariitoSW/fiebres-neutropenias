@@ -19,6 +19,8 @@ export const FICHA = {
   'neumo-epoc-vpp': [NEUMO, 'EPOC: ventilación con presión positiva', 'EPOC y VPP', PDF_A, 'Marino 2024'],
   'neumo-asma-agudo': [NEUMO, 'Asma agudo', 'Asma agudo', PDF_A, 'Marino 2024'],
   'neumo-sdra-ventilacion': [NEUMO, 'SDRA: ventilación protectora', 'SDRA: ventilación', PDF_A, 'Marino 2024'],
+  'neumo-vni-uso': [NEUMO, 'Ventilación no invasiva: uso clínico y corazón', 'VNI: uso y corazón', PDF_A, 'Marino 2024'],
+  'mc-ic-manejo': [['cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs'], 'Insuficiencia cardíaca aguda: manejo', 'IC aguda: manejo', 'docs/marino-2024-cardiac-disorders-caps18-21.pdf', 'Marino 2024'],
 };
 // Citas que se repiten: f (ficha), id (párrafo), sitio (cómo se llama), p (página del PDF, comprobada con pdftotext)
 export const C = {
@@ -75,6 +77,8 @@ export const NOTAS = [
   { k: 'psv-ilu', tipo: 'calla', txt: 'En la presión de soporte el modelo pone como ilustrativo lo que Marino no da: la frecuencia del paciente (16 por minuto), la compliance y la resistencia de Herminia, el tiempo que tarda su esfuerzo en llegar al umbral (0,1 s) y la pequeña variación del esfuerzo entre respiraciones (siempre dentro de 2-3 cmH₂O, con semilla fija: sale igual cada vez). El esfuerzo muscular como tal no está en el modelo.', citas: [C.disparo, C.psv4] },
   { k: 'causas-pico', tipo: 'calla', txt: 'Las páginas citadas (cap. 27 pp. 2-4) separan la parte de resistencia de la parte elástica del pico (Ec. 27.1-27.3) pero no enumeran las causas clínicas de un pico alto; el árbol de la página solo reparte entre resistencia y elasticidad y no lista causas.', citas: [C.ec271, C.meseta] },
   { k: 'tau-ilu', tipo: 'calla', txt: 'El libro azul da la definición de la constante de tiempo y las 4-5 constantes para eliminar la auto-PEEP; la cifra del par del modelo (R 20 × C 60 = 1,2 s) es ilustrativa. El libro azul no tiene ficha en la app: la cita lleva solo al PDF.', citas: [C.tau] },
+  { k: 'corazon-limite', tipo: 'calla', txt: 'El panel del corazón usa el motor del corazón del shock vivo, con la presión media de la vía aérea del pulmón como presión que llega a la pleura. Bradley 1992 (PMID 1736745): con CPAP 5, +22 % del VS indexado con PCP ≥12; con PCP <12 el gasto bajó (IC 3,14→2,89). El modelo da el sentido y el orden de magnitud (con CPAP 5, +14 % en el corazón de Ramiro con g = 1; −7 % en el normal). Con CPAP 15 daría +42 % de VS en ese corazón, probablemente demasiado: es una extrapolación ilustrativa y por eso el tope de la CPAP es 10 (usualmente 5-10, resp. p. 77). La retirada simpática y el menor trabajo respiratorio del paciente real no están, y tampoco la apertura de los alvéolos (el modelo no calcula gases).', citas: [{ f: 'mc-ic-manejo', id: 'mc-vpp', sitio: 'Ventilación con presión positiva en la IC', p: 14 }] },
+  { k: 'corazon-herminia', tipo: 'calla', txt: 'El corazón de Herminia en el estado de CPAP es el de la insuficiencia cardíaca del shock vivo (Ramiro, gravedad máxima): ilustrativo. Marino no da las cifras de VS, GC ni PAM de un paciente concreto. En el estado de presión positiva en el sano, el corazón es el del escenario normal del motor. Con CPAP (sin soporte) el paciente respira por su cuenta y el modelo no calcula ese volumen: el Vt y el volumen minuto de la pantalla salen en 0 y no es un fallo de ventilación.', citas: [] },
 ];
 
 // ---------------------------------------------------------------- pacientes del bloque (cobertura-3d.md §5)
@@ -248,8 +252,36 @@ export const ESTADOS = {
     ],
     fuentes: [C.disparo, C.psv4, C.oclusion28],
   },
+  // ───────── E3-enganche: el pulmón mueve el corazón (js/modules/libros/pulmon-vivo/corazon.js). `corazon` dice qué corazón se calcula
+  // con el motor del corazón (eco/motor.mjs, el del shock vivo): 'ic' = el de Ramiro (RECETA_IC, g = 1), 'normal' = el sano.
+  'cpap-eap': {
+    tit: 'CPAP en el edema agudo de pulmón: el corazón que falla eyecta más', pac: 'herminia', corazon: { tipo: 'ic', tope: 10 },
+    resp: { modo: 'psv', vt: 500, fr: 16, peep: 0, flujo: 60, pinsp: 10, ie: 2, pmax: 40, ps: 0, frEsp: 16 }, pulmon: { c: 40, r: 8 }, man: {},
+    frase: 'En el corazón que falla, la presión positiva en el tórax le quita trabajo al ventrículo y el volumen sistólico sube.',
+    guia: [
+      { t: 'Herminia, en edema agudo de pulmón, respira con CPAP: una presión constante (usualmente 5-10 cmH₂O) que evita el colapso de las vías pequeñas y los alvéolos al final de la espiración. Aquí el mando PEEP hace de CPAP y el soporte está a 0. Empieza en 0 y súbelo a 5 y a 10.', org: 'ficha · el mando PEEP como CPAP: ilustrativo', s: ['[data-fila="cor-pm"]'], c: { f: 'neumo-vni-metodos', id: 'nep-cpap-presion', sitio: 'CPAP: presión constante, usualmente 5-10 cmH₂O', p: 77 } },
+      { t: 'Esa presión llega a la pleura y rodea al corazón. Marino lo enseña con la presión arterial durante una insuflación con presión positiva: sube mientras sube la presión intratorácica, y el área sombreada de la curva, que es proporcional al volumen sistólico, crece.', s: ['[data-fila="cor-pm"]', '[data-fila="cor-vs"]'], c: { f: 'neumo-vni-uso', id: 'nep-vni-edema', sitio: 'CPAP en el edema agudo de pulmón y el volumen sistólico', p: 83 } },
+      { t: 'La razón es la poscarga del ventrículo izquierdo: poscarga = presión de la cámara − presión pleural. Con la pleura más positiva, la pared se mueve hacia dentro con menos esfuerzo en la sístole y la presión positiva asiste al VI en la eyección.', s: ['[data-fila="cor-vs"]'], c: { f: 'neumo-vni-uso', id: 'nep-poscarga-vpp', sitio: 'Poscarga: la presión positiva la baja (Ec. 26.1)', p: 87 } },
+      { t: 'El corazón que falla está en la parte plana de la curva de precarga y en la empinada de la de poscarga: bajar la poscarga le ayuda más de lo que le cuesta perder algo de llenado. Mira el VS y el GC del panel al subir la CPAP: suben, y la PAM con ellos.', s: ['[data-fila="cor-vs"]', '[data-fila="cor-gc"]', '[data-fila="cor-pam"]'], c: { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 } },
+      { t: 'Cuánto sube: con CPAP 5, Bradley 1992 (PMID 1736745) midió +22 % del VS indexado en 11 pacientes con PCP ≥12; con PCP <12 el gasto bajó (IC 3,14→2,89). El modelo da el sentido y el orden de magnitud. El tope de la CPAP es 10, el máximo de lo habitual (5-10).', org: 'ficha · Bradley 1992 · las cifras: modelo ilustrativo', s: ['[data-fila="cor-vs"]', '#pul-cor-limite'], c: { f: 'mc-ic-manejo', id: 'mc-vpp', sitio: 'Ventilación con presión positiva en la IC', p: 14 } },
+    ],
+    fuentes: [{ f: 'neumo-vni-metodos', id: 'nep-cpap-presion', sitio: 'CPAP: presión constante, usualmente 5-10 cmH₂O', p: 77 }, { f: 'neumo-vni-uso', id: 'nep-vni-edema', sitio: 'CPAP en el edema agudo de pulmón y el volumen sistólico', p: 83 }, { f: 'neumo-vni-uso', id: 'nep-poscarga-vpp', sitio: 'Poscarga: la presión positiva la baja (Ec. 26.1)', p: 87 }, { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 }, { f: 'mc-ic-manejo', id: 'mc-vpp', sitio: 'Ventilación con presión positiva en la IC', p: 14 }],
+  },
+  'vpp-corazon-normal': {
+    tit: 'Presión positiva en el corazón sano: el volumen sistólico baja', pac: 'rafael', corazon: { tipo: 'normal' },
+    resp: { modo: 'vcv', vt: 500, fr: 14, peep: 4, flujo: 60, pinsp: 10, ie: 2, pmax: 40 }, pulmon: NORMAL, man: {},
+    frase: 'En el corazón sano la misma presión le frena el llenado y el gasto baja, aunque el pulmón oxigene mejor.',
+    guia: [
+      { t: 'Rafael tiene el corazón sano. Sube la PEEP de 4 a 20 con el mando y mira el VS, el GC y la PAM del panel del corazón.', org: 'ilustrativo · el motor del corazón del shock vivo', s: ['[data-fila="cor-pm"]', '[data-fila="cor-vs"]', '[data-fila="cor-gc"]'] },
+      { t: 'La presión positiva dificulta el llenado: baja el gradiente de presión para la entrada venosa al tórax y reduce la presión transmural que llena los ventrículos, sobre todo el derecho (Fig. 26.7).', s: ['[data-fila="cor-pm"]'], c: { f: 'neumo-vni-uso', id: 'nep-precarga-vpp', sitio: 'Precarga: la presión positiva frena el llenado (Fig. 26.7)', p: '85-86' } },
+      { t: 'El corazón normal está en la parte empinada de la curva de precarga y en la plana de la de poscarga: perder precarga le cuesta más gasto del que gana con menos poscarga. Por eso la presión positiva tiende a bajarle el VS, y el motor lo muestra: Jellinek 2000 (PMID 10710387) midió −23 ± 22 % con 15 cmH₂O en pacientes anestesiados en apnea.', org: 'ficha · Jellinek 2000', s: ['[data-fila="cor-vs"]'], c: { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 } },
+      { t: 'Si hay hipovolemia el efecto se magnifica: durante la ventilación con presión positiva, sobre todo con presiones altas, hay que evitarla. En el corazón sano, mantener el volumen sostiene el retorno venoso.', s: ['[data-fila="cor-gc"]', '[data-fila="cor-pam"]'], c: { f: 'neumo-vni-uso', id: 'nep-precarga-vpp', sitio: 'La hipovolemia magnifica el efecto sobre el llenado', p: 86 } },
+      { t: 'En el estudio de SDRA de Marino, el PaO₂/FiO₂ sube con cada escalón de PEEP mientras el índice cardíaco baja: la PEEP magnifica el freno al llenado y puede anular el beneficio en el aporte de O₂ (DO₂ = GC × CaO₂). Este modelo no calcula gases: la subida del cociente no se ve aquí, pero la caída del GC sí.', s: ['[data-fila="cor-gc"]'], c: { f: 'neumo-vm-ajuste', id: 'nep-peep-gc', sitio: 'PEEP: oxigenación y aporte de O₂ (Fig. 27.6)', p: 12 } },
+    ],
+    fuentes: [{ f: 'neumo-vni-uso', id: 'nep-precarga-vpp', sitio: 'Precarga: la presión positiva frena el llenado (Fig. 26.7)', p: '85-86' }, { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 }, { f: 'neumo-vni-uso', id: 'nep-precarga-vpp', sitio: 'La hipovolemia magnifica el efecto sobre el llenado', p: 86 }, { f: 'neumo-vm-ajuste', id: 'nep-peep-gc', sitio: 'PEEP: oxigenación y aporte de O₂ (Fig. 27.6)', p: 12 }],
+  },
 };
-export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada', 'psv-disparo', 'atelectrauma-zeep', 'mejor-peep'];
+export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada', 'psv-disparo', 'atelectrauma-zeep', 'mejor-peep', 'cpap-eap', 'vpp-corazon-normal'];
 
 export const PROFUNDIZAR = [
   { t: 'Presión soporte y el disparo (por presión 2-3 cmH₂O, por flujo 1-10 L/min): el paciente que respira entra en la pieza 4.', c: { f: 'neumo-vm-ajuste', id: 'nep-disparo-presion', sitio: 'Disparo por presión (p. 8) y por flujo (p. 9)', p: '8-9' } },

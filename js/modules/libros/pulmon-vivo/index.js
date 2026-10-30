@@ -28,5 +28,6 @@ export function init() {
     instalarCss('pul', PUL_CSS);
     instalarCss('escena-pulmon', ESCENA_CSS);
     import('./lamina.js').then(m => m.montarLamina());
+    import('./corazon.js').then(m => m.montarCorazon());   // E3-enganche: el panel del corazón
     return { abrir: abrirEstado };
 }
