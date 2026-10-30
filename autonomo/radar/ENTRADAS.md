@@ -28,12 +28,95 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
-- 2026-10-29 · Bandeja #27 · 4 tuits sin leer (x.com cerrado: 402): espera enlace del paper o captura del usuario
+- 2026-10-29 · Bandeja #27 · 3 tuits sin leer (@shinriha_pt, @WithAScalpel, @sindenzu1): x.com ya se lee desde la
+  sesión (30/10); se leen en la próxima Bandeja, no hace falta captura
 - 2026-10-29 · Bandeja #27 · web CardioTeca, tablas de dosis de anticoagulantes y antiarrítmicos: ¿bibliografía de fase 3?
+- 2026-10-30 · Bandeja #27 · paper neuropronóstico tras parada (Benghanem 2026, Ann Intensive Care; acceso abierto,
+  pero la revista está cerrada en la red): espera el PDF del usuario o que se abra el dominio
+- 2026-10-30 · Bandeja #27 · paper de los seis principios del ECG en el IAM oclusivo (Helseth 2026, EHJ ACC; de
+  pago): espera el PDF del usuario
+- 2026-10-30 · Bandeja #27 · idea bloqueo de rama dependiente de la frecuencia (fase 3 y fase 4): ¿al bloque 3?
+- 2026-10-30 · Bandeja #27 · idea interdependencia ventricular: ¿mejora de Circulación viva (fase 2)?
+- 2026-10-30 · Bandeja #27 · caso de eco (HVI + estructura en la mitral): ¿banco de casos de eco (G1)?
 
-## Fichas de triaje (las 24 entradas, la más reciente arriba)
+## Fichas de triaje (las 29 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Neuropronóstico tras parada cardíaca: el curso temporal de los marcadores (Critical Care Reviews)
+- **Fecha / tipo**: 2026-10-30 (comentario del 29/10) · tuit → paper
+- **Enlace**: https://x.com/CritCareReviews/status/2115913940635201673 (Journal Watch de Critical Care Reviews)
+- **Dijo**: solo el enlace
+- **Qué es**: Benghanem S, Pruvost-Robieux E, Hmeydia G, Sellami H, Mercier J, Gavaret M, Sharshar T, Cariou A,
+  Calligaris C, Legouy C. *Neuroprognostication in unconscious patients after cardiac arrest: considering the time
+  course of prognostic markers*. Ann Intensive Care, octubre 2026, artículo 100195. doi:10.1016/j.aicoj.2026.100195
+  (Crossref, 30/10). Aún sin PubMed ni Europe PMC. Por el título: cuándo mira cada marcador (exploración,
+  pupilometría, EEG, potenciales evocados, NSE, imagen) tras la parada
+- **Sirve a**: la guardia (paciente en coma tras la parada, decidir cuándo pronosticar); UCI / Papers Tuiter
+- **Fuente**: el propio paper (sin abrir: solo título y autores)
+- **Licencia**: acceso abierto, CC BY-NC-ND 4.0 desde el 28/10/2026 (Crossref). Se puede descargar a `docs/`
+- **Coste**: 0 €. Desde la sesión no se abre: `www.sciencedirect.com`, `api.elsevier.com` y
+  `annalsofintensivecare.springeropen.com` están cerrados en la red
+- **Veredicto**: integrar en UCI / Papers Tuiter en cuanto haya PDF (adjunto en el issue o dominio abierto)
+
+### IAM oclusivo: seis principios del ECG más allá de los criterios de SCACEST (@MarlonVFZR)
+- **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (artículo de X) → paper
+- **Enlace**: https://x.com/MarlonVFZR/status/2115269246699852211 (enlaza un artículo de X y un canal de Telegram)
+- **Dijo**: solo el enlace
+- **Qué es**: el artículo de X resume, con casi el mismo título, Helseth HC, Mansur P, El-Baba M, McLaren JTT, de
+  Alencar JN, Smith SW. *Electrocardiographic Principles for the Diagnosis of Occlusion Myocardial Infarction*. Eur
+  Heart J Acute Cardiovasc Care, 3/9/2026, zuag114. doi:10.1093/ehjacc/zuag114 · PMID 42690215. Resumen (PubMed): el
+  paradigma IAMCEST/IAMSEST tiene poca sensibilidad y especificidad para la oclusión coronaria; propone el paradigma
+  OMI/NOMI y seis principios para leer el ECG isquémico: dinamismo, agudeza, reciprocidad, proporcionalidad,
+  totalidad y sustitución («surrogacy»). La relación tuit-paper se deduce por el título; el tuit no lo cita
+- **Sirve a**: la guardia (dolor torácico y ECG dudoso en UCI y tras la parada); enlazaría con el bloque de
+  arritmias/ECG (fase 1) y con la Guía ESC de Cardiología; UCI / Papers Tuiter
+- **Fuente**: el paper (solo el resumen leído)
+- **Licencia**: de pago (OUP, todos los derechos reservados); el artículo de X y sus ECG no se reproducen
+- **Coste**: 0 € si el usuario lo baja de la biblioteca del hospital
+- **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el PDF; los ECG, recreados o con fuente libre
+
+### Bloqueo de rama que aparece al cambiar la frecuencia: fase 3 y fase 4 (@RitikaTuliMD)
+- **Fecha / tipo**: 2026-10-30 (comentario del 28/10; era uno de los cuatro sin leer del 29/10) · tuit → idea
+- **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810
+- **Dijo**: solo el enlace
+- **Qué es**: «CardioNugget» con imagen: el bloqueo de rama dependiente de la taquicardia es un bloqueo en fase 3 (el
+  siguiente impulso llega cuando la rama aún está en periodo refractario: rápido → QRS ancho); el texto completo
+  sigue con el dependiente de la bradicardia (fase 4). Solo se leyó el principio (título de la página)
+- **Sirve a**: fase 1 (bloque 3 de arritmias, aparcado); buen mecanismo animado paso a paso (potencial de acción y
+  periodo refractario frente al siguiente latido), como la ficha de la TV del tracto de salida de la misma autora
+- **Fuente**: ninguna; el tuit no cita paper. Haría falta un libro o guía de `docs/`
+- **Licencia**: imagen ajena, no se reproduce
+- **Coste**: 0 €
+- **Veredicto**: idea suelta para el bloque 3 (fase 1)
+
+### Caso: HVI y una estructura rara en la válvula mitral (@AguilarMolina_)
+- **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (caso con vídeo de eco) → idea
+- **Enlace**: https://x.com/AguilarMolina_/status/2114860764812980605
+- **Dijo**: solo el enlace
+- **Qué es**: caso-adivinanza: varón de 40 años con dolor torácico, palpitaciones y disnea de esfuerzo; la eco muestra
+  hipertrofia del VI y una estructura inusual unida a la mitral, y pregunta qué puede ser. No se vio la respuesta
+  ni el vídeo
+- **Sirve a**: G1 (eco) y el formato «caso que evoluciona» de las preguntas (REGLAS §8); la miocardiopatía
+  hipertrófica y la mitral, en el atlas de eco
+- **Fuente**: ninguna; un caso de X no es fuente. El vídeo es de un paciente: no se usa
+- **Licencia**: vídeo ajeno de un paciente, no se reproduce
+- **Coste**: 0 €
+- **Veredicto**: idea suelta: plantilla de caso de eco para el atlas (G1), con imágenes de fuente libre
+
+### Interdependencia ventricular (@yoshiaki_666_)
+- **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (en japonés; cita un vídeo de @NephroP) → idea
+- **Enlace**: https://x.com/yoshiaki_666_/status/2115200513235112315 · vídeo citado:
+  https://twitter.com/NephroP/status/2115151681939747003/video/1
+- **Dijo**: solo el enlace
+- **Qué es**: «心室間相互作用» (interdependencia ventricular): comparte un vídeo docente de otra cuenta. No se vio
+  el vídeo
+- **Sirve a**: fase 2; mejora de Circulación viva (eco) y de los lazos P-V (VD dilatado que aplasta el VI, septo
+  plano, pulso paradójico, taponamiento, TEP)
+- **Fuente**: ninguna; haría falta Marino o el Libro Azul (`docs/`)
+- **Licencia**: vídeo ajeno, no se reproduce
+- **Coste**: 0 €
+- **Veredicto**: idea suelta para fase 2, junto al lazo P-V de @WithAScalpel
 
 ### Anatomy Atlas (Brian Pridgen, MD)
 - **Fecha / tipo**: 2026-10-29 (chat) · web/simulador 3D
@@ -54,7 +137,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Coste**: 0 €; informe de ingeniería inversa ≈0,5 M (sonnet)
 - **Veredicto**: SÍ sirve, como ideas y como prueba para la decisión del 3D. Propuesto: informe corto antes del 01/11
 
-### Cuatro tuits sin leer (Bandeja del 29/10)
+### Cuatro tuits sin leer (Bandeja del 29/10; el de @RitikaTuliMD, leído el 30/10)
 - **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
   https://x.com/shinriha_pt/status/2115396011443323199 · https://x.com/WithAScalpel/status/2115405654915514531 ·
