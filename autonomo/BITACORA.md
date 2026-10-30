@@ -674,3 +674,5 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
   (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
   (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
   no cambió.
+
+- **30/10 · Mejoras del bloque 3 que dejó el Consejo 11.ª** (condición de Justicia al fusionar la PR #51; sin aprobar): piezas de los grupos 2-5 que el profesor puntuó entre 8 y 8,75 con la regla vieja (g2 2b/2c; g3 iam-vd, septo 7,75, fármacos, soporte, papilar; g4 f14 8,1, f13, ic-cpap; g5 SCA-diagnóstico, tabique, antiagregantes/lisis, disección): un rejuicio corto por grupo (R8) y lo que el profesor dijo que las subiría, ≈0,4-0,6 M por grupo. También: `js/modules/eco/pruebas/atlas.test.mjs` falla en `main` por el cap. 16 del atlas sin figura (sesiones `atlas-texto`).
