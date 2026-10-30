@@ -40,9 +40,10 @@ página; ningún nombre interno a la vista; archivos ≤700 líneas.
 |---|---|---|
 | Cobertura | ✅ 30/10 (PR #41) | `cobertura.md`, `cobertura-anexo.md` |
 | Maquetas iones vivos (A, B, C) | en curso | `autonomo/maquetas/b4-iones-{a,b,c}.html` + carpeta |
-| Juicio y elección (Educación) | — | `juicio-iones-{a,b,c}.md`, acta en `autonomo/consejo/` |
-| Vuelta 2 de la elegida | — | misma maqueta |
-| Iones vivos a la app (modelo + Mayéutica) | — | sesión aparte |
+| Juicio y elección (Educación) | ✅ B (30/10) | `juicio-iones-{a,b,c}.md`, `consejo/2026-10-30-b4-iones.md` |
+| Vuelta 2 de la B | ✅ hecha; auditor y rejuicio en curso | `b4-iones-b/`, `auditoria-iones-b.md`, `rejuicio-iones-b.md` |
+| Tres miradas (el usuario: «que intervenga educación») | dictamen ✅ | `educacion-tres-maquetas.md`: un modelo, un motor, miradas B (Mira), A (capa célula, Juega), C (a pie de cama, Caso); +≈3,8 M |
+| Iones vivos a la app (modelo + Mayéutica) | — | sesión aparte, tras aprobar la B; después «A pie de cama» y «La célula por dentro» |
 | Ampliaciones (5 modelos) y Estudiar 4A-4D | — | sesiones aparte |
 
 ## 7. Piezas comunes
