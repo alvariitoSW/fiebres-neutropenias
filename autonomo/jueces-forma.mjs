@@ -40,6 +40,7 @@ export const BANCOS = [
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'pulmón vivo', datos: 'js/data/pulmon-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
