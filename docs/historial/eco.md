@@ -257,6 +257,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   - 30/10/2026: ya son 16 de 30; entra también solo con texto el 12 Eco de estrés (protocolo con dobutamina, lectura por segmentos, viabilidad, alto riesgo y otros usos).
   - 30/10/2026: ya son 17 de 30; entra también solo con texto el 16 Insuficiencia aórtica (grados, graduación integrada, criterios de la Fig. 25, estadios C1/C2 y método volumétrico; fusionado por el Consejo, sesión `fusiones-30-10`).
   - 30/10/2026: ya son 18 de 30; entra también solo con texto el 22 Miocardiopatía hipertrófica (definición y medida, SAM y su gravedad, gradiente del TSVI y provocación, chorro del TSVI frente al de la IM, riesgo y diagnóstico diferencial).
+  - 30/10/2026: ya son 19 de 30; entra solo con texto el 23 Amiloidosis cardíaca (hallazgos estructurales, Doppler y signo 5-5-5, strain con respeto apical, criterios de la ESC 2021 con la puntuación de Boldrini y medida).
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
