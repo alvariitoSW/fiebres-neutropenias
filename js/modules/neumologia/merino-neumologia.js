@@ -5,6 +5,8 @@ import { initCorkboard } from '../../core/corkboard.js';
 import { clamp, arrancar } from '../../core/ui.js';
 import { init as initVisual } from './visual.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
+import { montarRotulos } from '../../core/figura-rotulos.js';
+import { ROTULOS_MERINO_NEUMO } from '../../data/merino-neumo-rotulos.js';
 import { MAYEUTICA_B3 } from '../../data/mayeutica/b3.js';
 
 // Número con coma decimal (es-ES) y sin separador de miles. Si el valor
@@ -781,6 +783,7 @@ export function init() {
     initSbtChecklist();
     initSbtPredictores();
     initVniRespuesta();
+    arrancar('Rótulos sobre las figuras de Merino Neumología', () => montarRotulos(document.getElementById('merino-neumo-view'), ROTULOS_MERINO_NEUMO));
     // Vista Visual de las fichas de embolia pulmonar (Marino cap. 22, bloque 3): arranca por separado.
     arrancar('vista Visual de Merino Neumología', initVisual);
     arrancar('Estudiar en Merino Neumología', () => Object.entries(MAYEUTICA_B3)
