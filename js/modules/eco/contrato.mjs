@@ -17,7 +17,7 @@ C('t.ms', 'ms', 'Tiempo desde el inicio del latido', 'motor', ['d', 'm', 'w'], '
 C('t.wiggers', 'A-G', 'Fase de Wiggers (A contracción auricular … G diástasis)', 'motor', ['w', 'l'], 'instante');
 for (const [k, n] of [['vi', 'ventrículo izquierdo'], ['vd', 'ventrículo derecho'], ['ai', 'aurícula izquierda'], ['ad', 'aurícula derecha']])
   C('vol.' + k, 'mL', 'Volumen del ' + n, 'motor', ['b', 'm', 'a', 'w', 'g'], 'instante');
-for (const [k, n, bl] of [['vi', 'VI', 'pvi'], ['vd', 'VD', 'pvd'], ['ai', 'AI', 'pai'], ['ad', 'AD', 'pad'], ['ao', 'aorta', 'pao'], ['ap', 'arteria pulmonar', 'pap'], ['peri', 'saco pericárdico', 'pperi']])
+for (const [k, n] of [['vi', 'VI'], ['vd', 'VD'], ['ai', 'AI'], ['ad', 'AD'], ['ao', 'aorta'], ['ap', 'arteria pulmonar'], ['peri', 'saco pericárdico']])
   C('pres.' + k, 'mmHg', 'Presión de ' + n, 'motor', ['d', 'a', 'w', 'g'], 'instante');
 for (const [k, n] of [['mit', 'mitral'], ['tri', 'tricúspide'], ['ao', 'aórtica (sirve al TSVI: v = q / anillo.ao)'], ['pul', 'pulmonar'], ['vp', 'venas pulmonares (S, D y Ar)']])
   C('q.' + k, 'mL/s', 'Caudal por la válvula ' + n, 'motor', ['d', 'b'], 'instante');
@@ -73,6 +73,11 @@ B('vci.diam', 'mm', 'Diámetro de la VCI (el motor no lo calcula)', 'hueco', ['b
 B('vci.colapso', '%', 'Colapso inspiratorio de la VCI', 'hueco', ['b', 'l']);
 B('septoFase', '-', 'Fase del aplanamiento (sistólico/diastólico, signo D); llega con el paso 2', 'hueco', ['b']);
 B('regional', '0-1', 'Acortamiento por segmento (17 del VI + 3 del VD): McConnell; llega con el paso 2', 'hueco', ['b']);
+B('periodo', 's', 'Duración del latido (motor.ultimo.periodo)', 'motor', ['l', 'w']);
+for (const [k, n] of [['s1', 'cierre mitral (S1)'], ['s2', 'cierre aórtico (S2)'], ['s2p', 'cierre pulmonar'], ['aoAbre', 'apertura aórtica'], ['mitAbre', 'apertura mitral'], ['pulAbre', 'apertura pulmonar'], ['triCierra', 'cierre tricuspídeo']])
+  B('tiempos.eventos.' + k, 's', 'Instante en el latido: ' + n + ' (null si el motor no lo da)', 'motor', ['d', 'w']);
+B('fusion', 'bool', 'Fusión de las ondas E y A mitrales (medidasLatido de hoy)', 'puente-hoy', ['d']);
+B('limites', 'mL', 'LIMITES del dibujo de hoy: { vi, vd, au } = [mín, máx] (corazon-geo.mjs)', 'puente-hoy', ['b']);
 B('fueraDeMarco', 'bool', 'La fisiología se sale de lo que el dibujo de hoy puede mostrar (LIMITES)', 'puente-hoy', ['b']);
 
 export const CAMPOS = Object.freeze(Object.fromEntries(lista.map(c => [c.clave, Object.freeze(c)])));
@@ -113,6 +118,10 @@ export function contratoDe(motor, puente) {
     'tiempos.eyeccion': ms(u.tS2 != null && u.tAoAbre != null ? u.tS2 - u.tAoAbre : null),
     'tiempos.tap': u.tPulAbre != null ? ms(o[iPico].t - u.tPulAbre) : null,
     'tiempos.dt': P('dt'), derrame: motor.s.liquidoPeri ?? 0, 'vci.diam': null, 'vci.colapso': null,
+    periodo: L(u.periodo),
+    'tiempos.eventos.s1': L(u.tS1), 'tiempos.eventos.s2': L(u.tS2), 'tiempos.eventos.s2p': L(u.tS2p), 'tiempos.eventos.aoAbre': L(u.tAoAbre),
+    'tiempos.eventos.mitAbre': L(u.tMitAbre), 'tiempos.eventos.pulAbre': L(u.tPulAbre), 'tiempos.eventos.triCierra': L(u.tTriCierra),
+    fusion: puente ? (pv.fusion ?? null) : null, limites: puente ? (puente.limites ?? null) : null,
     septoFase: null, regional: null, fueraDeMarco: puente ? !!pv.fueraDeMarco : null,
   };
   return { latido, instantes, origen: { ...ORIGEN } };
@@ -124,10 +133,10 @@ export const TOLERANCIAS = { qCerrada: 5, saltoVol: 0.05, saltoPres: 0.1 };   //
 /**
  * Comprueba la parte NUMÉRICA del contrato (rúbrica de realismo, criterios 1, 4, 5 y 6; la forma y la textura no).
  * bandas = BANDAS de pruebas/bandas-paciente.mjs; clave = 'tep:def' …; sin ellas no hay lista fueraDeRango.
- * → { errores: [..], fueraDeRango: [..], diagnostico: [..] }
+ * → { errores, fueraDeRango, diagnostico, sinCampo: [medidas de BANDAS sin campo], sinValor: [campos con banda y valor null] }
  */
 export function validarContrato(c, { bandas, clave } = {}) {
-  const errores = [], fueraDeRango = [], diagnostico = [];
+  const errores = [], fueraDeRango = [], diagnostico = [], sinCampo = [], sinValor = [];
   const num = (v, n) => { if (typeof v === 'number' && !Number.isFinite(v)) errores.push(`${n}: ${v} (no finito)`); };
   for (const [k, v] of Object.entries(c.latido)) {
     num(v, k);
@@ -139,7 +148,7 @@ export function validarContrato(c, { bandas, clave } = {}) {
     if (c.latido[k] != null && c.latido[k] < 0) errores.push(`${k}: ${c.latido[k].toFixed(0)} ms negativo`);
   for (const cp of Object.values(CAMPOS)) if (!cp.unidad || !cp.que || !ORIGENES.includes(cp.origen)) errores.push(`${cp.clave}: esquema incompleto`);
   const I = c.instantes;
-  if (!I.length) { errores.push('sin instantes'); return { errores, fueraDeRango, diagnostico }; }
+  if (!I.length) { errores.push('sin instantes'); return { errores, fueraDeRango, diagnostico, sinCampo, sinValor }; }
   I.forEach((m, i) => {
     for (const g of ['vol', 'pres', 'q']) for (const [k, v] of Object.entries(m[g])) if (typeof v === 'number') num(v, `${g}.${k}@${i}`);
     num(m.gradSepto, `gradSepto@${i}`); num(m.t.ms, `t.ms@${i}`);
@@ -156,9 +165,10 @@ export function validarContrato(c, { bandas, clave } = {}) {
   if (bandas && clave && bandas[clave]) for (const b of bandas[clave]) {
     const campo = Object.values(CAMPOS).find(x => x.banda === b.medida);
     const v = campo ? c.latido[campo.clave] : undefined;
-    if (v == null) continue;
+    if (!campo) { sinCampo.push(b.medida); continue; }
+    if (v == null) { sinValor.push(campo.clave); continue; }
     const ok = Number.isFinite(v) && (b.min_excl ? v > b.min : v >= b.min) && (b.max_excl ? v < b.max : v <= b.max);
     if (!ok) (b.diagnostico ? diagnostico : fueraDeRango).push(`${b.medida} ${v.toFixed(2)} fuera de ${b.min}…${b.max} (${b.fuente})`);
   }
-  return { errores, fueraDeRango, diagnostico };
+  return { errores, fueraDeRango, diagnostico, sinCampo, sinValor };
 }

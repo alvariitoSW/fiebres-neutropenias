@@ -38,7 +38,7 @@ export function puenteHoy(motor) {
     'anillo.mit': 'areasAnillo (doppler.mjs)', 'anillo.tri': 'areasAnillo (doppler.mjs)', 'anillo.ao': 'areasAnillo (doppler.mjs)',
     'anillo.pul': 'areasAnillo (doppler.mjs)', 'anillo.vel.e': 'ePrima (atlas/diastolica.mjs)', eSep: 'ePrima', eLat: 'ePrima',
     E: 'medidasLatido (doppler.mjs)', A: 'medidasLatido', ea: 'medidasLatido', dt: 'medidasLatido (tde)', fusion: 'medidasLatido',
-    eE: 'medidasLatido / ePrima', fueraDeMarco: 'LIMITES (corazon-geo.mjs)', septo: 'aplanamientoSeptal (formas.mjs)',
+    eE: 'medidasLatido / ePrima', fueraDeMarco: 'LIMITES (corazon-geo.mjs)', limites: 'LIMITES (corazon-geo.mjs)', septo: 'aplanamientoSeptal (formas.mjs)',
   };
-  return { valores, funcion, serie: { septo: o.map(aplanamientoSeptal) } };
+  return { valores, limites: LIMITES, funcion, serie: { septo: o.map(aplanamientoSeptal) } };
 }

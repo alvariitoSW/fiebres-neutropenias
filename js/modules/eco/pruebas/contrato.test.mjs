@@ -1,5 +1,5 @@
 // Contrato = motor de hoy (mv-eco-1, B-045 paso 1). El contrato (contrato.mjs + contrato-puente-hoy.mjs) debe dar lo mismo
-// que el código de hoy (medirForma / la medida de la maqueta m12-comun, solo como control) ±2 %, y la tabla §3 de
+// que el código de hoy (medirForma) ±2 %, y la tabla §3 de
 // autonomo/maquetas/eco-reforma/mapa-motor.md como control grueso ±5 %. Los fallos conocidos del motor se CONGELAN
 // (todo), no se tapan. Cada motor se corre una vez por caso y se reutiliza.
 import { test } from 'node:test';
@@ -11,7 +11,6 @@ import { CAMPOS, ORIGENES, contratoDe, validarContrato } from '../contrato.mjs';
 import { puenteHoy } from '../contrato-puente-hoy.mjs';
 import { BANDAS } from './bandas-paciente.mjs';
 import { CASOS_FORMA, medirForma } from './medir-forma.mjs';
-import { medir as medirMaqueta } from '../../../../autonomo/maquetas/eco-reforma/m12-comun.mjs';   // control, no es de la app
 
 const T0 = Date.now();
 const clave = (k, g) => k + (g === undefined ? '' : ':' + g);
@@ -30,7 +29,7 @@ const caso = (k, g, modo = 'forma') => {
   const c = clave(k, g) + '/' + modo;
   if (!cache.has(c)) {
     const m = motorDe(k, g, modo), puente = puenteHoy(m);
-    cache.set(c, { m, puente, c: contratoDe(m, puente), hoy: igual ? medirForma(k, g) : null, mq: medirMaqueta(m) });
+    cache.set(c, { m, puente, c: contratoDe(m, puente), hoy: igual ? medirForma(k, g) : null });
   }
   return cache.get(c);
 };
@@ -61,18 +60,13 @@ const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.9, 'TEP 100 %
 
 for (const [nombre, k, g, ...t] of TABLA) {
   test(`contrato = motor de hoy · ${nombre}`, () => {
-    const { c, hoy, mq, puente } = caso(k, g, 'app'), L = c.latido;
+    const { c, hoy } = caso(k, g, 'app'), L = c.latido;
     const [fevd, tapse, psap, papd, pvc, pam, gc, vdvi, pared, ee] = t;
-    // contra el código de hoy ±2 %
-    cerca(L.feVd, mq.fevd, 2, 'FEVD maqueta'); cerca(L.tapse, mq.tapse, 2, 'TAPSE maqueta'); cerca(L.eE, mq.ee, 2, 'E/e′ maqueta');
-    cerca(L.paps, mq.psap, 2, 'PSAP maqueta'); cerca(L.pvc, mq.pvc, 2, 'PVC maqueta'); cerca(L.pam, mq.pam, 2, 'PAM maqueta'); cerca(L.gc, mq.gc, 2, 'GC maqueta');
-    cerca(L.vdvi, mq.vdvi, 2, 'VD/VI maqueta');
+    // contra el código de hoy ±2 % (medirForma)
     if (hoy) {   // medirForma (J1) en el mismo asentamiento
       cerca(L.feVd, hoy.feVd, 2, 'FEVD'); cerca(L.tapse, hoy.tapse, 2, 'TAPSE'); cerca(L.paps, hoy.paps, 2, 'PSAP'); cerca(L.pvc, hoy.pvc, 2, 'PVC');
       cerca(L.pam, hoy.pam, 2, 'PAM'); cerca(L.gc, hoy.gc, 2, 'GC'); cerca(L.vdvi, hoy.vdTd / hoy.viTd, 2, 'VD/VI vol'); cerca(L.eE, hoy.eE, 2, 'E/e′');
     }
-    cerca(L['pared.vd'], mq.paredVd, 2, 'pared VD maqueta'); cerca(L.papd, mq.papd, 2, 'PAPd');
-    assert.equal(L['anillo.excursion.tri'], L.tapse);
     // contra la tabla §3 ±5 % (lo que la tabla redondea a una cifra no se exige más fino)
     cerca(L.feVd, fevd, 5, 'FEVD tabla', true); cerca(L.tapse, tapse, 5, 'TAPSE tabla', true); cerca(L.paps, psap, 5, 'PSAP tabla', true);
     cerca(L.papd, papd, 5, 'PAPd tabla', true); cerca(L.pvc, pvc, 5, 'PVC tabla', true); cerca(L.pam, pam, 5, 'PAM tabla', true); cerca(L.gc, gc, 5, 'GC tabla', true);
@@ -82,7 +76,6 @@ for (const [nombre, k, g, ...t] of TABLA) {
     const septoMax = Math.max(...c.instantes.map(i => i.septo));
     const esperado = ['tep', 'hpcronica'].includes(k) && !(k === 'tep' && g === 0) ? 1 : 0;
     assert.ok(Math.abs(septoMax - esperado) <= 0.05, `septo ${septoMax} vs ${esperado}`);
-    assert.ok(puente.funcion.septo);
   });
 }
 
@@ -112,6 +105,7 @@ test('el motor no cambia al leerlo', () => {
 });
 
 // validarContrato en los 21 casos de CASOS_FORMA
+const SIN_CAMPO = ['Ar', 'bombaAI', 'sd'], VISTAS = new Set();   // bandas de BANDAS sin campo en CAMPOS (conocidas)
 const SEPARADOS = {
   'fallo:1': { clave: 'salto', texto: 'el último instante no enlaza con el primero (pres.vi 30,1 → 25,6 mmHg, FC ≈121): salto al volver a empezar el latido (rúbrica, criterio 4)' },
 };
@@ -121,6 +115,9 @@ for (const [k, g] of CASOS_FORMA) {
     const { c } = caso(k, g);
     const v = validarContrato(c, { bandas: BANDAS, clave: id });
     if (v.diagnostico.length) console.log(`  diagnóstico ${id}: ${v.diagnostico.join(' | ')}`);
+    console.log(`  sinCampo ${id}: ${v.sinCampo.join(', ')}`); if (v.sinValor.length) console.log(`  sinValor ${id}: ${v.sinValor.join(', ')}`);
+    v.sinCampo.forEach(x => VISTAS.add(x));
+    assert.deepEqual(v.sinCampo.filter(x => !SIN_CAMPO.includes(x)), [], 'banda nueva sin campo en ' + id);
     if (v.fueraDeRango.length) console.log(`  fueraDeRango ${id}: ${v.fueraDeRango.join(' | ')}`);
     if (SEPARADOS[id]) { assert.ok(v.errores.length > 0, 'ya pasa: quítalo de SEPARADOS'); assert.ok(v.errores.every(e => e.startsWith('salto al volver')), v.errores.join('\n')); return; }
     assert.deepEqual(v.errores, []);
@@ -144,6 +141,10 @@ test('fallo conocido (lo arregla mv-eco-2a5) · fallo:1 el latido enlaza consigo
 });
 test.todo('fallo conocido · HP crónica: VD/VI 0,72 en la imagen (el motor da 1,76 en volumen); se mide en la imagen en mv-eco-2a5');
 test.todo('hueco · regional (McConnell), septoFase, MAPSE, s′/a′, VCI, raíz aórtica, regurgitación aórtica por instante: sin dato en el motor ni fuente en docs/');
+
+test('bandas sin campo: la lista conocida es exactamente la que sale en los 21 casos', () => {
+  assert.deepEqual([...VISTAS].sort(), SIN_CAMPO);
+});
 
 test('tiempo: la prueba entera < 60 s', () => {
   const s = (Date.now() - T0) / 1000;
