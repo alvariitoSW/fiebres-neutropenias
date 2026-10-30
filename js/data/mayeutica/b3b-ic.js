@@ -375,8 +375,7 @@ export const MAYEUTICA_IC = {
         explicacion: `Los iSGLT2 se recomiendan en la IC avanzada, <span class="hl-verde">tanto con FE reducida como conservada</span>, con o sin diabetes (${p(14)}). Con FE conservada no hay recomendación de betabloqueantes (${p(14)}) y los antialdosterónicos no deben darse con filtrado <30 (${p(14)}).` + enFicha(M, 'mc-largo-plazo') },
     ],
     profundizar: [
-      { id: 'mc-ic-raa', titulo: 'Supresión del sistema renina-angiotensina-aldosterona' },
-      { id: 'mc-ic-betabloqueantes', titulo: 'Betabloqueantes' },
+      { id: 'mc-furosemida', titulo: 'Furosemida: cuándo empieza, cuándo pica y cuánto dura' },
       { id: 'mc-tabla-18-5', titulo: 'Tabla 18.5: dosis iniciales y objetivo' },
     ],
     casos: [
