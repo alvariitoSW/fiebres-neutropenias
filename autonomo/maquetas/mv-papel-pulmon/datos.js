@@ -32,7 +32,7 @@ export const FUENTES = {
   ],
 };
 export const TARJETAS = [
-  { q: 'Vt 300 mL a FR 30: ¿cuánto llega al alvéolo por minuto?', a: '(300 − 150) × 30 = 4 500 mL/min, 4,5 L. Con Vt 500 y FR 12 serían 350 × 12 = 4,2 L: respirar rápido y poco no ventila más.', o: 'fisiología general · el 150, de la ficha (Libro Azul, p. 389)' },
+  { q: 'Vt 300 mL a FR 30: ¿cuánto llega al alvéolo por minuto?', a: '(300 − 150) × 30 = 4 500 mL/min, 4,5 L. Con Vt 500 y FR 12 serían 350 × 12 = 4,2 L.', o: 'fisiología general · el 150, de la ficha (Libro Azul, p. 389)' },
   { q: '¿Por qué el alto flujo nasal ayuda aunque no sea PEEP?', a: 'Porque lava el espacio muerto de la nasofaringe: el aire que entra ya no arrastra gas espirado, y baja el espacio muerto (Marino, cap. 25).', o: 'ficha · Marino PDF 64-65' },
 ];
 export const NIVELES = [
@@ -46,11 +46,11 @@ export const OPCIONES_AS = {
   sincronico: 'Cada esfuerzo dispara una respuesta única y sigue a la curva del respirador: el paciente y la máquina van a la vez.',
   ineficaz: 'Hay esfuerzo (la presión baja un poco) y el respirador no responde: el paciente trabaja sin recibir aire.',
   doble: 'Dos respuestas seguidas con un solo esfuerzo: el volumen se apila y puede llegar al doble del programado.',
-  inverso: 'La insuflación empieza sin esfuerzo y el esfuerzo llega después, disparando una segunda respuesta apilada.',
+  inverso: 'Un nuevo disparo dentro de un ciclo inspiratorio, con riesgo de sobredistensión por más volumen.',
 };
 export const EXPL = {
   sincronico: 'El esfuerzo baja la presión 2 cmH₂O, el respirador responde una vez y el Vt es el programado.',
   ineficaz: 'El esfuerzo es débil y la presión no llega a bajar los 2 cmH₂O del umbral; el paciente trabaja y no recibe aire (Vt de ese ciclo = 0).',
-  doble: 'El esfuerzo dura más que la insuflación; al acabar esta, sigue tirando y dispara otra: el volumen se apila.',
-  inverso: 'La insuflación empezó sin esfuerzo y el esfuerzo llega después; dispara una segunda respuesta apilada sobre la primera.',
+  doble: 'Dos inspiraciones en menos de la mitad del tiempo inspiratorio: el volumen se apila.',
+  inverso: 'Un nuevo disparo dentro de un ciclo inspiratorio, con riesgo de sobredistensión por más volumen. El mecanismo está en investigación.',
 };

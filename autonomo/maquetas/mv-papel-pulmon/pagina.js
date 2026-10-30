@@ -167,7 +167,7 @@ $('svg-2').innerHTML = `<g class="lamina-svg">
  ${[0, 10, 20, 30, 40].map((p) => `<line class="eje" x1="${X(p)}" y1="176" x2="${X(p)}" y2="180"/><text x="${X(p)}" y="190" text-anchor="middle" class="t9">${p}</text>`).join('')}
  ${[0, 200, 400, 600, 800].map((v) => `<line class="eje" x1="36" y1="${Y(v)}" x2="40" y2="${Y(v)}"/><text x="34" y="${Y(v) + 3}" text-anchor="end" class="t9">${v}</text>`).join('')}
  <text x="312" y="202" text-anchor="end" class="t9">presión (cmH₂O)</text><text x="44" y="16" class="t9">volumen (mL)</text>
- <line id="h-peep" class="l-peep" x1="40" y1="10" x2="40" y2="176"/><text id="h-peep-t" x="42" y="170" class="t9" style="fill:var(--accent-blue)">PEEP</text>
+ <line id="h-peep" class="l-peep" x1="40" y1="10" x2="40" y2="176"/><text id="h-peep-t" x="42" y="36" class="t9" style="fill:var(--accent-blue)">PEEP</text>
  <path id="h-ins" class="l-ins" d=""/><path id="h-esp" class="l-esp" d=""/>
  <circle id="h-pii" r="4.5" style="fill:var(--bg-main);stroke:var(--text-main);stroke-width:1.6"/><text id="h-pii-t" class="t9" style="fill:var(--text-main)">inflexión inf.</text>
  <circle id="h-pis" r="4.5" style="fill:var(--bg-main);stroke:var(--text-main);stroke-width:1.6"/><text id="h-pis-t" class="t9" style="fill:var(--text-main)">inflexión sup.</text>
@@ -216,10 +216,10 @@ const pasos2 = () => [
 
 // ------------------------------------------------------------------ LÁMINA 3: asincronías
 let mon = null, ult3 = null;
-const VENT0 = 8, VENT = 12;
+let VENT0 = 0, VENT = 4;   // ventana de 4 s que se mueve hasta el primer esfuerzo propio de la asincronía elegida
 function montar3() {
   const base = canalesRespiratorios({ peep: () => 5, pawMax: 40, flujoMax: 90, volMax: 1000 }).map((c) => ({ ...c, marcas: [], alto: { paw: 50, flujo: 44, vol: 30 }[c.k] }));
-  mon = crearMonitor($('svg-3'), { canales: [...base, { k: 'esf', rot: 'esfuerzo (ilustrativo)', alto: 26, min: 0, max: 16, col: 'var(--accent-purple)' }], margen: 26, hueco: 3, borrar: 0 });
+  mon = crearMonitor($('svg-3'), { canales: [...base, { k: 'esf', rot: 'esfuerzo', alto: 26, min: 0, max: 16, col: 'var(--accent-purple)' }], margen: 26, hueco: 3, borrar: 0 });
   mon.montar();
 }
 addEventListener('resize', () => { if (mon && S.tab === 3) { mon.montar(); pintar3(); } });
@@ -233,7 +233,9 @@ function nuevaAdivina() {
 }
 function pintar3() {
   if (!mon) return;
-  const r = simularAsinc(S.as, { esfuerzo: S.esf, duracion: VENT + 0.1 }); ult3 = r;
+  const r = simularAsinc(S.as, { esfuerzo: S.esf, duracion: 16 }); ult3 = r;
+  const e0 = r.esfuerzos.find((e) => e.tipo === S.as) || r.esfuerzos.find((e) => e.tipo !== 'sincronico') || r.esfuerzos[0];
+  VENT0 = e0 ? Math.max(0, e0.t0 - 1) : 0; VENT = VENT0 + 4;
   const NP = mon.NP, dt = r.params.dt, tIni = VENT0, ven = VENT - VENT0;
   mon.llenar((i) => { const k = Math.min(r.t.length - 1, Math.round((tIni + i * ven / NP) / dt)); return { paw: r.paw[k], flujo: r.flujo[k], vol: r.vol[k], esf: r.pmus[k] }; }); mon.pintar();
   segA.pintar(S.adivina && !S.resuelto ? null : S.as); segA.querySelectorAll('button').forEach((b) => { b.disabled = S.adivina; });
@@ -267,8 +269,8 @@ function pintarAdivina(real) {
 const pasos3 = () => [
   { tit: 'Las curvas', txt: 'Arriba la presión de la vía aérea (Paw), luego el flujo, el volumen y, abajo, el esfuerzo del paciente (ilustrativo). Con el mismo esfuerzo, la forma de Paw cambia según responda el respirador.', fn: () => { S.adivina = false; bAdi.setAttribute('aria-pressed', 'false'); S.as = 'sincronico'; S.esf = 8; pintar3(); }, sel: ['#tr-paw', '#tr-esf'] },
   { tit: 'Esfuerzo ineficaz', txt: 'Un esfuerzo de 3 cmH₂O baja la Paw menos de 2: no llega al umbral y el respirador no responde. La Paw solo hace una muesca y el flujo casi no se mueve. Sube el esfuerzo para ver cuándo dispara.', fn: () => { S.as = 'ineficaz'; S.esf = 3; pintar3(); }, tramo: () => S.tramo && S.tramo('guia') },
-  { tit: 'Doble disparo', txt: 'El esfuerzo dura más que la insuflación: al acabar esta, el paciente sigue tirando y dispara otra. Dos inspiraciones seguidas, y el volumen se apila.', fn: () => { S.as = 'doble'; S.esf = 11; pintar3(); }, tramo: () => S.tramo && S.tramo('guia') },
-  { tit: 'Disparo inverso', txt: 'Aquí la insuflación empieza por tiempo, sin esfuerzo, y el esfuerzo llega después: dispara una segunda respuesta sobre la primera. El mecanismo está en investigación.', fn: () => { S.as = 'inverso'; S.esf = 11; pintar3(); }, tramo: () => S.tramo && S.tramo('guia') },
+  { tit: 'Doble disparo', txt: 'Dos inspiraciones en menos de la mitad del tiempo inspiratorio (Libro Azul, p. 558): el respirador entrega dos ciclos seguidos y el volumen se apila.', fn: () => { S.as = 'doble'; S.esf = 11; pintar3(); }, tramo: () => S.tramo && S.tramo('guia') },
+  { tit: 'Disparo inverso', txt: 'Nuevo disparo dentro de un ciclo inspiratorio, con riesgo de sobredistensión por el mayor volumen (Libro Azul, p. 558-559). En la curva, la insuflación empieza por tiempo y el esfuerzo llega después; el mecanismo está en investigación.', fn: () => { S.as = 'inverso'; S.esf = 11; pintar3(); }, tramo: () => S.tramo && S.tramo('guia') },
 ];
 
 // ------------------------------------------------------------------ arranque y prueba

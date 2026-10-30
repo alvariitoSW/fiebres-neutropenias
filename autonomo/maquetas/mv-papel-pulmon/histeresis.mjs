@@ -73,13 +73,13 @@ export function simularHisteresis({ perfil = 'sdra', peep = 5, vtKg = 6, talla =
 // Sellos (REGLAS §1.14): qué se le pasa al paciente. Devuelve null o { clave, titulo, texto, origen, cita }.
 export function selloHisteresis(c, { vtKg, peep }) {
   if (vtKg > TOPES.vtSello) return { clave: 'vt', titulo: 'Fuera de la protectora', origen: 'ficha', cita: 'M27 pdf 13-14',
-    texto: `Vt de ${String(vtKg).replace('.', ',')} mL/kg: el protocolo empieza en 8 y baja a 6 (4 si la meseta pasa de 30). Con más volumen cada ciclo estira más el pulmón.` };
+    texto: `Vt de ${String(vtKg).replace('.', ',')} mL/kg: el protocolo empieza en 8 y baja a 6 (4 si la meseta pasa de 30). La ficha lo explica así: el volumen alto, no la presión alta, es lo que lesiona (volutrauma; Marino, cap. 24, PDF 46).` };
   if (c.pMeseta > TOPES.mesetaSello) return { clave: 'meseta', titulo: 'Meseta por encima de 30', origen: 'ficha', cita: 'M27 pdf 4',
     texto: `Meseta de ${Math.round(c.pMeseta)} cmH₂O: el objetivo de la ficha es ≤30 para no lesionar el alvéolo. Baja el Vt.` };
   if (c.nAbreCierra > 0 && peep < Math.max(...PERFILES.sdra.unidades.map((u) => u.pCi)))
     return { clave: 'atelectrauma', titulo: 'Abre y cierra cada ciclo', origen: 'ficha', cita: 'M22 pdf 48; LA1 pdf 67',
       texto: `${c.nAbreCierra} de 4 unidades se abren al inspirar y se colapsan al espirar: es el atelectrauma, que daña la vía aérea pequeña. Con tantas respiraciones al día (unas 30 000), la lesión se acumula.` };
   if (peep >= TOPES.peepMax) return { clave: 'peep', titulo: 'PEEP en el tope', origen: 'ficha', cita: 'M27 pdf 10',
-    texto: 'PEEP de 20 cmH₂O: la ficha llega hasta 20 para abrir lo colapsado, pero la misma PEEP sobredistiende las zonas sanas (volutrauma). No se sube más.' };
+    texto: 'PEEP de 20 cmH₂O: la ficha llega hasta 20 para abrir lo colapsado, pero la misma PEEP sobredistiende las zonas sanas (volutrauma).' };
   return null;
 }
