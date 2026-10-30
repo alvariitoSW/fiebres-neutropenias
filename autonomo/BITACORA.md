@@ -245,6 +245,19 @@ esta sección.
 - **Depende de**: nada. **No es prioritario** (lo dijiste tú): espera a que digas cuándo.
 - **30/10, parte 2 aprobada** (`radar-tuits`): «me gustaría que los mirases, si tienen PDF que lo consigas, y lo integrases en la parte de UCI Papers […] no corre prisa». Queda aquí la parte 1 (los PDF de la lista).
 
+### B-049 · anatomyatelier.org para el motor del corazón (ingeniería inversa) · apuntado 2026-10-30
+- **Lo que dijiste** (30/10): «he encontrado una web que puede ser útil para hacer el motor del corazón de manera
+  realista». Fase 1 hecha el mismo día: informe https://claude.ai/artifact/PQDjwgQj5v7eMrQcqScTSk
+  (`autonomo/ideas/ingenieria-inversa/anatomyatelier.md`).
+- **Resultado**: no sirve para B-045. Es un corazón 3D de una sola pieza hecho con IA (Tripo AI), sin cavidades, sin
+  válvulas que se muevan y sin latido; sin licencia escrita. **No cambia el contrato** de `mv-eco`.
+- **Lo que propongo** (supongo): (1) una línea en el encargo de `mv-eco-2a5`: una malla hecha por IA nunca es
+  referencia de proporciones ni de forma; (2) «aislar el corte» y (3) rótulos que siguen a cada pieza en la vista 3D,
+  pequeñas, para después de B-045.
+- **Lo que NO quiero**: su malla, código, imágenes o textos; three.js para esto.
+- **Tamaño**: nada la (1); pequeña cada una la (2) y la (3).
+- **Depende de**: tu respuesta; la (2) y la (3), de que B-045 esté hecho.
+
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
 | Fase | Quién | Para qué | Modelo |
@@ -344,6 +357,8 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
      de aorta, Devereux 2012, Hickling 2001, Mireles-Cabodevila 2022, Carden 2026, AHA 2020/ERC 2021, SCAI 2015,
      Valdenebro 2021, Leung y Levine 1994, un libro de física de los ultrasonidos (B-028) y el capítulo
      cardiovascular de Bates o Surós.
+6. **B-049** (anatomyatelier.org): no sirve para el motor del corazón. ¿Añado la lección «malla de IA ≠ referencia» al
+   encargo de `mv-eco-2a5` y dejo «aislar el corte» y los rótulos 3D para después de B-045?
 
 **Ya no te toca** (Consejo, 30/10, 7.ª): SCA y disección (mirados) · HP crónica de la eco (lo arregla `mv-eco`, entra en
 su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`) · Wiggers (aprobado, `wiggers-movil`).
