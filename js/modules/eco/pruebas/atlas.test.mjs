@@ -172,7 +172,10 @@ test('Atlas: cada cita de los capítulos de la app está en la bibliografía, y 
     const refs = [...html.matchAll(/data-ref="([^"]+)"/g)].flatMap(x => x[1].split(','));
     assert.ok(refs.length > 0, `${k} sin citas`);
     for (const r of refs) assert.ok(REFERENCIAS[r.trim()], `${k}: cita sin referencia ${r}`);
-    assert.ok(html.includes('class="card at-figura"'), `${k} sin figura`);
+    // Fase A (solo texto, aprobada el 30/10; este cambio del juez, con el sí del usuario el 30/10): sin figura vale
+    // solo si el capítulo lleva el aviso «en preparación», como en jueces.mjs
+    assert.ok(html.includes('class="card at-figura"') || html.includes('at-en-preparacion'),
+      `${k} sin figura ni aviso «en preparación»`);
   }
 });
 
