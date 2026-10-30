@@ -26,6 +26,21 @@
                 </div>
             </div>
         </div>
+        <div class="field-card" data-tab="radio-n2">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="40" cy="28" rx="26" ry="21" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M40,8 v22" stroke="var(--accent-purple)" stroke-width="2"/><path d="M16,34 l22,-4 M64,34 l-22,-4" stroke="var(--accent-purple)" stroke-width="2"/><path d="M28,22 l10,6" stroke="var(--accent-red)" stroke-width="2.5"/></svg>
+                    <div class="field-name">HTIC y hernias</div>
+                    <div class="field-hook">Cisternas borradas, línea media desviada y una pupila que se dilata.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Qué ves en la TC cuando sube la presión, los cinco tipos de hernia y la clínica que los acompaña.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
         <!-- [HUECO constructores: una .field-card[data-tab="radio-nN"] por ficha, en orden] -->
     </div>
     <div id="panel-pif-radio-neuro-tabs">
@@ -78,6 +93,93 @@
                 <li>Perfusión por TC y resonancia con difusión: no se cubren aquí (<a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Computed Tomography Perfusion»</a>).</li>
                 <li>Ventanas de tiempo y criterios de trombólisis y trombectomía: no se dan aquí; el libro tampoco los desarrolla (el capítulo parte del paciente ya ingresado).</li>
                 <li>Edema, HTIC y hernias: siguiente ficha del cuaderno.</li>
+            </ul>
+        </div>
+        <div id="radio-n2" class="tab-content">
+            <h3 style="color: var(--accent-purple);">HTIC y hernias</h3>
+            <div class="card" id="radio-n2-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> cuando sube la presión, la TC lo cuenta con <span class="hl-rojo">cisternas de la base borradas</span> y la <span class="hl-azul">línea media desviada</span>; si además una pupila se dilata o baja la consciencia, piensa en <span class="hl-rojo">hernia</span>.</p>
+            </div>
+            <dl class="kv-row" id="radio-n2-cifras">
+                <dt>Marshall III</dt><dd>Swelling bilateral con <strong>ausencia de cisternas de la base</strong>: HTIC en el <strong>63,2 %</strong>. Con cisternas visibles y línea media centrada (tipo II): 28,6 %. <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">Manual UMI, pág. 94</a>.</dd>
+                <dt>HTIC</dt><dd>Definición operacional: <strong>PIC &gt;20 mmHg durante más de 5 minutos</strong>. <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=13" target="_blank" rel="noopener">Libro Azul, neurología, pág. 871</a>.</dd>
+                <dt>Signo clave</dt><dd>Edema difuso: se pierden la unión gris-blanca, los surcos, la ínsula y se <strong>comprimen las cisternas</strong>. <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=51" target="_blank" rel="noopener">Libro Azul, neurología, pág. 909</a>.</dd>
+            </dl>
+
+            <div class="article-figure" id="radio-n2-fig">
+                <img src="js/modules/sobrevivir-umi/img/umi-tc-marshall.jpg" alt="Seis cortes de TAC, uno por tipo de Marshall: tipos I a IV, masa evacuada y masa no evacuada" loading="lazy">
+                <div class="article-figure-caption">Un corte de TAC por categoría de Marshall, de izquierda a derecha: tipo I, II, III, IV, masa evacuada y masa no evacuada. Manual UMI, <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">pág. 94</a>.<br><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-marshall" data-resaltar="#umi-marshall-tabla">🔗 Ver en el texto: Clasificación de Marshall (Manual UMI) →</button></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Los cinco tipos de hernia en un corte coronal</p>
+            <div class="article-figure" id="radio-n2-esquema-fig" style="background: var(--bg-main);">
+                <svg id="radio-n2-esquema" viewBox="0 0 300 270" role="img" aria-label="Corte coronal esquemático del cráneo con la hoz, el tentorio y cinco flechas numeradas que marcan los tipos de hernia" style="width:100%; height:auto; display:block;">
+  <defs><marker id="radio-n2-punta" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--accent-red)"/></marker></defs>
+  <rect width="300" height="270" fill="var(--bg-main)"/>
+  <ellipse cx="150" cy="116" rx="120" ry="102" fill="none" stroke="var(--text-dim)" stroke-width="3"/>
+  <path d="M150,16 V88" stroke="var(--accent-yellow)" stroke-width="3"/>
+  <path d="M32,150 L138,128 M268,150 L162,128" stroke="var(--accent-yellow)" stroke-width="3" fill="none"/>
+  <ellipse cx="150" cy="190" rx="68" ry="30" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+  <rect x="143" y="126" width="14" height="92" rx="6" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+  <path d="M120,218 H180" stroke="var(--text-dim)" stroke-width="3" stroke-dasharray="5 4"/>
+  <circle cx="70" cy="62" r="28" fill="none" stroke="var(--accent-red)" stroke-width="2.5" stroke-dasharray="5 4"/>
+  <text x="70" y="67" font-size="12.5" text-anchor="middle" fill="var(--text-main)">masa</text>
+  <text x="156" y="30" font-size="12.5" fill="var(--text-main)">hoz</text>
+  <text x="54" y="168" font-size="12.5" fill="var(--text-main)">tentorio</text>
+  <text x="190" y="202" font-size="12.5" text-anchor="middle" fill="var(--text-main)">cerebelo</text>
+  <text x="150" y="260" font-size="12.5" text-anchor="middle" fill="var(--text-main)">foramen magno</text>
+  <path d="M112,96 H190" stroke="var(--accent-red)" stroke-width="3" fill="none" marker-end="url(#radio-n2-punta)"/>
+  <path d="M96,116 Q114,138 133,141" stroke="var(--accent-red)" stroke-width="3" fill="none" marker-end="url(#radio-n2-punta)"/>
+  <path d="M150,104 V122" stroke="var(--accent-red)" stroke-width="3" fill="none" marker-end="url(#radio-n2-punta)"/>
+  <path d="M128,196 V232" stroke="var(--accent-red)" stroke-width="3" fill="none" marker-end="url(#radio-n2-punta)"/>
+  <path d="M178,172 V140" stroke="var(--accent-red)" stroke-width="3" fill="none" marker-end="url(#radio-n2-punta)"/>
+  <g font-size="12.5" font-weight="700" text-anchor="middle">
+    <circle cx="200" cy="90" r="9" fill="var(--accent-red)"/><text x="200" y="94.5" fill="var(--bg-main)">1</text>
+    <circle cx="90" cy="134" r="9" fill="var(--accent-red)"/><text x="90" y="138.5" fill="var(--bg-main)">2</text>
+    <circle cx="170" cy="112" r="9" fill="var(--accent-red)"/><text x="170" y="116.5" fill="var(--bg-main)">3</text>
+    <circle cx="108" cy="232" r="9" fill="var(--accent-red)"/><text x="108" y="236.5" fill="var(--bg-main)">4</text>
+    <circle cx="196" cy="150" r="9" fill="var(--accent-red)"/><text x="196" y="154.5" fill="var(--bg-main)">5</text>
+  </g>
+</svg>
+                <div class="article-figure-caption" style="color: var(--text-main);">
+                    <ol id="radio-n2-leyenda" style="list-style:none; padding-left:0; margin:6px 0; font-size:0.82rem;"><li style="margin:4px 0;"><strong>1. Subfalcina:</strong> el giro cingulado se desliza bajo la hoz; puede comprimir la cerebral anterior (infarto distal) y debilitar las piernas. TC: ventrículo lateral del mismo lado borrado y septum pellucidum desplazado.</li><li style="margin:4px 0;"><strong>2. Uncal (transtentorial lateral):</strong> el uncus del lóbulo temporal desciende por el borde del tentorio y comprime el III par: pupila dilatada y poco reactiva del mismo lado y debilidad del lado contrario. TC: cisterna pontocerebelosa del mismo lado ensanchada y la contraria borrada.</li><li style="margin:4px 0;"><strong>3. Central descendente:</strong> diencéfalo y mesencéfalo bajan por la incisura del tentorio; típica del edema difuso o de masas en los dos lados. TC: cisternas perimesencefálicas borradas. Clínica: posturas de flexión y luego de extensión, pérdida de reflejos del tronco y respiración irregular.</li><li style="margin:4px 0;"><strong>4. Amigdalar:</strong> las amígdalas cerebelosas bajan por el foramen magno y comprimen el bulbo: amenaza vital inmediata.</li><li style="margin:4px 0;"><strong>5. Ascendente:</strong> una masa de la fosa posterior empuja el cerebelo hacia arriba por la incisura. TC: cisternas cuadrigeminales aplanadas, mesencéfalo «en peonza» e hidrocefalia.</li></ol>
+                    <span class="fuente-ficha" id="radio-n2-origen">Origen: esquema de la app (dibujo propio, sin escala); tipos según <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «Introduction»</a> y <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «Patterns of Brain Herniation»</a>; clínica según <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «History and Physical»</a>; hallazgos de la TC según <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «Evaluation»</a>. El foramen magno y la muerte por paro respiratorio y cardíaco: <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=48" target="_blank" rel="noopener">Libro Azul, neurología, pág. 906</a>.</span>
+                </div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">El orden de lectura de esta app</p>
+            <p class="fuente-ficha" id="radio-n2-nota">Es el guion propio de esta app: no lo propone una sola fuente. Cada paso lleva a la fuente que lo explica, y en cada frase hay una sola fuente.</p>
+            <div class="algo-flow" id="radio-n2-pasos">
+            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Edema difuso: surcos, ínsula y cisternas.</strong> El edema difuso borra la unión sustancia blanca-gris, la diferenciación del núcleo lenticular, los surcos de la corteza y la ínsula, y comprime las cisternas subaracnoideas; la TC no distingue el edema vasogénico del citotóxico, pero da la causa. <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=51" target="_blank" rel="noopener">Libro Azul, neurología, pág. 909</a>.</div></div>
+            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Marshall: dos preguntas, cisternas y línea media.</strong> Tipo II: cisternas visibles y línea media centrada; tipo III: swelling bilateral y ausencia de cisternas de la base; tipo IV: swelling unilateral con línea media desviada (100 % de HTIC). <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">Manual UMI, pág. 94</a>.
+                <details class="nota-plegable" id="radio-n2-nota-20mm"><summary>Nota de fidelidad: «20 mm» frente a &gt;5 mm</summary><p style="font-size:0.82rem;">La tabla del Manual imprime «línea media desviada 20 mm» en el tipo IV, pero el propio Manual usa <strong>&gt;5 mm</strong> como umbral de línea media para operar un hematoma (<a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=31" target="_blank" rel="noopener">Manual UMI, pág. 83</a>). Las fuentes discrepan y la app no elige: esta ficha no espera a 20 mm para dar la alarma. La ficha de origen guarda la misma nota.</p></details>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-marshall" data-resaltar="#umi-marshall-nota">🔗 Ver en el texto: Nota de la clasificación de Marshall →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Qué cisterna o qué ventrículo se borra dice qué hernia.</strong> En la subfalcina se borra el ventrículo lateral y se desplaza el septum pellucidum; en la central, las cisternas perimesencefálicas; en la uncal, la cisterna pontocerebelosa del mismo lado se ensancha y la contraria se borra; en la ascendente, las cuadrigeminales se aplanan (esquema). <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «Evaluation»</a>.</div></div>
+            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text"><strong>La clínica que confirma.</strong> Una pupila unilateral dilatada y fija puede ser una lesión ocular o la disfunción del III par por una masa en expansión. Marino, cap. 45, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=11" target="_blank" rel="noopener">pág. 11</a>.
+                <div style="margin-top:6px;">Por separado, el Libro Azul describe el deterioro rostrocaudal en cuatro fases (supratentorial, mesencefálica, pontina, bulbar), con pupilas que pasan de mióticas reactivas a midriáticas arreactivas. <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=12" target="_blank" rel="noopener">Libro Azul, neurología, pág. págs. 870-871</a>.</div>
+                <div style="margin-top:6px;"><small>Errata de la fuente: en la tabla 1 del Libro Azul la fila del patrón respiratorio se rotula «Reflejos oculocefálicos», igual que otra fila; esta ficha no usa esa fila.</small></div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-coma" data-resaltar="#mn-coma-ojos">🔗 Ver en el texto: Coma: ojos y pupilas (Marino) →</button> <button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-neuroanatomia">🔗 Ver en el texto: Neuroanatomía en la TAC (Manual UMI) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">5</span><div class="algo-text"><strong>Qué se mide y cuánto.</strong> Marino manda monitorizar la PIC con Glasgow ≤8, sangre en los ventrículos o signos clínicos de herniación transtentorial (p. ej. dilatación pupilar unilateral) y mantenerla por debajo de 20 mmHg. Marino, cap. 47, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=45" target="_blank" rel="noopener">pág. 45</a>. El Manual añade la compresión de cisternas basales en la TAC como indicación (nivel II). <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=31" target="_blank" rel="noopener">Manual UMI, pág. 83</a>.
+                <div style="margin-top:6px;"><small>Las fuentes difieren en el matiz: el Libro Azul define la HTIC con duración (más de 5 min); Marino y el Manual dan el umbral de 20 mmHg sin duración.</small></div>
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-pic-onda">🔗 Ver en el texto: Onda de la PIC (Manual UMI) →</button> <button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-onsd" data-resaltar="#umi-onsd-regla">🔗 Ver en el texto: Vaina del nervio óptico (Manual UMI) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">6</span><div class="algo-text"><strong>Qué hace el intensivista.</strong> Escalones del TCE, cirugía oportuna y segundo nivel (craniectomía descompresiva, hipotermia, barbitúricos) están en el Manual. <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=31" target="_blank" rel="noopener">Manual UMI, pág. 83</a>. La craniectomía busca controlar la PIC, mejorar la presión de perfusión y evitar las herniaciones y la compresión del tronco. <a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=59" target="_blank" rel="noopener">Libro Azul, neurología, pág. 917</a>.
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-tce-manejo">🔗 Ver en el texto: Manejo del TCE (Manual UMI) →</button> <button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-marshall" data-resaltar="#umi-marshall-tabla">🔗 Ver en el texto: Marshall (Manual UMI) →</button></div></div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Tarjeta de guardia: ¿hay hernia o riesgo de hernia?</p>
+            <p class="fuente-ficha">Responde Sí o No según lo que ves en la TC y en la exploración. Cada final lleva su fuente.</p>
+            <div class="card" id="radio-n2-wizard" style="padding:14px 16px;">
+                <div id="radio-n2-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-n2-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-n2-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-n2-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <ul class="term-chips" id="radio-n2-profundizar">
+                <li>Hernia transalar y transcalvarial (tras una craniectomía), hemorragias de Duret y signo de Kernohan: se nombran en <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/books/NBK542246/" target="_blank" rel="noopener">StatPearls, «Brain Herniation», sección «Patterns of Brain Herniation»</a>; no se desarrollan aquí.</li>
+                <li>Tratamiento escalonado de la HTIC: está en el Manual (<button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-tce-manejo" data-resaltar="#umi-tce-escalones">escalones del TCE</button>).</li>
+                <li>Ictus y hemorragia: ficha anterior del cuaderno.</li>
             </ul>
         </div>
         <!-- [HUECO constructores: un .tab-content#radio-nN por ficha, en orden] -->
