@@ -23,8 +23,8 @@ const AJUSTES = {
     // (botones que se apagan en su máximo) y los sellos «Cizalla ↑», «Objetivo», «Por debajo de lo tolerado» y bradicardia; los recorre este juez y
     // pruebas/shock-vivo.mjs (sección A4) comprueba la dirección de la FC. No hace falta ajuste: ningún botón del dock es un paso a paso.
     'shock-vivo': {},
-    // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos, no mandos que acumulen (la prueba propia los recorre)
-    'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa)/ },
+    // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
+    'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
