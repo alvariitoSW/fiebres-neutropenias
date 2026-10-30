@@ -1,11 +1,14 @@
 // Banco de repaso — PIF Radiología · «Placa portátil de UCI».
 // Fuente: Marino PL. The ICU Book, 5.ª ed.: cap. 28 (tubo endotraqueal), cap. 2 (vía central) y cap. 49 (sonda de alimentación).
+// Desde la ficha «TC de cráneo»: Marino cap. 47, El Libro Azul (sección VIII) y Manual de orientación de la UMI (PNT del hospital, cita genérica).
 // Las páginas son las del PDF de docs/. Formato igual que merino-hemato-preguntas.js.
 export const temasPifRadio = [
     { key: 'pifradio-tubo', etiqueta: 'Tubo endotraqueal en la placa' },
     { key: 'pifradio-via', etiqueta: 'Vía central en la placa' },
     { key: 'pifradio-sonda', etiqueta: 'Sonda nasogástrica en la placa' },
     { key: 'pifradio-caso', etiqueta: 'Caso: placa tras intubar, canalizar y sondar' },
+    { key: 'pifradio-craneo', etiqueta: 'TC de cráneo en 5 preguntas' },
+    { key: 'pifradio-caso-craneo', etiqueta: 'Caso: TC de cráneo de guardia' },
 ];
 
 export const preguntasPifRadio = [
@@ -192,5 +195,151 @@ export const preguntasPifRadio = [
         ],
         correcta: 1,
         explicacion: 'Un tubo que se mueve hacia los pulmones a menudo acaba en el bronquio principal derecho, y el pulmón izquierdo no ventilado se atelectasia (págs. 18-19); mantener la punta a ≤21 cm de los dientes en mujeres reduce el riesgo (pág. 19). Esperar o avanzarlo mantiene un pulmón sin ventilar; la TC retrasa la corrección (razonamiento propio). Lo que te llevas: 1) la punta, 3-5 cm por encima de la carina (Marino, cap. 28, pág. 18); 2) ≤21 cm de los dientes en mujeres y 23 en hombres (pág. 19); 3) placa antes de nutrir una sonda (cap. 49, págs. 27-28).',
+    },
+
+    // ---- TC de cráneo (ficha 5) ----
+    {
+        id: 'pifradio-q016', tema: 'pifradio-craneo',
+        enunciado: 'En una TC de cráneo sin contraste de un paciente que acaba de deteriorarse, ¿cómo se ve la sangre intracerebral?',
+        opciones: [
+            'Igual que el parénquima hasta pasadas 24 horas',
+            'Como una zona hipodensa, más oscura que el parénquima y parecida al edema',
+            'Hiperdensa: más blanca que el parénquima sano de alrededor',
+            'Como una zona negra, como el aire de los senos',
+        ],
+        correcta: 2,
+        explicacion: 'Marino muestra la hemorragia intracerebral como áreas hiperdensas (figs. 47.2 y 47.3, págs. 40 y 43). La hipodensidad es el edema focal (Libro Azul, pág. 51): leer así un hematoma te haría buscar un infarto y dar antiagregante a quien sangra. Que la sangre no se vea hasta 24 h no está en las fuentes y retrasaría la neurocirugía. Confundirla con aire (negro) pasaría por alto el hematoma. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q017', tema: 'pifradio-craneo',
+        enunciado: 'Un paciente con TCE tiene un hematoma y la línea media desviada. Según la ficha de factores pronósticos del Manual UMI, ¿a partir de qué desviación cuenta como factor de mal pronóstico?',
+        opciones: [
+            'Cualquier desviación visible, aunque sea de 1 mm',
+            'Más de 20 mm',
+            'Más de 15 mm',
+            'Más de 5 mm',
+        ],
+        correcta: 3,
+        explicacion: 'El manual lista el desplazamiento de la línea media de más de 5 mm como factor pronóstico (PDF pág. 27). En su tabla de Marshall imprime 20 mm para el tipo IV: es una discrepancia interna del manual, y esta app usa 5 mm. Esperar a 20 mm retrasaría la alarma en un paciente que ya tiene mal pronóstico. Los 15 mm no figuran; 15 cc es el volumen del hematoma. Origen: ficha (Manual UMI, págs. 79 y 94).',
+    },
+    {
+        id: 'pifradio-q018', tema: 'pifradio-craneo',
+        enunciado: 'La TC de un paciente con TCE no muestra las cisternas de la base y hay swelling en los dos hemisferios. ¿Qué tipo de Marshall es y qué te dice?',
+        opciones: [
+            'Difusa III: swelling bilateral sin cisternas basales (HTIC 63,2%)',
+            'Difusa II: pequeñas lesiones, línea media centrada y cisternas visibles, con HTIC en el 28,6% y sin necesidad de más medidas',
+            'Difusa I: TAC normal, sin riesgo de HTIC y no hace falta vigilar la PIC',
+            'Masa evacuada: se ha operado ya una lesión',
+        ],
+        correcta: 0,
+        explicacion: 'Swelling bilateral con ausencia de cisternas de la base es el tipo III, con HTIC en el 63,2% (Manual UMI, pág. 94). Llamarlo II, con cisternas visibles, infraestimaría el riesgo; el tipo I es una TC normal; y «masa evacuada» exige una cirugía previa que el enunciado no dice. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q019', tema: 'pifradio-craneo',
+        enunciado: 'Tras una hemorragia subaracnoidea, la TC muestra ventrículos dilatados. Según Marino, ¿por qué?',
+        opciones: [
+            'Porque ha entrado aire por la fractura y ocupa el sistema ventricular',
+            'Porque la sangre bloquea el flujo del LCR y causa hidrocefalia obstructiva',
+            'Porque la hipertensión intracraneal reduce el volumen del cerebro y los ventrículos se ven mayores por contraste',
+            'Porque la inflamación por la sangre cierra la barrera hematoencefálica',
+        ],
+        correcta: 1,
+        explicacion: 'La sangre en el espacio subaracnoideo bloquea el flujo del LCR y a menudo causa hidrocefalia obstructiva y aumento de la PIC (Marino, cap. 47, pág. 47). No hay fractura en el enunciado. La inflamación hace lo contrario: daña la barrera (vasogénico), y no dilata ventrículos. Tratarla como edema simple te haría tardar en pedir drenaje. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q020', tema: 'pifradio-craneo',
+        enunciado: 'Un paciente con warfarina tiene un hematoma intraparenquimatoso grande, sin desviación de la línea media. ¿Qué es lo primero que dice Marino?',
+        opciones: [
+            'Esperar una segunda TC a las 24 h y no actuar antes, porque sin desviación de la línea media no hay urgencia',
+            'Parar la warfarina de la siguiente toma y vigilar la tensión sin más',
+            'Revertir ya el antitrombótico: CCP de 4 factores y vitamina K',
+            'Administrar heparina para evitar que el trombo crezca',
+        ],
+        correcta: 2,
+        explicacion: 'El deterioro rápido de las primeras horas se atribuye a la expansión del hematoma, así que se revierte ya el antitrombótico (CCP de 4 factores más vitamina K en la warfarina; Marino, cap. 47, págs. 42-44). Esperar a la segunda TC deja que sangre más; omitir solo la siguiente dosis no revierte la anticoagulación presente; la heparina agravaría la hemorragia. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q021', tema: 'pifradio-craneo',
+        enunciado: 'Una TC sin sangre muestra una zona focal hipodensa. ¿Qué significa según El Libro Azul?',
+        opciones: [
+            'Sangre antigua ya reabsorbida, que no necesita más estudio',
+            'Un edema focal, del que el infarto es un ejemplo',
+            'Un hematoma epidural, que se ve oscuro por ser extraaxial',
+            'Un artefacto del hueso, que no tiene valor clínico',
+        ],
+        correcta: 1,
+        explicacion: 'La TC detecta el edema focal como señal hipodensa anormal, y los infartos son ejemplo de edema focal (Libro Azul, pág. 51). Pensar en sangre antigua o en hematoma epidural no lo dice ninguna fuente de la app y te alejaría del ictus. Un artefacto no se interpreta así sin más: no dejar de buscar causa podría costar tiempo de tratamiento. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q022', tema: 'pifradio-craneo',
+        enunciado: 'Encuentra el error. ¿Cuál de estas lecturas de una TC de cráneo es incorrecta?',
+        opciones: [
+            'Una TC normal en un TCE con GCS ≤8 puede justificar monitorizar la PIC si hay hipotensión sistólica por debajo de 90 mm Hg',
+            'Un hematoma con desviación de la línea media puede esperar sin neurocirugía',
+            'La ausencia de cisternas basales es factor de mal pronóstico del TCE',
+            'El hematoma intracerebral se ve como una zona hiperdensa',
+        ],
+        correcta: 1,
+        explicacion: 'Es incorrecta la segunda: Marino recomienda consultar neurocirugía en la mayoría de las hemorragias intracerebrales, sobre todo grandes o en expansión (cap. 47, pág. 45), y con masa y desviación de la línea media no se espera. Las otras tres son ciertas (Libro Azul, pág. 52; Manual UMI, pág. 79; Marino, pág. 43). Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q023', tema: 'pifradio-craneo',
+        enunciado: 'Hemorragia subaracnoidea por aneurisma roto, aún sin asegurar y con la TAS en 190 mm Hg. ¿Qué objetivo y fármaco propone Marino?',
+        opciones: [
+            'Tranexámico para prevenir el resangrado',
+            'TAS por debajo de 100 mm Hg con nitroprusiato, lo más rápido posible, aunque baje la perfusión',
+            'Dejar la TAS en 190 mm Hg para mantener la perfusión cerebral',
+            'TAS ≤140 mm Hg, con labetalol',
+        ],
+        correcta: 3,
+        explicacion: 'Con TAS de 140 mm Hg o menos, el resangrado es poco frecuente; la bajada no debe subir el gasto cardíaco, por eso el labetalol (Marino, cap. 47, pág. 47). Dejar 190 deja al aneurisma expuesto; bajar a menos de 100 no tiene respaldo en la fuente. El tranexámico no previene el resangrado y no se recomienda (pág. 47). Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q024', tema: 'pifradio-caso-craneo',
+        enunciado: 'Caso (1/4). Un hombre de 68 años con warfarina llega con cefalea y somnolencia (datos ilustrativos). La TC sin contraste muestra una gran zona blanca en el hemisferio derecho. ¿Qué haces en la lectura?',
+        opciones: [
+            'Es sangre hiperdensa: pasas a mirar la línea media y las cisternas',
+            'Es una zona hipodensa de infarto: preparas un antiagregante',
+            'No se puede interpretar sin contraste, así que pides contraste antes de decidir nada',
+            'Es una TC normal con artefacto: repites mañana',
+        ],
+        correcta: 0,
+        explicacion: 'La sangre se ve hiperdensa (Marino, figs. 47.2 y 47.3, págs. 40 y 43): sí a la primera pregunta y pasas a línea media y cisternas. Dar antiagregante a un hematoma lo agravaría, y la TC sin contraste es justo la técnica que muestra la hemorragia. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q025', tema: 'pifradio-caso-craneo',
+        enunciado: 'Caso (2/4). La línea media está centrada y las cisternas se ven; la sangre está dentro del hemisferio y ha pasado a los ventrículos. ¿Qué medida es la prioridad?',
+        opciones: [
+            'Dar vitamina K oral, sin más medidas, y reevaluar en una semana con una nueva TC',
+            'Revertir la warfarina ya y consultar con neurocirugía',
+            'Iniciar heparina para que la TC no empeore',
+            'Esperar: sin efecto de masa no hay urgencia',
+        ],
+        correcta: 1,
+        explicacion: 'La prioridad es frenar el hematoma con reversión inmediata (CCP de 4 factores más vitamina K; Marino, cap. 47, págs. 42-44), y la sangre intraventricular obliga a consultar neurocirugía por el riesgo de hidrocefalia obstructiva (pág. 45). La vitamina K sola actúa en horas (pág. 42), y la heparina empeora la hemorragia. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q026', tema: 'pifradio-caso-craneo',
+        enunciado: 'Caso (3/4, giro). A las 6 h la pupila izquierda se dilata y el Glasgow cae a 7 (cifras ilustrativas). La nueva TC muestra más sangre, línea media desviada y cisternas basales ausentes. ¿Qué interpretas?',
+        opciones: [
+            'Una lesión estable: se mantiene el plan anterior y se repite la TC en 24 horas, sin cambiar nada',
+            'Una bajada de la sedación: se retira la medicación',
+            'Efecto de masa con herniación: pedir neurocirugía y monitorizar la PIC',
+            'Un infarto añadido en un territorio arterial, que se trata con antiagregante',
+        ],
+        correcta: 2,
+        explicacion: 'Con desviación de la línea media y cisternas ausentes hay efecto de masa y swelling (Manual UMI, págs. 79 y 94), y Marino pide medir la PIC con GCS de 8 o menos, sangre intraventricular o signos de herniación como una pupila dilatada (cap. 47, pág. 45). Dejarla en 24 h perdería el momento de operar; los antiagregantes empeorarían la hemorragia. Origen: ficha.',
+    },
+    {
+        id: 'pifradio-q027', tema: 'pifradio-caso-craneo',
+        enunciado: 'Caso (4/4, giro; otra paciente de la misma guardia). Una mujer de 50 años en coma tras un accidente, con GCS de 7 y TAS de 85 mm Hg (datos ilustrativos). La TC no muestra sangre ni hipodensidad focal. ¿Qué haces?',
+        opciones: [
+            'Descartar la hipertensión intracraneal, porque la TC es normal y el coma será metabólico',
+            'Pensar en monitorizar la PIC pese a la TC normal',
+            'Pedir solo otra TC en un mes, porque la TC normal indica buen pronóstico',
+            'Tratarla como un Marshall IV por el coma',
+        ],
+        correcta: 1,
+        explicacion: 'El Libro Azul recoge que, con GCS de 8 o menos y TC normal, monitorizar la PIC es beneficioso si hay más de 40 años, TAS por debajo de 90 mm Hg o daño focal (pág. 52). Descartar la HTIC por la TC contradice esto; la clase IV exige swelling y línea media desviada, que no hay. Origen: ficha.',
     },
 ];

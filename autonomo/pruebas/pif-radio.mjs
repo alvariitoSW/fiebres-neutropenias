@@ -11,6 +11,8 @@ const RUTAS = {
   'radio-tubo': [['n'], ['s', 's'], ['s', 'n', 'n'], ['s', 'n', 's', 's'], ['s', 'n', 's', 'n']],
   'radio-via': [['n', 'n'], ['n', 's', 'n'], ['n', 's', 's'], ['s', 'n'], ['s', 's', 's'], ['s', 's', 'n']],
   'radio-sonda': [['n'], ['s', 'n'], ['s', 's', 'n'], ['s', 's', 's']],
+  // TC de cráneo: efecto de masa, swelling, HSA, hematoma sin masa, isquemia, TC sin sangre ni hipodensidad
+  'radio-craneo': [['s', 's'], ['s', 'n', 's'], ['s', 'n', 'n', 's'], ['s', 'n', 'n', 'n'], ['n', 's'], ['n', 'n']],
 };
 for (const w of [390, 360]) {
   const ctx = await b.newContext({ viewport: { width: w, height: 844 }, hasTouch: true, isMobile: true });
@@ -31,7 +33,7 @@ for (const w of [390, 360]) {
   const abrir = async tab => { await p.evaluate(t => document.querySelector(`#pif-radio-corkboard .field-card[data-tab="${t}"]`).click(), tab); await p.waitForTimeout(250);
     await p.evaluate(t => { const c = document.querySelector(`#pif-radio-corkboard .field-card[data-tab="${t}"]`); c.querySelector('.back-cta,.card-face.back')?.click(); }, tab); await p.waitForTimeout(250); };
   for (const [pref, rutas] of Object.entries(RUTAS)) {
-    const tab = { 'radio-tubo': 'radio-f2', 'radio-via': 'radio-f3', 'radio-sonda': 'radio-f4' }[pref];
+    const tab = { 'radio-tubo': 'radio-f2', 'radio-via': 'radio-f3', 'radio-sonda': 'radio-f4', 'radio-craneo': 'radio-f5' }[pref];
     await p.evaluate(t => window.openCorkboardTopic?.('panel-pif-radio-tabs', t), tab);
     await p.evaluate(t => { document.querySelectorAll('#panel-pif-radio-tabs .tab-content').forEach(x => x.classList.toggle('active', x.id === t)); }, tab);
     for (const ruta of rutas) {
@@ -45,6 +47,12 @@ for (const w of [390, 360]) {
       if (CAP && ruta.join('') === 'ss' + (pref === 'radio-via' ? '' : 'n')) await p.screenshot({ path: `${CAP}${w}-${pref}-${ruta.join('')}.png` });
     }
   }
+  // <details> «¿Qué no puede ver esta IA?»: cerrado al empezar, se abre, nombra la fuente y no desborda
+  await p.evaluate(() => window.openCorkboardTopic?.('panel-pif-radio-tabs', 'radio-f5'));
+  await p.evaluate(() => document.querySelectorAll('#panel-pif-radio-tabs .tab-content').forEach(x => x.classList.toggle('active', x.id === 'radio-f5')));
+  const ia = await p.evaluate(() => { const d = document.getElementById('radio-f5-ia'); const cerrado = !d.open; d.open = true; return { cerrado, git: !!d.querySelector('a[href*="github.com/NVIDIA-Medtech/NV-Reason-CT"]'), dw: document.documentElement.scrollWidth - innerWidth }; });
+  if (!ia.cerrado || !ia.git || ia.dw > 0) fallos.push(`${w} details IA: ${JSON.stringify(ia)}`);
+  if (CAP) await p.screenshot({ path: `${CAP}${w}-radio-craneo-ia.png` });
   // enlace "Ver en el texto" del último resultado → ficha de origen → VOLVER
   await p.evaluate(() => document.querySelector('#radio-sonda-resultado button[data-tab]').click()); await p.waitForTimeout(500);
   const dest = await p.evaluate(() => document.getElementById('mu-pauta-enteral')?.classList.contains('active'));
