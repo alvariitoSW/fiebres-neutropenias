@@ -183,7 +183,7 @@ export const preguntasPifRadio = [
     },
     {
         id: 'pifradio-q015', tema: 'pifradio-caso',
-        enunciado: 'Caso (4/4). Para hacerle la placa la giran y la saturación baja (cifras del caso, inventadas). El tubo parece más hondo y el pulmón izquierdo no tiene aire. ¿Qué haces y qué te llevas del caso?',
+        enunciado: 'Caso (4/4). Para hacerle la placa la giran y la saturación baja de 97 a 88 % (cifras inventadas del caso). El tubo parece más hondo y el pulmón izquierdo no tiene aire. ¿Qué haces y qué te llevas del caso?',
         opciones: [
             'Reposicionar el cuello y esperar: la placa del pulmón izquierdo se arregla sola',
             'Sospechar migración del tubo al bronquio principal derecho y retirarlo hasta que la punta quede a no más de 21 cm de los dientes',

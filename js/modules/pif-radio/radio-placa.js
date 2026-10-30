@@ -35,7 +35,7 @@ export const PASOS_VIA = {
     inicio: { pregunta: '¿Tienes una radiografía de tórax hecha tras canalizar la vía?',
         si: 'v2',
         no: 've1' },
-    ve1: { pregunta: 'Sin placa, con un catéter subclavio: ¿has mirado con eco las dos yugulares para descartar que haya subido hacia la cabeza?',
+    ve1: { pregunta: 'Sin placa, con un catéter subclavio: ¿has mirado con eco las dos yugulares para descartar que haya subido hacia la cabeza? (Si es yugular, contesta Sí y pasa a las burbujas.)',
         si: 've2',
         no: { estado: 'tfg-estado-warn', final: T_VIA('Con un catéter subclavio, la ficha propone mirar las dos yugulares para descartar que haya subido hacia la cabeza; se puede hacer durante el procedimiento y recolocarlo ya.' + cita('via', 36, 'Marino, cap. 2 (la ecografía continúa en la pág. 37).'), '#mar-punta-eco') } },
     ve2: { pregunta: 'Con eco subcostal, tras inyectar rápido 10 mL de suero por la luz distal, ¿aparecen microburbujas en la aurícula en menos de 2 segundos?',
