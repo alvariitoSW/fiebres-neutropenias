@@ -251,6 +251,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     inglés.
   - 30/10/2026: ya son 10 de 30 en la app; el 15 Estenosis aórtica entra solo con texto (fase A, sin figura ni preguntas).
   - 30/10/2026: ya son 12 de 30; entran también solo con texto el 19 Insuficiencia tricuspídea y el 21 Enfermedad pericárdica.
+  - 30/10/2026: ya son 13 de 30; entra también solo con texto el 17 Estenosis mitral.
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
@@ -409,4 +410,5 @@ quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e
 la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
 
 - 30/10/2026 · Atlas de eco, capítulo 21 (enfermedad pericárdica) en fase A: texto completo traducido (derrame, taponamiento, constricción y miocardiopatía restrictiva), con tres tablas y citas; figura y preguntas pendientes del ecógrafo nuevo.
+- 30/10/2026 · Atlas de eco, capítulo 17 (estenosis mitral) en fase A: texto completo traducido (estadios, tabla de grados de Pandian 2023, graduación por planimetría, tiempo de hemipresión, gradiente con la frecuencia y ejercicio), con una tabla y citas; figura y preguntas pendientes del ecógrafo nuevo.
 - 30/10/2026 · Atlas de eco, capítulo 19 (insuficiencia tricuspídea) en fase A: texto completo traducido, con tabla de grados y citas; figura y preguntas pendientes del ecógrafo nuevo.

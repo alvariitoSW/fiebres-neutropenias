@@ -870,7 +870,7 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
-- **Atlas de ecocardiografía**: quedan 20 capítulos por pasar a la app (10 de 30 ya están, 1 de ellos solo con texto) (ver «Atlas de ecocardiografía»).
+- **Atlas de ecocardiografía**: quedan 17 capítulos por pasar a la app (13 de 30 ya están, 4 de ellos solo con texto) (ver «Atlas de ecocardiografía»).
 
 **Imagen/UI, segunda vuelta de la parada 2 (eco-mega, 27/10/2026).** Mando de gravedad en el simulador: un deslizador «Gravedad»
 (`#cv-gravedad`, en `eco.html`) que aparece en los escenarios con `ESCENARIOS[k].gravedad` (hemorragia, fallo del VI, derrame y TEP) y
@@ -919,3 +919,4 @@ la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: 
 Tablas de Guyton regeneradas.
 - Atlas, capítulo 21 (enfermedad pericárdica): fase A, solo texto traducido (`atlas/cap-peri.html`), sin figura todavía.
 - Atlas, capítulo 19 (insuficiencia tricuspídea): fase A, solo texto traducido (`atlas/cap-tr.html`), sin figura todavía.
+- Atlas, capítulo 17 (estenosis mitral): fase A, solo texto traducido (`atlas/cap-ms.html`), sin figura todavía.
