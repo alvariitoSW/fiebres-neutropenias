@@ -1,0 +1,38 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 4). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b4-iones-b.html
+     Iones vivos, opción B «Lo que ves y lo que hay»: el suero es una ventanita sobre un depósito grande. Un selector de ion,
+     su reparto (K⁺ 98 % dentro, Mg²⁺ Tabla 37.1, Ca 99 % en hueso con la Fig. 38.1 en tres fracciones) y la Fig. 36.2 viva.
+     ECG: el del ritmo vivo (solo MOTOR y aplicarK, importados). Fuente: Marino 2024, caps. 35-38 (docs/marino-2024-electrolitos-caps35-38.pdf).
+     Sin librerías: SVG y JS puro. Con «reducir movimiento» (o Pausa), el ECG queda quieto. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iones vivos · lo que ves y lo que hay · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b4-iones-b/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>Lo que ves y lo que hay</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera">
+    <div class="mon-fila"><span id="mon-k">K⁺</span><span class="vit">PA <b id="mon-pa"></b> · FC <b id="mon-fc"></b> <span id="mon-extra"></span></span><button type="button" id="pausa" aria-pressed="false">Pausa</button></div>
+    <svg id="ecg" viewBox="0 0 340 70" preserveAspectRatio="none" role="img" aria-label="ECG del ritmo vivo, derivación II"><path id="ecg-path" d=""/></svg>
+    <p id="nota-ecg" hidden></p>
+  </section>
+  <div class="selector-ion" id="ion-sel" role="group" aria-label="Elige el ion"></div>
+  <section class="zona-escena"><svg id="ion-svg" viewBox="0 0 360 446" role="img" aria-label="El depósito grande del ion, la ventanita del suero y la figura del libro"></svg></section>
+  <div id="leyenda"></div>
+  <p class="aviso-rojo" hidden></p>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul><ul class="lista" id="fichas"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Dar</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y laboratorio</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<script type="module" src="b4-iones-b/pagina.js"></script>
+</body></html>

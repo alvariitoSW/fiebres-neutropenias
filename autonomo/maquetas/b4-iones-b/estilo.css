@@ -1,0 +1,39 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css, que se enlaza sin tocarlo). */
+.zona-escena { position: relative; }
+#ion-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#ion-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
+#ion-svg .min { font-size: 9.6px; fill: var(--text-muted); } #ion-svg .min2 { font-size: 9.6px; fill: var(--bg-main); font-weight: 700; }
+#ion-svg .rot { font-size: 9.6px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
+#ion-svg .gran { font-size: 30px; fill: var(--oro); font-weight: 800; }
+#ion-svg .tanque { fill: none; stroke: var(--line); stroke-width: 1.5; } #ion-svg .z, #ion-svg .dentro { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--line); }
+#ion-svg .fuera { fill: color-mix(in srgb, var(--accent-blue) 14%, var(--bg-main)); stroke: var(--line); }
+#ion-svg .ventana { fill: color-mix(in srgb, var(--accent-yellow) 10%, var(--bg-main)); stroke: var(--oro); stroke-width: 2; }
+#ion-svg .hilo { stroke: var(--oro); stroke-width: 2; } #ion-svg .lleno { fill: color-mix(in srgb, var(--accent-yellow) 55%, transparent); }
+#ion-svg .eje { stroke: var(--text-muted); stroke-width: 1; } #ion-svg .curva { fill: none; stroke: var(--accent-red); stroke-width: 2.4; }
+#ion-svg .punto { fill: var(--oro); stroke: var(--bg-main); stroke-width: 2; } #ion-svg .guia { stroke: var(--oro); stroke-width: 1; stroke-dasharray: 3 3; }
+#ion-svg .ca-i { fill: var(--accent-yellow); } #ion-svg .ca-q { fill: var(--accent-purple); } #ion-svg .ca-a { fill: var(--accent-green); }
+#ion-svg .ca-it { fill: var(--accent-yellow); } #ion-svg .ca-qt { fill: var(--accent-purple); } #ion-svg .ca-at { fill: var(--accent-green); }
+.selector-ion { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+.selector-ion button, .mando button, .mando select { min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
+.selector-ion button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; }
+#monitor .mon-fila { display: flex; justify-content: space-between; gap: 8px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
+#monitor .vit b { color: var(--text-main); font-size: .9rem; }
+#ecg { width: 100%; height: 66px; display: block; } #ecg path { fill: none; stroke: var(--accent-green); stroke-width: 1.6; }
+#nota-ecg { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); }
+.mando .fila { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; } .mando .fila > * { flex: 1 1 0; min-width: 72px; }
+.mando label { font: 600 .7rem/1.2 var(--sans); color: var(--text-dim); display: grid; gap: 2px; } .mando label output { color: var(--oro); }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); }
+.prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+.op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.frase .org { color: var(--text-muted); font-weight: 400; }
+.presets { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 38px; font: 700 .68rem/1.1 var(--sans); } .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.dock-pliega { display: grid; gap: 4px; }
+.dock-panel { max-height: 25vh !important; min-height: 0 !important; }
+.dock-tabs button { min-height: 34px !important; }
+.mando button, .mando select { min-height: 34px; padding: 2px 4px; }
+.mando .fila > * { min-width: 60px; }
+#monitor #ecg { height: 54px; }
