@@ -1,8 +1,8 @@
 // Mayéutica del bloque 3, sub-bloque 3B · Insuficiencia cardíaca aguda (Marino cap. 18, págs. 1-15): fichas 13 (tipos y consecuencias)
-// y 14 (manejo), y el caso C1 (Pilar). Datos puros; el formato está en la cabecera de b1-fluidos.js.
+// y 14 (manejo), y el caso C1 (Mercedes). Datos puros; el formato está en la cabecera de b1-fluidos.js.
 // Las fichas son js/modules/cardiologia/merino-cardiologia.html. Modelos vivos: shockVivo `ic-etapa-1/2/3` e `ic-cpap`
 // (js/data/shock-vivo-data.js), eco `hipertrofia` y `tep`, nefrona `normal|furosemida` y glomérulo `congestion`.
-// Las cifras de los modelos NO van en el texto de las preguntas (primero predices, luego compruebas); las del caso (Pilar) son
+// Las cifras de los modelos NO van en el texto de las preguntas (primero predices, luego compruebas); las del caso (Mercedes) son
 // datos del paciente. Las cifras de Ramiro (Fig. 18.3) las da el motor: autonomo/bloques/b3/herramientas/g4-etapas-cifras.mjs.
 const PDF = 'docs/marino-2024-cardiac-disorders-caps18-21.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
@@ -29,7 +29,7 @@ export const MAYEUTICA_IC = {
         enunciado: 'Un paciente con insuficiencia cardíaca tiene alta la presión telediastólica del VI. Antes de leer la ficha: ¿esa presión te dice si el fallo es sistólico o diastólico?',
         opciones: [
           { t: 'Sí: la presión alta es de la sistólica; en la diastólica la presión telediastólica es normal', porque: `En las dos sube la presión telediastólica; lo que cambia es el volumen (${p(2)}). Fiarte de la presión te haría llamar sistólica a una IC diastólica y tratarla como tal.` },
-          { t: 'No: sube en las dos; lo que las separa es el volumen telediastólico, mayor de 97 mL/m² en la sistólica', ok: true },
+          { t: 'No: sube en las dos; las separa el volumen telediastólico (>97 mL/m², sistólica)', ok: true },
           { t: 'Sí: por encima de 97 mmHg es diastólica, porque el ventrículo rígido necesita más presión', porque: `El 97 es un volumen (mL/m²), no una presión (${p(2)}). Un umbral de presión que no existe te daría falsas certezas.` }],
         explicacion: `El volumen telediastólico, no la presión, distingue las dos: <span class="hl-azul">>97 mL/m² es sistólica y ≤97 mL/m² es diastólica</span> (${p(2)}). Como el volumen no se mide fácil a pie de cama, se usa la fracción de eyección (${p(2)}).` },
       { id: 'ict-g2', corto: 'FE normal, VS bajo', tipo: 'test', fuente: 'mc-hfpef · mc-fe', modeloVivo: eco('hipertrofia', '🫀 Mira el VI hipertrófico y rígido'),
@@ -51,14 +51,14 @@ export const MAYEUTICA_IC = {
       { id: 'ict-g4', corto: 'yugulares planas', tipo: 'test', fuente: 'mc-ic-derecha',
         enunciado: 'En la IC derecha el VD falla y se llena de más. Predice: ¿por qué la PVC y las yugulares pueden seguir normales?',
         opciones: [
-          { t: 'Porque el VD que falla deja de recibir sangre y su volumen telediastólico baja', porque: `Es al revés: el mecanismo es sistólico y el volumen telediastólico del VD aumenta (${p(3)}-${p(4)}).` },
+          { t: 'Porque el VD que falla deja de recibir sangre y su volumen telediastólico baja, así que no hay nada que distender', porque: `Es al revés: el mecanismo es sistólico y el volumen telediastólico del VD aumenta (${p(3)}-${p(4)}).` },
           { t: 'Porque en la IC derecha el problema es del llenado y el volumen es normal', porque: `El mecanismo principal es la disfunción sistólica (${p(3)}-${p(4)}), no diastólica.` },
           { t: 'Porque la PVC no sube hasta que el pericardio frena el aumento del volumen del VD', ok: true }],
         explicacion: `El volumen del VD aumenta, pero la PVC no sube ni hay distensión yugular hasta que ese aumento queda <span class="hl-azul">restringido por el pericardio</span> (${p(4)}). Por eso es difícil de detectar a la cabecera.` },
       { id: 'ict-g5', corto: 'el tabique y el VI', tipo: 'test', fuente: 'mc-vd-septo', modeloVivo: eco('tep', '🫀 El VD dilatado empuja el tabique (TEP)'),
         enunciado: 'Predice, y luego lo compruebas: tras una embolia, el VD está muy dilatado y aplana el tabique. ¿Qué le pasa al VI?',
         opciones: [
-          { t: 'Se llena mejor, porque el tabique desplazado le deja más espacio para vaciarse', porque: `El tabique desplazado reduce el tamaño de la cámara del VI y altera su llenado (${p(4)}).` },
+          { t: 'Se llena mejor, porque el tabique desplazado le deja más espacio y más tiempo para vaciarse en cada latido', porque: `El tabique desplazado reduce el tamaño de la cámara del VI y altera su llenado (${p(4)}).` },
           { t: 'Se llena peor y sube su presión telediastólica: la IC derecha da una disfunción diastólica izquierda', ok: true },
           { t: 'Nada: los dos ventrículos solo se comunican por el pulmón', porque: `La interdependencia interventricular existe: el tabique empujado perjudica al VI (${p(4)}). Si la ignoras, no explicarás un gasto que cae con el VI sano.` }],
         explicacion: `La distensión del VD empuja el tabique hacia el VI, <span class="hl-rojo">altera su llenado y aumenta su presión telediastólica</span>: es la interdependencia interventricular (${p(4)}).`,
@@ -66,7 +66,7 @@ export const MAYEUTICA_IC = {
       { id: 'ict-g6', corto: 'PVC igual a la PCP', tipo: 'test', fuente: 'mc-vd-medidas',
         enunciado: 'Con un catéter de arteria pulmonar, la PVC es igual a la presión de enclavamiento. ¿En qué piensas y qué haces?',
         opciones: [
-          { t: 'En IC derecha, sin dudas: solo ella iguala las dos presiones', porque: `También se igualan en el taponamiento pericárdico (${p(4)}). Si lo olvidas, dejarás sin drenar un taponamiento.` },
+          { t: 'En IC derecha, sin dudas: solo ella iguala las dos presiones y con eso basta para el diagnóstico', porque: `También se igualan en el taponamiento pericárdico (${p(4)}). Si lo olvidas, dejarás sin drenar un taponamiento.` },
           { t: 'En un error de medida: la PVC nunca debería igualar a la PCP', porque: `La igualdad es justo lo que hace pensar en IC derecha (${p(4)}); descartarla como error retrasa el diagnóstico.` },
           { t: 'En IC derecha o en taponamiento; pido una ecocardiografía para saber cuál', ok: true }],
         explicacion: `PVC ≥ PCP hace pensar en IC derecha, pero <span class="hl-rojo">también ocurre en el taponamiento</span>: se necesita ecocardiografía (${p(4)}).` + enFicha(T, 'mc-vd-medidas') },
@@ -95,15 +95,15 @@ export const MAYEUTICA_IC = {
       { id: 'ict-g10', corto: 'angiotensina', tipo: 'test', fuente: 'mc-neurohumoral',
         enunciado: 'La angiotensina II contrae la arteriola eferente del glomérulo. ¿Qué consigue y cuándo se vuelve contraproducente en la IC?',
         opciones: [
-          { t: 'Baja la presión de filtración para proteger el glomérulo, y nunca resulta perjudicial', porque: `Contraer la eferente sube la presión de filtración y preserva el filtrado (${p(6)}).` },
-          { t: 'Mantiene la presión de filtración; en la IC avanzada la vasoconstricción frena el flujo y la retención de sal y agua favorece el edema', ok: true },
+          { t: 'Baja la presión de filtración para proteger el glomérulo de la hipertensión, y nunca resulta perjudicial para el paciente con IC', porque: `Contraer la eferente sube la presión de filtración y preserva el filtrado (${p(6)}).` },
+          { t: 'Mantiene la presión de filtración; en la IC avanzada frena el flujo y la retención de sal y agua favorece el edema', ok: true },
           { t: 'Aumenta la diuresis y la excreción de sodio, que descarga el ventrículo', porque: `Eso lo hacen los péptidos natriuréticos (${p(5)}); la aldosterona retiene sodio y agua (${p(6)}).` }],
         explicacion: `Preserva el filtrado glomerular al subir la presión de filtración. En la IC avanzada <span class="hl-rojo">la vasoconstricción puede impedir el flujo sistémico</span> y la retención de sodio y agua favorece el edema, sobre todo pulmonar (${p(6)}).` },
       { id: 'ict-g11', corto: 'riñón y congestión', tipo: 'test', fuente: 'mc-cardiorrenal · mc-congestion', modeloVivo: glomerulo('🫘 Mira el glomérulo con la congestión venosa'),
         enunciado: 'Predice, y luego lo compruebas: una IC aguda con PAM normal y creatinina que sube. ¿Qué lo explica sobre todo, y qué tratamiento sigue?',
         opciones: [
-          { t: 'La congestión venosa: reduce el gradiente arteriovenoso renal; el tratamiento principal es la diuresis', ok: true },
-          { t: 'El gasto cardíaco bajo; hay que subirlo con volumen', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); el volumen empeoraría la congestión.` },
+          { t: 'La congestión venosa baja el gradiente arteriovenoso renal; se trata con diuresis', ok: true },
+          { t: 'El gasto cardíaco bajo; hay que subirlo cuanto antes con volumen para restaurar el flujo renal', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); el volumen empeoraría la congestión.` },
           { t: 'La autorregulación renal ha fallado, aunque la PAM sea de 85', porque: `La autorregulación mantiene el flujo renal hasta que la PAM baja de 70 (${p(7)}).` }],
         explicacion: `La disfunción renal se atribuye sobre todo al <span class="hl-azul">aumento de la presión venosa</span>, que reduce el gradiente arteriovenoso renal y el flujo glomerular; el gasto bajo solo cuenta con hipotensión (${p(7)}). Es el síndrome cardiorrenal, y el principal tratamiento es la diuresis (${p(7)}).`,
         nota: `<b>La fuente no lo dice.</b> El libro no da la PVC ni las cifras del glomérulo; el modelo usa una PVC de 20 mmHg y una PAM de 80 (ilustrativo).` + enFicha(T, 'mc-cardiorrenal') },
@@ -119,14 +119,14 @@ export const MAYEUTICA_IC = {
       { id: 'ict-e1', corto: 'FE de 45 %', tipo: 'test', fuente: 'mc-tabla-18-1',
         enunciado: 'Una mujer con edema agudo de pulmón tiene una fracción de eyección del VI del 45 %. ¿Cómo la clasificas?',
         opciones: [
-          { t: 'IC con FE conservada: disfunción diastólica', porque: `La FE conservada es ≥50 % (Tabla 18.1, ${p(3)}); con 45 % ya hay disfunción sistólica leve.` },
+          { t: 'IC con FE conservada: disfunción diastólica, porque el 45 % sigue siendo casi normal', porque: `La FE conservada es ≥50 % (Tabla 18.1, ${p(3)}); con 45 % ya hay disfunción sistólica leve.` },
           { t: 'IC con FE reducida: disfunción sistólica moderada o grave', porque: `La FE reducida es ≤40 % (${p(3)}); el 45 % cae en el tramo intermedio.` },
           { t: 'IC con FE ligeramente reducida (41-49 %): disfunción sistólica leve', ok: true }],
         explicacion: `Tabla 18.1: conservada ≥50 %, <span class="hl">ligeramente reducida 41-49 %</span> y reducida ≤40 % (${p(3)}).` + enFicha(T, 'mc-tabla-18-1') },
       { id: 'ict-e2', corto: 'FE de 52 %', tipo: 'test', fuente: 'mc-fe',
         enunciado: 'Un residente ve una FE de 52 % en un paciente hipertenso con edema y dice: «Está por debajo del 55 % normal: es sistólica». ¿Qué le corriges?',
         opciones: [
-          { t: 'Que en la IC se toma ≥50 % como normal, porque el aumento de la poscarga puede bajar la FE un 5-10 %', ok: true },
+          { t: 'Que en la IC se acepta ≥50 % como normal: la poscarga puede bajar la FE un 5-10 %', ok: true },
           { t: 'Tiene razón: el normal es ≥55 % y cualquier valor por debajo indica disfunción sistólica', porque: `En la IC se acepta ≥50 % como normal (${p(3)}). Con su regla etiquetarías de sistólica a una IC con FE conservada.` },
           { t: 'Que la FE no depende de la poscarga, así que 52 % es normal siempre', porque: `La poscarga sí puede bajarla un 5-10 % (${p(3)}); por eso el umbral en la IC es más bajo.` }],
         explicacion: `El normal es ≥55 %, pero <span class="hl-azul">en la IC se usa ≥50 %</span> porque el aumento de la poscarga puede bajar la FE un 5-10 % (${p(3)}). Con 52 % es IC con FE conservada.` + enFicha(T, 'mc-fe') },
@@ -141,7 +141,7 @@ export const MAYEUTICA_IC = {
         enunciado: 'Un paciente con disnea y sospecha de IC tiene un NT-proBNP de 250 pg/mL. ¿Qué dice Marino?',
         opciones: [
           { t: 'IC improbable: está por debajo de 300; recuerda que sirve mejor para excluir', ok: true },
-          { t: 'Compatible con IC: supera 100 pg/mL, el umbral de los péptidos', porque: `El 100 es el umbral del BNP; el NT-proBNP tiene una vida media más larga y sus niveles son 3-5 veces mayores (${p(7)}). Con esa confusión solicitarías estudios de una IC que es improbable.` },
+          { t: 'Compatible con IC: supera 100 pg/mL, el umbral habitual de los péptidos natriuréticos', porque: `El 100 es el umbral del BNP; el NT-proBNP tiene una vida media más larga y sus niveles son 3-5 veces mayores (${p(7)}). Con esa confusión solicitarías estudios de una IC que es improbable.` },
           { t: 'No sirve: el NT-proBNP es la fracción inactiva y no tiene valor diagnóstico', porque: `Es metabólicamente inactiva, pero se usa igual: <300 pg/mL hace improbable la IC (${p(7)}-${p(8)}).` }],
         explicacion: `<span class="hl-verde">NT-proBNP <300 pg/mL</span> (y BNP <100) hacen improbable la IC (${p(8)}). El NT-proBNP queda 3-5 veces por encima del BNP por su vida media más larga (${p(7)}).` + enFicha(T, 'mc-bnp') },
       { id: 'ict-e5', corto: 'BNP 900 con sepsis', tipo: 'test', fuente: 'mc-bnp · mc-tabla-18-2', origen: 'ilustrativo: paciente inventado; las causas, de la Tabla 18.2',
@@ -175,7 +175,7 @@ export const MAYEUTICA_IC = {
   },
 
   /* =================================================================================================
-     Ficha 14 · IC aguda: manejo (cap. 18, págs. 9-15) y el caso C1 (Pilar)
+     Ficha 14 · IC aguda: manejo (cap. 18, págs. 9-15) y el caso C1 (Mercedes)
      ================================================================================================= */
   'mc-ic-manejo': {
     entrada: 'Qué se da primero según la tensión, cómo se maneja la nitroglicerina y la furosemida, qué hace la CPAP en el corazón y por qué el diurético, con la FE conservada, quita el llenado que el VI necesita.',
@@ -184,14 +184,14 @@ export const MAYEUTICA_IC = {
         enunciado: 'Un paciente con edema agudo de pulmón llega con PA 190/105. Antes de leer la ficha: ¿qué fármaco va primero, y qué le hace al corazón?',
         opciones: [
           { t: 'Un vasodilatador, que baja la precarga y la poscarga: menos congestión pulmonar y más gasto', ok: true },
-          { t: 'Un diurético IV, porque el problema es el exceso de volumen en el pulmón', porque: `Con la PA alta se empieza por un vasodilatador (${p(9)}); la furosemida IV produce una respuesta vasoconstrictora aguda y se retrasa hasta controlar la presión (${p(10)}).` },
+          { t: 'Un diurético IV, porque el problema es el exceso de volumen en el pulmón y hay que sacarlo cuanto antes', porque: `Con la PA alta se empieza por un vasodilatador (${p(9)}); la furosemida IV produce una respuesta vasoconstrictora aguda y se retrasa hasta controlar la presión (${p(10)}).` },
           { t: 'Un vasodilatador arterial puro, para bajar la poscarga sin tocar el retorno venoso', porque: `Los de la Tabla 18.3 dilatan arterias y venas: bajan precarga y poscarga a la vez (${p(9)}). La precarga es la que descongestiona el pulmón.` }],
         explicacion: `Con hipertensión se empieza con la infusión de un vasodilatador (Tabla 18.3) que dilata arterias y venas: <span class="hl-azul">menos precarga (menos congestión pulmonar) y menos poscarga (más gasto)</span>, y baja la presión hidrostática del capilar pulmonar (${p(9)}).` + enFicha(M, 'mc-ic-pa-alta') },
       { id: 'icm-g2', corto: 'NTG: pauta y bolsa', tipo: 'test', fuente: 'mc-nitroglicerina · mc-tabla-18-3',
         enunciado: 'Vas a preparar la nitroglicerina. ¿Cómo se sube la dosis y en qué material va?',
         opciones: [
           { t: 'Empezar con 5 µg/min y subir 5 µg/min cada 5 min hasta el efecto; en vidrio y tubos de polietileno', ok: true },
-          { t: 'Empezar con 5 µg/min y subir 5 cada 5 min, en las bolsas y tubos habituales de PVC', porque: `Hasta el 80 % de la nitroglicerina se adsorbe en el PVC (${p(9)}); el paciente recibiría una fracción de la dosis pautada.` },
+          { t: 'Empezar con 5 µg/min y subir 5 cada 5 min, en las bolsas y tubos habituales de PVC, que es lo que hay en planta', porque: `Hasta el 80 % de la nitroglicerina se adsorbe en el PVC (${p(9)}); el paciente recibiría una fracción de la dosis pautada.` },
           { t: 'Empezar con 50 µg/min en bolo para ganar tiempo, en vidrio', porque: `La pauta es 5 µg/min con aumentos de 5 µg/min cada 5 min (${p(9)}); una dosis de arranque así de alta arriesga hipotensión.` }],
         explicacion: `Inicio a 5 µg/min y +5 µg/min cada 5 min (eficaz casi siempre entre 5 y 100 µg/min; por encima de 200 no se aconseja). <span class="hl-rojo">Hasta el 80 % se pierde en el PVC</span>: botellas de vidrio y tubos de polietileno (${p(9)}).` + enFicha(M, 'mc-nitroglicerina') },
       { id: 'icm-g3', corto: 'NTG más de 24 h', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-nitroglicerina',
@@ -204,14 +204,14 @@ export const MAYEUTICA_IC = {
       { id: 'icm-g4', corto: 'nitroprusiato: cuándo no', tipo: 'test', fuente: 'mc-nitroprusiato',
         enunciado: 'El 20 % de las IC agudas no responde a la nitroglicerina y el nitroprusiato es la alternativa. ¿En qué pacientes lo evitas, y por qué?',
         opciones: [
-          { t: 'Solo en la insuficiencia renal: el hígado y la isquemia no importan', porque: `El cianuro lo eliminan el hígado y el riñón, y en la cardiopatía isquémica puede haber robo coronario (${p(10)}).` },
+          { t: 'Solo en la insuficiencia renal: el hígado y la isquemia no importan, porque el cianuro se elimina por el riñón', porque: `El cianuro lo eliminan el hígado y el riñón, y en la cardiopatía isquémica puede haber robo coronario (${p(10)}).` },
           { t: 'En ninguno, si se añade tiosulfato a la bolsa para fijar el cianuro', porque: `El tiosulfato reduce el riesgo de cianuro, pero no se recomienda en la insuficiencia renal o hepática ni en la cardiopatía isquémica (${p(9)}-${p(10)}).` },
           { t: 'En la insuficiencia renal o hepática (cianuro) y en la cardiopatía isquémica (robo coronario)', ok: true }],
         explicacion: `El nitroprusiato libera <span class="hl-rojo">cianuro</span> (lo aclaran hígado y riñón) y puede producir <span class="hl-rojo">robo coronario</span> al desviar sangre de las zonas isquémicas (${p(10)}). El tiosulfato disminuye el riesgo de cianuro.` + enFicha(M, 'mc-nitroprusiato') },
       { id: 'icm-g5', corto: 'cuándo el diurético', tipo: 'test', fuente: 'mc-ic-pa-alta · mc-diureticos-preocupaciones', origen: 'ilustrativo: paciente inventado; el criterio, de la ficha',
         enunciado: 'Un paciente con edema hipertensivo ya tiene la PA normalizada con nitroglicerina; el catéter de arteria pulmonar marca una PCP de 24. ¿Qué haces ahora?',
         opciones: [
-          { t: 'Seguir subiendo la nitroglicerina hasta 250 µg/min para bajar la PCP', porque: `Con la PA ya normal, más vasodilatador bajaría la presión arterial; no se aconsejan dosis por encima de 200 µg/min (${p(9)}).` },
+          { t: 'Seguir subiendo la nitroglicerina hasta 250 µg/min para bajar la PCP, sin esperar a añadir otro fármaco', porque: `Con la PA ya normal, más vasodilatador bajaría la presión arterial; no se aconsejan dosis por encima de 200 µg/min (${p(9)}).` },
           { t: 'Añadir un diurético IV: la PCP sigue por encima de 20 con la presión controlada', ok: true },
           { t: 'Intentar bajar la PCP a cifras normales (por debajo de 12) con más diurético', porque: `La PCP deseable es la más alta que aumenta el gasto sin edema, de 18 a 20 mmHg (${p(10)}); bajarla de más resta llenado.` }],
         explicacion: `El diurético IV se considera <span class="hl-azul">solo cuando el vasodilatador ha normalizado la presión</span> y persiste la congestión. Con catéter, se añade si la PCP sigue sobre 20 mmHg; el objetivo es la más alta que aumente el gasto sin dar edema, de 18 a 20 (${p(10)}).` + enFicha(M, 'mc-ic-pa-alta') },
@@ -226,7 +226,7 @@ export const MAYEUTICA_IC = {
         enunciado: 'Predice: en la IC aguda, ¿qué le hace la furosemida IV al gasto cardíaco?',
         opciones: [
           { t: 'Lo baja: menos retorno venoso y más poscarga por una vasoconstricción aguda', ok: true },
-          { t: 'Lo sube: al quitar volumen, el corazón trabaja con menos carga', porque: `El gasto baja, por menor retorno venoso y por mayor poscarga (${p(10)}-${p(11)}).` },
+          { t: 'Lo sube: al quitar volumen, el corazón trabaja con menos carga y bombea más sangre por minuto', porque: `El gasto baja, por menor retorno venoso y por mayor poscarga (${p(10)}-${p(11)}).` },
           { t: 'No lo cambia: la furosemida actúa solo en el asa de Henle', porque: `Bloquea el sodio en el asa ascendente (${p(11)}), pero además estimula la renina y la angiotensina II, un vasoconstrictor (${p(10)}).` }],
         explicacion: `La furosemida IV produce una <span class="hl-rojo">respuesta vasoconstrictora aguda</span> (renina, angiotensina II) y, con la diuresis, baja el retorno venoso: el gasto cae (${p(10)}-${p(11)}). Por eso se retrasa hasta controlar la PA con el vasodilatador.`,
         nota: `<b>La fuente no lo dice.</b> El modelo de la nefrona enseña dónde actúa la furosemida en el túbulo, no el efecto sobre el gasto.` + enFicha(M, 'mc-diureticos-preocupaciones') },
@@ -247,7 +247,7 @@ export const MAYEUTICA_IC = {
       { id: 'icm-g10', corto: 'la CPAP y el VS', tipo: 'test', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 Etapa 3 con CPAP: mira cómo sube el volumen sistólico'),
         enunciado: 'Predice, y luego lo compruebas: en un edema agudo de pulmón, ¿qué hace la CPAP con el volumen sistólico del VI?',
         opciones: [
-          { t: 'Lo baja: la presión positiva comprime el corazón y reduce su llenado', porque: `El efecto que recoge el libro en la IC izquierda es el contrario: baja la poscarga y sube el gasto (${p(14)}). Que dificulte el llenado se menciona solo para la IC con FE conservada en ventilación mecánica (${p(3)}).` },
+          { t: 'Lo baja: la presión positiva comprime el corazón y reduce su llenado en cada latido', porque: `El efecto que recoge el libro en la IC izquierda es el contrario: baja la poscarga y sube el gasto (${p(14)}). Que dificulte el llenado se menciona solo para la IC con FE conservada en ventilación mecánica (${p(3)}).` },
           { t: 'No lo cambia: solo mejora la oxigenación, no la hemodinámica', porque: `Se ha demostrado que la CPAP aumenta el gasto cardíaco en la IC izquierda (${p(14)}).` },
           { t: 'Lo aumenta: baja la presión transmural del VI y, con ella, su poscarga', ok: true }],
         explicacion: `La presión intratorácica positiva <span class="hl-azul">reduce la presión transmural que desarrolla el ventrículo en sístole</span> (menor poscarga): la pared se mueve hacia dentro más fácil y el volumen sistólico aumenta. La CPAP sube el gasto y acelera la mejoría del edema cardiogénico (${p(14)}).`,
@@ -257,7 +257,7 @@ export const MAYEUTICA_IC = {
         opciones: [
           { t: 'Cuanto antes, en la primera hora, junto al vasodilatador', porque: `Se inician tras resolverse el episodio agudo y con el paciente estable (${p(13)}); empezarlos antes arriesga hipotensión y peor perfusión.` },
           { t: 'Tras el episodio agudo, ya estable y sin hipotensión ni mala perfusión', ok: true },
-          { t: 'Solo si la FE es reducida: en la FE conservada no se usan nunca', porque: `Son populares también en la IC con FE conservada, si se toleran (${p(13)}); el principal beneficio es en la FE reducida.` }],
+          { t: 'Solo si la FE es reducida: en la FE conservada no se usan nunca ni se ha probado ninguno', porque: `Son populares también en la IC con FE conservada, si se toleran (${p(13)}); el principal beneficio es en la FE reducida.` }],
         explicacion: `Son orales y se inician (o continúan) <span class="hl-azul">tras el episodio agudo, con el paciente estable</span>. No se aconsejan con hipotensión o mala perfusión; el beneficio principal es en la FE reducida, pero también se usan con FE conservada (${p(13)}).` + enFicha(M, 'mc-largo-plazo') },
       { id: 'icm-g12', corto: 'tres cautelas', tipo: 'destapa', cuantas: 'son tres razones', fuente: 'mc-ic-final',
         enunciado: 'El adjunto te dice: «No te pases con el diurético». ¿Qué tres razones da Marino?',
@@ -271,9 +271,9 @@ export const MAYEUTICA_IC = {
       { id: 'icm-e1', corto: 'dosis de NTG', tipo: 'test', fuente: 'mc-tabla-18-3',
         enunciado: 'Nitroglicerina en la IC aguda hipertensiva. ¿Qué pauta y qué límite recoge Marino?',
         opciones: [
-          { t: 'Inicio de 5 µg/min, +5 µg/min cada 15 min; hasta 400 µg/min', porque: `Los aumentos son cada 5 min y por encima de 200 µg/min no se aconseja (${p(9)}).` },
+          { t: 'Inicio de 5 µg/min, +5 µg/min cada 15 min; se puede llegar hasta 400 µg/min si hace falta', porque: `Los aumentos son cada 5 min y por encima de 200 µg/min no se aconseja (${p(9)}).` },
           { t: 'Inicio de 5 µg/min, +10 µg/min cada 5 min; el máximo es 100', porque: `Los aumentos son de 5 µg/min; la dosis eficaz suele ser 5-100, pero el límite aconsejado es 200 (${p(9)}).` },
-          { t: 'Inicio de 5 µg/min, +5 µg/min cada 5 min; eficaz entre 5 y 100 en casi todos; más de 200, no', ok: true }],
+          { t: 'Inicio de 5 µg/min, +5 cada 5 min; eficaz 5-100 µg/min; por encima de 200, no', ok: true }],
         explicacion: `Tabla 18.3: <span class="hl">5 µg/min, +5 cada 5 min; efectiva 5-100 µg/min en la mayoría; no se aconsejan dosis >200</span> (${p(9)}).` + enFicha(M, 'mc-tabla-18-3') },
       { id: 'icm-e2', corto: 'dosis de nitroprusiato', tipo: 'test', fuente: 'mc-tabla-18-3',
         enunciado: 'Nitroprusiato en la IC aguda. ¿Qué dosis y qué precauciones de infusión da la Tabla 18.3?',
@@ -307,7 +307,7 @@ export const MAYEUTICA_IC = {
         enunciado: 'Un paciente no responde a 200 mg IV de furosemida. ¿Qué es y qué opciones hay?',
         opciones: [
           { t: 'Resistencia a la furosemida: cambiar a bumetanida o torsemida, o añadir metolazona', ok: true },
-          { t: 'Dosis insuficiente: sube a 400 mg IV', porque: `200 mg es la dosis a la que se para; sin respuesta se habla de resistencia (${p(12)}).` },
+          { t: 'Dosis insuficiente: sube a 400 mg IV, que es lo que se hace antes de hablar de resistencia', porque: `200 mg es la dosis a la que se para; sin respuesta se habla de resistencia (${p(12)}).` },
           { t: 'Resistencia: pasar a la vía oral, que se absorbe mejor', porque: `Solo se absorbe el 50 % de la dosis oral (${p(12)}); no es una estrategia contra la resistencia.` }],
         explicacion: `Sin respuesta a 200 mg IV hay <span class="hl-rojo">resistencia a la furosemida</span> (por hipoalbuminemia, hipoperfusión renal o «freno diurético») (${p(12)}). Otras opciones: otro diurético de asa o una tiazida como la metolazona (${p(12)}).` + enFicha(M, 'mc-resistencia-furosemida') },
       { id: 'icm-e7', corto: 'FE conservada, FG 28', tipo: 'test', fuente: 'mc-largo-plazo · mc-tabla-18-5', origen: 'ilustrativo: paciente inventado; las indicaciones, de la ficha',
@@ -323,14 +323,14 @@ export const MAYEUTICA_IC = {
       { id: 'mc-tabla-18-5', titulo: 'Tabla 18.5: dosis iniciales y objetivo' },
     ],
     casos: [
-      { id: 'c-ic1', titulo: 'Pilar, 71 años: el edema de madrugada', corto: 'Caso · Pilar', sub: 'HTA y diabetes; 96 kg; el diurético que quitó el llenado',
+      { id: 'c-ic1', titulo: 'Mercedes, 71 años: el edema de madrugada', corto: 'Caso · Mercedes', sub: 'HTA y diabetes; 96 kg; el diurético que quitó el llenado',
         paciente: { Edad: '71 años, mujer', Peso: '96 kg, obesa', Antecedentes: 'hipertensión y diabetes tipo 2', Riñón: 'filtrado estimado 48 mL/min/1,73 m²' },
         pasos: [
           { momento: '03:30', datos: { Constantes: 'PA 204/108, FC 118', 'SpO₂': '83 % respirando aire', Exploración: 'disnea intensa, crepitantes bilaterales' }, nuevo: ['Constantes', 'SpO₂', 'Exploración'],
-            pregunta: { id: 'cic-1', tipo: 'test', fuente: 'mc-ic-pa-alta · mc-nitroglicerina · mc-vpp', origen: 'ilustrativo: las cifras de Pilar son del paciente; la conducta, de la ficha',
-              enunciado: 'Pilar llega con la tensión muy alta, hipoxemia y un edema agudo de pulmón. ¿Qué haces primero?',
+            pregunta: { id: 'cic-1', tipo: 'test', fuente: 'mc-ic-pa-alta · mc-nitroglicerina · mc-vpp', origen: 'ilustrativo: las cifras de Mercedes son del paciente; la conducta, de la ficha',
+              enunciado: 'Mercedes llega con la tensión muy alta, hipoxemia y un edema agudo de pulmón. ¿Qué haces primero?',
               opciones: [
-                { t: 'Furosemida IV 80 mg ya: el pulmón está encharcado y es lo urgente', porque: `Con la PA alta el vasodilatador va primero; la furosemida IV es vasoconstrictora y sube la poscarga (${p(10)}). Con 204/108 sería echar leña al fuego.` },
+                { t: 'Furosemida IV 80 mg ya: el pulmón está encharcado y es lo urgente, lo demás puede esperar', porque: `Con la PA alta el vasodilatador va primero; la furosemida IV es vasoconstrictora y sube la poscarga (${p(10)}). Con 204/108 sería echar leña al fuego.` },
                 { t: 'Nitroglicerina en infusión (5 µg/min, +5 cada 5 min, en vidrio y polietileno) y CPAP', ok: true },
                 { t: 'Nitroprusiato, que es más potente que la nitroglicerina', porque: `La nitroglicerina es de elección (${p(10)}); el nitroprusiato es la alternativa en el 20 % que no responde, y no se recomienda con insuficiencia renal (${p(10)}).` }],
               explicacion: `Con hipertensión, <span class="hl-azul">vasodilatador primero</span>: la nitroglicerina es el de elección (${p(9)}), con la pauta de 5 µg/min y +5 cada 5 min, en vidrio y polietileno por la pérdida en PVC. La ventilación no invasiva es un tratamiento aceptado del edema pulmonar cardiogénico (${p(14)}).`,
@@ -343,10 +343,10 @@ export const MAYEUTICA_IC = {
                 `Eso es una <span class="hl-azul">menor poscarga</span>: la pared se mueve hacia dentro con más facilidad.`,
                 `El VI se vacía mejor y <span class="hl-verde">sube el volumen sistólico</span> (y el gasto).`],
               explicacion: `«Las presiones intratorácicas positivas reducirán la poscarga del VI al disminuir la presión transmural de la pared» y favorecen el vaciado ventricular, con lo que el volumen sistólico aumenta (${p(14)}). La CPAP sube el gasto en la IC izquierda y acelera la mejoría del edema (${p(14)}).`,
-              nota: `<b>La fuente no lo dice.</b> En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Pilar: enseña la dirección del cambio. El libro no da cifras de la CPAP.` + enFicha(M, 'mc-vpp') } },
+              nota: `<b>La fuente no lo dice.</b> En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Mercedes: enseña la dirección del cambio. El libro no da cifras de la CPAP.` + enFicha(M, 'mc-vpp') } },
           { momento: '04:10 · analítica', datos: { BNP: '160 pg/mL', Lactato: '1,3 mmol/L' }, nuevo: ['BNP', 'Lactato'],
             pregunta: { id: 'cic-3', tipo: 'test', fuente: 'mc-bnp · mc-tabla-18-2', origen: 'ilustrativo: BNP de la paciente; los umbrales, de la ficha',
-              enunciado: 'El BNP de Pilar es 160 pg/mL. La residente dice: «No llega ni a 300; no es insuficiencia cardíaca». ¿Qué le contestas?',
+              enunciado: 'El BNP de Mercedes es 160 pg/mL. La residente dice: «No llega ni a 300; no es insuficiencia cardíaca». ¿Qué le contestas?',
               opciones: [
                 { t: 'Tiene razón: con valores por debajo de 300 se descarta la IC', porque: `Ese 300 es el umbral del NT-proBNP; el del BNP es 100 (${p(8)}). Con su lectura dejarías sin tratar un edema cardiogénico.` },
                 { t: 'Que 160 supera el umbral de 100 y no la descarta; además, la obesidad lo baja, así que no tranquiliza', ok: true },
@@ -363,29 +363,29 @@ export const MAYEUTICA_IC = {
               explicacion: `FEVI ≥50 % es <span class="hl-azul">IC con FE conservada</span>: la hipertrofia es causa de disfunción diastólica (${p(3)}). Los diuréticos deben usarse con cuidado aquí, porque puede bajar el llenado (${p(11)}).` + enFicha(T, 'mc-hfpef') } },
           { momento: '07:30 · el giro', datos: { Tratamiento: 'furosemida 80 mg IV a las 05:30 (sin tomarla antes)', Constantes: 'PA 94/52, FC 108', Lactato: '2,4 mmol/L', Diuresis: '250 mL en 2 h' }, nuevo: ['Tratamiento', 'Constantes', 'Lactato', 'Diuresis'],
             pregunta: { id: 'cic-5', tipo: 'test', fuente: 'mc-diureticos-preocupaciones · mc-ic-final', origen: 'ilustrativo: las cifras de la furosemida, la PA y el lactato son de la paciente; la dosis, de la Tabla 18.4',
-              enunciado: 'Dos horas después de los 80 mg de furosemida, Pilar tiene PA 94/52, lactato 2,4 y ha orinado 250 mL. Un compañero dice: «Poca orina: resistencia; doblo a 160 mg». ¿Qué ha pasado?',
+              enunciado: 'Dos horas después de los 80 mg de furosemida, Mercedes tiene PA 94/52, lactato 2,4 y ha orinado 250 mL. Un compañero dice: «Poca orina: resistencia; doblo a 160 mg». ¿Qué ha pasado?',
               opciones: [
                 { t: 'El diurético ha bajado el gasto (menos precarga y más poscarga), sobre todo con FE conservada: antes de doblar, valoras la perfusión', ok: true },
                 { t: 'Resistencia pura a la furosemida: doblar a 160 mg es lo que dice la pauta a las 2 horas', porque: `La pauta duplica si la diuresis es <1 L, pero con hipotensión y lactato alto el diurético puede estar bajando el gasto (${p(10)}-${p(11)}); más dosis restaría más llenado (${DED}).` },
-                { t: 'Propilenglicol de la nitroglicerina: acidosis láctica e hipotensión', porque: `Aparece con infusiones prolongadas (${p(9)}-${p(10)}); Pilar lleva unas horas de infusión y el empeoramiento sigue a la furosemida (${DED}).` }],
+                { t: 'Propilenglicol de la nitroglicerina: acidosis láctica e hipotensión', porque: `Aparece con infusiones prolongadas (${p(9)}-${p(10)}); Mercedes lleva unas horas de infusión y el empeoramiento sigue a la furosemida (${DED}).` }],
               explicacion: `La furosemida IV <span class="hl-rojo">baja el gasto</span> (retorno venoso menor y más poscarga) y el efecto se magnifica en la FE conservada, donde el llenado es crítico (${p(15)}). Ante signos de menor perfusión tras el diurético, Marino aconseja valorar el vasodilatador y, a veces, un bolo de líquidos (${p(11)}).`,
               nota: `<b>La fuente no lo dice.</b> Marino no da qué hacer con una PA de 94/52 en este contexto; lo que se hace aquí lo decide el equipo.` + enFicha(M, 'mc-ic-final') } },
           { momento: 'Día 2 · nota del residente', datos: { Evolución: 'PA 118/66, lactato 1,2; sale de la CPAP', Nota: 'plan del residente de guardia' }, nuevo: ['Evolución', 'Nota'],
             pregunta: { id: 'cic-6', tipo: 'error', fuente: 'mc-nitroglicerina · mc-ic-final · mc-bnp · mc-largo-plazo',
-              enunciado: 'La nota del residente de guardia sobre Pilar. Hay dos errores. Encuéntralos.',
+              enunciado: 'La nota del residente de guardia sobre Mercedes. Hay dos errores. Encuéntralos.',
               frases: [
                 { t: 'La nitroglicerina se preparó en vidrio y polietileno, porque el PVC retiene hasta el 80 % del fármaco.' },
                 { t: 'Se mantiene la nitroglicerina 72 horas sin cambiar la dosis, porque la paciente va bien.', mal: true, c: `La <span class="hl-rojo">taquifilaxia es frecuente a las 24 h</span> y las infusiones prolongadas arriesgan toxicidad por propilenglicol: no debe pasar de 24 h (${p(9)}).` },
-                { t: 'El edema de Pilar es sobrecarga de volumen, así que lo prudente es seguir con más furosemida.', mal: true, c: `El edema agudo <span class="hl-rojo">no siempre es sobrecarga</span> (miocardio rígido), y la furosemida baja el gasto, más aún con FE conservada (${p(15)}).` },
+                { t: 'El edema de Mercedes es sobrecarga de volumen, así que lo prudente es seguir con más furosemida.', mal: true, c: `El edema agudo <span class="hl-rojo">no siempre es sobrecarga</span> (miocardio rígido), y la furosemida baja el gasto, más aún con FE conservada (${p(15)}).` },
                 { t: 'El BNP de 160, en una obesa, no descarta la IC.' },
                 { t: 'Antes del alta, cuando esté estable, se valorará un iSGLT2.' }],
               explicacion: 'Dos errores: mantener la nitroglicerina 72 h y seguir con más diurético dando por hecho que es sobrecarga.',
               nota: `<b>La fuente no lo dice.</b> Marino no da cuánto tiempo seguir con la CPAP; las cifras del día 2 son de la paciente.` } },
           { momento: 'Día 4 · antes del alta', datos: { Constantes: 'PA 124/70, FC 76, SpO₂ 96 % sin oxígeno', Riñón: 'filtrado 48, sin hiperpotasemia' }, nuevo: ['Constantes', 'Riñón'],
-            pregunta: { id: 'cic-7', tipo: 'test', fuente: 'mc-largo-plazo · mc-tabla-18-5', modeloVivo: eco('hipertrofia', '🫀 El VI hipertrófico de Pilar'), origen: 'ilustrativo: las constantes de Pilar son del paciente; las indicaciones, de la ficha',
-              enunciado: 'Pilar está estable, con FE del 58 %. La residente propone empezar carvedilol «porque es una IC». ¿Qué plan de alta recoge Marino?',
+            pregunta: { id: 'cic-7', tipo: 'test', fuente: 'mc-largo-plazo · mc-tabla-18-5', modeloVivo: eco('hipertrofia', '🫀 El VI hipertrófico de Mercedes'), origen: 'ilustrativo: las constantes de Mercedes son del paciente; las indicaciones, de la ficha',
+              enunciado: 'Mercedes está estable, con FE del 58 %. La residente propone empezar carvedilol «porque es una IC». ¿Qué plan de alta recoge Marino?',
               opciones: [
-                { t: 'Sacubitrilo-valsartán a dosis plena: es la combinación más eficaz', porque: `Es la más eficaz en la FE reducida; en la FE conservada la supresión del eje renina-angiotensina-aldosterona no ha mostrado beneficio consistente (${p(13)}).` },
+                { t: 'Sacubitrilo-valsartán a dosis plena desde el primer día: es la combinación más eficaz de todas', porque: `Es la más eficaz en la FE reducida; en la FE conservada la supresión del eje renina-angiotensina-aldosterona no ha mostrado beneficio consistente (${p(13)}).` },
                 { t: 'Carvedilol y espironolactona, como en la FE reducida', porque: `Con FE conservada no hay recomendación de betabloqueantes, y los antialdosterónicos se usan con cautela por el llenado (${p(14)}).` },
                 { t: 'Un iSGLT2 (10 mg/día), vigilando la cetoacidosis euglucémica; sin betabloqueante por la IC', ok: true }],
               explicacion: `Los <span class="hl-verde">iSGLT2</span> se recomiendan con FE reducida o conservada, con o sin diabetes (10 mg al día, Tabla 18.5); el riesgo es la cetoacidosis diabética euglucémica (${p(14)}). Las guías no incluyen betabloqueantes en la FE conservada (${p(14)}).`,
@@ -395,7 +395,7 @@ export const MAYEUTICA_IC = {
           'Con la tensión alta, el vasodilatador va antes que el diurético; la CPAP baja la poscarga del VI.' + enFicha(M, 'mc-ic-pa-alta'),
           'Con la FE conservada, el diurético quita el llenado que el VI necesita: el edema agudo no siempre es sobrecarga de volumen.',
           'Un BNP no confirma ni descarta por sí solo: la obesidad lo baja; la edad y la insuficiencia renal lo suben.'],
-        volver: { nombre: 'El diurético con cuidado', ancla: 'mc-ic-final', modelo: eco('hipertrofia', '🫀 El VI hipertrófico de Pilar') } },
+        volver: { nombre: 'El diurético con cuidado', ancla: 'mc-ic-final', modelo: eco('hipertrofia', '🫀 El VI hipertrófico de Mercedes') } },
     ],
   },
 };
