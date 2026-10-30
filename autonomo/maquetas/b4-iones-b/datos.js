@@ -23,11 +23,11 @@ export const TOPES = {
   caIV: { bolo: 200, origen: 'ficha · p. 45' },
 };
 export const PRESETS = {
-  normal: { nombre: 'Normal', s: {} },
-  damian: { nombre: 'Damián', s: { dK: -150, dMg: -66, po4b: 1.8, alb: 3.0 }, txt: 'Damián, 52 años, alcohólico desnutrido; empieza nutrición con glucosa.' },
-  rufino: { nombre: 'Rufino', s: { dK: -330, dMg: -100, ph: 7.52 }, txt: 'Rufino, 74 años, sonda nasogástrica 5 días y furosemida crónica.' },
-  valentin: { nombre: 'Valentín', s: { dK: 110, units: 10, ph: 7.22, alb: 3.0 }, txt: 'Valentín, 45 años, politrauma, 10 concentrados en 3 h.' },
-  adela: { nombre: 'Adela', s: { dK: 230 }, txt: 'Adela, 72 años, enalapril + espironolactona: hiperpotasemia.' },
+  normal: { nombre: 'Normal', s: {}, vit: ['118/72', 75] },
+  damian: { nombre: 'Damián', s: { dK: -150, dMg: -66, po4b: 1.8, alb: 3.0 }, vit: ['112/70', 88], txt: 'Damián, 52 años, alcohólico desnutrido; empieza nutrición con glucosa.' },
+  rufino: { nombre: 'Rufino', s: { dK: -330, dMg: -100, ph: 7.52 }, vit: ['128/76', 82], txt: 'Rufino, 74 años, sonda nasogástrica 5 días y furosemida crónica.' },
+  valentin: { nombre: 'Valentín', s: { dK: 110, units: 10, ph: 7.22, alb: 3.0 }, vit: ['98/60', 110], txt: 'Valentín, 45 años, politrauma, 10 concentrados en 3 h.' },
+  adela: { nombre: 'Adela', s: { dK: 230 }, vit: ['136/82', 54], txt: 'Adela, 72 años, enalapril + espironolactona: hiperpotasemia.' },
 };
 // Fuentes y notas (lista, REGLAS §7.11)
 export const FUENTES = [
@@ -44,3 +44,10 @@ export const NOTAS = [
   ['opinión del autor', 'Cloruro cálcico solo en el colapso circulatorio (p. 26): el libro lo recomienda así.'],
 ];
 export const PENDIENTE = 'Pendiente: el ritmo vivo aún no dibuja la onda U, la T plana ni el QT largo de la hipopotasemia (p. 22). Se pinta el trazo que hay.';
+
+// PA y FC de cada paciente: ilustrativos (el libro no los da); Valentín, como dice el enunciado de su caso.
+export const VITALES_ORIGEN = 'PA y FC ilustrativas';
+// A qué ficha de la app lleva cada página del PDF (la que cubre ese párrafo)
+export const FICHA_PAG = [[19, 23, 'mr-hipopotasemia'], [24, 25, 'mr-hiperk-causas'], [26, 28, 'mr-hiperk-tratamiento'], [29, 35, 'mr-magnesio-deficit'], [36, 41, 'mr-magnesio-reposicion'], [42, 47, 'mr-calcio-hipoca'], [48, 52, 'mr-fosforo']];
+export const fichaDe = (p) => (FICHA_PAG.find(([a, b]) => p >= a && p <= b) || FICHA_PAG[0])[2];
+export const IDEA = ['Una misma bajada del K⁺ del suero esconde el doble de potasio perdido que el que sobra en una subida: lo que ves es una ventanita.', 19];
