@@ -34,7 +34,7 @@ export const PUL_CSS = `
 .pul-raiz .pacientes button small { display: block; font-weight: 400; font-size: .62rem; color: var(--text-muted); }
 .pul-raiz .pacientes button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
 .pul-raiz .pacientes button[aria-pressed="true"] small { color: var(--bg-main); }
-.pul-raiz .ficha-pac { font: .72rem/1.3 var(--sans); color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.pul-raiz .ficha-pac { font: .72rem/1.3 var(--sans); color: var(--text-dim); white-space: normal; overflow-wrap: anywhere; }
 .pul-raiz .ficha-pac b { color: var(--text-main); }
 /* El monitor: la pieza común (js/core/monitor.js pone su CSS). Aquí, solo lo propio de la cabecera del shock */
 .pul-raiz .mon-cab { overflow: hidden; justify-content: flex-start; gap: 5px; text-transform: none; letter-spacing: .03em; }
@@ -207,7 +207,7 @@ export const PUL_CSS = `
 .pul-raiz .lupa[open] { padding: 2px 4px 6px; }
 .pul-raiz .calc .celda .t { display: block; }
 .pul-raiz .escena-caja { padding: 0; }
-.pul-raiz #pul-esc-svg { display: block; width: 84%; height: auto; margin: 0 auto; }
+.pul-raiz #pul-esc-svg { display: block; width: 100%; height: auto; }
 .pul-raiz .leyenda button { min-height: 40px; }
 .pul-raiz .dock-tabs { grid-auto-columns: minmax(0, 1fr); }
 .pul-raiz .deslizador output b { color: var(--accent-yellow); }

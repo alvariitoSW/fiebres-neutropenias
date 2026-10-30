@@ -1,4 +1,4 @@
-// El pulmón con respirador: la página (E1a). Une el modelo (pulmon.mjs), el monitor común (js/core/monitor.js), la escena (escena.js), los datos
+// El pulmón con respirador: la página. Une el modelo (pulmon.mjs), el monitor común (core/monitor.js), la pantalla (pantalla.js), la escena y los datos. Une el modelo (pulmon.mjs), el monitor común (js/core/monitor.js), la escena (escena.js), los datos
 // (datos.js) y la Mayéutica de muestra (comun/muestra-mayeutica.js). El modelo corre en vivo y el monitor dibuja
 // muestra a muestra, con un barrido de 12 s.
 import { instalarMonitor, instalarMonitorResp } from '../../../core/monitor.js';
@@ -170,6 +170,21 @@ const dock = crearDock($('dock'), { plegables: [$('dock-tabs'), $('dock-panel')]
 function medirDock() { dock.medir(); }
 dock.plegar(true);   // plegado al abrir: la escena y el monitor se ven enteros
 const desl = (k, et, v, min, max, paso, u, extra = '') => `<label class="deslizador"><input type="range" data-m="${k}" min="${min}" max="${max}" step="${paso}" value="${v}" aria-label="${et}"><output>${et} <b>${String(v).replace('.', ',')}</b> ${u}<small>${extra}</small></output></label>`;
+// Los mandos se crean una vez y se repintan en su sitio (REGLAS, «botones estables»): si la forma del panel no cambia, solo se
+// ponen los valores nuevos; así un deslizador que se está arrastrando no se rehace a mitad del gesto.
+function repintar(panel, html) {
+  const t = document.createElement('div'); t.innerHTML = html;
+  const fuera = (e) => !e.parentElement.closest('output, .dock-nota');   // el texto de un <output> y de una nota se pone entero
+  const A = [...panel.querySelectorAll('*')].filter(fuera), B = [...t.querySelectorAll('*')].filter(fuera);
+  if (A.length !== B.length || A.some((a, i) => a.tagName !== B[i].tagName || a.dataset.m !== B[i].dataset.m)) { panel.innerHTML = html; return; }
+  A.forEach((a, i) => {
+    const b = B[i];
+    for (const at of [...a.attributes]) if (!b.hasAttribute(at.name)) a.removeAttribute(at.name);
+    for (const at of [...b.attributes]) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
+    if (a.tagName === 'INPUT') a.value = b.getAttribute('value');
+    else if ((a.tagName === 'OUTPUT' || a.classList.contains('dock-nota') || !b.children.length) && a.innerHTML !== b.innerHTML) a.innerHTML = b.innerHTML;
+  });
+}
 function pintarMandos() {
   const r = P.S.resp, pu = P.S.pulmon, m = P.S.man, kg = PBW();
   let h = '';
@@ -186,7 +201,7 @@ function pintarMandos() {
     h += `<div class="rejilla" style="--n:3"><button type="button" class="tog" data-m="pausa" aria-pressed="${!!m.pausa}">Pausa inspiratoria<small>pico → meseta</small></button><button type="button" class="tog" data-m="oclusion" aria-pressed="${!!m.oclusion}">Oclusión espiratoria<small>mide la PEEP oculta</small></button><button type="button" class="tog" data-m="monpausa" aria-pressed="${est.pausa}">Congelar monitor<small>para mirar</small></button></div>`;
     h += `<p class="dock-nota">La pausa cierra la válvula 0,5 s al final de la insuflación; la oclusión, 1 s al final de la espiración. Las dos valen solo si el paciente no respira por su cuenta (cap. 28 p. 31).</p>`;
   }
-  $('dock-panel').innerHTML = h;
+  repintar($('dock-panel'), h);
 }
 // El tope duro: si el cambio lleva a un estado que un paciente no aguanta (Vt > 12 mL/kg PBW, VM > 20 L/min), el mando
 // se queda donde estaba y sale el sello. Si el cambio es válido, el sello se quita.
@@ -255,18 +270,33 @@ $('pacientes').addEventListener('click', (ev) => { const b = ev.target.closest('
 $('leyenda').innerHTML = D.ORDEN_ESTADOS.map((k, i) => `<button type="button" data-estado="${k}" aria-pressed="false"><b>${i + 1}</b>${D.ESTADOS[k].tit}</button>`).join('');
 $('leyenda').addEventListener('click', (ev) => { const b = ev.target.closest('[data-estado]'); if (b) ponerEstado(b.dataset.estado); });
 
+// La pantalla del respirador es la imagen de los mandos: tras tocar uno, si se ve menos de la mitad (el mando está en el dock fijo
+// de abajo), la página sube lo justo para que vuelva a verse (core/frase-vista.js hace lo mismo con la frase viva).
+function verPantalla() {
+  if (guia) return;
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const e = $('monitor'), r = e.getBoundingClientRect(), tope = $('dock').getBoundingClientRect().top;
+    if (!r.height || raiz.getClientRects().length === 0) return;
+    const ve = Math.max(0, Math.min(r.bottom, tope) - Math.max(r.top, 0)) / r.height;
+    if (ve < 0.6) scrollBy({ top: r.top - 8, behavior: 'instant' });
+  }));
+}
+$('dock').addEventListener('click', verPantalla); $('dock').addEventListener('input', verPantalla);
+$('pacientes').addEventListener('click', verPantalla); $('leyenda').addEventListener('click', verPantalla);
+$('monitor').addEventListener('click', verPantalla);
+
 // ---------------------------------------------------------------- explicación guiada
 let guia = null, gi = 0;
-function abrirGuia(E) { guia = { E }; gi = 0; dock.plegar(false); dock.asa.hidden = true; $('dock-explorar').hidden = true; $('dock-guia').hidden = false; est.pausa = true; llenarMonitor(); pintarTodo(); pintarGuia(); }
+function abrirGuia(E) { guia = { E }; gi = 0; dock.plegar(false); dock.asa.hidden = true; $('dock-tabs').hidden = true; $('dock-panel').hidden = true; $('btn-guia').hidden = true; $('dock-guia').hidden = false; est.pausa = true; llenarMonitor(); pintarTodo(); pintarGuia(); }
 function cerrarGuia() {
-  borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false; dock.asa.hidden = false; $('dock-explorar').hidden = false;
+  borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false; dock.asa.hidden = false; $('dock-tabs').hidden = false; $('dock-panel').hidden = false; $('btn-guia').hidden = false;
   medirDock();
 }
 function pintarGuia() {
   const E = guia.E, p = E.guia[gi], n = E.guia.length;
-  $('dock-guia').innerHTML = `<div class="guia"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${E.tit}</span><button type="button" class="guia-x" id="guia-x" aria-label="Cerrar la explicación">×</button></div>
+  $('dock-guia').innerHTML = `<div class="guia"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${E.tit}</span><button type="button" class="guia-x" id="pul-guia-x" aria-label="Cerrar la explicación">×</button></div>
     <p class="guia-txt">${p.t}${p.org ? ' ' + org(p.org) : ''}</p>${cita(p.c)}
-    <div class="guia-nav"><button type="button" class="guia-b" id="guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${E.guia.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
+    <div class="guia-nav"><button type="button" class="guia-b" id="pul-guia-ant" ${gi === 0 ? 'disabled' : ''}>← Atrás</button><span class="guia-puntos">${E.guia.map((_, i) => `<i class="${i < gi ? 'hecho' : i === gi ? 'aqui' : ''}"></i>`).join('')}</span><button type="button" class="guia-b prim" id="pul-guia-sig">${gi === n - 1 ? 'Hecho' : 'Siguiente →'}</button></div></div>`;
   $('guia-x').onclick = cerrarGuia; $('guia-ant').onclick = () => { gi--; pintarGuia(); };
   $('guia-sig').onclick = () => { if (gi === n - 1) cerrarGuia(); else { gi++; pintarGuia(); } };
   medirDock(); requestAnimationFrame(() => senalar(p.s));
@@ -304,7 +334,7 @@ raiz.addEventListener('click', (ev) => {
   const n = $('nota-' + b.dataset.nota); if (!n) return;
   n.closest('details').open = true; n.scrollIntoView({ block: 'center', behavior: REDUCIR ? 'auto' : 'smooth' }); n.classList.add('guia-marco'); setTimeout(() => n.classList.remove('guia-marco'), 2400);
 });
-$('notas').innerHTML = D.NOTAS.map((n) => `<div class="nota" id="nota-${n.k}"><span class="nota-tipo ${D.NOTA_TIPO[n.tipo][1]}">${D.NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.citas.map(cita).join('')}</div>`).join('');
+$('notas').innerHTML = D.NOTAS.map((n) => `<div class="nota" id="pul-nota-${n.k}"><span class="nota-tipo ${D.NOTA_TIPO[n.tipo][1]}">${D.NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.citas.map(cita).join('')}</div>`).join('');
 $('referencias').innerHTML = D.REFS.map(([t, pm, doi]) => `<li><span>${t} PMID ${pm}.</span><span class="cita"><a class="cita-pdf" href="https://pubmed.ncbi.nlm.nih.gov/${pm}/" target="_blank" rel="noopener">PubMed</a><a class="cita-pdf" href="https://doi.org/${doi}" target="_blank" rel="noopener">DOI</a></span></li>`).join('');
 $('profundizar').innerHTML = D.PROFUNDIZAR.map((p) => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
 
@@ -317,6 +347,6 @@ function abrirEstado(clave) {
   else if (!clave) pintarTodo();
   mon.montar(); llenarMonitor(); pintarTodo(); reanudar();
 }
-window.__pulPruebas = () => ({ P, est, get L() { return L; }, mon, PANT, tope });
+window.__pulPruebas = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
 return { abrirEstado };
 }
