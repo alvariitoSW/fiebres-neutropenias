@@ -33,7 +33,7 @@ export const PRESETS = {
 // Fuentes y notas (lista, REGLAS §7.11)
 export const FUENTES = [
   ['El 98 % del K⁺ está dentro de la célula', 18], ['K⁺ sérico frente a total (Fig. 36.2), déficit 200-400 y exceso 100-200 mEq por 1 mEq/L', 19],
-  ['Fig. 36.2: la curva, en el dibujo', 20], ['ClK: ritmo 20 mEq/h, 40 grave, cava superior', 23], ['K⁺ de los concentrados de 18 días (2-3 mEq)', 25], ['Furosemida: pierde K⁺ (causa principal de hipopotasemia)', 21], ['Calcio en la hiperpotasemia: 10 mL de gluconato al 10 % (90 mg) en 3 min, repetible a los 5; el efecto cede en 30-60 min (Tabla 36.3)', 27], ['La alcalosis tiene efecto variable sobre el K⁺; la acidosis láctica no se asocia a hiperpotasemia', 21],
+  ['Fig. 36.2: la curva, en el dibujo', 20], ['ClK: ritmo 20 mEq/h, 40 grave, cava superior', 23], ['K⁺ de los concentrados de 18 días (2-3 mEq)', 25], ['Furosemida: pierde K⁺ (causa principal de hipopotasemia)', 21], ['Calcio en la hiperpotasemia: 10 mL de gluconato al 10 % (90 mg) en 3 min, repetible a los 5; el efecto cede en 30-60 min (Tabla 36.3)', 27], ['La alcalosis tiene efecto variable sobre el K⁺', 21], ['La acidosis láctica no se asocia a hiperpotasemia', 24],
   ['Mg²⁺: reparto del cuerpo (Tabla 37.1)', 32], ['Furosemida y Mg²⁺ (50 % de los crónicos)', 34], ['MgSO₄: 8 mEq por gramo, 50 % a la orina', 37], ['Mg >13 mEq/L: parada', 39],
   ['Ca: 99 % en hueso, tres fracciones (Fig. 38.1)', 42], ['Total frente a iónico; ningún factor de corrección es fiable', 43], ['Alcalosis y citrato bajan el Ca iónico; el citrato de los concentrados', 44], ['Ca iónico <0,65 mmol/L; gluconato 9 y cloruro 27 mg/mL; bolo recomendado de 200 mg (sube el total 0,5 mg/dL y vuelve a caer a los 30 min, p. 46)', 45],
   ['Fosfato: casi todo dentro de la célula; insulina, nutrición parenteral (hipofosfatemia a los 2 días, <1 mg/dL a la semana, Fig. 38.2)', 49], ['Reposición de fosfato (Tabla 38.5; fosfato potásico 4,3 mEq/mL impreso como mEq/L)', 51],
@@ -56,13 +56,13 @@ export const CRECIMIENTO = [
 export const PENDIENTE = 'Pendiente: El corazón eléctrico aún no dibuja la onda U, la T plana ni el QT largo de la hipopotasemia (p. 22). Se pinta el trazo que hay.';
 
 // PA y FC de cada paciente: ilustrativos (el libro no los da); Valentín, como dice el enunciado de su caso.
-export const VITALES_ORIGEN = 'PA y FC ilustrativas';
+export const VITALES_ORIGEN = 'PA, FC, FR y SatO₂ ilustrativas';
 // A qué párrafo de la ficha de la app lleva cada página del PDF: [ficha (pestaña), id del párrafo]
 export const PAG_FICHA = {
   18: ['mr-hipopotasemia', 'mr-k-total'], 19: ['mr-hipopotasemia', 'mr-k-curva'], 20: ['mr-hipopotasemia', 'mr-k-curva'], 21: ['mr-hipopotasemia', 'mr-hipok-redistribucion'],
-  22: ['mr-hipopotasemia', 'mr-hipok-arritmias'], 23: ['mr-hipopotasemia', 'mr-kcl-ritmo'], 24: ['mr-hiperk-causas', 'mr-hiperk-transfusion'], 25: ['mr-hiperk-causas', 'mr-hiperk-transfusion'],
-  26: ['mr-hiperk-causas', 'mr-ecg-correlacion'], 27: ['mr-hiperk-tratamiento', 'mr-calcio-preparados'], 32: ['mr-magnesio-deficit', 'mr-tabla-37-1'], 33: ['mr-magnesio-deficit', 'mr-mg-farmacos'],
-  34: ['mr-magnesio-deficit', 'mr-mg-farmacos'], 37: ['mr-magnesio-reposicion', 'mr-mg-leve'], 38: ['mr-magnesio-reposicion', 'mr-mg-retencion'], 39: ['mr-magnesio-reposicion', 'mr-hipermg-umbral'],
+  22: ['mr-hipopotasemia', 'mr-hipok-arritmias'], 23: ['mr-hipopotasemia', 'mr-kcl-ritmo'], 24: ['mr-hiperk-causas', 'mr-hiperk-acidosis'], 25: ['mr-hiperk-causas', 'mr-hiperk-transfusion'],
+  26: ['mr-hiperk-causas', 'mr-ecg-correlacion'], 27: ['mr-hiperk-tratamiento', 'mr-calcio-preparados'], 32: ['mr-magnesio-deficit', 'mr-tabla-37-1'], 33: ['mr-magnesio-deficit', 'mr-mg-orina'],
+  34: ['mr-magnesio-deficit', 'mr-mg-farmacos'], 36: ['mr-magnesio-deficit', 'mr-mg-neuro'], 37: ['mr-magnesio-reposicion', 'mr-mg-leve'], 38: ['mr-magnesio-reposicion', 'mr-mg-retencion'], 39: ['mr-magnesio-reposicion', 'mr-hipermg-umbral'],
   42: ['mr-calcio-hipoca', 'mr-ca-fracciones'], 43: ['mr-calcio-hipoca', 'mr-ca-albumina'], 44: ['mr-calcio-hipoca', 'mr-hipoca-transfusion'], 45: ['mr-calcio-hipoca', 'mr-ca-pauta'],
   46: ['mr-calcio-hipoca', 'mr-ca-cuidado'], 49: ['mr-fosforo', 'mr-hipop-glucosa'], 51: ['mr-fosforo', 'mr-fosfato-soluciones'],
 };

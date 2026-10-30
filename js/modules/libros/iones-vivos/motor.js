@@ -9,7 +9,7 @@ export function curvaK(d) {
 export const nuevo = (o = {}) => ({ dK: 0, dMg: 0, po4b: 3.5, alb: 4, ph: 7.4, units: 0, ins: 0, caIV: 0, mgBolo: 0, t: 0, bombas: {}, ...o });
 // Lo que cada dosis de insulina mueve del suero a la célula (ilustrativo; la fuente da la dirección): en unidades del suero y en partículas del dibujo
 export const flujos = (s) => ({ kShift: P.kInsulina * s.ins, mgShift: P.mgInsulina * s.ins, pShift: P.poInsulina * s.ins, partK: s.ins ? Math.min(6, 2 + 2 * s.ins) : 0, partP: 3 * s.ins });
-// Avanza el reloj `min` minutos: las bombas dan su dosis; el bolo de Mg se reparte (mitad cada 15 min, p. 37-38) y el efecto del calcio IV se acaba a los 30 min (p. 46; 30-60 min en hiperK, p. 27). Los tiempos son ilustrativos.
+// Avanza el reloj `min` minutos: las bombas dan su dosis; el bolo de Mg baja con el tiempo (el libro dice que empieza a caer a los 15 min, p. 38, sin dar semivida: el ritmo es ilustrativo) y el efecto del calcio IV se acaba a los 30 min (p. 46; 30-60 min en hiperK, p. 27). Los tiempos son ilustrativos.
 export function avanzar(s, min) {
   if (s.bombas.clk) s.dK = Math.min(FIG.dKmax, s.dK + s.bombas.clk.rate * min / 60);
   s.mgBolo *= 0.5 ** (min / 15); s.caIV = Math.max(0, s.caIV * (1 - min / 30)); s.t += min;
@@ -30,12 +30,13 @@ export function leer(s) {
 export function topes(s, e = {}) {
   const L = leer(s), t = [];
   if (e.via === 'cava' && e.rate > TOPES.clk.max) t.push({ c: 'clk', n: 'sello', titulo: 'Asistolia', texto: 'ClK por la cava superior a más de 20 mEq/h: riesgo de asistolia. PA 0/0, FC 0 (parada).', pag: 23, origen: TOPES.clk.origen, off: ['#iov-b-clk'] });
-  else if (e.rate >= 40) t.push({ c: 'clk', n: 'aviso', titulo: 'Ritmo de hipopotasemia grave', texto: '40 mEq/h solo si es grave y por vía central, con monitor.', pag: 23, origen: TOPES.clk.origen });
+  else if (e.rate >= 40) t.push({ c: 'clk', n: 'aviso', titulo: 'Ritmo de hipopotasemia grave', texto: '40 mEq/h puede hacer falta en la hipopotasemia grave; mejor por una vía central grande, si es posible (E p. 23).', pag: 23, origen: TOPES.clk.origen });
+  if (s.mgBolo > 16) t.push({ c: 'mgbolo', n: 'aviso', titulo: 'Ritmo ilustrativo', texto: 'Más de 2 g de MgSO₄ de golpe: el libro da 2 g en 2-5 min solo en riesgo vital y 6 g en 3 h (E p. 37). Aquí el bolo es instantáneo, ilustrativo.', pag: 37, origen: 'ficha · p. 37; bolo instantáneo: ilustrativo' });
   if (L.mg > TOPES.mg.parada) t.push({ c: 'mg', n: 'sello', titulo: 'Parada', texto: `Mg²⁺ ${L.mg.toFixed(1).replace('.', ',')} mEq/L: más de 13, parada cardíaca. PA 0/0.`, pag: 39, origen: TOPES.mg.origen, off: ['#iov-b-mg'] });
   else if (L.mg > TOPES.mg.bloqueo) t.push({ c: 'mg', n: 'aviso', titulo: 'Bloqueo AV completo', texto: 'Mg²⁺ por encima de 10 mEq/L: bloqueo AV completo. No sigas.', pag: 39, origen: TOPES.mg.origen });
-  if (L.caIonMmol < TOPES.ca.grave) t.push({ c: 'ca', n: 'sello', titulo: 'Hipotensión y ectopia', texto: `Ca iónico ${L.caIonMmol.toFixed(2).replace('.', ',')} mmol/L (<0,65): PA 84/50, FC 112 con extrasístoles ventriculares.`, pag: 45, origen: TOPES.ca.origen });
-  else if (L.caIonMmol < TOPES.ca.severa) t.push({ c: 'ca', n: 'aviso', titulo: 'Hipocalcemia grave', texto: 'Ca iónico <0,9 mmol/L: grave. Se acerca a 0,65.', pag: 44, origen: TOPES.ca.origen });
-  if (L.po4 < TOPES.po4.grave) t.push({ c: 'po4', n: 'sello', titulo: 'Hipofosfatemia grave', texto: `Fosfato ${L.po4.toFixed(1).replace('.', ',')} mg/dL (<1): debilidad respiratoria. FR 28, SatO₂ 89 %.`, pag: 49, origen: TOPES.po4.origen, off: ['#iov-b-real'] });
+  if (L.caIonMmol < TOPES.ca.grave) t.push({ c: 'ca', n: 'sello', titulo: 'Hipotensión y ectopia', texto: `Ca iónico ${L.caIonMmol.toFixed(2).replace('.', ',')} mmol/L (<0,65): PA 84/50, FC 112 con extrasístoles ventriculares (constantes ilustrativas).`, pag: 45, origen: TOPES.ca.origen });
+  else if (L.caIonMmol < TOPES.ca.severa) t.push({ c: 'ca', n: 'aviso', titulo: 'Hipocalcemia grave', texto: 'Ca iónico <0,9 mmol/L: grave en la transfusión masiva (E p. 44). Se acerca a 0,65.', pag: 44, origen: TOPES.ca.origen });
+  if (L.po4 < TOPES.po4.grave) t.push({ c: 'po4', n: 'sello', titulo: 'Hipofosfatemia grave', texto: `Fosfato ${L.po4.toFixed(1).replace('.', ',')} mg/dL (<1): debilidad respiratoria. FR 28, SatO₂ 89 % (constantes ilustrativas).`, pag: 49, origen: TOPES.po4.origen, off: ['#iov-b-real'] });
   if (e.caMg > TOPES.caIV.bolo) t.push({ c: 'caiv', n: 'sello', titulo: 'Bolo de calcio excesivo', texto: `${e.caMg} mg de calcio elemental de golpe: por encima de los 200 mg del bolo recomendado (después, 1-2 mg/kg/h); el calcio IV puede dañar la célula (p. 46). Tope ilustrativo.`, pag: 45, origen: TOPES.caIV.origen, off: ['#iov-b-ca'] });
   if (L.dKef <= -900 || L.dKef >= 300) t.push({ c: 'nofis', n: 'sello', titulo: 'Combinación no fisiológica', texto: 'El potasio total sale de la Fig. 36.2: el suero y el total ya no caben en la curva.', pag: 20, origen: 'ficha · p. 20', off: ['#iov-b-furo', '#iov-b-clk'] });
   else if (L.k < 1.5) t.push({ c: 'nofis', n: 'sello', titulo: 'Combinación no fisiológica', texto: 'K⁺ por debajo de 1,5 mEq/L: no es un paciente posible; la curva de la Fig. 36.2 acaba en 1,9. Corrige el pH o la insulina.', pag: 20, origen: 'ficha · p. 20; tope 1,5: ilustrativo', off: ['#iov-b-furo', '#iov-b-real'] });
@@ -49,7 +50,7 @@ export function vitales(s, e = {}, preset = 'normal') {
   if (act.includes('clk') || act.includes('mg')) return { pa: '0/0', fc: 0, extra: 'parada', regla: 'ClK >20 mEq/h por la cava superior (p. 23) o Mg²⁺ >13 mEq/L (p. 39)' };
   if (act.includes('ca')) return { pa: '84/50', fc: 112, extra: 'ectopia · ' + o, regla: 'Ca iónico <0,65 mmol/L (p. 45)' };
   if (act.includes('hiperk')) return { pa: '90/54', fc: 46, extra: 'bradicardia · ' + o, regla: 'K⁺ ≥7 mEq/L (ilustrativo; el libro: grave >6,5, p. 27)' };
-  if (act.includes('po4')) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % · ' + o, regla: 'Fosfato <1 mg/dL (p. 49)' };
+  if (act.includes('po4')) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % (ilustrativas) · ' + o, regla: 'Fosfato <1 mg/dL (p. 49)' };
   return { pa, fc, extra: o, regla: '' };
 }
 export const fmt = (x, d = 1) => (+x).toFixed(d).replace('.', ',');

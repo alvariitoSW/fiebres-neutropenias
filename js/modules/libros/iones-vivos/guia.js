@@ -25,13 +25,15 @@ export const GUIAS = {
 };
 export const focoSvg = (zs = []) => zs.map((z) => { const [x, y, w, h] = ZONAS[z]; return `<rect class="foco" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>`; }).join('');
 // api: { caja, hacer(a, o), unidades(n), ponerIon(i), setFoco(zs), cita(p) }. Devuelve { abrir(preset), cerrar() }.
-export function crearGuia({ caja, hacer, unidades, ponerIon, setFoco, cita }) {
+import { verFrase } from '../../../core/frase-vista.js';
+export function crearGuia({ dock, caja, hacer, unidades, ponerIon, setFoco, cita }) {
   let g = null, i = 0;
   const cerrar = () => { caja.hidden = true; g = null; setFoco([]); };
   function paso(k) {
     i = Math.max(0, Math.min(g[1].length - 1, k)); const p = g[1][i]; caja.hidden = false; ponerIon(p.ion); setFoco(p.z);
     caja.innerHTML = `<h3>${g[0]} · paso ${i + 1} de ${g[1].length}</h3><p class="enun">${p.t} <span class="org">${p.o}</span> ${cita(p.p)}</p>
       <div class="fila-g">${p.haz ? `<button type="button" class="b prim" data-paso="haz">Hazlo: ${p.btn}</button>` : ''}<button type="button" data-paso="ant" ${i ? '' : 'disabled'}>‹ Anterior</button><button type="button" data-paso="sig">${i < g[1].length - 1 ? 'Siguiente ›' : 'Cerrar'}</button></div>`;
+    verFrase(caja, { dock, techo: 8, margen: 6 });
   }
   caja.addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-paso]'); if (!b || !g) return; const a = b.dataset.paso, p = g[1][i];

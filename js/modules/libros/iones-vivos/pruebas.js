@@ -23,7 +23,7 @@ export const CASO = {
       ops: [{ t: 'Pido un Ca iónico: el total mide las tres fracciones y el citrato quela calcio sin bajarlo.', ok: true, por: 'El iónico sale en 0,82 mmol/L (3,3 mg/dL): el citrato lo ha quelado (E p. 44).' },
         { t: 'Corrijo el total por la albúmina con la fórmula y, si sale normal, no hago nada.', ok: false, por: 'Lo normal de la fórmula tapa un iónico en 0,82 mmol/L; seguirías transfundiendo sin calcio (E p. 43).' },
         { t: 'Doy bicarbonato para el pH y vuelvo a pedir el total.', ok: false, por: 'El bicarbonato forma complejos con el calcio y baja aún más el iónico (E p. 44).' }] },
-    { enun: 'Ca iónico 0,82 mmol/L. Pones calcio: ¿cuánto y cuál?', orden: [0, 2, 1], pag: 45,
+    { enun: 'Ca iónico 0,82 mmol/L. El libro reserva el calcio IV a la reacción adversa grave o al síntoma, y avisa de que se asocia a fallo multiorgánico (E p. 45-46). Supón que la hipotensión se atribuye al calcio bajo y decides tratar: ¿cuánto y cuál?', orden: [0, 2, 1], pag: 45,
       ops: [{ t: '22 mL de gluconato al 10 % (200 mg elementales) y luego 1-2 mg/kg/h.', ok: true, por: 'Es el bolo recomendado y la perfusión de la ficha (E p. 45): el iónico sube.', haz: (a) => a.hacer('ca', { mg: 200 }) },
         { t: '10 mL de cloruro cálcico: es más potente y lo arregla de golpe.', ok: false, por: 'Son 270 mg de golpe, por encima del bolo recomendado de 200; el cloruro se reserva al colapso (E p. 27, 45).' },
         { t: '100 mL de gluconato de golpe para ir sobrados.', ok: false, por: '900 mg en bolo: sello de bolo excesivo (tope ilustrativo); el calcio IV puede dañar la célula (E p. 46).' }] },

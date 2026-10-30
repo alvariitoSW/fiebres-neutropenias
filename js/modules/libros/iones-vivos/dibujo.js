@@ -72,7 +72,7 @@ function figK(s, L, oculto) {
   o += `<path class="curva" d="${CURVA_K.map(([d, v], i) => (i ? 'L' : 'M') + X(d).toFixed(1) + ' ' + Y(v).toFixed(1)).join('')}"/>`;
   const dx = X(clamp(L.dKef, FIG.dKmin, FIG.dKmax)), y0 = Y(Math.min(8, Math.max(1.9, L.k + (L.k < 8 ? 0 : 0)))); const yc = Y(L.k);
   o += `<line class="guia" x1="${dx}" y1="420" x2="${dx}" y2="${yc}"/><circle class="punto" cx="${dx}" cy="${yc}" r="6"/>`;
-  const izq = dx > 200; o += txt(izq ? dx - 10 : Math.max(40, dx + 8), Math.max(292, yc - 10), `K⁺ ${oculto ? '?' : kVer(L.k)} · Δ ${L.dKef > 0 ? '+' : ''}${Math.round(L.dKef)} mEq`, `class="rot"${izq ? ' text-anchor="end"' : ''}`);
+  const izq = dx > 200; o += txt(izq ? dx - 10 : Math.max(40, dx + 8), (yc - 10 < 322 ? yc + 18 : yc - 10), `K⁺ ${oculto ? '?' : kVer(L.k)} · Δ ${L.dKef > 0 ? '+' : ''}${Math.round(L.dKef)} mEq`, `class="rot"${izq ? ' text-anchor="end"' : ''}`);
   o += txt(44, 300, 'Plano a la izquierda: déficit de 200-400 mEq por 1 mEq/L', 'class="min"') + txt(120, 314, 'a la derecha: 100-200', 'class="min"');
   return o + (s.ins ? txt(44, 330, 'Insulina: el suero baja, el total no cambia', 'class="min"') : '');
 }

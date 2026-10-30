@@ -32,7 +32,7 @@ const ecgK = (L) => (L.k > 5.5 ? Math.max(5.5, L.k - 1.2 * clamp(s.caIV / 90, 0,
 function aplicarTopes() {
   const lista = topes(s, e), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
-  for (const c of ['clk', 'mg', 'ca', 'po4', 'caiv', 'nofis', 'hiperk']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['clk', 'mg', 'ca', 'po4', 'caiv', 'nofis', 'hiperk', 'mgbolo']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.n === 'aviso' ? '#iov-dock-panel' : null });
 }
 function ecgPintar(L = leer(s)) { $('ecg-path').setAttribute('d', enParada(s, e) ? ECG.PLANO : ECG.traza().d); return L; }
@@ -106,8 +106,8 @@ function montar() {
   $('dock-panel').innerHTML = `
    <div class="mando"><button type="button" id="iov-b-real" class="b prim">Realimentar</button><button type="button" id="iov-b-furo" class="b">Furosemida (−20 K⁺, −6 Mg²⁺)</button></div>
    <details class="mas" id="iov-mas"><summary>Más mandos: ClK, MgSO₄ y calcio</summary>
-   <div class="mando"><b class="dock-nota">ClK: ritmo y vía</b>${seg('s-rate', 'rate', [[10, '10'], [20, '20'], [40, '40 mEq/h']])}${seg('s-via', 'via', [['periferica', 'Periférica'], ['central', 'Central'], ['cava', 'Cava sup.']])}<button type="button" id="iov-b-clk" class="b">Pasar 1 h de ClK</button></div>
-   <div class="mando"><b class="dock-nota">MgSO₄ (8 mEq por gramo)</b>${seg('s-g', 'gmg', [[2, '2 g'], [4, '4 g'], [6, '6 g']])}<div class="fila"><button type="button" id="iov-b-mg" class="b">Dar MgSO₄</button><button type="button" id="iov-b-esp" class="b">Esperar 15 min</button></div></div>
+   <div class="mando"><b class="dock-nota">ClK: ritmo y vía (el libro: 20 mEq/h, 40 en la grave, p. 23; el 10 es ilustrativo)</b>${seg('s-rate', 'rate', [[10, '10'], [20, '20'], [40, '40 mEq/h']])}${seg('s-via', 'via', [['periferica', 'Periférica'], ['central', 'Central'], ['cava', 'Cava sup.']])}<button type="button" id="iov-b-clk" class="b">Pasar 1 h de ClK</button></div>
+   <div class="mando"><b class="dock-nota">MgSO₄ (8 mEq por gramo) · dosis y ritmo ilustrativos: el libro da 2 g en 2-5 min solo en riesgo vital y 6 g en 3 h (p. 37)</b>${seg('s-g', 'gmg', [[2, '2 g'], [4, '4 g'], [6, '6 g']])}<div class="fila"><button type="button" id="iov-b-mg" class="b">Dar MgSO₄</button><button type="button" id="iov-b-esp" class="b">Esperar 15 min</button></div></div>
    <div class="mando"><b class="dock-nota">Calcio IV: gluconato 9 · cloruro 27 mg/mL (ampolla de 10 mL)</b>${seg('s-amp', 'amp', [['glu', 'Gluconato'], ['cl', 'Cloruro']])}${seg('s-n', 'n', [[1, '1 ampolla'], [2, '2'], [3, '3']])}<button type="button" id="iov-b-ca" class="b">Dar calcio · <span id="iov-o-ca"></span></button></div></details>`;
   $('dock-medir').innerHTML = `
    <div class="mando"><div class="presets" id="iov-presets"></div></div>
@@ -125,7 +125,7 @@ function montar() {
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') { modo = 'explorar'; $('prueba').hidden = true; } ponerPreset(b.dataset.pre); } });
   dock.querySelector('.dock-tabs').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pest]'); if (!b) return; dock.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); dp.hidden = b.dataset.pest !== 'dar'; $('dock-medir').hidden = b.dataset.pest !== 'medir'; ajustarDock(); });
-  guiaApi = crearGuia({ caja: $('guia'), hacer, cita, unidades: (n) => { s.units = n; $('r-uni').value = n; ion = 'k'; frase(`${n} concentrados: cada uno trae citrato y 2-3 mEq de K⁺; el K⁺ del suero sube a ${kVer(leer(s).k)} y el iónico baja.`, 'ficha · p. 25, 44; cifras ilustrativas'); pintar(); },
+  guiaApi = crearGuia({ dock: () => $('dock'), caja: $('guia'), hacer, cita, unidades: (n) => { s.units = n; $('r-uni').value = n; ion = 'k'; frase(`${n} concentrados: cada uno trae citrato y 2-3 mEq de K⁺; el K⁺ del suero sube a ${kVer(leer(s).k)} y el iónico baja.`, 'ficha · p. 25, 44; cifras ilustrativas'); pintar(); },
     ponerIon: (i) => { ion = i; oculto = false; }, setFoco: (z) => { foco = z; pintar(); } });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`;
   $('pausa').addEventListener('click', () => { pausa = !pausa; $('pausa').setAttribute('aria-pressed', String(pausa)); });
