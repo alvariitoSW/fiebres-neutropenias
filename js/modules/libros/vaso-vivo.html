@@ -96,6 +96,8 @@
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="herida" data-buscar-titulo="El vaso que sangra: la herida en sus 4 tiempos" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hemostasia primaria secundaria colágeno gpiib/iiia factor de von willebrand fvw fibrinógeno factor tisular cascada">La herida</button>
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="plaquetas-100k" data-buscar-titulo="El vaso que sangra: trombocitopenia, el corte de 100.000" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="trombocitopenia plaquetas bajas recuento 100000 5000 hemorragia intracerebral pseudotrombocitopenia edta sepsis">Trombocitopenia</button>
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="placa" data-buscar-titulo="El vaso que sangra: la arteria que se tapa (SCA)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="síndrome coronario agudo sca placa de ateroma rotura mieloperoxidasa trombo oclusivo stemi nstemi angina inestable troponina reloj">La placa</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="placa-antiagregantes" data-buscar-titulo="El vaso que sangra: los antiagregantes en el SCA" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="aspirina clopidogrel ticagrelor prasugrel eptifibatida tirofibán p2y12 iib iiia antiagregantes tromboxano plaqueta contraindicado">Antiagregantes</button>
+          <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="trombolisis" data-buscar-titulo="El vaso que sangra: la trombólisis en el SCA" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="trombólisis tenecteplasa tnk alteplasa reteplasa plasmina plasminógeno fibrina peso 12 horas sangrado fibrinógeno heparina">Trombólisis</button>
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="hit" data-buscar-titulo="El vaso que sangra: la HIT y el argatrobán" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="hit tih trombocitopenia inducida por heparina fp4 igg argatrobán trombosis">HIT</button>
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="cid" data-buscar-titulo="El vaso que sangra: CID, PTT y SHU (microangiopatías)" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="cid coagulación intravascular diseminada ptt púrpura trombocitopénica trombótica shu síndrome hemolítico urémico esquistocitos adamts-13 microangiopatía recambio plasmático">Microangiopatías</button>
           <button type="button" data-especialidad="libros" data-view="vasoVivo" data-vaso-vivo="pfc-inr" data-buscar-titulo="El vaso que sangra: plaquetas, plasma y la trampa del INR" data-buscar-bloque="Libros · Modelos vivos" data-buscar-palabras="transfusión de plaquetas pfc plasma fresco congelado inr antitrombina crioprecipitado fibrinógeno ccp4f complejo protrombínico warfarina hemorragia masiva refractariedad">Plaquetas y plasma</button>
@@ -136,6 +138,7 @@
               <button type="button" role="tab" data-vso-tab="plasma" aria-selected="false">Plasma</button>
               <button type="button" role="tab" data-vso-tab="farmaco" aria-selected="false">Fármaco</button>
               <button type="button" role="tab" data-vso-tab="arteria" aria-selected="false">Arteria</button>
+              <button type="button" role="tab" data-vso-tab="tratar" aria-selected="false">Tratar</button>
             </div>
             <div class="vso-dock-panel" data-vso-panel="herida">
               <div class="vso-seg" id="vso-m-lesion" role="group" aria-label="Lesión">
@@ -218,9 +221,44 @@
                 </div>
                 <button type="button" class="vso-tog vso-play" id="vso-m-ntg" aria-pressed="false" aria-label="El dolor cede con nitroglicerina">NTG<small>alivia</small></button>
               </div>
-              <div class="vso-fila-io">
+              <div class="vso-fila-io" id="vso-fila-reloj">
                 <label class="vso-desliza" id="vso-reloj"><span>Desde el dolor</span><input type="range" id="vso-m-horas" min="0" max="24" step="1" aria-label="Horas desde el dolor, de 0 a 24"><output id="vso-m-horas-out"></output></label>
                 <button type="button" class="vso-tog vso-play vso-enlace" id="vso-m-ecg" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="stemi" hidden>ECG<small>ST ↑ →</small></button>
+              </div>
+            </div>
+
+            <!-- Tratar el SCA (5b antiagregantes y 5c trombólisis): sobre la misma placa; el reloj es el de la pestaña Arteria -->
+            <div class="vso-dock-panel" data-vso-panel="tratar" hidden>
+              <div class="vso-fila-io">
+                <button type="button" class="vso-tog vso-play" id="vso-m-asa" data-vso-asa aria-pressed="false">Aspirina<small>tromboxano</small></button>
+                <div class="vso-seg" id="vso-m-p2y" role="group" aria-label="P2Y12: uno solo">
+                  <button type="button" data-v="clopidogrel" data-vso-p2y="clopidogrel">Clopidogrel</button>
+                  <button type="button" data-v="ticagrelor" data-vso-p2y="ticagrelor">Ticagrelor</button>
+                  <button type="button" data-v="prasugrel" data-vso-p2y="prasugrel">Prasugrel</button>
+                </div>
+              </div>
+              <div class="vso-fila-io">
+                <div class="vso-seg" id="vso-m-iib" role="group" aria-label="Anti-IIb/IIIa">
+                  <button type="button" data-v="eptifibatida">Eptifibatida<small>IIb/IIIa</small></button>
+                  <button type="button" data-v="tirofiban">Tirofibán<small>IIb/IIIa</small></button>
+                </div>
+                <button type="button" class="vso-tog vso-play" id="vso-m-lisis" data-vso-lisis aria-pressed="false">Lisis<small>tenecteplasa</small></button>
+              </div>
+              <div class="vso-fila-io">
+                <label class="vso-desliza" id="vso-peso"><span>Peso</span><input type="range" id="vso-m-peso" min="40" max="120" step="1" aria-label="Peso del paciente, de 40 a 120 kilos"><output id="vso-m-peso-out"></output></label>
+              </div>
+              <div class="vso-fila-io" id="vso-fila-pac">
+                <div class="vso-seg" id="vso-m-pac" role="group" aria-label="El paciente tiene">
+                  <button type="button" data-v="hic">HIC previa</button>
+                  <button type="button" data-v="ictus">Ictus/AIT</button>
+                  <button type="button" data-v="alasa">Alergia ASA</button>
+                  <button type="button" data-v="morfina">Morfina</button>
+                </div>
+                <div class="vso-seg" id="vso-m-clcr" role="group" aria-label="Aclaramiento de creatinina">
+                  <button type="button" data-v="0">ClCr ≥50</button>
+                  <button type="button" data-v="50">&lt;50</button>
+                  <button type="button" data-v="30">&lt;30</button>
+                </div>
               </div>
             </div>
             </div>

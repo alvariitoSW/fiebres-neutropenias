@@ -18,8 +18,8 @@
 // (pruebasVaso). La escena vive en js/modules/libros/vaso-vivo-escena.js y la interfaz en vaso-vivo.js.
 import { HEMODERIVADOS } from './hemoderivados-data.js';
 import { MAYEUTICA_HEMOSTASIA } from './mayeutica/b2-hemostasia.js';
-import { RELOJ, tableroPlaca, frasePlaca, GUIA_PLACA, topesReloj } from './vaso-vivo-data-sca.js';
-export { RELOJ, OCLUSIONES, OCL_ORDEN, topesReloj } from './vaso-vivo-data-sca.js';
+import { RELOJ, PESO, tnkMg, tableroPlaca, frasePlaca, GUIA_PLACA, GUIA_ANTIAG, GUIA_LISIS, topesReloj } from './vaso-vivo-data-sca.js';
+export { RELOJ, OCLUSIONES, OCL_ORDEN, topesReloj, PESO, tnkMg } from './vaso-vivo-data-sca.js';
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const copia = o => JSON.parse(JSON.stringify(o));
@@ -37,7 +37,7 @@ export const PDF = 'docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf';
 // es (1, 3 o 5); abo: plaquetas ABO-compatibles. La arteria que se tapa (lesion 'placa'): ocl, horas y ntg, en
 // vaso-vivo-data-sca.js.
 export function estadoBase() {
-    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false, ocl: 'completa', horas: RELOJ.inicio, ntg: false };
+    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false, ocl: 'completa', horas: RELOJ.inicio, ntg: false, asa: false, p2y: null, iib: null, lisis: false, peso: PESO.inicio, hic: false, ictus: false, alasa: false, morfina: false, clcr: 0 };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
 export const MAT = c => c === 'cid' || c === 'ptt' || c === 'shu' || c === 'mat';
@@ -253,6 +253,8 @@ export const ESTADOS = {
     'pfc-inr': { n: 'El PFC y el INR', s: 'la balanza', p: { rep: 'pfc' }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
     warfarina: { n: 'Warfarina', s: 'vitamina K y CCP4F', p: { rep: 'warf-pfc' }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
     placa: { n: 'La placa que se rompe', s: 'los 4 tiempos', p: { lesion: 'placa', t: 1 }, play: true, grupo: 'arteria', pestana: 'arteria', ficha: 'mc-sca-diagnostico' },
+    'placa-antiagregantes': { n: 'Los antiagregantes', s: 'tres interruptores', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 1, asa: true, p2y: 'ticagrelor', iib: 'eptifibatida' }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
+    trombolisis: { n: 'La trombólisis', s: 'plasmina y reloj', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 2, lisis: true, peso: 80 }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
     'hemorragia-masiva': { n: 'Hemorragia masiva', s: 'el fibrinógeno', p: { rep: 'masiva', lesion: 'grande', t: 4, plaq: 46000 }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
 };
 export const GRUPOS_CHIPS = [['trombo', 'La herida y las plaquetas (trombocitopenia y HIT)'], ['mat', 'La red que se tapa (microangiopatías)'], ['reponer', 'Reponer (plaquetas y plasma)'], ['arteria', 'La arteria que se tapa: SCA']];
@@ -279,6 +281,8 @@ const MAR19 = (id, pag) => ({ libro: 'Marino, The ICU Book (5.ª ed.), cap. 19',
 
 export const GUIAS = {
     placa: GUIA_PLACA,
+    'placa-antiagregantes': GUIA_ANTIAG,
+    trombolisis: GUIA_LISIS,
     sano: [
         { t: 'El endotelio está cubierto por el glucocálix (la hierba dorada), una malla de mucopolisacáridos: una superficie que resiste la trombosis.', resalta: '#vso-zona-glucocalix', cita: TRB('mh-glucocalix', '20') },
         { t: 'Mantiene la sangre fluida: no deja que plaquetas ni leucocitos se peguen al endotelio. Mira cómo pasan las plaquetas sin tocar la pared.', resalta: '#vso-zona-luz', cita: TRB('mh-glucocalix', '20') },
@@ -588,6 +592,12 @@ export function pruebasVaso() {
         if (!ok) r.todoCoincide = false;
         r.reloj.push({ ocl, horas, tropo: T.aptt.v, ecg: T.inr.v, sello, ok });
     }
+    // 5c: el peso (40-120 kg) → tenecteplasa por tramos; 5b: tres interruptores × sus contraindicaciones = sellos
+    r.peso = [40, 59, 60, 69, 70, 79, 80, 89, 90, 120].map(p => ({ p, mg: tnkMg(p) }));
+    if (r.peso.map(x => x.mg).join() !== '30,30,35,35,40,40,45,45,50,50') r.todoCoincide = false;
+    const sellos = (extra) => topesReloj(estadoDe({ lesion: 'placa', t: 4, ...extra })).filter(x => x.nivel === 'sello').map(x => x.clave).join();
+    r.sellos = { asa: sellos({ asa: true, alasa: true }), tica: sellos({ p2y: 'ticagrelor', hic: true }), prasu: sellos({ p2y: 'prasugrel', ictus: true }), clopi: sellos({ p2y: 'clopidogrel', hic: true, ictus: true, alasa: true }), nstemi: sellos({ lisis: true, ocl: 'parcial' }), tarde: sellos({ lisis: true, horas: 13 }) };
+    if (r.sellos.asa !== 'tx-asa' || r.sellos.tica !== 'tx-tica' || r.sellos.prasu !== 'tx-prasu' || r.sellos.clopi !== '' || r.sellos.nstemi !== 'tx-nstemi' || r.sellos.tarde !== 'reloj-lisis') r.todoCoincide = false;
     // La explicación guiada: 3-5 pasos por estado, cada paso con su cita (ficha, página y PDF), las fuentes en lista
     for (const k of Object.keys(ESTADOS)) {
         const g = GUIAS[k] || [];

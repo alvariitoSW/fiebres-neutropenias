@@ -19,7 +19,7 @@ import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExa
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { crearTope } from '../../core/tope.js';
-import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso, RELOJ, topesReloj } from '../../data/vaso-vivo-data.js';
+import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso, RELOJ, topesReloj, PESO, tnkMg } from '../../data/vaso-vivo-data.js';
 import { $, estado, REDUCIR, ocultos, initEscena, aplicarModelo, ponerLupa, setOcultos, mirar, arrancar, pintarUnaVez, ponerVisible, estadoBucle, vaciarFotogramas, lupaActual, fijar, LUPAS_GRANDES, ponerEstudio } from './vaso-vivo-escena.js';
 
 let raiz = null;
@@ -102,6 +102,13 @@ function sincronizarMandos() {
     $('m-ntg').disabled = pl && e.t === 4 && e.ocl === 'completa';   // en el STEMI decide el ECG: la NTG no prueba nada (p. 40)
     $('m-ntg').classList.toggle('tope-apagado', $('m-ntg').disabled);
     $('m-ecg').hidden = !(pl && e.t === 4 && e.ocl === 'completa');
+    marcar('#vso-m-asa', () => e.asa);
+    marcar('#vso-m-p2y button', b => e.p2y === b.dataset.v);
+    marcar('#vso-m-iib button', b => e.iib === b.dataset.v);
+    marcar('#vso-m-lisis', () => e.lisis);
+    marcar('#vso-m-pac button', b => e[b.dataset.v]);
+    marcar('#vso-m-clcr button', b => +b.dataset.v === e.clcr);
+    $('m-peso').value = e.peso; $('m-peso-out').innerHTML = `${e.peso} <small>kg · ${tnkMg(e.peso)} mg</small>`;
     pintarTopes();
     enRaiz('#vso-chips-estado [data-vso-estado]').forEach(b => b.setAttribute('aria-pressed', String(enEstado(b.dataset.vsoEstado))));
     if (claveActual && !enEstado(claveActual) && !reproduciendo && !Guia.activo) claveActual = null;
@@ -135,6 +142,15 @@ function engancharDock() {
     $('m-play-placa').addEventListener('click', () => { if (reproduciendo) { pararPlay(); return; } if (estado.lesion !== 'placa') cambiar(e => { aPlaca(e); }, { lupa: 'placa' }); reproducir(); });
     $('m-ocl').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.ocl = b.dataset.v; if (e.ocl === 'completa') e.ntg = false; }, { lupa: 'placa' }); });
     $('m-horas').addEventListener('input', ev => { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.horas = Math.max(RELOJ.min, Math.min(RELOJ.max, Math.round(+ev.target.value))); }, { lupa: 'placa' }); });
+    // Tratar el SCA (5b y 5c): cada mando se crea una vez en el HTML y solo se repinta; actúan sobre la placa en su tiempo 3 o 4
+    const trat = fn => { pararPlay(); cambiar(e => { aPlaca(e); if (e.t < 3) e.t = 4; fn(e); }, { lupa: 'placa' }); };
+    $('m-asa').addEventListener('click', () => trat(e => { e.asa = !e.asa; }));
+    $('m-p2y').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.p2y = e.p2y === b.dataset.v ? null : b.dataset.v; }); });
+    $('m-iib').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.iib = e.iib === b.dataset.v ? null : b.dataset.v; }); });
+    $('m-lisis').addEventListener('click', () => trat(e => { e.t = 4; e.lisis = !e.lisis; }));
+    $('m-peso').addEventListener('input', ev => trat(e => { e.peso = Math.max(PESO.min, Math.min(PESO.max, Math.round(+ev.target.value))); }));
+    $('m-pac').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e[b.dataset.v] = !e[b.dataset.v]; }); });
+    $('m-clcr').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.clcr = +b.dataset.v; }); });
     $('m-ntg').addEventListener('click', () => { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.ntg = e.ocl !== 'completa' && !e.ntg; }, { lupa: 'placa' }); });
     $('m-plaq').addEventListener('input', ev => { pararPlay(); cambiar(e => { e.plaq = plaqDe(+ev.target.value); if (e.rep === 'plaquetas') e.rep = null; if (MAT(e.causa)) { e.causa = 'ninguna'; e.vari = null; e.rep = null; } }); });
     $('m-transfundir').addEventListener('click', () => { pararPlay(); cambiar(e => { Object.assign(e, estadoBase(), { rep: 'plaquetas', previas: 1, plaq: Math.min(e.plaq, 20000) }); }); });
