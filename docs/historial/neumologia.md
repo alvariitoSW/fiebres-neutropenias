@@ -474,3 +474,14 @@ Botón «Ver rótulos» sobre 6 figuras (22-1, 24-2, 24-3, 28-1, 28-5, 29-3) con
 texto, con su página. 28-2 y 28-7 sin rótulos: son de Radiopaedia (solo enlace, Consejo 30/10, 3.ª). La misma pieza
 rotula la fig. 47.3 de Marino en la ficha 5 del PIF de Radiología, «TC de cráneo en 5 preguntas» (`js/modules/pif-radio/`).
 Parte: `autonomo/partes/2026-10-30-radio-baratas-d2.md`.
+
+## «Lee esta placa» en el PIF de Radiología (30/10/2026, `radio-baratas` día 3)
+
+Ficha 6 del cuaderno «Placa portátil de UCI»: dos ejercicios de tocar en una Rx real de Marino (tubo, fig. 28.1, pág. 18;
+vía central, fig. 2.6, pág. 36). Se toca dónde está la punta, se elige la lectura y «Comprobar con el libro» destapa los
+rótulos impresos, pinta la punta y la carina, dice si el toque cayó cerca (7 % del ancho) o en la carina, y da la frase
+de la fuente con su página. El pie y el `alt` no dicen «bien colocado» hasta comprobar. La punta de la vía la sitúa la
+app según el pie (dicho en pantalla). 5 preguntas nuevas (`pifradio-lee`, q040-q044). Pieza nueva
+`js/modules/pif-radio/radio-lee.js` (patrón «guardia» de `ecg-lector.js`), datos `js/data/pif-radio-lee.js`.
+**Fuera 49.2 y 49.3** (sondas): sus pies dan el crédito a terceros (ref. 31, Pennsylvania Patient Safety Advisory; ref. 36,
+introductiontoradiology.net); decide el usuario. Parte: `autonomo/partes/2026-10-30-radio-baratas-d3.md`.
