@@ -30,6 +30,7 @@ export const CAPITULOS = {
   as: { html: 'cap-as.html', sub: 'De normal a grave y la de bajo flujo y bajo gradiente' },
   tr: { html: 'cap-tr.html', sub: 'De leve a torrencial: vena contracta, ORE (EROA) y flujo suprahepático' },
   ms: { html: 'cap-ms.html', sub: 'Reumática de leve a grave: planimetría, tiempo de hemipresión y gradiente con la frecuencia' },
+  stress: { html: 'cap-stress.html', sub: 'Dobutamina en cuatro pantallas: isquemia, cicatriz y viabilidad' },
   strain: { html: 'cap-strain.html', sub: 'Strain longitudinal global por speckle tracking; patrones y cardio-oncología' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));

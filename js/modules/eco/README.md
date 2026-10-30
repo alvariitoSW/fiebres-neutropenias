@@ -922,3 +922,4 @@ Tablas de Guyton regeneradas.
 - Atlas, capítulo 17 (estenosis mitral): fase A, solo texto traducido (`atlas/cap-ms.html`), sin figura todavía.
 - Atlas, capítulo 11 (contractilidad segmentaria): fase A, solo texto traducido (`atlas/cap-segments.html`), sin figura todavía.
 - Atlas, capítulo 13 (strain): fase A, solo texto traducido (`atlas/cap-strain.html`), sin figura todavía; el capítulo 11 ya enlaza a él.
+- Atlas, capítulo 12 (eco de estrés): fase A, solo texto traducido (`atlas/cap-stress.html`), sin figura todavía; el capítulo 13 ya enlaza a él.
