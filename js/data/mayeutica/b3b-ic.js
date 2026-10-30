@@ -11,6 +11,10 @@ const p = n => pag(n, `pág. ${n}`);
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 const DED = '<i>Deducción; la fuente no lo dice.</i>';
 const FG = '<i>Fisiología general.</i>';
+const PDFR = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
+const r = n => `<a class="biblio-link" href="${PDFR}#page=${n}" target="_blank" rel="noopener">resp. pág. ${n}</a>`;
+const PDFS = 'docs/marino-2024-shock-caps14-17.pdf';
+const s = n => `<a class="biblio-link" href="${PDFS}#page=${n}" target="_blank" rel="noopener">shock pág. ${n}</a>`;
 const T = 'mc-ic-tipos', M = 'mc-ic-manejo';
 // Los modelos vivos de cada pregunta (el botón sale tras contestar).
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
@@ -62,13 +66,13 @@ export const MAYEUTICA_IC = {
         opciones: [
           { t: 'Se llena mejor, porque el tabique desplazado le deja más espacio y más tiempo para vaciarse en cada latido', porque: `El tabique desplazado reduce el tamaño de la cámara del VI y altera su llenado (${p(4)}).` },
           { t: 'Se llena peor y sube su presión telediastólica: la IC derecha da una disfunción diastólica izquierda', ok: true },
-          { t: 'Nada: los dos ventrículos solo se comunican por el pulmón', porque: `La interdependencia interventricular existe: el tabique empujado perjudica al VI (${p(4)}). Si la ignoras, no explicarás un gasto que cae con el VI sano.` }],
+          { t: 'Nada: los dos ventrículos solo se comunican por el pulmón', porque: `La interdependencia interventricular existe: el tabique empujado perjudica al VI (${p(4)}). Si la ignoras, no explicarás un gasto que cae con el VI sano (${DED}).` }],
         explicacion: `La distensión del VD empuja el tabique hacia el VI, <span class="hl-rojo">altera su llenado y aumenta su presión telediastólica</span>: es la interdependencia interventricular (${p(4)}).`,
         nota: `<b>La fuente no lo dice.</b> El libro no da cifras de presión para este paciente; el modelo es ilustrativo.` + enFicha(T, 'mc-vd-septo') },
       { id: 'ict-g6', corto: 'PVC igual a la PCP', tipo: 'test', fuente: 'mc-vd-medidas',
         enunciado: 'Con un catéter de arteria pulmonar, la PVC es igual a la presión de enclavamiento. ¿En qué piensas y qué haces?',
         opciones: [
-          { t: 'En IC derecha, sin dudas: solo ella iguala las dos presiones y con eso basta para el diagnóstico', porque: `También se igualan en el taponamiento pericárdico (${p(4)}). Si lo olvidas, dejarás sin drenar un taponamiento.` },
+          { t: 'En IC derecha, sin dudas: solo ella iguala las dos presiones y con eso basta para el diagnóstico', porque: `También se igualan en el taponamiento pericárdico (${p(4)}). Si lo olvidas, dejarás sin drenar un taponamiento (${DED}).` },
           { t: 'En un error de medida: la PVC nunca debería igualar a la PCP', porque: `La igualdad es justo lo que hace pensar en IC derecha (${p(4)}); descartarla como error retrasa el diagnóstico.` },
           { t: 'En IC derecha o en taponamiento; pido una ecocardiografía para saber cuál', ok: true }],
         explicacion: `PVC ≥ PCP hace pensar en IC derecha, pero <span class="hl-rojo">también ocurre en el taponamiento</span>: se necesita ecocardiografía (${p(4)}).` + enFicha(T, 'mc-vd-medidas') },
@@ -105,8 +109,8 @@ export const MAYEUTICA_IC = {
         enunciado: 'Predice, y luego lo compruebas: una IC aguda con PAM normal y creatinina que sube. ¿Qué lo explica sobre todo, y qué tratamiento sigue?',
         opciones: [
           { t: 'La congestión venosa baja el gradiente arteriovenoso renal; se trata con diuresis', ok: true },
-          { t: 'El gasto cardíaco bajo; hay que subirlo cuanto antes con volumen para restaurar el flujo renal', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); el volumen empeoraría la congestión.` },
-          { t: 'La autorregulación renal ha fallado, aunque la PAM sea de 85', porque: `La autorregulación mantiene el flujo renal hasta que la PAM baja de 70 (${p(7)}).` }],
+          { t: 'El gasto cardíaco bajo; hay que subirlo cuanto antes con volumen para restaurar el flujo renal', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); el volumen empeoraría la congestión (${DED}).` },
+          { t: 'La autorregulación renal ha fallado, aunque la PAM sea de 85', porque: `La autorregulación mantiene el flujo renal hasta que la PAM baja de 70 (${p(7)}); con 85 aún no ha fallado (${DED}).` }],
         explicacion: `La disfunción renal se atribuye sobre todo al <span class="hl-azul">aumento de la presión venosa</span>, que reduce el gradiente arteriovenoso renal y el flujo glomerular; el gasto bajo solo cuenta con hipotensión (${p(7)}). Es el síndrome cardiorrenal, y el principal tratamiento es la diuresis (${p(7)}).`,
         nota: `<b>La fuente no lo dice.</b> El libro no da la PVC ni las cifras del glomérulo; el modelo usa una PVC de 20 mmHg y una PAM de 80 (ilustrativo).` + enFicha(T, 'mc-cardiorrenal') },
       { id: 'ict-g12', corto: 'para qué el BNP', tipo: 'test', fuente: 'mc-bnp',
@@ -138,18 +142,19 @@ export const MAYEUTICA_IC = {
           { t: 'No hay correlación entre el gasto y la disfunción renal; con PAM >70 el flujo renal está autorregulado y el culpable es la presión venosa', ok: true },
           { t: 'Tiene razón: con la autorregulación renal perdida por debajo de PAM 90, el gasto bajo explica el fallo renal', porque: `La autorregulación mantiene el flujo hasta una PAM de 70, no de 90 (${p(7)}).` },
           { t: 'El gasto bajo explica el fallo renal siempre; la presión venosa solo lo agrava', porque: `El gasto bajo solo cuenta en el paciente con hipotensión, es decir, en el shock cardiogénico (${p(7)}).` }],
-        explicacion: `<span class="hl-azul">Sin correlación gasto-función renal</span> y flujo autorregulado hasta una PAM <70 (${p(7)}): lo principal es el aumento de la presión venosa, que baja el gradiente arteriovenoso renal.` + enFicha(T, 'mc-cardiorrenal') },
+        explicacion: `<span class="hl-azul">Sin correlación gasto-función renal</span> y flujo autorregulado hasta una PAM <70 (${p(7)}): lo principal es el aumento de la presión venosa, que baja el gradiente arteriovenoso renal.`,
+        nota: `<b>La fuente no lo dice.</b> El libro no da la PVC de este paciente inventado; no la deduzcas del glomérulo vivo, que usa una PVC propia de 20 mmHg (ilustrativo).` + enFicha(T, 'mc-cardiorrenal') },
       { id: 'ict-e4', corto: 'NT-proBNP 250', tipo: 'test', fuente: 'mc-bnp',
         enunciado: 'Un paciente con disnea y sospecha de IC tiene un NT-proBNP de 250 pg/mL. ¿Qué dice Marino?',
         opciones: [
           { t: 'IC improbable: está por debajo de 300; recuerda que sirve mejor para excluir', ok: true },
-          { t: 'Compatible con IC: supera 100 pg/mL, el umbral habitual de los péptidos natriuréticos', porque: `El 100 es el umbral del BNP; el NT-proBNP tiene una vida media más larga y sus niveles son 3-5 veces mayores (${p(7)}). Con esa confusión solicitarías estudios de una IC que es improbable.` },
+          { t: 'Compatible con IC: supera 100 pg/mL, el umbral habitual de los péptidos natriuréticos', porque: `El 100 es el umbral del BNP; el NT-proBNP tiene una vida media más larga y sus niveles son 3-5 veces mayores (${p(7)}). Con esa confusión solicitarías estudios de una IC que es improbable (${DED}).` },
           { t: 'No sirve: el NT-proBNP es la fracción inactiva y no tiene valor diagnóstico', porque: `Es metabólicamente inactiva, pero se usa igual: <300 pg/mL hace improbable la IC (${p(7)}-${p(8)}).` }],
         explicacion: `<span class="hl-verde">NT-proBNP <300 pg/mL</span> (y BNP <100) hacen improbable la IC (${p(8)}). El NT-proBNP queda 3-5 veces por encima del BNP por su vida media más larga (${p(7)}).` + enFicha(T, 'mc-bnp') },
       { id: 'ict-e5', corto: 'BNP 900 con sepsis', tipo: 'test', fuente: 'mc-bnp · mc-tabla-18-2', origen: 'ilustrativo: paciente inventado; las causas, de la Tabla 18.2',
         enunciado: 'Un paciente con sepsis, insuficiencia renal y disnea tiene un BNP de 900 pg/mL. ¿Cómo lo interpretas?',
         opciones: [
-          { t: 'IC confirmada: es una cifra muy superior a 100 pg/mL', porque: `Las causas no cardíacas de BNP alto incluyen la sepsis, la insuficiencia renal y la edad (Tabla 18.2, ${p(8)}). Con esa lectura darías diurético a un séptico sin comprobar la IC.` },
+          { t: 'IC confirmada: es una cifra muy superior a 100 pg/mL', porque: `Las causas no cardíacas de BNP alto incluyen la sepsis, la insuficiencia renal y la edad (Tabla 18.2, ${p(8)}). Con esa lectura darías diurético a un séptico sin comprobar la IC (${DED}).` },
           { t: 'No la confirma: la sepsis y la insuficiencia renal lo elevan; el valor serviría más para excluirla', ok: true },
           { t: 'Es IC derecha: solo el VD libera el péptido en esas cifras', porque: `Se libera de los dos ventrículos por el aumento de la tensión de pared (${p(7)}).` }],
         explicacion: `Tabla 18.2: la sepsis, la insuficiencia renal, la edad o la embolia elevan los péptidos. <span class="hl-rojo">Un valor alto no confirma la IC</span>; el péptido sirve mejor para excluirla (${p(8)}).` + enFicha(T, 'mc-tabla-18-2') },
@@ -167,7 +172,7 @@ export const MAYEUTICA_IC = {
           { t: 'La presión intratorácica alta dificulta el llenado ventricular y agrava la IC con FE conservada', ok: true },
           { t: 'Baja la FE por daño del miocardio', porque: `La FE se conserva en este tipo de IC; lo que falla es el llenado (${p(3)}).` }],
         explicacion: `Las <span class="hl-rojo">presiones intratorácicas altas</span> de la ventilación mecánica pueden dificultar el llenado y agravar la IC con FE conservada (${p(3)}).`,
-        nota: `<b>La fuente no lo dice.</b> Esa misma presión, con congestión pulmonar y llenado normal, baja la poscarga del VI y sube el volumen sistólico (${p(14)}); el libro no dice cuándo gana cada efecto.` + enFicha(T, 'mc-hfpef') },
+        nota: `Esa misma presión, en el VI insuficiente, baja la poscarga y sube el volumen sistólico (${p(14)}). Según la función cardiaca: el corazón normal está en la parte empinada de la curva de precarga y pierde gasto al restarse llenado; el insuficiente, en la parte plana de la precarga y empinada de la poscarga, gana con la menor poscarga mientras no se frene el retorno al corazón derecho (${r(85)}, ${r(88)}). <b>La fuente no lo dice:</b> el paciente concreto con FE conservada e hipertrofia.` + enFicha(T, 'mc-hfpef') },
     ],
     profundizar: [
       { id: 'mc-fig-18-1', titulo: 'Figura 18.1: curvas de función y de distensibilidad' },
@@ -199,9 +204,9 @@ export const MAYEUTICA_IC = {
               opciones: [
                 { t: 'Sigue compensado: con una PAM de 72 el gasto bajo no importa mientras no haya hipotensión franca', porque: `El punto en que el gasto empieza a caer marca el paso a descompensada (${p(5)}); la presión conservada no lo anula.` },
                 { t: 'Ya es descompensada: cayó el gasto, y la vasoconstricción periférica sostiene la presión', ok: true },
-                { t: 'Es un shock cardiogénico: toda caída del índice por debajo de 2 lo es', porque: `El capítulo trata la IC sin shock, sin hipotensión ni lactato elevado (${p(9)}); la vasoconstricción suele mantener la presión y la perfusión (${p(6)}-${p(7)}).` }],
+                { t: 'Es un shock cardiogénico: toda caída del índice por debajo de 2 lo es', porque: `El shock cardiogénico se distingue de la IC por la hipoperfusión (hipotensión, poca diuresis, lactato alto), con un índice típicamente <2,2 (${s(40)}); el capítulo de IC trata la IC sin ellos (${p(9)}) y aquí la vasoconstricción mantiene la presión (${p(6)}-${p(7)}). El índice solo no basta.` }],
               explicacion: `El gasto ha empezado a caer: <span class="hl-rojo">IC descompensada</span> (${p(5)}). La vasoconstricción periférica suele bastar para mantener la presión y la perfusión, por eso predomina la congestión venosa (${p(6)}-${p(7)}).`,
-              nota: `<b>La fuente no lo dice.</b> Marino no da una cifra de índice cardíaco que separe la IC descompensada del shock; lo separa la hipoperfusión (${p(9)}).` + enFicha(T, 'mc-congestion') } },
+              nota: `Marino da el índice del shock cardiogénico como «típicamente <2,2 L/min/m²» (${s(40)}), el mismo corte del modelo, pero no lo usa para separar la IC descompensada del shock: lo separa la hipoperfusión (${s(40)}, ${p(9)}). <b>La fuente no lo dice:</b> una cifra de índice que separe una de otro sin hipoperfusión.` + enFicha(T, 'mc-congestion') } },
           { momento: 'Hora 5 · analítica', datos: { Creatinina: '1,0 → 1,6 mg/dL', BNP: '480 pg/mL' }, nuevo: ['Creatinina', 'BNP'],
             pregunta: { id: 'cir-4', tipo: 'test', fuente: 'mc-cardiorrenal', modeloVivo: glomerulo('🫘 El glomérulo con la congestión venosa'), origen: 'ilustrativo: creatinina y BNP son del paciente, la PAM del modelo; la regla, de la ficha',
               enunciado: 'La creatinina de Ramiro sube de 1,0 a 1,6 con una PAM de 72. Un compañero dice: «Es por el gasto bajo; démosle volumen». ¿Qué le contestas?',
@@ -210,7 +215,7 @@ export const MAYEUTICA_IC = {
                 { t: 'Que el gasto no se correlaciona con la disfunción renal: lo más probable es la presión venosa; se trata con diuresis', ok: true },
                 { t: 'Que el volumen es lo correcto: el riñón responde siempre al gasto cardíaco', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); darle volumen a un pulmón congestionado empeora la congestión (${DED}).` }],
               explicacion: `No hay correlación entre el gasto y la disfunción renal, y el flujo se autorregula hasta una PAM <70: lo principal es la <span class="hl-azul">presión venosa alta</span>, que reduce el gradiente arteriovenoso renal. Es el síndrome cardiorrenal y su principal tratamiento es la diuresis (${p(7)}).`,
-              nota: `<b>La fuente no lo dice.</b> El libro no da la PVC de este paciente; el glomérulo vivo usa una PVC de 20 mmHg (ilustrativo) para enseñar el efecto.` + enFicha(T, 'mc-cardiorrenal') } },
+              nota: `<b>La fuente no lo dice.</b> El libro no da la PVC de este paciente; el glomérulo vivo es un modelo aparte, con una PVC de 20 mmHg (ilustrativo) para enseñar el efecto de una congestión marcada; no es la PVC que marca el monitor de Ramiro.` + enFicha(T, 'mc-cardiorrenal') } },
           { momento: 'Hora 6 · nota del R1', datos: { Nota: 'resumen de la evolución' }, nuevo: ['Nota'],
             pregunta: { id: 'cir-5', tipo: 'error', fuente: 'mc-ic-etapas · mc-bnp',
               enunciado: 'La nota del R1 sobre Ramiro. Hay dos errores. Encuéntralos.',
@@ -248,7 +253,7 @@ export const MAYEUTICA_IC = {
         opciones: [
           { t: 'Empezar con 5 µg/min y subir 5 µg/min cada 5 min hasta el efecto; en vidrio y tubos de polietileno', ok: true },
           { t: 'Empezar con 5 µg/min y subir 5 cada 5 min, en las bolsas y tubos habituales de PVC, que es lo que hay en planta', porque: `Hasta el 80 % de la nitroglicerina se adsorbe en el PVC (${p(9)}); el paciente recibiría una fracción de la dosis pautada.` },
-          { t: 'Empezar con 50 µg/min en bolo para ganar tiempo, en vidrio', porque: `La pauta es 5 µg/min con aumentos de 5 µg/min cada 5 min (${p(9)}); una dosis de arranque así de alta arriesga hipotensión.` }],
+          { t: 'Empezar con 50 µg/min en bolo para ganar tiempo, en vidrio', porque: `La pauta es 5 µg/min con aumentos de 5 µg/min cada 5 min (${p(9)}); el libro no recomienda un arranque así de alto; en un paciente sin hipertensión arriesgaría hipotensión (${DED}).` }],
         explicacion: `Inicio a 5 µg/min y +5 µg/min cada 5 min (eficaz casi siempre entre 5 y 100 µg/min; por encima de 200 no se aconseja). <span class="hl-rojo">Hasta el 80 % se pierde en el PVC</span>: botellas de vidrio y tubos de polietileno (${p(9)}).` + enFicha(M, 'mc-nitroglicerina') },
       { id: 'icm-g3', corto: 'NTG más de 24 h', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-nitroglicerina',
         enunciado: 'Un compañero deja la nitroglicerina 30 horas con el mismo ritmo porque «el paciente va bien». ¿Qué le dices? Son tres cosas.',
@@ -269,7 +274,7 @@ export const MAYEUTICA_IC = {
         opciones: [
           { t: 'Seguir subiendo la nitroglicerina hasta 250 µg/min para bajar la PCP, sin esperar a añadir otro fármaco', porque: `Con la PA ya normal, más vasodilatador bajaría la presión arterial; no se aconsejan dosis por encima de 200 µg/min (${p(9)}).` },
           { t: 'Añadir un diurético IV: la PCP sigue por encima de 20 con la presión controlada', ok: true },
-          { t: 'Intentar bajar la PCP a cifras normales (por debajo de 12) con más diurético', porque: `La PCP deseable es la más alta que aumenta el gasto sin edema, de 18 a 20 mmHg (${p(10)}); bajarla de más resta llenado.` }],
+          { t: 'Intentar bajar la PCP a cifras normales (por debajo de 12) con más diurético', porque: `La PCP deseable es la más alta que aumenta el gasto sin edema, de 18 a 20 mmHg (${p(10)}); bajarla de más resta llenado (${DED}).` }],
         explicacion: `El diurético IV se considera <span class="hl-azul">solo cuando el vasodilatador ha normalizado la presión</span> y persiste la congestión. Con catéter, se añade si la PCP sigue sobre 20 mmHg; el objetivo es la más alta que aumente el gasto sin dar edema, de 18 a 20 (${p(10)}).` + enFicha(M, 'mc-ic-pa-alta') },
       { id: 'icm-g6', corto: 'PA normal', tipo: 'test', fuente: 'mc-ic-pa-normal', origen: 'ilustrativo: paciente inventado; el criterio, de la ficha',
         enunciado: 'IC aguda con PA 125/75 y sin signos de mala perfusión periférica. ¿Qué fármaco y cuándo?',
@@ -307,7 +312,7 @@ export const MAYEUTICA_IC = {
           { t: 'No lo cambia: solo mejora la oxigenación, no la hemodinámica', porque: `Se ha demostrado que la CPAP aumenta el gasto cardíaco en la IC izquierda (${p(14)}).` },
           { t: 'Lo aumenta: baja la presión transmural del VI y, con ella, su poscarga', ok: true }],
         explicacion: `La presión intratorácica positiva <span class="hl-azul">reduce la presión transmural que desarrolla el ventrículo en sístole</span> (menor poscarga): la pared se mueve hacia dentro más fácil y el volumen sistólico aumenta. La CPAP sube el gasto y acelera la mejoría del edema cardiogénico (${p(14)}).`,
-        nota: `<b>La fuente no lo dice.</b> Marino no da la presión de CPAP; en el modelo es ilustrativo, con su tope. El efecto de la CPAP sobre la PCP no lo cuantifica el libro.` + enFicha(M, 'mc-vpp') },
+        nota: `Marino da la presión de la CPAP como «usualmente 5-10 cm H₂O» (${r(77)}), y en el edema cardiogénico CPAP y VNI son igual de eficaces porque el gasto sube por la menor poscarga (${r(83)}). <b>La fuente no lo dice:</b> el efecto de la CPAP sobre la PCP no lo cuantifica; el tope del modelo es ilustrativo.` + enFicha(M, 'mc-vpp') },
       { id: 'icm-g11', corto: 'cuándo los fármacos de fondo', tipo: 'test', fuente: 'mc-largo-plazo',
         enunciado: 'Un paciente ingresado por IC aguda va a recibir tratamientos que mejoran el pronóstico a largo plazo. ¿Cuándo se empiezan?',
         opciones: [
@@ -390,21 +395,21 @@ export const MAYEUTICA_IC = {
                 { t: 'Nitroglicerina en infusión (5 µg/min, +5 cada 5 min, en vidrio y polietileno) y CPAP', ok: true },
                 { t: 'Nitroprusiato, que es más potente que la nitroglicerina', porque: `La nitroglicerina es de elección (${p(10)}); el nitroprusiato es la alternativa en el 20 % que no responde, y no se recomienda con insuficiencia renal (${p(10)}).` }],
               explicacion: `Con hipertensión, <span class="hl-azul">vasodilatador primero</span>: la nitroglicerina es el de elección (${p(9)}), con la pauta de 5 µg/min y +5 cada 5 min, en vidrio y polietileno por la pérdida en PVC. La ventilación no invasiva es un tratamiento aceptado del edema pulmonar cardiogénico (${p(14)}).`,
-              nota: `<b>La fuente no lo dice.</b> Marino no da la presión de CPAP ni el orden entre el vasodilatador y la ventilación; los dos se inician a la vez en este caso.` } },
+              nota: `La CPAP se ajusta «usualmente a 5-10 cm H₂O» (${r(77)}). <b>La fuente no lo dice:</b> el orden entre el vasodilatador y la ventilación; los dos se inician a la vez en este caso.` } },
           { momento: '03:50 · con la CPAP', datos: { Tratamiento: 'nitroglicerina en infusión (vidrio y polietileno) y CPAP' }, nuevo: ['Tratamiento'],
             pregunta: { id: 'cic-2', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 Etapa 3 con CPAP: mira cómo sube el volumen sistólico'),
-              enunciado: 'Con la CPAP puesta, el volumen sistólico de su VI sube. ¿Por qué? Tu respuesta tiene tres partes.',
+              enunciado: 'Con la CPAP puesta, ¿qué espera Marino que le pase al volumen sistólico en una IC izquierda con edema, y por qué? Tu respuesta tiene tres partes.',
               puntos: [
                 `La presión positiva del tórax <span class="hl-azul">baja la presión transmural</span> que el VI desarrolla en sístole.`,
                 `Eso es una <span class="hl-azul">menor poscarga</span>: la pared se mueve hacia dentro con más facilidad.`,
                 `El VI se vacía mejor y <span class="hl-verde">sube el volumen sistólico</span> (y el gasto).`],
               explicacion: `«Las presiones intratorácicas positivas reducirán la poscarga del VI al disminuir la presión transmural de la pared» y favorecen el vaciado ventricular, con lo que el volumen sistólico aumenta (${p(14)}). La CPAP sube el gasto en la IC izquierda y acelera la mejoría del edema (${p(14)}).`,
-              nota: `<b>La fuente no lo dice.</b> En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Mercedes: enseña la dirección del cambio. El libro no da cifras de la CPAP.` + enFicha(M, 'mc-vpp') } },
+              nota: `En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Mercedes: enseña la dirección del cambio en la IC izquierda (${r(88)}). Mercedes tiene FE conservada: ahí la presión intratorácica alta puede dificultar el llenado y agravar el cuadro (${p(3)}), así que en ella el volumen sistólico podría no subir. <b>La fuente no lo dice:</b> cifras del cambio con la CPAP.` + enFicha(M, 'mc-vpp') } },
           { momento: '04:10 · analítica', datos: { BNP: '160 pg/mL', Lactato: '1,3 mmol/L' }, nuevo: ['BNP', 'Lactato'],
             pregunta: { id: 'cic-3', tipo: 'test', fuente: 'mc-bnp · mc-tabla-18-2', origen: 'ilustrativo: BNP de la paciente; los umbrales, de la ficha',
               enunciado: 'El BNP de Mercedes es 160 pg/mL. La residente dice: «No llega ni a 300; no es insuficiencia cardíaca». ¿Qué le contestas?',
               opciones: [
-                { t: 'Tiene razón: con valores por debajo de 300 se descarta la IC', porque: `Ese 300 es el umbral del NT-proBNP; el del BNP es 100 (${p(8)}). Con su lectura dejarías sin tratar un edema cardiogénico.` },
+                { t: 'Tiene razón: con valores por debajo de 300 se descarta la IC', porque: `Ese 300 es el umbral del NT-proBNP; el del BNP es 100 (${p(8)}). Con su lectura dejarías sin tratar un edema cardiogénico (${DED}).` },
                 { t: 'Que 160 supera el umbral de 100 y no la descarta; además, la obesidad lo baja, así que no tranquiliza', ok: true },
                 { t: 'Que lo confirma: un BNP de 160 con disnea basta para el diagnóstico', porque: `Los péptidos suben también por la edad y la insuficiencia renal (Tabla 18.2, ${p(8)}); sirven mejor para excluir que para confirmar.` }],
               explicacion: `Se considera improbable la IC con <span class="hl-verde">BNP <100</span> (${p(8)}). Los niveles son más bajos en los obesos, por el aclaramiento en el tejido adiposo (${p(7)}); la edad y la insuficiencia renal los elevan (${p(8)}).`,
@@ -421,11 +426,11 @@ export const MAYEUTICA_IC = {
             pregunta: { id: 'cic-5', tipo: 'test', fuente: 'mc-diureticos-preocupaciones · mc-ic-final', origen: 'ilustrativo: las cifras de la furosemida, la PA y el lactato son de la paciente; la dosis, de la Tabla 18.4',
               enunciado: 'Dos horas después de los 80 mg de furosemida, Mercedes tiene PA 94/52, lactato 2,4 y ha orinado 250 mL. Un compañero dice: «Poca orina: resistencia; doblo a 160 mg». ¿Qué ha pasado?',
               opciones: [
-                { t: 'El diurético ha bajado el gasto (menos precarga y más poscarga), sobre todo con FE conservada: antes de doblar, valoras la perfusión', ok: true },
+                { t: 'El diurético ha bajado el gasto (menos precarga y más poscarga), sobre todo con FE conservada: hay hipoperfusión: antes de doblar, valoras el shock', ok: true },
                 { t: 'Resistencia pura a la furosemida: doblar a 160 mg es lo que dice la pauta a las 2 horas', porque: `La pauta duplica si la diuresis es <1 L, pero con hipotensión y lactato alto el diurético puede estar bajando el gasto (${p(10)}-${p(11)}); más dosis restaría más llenado (${DED}).` },
                 { t: 'Propilenglicol de la nitroglicerina: acidosis láctica e hipotensión', porque: `Aparece con infusiones prolongadas (${p(9)}-${p(10)}); Mercedes lleva unas horas de infusión y el empeoramiento sigue a la furosemida (${DED}).` }],
-              explicacion: `La furosemida IV <span class="hl-rojo">baja el gasto</span> (retorno venoso menor y más poscarga) y el efecto se magnifica en la FE conservada, donde el llenado es crítico (${p(15)}). Ante signos de menor perfusión tras el diurético, Marino aconseja valorar el vasodilatador y, a veces, un bolo de líquidos (${p(11)}).`,
-              nota: `<b>La fuente no lo dice.</b> Marino no da qué hacer con una PA de 94/52 en este contexto; lo que se hace aquí lo decide el equipo.` + enFicha(M, 'mc-ic-final') } },
+              explicacion: `La furosemida IV <span class="hl-rojo">baja el gasto</span> (retorno venoso menor y más poscarga) y el efecto se magnifica en la FE conservada, donde el llenado es crítico (${p(15)}). El capítulo trata la IC aguda sin hipotensión ni lactato elevado y manda el shock cardiogénico al capítulo 16 (${p(9)}); el shock cardiogénico se distingue de la IC por la hipoperfusión (hipotensión, poca diuresis, lactato alto) (${s(40)}). Mercedes, con PA 94/52 y lactato 2,4, cumple esos dos rasgos (${DED}).`,
+              nota: `<b>La fuente no lo dice.</b> El libro no da la cifra de PA que cuenta como hipotensión ni el límite exacto del lactato; la PAM de Mercedes sale a unos 66 mmHg (fisiología general). La conducta en el shock está en el capítulo 16, no en este.` + enFicha(M, 'mc-ic-final') } },
           { momento: 'Día 2 · nota del residente', datos: { Evolución: 'PA 118/66, lactato 1,2; sale de la CPAP', Nota: 'plan del residente de guardia' }, nuevo: ['Evolución', 'Nota'],
             pregunta: { id: 'cic-6', tipo: 'error', fuente: 'mc-nitroglicerina · mc-ic-final · mc-bnp · mc-largo-plazo',
               enunciado: 'La nota del residente de guardia sobre Mercedes. Hay dos errores. Encuéntralos.',
@@ -443,7 +448,7 @@ export const MAYEUTICA_IC = {
               opciones: [
                 { t: 'Sacubitrilo-valsartán a dosis plena desde el primer día: es la combinación más eficaz de todas', porque: `Es la más eficaz en la FE reducida; en la FE conservada la supresión del eje renina-angiotensina-aldosterona no ha mostrado beneficio consistente (${p(13)}).` },
                 { t: 'Carvedilol y espironolactona, como en la FE reducida', porque: `Con FE conservada no hay recomendación de betabloqueantes, y los antialdosterónicos se usan con cautela por el llenado (${p(14)}).` },
-                { t: 'Un iSGLT2 (10 mg/día), vigilando la cetoacidosis euglucémica; sin betabloqueante por la IC', ok: true }],
+                { t: 'Un iSGLT2 (10 mg/día), vigilando la cetoacidosis; sin recomendación de betabloqueante', ok: true }],
               explicacion: `Los <span class="hl-verde">iSGLT2</span> se recomiendan con FE reducida o conservada, con o sin diabetes (10 mg al día, Tabla 18.5); el riesgo es la cetoacidosis diabética euglucémica (${p(14)}). Las guías no incluyen betabloqueantes en la FE conservada (${p(14)}).`,
               nota: `<b>La fuente no lo dice.</b> El libro no dice si un betabloqueante previo (la paciente es hipertensa) debe suspenderse; solo que no hay recomendación para iniciarlo por la IC con FE conservada.` + enFicha(M, 'mc-largo-plazo') } },
         ],
