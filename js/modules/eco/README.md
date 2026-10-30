@@ -909,3 +909,10 @@ la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora co
 (ilustrativo, extrapolación: Nagueh 2025 p. 561 da 3-4 en el grado 3 avanzado). Motor común sin cambios: la eyección del modelo (200 ms a FC 120) ya sigue
 la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
 Tablas de Guyton regeneradas.
+
+## Medidas (`raiz-aortica.js`, 30/10/2026)
+Tercera sección de la eco (`data-seccion="medidas"`, `#cv-seccion-medidas`): cuaderno `#eco-medidas-corkboard` /
+`#panel-eco-medidas-tabs` (en `PANEL_NAV`). `irAFicha(view, panel, tab)` abre la sección y la ficha. Ficha
+`eco-med-raiz`: datos de la Tabla 14 de Lang y constantes de Devereux en `js/data/raiz-aortica-data.js` (una sola vez;
+la prueba compara la tabla del HTML con ellos); `zLang`, `zDevereux` y `gradoDevereux` puras y exportadas. No lee el
+motor. Preguntas en `js/data/eco-medidas-preguntas.js` (tema `medidas-*`, ids `emd-qNNN`).
