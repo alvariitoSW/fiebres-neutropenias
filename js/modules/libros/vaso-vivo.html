@@ -229,6 +229,7 @@
 
             <!-- Tratar el SCA (5b antiagregantes y 5c trombólisis): sobre la misma placa; el reloj es el de la pestaña Arteria -->
             <div class="vso-dock-panel" data-vso-panel="tratar" hidden>
+            <div id="vso-tratar-sca">
               <div class="vso-fila-io">
                 <button type="button" class="vso-tog vso-play" id="vso-m-asa" data-vso-asa aria-pressed="false">Aspirina<small>tromboxano</small></button>
                 <div class="vso-seg" id="vso-m-p2y" role="group" aria-label="P2Y12: uno solo">
@@ -260,6 +261,32 @@
                   <button type="button" data-v="30">&lt;30</button>
                 </div>
               </div>
+            </div>
+            <!-- El émbolo y la lisis (EP): sobre la misma arteria; se ve en vez del tratamiento del SCA cuando hay émbolo -->
+            <div id="vso-tep-panel" hidden>
+              <div class="vso-fila-io">
+                <div class="vso-seg" id="vso-m-tto" role="group" aria-label="Tratamiento del émbolo">
+                  <button type="button" data-v="heparina" data-vso-tep="heparina">Heparina</button>
+                  <button type="button" data-v="lisis" data-vso-tep="lisis">Lisis sola</button>
+                  <button type="button" data-v="ambas" data-vso-tep="ambas">Lisis + heparina</button>
+                </div>
+              </div>
+              <div class="vso-fila-io" id="vso-fila-tep-reloj">
+                <label class="vso-desliza"><span>Desde los síntomas</span><input type="range" id="vso-m-horas-tep" min="0" max="96" step="1" aria-label="Horas desde los síntomas, de 0 a 96"><output id="vso-m-horas-tep-out"></output></label>
+              </div>
+              <div class="vso-fila-io" id="vso-fila-tep-peso">
+                <label class="vso-desliza"><span>Peso</span><input type="range" id="vso-m-peso-tep" min="40" max="150" step="1" aria-label="Peso del paciente, de 40 a 150 kilos"><output id="vso-m-peso-tep-out"></output></label>
+              </div>
+              <div class="vso-fila-io" id="vso-fila-tep-pac">
+                <div class="vso-rejilla" id="vso-m-contra" role="group" aria-label="El paciente tiene (contraindicaciones absolutas de la lisis)">
+                  <button type="button" class="vso-tog" data-v="sang" aria-pressed="false">Sangrado activo</button>
+                  <button type="button" class="vso-tog" data-v="hem" aria-pressed="false">Ictus hemorr. previo</button>
+                  <button type="button" class="vso-tog" data-v="isq" aria-pressed="false">Ictus isquémico &lt;6 meses</button>
+                  <button type="button" class="vso-tog" data-v="snc" aria-pressed="false">Neoplasia del SNC</button>
+                  <button type="button" class="vso-tog" data-v="cir" aria-pressed="false">Cirugía, trauma o TCE &lt;3 sem</button>
+                </div>
+              </div>
+            </div>
             </div>
             </div>
           </div>
