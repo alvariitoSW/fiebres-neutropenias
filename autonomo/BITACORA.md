@@ -262,6 +262,7 @@ esta sección.
   `eco-3d-lectura` (≈3 M, carril 2, tras `mv-eco-2a5`; tablero, tarea 15).
 
 ### B-050 · La gran reforma: terminar la app · apuntado 2026-10-30
+- **30/10: aprobada como «plan de 2 semanas»** (actas 13.ª y 14.ª): meta 13/11, sin techos de dinero (límite semanal), Educación elige maquetas, bloques solapados, recortes de Hacienda; 6a y 6b siempre con su modelo vivo (desempate a favor de Educación). Queda pendiente solo el trozo (7) (ACOD y lazos P-V). La fase B del atlas entra si cabe, la semana siguiente.
 - **Lo que dijiste**: «un plan general de la gran reforma para terminar la aplicación ya, de modo que solo queden El
   Libro Azul y cuatro cosas menores. Decid qué falta para llegar ahí y en qué fecha».
 - **Cómo lo entiendo**: tipo `plan`, hecho por el Consejo 12.ª (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP,
@@ -298,10 +299,45 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30 · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
+- **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
+  recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
+  radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
+- **Cómo lo entiendo** (dos trozos):
+  - **B-051a · Motor de estudio** · tipo: modelo vivo (maqueta primero). Una Rx de tórax y una TC (tórax y cráneo)
+    **dibujadas por la app** (supongo: SVG/canvas propio, como el motor de la eco), con mandos que ponen y quitan
+    patologías: neumotórax (también en supino), derrame, edema cardiogénico frente a SDRA, consolidación y atelectasia,
+    tubo y vía mal puestos, hematoma epidural/subdural, hemorragia, signos precoces de ictus, HTIC y hernias. Para
+    qué: ver cómo cambia la imagen y por qué, y practicar «lee esta placa» con casos que se generan. Modelo «así sí»:
+    el motor de la eco (`js/modules/eco/motor.mjs`) y «Lee esta placa» (PR #42). Se engancha a los cuadernos Tórax de
+    UCI y Neuro urgente (PR #62) y a la placa de UCI. Fuentes: las cifras, de los PDF de `docs/` (Marino, Libro Azul,
+    Manual UMI) y StatPearls ya verificado en `radio-fichas`; las webs que mandaste (Radiology Assistant, NavRad, los 6
+    informes de radiología) **solo como ideas**: sin licencia para copiar textos, imágenes ni contornos. Primer paso:
+    informe-propuesta con 2-3 maquetas para que elijas (supongo, ≈3-4 M); construir, después y por trozos.
+  - **B-051b · Estudio del análisis de imágenes** · tipo: informe (sin construir). Qué haría falta para subir una TC
+    o una placa de un paciente y que la app la analice: servidor e IA (qué modelos existen, qué leen y qué no; NV-Reason
+    ya dijo que no lee cráneo ni placa simple y que no es producto sanitario), privacidad (anonimizar, dónde se procesa),
+    legalidad (RGPD, producto sanitario) y coste. **Choca hoy con dos reglas tuyas**: «sin backend» (`CLAUDE.md` §2) y
+    «ningún dato de pacientes reales» (art. 3a de la reforma). El informe solo te da lo necesario para decidir si las
+    cambias; nada se construye sin esa decisión.
+- **Lo que NO quiero**: copiar imágenes, textos o contornos de Radiology Assistant, NavRad o Radiopaedia; cifras sin
+  fuente con página; guardar imágenes de pacientes; un esquema donde la app puede tener la imagen real (las figuras de
+  Marino se quedan al lado del dibujo, REGLAS §4.8 R4).
+- **Depende de**: la PR #42 (Lee esta placa) y la PR #62 (`radio-fichas`) en `main`; para B-051b, nada.
+- **Tamaño**: grande. Trozos: (1) informe + maquetas de B-051a; (2) informe B-051b; (3) motor de Rx de tórax;
+  (4) TC de cráneo; (5) TC de tórax; (6) casos y Mayéutica.
+- **Dudas**: 1) ¿Empezamos por la Rx de tórax o por la TC de cráneo? (supongo: Rx de tórax, la que más ves en UCI).
+  2) ¿B-051b ya, o cuando el motor esté hecho? 3) Presupuesto del bloque (supongo: maquetas ≈3-4 M; el motor entero,
+  a calcular en el informe).
+- **Lista de calidad**: topes con fuente de cada mando (tamaño del neumotórax, derrame, desviación de línea media): a
+  fijar en el informe · cifra que debe salir en cada forma: en el informe · «lo que NO quiero»: sí · fuentes con
+  página: `docs/` + StatPearls por sección · juez: `--modelo` y prueba propia al construir; el informe, el profesor.
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `motor-radio` | **B-051a · Motor de radiología de estudio** (Rx y TC dibujadas con patologías); primer trozo, informe + 2-3 maquetas | aprobado por ti el 30/10 («haz ahora el B-051a») | 2026-10-30 | ≈3-4 M el primer trozo; B-051b (análisis de imágenes de pacientes) sigue apuntada |
 | `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
 | `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | **hecha (30/10)**: PR #40 en `main` (Consejo 12.ª), 58 recursos con destino, https://claude.ai/artifact/L9ACnf5rSyMPyow9KYLTVM | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
@@ -367,6 +403,8 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+**Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
 1. **Semiología**: abrir `www.ncbi.nlm.nih.gov` en la red del entorno (StatPearls y Walker, gratis; recomendado) o subir

@@ -25,6 +25,7 @@ export const CAPITULOS = {
   eject: { html: 'cap-sistolica.html', figura: () => import('./sistolica.mjs'), sub: 'Volúmenes del VI por discos sobre el corazón de la app' },
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
+  ar: { html: 'cap-ar.html', sub: 'De leve a grave con disfunción del VI: graduación integrada y estadios' },
   segments: { html: 'cap-segments.html', sub: 'Los 17 segmentos, el índice de contractilidad y los territorios de la DA, la CD y la Cx' },
   peri: { html: 'cap-peri.html', sub: 'Del derrame al taponamiento; constricción frente a miocardiopatía restrictiva' },
   as: { html: 'cap-as.html', sub: 'De normal a grave y la de bajo flujo y bajo gradiente' },
@@ -32,6 +33,14 @@ export const CAPITULOS = {
   ms: { html: 'cap-ms.html', sub: 'Reumática de leve a grave: planimetría, tiempo de hemipresión y gradiente con la frecuencia' },
   stress: { html: 'cap-stress.html', sub: 'Dobutamina en cuatro pantallas: isquemia, cicatriz y viabilidad' },
   strain: { html: 'cap-strain.html', sub: 'Strain longitudinal global por speckle tracking; patrones y cardio-oncología' },
+  hcm: { html: 'cap-hcm.html', sub: 'De normal a obstrucción en reposo; SAM, Valsalva y el chorro en daga' },
+  amyloid: { html: 'cap-amyloid.html', sub: 'Pared gruesa, signo 5-5-5, respeto apical y los criterios de la ESC 2021' },
+  aorta: { html: 'cap-aorta.html', sub: 'Medir la raíz, umbrales quirúrgicos, colgajo de disección y criterios de coartación' },
+  windows: { html: 'cap-windows.html', sub: 'Las cuatro ventanas, los movimientos de la sonda y qué se mide en cada vista' },
+  shunts: { html: 'cap-shunts.html', sub: 'CIA, CIV y FOP: Qp/Qs, cuándo cerrar, suero agitado y la presión de la AI por el septo' },
+  masses: { html: 'cap-masses.html', sub: 'Mixoma de la AI, trombo del VI y fibroelastoma: describir la masa, falsos positivos y el contraste' },
+  endocarditis: { html: 'cap-endocarditis.html', sub: 'Criterios de imagen, ETT y ETE, vegetación y embolia, cirugía a los 10 mm y perforación con IM aguda' },
+  mi: { html: 'cap-mi.html', sub: 'Rotura septal, papilar y de pared libre, pseudoaneurisma frente a aneurisma verdadero e infarto del VD' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
