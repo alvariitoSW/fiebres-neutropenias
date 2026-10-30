@@ -10,6 +10,170 @@
 <div class="cv-fila cv-secciones" role="tablist" aria-label="Eco cardíaca">
     <button type="button" class="cv-mini on" data-seccion="sim" role="tab" aria-selected="true" aria-controls="cv-sim">🫀 Simulador</button>
     <button type="button" class="cv-mini" data-seccion="atlas" role="tab" aria-selected="false" aria-controls="cv-seccion-atlas">📖 Atlas de ecocardiografía</button>
+    <button type="button" class="cv-mini" data-seccion="medidas" role="tab" aria-selected="false" aria-controls="cv-seccion-medidas">📏 Medidas</button>
+</div>
+
+<!-- Medidas de la eco: cuaderno de campo con la ficha «Raíz aórtica» (raiz-aortica.js). Ids con prefijo eco-med-. -->
+<div class="cv-sim" id="cv-seccion-medidas" hidden>
+    <p class="section-label">Cuaderno de campo</p>
+    <div class="corkboard" id="eco-medidas-corkboard">
+        <div class="field-card" data-tab="eco-med-raiz">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M8,22 L30,22 C36,22 38,12 46,12 C54,12 54,20 60,20 L74,20 M8,36 L30,36 C36,36 38,46 46,46 C54,46 54,38 60,38 L74,38" fill="none" stroke="var(--accent-blue)" stroke-width="2"/></svg>
+                    <div class="field-name">Raíz aórtica</div>
+                    <div class="field-hook">La misma raíz mide 2 a 4 mm más según dónde pongas el calibre: ¿con qué borde mide el eco y en qué momento del ciclo?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">El eco mide de borde de ataque a borde de ataque (L-L), que da 2 a 4 mm más que el borde interno de la TC. El anillo es la excepción: se mide de borde interno a borde interno, en mesosístole; el resto, en telediástole.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="panel-eco-medidas-tabs" style="display:none;">
+        <div id="eco-med-raiz" class="tab-content">
+            <h3 style="color: var(--accent-blue);">Raíz aórtica: 4 niveles, 1 convención</h3>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Lang et al., ASE/EACVI 2015, secciones 12-13 y Tabla 14 <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 28-32</a>.</p>
+            <p id="eco-med-idea" data-nombre="Idea de la raíz" style="font-size:0.88rem;">La raíz se mide en <span class="hl hl-azul">4 niveles</span>, del anillo a la aorta ascendente proximal, en el paraesternal eje largo, con el plano que dé el <span class="hl hl-azul">diámetro máximo perpendicular al eje largo de la aorta</span> <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 28, 30</a>.</p>
+
+            <div class="article-figure" style="background: var(--bg-main);">
+                <svg id="eco-med-svg" viewBox="0 0 340 190" role="img" aria-label="Esquema del paraesternal eje largo con los 4 niveles de la raíz aórtica" style="width:100%; height:auto; display:block; background: var(--bg-main);">
+                    <rect x="0" y="0" width="340" height="190" fill="var(--bg-main)"/>
+                    <path d="M10,60 L112,70 C126,72 134,76 140,80" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+                    <path d="M10,150 C60,160 110,150 128,128 L140,120" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+                    <path d="M140,80 C150,80 160,70 178,70 C196,70 200,76 210,76 C230,74 250,72 310,72" fill="none" stroke="var(--text-dim)" stroke-width="2.5"/>
+                    <path d="M140,120 C150,120 160,130 178,130 C196,130 200,124 210,124 C230,126 250,128 310,128" fill="none" stroke="var(--text-dim)" stroke-width="2.5"/>
+                    <path d="M140,80 L158,100 L140,120" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    <path d="M142,134 C170,140 230,140 310,138 L310,184 L150,184 Z" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3 3"/>
+                    <text x="60" y="112" fill="var(--text-muted)" font-size="11" text-anchor="middle">VI</text>
+                    <text x="64" y="46" fill="var(--text-muted)" font-size="11" text-anchor="middle">VD</text>
+                    <text x="230" y="170" fill="var(--text-muted)" font-size="11" text-anchor="middle">AI</text>
+                    <text x="300" y="62" fill="var(--text-muted)" font-size="10" text-anchor="end">Aorta</text>
+                    <g data-nivel="anillo" tabindex="0" role="button" aria-label="Nivel 1, anillo" style="cursor:pointer;"><line x1="140" y1="80" x2="140" y2="120" stroke="var(--text-dim)" stroke-width="3"/><circle cx="140" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="140" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">1</text><line x1="140" y1="58" x2="140" y2="80" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="senos" tabindex="0" role="button" aria-label="Nivel 2, senos de Valsalva" style="cursor:pointer;"><line x1="178" y1="70" x2="178" y2="130" stroke="var(--text-dim)" stroke-width="3"/><circle cx="178" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="178" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">2</text><line x1="178" y1="58" x2="178" y2="70" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="ust" tabindex="0" role="button" aria-label="Nivel 3, unión sinotubular" style="cursor:pointer;"><line x1="212" y1="76" x2="212" y2="124" stroke="var(--text-dim)" stroke-width="3"/><circle cx="220" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="220" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">3</text><line x1="218" y1="58" x2="212" y2="76" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="asc" tabindex="0" role="button" aria-label="Nivel 4, aorta ascendente proximal" style="cursor:pointer;"><line x1="262" y1="72" x2="262" y2="128" stroke="var(--text-dim)" stroke-width="3"/><circle cx="262" cy="36" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="262" y="41" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">4</text><line x1="262" y1="48" x2="262" y2="72" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                </svg>
+                <div class="article-figure-caption">Esquema recreado del paraesternal eje largo (no es una ecografía real; Lang no trae ninguna de la raíz). Basado en la Figura 10A de Lang, pág. 30. En este plano, el máximo de los senos suele estar en su punto medio.</div>
+            </div>
+            <div class="cv-fila" id="eco-med-niveles" role="group" aria-label="Niveles de la raíz" style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                <button type="button" class="cv-mini" data-nivel="anillo" aria-pressed="false">1 · Anillo</button>
+                <button type="button" class="cv-mini" data-nivel="senos" aria-pressed="true">2 · Senos de Valsalva</button>
+                <button type="button" class="cv-mini" data-nivel="ust" aria-pressed="false">3 · Unión sinotubular</button>
+                <button type="button" class="cv-mini" data-nivel="asc" aria-pressed="false">4 · Aorta ascendente</button>
+            </div>
+            <p style="font-size:0.78rem; color:var(--text-muted);">Toca un nivel: se marca en la Tabla 14 y en la calculadora. Anota siempre la distancia entre el punto medido y el plano del anillo <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 30</a>.</p>
+            <div class="cv-fila"><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="plax">Ver el paraesternal eje largo en el simulador →</button></div>
+
+            <p class="section-label" style="margin-top:16px;">Cómo y cuándo medir <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 28-32</a></p>
+            <ul class="term-chips" id="eco-med-como" data-nombre="Cómo y cuándo medir la raíz">
+                <li id="eco-med-anillo">Anillo: en <span class="hl hl-azul">mesosístole</span>, de borde interno a borde interno, con zoom y calibres electrónicos <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 28-29, 32</a></li>
+                <li id="eco-med-resto">Senos, unión sinotubular y ascendente proximal: en <span class="hl hl-azul">telediástole</span>, perpendicular al eje largo de la aorta, de borde de ataque a borde de ataque <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a></li>
+                <li id="eco-med-cierre">Con válvula tricúspide, la línea de cierre debe quedar en el centro de la luz. Si es <span class="hl hl-rojo">asimétrica</span>, el corte no abarca el mayor diámetro <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 30</a></li>
+                <li id="eco-med-2d">Mejor 2D que modo M: el movimiento del corazón puede subestimar de forma sistemática unos 2 mm con el modo M <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 31-32</a></li>
+                <li id="eco-med-calcio">La calcificación que sobresale se considera luz y se excluye del diámetro <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=29" target="_blank" rel="noopener">pág. 28-29</a></li>
+                <li id="eco-med-ll">¿Por qué L-L si la TC mide borde interno? Los valores de referencia de la aorta de larga data se obtuvieron así, y pasar a I-I (2 a 4 mm menos) dejaría a pacientes en riesgo de disección por debajo del umbral de cirugía de las guías <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=31" target="_blank" rel="noopener">pág. 30-31</a></li>
+            </ul>
+
+            <p class="section-label" style="margin-top:16px;">Tabla 14 · raíz aórtica en adultos normales <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 32</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="eco-med-tabla-14" data-nombre="Tabla 14 de Lang">
+                <thead><tr><th>Nivel</th><th>Hombres (cm)</th><th>Mujeres (cm)</th><th>Hombres (cm/m²)</th><th>Mujeres (cm/m²)</th></tr></thead>
+                <tbody>
+                    <tr data-nivel="anillo"><td>1 · Anillo</td><td>2,6 ± 0,3</td><td>2,3 ± 0,2</td><td>1,3 ± 0,1</td><td>1,3 ± 0,1</td></tr>
+                    <tr data-nivel="senos"><td>2 · Senos de Valsalva</td><td>3,4 ± 0,3</td><td>3,0 ± 0,3</td><td>1,7 ± 0,2</td><td>1,8 ± 0,2</td></tr>
+                    <tr data-nivel="ust"><td>3 · Unión sinotubular</td><td>2,9 ± 0,3</td><td>2,6 ± 0,3</td><td>1,5 ± 0,2</td><td>1,5 ± 0,2</td></tr>
+                    <tr data-nivel="asc"><td>4 · Ascendente proximal</td><td>3,0 ± 0,4</td><td>2,7 ± 0,4</td><td>1,5 ± 0,2</td><td>1,6 ± 0,3</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha" style="margin:6px 0;">Media ± DE. «Adaptada de Roman et al. y Hiratzka et al.» (pie de la tabla). El diámetro de los senos se relaciona estrechamente con la superficie corporal y la edad, por eso la tabla también viene indexada <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>. Dilatación en los senos = diámetro por encima del límite superior del IC 95 % de una población de referencia grande (misma página).</p>
+
+            <p class="section-label" style="margin-top:16px;">🧮 Calculadora de z</p>
+            <div class="card" id="eco-med-calc" data-nombre="Calculadora de z de la raíz" style="padding:14px 16px;">
+                <div class="form-group">
+                    <label for="eco-med-modo">Método</label>
+                    <select id="eco-med-modo">
+                        <option value="lang">Lang 2015: por nivel y sexo (Tabla 14)</option>
+                        <option value="devereux">Devereux 2012: senos, por edad, superficie y sexo</option>
+                    </select>
+                </div>
+                <div id="eco-med-lang-campos">
+                    <div class="form-group"><label for="eco-med-nivel">Nivel</label>
+                        <select id="eco-med-nivel"><option value="anillo">1 · Anillo</option><option value="senos" selected>2 · Senos de Valsalva</option><option value="ust">3 · Unión sinotubular</option><option value="asc">4 · Aorta ascendente proximal</option></select></div>
+                    <div class="form-group"><label for="eco-med-sexo">Sexo</label>
+                        <select id="eco-med-sexo"><option value="H">Hombre</option><option value="M">Mujer</option></select></div>
+                    <div class="form-group"><label for="eco-med-valor">Medida (<span id="eco-med-unidad">cm</span>)</label>
+                        <input type="number" id="eco-med-valor" inputmode="decimal" step="0.1" min="0" placeholder="p. ej. 4,0"></div>
+                    <label class="checkbox-label" style="margin-bottom:10px;"><input type="checkbox" id="eco-med-indexado"> Medida indexada por superficie corporal (cm/m²)</label>
+                </div>
+                <div id="eco-med-dev-campos" hidden>
+                    <div class="form-group"><label for="eco-med-d-valor">Senos de Valsalva (cm)</label><input type="number" id="eco-med-d-valor" inputmode="decimal" step="0.1" min="0" placeholder="p. ej. 3,5"></div>
+                    <div class="form-group"><label for="eco-med-d-edad">Edad (años)</label><input type="number" id="eco-med-d-edad" inputmode="numeric" step="1" min="0" placeholder="p. ej. 40"></div>
+                    <div class="form-group"><label for="eco-med-d-sc">Superficie corporal (m²)</label><input type="number" id="eco-med-d-sc" inputmode="decimal" step="0.01" min="0" placeholder="p. ej. 1,9"></div>
+                    <div class="form-group"><label for="eco-med-d-sexo">Sexo</label><select id="eco-med-d-sexo"><option value="H">Hombre</option><option value="M">Mujer</option></select></div>
+                </div>
+                <div class="tfg-estado tfg-estado-neutro" id="eco-med-resultado" aria-live="polite">Escribe la medida para calcular la z.</div>
+                <div class="tfg-estado tfg-estado-warn" id="eco-med-aviso" hidden style="margin-top:8px;"></div>
+                <p class="fuente-ficha" style="margin:8px 0 0;">Origen: <strong>ficha</strong>. Lang: z = (medido − media) / DE con la Tabla 14 (<a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>). Devereux: esperado = 2,423 + 0,009·edad + 0,461·SC − 0,267·sexo (1 hombre, 2 mujer), error estándar 0,261 cm, validado desde los 15 años y con senos de 2,1 a 4,3 cm (<a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3462295/" target="_blank" rel="noopener">Devereux 2012</a>). La SC se escribe, no se calcula.</p>
+            </div>
+            <div class="tfg-estado tfg-estado-warn" id="eco-med-nota-z" style="margin-top:10px;"><strong>Nota de interpretación (z = 2).</strong> Lang no habla de z ni del error de la medida de la raíz. Lo que sí da: L-L frente a I-I difiere 2 a 4 mm (pág. 31) y el modo M da unos 2 mm menos que el 2D (pág. 32). Una DE de la Tabla 14 es de 0,2 a 0,4 cm y el error estándar de Devereux es 0,26 cm. Con una DE de 3 mm, una diferencia de método de 2 a 3 mm mueve la z cerca de 1: una z de 2 puede caer dentro del error de medida. Es una lectura de estas cifras, no una afirmación de ninguna fuente.</div>
+
+            <p class="section-label" style="margin-top:16px;">Cuándo se opera (aorta ascendente y raíz) <a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9876736/" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">ACC/AHA 2022</a></p>
+            <div style="overflow-x:auto;">
+            <table class="data-table" id="eco-med-umbrales" data-nombre="Umbrales ACC/AHA 2022">
+                <thead><tr><th>Situación</th><th>Raíz o ascendente</th><th>COR · LOE</th><th>Sección</th></tr></thead>
+                <tbody>
+                    <tr><td>Esporádico, sintomático</td><td>Cirugía</td><td>1 · C-LD</td><td>6.5.1</td></tr>
+                    <tr><td>Esporádico, asintomático</td><td>≥5,5 cm: cirugía</td><td>1 · B-NR</td><td>6.5.1</td></tr>
+                    <tr><td>Esporádico, menor de 5,5 cm</td><td>Crecimiento ≥0,3 cm/año en 2 años seguidos, o ≥0,5 cm en 1 año (confirmado por tomografía): cirugía</td><td>1 · C-LD</td><td>6.5.1</td></tr>
+                    <tr><td>Esporádico, asintomático</td><td>≥5,0 cm: razonable si hay cirujanos expertos en un equipo aórtico multidisciplinar</td><td>2a · B-NR</td><td>6.5.1</td></tr>
+                    <tr><td>Esporádico, con cirugía de válvula tricúspide</td><td>Ascendente ≥4,5 cm: sustituirla es razonable</td><td>2a · B-NR</td><td>6.5.1</td></tr>
+                    <tr><td>Marfan</td><td>Raíz ≥5,0 cm: reemplazar raíz y ascendente</td><td>1 · B-NR</td><td>6.1.2.2.3</td></tr>
+                    <tr><td>Marfan</td><td>Raíz ≥4,5 cm y factores de riesgo de disección: razonable</td><td>2a · B-NR</td><td>6.1.2.2.3</td></tr>
+                    <tr><td>Marfan</td><td>Área transversal máxima de la raíz (cm²) entre talla (m) ≥10: razonable</td><td>2a · C-LD</td><td>6.1.2.2.3</td></tr>
+                    <tr><td>Válvula bicúspide</td><td>≥5,5 cm: cirugía</td><td>1 · B-NR</td><td>6.1.3.2</td></tr>
+                    <tr><td>Válvula bicúspide</td><td>5,0 a 5,4 cm y otro factor de riesgo de disección: razonable</td><td>2a · B-NR</td><td>6.1.3.2</td></tr>
+                    <tr><td>Válvula bicúspide, si se opera la válvula</td><td>≥4,5 cm: sustitución simultánea razonable</td><td>2a · B-NR</td><td>6.1.3.2</td></tr>
+                </tbody>
+            </table>
+            </div>
+            <p class="fuente-ficha" style="margin:6px 0;">Origen: <strong>ficha</strong> (guía de aorta ACC/AHA 2022, Isselbacher et al.; COR = clase de recomendación, LOE = nivel de evidencia). Factores de riesgo de disección en Marfan: antecedente familiar de disección, crecimiento ≥0,3 cm/año, dilatación difusa de raíz y ascendente, tortuosidad vertebral marcada.</p>
+            <details class="nota-plegable" id="eco-med-nota-acc"><summary>Nota de fidelidad: de dónde salen estos umbrales</summary>
+                <p style="font-size:0.8rem; color:var(--text-dim);">El texto de la guía es el manuscrito de autor abierto en PubMed Central, sin páginas impresas: se cita por número de sección. La guía ESC 2024 de enfermedad aórtica no está disponible en abierto y no se muestran sus umbrales. En la enfermedad aórtica hereditaria, la guía advierte que la disección puede ocurrir con diámetros menores que los umbrales (apartado de enfermedad aórtica hereditaria).</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Dolor torácico brusco: la imagen no espera a la medida <a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9876736/" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">ACC/AHA 2022 apdos. 7.1-7.2</a></p>
+            <ul class="term-chips" id="eco-med-aas" data-nombre="Síndrome aórtico agudo">
+                <li>El síndrome aórtico agudo mata hasta 1-2 % por hora si no se identifica y trata, y su presentación se solapa con otras causas frecuentes de urgencias (apdo. 7.1)</li>
+                <li>Ante la sospecha: <span class="hl hl-rojo">TC</span> como imagen inicial (COR 1, C-LD); ETE y RM, alternativas razonables (2a, C-LD). La radiografía de tórax no es diagnóstica (apdo. 7.2)</li>
+                <li>La ETT a pie de cama ayuda a ver complicaciones (insuficiencia aórtica, derrame o taponamiento), pero la guía prefiere la ETE (apdo. 7.2)</li>
+            </ul>
+            <p style="font-size:0.78rem; color:var(--text-muted);">Conclusión práctica de la ficha, a partir de lo anterior: en un aórtico conocido con dolor brusco, la imagen urgente no espera a afinar el diámetro de la raíz.</p>
+
+            <details class="nota-plegable" id="eco-med-nota-errata"><summary>Nota de fidelidad: ecuaciones que Lang dice que están en la Tabla 14</summary>
+                <p style="font-size:0.8rem; color:var(--text-dim);">El texto de la pág. 32 dice que las ecuaciones del diámetro esperado de los senos por superficie corporal y edad «también se muestran en la Tabla 14 y la Figura 13». La Tabla 14 impresa no las trae; están solo en la Figura 13 (niños y adolescentes: y = 1,02 + 0,98x; adultos de 20 a 39 años: y = 0,97 + 1,12x; adultos de 40 o más: y = 1,92 + 0,74x; y en cm, x = SC en m²). Además, el texto habla de estratos «&lt;20, 20-40, &gt;40 años» y la figura rotula «20-39» y «≥40». Se reproduce tal cual.</p>
+            </details>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <p style="font-size:0.82rem; color:var(--text-dim);">No cubierto aquí: TC y ETE 3D de la raíz (Figura 11 de Lang), medida del anillo con plano sagital (Figura 12) y ETE (pág. 31-32), y los nomogramas por edad y superficie de la Figura 13.</p>
+            <p class="section-label" style="margin-top:16px;">Fuentes</p>
+            <ul class="term-chips" id="eco-med-fuentes">
+                <li><a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">Lang 2015, ASE/EACVI: raíz aórtica, pág. 28-32 (Tabla 14, pág. 32)</a></li>
+                <li><a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9876736/" target="_blank" rel="noopener">Isselbacher 2022, guía ACC/AHA de aorta, Circulation 146:e334</a></li>
+                <li><a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3462295/" target="_blank" rel="noopener">Devereux 2012, Am J Cardiol 110:1189-94</a></li>
+                <li>Guía ESC 2024 de enfermedad aórtica: no disponible en abierto; no se muestran sus umbrales.</li>
+            </ul>
+            <button class="accordion-btn nav-btn" id="btn-eco-medidas-repasar" data-quiz-asignatura="Eco cardíaca" data-quiz-bloque="Medidas" style="border-left: 4px solid var(--accent-yellow); margin-top:14px;">
+                <span>🎯 Repasar (preguntas de repaso)</span>
+                <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+            </button>
+        </div>
+    </div>
 </div>
 
 <!-- Atlas: The Heart by Ultrasound en español. Lo maneja atlas/atlas.js; los capítulos son atlas/cap-*.html. -->

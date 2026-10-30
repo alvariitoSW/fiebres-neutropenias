@@ -15,11 +15,17 @@ import { initAtlas, enApp } from './atlas/atlas.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { arrancar } from '../../core/ui.js';
 import { preguntasAtlasEco, temasAtlasEco } from '../../data/eco-atlas-preguntas.js';
+import { preguntasMedidasEco, temasMedidasEco } from '../../data/eco-medidas-preguntas.js';
+import { initCorkboard, openCorkboardTopic } from '../../core/corkboard.js';
+import { initRaizAortica } from './raiz-aortica.js';
 
 // Repaso del Atlas de ecocardiografía (main.js fusiona los de todas las especialidades).
-export const quizTriggerId = ['btn-eco-atlas-repasar', 'btn-eco-atlas-repasar-todo'];
-export const quizBanco = preguntasAtlasEco;
-export const quizTemas = temasAtlasEco.map(t => ({ ...t, asignatura: 'Eco cardíaca', bloque: 'Atlas de ecocardiografía' }));
+export const quizTriggerId = ['btn-eco-atlas-repasar', 'btn-eco-atlas-repasar-todo', 'btn-eco-medidas-repasar'];
+export const quizBanco = [...preguntasAtlasEco, ...preguntasMedidasEco];
+export const quizTemas = [
+    ...temasAtlasEco.map(t => ({ ...t, asignatura: 'Eco cardíaca', bloque: 'Atlas de ecocardiografía' })),
+    ...temasMedidasEco.map(t => ({ ...t, asignatura: 'Eco cardíaca', bloque: 'Medidas' })),
+];
 
 export function init() {
     const raiz = document.getElementById('cv-sim');
@@ -31,12 +37,15 @@ export function init() {
     const secAtlas = document.getElementById('cv-seccion-atlas');
     // El atlas arranca por separado (arrancar(), core/ui.js): si falla, el simulador sigue funcionando.
     const atlas = arrancar('atlas de eco', () => initAtlas({ alAbrirSimulador: (modo) => { seccion('sim'); pendiente = { modo }; cargar(); aplicarPendiente(); raiz.scrollIntoView({ block: 'start' }); } }));
+    const secMedidas = document.getElementById('cv-seccion-medidas');
+    arrancar('medidas eco', () => { initCorkboard('eco-medidas-corkboard', 'panel-eco-medidas-tabs'); initRaizAortica(); });
     function seccion(k) {
-        const enAtlas = k === 'atlas';
-        raiz.hidden = enAtlas; secAtlas.hidden = !enAtlas;
+        const enAtlas = k === 'atlas', enMedidas = k === 'medidas';
+        raiz.hidden = enAtlas || enMedidas; secAtlas.hidden = !enAtlas; if (secMedidas) secMedidas.hidden = !enMedidas;
         document.querySelectorAll('.cv-secciones [data-seccion]').forEach(b => { const on = b.dataset.seccion === k; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
         enAtlas ? atlas?.mostrar() : atlas?.ocultar();
     }
+    const abrirFicha = (panel, tab) => { seccion('medidas'); if (panel && tab) openCorkboardTopic(panel, tab); };
     document.querySelector('.cv-secciones').addEventListener('click', (e) => { const b = e.target.closest('[data-seccion]'); if (b) seccion(b.dataset.seccion); });
 
     function aplicarPendiente() {
@@ -158,7 +167,11 @@ export function init() {
         // entrar desde un menú: arriba del todo, sin tocar la vista ni el escenario elegidos
         volverAlMenu() { marcarVolver(volver, null, null); window.scrollTo(0, 0); },
         // llegar desde un enlace de otra ficha: arriba del todo (la página venía desplazada de la ficha de origen)
-        irAFicha() { marcarVolver(volver, null, null); window.scrollTo(0, 0); },
+        // (view, panel, tab): con un panel de Medidas (buscador, enlaces cruzados, jueces --ficha) abre esa sección y esa ficha
+        irAFicha(_view, panel, tab) {
+            marcarVolver(volver, null, null);
+            if (panel === 'panel-eco-medidas-tabs') abrirFicha(panel, tab); else window.scrollTo(0, 0);
+        },
         // data-eco-panel: home/index.js lo llama tras irAFicha con la ficha de la que se sale
         // Cualquier entrada desde una ficha (escenario, vista, medida o panel) deja el «← VOLVER» a esa ficha.
         modelosVivos: Object.fromEntries(['ecoPanel', 'ecoEscenario', 'ecoVista', 'ecoMedir']
