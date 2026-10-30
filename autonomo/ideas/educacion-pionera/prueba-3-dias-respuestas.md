@@ -1,0 +1,16 @@
+# Respuestas de la prueba de 3 días (no abrir antes de contestar)
+Fuente F = fluidoterapia caps. 10-11, página del PDF. «Ilustrativo» = cuenta proporcional sobre la cifra del libro.
+Resumen: A1 b · A2 a · A3 c · A4 b · A5 a · A6 c · B1 c · B2 a · B3 b · B4 b · B5 c · B6 a.
+
+**A1 · b.** Con 1 L de salino, 825 mL van al intersticio y 275 al plasma (F p. 5-6, Fig. 10.1): con 3 L, ≈ 825 y ≈ 2.475 (ilustrativo). (a) Seguiría dando litros creyendo que llenas el plasma: edema. (c) Eso es la albúmina al 5 % (700 de cada litro, F p. 13).
+**A2 · a.** El salino es algo hipertónico respecto al extracelular y mueve agua de dentro a fuera de la célula: +1.100 mL con 1 L (F p. 5). (b) No es lo que dice la fuente y no explica la cifra inmediata. (c) La sal se reparte por todo el extracelular; el plasma es solo el 20 % (F p. 5).
+**A3 · c.** «La diferencia de cloro es la más relevante» (154 frente a 103; F p. 4); causa acidosis hiperclorémica (F p. 6). (a) y (b) también difieren, pero no son la causa; corregir el sodio no evita la acidosis.
+**A4 · b.** Con salino el pH baja de 7,41 a 7,28; con Ringer (Cl 109) no cambia (F p. 6-7, Fig. 10.2). (a) Tratarías igual los dos líquidos y acidificarías a la del salino. (c) El lactato no neutraliza hidrogeniones en sangre: lo convierte el hígado (F p. 8).
+**A5 · a.** El hígado aclara ≈ 100 mmol/h = 3,5 L de Ringer por hora; en voluntarios sanos, 30 mL/kg subió el lactato 0,9 mmol/L, igual que el salino (F p. 8). Nota: en críticos con shock o fallo hepático no está estudiado. (b) y (c) no salen de la fuente; retirar el Ringer por miedo te deja el cloro del salino.
+**A6 · c.** Las muestras sacadas por el catéter del Ringer dan lactato falsamente alto (F p. 8). (a) Subirías fluidos por un dato falso: sobrecarga. (b) Dejarías sin medir un lactato que importa.
+**B1 · c.** El coloide logra el mismo aumento de plasma con ≈ 30 % del volumen del cristaloide (F p. 13): 30 % de 2 L ≈ 600 mL (ilustrativo). (a) Infundirías de más. (b) Es al revés: el coloide es ≈ 3 veces más eficaz, no menos.
+**B2 · a.** La potencia sube con la presión oncótica: la del 25 % (70 mm Hg) aumenta el plasma 3-4 veces lo infundido; hetastarch 1,0-1,3; albúmina 5 %, 0,7-1,3 (F p. 13, Tabla 10.3). (c) La del 5 % reparte casi mL por mL: no rinde más de lo infundido.
+**B3 · b.** La albúmina al 25 % saca el agua del intersticio, no repone volumen perdido y no debe usarse para ello (F p. 14). (a) Dejarías a la paciente hipovolémica con el intersticio seco. (c) No hay tal prohibición; el matiz es otro.
+**B4 · b.** El riesgo hemostático es mayor con alto grado de sustitución (hetastarch, 0,7: más sangrado y transfusión); el tetrastarch no da coagulopatía significativa hasta > 50 mL/kg (F p. 15). (c) Los dextranos dan tendencia al sangrado dependiente de dosis (límite 20 mL/kg/día; F p. 16).
+**B5 · c.** La amilasa que hidroliza la HES se une a ella y se aclara menos: amilasa 2-3 veces lo normal, lipasa sin cambio, vuelve a lo normal en una semana (F p. 16). (a) Un TC innecesario por un dato sin significado. (b) Lo del riñón con HES es otro tema, sin relación con la amilasa.
+**B6 · a.** Los estudios no ven peligro con albúmina, con una posible excepción: el TCE, donde un estudio grande halló más mortalidad con albúmina que con salino (F p. 14). (b) Daría un fluido con peor resultado. (c) La fuente no lo dice.
