@@ -405,3 +405,5 @@ ilustrativos aflojados, cada uno con su razón escrita (balón 3 → 2 mmHg, pli
 quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e′ ~2 cm/s en el shock cardiogénico
 (Nagueh p.561 da 3-4 en el grado III avanzado; extrapolación declarada); bomba AI 88 % de la vasoplejia (artefacto de
 la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
+
+- **30/10/2026 · mv-eco-1 (B-045 paso 1)**: nace `js/modules/eco/contrato.mjs` (+ `contrato-puente-hoy.mjs`, `pruebas/contrato.test.mjs`) al lado del motor, sin que la app lo use todavía. Congela «contrato = motor de hoy» (±2 % contra el código, ±5 % contra la tabla §3) y deja como fallos conocidos E/e′ 1,8 (TEP defecto), TA pulmonar 119 ms (TEP) y el salto al cerrar el latido (fallo VI 100 %). Lo arregla mv-eco-2a5.
