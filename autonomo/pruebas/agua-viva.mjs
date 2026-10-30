@@ -10,6 +10,11 @@ import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const { GUIAS, PREGUNTAS, CASOS } = await import(new URL('../../js/data/agua-viva-data.js', import.meta.url));
 const { probarGuias } = await import(new URL('./guias-comun.mjs', import.meta.url));
 const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
+const { MAYEUTICA_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
+const { MAYEUTICA_B3 } = await import(new URL('../../js/data/mayeutica/b3.js', import.meta.url));
+const BANCO = { ...MAYEUTICA_B1, ...MAYEUTICA_B3 };
+const preguntaDe = id => Object.values(BANCO).flatMap(f => [...(f.guia || []), ...(f.examen || [])]).find(q => q.id === id);
+const sinHtml = h => h.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -193,6 +198,56 @@ for (const k of [0, 1, 2]) {
     await pulsar('#agv-modo-preguntas'); await pulsar('#agv-preg [data-ir="casos"]');
   } else if (k < 2) await pulsar('#agv-preg [data-fin="otro"]');
 }
+
+// 7b. Teresa (caso 4): equivocarse sin guía. Primero eligiendo bien; luego el salino (la consecuencia sale ANTES de la explicación)
+await pulsar('#agv-preg [data-fin="otro"]');
+const TER = CASOS[3];
+ok(TER.id === 'w-4' && TER.pasos.length === 6, 'el caso 4 (Teresa) está en la lista, con 6 pasos');
+const ver = async (txt) => ok(await desborde() <= 0, `sin desborde: ${txt}`);
+// (a) todo bien
+await pulsar('#agv-preg [data-caso="3"]');
+for (const [j, paso] of TER.pasos.entries()) {
+  await contestar(paso.pregunta, false, null, false, `Teresa buena, paso ${j + 1}`);
+  if (j === 2) {
+    const e = (await T()).estado;
+    ok(!(await p.evaluate(() => /Se le pusieron los 2 L/.test(document.getElementById('agv-preg').textContent))), 'Teresa buena: el paso 4 no lleva la línea del salino');
+    ok(e.infusiones.length === 1 && e.infusiones[0].f === 'ringer' && e.infusiones[0].ml === 1300, `Teresa buena: el estuario sigue sobre 1,3 L de Ringer (${JSON.stringify(e.infusiones)})`);
+  }
+}
+ok(await p.evaluate(() => document.querySelectorAll('#agv-preg [data-objetivo][data-cumplido="true"]').length) === 3, 'Teresa buena: los 3 objetivos cumplidos');
+await ver('Lo que te llevas de Teresa (bien)');
+// (b) el salino
+await pulsar('#agv-preg [data-fin="otro"]'); await pulsar('#agv-preg [data-caso="3"]');
+for (const j of [0, 1]) await contestar(TER.pasos[j].pregunta, false, null, false, `Teresa salino, paso ${j + 1}`);
+{
+  const q = TER.pasos[2].pregunta;
+  const antes = await p.evaluate(() => document.getElementById('agv-preg').textContent);
+  ok(/Decide tú, sin pistas/.test(antes) && !/Tabla 15\.4/.test(antes.split('Decide tú')[1] || ''), 'P3: el enunciado no da pistas');
+  await pulsar('#agv-preg [data-accion="ops"]');
+  const orden = barajar(q.opciones, q.id);
+  await pulsar(`#agv-preg [data-op="${orden.findIndex(o => o.consecuencia)}"]`); await p.waitForTimeout(REDUCIDO ? 30 : 300);
+  const o = await p.evaluate(() => {
+    const r = document.querySelector('#agv-preg .agv-respuesta'), c = r.querySelector('.agv-consecuencia'), ps = [...r.querySelectorAll(':scope > p')];
+    const expl = ps.find(x => /Tabla 15\.4: 432/.test(x.textContent));
+    return { hayCaja: !!c, texto: c?.textContent || '', antes: !!c && !!expl && !!(c.compareDocumentPosition(expl) & Node.DOCUMENT_POSITION_FOLLOWING), enlace: !!c?.querySelector('[data-resaltar], [data-tab]'), est: window.__agvPruebas().estado.infusiones };
+  });
+  ok(o.hayCaja && o.antes, 'P3: la caja «Lo que acaba de pasar» sale antes de la explicación');
+  ok(/550/.test(o.texto) && /1\.650/.test(o.texto) && /hiperclorémica/.test(o.texto), 'P3: la consecuencia dice 550, 1.650 e hiperclorémica');
+  ok(o.enlace, 'P3: la consecuencia lleva su «Ver en el texto»');
+  ok(o.est.length === 1 && o.est[0].f === 'salino' && o.est[0].ml === 2000, 'P3: el estuario pasa a 2 L de salino');
+  await ver('P3 con la consecuencia'); await p.waitForTimeout(REDUCIDO ? 100 : 2500); await p.evaluate(() => document.getElementById('agv-preg').scrollIntoView({ block: 'start' })); await foto('12-teresa-p3');
+  await pulsar('#agv-preg [data-accion="sig"]');
+}
+ok(await p.evaluate(() => /Se le pusieron los 2 L de salino/.test(document.getElementById('agv-preg').textContent)), 'P4: la historia sigue sobre el salino (tras)');
+{
+  const e = (await T()).estado;
+  ok(e.infusiones[0]?.f === 'salino' && e.hemorragia === 20, 'P4: el estuario sigue en el salino');
+  await ver('P4 (el giro)'); await foto('13-teresa-p4');
+}
+for (const j of [3, 4, 5]) await contestar(TER.pasos[j].pregunta, false, null, false, `Teresa salino, paso ${j + 1}`);
+ok(await p.evaluate(() => { const o = document.querySelector('#agv-preg [data-objetivo="fluido"]'); return o && o.dataset.cumplido === 'false' && /Lo que pasó/.test(o.textContent); }), 'el objetivo del fluido falla y recuerda lo que pasó');
+await ver('Lo que te llevas de Teresa (salino)'); await foto('14-teresa-lleva');
+
 ok(nDesbordeOk >= 34, `sin desborde tras contestar en ${nDesbordeOk} respuestas y pasos`);
 await p.evaluate(() => { const r = document.getElementById('agv-preg').getBoundingClientRect(); const esc = document.getElementById('agv-escena-bloque').getBoundingClientRect(); window.scrollBy(0, r.top - esc.height - 10); }); await p.waitForTimeout(200);
 await foto('08-fin-caso');
@@ -205,6 +260,57 @@ await pulsar('#agv-modo-preguntas'); await p.waitForTimeout(200);
 ok(await p.evaluate(() => /Seguir el recorrido \(14 de 14\)/.test(document.getElementById('agv-preg').textContent)), 'tras recargar, el recorrido recuerda las 14');
 await p.evaluate(() => window.scrollTo(0, 0));
 await foto('09-mayeutica-recargada');
+
+// 8b. Al abrir la Mayéutica: el repaso «de días atrás» (fichas de conceptos parecidos, 'mayeutica-fichas-v1')
+{
+  const sembrar = reg => p.evaluate(r => {
+    const f = n => { const d = new Date(); d.setDate(d.getDate() - n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+    const g = {};
+    for (const [id, n, a, fa] of r) g[id] = { aciertos: a, fallos: fa, ultimo: f(n), resultado: fa ? 'mal' : 'on', repasar: !!fa, faltan: [], dias: a ? 1 : 0, diaOk: a ? f(n) : undefined };
+    localStorage.setItem('mayeutica-fichas-v1', JSON.stringify(g));
+  }, reg);
+  const hoyPag = () => p.evaluate(() => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; });
+  const abrirMayeutica = async () => {
+    await p.reload(); await p.waitForFunction(() => window.__agvPruebas);
+    await p.click('#btn-libros'); await p.click('#btn-libro-marino'); await p.click('#lib-pest-vivos'); await p.click('#agv-menu-libros'); await p.waitForTimeout(300);
+    await pulsar('#agv-modo-preguntas'); await p.waitForTimeout(250);
+  };
+  // (c) registro vacío: directo al inicio, sin pantalla vacía
+  await p.evaluate(() => localStorage.removeItem('mayeutica-fichas-v1'));
+  await abrirMayeutica();
+  ok(await p.evaluate(() => !!document.querySelector('#agv-preg [data-ir="recorrido"]') && !/días atrás/.test(document.getElementById('agv-preg').textContent)), 'días atrás: registro vacío, entra directo al inicio');
+  // (b) rv-g5 (hace 3 días, fallada) y rv-g7 (hace 2): misma ficha; hcl-e6 (hace 1, fallada); rf-g5 (acertada hace 8, tocaba a los 7);
+  //     col-g4 (acertada hace 1, intervalo 3: no toca)
+  await sembrar([['rv-g5', 3, 0, 1], ['rv-g7', 2, 0, 1], ['hcl-e6', 1, 0, 1], ['rf-g5', 8, 2, 0], ['col-g4', 1, 1, 0]]);
+  await abrirMayeutica();
+  await p.evaluate(() => document.getElementById('agv-preg').scrollIntoView({ block: 'start' })); await p.waitForTimeout(300); await foto('15-dias-atras');
+  const ESPERADAS = ['rv-g5', 'hcl-e6', 'rv-g7', 'rf-g5'];   // fallada más antigua primero, sin dos seguidas de la misma ficha, luego la acertada
+  const CHIPS = ['Fallada hace 3 días', 'Fallada hace 1 día', 'Fallada hace 2 días', 'Acertada hace 8 días'];
+  for (const [i, id] of ESPERADAS.entries()) {
+    const v = await p.evaluate(() => ({ t: document.getElementById('agv-preg').textContent, chip: document.querySelector('#agv-preg .agv-chip')?.textContent || '' }));
+    const q = preguntaDe(id);
+    ok(v.t.includes(`${i + 1} de ${ESPERADAS.length}`), `días atrás ${i + 1}: contador «${i + 1} de ${ESPERADAS.length}»`);
+    ok(v.t.includes(sinHtml(q.enunciado).slice(0, 40)), `días atrás ${i + 1}: sale ${id}`);
+    ok(v.chip.startsWith(CHIPS[i]), `días atrás ${i + 1}: chip «${v.chip}»`);
+    ok(!/Larsen/.test(v.t) || i === 0, 'días atrás: la nota del estudio solo sale en la primera');
+    ok(await desborde() <= 0, `sin desborde: días atrás ${i + 1}`);
+    await contestar(q, false, null, false, `días atrás ${id}`);
+    if (i === 0) {   // «Ver en el texto» de una pregunta de ficha lleva a SU ficha
+      const g = await p.evaluate(() => JSON.parse(localStorage.getItem('mayeutica-fichas-v1')));
+      ok(g['rv-g5'].ultimo === (g['rv-g5'].diaOk), 'días atrás: al contestar se reescribe «ultimo» (= hoy)');
+    }
+  }
+  ok(await p.evaluate(() => /Repaso hecho/.test(document.getElementById('agv-preg').textContent)), 'días atrás: «Repaso hecho»');
+  await pulsar('#agv-preg [data-accion="fin-dias"]'); await p.waitForTimeout(200);
+  ok(await p.evaluate(() => !!document.querySelector('#agv-preg [data-ir="recorrido"]')), 'días atrás: «Seguir» lleva al inicio de la Mayéutica');
+  const hoy = await hoyPag();
+  const g = await p.evaluate(() => JSON.parse(localStorage.getItem('mayeutica-fichas-v1')));
+  ok(ESPERADAS.every(id => g[id].ultimo === hoy && g[id].repasar === false), 'días atrás: lo acertado queda con «ultimo» = hoy y fuera del repaso de su ficha');
+  ok(g['hcl-e6'].resultado === 'mal' && g['col-g4'].ultimo !== hoy, 'días atrás: no pisa el «resultado» de la ficha ni toca lo que no tocaba');
+  // dos veces en la sesión: la segunda, directo al inicio
+  await pulsar('#agv-modo-explorar'); await pulsar('#agv-modo-preguntas'); await p.waitForTimeout(200);
+  ok(await p.evaluate(() => !!document.querySelector('#agv-preg [data-ir="recorrido"]')), 'días atrás: no se repite en la misma sesión');
+}
 // Conceptos: los 8, sin errores
 await pulsar('#agv-modo-conceptos');
 for (let i = 0; i < 8; i++) { await p.evaluate(() => document.querySelectorAll('#agv-concepto [data-acc]').forEach(b => b.click())); await p.waitForTimeout(REDUCIDO ? 50 : 300); if (i < 7) await pulsar('#agv-concepto [data-nav="1"]'); }
