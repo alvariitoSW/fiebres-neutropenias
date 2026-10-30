@@ -1098,7 +1098,7 @@ inmersión, receptores animados y los modelos nuevos (arteria culpable, taponami
 
 | # | Clave | Qué | Estado | Notas |
 |---|---|---|---|---|
-| 1 | `mv-papel-pulmon` | Fase A: informe y maqueta de mejoras del pulmón con respirador (VentLoop, clases de Antaa, Techartist; Marino 22-30, El Libro Azul IV) para que `b3-pulmon-app` las lea | en curso (2026-10-30, sesión mv-papel-pulmon) | 🔴: sin código. ≈1-2 M |
+| 1 | `mv-papel-pulmon` | Fase A: informe y maqueta de mejoras del pulmón con respirador (VentLoop, clases de Antaa, Techartist; Marino 22-30, El Libro Azul IV) para que `b3-pulmon-app` las lea | en revisión (2026-10-30, PR por abrir): informe `autonomo/bloques/b3/papel-pulmon.md` (auditor 0 graves) y maqueta `autonomo/maquetas/mv-papel-pulmon.html`; falta nota del profesor para el voto del Consejo | 🔴: sin código. ≈1-2 M |
 | 2 | `mv-papel-shock` | Fase A: shock cardiogénico en un IAM en 3 pasos y veredicto de 4 tipos de shock (Impella-Antaa, EchoSuite-2, AngioView-2 idea 8; Marino 14-17, Hernández 2026, ESC 2023 SCA) | pendiente (fase A, ya) | 🔴: sin código; se suma a `shock-scai`. ≈1-2 M |
 | 3 | `mv-papel-ritmo` | Fase A: ECG que se pinta bajo cada ficha y «construye un ECG» (RitmoLab, Ventriculus; ESC 2019, ESC 2021, López Ramírez) | pendiente (fase A, ya) | 🔴: sin código; alimenta `pif-cardio`. ≈1-2 M |
 | 4 | `pif-cardio-minimo` | El mínimo de Cardiología para la rotación (ya validado en el Objetivo L) | pasa al carril 2 | Ver Objetivo L, fila 1 |
