@@ -411,6 +411,7 @@ export function init() {
     initEscena();
     fijos(); engancharDock(); crearGuia();
     topes = crearTope({ monitor: $('escena'), dock: $('dock'), cita: c => { const r = rutaDe(c.id); return r ? `<span class="cita"><button type="button" class="vso-org-ir" ${atributosFicha(r)}>Ver en la ficha · p. ${c.pag} →</button></span>` : ''; } });
+    $('escena').querySelector('.tope-linea')?.style.setProperty('display', 'none', 'important'); // el aviso ya vive en el dock; la tira tapaba la fila de abajo
     enRaiz('.vso-lead .vso-org').forEach(sp => { sp.innerHTML = origenCorto(sp.textContent); sp.dataset.enlazado = ''; });
     enlazarOrigenes(raiz);
     enRaiz('[data-vso-fuente]').forEach(sp => { sp.innerHTML = enlacesFuente(sp.dataset.vsoFuente, { clase: 'vso-ir-texto', claseOrg: 'vso-org' }); });

@@ -132,10 +132,10 @@ export const MAYEUTICA_SCA = {
               nota: `<b>La fuente no lo dice.</b> La elevación de 1,7 mm es un dato de la paciente inventada.` + enFicha(D, 'mc-tabla-20-1') } },
           { momento: '06:15 · el giro', datos: { Tratamiento: 'nitroglicerina 0,4 mg sublingual', Dolor: 'baja a la mitad' }, nuevo: ['Tratamiento', 'Dolor'],
             pregunta: { id: 'scd-c2', tipo: 'test', fuente: 'mc-sca-clinica · mc-sca-ecg', origen: 'ilustrativo: la respuesta al tratamiento es de la paciente; la regla, de la ficha',
-              enunciado: 'Tras la nitroglicerina el dolor de Sagrario baja a la mitad. El residente dice: «Si cede con nitroglicerina será un espasmo esofágico; esperamos». ¿Qué le dices?',
+              enunciado: 'Tras la nitroglicerina el dolor de Sagrario baja a la mitad. El residente dice: «Si cede con nitroglicerina será un espasmo esofágico; la sacamos de la vía de reperfusión y esperamos». ¿Qué decides?',
               opciones: [
                 { t: 'Que tiene razón: si fuera un infarto, la nitroglicerina no habría aliviado nada', porque: `El alivio con nitroglicerina no es evidencia de isquemia ni de su ausencia (${p(40)}); con el ECG del STEMI, esperar retrasaría la reperfusión emergente.` },
-                { t: 'Que el alivio no prueba nada: también cede el espasmo esofágico, y el ECG ya manda', ok: true },
+                { t: 'Mantienes la reperfusión: el alivio no prueba nada, también cede el espasmo esofágico, y el ECG ya manda', ok: true },
                 { t: 'Que confirma el origen coronario: solo la isquemia responde a la nitroglicerina', porque: `También alivia el espasmo esofágico (${p(40)}); darlo por confirmado no cambia la conducta que ya dicta el ECG.` }],
               explicacion: `<span class="hl-rojo">El alivio con nitroglicerina no es evidencia de isquemia</span>: también alivia el espasmo esofágico (${p(40)}). Lo que decide aquí es el ECG con ST elevado, que obliga a reperfusión emergente (${p(40)}).` + enFicha(D, 'mc-sca-clinica') } },
           { momento: '06:30 · troponina', datos: { 'hs-cTn': 'inicial sobre el p99; a la hora, cambio >10 %' }, nuevo: ['hs-cTn'],
@@ -156,13 +156,13 @@ export const MAYEUTICA_SCA = {
                 { t: 'Como la nitroglicerina alivió el dolor, el origen es coronario.', mal: true, c: `<span class="hl-rojo">No es evidencia de isquemia</span>: también alivia el espasmo esofágico (${p(40)}).` },
                 { t: 'Un cambio de la hs-cTn mayor del 10 % a la hora indica isquemia aguda.' }],
               explicacion: 'Dos errores: aplicar a la mujer el umbral del varón y tomar el alivio con nitroglicerina por una prueba.' } },
-          { momento: '06:55 · si el ECG estuviera tapado', datos: { Supuesto: 'Sagrario con marcapasos' }, nuevo: ['Supuesto'],
+          { momento: '06:55 · la 2.ª troponina', datos: { Adjunto: '«esperemos a la 2.ª troponina antes de decidir»' }, nuevo: ['Adjunto'],
             pregunta: { id: 'scd-c5', tipo: 'destapa', cuantas: 'son dos', fuente: 'mc-sca-ecg', modeloVivo: rv('stemi', '⚡ El ST elevado en el corazón eléctrico'),
-              enunciado: 'Supón que Sagrario tuviera un marcapasos y el ECG no se pudiera leer. Tu respuesta tiene dos partes: ¿qué pasa con el ECG y qué haces con ese dolor?',
+              enunciado: 'El adjunto quiere esperar a la 2.ª troponina de Sagrario, que lleva menos de 3 horas con dolor y ST elevado. Tu respuesta tiene dos partes: ¿qué te dice el ECG y qué te puede decir la troponina a estas horas?',
               puntos: [
-                `Un ritmo de marcapasos (o un bloqueo de rama) puede <span class="hl-azul">enmascarar los cambios isquémicos</span>.`,
-                `Con sospecha de isquemia coronaria se maneja <span class="hl-rojo">como un STEMI</span>: reperfusión emergente.`],
-              explicacion: `Los cambios isquémicos pueden enmascararse por bloqueo de rama o marcapasos; si se sospecha isquemia coronaria, se maneja como STEMI (${p(40)}-${p(41)}).` + enFicha(D, 'mc-sca-ecg') } },
+                `El ST elevado que cumple los criterios (en la mujer, ≥1,5 mm en V2-V3) es un STEMI y <span class="hl-rojo">merece reperfusión emergente</span>.`,
+                `La hs-cTn <span class="hl-azul">solo se detecta desde las 3 h</span> del inicio de los síntomas: con menos tiempo puede no verse aún.`],
+              explicacion: `El ECG con ST elevado merece reperfusión emergente (${p(40)}); la hs-cTn detecta elevaciones desde las 3 h del inicio (${p(40)}). Que la 2.ª troponina no deba retrasar la reperfusión es deducción (${DED}).` + enFicha(D, 'mc-sca-ecg') } },
         ],
         lleva: [
           'En la mujer, 1,5 mm en V2-V3 ya es STEMI; el ECG decide, no la troponina.' + enFicha(D, 'mc-tabla-20-1'),
@@ -230,7 +230,7 @@ export const MAYEUTICA_SCA = {
         puntos: [
           `El infarto lo causa <span class="hl-rojo">un coágulo que obstruye una arteria coronaria</span>.`,
           `No lo causa una caída global del aporte de O₂ al miocardio: la anemia o la hipoxemia, por sí solas, no bastan.`],
-        explicacion: `La noción de oferta y demanda de O₂ como causa del infarto es engañosa: <span class="hl-azul">el infarto lo causa un coágulo en una coronaria</span>, no un desequilibrio global del aporte de oxígeno (${p(52)}).`,
+        explicacion: `La noción de oferta y demanda de O₂ como causa del infarto es engañosa: <span class="hl-azul">el infarto lo causa un coágulo en una coronaria</span>, no un desequilibrio global del aporte de oxígeno (${p(53)}).`,
         nota: `Las medidas cardioprotectoras (oxígeno, nitroglicerina, betabloqueo) sí mejoran el equilibrio local de oxígeno, pero no sustituyen la reperfusión (${p(45)}).` + enFicha(R, 'mc-oferta-demanda') },
     ],
     examen: [

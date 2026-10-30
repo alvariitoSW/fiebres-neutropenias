@@ -53,7 +53,7 @@ export const sellaP2y = e => (e.p2y === 'ticagrelor' && e.hic) || (e.p2y === 'pr
 // ¿Cuántos de los tres interruptores frenan la plaqueta? (los sellados no cuentan)
 export const frenos = e => (e.asa && !e.alasa ? 1 : 0) + (e.p2y && !sellaP2y(e) ? 1 : 0) + (e.iib ? 1 : 0);
 // La lisis actúa: en el STEMI y antes de las 12 h (p. 43)
-export const lisisActiva = e => !!e.lisis && e.lesion === 'placa' && e.t === 4 && e.ocl === 'completa' && e.horas < RELOJ.lisis;
+export const lisisActiva = e => !!e.lisis && e.lesion === 'placa' && e.t === 4 && e.ocl === 'completa' && e.horas <= RELOJ.lisis;
 
 // Los topes del reloj y de los fármacos: lo que tope.js pone (aviso o sello) en cada estado.
 export function topesReloj(e) {
@@ -71,9 +71,9 @@ export function topesReloj(e) {
         if (e.iib === 'tirofiban' && e.clcr && e.clcr <= 30) A('tx-clcr', 'ClCr <30:', 'tirofibán, la infusión al 50 %.', TX('mc-tabla-20-4', '48'), 'ficha · p. 48', '#vso-fila-pac');
     }
     if (e.t !== 4) return out;
-    if (e.ocl === 'completa' && e.horas >= RELOJ.lisis) out.push({ clave: 'reloj-lisis', nivel: 'sello', titulo: 'Lisis sin beneficio', texto: `${e.horas} h desde el dolor: pasadas 12 h, la trombólisis ya no da beneficio y no se aconseja.`, cita: TX('mc-fig-20-3', '43'), origen: 'ficha · p. 43', deshabilita: ['[data-vso-lisis]'] });
+    if (e.ocl === 'completa' && e.horas > RELOJ.lisis) out.push({ clave: 'reloj-lisis', nivel: 'sello', titulo: 'Lisis sin beneficio', texto: `${e.horas} h desde el dolor: pasadas 12 h, la trombólisis ya no da beneficio y no se aconseja.`, cita: TX('mc-fig-20-3', '43'), origen: 'ficha · p. 43', deshabilita: ['[data-vso-lisis]'] });
     else if (e.ocl === 'completa' && e.horas >= RELOJ.aviso) out.push({ clave: 'reloj-lisis', nivel: 'aviso', titulo: 'Se cierra la ventana:', texto: 'a las 12 h la lisis pierde su beneficio.', cita: TX('mc-fig-20-3', '43'), origen: 'ficha · p. 43; aviso a las 10 h: ilustrativo', bajo: '#vso-fila-reloj' });
-    if (e.lisis && e.ocl !== 'completa') S('tx-nstemi', 'Sin beneficio en el SCASEST', 'La trombólisis no da supervivencia sin ST elevado ni sustituye a la ICP: ICP urgente si hay inestabilidad; si no, a las 24-72 h.', TX('mc-scasest', '43'), 'ficha · p. 43', '[data-vso-lisis]');
+    if (e.lisis && e.ocl !== 'completa') S('tx-nstemi', e.ocl === 'intermitente' ? 'Sin beneficio sin ST elevado' : 'Sin beneficio en el SCASEST', 'La trombólisis no da supervivencia sin ST elevado ni sustituye a la ICP: ICP urgente si hay inestabilidad; si no, a las 24-72 h.', TX('mc-scasest', '43'), 'ficha · p. 43', '[data-vso-lisis]');
     if (lisisActiva(e)) {
         const h = hnf(e.peso);
         A('tx-sangrado', 'Sangrado:', `transfusión en ~10 %, grave en ~1 %; fibrinógeno <100 mg/dL: crio o concentrado, sin ácido tranexámico. Heparina al lado: 60 U/kg (máx. 4.000) = ${h.bolo} U y 12 U/kg/h (máx. 1.000) = ${h.inf} U/h; aPTT 1,5-2 (el libro imprime «60 Units», sin /kg).`, TX('mc-trombolisis', '45'), 'ficha · p. 45 y 49', '#vso-fila-pac');
@@ -94,13 +94,13 @@ export function tableroPlaca(e) {
     else if (e.ocl === 'intermitente') c.aptt = C('hs-cTn', '?', 'la fuente no lo dice', '');
     else if (e.horas < RELOJ.tropo) c.aptt = C('hs-cTn', 'aún no', 'se detecta desde 3 h', 'ficha · p. 41', '');
     else c.aptt = C('hs-cTn', '>p99', 'necrosis probable', 'ficha · p. 41', 'alarma');
-    c.fib = necrosis(e) ? C('A la 1 h', '>10 %', 'cambio: isquemia aguda', 'ficha · p. 41', 'alarma') : C('A la 1 h', '—', 'repetir la hs-cTn', t4 && e.ocl !== 'intermitente' ? 'ficha · p. 41' : '');
-    c.dd = C('Desde el dolor', `${e.horas} h`, e.horas >= RELOJ.lisis ? 'fuera de la lisis' : e.horas >= RELOJ.tropo ? 'la hs-cTn ya se ve' : 'temprano', RELOJ.origen(e.horas) === 'ilustrativo' ? 'ilustr.' : RELOJ.origen(e.horas), e.horas >= RELOJ.lisis ? 'aviso' : '', RELOJ.origen(e.horas) === 'ilustrativo');
+    c.fib = necrosis(e) ? C('A la 1 h', '>10 %', 'cambio: isquemia aguda', 'umbral de la ficha p. 41; el cambio, ilustrativo', 'alarma') : C('A la 1 h', '—', 'repetir la hs-cTn', t4 && e.ocl !== 'intermitente' ? 'ficha · p. 41' : '');
+    c.dd = C('Desde el dolor', `${e.horas} h`, e.horas > RELOJ.lisis ? 'fuera de la lisis' : e.horas >= RELOJ.tropo ? 'la hs-cTn ya se ve' : 'temprano', RELOJ.origen(e.horas) === 'ilustrativo' ? 'ilustr.' : RELOJ.origen(e.horas), e.horas > RELOJ.lisis ? 'aviso' : '', RELOJ.origen(e.horas) === 'ilustrativo');
     // NTG: que alivie no prueba la isquemia (p. 40); en el STEMI el mando se apaga: decide el ECG
     c.esq = C('NTG', e.ocl === 'completa' && t4 ? 'no cuenta' : e.ntg ? 'alivia' : '—', e.ocl === 'completa' && t4 ? 'decide el ECG' : 'no prueba isquemia', 'ficha · p. 40', e.ntg ? 'aviso' : '');
     if (!t4) c.amenaza = C('Lisis', '—', 'aún sin trombo', '');
     else if (e.ocl !== 'completa') c.amenaza = C('Lisis', 'sin beneficio', 'en el SCASEST', 'ficha · p. 43', 'aviso');
-    else if (e.horas >= RELOJ.lisis) c.amenaza = C('Lisis', 'sin beneficio', '>12 h', 'ficha · p. 43', 'alarma');
+    else if (e.horas > RELOJ.lisis) c.amenaza = C('Lisis', 'sin beneficio', '>12 h', 'ficha · p. 43', 'alarma');
     else c.amenaza = C('Lisis', 'aún sirve', 'más cuanto antes', 'ficha · p. 43', 'bien');
     // 5b: los tres interruptores frenan el trombo (nunca lo disuelven, p. 47); 5c: la lisis y el fibrinógeno
     const n = frenos(e);
@@ -130,7 +130,7 @@ export function frasePlaca(e) {
     if (e.ocl !== 'intermitente') reloj = e.horas >= RELOJ.tropo
         ? ` A las ${e.horas} h, una hs-cTn por encima del p99 hace probable la necrosis; un cambio de más del 10 % a la hora, isquemia aguda.`
         : ` A las ${e.horas} h, la hs-cTn puede no verse aún: se detecta desde las 3 h.`;
-    if (e.ocl === 'completa' && e.horas >= RELOJ.lisis) return [`${base} Pasadas <span class="hl-rojo">12 h</span>, la trombólisis ya no da beneficio.`, `${FTX}#mc-fig-20-3 · p. 43`];
+    if (e.ocl === 'completa' && e.horas > RELOJ.lisis) return [`${base} Pasadas <span class="hl-rojo">12 h</span>, la trombólisis ya no da beneficio.`, `${FTX}#mc-fig-20-3 · p. 43`];
     return [base + reloj, `${FDX}#${reloj ? 'mc-troponina' : 'mc-sca-sindromes'} · ${reloj ? 'p. 40-41' : 'p. 40'}${RELOJ.origen(e.horas) === 'ilustrativo' ? ` · ${e.horas} h: ilustrativo` : ''}`];
 }
 
@@ -147,7 +147,7 @@ export const GUIA_PLACA = [
 const E4 = { lesion: 'placa', t: 4, ocl: 'completa', horas: 1 };
 export const GUIA_ANTIAG = [
     { t: 'La aspirina inhibe la producción de tromboxano: la inhibición es irreversible. Salva 1 vida por cada 42 tratados. La primera dosis (162-325 mg) se mastica, sin tragar; si no se puede por boca, va por el recto.', estado: { ...E4, asa: true }, lupa: 'placa', resalta: '#vso-pl-plaq-asa', cita: TX('mc-tabla-20-4', '47') },
-    { t: 'Los P2Y12 (clopidogrel, ticagrelor, prasugrel) bloquean el receptor de la plaqueta por el que el ADP la agrega. Se añaden a la aspirina en todo SCA, y la primera dosis va antes de la ICP. Un solo P2Y12 a la vez.', estado: { ...E4, asa: true, p2y: 'ticagrelor' }, lupa: 'placa', resalta: '#vso-pl-plaq-p2y', cita: TX('mc-tabla-20-4', '48') },
+    { t: 'Los P2Y12 (clopidogrel, ticagrelor, prasugrel) bloquean el receptor de la plaqueta por el que el ADP la agrega. Se añaden a la aspirina en todo SCA, y la primera dosis va antes de la ICP.', estado: { ...E4, asa: true, p2y: 'ticagrelor' }, lupa: 'placa', resalta: '#vso-pl-plaq-p2y', cita: TX('mc-tabla-20-4', '48') },
     { t: 'Los anti-IIb/IIIa (eptifibatida, tirofibán) impiden que el fibrinógeno haga puentes entre plaquetas: son los antiagregantes más potentes. Solo en pacientes de alto riesgo que van a ICP urgente.', estado: { ...E4, asa: true, p2y: 'ticagrelor', iib: 'eptifibatida' }, lupa: 'placa', resalta: '#vso-pl-plaq-iib', cita: TX('mc-tabla-20-4', '48') },
     { t: 'Con los tres interruptores, el trombo deja de crecer, pero no desaparece: los antiagregantes evitan que crezca; no lo disuelven.', estado: { ...E4, asa: true, p2y: 'ticagrelor', iib: 'eptifibatida' }, lupa: 'placa', resalta: '#vso-pl-trombo', cita: TX('mc-tabla-20-4', '47') },
     { t: 'Cada uno tiene su contraindicación: ticagrelor con hemorragia intracraneal previa; prasugrel con ictus o AIT reciente; la aspirina con alergia (entonces, clopidogrel). Prueba los tres chips del paciente en la pestaña «Tratar».', estado: { ...E4, asa: true, p2y: 'ticagrelor', hic: true }, lupa: 'placa', resalta: '#vso-pl-plaq-p2y', cita: TX('mc-tabla-20-4', '48') },

@@ -588,7 +588,7 @@ export function pruebasVaso() {
     for (const ocl of ['intermitente', 'parcial', 'completa']) for (const horas of [0, 3, 12, 24]) {
         const e = estadoDe({ lesion: 'placa', t: 4, ocl, horas }), T = tableroDe(e), sello = topesReloj(e).some(x => x.nivel === 'sello');
         const tropo = ocl !== 'intermitente' && horas >= 3 ? '>p99' : ocl === 'intermitente' ? '?' : 'aún no';
-        const ok = T.aptt.v === tropo && sello === (ocl === 'completa' && horas >= 12) && T.inr.v === (ocl === 'completa' ? 'sí' : 'no') && T.dd.v === `${horas} h`;
+        const ok = T.aptt.v === tropo && sello === (ocl === 'completa' && horas > 12) && T.inr.v === (ocl === 'completa' ? 'sí' : 'no') && T.dd.v === `${horas} h`;
         if (!ok) r.todoCoincide = false;
         r.reloj.push({ ocl, horas, tropo: T.aptt.v, ecg: T.inr.v, sello, ok });
     }

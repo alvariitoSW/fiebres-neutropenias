@@ -37,6 +37,6 @@ export const ESTADO_DISECCION = { tit: 'Disección aórtica: bajar la PA sin ciz
   guia: [
     { t: 'Joaquín llega con la PA alta y dolor intenso. En la disección tipo A, la sangre abre una luz falsa en la pared de la aorta (p. 50).', s: ['[data-fila="pa"]'], c: CITAS_DISEC.fisio },
     { t: (R) => `La regla: la PA baja (${R.pas}/${R.pad} ahora) pero sin taquicardia ni más gasto cardíaco (FC ${R.fc}, IC ${c1(R.ic)}), porque ambos aumentan la cizalla que propaga la disección.`, s: ['[data-fila="fc"]', '[data-fila="ic"]'], c: CITAS_DISEC.manejo },
-    { t: 'Por eso el primero es un betabloqueante, y el esmolol por titularse deprisa. El nicardipino o el nitroprusiato solo valen combinados con él.', s: ['#shv-dock-panel'], c: CITAS_DISEC.tabla },
+    { t: 'Por eso el primero es un betabloqueante, y el esmolol por titularse deprisa. El nicardipino o el nitroprusiato solo valen combinados con él. (En el modelo, con el vasodilatador solo la PAD apenas baja: la diástole se acorta con la taquicardia.)', s: ['#shv-dock-panel'], c: CITAS_DISEC.tabla },
     { t: (R) => `Objetivo: PAS de 120, aunque hasta 90 suele tolerarse. Ahora ${R.pas}. Con el dolor tratado con opioides desde el principio, el simpático no vuelve a subir FC, gasto y PA.`, s: ['[data-fila="pa"]'], c: CITAS_DISEC.objetivos },
   ] };

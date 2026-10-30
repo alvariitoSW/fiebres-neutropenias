@@ -9,6 +9,8 @@ const p = n => pag(n, `pág. ${n}`);
 const LA = 'docs/libro-azul-seccion-i-cardiovascular-parte2.pdf';
 const la = n => `<a class="biblio-link" href="${LA}#page=${n}" target="_blank" rel="noopener">Libro Azul pág. ${n}</a>`;
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="cardiologia" data-view="merinoCardiologia" data-panel="panel-merino-cardio-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const ESC = 'docs/esc-2023-sca-parte1.pdf';
+const esc = n => `<a class="biblio-link" href="${ESC}#page=${n}" target="_blank" rel="noopener">ESC 2023 SCA, PDF pág. ${n}</a>`;
 const DED = '<i>Deducción; la fuente no lo dice.</i>';
 const D = 'mc-diseccion-aortica';
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
@@ -23,19 +25,19 @@ export const MAYEUTICA_DISECCION = {
       { id: 'dis-g1', corto: 'SCA o disección', tipo: 'test', fuente: 'mc-diseccion-claves · mc-diseccion-fisio',
         enunciado: 'Un paciente con dolor torácico intenso tiene el ECG con cambios isquémicos. Antes de leer la ficha: ¿cómo puede una disección de la aorta ascendente producir un cuadro que «incluye» un SCA?',
         opciones: [
-          { t: 'Al propagarse hacia atrás, el desgarro puede ocluir una coronaria, abrir la válvula aórtica o llenar el pericardio', ok: true },
-          { t: 'El desgarro de la íntima forma un trombo sobre la pared aórtica y este se desprende hacia la coronaria', porque: `Marino no describe una embolia: la disección que se propaga hacia atrás ocluye la coronaria desde la pared (${p(50)}). Con el reflejo de «trombo coronario» darías antitrombóticos a un paciente cuya aorta se está abriendo (${DED}).` },
+          { t: 'Al propagarse hacia atrás, el desgarro puede ocluir una coronaria, dar insuficiencia aórtica o llenar el pericardio', ok: true },
+          { t: 'El desgarro de la íntima forma un trombo sobre la pared aórtica y este se desprende hacia la coronaria', porque: `Marino no describe una embolia: la disección que se propaga hacia atrás ocluye la coronaria desde la pared (${p(50)}). Con ese reflejo tratarías un SCA sin haber descartado la disección, que la guía ESC manda excluir con angio-TC cuando el cuadro la hace posible (${esc(23)}).` },
           { t: 'No puede: el dolor de la disección es siempre en la espalda y el del SCA es retroesternal', porque: `La disección de la ascendente da dolor subesternal; el de la espalda es el de la descendente (${p(50)}). Con esa regla perderías la disección, que se pasa por alto en 1 de cada 3 casos (${p(50)}).` }],
         explicacion: `En la disección tipo A, la propagación <span class="hl-rojo">retrógrada</span> puede causar <span class="hl-azul">insuficiencia aórtica, oclusión coronaria y taponamiento pericárdico</span>; la presentación «puede simular o incluir un SCA» (${p(50)}).` + enFicha(D, 'mc-diseccion-fisio') },
       { id: 'dis-g2', corto: 'la FC con nicardipino solo', tipo: 'test', fuente: 'mc-diseccion-manejo · mc-tabla-20-5', modeloVivo: sv('diseccion', '🫀 Nicardipino solo en Joaquín: mira la PA y la frecuencia'),
         origen: 'ficha para el aviso; el barorreflejo, de Marino cap. 18 y del Libro Azul',
         enunciado: 'Predice, y luego lo compruebas en el modelo: a Joaquín, hipertenso, le das solo nicardipino y la presión baja. ¿Qué hace su frecuencia cardíaca?',
         opciones: [
-          { t: 'Baja: con menos presión el corazón trabaja menos y se enlentece por descarga', porque: `Es lo contrario: los barorreceptores notan la caída y activan el simpático, con efecto sobre la frecuencia (${p(5)}, ${la(51)}). Si esperas bradicardia darás el vasodilatador solo y la cizalla aumentará (${p(52)}).` },
-          { t: 'No cambia: el nicardipino actúa en el vaso, no en el corazón', porque: `Actúa en el vaso, pero la bajada de presión dispara el reflejo simpático (${p(5)}); por eso Marino avisa de que la bajada no debe acompañarse de taquicardia (${p(52)}).` },
+          { t: 'Baja: con menos presión el corazón trabaja menos y se enlentece por descarga', porque: `Es lo contrario: los barorreceptores notan la caída y activan el simpático, con efecto sobre la frecuencia (${la(51)}). Si esperas bradicardia darás el vasodilatador solo y la cizalla aumentará (${p(52)}).` },
+          { t: 'No cambia: el nicardipino actúa en el vaso, no en el corazón', porque: `Actúa en el vaso, pero la bajada de presión dispara el reflejo simpático (${la(51)}); por eso Marino avisa de que la bajada no debe acompañarse de taquicardia (${p(52)}).` },
           { t: 'Sube: la bajada de presión activa el reflejo simpático sobre el corazón', ok: true }],
-        explicacion: `Cuando la presión cae, los barorreceptores activan el simpático (efecto inotrópico y cronotrópico positivo, ${p(5)}; ${la(51)}). En la disección es justo lo que <span class="hl-rojo">no puede pasar</span>: la bajada de presión <b>no debe acompañarse de taquicardia ni de más gasto</b> (${p(52)}).`,
-        nota: `<b>En el modelo (ilustrativo):</b> Joaquín parte de 167/96, FC 93 e IC 2,8; con nicardipino 7,5 mg/h solo, 133/94, FC 127 e IC 3,3 y el sello «Cizalla ↑». <b>La fuente no lo dice:</b> cuánto sube la frecuencia; Marino da el aviso, no la cifra.` + enFicha(D, 'mc-diseccion-manejo') },
+        explicacion: `Cuando la presión cae, los barorreceptores activan el simpático (efecto inotrópico y cronotrópico positivo, ${la(51)}). En la disección es justo lo que <span class="hl-rojo">no puede pasar</span>: la bajada de presión <b>no debe acompañarse de taquicardia ni de más gasto</b> (${p(52)}).`,
+        nota: `<b>En el modelo (ilustrativo):</b> Joaquín parte de 167/96, FC 93 e IC 2,8; con nicardipino 10 mg/h solo, 133/94, FC 127 e IC 3,3 y el sello «Cizalla ↑». <b>La fuente no lo dice:</b> cuánto sube la frecuencia; Marino da el aviso, no la cifra.` + enFicha(D, 'mc-diseccion-manejo') },
       { id: 'dis-g3', corto: 'por qué cizalla', tipo: 'test', fuente: 'mc-diseccion-manejo',
         enunciado: 'Un compañero dice: «Si la PAS ya está en 120, qué más da que la frecuencia esté en 120 también». ¿Por qué empeora la disección con la taquicardia y el gasto altos?',
         opciones: [
@@ -110,7 +112,7 @@ export const MAYEUTICA_DISECCION = {
           { t: 'Sí: manda la de la disección y en el SCA con PAS <120 se da igual el betabloqueo', porque: `En el SCA, con PAS <120 mmHg el betabloqueo aumenta el riesgo de shock cardiogénico (${p(47)}); darlo igual lo provocaría.` },
           { t: 'No: son enfermedades distintas, cada una con su razón (shock en el SCA, cizalla en la disección)', ok: true }],
         explicacion: `<span class="hl-azul">SCA:</span> el betabloqueo reduce la demanda de O₂, pero con PAS <120 aumenta el riesgo de shock cardiogénico (${p(46)}-${p(47)}). <span class="hl-azul">Disección:</span> el betabloqueo frena la cizalla, la PAS objetivo es 120 y se tolera hasta 90 (${p(52)}).`,
-        nota: `<b>Las dos páginas son de Marino y no se eligen entre sí.</b> <b>La fuente no lo dice:</b> cómo se maneja una disección que llega con PAS <120 mmHg; el texto solo fija el objetivo.` + enFicha(D, 'mc-diseccion-objetivos') },
+        nota: `<b>Las dos páginas son de Marino y no se eligen entre sí.</b> Que no se contradigan es una deducción (${DED}): Marino no compara las dos reglas. <b>La fuente no lo dice:</b> cómo se maneja una disección que llega con PAS <120 mmHg; el texto solo fija el objetivo.` + enFicha(D, 'mc-diseccion-objetivos') },
     ],
     profundizar: [
       { id: 'mc-tabla-20-5', titulo: 'Tabla 20.5: las cinco filas completas (incluido el metoprolol)' },
@@ -126,9 +128,9 @@ export const MAYEUTICA_DISECCION = {
               opciones: [
                 { t: 'Sí: con descenso del ST y dolor torácico se trata como SCASEST hasta que se demuestre otra cosa', porque: `La presentación de la disección puede simular o incluir un SCA y el ECG isquémico aparece en el 15 % (${p(50)}); tratarlo como SCA sin descartarla sería pasarla por alto, algo que ocurre en 1 de cada 3 casos (${p(50)}).` },
                 { t: 'No: antes hay que descartar la disección; el ECG isquémico no la excluye', ok: true },
-                { t: 'Solo la aspirina y la heparina; el P2Y12 espera a la angiografía', porque: `Mantiene un antitrombótico sin haber descartado una aorta que se está abriendo; la imagen es lo que decide (${p(50)}). Los efectos del antitrombótico en la disección no los trata Marino (${DED}).` }],
-              explicacion: `La disección <span class="hl-rojo">puede simular o incluir un SCA</span> y el ECG tiene cambios isquémicos en el 15 % de los casos: antes de antitrombóticos hay que pensar en ella (${p(50)}).`,
-              nota: `<b>La fuente no lo dice:</b> por qué los antitrombóticos son peligrosos en la disección; es una cautela clínica sin cita en este capítulo. Las cifras de PA de Anselmo son del paciente del caso.` + enFicha(D, 'mc-diseccion-claves') } },
+                { t: 'Solo la aspirina y la heparina; el P2Y12 espera a la angiografía', porque: `Mantiene un antitrombótico sin haber descartado una aorta que se está abriendo; la imagen es lo que decide (${p(50)}). La imagen decide antes de tratar como SCA (${esc(23)}); Marino no dice qué le hace un antitrombótico a la disección.` }],
+              explicacion: `La disección <span class="hl-rojo">puede simular o incluir un SCA</span> y el ECG tiene cambios isquémicos en el 15 % de los casos: antes de tratarlo como SCA hay que descartarla (${p(50)}; ${esc(23)}).`,
+              nota: `<b>La fuente no lo dice:</b> que los antitrombóticos agraven la disección. Se buscó en Marino cap. 20, el Libro Azul cardiovascular (partes 1 y 2) y la guía ESC 2023 de SCA (partes 1 y 2): solo dicen que la disección se descarta con angio-TC y que se confunde con un SCA; por eso la respuesta se apoya en eso. Las cifras de PA de Anselmo son del paciente del caso.` + enFicha(D, 'mc-diseccion-claves') } },
           { momento: '22:25', datos: { 'Rx de tórax': 'sin ensanchamiento mediastínico', Pulsos: 'iguales en los dos brazos', ECG: 'sin más cambios' }, nuevo: ['Rx de tórax', 'Pulsos'],
             pregunta: { id: 'dis-c2', tipo: 'test', fuente: 'mc-diseccion-clinica', origen: 'ficha: los porcentajes; el paciente, inventado',
               enunciado: 'La radiografía es normal y los pulsos son iguales. ¿Descartas la disección?',
@@ -157,7 +159,7 @@ export const MAYEUTICA_DISECCION = {
               nota: `<b>La fuente no lo dice:</b> qué opioide ni en qué dosis; solo habla de opioides IV (${p(52)}).` + enFicha(D, 'mc-diseccion-objetivos') } },
           { momento: '23:10 · esmolol', datos: { Peso: '90 kg', 'PA': '186/104', FC: '98', Pauta: 'esmolol de la Tabla 20.5' }, nuevo: ['Peso', 'Pauta'],
             pregunta: { id: 'dis-c5', tipo: 'test', fuente: 'mc-tabla-20-5 · mc-diseccion-objetivos', modeloVivo: sv('diseccion', '🫀 Esmolol y luego nicardipino en Joaquín'),
-              origen: 'ficha: la pauta; Anselmo es el paciente del caso; las cifras del monitor son de Joaquín en el modelo (ilustrativo)',
+              origen: 'ficha: la pauta; los productos por peso (45 mg, 4,5 mg/min, 18 mg/min) son aritmética sobre la Tabla 20.5, no cifras de la fuente; Anselmo es el paciente del caso; las cifras del monitor son de Joaquín en el modelo (ilustrativo)',
               enunciado: 'Anselmo pesa 90 kg. ¿Qué bolo de esmolol y qué velocidad de infusión inicial le pones?',
               opciones: [
                 { t: 'Bolo de 45 mg y 4,5 mg/min', ok: true },
@@ -181,12 +183,12 @@ export const MAYEUTICA_DISECCION = {
                 `<span class="hl-rojo">Oclusión de una coronaria</span> (isquemia).`,
                 `<span class="hl-rojo">Taponamiento pericárdico</span> (hipotensión con PVC alta).`],
               explicacion: `La propagación retrógrada puede dar <b>insuficiencia aórtica, oclusión coronaria y taponamiento</b> (${p(50)}). El dolor que vuelve suele anunciar la rotura; sin cirugía mueren cerca del 60 % y la mortalidad sube 1-2 % por hora; la reparación la deja en torno al 10 % (${p(50)}, ${p(52)}).`,
-              nota: `<b>La fuente no lo dice:</b> qué hallazgo corresponde a cada complicación; el soplo y la PVC son fisiología general (${DED}). En el modelo, Joaquín una hora después ilustra el taponamiento.` + enFicha(D, 'mc-diseccion-fisio') } },
+              nota: `<b>La fuente no lo dice:</b> qué hallazgo corresponde a cada complicación; el soplo y la PVC son fisiología general (${DED}). En el modelo, Joaquín una hora después ilustra el taponamiento. <b>Nota de fidelidad:</b> en la p. 52 la cifra del 10 % tras la cirugía cita la referencia (30), distinta de la (39) de la frase anterior; se copia tal cual.` + enFicha(D, 'mc-diseccion-fisio') } },
         ],
         lleva: [
           'Nunca un vasodilatador solo: primero el freno (esmolol) y después el nicardipino hasta una PAS de 120.' + enFicha(D, 'mc-diseccion-manejo'),
-          'Ni la Rx, ni el ECG, ni los pulsos normales descartan una disección: hace falta imagen.',
-          'El dolor que se calla no cura: puede ceder horas o días y su vuelta anuncia la rotura.'],
+          'Ni la Rx, ni el ECG, ni los pulsos normales descartan una disección: hace falta imagen.' + enFicha(D, 'mc-diseccion-imagen'),
+          'El dolor que se calla no cura: puede ceder horas o días y su vuelta anuncia la rotura.' + enFicha(D, 'mc-diseccion-clinica')],
         volver: { nombre: 'Manejo de la disección', ancla: 'mc-diseccion-manejo', modelo: sv('diseccion', '🫀 Esmolol y nicardipino en el monitor') } },
     ],
   },
