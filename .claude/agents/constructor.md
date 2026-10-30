@@ -47,6 +47,13 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
 - [ ] **Topes** (REGLAS §1.14): cada mando con tope y origen; aviso al acercarse; al pasarse, sello con la consecuencia
   clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
   Si el modelo vivo es nuevo y tiene sello propio, su ajuste va en `autonomo/jueces-topes.mjs`, no en un arnés suelto.
+- [ ] **Mando nuevo en un modelo con muchos pacientes** (REGLAS §4.14): solo en los pacientes que usa la ficha, salvo
+  que tu prueba lleve sus topes en **todos** los pacientes.
+- [ ] **Cifras de los casos** (REGLAS §4.14): las copias del monitor de la app a 390 px (p. ej.
+  `autonomo/bloques/b3/herramientas/g4-app-cifras.mjs`), nunca del programa del motor; tus herramientas de cifras
+  importan la función de lectura de la app.
+- [ ] **Pieza de motor** (REGLAS §4.14): antes de su interfaz, un script de ≤10 pasos que compruebe que la cifra va en
+  la dirección de la fuente; si no va, paras y lo dices: el encargo pasa a ser el motor.
 - [ ] **Cifra mala del motor** (REGLAS §1.14): nunca la tapes con un ajuste del dibujo; para y dilo en tu entrega
   (la cifra y el estado que la da).
 - [ ] **Carpeta aparte** (REGLAS §4.6): si hay otro constructor a la vez, trabajas en tu propio `git worktree`, y lo

@@ -1,16 +1,17 @@
 // J1 «Doppler de paciente posible» y J2 «sin recorte»: cada forma en cada punto de su mando debe ser un paciente
 // que existe (bandas con libro y página en bandas-paciente.mjs) y caber en el dibujo (LIMITES de corazon-geo.mjs).
-// PENDIENTES: lo que hoy falla y arregla eco-calibra-a (cada arreglo quita sus claves; al cerrar, vacío).
+// PENDIENTES: lo que hoy falla y ya tiene tarea que lo arregla en el motor (cada arreglo quita sus claves).
 // Una prueba de PENDIENTES que ya pasa lo dice: hay que quitarla de la lista.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { medirForma } from './medir-forma.mjs';
-import { BANDAS, HUECO_MINIMOS, UNIDADES } from './bandas-paciente.mjs';
+import { BANDAS, HUECO_MINIMOS, UNIDADES, RANGOS_GUIA } from './bandas-paciente.mjs';
 
 const PENDIENTES = new Set([
-  // vacío: todo lo que fallaba al empezar eco-calibra-a ya pasa (sesión 2). Lo que se añada aquí debe salir antes de ir a main.
+  // E/e′ 1,8 con fusión E-A: fuera de todos los rangos de la guía (regla del 30/10/2026). Lo arregla mv-eco (TEP).
+  'J1:tep:def',
 ]);
-const todo = { todo: 'eco-calibra-a' };
+const todo = { todo: 'mv-eco' };
 
 const punto = (clave) => { const [k, p] = clave.split(':'); return [k, p === undefined ? undefined : p === 'def' ? 'def' : Number(p)]; };
 const dentro = (v, b) => Number.isFinite(v) && (b.min_excl ? v > b.min : v >= b.min) && (b.max_excl ? v < b.max : v <= b.max);
@@ -26,7 +27,10 @@ function fallosJ1(clave) {
     if (b.sinFusion && r.fusion) continue;
     const v = r[b.medida], ok = (b.min_excl || b.max_excl ? dentro(v, b) : (Number.isFinite(v) && v >= b.min && v <= b.max));
     const txt = `${b.medida} ${fmt(v)} ${UNIDADES[b.medida] ?? ''} fuera de ${banda(b)} (${b.fuente}${b.nota ? '; ' + b.nota : ''})`;
-    if (!ok) (b.diagnostico ? diagn : fallos).push(txt);
+    const g = RANGOS_GUIA[b.medida];
+    const fueraGuia = b.diagnostico && g && !(Number.isFinite(v) && v >= g.min && v <= g.max);
+    if (fueraGuia) fallos.push(`${b.medida} ${fmt(v)} fuera de todos los rangos de la guía (≥${g.min}; ${g.fuente}); la celda es diagnóstico, pero esta cifra no es de paciente`);
+    else if (!ok) (b.diagnostico ? diagn : fallos).push(txt);
   }
   return { fallos, diagn };
 }

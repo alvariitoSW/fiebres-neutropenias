@@ -343,6 +343,30 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       la web del editor o de la sociedad) y anota dónde buscó. Solo se pide si es de pago o la red no lo deja bajar, y
       entonces con el enlace exacto para descargarlo con un toque.
 
+14. **Reglas y ahorros aprobados el 30/10/2026** (tarea `reglas-30-10`; el usuario: «aprobadas las 4 reglas nuevas»;
+    «los puntos 4 y 5 de propuestas las acepto todas»):
+    - **Webs ajenas**: antes de la ingeniería inversa de una web, se prueba que se abre la página **y el dominio de cada
+      `<iframe>`** que carga (el simulador suele vivir en otro dominio); si alguno no se abre, se pide antes de lanzar
+      al agente (en `eco-reforma` costó un intento bloqueado y una parada más).
+    - **Juez J1 de la eco**: una celda `diagnostico` (se imprime, no falla) **sí falla** si su cifra queda fuera de
+      **todos** los rangos de la guía (`RANGOS_GUIA` de `js/modules/eco/pruebas/bandas-paciente.mjs`; E/e′ 1,8 en el
+      TEP pasaba). Lo que ya se sabe roto va a `PENDIENTES` con la tarea que lo arregla.
+    - **Versión**: `node autonomo/version.mjs` (y `--comprobar`, que pasan los jueces) falla si queda una marca de
+      conflicto de git (`<<<<<<<`, `>>>>>>>`) en cualquier archivo; prueba `autonomo/pruebas/version-conflicto-trampa.mjs`.
+    - **Mando nuevo en un modelo con muchos pacientes**: solo en los pacientes que usa la ficha, salvo que sus topes se
+      prueben en **todos** (§1.14: cada paciente con el mando a tope sigue siendo un paciente posible).
+    - **Cifras de los casos (ahorro)**: se leen en el monitor de la app a 390 px (p. ej.
+      `autonomo/bloques/b3/herramientas/g4-app-cifras.mjs`), nunca con el programa del motor; toda herramienta de
+      cifras importa la función de lectura de la propia app (en `b3-paso4` el programa daba PCP 30,8 y la app 32).
+    - **Un estado nuevo de un modelo vivo por encargo (ahorro)**: si pide calibrar el motor, presupuesto «estado nuevo
+      con barrido», sonnet 30 pasos / 0,7 M (tablero), y la prueba larga solo al final del último estado.
+    - **Pieza de motor (ahorro)**: antes de encargar su interfaz, un constructor sonnet de ≤10 pasos comprueba con un
+      script que la cifra va en la dirección de la fuente (sube o baja); si no, el encargo es el motor, no la interfaz.
+    - **Presupuestar por lo que falta en el código (ahorro)**: la revisión del encargo (§4.9) pega el `grep` de cada
+      estado, lupa y escenario; una pieza cuesta como **estado** (0,5 M) solo si su lupa o su tipo de paciente ya
+      existen; si no, como **modelo** (1,2 M). El director mide antes las cifras del motor con un programa corto y da
+      al constructor el objetivo que el motor puede dar.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los

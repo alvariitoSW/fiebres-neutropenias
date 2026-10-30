@@ -23,7 +23,7 @@
 //   1. Imágenes: todo <img src> de los .html apunta a un archivo que existe.
 //   2. Quiz: ningún tema sin preguntas; ninguna entidad &lt; / &gt; en los bancos; «correcta» dentro de rango.
 //   3. Caché: si cambió una pieza (.css, módulo o fragmento de js/) respecto a origin/main, la versión ?v= también
-//      cambió; y el mapa de versiones de index.html está al día (autonomo/version.mjs --comprobar).
+//      cambió; y el mapa de versiones de index.html está al día (autonomo/version.mjs --comprobar), sin marcas de conflicto de git.
 //   4. Navegador (390 y 360 px): sin errores de consola ni de página, sin ids repetidos, sin desbordamiento; y
 //      cada ficha/capítulo pedido abre de verdad, sin desbordar, con sus imágenes cargadas; y en cada ficha se
 //      abre también la vista Visual de cada bloque (sin desbordar y sin errores); en las fichas con Estudiar

@@ -12,9 +12,12 @@
 //   node autonomo/version.mjs 20261020-2    pone esa versión en todo y regenera el mapa
 //   node autonomo/version.mjs               regenera el mapa con la versión que ya tiene index.html
 //   node autonomo/version.mjs --comprobar   no escribe: falla (código 1) si el mapa no está al día
+// Las dos formas fallan si queda alguna marca de conflicto de git (<<<<<<< o >>>>>>>) en un archivo del repositorio
+// (regla aprobada por el usuario el 30/10/2026: en movil-existente el tablero subió con marcas de una fusión).
 // Los jueces (autonomo/jueces.mjs) llaman a --comprobar.
 import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
+import { execFileSync } from 'node:child_process';
 
 const RAIZ = new URL('..', import.meta.url).pathname;
 const INDEX = join(RAIZ, 'index.html');
@@ -41,6 +44,17 @@ export function versionDe(html) {
     return (html.match(/js\/main\.js\?v=([\w-]+)/) || [])[1];
 }
 
+// Archivos con marcas de conflicto, «archivo:línea»; [] si no hay. git grep mira lo seguido y lo nuevo sin ignorar.
+export function marcasDeConflicto() {
+    try {
+        const salida = execFileSync('git', ['grep', '-n', '-I', '--untracked', '-E', '^(<{7}|>{7})( |$)'], { cwd: RAIZ, encoding: 'utf8' });
+        return salida.split('\n').filter(Boolean).map(l => l.split(':').slice(0, 2).join(':'));
+    } catch (e) {
+        if (e.status === 1) return [];
+        throw e;
+    }
+}
+
 export function comprobar() {
     const html = readFileSync(INDEX, 'utf8');
     const v = versionDe(html);
@@ -53,6 +67,8 @@ export function comprobar() {
     else if (html.slice(i, f + FIN.length) !== mapa(v)) fallos.push('el mapa de versiones no está al día (falta o sobra algún módulo): node autonomo/version.mjs');
     const primerModulo = html.search(/<script[^>]*type="module"/);
     if (i >= 0 && primerModulo >= 0 && i > primerModulo) fallos.push('el mapa de versiones debe ir antes del primer <script type="module">');
+    const marcas = marcasDeConflicto();
+    if (marcas.length) fallos.push(`marcas de conflicto de git sin resolver en: ${marcas.join(', ')}`);
     return { version: v, fallos };
 }
 
@@ -63,6 +79,8 @@ if (process.argv[1] && import.meta.url.endsWith(process.argv[1].split('/').pop()
         if (fallos.length) { console.error(fallos.map(f => '❌ ' + f).join('\n')); process.exit(1); }
         console.log(`✅ Versión ${version} en todas las piezas`);
     } else {
+        const marcas = marcasDeConflicto();
+        if (marcas.length) { console.error(`❌ Marcas de conflicto de git sin resolver en: ${marcas.join(', ')}. Resuélvelas antes de poner la versión.`); process.exit(1); }
         let html = readFileSync(INDEX, 'utf8');
         const v = arg || versionDe(html);
         if (!/^\d{8}(-\d+)?$/.test(v)) { console.error('Versión no válida (AAAAMMDD o AAAAMMDD-N):', v); process.exit(1); }

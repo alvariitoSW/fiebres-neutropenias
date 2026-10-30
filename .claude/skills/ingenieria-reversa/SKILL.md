@@ -21,7 +21,10 @@ Radiology Assistant y RitmoLab (`autonomo/ideas/ingenieria-inversa/`, partes del
    léelo primero y estudia solo lo que falte o lo que se pide ahora (así se hizo la 2.ª pasada de NavRad).
 3. **Si es una web a la que volvemos** (vigía tecnológico del Radar): compara antes las **piezas** con las del informe
    anterior (lista de scripts y datos, su versión o su `?v=`, su peso). Estudia solo lo que cambió.
-4. Carpeta de trabajo: `/tmp/plan-socialista/rea-<clave>/` (notas y capturas; nada de esto va al repositorio).
+4. **Prueba antes que se abre la web y cada `<iframe>`** (REGLAS §4.14, aprobado el 30/10/2026): una llamada que
+   carga la página y lista los dominios de sus `<iframe>`, y otra que abre cada uno. El simulador suele vivir en otro
+   dominio; si alguno no se abre, pídelo antes de lanzar al investigador (en `eco-reforma` costó un intento bloqueado).
+5. Carpeta de trabajo: `/tmp/plan-socialista/rea-<clave>/` (notas y capturas; nada de esto va al repositorio).
 
 ## 1. Presupuesto (regla de oro de leanrea: «cada paso cuesta más que lo que lees»)
 

@@ -446,3 +446,13 @@ escribe, y balance al cerrar bloque), Transportes (`/bitacora`: rumbo con el gas
 va a pasarse más de un 25 %. En `REGLAS.md` §4.10 y en las tres skills. El mismo día aprobó las 24 propuestas de regla y
 de ahorro pendientes (§4.11). Primera prueba: grupo 2 de `b3-paso4`, 29/10.
 
+
+## Reglas y ahorros del 30/10/2026 (`reglas-30-10`)
+
+El usuario aprobó el 30/10 cuatro reglas (de los partes de `eco-reforma` y `movil-existente`) y cuatro ahorros de
+Hacienda (de `b3-paso4`). Van en `REGLAS.md` §4.14 y en quien las aplica: `ingenieria-reversa` (probar el `<iframe>`),
+`plan-socialista` (resumen y presupuestos), `constructor` (mando nuevo, cifras del monitor, dirección del motor) y el
+tablero («Presupuestos vigentes»). Dos con prueba: J1 de la eco falla si una celda `diagnostico` queda fuera de
+`RANGOS_GUIA` (los suelos de Nagueh 2025 p.551: E/e′ ≥4, E/A ≥0,5); el TEP por defecto (E/e′ 1,8) queda en
+`PENDIENTES` para `mv-eco`. `version.mjs` falla con marcas de conflicto (`git grep`), con prueba trampa
+`autonomo/pruebas/version-conflicto-trampa.mjs`.
