@@ -8,9 +8,9 @@ const b = await chromium.launch(); const fallos = [];
 const caminos = { 'radio-tubo': ['n', 'ys', 'ys', 'yn', 'yyy', 'yyn'].slice(0), };
 // cada camino = lista de respuestas desde el inicio
 const RUTAS = {
-  'radio-tubo': [['n'], ['s', 'n'], ['s', 's', 's'], ['s', 's', 'n', 's'], ['s', 's', 'n', 'n']],
-  'radio-via': [['n'], ['s', 's'], ['s', 'n', 's'], ['s', 'n', 'n']],
-  'radio-sonda': [['n'], ['s', 'n'], ['s', 's', 'n'], ['s', 's', 's', 's'], ['s', 's', 's', 'n']],
+  'radio-tubo': [['n'], ['s', 's'], ['s', 'n', 'n'], ['s', 'n', 's', 's'], ['s', 'n', 's', 'n']],
+  'radio-via': [['n', 'n'], ['n', 's', 'n'], ['n', 's', 's'], ['s', 'n'], ['s', 's', 's'], ['s', 's', 'n']],
+  'radio-sonda': [['n'], ['s', 'n'], ['s', 's', 'n'], ['s', 's', 's']],
 };
 for (const w of [390, 360]) {
   const ctx = await b.newContext({ viewport: { width: w, height: 844 }, hasTouch: true, isMobile: true });

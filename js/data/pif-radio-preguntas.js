@@ -16,11 +16,11 @@ export const preguntasPifRadio = [
         opciones: [
             'Apoyada justo sobre la carina, para que quede bien fija',
             '3 a 5 cm por encima de la bifurcación traqueal',
-            '1-2 cm por encima de la aurícula derecha',
+            'A medio camino entre la carina y la cúpula diafragmática, para que no moleste',
             'Por debajo de la carina, en el bronquio principal derecho',
         ],
         correcta: 1,
-        explicacion: 'Con la cabeza neutra, la punta debe quedar 3 a 5 cm por encima de la bifurcación traqueal. Apoyada en la carina, un movimiento de 2 cm del cuello la mete en un bronquio. «1-2 cm por encima de la aurícula derecha» es el objetivo de una vía central, no de un tubo. Y en el bronquio derecho solo se ventila un pulmón. Origen: Marino, cap. 28, pág. 18 (ficha Vías artificiales, Merino Neumología).',
+        explicacion: 'Con la cabeza neutra, la punta debe quedar 3 a 5 cm por encima de la bifurcación traqueal. Apoyada en la carina, sin margen: con un desplazamiento de 2 cm del cuello (pág. 18), el riesgo es que pase al bronquio (inferencia). La ficha no da una posición tan baja: la carina es la referencia de la bifurcación, y por debajo de ella el tubo entra en un bronquio, donde solo se ventila un pulmón. Origen: Marino, cap. 28, pág. 18 (ficha Vías artificiales, Merino Neumología).',
     },
     {
         id: 'pifradio-q002', tema: 'pifradio-tubo',
@@ -28,11 +28,11 @@ export const preguntasPifRadio = [
         opciones: [
             'En el espacio T1-T2, donde acaba la tráquea cervical',
             'En el espacio T8-T9, a la altura de la cúpula derecha',
-            'No se puede localizar: hay que pedir una TC',
+            'En el espacio T6-T7, por debajo del hilio',
             'Al nivel del espacio T4-T5',
         ],
         correcta: 3,
-        explicacion: 'Si la bifurcación o carina no es visible, se localiza al nivel del espacio T4-T5 en una radiografía portátil. Contar en T1-T2 te haría creer que el tubo está bajo la carina cuando no lo está, y en T8-T9 que está muy alto. Pedir una TC por esto expone al paciente a un traslado innecesario. Origen: Marino, cap. 28, pág. 18.',
+        explicacion: 'Si la bifurcación o carina no es visible, se localiza al nivel del espacio T4-T5 en una radiografía portátil. Contar en T1-T2 te haría creer que el tubo está bajo la carina cuando no lo está, y en T8-T9 que está muy alto. En T6-T7 la verías demasiado baja y creerías que el tubo está alto cuando no lo está; los niveles son razonamiento propio, la fuente solo da T4-T5. Origen: Marino, cap. 28, pág. 18.',
     },
     {
         id: 'pifradio-q003', tema: 'pifradio-tubo',
@@ -60,7 +60,7 @@ export const preguntasPifRadio = [
     },
     {
         id: 'pifradio-q005', tema: 'pifradio-tubo',
-        enunciado: 'Para reducir el riesgo de que el tubo migre, ¿a cuántos centímetros de los dientes se recomienda mantener la punta como máximo?',
+        enunciado: 'Para reducir el riesgo de que el tubo migre, ¿a cuántos centímetros de los dientes se mantiene la punta para reducir el riesgo de migración?',
         opciones: [
             '23 cm en mujeres y 21 cm en hombres',
             '25 cm en ambos sexos',
@@ -77,11 +77,11 @@ export const preguntasPifRadio = [
         opciones: [
             'En el ventrículo derecho, para medir presiones',
             'En la cava superior, 1-2 cm por encima de la aurícula derecha',
-            'En la yugular, 5 cm por encima de la clavícula, para evitar arritmias',
+            '1-2 cm por debajo de la unión cava-aurícula, ya dentro de la aurícula',
             'En el bronquio principal derecho, siguiendo el trayecto del tubo',
         ],
         correcta: 1,
-        explicacion: 'Los catéteres yugulares y subclavios deben estar en la cava superior, con la punta 1-2 cm por encima de la aurícula derecha. En el ventrículo derecho la punta irritaría el miocardio, y en una yugular alta el catéter no cumpliría su función. Un catéter no va por la vía aérea. Origen: Marino, cap. 2, pág. 36 (ficha Tras el catéter central).',
+        explicacion: 'Los catéteres yugulares y subclavios deben estar en la cava superior, con la punta 1-2 cm por encima de la aurícula derecha. En el ventrículo derecho la punta irritaría el miocardio, y 1-2 cm por debajo de la unión cava-aurícula la punta ya no está en la cava (la ficha da el objetivo por encima de la aurícula). Un catéter no va por la vía aérea. Origen: Marino, cap. 2, pág. 36 (ficha Tras el catéter central).',
     },
     {
         id: 'pifradio-q007', tema: 'pifradio-via',
@@ -93,7 +93,7 @@ export const preguntasPifRadio = [
             'Porque la carina se ve igual en todos los pacientes y nunca cambia de altura',
         ],
         correcta: 0,
-        explicacion: 'La carina está justo encima de la unión entre la cava superior y la aurícula derecha; por eso una punta a su altura, o algo por encima, está en posición adecuada. Una punta por debajo no es «siempre correcta»: ya habría pasado a la aurícula. Origen: Marino, cap. 2, pág. 36.',
+        explicacion: 'La carina está justo encima de la unión entre la cava superior y la aurícula derecha; por eso una punta a su altura, o algo por encima, está en posición adecuada. La fuente solo da como adecuada la punta a la altura de la carina o algo por encima; no valora la punta por debajo, así que «siempre correcta» no se sostiene. Origen: Marino, cap. 2, pág. 36.',
     },
     {
         id: 'pifradio-q008', tema: 'pifradio-via',
@@ -105,7 +105,7 @@ export const preguntasPifRadio = [
             'Que la prueba es negativa y hay que repetirla',
         ],
         correcta: 2,
-        explicacion: 'Las microburbujas en la aurícula indican que el catéter está en el sistema venoso, y si aparecen en menos de 2 segundos, que la punta está en la cava superior. No indican una arteria (el eco la habría delatado de otro modo) ni obligan a retirarlo. Origen: Marino, cap. 2, pág. 37.',
+        explicacion: 'Las microburbujas en la aurícula indican que el catéter está en el sistema venoso, y si aparecen en menos de 2 segundos, que la punta está en la cava superior. La prueba confirma el sistema venoso, no una arteria, y la ficha no manda retirarlo. Origen: Marino, cap. 2, pág. 37.',
     },
     // ---- Sonda nasogástrica ----
     {
@@ -126,11 +126,11 @@ export const preguntasPifRadio = [
         opciones: [
             'Confirma la posición si se oye claro',
             'No la confirma: un chorro de aire en el pulmón también se oye en el epigastrio',
-            'Solo vale en pacientes intubados',
-            'Vale si además el aspirado es líquido',
+            'Solo vale si se repite dos veces y suena igual',
+            'Solo la descarta si no se oye nada',
         ],
         correcta: 1,
-        explicacion: 'La presencia del soplido no confirma la colocación en el estómago, porque el aire que sale en el pulmón también se oye en el epigastrio. Fiarte del soplido deja pasar sondas en el pulmón. Origen: Marino, cap. 49, pág. 27.',
+        explicacion: 'La presencia del soplido no confirma la colocación en el estómago, porque el aire que sale en el pulmón también se oye en el epigastrio. Repetirlo o fiarte de su ausencia no cambia eso (la ficha no valora la ausencia: es razonamiento propio); fiarte del soplido deja pasar sondas en el pulmón. Origen: Marino, cap. 49, pág. 27.',
     },
     {
         id: 'pifradio-q011', tema: 'pifradio-sonda',
@@ -147,19 +147,19 @@ export const preguntasPifRadio = [
     // ---- Caso ----
     {
         id: 'pifradio-q012', tema: 'pifradio-caso',
-        enunciado: 'Caso (1/3). Mujer de 64 años con neumonía grave, intubada y sedada en la UCI. Cabeza en posición neutra: la placa muestra la punta del tubo 4 cm por encima de la carina y los dos pulmones ventilados. ¿Cómo lo valoras?',
+        enunciado: 'Caso (1/4). Mujer de 64 años con neumonía grave, intubada y sedada en la UCI. Cabeza en posición neutra: la placa muestra la punta del tubo 4 cm por encima de la carina y los dos pulmones ventilados. ¿Cómo lo valoras?',
         opciones: [
             'Bien: está entre 3 y 5 cm por encima de la bifurcación',
             'Mal: la punta debería estar sobre la carina',
-            'Mal: con un tubo así hay que avanzarlo 4 cm',
-            'Bien, pero solo si está a menos de 25 cm de los dientes en una mujer',
+            'Mal: a 4 cm de la carina, la flexión del cuello la mete en el bronquio',
+            'Bien, pero solo si está a menos de 25 cm de los dientes',
         ],
         correcta: 0,
-        explicacion: 'La posición correcta es 3 a 5 cm por encima de la bifurcación, y la flexión o extensión del cuello desplaza unos 2 cm la punta. Avanzarlo 4 cm lo metería en un bronquio; el límite de profundidad que da la ficha es de 21 cm en mujeres. Origen: Marino, cap. 28, pág. 18.',
+        explicacion: 'La posición correcta es 3 a 5 cm por encima de la bifurcación, y la flexión o extensión del cuello desplaza unos 2 cm la punta. Una flexión desplaza unos 2 cm, así que desde 4 cm sobre la carina no llega al bronquio (inferencia); avanzarlo 4 cm lo dejaría en la carina, sin margen. La cifra que da la ficha para reducir el riesgo de migración es ≤21 cm de los dientes en mujeres. Origen: Marino, cap. 28, págs. 18 y 19.',
     },
     {
         id: 'pifradio-q013', tema: 'pifradio-caso',
-        enunciado: 'Caso (2/3). Al día siguiente le colocas una vía central yugular derecha. En la placa, el catéter baja recto por el mediastino y su punta queda a la altura de la carina. ¿Qué concluyes?',
+        enunciado: 'Caso (2/4). Al día siguiente le colocas una vía central yugular derecha. En la placa, el catéter baja recto por el mediastino y su punta queda a la altura de la carina. ¿Qué concluyes?',
         opciones: [
             'Está mal: la punta tiene que llegar a la aurícula derecha para medir la presión',
             'Hay que retirarlo 5 cm porque está sobre la carina',
@@ -171,7 +171,7 @@ export const preguntasPifRadio = [
     },
     {
         id: 'pifradio-q014', tema: 'pifradio-caso',
-        enunciado: 'Caso (3/3). Para nutrirla le pasan una sonda fina con fiador. La placa muestra la sonda desviada a la derecha a la altura de la carina. El residente propone: «Insuflo aire y, si oigo el soplido en el epigastrio, empiezo a alimentar». ¿Qué le contestas?',
+        enunciado: 'Caso (3/4). Para nutrirla le pasan una sonda fina con fiador. La placa muestra la sonda desviada a la derecha a la altura de la carina. El residente propone: «Insuflo aire y, si oigo el soplido en el epigastrio, empiezo a alimentar». ¿Qué le contestas?',
         opciones: [
             'Que tiene razón: el soplido confirma el estómago',
             'Que no alimente: la sonda está en el pulmón derecho',
@@ -180,5 +180,17 @@ export const preguntasPifRadio = [
         ],
         correcta: 1,
         explicacion: 'La sonda que se desvía a la derecha a la altura de la bifurcación está en el bronquio principal derecho, y el soplido también se oye si está en el pulmón. No se alimenta hasta confirmar la posición en la radiografía. Avanzarla con el fiador rígido puede llegar a la pleura y causar neumotórax. Origen: Marino, cap. 49, págs. 27-29.',
+    },
+    {
+        id: 'pifradio-q015', tema: 'pifradio-caso',
+        enunciado: 'Caso (4/4). Para hacerle la placa la giran y la saturación baja (cifras del caso, inventadas). El tubo parece más hondo y el pulmón izquierdo no tiene aire. ¿Qué haces y qué te llevas del caso?',
+        opciones: [
+            'Reposicionar el cuello y esperar: la placa del pulmón izquierdo se arregla sola',
+            'Sospechar migración del tubo al bronquio principal derecho y retirarlo hasta que la punta quede a no más de 21 cm de los dientes',
+            'Avanzar más el tubo para ventilar los dos pulmones',
+            'Pedir una TC antes de tocar nada',
+        ],
+        correcta: 1,
+        explicacion: 'Un tubo que se mueve hacia los pulmones a menudo acaba en el bronquio principal derecho, y el pulmón izquierdo no ventilado se atelectasia (págs. 18-19); mantener la punta a ≤21 cm de los dientes en mujeres reduce el riesgo (pág. 19). Esperar o avanzarlo mantiene un pulmón sin ventilar; la TC retrasa la corrección (razonamiento propio). Lo que te llevas: 1) la punta, 3-5 cm por encima de la carina (Marino, cap. 28, pág. 18); 2) ≤21 cm de los dientes en mujeres y 23 en hombres (pág. 19); 3) placa antes de nutrir una sonda (cap. 49, págs. 27-28).',
     },
 ];
