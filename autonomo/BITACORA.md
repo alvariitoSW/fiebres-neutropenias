@@ -275,7 +275,7 @@ esta sección.
 | `b3` | **Bloque 3** (caps. 14-30, con el pulmón con respirador) | paradas 1 y 2 **hechas y en main** (PR #32 y [#35](https://github.com/alvariitoSW/fiebres-neutropenias/pull/35), 27/10). **Paso 4: plan escrito, sin construir** (`autonomo/bloques/b3/plan-paso4.md`): 17 fichas en 6 grupos, 17 piezas nuevas, ≈35-40 M en 10-12 sesiones; espera tu decisión | 2026-10-21 | Ver «Dónde quedó el bloque 3» abajo |
 | `reglas-b3p2` | Las 4 reglas de la parada 2 del `b3` (`.claude/`, una sesión por modelo, botones estables, maqueta a la app en dos encargos) | hecha (27/10, en main) | 2026-10-27 | aprobadas por el usuario el 27/10 |
 | `encargo-revisado` | **B-031**, dos ideas de Spec Kit: revisar el encargo antes de gastar y lista de calidad del encargo (sin instalar Spec Kit) | hecha (27/10, en main) | 2026-10-27 | «vamos solamente con la B-031» (27/10) |
-| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Ver «Dónde quedó tee-inversa» abajo |
+| `tee-inversa` | **Ingeniería inversa del simulador TEE** (anesthbeta) | **cerrada el 30/10**: C ya hecho (eco-mega, «Festones y cúspides»); A y B entran en la obra de la eco (`mv-eco`) | 2026-10-23 | |
 | `rea-*` | **Ingeniería inversa de EchoSuite, AngioView y NavRad** (B-009 a B-011) | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe conjunto: https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS |
 | `rea-radiologyassistant`, `rea-ritmolab` | **Ingeniería inversa de Radiology Assistant y RitmoLab** | ✅ elegido el 25/10: entra en el plan de integración | 2026-10-23 | Informe: https://claude.ai/artifact/1GTkuwubZ22Hb9qu4PW4P5 |
 | `ecg-guardia`, `arritmias-*`, `ecg-vector-*` | **B-033 · ECG en tres caminos** (leer juntos en la guardia, laboratorio de arritmias, vector y 12 derivaciones). Plan: https://claude.ai/artifact/6bVRWXYtCi8rFx7NZZYB3c | aprobado el 27/10: 6 tareas en el tablero (Objetivo I, filas 28-33); Anatomy instalado como skill el 27/10; las 2 primeras, programadas para el 28/10 por la mañana | 2026-10-27 | «guarda el informe en tareas para hacer […] y que se programe para mañana por la mañana» (27/10). Decisiones: las recomendadas del plan (supongo; cámbialas antes de que arranquen si quieres otra) |
@@ -301,17 +301,6 @@ esta sección.
 | `fuentes-b3` | Buscar y citar lo que la ficha no dice en las maquetas del `b3` (balón, distractores, topes) | hecha en `auto/b3` (27/10); entra en main con la PR del bloque | 2026-10-27 | Quedan 4 PDF (ver «Esperando algo tuyo») |
 | `rea-eco` | **B-024**, ingeniería inversa de las webs de eco para un corazón más real | hecha: elegido el 26/10 (A1-A3, B4, B5 y D1 a la parada 2 de `eco-mega`) | 2026-10-25 | «aprueba B-024» (25/10) |
 | `eco-anatomia` | **B-025**, corazón real (anatomía, fisiología y patología): informe con Fable 5.1 + plan socialista con su gasto | ✅ elegido el 26/10: el núcleo entra en la parada 2 de `eco-mega` (P1 potente, pericardio de las aurículas más real, P7 como forma grave con nota); PDF de los huecos los busca el usuario · https://claude.ai/artifact/TooB2RJcrwkf9CoFiPyqBi | 2026-10-26 | Pedido directo del usuario (26/10): «habría que generar un informe con fable 5.1… y apuntarlo en /bitacora» |
-
-### ⏸ Dónde quedó tee-inversa
-
-- **Informe**: https://claude.ai/artifact/6N5ChQF3E82Ca7DoNqEfaU (parte `autonomo/partes/2026-10-23-tee-inversa.md`).
-- **Cómo está hecho su simulador**: corazón 3D de anatomía fija (Human Reference Atlas, CC BY 4.0) con Three.js; el
-  esófago es una curva por 7 puntos; sonda con 5 mandos (avance, giro, ante/retroflexión, flexión lateral, multiplano);
-  28 vistas + 7 vasculares que viajan entre sí; imagen dibujada (no ecografía); válvulas en A1-P3 y cúspides; rótulos
-  que no se pisan. Ellos ganan en ETE y anatomía del corte; nosotros, en ecografía, fisiología, Doppler y enfermedad.
-- **Esperando tu elección**: paquete **A** (recomendado: colores de estructura, rótulos con enlace al 3D y viaje entre
-  vistas, en la ETT), **B** (ETE medioesofágico y transgástrico con reto) y/o **C** (segmentos de válvula), o números
-  sueltos del 1 al 7.
 
 ### ⏸ Dónde quedó el bloque 3 (para retomarlo en la próxima sesión)
 
@@ -342,6 +331,8 @@ El resto del tablero sigue `aparcada`.
   - **Di Mario 2005**: descartado del todo. `f2-angio` y `g3-sca` buscan fuente abierta o lo dejan como hueco.
   - **Mejoras y propuestas** (puntos 4 y 5): todas aceptadas → `mejoras-30-10`, la CPAP en `b3-pulmon-app`, la Fig. 18.3
     y las preguntas viejas de Merino Cardiología y Neumología en `b3-cierre`.
+  - **Recordatorio cerrado**: simulador ETE (C hecho; A y B a `mv-eco`); panel de subida, descartado; velocidad del
+    plan, cerrada (ya se hace con las reglas nuevas).
 
 - **✅ B-043 · Anatomy Atlas de Pridgen, decidido el 29/10**: «procedimiento en capítulos» para Técnicas R1, empezando por
   la vía venosa central. Tarea `tecnicas-capitulos` en el Objetivo L del tablero (tras Marino y El Libro Azul).
@@ -517,9 +508,6 @@ El resto del tablero sigue `aparcada`.
   Desbloquea la segunda parte de B-004 (secciones nuevas, cuando la apruebes).
 - **PIF de R1**: ya no se espera ningún PDF de temario (27/10): ver B-005.
 - **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
-- **Panel de subida**: la clave de la API y desplegar el Worker (`backend/README.md`).
-- **Velocidad del plan socialista**: hay propuestas (dos constructores a la vez, pruebas largas al final, los jueces a
-  la vez desde la 1.ª vuelta; de ~2 h 45 a ~1-1 h 15 por capítulo). Tu decisión del 14/10: **todavía no**.
 - **Eco, paradas 1 y 2 ya en main (27/10)**: mirarlas en el móvil (Eco cardíaca → simulador: A4C, subcostal,
   «Derrame» y «Hemorragia» a fondo, TEP, «Señálalo → Festones y cúspides»). La parada 3 (F3, F4, N1, P5, P6) espera
   los PDF de los huecos. Si tienes la **ASE 2025** en PDF, también daría la PAD con ventilación mecánica.
