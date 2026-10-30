@@ -15,6 +15,7 @@ import { svgParticula } from '../../core/particulas.js';
 import { svgBolsa } from '../../core/bolsa.js';
 import { svgTuboEdta } from '../../core/tubo.js';
 import { sinMovimiento } from '../../core/motion.js';
+import { svgPlaca, crearFlujoPlaca, moverPlaca } from './vaso-vivo-placa.js';
 import { svgMaquinaTrombina, svgPlaquetaFp4, fp4Posiciones } from './telar-vivo-escena.js';
 import { estadoBase, derivar, tableroDe, CELDAS, FIG132, FIB_CASO, FIB_CRIO, clamp } from '../../data/vaso-vivo-data.js';
 
@@ -280,7 +281,7 @@ function nudos() {
 /* ============================================================
    Las lupas pequeñas (coordenadas propias: círculo de radio 78 alrededor de 0, 0)
    ============================================================ */
-const LUPA_NOMBRE = { herida: 'la herida', cascada: 'la cascada', plaqueta: 'la plaqueta', frotis: 'el frotis', tubo: 'el tubo', complemento: 'el complemento' };
+const LUPA_NOMBRE = { placa: 'la placa', herida: 'la herida', cascada: 'la cascada', plaqueta: 'la plaqueta', frotis: 'el frotis', tubo: 'el tubo', complemento: 'el complemento' };
 export const LUPAS_GRANDES = new Set(['herida', 'cascada']);
 function lupaPequena(tipo) {
     const h = [];
@@ -559,6 +560,11 @@ function recorte(L) {
 }
 function construir() {
     const svg = $('lamina'), G = GEO.A, L = lupaActual();
+    // La arteria que se tapa (SCA): su lámina entera sale de vaso-vivo-placa.js
+    if (estado.lesion === 'placa' && (!L || L === 'placa')) {
+        svg.innerHTML = DEFS + svgPlaca(estado); svg.setAttribute('viewBox', '0 0 360 360'); pools = []; polyRed = null; crearFlujoPlaca(svg, estado);
+        document.querySelectorAll('[data-vso-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.vsoLupa === L))); return;
+    }
     let h = DEFS + '<rect width="360" height="360" style="fill:var(--bg-main)"/>';
     h += `<rect id="vso-zona-luz" x="0" y="${G.lumen[0]}" width="360" height="${G.lumen[1] - G.lumen[0]}" style="fill:url(#vso-g-luz)"/>`;
     h += `<g id="vso-g-pared">${pared(G, false, 'a')}${pared(G, true, 'a')}</g>`;
@@ -659,6 +665,7 @@ function techo(G, x) {
     return G.lumen[0] + Math.max(0, alto * (estado.t === 4 ? 0.62 : 1)) * Math.cos(u * Math.PI / 2) ** 2;
 }
 function mover(dt) {
+    if (estado.lesion === 'placa') moverPlaca(dt);
     for (const p of pools) {
         if (!p.el || !p.vis) continue;
         const m = p.m;
@@ -761,7 +768,7 @@ export function pintarTablero() {
 // después, las que cuentan en ese estado.
 function filtrarCeldas() {
     const e = estado;
-    const base = e.causa === 'hit' ? ['plaq', 'aptt', 'tapon', 'amenaza']
+    const base = e.lesion === 'placa' ? ['plaq', 'inr', 'aptt', 'amenaza'] : e.causa === 'hit' ? ['plaq', 'aptt', 'tapon', 'amenaza']
         : D.mat ? ['inr', 'aptt', 'fib', 'dd']
         : ['pfc', 'warf-pfc', 'ccp4f'].includes(e.rep) ? ['inr', 'fib', 'aptt', 'plaq']
         : D.masiva ? ['plaq', 'tapon', 'fib', 'amenaza']

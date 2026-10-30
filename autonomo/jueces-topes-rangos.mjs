@@ -23,6 +23,8 @@ export const RANGOS = [
     { nombre: 'lactato', re: rot('lactato'), min: 0, max: 30 },
     { nombre: 'glucemia', re: rot('glucemia|glucosa'), min: 0, max: 1500 },
     { nombre: 'Hb', re: rot('Hb|hemoglobina'), min: 0, max: 25 },
+    // El reloj del SCA (vaso vivo, lesión «placa»; lo comparte la trombólisis): 0-24 h, tope ilustrativo
+    { nombre: 'horas desde el dolor', neg: true, re: rot('[Dd]esde el dolor'), min: 0, max: 24 },
     { nombre: 'temperatura', re: rot('temperatura|T[ªa]'), min: 20, max: 45 },
 ];
 // Rótulos que solo pueden ser ≥ 0 (diuresis, volúmenes, gasto): el signo menos delante es un fallo.

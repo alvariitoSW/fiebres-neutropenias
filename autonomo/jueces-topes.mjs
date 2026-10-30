@@ -16,6 +16,9 @@ import { RANGOS, NO_NEGATIVOS } from './jueces-topes-rangos.mjs';
 // Ajustes propios de un modelo si hicieran falta: { raiz: '#x', noPulsar: /^Texto del botón/ }. Vacío por defecto.
 const AJUSTES = {
     // El «Paso a paso» de la lupa recorre piezas: no es un mando que acumule
+    // El vaso vivo: el reloj «horas desde el dolor» (#vso-m-horas, 0-24 h) se lleva a 0 y a 24 como todo range; su
+    // rango de paciente posible está en jueces-topes-rangos.mjs y el sello de las 12 h lo comprueba pruebas/vaso-vivo.mjs
+    'vaso-vivo': {},
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
