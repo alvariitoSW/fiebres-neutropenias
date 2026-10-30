@@ -16,6 +16,8 @@ const T = 'mc-ic-tipos', M = 'mc-ic-manejo';
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
 const eco = (escenario, texto) => ({ ecoEscenario: escenario, ecoVista: 'a4c', texto });
 const nefrona = (valor, texto) => ({ especialidad: 'nefrologia', view: 'nefrona', nefronaViva: valor, texto });
+// «(vista Visual)»: abre Estudiar → Mira de la ficha, con la vuelta a la pregunta.
+const visual = (tab, texto) => ({ especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab, enVisual: '', texto });
 const glomerulo = texto => ({ especialidad: 'nefrologia', view: 'nefrona', panel: 'panel-fisio-tabs', tab: 'fisio-regulacion', glomerulo: 'congestion', texto });
 
 export const MAYEUTICA_IC = {
@@ -85,7 +87,7 @@ export const MAYEUTICA_IC = {
           { t: 'Porque la vasoconstricción periférica sube el volumen sistólico', porque: `La vasoconstricción sostiene la presión arterial (${p(6)}); lo que sostiene el gasto en la segunda etapa es la taquicardia (${p(5)}).` },
           { t: 'Porque la presión de llenado vuelve a bajar y el corazón se descarga', porque: `La presión de llenado no baja: sube todavía más en la etapa final (${p(5)}).` }],
         explicacion: `Segunda etapa: baja el volumen sistólico y sube la frecuencia; <span class="hl-azul">la taquicardia compensa y el gasto se conserva</span> (${p(5)}).` },
-      { id: 'ict-g9', corto: 'etapa 3', tipo: 'test', fuente: 'mc-ic-etapas', modeloVivo: sv('ic-etapa-3', '🫀 Etapa 3: el gasto empieza a caer'),
+      { id: 'ict-g9', corto: 'etapa 3', tipo: 'test', fuente: 'mc-ic-etapas', modeloVivo: sv('ic-etapa-3', '🫀 Etapa 3: el gasto empieza a caer'), modelo: visual(T, '🖼️ Las tres etapas en el flujo (vista Visual)'),
         enunciado: 'Predice: ¿qué marca el paso de la insuficiencia cardíaca compensada a la descompensada?',
         opciones: [
           { t: 'La aparición de la disnea, por la congestión del pulmón', porque: `La disnea aparece ya en la primera etapa, con el gasto intacto (${p(5)}).` },
@@ -234,7 +236,7 @@ export const MAYEUTICA_IC = {
   'mc-ic-manejo': {
     entrada: 'Qué se da primero según la tensión, cómo se maneja la nitroglicerina y la furosemida, qué hace la CPAP en el corazón y por qué el diurético, con la FE conservada, quita el llenado que el VI necesita.',
     guia: [
-      { id: 'icm-g1', corto: 'PA alta: primero', tipo: 'test', fuente: 'mc-ic-pa-alta',
+      { id: 'icm-g1', corto: 'PA alta: primero', tipo: 'test', fuente: 'mc-ic-pa-alta', modelo: visual(M, '🖼️ El manejo según la PA (vista Visual)'),
         enunciado: 'Un paciente con edema agudo de pulmón llega con PA 190/105. Antes de leer la ficha: ¿qué fármaco va primero, y qué le hace al corazón?',
         opciones: [
           { t: 'Un vasodilatador, que baja la precarga y la poscarga: menos congestión pulmonar y más gasto', ok: true },
@@ -373,7 +375,8 @@ export const MAYEUTICA_IC = {
         explicacion: `Los iSGLT2 se recomiendan en la IC avanzada, <span class="hl-verde">tanto con FE reducida como conservada</span>, con o sin diabetes (${p(14)}). Con FE conservada no hay recomendación de betabloqueantes (${p(14)}) y los antialdosterónicos no deben darse con filtrado <30 (${p(14)}).` + enFicha(M, 'mc-largo-plazo') },
     ],
     profundizar: [
-      { id: 'mc-largo-plazo', titulo: 'Terapias a largo plazo' },
+      { id: 'mc-ic-raa', titulo: 'Supresión del sistema renina-angiotensina-aldosterona' },
+      { id: 'mc-ic-betabloqueantes', titulo: 'Betabloqueantes' },
       { id: 'mc-tabla-18-5', titulo: 'Tabla 18.5: dosis iniciales y objetivo' },
     ],
     casos: [
