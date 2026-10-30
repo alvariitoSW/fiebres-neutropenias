@@ -16,6 +16,10 @@
 //                                                      vivos y en las 23 fichas de Marino · Fundamentos (unos minutos)
 //                                                      y, en cada modelo vivo, todos sus mandos a los extremos
 //                                                      (jueces-topes.mjs; REGLAS §1.14), con --modelo y --forma
+//   node autonomo/jueces.mjs --formula               + el renglón «fórmula → tus números → resultado» (B-042;
+//                                                      jueces-formula.mjs) en sus 5 modelos: capilar, río y mar,
+//                                                      glomérulo, filtro y Doppler del eco; también con --forma, y
+//                                                      con --modelo capilar-vivo o agua-viva solo en ese modelo
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
@@ -44,6 +48,9 @@
 //      (1) nada del modelo o la ficha queda bajo la barra fija de abajo (el dock), ni la frase viva, el enunciado o
 //      «Siguiente» más de un 30 %; (2) tras tocar hasta 6 mandos, la figura principal sigue ≥ 50 % a la vista y la
 //      frase viva se ve; (3) ninguna frase cortada con «…» (ellipsis, line-clamp, rótulo de SVG); (4) letra ≥ 8 px.
+//   10. La fórmula (autonomo/jueces-formula.mjs; CLAUDE.md §7.10), con --formula, --forma o --modelo: en cada modelo
+//      que pinta renglones con pintarFormula, tras mover cada mando, la cuenta rehecha con los números que se ven da
+//      el resultado mostrado con sus mismos decimales. Su trampa: autonomo/pruebas/formula-juez-trampa.mjs.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
@@ -52,6 +59,7 @@ import { createServer } from 'node:net';
 import { juzgarFormaPreguntas, juzgarFormaNavegador } from './jueces-forma.mjs';
 import { juzgarMovil } from './jueces-movil.mjs';
 import { juzgarTopes } from './jueces-topes.mjs';
+import { juzgarFormula } from './jueces-formula.mjs';
 
 const RAIZ = resolve(dirname(new URL(import.meta.url).pathname), '..');
 const args = process.argv.slice(2);
@@ -244,6 +252,8 @@ if (!pide('--sin-navegador')) {
         await juzgarMovil({ nav, base, ok, mal, fichas, modelos: valores('--modelo'), todo: pide('--forma') });
         // ---- 9. Los topes (REGLAS §1.14): cada mando de cada modelo vivo a sus extremos (jueces-topes.mjs)
         await juzgarTopes({ nav, base, ok, mal, modelos: valores('--modelo'), todo: pide('--forma') });
+        // ---- 10. La fórmula: cada renglón «fórmula → números → resultado» rehecho a mano (jueces-formula.mjs)
+        await juzgarFormula({ nav, base, ok, mal, modelos: valores('--modelo'), todo: pide('--forma') || pide('--formula') });
         await nav.close();
         // ---- 6. Modelos vivos: su prueba de navegador, con este mismo servidor
         for (const clave of valores('--modelo')) {

@@ -644,9 +644,11 @@ export function montarSimulador(raiz, opc = {}) {
     }
     if (medD.tipo === 'eyeccion') {
       const u = motor.ultimo, aCm2 = areasD()[fuenteD.n] / 100, gc = medD.itv * aCm2 * u.fc / 1000;
+      // Los decimales justos para que la cuenta a mano dé el GC que se enseña (ITV y FC con 1, área con 2; si no, uno más cada vez)
+      const dG = [0, 1, 2].find(k => fx(+fx(medD.itv, 1 + k).replace(',', '.') * +fx(aCm2, 2 + k).replace(',', '.') * +fx(u.fc, 1 + k).replace(',', '.') / 1000, 1) === fx(gc, 1)) ?? 2;
       if (fuenteD.n === 'aortica' && fuenteD.tubo) {
         if (cajaF && pintarFormula) pintarFormula(cajaF, [{ titulo: 'Gasto cardíaco', formula: 'GC = ITV × área del TSVI × FC ÷ 1000',
-          numeros: `${fx(medD.itv, 1)} cm × ${fx(aCm2, 2)} cm²${refGeoTd?.geo?.rA ? ` (Ø ${fx(refGeoTd.geo.rA / 5, 1)} cm)` : ''} × ${fx(u.fc, 1)} lpm ÷ 1000`, resultado: fx(gc, 1), unidad: `L/min · estimado por Doppler; el simulador: ${fx(u.gc, 1)}`,
+          numeros: `${fx(medD.itv, 1 + dG)} cm × ${fx(aCm2, 2 + dG)} cm²${refGeoTd?.geo?.rA ? ` (Ø ${fx(refGeoTd.geo.rA / 5, 1)} cm)` : ''} × ${fx(u.fc, 1 + dG)} lpm ÷ 1000`, resultado: fx(gc, 1), unidad: `L/min · estimado por Doppler; el simulador: ${fx(u.gc, 1)}`,
           origen: 'fisiología general · ITV: ficha · cardio-eco-itv · área y FC del modelo: ilustrativo', prefijos: ['cardio'] }]);
         enl.innerHTML = enlace('ITV en la Ficha 11', 'cardio-interaccion-corazon-pulmon', '#cardio-eco-itv');
         poner(medD.itv >= 18 && medD.itv <= 22 ? 'ok' : 'warn', cab + `<b>ITV ${fx(medD.itv, 1)} cm</b> (normal 18-22 cm, Ficha 11) · pico ${fx(medD.pico)} cm/s`
