@@ -426,3 +426,17 @@ la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a
 - 30/10/2026 · Atlas de eco, capítulo 17 (estenosis mitral) en fase A: texto completo traducido (estadios, tabla de grados de Pandian 2023, graduación por planimetría, tiempo de hemipresión, gradiente con la frecuencia y ejercicio), con una tabla y citas; figura y preguntas pendientes del ecógrafo nuevo.
 - 30/10/2026 · Atlas de eco, capítulo 19 (insuficiencia tricuspídea) en fase A: texto completo traducido, con tabla de grados y citas; figura y preguntas pendientes del ecógrafo nuevo.
 - **30/10/2026 · mv-eco-1 (B-045 paso 1)**: nace `js/modules/eco/contrato.mjs` (+ `contrato-puente-hoy.mjs`, `pruebas/contrato.test.mjs`) al lado del motor, sin que la app lo use todavía. Congela «contrato = motor de hoy» (±2 % contra el código, ±5 % contra la tabla §3) y deja como fallos conocidos E/e′ 1,8 (TEP defecto), TA pulmonar 119 ms (TEP) y el salto al cerrar el latido (fallo VI 100 %). Lo arregla mv-eco-2a5.
+## Medidas · raíz aórtica (B-041, `raiz-aortica`, 30/10/2026)
+El usuario la pidió en la eco («la quiero en la eco»). Sección nueva «📏 Medidas» en Eco cardíaca (tercera pestaña,
+junto al simulador y al atlas) con un cuaderno de campo de una ficha, «Raíz aórtica», que admite más. Contenido: los
+4 niveles (anillo, senos, UST, ascendente) en un paraesternal eje largo recreado y tocable; cómo y cuándo medir (anillo
+mesosístole I-I, resto telediástole L-L; Lang 2015 pp. 28-32); Tabla 14 completa (p. 32); calculadora de z en dos
+modos: Tabla 14 por nivel y sexo, y Devereux 2012 (edad, SC y sexo, solo senos; abierto en PMC3462295); nota de
+interpretación de z = 2 (diferencias de método de 2-4 mm frente a DE de 3 mm; Lang no habla de z); umbrales de
+cirugía de ACC/AHA 2022 (abierta, manuscrito de autor PMC9876736, citada por apartado) y TC ante sospecha de síndrome
+aórtico agudo; 12 preguntas en el banco `js/data/eco-medidas-preguntas.js` (bloque «Medidas»). La ESC 2024 de aorta
+no está en abierto: sus umbrales no van. Erratas de Lang anotadas (la Tabla 14 no trae las ecuaciones de la Fig. 13;
+«pico sistólico» en la Fig. 10 frente a «mesosístole» en el texto). `irAFicha` de la eco abre ya fichas de la
+sección (buscador y `jueces --ficha eco::panel-eco-medidas-tabs:eco-med-raiz`). Prueba: `autonomo/pruebas/raiz-aortica-z.test.mjs`
+(node) y arnés `raiz-aortica-ui.mjs`. Parte: `autonomo/partes/2026-10-30-raiz-aortica.md`. Pendiente: enlazarla con
+el cap. 20 del atlas cuando exista.
