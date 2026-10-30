@@ -82,6 +82,8 @@ const PANEL_NAV = {
     'panel-pif-ecg-tabs': { especialidad: 'pifCardio', view: 'ecgArritmias', bloque: 'ECG y arritmias' },
     'panel-pif-cardio-obj-tabs': { especialidad: 'pifCardio', view: 'objetivos', bloque: 'Objetivos de la rotación' },
     'panel-pif-radio-tabs': { especialidad: 'pifRadio', view: 'placa', bloque: 'Placa portátil de UCI' },
+    'panel-pif-radio-torax-tabs': { especialidad: 'pifRadio', view: 'torax', bloque: 'Tórax de UCI' },
+    'panel-pif-radio-neuro-tabs': { especialidad: 'pifRadio', view: 'neuro', bloque: 'Neuro urgente' },
 
     // Libros
     'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },
