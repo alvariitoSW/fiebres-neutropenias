@@ -26,5 +26,10 @@
 | 1 | director | traducción | jueces ✅ |
 | 2 | director | auditoría: 0 graves, 3 medianos (remisiones a capítulos), 6 menores | aplicados los baratos (enlace al cap. 08 en las dos frases, lista ordenada, «oscilar», «modelo», reglas del VD y la VCI), jueces ✅ |
 
+## Después de la PR (pedido por el usuario)
+- PR #48 fusionada; después, las PR #43 (cap. 15) y #45 (cap. 19) fusionadas a mano en `main`, sumando las líneas que chocaban (`atlas.js`, README, historial), versión 20261030-23, cuenta «12 de 30» y `jueces --atlas as/tr/peri` en verde.
+- Tablero, fila `atlas-texto`: **cierre automático** (fusión a `main` con jueces en verde y auditoría sin graves; si no, PR en borrador para el usuario). Avisada la sesión del cap. 16, que ya cerró así junto con el 17.
+
 ## Gasto
-Auditor sonnet 0,11 M (11 herram.); director ≈0,15 M. Total ≈0,26 M, dentro de 0,3-0,6 M.
+Medido con `gasto.mjs`: director (opus) **1,4 M** + auditor sonnet ≈0,11 M = **≈1,5 M**. El cálculo previo (≈0,26 M) se quedó corto: la sesión hizo además las tres fusiones, la regla nueva y la conversación de permisos de GitHub, que repasaron muchas veces el contexto entero.
+Cómo se ahorraría: arrancar con el repositorio ya en las fuentes de la sesión (sin la ida y vuelta de permisos) y dejar las fusiones a la sesión de cada capítulo (ya es la regla).
