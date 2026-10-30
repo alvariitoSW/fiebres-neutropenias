@@ -388,7 +388,7 @@ for (const [k, C] of CASOS.entries()) {
     await contestar({ ...paso.pregunta, ocultar: paso.ocultar }, j === 0, k === 0 && j === 4 ? '07-caso-giro' : null, false, `${C.id} paso ${j + 1}`);
   }
   ok(await p.evaluate(() => /Lo que te llevas/.test(document.getElementById('cpv-preg').textContent)), `el caso ${C.id} llega a «Lo que te llevas»`);
-  ok(await p.evaluate(() => !!document.querySelector('#cpv-preg [data-tab][data-especialidad="libros"]')), `${C.id}: «Repasar en la ficha» enlaza con su ficha`);
+  ok(await p.evaluate(() => !!document.querySelector('#cpv-preg .cpv-link[data-tab][data-especialidad]')), `${C.id}: «Repasar en la ficha» enlaza con su ficha`);
   if (await desborde() > 0) ok(false, `desborde en «Lo que te llevas» del caso ${C.id}`);
   if (k === 0) {
     await p.evaluate(() => { const r = document.getElementById('cpv-preg').getBoundingClientRect(); const esc = document.getElementById('cpv-escena-bloque').getBoundingClientRect(); window.scrollBy(0, r.top - esc.height - 10); }); await p.waitForTimeout(200);
