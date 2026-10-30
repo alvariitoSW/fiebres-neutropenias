@@ -210,7 +210,7 @@ for (const [j, paso] of TER.pasos.entries()) {
   await contestar(paso.pregunta, false, null, false, `Teresa buena, paso ${j + 1}`);
   if (j === 2) {
     const e = (await T()).estado;
-    ok(!(await p.evaluate(() => /Se le pusieron los 2 L/.test(document.getElementById('agv-preg').textContent))), 'Teresa buena: el paso 4 no lleva la línea del salino');
+    ok(!(await p.evaluate(() => /Se le pusieron los 1,3 L/.test(document.getElementById('agv-preg').textContent))), 'Teresa buena: el paso 4 no lleva la línea del salino');
     ok(e.infusiones.length === 1 && e.infusiones[0].f === 'ringer' && e.infusiones[0].ml === 1300, `Teresa buena: el estuario sigue sobre 1,3 L de Ringer (${JSON.stringify(e.infusiones)})`);
   }
 }
@@ -232,13 +232,13 @@ for (const j of [0, 1]) await contestar(TER.pasos[j].pregunta, false, null, fals
     return { hayCaja: !!c, texto: c?.textContent || '', antes: !!c && !!expl && !!(c.compareDocumentPosition(expl) & Node.DOCUMENT_POSITION_FOLLOWING), enlace: !!c?.querySelector('[data-resaltar], [data-tab]'), est: window.__agvPruebas().estado.infusiones };
   });
   ok(o.hayCaja && o.antes, 'P3: la caja «Lo que acaba de pasar» sale antes de la explicación');
-  ok(/550/.test(o.texto) && /1\.650/.test(o.texto) && /hiperclorémica/.test(o.texto), 'P3: la consecuencia dice 550, 1.650 e hiperclorémica');
+  ok(/360/.test(o.texto) && /1\.070/.test(o.texto) && /hiperclorémica/.test(o.texto), 'P3: la consecuencia dice 360, 1.070 e hiperclorémica');
   ok(o.enlace, 'P3: la consecuencia lleva su «Ver en el texto»');
-  ok(o.est.length === 1 && o.est[0].f === 'salino' && o.est[0].ml === 2000, 'P3: el estuario pasa a 2 L de salino');
+  ok(o.est.length === 1 && o.est[0].f === 'salino' && o.est[0].ml === 1300, 'P3: el estuario pasa a 1,3 L de salino');
   await ver('P3 con la consecuencia'); await p.waitForTimeout(REDUCIDO ? 100 : 2500); await p.evaluate(() => document.getElementById('agv-preg').scrollIntoView({ block: 'start' })); await foto('12-teresa-p3');
   await pulsar('#agv-preg [data-accion="sig"]');
 }
-ok(await p.evaluate(() => /Se le pusieron los 2 L de salino/.test(document.getElementById('agv-preg').textContent)), 'P4: la historia sigue sobre el salino (tras)');
+ok(await p.evaluate(() => /Se le pusieron los 1,3 L de salino/.test(document.getElementById('agv-preg').textContent)), 'P4: la historia sigue sobre el salino (tras)');
 {
   const e = (await T()).estado;
   ok(e.infusiones[0]?.f === 'salino' && e.hemorragia === 20, 'P4: el estuario sigue en el salino');
