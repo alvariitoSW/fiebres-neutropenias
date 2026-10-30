@@ -45,6 +45,8 @@ export function calcularTopes(S, l, kg) {
   if (kgVt != null && kgVt > T.vtkgMax) sellos.push({ k: 'vtalto', titulo: 'Volumen no fisiológico', texto: `${f1(kgVt)} mL/kg de peso ideal: el doble del volumen normal (6-7); el daño por volumen se explica en el SDRA.`, cita: C.vtTrad, origen: ORG_12 });
   const pt = l.palvFinEsp;
   if (pt != null && pt > T.peepTotMax && pt - r.peep >= 2) sellos.push({ k: 'hiper', titulo: 'Hiperinflación', texto: `PEEP total ${f1(pt)} cmH₂O (${f1(pt - r.peep)} de PEEP oculta): el pulmón no se vacía; baja el gasto cardíaco y sube el riesgo de barotrauma.`, cita: C.vppConsec, origen: 'ficha · el mecanismo: cap. 23 p. 28; cap. 28 p. 31-33 · el 20 y la oculta ≥ 2: ilustrativo (lectura: Marini 2011, PMID 21700908)' });
+  // el racimo (E2): unidades que se abren y se cierran en cada ciclo
+  if (l.nAbreCierra > 0) sellos.push({ k: 'atelectrauma', titulo: 'Abre y cierra cada ciclo', texto: `${l.nAbreCierra} de 4 unidades se abren al inspirar y se colapsan al espirar: es el atelectrauma, que daña la vía aérea pequeña. La PEEP lo evita.`, cita: C.atelect, origen: 'ficha · cap. 24 p. 48 · presiones: ilustrativo' });
   const [s1, ...resto] = sellos;
   if (s1) out.sello = { k: s1.k, nivel: 'sello', titulo: s1.titulo, texto: s1.texto, cita: s1.cita, origen: s1.origen };
   resto.forEach((s, i) => { out['sello' + (i + 2)] = { k: s.k, nivel: 'aviso', titulo: s.titulo, texto: s.texto, cita: s.cita, origen: s.origen }; });

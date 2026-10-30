@@ -26,6 +26,9 @@ export const ESCENA_CSS = `
 .esc-alv { fill: var(--accent-green); fill-opacity: .55; stroke: var(--accent-green); stroke-width: .8; }
 .esc-racimo.terracota .esc-alv { fill: url(#pul-esc-rayas); stroke: var(--accent-red); }
 .esc-racimo.hiper .esc-alv { stroke: var(--accent-yellow); }
+.esc-alv.cerrada { fill: url(#pul-esc-rayas); stroke: var(--accent-red); }
+.esc-alv.abrecierra { stroke: var(--accent-red); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.esc-alv.sobre { stroke: var(--accent-yellow); stroke-width: 1.6; }
 .esc-capilar { fill: none; stroke: var(--accent-red); stroke-width: .7; opacity: .6; }
 .esc-cuff { fill: color-mix(in srgb, var(--accent-blue) 40%, transparent); stroke: var(--accent-blue); stroke-width: .7; }
 .esc-sello { font: 700 10.5px var(--sans); fill: var(--accent-red); }
@@ -79,6 +82,7 @@ export function crearEscena(svg) {
   <text x="232" y="198" class="esc-txt rot" text-anchor="middle">tubo</text>
   <!-- racimo -->
   <g id="pul-esc-racimo" class="esc-racimo">${ALV.map((p, i) => `<line class="esc-capilar" x1="${f1(CX + (p[0] - CX) * 0.55)}" y1="${f1(CY + (p[1] - CY) * 0.55)}" x2="${f1(p[0])}" y2="${f1(p[1])}"/><circle class="esc-alv" data-alv="${i}" cx="${f1(p[0])}" cy="${f1(p[1])}" r="8"/>`).join('')}</g>
+  <text id="pul-esc-atel" x="300" y="124" class="esc-sello" text-anchor="middle" hidden>Atelectrauma</text>
   <text id="pul-esc-palv" x="300" y="232" class="esc-txt g" text-anchor="middle">Palv 5</text>
   <text x="300" y="244" class="esc-txt rot" text-anchor="middle">presión alveolar</text>`;
   const $ = (id) => svg.querySelector('#' + id);
@@ -89,7 +93,10 @@ export function crearEscena(svg) {
     const r = p.S.resp, V = p.volAbs, C = p.S.pulmon.c;
     // el racimo: radio con el volumen por encima del reposo a presión cero (0 → 6,5; 1000 mL → 12,5; aproximación de raíz cúbica)
     const esc = 6.5 + 6 * Math.cbrt(Math.max(0, V) / 1000);
-    for (const a of alv) a.setAttribute('r', f1(esc));
+    // el racimo son 4 unidades de 3 alvéolos (racimo.mjs): la unidad colapsada se encoge y se raya; la que abre y cierra cada ciclo lleva anillo discontinuo
+    const U = p.unidades, LU = L?.unidades;
+    alv.forEach((a, i) => { const k = i % 4; a.setAttribute('r', f1(U[k].abierta ? esc : 4)); a.classList.toggle('cerrada', !U[k].abierta); a.classList.toggle('abrecierra', !!LU?.[k]?.abreCierra); a.classList.toggle('sobre', !!LU?.[k]?.sobre); });
+    $('pul-esc-atel').toggleAttribute('hidden', !(L?.nAbreCierra > 0));   // un <text> de SVG no tiene la propiedad .hidden: se pone el atributo
     const t = Math.min(1, V / 1200);
     $('pul-esc-pulmon').setAttribute('transform', `translate(${f1(300 - 300 * (1 + 0.05 * t))} ${f1(168 - 168 * (1 + 0.05 * t))}) scale(${f1(1 + 0.05 * t)})`);
     $('pul-esc-diafragma').setAttribute('d', `M236 262 Q300 ${f1(236 + 14 * t)} 364 262`);
@@ -111,7 +118,7 @@ export function crearEscena(svg) {
     $('pul-esc-p-vt').textContent = r.modo === 'vcv' ? r.vt : (L ? Math.round(L.vtExh) : '—');
     $('pul-esc-p-fr').textContent = r.fr; $('pul-esc-p-peep').textContent = r.peep;
     $('pul-esc-p-flujo').textContent = r.modo === 'vcv' ? r.flujo : `Pi ${r.modo === 'psv' ? r.ps : r.pinsp}`;
-    $('pul-esc-p-alarma').hidden = !L?.alarmaPresion;
+    $('pul-esc-p-alarma').toggleAttribute('hidden', !L?.alarmaPresion);
   }
   return { actualizar };
 }

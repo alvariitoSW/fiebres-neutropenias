@@ -156,5 +156,31 @@ ok(cv.dp === 22 && Math.abs(cv.cstat - (576 - 66) / 22) < 0.1, `ΔP ${cv.dp}, Cs
 cv = calcVentilacion({ talla: '', sexo: 'v', vt: 500, meseta: '', peep: '' });
 ok(cv.pbw == null && cv.cstat == null && cv.dp == null, 'un campo vacío no es 0');
 
+console.log('Par 5 · racimo con histéresis (E2; presiones de apertura y cierre ilustrativas; Libro azul IV pp. 450-451, Marino cap. 24 p. 48, cap. 27 p. 10-12)');
+{
+  const R = (peep, vt = 282, racimo = 'sdra') => simular({ modo: 'vcv', vt, fr: 20, peep, flujo: 60, pmax: 90 }, { c: 19, r: 8, rEsp: 8, racimo }, MAN0, { ciclos: 8 });
+  const MAN0 = { pausa: true };
+  // a igual presión alveolar, el volumen de la rama espiratoria es ≥ el de la inspiratoria (último ciclo, por tramos de 1 cmH₂O)
+  const s5 = R(5), n5 = s5.fase.length; let ini = n5 - 1; while (ini > 0 && !(s5.fase[ini] === 'insp' && s5.fase[ini - 1] !== 'insp')) ini--;
+  const ins = new Map(), esp = new Map(), acum = (m, k, v) => { const a = m.get(k) || [0, 0]; a[0] += v; a[1]++; m.set(k, a); };
+  for (let i = ini; i < n5; i++) { const k = Math.floor(s5.palv[i]); if (s5.fase[i] === 'insp' || s5.fase[i] === 'pausa') acum(ins, k, s5.vol[i]); else if (s5.fase[i] === 'esp') acum(esp, k, s5.vol[i]); }
+  let comunes = 0, peor = Infinity, mayor = 0;
+  for (const [k, a] of ins) if (esp.has(k)) { const d = esp.get(k)[0] / esp.get(k)[1] - a[0] / a[1]; comunes++; peor = Math.min(peor, d); mayor = Math.max(mayor, d); }
+  console.log(`  ${comunes} tramos de presión comunes; diferencia espiratoria − inspiratoria: mínima ${r1(peor)} mL, máxima ${r1(mayor)} mL`);
+  ok(comunes >= 5, 'hay tramos de presión comunes a las dos ramas'); ok(peor >= -1, 'a igual presión, la rama espiratoria lleva ≥ volumen que la inspiratoria'); ok(mayor > 10, 'y en algún tramo la diferencia se ve (histéresis > 10 mL)');
+  const cp = {}; for (const pe of [0, 5, 8, 12, 16, 20]) { cp[pe] = R(pe).lectura; }
+  console.log('  Vt 4 mL/kg (282 mL), PEEP → Cstat · abre-cierra · abiertas · sobredistendidas: ' + Object.entries(cp).map(([pe, l]) => `${pe}: ${r1(l.cstat)} · ${l.nAbreCierra} · ${l.nAbiertas} · ${l.unidades.filter((u) => u.sobre).length}`).join(' | '));
+  ok(cp[0].nAbreCierra === 3 && cp[0].nAbiertas === 1, 'PEEP 0 (por debajo de los cierres 6, 8 y 10): tres unidades se abren y se cierran en cada ciclo');
+  ok(cp[0].cstat < cp[12].cstat - 3, `PEEP 0: la Cstat baja (${r1(cp[0].cstat)} frente a ${r1(cp[12].cstat)} con PEEP 12)`);
+  ok(cp[12].nAbreCierra === 0 && cp[12].nAbiertas === 4, 'PEEP 12, por encima del cierre más alto (10): las cuatro quedan abiertas y ninguna se cierra');
+  ok(cp[5].nAbreCierra >= 1 && cp[12].nAbreCierra === 0, 'PEEP 5 → 12: lo que se cerraba deja de cerrarse');
+  ok(cp[12].cstat > cp[5].cstat && cp[12].cstat > cp[20].cstat, `la mejor PEEP está en 12 (Fig. 27.5): Cstat ${r1(cp[5].cstat)} (5) < ${r1(cp[12].cstat)} (12) > ${r1(cp[20].cstat)} (20)`);
+  ok(cp[20].unidades.every((u) => u.sobre) && cp[20].cstat < cp[16].cstat, `PEEP 20, todo sobredistendido: la Cstat BAJA (${r1(cp[16].cstat)} → ${r1(cp[20].cstat)}; la cola se aplana)`);
+  const sano = R(5, 282, 'sano').lectura; ok(sano.nAbreCierra === 0 && sano.nAbiertas === 4, 'sin racimo (pulmón sano) nada se abre ni se cierra');
+  // al cambiar de perfil en vivo, el reposo es el de la PEEP
+  const P = crearPulmon({ modo: 'vcv', vt: 282, fr: 20, peep: 12, flujo: 60 }, { c: 19, r: 8 }); P.pulmonAjustar({ racimo: 'sdra' });
+  ok(P.unidades.every((u) => u.abierta), 'con PEEP 12 el racimo empieza con las cuatro unidades abiertas');
+}
+
 console.log(`\n${n - fallos} de ${n} comprobaciones en verde${fallos ? ` · ${fallos} FALLOS` : ''}`);
 process.exit(fallos ? 1 : 0);

@@ -147,6 +147,15 @@ for (const k of ORDEN_ESTADOS) {
     await abrir(k); await espera(900);
     await p.evaluate(() => document.getElementById('pul-btn-guia').click()); await espera(500);
     const n = ESTADOS[k].guia.length; let senal = 0, mal = [];
+    if (ESTADOS[k].piensa) {   // «piensa antes» (E2): primero el enunciado; las opciones no dicen cuál es la buena hasta contestar
+        const Q = ESTADOS[k].piensa, hay = () => p.evaluate(() => ({ ops: document.querySelectorAll('#pul-dock-guia .pq-op').length, bien: document.querySelectorAll('#pul-dock-guia .pq-op.bien').length, exp: !document.getElementById('pul-pq-exp').hidden, sig: !!document.getElementById('pul-guia-sig'), desb: document.documentElement.scrollWidth - innerWidth }));
+        let h = await hay(); ok(h.ops === 0 && !h.sig, `piensa «${k}»: antes de la guía sale el enunciado, sin opciones ni pasos`);
+        await p.evaluate(() => document.getElementById('pul-pq-ver').click()); await espera(150); h = await hay();
+        ok(h.ops === Q.ops.length && h.bien === 0, `piensa «${k}»: ${Q.ops.length} opciones y ninguna marcada antes de contestar (la respuesta no está en el HTML)`);
+        await p.evaluate((i) => document.querySelectorAll('#pul-dock-guia .pq-op')[i].click(), Q.ops.findIndex(o => !o.ok)); await espera(150); h = await hay();
+        ok(h.exp && h.bien === 1 && h.desb <= 0, `piensa «${k}»: al contestar sale la explicación, marca la buena y no desborda (${h.desb} px)`);
+        await p.evaluate(() => document.getElementById('pul-pq-seguir').click()); await espera(300);
+    }
     for (let i = 0; i < n; i++) {
         const r = await p.evaluate(() => ({ s: document.querySelectorAll('#pul-raiz .guia-anillo, #pul-raiz .guia-marco, #pul-raiz [data-tramo]').length, malas: [...document.querySelectorAll('#pul-dock-guia [data-resaltar]')].filter(c => !document.querySelector(c.dataset.resaltar)).map(c => c.dataset.resaltar), cita: !!document.querySelector('#pul-dock-guia .cita-ir') }));
         if (r.s > 0) senal++; mal.push(...r.malas);
@@ -156,6 +165,42 @@ for (const k of ORDEN_ESTADOS) {
     ok(mal.length === 0, `guía «${k}»: cada «Ver en la ficha» llega a un párrafo que existe${mal.length ? ' (falta ' + mal.join(', ') + ')' : ''}`);
     if (!n) ok(false, `guía «${k}»: sin pasos`);
     await limpio(`guía «${k}»`);
+}
+// ───────── E. El racimo con histéresis (E2; par 5 de papel-pulmon.md §6), leído del monitor y del DOM de la app
+{
+  const sello = () => p.evaluate(() => document.getElementById('pul-frase-txt').textContent);
+  await abrir('atelectrauma-zeep'); await espera(900); await llenar();
+  let c = await p.evaluate(() => { const q = window.__pulPruebas(); return { n: q.L.nAbreCierra, ab: q.P.unidades.map(u => u.abierta), peep: q.P.S.resp.peep, rot: document.getElementById('pul-esc-atel').hasAttribute('hidden'), cerr: document.querySelectorAll('#pul-esc-racimo .esc-alv.cerrada').length }; });
+  const cs0 = await cifra('cstat');
+  ok(c.peep === 0 && c.n === 3 && !c.rot && await p.evaluate(() => document.getElementById('pul-esc-atel').getBoundingClientRect().width > 40), `racimo, PEEP 0: tres unidades se abren y se cierran en cada ciclo y el rótulo «atelectrauma» está a la vista (n ${c.n})`);
+  ok(/Abre y cierra/.test(await sello()) && /atelectrauma/.test(await sello()), 'racimo: la frase viva lleva el sello con el nombre «atelectrauma»');
+  ok(c.cerr > 0 && c.cerr % 3 === 0, `racimo: las unidades colapsadas se ven rayadas en el dibujo (${c.cerr} de 12 alvéolos)`);
+  // PEEP 12 (por encima de todos los cierres): ninguna se cierra, el sello desaparece y la Cstat sube
+  await pest('resp'); await mando('peep', 12); await espera(500); await llenar(); await espera(200);
+  c = await p.evaluate(() => { const q = window.__pulPruebas(); return { n: q.L.nAbreCierra, ab: q.P.unidades.filter(u => u.abierta).length, rot: document.getElementById('pul-esc-atel').hasAttribute('hidden') }; });
+  const cs12 = await cifra('cstat');
+  ok(c.n === 0 && c.ab === 4 && c.rot, `racimo, PEEP 12: las cuatro unidades abiertas, ninguna se cierra y el rótulo desaparece`);
+  ok(cs12 > cs0 + 3, `racimo: la Cstat de la pantalla sube con la PEEP 0 → 12 (${cs0} → ${cs12})`);
+  await mando('peep', 20); await espera(500); await llenar(); await espera(200);
+  const cs20 = await cifra('cstat');
+  ok(cs20 < cs12 - 1, `racimo, PEEP 20: la Cstat BAJA (la cola se aplana): ${cs12} → ${cs20}`);
+  await mando('peep', 4); await espera(500); await llenar(); await espera(200);
+  const cs4 = await cifra('cstat');
+  ok(cs4 < cs12 - 1, `mejor PEEP: Cstat ${cs4} (PEEP 4) < ${cs12} (PEEP 12) > ${cs20} (PEEP 20)`);
+  await limpio('racimo'); await foto('racimo-peep4');
+  // el estado «mejor PEEP» abre en 12
+  await abrir('mejor-peep'); await espera(900); await llenar();
+  c = await p.evaluate(() => { const q = window.__pulPruebas(); return { n: q.L.nAbreCierra, peep: q.P.S.resp.peep, ab: q.P.unidades.filter(u => u.abierta).length }; });
+  ok(c.peep === 12 && c.n === 0 && c.ab === 4, 'mejor PEEP: abre con PEEP 12 y las cuatro unidades abiertas');
+  // el sello no tapa el rótulo «PEEP» de la pantalla (ni el del dibujo)
+  await abrir('atelectrauma-zeep'); await espera(900); await llenar(); await espera(300);
+  const tapa = await p.evaluate(() => {
+    const sellos = [...document.querySelectorAll('#pul-raiz [class*="sello"], #pul-raiz [class*="tope"]')].filter(e => e.getClientRects().length && e.textContent.includes('Abre y cierra')).map(e => e.getBoundingClientRect());
+    const peeps = [...document.querySelectorAll('#pul-raiz text, #pul-raiz span, #pul-raiz b, #pul-raiz small')].filter(e => e.children.length === 0 && /^PEEP$/.test(e.textContent.trim()) && e.getClientRects().length).map(e => e.getBoundingClientRect());
+    return { ns: sellos.length, np: peeps.length, choca: sellos.some(a => peeps.some(b => a.left < b.right && a.right > b.left && a.top < b.bottom && a.bottom > b.top)) };
+  });
+  ok(!tapa.choca, `el sello no tapa el rótulo «PEEP» (${tapa.ns} sello(s), ${tapa.np} rótulo(s))`);
+  await foto('racimo-peep0');
 }
 // Las citas de las fuentes y las notas
 await abrir('normal-vcv'); await espera(600);

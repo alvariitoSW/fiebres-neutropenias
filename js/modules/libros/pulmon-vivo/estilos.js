@@ -118,7 +118,7 @@ export const PUL_CSS = `
 .pul-raiz .dock-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; }
 .pul-raiz .frase { display: flex; gap: 6px; align-items: flex-start; font: .8rem/1.32 var(--serif); color: var(--text-main); box-shadow: inset 3px 0 0 var(--accent-yellow); padding: 2px 0 2px 8px; }
 .pul-raiz .frase-txt { flex: 1; min-width: 0; }
-.pul-raiz .frase-txt .org { white-space: nowrap; }
+.pul-raiz .frase-txt .org { white-space: normal; }
 .pul-raiz .frase-txt .estado { font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-yellow); display: block; }
 .pul-raiz .btn-guia { flex: none; min-height: 44px; min-width: 44px; border-radius: 10px; border: 1px solid var(--accent-yellow); background: var(--accent-yellow); color: var(--bg-main); font: 700 .7rem/1.1 var(--sans); cursor: pointer; padding: 2px 6px; }
 .pul-raiz .dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
@@ -160,6 +160,15 @@ export const PUL_CSS = `
 @media (max-width: 370px) { .pul-raiz .guia-txt { max-height: 20vh; } }
 .pul-raiz .guia-b { min-height: 44px; padding: 0 10px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; border-radius: 999px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: 600 .82rem var(--sans); cursor: pointer; }
 .pul-raiz .guia-b:disabled { opacity: .45; }
+.pul-raiz .pq-ops { display: grid; gap: 5px; }
+.pul-raiz .pq-op { min-height: 44px; padding: 6px 10px; text-align: left; white-space: normal; border-radius: 10px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: 600 .78rem/1.3 var(--sans); cursor: pointer; }
+.pul-raiz .pq-op.bien { border-color: var(--accent-green); box-shadow: inset 3px 0 0 var(--accent-green); }
+.pul-raiz .pq-op.mal { border-color: var(--accent-red); box-shadow: inset 3px 0 0 var(--accent-red); }
+.pul-raiz .pq-op[aria-disabled] { min-height: 0; padding: 3px 9px; font-size: .72rem; }
+.pul-raiz .pq-exp { max-height: 22vh; overflow-y: auto; font: .8rem/1.35 var(--serif); }
+.pul-raiz .pq-exp p { margin: 0 0 4px; }
+.pul-raiz .pq-nav { grid-template-columns: minmax(0, 1fr); }
+.pul-raiz .dock-nota-det > summary { font: 600 .64rem/1.3 var(--sans); color: var(--text-muted); cursor: pointer; min-height: 28px; display: flex; align-items: center; }
 .pul-raiz .guia-b.prim { background: var(--accent-yellow); border-color: var(--accent-yellow); color: var(--bg-main); }
 .pul-raiz .guia-puntos { display: flex; justify-content: center; gap: 5px; }
 .pul-raiz .guia-puntos i { width: 7px; height: 7px; border-radius: 50%; border: 1px solid var(--accent-yellow); }

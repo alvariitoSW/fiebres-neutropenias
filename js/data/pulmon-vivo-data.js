@@ -5,12 +5,14 @@
 
 export const PDF_A = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
 export const PDF_B = 'docs/marino-2024-respiratory-management-caps27-30.pdf';
+export const PDF_LA1 = 'docs/libro-azul-seccion-iv-respiratorio-parte1.pdf';
 export const PDF_LA2 = 'docs/libro-azul-seccion-iv-respiratorio-parte2.pdf';
 const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
 export const FICHA = {
   'neumo-vm-modos': [NEUMO, 'Ventilación mecánica: los modos', 'VM: modos', PDF_B, 'Marino 2024'],
   'neumo-vni-metodos': [NEUMO, 'Ventilación no invasiva: métodos', 'VNI: métodos', PDF_A, 'Marino 2024'],
   // El libro azul no tiene ficha en la app: la cita lleva solo al PDF (sin «Ver en la ficha»)
+  'libro-azul-resp1': [null, 'El libro azul, sección IV (parte 1)', 'Libro azul IV', PDF_LA1, 'El libro azul IV'],
   'libro-azul-resp2': [null, 'El libro azul, sección IV (parte 2)', 'Libro azul IV', PDF_LA2, 'El libro azul IV'],
   'neumo-vm-ajuste': [NEUMO, 'Ventilación mecánica: ajustes', 'VM: ajustes', PDF_B, 'Marino 2024'],
   'neumo-peep-oculta': [NEUMO, 'PEEP oculta', 'PEEP oculta', PDF_B, 'Marino 2024'],
@@ -53,7 +55,11 @@ export const C = {
   disparo: { f: 'neumo-vm-ajuste', id: 'nep-disparo-presion', sitio: 'Disparo por presión: 2 a 3 cmH₂O negativos', p: 8 },
   psv4: { f: 'neumo-vni-metodos', id: 'nep-psv-4-puntos', sitio: 'PSV: los 4 puntos de interacción (corte al 25 % del flujo pico)', p: 78 },
   tau: { f: 'libro-azul-resp2', id: null, sitio: 'Constante de tiempo (pp. 514-515)', p: 50 },
+  colapsoPeep: { f: 'neumo-vm-ajuste', id: 'nep-mejor-peep', sitio: 'Sin PEEP el espacio aéreo colapsa y empeora el intercambio', p: 10 },
   mejorPeep: { f: 'neumo-vm-ajuste', id: 'nep-mejor-peep', sitio: 'PEEP y PaO₂/FiO₂ (La mejor PEEP)', p: '10-12' },
+  atelect: { f: 'neumo-sdra-ventilacion', id: 'nep-atelectrauma', sitio: 'Atelectrauma: se abre y se cierra, y la PEEP lo evita', p: 48 },
+  histeresis: { f: 'libro-azul-resp1', id: null, sitio: 'Histéresis: abrir pide más presión que mantener abierto; ~30 000 ciclos al día (pp. 450-451)', p: '66-67' },
+  inflexion: { f: 'libro-azul-resp2', id: null, sitio: 'Puntos de inflexión; el colapso empieza al espirar (pp. 550-551)', p: '86-87' },
   hipercapnia: { f: 'neumo-sdra-ventilacion', id: 'nep-hipercapnia', sitio: 'Hipercapnia permisiva', p: 49 },
 };
 export const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'], errata: ['Errata de la fuente', 'errata'] };
@@ -64,7 +70,7 @@ export const NOTAS = [
   { k: 'cifras-ilu', tipo: 'calla', txt: 'Ninguna fuente da estas cifras de tope, que son ilustrativas: volumen minuto 2-20 L/min (lo más cercano: «VM alta ≥10 L/min», cap. 27 p. 14; Tuxen 1987 ventiló a 10, 16 y 26 L/min en obstrucción grave), PEEP total ≤20 (el mecanismo está en cap. 28 p. 31-33; Marini 2011 como lectura), alarma de presión 45/50 (el 50 de ARDS Network 2000 es la meseta del brazo tradicional, no un pico; la ficha quiere la meseta ≤30, cap. 27 p. 14), Ti mínimo 0,2 s (sale de Ti = VT ÷ flujo; la ficha pide I:E ≥1:2), compliance mínima 15 (la ficha dice «<25», sin suelo) y resistencia 5/20. Nota: la presión pico depende sobre todo del flujo inspiratorio y no refleja el volumen pulmonar (Tuxen 1987).', citas: [C.t271] },
   { k: 'fr-35', tipo: 'calla', txt: 'La ficha pide no pasar de 35 respiraciones por minuto (cap. 27 p. 14, tabla 27.1). Por encima, el libro advierte de que la respiración rápida favorece la hiperinflación y la PEEP intrínseca, y eso puede bajar el gasto cardíaco (cap. 27 p. 55; lo dice a propósito de las pruebas de respiración espontánea). Tuxen 1987 (PMID 3662241): al subir la frecuencia, menos tiempo espiratorio, más hiperinflación e hipotensión.', citas: [C.t271] },
   { k: 'apnea', tipo: 'calla', txt: 'Al detener la ventilación, la saturación cae y el CO₂ sube en minutos (Farmery 1996; Benumof 1997; Eger 1961). La velocidad depende de la oxigenación previa, el consumo de O₂, el volumen alveolar y el shunt, y es peor en obesos. El modelo no calcula gases y no da cifras por minuto: ninguna de las fuentes abiertas aquí las trae.', citas: [] },
-  { k: 'peep-lineal', tipo: 'calla', txt: 'La PEEP aplicada «justo por debajo de la oculta» reduce la hiperinflación porque sostiene abiertas las vías pequeñas que se colapsan (p. 32-33). Un pulmón de un compartimento no tiene ese colapso: en esta pieza la PEEP aplicada no reduce la oculta. Va en la pieza siguiente (racimo con vías que se cierran). Y el propio libro añade que reducir la PEEP oculta con PEEP aplicada «probablemente no merece la pena» (p. 33).', citas: [C.peepAplicada, C.noMerece] },
+  { k: 'racimo-ilu', tipo: 'calla', txt: 'El libro describe el fenómeno (cada unidad abre a una presión y se mantiene abierta a otra más baja; abrir y cerrar unas 30 000 veces al día), pero no da las presiones. El racimo usa cuatro unidades con apertura a 16, 20 y 24 cmH₂O y cierre a 6, 8 y 10 (la primera siempre abierta), y una cola que se aplana por encima de 26-29: todo ilustrativo. Es un pulmón de SDRA reclutable inventado, no una medida. La PEEP aplicada "justo por debajo de la oculta" del EPOC (p. 32-33) sigue sin modelarse: aquel colapso es de la vía pequeña en la obstrucción.', citas: [C.histeresis, C.inflexion, C.peepAplicada] },
   { k: 'dp-sin-objetivo', tipo: 'calla', txt: 'La presión de conducción (meseta − PEEP) se calcula, pero Marino no da un objetivo numérico para ella, así que la calculadora no pone ninguno: el único objetivo de presión del libro es la meseta ≤30. La Fig. 27.5 solo la usa para buscar la mejor PEEP.', citas: [C.cstat, C.protectora] },
   { k: 'psv-ilu', tipo: 'calla', txt: 'En la presión de soporte el modelo pone como ilustrativo lo que Marino no da: la frecuencia del paciente (16 por minuto), la compliance y la resistencia de Herminia, el tiempo que tarda su esfuerzo en llegar al umbral (0,1 s) y la pequeña variación del esfuerzo entre respiraciones (siempre dentro de 2-3 cmH₂O, con semilla fija: sale igual cada vez). El esfuerzo muscular como tal no está en el modelo.', citas: [C.disparo, C.psv4] },
   { k: 'causas-pico', tipo: 'calla', txt: 'Las páginas citadas (cap. 27 pp. 2-4) separan la parte de resistencia de la parte elástica del pico (Ec. 27.1-27.3) pero no enumeran las causas clínicas de un pico alto; el árbol de la página solo reparte entre resistencia y elasticidad y no lista causas.', citas: [C.ec271, C.meseta] },
@@ -91,7 +97,7 @@ export const ESTADOS = {
     guia: [
       { t: 'El respirador entrega el volumen marcado (500 mL) a flujo constante: la curva de flujo es un escalón de 60 L/min, y el volumen sube en línea recta.', s: ['flujo:insp', 'vol:insp'], c: C.vcv },
       { t: 'La presión en la vía aérea la decide el pulmón: sube en rampa porque cada mL que entra tensa más el tórax (Pel) y, encima, hay que empujar el aire por la vía aérea (Pres). Pico = Pres + Pel.', s: ['paw:insp'], c: C.ec271 },
-      { t: 'La espiración es pasiva: el respirador abre la válvula espiratoria y el pulmón se vacía solo, con un flujo que decae hasta cero antes del siguiente ciclo. La presión cae hasta la PEEP, 5 cmH₂O.', s: ['flujo:esp', 'paw:esp', '#pul-esc-valvula-esp'], c: C.finEsp },
+      { t: 'La espiración es pasiva: el respirador abre la válvula espiratoria y el pulmón se vacía solo, con un flujo que decae hasta cero antes del siguiente ciclo. La presión cae hasta la PEEP, 5 cmH₂O.', s: ['#pul-esc-valvula-esp', 'flujo:esp', 'paw:esp'], c: C.finEsp },
       { t: 'Con 500 mL en un tórax de compliance 60 mL/cmH₂O y 5 cmH₂O de resistencia a 1 L/s, el pico ronda 18 cmH₂O. Es un pulmón sano: Cstat de 50 a 80.', org: 'ilustrativo (R y C) · ficha, cap. 27 p. 6 (Cstat 50-80)', s: ['[data-fila="pico"]', '#pul-esc-racimo'], c: C.cstat },
     ],
     fuentes: [C.vcv, C.fig271, C.ec271, C.finEsp, C.cstat],
@@ -158,7 +164,7 @@ export const ESTADOS = {
     frase: 'El pulmón no termina de vaciarse: cada respiración empieza más lleno.',
     guia: [
       { t: 'Jacinto exhala contra una resistencia alta: el flujo espiratorio decae despacio y, cuando llega la siguiente insuflación, todavía está saliendo aire. Ese flujo al final de la espiración es la prueba de hiperinflación dinámica.', s: ['flujo:finesp', '[data-fila="flujofin"]'], c: C.fig235 },
-      { t: 'El volumen no vuelve a su punto de partida: el pulmón se queda con aire atrapado y el racimo, hiperinsuflado. Fíjate en que la curva de volumen no baja a cero.', s: ['vol:finesp', '#pul-esc-racimo'], c: C.defOculta },
+      { t: 'El volumen no vuelve a su punto de partida: el pulmón se queda con aire atrapado y el racimo, hiperinsuflado. Fíjate en que la curva de volumen no baja a cero.', s: ['#pul-esc-racimo', 'vol:finesp'], c: C.defOculta },
       { t: 'En la curva de presión no ves nada: la presión proximal baja a la PEEP marcada (0). La presión alveolar sigue positiva. Por eso se llama PEEP oculta.', s: ['paw:finesp'], c: C.finEsp },
       { t: 'Para medirla, el respirador ocluye el circuito espiratorio al final de la espiración: sin flujo, la presión proximal se iguala con la alveolar y salta a la PEEP oculta, aquí unos 6 cmH₂O. Solo vale si el paciente no respira por su cuenta.', org: 'ficha (maniobra) · modelo (cifra)', s: ['paw:oclusion', '[data-fila="peeptot"]', '#pul-esc-valvula-esp'], c: C.oclusion28 },
       { t: 'Consecuencias: sube la presión intratorácica media (menos retorno venoso, menos gasto cardíaco), más trabajo para disparar, más riesgo de volutrauma y barotrauma, y una PVC falsamente alta.', s: ['#pul-esc-torax'], c: C.efectos },
@@ -197,6 +203,39 @@ export const ESTADOS = {
     ],
     fuentes: [C.estrategias, C.vppConsec, C.manejo],
   },
+  'atelectrauma-zeep': {
+    tit: 'Sin PEEP: el alvéolo que se abre y se cierra', pac: 'isidro', resp: { modo: 'vcv', vt: 282, fr: 20, peep: 0, flujo: 60, pinsp: 15, ie: 2, pmax: 40 }, pulmon: { c: 19, r: 8, racimo: 'sdra' }, man: { pausa: true },
+    frase: 'Sin PEEP, tres de las cuatro unidades se abren al inspirar y se cierran al espirar, en cada respiración.',
+    piensa: {
+      q: 'Isidro lleva PEEP 5 y tres de sus cuatro unidades se abren y se cierran en cada respiración. Subes la PEEP a 12 cmH₂O. ¿Qué le pasa al alvéolo que se cerraba?',
+      ops: [
+        { t: 'Se cierra aún más, porque más presión al final de la espiración lo comprime.', ok: false, e: 'Al revés: la PEEP sostiene la vía pequeña abierta. Si esto fuera cierto, la cizalla de abrir y cerrar seguiría en cada respiración y la lesión de la vía aérea se acumularía.', c: C.atelect },
+        { t: 'Se queda abierto al espirar y deja de abrirse y cerrarse.', ok: true, e: 'Sus presiones de cierre (6, 8 y 10 cmH₂O en este modelo) quedan por debajo de la PEEP de 12: ya no colapsa al final de la espiración y no hay que volver a abrirlo.', c: C.atelect },
+        { t: 'Nada: la PEEP solo cambia la oxigenación, no lo que ocurre dentro del alvéolo.', ok: false, e: 'La PEEP actúa justo ahí: sin ella el espacio aéreo colapsa al final de la espiración, empeora el intercambio de gases y favorece la hipoxemia.', c: C.colapsoPeep },
+      ],
+      exp: 'Abrir una unidad pide más presión que mantenerla abierta (histéresis): por eso una PEEP por encima de la presión de cierre la deja abierta todo el ciclo. Es el atelectrauma que evita la PEEP.',
+    },
+    guia: [
+      { t: 'Isidro (SDRA) con Vt 282 mL (4 mL/kg, como en la Fig. 27.5) y PEEP 0. El racimo tiene cuatro unidades; la de arriba nunca se cierra. Las otras tres se abren a presiones distintas y, una vez abiertas, se mantienen abiertas hasta una presión de cierre más baja.', org: 'ilustrativo (presiones de apertura y cierre) · ficha (el fenómeno)', s: ['#pul-esc-racimo'], c: C.histeresis },
+      { t: 'Al inspirar, la presión alveolar sube y cada unidad pasa de colapsada a abierta cuando llega a su presión de apertura, una detrás de otra. Mira el racimo mientras sube el volumen.', org: 'ilustrativo', s: ['#pul-esc-racimo', 'vol:insp'], c: C.histeresis },
+      { t: 'Sin PEEP, la presión alveolar cae por debajo de la presión de cierre y las tres unidades se colapsan al espirar. En la siguiente respiración hay que abrirlas otra vez: el racimo muestra ese abrir y cerrar a cada ciclo.', org: 'ilustrativo (presiones) · ficha (mecanismo)', s: ['#pul-esc-racimo', 'vol:finesp'], c: C.atelect },
+      { t: 'Ese abrir y cerrar crea fuerzas de cizalla que dañan el epitelio de la vía aérea: es el atelectrauma, y se evita o se reduce aplicando PEEP para mantener abierta la vía pequeña al final de la espiración. Con tantas respiraciones al día, la lesión se acumula (unas 30 000 aperturas y cierres).', s: ['#pul-esc-racimo', '#pul-esc-atel'], c: C.atelect },
+      { t: 'La compliance lo paga: la Cstat sale baja porque parte del pulmón no participa. Sube la PEEP a 12 con el mando y compara: las tres unidades dejan de cerrarse.', org: 'modelo (cifras ilustrativas)', s: ['[data-fila="cstat"]', '#pul-esc-pantalla'], c: C.mejorPeep },
+    ],
+    fuentes: [C.atelect, C.histeresis, C.inflexion, C.mejorPeep],
+  },
+  'mejor-peep': {
+    tit: 'La mejor PEEP: 4 → 12 → 20', pac: 'isidro', resp: { modo: 'vcv', vt: 282, fr: 20, peep: 12, flujo: 60, pinsp: 15, ie: 2, pmax: 40 }, pulmon: { c: 19, r: 8, racimo: 'sdra' }, man: { pausa: true },
+    frase: 'Con PEEP 12 no hay unidades que se cierren y la compliance es la mejor; subirla más sobredistiende.',
+    guia: [
+      { t: 'Con PEEP baja (5-10 cmH₂O) se previene el colapso de los espacios aéreos distales; con más (10-20) se abren espacios ya colapsados (reclutamiento). Pero una PEEP alta también sobredistiende los alvéolos de las zonas sanas.', s: ['#pul-esc-racimo'], c: C.mejorPeep },
+      { t: 'Con PEEP 12, Vt 4 mL/kg: las cuatro unidades están abiertas y ninguna se abre y se cierra. La compliance es la más alta de todo el barrido, y la presión de conducción (meseta − PEEP), la más baja.', org: 'modelo (cifras ilustrativas) · ficha (el sentido)', s: ['[data-fila="cstat"]', '[data-fila="dp"]'], c: C.mejorPeep },
+      { t: 'Baja la PEEP a 4: parte de las unidades se cierra al espirar y la compliance cae (reclutamiento perdido). Súbela a 20 con el mando: las cuatro unidades pasan a la zona plana de su curva, la Cstat baja otra vez y la presión se dispara hasta que salta la alarma de presión. Ese es el riesgo de volutrauma que cita el libro.', org: 'ilustrativo', s: ['#pul-esc-racimo', '[data-fila="cstat"]'], c: C.mejorPeep },
+      { t: 'El libro lo muestra con un estudio real de PEEP incremental a Vt 4 mL/kg: la compliance aumenta desde PEEP 4, alcanza un máximo hacia PEEP 12 y desciende de nuevo, y la presión de conducción hace lo contrario. De ahí sale «la mejor PEEP» de ese estudio: no una cifra para todos.', org: 'ficha (Fig. 27.5)', s: ['[data-fila="dp"]'], c: C.mejorPeep },
+      { t: 'Otra forma de verlo, de la curva presión-volumen: la ventilación debería ocurrir entre los dos puntos de inflexión, el inferior (empieza el reclutamiento) y el superior (empieza la sobredistensión). El colapso empieza en la espiración, al caer la presión por debajo del punto de máxima curvatura.', s: ['#pul-esc-racimo'], c: C.inflexion },
+    ],
+    fuentes: [C.mejorPeep, C.inflexion, C.histeresis, C.atelect],
+  },
   'psv-disparo': {
     tit: 'Presión de soporte: el paciente dispara y el flujo corta', pac: 'herminia', resp: { modo: 'psv', vt: 500, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40, ps: 10, frEsp: 16 }, pulmon: { c: 40, r: 8 }, man: {},
     frase: 'En presión de soporte el paciente dispara cada respiración y el flujo decide cuándo termina.',
@@ -210,14 +249,14 @@ export const ESTADOS = {
     fuentes: [C.disparo, C.psv4, C.oclusion28],
   },
 };
-export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada', 'psv-disparo'];
+export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada', 'psv-disparo', 'atelectrauma-zeep', 'mejor-peep'];
 
 export const PROFUNDIZAR = [
   { t: 'Presión soporte y el disparo (por presión 2-3 cmH₂O, por flujo 1-10 L/min): el paciente que respira entra en la pieza 4.', c: { f: 'neumo-vm-ajuste', id: 'nep-disparo-presion', sitio: 'Disparo por presión (p. 8) y por flujo (p. 9)', p: '8-9' } },
   { t: 'PRVC, el modo adaptativo que entrega el volumen con la menor presión.', c: { f: 'neumo-vm-modos', id: 'nep-prvc', sitio: 'PRVC', p: '4-5' } },
   { t: 'La presión media de la vía aérea (5-10 normal, 10-20 obstrucción, 20-30 pulmón rígido) y su relación con la hemodinámica: con el corazón (M8), en la pieza 3.', c: C.pMedia },
   { t: 'La mejor PEEP (4 → 12 → 20 a 4 mL/kg PBW) y el gasto cardíaco: Figs. 27.5-27.6.', c: { f: 'neumo-vm-ajuste', id: 'nep-mejor-peep', sitio: 'La mejor PEEP', p: '11-12' } },
-  { t: 'La PEEP aplicada justo por debajo de la oculta («probablemente no merece la pena», p. 33): necesita vías aéreas que se colapsan (pieza 2).', c: C.noMerece },
+  { t: 'La PEEP aplicada justo por debajo de la oculta («probablemente no merece la pena», p. 33): es el colapso de la vía pequeña en la obstrucción del EPOC, que el racimo de SDRA de esta pieza no modela.', c: C.noMerece },
   { t: 'Presión transpulmonar y balón esofágico: separar el pulmón de la pared torácica.', c: { f: 'neumo-vm-modos', id: 'nep-transpulmonar', sitio: 'Presión transpulmonar', p: 2 } },
 ];
 

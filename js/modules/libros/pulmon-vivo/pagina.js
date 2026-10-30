@@ -11,6 +11,7 @@ import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from '../../../data/pulmon-vivo-data.js';
 import { montarExtras } from './extras.js';
+import { montarPiensa } from './piensa.js';
 import { tau, TAU } from '../../../data/ventilacion-data.js';
 
 export function montarPulmon(raiz) {
@@ -52,7 +53,8 @@ function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
-  P.ajustarYa({ ps: 10, frEsp: 16, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r }); P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
+  P.ajustarYa({ ps: 10, frEsp: 16, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
   pintarTodo();
@@ -182,7 +184,7 @@ function repintar(panel, html) {
   if (A.length !== B.length || A.some((a, i) => a.tagName !== B[i].tagName || a.dataset.m !== B[i].dataset.m)) { panel.innerHTML = html; return; }
   A.forEach((a, i) => {
     const b = B[i];
-    for (const at of [...a.attributes]) if (!b.hasAttribute(at.name)) a.removeAttribute(at.name);
+    for (const at of [...a.attributes]) if (!b.hasAttribute(at.name) && at.name !== 'open') a.removeAttribute(at.name);   // «open»: lo pone el usuario al desplegar
     for (const at of [...b.attributes]) if (a.getAttribute(at.name) !== at.value) a.setAttribute(at.name, at.value);
     if (a.tagName === 'INPUT') a.value = b.getAttribute('value');
     else if ((a.tagName === 'OUTPUT' || a.classList.contains('dock-nota') || !b.children.length) && a.innerHTML !== b.innerHTML) a.innerHTML = b.innerHTML;
@@ -202,14 +204,14 @@ function pintarMandos() {
     h += desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
     h += `<p class="dock-nota dock-grupo"><b>Oxigenar</b> (PaO₂): FiO₂ y PEEP</p>`;
     h += desl('fio2', 'FiO₂', est.fio2, 21, 100, 1, '%', 'ilustrativo: el modelo no calcula gases') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5');
-    h += `<p class="dock-nota">${r.modo === 'vcv' ? 'Volumen garantizado: vigila la presión.' : r.modo === 'pcv' ? 'Presión garantizada: vigila el volumen.' : 'Presión garantizada: vigila volumen y frecuencia.'} ${pend.length ? `Entra en la siguiente respiración: ${pend.join(', ')}.` : 'Los cambios entran en la respiración siguiente.'}</p>`;
+    h += `<details class="dock-nota-det"><summary>Notas y topes</summary><p class="dock-nota">${r.modo === 'vcv' ? 'Volumen garantizado: vigila la presión.' : r.modo === 'pcv' ? 'Presión garantizada: vigila el volumen.' : 'Presión garantizada: vigila volumen y frecuencia.'} ${pend.length ? `Entra en la siguiente respiración: ${pend.join(', ')}.` : 'Los cambios entran en la respiración siguiente.'}</p></details>`;
   } else if (est.pest === 'pulmon') {
     h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha cap. 27 p. 6: SDRA <25 (mínimo 15: ilustrativo)' : pu.c >= 50 ? 'ficha cap. 27 p. 6: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'ilustrativo (la ficha no da R)');
     h += `<div class="seg" aria-label="Resistencia espiratoria"><button type="button" data-m="fesp" data-v="1" aria-pressed="${est.factorEsp === 1}">Esp. = insp.<small>pulmón sano</small></button><button type="button" data-m="fesp" data-v="2" aria-pressed="${est.factorEsp === 2}">Esp. ×2<small>EPOC</small></button><button type="button" data-m="fesp" data-v="3" aria-pressed="${est.factorEsp === 3}">Esp. ×3<small>asma (ilustrativo)</small></button></div>`;
-    h += `<p class="dock-nota">τ = R·C = ${f1(tau(pu.r, pu.c))} s (insp.) · ${f1(tau(pu.rEsp ?? pu.r, pu.c))} s (esp.). En una τ el alvéolo se llena o vacía un ${String(TAU.fraccion).replace('.', ',')} %; con 4-5 τ de espiración desaparece la auto-PEEP${L?.teTau != null ? ` (ahora la espiración dura ${f1(L.teTau)} τ)` : ''}. ${org('ficha: LA2 pdf 50-51 · R y C: ilustrativo')}</p>`;
+    h += `<details class="dock-nota-det"><summary>Notas y topes</summary><p class="dock-nota">τ = R·C = ${f1(tau(pu.r, pu.c))} s (insp.) · ${f1(tau(pu.rEsp ?? pu.r, pu.c))} s (esp.). En una τ el alvéolo se llena o vacía un ${String(TAU.fraccion).replace('.', ',')} %; con 4-5 τ de espiración desaparece la auto-PEEP${L?.teTau != null ? ` (ahora la espiración dura ${f1(L.teTau)} τ)` : ''}. ${org('ficha: LA2 pdf 50-51 · R y C: ilustrativo')}</p></details>`;
   } else if (est.pest === 'man') {
     h += `<div class="rejilla" style="--n:3"><button type="button" class="tog" data-m="pausa" aria-pressed="${!!m.pausa}">Pausa inspiratoria<small>pico → meseta</small></button><button type="button" class="tog" data-m="oclusion" aria-pressed="${!!m.oclusion}">Oclusión espiratoria<small>mide la PEEP oculta</small></button><button type="button" class="tog" data-m="monpausa" aria-pressed="${est.pausa}">Congelar monitor<small>para mirar</small></button></div>`;
-    h += `<p class="dock-nota">La pausa cierra la válvula 0,5 s al final de la insuflación; la oclusión, 1 s al final de la espiración. Las dos valen solo si el paciente no respira por su cuenta (cap. 28 p. 31).</p>`;
+    h += `<details class="dock-nota-det"><summary>Notas y topes</summary><p class="dock-nota">La pausa cierra la válvula 0,5 s al final de la insuflación; la oclusión, 1 s al final de la espiración. Las dos valen solo si el paciente no respira por su cuenta (cap. 28 p. 31).</p></details>`;
   }
   repintar($('dock-panel'), h);
 }
@@ -300,12 +302,18 @@ $('monitor').addEventListener('click', verPantalla);
 
 // ---------------------------------------------------------------- explicación guiada
 let guia = null, gi = 0;
+const piensaHecho = new Set();   // los estados cuyo «piensa antes» ya se contestó en esta visita
 function abrirGuia(E) { guia = { E }; gi = 0; dock.plegar(false); dock.asa.hidden = true; $('dock-tabs').hidden = true; $('dock-panel').hidden = true; $('btn-guia').hidden = true; $('dock-guia').hidden = false; est.pausa = true; llenarMonitor(); pintarTodo(); pintarGuia(); }
 function cerrarGuia() {
-  borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false; dock.asa.hidden = false; $('dock-tabs').hidden = false; $('dock-panel').hidden = false; $('btn-guia').hidden = false;
+  $('frase').hidden = false; borrarSenal(); guia = null; $('dock-guia').hidden = true; est.pausa = false; dock.asa.hidden = false; $('dock-tabs').hidden = false; $('dock-panel').hidden = false; $('btn-guia').hidden = false;
   medirDock();
 }
 function pintarGuia() {
+  if (guia.E.piensa && !piensaHecho.has(est.clave)) {
+    borrarSenal(); $('frase').hidden = true;   // mientras apuesta, el dock no pasa de ~30 % de la pantalla: la frase viva espera
+    montarPiensa($('dock-guia'), guia.E, { org, cita, medir: medirDock, alCerrar: cerrarGuia, alSeguir: () => { piensaHecho.add(est.clave); $('frase').hidden = false; pintarGuia(); } });
+    return;
+  }
   const E = guia.E, p = E.guia[gi], n = E.guia.length;
   $('dock-guia').innerHTML = `<div class="guia"><div class="guia-cab"><span class="guia-n">Paso ${gi + 1} de ${n}</span><span class="guia-tit">${E.tit}</span><button type="button" class="guia-x" id="pul-guia-x" aria-label="Cerrar la explicación">×</button></div>
     <p class="guia-txt">${p.t}${p.org ? ' ' + org(p.org) : ''}</p>${cita(p.c)}
@@ -324,7 +332,11 @@ function senalar(sels) {
     if (m) { const seg = T?.[m[2]]; if (seg) { const r = mon.tramo(m[1], m[2], seg[0], seg[1]); if (r) lista.push(r); } continue; }
     for (const el of raiz.querySelectorAll(s)) lista.push(el);
   }
-  for (const el of lista) { const d = el.closest('details'); if (d && !d.open) d.open = true; }   // la lupa del pulmón, abierta antes de medir
+  // La lupa del pulmón se abre solo si el primer blanco del paso está dentro: si el paso empieza en la pantalla o las curvas, abrirla
+  // dejaba el dibujo fuera de la vista (está más abajo) y el resto de blancos de la lupa se ignoran en vez de señalarse a ciegas.
+  const cerrada = (el) => { const d = el.closest('details'); return d && !d.open; };
+  if (lista.length && cerrada(lista[0])) lista[0].closest('details').open = true;
+  for (let i = lista.length - 1; i >= 0; i--) if (cerrada(lista[i])) lista.splice(i, 1);
   for (const el of lista) {
     const svg = el.ownerSVGElement;
     if (svg) {
@@ -337,7 +349,7 @@ function senalar(sels) {
       svg.appendChild(r); primero = primero || r;
     } else { el.classList.add('guia-marco'); primero = primero || el; if (el.closest('details')) el.closest('details').open = true; }
   }
-  if (primero) { const c = primero.getBoundingClientRect(), alto = innerHeight - $('dock').offsetHeight; if (c.top < 6 || c.bottom > alto - 6) scrollBy({ top: c.top - (alto - c.height) / 2, behavior: REDUCIR ? 'auto' : 'smooth' }); }
+  if (primero) { const c = primero.getBoundingClientRect(), alto = innerHeight - $('dock').offsetHeight; if (c.top < 6 || c.bottom > alto - 6) scrollBy({ top: c.top - (alto - c.height) / 2, behavior: 'instant' }); }   // instantáneo: con el desplazamiento suave la figura aún iba de camino al medir
 }
 $('btn-guia').addEventListener('click', () => abrirGuia(D.ESTADOS[est.clave]));
 
