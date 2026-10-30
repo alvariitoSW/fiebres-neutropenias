@@ -467,3 +467,10 @@ Parte: `autonomo/partes/2026-10-14-marino-r6.md`.
 - preguntas q115-q178.
 
 Va encima de R6. Parte: `autonomo/partes/2026-10-14-marino-r7.md`.
+
+## Rótulos sobre las Rx y TC de Merino (30/10/2026, `radio-baratas` día 2)
+Botón «Ver rótulos» sobre 6 figuras (22-1, 24-2, 24-3, 28-1, 28-5, 29-3) con la pieza común `js/core/figura-rotulos.js`
+(datos en `js/data/merino-neumo-rotulos.js`, prueba `autonomo/pruebas/merino-rotulos.mjs`). Cada rótulo sale del pie o del
+texto, con su página. 28-2 y 28-7 sin rótulos: son de Radiopaedia (solo enlace, Consejo 30/10, 3.ª). La misma pieza
+rotula la fig. 47.3 de Marino en la ficha 5 del PIF de Radiología, «TC de cráneo en 5 preguntas» (`js/modules/pif-radio/`).
+Parte: `autonomo/partes/2026-10-30-radio-baratas-d2.md`.
