@@ -299,6 +299,40 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30
+- **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
+  recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
+  radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
+- **Cómo lo entiendo** (dos trozos):
+  - **B-051a · Motor de estudio** · tipo: modelo vivo (maqueta primero). Una Rx de tórax y una TC (tórax y cráneo)
+    **dibujadas por la app** (supongo: SVG/canvas propio, como el motor de la eco), con mandos que ponen y quitan
+    patologías: neumotórax (también en supino), derrame, edema cardiogénico frente a SDRA, consolidación y atelectasia,
+    tubo y vía mal puestos, hematoma epidural/subdural, hemorragia, signos precoces de ictus, HTIC y hernias. Para
+    qué: ver cómo cambia la imagen y por qué, y practicar «lee esta placa» con casos que se generan. Modelo «así sí»:
+    el motor de la eco (`js/modules/eco/motor.mjs`) y «Lee esta placa» (PR #42). Se engancha a los cuadernos Tórax de
+    UCI y Neuro urgente (PR #62) y a la placa de UCI. Fuentes: las cifras, de los PDF de `docs/` (Marino, Libro Azul,
+    Manual UMI) y StatPearls ya verificado en `radio-fichas`; las webs que mandaste (Radiology Assistant, NavRad, los 6
+    informes de radiología) **solo como ideas**: sin licencia para copiar textos, imágenes ni contornos. Primer paso:
+    informe-propuesta con 2-3 maquetas para que elijas (supongo, ≈3-4 M); construir, después y por trozos.
+  - **B-051b · Estudio del análisis de imágenes** · tipo: informe (sin construir). Qué haría falta para subir una TC
+    o una placa de un paciente y que la app la analice: servidor e IA (qué modelos existen, qué leen y qué no; NV-Reason
+    ya dijo que no lee cráneo ni placa simple y que no es producto sanitario), privacidad (anonimizar, dónde se procesa),
+    legalidad (RGPD, producto sanitario) y coste. **Choca hoy con dos reglas tuyas**: «sin backend» (`CLAUDE.md` §2) y
+    «ningún dato de pacientes reales» (art. 3a de la reforma). El informe solo te da lo necesario para decidir si las
+    cambias; nada se construye sin esa decisión.
+- **Lo que NO quiero**: copiar imágenes, textos o contornos de Radiology Assistant, NavRad o Radiopaedia; cifras sin
+  fuente con página; guardar imágenes de pacientes; un esquema donde la app puede tener la imagen real (las figuras de
+  Marino se quedan al lado del dibujo, REGLAS §4.8 R4).
+- **Depende de**: la PR #42 (Lee esta placa) y la PR #62 (`radio-fichas`) en `main`; para B-051b, nada.
+- **Tamaño**: grande. Trozos: (1) informe + maquetas de B-051a; (2) informe B-051b; (3) motor de Rx de tórax;
+  (4) TC de cráneo; (5) TC de tórax; (6) casos y Mayéutica.
+- **Dudas**: 1) ¿Empezamos por la Rx de tórax o por la TC de cráneo? (supongo: Rx de tórax, la que más ves en UCI).
+  2) ¿B-051b ya, o cuando el motor esté hecho? 3) Presupuesto del bloque (supongo: maquetas ≈3-4 M; el motor entero,
+  a calcular en el informe).
+- **Lista de calidad**: topes con fuente de cada mando (tamaño del neumotórax, derrame, desviación de línea media): a
+  fijar en el informe · cifra que debe salir en cada forma: en el informe · «lo que NO quiero»: sí · fuentes con
+  página: `docs/` + StatPearls por sección · juez: `--modelo` y prueba propia al construir; el informe, el profesor.
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |

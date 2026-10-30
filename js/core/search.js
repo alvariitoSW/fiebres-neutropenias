@@ -41,6 +41,9 @@ const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'ca
 // index.js de especialidad — nunca inferido, para no arriesgar un
 // resultado de búsqueda que navegue a un sitio equivocado o roto.
 const PANEL_NAV = {
+    // Eco cardíaca (sección Medidas)
+    'panel-eco-medidas-tabs': { especialidad: 'eco', bloque: 'Eco cardíaca · Medidas' },
+
     // Hematología (especialidad 'home' — switcher raíz de home/index.js)
     'panel-reconocimiento-tabs': { especialidad: 'home', view: 'reconocimiento', bloque: 'Reconocimiento Temprano del Paciente Hematológico' },
     'panel-sindromes-tabs': { especialidad: 'home', view: 'sindromes', bloque: 'Síndromes Hematológicos Urgentes' },
