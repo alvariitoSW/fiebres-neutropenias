@@ -31,7 +31,7 @@ export const FICHA = {
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar: manejo', 'Embolia pulmonar: manejo', PDF_R, 'Marino 2024'],
   'mar-cateter-ap': [['libros', 'marinoFundamentos', 'panel-marino-fund-tabs'], 'El catéter de arteria pulmonar y la presión de enclavamiento', 'Catéter de arteria pulmonar', 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', 'Marino 2024'],
   // otras fuentes de la app (solo enlace; nunca se funden con Marino)
-  'ic-descompensada': [['cardiologia', 'insuficienciaCardiaca', 'panel-cardio-ic-tabs'], 'Guía ESC 2026 de IC: IC descompensada', 'Guía ESC de IC', null, 'Guía ESC 2026 de IC'],
+  'ic-descompensada': [['cardiologia', 'insuficienciaCardiaca', 'panel-cardio-ic-tabs'], 'Guía ESC 2026 de IC: IC descompensada', 'Guía ESC de IC', 'docs/esc-2026-hf-guideline-parte1.pdf', 'Guía ESC 2026 de IC'],
   'umi-shock-septico': [['sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs'], 'Manual UMI: shock séptico', 'Manual UMI', null, 'Manual UMI'],
 };
 // Citas que se repiten (ids de párrafo: los de la cobertura del bloque, §3; los que aún no existen en la ficha se

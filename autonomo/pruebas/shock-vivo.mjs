@@ -212,7 +212,7 @@ const scai = async () => p.evaluate(() => document.getElementById('shv-scai-r').
 const ajus = o => p.evaluate(o => window.__shvPruebas().cab.ajustar(o), o);
 const horas5 = async () => { await pest('reloj'); await p.evaluate(() => document.querySelector('[data-h="5"]')?.click()); await espera(700); };
 { const T = [['aurelio', 0, {}, 'A'], ['aurelio', 100, {}, 'C'], ['aurelio', 100, { na: 5, dobuta: true, soporte: 'ecmo' }, 'E'], ['amparo', 100, {}, 'C'], ['fermin', 0, {}, 'A'], ['fermin', 100, {}, 'C']];
-  for (const [k, g, a, esperada] of T) { await pac(k); await pest('grav'); await grav(g); await ajus({ na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: 'no' }); await ajus(a); await p.waitForTimeout(1000);
+  for (const [k, g, a, esperada] of T) { await pac(k); await pest('grav'); await grav(g); await ajus({ na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: 'no' }); await ajus(a); for (let i = 0; i < 12 && await scai() !== esperada; i++) await p.waitForTimeout(500);   // espera a que el bucle repinte el rótulo (con la máquina cargada tarda más)
     ok(await scai() === esperada, `SCAI ${k} g${g} ${JSON.stringify(a)} → ${esperada} (da ${await scai()})`); }
   await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 8 }); await horas5(); ok(await scai() === 'D', 'SCAI amparo con noradrenalina y +5 h (lactato persiste) → D');
   await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 0 }); await grav(70); await espera(400);
@@ -336,6 +336,8 @@ async function medir(t, esperaSig = true) {
 }
 async function responder(q, { bien = true, repaso = false, foto: f = null } = {}) {
     const tag = `${q.id}${bien ? '' : ' (fallando)'}${repaso ? ' en el repaso' : ''}`;
+    { const L = { S1: 'C', S2: 'C', CF1: 'C', CF2: 'C', CF3: 'C', CF5: 'A' }[q.id];   // la letra del monitor es la que dice la explicación de la pregunta
+      if (L) ok(new RegExp(`SCAI · ${L}`).test(await p.evaluate(() => document.getElementById('shv-scai-r').textContent)), `${q.id}: el rótulo SCAI es ${L}`); }
     if (q.predice && !repaso) ok(await velo(), `${tag}: el monitor y el dibujo están tapados antes de contestar («primero predices»)`);
     if (repaso && q.predice) ok(!(await velo()), `${tag}: en el repaso no hay velo`);
     if (q.tipo === 'test') {
@@ -389,7 +391,21 @@ for (const id of ['E2', 'E4', 'E5']) {
     await responder(PREG.find(x => x.id === id), { bien: true, repaso: true });
 }
 ok(await p.evaluate(Z => document.querySelectorAll(Z + ' [data-rep]').length, Z) === 0 && await p.evaluate(Z => /No queda nada por repasar/.test(document.querySelector(Z).innerText), Z), 'repaso: acertadas las tres, no queda nada');
+// El caso de Fermín (infarto del VD, 5 pasos): se recorre entero (desborde tras cada paso y cada respuesta); el paso 4 se falla
 await clic(`${Z} [data-ir="casos"]`); await espera(400);
+await clic(`${Z} [data-caso="1"]`); await espera(700);
+const pasosF = CASOS_D[1].pasos;
+for (let k = 0; k < pasosF.length; k++) {
+    const q = pasosF[k].pregunta;
+    const ficha = await p.evaluate(Z => ({ filas: document.querySelectorAll(Z + ' dl.shv-paciente dd').length, nuevas: document.querySelectorAll(Z + ' dl.shv-paciente dd.shv-cambia').length }), Z);
+    ok(ficha.filas >= 3, `Fermín paso ${k + 1}: la ficha del paciente tiene ${ficha.filas} filas`);
+    await medir(`Fermín paso ${k + 1} · ficha`, false);
+    await responder(q, { bien: k !== 3, foto: k === 0 ? 'may-fermin-1' : k === 3 ? 'may-fermin-4' : null });
+}
+ok(await p.evaluate(Z => /lo que te llevas/i.test(document.querySelector(Z).innerText) && document.querySelectorAll(Z + ' ol.shv-lleva li').length === 4, Z), 'Fermín: «Lo que te llevas» con sus 4 ideas');
+{ const c = await citasOk(); ok(c.n >= 3 && c.bad.length === 0, `Fermín: el final lleva ${c.n} citas y todas llegan ${c.bad.join(', ')}`); }
+await medir('Fermín · final', false); await foto('may-fermin-final');
+await clic(`${Z} [data-fin="otro"]`); await espera(500);
 await clic(`${Z} [data-caso="0"]`); await espera(700);
 const pasosC = CASOS_D[0].pasos;
 for (let k = 0; k < pasosC.length; k++) {

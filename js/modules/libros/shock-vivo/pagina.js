@@ -450,7 +450,7 @@ function refrescar(todo) {
   if (!cab?.lectura) return;
   R = leer();
   pintarCifras(); pintarConsola(); aplicarTopes(false);
-  if (est.modo === 'explorar') { pintarFrase(); pintarLab(); }
+  if (est.modo === 'explorar') { pintarFrase(); pintarLab(); } else pintarScai();   // en la Mayéutica el rótulo SCAI también sigue al monitor
   if (todo) { montarEscena(); pintarPestEscena(); escena.actualizar(cab, 0, true, infoEscena()); if (REDUCIR || est.pausa) monitor.llenar(cab, ctxMon()); monitor.pintar(); pintarMandos(); }
   $('obj-umi').disabled = est.pac.tipo !== 'septico' || est.modo === 'qs';
   $('obj-umi').title = est.pac.tipo !== 'septico' ? 'El Manual UMI da sus objetivos para el shock séptico' : '';

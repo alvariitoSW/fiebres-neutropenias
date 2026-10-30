@@ -28,7 +28,7 @@ const enRepaso = () => May.fase === 'repaso';
 function subirMay() { medirDock(); const r = raiz.getBoundingClientRect(); if (r.top < 0) scrollBy({ top: r.top, behavior: 'auto' }); }
 // El caso: la ficha del paciente se rellena con las cifras del monitor en ese momento (datos y nuevo se leen al abrir el paso)
 const CASOS_V = CASOS_MAY.map((C) => ({ ...C,
-  hueco: `Fuentes: ${[D.C.csHemo, D.C.csNa, D.C.papilar, D.C.ecmoPoscarga].map(cita).join(' ')}`,
+  hueco: `Fuentes: ${(C.corto === 'Fermín' ? [D.C.vd, D.C.dobuta, D.C.csNa] : [D.C.csHemo, D.C.csNa, D.C.papilar, D.C.ecmoPoscarga]).map(cita).join(' ')}`,
   pasos: C.pasos.map((p, i) => {
     let claves = [];
     return Object.defineProperties({ ...p }, {

@@ -1,0 +1,109 @@
+// Mayéutica del shock vivo: la escala SCAI, el ECMO con el Impella y el caso de Fermín (infarto del VD). Mismo formato crudo que
+// PREGUNTAS y CASO de shock-vivo-data.js (se convierten en shock-vivo-mayeutica.js). Cada cifra de un enunciado sale del monitor
+// de la app (autonomo/pruebas/shock-scai-fermin.mjs); las fijas son ilustrativas y lo dicen.
+import { C } from './shock-vivo-data.js';
+const c1 = (x) => (+x).toFixed(1).replace('.', ',');
+// Citas nuevas: ESC 2026 parte 1 (PDF p. 44, Tabla 13 y apartado 7.3.2), Marino caps. 18-21 (PDF p. 45-46)
+const ESC = { f: 'ic-descompensada', id: 'ic-scai-tabla', sitio: 'Tabla 13 · escala SCAI', p: 44 };
+const ESC732 = { f: 'ic-descompensada', id: 'ic-scai-tabla', sitio: 'Shock cardiogénico (7.3.2) y escala SCAI', p: 44 };
+const NTG = { f: 'mc-sca-tratamiento', id: 'mc-tabla-20-3', sitio: 'Tabla 20.3 · nitroglicerina', p: 46 };
+const O2 = { f: 'mc-sca-tratamiento', id: 'mc-tabla-20-3', sitio: 'Tabla 20.3 · oxígeno', p: 45 };
+const REGLA = 'Regla del modelo sobre la Tabla 13 (ESC 2026, p. 44): C/D/E según las intervenciones puestas y la evolución del lactato; la tabla no da más cifra que el lactato >2 mmol/L';
+const AUR1 = { pac: 'aurelio', rec: { g: 1 }, escena: 'corazon' };
+
+export const PREG_SCAI = [
+  { id: 'S1', grupo: 'guia', predice: true, prepara: AUR1,
+    enunciado: (R) => `Aurelio, IAM anterior, aún sin ningún tratamiento: PAM ${R.pam} mmHg y lactato ${c1(R.lact)} mmol/L. <b>Antes de mirar el rótulo del monitor: ¿qué estadio SCAI es?</b>`,
+    opciones: [
+      { t: 'C, «clásico»: hipoperfusión (lactato alto) que ya necesita una intervención.', ok: true },
+      { t: 'A, «en riesgo»: aún no tiene signos de shock.', porque: 'Con lactato de 5,4 sí los tiene: A es el paciente sin signos ni síntomas de shock. Dejarlo en A retrasaría el inotrópico, el vasopresor o el soporte.' },
+      { t: 'B, «inicial»: está inestable, pero sin hipoperfusión.', porque: 'B pide inestabilidad sin hipoperfusión, y un lactato >2 mmol/L es hipoperfusión. Llamarlo B lo trataría como un paciente que todavía perfunde bien.' },
+      { t: 'D, «deteriorante»: ya no responde.', porque: 'D es el paciente parecido al C que empeora pese a las primeras intervenciones; Aurelio aún no tiene ninguna. Con D saltarías a escalar el soporte antes de probar lo básico.' }],
+    explica: 'El estadio C es el paciente con hipoperfusión que requiere una intervención (inotrópico, vasopresor o soporte mecánico). La hipoperfusión se mide mejor con el lactato arterial: se exige >2 mmol/L (ESC 2026, p. 44). La letra del monitor sigue esa tabla.', cita: ESC,
+    org: REGLA },
+  { id: 'S2', grupo: 'guia', predice: true, prepara: { ...AUR1, horas: 5, ajuste: { dobuta: true } },
+    enunciado: (R) => `Cinco horas después, con dobutamina: el lactato de Aurelio ha bajado de 5,4 a ${c1(R.lact)} mmol/L y la PAM es ${R.pam} mmHg. <b>Antes de mirar el rótulo: ¿qué estadio SCAI es ahora?</b>`,
+    opciones: [
+      { t: 'C: sigue con hipoperfusión (lactato >2), pero responde.', ok: true },
+      { t: 'D: el lactato sigue por encima de 2 mmol/L pese al fármaco.', porque: 'D exige no responder a las primeras intervenciones; el lactato de Aurelio baja. Llamarlo D lo llevaría a escalar el soporte cuando el fármaco está funcionando.' },
+      { t: 'A: el lactato ya mejora, así que está en riesgo, no en shock.', porque: 'Con lactato >2 mmol/L la hipoperfusión sigue ahí; A es no tener aún signos de shock. Retirar la vigilancia ahora lo dejaría sin seguimiento mientras todavía perfunde mal.' },
+      { t: 'B: está estable, pero perfunde mal según el lactato.', porque: 'B es la inestabilidad sin hipoperfusión; Aurelio tiene hipoperfusión, así que B no encaja con lo que ves en el lactato.' }],
+    explica: 'Mientras el lactato siga por encima de 2 hay hipoperfusión, y con una intervención puesta es C si responde. D es «parecido al C, pero empeorando sin responder a las primeras intervenciones» (ESC 2026, p. 44).', cita: ESC,
+    org: REGLA + '. Los 5,4 y los 3,4 mmol/L son del modelo (ilustrativo)' },
+  { id: 'S3', grupo: 'examen', tipo: 'error', prepara: { pac: 'fermin', escena: 'corazon' },
+    enunciado: 'El R1 anota la escala SCAI de varios pacientes (cifras de ejemplo, ilustrativas). <b>Puede haber 0, 1 o 2 errores.</b>',
+    frases: [
+      { t: 'La hipoperfusión se mide mejor con el lactato arterial: se exige >2 mmol/L.' },
+      { t: 'Un paciente con PAM 58, FC 120 y lactato 1,4 mmol/L está en estadio C.', mal: true, buena: 'Sin hipoperfusión (lactato ≤2) no es C: con hipotensión relativa o taquicardia pero sin hipoperfusión es el estadio B, «inicial». La tabla del modelo nunca llega a B porque, con PAM <65, sus pacientes ya tienen lactato >2.', cita: ESC },
+      { t: 'El estadio D es el paciente parecido al C que empeora sin responder a las primeras intervenciones.' }],
+    explica: 'Solo la segunda es falsa: el estadio lo marca la hipoperfusión, no la PA sola (ESC 2026, p. 44).', cita: ESC,
+    org: 'El PAM 58 y la FC 120 son un ejemplo ilustrativo; la Tabla 13 no da cifras de PA («no specific blood pressure cut-off»)' },
+  { id: 'S4', grupo: 'examen', predice: true, prepara: { pac: 'aurelio', rec: { esc: 'fallo', g: 1, volemia: 0 }, ajuste: { soporte: 'ecmo', ecmo: 6 }, escena: 'ecmo' },
+    enunciado: (R) => `Aurelio, en ECMO VA a ${c1(R.ecmo)} L/min: la aórtica abre ${R.aoAbre} de ${R.aoDe} latidos y la PCP es ${R.pcp} mmHg. El VI no se vacía. <b>¿Qué añades?</b>`,
+    opciones: [
+      { t: 'Un Impella o un balón de contrapulsación, para descargar el VI.', ok: true },
+      { t: 'Más flujo de ECMO: así la bomba hace más trabajo y el VI descansa.', porque: 'El flujo retrógrado de la aorta es justo lo que sube la poscarga del VI. Con más flujo, el VI de Aurelio abriría aún menos y el edema agudo de pulmón se acercaría.' },
+      { t: 'Más noradrenalina, para sostener la presión de la aorta y la perfusión.', porque: 'Un vasoconstrictor sube la presión contra la que eyecta el VI. A un ventrículo ya cerrado le pondrías más poscarga, no menos.' },
+      { t: 'Un bolo de volumen para llenar el circuito y mantener el flujo.', porque: 'El problema es que el VI recibe más de lo que saca. Con la PCP ya alta, más volumen encharcaría el pulmón de Aurelio.' }],
+    explica: 'El flujo retrógrado del ECMO sube la poscarga del VI y puede reducir su gasto y causar edema agudo de pulmón. Se combina el ECMO con un balón o un Impella para bajar la poscarga, o se drena el VI («venteo») para bajar su presión telediastólica (Marino, pp. 48-49).', cita: C.ecmoPoscarga,
+    org: 'Marino, PDF pp. 48-49; los motivos de las opciones falsas aplican esa misma frase (la poscarga y la PCP). Cuánto baja la PCP lo calcula el modelo (ilustrativo)',
+    comprueba: { txt: 'Compruébalo: añade un Impella', ajuste: { venteo: 'impella', impella: 2.5 }, mira: 'Mira la PCP y cuántos latidos abre la aórtica en la consola.', cifras: ['pcp', 'aoAbre', 'ecmo'] } },
+];
+
+// ── El caso de Fermín (70 años, 80 kg, IAM inferior con el VD afectado): la gravedad al máximo, para que haya hipoperfusión
+const FER = { pac: 'fermin', rec: { g: 1 }, escena: 'corazon', canales: 'todos' };
+const filaF = (R, ...extra) => [['Paciente', 'Fermín, 70 años, 80 kg'], ['Motivo', 'IAM inferior con el VD afectado', 1], ['PA', `${R.pas}/${R.pad} mmHg`, 1], ['PVC / PCP', `${R.pvc} / ${R.pcp} mmHg`, 1], ['IC', `${c1(R.ic)} L/min/m²`, 1], ['Lactato', `${c1(R.lact)} mmol/L`, 1], ...extra];
+export const CASO_FERMIN = {
+  titulo: 'El infarto que se come el ventrículo derecho (Fermín)',
+  sub: 'Un infarto inferior que falla por la derecha: volumen con juicio, el fármaco que toca y lo que no se da',
+  pasos: [
+    { dia: 'Hora 2 · ¿qué ventrículo y es shock?', prepara: FER, tipo: 'test', ficha: (R) => filaF(R, ['FEVI', '52 %']),
+      enunciado: (R) => `PVC ${R.pvc}, PCP ${R.pcp} mmHg, IC ${c1(R.ic)} L/min/m², FEVI 52 %, PAM ${R.pam} mmHg y lactato ${c1(R.lact)} mmol/L. <b>¿Qué ventrículo falla y es ya un shock?</b>`,
+      opciones: [
+        { t: 'El derecho, y sí es shock: gasto bajo con hipoperfusión (lactato >2), aunque la PAM sea normal.', ok: true },
+        { t: 'El derecho, pero no es shock: con PAM de 80 hay presión suficiente.', porque: 'El shock cardiogénico puede cursar con hipoperfusión y presión normal, y la hipotensión falta en cerca del 5 % (Marino, p. 40; ESC 2026, p. 44). Con ese criterio Fermín seguiría sin tratamiento mientras su lactato sube.' },
+        { t: 'El izquierdo, y sí es shock: la FEVI de 52 % ya está baja.', porque: 'La PCP está en 11, no alta, y la FEVI es normal: no es el patrón del VI. Tratar un VI que no falla le sumaría un fármaco sin diana y dejaría el VD sin ayuda.' },
+        { t: 'El izquierdo, pero aún no es shock porque la PAM es normal.', porque: 'Falla el derecho (PVC mayor que PCP, FEVI normal), y la PAM normal no descarta la hipoperfusión. Llamarlo «aún no» retrasaría el tratamiento de un paciente que ya perfunde mal.' }],
+      explica: 'En el fallo del VD suben la PVC más que la PCP y la FEVI se conserva (Marino, p. 40). Es shock porque hay hipoperfusión (lactato >2 mmol/L): puede haberla con presión normal, con mejor pronóstico que la hipotensiva (ESC 2026, p. 44).', cita: C.vd,
+      org: 'El lactato de la hora 2 es del modelo (ilustrativo)' },
+    { dia: 'Hora 2 · el volumen', prepara: FER, tipo: 'test', predice: true, ficha: (R) => filaF(R),
+      enunciado: (R) => `La PVC ya es ${R.pvc} mmHg y el IC, ${c1(R.ic)}. Un compañero propone «llenar al VD». <b>¿Qué haces con el volumen?</b>`,
+      opciones: [
+        { t: '250 mL como prueba, mirando PVC e IC.', ok: true },
+        { t: 'Un litro rápido: el VD necesita más precarga para empujar sangre.', porque: 'La PVC ya está alta; más volumen dilata más el VD y empuja el tabique hacia el VI, que se llena peor (Marino, p. 40). Fermín perdería gasto en vez de ganarlo.' },
+        { t: 'Furosemida para bajar la PVC y descongestionar al VD.', porque: 'El VI ya se llena mal por el VD dilatado (Marino, p. 40); quitar volumen le restaría aún más llenado y gasto. La ESC cita los diuréticos para la congestión, que Fermín no tiene en el pulmón.' },
+        { t: 'Nada de volumen en ningún caso, porque el VD ya está dilatado.', porque: 'La guía pide un manejo «prudente» de los líquidos, no ninguno (ESC 2026, p. 44). Negarse a probar dejaría sin tratar un posible déficit de llenado.' }],
+      explica: 'La guía pide «judicious fluid management»: volumen con juicio, no a ciegas (ESC 2026, p. 44). En el modelo, 250 mL suben la PVC de 15 a 16 y el IC no mejora: la prueba se para.', cita: ESC732,
+      org: 'La guía no da cuánto volumen ni la meta en el VD; los 250 mL y lo que hace el modelo son ilustrativos',
+      comprueba: { txt: 'Compruébalo: dale 250 mL', volumen: 250, mira: 'Mira la PVC y el IC: el volumen no mejora el gasto.', cifras: ['pvc', 'pcp', 'ic'] } },
+    { dia: 'Hora 2 · el fármaco', prepara: FER, tipo: 'test', ficha: (R) => filaF(R),
+      enunciado: (R) => `Con PAM ${R.pam} mmHg, IC ${c1(R.ic)} y lactato ${c1(R.lact)}. <b>¿Qué eliges?</b>`,
+      opciones: [
+        { t: 'Un inotrópico, dobutamina: el problema es el gasto, no la presión.', ok: true },
+        { t: 'Noradrenalina, para subir la PAM y mejorar la perfusión de los órganos.', porque: 'Con PAM de 80 no hay hipotensión que corregir; en el modelo la noradrenalina no cambia el IC de Fermín. Se quedaría con la hipoperfusión y un vasoconstrictor de más.' },
+        { t: 'Esperar a que baje la PA antes de tratar, para no anticiparse.', porque: 'El shock cardiogénico puede presentarse con hipoperfusión y normotensión (ESC 2026, p. 44). Esperar a la hipotensión sería llegar tarde.' },
+        { t: 'Otro bolo grande de volumen, para subir el gasto del VD.', porque: 'La PVC ya está alta y el IC no sube con volumen (paso anterior). Seguirías dilatando el VD sin ganar gasto.' }],
+      explica: 'La guía cita el uso apropiado de inotrópicos y vasopresores (ESC 2026, p. 44); el inotrópico más usado en el shock cardiogénico es la dobutamina (Marino, p. 43). En el modelo, tras 5 h con dobutamina el IC sube a 2,2 y el lactato baja a cerca de 1 mmol/L.', cita: C.dobuta,
+      org: REGLA.split(':')[0] + '; la respuesta en horas es del modelo (ilustrativo)',
+      comprueba: { txt: 'Compruébalo: dobutamina', ajuste: { dobuta: true }, mira: 'Mira el IC y la FC: la dobutamina sube el gasto y acelera el corazón; el lactato tarda horas (pasa el reloj).', cifras: ['ic', 'fc', 'pam'] } },
+    { dia: 'Hora 3 · dolor torácico', prepara: { ...FER, horas: 3, ajuste: { dobuta: true } }, tipo: 'test', ficha: (R) => filaF(R, ['Dolor', 'vuelve el dolor torácico']),
+      enunciado: 'Fermín vuelve a tener dolor torácico. Piensas en la nitroglicerina que se usa en el infarto. <b>¿Cuál de estas es la que NO debes dar?</b>',
+      opciones: [
+        { t: 'Nitroglicerina: venodilatadora, puede ser contraproducente en el VD.', ok: true },
+        { t: 'Oxígeno suplementario, solo si la SaO₂ es <90 %, como en cualquier infarto.', porque: 'El oxígeno sin hipoxemia no ayuda y, si la saturación es baja, sí está indicado (Marino, p. 45). No es el que hay que evitar: quitarlo a un Fermín hipoxémico empeoraría el aporte al miocardio.' },
+        { t: 'Seguir con la dobutamina que ya lleva, para sostener el gasto.', porque: 'Es el inotrópico que sostiene su gasto. Retirarla por el dolor lo devolvería a un IC bajo y a la hipoperfusión.' },
+        { t: 'Una prueba de volumen de 250 mL, mirando la PVC y el IC.', porque: 'La guía pide un manejo prudente del volumen, no prohibirlo (ESC 2026, p. 44). No es lo que se evita aquí.' }],
+      explica: 'La nitroglicerina no se aconseja en el infarto del ventrículo derecho porque sus efectos venodilatadores pueden ser contraproducentes (Marino, p. 46; Tabla 20.3: «evitar en infarto de VD»).', cita: NTG,
+      org: 'El modelo no tiene nitroglicerina: este paso no se puede probar en el monitor' },
+    { dia: 'Hora 5 · ¿hace falta más?', prepara: { ...FER, horas: 5, ajuste: { dobuta: true } }, tipo: 'test', ficha: (R) => filaF(R, ['Hora', '5 h con dobutamina']),
+      enunciado: (R) => `Cinco horas con dobutamina: IC ${c1(R.ic)}, PAM ${R.pam} mmHg y lactato ${c1(R.lact)} mmol/L; el rótulo del monitor marca el estadio SCAI. <b>¿Pasas ya a un soporte mecánico?</b>`,
+      opciones: [
+        { t: 'No: ha respondido; el soporte se reserva por si no responde.', ok: true },
+        { t: 'Sí, un Impella ya: todo shock cardiogénico acaba necesitándolo.', porque: 'La guía lo prevé «cuando esté indicado» (ESC 2026, p. 44). Fermín responde al fármaco: pondría un dispositivo con sus riesgos de sangrado e isquemia de la pierna sin necesidad (Marino, p. 48).' },
+        { t: 'Sí, un ECMO: el IC aún no es normal y conviene asegurar el gasto.', porque: 'El ECMO añade poscarga al VI y complicaciones (Marino, p. 48-49). Con el lactato normalizado, Fermín no lo necesita.' },
+        { t: 'Es el estadio D: el tratamiento inicial ya ha fallado.', porque: 'D es no responder a las primeras intervenciones (ESC 2026, p. 44); Fermín ha respondido. Escalarlo como D lo expondría a un soporte que no necesita.' }],
+      explica: 'El estadio D es «parecido al C, pero empeorando sin responder a las primeras intervenciones»; el soporte circulatorio mecánico entra cuando está indicado (ESC 2026, p. 44). Fermín responde: lactato normal y gasto mejor.', cita: ESC,
+      org: REGLA + '. Qué cifras hacen «responder» no las da la fuente: son del modelo (ilustrativo)' },
+  ],
+  llevas: ['El infarto del VD es shock con la PAM normal si hay hipoperfusión: lo marca el lactato (>2 mmol/L).', 'El volumen se prueba con juicio y se para si la PVC sube sin ganar gasto.', 'Se trata el gasto con un inotrópico; la nitroglicerina no se da.', 'El soporte mecánico se reserva para quien no responde (SCAI D).'],
+};

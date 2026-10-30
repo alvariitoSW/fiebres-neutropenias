@@ -4,10 +4,11 @@
 // función (`vivo`): al preguntar, el modelo se pone en el estado de la pregunta y el texto se escribe con sus cifras;
 // el texto fijo de aquí solo sirve de reserva y para comprobar la forma del banco.
 import { PREGUNTAS as RAW0, CASO as RAW_CASO, C } from './shock-vivo-data.js';
+import { PREG_SCAI, CASO_FERMIN } from './shock-vivo-scai.js';
 import { tempDe, pdfPagina } from './balon-temporizacion-data.js';
 
 const CORTO = { G1: 'balón: cuándo se hincha', G4: 'balón 1:2', G5: 'el «Aumento» de la consola', G6: 'contraindicaciones del balón', B1: 'balón bien sincronizado', B2: 'pon los errores', B3: 'inflado precoz', B4: 'inflado tardío', B5: 'desinflado precoz o tardío', B6: 'corregir el balón', B7: 'frases del balón', G2: 'Impella a 5,5 L/min',
-  G3: 'ECMO y el VI', E1: 'ScvO₂ en la sepsis', E2: 'sin balón', E3: 'pie sin pulso con balón', E4: 'complicación del Impella', E5: 'ventaja del ECMO VA' };
+  G3: 'ECMO y el VI', S1: 'SCAI sin tratar', S2: 'SCAI tras 5 h', S3: 'frases de la escala SCAI', S4: 'ECMO con el VI cerrado', E1: 'ScvO₂ en la sepsis', E2: 'sin balón', E3: 'pie sin pulso con balón', E4: 'complicación del Impella', E5: 'ventaja del ECMO VA' };
 // ── Temporización del balón (Gillespie 2024, p. 8 «Timing errors» y pie de la Fig. 7, p. 6). Los textos salen de
 // balon-temporizacion-data.js; los segundos de cada error son del modelo (ilustrativo). Marino (p. 45) da el balón; la
 // temporización la da Gillespie, enlazada a su página en `org`.
@@ -87,6 +88,7 @@ const BALON_NUEVAS = [
 const RAW = [...RAW0];
 const meter = (despuesDe, nuevas) => { const i = RAW.findIndex((q) => q.id === despuesDe); RAW.splice(i + 1, 0, ...nuevas); };
 meter('G4', BALON_NUEVAS.slice(0, 2)); meter('E3', BALON_NUEVAS.slice(2));
+RAW.push(...PREG_SCAI);
 
 // Una lectura de reserva: todo a 0 (no se ve nunca; el modelo da las cifras de verdad)
 const R0 = new Proxy({}, { get: () => 0 });
@@ -117,4 +119,9 @@ export const CASOS = [{
   pasos: RAW_CASO.pasos.map((p, i) => ({ momento: p.dia, modelo: p.prepara, ficha: p.ficha, pregunta: convertir(p, `C${i + 1}`, 'caso') })),
   lleva: RAW_CASO.llevas,
   volver: { nombre: 'Shock cardiogénico: la hemodinámica', ancla: 'mc-cs-hemodinamica' },
+}, {
+  titulo: CASO_FERMIN.titulo, sub: CASO_FERMIN.sub, corto: 'Fermín', paciente: {},
+  pasos: CASO_FERMIN.pasos.map((p, i) => ({ momento: p.dia, modelo: p.prepara, ficha: p.ficha, pregunta: convertir(p, `CF${i + 1}`, 'caso') })),
+  lleva: CASO_FERMIN.llevas,
+  volver: { nombre: 'Fallo del corazón derecho', ancla: 'mc-cs-vd' },
 }];
