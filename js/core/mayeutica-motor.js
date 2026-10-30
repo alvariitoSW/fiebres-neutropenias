@@ -273,7 +273,7 @@ export function pintarPregunta(cont, q, o) {
             <div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="corregir">Corregir</button></div>`;
     }
     entrar(fmt, p);
-    const botonSig = () => `<div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="sig">${q.ultimo ? 'Ver lo que te llevas' : 'Siguiente →'}</button></div>`;
+    const botonSig = () => `<div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="sig">${q.ultimo ? (q.ultimoTexto || 'Ver lo que te llevas') : 'Siguiente →'}</button></div>`;
     const confirma = ok => T.confirma ? T.confirma(q) : t.confirma || (ok ? 'el modelo lo confirma.' : 'míralo en el modelo.');
 
     function cerrar(htmlRes, conConsecuencia) {
@@ -436,7 +436,7 @@ export function pintarDiasAtras(zona, items, o) {
         const intro = i === 0 ? `<p class="${p}-para">${N === 1 ? 'Una pregunta' : `${N} preguntas`} de fichas que ya estudiaste. Volver a contestar días después fija más que releer (Larsen 2009, d = 0,91 en residentes; Kerfoot 2010, 724 residentes). Las elige la fecha de tu último intento.</p><details class="nota-plegable" open><summary>Mezclar fichas</summary><p>Mezclar fichas (entrelazado) tiene evidencia contradictoria en medicina: en ECG ayudó (Hatala 2003, 46 % frente a 30 %) y perjudicó (Monteiro 2017, 24 % frente a 34 % a los días). Aquí solo se mezclan conceptos parecidos, y se mide contigo.</p></details>` : '';
         const cabecera = `${eyebrow}<span class="${p}-contador">${i + 1} de ${N}</span>${intro}<p class="${p}-chip">${chipDiasAtras(a, hoy)}</p>`;
         const base = o.pregunta ? o.pregunta(q) : {};
-        pintarPregunta(zona, { ...q, num: i + 1, ultimo: i === N - 1 }, { ...base, p, cabecera,
+        pintarPregunta(zona, { ...q, num: i + 1, ultimo: i === N - 1, ultimoTexto: 'Terminar el repaso →' }, { ...base, p, cabecera,
             vuelve: (qq, r) => { const b = { aciertos: 0, fallos: 0, ...a }; r.ok ? b.aciertos++ : b.fallos++; b.repasar = !r.ok; return lineaVuelve(b); },
             alFinal: r => { o.guardar?.(q, r); paso(i + 1); } });
     };

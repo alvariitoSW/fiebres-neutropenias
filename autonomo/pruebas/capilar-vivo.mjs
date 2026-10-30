@@ -314,7 +314,7 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
     if (sinTapar.length) ok(false, `${donde}: se ven antes de contestar ${sinTapar.join(', ')}`);
   }
   if (q.tipo === 'test') {
-    await pulsar(pref + '[data-accion="ops"]');
+    if (!q.sinPensar) await pulsar(pref + '[data-accion="ops"]');
     // data-op es la posición en pantalla: las opciones salen barajadas por el motor común (core/mayeutica-motor.js)
     const orden = barajar(q.opciones, q.id), buena = orden.findIndex(o => o.ok), mala = orden.findIndex(o => !o.ok);
     if (foto1) { await p.evaluate(() => document.getElementById('cpv-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }

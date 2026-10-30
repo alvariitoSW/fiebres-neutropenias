@@ -15,6 +15,7 @@
 // (core/citas.js).
 import { cargarMotion } from '../../core/motion.js';
 import { verFrase } from '../../core/frase-vista.js';
+import { ENSENANZA } from '../../data/capilar-vivo-caso-carmen.js';
 import { crearTope } from '../../core/tope.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
@@ -173,6 +174,7 @@ const soltar = e => { e.gcFijo = null; e.transf = null; e.dil = null; };
    Tope: Hb ≥7 g/dL en el crítico estable sin cardiopatía isquémica = fuera de indicación (merino-transfusion, p. 8, #mh-umbral-7).
    1.ª bolsa: la Hb llega a 8,4 y sale el dato de las guías, sin consejo. 2.ª bolsa: sello TACO, mando apagado, constantes.
    ============================================================ */
+const rama = { b1: false, b2: false };   // caso de Carmen: ¿puso la 1.ª bolsa? ¿y la 2.ª?
 let carmen = null;    // { bolsas } mientras el modelo es Carmen; null en cualquier otro caso
 const CITA_TACO = 'merino-riesgos#mh-taco', CITA_UMBRAL = 'merino-transfusion#mh-umbral-7';
 function salirDeCarmen() {
@@ -195,6 +197,10 @@ function selloCarmen() {
     claveActual = null;
     decir('La transfusión que no hacía falta le ha llenado el pulmón de agua.', 'ficha · merino-riesgos#mh-taco · p. 15-16 · PaO₂ 55: ilustrativa', true);
     Lupa.abrir('alveolo');
+    ponerSelloTaco();
+}
+// El sello y sus constantes (también los usa el caso de Carmen en su pantalla del sello)
+function ponerSelloTaco() {
     tope.poner('carmen-taco', { nivel: 'sello', titulo: 'TACO', texto: 'Sin indicación: edema pulmonar en 6 h', cita: CITA_TACO, origen: 'ficha · p. 8 y 15-16', deshabilita: ['#cpv-m-transf'] });
     let n = document.getElementById('cpv-carmen-nota');
     if (!n) { n = document.createElement('div'); n.id = 'cpv-carmen-nota'; n.className = 'cpv-carmen-nota'; $('lamina-caja').after(n); }
@@ -458,14 +464,20 @@ const Mayeutica = crearMayeuticaModelo({
     subir, reiniciar: () => { aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar(); },
     volverPor: 'Capilar y oxígeno',
     pregunta: {
-        alEmpezar: q => { ponerCamas(q.camas); ponerModelo(q); },
+        alEmpezar: q => { salirDeCarmen(); ponerCamas(q.camas); ponerModelo(q); if (q.carmen === 'taco') ponerSelloTaco(); },
+        // Al elegir una opción con consecuencia, el modelo pasa a su estado; en el caso de Carmen se recuerda la rama
+        alConsecuencia: (c, q) => { if (q.id === 'cm-1') rama.b1 = true; if (q.id === 'cm-2') rama.b2 = true; ponerModelo({ ...q, estado: c.estado, lupa: c.lupa, mirar: c.mirar || q.mirar }); },
+        antes: q => (typeof q.antes === 'function' ? q.antes() : ''),
         alPintar: () => pintarCamas(),
         enlazar: enlazarOrigenes,
         verEnTexto: q => verEnTexto(q.fuente),
         alCerrar: q => { if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); } setOcultos([]); },
-        alSalir: () => { mirar(null); setOcultos([]); ponerCamas(null); },
+        alSalir: () => { salirDeCarmen(); mirar(null); setOcultos([]); ponerCamas(null); },
         // Las camas del caso: «Ver cama 1 / cama 2» pone el modelo en cada una
-        alClic: (e, q) => { const cm = e.target.closest('[data-cama]'); if (!cm) return false; aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return true; },
+        alClic: (e, q) => {
+            const ens = e.target.closest('[data-cm-paso]');
+            if (ens) { const p = ENSENANZA[+ens.dataset.cmPaso]; ponerModelo({ estado: p.estado, lupa: p.lupa, mirar: p.mirar }); return true; }
+            const cm = e.target.closest('[data-cama]'); if (!cm) return false; aplicar(estadoDe(q.camas[+cm.dataset.cama].e), { frase: false }); return true; },
         tocar: {
             mandoHTML,
             alMostrar: q => mirar(q.tocar.mirar || q.mirar || null),
@@ -491,12 +503,14 @@ const Mayeutica = crearMayeuticaModelo({
         casos: 'El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.',
         abrirPaciente: 'Abrir el modelo en el estado del paciente',
     },
-    preguntaDePaso: (paso, C) => ({ estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar, camas: paso.camas || C.camas }),
+    preguntaDePaso: (paso, C) => (paso.pregunta.id === 'cm-1' && (rama.b1 = rama.b2 = false), { carmen: paso.carmen, antes: paso.antes, estado: rama.b1 && paso.estadoB1 ? paso.estadoB1 : paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar, camas: paso.camas || C.camas }),
     // Si el paso compara camas, sus botones van bajo la ficha del paciente
     cabeceraPaso: (paso, C) => {
-        const camas = paso.camas || C.camas;
-        return camas ? `<div class="cpv-camas"><div class="cpv-seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="cpv-camas-tabla"></div></div>` : '';
+        const camas = paso.camas || C.camas, ramaHtml = paso.cab ? paso.cab(rama) : '';
+        return ramaHtml + (camas ? `<div class="cpv-camas"><div class="cpv-seg" role="group" aria-label="Qué cama ves en el modelo">${camas.map((c, i) => `<button type="button" data-cama="${i}" aria-pressed="false">Ver ${c.n}</button>`).join('')}</div><div id="cpv-camas-tabla"></div></div>` : '');
     },
+    // «Lo que te llevas» se pinta justo después: sus «Ver en la ficha» se rellenan en cuanto está en la página
+    alTerminarCaso: () => queueMicrotask(() => $('preg').querySelectorAll('[data-cpv-fuente]').forEach(sp => { sp.innerHTML = enlacesFuente(sp.dataset.cpvFuente, { clase: 'cpv-ir-texto', claseOrg: 'cpv-org', prefijo: 'Ver en la ficha: ' }); })),
     abrirPaciente: C => { setModo('explorar'); ponerEnEstado(C.volver.estado); },
 });
 
