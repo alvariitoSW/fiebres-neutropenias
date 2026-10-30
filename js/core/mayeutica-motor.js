@@ -10,7 +10,7 @@
 //     opciones y los puntos de destapar se escriben al pulsar «Ya lo tengo»).
 //   - barajar(): el orden fijo de las opciones de cada test (lo lee también autonomo/jueces-forma.mjs).
 //   - crearGuardado() y Progreso: aciertos y fallos en este dispositivo (localStorage, como el quiz), cada banco con
-//     su clave de siempre y el mismo formato: por pregunta { aciertos, fallos, resultado ('on'|'mal'), repasar, faltan }.
+//     su clave de siempre y el mismo formato: por pregunta { aciertos, fallos, resultado ('on'|'mal'), repasar, faltan, ultimo (día local), dias (días distintos con acierto), diaOk }.
 //   - pintarRepaso(): «Otra vez lo que fallaste» (solo lo fallado; en destapar, solo los puntos que faltaron).
 //   - Casos: los casos clínicos que evolucionan (la ficha del paciente se rellena, lo nuevo en rojo y marcado) y
 //     «Lo que te llevas». Dos campos opcionales (B-020; sin ellos, todo queda como antes):
@@ -47,6 +47,53 @@ export function barajar(ops, id) {
 }
 
 /* ---------- Aciertos y fallos guardados (solo en este dispositivo, siempre dentro de try/catch) ---------- */
+// ---- Repaso espaciado: reglas puras (sin DOM). Regla propia de la app, sin prueba propia (ver Mayéutica, inicio). ----
+const pad = n => String(n).padStart(2, '0');
+// Día LOCAL 'AAAA-MM-DD' (nunca toISOString: a medianoche local cambia de día en UTC).
+export function hoyLocal(d = new Date()) { return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
+const aFecha = s => { const [y, m, d] = s.split('-').map(Number); return Date.UTC(y, m - 1, d); };
+export function diasEntre(a, b) { return Math.round((aFecha(b) - aFecha(a)) / 86400000); }
+export function sumarDias(dia, n) { const t = new Date(aFecha(dia) + n * 86400000); return `${t.getUTCFullYear()}-${pad(t.getUTCMonth() + 1)}-${pad(t.getUTCDate())}`; }
+const esFallada = a => !!a && (a.repasar === undefined ? a.resultado === 'mal' : !!a.repasar);
+// Días hasta que vuelve: fallada → 1; saldo aciertos−fallos 0-1 → 3; 2 → 7; ≥3 → 14.
+export function intervalo(a) {
+    if (esFallada(a)) return 1;
+    const saldo = (a?.aciertos || 0) - (a?.fallos || 0);
+    return saldo >= 3 ? 14 : saldo === 2 ? 7 : 3;
+}
+// Toca si hoy ≥ último + intervalo. Sin fecha (registro viejo): nunca toca.
+export function toca(a, hoy) { return !!a?.ultimo && diasEntre(a.ultimo, hoy) >= intervalo(a); }
+// Firme: acertada en dos días distintos.
+export function firme(a) { return (a?.dias || 0) >= 2; }
+const nDias = n => `${n} día${n === 1 ? '' : 's'}`;
+export function chipDiasAtras(a, hoy) {
+    const n = diasEntre(a.ultimo, hoy);
+    return esFallada(a) ? `Fallada hace ${nDias(n)}` : `Acertada hace ${nDias(n)} · tocaba a los ${intervalo(a)}`;
+}
+export function lineaVuelve(a) {
+    if (!a) return '';
+    if (esFallada(a)) return 'Vuelve mañana: fallada';
+    const v = a.aciertos || 0;
+    return `Vuelve en ${nDias(intervalo(a))}: la acertaste ${v <= 1 ? 'una vez' : v === 2 ? 'dos veces' : 'tres veces o más'}`;
+}
+// items { q, ficha, a }: solo las que tocan; primero falladas (la más antigua antes), luego acertadas más atrasadas;
+// nunca dos seguidas de la misma ficha (si no se puede, se queda corta); como mucho max; nunca rellena con «sin fecha».
+export function elegirDiasAtras(items, { hoy, max = 5 } = {}) {
+    const atraso = it => diasEntre(it.a.ultimo, hoy) - intervalo(it.a);
+    const resto = items.filter(it => toca(it.a, hoy)).sort((x, y) => {
+        const fx = esFallada(x.a), fy = esFallada(y.a);
+        if (fx !== fy) return fx ? -1 : 1;
+        return fx ? x.a.ultimo.localeCompare(y.a.ultimo) : atraso(y) - atraso(x);
+    });
+    const out = [];
+    while (out.length < max) {
+        const i = resto.findIndex(it => it.ficha !== out[out.length - 1]?.ficha);
+        if (i < 0) break;
+        out.push(resto.splice(i, 1)[0]);
+    }
+    return out;
+}
+
 export function crearGuardado(clave) {
     const leer = () => {
         try { return JSON.parse(localStorage.getItem(clave)) ?? {}; }
@@ -60,6 +107,9 @@ export function crearGuardado(clave) {
                 const g = leer();
                 const a = g[id] ?? { aciertos: 0, fallos: 0 };
                 ok ? a.aciertos++ : a.fallos++;
+                const hoy = hoyLocal();
+                a.ultimo = hoy;
+                if (ok && a.diaOk !== hoy) { a.dias = (a.dias || 0) + 1; a.diaOk = hoy; }
                 if (resultado) a.resultado = resultado;
                 a.repasar = !!fallo; a.faltan = fallo?.faltan ?? [];
                 g[id] = a;
@@ -106,6 +156,19 @@ export class Progreso {
     // Un paso de un caso: cuenta, pero no entra en el repaso.
     anotarCaso(q, r) { this.g.guardar(q.id, r.ok); }
     borrar(ids) { this.g.borrar(ids); this.cargar(); }
+    registro(id) { return this.g.leer()[id]; }
+    // Registro tal como quedará al anotar esta respuesta (para decir cuándo vuelve, antes de anotar).
+    previsto(q, ok) {
+        const a = { aciertos: 0, fallos: 0, ...this.registro(q.id) };
+        ok ? a.aciertos++ : a.fallos++;
+        a.repasar = !ok; a.ultimo = hoyLocal();
+        return a;
+    }
+    // Ideas firmes del banco (guía y examen; los pasos de caso viven aparte y no cuentan): { n, total, manana }.
+    firmes(lista = this.preguntas) {
+        const g = this.g.leer(), man = sumarDias(hoyLocal(), 1);
+        return { n: lista.filter(q => firme(g[q.id])).length, total: lista.length, manana: lista.filter(q => toca(g[q.id], man)).length };
+    }
     get hechas() { return Object.keys(this.resultados).length; }
     get bien() { return Object.values(this.resultados).filter(r => r === 'on').length; }
     get nFallos() { return Object.keys(this.fallos).length; }
@@ -213,7 +276,8 @@ export function pintarPregunta(cont, q, o) {
 
     function cerrar(htmlRes, conConsecuencia) {
         const r = hueco('res');
-        const pie = `${q.nota ? `<div class="${c('nota-fuentes')}">${q.nota}</div>` : ''}${o.trasRespuesta?.(q) || ''}${o.verEnTexto?.(q) || ''}`;
+        const vuelve = o.vuelve ? o.vuelve(q, res) : '';
+        const pie = `${vuelve ? `<p class="${c('vuelve')}">${vuelve}</p>` : ''}${q.nota ? `<div class="${c('nota-fuentes')}">${q.nota}</div>` : ''}${o.trasRespuesta?.(q) || ''}${o.verEnTexto?.(q) || ''}`;
         if (t) {
             // Primero se predice; ahora se comprueba en el modelo (las cifras tapadas se destapan al comprobar).
             r.innerHTML = `<div class="${c('respuesta entra')}">${htmlRes}</div>`;
@@ -461,8 +525,14 @@ export function crearMayeuticaModelo(cfg) {
     const { p, preguntas: P, casos: CASOS } = cfg, X = cfg.textos;
     const prog = new Progreso(cfg.clave, P);
     const dock = (items, izq, der) => pintarDock(p, items, izq, der);
-    const opciones = () => ({ p, ids: true, volverPor: cfg.volverPor, ...cfg.pregunta });
+    const opciones = () => ({ p, ids: true, volverPor: cfg.volverPor, vuelve: (q, r) => (P.some(x => x.id === q.id) ? lineaVuelve(prog.previsto(q, r.ok)) : ''), ...cfg.pregunta });
     const h2 = txt => `<h2 class="${p}-h">${txt}</h2>`;
+    // «Ideas firmes: N de T» (sin reproches con 0) y la nota de qué es firme.
+    const indicador = () => {
+        const f = prog.firmes();
+        return `<p class="${p}-para ${p}-firmes">Ideas firmes: <strong>${f.n} de ${f.total}</strong>${f.total && f.n === f.total ? ' · ficha dominada' : ''}${f.manana ? ` · mañana te tocan ${f.manana}` : ''}</p>
+            <details class="nota-plegable"><summary>¿Qué es firme?</summary><p>Firme = acertada en dos días distintos. Criterio de la app, sin prueba propia; nunca bloquea nada.</p></details>`;
+    };
     const M = {
         fase: 'inicio', i: 0, prog,
         cargar() { prog.cargar(); },
@@ -476,6 +546,7 @@ export function crearMayeuticaModelo(cfg) {
             cont.innerHTML = `<div><span class="${p}-eyebrow">Mayéutica</span>${h2('Preguntas para pensar, como Sócrates')}</div>
                 <div class="${p}-ruta">${X.ruta(nG, nE)}</div>
                 <div class="${p}-fila"><button class="${p}-b ${p}-prim" type="button" data-ir="recorrido">${hechas ? `${X.seguir} (${hechas} de ${P.length})` : X.empezar}</button><button class="${p}-b" type="button" data-ir="casos">Ir a los casos</button></div>
+                ${indicador()}
                 ${hechas ? `<p class="${p}-para">Guardado en este dispositivo: ${prog.bien} de ${hechas} bien a la primera. <button class="${p}-b ${p}-link" type="button" data-ir="cero">Empezar de cero</button></p>` : ''}
                 <p class="${p}-para">${X.pie}</p>`;
             entrar(cont, p);

@@ -4958,3 +4958,6 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .ecg-comprobar:disabled { opacity: .4; cursor: default; }
 .ecg-chip.ecg-correcta { border-color: var(--accent-green); box-shadow: inset 0 -3px 0 var(--accent-green); }
 .ecg-chip.ecg-fallada { border-color: var(--accent-red); text-decoration: line-through; }
+
+/* Mayéutica: «Vuelve en…» bajo la explicación (repaso espaciado) */
+[class$="-vuelve"] { font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0; line-height: 1.45; }
