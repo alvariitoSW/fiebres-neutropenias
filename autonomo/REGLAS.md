@@ -15,12 +15,18 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    (`<details class="nota-plegable">`) que la explica. Nunca se corrige en silencio.
 4. **Si dos fuentes no coinciden**, se muestran las dos con una nota de fuentes. No se elige una ganadora.
 5. **No resumas por debajo de la fuente**: cifras, fármacos y mecanismos con su detalle real.
-6. **Código ajeno**: de echodemo (The Heart by Ultrasound) se traduce el texto, con permiso del autor y citado; el
-   código nunca se copia: cada figura se reconstruye sobre los motores de la app. Nada de imágenes de pacientes con
-   licencia restrictiva (CAMUS, EchoNet).
+6. **Código ajeno** (Consejo 8.ª del 30/10/2026, aprobado por el usuario el 30/10): ideas y texto, con permiso del autor
+   apuntado en `docs/` y citado (así se tradujo echodemo, *The Heart by Ultrasound*), sí. El código **no entra en la
+   app**: cada figura o modelo se reconstruye sobre los motores propios, con crédito (un solo motor por fenómeno). Con
+   permiso que cubra redistribuirlo en el repositorio público, una copia congelada puede vivir en
+   `autonomo/ajenos/<autor>-<versión>/` (fecha, URL, hash, permiso y LEEME), solo para leerla y para las pruebas
+   (p. ej. Ventriculus como vara de medir de las 12 derivaciones); ningún archivo de la app la carga y sus cifras son
+   pares de prueba, no fuente. El permiso vale por escrito o de palabra (el usuario lo apunta en `docs/`: quién, cuándo,
+   medio y qué cubre); cada permiso nuevo lo valida el Consejo; copiar código dentro de la app, solo por decisión
+   expresa del usuario. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
    **Recursos estudiados** (art. 2 de la reforma, aprobado por el usuario el 30/10/2026): una web, simulador, curso,
    repositorio o tuit estudiado aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota
-   su licencia o permiso (el permiso, copiado en `docs/`). Sin licencia verificada, solo la idea reescrita.
+   su licencia o permiso (el permiso, apuntado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 7. **Lo que muestra un simulador es un paciente posible** en todo el recorrido de sus mandos (extremos y punto
    medio): presión arterial, frecuencias, presiones, volúmenes y velocidades dentro de lo fisiológico para ese
    estado. **El límite es la propia fisiología humana.** Si una cifra no existe en un ser humano, está fuera de lo

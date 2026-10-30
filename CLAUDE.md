@@ -161,11 +161,18 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
    la figura está fragmentada en muchos trozos, rasterizar la página y recortar.
 8. **PNT y manuales internos del hospital**: nunca reproducir el documento ni los nombres del personal; extraer el
    contenido clínico, reescribirlo y citarlo de forma genérica. Los puramente administrativos se descartan.
-9. **Código ajeno** (echodemo, ATRIA): ideas y texto (con permiso) sí; código no, se reconstruye sobre los motores de
-   la app. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
+9. **Código ajeno** (echodemo, ATRIA, Ventriculus; Consejo 8.ª del 30/10/2026, aprobado por el usuario el 30/10): ideas
+   y texto, con permiso del autor apuntado en `docs/`, sí. El código **no entra en la app**: se reconstruye sobre los
+   motores propios, con crédito (un solo motor por fenómeno). Para estudiarlo y comparar, con permiso que cubra
+   redistribuirlo en este repositorio público, una copia congelada puede vivir en `autonomo/ajenos/<autor>-<versión>/`
+   (fecha, URL, hash, permiso y LEEME); ningún archivo de la app la carga y sus cifras son pares de prueba, no fuente. El
+   permiso vale por escrito o de palabra (p. ej. por teléfono): si es de palabra, el usuario lo deja apuntado en `docs/`
+   (quién, cuándo, por qué medio y qué cubre). Cada permiso nuevo lo valida el Consejo. Copiar código dentro de la app,
+   solo por decisión expresa del usuario, caso por caso. Nada de imágenes de pacientes con licencia restrictiva (CAMUS,
+   EchoNet).
    **Recursos estudiados** (art. 2 de la reforma, 30/10/2026): una web, simulador, curso, repositorio o tuit estudiado
    aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota su licencia o permiso (el
-   permiso, copiado en `docs/`). Sin licencia verificada, solo la idea reescrita.
+   permiso, apuntado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 10. **Calculadoras**: `calcX()` + `init()`; un campo vacío nunca es 0 (`el.value === ''`); clamp de rangos; aviso de
     «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no. Casillas
     que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado). Los umbrales se comparan

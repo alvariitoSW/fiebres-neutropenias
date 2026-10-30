@@ -347,12 +347,6 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Regla del código ajeno (Consejo 8.ª del 30/10, proyecto)**: «quiero que el congreso revise la regla […] cambiarla
-  sí o no, y si se cambia por cuál». Acta `autonomo/consejo/2026-10-30-8.md`. **Esperando tu sí o no**: (1) texto nuevo
-  de `CLAUDE.md` §7.9 y REGLAS §1.6 (el código ajeno no entra en la app; con permiso escrito, copia congelada en
-  `autonomo/ajenos/` solo para leer y comparar; cada permiso lo valida el Consejo; copiar dentro de la app, solo por tu
-  decisión expresa); (2) Ventriculus: B + A, no C; (3) **30/10, cambia**: el permiso vale de palabra (teléfono); basta tu
-  nota en `docs/` con quién, cuándo, medio y qué cubre (5 puntos del acta). Falta tu sí al texto ya corregido.
 Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
 en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
@@ -511,6 +505,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-30 · **Regla del código ajeno** (Consejo 8.ª): aprobada por el usuario con su cambio (permiso de palabra con nota
+  en `docs/`); aplicada en `CLAUDE.md` §7.9 y REGLAS §1.6. Ventriculus: B + A (vara de medir fuera de la app y sus textos), no C.
 - 2026-10-30 · **Parada 3 del bloque 3 aprobada** por ti (grupos 1-5 y los 3 modelos vivos, mirados en el móvil). Pedida la ingeniería inversa de anatomyatelier.org (sesión abierta, para `mv-eco`).
 
 - 2026-10-30 · **Consejo, 7.ª reunión** («terminar ya», acta `autonomo/consejo/2026-10-30-7.md`): cabos sueltos
