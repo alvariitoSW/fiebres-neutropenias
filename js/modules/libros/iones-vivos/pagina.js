@@ -137,7 +137,7 @@ function montar() {
   topeApi = crearTope({ monitor: $('monitor'), dock, cita });
   $('leyenda').innerHTML = leyendaParticulas(['k', 'mg', 'ca', 'p'], { titulo: 'Qué es cada partícula' });
 }
-function ajustarDock() { R.style.setProperty('--iov-dock-h', $('dock').offsetHeight + 'px'); R.style.setProperty('--iov-frase-h', $('frase').offsetHeight + 'px'); }
+function ajustarDock() { R.style.setProperty('--iov-dock-h', $('dock').offsetHeight + 'px'); }
 function bucle() {
   if (corriendo) return; corriendo = true; let ult = 0;
   const paso = (ts) => {
@@ -155,6 +155,6 @@ export function abrirEstado(clave) {
   bucle(); ajustarDock();
 }
 montar(); ECG.iniciar(); ponerPreset('normal'); bucle(); ajustarDock();
-new ResizeObserver(ajustarDock).observe($('dock')); new ResizeObserver(ajustarDock).observe($('frase'));
-seguirFrase(R, () => $('ion-svg'), { dock: () => $('dock').offsetHeight + $('frase').offsetHeight });
+new ResizeObserver(ajustarDock).observe($('dock'));
+seguirFrase(R, () => $('escena'), { dock: () => $('dock') });
 window.__iones = { get s() { return s; }, e, leer: () => leer(s), hacer, ponerIon, ponerPreset, modoPrueba, pintar, ecg: ECG, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); }, ecgK: () => ecgK(leer(s)), abrirEstado };

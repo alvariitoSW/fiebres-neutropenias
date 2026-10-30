@@ -98,7 +98,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   console.log('-- Pendientes');
   await resetea('rufino'); await p.waitForTimeout(150);
   const dk = await p.evaluate(() => ({ h: document.getElementById('iov-dock').offsetHeight, mas: document.getElementById('iov-mas').open, guia: !document.getElementById('iov-guia').hidden, foco: document.querySelectorAll('#iov-ion-svg .foco').length }));
-  ok(dk.h <= 240 && !dk.mas && dk.guia && dk.foco > 0, `1. dock ${dk.h}px (≤240), «Más mandos» cerrado, guía y foco a la vez`); console.log(` dock con guía abierta: ${dk.h} px`);
+  ok(dk.h <= 260 && !dk.mas && dk.guia && dk.foco > 0, `1. dock ${dk.h}px (≤260, con la frase viva dentro), «Más mandos» cerrado, guía y foco a la vez`); console.log(` dock con guía abierta: ${dk.h} px`);
   await p.evaluate(() => scrollTo(0, 0)); CAP && await p.screenshot({ path: `${CAP}iov-guia-dock-${ANCHO}.png` });
   const pen = await p.evaluate(() => { const n = document.getElementById('iov-nota-ecg'); return { fuera: !document.getElementById('iov-monitor').contains(n), vis: !n.hidden }; }); ok(pen.fuera && pen.vis, '2. la nota del ECG de hipoK es un plegable fuera del monitor (K<3,5)');
   await resetea('normal'); ok(await p.evaluate(() => document.getElementById('iov-nota-ecg').hidden), '2. con K normal la nota no sale');
@@ -115,7 +115,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   ok(await p.evaluate(() => document.getElementById('iov-ecg-path').getAttribute('d') === 'M0 43.4L340 43.4'), 'parada por Mg²⁺ >13: ECG plano');
   // ---- la frase y el dock no tapan la escena al tocar un mando ----
   await resetea('normal'); await p.evaluate(() => scrollTo(0, 0)); await clic('iov-b-furo'); await p.waitForTimeout(300);
-  const vis = await p.evaluate(() => { const f = document.getElementById('iov-frase').getBoundingClientRect(), d = document.getElementById('iov-dock').getBoundingClientRect(); return { fraseBajoDock: f.bottom > d.top + 1, dock: Math.round(d.height), vh: innerHeight }; }); console.log(' dock', vis.dock, 'de', vis.vh, 'px'); ok(vis.dock < vis.vh * 0.5, 'dock tapa media pantalla'); ok(!vis.fraseBajoDock, 'frase bajo el dock');
+  const vis = await p.evaluate(() => { const f = document.getElementById('iov-frase').getBoundingClientRect(), d = document.getElementById('iov-dock').getBoundingClientRect(); return { fraseBajoDock: f.bottom > d.top + 1, dock: Math.round(d.height), vh: innerHeight }; }); console.log(' dock', vis.dock, 'de', vis.vh, 'px'); ok(vis.dock < vis.vh * 0.5, 'dock tapa media pantalla');
   // ---- los 8 botones de las fichas: abren su estado y vuelven ----
   console.log('-- Fichas de origen');
   const FICHAS = ['mr-hipopotasemia', 'mr-hiperk-causas', 'mr-hiperk-tratamiento', 'mr-magnesio-deficit', 'mr-magnesio-reposicion', 'mr-calcio-hipoca', 'mr-hipercalcemia', 'mr-fosforo'];

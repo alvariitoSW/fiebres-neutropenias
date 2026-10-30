@@ -13,7 +13,7 @@
       </section>
       <details id="iov-nota-ecg" class="plegable" hidden><summary>ECG de la hipopotasemia: pendiente</summary><p id="iov-nota-ecg-txt"></p></details>
       <div class="selector-ion" id="iov-ion-sel" role="group" aria-label="Elige el ion"></div>
-      <section class="zona-escena"><svg id="iov-ion-svg" viewBox="0 0 360 446" role="img" aria-label="El depósito grande del ion, la ventanita del suero y la figura del libro"></svg></section>
+      <section class="zona-escena" id="iov-escena"><svg id="iov-ion-svg" viewBox="0 0 360 446" role="img" aria-label="El depósito grande del ion, la ventanita del suero y la figura del libro"></svg></section>
       <section id="iov-guia" class="prueba guia" hidden aria-live="polite"></section>
       <div id="iov-leyenda"></div>
       <section class="bloque">
@@ -22,8 +22,8 @@
         <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="iov-notas"></div></details>
         <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="iov-profundizar"></ul></details>
       </section>
-      <p class="frase" id="iov-frase" role="status" aria-live="polite"><span class="frase-txt" id="iov-frase-txt"></span></p>
       <div class="dock" id="iov-dock"><div class="dock-in">
+        <p class="frase" id="iov-frase" role="status" aria-live="polite"><span class="frase-txt" id="iov-frase-txt"></span></p>
         <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Dar</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y laboratorio</button></div>
         <div class="dock-panel" id="iov-dock-panel"></div><div class="dock-panel" id="iov-dock-medir" hidden></div>
       </div></div>

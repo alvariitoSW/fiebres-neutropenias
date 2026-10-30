@@ -32,7 +32,7 @@ export const PRESETS = {
 };
 // Fuentes y notas (lista, REGLAS §7.11)
 export const FUENTES = [
-  ['K⁺: 98 % dentro de la célula', 18], ['K⁺ sérico frente a total (Fig. 36.2), déficit 200-400 y exceso 100-200 mEq por 1 mEq/L', 19],
+  ['El 98 % del K⁺ está dentro de la célula', 18], ['K⁺ sérico frente a total (Fig. 36.2), déficit 200-400 y exceso 100-200 mEq por 1 mEq/L', 19],
   ['Fig. 36.2: la curva, en el dibujo', 20], ['ClK: ritmo 20 mEq/h, 40 grave, cava superior', 23], ['K⁺ de los concentrados de 18 días (2-3 mEq)', 25], ['Furosemida: pierde K⁺ (causa principal de hipopotasemia)', 21], ['Calcio en la hiperpotasemia: 10 mL de gluconato al 10 % (90 mg) en 3 min, repetible a los 5; el efecto cede en 30-60 min (Tabla 36.3)', 27], ['La alcalosis tiene efecto variable sobre el K⁺; la acidosis láctica no se asocia a hiperpotasemia', 21],
   ['Mg²⁺: reparto del cuerpo (Tabla 37.1)', 32], ['Furosemida y Mg²⁺ (50 % de los crónicos)', 34], ['MgSO₄: 8 mEq por gramo, 50 % a la orina', 37], ['Mg >13 mEq/L: parada', 39],
   ['Ca: 99 % en hueso, tres fracciones (Fig. 38.1)', 42], ['Total frente a iónico; ningún factor de corrección es fiable', 43], ['Alcalosis y citrato bajan el Ca iónico; el citrato de los concentrados', 44], ['Ca iónico <0,65 mmol/L; gluconato 9 y cloruro 27 mg/mL; bolo recomendado de 200 mg (sube el total 0,5 mg/dL y vuelve a caer a los 30 min, p. 46)', 45],

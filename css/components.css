@@ -5000,7 +5000,7 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
   --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple); --bg: var(--bg-main);
   --sans: system-ui, -apple-system, 'Segoe UI', sans-serif; --serif: Georgia, 'Times New Roman', serif; --iov-dock-h: 150px; --iov-frase-h: 40px;
   display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); font: 16px/1.5 var(--serif); color: var(--text-main);
-  padding-bottom: calc(var(--iov-dock-h) + var(--iov-frase-h) + 24px); }
+  padding-bottom: calc(var(--iov-dock-h) + 24px); }
 #iov-raiz > *, #iov-raiz .bloque > * { min-width: 0; }
 #iov-raiz p { margin: 0; }
 #iov-raiz h2, #iov-raiz h3 { text-transform: none; letter-spacing: 0; text-shadow: none; font-weight: normal; }
@@ -5012,8 +5012,8 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 #iov-raiz button:disabled { opacity: .55; cursor: default; }
 #iov-raiz button:focus-visible, #iov-raiz input:focus-visible, #iov-raiz summary:focus-visible, #iov-raiz a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
 #iov-raiz .org { font: .64rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; }
-#iov-raiz .frase { position: fixed; left: 0; right: 0; bottom: var(--iov-dock-h); z-index: 19; margin: 0; background: var(--bg-main); border-top: 1px solid var(--line); font: .82rem/1.28 var(--serif); color: var(--fg); padding: 4px max(12px, calc((100% - 560px) / 2)); box-shadow: inset 3px 0 0 var(--oro); }
-#iov-raiz .frase-txt { display: block; max-height: 30vh; overflow-y: auto; }
+#iov-raiz .frase { margin: 0; border-bottom: 1px solid var(--line); font: .78rem/1.25 var(--serif); color: var(--fg); padding: 3px 0 3px 8px; box-shadow: inset 3px 0 0 var(--oro); }
+#iov-raiz .frase-txt { display: block; max-height: 5.2em; overflow-y: auto; }
 #iov-raiz .frase-txt .org { white-space: normal; }
 #iov-raiz button.b { min-height: 44px; font: 600 .84rem/1.2 var(--sans); border-radius: 10px; padding: 8px 12px; text-align: left; }
 #iov-raiz button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
@@ -5099,7 +5099,7 @@ body.study-mode-on #iov-raiz .dock { padding-right: 82px; }
 #iov-raiz .presets { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; }
 #iov-raiz .presets button { min-height: 38px; font: 700 .68rem/1.1 var(--sans); }
 #iov-raiz .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
-#iov-raiz .dock-panel { max-height: 25vh !important; min-height: 0 !important; }
+#iov-raiz .dock-panel { max-height: 20vh !important; min-height: 0 !important; }
 #iov-raiz .dock-tabs button { min-height: 34px !important; }
 #iov-raiz .mando button, #iov-raiz .mando select { min-height: 34px; padding: 2px 4px; }
 #iov-raiz .mando .fila > * { min-width: 60px; }
