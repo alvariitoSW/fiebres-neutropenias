@@ -26,7 +26,7 @@ for (const w of [390, 360]) {
   };
   // botón PIF de la raíz: abre PIF y luego Radiología
   await p.evaluate(() => document.getElementById('btn-pif')?.click()); await p.waitForTimeout(300);
-  const visibleRadio = await p.evaluate(() => !!document.getElementById('btn-pif-radio')?.offsetParent);
+  const visibleRadio = await p.waitForFunction(() => !!document.getElementById('btn-pif-radio')?.offsetParent, null, { timeout: 5000 }).then(() => true, () => false);
   if (!visibleRadio) fallos.push(`${w}: btn-pif-radio no visible desde PIF`);
   await ir();
   if (!await p.evaluate(() => document.getElementById('pif-radio-placa-view').offsetParent)) fallos.push(`${w}: no abre el cuaderno`);

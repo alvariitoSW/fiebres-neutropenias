@@ -46,6 +46,7 @@ function montar(ej, host) {
     btn.addEventListener('click', () => {
         if (btn.disabled) return;
         hecho = true; btn.disabled = true; pie.textContent = ej.pie;
+        estado.textContent = 'Comprobado: el círculo amarillo marca la punta; el discontinuo, la carina.';
         caja.querySelectorAll('.radio-tapa').forEach(n => n.remove());
         const r = img.getBoundingClientRect();
         const dx = (toque[0] - ej.punto[0]) / 100 * r.width, dy = (toque[1] - ej.punto[1]) / 100 * r.height;

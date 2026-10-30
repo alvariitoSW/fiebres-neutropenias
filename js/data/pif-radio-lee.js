@@ -19,7 +19,7 @@ export const EJERCICIOS_LEE = [
         punto: R28[0].punto, textoPunto: 'Punta del tubo (según el pie de la fuente)',
         extra: { punto: R28[1].punto, texto: 'Carina' },
         tapar: [{ x: 84, y: 8, w: 16, h: 14 }, { x: 50.4, y: 29.1, w: 17.2, h: 9 }, { x: 50.4, y: 46.9, w: 15.2, h: 4.6 }],
-        tolerancia: 12,
+        tolerancia: 7,
         elecciones: ['Bien colocado', 'Muy alto', 'Muy bajo o en el bronquio derecho'],
         correcta: 0,
         respuesta: 'Según el pie de la figura, el tubo está bien colocado.',
