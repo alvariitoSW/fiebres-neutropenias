@@ -4993,3 +4993,8 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .radio-lee-extra { border-style: dashed; }
 .radio-lee-rot { font-size: 0.72rem; max-width: 46%; }
 .radio-tapa { position: absolute; background: var(--bg-main); pointer-events: none; }
+/* Estudiar: repaso de días atrás, «Vuelve en…» e ideas firmes */
+.may-contador { font-weight: 700; font-size: .76rem; color: var(--accent-yellow); }
+.may-chip { margin: 0; font-size: .78rem; font-weight: 600; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px; width: fit-content; max-width: 100%; }
+.may-vuelve { margin: 0; font-size: .8rem; line-height: 1.4; color: var(--text-dim); border-top: 1px dashed var(--border-color); padding-top: 6px; }
+.may-firmes strong { color: var(--text-main); }
