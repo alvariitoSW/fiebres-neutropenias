@@ -62,3 +62,10 @@ profesor ≥8,75 (meta 9,5: modelo vivo nuevo); a 390 y 360 px sin desborde; cad
 ## Lo que NO quiero
 Cifras de VentLoop/Antaa/Techartist visibles; 64 unidades; tabla FiO₂/PEEP; 3D real; texto en muro sobre la pantalla;
 el motor del corazón copiado dentro del pulmón (se usa `eco/motor.mjs`); una curva tapando una cifra mala del motor.
+
+## Cambios de Educación a la maqueta en papel (`juicio-papel-pulmon.md`: 7,8 · 8,9 · 8,4, «entra con cambios»)
+- E4a: el doble disparo se ve como **dos picos con valle corto**, no una insuflación de 800 mL (LA2 Fig. 27).
+- E2: con PEEP 20 la Cstat **baja** cuando todo está sobredistendido (la cola se aplana); el sello no tapa el rótulo «PEEP».
+- E2 y L: **apuesta antes de la guía** (REGLAS §8): 3 opciones («PEEP 5 → 12: ¿qué le pasa al alvéolo que se cerraba?»;
+  «Vt 300 a FR 30: ¿cuánto llega al alvéolo?» como «piensa antes»). L: sin animación en bucle; rótulo del diafragma separado.
+- Todas: la nota de topes del dock, plegable (el dock no pasa del ~30 % de la pantalla).
