@@ -22,11 +22,10 @@ const DERRAME_ML_MAX = 377;
 // cerca del final cada paso del mando añade menos líquido y la PA no cae a saltos
 const derrameMl = (g) => DERRAME_ML_MAX * (1 - (1 - g) ** 2);
 const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
-// TEP: resistencia pulmonar ×9,3 a fondo (antes ×16) y el defecto, el de siempre (×8 y contractilidad del VD ×0,65), que ahora
-// cae en g ≈ 0,93. Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
+// TEP: resistencia pulmonar a fondo ×9,0 (antes ×16, luego ×9,3); el defecto, desde P5a, es el submasivo (g 0,7, ver abajo). Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
 // ella daba una pulmonar media de 54 mmHg, que un VD sin hipertrofia no sostiene. A fondo, ~40/33 (media ~36). Ilustrativo
 // P4b: 9,3 → 9,0 con la cola de la activación entre latidos: con 9,3 la PAM caía 8,0 mmHg entre el 95 y el 100 % (el límite de la prueba, 7,5)
-const TEP_RPUL_MAX = 9.0, TEP_EES_VD_PENDIENTE = 0.35 / (Math.log(8) / Math.log(9.0));   // la contractilidad del VD cae con la misma pendiente de siempre (0,376 por unidad de u)
+const TEP_RPUL_MAX = 9.0, TEP_EES_VD_PENDIENTE = 0.35 / (Math.log(8) / Math.log(9.0));   // la contractilidad del VD cae con la misma pendiente de siempre (≈0,37 por unidad de u)
 // P5a (mv-eco-2a5): el defecto pasa a ser el TEP de RIESGO INTERMEDIO (submasivo): VD dilatado (VD/VI >1,0) y FEVD/TAPSE bajos con la
 // PAM normal, sin hipotensión; y el tramo final (a partir de TEP_G_MASIVO) es el de ALTO RIESGO: PAM <70 (Marino cap. 22, «Management»,
 // PDF p. 7: riesgo intermedio = disfunción del VD sin inestabilidad hemodinámica; alto riesgo = con inestabilidad). Umbral de hipotensión:
@@ -158,12 +157,12 @@ export const ESCENARIOS = {
     // Nombre como el libro: con disfunción del VD y sin inestabilidad (PAM ~67) es la EP de riesgo intermedio
     // («submasiva»); «masiva» es la de alto riesgo, con inestabilidad hemodinámica (Marino, cap. 22, p. 7,
     // docs/marino-2024-respiratory-management-caps22-26.pdf#page=7). Antes se llamaba «TEP masivo». La gravedad a fondo
-    // sí la tiene (PAM <65): la de alto riesgo. (Con la RVS calibrada, el de siempre da una PAM de ~67)
+    // sí la tiene (PAM <70, desde P5a): la de alto riesgo. (Con la RVS calibrada, el de siempre da una PAM de ~67)
     nombre: 'TEP de riesgo intermedio (VD)', forma: true,
     // el émbolo sube la resistencia pulmonar (poscarga del VD) y el VD falla: se dilata, se vacía mal y empuja el
     // tabique hacia el VI (Fisiopatología UCI · Cardiología, Fichas 8 y 9; Merino, IC derecha)
-    // gravedad: resistencia pulmonar ×9,3^g (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
-    // (~0,93) es el de siempre: ×8 y ×0,65
+    // gravedad: resistencia pulmonar ×9,0^u con u = g^0,6 (escala logarítmica) y contractilidad del VD que cae a la par; el defecto
+    // (g 0,7, P5a) es el submasivo: ×5,9 y ×0,70
     gravedad: { fin: 'el TEP de alto riesgo a fondo (masivo: hipotensión, PAM <70 mmHg; Marino cap. 22, PDF p. 7, y cap. 14, PDF p. 2)', defecto: TEP_DEFECTO,
       texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** tepU(g), 1)}. ` + (g < TEP_G_MASIVO
         ? 'Riesgo intermedio (submasivo): disfunción del VD sin inestabilidad hemodinámica (Marino cap. 22, PDF p. 7)'

@@ -948,6 +948,21 @@ Tablas de Guyton regeneradas.
 ## Contrato del corazón (`contrato.mjs`, mv-eco-1, 30/10/2026)
 Lo que el motor entrega a la imagen, con el esquema `CAMPOS` (unidad, qué es, `origen`: `motor`, `puente-hoy` o `hueco`, y quién lo usa) y `contratoDe(motor, puente?)` → `{ latido, instantes, origen }`. Solo lee `motor.onda/ultimo/p/s` (la prueba comprueba que el motor queda idéntico). Lo que hoy sale del dibujo o del atlas (TAPSE, pared del VD, áreas de anillo, e′, E/A, TDE, aplanamiento del tabique) va en `contrato-puente-hoy.mjs` con la función de hoy que lo da: el paso 2 lo moverá al motor. Los huecos (regional/McConnell, septoFase, MAPSE, s′/a′, VCI, raíz aórtica, regurgitación aórtica por instante, masa del VD) valen `null`, nunca una cifra sin cita. Los rangos no se copian: `CAMPOS[x].banda` es la medida de `BANDAS`, y `validarContrato(c, { bandas, clave })` los recibe como argumento (solo comprueba lo numérico: finitos, volúmenes ≥0, válvula cerrada sin caudal, enlace último-primer instante, tiempos no negativos, `fueraDeRango`). `pruebas/contrato.test.mjs`: contrato = código de hoy (`medirForma`) ±2 % y tabla §3 de `autonomo/maquetas/eco-reforma/mapa-motor.md` ±5 %; recorre los 21 `CASOS_FORMA`; los fallos conocidos (E/e′ 1,8 del TEP defecto, TA pulmonar 119 ms en el TEP, salto al cerrar el latido en el fallo VI al 100 %) van congelados como `todo`. Campos para los pasos 2-5: `periodo`, `tiempos.eventos.{s1,s2,s2p,aoAbre,mitAbre,pulAbre,triCierra}` (s, motor), `fusion` y `limites` (puente-hoy). `validarContrato` devuelve además `sinCampo` (bandas sin campo: hoy Ar, bombaAI, sd) y `sinValor`. Ojo: la tabla §3 se hizo con `aplicarEscenario` (10 s de asentamiento en hemorragia, fallo y derrame) y J1 con 40 s: en esas formas las cifras difieren.
 
+## Motor, paso 2a (mv-eco-2a5, 30/10/2026)
+- **La activación no se corta al cambiar de latido** (`presiones()`, `tv0`): con relajación lenta o FC alta, la cola de la
+  activación del latido anterior sigue (relajación incompleta). El fallo VI al 100 % ya enlaza (pres VI 29,2 → 29,3).
+  Por encima de ~133 lpm la sístole se acorta más deprisa que √T (`T_SIS_APRIETA` 0,45 s, ilustrativo): sin ello, la
+  hemorragia del shock vivo a FC 178 se quedaba sin diástole (PAM 26).
+- Recalibrado por la cola: hipertrofia (AI ×1,3, rigidez ×1,64, −330 mL), balón (`tauBalon.hincha` 0,025), derrame
+  máximo 377 mL y TEP ×9,0 a fondo (ilustrativos, comentados en `escenarios.mjs`).
+- **TEP con escalón** (Marino cap. 22, PDF p. 7; hipotensión PAM <70, cap. 14, PDF p. 2): el defecto (g 0,7) es el de
+  riesgo intermedio (PAM 76, FEVD 20 %, VD/VI 2,7) y desde g ≈ 0,85 el de alto riesgo. El dibujo de hoy satura el VD
+  basal en 41 mm: «VD basal >41» y «VD/VI basal >1» se miden al 100 % y quedan `todo` en el defecto hasta el dibujo
+  nuevo (paso 4).
+- Tabla del contrato: filas TEP y HP crónica 100 % (FEVD 14,1 desde el tabique M0c, 0a84f734) al día, con comentario.
+- Pendiente (paso 2b): e′ del motor (E/e′ del TEP al 90-95 % cae a 0,3-2,4 por la fusión E-A), aceleración pulmonar
+  (127 ms en el defecto, <105 en la guía), septo continuo, regional (McConnell) y shock cardiogénico coherente.
+
 ## Medidas (`raiz-aortica.js`, 30/10/2026)
 Tercera sección de la eco (`data-seccion="medidas"`, `#cv-seccion-medidas`): cuaderno `#eco-medidas-corkboard` /
 `#panel-eco-medidas-tabs` (en `PANEL_NAV`). `irAFicha(view, panel, tab)` abre la sección y la ficha. Ficha
