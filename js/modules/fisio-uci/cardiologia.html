@@ -729,7 +729,8 @@
             </table>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El <strong>DO₂ indexado por superficie corporal (DO₂I)</strong> es la forma correcta de comparar la entrega de oxígeno entre pacientes de distinto tamaño corporal — equivalente conceptual del índice cardíaco (IC) aplicado a la entrega de oxígeno en vez de al gasto cardíaco. La Ficha 2 desarrolla el <strong>índice de aporte de oxígeno (IDO₂)</strong>, una fórmula relacionada pero distinta (IDO₂ = IC × CaO₂), y la Ficha 5 retoma estas mismas fórmulas con su rango normal ligeramente ajustado y las aplica al monitoreo hemodinámico completo (DO₂, VO₂, IC, OEI). <strong>Nota de fidelidad</strong>: esta Tabla 3 (Capítulo 1) da 530-600 mL/min/m² como rango normal, mientras que la Tabla 12 del Capítulo 5 (ver Ficha 2 y Ficha 5) da 520-650 — son dos tablas distintas del mismo libro, no un error de esta app; cada calculadora cita explícitamente su propia tabla de referencia para que no se confundan entre sí.</p>
 
-            <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: transporte de oxígeno (principio de Fick)</p>
+            <p id="cardio-fick-titulo" class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: transporte de oxígeno (principio de Fick)</p>
+            <p id="cardio-compara-fick" style="font-size: 0.8rem; color: var(--text-muted);">⚖️ <strong>Compara</strong> · la misma cuenta en el capilar vivo (Marino, cap. 9): allí DO₂ = GC × CaO₂ y el tejido coge su VO₂ de ese aporte. Su CaO₂ multiplica la PaO₂ por 0,003; esta tabla, por 0,0031 (cada libro con su cifra). <button type="button" class="especialidad-link" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="normal">Ver el capilar vivo →</button></p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">Aplica en vivo las fórmulas de la Tabla 3 (CaO₂, DO₂, VO₂, EO₂) con tus propios valores. Los campos de sangre venosa (SvO₂/PvO₂) son opcionales — sin ellos se calcula el DO₂ pero no el VO₂ ni el EO₂ reales.</p>
             <div class="mini-ciclo">
                 <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba — el GC/DO₂ que calculas aquí es un promedio de todo el ciclo, no un valor de un instante concreto.</span>
@@ -773,7 +774,8 @@
             </div>
             <div id="cardio-fick-interpretacion" class="tfg-estado tfg-estado-ok" style="margin-top:10px; display:none;"></div>
 
-            <p class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
+            <p id="cardio-rv-titulo" class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: resistencias vasculares (ley de Hagen-Poiseuille)</p>
+            <p id="cardio-compara-poiseuille" style="font-size: 0.8rem; color: var(--text-muted);">⚖️ <strong>Compara</strong> · la misma ley en el catéter vivo (Marino, cap. 1): en un tubo la resistencia se calcula desde dentro, R = 8µL / πr⁴ (radio a la cuarta, longitud). En un lecho vascular no se puede medir el radio, así que se despeja de fuera: R = ΔP / Q. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="inicio">Ver el catéter vivo →</button></p>
             <p style="font-size: 0.8rem; color: var(--text-muted);">RVS = (PAM − PAD) / GC; RVP = (PAMP − PAI) / GC, tal como las da la fuente (en unidades de Wood, mmHg·min/L). Recuerda la advertencia de la propia ficha: el GC aparece en el denominador de su propio cálculo, un acoplamiento matemático que limita su interpretación como poscarga "pura".</p>
             <div class="mini-ciclo">
                 <span class="mini-ciclo-caption">🫀 Mismo cursor que la animación del ciclo de Wiggers de más arriba — la RVS/RVP, igual que el GC de Fick, es un promedio del ciclo completo, no un valor de un instante concreto.</span>
