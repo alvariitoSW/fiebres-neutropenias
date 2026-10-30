@@ -128,7 +128,7 @@ const acc = {
   glu: () => { M.calcioBolo(s, 'gluconato'); frase('Gluconato 10 mL (90 mg): el Ca²⁺ iónico sube; en la hiperK protege el ECG 30-60 min y el K⁺ no cambia.', 26); },
   cl: () => { M.calcioBolo(s, 'cloruro'); frase('Cloruro 10 mL (270 mg): el triple de calcio; la ficha lo reserva para el colapso.', 26); },
   mg: g => { M.mgBolo(s, g); frase(g <= 2 ? '2 g de MgSO₄ en 5 min: el Mg sube y a los 15 min vuelve a caer; hace falta perfusión.' : '6 g en 3 h (hipoMg moderada): la mitad se pierde por la orina.', 37); },
-  clk: () => { const c = s.bombas.clk; c.on = !c.on; c.pedido = c.on; if (c.on) frase(`ClK a ${c.tasa} mEq/h: el suero sube despacio al principio (tramo plano de la Fig. 36.2).`, 19); else frase('ClK parado.'); },
+  clk: () => { const c = s.bombas.clk; c.on = !c.on; c.pedido = c.on; if (c.on && c.via === 'cava' && c.tasa > 20) frase('Pides ClK a más de 20 mEq/h por la cava superior: la bomba se para (riesgo de asistolia).', 23); else if (c.on) frase(`ClK a ${c.tasa} mEq/h: el suero sube despacio al principio (tramo plano de la Fig. 36.2).`, 19); else frase('ClK parado.'); },
   clkTasa: v => { const c = s.bombas.clk; c.tasa = v; c.pedido = c.on; },
   clkVia: v => { const c = s.bombas.clk; c.via = v; c.pedido = c.on; },
   caTasa: v => { s.bombas.ca.tasa = v; },
