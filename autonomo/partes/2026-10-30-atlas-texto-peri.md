@@ -1,6 +1,6 @@
 # 2026-10-30 · atlas-texto · cap. 21 Enfermedad pericárdica (fase A, solo texto)
 
-**Resultado:** listo en la rama `auto/atlas-texto-peri`, sin subir (la sesión no tuvo permiso de escritura en el repositorio) · **Vueltas:** 2 · **Jueces:** `jueces --atlas peri` ✓ · auditoría ✓ (0 graves)
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/48) · **Vueltas:** 2 · **Jueces:** `jueces --atlas peri` ✓ · auditoría ✓ (0 graves)
 
 ## Qué se hizo
 - `js/modules/eco/atlas/cap-peri.html`: traducción completa del cap. 21 (fuente: echodemo `index.html` #ch-peri, l. 1993-2064; tablas de `src/ch/peri.js` 319-336; diferencias con la restrictiva de `src/constriction.js` 532-545; corte del tabique de `constriction.js` 29). Carril «En 30 segundos», tres tablas (tamaño, signos de taponamiento, constricción frente a restrictiva), trampas, puntos clave, nota de fidelidad (volumen >500 mL solo en la tabla; VCI 2,1 cm ASE frente a 20 mm ESC 2025) y lo que sale del código rotulado «regla del original». `src/norms.js` no tiene bandas del pericardio.
@@ -8,7 +8,6 @@
 - Sin lector-fuente ni revisor ni constructor aparte: el director tradujo (tarea de texto que copia `cap-tr`).
 
 ## Qué no se pudo hacer o leer
-- Subir la rama y abrir la PR: el proxy de git rechazó el push (el repositorio no estaba en las fuentes de la sesión). Hace falta reconectar GitHub y volver a pedir el acceso.
 - Figura, pruebas, preguntas y profesor esperan a `mv-eco-2a5`.
 
 ## Para el usuario
