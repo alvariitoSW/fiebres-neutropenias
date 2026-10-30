@@ -99,6 +99,33 @@ const FA = {
     libro: 'Estrecha e irregular. Fibrilación auricular: R-R irregulares y sin P (la línea de base lleva ondas f).'
 };
 
+// «Léelo en orden y destapa»: FREHIII paso a paso; el libro se destapa al pensar y el siguiente paso se abre después.
+// Donde el libro no comenta el trazado, el paso lo dice y da la regla del método con su página.
+const EKG1_ORDEN = {
+    figura: '#ecg9-fig-ekg1', grupo: 'orden', rejilla: { x: 1, y: 3, w: 98, h: 94 },
+    titulo: 'Paciente: varón de 61 años con dolor torácico opresivo de horas. El paciente es inventado; el trazado, del libro.',
+    pasos: [
+        { letra: 'F', nombre: 'Frecuencia', piensa: 'cuenta los milímetros entre dos R: ¿rápida, lenta o normal?', libro: 'El libro no da la frecuencia de este EKG. Se saca con 1500 ÷ mm entre dos R; el ritmo sinusal nace a 60-100 por minuto.', pags: [10, 113], fuente: '#ecg2-metodo2' },
+        { letra: 'R', nombre: 'Ritmo', piensa: '¿hay una P igual antes de cada QRS?', libro: 'El libro no describe el ritmo de este EKG. Ritmo sinusal: ondas P de igual morfología antes de cada QRS.', pags: [13, 14], fuente: '#ecg-f3-es-sinusal' },
+        { letra: 'E', nombre: 'Eje', piensa: '¿qué derivación es la más isobifásica y cuál es su perpendicular?', libro: 'El libro no da el eje de este EKG. Se busca el QRS más isobifásico, su perpendicular y la polaridad de esta.', pags: [47, 48], fuente: '#ecg-f4-pasos' },
+        { letra: 'H', nombre: 'Hipertrofias', piensa: '¿la P o el QRS sugieren crecimiento de alguna cavidad?', libro: 'El libro no comenta hipertrofias en este EKG. Ejemplo de la regla: en V1 la P es bifásica y cada componente no debe pasar de 2,5 mm.', pags: [61], fuente: '#ecg-f5-v1' },
+        { letra: 'I', nombre: 'Isquemia e infarto', piensa: '¿dónde sube el ST, dónde baja y hay Q? ¿Qué arteria sugiere?', derivs: ['V1', 'V2', 'V3', 'V4', 'aVR', 'I', 'aVL'], libro: '↑ST > 0,25 mV en V1; ↑ST en aVR; ↓ST en V5; ↓ST inferior ≥ 0,1 mV; Q en aVL con ↑ST en DI-aVL. Infarto anterior por oclusión de la DA antes de la 1.ª septal y la 1.ª diagonal.', pags: [136, 137], fuente: '#ecg9-tabla-ekg' },
+        { letra: 'I', nombre: 'Intervalos', piensa: '¿el PR y el QRS están dentro de lo normal?', libro: 'El libro no da los intervalos de este EKG. En el infarto anteroseptal, la necrosis septal prolonga ligeramente el PR y suele acompañarse de QRS ancho con BCRD. Normales: PR 0,12-0,20 s; QRS hasta 0,10 s.', pags: [137, 92, 100], fuente: '#ecg9-anteroseptal' }
+    ]
+};
+const FA_ORDEN = {
+    figura: '#ecg8-fig-fa', grupo: 'orden',
+    titulo: 'Paciente: palpitaciones irregulares. Tira de una sola derivación (DII). El paciente es inventado; el trazado, del libro.',
+    pasos: [
+        { letra: 'F', nombre: 'Frecuencia', piensa: 'con los R-R tan distintos, ¿sirve contar las rayas entre dos R?', libro: 'El libro no da la cifra de esta tira. Con R-R variable el método de las rayas no vale: se cuentan los QRS en 5 s (× 12) o en 6 s (× 10).', pags: [11], fuente: '#ecg2-metodo3' },
+        { letra: 'R', nombre: 'Ritmo', piensa: '¿hay P? ¿los R-R son regulares? ¿qué lleva la línea de base?', libro: 'QRS estrecho e irregular. Fibrilación auricular: R-R irregulares y sin P (la línea de base lleva ondas f). Se exigen los tres criterios: ausencia de P, RR variable y ondas f.', pags: [120, 14], fuente: '#ecg8-tabla-estrechas' },
+        { letra: 'E', nombre: 'Eje', piensa: '¿se puede sacar el eje con una sola derivación?', libro: 'No: hacen falta el QRS más isobifásico y su perpendicular, es decir, varias derivaciones.', pags: [47, 48], fuente: '#ecg-f4-pasos' },
+        { letra: 'H', nombre: 'Hipertrofias', piensa: '¿qué onda se mide para la aurícula, y está aquí?', libro: 'Con una sola derivación y sin P, este paso no se puede hacer aquí: la hipertrofia auricular se lee en la P.', pags: [61], fuente: '#ecg-f5-v1' },
+        { letra: 'I', nombre: 'Isquemia e infarto', piensa: '¿qué pasa con el ST y la T en una tira de DII?', libro: 'El libro no comenta el ST ni la T en esta tira; la isquemia y el infarto se leen en el ECG de 12 derivaciones.', pags: [136], fuente: '#ecg9-tabla-ekg' },
+        { letra: 'I', nombre: 'Intervalos', piensa: '¿el QRS es estrecho? ¿se puede medir el PR?', libro: 'QRS estrecho (límite superior 0,10 s, 2,5 mm). El PR no se puede medir porque no hay P.', pags: [100, 101], fuente: '#ecg-f7-qrs' }
+    ]
+};
+
 const ayuda = (n, etq, c) => ({ fuente: `css:#ecg8-pasos li:nth-child(${n})`, etiqueta: etq, color: c });
 const evo = (n, etq, c) => ({ fuente: `css:#ecg9-evolucion li:nth-child(${n})`, etiqueta: etq, color: c });
 
@@ -141,6 +168,7 @@ export function init() {
     montarVisual('ecg-f8', { guia: 'Tres preguntas ante una arritmia: ¿rápida o lenta? ¿QRS estrecho o ancho? ¿R-R regular o irregular?', paneles: [
         propio('Taquicardia de QRS ancho', 'Primero eliges; después se comprueba con el libro.', TV),
         propio('Taquicardia de QRS estrecho', 'Primero eliges; después se comprueba con el libro.', FA),
+        propio('Léelo en orden y destapa', 'Piensa cada paso del método; al destapar el libro se abre el siguiente.', FA_ORDEN),
         { tipo: 'flujo', titulo: 'Cómo leer una arritmia', nodos: [
             ayuda(1, 'Frecuencia de los QRS', 'amarillo'), ayuda(2, 'Si es lenta: disfunción sinusal o bloqueo AV', 'verde'),
             ayuda(3, 'Si es rápida: QRS estrecho o ancho', 'amarillo'), ayuda(4, 'R-R regular o irregular y qué hace la P', 'amarillo'),
@@ -150,6 +178,7 @@ export function init() {
     ] });
     montarVisual('ecg-f9', { guia: 'El ECG del infarto: qué se ve y en qué derivaciones.', paneles: [
         propio('EKG 1 · infarto anterior', null, EKG1),
+        propio('Léelo en orden y destapa', 'Piensa cada paso del método; al destapar el libro se abre el siguiente.', EKG1_ORDEN),
         { tipo: 'flujo', titulo: 'Evolución del infarto en el ECG', nodos: [
             evo(1, 'T picuda (hiperaguda)', 'amarillo'), evo(2, 'Inicio de la elevación del ST', 'amarillo'), evo(3, '↑ST con ST-T convexo', 'rojo'),
             evo(4, 'Aparece la Q patológica', 'rojo'), evo(5, 'Reperfundido: Q, ST en línea de base, T negativa', 'verde'), evo(6, 'No reperfundido: Q con ST elevado', 'rojo')
