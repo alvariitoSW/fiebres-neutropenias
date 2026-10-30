@@ -249,6 +249,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     abren dentro (hoy 9: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
     Doppler, 09 Función sistólica, 10 Función diastólica y 14 Ventrículo derecho); los demás enlazan al original en
     inglés.
+  - 30/10/2026: ya son 10 de 30 en la app; el 15 Estenosis aórtica entra solo con texto (fase A, sin figura ni preguntas).
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
