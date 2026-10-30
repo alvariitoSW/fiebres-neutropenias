@@ -12,7 +12,9 @@ import { REFERENCIAS } from './referencias.js';
 import { conVersion } from '../../../core/include.js';
 
 const BASE = 'js/modules/eco/atlas/';
-/** Capítulos ya en la app: fragmento, figura y subtítulo (el título y el número salen de ATLAS_PARTES). */
+/** Capítulos ya en la app: fragmento, figura y subtítulo (el título y el número salen de ATLAS_PARTES).
+ *  Sin `figura`, el capítulo solo tiene el texto (fase A): su fragmento lleva el aviso .at-en-preparacion y no hay
+ *  «Repasar este capítulo» hasta que tenga preguntas. */
 export const CAPITULOS = {
   pulse: { html: 'cap-pulso.html', figura: () => import('./pulso.mjs'), sub: 'El principio pulso-eco' },
   image: { html: 'cap-imagen.html', figura: () => import('./imagen.mjs'), sub: 'Formación de la imagen y artefactos' },
@@ -79,6 +81,7 @@ export function initAtlas({ alAbrirSimulador } = {}) {
     document.getElementById('at-original').href = atlasUrl(k);
     const repaso = document.getElementById('btn-eco-atlas-repasar');
     repaso.dataset.quizTema = `atlas-${k}`;
+    repaso.hidden = !CAPITULOS[k].figura;
     const cuerpo = document.getElementById('at-cuerpo');
     cuerpo.innerHTML = '<p class="cv-cargando">Cargando el capítulo…</p>';
     let html;
@@ -99,7 +102,7 @@ export function initAtlas({ alAbrirSimulador } = {}) {
     if (sig) { bSig.dataset.atCap = sig; bSig.textContent = `${DATOS[sig].n} ${DATOS[sig].t} →`; }
     cap.scrollIntoView({ block: 'start' });
     const fig = cuerpo.querySelector('.at-figura');
-    if (fig) {
+    if (fig && CAPITULOS[k].figura) {
       try {
         const mod = await CAPITULOS[k].figura();
         if (yo !== peticion) return;
