@@ -7,7 +7,7 @@ const LA1 = 'docs/libro-azul-seccion-iv-respiratorio-parte1.pdf', M22 = 'docs/ma
 const FOTO = 'js/modules/neumologia/img/neumo-fig24-1-histologia-sdra.jpg';
 const org = (t, ilu = false) => `<span class="org${ilu ? ' ilu' : ''}">${t}</span>`;
 const pdf = (u, p, txt) => `<a href="${u}#page=${p}" target="_blank" rel="noopener">${txt}</a>`;
-const IR = (tab, txt) => `<button type="button" class="lam-ir" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="${tab}">${txt} →</button>`;
+const IR = (tab, txt, resaltar = '') => `<button type="button" class="lam-ir" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="${tab}"${resaltar ? ` data-resaltar="${resaltar}"` : ''}>${txt} →</button>`;
 
 const NIVELES = [
     { n: 'Tórax y vía aérea', fr: `Con un Vt de 500 mL, <b>150 mL</b> se quedan en la vía que solo conduce (espacio muerto anatómico) y <b>350 mL</b> llegan al alvéolo. ${org('ficha · LA1 p. 389')} Los 150 mL son los de una persona de 68 kg. ${org('ficha · LA1 p. 389')}` },
@@ -109,7 +109,7 @@ export function montarLamina() {
  <img id="pl-foto" class="lam-foto" src="${FOTO}" alt="Fig. 24.1: pulmón normal, con abundantes espacios aéreos separados por tabiques finos con capilares, frente a un pulmón con SDRA" loading="lazy" hidden>
  <div class="lam-guia" id="pl-guia" hidden></div>
  <p class="lam-frase" id="pl-frase"></p>
- <div class="lam-fila"><button type="button" class="lam-b prim" id="pl-insp" aria-pressed="false">Inspirar</button><span id="pl-ir" hidden>${IR('neumo-sdra-ventilacion', 'Ver en la ficha: Fig. 24.1')}</span></div>
+ <div class="lam-fila"><button type="button" class="lam-b prim" id="pl-insp" aria-pressed="false">Inspirar</button><span id="pl-ir" hidden>${IR('neumo-sdra-diagnostico', 'Ver en la ficha: Fig. 24.1', '#nep-fig-24-1')}</span></div>
  <details class="nota-plegable"><summary>Nota de fidelidad: «0,6 µm de diámetro»</summary><p>La fuente escribe que la membrana mide «aproximadamente 0,6 μm de diámetro y una superficie de 50-100 m² en ambos pulmones». Un grosor de membrana no se mide en diámetro; se reproduce la cifra tal como la imprime el libro. ${org('ficha · LA1 p. 390')} El libro no da el tamaño ni el número de alvéolos y aquí tampoco se dibujan a escala.</p></details>
  <section class="lam-q" aria-label="Piensa antes"><p><b>Piensa antes.</b> Un paciente recibe Vt 300 mL a FR 30/min. Con los 150 mL de espacio muerto de la ficha, ¿cuánta ventilación alveolar tiene por minuto?</p>
   <button type="button" class="lam-b" id="pl-ver">Ya lo tengo: ver opciones</button><div id="pl-ops" hidden style="display:grid; gap:6px"></div>
