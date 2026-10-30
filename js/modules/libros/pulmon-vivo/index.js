@@ -13,14 +13,14 @@ import { PUL_CSS, ESCENA_CSS } from './estilos.js';
 let raiz = null, modelo = null, cargando = null;
 
 // `origen`: la ficha de la que se entra, null desde un menú o el buscador, undefined desde otro modelo vivo.
-export async function abrirEstado(clave, origen) {
+export async function abrirEstado(clave, origen, sinSubir) {
     if (origen !== undefined) marcarVolver(document.getElementById('pul-volver'), raiz, origen);
     if (!modelo) {
         cargando = cargando || import('./pagina.js').then(m => { modelo = m.montarPulmon(raiz); });
         await cargando;
     }
     modelo.abrirEstado(clave || '');
-    requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
+    if (!sinSubir) requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
 }
 
 export function init() {
@@ -28,6 +28,7 @@ export function init() {
     instalarCss('pul', PUL_CSS);
     instalarCss('escena-pulmon', ESCENA_CSS);
     import('./lamina.js').then(m => m.montarLamina());
-    import('./corazon.js').then(m => m.montarCorazon());   // E3-enganche: el panel del corazón
+    import('./corazon.js').then(m => m.montarCorazon());
+    import('./mayeutica-pulmon.js').then(m => m.montarMayeutica({ estado: (c) => abrirEstado(c, undefined, true) }));   // la Mayéutica: preguntas, examen y casos   // E3-enganche: el panel del corazón
     return { abrir: abrirEstado };
 }
