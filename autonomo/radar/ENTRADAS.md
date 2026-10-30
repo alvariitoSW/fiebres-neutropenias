@@ -38,7 +38,6 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-30 · Bandeja #27 · idea bloqueo de rama dependiente de la frecuencia (fase 3 y fase 4): ¿al bloque 3?
 - 2026-10-30 · Bandeja #27 · idea interdependencia ventricular: ¿mejora de Circulación viva (fase 2)?
 - 2026-10-30 · Bandeja #27 · caso de eco (HVI + estructura en la mitral): ¿banco de casos de eco (G1)?
-- 2026-10-30 · DeepTutor (repositorio): ¿la «puerta de dominio» como idea para `educacion-app` (B-040)? No se instala
 
 ## Fichas de triaje (las 30 entradas, la más reciente arriba)
 
@@ -66,9 +65,10 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
   norte dice ideas sí, código y servidores no
 - **Coste**: instalarlo rompe «sin backend» y pide una IA en un servidor (no aprobado, `NORTE.md` nivel 3) y una clave
   de pago. Llevarse la idea: 0 €
-- **Veredicto**: **no instalar ni copiar**. Idea suelta para `educacion-app` (B-040): la **puerta de dominio**, que
-  el recorrido no dé por estudiada una ficha hasta acertar a la primera cada tipo de pregunta (test, destapa, error)
-  en dos días distintos, con los datos que ya guarda el móvil. Decide el usuario en la tanda
+- **Veredicto**: **no instalar ni copiar**. Lo decidió el Consejo (30/10, `autonomo/consejo/2026-10-30-2.md`): la
+  puerta (bloqueo por tipo de pregunta) se descarta; entra en `educacion-app` un indicador de «ideas firmes» (2
+  aciertos en días distintos; el criterio es nuestro, no de DeepTutor, que no lo publica). El usuario dio el sí el 30/10 a
+  guardar los días con acierto
 
 ### Neuropronóstico tras parada cardíaca: el curso temporal de los marcadores (Critical Care Reviews)
 - **Fecha / tipo**: 2026-10-30 (comentario del 29/10) · tuit → paper

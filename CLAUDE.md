@@ -28,7 +28,7 @@ Este archivo son **las reglas vigentes**, cortas a propósito:
 ## 2. Decisiones de arquitectura (no las reabras sin preguntar)
 
 - **Sin backend, sin login, sin base de datos.** Nada se guarda, con tres excepciones de `localStorage`,
-  deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos y, desde el 28/10/2026, la fecha del último intento, para el repaso espaciado), el Modo Estudio (pomodoros, duración y
+  deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos y, desde el 28/10/2026, la fecha del último intento, para el repaso espaciado; y, desde el 30/10/2026, en la Mayéutica, en cuántos días distintos acertó cada pregunta, para el indicador de «ideas firmes»), el Modo Estudio (pomodoros, duración y
   progreso por ficha) y Dudas de guardia (las dudas que escribe el usuario). Ninguna persistencia más sin que la pida.
 - **Sin build tool ni dependencias.** HTML/CSS/JS que el navegador ejecuta tal cual. GitHub Pages sirve `index.html`.
 - **Una sola librería externa, a petición del usuario: Motion 11.18.2** (animaciones), copiada en
