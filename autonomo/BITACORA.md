@@ -347,10 +347,10 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **PR #47 y semiología (Consejo 10.ª del 30/10)**, acta `autonomo/consejo/2026-10-30-10.md`: (1) la PR #47 tiene los votos y
-  los jueces, pero un 8,5 del profesor (lo impone el formato de test de §8): **¿excepción para fusionarla?**; (2) la
-  semiología no tiene fuente abierta amplia: **¿abres `www.ncbi.nlm.nih.gov` o subes el capítulo de Surós o Bates?** Un PDF
-  escrito por Fable no vale como fuente (§7.1).
+- **Semiología (Consejo 10.ª del 30/10)**, acta `autonomo/consejo/2026-10-30-10.md`: no hay fuente abierta amplia. El
+  usuario pide una excepción para que Fable monte la fuente y señala su repositorio `sobreviviendo_a_urgencias_en_el_Negrin`
+  (chuletas de anamnesis y exploración, bibliografía general sin páginas). Pendiente: cómo se hace la excepción (ver la
+  respuesta en la sesión del 30/10).
 
 Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
 en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
@@ -510,6 +510,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-10-30 · **PR #47 en `main`** (el mínimo del PIF de Cardiología: 6 objetivos, «léelo en orden», tabla arteria → ECG y 8
+  preguntas): Consejo 10.ª + tu excepción a la condición 3; versión 20261030-28, jueces a favor.
 - 2026-10-30 · **Regla del código ajeno** (Consejo 8.ª): aprobada por el usuario con su cambio (permiso de palabra con nota
   en `docs/`); aplicada en `CLAUDE.md` §7.9 y REGLAS §1.6. Ventriculus: B + A (vara de medir fuera de la app y sus textos), no C.
 - 2026-10-30 · **Parada 3 del bloque 3 aprobada** por ti (grupos 1-5 y los 3 modelos vivos, mirados en el móvil). Pedida la ingeniería inversa de anatomyatelier.org (sesión abierta, para `mv-eco`).
