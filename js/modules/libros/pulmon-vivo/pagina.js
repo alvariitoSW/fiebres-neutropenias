@@ -12,6 +12,7 @@ import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from '../../../data/pulmon-vivo-data.js';
 import { montarExtras } from './extras.js';
 import { montarPiensa } from './piensa.js';
+import * as NX from './neumotorax.js';
 import { tau, TAU } from '../../../data/ventilacion-data.js';
 
 export function montarPulmon(raiz) {
@@ -56,6 +57,7 @@ function ponerEstado(clave, { llenar = true } = {}) {
   est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
   P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
+  NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
   pintarTodo();
@@ -77,7 +79,7 @@ function llenarMonitor() {
 const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase, pmus: P.pmus, disp: P.disparo ? 1 : 0 });
 function avanzar(dt) {
   const cada = SEG / mon.NP, n = Math.round(dt / 0.005);
-  for (let i = 0; i < n; i++) { P.paso(0.005); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
+  for (let i = 0; i < n; i++) { const f0 = P.fase; P.paso(0.005); if (f0 !== 'insp' && P.fase === 'insp') NX.ciclo(); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
   L = P.lectura() || L;
 }
 
@@ -139,7 +141,7 @@ function pintarCifrasTodo() {
 }
 function pintarFrase() {
   const E = D.ESTADOS[est.clave];
-  const S = est.sello;   // un tope pasado manda sobre la frase del estado: la frase viva dice lo que le pasa al paciente
+  const S = est.sello || NX.selloFrase();   // un tope pasado manda sobre la frase del estado: la frase viva dice lo que le pasa al paciente
   $('frase-txt').innerHTML = S ? `<span class="estado">${S.titulo}</span>${S.texto} ${org(S.origen, false)}`
     : `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
@@ -386,6 +388,8 @@ function abrirEstado(clave) {
   else if (!clave) pintarTodo();
   mon.montar(); llenarMonitor(); pintarTodo(); reanudar();
 }
+NX.montarNeumotorax({ raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() });
+setInterval(() => { if (raiz.getClientRects().length) NX.vigilar(); }, 400);
 window.__pulPruebas = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
 return { abrirEstado };
 }

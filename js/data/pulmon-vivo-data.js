@@ -393,3 +393,35 @@ Object.assign(ESTADOS, {
   },
 });
 ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'sbt-ok', 'sbt-fracaso');
+
+// ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
+FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  tension: { f: 'neumo-cuidado-barotrauma', id: 'nep-neumotorax-tension', sitio: 'Neumotórax a tensión: hipoxemia o hipotensión inexplicadas en el ventilado (Fig. 28.7)', p: 28 },
+  descompresion: { f: 'neumo-cuidado-barotrauma', id: 'nep-descompresion', sitio: 'Descompresión: angiocatéter 14 G de 8 cm, 5.º espacio, por delante de la línea axilar media', p: 29 },
+});
+export const NEUMOTORAX = {
+  tope: 20, paso: 1.5, spo2Base: 98, spo2PorCmH2O: 0.6,   // ilustrativo: cmH₂O de presión pleural extra; +1,5 por respiración; SpO₂ = 98 − 0,6 · P
+  figura: 'js/modules/neumologia/img/neumo-fig28-7-radiografia-neumotorax-tension.jpg',
+  sitios: {
+    correcto: { k: 'correcto', et: '5.º espacio, por delante de la línea axilar media · 14 G, 8 cm', ok: true,
+      e: 'Es el sitio y el catéter que recomienda Marino: angiocatéter de calibre 14 y 8 cm en el 5.º espacio intercostal, justo por delante de la línea axilar media. Llega al espacio pleural: el aire sale, la presión intratorácica cae, el pulmón se expande y el gasto vuelve. Después hace falta un tubo de tórax de calibre fino (8,5-14 French).', c: C.descompresion },
+    clasico: { k: 'clasico', et: '2.º espacio, línea medioclavicular · aguja de 5 cm', ok: false,
+      e: 'Es el error clásico: Marino dice que el fallo es más frecuente con catéteres más cortos y en el 2.º espacio a nivel de la línea medioclavicular. La pared torácica ahí es gruesa y la aguja corta no alcanza la pleura (la cifra de 5 cm es la de la aguja corta habitual: la fuente solo dice «más corta»). El aire sigue dentro: el paciente continúa sin gasto. Elige el otro sitio; si la aguja falla, Marino recomienda la descompresión con el dedo.', c: C.descompresion },
+  },
+};
+ESTADOS['neumotorax-tension'] = {
+  tit: 'Neumotórax a tensión en el ventilado: la presión crece en cada ciclo', pac: 'rafael', corazon: { tipo: 'normal', neumo: true },
+  resp: { modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 }, pulmon: NORMAL, man: { pausa: true },
+  frase: 'El aire entra en la pleura con cada insuflación y no sale: el pico y la meseta suben a la vez, y la PA y la saturación caen.',
+  guia: [
+    { t: 'Rafael, el politrauma ventilado, de pronto tiene hipoxemia o hipotensión sin explicación. En el ventilado hay que pensar en el neumotórax a tensión: la presión positiva mete aire en la pleura y no deja que salga. Pulsa «Dejar pasar 5 respiraciones» y mira cómo crece la presión del neumotórax.', org: 'ficha · la presión que crece por ciclo: ilustrativo', s: ['#pul-neumo'], c: C.tension },
+    { t: 'Pico y meseta suben juntos, y su diferencia se queda igual. Es una deducción nuestra de las ecuaciones: el pico es resistencia más elasticidad (Ec. 27.1), la meseta es solo la elasticidad (27.2) y su diferencia es la resistencia (27.3). El aire pleural endurece el sistema respiratorio, sube la parte elástica en las dos presiones y la resistencia no cambia.', org: 'deducción de la Ec. 27.1-27.3 · Marino no lo dice', s: ['[data-fila="pico"]', '[data-fila="meseta"]', '[data-fila="pres"]'], c: C.ec271 },
+    { t: 'El aire pleural comprime el pulmón y aumenta la presión intratorácica. Marino lo describe: colapsa el pulmón del mismo lado y produce una caída progresiva del gasto cardíaco que acaba en shock obstructivo y paro por actividad eléctrica sin pulso. Mira la PAM y la SpO₂.', org: 'ficha · las cifras: modelo ilustrativo', s: ['[data-fila="cor-pam"]', '[data-fila="cor-gc"]', '[data-fila="neumo-spo2"]'], c: C.tension },
+    { t: 'Se reconoce fácil en la radiografía portátil: sin marcas pulmonares en el hemitórax afectado, hemidiafragma deprimido y mediastino desplazado al lado contrario (Fig. 28.7). Es una emergencia médica: requiere descompresión inmediata, no esperar a la placa.', org: 'ficha', s: ['#pul-neumo-fig'], c: C.tension },
+    { t: 'Descomprime: elige el sitio y pulsa «Descomprimir». El recomendado es un angiocatéter de 14 G y 8 cm en el 5.º espacio intercostal, justo por delante de la línea axilar media. Prueba antes el 2.º espacio en la línea medioclavicular con la aguja corta: es donde más falla.', org: 'ficha', s: ['#pul-neumo-sitios'], c: C.descompresion },
+  ],
+  fuentes: [C.tension, C.descompresion, C.ec271, C.meseta],
+};
+ORDEN_ESTADOS.push('neumotorax-tension');
+NOTAS.push({ k: 'neumo-pico-meseta', tipo: 'calla', txt: 'Marino no dice cómo cambian el pico y la meseta en el neumotórax a tensión. Que suban juntos, con la misma diferencia, es una deducción de las Ec. 27.1-27.3 (pico = Pres + Pel; meseta = Pel; pico − meseta = Pres). La presión del neumotórax (1,5 cmH₂O por respiración, tope 20), la SpO₂ (98 − 0,6 por cmH₂O) y los 5 cm de la aguja corta son ilustrativos; la fuente no da cifras de saturación ni de presión pleural, solo dice «hipoxemia o hipotensión inexplicadas».', citas: [C.ec271, C.meseta, C.tension] });

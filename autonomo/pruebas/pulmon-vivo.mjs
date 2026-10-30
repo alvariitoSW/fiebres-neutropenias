@@ -261,6 +261,38 @@ for (const k of ORDEN_ESTADOS) {
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f2v > 105, `E4a SBT que fracasa: rápida y superficial, FR/Vt ${f2v} > 105 (Marino cap. 30 p. 52)`); await limpio('sbt-fracaso'); await foto('e4a-sbt');
 }
+// E4b · el neumotórax a tensión (par 9 de papel-pulmon.md §6): pico y meseta suben juntos, la PAM y la SpO₂ caen, el tope deja solo la descompresión
+{
+  const nx = (k) => p.evaluate(k => num2(document.querySelector(`#pul-neumo [data-fila="${k}"] .v`)?.textContent), k).catch(() => null);
+  await p.evaluate(() => { window.num2 = s => { const m = String(s ?? '').replace(',', '.').match(/-?\d+(\.\d+)?/); return m ? +m[0] : null; }; });
+  const pamNx = async () => num(await p.evaluate(() => document.querySelector('#pul-corazon [data-fila="cor-pam"] .v')?.textContent || ''));
+  const estable = async () => { try { await p.waitForFunction(() => { const s = document.getElementById('pul-corazon'), n = window.__pulPruebas(); return !s.hidden && !/…/.test(s.textContent) && +s.dataset.presion === Math.round((n.L?.pMedia ?? 0) + (+document.querySelector('#pul-neumo [data-fila="neumo-p"] .v').textContent.replace(',', '.'))); }, null, { timeout: 12000 }); } catch {} await espera(200); };
+  const tomar = async () => ({ pico: await cifra('pico'), mes: await cifra('meseta'), pam: await pamNx(), spo2: await nx('neumo-spo2'), ptx: await nx('neumo-p') });
+  const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(250); };
+  await abrir('neumotorax-tension'); await espera(900); await llenar(); await estable();
+  const a = await tomar();
+  ok(await p.evaluate(() => !document.getElementById('pul-neumo').hidden && window.__pulPruebas().est.pac.k === 'rafael'), 'E4b: Rafael, y el panel del neumotórax se ve');
+  ok(a.ptx === 0 && a.spo2 === 98 && a.mes > 10 && a.mes < 20, `E4b antes: presión 0, SpO₂ ${a.spo2} %, pico ${a.pico}, meseta ${a.mes}, PAM ${a.pam}`);
+  await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); const m1 = await tomar();
+  ok(m1.ptx > a.ptx && m1.pico > a.pico && m1.mes > a.mes && m1.pam < a.pam && m1.spo2 < a.spo2, `E4b: tras 5 respiraciones la presión crece (${m1.ptx}) y suben pico (${a.pico} → ${m1.pico}) y meseta (${a.mes} → ${m1.mes}); caen PAM (${m1.pam}) y SpO₂ (${m1.spo2})`);
+  for (let i = 0; i < 3; i++) await clic('#pul-neumo [data-nx="pasar"]');
+  await llenar(); await estable(); await espera(600);
+  const t = await tomar();
+  const sell = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).map(e => e.textContent), inerte: document.getElementById('pul-dock-panel').inert }));
+  ok(sell.s.some(x => /Neumotórax a tensión/.test(x)) && sell.inerte, `E4b tope: sello «Neumotórax a tensión» y mandos del respirador apagados (${sell.inerte})`);
+  ok(Math.abs((t.pico - t.mes) - (a.pico - a.mes)) < 1.5 && t.pico - a.pico > 15 && t.mes - a.mes > 15, `E4b tope: pico ${a.pico} → ${t.pico} y meseta ${a.mes} → ${t.mes} suben juntos; su diferencia (resistencia) se queda en ${(t.pico - t.mes).toFixed(1)}`);
+  ok(t.pam < a.pam - 8 && t.spo2 < a.spo2 - 8, `E4b tope: PAM ${a.pam} → ${t.pam} mmHg, SpO₂ ${a.spo2} → ${t.spo2} %`);
+  ok(/Meseta alta/.test(await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'E4b tope: la meseta por encima de 30 da su aviso');
+  await limpio('neumotórax en el tope'); await foto('e4b-tope');
+  await clic('#pul-neumo [data-sitio="clasico"]'); await clic('#pul-neumo [data-nx="desc"]');
+  { const r = await p.evaluate(() => ({ msg: document.querySelector('#pul-neumo [data-nx="msg"]').textContent, ptx: document.querySelector('#pul-neumo [data-fila="neumo-p"] .v').textContent, inerte: document.getElementById('pul-dock-panel').inert }));
+    ok(/No descomprime/.test(r.msg) && r.inerte && num(r.ptx) === t.ptx, `E4b: el 2.º espacio con aguja corta falla (presión ${r.ptx} igual, sello sigue)`); }
+  await clic('#pul-neumo [data-sitio="correcto"]'); await clic('#pul-neumo [data-nx="desc"]'); await llenar(); await estable();
+  const d = await tomar();
+  const fin = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).length, inerte: document.getElementById('pul-dock-panel').inert }));
+  ok(d.ptx === 0 && fin.s === 0 && !fin.inerte && d.pam >= a.pam - 2 && d.spo2 === a.spo2 && Math.abs(d.pico - a.pico) < 1, `E4b descompresión correcta: PAM ${t.pam} → ${d.pam}, SpO₂ ${t.spo2} → ${d.spo2}, pico ${d.pico}; sin sello y con los mandos libres`);
+  await limpio('neumotórax descomprimido'); await foto('e4b-descomprimido');
+}
 // Las citas de las fuentes y las notas
 await abrir('normal-vcv'); await espera(600);
 { const bad = await p.evaluate(() => [...document.querySelectorAll('#pul-raiz [data-resaltar]')].filter(c => !document.querySelector(c.dataset.resaltar)).map(c => c.dataset.resaltar)); ok(bad.length === 0, `todas las citas de la página llegan a un párrafo que existe${bad.length ? ': ' + [...new Set(bad)].join(', ') : ''}`); }

@@ -5,6 +5,7 @@
 // Lee la página por window.__pulPruebas (pagina.js no se toca). Los botones y las cifras se crean una vez y se repintan.
 import { instalarCss } from '../../../core/dibujo-iso.js';
 import * as D from '../../../data/pulmon-vivo-data.js';
+import * as NX from './neumotorax.js';
 
 const CSS = `
 #pul-corazon { display: grid; gap: 6px; background: var(--bg-card); border: 1px solid var(--card2); border-radius: 12px; padding: 8px 10px; }
@@ -28,7 +29,7 @@ const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 const f0 = (n) => String(Math.round(n));
 const pct = (a, b) => { const d = Math.round(100 * (a / b - 1)); return (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(d) + ' %'; };
 
-let sec = null, S = null, cargando = null, temporizador = null, clave = '', pedido = '', tope10 = false;
+let ultimo = null, sec = null, S = null, cargando = null, temporizador = null, clave = '', pedido = '', tope10 = false;
 const motores = new Map();   // tipo → { cab, res: Map(presión entera → lectura) }
 const celdas = {};
 
@@ -71,6 +72,7 @@ function pintar(tipo, x, nombre) {
     c.sub.textContent = x === 0 ? 'sin presión positiva' : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
     c.e.classList.toggle('sube', d > 0.005); c.e.classList.toggle('baja', d < -0.005);
   }
+  ultimo = b;
   document.getElementById('pul-cor-tit').textContent = `El corazón de ${nombre} con esta presión`;
   return b;
 }
@@ -95,7 +97,7 @@ function vigilar() {
     return;
   }
   if (tope10 && peep < T) { tope10 = false; q.tope.quitar('cpap-tope'); }
-  const x = Math.round(pm), firma = clave + ':' + x;
+  const x = Math.round(pm + (E.corazon.neumo ? NX.ptx() : 0)), firma = clave + ':' + x;
   if (firma === pedido) return;
   pedido = firma;
   const hacer = () => { if (pedido !== firma) return; pintar(E.corazon.tipo, x, q.est.pac.nombre); };
@@ -107,3 +109,6 @@ function vigilar() {
 
 // Para las pruebas: las cifras del panel tal como están en pantalla
 export function parar() { clearInterval(temporizador); }
+
+// Para el neumotórax: la última lectura del corazón (VS, GC, PAM)
+window.__pulCorazon = () => ultimo;

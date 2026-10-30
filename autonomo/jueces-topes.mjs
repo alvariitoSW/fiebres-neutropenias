@@ -28,7 +28,10 @@ const AJUSTES = {
     // «Hiperinflación» los comprueba pruebas/pulmon-vivo.mjs (par 10) con las constantes del paciente.
     // E4a: el deslizador «Esfuerzo (Pmus)» (0-15, aviso a 12) y el sello P-SILI (Vt ≥9,5 mL/kg en presión de soporte) los lleva al tope
     // pruebas/pulmon-vivo.mjs (bloque «E4a»): Pmus 15 en Elvira pasa el tope de 12 mL/kg y el mando vuelve; Pmus 9 conserva el P-SILI.
-    'pulmon-vivo': {},
+    // E4b: el estado «neumotorax-tension» lleva su sello «Neumotórax a tensión: gasto en caída» (presión del aire pleural 20 cmH₂O, el tope: «Dejar pasar 5
+    // respiraciones» se apaga y los mandos del respirador quedan inertes hasta descomprimir); «Empezar otra vez» reinicia el caso y no es un mando.
+    // Lo recorre pruebas/pulmon-vivo.mjs (bloque «E4b»): pico y meseta suben juntos, PAM y SpO₂ caen, el sitio clásico falla y el correcto los recupera.
+    'pulmon-vivo': { noPulsar: /^(Empezar otra vez)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
