@@ -184,7 +184,7 @@ export function prepararMotor(rec, segundos = 40) {
 export function crearCabecera(rec, { asentar = 40 } = {}) {
   const m = prepararMotor(rec);
   const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
-  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false };
+  const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false, cpap: 0 };
   // lo que miran los dibujos: el balón y las bombas, del motor; lo que pide el Impella y las vueltas, de la maqueta
   const ms = m.s;
   const st = { qImpObj: 3.5 * LMIN, impTotalObj: 3.5 * LMIN, rotor: 0, rodete: 0,
@@ -268,6 +268,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 
   function ajustar(cambio = {}) {
     Object.assign(ajuste, cambio);
+    if ('cpap' in cambio) m.p.pTorax = Math.max(0, +ajuste.cpap || 0);   // CPAP (cmH₂O) = presión de la vía aérea; a la pleura llega fPleura de ella (motor.mjs, pTorax)
     if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio) aplicarFarmacos();
     if (ajuste.soporte !== 'impella') ajuste.total = ajuste.total;   // (el modo total solo actúa con el Impella solo)
     if (cambio.soporte && cambio.soporte !== 'ecmo') ajuste.venteo = 'no';
@@ -305,7 +306,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
 // vuelve del oxigenador se toma como arterializada (98 %: ilustrativo, la fuente no da la saturación de salida)
 export function perfusion(L, rec) {
   const u = L.u;
-  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0) - PAO2_PCP * Math.max(0, (u.pvp ?? u.pcp ?? 0) - P_EDEMA));
+  const pao2 = Math.max(50, (rec.pao2 ?? 90) - 0.1 * (u.vEdema || 0) - PAO2_PCP * Math.max(0, (u.pvp ?? u.pcp ?? 0) - (u.pTorax || 0) - P_EDEMA));
   const satNativa = satDe(pao2);
   const sao2 = L.ecmo > 0 ? ((L.gcNativo + L.imp) * satNativa + L.ecmo * 0.98) / Math.max(0.1, L.gcTotal) : satNativa;
   const d = derivar(estadoDe({ hb: rec.hb ?? 14, pao2, gcFijo: L.gcTotal, util: rec.util || 'normal', espacio: rec.espacio || 'no' }));

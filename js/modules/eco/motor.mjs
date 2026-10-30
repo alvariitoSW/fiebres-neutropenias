@@ -57,6 +57,26 @@ export const BASE = {
   // relajación lenta, como en la disfunción diastólica). Ver activacionVi
   relajacion: 1,
   // pericardio: P = kPeri·exp((Vcorazón − v0Peri)/phiPeri); liquido = derrame extra
+  // pTorax: presión positiva de la vía aérea (CPAP o PEEP, cmH₂O; ×0,74 = mmHg, fisiología general). Por defecto 0: cifras
+  // idénticas a sin él. Lo que llega al espacio pleural es fPleura de ella, y esa presión pleural (s.pTorax, en mmHg) se SUMA
+  // por fuera a las cámaras y a los vasos del tórax (pulmonares); la aorta y las venas sistémicas, fuera, no la notan (pero
+  // ver kAbdomen). Así la poscarga del VI es la presión de la cámara menos la pleural (Marino cap. 26, Ec. 26.1, PDF p. 87)
+  pTorax: 0,
+  // fPleura: fracción de la presión de la vía aérea que llega al espacio pleural. En 19 pacientes con insuficiencia
+  // respiratoria aguda, el 37 % con pulmones distensibles, el 32 % y el 24 % con los más rígidos (presión esofágica; Jardin
+  // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, J Appl Physiol 59:1171,
+  // PMID 3902775) y, en decúbito supino, el esófago la infravalora mucho (Marini 1982, J Appl Physiol 53:384, PMID 6749776).
+  // Por eso 0,65, calibrado a la medida de fuera: 15 cmH₂O bajan el VS un 23 ± 22 % (Jellinek 2000, ver kAbdomen); con 0,65
+  // el motor da −24 % en el paciente normal (autonomo/bloques/b3/herramientas/g4-fpleura.mjs). Antes llegaba toda (1):
+  // 10 cmH₂O en un paciente seco paraban el retorno (GC 0,05)
+  fPleura: 0.65,
+  // kAbdomen: fracción de la presión de la vía aérea que llega a las venas de fuera del tórax. Al inflarse el pulmón baja el
+  // diafragma, sube la presión del abdomen y exprime su reservorio venoso: la presión media de llenado sube casi tanto como la
+  // de la AD y el gradiente del retorno venoso se mantiene. En 10 pacientes anestesiados, 15 cmH₂O (11,1 mmHg) subieron la
+  // presión media de llenado de 10,2 a 12,7 mmHg (2,5/11,1 ≈ 0,23) y la AD de 7,3 a 10,0 (Jellinek 2000, J Appl Physiol
+  // 88:926, PMID 10710387). Sin esto, con la AD dentro del tórax y las venas fuera, 10 cmH₂O vaciaban el pulmón hacia las
+  // venas y, en el paciente seco, paraban el retorno (GC 0,05)
+  kAbdomen: 0.23,
   kPeri: 0.1, v0Peri: 300, phiPeri: 40, liquidoPeri: 0,
   tabique: 0.05,            // fracción de la presión del otro ventrículo que se transmite
   // DESPLAZAMIENTO DEL TABIQUE (M0c, 29/10/2026): cuando la presión libre del VD supera a la del VI en diástole (VD que
@@ -238,6 +258,7 @@ const LMIN = 1000 / 60;   // mL/s por cada L/min
 // Recta con codo: x por encima del codo; por debajo, exponencial con el mismo valor y la misma pendiente en el codo
 // (continua y derivable), siempre > 0. Ver codoVen
 const VCOLAPSO = 3, KCOLAPSO = 2;
+const CMH2O_MMHG = 0.74; // 1 cmH₂O = 0,74 mmHg (fisiología general)
 // x se acerca a objetivo como mucho «paso» (y llega exacto)
 const hacia = (x, objetivo, paso) => Math.abs(objetivo - x) <= paso ? objetivo : x + Math.sign(objetivo - x) * paso;
 export const conCodo = (x, codo) => codo > 0 && x < codo ? codo * Math.exp(x / codo - 1) : Math.max(0, x);
@@ -270,7 +291,7 @@ export function crearMotor(ajustes = {}) {
     // arranca cerca del régimen estable (principio de un latido normal), para no esperar al asentamiento
     vad: 43, vvd: 110, vai: 46, vvi: 105,
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
-    pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
+    pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pTorax: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
     qMit: 0, qMitReg: 0, qCiv: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
     vMit: false, vTri: false, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
@@ -335,20 +356,22 @@ export function crearMotor(ajustes = {}) {
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
-    s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi;
-    s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi;
-    s.pai = presionAurícula(p.ai, s.vai, eAur, s.pperi);
-    s.pad = presionAurícula(p.ad, s.vad, eAur, s.pperi);
+    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw;   // vía aérea y pleura (mmHg)
+    s.pTorax = pT;
+    s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi + pT;
+    s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi + pT;
+    s.pai = presionAurícula(p.ai, s.vai, eAur, s.pperi + pT);
+    s.pad = presionAurícula(p.ad, s.vad, eAur, s.pperi + pT);
     // P1 · presión TRANSMURAL de las cavidades derechas (la de dentro menos la del saco): la que mantiene la pared abierta.
     // La presión de cada cámara ya lleva pperi dentro, así que pperi − pad nunca es > 0; lo que se acerca a 0 en el
     // taponamiento es la transmural (formas.mjs, plieguePared, la convierte en el pliegue de la pared libre)
-    s.ptmAd = s.pad - s.pperi; s.ptmVd = s.pvd - s.pperi;
+    s.ptmAd = s.pad - s.pperi - pT; s.ptmVd = s.pvd - s.pperi - pT;
     // s.paoDist: presión del depósito elástico; s.pao: la de la raíz (la que se mide y ve la válvula)
     s.paoDist = Math.max(0, (s.vao + s.vBalon - p.vuAo) / p.cAo);
     s.pao = s.paoDist + p.zAo * s.qAo;
-    s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen);
-    s.pap = conRigidez(conCodo((s.vap - p.vuAp) / p.cAp, p.codoPul), p.rigAp, p.kRigAp);
-    s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul);
+    s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen) + p.kAbdomen * pAw;   // + el abdomen (kAbdomen)
+    s.pap = conRigidez(conCodo((s.vap - p.vuAp) / p.cAp, p.codoPul), p.rigAp, p.kRigAp) + pT;
+    s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul) + pT;
   }
 
   function flujos(dt) {
@@ -422,7 +445,7 @@ export function crearMotor(ajustes = {}) {
     const objetivo = p.rellenoMax > 0 ? p.rellenoMax * Math.tanh(p.cInt * caida / p.rellenoMax) : 0;
     s.qRelleno = (objetivo - s.vRelleno) / p.tauRelleno;
     s.vRelleno += s.qRelleno * dt; s.vven += s.qRelleno * dt;
-    s.qEdema = p.kEdema * Math.max(0, s.pvp - p.pEdema);
+    s.qEdema = p.kEdema * Math.max(0, s.pvp - s.pTorax - p.pEdema);
     s.vEdema += s.qEdema * dt; s.vvp -= s.qEdema * dt;
   }
 
@@ -516,7 +539,7 @@ export function crearMotor(ajustes = {}) {
       t: +s.tLatido.toFixed(4), pvi: s.pvi, pai: s.pai, pao: s.pao, vvi: s.vvi,
       pvd: s.pvd, pad: s.pad, pap: s.pap, vvd: s.vvd, vai: s.vai, vad: s.vad,
       qAo: s.qAo, dpVc: s.dpVc, qMit: s.qMit, qMitReg: s.qMitReg, qCiv: s.qCiv, qPul: s.qPul, qTri: s.qTri, qTriReg: s.qTriReg, pven: s.pven, pvp: s.pvp,
-      pperi: s.pperi, ptmAd: s.ptmAd, ptmVd: s.ptmVd, liquidoPeri: s.liquidoPeri, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
+      pTorax: s.pTorax, pperi: s.pperi, ptmAd: s.ptmAd, ptmVd: s.ptmVd, liquidoPeri: s.liquidoPeri, eVen: s.eVen, eVd: s.eVd, eVi: s.eVi, eAur: s.eAur, fase: s.fase, qVp: s.qVp,
       vMit: s.vMit, vAo: s.vAo, vTri: s.vTri, vPul: s.vPul, vBalon: s.vBalon, qImp: s.qImp, qEcmo: s.qEcmo,
     };
   }
@@ -584,7 +607,7 @@ export function crearMotor(ajustes = {}) {
       rvs: (a.pao / T - a.pad / T) / (a.qSis * fcLatido / 1000) * 80,     // dyn·s·cm⁻⁵
       // RVP con el flujo que cruza el pulmón (lo que expulsa el VD): con un ECMO, el gasto que llega al cuerpo no pasa por él
       rvp: (a.pap / T - a.pai / T) / (vsD * fcLatido / 1000) * 80,
-      pven: a.pven / T, pvp: a.pvp / T, pperi: a.pperi / T,
+      pven: a.pven / T, pvp: a.pvp / T, pTorax: s.pTorax, pperi: a.pperi / T,
       ppc: a.paoMin - (a.pviEnMitralCierre ?? 0),  // presión de perfusión coronaria
       tS1: a.tS1, tS2: a.tS2, tS2p: a.tS2p, tAoAbre: a.tAoAbre, tMitAbre: a.tMitAbre,
       tPulAbre: a.tPulAbre, tTriCierra: a.tTriCierra,
