@@ -1,6 +1,6 @@
 # 2026-10-30 · b4-cobertura
 
-**Resultado:** en revisión (PR: PENDIENTE)
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/41)
 **Vueltas:** 1 · **Jueces:** no aplica (informe sin código) · móvil no aplica · auditoría: llega con las piezas
 
 ## Qué se hizo
