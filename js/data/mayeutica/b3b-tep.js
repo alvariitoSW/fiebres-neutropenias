@@ -13,6 +13,7 @@ const tv = (clave, texto) => ({ telarVivo: clave, texto });
 const vv = (clave, texto) => ({ vasoVivo: clave, texto });
 const sv = (clave, texto) => ({ shockVivo: clave, texto });
 const ce = (clave, texto) => ({ ecoEscenario: clave, texto });
+const visual = (tab, texto) => ({ especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab, enVisual: '', texto });
 
 export const MAYEUTICA_TEP = {
   /* =================================================================================================
@@ -28,7 +29,7 @@ export const MAYEUTICA_TEP = {
           { t: 'Solo el 10 % de las autopsias la muestran, y el 30 % de las sospechas se confirman con la prueba, por lo que conviene pedirla ante cualquier duda', porque: `Están cambiadas: son 30 % en la autopsia y 10 % de confirmaciones (${p(1)}). Con ese orden creerías que sospechar es rentable y pedirías pocas pruebas a quien tiene el diagnóstico sin hacer.` },
           { t: 'Se confirma en la mitad de las sospechas, por eso se pide la prueba en cuanto hay disnea', porque: `Se confirma en tan solo el 10 % (${p(1)}); pedir la prueba con cada disnea es el exceso de pruebas que el autor señala.` }],
         explicacion: `En autopsias de pacientes hospitalizados hay émbolos en <span class="hl-rojo">hasta el 30 %</span>, y la mayoría no se sospechó; pero la sospecha clínica solo se confirma en <span class="hl-rojo">el 10 %</span> (${p(1)}).` + enFicha(DX, 'nep-epidemiologia') },
-      { id: 'tep-g2', corto: 'PaO₂ normal', tipo: 'test', fuente: 'nep-presentacion · nep-tabla-22-1',
+      { id: 'tep-g2', corto: 'PaO₂ normal', tipo: 'test', fuente: 'nep-presentacion · nep-tabla-22-1', modelo: visual(DX, '👁️ La EP: pistas y pruebas (vista Visual)'),
         enunciado: 'Una paciente con sospecha de EP tiene PaO₂ normal. ¿Cuántas EP agudas la tienen y qué te dice eso?',
         opciones: [
           { t: 'El 30 % de las EP tienen PaO₂ normal: no la descarta', ok: true },
@@ -38,9 +39,9 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-g3', corto: 'dímero D en UCI', tipo: 'test', fuente: 'nep-dimero-d',
         enunciado: 'El dímero D de un paciente de UCI sale elevado. ¿Qué aporta?',
         opciones: [
-          { t: 'Poco: VPP 27 %, y se eleva en hasta el 80 % de los pacientes de UCI', ok: true },
           { t: 'Confirma la EP: el dímero D elevado indica trombosis activa', porque: `El VPP es solo del 27 %: la sepsis, la inflamación, la IC, la insuficiencia renal, el embarazo y la edad avanzada también lo elevan (${p(3)}). Con esa idea anticoagularías a muchos sin trombo.` },
-          { t: 'Es la prueba de elección en UCI porque su VPN de 92 % descarta con seguridad', porque: `El VPN de 92 % no sirve donde casi todos lo tienen elevado: Marino no lo considera una prueba útil en la UCI (${p(3)}).` }],
+          { t: 'Es la prueba de elección en UCI porque su VPN de 92 % descarta con seguridad', porque: `El VPN de 92 % no sirve donde casi todos lo tienen elevado: Marino no lo considera una prueba útil en la UCI (${p(3)}).` },
+          { t: 'Poco: VPP 27 %, y se eleva en hasta el 80 % de los pacientes de UCI', ok: true }],
         explicacion: `VPP <span class="hl-rojo">27 %</span> y VPN 92 %: normal, apoya que no hay EP; elevado, no dice nada. En la UCI hasta el <span class="hl-rojo">80 %</span> lo tiene elevado y por eso no se considera una prueba útil (${p(3)}).` + enFicha(DX, 'nep-dimero-d') },
       { id: 'tep-g4', corto: 'apretar la vena', tipo: 'test', fuente: 'nep-tabla-22-2 · nep-eco-venosa', modeloVivo: tv('tvp', '🧵 Aprieta la sonda en la femoral: con y sin trombo'),
         enunciado: 'Predice y luego lo compruebas en el telar: aprietas con la sonda sobre la vena femoral de una pierna con un trombo dentro. ¿Qué ves?',
@@ -52,16 +53,16 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-g5', corto: 'TVP proximal', tipo: 'test', fuente: 'nep-eco-venosa',
         enunciado: 'La eco de compresión de un paciente estable muestra una TVP proximal de la pierna. ¿Qué sigue?',
         opciones: [
-          { t: 'Anticoagular como en la EP y no seguir buscando el émbolo', ok: true },
           { t: 'Una angio-TC igualmente, para confirmar que hay embolia antes de anticoagular', porque: `Con TVP detectada no hace falta más estudio de émbolos, salvo que el paciente esté inestable (${p(4)}); la angio-TC añade 15 mSv y contraste sin cambiar la pauta (${p(6)}).` },
+          { t: 'Anticoagular como en la EP y no seguir buscando el émbolo', ok: true },
           { t: 'Esperar a repetir la eco en unos días: una TVP aislada no necesita tratamiento', porque: `Se inicia ya la anticoagulación con las mismas pautas que en la EP; solo difiere la duración (${p(4)}).` }],
         explicacion: `Entre el 30 y el 50 % de las EP tienen una TVP proximal en las piernas; si se ve, <span class="hl-verde">no hace falta más estudio</span> (salvo inestabilidad) y se anticoagula con los mismos esquemas que la EP (${p(3)}, ${p(4)}).` + enFicha(DX, 'nep-eco-venosa') },
       { id: 'tep-g6', corto: 'sin anticoagular', tipo: 'test', fuente: 'nep-subsegmentarios',
         enunciado: 'La angio-TC halla un émbolo subsegmentario (<2,5 mm). ¿Cuándo es razonable no anticoagular?',
         opciones: [
-          { t: 'Si cumple las cuatro a la vez: único, sin trombo en las piernas, sin disfunción del VD y sin comorbilidad importante', ok: true },
           { t: 'Siempre que sea subsegmentario, porque por su tamaño no daña, aunque haya varios émbolos o trombo residual en las piernas', porque: `Si hay varios émbolos subsegmentarios, la recurrencia sin anticoagulante fue mucho mayor (${p(5)}).` },
-          { t: 'Si es único y no hay hipoxemia; las piernas y el VD no importan', porque: `Hacen falta las cuatro: único, sin residuo en piernas por eco, sin disfunción del VD y sin comorbilidades (${p(6)}).` }],
+          { t: 'Si es único y no hay hipoxemia; las piernas y el VD no importan', porque: `Hacen falta las cuatro: único, sin residuo en piernas por eco, sin disfunción del VD y sin comorbilidades (${p(6)}).` },
+          { t: 'Si cumple las cuatro a la vez: único, sin trombo en las piernas, sin disfunción del VD y sin comorbilidad importante', ok: true }],
         explicacion: `<span class="hl-azul">Las cuatro a la vez</span>: émbolo único, sin trombo en las piernas, sin disfunción del VD y sin comorbilidad significativa (p. ej. hipoxemia) (${p(5)}-${p(6)}).`,
         nota: `<b>La fuente no lo dice</b> con grado de evidencia: Marino lo presenta como «parece razonable» a partir de los estudios citados.` + enFicha(DX, 'nep-subsegmentarios') },
       { id: 'tep-g7', corto: 'eco: signos propios', tipo: 'destapa', cuantas: 'son dos', fuente: 'nep-ecocardio', modelo: ce('tep', '🫀 La circulación viva con un émbolo'),
@@ -82,16 +83,16 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-e2', corto: 'angio-TC', tipo: 'test', fuente: 'nep-ctpa · nep-fig-22-1',
         enunciado: '¿Qué dice Marino de la angio-TC multidetector en la EP?',
         opciones: [
-          { t: 'Es la prueba de elección y su VPN es 95 %; se evita con aclaramiento <30 mL/min y dan unos 15 mSv', ok: true },
           { t: 'Es la prueba de elección, pero la dosis de radiación (unos 2 mSv) la hace segura en la embarazada y en la lactancia', porque: `Los 2 mSv son los de la gammagrafía V/Q; la angio-TC supone unos 15 mSv y en el embarazo y la lactancia hay que valorar alternativas (${p(6)}).` },
+          { t: 'Es la prueba de elección y su VPN es 95 %; se evita con aclaramiento <30 mL/min y dan unos 15 mSv', ok: true },
           { t: 'Es la prueba de elección, y con un aclaramiento de 25 mL/min basta una hidratación', porque: `Con ClCr <30 se evita el contraste si es posible, y si se usa se protege con volumen y N-acetilcisteína, no solo con hidratación (${p(6)}); si lo olvidas, el riñón sufre una nefropatía por contraste.` }],
         explicacion: `Un VPN de <span class="hl-azul">95 %</span> hace que una angio-TC normal elimine la EP; el riesgo es la nefropatía por contraste (evitar con ClCr <30 mL/min/1,73 m²) y la radiación, <span class="hl-rojo">15 mSv</span> de media (${p(5)}-${p(6)}).` + enFicha(DX, 'nep-ctpa') },
       { id: 'tep-e3', corto: 'gammagrafía V/Q', tipo: 'test', fuente: 'nep-vq',
         enunciado: 'Una V/Q «indeterminada» en un paciente estable con eco venosa negativa. ¿Qué haces con ella?',
         opciones: [
-          { t: 'Las dos juntas permiten excluir la EP, solo si está estable', ok: true },
           { t: 'Nada: una V/Q indeterminada no cambia la probabilidad, así que pasas directamente a la TC', porque: `Aunque aporta poco aislada (alrededor de tres cuartas partes son indeterminadas), con una eco venosa negativa permite excluir en estables (${p(6)}).` },
-          { t: 'Confirmas la EP: hay defectos de perfusión', porque: `La que confirma es la de alta probabilidad (defectos de perfusión sin ventilación); la indeterminada tiene defectos que coinciden y no confirma ni excluye por sí sola (${p(6)}).` }],
+          { t: 'Confirmas la EP: hay defectos de perfusión', porque: `La que confirma es la de alta probabilidad (defectos de perfusión sin ventilación); la indeterminada tiene defectos que coinciden y no confirma ni excluye por sí sola (${p(6)}).` },
+          { t: 'Las dos juntas permiten excluir la EP, solo si está estable', ok: true }],
         explicacion: `Aproximadamente tres cuartas partes son indeterminadas; <span class="hl-azul">indeterminada + eco venosa negativa</span> excluye la EP, pero solo con estabilidad hemodinámica (${p(6)}).` + enFicha(DX, 'nep-vq') },
     ],
     profundizar: [
@@ -115,8 +116,8 @@ export const MAYEUTICA_TEP = {
             pregunta: { id: 'tep-c2', tipo: 'test', fuente: 'nep-dimero-d', origen: 'ficha: VPP, VPN y el 80 %; la cifra de 2.400, del caso',
               enunciado: 'El dímero D sale en 2.400. ¿Qué te aporta en una paciente que está en el hospital y operada hace 5 días?',
               opciones: [
-                { t: 'Poco: su VPP es 27 % y en la UCI la mayoría lo tiene elevado', ok: true },
                 { t: 'Confirma la EP, al ser tan alto', porque: `Su VPP es del 27 % y la cirugía, la sepsis o la inflamación también lo elevan (${p(3)}). Anticoagular sin imagen sería un acto basado en un dato sin valor aquí.` },
+                { t: 'Poco: su VPP es 27 % y en la UCI la mayoría lo tiene elevado', ok: true },
                 { t: 'La descarta si baja a la mitad en 24 h', porque: `Marino no propone repetirlo: lo considera poco útil en la UCI porque hasta el 80 % lo tienen elevado (${p(3)}).` }],
               explicacion: `VPP <span class="hl-rojo">27 %</span>; hasta el 80 % de los pacientes de UCI lo tienen elevado y no se considera útil en ese contexto (${p(3)}).` + enFicha(DX, 'nep-dimero-d') } },
           { momento: '10:45', datos: { Situación: 'estable, en cama', 'Dónde': 'sin salir de la UCI' }, nuevo: ['Situación'],
@@ -130,9 +131,9 @@ export const MAYEUTICA_TEP = {
             pregunta: { id: 'tep-c4', tipo: 'test', fuente: 'nep-eco-venosa', modeloVivo: tv('tvp', '🧵 TVP: la femoral que no se aplasta'), origen: 'ficha; el hallazgo, del caso',
               enunciado: 'La femoral no se comprime y no tiene flujo. La paciente sigue estable. ¿Pides una angio-TC?',
               opciones: [
-                { t: 'No: anticoagulas como en la EP; con una TVP proximal y estabilidad, no hace falta más estudio', ok: true },
                 { t: 'Sí: sin la angio-TC no puedes afirmar que hay una EP ni justificar el tratamiento anticoagulante completo', porque: `Con TVP proximal y paciente estable no se sigue buscando el émbolo (${p(4)}); la TC añade 15 mSv y contraste (${p(6)}).` },
-                { t: 'Sí, y esperas el resultado antes de anticoagular', porque: `Se inicia ya la anticoagulación con las pautas de la EP (${p(4)}); esperar deja el trombo sin tratar.` }],
+                { t: 'Sí, y esperas el resultado antes de anticoagular', porque: `Se inicia ya la anticoagulación con las pautas de la EP (${p(4)}); esperar deja el trombo sin tratar.` },
+                { t: 'No: anticoagulas como en la EP; con una TVP proximal y estabilidad, no hace falta más estudio', ok: true }],
               explicacion: `<span class="hl-verde">Vena incompresible = TVP</span>: sin más estudio si está estable, y anticoagulación con los esquemas de la EP; solo la inestabilidad cambia esto (${p(4)}).` + enFicha(DX, 'nep-eco-venosa') } },
           { momento: '13:00 · el giro', datos: { 'Brazo derecho': 'hinchado', 'Vía subclavia': 'del día 1', 'Eco del brazo': 'subclavia incompresible' }, nuevo: ['Brazo derecho', 'Eco del brazo'],
             pregunta: { id: 'tep-c5', tipo: 'test', fuente: 'nep-tvp-brazo', origen: 'ficha: <10 % y la conducta; la paciente es inventada',
@@ -176,11 +177,11 @@ export const MAYEUTICA_TEP = {
           { t: 'Bajo riesgo, porque la tensión es normal', porque: `El bajo riesgo es sin disfunción del VD ni inestabilidad ni comorbilidad (${p(7)}); darías el alta a quien necesita 24-48 h de observación (${p(8)}).` }],
         explicacion: `<span class="hl-azul">Riesgo = VD + troponina + inestabilidad.</span> Intermedio: disfunción del VD (con o sin troponina) sin inestabilidad; alto: la sobrecarga del VD con troponina elevada <b>y</b> inestabilidad (${p(7)}).`,
         nota: `<b>La fuente no lo dice:</b> con qué cifra de PA se declara la inestabilidad. El modelo usa la PAM <65 mmHg, regla del modelo.` + enFicha(MJ, 'nep-riesgo') },
-      { id: 'tep-m2', corto: 'enoxaparina 24-48 h', tipo: 'test', fuente: 'nep-intermedio · nep-tabla-22-3',
+      { id: 'tep-m2', corto: 'enoxaparina 24-48 h', tipo: 'test', fuente: 'nep-intermedio · nep-tabla-22-3', modelo: visual(MJ, '👁️ El manejo según el riesgo (vista Visual)'),
         enunciado: 'Un paciente con EP de riesgo intermedio. ¿Qué anticoagulante y durante cuánto?',
         opciones: [
-          { t: 'Enoxaparina 1 mg/kg/12 h, vigilando 24-48 h; si no empeora, pasa a un anticoagulante oral', ok: true },
           { t: 'Un anticoagulante oral directo desde el primer momento y alta precoz a domicilio, al ser la tensión normal', porque: `Eso es el bajo riesgo; el intermedio se vigila en el hospital 24-48 h por la posibilidad de deterioro (${p(8)}).` },
+          { t: 'Enoxaparina 1 mg/kg/12 h, vigilando 24-48 h; si no empeora, pasa a un anticoagulante oral', ok: true },
           { t: 'Heparina no fraccionada con bolo de 80 U/kg, como en el alto riesgo', porque: `Esa pauta es la del alto riesgo (${p(7)}-${p(8)}); en el intermedio se usa enoxaparina (${p(8)}).` }],
         explicacion: `Intermedio: <span class="hl-azul">enoxaparina 1 mg/kg cada 12 h</span> y observación de 24 a 48 h; si no hay deterioro, se pasa a la pauta oral del bajo riesgo (${p(8)}).`,
         nota: `<b>La fuente no lo dice:</b> la dosis de enoxaparina en la obesidad extrema; la ficha da 1 mg/kg sin ajuste para pesos como los de Consuelo.` + enFicha(MJ, 'nep-intermedio') },
@@ -188,18 +189,20 @@ export const MAYEUTICA_TEP = {
         origen: 'ficha',
         enunciado: 'Una paciente con EP, VD dilatado e hipotensión tiene una PVC normal (4-6 mmHg). ¿Cuánto volumen aceptas y cómo lo guías?',
         opciones: [
-          { t: 'Hasta 500 mL de cristaloide, guiados por la eco', ok: true },
           { t: 'Un bolo de 1.000 mL, repetido hasta que la PAS pase de 90', porque: `El volumen agresivo sobrecarga el VD y empuja el tabique hacia el VI; el tope es de 500 mL (${p(10)}).` },
-          { t: 'Hasta 500 mL, guiados solo por la PA y sin necesidad de eco', porque: `El límite de 500 mL se acompaña de la eco como guía, para ver si el VD se dilata más (${p(10)}).` }],
+          { t: 'Hasta 500 mL, guiados solo por la PA y sin necesidad de eco', porque: `El límite de 500 mL se acompaña de la eco como guía, para ver si el VD se dilata más (${p(10)}).` },
+          { t: 'Hasta 500 mL de cristaloide, guiados por la eco', ok: true }],
         explicacion: `Con PVC normal se acepta volumen, <span class="hl-azul">limitado a 500 mL y guiado por eco</span>; más sobrecarga el VD (${p(10)}).` + enFicha(MJ, 'nep-hemodinamica') },
       { id: 'tep-m4', corto: 'dobutamina e hipotensión', tipo: 'error', fuente: 'nep-hemodinamica', modeloVivo: sv('tep', '🫀 Consuelo en el monitor: la PA con VD sobrecargado'),
         origen: 'ficha',
         enunciado: 'Frases sobre los vasoactivos en la EP. Hay un error. Encuéntralo.',
         frases: [
+          { t: 'Una infusión agresiva de volumen puede perjudicar en la EP aguda, porque sobrecarga más el VD y empuja el septo hacia el VI.' },
+          { t: 'Con fallo del corazón derecho, si la PVC es normal (4-6 mmHg) se puede infundir volumen, pero limitado a 500 mL.' },
           { t: 'La dobutamina se considera con sobrecarga del VD y PA normal.' },
           { t: 'Si hay hipotensión, la dobutamina sola es la primera elección porque sube el gasto del VD.', mal: true, c: `La dobutamina es vasodilatadora y no debe usarse sola si la EP produce hipotensión (${p(11)}).` },
           { t: 'Para la hipotensión se indica noradrenalina, que no aumenta la resistencia vascular pulmonar.' }],
-        explicacion: `Dobutamina con <span class="hl-azul">sobrecarga del VD y presión normal</span>; <span class="hl-rojo">no sola</span> si hay hipotensión, porque vasodilata; ahí va la noradrenalina (${p(11)}).` + enFicha(MJ, 'nep-hemodinamica') },
+        explicacion: `Dobutamina con <span class="hl-azul">sobrecarga del VD y presión normal</span>; <span class="hl-rojo">no sola</span> si hay hipotensión, porque vasodilata; ahí va la noradrenalina (${p(11)}). El volumen se limita a 500 mL porque sobrecarga el VD (${p(10)}).` + enFicha(MJ, 'nep-hemodinamica') },
       { id: 'tep-m5', corto: 'noradrenalina', tipo: 'test', fuente: 'nep-hemodinamica',
         enunciado: '¿Por qué la noradrenalina es el vasopresor indicado en la hipotensión por EP?',
         opciones: [
@@ -210,8 +213,8 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-m6', corto: 'heparina tras lisis', tipo: 'test', fuente: 'nep-alto-riesgo · nep-trombolisis', modeloVivo: vv('tep-lisis', '🩹 Lisis y heparina: mira el émbolo'),
         enunciado: 'Tras una lisis con éxito, ¿por qué la heparina es especialmente útil?',
         opciones: [
-          { t: 'Porque al disolverse el coágulo se libera trombina, que puede reocluir el vaso', ok: true },
           { t: 'Porque la lisis ya anticoagula y la heparina solo corrige el exceso', porque: `Es al contrario: se suele detener y reiniciar tras el fibrinolítico, pero la disolución libera trombina que favorece la reoclusión (${p(9)}).` },
+          { t: 'Porque al disolverse el coágulo se libera trombina, que puede reocluir el vaso', ok: true },
           { t: 'Porque la heparina termina de disolver lo que la lisis dejó', porque: `Marino aclara que anticoagular no es disolver el émbolo, sino prevenir el siguiente (${p(11)}).` }],
         explicacion: `<span class="hl-azul">La disolución del coágulo libera trombina</span>, que puede producir la reoclusión del vaso: la heparina es especialmente útil tras la lisis (${p(9)}).` + enFicha(MJ, 'nep-trombolisis') },
       { id: 'tep-m7', corto: 'sin lisis ni anticoagular', tipo: 'destapa', cuantas: 'son dos', fuente: 'nep-trombectomia · nep-filtro-indicaciones', modeloVivo: vv('tep-lisis', '🩹 Marca una contraindicación en el vaso'),
@@ -225,8 +228,8 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-e4', corto: 'pautas orales', tipo: 'test', fuente: 'nep-bajo-riesgo · nep-tabla-22-3',
         enunciado: '¿Qué pautas orales da Marino para el riesgo bajo, y qué se sabe del sangrado con ellas?',
         opciones: [
-          { t: 'Rivaroxabán 15 mg/12 h 3 semanas y luego 20 mg/día; o apixabán 10 mg/12 h 7 días y luego 5 mg/12 h; sin más sangrado', ok: true },
           { t: 'Rivaroxabán 20 mg/día desde el inicio y apixabán 5 mg/12 h, con más sangrado que la dosis habitual, por lo que se reserva a pacientes sin riesgo hemorrágico', porque: `La dosis inicial es mayor de lo habitual, pero no aumenta el riesgo de sangrado (${p(8)}).` },
+          { t: 'Rivaroxabán 15 mg/12 h 3 semanas y luego 20 mg/día; o apixabán 10 mg/12 h 7 días y luego 5 mg/12 h; sin más sangrado', ok: true },
           { t: 'Apixabán 15 mg/12 h 3 semanas y rivaroxabán 10 mg/12 h 7 días', porque: `Las cifras están cruzadas entre fármacos: el rivaroxabán es el de 15 mg ×3 semanas y el apixabán el de 10 mg ×7 días (${p(8)}).` }],
         explicacion: `<span class="hl-azul">Rivaroxabán 15 mg/12 h ×3 sem → 20 mg/24 h; apixabán 10 mg/12 h ×7 d → 5 mg/12 h.</span> La dosis inicial es mayor que la habitual, sin aumentar el sangrado (${p(8)}).` + enFicha(MJ, 'nep-bajo-riesgo') },
       { id: 'tep-e5', corto: 'ClCr ≤30', tipo: 'test', fuente: 'nep-bajo-riesgo',
@@ -239,8 +242,8 @@ export const MAYEUTICA_TEP = {
       { id: 'tep-e6', corto: 'filtro profiláctico', tipo: 'test', fuente: 'nep-filtro-indicaciones',
         enunciado: 'Se plantea poner filtros de vena cava como prevención en politrauma o cirugía bariátrica. ¿Qué dicen los estudios?',
         opciones: [
-          { t: 'Reducen la EP en un 60 % pero aumentan la TVP un 70 %; el beneficio global se cuestiona', ok: true },
           { t: 'Reducen la EP en un 60 % sin efectos adversos relevantes: es una indicación aceptada en politrauma y cirugía bariátrica', porque: `Aumentan la TVP un 70 % y el beneficio global se cuestiona (${p(12)}).` },
+          { t: 'Reducen la EP en un 60 % pero aumentan la TVP un 70 %; el beneficio global se cuestiona', ok: true },
           { t: 'No reducen la EP, pero evitan la TVP', porque: `Es al revés: la EP baja alrededor de un 60 % y la TVP sube un 70 % (${p(12)}).` }],
         explicacion: `Prevención con filtro: la EP baja <span class="hl-azul">≈60 %</span>, pero la TVP sube <span class="hl-rojo">70 %</span>; la práctica se cuestiona (${p(12)}).` + enFicha(MJ, 'nep-filtro-indicaciones') },
     ],
@@ -276,8 +279,8 @@ export const MAYEUTICA_TEP = {
               origen: 'ficha; las cifras, del monitor de la app (gravedad 95), ilustrativas',
               enunciado: 'Ahora está inestable: alto riesgo. La lisis se recomienda en el alto riesgo, pero Consuelo se operó hace 5 días. ¿Qué haces?',
               opciones: [
-                { t: 'No lisis, contraindicación absoluta (cirugía <3 semanas): trombectomía mecánica y noradrenalina', ok: true },
                 { t: 'Alteplasa 100 mg en 2 h, porque está inestable y es lo que recomienda la guía para el alto riesgo con shock', porque: `Una cirugía en las 3 semanas previas es una contraindicación absoluta (${p(9)}); con ella puede producirse sangrado grave (10-12 % de sangrado mayor con lisis sistémica, ${p(9)}).` },
+                { t: 'No lisis, contraindicación absoluta (cirugía <3 semanas): trombectomía mecánica y noradrenalina', ok: true },
                 { t: 'Alteplasa a dosis acelerada (0,6 mg/kg en 15 min), que es más segura', porque: `La dosis acelerada es para el colapso inminente y también tiene las mismas contraindicaciones (${p(9)}).` }],
               explicacion: `Alto riesgo con inestabilidad: la lisis se indica salvo contraindicaciones absolutas, entre ellas <span class="hl-rojo">cirugía en las últimas 3 semanas</span>. El rescate es la <span class="hl-azul">trombectomía por catéter</span> (${p(9)}, ${p(10)}); la hipotensión, con noradrenalina (${p(11)}).`,
               nota: `<b>La fuente no lo dice:</b> con qué cifra de PA se declara inestable; el modelo usa PAM <65 (regla del modelo). La serie de cifras es del monitor, ilustrativa.` + enFicha(MJ, 'nep-trombolisis') } },
@@ -285,9 +288,9 @@ export const MAYEUTICA_TEP = {
             pregunta: { id: 'tep-k4', tipo: 'test', fuente: 'nep-hnf · nep-obesidad', origen: 'ficha: Ec. 22.1 y la pauta; el peso ideal de 52 kg, dato del caso (la ficha remite a su tabla del apéndice 2); los productos, aritmética',
               enunciado: 'Heparina no fraccionada en el alto riesgo (80 U/kg en bolo y 18 U/kg/h). Con 142 kg e IMC de 55, ¿qué peso usas y qué dosis resultan?',
               opciones: [
-                { t: 'Peso ajustado, 88 kg: bolo de 7.040 U y 1.584 U/h; PTT a las 6 h', ok: true },
                 { t: 'Peso real, 142 kg: bolo de 11.360 U y 2.556 U/h', porque: `La pauta se derivó en pacientes de <130 kg y por encima sobreestima la dosis y favorece la anticoagulación excesiva (${p(9)}).` },
-                { t: 'Peso ideal, 52 kg: bolo de 4.160 U y 936 U/h', porque: `La ficha recomienda el peso ajustado, casi a medio camino entre el ideal y el real, no el ideal (${p(9)}). Con ese cálculo quedaría infradosificada (${DED}).` }],
+                { t: 'Peso ideal, 52 kg: bolo de 4.160 U y 936 U/h', porque: `La ficha recomienda el peso ajustado, casi a medio camino entre el ideal y el real, no el ideal (${p(9)}). Con ese cálculo quedaría infradosificada (${DED}).` },
+                { t: 'Peso ajustado, 88 kg: bolo de 7.040 U y 1.584 U/h; PTT a las 6 h', ok: true }],
               explicacion: `IMC ≥40: <span class="hl-azul">peso ajustado = 52 + 0,4 × (142 − 52) = 88 kg</span> (Ec. 22.1). Bolo 80 × 88 = <span class="hl-azul">7.040 U</span>; infusión 18 × 88 = <span class="hl-azul">1.584 U/h</span>; PTT a las 6 h, objetivo 46-70 s (${p(7)}-${p(9)}).`,
               nota: `<b>La fuente no lo dice:</b> el peso ideal de Consuelo (52 kg): es un dato del caso; la ficha remite a su tabla de pesos ideales. Los dos productos son aritmética sobre la pauta.` + enFicha(MJ, 'nep-obesidad') } },
           { momento: '20:40 · el volumen', datos: { PA: '67/54', PVC: '9 mmHg', Idea: '500 mL para subir la PA' }, nuevo: ['Idea'],
