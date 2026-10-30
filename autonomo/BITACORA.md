@@ -338,8 +338,15 @@ El resto del tablero sigue `aparcada`.
   la vía venosa central. Tarea `tecnicas-capitulos` en el Objetivo L del tablero (tras Marino y El Libro Azul).
 - **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
   puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
-  el ministerio de educación». **Desbloqueada el 30/10** (la web ya abre desde el entorno). Siguiente: `/ingenieria-reversa` en una sesión nueva; se hace el informe para Educación
-  (`/mayeutica`), comparándolo con `formula-comun` («la fórmula con tus números») y los modelos vivos.
+  el ministerio de educación». **Informe hecho el 30/10** (fase 1, ⏸ parado): https://claude.ai/artifact/GxMeNNH8AV8ReEvUVkTAtH
+  (`autonomo/ideas/ingenieria-inversa/atlas-of-physics.md`). Espera de ti: qué propuestas apruebas (recomendado: 1
+  «Compara» entre fichas con la misma fórmula y 2 juez que recalcula el renglón, ya; 3 tocar la pieza y ver su fórmula
+  y 4 curva con punto vivo, como piloto en el capilar vivo; 5 hoja de fórmulas de guardia, cuando decidas dónde vive;
+  6 preguntas con cifras del modelo, tras `preguntas`) y dónde va la hoja de fórmulas (raíz, Sobrevivir a la UMI o
+  buscador). Opcional: `cdn.jsdelivr.net` en la red del entorno para ver sus figuras 3D.
+  **Consejo del 30/10** (`autonomo/consejo/2026-10-30.md`, solo recomienda): sí al 2 (≈0,5-0,8 M), al 1 con catéter ↔
+  vaso y Fick (≈0,8-1,2 M) y al 3+4 piloto en el capilar tras `capilar-transfundir` (≈2,5-3,5 M); la 5 como acordeón en
+  Sobrevivir a la UMI (≈3-4 M); la 6, aplazada; sin segunda visita al 3D. Restaurar el hook que graft borró.
 - **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
   `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
   Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
