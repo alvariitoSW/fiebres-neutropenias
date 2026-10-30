@@ -91,9 +91,9 @@ test('mando de gravedad: aparece en los escenarios que lo tienen, se aplica al s
   assert.equal(await pg.locator('#cv-gravedad').isVisible(), true);
   assert.match(await pg.textContent('#cv-grav-txt'), /260 mL de derrame/);
   const poner = async (v) => { await pg.$eval('#cv-grav', (el, x) => { el.value = x; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, v); await pg.waitForTimeout(300); };
-  await poner(100); assert.match(await pg.textContent('#cv-grav-txt'), /383 mL de derrame/);
+  await poner(100); assert.match(await pg.textContent('#cv-grav-txt'), /377 mL de derrame/);
   const pam = await pg.evaluate(() => window.__motor.ultimo.pam), liq = await pg.evaluate(() => window.__motor.p.liquidoPeri);
-  assert.ok(Math.abs(liq - 383) < 1e-6, `líquido ${liq}`); assert.ok(pam >= 45 && pam <= 60, `PAM ${pam}`);
+  assert.ok(Math.abs(liq - 377) < 1e-6, `líquido ${liq}`); assert.ok(pam >= 45 && pam <= 60, `PAM ${pam}`);
   await poner(0); assert.equal(await pg.evaluate(() => window.__motor.p.liquidoPeri), 0);
   await pg.click('[data-c="hemorragia"]'); assert.match(await pg.textContent('#cv-grav-txt'), /1000 mL perdidos/);
   assert.ok(await pg.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'sin desborde');

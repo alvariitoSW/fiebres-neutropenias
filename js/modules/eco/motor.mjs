@@ -244,7 +244,9 @@ export const BASE = {
   // La bomba no saca lo que no hay: el flujo cae cuando el VI (succionVi, mL) o las venas (succionVen, mmHg) se vacían (las
   // paredes se pegan a la cánula: fisiología general; los umbrales, ilustrativos). El flujo de la bomba no depende de la
   // presión que vence (la curva de cada aparato no está en la fuente): es el que se pide, salvo la succión
-  soporte: null, tauBalon: { hincha: 0.03, vacia: 0.02 }, succionVi: [6, 22], succionVen: [0.15, 1.2],
+  // P4b: hincha 0,03 → 0,025 s (ilustrativo): con la cola de la activación el fallo al 100 % (FC ≈122) tiene ~87 ms de diástole tras cerrarse la aórtica y el
+  // balón llegaba a 37,6 de 40 mL (95 %); el inflado de un balón real es rápido (p. 45), no un 5 % de lo que desplaza
+  soporte: null, tauBalon: { hincha: 0.025, vacia: 0.02 }, succionVi: [6, 22], succionVen: [0.15, 1.2],
   // volumen de sangre total (mL)
   vSangre: 4850,
   // transporte de O₂ (Fick, por latido)
@@ -343,11 +345,14 @@ export function crearMotor(ajustes = {}) {
     const T = periodo, k = Math.sqrt(T / (60 / 70));
     const tl = s.tLatido;
     const eAur = activacion(tl, 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
-    const eVen = activacion(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida);
+    const tv0 = tl < p.pr ? tl + T - p.pr : tl - p.pr;   // misma continuidad de la cola que en eVi (abajo)
+    const eVen = activacion(tv0, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida);
     // el VI puede relajarse más despacio que el VD (relajacion): solo se alarga la caída de su activación
-    s.eVi = activacionVi(tl - p.pr, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida, p.relajacion);
+    // la cola de la relajación del latido anterior no se corta al empezar el siguiente: antes de la onda R sigue su caída (a FC alta
+    // y relajación lenta la cola era aún ~0,1 y la presión daba un salto de 4-5 mmHg al volver a empezar el latido)
+    s.eVi = activacionVi(tv0, p.fSubida * p.tsVen * k, (1 - p.fSubida) * p.tsVen * k, p.qSubida, p.relajacion);
     // activación del VD: la del VI salvo que su sístole dure más (durVd)
-    const eVd = p.durVd === 1 ? eVen : activacion(tl - p.pr, p.fSubida * p.tsVen * k * p.durVd, (1 - p.fSubida) * p.tsVen * k * p.durVd, p.qSubida);
+    const eVd = p.durVd === 1 ? eVen : activacion(tv0, p.fSubida * p.tsVen * k * p.durVd, (1 - p.fSubida) * p.tsVen * k * p.durVd, p.qSubida);
     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri - s.estiraPeri) / p.phiPeri);

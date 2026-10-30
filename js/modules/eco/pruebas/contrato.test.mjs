@@ -49,7 +49,8 @@ const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
   ['TEP 50 %', 'tep', 0.5, 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7],
   ['TEP defecto', 'tep', 'def', 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8],
-  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.3],
+  // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
+  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.8],
   ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.8],
   ['HP crónica 100 %', 'hpcronica', 1, 15, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 7.4],
   ['Taponamiento 100 %', 'derrame', 1, 33, 13.4, 14, 12, 9, 64, 2.8, 0.66, 6.0, 4.0],
@@ -106,9 +107,7 @@ test('el motor no cambia al leerlo', () => {
 
 // validarContrato en los 21 casos de CASOS_FORMA
 const SIN_CAMPO = ['Ar', 'bombaAI', 'sd'], VISTAS = new Set();   // bandas de BANDAS sin campo en CAMPOS (conocidas)
-const SEPARADOS = {
-  'fallo:1': { clave: 'salto', texto: 'el último instante no enlaza con el primero (pres.vi 30,1 → 25,6 mmHg, FC ≈121): salto al volver a empezar el latido (rúbrica, criterio 4)' },
-};
+const SEPARADOS = {};
 for (const [k, g] of CASOS_FORMA) {
   const id = clave(k, g);
   test(`validarContrato · ${id}`, () => {
@@ -135,7 +134,7 @@ test('fallo conocido (lo arregla mv-eco-2a5) · tep:def tiempo de aceleración p
   const ta = caso('tep', 'def').c.latido['tiempos.tap'];
   assert.ok(ta < 105, `TA pulmonar ${ta.toFixed(0)} ms; ESC/ERS 2022, Tabla 10 (PDF 28/p. 3645): <105 ms en el TEP`);
 });
-test('fallo conocido (lo arregla mv-eco-2a5) · fallo:1 el latido enlaza consigo mismo [sin clave en PENDIENTES]', { todo: 'mv-eco-2a5' }, () => {
+test('fallo:1 el latido enlaza consigo mismo (P4b: la cola de la activación pasa de un latido al siguiente)', () => {
   const v = validarContrato(caso('fallo', 1).c);
   assert.deepEqual(v.errores, []);
 });
