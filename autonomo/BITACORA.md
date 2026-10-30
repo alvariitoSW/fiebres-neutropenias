@@ -325,7 +325,7 @@ El resto del tablero sigue `aparcada`.
     se corrige a **≈58 M** (el parte del grupo 5 ya contaba con 58; el tablero decía 51): el grupo 6 (TEP) tiene
     **5,9 M de tope duro**. `formula-juez` (+19 %), solo anotada.
   - **PR #38 (`compara-formulas`) y PR #39 (`radio-baratas`, día 1): fusionadas** con los jueces en verde (versión
-    20261030-10).
+    20261030-12).
   - **Radio**: el mínimo va **ya, en el carril 2** (no tras El Libro Azul), y **«Lee esta placa» entra**: día 2
     (rótulos + TC de cráneo) desde el 31/10 y día 3 («Lee esta placa») al siguiente. Marino va primero cada día.
   - **`educacion-app`**: sigue esperando al `b3`. **Cuando el `b3` esté en `main`, escribe «sigue»** en la sesión

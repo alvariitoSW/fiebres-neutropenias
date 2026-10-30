@@ -13,6 +13,8 @@
 // Las partículas usan la tabla única de formas (js/data/formas-iones.js): cada
 // fluido dice su `particula` (clave de esa tabla).
 
+import { CASO_TERESA } from './agua-viva-caso-teresa.js';
+
 // ---------- Utilidades de formato (las usan las frases de cada fluido) ----------
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const copia = o => JSON.parse(JSON.stringify(o));
@@ -649,7 +651,9 @@ export const CASOS = [
     lleva: ['Posoperatorio y sueros hipotónicos: riesgo de hiponatremia (ADH por estrés).',
       'Los síntomas, no la cifra, deciden el salino al 3 %: bolos de 2 mL/kg o 150 mL.',
       'Límites: ≤5 en 2 h, ≤10 en 5 h y el primer día, final ≤130. Si se dispara la diuresis, valorar desmopresina (el libro no la aconseja con ADH no regulada y no lo concilia con el estrés).'],
-    volver: { nombre: 'Hiponatremia: encefalopatía y salino al 3 %', ficha: 'mr-hiponatremia-tto (Marino cap. 35)', estado: { paciente: 'mujer', na0: 124, adh: true, bolos3: 1, periodo3: '2h' }, pestana: 'sueros', fluido: 'salino3', lupa: 'neurona' } }
+    volver: { nombre: 'Hiponatremia: encefalopatía y salino al 3 %', ficha: 'mr-hiponatremia-tto (Marino cap. 35)', estado: { paciente: 'mujer', na0: 124, adh: true, bolos3: 1, periodo3: '2h' }, pestana: 'sueros', fluido: 'salino3', lupa: 'neurona' } },
+
+  CASO_TERESA
 ];
 
 
