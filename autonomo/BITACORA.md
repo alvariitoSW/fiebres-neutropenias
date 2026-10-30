@@ -264,10 +264,10 @@ esta sección.
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
 | `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` programada el 30/10, el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
-| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | **Parada contigo el 04/11**: elegir A, B, C o la mezcla del profesor |
+| `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | 30/10: aprobadas A, B y C; elegimos la mezcla C+B primero y A después. A la app: `educacion-app` |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
 | `eco-calibra-b`, `capilar-transfundir` | Los 3 huecos de la eco (TEP con escalón, shock cardiogénico coherente, DT del grado 1) y el tope del mando «Transfundir» del capilar vivo | aprobadas por el Consejo (28/10, 3.ª), **aparcadas**: la 1.ª espera el informe `eco-reforma`, la 2.ª la parada del 04/11 | 2026-10-28 | ≈3,5 M y ≈0,5 M. Acta `autonomo/consejo/2026-10-28-3.md` |
-| `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | **hecho el 30/10** (adelantado; 3,5 M de 4,4): [informe](https://claude.ai/artifact/BsV8RZpH6De3RcxhirNr7i), maquetas en `autonomo/maquetas/eco-reforma/` | 2026-10-28 | **Espera tu decisión**: opción A, B o C, y si entra three.js. `eco-calibra-b`, `f0-eco-*`, `f2-ete`, `b3-ritmo-motor`, B-041 y el atlas esperan |
+| `eco-reforma` | **B-039 · Reforma integral de la eco**: informe con maquetas visuales de los dos motores | **hecho el 30/10** (adelantado; 3,5 M de 4,4): [informe](https://claude.ai/artifact/BsV8RZpH6De3RcxhirNr7i), maquetas en `autonomo/maquetas/eco-reforma/` | 2026-10-28 **Elegiste la A el 30/10** (sin three.js): la obra, `mv-eco`, tras fusionar el bloque 3 |
 | `consejo`, `mayeutica` | **B-037 y B-038**: Consejo de Ministros (poderes: todo menos presupuesto total, arquitectura, quitar contenido y la última parada de cada bloque) y Ministerio de Educación (`/mayeutica`: escuela, arte e ideas) | hechas (28/10, en main): REGLAS §4.12 y la skill; primer Consejo el 28/10 (acta `autonomo/consejo/2026-10-28.md`) | 2026-10-28 | Acuerdos: `mayeutica-pestana` el 29/10 antes del grupo 2; `b3-bradi` corta; `b3-ritmo-motor` y `f2-ete`, aparcadas hasta B-039 |
 | `gobierno` | **B-036 · Trabajar como un gobierno**: Interior (`/plan-socialista`) presupuesta y rinde cuentas, Hacienda (`/ahorro`) recorta sola y lo deja escrito, Transportes (`/bitacora`) lleva el rumbo; tú apruebas el presupuesto de cada bloque; comparecer si se pasa >25 % | hecha (28/10, en main): REGLAS §4.10 y las tres skills | 2026-10-28 | Primera prueba: grupo 2 de `b3-paso4` (29/10) |
 | `b1-*` | **Objetivo M5 · bloque 1** (caps. 1-11) | hecho el 20/10 | 2026-10-19 | |
@@ -285,7 +285,7 @@ esta sección.
 | `inventario` | **B-014 · Inventario de estudio** | hecha (26/10, PR #31) | 2026-10-25 | Informe https://claude.ai/artifact/894zY7AfqYQC3QWP1Yjxir |
 | `pif-ecg` … `f4-recorridos` | **Objetivo I · Integración** (rumbo del Radar del 25/10): fase 1, fase 0, G1-G6 y fases 2-4, 26 tareas | pasado al tablero el 27/10: 13 `pendiente`, 13 `aparcada` (esperan PDF o terminar Marino) | 2026-10-27 | «sí, pásalo al tablero» (27/10). Orden: fase 1 → fase 0 → G1 |
 | `b3-paso4-opciones`, `eco-calibra`, `competencias-r` | **Objetivo P**: informes con gasto antes de construir: paso 4 del `b3`, **B-027 + B-029** (motor diastólico y HP crónica de la eco) y **B-032** (competencias por año) | hechos (27/10); R2-R5 de competencias, a medias | 2026-10-27 | Elegiste: paso 4 opción A (17 piezas, ≈36 M) y eco opción A |
-| `b3-paso4` | Paso 4 del `b3` por grupos | **grupos 1-4 hechos** en `auto/b3` (28-30/10: taquiarritmias, parada, shock cardiogénico, IC; profesor ≥8,25). Faltan la pieza del tabique y los grupos 5-6. Gastado 40,4 M de ≈46 M aprobados: **faltan ≈5 M** | 2026-10-28 | Parada 3 contigo tras el grupo 6. `eco-calibra-a`: hecha el 28/10 (14,5 M, en `main`) |
+| `b3-paso4` | Paso 4 del `b3` por grupos | **grupos 1-4 hechos** en `auto/b3` (28-30/10: taquiarritmias, parada, shock cardiogénico, IC; profesor ≥8,25). Faltan la pieza del tabique y los grupos 5-6. Gastado 40,4 M de ≈51 M (+5 M aprobados por ti el 30/10) | 2026-10-28 | Parada 3 contigo tras el grupo 6. `eco-calibra-a`: hecha el 28/10 (14,5 M, en `main`) |
 | `azul-cobertura`, `radio-informe` | **Objetivo P2**: mapa de El Libro Azul frente a Marino y propuesta del PIF de Radiología (B-034), solo informes | pendiente (31/10) | 2026-10-27 | «Sí a todo» (27/10, noche) |
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
 | `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
@@ -330,27 +330,24 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **🆕 30/10 · Reforma de la eco** (https://claude.ai/artifact/BsV8RZpH6De3RcxhirNr7i): elegir la opción **A, B o C** y
-  si entra **three.js**. Hasta entonces, todo lo de la eco espera.
-- **🆕 30/10 · Presupuesto del `b3-paso4`**: quedan ≈5,6 M y la pieza del tabique (1-2 M) más los grupos 5-6 (≈8-10 M)
-  piden **≈5 M más**. Sin tu sí, el bloque se para tras el grupo 4.
-- **🆕 Propuestas de regla de los partes del 29-30/10** (aprobar o no):
-  1. Antes de la ingeniería inversa de una web, probar también el dominio de su `<iframe>` (`eco-reforma`).
-  2. Las celdas «diagnóstico» del juez J1 de la eco fallan si la cifra queda fuera de **todos** los rangos de la guía
-     (hoy pasa E/e′ 1,8 en el TEP).
-  3. `version.mjs` falla si quedan marcas de conflicto de una fusión (g3b: llegó un commit con ellas).
-  4. Un mando nuevo de un modelo con muchos pacientes, solo en los pacientes que usa la ficha, salvo que se prueben
-     sus topes en todos (g4: CPAP en Mateo con hemorragia daba PAM 15).
-  (Las otras del g3a, g3b y g4, «herramientas que leen como la app», «un estado, un encargo» y «primero un script de
-  dirección», ya están abajo como propuestas de Hacienda.)
+- **✅ Decidido por ti el 30/10** (sobre el rumbo de hoy):
+  - **Eco**: opción **A** (dos motores con contrato, 20-26 M; «la C también está bien»). three.js, no (no lo elegiste).
+    La obra es `mv-eco`, tras fusionar el bloque 3; absorbe `eco-calibra-b`.
+  - **Bloque 3**: +5 M (`b3-paso4`, ≈51 M).
+  - **Las 4 reglas nuevas** y **los 4 ahorros de Hacienda**: tarea `reglas-30-10`.
+  - **Educación**: A, B y C aprobadas, con vía libre a Interior y Transportes → primero la mezcla del profesor (C con
+    el error de B dentro del caso), después A cuando use el motor en vivo. Tarea `educacion-app`; `capilar-transfundir`,
+    a `pendiente`. El 04/11 ya no hay que elegir: queda la prueba de 3 días, cuando quieras.
+  - **Red**: comprobado el 30/10, `atlas-of-physics.vercel.app` y `phet.colorado.edu` ya abren. **B-042 desbloqueada**.
+  - **Di Mario 2005**: descartado del todo. `f2-angio` y `g3-sca` buscan fuente abierta o lo dejan como hueco.
+  - **Mejoras y propuestas** (puntos 4 y 5): todas aceptadas → `mejoras-30-10`, la CPAP en `b3-pulmon-app`, la Fig. 18.3
+    y las preguntas viejas de Merino Cardiología y Neumología en `b3-cierre`.
 
 - **✅ B-043 · Anatomy Atlas de Pridgen, decidido el 29/10**: «procedimiento en capítulos» para Técnicas R1, empezando por
   la vía venosa central. Tarea `tecnicas-capitulos` en el Objetivo L del tablero (tras Marino y El Libro Azul).
 - **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
   puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
-  el ministerio de educación». **Bloqueada por la red**: el entorno no deja entrar en `atlas-of-physics.vercel.app`
-  (el túnel responde 403 y el lector web no resuelve el nombre). **Esperando algo tuyo**: añadir ese dominio en Allowed
-  domains de la red del entorno (ajustes del entorno → Network access). Después se hace el informe para Educación
+  el ministerio de educación». **Desbloqueada el 30/10** (la web ya abre desde el entorno). Siguiente: `/ingenieria-reversa` en una sesión nueva; se hace el informe para Educación
   (`/mayeutica`), comparándolo con `formula-comun` («la fórmula con tus números») y los modelos vivos.
 - **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
   `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
@@ -360,9 +357,7 @@ El resto del tablero sigue `aparcada`.
   modelos vivos con webs y guías en paralelo (semáforo por modelo, 70/30 del gasto diario). Espera de ti: dónde queda
   El Libro Azul (recomendado: tras los modelos), el artículo 13 y el presupuesto del carril 2 (≈25-40 M).
   **✅ Decidido por ti el 29/10**: El Libro Azul tras los modelos; artículo 13 aprobado (REGLAS §4.13); presupuesto
-  delegado en Hacienda; los PDF se buscan en abierto antes de pedirlos. En el tablero como Objetivo C. Queda: Di Mario
-  2005 es gratis en PubMed Central pero la red no lo baja: descárgalo de
-  https://pmc.ncbi.nlm.nih.gov/articles/PMC1768997/ y súbelo a la Bandeja (#27) cuando puedas.
+  delegado en Hacienda; los PDF se buscan en abierto antes de pedirlos. En el tablero como Objetivo C. Di Mario 2005: descartado por ti el 30/10.
   **✅ 29/10**: el simulador de eco entra en el carril 2 (`mv-eco`, último paso, tras el bloque 3 y tu elección de motor el 01/11).
 
 - **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
@@ -539,7 +534,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 4. Mejoras de lo que ya existe
 
-- **Visto de paso (29-30/10, `b3-paso4` g3-g4 y `eco-reforma`)**:
+- **Visto de paso (29-30/10, `b3-paso4` g3-g4 y `eco-reforma`)** · ✅ aprobado el 30/10 (`mejoras-30-10`, `mv-eco`, `b3-pulmon-app`, `b3-cierre`):
   - Shock vivo: cambiar de paciente tarda 1-3 s (asienta 30 latidos) y el juez del móvil lo da por «mando no tocable»;
     ECMO + Impella da FC 56 y presión de pulso 1; el edema no llega a equilibrio (191 mL al abrir, 475 a los 80 s).
   - Pieza propuesta para `b3-pulmon-app`: **CPAP que sube el gasto del corazón que falla** (hoy el modelo no lo hace,
@@ -654,6 +649,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **✅ 30/10: aprobadas todas las de abajo** (ahorros → `reglas-30-10`; preguntas viejas del bloque 3 → `b3-cierre`).
 - **Ahorro · Las cifras de los casos se leen en el monitor de la app** (propuesto 2026-10-30 por /ahorro) · Visto en: `b3-paso4` g3b (vuelta 2 del caso de Remedios: la herramienta no leía lo mismo que la pantalla) y g4 (Ramiro: el programa daba PCP 30,8 y la app 32; lo cazó el profesor) · Cambio: el constructor de Estudiar copia las cifras de los casos con `autonomo/bloques/b3/herramientas/g4-app-cifras.mjs` (lee el monitor a 390 px), nunca con el programa del motor; línea en la lista del constructor · Ahorro esperado: ≈0,4 M por grupo (una vuelta de arreglos del caso).
 - **Ahorro · Estados nuevos de un modelo vivo: uno por encargo y presupuesto real** (propuesto 2026-10-30 por /ahorro) · Visto en: `b3-paso4` g3a (3 estados en un encargo: 73 pasos, 2,9 M frente a 1,0) y g4 (3 etapas de la IC en un encargo: 71 pasos, 2,1 M frente a 0,5) · Cambio: un encargo por estado que pide calibrar el motor, presupuesto «estado nuevo con barrido» sonnet 30 pasos / 0,7 M en la tabla del tablero, y la prueba larga solo al final del último · Ahorro esperado: ≈0,8-1,2 M por grupo (menos relecturas de una conversación de 70 pasos).
 - **Ahorro · Pieza de motor: primero un script de dirección de 5 minutos** (propuesto 2026-10-30 por /ahorro) · Visto en: `b3-paso4` g3a (rotura del tabique: el motor bajaba la PCP, se vio tras construir) y g4 (CPAP: el VS bajaba en vez de subir; tres vueltas de motor, 1,4 M, y la interfaz esperando) · Cambio: antes de encargar la interfaz de una pieza de motor, un constructor sonnet de ≤10 pasos comprueba con un script que la cifra va en la dirección de la fuente; si no, el encargo es el motor, no la interfaz · Ahorro esperado: ≈0,5-0,8 M por pieza de motor que falla.
