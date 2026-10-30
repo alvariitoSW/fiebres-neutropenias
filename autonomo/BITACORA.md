@@ -658,6 +658,10 @@ El resto del tablero sigue `aparcada`.
   «Apuntado» como B-013 y B-014.
 
 
+- **Ahorro · Medir el gasto tras las piezas, antes del Estudiar** (propuesto 2026-10-30 por /ahorro) · Visto en: b3-paso4 g2 (+29 %, medido al final) y g5 (+30 %, 11,7 M frente a 9,0, medido al final); en g3a se midió a mitad y se compareció a tiempo · Cambio: el director pasa `gasto.mjs --clave` al terminar las piezas y antes de lanzar el Estudiar, y comparece ahí si va a pasar del 25 % · Ahorro esperado: no baja tokens por sí solo, pero deja al usuario decidir antes de gastar ≈2-3 M de más por grupo.
+- **Ahorro · Hacienda no junta piezas con prueba propia en un encargo** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a («estados», 3 en uno: 73 pasos, 2,9 M frente a 1,0) y g5 (5b+5c juntos por recorte de Hacienda: 80 pasos, 1,5 M frente a 0,9) · Cambio: en el modo presupuesto, Hacienda solo une piezas que no llevan prueba ni jueces propios; las que sí, un encargo cada una · Ahorro esperado: ≈0,5 M por grupo (menos esperas a jueces largos dentro de un mismo encargo).
+- **Ahorro · Director del paso 4 a 1,3 M** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a 1,1 · g3b 1,3 · g4 1,9 · g5 1,3 M frente a 0,8-0,9 · Cambio: el presupuesto del director de un grupo con piezas + Estudiar pasa a 1,3 M en «Presupuestos vigentes» (o, si se quiere bajar, partir piezas y Estudiar en dos sesiones) · Ahorro esperado: ninguno directo; presupuestos realistas que evitan comparecer por el director.
+
 ## 6. Hecho (últimos 7 días)
 
 - 2026-10-30 · **Reforma de la eco, informe** (`eco-reforma`, B-039): qué falla en el motor, ingeniería inversa de
