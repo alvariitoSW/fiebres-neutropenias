@@ -167,7 +167,7 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     posible(r, 'ic-cpap'); await limpio('ic-cpap');
     await pest('sop'); await clic('#shv-dock-panel [data-cpap="0"]'); await espera(1500); r = await S();
     const e0 = await p.evaluate(() => window.__shvPruebas().R.edema);
-    ok(e0 > e10 && Math.abs(r.vs - vs10) <= 3, `Ramiro CPAP 0 -> 10: el edema baja (${Math.round(e0)} -> ${Math.round(e10)} mL) y el VS se sostiene (${r.vs} -> ${vs10})`);
+    ok(e0 > e10 && vs10 >= r.vs + 3 && vs10 <= r.vs * 1.35, `Ramiro CPAP 0 -> 10: el edema baja (${Math.round(e0)} -> ${Math.round(e10)} mL) y el VS sube sin pasar del +35 % (${r.vs} -> ${vs10}; Bradley 1992, +22 % con CPAP 5)`);
     await clic('#shv-dock-panel [data-cpap="15"]'); await espera(1500); r = await S(); posible(r, 'Ramiro CPAP 15');
     ok(r.sellos.some(t => /CPAP por encima de 10/.test(t)), `Ramiro CPAP 15: sello (${r.sellos.join(' | ')})`);
     ok(await p.evaluate(() => document.querySelector('#shv-dock-panel [data-cpap="15"]')?.disabled === true), 'Ramiro CPAP 15: el mando del 15 queda apagado');
