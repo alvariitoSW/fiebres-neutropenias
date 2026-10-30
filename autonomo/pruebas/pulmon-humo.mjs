@@ -1,0 +1,11 @@
+import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+const BASE = process.argv[2] || 'http://localhost:8731/';
+const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2 }); const p = await ctx.newPage();
+const err = []; p.on('console', m => { if (m.type() === 'error') err.push(m.text()); }); p.on('pageerror', e => err.push('PAGE ' + e.stack.split('\n').slice(0,4).join(' | ')));
+await p.goto(BASE, { waitUntil: 'networkidle' }); await p.waitForTimeout(500);
+await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'pulmonVivo', pulmonVivo: 'normal-vcv' }); document.body.append(t); t.click(); t.remove(); });
+await p.waitForTimeout(2500);
+console.log(await p.evaluate(() => ({ vista: document.getElementById('pulmon-vivo-view').style.display, ancho: document.documentElement.scrollWidth, frase: document.getElementById('pul-frase-txt')?.textContent.slice(0, 80), x: !!window.__pulPruebas })));
+await p.screenshot({ path: '/tmp/plan-socialista/b3d/capturas-e1a/humo.png' });
+console.log(err); 
+await b.close();
