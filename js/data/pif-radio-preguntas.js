@@ -9,6 +9,7 @@ export const temasPifRadio = [
     { key: 'pifradio-caso', etiqueta: 'Caso: placa tras intubar, canalizar y sondar' },
     { key: 'pifradio-craneo', etiqueta: 'TC de cráneo en 5 preguntas' },
     { key: 'pifradio-caso-craneo', etiqueta: 'Caso: TC de cráneo de guardia' },
+    { key: 'pifradio-lee', etiqueta: 'Lee esta placa: tocar y comprobar' },
 ];
 
 export const preguntasPifRadio = [
@@ -341,5 +342,54 @@ export const preguntasPifRadio = [
         ],
         correcta: 1,
         explicacion: 'El Libro Azul recoge que, con GCS de 8 o menos y TC normal, monitorizar la PIC es beneficioso si hay más de 40 años, TAS por debajo de 90 mm Hg o daño focal (pág. 52). Descartar la HTIC por la TC contradice esto; la clase IV exige swelling y línea media desviada, que no hay. Origen: ficha.',
+    },
+    // ---- Lee esta placa ----
+    {
+        id: 'pifradio-q040', tema: 'pifradio-lee',
+        enunciado: 'En la placa portátil de un intubado ves la punta del tubo, pero la carina no se distingue. ¿Qué referencia usas para valorar la punta?',
+        opciones: [
+            'La clavícula derecha, porque la punta debe quedar siempre sobre ella',
+            'El espacio T4-T5, donde puede localizarse la carina en una placa portátil',
+            'El hemidiafragma izquierdo, porque marca la altura de la bifurcación',
+            'Ninguna: sin carina visible hay que dejar el tubo donde está',
+        ],
+        correcta: 1,
+        explicacion: 'Si la bifurcación traqueal no es visible, puede localizarse al nivel del espacio T4-T5 en una radiografía portátil. Con la clavícula o el diafragma como guía, un tubo pegado a la carina pasaría por correcto y acabaría en el bronquio derecho; dejarlo sin valorar tampoco es una opción. Origen: Marino, cap. 28, pág. 18.',
+    },
+    {
+        id: 'pifradio-q041', tema: 'pifradio-lee',
+        enunciado: 'Con la cabeza en posición neutra, ¿dónde debe estar la punta del tubo respecto a la bifurcación traqueal?',
+        opciones: [
+            'Justo sobre la carina, para no perder ventilación',
+            'Por debajo de la carina, en el bronquio principal derecho',
+            '1 cm por encima de las cuerdas vocales',
+            'De 3 a 5 cm por encima de la bifurcación, o a medio camino entre la bifurcación y las cuerdas',
+        ],
+        correcta: 3,
+        explicacion: 'Esa es la posición de la fuente. Sobre la carina, un movimiento de 2 cm con la flexión o extensión del cuello la deja en el bronquio derecho; por debajo ya hay riesgo de que el pulmón izquierdo no se ventile; y junto a las cuerdas el tubo se sale al extender el cuello. Origen: Marino, cap. 28, pág. 18.',
+    },
+    {
+        id: 'pifradio-q042', tema: 'pifradio-lee',
+        enunciado: 'Placa tras canalizar una yugular: el catéter baja recto por el mediastino y la punta queda a la altura de la carina. ¿Cómo lo lees?',
+        opciones: [
+            'Posición adecuada: la carina está justo encima de la unión de la cava superior con la aurícula derecha',
+            'Demasiado profundo: la punta ya está dentro de la aurícula derecha',
+            'Demasiado alto: hay que avanzarlo hasta la aurícula',
+            'No valorable sin eco, porque la placa no enseña la cava',
+        ],
+        correcta: 0,
+        explicacion: 'La carina está justo encima de la unión cava superior-aurícula derecha, de modo que la punta a ese nivel o algo por encima queda en la cava superior, que es el objetivo (1-2 cm por encima de la aurícula). Avanzarlo hasta la aurícula lo dejaría en la cavidad cardíaca. Origen: Marino, cap. 2, pág. 36.',
+    },
+    {
+        id: 'pifradio-q043', tema: 'pifradio-lee',
+        enunciado: 'Encuentra el error. Un residente lee dos placas: (1) «tubo con la punta a 4 cm de la carina: bien»; (2) «catéter subclavio cuya punta queda muy por debajo de la carina, en la aurícula: bien». ¿Qué lectura es errónea?',
+        opciones: [
+            'La 1: 4 cm sobre la carina es demasiado alto',
+            'Ninguna: las dos cumplen la fuente',
+            'La 2: la punta debe quedar a la altura de la carina o algo por encima, en la cava superior',
+            'Las dos: ambas puntas deben tocar la carina',
+        ],
+        correcta: 2,
+        explicacion: 'La lectura 1 es correcta: de 3 a 5 cm por encima de la bifurcación (Marino, cap. 28, pág. 18). La 2 es el error: el objetivo es la cava superior, con la punta a la altura de la carina o algo por encima, 1-2 cm por encima de la aurícula derecha; una punta por debajo estaría en la aurícula (Marino, cap. 2, pág. 36).',
     },
 ];

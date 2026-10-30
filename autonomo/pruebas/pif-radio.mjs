@@ -53,6 +53,28 @@ for (const w of [390, 360]) {
   const ia = await p.evaluate(() => { const d = document.getElementById('radio-f5-ia'); const cerrado = !d.open; d.open = true; return { cerrado, git: !!d.querySelector('a[href*="github.com/NVIDIA-Medtech/NV-Reason-CT"]'), dw: document.documentElement.scrollWidth - innerWidth }; });
   if (!ia.cerrado || !ia.git || ia.dw > 0) fallos.push(`${w} details IA: ${JSON.stringify(ia)}`);
   if (CAP) await p.screenshot({ path: `${CAP}${w}-radio-craneo-ia.png` });
+  // Ficha 6 «Lee esta placa»: Comprobar desactivado hasta tocar y elegir; un toque cerca de la punta y otro lejos
+  await p.evaluate(() => window.openCorkboardTopic?.('panel-pif-radio-tabs', 'radio-f6'));
+  await p.evaluate(() => document.querySelectorAll('#panel-pif-radio-tabs .tab-content').forEach(x => x.classList.toggle('active', x.id === 'radio-f6')));
+  for (const [id, pt] of [['tubo', [50.7, 31.3]], ['via', [44.9, 48.4]]]) {
+    await p.evaluate(i => document.getElementById(`radio-f6-${i}-img`).scrollIntoView({ block: "center" }), id); await p.waitForTimeout(300);
+    for (const [lejos, esperado] of [[false, 'true'], [true, 'false']]) {
+      await p.evaluate(i => document.getElementById(`radio-f6-${i}-img`).scrollIntoView({ block: "center" }), id); await p.waitForTimeout(150);
+      const bb = await p.locator(`#radio-f6-${id}-img`).boundingBox();
+      const off = () => p.evaluate(i => document.getElementById(`radio-f6-${i}-comprobar`).disabled, id);
+      if (!await off()) fallos.push(`${w} f6 ${id}: Comprobar activo antes de tocar`);
+      const [x, y] = lejos ? [15, 80] : pt;
+      await p.touchscreen.tap(bb.x + bb.width * x / 100 + 3, bb.y + bb.height * y / 100 + 3);
+      if (!await off()) fallos.push(`${w} f6 ${id}: Comprobar activo sin elegir`);
+      await p.locator(`#radio-f6-${id}-ops button`).first().tap();
+      if (await off()) { fallos.push(`${w} f6 ${id}: Comprobar sigue apagado tras tocar y elegir`); console.log(await p.evaluate(i => document.getElementById(`radio-f6-${i}-estado`).textContent + document.querySelectorAll(`#radio-f6-${i}-ops [aria-pressed=true]`).length, id)); }
+      await p.locator(`#radio-f6-${id}-comprobar`).tap(); await p.waitForTimeout(150);
+      const r = await p.evaluate(i => { const e = document.getElementById(`radio-f6-${i}-res`); return { cerca: e.dataset.cerca, pag: !!e.querySelector('a[href*="#page="]'), btn: !!e.querySelector('button[data-tab]'), dw: document.documentElement.scrollWidth - innerWidth }; }, id);
+      if (r.cerca !== esperado || !r.pag || !r.btn || r.dw > 0) fallos.push(`${w} f6 ${id} lejos=${lejos}: ${JSON.stringify(r)}`);
+      await p.locator(`#radio-f6-${id}-repetir`).tap();
+    }
+  }
+  if (CAP) await p.screenshot({ path: `${CAP}${w}-radio-f6.png` });
   // enlace "Ver en el texto" del último resultado → ficha de origen → VOLVER
   await p.evaluate(() => document.querySelector('#radio-sonda-resultado button[data-tab]').click()); await p.waitForTimeout(500);
   const dest = await p.evaluate(() => document.getElementById('mu-pauta-enteral')?.classList.contains('active'));

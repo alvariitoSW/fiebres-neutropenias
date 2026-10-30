@@ -4981,3 +4981,12 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .fig-rot-fuente { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; padding: 6px 4px 0; background: var(--bg-main); }
 .fig-rot-fuente p { margin: 0 0 4px; }
 .fig-rot-fuente ul { margin: 0; padding-left: 16px; }
+
+/* Ficha «Lee esta placa» (PIF Radiología) */
+.radio-lee-caja { cursor: crosshair; touch-action: manipulation; }
+.radio-lee-caja img { width: 100%; display: block; user-select: none; }
+.radio-toque { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; border: 2px solid var(--accent-purple); box-shadow: 0 0 0 1.5px var(--bg-main); box-sizing: border-box; pointer-events: none; }
+.radio-lee-extra { border-style: dashed; }
+.radio-lee-rot { font-size: 0.72rem; max-width: 46%; }
+.radio-lee-op { text-align: left; min-height: 44px; }
+.radio-lee-op[aria-pressed="true"] { border-color: var(--accent-purple); color: var(--accent-purple); }

@@ -3,6 +3,7 @@
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
 import { montarRotulos } from '../../core/figura-rotulos.js';
+import { initLee } from './radio-lee.js';
 import { ROTULOS_PIF_RADIO } from '../../data/pif-radio-rotulos.js';
 
 const PDF = {
@@ -95,5 +96,6 @@ export function init() {
     initSiNoWizard('radio-via', PASOS_VIA);
     initSiNoWizard('radio-sonda', PASOS_SONDA);
     initSiNoWizard('radio-craneo', PASOS_CRANEO);
+    initLee();
     montarRotulos(document.getElementById('pif-radio-placa-view'), ROTULOS_PIF_RADIO);
 }
