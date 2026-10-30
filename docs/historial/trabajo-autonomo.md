@@ -487,3 +487,5 @@ Los 7 artículos de la reforma con «sí» del usuario (2, 3a, 5, 6, 8, 10 y 12;
 §2.1b, §2.6b, §4.15, §5.7, §7.13), `autonomo/radar/NORTE.md` (G7 paciente ventilado; el estudio puro entra sin G), las
 skills `plan-socialista`, `ahorro` y `radar` y la lista del constructor. El art. 10 se reescribió para los dos motores
 de B-045 (corazón y contrato; los consumidores migran de uno en uno). Parte `autonomo/partes/2026-10-30-reglas-reforma.md`.
+
+- **30/10/2026 · PR por votos del Consejo** (Consejo 9.ª, acta `autonomo/consejo/2026-10-30-9.md`): el usuario pidió que las PR no dependan de su presencia. Regla nueva REGLAS §4.15 (jueces + auditor sin graves + profesor ≥ 8,75 + mayoría del Consejo = se fusiona; meta 9,5 en modelos vivos nuevos); cambian §2.3, §4.12, §4.8 R7, §7, `CLAUDE.md` §10 y el cierre de la skill del plan socialista. Lo escribió la sesión `educacion-app` sin agentes.

@@ -217,8 +217,10 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   (`git checkout main && git merge --ff-only origin/<rama> && git push origin main`, y volver a la rama). Si el
   fast-forward falla, avisa al usuario; no reescribas historia.
 - **Plan socialista** (`/plan-socialista`): el contenido de un bloque va a una rama `auto/<bN>` con una sola PR en
-  borrador, y el usuario solo se para 4-5 veces por bloque (`autonomo/REGLAS.md` §2.3). Los arreglos, los fallos de
-  los jueces y las mejoras técnicas van directo a `main` con los jueces en verde, sin pedir aprobación.
+  borrador, y el usuario solo se para 4-5 veces por bloque (`autonomo/REGLAS.md` §2.3). **La PR entra en `main` por
+  votos del Consejo** (desde el 30/10/2026, REGLAS §4.15): jueces en verde, auditor sin graves, profesor ≥ 8,75 (meta
+  9,5 en modelos vivos nuevos) y mayoría del Consejo; el usuario la ve después y pide arreglos si quiere. Los arreglos,
+  los fallos de los jueces y las mejoras técnicas van directo a `main` con los jueces en verde, sin pedir aprobación.
 
 ## 11. Redacción e idioma
 
