@@ -12,6 +12,7 @@
 // lámina a la vista; con «reducir movimiento» se pinta el estado final. Todos los ids llevan el prefijo tel-.
 import { svgParticula } from '../../core/particulas.js';
 import { sinMovimiento } from '../../core/motion.js';
+import { construirEco, pintarEco, sincronizarEco, tableroEco } from './telar-vivo-tvp.js';
 import { estadoBase, derivar, chipTxt, clamp, ES_HBPM, ES_HEPARINA, CUENTAS, CNI, NEURO, NEURO_NOMBRE, ORDEN_NEURO } from '../../data/telar-vivo-data.js';
 
 export const $ = id => document.getElementById('tel-' + id);
@@ -125,7 +126,7 @@ function construirLamina() {
     <circle cx="${LUPA.cx}" cy="${LUPA.cy}" r="${LUPA.r + 5}" style="fill:var(--bg-main)"/>
     <g clip-path="url(#tel-clip-lupa)">
       <circle cx="${LUPA.cx}" cy="${LUPA.cy}" r="${LUPA.r}" style="fill:var(--bg-main)"/>
-      <g id="tel-v-telar"></g><g id="tel-v-tih" display="none"></g><g id="tel-v-reloj" display="none"></g>
+      <g id="tel-v-telar"></g><g id="tel-v-tih" display="none"></g><g id="tel-v-reloj" display="none"></g><g id="tel-v-eco" display="none"></g>
       <circle cx="${LUPA.cx}" cy="${LUPA.cy}" r="${LUPA.r}" fill="url(#tel-g-vineta)" pointer-events="none"/>
     </g>
     <circle cx="${LUPA.cx}" cy="${LUPA.cy}" r="${LUPA.r}" style="fill:none;stroke:var(--accent-blue)" stroke-width="1.4"/>
@@ -135,7 +136,7 @@ function construirLamina() {
   <rect data-toca="pierna" role="button" aria-label="La pierna y la femoral" x="0" y="0" width="122" height="330" fill="transparent"/>
   <circle data-toca="lupa" role="button" aria-label="La lupa" cx="${LUPA.cx}" cy="${LUPA.cy}" r="${LUPA.r}" fill="transparent"/>
   <rect data-toca="rinon" role="button" aria-label="El riñón y la dosis" x="124" y="266" width="236" height="64" fill="transparent"/>`;
-    construirTelar(); construirTih(); construirReloj();
+    construirTelar(); construirTih(); construirReloj(); construirEco();
     const gp = $('g-rbc-pierna');
     for (let i = 0; i < 10; i++) { const g = document.createElementNS(SVGNS, 'g'); g.innerHTML = svgParticula('rbc', 0, 0, 1.9); gp.appendChild(g); Anim.rbcPierna.push({ el: g, u: i / 10 }); }
 }
@@ -607,12 +608,12 @@ export function vaciarFotogramas() { fotogramas.length = 0; }
 /* ============================================================
    Aplicar un estado, la vista de la lupa y el tablero de lecturas
    ============================================================ */
-const CHAPA = { telar: 'la pierna · el telar', tih: 'la plaqueta · TIH', reloj: 'reloj neuroaxial' };
+const CHAPA = { telar: 'la pierna · el telar', tih: 'la plaqueta · TIH', reloj: 'reloj neuroaxial', eco: 'eco de compresión' };
 let vistaAnim = null;
 function abrirVista(v) {
     $('chapa').textContent = CHAPA[v];
     $('vista-cerrar').hidden = v === 'telar';
-    ['telar', 'tih', 'reloj'].forEach(k => $('v-' + k).setAttribute('display', k === v ? 'inline' : 'none'));
+    ['telar', 'tih', 'reloj', 'eco'].forEach(k => $('v-' + k).setAttribute('display', k === v ? 'inline' : 'none'));
     const g = $('lupa');
     if (vistaAnim) { vistaAnim.stop?.(); vistaAnim = null; }
     const tr = k => g.setAttribute('transform', `translate(${LUPA.cx} ${LUPA.cy}) scale(${k.toFixed(3)}) translate(${-LUPA.cx} ${-LUPA.cy})`);
@@ -634,6 +635,8 @@ function pintarTodo(viejo) {
     pintarFarmaco(); pintarMangas(); pintarRinon();
     if (estado.vista === 'tih' && (!viejo || viejo.farmaco !== estado.farmaco || viejo.vista !== 'tih' || viejo.tih !== estado.tih)) pintarTihFijo();
     if (estado.vista === 'reloj') pintarReloj();
+    if (estado.vista === 'eco') pintarEco(estado);
+    sincronizarEco(estado);
     pintarTablero();
     ganchos.despues?.();
 }
@@ -666,6 +669,8 @@ export function pintarTablero() {
             celda('TIH', 'tih', D.tih.incidencia != null ? String(D.tih.incidencia).replace('.', ',') + ' %' : '—', e.farmaco === 'hnf' || ES_HBPM(e.farmaco) ? 'mar-hbpm (p. 7)' : '!sin heparina');
             celda('Con la dosis', 'tih', 'no depende', 'mar-hnf (p. 5)');
         }
+    } else if (e.vista === 'eco') {
+        tableroEco(e).forEach(([k, clave, valor, origen, tono]) => celda(k, clave, valor, origen, tono));
     } else {
         const corto = k => ({ hnf: 'HNF', enoxaparina: 'enoxa 1/día', apixaban: 'apixa', rivaroxaban: 'rivaro', dabigatran: 'dabi' }[k]);
         const listos = ORDEN_NEURO.filter(k => D.reloj[k]), esperar = ORDEN_NEURO.filter(k => !D.reloj[k]);

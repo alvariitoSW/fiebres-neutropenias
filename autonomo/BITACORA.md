@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-30 (rumbo): partes del 29 y 30/10 leídos (Ley de Ciencia, `educacion-pionera` f3, `b3-paso4` g3a, g3b y g4, `eco-reforma`); ninguna PR fusionada ni cerrada desde el 28/10; PR #37 (Educación) abierta en borrador; **Marino: 50 de 155** fichas con Estudiar (42 + 8 de los grupos 2-4, en `auto/b3`).
+Última sincronización: 2026-10-30 (Consejo, 7.ª): sin PR nuevas fusionadas ni cerradas; PR #37 sigue en borrador. Antes, 2026-10-30 (rumbo): partes del 29 y 30/10 leídos (Ley de Ciencia, `educacion-pionera` f3, `b3-paso4` g3a, g3b y g4, `eco-reforma`); ninguna PR fusionada ni cerrada desde el 28/10; PR #37 (Educación) abierta en borrador; **Marino: 50 de 155** fichas con Estudiar (42 + 8 de los grupos 2-4, en `auto/b3`).
 
 ---
 
@@ -229,18 +229,20 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-041 · Raíz aórtica en la eco · apuntado 2026-10-29
-- **De dónde sale**: Consejo de Ministros del 29/10 (2.ª reunión, acta `autonomo/consejo/2026-10-29-2.md`), sobre el
-  informe del visor de la raíz aórtica (`autonomo/ideas/ingenieria-inversa/raiz-aortica.md`, cerrado).
-- **Cómo lo entiendo**: tipo `contenido`. Ficha de la raíz aórtica (anillo, senos, unión sinotubular, ascendente) con la
-  Tabla 14 de Lang 2015 (`docs/lang-2015-cuantificacion-camaras-ase.pdf`, pdf 32) y una calculadora de z simple
-  ((medido − media) / DE, por sexo) con el aviso de que el corte z = 2 puede caer dentro del error de medida. Pregunta
-  de guardia: «aorta de 4,5 cm en un Marfan con dolor torácico: ¿qué no esperas a medir?».
-- **Lo que NO quiero**: 3D, PDF, guardar datos, lector de informes; umbrales quirúrgicos sin su guía abierta.
-- **Depende de**: `eco-reforma` (Ley de Ciencia art. 1). Los umbrales, de la ESC 2024 y la ACC/AHA 2022 de aorta (no
-  están en `docs/`); la z ajustada por edad y SC, de Devereux 2012 (sin cotejar).
-- **Tamaño**: pequeña (0,8-1,2 M solo con Lang; ≈3-4 M más con las guías).
-- **Dudas**: ¿la quieres, y en la eco o en Cardiología?
+### B-047 · PDF por su cuenta y tuits del Radar dentro de la app · apuntado 2026-10-30
+- **Lo que dijiste**: «estaría bien que pudieras conseguir los PDF por tu cuenta y que la parte de radar metiera los
+  tuits que le voy pasando en la app, pero bueno, esto ahora es mínimo y no es prioritario».
+- **Cómo lo entiendo**: dos cosas pequeñas.
+  1. **PDF**: ya es regla (REGLAS §4.13: se buscan en abierto antes de pedirlos). Falta hacerlo de verdad con la
+     lista de «Esperando algo tuyo» (punto 5): una pasada que busque cada uno en Europe PMC, PMC y la web de la
+     sociedad, baje los que estén en abierto a `docs/` y te pida solo los de pago, con el enlace exacto (supongo).
+  2. **Tuits**: hoy la Bandeja (issue #27) los lee y los apunta en `autonomo/radar/`, pero no llegan a la app. La idea:
+     que cada tuit útil acabe en la ficha que toca, como «Visto en Twitter» con su enlace y lo que aporta (supongo),
+     nunca como fuente clínica (artículo 2 de la reforma).
+- **Lo que NO quiero**: copiar el texto o las imágenes del tuit; tuits sin destino.
+- **Tamaño**: pequeña cada una (≈1-2 M la de PDF; ≈1-2 M la de tuits).
+- **Depende de**: nada. **No es prioritario** (lo dijiste tú): espera a que digas cuándo.
+- **Dudas**: (1) ¿«Visto en Twitter» dentro de la ficha te vale, o lo quieres en un sitio aparte?
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -263,7 +265,13 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` programada el 30/10, el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
+| `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
+| `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
+| `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | aprobado por ti el 30/10; ya | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
+| `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | aprobado por ti el 30/10 («sí a lo que dice el Consejo») | 2026-10-30 | ≈0,9 M, directo a `main` |
+| `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | aprobado por ti el 30/10 («la quiero en la eco») | 2026-10-30 | ≈0,8-1,2 M |
+| `wiggers-movil` | Arreglo de la Wiggers a 360 px | aprobado por el Consejo el 30/10 (7.ª) | 2026-10-30 | ≈0,3 M |
+| `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` **pasa al 31/10** (el 30/10 el día ya iba en ≈34 M: no se empezó), el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | 30/10: aprobadas A, B y C; elegimos la mezcla C+B primero y A después. A la app: `educacion-app` |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
 | `eco-calibra-b`, `capilar-transfundir` | Los 3 huecos de la eco (TEP con escalón, shock cardiogénico coherente, DT del grado 1) y el tope del mando «Transfundir» del capilar vivo | aprobadas por el Consejo (28/10, 3.ª), **aparcadas**: la 1.ª espera el informe `eco-reforma`, la 2.ª la parada del 04/11 | 2026-10-28 | ≈3,5 M y ≈0,5 M. Acta `autonomo/consejo/2026-10-28-3.md` |
@@ -319,233 +327,24 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-- **Consejo extraordinario del 30/10 (6.ª, con tu potestad delegada sobre este punto 3; acta
-  `autonomo/consejo/2026-10-30-6.md`)**. Decidido:
-  - **Comparecencias aceptadas**: grupo 5 del `b3` (+30 %) y `reglas-30-10` (+165 %). El presupuesto de `b3-paso4`
-    se corrige a **≈58 M** (el parte del grupo 5 ya contaba con 58; el tablero decía 51): el grupo 6 (TEP) tiene
-    **5,9 M de tope duro**. `formula-juez` (+19 %), solo anotada.
-  - **PR #38 (`compara-formulas`) y PR #39 (`radio-baratas`, día 1): fusionadas** con los jueces en verde (versión
-    20261030-12).
-  - **Radio**: el mínimo va **ya, en el carril 2** (no tras El Libro Azul), y **«Lee esta placa» entra**: día 2
-    (rótulos + TC de cráneo) desde el 31/10 y día 3 («Lee esta placa») al siguiente. Marino va primero cada día.
-  - **`educacion-app`**: sigue esperando al `b3`. **Cuando el `b3` esté en `main`, escribe «sigue»** en la sesión
-    «educacion-app · espera al bloque 3».
-  - **Semiología (Bates o Surós)**: opcional, sin prisa; sin cambios.
-- **🔔 Recordatorio, solo tú puedes hacerlo** (no está hecho): mirar en el móvil (1) el **SCA** y la **disección
-  aórtica** del grupo 5 (https://raw.githack.com/alvariitoSW/fiebres-neutropenias/auto/b3/index.html → Cardiología →
-  Merino Cardiología → «SCA» o «Disección aórtica» → Estudiar) y (2) **M3 de la eco con «HP crónica»**: el sello VD/VI
-  0,72 es un fallo conocido del motor (la guía espera >1,0) que arreglará `mv-eco`; mirarlo solo lo confirma.
-- **Espera tu sí (visto de paso de la PR #38)**: la ficha Fisiopatología UCI → Cardiología → Fisiología cardíaca
-  aplicada tiene rótulos de 5-6 px en la animación de Wiggers y se sale 30 px a 360 px (ya estaba antes). ¿Arreglo
-  directo a `main` (≈0,3 M)?
+Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
+en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
-- **✅ Decidido por ti el 30/10** (sobre el rumbo de hoy):
-  - **Eco**: opción **A** (dos motores con contrato, 20-26 M; «la C también está bien»). three.js, no (no lo elegiste).
-    La obra es `mv-eco`, tras fusionar el bloque 3; absorbe `eco-calibra-b`.
-  - **Bloque 3**: +5 M (`b3-paso4`, ≈51 M).
-  - **Las 4 reglas nuevas** y **los 4 ahorros de Hacienda**: tarea `reglas-30-10`.
-  - **Educación**: A, B y C aprobadas, con vía libre a Interior y Transportes → primero la mezcla del profesor (C con
-    el error de B dentro del caso), después A cuando use el motor en vivo. Tarea `educacion-app`; `capilar-transfundir`,
-    a `pendiente`. El 04/11 ya no hay que elegir: queda la prueba de 3 días, cuando quieras.
-  - **Red**: comprobado el 30/10, `atlas-of-physics.vercel.app` y `phet.colorado.edu` ya abren. **B-042 desbloqueada**.
-  - **Di Mario 2005**: descartado del todo. `f2-angio` y `g3-sca` buscan fuente abierta o lo dejan como hueco.
-  - **Mejoras y propuestas** (puntos 4 y 5): todas aceptadas → `mejoras-30-10`, la CPAP en `b3-pulmon-app`, la Fig. 18.3
-    y las preguntas viejas de Merino Cardiología y Neumología en `b3-cierre`.
-  - **Recordatorio cerrado**: simulador ETE (C hecho; A y B a `mv-eco`); panel de subida, descartado; velocidad del
-    plan, cerrada (ya se hace con las reglas nuevas).
+1. ✅ **B-044, B-045 y B-046**: aprobadas el 30/10 (ver «En marcha»).
+2. ✅ **La reforma**: «sí a lo que dice el Consejo» (30/10), tarea `reglas-reforma`.
+3. **Parada 3 del `b3`**, solo la parte del corazón (`b3-corazon-pr`): mirarla en el móvil antes de `main`.
+4. ✅ **B-041**: en la eco (30/10), tarea `raiz-aortica`.
+5. **Opcional, sin prisa**:
+   - la prueba de 3 días con el caso de Teresa (`autonomo/ideas/educacion-pionera/prueba-3-dias.md`);
+   - abrir en la red del entorno cardiorender.com, litfl.com e intro2echo.com, o descartarlas (siguen cerradas; las
+     demás webs del plan de B-046 ya abren, probado el 30/10);
+   - PDF que mejorarían fichas (se buscan antes en abierto, REGLAS §4.13): DanGer Shock 2024, ESC 2024 y ACC/AHA 2022
+     de aorta, Devereux 2012, Hickling 2001, Mireles-Cabodevila 2022, Carden 2026, AHA 2020/ERC 2021, SCAI 2015,
+     Valdenebro 2021, Leung y Levine 1994, un libro de física de los ultrasonidos (B-028) y el capítulo
+     cardiovascular de Bates o Surós.
 
-- **✅ B-043 · Anatomy Atlas de Pridgen, decidido el 29/10**: «procedimiento en capítulos» para Técnicas R1, empezando por
-  la vía venosa central. Tarea `tecnicas-capitulos` en el Objetivo L del tablero (tras Marino y El Libro Azul).
-- **B-042 · Atlas of Physics (https://atlas-of-physics.vercel.app/), pedido el 29/10** (`/ingenieria-reversa`): «si nos
-  puede servir para explicar ecuaciones y fórmulas físicas y matemáticas médicas de manera más sencilla y así aumentar
-  el ministerio de educación». **Informe hecho el 30/10** (fase 1, ⏸ parado): https://claude.ai/artifact/GxMeNNH8AV8ReEvUVkTAtH
-  (`autonomo/ideas/ingenieria-inversa/atlas-of-physics.md`). Espera de ti: qué propuestas apruebas (recomendado: 1
-  «Compara» entre fichas con la misma fórmula y 2 juez que recalcula el renglón, ya; 3 tocar la pieza y ver su fórmula
-  y 4 curva con punto vivo, como piloto en el capilar vivo; 5 hoja de fórmulas de guardia, cuando decidas dónde vive;
-  6 preguntas con cifras del modelo, tras `preguntas`) y dónde va la hoja de fórmulas (raíz, Sobrevivir a la UMI o
-  buscador). Opcional: `cdn.jsdelivr.net` en la red del entorno para ver sus figuras 3D.
-  **Consejo del 30/10** (`autonomo/consejo/2026-10-30.md`, solo recomienda): sí al 2 (≈0,5-0,8 M), al 1 con catéter ↔
-  vaso y Fick (≈0,8-1,2 M) y al 3+4 piloto en el capilar tras `capilar-transfundir` (≈2,5-3,5 M); la 5 como acordeón en
-  Sobrevivir a la UMI (≈3-4 M); la 6, aplazada; sin segunda visita al 3D. Restaurar el hook que graft borró.
-- **Consejo extraordinario de la reforma (29/10, PROYECTO; acta `autonomo/consejo/2026-10-29-reforma.md`, inventario
-  `autonomo/consejo/mesa-recursos-2026-10-29.md`)**: 56 recursos sobre la mesa, ≈16 se habían quedado sin estudiar.
-  Espera de ti: validar el proyecto; los 12 artículos de reforma constitucional uno a uno; el techo de gasto de la
-  reforma (≈25-60 M); pegar el texto de 7 tuits; abrir pulmonarypocus.com en la red.
-  **Enmienda del 29/10 (4.ª reunión, `autonomo/consejo/2026-10-29-carriles.md`)**: dos carriles, Marino primero y
-  modelos vivos con webs y guías en paralelo (semáforo por modelo, 70/30 del gasto diario). Espera de ti: dónde queda
-  El Libro Azul (recomendado: tras los modelos), el artículo 13 y el presupuesto del carril 2 (≈25-40 M).
-  **✅ Decidido por ti el 29/10**: El Libro Azul tras los modelos; artículo 13 aprobado (REGLAS §4.13); presupuesto
-  delegado en Hacienda; los PDF se buscan en abierto antes de pedirlos. En el tablero como Objetivo C. Di Mario 2005: descartado por ti el 30/10.
-  **✅ 29/10**: el simulador de eco entra en el carril 2 (`mv-eco`, último paso, tras el bloque 3 y tu elección de motor el 01/11).
-
-- **Consejo del 29/10 (2.ª reunión, UCI: VentLoop, raíz aórtica e Impella; acta `autonomo/consejo/2026-10-29-2.md`)**:
-  entra `shock-scai` (dentro del bloque 3) y las ideas de VentLoop en `b3-pulmon-app`. **Espera de ti**: (1) subir la
-  horquilla de `b3-pulmon-app` a ≈12-18 M (en la parada 2 del 3D); (2) B-041, raíz aórtica; (3) PDF opcionales: DanGer
-  Shock (NEJM 2024), ESC 2024 y ACC/AHA 2022 de aorta, Devereux 2012 y Hickling 2001.
-
-- **✅ Ley de Ciencia validada entera el 29/10** («valido todo para que el congreso empiece a implementar»; acta
-  `autonomo/consejo/2026-10-29-ley-de-ciencia.md`, página https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3). Pasa al tablero como Objetivo L. **PDF**: recibidos el 29/10 y en `docs/` (página impresa = PDF + desplazamiento): `esc-2023-endocarditis.pdf`
-  (Delgado V et al., Eur Heart J 2023;44:3948-4042; PDF + 3947) y `esc-2025-miocarditis-pericarditis.pdf`
-  (Schulz-Menger J, Imazio M et al., Eur Heart J 2025;46:3952-4041; PDF + 3951). **Falta 1**: el capítulo cardiovascular
-  de un libro de semiología (Bates o Surós), para la exploración y la auscultación del bloque `pif-cardio`; no corre prisa.
-- **Resueltos por la Ley de Ciencia (29/10)**: las preguntas de Ventriculus, del informe final del PIF de Cardiología, de Techartist y de LFM3 (ver Objetivo L del tablero).
-- **Consejo del 28/10 (3.ª reunión, acta `autonomo/consejo/2026-10-28-3.md`)**: lo delegaste («que lo apruebe todo el
-  consejo»). Regla de las webs: retirada, ya la cubre REGLAS §4.11 · eco: `eco-calibra-b` aparcada hasta `eco-reforma` ·
-  aviso B de Educación: `capilar-transfundir` aparcada hasta el 04/11 · ESC 2023 de SCA y repaso espaciado: cerrados ·
-  three.js: va como opción en el informe `eco-reforma` · los 2 papers de pago: dejan de recordarse (aparcados en el Radar).
-- **Para la fase 3 de Educación (opcional, antes del 02/11)**: abrir en la red del entorno **phet.colorado.edu**
-  (recomendación del Consejo; comprobado el 28/10 que sigue cerrada). Brilliant, si quieres (casi todo de pago); las
-  editoriales no hacen falta (la evidencia sale de PubMed).
-- **Tareas programadas (revisadas el 28/10, 17:25)**: 28/10 (noche) `mayeutica-pestana`, adelantada por el usuario · 29/10 7:40 grupo siguiente del `b3` · 30/10 7:40 siguiente
-  grupo del `b3` · 31/10 8:13 informes de El Libro Azul y Radiología (+ `b3`) · 01/11 `eco-reforma` · 02/11 fase 3 de
-  Educación · 04/11 recordatorio de los puntos 18-22 y parada de Educación · cada día 13:43 y 21:43 el informe de la
-  bitácora con la línea «Marino N de 155» · 6:42 la Bandeja del Radar. Las de esta sesión se pasaron a sesiones nuevas
-  para poder cerrarla. Queda pausada (no salta) la vieja del 29/10.
-- **Recordar más adelante (pedido el 28/10)**: los puntos 18-22 de esa tarde. Ya resueltos por el Consejo (28/10,
-  3.ª): los 2 papers, abrir sitios, three.js y repaso espaciado. Quedan para el aviso del 04/11: PDF opcionales (AHA
-  2020/ERC 2021, SCAI 2015, Valdenebro 2021), clave del panel de subida, velocidad del plan y rutina nocturna, y la
-  elección de maqueta de Educación (A, B o C).
-
-
-- **✅ Bloque 3, paso 4: decidido el 27/10**, opción A (las 17 piezas, ≈36 M). Tarea `b3-paso4`, empieza el 28/10.
-
-- **✅ Decidido el 26/10, B-026 · Culprit** (https://claude.ai/artifact/Y6ewAZfAk5cPewnsnNcsAw): opción 1. A (ficha «Del
-  vaso a la derivación») y B (preguntas «predice el ECG» y «coloca el trombo») entran en la Fase 1, después de Marino;
-  C (modelo vivo 2D) cuando el motor de la eco tenga las coronarias; D después de C. El ECG llegó el 27/10 (López Ramírez 2012). Ya en `docs/`: ESC 2023 de SCA (2 partes),
-  de Winter 2008, CONFIRM 2015 (dominancia) y Tamura 2014 (aVR). También Wagner 2009 (AHA, territorios) y Thygesen
-  2018 (definición universal): **A y B ya tienen fuente completa**. Opcional: suplemento de la ESC (figuras S2-S3). three.js y repaso espaciado: resueltos por el Consejo del 28/10 (3.ª).
-
-
-- **Decidido el 19/10**: Marino primero, por bloques (Objetivo M5). B-002, B-004, B-005 y B-006 esperan a terminar
-  Marino. B-001 (preguntas) se hace como la **Mayéutica** de cada ficha, bloque a bloque. B-007 sigue sin aprobar.
-- **Optimizar los agentes del plan** (pedido del usuario el 19/10: más fluido, menos gasto, mejor trabajo): propuesta
-  en el chat, esperando su visto bueno.
-
-- **✅ Decidido el 26/10, «Un corazón más real»**: entran en la parada 2 de `eco-mega` A1, A2, A3, B4, B5 y D1 (sin
-  PDF); la malla de Visible Human, solo como referencia de forma. Detalle en el tablero.
-- **Los PDF de la ASE ya están en `docs/`** (Lang 2015, Hahn 2013, Mor-Avi 2011 y Mitchell 2019, 26/10): no hace
-  falta abrir `asecho.org` ni Wikimedia. B1, B2, B3 y C1 entran (B2 en potente). La pared por regiones y el
-  infarto (C2) esperan a las coronarias en el motor (decidido el 26/10).
-- **🔴 Megaproyecto «La UCI en el bolsillo»** (https://claude.ai/artifact/6XfQibZ3H4NwgjUFMJhTdU): tres pisos (Guardia en 30 s · Paciente vivo · Escuela)
-  sobre los cimientos de siempre; 6 situaciones de guardia con su tarjeta; NV-Reason-CT en tres usos (lista de
-  hallazgos, compañera de estudio con casos abiertos, asistente de nivel 3). Nueva **fase G** dentro del plan aprobado:
-  G1 shock (puede empezar ya: Manual UMI y VExUS en `docs/`), G2 inestable y paro (AHA 2025), G3 marcapasos/SCA,
-  G4 tras el dispositivo, G5 neurocrítico, G6 ETE. Espera: ¿puerta «Guardia» nueva en la raíz?, ¿G1 tras la fase 0?,
-  PDF, y abrir `huggingface.co` y `arxiv.org`.
-- **✅ Decidido el 25/10** («estoy de acuerdo con todo»): el plan de integración, el megaproyecto «La UCI en el bolsillo»,
-  la v3 de los 3 modelos del bloque 3, la puerta «Guardia», G1 tras la fase 0, tocar el motor y la anatomía, y B-012 a
-  B-016. Detalle en `autonomo/TABLERO.md` («Encargos aprobados el 25/10/2026») y `docs/historial/radar.md`.
-  **Siguiente: abrir una sesión nueva y lanzar `/plan-socialista` (etapa A).**
-- **🔴 Bandeja del Radar**: crear la tarea diaria **desde la app de Claude** con el proyecto elegido (texto en
-  `autonomo/radar/LEEME.md`); la creada desde la sesión no tenía el repositorio y está pausada.
-- **Bandeja del Radar, arreglada el 27/10 (noche), por comprobar el 28/10**: la tarea diaria se lanzaba sin el
-  repositorio ni permiso de escritura en GitHub. Borrada; la nueva (6:42 de Canarias) dispara en una sesión que sí lo
-  tiene y abre la sesión de trabajo con el repositorio. Esperan 4 tuits del issue #27. `x.com` abierto el 27/10 (comprobado: se lee el texto del tuit); `twitter.com`,
-  `*.twimg.com` y `threadreaderapp.com` siguen cerrados (no hacen falta para leer un tuit suelto).
-  **Comprobado el 28/10**: la tarea corrió y leyó los 4 tuits (el texto va dentro de la página de `x.com`). No
-  se pueden abrir `t.co`, `doi.org`, PubMed, Europe PMC ni criticalcarereviews.com: los papers se buscan por título
-  en la web y, si no aparecen o son de pago, se pide el PDF en el issue. 2 papers esperan PDF/enlace del usuario.
-- **AngioView (cateterismo)**: el informe está hecho (23/10, https://claude.ai/artifact/T4WcxXWzjPGm911ShU3aiS),
-  pero sus tareas (`f2-coronarias`, `f2-angio`) están **aparcadas**: esperan las coronarias en el motor y una fuente
-  de las proyecciones (Di Mario 2005 es de pago). Por eso no lo ves en la app.
-- **Prioridad nueva (27/10, noche)**: Marino → El Libro Azul → lo de las webs (ingeniería inversa: eco, AngioView,
-  RitmoLab…) y los modelos vivos → pulir la eco → el PIF rehecho con lo nuestro (B-005) y Radiología (B-034).
-  Cardiología del PIF (ECG, laboratorio de arritmias) deja de ser prioridad.
-- **🔴 Red del entorno** (todo gratis): `x.com`, `*.twitter.com`, `*.twimg.com`, `threadreaderapp.com` (leer tuits e
-  hilos); `huggingface.co`, `arxiv.org` (NV-Reason-CT); `heart.org` (AHA 2025); `zenodo.org`,
-  `*.cancerimagingarchive.net`, `*.radiopaedia.org`, `registry.opendata.aws` (licencias de casos de imagen).
-- **🔴 PDF que hacen falta**, por urgencia: Leung y Levine 1994 (opcional) (los temarios del PIF no
-  existen: ver B-005). (La guía de amiloidosis y el MAPSE ya están en `docs/` desde el 27/10; el ECG, desde el 27/10,
-  3.ª tanda.)
-- **✅ PDF recibidos el 27/10 (3.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
-  - `lopez-ramirez-2012-alegria-leer-ecg-parte1/2/3.pdf`: López Ramírez JH. *La alegría de leer el
-    electrocardiograma*, 3.ª ed. Bogotá: Celsus; 2012 (ISBN 978-958-9327-44-9). Pp. 1-195; parte 1: PDF − 10 (pdf 20
-    = p. 10); parte 2: PDF + 59 (pdf 20 = p. 79); parte 3: PDF + 127 (pdf 20 = p. 147). Lo mandaste como el ECG
-    básico: `pif-ecg` pasa a `pendiente` (si no es el de la rotación, dilo y se busca el otro).
-  - `esc-2019-taquicardias-supraventriculares.pdf`: Brugada J, Katritsis DG, et al. 2019 ESC Guidelines for the
-    management of patients with supraventricular tachycardia. Eur Heart J 2020;41:655-720
-    (doi:10.1093/eurheartj/ehz467). Página impresa = PDF + 654 (pdf 10 = 664; pdf 40 = 694). Hueco de `fuentes-b3`.
-  - `esc-2023-miocardiopatias-parte1/2.pdf`: Arbelo E, Protonotarios A, et al. 2023 ESC Guidelines for the management
-    of cardiomyopathies. Eur Heart J 2023;44:3503-3626 (doi:10.1093/eurheartj/ehad194). Parte 1: PDF + 3501 (pdf 1 es
-    la portada del repositorio; pdf 10 = 3511, pdf 40 = 3541); parte 2: PDF + 3564 (pdf 10 = 3574, pdf 40 = 3604).
-    Hueco de `fuentes-b3`; sirve también a `hcm` (obstrucción del TSVI).
-  - `tamagnone-pocus-ecografia-critica-muestra-parte1/2/3.pdf`: **muestra**, no el libro entero, sin año impreso.
-    Junta: *POCUS. Manual práctico de ultrasonografía crítica*, 2.ª ed. (Tamagnone, Previgliano, Merlo, Benay; Corpus):
-    cap. 2 «Funciones del equipo / Knobología» y el principio del cap. 3 (parte 1, pdf 3-19; impresa = PDF + 32);
-    *POCUS II. Ecocardiografía crítica* (Merlo, Tamagnone, Benay; ASARUC): cap. 1 introducción (pdf 22-24, impresa =
-    PDF + 0), cap. 3 técnicas y cuantificación de cavidades (parte 1 pdf 26 → parte 2 pdf 5, p. 33-65; impresa parte 1
-    = PDF + 8 (pdf 28 = 36), parte 2 = PDF + 60 (pdf 3 = 63)), cap. 11 eco en el weaning (parte 2 pdf 7-17, p. 183-194, impresa = PDF + 177: pdf 9 = 186, pdf 12 = 189) y
-    cap. 13 valoración hemodinámica del shock séptico por ETT (parte 2 pdf 19-46, p. 201-229, impresa = PDF + 183: pdf 20 = 203, pdf 40 = 223);
-    y ~12 artículos de Cheong, Tamagnone y cols. (2021-2022: TEP en prono con *speckle tracking*, carótida en la UCI,
-    elevación pasiva de piernas con ITV del TSVD subcostal, ITV del TSVI subcostal modificado, ETT en prono COVID,
-    absceso pulmonar, *heart point* y *lung point* en neumotórax, sinusitis maxilar, disección carotídea, ventana
-    paraesternal transhepática derecha), cada uno con su propia paginación de revista. Entre medias, páginas de
-    publicidad de cursos. **No estaba pedido** y no es el libro de física de B-028; útil para Eco cardíaca (cavidades,
-    weaning, shock séptico) cuando se apruebe algo que lo use.
-- **✅ PDF de la ASE 2025 (27/10)**, en `docs/`:
-  - `nagueh-2025-funcion-diastolica-hfpef-ase.pdf` (J Am Soc Echocardiogr 2025;38:537-569; página impresa = página
-    del PDF + 536). **Lo había pedido**: el «ASE 2025 diastólica» de la fase 3 (`f3-calc-eco`, `echosuite.md` §4.6).
-    Además, el atlas cap. 10 lo cita 14 veces sin tener el PDF: ahora se puede cotejar.
-  - `taub-2025-informe-eco-estandarizado-ase.pdf` (2025;38:735-774; página impresa = PDF + 734). **No estaba pedido**
-    en ninguna lista, pero el atlas ya lo cita en los caps. de función sistólica y VD (`taub2025`), y sirve para la
-    ficha «cómo leer un informe» y los avisos críticos de la fase 3.
-- **✅ PDF recibidos el 27/10 (2.ª tanda)**, en `docs/` (página impresa = página del PDF + desplazamiento):
-  - `mukherjee-2025-corazon-derecho-hp-ase.pdf` (J Am Soc Echocardiogr 2025;38:141-186; +140): la PAD con
-    ventilación mecánica (`eat-q032`), las calculadoras del VD (`f3-calc-eco`) y el índice de excentricidad y el grosor
-    de la pared del VD (huecos de la parada 3 de `eco-mega`).
-  - `zoghbi-2017-insuficiencias-valvulares-ase.pdf` (2017;30:303-371; +302): IM de la parada 3 (P5) y `mr` del atlas.
-  - `klein-2013-pericardio-multimodal-ase.pdf` (2013;26:965-1027; +964): cifras del pericardio y del taponamiento.
-  - `aha-2025-parte9-soporte-vital-avanzado.pdf` (Circulation 2025;152(supl. 2):S538-S577; S = PDF + 537): paro,
-    taquiarritmia y bradicardia con pulso, cardioversión. `g2-paro` pasa a `pendiente`. Con
-    `aha-2025-novedades-rcp.pdf` (resumen de novedades, sin paginar como la revista).
-  - **Di Mario 2005**: de pago (60 €), el usuario no lo manda. `f2-angio` y `g3-sca` buscarán otra fuente de acceso
-    libre para las proyecciones, o lo marcarán como hueco.
-- **✅ PDF de la guía de marcapasos**: ya en `docs/` (`esc-2021-estimulacion-cardiaca.pdf`, 26/10). `b3-bradi` pasa a
-  `pendiente`.
-- **Simulador de arritmias (idea de RitmoLab)**: los PDF de los algoritmos **AHA 2025** (bradicardia, taquicardia,
-  parada y la guía completa); heart.org está bloqueado desde el entorno. Decidido: puerta propia en la raíz
-  («Arritmias»), enlazada desde Cardiología del PIF. Fases: 1) monitor, 17 ritmos y modo Estudio; 2) casos; 3) 12
-  derivaciones. Antes de construir, maqueta para elegir. Detalle en `docs/historial/cardiologia.md`.
-- **El Libro Azul**: **completo** en `docs/` (secciones I a X, caps. 1-61). Las IV, V, VI, VIII, IX y X llegaron el
-  27/10 (abajo). Orden que pediste: Marino (hecho), después El Libro Azul y después el PIF
-  de R1.
-- **✅ El Libro Azul, 27/10 (4.ª tanda)**, en `docs/`. Fuente: *El libro azul. Bases fisiopatológicas de la medicina
-  crítica* (Medicucheando). Página impresa = página del PDF + desplazamiento (comprobado en dos páginas de cada uno):
-  - `libro-azul-seccion-v-digestivo-parte1.pdf`: caps. 37-39 (tracto GI, ictericia, hepática), pp. 609-690; +608
-    (pdf 5 = 613, pdf 41 = 649).
-  - `libro-azul-seccion-v-digestivo-parte2.pdf`: caps. 40-42 (pancreatitis, sangrado digestivo, HIA), pp. 691-722;
-    +690 (pdf 1 = 691, pdf 16 = 706).
-  - `libro-azul-seccion-v-digestivo-parte3.pdf`: caps. 43-44 (nutrición según la fisiopatología, monitorización
-    nutricional), pp. 723-808; +722 (pdf 5 = 727, pdf 43 = 765).
-  - `libro-azul-seccion-vi-endocrino.pdf`: cap. 45 (respuesta endocrina al estrés), pp. 807-814; +806 (pdf 5 = 811).
-  - `libro-azul-seccion-viii-neurologia-parte1.pdf`: caps. 49-52 (HTIC, hipoxia tisular cerebral, isquemia, edema),
-    pp. 859-920; +858 (pdf 5 = 863, pdf 31 = 889, pdf 62 = 920).
-  - `libro-azul-seccion-viii-neurologia-parte2.pdf`: caps. 53-56 (estado epiléptico, hemorragia cerebral, TCE,
-    neuromonitorización multimodal), pp. 921-970; +920 (pdf 5 = 925, pdf 25 = 945).
-  - `libro-azul-seccion-ix-embarazo.pdf`: cap. 57 (trastornos hemorrágicos del embarazo), pp. 969-982; +968 (pdf 5 =
-    973, pdf 14 = 982).
-  - `libro-azul-seccion-x-miscelaneos.pdf`: caps. 58-61 (caquexia, RCP, control de daños, gran quemado),
-    pp. 983-1044; +982 (pdf 5 = 987, pdf 31 = 1013, pdf 62 = 1044).
-  - `libro-azul-seccion-iv-respiratorio-parte1.pdf`: caps. 24-29 (fisiología respiratoria, hipoxemia e
-    hipercapnia, IRA, EPOC, SDRA, NAV), pp. 385-464; +384 (pdf 5 = 389, pdf 60 = 444, pdf 80 = 464).
-  - `libro-azul-seccion-iv-respiratorio-parte2.pdf`: caps. 30-33 (diafragma, ventilación mecánica y sus modos, modos
-    nuevos, monitorización respiratoria), pp. 465-564; +464 (pdf 1 = 465, pdf 30 = 494, pdf 60 = 524).
-  - `libro-azul-seccion-iv-respiratorio-parte3.pdf`: caps. 34-36 (bases de las técnicas, trabajo respiratorio,
-    retirada de la ventilación mecánica), pp. 565-608; +564 (pdf 1 = 565, pdf 21 = 585, pdf 40 = 604).
-  Desbloquea la segunda parte de B-004 (secciones nuevas, cuando la apruebes).
-- **PIF de R1**: ya no se espera ningún PDF de temario (27/10): ver B-005.
-- **TRR**: el PDF de Valdenebro 2021, para cotejar las 7 dudas anotadas en `docs/historial/nefrologia.md`.
-- **Eco, paradas 1 y 2 ya en main (27/10)**: mirarlas en el móvil (Eco cardíaca → simulador: A4C, subcostal,
-  «Derrame» y «Hemorragia» a fondo, TEP, «Señálalo → Festones y cúspides»). La parada 3 (F3, F4, N1, P5, P6) espera
-  los PDF de los huecos. Si tienes la **ASE 2025** en PDF, también daría la PAD con ventilación mecánica.
-- **Sesiones cerradas (hecho el 27/10)**: las sesiones del plan se cierran solas y cada una deja su fila en
-  `autonomo/SESIONES.md` (tarea, qué salió, informe o PR, qué te toca, parte y enlace a la sesión archivada). El
-  informe «Bitácora diaria» lo lee y ya no se archiva a sí mismo.
-- **2 PDF para cerrar los huecos del bloque 3** (`fuentes-b3`, 27/10): AHA 2020 de soporte vital (o ERC 2021) y el
-  consenso SCAI 2015. Sin ellos, esos puntos quedan marcados como hueco. (La ESC 2019 de TSV y la ESC 2023 de
-  miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
-- **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
-  aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
+**Ya no te toca** (Consejo, 30/10, 7.ª): SCA y disección (mirados) · HP crónica de la eco (lo arregla `mv-eco`, entra en
+su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`) · Wiggers (aprobado, `wiggers-movil`).
 
 ## 4. Mejoras de lo que ya existe
 
@@ -664,6 +463,8 @@ El resto del tablero sigue `aparcada`.
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **✅ 30/10 (noche): aprobadas las 4 de Hacienda que quedaban** («quedan todas aprobadas») → `reglas-reforma`.
+
 - **Ahorro · Tareas técnicas del director: presupuesto con su pasada de jueces y una ruta de apertura** (propuesto 2026-10-30 por /ahorro) · Visto en: `reglas-30-10` (0,79 M frente a 0,3 M, +165 %) y `formula-juez` (≈0,95 M frente a 0,8 M, +19 %): en las dos se fue en buscar dónde estaba cada pieza (el origen de cada regla; cómo se abre cada modelo) y en las pasadas largas de jueces · Cambio: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M fijos por la pasada de jueces más 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (parte de origen, o «especialidad → ficha → Visual» de cada modelo) · Ahorro esperado: ≈0,2-0,3 M por tarea técnica (menos búsqueda) y presupuestos que ya no se pasan.
 - **✅ 30/10: aprobadas todas las de abajo** (ahorros → `reglas-30-10`; preguntas viejas del bloque 3 → `b3-cierre`).
 - **Ahorro · Las cifras de los casos se leen en el monitor de la app** (propuesto 2026-10-30 por /ahorro) · Visto en: `b3-paso4` g3b (vuelta 2 del caso de Remedios: la herramienta no leía lo mismo que la pantalla) y g4 (Ramiro: el programa daba PCP 30,8 y la app 32; lo cazó el profesor) · Cambio: el constructor de Estudiar copia las cifras de los casos con `autonomo/bloques/b3/herramientas/g4-app-cifras.mjs` (lee el monitor a 390 px), nunca con el programa del motor; línea en la lista del constructor · Ahorro esperado: ≈0,4 M por grupo (una vuelta de arreglos del caso).
@@ -683,6 +484,10 @@ El resto del tablero sigue `aparcada`.
 - **Ahorro · Director del paso 4 a 1,3 M** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a 1,1 · g3b 1,3 · g4 1,9 · g5 1,3 M frente a 0,8-0,9 · Cambio: el presupuesto del director de un grupo con piezas + Estudiar pasa a 1,3 M en «Presupuestos vigentes» (o, si se quiere bajar, partir piezas y Estudiar en dos sesiones) · Ahorro esperado: ninguno directo; presupuestos realistas que evitan comparecer por el director.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-30 · **Consejo, 7.ª reunión** («terminar ya», acta `autonomo/consejo/2026-10-30-7.md`): cabos sueltos
+  cerrados; Wiggers aprobado (`wiggers-movil`); vía libre de gasto hasta el 02/11; radio día 2 hoy; B-044 a B-046
+  apuntadas; recomendación de la reforma artículo a artículo.
 
 - 2026-10-30 · **Reforma de la eco, informe** (`eco-reforma`, B-039): qué falla en el motor, ingeniería inversa de
   pulmonarypocus, opciones A/B/C y 3 maquetas vivas. 3,5 M (−20 %). Espera tu elección.

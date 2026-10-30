@@ -16,6 +16,7 @@ import { svgBolsa } from '../../core/bolsa.js';
 import { svgTuboEdta } from '../../core/tubo.js';
 import { sinMovimiento } from '../../core/motion.js';
 import { svgPlaca, crearFlujoPlaca, moverPlaca } from './vaso-vivo-placa.js';
+import { svgTep, crearFlujoTep, moverTep } from './vaso-vivo-tep.js';
 import { svgMaquinaTrombina, svgPlaquetaFp4, fp4Posiciones } from './telar-vivo-escena.js';
 import { estadoBase, derivar, tableroDe, CELDAS, FIG132, FIB_CASO, FIB_CRIO, clamp } from '../../data/vaso-vivo-data.js';
 
@@ -562,7 +563,7 @@ function construir() {
     const svg = $('lamina'), G = GEO.A, L = lupaActual();
     // La arteria que se tapa (SCA): su lámina entera sale de vaso-vivo-placa.js
     if (estado.lesion === 'placa' && (!L || L === 'placa')) {
-        svg.innerHTML = DEFS + svgPlaca(estado); svg.setAttribute('viewBox', '0 0 360 360'); pools = []; polyRed = null; crearFlujoPlaca(svg, estado);
+        svg.innerHTML = DEFS + (estado.emb ? svgTep(estado) : svgPlaca(estado)); svg.setAttribute('viewBox', '0 0 360 360'); pools = []; polyRed = null; (estado.emb ? crearFlujoTep : crearFlujoPlaca)(svg, estado);
         document.querySelectorAll('[data-vso-lupa]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.vsoLupa === L))); return;
     }
     let h = DEFS + '<rect width="360" height="360" style="fill:var(--bg-main)"/>';
@@ -665,7 +666,7 @@ function techo(G, x) {
     return G.lumen[0] + Math.max(0, alto * (estado.t === 4 ? 0.62 : 1)) * Math.cos(u * Math.PI / 2) ** 2;
 }
 function mover(dt) {
-    if (estado.lesion === 'placa') moverPlaca(dt);
+    if (estado.lesion === 'placa') (estado.emb ? moverTep : moverPlaca)(dt);
     for (const p of pools) {
         if (!p.el || !p.vis) continue;
         const m = p.m;

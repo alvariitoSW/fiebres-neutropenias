@@ -164,6 +164,41 @@ for (const k of ['pierna', 'lupa', 'rinon']) { await pulsar(`#tel-lamina [data-t
 ok(await p.evaluate(() => document.getElementById('tel-frase').textContent.length > 40), 'tocar la pierna, la lupa y el riñón explica cada parte');
 ok(await desborde() <= 0, 'sin desborde tras los toques');
 
+// 5b. TVP: eco de compresión (Marino cap. 22, p. 4): vena sana frente a vena con trombo, Doppler, brazo con catéter y sello
+{
+  const ECO = () => p.evaluate(() => ({ ry: +document.getElementById('tel-eco-v-pared').getAttribute('ry'), ra: +document.getElementById('tel-eco-a-pared').getAttribute('r'),
+    sello: [...document.querySelectorAll('#tel-escena .tope-sello')].filter(e => !e.hidden).map(e => e.textContent), aviso: document.getElementById('tel-eco-t-aviso').textContent,
+    slider: document.getElementById('tel-eco-slider').disabled, mandos: !document.getElementById('tel-eco-mandos').hidden, vena: document.getElementById('tel-tablero').textContent }));
+  const sonda = async v => { await p.evaluate(v => { const s = document.getElementById('tel-eco-slider'); s.disabled = false; s.value = v; s.dispatchEvent(new Event('input', { bubbles: true })); }, v); await p.waitForTimeout(60); };
+  await p.evaluate(() => { const s = document.getElementById('tel-m-estado'); s.value = 'tvp'; s.dispatchEvent(new Event('change', { bubbles: true })); }); await p.waitForTimeout(500);
+  let e = await ECO(), t5 = await T();
+  ok(e.mandos && t5.estado.vista === 'eco' && e.ry === 30, 'tvp: la lupa pasa a la eco, con la vena abierta y sus mandos');
+  const ids5 = ['tel-eco-b-tvp', 'tel-eco-b-doppler', 'tel-eco-b-brazo', 'tel-eco-slider'];
+  const nodos = await p.evaluate(ids => { window.__ecoN = ids.map(i => document.getElementById(i)); return 1; }, ids5);
+  const ryTvp = [];
+  for (const v of [0, 50, 95]) { await sonda(v); ryTvp.push((await ECO()).ry); }
+  ok(ryTvp.every(r => r === 30), `con trombo, la vena no se aplasta a 0, 50 y 95 % (ry ${ryTvp.join(', ')})`);
+  e = await ECO(); ok(/no se aplasta/.test(e.aviso) && e.sello.length === 0, 'al 95 %, aviso «no se aplasta» y aún sin sello');
+  await sonda(100); e = await ECO();
+  ok(e.ry === 30 && e.sello.some(x => /No compresible = TVP/.test(x)) && e.slider, `al 100 % con trombo: sello «No compresible = TVP», mando apagado y vena intacta (${e.sello.join('|').slice(0, 60)})`);
+  ok(e.ra === 19, 'la arteria no se aplasta');
+  await pulsar('#tel-eco-b-tvp'); await p.waitForTimeout(60); e = await ECO();
+  ok(e.ry < 3 && e.sello.length === 0 && e.ra === 19, `sin trombo, al 100 % la vena se aplasta (ry ${e.ry}) y la arteria no; el sello se va`);
+  await sonda(30); e = await ECO(); const ry30 = e.ry; await sonda(60); e = await ECO();
+  ok(ry30 > 3 && ry30 < 30 && e.ry < 3, `sin trombo la vena se aplasta antes del 100 % (a 30 %: ${ry30}; a 60 %: ${e.ry})`);
+  await pulsar('#tel-eco-b-tvp'); await pulsar('#tel-eco-b-doppler'); await sonda(100); await p.waitForTimeout(60);
+  ok(await p.evaluate(() => /lento o ausente/.test(document.getElementById('tel-eco-t-dv').textContent) && /pulsátil/.test(document.getElementById('tel-eco-t-da').textContent)), 'Doppler: arteria pulsátil y vena con trombo con flujo lento o ausente');
+  await pulsar('#tel-eco-b-brazo'); await p.waitForTimeout(60); e = await ECO();
+  ok(e.sello.some(x => /retirar el catéter/.test(x)) && /<10 %/.test(e.vena), 'brazo con catéter: sello «anticoagular y retirar el catéter» y EP sintomática <10 %');
+  ok(await p.evaluate(() => window.__ecoN.every(n => n.isConnected && n === document.getElementById(n.id))), 'los botones de la eco son los mismos nodos tras todos los cambios (no se rehacen)');
+  ok(await desborde() <= 0, 'sin desborde en la eco con sello');
+  await foto('5b-eco');
+  await pulsar('#tel-eco-b-soltar'); await p.waitForTimeout(60); e = await ECO();
+  ok(e.sello.length === 0 && !e.slider, 'soltar la sonda quita el sello y enciende el mando');
+  await pulsar('#tel-vista-cerrar'); await p.waitForTimeout(100);
+  ok(!(await ECO()).mandos && (await T()).estado.vista === 'telar', '«× al telar» cierra la eco y vuelve al telar');
+}
+
 // 6. Rendimiento (solo con movimiento): CPU ×4
 if (!REDUCIDO) {
   const cdp = await ctx.newCDPSession(p);
