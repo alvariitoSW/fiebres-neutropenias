@@ -39,6 +39,8 @@ export const CAPITULOS = {
   windows: { html: 'cap-windows.html', sub: 'Las cuatro ventanas, los movimientos de la sonda y qué se mide en cada vista' },
   shunts: { html: 'cap-shunts.html', sub: 'CIA, CIV y FOP: Qp/Qs, cuándo cerrar, suero agitado y la presión de la AI por el septo' },
   masses: { html: 'cap-masses.html', sub: 'Mixoma de la AI, trombo del VI y fibroelastoma: describir la masa, falsos positivos y el contraste' },
+  endocarditis: { html: 'cap-endocarditis.html', sub: 'Criterios de imagen, ETT y ETE, vegetación y embolia, cirugía a los 10 mm y perforación con IM aguda' },
+  mi: { html: 'cap-mi.html', sub: 'Rotura septal, papilar y de pared libre, pseudoaneurisma frente a aneurisma verdadero e infarto del VD' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
