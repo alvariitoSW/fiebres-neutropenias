@@ -926,3 +926,4 @@ Tablas de Guyton regeneradas.
 - Atlas, capítulo 12 (eco de estrés): fase A, solo texto traducido (`atlas/cap-stress.html`), sin figura todavía; el capítulo 13 ya enlaza a él.
 - Atlas, capítulo 22 (miocardiopatía hipertrófica): fase A, solo texto traducido (`atlas/cap-hcm.html`), sin figura todavía; enlaza a los capítulos 10, 12, 13 y 15.
 - Atlas, capítulo 23 (amiloidosis cardíaca): fase A, solo texto traducido (`atlas/cap-amyloid.html`), sin figura todavía; enlaza a los capítulos 02, 09, 10, 11 y 13, y las menciones del 23 en los capítulos 10, 13, 21 y 22 pasan a botón.
+- Atlas, capítulo 20 (enfermedades de la aorta): fase A, solo texto traducido (`atlas/cap-aorta.html`), sin figura todavía; enlaza a los capítulos 02 y 16.
