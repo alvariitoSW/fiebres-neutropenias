@@ -4,6 +4,7 @@
 #ion-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
 #ion-svg .min { font-size: 9.6px; fill: var(--text-muted); } #ion-svg .min2 { font-size: 9.6px; fill: var(--bg-main); font-weight: 700; }
 #ion-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
+#ion-svg .oro { fill: var(--oro); font-weight: 800; }
 #ion-svg .gran { font-size: 30px; fill: var(--oro); font-weight: 800; }
 #ion-svg .tanque { fill: none; stroke: var(--line); stroke-width: 1.5; } #ion-svg .z, #ion-svg .dentro { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--line); }
 #ion-svg .fuera { fill: color-mix(in srgb, var(--accent-blue) 14%, var(--bg-main)); stroke: var(--line); }

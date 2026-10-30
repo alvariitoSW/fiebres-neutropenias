@@ -2,9 +2,9 @@
 import { crearTope } from '../../../js/core/tope.js';
 import { seguirFrase } from '../../../js/core/frase-vista.js';
 import { leyendaParticulas } from '../../../js/core/particulas.js';
-import { PDF, FICHA, PRESETS, FUENTES, NOTAS, PENDIENTE, P, fichaDe, VITALES_ORIGEN, IDEA } from './datos.js';
+import { PDF, FICHA, PRESETS, FUENTES, NOTAS, PENDIENTE, CRECIMIENTO, P, fichaDe, IDEA } from './datos.js';
 import { crearGuia, focoSvg } from './guia.js';
-import { nuevo, leer, topes, fmt, clamp, FIG } from './modelo.js';
+import { nuevo, leer, topes, fmt, clamp, FIG, avanzar, vitales } from './modelo.js';
 import { escena, NOMBRE } from './dibujo.js';
 import * as ECG from './ecg.js';
 import { APUESTA, ERROR, CASO, LLEVAS, opciones } from './pruebas.js';
@@ -14,17 +14,17 @@ let foco = [], guiaApi;
 let s = nuevo(), ion = 'k', oculto = false, modo = 'explorar', pausa = false, preset = 'normal';
 const e = { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1, caMg: 90 };
 const FRASES = {
-  k: 'El suero guarda el 2 % del potasio: por eso un número normal puede ocultar un déficit de cientos de mEq.',
+  k: 'El líquido de fuera de la célula guarda solo el 2 % del potasio (el suero, ~0,4 %): por eso un número normal puede ocultar un déficit de cientos de mEq.',
   mg: 'El suero es el 0,3 % del magnesio: puede salir normal con el total vacío.',
   ca: 'El laboratorio mide el calcio total: con poca albúmina baja el total y el iónico, el que actúa, no se mueve.',
   p: 'El fosfato casi todo está dentro de las células: la insulina lo mete y el suero se hunde.',
 };
-const ORIG = { k: 'ficha · p. 18-20', mg: 'ficha · p. 32', ca: 'ficha · p. 42-43', p: 'ficha · p. 48' };
+const ORIG = { k: 'ficha · p. 18-20', mg: 'ficha · p. 32', ca: 'ficha · p. 42-43', p: 'ficha · p. 49' };
 let fraseTxt = FRASES.k, fraseOrg = ORIG.k;
 // Cada cita: «PDF p. N» (abre el libro) y «p. N · Ver en la ficha» (en la app, el párrafo exacto de la ficha: data-resaltar)
 const cita = (c) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · <button type="button" class="ver-ficha" data-resaltar="#${fichaDe(c)}" data-pag-ficha="${c}">p. ${c} · Ver en la ficha</button></span>`;
 function frase(t, org) { fraseTxt = t; fraseOrg = org; $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
-const ecgK = (L) => (L.k > 5.5 ? Math.max(5.5, L.k - 1.2 * clamp(s.caIV / 200, 0, 1)) : L.k);
+const ecgK = (L) => (L.k > 5.5 ? Math.max(5.5, L.k - 1.2 * clamp(s.caIV / 90, 0, 1)) : L.k);
 let topeApi, firma = '';
 function aplicarTopes() {
   const lista = topes(s, e), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
@@ -32,19 +32,11 @@ function aplicarTopes() {
   for (const c of ['clk', 'mg', 'ca', 'po4', 'caiv', 'nofis', 'hiperk']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.n === 'aviso' ? '#dock-panel' : null });
 }
-function vitales() {
-  const act = topeApi.activos().filter((a) => a.nivel === 'sello').map((a) => a.clave), [pa, fc] = PRESETS[preset].vit, o = VITALES_ORIGEN;
-  if (act.includes('clk') || act.includes('mg')) return { pa: '0/0', fc: 0, extra: 'parada' };
-  if (act.includes('ca')) return { pa: '84/50', fc: 112, extra: 'ectopia · ' + o };
-  if (act.includes('hiperk')) return { pa: '90/54', fc: 46, extra: 'bradicardia · ' + o };
-  if (act.includes('po4')) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % · ' + o };
-  return { pa, fc, extra: o };
-}
 let pendiente = 0;
 function pintar() {
   e.caMg = (e.amp === 'glu' ? 90 : 270) * e.n; const L = leer(s); aplicarTopes();
   const kOc = modo === 'apuesta' && oculto; $('ion-svg').innerHTML = escena(ion, s, L, oculto) + focoSvg(foco);
-  const v = vitales(); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
+  const v = vitales(s, e, preset); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
   $('mon-k').textContent = `K⁺ ${kOc ? '?' : fmt(L.k)}` + (L.k > 5.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
   $('nota-ecg').hidden = L.k >= 3.5; $('nota-ecg').textContent = PENDIENTE;
   document.querySelectorAll('.selector-ion button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ion === ion)));
@@ -64,11 +56,11 @@ function pintar() {
 function hacer(a, o = {}) {
   const L0 = leer(s);
   if (a === 'real') { s.ins = Math.min(4, s.ins + 1); ion = ion === 'ca' ? 'k' : ion; frase(`Entra glucosa con insulina: el K⁺ del suero pasa de ${fmt(L0.k)} a ${fmt(leer(s).k)} sin que el total cambie; el fosfato cae a ${fmt(leer(s).po4)} mg/dL y el Mg²⁺ a ${fmt(leer(s).mg)}.`, 'dirección: ficha · p. 21, 34, 49; cifras ilustrativas'); }
-  if (a === 'furo') { s.dK = Math.max(FIG.dKmin, s.dK - P.kFurosemida); s.dMg -= P.mgFurosemida; frase('Furosemida: se van 20 mEq de K⁺ y 6 de Mg²⁺ por la orina; el total baja y el suero apenas lo nota.', 'dirección: ficha · p. 33-34; cantidades ilustrativas'); }
-  if (a === 'clk') { s.dK = Math.min(FIG.dKmax, s.dK + e.rate); frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
+  if (a === 'furo') { s.dK = Math.max(FIG.dKmin, s.dK - P.kFurosemida); s.dMg -= P.mgFurosemida; frase('Furosemida: se van 20 mEq de K⁺ y 6 de Mg²⁺ por la orina; el total baja y el suero apenas lo nota.', 'dirección: ficha · p. 21, 23, 34; cantidades ilustrativas'); }
+  if (a === 'clk') { s.bombas.clk = { rate: e.rate }; avanzar(s, 60); delete s.bombas.clk; frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
   if (a === 'mg') { s.mgBolo += 8 * e.g; s.dMg += 4 * e.g; ion = 'mg'; frase(`${e.g} g de MgSO₄ = ${8 * e.g} mEq: la mitad se va por la orina; el suero sube rápido y baja a los 15 minutos.`, 'ficha · p. 36-38; subida: ilustrativa'); }
-  if (a === 'esp') { s.mgBolo *= 0.5; s.caIV *= 0.5; frase('Pasan 15 minutos: el bolo de Mg²⁺ se reparte por el cuerpo y el efecto del calcio se disipa.', 'ficha · p. 37; ilustrativo'); }
-  if (a === 'ca') { s.caIV += o.mg ?? e.caMg; ion = 'ca'; frase(`${o.mg ?? e.caMg} mg de calcio elemental: el iónico sube de ${fmt(L0.caIon)} a ${fmt(leer(s).caIon)} mg/dL. En la hiperpotasemia arregla el ECG y el K⁺ no cambia.`, 'gluconato 9 y cloruro 27 mg/mL: ficha · p. 45; subida: ilustrativa'); }
+  if (a === 'esp') { avanzar(s, 15); frase('Pasan 15 minutos: el bolo de Mg²⁺ se reparte por el cuerpo y el calcio, a medias de los 30 min tras los que su efecto se acaba.', 'Mg: ficha · p. 37-38; calcio: p. 46 (30-60 min en hiperK, p. 27); tiempos ilustrativos'); }
+  if (a === 'ca') { s.caIV += o.mg ?? e.caMg; ion = 'ca'; frase(`${o.mg ?? e.caMg} mg de calcio elemental: el iónico sube de ${fmt(L0.caIon)} a ${fmt(leer(s).caIon)} mg/dL. En la hiperpotasemia (10 mL de gluconato = 90 mg, p. 27) el calcio protege el ECG y el K⁺ no baja: se deduce de la Tabla 36.3.`, 'gluconato 9 y cloruro 27 mg/mL: ficha · p. 27, 45; subida: ilustrativa'); }
   pintar();
 }
 function ponerPreset(clave) {
@@ -126,7 +118,7 @@ function montar() {
     if (b.dataset.rate) e.rate = +b.dataset.rate; if (b.dataset.via) e.via = b.dataset.via; if (b.dataset.g) e.g = +b.dataset.g; if (b.dataset.amp) e.amp = b.dataset.amp; if (b.dataset.n) e.n = +b.dataset.n;
     if (b.id === 'b-real') hacer('real'); else if (b.id === 'b-furo') hacer('furo'); else if (b.id === 'b-clk') hacer('clk'); else if (b.id === 'b-mg') hacer('mg'); else if (b.id === 'b-esp') hacer('esp'); else if (b.id === 'b-ca') hacer('ca'); else pintar();
   });
-  const sl = (id, k, f) => $(id).addEventListener('input', (ev) => { s[k] = +ev.target.value; ion = id === 'r-ph' || id === 'r-alb' || id === 'r-uni' ? 'ca' : ion; frase(k === 'alb' ? 'Menos albúmina baja el calcio total y el iónico queda igual.' : k === 'ph' ? 'La alcalosis une calcio a la albúmina: baja el iónico sin tocar el total.' : 'Cada concentrado trae citrato, que quela calcio, y 2-3 mEq de K⁺.', k === 'ph' ? 'ficha · p. 44; cifra ilustrativa' : k === 'alb' ? 'ficha · p. 43' : 'ficha · p. 24, 44; cifra ilustrativa'); pintar(); });
+  const sl = (id, k, f) => $(id).addEventListener('input', (ev) => { s[k] = +ev.target.value; ion = id === 'r-ph' || id === 'r-alb' || id === 'r-uni' ? 'ca' : ion; frase(k === 'alb' ? 'Menos albúmina baja el calcio total y el iónico queda igual.' : k === 'ph' ? 'La alcalosis une calcio a la albúmina: baja el iónico sin tocar el total.' : 'Cada concentrado trae citrato, que quela calcio, y 2-3 mEq de K⁺.', k === 'ph' ? 'ficha · p. 44; cifra ilustrativa' : k === 'alb' ? 'ficha · p. 43' : 'ficha · p. 25, 44; cifra ilustrativa'); pintar(); });
   sl('r-alb', 'alb'); sl('r-ph', 'ph'); sl('r-uni', 'units');
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') { modo = 'explorar'; $('prueba').hidden = true; } ponerPreset(b.dataset.pre); } });
@@ -141,8 +133,9 @@ function montar() {
   $('pausa').addEventListener('click', () => { pausa = !pausa; $('pausa').setAttribute('aria-pressed', String(pausa)); });
   $('fuentes').innerHTML = FUENTES.map(([t, p]) => `<li>${t} · <button type="button" class="enlace" data-pag="${p}">p. ${p}</button></li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuentes discrepan' ? 'Las fuentes discrepan' : t === 'fuente no lo dice' ? 'La fuente no lo dice' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
+  $('crecera').innerHTML = CRECIMIENTO.map(([t]) => `<li>${t}</li>`).join('');
   $('fichas').innerHTML = Object.entries(FICHA).map(([k, id]) => `<li>${NOMBRE[k]}: <span class="enlace-ficha" data-resaltar="#${id}">Ver en la ficha · ${id}</span></li>`).join('');
-  $('profundizar').innerHTML = '<li>Cuánto sube el Mg²⁺ del suero con cada gramo y a los 15 minutos: curva de la p. 38, aún sin dibujar.</li><li>Prueba de retención de Mg (p. 38, Tabla 37.5): 24 mmol en 1 h; orina de 24 h ≤12 = déficit, >19 = lleno.</li><li>Reposición de fosfato (Tabla 38.5, p. 50): pendiente de este modelo.</li>';
+  $('profundizar').innerHTML = '<li>Cuánto sube el Mg²⁺ del suero con cada gramo y a los 15 minutos: curva de la p. 38, aún sin dibujar.</li><li>Prueba de retención de Mg (p. 38, Tabla 37.5): 24 mmol en 1 h; orina de 24 h ≤12 = déficit, >19 = lleno.</li><li>Reposición de fosfato (Tabla 38.5, p. 51): pendiente de este modelo.</li>';
   topeApi = crearTope({ monitor: $('monitor'), dock, cita });
 }
 function ajustarDock() { document.documentElement.style.setProperty('--dock-h', ($('dock').offsetHeight + 0) + 'px'); const f = $('frase'); document.documentElement.style.setProperty('--frase-h', f.offsetHeight + 'px'); }

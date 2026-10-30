@@ -1,7 +1,7 @@
 // El dibujo: el depósito grande (lo que hay), la ventanita del suero (lo que ve el laboratorio) y la figura de cada ion.
 import { svgParticula } from '../../../js/core/particulas.js';
 import { CURVA_K, MG_REPARTO, K_TOTAL } from './datos.js';
-import { fmt, FIG, clamp } from './modelo.js';
+import { fmt, FIG, clamp, flujos } from './modelo.js';
 const R = 4.2;
 const h = (n) => { const x = Math.sin(n * 127.1 + 311.7) * 43758.5453; return x - Math.floor(x); };
 const caja = (x, y, w, hh, cls = 'z') => `<rect class="${cls}" x="${x}" y="${y}" width="${w}" height="${hh}" rx="6"/>`;
@@ -28,14 +28,14 @@ const NOM = { k: 'K⁺', mg: 'Mg²⁺', ca: 'Ca²⁺', p: 'Fosfato' };
 const VAL = { k: ['mEq/L', '3,5-5,5'], mg: ['mEq/L', '1,4 normal'], ca: ['mg/dL iónico', '4,6-5,0'], p: ['mg/dL', '2,5-5,0'] };
 // El depósito: bandas con el reparto de la fuente; las partículas dicen cuánto hay y las huecas cuánto falta.
 function deposito(ion, s, L) {
-  const x = 8, y = 24, w = 228, H = 214; let o = caja(x, y, w, H, 'tanque');
+  const x = 8, y = 24, w = 228, H = 214, fl = flujos(s); let o = caja(x, y, w, H, 'tanque');
   o += txt(14, y + 12, 'LO QUE HAY · todo el cuerpo', 'class="rot"');
   if (ion === 'k') {
     const falta = Math.max(0, Math.round(-L.dKef / 50)), sobra = Math.max(0, Math.round(L.dKef / 50)), n = Math.round(K_TOTAL / 50 * 0.98);
-    o += caja(x + 4, y + 18, w - 8, 26, 'fuera') + txt(x + 10, y + 34, 'Fuera de la célula · 2 % (el suero)', 'class="rot"');
-    o += caja(x + 4, y + 48, w - 8, H - 54, 'dentro') + txt(x + 10, y + 61, 'Dentro de la célula · 98 %', 'class="rot"');
+    o += caja(x + 4, y + 18, w - 8, 26, 'fuera') + txt(x + 10, y + 34, 'Fuera · <tspan class="oro">2 %</tspan> (extracelular)', 'class="rot"');
+    o += caja(x + 4, y + 48, w - 8, H - 54, 'dentro') + txt(x + 10, y + 61, 'Dentro de la célula · <tspan class="oro">98 %</tspan>', 'class="rot"');
     o += nube('k', x + 4, y + 66, w - 8, H - 72, Math.min(n, 66) + sobra, falta, 1);
-    o += entran('k', s.ins, [0, 58], (i) => [x + 20 + i * 34, y + 31]);
+    o += entran('k', s.ins, [0, 58], (i) => [x + 168 + i * 9, y + 31]);   // a la derecha del rótulo: no lo tapan
     o += txt(x + 10, y + H - 4, `1 partícula = 50 mEq · total ${fmt(L.kTotal, 0)} mEq`, 'class="min"');
   } else if (ion === 'mg') {
     const alt = [78, 46, 38, 16], col = ['Hueso 53 %', 'Músculo 27 %', 'Tejido blando 19 %', 'Hematíes 0,7 %'];
@@ -48,8 +48,9 @@ function deposito(ion, s, L) {
     o += caja(x + 4, y + H - 40, w - 8, 22, 'fuera') + txt(x + 10, y + H - 25, 'Plasma · 1 % (lo que mide el suero)', 'class="rot"');
     o += txt(x + 10, y + H - 4, 'Más de medio kilo de calcio en el adulto (E p. 42)', 'class="min"');
   } else {
-    o += caja(x + 4, y + 18, w - 8, H - 62, 'dentro') + txt(x + 10, y + 31, 'Dentro de las células · casi todo', 'class="rot"') + nube('p', x + 4, y + 34, w - 8, H - 80, 40 - Math.round((s.ins) * 6), s.ins * 6, 7);
-    o += caja(x + 4, y + H - 40, w - 8, 22, 'fuera') + txt(x + 10, y + H - 25, 'Plasma · lo que mide el suero', 'class="rot"');
+    o += caja(x + 4, y + 18, w - 8, H - 62, 'dentro') + txt(x + 10, y + 31, 'Dentro de las células · casi todo', 'class="rot"') + nube('p', x + 4, y + 34, w - 8, H - 80, 40 + fl.partP, 0, 7);
+    o += caja(x + 4, y + H - 40, w - 8, 22, 'fuera') + txt(x + 10, y + H - 25, 'Plasma (suero)', 'class="rot"') + nube('p', x + 150, y + H - 40, 70, 22, Math.max(0, 5 - fl.partP), Math.min(5, fl.partP), 31);
+    o += entran('p', s.ins, [0, -40], (i) => [x + 150 + i * 12, y + H - 29]);   // el fosfato ENTRA en la célula
     o += txt(x + 10, y + H - 4, 'El libro no da el reparto en cifras (nota)', 'class="min"');
   }
   return o;

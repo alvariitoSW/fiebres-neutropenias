@@ -2,7 +2,7 @@
 // Uso: node iones-b.mjs [ancho]   (lanza su propio servidor en el puerto 8102 y lo cierra por su número de proceso)
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { spawn } from 'node:child_process';
-const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b4/capturas-b2/';
+const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b4/capturas-b3/';
 const srv = spawn('python3', ['-m', 'http.server', '8102'], { cwd: RAIZ, stdio: 'ignore' }); const pid = srv.pid;
 await new Promise((r) => setTimeout(r, 900));
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
@@ -41,7 +41,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   console.log('-- Calcio IV (gluconato/cloruro × ampollas)'); await resetea('valentin');
   for (const [a, nn] of [['glu', 1], ['glu', 2], ['glu', 3], ['cl', 1]]) { await sel(`[data-amp="${a}"]`); await sel(`[data-n="${nn}"]`); console.log(` ${a} ×${nn}: ${await p.evaluate(() => window.__iones.e.caMg)} mg  topes[${await tp()}]`); }
   ok((await tp()).includes('caiv:sello'), 'cloruro 270 mg sin sello de bolo'); await sel('[data-amp="glu"]'); await sel('[data-n="2"]'); const ca0 = (await L()).caIon; await clic('b-ca'); console.log(` Valentín antes ${ca0} → después de 180 mg ${(await L()).caIon} mg/dL`);
-  console.log('-- Hiperpotasemia (Adela): el calcio arregla el ECG, el K no cambia'); await resetea('adela'); const k1 = await I((I) => [I.leer().k, I.ecgK()]); await sel('[data-amp="glu"]'); await sel('[data-n="3"]'); await clic('b-esp'); await I((I) => I.set({ caIV: 0 })); await p.evaluate(() => { window.__iones.s.caIV = 180; window.__iones.pintar(); }); const k2 = await I((I) => [I.leer().k, I.ecgK()]); console.log(` sin calcio: K ${k1[0].toFixed(2)} ECG ${k1[1].toFixed(2)} · con calcio: K ${k2[0].toFixed(2)} ECG ${k2[1].toFixed(2)}`); ok(Math.abs(k1[0] - k2[0]) < 1e-6 && k2[1] < k1[1], 'el calcio debe bajar el K del ECG y no el del suero');
+  console.log('-- Hiperpotasemia (Adela): el calcio arregla el ECG, el K no cambia'); await resetea('adela'); const k1 = await I((I) => [I.leer().k, I.ecgK()]); await sel('[data-amp="glu"]'); await sel('[data-n="3"]'); await clic('b-esp'); await I((I) => I.set({ caIV: 0 })); await p.evaluate(() => { window.__iones.s.caIV = 90; window.__iones.pintar(); }); const k2 = await I((I) => [I.leer().k, I.ecgK()]); console.log(` sin calcio: K ${k1[0].toFixed(2)} ECG ${k1[1].toFixed(2)} · con calcio: K ${k2[0].toFixed(2)} ECG ${k2[1].toFixed(2)}`); ok(Math.abs(k1[0] - k2[0]) < 1e-6 && k2[1] < k1[1], 'el calcio debe bajar el K del ECG y no el del suero');
   console.log('-- Albúmina, pH, concentrados (mín/medio/máx)'); await resetea('normal');
   for (const [id, vals] of [['r-alb', [1, 2.5, 4.5]], ['r-ph', [7.2, 7.4, 7.6]], ['r-uni', [0, 8, 16]]]) for (const v of vals) { await resetea('normal'); await p.evaluate(([id, v]) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input')); }, [id, v]); const l = await L(); console.log(` ${id}=${v}: Ca total ${l.caTotal} iónico ${l.caIon} (${l.caIonMmol} mmol/L) K ${l.k} topes[${await tp()}]`); }
   ok((await tp()).includes('ca:sello'), 'Ca iónico <0,65 sin sello'); await p.screenshot({ path: `${CAP}05-tope-ca-${ANCHO}.png` });
@@ -63,10 +63,17 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   }
   await resetea('damian'); await p.screenshot({ path: `${CAP}08-guia-damian-${ANCHO}.png`, fullPage: true });
   await resetea('adela'); await sel('#guia [data-g="sig"]'); await p.screenshot({ path: `${CAP}09-guia-adela-${ANCHO}.png`, fullPage: true });
+  // Vuelta 3: calcio de la hiperK = 90 mg en la guía de Adela; el fosfato ENTRA en la célula; #guia bajo el dibujo
+  await resetea('adela'); for (let i = 0; i < 3; i++) await sel('#guia [data-g="sig"]');
+  const gt = await p.evaluate(() => document.getElementById('guia').textContent); ok(/90 mg/.test(gt) && !/180/.test(gt), 'guía de Adela: debe decir 90 mg y no 180'); console.log(' guía Adela paso 4: ' + (/90 mg/.test(gt) ? '90 mg ✔' : 'SIN 90 mg'));
+  const bajo = await p.evaluate(() => { const s = document.getElementById('ion-svg').getBoundingClientRect(), g = document.getElementById('guia').getBoundingClientRect(); return { dy: Math.round(g.top - s.bottom) }; }); ok(bajo.dy >= 0 && bajo.dy < 40, `#guia no queda justo bajo el dibujo (${bajo.dy}px)`); console.log(' #guia bajo el dibujo: ' + bajo.dy + ' px');
+  await resetea('damian'); await p.evaluate(() => { window.__iones.ponerIon('p'); }); const pf0 = await p.evaluate(() => document.querySelectorAll('#ion-svg circle, #ion-svg .p').length);
+  await clic('b-real'); await p.waitForTimeout(400);
+  const pf = await p.evaluate(() => ({ entra: document.querySelectorAll('#ion-svg .entra').length, n: document.querySelectorAll('#ion-svg circle, #ion-svg .p').length, t: document.getElementById('ion-svg').innerHTML.includes('Plasma (suero)') })); ok(pf.entra > 0 && pf.t, 'fosfato: no hay partículas que entren en la célula'); console.log(` fosfato: ${pf.entra} partículas entran (antes ${pf0} formas, ahora ${pf.n})`);
   await resetea('normal'); await p.evaluate(() => window.__iones.ponerIon('k')); const e0 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); await clic('b-real'); await clic('b-real'); await p.waitForTimeout(500);
   const e1 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); console.log(` partículas que entran (K): sin insulina ${e0}, con 2 dosis ${e1}`); ok(e0 === 0 && e1 >= 4 && e1 <= 6, 'partículas que entran (K) fuera de 4-6');
   await p.screenshot({ path: `${CAP}10-entran-k-${ANCHO}.png`, fullPage: true });
-  await p.evaluate(() => window.__iones.ponerIon('p')); const e2 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); console.log(` partículas que entran (fosfato): ${e2}`); ok(e2 >= 4 && e2 <= 6, 'partículas que entran (fosfato) fuera de 4-6'); await p.screenshot({ path: `${CAP}11-entran-p-${ANCHO}.png`, fullPage: true });
+  await p.evaluate(() => window.__iones.ponerIon('p')); const e2 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); console.log(` partículas que entran (fosfato): ${e2}`); ok(e2 >= 8 && e2 <= 12, 'partículas que entran (fosfato) fuera de 8-12 (depósito + figura)'); await p.screenshot({ path: `${CAP}11-entran-p-${ANCHO}.png`, fullPage: true });
   console.log('-- K alto: aviso ≥6 y sello ≥7; hipoK <1,5'); await resetea('adela'); console.log(` Adela K ${(await L()).k} topes[${await tp()}]`); await sel('[data-rate="40"]'); await clic('b-clk', 1);
   let kk = 0; while ((await L()).k < 7 && kk++ < 20) await clic('b-clk'); console.log(` tras ClK: K ${(await L()).k} topes[${await tp()}] PA ${await p.evaluate(() => document.getElementById('mon-pa').textContent)}`); ok((await tp()).includes('hiperk:sello'), 'K≥7 sin sello');
   await resetea('rufino'); await p.evaluate(() => window.__iones.set({ ph: 7.6, ins: 3, dK: -500 })); console.log(` Rufino extremo: K ${(await L()).k} PO4 ${(await L()).po4} topes[${await tp()}]`); ok((await tp()).includes('nofis:sello') && (await L()).k >= 0, 'K<1,5 sin sello no fisiológica');
