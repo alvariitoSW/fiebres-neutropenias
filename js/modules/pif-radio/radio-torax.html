@@ -11,8 +11,66 @@
 
     <p class="section-label">Cuaderno de campo</p>
     <div class="corkboard" id="pif-radio-torax-corkboard">
-        <!-- [HUECO constructores: una .field-card[data-tab="radio-tN"] por ficha, en orden] -->
+        <div class="field-card" data-tab="radio-t1">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M12,8 q10,-4 16,6 v26 q-8,6 -16,0 z" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M68,8 q-10,-4 -16,6 v26 q8,6 16,0 z" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M36,46 h8" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Neumotórax y derrame</div>
+                    <div class="field-hook">En supino el aire no sube al vértice y la placa portátil se lo pierde: ¿dónde miras?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Delante de las bases, y si hay hipoxemia o hipotensión sin causa, piensa en tensión.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <!-- [HUECO constructores: una .field-card[data-tab="radio-tN"] por ficha, en orden; T1 hecha] -->
     </div>
     <div id="panel-pif-radio-torax-tabs">
-        <!-- [HUECO constructores: un .tab-content#radio-tN por ficha, en orden] -->
+        <div id="radio-t1" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Neumotórax y derrame</h3>
+            <div class="card" id="radio-t1-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> en un paciente tumbado el aire pleural <span class="hl-azul">se coloca delante, no en el vértice</span>, y la placa portátil se lo puede perder: ante hipoxemia o hipotensión sin causa, <span class="hl-rojo">sospecha neumotórax a tensión y no esperes a la imagen</span>.</p>
+            </div>
+            <dl class="kv-row" id="radio-t1-cifras">
+                <dt>Tras ventilar</dt><dd>Neumotórax en el 3-10 % de los ventilados con protección. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=25" target="_blank" rel="noopener">pág. 25</a> · Marino, cap. 28.</dd>
+                <dt>Tras un catéter</dt><dd>Con subclavia, 1 % con eco y 4 % sin ella. <a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=34" target="_blank" rel="noopener">pág. 34</a> · Marino, cap. 2.</dd>
+                <dt>Lo que se pierde</dt><dd>La placa portátil no ve <span class="hl-rojo">hasta el 50 %</span> de los neumotórax del crítico. <a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=34" target="_blank" rel="noopener">pág. 34</a> · Marino, cap. 2.</dd>
+            </dl>
+            <div class="article-figure" id="radio-t1-fig">
+                <img src="js/modules/neumologia/img/neumo-fig28-7-radiografia-neumotorax-tension.jpg" alt="Radiografía portátil de tórax con neumotórax a tensión: sin trama pulmonar en el hemitórax izquierdo, hemidiafragma deprimido y mediastino desplazado al lado contrario" loading="lazy">
+                <div class="article-figure-caption">Neumotórax a tensión: sin trama pulmonar en el hemitórax izquierdo, hemidiafragma deprimido y mediastino desplazado al lado contrario. Marino, <em>The ICU Book</em>, fig. 28.7, <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=29" target="_blank" rel="noopener">pág. 29</a>. <button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-cuidado-barotrauma">🔗 Ver en el texto</button></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Neumotórax: el guion de esta app</p>
+            <p class="fuente-ficha" id="radio-t1-nota">Es el orden de lectura de esta app, un guion propio. Cada paso lleva a la ficha donde la fuente lo explica, con su página.</p>
+            <div class="algo-flow" id="radio-t1-pasos">
+            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Supino: mira delante de las bases.</strong> En decúbito supino el aire pleural se colecta en la zona más alta, justo por delante de ambas bases, y no en el vértice. Marino dice que las colecciones basales y subpulmonares son las características del neumotórax en supino. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=26" target="_blank" rel="noopener">pág. 26</a><br><span class="hl-rojo">Un neumotórax anterior puede no verse en la placa y sí en la TC</span> (figura 28.5, <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=26" target="_blank" rel="noopener">pág. 26</a>).<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-cuidado-barotrauma">🔗 Ver en el texto: Barotrauma y tubo torácico (Marino, cap. 28) →</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cvc-complicaciones" data-resaltar="#mar-neumo-rx">🔗 Ver en el texto: Tras el catéter central (Marino, cap. 2) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Surco profundo (fuente aparte).</strong> Otra fuente describe en la placa en supino un seno costofrénico anormalmente profundo y más lucente en el lado afectado, el «signo del surco profundo». Marino no lo nombra. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK441885/" target="_blank" rel="noopener">StatPearls, <em>Pneumothorax</em>, pie de la figura 1</a>.</div></div>
+            <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Tensión: hipoxemia o hipotensión sin explicar.</strong> En ventilación mecánica es la sospecha. En la placa: falta de trama pulmonar en el hemitórax, mediastino desplazado al lado contrario y hemidiafragma deprimido. Puede acabar en shock obstructivo y parada en actividad eléctrica sin pulso. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=28" target="_blank" rel="noopener">págs. 27-28</a><div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-cuidado-barotrauma">🔗 Ver en el texto: Barotrauma y tubo torácico (Marino, cap. 28) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text"><strong>Conducta: descomprime y luego tubo.</strong> Angiocatéter de 14 G y 8 cm en el 5.º espacio intercostal, justo por delante de la línea axilar media; si falla, descompresión digital, y después un tubo pequeño de 8,5-14 Fr. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=29" target="_blank" rel="noopener">pág. 29</a><br>Tubo torácico: 4.º-5.º espacio en la línea axilar media, dirigido hacia delante y arriba para aire. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=29" target="_blank" rel="noopener">págs. 29-30</a><div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-cuidado-barotrauma">🔗 Ver en el texto: Barotrauma y tubo torácico (Marino, cap. 28) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">5</span><div class="algo-text"><strong>Eco, solo como puerta.</strong> La eco es más sensible que la placa y la presencia de deslizamiento pulmonar excluye el neumotórax en ese punto. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=27" target="_blank" rel="noopener">págs. 26-27</a><div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-blue">🔗 Ver en el texto: Eco pulmonar BLUE (Manual UMI) →</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cvc-complicaciones" data-resaltar="#mar-neumo-eco">🔗 Ver en el texto: Eco tras el catéter (Marino, cap. 2) →</button></div></div></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Derrame: solo tres umbrales</p>
+            <dl class="kv-row" id="radio-t1-derrame">
+                <dt>Menos de 10 mm</dt><dd>Pequeño, libre: <span class="hl-verde">sin toracocentesis</span>. Se mide en decúbito lateral, TC o eco. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=46" target="_blank" rel="noopener">pág. 46</a></dd>
+                <dt>Más de 10 mm</dt><dd>Menos de la mitad del hemitórax: toracocentesis. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=46" target="_blank" rel="noopener">pág. 46</a></dd>
+                <dt>Más del 50 %</dt><dd>O loculado: <span class="hl-rojo">tubo de 8,5-14 Fr</span>. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=46" target="_blank" rel="noopener">pág. 46</a></dd>
+            </dl>
+            <p class="fuente-ficha">La placa muestra el derrame paraneumónico, pero Marino recomienda la eco para definir tamaño y ubicación. <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=45" target="_blank" rel="noopener">pág. 45</a> · Marino, cap. 29.</p>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-nav-diagnostico">🔗 Ver en el texto: Derrame paraneumónico (Marino, cap. 29) →</button></div>
+
+            <p class="section-label" style="margin-top:16px;">Tarjeta de guardia</p>
+            <p class="fuente-ficha">Marino, <em>The ICU Book</em>, cap. 28 (<a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=28" target="_blank" rel="noopener">págs. 27-29</a>), tal como está en la ficha de barotrauma. Responde Sí o No.</p>
+            <div class="card" id="radio-t1-wizard" style="padding:14px 16px;">
+                <div id="radio-t1-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-t1-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-t1-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-t1-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+        </div>
+        <!-- [HUECO constructores: un .tab-content#radio-tN por ficha, en orden; T1 hecha] -->
     </div>
