@@ -20,15 +20,21 @@ export const quizTemas = [
 ];
 
 export function init() {
-    const nivel = createViewSwitcher({
+    // Los cuadernos que aún no estén registrados en index.html se saltan, para que el resto arranque igual.
+    const vistas = {
         menu: document.getElementById('pif-radio-menu-view'),
         placa: document.getElementById('pif-radio-placa-view'),
         torax: document.getElementById('pif-radio-torax-view'),
         neuro: document.getElementById('pif-radio-neuro-view'),
+    };
+    Object.keys(vistas).forEach(k => { if (!vistas[k]) delete vistas[k]; });
+    const nivel = createViewSwitcher(vistas);
+    ['placa', 'torax', 'neuro'].forEach(k => {
+        const boton = document.getElementById(`btn-pif-radio-${k}`);
+        if (!boton) return;
+        if (vistas[k]) boton.addEventListener('click', () => nivel.show(k));
+        else boton.hidden = true;
     });
-    document.getElementById('btn-pif-radio-placa').addEventListener('click', () => nivel.show('placa'));
-    document.getElementById('btn-pif-radio-torax').addEventListener('click', () => nivel.show('torax'));
-    document.getElementById('btn-pif-radio-neuro').addEventListener('click', () => nivel.show('neuro'));
     document.querySelectorAll('.btn-volver-pif-radio-menu').forEach(b => b.addEventListener('click', () => nivel.show('menu')));
     initPlaca();
     initTorax();
