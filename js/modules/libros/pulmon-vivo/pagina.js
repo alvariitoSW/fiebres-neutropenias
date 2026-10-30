@@ -10,6 +10,8 @@ import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
 import * as D from '../../../data/pulmon-vivo-data.js';
+import { montarExtras } from './extras.js';
+import { tau, TAU } from '../../../data/ventilacion-data.js';
 
 export function montarPulmon(raiz) {
 const $ = (id) => document.getElementById('pul-' + id);
@@ -24,8 +26,8 @@ const f0 = (n) => (n == null || !isFinite(n) ? '—' : String(Math.round(n)));
 const pagTxt = (p) => /[-,]/.test(String(p)) ? `pp. ${p}` : `p. ${p}`;
 function cita(c) {
   if (!c) return '';
-  const [[esp, view, panel], titulo, corto, pdf] = D.FICHA[c.f];
-  const btn = `<button type="button" class="cita-ir" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">Ver en la ficha: ${corto} · ${c.sitio} →</button>`;
+  const [ubic, titulo, corto, pdf] = D.FICHA[c.f], [esp, view, panel] = ubic || [];
+  const btn = esp ? `<button type="button" class="cita-ir" data-especialidad="${esp}" data-view="${view}" data-panel="${panel}" data-tab="${c.f}" data-resaltar="#${c.id}" data-titulo="${titulo}" data-sitio="${c.sitio}">Ver en la ficha: ${corto} · ${c.sitio} →</button>` : `<span class="cita-sin">${corto} · ${c.sitio}</span>`;
   const enlace = pdf && c.p != null ? `<a class="cita-pdf" href="${pdf}#page=${String(c.p).match(/\d+/)[0]}" target="_blank" rel="noopener">PDF, ${pagTxt(c.p)}</a>` : '';
   return `<span class="cita">${btn}${enlace}</span>`;
 }
@@ -44,13 +46,13 @@ let tSim = 0, tProx = 0, L = null;
 
 const pacDe = (k) => D.PACIENTES.find((p) => p.k === k);
 const PBW = () => pbw(est.pac.talla, est.pac.sexo);
-const NOMBRE_MANDO = { vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo' };
+const NOMBRE_MANDO = { vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo', ps: 'P. soporte', frEsp: 'FR del paciente', fio2: 'FiO₂' };
 
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
-  P.ajustar({ ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r }); P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
+  P.ajustarYa({ ps: 10, frEsp: 16, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r }); P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
   pintarTodo();
@@ -64,7 +66,7 @@ function llenarMonitor() {
   // oclusión, el ciclo dura 7 s; si la ventana de 12 s empezaba justo en una inspiración, no había ciclo completo que señalar)
   let g = 0; while (P.fase === 'insp' && g++ < 4000) P.paso(0.005);
   g = 0; while (P.fase !== 'insp' && g++ < 4000) P.paso(0.005);
-  const tc = 60 / P.S.resp.fr + (P.S.man.pausa ? T_PAUSA : 0) + (P.S.man.oclusion ? T_OCLUSION : 0);
+  const tc = P.duracion();
   for (let i = 0, n85 = Math.round(0.85 * tc / 0.005); i < n85; i++) P.paso(0.005);
   mon.llenar(() => { for (let j = 0; j < n; j++) P.paso(0.005); return muestra(); });
   L = P.lectura(); tProx = tSim;
@@ -87,8 +89,8 @@ function tramosUltimoCiclo() {
     for (let i = a; i < b; i++) if (hueco.has(i) || F[i] == null) { roto = true; break; }
     if (roto) continue;
     const seg = (nombre) => { let i0 = -1, i1 = -1; for (let i = a; i < b; i++) if (F[i] === nombre) { if (i0 < 0) i0 = i; i1 = i; } return i0 < 0 ? null : [i0, i1 + 1]; };
-    const insp = seg('insp'), esp = seg('esp');
-    return { insp, pico: insp ? [Math.max(insp[0], insp[1] - 6), insp[1] + (seg('pausa') ? 0 : 2)] : null, pausa: seg('pausa'), esp, finesp: esp ? [Math.max(esp[0], esp[1] - Math.max(6, Math.round((esp[1] - esp[0]) * 0.18))), esp[1] + (seg('oclusion') ? 0 : 1)] : null, oclusion: seg('oclusion') };
+    const insp = seg('insp'), esp = seg('esp'), disparo = seg('disparo');
+    return { insp, disparo, pico: insp ? [Math.max(insp[0], insp[1] - 6), insp[1] + (seg('pausa') ? 0 : 2)] : null, pausa: seg('pausa'), esp, finesp: esp ? [Math.max(esp[0], esp[1] - Math.max(6, Math.round((esp[1] - esp[0]) * 0.18))), esp[1] + (seg('oclusion') ? 0 : 1)] : null, oclusion: seg('oclusion') };
   }
   return null;
 }
@@ -108,13 +110,14 @@ function pintarMonitor() { PANT.R.pintarCurvas(); marcasFlujo(); }
 const alarma30 = (v) => (v == null ? '' : v > 30 ? 'no' : 'si');
 function pintarCifrasTodo() {
   const r = P.S.resp, kg = PBW(), l = L || {};
+  EX.pintar();
   const hay = aplicarTopes();
   PANT.pintar(L, hay, { tapado: est.tapado, detenido: est.detenido });
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
-    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : 'haz pausa', l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
-    celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : 'haz pausa', l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
+    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
+    celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
     celda('flujofin', 'Flujo fin esp.', f0(l.flujoFinEsp), l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'L/min · no llega a cero' : 'L/min · llega a cero', l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si'),
   ].join('');
@@ -189,14 +192,21 @@ function pintarMandos() {
   const r = P.S.resp, pu = P.S.pulmon, m = P.S.man, kg = PBW();
   let h = '';
   if (est.pest === 'resp') {
-    h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button></div>`;
+    const psv = r.modo === 'psv', pend = P.pendientes().map((k) => NOMBRE_MANDO[k] || k);
+    h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button><button type="button" data-m="modo" data-v="psv" aria-pressed="${psv}">PSV<small>presión de soporte</small></button></div>`;
+    h += `<p class="dock-nota dock-grupo"><b>Ventilar</b> (CO₂): Vt × FR = ${f1(L?.vm)} L/min</p>`;
     if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
+    else if (psv) h += desl('ps', 'P. soporte', r.ps, 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5') + desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
+    h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, 8, 30, 1, 'rpm', 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
+    h += desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
+    h += `<p class="dock-nota dock-grupo"><b>Oxigenar</b> (PaO₂): FiO₂ y PEEP</p>`;
+    h += desl('fio2', 'FiO₂', est.fio2, 21, 100, 1, '%', 'ilustrativo: el modelo no calcula gases') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5');
+    h += `<p class="dock-nota">${r.modo === 'vcv' ? 'Volumen garantizado: vigila la presión.' : r.modo === 'pcv' ? 'Presión garantizada: vigila el volumen.' : 'Presión garantizada: vigila volumen y frecuencia.'} ${pend.length ? `Entra en la siguiente respiración: ${pend.join(', ')}.` : 'Los cambios entran en la respiración siguiente.'}</p>`;
   } else if (est.pest === 'pulmon') {
     h += desl('c', 'Compliance', pu.c, 15, TOPE.cMax, 1, 'mL/cmH₂O', pu.c < 25 ? 'ficha cap. 27 p. 6: SDRA <25 (mínimo 15: ilustrativo)' : pu.c >= 50 ? 'ficha cap. 27 p. 6: normal 50-80' : 'entre medias') + desl('r', 'Resistencia', pu.r, 2, 40, 1, 'cmH₂O/(L/s)', 'ilustrativo (la ficha no da R)');
     h += `<div class="seg" aria-label="Resistencia espiratoria"><button type="button" data-m="fesp" data-v="1" aria-pressed="${est.factorEsp === 1}">Esp. = insp.<small>pulmón sano</small></button><button type="button" data-m="fesp" data-v="2" aria-pressed="${est.factorEsp === 2}">Esp. ×2<small>EPOC</small></button><button type="button" data-m="fesp" data-v="3" aria-pressed="${est.factorEsp === 3}">Esp. ×3<small>asma (ilustrativo)</small></button></div>`;
-    h += `<p class="dock-nota">τ = R·C = ${f1(pu.r * pu.c / 1000)} s (insp.) · ${f1((pu.rEsp ?? pu.r) * pu.c / 1000)} s (esp.): en 3 τ sale el 95 % del aire. ${org('fisiología general')}</p>`;
+    h += `<p class="dock-nota">τ = R·C = ${f1(tau(pu.r, pu.c))} s (insp.) · ${f1(tau(pu.rEsp ?? pu.r, pu.c))} s (esp.). En una τ el alvéolo se llena o vacía un ${String(TAU.fraccion).replace('.', ',')} %; con 4-5 τ de espiración desaparece la auto-PEEP${L?.teTau != null ? ` (ahora la espiración dura ${f1(L.teTau)} τ)` : ''}. ${org('ficha: LA2 pdf 50-51 · R y C: ilustrativo')}</p>`;
   } else if (est.pest === 'man') {
     h += `<div class="rejilla" style="--n:3"><button type="button" class="tog" data-m="pausa" aria-pressed="${!!m.pausa}">Pausa inspiratoria<small>pico → meseta</small></button><button type="button" class="tog" data-m="oclusion" aria-pressed="${!!m.oclusion}">Oclusión espiratoria<small>mide la PEEP oculta</small></button><button type="button" class="tog" data-m="monpausa" aria-pressed="${est.pausa}">Congelar monitor<small>para mirar</small></button></div>`;
     h += `<p class="dock-nota">La pausa cierra la válvula 0,5 s al final de la insuflación; la oclusión, 1 s al final de la espiración. Las dos valen solo si el paciente no respira por su cuenta (cap. 28 p. 31).</p>`;
@@ -216,6 +226,7 @@ $('dock-panel').addEventListener('input', (ev) => {
   cambiarMando(i.dataset.m, +i.value);
 });
 function cambiarMando(k, v) {
+  if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
   if (k === 'fio2') { est.fio2 = v; pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
@@ -234,6 +245,7 @@ function cambiarModo(k) {
 }
 function pulsarTecla(k) {
   if (k === 'alarmas') return PANT.infoAlarmas();
+  if ((k === 'inspmant' || k === 'espmant') && P.S.resp.modo === 'psv') { PANT.R.info(`<b>PSV</b> · La pausa y la oclusión no valen aquí: la oclusión solo es fiable si el paciente no respira por su cuenta. ${cita(D.C.oclusion28)}`); return; }
   if (k === 'vistas') { PANT.vistas(); llenarMonitor(); pintarTodo(); return; }
   if (k === 'inspmant' || k === 'espmant') { const m = k === 'inspmant' ? 'pausa' : 'oclusion'; P.maniobra({ [m]: !P.S.man[m] }); topeMando = null; }
   else if (k === 'congelar') { est.pausa = !est.pausa; }
@@ -252,6 +264,7 @@ function detener(on) {
 $('dock-panel').addEventListener('click', (ev) => {
   const b = ev.target.closest('button[data-m]'); if (!b) return;
   const k = b.dataset.m;
+  if ((k === 'pausa' || k === 'oclusion') && P.S.resp.modo === 'psv') return;
   if (k === 'modo') { const antes = P.S.resp.modo; P.ajustar({ modo: b.dataset.v }); guardarTope('modo', antes); }
   else if (k === 'fesp') { est.factorEsp = +b.dataset.v; P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); }
   else if (k === 'pausa' || k === 'oclusion') { P.maniobra({ [k]: !P.S.man[k] }); topeMando = null; }
@@ -337,6 +350,9 @@ raiz.addEventListener('click', (ev) => {
 $('notas').innerHTML = D.NOTAS.map((n) => `<div class="nota" id="pul-nota-${n.k}"><span class="nota-tipo ${D.NOTA_TIPO[n.tipo][1]}">${D.NOTA_TIPO[n.tipo][0]}</span><span>${n.txt}</span>${n.citas.map(cita).join('')}</div>`).join('');
 $('referencias').innerHTML = D.REFS.map(([t, pm, doi]) => `<li><span>${t} PMID ${pm}.</span><span class="cita"><a class="cita-pdf" href="https://pubmed.ncbi.nlm.nih.gov/${pm}/" target="_blank" rel="noopener">PubMed</a><a class="cita-pdf" href="https://doi.org/${doi}" target="_blank" rel="noopener">DOI</a></span></li>`).join('');
 $('profundizar').innerHTML = D.PROFUNDIZAR.map((p) => `<li><span>${p.t}</span>${cita(p.c)}</li>`).join('');
+
+// ---------------------------------------------------------------- las 4 decisiones, el árbol del pico y la calculadora (extras.js)
+const EX = montarExtras({ $, P, est, leer: () => L, PBW: () => PBW(), cita, org, hacerPausa: () => pulsarTecla('inspmant') });
 
 // ---------------------------------------------------------------- arranque
 mon.montar(); ponerEstado('normal-vcv');
