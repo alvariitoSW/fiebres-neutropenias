@@ -182,5 +182,32 @@ console.log('Par 5 · racimo con histéresis (E2; presiones de apertura y cierre
   ok(P.unidades.every((u) => u.abierta), 'con PEEP 12 el racimo empieza con las cuatro unidades abiertas');
 }
 
+console.log('Par 8 · asincronías que salen del motor (E4a; Libro azul IV pdf 47 y 93-95; Marino cap. 27 p. 8; esfuerzo ilustrativo)');
+{
+  const corre = (resp, pu = { c: 60, r: 8 }, seg = 40) => { const P = crearPulmon({ modo: 'vcv', vt: 400, fr: 12, peep: 5, flujo: 60, pmax: 60, tin: 0.8, frNeural: 20, ...resp }, pu); let marcas = 0, minPaw = 99; for (let i = 0; i < seg / 0.005; i++) { P.paso(0.005); if (P.disparo) marcas++; if (P.paw < minPaw) minPaw = P.paw; } return { P, marcas, minPaw, ef: P.esfuerzos.slice(2) }; };
+  // sin esfuerzo (pmus 0) el motor es el de siempre: ninguna insuflación disparada por el paciente
+  let r = corre({ pmus: 0 }); ok(r.ef.length === 0 && r.marcas === 0, 'pmus 0: no hay esfuerzos ni marcas de disparo del paciente (el motor es el de siempre)');
+  // esfuerzo ineficaz: no baja la Paw 2 cmH₂O bajo la PEEP (umbral 2-3, M27 pdf 8) y no entrega Vt
+  r = corre({ pmus: 2.5 }); const tipos = new Set(r.ef.map((e) => e.tipo));
+  ok(r.ef.length >= 6 && tipos.size === 1 && tipos.has('ineficaz'), `pmus 2,5: todos los esfuerzos son ineficaces (${[...tipos]})`);
+  ok(r.ef.every((e) => e.vt === 0 && e.disparos === 0), 'el esfuerzo ineficaz no da Vt (0 mL y 0 disparos)');
+  console.log('  Paw mínima con esfuerzo 2,5: ' + r1(r.minPaw) + ' (PEEP 5; umbral 2 por debajo = 3)'); ok(r.minPaw > 5 - 2, 'la Paw no baja 2 cmH₂O de la PEEP: no dispara');
+  // el mismo paciente con más esfuerzo dispara
+  r = corre({ pmus: 8 }); ok(r.ef.every((e) => e.tipo === 'sincronico' && Math.abs(e.vt - 400) < 12), 'pmus 8: cada esfuerzo dispara una insuflación de 400 mL');
+  // doble disparo (Fig. 27): ~2 Vt con menos de Ti/2 entre las dos insuflaciones; dos picos de Paw con un valle
+  r = corre({ vt: 300, flujo: 30, pmus: 14, tin: 2.2, frNeural: 12 }); const d = r.ef.filter((e) => e.tipo === 'doble');
+  ok(d.length >= 5 && d.length === r.ef.length, `doble disparo: todos los esfuerzos dan doble (${d.length} de ${r.ef.length})`);
+  ok(d.every((e) => e.vt > 1.9 * 300 && e.vt < 2.1 * 300 && e.valle > 0 && e.valle < e.ti / 2), `doble disparo: ~2 Vt (${Math.round(d[0].vt)} mL) con el valle (${r1(d[0].valle)} s) < Ti/2 (${r1(d[0].ti / 2)} s)`);
+  ok(r.marcas >= 2 * d.length, 'dos marcas de disparo por esfuerzo');
+  { const P = crearPulmon({ modo: 'vcv', vt: 300, fr: 12, peep: 5, flujo: 30, pmax: 60, pmus: 14, tin: 2.2, frNeural: 12 }, { c: 60, r: 8 }); const paw = [], fase = []; for (let i = 0; i < 40 / 0.005; i++) { P.paso(0.005); paw.push(P.paw); } const sub = paw.slice(-2000);
+    let picos = 0; for (let i = 1; i < sub.length - 1; i++) if (sub[i] > 12 && sub[i] >= sub[i - 1] && sub[i] > sub[i + 1]) picos++; ok(picos >= 2, `la curva de Paw tiene dos picos seguidos (${picos} máximos en la ventana)`);
+    const L2 = P.lectura(); ok(L2 && L2.vtExh > 600 && L2.vtExh < 800, `el Vt espirado del doble disparo ronda 2 Vt (${r1(L2?.vtExh)} mL)`); }
+  // disparo inverso: el esfuerzo llega con la insuflación ya empezada (insuflación por tiempo)
+  r = corre({ pmus: 10, tin: 1.0, retraso: 0.3, fr: 14 }); ok(r.ef.length >= 5 && r.ef.every((e) => e.tipo === 'inverso'), 'disparo inverso: el esfuerzo llega dentro de la insuflación por tiempo');
+  // PSV: el esfuerzo se suma al soporte (P-SILI): más Vt a igual soporte
+  const psv = (pmus) => simular({ modo: 'psv', vt: 500, fr: 16, peep: 5, flujo: 60, pmax: 40, ps: 10, frEsp: 26, pmus, tin: 1 }, { c: 40, r: 8 }, {}, { ciclos: 14 }).lectura;
+  const a0 = psv(0), a65 = psv(6.5); ok(a65.vtExh > a0.vtExh + 100 && a65.vtExh / pbw(160, 'm') >= 9.5, `PSV: con Pmus 6,5 el Vt sube de ${r1(a0.vtExh)} a ${r1(a65.vtExh)} mL (${r1(a65.vtExh / pbw(160, 'm'))} mL/kg ≥9,5)`);
+}
+
 console.log(`\n${n - fallos} de ${n} comprobaciones en verde${fallos ? ` · ${fallos} FALLOS` : ''}`);
 process.exit(fallos ? 1 : 0);

@@ -132,5 +132,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
   let conVol = false;
   R.ver(['paw', 'flujo']);
   function vistas() { conVol = !conVol; R.ver(conVol ? ['paw', 'flujo', 'vol'] : ['paw', 'flujo']); R.info(`<b>Vistas</b> · ${conVol ? 'Paw, flujo y volumen' : 'Paw y flujo (sin la curva de volumen)'}.`); }
-  return { R, mon: R.mon, pintar, infoAlarmas, vistas };
+  // Los estados con esfuerzo del paciente enseñan Paw, flujo y la curva de Pmus (en lugar del volumen)
+  function verPmus(on) { conVol = false; R.ver(on ? ['paw', 'flujo', 'pmus'] : ['paw', 'flujo']); }
+  return { R, mon: R.mon, pintar, infoAlarmas, vistas, verPmus };
 }

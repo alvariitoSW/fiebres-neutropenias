@@ -25,6 +25,12 @@ function azar(semilla) {          // mulberry32: la variación entre respiracion
 }
 export const T_PAUSA = 0.5;      // s de pausa inspiratoria (inflation-hold)
 export const T_OCLUSION = 1.0;   // s de oclusión al final de la espiración
+// Esfuerzo del paciente (E4a). Ecuación del movimiento (Libro azul IV parte 2, pdf 47 = p. 511): Pmus + Pvent = flujo × R + Vt/C + PEEP.
+// Pmus = pmus · sen²(π·t/tin): 0-15 cmH₂O, ILUSTRATIVO. El respirador dispara cuando el esfuerzo baja la Paw 2 cmH₂O por debajo de la PEEP
+// (Marino cap. 27 p. 8: 2 a 3). Las asincronías salen de esta dinámica, no de un dibujo.
+export const UMBRAL_DISPARO = 2;   // cmH₂O (ficha: 2-3)
+export const RC_DISPARO = 10;      // cmH₂O por L/s: resistencia del circuito de disparo (ilustrativo)
+export const T_REFRACTARIO = 0.25;  // s tras acabar la insuflación en que el respirador no vuelve a disparar (ilustrativo)
 const TAU_VALVULA = 0.04;        // s: lo que tarda la presión proximal en igualarse al cerrar una válvula (ilustrativo)
 
 // resp: { modo: 'vcv' | 'pcv' | 'psv', vt (mL, VCV), fr (rpm), peep (cmH₂O), flujo (L/min, VCV), pinsp (cmH₂O sobre la PEEP,
@@ -41,6 +47,35 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
   // y el pulmón es el de un compartimento de siempre (V = C·Palv).
   let perfil = perfilRacimo(pulmon.racimo), U = estadoInicial(perfil, resp.peep || 0);
   let V = volumenReposo(perfil, pulmon.c || 0, resp.peep || 0), t = 0, tFase = 0, tCiclo = 0, fase = 'insp', paw = resp.peep || 0, q = 0, alarma = false;
+  let pm = 0, esf = null, eNext = 0.4, eInv = null, disp = false, breath = null, ultimoEsf = null;
+  const ventilaciones = [], esfuerzos = [];   // cada insuflación {t0, t1, vt, tipo}; cada esfuerzo clasificado al acabar
+  const asist = () => (A.pmus || 0) > 0 && A.modo === 'vcv';
+  const sen2 = (x) => Math.sin(Math.PI * Math.min(1, Math.max(0, x))) ** 2;
+  function cerrarEsfuerzo() {
+    const bs = ventilaciones.filter((b) => b.t0 >= esf.t0 - 1e-9 && b.t0 <= esf.t0 + esf.tin), ti = tiempos().ti;
+    let tipo = 'sincronico';
+    const pac = bs.filter((b) => b.tipo === 'esfuerzo');   // las que disparó el paciente (no las de respaldo por tiempo)
+    if (esf.enInsp) tipo = 'inverso';
+    else if (pac.length === 0) tipo = 'ineficaz';
+    else if (pac.length >= 2 && pac[1].t0 - pac[0].t1 < ti / 2) tipo = 'doble';
+    ultimoEsf = { tipo, t0: esf.t0, a: esf.a, vt: pac.reduce((x, b) => x + b.vt, 0) + (esf.enInsp && esf.previo ? esf.previo.vt : 0), valle: pac.length >= 2 ? pac[1].t0 - pac[0].t1 : null, disparos: pac.length, ti };
+    esfuerzos.push(ultimoEsf); if (esfuerzos.length > 30) esfuerzos.shift();
+    eNext = esf.t0 + 60 / (A.frNeural || 20); esf = null;
+  }
+  function esfuerzoPaso() {
+    if (!asist()) { if (esf) esf = null; if (pm && A.modo !== 'psv') pm = 0; return; }
+    if (!esf && ((A.retraso == null && t >= eNext) || (A.retraso != null && eInv != null && t >= eInv))) {
+      esf = { t0: t, disp: 0, a: A.pmus, tin: A.tin || 0.8, enInsp: A.retraso != null && fase === 'insp', previo: fase === 'insp' ? breath : null }; eInv = null;
+    }
+    if (esf && t - esf.t0 >= esf.tin) cerrarEsfuerzo();
+    pm = esf ? esf.a * sen2((t - esf.t0) / esf.tin) : 0;
+  }
+  function registrar(tipo) {   // una insuflación empieza: por esfuerzo del paciente o por tiempo (respaldo del respirador)
+    breath = { t0: t, t1: null, vt: 0, tipo }; ventilaciones.push(breath); if (ventilaciones.length > 40) ventilaciones.shift();
+    if (tipo === 'esfuerzo') disp = true;   // la marca bajo la Paw es solo del disparo del paciente
+    if (esf && tipo === 'esfuerzo') esf.disp++;
+    if (tipo === 'tiempo' && A.retraso != null && asist()) eInv = t + A.retraso;   // disparo inverso: el esfuerzo llega tras empezar la insuflación
+  }
   let qPico = 0, tiMed = 0, dip = 0, tDisp = T_DISPARO, qFin = 0;
   const ciclo = { pico: 0, mesetaMedida: null, peepTotMedida: null, palvFinInsp: 0, palvFinEsp: 0, vFinInsp: 0, vFinEsp: 0, flujoFinEsp: 0, vtIns: 0, sumaPaw: 0, nPaw: 0, ti: 0, te: 0, tPausa: 0 };
   let ultimo = null;   // la lectura del último ciclo completo
@@ -60,7 +95,7 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
   };
   function cerrarCiclo() {
     const { ti, te } = tiempos(), r = A;
-    const vtExh = ciclo.vFinInsp - ciclo.vFinEsp;
+    const vtExh = Math.max(0, ciclo.vFinInsp - ciclo.vFinEsp);
     const peepTot = ciclo.palvFinEsp, autoPeep = Math.max(0, peepTot - r.peep);
     const meseta = ciclo.mesetaMedida, peepTotMed = ciclo.peepTotMedida;
     ultimo = {
@@ -110,25 +145,32 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
     const r = A, { ti, tp, te, T } = tiempos();
     racimo(palv());
     const pa = palv();
+    if (r.modo !== 'psv') esfuerzoPaso();
     if (fase === 'insp') {
-      if (r.modo === 'vcv') { q = r.flujo * 1000 / 60; V += q * dt; paw = palv() + Ri() * q / 1000; }
-      else if (r.modo === 'psv') { paw = r.peep + r.ps; if (paw > (r.pmax ?? 40)) { paw = r.pmax ?? 40; alarma = true; } q = Math.max(0, (paw - pa) / Ri() * 1000); V += q * dt; if (q > qPico) qPico = q; }
+      if (r.modo === 'vcv') { q = r.flujo * 1000 / 60; V += q * dt; paw = palv() + Ri() * q / 1000 - (asist() ? pm : 0); }
+      else if (r.modo === 'psv') { paw = r.peep + r.ps; if (paw > (r.pmax ?? 40)) { paw = r.pmax ?? 40; alarma = true; } pm = (r.pmus || 0) > 0 ? r.pmus * sen2(tFase / (r.tin || 1)) : 0; q = Math.max(0, (paw - pa + pm) / Ri() * 1000); V += q * dt; if (q > qPico) qPico = q; }
       else { paw = r.peep + r.pinsp; if (paw > (r.pmax ?? 40)) { paw = r.pmax ?? 40; alarma = true; } q = Math.max(0, (paw - pa) / Ri() * 1000); V += q * dt; }   // PCV: el respirador no pasa de pmax (limita la presión; el tiempo inspiratorio sigue)
-      ciclo.vtIns += q * dt;
+      ciclo.vtIns += q * dt; if (breath && breath.t1 == null && asist()) breath.vt += q * dt;
       if (paw > ciclo.pico) ciclo.pico = paw;
       const pmax = r.pmax ?? 40, corta = r.modo === 'vcv' && paw > pmax;
-      if (corta) { alarma = true; ciclo.pico = Math.max(pmax, palv()); }
+      if (corta) { alarma = true; ciclo.pico = asist() ? pmax : Math.max(pmax, palv()); }   // con esfuerzo del paciente, la Paw medida es la que el respirador limita (pmax); la palv incluye el empuje del paciente
       // PSV: la insuflación acaba cuando el flujo cae al 25 % del pico (M22 pdf 78); el Ti lo decide el paciente
       const fin = r.modo === 'psv' ? (tFase >= 0.05 && q <= PSV.ciclado * qPico) || tFase >= TI_MAX_PSV : tFase >= ti || corta;
-      if (fin) { qFin = q; tiMed = tFase; ciclo.palvFinInsp = palv(); ciclo.vFinInsp = V; fase = tp ? 'pausa' : 'esp'; tFase = 0; }
+      if (fin) { if (breath && breath.t1 == null) breath.t1 = t; qFin = q; tiMed = tFase; ciclo.palvFinInsp = palv(); ciclo.vFinInsp = V; fase = tp ? 'pausa' : 'esp'; tFase = 0; }
     } else if (fase === 'pausa') {
       q = 0; paw += (pa - paw) * (1 - Math.exp(-dt / TAU_VALVULA));
       if (tFase >= tp) { ciclo.mesetaMedida = pa; fase = 'esp'; tFase = 0; }
     } else if (fase === 'esp') {
-      paw += (r.peep - paw) * (1 - Math.exp(-dt / TAU_VALVULA));
-      q = pa > r.peep ? -(pa - r.peep) / Re() * 1000 : 0;
-      V = Math.max(0, V + q * dt);
-      if (r.modo === 'psv') {
+      pm = r.modo === 'psv' ? 0 : pm;
+      const as = asist();
+      if (as) { const qL = (pm - (pa - r.peep)) / (Re() + RC_DISPARO); q = qL * 1000; paw = r.peep - RC_DISPARO * qL; V = Math.max(0, V + q * dt); }
+      else { paw += (r.peep - paw) * (1 - Math.exp(-dt / TAU_VALVULA)); q = pa > r.peep ? -(pa - r.peep) / Re() * 1000 : 0; V = Math.max(0, V + q * dt); }
+      if (as && r.peep - paw >= UMBRAL_DISPARO && tFase >= T_REFRACTARIO) {
+        ciclo.palvFinEsp = palv(); ciclo.vFinEsp = V; ciclo.flujoFinEsp = q * 60 / 1000;
+        // segundo disparo del mismo esfuerzo (doble disparo): los dos volúmenes se apilan en el mismo ciclo, sin espiración entre ambos
+        if (esf && esf.disp > 0) { fase = 'insp'; tFase = 0; } else empezar();
+        registrar('esfuerzo');
+      } else if (r.modo === 'psv') {
         // el paciente dispara cuando le toca su ritmo; el esfuerzo (−2 a −3 cmH₂O) y su tiempo varían un poco, con semilla fija (ilustrativo)
         if (tCiclo >= T - T_DISPARO * 1.2) {
           ciclo.palvFinEsp = palv(); ciclo.vFinEsp = V; ciclo.flujoFinEsp = q * 60 / 1000;
@@ -136,7 +178,7 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
         }
       } else if (tFase >= te) {
         ciclo.palvFinEsp = palv(); ciclo.vFinEsp = V; ciclo.flujoFinEsp = q * 60 / 1000;
-        if (man().oclusion) { fase = 'oclusion'; tFase = 0; } else empezar();
+        if (man().oclusion) { fase = 'oclusion'; tFase = 0; } else { empezar(); if (as) registrar('tiempo'); }
       }
     } else if (fase === 'disparo') {
       // el esfuerzo del paciente baja la presión de la vía aérea por debajo de la PEEP; al llegar al umbral, la válvula se abre
@@ -153,6 +195,10 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
   return {
     paso, S,
     get t() { return t; }, get fase() { return fase; }, get paw() { return paw; }, get palv() { return palv(); },
+    get pmus() { return pm; },                                      // esfuerzo del paciente ahora (cmH₂O, + inspiratorio)
+    get disparo() { const d = disp; disp = false; return d; },        // true una vez por cada insuflación que dispara el paciente
+    get asinc() { return ultimoEsf; },                               // el último esfuerzo clasificado: { tipo, vt, valle, disparos, a }
+    get ventilaciones() { return ventilaciones; }, get esfuerzos() { return esfuerzos; },
     get unidades() { return U; },                                  // el racimo: { abierta, eff, abrio, cerro } por unidad
     get flujo() { return q * 60 / 1000; },                       // L/min (+ inspiratorio, − espiratorio)
     get vol() { return Math.max(0, V - reposo()); },                      // mL por encima del reposo a la PEEP activa

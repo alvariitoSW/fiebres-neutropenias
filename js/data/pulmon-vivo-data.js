@@ -268,3 +268,96 @@ export const REFS = [
   ['Benumof JL, Dagg R, Benumof R. Critical hemoglobin desaturation will occur before return to an unparalyzed state following 1 mg/kg intravenous succinylcholine. Anesthesiology. 1997;87(4):979-82.', '9357902', '10.1097/00000542-199710000-00034'],
   ['Eger EI, Severinghaus JW. The rate of rise of PaCO2 in the apneic anesthetized patient. Anesthesiology. 1961;22:419-25.', '13725901', '10.1097/00000542-196105000-00013'],
 ];
+
+// ---------------------------------------------------------------- E4a · el paciente que respira y las asincronías
+// Ceferino (asincronías y prueba de respiración espontánea) y Elvira (P-SILI) son pacientes de este bloque. La ficha no tiene ids
+// propios en estos párrafos: la cita apunta a la hoja entera (data-resaltar con el id de la hoja).
+const NEUMO_E4 = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
+FICHA['neumo-sdra-no-ventilatorio'] = [NEUMO_E4, 'SDRA: tratamiento no ventilatorio', 'SDRA no ventilatorio', PDF_A, 'Marino 2024'];
+FICHA['neumo-sbt'] = [NEUMO_E4, 'Prueba de respiración espontánea', 'Prueba de respiración espontánea', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  ecMov: { f: 'libro-azul-resp2', id: null, sitio: 'Ecuación del movimiento: Pmus + Pvent = flujo × resistencia + Vt/C + PEEP (p. 511)', p: 47 },
+  asincronia: { f: 'libro-azul-resp2', id: null, sitio: 'Asincronías; esfuerzos ineficaces, la más frecuente (p. 557)', p: 93 },
+  doble: { f: 'libro-azul-resp2', id: null, sitio: 'Doble desencadenante: dos inspiraciones en menos de la mitad del Ti; Fig. 27 (pp. 558-559)', p: '94-95' },
+  inverso: { f: 'libro-azul-resp2', id: null, sitio: 'Desencadenante inverso: sobredistensión; Hering-Breuer, «en proceso de investigación» (pp. 558-559)', p: '94-95' },
+  psili: { f: 'neumo-sdra-no-ventilatorio', id: 'neumo-sdra-no-ventilatorio', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
+  sbt: { f: 'neumo-sbt', id: 'neumo-sbt', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
+  pimax: { f: 'neumo-sbt', id: 'neumo-sbt', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
+});
+NOTAS.push(
+  { k: 'pmus-ilu', tipo: 'calla', txt: 'La ecuación del movimiento (Libro azul IV, p. 511) incluye el esfuerzo del paciente (Pmus), pero ninguna fuente de este plan da su amplitud ni su duración. Aquí el esfuerzo es ilustrativo: 0 a 15 cmH₂O, con aviso a 12 y duración y ritmo propios de cada estado. La presión inspiratoria máxima de Marino (−120 y −84 cmH₂O de media, y amenaza de la ventilación a −20 o −30; cap. 30 p. 58) es un esfuerzo máximo contra vía cerrada, no el esfuerzo de reposo.', citas: [C.ecMov, C.pimax] },
+  { k: 'refractario-ilu', tipo: 'calla', txt: 'El Libro azul define el doble disparo como dos inspiraciones en menos de la mitad del tiempo inspiratorio (Fig. 27) pero no da el valle entre ambas. El modelo usa un tiempo refractario de 0,25 s (ilustrativo) tras acabar la insuflación; el valle de la curva sale de ahí. El disparo inverso se rotula «en investigación» porque el propio libro dice que su mecanismo (Hering-Breuer) no está establecido.', citas: [C.doble, C.inverso] },
+);
+PACIENTES.push(
+  { k: 'ceferino', nombre: 'Ceferino', chip: '67 a · neumonía en resolución', linea: '67 años, 1,75 m, neumonía en resolución, sedación ligera: dispara el respirador y se prueba su destete. PBW 70,5 kg.', talla: 175, sexo: 'v', estado: 'asincronia-ineficaz' },
+  { k: 'elvira', nombre: 'Elvira', chip: '45 a · trasplantada renal · P-SILI', linea: '45 años, 58 kg, 1,60 m (talla ilustrativa), trasplantada renal; neumonía con fallo hipoxémico que sigue respirando con mucho esfuerzo; intubada. PBW 52,4 kg.', talla: 160, sexo: 'm', estado: 'p-sili' },
+);
+const RESP_E4 = { vt: 500, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 };
+Object.assign(ESTADOS, {
+  'asincronia-ineficaz': {
+    tit: 'Esfuerzo ineficaz: empuja y no dispara', pac: 'ceferino', pmus: true, seg: 8, resp: { ...RESP_E4, modo: 'vcv', vt: 400, fr: 12, pmus: 2.5, tin: 0.8, frNeural: 20 }, pulmon: { c: 60, r: 8 }, man: {},
+    frase: 'El paciente hace fuerza y el respirador no se entera: sin disparo, ese esfuerzo no recibe volumen.',
+    guia: [
+      { t: 'El esfuerzo del paciente (Pmus) se suma a la presión del respirador en la ecuación del movimiento: Pmus + Pvent = flujo × resistencia + Vt/C + PEEP. En la curva «Pmus» ves cada empujón de Ceferino, cada 3 s.', org: 'ficha (ecuación) · amplitud y ritmo del esfuerzo: ilustrativo', s: ['pmus:esp', '#pul-trazas'], c: C.ecMov },
+      { t: 'Para disparar, el esfuerzo tiene que bajar la presión de la vía aérea 2 o 3 cmH₂O por debajo de la PEEP. Aquí el empujón es de 2,5 cmH₂O y la Paw apenas se hunde en la espiración: no llega al umbral y la válvula no se abre.', org: 'ficha (2-3) · 2,5: ilustrativo', s: ['paw:esp'], c: C.disparo },
+      { t: 'Eso es un esfuerzo ineficaz: el paciente hace un esfuerzo inspiratorio que no consigue desencadenar la asistencia. Es la asincronía más frecuente. Con el disparo por presión, alrededor de un tercio de los esfuerzos inspiratorios fracasa.', s: ['paw:esp', 'pmus:esp'], c: C.asincronia },
+      { t: 'Fíjate en que bajo la Paw no hay ningún triángulo de disparo en esos empujones: las respiraciones que sí entran son las de respaldo del respirador, por tiempo (FR 12). El respirador no entrega ningún volumen por los esfuerzos ineficaces.', org: 'ficha (disparo por tiempo) · cifras: modelo', s: ['paw:insp', 'flujo:insp'], c: C.disparo },
+      { t: 'Prueba: sube el esfuerzo con el deslizador «Esfuerzo (Pmus)» hasta que dispare (hacia 3 cmH₂O con estos ajustes): aparece el triángulo bajo la Paw y entran 400 mL. Por encima de 12 cmH₂O sale el aviso de esfuerzo excesivo.', org: 'ilustrativo (3 y 12)', s: ['#pul-trazas'], c: C.disparo },
+    ],
+    fuentes: [C.ecMov, C.disparo, C.asincronia],
+  },
+  'doble-disparo': {
+    tit: 'Doble disparo: dos respiraciones por un esfuerzo', pac: 'ceferino', pmus: true, seg: 6, resp: { ...RESP_E4, modo: 'vcv', vt: 300, fr: 12, flujo: 30, pmus: 14, tin: 2.2, frNeural: 12 }, pulmon: { c: 60, r: 8 }, man: {},
+    frase: 'Un esfuerzo largo dispara dos veces: el volumen que entra es casi el doble del programado.',
+    piensa: {
+      q: 'Ceferino tiene programados 300 mL. En la pantalla, cada esfuerzo suyo produce dos picos de presión seguidos, con un valle corto entre ambos. ¿Qué asincronía ves?',
+      ops: [
+        { t: 'Esfuerzo ineficaz: el paciente empuja y el respirador no llega a dispararse nunca.', ok: false, e: 'En el esfuerzo ineficaz no hay ningún pico tras el empuje: ese esfuerzo no entrega volumen. Aquí cada esfuerzo entrega dos insuflaciones; si lo confundes, no verías que el Vt real se duplica.', c: C.asincronia },
+        { t: 'Doble disparo: el esfuerzo dura más que la insuflación y dispara otra.', ok: true, e: 'Son dos inspiraciones en menos de la mitad del tiempo inspiratorio: el valle (0,25 s) es menor que la mitad del Ti (0,6 s). El paciente recibe dos volúmenes apilados.', c: C.doble },
+        { t: 'Autodisparo: el respirador insufla sin que el paciente haga esfuerzo.', ok: false, e: 'El autodisparo es una insuflación sin esfuerzo previo del paciente. Aquí el esfuerzo (Pmus) es visible y precede a cada pico; tratarlo como autodisparo llevaría a sedar o a cambiar el umbral de disparo, y el Vt apilado seguiría.', c: C.doble },
+      ],
+      exp: 'Cuenta los picos de Paw por cada esfuerzo: ninguno es un esfuerzo ineficaz; dos con un valle corto son un doble disparo; uno sin esfuerzo previo es un autodisparo.',
+    },
+    guia: [
+      { t: 'La causa: el esfuerzo del paciente dura más (2,2 s, ilustrativo) que la insuflación del respirador (0,6 s). Los tiempos inspiratorio y espiratorio neurales son distintos de los del ventilador: eso es una asincronía.', org: 'ficha (definición) · 2,2 s: ilustrativo', s: ['pmus:insp', 'paw:insp'], c: C.asincronia },
+      { t: 'Cuando acaba la primera insuflación el esfuerzo sigue ahí y vuelve a bajar la Paw por debajo de la PEEP: el respirador dispara otra vez. Ves dos picos con un valle corto entre ambos, con el triángulo de disparo bajo cada uno.', org: 'ficha (Fig. 27) · valle de 0,25 s: ilustrativo', s: ['paw:insp', 'paw:esp'], c: C.doble },
+      { t: 'Definición: dos inspiraciones en un tiempo inferior a la mitad del tiempo inspiratorio. Aquí el valle (0,25 s) cabe en la mitad del Ti de 0,6 s (0,3 s).', s: ['paw:esp'], c: C.doble },
+      { t: 'Consecuencia: los dos volúmenes se apilan sin espirar entre ambos. Programaste 300 mL (4,3 mL/kg de peso ideal) y el Vt espirado sale cerca de 700 mL (9,9 mL/kg): la ventilación «protectora» deja de serlo.', org: 'ficha (6-8 mL/kg: Tabla 27.1) · cifras: modelo', s: ['[data-fila="vt"]', 'vol:insp'], c: C.t271 },
+      { t: 'Su primo es el disparo inverso: un nuevo disparo dentro de un ciclo inspiratorio, con el riesgo de sobredistensión. Se relaciona con el reflejo de Hering-Breuer, pero el propio libro dice que está en proceso de investigación.', org: 'en investigación', s: ['#pul-trazas'], c: C.inverso },
+    ],
+    fuentes: [C.asincronia, C.doble, C.inverso, C.t271],
+  },
+  'p-sili': {
+    tit: 'P-SILI: respira con tanto esfuerzo que se lesiona', pac: 'elvira', pmus: true, resp: { ...RESP_E4, modo: 'psv', ps: 10, frEsp: 26, pmus: 6.5, tin: 1 }, pulmon: { c: 40, r: 8 }, man: {},
+    frase: 'Si el esfuerzo del paciente es muy grande, el volumen que mueve puede lesionar su propio pulmón.',
+    guia: [
+      { t: 'A la presión de soporte (10 cmH₂O) Elvira suma su propio esfuerzo (Pmus 6,5 cmH₂O): los dos empujan el aire a la vez, según la ecuación del movimiento. Mira el flujo y la curva «Pmus» durante la inspiración.', org: 'ficha (ecuación) · 6,5: ilustrativo', s: ['pmus:insp', 'flujo:insp'], c: C.ecMov },
+      { t: 'El resultado es un Vt de unos 515 mL: 9,8 mL/kg de peso ideal (52,4 kg). Los pacientes que fracasan con la ventilación no invasiva tienen típicamente Vt ≥9,5 mL/kg, señal de un esfuerzo respiratorio aumentado.', org: 'ficha (9,5) · Vt: modelo', s: ['[data-fila="vt"]'], c: C.psili },
+      { t: 'Eso es el P-SILI, la lesión pulmonar autoinducida por el paciente: respirar con mucho esfuerzo puede lesionar el pulmón como lo haría el propio ventilador. Si sigue con esfuerzo aumentado, la ficha aconseja intubar y ventilar antes mejor que después.', s: ['#pul-esc-racimo'], c: C.psili },
+      { t: 'Baja el esfuerzo con el deslizador «Esfuerzo (Pmus)»: por debajo de 5 el Vt cae de 9,5 mL/kg y el sello desaparece. Es lo que buscan el oxígeno de alto flujo y la sedación: respirar cómodo, sin el volumen excesivo.', org: 'ficha (alivio de la disnea) · umbral 5: modelo', s: ['[data-fila="vt"]'], c: C.psili },
+    ],
+    fuentes: [C.ecMov, C.psili, C.disparo],
+  },
+  'sbt-ok': {
+    tit: 'Prueba de respiración espontánea: la supera', pac: 'ceferino', pmus: false, resp: { ...RESP_E4, modo: 'psv', ps: 5, frEsp: 20 }, pulmon: { c: 80, r: 5 }, man: {},
+    frase: 'Si respira con calma y volumen suficiente, la prueba sale bien.',
+    guia: [
+      { t: 'Ceferino cumple los criterios para intentarlo: SpO₂ ≥90 % con FiO₂ ≤50 %, PEEP ≤8, estable y despierto. Se deja conectado al respirador con un soporte bajo (5 cmH₂O), que vence la resistencia del circuito.', s: ['#pul-esc-pantalla'], c: C.sbt },
+      { t: 'Durante la prueba se miden los predictores de éxito: Vt de 4 a 6 mL/kg, FR <40, cociente FR/Vt entre 60 y 105, presión inspiratoria máxima más negativa que −20 cmH₂O. Aquí: Vt de unos 300 mL (4,3 mL/kg), FR 20, FR/Vt de unos 66.', org: 'ficha (Tabla 30.1) · cifras: modelo', s: ['[data-fila="vt"]'], c: C.sbt },
+      { t: 'Cada predictor falla a veces en un paciente concreto; juntos dan una buena idea de cómo irá, y los cambios seguidos pesan más que una medida suelta.', s: ['#pul-esc-pantalla'], c: C.sbt },
+    ],
+    fuentes: [C.sbt, C.pimax],
+  },
+  'sbt-fracaso': {
+    tit: 'Prueba de respiración espontánea: respira rápido y superficial', pac: 'ceferino', pmus: false, resp: { ...RESP_E4, modo: 'psv', ps: 5, frEsp: 34, pmus: 3, tin: 1 }, pulmon: { c: 30, r: 12 }, man: {},
+    frase: 'Mucha frecuencia y poco volumen: el cociente FR/Vt por encima de 105 anuncia que la prueba fracasa.',
+    guia: [
+      { t: 'La misma prueba, otro patrón (Ceferino otro día, con el pulmón más rígido: compliance 30, ilustrativo). Respira rápido y superficial: FR 34 y Vt de unos 170 mL (2,5 mL/kg).', org: 'cifras: modelo · compliance 30: ilustrativo', s: ['flujo:insp', '[data-fila="vt"]'], c: C.sbt },
+      { t: 'El cociente FR/Vt sale cerca de 200 respiraciones por minuto y litro, muy por encima de 105. Dos predictores de éxito fallan a la vez: Vt por debajo de 4 mL/kg y FR/Vt >105.', org: 'ficha (Tabla 30.1) · cifras: modelo', s: ['[data-fila="vt"]'], c: C.sbt },
+      { t: 'La respiración rápida y superficial es un patrón frecuente en los pacientes que fracasan la prueba. Por eso se hace conectado al respirador: permite ver el Vt y la FR.', s: ['#pul-esc-pantalla'], c: C.sbt },
+      { t: 'Y si la presión inspiratoria máxima cae a −20 o −30 cmH₂O, la ventilación en reposo está amenazada: es el umbral de los predictores de la prueba.', org: 'ficha (PImax)', s: ['#pul-esc-pantalla'], c: C.pimax },
+    ],
+    fuentes: [C.sbt, C.pimax],
+  },
+});
+ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'sbt-ok', 'sbt-fracaso');

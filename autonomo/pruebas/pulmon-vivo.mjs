@@ -82,6 +82,7 @@ for (const pc of PACIENTES) {
         await pest(tab);
         const mandos = await p.evaluate(() => [...document.querySelectorAll('#pul-dock-panel input[data-m]')].map(i => ({ k: i.dataset.m, min: +i.min, max: +i.max })));
         for (const m of mandos) for (const v of [m.min, m.max]) {
+            if (m.k === 'pmus') continue;   // el esfuerzo (Pmus) lo lleva a 0 y al tope el bloque «E4a»; aquí se acumularía con los demás extremos
             await mando(m.k, v); const r = await ls(), L = r.L;
             const kgp = await p.evaluate(() => { const c = window.__pulPruebas(); return c.est.pac.sexo === 'v' ? 50 + 0.91 * (c.est.pac.talla - 152.4) : 45.5 + 0.91 * (c.est.pac.talla - 152.4); });
             const posible = [L.pico, L.vm, L.vtExh].every(x => x == null || isFinite(x)) && (L.vm == null || L.vm <= 20.01) && (L.vtExh == null || L.vtExh / kgp <= 12.05) && (L.pico == null || L.pico <= (r.r.pmax ?? 40) + 0.6);
@@ -201,6 +202,32 @@ for (const k of ORDEN_ESTADOS) {
   });
   ok(!tapa.choca, `el sello no tapa el rótulo «PEEP» (${tapa.ns} sello(s), ${tapa.np} rótulo(s))`);
   await foto('racimo-peep0');
+}
+// E4a · el paciente que respira: esfuerzo, asincronías, P-SILI y prueba de respiración espontánea (pares del motor: pulmon-motor.mjs, par 8)
+{
+  const esf = () => p.evaluate(() => { const q = window.__pulPruebas(); return { ef: q.P.esfuerzos.slice(-4).map((e) => ({ tipo: e.tipo, vt: e.vt, valle: e.valle, ti: e.ti })), marcas: q.mon.dato('disp').filter((x) => x === 1).length, sello: q.est.sello?.titulo || null, info: document.querySelector('#pul-raiz [data-resp="info"]')?.textContent || '', pmusVis: !!document.querySelector('#pul-dock-panel input[data-m="pmus"]'), canal: !!document.querySelector('#pul-trazas #pul-pmus, #pul-trazas [id$="pmus"]') }; });
+  const aviso = () => p.evaluate(() => [...document.querySelectorAll('#pul-raiz [class*="aviso"], #pul-raiz [class*="tope"]')].filter((e) => e.getClientRects().length && /Esfuerzo muy alto/.test(e.textContent)).length);
+  await abrir('asincronia-ineficaz'); await espera(900); await llenar(); await pest('resp');
+  let e = await esf(); ok(e.pmusVis && e.ef.length >= 3 && e.ef.every((x) => x.tipo === 'ineficaz' && x.vt === 0), `E4a ineficaz: la app muestra el mando de Pmus y todos los esfuerzos son ineficaces con 0 mL (${e.ef.length})`);
+  await mando('pmus', 8); await espera(7000 / (REDUCIDO ? 8 : 1)); await llenar(); e = await esf(); ok(e.ef.some((x) => x.tipo === 'sincronico') && e.marcas >= 1, `E4a ineficaz: con Pmus 8 el paciente dispara (${e.marcas} marca(s) bajo la Paw)`);
+  await mando('pmus', 12); await llenar(); ok((await aviso()) >= 1, 'E4a: a Pmus 12 sale el aviso de esfuerzo muy alto'); await limpio('Pmus 12');
+  await mando('pmus', 15); await llenar(); await limpio('Pmus 15 (tope)'); await mando('pmus', 0); await llenar(); await limpio('Pmus 0'); await foto('e4a-ineficaz');
+  await abrir('doble-disparo'); await espera(900); await llenar();
+  e = await esf(); ok(e.ef.length >= 3 && e.ef.every((x) => x.tipo === 'doble' && x.vt > 540 && x.vt < 640 && x.valle < x.ti / 2), `E4a doble disparo: cada esfuerzo da ~2 Vt (${Math.round(e.ef[0]?.vt)} mL) con el valle (${(e.ef[0]?.valle ?? 0).toFixed(2)} s) < Ti/2 (${((e.ef[0]?.ti ?? 0) / 2).toFixed(2)} s)`);
+  ok(e.marcas >= 2, `E4a doble disparo: al menos 2 triángulos de disparo bajo la Paw (${e.marcas})`);
+  { const vtkg = await cifra('vtkg'); ok(vtkg > 8, `E4a doble disparo: el Vt espirado por kg sube por encima de 8 (${vtkg})`); }
+  await mando('pmus', 15); await llenar(); await limpio('doble disparo, Pmus 15'); await foto('e4a-doble');
+  await abrir('p-sili'); await espera(900); await llenar();
+  e = await esf(); ok(/P-SILI/.test(e.sello || ''), `E4a P-SILI: con Vt ≥9,5 mL/kg sale el sello (${e.sello})`);
+  await mando('pmus', 3); await llenar(); e = await esf(); ok(!/P-SILI/.test(e.sello || ''), 'E4a P-SILI: al bajar el esfuerzo a 3 el sello desaparece');
+  await mando('pmus', 9); await llenar(); e = await esf(); ok(/P-SILI/.test(e.sello || ''), 'E4a P-SILI: con Pmus 9 el sello sigue');
+  await mando('pmus', 15); await llenar(); await limpio('P-SILI, Pmus 15'); e = await esf(); const v15 = await p.evaluate(() => +document.querySelector('#pul-dock-panel input[data-m="pmus"]').value);
+  ok(/no fisiológico/.test(e.sello || '') && v15 < 15, `E4a P-SILI: Pmus 15 pasa el tope de 12 mL/kg: sello «${e.sello}» y el mando vuelve a ${v15}`);
+  await foto('e4a-psili');
+  await abrir('sbt-ok'); await espera(900); await llenar(); e = await esf(); const f1v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
+  ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
+  await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
+  ok(f2v > 105, `E4a SBT que fracasa: rápida y superficial, FR/Vt ${f2v} > 105 (Marino cap. 30 p. 52)`); await limpio('sbt-fracaso'); await foto('e4a-sbt');
 }
 // Las citas de las fuentes y las notas
 await abrir('normal-vcv'); await espera(600);

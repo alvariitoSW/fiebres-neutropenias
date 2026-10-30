@@ -29,6 +29,7 @@ export function canalesPantalla({ peep = () => 5, pmax = () => 40, pawMin = -10,
     { k: 'paw', rot: 'Paw mbar', alto: 110, min: pawMin, max: pawMax, base0: 0, marcas: [0, 20], col: 'var(--resp-curva)', lineas: [{ k: 'pmax', v: pmax, clase: 'resp-pmax', rot: 'Pmáx' }, { k: 'peep', v: peep, clase: 'resp-peep', rot: 'PEEP' }] },
     { k: 'flujo', rot: 'Flujo L/min', alto: 90, min: -flujoMax, max: flujoMax, base0: 0, marcas: [-50, 0, 50], col: 'var(--resp-curva)' },
     { k: 'vol', rot: 'Vol mL', alto: 60, min: 0, max: volMax, base0: 0, marcas: [500], col: 'var(--resp-curva)' },
+    { k: 'pmus', rot: 'Pmus', alto: 44, min: 0, max: 15, base0: 0, marcas: [0, 12], col: 'var(--resp-curva)' },   // esfuerzo del paciente (E4a): solo en los estados que lo usan
   ];
 }
 
