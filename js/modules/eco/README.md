@@ -918,3 +918,4 @@ la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora co
 la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
 Tablas de Guyton regeneradas.
 - Atlas, capítulo 21 (enfermedad pericárdica): fase A, solo texto traducido (`atlas/cap-peri.html`), sin figura todavía.
+- Atlas, capítulo 19 (insuficiencia tricuspídea): fase A, solo texto traducido (`atlas/cap-tr.html`), sin figura todavía.

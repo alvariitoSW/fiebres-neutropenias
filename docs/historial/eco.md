@@ -408,3 +408,4 @@ quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e
 la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
 
 - 30/10/2026 · Atlas de eco, capítulo 21 (enfermedad pericárdica) en fase A: texto completo traducido (derrame, taponamiento, constricción y miocardiopatía restrictiva), con tres tablas y citas; figura y preguntas pendientes del ecógrafo nuevo.
+- 30/10/2026 · Atlas de eco, capítulo 19 (insuficiencia tricuspídea) en fase A: texto completo traducido, con tabla de grados y citas; figura y preguntas pendientes del ecógrafo nuevo.
