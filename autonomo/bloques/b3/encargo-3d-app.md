@@ -77,5 +77,5 @@ exige más sensibilidad a la poscarga del VI que falla en `motor.mjs`, y eso mue
 - **E3-enganche** (sonnet, 40 / 0,8 M, sin tocar el motor): el pulmón escribe `pTorax`; estados `cpap-eap` (Ramiro) y
   `vpp-corazon-normal` enseñan el contraste «el normal pierde, el que falla casi no», y PEEP 4 → 20 baja el GC; la nota
   «Límite del modelo» del shock vivo se copia tal cual.
-- **E3-motor**: espera la decisión del usuario (cambio grande en un motor compartido; CLAUDE.md §1). La prueba
+- **E3-motor**: **el usuario elige la opción B (30/10)**: encargo del motor (sonnet, 70 / 1,8 M).
   `eco/pruebas/torax.test.mjs` ya lo deja escrito como `todo`.
