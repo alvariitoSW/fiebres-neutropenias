@@ -69,3 +69,13 @@ el motor del corazón copiado dentro del pulmón (se usa `eco/motor.mjs`); una c
 - E2 y L: **apuesta antes de la guía** (REGLAS §8): 3 opciones («PEEP 5 → 12: ¿qué le pasa al alvéolo que se cerraba?»;
   «Vt 300 a FR 30: ¿cuánto llega al alvéolo?» como «piensa antes»). L: sin animación en bucle; rótulo del diafragma separado.
 - Todas: la nota de topes del dock, plegable (el dock no pasa del ~30 % de la pantalla).
+
+## E3, partido (30/10, tras el informe del constructor; `herramientas/e3-cpap.mjs`)
+Hoy el motor da, con CPAP 5: normal −7 % de VS, Ramiro (PCP 19-31) −0,8 a −2,4 %, seco (PCP 8) −10 %. Es decir, el
+corazón que falla **casi no pierde** (Fig. 26.6 frente a 26.7, M22 pdf 85-86), pero **no sube** (Bradley: +22 %). Subirlo
+exige más sensibilidad a la poscarga del VI que falla en `motor.mjs`, y eso mueve todos los estados de shock ya aprobados.
+- **E3-enganche** (sonnet, 40 / 0,8 M, sin tocar el motor): el pulmón escribe `pTorax`; estados `cpap-eap` (Ramiro) y
+  `vpp-corazon-normal` enseñan el contraste «el normal pierde, el que falla casi no», y PEEP 4 → 20 baja el GC; la nota
+  «Límite del modelo» del shock vivo se copia tal cual.
+- **E3-motor**: espera la decisión del usuario (cambio grande en un motor compartido; CLAUDE.md §1). La prueba
+  `eco/pruebas/torax.test.mjs` ya lo deja escrito como `todo`.
