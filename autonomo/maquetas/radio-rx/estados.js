@@ -129,12 +129,12 @@ function textos(k, id, supino) {
       no: { frase: 'Sin aire en la pleura: la trama de los vasos llega hasta la pared en los dos lados.', cifras: [c('Trama hasta la periferia', 'fisiología general', null, '')] },
       pequeno: supino
         ? { frase: 'Tumbado, el aire se junta delante de la base: la base se ve más negra y el seno costofrénico más hondo. No hay línea que ver en el vértice.',
-          cifras: [c('Supino: colección basal y subpulmonar', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Seno costofrénico hondo («surco profundo»)', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1 (Marino no lo nombra)')] }
+          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Supino: colección basal y subpulmonar', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Seno costofrénico hondo («surco profundo»)', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1 (Marino no lo nombra)')] }
         : { frase: 'Sentado, el aire sube al vértice: arriba se ve una línea fina, la pleura del pulmón, y por fuera de ella nada de trama.',
           cifras: [c('Línea pleural y vértice sin trama', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Tamaño del dibujo', 'ilustrativo', null, '')] },
       grande: supino
         ? { frase: 'Tumbado, el aire se reparte por delante: toda la base izquierda se ve negra y el seno costofrénico baja mucho. Un neumotórax delante puede no verse en la placa y sí en la TC.',
-          cifras: [c('Neumotórax anterior: placa negativa, TC positiva', 'ficha', M27 + 26, 'Marino cap. 28, fig. 28.5, pág. 26'), c('Surco profundo', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1')],
+          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Neumotórax anterior: placa negativa, TC positiva', 'ficha', M27 + 26, 'Marino cap. 28, fig. 28.5, pág. 26'), c('Surco profundo', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1')],
           aviso: 'Un paso más y es a tensión: vigila la tensión arterial y la oxigenación.' }
         : { frase: 'El pulmón se ha separado mucho de la pared: hay una franja ancha sin trama. Mira el mediastino y la cúpula: si se mueven, ya es a tensión.',
           cifras: [c('Línea pleural y franja sin trama', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Tamaño del dibujo', 'ilustrativo', null, '')],

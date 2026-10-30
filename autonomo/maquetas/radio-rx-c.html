@@ -1,0 +1,59 @@
+<!-- PROPUESTA PARA REVISAR (encargo motor-radio, maqueta C «Lee esta placa generada»). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/radio-rx-c.html
+     La placa la dibuja radio-rx/escena.js; el paciente y las preguntas, radio-rx/caso.js. Casos inventados; nada se guarda. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lee esta placa</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<link rel="stylesheet" href="radio-rx/estilo-bc.css">
+</head>
+<body><main>
+<h1>Lee esta placa</h1>
+<p class="rx-contexto"><span id="rx-ctx"></span> <span class="rx-origen" data-o="ilustrativo">caso inventado</span></p>
+<div class="rx-fijo">
+  <svg id="rx-placa" class="rx-placa" viewBox="0 0 390 330" role="img" aria-label="Radiografía de tórax portátil generada" style="max-height:34vh"></svg>
+  <div class="rx-paso" id="rx-pasos" aria-label="Recorrido de la placa"></div>
+</div>
+<div class="rx-fila"><button type="button" id="rx-otro">Otro paciente</button></div>
+
+<section id="rx-recorrido">
+  <h2 id="rx-letra"></h2>
+  <p id="rx-enunciado"></p>
+  <div class="rx-opciones" id="rx-opciones"></div>
+  <div class="rx-caja" id="rx-res" aria-live="polite" hidden>
+    <p><strong id="rx-veredicto"></strong></p>
+    <p id="rx-frase"></p>
+    <div id="rx-sello" role="alert" hidden></div>
+    <ul class="rx-cifras" id="rx-cifras"></ul>
+    <button type="button" class="rx-ver" id="rx-ver">Ver en la ficha</button>
+    <p id="rx-ver-nota" hidden></p>
+  </div>
+  <button type="button" id="rx-siguiente" hidden></button>
+</section>
+
+<section id="rx-cierre" hidden>
+  <h2>Encuentra el error</h2>
+  <p>Otro residente ha informado esta placa. Puede tener 0, 1 o 2 frases malas: toca las que creas malas (o ninguna) y comprueba.</p>
+  <div class="rx-informe" id="rx-informe"></div>
+  <div class="rx-fila"><button type="button" id="rx-comprobar">Comprobar</button><button type="button" id="rx-ver-resumen" hidden>Lo que te llevas</button></div>
+  <div class="rx-caja" id="rx-inf-res" hidden></div>
+</section>
+
+<section id="rx-llevas-caja" hidden>
+  <h2>Lo que te llevas</h2>
+  <p id="rx-puntos"></p>
+  <ul class="rx-cifras" id="rx-llevas"></ul>
+  <button type="button" id="rx-otro2">Otro paciente</button>
+</section>
+
+<p class="rx-nota">Rótulos de origen: <span class="rx-origen" data-o="ficha">ficha</span> sale de Marino o StatPearls, con su página · <span class="rx-origen">fisiología general</span> · <span class="rx-origen" data-o="ilustrativo">ilustrativo</span>. Los pacientes son inventados y se generan solos; nunca salen combinaciones imposibles.</p>
+<h2>Para profundizar</h2>
+<ul class="rx-prof">
+  <li>Cómo leer la placa de un paciente ventilado: Marino, cap. 28, <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=18" target="_blank" rel="noopener">pág. 18</a>.</li>
+  <li>Sonda nasogástrica y su placa: Marino, cap. 49, <a href="../../docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=29" target="_blank" rel="noopener">pág. 29</a>.</li>
+  <li>Vía central: Marino, cap. 2, <a href="../../docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=36" target="_blank" rel="noopener">pág. 36</a>.</li>
+</ul>
+<p class="rx-creditos">Placa dibujada por la app, sin imágenes de ningún atlas ni de pacientes. Marino, <em>The ICU Book</em>, 5.ª ed. (2024).</p>
+</main>
+<script type="module" src="radio-rx/maqueta-c.js"></script>
+</body></html>

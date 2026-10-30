@@ -139,7 +139,7 @@ export function marcado(entrada) {
   if (der && der.velo) q.push(`<g clip-path="url(#rx-cl-d)"><rect width="200" height="${ALTO}" ${W(der.velo)} filter="url(#rx-muy)"/></g>`);
   out.push(`<g id="rx-c6">${q.join('')}</g>`);
   // 7 · mediastino (se desplaza en bloque con el desvío)
-  const ancho = d.perforacion ? 16 : 0, esc = e.patron === 'edema' ? 1.16 : 1;
+  const ancho = d.perforacion ? 30 : 0, esc = e.patron === 'edema' ? 1.16 : 1;
   out.push(`<g id="rx-c7" transform="translate(${dx} 0)" filter="url(#rx-suave)">`
     + `<path d="M${172 - ancho} 40 L${218 + ancho * 0.6} 40 L${222 + ancho * 0.6} 150 L${170 - ancho} 150 Z" ${W(0.5)}/>`
     + `<circle cx="222" cy="110" r="13" ${W(0.5)}/>`
