@@ -259,8 +259,10 @@ export function pintarPregunta(cont, q, o) {
     const vuelven = q.tipo === 'destapa' && repaso?.faltan?.length ? repaso.faltan : null;
     const idx = q.tipo === 'destapa' ? vuelven || q.puntos.map((_, i) => i) : [];
     if (q.tipo === 'test') {
-        fmt.innerHTML = `<p class="${c('para')}">Piénsalo antes de ver las opciones.</p><div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>
-            <div class="${c(K.ops)}" data-hueco="ops"${id('ops')} hidden></div>`;
+        // `sinPensar: true`: sin compuerta «Piénsalo antes»; las opciones salen directamente (el «Decide tú, sin pistas» de un caso)
+        fmt.innerHTML = `${q.sinPensar ? '' : `<p class="${c('para')}">Piénsalo antes de ver las opciones.</p><div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="ops">Ya lo tengo: ver opciones</button></div>`}
+            <div class="${c(K.ops)}" data-hueco="ops"${id('ops')}${q.sinPensar ? '' : ' hidden'}></div>`;
+        if (q.sinPensar) { orden = barajar(q.opciones, q.id); hueco('ops').innerHTML = orden.map((x, k) => `<button class="${c(K.op)}" type="button" data-op="${k}">${x.t}</button>`).join(''); }
     } else if (q.tipo === 'destapa') {
         fmt.innerHTML = `<p class="${c('para')}">${vuelven ? (idx.length === 1 ? 'Vuelve solo lo que te faltó.' : `Vuelven solo los ${idx.length} que te faltaron.`) : `Contesta en la cabeza: ${q.cuantas || `son ${CUANTAS[q.puntos.length]}`}. Luego destápalo.`}</p>
             <div class="${c('fila')}"><button class="${c('b prim')}" type="button" data-accion="destapa">Ya lo tengo: destapar</button></div>
