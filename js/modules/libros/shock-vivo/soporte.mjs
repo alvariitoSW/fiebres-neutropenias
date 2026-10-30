@@ -22,6 +22,7 @@ import { crearMotor, BASE } from '../../eco/motor.mjs';
 import { ESCENARIOS } from '../../eco/escenarios.mjs';
 import { bolo } from '../../eco/maniobras.mjs';
 import { derivar, estadoDe, satDe } from '../../../data/capilar-vivo-data.js';
+import { factoresDiseccion } from './diseccion-farmacos.mjs';
 
 export const LMIN = 1000 / 60;             // mL/s por cada L/min
 
@@ -152,6 +153,10 @@ export const textoGravedad = (k, g) => ESC[k]?.gravedad?.texto?.(g) ?? ESC[k]?.t
 // no supera la presión media de llenado (~7 + la venoconstricción del barorreflejo) si no entra volumen. Con ellos y el
 // tabique que se desplaza hacia el VI (motor.mjs, septoDesplaza; Marino cap. 16, p. 40): PVC 14,1 > PCP 9,7, IC 1,99,
 // PA 94/69, FEVI 52 %, VTD VD/VI 2,6 (medido con autonomo/bloques/b3/herramientas/m0-cifras.mjs)
+// Joaquín a las 08:25 (disección tipo A, b3-paso4 g5): base PA ~168/90, FC ~96, sin shock. HTA, dolor y simpático: resistencias ×1,9 y la
+// consigna del barorreflejo alta (se defiende una PAM de ~118, no de 87), arteria menos distensible (pulso ancho). Todo ilustrativo:
+// la ficha solo dice «HTA en el 50 %» (cap. 20, p. 50); la cifra 168/90 es del plan del profesor
+export const RECETA_DISECCION = { esc: 'normal', rSis: 1.6, consigna: 130, cAo: 0.36, fc: 96, baroR: 0.1, hb: 13.5 };
 export const RECETA_IAM_VD = { esc: 'fallo', g: 0.05, eesVd: 0.15, volemia: 1250, hb: 14 };
 
 export function prepararMotor(rec, segundos = 40) {
@@ -166,6 +171,11 @@ export function prepararMotor(rec, segundos = 40) {
     else if (rec.mando === 'vd') rec = { ...rec, eesVd: eesVdDeG(rec.g), volemia: rec.liquidos ?? 0 };
     else if (rec.mando === 'septo') rec = { ...rec, civ: civDeG(rec.g) };
   }
+  if (rec.consigna) m.p.pamConsigna = rec.consigna;   // (solo Joaquín a las 08:25: la HTA y el dolor suben lo que defiende el barorreflejo)
+  if (rec.cAo) m.p.cAo *= rec.cAo;
+  if (rec.baroFc != null) m.p.baro = { ...m.p.baro, fc: { ...m.p.baro.fc, sube: m.p.baro.fc.sube * rec.baroFc } };
+  if (rec.baroR != null) m.p.baro = { ...m.p.baro, r: { ...m.p.baro.r, sube: m.p.baro.r.sube * rec.baroR, baja: m.p.baro.r.baja * rec.baroR }, vu: { ...m.p.baro.vu, sube: m.p.baro.vu.sube * rec.baroR, baja: m.p.baro.vu.baja * rec.baroR } };   // el reflejo del tono y de las venas, más flojo (HTA crónica: el barorreceptor se resetea; ilustrativo)
+  if (rec.fc) m.p.fc = rec.fc;
   if (rec.viDiast) m.p.vi.b *= rec.viDiast;
   if (rec.rSis) m.p.rSis *= rec.rSis;         // resistencia sistémica de partida (factor; ilustrativo: IC ic-etapa-1, ver RECETA_IC)
   if (rec.volemia) m.s.vven += rec.volemia;
@@ -183,7 +193,7 @@ export function prepararMotor(rec, segundos = 40) {
 // ---------------------------------------------------------------- la envoltura: aparatos + fármacos sobre el motor
 export function crearCabecera(rec, { asentar = 40 } = {}) {
   const m = prepararMotor(rec);
-  const base = { rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
+  const base = { baroEesSube: m.p.baro.ees.sube, cAo: m.p.cAo, baroFcSube: m.p.baro.fc.sube, rSis: m.p.rSis, vuVen: m.p.vuVen, viEes: m.p.vi.ees, vdEes: m.p.vd.ees, fc: m.p.fc };
   const ajuste = { soporte: 'no', impella: 3.5, total: null, ecmo: 4.5, venteo: 'no', balon: 40, razon: 1, na: 0, vaso: false, dobuta: false, cpap: 0 };
   // lo que miran los dibujos: el balón y las bombas, del motor; lo que pide el Impella y las vueltas, de la maqueta
   const ms = m.s;
@@ -208,6 +218,10 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
     if (ajuste.vaso) fR *= 1.25;                                                   // V1: vasoconstricción (p. 15-16)
     let dFc = 0;
     if (ajuste.dobuta) { fEes *= 1.25; dFc += 10; fR *= 0.92; }                    // p. 43 (FC +5-15); vasodilatadora (cap. 22, p. 11)
+    // disección (esmolol, labetalol, nicardipino, nitroprusiato, opioide): solo actúan si hay mando puesto (diseccion-farmacos.mjs)
+    const dz = factoresDiseccion(ajuste); fR *= dz.fR; fVu *= dz.fVu; fEes *= dz.fEes; fFc *= dz.fFc;
+    m.p.baro = { ...m.p.baro, fc: { ...m.p.baro.fc, sube: base.baroFcSube * (1 - dz.bloqueo) }, ees: { ...m.p.baro.ees, sube: base.baroEesSube * (1 - dz.bloqueo) } };   // (copia: el objeto es el mismo para todos los motores)
+    m.p.cAo = base.cAo * dz.fCao;
     m.p.rSis = base.rSis * fR; m.p.vuVen = base.vuVen * fVu;
     m.p.vi.ees = base.viEes * fEes; m.p.vd.ees = base.vdEes * fEes;
     m.p.fc = base.fc * fFc + dFc;
@@ -269,7 +283,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   function ajustar(cambio = {}) {
     Object.assign(ajuste, cambio);
     if ('cpap' in cambio) m.p.pTorax = Math.max(0, +ajuste.cpap || 0);   // CPAP (cmH₂O) = presión de la vía aérea; a la pleura llega fPleura de ella (motor.mjs, pTorax)
-    if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio) aplicarFarmacos();
+    if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio || ['esmolol', 'nicardipino', 'labetalol', 'nitroprusiato', 'opioide'].some((x) => x in cambio)) aplicarFarmacos();
     if (ajuste.soporte !== 'impella') ajuste.total = ajuste.total;   // (el modo total solo actúa con el Impella solo)
     if (cambio.soporte && cambio.soporte !== 'ecmo') ajuste.venteo = 'no';
   }

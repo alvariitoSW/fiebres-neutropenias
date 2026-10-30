@@ -7,7 +7,7 @@
 //     dock:    el dock fijo (o cualquier caja bajo los mandos); ahí sale el aviso ámbar.
 //     cita:    (c) => html del «Ver en la ficha» de la página (su misma función cita()). Opcional: sin ella, el
 //              tope solo enseña su origen.
-//   poner(clave, { nivel, titulo, texto, cita, origen, deshabilita, bajo })
+//   poner(clave, { nivel, tono ('ok': sello verde de objetivo cumplido), titulo, texto, cita, origen, deshabilita, bajo })
 //     nivel: 'aviso' (texto ámbar bajo el mando + una línea en el monitor) | 'sello' (sello en el monitor + apaga lo listado)
 //     titulo: la palabra del sello o del aviso («Contraindicado», «Combinación no fisiológica»); texto: la consecuencia clínica
 //     cita: lo que entiende la función cita() de la página; origen: 'ficha · p. 45' | 'fisiología general' | 'ilustrativo'
@@ -23,6 +23,7 @@ export const TOPE_CSS = `
 .tope-sello[hidden] { display: none; }
 .tope-sello.tope-compacto small { display: none; }
 .tope-sello { flex: none; transform: rotate(-2deg); border: 2px solid var(--accent-red); color: var(--accent-red); background: color-mix(in srgb, var(--bg-main) 88%, transparent); font: 800 .8rem/1.15 var(--sans, system-ui, sans-serif); letter-spacing: .03em; text-transform: uppercase; padding: 4px 8px; border-radius: 8px; text-align: center; width: max-content; max-width: 100%; overflow: hidden; box-sizing: border-box; overflow-wrap: normal; word-break: normal; hyphens: none; pointer-events: auto; }
+.tope-sello.tope-ok { border-color: var(--accent-green); color: var(--accent-green); }
 .tope-sello small, .tope-aviso small { display: block; font: 600 .62rem/1.2 var(--sans, system-ui, sans-serif); letter-spacing: 0; text-transform: none; color: var(--text-main); }
 .tope-sello .cita { display: flex; flex-wrap: wrap; gap: 0 8px; justify-content: center; align-items: baseline; margin: 1px 0 0; }
 .tope-sello .cita a { display: none; }
@@ -71,15 +72,15 @@ export function crearTope({ monitor, dock, cita = null } = {}) {
     for (const sel of t.sels) for (const el of document.querySelectorAll(sel)) if (!t.off.includes(el)) { apagar(el); t.off.push(el); }
   }
   function refrescar() { for (const t of activos.values()) if (t.sels.length) aplicarOff(t); }
-  function poner(clave, { nivel = 'aviso', titulo = '', texto = '', cita: c = null, origen = '', deshabilita = [], bajo = null } = {}) {
+  function poner(clave, { nivel = 'aviso', tono = '', titulo = '', texto = '', cita: c = null, origen = '', deshabilita = [], bajo = null } = {}) {
     quitar(clave);
     const nodos = [], off = [];
     const pie = `${origen ? `<span class="tope-org">${esc(origen)}</span> ` : ''}${c && cita ? cita(c) : ''}`;
     const cuerpo = `${titulo ? `<b>${esc(titulo)}</b> ` : ''}${esc(texto)}`;
-    const lin = document.createElement('span'); lin.dataset.tope = clave; lin.textContent = (nivel === 'sello' ? '⛔ ' : '⚠ ') + (titulo || texto);
+    const lin = document.createElement('span'); lin.dataset.tope = clave; lin.textContent = (nivel === 'sello' ? (tono === 'ok' ? '✔ ' : '⛔ ') : '⚠ ') + (titulo || texto);
     if (nivel === 'sello') {
-      const s = document.createElement('div'); s.className = 'tope-sello'; s.dataset.tope = clave; s.setAttribute('role', 'alert');
-      s.innerHTML = `⛔ ${esc(titulo)}<small>${esc(texto)}</small>${pie ? `<small>${pie}</small>` : ''}`;
+      const s = document.createElement('div'); s.className = 'tope-sello' + (tono === 'ok' ? ' tope-ok' : ''); s.dataset.tope = clave; s.setAttribute('role', 'alert');
+      s.innerHTML = `${tono === 'ok' ? '✔' : '⛔'} ${esc(titulo)}<small>${esc(texto)}</small>${pie ? `<small>${pie}</small>` : ''}`;
       sellos.append(s); nodos.push(s);
     } else {
       const a = document.createElement('div'); a.className = 'tope-aviso'; a.dataset.tope = clave;

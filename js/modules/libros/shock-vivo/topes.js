@@ -3,6 +3,7 @@
 // Cada tope lleva su origen tal como lo da la tabla: ficha (con página), «fisiología general» o «ilustrativo».
 import * as D from '../../../data/shock-vivo-data.js';
 import { eroaDeG, civDeG, eesVdDeG } from './soporte.mjs';
+import { topesDiseccion } from './diseccion.js';
 const { C, TOPES: T } = D;
 const VOL = ['[data-vol]', '[data-sangre]'];
 const mL = (x) => Math.round(x).toLocaleString('es-ES');
@@ -18,7 +19,8 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const llegaAlta = (tipo === 'papilar' || tipo === 'septo' || tipo === 'ic') && dado === 0;
   // con CPAP el aviso de «sin volumen» no vale: la PCP del monitor sube por la presión del tórax, no por el volumen
   const cpapIc = tipo === 'ic' && dado === 0 && (X.ajuste.cpap || 0) > 0;
-  if (cpapIc) { /* sin aviso: ver la guía de ic-cpap */ }
+  // Joaquín a las 08:25 sin volumen dado: la PCP sube con el betabloqueo (menos contractilidad), no con el suero; el aviso de volumen no toca
+  if (cpapIc || (tipo === 'diseccion' && dado === 0)) { /* sin aviso: ver la guía de ic-cpap / diseccion */ }
   else if (D.sobrecarga(R) && llegaAlta) {
     out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : tipo === 'ic' ? 'el VI que falla y no vacía la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
       cita: C.llenado, origen: 'ficha · p. 42 · la PCP de este paciente: modelo', bajo: '#shv-dock-panel .rejilla' };
@@ -97,6 +99,8 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
     cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10 para la CPAP; la frase de mal tolerada y fugas es de la VNI con dos niveles; el tope, por analogía) y p. 85, 88 (la caída del gasto) · las cifras: modelo', deshabilita: ['[data-cpap="15"]'] };
   else if (cp === T.cpap) out.cpap = { nivel: 'aviso', titulo: 'En el tope de la CPAP',
     texto: `CPAP ${cp}: es el máximo habitual (5-10); por encima, la fuente no da cifra para la CPAP (en la VNI con dos niveles desaconseja subir: mal tolerada, fugas).`, cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10) · analogía con la VNI con dos niveles (la frase de mal tolerada y fugas es de esa)', bajo: '#shv-dock-panel [aria-label^="CPAP"]' };
+  // 4c) Joaquín a las 08:25: los topes de sus fármacos (diseccion.js)
+  if (tipo === 'diseccion') { Object.assign(out, topesDiseccion(R, X, horas, horaTxt)); return out; }
   // 5) el reloj: 48 h
   if (tipo === 'posparo') {
     // el reloj es el de la RCE: 72 h («suele resolverse en 72 h», p. 65); pasado, las cifras ya no cambian

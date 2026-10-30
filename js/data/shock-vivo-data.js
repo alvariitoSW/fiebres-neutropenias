@@ -2,6 +2,7 @@
 // pacientes-b3.js). Sin DOM. Toda cifra visible sale del motor (soporte.mjs) o lleva su página; los textos que citan
 // cifras del paciente son funciones de la lectura del momento (R), para que el texto y el monitor digan lo mismo.
 import { textoGravedad, gDePosparo, horasDePosparo, POSPARO_H, POSPARO_G0, RECETA_BENITO, RECETA_FERMIN, RECETA_REMEDIOS, RECETA_IC, IC_G_ETAPA, horasDeIc, eroaDeG, eesVdDeG, civDeG, EROA_TOPE, CIV_TOPE, VD_G_RECETA } from '../modules/libros/shock-vivo/soporte.mjs';
+import { PACIENTE_DISECCION, ESTADO_DISECCION } from './shock-vivo-diseccion.js';
 export { gDePosparo, horasDePosparo, POSPARO_H, IC_G_ETAPA };
 
 // ---------------------------------------------------------------- fuentes y citas («Ver en la ficha» + PDF)
@@ -157,6 +158,7 @@ export const PACIENTES = [
     rec: RECETA_IC, linea: '68 años, 74 kg · postoperatorio · IC izquierda que se descompensa' },
   { k: 'consuelo', nombre: 'Consuelo', chip: 'TEP', tipo: 'tep', peso: 142, edad: 63, sexo: 'mujer', hb: 12.8, fr: 30, t: 37.2, obj: 'marino-14-5',
     rec: { esc: 'tep', g: 0.95, hb: 12.8, espacio: 'embolia' }, linea: '63 años, 142 kg · día 5 de prótesis de cadera · hora 20' },
+  PACIENTE_DISECCION,   // Joaquín a las 08:25 (js/data/shock-vivo-diseccion.js)
 ];
 // La gravedad de cada paciente, con nombre (el mando mueve la «g» del escenario del motor)
 const coma2 = (x, d = 2) => (+x).toFixed(d).replace('.', ',');
@@ -177,6 +179,7 @@ export const GRAVEDAD = {
     nota: 'Orificio entre el VI y el VD: los cm² son del modelo (la ficha, p. 38, solo da la dirección). Modelo: la PCP queda alta (por encima de 18-20), algo por debajo de la de antes de la rotura porque el VI se descarga hacia el VD', cita: C.septo },
   ic: { min: 0, max: 1, paso: 0.01, texto: (g) => [`hora ${horasDeIc(g).toLocaleString('es-ES')} del postoperatorio`, 'IC izquierda: de 0 a 4 h (Fig. 18.3)'],
     nota: 'El reloj de la Fig. 18.3 (p. 6): cada hora lleva su fallo del VI y su resistencia; las cifras son del modelo, la dirección, de la ficha', cita: C.icFig },
+  diseccion: { min: 0, max: 1, paso: 0.01, sinMando: true, texto: () => ['Sin gravedad que mover', 'aquí mandan los fármacos'], nota: 'Joaquín llega con la PA alta: no hay un grado de gravedad. Prueba los fármacos (Marino cap. 20, p. 51-52)', cita: { f: 'mc-diseccion-aortica', id: 'mc-tabla-20-5', sitio: 'Tabla 20.5', p: '51-52' } },
   tapon: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('derrame', g), 'en el saco'], nota: 'Líquido en el pericardio (modelo)', cita: C.obstr },
   tep: { min: 0, max: 1, paso: 0.01, texto: (g) => [textoGravedad('tep', g), 'el émbolo, sobre el VD'], nota: 'Carga del émbolo sobre el VD (modelo)', cita: C.tepRiesgo },
 };
@@ -188,8 +191,8 @@ export const claseClinica = (R) => R.pas < 70 || R.fc > 140 ? 'IV' : R.pas < 90 
 // ---------------------------------------------------------------- soporte: para quién (p. 45, 48)
 export function indicacion(pac, tipoAparato) {
   if (pac.tipo === 'cardio' || pac.tipo === 'papilar' || pac.tipo === 'septo') return { ok: true };   // el soporte, para el cardiogénico refractario (p. 45)
-  if (pac.k === 'joaquin' && tipoAparato === 'balon') return { ok: false, sello: 'Contraindicado', txt: 'Disección aórtica: el balón está contraindicado (p. 45).', cita: C.iabp };
-  if (pac.k === 'joaquin' && tipoAparato === 'impella') return { ok: false, sello: 'Contraindicado', txt: 'Valvulopatía aórtica: el Impella está contraindicado (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50).', cita: C.impellaEf };
+  if (pac.k.startsWith('joaquin') && tipoAparato === 'balon') return { ok: false, sello: 'Contraindicado', txt: 'Disección aórtica: el balón está contraindicado (p. 45).', cita: C.iabp };
+  if (pac.k.startsWith('joaquin') && tipoAparato === 'impella') return { ok: false, sello: 'Contraindicado', txt: 'Valvulopatía aórtica: el Impella está contraindicado (p. 48), y la disección tipo A puede dar insuficiencia aórtica (cap. 20, p. 50).', cita: C.impellaEf };
   return { ok: false, sello: 'No indicado', txt: 'La fuente reserva el soporte mecánico para el shock cardiogénico refractario (p. 45). En este paciente no se pone.', cita: C.mcs };
 }
 
@@ -239,6 +242,7 @@ export function nombreEstado(R, X) {
   if (t === 'papilar') return 'rotura-papilar';
   if (t === 'vd') return R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'iam-vd';
   if (t === 'septo') return R.qpqs >= 1.2 ? 'rotura-septo' : R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'cardio';
+  if (t === 'diseccion') return 'diseccion';
   if (t === 'tapon') return Math.abs(R.pvc - R.pcp) > 3 ? 'sin-shock' : 'tapon';
   if (t === 'tep') return X.infundido.cris >= TOPES.tepMl ? 'tep-bolo' : R.pam >= 65 ? 'tep-intermedio' : 'tep-alto';
   return t;
@@ -359,6 +363,7 @@ export const ESTADOS = {
       { t: (R) => `Esa sangre llega oxigenada: la saturación sube de ${R.satAd} % en la AD a ${R.satAp} % en la AP. El salto de saturación es la huella del cortocircuito.`, s: ['[data-fila="satad"]', '[data-fila="satap"]'], c: C.septo, org: 'el salto: fisiología general · el umbral numérico: la fuente no lo dice · las cifras: modelo' },
       { t: (R) => `El pulmón recibe ese flujo de más: ${coma2(R.qpqs, 1)} veces el de la aorta. La PCP sigue alta, ${R.pcp}${R.pcp > 20 ? ', por encima de 18-20: el pulmón se encharca' : ''} (PAP ${R.paps}/${R.papd}). Modelo: la PCP queda algo por debajo de la de antes de la rotura porque el VI se descarga hacia el VD; esa caída no la dice la fuente.`, s: ['[data-fila="qpqs"]', '[data-fila="pcp"]', '#cor-pulmon'], c: C.septo, org: 'inunda la circulación pulmonar: ficha p. 38 · el umbral 18-20: ficha p. 42 · las cifras y la caída de la PCP: modelo' },
       { t: (R) => `La aorta se queda sin ese flujo: IC ${c1(R.ic)}, PAM ${R.pam}. La FEVI (${R.fevi} %) cuenta lo que el VI expulsa a la aorta y al VD.`, s: ['[data-fila="ic"]', '[data-fila="fevi"]'], c: C.septo, org: 'la FEVI por volúmenes: fisiología general' }] },
+  diseccion: ESTADO_DISECCION,   // js/data/shock-vivo-diseccion.js
   tapon: { tit: 'Taponamiento', frase: (R) => `El líquido del saco no deja llenarse al corazón: PVC ${R.pvc} y PCP ${R.pcp} se igualan. La eco lo separa del fallo del VD.`, org: 'ficha · p. 3; cap. 18, p. 4',
     guia: [{ t: 'La disección tipo A puede propagarse hacia atrás y sangrar al pericardio: taponamiento.', s: ['#cor-saco'], c: C.disec },
       { t: (R) => `El líquido no deja llenarse al corazón: shock obstructivo, con el patrón del cardiogénico (PVC ${R.pvc}, IC ${c1(R.ic)}, IRVS ${R.irvs}).`, s: ['[data-fila="pvc"]', '[data-fila="ic"]'], c: C.t141 },
