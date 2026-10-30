@@ -154,6 +154,7 @@ esta sección.
   3. ¿Empiezo por Cardiología por la fecha de la rotación? (supongo: sí).
 
 ### B-006 · Atlas de eco: los 20 capítulos que faltan · apuntado 2026-10-14
+- **30/10: fase A aprobada** (texto, `atlas-texto`). Aquí queda solo la fase B (figura y estudio con el ecógrafo nuevo).
 - **Lo que dijiste**: (aprobado antes como Objetivo 1; con el método nuevo, lo vuelvo a poner a tu visto bueno).
 - **Cómo lo entiendo**: tipo `visual`, las dos fases por capítulo: traducción completa y auditada; después, estudio
   con el ecógrafo y el motor, y preguntas nuevas. Lista y «hecho» en el tablero (Objetivo 1).
@@ -242,7 +243,7 @@ esta sección.
 - **Lo que NO quiero**: copiar el texto o las imágenes del tuit; tuits sin destino.
 - **Tamaño**: pequeña cada una (≈1-2 M la de PDF; ≈1-2 M la de tuits).
 - **Depende de**: nada. **No es prioritario** (lo dijiste tú): espera a que digas cuándo.
-- **Dudas**: (1) ¿«Visto en Twitter» dentro de la ficha te vale, o lo quieres en un sitio aparte?
+- **30/10, parte 2 aprobada** (`radar-tuits`): «me gustaría que los mirases, si tienen PDF que lo consigas, y lo integrases en la parte de UCI Papers […] no corre prisa». Queda aquí la parte 1 (los PDF de la lista).
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -270,6 +271,8 @@ esta sección.
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | aprobado por ti el 30/10; ya | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
 | `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | **hecha el 30/10, en `main`** (con las 4 de Hacienda): REGLAS §4.15 y las demás | 2026-10-30 | ≈1,3 M, directo a `main` |
 | `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | aprobado por ti el 30/10 («la quiero en la eco») | 2026-10-30 | ≈0,8-1,2 M |
+| `atlas-texto` | **B-006, fase A**: el texto de los 20 capítulos del atlas de eco, uno por sesión; figuras y estudio, con el ecógrafo nuevo | aprobado por ti el 30/10 | 2026-10-30 | ≈20-30 M en el carril 2 |
+| `radar-tuits` | **B-047, parte 2**: los tuits que mandas, con su PDF, a UCI / Papers Tuiter | aprobado por ti el 30/10, sin prisa | 2026-10-30 | ≈1-2 M por tanda |
 | `wiggers-movil` | Arreglo de la Wiggers a 360 px | aprobado por el Consejo el 30/10 (7.ª) | 2026-10-30 | ≈0,3 M |
 | `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` **pasa al 31/10** (el 30/10 el día ya iba en ≈34 M: no se empezó), el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | 30/10: aprobadas A, B y C; elegimos la mezcla C+B primero y A después. A la app: `educacion-app` |
@@ -336,8 +339,6 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 4. ✅ **B-041**: en la eco (30/10), tarea `raiz-aortica`.
 5. **Opcional, sin prisa**:
    - la prueba de 3 días con el caso de Teresa (`autonomo/ideas/educacion-pionera/prueba-3-dias.md`);
-   - abrir en la red del entorno cardiorender.com, litfl.com e intro2echo.com, o descartarlas (siguen cerradas; las
-     demás webs del plan de B-046 ya abren, probado el 30/10);
    - PDF que mejorarían fichas (se buscan antes en abierto, REGLAS §4.13): DanGer Shock 2024, ESC 2024 y ACC/AHA 2022
      de aorta, Devereux 2012, Hickling 2001, Mireles-Cabodevila 2022, Carden 2026, AHA 2020/ERC 2021, SCAI 2015,
      Valdenebro 2021, Leung y Levine 1994, un libro de física de los ultrasonidos (B-028) y el capítulo
