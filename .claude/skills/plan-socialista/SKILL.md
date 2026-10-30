@@ -54,7 +54,8 @@ tablero y el último parte, sin trabajar.
    su agente, modelo, pasos y millones (tabla «Presupuestos vigentes» del tablero; cuenta antes las piezas en el
    código), el total y lo que queda del presupuesto del bloque. Si la tarea es de **2 M o más**, pasa tú mismo `/ahorro presupuesto` (Hacienda, 2-3
    llamadas, sin agentes; en las menores aplicas tú la lista de recortes, sin llamarla): recorta sola lo que no baja la nota ni la fidelidad y deja escrito qué recortó. Trabajas con
-   el presupuesto ya recortado y lo copias al parte. Si la tarea no cabe en lo que queda del bloque, comparece antes de
+   el presupuesto ya recortado y lo copias al parte. Un `arreglo` técnico que haces tú suma 0,2 M por la pasada de
+   jueces y 0,1 M por regla o modelo tocado, con la ruta de cada pieza en el encargo (REGLAS §4.15). Si la tarea no cabe en lo que queda del bloque, comparece antes de
    empezar.
 10. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
@@ -230,6 +231,22 @@ a presupuesto por agente, por qué, y la tabla del tablero actualizada.
 - **Presupuesto por lo que falta** (pasos 8 y 9): la revisión del encargo pega el `grep` de cada estado, lupa y
   escenario; estado 0,5 M solo si su lupa o su tipo ya existen; si no, 1,2 M. Mide antes las cifras del motor con un
   programa corto y da al constructor el objetivo que el motor puede dar.
+
+### La reforma y los ahorros del 30/10/2026 (`reglas-reforma`, aprobados por el usuario)
+
+`autonomo/REGLAS.md` §1.6, §2.1b, §2.6b, §4.15, §5.7 y §7.13; `autonomo/radar/NORTE.md` (G7). En resumen:
+- **Recursos estudiados**: aportan ideas, no son fuente clínica; licencia o permiso anotados antes de traer nada.
+- **Ningún dato de pacientes reales** se guarda; los casos son inventados.
+- **Motores compartidos**: quien toque `eco/motor.mjs` o su contrato pasa las pruebas de la eco y `--modelo shock-vivo`
+  y deja la API antigua funcionando; una pieza de `js/core/` usada por más de 20 fichas, con maqueta, `--ficha` en 3
+  fichas y versión nueva.
+- **Jueces que solo crecen**: sus umbrales no bajan sin el sí del usuario; un cambio de juez, en commit aparte.
+- **Ficha nueva**: abre con el carril de 30 segundos (idea, 2-3 cifras, figura) y debajo el desarrollo.
+- **Enlaces del usuario**: a `autonomo/radar/ENTRADAS.md` en la misma sesión, con su estado.
+- **Gasto tras las piezas**: en un grupo con piezas y Estudiar, `gasto.mjs --clave` al acabar las piezas y antes del
+  Estudiar; si va a pasar del 25 %, comparece ahí.
+- **Presupuestos**: tu sesión de un grupo con piezas y Estudiar, 1,3 M; Hacienda no junta en un encargo piezas con
+  prueba o jueces propios.
 
 ### Llegar al 8,75 a la primera (aprobado por el usuario el 27/10/2026)
 
