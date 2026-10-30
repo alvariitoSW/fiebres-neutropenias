@@ -1,0 +1,101 @@
+<!-- PROPUESTA PARA REVISAR (encargo motor-radio, maqueta A «Placa con capas y mandos»). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/radio-rx-a.html
+     La placa la dibuja radio-rx/escena.js (pieza común de las maquetas A, B y C). Solo tokens de css/variables.css;
+     la placa usa blanco y negro con opacidad (densidad de rayos X). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La placa del paciente de la cama</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<style>
+  :root { color-scheme: dark; }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, -apple-system, "Segoe UI", sans-serif; }
+  main { max-width: 640px; margin: 0 auto; padding: 12px 12px 40px; }
+  h1 { font-size: 19px; margin: 2px 0 4px; }
+  h2 { font-size: 16px; margin: 20px 0 8px; color: var(--accent-yellow); }
+  p { margin: 6px 0; }
+  .rx-idea { color: var(--text-dim); font-size: 14px; }
+  .rx-origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 1px 8px; margin: 2px 4px 0 0; white-space: nowrap; }
+  .rx-origen[data-o="ficha"] { color: var(--accent-green); border-color: var(--accent-green); }
+  .rx-origen[data-o="ilustrativo"] { color: var(--accent-purple); border-color: var(--accent-purple); }
+  .rx-fijo { position: sticky; top: 0; z-index: 5; background: var(--bg-main); margin: 0 -12px; padding: 4px 12px 6px; border-bottom: 1px solid var(--border-color); }
+  #rx-placa { display: block; width: 100%; max-height: 38vh; aspect-ratio: 390 / 330; margin: 0 auto; border-radius: 8px; background: #000; }
+  .rx-carril { display: flex; gap: 6px; overflow-x: auto; padding: 6px 0 4px; scrollbar-width: thin; -webkit-overflow-scrolling: touch; }
+  button { font: inherit; color: var(--text-main); background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 8px; min-height: 44px; padding: 6px 12px; cursor: pointer; }
+  .rx-chip { flex: none; white-space: nowrap; border-radius: 999px; font-size: 14px; }
+  .rx-chip[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); font-weight: 600; }
+  .rx-chip[data-cambiado="true"]::after { content: " ●"; color: var(--accent-yellow); }
+  .rx-chip[data-peligro="true"]::after { content: " ▲"; color: var(--accent-red); }
+  .rx-seg { display: flex; flex-wrap: wrap; gap: 0; border: 1px solid var(--border-color); border-radius: 10px; overflow: hidden; margin: 2px 0; }
+  .rx-seg > button { flex: 1 1 auto; border: 0; border-right: 1px solid var(--border-color); border-radius: 0; font-size: 14px; padding: 6px 8px; }
+  .rx-seg > button:last-child { border-right: 0; }
+  .rx-seg > button[aria-pressed="true"] { background: var(--accent-yellow); color: var(--bg-main); font-weight: 700; }
+  .rx-seg > button[aria-pressed="true"]::before { content: "✓ "; }
+  .rx-seg > button[aria-disabled="true"] { color: var(--text-muted); text-decoration: line-through; }
+  .rx-fila { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0 0; }
+  #rx-senalalo[aria-pressed="true"] { border-color: var(--accent-yellow); color: var(--accent-yellow); }
+  .rx-caja { border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-card); padding: 8px 10px; margin: 8px 0; }
+  #rx-frase { font-size: 15px; margin: 0 0 4px; }
+  #rx-aviso { color: var(--accent-yellow); font-size: 14px; font-weight: 600; }
+  #rx-sello { border: 2px solid var(--accent-red); border-radius: 10px; padding: 8px 10px; margin: 8px 0; color: var(--text-main); box-shadow: var(--glow-red); }
+  #rx-sello strong { color: var(--accent-red); }
+  #rx-sello a, .rx-cifras a, .rx-fig a, .rx-prof a { color: var(--accent-yellow); }
+  .rx-cifras { list-style: none; padding: 0; margin: 6px 0 0; font-size: 14px; }
+  .rx-cifras li { padding: 5px 0; border-top: 1px solid var(--border-color); }
+  .rx-cita { color: var(--text-muted); font-size: 13px; }
+  .rx-ver { min-height: 40px; font-size: 14px; margin-top: 6px; }
+  #rx-ver-nota { font-size: 13px; color: var(--text-dim); }
+  details.rx-fig { border: 1px solid var(--border-color); border-radius: 10px; margin: 8px 0; padding: 6px 10px; background: var(--bg-card); }
+  details.rx-fig summary { cursor: pointer; font-weight: 600; min-height: 32px; }
+  .rx-fig img { display: block; width: 100%; max-width: 420px; height: auto; margin: 6px auto; border-radius: 6px; background: #000; }
+  .rx-fig p { font-size: 13px; color: var(--text-dim); }
+  .rx-nota { font-size: 13px; color: var(--text-muted); }
+  .rx-prof li { margin: 4px 0; font-size: 14px; }
+  .rx-creditos { font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 22px; padding-top: 10px; }
+</style></head>
+<body><main>
+<h1>La placa del paciente de la cama</h1>
+<p class="rx-idea">El mismo paciente, una placa portátil de frente. Pon y quita cosas y mira qué cambia: <strong>dónde se va el aire, dónde el líquido y adónde apunta cada tubo.</strong></p>
+
+<div class="rx-fijo">
+  <svg id="rx-placa" viewBox="0 0 390 330" role="img" aria-label="Radiografía de tórax portátil dibujada"></svg>
+  <div class="rx-carril" id="rx-chips" role="toolbar" aria-label="Qué cambiar en la placa"></div>
+</div>
+<div id="rx-estados"></div>
+<div class="rx-fila">
+  <button type="button" id="rx-senalalo" aria-pressed="false">Señálalo en la placa</button>
+  <button type="button" id="rx-sano">Volver al paciente sano</button>
+</div>
+
+<div id="rx-sello" role="alert" hidden></div>
+<div class="rx-caja" aria-live="polite">
+  <p id="rx-frase"></p>
+  <p id="rx-aviso" hidden></p>
+  <ul class="rx-cifras" id="rx-cifras"></ul>
+  <button type="button" class="rx-ver" id="rx-ver">Ver en la ficha</button>
+  <p id="rx-ver-nota" hidden></p>
+</div>
+
+<details class="rx-fig" id="rx-fig" open hidden>
+  <summary>La placa real (Marino)</summary>
+  <img id="rx-fig-img" alt="" loading="lazy">
+  <p><span id="rx-fig-pie"></span> · <a id="rx-fig-pag" target="_blank" rel="noopener"></a></p>
+</details>
+
+<p class="rx-nota">Rótulos de origen: <span class="rx-origen" data-o="ficha">ficha</span> sale de Marino o StatPearls, con su página · <span class="rx-origen">fisiología general</span> · <span class="rx-origen" data-o="ilustrativo">ilustrativo</span>: el dibujo enseña la idea; el tamaño o la forma no tienen cifra en la fuente.</p>
+<p class="rx-nota">Lados: el neumotórax y la atelectasia van en el pulmón izquierdo; el derrame y la consolidación, en el derecho. La «R» marca la derecha del paciente. Como mucho, 3 cosas del pulmón a la vez.</p>
+
+<h2>Para profundizar</h2>
+<ul class="rx-prof">
+  <li>Por qué la eco ve el neumotórax que la placa no ve, y el deslizamiento pulmonar: Marino, cap. 28, <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=26" target="_blank" rel="noopener">pág. 26</a>.</li>
+  <li>Qué hacer con el líquido pleural (pH, glucosa, Gram): Marino, cap. 29, <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=46" target="_blank" rel="noopener">pág. 46</a>.</li>
+  <li>Edema cardiogénico frente a SDRA: Marino, cap. 24, <a href="../../docs/marino-2024-respiratory-management-caps22-26.pdf#page=36" target="_blank" rel="noopener">págs. 36-38</a>.</li>
+  <li>Hallazgos de la placa en la insuficiencia cardiaca y la atelectasia: <a href="https://www.ncbi.nlm.nih.gov/sites/books/NBK558976/" target="_blank" rel="noopener">StatPearls, Lung Imaging</a>.</li>
+  <li>Cómo comprobar la sonda sin placa (CO₂ espirado, eco): Marino, cap. 49, <a href="../../docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=29" target="_blank" rel="noopener">pág. 29</a>.</li>
+</ul>
+
+<p class="rx-creditos">Placa dibujada por la app con anatomía general: no copia imágenes ni contornos de ningún atlas. Los tamaños de cada lesión y los centímetros del dibujo son ilustrativos salvo donde la cifra lleva «ficha». Figuras reales: Marino, <em>The ICU Book</em>, 5.ª ed. (2024), las mismas que ya usa la app en sus fichas.</p>
+</main>
+<script type="module" src="radio-rx/maqueta-a.js"></script>
+</body></html>
