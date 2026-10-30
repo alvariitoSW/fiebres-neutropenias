@@ -172,9 +172,8 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     ok(r.sellos.some(t => /CPAP por encima de 10/.test(t)), `Ramiro CPAP 15: sello (${r.sellos.join(' | ')})`);
     ok(await p.evaluate(() => document.querySelector('#shv-dock-panel [data-cpap="15"]')?.disabled === true), 'Ramiro CPAP 15: el mando del 15 queda apagado');
     await limpio('Ramiro CPAP 15'); await foto('cpap-15');
-    await abrir('hemo'); await espera(1200); await pest('grav'); await desplegar(); await grav(50); await espera(800); await pest('sop'); r = await S(); const vsH0 = r.vs;   // hemorragia moderada (la grave con CPAP 10 llega a PAM 15: ver la entrega)
-    await clic('#shv-dock-panel [data-cpap="10"]'); await espera(1500); r = await S();
-    ok(r.vs < vsH0 - 3, `hemorragia con CPAP 10: el VS cae (${vsH0} -> ${r.vs}) sin sello`); posible(r, 'hemo CPAP 10'); await limpio('hemo CPAP');
+    await abrir('hemo'); await espera(1200); await pest('sop'); r = await S();   // el mando CPAP solo aparece con Ramiro: en el seco no existe (paciente imposible, REGLAS 1.14)
+    ok(await p.evaluate(() => !document.querySelector('#shv-dock-panel [data-cpap]')), 'Mateo (hemorragia): sin mando CPAP en Soporte'); posible(r, 'hemo sin CPAP'); await limpio('hemo sin CPAP');
 }
 
 // ───────── B. Pacientes × gravedad
