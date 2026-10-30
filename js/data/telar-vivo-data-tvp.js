@@ -35,7 +35,7 @@ export const ESTADO_TVP = { nombre: 'TVP: eco de compresión', clave: 'eco', e: 
 export const GUIA_TVP = [
     { t: 'La mayoría de los émbolos nacen de una <span class="hl">TVP del muslo o la ingle</span>: la sospecha de EP puede empezar por la eco de las venas proximales de la pierna, sin viajar a radiología. Aquí, el corte transversal de la femoral con su arteria al lado.',
         e: { tvp: false, sonda: 0 }, resalta: '#tel-eco-vena', cita: EV('nep-eco-venosa') },
-    { t: 'Se aprieta con la sonda. La vena normal <span class="hl-verde">se colapsa y la luz desaparece</span>; la arteria, de pared gruesa, sigue redonda.',
+    { t: 'Se aprieta con la sonda. La vena normal <span class="hl-verde">se colapsa y la luz desaparece</span>; la arteria sigue redonda, porque no se comprime (cap. 1, p. 16); su pared gruesa es fisiología general.',
         e: { tvp: false, sonda: 100 }, resalta: ['#tel-eco-vena', '#tel-eco-arteria'], cita: [EV('nep-eco-venosa'), COMP], org: 'presión de la sonda: ilustrativo' },
     { t: 'Con trombo la vena <span class="hl-rojo">no se comprime</span>, ni apretando al máximo: una vena incompresible es evidencia de trombosis venosa.',
         e: { tvp: true, sonda: 100 }, resalta: '#tel-eco-vena', cita: EV('nep-eco-venosa'), org: 'presión de la sonda: ilustrativo' },
@@ -54,7 +54,7 @@ export const FRASE_ECO = {
             ? ['Brazo con catéter central: la TVP de subclavia o axilar da EP sintomática en <span class="hl">menos del 10 %</span>, pero se mira el edema del brazo. La eco acierta (S 97 %, E 96 %).', 'nep-tvp-brazo (p. 4)']
             : ['La femoral: la TVP proximal de la pierna es la fuente de la mayoría de las EP.', 'nep-eco-venosa (p. 4)'];
         if (!!n.doppler !== !!v.doppler) return n.doppler
-            ? ['Doppler color: la arteria muestra flujo pulsátil; en la vena, ' + (en.tvp ? A + 'flujo lento o ausente' + Z + ' (' + A + 'trombosis' + Z + ')' : 'flujo presente') + '. Compresión más Doppler es el dúplex.', 'nep-eco-venosa (p. 4)']
+            ? ['Doppler color: la arteria muestra flujo pulsátil (fisiología general); en la vena, ' + (en.tvp ? A + 'flujo lento o ausente' + Z + ' (' + A + 'trombosis' + Z + ')' : 'flujo presente con la sonda suelta') + '. Compresión más Doppler es el dúplex.', 'nep-eco-venosa (p. 4)']
             : ['Sin Doppler: solo la imagen en grises y la compresión.', 'nep-eco-venosa (p. 4)'];
         if (!!n.tvp !== !!v.tvp) return n.tvp
             ? ['Vena con trombo: ocupa la luz. Aprieta y comprueba que ' + A + 'no se aplasta' + Z + '.', 'nep-eco-venosa (p. 4)']
@@ -72,7 +72,7 @@ export function celdasEco(e) {
     return [
         ['Vena', 'eco-vena', d.tvp ? 'no se aplasta' : d.venaColapsa ? 'se aplasta' : 'se cierra', d.tvp ? 'nep-eco-venosa (p. 4)' : 'nep-eco-venosa (p. 4)', d.tvp && d.sonda >= TVP.sondaAviso ? 'alarma' : d.venaColapsa ? 'bien' : ''],
         ['Presión de la sonda', 'eco-sonda', d.sonda + ' %', 'ilustrativo'],
-        d.brazo ? ['EP sintomática (brazo)', 'eco-ep', '<10 %', 'nep-tvp-brazo (p. 4)'] : ['Dúplex S / E', 'eco-dupl', `≥${TVP.dupl.sens} / ≥${TVP.dupl.esp} %`, 'nep-eco-venosa (p. 4)'],
+        d.brazo ? ['EP sintomática (brazo)', 'eco-ep', '<10 %', 'nep-tvp-brazo (p. 4)'] : ['Dúplex S · E', 'eco-dupl', `≥${TVP.dupl.sens}\u00a0% · ≥${TVP.dupl.esp}\u00a0%`, 'nep-eco-venosa (p. 4)'],
     ];
 }
 export const SELLO_TVP = e => {

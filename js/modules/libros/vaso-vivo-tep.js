@@ -3,6 +3,7 @@
 // Fuente: docs/marino-2024-respiratory-management-caps22-26.pdf, PDF p. 8-11. El tamaño del coágulo y su resto tras la
 // lisis son ilustrativos (la ficha no da un %). Rótulos ≥ 10 de cuerpo (a 360 px, ≥ 8 px en pantalla).
 import { svgParticula } from '../../core/particulas.js';
+import { instalarCss } from '../../core/dibujo-iso.js';
 import { arteria, tx, mezcla } from './vaso-vivo-placa.js';
 import { estadoBase } from '../../data/vaso-vivo-data.js';
 import { RELOJ_TEP, PESO_TEP, BASE_TEP, CONTRA, acelMg, lisisTep, heparinaTep, hayContra, pideLisis } from '../../data/vaso-vivo-data-tep.js';
@@ -107,8 +108,19 @@ export function moverTep(dt) {
 }
 
 // Los mandos: se crean una vez en el HTML (vaso-vivo.html, #vso-tep) y solo se repintan
+const CSS_TEP = `
+.vso-raiz .vso-escena.vso-tep-sello { padding-bottom: 118px; }
+.vso-raiz .vso-escena.vso-tep-sello .tope-sellos { bottom: 30px; max-width: 98%; }
+.vso-raiz .vso-chip-origen { position: absolute; left: 6px; top: 57%; z-index: 2; min-height: 30px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--accent-yellow); background: var(--bg-card); color: var(--accent-yellow); font: 700 .78rem/1.1 var(--sans, system-ui, sans-serif); }
+.vso-raiz .vso-chip-origen[hidden] { display: none; }
+`;
 export function pintarMandosTep($, e) {
     const emb = !!e.emb;
+    instalarCss('vso-tep', CSS_TEP);
+    // en el émbolo solo toca la lupa de la «placa» (el resto es de otras escenas); el chip lleva al telar de la pierna
+    document.querySelectorAll('.vso-lupas-fila [data-vso-lupa]').forEach(b => { b.hidden = emb && b.dataset.vsoLupa !== 'placa'; });
+    $('chip-origen').hidden = !emb;
+    $('escena').classList.toggle('vso-tep-sello', emb && (hayContra(e) || e.tto === 'lisis'));
     $('tep-panel').hidden = !emb; $('tratar-sca').hidden = emb;
     if (!emb) return;
     document.querySelectorAll('#vso-m-tto [data-v]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === e.tto)));

@@ -15,7 +15,8 @@ const n1 = v => +v.toFixed(1);
 const CSS = `
 .tel-raiz .tel-eco-mandos { display: grid; gap: 6px; padding: 2px 0 4px; }
 .tel-raiz .tel-eco-mandos[hidden] { display: none; }
-.tel-raiz .tel-escena .tope-sellos { left: 4px; right: auto; transform: none; bottom: 4px; max-width: 46%; align-items: flex-start; }
+.tel-raiz .tel-escena { padding-bottom: 104px; }
+.tel-raiz .tel-escena .tope-sellos { left: 50%; transform: translateX(-50%); bottom: 30px; max-width: 98%; }
 .tel-raiz .tel-eco-sonda { display: grid; grid-template-columns: 1fr auto; gap: 2px 8px; align-items: center; font: 600 .78rem/1.2 var(--tel-sans, system-ui, sans-serif); }
 .tel-raiz .tel-eco-sonda input { grid-column: 1 / -1; width: 100%; min-height: 44px; accent-color: var(--accent-yellow); }
 .tel-raiz .tel-eco-sonda small { font-weight: 400; color: var(--text-muted); }
@@ -66,7 +67,7 @@ export function pintarEco(e) {
     for (const id of ['eco-a-pared', 'eco-a-flujo']) q(id, 'cy', n1(158 + desp * 0.5));
     $('eco-a-flujo').setAttribute('display', d.doppler ? 'inline' : 'none');
     $('eco-t-vena').textContent = d.brazo ? 'vena axilar' : 'vena femoral';
-    $('eco-t-dv').textContent = d.doppler ? (d.tvp ? 'lento o ausente' : 'flujo presente') : '';
+    $('eco-t-dv').textContent = d.doppler ? (d.tvp ? 'lento o ausente' : d.venaColapsa ? 'aplastada: sin luz' : 'flujo presente') : '';
     $('eco-t-da').textContent = d.doppler ? 'pulsátil' : '';
     $('eco-t-aviso').textContent = d.tvp && d.sonda >= TVP.sondaAviso ? 'no se aplasta' : d.venaColapsa ? 'solo la vena cede' : '';
 }
