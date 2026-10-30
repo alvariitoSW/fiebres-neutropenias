@@ -21,7 +21,7 @@ const FRASES = {
     'agua-viva': '#agv-frase', 'acidobase-vivo': '#abv-frase', 'capilar-vivo': '#cpv-frase', 'cateter-vivo': '#ctv-frase',
     'muralla-viva': '#mur-frase', 'telar-vivo': '#tel-frase', 'inmersion-viva': '#inm-frase', 'vaso-vivo': '#vso-frase', 'shock-vivo': '#shv-frase-txt',
     'ritmo-vivo': '#rtv-frase',
-    'receptor-vivo': '#rcv-frase',
+    'receptor-vivo': '#rcv-frase', 'iones-vivos': '#iov-frase',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';
