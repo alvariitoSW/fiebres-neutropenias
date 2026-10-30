@@ -115,7 +115,7 @@ export const MAYEUTICA_CARDIOGENICO_2 = {
         nota: `<b>Las fuentes discrepan.</b> En la misma página: 18-20 mmHg en el texto y 19-20 mmHg en la Tabla 16.2. La calculadora da por buena una cuña de 18-20.` + enFicha(FICHA, 'mc-nota-pcp-fuentes') },
     ],
     profundizar: [
-      { id: 'mc-cs-monitorizacion', titulo: 'Monitorización: el catéter de arteria pulmonar' },
+      { id: 'mc-cs-monitorizacion-txt', titulo: 'Monitorización: el catéter de arteria pulmonar' },
       { id: 'mc-nota-pac-fuentes', titulo: 'Nota de fuentes: catéter de arteria pulmonar (cap. 14 frente a cap. 16)' },
       { id: 'mc-levosimendan', titulo: 'Levosimendán' },
     ],

@@ -172,8 +172,8 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
     ],
     profundizar: [
       { id: 'mc-impella-efectos', titulo: 'Impella: efectos, supervivencia y complicaciones (hemólisis 5-10 %)' },
-      { id: 'mc-mcs-resultados', titulo: 'Resultados: supervivencia del 42 % con VA-ECMO' },
-      { id: 'mc-mcs-seleccion', titulo: 'Selección de dispositivo' },
+      { id: 'mc-mcs-resultados-txt', titulo: 'Resultados: supervivencia del 42 % con VA-ECMO' },
+      { id: 'mc-mcs-seleccion-txt', titulo: 'Selección de dispositivo' },
     ],
   },
 };
