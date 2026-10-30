@@ -299,7 +299,7 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
-### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30 · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
 - **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
   recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
   radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
@@ -337,6 +337,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `motor-radio` | **B-051a · Motor de radiología de estudio** (Rx y TC dibujadas con patologías); primer trozo, informe + 2-3 maquetas | aprobado por ti el 30/10 («haz ahora el B-051a») | 2026-10-30 | ≈3-4 M el primer trozo; B-051b (análisis de imágenes de pacientes) sigue apuntada |
 | `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
 | `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | **hecha (30/10)**: PR #40 en `main` (Consejo 12.ª), 58 recursos con destino, https://claude.ai/artifact/L9ACnf5rSyMPyow9KYLTVM | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
