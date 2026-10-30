@@ -638,3 +638,10 @@ FA). Ahora cada ficha con Mayéutica tiene un tercer botón «Mayéutica» que a
 Estudiar, en modo `modo-mayeutica`, que oculta la lista de pasos): los resultados se comparten con Piensa y al acabar
 ofrece «Sigue en Estudiar → Examínate». Prueba ampliada en `autonomo/pruebas/mayeutica-fichas.mjs`
 (`casoPestanaMayeutica`). Versión 20261028-3.
+
+## Río y mar: caso de Teresa y repaso de días atrás (30/10/2026, `educacion-app` parte 2)
+La opción C de Educación pionera con el error de B dentro del caso (diseño `autonomo/ideas/educacion-pionera/diseno-c.md`).
+Caso 4 (`js/data/agua-viva-caso-teresa.js`): hemorragia clase II; P3 «decide sin pistas» (1,3 L de salino con consecuencia en
+el estuario, Ringer o sangre); cifras del monitor, no de la maqueta. Al abrir la Mayéutica, `pintarDiasAtras` con preguntas de 6
+fichas parecidas leídas de `mayeutica-fichas-v1` (guarda sin `resultado`). Pareja gemela de la prueba de 3 días:
+`mar-cristaloides` frente a `mar-coloides` (`prueba-3-dias.md`). Parte `autonomo/partes/2026-10-30-educacion-app-rio.md`.

@@ -2,9 +2,10 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
+**Último parte revisado:** `2026-10-30-educacion-app-rio.md` (duodécima pasada, 30/10: 2,8 M frente a 2,0 M, +40 %; sin propuesta nueva: «medir tras las piezas» ya está propuesta en la undécima y aquí se repite). Antes: `2026-10-30-b3-paso4-g5.md` (undécima pasada, 30/10: 11,7 M frente a 9,0 M, +30 %; 3 propuestas: medir tras las piezas, Hacienda no junta piezas con prueba, director a 1,3 M). Antes: `2026-10-30-formula-juez.md` (décima pasada, 30/10: ≈0,95 M frente a 0,8 M, +19 %; 1 propuesta: tareas técnicas del director con jueces y ruta en el presupuesto, segunda vez tras `reglas-30-10`). Antes: `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- Continuar al mismo constructor para la pieza 2 y las vueltas: ahorró en `educacion-app` parte 1 (<60 pasos) y encareció en la parte 2 (72 pasos, 2,3 M frente a 1,45 M; cada paso releía ≈200 k). Si se repite: continuar solo por debajo de 60 pasos (ya lo dice R5); vueltas, a un sonnet nuevo.
 - Director por encima de 1 M en cada grupo del paso 4 (g3a 1,1 · g3b 1,3 · g4 1,9, con un reinicio del contenedor): si sigue, subir el presupuesto del director a 1,3 M o partir el grupo en dos sesiones (piezas / Estudiar).
 - Un mando nuevo de un modelo con muchos pacientes da cifras imposibles en los que la ficha no usa (g4: CPAP en Mateo, PAM 15). Si se repite: el mando solo en los pacientes de la ficha.
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
@@ -49,3 +50,6 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-28 | Suite corta para iterar, la entera al entregar | aprobada (28/10, REGLAS §4.6-4.11) |
 | 2026-10-28 | Una cifra mala no se tapa con otro parámetro | aprobada (28/10, REGLAS §4.6-4.11) |
 | 2026-10-28 | Una pieza se presupuesta por lo que falta en el código | propuesta |
+| 2026-10-30 | Medir el gasto tras las piezas, antes del Estudiar | propuesta |
+| 2026-10-30 | Hacienda no junta piezas con prueba propia en un encargo | propuesta |
+| 2026-10-30 | Director del paso 4 a 1,3 M | propuesta |

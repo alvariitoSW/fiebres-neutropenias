@@ -103,4 +103,5 @@ G1 empieza tras la fase 0 (sus fuentes ya están en la app); el resto, según ll
   `f2-*`, `f3-calc-eco`, `f4-*`.
 
 ## Ideas sueltas
-Ninguna por ahora. Las ideas del Radar sin fase se listan aquí con su fecha.
+Ninguna por ahora. Las ideas del Radar sin fase se listan aquí con su fecha. (La puerta de dominio de DeepTutor pasó a
+`educacion-app` como indicador de «ideas firmes»: Consejo del 30/10.)

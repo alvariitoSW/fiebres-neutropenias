@@ -1,0 +1,142 @@
+    <button class="back-btn btn-volver-pif-radio-menu">← VOLVER</button>
+    <div class="diag-header">
+        <h2 style="color: var(--accent-purple); text-shadow: var(--glow-purple);">Placa portátil de UCI</h2>
+        <p>Qué mirar primero en la placa de un paciente con tubos y vías</p>
+    </div>
+
+    <button class="accordion-btn nav-btn" id="btn-pif-radio-repasar" data-quiz-asignatura="Radiología · PIF" data-quiz-elegir data-quiz-bloque="Placa portátil de UCI" style="border-left: 4px solid var(--accent-yellow);">
+        <span>🎯 Repasar (preguntas de repaso)</span>
+        <span style="font-size: 0.8rem; color: var(--accent-yellow);">[ EMPEZAR → ]</span>
+    </button>
+
+    <p class="section-label">Cuaderno de campo</p>
+    <div class="corkboard" id="pif-radio-corkboard">
+        <div class="field-card" data-tab="radio-f1">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,6 v22 M40,28 l-10,12 M40,28 l10,12" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><rect x="14" y="8" width="52" height="42" rx="4" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Lee la placa de dentro afuera</div>
+                    <div class="field-hook">Una placa portátil de UCI está llena de cosas que hemos metido nosotros: ¿por dónde empiezas?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Siempre con la previa al lado, y primero lo que metimos: tubo, vía y sonda.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="radio-f2">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 2</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M40,6 v26 M40,32 l-12,14 M40,32 l12,14" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><circle cx="40" cy="22" r="4" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">¿Punta del tubo?</div>
+                    <div class="field-hook">Cuatro preguntas Sí/No sobre la placa de un intubado: carina, altura, bronquio derecho y distancia.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Entre 3 y 5 cm por encima de la bifurcación traqueal, con la cabeza en posición neutra.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="radio-f3">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 3</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M30,6 v26 q0,8 10,8 h10" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><circle cx="50" cy="40" r="3" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">¿Punta de la vía?</div>
+                    <div class="field-hook">Una vía central bien puesta termina donde la carina marca el camino: ¿la tuya llega?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">A la altura de la carina o algo por encima, en la cava superior.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="radio-f4">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 4</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M36,6 v30 q0,8 8,8 h8" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M16,44 q14,-12 40,0" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">¿Sonda en el estómago?</div>
+                    <div class="field-hook">La sonda que se cuela en el pulmón no avisa en un paciente sedado: ¿cómo lo ves en la placa?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Recta por el mediastino, bisecando la bifurcación, y la punta bajo la cúpula izquierda.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="panel-pif-radio-tabs">
+
+        <div id="radio-f1" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Lee la placa de dentro afuera</h3>
+            <div class="card" id="radio-f1-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> compara <span class="hl-azul">siempre con la placa previa</span> y mira <span class="hl-rojo">primero lo que metimos nosotros</span>: tubo, vía y sonda. Después, pleura y pulmón.</p>
+            </div>
+
+            <div class="article-figure" id="radio-f1-fig">
+                <img src="js/modules/libros/img/mar-fig2-6-punta-carina.jpg" alt="Radiografía de tórax portátil con la punta del catéter venoso central a la altura de la carina" loading="lazy">
+                <div class="article-figure-caption">Catéter venoso central bien colocado: la punta, a la altura de la carina (bifurcación traqueal), justo encima de la unión cava-aurícula. Marino, <em>The ICU Book</em>, fig. 2.6, <a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=36" target="_blank" rel="noopener">pág. 36</a>.</div>
+            </div>
+            <p class="section-label" style="margin-top:16px;">El orden de lectura de esta app</p>
+            <p class="fuente-ficha" id="radio-f1-nota">Es el orden de lectura de esta app, un guion propio: no lo propone ninguna de las fuentes. Cada paso lleva a la ficha donde la fuente explica ese punto.</p>
+            <div class="algo-flow" id="radio-f1-pasos">
+            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>Tubo endotraqueal</strong>: ¿dónde está la punta?<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="pifRadio" data-view="placa" data-panel="panel-pif-radio-tabs" data-tab="radio-f2">Tarjeta</button> <button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-vias-artificiales" data-resaltar="#neumo-et-altura">Ficha</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>Vía central</strong>: ¿llega a la carina?<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="pifRadio" data-view="placa" data-panel="panel-pif-radio-tabs" data-tab="radio-f3">Tarjeta</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cvc-complicaciones" data-resaltar="#mar-punta-rx">Ficha</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Sonda nasogástrica</strong>: ¿recta y bajo la cúpula izquierda?<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="pifRadio" data-view="placa" data-panel="panel-pif-radio-tabs" data-tab="radio-f4">Tarjeta</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNutricion" data-panel="panel-marino-nutri-tabs" data-tab="mu-pauta-enteral" data-resaltar="#mu-sonda-rx">Ficha</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text"><strong>Pleura</strong>: neumotórax tras el pinchazo y tubo torácico<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cvc-complicaciones" data-resaltar="#mar-neumo-rx">Neumotórax</button> <button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-cuidado-barotrauma">Tubo torácico</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">5</span><div class="algo-text"><strong>Pulmón</strong>: el patrón, al final<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-sdra-diagnostico">SDRA: diagnóstico</button></div></div></div>
+            </div>
+        </div>
+
+        <div id="radio-f2" class="tab-content">
+            <h3 style="color: var(--accent-purple);">¿Punta del tubo?</h3>
+            <div class="card" id="radio-f2-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> la punta del tubo debe estar <span class="hl-verde">3 a 5 cm por encima de la bifurcación traqueal</span>, con la cabeza en posición neutra. Responde Sí o No según lo que ves en la placa.</p>
+            </div>
+
+            <p class="fuente-ficha">Marino, <em>The ICU Book</em>, cap. 28 (<a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=18" target="_blank" rel="noopener">pág. 18</a>), tal como está en la ficha de Vías artificiales.</p>
+            <div class="card" id="radio-tubo-wizard" style="padding:14px 16px;">
+                <div id="radio-tubo-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-tubo-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-tubo-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-tubo-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+        </div>
+
+        <div id="radio-f3" class="tab-content">
+            <h3 style="color: var(--accent-purple);">¿Punta de la vía?</h3>
+            <div class="card" id="radio-f3-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> la punta de una vía yugular o subclavia va <span class="hl-verde">en la cava superior, a la altura de la carina o algo por encima</span>. Responde Sí o No según lo que ves en la placa.</p>
+            </div>
+
+            <p class="fuente-ficha">Marino, <em>The ICU Book</em>, cap. 2 (<a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=36" target="_blank" rel="noopener">pág. 36</a>), tal como está en la ficha de la vía central.</p>
+            <div class="card" id="radio-via-wizard" style="padding:14px 16px;">
+                <div id="radio-via-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-via-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-via-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-via-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+        </div>
+
+        <div id="radio-f4" class="tab-content">
+            <h3 style="color: var(--accent-purple);">¿Sonda en el estómago?</h3>
+            <div class="card" id="radio-f4-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> la sonda que entra en el pulmón <span class="hl-rojo">no da señales en un paciente sedado</span>: la placa decide, y hasta verla no se alimenta. Responde Sí o No según lo que ves.</p>
+            </div>
+
+            <p class="fuente-ficha">Marino, <em>The ICU Book</em>, cap. 49 (<a class="biblio-link" href="docs/marino-2024-nutricion-endocrino-caps48-51.pdf#page=27" target="_blank" rel="noopener">pág. 27</a>), tal como está en la ficha de alimentación enteral.</p>
+            <div class="card" id="radio-sonda-wizard" style="padding:14px 16px;">
+                <div id="radio-sonda-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-sonda-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-sonda-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-sonda-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+        </div>
+    </div>

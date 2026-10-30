@@ -123,3 +123,13 @@ Formato: `AAAA-MM-DD · hecho|descartado · qué · PR o motivo`
   - Capilar y oxígeno, y catéter vivo, en Libros → Marino → Modelos vivos y desde las fichas.
   - El motor del corazón lee Guyton, la elevación de piernas, el bolo, el catéter de AP y la termodilución.
   - Auditados con el PDF: 9 graves corregidos (ninguno de dosis).
+
+- 2026-10-30 · **Recordatorio cerrado por el usuario** («sí a las 3»):
+  - `tee-inversa`: cerrada. El paquete C (segmentos de la mitral y cúspides aórticas) ya estaba en `eco-mega` parada 2;
+    A (colores y rótulos al tocar, viaje entre vistas) y B (vistas de ETE con reto) pasan a `mv-eco`, la obra de la
+    eco con la opción A de la reforma.
+  - Panel de subida (`backend/`, `admin/`): **descartado (2026-10-30)**: pedía una clave de pago de la API (~8 $ por
+    PDF) y un Worker de Cloudflare; los PDF ya llegan por las sesiones. El código se queda donde está, sin encender.
+  - Velocidad del plan socialista (propuesta del 14/10: constructores a la vez, pruebas largas al final, jueces desde
+    la 1.ª vuelta): **cerrada (2026-10-30)**: ya se hace con REGLAS §4.8 y §4.11.
+  - Di Mario 2005: **descartado (2026-10-30)**: «no voy a subir un artículo de hace 21 años».

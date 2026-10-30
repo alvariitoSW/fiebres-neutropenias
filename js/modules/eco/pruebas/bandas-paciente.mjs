@@ -2,6 +2,8 @@
 // Datos puros: por forma y punto, cada comprobación = { medida, min, max, fuente, diagnostico?, nota? }.
 //   · Solo las celdas con cifra de libro y página exigen. Lo inferido o de fisiología general va con
 //     `diagnostico: true`: se imprime, no falla.
+//   · Una celda `diagnostico` sí falla si su cifra queda fuera de TODOS los rangos de la guía (RANGOS_GUIA, abajo;
+//     regla aprobada por el usuario el 30/10/2026: en el TEP E/e′ 1,8 pasaba por ser solo diagnóstico).
 //   · «Hueco» (buscado en los 4 PDF y sin cifra): solo el mínimo E>0, A>0, S>0, D>0.
 //   · VD/VI en volumen no se juzga (las fuentes dan diámetro o área, no volumen). Edad: unión 20-60 años.
 // Medidas (de medirForma): E, A (cm/s) · ea · dt (ms) · eSep, eLat, eAvg (cm/s) · eE (E/e′ medio) · S, D, Ar (cm/s) ·
@@ -63,6 +65,9 @@ export const BANDAS = {
 };
 // Suelos duros de todas las formas, solo SIN fusión E-A (con fusión no se mide E/A ni E/e′: Nagueh 2025 p.547 (11), T7 p.557 (21))
 const SUELOS = [c('eE', 4, INF, N(551) + ' (15) T5', { sinFusion: true }), c('ea', 0.5, INF, N(551) + ' (15), 60-80 años', { sinFusion: true })];
+// Rangos de la guía (todos sus rangos juntos, normal y patológicos): lo que cae fuera no es un paciente de la guía,
+// tampoco en una celda `diagnostico`. Solo medidas con borde de libro: E/e′ no baja de 4 ni E/A de 0,5 en ningún rango.
+export const RANGOS_GUIA = Object.fromEntries(SUELOS.map(s => [s.medida, { min: s.min, max: s.max, fuente: s.fuente }]));
 for (const k of Object.keys(BANDAS)) BANDAS[k] = [...BANDAS[k], ...SUELOS];
 export const HUECO_MINIMOS = HUECO;
 export const UNIDADES = { E: 'cm/s', A: 'cm/s', ea: '', dt: 'ms', eSep: 'cm/s', eLat: 'cm/s', eAvg: 'cm/s', eE: '', S: 'cm/s', D: 'cm/s', Ar: 'cm/s', sd: '', bombaAI: '%', tapse: 'mm', pcp: 'mmHg', paps: 'mmHg', feVd: '%', tapsePaps: 'mm/mmHg', pvc: 'mmHg' };

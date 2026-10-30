@@ -215,6 +215,22 @@ encargos de constructor con archivo y función exactos; archivos de ≤700 líne
 programas de prueba se guardan en `autonomo/bloques/<bN>/herramientas/` y se reutilizan. En el parte: gasto frente
 a presupuesto por agente, por qué, y la tabla del tablero actualizada.
 
+### Reglas y ahorros del 30/10/2026 (`reglas-30-10`, aprobados por el usuario)
+
+`autonomo/REGLAS.md` §4.14. En resumen:
+- **Web ajena**: antes de lanzar la ingeniería inversa, prueba tú que se abren la página y el dominio de cada `<iframe>`.
+- **Jueces**: J1 de la eco falla si una celda `diagnostico` queda fuera de todos los rangos de la guía; `version.mjs`
+  falla si hay marcas de conflicto de git.
+- **Mando nuevo** en un modelo con muchos pacientes: solo en los que usa la ficha, salvo que se prueben sus topes en todos.
+- **Cifras de los casos**: del monitor de la app (`g4-app-cifras.mjs`), nunca del programa del motor; dilo en el encargo.
+- **Un estado nuevo de un modelo vivo por encargo**: «estado nuevo con barrido», sonnet 30 pasos / 0,7 M; la prueba
+  larga, al final del último.
+- **Pieza de motor**: antes de encargar su interfaz, un constructor sonnet de ≤10 pasos comprueba la dirección de la
+  cifra frente a la fuente; si falla, el encargo es el motor.
+- **Presupuesto por lo que falta** (pasos 8 y 9): la revisión del encargo pega el `grep` de cada estado, lupa y
+  escenario; estado 0,5 M solo si su lupa o su tipo ya existen; si no, 1,2 M. Mide antes las cifras del motor con un
+  programa corto y da al constructor el objetivo que el motor puede dar.
+
 ### Llegar al 8,75 a la primera (aprobado por el usuario el 27/10/2026)
 
 `autonomo/REGLAS.md` §4.8 (R1-R9 de `notas-meta`). En resumen: el constructor pasa la prueba del móvil antes de

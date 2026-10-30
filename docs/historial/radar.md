@@ -139,3 +139,10 @@ Tarea `radar` (B-012), aprobada el 25/10 («estoy de acuerdo con todo»). Solo o
   Tamura 2014. Su modelo pone ↓ST en aVR en el tronco; Tamura (Yamaji) da ↑ST en el 88 %: no copiar ese detalle.
 - Sin respuesta aún: three.js (3D), repaso espaciado (4.ª excepción de `localStorage`) y el mensaje a Cliff Reid
   pidiendo permiso para usar su material.
+
+## Atlas of Physics (B-042, 30/10/2026)
+Ingeniería inversa para Educación de https://atlas-of-physics.vercel.app/ (libro de física AP con escenas 3D, MIT).
+Su idea: todo número sale de un modelo único y se ve al tocar la pieza («desglose»), con curva y punto vivo, notas
+«Compare» entre capítulos con la misma ecuación y una hoja de ecuaciones enlazada a cada página. Seis propuestas sobre
+nuestra `formula-comun`; espera la elección del usuario. Notas en `autonomo/ideas/ingenieria-inversa/atlas-of-physics.md`,
+parte `autonomo/partes/2026-10-30-atlas-of-physics.md`. Las figuras 3D no se vieron (`cdn.jsdelivr.net` bloqueado).

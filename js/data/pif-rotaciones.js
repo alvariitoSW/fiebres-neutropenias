@@ -49,7 +49,8 @@ export const rotacionesPif = {
         {
             id: 'radio-torax', nombre: 'Radiología — sección de tórax', periodo: 'Septiembre 2026',
             inicio: '2026-09-01', fin: '2026-09-30',
-            construido: false,
+            construido: true,
+            destino: { botonId: 'btn-pif-radio' },
             objetivos: [
                 'Semiología de la Rx de tórax',
                 'Patrones radiológicos',

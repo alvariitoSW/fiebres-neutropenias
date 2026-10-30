@@ -15,7 +15,9 @@ import { cargarMotion } from '../../core/motion.js';
 import { verFrase as verFraseComun } from '../../core/frase-vista.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { iconoParticula } from '../../core/particulas.js';
-import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
+import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun, crearGuardado, elegirDiasAtras, pintarDiasAtras, hoyLocal } from '../../core/mayeutica-motor.js';
+import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
+import { MAYEUTICA_B3 } from '../../data/mayeutica/b3.js';
 import { enlacesFuente, origenEnlazado, citaExacta, hrefPdf } from '../../core/citas.js';
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import {
@@ -286,7 +288,7 @@ function setModo(m) {
     alTocar = null; anillo(null); setOcultos([]);
     medir();
     if (m === 'conceptos') Estudio.concepto(Estudio.c);
-    if (m === 'preguntas') Mayeutica.entrar();
+    if (m === 'preguntas') entrarMayeutica();
     if (m === 'explorar') decir(...fraseDe(estado, estado));
     if (REDUCIR) pintarUnaVez(); else arrancar();
     subir();
@@ -383,29 +385,34 @@ const Estudio = {
 
 /* ---------- Mayéutica: el motor común con los enganches del estuario ---------- */
 // Aciertos y fallos en localStorage con su clave de siempre (como el quiz: solo en este dispositivo).
+let salinoDeTeresa = false;   // ¿eligió el salino en el paso 3 de Teresa? (su historia sigue sobre el salino)
+const enganchesPregunta = {
+    alEmpezar: ponerModelo,
+    // Elegir una opción con consecuencia: el modelo pasa a ese estado; en el paso 3 de Teresa (el salino) se
+    // recuerda para que los pasos siguientes sigan sobre el salino.
+    alConsecuencia: (c, q) => { if (q.id === 'w4-3') salinoDeTeresa = true; ponerModelo({ ...q, estado: c.estado, mirar: c.mirar || q.mirar }); },
+    enlazar: enlazarOrigenes,
+    antes: q => q.acidobase ? enlaceAcidobase(q.acidobase) : '',
+    verEnTexto: q => verEnTexto(q.fuente),
+    alCerrar: q => { if (q.despues) aplicar(estadoDe(q.despues)); setOcultos([]); },
+    alSalir: () => { anillo(null); alTocar = null; setOcultos([]); },
+    tocar: {
+        mandoHTML,
+        alMostrar: (q, cont) => {
+            anillo(q.tocar.mirar || null);
+            alTocar = q.tocar.mandos.includes('compartimento') ? z => { if (!z) return; cambiar(e => { e.tocado = z; }, { frase: false }); marcarTocado(cont); anillo(z); } : null;
+        },
+        comprobar: q => q.tocar.comprobar(estado),
+        ponerBueno: q => { aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), {}); if (q.tocar.bueno.tocado) anillo(q.tocar.bueno.tocado); },
+        alComprobar: () => { setOcultos([]); alTocar = null; },
+        accion: accionMando,
+    },
+};
 const Mayeutica = crearMayeuticaModelo({
     p: 'agv', cont: () => $('preg'), clave: 'agua-viva-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
     subir, reiniciar: () => { aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar(); },
     volverPor: 'Río y mar',
-    pregunta: {
-        alEmpezar: ponerModelo,
-        enlazar: enlazarOrigenes,
-        antes: q => q.acidobase ? enlaceAcidobase(q.acidobase) : '',
-        verEnTexto: q => verEnTexto(q.fuente),
-        alCerrar: q => { if (q.despues) aplicar(estadoDe(q.despues)); setOcultos([]); },
-        alSalir: () => { anillo(null); alTocar = null; setOcultos([]); },
-        tocar: {
-            mandoHTML,
-            alMostrar: (q, cont) => {
-                anillo(q.tocar.mirar || null);
-                alTocar = q.tocar.mandos.includes('compartimento') ? z => { if (!z) return; cambiar(e => { e.tocado = z; }, { frase: false }); marcarTocado(cont); anillo(z); } : null;
-            },
-            comprobar: q => q.tocar.comprobar(estado),
-            ponerBueno: q => { aplicar(estadoDe(Object.assign({}, q.estado, q.tocar.bueno)), {}); if (q.tocar.bueno.tocado) anillo(q.tocar.bueno.tocado); },
-            alComprobar: () => { setOcultos([]); alTocar = null; },
-            accion: accionMando,
-        },
-    },
+    pregunta: enganchesPregunta,
     textos: {
         ruta: () => `<span><b>1.</b> Recorrido: ${PREGUNTAS.length} preguntas, en el orden de las fichas; varias se responden tocando el estuario.</span>
             <span><b>2.</b> Otra vez lo que fallaste o sabías a medias, solo eso.</span>
@@ -416,9 +423,43 @@ const Mayeutica = crearMayeuticaModelo({
         casos: 'El estuario se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.',
         abrirPaciente: 'Abrir el modelo en el estado del paciente',
     },
-    preguntaDePaso: paso => ({ estado: paso.estado, lupa: paso.lupa, mirar: paso.mirar, acidobase: paso.acidobase }),
+    preguntaDePaso: paso => {
+        if (paso.pregunta.id === 'w4-3') salinoDeTeresa = false;
+        return { estado: salinoDeTeresa && paso.estadoSalino ? paso.estadoSalino : paso.estado, lupa: paso.lupa, mirar: paso.mirar, acidobase: paso.acidobase };
+    },
     abrirPaciente: C => { setModo('explorar'); ponerEnEstado(C.volver); },
 });
+
+/* ---------- Al abrir la Mayéutica: lo de días atrás (repaso espaciado) ---------- */
+// Preguntas de las fichas de conceptos parecidos que el usuario ya contestó (lo guardan las fichas, en
+// 'mayeutica-fichas-v1'). Solo si la Mayéutica empieza desde su inicio y la sesión aún no lo enseñó hoy.
+const FICHAS_PARECIDAS = ['mar-cristaloides', 'mar-coloides', 'mar-retorno-venoso', 'mar-respuesta-fluidos', 'mc-hemorragico-clasificacion', 'mc-hemorragico-fluidos'];
+let diasAtrasEnsenado = null;   // el día (local) en que esta sesión lo enseñó
+function itemsDiasAtras() {
+    const g = crearGuardado('mayeutica-fichas-v1').leer(), banco = { ...MAYEUTICA_B1, ...MAYEUTICA_B3 };
+    const items = FICHAS_PARECIDAS.flatMap(f => [...(banco[f]?.guia || []), ...(banco[f]?.examen || [])].filter(q => g[q.id]).map(q => ({ q, ficha: f, a: g[q.id] })));
+    return elegirDiasAtras(items, { hoy: hoyLocal(), max: 5 });
+}
+function entrarMayeutica() {
+    const hoy = hoyLocal();
+    if (!['caso', 'recorrido', 'repaso'].includes(Mayeutica.fase) && diasAtrasEnsenado !== hoy) {
+        const items = itemsDiasAtras();
+        if (items.length) {
+            diasAtrasEnsenado = hoy;
+            aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar();
+            pintarDock(items.map(() => ''), 'Mayéutica', 'repaso de días atrás');
+            const ficha = crearGuardado('mayeutica-fichas-v1');
+            pintarDiasAtras($('preg'), items, {
+                p: 'agv', hoy, pregunta: () => ({ ids: true, ...enganchesPregunta }),
+                // sin `resultado`: no pisa el del recorrido de la ficha
+                guardar: (q, r) => ficha.guardar(q.id, r.ok, { fallo: r.ok ? undefined : { faltan: r.faltan } }),
+                alFinal: () => Mayeutica.entrar(),
+            });
+            return;
+        }
+    }
+    Mayeutica.entrar();
+}
 
 /* ============================================================
    Abrir en un estado (los botones de las fichas, los menús y el buscador)

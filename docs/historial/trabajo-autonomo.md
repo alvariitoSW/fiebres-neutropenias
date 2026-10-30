@@ -446,3 +446,36 @@ escribe, y balance al cerrar bloque), Transportes (`/bitacora`: rumbo con el gas
 va a pasarse más de un 25 %. En `REGLAS.md` §4.10 y en las tres skills. El mismo día aprobó las 24 propuestas de regla y
 de ahorro pendientes (§4.11). Primera prueba: grupo 2 de `b3-paso4`, 29/10.
 
+
+## Reglas y ahorros del 30/10/2026 (`reglas-30-10`)
+
+El usuario aprobó el 30/10 cuatro reglas (de los partes de `eco-reforma` y `movil-existente`) y cuatro ahorros de
+Hacienda (de `b3-paso4`). Van en `REGLAS.md` §4.14 y en quien las aplica: `ingenieria-reversa` (probar el `<iframe>`),
+`plan-socialista` (resumen y presupuestos), `constructor` (mando nuevo, cifras del monitor, dirección del motor) y el
+tablero («Presupuestos vigentes»). Dos con prueba: J1 de la eco falla si una celda `diagnostico` queda fuera de
+`RANGOS_GUIA` (los suelos de Nagueh 2025 p.551: E/e′ ≥4, E/A ≥0,5); el TEP por defecto (E/e′ 1,8) queda en
+`PENDIENTES` para `mv-eco`. `version.mjs` falla con marcas de conflicto (`git grep`), con prueba trampa
+`autonomo/pruebas/version-conflicto-trampa.mjs`.
+
+## 30/10/2026 · graft dejaba de borrar la orden de `.gitignore` y `.ignore`
+
+Al arrancar cada sesión, graft reescribía `.claude/settings.json` y borraba la orden del proyecto que marca
+`.gitignore` y `.ignore` con `skip-worktree`: graft da por suyo todo grupo de órdenes que contenga una suya
+(`isGraftEntry` en `@nanonets/graft`, `hosts/config-write.js`), y la del proyecto iba en el mismo grupo de
+`SessionStart`. Arreglo, con permiso del usuario («arréglalo tú»): la orden va en un grupo propio, que graft conserva
+(comprobado con su propia función `mergeGraftSettings`). Así deja de salir el aviso de cambios sin subir.
+
+## Juez de la fórmula (`formula-juez`, 30/10/2026, B-042)
+
+- `autonomo/jueces-formula.mjs`: en los 5 modelos que pintan el renglón «fórmula → tus números → resultado»
+  (`js/core/formula.js`: capilar, río y mar, glomérulo en ERC, filtro en TRR y Doppler del TSVI del laboratorio de
+  eco) mueve cada mando (mínimo, medio, máximo; primera y última opción; casillas y botones de encendido), lee los
+  renglones pintados (`.fml-n`, `.fml-s b`), rehace la cuenta con los números tal como se ven (coma decimal, punto de
+  miles, «÷», aclaraciones entre paréntesis fuera) y falla si no da el resultado con sus mismos decimales (§7.10).
+  Un paso intermedio negativo con «negativa» acepta el 0 (glomérulo). Se pasa con `jueces.mjs --formula` (y con
+  `--forma`, o `--modelo capilar-vivo|agua-viva`). Trampa: `autonomo/pruebas/formula-juez-trampa.mjs` (suma 1 a la
+  última cifra de cada resultado pintado → ❌; y 13 cuentas de ejemplo sin navegador).
+- Lo que cazó a la primera, arreglado en la app: la DO₂ del capilar escribía el gasto ya redondeado a 1 decimal
+  (`R.gc`) y la cuenta a mano se iba hasta 7 mL/min (843 frente a 850); ahora escribe `D.gc` con 1, 2 o 3 decimales,
+  los justos para que cuadre. El GC del Doppler del eco fallaba por 0,1 L/min en 3 de 29 lecturas: ITV, área y FC
+  llevan un decimal más cuando hace falta.
