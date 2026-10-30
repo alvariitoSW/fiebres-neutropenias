@@ -70,10 +70,10 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
 
   <section>
     <h2>Las tres maquetas</h2>
-    <p class="pie">Ábrelas en el móvil. Notas del profesor (meta 8,75 en cada una): {{NOTAS}}</p>
+    <p class="pie">Ábrelas en el móvil. Notas del profesor (meta 8,75 en cada una): A 8,8 · B 9,0 · C 8,8 (tras una vuelta de arreglos: A y C partían de 8,3 y 8,1).</p>
 
     <article class="maq">
-      <div class="maq-head"><h3>A · Placa con capas y mandos</h3><span class="nota {{CA}}">{{A}}</span></div>
+      <div class="maq-head"><h3>A · Placa con capas y mandos</h3><span class="nota ok">8,8</span></div>
       <img src="img/a.png" alt="Maqueta A: placa portátil dibujada con neumotórax a tensión izquierdo y su frase explicativa" loading="lazy">
       <p><strong>Qué cambia en la imagen.</strong> Un carril de 9 mandos: postura, neumotórax, derrame, patrón, consolidación, atelectasia, tubo, vía y sonda. Cada estado pinta su capa, su cifra con fuente y una frase que explica por qué ahí es blanco o negro. «Señálalo» colorea lo que buscas.</p>
       <ul class="pros">
@@ -84,7 +84,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
     </article>
 
     <article class="maq">
-      <div class="maq-head"><h3>B · Por qué se ve así: corte y rayo</h3><span class="nota {{CB}}">{{B}}</span></div>
+      <div class="maq-head"><h3>B · Por qué se ve así: corte y rayo</h3><span class="nota ok">9,0</span></div>
       <img src="img/b.png" alt="Maqueta B: placa arriba y corte axial del tórax en supino con aire anterior y el rayo de delante atrás" loading="lazy">
       <p><strong>Por qué la placa engaña.</strong> Debajo de la placa, un corte del tórax con el foco delante y el chasis detrás. Al tumbar al paciente, el aire sube delante de las bases y el líquido se va atrás: el rayo los suma al pulmón y no queda borde que ver. Por eso la placa portátil no ve hasta el 50 % de los neumotórax del crítico (Marino, cap. 2, pág. 34).</p>
       <ul class="pros">
@@ -95,7 +95,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
     </article>
 
     <article class="maq">
-      <div class="maq-head"><h3>C · Lee esta placa generada</h3><span class="nota {{CC}}">{{C}}</span></div>
+      <div class="maq-head"><h3>C · Lee esta placa generada</h3><span class="nota ok">8,8</span></div>
       <img src="img/c.png" alt="Maqueta C: caso inventado con la placa generada y la pregunta de la letra B del recorrido A-E" loading="lazy">
       <p><strong>Practicar.</strong> «Otro paciente» genera una placa al azar, siempre posible. Recorres A-B-C-D-E: tocas la zona y eliges el hallazgo; las opciones falsas son la patología hermana (atelectasia frente a consolidación, edema frente a SDRA). Cierra con «Encuentra el error» en el informe de otro residente.</p>
       <ul class="pros">
@@ -156,7 +156,7 @@ td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
     <ul class="pros">
       <li>Las tres maquetas se abren a 390 y 360 px sin desbordar y sin errores; todas las figuras reales cargan.</li>
       <li>Pruebas automáticas: los 62 estados de la placa sacan frase y fuente; 5.000 pacientes generados, ninguno imposible y la tensión siempre con desvío.</li>
-      <li>Auditor contra los PDF: ninguna cifra inventada ni mal copiada. {{AUDIT}}</li>
+      <li>Auditor contra los PDF: ninguna cifra inventada ni mal copiada. Se corrigieron 2 fallos: los umbrales del derrame son del derrame paraneumónico y ahora lo dicen, y dos figuras que no casaban con su estado llevan «Referencia: posición correcta».</li>
       <li>Lo dibujado sin cifra en la fuente (tamaños, desvío por derrame, veladura en supino, suma de densidades) va rotulado «ilustrativo».</li>
     </ul>
   </section>
