@@ -1,0 +1,67 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 4, maqueta C). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b4-iones-c.html
+     «Iones vivos · A pie de cama»: el monitor (ECG del ritmo vivo), la gasometría con iones y las bombas (ClK, MgSO4, calcio,
+     insulina) con reloj; una lupa abre la célula. Fuente: Marino, caps. 36-38 (docs/marino-2024-electrolitos-caps35-38.pdf).
+     Los topes mandan: cada mando tiene su límite con origen y, al pasarlo, un sello con la consecuencia. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iones vivos · a pie de cama · para revisar</title>
+<link rel="stylesheet" href="b4-iones-c/base.css">
+</head>
+<body>
+<main>
+  <h1>Iones vivos · a pie de cama</h1>
+  <p class="aviso">Para revisar: aún no está en la app. Cifras de cada mando: dirección de la ficha, tamaño ilustrativo.</p>
+  <div class="fila pacs" id="pacs" role="group" aria-label="Paciente"></div>
+  <p class="pie" id="pac-res"></p>
+
+  <section class="tarjeta mon" id="mon" aria-label="Monitor de cabecera">
+    <div class="tarj-cab"><b>Monitor · derivación II</b><span class="der" id="ecg-k"></span></div>
+    <svg id="ecg-svg" role="img" aria-label="ECG generado por el motor del ritmo vivo"></svg>
+    <div class="cifras" id="mon-cifras"></div>
+  </section>
+
+  <section class="tarjeta" aria-label="Gasometría con iones">
+    <div class="tarj-cab"><b>Gasometría con iones</b><span class="der">lo que dice el tubo</span></div>
+    <div class="cifras" id="gaso"><div class="cifra" id="g-ph"></div><div class="cifra" id="g-hco3"></div><div class="cifra" id="g-k"></div><div class="cifra" id="g-mg"></div><div class="cifra" id="g-ca"></div><div class="cifra" id="g-cat"></div><div class="cifra" id="g-po4"></div><div class="cifra" id="g-alb"></div></div>
+  </section>
+
+  <section class="tarjeta" aria-label="Bombas y mandos">
+    <div class="tarj-cab"><b>Las bombas</b><span class="der">cada una con su tope</span></div>
+    <div id="bombas"></div>
+  </section>
+
+  <div class="fila"><button type="button" id="lupa-btn" aria-expanded="false" aria-controls="lupa">🔍 Abrir la lupa: la célula</button></div>
+  <section class="tarjeta" id="lupa" aria-label="La lupa de la célula" hidden>
+    <div class="tarj-cab"><b>La lupa · célula, plasma y hueso</b></div>
+    <div id="leyenda"></div>
+    <svg id="cel-svg" role="img" aria-label="Plasma arriba, célula abajo y hueso a la derecha con las partículas de K, Mg, Ca y fosfato"></svg>
+    <p class="pie">El 98 % del K⁺ está dentro de la célula (p. 19); el 99 % del Ca está en el hueso (p. 42) y algo más de la mitad del Mg (p. 31). Número de partículas: ilustrativo.</p>
+    <h3>Fig. 36.2 · K⁺ sérico frente a K⁺ total</h3>
+    <svg id="f362-svg" role="img" aria-label="Curva del potasio sérico frente al potasio total con el punto del paciente"></svg>
+    <p class="pie" id="f362-pie"></p>
+    <p class="pie">Abajo, 200-400 mEq por cada 1 mEq/L que baja; arriba, 100-200 (p. 19). Línea: punto medio, ilustrativo. <a class="cita-pdf" href="../../docs/marino-2024-electrolitos-caps35-38.pdf#page=19" target="_blank" rel="noopener">Ver en el texto: p. 19</a></p>
+    <h3>Fig. 38.1 · las tres fracciones del calcio</h3>
+    <svg id="f381-svg" role="img" aria-label="Calcio total con sus tres fracciones frente al calcio iónico"></svg>
+    <p class="pie">El tubo mide el total (las tres partes); el que actúa es el iónico (p. 42-43). <a class="cita-pdf" href="../../docs/marino-2024-electrolitos-caps35-38.pdf#page=43" target="_blank" rel="noopener">Ver en el texto: p. 43</a></p>
+  </section>
+
+  <section class="tarjeta" aria-label="Estudiar con el modelo">
+    <div class="tarj-cab"><b>Estudiar con el modelo</b></div>
+    <div class="fila" role="group" aria-label="Qué hacer"><button type="button" data-est="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-est="error" aria-pressed="false">Encuentra el error</button><button type="button" data-est="caso" aria-pressed="false">Caso: Damián</button></div>
+    <div id="est-cuerpo"><p class="pie">Elige una. El modelo no te enseña la cifra antes de que contestes.</p></div>
+  </section>
+
+  <details><summary>Notas: lo que discrepa, lo que la fuente no dice</summary><div id="notas"></div></details>
+  <details><summary>Las fuentes de este modelo</summary><ul class="mini-lista" id="fuentes"></ul></details>
+  <details><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="mini-lista" id="profundizar"></ul></details>
+</main>
+
+<div class="frase" id="dock">
+  <div class="dock-in">
+    <span class="frase-txt" id="frase" role="status" aria-live="polite"><span id="frase-txt"></span></span>
+    <div class="reloj" role="group" aria-label="Reloj de las bombas"><span class="hora" id="hora"></span><button type="button" id="r-play" aria-pressed="false">▶ Correr</button><button type="button" id="r-t15">+15 min</button><button type="button" id="r-t60">+1 h</button><button type="button" id="r-t360">+6 h</button></div>
+  </div>
+</div>
+<script type="module" src="b4-iones-c/pagina.js"></script>
+</body></html>
