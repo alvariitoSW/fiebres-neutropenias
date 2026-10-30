@@ -23,6 +23,10 @@ const AJUSTES = {
     // (botones que se apagan en su máximo) y los sellos «Cizalla ↑», «Objetivo», «Por debajo de lo tolerado» y bradicardia; los recorre este juez y
     // pruebas/shock-vivo.mjs (sección A4) comprueba la dirección de la FC. No hace falta ajuste: ningún botón del dock es un paso a paso.
     'shock-vivo': {},
+    // El pulmón con respirador: sus mandos son los deslizadores del dock, los alternadores de maniobra y las teclas de la pantalla
+    // (Insp./Esp. mantenida, Congelar: alternan, no acumulan). Los sellos de tope duro (Vt > 12 mL/kg, VM > 20 L/min) y de
+    // «Hiperinflación» los comprueba pruebas/pulmon-vivo.mjs (par 10) con las constantes del paciente.
+    'pulmon-vivo': {},
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.

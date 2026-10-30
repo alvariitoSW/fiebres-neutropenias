@@ -1,0 +1,50 @@
+    <button class="back-btn btn-volver-libros-menu" id="pul-volver">← VOLVER</button>
+    <!-- El pulmón con respirador (Marino caps. 22-28, fichas de Merino Neumología). Modelo vivo de Libros. Viene de la maqueta
+         aprobada autonomo/maquetas/b3-pulmon.html. Lógica en pulmon-vivo/ (index.js arranca; pagina.js es el modelo; pulmon.mjs
+         el motor), datos en js/data/pulmon-vivo-data.js, CSS acotado en estilos.js. Prefijo de clases propias e ids: pul-. -->
+    <div class="pul-raiz" id="pul-raiz" data-modelo-vivo>
+      <header class="pul-cabecera">
+        <p class="pul-eyebrow">Modelo vivo · Marino caps. 22-28</p>
+        <h2 class="pul-titulo">El pulmón con respirador: <em>presión, flujo y volumen</em></h2>
+      </header>
+      <div class="pul-main" id="pul-modelo">
+  <section id="pul-zona-pac" aria-label="Pacientes"><div class="pacientes" id="pul-pacientes"></div><p class="ficha-pac" id="pul-ficha-pac"></p></section>
+
+  <p class="mon-quien" id="pul-mon-quien"></p>
+  <section id="pul-monitor" aria-label="Pantalla del respirador"></section>
+  <div class="calc" id="pul-calc" aria-label="Mecánica: lo que calcula la pantalla con la pausa y la oclusión"></div>
+  <div class="consola-tira" id="pul-consola" hidden></div>
+
+  <details class="plegable lupa" id="pul-lupa">
+    <summary>Ver el pulmón (la lupa): respirador, tubo, tórax y alvéolos</summary>
+    <section class="escena-caja" id="pul-escena" data-dock-pliega aria-label="El respirador, el tubo y el tórax">
+      <svg id="pul-esc-svg" role="img" aria-label="Respirador con su pantalla, rama inspiratoria y espiratoria, válvula espiratoria, tubo con cuff, tórax con pleura y diafragma y el racimo de alvéolos"></svg>
+      <span class="fig-esq">Un compartimento · fisiología general</span>
+    </section>
+  </details>
+  <section id="pul-bajo-escena" style="display:grid; gap:6px">
+    <div class="leyenda" id="pul-leyenda"></div>
+    <p class="leyenda-txt">Elige un estado y pulsa <b>Guía</b>: cada paso señala el tramo de la curva, la casilla o la pieza del dibujo de la que habla. En la pantalla, <b>Insp. mantenida</b> enseña la meseta (EIP) y <b>Esp. mantenida</b>, la PEEP oculta.</p>
+  </section>
+
+  <section id="pul-abajo" style="display:grid; gap:6px">
+    <details class="plegable" open><summary>Las fuentes de este estado</summary><ul class="lista" id="pul-fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que discrepa y lo que la fuente no dice</summary><div id="pul-notas" style="display:grid; gap:6px"></div></details>
+    <details class="plegable"><summary>Referencias de los orígenes</summary><ul class="lista" id="pul-referencias"></ul></details>
+    <details class="plegable"><summary>Para profundizar (lo que esta pieza no cubre)</summary><ul class="lista" id="pul-profundizar"></ul></details>
+  </section>
+      </div>
+
+<div class="dock" id="pul-dock" data-dock-min="160">
+  <div class="dock-in" id="pul-dock-explorar">
+    <div class="frase" id="pul-frase"><span class="frase-txt" id="pul-frase-txt" role="status" aria-live="polite"></span><button type="button" class="btn-guia" id="pul-btn-guia" aria-label="Explicación guiada de este estado">Guía</button></div>
+    <div class="dock-tabs" role="tablist" id="pul-dock-tabs">
+      <button type="button" role="tab" data-pest="resp" aria-selected="true">Respirador</button>
+      <button type="button" role="tab" data-pest="pulmon" aria-selected="false">Pulmón</button>
+      <button type="button" role="tab" data-pest="man" aria-selected="false">Maniobras</button>
+    </div>
+    <div class="dock-panel" id="pul-dock-panel"></div>
+  </div>
+  <div class="dock-in" id="pul-dock-guia" hidden></div>
+</div>
+    </div>
