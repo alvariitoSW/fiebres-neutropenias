@@ -366,7 +366,7 @@ export const preguntasPifRadio = [
             'De 3 a 5 cm por encima de la bifurcación, o a medio camino entre la bifurcación y las cuerdas',
         ],
         correcta: 3,
-        explicacion: 'Esa es la posición de la fuente. Sobre la carina, un movimiento de 2 cm con la flexión o extensión del cuello la deja en el bronquio derecho; por debajo ya hay riesgo de que el pulmón izquierdo no se ventile; y junto a las cuerdas el tubo se sale al extender el cuello. Origen: Marino, cap. 28, pág. 18.',
+        explicacion: 'Esa es la posición de la fuente, con la cabeza en posición neutra: la flexión o extensión de la cabeza y el cuello desplaza 2 cm la punta. Origen: Marino, cap. 28, pág. 18.',
     },
     {
         id: 'pifradio-q042', tema: 'pifradio-lee',

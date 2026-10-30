@@ -13,17 +13,18 @@ function montar(ej, host) {
         <div class="fig-rot-caja radio-lee-caja" id="${p}-caja"><img id="${p}-img" src="${ej.img}" alt="${ej.alt}" draggable="false"></div>
         <p class="fuente-ficha" style="margin:6px 0;">${ej.pie} <a class="biblio-link" href="${ej.pdf}#page=${ej.pag}" target="_blank" rel="noopener">pág. ${ej.pag}</a></p>
         <p id="${p}-estado" style="font-size:0.85rem; margin:0 0 8px;" aria-live="polite">Aún no has tocado la placa.</p>
-        <div id="${p}-ops" style="display:flex; flex-direction:column; gap:6px;"></div>
+        <div id="${p}-ops" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         <button type="button" class="siguiente-ficha-btn" id="${p}-comprobar" style="margin-top:10px;" disabled>Comprobar con el libro</button>
         <div class="result-box" id="${p}-res" style="display:none; text-align:left; margin-top:12px;"></div>
     </div>`);
     const caja = document.getElementById(`${p}-caja`), img = document.getElementById(`${p}-img`);
     const ops = document.getElementById(`${p}-ops`), btn = document.getElementById(`${p}-comprobar`);
     const estado = document.getElementById(`${p}-estado`), res = document.getElementById(`${p}-res`);
+    (ej.tapar || []).forEach(t => { const d = document.createElement('div'); d.className = 'radio-tapa'; d.style.cssText = `left:${t.x}%;top:${t.y}%;width:${t.w}%;height:${t.h}%`; caja.appendChild(d); });
     let toque = null, eleg = -1, hecho = false;
     const botones = ej.elecciones.map((t, i) => {
         const b = document.createElement('button');
-        b.type = 'button'; b.className = 'nav-btn radio-lee-op'; b.textContent = t; b.setAttribute('aria-pressed', 'false');
+        b.type = 'button'; b.className = 'ecg-chip radio-lee-op'; b.textContent = t; b.setAttribute('aria-pressed', 'false');
         b.addEventListener('click', () => { if (hecho) return; eleg = i; botones.forEach((x, j) => x.setAttribute('aria-pressed', String(j === i))); listo(); });
         ops.appendChild(b); return b;
     });
@@ -44,6 +45,7 @@ function montar(ej, host) {
     btn.addEventListener('click', () => {
         if (btn.disabled) return;
         hecho = true; btn.disabled = true;
+        caja.querySelectorAll('.radio-tapa').forEach(n => n.remove());
         const r = img.getBoundingClientRect();
         const dx = (toque[0] - ej.punto[0]) / 100 * r.width, dy = (toque[1] - ej.punto[1]) / 100 * r.height;
         const dist = Math.hypot(dx, dy), cerca = dist <= ej.tolerancia / 100 * r.width;
@@ -63,6 +65,7 @@ function montar(ej, host) {
         document.getElementById(`${p}-repetir`).addEventListener('click', () => {
             hecho = false; toque = null; eleg = -1; res.style.display = 'none'; res.innerHTML = '';
             caja.querySelectorAll('.radio-toque,.fig-rot-punto,.fig-rot-txt').forEach(n => n.remove());
+            (ej.tapar || []).forEach(t => { const d = document.createElement('div'); d.className = 'radio-tapa'; d.style.cssText = `left:${t.x}%;top:${t.y}%;width:${t.w}%;height:${t.h}%`; caja.appendChild(d); });
             botones.forEach(x => x.setAttribute('aria-pressed', 'false'));
             estado.textContent = 'Aún no has tocado la placa.'; listo();
         });
