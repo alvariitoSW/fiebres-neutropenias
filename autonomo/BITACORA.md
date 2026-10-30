@@ -347,6 +347,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+- **PR #47 y semiología (Consejo 10.ª del 30/10)**, acta `autonomo/consejo/2026-10-30-10.md`: (1) la PR #47 tiene los votos y
+  los jueces, pero un 8,5 del profesor (lo impone el formato de test de §8): **¿excepción para fusionarla?**; (2) la
+  semiología no tiene fuente abierta amplia: **¿abres `www.ncbi.nlm.nih.gov` o subes el capítulo de Surós o Bates?** Un PDF
+  escrito por Fable no vale como fuente (§7.1).
+
 Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
 en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
