@@ -374,6 +374,17 @@ export function crearMotor(ajustes = {}) {
     s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul) + pT;
   }
 
+  // Alivio de la poscarga por la presión pleural, SOLO en la eyección (el llenado y las presiones que se miden no lo ven).
+  // La poscarga que nota el músculo es la tensión de la pared (Laplace: presión transmural × radio / (2·grosor)), y lo que le
+  // queda para acortarse es su reserva: la tensión que puede generar, proporcional a su Ees. Quitar la misma presión pleural
+  // a un VI con la mitad de Ees le quita el doble de fracción de su reserva: el efecto crece como Ees_normal / Ees (acoplamiento
+  // Ees/Ea; Suga y Sagawa 1974, Circ Res 35:117, la relación presión-volumen telesistólica; aquí solo la forma, sin cifras). Con pTorax = 0 vale 0 y el motor es
+  // idéntico; con un VI normal (Ees = normal) el factor es 1 y no cambia nada. Resultado a comprobar: PCP ≥12 y CPAP 5 → el VS
+  // sube (Bradley 1992, PMID 1736745: +22 % del VS indexado; Marino resp. cap. 26, PDF p. 87)
+  function alivioEyeccion() {
+    return s.pTorax > 0 ? (Math.max(1, BASE.vi.ees / s.eesVi) - 1) * s.pTorax : 0;
+  }
+
   function flujos(dt) {
     // válvulas: diodo por gradiente
     s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
@@ -398,14 +409,14 @@ export function crearMotor(ajustes = {}) {
     s.qTriReg = p.eroaTricus > 0 && dpTri > 0 ? p.eroaTricus * 50 * dpTri / Math.sqrt(dpTri + 0.25) : 0;
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
     // cierra cuando el reflujo acumulado llega al volumen de cierre
-    if (!s.vAo) { if (s.pvi > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
+    if (!s.vAo) { if (s.pvi + alivioEyeccion() > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
     s.dpVc = 0; s.dpNeto = 0;
     if (s.vAo && p.areaAortica > 0 && s.qAo > 0) {
       const v = s.qAo / (100 * p.areaAortica), r = Math.min(1, p.areaAortica / (Math.PI * (p.dAorta / 2) ** 2));
       s.dpVc = 4 * v * v; s.dpNeto = s.dpVc * (1 - 2 * r * (1 - r));
     }
     if (s.vAo) {
-      s.qAo += (s.pvi - s.paoDist - (p.rAortica + p.zAo) * s.qAo - s.dpNeto) / p.lAo * dt;
+      s.qAo += (s.pvi + alivioEyeccion() - s.paoDist - (p.rAortica + p.zAo) * s.qAo - s.dpNeto) / p.lAo * dt;
       if (s.qAo < 0) { s.reflujoAo -= s.qAo * dt; if (s.reflujoAo > p.vCierreAo) { s.vAo = false; s.qAo = 0; } }
     }
     s.pao = s.paoDist + p.zAo * s.qAo;
