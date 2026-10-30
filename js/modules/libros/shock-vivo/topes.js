@@ -16,7 +16,10 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
   // el papilar y el septo llegan con la PCP en 20-30 sin volumen: es su cuadro; el sello llega con el primer bolo
   const llegaAlta = (tipo === 'papilar' || tipo === 'septo' || tipo === 'ic') && dado === 0;
-  if (D.sobrecarga(R) && llegaAlta) {
+  // con CPAP el aviso de «sin volumen» no vale: la PCP del monitor sube por la presión del tórax, no por el volumen
+  const cpapIc = tipo === 'ic' && dado === 0 && (X.ajuste.cpap || 0) > 0;
+  if (cpapIc) { /* sin aviso: ver la guía de ic-cpap */ }
+  else if (D.sobrecarga(R) && llegaAlta) {
     out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : tipo === 'ic' ? 'el VI que falla y no vacía la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
       cita: C.llenado, origen: 'ficha · p. 42 · la PCP de este paciente: modelo', bajo: '#shv-dock-panel .rejilla' };
   } else if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
@@ -87,13 +90,13 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
     cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · el fármaco: ficha p. 12-13' };
   else if (R.pam > 100 && (X.ajuste.na > 0 || X.ajuste.vaso)) out.vaso = { nivel: 'aviso', titulo: 'Presión alta con vasopresor',
     texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
-  // 4b) la CPAP: usualmente 5-10 cmH₂O (resp. p. 77); más, mal tolerada y con fugas. En el seco, además, le quita el gasto (p. 85, 88)
+  // 4b) la CPAP: usualmente 5-10 cmH₂O (resp. p. 77). «Mal tolerada y con fugas» es de la ventilación no invasiva con dos niveles, no de la CPAP: aquí el mismo tope es por analogía. En el seco, además, le quita el gasto (p. 85, 88)
   const cp = X.ajuste.cpap || 0;
   if (cp > T.cpap) out.cpap = { nivel: 'sello', titulo: 'CPAP por encima de 10',
-    texto: `CPAP ${cp}: la fuente la deja en 5-10; más presión se tolera mal y da fugas por la mascarilla. VS ${R.vs} mL, IC ${c2(R.ic, 1)}, PAM ${R.pam}, FC ${R.fc}${tipo === 'ic' ? '' : ': en quien no tiene el corazón enfermo, la presión le frena el retorno venoso y el gasto cae'}.`,
-    cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10; «más presión: mal tolerada y fugas», dicho de la ventilación con dos niveles) y p. 85, 88 (la caída del gasto) · las cifras: modelo', deshabilita: ['[data-cpap="15"]'] };
+    texto: `CPAP ${cp}: Marino da 5-10 para la CPAP y, en la ventilación no invasiva con dos niveles, desaconseja presiones mayores (mal toleradas, fugas por la mascarilla); aquí se aplica el mismo límite por analogía. VS ${R.vs} mL, IC ${c2(R.ic, 1)}, PAM ${R.pam}, FC ${R.fc}${tipo === 'ic' ? '' : ': en quien no tiene el corazón enfermo, la presión le frena el retorno venoso y el gasto cae'}.`,
+    cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10 para la CPAP; la frase de mal tolerada y fugas es de la VNI con dos niveles; el tope, por analogía) y p. 85, 88 (la caída del gasto) · las cifras: modelo', deshabilita: ['[data-cpap="15"]'] };
   else if (cp === T.cpap) out.cpap = { nivel: 'aviso', titulo: 'En el tope de la CPAP',
-    texto: `CPAP ${cp}: es el máximo habitual (5-10); por encima, mal tolerada y con fugas.`, cita: C.cpapIc, origen: 'ficha · resp. p. 77', bajo: '#shv-dock-panel [aria-label^="CPAP"]' };
+    texto: `CPAP ${cp}: es el máximo habitual (5-10); por encima, la fuente no da cifra para la CPAP (en la VNI con dos niveles desaconseja subir: mal tolerada, fugas).`, cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10) · analogía con la VNI con dos niveles (la frase de mal tolerada y fugas es de esa)', bajo: '#shv-dock-panel [aria-label^="CPAP"]' };
   // 5) el reloj: 48 h
   if (tipo === 'posparo') {
     // el reloj es el de la RCE: 72 h («suele resolverse en 72 h», p. 65); pasado, las cifras ya no cambian

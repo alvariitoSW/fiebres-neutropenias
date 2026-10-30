@@ -336,7 +336,10 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             for (const k of toggles) e[k] = mandos.includes(k);
             for (const k of mandos) if (PREAJUSTE[k] && PREAJUSTE[k].pam != null && opciones.mandos.includes('pam')) {
                 e.pam = PREAJUSTE[k].pam; cuerpo.querySelector('.gl-pam').value = e.pam; cuerpo.querySelector('.gl-pam-out').textContent = `${e.pam} mmHg`;
-            } if (e.obstruccionMantenida) e.obstruccion = true; actualizar();
+            }
+            // «pam=72» en data-glomerulo: fija la PAM del paciente de origen (p. ej. Ramiro, 72) tras el preajuste de la congestión
+            for (const k of mandos) { const m = /^pam=(\d+)$/.exec(k); if (m && opciones.mandos.includes('pam')) { e.pam = Math.min(220, Math.max(40, +m[1])); cuerpo.querySelector('.gl-pam').value = e.pam; cuerpo.querySelector('.gl-pam-out').textContent = `${e.pam} mmHg`; } }
+            if (e.obstruccionMantenida) e.obstruccion = true; actualizar();
         },
     });
     const pam = cuerpo.querySelector('.gl-pam');

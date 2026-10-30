@@ -14,6 +14,8 @@ const FG = '<i>Fisiología general.</i>';
 const PDFR = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
 const r = n => `<a class="biblio-link" href="${PDFR}#page=${n}" target="_blank" rel="noopener">resp. pág. ${n}</a>`;
 const PDFS = 'docs/marino-2024-shock-caps14-17.pdf';
+const PDFM = 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf';
+const mo = n => `<a class="biblio-link" href="${PDFM}#page=${n}" target="_blank" rel="noopener">monitorización pág. ${n}</a>`;
 const s = n => `<a class="biblio-link" href="${PDFS}#page=${n}" target="_blank" rel="noopener">shock pág. ${n}</a>`;
 const T = 'mc-ic-tipos', M = 'mc-ic-manejo';
 // Los modelos vivos de cada pregunta (el botón sale tras contestar).
@@ -182,41 +184,41 @@ export const MAYEUTICA_IC = {
       { id: 'c-ic2', titulo: 'Ramiro, 68 años: las tres etapas del posoperatorio', corto: 'Caso · Ramiro', sub: 'posoperatorio; 74 kg; el gasto que se aguanta y luego cae',
         paciente: { Edad: '68 años, varón', Peso: '74 kg', Motivo: 'posoperatorio, IC izquierda que se descompensa', Seguimiento: 'una medida por hora, con catéter de arteria pulmonar' },
         pasos: [
-          { momento: 'Hora 1', datos: { 'PCP': '18,6 mmHg', FC: '83', 'Índice cardíaco': '3,19 L/min/m²', PAM: '81 mmHg', Síntoma: 'disnea al incorporarse' }, nuevo: ['PCP', 'FC', 'Índice cardíaco', 'PAM', 'Síntoma'],
+          { momento: 'Hora 1', datos: { 'PCP': '19 mmHg', FC: '83', 'Índice cardíaco': '3,2 L/min/m²', PAM: '81 mmHg', Síntoma: 'disnea al incorporarse' }, nuevo: ['PCP', 'FC', 'Índice cardíaco', 'PAM', 'Síntoma'],
             pregunta: { id: 'cir-1', tipo: 'test', fuente: 'mc-ic-etapas', origen: 'ilustrativo: las cifras de Ramiro son las del modelo; la secuencia de etapas, de la ficha', modeloVivo: sv('ic-etapa-1', '🫀 Ramiro en la primera etapa'),
               enunciado: 'Ramiro nota disnea; su PCP ha subido, la FC es normal y el gasto está bien. ¿Qué es lo primero que ha cambiado en su corazón y por qué le falta el aire?',
               opciones: [
-                { t: 'El gasto cardíaco: ha empezado a caer y por eso le falta el aire al incorporarse', porque: `El gasto es lo último que cae, en la tercera etapa (${p(5)}); su índice de 3,19 está conservado.` },
+                { t: 'El gasto cardíaco: ha empezado a caer y por eso le falta el aire al incorporarse', porque: `El gasto es lo último que cae, en la tercera etapa (${p(5)}); su índice de 3,2 está conservado.` },
                 { t: 'La presión de llenado: sube, congestiona el pulmón y da la disnea', ok: true },
                 { t: 'La frecuencia: la taquicardia compensatoria es el primer signo', porque: `La taquicardia llega en la segunda etapa (${p(5)}); su FC de 83 aún no lo es.` }],
               explicacion: `La primera señal es un <span class="hl-azul">aumento de la presión de llenado</span> (la PCP) con el gasto conservado; la congestión del pulmón produce la sensación de disnea (${p(5)}).`,
               nota: `<b>La fuente no lo dice.</b> El libro no da la PCP de cada etapa; las cifras son las del modelo (ilustrativo) y se parecen a la Fig. 18.3 (${p(6)}), no son idénticas.` + enFicha(T, 'mc-ic-etapas') } },
-          { momento: 'Hora 2', datos: { 'PCP': '21,7 mmHg', FC: '91', VS: '62 mL', 'Índice cardíaco': '3,06 L/min/m²', PAM: '77 mmHg' }, nuevo: ['PCP', 'FC', 'VS', 'Índice cardíaco', 'PAM'],
+          { momento: 'Hora 2', datos: { 'PCP': '22 mmHg', FC: '91', VS: '62 mL', 'Índice cardíaco': '3,1 L/min/m²', PAM: '78 mmHg' }, nuevo: ['PCP', 'FC', 'VS', 'Índice cardíaco', 'PAM'],
             pregunta: { id: 'cir-2', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mc-ic-etapas', modeloVivo: sv('ic-etapa-2', '🫀 Ramiro en la segunda etapa'),
               enunciado: 'Una hora después, el volumen sistólico de Ramiro ha caído y su índice casi no. ¿Cómo se explica y a qué precio? Tu respuesta tiene dos partes.',
               puntos: [
                 `La <span class="hl-azul">taquicardia compensa</span> el volumen sistólico más bajo, y el gasto se conserva.`,
                 `El precio es la <span class="hl-rojo">presión de llenado alta</span>, que sigue congestionando el pulmón.`],
               explicacion: `Segunda etapa: baja el volumen sistólico y sube la frecuencia; la taquicardia compensa y el gasto se conserva (${p(5)}). La presión de llenado sigue siendo la de la congestión pulmonar (${p(5)}).` + enFicha(T, 'mc-ic-etapas') } },
-          { momento: 'Hora 4 · el giro', datos: { 'PCP': '30,8 mmHg', FC: '102', VS: '34 mL', 'Índice cardíaco': '1,87 L/min/m²', PAM: '72 mmHg' }, nuevo: ['PCP', 'FC', 'VS', 'Índice cardíaco', 'PAM'],
+          { momento: 'Hora 4 · el giro', datos: { 'PCP': '32 mmHg', FC: '101', VS: '34 mL', 'Índice cardíaco': '1,9 L/min/m²', PAM: '72 mmHg' }, nuevo: ['PCP', 'FC', 'VS', 'Índice cardíaco', 'PAM'],
             pregunta: { id: 'cir-3', tipo: 'test', fuente: 'mc-ic-etapas · mc-congestion', modeloVivo: sv('ic-etapa-3', '🫀 Ramiro en la tercera etapa'), origen: 'ilustrativo: cifras del modelo; la lectura, de la ficha',
-              enunciado: 'Ahora el índice cardíaco de Ramiro es 1,87 y la PCP 30,8, pero su PAM sigue en 72. ¿Qué ha pasado y por qué la presión se mantiene?',
+              enunciado: 'Ahora el índice cardíaco de Ramiro es 1,9 y la PCP 32, pero su PAM sigue en 72. ¿Qué ha pasado y por qué la presión se mantiene?',
               opciones: [
                 { t: 'Sigue compensado: con una PAM de 72 el gasto bajo no importa mientras no haya hipotensión franca', porque: `El punto en que el gasto empieza a caer marca el paso a descompensada (${p(5)}); la presión conservada no lo anula.` },
                 { t: 'Ya es descompensada: cayó el gasto, y la vasoconstricción periférica sostiene la presión', ok: true },
                 { t: 'Es un shock cardiogénico: toda caída del índice por debajo de 2 lo es', porque: `El shock cardiogénico se distingue de la IC por la hipoperfusión (hipotensión, poca diuresis, lactato alto), con un índice típicamente <2,2 (${s(40)}); el capítulo de IC trata la IC sin ellos (${p(9)}) y aquí la vasoconstricción mantiene la presión (${p(6)}-${p(7)}). El índice solo no basta.` }],
               explicacion: `El gasto ha empezado a caer: <span class="hl-rojo">IC descompensada</span> (${p(5)}). La vasoconstricción periférica suele bastar para mantener la presión y la perfusión, por eso predomina la congestión venosa (${p(6)}-${p(7)}).`,
               nota: `Marino da el índice del shock cardiogénico como «típicamente <2,2 L/min/m²» (${s(40)}), el mismo corte del modelo, pero no lo usa para separar la IC descompensada del shock: lo separa la hipoperfusión (${s(40)}, ${p(9)}). <b>La fuente no lo dice:</b> una cifra de índice que separe una de otro sin hipoperfusión.` + enFicha(T, 'mc-congestion') } },
-          { momento: 'Hora 5 · analítica', datos: { Creatinina: '1,0 → 1,6 mg/dL', BNP: '480 pg/mL' }, nuevo: ['Creatinina', 'BNP'],
-            pregunta: { id: 'cir-4', tipo: 'test', fuente: 'mc-cardiorrenal', modeloVivo: glomerulo('🫘 El glomérulo con la congestión venosa'), origen: 'ilustrativo: creatinina y BNP son del paciente, la PAM del modelo; la regla, de la ficha',
-              enunciado: 'La creatinina de Ramiro sube de 1,0 a 1,6 con una PAM de 72. Un compañero dice: «Es por el gasto bajo; démosle volumen». ¿Qué le contestas?',
+          { momento: 'Hora 4 · con CPAP', datos: { 'PCP': '33 mmHg', FC: '100', VS: '34 mL', 'Índice cardíaco': '1,8 L/min/m²', PAM: '73 mmHg', 'SpO₂': '83 %', Tratamiento: 'CPAP de 10 cmH₂O' }, nuevo: ['PCP', 'FC', 'Índice cardíaco', 'PAM', 'Tratamiento'],
+            pregunta: { id: 'cir-6', tipo: 'test', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 La CPAP en Ramiro: la PCP del monitor y el gasto'), origen: 'ilustrativo: cifras del modelo; que la presión del tórax eleva el enclavamiento, de la ficha de monitorización',
+              enunciado: 'Con la CPAP, la PCP del monitor de Ramiro pasa de 32 a 33 y el gasto casi no cambia. Un compañero dice: «Se ha pasado de volumen; furosemida ya». ¿Qué le contestas?',
               opciones: [
-                { t: 'Tiene razón: con una PAM de 72 la autorregulación renal ya no mantiene el flujo y el riñón depende del gasto cardíaco', porque: `La autorregulación mantiene el flujo hasta que la PAM baja de 70 (${p(7)}); 72 aún la tiene.` },
-                { t: 'Que el gasto no se correlaciona con la disfunción renal: lo más probable es la presión venosa; se trata con diuresis', ok: true },
-                { t: 'Que el volumen es lo correcto: el riñón responde siempre al gasto cardíaco', porque: `No hay correlación entre el gasto y la disfunción renal en la IC (${p(7)}); darle volumen a un pulmón congestionado empeora la congestión (${DED}).` }],
-              explicacion: `No hay correlación entre el gasto y la disfunción renal, y el flujo se autorregula hasta una PAM <70: lo principal es la <span class="hl-azul">presión venosa alta</span>, que reduce el gradiente arteriovenoso renal. Es el síndrome cardiorrenal y su principal tratamiento es la diuresis (${p(7)}).`,
-              nota: `<b>La fuente no lo dice.</b> El libro no da la PVC de este paciente; el glomérulo vivo es un modelo aparte, con una PVC de 20 mmHg (ilustrativo) para enseñar el efecto de una congestión marcada; no es la PVC que marca el monitor de Ramiro.` + enFicha(T, 'mc-cardiorrenal') } },
-          { momento: 'Hora 6 · nota del R1', datos: { Nota: 'resumen de la evolución' }, nuevo: ['Nota'],
+                { t: 'Tiene razón: la PCP ha subido, así que la CPAP le ha añadido volumen al pulmón y hay que vaciarlo', porque: `La CPAP no mete volumen en el pulmón; la presión del tórax eleva falsamente el enclavamiento (${mo(55)}). Tratarlo como sobrecarga sería corregir una cifra, no al paciente (${DED}).` },
+                { t: 'Que la presión del tórax llega al catéter y eleva la PCP medida; la que encharca el pulmón es la transmural, que no sube', ok: true },
+                { t: 'Que hay que quitar la CPAP: en un corazón que falla toda presión positiva le baja el gasto y le sube la presión', porque: `En la IC izquierda la presión intratorácica positiva baja la poscarga y la CPAP es eficaz en el edema cardiogénico (${p(14)}, ${r(83)}); quitarla dejaría el edema sin tratar.` }],
+              explicacion: `La presión positiva de la vía aérea <span class="hl-azul">eleva falsamente el enclavamiento</span>, porque la presión intratorácica es mayor que la atmosférica; la presión importante es la transmural (${mo(55)}). La CPAP baja la presión transmural que desarrolla el VI (${p(14)}), así que el gasto apenas cambia y no hay motivo para pensar en exceso de volumen.`,
+              nota: `<b>La fuente no lo dice:</b> cuánto sube la PCP del monitor ni cuánto baja la transmural con la CPAP; las cifras son del modelo (ilustrativo). Marino describe la PEEP, no la CPAP, para el enclavamiento: se aplica por analogía.` + enFicha(M, 'mc-vpp') } },
+          { momento: 'Hora 5 · nota del R1', datos: { BNP: '480 pg/mL', Nota: 'resumen de la evolución' }, nuevo: ['BNP', 'Nota'],
             pregunta: { id: 'cir-5', tipo: 'error', fuente: 'mc-ic-etapas · mc-bnp',
               enunciado: 'La nota del R1 sobre Ramiro. Hay dos errores. Encuéntralos.',
               frases: [
@@ -230,7 +232,7 @@ export const MAYEUTICA_IC = {
         lleva: [
           'La IC izquierda tiene tres etapas: sube la presión de llenado, baja el volumen sistólico y sube la FC, y por fin cae el gasto.' + enFicha(T, 'mc-ic-etapas'),
           'La IC descompensada empieza cuando cae el gasto, no cuando cae la presión: la vasoconstricción la sostiene.',
-          'La insuficiencia renal de la IC depende sobre todo de la presión venosa alta, no del gasto bajo.'],
+          'Un BNP alto no confirma la IC: sirve mejor para excluirla.'],
         volver: { nombre: 'Las etapas de la IC izquierda', ancla: 'mc-ic-etapas', modelo: sv('ic-etapa-3', '🫀 Ramiro en la tercera etapa') } },
     ],
   },
@@ -305,14 +307,14 @@ export const MAYEUTICA_IC = {
           { t: '5 mg/h, la velocidad de inicio estándar', porque: `Los 5 mg/h son para el filtrado ≥30 (${p(12)}); con 28 te quedarías corto.` },
           { t: '40 mg/h, el máximo, para ir más rápido', porque: `El máximo de 40 mg/h se alcanza tras un segundo bolo si no hay respuesta (${p(12)}), no al inicio.` }],
         explicacion: `Bolo de 80 mg y, con filtrado ≥30, infusión de 5 mg/h (sube a 10 mg/h tras un segundo bolo si la diuresis es <100 mL/h; máximo 40 mg/h). <span class="hl-azul">Con filtrado <30: 20 mg/h</span> (y 40 mg/h tras un segundo bolo) (${p(12)}).` + enFicha(M, 'mc-infusion-continua') },
-      { id: 'icm-g10', corto: 'la CPAP y el VS', tipo: 'test', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 Etapa 3 con CPAP: mira cómo se sostiene el gasto y baja el edema'),
+      { id: 'icm-g10', corto: 'la CPAP y el VS', tipo: 'test', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 La CPAP en un corazón que falla (Ramiro, etapa 3): el gasto apenas cambia'),
         enunciado: 'Predice, y luego lo compruebas: en un edema agudo de pulmón por IC izquierda, ¿qué dice Marino que hace la CPAP con el volumen sistólico del VI?',
         opciones: [
           { t: 'Lo baja: la presión positiva comprime el corazón y reduce su llenado en cada latido', porque: `El efecto que recoge el libro en la IC izquierda es el contrario: baja la poscarga y sube el gasto (${p(14)}). Que dificulte el llenado se menciona solo para la IC con FE conservada en ventilación mecánica (${p(3)}).` },
           { t: 'No lo cambia: solo mejora la oxigenación, no la hemodinámica', porque: `Se ha demostrado que la CPAP aumenta el gasto cardíaco en la IC izquierda (${p(14)}).` },
           { t: 'Lo aumenta: baja la presión transmural del VI y, con ella, su poscarga', ok: true }],
         explicacion: `La presión intratorácica positiva <span class="hl-azul">reduce la presión transmural que desarrolla el ventrículo en sístole</span> (menor poscarga): la pared se mueve hacia dentro más fácil y el volumen sistólico aumenta. La CPAP sube el gasto y acelera la mejoría del edema cardiogénico (${p(14)}).`,
-        nota: `Marino da la presión de la CPAP como «usualmente 5-10 cm H₂O» (${r(77)}), y en el edema cardiogénico CPAP y VNI son igual de eficaces porque el gasto sube por la menor poscarga (${r(83)}). <b>La fuente no lo dice:</b> el efecto de la CPAP sobre la PCP no lo cuantifica; el tope del modelo es ilustrativo. <b>Límite del modelo:</b> en Ramiro (etapa 3) el modelo no sube el volumen sistólico: con CPAP 10 se sostiene (≈34 → 33 mL) y el edema baja. Marino (resp. p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 y PCP ≥12) describen que el gasto puede subir; el modelo no lo reproduce porque no tiene la retirada simpática ni el alivio del trabajo respiratorio. En el paciente seco ocurre lo contrario: la CPAP le quita gasto (resp. p. 85, 88).` + enFicha(M, 'mc-vpp') },
+        nota: `Marino da la presión de la CPAP como «usualmente 5-10 cm H₂O» (${r(77)}), y en el edema cardiogénico CPAP y VNI son igual de eficaces porque el gasto sube por la menor poscarga (${r(83)}). <b>La fuente no lo dice:</b> el efecto de la CPAP sobre la PCP no lo cuantifica; el tope del modelo es ilustrativo. <b>Límite del modelo:</b> en Ramiro (etapa 3) el modelo no sube el volumen sistólico: con CPAP 10 el gasto apenas cambia (VS ≈34 → 33 mL, IC 1,9 → 1,8) y el edema crece más despacio. Marino (resp. p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 en 11 pacientes con PCP ≥12; con PCP <12 el gasto bajó, IC 3,14→2,89) describen que el gasto puede subir; el modelo no lo reproduce (el motivo es del autor: otros mecanismos del paciente real, como la retirada simpática, no están en el modelo). En el paciente seco ocurre lo contrario: la CPAP le quita gasto (resp. p. 85, 88).` + enFicha(M, 'mc-vpp') },
       { id: 'icm-g11', corto: 'cuándo los fármacos de fondo', tipo: 'test', fuente: 'mc-largo-plazo',
         enunciado: 'Un paciente ingresado por IC aguda va a recibir tratamientos que mejoran el pronóstico a largo plazo. ¿Cuándo se empiezan?',
         opciones: [
@@ -397,14 +399,15 @@ export const MAYEUTICA_IC = {
               explicacion: `Con hipertensión, <span class="hl-azul">vasodilatador primero</span>: la nitroglicerina es el de elección (${p(9)}), con la pauta de 5 µg/min y +5 cada 5 min, en vidrio y polietileno por la pérdida en PVC. La ventilación no invasiva es un tratamiento aceptado del edema pulmonar cardiogénico (${p(14)}).`,
               nota: `La CPAP se ajusta «usualmente a 5-10 cm H₂O» (${r(77)}). <b>La fuente no lo dice:</b> el orden entre el vasodilatador y la ventilación; los dos se inician a la vez en este caso.` } },
           { momento: '03:50 · con la CPAP', datos: { Tratamiento: 'nitroglicerina en infusión (vidrio y polietileno) y CPAP' }, nuevo: ['Tratamiento'],
-            pregunta: { id: 'cic-2', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 Etapa 3 con CPAP: mira cómo se sostiene el gasto y baja el edema'),
-              enunciado: 'Con la CPAP puesta, ¿qué espera Marino que le pase al volumen sistólico en una IC izquierda con edema, y por qué? Tu respuesta tiene tres partes.',
+            pregunta: { id: 'cic-2', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'mc-vpp', modeloVivo: sv('ic-cpap', '🫀 La CPAP en otro corazón que falla (Ramiro, etapa 3)'),
+              enunciado: 'Con la CPAP puesta, ¿qué espera Marino que le pase al volumen sistólico en una IC izquierda con edema, y por qué? Tu respuesta tiene cuatro partes.',
               puntos: [
                 `La presión positiva del tórax <span class="hl-azul">baja la presión transmural</span> que el VI desarrolla en sístole.`,
                 `Eso es una <span class="hl-azul">menor poscarga</span>: la pared se mueve hacia dentro con más facilidad.`,
-                `El VI se vacía mejor y <span class="hl-verde">sube el volumen sistólico</span> (y el gasto).`],
-              explicacion: `«Las presiones intratorácicas positivas reducirán la poscarga del VI al disminuir la presión transmural de la pared» y favorecen el vaciado ventricular, con lo que el volumen sistólico aumenta (${p(14)}). La CPAP sube el gasto en la IC izquierda y acelera la mejoría del edema (${p(14)}).`,
-              nota: `En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Mercedes: enseña lo que el corazón que falla tolera con la CPAP (${r(88)}): el gasto se sostiene (VS ≈33-34 mL) y el edema baja con CPAP 10, sin la subida que describe el libro. <b>Límite del modelo:</b> Marino (resp. p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 y PCP ≥12) describen que el gasto puede subir; el modelo no lo reproduce porque no tiene la retirada simpática ni el alivio del trabajo respiratorio. Mercedes tiene FE conservada: ahí la presión intratorácica alta puede dificultar el llenado y agravar el cuadro (${p(3)}), así que en ella el volumen sistólico podría no subir. <b>La fuente no lo dice:</b> cifras del cambio con la CPAP.` + enFicha(M, 'mc-vpp') } },
+                `El VI se vacía mejor y <span class="hl-verde">sube el volumen sistólico</span> (y el gasto).`,
+                `Salvedad: en la <span class="hl-rojo">FE conservada</span> (Mercedes), la presión intratorácica alta puede bajar el llenado ventricular.`],
+              explicacion: `«Las presiones intratorácicas positivas reducirán la poscarga del VI al disminuir la presión transmural de la pared» y favorecen el vaciado ventricular, con lo que el volumen sistólico aumenta (${p(14)}). La CPAP sube el gasto en la IC izquierda y acelera la mejoría del edema (${p(14)}). La salvedad de la FE conservada: las presiones intratorácicas altas pueden dificultar el llenado y agravar la IC (${p(3)}).`,
+              nota: `En el modelo, el paciente es Ramiro (etapa 3 de la Fig. 18.3), no Mercedes: enseña lo que el corazón que falla tolera con la CPAP (${r(88)}): el gasto apenas cambia (VS ≈33-34 mL, IC 1,9 → 1,8) y el edema crece más despacio con CPAP 10, sin la subida que describe el libro. <b>Límite del modelo:</b> Marino (resp. p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 en 11 pacientes con PCP ≥12; con PCP <12 el gasto bajó, IC 3,14→2,89) describen que el gasto puede subir; el modelo no lo reproduce (el motivo es del autor: otros mecanismos del paciente real, como la retirada simpática, no están en el modelo). Mercedes tiene FE conservada: ahí la presión intratorácica alta puede dificultar el llenado y agravar el cuadro (${p(3)}), así que en ella el volumen sistólico podría no subir. <b>La fuente no lo dice:</b> cifras del cambio con la CPAP.` + enFicha(M, 'mc-vpp') } },
           { momento: '04:10 · analítica', datos: { BNP: '160 pg/mL', Lactato: '1,3 mmol/L' }, nuevo: ['BNP', 'Lactato'],
             pregunta: { id: 'cic-3', tipo: 'test', fuente: 'mc-bnp · mc-tabla-18-2', origen: 'ilustrativo: BNP de la paciente; los umbrales, de la ficha',
               enunciado: 'El BNP de Mercedes es 160 pg/mL. La residente dice: «No llega ni a 300; no es insuficiencia cardíaca». ¿Qué le contestas?',

@@ -64,15 +64,15 @@ export const BASE = {
   pTorax: 0,
   // fPleura: fracción de la presión de la vía aérea que llega al espacio pleural. En 19 pacientes con insuficiencia
   // respiratoria aguda, el 37 % con pulmones distensibles, el 32 % y el 24 % con los más rígidos (presión esofágica; Jardin
-  // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, J Appl Physiol 59:1171,
-  // PMID 3902775) y, en decúbito supino, el esófago la infravalora mucho (Marini 1982, J Appl Physiol 53:384, PMID 6749776).
-  // Por eso 0,65, calibrado a la medida de fuera: 15 cmH₂O bajan el VS un 23 ± 22 % (Jellinek 2000, ver kAbdomen); con 0,65
+  // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, en perros; J Appl Physiol 59:1171,
+  // PMID 3902775) y, en decúbito supino, el esófago la infravalora mucho (Marini 1982, en perros; J Appl Physiol 53:384, PMID 6749776).
+  // Por eso 0,65, calibrado a la medida de fuera: 15 cmH₂O bajan el VS un 23 ± 22 % (Jellinek 2000, en pacientes anestesiados en apnea; ver kAbdomen); con 0,65
   // el motor da −24 % en el paciente normal (autonomo/bloques/b3/herramientas/g4-fpleura.mjs). Antes llegaba toda (1):
   // 10 cmH₂O en un paciente seco paraban el retorno (GC 0,05)
   fPleura: 0.65,
   // kAbdomen: fracción de la presión de la vía aérea que llega a las venas de fuera del tórax. Al inflarse el pulmón baja el
   // diafragma, sube la presión del abdomen y exprime su reservorio venoso: la presión media de llenado sube casi tanto como la
-  // de la AD y el gradiente del retorno venoso se mantiene. En 10 pacientes anestesiados, 15 cmH₂O (11,1 mmHg) subieron la
+  // de la AD y el gradiente del retorno venoso se mantiene. En 10 pacientes anestesiados y en apnea, 15 cmH₂O (11,1 mmHg) subieron la
   // presión media de llenado de 10,2 a 12,7 mmHg (2,5/11,1 ≈ 0,23) y la AD de 7,3 a 10,0 (Jellinek 2000, J Appl Physiol
   // 88:926, PMID 10710387). Sin esto, con la AD dentro del tórax y las venas fuera, 10 cmH₂O vaciaban el pulmón hacia las
   // venas y, en el paciente seco, paraban el retorno (GC 0,05)
