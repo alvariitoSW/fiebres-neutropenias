@@ -4,7 +4,7 @@
 // Fuentes: López Ramírez 2012 (los mismos datos y páginas que `ecg9-tabla-ekg`), Wagner 2009 (Circulation 119:e262),
 // Damluji 2021 (AHA, complicaciones mecánicas; texto libre en PMC, por apartado), ESC 2023 SCA y Marino 2024.
 const LOP = 'López Ramírez 2012';
-const lop = (texto, pagina, pdf) => ({ texto, fuente: LOP, pagina, href: `docs/lopez-ramirez-2012-alegria-leer-ecg-parte3.pdf#page=${pdf}` });
+const lop = (texto, pagina, pdf, ficha) => ({ texto, fuente: LOP, pagina, ficha, href: `docs/lopez-ramirez-2012-alegria-leer-ecg-parte3.pdf#page=${pdf}` });
 const wag = (texto, pdf, impresa) => ({ texto, fuente: 'Wagner 2009', pagina: `PDF p. ${pdf} (e${impresa})`, href: `docs/wagner-2009-aha-ecg-isquemia-infarto.pdf#page=${pdf}` });
 const DAM_URL = 'https://pmc.ncbi.nlm.nih.gov/articles/PMC9364424';
 const dam = (texto, apartado) => ({ texto, fuente: 'AHA 2021 (Damluji)', apartado, href: DAM_URL });
@@ -21,18 +21,23 @@ export const scaColumnas = [
 export const scaTerritorios = [
     {
         id: 'da-proximal', territorio: 'DA proximal (antes de la 1.ª septal y la 1.ª diagonal)',
-        lopez: [lop('EKG 1: ↑ST > 0,25 mV en V1; ↑ST en aVR; ↓ST en V5; ↓ST inferior ≥ 0,1 mV; Q en aVL con ↑ST en DI-aVL', 'pp. 136-137', 9)],
+        lopez: [lop('EKG 1: ↑ST > 0,25 mV en V1; ↑ST en aVR; ↓ST en V5; ↓ST inferior ≥ 0,1 mV; Q en aVL con ↑ST en DI-aVL', 'pp. 136-137', 9, '#ecg9-tabla-ekg'),
+            lop('↑ST en DI y aVL no distingue la oclusión proximal de la distal a la 1.ª diagonal; más ↑ST en aVL, más probable que sea proximal', 'p. 137', 10, '#ecg9-tabla-ekg'),
+            lop('Cualquier ↑ST en aVR en un infarto anterior se asocia a oclusión proximal de la DA (el ↑ST en aVR también se ve en angina inestable, enfermedad de tres vasos o tronco)', 'p. 140', 13, '#ecg9-tabla-ekg'),
+        ],
         wagner: [wag('↑ST en V1-V4, I, aVL y a menudo aVR; ↓ST recíproco en II, III, aVF y a menudo V5; más ↑ST en aVL que en aVR y más ↓ST en III que en II', 4, 265)],
         pared: [wag('Base del VI, paredes anterior y lateral y tabique («extensive anterior wall or anterobasal»)', 4, 265)],
         complicacion: [
             dam('Los defectos septales anteriores y apicales se deben a infartos del territorio de la DA', 'Ventricular septal defect'),
             dam('Shock con predominio del VI: infarto extenso de la DA', 'Tabla 2'),
             esc('Trombo del VI sobre todo en el IAMCEST anterior', 2, 3, 'p. 3776, apdo. 12.2.3'),
+            lop('BAV de 2.º o 3.º grado en las primeras 24 h por necrosis septal; el bifascicular (BCRDHH + hemibloqueo anterosuperior) tiene un 30 % de riesgo de BAV completo', 'pp. 137-138', 10, '#ecg9-anteroseptal'),
+            esc('BAV de alto grado con IAM anterior e insuficiencia cardíaca aguda: puede considerarse un dispositivo precoz (IIb)', 2, 5, 'p. 3778, Tabla 14'),
         ],
     },
     {
         id: 'da-distal', territorio: 'DA distal (tras la 1.ª septal y la 1.ª diagonal)',
-        lopez: [lop('EKG 4: sin ↓ST inferior (≤ 0,1 mV, sobre todo en DIII); Q en V4-V6; T negativa en aVL; a veces ↓ST en aVL', 'pp. 139-140', 12)],
+        lopez: [lop('EKG 4: sin ↓ST inferior (≤ 0,1 mV, sobre todo en DIII); Q en V4-V6; T negativa en aVL; a veces ↓ST en aVL', 'pp. 139-140', 12, '#ecg9-tabla-ekg')],
         wagner: [wag('↑ST en V3-V6 (menos en V2); sin ↑ST en V1, aVR ni aVL; sin ↓ST en II, III, aVF (puede haber ↑ST en II, III, aVF)', 4, 265)],
         pared: [wag('Anterior', 4, 265)],
         complicacion: [
@@ -42,30 +47,31 @@ export const scaTerritorios = [
     },
     {
         id: 'diagonal', territorio: '1.ª diagonal',
-        lopez: [lop('EKG 8: ↑ST en DI, aVL y V2 (> 0,1 mV); ↓ST en DIII y aVF; V3 isoeléctrico o ↓ST < 0,1 mV; ↓ST de 1 mm en V4', 'pp. 142-143', 15)],
+        lopez: [lop('EKG 8: ↑ST en DI, aVL y V2 (> 0,1 mV); ↓ST en DIII y aVF; V3 isoeléctrico o ↓ST < 0,1 mV; ↓ST de 1 mm en V4', 'pp. 142-143', 15, '#ecg9-tabla-ekg')],
         wagner: [hueco('Wagner no trata la oclusión de la diagonal; solo describe la DA entre la 1.ª septal y la 1.ª diagonal: V1 sin ↑ST, aVL con ↑ST y III con ↓ST (PDF p. 4, e265)', 'Wagner 2009, ESC 2023')],
         pared: [hueco('La fuente no lo dice', 'López Ramírez, Wagner')],
         complicacion: [hueco('La fuente no lo dice', 'Damluji 2021, ESC 2023, Marino')],
     },
     {
         id: 'cd-inferior', territorio: 'Coronaria derecha (infarto inferior)',
-        lopez: [lop('EKG 5: ↓ST en DIII > DII (flecha tal como la imprime el libro, ver nota); ↓ST ≥ 1 mm en DI y aVL; ↓ST en V1-V2 = compromiso posterior', 'pp. 140-141', 13)],
+        lopez: [lop('EKG 5: ↓ST en DIII > DII (flecha tal como la imprime el libro, ver nota); ↓ST ≥ 1 mm en DI y aVL; ↓ST en V1-V2 = compromiso posterior', 'pp. 140-141', 13, '#ecg9-tabla-ekg')],
         wagner: [wag('↑ST solo en II, III y aVF, con más ↑ST en III que en II; a menudo ↓ST en I y aVL', 4, 265)],
         pared: [wag('Inferior', 4, 265)],
         complicacion: [
             dam('Los defectos septales posteriores se deben a infartos inferiores', 'Ventricular septal defect'),
-            dam('La rotura del músculo papilar posteromedial (riego único: Cx o CD) ocurre con infartos inferiores o laterales', 'Acute mitral regurgitation secondary to papillary muscle rupture'),
+            dam('La rotura del músculo papilar posteromedial (riego único: Cx o CD) ocurre típicamente con infartos inferiores o laterales', 'Acute mitral regurgitation secondary to papillary muscle rupture'),
             { texto: 'La insuficiencia cardíaca derecha suele deberse a hipertensión pulmonar o a un infarto de pared inferior', fuente: 'Marino 2024, caps. 18-21', pagina: 'PDF p. 3', href: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf#page=3' },
             hueco('BAV con infarto inferior: la fuente no lo dice', 'ESC 2023, Wagner'),
         ],
     },
     {
         id: 'cd-vd', territorio: 'Coronaria derecha proximal + ventrículo derecho',
-        lopez: [lop('EKG 6: lo anterior, con mayor ↓ST en aVL que en V1, ↑ST en V1 y ↑ST en V4R, que rara vez persiste más de 12 h', 'p. 141', 14)],
+        lopez: [lop('EKG 6: lo anterior, con mayor ↓ST en aVL que en V1, ↑ST en V1 y ↑ST en V4R, que rara vez persiste más de 12 h', 'p. 141', 14, '#ecg9-rv-stemi')],
         wagner: [wag('↑ST en V3R y V4R y a menudo en V1; V4R es la derivación derecha más usada; la ↑ST derecha dura menos que la inferior (sin cifra de horas): registrarla cuanto antes. El vector posterior puede anular el ↑ST en V1', 4, 265)],
-        pared: [wag('Inferior con extensión al ventrículo derecho (y posterolateral izquierda si la CD es dominante)', 5, 266)],
+        pared: [wag('Inferior con extensión al ventrículo derecho', 4, 265), wag('Y posterolateral izquierda si la CD es dominante', 5, 266)],
         complicacion: [
             esc('No dar nitratos con hipotensión, bradicardia o taquicardia marcadas, o infarto del VD', 1, 25, 'p. 3744, apdo. 4.2.2.2'),
+            { texto: 'La nitroglicerina no se aconseja en el infarto del ventrículo derecho: sus efectos venodilatadores pueden ser contraproducentes', fuente: 'Marino 2024, caps. 18-21', pagina: 'PDF p. 46', href: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf#page=46' },
             dam('Shock con predominio del VD: suele ser infarto de la coronaria derecha con afectación del VD', 'Tabla 2'),
             dam('El infarto del VD es un rasgo importante de los defectos septales por oclusión proximal aguda de la coronaria derecha', 'Ventricular septal defect'),
         ],
@@ -73,13 +79,13 @@ export const scaTerritorios = [
     {
         id: 'cx-om', territorio: 'Circunfleja / obtusa marginal (lateral y posterior)',
         lopez: [
-            lop('EKG 7 (inferior, circunfleja): ↑ST en DII > DIII; aVL isoeléctrico o con ↑ST; ↓ST en V1-V2 (también en la CD): «siempre implica compromiso posterior»', 'p. 142', 15),
-            lop('EKG 9 (obtusa marginal 1 proximal): ↑ST en aVL y V6; leve ↓ST en DIII y aVF; ↓ST en V2 (< 0,1 mV), V3 y V4', 'p. 143', 16),
+            lop('EKG 7 (inferior, circunfleja): ↑ST en DII > DIII; aVL isoeléctrico o con ↑ST; ↓ST en V1-V2 (también en la CD): «siempre implica compromiso posterior»', 'p. 142', 15, '#ecg9-tabla-ekg'),
+            lop('EKG 9 (obtusa marginal 1 proximal): ↑ST en aVL y V6; leve ↓ST en DIII y aVF; ↓ST en V2 (< 0,1 mV), V3 y V4', 'p. 143', 16, '#ecg9-tabla-ekg'),
         ],
         wagner: [wag('↑ST en II mayor que en III; I y aVL isoeléctricos o con ↑ST. La ↓ST en V1-V3 con infarto inferior puede ser de CD o de Cx y no las distingue; su ausencia sugiere más CD que Cx', 5, 266)],
         pared: [wag('Inferior y lateral; ↓ST en V1-V3 = pared posterior o posterolateral', 5, 266)],
         complicacion: [
-            dam('La rotura del músculo papilar posteromedial (riego único: Cx o CD) ocurre con infartos inferiores o laterales', 'Acute mitral regurgitation secondary to papillary muscle rupture'),
+            dam('La rotura del músculo papilar posteromedial (riego único: Cx o CD) ocurre típicamente con infartos inferiores o laterales', 'Acute mitral regurgitation secondary to papillary muscle rupture'),
             dam('El pseudoaneurisma afecta con más frecuencia a la pared inferior o lateral', 'Pseudoaneurysm and true aneurysm'),
         ],
     },

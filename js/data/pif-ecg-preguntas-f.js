@@ -40,11 +40,11 @@ export const preguntasPifEcgF = [
             'Circunfleja: inferior y lateral, y el ↓ST en V1-V2 señala pared posterior',
         ],
         correcta: 3,
-        explicacion: 'II > III con aVL isoeléctrico o elevado es el patrón de la circunfleja, y el ↓ST en V1-V2 indica pared posterior. Con la coronaria derecha el ↑ST sería mayor en III que en II y aVL tendría ↓ST: confundirlas lleva a buscar la arteria equivocada. Con la DA proximal hay ↑ST en V1-V4, no ↓ST. La 1.ª diagonal no da ↑ST inferior. El ↓ST en V1-V2 también puede darlo la coronaria derecha: Wagner no las distingue por ese signo. López Ramírez, EKG 7, p. 142; Wagner 2009, PDF p. 5 (e266).',
+        explicacion: 'II > III con aVL isoeléctrico o elevado es el patrón de la circunfleja, y el ↓ST en V1-V2 indica pared posterior. Con la coronaria derecha el ↑ST sería mayor en III que en II y aVL a menudo tendría ↓ST: confundirlas lleva a buscar la arteria equivocada. Con la DA proximal hay ↑ST en V1-V4, no ↓ST. La 1.ª diagonal no da ↑ST inferior. El ↓ST en V1-V2 también puede darlo la coronaria derecha: Wagner no las distingue por ese signo. López Ramírez, EKG 7, p. 142; Wagner 2009, PDF p. 5 (e266).',
     },
     {
         id: 'pif-ecg-f-q004', tema: 'ecg-predice',
-        enunciado: 'Piensa y destapa: tras un infarto anterior extenso por oclusión de la DA, ¿qué complicación vigilarías en los días siguientes con una ecocardiografía, y por qué esa y no otra?',
+        enunciado: 'Piensa antes: tras un infarto anterior extenso por oclusión de la DA, ¿qué complicación vigilarías con una ecocardiografía?',
         opciones: [
             'Rotura del músculo papilar posteromedial',
             'Trombo en el ventrículo izquierdo',
@@ -61,14 +61,14 @@ export const preguntasPifEcgF = [
             'Un infarto inferior',
             'Un infarto anterior extenso de la DA proximal',
             'Un infarto apical de la DA distal',
-            'Ninguno: la CIV solo aparece con el infarto del ventrículo derecho',
+            'Un infarto lateral aislado de la marginal, que no llega al tabique',
         ],
         correcta: 0,
-        explicacion: 'Los defectos septales posteriores se deben a infartos inferiores; los anteriores y apicales, a infartos del territorio de la DA. Pensar en la DA proximal o distal llevaría a buscar la CIV en el sitio equivocado. El infarto del VD es un rasgo importante cuando la oclusión proximal de la coronaria derecha causa la CIV, pero no es su única causa. AHA 2021 Damluji, apartado «Ventricular septal defect» (la aparición a los 3-5 días sale de la Tabla 1 del mismo documento).',
+        explicacion: 'Los defectos septales posteriores se deben a infartos inferiores; los anteriores y apicales, a infartos del territorio de la DA. Pensar en la DA proximal o distal llevaría a buscar la CIV en el sitio equivocado. Un infarto lateral aislado no es el que la fuente asocia a la CIV posterior. AHA 2021 Damluji, apartado «Ventricular septal defect» (la aparición a los 3-5 días sale de la Tabla 1 del mismo documento).',
     },
     // ---- Caso que evoluciona (paciente inventado) ----
     {
-        id: 'pif-ecg-f-c001', tema: 'ecg-predice',
+        id: 'pif-ecg-f-c001', tema: 'ecg-predice', paso: 1,
         enunciado: 'Caso, paso 1. Varón de 62 años con dolor torácico de 40 minutos. ECG: ↑ST en II, III y aVF, con más ↑ST en III que en II, ↓ST en I y aVL y ↑ST en V1. Piensa: ¿qué arteria y qué territorio?',
         opciones: [
             'Circunfleja: territorio inferior y lateral, porque el ↑ST es mayor en II que en III',
@@ -80,19 +80,19 @@ export const preguntasPifEcgF = [
         explicacion: 'III > II con ↓ST en I y aVL apunta a la coronaria derecha; el ↑ST en V1 hace pensar en el ventrículo derecho. La circunfleja daría II > III. La DA daría ↑ST anterior, no inferior. Wagner 2009, PDF p. 4 (e265); López Ramírez, EKG 5 y 6, pp. 140-141.',
     },
     {
-        id: 'pif-ecg-f-c002', tema: 'ecg-predice',
-        enunciado: 'Caso, paso 2. Siguen el dolor y una PA de 82/50 mmHg. Antes de elegir: ¿qué derivaciones añades y qué fármaco clásico del dolor isquémico evitas?',
+        id: 'pif-ecg-f-c002', tema: 'ecg-predice', paso: 2,
+        enunciado: 'Caso, paso 2. Sigue el dolor y la PA es de 104/66 mmHg. Antes de elegir: ¿qué derivaciones añades, y qué fármaco clásico del dolor isquémico evitas y por qué?',
         opciones: [
-            'Solo V7-V9 para ver la pared posterior, y nitroglicerina para controlar el dolor con la PA vigilada',
-            'V3R y V4R cuanto antes, y sin nitratos por la hipotensión',
-            'Repetir V1-V6 más tarde, y dar nitroglicerina con la PA vigilada de cerca',
-            'V3R y V4R, y nitroglicerina porque el dolor sigue',
+            'Solo V7-V9 para ver la pared posterior, y nitroglicerina para el dolor porque la PA es normal',
+            'V3R y V4R cuanto antes, y sin nitroglicerina: sus efectos venodilatadores pueden ser contraproducentes si el ventrículo derecho está infartado',
+            'Repetir V1-V6 más tarde, y nitroglicerina con la PA vigilada de cerca',
+            'V3R y V4R cuanto antes, y nitroglicerina mientras la PA siga normal',
         ],
         correcta: 1,
-        explicacion: 'V3R-V4R se registran en todo infarto inferior, y cuanto antes, porque el ↑ST derecho dura menos que el inferior; el ↑ST en V4R sugiere isquemia del VD. Con hipotensión o infarto del VD no se dan nitratos: bajarían la precarga y la PA. Registrar solo V7-V9 o repetir V1-V6 retrasa el diagnóstico del VD. Wagner 2009, PDF p. 4 (e265); ESC 2023 SCA, parte 1, PDF p. 19 (p. 3738) y PDF p. 25 (p. 3744, apdo. 4.2.2.2).',
+        explicacion: 'V3R-V4R se registran en todo infarto inferior, y cuanto antes, porque el ↑ST derecho dura menos que el inferior; el ↑ST en V4R sugiere isquemia del VD. En el infarto del VD la nitroglicerina no se aconseja «porque sus efectos venodilatadores pueden ser contraproducentes» (Marino 2024, PDF p. 46); aunque la PA sea normal ahora, el riesgo está en el infarto del VD. Registrar solo V7-V9 o repetir V1-V6 retrasa el diagnóstico del VD. Wagner 2009, PDF p. 4 (e265); ESC 2023 SCA, parte 1, PDF p. 19 (p. 3738) y PDF p. 25 (p. 3744, apdo. 4.2.2.2).',
     },
     {
-        id: 'pif-ecg-f-c003', tema: 'ecg-predice',
+        id: 'pif-ecg-f-c003', tema: 'ecg-predice', paso: 3,
         enunciado: 'Caso, paso 3. Al cuarto día, el eco muestra rotura de un músculo papilar con insuficiencia mitral aguda. Piensa: en este infarto de la cara inferior, ¿qué papilar es el más probable y por qué?',
         opciones: [
             'El anterolateral, porque tiene doble riego de la DA y de una diagonal o de la marginal de la circunfleja',
@@ -101,6 +101,6 @@ export const preguntasPifEcgF = [
             'El posteromedial: riego único (circunfleja o coronaria derecha) y rotura en infartos inferiores o laterales',
         ],
         correcta: 3,
-        explicacion: 'El posteromedial depende de una sola arteria, según la dominancia circunfleja o coronaria derecha, y su rotura se asocia a infartos inferiores o laterales, a los 3-5 días. El anterolateral tiene doble riego (DA y diagonal o marginal de la circunfleja): protege frente a la rotura y no encaja con este ECG. La rotura sí depende del infarto transmural. AHA 2021 Damluji, apartado «Acute mitral regurgitation secondary to papillary muscle rupture» y Tabla 1. La cirugía es de elección y se puede considerar un balón de contrapulsación mientras se espera: ESC 2023 SCA, parte 2, PDF p. 3-4 (pp. 3776-3777).',
+        explicacion: 'El posteromedial depende de una sola arteria, según la dominancia circunfleja o coronaria derecha, y su rotura se asocia a infartos inferiores o laterales, a los 3-5 días. El anterolateral tiene doble riego (DA y diagonal o marginal de la circunfleja); la rotura típica en un infarto inferior es la del posteromedial. La rotura sí depende del infarto transmural. AHA 2021 Damluji, apartado «Acute mitral regurgitation secondary to papillary muscle rupture» y Tabla 1. La cirugía es de elección y se puede considerar un balón de contrapulsación mientras se espera: ESC 2023 SCA, parte 2, PDF p. 3-4 (pp. 3776-3777).',
     },
 ];

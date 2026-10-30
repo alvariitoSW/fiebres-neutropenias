@@ -25,7 +25,11 @@ export const quizTemas = [...temasPifEcgA, ...temasPifEcgB, ...temasPifEcgD, ...
 function initObjetivos() {
     initCorkboard('pif-cardio-obj-corkboard', 'panel-pif-cardio-obj-tabs');
     const obj = rotacionesPif.R1.find(r => r.id === 'cardio-pif')?.objetivos || [];
-    document.querySelectorAll('.pifobj-objetivo').forEach(p => { p.textContent = obj[Number(p.dataset.objetivo)] || ''; });
+    document.querySelectorAll('.pifobj-objetivo').forEach(p => { p.textContent = obj[Number(p.dataset.objetivo)] || '';
+        // Si el objetivo es solo el título del capítulo, no se repite.
+        const titulo = p.closest('.tab-content')?.querySelector('h3')?.textContent.trim();
+        if (titulo && p.textContent.trim() === titulo) { p.hidden = true; p.previousElementSibling?.classList.contains('pifobj-etiqueta') && (p.previousElementSibling.hidden = true); }
+    });
 }
 
 export function init() {
