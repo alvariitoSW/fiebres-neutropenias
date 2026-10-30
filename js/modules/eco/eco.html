@@ -38,27 +38,42 @@
         <div id="eco-med-raiz" class="tab-content">
             <h3 style="color: var(--accent-blue);">Raíz aórtica: 4 niveles, 1 convención</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Lang et al., ASE/EACVI 2015, secciones 12-13 y Tabla 14 <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 28-32</a>.</p>
-            <p id="eco-med-idea" data-nombre="Idea de la raíz" style="font-size:0.88rem;">La raíz se mide en <span class="hl hl-azul">4 niveles</span>, del anillo a la aorta ascendente proximal, en el paraesternal eje largo, con el plano que dé el <span class="hl hl-azul">diámetro máximo perpendicular al eje largo de la aorta</span> <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 28, 30</a>.</p>
+            <p id="eco-med-idea" data-nombre="Idea de la raíz" style="font-size:0.88rem;">La raíz se mide en <span class="hl hl-azul">4 niveles</span>, del anillo a la aorta ascendente proximal, en el paraesternal eje largo, el anillo en sístole y de borde interno a borde interno (I-I), el resto en diástole y de borde de ataque a borde de ataque (L-L) <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 28, 30</a>.</p>
 
             <div class="article-figure" style="background: var(--bg-main);">
-                <svg id="eco-med-svg" viewBox="0 0 340 190" role="img" aria-label="Esquema del paraesternal eje largo con los 4 niveles de la raíz aórtica" style="width:100%; height:auto; display:block; background: var(--bg-main);">
+                <svg id="eco-med-svg" viewBox="0 0 340 190" role="img" aria-label="Esquema del paraesternal eje largo en sector de ecografía con los 4 niveles de la raíz aórtica" style="width:100%; height:auto; display:block; background: var(--bg-main);">
+                    <defs><clipPath id="eco-med-sector"><path d="M170,-120 L-90,190 L430,190 Z"/></clipPath></defs>
                     <rect x="0" y="0" width="340" height="190" fill="var(--bg-main)"/>
-                    <path d="M10,60 L112,70 C126,72 134,76 140,80" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
-                    <path d="M10,150 C60,160 110,150 128,128 L140,120" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
-                    <path d="M140,80 C150,80 160,70 178,70 C196,70 200,76 210,76 C230,74 250,72 310,72" fill="none" stroke="var(--text-dim)" stroke-width="2.5"/>
-                    <path d="M140,120 C150,120 160,130 178,130 C196,130 200,124 210,124 C230,126 250,128 310,128" fill="none" stroke="var(--text-dim)" stroke-width="2.5"/>
-                    <path d="M140,80 L158,100 L140,120" fill="none" stroke="var(--text-muted)" stroke-width="1.5"/>
-                    <path d="M142,134 C170,140 230,140 310,138 L310,184 L150,184 Z" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-dasharray="3 3"/>
-                    <text x="60" y="112" fill="var(--text-muted)" font-size="11" text-anchor="middle">VI</text>
-                    <text x="64" y="46" fill="var(--text-muted)" font-size="11" text-anchor="middle">VD</text>
-                    <text x="230" y="170" fill="var(--text-muted)" font-size="11" text-anchor="middle">AI</text>
-                    <text x="300" y="62" fill="var(--text-muted)" font-size="10" text-anchor="end">Aorta</text>
-                    <g data-nivel="anillo" tabindex="0" role="button" aria-label="Nivel 1, anillo" style="cursor:pointer;"><line x1="140" y1="80" x2="140" y2="120" stroke="var(--text-dim)" stroke-width="3"/><circle cx="140" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="140" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">1</text><line x1="140" y1="58" x2="140" y2="80" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
-                    <g data-nivel="senos" tabindex="0" role="button" aria-label="Nivel 2, senos de Valsalva" style="cursor:pointer;"><line x1="178" y1="70" x2="178" y2="130" stroke="var(--text-dim)" stroke-width="3"/><circle cx="178" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="178" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">2</text><line x1="178" y1="58" x2="178" y2="70" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
-                    <g data-nivel="ust" tabindex="0" role="button" aria-label="Nivel 3, unión sinotubular" style="cursor:pointer;"><line x1="212" y1="76" x2="212" y2="124" stroke="var(--text-dim)" stroke-width="3"/><circle cx="220" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="220" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">3</text><line x1="218" y1="58" x2="212" y2="76" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
-                    <g data-nivel="asc" tabindex="0" role="button" aria-label="Nivel 4, aorta ascendente proximal" style="cursor:pointer;"><line x1="262" y1="72" x2="262" y2="128" stroke="var(--text-dim)" stroke-width="3"/><circle cx="262" cy="36" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="262" y="41" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">4</text><line x1="262" y1="48" x2="262" y2="72" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <path d="M170,-120 L-90,190 L430,190 Z" fill="var(--bg-card)" stroke="var(--border-color)" stroke-width="1" clip-path="url(#eco-med-sector)"/>
+                    <g clip-path="url(#eco-med-sector)" fill="none">
+                    <path d="M22,56 C50,24 120,16 190,20 C225,22 250,26 330,32" stroke="var(--text-muted)" stroke-width="2"/>
+                    <path d="M10,60 L112,70 C126,72 134,76 140,80" stroke="var(--text-muted)" stroke-width="2"/>
+                    <path d="M10,150 C60,160 110,150 128,128 L140,120" stroke="var(--text-muted)" stroke-width="2"/>
+                    <path d="M140,80 C146,80 156,68 178,68 C198,68 202,78 212,78 C230,76 250,76 330,76" stroke="var(--text-dim)" stroke-width="2.5"/>
+                    <path d="M140,120 C146,120 156,132 178,132 C198,132 202,122 212,122 C230,124 250,124 330,124" stroke="var(--text-dim)" stroke-width="2.5"/>
+                    <path d="M140,120 C130,132 112,138 94,142" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    <path d="M127,130 C120,137 112,141 104,143" stroke="var(--text-muted)" stroke-width="1.2"/>
+                    <path d="M150,134 C146,172 190,186 220,184 C258,182 270,152 254,138 C240,135 200,137 150,134 Z" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    <line x1="120" y1="100" x2="330" y2="100" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="1 3"/>
+                    <path d="M140,80 C148,86 156,96 166,100" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    <path d="M140,120 C148,114 156,104 166,100" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    <line x1="164" y1="100" x2="175" y2="100" stroke="var(--text-muted)" stroke-width="1.5"/>
+                    </g>
+                    <text x="46" y="112" fill="var(--text-muted)" font-size="11" text-anchor="middle">VI</text>
+                    <text x="70" y="46" fill="var(--text-muted)" font-size="11" text-anchor="middle">VD</text>
+                    <text x="60" y="80" fill="var(--text-muted)" font-size="9.5" text-anchor="middle">Septo</text>
+                    <text x="112" y="100" fill="var(--text-muted)" font-size="9.5" text-anchor="middle">TSVI</text>
+                    <text x="86" y="138" fill="var(--text-muted)" font-size="9.5" text-anchor="end">VMA</text>
+                    <text x="200" y="168" fill="var(--text-muted)" font-size="11" text-anchor="middle">AI</text>
+                    <text x="186" y="95" fill="var(--text-muted)" font-size="9.5">CD</text>
+                    <text x="186" y="116" fill="var(--text-muted)" font-size="9.5">NC</text>
+                    <text x="318" y="66" fill="var(--text-muted)" font-size="9.5" text-anchor="end">Ao asc</text>
+                    <g data-nivel="anillo" tabindex="0" role="button" aria-label="Nivel 1, anillo" style="cursor:pointer;"><line x1="140" y1="80" x2="140" y2="120" stroke="var(--text-dim)" stroke-width="3"/><line x1="135" y1="80" x2="145" y2="80" stroke="var(--text-dim)" stroke-width="2"/><line x1="135" y1="120" x2="145" y2="120" stroke="var(--text-dim)" stroke-width="2"/><circle cx="140" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="140" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">1</text><line x1="140" y1="58" x2="140" y2="80" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="senos" tabindex="0" role="button" aria-label="Nivel 2, senos de Valsalva" style="cursor:pointer;"><line x1="178" y1="68" x2="178" y2="132" stroke="var(--text-dim)" stroke-width="3"/><line x1="173" y1="66" x2="183" y2="66" stroke="var(--text-dim)" stroke-width="2"/><line x1="173" y1="134" x2="183" y2="134" stroke="var(--text-dim)" stroke-width="2"/><circle cx="178" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="178" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">2</text><line x1="178" y1="58" x2="178" y2="68" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="ust" tabindex="0" role="button" aria-label="Nivel 3, unión sinotubular" style="cursor:pointer;"><line x1="212" y1="78" x2="212" y2="122" stroke="var(--text-dim)" stroke-width="3"/><line x1="207" y1="76" x2="217" y2="76" stroke="var(--text-dim)" stroke-width="2"/><line x1="207" y1="124" x2="217" y2="124" stroke="var(--text-dim)" stroke-width="2"/><circle cx="220" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="220" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">3</text><line x1="220" y1="58" x2="212" y2="78" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
+                    <g data-nivel="asc" tabindex="0" role="button" aria-label="Nivel 4, aorta ascendente proximal" style="cursor:pointer;"><line x1="262" y1="76" x2="262" y2="124" stroke="var(--text-dim)" stroke-width="3"/><line x1="257" y1="74" x2="267" y2="74" stroke="var(--text-dim)" stroke-width="2"/><line x1="257" y1="126" x2="267" y2="126" stroke="var(--text-dim)" stroke-width="2"/><circle cx="262" cy="46" r="12" fill="var(--bg-main)" stroke="var(--text-dim)" stroke-width="2"/><text x="262" y="51" fill="var(--text-main)" font-size="13" font-weight="700" text-anchor="middle">4</text><line x1="262" y1="58" x2="262" y2="76" stroke="var(--text-dim)" stroke-width="1" stroke-dasharray="2 2"/></g>
                 </svg>
-                <div class="article-figure-caption">Esquema recreado del paraesternal eje largo (no es una ecografía real; Lang no trae ninguna de la raíz). Basado en la Figura 10A de Lang, pág. 30. En este plano, el máximo de los senos suele estar en su punto medio.</div>
+                <div class="article-figure-caption">Esquema recreado del paraesternal eje largo (no es una ecografía real; Lang no trae ninguna de la raíz). Basado en la Figura 10A de Lang, pág. 30. VD: ventrículo derecho; VI: ventrículo izquierdo; TSVI: tracto de salida del VI; VMA: valva mitral anterior; AI: aurícula izquierda; CD y NC: cúspides coronaria derecha y no coronaria. Las marcas del nivel 1 van en el borde interno (I-I); las de los niveles 2-4, en el borde de ataque (L-L). En este plano, el máximo de los senos suele estar en su punto medio.</div>
             </div>
             <div class="cv-fila" id="eco-med-niveles" role="group" aria-label="Niveles de la raíz" style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
                 <button type="button" class="cv-mini" data-nivel="anillo" aria-pressed="false">1 · Anillo</button>
@@ -66,12 +81,13 @@
                 <button type="button" class="cv-mini" data-nivel="ust" aria-pressed="false">3 · Unión sinotubular</button>
                 <button type="button" class="cv-mini" data-nivel="asc" aria-pressed="false">4 · Aorta ascendente</button>
             </div>
+            <p id="eco-med-nivel-txt" aria-live="polite" style="font-size:0.84rem; margin:8px 0 4px;"></p>
             <p style="font-size:0.78rem; color:var(--text-muted);">Toca un nivel: se marca en la Tabla 14 y en la calculadora. Anota siempre la distancia entre el punto medido y el plano del anillo <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 30</a>.</p>
             <div class="cv-fila"><button type="button" class="especialidad-link" data-especialidad="eco" data-eco-vista="plax">Ver el paraesternal eje largo en el simulador →</button></div>
 
             <p class="section-label" style="margin-top:16px;">Cómo y cuándo medir <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 28-32</a></p>
             <ul class="term-chips" id="eco-med-como" data-nombre="Cómo y cuándo medir la raíz">
-                <li id="eco-med-anillo">Anillo: en <span class="hl hl-azul">mesosístole</span>, de borde interno a borde interno, con zoom y calibres electrónicos <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 28-29, 32</a></li>
+                <li id="eco-med-anillo">Anillo: en <span class="hl hl-azul">mesosístole</span>, de borde interno a borde interno (I-I, la convención que usan también la TC y la RM), con zoom y calibres electrónicos <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 28, 32</a></li>
                 <li id="eco-med-resto">Senos, unión sinotubular y ascendente proximal: en <span class="hl hl-azul">telediástole</span>, perpendicular al eje largo de la aorta, de borde de ataque a borde de ataque <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a></li>
                 <li id="eco-med-cierre">Con válvula tricúspide, la línea de cierre debe quedar en el centro de la luz. Si es <span class="hl hl-rojo">asimétrica</span>, el corte no abarca el mayor diámetro <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=30" target="_blank" rel="noopener">pág. 30</a></li>
                 <li id="eco-med-2d">Mejor 2D que modo M: el movimiento del corazón puede subestimar de forma sistemática unos 2 mm con el modo M <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 31-32</a></li>
@@ -82,16 +98,16 @@
             <p class="section-label" style="margin-top:16px;">Tabla 14 · raíz aórtica en adultos normales <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">pág. 32</a></p>
             <div style="overflow-x:auto;">
             <table class="data-table" id="eco-med-tabla-14" data-nombre="Tabla 14 de Lang">
-                <thead><tr><th>Nivel</th><th>Hombres (cm)</th><th>Mujeres (cm)</th><th>Hombres (cm/m²)</th><th>Mujeres (cm/m²)</th></tr></thead>
+                <thead><tr><th>Nivel</th><th>H cm</th><th>M cm</th><th>H cm/m²</th><th>M cm/m²</th></tr></thead>
                 <tbody>
                     <tr data-nivel="anillo"><td>1 · Anillo</td><td>2,6 ± 0,3</td><td>2,3 ± 0,2</td><td>1,3 ± 0,1</td><td>1,3 ± 0,1</td></tr>
-                    <tr data-nivel="senos"><td>2 · Senos de Valsalva</td><td>3,4 ± 0,3</td><td>3,0 ± 0,3</td><td>1,7 ± 0,2</td><td>1,8 ± 0,2</td></tr>
+                    <tr data-nivel="senos"><td><strong>2 · Senos de Valsalva</strong></td><td><strong>3,4 ± 0,3</strong></td><td><strong>3,0 ± 0,3</strong></td><td><strong>1,7 ± 0,2</strong></td><td><strong>1,8 ± 0,2</strong></td></tr>
                     <tr data-nivel="ust"><td>3 · Unión sinotubular</td><td>2,9 ± 0,3</td><td>2,6 ± 0,3</td><td>1,5 ± 0,2</td><td>1,5 ± 0,2</td></tr>
                     <tr data-nivel="asc"><td>4 · Ascendente proximal</td><td>3,0 ± 0,4</td><td>2,7 ± 0,4</td><td>1,5 ± 0,2</td><td>1,6 ± 0,3</td></tr>
                 </tbody>
             </table>
             </div>
-            <p class="fuente-ficha" style="margin:6px 0;">Media ± DE. «Adaptada de Roman et al. y Hiratzka et al.» (pie de la tabla). El diámetro de los senos se relaciona estrechamente con la superficie corporal y la edad, por eso la tabla también viene indexada <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>. Dilatación en los senos = diámetro por encima del límite superior del IC 95 % de una población de referencia grande (misma página).</p>
+            <p class="fuente-ficha" style="margin:6px 0;">H: hombres; M: mujeres. Media ± DE. «Adaptada de Roman et al. y Hiratzka et al.» (pie de la tabla). El diámetro de los senos se relaciona estrechamente con la superficie corporal y la edad, por eso la tabla también viene indexada <a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>. Dilatación en los senos = diámetro por encima del límite superior del IC 95 % de una población de referencia grande (misma página). La dilatación de la raíz se asocia a la presencia y progresión de la insuficiencia aórtica y a la disección. La hipertensión casi no cambia el diámetro de los senos, pero sí se asocia a mayor tamaño de los segmentos más distales. El índice de raíz es el cociente entre el diámetro observado y el esperado (pág. 32).</p>
 
             <p class="section-label" style="margin-top:16px;">🧮 Calculadora de z</p>
             <div class="card" id="eco-med-calc" data-nombre="Calculadora de z de la raíz" style="padding:14px 16px;">
@@ -119,9 +135,16 @@
                 </div>
                 <div class="tfg-estado tfg-estado-neutro" id="eco-med-resultado" aria-live="polite">Escribe la medida para calcular la z.</div>
                 <div class="tfg-estado tfg-estado-warn" id="eco-med-aviso" hidden style="margin-top:8px;"></div>
+                <div class="tfg-estado tfg-estado-neutro" id="eco-med-aviso-z" hidden style="margin-top:8px;">Zona donde una diferencia de método mueve la z ~1: mira la nota de interpretación de abajo.</div>
                 <p class="fuente-ficha" style="margin:8px 0 0;">Origen: <strong>ficha</strong>. Lang: z = (medido − media) / DE con la Tabla 14 (<a class="biblio-link" href="docs/lang-2015-cuantificacion-camaras-ase.pdf#page=32" target="_blank" rel="noopener">pág. 32</a>). Devereux: esperado = 2,423 + 0,009·edad + 0,461·SC − 0,267·sexo (1 hombre, 2 mujer), error estándar 0,261 cm, validado desde los 15 años y con senos de 2,1 a 4,3 cm (<a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3462295/" target="_blank" rel="noopener">Devereux 2012</a>). La SC se escribe, no se calcula.</p>
             </div>
-            <div class="tfg-estado tfg-estado-warn" id="eco-med-nota-z" style="margin-top:10px;"><strong>Nota de interpretación (z = 2).</strong> Lang no habla de z ni del error de la medida de la raíz. Lo que sí da: L-L frente a I-I difiere 2 a 4 mm (pág. 31) y el modo M da unos 2 mm menos que el 2D (pág. 32). Una DE de la Tabla 14 es de 0,2 a 0,4 cm y el error estándar de Devereux es 0,26 cm. Con una DE de 3 mm, una diferencia de método de 2 a 3 mm mueve la z cerca de 1: una z de 2 puede caer dentro del error de medida. Es una lectura de estas cifras, no una afirmación de ninguna fuente.</div>
+            <div class="tfg-estado tfg-estado-warn" id="eco-med-nota-z" style="margin-top:10px;"><strong>Nota de interpretación (z = 2).</strong> Lang no habla de z ni del error de la medida de la raíz. Lo que sí da:
+                <ul style="margin:4px 0 4px 18px; padding:0;">
+                    <li>L-L frente a I-I difiere 2 a 4 mm (pág. 31).</li>
+                    <li>El modo M da unos 2 mm menos que el 2D (pág. 32).</li>
+                    <li>Una DE de la Tabla 14 es de 0,2 a 0,4 cm; el error estándar de Devereux, 0,26 cm.</li>
+                </ul>
+                Con una DE de 3 mm, una diferencia de método de 2 a 3 mm mueve la z cerca de 1: una z de 2 puede caer dentro del error de medida. Es una lectura de estas cifras, no una afirmación de ninguna fuente.</div>
 
             <p class="section-label" style="margin-top:16px;">Cuándo se opera (aorta ascendente y raíz) <a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9876736/" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">ACC/AHA 2022</a></p>
             <div style="overflow-x:auto;">
@@ -136,15 +159,21 @@
                     <tr><td>Marfan</td><td>Raíz ≥5,0 cm: reemplazar raíz y ascendente</td><td>1 · B-NR</td><td>6.1.2.2.3</td></tr>
                     <tr><td>Marfan</td><td>Raíz ≥4,5 cm y factores de riesgo de disección: razonable</td><td>2a · B-NR</td><td>6.1.2.2.3</td></tr>
                     <tr><td>Marfan</td><td>Área transversal máxima de la raíz (cm²) entre talla (m) ≥10: razonable</td><td>2a · C-LD</td><td>6.1.2.2.3</td></tr>
+                    <tr><td>Marfan</td><td>Diámetro cercano al umbral, candidato a reemplazo con preservación de válvula (VSRR) y riesgo quirúrgico muy bajo, con cirujanos expertos: puede ser razonable</td><td>2b · C-LD</td><td>6.1.2.2.3</td></tr>
                     <tr><td>Válvula bicúspide</td><td>≥5,5 cm: cirugía</td><td>1 · B-NR</td><td>6.1.3.2</td></tr>
                     <tr><td>Válvula bicúspide</td><td>5,0 a 5,4 cm y otro factor de riesgo de disección: razonable</td><td>2a · B-NR</td><td>6.1.3.2</td></tr>
+                    <tr><td>Válvula bicúspide</td><td>5,0 a 5,4 cm sin otros factores y con bajo riesgo quirúrgico, en centro con experiencia: puede considerarse</td><td>2b · B-NR</td><td>6.1.3.2</td></tr>
+                    <tr><td>Válvula bicúspide</td><td>Área transversal máxima (cm²) entre talla (m) ≥10: razonable</td><td>2a · B-NR</td><td>6.1.3.2</td></tr>
                     <tr><td>Válvula bicúspide, si se opera la válvula</td><td>≥4,5 cm: sustitución simultánea razonable</td><td>2a · B-NR</td><td>6.1.3.2</td></tr>
                 </tbody>
             </table>
             </div>
             <p class="fuente-ficha" style="margin:6px 0;">Origen: <strong>ficha</strong> (guía de aorta ACC/AHA 2022, Isselbacher et al.; COR = clase de recomendación, LOE = nivel de evidencia). Factores de riesgo de disección en Marfan: antecedente familiar de disección, crecimiento ≥0,3 cm/año, dilatación difusa de raíz y ascendente, tortuosidad vertebral marcada.</p>
             <details class="nota-plegable" id="eco-med-nota-acc"><summary>Nota de fidelidad: de dónde salen estos umbrales</summary>
-                <p style="font-size:0.8rem; color:var(--text-dim);">El texto de la guía es el manuscrito de autor abierto en PubMed Central, sin páginas impresas: se cita por número de sección. La guía ESC 2024 de enfermedad aórtica no está disponible en abierto y no se muestran sus umbrales. En la enfermedad aórtica hereditaria, la guía advierte que la disección puede ocurrir con diámetros menores que los umbrales (apartado de enfermedad aórtica hereditaria).</p>
+                <p style="font-size:0.8rem; color:var(--text-dim);">El texto de la guía es el manuscrito de autor abierto en PubMed Central, sin páginas impresas: se cita por número de sección. La guía ESC 2024 de enfermedad aórtica no está disponible en abierto y no se muestran sus umbrales. En la enfermedad aórtica hereditaria, la guía advierte que la disección puede ocurrir con diámetros menores que los umbrales: en Loeys-Dietz (TGFBR1, TGFBR2, SMAD3), con menos diámetro que en Marfan (apdo. 6.1.2.3.3), y también con variantes de MYH11 o ACTA2 (apdo. 6.1.2.6). Tampoco el diámetro basta como predictor: alrededor del 60 % de las disecciones agudas tipo A tenían menos de 5,5 cm al presentarse (apdo. 6.5.1).</p>
+            </details>
+            <details class="nota-plegable" id="eco-med-nota-m1"><summary>Nota de fidelidad: sístole del anillo</summary>
+                <p style="font-size:0.8rem; color:var(--text-dim);">El pie de la Figura 10 de Lang dice «pico sistólico»; el texto y la recomendación dicen «mesosístole». Esta ficha usa mesosístole, que es lo que indica el texto (pág. 28-32).</p>
             </details>
 
             <p class="section-label" style="margin-top:16px;">Dolor torácico brusco: la imagen no espera a la medida <a class="biblio-link" href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9876736/" target="_blank" rel="noopener" style="text-transform:none; letter-spacing:0; font-size:0.72rem;">ACC/AHA 2022 apdos. 7.1-7.2</a></p>

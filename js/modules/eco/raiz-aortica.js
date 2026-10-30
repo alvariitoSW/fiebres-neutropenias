@@ -37,11 +37,16 @@ export function avisosDevereux(cm, edad, sc) {
     if (o !== null && (o < DEVEREUX.dMin || o > DEVEREUX.dMax)) a.push(`Fuera del rango de validación de Devereux (${DEVEREUX.dMin}-${DEVEREUX.dMax} cm): la z es una extrapolación.`);
     return a;
 }
-// Grado de dilatación de Devereux (sobre z redondeada a 1 decimal): >1,96 SEE
+// Grado de dilatación de Devereux, con la z sin redondear (cortes de la fuente: >1,96 leve hasta 3,0; 3,01-4,0 moderada; >4,0 grave)
 export function gradoDevereux(z) {
-    const r = r1(z);
-    return r <= 1.9 ? null : r <= 3.0 ? 'leve' : r <= 4.0 ? 'moderada' : 'grave';
+    return z <= 1.96 ? null : z <= 3.0 ? 'leve' : z <= 4.0 ? 'moderada' : 'grave';
 }
+const FRASES_NIVEL = {
+    anillo: 'Anillo: mesosístole, de borde interno a borde interno (I-I); es la inserción basal de las valvas y el único nivel con I-I (pág. 28-29, 32).',
+    senos: 'Senos: telediástole, de borde de ataque a borde de ataque (L-L), diámetro máximo perpendicular al eje largo de la aorta; aquí se define la dilatación de la raíz (pág. 30-32).',
+    ust: 'Unión sinotubular: telediástole, L-L; es la transición marcada hacia la porción tubular y la cintura de la raíz (pág. 28, 32).',
+    asc: 'Ascendente proximal: telediástole, L-L, perpendicular al eje largo; anota su distancia al plano del anillo (pág. 30, 32).'
+};
 
 
 export function initRaizAortica() {
@@ -59,17 +64,18 @@ export function initRaizAortica() {
             else if (el.tagName === 'BUTTON') { el.classList.toggle('on', on); el.setAttribute('aria-pressed', on); }
             else { el.querySelectorAll('line,circle').forEach(p => p.setAttribute('stroke', on ? 'var(--accent-yellow)' : 'var(--text-dim)')); el.querySelector('circle')?.setAttribute('fill', on ? 'var(--accent-yellow)' : 'var(--bg-main)'); el.querySelector('text')?.setAttribute('fill', on ? 'var(--bg-main)' : 'var(--text-main)'); }
         });
+        const tx = $('eco-med-nivel-txt'); if (tx) tx.textContent = FRASES_NIVEL[id] || '';
         if (!desdeCalc && id && modo.value === 'lang') nivelSel.value = id;
         if (!desdeCalc) calcular();
     }
     function calcular() {
         const dev = modo.value === 'devereux';
         $('eco-med-lang-campos').hidden = dev; $('eco-med-dev-campos').hidden = !dev;
-        const avisos = []; let html = '';
+        const avisos = []; let html = '', z1 = null;
         if (!dev) {
             const indexado = idx.checked, v = val.value;
             $('eco-med-unidad').textContent = indexado ? 'cm/m²' : 'cm';
-            const z = zLang(nivelSel.value, sexoSel.value, v, indexado), a = avisoLang(v, indexado);
+            const z = zLang(nivelSel.value, sexoSel.value, v, indexado), a = avisoLang(v, indexado); z1 = z;
             if (a) avisos.push(a);
             if (z !== null) {
                 const n = NIVELES_RAIZ.find(x => x.id === nivelSel.value), [m, de] = (indexado ? n.idx : n.abs)[sexoSel.value];
@@ -89,6 +95,7 @@ export function initRaizAortica() {
             }
             res.className = 'tfg-estado ' + (z !== null && gradoDevereux(z) ? 'tfg-estado-warn' : 'tfg-estado-neutro');
         }
+        const zz = !dev && z1 !== null ? z1 : null; $('eco-med-aviso-z').hidden = !(zz !== null && Math.abs(zz) >= 1.5 && Math.abs(zz) <= 2.5);
         res.innerHTML = html || 'Escribe la medida para calcular la z.';
         aviso.hidden = !avisos.length; aviso.textContent = avisos.join(' ');
     }

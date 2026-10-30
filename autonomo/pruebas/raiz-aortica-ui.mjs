@@ -21,4 +21,16 @@ await p.evaluate(() => document.getElementById('eco-med-svg').scrollIntoView());
 await p.screenshot({ path: '/tmp/plan-socialista/raiz-aortica/cap/svg-390.png' });
 await p.evaluate(() => document.getElementById('eco-med-calc').scrollIntoView());
 await p.screenshot({ path: '/tmp/plan-socialista/raiz-aortica/cap/calc-390.png' });
+await p.evaluate(() => document.getElementById('eco-med-tabla-14').scrollIntoView());
+await p.screenshot({ path: '/tmp/plan-socialista/raiz-aortica/cap/tabla-390.png' });
+await p.selectOption('#eco-med-modo', 'lang'); await p.fill('#eco-med-valor', '3.6'); await p.selectOption('#eco-med-sexo', 'M'); await p.selectOption('#eco-med-nivel', 'senos');
+console.log('aviso z 2.0 visible:', await p.evaluate(() => !document.getElementById('eco-med-aviso-z').hidden), '| frase:', await p.textContent('#eco-med-nivel-txt'));
+for (const w of [360, 390]) {
+  await p.setViewportSize({ width: w, height: 844 }); await p.waitForTimeout(300);
+  await p.evaluate(() => document.getElementById('eco-med-svg').scrollIntoView({ block: 'center' }));
+  await p.screenshot({ path: `/tmp/plan-socialista/raiz-aortica/cap/svg2-${w}.png` });
+  await p.evaluate(() => document.getElementById('eco-med-tabla-14').scrollIntoView({ block: 'center' }));
+  await p.screenshot({ path: `/tmp/plan-socialista/raiz-aortica/cap/tabla-${w}.png` });
+  console.log(w, 'desborde', await p.evaluate(() => document.documentElement.scrollWidth > innerWidth), 'tabla scroll', await p.evaluate(() => { const t = document.getElementById('eco-med-tabla-14'); return t.parentElement.scrollWidth > t.parentElement.clientWidth; }));
+}
 console.log('errores', errs); await b.close();

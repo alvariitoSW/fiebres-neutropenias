@@ -27,8 +27,8 @@ test('Devereux: vacío, <15 años y fuera de validación', () => {
     assert.equal(zDevereux(3.5, 14, 1.9, 'H'), null); assert.equal(zDevereux(3.5, 40, 1.9, ''), null);
     assert.ok(avisosDevereux(4.8, 40, 1.9).length); assert.ok(avisosDevereux(3.5, 12, 1.9).length); assert.equal(avisosDevereux(3.5, 40, 1.9).length, 0);
 });
-test('grado de Devereux compara redondeado', () => {
-    assert.equal(gradoDevereux(1.96), 'leve'); assert.equal(gradoDevereux(1.9), null); assert.equal(gradoDevereux(3.04), 'leve');
+test('grado de Devereux compara la z sin redondear', () => {
+    assert.equal(gradoDevereux(1.97), 'leve'); assert.equal(gradoDevereux(1.95), null); assert.equal(gradoDevereux(1.96), null); assert.equal(gradoDevereux(3.0), 'leve'); assert.equal(gradoDevereux(3.04), 'moderada'); assert.equal(gradoDevereux(4.01), 'grave');
     assert.equal(gradoDevereux(3.5), 'moderada'); assert.equal(gradoDevereux(4.5), 'grave');
 });
 test('la tabla del HTML coincide con los datos de la Tabla 14', () => {
@@ -38,7 +38,7 @@ test('la tabla del HTML coincide con los datos de la Tabla 14', () => {
     for (const n of NIVELES_RAIZ) {
         const fila = t.match(new RegExp(`<tr data-nivel="${n.id}">[\\s\\S]*?</tr>`))[0];
         const esperado = [n.abs.H, n.abs.M, n.idx.H, n.idx.M].map(([m, d]) => `${c(m)} ± ${c(d)}`);
-        const celdas = [...fila.matchAll(/<td>([^<]*)<\/td>/g)].map(m => m[1]);
+        const celdas = [...fila.matchAll(/<td>(?:<strong>)?([^<]*)(?:<\/strong>)?<\/td>/g)].map(m => m[1]);
         assert.deepEqual(celdas.slice(1), esperado, n.id);
     }
 });
