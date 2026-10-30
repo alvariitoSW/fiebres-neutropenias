@@ -271,6 +271,7 @@ esta sección.
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | aprobado por ti el 30/10; ya | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
 | `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | **hecha el 30/10, en `main`** (con las 4 de Hacienda): REGLAS §4.15 y las demás | 2026-10-30 | ≈1,3 M, directo a `main` |
 | `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | aprobado por ti el 30/10 («la quiero en la eco») | 2026-10-30 | ≈0,8-1,2 M |
+| `marino-unido` | **B-048 · Todo Marino en Libros → Marino**: tarjetas de Cardiología (14-21) y Neumología (22-30) en el índice, y los modelos vivos por temas | aprobado por ti el 30/10 | 2026-10-30 | ≈0,8-1,5 M, tras el corazón del `b3` en `main` |
 | `atlas-texto` | **B-006, fase A**: el texto de los 20 capítulos del atlas de eco, uno por sesión; figuras y estudio, con el ecógrafo nuevo | aprobado por ti el 30/10 | 2026-10-30 | ≈20-30 M en el carril 2 |
 | `radar-tuits` | **B-047, parte 2**: los tuits que mandas, con su PDF, a UCI / Papers Tuiter | aprobado por ti el 30/10, sin prisa | 2026-10-30 | ≈1-2 M por tanda |
 | `wiggers-movil` | Arreglo de la Wiggers a 360 px | aprobado por el Consejo el 30/10 (7.ª) | 2026-10-30 | ≈0,3 M |
@@ -335,7 +336,7 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
 1. ✅ **B-044, B-045 y B-046**: aprobadas el 30/10 (ver «En marcha»).
 2. ✅ **La reforma**: «sí a lo que dice el Consejo» (30/10), tarea `reglas-reforma`.
-3. **Parada 3 del `b3`**, solo la parte del corazón (`b3-corazon-pr`): mirarla en el móvil antes de `main`.
+3. ✅ **Parada 3 del `b3`**: «apruebo todo el bloque 3» (30/10). Entra en `main` al terminar el grupo 6, `shock-scai` y `b3-bradi`.
 4. ✅ **B-041**: en la eco (30/10), tarea `raiz-aortica`.
 5. **Opcional, sin prisa**:
    - la prueba de 3 días con el caso de Teresa (`autonomo/ideas/educacion-pionera/prueba-3-dias.md`);
@@ -485,6 +486,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 - **Ahorro · Director del paso 4 a 1,3 M** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a 1,1 · g3b 1,3 · g4 1,9 · g5 1,3 M frente a 0,8-0,9 · Cambio: el presupuesto del director de un grupo con piezas + Estudiar pasa a 1,3 M en «Presupuestos vigentes» (o, si se quiere bajar, partir piezas y Estudiar en dos sesiones) · Ahorro esperado: ninguno directo; presupuestos realistas que evitan comparecer por el director.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-30 · **Parada 3 del bloque 3 aprobada** por ti (grupos 1-5 y los 3 modelos vivos, mirados en el móvil). Pedida la ingeniería inversa de anatomyatelier.org (sesión abierta, para `mv-eco`).
 
 - 2026-10-30 · **Consejo, 7.ª reunión** («terminar ya», acta `autonomo/consejo/2026-10-30-7.md`): cabos sueltos
   cerrados; Wiggers aprobado (`wiggers-movil`); vía libre de gasto hasta el 02/11; radio día 2 hoy; B-044 a B-046
