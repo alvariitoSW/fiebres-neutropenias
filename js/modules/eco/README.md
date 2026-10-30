@@ -705,6 +705,14 @@ los que ya están en la app se abren aquí, los demás siguen enlazando al origi
   tiene); pericardio. Las vistas (04) y la ETE (05) chocan con la anatomía congelada y la sonda libre ya existe, así
   que van al final. Los capítulos de enfermedad necesitan la forma de enfermedad correspondiente en el corazón.
 
+### Capítulo 15, Estenosis aórtica (`as`): solo texto, fase A (30/10/2026)
+
+`atlas/cap-as.html` traduce el capítulo completo del original (historia natural, graduación, tabla de criterios de la
+Tabla 3 de Baumgartner 2017, bajo flujo y bajo gradiente, puntos clave) con las mismas referencias (`baumgartner2017`,
+`otto2020`). Se registra en `CAPITULOS` **sin `figura`**: lleva el aviso `.at-en-preparacion` y no tiene «Repasar este
+capítulo». La figura sobre el ecógrafo de la app y las preguntas llegarán con el ecógrafo nuevo. El texto del original
+está en `index.html` de echodemo (el `as.js` solo trae la figura y las frases vivas).
+
 ## Hemodinámica de Marino: capa de lectura (octubre 2026)
 
 Decisión del profesor (bloque 1, `autonomo/bloques/b1/diseno-sin-modelo.md` §8): el motor **no cambia su fisiología**;
@@ -862,7 +870,7 @@ licencia CC BY-SA 4.0 (el resto del simulador no). La cita también se muestra e
   sonda en otro sitio de la piel); la supraesternal no tiene troncos supraaórticos ni Doppler del arco (el motor no
   da flujo más allá de la raíz).
 - Ecografía en un *worker* si en el móvil baja de fps.
-- **Atlas de ecocardiografía**: quedan 21 capítulos por pasar a la app (9 de 30 ya están) (ver «Atlas de ecocardiografía»).
+- **Atlas de ecocardiografía**: quedan 17 capítulos por pasar a la app (13 de 30 ya están, 4 de ellos solo con texto) (ver «Atlas de ecocardiografía»).
 
 **Imagen/UI, segunda vuelta de la parada 2 (eco-mega, 27/10/2026).** Mando de gravedad en el simulador: un deslizador «Gravedad»
 (`#cv-gravedad`, en `eco.html`) que aparece en los escenarios con `ESCENARIOS[k].gravedad` (hemorragia, fallo del VI, derrame y TEP) y
@@ -910,3 +918,9 @@ la rigidez del VI. La restitución de e′ (`atlas/diastolica.mjs`) cae ahora co
 la caída con la FC del tiempo de eyección y la mitral abre ~0,47 s tras la P: a FC 120 la fusión E-A es la fisiología (Nagueh 2025 p. 557, Tabla 7).
 Tablas de Guyton regeneradas.
 - Atlas, capítulo 16 (insuficiencia aórtica): fase A, solo texto traducido (`atlas/cap-ar.html`), sin figura todavía.
+- Atlas, capítulo 21 (enfermedad pericárdica): fase A, solo texto traducido (`atlas/cap-peri.html`), sin figura todavía.
+- Atlas, capítulo 19 (insuficiencia tricuspídea): fase A, solo texto traducido (`atlas/cap-tr.html`), sin figura todavía.
+- Atlas, capítulo 17 (estenosis mitral): fase A, solo texto traducido (`atlas/cap-ms.html`), sin figura todavía.
+- Atlas, capítulo 11 (contractilidad segmentaria): fase A, solo texto traducido (`atlas/cap-segments.html`), sin figura todavía.
+- Atlas, capítulo 13 (strain): fase A, solo texto traducido (`atlas/cap-strain.html`), sin figura todavía; el capítulo 11 ya enlaza a él.
+- Atlas, capítulo 12 (eco de estrés): fase A, solo texto traducido (`atlas/cap-stress.html`), sin figura todavía; el capítulo 13 ya enlaza a él.

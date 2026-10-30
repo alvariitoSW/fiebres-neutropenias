@@ -1,6 +1,7 @@
 // Lector de ECG (PIF Cardiología): el trazado real de una ficha con chips que encienden sus derivaciones o su zona.
-// Dos grupos: «metodo» (cada chip es un paso de FREHIII: toca y mira dónde) y «guardia» (primero eliges
-// rápido/lento, estrecho/ancho, regular/irregular y solo después se comprueba con el libro).
+// Tres grupos: «metodo» (cada chip es un paso de FREHIII: toca y mira dónde), «guardia» (primero eliges
+// rápido/lento, estrecho/ancho, regular/irregular y solo después se comprueba con el libro) y «orden» (los seis pasos
+// de FREHIII en orden fijo: piensas, destapas lo que dice el libro y solo entonces se abre el siguiente).
 // La imagen no calcula: un chip con `calc` escribe en la calculadora real de la ficha y copia su resultado.
 // Fuente: López Ramírez JH. La alegría de leer el electrocardiograma, 3.ª ed., 2012 (páginas en cada chip).
 import { irAlTexto } from '../../core/vista-visual.js';
@@ -182,6 +183,46 @@ export function crearLectorEcg(cuerpo, def, ctx = {}) {
         return { reset() { }, elecciones: () => ({ ...elegido }) };
     }
 
-    if (!guardia) pintarPie(def.fuente, def.pagina);
-    return guardia ? montarGuardia() : montarMetodo();
+    // ---------- grupo orden: F→R→E→H→I→I; el paso siguiente se abre al destapar el anterior ----------
+    // def.pasos: [{ letra, nombre, piensa, libro, pags: [n], fuente: '#id', derivs?, zona?, sinDato? }]
+    function montarOrden() {
+        const pasos = def.pasos;
+        let abiertos = 0, sel = 0;
+        const botones = pasos.map((p, k) => {
+            const b = document.createElement('button');
+            b.type = 'button'; b.className = 'ecg-chip'; b.setAttribute('aria-pressed', 'false'); b.disabled = k > 0;
+            b.innerHTML = `<b class="ecg-chip-paso">${p.letra}</b> ${p.nombre}`;
+            b.addEventListener('click', () => mostrar(k));
+            chipsEl.appendChild(b);
+            return b;
+        });
+        const accion = document.createElement('button');
+        accion.type = 'button'; accion.className = 'ecg-comprobar'; accion.style.flexBasis = '100%';
+        chipsEl.appendChild(accion);
+        const lleva = p => (p.pags || []).map(n => enlacePagina(n)).join(' · ');
+        function mostrar(k) {
+            sel = k;
+            const p = pasos[k], hecho = k < abiertos;
+            botones.forEach((b, i) => { b.setAttribute('aria-pressed', String(i === k)); b.classList.toggle('active', i === k); b.disabled = i > abiertos; b.style.opacity = i > abiertos ? '.45' : ''; });
+            iluminar(hecho ? p : null);
+            if (hecho) {
+                frase.innerHTML = `<strong>${p.letra} · ${p.nombre}.</strong> ${p.libro}${p.pags?.length ? ` (${lleva(p)})` : ''}`;
+                pintarPie(p.fuente, null);
+                accion.textContent = k + 1 < pasos.length ? `Siguiente: ${pasos[k + 1].nombre} →` : 'Hecho: los seis pasos';
+                accion.disabled = k + 1 >= pasos.length;
+            } else {
+                frase.innerHTML = `<strong>${p.letra} · ${p.nombre}. Piensa:</strong> ${p.piensa}`;
+                pintarPie(null, null);
+                accion.textContent = 'Ya lo pensé: destapar lo que dice el libro'; accion.disabled = false;
+            }
+        }
+        accion.addEventListener('click', () => {
+            if (sel >= abiertos) { abiertos = sel + 1; mostrar(sel); } else mostrar(sel + 1);
+        });
+        mostrar(0);
+        return { reset() { abiertos = 0; mostrar(0); }, elecciones: () => null };
+    }
+
+    if (!guardia && def.grupo !== 'orden') pintarPie(def.fuente, def.pagina);
+    return guardia ? montarGuardia() : def.grupo === 'orden' ? montarOrden() : montarMetodo();
 }
