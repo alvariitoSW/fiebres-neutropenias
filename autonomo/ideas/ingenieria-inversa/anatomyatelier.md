@@ -87,6 +87,16 @@ hacer mallas con IA para el corazón de la eco; sus cifras de divulgación; anal
 - ¿Apunto las ideas 3 y 4 en la bitácora como mejora de la vista 3D, para después de B-045? (Yo diría que sí, sin prisa.)
 - ¿Añado la lección 2 al encargo de `mv-eco-2a5`? (Recomendado; no cuesta nada.)
 
+## 9. Decisión (30/10, Interior y Educación, por delegación del usuario)
+
+- **Interior**: pequeño, pero después de `mv-eco-2a5` (trae `corazon-geo-2.mjs`; hacerlo antes sería rehacerlo). No toca
+  `motor.mjs` ni el contrato: carril 2, ámbar hoy, verde al cerrar `mv-eco-2a5`. Las dos ideas en una sola tarea
+  (`eco-3d-lectura`), porque usan el mismo dato: qué pieza corta el plano. ≈3 M (1,2 aislar + 1,8 rótulos).
+- **Educación**: sirve a pie de cama («¿qué estoy cortando?»). Juntas valen más: aislar sin nombres se queda a medias y
+  rótulos sin aislar ensucian. Pocos rótulos (≤6 a 390 px), estado con icono y texto, nombres iguales a los de las
+  fichas. No cuenta como Estudiar (§8); más adelante, quizá una pregunta «¿qué corta este plano?».
+- **Resultado**: tarea 15 del carril 2 del tablero, aparcada hasta `mv-eco-2a5` en `main`.
+
 ## Pares de prueba (observados)
 
 - Abrir la ficha del corazón → 6 puntos con nombre (aorta, AI, AD, VI, VD, mitral) sobre el modelo (pantalla).
