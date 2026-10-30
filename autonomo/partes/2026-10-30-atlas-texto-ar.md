@@ -1,6 +1,6 @@
 # 2026-10-30 · atlas-texto · cap. 16 Insuficiencia aórtica (fase A, solo texto)
 
-**Resultado:** en revisión (PR en la rama `auto/atlas-texto-ar`) · **Vueltas:** 2 · **Jueces:** `jueces --atlas ar` ✓ · auditoría ✓ (0 graves, 0 medianos)
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/49) · **Vueltas:** 2 · **Jueces:** `jueces --atlas ar` ✓ · auditoría ✓ (0 graves, 0 medianos)
 
 ## Qué se hizo
 - `js/modules/eco/atlas/cap-ar.html`: traducción completa del cap. 16 (fuente: echodemo `index.html` #ch-ar, l. 1450-1494; tabla de grados de `src/norms.js` 178-192; grados I-IV, criterios de la Fig. 25 y regla integrada de `norms.js` 418-503; comentarios de `src/ch/ar.js` 1-60, 357-361, 750-770). Carril «En 30 segundos», tres tablas (grados por medida, grados cuantitativos I-IV, criterios específicos con su cifra), método volumétrico, trampas y puntos clave. Lo del código, rotulado «regla del original» (convergencia por observador, CW tenue <30 mL, DTDVI 58 mm, aorta descendente 10/20 cm/s, indeterminado con 4+4, «grave con disfunción del VI», ORE = Vreg ÷ ITV, CW 3-6 m/s).
