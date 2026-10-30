@@ -1,6 +1,6 @@
 # 2026-10-30 · atlas-texto · cap. 19 Insuficiencia tricuspídea (fase A, solo texto)
 
-**Resultado:** en revisión (PR: ver abajo) · **Vueltas:** 2 · **Jueces:** pruebas ✓ · móvil ✓ (390/360) · auditoría ✓ (0 graves)
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/45) · **Vueltas:** 2 · **Jueces:** pruebas ✓ · móvil ✓ (390/360) · auditoría ✓ (0 graves)
 
 ## Qué se hizo
 - `js/modules/eco/atlas/cap-tr.html`: traducción completa del cap. 19 (fuente: echodemo `index.html` #ch-tr, l. 1612-1662; tabla de `src/norms.js` 193-206; criterios de la Fig. 31 de `norms.js` 535-552), con carril «En 30 segundos», tabla de grados leve → torrencial, tabla nueva de los 7 + 7 criterios específicos (lo que sale de comentarios del código, rotulado «regla del original»), trampas, puntos clave, nota de fidelidad con 3 discrepancias (VCI <2 frente a ≤2,0; VC >0,7 frente a ≥0,7; PISA a 30-40 frente a 28 cm/s) y aviso «En preparación · Figura y estudio».
