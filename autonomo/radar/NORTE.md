@@ -26,15 +26,20 @@ Añadido del usuario (23/10): mejorarlo y **abrir la puerta a seguir mejorándol
 Cada avance de IA o de técnica entra como una entrada más en `ENTRADAS.md` y se tría contra este norte. Las webs ya
 estudiadas se revisan por su «huella» (pesos y nombres de archivo anotados en cada informe de ingeniería inversa).
 
-## La vara de medir: seis situaciones de guardia (G1-G6)
+## La vara de medir: siete situaciones de guardia (G1-G7)
 
-Del megaproyecto «La UCI en el bolsillo» (25/10/2026). Una idea sirve si ayuda a resolver una de ellas.
+Del megaproyecto «La UCI en el bolsillo» (25/10/2026; G7 añadida por el usuario el 30/10/2026, artículo 12 de la
+reforma, acta `autonomo/consejo/2026-10-29-reforma.md` §4). Una idea sirve si ayuda a resolver una de ellas.
 - **G1 Shock e hipotensión**: cadena VCI → PAD → VS → GC → E/e′ → VExUS, cada paso con su fórmula.
 - **G2 Arritmia inestable y paro**: algoritmo paso a paso, SYNC y energía, marcapasos, paro con reloj.
 - **G3 Dolor torácico y SCA**: vaso → derivaciones → pared del VI → complicación; leer un informe de cateterismo.
 - **G4 Tras colocar un dispositivo**: orden de lectura de la placa, punta del tubo o de la vía, neumotórax.
 - **G5 Neurocrítico**: TC de cráneo en 5 preguntas (sangre, línea media, cisternas, ventrículos, hernias).
 - **G6 Quirófano cardíaco y ETE**: qué vista pedir, su ángulo y lo que se ve; banco de la mitral.
+- **G7 Paciente ventilado**: asincronías, SDRA y destete.
+
+**Recurso de estudio puro** (mismo artículo): un recurso que solo sirve para estudiar (nivel 1) puede entrar aunque no
+resuelva ninguna G; se tría por el norte (el mecanismo que se ve, fiel a su fuente), no por la vara.
 
 ## Datos de pacientes (decidido el 23/10/2026; `docs/historial/radar.md` §3)
 
@@ -55,5 +60,5 @@ Del encargo B-012 (marcado «supongo» el 23/10; el usuario lo aprobó entero el
 
 ## Cómo se tría una entrada
 
-Ficha de triaje (`LEEME.md`) → ¿a qué nivel y a qué G sirve? ¿qué fuente en PDF la respalda? → veredicto: integrar en
+Ficha de triaje (`LEEME.md`) → ¿a qué nivel y a qué G sirve (o es estudio puro)? ¿qué fuente en PDF la respalda? → veredicto: integrar en
 una fase de `HOJA-DE-RUTA.md`, idea suelta o descartar con motivo. Las decisiones van al usuario por tandas semanales.

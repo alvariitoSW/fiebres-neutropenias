@@ -12,7 +12,9 @@ import { REFERENCIAS } from './referencias.js';
 import { conVersion } from '../../../core/include.js';
 
 const BASE = 'js/modules/eco/atlas/';
-/** Capítulos ya en la app: fragmento, figura y subtítulo (el título y el número salen de ATLAS_PARTES). */
+/** Capítulos ya en la app: fragmento, figura y subtítulo (el título y el número salen de ATLAS_PARTES).
+ *  Sin `figura`, el capítulo solo tiene el texto (fase A): su fragmento lleva el aviso .at-en-preparacion y no hay
+ *  «Repasar este capítulo» hasta que tenga preguntas. */
 export const CAPITULOS = {
   pulse: { html: 'cap-pulso.html', figura: () => import('./pulso.mjs'), sub: 'El principio pulso-eco' },
   image: { html: 'cap-imagen.html', figura: () => import('./imagen.mjs'), sub: 'Formación de la imagen y artefactos' },
@@ -23,6 +25,11 @@ export const CAPITULOS = {
   eject: { html: 'cap-sistolica.html', figura: () => import('./sistolica.mjs'), sub: 'Volúmenes del VI por discos sobre el corazón de la app' },
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
+  segments: { html: 'cap-segments.html', sub: 'Los 17 segmentos, el índice de contractilidad y los territorios de la DA, la CD y la Cx' },
+  peri: { html: 'cap-peri.html', sub: 'Del derrame al taponamiento; constricción frente a miocardiopatía restrictiva' },
+  as: { html: 'cap-as.html', sub: 'De normal a grave y la de bajo flujo y bajo gradiente' },
+  tr: { html: 'cap-tr.html', sub: 'De leve a torrencial: vena contracta, ORE (EROA) y flujo suprahepático' },
+  ms: { html: 'cap-ms.html', sub: 'Reumática de leve a grave: planimetría, tiempo de hemipresión y gradiente con la frecuencia' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
@@ -79,6 +86,7 @@ export function initAtlas({ alAbrirSimulador } = {}) {
     document.getElementById('at-original').href = atlasUrl(k);
     const repaso = document.getElementById('btn-eco-atlas-repasar');
     repaso.dataset.quizTema = `atlas-${k}`;
+    repaso.hidden = !CAPITULOS[k].figura;
     const cuerpo = document.getElementById('at-cuerpo');
     cuerpo.innerHTML = '<p class="cv-cargando">Cargando el capítulo…</p>';
     let html;
@@ -99,7 +107,7 @@ export function initAtlas({ alAbrirSimulador } = {}) {
     if (sig) { bSig.dataset.atCap = sig; bSig.textContent = `${DATOS[sig].n} ${DATOS[sig].t} →`; }
     cap.scrollIntoView({ block: 'start' });
     const fig = cuerpo.querySelector('.at-figura');
-    if (fig) {
+    if (fig && CAPITULOS[k].figura) {
       try {
         const mod = await CAPITULOS[k].figura();
         if (yo !== peticion) return;

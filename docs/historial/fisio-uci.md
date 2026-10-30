@@ -2560,3 +2560,18 @@ Añadir un bloque nuevo en el futuro: 1) botón nuevo en
       horizontal a 390px (envuelta en su propio `overflow-x:auto`, mismo
       patrón ya usado en el resto de la app para tablas anchas).
 
+
+## Wiggers legible en el móvil (30/10/2026, `wiggers-movil`)
+
+- La animación de Wiggers (Cardiología → Fisiología cardíaca aplicada) tenía rótulos de 6 unidades en un dibujo de 320
+  de ancho: en el móvil salían a 5-6 px. Ahora todo su texto va a 9,5 (fase en curso, 10) con la clase `.wiggers-svg`,
+  y la letra real queda ≥ 8 px a 360 px.
+- Para que no se pisen: el viewBox crece arriba (`0 -16 320 280`) y la nota del cruce aórtico va en una línea encima de
+  la curva; los rótulos de presión van a la derecha, apilados; PVY, ECG y el rótulo de fase bajan 10 unidades en un
+  `<g transform>` para que S1-S2 no toquen la onda v.
+- La figura de interdependencia ventricular (`.interdep-svg`) también tenía letra de 6,6 px: 10,5 unidades y el pie en
+  dos líneas.
+- Los 30 px de desborde a 360 px eran la tabla del sistema de conducción: las 4 tablas de la ficha van ahora en
+  `overflow-x:auto`.
+- Juez `--ficha fisioUci:cardiologia:panel-cardio-tabs:cardio-fisiologia-aplicada` en verde a 390 y 360 px.
+  Versión 20261030-13.
