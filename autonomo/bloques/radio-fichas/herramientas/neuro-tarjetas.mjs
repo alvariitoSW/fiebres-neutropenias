@@ -4,7 +4,7 @@
 import { chromium } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const BASE = process.argv[2], CAP = process.argv[3] || '/tmp/neuro-';
 const FICHAS = {
-  'radio-n1': { rutas: [['s','s'],['s','n'],['n','s'],['n','n']], destino: { 'ss': 'mn-hic', 'sn': 'mn-hic', 'ns': 'radio-n1', 'nn': 'radio-n1' } },
+  'radio-n1': { rutas: [['s','s'],['s','n'],['n','s'],['n','n']], destino: { 'ss': 'mn-hic', 'sn': 'mn-hic', 'ns': 'mn-ictus-soporte', 'nn': 'mn-ictus-soporte' } },
   'radio-n2': { rutas: [['s','s'],['s','n'],['n','s'],['n','n']], destino: { 'ss': 'umi-marshall', 'sn': 'umi-marshall', 'ns': 'mn-coma', 'nn': 'umi-marshall' } },
 };
 const b = await chromium.launch(); const fallos = [];

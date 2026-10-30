@@ -13,15 +13,15 @@ export const preguntasPifRadioNeuro = [
     // ---- N1 · Ictus: ¿isquémico o hemorrágico? ----
     {
         id: 'pifradio-n1-q001', tema: 'pifradio-n1',
-        enunciado: 'Llega un paciente con un déficit neurológico agudo y se sospecha un ictus. ¿Qué prueba de imagen se pide primero?',
+        enunciado: 'Llega un paciente con un déficit neurológico agudo y se sospecha un ictus. La resonancia ve la isquemia en minutos, pero la prueba de entrada es una TC sin contraste. ¿Por qué?',
         opciones: [
-            'Esperar 24 horas para repetir la exploración, porque el infarto no se ve antes',
-            'Una angio-TC con contraste y, solo si sale normal, una TC sin contraste',
-            'TC de cráneo sin contraste, para excluir sangre y ver signos precoces de isquemia',
-            'Una resonancia sin urgencia, mientras se trata como isquémico por ser el más frecuente',
+            'Porque la resonancia no detecta la isquemia hasta pasadas 24 horas',
+            'Porque en la primera hora la TC ya muestra el infarto completo y no hace falta nada más',
+            'Porque la angio-TC está contraindicada en todo ictus y la TC simple la sustituye',
+            'Es rápida, está disponible y descarta enseguida una hemorragia; la resonancia queda para casos concretos',
         ],
-        correcta: 2,
-        explicacion: 'La TC sin contraste es la prueba inicial de elección en todo ictus sospechado: excluye la hemorragia, detecta lo que lo imita y busca signos precoces de isquemia. Esperar 24 h retrasa el diagnóstico (la hipodensidad se hace nítida a las 12-24 h, pero la sangre se ve ya). Tratar como isquémico sin saber si hay sangre expone al paciente a un fármaco antitrombótico en una hemorragia (razonamiento propio). Origen: StatPearls, «Stroke Imaging», sección «Noncontrast Computed Tomography».',
+        correcta: 3,
+        explicacion: 'La TC sin contraste es la primera prueba porque es rápida, está en todas partes, tiene pocas contraindicaciones y descarta enseguida la hemorragia; la resonancia sí detecta la isquemia en minutos, pero se usa como prueba de rescate o en centros de ictus. Pensar que la resonancia no ve la isquemia hasta las 24 h es falso; esperar que la TC muestre el infarto completo en la primera hora retrasa el diagnóstico, porque la TC hiperaguda puede ser normal o sutil; y la angio-TC no está contraindicada: se recomienda después, en todo candidato a tratamiento. Origen: StatPearls, «Stroke Imaging», secciones «Noncontrast Computed Tomography» y «Integrated Hyperacute Workflows».',
     },
     {
         id: 'pifradio-n1-q002', tema: 'pifradio-n1',
@@ -37,15 +37,15 @@ export const preguntasPifRadioNeuro = [
     },
     {
         id: 'pifradio-n1-q003', tema: 'pifradio-n1',
-        enunciado: 'En la TC sin contraste, ¿cómo se ve un hematoma intracerebral como el de la figura 47.3 del libro?',
+        enunciado: 'En la TC sin contraste ves un hematoma hiperdenso que ocupa casi medio hemisferio y se extiende a los ventrículos (fig. 47.3 del libro). ¿Qué complicación vigilas y qué pides?',
         opciones: [
-            'Como una zona más oscura que el cerebro de alrededor, igual que se ve el edema o el infarto',
-            'Como una zona hiperdensa, blanca, dentro del parénquima, que puede entrar en los ventrículos',
-            'Como un cerebro normal: la sangre solo se ve después de inyectar contraste',
-            'Como una sola arteria blanca sin ninguna otra alteración en el parénquima',
+            'Una nueva isquemia por el fármaco que se acaba de dar: se pide una angio-TC para trombolisar',
+            'Que la sangre se reabsorba sola en horas: se espera sin consultar y se repite la TC mañana',
+            'Hidrocefalia obstructiva: neurocirugía y un catéter de drenaje ventricular, que además mide la PIC',
+            'Que baje la presión arterial: se sube la PAS por encima de 180 mmHg para perfundir el hematoma',
         ],
-        correcta: 1,
-        explicacion: 'Marino muestra el hematoma como una zona hiperdensa que ocupa casi la mitad del hemisferio y se extiende a los ventrículos, con riesgo de hidrocefalia obstructiva. Confundirlo con una zona oscura haría no buscar sangre; esperar al contraste retrasaría la decisión sobre antitrombóticos. La arteria hiperdensa es otro signo (trombo), no un hematoma. Origen: Marino, cap. 47, fig. 47.3, pág. 43.',
+        correcta: 2,
+        explicacion: 'La sangre intraventricular suele causar hidrocefalia obstructiva y requiere un catéter de drenaje ventricular, que además sirve para medir la PIC; en la mayoría de las hemorragias intracerebrales se consulta con neurocirugía. Buscar trombólisis en una hemorragia es el tratamiento contrario; esperar sin consultar deja crecer la presión sobre un ventrículo bloqueado; y subir la PAS es lo opuesto a la meta de mantenerla por debajo de 140 mmHg. Origen: Marino, cap. 47, pág. 45 (y fig. 47.3, pág. 43).',
     },
     {
         id: 'pifradio-n1-q004', tema: 'pifradio-n1',
@@ -98,7 +98,7 @@ export const preguntasPifRadioNeuro = [
     },
     {
         id: 'pifradio-n2-q002', tema: 'pifradio-n2',
-        enunciado: 'Un paciente con traumatismo tiene en la TAC un swelling en los dos hemisferios, no se ven las cisternas de la base y la línea media está centrada. ¿Qué tipo de Marshall es y qué riesgo de HTIC tiene?',
+        enunciado: 'Un paciente con traumatismo tiene en la TAC un swelling en los dos hemisferios y no se ven las cisternas de la base. ¿Qué tipo de Marshall es y qué riesgo de HTIC tiene?',
         opciones: [
             'Tipo III (swelling bilateral, sin cisternas de la base): HTIC en el 63,2 %',
             'Tipo II (lesiones pequeñas y cisternas visibles): HTIC en el 28,6 %',
@@ -134,15 +134,15 @@ export const preguntasPifRadioNeuro = [
     },
     {
         id: 'pifradio-n2-q005', tema: 'pifradio-n2',
-        enunciado: 'La tabla de Marshall del Manual dice «línea media desviada 20 mm» en el tipo IV, pero en la misma obra el umbral de línea media para operar es mayor de 5 mm. ¿Cómo lo manejas?',
+        enunciado: 'La tabla de Marshall del Manual dice «línea media desviada 20 mm» en el tipo IV; para operar un hematoma subdural o una contusión con efecto de masa, el mismo Manual usa más de 5 mm. ¿Cómo lo manejas?',
         opciones: [
-            'Esperar a los 20 mm para actuar, así no se opera de más',
+            'Esperar a los 20 mm para dar la alarma, así no se opera de más',
+            'Mostrar las dos cifras con su nota y no esperar a 20 mm para avisar',
             'Ignorar el umbral de 5 mm, porque la tabla de Marshall manda sobre el resto del Manual',
-            'Tomar el 20 mm como discrepancia de la fuente y actuar ya con más de 5 mm',
             'Pensar que 5 y 20 mm son el mismo umbral escrito de dos maneras',
         ],
-        correcta: 2,
-        explicacion: 'Las fuentes discrepan dentro del propio Manual: la tabla imprime 20 mm y el criterio quirúrgico usa más de 5 mm. Esperar a 20 mm retrasaría la cirugía con el cerebro ya comprimido; darle más peso a la tabla es elegir una cifra sin motivo; y creer que son lo mismo no explica una diferencia de 15 mm. Origen: Manual UMI, págs. impresas 94 (tabla) y 83 (línea media >5 mm), y nota de fidelidad de la ficha «Marshall».',
+        correcta: 1,
+        explicacion: 'Son dos criterios distintos del Manual: la tabla de Marshall clasifica el TCE y el criterio quirúrgico decide si se opera un hematoma o una contusión con efecto de masa. El «20 mm» de la tabla parece una errata y la fuente no lo aclara, así que se muestran las dos cifras con su nota. Esperar a 20 mm retrasaría el aviso con el cerebro ya comprimido; darle más peso a la tabla es elegir una cifra sin motivo; y creer que son lo mismo no explica una diferencia de 15 mm. Origen: Manual UMI, págs. impresas 94 (tabla) y 83 (línea media >5 mm), y nota de fidelidad de la ficha «HTIC y hernias».',
     },
     // ---- Caso: déficit agudo que acaba en la UCI (N1 + N2) ----
     {
@@ -155,7 +155,7 @@ export const preguntasPifRadioNeuro = [
             'Esperar la TC de control a las 24 h antes de revertir nada, porque el hematoma ya está formado y no crece',
         ],
         correcta: 1,
-        explicacion: 'En la hemorragia intracerebral se revierte el antitrombótico (apixabán o rivaroxabán: andexanet alfa, tabla 47.4, pág. 44), se mantiene la PAS por debajo de 140 mmHg y se consulta con neurocirugía (pág. 45). El AAS es para el isquémico: aquí aumentaría el sangrado. El límite de 180/105 es el del isquémico tratado con trombólisis (pág. 35), no el de la hemorragia. Esperar 24 h no es seguro: los hematomas crecen sobre todo en las primeras horas, 26 % en la primera hora según el Libro Azul (neurología, parte 2, pág. 25 del PDF). Origen: Marino, cap. 47, págs. 35, 44 y 45.',
+        explicacion: 'En la hemorragia intracerebral se revierte el antitrombótico (apixabán o rivaroxabán: andexanet alfa, tabla 47.4, pág. 44), se mantiene la PAS por debajo de 140 mmHg y se consulta con neurocirugía (pág. 45). El AAS es para el isquémico: aquí aumentaría el sangrado (razonamiento propio). El límite de 180/105 es el del isquémico tratado con trombólisis (pág. 35), no el de la hemorragia. Esperar 24 h no es seguro: los hematomas crecen sobre todo en las primeras horas, 26 % en la primera hora según el Libro Azul (neurología, parte 2, pág. 945). Origen: Marino, cap. 47, págs. 35, 44 y 45.',
     },
     {
         id: 'pifradio-n1-q008', tema: 'pifradio-neuro-caso',
@@ -167,7 +167,7 @@ export const preguntasPifRadioNeuro = [
             'Que hace falta una nueva angio-TC urgente para decidir si se trombolisa a este paciente',
         ],
         correcta: 0,
-        explicacion: 'La sangre intraventricular suele causar hidrocefalia obstructiva y requiere un catéter de drenaje ventricular, que también mide la PIC; el Glasgow de 8 o menos, la sangre intraventricular y la midriasis unilateral (herniación transtentorial) son indicaciones de monitorizarla (págs. 41-45). Añadir antiagregantes agravaría el sangrado; no hacer nada deja crecer la presión; trombolizar a un paciente con hemorragia es lo contrario del tratamiento. Origen: Marino, cap. 47, pág. 45 (ficha «Hemorragia intracerebral»).',
+        explicacion: 'La sangre intraventricular suele causar hidrocefalia obstructiva y requiere un catéter de drenaje ventricular, que también mide la PIC; el Glasgow de 8 o menos, la sangre intraventricular y la midriasis unilateral (herniación transtentorial) son indicaciones de monitorizarla (págs. 41-45). La pupila derecha dilatada ya era, desde el enunciado, un signo de herniación transtentorial y una indicación de monitorizar la PIC (pág. 45). Añadir antiagregantes agravaría el sangrado, no hacer nada deja crecer la presión y trombolizar a un paciente con hemorragia es lo contrario del tratamiento (los tres, razonamiento propio). Origen: Marino, cap. 47, pág. 45 (ficha «Hemorragia intracerebral»).',
     },
     {
         id: 'pifradio-n1-q009', tema: 'pifradio-neuro-caso',
@@ -215,7 +215,7 @@ export const preguntasPifRadioNeuro = [
             'Herniación con compromiso del tronco: tríada de Cushing con pupilas midriáticas arreactivas',
         ],
         correcta: 3,
-        explicacion: 'Hipertensión, bradicardia y respiración irregular son la tríada de Cushing, y las pupilas midriáticas arreactivas corresponden a la fase bulbar del deterioro rostrocaudal: la herniación comprime el tronco. Tomarlo por una mejoría pierde minutos que el paciente no tiene; tratarlo como una crisis o como sedación deja sin tratar la presión, y puede acabar en parada. Origen: StatPearls, «Brain Herniation», sección «Pathophysiology» (hernia central, tríada de Cushing); Libro Azul, neurología (parte 1), págs. 870-871 (tabla 1, fase bulbar).',
+        explicacion: 'Hipertensión, bradicardia y respiración irregular son la tríada de Cushing, y las pupilas midriáticas arreactivas corresponden a la fase bulbar del deterioro rostrocaudal: la herniación comprime el tronco. Tomarlo por una mejoría pierde minutos que el paciente no tiene; tratarlo como una crisis o como sedación deja sin tratar la presión, y podría acabar en parada (razonamiento propio). Origen: StatPearls, «Brain Herniation», sección «Pathophysiology» (hernia central, tríada de Cushing); Libro Azul, neurología (parte 1), págs. 870-871 (tabla 1, fase bulbar).',
     },
     {
         id: 'pifradio-n1-q013', tema: 'pifradio-neuro-caso',
