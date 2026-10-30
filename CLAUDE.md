@@ -161,11 +161,18 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
    la figura está fragmentada en muchos trozos, rasterizar la página y recortar.
 8. **PNT y manuales internos del hospital**: nunca reproducir el documento ni los nombres del personal; extraer el
    contenido clínico, reescribirlo y citarlo de forma genérica. Los puramente administrativos se descartan.
-9. **Código ajeno** (echodemo, ATRIA): ideas y texto (con permiso) sí; código no, se reconstruye sobre los motores de
-   la app. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
+9. **Código ajeno** (echodemo, ATRIA, Ventriculus; Consejo 8.ª del 30/10/2026, aprobado por el usuario el 30/10): ideas
+   y texto, con permiso del autor apuntado en `docs/`, sí. El código **no entra en la app**: se reconstruye sobre los
+   motores propios, con crédito (un solo motor por fenómeno). Para estudiarlo y comparar, con permiso que cubra
+   redistribuirlo en este repositorio público, una copia congelada puede vivir en `autonomo/ajenos/<autor>-<versión>/`
+   (fecha, URL, hash, permiso y LEEME); ningún archivo de la app la carga y sus cifras son pares de prueba, no fuente. El
+   permiso vale por escrito o de palabra (p. ej. por teléfono): si es de palabra, el usuario lo deja apuntado en `docs/`
+   (quién, cuándo, por qué medio y qué cubre). Cada permiso nuevo lo valida el Consejo. Copiar código dentro de la app,
+   solo por decisión expresa del usuario, caso por caso. Nada de imágenes de pacientes con licencia restrictiva (CAMUS,
+   EchoNet).
    **Recursos estudiados** (art. 2 de la reforma, 30/10/2026): una web, simulador, curso, repositorio o tuit estudiado
    aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota su licencia o permiso (el
-   permiso, copiado en `docs/`). Sin licencia verificada, solo la idea reescrita.
+   permiso, apuntado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 10. **Calculadoras**: `calcX()` + `init()`; un campo vacío nunca es 0 (`el.value === ''`); clamp de rangos; aviso de
     «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no. Casillas
     que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado). Los umbrales se comparan
@@ -217,8 +224,10 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   (`git checkout main && git merge --ff-only origin/<rama> && git push origin main`, y volver a la rama). Si el
   fast-forward falla, avisa al usuario; no reescribas historia.
 - **Plan socialista** (`/plan-socialista`): el contenido de un bloque va a una rama `auto/<bN>` con una sola PR en
-  borrador, y el usuario solo se para 4-5 veces por bloque (`autonomo/REGLAS.md` §2.3). Los arreglos, los fallos de
-  los jueces y las mejoras técnicas van directo a `main` con los jueces en verde, sin pedir aprobación.
+  borrador, y el usuario solo se para 4-5 veces por bloque (`autonomo/REGLAS.md` §2.3). **La PR entra en `main` por
+  votos del Consejo** (desde el 30/10/2026, REGLAS §4.15): jueces en verde, auditor sin graves, profesor ≥ 8,75 (meta
+  9,5 en modelos vivos nuevos) y mayoría del Consejo; el usuario la ve después y pide arreglos si quiere. Los arreglos,
+  los fallos de los jueces y las mejoras técnicas van directo a `main` con los jueces en verde, sin pedir aprobación.
 
 ## 11. Redacción e idioma
 

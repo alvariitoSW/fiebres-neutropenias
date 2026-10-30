@@ -152,7 +152,8 @@ export function initQuiz({ triggerId, banco, temas }) {
             renderNivelAsignaturas();
             return;
         }
-        orden = barajar(subBanco);
+        // Las preguntas con `paso` (caso que evoluciona) van al final y en orden; las demás se barajan.
+        orden = [...barajar(subBanco.filter(q => !q.paso)), ...subBanco.filter(q => q.paso).sort((a, b) => a.paso - b.paso)];
         indice = 0;
         mostrarPantallaQuiz(true);
         renderPregunta();

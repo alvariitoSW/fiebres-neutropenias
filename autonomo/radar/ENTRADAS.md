@@ -43,6 +43,46 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
 
+### Repos propios: simulador-UCI- (Pygame) y simulador-uci-3d (Godot)
+- **Fecha / tipo**: 2026-10-30 · repositorios del usuario
+- **Enlace**: https://github.com/alvariitoSW/simulador-UCI- · https://github.com/alvariitoSW/simulador-uci-3d
+- **Estado (30/10, rea-cierre)**: leído (README y scripts clave; sin ejecutar). Informe: `autonomo/ideas/ingenieria-inversa/rea-cierre-repos.md`
+- **Qué es**: el 2D, un juego con monitor en vivo y 5 casos (sepsis, SDRA, paro, sedación, neutropenia febril); el 3D, un prototipo de disparos con antibióticos. Sus fórmulas son lineales y no fisiológicas; casi ninguna cifra tiene fuente
+- **Sirve a**: ideas de caso que acaba con causa clínica y «puntos clave» (`guardia-shock`), calidad de RCP (`g2-paro`)
+- **Licencia**: sin archivo LICENSE; solo ideas, nada de código
+- **Veredicto**: destino tarea `guardia-shock`; el juego 3D, descartado porque no sirve para estudiar a pie de cama
+
+### PhET (Universidad de Colorado)
+- **Fecha / tipo**: 2026-10-30 · web de simulaciones
+- **Enlace**: https://phet.colorado.edu
+- **Estado (30/10, rea-cierre)**: no se pudo leer la web por dentro (devolvía solo menú y pie); lo que se sabe sale de la página de licencias y de un artículo de diseño (arXiv 1306.6544). Informe: `rea-cierre-webs.md`
+- **Qué es**: simulaciones de física con ayudas dentro de la propia escena
+- **Licencia**: las anteriores al 29/03/2026, CC BY 4.0 con logo y atribución; las nuevas, no
+- **Veredicto**: destino tarea `estudio-04-11` (solo el principio: pocos mandos, efecto inmediato, pista dentro de la escena); simulaciones descartadas porque la licencia exige logo y las nuevas no son libres
+
+### cardiorender.com (simulador de hemodinámica)
+- **Fecha / tipo**: 2026-10-30 · web
+- **Enlace**: https://cardiorender.com (citada en las respuestas del tuit de lazo P-V)
+- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre. Leída el 30/10 (`rea-cierre-webs-abiertas.md`).
+- **Licencia**: solo ideas; redistribuir exige permiso escrito
+- **Veredicto**: destino tarea `mv-eco` (acople Ea/Ees, reflejos); ideas también para `guardia-shock` y `pif-cardio`
+
+### litfl.com · «ST elevation in aVR»
+- **Fecha / tipo**: 2026-10-30 · web
+- **Enlace**: https://litfl.com/st-elevation-in-avr/
+- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre. Leída el 30/10.
+- **Licencia**: CC BY-NC-SA 4.0; solo se enlaza
+- **Veredicto**: destino tarea `arteria-culpable` (solo enlace)
+
+### intro2echo.com (The Heart by Ultrasound)
+- **Fecha / tipo**: 2026-10-30 · web
+- **Enlace**: https://intro2echo.com
+- **Estado (30/10, rea-cierre)**: ya integrada en el atlas de eco (con permiso del autor); no abría el 29/10, abre desde el 30/10. Leída el 30/10.
+- **Veredicto**: destino tarea `eco-sueltas` (atribución y lista de capítulos como índice de pendientes); el resto, aparcado hasta que `mv-eco` abra las valvulopatías
+
+### Tuits #29-31 (MarlonVFZR, AguilarMolina_, yoshiaki_666_)
+- Ya tienen ficha arriba, con su línea de estado: #29 no se pudo leer (pide PDF de Helseth); #30 tarea `hcm`; #31 tareas `peri` y `mv-eco`. Todos dieron 402 el 30/10.
+
 ### DeepTutor (HKUDS): tutor con IA, ¿sirve para la Mayéutica?
 - **Fecha / tipo**: 2026-10-30 · repositorio
 - **Enlace**: https://github.com/HKUDS/DeepTutor (preprint arXiv 2604.26962; v1.7.0 del 28/10/2026, 51k estrellas)
@@ -87,6 +127,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: integrar en UCI / Papers Tuiter en cuanto haya PDF (adjunto en el issue o dominio abierto)
 
 ### IAM oclusivo: seis principios del ECG más allá de los criterios de SCACEST (@MarlonVFZR)
+- **Estado (30/10, rea-cierre)**: no se pudo leer (402); el paper (Helseth) pide PDF del usuario. Destino: no se pudo leer hasta tener el PDF; luego UCI / Papers Tuiter.
 - **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (artículo de X) → paper
 - **Enlace**: https://x.com/MarlonVFZR/status/2115269246699852211 (enlaza un artículo de X y un canal de Telegram)
 - **Dijo**: solo el enlace
@@ -104,6 +145,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: integrar en UCI / Papers Tuiter cuando llegue el PDF; los ECG, recreados o con fuente libre
 
 ### Bloqueo de rama que aparece al cambiar la frecuencia: fase 3 y fase 4 (@RitikaTuliMD)
+- **Estado (30/10, rea-cierre)**: no se pudo leer entero (x.com 402). Destino: aparcado hasta tener una fuente abrible; luego `arritmias-maqueta`.
 - **Fecha / tipo**: 2026-10-30 (comentario del 28/10; era uno de los cuatro sin leer del 29/10) · tuit → idea
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810
 - **Dijo**: solo el enlace
@@ -118,6 +160,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: idea suelta para el bloque 3 (fase 1)
 
 ### Caso: HVI y una estructura rara en la válvula mitral (@AguilarMolina_)
+- **Estado (30/10, rea-cierre)**: no se pudo leer (402); la ficha es de una sesión anterior. Destino: tarea `hcm`.
 - **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (caso con vídeo de eco) → idea
 - **Enlace**: https://x.com/AguilarMolina_/status/2114860764812980605
 - **Dijo**: solo el enlace
@@ -132,6 +175,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: idea suelta: plantilla de caso de eco para el atlas (G1), con imágenes de fuente libre
 
 ### Interdependencia ventricular (@yoshiaki_666_)
+- **Estado (30/10, rea-cierre)**: no se pudo leer (402); vídeo citado no visto. Destino: tareas `peri` y `mv-eco`.
 - **Fecha / tipo**: 2026-10-30 (comentario del 28/10) · tuit (en japonés; cita un vídeo de @NephroP) → idea
 - **Enlace**: https://x.com/yoshiaki_666_/status/2115200513235112315 · vídeo citado:
   https://twitter.com/NephroP/status/2115151681939747003/video/1
@@ -165,6 +209,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: SÍ sirve, como ideas y como prueba para la decisión del 3D. Propuesto: informe corto antes del 01/11
 
 ### Cuatro tuits sin leer (Bandeja del 29/10; el de @RitikaTuliMD, leído el 30/10)
+- **Estado (30/10, rea-cierre)**: los de @shinriha_pt, @WithAScalpel (2115405654…) y @sindenzu1 siguen en **no se pudo leer** (402 el 30/10). Hace falta del usuario: pegar el texto o una captura en la Bandeja #27. Destino: no se pudo leer.
 - **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
   https://x.com/shinriha_pt/status/2115396011443323199 · https://x.com/WithAScalpel/status/2115405654915514531 ·
@@ -179,6 +224,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: pendiente de que el usuario pegue el paper o una captura
 
 ### CardioTeca · Espacio Arritmias: dosis de anticoagulantes y antiarrítmicos (tablas)
+- **Estado (30/10, rea-cierre)**: leído el 30/10 (resumen de la web, sin cifras de las tablas): fuentes declaradas = fichas técnicas CIMA/AEMPS, ESC 2024 FA, EHRA 2021; sin licencia visible, no se copia. Destino: aparcado hasta que el usuario decida si quiere la calculadora de ACOD (sin tarea); como bibliografía, `arritmias-maqueta`.
 - **Fecha / tipo**: 2026-10-29 (comentario del 28/10) · web
 - **Enlace**: https://www.cardioteca.com/espacio-arritmias/9091-dosis-de-los-anticoagulantes-y-los-antiarritmicos-tablas-por.html
 - **Dijo**: solo el enlace
@@ -197,6 +243,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
   CardioTeca, como bibliografía. Para ver la página hace falta abrir `www.cardioteca.com` en la red de la sesión
 
 ### Easy LA Segmentator (Mikael Laredo, Pitié-Salpêtrière)
+- **Estado (30/10, rea-cierre)**: leído el 30/10: sin código público, licencia solo investigación no comercial. Destino: tarea `f2-ete` (solo las ideas de qué enseñar); código descartado porque no hay y la licencia lo impide.
 - **Fecha / tipo**: 2026-10-28 · repositorio
 - **Enlace**: https://github.com/mikaellaredo/easy-la-segmentator
 - **Dijo**: «Mira a ver si este repositorio de GitHub nos puede ayudar a montar el motor real del corazón»; tras la
@@ -220,6 +267,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
   corazón
 
 ### Lazo presión-volumen #1: precarga y distensibilidad (@WithAScalpel) + CardioRender
+- **Estado (30/10, rea-cierre)**: no se pudo leer (x.com 402); el contenido es el de la ficha anterior. CardioRender abre desde el 30/10 y está en lectura. Destino: aparcado hasta que el usuario decida una mejora de lazos P-V (sin tarea propia; encajaría en `mv-eco`).
 - **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás); en una respuesta, una web
 - **Enlace**: https://x.com/WithAScalpel/status/2115036104977940880 · la web citada en las respuestas: https://cardiorender.com
 - **Dijo**: solo el enlace
@@ -235,6 +283,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: idea suelta para fase 2; ingeniería inversa de CardioRender solo si el usuario la pide
 
 ### ¿Por qué el ejercicio dispara la TV del tracto de salida del VD? (@RitikaTuliMD)
+- **Estado (30/10, rea-cierre)**: no se pudo leer (x.com 402). Destino: aparcado hasta tener una guía o libro que se pueda abrir; luego `arritmias-maqueta`.
 - **Fecha / tipo**: 2026-10-28 (comentario del 27/10) · tuit → idea (sin paper detrás)
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115035277752463816
 - **Dijo**: solo el enlace
