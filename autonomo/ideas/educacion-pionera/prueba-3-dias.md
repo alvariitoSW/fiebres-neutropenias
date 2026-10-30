@@ -16,9 +16,9 @@ Pega: el texto de la ficha de cristaloides es ~34 % más largo (≈1.500 palabra
 
 ## 2. Serie A · cristaloides (6)
 **A1.** Un varón de 80 kg recibe 3 L de salino 0,9 % en el día. Suponiendo el mismo reparto proporcional, ¿cuánto de ese volumen se queda en su plasma?
- a) ≈ 3.000 mL: es isotónico y se queda en el vaso.
- b) ≈ 825 mL; unos 2.475 mL van al intersticio.
- c) ≈ 2.100 mL (70 %), como con la albúmina al 5 %.
+ a) ≈ 3.000 mL: al ser isotónico, casi todo se queda en el vaso.
+ b) ≈ 825 mL en el plasma; el resto, unos 2.475 mL, pasa al intersticio.
+ c) ≈ 2.100 mL (70 %), como pasa con la albúmina al 5 %.
 
 **A2.** A una mujer de 60 kg le pasan 1 L de salino y su volumen extracelular sube 1.100 mL, algo más de lo infundido. ¿Por qué sube más?
  a) Porque el salino es algo hipertónico y arrastra agua desde las células.
@@ -26,24 +26,24 @@ Pega: el texto de la ficha de cristaloides es ~34 % más largo (≈1.500 palabra
  c) Porque la sal atrae agua desde el plasma hacia el intersticio.
 
 **A3.** Tras 4 L de salino, un varón tiene cloro 118 mEq/L y bicarbonato bajo. Entre las diferencias del salino con el plasma, ¿cuál es la más relevante para esta acidosis?
- a) El sodio, 154 frente a 140 mEq/L.
- b) La osmolalidad, 308 frente a 290 mOsm/L.
- c) El cloro, 154 frente a 103 mEq/L.
+ a) El sodio, 154 frente a 140 mEq/L en el plasma.
+ b) La osmolalidad, 308 frente a 290 mOsm/L en el plasma.
+ c) El cloro, 154 frente a 103 mEq/L en el plasma.
 
 **A4.** Dos mujeres operadas reciben líquidos al mismo ritmo (30 mL/kg/h): una, salino 0,9 %; la otra, Ringer lactato. ¿Qué pH esperas al seguir la infusión?
- a) Bajan las dos, porque ambos líquidos son ácidos.
- b) Baja la del salino (de 7,41 hacia 7,28) y no cambia la del Ringer.
- c) Sube la del Ringer, porque el lactato alcaliniza directamente.
+ a) Bajan las dos (de 7,41 hacia 7,28), porque ambos líquidos son ácidos.
+ b) Baja la del salino (de 7,41 hacia 7,28) y la del Ringer no cambia.
+ c) Sube la del Ringer (de 7,41 hacia 7,50), porque el lactato alcaliniza.
 
 **A5.** Un varón de 70 kg, sin shock, recibe 2 L de Ringer lactato en una hora y el residente teme «cargarlo de lactato». ¿Qué le dices?
- a) El hígado aclara ≈ 100 mmol/h de lactato, lo que llevan unos 3,5 L de Ringer por hora.
- b) El riñón elimina el lactato del Ringer en minutos.
- c) El lactato que se infunde no se mide en sangre.
+ a) El hígado aclara ≈ 100 mmol/h de lactato, que son unos 3,5 L de Ringer por hora.
+ b) El riñón elimina ≈ 100 mmol/h de lactato, que son unos 3,5 L de Ringer por hora.
+ c) El lactato infundido no se mide en sangre y no suma al lactato del paciente.
 
 **A6.** Una paciente con shock recibe Ringer lactato por su vía central y se saca ahí el lactato: 6,8 mmol/L. ¿Qué haces?
- a) Lo tratas como hipoperfusión y subes el ritmo de fluidos.
- b) Lo atribuyes al Ringer y no vuelves a medirlo.
- c) Repites la muestra por otro sitio, no por el catéter del Ringer.
+ a) Lo tratas como hipoperfusión y subes el ritmo de fluidos hasta que baje.
+ b) Lo atribuyes al Ringer y no vuelves a medirlo en las horas siguientes.
+ c) Repites la muestra en otro sitio, no por el catéter por el que pasa el Ringer.
 
 ## 3. Serie B · coloides (6)
 **B1.** Para subir el plasma lo mismo que con 2 L de salino, un residente calcula albúmina al 5 %. ¿Cuánta hace falta, aproximadamente?
@@ -57,14 +57,14 @@ Pega: el texto de la ficha de cristaloides es ~34 % más largo (≈1.500 palabra
  c) La albúmina al 5 %, la más parecida al plasma.
 
 **B3.** Una mujer sangra por una úlcera y tiene PA 85/50. Un residente propone 100 mL de albúmina al 25 % para reponer lo perdido. ¿Qué le contestas?
- a) Que está bien: sube el plasma 3-4 veces lo infundido.
- b) Que no repone la pérdida: saca agua del intersticio al plasma.
- c) Que la hiperoncótica está prohibida en el shock.
+ a) Que repone el volumen perdido: sube el plasma 3-4 veces lo infundido.
+ b) Que no repone el volumen perdido: mueve agua del intersticio al plasma.
+ c) Que la hiperoncótica se ha asociado a más daño renal en el shock circulatorio.
 
 **B4.** Un paciente irá a cirugía con riesgo de sangrado y necesita un coloide sintético. ¿Cuál altera menos la hemostasia?
- a) Hetastarch 450/0,7.
+ a) Hetastarch 450/0,7, que no da coagulopatía significativa hasta > 20 mL/kg.
  b) Tetrastarch 130/0,4, que no da coagulopatía significativa hasta > 50 mL/kg.
- c) Dextrano-70, que no tiene efecto sobre las plaquetas.
+ c) Dextrano-70, que no da coagulopatía significativa hasta > 20 mL/kg.
 
 **B5.** Un paciente que recibe HES tiene la amilasa 3 veces su valor normal y la lipasa normal. ¿Qué piensas?
  a) Pancreatitis aguda: hay que pedir TC.
@@ -72,8 +72,8 @@ Pega: el texto de la ficha de cristaloides es ~34 % más largo (≈1.500 palabra
  c) Hiperamilasemia por la HES: la amilasa se une a la molécula y se aclara menos.
 
 **B6.** Un varón de 30 años con TCE grave e hipotensión. El residente dice «la albúmina nunca ha dado problemas de supervivencia». ¿Qué matiz añades?
- a) En el TCE un estudio grande mostró más mortalidad con albúmina que con salino.
- b) En el TCE la albúmina al 5 % es de elección.
- c) La albúmina solo da problemas en cirróticos.
+ a) En el TCE, un estudio grande mostró más mortalidad con albúmina que con salino.
+ b) En el TCE, un estudio grande mostró menos mortalidad con albúmina que con salino.
+ c) En el TCE, un estudio grande mostró la misma mortalidad con albúmina que con salino.
 
 Apunta aquí: aciertos A __/6 · tiempo __ min · aciertos B __/6 · tiempo __ min · estudio día 0: cristaloides __ min, coloides __ min.
