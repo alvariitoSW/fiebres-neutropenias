@@ -2,8 +2,9 @@
 // Uso: node autonomo/pruebas/vaso-vivo.mjs <url-base> [--capturas <carpeta>]
 // Copia la del capilar (capilar-vivo.mjs). Recorre, a 390 px (con movimiento y su medida de rendimiento) y a 360 px
 // (con «reducir movimiento»), cada uno en un contexto limpio: accesos (menú de Libros, buscador y los botones de las
-// fichas 4-6 de Merino HEMATO, cada uno en su estado), los 18 estados con sus cifras (±1 en la última frente a la
-// cobertura del bloque 2 §5.3) y su lupa, la herida en sus 4 tiempos, el mando de las plaquetas en sus extremos y su
+// fichas 4-6 de Merino HEMATO, cada uno en su estado), los 21 estados con sus cifras (±1 en la última frente a la
+// cobertura del bloque 2 §5.3) y su lupa, la herida en sus 4 tiempos, la placa (SCA) con sus 3 oclusiones × el reloj a
+// 0, 3, 12 y 24 h (rótulo, troponina y sello de la lisis), el mando de las plaquetas en sus extremos y su
 // punto medio (un paciente posible), la explicación guiada recorrida entera en 3 estados (cada paso señala en el
 // dibujo y lleva su «Ver en la ficha» a un párrafo que existe), los rótulos (≥7,5 px, sin pisarse), la Mayéutica
 // entera fallando 4 con su repaso (las cifras que se predicen salen tapadas; la respuesta no está en el HTML), los 3
@@ -84,7 +85,7 @@ ok(await p.evaluate(() => /FICHA/.test(document.getElementById('vso-volver').tex
 const nBotones = await p.evaluate(() => ['merino-trombocitopenia', 'merino-microangiopatias', 'merino-plaquetas-plasma'].map(f => document.querySelectorAll(`#${f} [data-vaso-vivo]`).length));
 ok(nBotones.every(n => n >= 3), `las fichas 4-6 enlazan el vaso en sus estados (${nBotones.join(', ')} botones)`);
 
-// 4. Los 18 estados, desde el enlace cruzado de siempre: sus cifras (cobertura §5.3), su lupa y sin desborde
+// 4. Los 21 estados, desde el enlace cruzado de siempre: sus cifras (cobertura §5.3), su lupa y sin desborde
 const ESPERA = {
   sano: t => t.celdas.plaq === '250.000' && !t.lupa,
   herida: t => t.estado.lesion === 'herida' && t.lupa === 'herida',
@@ -103,9 +104,12 @@ const ESPERA = {
   refractariedad: t => t.celdas.plaq === '−25 %',
   'pfc-inr': t => t.celdas.inr === '1,8→1,4' && t.celdas.fib === '38→50 %',
   warfarina: t => t.estado.rep === 'warf-pfc' && /baja/.test(t.celdas.inr),
+  placa: t => t.estado.lesion === 'placa' && t.lupa === 'placa',
+  'placa-antiagregantes': t => t.celdas.tapon === 'deja de crecer' && t.lupa === 'placa',
+  trombolisis: t => t.celdas.amenaza === 'TNK 45 mg' && t.celdas.fib === '↓' && t.lupa === 'placa',
   'hemorragia-masiva': t => t.celdas.fib === '120' && t.celdas.amenaza === 'sangrado' && t.celdas.tapon === 'no cierra',
 };
-ok(Object.keys(ESTADOS).length === 18 && Object.keys(ESPERA).length === 18, `18 estados con nombre (${Object.keys(ESTADOS).length})`);
+ok(Object.keys(ESTADOS).length === 21 && Object.keys(ESPERA).length === 21, `21 estados con nombre (${Object.keys(ESTADOS).length})`);
 for (const k of Object.keys(ESTADOS)) {
   await abrirModelo(k); await espera(k === 'herida' ? 600 : 500);
   const t = await T();
@@ -122,6 +126,71 @@ for (const n of [1, 2, 3, 4]) {
   const t = await T();
   ok(t.estado.t === n && t.estado.lesion === 'herida' && t.lupa === 'herida' && t.celdas.tapon === ['se pega', 'anclado', 'trombo', 'contraído'][n - 1], `tiempo ${n} de la herida: tapón «${t.celdas.tapon}»`);
   await aEscena(); await espera(300); await foto('05-tiempo-' + n);
+}
+// 5b. La placa (SCA): sus 4 tiempos y las 3 oclusiones × el reloj a 0, 3, 12 y 24 h (rótulo del ECG en el dibujo,
+// troponina «>p99» desde 3 h salvo a ratos, sello «Lisis sin beneficio» solo en la completa desde 12 h, NTG apagada en
+// la completa, chip del ECG solo en la completa)
+await abrirModelo('placa'); await espera(300);
+await pulsar('[data-vso-tab="arteria"]');
+for (const n of [1, 2, 3, 4]) {
+  await pulsar(`#vso-m-tiempo-placa [data-v="${n}"]`); await espera(400);
+  const t = await T();
+  ok(t.estado.lesion === 'placa' && t.estado.t === n && t.lupa === 'placa' && await p.evaluate(() => !!document.querySelector('#vso-lamina #vso-pl-bif')), `tiempo ${n} de la placa: «${t.celdas.tapon}»`);
+  if (n === 2) ok(await p.evaluate(() => !!document.querySelector('#vso-lamina #vso-pl-mpo')), 'tiempo 2: el leucocito y la MPO en el dibujo');
+  if (n === 3) ok(await p.evaluate(() => !!document.querySelector('#vso-lamina #vso-pl-lipidos')), 'tiempo 3: los lípidos trombogénicos en el dibujo');
+  await aEscena(); await espera(200); await foto('05b-placa-' + n);
+}
+for (const ocl of ['intermitente', 'parcial', 'completa']) {
+  await pulsar(`#vso-m-ocl [data-v="${ocl}"]`); await espera(250);
+  for (const h of [0, 3, 12, 24]) {
+    await deslizar('#vso-m-horas', h); await espera(250);
+    const t = await T();
+    const v = await p.evaluate(() => {
+      const vis = e => e && e.getClientRects().length > 0 && !e.closest('[hidden]');
+      return { ecg: document.getElementById('vso-pl-ecg')?.textContent || '', sello: [...document.querySelectorAll('#vso-escena .tope-sello')].filter(vis).map(e => e.textContent).join(' '),
+        ntg: document.getElementById('vso-m-ntg').disabled, chip: vis(document.getElementById('vso-m-ecg')), out: document.getElementById('vso-m-horas-out').textContent };
+    });
+    const tropo = ocl === 'intermitente' ? '?' : h >= 3 ? '>p99' : 'aún no', conSello = ocl === 'completa' && h >= 12;
+    ok(t.estado.horas === h && t.celdas.aptt === tropo && /Lisis sin beneficio/.test(v.sello) === conSello
+      && v.ecg.includes(ocl === 'completa' ? 'ST elevado' : 'sin ST elevado') && v.ntg === (ocl === 'completa') && v.chip === (ocl === 'completa') && v.out.startsWith(`${h} `),
+      `${ocl} a las ${h} h: rótulo «${v.ecg}», hs-cTn «${t.celdas.aptt}», sello «${v.sello.slice(0, 22)}», NTG ${v.ntg ? 'apagada' : 'viva'}, ECG ${v.chip ? 'sí' : 'no'}`);
+    if (await desborde() > 0) ok(false, `desborde en ${ocl} a las ${h} h`);
+    if (h === 3 || (ocl === 'completa' && h === 12)) { await aEscena(); await espera(200); await foto(`05c-${ocl}-${h}h`); }
+  }
+}
+ok(await p.evaluate(() => { const b = document.getElementById('vso-m-ecg'); return b.dataset.especialidad === 'libros' && b.dataset.view === 'ritmoVivo' && b.dataset.ritmoVivo === 'stemi'; }), 'el chip del ECG es el enlace cruzado al corazón eléctrico (stemi)');
+// 5b y 5c. Tratar el SCA: el peso (40-120 kg) → tenecteplasa por tramos; el reloj 11/12/13 h con la lisis; la lisis en el
+// NSTEMI (apagada, con su sello); los 3 interruptores × sus chips = sellos, y el trombo que deja de crecer con los tres
+await abrirModelo('trombolisis'); await espera(400);
+const selloTxt = () => p.evaluate(() => [...document.querySelectorAll('#vso-escena .tope-sello')].filter(e => e.getClientRects().length > 0).map(e => e.textContent).join(' | '));
+for (const [kg, mg] of [[40, 30], [59, 30], [60, 35], [89, 45], [90, 50], [120, 50]]) {
+  await deslizar('#vso-m-peso', kg); await espera(150);
+  const o = await p.evaluate(() => document.getElementById('vso-m-peso-out').textContent), t = await T();
+  ok(t.estado.peso === kg && o.includes(`${mg} mg`) && /TNK \d+ mg/.test(await p.evaluate(() => document.getElementById('vso-pl-lisis')?.textContent || '')), `peso ${kg} kg → tenecteplasa ${mg} mg («${o}»)`);
+}
+await pulsar('[data-vso-tab="arteria"]');
+for (const h of [11, 12, 13]) {
+  await deslizar('#vso-m-horas', h); await espera(250);
+  const sello = await selloTxt(), apagado = await p.evaluate(() => document.getElementById('vso-m-lisis').disabled);
+  ok(/Lisis sin beneficio/.test(sello) === (h >= 12) && apagado === (h >= 12), `lisis a las ${h} h: ${h >= 12 ? 'sello y mando apagado' : 'activa'} («${sello.slice(0, 30)}»)`);
+}
+await deslizar('#vso-m-horas', 2); await pulsar('#vso-m-ocl [data-v="parcial"]'); await espera(300);
+ok(/SCASEST/.test(await selloTxt()) && await p.evaluate(() => document.getElementById('vso-m-lisis').disabled), 'parcial (NSTEMI): la lisis se apaga con su sello');
+await pulsar('#vso-m-ocl [data-v="completa"]'); await espera(200);
+await pulsar('[data-vso-tab="tratar"]');
+// sin lisis apagada: se apagan los fármacos al revés; se encienden los tres y el trombo deja de crecer
+await abrirModelo('placa-antiagregantes'); await espera(400);
+ok((await T()).celdas.tapon === 'deja de crecer', 'con los tres interruptores el trombo «deja de crecer» (nunca desaparece)');
+const casos = [['asa', '#vso-m-asa', 'alasa', /aspirina/i], ['tica', '#vso-m-p2y [data-v="ticagrelor"]', 'hic', /intracraneal/i], ['prasu', '#vso-m-p2y [data-v="prasugrel"]', 'ictus', /ictus/i]];
+for (const [k, btn, chip, re] of casos) {
+  await abrirModelo('sano'); await espera(200); await pulsar('[data-vso-tab="arteria"]'); await pulsar('#vso-m-ocl [data-v="completa"]'); await pulsar('[data-vso-tab="tratar"]');
+  await pulsar(btn); await espera(200);
+  const sin = await selloTxt();
+  await pulsar(`#vso-m-pac [data-v="${chip}"]`); await espera(300);
+  const con = await selloTxt();
+  ok(!/Contraindicado/.test(sin) && /Contraindicado/.test(con) && re.test(con) && await p.evaluate(b => document.querySelector(b).disabled, btn), `${k} × ${chip}: sello «Contraindicado» y mando apagado`);
+  if (k === 'tica') { await aEscena(); await foto('05d-sello-ticagrelor-hic'); }
+  if (await desborde() > 0) ok(false, `desborde en ${k} × ${chip}`);
 }
 // Tocar la pared sana abre una herida (los 4 tiempos) y su lupa
 await abrirModelo('sano'); await espera(300);
@@ -200,7 +269,7 @@ for (const k of ['herida', 'cid', 'pfc-inr']) {
   await pulsar('#vso-dock-guia [data-guia="salir"]'); await p.waitForTimeout(200);
   ok(await p.evaluate(() => !window.__vsoPruebas().guia && !document.getElementById('vso-dock-explorar').hidden && !document.querySelectorAll('g.guia-capa').length), `${k}: «Terminar» devuelve los mandos y quita los anillos`);
 }
-// Todas las explicaciones (18): cada paso señala algo que existe en ese paso y cada cita va a un párrafo que existe
+// Todas las explicaciones (21): cada paso señala algo que existe en ese paso y cada cita va a un párrafo que existe
 const sinSenal = [];
 for (const k of Object.keys(GUIAS)) {
   await abrirModelo(k); await espera(400);
@@ -212,7 +281,7 @@ for (const k of Object.keys(GUIAS)) {
   }
   await pulsar('#vso-dock-guia [data-guia="salir"]');
 }
-ok(!sinSenal.length, `los ${Object.values(GUIAS).flat().length} pasos de las 18 explicaciones señalan en el dibujo ${sinSenal.join(', ')}`);
+ok(!sinSenal.length, `los ${Object.values(GUIAS).flat().length} pasos de las 19 explicaciones señalan en el dibujo ${sinSenal.join(', ')}`);
 const citas = await p.evaluate(() => window.__vsoPruebas().citas);
 const sinParrafo = citas.filter(c => !c.exacta || !c.ficha_existe || !c.pdf);
 ok(!sinParrafo.length, `las ${citas.length} citas de las explicaciones van a un párrafo que existe, con su PDF ${sinParrafo.slice(0, 4).map(c => c.id).join(' ')}`);

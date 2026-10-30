@@ -18,7 +18,8 @@ import { crearMayeuticaModelo, pintarDock as pintarDockComun, rutaDe, atributosF
 import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExacta, hrefPdf } from '../../core/citas.js';
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
-import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso } from '../../data/vaso-vivo-data.js';
+import { crearTope } from '../../core/tope.js';
+import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso, RELOJ, topesReloj, PESO, tnkMg } from '../../data/vaso-vivo-data.js';
 import { $, estado, REDUCIR, ocultos, initEscena, aplicarModelo, ponerLupa, setOcultos, mirar, arrancar, pintarUnaVez, ponerVisible, estadoBucle, vaciarFotogramas, lupaActual, fijar, LUPAS_GRANDES, ponerEstudio } from './vaso-vivo-escena.js';
 
 let raiz = null;
@@ -31,9 +32,9 @@ let fraseActual = '';
 // El origen de la frase, corto: «ficha · p. 20 →» es el enlace cruzado al párrafo exacto (REGLAS §7.9); lo que no
 // es de la ficha («60.000: ilustrativo») queda como texto.
 function origenCorto(fuente) {
-    const m = String(fuente).match(/([a-z0-9-]+)#((?:mh|mar)-[a-z0-9-]+)/);
+    const m = String(fuente).match(/([a-z0-9-]+)#((?:mh|mar|mc)-[a-z0-9-]+)/);
     const r = m && (rutaDe(m[2]) || rutaDe(m[1]));
-    const partes = String(fuente).replace(/\s*·?\s*[a-z0-9-]+#(?:mh|mar)-[a-z0-9-]+/g, '').split(' · ').map(t => t.trim()).filter(Boolean);
+    const partes = String(fuente).replace(/\s*·?\s*[a-z0-9-]+#(?:mh|mar|mc)-[a-z0-9-]+/g, '').split(' · ').map(t => t.trim()).filter(Boolean);
     const k = partes.findIndex(t => /^pp?\. /.test(t)), enlace = partes.slice(0, k + 1).join(' · '), resto = partes.slice(k + 1).join(' · ');
     return r ? `<button type="button" class="vso-org-ir" ${atributosFicha(r)}>${enlace} →</button>${resto ? ' · ' + resto : ''}` : partes.join(' · ');
 }
@@ -60,15 +61,15 @@ const cambiar = (fn, op) => { const e = copia(estado); fn(e); aplicar(e, op); };
    Los 4 tiempos de la herida (▶): cada 2,7 s el siguiente; con «reducir movimiento», el tiempo 4 quieto
    ============================================================ */
 let reproduciendo = null;
-function pararPlay() { if (reproduciendo) { clearInterval(reproduciendo); reproduciendo = null; } $('m-play')?.setAttribute('aria-pressed', 'false'); }
+function pararPlay() { if (reproduciendo) { clearInterval(reproduciendo); reproduciendo = null; } $('m-play')?.setAttribute('aria-pressed', 'false'); $('m-play-placa')?.setAttribute('aria-pressed', 'false'); }
 function reproducir() {
     pararPlay();
-    const lesion = estado.lesion === 'ninguna' ? 'herida' : estado.lesion;
-    if (REDUCIR) { cambiar(e => { e.lesion = lesion; e.t = 4; }, { lupa: 'herida' }); return; }
+    const lesion = estado.lesion === 'ninguna' ? 'herida' : estado.lesion, lupa = lesion === 'placa' ? 'placa' : 'herida';
+    if (REDUCIR) { cambiar(e => { e.lesion = lesion; e.t = 4; }, { lupa }); return; }
     let t = 1;
-    cambiar(e => { e.lesion = lesion; e.t = t; }, { lupa: 'herida' });
-    $('m-play').setAttribute('aria-pressed', 'true');
-    reproduciendo = setInterval(() => { t++; if (t > 4) { pararPlay(); return; } cambiar(e => { e.t = t; }, { lupa: 'herida' }); $('m-play').setAttribute('aria-pressed', 'true'); }, 2700);
+    cambiar(e => { e.lesion = lesion; e.t = t; }, { lupa });
+    $(lupa === 'placa' ? 'm-play-placa' : 'm-play').setAttribute('aria-pressed', 'true');
+    reproduciendo = setInterval(() => { t++; if (t > 4) { pararPlay(); return; } cambiar(e => { e.t = t; }, { lupa }); $(lupa === 'placa' ? 'm-play-placa' : 'm-play').setAttribute('aria-pressed', 'true'); }, 2700);
 }
 
 /* ============================================================
@@ -92,6 +93,23 @@ function sincronizarMandos() {
     marcar('[data-vso-rep]', b => b.dataset.vsoRep === e.rep);
     marcar('[data-vso-hep]', b => e.causa === 'hit' && b.dataset.vsoHep === e.hep);
     $('farmaco-nota').hidden = e.causa === 'hit';
+    // La arteria que se tapa: tiempo, oclusión, reloj, NTG y el ECG (solo con el ST elevado)
+    const pl = e.lesion === 'placa';
+    marcar('#vso-m-tiempo-placa button', b => pl && +b.dataset.v === e.t);
+    marcar('#vso-m-ocl button', b => pl && e.t === 4 && b.dataset.v === e.ocl);
+    $('m-horas').value = e.horas; $('m-horas-out').innerHTML = `${e.horas} <small>h</small>`;
+    marcar('#vso-m-ntg', () => pl && e.ntg);
+    $('m-ntg').disabled = pl && e.t === 4 && e.ocl === 'completa';   // en el STEMI decide el ECG: la NTG no prueba nada (p. 40)
+    $('m-ntg').classList.toggle('tope-apagado', $('m-ntg').disabled);
+    $('m-ecg').hidden = !(pl && e.t === 4 && e.ocl === 'completa');
+    marcar('#vso-m-asa', () => e.asa);
+    marcar('#vso-m-p2y button', b => e.p2y === b.dataset.v);
+    marcar('#vso-m-iib button', b => e.iib === b.dataset.v);
+    marcar('#vso-m-lisis', () => e.lisis);
+    marcar('#vso-m-pac button', b => e[b.dataset.v]);
+    marcar('#vso-m-clcr button', b => +b.dataset.v === e.clcr);
+    $('m-peso').value = e.peso; $('m-peso-out').innerHTML = `${e.peso} <small>kg · ${tnkMg(e.peso)} mg</small>`;
+    pintarTopes();
     enRaiz('#vso-chips-estado [data-vso-estado]').forEach(b => b.setAttribute('aria-pressed', String(enEstado(b.dataset.vsoEstado))));
     if (claveActual && !enEstado(claveActual) && !reproduciendo && !Guia.activo) claveActual = null;
     const g = $('guia-abrir');
@@ -102,14 +120,38 @@ function sincronizarMandos() {
 function enEstado(k) {
     const s = ESTADOS[k];
     if (!s) return false;
-    if (s.play) return estado.lesion === 'herida' && JSON.stringify({ ...estado, t: 1 }) === JSON.stringify(estadoDe(s.p));
+    if (s.play) return estado.lesion === s.p.lesion && JSON.stringify({ ...estado, t: 1 }) === JSON.stringify(estadoDe(s.p));
     return JSON.stringify(estado) === JSON.stringify(estadoDe(s.p));
 }
+// Los topes del reloj (tope.js): aviso al acercarse a las 12 h, sello «lisis sin beneficio» al pasarlas
+let topes = null;
+const topesPuestos = new Map();
+function pintarTopes() {
+    if (!topes) return;
+    const lista = topesReloj(estado), claves = new Set(lista.map(x => x.clave));
+    for (const k of [...topesPuestos.keys()]) if (!claves.has(k)) { topes.quitar(k); topesPuestos.delete(k); }
+    for (const x of lista) { const j = JSON.stringify(x); if (topesPuestos.get(x.clave) !== j) { topes.poner(x.clave, x); topesPuestos.set(x.clave, j); } }
+}
+const aPlaca = e => { if (e.lesion !== 'placa') Object.assign(e, estadoBase(), { lesion: 'placa' }); };
 function engancharDock() {
     enRaiz('.vso-dock-tabs button').forEach(b => b.addEventListener('click', () => pestana(b.dataset.vsoTab)));
     $('m-lesion').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { e.lesion = b.dataset.v; if (e.lesion !== 'ninguna' && e.causa !== 'cid') e.t = 4; }, { lupa: b.dataset.v === 'ninguna' ? null : 'herida' }); });
     $('m-tiempo').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { e.t = +b.dataset.v; if (e.lesion === 'ninguna') e.lesion = 'herida'; }, { lupa: 'herida' }); });
     $('m-play').addEventListener('click', () => { if (reproduciendo) { pararPlay(); return; } reproducir(); });
+    $('m-tiempo-placa').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { aPlaca(e); e.t = +b.dataset.v; }, { lupa: 'placa' }); });
+    $('m-play-placa').addEventListener('click', () => { if (reproduciendo) { pararPlay(); return; } if (estado.lesion !== 'placa') cambiar(e => { aPlaca(e); }, { lupa: 'placa' }); reproducir(); });
+    $('m-ocl').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.ocl = b.dataset.v; if (e.ocl === 'completa') e.ntg = false; }, { lupa: 'placa' }); });
+    $('m-horas').addEventListener('input', ev => { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.horas = Math.max(RELOJ.min, Math.min(RELOJ.max, Math.round(+ev.target.value))); }, { lupa: 'placa' }); });
+    // Tratar el SCA (5b y 5c): cada mando se crea una vez en el HTML y solo se repinta; actúan sobre la placa en su tiempo 3 o 4
+    const trat = fn => { pararPlay(); cambiar(e => { aPlaca(e); if (e.t < 3) e.t = 4; fn(e); }, { lupa: 'placa' }); };
+    $('m-asa').addEventListener('click', () => trat(e => { e.asa = !e.asa; }));
+    $('m-p2y').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.p2y = e.p2y === b.dataset.v ? null : b.dataset.v; }); });
+    $('m-iib').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.iib = e.iib === b.dataset.v ? null : b.dataset.v; }); });
+    $('m-lisis').addEventListener('click', () => trat(e => { e.t = 4; e.lisis = !e.lisis; }));
+    $('m-peso').addEventListener('input', ev => trat(e => { e.peso = Math.max(PESO.min, Math.min(PESO.max, Math.round(+ev.target.value))); }));
+    $('m-pac').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e[b.dataset.v] = !e[b.dataset.v]; }); });
+    $('m-clcr').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.clcr = +b.dataset.v; }); });
+    $('m-ntg').addEventListener('click', () => { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.ntg = e.ocl !== 'completa' && !e.ntg; }, { lupa: 'placa' }); });
     $('m-plaq').addEventListener('input', ev => { pararPlay(); cambiar(e => { e.plaq = plaqDe(+ev.target.value); if (e.rep === 'plaquetas') e.rep = null; if (MAT(e.causa)) { e.causa = 'ninguna'; e.vari = null; e.rep = null; } }); });
     $('m-transfundir').addEventListener('click', () => { pararPlay(); cambiar(e => { Object.assign(e, estadoBase(), { rep: 'plaquetas', previas: 1, plaq: Math.min(e.plaq, 20000) }); }); });
     enRaiz('[data-vso-previas]').forEach(b => b.addEventListener('click', () => { pararPlay(); cambiar(e => { Object.assign(e, estadoBase(), { rep: 'plaquetas', previas: +b.dataset.vsoPrevias, plaq: estado.rep === 'plaquetas' ? estado.plaq : 20000 }); }); }));
@@ -134,6 +176,7 @@ function engancharDock() {
         const l = b.dataset.vsoLupa;
         if (lupaActual() === l) { ponerLupa(false); return; }
         // la herida y la cascada piden una herida en la pared: si no la hay, se abre (tiempo 4)
+        if (l === 'placa' && estado.lesion !== 'placa') { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; }, { lupa: 'placa' }); return; }
         if (LUPAS_GRANDES.has(l) && estado.lesion === 'ninguna') { pararPlay(); cambiar(e => { e.lesion = 'herida'; e.t = l === 'cascada' ? 3 : 4; }, { lupa: l }); return; }
         ponerLupa(l); pintarLibro();
     }));
@@ -367,6 +410,7 @@ export function init() {
     if (!raiz) return null;
     initEscena();
     fijos(); engancharDock(); crearGuia();
+    topes = crearTope({ monitor: $('escena'), dock: $('dock'), cita: c => { const r = rutaDe(c.id); return r ? `<span class="cita"><button type="button" class="vso-org-ir" ${atributosFicha(r)}>Ver en la ficha · p. ${c.pag} →</button></span>` : ''; } });
     enRaiz('.vso-lead .vso-org').forEach(sp => { sp.innerHTML = origenCorto(sp.textContent); sp.dataset.enlazado = ''; });
     enlazarOrigenes(raiz);
     enRaiz('[data-vso-fuente]').forEach(sp => { sp.innerHTML = enlacesFuente(sp.dataset.vsoFuente, { clase: 'vso-ir-texto', claseOrg: 'vso-org' }); });
