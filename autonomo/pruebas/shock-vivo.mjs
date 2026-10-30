@@ -176,6 +176,29 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     ok(await p.evaluate(() => !document.querySelector('#shv-dock-panel [data-cpap]')), 'Mateo (hemorragia): sin mando CPAP en Soporte'); posible(r, 'hemo sin CPAP'); await limpio('hemo sin CPAP');
 }
 
+// ───────── A4. La disección (b3-paso4 g5, 5d): las 4 recetas con la DIRECCIÓN de la FC y los sellos (Marino cap. 20, p. 51-52)
+{
+    const dock = (ds, v) => p.evaluate(([ds, v]) => { const e = document.querySelector(`#shv-dock-panel [data-ds="${ds}"]${v != null ? `[data-v="${v}"]` : ''}`); if (!e) throw new Error('no hay ' + ds); if (e.disabled) return false; e.click(); return true; }, [ds, v]);
+    const sello = async re => { await espera(1300); return p.evaluate(re => [...document.querySelectorAll('#shv-raiz [class*="tope-sello"]')].some(e => e.getClientRects().length && new RegExp(re, 'i').test(e.textContent)), re.source); };
+    await abrir('diseccion'); await espera(1800);
+    const base = await S(); ok(base.pac === 'joaquin-0', 'disección: abre con Joaquín a las 08:25'); posible(base, 'disección base');
+    ok(!await sello(/Cizalla|Objetivo|tolerado/), 'disección base: sin sello');
+    await dock('ni-sube'); await dock('ni-sube'); await dock('ni-sube'); await espera(1300);
+    const ni = await S(); ok(ni.pas < base.pas && ni.fc > base.fc && ni.ic > base.ic, `receta 1, nicardipino solo: la PAS baja (${base.pas}→${ni.pas}) y la FC (${base.fc}→${ni.fc}) y el IC (${base.ic}→${ni.ic}) SUBEN`);
+    ok(await sello(/Cizalla/), 'receta 1: sello «Cizalla ↑»'); posible(ni, 'disección nicardipino solo'); await limpio('disección nicardipino solo'); await foto('diseccion-cizalla');
+    await dock('cero'); await dock('es-bolo'); await dock('es-sube'); for (let i = 0; i < 2; i++) { await dock('es-bolo'); await dock('es-sube'); } await espera(1300);
+    const es = await S(); ok(es.fc < base.fc && es.ic < base.ic && es.pas < base.pas, `receta 2, esmolol 100: la FC BAJA (${base.fc}→${es.fc}), el IC baja (${base.ic}→${es.ic}) y la PAS baja (${base.pas}→${es.pas})`);
+    ok(!await sello(/Cizalla/), 'receta 2: sin sello de cizalla'); posible(es, 'disección esmolol');
+    await dock('ni-sube'); await dock('ni-sube'); await espera(1300);
+    const dos = await S(); ok(dos.pas < es.pas && dos.pas >= 90 && dos.fc < base.fc, `receta 3, esmolol + nicardipino 7,5: PAS ${dos.pas} (≥90, bajo la de esmolol solo ${es.pas}) con FC ${dos.fc} que sigue baja`);
+    ok(await sello(/Objetivo/), 'receta 3: sello «Objetivo»'); posible(dos, 'disección esmolol + nicardipino'); await limpio('disección objetivo'); await foto('diseccion-objetivo');
+    for (let i = 0; i < 4; i++) await dock('ni-sube'); await dock('nit', '3'); await espera(1300);
+    const bajo = await S(); ok(bajo.pas < 90, `receta 4, de más: PAS ${bajo.pas} <90`); ok(await sello(/Por debajo de lo tolerado/), 'receta 4: sello «Por debajo de lo tolerado» con PAS <90'); posible(bajo, 'disección PAS <90'); await foto('diseccion-pas90');
+    ok(await p.evaluate(() => { const e = document.querySelector('#shv-dock-panel [data-ds="ni-sube"]'); return e && e.disabled; }), 'tope: el nicardipino en 15 mg/h apaga su botón de subir');
+    await dock('cero'); await dock('es-bolo'); await dock('es-sube'); for (let i = 0; i < 6; i++) { await dock('es-bolo'); await dock('es-sube'); } await espera(1000);
+    ok(await p.evaluate(() => { const e = document.querySelector('#shv-dock-panel [data-ds="es-sube"]'); return e && e.disabled; }), 'tope: el esmolol en 200 µg/kg/min apaga su botón de subir'); await limpio('disección esmolol al máximo');
+}
+
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
 for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {

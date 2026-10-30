@@ -26,6 +26,7 @@ export const FICHA = {
   'mc-ic-tipos': [CARDIO, 'Insuficiencia cardíaca aguda: tipos', 'IC aguda', PDF_C, 'Marino 2024'],
   'mc-ic-manejo': [CARDIO, 'Insuficiencia cardíaca aguda: manejo', 'IC aguda: manejo', PDF_C, 'Marino 2024'],
   'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica', PDF_C, 'Marino 2024'],
+  'mc-sca-tratamiento': [CARDIO, 'SCA: tratamiento', 'SCA: tratamiento', PDF_C, 'Marino 2024'],
   'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar: diagnóstico', 'Embolia pulmonar', PDF_R, 'Marino 2024'],
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar: manejo', 'Embolia pulmonar: manejo', PDF_R, 'Marino 2024'],
   'mar-cateter-ap': [['libros', 'marinoFundamentos', 'panel-marino-fund-tabs'], 'El catéter de arteria pulmonar y la presión de enclavamiento', 'Catéter de arteria pulmonar', 'docs/marino-2024-practicas-monitorizacion-caps5-9.pdf', 'Marino 2024'],
