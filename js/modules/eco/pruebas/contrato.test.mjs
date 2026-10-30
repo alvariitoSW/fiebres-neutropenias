@@ -48,8 +48,9 @@ const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
   // P5a: 50 % con el mando curvado (u = g^0,6): antes 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7
   ['TEP 50 %', 'tep', 0.5, 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.4],
+  // P5a vuelta 2: el defecto es g 0,7 (submasivo, PAM 76): cifras de la salida del motor. Antes (g 0,6): 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1
   // P5a: el defecto del TEP pasa a submasivo (g 0,6, u = g^0,6): cifras de la salida del motor (barrido-tep.mjs); antes 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8
-  ['TEP defecto', 'tep', 'def', 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1],
+  ['TEP defecto', 'tep', 'def', 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.6],
   // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
   ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.8],
   ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.8],
@@ -59,7 +60,7 @@ const TABLA = [
   ['Fallo VI 100 %', 'fallo', 1, 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 23.7],
 ];
 // TRV: la tabla usa √((PSAP−PVC)/4) con las cifras medias; el contrato, el gradiente máximo instantáneo VD−AD (menor): ±10 %
-const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.9, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)
+const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.8, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)
 
 for (const [nombre, k, g, ...t] of TABLA) {
   test(`contrato = motor de hoy · ${nombre}`, () => {

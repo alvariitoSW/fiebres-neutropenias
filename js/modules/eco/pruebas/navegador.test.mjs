@@ -274,10 +274,10 @@ test('sonda libre: los mandos mueven el corte, se reconoce la vista y el reto se
   await pg.close();
 });
 
-test('Doppler con fusión E-A (TEP, FC alta): el panel dice que E/A y TDE no son medibles y no imprime E/A', { skip: omitir }, async () => {
+test('Doppler con fusión E-A (TEP al 100 %, FC alta: en el defecto submasivo la FC no fusiona): el panel dice que E/A y TDE no son medibles y no imprime E/A', { skip: omitir }, async () => {
   const { pg, errores } = await abrir('js/modules/eco/laboratorio.html');
   await pg.locator('[data-modo="D"]').tap(); await pg.waitForTimeout(300);
-  await pg.evaluate(async () => { const { ESCENARIOS, ASENTAR_FORMA } = await import('./escenarios.mjs'); ESCENARIOS.tep.aplicar(window.__motor); window.__motor.correr(ESCENARIOS.tep.forma ? ASENTAR_FORMA : 40); });
+  await pg.evaluate(async () => { const { ESCENARIOS, ASENTAR_FORMA } = await import('./escenarios.mjs'); ESCENARIOS.tep.aplicar(window.__motor, 1); window.__motor.correr(ESCENARIOS.tep.forma ? ASENTAR_FORMA : 40); });
   await pg.locator('[data-muestra="mitral"]').tap(); await pg.waitForTimeout(3500);
   const info = await pg.evaluate(() => window.__eco.info());
   assert.equal(info.medidas.fusion, true);
