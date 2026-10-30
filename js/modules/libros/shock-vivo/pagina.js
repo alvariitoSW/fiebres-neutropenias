@@ -12,6 +12,7 @@ import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
 import { crearTope } from '../../../core/tope.js';
 import { mandosDiseccion, cambioDiseccion, CLAVES_DISEC, AJUSTE_DISEC } from './diseccion.js';
 import * as D from '../../../data/shock-vivo-data.js';
+import { estadioScai } from './scai.mjs';
 import { crearConsolaBalon } from './consola-balon.js';
 import { calcularTopes, bolosQueNoCaben } from './topes.js';
 import { ECO_REAL } from '../../eco/eco-real.mjs';
@@ -338,10 +339,16 @@ function pintarFrase() {
   const k = D.nombreEstado(R, ctxX()), E = D.ESTADOS[k]; claveActual = k;
   if (!E) return;
   $('frase-txt').innerHTML = `<span class="estado">${typeof E.tit === 'function' ? E.tit(R, ctxX()) : E.tit}</span>${E.frase(R, ctxX())} ${org(typeof E.org === 'function' ? E.org(R) : E.org, false)}`;
+  pintarScai();
   const vistas = new Set(), lis = [];
   for (const p of E.guia) { const c = p.c; const kk = c.f + c.id + c.sitio; if (vistas.has(kk)) continue; vistas.add(kk); lis.push(c); }
   const T = D.OBJETIVOS[tablaActual()].cita; lis.push(T);
   $('fuentes').innerHTML = lis.map((c) => `<li><span>${D.FICHA[c.f][4]} · ${c.sitio}${c.p != null ? ` (${pagTxt(c.p)})` : ''}</span>${cita(c)}</li>`).join('');
+}
+
+function pintarScai() {
+  const h = est.historia, n = h.length, sc = estadioScai(R, cab.ajuste, { lact: est.lab.lact, horas: est.horas, baja: n >= 2 && h[n - 1].lact < h[n - 2].lact - 0.05 });
+  $('scai-r').textContent = `SCAI · ${sc.letra} · ${sc.nombre}`; $('scai-p').textContent = sc.porque + '.';
 }
 
 // ---------------------------------------------------------------- laboratorio y tendencias

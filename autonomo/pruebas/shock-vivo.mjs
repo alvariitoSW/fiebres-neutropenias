@@ -201,10 +201,32 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
 
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
-for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia']) {
+for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia', 'fermin']) {
     await pac(k); await pest('grav');
     for (const g of [0, 50, 100]) { await grav(g); const r = await S(); posible(r, `${k} gravedad ${g} %`); ok(!/undefined|NaN/.test(r.frase), `${k} g${g}: la frase viva sin undefined/NaN`); }
     await limpio(`paciente ${k}`);
+}
+
+// ───────── B2. Estadio SCAI (regla del modelo sobre la ESC 2026, p. 44): tabla paciente/ajuste → letra, medida en el monitor de la app
+const scai = async () => p.evaluate(() => document.getElementById('shv-scai-r').textContent.replace(/^SCAI · (\w).*/, '$1'));
+const ajus = o => p.evaluate(o => window.__shvPruebas().cab.ajustar(o), o);
+const horas5 = async () => { await pest('reloj'); await p.evaluate(() => document.querySelector('[data-h="5"]')?.click()); await espera(700); };
+{ const T = [['aurelio', 0, {}, 'A'], ['aurelio', 100, {}, 'C'], ['aurelio', 100, { na: 5, dobuta: true, soporte: 'ecmo' }, 'E'], ['amparo', 100, {}, 'C'], ['fermin', 0, {}, 'A'], ['fermin', 100, {}, 'C']];
+  for (const [k, g, a, esperada] of T) { await pac(k); await pest('grav'); await grav(g); await ajus({ na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: 'no' }); await ajus(a); await p.waitForTimeout(1000);
+    ok(await scai() === esperada, `SCAI ${k} g${g} ${JSON.stringify(a)} → ${esperada} (da ${await scai()})`); }
+  await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 8 }); await horas5(); ok(await scai() === 'D', 'SCAI amparo con noradrenalina y +5 h (lactato persiste) → D');
+  await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 0 }); await grav(70); await espera(400);
+  const rb = await S(); const lb = await p.evaluate(() => window.__shvPruebas().est.lab.lact); ok((await scai()) === (rb.pam < 65 && lb <= 2 ? 'B' : lb > 2 ? 'C' : 'A'), `SCAI amparo g70 (PAM ${rb.pam}, lactato ${lb}): coherente con la regla`);
+  ok(await p.evaluate(() => { const e = document.getElementById('shv-scai'), b = e.querySelector('button.especialidad-link'); return e.getClientRects().length > 0 && b.dataset.resaltar === '#ic-scai-tabla' && !!document.getElementById('ic-scai-tabla'); }), 'SCAI: rótulo visible, botón con su destino y la tabla de la ficha tiene su id');
+  const b0 = await p.evaluate(() => { window.__b0 = document.querySelector('#shv-scai button'); return 1; }); await pest('grav'); await grav(0); await espera(300);
+  ok(await p.evaluate(() => window.__b0 === document.querySelector('#shv-scai button')), 'SCAI: el botón no se rehace al cambiar de estado');
+  await limpio('SCAI'); await foto('scai');
+  // el enlace: abre la ficha y resalta la tabla; VOLVER vuelve al modelo
+  await clic('#shv-scai button'); await espera(1200);
+  ok(await p.evaluate(() => { const t = document.getElementById('ic-scai-tabla'); return !!t && t.getClientRects().length > 0; }), 'SCAI: el enlace abre la ficha con la tabla visible');
+  await foto('scai-ficha');
+  await clic('.btn-volver-ficha, #ic-volver-ficha, [data-volver-ficha]').catch(() => {}); await espera(300);
+  await abrir('cardio'); await espera(1200);
 }
 
 // ───────── C. Topes: cada mando a su tope (REGLAS §1.14)
