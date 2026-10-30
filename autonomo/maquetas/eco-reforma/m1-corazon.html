@@ -25,12 +25,12 @@
   .banda-pt.mal { border-top-color: var(--accent-red); }
   .banda-n { display: flex; justify-content: space-between; font-size: 12px; color: var(--text-muted); }
   .fijas { position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; background: var(--bg-main); border-top: 1px solid var(--accent-yellow); padding: 4px 6px calc(6px + env(safe-area-inset-bottom)); }
-  .fijas-t { font-size: 10px; color: var(--text-muted); text-align: center; margin: 0 0 2px; }
+  .fijas-t { font-size: 11px; color: var(--text-muted); text-align: center; margin: 0 0 2px; }
   .fijas-g { display: grid; grid-template-columns: repeat(6, 1fr); gap: 2px; max-width: 640px; margin: 0 auto; }
   .fijas-g div { text-align: center; min-width: 0; }
   .fijas-g b { display: block; font-size: 15px; font-variant-numeric: tabular-nums; white-space: nowrap; }
   .fijas-g i { display: block; font-style: normal; font-size: 9.5px; color: var(--text-dim); white-space: nowrap; }
-  .fijas-g u { display: block; text-decoration: none; font-size: 9px; color: var(--text-muted); }
+  .fijas-g u { display: block; text-decoration: none; font-size: 10px; color: var(--text-muted); }
   .huecos { display: grid; gap: 6px; }
 </style></head><body>
 <main>
@@ -41,7 +41,7 @@
 <div class="fila" id="m1-pac" role="group" aria-label="Paciente"></div>
 <div class="mando"><span>Gravedad</span><input id="m1-g" type="range" min="0" max="100" step="1" value="0" aria-label="Gravedad del escenario, 0 a 100 %"><output id="m1-gout">—</output></div>
 <p id="m1-gtxt"></p>
-<p class="mut">Tope 0-100 %: el mismo que la app (<code>escenarios.mjs</code>); fuera no hay mando.</p>
+<p class="mut">El deslizador llega al 100 %, el mismo límite que usa la app.</p>
 <div id="m1-sello100" hidden class="sello"></div>
 
 <svg id="m1-lienzo" viewBox="0 0 360 318" role="img" aria-label="Cuatro cámaras del corazón como cajas: el tamaño es el volumen y el color la presión"></svg>
@@ -56,9 +56,9 @@
 <div class="tarjeta" id="m1-ee">
   <div class="ee"><span class="ee-v" id="m1-eev">—</span><span>E/e′ medio · <span class="origen">motor de hoy</span></span></div>
   <div class="banda"><div class="banda-ok" id="m1-banda-ok"></div><div class="banda-pt" id="m1-banda-pt"></div></div>
-  <div class="banda-n"><span>0</span><span>banda normal 4,0-11,5 (verde)</span><span>25</span></div>
-  <div id="m1-ee-sello" hidden class="sello">Imposible: banda normal 4,0-11,5, <a href="../../../docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf" target="_blank" rel="noopener">Nagueh 2025, p. 551 (impresa)</a>.</div>
-  <div id="m1-ee-A" hidden class="sello ilus">Lo que daría la opción A: e′ del motor, no del atlas. ilustrativo · sin cifra →  vuelve a la banda 4,0-11,5.</div>
+  <div class="banda-n"><span>0</span><span>normal según edad, ≈4-14 (unión de los tres grupos)</span><span>25</span></div>
+  <div id="m1-ee-sello" hidden class="sello">Imposible: E/e′ promedio normal 4,0-9,1 (20-39 a), 4,6-11,5 (40-60 a), 5,2-14,0 (60-80 a): <a href="../../../docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=15" target="_blank" rel="noopener">Nagueh 2025, Tabla 5, p. 551 (PDF 15)</a>. El 1,8 está por debajo de todos los límites inferiores.</div>
+  <div id="m1-ee-A" hidden class="sello ilus">Lo que daría la opción A: e′ del motor, no del atlas. ilustrativo · sin cifra →  vuelve a la banda normal para su edad.</div>
 </div>
 
 <h2>Lo que el motor aún no tiene</h2>
@@ -68,7 +68,7 @@
   <div class="sello hueco">hueco · techo de presión del VD agudo: la nota «~40/33» del código no tiene cita</div>
 </div>
 
-<p class="pie">Cifras: <code>motor.mjs</code> y <code>escenarios.mjs</code> de hoy (FEVI, FEVD, presiones, PVC, GC) y TAPSE de <code>corazon-geo.mjs</code>; E/e′ con la fórmula del atlas diastólico. Umbral: Nagueh 2025 p. 551. Origen de todo: ficha/motor.<br>
+<p class="pie">Cifras: <code>motor.mjs</code> y <code>escenarios.mjs</code> de hoy (FEVI, FEVD, presiones, PVC, GC) y TAPSE de <code>corazon-geo.mjs</code>; E/e′ con la fórmula del atlas diastólico. Umbral: Nagueh 2025, Tabla 5, p. 551 (PDF 15). Origen de todo: ficha/motor.<br>
 <a class="volver" href="index.html">← Volver al informe</a></p>
 </main>
 

@@ -14,7 +14,7 @@ const HILOS = [
   { id: 'vol', n: 1, nombre: 'vol · volumen de cada cámara', unidad: 'mL', corto: 'Volúmenes',
     valor: (m) => `VD ${coma(m.s.vvd)} · VI ${coma(m.s.vvi)} · AD ${coma(m.s.vad)} · AI ${coma(m.s.vai)} mL`,
     usa: 'B-mode (tamaño de las cavidades), modo M (diámetros), lecturas (FE, volúmenes).',
-    hoy: 'Hoy el dibujo toca el motor: <code>suelo()</code> de <code>escenarios.mjs</code> sube el volumen basal de VD, AI y AD para que la forma quepa. En A el volumen del motor no se retoca; si no cabe, la imagen lo declara.', rev: [{ cod: 'suelo()', txt: 'el dibujo retoca el volumen del motor (suelo() de escenarios.mjs)' }] },
+    hoy: 'Hoy el dibujo toca el motor: <code>suelo()</code> de <code>escenarios.mjs</code> sube el volumen basal de VD, AI y AD para que la forma quepa. En A el volumen del motor no se retoca; si no cabe, la imagen lo declara.', rev: [{ cod: 'suelo()', txt: 'el dibujo retoca el volumen del motor para que quepa' }] },
   { id: 'pres', n: 2, nombre: 'pres · presión de cámaras y vasos', unidad: 'mmHg', corto: 'Presiones',
     valor: (m) => `VI ${coma(m.s.pvi)} · VD ${coma(m.s.pvd)} · Ao ${coma(m.s.pao)} · AP ${coma(m.s.pap)} mmHg`,
     usa: 'Doppler (gradiente y TRV desde pres.ap), B-mode (el septo sale de pres.vd − pres.vi), lecturas (catéter, Wiggers, asas).',
@@ -38,7 +38,7 @@ const HILOS = [
     valor: (m, r) => `TAPSE ${coma(r.tapse, 1)} mm · e′ ${coma(r.eprima, 1)} cm/s · MAPSE hueco`,
     usa: 'Modo M (TAPSE), Doppler tisular (e′, s′), lecturas (E/e′).',
     hoy: 'Hoy dos hilos van al revés: TAPSE sale de la geometría (<code>tapseDeLatido</code>, FEVD × eje largo del VI) y e′ del atlas (<code>ePrima</code> en <code>atlas/diastolica.mjs</code>). En A los entrega el motor.', sello: 'hueco · MAPSE y S′ tricuspídea: sin fuente en docs/',
-    rev: [{ cod: 'TAPSE', txt: 'TAPSE sale del dibujo (tapseDeLatido, corazon-geo.mjs)' }, { cod: 'e′', txt: 'e′ sale del atlas (ePrima, atlas/diastolica.mjs)' }] },
+    rev: [{ cod: 'TAPSE', txt: 'el TAPSE se mide sobre el dibujo; no lo calcula el corazón' }, { cod: 'e′', txt: 'la e′ sale de un capítulo del atlas, no del motor' }] },
   { id: 'tiempos', n: 8, nombre: 'tiempos · TRIV, TD, tiempo de aceleración, TIVC', unidad: 'ms', corto: 'Tiempos',
     valor: (m, r) => `TRIV ${coma(r.triv)} ms (los demás: hueco hasta que lo entregue el motor)`,
     usa: 'Doppler (TRIV, tiempo de deceleración, TA pulmonar), lecturas (Wiggers).',
@@ -150,7 +150,7 @@ function repintar() {
   const lista = $('m2-lista'); lista.replaceChildren();
   if (modo === 'hoy') {
     $('m2-lista-t').textContent = 'Hoy, tres hebras (en rojo, con ↩ y la flecha invertida) van al revés: la imagen escribe o el motor lee del dibujo.';
-    for (const h of HILOS) for (const q of h.rev || []) { const li = document.createElement('li'); li.innerHTML = `<span class="flecha-rev">↩ hilo ${h.n} · ${q.cod}:</span> ${q.txt}.`; lista.appendChild(li); }
+    for (const h of HILOS) for (const q of h.rev || []) { const li = document.createElement('li'); li.innerHTML = `<span class="flecha-rev">↩ hilo ${h.n} · </span> ${q.txt}.`; lista.appendChild(li); }
   } else $('m2-lista-t').textContent = 'Opción A (ilustrativa): los 9 hilos van en un solo sentido, del corazón a la imagen. Las tres hebras que hoy van al revés pasan a ser salidas del motor.';
   info();
 }
@@ -169,7 +169,7 @@ lienzo.addEventListener('click', (e) => { const g = e.target.closest('[data-hebr
 document.querySelectorAll('[data-modo]').forEach(b => b.addEventListener('click', () => { modo = b.dataset.modo; repintar(); }));
 $('m2-pac').addEventListener('click', (e) => { const b = e.target.closest('button[data-pac]'); if (b) { quien = PACIENTES.find(p => p.id === b.dataset.pac); nuevo(); repintar(); } });
 function nuevo() {
-  ocupado = true; document.body.dataset.calculando = '1'; $('m2-valor').textContent = 'Calculando el paciente…';
+  ocupado = true; document.body.dataset.calculando = '1'; $('m2-valor').textContent = 'Calculando el paciente… (medio segundo: el motor recalcula los latidos)';
   setTimeout(() => { m = crearPaciente(quien.k); r = medir(m); nLat = m.s.nLatido; ocupado = false; delete document.body.dataset.calculando; last = performance.now(); valor(); info(); }, 20);
 }
 function bucle(t) {

@@ -51,22 +51,23 @@ const FICHA_VD = 'Fisiopatología UCI · Cardiología · Ficha 11 (VD y TEP)';
 const lib = (pdf, p, t) => `<a href="../../../docs/${pdf}#page=${p}" target="_blank" rel="noopener">${t}</a>`;
 const ESC = 'esc-ers-2022-hipertension-pulmonar-parte1.pdf', MUK = 'mukherjee-2025-corazon-derecho-hp-ase.pdf', LANG = 'lang-2015-cuantificacion-camaras-ase.pdf';
 const SIGNOS = [
-  { id: 'vdvi', n: 'VD/VI basal', val: (s) => coma(s.vdvi, 2), unidad: '', pat: (s) => s.vdvi > 1.0, umbral: 'Patológico si >1,0',
+  { id: 'vdvi', n: 'VD/VI basal', val: (s) => coma(s.vdvi, 2), unidad: '', pat: (s) => s.vdvi > 1.0, contra: (s, k) => k === 'hpcronica' && s.vdvi < 1.0, umbral: 'Patológico si >1,0',
     fuente: lib(ESC, 28, 'ESC/ERS 2022 Tabla 10, PDF 28 (p. 3645)'), origen: 'motor · medirVd (anchura basal VD / VI en A4C)' },
   { id: 'tapse', n: 'TAPSE', val: (s) => coma(s.tapse, 1), unidad: ' mm', pat: (s) => s.tapse < 17, umbral: 'Patológico si <17 mm',
     fuente: lib(LANG, 23, 'Lang 2015, PDF 23 (p. 23)'), origen: 'motor · tapseDeLatido' },
   { id: 'ratio', n: 'TAPSE/PSAP', val: (s) => coma(s.ratio, 2), unidad: ' mm/mmHg', pat: (s) => s.ratio < 0.55, umbral: 'Patológico si <0,55 mm/mmHg',
     fuente: lib(ESC, 28, 'ESC/ERS 2022 Tabla 10, PDF 28') + ' · ' + lib(MUK, 33, 'Mukherjee, PDF 33 (p. 173)'), origen: 'motor · TAPSE ÷ PSAP' },
-  { id: 'pared', n: 'Pared libre del VD', val: (s) => coma(s.pared, 1), unidad: ' mm', pat: (s) => s.pared > 5, umbral: 'Hipertrofia si >5 mm',
-    fuente: lib(MUK, 4, 'Mukherjee, PDF 4 (p. 144)'), origen: 'motor · medidasCorazon (telediástole)' },
+  { id: 'pared', n: 'Pared libre del VD', val: (s) => coma(s.pared, 1), unidad: ' mm', pat: (s) => s.pared >= 5, umbral: 'Aumentada si ≥5 mm (normal <5, Mukherjee p. 144; 1-5, Lang Tabla 8, PDF 20)',
+    fuente: lib(MUK, 4, 'Mukherjee, PDF 4 (p. 144)') + ' · ' + lib(LANG, 20, 'Lang 2015, Tabla 8, PDF 20'), origen: 'motor · medidasCorazon (telediástole)' },
   { id: 'trv', n: 'Velocidad de la regurgitación tricuspídea (TRV)', val: (s) => coma(s.trv, 1), unidad: ' m/s', intermedio: (s) => s.trv > 2.8 && s.trv <= 3.4, pat: (s) => s.trv > 3.4,
-    umbral: '≤2,8 baja · 2,9-3,4 intermedia · >3,4 alta', fuente: lib(ESC, 28, 'ESC/ERS 2022 Fig. 5, PDF 28 (p. 3645)'),
+    umbral: 'Probabilidad de HP por TRV: ≤2,8 baja · 2,9-3,4 intermedia · >3,4 alta; con ≥2 categorías de otros signos (Tabla 10) sube un nivel (Fig. 5)', fuente: lib(ESC, 28, 'ESC/ERS 2022 Fig. 5, PDF 28 (p. 3645)'),
     origen: 'calculada √((PSAP−PVC)/4), ilustrativa; el motor aún no la entrega' },
 ];
 function estado(sg, s) {
+  if (sg.contra && (sg.contra(s, st.k) || (st.k === 'tep' && st.g >= ESCENARIOS.tep.gravedad.defecto && s.vdvi < 1.0))) return ['est-pat', '⚠ contradice la guía (>1,0 en HP): cifra del motor de hoy, no de la fisiología'];
   if (sg.pat(s)) return ['est-pat', '⚠ patológico'];
   if (sg.intermedio && sg.intermedio(s)) return ['est-int', '◐ intermedia'];
-  return ['est-nor', '✔ normal'];
+  return ['est-nor', sg.id === 'trv' ? '✔ TRV ≤2,8' : '✔ normal'];
 }
 function pintarSignos() {
   const s = pac.sig;

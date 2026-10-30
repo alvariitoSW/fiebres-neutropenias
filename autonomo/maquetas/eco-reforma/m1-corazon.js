@@ -76,7 +76,7 @@ function cifras() {
 }
 function nuevo() {
   ocupado = true; document.body.dataset.calculando = '1';
-  $('m1-gtxt').textContent = 'Calculando el paciente…';
+  $('m1-gtxt').textContent = 'Calculando el paciente… (medio segundo: el motor recalcula los latidos)';
   setTimeout(() => {
     m = crearPaciente(quien.k, gActual()); nLat = -1; textoG(); cifras(); pintar(m.s);
     ocupado = false; delete document.body.dataset.calculando; last = performance.now();

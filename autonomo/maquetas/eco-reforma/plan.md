@@ -30,7 +30,7 @@ Campos, uno por línea, todos con unidad física; `t` = fase del ciclo 0-1 y tie
 **M1 · «El corazón solo»** (`m1-corazon.html`): motor real (`crearMotor`, `ESCENARIOS`, `aplicarEscenario`), sin ninguna imagen.
 - Primera pantalla 390 px: arriba una frase («El motor calcula; nada de lo que ves aquí sale de un dibujo»), 4 cámaras como cajas isométricas cuyo tamaño es el **volumen** y cuyo color es la **presión** (método /anatomy), latiendo con `onda`. Debajo, fila fija de 6 cifras: FEVI, FEVD, PSAP/PAPd, PVC, GC, TAPSE (todas `ficha/motor`).
 - Se toca: chips de paciente (normal, TEP, HP crónica, fallo VI, taponamiento) y un deslizador 0-100 % del escenario (el mismo `g` que la app). Topes: los de `escenarios.mjs` (0-100); fuera no hay mando. Al 100 % de TEP, sello «VD claudica: GC 2,3, PAM 58» (cifra del motor de hoy, tabla §3).
-- Antes/después: en TEP defecto se muestra **E/e′ 1,8** con sello rojo «imposible: banda normal 4,0-11,5, Nagueh p. 551» y al lado «lo que daría A: e′ del motor» marcado **ilustrativo** (sin cifra, solo flecha a la banda).
+- Antes/después: en TEP defecto se muestra **E/e′ 1,8** con sello rojo «imposible: E/e′ promedio normal 4,0-9,1 (20-39 a), 4,6-11,5 (40-60 a), 5,2-14,0 (60-80 a), Nagueh 2025, Tabla 5, p. 551 (PDF 15)» y al lado «lo que daría A: e′ del motor» marcado **ilustrativo** (sin cifra, solo flecha a la banda).
 - Huecos marcados «hueco»: MAPSE, torsión, techo del VD agudo.
 **M2 · «El cable»** (`m2-contrato.html`): dos piezas isométricas (corazón a la izquierda, ecógrafo a la derecha) unidas por un cable con 9 hilos = los 9 grupos del contrato §2.
 - Primera pantalla: las dos piezas y el cable; tocar un hilo lo ilumina, muestra su nombre, unidad, valor en vivo (motor real) y «quién lo usa» (B-mode, Doppler, modo M, lecturas). Nada calcula a la derecha: un rótulo fijo «la imagen solo lee».
@@ -44,7 +44,7 @@ Campos, uno por línea, todos con unidad física; `t` = fase del ciclo 0-1 y tie
 - Criterio clínico R3: ningún umbral nuevo; solo los de arriba, con la página al lado y «Ver en la ficha» a `atlas/cap-vd.html` y a `libros/marino-fundamentos` donde exista id.
 
 ## 4. Lista R2 (lo que debe hacer cada maqueta)
-M1: (1) late con el motor real, 5 pacientes; (2) deslizador 0-100 con tope y sello al 100 %; (3) 6 cifras fijas al pie siempre visibles; (4) tamaño = volumen, color = presión, leyenda; (5) E/e′ 1,8 con sello y banda Nagueh; (6) huecos MAPSE/torsión/techo VD marcados; (7) sin desborde a 390/360; (8) cada cifra con origen `ficha/motor`.
+M1: (1) late con el motor real, 5 pacientes; (2) deslizador 0-100 con tope y sello al 100 %; (3) 6 cifras fijas al pie siempre visibles; (4) tamaño = volumen, color = presión, leyenda; (5) E/e′ 1,8 con sello y banda Nagueh 2025, Tabla 5, p. 551 (PDF 15); (6) huecos MAPSE/torsión/techo VD marcados; (7) sin desborde a 390/360; (8) cada cifra con origen `ficha/motor`.
 M2: (1) 9 hilos tocables con nombre, unidad, valor vivo; (2) interruptor hoy/A con los 3 hilos al revés en rojo; (3) «quién lo usa» por hilo; (4) rótulo fijo «la imagen solo lee»; (5) chips de paciente cambian los valores; (6) hilos hueco en gris; (7) 390/360 sin desborde.
 M3: (1) A4C real latiendo en TEP y HP; (2) 5 signos con cifra del motor + umbral + página; (3) deslizador 0-100 con sellos de tope; (4) tres tarjetas antes/después (McConnell, aplanamiento, TA pulmonar) marcadas ilustrativo; (5) TRV marcada «calculada»; (6) hueco del techo VD agudo; (7) «Ver en la ficha» en cada signo; (8) 390/360 sin desborde y captura R4 junto a imagen libre de D1.
 
