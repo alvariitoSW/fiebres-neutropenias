@@ -18,8 +18,10 @@
 // (pruebasVaso). La escena vive en js/modules/libros/vaso-vivo-escena.js y la interfaz en vaso-vivo.js.
 import { HEMODERIVADOS } from './hemoderivados-data.js';
 import { MAYEUTICA_HEMOSTASIA } from './mayeutica/b2-hemostasia.js';
-import { RELOJ, PESO, tnkMg, tableroPlaca, frasePlaca, GUIA_PLACA, GUIA_ANTIAG, GUIA_LISIS, topesReloj } from './vaso-vivo-data-sca.js';
-export { RELOJ, OCLUSIONES, OCL_ORDEN, topesReloj, PESO, tnkMg } from './vaso-vivo-data-sca.js';
+import { RELOJ, PESO, tnkMg, tableroPlaca, frasePlaca, GUIA_PLACA, GUIA_ANTIAG, GUIA_LISIS, topesReloj as topesSca } from './vaso-vivo-data-sca.js';
+import { BASE_TEP, tableroTep, fraseTep, topesTep, GUIA_TEP } from './vaso-vivo-data-tep.js';
+export { RELOJ, OCLUSIONES, OCL_ORDEN, PESO, tnkMg } from './vaso-vivo-data-sca.js';
+export const topesReloj = e => (e.emb ? topesTep(e) : topesSca(e));   // el émbolo (EP) tiene sus propios topes
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const copia = o => JSON.parse(JSON.stringify(o));
@@ -37,7 +39,7 @@ export const PDF = 'docs/marino-2024-anemia-transfusion-hemostasia-uci.pdf';
 // es (1, 3 o 5); abo: plaquetas ABO-compatibles. La arteria que se tapa (lesion 'placa'): ocl, horas y ntg, en
 // vaso-vivo-data-sca.js.
 export function estadoBase() {
-    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false, ocl: 'completa', horas: RELOJ.inicio, ntg: false, asa: false, p2y: null, iib: null, lisis: false, peso: PESO.inicio, hic: false, ictus: false, alasa: false, morfina: false, clcr: 0 };
+    return { lesion: 'ninguna', t: 4, plaq: 250000, causa: 'ninguna', vari: null, hep: 'curso', rep: null, previas: 1, abo: false, ocl: 'completa', horas: RELOJ.inicio, ntg: false, asa: false, p2y: null, iib: null, lisis: false, peso: PESO.inicio, hic: false, ictus: false, alasa: false, morfina: false, clcr: 0, ...BASE_TEP };
 }
 export const estadoDe = parcial => Object.assign(estadoBase(), copia(parcial || {}));
 export const MAT = c => c === 'cid' || c === 'ptt' || c === 'shu' || c === 'mat';
@@ -113,7 +115,7 @@ export function derivar(e) {
    ============================================================ */
 export const CELDAS = ['plaq', 'tapon', 'inr', 'aptt', 'fib', 'dd', 'esq', 'amenaza'];
 export function tableroDe(e) {
-    if (e.lesion === 'placa') return tableroPlaca(e);
+    if (e.lesion === 'placa') return e.emb ? tableroTep(e) : tableroPlaca(e);
     const d = derivar(e), mat = d.mat;
     const C = (n, v, u, o, cls = '', ilu = false) => ({ n, v, u, o, cls, ilu });
     const fis = n => C(n, 'normal', '', 'fisiol.', 'bien', true);
@@ -177,7 +179,7 @@ export function tableroDe(e) {
    ============================================================ */
 const F4 = 'ficha · merino-trombocitopenia', F5 = 'ficha · merino-microangiopatias', F6 = 'ficha · merino-plaquetas-plasma';
 export function fraseDe(e) {
-    if (e.lesion === 'placa') return frasePlaca(e);
+    if (e.lesion === 'placa') return e.emb ? fraseTep(e) : frasePlaca(e);
     const d = derivar(e);
     if (e.rep === 'recambio') return ['El tratamiento de la PTT es el <span class="hl-azul">recambio plasmático</span>: se separa y se desecha el plasma del paciente, y se le devuelven sus hematíes con plasma de un donante sano. Unas 1,5 veces el volumen de plasma cada día, hasta plaquetas normales <span class="hl">2 días seguidos</span>; si empieza en las primeras 48 h, <span class="hl-verde">sobrevive hasta el 90 %</span>.', `${F5}#mh-ptt · p. 28`];
     if (e.rep === 'lena' && e.causa === 'mat') return ['Las indicaciones de transfusión de plaquetas <span class="hl-rojo">no se aplican</span> a la trombocitopenia por consumo de las microangiopatías: transfundirlas puede agravar la microtrombosis. Cuántos nudos más: ilustrativo.', `${F6}#mh-plaq-indicaciones · p. 29`];
@@ -254,10 +256,11 @@ export const ESTADOS = {
     warfarina: { n: 'Warfarina', s: 'vitamina K y CCP4F', p: { rep: 'warf-pfc' }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
     placa: { n: 'La placa que se rompe', s: 'los 4 tiempos', p: { lesion: 'placa', t: 1 }, play: true, grupo: 'arteria', pestana: 'arteria', ficha: 'mc-sca-diagnostico' },
     'placa-antiagregantes': { n: 'Los antiagregantes', s: 'tres interruptores', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 1, asa: true, p2y: 'ticagrelor', iib: 'eptifibatida' }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
+    'tep-lisis': { n: 'El émbolo y la lisis', s: 'evitar el siguiente', p: { lesion: 'placa', emb: true, t: 4, tto: 'heparina', horas: 6, peso: 80 }, grupo: 'arteria', pestana: 'tratar', ficha: 'neumo-ep-manejo' },
     trombolisis: { n: 'La trombólisis', s: 'plasmina y reloj', p: { lesion: 'placa', t: 4, ocl: 'completa', horas: 2, lisis: true, peso: 80 }, grupo: 'arteria', pestana: 'tratar', ficha: 'mc-sca-tratamiento' },
     'hemorragia-masiva': { n: 'Hemorragia masiva', s: 'el fibrinógeno', p: { rep: 'masiva', lesion: 'grande', t: 4, plaq: 46000 }, grupo: 'reponer', pestana: 'plasma', ficha: 'merino-plaquetas-plasma' },
 };
-export const GRUPOS_CHIPS = [['trombo', 'La herida y las plaquetas (trombocitopenia y HIT)'], ['mat', 'La red que se tapa (microangiopatías)'], ['reponer', 'Reponer (plaquetas y plasma)'], ['arteria', 'La arteria que se tapa: SCA']];
+export const GRUPOS_CHIPS = [['trombo', 'La herida y las plaquetas (trombocitopenia y HIT)'], ['mat', 'La red que se tapa (microangiopatías)'], ['reponer', 'Reponer (plaquetas y plasma)'], ['arteria', 'La arteria que se tapa: SCA y EP']];
 // Qué estado con nombre es un estado cualquiera (o null)
 export function claveDe(e) {
     for (const [k, s] of Object.entries(ESTADOS)) if (JSON.stringify(estadoDe(s.p)) === JSON.stringify(e)) return k;
@@ -283,6 +286,7 @@ export const GUIAS = {
     placa: GUIA_PLACA,
     'placa-antiagregantes': GUIA_ANTIAG,
     trombolisis: GUIA_LISIS,
+    'tep-lisis': GUIA_TEP,
     sano: [
         { t: 'El endotelio está cubierto por el glucocálix (la hierba dorada), una malla de mucopolisacáridos: una superficie que resiste la trombosis.', resalta: '#vso-zona-glucocalix', cita: TRB('mh-glucocalix', '20') },
         { t: 'Mantiene la sangre fluida: no deja que plaquetas ni leucocitos se peguen al endotelio. Mira cómo pasan las plaquetas sin tocar la pared.', resalta: '#vso-zona-luz', cita: TRB('mh-glucocalix', '20') },
@@ -532,6 +536,7 @@ const IMG = 'js/modules/merino-hemato/img/';
 export const LAMINAS = {
     frotis: [IMG + 'fig2-esquistocitos-cid.jpg', 'Figura 13.1 del libro (PDF p. 26): frotis de sangre de un paciente con CID; las flechas señalan esquistocitos, hematíes fragmentados, patognomónicos de una anemia hemolítica microangiopática.', 'Fig. 13.1: el frotis de una CID'],
     fig132: [IMG + 'fig13-2-respuesta-plaquetas.jpg', 'Figura 13.2 del libro (PDF p. 31): aumento medio de plaquetas a la hora y a las 24 h tras la 1.ª, la 3.ª y la 5.ª transfusión.', 'Fig. 13.2: la gráfica del libro'],
+    fig222: ['js/modules/neumologia/img/neumo-fig22-2-trombectomia-cateter.jpg', 'Figura 22.2 del libro (PDF p. 10): coágulo recuperado con un catéter de las arterias pulmonares en una EP aguda con sobrecarga del corazón derecho; la trombectomía saca mucho coágulo, y por eso la lisis ha tenido tan poco efecto en la EP que amenaza la vida.', 'Fig. 22.2: la foto del libro'],
     balanza: [IMG + 'fig13-3-pfc-inr-antitrombina.jpg', 'Figura 13.3 del libro (PDF p. 34): PFC 12 mL/kg en críticos sin sangrado; el INR baja de 1,8 a 1,4 y la antitrombina sube de 38 a 50 % (medianas).', 'Fig. 13.3: la gráfica del libro'],
 };
 

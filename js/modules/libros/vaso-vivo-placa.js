@@ -9,11 +9,11 @@ import { RELOJ, OCLUSIONES, P2Y12, IIB, FIG203, barraFig203, tnkMg, sellaAsa, se
 
 const n2 = x => +(+x).toFixed(2);
 const P = (k, x, y, r, o = {}) => svgParticula(k, x, y, r, o);
-function tx(x, y, t, { s = 10, c = 'text-dim', a = 'start', b = false, id = '' } = {}) {
+export function tx(x, y, t, { s = 10, c = 'text-dim', a = 'start', b = false, id = '' } = {}) {
     s = Math.max(10, s);
     return `<text${id ? ` id="${id}"` : ''} x="${n2(x)}" y="${n2(y)}" font-size="${s}" text-anchor="${a}" style="fill:var(--${c});font-family:system-ui,sans-serif${b ? ';font-weight:700' : ''};paint-order:stroke;stroke:var(--bg-main);stroke-width:2.6;stroke-linejoin:round">${t}</text>`;
 }
-const mezcla = (c, p) => `color-mix(in srgb, var(--${c}) ${p}%, var(--bg-main))`;
+export const mezcla = (c, p) => `color-mix(in srgb, var(--${c}) ${p}%, var(--bg-main))`;
 
 // Geometría: arriba el reloj (y 34-110); la luz va de y 136 a 226; la placa, en la pared de abajo (x 112-236), justo antes de la rama (x 238-270)
 const A = { x0: 0, x1: 360, top: [120, 136], luz: [136, 226], bot: [226, 242], rama: [238, 270], placa: [112, 236], cima: 190, rotura: [168, 188] };
@@ -21,7 +21,7 @@ const A = { x0: 0, x1: 360, top: [120, 136], luz: [136, 226], bot: [226, 242], r
 const TECHO = { completa: A.luz[0], parcial: 170, intermitente: 182, lisada: 176 };
 const domo = x => { const [a, b] = A.placa, u = (x - a) / (b - a); return u <= 0 || u >= 1 ? A.luz[1] : A.luz[1] - (A.luz[1] - A.cima) * Math.sin(u * Math.PI) ** 0.8; };
 
-function arteria() {
+export function arteria() {
     const [r0, r1] = A.rama;
     let h = `<rect x="0" y="${A.luz[0]}" width="360" height="${A.luz[1] - A.luz[0]}" style="fill:${mezcla('accent-red', 14)}"/>`;
     // la rama: un tubo que baja hacia la derecha desde la pared de abajo (sus paredes, por fuera de su luz)

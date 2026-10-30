@@ -19,6 +19,7 @@ import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExa
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import { iconoParticula } from '../../core/particulas.js';
 import { crearTope } from '../../core/tope.js';
+import { pintarMandosTep, engancharTep } from './vaso-vivo-tep.js';
 import { ESTADOS, GRUPOS_CHIPS, GUIAS, PREGUNTAS, CASOS, NOTAS, NOTA_TIPO, LAMINAS, PDF, PLAQ_CAUSA, estadoBase, estadoDe, derivar, fraseDe, copia, plaqDe, vDe, mil, MAT, claveDe, pruebasVaso, RELOJ, topesReloj, PESO, tnkMg } from '../../data/vaso-vivo-data.js';
 import { $, estado, REDUCIR, ocultos, initEscena, aplicarModelo, ponerLupa, setOcultos, mirar, arrancar, pintarUnaVez, ponerVisible, estadoBucle, vaciarFotogramas, lupaActual, fijar, LUPAS_GRANDES, ponerEstudio } from './vaso-vivo-escena.js';
 
@@ -94,7 +95,8 @@ function sincronizarMandos() {
     marcar('[data-vso-hep]', b => e.causa === 'hit' && b.dataset.vsoHep === e.hep);
     $('farmaco-nota').hidden = e.causa === 'hit';
     // La arteria que se tapa: tiempo, oclusión, reloj, NTG y el ECG (solo con el ST elevado)
-    const pl = e.lesion === 'placa';
+    const pl = e.lesion === 'placa' && !e.emb;
+    pintarMandosTep($, e);
     marcar('#vso-m-tiempo-placa button', b => pl && +b.dataset.v === e.t);
     marcar('#vso-m-ocl button', b => pl && e.t === 4 && b.dataset.v === e.ocl);
     $('m-horas').value = e.horas; $('m-horas-out').innerHTML = `${e.horas} <small>h</small>`;
@@ -132,7 +134,7 @@ function pintarTopes() {
     for (const k of [...topesPuestos.keys()]) if (!claves.has(k)) { topes.quitar(k); topesPuestos.delete(k); }
     for (const x of lista) { const j = JSON.stringify(x); if (topesPuestos.get(x.clave) !== j) { topes.poner(x.clave, x); topesPuestos.set(x.clave, j); } }
 }
-const aPlaca = e => { if (e.lesion !== 'placa') Object.assign(e, estadoBase(), { lesion: 'placa' }); };
+const aPlaca = e => { if (e.lesion !== 'placa' || e.emb) Object.assign(e, estadoBase(), { lesion: 'placa' }); };
 function engancharDock() {
     enRaiz('.vso-dock-tabs button').forEach(b => b.addEventListener('click', () => pestana(b.dataset.vsoTab)));
     $('m-lesion').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (!b) return; pararPlay(); cambiar(e => { e.lesion = b.dataset.v; if (e.lesion !== 'ninguna' && e.causa !== 'cid') e.t = 4; }, { lupa: b.dataset.v === 'ninguna' ? null : 'herida' }); });
@@ -151,6 +153,7 @@ function engancharDock() {
     $('m-peso').addEventListener('input', ev => trat(e => { e.peso = Math.max(PESO.min, Math.min(PESO.max, Math.round(+ev.target.value))); }));
     $('m-pac').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e[b.dataset.v] = !e[b.dataset.v]; }); });
     $('m-clcr').addEventListener('click', ev => { const b = ev.target.closest('[data-v]'); if (b) trat(e => { e.clcr = +b.dataset.v; }); });
+    engancharTep($, cambiar, pararPlay);
     $('m-ntg').addEventListener('click', () => { pararPlay(); cambiar(e => { aPlaca(e); e.t = 4; e.ntg = e.ocl !== 'completa' && !e.ntg; }, { lupa: 'placa' }); });
     $('m-plaq').addEventListener('input', ev => { pararPlay(); cambiar(e => { e.plaq = plaqDe(+ev.target.value); if (e.rep === 'plaquetas') e.rep = null; if (MAT(e.causa)) { e.causa = 'ninguna'; e.vari = null; e.rep = null; } }); });
     $('m-transfundir').addEventListener('click', () => { pararPlay(); cambiar(e => { Object.assign(e, estadoBase(), { rep: 'plaquetas', previas: 1, plaq: Math.min(e.plaq, 20000) }); }); });
@@ -215,6 +218,7 @@ function pintarLibro() {
     if (L === 'frotis' || (d.mat && !L)) lams.push(LAMINAS.frotis);
     if (d.pie === 'fig132') lams.push(LAMINAS.fig132);
     if (estado.rep === 'pfc') lams.push(LAMINAS.balanza);
+    if (estado.emb) lams.push(LAMINAS.fig222);
     const el = $('libro'), clave = lams.map(l => l[0]).join('|');
     el.hidden = !lams.length || modo !== 'explorar';
     if (el.dataset.clave === clave) return;

@@ -107,9 +107,10 @@ const ESPERA = {
   placa: t => t.estado.lesion === 'placa' && t.lupa === 'placa',
   'placa-antiagregantes': t => t.celdas.tapon === 'deja de crecer' && t.lupa === 'placa',
   trombolisis: t => t.celdas.amenaza === 'TNK 45 mg' && t.celdas.fib === '↓' && t.lupa === 'placa',
+  'tep-lisis': t => t.estado.emb === true && t.celdas.plaq === 'sigue ahí' && t.celdas.aptt === '46-70 s' && t.celdas.inr === '—' && t.lupa === 'placa',
   'hemorragia-masiva': t => t.celdas.fib === '120' && t.celdas.amenaza === 'sangrado' && t.celdas.tapon === 'no cierra',
 };
-ok(Object.keys(ESTADOS).length === 21 && Object.keys(ESPERA).length === 21, `21 estados con nombre (${Object.keys(ESTADOS).length})`);
+ok(Object.keys(ESTADOS).length === 22 && Object.keys(ESPERA).length === 22, `22 estados con nombre (${Object.keys(ESTADOS).length})`);
 for (const k of Object.keys(ESTADOS)) {
   await abrirModelo(k); await espera(k === 'herida' ? 600 : 500);
   const t = await T();
@@ -192,6 +193,49 @@ for (const [k, btn, chip, re] of casos) {
   if (k === 'tica') { await aEscena(); await foto('05d-sello-ticagrelor-hic'); }
   if (await desborde() > 0) ok(false, `desborde en ${k} × ${chip}`);
 }
+
+// 5d. El émbolo y la lisis (EP, cap. 22): la heparina no encoge el émbolo; la lisis sola sella la reoclusión; con heparina
+// frena la trombina; cada contraindicación sella y apaga la lisis; el peso (40-150 kg) → 24 / 49,8 / 50 / 50 mg; el reloj
+// 0/47/48/96 h (aviso ámbar «menos beneficio» solo pasadas 48 h); y todos los mandos al tope sin desborde
+await abrirModelo('tep-lisis'); await espera(500);
+await pulsar('[data-vso-tab="tratar"]');
+const alto = () => p.evaluate(() => +document.getElementById('vso-tep-embolo').dataset.techo);
+const avisoTxt = () => p.evaluate(() => [...document.querySelectorAll('.tope-aviso')].filter(e => e.getClientRects().length > 0).map(e => e.textContent).join(' | '));
+const tto = async v => { await pulsar(`#vso-m-tto [data-v="${v}"]`); await espera(250); };
+const techoHep = await alto();
+ok(techoHep === 140 && !/Trombina liberada/.test(await selloTxt()), 'heparina sola: el émbolo no cambia de tamaño y no hay sello de reoclusión');
+await tto('lisis');
+const techoLisis = await alto();
+ok(techoLisis > techoHep && /Trombina liberada: reoclusión/.test(await selloTxt()) && (await T()).celdas.inr === 'liberada', 'lisis sola: se reabre y sale el sello «Trombina liberada: reoclusión»');
+await tto('ambas');
+ok((await alto()) === techoLisis && !/reoclusión/.test(await selloTxt()) && (await T()).celdas.inr === 'frenada' && /heparina durante y después/.test(await p.evaluate(() => document.getElementById('vso-tep-sello').textContent)) && !(await selloTxt()), 'lisis + heparina: se reabre con la trombina frenada');
+for (const [kg, mg] of [[40, '24'], [83, '49,8'], [84, '50'], [150, '50']]) {
+  await deslizar('#vso-m-peso-tep', kg); await espera(150);
+  const t = await T(), o = await p.evaluate(() => document.getElementById('vso-m-peso-tep-out').textContent), d = await p.evaluate(() => document.getElementById('vso-tep-dosis').textContent);
+  ok(t.estado.peso === kg && o.includes(`${mg} mg`) && d.includes('100 mg en 2 h') && d.includes(`${mg} mg en 15 min`), `peso ${kg} kg → colapso ${mg} mg («${o}»)`);
+  if (kg >= 84) ok(/máximo de 50 mg/.test(await avisoTxt()), `peso ${kg} kg: aviso del tope de 50 mg`);
+}
+for (const h of [0, 47, 48, 49, 96]) {
+  await deslizar('#vso-m-horas-tep', h); await espera(200);
+  const a = await avisoTxt();
+  ok((/Pasadas 48 h/.test(a)) === (h > 48) && (h < 40 || /48 h/.test(a)), `reloj ${h} h: ${h > 48 ? 'aviso «menos beneficio»' : h >= 40 ? 'aviso «se acaban las 48 h»' : 'sin aviso'}`);
+}
+await deslizar('#vso-m-horas-tep', 6);
+for (const [chip, re] of [['sang', /Sangrado activo/], ['hem', /hemorrágico/], ['isq', /isquémico/], ['snc', /SNC/], ['cir', /Cirugía/]]) {
+  await tto('ambas');
+  await pulsar(`#vso-m-contra [data-v="${chip}"]`); await espera(300);
+  const sello = await selloTxt(), off = await p.evaluate(() => ['lisis', 'ambas'].every(v => document.querySelector(`[data-vso-tep="${v}"]`).disabled)), t = await T();
+  ok(/Lisis contraindicada/.test(sello) && /trombectomía/i.test(sello) && re.test(sello) && off && t.estado.tto === 'heparina' && t.celdas.amenaza === 'trombectomía', `${chip}: sello «Lisis contraindicada», lisis apagada y trombectomía de rescate`);
+  if (await desborde() > 0) ok(false, `desborde con ${chip}`);
+  if (chip === 'sang') { await aEscena(); await foto('05e-tep-contraindicada'); }
+  await pulsar(`#vso-m-contra [data-v="${chip}"]`); await espera(150);
+}
+await tto('ambas'); await deslizar('#vso-m-horas-tep', 96); await deslizar('#vso-m-peso-tep', 150); await espera(300);
+ok(/Fin del reloj/.test(await avisoTxt()) && /Fin del mando/.test(await avisoTxt()) && (await desborde()) <= 0, 'los mandos al tope (96 h, 150 kg): avisos y sin desborde');
+await aEscena(); await foto('05e-tep-topes');
+ok(await p.evaluate(() => !!document.querySelector('#vso-libro-lams img[src*="neumo-fig22-2"]')), 'la Fig. 22.2 (foto real) aparece al lado del dibujo');
+await pulsar('[data-vso-tab="arteria"]'); await pulsar('#vso-m-ocl [data-v="completa"]'); await espera(200);
+ok(!(await T()).estado.emb, 'volver a los mandos del SCA suelta el émbolo');
 // Tocar la pared sana abre una herida (los 4 tiempos) y su lupa
 await abrirModelo('sano'); await espera(300);
 await p.evaluate(() => document.querySelector('#vso-lamina [data-vso-toca="herida"]').dispatchEvent(new MouseEvent('click', { bubbles: true })));
