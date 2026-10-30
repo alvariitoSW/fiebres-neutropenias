@@ -304,7 +304,7 @@
                 haber colapso del VI, con la consecuente caída de su volumen diastólico final.
             </p>
             <div class="article-figure">
-                <svg viewBox="0 0 340 190" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 340 214" class="micro-svg interdep-svg" xmlns="http://www.w3.org/2000/svg">
                     <text x="85" y="16" text-anchor="middle" class="micro-svg-label" style="font-weight:bold;">Corazón normal</text>
                     <ellipse cx="85" cy="105" rx="72" ry="62" fill="none" stroke="var(--text-muted)" stroke-width="1.2" stroke-dasharray="3,3"/>
                     <circle cx="60" cy="105" r="34" fill="var(--accent-blue)" fill-opacity="0.35" stroke="var(--accent-blue)" stroke-width="1.5"/>
@@ -317,7 +317,8 @@
                     <circle cx="278" cy="105" r="36" fill="var(--accent-yellow)" fill-opacity="0.3" stroke="var(--accent-yellow)" stroke-width="1.5"/>
                     <text x="210" y="65" class="micro-svg-label" style="fill:var(--accent-blue);font-weight:bold;">VD</text>
                     <text x="292" y="65" class="micro-svg-label" style="fill:var(--accent-yellow);font-weight:bold;">VI</text>
-                    <text x="170" y="182" text-anchor="middle" class="micro-svg-label">El pericardio (línea punteada) mantiene el mismo tamaño externo — VD y VI compiten por el mismo espacio</text>
+                    <text x="170" y="186" text-anchor="middle" class="micro-svg-label">El pericardio (línea punteada) mantiene el mismo</text>
+                    <text x="170" y="199" text-anchor="middle" class="micro-svg-label">tamaño externo — VD y VI compiten por el mismo espacio</text>
                 </svg>
                 <div class="article-figure-caption">Vista esquemática de la interdependencia ventricular: la dilatación del VD dentro de un pericardio de tamaño fijo reduce el espacio disponible para el VI.</div>
             </div>
@@ -356,7 +357,7 @@
                 subdividiéndose a su vez en una extensa e intrincada red conocida como <strong>fibras de
                 Purkinje</strong>, que transmiten rápidamente la onda de despolarización a los ventrículos.
             </p>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Estructura</th><th>Frecuencia de disparo (impulsos/min)</th><th>Velocidad de conducción (m/s)</th></tr></thead>
                 <tbody>
                     <tr><td>Nodo sinusal</td><td>70-80</td><td>0,05</td></tr>
@@ -364,7 +365,7 @@
                     <tr><td>Haz de His</td><td>40</td><td>2</td></tr>
                     <tr><td>Fibras de Purkinje</td><td>15-20</td><td>4</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 Nota histórica: la propiedad de automatismo del tejido de conducción es tan robusta que los corazones extraídos en los sacrificios aztecas seguían latiendo visiblemente durante varios segundos fuera del cuerpo — una de las primeras observaciones documentadas de la actividad eléctrica intrínseca del corazón, independiente de la inervación central.</p>
 
             <div class="article-figure">
@@ -398,7 +399,7 @@
                 electrocardiograma. La fuente describe el ciclo en <strong>7 fases</strong>, no en las 4 clásicas
                 simplificadas:
             </p>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Fase</th><th>Eventos principales</th><th>Válvulas</th><th>Ruido cardíaco</th></tr></thead>
                 <tbody>
                     <tr><td>A — Sístole auricular</td><td>Contracción auricular, completa el llenado ventricular</td><td>AV abierta, sigmoideas cerradas</td><td>—</td></tr>
@@ -409,7 +410,7 @@
                     <tr><td>F — Llenado ventricular rápido</td><td>Entrada pasiva veloz de sangre</td><td>AV abierta</td><td>S3 (si patológico)</td></tr>
                     <tr><td>G — Diástasis</td><td>Fase de llenado lento, previa a la siguiente sístole auricular</td><td>AV abierta</td><td>—</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 La <strong>incisura dicrótica</strong> (pequeña muesca en la curva de presión aórtica al cerrarse la válvula aórtica, inicio de la fase E) es la referencia temporal que usa el balón de contrapulsación intraaórtico para sincronizar su inflado — debe inflarse justo después de la incisura dicrótica (inicio de diástole) y desinflarse justo antes de la siguiente sístole.</p>
             <dl class="kv-row"><dt>Asimetría sístole/diástole</dt><dd>La diástole ocupa la mayor parte del ciclo cardíaco en reposo — consecuencia directa: la <strong>perfusión coronaria del ventrículo izquierdo ocurre casi exclusivamente durante la diástole</strong> (durante la sístole, la compresión miocárdica colapsa los vasos intramurales). Esto explica por qué la taquicardia extrema, al acortar desproporcionadamente la diástole, compromete la perfusión coronaria.</dd></dl>
 
@@ -438,7 +439,7 @@
                     <span id="cardio-wiggers-fase-actual" style="font-size:0.78rem; min-width:170px; text-align:center;">Fase: en marcha</span>
                     <button type="button" id="cardio-wiggers-fase-next" title="Fase siguiente">▶</button>
                 </div>
-                <svg viewBox="0 0 320 250" class="micro-svg" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 -16 320 280" class="micro-svg wiggers-svg" xmlns="http://www.w3.org/2000/svg">
                     <line x1="40" y1="10" x2="40" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
                     <line x1="40" y1="140" x2="300" y2="140" stroke="var(--text-muted)" stroke-width="1"/>
                     <text x="34" y="22" text-anchor="end" class="micro-svg-label">120</text>
@@ -452,9 +453,9 @@
                          presión (0-14 mmHg) de este mismo panel — fusiona en un único gráfico
                          lo que en el diagrama de Wiggers estático son 2 paneles separados. -->
                     <path d="M 40,135.5 C 48,125 52,125 56,125 C 62,133 68,135 72.5,135.5 C 76,131 78,130 80,130 C 85,136 90,138 92,139 C 105,137 115,134 124.5,132 C 135,129 145,128.5 150.5,128.5 L 160,136.75 C 180,138.5 195,139.5 209,140 C 240,138 270,136.5 300,135.5" fill="none" stroke="var(--accent-purple)" stroke-width="1.2" stroke-dasharray="3,2"/>
-                    <text x="215" y="52" class="micro-svg-label" style="fill:var(--accent-red);">Presión aórtica</text>
-                    <text x="215" y="120" class="micro-svg-label" style="fill:var(--accent-blue);">Presión ventricular</text>
-                    <text x="42" y="108" class="micro-svg-label" style="fill:var(--accent-purple); font-size: 6px;">Presión auricular</text>
+                    <text x="212" y="50" class="micro-svg-label" style="fill:var(--accent-red);">Presión aórtica</text>
+                    <text x="212" y="112" class="micro-svg-label" style="fill:var(--accent-blue);">Presión ventricular</text>
+                    <text x="212" y="125" class="micro-svg-label" style="fill:var(--accent-purple);">Presión auricular</text>
 
                     <!-- Válvulas en miniatura, incrustadas justo en los 2 cruces de las
                          curvas de presión — mismas clases/ángulos que el corazón esquemático
@@ -462,45 +463,47 @@
                          corto: fusiona el instante exacto de apertura con la propia curva. -->
                     <line class="wiggers-valva wiggers-flap-aortic-l" x1="106.5" y1="18" x2="110" y2="18" style="stroke-width:1.3; transform-origin: 106.5px 18px;"/>
                     <line class="wiggers-valva wiggers-flap-aortic-r" x1="113.5" y1="18" x2="110" y2="18" style="stroke-width:1.3; transform-origin: 113.5px 18px;"/>
-                    <line x1="110" y1="15" x2="88" y2="14" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,1"/>
-                    <text x="6" y="8" class="micro-svg-label" style="font-size: 6px;">Cruzamiento</text>
-                    <text x="6" y="14" class="micro-svg-label" style="font-size: 6px;">(apertura aórtica, inicio C)</text>
+                    <line x1="110" y1="15" x2="110" y2="0" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,1"/>
+                    <text x="44" y="-4" class="micro-svg-label">Cruzamiento (apertura aórtica, inicio C)</text>
 
                     <line class="wiggers-valva wiggers-flap-mitral-l" x1="168.5" y1="133.5" x2="172" y2="133.5" style="stroke-width:1.3; transform-origin: 168.5px 133.5px;"/>
                     <line class="wiggers-valva wiggers-flap-mitral-r" x1="175.5" y1="133.5" x2="172" y2="133.5" style="stroke-width:1.3; transform-origin: 175.5px 133.5px;"/>
-                    <line x1="172" y1="130.5" x2="180" y2="112" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,1"/>
-                    <text x="182" y="106" class="micro-svg-label" style="font-size: 6px;">Cruzamiento</text>
-                    <text x="182" y="112" class="micro-svg-label" style="font-size: 6px;">(apertura mitral, inicio F)</text>
+                    <line x1="172" y1="130.5" x2="178" y2="97" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,1"/>
+                    <text x="176" y="84" class="micro-svg-label">Cruzamiento</text>
+                    <text x="176" y="94" class="micro-svg-label">(apertura mitral, inicio F)</text>
 
                     <circle class="wiggers-pulso wiggers-s4" cx="65" cy="146" r="2.5" fill="var(--accent-yellow)"/>
                     <circle class="wiggers-pulso wiggers-s1" cx="72.5" cy="146" r="3" fill="var(--accent-yellow)"/>
-                    <text x="72.5" y="159" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">S1</text>
+                    <text x="72.5" y="159" text-anchor="middle" class="micro-svg-label">S1</text>
                     <circle class="wiggers-pulso wiggers-s2" cx="150.5" cy="146" r="3" fill="var(--accent-yellow)"/>
-                    <text x="150.5" y="159" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">S2</text>
+                    <text x="150.5" y="159" text-anchor="middle" class="micro-svg-label">S2</text>
                     <circle class="wiggers-pulso wiggers-s3" cx="170" cy="146" r="2.5" fill="var(--accent-yellow)"/>
                     <text x="6" y="150" class="micro-svg-label">Tonos</text>
 
-                    <line x1="40" y1="185" x2="300" y2="185" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,2"/>
-                    <text x="6" y="172" class="micro-svg-label">PVY</text>
-                    <path d="M 40,167.5 C 48,157 52,157 56,157 C 62,165 68,167 72.5,167.5 C 76,163 78,162 80,162 C 85,168 90,170 92,171 C 105,169 115,166 124.5,164 C 135,161 145,160.5 150.5,160.5 L 160,168.75 C 180,170.5 195,171.5 209,172 C 240,170 270,168.5 300,167.5" fill="none" stroke="var(--accent-yellow)" stroke-width="1.2"/>
-                    <text x="56" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">a</text>
-                    <text x="80" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">c</text>
-                    <text x="150.5" y="181" text-anchor="middle" class="micro-svg-label" style="font-size: 6px;">v</text>
+                    <!-- PVY, ECG y rótulo de fase, 10 unidades más abajo: con letra legible en el móvil, S1-S2 pisaban la onda v. -->
+                    <g transform="translate(0,10)">
+                        <line x1="40" y1="185" x2="300" y2="185" stroke="var(--text-muted)" stroke-width="0.5" stroke-dasharray="1,2"/>
+                        <text x="6" y="172" class="micro-svg-label">PVY</text>
+                        <path d="M 40,167.5 C 48,157 52,157 56,157 C 62,165 68,167 72.5,167.5 C 76,163 78,162 80,162 C 85,168 90,170 92,171 C 105,169 115,166 124.5,164 C 135,161 145,160.5 150.5,160.5 L 160,168.75 C 180,170.5 195,171.5 209,172 C 240,170 270,168.5 300,167.5" fill="none" stroke="var(--accent-yellow)" stroke-width="1.2"/>
+                        <text x="56" y="181" text-anchor="middle" class="micro-svg-label">a</text>
+                        <text x="80" y="181" text-anchor="middle" class="micro-svg-label">c</text>
+                        <text x="150.5" y="181" text-anchor="middle" class="micro-svg-label">v</text>
 
-                    <text x="6" y="212" class="micro-svg-label">ECG</text>
-                    <path d="M 40,215 C 44,215 46,209 50,208 C 54,208 58,212 62,215 L 68,215 L 71,217 L 74,190 L 77,222 L 80,215 L 128,215 C 134,215 138,206 142,205 C 146,206 150,211 154,215 L 300,215" fill="none" stroke="var(--accent-green)" stroke-width="1.2"/>
+                        <text x="6" y="212" class="micro-svg-label">ECG</text>
+                        <path d="M 40,215 C 44,215 46,209 50,208 C 54,208 58,212 62,215 L 68,215 L 71,217 L 74,190 L 77,222 L 80,215 L 128,215 C 134,215 138,206 142,205 C 146,206 150,211 154,215 L 300,215" fill="none" stroke="var(--accent-green)" stroke-width="1.2"/>
 
-                    <g>
-                        <text class="wiggers-fase wiggers-fase-a" x="170" y="244" text-anchor="middle">A — Sístole auricular (onda P, S4 si patológico)</text>
-                        <text class="wiggers-fase wiggers-fase-b" x="170" y="244" text-anchor="middle">B — Contracción isovolumétrica (S1, QRS)</text>
-                        <text class="wiggers-fase wiggers-fase-c" x="170" y="244" text-anchor="middle">C — Eyección ventricular rápida</text>
-                        <text class="wiggers-fase wiggers-fase-d" x="170" y="244" text-anchor="middle">D — Eyección ventricular lenta (onda T)</text>
-                        <text class="wiggers-fase wiggers-fase-e" x="170" y="244" text-anchor="middle">E — Relajación isovolumétrica (S2)</text>
-                        <text class="wiggers-fase wiggers-fase-f" x="170" y="244" text-anchor="middle">F — Llenado ventricular rápido (S3 si patológico)</text>
-                        <text class="wiggers-fase wiggers-fase-g" x="170" y="244" text-anchor="middle">G — Diástasis</text>
+                        <g>
+                            <text class="wiggers-fase wiggers-fase-a" x="170" y="244" text-anchor="middle">A — Sístole auricular (onda P, S4 si patológico)</text>
+                            <text class="wiggers-fase wiggers-fase-b" x="170" y="244" text-anchor="middle">B — Contracción isovolumétrica (S1, QRS)</text>
+                            <text class="wiggers-fase wiggers-fase-c" x="170" y="244" text-anchor="middle">C — Eyección ventricular rápida</text>
+                            <text class="wiggers-fase wiggers-fase-d" x="170" y="244" text-anchor="middle">D — Eyección ventricular lenta (onda T)</text>
+                            <text class="wiggers-fase wiggers-fase-e" x="170" y="244" text-anchor="middle">E — Relajación isovolumétrica (S2)</text>
+                            <text class="wiggers-fase wiggers-fase-f" x="170" y="244" text-anchor="middle">F — Llenado ventricular rápido (S3 si patológico)</text>
+                            <text class="wiggers-fase wiggers-fase-g" x="170" y="244" text-anchor="middle">G — Diástasis</text>
+                        </g>
                     </g>
 
-                    <rect class="wiggers-cursor" x="40" y="10" width="1.5" height="230" fill="var(--text-main)"/>
+                    <rect class="wiggers-cursor" x="40" y="10" width="1.5" height="240" fill="var(--text-main)"/>
                 </svg>
 
                 <p style="font-size:0.78rem; color: var(--text-muted); margin-top:10px;">🫀 <strong>Estado valvular sincronizado</strong> — el mismo cursor de arriba mueve de verdad las valvas de las válvulas mitral y aórtica (giran sobre su bisagra, no solo cambian de color): tumbadas y en rojo cuando están cerradas, abiertas hacia dentro del ventrículo/aorta y en verde con flecha de flujo cuando dejan pasar la sangre. En B y E (contracción/relajación isovolumétrica) las dos están cerradas a la vez — el corazón "ISO", ni entra ni sale sangre, solo cambia la presión. El propio <strong>ventrículo</strong> también "respira" con el ciclo: fijo de tamaño durante las 2 fases isovolumétricas y se contrae/distiende visiblemente durante la eyección (C-D) y el llenado (F-G-A) — el correlato visual directo del volumen sistólico ya calculado en la Ficha 1. La misma válvula mitral en miniatura, con el mismo movimiento, aparece también <strong>incrustada en la curva de presión</strong> justo en el punto de cruzamiento de arriba — el fotograma exacto en el que se abre.</p>
@@ -511,19 +514,19 @@
                         </marker>
                     </defs>
                     <ellipse cx="100" cy="28" rx="32" ry="20" fill="rgba(144,160,106,0.12)" stroke="var(--text-muted)" stroke-width="1.2"/>
-                    <text x="100" y="14" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Aurícula izq.</text>
+                    <text x="100" y="14" text-anchor="middle" class="micro-svg-label" style="font-size:8.5px;">Aurícula izq.</text>
 
                     <ellipse class="wiggers-ventriculo" cx="100" cy="95" rx="42" ry="44" fill="rgba(184,92,62,0.10)" stroke="var(--text-muted)" stroke-width="1.2"/>
-                    <text x="100" y="146" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Ventrículo izq. (volumen)</text>
+                    <text x="100" y="146" text-anchor="middle" class="micro-svg-label" style="font-size:8.5px;">Ventrículo izq. (volumen)</text>
                     <text x="100" y="98" text-anchor="middle" class="wiggers-iso-label" style="font-size:10px; font-weight:bold; fill:var(--accent-yellow);">ISO</text>
 
                     <path d="M 130,60 C 140,45 155,30 178,18" stroke="var(--text-muted)" stroke-width="10" fill="none" stroke-linecap="round" opacity="0.3"/>
-                    <text x="178" y="10" text-anchor="middle" class="micro-svg-label" style="font-size:7px;">Aorta</text>
+                    <text x="178" y="10" text-anchor="middle" class="micro-svg-label" style="font-size:8.5px;">Aorta</text>
 
                     <line class="wiggers-valva wiggers-flap-mitral-l" x1="93" y1="50" x2="100" y2="50" style="transform-origin: 93px 50px;"/>
                     <line class="wiggers-valva wiggers-flap-mitral-r" x1="107" y1="50" x2="100" y2="50" style="transform-origin: 107px 50px;"/>
                     <path class="wiggers-mitral-open" d="M 100,46 L 100,68" stroke="var(--accent-green)" stroke-width="2.5" stroke-linecap="round" marker-end="url(#wigHeartArrow)"/>
-                    <text x="58" y="46" class="micro-svg-label" style="font-size:6.5px;">Mitral</text>
+                    <text x="58" y="46" class="micro-svg-label" style="font-size:8.5px;">Mitral</text>
 
                     <!-- Aórtica repuesta con bisagras horizontales (mismo estilo que la
                          mitral) pero abriendo hacia ARRIBA, flanqueando la base del tubo, en
@@ -533,7 +536,7 @@
                     <line class="wiggers-valva wiggers-flap-aortic-l" x1="123" y1="56" x2="130" y2="56" style="transform-origin: 123px 56px;"/>
                     <line class="wiggers-valva wiggers-flap-aortic-r" x1="137" y1="56" x2="130" y2="56" style="transform-origin: 137px 56px;"/>
                     <path class="wiggers-aortic-open" d="M 130,58 L 130,36" stroke="var(--accent-green)" stroke-width="2.2" stroke-linecap="round" marker-end="url(#wigHeartArrow)"/>
-                    <text x="112" y="84" text-anchor="middle" class="micro-svg-label" style="font-size:6.5px;">Aórtica</text>
+                    <text x="112" y="84" text-anchor="middle" class="micro-svg-label" style="font-size:8.5px;">Aórtica</text>
                 </svg>
             </div>
 
@@ -701,7 +704,7 @@
                 </div>
             </div>
 
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th colspan="3">Determinantes del gasto cardíaco</th></tr></thead>
                 <tbody>
                     <tr><td><strong>Determinante</strong></td><td><strong>Definición</strong></td><td><strong>Medición clínica</strong></td></tr>
@@ -709,7 +712,7 @@
                     <tr><td>Contractilidad</td><td>Fracción de eyección, velocidad de acortamiento, índices de trabajo ventricular</td><td>dP/dt, FE, ITSVI/ITSVD (ver Ficha 5)</td></tr>
                     <tr><td>Poscarga</td><td>Resistencia periférica, impedancia aórtica, tono vasomotor, propiedades reológicas</td><td>RVS, RVP (ver arriba)</td></tr>
                 </tbody>
-            </table>
+            </table></div>
 
             <p class="section-label" style="margin-top:16px;">Parámetros de transporte de oxígeno</p>
             <p style="font-size: 0.85rem; line-height: 1.6;">
@@ -717,7 +720,7 @@
                 los parámetros que la cuantifican, con su valor absoluto y su valor <span class="hl">ajustado a la
                 superficie corporal</span> (indexado):
             </p>
-            <table class="data-table">
+            <div style="overflow-x:auto;"><table class="data-table">
                 <thead><tr><th>Parámetro</th><th>Valor normal absoluto</th><th>Valor normal indexado (SC)</th><th>Fórmula</th></tr></thead>
                 <tbody>
                     <tr><td>Gasto cardíaco (GC)</td><td>5-6 L/min</td><td>2,4-4 L/min/m² (IC)</td><td>FC × VS</td></tr>
@@ -726,7 +729,7 @@
                     <tr><td>Consumo de O₂ (VO₂)</td><td>200-270 mL/min</td><td>120-150 mL/min/m² (VO₂I)</td><td>GC × (CaO₂ − CvO₂)</td></tr>
                     <tr><td>Extracción de O₂ (EO₂)</td><td colspan="2" style="text-align:center;">25%-35%</td><td>VO₂/DO₂</td></tr>
                 </tbody>
-            </table>
+            </table></div>
             <p style="font-size: 0.8rem; color: var(--text-muted);">👉 El <strong>DO₂ indexado por superficie corporal (DO₂I)</strong> es la forma correcta de comparar la entrega de oxígeno entre pacientes de distinto tamaño corporal — equivalente conceptual del índice cardíaco (IC) aplicado a la entrega de oxígeno en vez de al gasto cardíaco. La Ficha 2 desarrolla el <strong>índice de aporte de oxígeno (IDO₂)</strong>, una fórmula relacionada pero distinta (IDO₂ = IC × CaO₂), y la Ficha 5 retoma estas mismas fórmulas con su rango normal ligeramente ajustado y las aplica al monitoreo hemodinámico completo (DO₂, VO₂, IC, OEI). <strong>Nota de fidelidad</strong>: esta Tabla 3 (Capítulo 1) da 530-600 mL/min/m² como rango normal, mientras que la Tabla 12 del Capítulo 5 (ver Ficha 2 y Ficha 5) da 520-650 — son dos tablas distintas del mismo libro, no un error de esta app; cada calculadora cita explícitamente su propia tabla de referencia para que no se confundan entre sí.</p>
 
             <p id="cardio-fick-titulo" class="section-label" style="margin-top:16px;">🧮 Calculadora interactiva: transporte de oxígeno (principio de Fick)</p>

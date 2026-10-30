@@ -15,9 +15,18 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    (`<details class="nota-plegable">`) que la explica. Nunca se corrige en silencio.
 4. **Si dos fuentes no coinciden**, se muestran las dos con una nota de fuentes. No se elige una ganadora.
 5. **No resumas por debajo de la fuente**: cifras, fármacos y mecanismos con su detalle real.
-6. **Código ajeno**: de echodemo (The Heart by Ultrasound) se traduce el texto, con permiso del autor y citado; el
-   código nunca se copia: cada figura se reconstruye sobre los motores de la app. Nada de imágenes de pacientes con
-   licencia restrictiva (CAMUS, EchoNet).
+6. **Código ajeno** (Consejo 8.ª del 30/10/2026, aprobado por el usuario el 30/10): ideas y texto, con permiso del autor
+   apuntado en `docs/` y citado (así se tradujo echodemo, *The Heart by Ultrasound*), sí. El código **no entra en la
+   app**: cada figura o modelo se reconstruye sobre los motores propios, con crédito (un solo motor por fenómeno). Con
+   permiso que cubra redistribuirlo en el repositorio público, una copia congelada puede vivir en
+   `autonomo/ajenos/<autor>-<versión>/` (fecha, URL, hash, permiso y LEEME), solo para leerla y para las pruebas
+   (p. ej. Ventriculus como vara de medir de las 12 derivaciones); ningún archivo de la app la carga y sus cifras son
+   pares de prueba, no fuente. El permiso vale por escrito o de palabra (el usuario lo apunta en `docs/`: quién, cuándo,
+   medio y qué cubre); cada permiso nuevo lo valida el Consejo; copiar código dentro de la app, solo por decisión
+   expresa del usuario. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
+   **Recursos estudiados** (art. 2 de la reforma, aprobado por el usuario el 30/10/2026): una web, simulador, curso,
+   repositorio o tuit estudiado aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota
+   su licencia o permiso (el permiso, apuntado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 7. **Lo que muestra un simulador es un paciente posible** en todo el recorrido de sus mandos (extremos y punto
    medio): presión arterial, frecuencias, presiones, volúmenes y velocidades dentro de lo fisiológico para ese
    estado. **El límite es la propia fisiología humana.** Si una cifra no existe en un ser humano, está fuera de lo
@@ -86,6 +95,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 1. **Sin backend, sin build, sin dependencias nuevas.** HTML/CSS/JS que el navegador ejecuta tal cual. La única
    librería es Motion (`js/vendor/`), elegida por el usuario; otra, solo si él la pide.
+1b. **Ningún dato de pacientes reales se guarda**, ni en `localStorage` (art. 3a de la reforma, 30/10/2026): las medidas
+   que se teclean en Guardia viven solo en la pantalla; los casos son inventados.
 2. **Móvil primero**: nada desborda a 390 ni a 360 px de ancho; toques de al menos 44 px.
 3. **Reutiliza antes de crear**: enlaces cruzados con `[data-especialidad]`; ayudas de `js/core/ui.js` y
    `js/core/wizard.js`; clases ya existentes de `css/components.css`. Una clase o un componente nuevos solo si no hay
@@ -98,6 +109,13 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    app desaparece en ella.
 6. **Motor del simulador de eco**: si lo tocas, todas sus pruebas siguen en verde y lo cuentas en
    `js/modules/eco/README.md`. Nunca cambies una referencia de `referencias.mjs` para que una prueba pase.
+6b. **Motores compartidos** (art. 10 de la reforma, 30/10/2026, adaptado a los dos motores de B-045): el motor del
+   corazón (`eco/motor.mjs`) y su contrato con el motor de la imagen (`contrato.mjs`) son una API compartida con el
+   shock vivo. Quien los toque corre las pruebas de la eco y `jueces --modelo shock-vivo`, y deja la API antigua
+   funcionando: el contrato, congelado en su prueba; los consumidores (formas, Doppler, escenarios, dibujo) migran de uno
+   en uno y nunca antes que el proveedor; el dibujo nuevo vive en su archivo con interruptor hasta pasar J1, J2 y R4.
+   Un cambio en una pieza de `js/core/` usada por más de 20 fichas lleva maqueta, `jueces --ficha` en 3 fichas y versión
+   nueva.
 7. **Nada interno a la vista** (lección 5 del bloque 1): ni ids de ficha («mar-…»), ni «§», ni códigos del plan
    («Caso E1», «maqueta», «diseño», «REGLAS», «cobertura»), ni rutas de archivos, ni notas de trabajo. El chip de
    origen dice solo «ficha», «fisiología general» o «ilustrativo», más su página. Lo comprueba `jueces.mjs`.
@@ -122,8 +140,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      1. **El plan del bloque**: la cobertura, la ruta y los modelos nuevos con sus maquetas (elige).
      2. **El primer modelo o escena nueva ya construida**, para corregir el rumbo pronto (si el bloque no trae
         ninguno nuevo, esta parada no existe).
-     3. **El bloque entero en la app**: lo prueba en el móvil y pide cambios.
-     4. **Los cambios que pidió, hechos**: con su visto bueno, el bloque entra en `main`.
+     3. **El bloque entero en la app**: lo prueba en el móvil y pide cambios, **si está**. Desde el 30/10/2026
+        (§4.15) la PR no le espera: entra en `main` por votos del Consejo cuando cumple las cuatro condiciones, y lo
+        que él pida al verla después se hace como arreglo (o se deshace con `git revert`).
+     4. **Los cambios que pidió, hechos**: entran igual, con jueces y voto.
      La 5.ª solo para una duda grande que surja por el camino.
    - **El contenido del bloque** se acumula en una sola rama `auto/<bN>` con una sola PR en borrador; las paradas
      se ven en su enlace «Ver en el móvil». No se abre una PR por tarea.
@@ -224,9 +244,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      exacta de fallos (archivo y función). Solo se continúa el mismo (SendMessage) si lleva menos de 60 pasos.
    - **R6 · Nada de opus en las vueltas**: opus solo en la primera vuelta de un modelo vivo nuevo. Si un arreglo
      necesita pensar, lo piensa el profesor en una lista y lo hace sonnet.
-   - **R7 · Dónde obliga la meta**: el 8,75 obliga en lo que se copia después (modelos vivos nuevos, maquetas y los
-     archivos modelo de `CLAUDE.md` §6). En fichas que siguen un modelo, arreglos e informes basta con 8; lo que falte
-     hasta 8,75 va al parte si no cabe en una vuelta corta (≤15 pasos de constructor).
+   - **R7 · Dónde obliga la meta** (subida por el usuario el 30/10/2026, §4.15): **8,75 obliga en todo** lo que se
+     juzga (fichas, arreglos, informes, modelos). En **modelos vivos nuevos y maquetas la meta es 9,5**: lo que quede
+     entre 8,75 y 9,5 se sube si cabe en una vuelta corta (≤15 pasos de constructor) y, si no, va al parte y a la
+     bitácora como tarea de mejora; no impide la PR. (Hasta el 30/10: 8 en lo que copia un modelo y 8,75 en lo nuevo.)
    - **R8 · Rejuicio corto**: en la segunda vuelta y siguientes, el profesor solo vuelve a puntuar los criterios que
      estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera.
    - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, el modelo, los pasos y los tokens de cada
@@ -321,8 +342,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     - **Aprueba sin pasar por el usuario**: dudas de los planes, orden, tareas, opciones de los informes y cambios de
       estudio, **dentro del presupuesto que apruebe el usuario**. Lo acordado entra en el tablero con «(Consejo, fecha)».
     - **Reservado al gobierno central (el usuario)**: el presupuesto total, la arquitectura (`CLAUDE.md` §2, p. ej.
-      separar motores), quitar contenido y la última parada de cada bloque (lo prueba en el móvil antes de `main`).
-      En esos asuntos, el Consejo estudia y recomienda.
+      separar motores), quitar contenido y las reglas. En esos asuntos, el Consejo estudia y recomienda. La última
+      parada de cada bloque **ya no** está reservada: desde el 30/10/2026 la PR entra en `main` por votos del
+      Consejo (§4.15).
     - Si los ministerios no se ponen de acuerdo, decide quien preside y el acta lo dice; el usuario puede reabrirlo.
 13. **Dos carriles** (artículo 13 del Consejo del 29/10/2026, aprobado por el usuario el 29/10: «bueno, se puede regular,
     pero vale»; acta `autonomo/consejo/2026-10-29-carriles.md`). Mientras dure Marino puede haber **dos directores a la
@@ -367,6 +389,46 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       existen; si no, como **modelo** (1,2 M). El director mide antes las cifras del motor con un programa corto y da
       al constructor el objetivo que el motor puede dar.
 
+15. **La reforma y los ahorros de Hacienda, aprobados el 30/10/2026** (tarea `reglas-reforma`; el usuario: «sí a lo que
+    dice el Consejo» y «quedan todas aprobadas»; actas `autonomo/consejo/2026-10-29-reforma.md` §4 y `2026-10-30-7.md`).
+    Los artículos 2 y 3a están en §1.6 y §2.1b; el 6, en §5.7; el 8, en §7.13; el 10, en §2.6b; el 12, en
+    `autonomo/radar/NORTE.md`.
+    - **Puerta única de recursos** (art. 5): todo enlace que mande el usuario se apunta en `autonomo/radar/ENTRADAS.md`
+      en la misma sesión, con estado (leído · no se pudo leer · pide PDF · descartado + motivo). La Bandeja (issue #27)
+      es solo buzón: cada tanda del Radar empieza cotejándola con `ENTRADAS.md` (diferencia cero). «No se pudo leer»
+      vuelve en cada tanda hasta que el usuario pega el texto o lo descarta. Los repositorios propios cuentan como
+      recursos. Ningún recurso sale de la mesa sin etiqueta (tarea · aparcado hasta X · descartado porque Y).
+    - **Tareas técnicas del director (ahorro)**: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M
+      fijos por la pasada de jueces y 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (el parte
+      de origen de cada regla, o «especialidad → ficha → Visual» de cada modelo).
+    - **Medir el gasto tras las piezas (ahorro)**: en un grupo con piezas y Estudiar, el director pasa
+      `gasto.mjs --clave` al terminar las piezas y antes de lanzar el Estudiar, y comparece ahí si va a pasar del 25 %.
+    - **Hacienda no junta piezas con prueba propia (ahorro)**: en el modo presupuesto, Hacienda solo une en un encargo
+      piezas que no llevan prueba ni jueces propios; las que sí, un encargo cada una.
+    - **Director de un grupo con piezas y Estudiar: 1,3 M** (ahorro; tabla «Presupuestos vigentes» del tablero). Si se
+      quiere bajar, se parten piezas y Estudiar en dos sesiones.
+
+15. **La PR entra en `main` por votos del Consejo** (aprobado por el usuario el 30/10/2026: «quiero que el tema de
+    PR no dependa de mí tanto… que se puedan aprobar automáticamente por votos del congreso»; acta
+    `autonomo/consejo/2026-10-30-9.md`). Una PR de contenido (bloque o tarea) se fusiona sin esperar al usuario cuando
+    cumple **las cuatro condiciones**:
+    1. **Jueces**: la suite entera en verde sobre el último commit de la rama (general, `--modelo` de cada modelo
+       tocado, `--ficha` de cada ficha tocada, `--forma`, `--formula`, pruebas del eco si lo toca), con la versión subida.
+    2. **Auditor ciego**: sin hallazgos graves contra la fuente (los medianos y menores, arreglados o en el parte).
+    3. **Profesor**: todos los puntos **≥ 8,75**; en modelos vivos nuevos y maquetas, meta 9,5 (§4.8 R7).
+    4. **Voto del Consejo**: Interior, Justicia, Educación y Hacienda votan sobre la PR con los informes y las capturas
+       delante (un solo agente barato puede dar dos dictámenes, ≤8 líneas cada uno); preside Transportes, que
+       desempata. **Mayoría simple** = se fusiona. El acta (≤30 líneas) enlaza la PR y los informes.
+    - **Quién fusiona**: el director que abrió la PR (o el de la bitácora, si aquel cerró): `merge` de la PR en GitHub
+      sin reescribir historia, versión y jueces ya pasados sobre ese commit. Si la rama recibe commits después del
+      voto, se repiten los jueces antes de fusionar (sin nuevo voto si no hay contenido nuevo).
+    - **El usuario se entera** por la fila de `autonomo/SESIONES.md` («fusionada por el Consejo», con el enlace «Ver en
+      el móvil» de `main`) y por el informe diario. Lo que pida al verlo se hace como `arreglo`; si no le gusta, se
+      deshace con `git revert` (nunca reescribiendo historia). Puede reabrir cualquier voto.
+    - **Sigue reservado al usuario** (sin voto): la arquitectura (`CLAUDE.md` §2), quitar contenido, el presupuesto
+      total y las reglas (§4.12).
+    - **Lo que no vota**: lo técnico y los arreglos siguen yendo directo a `main` con los jueces en verde (§2.3).
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
@@ -386,6 +448,11 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 6. **Límite de gasto**: si la sesión llega al límite del tablero, se para y deja el estado como está. Desde el
    27/10/2026 hay también un **límite por día**, sumando todas las sesiones: como mucho el **18 % del uso semanal**
    (tablero, «Límite de gasto por día»).
+7. **Jueces que solo crecen** (art. 6 de la reforma, aprobado por el usuario el 30/10/2026): los jueces
+   (`autonomo/jueces.mjs`, `jueces-topes.mjs`, las pruebas de `autonomo/pruebas/` y de la eco) y el auditor ciego solo se
+   amplían. Sus umbrales (8 px, 390/360 px, 7,5 px de rótulo, la meta 8,75, los topes) no bajan ni se quitan sin el sí
+   del usuario, y un cambio de juez va en un commit aparte. Jueces nuevos pedidos: que cada enlace cruzado apunte a algo
+   que existe y que `PANEL_NAV` cubra cada cuaderno.
 
 ## 6. Cómo crecen estas reglas
 
@@ -491,12 +558,16 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
     fuentes en lista, §7.11; escenas por capas; monitor y mandos comunes) ya debe aguantar lo demás. El nivel visual,
     el de los mejores modelos de la app o más: un objeto real hecho de muchas piezas pequeñas que se entiende al
     mirarlo (método «Anatomy», `autonomo/bloques/b3/encargo.md`), nunca un esquema de cajas.
+13. **Dos velocidades** (art. 8 de la reforma, aprobado por el usuario el 30/10/2026): toda ficha nueva abre con un
+    **carril de 30 segundos** (la idea, 2-3 cifras con su fuente y la figura) y debajo el desarrollo. Es la respuesta en la
+    cama del norte; el desarrollo es para estudiar.
 
 **Cómo se juzga**: el agente `profesor` puntúa del 0 al 10 cada punto (y los de §8 si hay preguntas) mirando
-capturas al lado de un modelo. Para pasar, **todos los puntos con 8 o más**; si
-alguno queda por debajo, la tarea se repite: vuelve al constructor con lo que falta. **La meta es 8,75 o más**: en
-los puntos entre 8 y 8,75, el profesor dice qué los subiría y se hace si es barato y quedan vueltas; si no, va al
-parte (el usuario, 25/10/2026; antes era del 1 al 5 y se pasaba con 4).
+capturas al lado de un modelo. Para pasar, **todos los puntos con 8,75 o más** (el usuario, 30/10/2026; del 25 al
+30/10 bastaba 8 con meta 8,75; antes era del 1 al 5 y se pasaba con 4); si alguno queda por debajo, la tarea se
+repite: vuelve al constructor con lo que falta. **En modelos vivos nuevos y maquetas la meta es 9,5**: en los puntos
+entre 8,75 y 9,5 el profesor dice qué los subiría y se hace si es barato y quedan vueltas; si no, va al parte y a la
+bitácora (§4.8 R7).
 
 ## 8. Preguntas para estudiar
 

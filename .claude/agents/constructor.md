@@ -47,6 +47,9 @@ fuente y los modelos tienen que estar al nivel de los «así sí».
 - [ ] **Topes** (REGLAS §1.14): cada mando con tope y origen; aviso al acercarse; al pasarse, sello con la consecuencia
   clínica, mando apagado y constantes de un paciente real (`comun/tope.js`). Tu prueba lleva todos los mandos al tope.
   Si el modelo vivo es nuevo y tiene sello propio, su ajuste va en `autonomo/jueces-topes.mjs`, no en un arnés suelto.
+- [ ] **Ficha nueva** (REGLAS §7.13): abre con el carril de 30 segundos (idea, 2-3 cifras con fuente, figura) y debajo
+  el desarrollo. **Recurso ajeno** (§1.6): ninguna imagen, malla, texto ni dato sin su licencia o permiso anotados.
+  **Motor de la eco o su contrato** (§2.6b): pruebas de la eco y `--modelo shock-vivo` en verde, API antigua viva.
 - [ ] **Mando nuevo en un modelo con muchos pacientes** (REGLAS §4.14): solo en los pacientes que usa la ficha, salvo
   que tu prueba lleve sus topes en **todos** los pacientes.
 - [ ] **Cifras de los casos** (REGLAS §4.14): las copias del monitor de la app a 390 px (p. ej.
