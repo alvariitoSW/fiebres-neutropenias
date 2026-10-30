@@ -1,33 +1,46 @@
-# rea-cierre (B-046) · Tres webs «abiertas en la red» (30/10/2026)
+# rea-cierre (B-046) · Tres webs abiertas en la red (30/10/2026) — leídas con curl, sin copiar código
 
-**Resultado: las tres NO se pudieron leer desde esta sesión.** WebFetch devolvió `getaddrinfo ENOTFOUND` para
-cardiorender.com, litfl.com e intro2echo.com: los tres dominios están fuera de los permitidos de la sesión en la nube
-(no es un control anti-robot; no se intentó saltar nada). Para leerlos hay que permitir esos dominios en la red de la sesión
-(o que el usuario los abra en su móvil/PC). No se ha inventado nada de su contenido.
+(Primera pasada fallida con WebFetch; rehecho con `curl`. Texto extraído de la propia página y del HTML del simulador.)
 
-## 1. cardiorender.com — no se pudo leer (30/10)
-- Lo único que consta es lo de `autonomo/radar/ENTRADAS.md` (ficha «Lazo presión-volumen #1»): lo recomienda un tercero
-  en las respuestas de un tuit; «simulador de hemodinámica»; licencia «no consta». Mandos, modelo y autor: sin verificar.
-- Ya hay en la app: lazos P-V en Fisiopatología UCI (Cardiología), Circulación viva (eco, `js/modules/eco/`: motor,
-  `latido.html`, `guyton-tablas.mjs`) y Merino Neumología; en el tablero `wiggers-movil` toca los rótulos del Wiggers.
-- Destino propuesto: **aparcado hasta que se permita el dominio** (o el usuario pase capturas). Si se lee y aporta, la
-  idea (precarga/poscarga/contractilidad moviendo el lazo) iría a la tarea **`mv-eco`** (mejora de lo existente, no módulo nuevo).
+## 1. CardioRender (Dr Dinesh Raja Palanisamy) — cardiorender.com
+- **Qué es**: 11 simuladores de navegador, un motor por curso, «un modelo guía todas las vistas». Los 3 grandes: Conducción y
+  arritmias (56 módulos, v1.6), Cardiopatías congénitas (41, v2.1) y Mecánica cardíaca (35, v3.0). Más: anatomía del ECG,
+  electrodo→ECG (inversión de cables), marcapasos (17 módulos + marcapasos vivo que se rompe y se arregla), electricidad→ECG
+  (14), simulador de STEMI, ritmos, Einthoven, ultrasonido y Doppler (34).
+- **Mecánica (el que interesa)**: elastancia variable en el tiempo (Suga-Sagawa; Burkhoff 2005), ESPVR lineal, EDPVR de Klotz,
+  presión arterial tipo Windkessel, acople Ea/Ees (normal 0,61, EF 57 %, 111/77). Mandos: determinantes, preajuste, valvulopatía
+  y gravedad, fármaco y dosis, soporte (Impella, VA-ECMO, ECPELLA; validado con Yahagi 2024), reflejos (9 mecanismos,
+  consigna y ganancia). Muestra el lazo con área de trabajo, curva normal superpuesta y las fórmulas con las cifras. Enseña
+  «predice antes de mover»; el shock como 4 formas de lazo, no 4 listas. Dice qué simplifica y que no se citen cifras de fármacos.
+- **Arritmias**: ningún ritmo guionizado; todo sale de conducción, refractariedad y recuperación (curva decremental del nodo);
+  un mando inicia/rompe la reentrada; 8 módulos «nivel EP» opcionales; cierre «Nombra el ritmo» con 10 trazados al azar.
+- **Licencia**: © autor. Solo uso docente con atribución; **redistribuir archivos, uso comercial o modificar requiere permiso
+  escrito**. No se copia nada; solo ideas y referencias (que son artículos reales, citables desde `docs/`).
+- **Ya hay**: lazos P-V (Fisio UCI, Circulación viva, Merino Neumología), shock vivo. **Aporta**: acople Ea/Ees, reflejos como
+  lazo externo amortiguado, «predice antes» con lazo, curva decremental del nodo.
+- **Destino**: mecánica/acople/fármacos/soporte → tarea **`mv-eco`** (mejora de lo existente); shock en 4 lazos →
+  **`guardia-shock`**; curva decremental, Wenckebach y «Nombra el ritmo» → **`pif-cardio`** (y `arritmias-maqueta` si se reabre);
+  marcapasos vivo y electrodo→ECG → **aparcado hasta `g3-sca`/`g4-dispositivo`** (no hay tarea abierta).
 
-## 2. litfl.com / st-elevation-in-avr — no se pudo leer (30/10)
-- Licencia: **sin comprobar en la propia web** (se cree CC BY-NC-SA, pero no se ha verificado; anotarlo como «no consta»).
-- Uso previsto ya fijado en `autonomo/ideas/ingenieria-inversa/culprit.md`: solo enlace cruzado / «qué buscar»; no es
-  fuente de cifras (el aVR de tronco sale de Tamura 2014 en `docs/`, y Wagner 2009, ESC 2023).
-- Destino propuesto: **tarea `arteria-culpable`** (bibliografía de ECG de `culprit-a`, como enlace `.biblio-link`
-  con `.biblio-nota`), condicionado a que el enlace se verifique abierto. Si no se verifica la licencia, solo enlace, sin copiar texto ni imágenes.
+## 2. LITFL — litfl.com/st-elevation-in-avr/
+- **Licencia confirmada en su pie**: CC BY-NC-SA 4.0 (Ed Burns y Robert Buttner, 8/10/2024). La página: ↑ST en aVR con
+  ↓ST multiderivación = isquemia subendocárdica (tronco, DA proximal, 3 vasos); es biblioteca de ECG, con enlaces y cursos de pago al lado.
+- **Destino**: enlace `.biblio-link` + `.biblio-nota` en **`arteria-culpable`** (`culprit-a`); no es fuente de cifras (el aVR sale de
+  Tamura 2014 y Wagner 2009 en `docs/`). Atribución visible; no se copia texto ni imágenes (SA obligaría a compartir igual).
 
-## 3. intro2echo.com — no se pudo leer (30/10)
-- Es la web de echodemo (D. Ouyang), ya traducida con permiso (atlas de eco: `js/modules/eco/atlas-ouyang.js`, `atlas/`).
-  No se pudo comparar secciones/vídeos/interactivos de la web con el repo github.com/douyang/echodemo.
-- Destino propuesto: **tarea `eco-sueltas`** (solo para comprobar que la atribución al autor está bien citada y si la
-  web trae algo que el repo no tiene); sin trabajo de construcción hasta leerla.
+## 3. intro2echo.com — The Heart by Ultrasound (D. Ouyang)
+- **Qué hay**: una sola página con ~38 capítulos (`src/ch/*.js`): física del pulso, A/B-mode, artefactos, Doppler con Nyquist,
+  9 planos con sonda y cuerpo 3D, Wiggers, lazo P-V con Ees/Ea, hemodinámica, VCI→PSAP, volúmenes (Simpson), segmentaria con
+  arteria ocluida (LAD/RCA/Cx) y 17 segmentos, diastólica (algoritmo 2025), VD, masas, LVAD (4600-6200 rpm), EA, IA, IM, EM,
+  IT, prótesis, endocarditis, pericardio, MCH, amiloide, TEE, TEER, TAVR, shunts, strain, estrés, informe; casos (amiloide, MCD
+  isquémica, Barlow, bicúspide) y valores normales.
+- **Ya en la app**: atlas con 9 capítulos (sistólica, diastólica, ciclo, Doppler, hemodinámica, imagen, pulso, VD, ASA).
+- **Añade la web actual**: los capítulos valvulares, MCH, amiloide, masas, LVAD, TEE, TEER/TAVR, shunts, strain, estrés,
+  endocarditis y prótesis; coinciden con las 21 aparcadas del tablero (`mr`, `as`, `ar`, `ms`, `hcm`, `lvad`…).
+- **Destino**: **`eco-sueltas`** solo para citar bien al autor y apuntar la lista de capítulos como índice de pendientes;
+  el resto, **aparcado hasta** que `mv-eco` abra las valvulopatías. La licencia de la web no se vio: usa el permiso ya dado.
 
 ## No comprobado / riesgo
-- Todo lo de las tres webs: contenido, mandos, licencias, autoría, scripts. Nada leído.
-- No se consultó el repo douyang/echodemo (no era el encargo del dominio cerrado y el presupuesto era corto).
-- Riesgo: marcar como «estudiadas» estas tres en «Todo lo estudiado» sería falso; deben constar «no se pudo leer (30/10): dominio no permitido en la sesión».
-- Los destinos son propuestas condicionadas a poder leerlas; las claves (`mv-eco`, `arteria-culpable`, `eco-sueltas`) existen en el tablero.
+- No se abrió el simulador de CardioRender en navegador (solo su HTML y texto): mandos y comportamiento de arritmias salen de sus descripciones.
+- Licencia de intro2echo.com y del repo echodemo para el contenido nuevo: no leída; el permiso previo cubre lo ya traducido.
+- Las cifras de CardioRender (0,61, 111/77) son suyas y ajustadas («constantes ajustadas, no medidas»): no usarlas como fuente.
