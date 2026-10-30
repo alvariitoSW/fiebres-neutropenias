@@ -41,22 +41,26 @@ const cerca = (a, b, pct, nombre, redondeo = false) => {
 
 // Fallos conocidos, congelados. Clave de PENDIENTES de paciente-doppler.test.mjs cuando existe.
 const CONOCIDOS = {
-  'tep:def': 'J1:tep:def',            // E/e′ 1,8 (ePrima del atlas + fusión E-A): fuera de Nagueh 2025 p. 551
 };
 
 // Tabla §3 de mapa-motor.md (control grueso ±5 %): [clave, k, g, FEVD, TAPSE, PSAP, PAPd, PVC, PAM, GC, VD/VI vol, pared VD, E/e′]
 const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
-  ['TEP 50 %', 'tep', 0.5, 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7],
-  ['TEP defecto', 'tep', 'def', 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8],
-  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.3],
+  // P5a: 50 % con el mando curvado (u = g^0,6): antes 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7
+  ['TEP 50 %', 'tep', 0.5, 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.4],
+  // P5a vuelta 2: el defecto es g 0,7 (submasivo, PAM 76): cifras de la salida del motor. Antes (g 0,6): 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1
+  // P5a: el defecto del TEP pasa a submasivo (g 0,6, u = g^0,6): cifras de la salida del motor (barrido-tep.mjs); antes 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8
+  ['TEP defecto', 'tep', 'def', 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.6],
+  // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
+  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.8],
   ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.8],
-  ['HP crónica 100 %', 'hpcronica', 1, 15, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 7.4],
+  // FEVD 15 → 14,1: la tabla §3 era anterior al desplazamiento del tabique M0c (b3-paso4 g3, 0a84f734; Marino cap. 16 p. 40); el motor da 14,1
+  ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 7.4],
   ['Taponamiento 100 %', 'derrame', 1, 33, 13.4, 14, 12, 9, 64, 2.8, 0.66, 6.0, 4.0],
   ['Fallo VI 100 %', 'fallo', 1, 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 23.7],
 ];
 // TRV: la tabla usa √((PSAP−PVC)/4) con las cifras medias; el contrato, el gradiente máximo instantáneo VD−AD (menor): ±10 %
-const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.9, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)
+const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.8, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)
 
 for (const [nombre, k, g, ...t] of TABLA) {
   test(`contrato = motor de hoy · ${nombre}`, () => {
@@ -106,9 +110,7 @@ test('el motor no cambia al leerlo', () => {
 
 // validarContrato en los 21 casos de CASOS_FORMA
 const SIN_CAMPO = ['Ar', 'bombaAI', 'sd'], VISTAS = new Set();   // bandas de BANDAS sin campo en CAMPOS (conocidas)
-const SEPARADOS = {
-  'fallo:1': { clave: 'salto', texto: 'el último instante no enlaza con el primero (pres.vi 30,1 → 25,6 mmHg, FC ≈121): salto al volver a empezar el latido (rúbrica, criterio 4)' },
-};
+const SEPARADOS = {};
 for (const [k, g] of CASOS_FORMA) {
   const id = clave(k, g);
   test(`validarContrato · ${id}`, () => {
@@ -127,7 +129,7 @@ for (const [k, g] of CASOS_FORMA) {
 }
 
 // Fallos conocidos, congelados: la cifra mala se queda como está (mv-eco-2a5 la arregla); aquí el objetivo de la guía.
-test('fallo conocido (lo arregla mv-eco-2a5) · tep:def E/e′ ≥ 4,0 [PENDIENTES J1:tep:def]', { todo: 'J1:tep:def' }, () => {
+test('tep:def (P5a, submasivo) E/e′ en la banda normal 4,0-11,5 (antes fallo J1:tep:def)', () => {
   const e = caso('tep', 'def').c.latido.eE;
   assert.ok(e >= 4.0, `E/e′ ${e.toFixed(2)} fuera de la banda normal 4,0-11,5 (Nagueh 2025, Tabla 5, p. 551)`);
 });
@@ -135,7 +137,16 @@ test('fallo conocido (lo arregla mv-eco-2a5) · tep:def tiempo de aceleración p
   const ta = caso('tep', 'def').c.latido['tiempos.tap'];
   assert.ok(ta < 105, `TA pulmonar ${ta.toFixed(0)} ms; ESC/ERS 2022, Tabla 10 (PDF 28/p. 3645): <105 ms en el TEP`);
 });
-test('fallo conocido (lo arregla mv-eco-2a5) · fallo:1 el latido enlaza consigo mismo [sin clave en PENDIENTES]', { todo: 'mv-eco-2a5' }, () => {
+// P5a: umbral de hipotensión PAM <70 mmHg (o PAS <90): Marino cap. 14 «Clinical Features», docs/marino-2024-shock-caps14-17.pdf#page=2.
+// Riesgo intermedio (submasivo) = disfunción del VD sin inestabilidad; alto riesgo (masivo) = con inestabilidad: Marino cap. 22, PDF p. 7
+test('TEP con escalón (P5a): el defecto es submasivo (PAM ≥70, VD/VI >1,0) y al 100 % masivo (PAM <70)', () => {
+  const d = caso('tep', 'def').c.latido, f = caso('tep', 1).c.latido;
+  assert.ok(d.pam >= 70, `defecto: PAM ${d.pam.toFixed(1)} (sin hipotensión)`);
+  assert.ok(d.vdvi > 1.0, `defecto: VD/VI ${d.vdvi.toFixed(2)}`);
+  assert.ok(d.feVd < 35, `defecto: FEVD ${d.feVd}`);
+  assert.ok(f.pam < 70, `100 %: PAM ${f.pam.toFixed(1)} (hipotensión)`);
+});
+test('fallo:1 el latido enlaza consigo mismo (P4b: la cola de la activación pasa de un latido al siguiente)', () => {
   const v = validarContrato(caso('fallo', 1).c);
   assert.deepEqual(v.errores, []);
 });
