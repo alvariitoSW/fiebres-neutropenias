@@ -366,7 +366,7 @@ export const preguntasPifRadio = [
             'A 1 cm de las cuerdas vocales',
         ],
         correcta: 2,
-        explicacion: 'La fuente pone la punta a 3-5 cm por encima de la bifurcación, o a medio camino entre la bifurcación y las cuerdas, con la cabeza en posición neutra (Marino, cap. 28, pág. 18). Lo de 1-2 cm por encima es la regla de la vía central, no la del tubo; a la altura de la carina o más abajo deja al tubo en riesgo de entrar en un bronquio, y a 1 cm de las cuerdas queda tan alto que se sale con un movimiento.',
+        explicacion: 'La fuente pone la punta a 3-5 cm por encima de la bifurcación, o a medio camino entre la bifurcación y las cuerdas, con la cabeza en posición neutra (Marino, cap. 28, pág. 18). Lo de 1-2 cm por encima es la regla de la vía central, no la del tubo; a la altura de la carina no deja margen: los tubos que avanzan acaban a menudo en el bronquio principal derecho (pág. 18); y a 1 cm de las cuerdas no cumple ninguna de las dos referencias de la fuente.',
     },
     {
         id: 'pifradio-q042', tema: 'pifradio-lee',
@@ -402,6 +402,6 @@ export const preguntasPifRadio = [
             'La carina sube cuando el paciente está intubado',
         ],
         correcta: 1,
-        explicacion: 'Los tubos pueden migrar en ambos sentidos por las maniobras (aspirar, girar al paciente); la flexión o extensión de cabeza y cuello desplaza la punta 2 cm, y cuando avanzan suelen acabar en el bronquio principal derecho, que sigue el trayecto recto de la tráquea, con atelectasia del pulmón izquierdo no ventilado (Marino, cap. 28, pág. 18). Un balón mal inflado no empuja el tubo, la inspiración no desplaza 3-5 cm la punta, y la carina no cambia de sitio por intubar.',
+        explicacion: 'Los tubos pueden migrar en ambos sentidos por las maniobras (aspirar, girar al paciente); la flexión o extensión de cabeza y cuello desplaza la punta 2 cm, y cuando avanzan suelen acabar en el bronquio principal derecho, que sigue el trayecto recto de la tráquea, con atelectasia del pulmón izquierdo no ventilado (Marino, cap. 28, pág. 18). Las otras explicaciones no son las que da la fuente: Marino atribuye la migración a la manipulación del tubo y al movimiento de la cabeza y el cuello.',
     },
 ];
