@@ -11,6 +11,7 @@ import { MAYEUTICA_PARO_2 } from './b3c-paro-2.js';
 import { MAYEUTICA_CARDIOGENICO_1 } from './b3b-cardiogenico-1.js';
 import { MAYEUTICA_CARDIOGENICO_2 } from './b3b-cardiogenico-2.js';
 import { MAYEUTICA_CARDIOGENICO_3 } from './b3b-cardiogenico-3.js';
+import { MAYEUTICA_IC } from './b3b-ic.js';
 
 export const MAYEUTICA_B3 = {
     ...MAYEUTICA_SHOCK_1,
@@ -23,4 +24,5 @@ export const MAYEUTICA_B3 = {
     ...MAYEUTICA_CARDIOGENICO_1,
     ...MAYEUTICA_CARDIOGENICO_2,
     ...MAYEUTICA_CARDIOGENICO_3,
+    ...MAYEUTICA_IC,
 };
