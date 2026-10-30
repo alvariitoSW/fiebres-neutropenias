@@ -57,10 +57,26 @@ export const BASE = {
   // relajación lenta, como en la disfunción diastólica). Ver activacionVi
   relajacion: 1,
   // pericardio: P = kPeri·exp((Vcorazón − v0Peri)/phiPeri); liquido = derrame extra
-  // pTorax: presión pleural que se SUMA (cmH₂O; ×0,74 = mmHg, fisiología general) en CPAP/ventilación con presión positiva.
-  // Actúa como presión externa de las cámaras y de los vasos del tórax (pulmonares); la aorta y las venas sistémicas, fuera,
-  // no la notan. Por defecto 0: cifras idénticas a sin él. Ilustrativo: el valor lo pone quien llama
+  // pTorax: presión positiva de la vía aérea (CPAP o PEEP, cmH₂O; ×0,74 = mmHg, fisiología general). Por defecto 0: cifras
+  // idénticas a sin él. Lo que llega al espacio pleural es fPleura de ella, y esa presión pleural (s.pTorax, en mmHg) se SUMA
+  // por fuera a las cámaras y a los vasos del tórax (pulmonares); la aorta y las venas sistémicas, fuera, no la notan (pero
+  // ver kAbdomen). Así la poscarga del VI es la presión de la cámara menos la pleural (Marino cap. 26, Ec. 26.1, PDF p. 87)
   pTorax: 0,
+  // fPleura: fracción de la presión de la vía aérea que llega al espacio pleural. En 19 pacientes con insuficiencia
+  // respiratoria aguda, el 37 % con pulmones distensibles, el 32 % y el 24 % con los más rígidos (presión esofágica; Jardin
+  // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, J Appl Physiol 59:1171,
+  // PMID 3902775) y, en decúbito supino, el esófago la infravalora mucho (Marini 1982, J Appl Physiol 53:384, PMID 6749776).
+  // Por eso 0,65, calibrado a la medida de fuera: 15 cmH₂O bajan el VS un 23 ± 22 % (Jellinek 2000, ver kAbdomen); con 0,65
+  // el motor da −24 % en el paciente normal (autonomo/bloques/b3/herramientas/g4-fpleura.mjs). Antes llegaba toda (1):
+  // 10 cmH₂O en un paciente seco paraban el retorno (GC 0,05)
+  fPleura: 0.65,
+  // kAbdomen: fracción de la presión de la vía aérea que llega a las venas de fuera del tórax. Al inflarse el pulmón baja el
+  // diafragma, sube la presión del abdomen y exprime su reservorio venoso: la presión media de llenado sube casi tanto como la
+  // de la AD y el gradiente del retorno venoso se mantiene. En 10 pacientes anestesiados, 15 cmH₂O (11,1 mmHg) subieron la
+  // presión media de llenado de 10,2 a 12,7 mmHg (2,5/11,1 ≈ 0,23) y la AD de 7,3 a 10,0 (Jellinek 2000, J Appl Physiol
+  // 88:926, PMID 10710387). Sin esto, con la AD dentro del tórax y las venas fuera, 10 cmH₂O vaciaban el pulmón hacia las
+  // venas y, en el paciente seco, paraban el retorno (GC 0,05)
+  kAbdomen: 0.23,
   kPeri: 0.1, v0Peri: 300, phiPeri: 40, liquidoPeri: 0,
   tabique: 0.05,            // fracción de la presión del otro ventrículo que se transmite
   // DESPLAZAMIENTO DEL TABIQUE (M0c, 29/10/2026): cuando la presión libre del VD supera a la del VI en diástole (VD que
@@ -340,7 +356,7 @@ export function crearMotor(ajustes = {}) {
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
-    const pT = p.pTorax * CMH2O_MMHG;
+    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw;   // vía aérea y pleura (mmHg)
     s.pTorax = pT;
     s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi + pT;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi + pT;
@@ -353,7 +369,7 @@ export function crearMotor(ajustes = {}) {
     // s.paoDist: presión del depósito elástico; s.pao: la de la raíz (la que se mide y ve la válvula)
     s.paoDist = Math.max(0, (s.vao + s.vBalon - p.vuAo) / p.cAo);
     s.pao = s.paoDist + p.zAo * s.qAo;
-    s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen);
+    s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen) + p.kAbdomen * pAw;   // + el abdomen (kAbdomen)
     s.pap = conRigidez(conCodo((s.vap - p.vuAp) / p.cAp, p.codoPul), p.rigAp, p.kRigAp) + pT;
     s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul) + pT;
   }

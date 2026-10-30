@@ -1,5 +1,5 @@
 // CPAP (b3-paso4 g4, pieza 4b): tabla CPAP 0/5/10/15 cmH2O x paciente congestionado (Ramiro etapa 3, PCP ~30) y paciente seco (PCP ~8).
-// PCP = la que mide el monitor (dentro del vaso); PCPtm = PCP - CPAP*0,74 (transmural); PAMtm = PAM - CPAP*0,74 (la que "ve" el VI).
+// PCP = la que mide el monitor (dentro del vaso); PCPtm = PCP - pleural del motor (transmural); PAMtm = PAM - pleural (la que "ve" el VI).
 // Uso: node autonomo/bloques/b3/herramientas/g4-cpap-cifras.mjs
 const S = await import('../../../../js/modules/libros/shock-vivo/soporte.mjs');
 const r = (x, d = 1) => +x.toFixed(d);
@@ -9,7 +9,7 @@ for (const [n, rec] of Object.entries(PAC)) {
   console.log('\n' + n);
   for (const cpap of [0, 5, 10, 15]) {
     const c = S.crearCabecera(rec); c.ajustar({ cpap }); c.correr(40);
-    const L = c.lectura, u = L.u, t = cpap * 0.74;
+    const L = c.lectura, u = L.u, t = u.pTorax;   // la pleural que da el motor (fPleura)
     console.log(`  CPAP ${String(cpap).padStart(2)}`, JSON.stringify({ PCP: r(u.pvp), PCPtm: r(u.pvp - t), VS: r(u.vs, 0), GC: r(L.gcTotal, 2), IC: r(L.icTotal, 2), PAM: r(u.pam, 0), PAMtm: r(u.pam - t, 0), PVC: r(u.pvc), FC: r(u.fc, 0), edema: r(u.vEdema, 0) }));
   }
 }
