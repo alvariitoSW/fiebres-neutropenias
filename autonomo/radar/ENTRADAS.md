@@ -63,20 +63,22 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 ### cardiorender.com (simulador de hemodinámica)
 - **Fecha / tipo**: 2026-10-30 · web
 - **Enlace**: https://cardiorender.com (citada en las respuestas del tuit de lazo P-V)
-- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre (200). En lectura: destino provisional hasta que termine el lector (`rea-cierre-webs-abiertas.md`)
-- **Veredicto**: pendiente del lector
+- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre. Leída el 30/10 (`rea-cierre-webs-abiertas.md`).
+- **Licencia**: solo ideas; redistribuir exige permiso escrito
+- **Veredicto**: destino tarea `mv-eco` (acople Ea/Ees, reflejos); ideas también para `guardia-shock` y `pif-cardio`
 
 ### litfl.com · «ST elevation in aVR»
 - **Fecha / tipo**: 2026-10-30 · web
 - **Enlace**: https://litfl.com/st-elevation-in-avr/
-- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre. En lectura: destino provisional hasta que termine el lector
-- **Veredicto**: pendiente del lector
+- **Estado (30/10, rea-cierre)**: no se pudo leer el 29/10; desde el 30/10 abre. Leída el 30/10.
+- **Licencia**: CC BY-NC-SA 4.0; solo se enlaza
+- **Veredicto**: destino tarea `arteria-culpable` (solo enlace)
 
 ### intro2echo.com (The Heart by Ultrasound)
 - **Fecha / tipo**: 2026-10-30 · web
 - **Enlace**: https://intro2echo.com
-- **Estado (30/10, rea-cierre)**: ya integrada en el atlas de eco (con permiso del autor); no abría el 29/10, abre desde el 30/10. En lectura: destino provisional
-- **Veredicto**: pendiente del lector
+- **Estado (30/10, rea-cierre)**: ya integrada en el atlas de eco (con permiso del autor); no abría el 29/10, abre desde el 30/10. Leída el 30/10.
+- **Veredicto**: destino tarea `eco-sueltas` (atribución y lista de capítulos como índice de pendientes); el resto, aparcado hasta que `mv-eco` abra las valvulopatías
 
 ### Tuits #29-31 (MarlonVFZR, AguilarMolina_, yoshiaki_666_)
 - Ya tienen ficha arriba, con su línea de estado: #29 no se pudo leer (pide PDF de Helseth); #30 tarea `hcm`; #31 tareas `peri` y `mv-eco`. Todos dieron 402 el 30/10.
