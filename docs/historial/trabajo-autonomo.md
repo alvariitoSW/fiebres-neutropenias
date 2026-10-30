@@ -456,3 +456,11 @@ tablero («Presupuestos vigentes»). Dos con prueba: J1 de la eco falla si una c
 `RANGOS_GUIA` (los suelos de Nagueh 2025 p.551: E/e′ ≥4, E/A ≥0,5); el TEP por defecto (E/e′ 1,8) queda en
 `PENDIENTES` para `mv-eco`. `version.mjs` falla con marcas de conflicto (`git grep`), con prueba trampa
 `autonomo/pruebas/version-conflicto-trampa.mjs`.
+
+## 30/10/2026 · graft dejaba de borrar la orden de `.gitignore` y `.ignore`
+
+Al arrancar cada sesión, graft reescribía `.claude/settings.json` y borraba la orden del proyecto que marca
+`.gitignore` y `.ignore` con `skip-worktree`: graft da por suyo todo grupo de órdenes que contenga una suya
+(`isGraftEntry` en `@nanonets/graft`, `hosts/config-write.js`), y la del proyecto iba en el mismo grupo de
+`SessionStart`. Arreglo, con permiso del usuario («arréglalo tú»): la orden va en un grupo propio, que graft conserva
+(comprobado con su propia función `mergeGraftSettings`). Así deja de salir el aviso de cambios sin subir.

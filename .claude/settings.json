@@ -46,13 +46,17 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/helpers/graft-hooks.cjs\" session-start || exit 0",
-            "timeout": 10
-          },
-          {
-            "type": "command",
             "command": "cd \"${CLAUDE_PROJECT_DIR:-.}\" && git update-index --skip-worktree .ignore .gitignore 2>/dev/null || true",
             "timeout": 5
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PROJECT_DIR:-.}/.claude/helpers/graft-hooks.cjs\" session-start || exit 0",
+            "timeout": 10
           }
         ]
       }
