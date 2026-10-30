@@ -4961,3 +4961,5 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 
 /* Mayéutica: «Vuelve en…» bajo la explicación (repaso espaciado) */
 [class$="-vuelve"] { font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0; line-height: 1.45; }
+[class$="-chip"]:is(p) { display: inline-block; font-size: 0.75rem; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 2px 10px; margin: 6px 0 0; }
+[class$="-contador"] { float: right; font-size: 0.75rem; color: var(--text-muted); }

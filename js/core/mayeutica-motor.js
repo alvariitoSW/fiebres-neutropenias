@@ -409,6 +409,39 @@ export function pintarRepaso(zona, r) {
     };
 }
 
+/* ---------- El repaso «de días atrás» ---------- */
+// items: la salida de elegirDiasAtras ({ q, ficha, a }). o: { p, pregunta(q) (opciones de pintarPregunta, como en el
+// repaso), guardar(q, r) (lo pone el que llama: anota sin meter lo acertado en el repaso de fallos), alFinal(),
+// hoy (por defecto, hoyLocal()), alClic(e) }. Una pregunta por vez, con su chip y su contador «1 de N».
+export function pintarDiasAtras(zona, items, o) {
+    const { p } = o, hoy = o.hoy || hoyLocal();
+    const eyebrow = `<span class="${p}-eyebrow">Repaso de días atrás</span>`;
+    if (!items.length) {
+        zona.innerHTML = `${eyebrow}<p class="${p}-para">Hoy no toca nada de días atrás.</p><div class="${p}-fila"><button class="${p}-b ${p}-prim" type="button" data-accion="fin-dias">Seguir</button></div>`;
+        entrar(zona, p);
+        zona.onclick = e => { if (e.target.closest('[data-accion="fin-dias"]')) o.alFinal?.(); else o.alClic?.(e); };
+        return;
+    }
+    const N = items.length;
+    const paso = i => {
+        if (i >= N) {
+            zona.innerHTML = `${eyebrow}<p class="${p}-para"><strong>Repaso hecho.</strong></p><div class="${p}-fila"><button class="${p}-b ${p}-prim" type="button" data-accion="fin-dias">Seguir</button></div>`;
+            entrar(zona, p);
+            zona.onclick = e => { if (e.target.closest('[data-accion="fin-dias"]')) o.alFinal?.(); else o.alClic?.(e); };
+            return;
+        }
+        const { q, a } = items[i];
+        const intro = i === 0 ? `<p class="${p}-para">${N === 1 ? 'Una pregunta' : `${N} preguntas`} de fichas que ya estudiaste. Volver a contestar días después fija más que releer (Larsen 2009, d = 0,91 en residentes; Kerfoot 2010, 724 residentes). Las elige la fecha de tu último intento.</p><details class="nota-plegable" open><summary>Mezclar fichas</summary><p>Mezclar fichas (entrelazado) tiene evidencia contradictoria en medicina: en ECG ayudó (Hatala 2003, 46 % frente a 30 %) y perjudicó (Monteiro 2017, 24 % frente a 34 % a los días). Aquí solo se mezclan conceptos parecidos, y se mide contigo.</p></details>` : '';
+        const cabecera = `${eyebrow}<span class="${p}-contador">${i + 1} de ${N}</span>${intro}<p class="${p}-chip">${chipDiasAtras(a, hoy)}</p>`;
+        const base = o.pregunta ? o.pregunta(q) : {};
+        pintarPregunta(zona, { ...q, num: i + 1, ultimo: i === N - 1 }, { ...base, p, cabecera,
+            vuelve: (qq, r) => { const b = { aciertos: 0, fallos: 0, ...a }; r.ok ? b.aciertos++ : b.fallos++; b.repasar = !r.ok; return lineaVuelve(b); },
+            alFinal: r => { o.guardar?.(q, r); paso(i + 1); } });
+    };
+    zona.onclick = e => o.alClic?.(e);
+    paso(0);
+}
+
 /* ---------- Los casos clínicos que evolucionan ---------- */
 // cfg: { p, prog, casos, pregunta(q) (opciones de pintarPregunta), barra(items, izq, der), subir(),
 //   titulo(n) (el encabezado de la lista), intro (su párrafo), extraLista(), alClicLista(e),
