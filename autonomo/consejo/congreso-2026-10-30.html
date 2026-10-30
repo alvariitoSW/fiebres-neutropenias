@@ -1,0 +1,293 @@
+<title>Congreso del 30 de octubre</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Informe para el móvil: una columna, barra de saltos fija arriba, cada plan como una hoja de evolución con su calendario */
+:root{
+  --bg:#f3f6f7; --hoja:#ffffff; --tinta:#14232b; --tenue:#56676f; --raya:#d5dfe2;
+  --acento:#0d6e72; --acento-suave:#dcefef;
+  --ok:#1f7a3d; --ok-suave:#e1f2e6; --aviso:#9a5b00; --aviso-suave:#fbefd9; --alerta:#b3261e; --alerta-suave:#fbe3e1;
+  --f-titulo:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-texto:"Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+  --f-cifra:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d171c; --hoja:#14232a; --tinta:#e4eef0; --tenue:#9db0b6; --raya:#2a3d45;
+  --acento:#5cc8c4; --acento-suave:#163a3c;
+  --ok:#7fd49a; --ok-suave:#173826; --aviso:#f0b75e; --aviso-suave:#3a2b12; --alerta:#ff8f86; --alerta-suave:#45201d; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d171c; --hoja:#14232a; --tinta:#e4eef0; --tenue:#9db0b6; --raya:#2a3d45;
+  --acento:#5cc8c4; --acento-suave:#163a3c;
+  --ok:#7fd49a; --ok-suave:#173826; --aviso:#f0b75e; --aviso-suave:#3a2b12; --alerta:#ff8f86; --alerta-suave:#45201d; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--tinta);font-family:var(--f-texto);font-size:16px;line-height:1.55;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--hoja)}
+.pagina{max-width:720px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:8px 64px;display:flex;flex-direction:column;gap:28px}
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--hoja);border-bottom:1px solid var(--raya)}
+nav .fila{max-width:720px;margin:0 auto;display:flex;gap:6px;overflow-x:auto;padding-block:8px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));scrollbar-width:none}
+nav a{flex:0 0 auto;font-size:14px;text-decoration:none;color:var(--tinta);border:1px solid var(--raya);border-radius:999px;padding:5px 12px;white-space:nowrap}
+nav a:focus-visible,a:focus-visible{outline:2px solid var(--acento);outline-offset:2px}
+nav a.decide{background:var(--acento);color:var(--hoja);border-color:var(--acento)}
+h1,h2,h3{font-family:var(--f-titulo);text-wrap:balance;line-height:1.15;margin:0}
+h1{font-size:clamp(28px,7vw,40px);font-weight:800;letter-spacing:-.01em}
+h2{font-size:24px;font-weight:800}
+h3{font-size:17px;font-weight:600}
+p{margin:0}
+.etiqueta{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--tenue);font-weight:700}
+.cabecera{display:flex;flex-direction:column;gap:10px;padding-top:12px}
+.lead{font-size:18px}
+section{display:flex;flex-direction:column;gap:14px;scroll-margin-top:64px}
+.hoja{background:var(--hoja);border:1px solid var(--raya);border-radius:10px;padding:16px;display:flex;flex-direction:column;gap:10px}
+.cifra{font-family:var(--f-cifra);font-variant-numeric:tabular-nums}
+.gasto{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.gasto div{background:var(--hoja);border:1px solid var(--raya);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.gasto b{font-family:var(--f-cifra);font-size:22px}
+.gasto span{font-size:13px;color:var(--tenue)}
+ul.lista,ol.lista{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:8px}
+.estado{display:inline-block;font-size:12px;font-weight:700;border-radius:4px;padding:1px 7px;margin-right:4px;white-space:nowrap}
+.e-ok{background:var(--ok-suave);color:var(--ok)}
+.e-aviso{background:var(--aviso-suave);color:var(--aviso)}
+.e-alerta{background:var(--alerta-suave);color:var(--alerta)}
+.e-tu{background:var(--acento-suave);color:var(--acento)}
+.tabla{overflow-x:auto;border:1px solid var(--raya);border-radius:10px;background:var(--hoja)}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:560px}
+th,td{text-align:left;vertical-align:top;padding:8px 10px;border-bottom:1px solid var(--raya)}
+th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--tenue);font-weight:700}
+tr:last-child td{border-bottom:0}
+td.cifra,th.cifra{text-align:right;white-space:nowrap}
+.barra{height:14px;border-radius:7px;background:var(--raya);overflow:hidden;display:flex}
+.barra i{display:block;height:100%}
+.barra .hecho{background:var(--ok)}
+.barra .rama{background:var(--aviso)}
+.leyenda{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;color:var(--tenue)}
+.leyenda i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
+.pasos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.pasos li{display:grid;grid-template-columns:72px 1fr;gap:12px;padding:12px 0;border-top:1px solid var(--raya)}
+.pasos li:first-child{border-top:0}
+.pasos .fecha{font-family:var(--f-cifra);font-size:13px;color:var(--acento);padding-top:2px}
+.pasos .cuerpo{display:flex;flex-direction:column;gap:4px;min-width:0}
+.pasos .meta{font-size:13px;color:var(--tenue)}
+.tu{font-size:14px;border-left:3px solid var(--acento);padding-left:8px}
+.nota{font-size:14px;color:var(--tenue)}
+details{background:var(--hoja);border:1px solid var(--raya);border-radius:10px;padding:10px 14px}
+summary{cursor:pointer;font-weight:700}
+details[open] summary{margin-bottom:8px}
+.decidir{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;counter-reset:d}
+.decidir li{background:var(--hoja);border:1px solid var(--raya);border-radius:10px;padding:12px 14px 12px 48px;position:relative;counter-increment:d}
+.decidir li::before{content:counter(d);position:absolute;left:14px;top:12px;font-family:var(--f-cifra);font-size:18px;color:var(--acento)}
+.decidir .grupo{list-style:none;padding:4px 0 0;background:none;border:0;font-family:var(--f-titulo);font-weight:600;font-size:15px;color:var(--tenue);counter-increment:none}
+.decidir .grupo::before{content:none}
+.rec{font-size:14px;color:var(--tenue)}
+a{color:var(--acento)}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+
+<nav aria-label="Secciones"><div class="fila">
+  <a href="#hoy">Hoy</a><a href="#revision">A · Sesiones</a><a href="#espera">B · Lo tuyo</a>
+  <a href="#marino">Plan 1 · Marino</a><a href="#eco">Plan 2 · Eco</a><a href="#webs">Plan 3 · Webs</a>
+  <a href="#reforma">Gran reforma</a><a href="#decide" class="decide">Decide</a>
+</div></nav>
+
+<main class="pagina">
+
+<header class="cabecera">
+  <p class="etiqueta">Consejo de Ministros · 12.ª reunión · viernes 30/10/2026</p>
+  <h1>Congreso del 30 de octubre</h1>
+  <p class="lead">Preside Transportes, vigila Hacienda. Revisamos todas las sesiones de hoy, lo que esperaba algo de ti, y salen tres planes y el plan final para terminar la app.</p>
+  <p>Si solo lees una cosa: <strong>la app puede quedar terminada (salvo El Libro Azul y cuatro cosas pequeñas) hacia el domingo 22/11</strong>, si mantienes el ritmo de gasto de estos días. Con el tope normal del 18 % se va a la primera quincena de diciembre. Lo decides tú en el punto 2 de <a href="#decide">Decide</a>.</p>
+</header>
+
+<section id="hoy">
+  <h2>Lo que decidiste hoy</h2>
+  <ol class="lista">
+    <li><strong>Las propuestas de Hacienda</strong>: ya estaban en las reglas desde esta tarde (REGLAS §4.14 y §4.15): pieza presupuestada por lo que falta en el código, gasto medido antes del Estudiar, nada de juntar piezas con prueba propia y director del paso 4 a 1,3 M. Queda apuntado tu sí. No hace falta nada más.</li>
+    <li><strong>Vía libre hasta el lunes 02/11 incluido</strong>, todos los carriles a la vez. Abajo, los topes.</li>
+    <li><strong>SCA y disección aórtica</strong>: dados por mirados.</li>
+    <li><strong>Radiología del PIF ya</strong>: el resto del temario (<span class="cifra">radio-fichas</span>: neumotórax y derrame, patrones y edema, intro a la TC, ictus, HTIC y hernias) pasa de aparcado a pendiente y empieza hoy en el carril 2.</li>
+  </ol>
+  <div class="gasto" role="list">
+    <div role="listitem"><b>≈50-56 M</b><span>gasto de hoy, sumando los partes (estimado)</span></div>
+    <div role="listitem"><b>sin tope</b><span>diario hasta el 02/11; alarma de Hacienda a 60 M en un día</span></div>
+    <div role="listitem"><b>7</b><span>sesiones a la vez como mucho, sin compartir archivos</span></div>
+    <div role="listitem"><b>+25 / +50 %</b><span>sobre su presupuesto: sigue / comparece ante el Consejo / para</span></div>
+  </div>
+  <details>
+    <summary>Topes por tarea mientras dure la vía libre</summary>
+    <div class="tabla"><table>
+      <thead><tr><th>Tarea</th><th class="cifra">Tope</th><th>Qué pasa si se pasa</th></tr></thead>
+      <tbody>
+        <tr><td>Grupo 6 del bloque 3 (TEP)</td><td class="cifra">5,9 M</td><td>Comparece; el bloque 3 entero no pasa de 58 M</td></tr>
+        <tr><td>Pulmón con respirador (<span class="cifra">b3d</span>)</td><td class="cifra">70 M</td><td>Para y comparece</td></tr>
+        <tr><td>Bloque 4 (caps. 31-38)</td><td class="cifra">58 M</td><td>Para y comparece</td></tr>
+        <tr><td>Motor de la eco (<span class="cifra">mv-eco</span>)</td><td class="cifra">26 M</td><td>Comparece ante ti (lo aprobaste así)</td></tr>
+        <tr><td>Un capítulo del atlas, solo texto</td><td class="cifra">0,6 M</td><td>Se para ese capítulo</td></tr>
+        <tr><td>Resto de Radiología (<span class="cifra">radio-fichas</span>)</td><td class="cifra">9 M</td><td>Comparece</td></tr>
+        <tr><td>Una ficha suelta o un informe</td><td class="cifra">2 M</td><td>Comparece</td></tr>
+        <tr><td>Fusionar una PR (jueces incluidos)</td><td class="cifra">0,4 M</td><td>Hacienda lo apunta como gasto de esperar</td></tr>
+      </tbody>
+    </table></div>
+    <p class="nota">Lo que Hacienda llama superfluo: sesiones que se abren y no hacen nada (hoy hubo dos), 3 vueltas seguidas sin un juez nuevo en verde, la suite larga mientras se itera, el modelo potente para algo barato y las PR que esperan días y obligan a volver a fusionar <span class="cifra">main</span> (a la PR #47 le pasó tres veces). El 03/11 vuelve el 18 % salvo que digas otra cosa.</p>
+  </details>
+</section>
+
+<section id="revision">
+  <p class="etiqueta">Orden del día A</p>
+  <h2>Las sesiones que se cerraron solas</h2>
+  <p>Repasadas las 47 filas de <span class="cifra">SESIONES.md</span> y tu lista de sesiones. Casi todo cerró bien; lo que no, ya tiene arreglo.</p>
+  <ul class="lista">
+    <li><span class="estado e-ok">arreglado</span><strong>PR #37 de Educación (las 3 maquetas)</strong>: no estaba fusionada. Solo toca <span class="cifra">autonomo/</span> y aprobaste A, B y C: entra hoy en <span class="cifra">main</span> desde esta sesión.</li>
+    <li><span class="estado e-ok">arreglado</span><strong>radio-informe</strong>: seguía «en revisión» sin PR (era un informe). Pasa a hecha.</li>
+    <li><span class="estado e-aviso">en marcha</span><strong>Bloque 3 (<span class="cifra">auto/b3</span>, PR #51)</strong>: más de mil commits por delante de <span class="cifra">main</span> porque lleva todo el paso 4. El Consejo 11.ª ya votó 5 a 0 fusionarla cuando el grupo 6 cierre con auditor y profesor, se fusione <span class="cifra">main</span> y los jueces den verde. La sesión del grupo 6 sigue trabajando ahora mismo (arreglos del TEP). Tras ella, <span class="cifra">shock-scai</span> y bradicardias en ramas aparte.</li>
+    <li><span class="estado e-alerta">sin fusionar</span><strong>Cuatro PR de hoy quedaron abiertas</strong> al cerrarse su sesión: atlas cap. 16 insuficiencia aórtica (#49, limpia), contrato de la eco (#44, técnica), raíz aórtica (#46, profesor 8,5) y Radiología días 2-3 (#42, profesor 8,44 y 8,5). El Consejo abre una sesión de fusiones: las dos limpias entran ya; las otras dos, tras un arreglo corto que las suba a 8,75 y el voto.</li>
+    <li><span class="estado e-ok">arreglado</span><strong>Mapa del bloque 4 (#41) y «Todo lo estudiado» (#40)</strong>: informes sin app; entran hoy en <span class="cifra">main</span>.</li>
+    <li><span class="estado e-aviso">cortada</span><strong>La cadena del atlas</strong> se paró a las 18:35 por el límite de 8 sesiones encadenadas. Van 16 de 30 capítulos en la app (17 con el 16 al fusionar). El Consejo la reabre por <span class="cifra">hcm</span> (cap. 22).</li>
+    <li><span class="estado e-ok">sin fila, sin daño</span>Dos sesiones se abrieron por duplicado y se archivaron sin hacer nada (cap. 13 a las 18:12 y Radiología día 2 a las 17:02). No dejaron trabajo ni gasto. Las sesiones de comidas, finanzas y radiómica son de otros proyectos.</li>
+  </ul>
+</section>
+
+<section id="espera">
+  <p class="etiqueta">Orden del día B</p>
+  <h2>Lo que te esperaba</h2>
+  <div class="tabla"><table>
+    <thead><tr><th>Asunto</th><th>Cómo queda</th><th>¿Te toca?</th></tr></thead>
+    <tbody>
+      <tr><td>HP crónica de la eco (VD/VI 0,72)</td><td>Entra en el «hecho» del motor nuevo: VD/VI &gt; 1,0 con su juez</td><td>No</td></tr>
+      <tr><td>El «sigue» de educacion-app</td><td>Lo manda la sesión de Educación al fusionar el bloque 3 (acta 11.ª)</td><td>No</td></tr>
+      <tr><td>Rótulos de Wiggers</td><td>Hechos y en <span class="cifra">main</span> (≥ 8 px a 360 px)</td><td>Solo si quieres mirarlo</td></tr>
+      <tr><td>Caso de Teresa y prueba de 3 días</td><td>Lista en río y mar. Día 0: dos fichas, 30-40 min. Día 3: 12 preguntas</td><td><span class="estado e-tu">tuya</span> opcional; si empiezas mañana, el día 3 cae el 03/11</td></tr>
+      <tr><td>Los 12 artículos de la reforma</td><td>7 aprobados y ya en las reglas; 1, 4 y 9 decaen; 3b y 11, no por ahora; el 7 (menú por intención) espera a que elijas el menú</td><td>Solo el 7, cuando veas las maquetas del menú</td></tr>
+      <tr><td>Los 7 tuits</td><td>x.com no deja leerlos (error 402). Tres (#26 @shinriha_pt, #27 @WithAScalpel, #28 @sindenzu1) no se han leído nunca; los otros tienen destino o esperan PDF</td><td><span class="estado e-tu">tuya</span> pegar texto o captura de los 3 en la Bandeja #27</td></tr>
+      <tr><td>pulmonarypocus.com</td><td>Estudiada el 30/10 dentro de la reforma de la eco: es un laboratorio de Doppler color y espectral, no de pulmón. Sus ideas van al motor de la eco</td><td>No</td></tr>
+      <tr><td>Libro de semiología</td><td>Una IA no puede ser la fuente (acta 10.ª). Lo abierto que hay vive en <span class="cifra">www.ncbi.nlm.nih.gov</span> (StatPearls y el <em>Clinical Methods</em> de Walker), que la red de tus sesiones bloquea</td><td><span class="estado e-tu">tuya</span> abrir ese dominio (2 min) o subir el capítulo cardiovascular de Surós o Bates</td></tr>
+    </tbody>
+  </table></div>
+  <p class="nota">Para abrir el dominio: en la sesión, menú del entorno en la barra del título → Editar → Acceso a la red → añade <span class="cifra">www.ncbi.nlm.nih.gov</span> en dominios permitidos. Pasos: <a href="https://code.claude.com/docs/en/cloud-environments#network-access">code.claude.com/docs/en/cloud-environments</a>.</p>
+</section>
+
+<section id="marino">
+  <p class="etiqueta">Plan 1</p>
+  <h2>Terminar Marino: de 55 a 155 fichas con Estudiar</h2>
+  <div class="hoja">
+    <div class="barra" aria-label="38 fichas en main, 17 en la rama del bloque 3, 100 por hacer"><i class="hecho" style="width:24.5%"></i><i class="rama" style="width:11%"></i></div>
+    <div class="leyenda"><span><i style="background:var(--ok)"></i>38 en la app</span><span><i style="background:var(--aviso)"></i>17 en la rama del bloque 3</span><span><i style="background:var(--raya)"></i>100 por hacer</span></div>
+    <p><strong>Falta ≈205-280 M</strong> en 5 tramos: pulmón con respirador (21 fichas), bloque 4 (23), bloque 5 (17), bloque 6a (14) y bloque 6b (25). El techo de Marino es 400 M; Hacienda mide lo gastado al cerrar el bloque 3 y avisa si no cabe.</p>
+    <p class="nota">Orden: dos bloques a la vez, nunca más. Jueces de cada paso: <span class="cifra">--ficha</span> de cada ficha, <span class="cifra">--modelo</span> de cada modelo tocado, <span class="cifra">--forma</span>, <span class="cifra">--formula</span>, auditor ciego sin graves, profesor ≥ 8,75 (meta 9,5 en modelos nuevos) y voto del Consejo para entrar en <span class="cifra">main</span>.</p>
+  </div>
+  <ol class="pasos">
+    <li><span class="fecha">30-31/10</span><div class="cuerpo"><h3>Bloque 3 a la app</h3><p>Cierra el grupo 6 (TEP) y la PR #51 entra por el voto ya hecho. Después, <span class="cifra">shock-scai</span> (1,5-2,5 M) y bradicardias (3-4 M) en ramas aparte. Las 48 preguntas viejas de Merino Cardiología, a la vez.</p><p class="meta">≈10-12 M · Marino pasa a 55 de 155</p><p class="tu">Tú: nada. Ya aprobaste el bloque 3.</p></div></li>
+    <li><span class="fecha">31/10-02/11</span><div class="cuerpo"><h3>Pulmón con respirador a la app</h3><p>Antes, el informe <span class="cifra">mv-papel-pulmon</span> (1-2 M, con VentLoop, Techartist y Antaa). Luego 4 encargos: ciclo y curvas del monitor, racimo de alvéolos, enganche al tórax, paciente que respira con maniobras y neumotórax a tensión. Incluye la CPAP que sube el gasto del corazón que falla.</p><p class="meta">12-18 M · rama <span class="cifra">auto/b3d</span></p><p class="tu">Tú: mirarlo en el móvil si quieres; entra por voto.</p></div></li>
+    <li><span class="fecha">01-03/11</span><div class="cuerpo"><h3>Bloque 4: las piezas, en paralelo</h3><p>«Iones vivos»: la escena del potasio ampliada con magnesio, calcio y fósforo. El mapa ya está hecho: cubre el 88 % del bloque con 11 pacientes.</p><p class="meta">Con maqueta ≈58 M el bloque; sin maqueta ≈50 M</p><p class="tu">Tú: decidir maqueta sí o no (el profesor recomienda maqueta).</p></div></li>
+    <li><span class="fecha">03-08/11</span><div class="cuerpo"><h3>Estudiar del pulmón y del bloque 4</h3><p>21 fichas del pulmón en 5 grupos y 23 del bloque 4 en 4 grupos, con sus casos. Las 46 preguntas viejas de Neumología, a la vez.</p><p class="meta">30-40 M + ≈40 M · Marino pasa a 99 de 155</p><p class="tu">Tú: nada obligatorio.</p></div></li>
+    <li><span class="fecha">05-13/11</span><div class="cuerpo"><h3>Bloque 5 (caps. 39-44)</h3><p>Mapa y 2-3 maquetas del hepatocito y del termostato (fiebre). Después, modelos y Estudiar de 17 fichas.</p><p class="meta">45-63 M · Marino pasa a 116</p><p class="tu">Tú: elegir maqueta del hepatocito y del termostato (≈07/11).</p></div></li>
+    <li><span class="fecha">09-16/11</span><div class="cuerpo"><h3>Bloque 6a (caps. 45-47)</h3><p>Cráneo vivo (presión intracraneal) y unión neuromuscular; Estudiar de 14 fichas.</p><p class="meta">30-45 M · Marino pasa a 130</p><p class="tu">Tú: elegir maqueta del cráneo vivo (≈11/11).</p></div></li>
+    <li><span class="fecha">14-20/11</span><div class="cuerpo"><h3>Bloque 6b (caps. 48-53 y apéndices)</h3><p>Eje hormonal animado y hepatocito para tóxicos; las fichas de consulta, con un Estudiar corto y un caso por grupo.</p><p class="meta">30-45 M · Marino 155 de 155</p><p class="tu">Tú: elegir maqueta del eje hormonal (≈16/11).</p></div></li>
+  </ol>
+  <p class="nota">Las fechas suponen que la vía libre sigue tras el 02/11 (≈40-50 M al día entre todos los carriles). Con el 18 %, Marino acaba hacia el 05/12. Para que los bloques 5 y 6a se preparen mientras se construye el anterior hace falta tu sí (la regla del Objetivo M5 dice uno tras otro).</p>
+</section>
+
+<section id="eco">
+  <p class="etiqueta">Plan 2</p>
+  <h2>El motor de la eco, opción A</h2>
+  <div class="hoja">
+    <p>Dos motores: el del corazón (presiones, volúmenes, tabique) y el de la imagen, unidos por un contrato. La imagen solo lee. Absorbe los tres huecos de <span class="cifra">eco-calibra-b</span>: TEP que pasa de submasivo a masivo, shock cardiogénico coherente y desaceleración de la E en la hipertrofia grado 1.</p>
+    <p><strong>Presupuesto 20-26 M</strong>, gastado 1,0 M (el contrato). Meta de realismo: media ≥ 9,5 y ningún criterio por debajo de 9, comparando cada corte con una figura real de las guías.</p>
+  </div>
+  <ol class="pasos">
+    <li><span class="fecha">30-31/10</span><div class="cuerpo"><h3>Paso 1: el contrato, a <span class="cifra">main</span></h3><p>Hecho y probado (38 pruebas; 5 fallos del motor congelados para el paso 2). La sesión de fusiones lo mete como técnica.</p><p class="meta">≈0,3 M</p></div></li>
+    <li><span class="fecha">31/10-01/11</span><div class="cuerpo"><h3>Paso 2: el motor del corazón</h3><p>e′ dentro del motor, tabique que se aplana poco a poco, contracción por regiones y techo del VD. Arregla los 5 fallos congelados (E/e′ 1,8 en el TEP, VD/VI 0,72 en la HP…) y los 3 de <span class="cifra">eco-calibra-b</span>. Empieza cuando el bloque 3 esté en <span class="cifra">main</span>, porque el shock vivo usa el mismo motor.</p><p class="meta">≈5 M · pruebas de la eco, <span class="cifra">jueces --modelo shock-vivo</span>, J1 y J2 en las 9 formas</p></div></li>
+    <li><span class="fecha">01/11</span><div class="cuerpo"><h3>Paso 3: adaptadores y juez de geometría</h3><p>La imagen pasa a leer del contrato. Juez nuevo: en el mínimo, el medio y el máximo de cada mando, ningún contorno se cruza y las proporciones caen en el rango de la guía (va en commit aparte).</p><p class="meta">≈3 M</p></div></li>
+    <li><span class="fecha">01-03/11</span><div class="cuerpo"><h3>Paso 4: el dibujo nuevo</h3><p>Corazón dibujado de nuevo, con interruptor para volver al de hoy hasta que pase. Cada vista, al lado de su figura real (Lang 2015, ESC/ERS 2022 de HP, Hahn 2013, Mitchell 2019). Se acaba la «nave espacial» de la HP al máximo.</p><p class="meta">9-13 M en 3 sesiones</p></div></li>
+    <li><span class="fecha">03-05/11</span><div class="cuerpo"><h3>Paso 5 y juicio de realismo</h3><p>Signo de McConnell, Doppler pulmonar y contracción regional; el profesor puntúa los 6 criterios con las dos capturas delante.</p><p class="meta">≈3 M + 2-4 M de juicio</p><p class="tu">Tú: nada salvo que pida pasar de 26 M. Opcional: un libro de física de los ultrasonidos subiría la nota de textura.</p></div></li>
+    <li><span class="fecha">desde 05/11</span><div class="cuerpo"><h3>Lo que desbloquea</h3><p>Figuras y Estudiar de los 30 capítulos del atlas, la vista 3D con «solo el corte» y rótulos (3 M), la ficha del ETE (2 M) y la fase C del shock vivo.</p></div></li>
+  </ol>
+</section>
+
+<section id="webs">
+  <p class="etiqueta">Plan 3</p>
+  <h2>Todo lo estudiado de fuera, y dónde acaba</h2>
+  <div class="hoja">
+    <p><strong>58 recursos</strong> (webs, simuladores, repositorios y tuits) y 35 informes de ingeniería inversa. Ninguno queda sin destino:</p>
+    <div class="tabla"><table style="min-width:0">
+      <tbody>
+        <tr><td><span class="estado e-ok">10</span></td><td>ya están en la app (atlas de eco, mallas de Z-Anatomy, papers, Anatomy…)</td></tr>
+        <tr><td><span class="estado e-aviso">28</span></td><td>tienen tarea en el tablero</td></tr>
+        <tr><td><span class="estado e-aviso">7</span></td><td>aparcados, con el motivo escrito</td></tr>
+        <tr><td><span class="estado e-alerta">8</span></td><td>no se pudieron leer (tuits con error 402, PDF de pago, webs cerradas)</td></tr>
+        <tr><td><span class="estado">5</span></td><td>descartados, con el motivo (p. ej. NV-Reason-CT necesita servidor)</td></tr>
+      </tbody>
+    </table></div>
+    <p class="nota">Regla de siempre: de fuera vienen ideas, nunca cifras ni código. Las cifras salen de libros y guías con página.</p>
+  </div>
+  <ol class="pasos">
+    <li><span class="fecha">ya</span><div class="cuerpo"><h3>Tres informes que dicen cómo aplicarlos</h3><p><span class="cifra">mv-papel-pulmon</span> (VentLoop, Techartist, Antaa), <span class="cifra">mv-papel-shock</span> (Impella de Antaa, EchoSuite, AngioView) y <span class="cifra">mv-papel-ritmo</span> (RitmoLab, Ventriculus). Sin código.</p><p class="meta">≈1-2 M cada uno</p></div></li>
+    <li><span class="fecha">31/10-05/11</span><div class="cuerpo"><h3>Dentro de lo que ya corre</h3><p>Pulmón con respirador (VentLoop, Techartist, Antaa), <span class="cifra">shock-scai</span> (Impella), motor de la eco (pulmonarypocus, CardioRender, la lección de anatomyatelier), Radiología (NavRad, Radiology Assistant) y el atlas (tuits de HVI e interdependencia).</p><p class="meta">0 M extra: va en sus presupuestos</p></div></li>
+    <li><span class="fecha">04/11</span><div class="cuerpo"><h3>Cómo se estudia</h3><p><span class="cifra">estudio-04-11</span>: receta de sala, recapitulación al empezar, no repetir ficha seguida y tabla error → remedio (ideas de PhET, Anki, Oppia y ncase).</p><p class="meta">3-4 M</p><p class="tu">Tú: decir si eliges tú las candidatas o lo hace Educación.</p></div></li>
+    <li><span class="fecha">05-12/11</span><div class="cuerpo"><h3>Tras el motor de la eco</h3><p>Arteria culpable (LITFL, Coronary Culprit, AngioView; 7-8,5 M), mejoras verdes de capilar, telar y receptores (3-6 M), ficha del ETE (2 M) y vista 3D legible (3 M).</p><p class="meta">≈15-20 M</p></div></li>
+    <li><span class="fecha">20-28/11</span><div class="cuerpo"><h3>Tras Marino</h3><p>Guardia de shock: cadena VCI → VExUS con veredicto (EchoSuite y tus repos; 14-18 M). PIF Cardiología entero con ECG vivo y laboratorio de arritmias (RitmoLab, Ventriculus; 21-22 M). Técnicas R1 en capítulos, empezando por la vía central (idea de Pridgen; ≈4-6 M, estimado).</p><p class="meta">≈40-46 M</p></div></li>
+  </ol>
+  <p class="tu">Lo tuyo en este plan: pegar los 3 tuits; PDF de Helseth (ECG del infarto con oclusión), Carden 2026 y Mireles-Cabodevila 2022 si los tienes; y decir si quieres la calculadora de anticoagulantes por función renal y la mejora de los lazos presión-volumen.</p>
+  <p class="nota">Total del plan: ≈65-85 M, casi todo ya aprobado en el tablero.</p>
+</section>
+
+<section id="reforma">
+  <p class="etiqueta">Orden del día D</p>
+  <h2>La gran reforma: terminar la app</h2>
+  <p>Meta: que solo queden El Libro Azul y cuatro cosas pequeñas. Esto es lo que falta, con su coste y su fecha si el ritmo de estos días sigue.</p>
+  <div class="tabla"><table>
+    <thead><tr><th>Pieza</th><th class="cifra">Coste</th><th class="cifra">Fecha</th><th>Estado</th></tr></thead>
+    <tbody>
+      <tr><td>Marino 100 % (plan 1)</td><td class="cifra">205-280 M</td><td class="cifra">20/11</td><td>aprobado (techo 400 M)</td></tr>
+      <tr><td>Motor de la eco (plan 2)</td><td class="cifra">19-25 M</td><td class="cifra">05/11</td><td>aprobado</td></tr>
+      <tr><td>Atlas de eco, texto de los 12 capítulos que faltan</td><td class="cifra">5-7 M</td><td class="cifra">02/11</td><td>aprobado</td></tr>
+      <tr><td>Atlas de eco, figuras y Estudiar de los 30</td><td class="cifra">30-45 M</td><td class="cifra">15/11</td><td><span class="estado e-tu">te toca</span> aprobar</td></tr>
+      <tr><td>Webs y modelos del carril 2 (plan 3)</td><td class="cifra">65-85 M</td><td class="cifra">28/11</td><td>casi todo aprobado</td></tr>
+      <tr><td>PIF: Radiología entera y las 5 rotaciones sin cuaderno, montadas sobre lo hecho</td><td class="cifra">22-34 M</td><td class="cifra">28/11</td><td>Radiología aprobada; el resto, informe antes</td></tr>
+      <tr><td>Educación en la app (capilar, gemelas, apuesta en el shock)</td><td class="cifra">3-5 M</td><td class="cifra">08/11</td><td>aprobado</td></tr>
+      <tr><td>Menú y navegación (Marino unido, acceso rápido a los modelos, maquetas del menú y art. 7)</td><td class="cifra">5-8 M</td><td class="cifra">10/11</td><td>Marino unido aprobado; el resto, maqueta antes</td></tr>
+      <tr><td>Preguntas viejas «de redactar» fuera de Marino (≈267)</td><td class="cifra">10-15 M</td><td class="cifra">25/11</td><td><span class="estado e-tu">te toca</span> aprobar</td></tr>
+      <tr><td>Arreglos «visto de paso» más importantes</td><td class="cifra">5-8 M</td><td class="cifra">10/11</td><td>aprobados en parte</td></tr>
+      <tr><td><strong>Total</strong></td><td class="cifra"><strong>≈370-510 M</strong></td><td class="cifra"><strong>22/11-28/11</strong></td><td></td></tr>
+    </tbody>
+  </table></div>
+  <div class="hoja">
+    <h3>Fecha objetivo: domingo 22/11 para todo lo grande; 28/11 para los restos del carril 2</h3>
+    <p>Solo se llega si la vía libre sigue después del 02/11. Con el 18 % (≈15 M al día, sin calibrar todavía) la misma obra acaba en la segunda quincena de diciembre.</p>
+    <p>El techo de 400 M cubre Marino y Educación. Lo demás (≈165-230 M) <strong>no tiene techo aprobado</strong>: es decisión tuya.</p>
+  </div>
+  <div class="hoja">
+    <h3>Lo que quedaría después</h3>
+    <ul class="lista">
+      <li><strong>El Libro Azul</strong>: el mapa frente a Marino (<span class="cifra">azul-cobertura</span>, ≈1 M) sale ya, para que sus bloques se presupuesten con datos. Falta el PDF de la sección IV (Respiratorio).</li>
+      <li>Huecos que esperan un PDF o la red (semiología, Helseth, Carden, Mireles-Cabodevila, DanGer Shock, ESC 2024 de aorta).</li>
+      <li>Competencias de R2 a R5.</li>
+      <li>Las mejoras pequeñas de «visto de paso».</li>
+      <li>Los tuits y papers que vayas mandando (<span class="cifra">radar-tuits</span>, sin prisa).</li>
+    </ul>
+  </div>
+</section>
+
+<section id="decide">
+  <h2>Lo que te toca decidir</h2>
+  <p class="nota">Lo más urgente primero. Contesta con el número.</p>
+  <ol class="decidir">
+    <li class="grupo">Hoy</li>
+    <li><strong>Semiología</strong>: ¿abres <span class="cifra">www.ncbi.nlm.nih.gov</span> en la red de las sesiones (2 minutos) o subes el capítulo cardiovascular de Surós o Bates? <p class="rec">Recomendado: abrir el dominio. Da StatPearls y Walker gratis y sirve para más fichas.</p></li>
+    <li><strong>Ritmo después del 02/11</strong>: ¿sigue la vía libre hasta terminar (≈22/11) o vuelve el 18 % el 03/11 (diciembre)? <p class="rec">Recomendado: seguir hasta el 22/11 con la alarma de 60 M al día.</p></li>
+    <li><strong>Techo de la gran reforma</strong>: ≈165-230 M aparte de Marino, para eco, atlas, webs, PIF, menú y preguntas viejas. <p class="rec">Recomendado: aprobar 230 M con Hacienda vigilando cada tarea.</p></li>
+    <li class="grupo">Esta semana</li>
+    <li><strong>Bloque 4</strong>: ¿maqueta de «iones vivos» antes de construir (≈+8 M) o directo? <p class="rec">Recomendado: maqueta, como dice el profesor.</p></li>
+    <li><strong>Bloques solapados</strong>: ¿dejas que el mapa y las maquetas del bloque siguiente se hagan mientras se construye el anterior? <p class="rec">Recomendado: sí; sin eso, Marino no acaba antes del 22/11.</p></li>
+    <li><strong>Figuras y Estudiar del atlas</strong> (fase B, 30 capítulos, ≈30-45 M), para cuando pase el ecógrafo nuevo. <p class="rec">Recomendado: aprobar.</p></li>
+    <li><strong>Preguntas viejas fuera de Marino</strong> (≈267, 10-15 M): ¿se reconvierten ya? <p class="rec">Recomendado: sí, por bloques, después de Marino.</p></li>
+    <li><strong>Calculadora de anticoagulantes por función renal</strong> y <strong>lazos presión-volumen mejorados</strong>: ¿tarea o no? <p class="rec">Recomendado: lazos P-V sí, dentro del motor de la eco (≈1-2 M); la calculadora, con PIF Cardiología.</p></li>
+    <li><strong>Candidatas de estudio del 04/11</strong>: ¿eliges tú o el Consejo (Educación)? <p class="rec">Recomendado: el Consejo, y tú lo ves después.</p></li>
+    <li class="grupo">Cuando puedas</li>
+    <li>Pegar el texto o una captura de los tuits #26, #27 y #28 en la Bandeja #27.</li>
+    <li>PDF de Helseth, Carden 2026 y Mireles-Cabodevila 2022, si los tienes.</li>
+    <li>La prueba de 3 días con el caso de Teresa: si empiezas mañana, el día 3 es el martes 03/11.</li>
+  </ol>
+</section>
+
+<p class="nota">Acta: <span class="cifra">autonomo/consejo/2026-10-30-12.md</span>. Sin agentes: los dictámenes salen de los partes y de las actas 7.ª a 11.ª; Hacienda y Transportes los da quien preside. Gasto de la reunión ≈0,6 M.</p>
+</main>

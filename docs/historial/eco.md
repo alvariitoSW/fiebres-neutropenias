@@ -249,6 +249,13 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
     abren dentro (hoy 9: 01 Pulso, 02 Imagen, 03 Doppler, 06 Ciclo cardíaco, 07 Asa P-V, 08 Hemodinámica por
     Doppler, 09 Función sistólica, 10 Función diastólica y 14 Ventrículo derecho); los demás enlazan al original en
     inglés.
+  - 30/10/2026: ya son 10 de 30 en la app; el 15 Estenosis aórtica entra solo con texto (fase A, sin figura ni preguntas).
+  - 30/10/2026: ya son 12 de 30; entran también solo con texto el 19 Insuficiencia tricuspídea y el 21 Enfermedad pericárdica.
+  - 30/10/2026: ya son 13 de 30; entra también solo con texto el 17 Estenosis mitral.
+  - 30/10/2026: ya son 14 de 30; entra también solo con texto el 11 Contractilidad segmentaria (los 17 segmentos, el índice y los territorios coronarios).
+  - 30/10/2026: ya son 15 de 30; entra también solo con texto el 13 Strain (GLS por speckle tracking, patrones global, regional y de respeto apical, y cardio-oncología con la CTRCD de la ESC 2022).
+  - 30/10/2026: ya son 16 de 30; entra también solo con texto el 12 Eco de estrés (protocolo con dobutamina, lectura por segmentos, viabilidad, alto riesgo y otros usos).
+  - 30/10/2026: ya son 17 de 30; entra también solo con texto el 16 Insuficiencia aórtica (grados, graduación integrada, criterios de la Fig. 25, estadios C1/C2 y método volumétrico; fusionado por el Consejo, sesión `fusiones-30-10`).
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor
@@ -406,4 +413,8 @@ quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e
 (Nagueh p.561 da 3-4 en el grado III avanzado; extrapolación declarada); bomba AI 88 % de la vasoplejia (artefacto de
 la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
 
+- 30/10/2026 · Atlas de eco, capítulo 16 (insuficiencia aórtica) en fase A: texto completo traducido (grados, graduación integrada con los grados I-IV, criterios específicos de la Fig. 25, estadios C1/C2 y el método volumétrico), con tres tablas y citas; figura y preguntas pendientes del ecógrafo nuevo.
+- 30/10/2026 · Atlas de eco, capítulo 21 (enfermedad pericárdica) en fase A: texto completo traducido (derrame, taponamiento, constricción y miocardiopatía restrictiva), con tres tablas y citas; figura y preguntas pendientes del ecógrafo nuevo.
+- 30/10/2026 · Atlas de eco, capítulo 17 (estenosis mitral) en fase A: texto completo traducido (estadios, tabla de grados de Pandian 2023, graduación por planimetría, tiempo de hemipresión, gradiente con la frecuencia y ejercicio), con una tabla y citas; figura y preguntas pendientes del ecógrafo nuevo.
+- 30/10/2026 · Atlas de eco, capítulo 19 (insuficiencia tricuspídea) en fase A: texto completo traducido, con tabla de grados y citas; figura y preguntas pendientes del ecógrafo nuevo.
 - **30/10/2026 · mv-eco-1 (B-045 paso 1)**: nace `js/modules/eco/contrato.mjs` (+ `contrato-puente-hoy.mjs`, `pruebas/contrato.test.mjs`) al lado del motor, sin que la app lo use todavía. Congela «contrato = motor de hoy» (±2 % contra el código, ±5 % contra la tabla §3) y deja como fallos conocidos E/e′ 1,8 (TEP defecto), TA pulmonar 119 ms (TEP) y el salto al cerrar el latido (fallo VI 100 %). Lo arregla mv-eco-2a5.
