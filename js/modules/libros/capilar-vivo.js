@@ -14,13 +14,14 @@
 // explicación guiada (core/explicacion-guiada.js, «Explícame este estado») y cada cita lleva a su sitio de la ficha
 // (core/citas.js).
 import { cargarMotion } from '../../core/motion.js';
+import { verFrase } from '../../core/frase-vista.js';
 import { crearTope } from '../../core/tope.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { crearMayeuticaModelo, entrar, pintarDock as pintarDockComun } from '../../core/mayeutica-motor.js';
 import { enlacesFuente, origenEnlazado, enlazarOrigenes as enlazarCitas, citaExacta } from '../../core/citas.js';
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import {
-    ESTADOS, ESTADOS_CHIPS, GRUPOS_CHIPS, CONCEPTOS, PREGUNTAS, CASOS, GUIAS, TUBOS, HB_POR_CH, estadoBase, estadoDe, estadoFinal, hbDeHto,
+    ESTADOS, ESTADOS_CHIPS, CARMEN, CARMEN_UMBRAL, CARMEN_TACO, CARMEN_TACO_CONSTANTES, GRUPOS_CHIPS, CONCEPTOS, PREGUNTAS, CASOS, GUIAS, TUBOS, HB_POR_CH, estadoBase, estadoDe, estadoFinal, hbDeHto,
     gastoDe, derivar, copia, clamp, dec, mil, pruebasCapilar,
 } from '../../data/capilar-vivo-data.js';
 import {
@@ -167,13 +168,57 @@ function sincronizarMandos() {
 // Mover la Hb, el gasto o el corazón deja atrás la bolsa y el tubo
 const soltar = e => { e.gcFijo = null; e.transf = null; e.dil = null; };
 
+/* ============================================================
+   Carmen: el tope clínico de «Transfundir 1 CH» (diseno-b, REGLAS §1.14)
+   Tope: Hb ≥7 g/dL en el crítico estable sin cardiopatía isquémica = fuera de indicación (merino-transfusion, p. 8, #mh-umbral-7).
+   1.ª bolsa: la Hb llega a 8,4 y sale el dato de las guías, sin consejo. 2.ª bolsa: sello TACO, mando apagado, constantes.
+   ============================================================ */
+let carmen = null;    // { bolsas } mientras el modelo es Carmen; null en cualquier otro caso
+const CITA_TACO = 'merino-riesgos#mh-taco', CITA_UMBRAL = 'merino-transfusion#mh-umbral-7';
+function salirDeCarmen() {
+    carmen = null;
+    if (tope) { tope.quitar('carmen-umbral'); tope.quitar('carmen-taco'); }
+    const n = document.getElementById('cpv-carmen-nota'); if (n) n.hidden = true;
+}
+function transfundirCarmen() {
+    if (carmen.bolsas >= 2) return;
+    const n = ++carmen.bolsas;
+    // las dos bolsas pasan el tope (Hb ≥7): son las dos «sin indicación»
+    transfundir(Math.min(17, estado.hb + HB_POR_CH), { alAcabar: n === 1 ? avisoCarmen : selloCarmen });
+}
+function avisoCarmen() {
+    tope.poner('carmen-umbral', { nivel: 'aviso', titulo: '', texto: `Hb ${dec(estado.hb, 1)} · umbrales de las guías: 7 y 8 g/dL (p. 8)`, cita: CITA_UMBRAL, origen: 'ficha · p. 8' });
+}
+function selloCarmen() {
+    tope.quitar('carmen-umbral');
+    aplicar(Object.assign(copia(estado), CARMEN_TACO, { transf: null }), { frase: false });
+    claveActual = null;
+    decir('La transfusión que no hacía falta le ha llenado el pulmón de agua.', 'ficha · merino-riesgos#mh-taco · p. 15-16 · PaO₂ 55: ilustrativa', true);
+    Lupa.abrir('alveolo');
+    tope.poner('carmen-taco', { nivel: 'sello', titulo: 'TACO', texto: 'Sin indicación: edema pulmonar en 6 h', cita: CITA_TACO, origen: 'ficha · p. 8 y 15-16', deshabilita: ['#cpv-m-transf'] });
+    let n = document.getElementById('cpv-carmen-nota');
+    if (!n) { n = document.createElement('div'); n.id = 'cpv-carmen-nota'; n.className = 'cpv-carmen-nota'; $('lamina-caja').after(n); }
+    n.hidden = false;
+    n.innerHTML = `<p class="cpv-carmen-cts" role="status">${CARMEN_TACO_CONSTANTES.map(([k, v]) => `<b>${k} ${v}</b>`).join(' · ')} <span class="cpv-org cpv-ilu">fisiología general · ilustrativas</span></p>`
+        + '<p class="cpv-carmen-honesta">El libro no dice que dos bolsas den más TACO que una (p. 15). Lo que el sello castiga es transfundir sin indicación (Hb ≥7, p. 8) a una paciente con insuficiencia cardíaca (p. 15).</p>';
+    setTimeout(() => verFrase(n, { dock: $('dock'), techo: 8 }), 450);   // tras abrirse la lupa
+}
+// Abre el modelo como Carmen (lo usa el caso de Carmen; también sirve de punto de entrada para la prueba)
+export function ponerCarmen() {
+    ponerEnEstado('normal');
+    carmen = { bolsas: 0 };
+    aplicar(estadoDe(CARMEN), { frase: false });
+    decir('Carmen, Hb 7,4 g/dL: el corazón compensa la anemia.', 'ilustrativo', true);
+    pestana('sangre');
+}
+
 // «Transfundir 1 CH»: la Hb sube en unas «2 h» (2 s en pantalla) con el gasto quieto (Fig. 12.4, decisión del usuario)
 let goteando = false, transfusionN = 0;
 function transfundir(hasta, op = {}) {
     const e0 = copia(estado), de = e0.hb, gc = gastoDe(e0), a = Math.min(17, hasta);
     if (a <= de) return;
     const n = ++transfusionN;
-    const fin = () => { if (n !== transfusionN) return; goteando = false; ponerGoteo(false); aplicar(Object.assign(copia(e0), { hb: a, gcFijo: gc, transf: { de, a }, dil: null }), op); };
+    const fin = () => { if (n !== transfusionN) return; goteando = false; ponerGoteo(false); aplicar(Object.assign(copia(e0), { hb: a, gcFijo: gc, transf: { de, a }, dil: null }), op); if (op.alAcabar) op.alAcabar(); };
     if (REDUCIR) { fin(); return; }
     goteando = true; ponerGoteo(true);
     const t0 = performance.now(), dur = 2000;
@@ -189,12 +234,12 @@ const pararTransfusion = () => { if (goteando) { transfusionN++; goteando = fals
 
 function engancharDock() {
     enRaiz('.cpv-dock-tabs button').forEach(b => b.addEventListener('click', () => pestana(b.dataset.cpvTab)));
-    const suelto = fn => { pararTransfusion(); cambiar(fn); };
+    const suelto = fn => { pararTransfusion(); salirDeCarmen(); cambiar(fn); };
     $('m-hb').addEventListener('input', ev => suelto(e => { soltar(e); e.hb = +ev.target.value; }));
     $('m-pao2').addEventListener('input', ev => cambiar(e => { e.pao2 = +ev.target.value; }));
     $('m-gc').addEventListener('input', ev => suelto(e => { e.gcFijo = null; e.transf = null; e.gc = +ev.target.value; }));
     $('m-co').addEventListener('click', () => cambiar(e => { e.co = !e.co; }));
-    $('m-transf').addEventListener('click', () => { if (!goteando) transfundir(Math.min(17, estado.hb + HB_POR_CH)); });
+    $('m-transf').addEventListener('click', () => { if (goteando) return; if (carmen) transfundirCarmen(); else transfundir(Math.min(17, estado.hb + HB_POR_CH)); });
     // el tubo (Fig. 12.1): tumbarse y el bolo cambian el Hto sin cambiar la masa; la Hb del tablero es Hto / 3
     const tubo = (dil, otro) => { suelto(e => { soltar(e); e.dil = estado.dil === dil ? otro : dil; e.hb = hbDeHto(TUBOS[e.dil][1] ?? TUBOS[e.dil][0]); }); if (Lupa.abierta !== 'tubo') Lupa.abrir('tubo'); };
     $('m-tumbar').addEventListener('click', () => tubo('tumbado', 'pie'));
@@ -461,7 +506,7 @@ const Mayeutica = crearMayeuticaModelo({
 function ponerEnEstado(clave) {
     const k = ESTADOS[clave] ? clave : 'normal', s = ESTADOS[k];
     medir();
-    pararTransfusion();
+    pararTransfusion(); salirDeCarmen();
     aplicar(estadoBase(), { frase: false });
     fraseActual = '';
     claveActual = k;
@@ -539,6 +584,7 @@ export function init() {
     document.addEventListener('visibilitychange', () => { if (!document.hidden) arrancar(); });
 
     // Para las pruebas (Playwright): las cifras de cada estado frente a cobertura §6.1 y el estado del bucle.
+    window.__cpvPonerCarmen = ponerCarmen;
     window.__cpvPruebas = () => {
         const r = pruebasCapilar();
         const celdas = Object.fromEntries(CELDAS.map(c => [c.k, $('c-' + c.k).querySelector('b').textContent]));
