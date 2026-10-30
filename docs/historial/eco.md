@@ -252,6 +252,7 @@ sección recoge solo las decisiones. Donde abajo dice `lab/circulacion/`, léase
   - 30/10/2026: ya son 10 de 30 en la app; el 15 Estenosis aórtica entra solo con texto (fase A, sin figura ni preguntas).
   - 30/10/2026: ya son 12 de 30; entran también solo con texto el 19 Insuficiencia tricuspídea y el 21 Enfermedad pericárdica.
   - 30/10/2026: ya son 13 de 30; entra también solo con texto el 17 Estenosis mitral.
+  - 30/10/2026: ya son 14 de 30; entra también solo con texto el 11 Contractilidad segmentaria (los 17 segmentos, el índice y los territorios coronarios).
   - El texto se traduce, con permiso del autor, y la bibliografía es la suya (`atlas/referencias.js`). **El código no
     se copia**: cada figura se reconstruye sobre los motores de la app.
   - Hay **una sola fisiología**: el ciclo y el asa salen del motor del latido del simulador. Donde el texto y el motor

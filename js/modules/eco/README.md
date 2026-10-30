@@ -920,3 +920,4 @@ Tablas de Guyton regeneradas.
 - Atlas, capítulo 21 (enfermedad pericárdica): fase A, solo texto traducido (`atlas/cap-peri.html`), sin figura todavía.
 - Atlas, capítulo 19 (insuficiencia tricuspídea): fase A, solo texto traducido (`atlas/cap-tr.html`), sin figura todavía.
 - Atlas, capítulo 17 (estenosis mitral): fase A, solo texto traducido (`atlas/cap-ms.html`), sin figura todavía.
+- Atlas, capítulo 11 (contractilidad segmentaria): fase A, solo texto traducido (`atlas/cap-segments.html`), sin figura todavía.
