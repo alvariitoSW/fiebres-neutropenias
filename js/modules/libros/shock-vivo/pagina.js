@@ -469,16 +469,17 @@ function aplicarTopes(forzar) {
 function medirDock() { dock.medir(); }
 // La figura sigue a la vista al tocar un mando (REGLAS §4.8 R1): si menos de la mitad de la escena se ve sobre el dock, se
 // sube o se baja la página lo justo para verla entera.
-function verEscena(forzar) {
+function verEscena(forzar, enseguida) {   // enseguida: sin esperar dos cuadros (tras un cálculo largo, el cuadro tarda y la imagen aún no se ve)
   if (guia && !forzar) return;
   if (est.modo !== 'explorar') return;
-  requestAnimationFrame(() => requestAnimationFrame(() => {
+  const ir = enseguida ? (f) => f() : (f) => requestAnimationFrame(() => requestAnimationFrame(f));
+  ir(() => {
     const e = $('escena'), r = e.getBoundingClientRect(), tope = $('dock').getBoundingClientRect().top;
     if (!r.height || raiz.getClientRects().length === 0) return;
     const ve = Math.max(0, Math.min(r.bottom, tope) - Math.max(r.top, 0)) / r.height;
     if (ve >= 0.6) return;
     scrollBy({ top: r.top < 0 ? r.top - 8 : r.bottom - tope + 8, behavior: 'instant' });
-  }));
+  });
 }
 $('dock').addEventListener('click', () => verEscena());
 $('pacientes').addEventListener('click', () => verEscena());
@@ -493,11 +494,19 @@ function pintarPacientes() {
 $('pacientes').addEventListener('click', (ev) => {
   const b = ev.target.closest('[data-pac]'); if (!b) return;
   const p = D.PACIENTES.find((x) => x.k === b.dataset.pac);
-  if (guia) cerrarGuia();   // la explicación era del paciente anterior: se cierra y la figura vuelve a la vista
-  est.vista = 'paciente'; est.aparato = 'no';
-  nuevoPaciente(p); if (p.tipo === 'diseccion') est.pest = 'far'; pintarPacientes(); refrescar(true); pintarDock(); pintarMandos();
-  verEscena(true);
+  // Asentar al paciente nuevo son ~1,5 s de motor: el toque responde al instante (marca el botón) y el cálculo corre después,
+  // para que el hilo no quede ocupado dentro del propio toque (en el móvil el botón parecía colgado)
+  $('pacientes').querySelectorAll('[data-pac]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  const mio = ++cambioPac;
+  setTimeout(() => {
+    if (mio !== cambioPac) return;   // otro toque más reciente: manda ese
+    if (guia) cerrarGuia();   // la explicación era del paciente anterior: se cierra y la figura vuelve a la vista
+    est.vista = 'paciente'; est.aparato = 'no';
+    nuevoPaciente(p); if (p.tipo === 'diseccion') est.pest = 'far'; pintarPacientes(); refrescar(true); pintarDock(); pintarMandos();
+    verEscena(true, true);
+  }, 0);
 });
+let cambioPac = 0;
 
 // ---------------------------------------------------------------- explicación guiada
 let guia = null, gi = 0;
