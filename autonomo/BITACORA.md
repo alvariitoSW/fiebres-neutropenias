@@ -351,8 +351,8 @@ El resto del tablero sigue `aparcada`.
   sí o no, y si se cambia por cuál». Acta `autonomo/consejo/2026-10-30-8.md`. **Esperando tu sí o no**: (1) texto nuevo
   de `CLAUDE.md` §7.9 y REGLAS §1.6 (el código ajeno no entra en la app; con permiso escrito, copia congelada en
   `autonomo/ajenos/` solo para leer y comparar; cada permiso lo valida el Consejo; copiar dentro de la app, solo por tu
-  decisión expresa); (2) Ventriculus: B + A, no C; (3) el permiso escrito del autor en `docs/` (5 puntos en el acta) y
-  si se prepara el borrador del mensaje.
+  decisión expresa); (2) Ventriculus: B + A, no C; (3) **30/10, cambia**: el permiso vale de palabra (teléfono); basta tu
+  nota en `docs/` con quién, cuándo, medio y qué cubre (5 puntos del acta). Falta tu sí al texto ya corregido.
 Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
 en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
