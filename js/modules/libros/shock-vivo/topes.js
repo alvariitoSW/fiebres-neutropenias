@@ -15,9 +15,9 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
   // 1) volumen: PCP ≥ 20, o PVC > 12 habiendo subido ≥ 4 sobre la de entrada (aviso desde PCP 15 o PVC 11)
   const porPcp = R.pcp >= T.pcpAviso, ed = R.edema > 50 ? ` Edema en el pulmón: ${mL(R.edema)} mL (SpO₂ ${R.spo2} %).` : '';
   // el papilar y el septo llegan con la PCP en 20-30 sin volumen: es su cuadro; el sello llega con el primer bolo
-  const llegaAlta = (tipo === 'papilar' || tipo === 'septo') && dado === 0;
+  const llegaAlta = (tipo === 'papilar' || tipo === 'septo' || tipo === 'ic') && dado === 0;
   if (D.sobrecarga(R) && llegaAlta) {
-    out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
+    out.sobrecarga = { nivel: 'aviso', titulo: `PCP ${R.pcp}: sin volumen`, texto: `Llega con la PCP en ${R.pcp} sin haber dado volumen (${tipo === 'papilar' ? 'la sangre que vuelve a la aurícula' : tipo === 'ic' ? 'el VI que falla y no vacía la aurícula' : 'el cortocircuito que inunda el pulmón'}): la ficha para el volumen en 18-20; no des más.${ed}`,
       cita: C.llenado, origen: 'ficha · p. 42 · la PCP de este paciente: modelo', bajo: '#shv-dock-panel .rejilla' };
   } else if (D.sobrecarga(R) && X.ajuste.soporte === 'ecmo' && !boloNuevo && R.pcp >= T.pcp) {
     // con el ECMO y sin volumen nuevo, la PCP sube por la poscarga del VI, no por el suero
