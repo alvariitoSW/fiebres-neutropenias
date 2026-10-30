@@ -262,6 +262,7 @@ esta sección.
   `eco-3d-lectura` (≈3 M, carril 2, tras `mv-eco-2a5`; tablero, tarea 15).
 
 ### B-050 · La gran reforma: terminar la app · apuntado 2026-10-30
+- **30/10: aprobada como «plan de 2 semanas»** (actas 13.ª y 14.ª): meta 13/11, sin techos de dinero (límite semanal), Educación elige maquetas, bloques solapados, recortes de Hacienda; 6a y 6b siempre con su modelo vivo (desempate a favor de Educación). Queda pendiente solo el trozo (7) (ACOD y lazos P-V). La fase B del atlas entra si cabe, la semana siguiente.
 - **Lo que dijiste**: «un plan general de la gran reforma para terminar la aplicación ya, de modo que solo queden El
   Libro Azul y cuatro cosas menores. Decid qué falta para llegar ahí y en qué fecha».
 - **Cómo lo entiendo**: tipo `plan`, hecho por el Consejo 12.ª (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP,
@@ -367,6 +368,8 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+**Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
 1. **Semiología**: abrir `www.ncbi.nlm.nih.gov` en la red del entorno (StatPearls y Walker, gratis; recomendado) o subir

@@ -34,6 +34,11 @@ export const CAPITULOS = {
   stress: { html: 'cap-stress.html', sub: 'Dobutamina en cuatro pantallas: isquemia, cicatriz y viabilidad' },
   strain: { html: 'cap-strain.html', sub: 'Strain longitudinal global por speckle tracking; patrones y cardio-oncología' },
   hcm: { html: 'cap-hcm.html', sub: 'De normal a obstrucción en reposo; SAM, Valsalva y el chorro en daga' },
+  amyloid: { html: 'cap-amyloid.html', sub: 'Pared gruesa, signo 5-5-5, respeto apical y los criterios de la ESC 2021' },
+  aorta: { html: 'cap-aorta.html', sub: 'Medir la raíz, umbrales quirúrgicos, colgajo de disección y criterios de coartación' },
+  windows: { html: 'cap-windows.html', sub: 'Las cuatro ventanas, los movimientos de la sonda y qué se mide en cada vista' },
+  shunts: { html: 'cap-shunts.html', sub: 'CIA, CIV y FOP: Qp/Qs, cuándo cerrar, suero agitado y la presión de la AI por el septo' },
+  masses: { html: 'cap-masses.html', sub: 'Mixoma de la AI, trombo del VI y fibroelastoma: describir la masa, falsos positivos y el contraste' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
