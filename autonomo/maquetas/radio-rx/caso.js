@@ -51,10 +51,10 @@ export const LETRAS = [
 // Etiquetas y consecuencias de leer mal (lo que le pasaría al paciente). Pág. = página del PDF de Marino.
 const O = (rotulo, pasa) => ({ rotulo, pasa });
 const TUBO = {
-  no: O('Sin tubo', 'no mirarías la punta del tubo: un tubo alto se sale al mover el cuello (Marino cap. 28, pág. 18)'),
+  no: O('Sin tubo', 'no mirarías la punta del tubo, que se mueve unos 2 cm al flexionar o extender el cuello: un tubo alto puede salirse (Marino cap. 28, pág. 18)'),
   bien: O('Tubo a 3-5 cm de la carina', 'dejarías sin corregir un tubo alto o en el bronquio derecho; con éste último el pulmón izquierdo sigue sin aire (Marino cap. 28, págs. 18-19)'),
   alto: O('Tubo alto, lejos de la carina', 'moverías un tubo que está bien puesto, con riesgo de sacarlo del todo'),
-  selectivo: O('Tubo en el bronquio derecho', 'retirarías de más un tubo que está bien: quedaría alto y se saldría al mover el cuello (Marino cap. 28, pág. 18)'),
+  selectivo: O('Tubo en el bronquio derecho', 'retirarías de más un tubo que está bien: quedaría alto, y su punta se mueve unos 2 cm al flexionar o extender el cuello (Marino cap. 28, pág. 18)'),
 };
 const PLEURA = {
   tension: O('Neumotórax a tensión', 'descomprimirías de urgencia un tórax sin tensión, con el riesgo de una punción sin necesidad (Marino cap. 28, pág. 29)'),
@@ -73,20 +73,26 @@ const VIA = {
   yugular: O('Punta subida a la yugular', 'recolocarías una vía que ya baja a la cava (Marino cap. 2, pág. 37)'),
 };
 const MED = {
-  central: O('Mediastino en el centro', 'no buscarías el motivo del desvío: tensión, colapso o derrame grande'),
-  der: O('Mediastino desviado a la derecha del paciente', 'buscarías el problema en el lado equivocado'),
-  izq: O('Mediastino desviado a la izquierda del paciente', 'buscarías el problema en el lado equivocado'),
+  central: O('Mediastino en el centro', 'no buscarías el motivo de un desvío: al lado contrario, tensión o derrame grande; hacia el lado, atelectasia (Marino cap. 28, pág. 28)'),
+  der: O('Mediastino desviado a la derecha del paciente', 'buscarías el problema en el lado equivocado: un desvío contrario es tensión o derrame grande, uno hacia el lado es atelectasia (Marino cap. 28, pág. 28)'),
+  izq: O('Mediastino desviado a la izquierda del paciente', 'buscarías el problema en el lado equivocado: un desvío contrario es tensión o derrame grande, uno hacia el lado es atelectasia (Marino cap. 28, pág. 28)'),
   ancho: O('Mediastino ensanchado', 'sospecharías una perforación o una masa en un mediastino normal (Marino cap. 3, pág. 45)'),
 };
+const CUP = {
+  normal: O('Cúpulas en su sitio', 'no buscarías la causa de un diafragma alterado: tensión, atelectasia o derrame'),
+  deprimida: O('Cúpula izquierda deprimida', 'tomarías por colapso o derrame un tórax a tensión, que empuja el diafragma hacia abajo (Marino cap. 28, pág. 28)'),
+  elevada: O('Cúpula izquierda elevada', 'descomprimirías como tensión una atelectasia, que tira del diafragma hacia arriba (StatPearls Lung Imaging, NBK558976)'),
+  borrada: O('Cúpula derecha borrada', 'no verías el derrame que borra el contorno del diafragma (StatPearls Lung Imaging, NBK558976)'),
+};
 const SNG = {
-  no: O('Sin sonda', 'no verías una sonda mal puesta antes de nutrir (Marino cap. 49, pág. 29)'),
-  bien: O('Sonda recta, con la punta bajo la cúpula izquierda', 'empezarías la nutrición por una sonda que está en el pulmón (Marino cap. 49, pág. 29)'),
+  no: O('Sin sonda', 'no verías una sonda mal puesta: la placa es obligatoria antes de nutrir (Marino cap. 49, pág. 27)'),
+  bien: O('Sonda recta, con la punta bajo la cúpula izquierda', 'empezarías la nutrición por una sonda que está en el pulmón, sin placa que lo confirme: es obligatoria antes de nutrir (Marino cap. 49, pág. 27)'),
   bronquio: O('Sonda desviada a la derecha en la carina', 'retirarías una sonda que está bien puesta'),
 };
 const POSTURA = {
-  erguido: O('Sentado', 'buscarías el neumotórax delante de las bases y el derrame sin menisco: leerías al revés (Marino cap. 2, pág. 34)'),
-  supino: O('Tumbado', 'buscarías el aire en el vértice y el menisco del líquido; en tumbado no están (Marino cap. 2, pág. 34)'),
-  lateral: O('De lado (decúbito lateral)', 'esperarías el líquido en la pared, como en la placa de lado (Marino cap. 29, pág. 46)'),
+  erguido: O('Sentado', 'buscarías el neumotórax delante de las bases, como en una placa tumbado, y leerías al revés el aire y el líquido (fisiología general)'),
+  supino: O('Tumbado', 'buscarías el aire en el vértice; tumbado se junta por delante, cerca de la base, y se te escapa (Marino cap. 2, pág. 34)'),
+  lateral: O('De lado (decúbito lateral)', 'esperarías el líquido en la pared, como en una placa de lado: de lado no es lo mismo que sentado o tumbado (fisiología general)'),
 };
 
 const HERMANAS = { tension: ['ntx', 'derrame'], ntx: ['tension', 'derrame'], derrame: ['consol', 'atel'], edema: ['sdra', 'derrame'], sdra: ['edema', 'consol'],
@@ -115,14 +121,17 @@ export function preguntas(p, rnd = Math.random) {
   const cand = [...HERMANAS[lb].filter(x => !ids.includes(x)), ...Object.keys(PLEURA).filter(x => x !== lb && !ids.includes(x) && !HERMANAS[lb].includes(x))];
   const resto = pres.slice(1).map(x => PLEURA[x[0]].rotulo);
   q.push(armar('B', '¿Qué es lo principal en el pulmón y la pleura?', PLEURA, lb, [lb, ...cand.slice(0, 3)], fb, resto.length ? `También hay: ${resto.join(', ')}.` : null));
-  // C
-  if (e.via !== 'no') q.push(armar('C', '¿Dónde acaba la punta de la vía central?', VIA, e.via, Object.keys(VIA), 'via'));
-  else {
-    const mc = d.desvio < -8 ? 'der' : d.desvio > 4 ? 'izq' : 'central';
-    const fc = mc === 'der' ? 'ntx' : mc === 'izq' ? (e.atel !== 'no' ? 'atel' : 'derrame') : 'atel';
-    q.push(armar('C', '¿Dónde está el mediastino?', MED, mc, Object.keys(MED), fc));
-  }
+  // C: el mediastino siempre; C2 la vía si hay
+  const mc = d.desvio < -8 ? 'der' : d.desvio > 4 ? 'izq' : 'central';
+  const fc = mc === 'der' ? 'ntx' : mc === 'izq' ? (e.atel !== 'no' ? 'atel' : 'derrame') : 'atel';
+  q.push(armar('C', '¿Dónde está el mediastino?', MED, mc, ['central', 'der', 'izq'], fc));
+  if (e.via !== 'no') q.push(armar('C2', '¿Dónde acaba la punta de la vía central?', VIA, e.via, Object.keys(VIA), 'via'));
   q.push(armar('D', '¿Qué ves en la sonda?', SNG, e.sng, Object.keys(SNG), 'sng'));
+  // D2: las cúpulas
+  const dc = d.cupulaIzq > 10 ? 'deprimida' : d.cupulaIzq < 0 ? 'elevada' : e.derrame !== 'no' ? 'borrada' : 'normal';
+  const fd = { deprimida: 'ntx', elevada: 'atel', borrada: 'derrame', normal: 'patron' }[dc];
+  const dobles = dc === 'elevada' && e.derrame !== 'no';
+  q.push(armar('D2', '¿Cómo están las cúpulas del diafragma?', CUP, dc, dobles ? ['normal', 'deprimida', 'elevada'] : Object.keys(CUP), fd, dobles ? 'También la derecha está borrada por el derrame.' : null));
   q.push(armar('E', '¿En qué postura se hizo la placa?', POSTURA, e.postura, Object.keys(POSTURA), 'postura'));
   return q;
 }
@@ -131,7 +140,7 @@ export function preguntas(p, rnd = Math.random) {
 export function informe(qs, rnd = Math.random) {
   const r = rnd(), nErr = r < 0.25 ? 0 : r < 0.65 ? 1 : 2;
   const malas = new Set(baraja(rnd, qs.map((_, i) => i)).slice(0, nErr));
-  const pref = { A: 'Vía aérea', B: 'Pulmón y pleura', C: 'Vía y mediastino', D: 'Sonda', E: 'Postura' };
+  const pref = { A: 'Vía aérea', B: 'Pulmón y pleura', C: 'Mediastino', C2: 'Vía central', D: 'Sonda', D2: 'Cúpulas', E: 'Postura' };
   return qs.map((x, i) => {
     const falsa = malas.has(i);
     const otro = falsa ? x.opciones.filter(o => o.id !== x.correcta)[Math.floor(rnd() * (x.opciones.length - 1))] : null;
