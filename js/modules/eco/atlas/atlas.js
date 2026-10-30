@@ -33,6 +33,7 @@ export const CAPITULOS = {
   ms: { html: 'cap-ms.html', sub: 'Reumática de leve a grave: planimetría, tiempo de hemipresión y gradiente con la frecuencia' },
   stress: { html: 'cap-stress.html', sub: 'Dobutamina en cuatro pantallas: isquemia, cicatriz y viabilidad' },
   strain: { html: 'cap-strain.html', sub: 'Strain longitudinal global por speckle tracking; patrones y cardio-oncología' },
+  hcm: { html: 'cap-hcm.html', sub: 'De normal a obstrucción en reposo; SAM, Valsalva y el chorro en daga' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
