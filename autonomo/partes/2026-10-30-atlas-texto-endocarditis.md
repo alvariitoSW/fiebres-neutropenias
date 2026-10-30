@@ -28,3 +28,5 @@ Presupuesto 0,45 M (tope 0,6 M). Auditor sonnet ≈0,05 M (4 herramientas); dire
 
 ## Siguiente: encargo de `prosthetic` (para la sesión nueva)
 `/plan-socialista atlas-texto` — Capítulo siguiente: `prosthetic`, misma receta que `masses`, `mi` y `endocarditis`. Rama `auto/atlas-texto-prosthetic` desde `origin/main` (con `endocarditis` ya fusionado); prosa en `index.html` (`<article id="ch-prosthetic">`), grados en `src/ch/prosthetic.js`. Cierre automático igual («ya son 26 de 30»); después, `lvad`.
+
+**No se abrió la sesión siguiente:** la cadena de sesiones llegó al límite de 8 encadenadas; la abre el usuario.
