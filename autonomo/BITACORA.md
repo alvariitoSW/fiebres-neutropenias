@@ -154,6 +154,7 @@ esta sección.
   3. ¿Empiezo por Cardiología por la fecha de la rotación? (supongo: sí).
 
 ### B-006 · Atlas de eco: los 20 capítulos que faltan · apuntado 2026-10-14
+- **30/10: fase A aprobada** (texto, `atlas-texto`). Aquí queda solo la fase B (figura y estudio con el ecógrafo nuevo).
 - **Lo que dijiste**: (aprobado antes como Objetivo 1; con el método nuevo, lo vuelvo a poner a tu visto bueno).
 - **Cómo lo entiendo**: tipo `visual`, las dos fases por capítulo: traducción completa y auditada; después, estudio
   con el ecógrafo y el motor, y preguntas nuevas. Lista y «hecho» en el tablero (Objetivo 1).
@@ -229,72 +230,20 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-041 · Raíz aórtica en la eco · apuntado 2026-10-29
-- **De dónde sale**: Consejo de Ministros del 29/10 (2.ª reunión, acta `autonomo/consejo/2026-10-29-2.md`), sobre el
-  informe del visor de la raíz aórtica (`autonomo/ideas/ingenieria-inversa/raiz-aortica.md`, cerrado).
-- **Cómo lo entiendo**: tipo `contenido`. Ficha de la raíz aórtica (anillo, senos, unión sinotubular, ascendente) con la
-  Tabla 14 de Lang 2015 (`docs/lang-2015-cuantificacion-camaras-ase.pdf`, pdf 32) y una calculadora de z simple
-  ((medido − media) / DE, por sexo) con el aviso de que el corte z = 2 puede caer dentro del error de medida. Pregunta
-  de guardia: «aorta de 4,5 cm en un Marfan con dolor torácico: ¿qué no esperas a medir?».
-- **Lo que NO quiero**: 3D, PDF, guardar datos, lector de informes; umbrales quirúrgicos sin su guía abierta.
-- **Depende de**: `eco-reforma` (Ley de Ciencia art. 1). Los umbrales, de la ESC 2024 y la ACC/AHA 2022 de aorta (no
-  están en `docs/`); la z ajustada por edad y SC, de Devereux 2012 (sin cotejar).
-- **Tamaño**: pequeña (0,8-1,2 M solo con Lang; ≈3-4 M más con las guías).
-- **Dudas**: ¿la quieres, y en la eco o en Cardiología?
-
-### B-044 · Terminar Marino ya · apuntado 2026-10-30
-- **Lo que dijiste**: «Tres planes de "terminar ya": terminar Marino…».
-- **Cómo lo entiendo**: tipo `plan` sobre B-035 (mismo techo, 400 M). Llevamos 50 de 155 fichas; quedan ≈206-307 M y el
-  fin previsto es entre el 22/11 y el 05/12. El freno es la cola, no el dinero: el `b3` no llega a `main` hasta acabar
-  también el pulmón, y mientras esperan Educación, la eco y el `b4`. Trozos (Consejo, 30/10, 7.ª):
-  1. grupo 6 (TEP, 5,9 M), `shock-scai` y `b3-bradi`;
-  2. **la parte del corazón del `b3` a tu parada 3 y a `main`** (26 fichas), sin esperar al pulmón;
-  3. el pulmón con respirador como bloque propio (`b3d`: `b3-pulmon-app` + `b3-pulmon-estudio`, su PR);
-  4. cobertura del `b4` ya, como informe sin código (≈1 M), y sus piezas de Mg, Ca y P en su rama en paralelo con el
-     `b3d`, si no comparten archivos;
-  5. `b4` → `b5` → `b6a` → `b6b`, como estaban.
-- **Lo que NO quiero** (supongo): bajar la nota (8,75), saltarse jueces o paradas, ni empezar el `b4` en la app antes
-  de que apruebes el `b3`.
-- **Depende de**: tus paradas (la 3 del `b3`, sobre todo).
-- **Tamaño**: grande (ya troceado arriba).
-- **Dudas**:
-  1. ¿Partimos el `b3` en dos PR (corazón ya, pulmón después)?
-  2. ¿Dos sesiones de Marino a la vez mientras dure la vía libre?
-  3. ¿Subes la horquilla de `b3-pulmon-app` a ≈12-18 M (pendiente desde el 29/10)?
-- **Lista de calidad**: fuentes, las de cada bloque · juez: `--ficha` y `--modelo` de cada bloque, profesor ≥8,75.
-
-### B-045 · El motor de la eco ya (`mv-eco`) · apuntado 2026-10-30
-- **Lo que dijiste**: «…el motor de la eco (mv-eco)…».
-- **Cómo lo entiendo**: la opción A que elegiste (20-26 M, sin three.js; `autonomo/maquetas/eco-reforma/plan.md`),
-  adelantada. **Paso 1 ya** (≈4 M): `contrato.mjs` y la prueba «contrato = motor de hoy», en `auto/mv-eco` desde
-  `main`; es un archivo nuevo que solo lee el motor. **Pasos 2-5** (≈16-22 M) cuando el corazón del `b3` esté en
-  `main` (con B-044, la semana que viene).
-- **Hecho**: E/e′ del TEP posible; VD/VI > 1,0 en la HP crónica grave; J1 y J2 en verde en las 9 formas; las 505
-  pruebas de la eco y la del shock en verde; el dibujo de hoy sigue hasta que el nuevo pase.
-- **Lo que NO quiero**: three.js; dejar el shock vivo o el atlas sin corazón ni un día.
-- **Depende de**: el paso 1, de nada; el resto, del `b3` en `main`.
-- **Tamaño**: grande (5 pasos del plan).
-- **Dudas**: ¿empiezo el paso 1 ya? (supongo: sí).
-- **Lista de calidad**: topes de cada forma con su página (Lang 2015, ESC/ERS 2022 de HP, Nagueh 2025) · juez: J1,
-  J2, `node --test 'js/modules/eco/pruebas/*.test.mjs'` y `--modelo` del shock.
-
-### B-046 · La ingeniería inversa de todas las webs · apuntado 2026-10-30
-- **Lo que dijiste**: «…y la ingeniería inversa de todas las webs que me has pasado».
-- **Cómo lo entiendo**: tipo `informe`, carril 2, sin tocar la app. Ya hay 27 informes (Ley de Ciencia) más Atlas of
-  Physics, raíz aórtica, Pridgen y pulmonarypocus. Faltan (mesa del 29/10): 8 tuits, CardioTeca (calculadora de
-  ACOD), Easy LA Segmentator, tus repos `simulador-UCI-` y `simulador-uci-3d`, y PhET (para Educación). Una sesión
-  «rea-final» con lectores baratos en paralelo (≈3-4 M). Termina con **una página «Todo lo estudiado»**: cada recurso
-  con su destino (tarea · aparcado hasta X · descartado porque Y). Absorbe `mesa-destinos` de la reforma.
-- **Probado el 30/10**: abren pulmonarypocus.com, cardioteca.com, x.com y phet.colorado.edu; siguen cerradas
-  cardiorender.com, litfl.com e intro2echo.com.
-- **Lo que NO quiero**: copiar código, textos ni imágenes; una segunda pasada de los 23 informes ya cerrados.
-- **Depende de**: nada.
-- **Tamaño**: mediana (una sesión).
-- **Dudas**:
-  1. Las 3 webs cerradas: ¿las abres o se descartan?
-  2. ¿Los repos son `alvariitoSW/simulador-UCI-` y `alvariitoSW/simulador-uci-3d`? (supongo: sí).
-- **Lista de calidad**: sin simulador · fuentes: cada web con su URL probada · sin juez automático: lo mira
-  Transportes al cerrar (ningún recurso sin destino).
+### B-047 · PDF por su cuenta y tuits del Radar dentro de la app · apuntado 2026-10-30
+- **Lo que dijiste**: «estaría bien que pudieras conseguir los PDF por tu cuenta y que la parte de radar metiera los
+  tuits que le voy pasando en la app, pero bueno, esto ahora es mínimo y no es prioritario».
+- **Cómo lo entiendo**: dos cosas pequeñas.
+  1. **PDF**: ya es regla (REGLAS §4.13: se buscan en abierto antes de pedirlos). Falta hacerlo de verdad con la
+     lista de «Esperando algo tuyo» (punto 5): una pasada que busque cada uno en Europe PMC, PMC y la web de la
+     sociedad, baje los que estén en abierto a `docs/` y te pida solo los de pago, con el enlace exacto (supongo).
+  2. **Tuits**: hoy la Bandeja (issue #27) los lee y los apunta en `autonomo/radar/`, pero no llegan a la app. La idea:
+     que cada tuit útil acabe en la ficha que toca, como «Visto en Twitter» con su enlace y lo que aporta (supongo),
+     nunca como fuente clínica (artículo 2 de la reforma).
+- **Lo que NO quiero**: copiar el texto o las imágenes del tuit; tuits sin destino.
+- **Tamaño**: pequeña cada una (≈1-2 M la de PDF; ≈1-2 M la de tuits).
+- **Depende de**: nada. **No es prioritario** (lo dijiste tú): espera a que digas cuándo.
+- **30/10, parte 2 aprobada** (`radar-tuits`): «me gustaría que los mirases, si tienen PDF que lo consigas, y lo integrases en la parte de UCI Papers […] no corre prisa». Queda aquí la parte 1 (los PDF de la lista).
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -317,6 +266,15 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
+| `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
+| `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | aprobado por ti el 30/10; ya | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
+| `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | **hecha el 30/10, en `main`** (con las 4 de Hacienda): REGLAS §4.15 y las demás | 2026-10-30 | ≈1,3 M, directo a `main` |
+| `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | aprobado por ti el 30/10 («la quiero en la eco») | 2026-10-30 | ≈0,8-1,2 M |
+| `marino-unido` | **B-048 · Todo Marino en Libros → Marino**: tarjetas de Cardiología (14-21) y Neumología (22-30) en el índice, y los modelos vivos por temas | aprobado por ti el 30/10 | 2026-10-30 | ≈0,8-1,5 M, tras el corazón del `b3` en `main` |
+| `atlas-texto` | **B-006, fase A**: el texto de los 20 capítulos del atlas de eco, uno por sesión; figuras y estudio, con el ecógrafo nuevo | aprobado por ti el 30/10 | 2026-10-30 | ≈20-30 M en el carril 2 |
+| `radar-tuits` | **B-047, parte 2**: los tuits que mandas, con su PDF, a UCI / Papers Tuiter | aprobado por ti el 30/10, sin prisa | 2026-10-30 | ≈1-2 M por tanda |
+| `wiggers-movil` | Arreglo de la Wiggers a 360 px | aprobado por el Consejo el 30/10 (7.ª) | 2026-10-30 | ≈0,3 M |
 | `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` **pasa al 31/10** (el 30/10 el día ya iba en ≈34 M: no se empezó), el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | 30/10: aprobadas A, B y C; elegimos la mezcla C+B primero y A después. A la app: `educacion-app` |
 | `b3-pulmon-*`, `b3-cierre`, `b4`, `b5`, `b6a`, `b6b` | **B-035 · Plan Marino 100 %** (42 de 155 fichas con Estudiar el 28/10) | aprobado el 28/10: objetivo ≈212-328 M, **techo 400 M**, Hacienda en cada tarea | 2026-10-28 | Fin previsto entre el 22/11 y el 05/12. Objetivo M5, filas 9-16 |
@@ -376,19 +334,12 @@ El resto del tablero sigue `aparcada`.
 Limpiado por el Consejo del 30/10 (7.ª, acta `autonomo/consejo/2026-10-30-7.md`): lo ya decidido está copiado entero
 en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 
-1. **Los tres planes de «terminar ya»** (B-044 Marino, B-045 `mv-eco`, B-046 webs): sí, no o con cambios. Están arriba,
-   en «Apuntado», con sus dudas.
-2. **La reforma (29/10)**: el Consejo recomienda sí a los artículos 2, 3a, 5, 6, 8, 10 y 12; no por ahora al 3b y al
-   11; aplazado el 7; decaen el 1, el 4, el 9 y el techo de gasto. Basta con «sí a lo que dice el Consejo» (≈0,9 M,
-   tarea `reglas-reforma`).
-3. **Parada 3 del `b3`** (mirarlo en el móvil antes de `main`), cuando termine el grupo 6. Si apruebas B-044, solo la
-   parte del corazón.
-4. **B-041 · raíz aórtica**: ¿la quieres, y en la eco o en Cardiología? Y la horquilla de `b3-pulmon-app` a ≈12-18 M
-   (entra en B-044).
+1. ✅ **B-044, B-045 y B-046**: aprobadas el 30/10 (ver «En marcha»).
+2. ✅ **La reforma**: «sí a lo que dice el Consejo» (30/10), tarea `reglas-reforma`.
+3. ✅ **Parada 3 del `b3`**: «apruebo todo el bloque 3» (30/10). Entra en `main` al terminar el grupo 6, `shock-scai` y `b3-bradi`.
+4. ✅ **B-041**: en la eco (30/10), tarea `raiz-aortica`.
 5. **Opcional, sin prisa**:
    - la prueba de 3 días con el caso de Teresa (`autonomo/ideas/educacion-pionera/prueba-3-dias.md`);
-   - abrir en la red del entorno cardiorender.com, litfl.com e intro2echo.com, o descartarlas (siguen cerradas; las
-     demás webs del plan de B-046 ya abren, probado el 30/10);
    - PDF que mejorarían fichas (se buscan antes en abierto, REGLAS §4.13): DanGer Shock 2024, ESC 2024 y ACC/AHA 2022
      de aorta, Devereux 2012, Hickling 2001, Mireles-Cabodevila 2022, Carden 2026, AHA 2020/ERC 2021, SCAI 2015,
      Valdenebro 2021, Leung y Levine 1994, un libro de física de los ultrasonidos (B-028) y el capítulo
@@ -514,6 +465,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **✅ 30/10 (noche): aprobadas las 4 de Hacienda que quedaban** («quedan todas aprobadas») → `reglas-reforma`.
+
 - **Ahorro · Tareas técnicas del director: presupuesto con su pasada de jueces y una ruta de apertura** (propuesto 2026-10-30 por /ahorro) · Visto en: `reglas-30-10` (0,79 M frente a 0,3 M, +165 %) y `formula-juez` (≈0,95 M frente a 0,8 M, +19 %): en las dos se fue en buscar dónde estaba cada pieza (el origen de cada regla; cómo se abre cada modelo) y en las pasadas largas de jueces · Cambio: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M fijos por la pasada de jueces más 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (parte de origen, o «especialidad → ficha → Visual» de cada modelo) · Ahorro esperado: ≈0,2-0,3 M por tarea técnica (menos búsqueda) y presupuestos que ya no se pasan.
 - **✅ 30/10: aprobadas todas las de abajo** (ahorros → `reglas-30-10`; preguntas viejas del bloque 3 → `b3-cierre`).
 - **Ahorro · Las cifras de los casos se leen en el monitor de la app** (propuesto 2026-10-30 por /ahorro) · Visto en: `b3-paso4` g3b (vuelta 2 del caso de Remedios: la herramienta no leía lo mismo que la pantalla) y g4 (Ramiro: el programa daba PCP 30,8 y la app 32; lo cazó el profesor) · Cambio: el constructor de Estudiar copia las cifras de los casos con `autonomo/bloques/b3/herramientas/g4-app-cifras.mjs` (lee el monitor a 390 px), nunca con el programa del motor; línea en la lista del constructor · Ahorro esperado: ≈0,4 M por grupo (una vuelta de arreglos del caso).
@@ -533,6 +486,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 - **Ahorro · Director del paso 4 a 1,3 M** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a 1,1 · g3b 1,3 · g4 1,9 · g5 1,3 M frente a 0,8-0,9 · Cambio: el presupuesto del director de un grupo con piezas + Estudiar pasa a 1,3 M en «Presupuestos vigentes» (o, si se quiere bajar, partir piezas y Estudiar en dos sesiones) · Ahorro esperado: ninguno directo; presupuestos realistas que evitan comparecer por el director.
 
 ## 6. Hecho (últimos 7 días)
+
+- 2026-10-30 · **Parada 3 del bloque 3 aprobada** por ti (grupos 1-5 y los 3 modelos vivos, mirados en el móvil). Pedida la ingeniería inversa de anatomyatelier.org (sesión abierta, para `mv-eco`).
 
 - 2026-10-30 · **Consejo, 7.ª reunión** («terminar ya», acta `autonomo/consejo/2026-10-30-7.md`): cabos sueltos
   cerrados; Wiggers aprobado (`wiggers-movil`); vía libre de gasto hasta el 02/11; radio día 2 hoy; B-044 a B-046

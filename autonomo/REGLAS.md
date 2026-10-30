@@ -18,6 +18,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 6. **Código ajeno**: de echodemo (The Heart by Ultrasound) se traduce el texto, con permiso del autor y citado; el
    código nunca se copia: cada figura se reconstruye sobre los motores de la app. Nada de imágenes de pacientes con
    licencia restrictiva (CAMUS, EchoNet).
+   **Recursos estudiados** (art. 2 de la reforma, aprobado por el usuario el 30/10/2026): una web, simulador, curso,
+   repositorio o tuit estudiado aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota
+   su licencia o permiso (el permiso, copiado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 7. **Lo que muestra un simulador es un paciente posible** en todo el recorrido de sus mandos (extremos y punto
    medio): presión arterial, frecuencias, presiones, volúmenes y velocidades dentro de lo fisiológico para ese
    estado. **El límite es la propia fisiología humana.** Si una cifra no existe en un ser humano, está fuera de lo
@@ -86,6 +89,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 
 1. **Sin backend, sin build, sin dependencias nuevas.** HTML/CSS/JS que el navegador ejecuta tal cual. La única
    librería es Motion (`js/vendor/`), elegida por el usuario; otra, solo si él la pide.
+1b. **Ningún dato de pacientes reales se guarda**, ni en `localStorage` (art. 3a de la reforma, 30/10/2026): las medidas
+   que se teclean en Guardia viven solo en la pantalla; los casos son inventados.
 2. **Móvil primero**: nada desborda a 390 ni a 360 px de ancho; toques de al menos 44 px.
 3. **Reutiliza antes de crear**: enlaces cruzados con `[data-especialidad]`; ayudas de `js/core/ui.js` y
    `js/core/wizard.js`; clases ya existentes de `css/components.css`. Una clase o un componente nuevos solo si no hay
@@ -98,6 +103,13 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    app desaparece en ella.
 6. **Motor del simulador de eco**: si lo tocas, todas sus pruebas siguen en verde y lo cuentas en
    `js/modules/eco/README.md`. Nunca cambies una referencia de `referencias.mjs` para que una prueba pase.
+6b. **Motores compartidos** (art. 10 de la reforma, 30/10/2026, adaptado a los dos motores de B-045): el motor del
+   corazón (`eco/motor.mjs`) y su contrato con el motor de la imagen (`contrato.mjs`) son una API compartida con el
+   shock vivo. Quien los toque corre las pruebas de la eco y `jueces --modelo shock-vivo`, y deja la API antigua
+   funcionando: el contrato, congelado en su prueba; los consumidores (formas, Doppler, escenarios, dibujo) migran de uno
+   en uno y nunca antes que el proveedor; el dibujo nuevo vive en su archivo con interruptor hasta pasar J1, J2 y R4.
+   Un cambio en una pieza de `js/core/` usada por más de 20 fichas lleva maqueta, `jueces --ficha` en 3 fichas y versión
+   nueva.
 7. **Nada interno a la vista** (lección 5 del bloque 1): ni ids de ficha («mar-…»), ni «§», ni códigos del plan
    («Caso E1», «maqueta», «diseño», «REGLAS», «cobertura»), ni rutas de archivos, ni notas de trabajo. El chip de
    origen dice solo «ficha», «fisiología general» o «ilustrativo», más su página. Lo comprueba `jueces.mjs`.
@@ -367,6 +379,25 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       existen; si no, como **modelo** (1,2 M). El director mide antes las cifras del motor con un programa corto y da
       al constructor el objetivo que el motor puede dar.
 
+15. **La reforma y los ahorros de Hacienda, aprobados el 30/10/2026** (tarea `reglas-reforma`; el usuario: «sí a lo que
+    dice el Consejo» y «quedan todas aprobadas»; actas `autonomo/consejo/2026-10-29-reforma.md` §4 y `2026-10-30-7.md`).
+    Los artículos 2 y 3a están en §1.6 y §2.1b; el 6, en §5.7; el 8, en §7.13; el 10, en §2.6b; el 12, en
+    `autonomo/radar/NORTE.md`.
+    - **Puerta única de recursos** (art. 5): todo enlace que mande el usuario se apunta en `autonomo/radar/ENTRADAS.md`
+      en la misma sesión, con estado (leído · no se pudo leer · pide PDF · descartado + motivo). La Bandeja (issue #27)
+      es solo buzón: cada tanda del Radar empieza cotejándola con `ENTRADAS.md` (diferencia cero). «No se pudo leer»
+      vuelve en cada tanda hasta que el usuario pega el texto o lo descarta. Los repositorios propios cuentan como
+      recursos. Ningún recurso sale de la mesa sin etiqueta (tarea · aparcado hasta X · descartado porque Y).
+    - **Tareas técnicas del director (ahorro)**: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M
+      fijos por la pasada de jueces y 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (el parte
+      de origen de cada regla, o «especialidad → ficha → Visual» de cada modelo).
+    - **Medir el gasto tras las piezas (ahorro)**: en un grupo con piezas y Estudiar, el director pasa
+      `gasto.mjs --clave` al terminar las piezas y antes de lanzar el Estudiar, y comparece ahí si va a pasar del 25 %.
+    - **Hacienda no junta piezas con prueba propia (ahorro)**: en el modo presupuesto, Hacienda solo une en un encargo
+      piezas que no llevan prueba ni jueces propios; las que sí, un encargo cada una.
+    - **Director de un grupo con piezas y Estudiar: 1,3 M** (ahorro; tabla «Presupuestos vigentes» del tablero). Si se
+      quiere bajar, se parten piezas y Estudiar en dos sesiones.
+
 ## 5. Lo que el agente puede y no puede tocar
 
 1. **Las reglas son de solo lectura** para el agente: nunca edita `autonomo/REGLAS.md`, `CLAUDE.md` (ni los de los
@@ -386,6 +417,11 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
 6. **Límite de gasto**: si la sesión llega al límite del tablero, se para y deja el estado como está. Desde el
    27/10/2026 hay también un **límite por día**, sumando todas las sesiones: como mucho el **18 % del uso semanal**
    (tablero, «Límite de gasto por día»).
+7. **Jueces que solo crecen** (art. 6 de la reforma, aprobado por el usuario el 30/10/2026): los jueces
+   (`autonomo/jueces.mjs`, `jueces-topes.mjs`, las pruebas de `autonomo/pruebas/` y de la eco) y el auditor ciego solo se
+   amplían. Sus umbrales (8 px, 390/360 px, 7,5 px de rótulo, la meta 8,75, los topes) no bajan ni se quitan sin el sí
+   del usuario, y un cambio de juez va en un commit aparte. Jueces nuevos pedidos: que cada enlace cruzado apunte a algo
+   que existe y que `PANEL_NAV` cubra cada cuaderno.
 
 ## 6. Cómo crecen estas reglas
 
@@ -491,6 +527,9 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
     fuentes en lista, §7.11; escenas por capas; monitor y mandos comunes) ya debe aguantar lo demás. El nivel visual,
     el de los mejores modelos de la app o más: un objeto real hecho de muchas piezas pequeñas que se entiende al
     mirarlo (método «Anatomy», `autonomo/bloques/b3/encargo.md`), nunca un esquema de cajas.
+13. **Dos velocidades** (art. 8 de la reforma, aprobado por el usuario el 30/10/2026): toda ficha nueva abre con un
+    **carril de 30 segundos** (la idea, 2-3 cifras con su fuente y la figura) y debajo el desarrollo. Es la respuesta en la
+    cama del norte; el desarrollo es para estudiar.
 
 **Cómo se juzga**: el agente `profesor` puntúa del 0 al 10 cada punto (y los de §8 si hay preguntas) mirando
 capturas al lado de un modelo. Para pasar, **todos los puntos con 8 o más**; si

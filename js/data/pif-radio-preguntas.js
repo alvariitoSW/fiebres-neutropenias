@@ -251,7 +251,7 @@ export const preguntasPifRadio = [
         enunciado: 'Un paciente con warfarina tiene un hematoma intraparenquimatoso grande, sin desviación de la línea media. ¿Qué es lo primero que dice Marino?',
         opciones: [
             'Esperar una segunda TC a las 24 h y no actuar antes, porque sin desviación de la línea media no hay urgencia',
-            'Parar la warfarina de la siguiente toma y vigilar la tensión sin más',
+            'Parar la warfarina de la siguiente toma y vigilar la tensión',
             'Revertir ya el antitrombótico: CCP de 4 factores y vitamina K',
             'Solo vitamina K intravenosa, que basta para revertir la warfarina',
         ],
@@ -310,7 +310,7 @@ export const preguntasPifRadio = [
         id: 'pifradio-q025', tema: 'pifradio-caso-craneo',
         enunciado: 'Caso (2/4). La línea media está centrada y las cisternas se ven; la sangre está dentro del hemisferio y ha pasado a los ventrículos. ¿Qué medida es la prioridad?',
         opciones: [
-            'Dar vitamina K oral, sin más medidas, y reevaluar en una semana con una nueva TC',
+            'Dar vitamina K oral y repetir la TC al día siguiente',
             'Revertir la warfarina ya y consultar con neurocirugía',
             'Iniciar heparina para que la TC no empeore',
             'Esperar: sin efecto de masa no hay urgencia',
@@ -320,9 +320,9 @@ export const preguntasPifRadio = [
     },
     {
         id: 'pifradio-q026', tema: 'pifradio-caso-craneo',
-        enunciado: 'Caso (3/4, giro). A las 6 h la pupila izquierda se dilata y el Glasgow cae a 7 (cifras ilustrativas). La nueva TC muestra más sangre, línea media desviada y cisternas basales ausentes. ¿Qué interpretas?',
+        enunciado: 'Caso (3/4, giro). A las 6 h una pupila se dilata y el Glasgow cae a 7 (cifras ilustrativas). La nueva TC muestra más sangre, línea media desviada y cisternas basales ausentes. ¿Qué interpretas?',
         opciones: [
-            'Una lesión estable: se mantiene el plan anterior y se repite la TC en 24 horas, sin cambiar nada',
+            'Una lesión estable: se mantiene el plan anterior y se repite la TC en 24 horas',
             'Un Marshall III: cirugía urgente sin medir la PIC',
             'Efecto de masa con herniación: pedir neurocirugía y monitorizar la PIC',
             'Un infarto añadido en un territorio arterial, que se trata con antiagregante',
@@ -336,7 +336,7 @@ export const preguntasPifRadio = [
         opciones: [
             'Descartar la hipertensión intracraneal, porque la TC es normal y el coma será metabólico',
             'Pensar en monitorizar la PIC pese a la TC normal',
-            'Pedir solo otra TC en un mes, porque la TC normal indica buen pronóstico',
+            'Pedir solo otra TC en 24 h, porque la TC normal indica buen pronóstico',
             'Tratarla como un Marshall IV por el coma',
         ],
         correcta: 1,

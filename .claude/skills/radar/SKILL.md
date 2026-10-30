@@ -35,22 +35,29 @@ tablero**: pasa a la bitácora como entrada nueva.
    - **Web o app**: **propón** `/ingenieria-reversa`; no la hagas sin permiso del usuario.
    - **Repositorio**: léelo, comprueba la licencia y, si es una herramienta, revísala antes de instalarla.
    - **Idea**: conviértela en ficha de encargo con las preguntas mínimas (como `/bitacora apunta`).
-3. **Ficha de triaje** en `ENTRADAS.md` (formato de `LEEME.md`): fecha · tipo · enlace · lo que dijo · qué es · a qué
+3. **Ficha de triaje** en `ENTRADAS.md` (formato de `LEEME.md`) **en la misma sesión en que llega el enlace**, con
+   estado (leído · no se pudo leer · pide PDF · descartado + motivo; REGLAS §4.15, art. 5 de la reforma). Los
+   repositorios propios también cuentan. Campos: fecha · tipo · enlace · lo que dijo · qué es · a qué
    situación de guardia o ficha sirve · fuente que lo respalda · licencia · coste · veredicto. Lo que no conste:
    «no consta». Nunca inventes licencias, fechas ni costes.
-4. **Tría contra el norte** (`NORTE.md`): nivel 1, 2 o 3; situación G1-G6. Si no sirve a ninguna, di por qué.
+4. **Tría contra el norte** (`NORTE.md`): nivel 1, 2 o 3; situación G1-G7. Un recurso de estudio puro puede entrar
+   sin G; si no sirve a ninguna ni es para estudiar, di por qué. Una web o un repositorio estudiado aporta ideas, no
+   es fuente clínica: antes de traer texto, imagen, malla o dato, su licencia o permiso anotados (REGLAS §1.6).
 5. **Encaja** en una fase de la hoja de ruta (sin duplicar; si ya está, añade la entrada a «La alimentan») o márcala
    «idea suelta». Veredicto: integrar en la fase N · idea suelta · descartar con motivo.
 6. Las que necesiten decisión del usuario van a «Tanda pendiente». Devuelve una línea por entrada.
 
 ### Tanda (semanal)
 
+0. **Coteja la Bandeja (issue #27) con `ENTRADAS.md`**: diferencia cero; lo que falte se apunta antes de seguir. Las
+   entradas «no se pudo leer» vuelven a esta tanda hasta que el usuario pega el texto o las descarta.
 1. Lee «Tanda pendiente» y compara `HOJA-DE-RUTA.md` con `autonomo/TABLERO.md` (copia los estados; no los cambies).
 2. Junta **todo lo pendiente de decidir** y llévaselo de una vez: cada entrada con su veredicto propuesto y su
    motivo, y las dudas. Una pregunta final concreta.
 3. Con su respuesta: lo **aprobado** se apunta en `autonomo/BITACORA.md` como **entrada nueva** (siguiente `B-00N`,
    ficha de encargo); lo **descartado** queda en `ENTRADAS.md` con su motivo; la hoja de ruta se actualiza y se
-   vacía la tanda. Si hay un hecho nuevo del vigía (una web cambió), anótalo en la ficha.
+   vacía la tanda. Ningún recurso sale de la mesa sin etiqueta (tarea · aparcado hasta X · descartado porque Y). Si hay
+   un hecho nuevo del vigía (una web cambió), anótalo en la ficha.
 
 ### Rumbo
 

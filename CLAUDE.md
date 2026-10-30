@@ -30,6 +30,8 @@ Este archivo son **las reglas vigentes**, cortas a propósito:
 - **Sin backend, sin login, sin base de datos.** Nada se guarda, con tres excepciones de `localStorage`,
   deliberadas y en el dispositivo del usuario: el quiz (aciertos/fallos y, desde el 28/10/2026, la fecha del último intento, para el repaso espaciado; y, desde el 30/10/2026, en la Mayéutica, en cuántos días distintos acertó cada pregunta, para el indicador de «ideas firmes»), el Modo Estudio (pomodoros, duración y
   progreso por ficha) y Dudas de guardia (las dudas que escribe el usuario). Ninguna persistencia más sin que la pida.
+- **Ningún dato de pacientes reales se guarda**, ni en `localStorage` (art. 3a de la reforma, aprobado el 30/10/2026):
+  las medidas que se teclean en Guardia viven solo en la pantalla; los casos de las preguntas y los modelos son inventados.
 - **Sin build tool ni dependencias.** HTML/CSS/JS que el navegador ejecuta tal cual. GitHub Pages sirve `index.html`.
 - **Una sola librería externa, a petición del usuario: Motion 11.18.2** (animaciones), copiada en
   `js/vendor/motion.js` (MIT; ver `js/vendor/README.md`) y cargada solo cuando hace falta con `cargarMotion()` de
@@ -92,6 +94,12 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
   Un cuaderno nuevo necesita su entrada en `PANEL_NAV` de `core/search.js`, o el buscador global no lo encuentra.
 - **`core/ui.js`**: `arrancar(nombre, init)` (cada modelo vivo, cuaderno o especialidad arranca por separado: si falla, el resto sigue), `wireSelectExplicacion()`, `pintarGauge()` (gauges `.kinetic-*`), `clamp()`, `escapeHtml()`
   (solo para texto que escribe el usuario). **`core/wizard.js`**: `initSiNoWizard()`.
+- **Motores compartidos** (art. 10 de la reforma, aprobado el 30/10/2026, adaptado a los dos motores de B-045): el
+  motor del corazón (`js/modules/eco/motor.mjs`) y su **contrato** con el motor de la imagen (`contrato.mjs`, cuando
+  exista) son una API que usa también el shock vivo. Quien los toque corre las pruebas de la eco
+  (`node --test 'js/modules/eco/pruebas/*.test.mjs'`) y `jueces --modelo shock-vivo`, y deja la API antigua funcionando:
+  el contrato congelado en su prueba, y los que leen del motor migran de uno en uno, nunca antes que el motor. Un cambio
+  en una pieza de `js/core/` que usan más de 20 fichas lleva maqueta, `jueces --ficha` en 3 fichas y versión nueva.
 - **Pestañas** (`core/tabs.js`, ya casi sin uso): `initTabs(contenedor)` siempre acotado a su contenedor, nunca
   `document`; si no, los grupos de pestañas de módulos distintos se pisan.
 - **Vista Visual** (`core/vista-visual.js`, `core/visual-kit.js`): interruptor Texto | Visual.
@@ -155,6 +163,9 @@ backend/ admin/         panel de subida de contenido (aparte de la app)
    contenido clínico, reescribirlo y citarlo de forma genérica. Los puramente administrativos se descartan.
 9. **Código ajeno** (echodemo, ATRIA): ideas y texto (con permiso) sí; código no, se reconstruye sobre los motores de
    la app. Nada de imágenes de pacientes con licencia restrictiva (CAMUS, EchoNet).
+   **Recursos estudiados** (art. 2 de la reforma, 30/10/2026): una web, simulador, curso, repositorio o tuit estudiado
+   aporta ideas; no es fuente clínica. Antes de traer texto, imagen, malla o dato se anota su licencia o permiso (el
+   permiso, copiado en `docs/`). Sin licencia verificada, solo la idea reescrita.
 10. **Calculadoras**: `calcX()` + `init()`; un campo vacío nunca es 0 (`el.value === ''`); clamp de rangos; aviso de
     «combinación no fisiológica»; scores aditivos sí, regresiones complejas sin verificar (p. ej. KFRE) no. Casillas
     que suman puntos: clase `.puntuable` o `<select>` (la regla general tacha lo marcado). Los umbrales se comparan
@@ -231,6 +242,7 @@ como las conoce un médico, no como están hechas por dentro. Los botones dicen 
 - [ ] Contenido nuevo o rehecho: **sirve para estudiar** (`autonomo/REGLAS.md` §7): arriba la idea y la figura, nada
       de muros de texto, 1-3 cosas resaltadas por bloque y el mecanismo visible con las piezas de la app, al nivel de
       los modelos (receptores animados, atlas 14 y 10, nefrona viva, vista Visual). Preguntas nuevas: REGLAS §8.
+      Ficha nueva: abre con el carril de 30 segundos (idea, 2-3 cifras, figura) y debajo el desarrollo (REGLAS §7.13).
 - [ ] Ningún id duplicado; ningún `<img>` sin archivo; ningún tema de quiz sin preguntas.
 - [ ] Si cambió una pieza de la app: `node autonomo/version.mjs AAAAMMDD-N` (§9).
 - [ ] La historia del trabajo, añadida al archivo de `docs/historial/` que toque (no aquí). Este archivo, solo si
