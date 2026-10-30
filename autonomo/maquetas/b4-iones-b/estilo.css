@@ -3,7 +3,7 @@
 #ion-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
 #ion-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
 #ion-svg .min { font-size: 9.6px; fill: var(--text-muted); } #ion-svg .min2 { font-size: 9.6px; fill: var(--bg-main); font-weight: 700; }
-#ion-svg .rot { font-size: 9.6px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
+#ion-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
 #ion-svg .gran { font-size: 30px; fill: var(--oro); font-weight: 800; }
 #ion-svg .tanque { fill: none; stroke: var(--line); stroke-width: 1.5; } #ion-svg .z, #ion-svg .dentro { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--line); }
 #ion-svg .fuera { fill: color-mix(in srgb, var(--accent-blue) 14%, var(--bg-main)); stroke: var(--line); }
@@ -17,7 +17,7 @@
 .selector-ion button, .mando button, .mando select { min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
 .selector-ion button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
 #monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; }
-#monitor .mon-fila { display: flex; justify-content: space-between; gap: 8px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
+#monitor .mon-fila { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
 #monitor .vit b { color: var(--text-main); font-size: .9rem; }
 #ecg { width: 100%; height: 66px; display: block; } #ecg path { fill: none; stroke: var(--accent-green); stroke-width: 1.6; }
 #nota-ecg { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
@@ -37,3 +37,13 @@
 .mando button, .mando select { min-height: 34px; padding: 2px 4px; }
 .mando .fila > * { min-width: 60px; }
 #monitor #ecg { height: 54px; }
+#leyenda .nv-especies { gap: 6px 12px; }
+#ion-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+#ion-svg .entra { animation: entra 2.4s ease-in-out infinite; }
+@keyframes entra { 0%, 15% { transform: translate(0, 0); opacity: 1; } 75%, 100% { transform: translate(var(--dx), var(--dy)); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #ion-svg .entra { animation: none; transform: translate(var(--dx), var(--dy)); } }
+.idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); } .idea .org, .guia .org { color: var(--text-muted); font-weight: 400; }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+.llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); } .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+.cita { font: .68rem/1.3 var(--sans); } .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; }
+.toast { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h, 190px) + var(--frase-h, 60px) + 8px); z-index: 40; margin: 0; padding: 6px 10px; border: 1px solid var(--oro); border-radius: 10px; background: var(--bg-card); font: .76rem/1.35 var(--sans); }

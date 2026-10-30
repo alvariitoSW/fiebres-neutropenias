@@ -2,13 +2,15 @@
 import { crearTope } from '../../../js/core/tope.js';
 import { seguirFrase } from '../../../js/core/frase-vista.js';
 import { leyendaParticulas } from '../../../js/core/particulas.js';
-import { PDF, FICHA, PRESETS, FUENTES, NOTAS, PENDIENTE, P } from './datos.js';
+import { PDF, FICHA, PRESETS, FUENTES, NOTAS, PENDIENTE, P, fichaDe, VITALES_ORIGEN, IDEA } from './datos.js';
+import { crearGuia, focoSvg } from './guia.js';
 import { nuevo, leer, topes, fmt, clamp, FIG } from './modelo.js';
 import { escena, NOMBRE } from './dibujo.js';
 import * as ECG from './ecg.js';
-import { APUESTA, ERROR, CASO, opciones } from './pruebas.js';
+import { APUESTA, ERROR, CASO, LLEVAS, opciones } from './pruebas.js';
 const $ = (id) => document.getElementById(id);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let foco = [], guiaApi;
 let s = nuevo(), ion = 'k', oculto = false, modo = 'explorar', pausa = false, preset = 'normal';
 const e = { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1, caMg: 90 };
 const FRASES = {
@@ -19,29 +21,31 @@ const FRASES = {
 };
 const ORIG = { k: 'ficha · p. 18-20', mg: 'ficha · p. 32', ca: 'ficha · p. 42-43', p: 'ficha · p. 48' };
 let fraseTxt = FRASES.k, fraseOrg = ORIG.k;
-const cita = (c) => `<span class="cita"><button type="button" data-pag="${c}">Ver en el texto · p. ${c}</button></span>`;
+// Cada cita: «PDF p. N» (abre el libro) y «p. N · Ver en la ficha» (en la app, el párrafo exacto de la ficha: data-resaltar)
+const cita = (c) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · <button type="button" class="ver-ficha" data-resaltar="#${fichaDe(c)}" data-pag-ficha="${c}">p. ${c} · Ver en la ficha</button></span>`;
 function frase(t, org) { fraseTxt = t; fraseOrg = org; $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
 const ecgK = (L) => (L.k > 5.5 ? Math.max(5.5, L.k - 1.2 * clamp(s.caIV / 200, 0, 1)) : L.k);
 let topeApi, firma = '';
 function aplicarTopes() {
   const lista = topes(s, e), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
-  for (const c of ['clk', 'mg', 'ca', 'po4', 'caiv', 'nofis']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['clk', 'mg', 'ca', 'po4', 'caiv', 'nofis', 'hiperk']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.n === 'aviso' ? '#dock-panel' : null });
 }
 function vitales() {
-  const act = topeApi.activos().filter((a) => a.nivel === 'sello').map((a) => a.clave);
+  const act = topeApi.activos().filter((a) => a.nivel === 'sello').map((a) => a.clave), [pa, fc] = PRESETS[preset].vit, o = VITALES_ORIGEN;
   if (act.includes('clk') || act.includes('mg')) return { pa: '0/0', fc: 0, extra: 'parada' };
-  if (act.includes('ca')) return { pa: '84/50', fc: 112, extra: 'ectopia' };
-  if (act.includes('po4')) return { pa: '118/72', fc: 96, extra: 'FR 28 · SatO₂ 89 %' };
-  return { pa: '118/72', fc: 75, extra: '' };
+  if (act.includes('ca')) return { pa: '84/50', fc: 112, extra: 'ectopia · ' + o };
+  if (act.includes('hiperk')) return { pa: '90/54', fc: 46, extra: 'bradicardia · ' + o };
+  if (act.includes('po4')) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % · ' + o };
+  return { pa, fc, extra: o };
 }
 let pendiente = 0;
 function pintar() {
   e.caMg = (e.amp === 'glu' ? 90 : 270) * e.n; const L = leer(s); aplicarTopes();
-  $('ion-svg').innerHTML = escena(ion, s, L, oculto);
+  const kOc = modo === 'apuesta' && oculto; $('ion-svg').innerHTML = escena(ion, s, L, oculto) + focoSvg(foco);
   const v = vitales(); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
-  $('mon-k').textContent = `K⁺ ${fmt(L.k)}` + (L.k > 5.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
+  $('mon-k').textContent = `K⁺ ${kOc ? '?' : fmt(L.k)}` + (L.k > 5.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
   $('nota-ecg').hidden = L.k >= 3.5; $('nota-ecg').textContent = PENDIENTE;
   document.querySelectorAll('.selector-ion button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.ion === ion)));
   document.querySelectorAll('.modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
@@ -68,26 +72,26 @@ function hacer(a, o = {}) {
   pintar();
 }
 function ponerPreset(clave) {
-  preset = clave; s = nuevo(PRESETS[clave].s); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); oculto = false; ion = clave === 'valentin' ? 'ca' : clave === 'damian' ? 'p' : 'k';
-  frase(PRESETS[clave].txt || FRASES[ion], PRESETS[clave].txt ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
+  preset = clave; s = nuevo(PRESETS[clave].s); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); oculto = false; ion = clave === 'valentin' ? 'ca' : clave === 'damian' ? 'p' : 'k'; foco = [];
+  frase(PRESETS[clave].txt || FRASES[ion], PRESETS[clave].txt ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar(); if (guiaApi) guiaApi.abrir(clave);
 }
-function ponerIon(i) { ion = i; oculto = false; frase(FRASES[i], ORIG[i]); pintar(); }
+function ponerIon(i) { ion = i; oculto = modo === 'apuesta' && oculto; frase(FRASES[i], ORIG[i]); pintar(); }
 // ---- Pon a prueba ----
 function modoPrueba(m) {
-  modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false;
+  modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false; foco = []; if (guiaApi) guiaApi.cerrar();
   if (m === 'explorar') { pintar(); return; }
   const def = m === 'apuesta' ? APUESTA : m === 'error' ? ERROR : CASO;
   Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); preset = def.preset; s = nuevo({ ...PRESETS[def.preset].s, ...(def.estado || {}) }); ion = def.ion;
   const tit = document.createElement('h3'); tit.textContent = m === 'apuesta' ? 'Apuesta antes de tocar' : m === 'error' ? 'Encuentra el error (hay 0, 1 o 2)' : CASO.titulo; caja.append(tit);
   if (m === 'apuesta') {
-    const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes + ' ' + def.pregunta; const c = document.createElement('div'); c.className = 'ops'; caja.append(p, c);
-    opciones(c, def.ops, (op) => { def.tras({ hacer }); fin(caja, def.pag); }, def.orden);
+    oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes + ' ' + def.pregunta; const c = document.createElement('div'); c.className = 'ops'; caja.append(p, c);
+    opciones(c, def.ops, (op) => { oculto = false; def.tras({ hacer }); fin(caja, 'apuesta'); }, def.orden);
   } else if (m === 'error') {
     oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes; caja.append(p);
     let hechas = 0; def.frases.forEach((f) => {
       const c = document.createElement('div'); const t = document.createElement('p'); t.className = 'enun'; t.textContent = f.t; c.append(t);
       const b = document.createElement('div'); b.className = 'ops'; c.append(b); caja.append(c);
-      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; frase('Ahora ves el Ca iónico: sigue normal con el total bajo.', 'ficha · p. 43'); pintar(); fin(caja, def.pag); } });
+      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; frase('Ahora ves el Ca iónico: sigue normal con el total bajo.', 'ficha · p. 43'); pintar(); fin(caja, 'error'); } });
     });
   } else caso(0, caja);
   pintar();
@@ -95,9 +99,12 @@ function modoPrueba(m) {
 function caso(i, caja) {
   const st = CASO.pasos[i]; Object.assign(s, st.antes && st.antes.units ? { units: st.antes.units } : {}); oculto = !!(st.antes && st.antes.oculto);
   const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${CASO.pasos.length}. ${st.enun}`; const o = document.createElement('div'); c.append(p, o); caja.append(c);
-  opciones(o, st.ops, (op) => { oculto = false; if (op.haz) op.haz({ hacer }); pintar(); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja); pintar(); }); c.append(b); } else fin(caja, 24); }, st.orden);
+  opciones(o, st.ops, (op) => { oculto = false; if (op.haz) op.haz({ hacer }); pintar(); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja); pintar(); }); c.append(b); } else fin(caja, 'caso'); }, st.orden);
 }
-function fin(caja, pag) { const b = document.createElement('p'); b.className = 'por'; b.innerHTML = 'Hecho. ' + cita(pag); caja.append(b); caja.dataset.fin = '1'; }
+function fin(caja, clave) {
+  const b = document.createElement('div'); b.className = 'llevas'; b.innerHTML = '<b>Lo que te llevas</b><ul>' + LLEVAS[clave].map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('') + '</ul>';
+  caja.append(b); caja.dataset.fin = '1';
+}
 // ---- Montaje (una vez) ----
 function montar() {
   $('ion-sel').innerHTML = ['k', 'mg', 'ca', 'p'].map((i) => `<button type="button" data-ion="${i}" aria-pressed="false">${NOMBRE[i]}</button>`).join('');
@@ -119,12 +126,18 @@ function montar() {
     if (b.dataset.rate) e.rate = +b.dataset.rate; if (b.dataset.via) e.via = b.dataset.via; if (b.dataset.g) e.g = +b.dataset.g; if (b.dataset.amp) e.amp = b.dataset.amp; if (b.dataset.n) e.n = +b.dataset.n;
     if (b.id === 'b-real') hacer('real'); else if (b.id === 'b-furo') hacer('furo'); else if (b.id === 'b-clk') hacer('clk'); else if (b.id === 'b-mg') hacer('mg'); else if (b.id === 'b-esp') hacer('esp'); else if (b.id === 'b-ca') hacer('ca'); else pintar();
   });
-  const sl = (id, k, f) => $(id).addEventListener('input', (ev) => { s[k] = +ev.target.value; ion = id === 'r-ph' || id === 'r-alb' || id === 'r-uni' ? 'ca' : ion; frase(k === 'alb' ? 'Menos albúmina baja el calcio total y el iónico queda igual.' : k === 'ph' ? 'La alcalosis une calcio a la albúmina: baja el iónico sin tocar el total.' : 'Cada concentrado trae citrato, que quela calcio, y 2-3 mEq de K⁺.', k === 'ph' ? 'ficha · p. 44; cifra ilustrativa' : k === 'alb' ? 'ficha · p. 43' : 'ficha · p. 24, 44; cifra ilustrativa'); if (k === 'units') s.dK = s.dK; pintar(); });
+  const sl = (id, k, f) => $(id).addEventListener('input', (ev) => { s[k] = +ev.target.value; ion = id === 'r-ph' || id === 'r-alb' || id === 'r-uni' ? 'ca' : ion; frase(k === 'alb' ? 'Menos albúmina baja el calcio total y el iónico queda igual.' : k === 'ph' ? 'La alcalosis une calcio a la albúmina: baja el iónico sin tocar el total.' : 'Cada concentrado trae citrato, que quela calcio, y 2-3 mEq de K⁺.', k === 'ph' ? 'ficha · p. 44; cifra ilustrativa' : k === 'alb' ? 'ficha · p. 43' : 'ficha · p. 24, 44; cifra ilustrativa'); pintar(); });
   sl('r-alb', 'alb'); sl('r-ph', 'ph'); sl('r-uni', 'units');
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') { modo = 'explorar'; $('prueba').hidden = true; } ponerPreset(b.dataset.pre); } });
   dock.querySelector('.dock-tabs').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pest]'); if (!b) return; dock.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); dp.hidden = b.dataset.pest !== 'dar'; $('dock-medir').hidden = b.dataset.pest !== 'medir'; ajustarDock(); });
-  document.body.addEventListener('click', (ev) => { const b = ev.target.closest('[data-pag]'); if (b) window.open(`${PDF}#page=${b.dataset.pag}`, '_blank'); });
+  document.body.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-pag]'); if (b) window.open(`${PDF}#page=${b.dataset.pag}`, '_blank');
+    const f = ev.target.closest('.ver-ficha'); if (f) { const t = $('toast'); t.textContent = `En la app, esto abre la ficha en el párrafo de la p. ${f.dataset.pagFicha} del libro.`; t.hidden = false; clearTimeout(t._t); t._t = setTimeout(() => { t.hidden = true; }, 2600); }
+  });
+  guiaApi = crearGuia({ caja: $('guia'), hacer, cita, unidades: (n) => { s.units = n; $('r-uni').value = n; ion = 'k'; frase(`${n} concentrados: cada uno trae citrato y 2-3 mEq de K⁺; el K⁺ del suero sube a ${fmt(leer(s).k)} y el iónico baja.`, 'ficha · p. 25, 44; cifras ilustrativas'); pintar(); },
+    ponerIon: (i) => { ion = i; oculto = false; }, setFoco: (z) => { foco = z; pintar(); } });
+  $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`;
   $('pausa').addEventListener('click', () => { pausa = !pausa; $('pausa').setAttribute('aria-pressed', String(pausa)); });
   $('fuentes').innerHTML = FUENTES.map(([t, p]) => `<li>${t} · <button type="button" class="enlace" data-pag="${p}">p. ${p}</button></li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuentes discrepan' ? 'Las fuentes discrepan' : t === 'fuente no lo dice' ? 'La fuente no lo dice' : 'Opinión del autor'}.</b> ${x}</p>`).join('');

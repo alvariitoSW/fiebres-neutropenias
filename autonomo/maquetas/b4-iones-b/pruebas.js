@@ -49,3 +49,9 @@ export function opciones(caja, ops, alResponder, orden0) {
   }
   delete caja.dataset.hecho;
 }
+// «Lo que te llevas»: una frase por punto, cada una con su página (E = Marino 2024, caps. 35-38) y su «Ver en la ficha».
+export const LLEVAS = {
+  apuesta: [['La insulina mete el potasio en la célula: el K⁺ del suero baja y el total no cambia.', 21], ['El fosfato también baja con la glucosa y la insulina; por debajo de 1 mg/dL es grave.', 49]],
+  error: [['Con poca albúmina baja el calcio total y el iónico no se mueve.', 43], ['Ningún factor de corrección es fiable: se mide el calcio iónico.', 43]],
+  caso: [['El citrato de la transfusión quela calcio: el total no lo nota y el iónico sí.', 44], ['Bolo de calcio de 200 mg como máximo y luego 1-2 mg/kg/h.', 45], ['Cada concentrado de 18 días trae 2-3 mEq de K⁺ y se acumula si el riñón no filtra.', 25]],
+};
