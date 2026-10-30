@@ -1,6 +1,6 @@
 # 2026-10-30 · rea-cierre (B-046, Objetivo C fila 11; absorbe `mesa-destinos`)
 
-**Resultado:** en revisión (PR: ver abajo) · carril 2, sin tocar la app
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/40) · carril 2, sin tocar la app
 **Vueltas:** 1 (+1 vuelta corta de la página) · **Jueces:** la app no se toca (sin `jueces.mjs`); página comprobada a
 390 px (claro) y 360 px (oscuro): sin desborde, sin errores de consola, el filtro funciona
 
