@@ -47,3 +47,4 @@ button:disabled { opacity: .4; }
 .chip { background: var(--bg-card); border-radius: 8px; padding: 2px 4px; font-size: .72rem; text-align: center; font-variant-numeric: tabular-nums; min-width: 0; } .chip b { font-size: .88rem; }
 .chip.mal b { color: var(--accent-red); } .chip.ojo b { color: var(--accent-yellow); } .chip.bien b { color: var(--accent-green); }
 #bm-sl { display: block; }
+#mon .tope-sellos { top: 30px; bottom: auto; max-height: 96px; }

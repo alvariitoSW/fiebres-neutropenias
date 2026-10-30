@@ -3,7 +3,7 @@
 import { svgParticula, leyendaParticulas } from '../../../js/core/particulas.js';
 import { PEND, ks, mgSero, po4, caIonico, caFracciones, deficitTabla, dDeKSero, kSeroDeD } from './motor.js';
 
-const R = 4.2;
+const R = 4.2, c = (x, n = 1) => x.toFixed(n).replace('.', ',');
 function nube(clave, n, x0, y0, w, h) {
   const cols = Math.max(1, Math.floor(w / (2.6 * R))), gap = w / cols, filas = Math.max(1, Math.floor(h / (2.6 * R))); let s = '';
   for (let i = 0; i < Math.min(n, cols * filas); i++) s += svgParticula(clave, x0 + gap * ((i % cols) + 0.5), y0 + R + Math.floor(i / cols) * 2.6 * R, R);
@@ -22,10 +22,10 @@ export function pintarCelula(svg, s) {
   <rect x="6" y="6" width="236" height="82" rx="10" fill="none" stroke="var(--text-dim)" stroke-dasharray="4 3"/>
   <text x="12" y="19" fill="var(--text-dim)">Plasma (lo que mide el tubo)</text>
   ${nube('k', nk, 12, 24, 100, 60)}${nube('mg', nmg, 116, 24, 28, 60)}${nube('ca', nca, 150, 24, 34, 60)}${nube('p', np, 190, 24, 44, 60)}
-  <text x="12" y="83" fill="var(--text-dim)">K⁺ ${k.toFixed(1)}</text><text x="120" y="83" fill="var(--text-dim)">Mg ${mg.toFixed(1)}</text><text x="152" y="83" fill="var(--text-dim)">Ca ${ca.toFixed(2)}</text><text x="190" y="83" fill="var(--text-dim)">P ${p.toFixed(1)}</text>
+  <text x="12" y="83" fill="var(--text-dim)">K⁺ ${c(k)}</text><text x="120" y="83" fill="var(--text-dim)">Mg ${c(mg)}</text><text x="152" y="83" fill="var(--text-dim)">Ca ${c(ca, 2)}</text><text x="190" y="83" fill="var(--text-dim)">P ${c(p)}</text>
   <ellipse cx="124" cy="176" rx="116" ry="72" fill="var(--bg-card)" stroke="var(--accent-green)" stroke-width="1.5"/>
-  <text x="124" y="118" text-anchor="middle" fill="var(--text-dim)">Célula (aquí vive el 98 % del K⁺)</text>
-  ${nube('k', dentroK, 40, 124, 168, 70)}${nube('p', 6, 68, 196, 112, 30)}${nube('mg', 5, 60, 218, 126, 20)}
+  <text x="124" y="136" text-anchor="middle" fill="var(--text-dim)">Célula · 98 % del K⁺ dentro</text>
+  ${nube('k', dentroK, 40, 146, 168, 50)}${nube('p', 6, 68, 200, 112, 20)}${nube('mg', 5, 60, 224, 126, 20)}
   <path d="M124 92v22" stroke="${flecha ? 'var(--accent-yellow)' : 'var(--text-dim)'}" stroke-width="2" marker-end="url(#fl)"/>
   <text x="132" y="99" fill="${flecha ? 'var(--accent-yellow)' : 'var(--text-dim)'}">${flecha ? 'insulina + glucosa:' : 'sin movimiento'}</text><text x="132" y="110" fill="var(--accent-yellow)">${flecha ? 'K⁺, Mg²⁺ y P entran' : ''}</text>
   <defs><marker id="fl" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3L0 6z" fill="${flecha ? 'var(--accent-yellow)' : 'var(--text-dim)'}"/></marker></defs>
@@ -49,9 +49,9 @@ export function pintarFig362(svg, s) {
   <line x1="${x0}" y1="${Y(4)}" x2="${x1}" y2="${Y(4)}" stroke="var(--text-dim)" stroke-opacity=".4"/><text x="${x0 + 2}" y="${Y(4) - 3}">normal 4</text>
   <text x="2" y="${y0 + 8}">K⁺ sérico</text><text x="${x1}" y="${H - 6}" text-anchor="end">K⁺ total del cuerpo →  (déficit a la izquierda)</text>
   <circle cx="${X(D)}" cy="${Y(Math.max(kmin, Math.min(kmax, k)))}" r="5.5" fill="var(--accent-yellow)" stroke="var(--bg-main)" stroke-width="1.5"/>
-  <text x="${Math.min(X(D) + 9, 250)}" y="${Y(k) - 7}" fill="var(--text-main)">tú: K⁺ ${k.toFixed(1)}</text>
+  <text x="${Math.min(X(D) + 9, 250)}" y="${Y(k) - 7}" fill="var(--text-main)">tú: K⁺ ${c(k)}</text>
   </g>`;
-  return k < 3.5 ? `Tabla 36.1 (p. 22): con K⁺ ${k.toFixed(1)} el déficit es de ${tab} mEq.` : '';
+  return k < 3.5 ? `Tabla 36.1 (p. 22): con K⁺ ${c(k)} el déficit es de ${tab} mEq.` : '';
 }
 
 // Fig. 38.1 viva: total frente a iónico según la albúmina y el pH
@@ -61,8 +61,8 @@ export function pintarFig381(svg, s) {
   const barra = (x, partes, tit) => { let y = y1, h = ''; for (const [v, col, rot] of partes) { const a = u(v); y -= a; h += `<rect x="${x}" y="${y.toFixed(1)}" width="${bw}" height="${a.toFixed(1)}" fill="${col}" fill-opacity=".85" stroke="var(--bg-main)"/>${a > 11 ? `<text x="${x + bw / 2}" y="${(y + a / 2 + 3).toFixed(1)}" text-anchor="middle" font-size="9.5" fill="var(--bg-main)" font-weight="700">${rot}</text>` : ''}`; } return h + `<text x="${x + bw / 2}" y="${y1 + 13}" text-anchor="middle" font-size="9.5" fill="var(--text-main)">${tit}</text>`; };
   svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
   svg.innerHTML = `<rect width="${W}" height="${H}" fill="var(--bg-main)"/><g font-family="system-ui,sans-serif">
-  ${barra(bx - 20, [[f.ion, 'var(--accent-green)', 'iónico'], [f.complejos, 'var(--accent-purple)', 'complejos'], [f.albumina, 'var(--accent-yellow)', 'albúmina']], 'Ca total ' + f.total.toFixed(1))}
-  ${barra(bx + 120, [[f.ion, 'var(--accent-green)', 'iónico']], 'Ca iónico ' + f.ion.toFixed(1))}
-  <text x="240" y="${y1 - 4}" font-size="9.5" fill="var(--text-dim)">mg/dL · alb. ${s.alb.toFixed(1)} g/dL</text>
+  ${barra(bx - 20, [[f.ion, 'var(--accent-green)', 'iónico'], [f.complejos, 'var(--accent-purple)', 'complejos'], [f.albumina, 'var(--accent-yellow)', 'albúmina']], 'Ca total ' + c(f.total))}
+  ${barra(bx + 120, [[f.ion, 'var(--accent-green)', 'iónico']], 'Ca iónico ' + c(f.ion))}
+  <text x="240" y="${y1 - 4}" font-size="9.5" fill="var(--text-dim)">mg/dL · alb. ${c(s.alb)} g/dL</text>
   </g>`;
 }
