@@ -4,7 +4,7 @@
 // (con «reducir movimiento»), cada uno en un contexto limpio: accesos (menú de Libros, buscador y los botones de las
 // fichas 4-6 de Merino HEMATO, cada uno en su estado), los 21 estados con sus cifras (±1 en la última frente a la
 // cobertura del bloque 2 §5.3) y su lupa, la herida en sus 4 tiempos, la placa (SCA) con sus 3 oclusiones × el reloj a
-// 0, 3, 12 y 24 h (rótulo, troponina y sello de la lisis), el mando de las plaquetas en sus extremos y su
+// 0, 3, 12, 13 y 24 h (rótulo, troponina y sello de la lisis), el mando de las plaquetas en sus extremos y su
 // punto medio (un paciente posible), la explicación guiada recorrida entera en 3 estados (cada paso señala en el
 // dibujo y lleva su «Ver en la ficha» a un párrafo que existe), los rótulos (≥7,5 px, sin pisarse), la Mayéutica
 // entera fallando 4 con su repaso (las cifras que se predicen salen tapadas; la respuesta no está en el HTML), los 3
@@ -128,7 +128,7 @@ for (const n of [1, 2, 3, 4]) {
   await aEscena(); await espera(300); await foto('05-tiempo-' + n);
 }
 // 5b. La placa (SCA): sus 4 tiempos y las 3 oclusiones × el reloj a 0, 3, 12 y 24 h (rótulo del ECG en el dibujo,
-// troponina «>p99» desde 3 h salvo a ratos, sello «Lisis sin beneficio» solo en la completa desde 12 h, NTG apagada en
+// troponina «>p99» desde 3 h salvo a ratos, sello «Lisis sin beneficio» solo en la completa pasadas las 12 h (p. 43: «more than 12 h»), NTG apagada en
 // la completa, chip del ECG solo en la completa)
 await abrirModelo('placa'); await espera(300);
 await pulsar('[data-vso-tab="arteria"]');
@@ -142,7 +142,7 @@ for (const n of [1, 2, 3, 4]) {
 }
 for (const ocl of ['intermitente', 'parcial', 'completa']) {
   await pulsar(`#vso-m-ocl [data-v="${ocl}"]`); await espera(250);
-  for (const h of [0, 3, 12, 24]) {
+  for (const h of [0, 3, 12, 13, 24]) {
     await deslizar('#vso-m-horas', h); await espera(250);
     const t = await T();
     const v = await p.evaluate(() => {
@@ -150,7 +150,7 @@ for (const ocl of ['intermitente', 'parcial', 'completa']) {
       return { ecg: document.getElementById('vso-pl-ecg')?.textContent || '', sello: [...document.querySelectorAll('#vso-escena .tope-sello')].filter(vis).map(e => e.textContent).join(' '),
         ntg: document.getElementById('vso-m-ntg').disabled, chip: vis(document.getElementById('vso-m-ecg')), out: document.getElementById('vso-m-horas-out').textContent };
     });
-    const tropo = ocl === 'intermitente' ? '?' : h >= 3 ? '>p99' : 'aún no', conSello = ocl === 'completa' && h >= 12;
+    const tropo = ocl === 'intermitente' ? '?' : h >= 3 ? '>p99' : 'aún no', conSello = ocl === 'completa' && h > 12;
     ok(t.estado.horas === h && t.celdas.aptt === tropo && /Lisis sin beneficio/.test(v.sello) === conSello
       && v.ecg.includes(ocl === 'completa' ? 'ST elevado' : 'sin ST elevado') && v.ntg === (ocl === 'completa') && v.chip === (ocl === 'completa') && v.out.startsWith(`${h} `),
       `${ocl} a las ${h} h: rótulo «${v.ecg}», hs-cTn «${t.celdas.aptt}», sello «${v.sello.slice(0, 22)}», NTG ${v.ntg ? 'apagada' : 'viva'}, ECG ${v.chip ? 'sí' : 'no'}`);
@@ -172,7 +172,7 @@ await pulsar('[data-vso-tab="arteria"]');
 for (const h of [11, 12, 13]) {
   await deslizar('#vso-m-horas', h); await espera(250);
   const sello = await selloTxt(), apagado = await p.evaluate(() => document.getElementById('vso-m-lisis').disabled);
-  ok(/Lisis sin beneficio/.test(sello) === (h >= 12) && apagado === (h >= 12), `lisis a las ${h} h: ${h >= 12 ? 'sello y mando apagado' : 'activa'} («${sello.slice(0, 30)}»)`);
+  ok(/Lisis sin beneficio/.test(sello) === (h > 12) && apagado === (h > 12), `lisis a las ${h} h: ${h > 12 ? 'sello y mando apagado' : 'activa'} («${sello.slice(0, 30)}»)`);
 }
 await deslizar('#vso-m-horas', 2); await pulsar('#vso-m-ocl [data-v="parcial"]'); await espera(300);
 ok(/SCASEST/.test(await selloTxt()) && await p.evaluate(() => document.getElementById('vso-m-lisis').disabled), 'parcial (NSTEMI): la lisis se apaga con su sello');
