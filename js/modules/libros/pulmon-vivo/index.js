@@ -27,5 +27,6 @@ export function init() {
     raiz = document.getElementById('pul-raiz');
     instalarCss('pul', PUL_CSS);
     instalarCss('escena-pulmon', ESCENA_CSS);
+    import('./lamina.js').then(m => m.montarLamina());
     return { abrir: abrirEstado };
 }
