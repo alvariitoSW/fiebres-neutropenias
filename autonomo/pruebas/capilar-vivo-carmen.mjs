@@ -30,7 +30,7 @@ for (const [W, red] of [[390, false], [360, true]]) {
   ok(t.sellos.length === 1 && /TACO/.test(t.sellos[0]) && !t.avisos.length && t.btn, `sello: ${t.sellos[0]} · mando apagado ${t.btn}`);
   ok(t.lupa === 'alveolo', 'lupa del alvéolo abierta');
   ok(t.frase.includes('La transfusión que no hacía falta le ha llenado el pulmón de agua.'), 'frase viva');
-  ok(/FR 30/.test(t.nota) && /SpO₂ 86 %/.test(t.nota) && /FC 110/.test(t.nota) && /152\/90/.test(t.nota) && /PVC 16/.test(t.nota) && /ilustrativas/.test(t.nota) && /no dice que dos bolsas/.test(t.nota), 'constantes rotuladas y nota honesta');
+  ok(/FR 30/.test(t.nota) && /SpO₂ 86 %/.test(t.nota) && /FC 110/.test(t.nota) && /152\/90/.test(t.nota) && /PVC 16/.test(t.nota) && /ilustrativas/.test(t.nota) && /≈1 %, más con IC previa \(p\. 15\)/.test(t.nota) && /gasto caería/.test(t.nota), 'constantes rotuladas y nota honesta');
   await p.waitForTimeout(700); ok(await p.evaluate(() => { const r = document.getElementById('cpv-carmen-nota').getBoundingClientRect(); return r.bottom <= document.getElementById('cpv-dock').getBoundingClientRect().top + 1; }), 'constantes y nota a la vista, sobre la barra'); ok(t.desb <= 0, 'sin desborde con el sello'); await p.screenshot({ path: CAP && CAP + `carmen-2-${W}.png` });
   await p.evaluate(() => document.getElementById('cpv-m-transf').click()); await p.waitForTimeout(300); t = await T();
   ok(Math.abs(t.hb - 9.4) < 1e-6, 'con el mando apagado no entra otra bolsa');
@@ -46,6 +46,19 @@ for (const [W, red] of [[390, false], [360, true]]) {
   const medidas = [];
   const vigila = async d => { const dd = await p.evaluate(() => document.documentElement.scrollWidth - innerWidth); if (dd > 0) { ok(false, `desborde ${dd}px en ${d}`); } medidas.push(dd); };
   const monitor = () => p.evaluate(() => { const t = window.__cpvPruebas(); return { hb: t.estado.hb, do2: t.R.do2, vo2: t.R.vo2, ext: t.R.ext, scvo2: t.R.ven, sao2: t.R.sao2, lact: t.R.lact, gc: t.R.gc, lupa: t.lupa }; });
+  // paso nuevo (N1/N2): apuestas el VO₂ ANTES de ver el monitor; todas las opciones enseñan la tabla antes → después
+  const nuevoPaso = async rama => {
+    const antes = await monitor(), t0 = await txt();
+    ok(/qué ha hecho el consumo/.test(t0) && antes.hb === 7.4 && antes.do2 === 742, `${rama} paso nuevo: monitor aún en Hb 7,4 · DO₂ 742 y compuerta («Piénsalo antes»: ${/Piénsalo antes/.test(t0)})`);
+    ok(/Piénsalo antes/.test(t0), `${rama} paso nuevo: con compuerta`);
+    await vigila(rama + ' paso nuevo'); if (CAP && rama === 'A') await p.screenshot({ path: CAP + `caso-nuevo-pregunta-${W}.png` });
+    await op(/^Baja, porque la extracción/);
+    const m = await monitor(), tx = await p.evaluate(() => { const r = document.querySelector('#cpv-preg [data-hueco="res"]'); return { t: r.innerText, tabla: r.querySelectorAll('.cpv-consecuencia table tr').length, cons: r.innerHTML.indexOf('cpv-consecuencia'), porque: r.innerText.indexOf('hipometabolismo') }; });
+    ok(m.hb === 8.4 && m.do2 === 843 && m.vo2 === 250 && m.ext === 30 && m.scvo2 === 69, `${rama} paso nuevo: tras contestar, monitor ${m.hb} · ${m.do2} · VO₂ ${m.vo2} · ext ${m.ext} · ScvO₂ ${m.scvo2}`);
+    ok(tx.tabla === 6 && /Lo que ves ahora/.test(tx.t) && tx.t.indexOf('Lo que ves ahora') < tx.porque, `${rama} paso nuevo: tabla antes → después y la consecuencia antes de la explicación`);
+    await vigila(rama + ' paso nuevo respuesta'); if (CAP && rama === 'A') await p.screenshot({ path: CAP + `caso-nuevo-tabla-${W}.png` });
+    await sig();
+  };
   for (const rama of ['A', 'B']) {
     await p.evaluate(() => document.getElementById('cpv-modo-preguntas').click()); await p.waitForTimeout(300);
     await clic('[data-ir="casos"]').catch(() => p.evaluate(() => document.querySelector('#cpv-preg [data-ir="casos"]').click()));
@@ -58,9 +71,11 @@ for (const [W, red] of [[390, false], [360, true]]) {
       await op(/^Transfundir 1 CH/);
       const m1 = await monitor();
       const orden = await p.evaluate(() => { const r = document.querySelector('#cpv-preg [data-hueco="res"]'); const t = r.innerText; return { cons: t.indexOf('Lo que acaba de pasar'), expl: t.search(/Crítico estable sin cardiopatía|Con Hb 7,4 ≥7/), tiene: !!r.querySelector('.cpv-consecuencia') }; });
-      ok(m1.hb === 8.4 && m1.do2 === 843 && m1.ext === 30 && m1.scvo2 === 69, `A P1: tras la 1.ª bolsa, monitor Hb ${m1.hb} · DO₂ ${m1.do2} · ext ${m1.ext} % · ScvO₂ ${m1.scvo2} %`);
+      ok(m1.hb === 7.4 && m1.do2 === 742 && m1.ext === 34 && m1.scvo2 === 65, `A P1: tras la 1.ª bolsa (sin destapar), monitor Hb ${m1.hb} · DO₂ ${m1.do2} · ext ${m1.ext} % · ScvO₂ ${m1.scvo2} %`);
       ok(orden.tiene && orden.cons >= 0, 'A P1: sale «Lo que acaba de pasar»');
+      ok(!/DO₂ 742 → 843/.test(await txt()), 'A P1: la consecuencia ya no destapa las cifras de la bolsa');
       await vigila('A P1 respuesta'); await sig();
+      await nuevoPaso(rama);
       ok(/Pasó la primera bolsa\. Hb de control 8,4/.test(await txt()), 'A P2: «Pasó la primera bolsa. Hb de control 8,4»');
       await vigila('A P2'); await op(/^Transfundir otro CH/);
       const m2 = await monitor();
@@ -68,17 +83,19 @@ for (const [W, red] of [[390, false], [360, true]]) {
       await vigila('A P2 respuesta'); await sig();
     } else {
       await op(/^Dejar así/); await vigila('B P1 respuesta'); await sig();
+      ok(/la bolsa es la del R1 de la mañana/.test(await txt()), 'B paso nuevo: la cab dice que la bolsa es la del R1');
+      await nuevoPaso(rama);
       ok(/R1 de la mañana la ve «todavía baja»/.test(await txt()), 'B P2: línea del R1 de la mañana');
       await vigila('B P2'); await op(/^Parar aquí/); await vigila('B P2 respuesta'); await sig();
     }
     // P3: el sello, para las dos ramas, y «Lo que acaba de pasar» antes de la enseñanza
     const m3 = await monitor(); t1 = await txt();
     ok(m3.hb === 9.4 && m3.do2 === 826 && m3.lupa === 'alveolo', `${rama} P3: el modelo está en el TACO (Hb ${m3.hb}, DO₂ ${m3.do2}, ${m3.lupa})`);
-    ok(await p.evaluate(() => !!document.querySelector('#cpv-lamina-caja .tope-sello') && document.getElementById('cpv-m-transf').disabled), `${rama} P3: sello TACO y mando apagado`);
-    ok(/Lo que acaba de pasar/.test(t1) && !/El ejemplo resuelto/.test(t1) && /FR 30, SpO₂ 86 % con gafas, FC 110, PA 152\/90, PVC 16/.test(t1), `${rama} P3: «Lo que acaba de pasar» con las constantes, antes de la enseñanza`);
-    if (rama === 'B') ok(/cuelga otra bolsa a las 8:00/.test(t1), 'B P3: línea del R1 (todos ven el sello)');
+    ok(await p.evaluate(() => { const s = document.querySelector('#cpv-lamina-caja .tope-sello'); return !!s && !/TACO/.test(s.textContent) && /Edema pulmonar/.test(s.textContent) && document.getElementById('cpv-m-transf').disabled; }), `${rama} P3: sello sin nombre («Edema pulmonar») y mando apagado`);
+    ok(/Edema pulmonar a las 4 h de la 2\.ª bolsa/.test(t1) && !/TACO/.test(t1.split('Pasó. Ahora')[0]) && !/El ejemplo resuelto/.test(t1) && /FR 30, SpO₂ 86 % con gafas, FC 110, PA 152\/90, PVC 16/.test(t1), `${rama} P3: «Lo que acaba de pasar» con las constantes, antes de la enseñanza`);
+    if (rama === 'B') ok(/a las 10:30 cuelga la 2\.ª bolsa/.test(t1), 'B P3: línea del R1 (todos ven el sello)');
     await vigila(rama + ' P3'); if (CAP && rama === 'A') { await p.waitForTimeout(700); await p.screenshot({ path: CAP + `caso-p3-${W}.png` }); }
-    await op(/^Una sobrecarga circulatoria/); await vigila(rama + ' P3 respuesta'); await sig();
+    await op(/^TACO: sobrecarga/); ok(await p.evaluate(() => /TACO/.test(document.querySelector('#cpv-lamina-caja .tope-sello')?.textContent || '')), `${rama} P3: tras contestar, el sello pasa a «TACO»`); await vigila(rama + ' P3 respuesta'); await sig();
     // P4: la enseñanza
     t1 = await txt();
     ok(/El ejemplo resuelto/.test(t1) && await p.evaluate(() => document.querySelectorAll('#cpv-preg [data-cm-paso]').length === 6 && !!document.querySelector('#cpv-preg details.nota-plegable')), `${rama} P4: 6 pasos con su botón y la nota de evidencia plegable`);

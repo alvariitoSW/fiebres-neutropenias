@@ -375,14 +375,14 @@ export function pintarPregunta(cont, q, o) {
             if (!x.ok) res.ok = false;
             res.elegida = x.t; res.opcion = x.i;   // x.i: su lugar en los datos (el orden se baraja)
             // Error con consecuencia: el modelo pasa a ese estado y lo cuenta una caja antes de la explicación.
-            const cs = !x.ok && x.consecuencia;
+            const cs = x.consecuencia;   // en una mala, «Lo que acaba de pasar»; en la buena, «Lo que ves ahora»
             let caja = '';
             if (cs) {
                 res.consecuencia = cs;
                 o.alConsecuencia ? o.alConsecuencia(cs, q) : o.alEmpezar?.({ ...q, estado: cs.estado, mirar: cs.mirar || q.mirar });
-                caja = `<div class="tfg-estado tfg-estado-warn ${c('consecuencia')}" role="note"><b>⚠ Lo que acaba de pasar</b><p>${cs.texto}</p>${cs.fuente ? o.verEnTexto?.({ ...q, fuente: cs.fuente }) || '' : ''}</div>`;
+                caja = `<div class="tfg-estado tfg-estado-warn ${c('consecuencia')}" role="note"><b>${cs.rotulo || (x.ok ? 'Lo que ves ahora' : '⚠ Lo que acaba de pasar')}</b>${/^\s*<(table|ul|div)/.test(cs.texto) ? cs.texto : `<p>${cs.texto}</p>`}${cs.fuente ? o.verEnTexto?.({ ...q, fuente: cs.fuente }) || '' : ''}</div>`;
             }
-            cerrar(`<span class="${c(x.ok ? 'ok' : 'mal')}">${x.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${x.ok ? '' : `<p>${x.porque}</p>`}${caja}<p>${q.explicacion}</p>`, !!cs);
+            cerrar(`<span class="${c(x.ok ? 'ok' : 'mal')}">${x.ok ? '✓ Bien' : '✗ Qué le habría pasado al paciente'}</span>${caja}${x.ok ? '' : `<p>${x.porque}</p>`}<p>${q.explicacion}</p>`, !!cs);
             return;
         }
         const m = e.target.closest('[data-mando]');
@@ -427,13 +427,13 @@ export function pintarDiasAtras(zona, items, o) {
     const N = items.length;
     const paso = i => {
         if (i >= N) {
-            zona.innerHTML = `${eyebrow}<p class="${p}-para"><strong>Repaso hecho.</strong></p><div class="${p}-fila"><button class="${p}-b ${p}-prim" type="button" data-accion="fin-dias">Seguir</button></div>`;
+            zona.innerHTML = `${eyebrow}<p class="${p}-para"><strong>Repaso hecho.</strong>${o.finTexto ? ' ' + o.finTexto : ''}</p><div class="${p}-fila"><button class="${p}-b ${p}-prim" type="button" data-accion="fin-dias">Seguir</button></div>`;
             entrar(zona, p);
             zona.onclick = e => { if (e.target.closest('[data-accion="fin-dias"]')) o.alFinal?.(); else o.alClic?.(e); };
             return;
         }
         const { q, a } = items[i];
-        const intro = i === 0 ? `<p class="${p}-para">${N === 1 ? 'Una pregunta' : `${N} preguntas`} de fichas que ya estudiaste. Volver a contestar días después fija más que releer (Larsen 2009, d = 0,91 en residentes; Kerfoot 2010, 724 residentes). Las elige la fecha de tu último intento.</p><details class="nota-plegable" open><summary>Mezclar fichas</summary><p>Mezclar fichas (entrelazado) tiene evidencia contradictoria en medicina: en ECG ayudó (Hatala 2003, 46 % frente a 30 %) y perjudicó (Monteiro 2017, 24 % frente a 34 % a los días). Aquí solo se mezclan conceptos parecidos, y se mide contigo.</p></details>` : '';
+        const intro = i === 0 ? `<p class="${p}-para">${N === 1 ? 'Una pregunta' : `${N} preguntas`} de fichas que ya estudiaste; las elige la fecha de tu último intento.</p><details class="nota-plegable"><summary>Por qué repasar y mezclar fichas</summary><p>Volver a contestar días después fija más que releer (Larsen 2009, d = 0,91 en residentes; Kerfoot 2010, 724 residentes). Mezclar fichas (entrelazado) tiene evidencia contradictoria en medicina: en ECG ayudó (Hatala 2003, 46 % frente a 30 %) y perjudicó (Monteiro 2017, 24 % frente a 34 % a los días). Aquí solo se mezclan conceptos parecidos, y se mide contigo.</p></details>` : '';
         const cabecera = `${eyebrow}<span class="${p}-contador">${i + 1} de ${N}</span>${intro}<p class="${p}-chip">${chipDiasAtras(a, hoy)}</p>`;
         const base = o.pregunta ? o.pregunta(q) : {};
         pintarPregunta(zona, { ...q, num: i + 1, ultimo: i === N - 1, ultimoTexto: 'Terminar el repaso →' }, { ...base, p, cabecera,

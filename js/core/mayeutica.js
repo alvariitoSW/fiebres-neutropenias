@@ -306,13 +306,11 @@ class Estudiar {
         const ocultar = h => this.raiz.querySelectorAll(':scope > .est-cabeza, :scope > .est-resumen, :scope > .may-profundizar').forEach(e => { e.hidden = h; });
         const zona = this.raiz.querySelector('.est-dias');
         ocultar(true); zona.hidden = false;
-        let hechas = 0;
         pintarDiasAtras(zona, elegidos, {
-            p: 'may', hoy, pregunta: () => preguntaFicha(this.tab),
+            p: 'may', hoy, pregunta: () => preguntaFicha(this.tab), finTexto: `Ahora, ${tituloFicha(this.tab)}.`,
             // sin `resultado`: no pisa el del recorrido de su ficha
             guardar: (q, r) => {
                 crearGuardado(CLAVE_GUARDADO).guardar(q.id, r.ok, { fallo: r.ok ? undefined : { faltan: r.faltan } });
-                if (++hechas === elegidos.length) queueMicrotask(() => zona.querySelector('strong')?.parentElement?.append(` Ahora, ${tituloFicha(this.tab)}.`));
             },
             alFinal: () => {
                 this.enDias = false; zona.hidden = true; zona.innerHTML = ''; ocultar(false);

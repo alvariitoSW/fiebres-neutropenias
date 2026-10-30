@@ -467,6 +467,7 @@ async function diasAtrasFichas(ANCHO) {
         ok(r.visible && r.cont === `${i + 1} de 4` && r.chip === chip, `días atrás ${i + 1}: «${r.cont}» · «${r.chip}» (esperado «${chip}»)`);
         ok(await p.evaluate(([z, t]) => document.querySelector(z + ' .may-pregunta').textContent.trim() === t, [Zd, q.enunciado.replace(/<[^>]+>/g, '').trim()]) || await p.evaluate(z => document.querySelector(z + ' .may-pregunta').textContent.length > 10, Zd), `días atrás ${i + 1}: la pregunta es la de su ficha (${fx})`);
         if (i === 0) {
+            ok(await p.evaluate(z => !!document.querySelector(z + ' details.nota-plegable') && !document.querySelector(z + ' details.nota-plegable[open]'), Zd), 'la nota de evidencia llega cerrada');
             ok(/Mezclar fichas/.test(r.texto) && /Larsen 2009/.test(r.texto) && /Kerfoot 2010/.test(r.texto) && /Hatala 2003/.test(r.texto) && /Monteiro 2017/.test(r.texto), 'cabecera con la evidencia (Larsen, Kerfoot) y la nota del entrelazado (Hatala, Monteiro)');
             ok(!(await p.evaluate(f => !!document.querySelector(`#${f} .est-resumen`)?.offsetParent, C)), 'mientras dura el repaso, la lista de pasos no se ve');
         }

@@ -200,13 +200,14 @@ function selloCarmen() {
     ponerSelloTaco();
 }
 // El sello y sus constantes (también los usa el caso de Carmen en su pantalla del sello)
-function ponerSelloTaco() {
-    tope.poner('carmen-taco', { nivel: 'sello', titulo: 'TACO', texto: 'Sin indicación: edema pulmonar en 6 h', cita: CITA_TACO, origen: 'ficha · p. 8 y 15-16', deshabilita: ['#cpv-m-transf'] });
+function ponerSelloTaco(sinNombre = false) {
+    // en el caso de Carmen el sello no da el diagnóstico hasta que contestas «¿qué le ha pasado?»
+    tope.poner('carmen-taco', { nivel: 'sello', titulo: sinNombre ? 'Edema pulmonar' : 'TACO', texto: 'Sin indicación: edema pulmonar en 6 h', cita: sinNombre ? null : CITA_TACO, origen: 'ficha · p. 8 y 15-16', deshabilita: ['#cpv-m-transf'] });
     let n = document.getElementById('cpv-carmen-nota');
     if (!n) { n = document.createElement('div'); n.id = 'cpv-carmen-nota'; n.className = 'cpv-carmen-nota'; $('lamina-caja').after(n); }
     n.hidden = false;
     n.innerHTML = `<p class="cpv-carmen-cts" role="status">${CARMEN_TACO_CONSTANTES.map(([k, v]) => `<b>${k} ${v}</b>`).join(' · ')} <span class="cpv-org cpv-ilu">fisiología general · ilustrativas</span></p>`
-        + '<p class="cpv-carmen-honesta">El libro no dice que dos bolsas den más TACO que una (p. 15). Lo que el sello castiga es transfundir sin indicación (Hb ≥7, p. 8) a una paciente con insuficiencia cardíaca (p. 15).</p>';
+        + '<p class="cpv-carmen-honesta">El libro: ≈1 %, más con IC previa (p. 15); la app castiga la bolsa sin indicación (p. 8). En una IC real el gasto caería; el modelo lo deja fijo (ilustrativo).</p>';
     setTimeout(() => verFrase(n, { dock: $('dock'), techo: 8 }), 450);   // tras abrirse la lupa
 }
 // Abre el modelo como Carmen (lo usa el caso de Carmen; también sirve de punto de entrada para la prueba)
@@ -464,14 +465,14 @@ const Mayeutica = crearMayeuticaModelo({
     subir, reiniciar: () => { aplicar(estadoBase(), { frase: false }); if (Lupa.abierta) Lupa.cerrar(); },
     volverPor: 'Capilar y oxígeno',
     pregunta: {
-        alEmpezar: q => { salirDeCarmen(); ponerCamas(q.camas); ponerModelo(q); if (q.carmen === 'taco') ponerSelloTaco(); },
+        alEmpezar: q => { salirDeCarmen(); ponerCamas(q.camas); ponerModelo(q); if (q.carmen === 'taco') ponerSelloTaco(!!q.sinNombre); },
         // Al elegir una opción con consecuencia, el modelo pasa a su estado; en el caso de Carmen se recuerda la rama
         alConsecuencia: (c, q) => { if (q.id === 'cm-1') rama.b1 = true; if (q.id === 'cm-2') rama.b2 = true; ponerModelo({ ...q, estado: c.estado, lupa: c.lupa, mirar: c.mirar || q.mirar }); },
         antes: q => (typeof q.antes === 'function' ? q.antes() : ''),
         alPintar: () => pintarCamas(),
         enlazar: enlazarOrigenes,
         verEnTexto: q => verEnTexto(q.fuente),
-        alCerrar: q => { if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); } setOcultos([]); },
+        alCerrar: q => { if (q.carmen === 'taco' && q.sinNombre) ponerSelloTaco(); if (q.despues) { aplicar(estadoDe(q.despues), { frase: false }); if (q.lupaDespues) Lupa.abrir(q.lupaDespues); } setOcultos([]); },
         alSalir: () => { salirDeCarmen(); mirar(null); setOcultos([]); ponerCamas(null); },
         // Las camas del caso: «Ver cama 1 / cama 2» pone el modelo en cada una
         alClic: (e, q) => {
@@ -503,7 +504,7 @@ const Mayeutica = crearMayeuticaModelo({
         casos: 'El modelo se mueve al estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.',
         abrirPaciente: 'Abrir el modelo en el estado del paciente',
     },
-    preguntaDePaso: (paso, C) => (paso.pregunta.id === 'cm-1' && (rama.b1 = rama.b2 = false), { carmen: paso.carmen, antes: paso.antes, estado: rama.b1 && paso.estadoB1 ? paso.estadoB1 : paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar, camas: paso.camas || C.camas }),
+    preguntaDePaso: (paso, C) => (paso.pregunta.id === 'cm-1' && (rama.b1 = rama.b2 = false), { carmen: paso.carmen, sinNombre: paso.sinNombre, antes: paso.antes, estado: rama.b1 && paso.estadoB1 ? paso.estadoB1 : paso.estado, lupa: paso.lupa, mirar: paso.mirar, ocultar: paso.ocultar || paso.pregunta.ocultar, camas: paso.camas || C.camas }),
     // Si el paso compara camas, sus botones van bajo la ficha del paciente
     cabeceraPaso: (paso, C) => {
         const camas = paso.camas || C.camas, ramaHtml = paso.cab ? paso.cab(rama) : '';
