@@ -232,10 +232,15 @@ if (!pide('--sin-navegador')) {
                 await pag.waitForTimeout(2500);
                 const estado = await pag.evaluate(() => {
                     const c = document.getElementById('at-capitulo'), cuerpo = document.getElementById('at-cuerpo');
-                    return { visible: !!c && !c.hidden && c.offsetParent !== null, texto: cuerpo?.innerText.length || 0, figura: !!cuerpo?.querySelector('canvas, svg') };
+                    const aviso = cuerpo?.querySelector('.at-en-preparacion'), repaso = document.getElementById('btn-eco-atlas-repasar');
+                    return { visible: !!c && !c.hidden && c.offsetParent !== null, texto: cuerpo?.innerText.length || 0, figura: !!cuerpo?.querySelector('canvas, svg'),
+                        enPreparacion: !!aviso && aviso.offsetParent !== null, sinRepaso: !!repaso?.hidden };
                 });
                 if (!estado.visible || estado.texto < 500) { mal(`${ancho}px: el capítulo ${k} del atlas no se abre (o está casi vacío)`); continue; }
-                estado.figura ? ok(`${ancho}px: atlas ${k} abre con figura`) : mal(`${ancho}px: atlas ${k}: no se montó ninguna figura (canvas o svg)`);
+                // Fase A (solo texto, aprobada el 30/10): sin figura vale solo con el aviso visible y sin «Repasar».
+                if (estado.figura) ok(`${ancho}px: atlas ${k} abre con figura`);
+                else if (estado.enPreparacion && estado.sinRepaso) ok(`${ancho}px: atlas ${k}: solo texto, con el aviso «en preparación» y sin «Repasar»`);
+                else mal(`${ancho}px: atlas ${k}: no se montó ninguna figura (canvas o svg)${estado.enPreparacion ? ' y «Repasar» sigue a la vista' : ' ni hay aviso «en preparación»'}`);
                 const sin = await imagenes('#at-cuerpo');
                 const d = await desborda();
                 if (sin.length) mal(`${ancho}px: atlas ${k}: imágenes sin cargar: ${sin.join(', ')}`);
