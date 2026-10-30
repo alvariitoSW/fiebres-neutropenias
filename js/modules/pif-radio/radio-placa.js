@@ -67,9 +67,19 @@ export const PASOS_SONDA = {
         no: { estado: 'tfg-estado-warn', final: T_SONDA('La ficha da la colocación en el estómago como probable si la punta está por debajo de la cúpula del hemidiafragma izquierdo.' + cita('sonda', 27, 'Marino, cap. 49.'), '#mu-sonda-rx') } },
 };
 
-const ne = c => c.replace(/\. /, '.</strong><span style="font-weight:400"> ') + '</span><strong>';
+const RESALTES = [['más de 5 mm', 'hl hl-rojo'], ['63,2%', 'hl hl-rojo'], ['100%', 'hl hl-rojo'], ['TAS ≤140', 'hl hl-rojo'], ['hidrocefalia obstructiva', 'hl hl-azul']];
+// Primera frase en negrita y el resto en 2-3 puntos (el mismo texto); las citas (tras el primer <br>) quedan igual.
+const ne = c => {
+    const k = c.indexOf('<br><small'), cuerpo = k < 0 ? c : c.slice(0, k), cola = k < 0 ? '' : c.slice(k);
+    const fr = cuerpo.split(/(?<=[a-z0-9%)])\.\s+(?=[A-ZÁÉÍÓÚ])/), pri = fr.shift();
+    const n = Math.ceil(fr.length / 3), pts = [];
+    for (let i = 0; i < fr.length; i += n) pts.push(fr.slice(i, i + n).map(x => x.replace(/\.$/, '')).join('. ') + '.');
+    let lista = pts.map(x => `<li>${x}</li>`).join('');
+    RESALTES.forEach(([t, c2]) => { if (lista.includes(t)) lista = lista.replace(t, `<span class="${c2}">${t}</span>`); });
+    return `<span class="radio-pts"><strong>${pri}.</strong></span><ul style="font-weight:400; margin:6px 0 0 18px; padding:0;">${lista}</ul>` + cola;
+};
 const T_UMI = (c, res, rot) => ne(c) + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-marshall', res, rot || 'Clasificación de Marshall (Manual UMI)');
-const T_UMI_TCE = c => (c.includes('font-weight:400') ? c : ne(c)) + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-tce-manejo', '', 'Manejo del TCE (Manual UMI)');
+const T_UMI_TCE = c => (c.includes('radio-pts') ? c : ne(c)) + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-tce-manejo', '', 'Manejo del TCE (Manual UMI)');
 const T_NEURO = (c, tab, res, rot) => ne(c) + ver('libros', 'marinoNeuro', 'panel-marino-neuro-tabs', tab, res, rot);
 
 export const PASOS_CRANEO = {
@@ -96,6 +106,14 @@ export function init() {
     initSiNoWizard('radio-via', PASOS_VIA);
     initSiNoWizard('radio-sonda', PASOS_SONDA);
     initSiNoWizard('radio-craneo', PASOS_CRANEO);
+    const botones = document.getElementById('radio-craneo-botones');
+    if (botones) botones.addEventListener('click', () => setTimeout(() => {
+        const preg = document.getElementById('radio-craneo-pregunta');
+        if (!preg || !preg.textContent.includes(PASOS_CRANEO.c2.pregunta) || preg.querySelector('.radio-craneo-aviso')) return;
+        const b = document.querySelector('#radio-f5-fig .fig-rot-btn, #radio-f5-fig button[aria-pressed]');
+        if (b && b.getAttribute('aria-pressed') === 'false') b.click();
+        preg.insertAdjacentHTML('afterbegin', '<span class="radio-craneo-aviso" style="display:block; margin-bottom:6px;"><em>Mira la figura: la sangre hiperdensa está rotulada.</em></span>');
+    }, 0));
     initLee();
     montarRotulos(document.getElementById('pif-radio-placa-view'), ROTULOS_PIF_RADIO);
 }

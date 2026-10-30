@@ -272,18 +272,6 @@ export const preguntasPifRadio = [
         explicacion: 'La TC detecta el edema focal como señal hipodensa anormal, y los infartos son ejemplo de edema focal (Libro Azul, pág. 51). Pensar en sangre antigua o en hematoma epidural no lo dice ninguna fuente de la app y te alejaría del ictus. Un artefacto no se interpreta así sin más: no dejar de buscar causa podría costar tiempo de tratamiento. Origen: ficha.',
     },
     {
-        id: 'pifradio-q022', tema: 'pifradio-craneo',
-        enunciado: 'Encuentra el error. ¿Cuál de estas lecturas de una TC de cráneo es incorrecta?',
-        opciones: [
-            'Una TC normal en un TCE con GCS ≤8 puede justificar monitorizar la PIC si hay hipotensión sistólica por debajo de 90 mm Hg',
-            'La línea media desviada solo es factor de mal pronóstico por encima de 20 mm, el umbral de la tabla de Marshall',
-            'La ausencia de cisternas basales es factor de mal pronóstico del TCE',
-            'El hematoma intracerebral se ve como una zona hiperdensa',
-        ],
-        correcta: 1,
-        explicacion: 'Es incorrecta la segunda: la ficha de factores pronósticos del Manual UMI cuenta la línea media desviada más de 5 mm (PDF pág. 27); los 20 mm son los que imprime la tabla de Marshall en el tipo IV, una discrepancia del propio manual (PDF pág. 42) y esta app usa 5 mm. Medirla con 20 mm te haría tardar en alarmarte con un paciente que ya tiene mal pronóstico. Las otras tres son ciertas (Libro Azul, pág. 52; Manual UMI, pág. 27; Marino, pág. 43). Origen: ficha.',
-    },
-    {
         id: 'pifradio-q023', tema: 'pifradio-craneo',
         enunciado: 'Hemorragia subaracnoidea por aneurisma roto, aún sin asegurar y con la TAS en 190 mm Hg. ¿Qué objetivo y fármaco propone Marino?',
         opciones: [
@@ -320,8 +308,20 @@ export const preguntasPifRadio = [
         explicacion: 'La prioridad es frenar el hematoma con reversión inmediata (CCP de 4 factores más vitamina K; Marino, cap. 47, págs. 42-44), y la sangre intraventricular obliga a consultar neurocirugía por el riesgo de hidrocefalia obstructiva (pág. 45). La vitamina K se da junto al CCP; su efecto empieza hacia las 2 h y es máximo a las 24 h (pág. 42), así que no frena el hematoma a tiempo; la heparina empeora la hemorragia. Origen: ficha.',
     },
     {
+        id: 'pifradio-q022', tema: 'pifradio-caso-craneo',
+        enunciado: 'Caso (3/4). Encuentra el error en el plan del residente de guardia (hay 1)',
+        opciones: [
+            'Revertir ya la warfarina con CCP de 4 factores más vitamina K',
+            'Consultar con neurocirugía por la sangre dentro de los ventrículos',
+            'Vigilar la aparición de hidrocefalia obstructiva',
+            'Vitamina K iv sola y TC a las 24 h',
+        ],
+        correcta: 3,
+        explicacion: 'Es el error la cuarta: la vitamina K sola tarda, su efecto empieza hacia las 2 h y es máximo a las 24 h, por eso se da junto al CCP de 4 factores (Marino, cap. 47, págs. 42-44), y esperar a la TC de las 24 h deja que el hematoma siga creciendo. Las otras tres son ciertas: se revierte ya el antitrombótico (págs. 42-44) y la sangre intraventricular obliga a consultar con neurocirugía por el riesgo de hidrocefalia obstructiva (pág. 45). Origen: ficha.',
+    },
+    {
         id: 'pifradio-q026', tema: 'pifradio-caso-craneo',
-        enunciado: 'Caso (3/4, giro). A las 6 h una pupila se dilata y el Glasgow cae a 7 (cifras ilustrativas). La nueva TC muestra más sangre, línea media desviada y cisternas basales ausentes. ¿Qué interpretas?',
+        enunciado: 'Caso (4/4, giro). A las 6 h una pupila se dilata y el Glasgow cae a 7 (cifras ilustrativas). La nueva TC muestra más sangre, línea media desviada y cisternas basales ausentes. ¿Qué interpretas?',
         opciones: [
             'Una lesión estable: se mantiene el plan anterior y se repite la TC en 24 horas',
             'Un Marshall III: cirugía urgente sin medir la PIC',
@@ -332,8 +332,8 @@ export const preguntasPifRadio = [
         explicacion: 'Con desviación de la línea media y cisternas ausentes hay efecto de masa y swelling (Manual UMI, págs. 79 y 94), y Marino pide medir la PIC con GCS de 8 o menos, sangre intraventricular o signos de herniación como una pupila dilatada (cap. 47, pág. 45). Dejarla en 24 h perdería el momento de operar; los antiagregantes empeorarían la hemorragia. Puntúa con la tabla de Marshall (ficha umi-marshall, pág. 94 del manual): el Marshall III es swelling bilateral con cisternas ausentes (HTIC 63,2%); aquí la línea media desviada y la sangre añadida lo llevan al IV (swelling unilateral con línea media desviada, HTIC 100%) o a masa no evacuada si pasa de 25 cc (84,6%); y la cirugía urgente sin medir la PIC no sigue de la clase III. Lo que te llevas: 1) línea media y cisternas se leen siempre tras ver sangre; 2) cisternas ausentes más línea media desviada es efecto de masa, no una lesión estable; 3) con GCS ≤8 y signos de herniación se pide neurocirugía y se mide la PIC. Origen: ficha.',
     },
     {
-        id: 'pifradio-q027', tema: 'pifradio-caso-craneo',
-        enunciado: 'Caso B: otro paciente (4/4, giro). Una mujer de 50 años en coma tras un accidente, con GCS de 7 y TAS de 85 mm Hg (datos ilustrativos). La TC no muestra sangre ni hipodensidad focal. ¿Qué haces?',
+        id: 'pifradio-q027', tema: 'pifradio-craneo',
+        enunciado: 'Otro paciente: una mujer de 50 años en coma tras un accidente, con GCS de 7 y TAS de 85 mm Hg (datos ilustrativos). La TC no muestra sangre ni hipodensidad focal. ¿Qué haces?',
         opciones: [
             'Descartar la hipertensión intracraneal, porque la TC es normal y el coma será metabólico',
             'Pensar en monitorizar la PIC pese a la TC normal',

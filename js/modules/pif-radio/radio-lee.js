@@ -46,7 +46,7 @@ function montar(ej, host) {
     btn.addEventListener('click', () => {
         if (btn.disabled) return;
         hecho = true; btn.disabled = true; pie.textContent = ej.pie;
-        estado.textContent = 'Comprobado: el círculo amarillo marca la punta; el discontinuo, la carina.';
+        estado.textContent = 'Comprobado: el círculo amarillo marca la punta; el discontinuo, la carina; el morado, tu toque.';
         caja.querySelectorAll('.radio-tapa').forEach(n => n.remove());
         const r = img.getBoundingClientRect();
         const dx = (toque[0] - ej.punto[0]) / 100 * r.width, dy = (toque[1] - ej.punto[1]) / 100 * r.height;
@@ -60,8 +60,8 @@ function montar(ej, host) {
         const ok = eleg === ej.correcta;
         const v = ej.ver;
         res.style.display = '';
-        res.innerHTML = `<p style="margin:0 0 6px;"><strong>${ok ? 'Tu lectura coincide con el libro.' : 'Tu lectura no coincide con el libro.'}</strong> ${ej.respuesta}</p>
-            <p style="margin:0 0 6px;"><strong>${cerca ? 'Tu toque cayó cerca de la punta.' : carina ? 'Has tocado la carina, no la punta.' : 'Tu toque cayó lejos de la punta.'}</strong> ${carina ? ej.regla + ' ' : ''}El círculo amarillo marca la punta; el discontinuo, la carina.</p>
+        res.innerHTML = `<p style="margin:0 0 6px;"><strong>${ok ? 'Tu lectura coincide con el libro.' : 'Tu lectura no coincide con el libro.'}</strong> ${ej.respuesta}${!ok && ej.porque && ej.porque[eleg] ? ' ' + ej.porque[eleg] : ''}</p>
+            <p style="margin:0 0 6px;"><strong>${cerca ? 'Tu toque cayó cerca de la punta.' : carina ? 'Has tocado la carina, no la punta.' : 'Tu toque cayó lejos de la punta.'}</strong> ${carina ? ej.regla + ' ' : ''}El círculo amarillo marca la punta; el discontinuo, la carina; el morado, tu toque.</p>
             <p style="margin:0;">${ej.frase} <a class="biblio-link" href="${ej.pdf}#page=${ej.pag}" target="_blank" rel="noopener">Marino, pág. ${ej.pag}</a></p>
             <button type="button" class="especialidad-link" style="margin-top:8px;" data-especialidad="${v.esp}" data-view="${v.view}" data-panel="${v.panel}" data-tab="${v.tab}" data-resaltar="${v.res}">🔗 Ver en el texto: ${v.rot} →</button>
             <button type="button" class="siguiente-ficha-btn" id="${p}-repetir" style="margin-top:10px;">↺ Repetir</button>`;
