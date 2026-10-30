@@ -927,3 +927,6 @@ Tablas de Guyton regeneradas.
 - Atlas, capítulo 22 (miocardiopatía hipertrófica): fase A, solo texto traducido (`atlas/cap-hcm.html`), sin figura todavía; enlaza a los capítulos 10, 12, 13 y 15.
 - Atlas, capítulo 23 (amiloidosis cardíaca): fase A, solo texto traducido (`atlas/cap-amyloid.html`), sin figura todavía; enlaza a los capítulos 02, 09, 10, 11 y 13, y las menciones del 23 en los capítulos 10, 13, 21 y 22 pasan a botón.
 - Atlas, capítulo 20 (enfermedades de la aorta): fase A, solo texto traducido (`atlas/cap-aorta.html`), sin figura todavía; enlaza a los capítulos 02 y 16.
+- Atlas, capítulo 04 (vistas transtorácicas): fase A, solo texto traducido (`atlas/cap-windows.html`), sin figura todavía; tabla de las vistas con lo que muestran y lo que se adquiere (ASE 2019); enlaza a los capítulos 08 y 09.
+- Atlas, capítulo B4 (cortocircuitos: CIA, CIV y FOP): fase A, solo texto traducido (`atlas/cap-shunts.html`), sin figura todavía; tabla de los grados de la figura original; enlaza a los capítulos 08, 10 y 14.
+- Atlas, capítulo B5 (masas y trombos: mixoma de la AI, trombo del VI y fibroelastoma papilar): fase A, solo texto traducido (`atlas/cap-masses.html`), sin figura todavía; tabla de los grados de la figura original; enlaza a los capítulos 11 y 17.
