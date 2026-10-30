@@ -11,7 +11,9 @@ const RUTAS = {
   torax: { boton: 'btn-pif-radio-torax', vista: 'pif-radio-torax-view', panel: 'panel-pif-radio-torax-tabs', cork: 'pif-radio-torax-corkboard',
     fichas: [
       { tab: 'radio-t1', prefijo: 'radio-t1', rutas: [['n'], ['s', 's'], ['s', 'n', 's'], ['s', 'n', 'n']], destino: 'neumo-cuidado-barotrauma' },
-      // [HUECO T2/T3: sus fichas y tarjetas]
+      { tab: 'radio-t2', prefijo: 'radio-t2', rutas: [], destino: '' }, // sin tarjeta Sí/No: solo abre y mide
+      { tab: 'radio-t3', prefijo: 'radio-t3', rutas: [], destino: '' },
+      // [HUECO T2/T3: sus tarjetas, si algún día llevan]
     ] },
   neuro: { boton: 'btn-pif-radio-neuro', vista: 'pif-radio-neuro-view', panel: 'panel-pif-radio-neuro-tabs', cork: 'pif-radio-neuro-corkboard',
     fichas: [
@@ -51,6 +53,7 @@ for (const w of [390, 360]) {
         if (!res.vis || !res.pag || !res.btn || res.dw > 0) fallos.push(`${w} ${f.prefijo} ${ruta}: ${JSON.stringify(res)}`);
         if (CAP && ruta.length === 2) await p.screenshot({ path: `${CAP}${w}-${f.prefijo}-${ruta.join('')}.png` });
       }
+      if (!f.rutas.length) continue; // ficha sin tarjeta Sí/No
       // «Ver en el texto» del último final → ficha de origen → VOLVER
       await p.evaluate(pf => document.querySelector(`#${pf}-resultado button[data-tab]`).click(), f.prefijo); await p.waitForTimeout(600);
       if (!await p.evaluate(d => document.getElementById(d)?.classList.contains('active'), f.destino)) fallos.push(`${w} ${f.prefijo}: «Ver en el texto» no abre ${f.destino}`);
