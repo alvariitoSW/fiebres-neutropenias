@@ -1152,6 +1152,9 @@ inmersión, receptores animados y los modelos nuevos (arteria culpable, taponami
   **Juez nuevo de geometría**: en el mínimo, el medio y el máximo de cada mando, ningún contorno se cruza consigo
   mismo, las proporciones (VD/VI, grosor de pared, AD) caen en el rango de la guía con su página, y la captura de
   cada extremo va al parte.
+- **Referencias de forma** (B-049, aprobado por el usuario el 30/10): una malla 3D generada por IA (p. ej. Tripo AI,
+  como la de anatomyatelier.org) es bonita pero nadie ha comprobado su anatomía: **nunca** sirve de referencia para
+  los criterios 1 (proporciones) y 2 (forma). Esas salen solo de las figuras y tablas con página de `docs/`.
 - **Hecho**: lo anterior + E/e′ del TEP posible + VD/VI > 1,0 en la HP crónica grave + J1 y J2 en verde en las 9 formas
   + las 505 pruebas de la eco y la del shock en verde + el dibujo de hoy sigue hasta que el nuevo pase (interruptor).
 - **Lo que NO quiero**: three.js (no elegido); fotos de pacientes con licencia restrictiva (CLAUDE.md §7.9); dejar el

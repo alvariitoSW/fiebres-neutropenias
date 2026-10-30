@@ -28,7 +28,8 @@ tiene nada que sirva para cortar una eco ni para un motor de fisiología. **No c
 | Malla del corazón | `models/heart.glb`, 3,3 MB: **1 malla, 1 nodo, 1 material** llamado `tripo_mat_…`, ≈386 600 triángulos, 3 texturas WebP; **sin animaciones, sin «morph targets», sin esqueleto** | visto: cabecera del GLB, leída en memoria |
 | Origen de la malla | generada con **Tripo AI** (texto/imagen → 3D); el autor dice que usó también GPT Image para las imágenes | visto: nombre del material + FAQ de la web |
 | Compresión | meshopt + cuantización + texturas WebP; decodificadores Draco y Basis servidos aparte | visto: extensiones del GLB y lista de archivos |
-| Corte transversal | un **plano de recorte** de three.js (`clippingPlanes`) que corta la cáscara | visto: `viewer.ts`; **no visto funcionando** (en el navegador del entorno, sin GPU, 3,5 fotogramas/s, la captura no mostró el corte) |
+| Corte transversal | un **plano de recorte** de three.js (`clippingPlanes`) que quita media figura | visto en `viewer.ts` y **funcionando** (2.ª pasada); la cara cortada mirada de frente: **no visto** |
+| Capas | no son capas de tejido: pasa la malla a **alambre** (`wireframe`) | visto en `viewer.ts` y funcionando (2.ª pasada) |
 | Aislar | baja la base y la sombra al 15 % y 8 % de opacidad | visto: `viewer.ts` |
 | Calidad en el móvil | `setPixelRatio` con un valor base | visto: `viewer.ts` |
 | Latido | ninguno: el «Animate» de la ficha es otra cosa; la malla no trae animación | visto: GLB sin `animations`; el cargador solo reproduce animaciones si la malla las trae |
@@ -90,7 +91,8 @@ hacer mallas con IA para el corazón de la eco; sus cifras de divulgación; anal
 
 - Abrir la ficha del corazón → 6 puntos con nombre (aorta, AI, AD, VI, VD, mitral) sobre el modelo (pantalla).
 - `heart.glb` → 1 malla, 0 animaciones, 0 morph targets (cabecera del GLB).
-- Corte transversal → no se vio el corte en el navegador del entorno (sin GPU): **no visto**.
+- Corte transversal → desaparece media figura (la derecha de la pantalla), de frente sin interior a la vista (captura).
+- Capas → toda la figura cubierta de puntitos: la malla en alambre (captura).
 
 ## Piezas (para la próxima visita)
 
@@ -100,6 +102,8 @@ hacer mallas con IA para el corazón de la eco; sus cifras de divulgación; anal
 ## Cómo se hizo y lo que no se pudo ver
 
 1 llamada para comprobar que abre (200, sin `<iframe>`); árbol del repo sin contenido; cabecera del GLB en memoria;
-1 pasada de Playwright a 390×844 (mapa de la red, texto, 2 capturas). No se vio: el corte transversal funcionando, las
-capas, la animación de función ni el quiz (el navegador del entorno no tiene GPU). Bloqueados por la red del entorno:
+1 pasada de Playwright a 390×844 (mapa de la red, texto, 2 capturas). **2.ª pasada (30/10, a petición del usuario)**: el entorno no tiene GPU en ningún modo
+(SwiftShader con ANGLE, EGL o Vulkan: 2,7-3,7 fotogramas/s), pero esperando 25 s tras cada pulsación se ven el corte y
+las capas. Truco para la próxima: quitar el giro automático, pulsar, esperar 25 s y capturar. No se vio: la cara
+cortada de frente (al girar con el ratón el corte no quedó a la vista), la animación de función ni el quiz. Bloqueados por la red del entorno:
 analítica y anuncios (no hacen falta).

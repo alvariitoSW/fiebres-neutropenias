@@ -257,6 +257,8 @@ esta sección.
 - **Lo que NO quiero**: su malla, código, imágenes o textos; three.js para esto.
 - **Tamaño**: nada la (1); pequeña cada una la (2) y la (3).
 - **Depende de**: tu respuesta; la (2) y la (3), de que B-045 esté hecho.
+- **30/10**: «apruebo lo de añadir la línea 1» → añadida al «Encargo B-045» del tablero. Pidió además ver el corte y
+  las capas: 2.ª pasada hecha (el corte quita media figura; las «capas» son la malla en alambre). La (2) y la (3), sin respuesta.
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -357,8 +359,8 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
      de aorta, Devereux 2012, Hickling 2001, Mireles-Cabodevila 2022, Carden 2026, AHA 2020/ERC 2021, SCAI 2015,
      Valdenebro 2021, Leung y Levine 1994, un libro de física de los ultrasonidos (B-028) y el capítulo
      cardiovascular de Bates o Surós.
-6. **B-049** (anatomyatelier.org): no sirve para el motor del corazón. ¿Añado la lección «malla de IA ≠ referencia» al
-   encargo de `mv-eco-2a5` y dejo «aislar el corte» y los rótulos 3D para después de B-045?
+6. **B-049** (anatomyatelier.org): ✅ la lección «malla de IA ≠ referencia» ya está en el encargo B-045 (aprobada el
+   30/10). Queda: ¿dejo «aislar el corte» y los rótulos 3D para después de B-045?
 
 **Ya no te toca** (Consejo, 30/10, 7.ª): SCA y disección (mirados) · HP crónica de la eco (lo arregla `mv-eco`, entra en
 su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`) · Wiggers (aprobado, `wiggers-movil`).
