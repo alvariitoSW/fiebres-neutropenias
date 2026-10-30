@@ -14,7 +14,7 @@ const f0 = (n) => (n == null || !isFinite(n) ? null : String(Math.round(n)));
 export const MODOS = [
   { k: 'vcv', et: 'VC-AC' },
   { k: 'simv', et: 'VC-SIMV', apagado: 'no en este modelo (sin respiración espontánea)' },
-  { k: 'spn', et: 'SPN-CPAP/PS', apagado: 'no en este modelo (sin respiración espontánea)' },
+  { k: 'psv', et: 'SPN-CPAP/PS' },
   { k: 'pcv', et: 'PC-AC' },
   { k: 'otros', et: 'Otros modos', apagado: 'no en este modelo (sin respiración espontánea)' },
 ];
@@ -31,8 +31,8 @@ export const CASILLAS = [
   { k: 'vm', et: 'VMe', u: 'L/min', que: 'Volumen minuto espirado = VTe × FR. Límites 2 y 20: fisiología general.', c: C.t271 },
   { k: 'ie', et: 'I:E', u: '', que: 'Relación inspiración:espiración. La ficha pide 1:2 o más.', c: C.flujoIE },
   { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, que: 'Copia el mando FiO₂. Este modelo no tiene gases: no cambia nada (ilustrativo).' },
-  { k: 'frespon', et: 'FRespon', u: '/min', ilu: true, que: `Frecuencia espontánea: vacía, ${SIN_ESP}.` },
-  { k: 'vmespon', et: 'VMe espon', u: 'L/min', ilu: true, que: `Volumen minuto espontáneo: vacío, ${SIN_ESP}.` },
+  { k: 'frespon', et: 'FRespon', u: '/min', ilu: true, que: 'Frecuencia del paciente en presión de soporte (ilustrativa: 16 por minuto). Vacía en volumen y presión control, que no tienen respiración espontánea en este modelo.' },
+  { k: 'vmespon', et: 'VMe espon', u: 'L/min', ilu: true, que: 'Volumen minuto espontáneo en presión de soporte. Vacío en volumen y presión control.' },
 ];
 const MANDOS = [
   { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, min: 21, max: 100, paso: 1, nota: 'Ilustrativo: este modelo no tiene gases y la FiO₂ no cambia nada.' },
@@ -95,31 +95,31 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
     const v = (x) => (tapado ? '?' : x);
     const val = {
       pico: { v: v(f1(l.pico)), lim: `≤${r.pmax ?? 40}` },
-      meseta: { v: v(f1(l.meseta)), sub: l.meseta == null && !tapado ? 'pausa: Insp. mant.' : '', lim: `≤${TOPE.meseta}` },
+      meseta: { v: v(f1(l.meseta)), sub: l.meseta == null && !tapado ? (r.modo === 'psv' ? 'no en PSV' : 'pausa: Insp. mant.') : '', lim: `≤${TOPE.meseta}` },
       peeptot: l.peepTot != null ? { v: v(f1(l.peepTot)), sub: tapado ? '' : `total · oculta ${f1(l.autoPeep) ?? '—'}`, lim: `≤${TOPE.peepTotMax}` } : { v: v(f0(r.peep)), sub: 'aplicada', lim: `≤${TOPE.peepTotMax}` },
       pmedia: { v: v(f1(l.pMedia)) },
-      frmand: { v: f0(r.fr) },
+      frmand: r.modo === 'psv' ? {} : { v: f0(r.fr) },
       fr: { v: v(f0(l.frReal)) },
       vt: { v: v(f0(l.vtExh)), sub: tapado || l.vtExh == null ? '' : `${f1(l.vtExh / kg)} /kg`, lim: `≤${vtMax}` },
       vm: { v: v(f1(l.vm)), lim: `<span>≤${TOPE.vmMax}</span><span>≥${TOPE.vmMin}</span>` },
       ie: { v: v(l.ie != null && isFinite(l.ie) ? `1:${f1(l.ie)}` : null) },
-      fio2: { v: f0(est.fio2) }, frespon: {}, vmespon: {},
+      fio2: { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
     };
     for (const [k, n] of Object.entries(marca)) if (val[k] && !tapado) val[k].estado = n;
     R.casillas(val);
     // mandos: rango, nota y si están apagados en este modo
-    const vcv = r.modo === 'vcv', ti = l.ti ?? (vcv ? r.vt / (r.flujo * 1000 / 60) : 60 / r.fr / (1 + r.ie));
+    const vcv = r.modo === 'vcv', psv = r.modo === 'psv', ti = l.ti ?? (vcv ? r.vt / (r.flujo * 1000 / 60) : psv ? 0 : 60 / r.fr / (1 + r.ie));
     const vtTope = Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10));
     R.mandos({
       fio2: { v: est.fio2 },
-      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ARDS Network 2000 (PMID 10793162, 12 inicial); ficha, cap. 24 p. 46: tradicional 12-15, normal 6-7.` } : { v: r.vt, apagado: 'En PC-AC no se fija el volumen: se fija la presión.' },
-      ti: vcv ? { v: f1(ti), txt: f1(ti), et: 'Flujo (mueve el Ti)', mueve: 'flujo', vRango: r.flujo, txtDesl: `${r.flujo} L/min`, min: 30, max: flujoTope(r.vt), paso: 5, u: '', nota: `Ti ${f1(ti)} s. En este modelo el Ti sale del flujo: Ti = VT ÷ flujo (sube el flujo y el Ti se acorta). Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` }
+      vt: vcv ? { v: r.vt, max: vtTope, nota: `${f1(r.vt / kg)} mL/kg de peso ideal (${f1(kg)} kg). Tope 12 mL/kg: ARDS Network 2000 (PMID 10793162, 12 inicial); ficha, cap. 24 p. 46: tradicional 12-15, normal 6-7.` } : { v: r.vt, apagado: psv ? 'En presión de soporte el volumen lo decide el paciente.' : 'En PC-AC no se fija el volumen: se fija la presión.' },
+      ti: psv ? { v: f1(ti), txt: f1(ti), apagado: 'En presión de soporte el paciente decide el Ti: la insuflación acaba al caer el flujo al 25 % del pico.' } : vcv ? { v: f1(ti), txt: f1(ti), et: 'Flujo (mueve el Ti)', mueve: 'flujo', vRango: r.flujo, txtDesl: `${r.flujo} L/min`, min: 30, max: flujoTope(r.vt), paso: 5, u: '', nota: `Ti ${f1(ti)} s. En este modelo el Ti sale del flujo: Ti = VT ÷ flujo (sube el flujo y el Ti se acorta). Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés.` }
         : { v: f1(ti), txt: f1(ti), et: 'I:E (mueve el Ti)', mueve: 'ie', vRango: r.ie, txtDesl: `1:${f1(r.ie)}`, min: 1, max: 4, paso: 0.5, u: '', nota: `Ti ${f1(ti)} s · I:E 1:${f1(r.ie)}. En este modelo el Ti sale de la relación I:E y de la FR.` },
-      fr: { v: r.fr }, peep: { v: r.peep, ...(vcv ? {} : { nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' }) },
-      dpsop: { v: null, txt: '—', apagado: 'Presión de soporte: para la respiración espontánea; no en este modelo.' },
+      fr: psv ? { v: r.frEsp, apagado: 'La frecuencia la pone el paciente (ilustrativa: 16).' } : { v: r.fr }, peep: { v: r.peep, ...(vcv ? {} : { nota: 'Ficha (cap. 27 p. 15): PEEP inicial 5-8; Tabla 27.1 p. 14: 5. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' }) },
+      dpsop: psv ? { v: r.ps, min: 5, max: 20, paso: 1, nota: 'Presión de soporte sobre la PEEP. Ilustrativo: Marino usa 10 cmH₂O en IMV (cap. 27 p. 10).' } : { v: null, txt: '—', apagado: 'Solo en SPN-CPAP/PS.' },
       rampa: { v: null, txt: '—', apagado: 'Rampa: no en este modelo (ilustrativo).' },
-      flujo: vcv ? { v: r.flujo, max: flujoTope(r.vt), nota: `Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo, límite técnico del modelo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés; I:E ≥1:2 (cap. 27 p. 14).` } : { v: r.flujo, txt: '—', apagado: 'En PC-AC no se fija el flujo.' },
-      pinsp: vcv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
+      flujo: vcv ? { v: r.flujo, max: flujoTope(r.vt), nota: `Ti mínimo ${f1(TOPE.tiMin)} s: ilustrativo, límite técnico del modelo (con VT ${r.vt} el flujo no pasa de ${flujoTope(r.vt)} L/min). Ficha: 60 L/min, ≥80 si hay distrés; I:E ≥1:2 (cap. 27 p. 14).` } : { v: r.flujo, txt: '—', apagado: psv ? 'En presión de soporte el flujo lo decide el paciente.' : 'En PC-AC no se fija el flujo.' },
+      pinsp: vcv || psv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });
     R.modo(r.modo, { detenido });

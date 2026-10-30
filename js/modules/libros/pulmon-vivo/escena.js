@@ -107,10 +107,10 @@ export function crearEscena(svg) {
     fi.classList.toggle('on', q > 1); fe.classList.toggle('on', q < -1);
     if (!info.reducir) { despl = (despl - q * 0.015) % 11; fi.setAttribute('stroke-dashoffset', f1(despl)); fe.setAttribute('stroke-dashoffset', f1(-despl)); }
     // la pantalla
-    $('pul-esc-p-modo').textContent = r.modo === 'vcv' ? 'VCV' : 'PCV';
+    $('pul-esc-p-modo').textContent = r.modo === 'vcv' ? 'VCV' : r.modo === 'psv' ? 'PSV' : 'PCV';
     $('pul-esc-p-vt').textContent = r.modo === 'vcv' ? r.vt : (L ? Math.round(L.vtExh) : '—');
     $('pul-esc-p-fr').textContent = r.fr; $('pul-esc-p-peep').textContent = r.peep;
-    $('pul-esc-p-flujo').textContent = r.modo === 'vcv' ? r.flujo : `Pi ${r.pinsp}`;
+    $('pul-esc-p-flujo').textContent = r.modo === 'vcv' ? r.flujo : `Pi ${r.modo === 'psv' ? r.ps : r.pinsp}`;
     $('pul-esc-p-alarma').hidden = !L?.alarmaPresion;
   }
   return { actualizar };

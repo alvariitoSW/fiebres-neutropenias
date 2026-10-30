@@ -104,5 +104,57 @@ ok(avisosAjuste(ax, 75).some((a) => a.k === 'sinvent') === (ax.vm < 2), `R 40: V
 ax = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60, pmax: 30 }, { c: 60, r: 40 }, MAN).lectura;
 ok(ax.vm < 2 && avisosAjuste(ax, 75).some((a) => a.k === 'sinvent'), `VCV con R 40 y pmax 30: Vt ${r1(ax.vtExh)} mL, avisa «sin ventilación»`);
 
+// ---- E1b: el ciclo (pares 4 y 6, cambio en la respiración siguiente, semilla fija, calculadora)
+import { tau, calcVentilacion, PSV } from '../../js/data/ventilacion-data.js';
+console.log('Par 4: constante de tiempo (LA2 pdf 50-51): R 20, C 60 → τ 1,2 s; con Te ≥ 4-5 τ la auto-PEEP ≈ 0; con Te < 4 τ el flujo final ≠ 0');
+ok(Math.abs(tau(20, 60) - 1.2) < 1e-9, `τ = ${tau(20, 60)} s (esperado 1,2)`);
+let Lt = simular({ modo: 'vcv', vt: 500, fr: 8, peep: 0, flujo: 60 }, { c: 60, r: 20 }, {}, { ciclos: 8 }).lectura;
+ok(Lt.teTau >= 5 && Lt.autoPeepReal < 0.2 && Math.abs(Lt.flujoFinEsp) < 1, `Te ${r1(Lt.te)} s = ${r1(Lt.teTau)} τ: auto-PEEP ${r1(Lt.autoPeepReal)}, flujo final ${r1(Lt.flujoFinEsp)}`);
+Lt = simular({ modo: 'vcv', vt: 500, fr: 24, peep: 0, flujo: 60 }, { c: 60, r: 20 }, {}, { ciclos: 12 }).lectura;
+ok(Lt.teTau < 4 && Lt.flujoFinEsp < -2 && Lt.autoPeepReal > 1, `Te ${r1(Lt.te)} s = ${r1(Lt.teTau)} τ < 4: flujo final ${r1(Lt.flujoFinEsp)} L/min, auto-PEEP ${r1(Lt.autoPeepReal)}`);
+
+console.log('Par 6: PSV (Herminia: PS 10, PEEP 5, C 40, R 8): el flujo cicla al 25 % del pico; disparo de −2 a −3 cmH₂O');
+const PSVR = { modo: 'psv', ps: 10, peep: 5, frEsp: 16, fr: 16, pmax: 40 }, PSVP = { c: 40, r: 8 };
+const sp = simular(PSVR, PSVP, {}, { ciclos: 12, ventana: 12 }), Lp = sp.lectura;
+ok(Lp.psv && Math.abs(Lp.psv.qCiclo - PSV.ciclado) < 0.04, `ciclado a ${r1(Lp.psv.qCiclo * 100)} % del flujo pico (${r1(Lp.psv.qPico)} L/min)`);
+ok(Lp.psv.disparo >= 2 && Lp.psv.disparo <= 3, `esfuerzo de disparo ${r1(Lp.psv.disparo)} cmH₂O (2-3, M27 pdf 8)`);
+ok(Math.abs(Math.min(...sp.paw) - (5 - Lp.psv.disparo)) < 0.15 || Math.min(...sp.paw) <= 5 - 1.9, `la presión baja por debajo de la PEEP en el disparo (mín ${r1(Math.min(...sp.paw))})`);
+ok(entre(Lp.pico, 14.9, 15.1) && Lp.vtExh > 250 && Lp.vtExh < 450 && Lp.meseta == null, `PS 10 + PEEP 5 → pico 15, Vt ${r1(Lp.vtExh)} mL, sin meseta (el paciente respira solo)`);
+ok(entre(Lp.frReal, 15.5, 16.5), `FR del paciente ${r1(Lp.frReal)} /min`);
+const p2 = simular(PSVR, PSVP, { pausa: true, oclusion: true }, { ciclos: 12 }).lectura;
+ok(p2.meseta == null && p2.peepTot == null, 'en PSV la pausa y la oclusión no valen (el paciente respira por su cuenta, cap. 28 p. 31)');
+ok(sp.fase.includes('disparo') && sp.fase.includes('insp') && sp.fase.includes('esp'), 'el ciclo PSV pasa por disparo, inspiración y espiración');
+
+console.log('Un mando movido a mitad de ciclo entra en la respiración siguiente (nunca a mitad)');
+{
+  const P = crearPulmon({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r: 5 });
+  while (P.lectura() == null) P.paso(0.005);
+  while (P.fase !== 'insp') P.paso(0.005);   // empieza una inspiración (ciclo en curso)
+  const ref = crearPulmon({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r: 5 });
+  while (ref.lectura() == null) ref.paso(0.005); while (ref.fase !== 'insp') ref.paso(0.005);
+  const Ti = 500 / (60000 / 60), traza = [], trazaRef = [];
+  for (let i = 0, n = Math.round(Ti / 2 / 0.005); i < n; i++) { P.paso(0.005); ref.paso(0.005); }
+  P.ajustar({ peep: 12, vt: 700 });   // a t = Ti/2
+  ok(P.pendientes().includes('peep') && P.pendientes().includes('vt'), 'los mandos movidos quedan pendientes');
+  for (let i = 0; P.fase === 'insp' && i < 4000; i++) { P.paso(0.005); ref.paso(0.005); traza.push(P.paw); trazaRef.push(ref.paw); }
+  ok(traza.every((v, i) => v === trazaRef[i]), 'el resto de la inspiración en curso es idéntico al de referencia sin cambio');
+  const Lc = P.lectura(); let g = 0; while (P.fase !== 'esp' && g++ < 9000) P.paso(0.005);
+  while (P.fase === 'esp' && g++ < 20000) P.paso(0.005);
+  while (P.fase !== 'esp' && g++ < 30000) P.paso(0.005);   // fin de la siguiente inspiración
+  ok(P.activo.peep === 12 && P.activo.vt === 700 && P.pendientes().length === 0, 'en la respiración siguiente ya entran PEEP 12 y Vt 700');
+  ok(Lc.vtIns < 520, `el Vt del ciclo en curso no cambió (${r1(Lc.vtIns)} mL)`);
+}
+
+console.log('Semilla fija: dos corridas dan las mismas cifras');
+const sa = simular(PSVR, PSVP, {}, { ciclos: 12 }), sb = simular(PSVR, PSVP, {}, { ciclos: 12 });
+ok(JSON.stringify(sa.paw) === JSON.stringify(sb.paw) && sa.lectura.psv.disparo === sb.lectura.psv.disparo, 'las dos corridas PSV son idénticas muestra a muestra');
+
+console.log('Calculadora (PBW, Vt/kg, Cstat, ΔP)');
+let cv = calcVentilacion({ talla: 175, sexo: 'v', vt: 576, meseta: 32, peep: 10 });
+ok(cv.pbw === 70.5, `Isidro 1,75 m → PBW ${cv.pbw}`); ok(cv.vtkg === 8.2 && cv.avisos.some((a) => /8 mL\/kg/.test(a)), `576 mL = ${cv.vtkg} mL/kg PBW (6 × el peso real 96 kg = 576): avisa`);
+ok(cv.dp === 22 && Math.abs(cv.cstat - (576 - 66) / 22) < 0.1, `ΔP ${cv.dp}, Cstat ${cv.cstat}`);
+cv = calcVentilacion({ talla: '', sexo: 'v', vt: 500, meseta: '', peep: '' });
+ok(cv.pbw == null && cv.cstat == null && cv.dp == null, 'un campo vacío no es 0');
+
 console.log(`\n${n - fallos} de ${n} comprobaciones en verde${fallos ? ` · ${fallos} FALLOS` : ''}`);
 process.exit(fallos ? 1 : 0);

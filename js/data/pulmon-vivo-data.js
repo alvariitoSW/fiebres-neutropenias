@@ -5,9 +5,13 @@
 
 export const PDF_A = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
 export const PDF_B = 'docs/marino-2024-respiratory-management-caps27-30.pdf';
+export const PDF_LA2 = 'docs/libro-azul-seccion-iv-respiratorio-parte2.pdf';
 const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
 export const FICHA = {
   'neumo-vm-modos': [NEUMO, 'Ventilación mecánica: los modos', 'VM: modos', PDF_B, 'Marino 2024'],
+  'neumo-vni-metodos': [NEUMO, 'Ventilación no invasiva: métodos', 'VNI: métodos', PDF_A, 'Marino 2024'],
+  // El libro azul no tiene ficha en la app: la cita lleva solo al PDF (sin «Ver en la ficha»)
+  'libro-azul-resp2': [null, 'El libro azul, sección IV (parte 2)', 'Libro azul IV', PDF_LA2, 'El libro azul IV'],
   'neumo-vm-ajuste': [NEUMO, 'Ventilación mecánica: ajustes', 'VM: ajustes', PDF_B, 'Marino 2024'],
   'neumo-peep-oculta': [NEUMO, 'PEEP oculta', 'PEEP oculta', PDF_B, 'Marino 2024'],
   'neumo-epoc-vpp': [NEUMO, 'EPOC: ventilación con presión positiva', 'EPOC y VPP', PDF_A, 'Marino 2024'],
@@ -46,6 +50,10 @@ export const C = {
   t245: { f: 'neumo-sdra-ventilacion', id: 'nep-tabla-24-5', sitio: 'Tabla 24.5: protocolo protector', p: 48 },
   protectora: { f: 'neumo-sdra-ventilacion', id: 'nep-protectora', sitio: 'Ventilación protectora: meseta ≤30', p: 48 },
   vtTrad: { f: 'neumo-sdra-ventilacion', id: 'nep-vt-tradicional', sitio: 'Volutrauma: Vt tradicional 12-15 mL/kg', p: 46 },
+  disparo: { f: 'neumo-vm-ajuste', id: 'nep-disparo-presion', sitio: 'Disparo por presión: 2 a 3 cmH₂O negativos', p: 8 },
+  psv4: { f: 'neumo-vni-metodos', id: 'nep-psv-4-puntos', sitio: 'PSV: los 4 puntos de interacción (corte al 25 % del flujo pico)', p: 78 },
+  tau: { f: 'libro-azul-resp2', id: null, sitio: 'Constante de tiempo (pp. 514-515)', p: 50 },
+  mejorPeep: { f: 'neumo-vm-ajuste', id: 'nep-mejor-peep', sitio: 'PEEP y PaO₂/FiO₂ (La mejor PEEP)', p: '10-12' },
   hipercapnia: { f: 'neumo-sdra-ventilacion', id: 'nep-hipercapnia', sitio: 'Hipercapnia permisiva', p: 49 },
 };
 export const NOTA_TIPO = { discrepan: ['Las fuentes discrepan', ''], calla: ['La fuente no lo dice', 'calla'], autor: ['Opinión del autor', 'autor'], errata: ['Errata de la fuente', 'errata'] };
@@ -57,6 +65,10 @@ export const NOTAS = [
   { k: 'fr-35', tipo: 'calla', txt: 'La ficha pide no pasar de 35 respiraciones por minuto (cap. 27 p. 14, tabla 27.1). Por encima, el libro advierte de que la respiración rápida favorece la hiperinflación y la PEEP intrínseca, y eso puede bajar el gasto cardíaco (cap. 27 p. 55; lo dice a propósito de las pruebas de respiración espontánea). Tuxen 1987 (PMID 3662241): al subir la frecuencia, menos tiempo espiratorio, más hiperinflación e hipotensión.', citas: [C.t271] },
   { k: 'apnea', tipo: 'calla', txt: 'Al detener la ventilación, la saturación cae y el CO₂ sube en minutos (Farmery 1996; Benumof 1997; Eger 1961). La velocidad depende de la oxigenación previa, el consumo de O₂, el volumen alveolar y el shunt, y es peor en obesos. El modelo no calcula gases y no da cifras por minuto: ninguna de las fuentes abiertas aquí las trae.', citas: [] },
   { k: 'peep-lineal', tipo: 'calla', txt: 'La PEEP aplicada «justo por debajo de la oculta» reduce la hiperinflación porque sostiene abiertas las vías pequeñas que se colapsan (p. 32-33). Un pulmón de un compartimento no tiene ese colapso: en esta pieza la PEEP aplicada no reduce la oculta. Va en la pieza siguiente (racimo con vías que se cierran). Y el propio libro añade que reducir la PEEP oculta con PEEP aplicada «probablemente no merece la pena» (p. 33).', citas: [C.peepAplicada, C.noMerece] },
+  { k: 'dp-sin-objetivo', tipo: 'calla', txt: 'La presión de conducción (meseta − PEEP) se calcula, pero Marino no da un objetivo numérico para ella, así que la calculadora no pone ninguno: el único objetivo de presión del libro es la meseta ≤30. La Fig. 27.5 solo la usa para buscar la mejor PEEP.', citas: [C.cstat, C.protectora] },
+  { k: 'psv-ilu', tipo: 'calla', txt: 'En la presión de soporte el modelo pone como ilustrativo lo que Marino no da: la frecuencia del paciente (16 por minuto), la compliance y la resistencia de Herminia, el tiempo que tarda su esfuerzo en llegar al umbral (0,1 s) y la pequeña variación del esfuerzo entre respiraciones (siempre dentro de 2-3 cmH₂O, con semilla fija: sale igual cada vez). El esfuerzo muscular como tal no está en el modelo.', citas: [C.disparo, C.psv4] },
+  { k: 'causas-pico', tipo: 'calla', txt: 'Las páginas citadas (cap. 27 pp. 2-4) separan la parte de resistencia de la parte elástica del pico (Ec. 27.1-27.3) pero no enumeran las causas clínicas de un pico alto; el árbol de la página solo reparte entre resistencia y elasticidad y no lista causas.', citas: [C.ec271, C.meseta] },
+  { k: 'tau-ilu', tipo: 'calla', txt: 'El libro azul da la definición de la constante de tiempo y las 4-5 constantes para eliminar la auto-PEEP; la cifra del par del modelo (R 20 × C 60 = 1,2 s) es ilustrativa. El libro azul no tiene ficha en la app: la cita lleva solo al PDF.', citas: [C.tau] },
 ];
 
 // ---------------------------------------------------------------- pacientes del bloque (cobertura-3d.md §5)
@@ -65,6 +77,7 @@ export const PACIENTES = [
   { k: 'isidro', nombre: 'Isidro', chip: '64 a · SDRA moderado', linea: '64 años, 96 kg, 1,75 m, neumonía bilateral → SDRA (P/F 110 con PEEP 10). PBW 70,5 kg.', talla: 175, sexo: 'v', estado: 'sdra-rigido' },
   { k: 'jacinto', nombre: 'Jacinto', chip: '58 a · EPOC grave', linea: '58 años, 70 kg, 1,70 m, EPOC grave, fumador; intubado tras fracasar la VNI. PBW 66 kg.', talla: 170, sexo: 'v', estado: 'broncoespasmo-auto-peep' },
   { k: 'eulalia', nombre: 'Eulalia', chip: '27 a · asma casi fatal', linea: '27 años, 60 kg, 1,62 m, asma casi fatal (PaCO₂ 42 tras 3 nebulizaciones), intubada. PBW 54 kg.', talla: 162, sexo: 'm', estado: 'eulalia-conectada' },
+  { k: 'herminia', nombre: 'Herminia', chip: '76 a · edema agudo de pulmón', linea: '76 años, 92 kg, 1,55 m, hipertensa, edema agudo de pulmón; ya respira por su cuenta con presión de soporte. PBW 47,9 kg.', talla: 155, sexo: 'm', estado: 'psv-disparo' },
 ];
 
 // ---------------------------------------------------------------- estados con nombre
@@ -184,8 +197,20 @@ export const ESTADOS = {
     ],
     fuentes: [C.estrategias, C.vppConsec, C.manejo],
   },
+  'psv-disparo': {
+    tit: 'Presión de soporte: el paciente dispara y el flujo corta', pac: 'herminia', resp: { modo: 'psv', vt: 500, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40, ps: 10, frEsp: 16 }, pulmon: { c: 40, r: 8 }, man: {},
+    frase: 'En presión de soporte el paciente dispara cada respiración y el flujo decide cuándo termina.',
+    guia: [
+      { t: 'Herminia respira por su cuenta. Su esfuerzo baja la presión de la vía aérea 2 o 3 cmH₂O por debajo de la PEEP y eso abre la válvula sensible a la presión del respirador: es el disparo por presión. En la curva de presión ves el hundimiento antes de cada respiración.', org: 'ficha (2-3) · esfuerzo de cada respiración: ilustrativo', s: ['paw:disparo'], c: C.disparo },
+      { t: 'Disparada la respiración, el flujo es alto al principio para subir la presión de la vía aérea lo antes posible hasta el nivel pedido (PEEP 5 + soporte 10 = 15), y luego el respirador lo ajusta a lo que el paciente pide.', org: 'ilustrativo (soporte 10)', s: ['paw:insp', 'flujo:insp'], c: C.psv4 },
+      { t: 'La insuflación termina cuando el flujo inspiratorio cae al 25 % del flujo pico. Mira la curva de flujo: baja desde el pico y se corta antes de llegar a cero.', s: ['flujo:insp', '[data-fila="vt"]'], c: C.psv4 },
+      { t: 'Por eso el paciente fija el tiempo de insuflación y el volumen: con la misma presión de soporte, si su pulmón se pone más rígido el flujo cae antes y entra menos volumen. Prueba a bajar la compliance en la pestaña Pulmón.', s: ['[data-fila="vt"]', 'vol:insp'], c: C.psv4 },
+      { t: 'Aquí no hay pausa inspiratoria ni oclusión espiratoria: la oclusión solo es fiable si el paciente no respira por su cuenta, y el modelo apaga las dos maniobras.', org: 'ficha (oclusión) · la pausa: deducción', s: ['#pul-esc-pantalla'], c: C.oclusion28 },
+    ],
+    fuentes: [C.disparo, C.psv4, C.oclusion28],
+  },
 };
-export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada'];
+export const ORDEN_ESTADOS = ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada', 'psv-disparo'];
 
 export const PROFUNDIZAR = [
   { t: 'Presión soporte y el disparo (por presión 2-3 cmH₂O, por flujo 1-10 L/min): el paciente que respira entra en la pieza 4.', c: { f: 'neumo-vm-ajuste', id: 'nep-disparo-presion', sitio: 'Disparo por presión (p. 8) y por flujo (p. 9)', p: '8-9' } },

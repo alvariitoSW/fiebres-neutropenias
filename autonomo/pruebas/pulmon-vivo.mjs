@@ -99,6 +99,49 @@ await abrir('normal-vcv'); await espera(900); await pest('resp'); await mando('v
 await abrir('broncoespasmo-auto-peep'); await espera(900); await pest('resp'); await mando('peep', 20);
 { const d = await ls(); ok(d.sello.length > 0 || d.avisos > 0, `par 10: PEEP 20 en el broncoespasmo da sello o aviso (${d.sello[0] || d.avisos + ' avisos'})`); await limpio('PEEP 20'); }
 
+// ───────── C2. E1b: el ciclo (par 6 PSV, 4 decisiones, mando en la respiración siguiente, árbol del pico, calculadora)
+await abrir('psv-disparo'); await espera(1200); await llenar();
+{ const d = await p.evaluate(() => { const c = window.__pulPruebas(); return { psv: c.L.psv, modo: c.P.S.resp.modo, pico: c.L.pico, fases: [...new Set(c.mon.dato('fase'))] }; });
+  ok(d.modo === 'psv' && d.psv && Math.abs(d.psv.qCiclo - 0.25) < 0.04, `par 6 (app): PSV cicla al ${Math.round((d.psv?.qCiclo ?? 0) * 100)} % del flujo pico`);
+  ok(d.psv.disparo >= 2 && d.psv.disparo <= 3 && d.fases.includes('disparo'), `PSV: disparo de ${d.psv.disparo.toFixed(2)} cmH₂O (2-3) visible en la curva de presión`);
+  ok(Math.abs((await cifra('pico')) - 15) < 0.2, 'PSV: Ppico en pantalla = PEEP 5 + soporte 10 = 15');
+  const fr = await cifra('frespon'); ok(fr >= 15 && fr <= 17, `PSV: FRespon en pantalla ${fr} (la del paciente, 16)`);
+  ok((await sub('meseta')).includes('PSV'), 'PSV: la casilla de meseta dice que no vale en PSV'); await limpio('PSV'); await foto('psv'); }
+ok(await p.evaluate(() => document.querySelectorAll('#pul-ciclo4 [data-decision]').length === 4), 'las 4 decisiones del ciclo están rotuladas (disparo, límite, ciclado, espiración)');
+ok(await p.evaluate(() => /25 %/.test(document.getElementById('pul-ciclo4').innerText)), 'PSV: el ciclado dice 25 % del flujo pico');
+// todos los mandos de la PSV a su extremo y al medio: sin NaN ni desborde, y el tope manda
+await pest('resp');
+for (const [k, vs] of [['ps', [5, 12, 20]], ['frEsp', [8, 19, 30]], ['peep', [0, 10, 20]], ['pmax', [20, 35, 50]]]) for (const v of vs) {
+  await mando(k, v); const d = await ls(); ok(Number.isFinite(d.L.vtExh) && Number.isFinite(d.L.vm) && d.L.vm < 21, `PSV ${k} ${v}: Vt ${Math.round(d.L.vtExh)} mL, VM ${d.L.vm.toFixed(1)} L/min`); await limpio(`PSV ${k} ${v}`); }
+await mando('ps', 10); await mando('frEsp', 16); await mando('peep', 5); await mando('pmax', 40);
+{ const d = await p.evaluate(() => { document.querySelector('#pul-dock-tabs [data-pest="man"]').click(); document.querySelector('#pul-dock-panel button[data-m="pausa"]')?.click(); return window.__pulPruebas().P.S.man.pausa; });
+  ok(d !== true, 'PSV: el botón de pausa no activa la maniobra'); await pest('resp'); }
+// cambiar de modo: VCV → PSV → VCV sin romper
+await clicM('modo', 'vcv'); await espera(300); await clicM('modo', 'psv'); await espera(300); await llenar();
+ok((await ls()).r.modo === 'psv' && (await cifra('pico')) > 0, 'VCV → PSV desde la pantalla'); await clicM('modo', 'vcv'); await limpio('modo PSV→VCV');
+// «los mandos entran en la respiración siguiente»
+if (!REDUCIDO) { await abrir('normal-vcv'); await espera(800);
+  const d = await p.evaluate(() => { const c = window.__pulPruebas(), i = document.querySelector('#pul-dock-panel input[data-m="peep"]'); i.value = 9; i.dispatchEvent(new Event('input', { bubbles: true })); return { pend: c.P.pendientes(), act: c.P.activo.peep, ped: c.P.S.resp.peep }; });
+  ok(d.pend.includes('peep') && d.act === 5 && d.ped === 9, 'un mando movido a mitad de ciclo queda pendiente (activo 5, pedido 9)'); }
+// el árbol «pico sube: ¿y la meseta?» y la calculadora
+await abrir('normal-vcv'); await espera(800); await p.evaluate(() => { document.getElementById('pul-arbol').open = true; document.getElementById('pul-cv').open = true; });
+await p.evaluate(() => document.getElementById('pul-arbol-pausa').click()); await espera(900); await llenar();
+{ const t = await p.evaluate(() => ({ pico: document.getElementById('pul-arbol-pico').textContent, mes: document.getElementById('pul-arbol-meseta').textContent, pres: document.getElementById('pul-arbol-pres').textContent }));
+  ok(num(t.mes) > 10 && num(t.pres) > 3, `árbol: con la pausa lee pico ${t.pico}, meseta ${t.mes}, resistencia ${t.pres}`);
+  await p.evaluate(() => document.querySelector('[data-arbol="igual"]').click());
+  ok(await p.evaluate(() => /resistencia/.test(document.getElementById('pul-arbol-concl').innerText) && !document.getElementById('pul-arbol-concl').hidden), 'árbol: «la meseta no se movió» concluye resistencia'); }
+{ const set = (id, v) => p.evaluate(([id, v]) => { const e = document.getElementById(id); e.value = v; e.dispatchEvent(new Event('input', { bubbles: true })); }, [id, v]);
+  const r = () => p.evaluate(() => Object.fromEntries(['pbw', 'vtkg', 'dp', 'cstat'].map(k => [k, document.getElementById('pul-cv-r-' + k).textContent])));
+  let c = await r(); ok(c.pbw === '—' && c.cstat === '—', 'calculadora: vacía no calcula (un campo vacío no es 0)');
+  await set('pul-cv-talla', 175); await set('pul-cv-vt', 576); c = await r(); ok(c.pbw === '70,5' && c.vtkg === '8,2', `calculadora: Isidro 1,75 m → PBW ${c.pbw} kg, 576 mL = ${c.vtkg} mL/kg`);
+  await set('pul-cv-meseta', 32); await set('pul-cv-peep', 10); c = await r(); ok(c.dp === '22' && num(c.cstat) > 20, `calculadora: ΔP ${c.dp}, Cstat ${c.cstat}`);
+  ok(await p.evaluate(() => !/objetivo/i.test(document.getElementById('pul-cv-avisos').textContent)), 'calculadora: la ΔP no lleva objetivo');
+  await set('pul-cv-meseta', 8); c = await r(); ok(c.dp === '—' && await p.evaluate(() => /no fisiol/i.test(document.getElementById('pul-cv-avisos').textContent)), 'calculadora: meseta ≤ PEEP avisa «no fisiológica»');
+  await limpio('calculadora'); await foto('calculadora'); }
+// τ (par 4) en la pestaña Pulmón
+await abrir('eulalia-ajustada'); await espera(900); await pest('pulmon');
+{ const t = await p.evaluate(() => document.querySelector('#pul-dock-panel .dock-nota')?.textContent || ''); ok(/63,2/.test(t) && /4-5 τ/.test(t), 'τ: la nota dice 63,2 % y 4-5 τ'); }
+
 // ───────── D. Explicación guiada de cada estado
 for (const k of ORDEN_ESTADOS) {
     await abrir(k); await espera(900);
