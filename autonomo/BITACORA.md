@@ -229,18 +229,20 @@ esta sección.
 - **Lista de calidad**: sin simulador · cifras por caso: no aplica · «lo que NO quiero»: sí · fuentes: Radiology
   Assistant (URL verificada en su informe) · juez: `--ficha` de cada ficha nueva.
 
-### B-041 · Raíz aórtica en la eco · apuntado 2026-10-29
-- **De dónde sale**: Consejo de Ministros del 29/10 (2.ª reunión, acta `autonomo/consejo/2026-10-29-2.md`), sobre el
-  informe del visor de la raíz aórtica (`autonomo/ideas/ingenieria-inversa/raiz-aortica.md`, cerrado).
-- **Cómo lo entiendo**: tipo `contenido`. Ficha de la raíz aórtica (anillo, senos, unión sinotubular, ascendente) con la
-  Tabla 14 de Lang 2015 (`docs/lang-2015-cuantificacion-camaras-ase.pdf`, pdf 32) y una calculadora de z simple
-  ((medido − media) / DE, por sexo) con el aviso de que el corte z = 2 puede caer dentro del error de medida. Pregunta
-  de guardia: «aorta de 4,5 cm en un Marfan con dolor torácico: ¿qué no esperas a medir?».
-- **Lo que NO quiero**: 3D, PDF, guardar datos, lector de informes; umbrales quirúrgicos sin su guía abierta.
-- **Depende de**: `eco-reforma` (Ley de Ciencia art. 1). Los umbrales, de la ESC 2024 y la ACC/AHA 2022 de aorta (no
-  están en `docs/`); la z ajustada por edad y SC, de Devereux 2012 (sin cotejar).
-- **Tamaño**: pequeña (0,8-1,2 M solo con Lang; ≈3-4 M más con las guías).
-- **Dudas**: ¿la quieres, y en la eco o en Cardiología?
+### B-047 · PDF por su cuenta y tuits del Radar dentro de la app · apuntado 2026-10-30
+- **Lo que dijiste**: «estaría bien que pudieras conseguir los PDF por tu cuenta y que la parte de radar metiera los
+  tuits que le voy pasando en la app, pero bueno, esto ahora es mínimo y no es prioritario».
+- **Cómo lo entiendo**: dos cosas pequeñas.
+  1. **PDF**: ya es regla (REGLAS §4.13: se buscan en abierto antes de pedirlos). Falta hacerlo de verdad con la
+     lista de «Esperando algo tuyo» (punto 5): una pasada que busque cada uno en Europe PMC, PMC y la web de la
+     sociedad, baje los que estén en abierto a `docs/` y te pida solo los de pago, con el enlace exacto (supongo).
+  2. **Tuits**: hoy la Bandeja (issue #27) los lee y los apunta en `autonomo/radar/`, pero no llegan a la app. La idea:
+     que cada tuit útil acabe en la ficha que toca, como «Visto en Twitter» con su enlace y lo que aporta (supongo),
+     nunca como fuente clínica (artículo 2 de la reforma).
+- **Lo que NO quiero**: copiar el texto o las imágenes del tuit; tuits sin destino.
+- **Tamaño**: pequeña cada una (≈1-2 M la de PDF; ≈1-2 M la de tuits).
+- **Depende de**: nada. **No es prioritario** (lo dijiste tú): espera a que digas cuándo.
+- **Dudas**: (1) ¿«Visto en Twitter» dentro de la ficha te vale, o lo quieres en un sitio aparte?
 
 ### Cómo se trabaja (lo que haría el plan socialista con cada una)
 
@@ -267,6 +269,7 @@ esta sección.
 | `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | aprobado por ti el 30/10; ya | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
 | `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | aprobado por ti el 30/10 («sí a lo que dice el Consejo») | 2026-10-30 | ≈0,9 M, directo a `main` |
+| `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | aprobado por ti el 30/10 («la quiero en la eco») | 2026-10-30 | ≈0,8-1,2 M |
 | `wiggers-movil` | Arreglo de la Wiggers a 360 px | aprobado por el Consejo el 30/10 (7.ª) | 2026-10-30 | ≈0,3 M |
 | `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` **pasa al 31/10** (el 30/10 el día ya iba en ≈34 M: no se empezó), el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
 | `educacion-pionera` | **B-040 · Educación pionera** (modelos vivos + preguntas socráticas; la IA diseña, la app no conversa) | fases 1, 2 y **3 hechas** (28-29/10): 3 maquetas juzgadas (A 7,75 no pasa; B 8,25; C 8,25), [página](https://claude.ai/artifact/GoHaq43vYu8echLwfqN6oe), [PR #37](https://github.com/alvariitoSW/fiebres-neutropenias/pull/37) en borrador; ≈8,4 M (5 % sobre el tope) | 2026-10-28 | 30/10: aprobadas A, B y C; elegimos la mezcla C+B primero y A después. A la app: `educacion-app` |
@@ -330,7 +333,7 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 1. ✅ **B-044, B-045 y B-046**: aprobadas el 30/10 (ver «En marcha»).
 2. ✅ **La reforma**: «sí a lo que dice el Consejo» (30/10), tarea `reglas-reforma`.
 3. **Parada 3 del `b3`**, solo la parte del corazón (`b3-corazon-pr`): mirarla en el móvil antes de `main`.
-4. **B-041 · raíz aórtica**: ¿la quieres, y en la eco o en Cardiología?
+4. ✅ **B-041**: en la eco (30/10), tarea `raiz-aortica`.
 5. **Opcional, sin prisa**:
    - la prueba de 3 días con el caso de Teresa (`autonomo/ideas/educacion-pionera/prueba-3-dias.md`);
    - abrir en la red del entorno cardiorender.com, litfl.com e intro2echo.com, o descartarlas (siguen cerradas; las
@@ -459,6 +462,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
     corazón eléctrico (mejora 4 del debate).
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
+
+- **✅ 30/10 (noche): aprobadas las 4 de Hacienda que quedaban** («quedan todas aprobadas») → `reglas-reforma`.
 
 - **Ahorro · Tareas técnicas del director: presupuesto con su pasada de jueces y una ruta de apertura** (propuesto 2026-10-30 por /ahorro) · Visto en: `reglas-30-10` (0,79 M frente a 0,3 M, +165 %) y `formula-juez` (≈0,95 M frente a 0,8 M, +19 %): en las dos se fue en buscar dónde estaba cada pieza (el origen de cada regla; cómo se abre cada modelo) y en las pasadas largas de jueces · Cambio: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M fijos por la pasada de jueces más 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (parte de origen, o «especialidad → ficha → Visual» de cada modelo) · Ahorro esperado: ≈0,2-0,3 M por tarea técnica (menos búsqueda) y presupuestos que ya no se pasan.
 - **✅ 30/10: aprobadas todas las de abajo** (ahorros → `reglas-30-10`; preguntas viejas del bloque 3 → `b3-cierre`).

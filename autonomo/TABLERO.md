@@ -1108,6 +1108,7 @@ inmersión, receptores animados y los modelos nuevos (arteria culpable, taponami
 | 9 | `mv-eco-1` | **B-045, paso 1**: `contrato.mjs` (lo que el corazón entrega por instante) y la prueba «contrato = motor de hoy», en `auto/mv-eco` desde `main`; archivo nuevo que solo lee el motor | pendiente · **ya** | ≈4 M. No edita `motor.mjs` (REGLAS §4.13). Ver «Encargo B-045» abajo |
 | 10 | `mv-eco-2a5` | **B-045, pasos 2-5**: motor (e′, septo continuo, regional, techo del VD), adaptadores, **dibujo nuevo** (`corazon-geo-2.mjs`, con interruptor) y McConnell y Doppler pulmonar | aparcada · hasta `b3-corazon-pr` en `main` | ≈16-22 M + lo que pida el realismo (ver encargo; comparece si pasa de 26 M) |
 | 11 | `rea-cierre` | **B-046**: ingeniería inversa de lo que falta (8 tuits, CardioTeca, Easy LA Segmentator, repos `simulador-UCI-` y `simulador-uci-3d`, PhET) con lectores baratos en paralelo, y la página «Todo lo estudiado» (cada recurso con su destino; absorbe `mesa-destinos`) | pendiente · **ya** | ≈3-4 M, sin tocar la app. Las 3 webs cerradas (cardiorender, litfl, intro2echo): se descartan por escrito si el usuario no las abre (supongo). Estrena `ENTRADAS.md` (art. 5 de la reforma) |
+| 12 | `raiz-aortica` | **B-041 · Raíz aórtica en la eco** (el usuario, 30/10: «la quiero en la eco»): ficha de la raíz (anillo, senos, unión sinotubular, ascendente) con la Tabla 14 de Lang 2015 (`docs/lang-2015-cuantificacion-camaras-ase.pdf`, pdf 32) y calculadora de z simple ((medido − media) / DE, por sexo) con el aviso de que z = 2 puede caer dentro del error de medida; pregunta de guardia «aorta de 4,5 cm en un Marfan con dolor torácico: ¿qué no esperas a medir?» | pendiente · ya | ≈0,8-1,2 M solo con Lang. Umbrales quirúrgicos (ESC 2024, ACC/AHA 2022 de aorta) y la z de Devereux 2012: se buscan en abierto (REGLAS §4.13); sin guía abierta, no van. Sin 3D, PDF ni guardar datos. No toca `motor.mjs`. Se enlaza después con el cap. 20 del atlas (Enfermedades de la aorta) |
 
 ### Encargo B-045 · `mv-eco` (aprobado por el usuario el 30/10)
 - **Lo que dijo**: «Quiero que el simulador de ecografía sea lo más parecido a la realidad que la propia eco del
@@ -1119,8 +1120,30 @@ inmersión, receptores animados y los modelos nuevos (arteria culpable, taponami
   nunca calcula fisiología ni recorta la del corazón. Es la opción A del 30/10.
 - **Meta de realismo**: que cada corte se parezca a la eco del hospital. Cada vista de cada forma (normal, TEP, HP
   crónica, fallo VI, taponamiento, valvulopatías…) se compara **lado a lado** con una imagen real de referencia con
-  página (figuras de Lang 2015, ESC/ERS 2022 de HP, Hahn 2013, Mitchell 2019 en `docs/`); el profesor la juzga ≥8,75
-  en «se parece a lo real».
+  página (figuras de Lang 2015, ESC/ERS 2022 de HP, Hahn 2013, Mitchell 2019 en `docs/`).
+- **Nota de realismo: ≥9,5** (el usuario, 30/10; solo para la eco: el resto de la app sigue con la meta de 8,75). El
+  profesor pone una nota de 0 a 10 a cada criterio de abajo, con **una frase de lo que falta para el 10**. Pasa si la
+  **media es ≥9,5 y ningún criterio baja de 9**. Cada criterio se juzga con la captura de la app **al lado** de la
+  figura real (archivo y página del PDF), en la misma vista:
+  1. **Proporciones**: cavidades, grosores de pared y relaciones (VD/VI, AI, raíz) dentro del rango de la guía, con
+     su página. 10 = todo dentro; −1 por cada medida fuera. Lo mide el juez de geometría: si está en rojo, máximo 8.
+  2. **Forma**: contornos suaves, sin cruces, picos ni huecos; la forma típica de la enfermedad se reconoce sin leer
+     el rótulo (tabique en D en la HP, VD en «McConnell» en el TEP, VI esférico en la dilatada). 10 = un ecografista
+     la reconocería; 9 = se reconoce con un detalle que no está; menos = hay que leer el rótulo.
+  3. **Textura de la imagen**: moteado (no color liso), pericardio más brillante que el miocardio, sangre casi negra,
+     brillo que cae con la profundidad, sombra y refuerzo donde tocan, sector en abanico con su ganancia. 10 = no
+     hay ninguna zona «dibujada»; −1 por cada zona que lo parece.
+  4. **Movimiento**: la pared engorda en sístole, las válvulas abren y cierran en su fase del ciclo, los anillos bajan
+     (TAPSE y MAPSE dentro de su rango), sin salto al volver a empezar el latido, fluido en el móvil. −1 por cada fallo.
+  5. **Doppler y modo M**: la forma de cada espectro como en la guía (E y A, regurgitación tricuspídea, TSVI, venas
+     pulmonares), las cifras iguales a las del motor del corazón, escala y línea de base como un ecógrafo. −1 por
+     cada espectro que no se parece o cifra que no casa.
+  6. **Extremos**: en el mínimo, el medio y el máximo de cada mando la imagen sigue siendo un corazón posible. La «nave
+     espacial» de la HP al máximo es un 0 aquí. Lo comprueba también el juez de geometría con la captura de cada
+     extremo.
+  Para llegar al 9,5, el constructor recibe el juicio **criterio por criterio** (nota, frase de lo que falta y las dos
+  capturas) y arregla por orden de los que más bajan. Si tras 3 vueltas un criterio no sube, comparece: puede faltar
+  una figura de referencia o una cifra con fuente, no esfuerzo.
 - **La «nave espacial»** (HP al máximo): fallo con nombre. En HP crónica grave el VD se ve grande y redondeado, el
   tabique aplanado en D, la AD dilatada y el VI pequeño, **nunca** contornos que se cruzan, picos o formas imposibles.
   **Juez nuevo de geometría**: en el mínimo, el medio y el máximo de cada mando, ningún contorno se cruza consigo
@@ -1155,7 +1178,7 @@ Interior, Hacienda en las de ≥2 M y «Cuentas» en el parte.
 | 8 | `radar-hoja` | Refrescar `autonomo/radar/HOJA-DE-RUTA.md` con la Ley de Ciencia (sin revisar desde el 25/10) | hecha (29/10, en `main`) | ≈0,2 M, la bitácora, sin agentes |
 | 9 | `shock-scai` | Modelo de shock (ya en `main`): estadio SCAI A-E (ESC 2026 de IC, parte 1, pdf 44), nota y pregunta de ECMO + Impella (Marino caps. 14-17, pdf 48), caso del fallo del VD (Marino cap. 16, desde pdf 39) y, solo si hay fuente abrible, la pregunta de la succión; SCAI enlazada a la de IC, sin duplicarla (Consejo, 29/10, 2.ª) | pendiente (tras `b3-paso4`, antes de `b3-cierre`) | ≈1,5-2,5 M, sonnet; contenido del bloque 3 (`auto/b3`), cargado a `b3-paso4`. Ideas de `impella-antaa.md`; nada de la charla es fuente. Si llega DanGer Shock, nota de fuentes frente a Marino p. 48 |
 | 10 | `tecnicas-capitulos` | B-043 · «Procedimiento en capítulos» en Técnicas R1, empezando por la **vía venosa central**: 6-10 pasos con nombre, una frase y una trampa en negrita, barra de tiempo y saltar a un paso (2D con Motion), una pregunta por paso (REGLAS §8) y capas con deslizador («¿qué atraviesa la aguja?») | aparcada (tras Marino y El Libro Azul, como el resto del Objetivo L) | Aprobada por el usuario el 29/10 («1- sí, 2- por la primera»). Idea de Anatomy Atlas de Pridgen (https://claude.ai/artifact/5n2mC3NP4MUm4SsPoWed9C; notas `autonomo/ideas/ingenieria-inversa/anatomy-atlas-pridgen.md`); sin su código ni three.js. Fuente: Marino caps. 1-4 y Manual UMI con página. Encaja con el catéter vivo. Maqueta antes. Coste por estimar al lanzarla (Interior + Hacienda) |
-| 12 | `reglas-reforma` | Los 7 artículos de la reforma aprobados el 30/10 («sí a lo que dice el Consejo»): 2 (recurso = ideas, licencia antes), 3a (ningún dato de pacientes), 5 (`ENTRADAS.md`), 6 (jueces que solo crecen), 8 (ficha nueva con 30 s arriba), 10 (motor de la eco compartido) y 12 (G7 en el norte), a `CLAUDE.md`, REGLAS y `NORTE.md` | pendiente · ya | ≈0,9 M, técnica, directo a `main`. Acta `autonomo/consejo/2026-10-30-7.md`. El art. 10 se adapta a los dos motores de B-045 |
+| 12 | `reglas-reforma` | Los 7 artículos de la reforma aprobados el 30/10 («sí a lo que dice el Consejo»): 2 (recurso = ideas, licencia antes), 3a (ningún dato de pacientes), 5 (`ENTRADAS.md`), 6 (jueces que solo crecen), 8 (ficha nueva con 30 s arriba), 10 (motor de la eco compartido) y 12 (G7 en el norte), a `CLAUDE.md`, REGLAS y `NORTE.md` | pendiente · ya | ≈0,9 M + ≈0,4 M de las **4 propuestas de ahorro de Hacienda del 30/10**, aprobadas por el usuario el 30/10 («quedan todas aprobadas»; bitácora §5: presupuesto de las tareas técnicas con su pasada de jueces y ruta de apertura · medir el gasto tras las piezas, antes del Estudiar · Hacienda no junta piezas con prueba propia en un encargo · director del paso 4 a 1,3 M). Técnica, directo a `main`. Acta `autonomo/consejo/2026-10-30-7.md`. El art. 10 se adapta a los dos motores de B-045 |
 
 **Descartado por la ley (recomendación del Consejo, validada)**: three.js para el pulmón, LFM3 dentro de la app,
 botón «Escuchar», NV-Reason-CT en el hospital (servidor), coronariografía animada antes del árbol SYNTAX y coaching de
