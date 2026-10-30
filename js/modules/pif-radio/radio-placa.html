@@ -71,6 +71,21 @@
                 </div>
             </div>
         </div>
+        <div class="field-card" data-tab="radio-f5">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="40" cy="28" rx="22" ry="20" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M40,10 v36" fill="none" stroke="var(--accent-purple)" stroke-width="2" stroke-dasharray="3 3"/><path d="M30,26 q4,-6 8,0 q-4,6 -8,0" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">TC de cráneo en 5 preguntas</div>
+                    <div class="field-hook">Sangre, efecto de masa, cisternas, hipodensidad: el orden para leer una TC sin contraste de guardia.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">¿Hay sangre? ¿Empuja la línea media? ¿Están abiertas las cisternas? Si no hay sangre: ¿hipodensidad?</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="panel-pif-radio-tabs">
 
@@ -138,5 +153,25 @@
                 <div class="result-box" id="radio-sonda-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
                 <button class="siguiente-ficha-btn" id="radio-sonda-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
             </div>
+        </div>
+
+        <div id="radio-f5" class="tab-content">
+            <h3 style="color: var(--accent-purple);">TC de cráneo en 5 preguntas</h3>
+            <div class="card" id="radio-f5-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> en una TC sin contraste, mira <span class="hl-rojo">primero si hay sangre (hiperdensa)</span>; si la hay, <span class="hl-rojo">si empuja la línea media o aplasta las cisternas</span>. Sin sangre, busca <span class="hl-azul">una zona hipodensa</span>. Responde Sí o No según lo que ves.</p>
+            </div>
+            <p class="fuente-ficha" id="radio-f5-fuente">Fuentes: Marino, <em>The ICU Book</em>, cap. 47 (<a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=39" target="_blank" rel="noopener">pág. 39</a>); <em>El Libro Azul</em>, sección VIII (<a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=51" target="_blank" rel="noopener">pág. 51</a>); Manual de orientación de la UMI (<a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">pág. 42</a>). Es un orden de lectura de esta app; cada final cita lo que dicen las fuentes.</p>
+            <div class="card" id="radio-craneo-wizard" style="padding:14px 16px;">
+                <div id="radio-craneo-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-craneo-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-craneo-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-craneo-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+            <p class="fuente-ficha" id="radio-f5-limites">Lo que las fuentes de la app no cubren, y por eso no está en el árbol: distinguir un hematoma epidural (lenticular) de un subdural (en semiluna), y qué hacer ante una TC normal en las primeras horas de un ictus.</p>
+            <details class="nota-plegable" id="radio-f5-ia">
+                <summary>🤖 ¿Qué no puede ver esta IA? Piensa y destapa</summary>
+                <p style="font-size:0.88rem;">Existe un modelo de código abierto de NVIDIA, NV-Reason-CT, que lee un TC 3D y responde con texto. Antes de abrirlo, piensa: ¿le pasarías la TC de esta ficha? ¿Y la placa portátil de las fichas 2 a 4?</p>
+                <p style="font-size:0.88rem;"><strong>No.</strong> Su lista de hallazgos es de <strong>tórax y abdomen</strong>: no incluye la TC de cráneo (ni hemorragia, ni hipertensión intracraneal, ni herniación). Tampoco lee <strong>radiografía simple</strong>: solo TC 3D. Y de los dispositivos solo detecta que hay «material médico»; <strong>no dice si la punta está bien colocada</strong> (esto último está deducido de su lista de hallazgos, no lo afirma el repositorio). Es un modelo de investigación, «no un producto sanitario» y sus respuestas deben revisarse. Fuente: <a class="biblio-link" href="https://github.com/NVIDIA-Medtech/NV-Reason-CT" target="_blank" rel="noopener">NV-Reason-CT, NVIDIA-Medtech (GitHub)</a>.</p>
+            </details>
         </div>
     </div>
