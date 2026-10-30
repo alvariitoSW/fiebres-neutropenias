@@ -62,6 +62,7 @@ const BOTONES_ESPECIALIDAD = {
     cardiologia: 'btn-cardiologia',
     neumologia: 'btn-neumologia',
     pifCardio: 'btn-pif-cardio',
+    pifRadio: 'btn-pif-radio',
     sobrevivirUmi: 'btn-sobrevivir-umi',
     libros: 'btn-libros',
 };
@@ -91,6 +92,7 @@ export function init() {
         cardiologia: document.getElementById('cardiologia-view'),
         neumologia: document.getElementById('neumologia-view'),
         pifCardio: document.getElementById('pif-cardio-view'),
+        pifRadio: document.getElementById('pif-radio-view'),
         sobrevivirUmi: document.getElementById('sobrevivir-umi-view'),
         eco: document.getElementById('eco-view'),
         libros: document.getElementById('libros-view'),
