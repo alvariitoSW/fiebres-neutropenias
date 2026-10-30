@@ -13,14 +13,14 @@ export const ROTULOS_MERINO_NEUMO = {
         rotulos: [
             { texto: 'Arteria pulmonar', punto: [53, 40], et: { x: 58, y: 20, lado: 'l' }, pag: 5, nota: 'pie de la figura 22.1: PA = arteria pulmonar' },
             { texto: 'Aorta', punto: [56, 58], et: { x: 60, y: 87, lado: 'l' }, pag: 5, nota: 'pie de la figura 22.1: AO = aorta' },
-            { texto: 'Defecto de repleción', punto: [63, 46.5], et: { x: 72, y: 60, lado: 'l' }, pag: 5, nota: 'pie de la figura 22.1: defecto de repleción en la arteria pulmonar principal izquierda' },
+            { texto: 'Defecto de repleción', punto: [59.5, 47], et: { x: 66, y: 70, lado: 'l' }, pag: 5, nota: 'pie de la figura 22.1: defecto de repleción en la arteria pulmonar principal izquierda' },
         ],
     },
     'fig-24-2': {
         pdf: CAP22,
         rotulos: [
             { texto: 'Infiltrados difusos', punto: [30, 30], et: { x: 38, y: 20, lado: 'l' }, pag: 38, nota: 'pie de la figura 24.2, panel superior: infiltrados finamente granulares distribuidos de forma uniforme' },
-            { texto: 'Infiltrados inferiores', punto: [24, 76], et: { x: 32, y: 66, lado: 'l' }, pag: 38, nota: 'pie de la figura 24.2, panel inferior: infiltrados confinados a los campos pulmonares inferiores' },
+            { texto: 'Infiltrados inferiores', punto: [24, 84], et: { x: 32, y: 73, lado: 'l' }, pag: 38, nota: 'pie de la figura 24.2, panel inferior: infiltrados confinados a los campos pulmonares inferiores' },
             { texto: 'Hemidiafragma izquierdo borrado', punto: [78, 88], et: { x: 70, y: 95, lado: 'r' }, pag: 38, nota: 'pie de la figura 24.2: obliteración del hemidiafragma izquierdo que sugiere un derrame pleural' },
         ],
     },
@@ -47,7 +47,7 @@ export const ROTULOS_MERINO_NEUMO = {
     'fig-29-3': {
         pdf: CAP27,
         rotulos: [
-            { texto: 'Marcas apiñadas', punto: [14, 45.6], et: { x: 5, y: 62, lado: 'l' }, ancho: 24, pag: 41, nota: 'pie de la figura 29.3: marcas pulmonares apiñadas en la base derecha (imagen supina tras la espiración). El texto (pág. 40) las atribuye al hemidiafragma elevado y al volumen pulmonar bajo' },
+            { texto: 'Marcas apiñadas', punto: [15, 66], et: { x: 3, y: 11, lado: 'l' }, ancho: 24, pag: 41, nota: 'pie de la figura 29.3: marcas pulmonares apiñadas en la base derecha (imagen supina tras la espiración). El texto (pág. 40) las atribuye al hemidiafragma elevado y al volumen pulmonar bajo' },
         ],
     },
 };

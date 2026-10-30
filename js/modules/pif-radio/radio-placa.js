@@ -2,6 +2,8 @@
 // Cada criterio sale literal de una ficha ya hecha de la app (Marino, The ICU Book, 5.ª ed.) y lleva su página.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
+import { montarRotulos } from '../../core/figura-rotulos.js';
+import { ROTULOS_PIF_RADIO } from '../../data/pif-radio-rotulos.js';
 
 const PDF = {
     tubo: 'docs/marino-2024-respiratory-management-caps27-30.pdf',
@@ -64,9 +66,10 @@ export const PASOS_SONDA = {
         no: { estado: 'tfg-estado-warn', final: T_SONDA('La ficha da la colocación en el estómago como probable si la punta está por debajo de la cúpula del hemidiafragma izquierdo.' + cita('sonda', 27, 'Marino, cap. 49.'), '#mu-sonda-rx') } },
 };
 
-const T_UMI = (c, res, rot) => c + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-marshall', res, rot || 'Clasificación de Marshall (Manual UMI)');
-const T_UMI_TCE = c => c + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-tce-manejo', '', 'Manejo del TCE (Manual UMI)');
-const T_NEURO = (c, tab, res, rot) => c + ver('libros', 'marinoNeuro', 'panel-marino-neuro-tabs', tab, res, rot);
+const ne = c => c.replace(/\. /, '.</strong><span style="font-weight:400"> ') + '</span><strong>';
+const T_UMI = (c, res, rot) => ne(c) + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-marshall', res, rot || 'Clasificación de Marshall (Manual UMI)');
+const T_UMI_TCE = c => (c.includes('font-weight:400') ? c : ne(c)) + ver('sobrevivirUmi', 'manualUmi', 'panel-manual-umi-tabs', 'umi-tce-manejo', '', 'Manejo del TCE (Manual UMI)');
+const T_NEURO = (c, tab, res, rot) => ne(c) + ver('libros', 'marinoNeuro', 'panel-marino-neuro-tabs', tab, res, rot);
 
 export const PASOS_CRANEO = {
     inicio: { pregunta: '¿Ves sangre, es decir, una zona hiperdensa (más blanca que el parénquima) en la TC sin contraste?',
@@ -76,11 +79,11 @@ export const PASOS_CRANEO = {
         si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Efecto de masa. Marino muestra una hemorragia intracerebral masiva con desviación de la línea media tras trombólisis, y pide neurocirugía. En el TCE, la línea media desviada más de 5 mm y los hematomas de más de 15 cc son factores de mal pronóstico. En la clasificación de Marshall, el swelling unilateral con línea media desviada es el tipo IV (HTIC en el 100% según el manual) y la lesión de más de 25 cc sin evacuar, masa no evacuada (84,6%). El manual imprime 20 mm en el tipo IV; esta app usa más de 5 mm (nota en la ficha).' + cita('umi', 42, 'Manual UMI, pág. 94 del manual; factores pronósticos en el PDF pág. 27 (pág. 79 del manual) y Marino, cap. 47, <a class="biblio-link" href="' + PDF.neuro + '#page=40" target="_blank" rel="noopener">pág. 40</a>.'), '#umi-marshall-nota')) },
         no: 'c3' },
     c3: { pregunta: '¿Las cisternas basales están comprimidas o ausentes?',
-        si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Swelling: es el tipo III de Marshall (swelling bilateral, ausencia de cisternas de la base; HTIC en el 63,2%). La ausencia de cisternas basales figura entre los factores de mal pronóstico del TCE. El Libro Azul recoge la compresión de las cisternas como signo del edema difuso, y que con GCS de 8 o menos y TC anormal (hematoma, contusión, edema) la monitorización de la PIC es beneficiosa.' + cita('umi', 42, 'Manual UMI, pág. 94 del manual') + ' · <small><a class="biblio-link" href="' + PDF.azul + '#page=52" target="_blank" rel="noopener">Libro Azul, pág. 52</a></small>', '#umi-marshall-tabla')) },
+        si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Swelling: es el tipo III de Marshall (swelling bilateral, ausencia de cisternas de la base; HTIC en el 63,2%). La ausencia de cisternas basales figura entre los factores de mal pronóstico del TCE. El Libro Azul recoge la compresión de las cisternas como signo del edema difuso, y que con GCS de 8 o menos y TC anormal (hematoma, contusión, edema) la monitorización de la PIC es beneficiosa.' + cita('umi', 42, 'Manual UMI, pág. 94 del manual') + ' · <small>Libro Azul, <a class="biblio-link" href="' + PDF.azul + '#page=51" target="_blank" rel="noopener">pág. 51</a> (cisternas comprimidas en el edema difuso) y <a class="biblio-link" href="' + PDF.azul + '#page=52" target="_blank" rel="noopener">pág. 52</a></small>', '#umi-marshall-tabla')) },
         no: 'c4' },
     c4: { pregunta: '¿La sangre está en el espacio subaracnoideo (rodea la base del cerebro) en lugar de dentro del parénquima?',
         si: { estado: 'tfg-estado-danger', final: T_NEURO('Hemorragia subaracnoidea: la sangre en el espacio subaracnoideo, tras la rotura de un aneurisma sacular. La sangre bloquea el flujo del LCR y puede causar hidrocefalia obstructiva e hipertensión intracraneal. Hasta asegurar el aneurisma, la fuente propone una TAS de 140 mm Hg o menos con labetalol, y cerrarlo (con neurocirugía o radiología intervencionista): los resultados mejoran si se hace en los primeros 3 días.' + cita('neuro', 47, 'Marino, cap. 47 (el espacio subaracnoideo, en la pág. 45).'), 'mn-hsa', '#mn-hsa-inmediato', 'Hemorragia subaracnoidea (Marino, cap. 47)') },
-        no: { estado: 'tfg-estado-warn', final: T_NEURO('Hematoma sin efecto de masa: en la fuente, el hematoma intracerebral es una zona hiperdensa (fig. 47.3, que además se abre a los ventrículos, con riesgo de hidrocefalia obstructiva). Aun sin desviar la línea media, la primera preocupación es frenar su crecimiento: revertir los antitrombóticos, TAS por debajo de 140 mm Hg y neurocirugía si es grande, crece o hay sangre intraventricular.' + cita('neuro', 42, 'Marino, cap. 47 (reversión, págs. 42-44; tensión y neurocirugía, pág. 45; figura 47.3, pág. 43). Las fuentes de la app no distinguen aquí el hematoma epidural del subdural.'), 'mn-hic', '#mar-img-47-3', 'Hemorragia intracerebral (Marino, cap. 47)') } },
+        no: { estado: 'tfg-estado-warn', final: T_NEURO('Hematoma sin efecto de masa: hiperdenso dentro del parénquima. En la fuente (fig. 47.3), el hematoma intracerebral es hiperdenso y se abre a los ventrículos, con riesgo de hidrocefalia obstructiva. Aun sin desviar la línea media, la primera preocupación es frenar su crecimiento: revertir los antitrombóticos, TAS por debajo de 140 mm Hg y neurocirugía si es grande, crece o hay sangre intraventricular.' + cita('neuro', 42, 'Marino, cap. 47 (reversión, págs. 42-44; tensión y neurocirugía, pág. 45; figura 47.3, pág. 43). Las fuentes de la app no distinguen aquí el hematoma epidural del subdural.'), 'mn-hic', '#mar-img-47-3', 'Hemorragia intracerebral (Marino, cap. 47)') } },
     c5: { pregunta: 'Sin sangre: ¿ves una zona hipodensa focal (más oscura que el parénquima)?',
         si: { estado: 'tfg-estado-warn', final: T_NEURO('Hipodensidad focal, compatible con el edema de un infarto. La TC detecta el edema focal como una señal hipodensa anormal, y el infarto es un ejemplo de edema focal (Libro Azul). En el ictus isquémico, cuanto mayor es el área isquémica, más edema, y es el edema, junto a la hemorragia, lo que más pesa en el mal pronóstico. Si el paciente empeora por el edema, Marino da suero hipertónico; no recomienda monitorizar la PIC.' + cita('azul', 51, 'Libro Azul, sección VIII.') + ' · <small><a class="biblio-link" href="' + PDF.neuro + '#page=40" target="_blank" rel="noopener">Marino, cap. 47, pág. 40</a></small>', 'mn-ictus-complicaciones', '#mn-isq-edema', 'Edema cerebral tras el ictus (Marino, cap. 47)') },
         no: { estado: 'tfg-estado-neutro', final: T_UMI_TCE('TC sin sangre ni hipodensidad focal: es lo que ves, no un diagnóstico. En el TCE, el Libro Azul recoge que con GCS de 8 o menos y TC normal la monitorización de la PIC es beneficiosa si hay más de 40 años, TAS por debajo de 90 mm Hg o daño focal. Si el edema es difuso, pierde la diferencia entre sustancia blanca y gris y se comprimen las cisternas. Qué hacer con una TC normal en las primeras horas de un ictus no lo dice ninguna de las fuentes de la app, y aquí no se afirma.' + cita('azul', 51, 'Libro Azul, sección VIII (monitorización con TC normal, pág. 52).')) } },
@@ -92,4 +95,5 @@ export function init() {
     initSiNoWizard('radio-via', PASOS_VIA);
     initSiNoWizard('radio-sonda', PASOS_SONDA);
     initSiNoWizard('radio-craneo', PASOS_CRANEO);
+    montarRotulos(document.getElementById('pif-radio-placa-view'), ROTULOS_PIF_RADIO);
 }
