@@ -59,17 +59,20 @@ Valentín 45 (transfusión masiva: citrato, K⁺ de la bolsa) · Encarna 59 (mie
 ## 9. Encargo de las maquetas «iones vivos» (parada 1)
 
 **Común a las tres** (lo que el anexo §2 pide; la cifra, con su página de **E**):
-- Los cuatro iones (K⁺, Mg²⁺, Ca²⁺, fosfato) con la forma y el color de `autonomo/maquetas/formas-iones.html`
-  (leyenda de la nefrona: `k/mg/ca/p`). Identidad nunca solo por color: forma + rótulo.
-- **ECG del ritmo vivo** (importado de `js/modules/libros/ritmo-vivo/` y `js/data/ritmo-vivo-data.js`, p. ej.
-  `aplicarK`), no el `onda()` de `potasio-escena.js`. Si el ritmo vivo no da la hipoK (U, T plana, QT) ni la escalera de
+- Los cuatro iones (K⁺, Mg²⁺, Ca²⁺, fosfato) con la forma y el color de la leyenda común de la app:
+  `js/data/formas-iones.js` + `js/core/particulas.js` (claves `k/mg/ca/p`; aprobada, PR #17). Identidad nunca solo por
+  color: forma + rótulo.
+- **ECG del ritmo vivo**, no el `onda()` de `potasio-escena.js`: importa **solo** `MOTOR` de
+  `js/modules/libros/ritmo-vivo/motor.js` (`crear`, `voltaje`, `DERIV`) y `aplicarK` de `js/data/ritmo-vivo-data.js:197`,
+  y traza `MOTOR.voltaje(mo, t, deriv, {})` en tu SVG (como `ecgEn` de `ritmo-vivo/pagina.js:80`, sin importarlo:
+  `pagina.js` y `ayudas.js` arrastran el DOM de la página). `aplicarK` solo da el K⁺ alto (5,5-8,6). Si el ritmo vivo no da la hipoK (U, T plana, QT) ni la escalera de
   la Fig. 36.4, **no se inventa el trazo**: se pinta el que hay y un rótulo «pendiente» (el estado lo añade otra pieza).
 - Mandos mínimos: Realimentar (insulina + glucosa: K⁺, fosfato y Mg²⁺ entran; E p. 20-21, 34, 49, Fig. 38.2) ·
   furosemida (K⁺ y Mg²⁺ por la orina, E p. 33) · reponer ClK (10/20/40 mEq/h, Tabla 36.1, E p. 23) · reponer MgSO₄
   (8 mEq/g; el 50 % a la orina; E p. 36-38) · calcio IV (gluconato 9 mg/mL frente a cloruro 27, E p. 27 y 45; en la
   hiperK arregla el ECG, el K⁺ no cambia) · albúmina y pH/alcalosis (Fig. 38.1 viva: Ca total frente a iónico, E p. 43-44)
   · citrato de la transfusión (quela Ca; K⁺ 2-3 mEq por unidad, E p. 24-25 y 44).
-- **Fig. 36.2 viva** (E p. 20): K⁺ sérico frente a K⁺ total; déficit de 200-400 mEq por cada 1 mEq/L que baja.
+- **Fig. 36.2 viva** (E p. 19-20: el texto en la 19, la figura en la 20): K⁺ sérico frente a K⁺ total; déficit de 200-400 mEq por cada 1 mEq/L que baja.
 - **Topes con origen y consecuencia visible** (sello, constantes, frase viva): ClK >20 mEq/h por cava superior →
   «asistolia» (E p. 23); Mg >13 mEq/L parada (E p. 39); Ca iónico <0,65 mmol/L hipotensión y ectopia (E p. 45);
   fosfato <1 mg/dL grave (E p. 50); calcio IV ≤200 mg en bolo, 1-2 mg/kg/h (E p. 45). Combinación imposible →
@@ -84,6 +87,10 @@ Valentín 45 (transfusión masiva: citrato, K⁺ de la bolsa) · Encarna 59 (mie
 - Archivos: `autonomo/maquetas/b4-iones-<x>.html` + carpeta `autonomo/maquetas/b4-iones-<x>/` en módulos ≤700 líneas
   (molde: `autonomo/maquetas/b3-ritmo/`). Programa de prueba en `autonomo/bloques/b4/herramientas/` (cifras en texto y
   capturas a 390 y 360). **Lista de frases nuevas con página** al final de la entrega (`frases-<x>.md`).
+- **Ningún juez automático mide las maquetas**: tu programa de prueba `autonomo/bloques/b4/herramientas/iones-<x>.mjs`
+  (Playwright, 390 y 360) **es obligatorio** y devuelve en texto: desborde, rótulos <8 px, cifras de cada mando en su
+  mínimo/medio/máximo, que cada tope dispara su sello, que la apuesta, el error y el caso se completan, y errores de
+  consola. Su salida va a la entrega.
 
 **Las tres opciones** (distintas a propósito; cada una lleva lo común):
 - **A · «La célula que crece»**: el molde de `potasio-escena.js` ampliado (vaso/plasma arriba, célula abajo, salidas
