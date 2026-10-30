@@ -2,9 +2,11 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
+**Último parte revisado:** `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- Director por encima de 1 M en cada grupo del paso 4 (g3a 1,1 · g3b 1,3 · g4 1,9, con un reinicio del contenedor): si sigue, subir el presupuesto del director a 1,3 M o partir el grupo en dos sesiones (piezas / Estudiar).
+- Un mando nuevo de un modelo con muchos pacientes da cifras imposibles en los que la ficha no usa (g4: CPAP en Mateo, PAM 15). Si se repite: el mando solo en los pacientes de la ficha.
 - (Pasó a propuesta el 27/10, segunda vez en b3 plan del paso 4) El estimado no cuenta las piezas que faltan.
 - Revisor del encargo por encima de su presupuesto (b3 plan del paso 4: 10 pasos / 173 k frente a 0,15 M) por releer
   archivos de datos. Si se repite: darle las claves ya sacadas.
