@@ -28,11 +28,22 @@ test('PCP ≥12 (Ramiro): la CPAP 5 no baja el VS más de un 3 % y el gasto cae 
     assert.ok(b.gcTotal / a.gcTotal > n5.gcTotal / n.gcTotal, `g ${g}`);
   }
 });
-// PENDIENTE (motor): Bradley da +22 % del VS con PCP ≥12 y CPAP 5. El motor da −1 a −2 %: la curva de poscarga del VI que falla es
-// demasiado plana (−10 mmHg de PAM = +12 % de VS en Ramiro g=1; CPAP 5 quita solo 2,4 mmHg de poscarga transmural).
-test('PCP ≥12 con CPAP 5: el VS sube (Bradley 1992)', { todo: 'el motor no da la subida; ver e3-cpap.mjs' }, () => {
+// Bradley 1992 (PMID 1736745): con PCP ≥12 y CPAP 5 el VS indexado sube (+22 %; con PCP <12 baja). El motor lo da por el alivio
+// de la poscarga en la eyección (motor.mjs, alivioEyeccion): crece cuanto más baja la Ees del VI. Ramiro g=1 (Ees 0,17 de la normal)
+test('PCP ≥12 con CPAP 5: el VS sube (Bradley 1992)', () => {
+  const a = medir(RAMIRO(1), 0), b = medir(RAMIRO(1), 5);
+  assert.ok(a.u.pvp >= 12 && b.u.pvp >= 12);
+  const d = b.u.vs / a.u.vs - 1;
+  assert.ok(d > 0.08 && d < 0.30, `dVS ${(100 * d).toFixed(1)} %`);
+});
+test('VI con Ees moderada (PCP ≥12): el VS no cae más de un 3 % con CPAP 5', () => {
   const a = medir(RAMIRO(0.5), 0), b = medir(RAMIRO(0.5), 5);
-  assert.ok(b.u.vs > a.u.vs);
+  assert.ok(b.u.vs / a.u.vs > 0.97);
+});
+test('VI normal (Ees normal): el alivio no actúa, el VS baja con CPAP 15 como en Jellinek', () => {
+  const a = medir({ esc: 'normal', hb: 14 }, 0), b = medir({ esc: 'normal', hb: 14 }, 15);
+  const d = b.u.vs / a.u.vs - 1;
+  assert.ok(d < -0.18 && d > -0.28, `dVS ${(100 * d).toFixed(1)} %`);
 });
 test('PaO₂ (soporte.mjs, perfusion): depende de pvp − pTorax, no del pTorax solo', () => {
   const a = medir(RAMIRO(1), 0), b = medir(RAMIRO(1), 10);
