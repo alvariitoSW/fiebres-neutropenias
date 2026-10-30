@@ -38,10 +38,37 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-30 · Bandeja #27 · idea bloqueo de rama dependiente de la frecuencia (fase 3 y fase 4): ¿al bloque 3?
 - 2026-10-30 · Bandeja #27 · idea interdependencia ventricular: ¿mejora de Circulación viva (fase 2)?
 - 2026-10-30 · Bandeja #27 · caso de eco (HVI + estructura en la mitral): ¿banco de casos de eco (G1)?
+- 2026-10-30 · DeepTutor (repositorio): ¿la «puerta de dominio» como idea para `educacion-app` (B-040)? No se instala
 
-## Fichas de triaje (las 29 entradas, la más reciente arriba)
+## Fichas de triaje (las 30 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### DeepTutor (HKUDS): tutor con IA, ¿sirve para la Mayéutica?
+- **Fecha / tipo**: 2026-10-30 · repositorio
+- **Enlace**: https://github.com/HKUDS/DeepTutor (preprint arXiv 2604.26962; v1.7.0 del 28/10/2026, 51k estrellas)
+- **Dijo**: «Comprueba que nos sirva para mejorar mayéutica»
+- **Qué es**: un «espacio de estudio» con IA del laboratorio de datos de la Universidad de Hong Kong. Servidor en
+  Python (FastAPI) + web en Next.js/React; necesita una clave de un modelo de IA (OpenAI, Anthropic o uno local) y,
+  para sus libros, un buscador sobre tus PDF (RAG: la IA busca el trozo del PDF antes de responder). Hace chat tutor,
+  «Quiz», «Guided Learning» con una «puerta de dominio» por tipo de pregunta (no avanzas hasta dominarlo), «Mastery
+  Path», práctica con fallos y repetición programada, fichas de memoria, «libros vivos» generados de tus fuentes y
+  explicaciones de un párrafo («Dito»). El README no explica cómo genera ni corrige las preguntas, ni el criterio de
+  la puerta de dominio; tutor socrático solo como complemento de la comunidad
+- **Comparado con lo nuestro**: nuestra Mayéutica ya tiene, escritas a mano y fieles a la ficha con «Ver en el
+  texto»: guía en el orden del texto, examen, casos que evolucionan, repaso de lo fallado, revisión por objetivos y
+  (aprobado el 28/10) repaso espaciado; B-040 (`educacion-pionera`) ya cubre POE, error productivo, autoexplicación y
+  entrelazado. DeepTutor genera las preguntas con IA en el momento: sin página de la fuente garantizada (su medida de
+  calidad mira solo si encuentra el trozo, no si la respuesta es correcta)
+- **Sirve a**: nivel 1 (Estudiar), de lejos. Ninguna G directa
+- **Fuente**: no es fuente; solo método
+- **Licencia**: Apache 2.0 (Copyright 2025 Data Intelligence Lab, HKU). Permitiría ideas y hasta código, pero el
+  norte dice ideas sí, código y servidores no
+- **Coste**: instalarlo rompe «sin backend» y pide una IA en un servidor (no aprobado, `NORTE.md` nivel 3) y una clave
+  de pago. Llevarse la idea: 0 €
+- **Veredicto**: **no instalar ni copiar**. Idea suelta para `educacion-app` (B-040): la **puerta de dominio**, que
+  el recorrido no dé por estudiada una ficha hasta acertar a la primera cada tipo de pregunta (test, destapa, error)
+  en dos días distintos, con los datos que ya guarda el móvil. Decide el usuario en la tanda
 
 ### Neuropronóstico tras parada cardíaca: el curso temporal de los marcadores (Critical Care Reviews)
 - **Fecha / tipo**: 2026-10-30 (comentario del 29/10) · tuit → paper
