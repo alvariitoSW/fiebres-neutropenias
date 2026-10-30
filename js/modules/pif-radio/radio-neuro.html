@@ -11,8 +11,74 @@
 
     <p class="section-label">Cuaderno de campo</p>
     <div class="corkboard" id="pif-radio-neuro-corkboard">
+        <div class="field-card" data-tab="radio-n1">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 1</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="40" cy="28" rx="26" ry="21" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M40,8 v40" stroke="var(--accent-purple)" stroke-width="2"/><path d="M50,22 q6,2 5,9 q-6,3 -9,-3 z" fill="var(--accent-purple)"/></svg>
+                    <div class="field-name">Ictus: ¿isquémico o hemorrágico?</div>
+                    <div class="field-hook">Un déficit agudo y una TC sin contraste: ¿ves sangre o no la ves?</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Primero se busca sangre; si no hay, se buscan los signos precoces de isquemia y la arteria ocluida.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
         <!-- [HUECO constructores: una .field-card[data-tab="radio-nN"] por ficha, en orden] -->
     </div>
     <div id="panel-pif-radio-neuro-tabs">
+
+        <div id="radio-n1" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Ictus: ¿isquémico o hemorrágico?</h3>
+            <div class="card" id="radio-n1-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> ante un déficit agudo, la primera prueba es la <span class="hl-rojo">TC de cráneo sin contraste</span>: busca <strong>sangre</strong> (zona hiperdensa). Si no la hay, no se descarta el infarto: se buscan los signos precoces de isquemia y se pide angio-TC.</p>
+            </div>
+            <dl class="kv-row" id="radio-n1-cifras">
+                <dt>Frecuencia</dt><dd>Isquémico, <strong>≈85 %</strong> de los ictus (<a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=34" target="_blank" rel="noopener">pág. 34</a>); hemorragia intracerebral espontánea, <strong>10-15 %</strong> (<a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=41" target="_blank" rel="noopener">pág. 41</a>). Marino, cap. 47.</dd>
+                <dt>Signo clave</dt><dd>Arteria cerebral media hiperdensa: indica un trombo y tiene <strong>alta especificidad</strong> de oclusión de gran vaso. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Noncontrast Computed Tomography»</a>.</dd>
+                <dt>Puntuación</dt><dd>ASPECTS: <strong>10 puntos</strong>, se resta por cada región con hipodensidad en el territorio de la cerebral media. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Alberta Stroke Program Early CT Score»</a>.</dd>
+            </dl>
+
+            <div class="article-figure" id="radio-n1-fig">
+                <img src="js/modules/libros/img/mar-fig47-3-hematoma.jpg" alt="TC sin contraste con un gran hematoma hiperdenso que ocupa casi la mitad del hemisferio derecho y entra en los ventrículos" loading="lazy">
+                <div class="article-figure-caption">TC sin contraste: hematoma intracerebral hiperdenso que ocupa casi la mitad del hemisferio derecho y se extiende a los ventrículos (riesgo de hidrocefalia obstructiva). Marino, <em>The ICU Book</em>, fig. 47.3, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=43" target="_blank" rel="noopener">pág. 43</a>.<br><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-hic" data-resaltar="#mar-img-47-3">🔗 Ver en el texto: Hemorragia intracerebral (Marino, cap. 47) →</button></div>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">El orden de lectura de esta app</p>
+            <p class="fuente-ficha" id="radio-n1-nota">Es el guion propio de esta app: no lo propone una sola fuente. Cada paso lleva a la fuente que lo explica, y en cada frase hay una sola fuente.</p>
+            <div class="algo-flow" id="radio-n1-pasos">
+            <div class="algo-step"><span class="algo-num">1</span><div class="algo-text"><strong>TC sin contraste, primero.</strong> Es la prueba inicial de todo ictus sospechado: busca hemorragia, otras causas que lo imitan y signos precoces de isquemia. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Noncontrast Computed Tomography»</a>.</div></div>
+            <div class="algo-step"><span class="algo-num">2</span><div class="algo-text"><strong>¿Hay sangre?</strong> Se ve como una zona <span class="hl-rojo">hiperdensa</span> (blanca). En Marino: un hematoma que ocupa la mitad del hemisferio con sangre en los ventrículos (fig. 47.3, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=43" target="_blank" rel="noopener">pág. 43</a>) y una hemorragia masiva con desviación de la línea media 5 h después de un tPA (fig. 47.2, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=40" target="_blank" rel="noopener">pág. 40</a>).
+                <div class="article-figure" id="radio-n1-fig2" style="margin-top:8px;"><img src="js/modules/libros/img/mar-fig47-2-hemorragia-tpa.jpg" alt="Dos TC cerebrales: antes del tPA sin sangre y 5 horas después con una gran hemorragia hiperdensa y desviación de la línea media" loading="lazy"><div class="article-figure-caption">Antes del tPA, sin sangre; 5 h después, hemorragia masiva hiperdensa con desviación de la línea media. Marino, fig. 47.2, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=40" target="_blank" rel="noopener">pág. 40</a>.</div></div>
+                <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-ictus-complicaciones" data-resaltar="#mar-img-47-2">🔗 Ver en el texto: Hemorragia tras la trombólisis (Marino) →</button></div></div>
+            <div class="algo-step"><span class="algo-num">3</span><div class="algo-text"><strong>Sin sangre, busca la isquemia precoz.</strong> En las primeras horas la TC puede ser normal o mostrar <span class="hl-azul">pérdida de la diferenciación sustancia gris-blanca, borramiento de la cinta de la ínsula o del núcleo lenticular</span>. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Noncontrast Computed Tomography»</a>. Después se puntúa con ASPECTS (<a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Alberta Stroke Program Early CT Score»</a>).</div></div>
+            <div class="algo-step"><span class="algo-num">4</span><div class="algo-text"><strong>Angio-TC.</strong> Se recomienda en todo candidato a tratamiento de un ictus agudo para detectar oclusión de gran vaso (carótida interna, cerebral media M1/M2, basilar, vertebral), disección, malformaciones y aneurismas. <a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Computed Tomography Angiography»</a>.</div></div>
+            <div class="algo-step"><span class="algo-num">5</span><div class="algo-text"><strong>Lo que ve el intensivista si es hemorragia.</strong> Revertir antitrombóticos (Marino, tabla 47.4, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=44" target="_blank" rel="noopener">pág. 44</a>), mantener la PAS por debajo de 140 mmHg y consultar con neurocirugía; la sangre intraventricular puede causar hidrocefalia obstructiva y pide drenaje (<a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=45" target="_blank" rel="noopener">pág. 45</a>).
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-hic" data-resaltar="#mn-hic-otras">🔗 Ver en el texto: Tratamiento de la hemorragia (Marino) →</button> <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-hsa">🔗 Ver en el texto: Hemorragia subaracnoidea →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">6</span><div class="algo-text"><strong>Si es un traumatismo.</strong> En el Manual UMI la TAC decide qué hematomas se operan (extradural &gt;30 cc, subdural &gt;10 mm o línea media &gt;5 mm…). <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=31" target="_blank" rel="noopener">Manual UMI, pág. 83</a>.
+                <div style="margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-tce-manejo" data-resaltar="#umi-tce-cirugia">🔗 Ver en el texto: Cirugía oportuna en el TCE (Manual UMI) →</button></div></div></div>
+            <div class="algo-step"><span class="algo-num">7</span><div class="algo-text"><strong>El ictus ya ingresado en UCI.</strong> Medidas generales del isquémico y complicaciones.
+                <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:6px;"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-ictus-soporte">🔗 Ver en el texto: Ictus isquémico: medidas generales →</button></div></div></div>
+            </div>
+            <!-- [ENLACE radio-f5 cuando la PR #42 esté en main] -->
+
+            <p class="section-label" style="margin-top:16px;">Tarjeta de guardia: ¿isquémico o hemorrágico?</p>
+            <p class="fuente-ficha">Responde Sí o No según lo que ves en la TC sin contraste. Cada final lleva su fuente.</p>
+            <div class="card" id="radio-n1-wizard" style="padding:14px 16px;">
+                <div id="radio-n1-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-n1-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-n1-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-n1-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+
+            <p class="section-label" style="margin-top:16px;">Para profundizar</p>
+            <ul class="term-chips" id="radio-n1-profundizar">
+                <li>Perfusión por TC y resonancia con difusión: no se cubren aquí (<a class="biblio-link" href="https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/" target="_blank" rel="noopener">StatPearls, «Stroke Imaging», sección «Computed Tomography Perfusion»</a>).</li>
+                <li>Ventanas de tiempo y criterios de trombólisis y trombectomía: no se dan aquí; el libro tampoco los desarrolla (el capítulo parte del paciente ya ingresado).</li>
+                <li>Edema, HTIC y hernias: siguiente ficha del cuaderno.</li>
+            </ul>
+        </div>
         <!-- [HUECO constructores: un .tab-content#radio-nN por ficha, en orden] -->
     </div>
