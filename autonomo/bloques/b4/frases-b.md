@@ -27,3 +27,12 @@
 - Constantes de los sellos (PA 84/50 FC 112; FR 28 SatO₂ 89 %): ilustrativas de paciente posible.
 - Mg: «hipoMg >50 %» (p. 39) y 65 %, fosfato potásico 4,5 frente a 4,3 mEq/mL: con nota, sin elegir. No he verificado el 65 % ni el 4,3 en el texto (vienen del anexo §10.2).
 - Tabla 37.1 está en la p. 32, no en la 31 que cita el encargo.
+
+## Vuelta 2 (frases nuevas, E = Marino 2024 caps. 35-38)
+- «Una misma bajada del K⁺ del suero esconde el doble de potasio perdido que el que sobra en una subida» — p. 19 (el cambio del total es el doble con déficit que con exceso).
+- Guía Damián: «El K⁺ del suero es la ventanita (2 %); el 98 % está dentro» p. 19 · «bajar 1 mEq/L cuesta 200-400 mEq» p. 19 · «la insulina mete K⁺ en la célula; el total no cambia» p. 21 · «el fosfato cae; <1 mg/dL grave» p. 49.
+- Guía Rufino: «el suero ya está en la parte plana» p. 19 · «furosemida: pierde K⁺ y Mg²⁺» p. 34 · «Mg²⁺ del suero 0,3 % del total» p. 32 · «MgSO₄ 8 mEq/g; la mitad por la orina» p. 37.
+- Guía Valentín: «Ca total mide tres fracciones» p. 43 · «el citrato quela calcio» p. 44 · «concentrado de 18 días: 2-3 mEq de K⁺, se acumula si el riñón no filtra» p. 25 · «gluconato 9 mg/mL, bolo ≤200 mg, 1-2 mg/kg/h» p. 45.
+- Guía Adela: «el exceso de 100-200 mEq sube 1 mEq/L» p. 19 · «fármacos que inhiben el eje renina-angiotensina-aldosterona» p. 25 · «no hay relación previsible K⁺-ECG; 40 % con K⁺ >7 tienen cambios» p. 26 · «el calcio arregla el ECG y el K⁺ no cambia; efecto 30-60 min» p. 27 (sin recomprobar la p. 27 en esta vuelta).
+- Sellos: K⁺ ≥7 «riesgo de bloqueo y parada; el ECG puede ser normal» p. 25-26; aviso ≥6 p. 26. Ilustrativos: PA/FC por paciente y las de sello (90/54, 46), umbral K⁺ <1,5.
+- Lo que te llevas: p. 21, 49, 43, 43, 44, 45, 25.

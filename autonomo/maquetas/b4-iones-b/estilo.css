@@ -37,7 +37,8 @@
 .mando button, .mando select { min-height: 34px; padding: 2px 4px; }
 .mando .fila > * { min-width: 60px; }
 #monitor #ecg { height: 54px; }
-#leyenda .nv-especies { gap: 6px 12px; }
+#leyenda .nv-especies { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 600 .74rem/1.2 var(--sans); } #leyenda .nv-especies > span { display: inline-flex; align-items: center; gap: 4px; }
+.idea .cita { white-space: nowrap; }
 #ion-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
 #ion-svg .entra { animation: entra 2.4s ease-in-out infinite; }
 @keyframes entra { 0%, 15% { transform: translate(0, 0); opacity: 1; } 75%, 100% { transform: translate(var(--dx), var(--dy)); opacity: 1; } }

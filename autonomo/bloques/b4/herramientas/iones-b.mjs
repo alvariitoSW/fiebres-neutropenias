@@ -2,7 +2,7 @@
 // Uso: node iones-b.mjs [ancho]   (lanza su propio servidor en el puerto 8102 y lo cierra por su número de proceso)
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { spawn } from 'node:child_process';
-const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b4/capturas-b/';
+const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b4/capturas-b2/';
 const srv = spawn('python3', ['-m', 'http.server', '8102'], { cwd: RAIZ, stdio: 'ignore' }); const pid = srv.pid;
 await new Promise((r) => setTimeout(r, 900));
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
@@ -47,11 +47,37 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   ok((await tp()).includes('ca:sello'), 'Ca iónico <0,65 sin sello'); await p.screenshot({ path: `${CAP}05-tope-ca-${ANCHO}.png` });
   // ---- los cuatro iones: sin desborde y rótulos ----
   for (const i of ['k', 'mg', 'ca', 'p']) { await resetea('normal'); await p.evaluate((i) => window.__iones.ponerIon(i), i); await desb('ion ' + i); const r = await rotulos('ion ' + i); console.log(` ion ${i}: rótulos`, JSON.stringify(r)); if (i === 'k') await p.screenshot({ path: `${CAP}02-k-${ANCHO}.png`, fullPage: true }); }
+  // ---- vuelta 2: K con concentrados, guía, citas, vitales, partículas ----
+  console.log('-- Vuelta 2');
+  await resetea('normal'); const kc = []; for (const u of [0, 8, 16]) { await p.evaluate((u) => window.__iones.set({ units: u }), u); kc.push((await L()).k); } console.log(` K con 0/8/16 concentrados: ${kc.join(' · ')}`); ok(kc[0] < kc[1] && kc[1] < kc[2], 'K no sube con los concentrados');
+  await resetea('valentin'); const vv = await p.evaluate(() => [document.getElementById('mon-pa').textContent, document.getElementById('mon-fc').textContent]); console.log(` Valentín monitor PA ${vv[0]} FC ${vv[1]}`); ok(vv[0] === '98/60' && vv[1] === '110', 'Valentín sin 98/60 · 110');
+  for (const c of ['damian', 'rufino', 'valentin', 'adela']) {
+    await resetea(c); let pasos = 0, focos = [];
+    for (let i = 0; i < 6; i++) {
+      const g = await p.evaluate(() => ({ vis: !document.getElementById('guia').hidden, foco: document.querySelectorAll('#ion-svg .foco').length, citas: document.querySelectorAll('#guia .ver-ficha[data-resaltar^="#mr-"]').length, pdf: document.querySelectorAll('#guia .cita-pdf').length, haz: !!document.querySelector('#guia [data-g="haz"]'), t: document.querySelector('#guia h3')?.textContent }));
+      if (!g.vis) break; pasos++; focos.push(g.foco); ok(g.foco > 0, `${c}: paso ${pasos} sin .foco`); ok(g.citas === 1 && g.pdf === 1, `${c}: paso ${pasos} sin su cita doble`);
+      if (g.haz) { const k0 = (await L()); await sel('#guia [data-g="haz"]'); const k1 = await L(); ok(JSON.stringify(k0) !== JSON.stringify(k1), `${c}: «Hazlo» del paso ${pasos} no cambió nada`); }
+      await sel('#guia [data-g="sig"]');
+    }
+    console.log(` guía ${c}: ${pasos} pasos, focos ${focos.join('/')}`); ok(pasos >= 3 && pasos <= 5, `${c}: guía de ${pasos} pasos`);
+  }
+  await resetea('damian'); await p.screenshot({ path: `${CAP}08-guia-damian-${ANCHO}.png`, fullPage: true });
+  await resetea('adela'); await sel('#guia [data-g="sig"]'); await p.screenshot({ path: `${CAP}09-guia-adela-${ANCHO}.png`, fullPage: true });
+  await resetea('normal'); await p.evaluate(() => window.__iones.ponerIon('k')); const e0 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); await clic('b-real'); await clic('b-real'); await p.waitForTimeout(500);
+  const e1 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); console.log(` partículas que entran (K): sin insulina ${e0}, con 2 dosis ${e1}`); ok(e0 === 0 && e1 >= 4 && e1 <= 6, 'partículas que entran (K) fuera de 4-6');
+  await p.screenshot({ path: `${CAP}10-entran-k-${ANCHO}.png`, fullPage: true });
+  await p.evaluate(() => window.__iones.ponerIon('p')); const e2 = await p.evaluate(() => document.querySelectorAll('#ion-svg .entra').length); console.log(` partículas que entran (fosfato): ${e2}`); ok(e2 >= 4 && e2 <= 6, 'partículas que entran (fosfato) fuera de 4-6'); await p.screenshot({ path: `${CAP}11-entran-p-${ANCHO}.png`, fullPage: true });
+  console.log('-- K alto: aviso ≥6 y sello ≥7; hipoK <1,5'); await resetea('adela'); console.log(` Adela K ${(await L()).k} topes[${await tp()}]`); await sel('[data-rate="40"]'); await clic('b-clk', 1);
+  let kk = 0; while ((await L()).k < 7 && kk++ < 20) await clic('b-clk'); console.log(` tras ClK: K ${(await L()).k} topes[${await tp()}] PA ${await p.evaluate(() => document.getElementById('mon-pa').textContent)}`); ok((await tp()).includes('hiperk:sello'), 'K≥7 sin sello');
+  await resetea('rufino'); await p.evaluate(() => window.__iones.set({ ph: 7.6, ins: 3, dK: -500 })); console.log(` Rufino extremo: K ${(await L()).k} PO4 ${(await L()).po4} topes[${await tp()}]`); ok((await tp()).includes('nofis:sello') && (await L()).k >= 0, 'K<1,5 sin sello no fisiológica');
+  await resetea('normal'); await p.evaluate(() => window.__iones.set({ ins: 4, po4b: 1 })); ok((await L()).po4 >= 0, 'fosfato negativo');
+  // citas: todas las del documento llevan su botón doble
+  const cc = await p.evaluate(() => ({ cita: document.querySelectorAll('.cita').length, sinBoton: [...document.querySelectorAll('.cita')].filter((c) => !c.querySelector('.ver-ficha[data-resaltar]') || !c.querySelector('.cita-pdf')).length })); console.log(` citas a la vista: ${cc.cita}, sin doble botón: ${cc.sinBoton}`); ok(cc.sinBoton === 0, 'cita sin doble botón');
   // ---- apuesta, error, caso ----
-  console.log('-- Apuesta'); await p.evaluate(() => window.__iones.modoPrueba('apuesta')); const kA = (await L()).k;
+  console.log('-- Apuesta'); await p.evaluate(() => window.__iones.modoPrueba('apuesta')); const kA = (await L()).k; const monK0 = await p.evaluate(() => document.getElementById('mon-k').textContent); const vent0 = await p.evaluate(() => document.getElementById('ion-svg').textContent.includes('?')); console.log(` antes de contestar: monitor «${monK0}», ventana con «?»=${vent0}`); ok(monK0.includes('?') && vent0, 'apuesta: K no oculto');
   const ops = await p.$$('#prueba .op'); ok(ops.length === 3, 'apuesta: 3 opciones'); ok(!(await p.evaluate(() => document.getElementById('prueba').innerHTML.includes('data-ok'))), 'respuesta en el HTML');
   const txt = await Promise.all(ops.map((o) => o.textContent())); const iok = txt.findIndex((t) => t.startsWith('Baja')); await ops[iok].click(); await p.waitForTimeout(200);
-  console.log(` K antes ${kA} → después ${(await L()).k}; fosfato ${(await L()).po4}; fin=${await p.evaluate(() => document.getElementById('prueba').dataset.fin)}`); ok((await L()).k < kA, 'apuesta: el K no bajó'); await desb('apuesta respondida'); await rotulos('apuesta');
+  console.log(` K antes ${kA} → después ${(await L()).k}; fosfato ${(await L()).po4}; fin=${await p.evaluate(() => document.getElementById('prueba').dataset.fin)}`); ok((await L()).k < kA, 'apuesta: el K no bajó'); console.log(' monitor tras contestar:', await p.evaluate(() => document.getElementById('mon-k').textContent), '· lleva-te:', await p.evaluate(() => document.querySelectorAll('#prueba .llevas li .ver-ficha').length)); ok(await p.evaluate(() => document.querySelectorAll('#prueba .llevas li').length >= 2), 'sin «Lo que te llevas»'); await desb('apuesta respondida'); await rotulos('apuesta');
   console.log('-- Error'); await p.evaluate(() => window.__iones.modoPrueba('error')); const ocu = await p.evaluate(() => document.getElementById('ion-svg').textContent.includes('iónico 4,6')); ok(!ocu, 'error: el iónico se ve antes de contestar');
   const grupos = await p.$$('#prueba .ops'); ok(grupos.length === 3, 'error: 3 frases'); for (let i = 0; i < 3; i++) { const bs = await grupos[i].$$('.op'); await bs[i < 2 ? 0 : 1].click(); }
   await p.waitForTimeout(150); console.log(` error resuelto: fin=${await p.evaluate(() => document.getElementById('prueba').dataset.fin)} iónico visible=${await p.evaluate(() => document.getElementById('ion-svg').textContent.includes('iónico'))}`); ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'error sin completar'); await desb('error'); await p.screenshot({ path: `${CAP}06-error-${ANCHO}.png`, fullPage: true });
