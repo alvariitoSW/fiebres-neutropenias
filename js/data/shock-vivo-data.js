@@ -23,6 +23,7 @@ export const FICHA = {
   'mc-anafilaxia': [CARDIO, 'Anafilaxia', 'Anafilaxia', PDF_S, 'Marino 2024'],
   'mc-posresucitacion': [CARDIO, 'Cuidados posparo: el síndrome posparo cardíaco', 'Posparo', PDF_C, 'Marino 2024'],
   'mc-ic-tipos': [CARDIO, 'Insuficiencia cardíaca aguda: tipos', 'IC aguda', PDF_C, 'Marino 2024'],
+  'mc-ic-manejo': [CARDIO, 'Insuficiencia cardíaca aguda: manejo', 'IC aguda: manejo', PDF_C, 'Marino 2024'],
   'mc-diseccion-aortica': [CARDIO, 'Disección aórtica aguda', 'Disección aórtica', PDF_C, 'Marino 2024'],
   'neumo-ep-diagnostico': [NEUMO, 'Embolia pulmonar: diagnóstico', 'Embolia pulmonar', PDF_R, 'Marino 2024'],
   'neumo-ep-manejo': [NEUMO, 'Embolia pulmonar: manejo', 'Embolia pulmonar: manejo', PDF_R, 'Marino 2024'],
@@ -91,6 +92,7 @@ export const C = {
   icFig: { f: 'mc-ic-tipos', id: 'mc-fig-18-3', sitio: 'Fig. 18.3', p: 6 },
   icNeuro: { f: 'mc-ic-tipos', id: 'mc-neurohumoral', sitio: 'Respuestas neurohumorales', p: '5-6' },
   icCongestion: { f: 'mc-ic-tipos', id: 'mc-congestion', sitio: 'Congestión venosa', p: '6-7' },
+  cpapIc: { f: 'mc-ic-manejo', id: 'mc-vpp', sitio: 'Ventilación con presión positiva', p: 14 },
   autorreg: { f: 'mc-ic-tipos', id: 'mc-cardiorrenal', sitio: 'Síndrome cardiorrenal', p: 7 },
   disec: { f: 'mc-diseccion-aortica', id: 'mc-diseccion-fisio', sitio: 'Fisiopatología', p: 50 },
   tepClin: { f: 'neumo-ep-diagnostico', id: 'nep-tabla-22-1', sitio: 'Tabla 22.1', p: 2 },
@@ -193,7 +195,7 @@ export function indicacion(pac, tipoAparato) {
 // ---------------------------------------------------------------- estados con nombre (el nombre sale de las cifras)
 // R: la lectura redondeada del momento; X: el contexto (paciente, ajuste, infundido, pérdida)
 // Los topes de los mandos (autonomo/bloques/b3/limites-shock.md): cada cifra con su origen en topes.js
-export const TOPES = { eroa: EROA_TOPE, eroaAviso: 0.7, civ: CIV_TOPE, civAviso: 0.5, vdG: 0.99, vdGAviso: VD_G_RECETA + 0.01, horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5 };
+export const TOPES = { eroa: EROA_TOPE, eroaAviso: 0.7, civ: CIV_TOPE, civAviso: 0.5, vdG: 0.99, vdGAviso: VD_G_RECETA + 0.01, horasPosparo: 72, horasPosparoAviso: 66, pcp: 20, pcpAviso: 15, pvc: 12, pvcAviso: 11, pvcSube: 4, spo2: 95, edemaMl: 300, edemaSello: 600, tepMl: 500, tepAviso: 250, horas: 48, horasAviso: 42, pamVaso: 110, reposicion: 1.5, cpap: 10 };
 // Sobrecarga: la PCP en el techo de la ficha, o la PVC por encima de 12 habiendo subido ≥ 4 sobre la de entrada y el pulmón ya
 // encharcado (SpO₂ < 95: el sello llega con su consecuencia). El taponamiento y el TEP nacen con la PVC alta: cuenta lo que sube
 export const sobrecarga = (R) => R.pcp >= TOPES.pcp || (R.pvc > TOPES.pvc && R.pvc - (R.pvc0 ?? 0) >= TOPES.pvcSube && R.edema > 50 && R.spo2 < TOPES.spo2);
@@ -231,6 +233,7 @@ export function nombreEstado(R, X) {
   if (t === 'posparo') return X.g <= 0.005 ? 'posparo-72' : 'posparo';
   // la IC izquierda se nombra por su etapa (Fig. 18.3): el gasto cae (3), la FC sube con el gasto conservado (2), o solo sube la PCP (1).
   // Los cortes (IC 3,0 y FC 90) son ilustrativos: la figura no los da. Sin la PA sostenida (PAM <65) ya es el cardiogénico
+  if (t === 'ic' && X.ajuste.cpap > 0 && R.ic < 3 && R.pam >= 65) return 'ic-cpap';
   if (t === 'ic') return R.ic < 3 ? (R.pam >= 65 ? 'ic-etapa-3' : 'cardio') : R.fc >= 90 ? 'ic-etapa-2' : 'ic-etapa-1';
   if (t === 'papilar') return 'rotura-papilar';
   if (t === 'vd') return R.pam >= 65 && R.ic >= 2.2 ? 'sin-shock' : 'iam-vd';
@@ -330,6 +333,12 @@ export const ESTADOS = {
       { t: (R) => `La vasoconstricción periférica basta para sostener la PA (PAM ${R.pam}) y la perfusión de los tejidos: mira la arteriola cerrada (IRVS ${R.irvs}).`, s: ['#cor-arteriola', '[data-fila="pa"]'], c: C.icCongestion },
       { t: 'Por eso las manifestaciones de la IC aguda descompensada son las de la congestión venosa, no las del bajo gasto: disnea, crepitantes y edema de pulmón.', s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.icCongestion },
       { t: 'El riñón sufre sobre todo por la presión venosa alta, no por el gasto: la autorregulación mantiene su flujo hasta que la PAM baja de 70.', s: ['[data-fila="pa"]'], c: C.autorreg }] },
+  'ic-cpap': { tit: 'IC izquierda, etapa 3, con CPAP', frase: (R) => `Etapa 3 con CPAP: el gasto no cae (VS ${R.vs} mL, IC ${c1(R.ic)}) y el edema baja (${Math.round(R.edema)} mL, SpO₂ ${R.spo2} %). En el corazón que falla la CPAP no le quita gasto; en el seco, sí. Límite del modelo: Marino describe que el gasto puede subir (p. 83, 88); el modelo no lo reproduce.`, org: 'ficha · cap. 18, p. 14 y resp. p. 77, 83, 88 (las cifras: modelo, ilustrativo)',
+    guia: [{ t: 'La presión positiva en el tórax baja la presión transmural que el VI desarrolla en sístole: es una menor poscarga, y la pared se mueve hacia dentro con más facilidad.', s: ['#cor-cav'], c: C.cpapIc },
+      { t: (R) => `El corazón que falla está en la parte plana de la curva de precarga: perder algo de llenado le cuesta poco gasto (VS ${R.vs} mL, IC ${c1(R.ic)}) y bajar la poscarga le ayuda (resp. p. 88).`, s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.cpapIc, org: 'la razón: ficha (resp. p. 88) · las cifras: modelo' },
+      { t: (R) => `El pulmón se seca: la CPAP evita el colapso de las vías pequeñas y los alvéolos al final de la espiración (resp. p. 77) y es muy eficaz en el edema cardiogénico (resp. p. 83). Edema: ${Math.round(R.edema)} mL.`, s: ['#cor-pulmon', '[data-fila="spo2"]'], c: C.cpapIc, org: 'ficha (resp. p. 77, 83) · cuánto edema: modelo' },
+      { t: 'En el paciente seco ocurre lo contrario: la misma presión le frena el retorno venoso y baja la precarga, y el gasto cae (resp. p. 85, 88). Pruébalo con un paciente hemorrágico, con la CPAP en 10.', s: ['#shv-dock'], c: C.cpapIc, org: 'ficha (resp. p. 85, 88)' },
+      { t: 'Límite del modelo: Marino (p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 y PCP ≥12) describen que el gasto del corazón que falla puede subir; el modelo no lo reproduce porque no tiene la retirada simpática ni el alivio del trabajo respiratorio.', s: ['[data-fila="vs"]', '[data-fila="ic"]'], c: C.cpapIc, org: 'límite del modelo' }] },
   'rotura-papilar': { tit: 'Rotura del músculo papilar', frase: (R) => `La sangre vuelve a la aurícula en cada sístole: IC ${c1(R.ic)}, PCP ${R.pcp} y SpO₂ ${R.spo2} %. Es una insuficiencia mitral aguda: el 7 % de los shocks del infarto, y llega en las primeras 24 h, no tarde.`, org: 'ficha · p. 38 (las cifras: modelo, ilustrativo)',
     guia: [{ t: 'El músculo papilar roto suelta la valva mitral: en la sístole la valva se va a la aurícula y la válvula no cierra. Es una insuficiencia mitral aguda, y amenaza la vida.', s: ['#cor-mitral'], c: C.papilar },
       { t: (R) => `Mira el chorro rojo: en cada sístole parte de la sangre del VI vuelve a la aurícula. Fracción regurgitante ${R.frmit} %.`, s: ['.cc-chorro', '[data-fila="frmit"]'], c: C.papilar, org: 'la fracción y su tamaño: modelo (fisiología general)' },

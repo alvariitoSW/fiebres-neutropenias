@@ -157,6 +157,25 @@ await abrir('explorar-no-existe'); await espera(500); ok(await vista(), 'un esta
     await pest('grav'); await desplegar();
     for (const g of [0, 25, 50, 75, 100]) { await grav(g); r = await S(); posible(r, `Ramiro ${g} %`); ok(r.pcp <= 32 && r.pam >= 65, `Ramiro ${g} %: PCP ${r.pcp}, PAM ${r.pam}, estado «${r.estado}»`); await limpio('Ramiro ' + g); }
 }
+// CPAP (b3-paso4 g4): Ramiro con CPAP 0 -> 10 -> 15. En el corazón que falla el gasto se sostiene y el edema baja; al pasar de 10, sello
+{
+    let r;
+    await abrir('ic-cpap'); await espera(1800); r = await S();
+    ok(r.pac === 'ramiro' && /con CPAP/.test(r.estado), `ic-cpap: abre Ramiro, estado «${r.estado}»`);
+    const e10 = await p.evaluate(() => window.__shvPruebas().R.edema); const vs10 = r.vs, ic10 = r.ic;
+    ok(r.ic >= 1.6 && r.ic <= 2.2 && r.pam >= 65 && r.pcp <= 34 && !r.sellos.some(t => /CPAP/.test(t)), `ic-cpap: IC ${r.ic}, VS ${r.vs}, PCP ${r.pcp}, PAM ${r.pam}, sellos [${r.sellos.join(' | ')}]`);
+    posible(r, 'ic-cpap'); await limpio('ic-cpap');
+    await pest('sop'); await clic('#shv-dock-panel [data-cpap="0"]'); await espera(1500); r = await S();
+    const e0 = await p.evaluate(() => window.__shvPruebas().R.edema);
+    ok(e0 > e10 && Math.abs(r.vs - vs10) <= 3, `Ramiro CPAP 0 -> 10: el edema baja (${Math.round(e0)} -> ${Math.round(e10)} mL) y el VS se sostiene (${r.vs} -> ${vs10})`);
+    await clic('#shv-dock-panel [data-cpap="15"]'); await espera(1500); r = await S(); posible(r, 'Ramiro CPAP 15');
+    ok(r.sellos.some(t => /CPAP por encima de 10/.test(t)), `Ramiro CPAP 15: sello (${r.sellos.join(' | ')})`);
+    ok(await p.evaluate(() => document.querySelector('#shv-dock-panel [data-cpap="15"]')?.disabled === true), 'Ramiro CPAP 15: el mando del 15 queda apagado');
+    await limpio('Ramiro CPAP 15'); await foto('cpap-15');
+    await abrir('hemo'); await espera(1200); await pest('grav'); await desplegar(); await grav(50); await espera(800); await pest('sop'); r = await S(); const vsH0 = r.vs;   // hemorragia moderada (la grave con CPAP 10 llega a PAM 15: ver la entrega)
+    await clic('#shv-dock-panel [data-cpap="10"]'); await espera(1500); r = await S();
+    ok(r.vs < vsH0 - 3, `hemorragia con CPAP 10: el VS cae (${vsH0} -> ${r.vs}) sin sello`); posible(r, 'hemo CPAP 10'); await limpio('hemo CPAP');
+}
 
 // ───────── B. Pacientes × gravedad
 await abrir('hemo'); await espera(600);
@@ -230,7 +249,7 @@ for (const [k, n] of [['impella', 8], ['balon', 5], ['ecmo', 5]]) {
     await clic('#shv-esc-pest [data-plano="recorrido"]'); await espera(500); await limpio('recorrido ' + k);
 }
 // ───────── E. Explicación guiada: señala y cada cita llega a un párrafo que existe
-for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3']) {
+for (const k of ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'posparo', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3', 'ic-cpap']) {
     await abrir(k); await espera(900); await clic('#shv-btn-guia'); await espera(500);
     let pasos = 0, sinSenal = 0, citasRotas = [];
     for (; pasos < 8; pasos++) {

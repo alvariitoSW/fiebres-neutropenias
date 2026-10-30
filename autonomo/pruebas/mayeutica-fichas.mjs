@@ -175,10 +175,10 @@ async function correr(ANCHO, REDUCIDO) {
         if (nf === 0) { await foto('01-resumen', `#${ficha} > .vista-toggle`); await foto('01b-mira', PASO(ficha, 'mira')); }
         // «Juega con el modelo»
         await irPaso(ficha, 'juega'); await p.waitForTimeout(200);
-        const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => ({ modelo: Object.keys(b.dataset).some(k => /Viva|Vivo|ecoEscenario/.test(k)), texto: b.textContent.trim() })), ficha);
+        const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => ({ modelo: Object.keys(b.dataset).some(k => /Viva|Vivo|ecoEscenario|^glomerulo$/.test(k)), texto: b.textContent.trim() })), ficha);
         // Una ficha cuyo modelo aún no existe (sus preguntas solo llevan `modeloFuturo`) dice que no enlaza ninguno.
         const sinModeloAun = !juega.length && await p.evaluate(f => /no enlaza ningún modelo vivo/.test(document.querySelector(`#${f} .est-paso[data-paso="juega"]`).textContent), ficha) && !/modeloVivo|"(aguaViva|capilarVivo|cateterVivo|murallaViva|telarVivo|inmersionViva|acidobaseVivo|ecoEscenario)"/.test(JSON.stringify(d, (k, v) => k === 'modeloFuturo' ? undefined : v));
-        ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}`);
+        ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}${juega.filter(j => !(j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))).map(j => ' [falla: «' + j.texto.slice(0, 70) + '»]').join('')}`);
         ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
         if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
         if (!REDUCIDO && !juegaProbado) {

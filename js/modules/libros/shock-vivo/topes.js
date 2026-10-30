@@ -87,6 +87,13 @@ export function calcularTopes(R, X, horas, horaTxt = (h) => h + ' h') {
     cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · el fármaco: ficha p. 12-13' };
   else if (R.pam > 100 && (X.ajuste.na > 0 || X.ajuste.vaso)) out.vaso = { nivel: 'aviso', titulo: 'Presión alta con vasopresor',
     texto: `PAM ${R.pam}: el objetivo del shock es 65 o más; por encima de 110, baja la dosis.`, cita: C.na, origen: 'ilustrativo (el 110). En shock séptico o vasodilatador, un objetivo de PAM más alto se asoció a un 10 % más de mortalidad a 28 días (Mendes 2025, PMID 41276856) y a más FA (Asfar 2014, SEPSISPAM, PMID 24635770) · fármaco: ficha p. 12-13', bajo: '#shv-dock-panel .seg' };
+  // 4b) la CPAP: usualmente 5-10 cmH₂O (resp. p. 77); más, mal tolerada y con fugas. En el seco, además, le quita el gasto (p. 85, 88)
+  const cp = X.ajuste.cpap || 0;
+  if (cp > T.cpap) out.cpap = { nivel: 'sello', titulo: 'CPAP por encima de 10',
+    texto: `CPAP ${cp}: la fuente la deja en 5-10; más presión se tolera mal y da fugas por la mascarilla. VS ${R.vs} mL, IC ${c2(R.ic, 1)}, PAM ${R.pam}, FC ${R.fc}${tipo === 'ic' ? '' : ': en quien no tiene el corazón enfermo, la presión le frena el retorno venoso y el gasto cae'}.`,
+    cita: C.cpapIc, origen: 'ficha · resp. p. 77 (5-10; «más presión: mal tolerada y fugas», dicho de la ventilación con dos niveles) y p. 85, 88 (la caída del gasto) · las cifras: modelo', deshabilita: ['[data-cpap="15"]'] };
+  else if (cp === T.cpap) out.cpap = { nivel: 'aviso', titulo: 'En el tope de la CPAP',
+    texto: `CPAP ${cp}: es el máximo habitual (5-10); por encima, mal tolerada y con fugas.`, cita: C.cpapIc, origen: 'ficha · resp. p. 77', bajo: '#shv-dock-panel [aria-label^="CPAP"]' };
   // 5) el reloj: 48 h
   if (tipo === 'posparo') {
     // el reloj es el de la RCE: 72 h («suele resolverse en 72 h», p. 65); pasado, las cifras ya no cambian

@@ -83,7 +83,7 @@ function reconstruir(conservar = false) {   // al cambiar la gravedad: mismo pac
   const aj = { ...cab.ajuste }, inf = cab.infundido, h = est.horas;
   cab = crearCabecera(recDe(est.pac), { asentar: 24 });
   est.rec = recDe(est.pac);
-  cab.ajustar({ na: aj.na, vaso: aj.vaso, dobuta: aj.dobuta, soporte: aj.soporte, impella: aj.impella, ecmo: aj.ecmo, venteo: aj.venteo, total: aj.total });
+  cab.ajustar({ na: aj.na, vaso: aj.vaso, dobuta: aj.dobuta, soporte: aj.soporte, impella: aj.impella, ecmo: aj.ecmo, venteo: aj.venteo, total: aj.total, cpap: aj.cpap });
   if (inf.cris) cab.volumen(inf.cris); if (inf.sangre) cab.volumen(inf.sangre, 'sangre');
   cab.correr(8);
   // la gravedad define al paciente que llega: el laboratorio vuelve a ser el de la hora 0 (v3: antes la clase I llegaba con el
@@ -381,6 +381,8 @@ function pintarDock() {
     h.push(`<div class="rejilla" style="--n:2"><button type="button" class="tog" data-far="vaso" aria-pressed="${aj.vaso}">Vasopresina<small>0,03 U/min · ver la nota</small></button><button type="button" class="tog" data-far="dobuta" aria-pressed="${aj.dobuta}">Dobutamina<small>5 µg/kg/min</small></button></div>`);
   } else if (est.pest === 'sop') {
     h.push(`<div class="seg" role="group" aria-label="Soporte mecánico">${[['no', 'Ninguno'], ['balon', 'Balón'], ['impella', 'Impella'], ['ecmo', 'ECMO VA']].map(([k, n]) => `<button type="button" data-sop="${k}" aria-pressed="${est.aparato === k}">${n}</button>`).join('')}</div>`);
+    h.push(`<div class="seg" role="group" aria-label="CPAP, en cmH₂O">${[0, 5, 10, 15].map((v) => `<button type="button" data-cpap="${v}" aria-pressed="${aj.cpap === v}">${v ? v : 'Sin'}<small>${v ? 'cmH₂O' : 'CPAP'}</small></button>`).join('')}</div><p class="dock-nota">CPAP: presión de la vía aérea, «usualmente 5-10 cmH₂O» (Marino resp. p. 77; el 15 es para ver el tope). En el corazón que falla (Ramiro) no le quita gasto y le seca el pulmón; en el paciente seco (hemorragia) le quita gasto (resp. p. 85, 88). ${org('ficha · resp. p. 77, 85, 88 · las cifras: modelo')}</p>`);
+    if (t === 'ic') h.push(`<p class="dock-nota"><b>Límite del modelo:</b> Marino (p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 y PCP ≥12) describen que el gasto del corazón que falla puede subir; el modelo no lo reproduce porque no tiene la retirada simpática ni el alivio del trabajo respiratorio.</p>`);
     const ok = est.aparato !== 'no' && D.indicacion(p, est.aparato).ok;
     if (ok) h.push(`<p class="dock-nota">Los mandos del aparato, bajo su dibujo.</p>`);
     if (!ok && est.aparato !== 'no') h.push(`<p class="dock-nota">${D.indicacion(p, est.aparato).txt}</p>`);
@@ -421,6 +423,7 @@ $('dock-panel').addEventListener('click', (ev) => {
   if (d.vol) trabajar(() => cab.volumen(+d.vol), 20);
   if (d.sangre) trabajar(() => cab.volumen(+d.sangre, 'sangre'), 20);
   if (d.na) trabajar(() => cab.ajustar({ na: +d.na }));
+  if (d.cpap != null && d.cpap !== '') trabajar(() => cab.ajustar({ cpap: +d.cpap }));
   if (d.far) trabajar(() => cab.ajustar({ [d.far]: !cab.ajuste[d.far] }));
   if (d.sop) { est.aparato = d.sop; est.vista = d.sop === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro'; trabajar(() => cab.ajustar({ soporte: D.indicacion(est.pac, d.sop).ok || d.sop === 'no' ? d.sop : 'no' })); monitor.llenar(cab, ctxMon()); monitor.pintar();
     if (d.sop !== 'no') { dock.plegar(true); $('escena').scrollIntoView({ block: 'start', behavior: REDUCIR ? 'auto' : 'smooth' }); } }
@@ -451,7 +454,7 @@ const topeVisto = {};
 function aplicarTopes(forzar) {
   if (!cab?.lectura || !R) return;
   const hay = est.modo === 'qs' ? {} : calcularTopes(R, ctxX(), est.horas, horaTxt);
-  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj', 'gravedad']) {
+  for (const k of ['sobrecarga', 'edema', 'tep', 'reposicion', 'vaso', 'reloj', 'gravedad', 'cpap']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (!forzar && topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
@@ -667,7 +670,7 @@ nuevoPaciente(D.PACIENTES[0]); pintarPacientes(); refrescar(true); pintarDock();
 reanudar();
 
 // Abrir en un estado de la tabla F de la lista del bloque (hemo, septico, cardio, tapon, tep, balon, impella, ecmo, qs)
-const ESTADO_PAC = { 'ic-etapa-1': 'ramiro', 'ic-etapa-2': 'ramiro', 'ic-etapa-3': 'ramiro', 'rotura-papilar': 'benito', 'iam-vd': 'fermin', 'rotura-septo': 'remedios', posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
+const ESTADO_PAC = { 'ic-etapa-1': 'ramiro', 'ic-etapa-2': 'ramiro', 'ic-etapa-3': 'ramiro', 'ic-cpap': 'ramiro', 'rotura-papilar': 'benito', 'iam-vd': 'fermin', 'rotura-septo': 'remedios', posparo: 'virginia', hemo: 'mateo', septico: 'amparo', cardio: 'aurelio', tapon: 'joaquin', tep: 'consuelo', balon: 'aurelio', impella: 'aurelio', ecmo: 'aurelio' };
 function abrirEstado(clave) {
   if (!clave) { reanudar(); medirDock(); return; }
   setModo(clave === 'qs' ? 'qs' : 'explorar');
@@ -675,8 +678,8 @@ function abrirEstado(clave) {
   const p = D.PACIENTES.find((x) => x.k === ESTADO_PAC[clave]); if (!p) { reanudar(); return; }
   const ap = ['balon', 'impella', 'ecmo'].includes(clave) ? clave : 'no';
   est.aparato = ap; est.vista = ap === 'no' ? 'paciente' : 'aparato'; est.plano = 'dentro';
-  est.pest = { 'ic-etapa-1': 'grav', 'ic-etapa-2': 'grav', 'ic-etapa-3': 'grav', 'rotura-papilar': 'grav', 'iam-vd': 'grav', 'rotura-septo': 'grav', posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
-  nuevoPaciente(p, { ajuste: ap === 'no' ? {} : { soporte: ap }, g: clave.startsWith('ic-etapa-') ? D.IC_G_ETAPA[+clave.slice(-1) - 1] : undefined });
+  est.pest = { 'ic-etapa-1': 'grav', 'ic-etapa-2': 'grav', 'ic-etapa-3': 'grav', 'ic-cpap': 'sop', 'rotura-papilar': 'grav', 'iam-vd': 'grav', 'rotura-septo': 'grav', posparo: 'grav', hemo: 'vol', tep: 'vol', septico: 'far', cardio: 'vol', tapon: 'grav', balon: 'sop', impella: 'sop', ecmo: 'sop' }[clave];
+  nuevoPaciente(p, { ajuste: ap === 'no' ? (clave === 'ic-cpap' ? { cpap: 10 } : {}) : { soporte: ap }, g: clave.startsWith('ic-etapa-') ? D.IC_G_ETAPA[+clave.slice(-1) - 1] : clave === 'ic-cpap' ? D.IC_G_ETAPA[2] : undefined });
   if (clave === 'tapon') est.vista = 'eco';
   if (monitor.enclavado !== (clave === 'cardio')) { monitor.enclavar(clave === 'cardio'); $('enclavar').setAttribute('aria-pressed', String(monitor.enclavado)); monitor.llenar(cab, ctxMon()); }
   pintarPacientes(); refrescar(true); pintarDock(); pintarMandos(); reanudar();
