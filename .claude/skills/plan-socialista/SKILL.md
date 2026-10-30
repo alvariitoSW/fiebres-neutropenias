@@ -54,7 +54,8 @@ tablero y el último parte, sin trabajar.
    su agente, modelo, pasos y millones (tabla «Presupuestos vigentes» del tablero; cuenta antes las piezas en el
    código), el total y lo que queda del presupuesto del bloque. Si la tarea es de **2 M o más**, pasa tú mismo `/ahorro presupuesto` (Hacienda, 2-3
    llamadas, sin agentes; en las menores aplicas tú la lista de recortes, sin llamarla): recorta sola lo que no baja la nota ni la fidelidad y deja escrito qué recortó. Trabajas con
-   el presupuesto ya recortado y lo copias al parte. Si la tarea no cabe en lo que queda del bloque, comparece antes de
+   el presupuesto ya recortado y lo copias al parte. Un `arreglo` técnico que haces tú suma 0,2 M por la pasada de
+   jueces y 0,1 M por regla o modelo tocado, con la ruta de cada pieza en el encargo (REGLAS §4.15). Si la tarea no cabe en lo que queda del bloque, comparece antes de
    empezar.
 10. Marca la tarea `en curso` en el tablero y cuéntale al usuario, en 2 líneas, qué vas a hacer y qué se va a ver.
 
@@ -231,6 +232,22 @@ a presupuesto por agente, por qué, y la tabla del tablero actualizada.
   escenario; estado 0,5 M solo si su lupa o su tipo ya existen; si no, 1,2 M. Mide antes las cifras del motor con un
   programa corto y da al constructor el objetivo que el motor puede dar.
 
+### La reforma y los ahorros del 30/10/2026 (`reglas-reforma`, aprobados por el usuario)
+
+`autonomo/REGLAS.md` §1.6, §2.1b, §2.6b, §4.15, §5.7 y §7.13; `autonomo/radar/NORTE.md` (G7). En resumen:
+- **Recursos estudiados**: aportan ideas, no son fuente clínica; licencia o permiso anotados antes de traer nada.
+- **Ningún dato de pacientes reales** se guarda; los casos son inventados.
+- **Motores compartidos**: quien toque `eco/motor.mjs` o su contrato pasa las pruebas de la eco y `--modelo shock-vivo`
+  y deja la API antigua funcionando; una pieza de `js/core/` usada por más de 20 fichas, con maqueta, `--ficha` en 3
+  fichas y versión nueva.
+- **Jueces que solo crecen**: sus umbrales no bajan sin el sí del usuario; un cambio de juez, en commit aparte.
+- **Ficha nueva**: abre con el carril de 30 segundos (idea, 2-3 cifras, figura) y debajo el desarrollo.
+- **Enlaces del usuario**: a `autonomo/radar/ENTRADAS.md` en la misma sesión, con su estado.
+- **Gasto tras las piezas**: en un grupo con piezas y Estudiar, `gasto.mjs --clave` al acabar las piezas y antes del
+  Estudiar; si va a pasar del 25 %, comparece ahí.
+- **Presupuestos**: tu sesión de un grupo con piezas y Estudiar, 1,3 M; Hacienda no junta en un encargo piezas con
+  prueba o jueces propios.
+
 ### Llegar al 8,75 a la primera (aprobado por el usuario el 27/10/2026)
 
 `autonomo/REGLAS.md` §4.8 (R1-R9 de `notas-meta`). En resumen: el constructor pasa la prueba del móvil antes de
@@ -265,8 +282,9 @@ se copian a otras fichas (Merino HEMATO, modelo de fichas con calculadora, tení
 ### Entregas sin esperar (el usuario revisa mientras tú sigues)
 
 **No pidas aprobación tarea a tarea** (el usuario lo pidió el 20/10/2026). Lo técnico y los arreglos, con los jueces
-en verde, van directo a `main`; el contenido de un bloque se acumula en su rama `auto/<bN>` y solo se para al usuario
-en las 4-5 paradas del bloque (`REGLAS.md` §2.3), con el enlace «Ver en el móvil», dónde tocar y 2-3 cosas que mirar.
+en verde, van directo a `main`; el contenido de un bloque se acumula en su rama `auto/<bN>` y entra en `main` por
+votos del Consejo (REGLAS §4.15); al usuario se le enseña igual el enlace «Ver en el móvil», dónde tocar y 2-3 cosas
+que mirar (en la PR y en `SESIONES.md`), pero no se le espera.
 Mientras el usuario mira, la tarea siguiente sigue en **otra sesión** (Ahorro medido, punto 1). Si contesta con
 cambios, se atienden en la vuelta siguiente.
 
@@ -299,10 +317,17 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    seguido de **dónde tocar para llegar** a lo nuevo (p. ej. «Eco cardíaca → Atlas → 18 · Insuficiencia mitral») y
    qué probar (2-3 cosas, incluido un caso clínico entero si hay preguntas). Después: qué se hizo, el encargo (y lo
    que rellenaste tú), jueces (✅/❌), las notas del profesor, los modelos nuevos que propone (para que decidas) y
-   huecos. El contenido de un bloque entra en `main` en su última parada, con el visto bueno del usuario; lo técnico
-   y los arreglos, directo con los jueces en verde (`REGLAS.md` §2.3).
-3. Solo con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero (commit y push de ese cambio en la misma
-   rama). Si el push o la PR fallan, el estado no cambia y el parte lo dice.
+   huecos. Lo técnico y los arreglos van directo a `main` con los jueces en verde (`REGLAS.md` §2.3).
+   **El contenido entra en `main` por votos del Consejo, sin esperar al usuario** (REGLAS §4.15, aprobado el
+   30/10/2026): con la suite entera de jueces en verde, el auditor sin graves y el profesor ≥ 8,75 (meta 9,5 en modelos
+   vivos nuevos y maquetas), lanzas un agente barato (`Explore`, sonnet) con los dictámenes de Interior, Justicia,
+   Educación y Hacienda sobre la PR (le das los informes y las capturas; ≤8 líneas y un voto cada uno); tú presides
+   como Transportes y desempatas; escribes el acta en `autonomo/consejo/` y, con mayoría, fusionas la PR
+   (`mcp__github__merge_pull_request`, sin reescribir historia). Si falta una condición, la PR queda en borrador con
+   lo que falta escrito, y se vuelve a votar cuando se cumpla. Si la rama recibe commits después del voto, repites los
+   jueces antes de fusionar.
+3. Con el enlace de la PR, la tarea pasa a `en revisión (AAAA-MM-DD)` en el tablero y, tras el voto, a `hecha` (commit y
+   push en la misma rama o en `main`). Si el push, la PR o la fusión fallan, el estado no cambia y el parte lo dice.
 4. **Comparecer** (REGLAS §4.10): durante el ciclo, si vas a pasar del presupuesto más de un **25 %**, para antes de
    seguir y dilo en una línea al usuario (qué se pasa, cuánto y por qué); sigues solo con su sí, o con el recorte que
    proponga Hacienda.

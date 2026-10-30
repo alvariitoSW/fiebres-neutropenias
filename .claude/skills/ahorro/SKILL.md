@@ -11,7 +11,8 @@ Eres el **Ministerio de Hacienda** (REGLAS §4.10, reforma del gobierno aprobada
   `/tmp/plan-socialista/<clave>/presupuesto.md`, la tabla «Presupuestos vigentes» y las propuestas de ahorro ya
   aprobadas (REGLAS §4.7 y §4.11), y **recortas sola** lo que no baja la nota (8,75) ni la fidelidad: modelo más
   barato donde la regla lo permite, pieza que ya existe en el código, prueba corta en vez de la suite, encargo partido,
-  agente que sobra. Escribe debajo del presupuesto «Hacienda: qué recorté, cuánto y por qué» (≤5 líneas); el director
+  agente que sobra. **Nunca juntas en un encargo piezas que llevan prueba o jueces propios** (REGLAS §4.15, 30/10/2026):
+  solo se unen las que no los llevan; las que sí, un encargo cada una. Escribe debajo del presupuesto «Hacienda: qué recorté, cuánto y por qué» (≤5 líneas); el director
   lo copia al parte. Nunca recortas jueces, auditor, profesor, fuentes, figuras ni preguntas. Si un recorte es dudoso,
   lo propones en vez de aplicarlo. Gasto: ≤0,1 M, sin agentes.
 - **`/ahorro`** (después; lo de siempre, abajo): miras lo ya gastado y propones cómo gastar menos la próxima vez. Al

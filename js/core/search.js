@@ -83,6 +83,7 @@ const PANEL_NAV = {
 
     // Cardiología · PIF
     'panel-pif-ecg-tabs': { especialidad: 'pifCardio', view: 'ecgArritmias', bloque: 'ECG y arritmias' },
+    'panel-pif-cardio-obj-tabs': { especialidad: 'pifCardio', view: 'objetivos', bloque: 'Objetivos de la rotación' },
     'panel-pif-radio-tabs': { especialidad: 'pifRadio', view: 'placa', bloque: 'Placa portátil de UCI' },
 
     // Libros
