@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
+**Último parte revisado:** `2026-10-30-formula-juez.md` (décima pasada, 30/10: ≈0,95 M frente a 0,8 M, +19 %; 1 propuesta: tareas técnicas del director con jueces y ruta en el presupuesto, segunda vez tras `reglas-30-10`). Antes: `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - Director por encima de 1 M en cada grupo del paso 4 (g3a 1,1 · g3b 1,3 · g4 1,9, con un reinicio del contenedor): si sigue, subir el presupuesto del director a 1,3 M o partir el grupo en dos sesiones (piezas / Estudiar).
