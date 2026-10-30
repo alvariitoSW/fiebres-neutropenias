@@ -68,11 +68,11 @@ export const PASOS_SONDA = {
 };
 
 const RESALTES = [['más de 5 mm', 'hl hl-rojo'], ['63,2%', 'hl hl-rojo'], ['100%', 'hl hl-rojo'], ['TAS ≤140', 'hl hl-rojo'], ['hidrocefalia obstructiva', 'hl hl-azul']];
-// Primera frase en negrita y el resto en 2-3 puntos (el mismo texto); las citas (tras el primer <br>) quedan igual.
+// Primera frase en negrita y el resto, una frase por punto (el mismo texto); las citas (tras el primer <br>) quedan igual.
 const ne = c => {
     const k = c.indexOf('<br><small'), cuerpo = k < 0 ? c : c.slice(0, k), cola = k < 0 ? '' : c.slice(k);
     const fr = cuerpo.split(/(?<=[a-z0-9%)])\.\s+(?=[A-ZÁÉÍÓÚ])/), pri = fr.shift();
-    const n = Math.ceil(fr.length / 3), pts = [];
+    const n = 1, pts = [];
     for (let i = 0; i < fr.length; i += n) pts.push(fr.slice(i, i + n).map(x => x.replace(/\.$/, '')).join('. ') + '.');
     let lista = pts.map(x => `<li>${x}</li>`).join('');
     RESALTES.forEach(([t, c2]) => { if (lista.includes(t)) lista = lista.replace(t, `<span class="${c2}">${t}</span>`); });
@@ -87,7 +87,7 @@ export const PASOS_CRANEO = {
         si: 'c2',
         no: 'c5' },
     c2: { pregunta: '¿Hay desviación de la línea media (más de 5 mm) o una lesión de masa que la empuja?',
-        si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Efecto de masa. Marino muestra una hemorragia intracerebral masiva con desviación de la línea media tras trombólisis, y pide neurocirugía. En el TCE, la línea media desviada más de 5 mm y los hematomas de más de 15 cc son factores de mal pronóstico. En la clasificación de Marshall, el swelling unilateral con línea media desviada es el tipo IV (HTIC en el 100% según el manual) y la lesión de más de 25 cc sin evacuar, masa no evacuada (84,6%). El manual imprime 20 mm en el tipo IV; esta app usa más de 5 mm (nota en la ficha).' + cita('umi', 42, 'Manual UMI, pág. 94 del manual; factores pronósticos en el PDF pág. 27 (pág. 79 del manual) y Marino, cap. 47, <a class="biblio-link" href="' + PDF.neuro + '#page=40" target="_blank" rel="noopener">pág. 40</a>.'), '#umi-marshall-nota')) },
+        si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Efecto de masa. Marino muestra una hemorragia intracerebral masiva con desviación de la línea media tras trombólisis, y pide neurocirugía. En el TCE, la línea media desviada más de 5 mm y los hematomas de más de 15 cc son factores de mal pronóstico. En la clasificación de Marshall, el swelling unilateral con línea media desviada es el tipo IV (HTIC en el 100% según el manual) y la lesión de más de 25 cc sin evacuar, masa no evacuada (84,6%). El manual imprime 20 mm en el tipo IV; esta app usa más de 5 mm (nota en la ficha).' + cita('umi', 42, 'Manual UMI, pág. 94 del manual; factores pronósticos en el PDF pág. 27 (pág. 79 del manual) y Marino, cap. 47, <a class="biblio-link" href="' + PDF.neuro + '#page=40" target="_blank" rel="noopener">pág. 40</a>. Marshall en el Manual UMI, PDF'), '#umi-marshall-nota')) },
         no: 'c3' },
     c3: { pregunta: '¿Las cisternas basales están comprimidas o ausentes?',
         si: { estado: 'tfg-estado-danger', final: T_UMI_TCE(T_UMI('Swelling: es el tipo III de Marshall (swelling bilateral, ausencia de cisternas de la base; HTIC en el 63,2%). La ausencia de cisternas basales figura entre los factores de mal pronóstico del TCE. El Libro Azul recoge la compresión de las cisternas como signo del edema difuso, y que con GCS de 8 o menos y TC anormal (hematoma, contusión, edema) la monitorización de la PIC es beneficiosa.' + cita('umi', 42, 'Manual UMI, pág. 94 del manual') + ' · <small>Libro Azul, <a class="biblio-link" href="' + PDF.azul + '#page=51" target="_blank" rel="noopener">pág. 51</a> (cisternas comprimidas en el edema difuso) y <a class="biblio-link" href="' + PDF.azul + '#page=52" target="_blank" rel="noopener">pág. 52</a></small>', '#umi-marshall-tabla')) },
