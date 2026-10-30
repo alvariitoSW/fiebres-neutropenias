@@ -405,3 +405,5 @@ ilustrativos aflojados, cada uno con su razón escrita (balón 3 → 2 mmHg, pli
 quedan: DT del grado 1 de la hipertrofia ~420 ms y sin cifra de libro abierta; e′ ~2 cm/s en el shock cardiogénico
 (Nagueh p.561 da 3-4 en el grado III avanzado; extrapolación declarada); bomba AI 88 % de la vasoplejia (artefacto de
 la etiqueta de fase a FC 108). Partes: `autonomo/partes/2026-10-28-eco-calibra-a-s1.md` y `-s2.md`.
+
+- 30/10/2026 · Atlas de eco, capítulo 16 (insuficiencia aórtica) en fase A: texto completo traducido (grados, graduación integrada con los grados I-IV, criterios específicos de la Fig. 25, estadios C1/C2 y el método volumétrico), con tres tablas y citas; figura y preguntas pendientes del ecógrafo nuevo.
