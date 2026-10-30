@@ -26,6 +26,7 @@ export const CAPITULOS = {
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
   peri: { html: 'cap-peri.html', sub: 'Del derrame al taponamiento; constricción frente a miocardiopatía restrictiva' },
+  as: { html: 'cap-as.html', sub: 'De normal a grave y la de bajo flujo y bajo gradiente' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
