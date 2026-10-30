@@ -4985,6 +4985,7 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 /* Ficha «Lee esta placa» (PIF Radiología) */
 .radio-lee-caja { cursor: crosshair; touch-action: manipulation; }
 .radio-lee-caja img { width: 100%; display: block; user-select: none; }
+.radio-toque::after { content: ''; position: absolute; left: 50%; top: 50%; width: 3px; height: 3px; margin: -1.5px; border-radius: 50%; background: var(--accent-purple); }
 .radio-toque { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; border: 2px solid var(--accent-purple); box-shadow: 0 0 0 1.5px var(--bg-main); box-sizing: border-box; pointer-events: none; }
 .radio-lee-extra { border-style: dashed; }
 .radio-lee-rot { font-size: 0.72rem; max-width: 46%; }

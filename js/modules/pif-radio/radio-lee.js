@@ -11,7 +11,7 @@ function montar(ej, host) {
         <p class="section-label" style="margin-top:0;">${ej.titulo}</p>
         <p style="font-size:0.88rem; margin:0 0 8px;">${ej.consigna}</p>
         <div class="fig-rot-caja radio-lee-caja" id="${p}-caja"><img id="${p}-img" src="${ej.img}" alt="${ej.alt}" draggable="false"></div>
-        <p class="fuente-ficha" style="margin:6px 0;">${ej.pie} <a class="biblio-link" href="${ej.pdf}#page=${ej.pag}" target="_blank" rel="noopener">pág. ${ej.pag}</a></p>
+        <p class="fuente-ficha" style="margin:6px 0;"><span id="${p}-pie">${ej.pieAntes}</span> <a class="biblio-link" href="${ej.pdf}#page=${ej.pag}" target="_blank" rel="noopener">pág. ${ej.pag}</a></p>
         <p id="${p}-estado" style="font-size:0.85rem; margin:0 0 8px;" aria-live="polite">Aún no has tocado la placa.</p>
         <div id="${p}-ops" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
         <button type="button" class="siguiente-ficha-btn" id="${p}-comprobar" style="margin-top:10px;" disabled>Comprobar con el libro</button>
@@ -19,6 +19,7 @@ function montar(ej, host) {
     </div>`);
     const caja = document.getElementById(`${p}-caja`), img = document.getElementById(`${p}-img`);
     const ops = document.getElementById(`${p}-ops`), btn = document.getElementById(`${p}-comprobar`);
+    const pie = document.getElementById(`${p}-pie`);
     const estado = document.getElementById(`${p}-estado`), res = document.getElementById(`${p}-res`);
     (ej.tapar || []).forEach(t => { const d = document.createElement('div'); d.className = 'radio-tapa'; d.style.cssText = `left:${t.x}%;top:${t.y}%;width:${t.w}%;height:${t.h}%`; caja.appendChild(d); });
     let toque = null, eleg = -1, hecho = false;
@@ -36,7 +37,7 @@ function montar(ej, host) {
     caja.addEventListener('click', e => {
         if (hecho) return;
         const r = img.getBoundingClientRect();
-        toque = [(e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100];
+        toque = [(e.clientX - r.left) / r.width * 100, (e.clientY - r.top) / r.height * 100 - 6];
         caja.querySelectorAll('.radio-toque').forEach(n => n.remove());
         marca('radio-toque', toque).id = `${p}-toque`;
         estado.textContent = 'Has marcado un punto. Puedes tocar otra vez para moverlo.';
@@ -44,30 +45,32 @@ function montar(ej, host) {
     });
     btn.addEventListener('click', () => {
         if (btn.disabled) return;
-        hecho = true; btn.disabled = true;
+        hecho = true; btn.disabled = true; pie.textContent = ej.pie;
         caja.querySelectorAll('.radio-tapa').forEach(n => n.remove());
         const r = img.getBoundingClientRect();
         const dx = (toque[0] - ej.punto[0]) / 100 * r.width, dy = (toque[1] - ej.punto[1]) / 100 * r.height;
-        const dist = Math.hypot(dx, dy), cerca = dist <= ej.tolerancia / 100 * r.width;
+        const dC = Math.hypot((toque[0] - ej.extra.punto[0]) / 100 * r.width, (toque[1] - ej.extra.punto[1]) / 100 * r.height);
+        const dist = Math.hypot(dx, dy), tol = ej.tolerancia / 100 * r.width, cerca = dist <= tol, carina = !cerca && dC <= tol;
         marca('fig-rot-punto', ej.punto).id = `${p}-real`;
         const t = marca('fig-rot-txt radio-lee-rot', [Math.min(ej.punto[0] + 4, 52), Math.max(ej.punto[1] - 9, 6)], ej.textoPunto);
         t.id = `${p}-real-txt`;
-        if (ej.extra) marca('fig-rot-punto radio-lee-extra', ej.extra.punto);
+        marca('fig-rot-punto radio-lee-extra', ej.extra.punto);
+        marca('fig-rot-txt radio-lee-rot', [Math.min(ej.extra.punto[0] + 4, 52), ej.extra.punto[1]], ej.extra.texto);
         const ok = eleg === ej.correcta;
         const v = ej.ver;
         res.style.display = '';
         res.innerHTML = `<p style="margin:0 0 6px;"><strong>${ok ? 'Tu lectura coincide con el libro.' : 'Tu lectura no coincide con el libro.'}</strong> ${ej.respuesta}</p>
-            <p style="margin:0 0 6px;"><strong>${cerca ? 'Tu toque cayó cerca de la punta.' : 'Tu toque cayó lejos de la punta.'}</strong> El círculo amarillo marca el punto real.</p>
+            <p style="margin:0 0 6px;"><strong>${cerca ? 'Tu toque cayó cerca de la punta.' : carina ? 'Has tocado la carina, no la punta.' : 'Tu toque cayó lejos de la punta.'}</strong> ${carina ? ej.regla + ' ' : ''}El círculo amarillo marca la punta; el discontinuo, la carina.</p>
             <p style="margin:0;">${ej.frase} <a class="biblio-link" href="${ej.pdf}#page=${ej.pag}" target="_blank" rel="noopener">Marino, pág. ${ej.pag}</a></p>
             <button type="button" class="especialidad-link" style="margin-top:8px;" data-especialidad="${v.esp}" data-view="${v.view}" data-panel="${v.panel}" data-tab="${v.tab}" data-resaltar="${v.res}">🔗 Ver en el texto: ${v.rot} →</button>
             <button type="button" class="siguiente-ficha-btn" id="${p}-repetir" style="margin-top:10px;">↺ Repetir</button>`;
-        res.dataset.cerca = String(cerca); res.dataset.ok = String(ok);
+        res.dataset.cerca = String(cerca); res.dataset.carina = String(carina); res.dataset.ok = String(ok);
         document.getElementById(`${p}-repetir`).addEventListener('click', () => {
             hecho = false; toque = null; eleg = -1; res.style.display = 'none'; res.innerHTML = '';
             caja.querySelectorAll('.radio-toque,.fig-rot-punto,.fig-rot-txt').forEach(n => n.remove());
             (ej.tapar || []).forEach(t => { const d = document.createElement('div'); d.className = 'radio-tapa'; d.style.cssText = `left:${t.x}%;top:${t.y}%;width:${t.w}%;height:${t.h}%`; caja.appendChild(d); });
             botones.forEach(x => x.setAttribute('aria-pressed', 'false'));
-            estado.textContent = 'Aún no has tocado la placa.'; listo();
+            pie.textContent = ej.pieAntes; estado.textContent = 'Aún no has tocado la placa.'; listo();
         });
     });
 }

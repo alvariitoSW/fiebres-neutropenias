@@ -62,6 +62,8 @@ for (const w of [390, 360]) {
       await p.evaluate(i => document.getElementById(`radio-f6-${i}-img`).scrollIntoView({ block: "center" }), id); await p.waitForTimeout(150);
       const bb = await p.locator(`#radio-f6-${id}-img`).boundingBox();
       const off = () => p.evaluate(i => document.getElementById(`radio-f6-${i}-comprobar`).disabled, id);
+      const pieA = () => p.evaluate(i => document.getElementById(`radio-f6-${i}-pie`).textContent, id);
+      if (/bien colocado/i.test(await pieA())) fallos.push(`${w} f6 ${id}: el pie regala bien colocado`);
       if (!await off()) fallos.push(`${w} f6 ${id}: Comprobar activo antes de tocar`);
       const [x, y] = lejos ? [15, 80] : pt;
       await p.touchscreen.tap(bb.x + bb.width * x / 100 + 3, bb.y + bb.height * y / 100 + 3);
@@ -71,8 +73,18 @@ for (const w of [390, 360]) {
       await p.locator(`#radio-f6-${id}-comprobar`).tap(); await p.waitForTimeout(150);
       const r = await p.evaluate(i => { const e = document.getElementById(`radio-f6-${i}-res`); return { cerca: e.dataset.cerca, pag: !!e.querySelector('a[href*="#page="]'), btn: !!e.querySelector('button[data-tab]'), dw: document.documentElement.scrollWidth - innerWidth }; }, id);
       if (r.cerca !== esperado || !r.pag || !r.btn || r.dw > 0) fallos.push(`${w} f6 ${id} lejos=${lejos}: ${JSON.stringify(r)}`);
+      if (!/bien colocado/i.test(await pieA())) fallos.push(`${w} f6 ${id}: el pie no dice bien colocado tras comprobar`);
       await p.locator(`#radio-f6-${id}-repetir`).tap();
     }
+  }
+  for (const [id, pc] of [['tubo', [50.7, 48.8]], ['via', [49.5, 56]]]) {   // toque sobre la carina (el anillo sube 6 %)
+    await p.evaluate(i => document.getElementById(`radio-f6-${i}-img`).scrollIntoView({ block: 'center' }), id); await p.waitForTimeout(150);
+    const bb = await p.locator(`#radio-f6-${id}-img`).boundingBox();
+    await p.touchscreen.tap(bb.x + bb.width * pc[0] / 100, bb.y + bb.height * (pc[1] + 6) / 100);
+    await p.locator(`#radio-f6-${id}-ops button`).first().tap(); await p.locator(`#radio-f6-${id}-comprobar`).tap(); await p.waitForTimeout(150);
+    const c = await p.evaluate(i => document.getElementById(`radio-f6-${i}-res`).dataset.carina, id);
+    if (c !== 'true') fallos.push(`${w} f6 ${id}: toque en la carina sin mensaje de carina`);
+    await p.locator(`#radio-f6-${id}-repetir`).tap();
   }
   if (CAP) await p.screenshot({ path: `${CAP}${w}-radio-f6.png` });
   // enlace "Ver en el texto" del último resultado → ficha de origen → VOLVER
