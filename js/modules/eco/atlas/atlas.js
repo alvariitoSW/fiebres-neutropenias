@@ -26,6 +26,9 @@ export const CAPITULOS = {
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
   peri: { html: 'cap-peri.html', sub: 'Del derrame al taponamiento; constricción frente a miocardiopatía restrictiva' },
+  as: { html: 'cap-as.html', sub: 'De normal a grave y la de bajo flujo y bajo gradiente' },
+  tr: { html: 'cap-tr.html', sub: 'De leve a torrencial: vena contracta, ORE (EROA) y flujo suprahepático' },
+  ms: { html: 'cap-ms.html', sub: 'Reumática de leve a grave: planimetría, tiempo de hemipresión y gradiente con la frecuencia' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
