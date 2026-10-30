@@ -22,12 +22,12 @@ const TIEMPOS = Object.fromEntries(REFERENCIAS.map(r => [r.id, r]));
 const ENGROSAMIENTO = { id: 'vi-engrosa', nombre: 'VI: engrosamiento sistólico de la pared', unidad: '%', min: 40, max: Infinity, texto: '>40',
   fuente: 'Mor-Avi 2011 (docs/mor-avi-2011-mecanica-cardiaca-ase.pdf, p. PDF 11 = impresa 287)' };
 
-const correr = (k) => { const m = crearMotor(); m.correr(12); ESCENARIOS[k].aplicar(m);
+const correr = (k, g) => { const m = crearMotor(); m.correr(12); if (g === undefined) ESCENARIOS[k].aplicar(m); else ESCENARIOS[k].aplicar(m, g);
   if (k !== 'normal') m.correr(ESCENARIOS[k].forma || k === 'hemorragia' ? ASENTAR_FORMA : 10); return m; };   // hemorragia: 1 L entran a 80 mL/s (12,5 s); se mide ya sangrada (P2)
 
 // Todo lo que se mide de un escenario (clave = id de REFERENCIAS_FORMA / REFERENCIAS, o del engrosamiento)
-function medir(k) {
-  const m = correr(k), o = m.onda, u = m.ultimo, sc = m.p.sc;
+function medir(k, g) {
+  const m = correr(k, g), o = m.onda, u = m.ultimo, sc = m.p.sc;
   const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a)), ex = extraDeMotor(m);
   const eT = estadoGeo(td, ex), eS = estadoGeo(ts, ex), mT = medidasCorazon(eT, sc), mS = medidasCorazon(eS, sc);
   const gT = baseGeometrica(eT), vdT = medirVd(eT), vdS = medirVd(eS), tsvd = diametrosTSVD(gT);
@@ -55,7 +55,7 @@ function medir(k) {
 const REF_DE = (id) => id === 'vi-engrosa' ? ENGROSAMIENTO : (FORMA[id] || TIEMPOS[id]);
 const dentro = (id, x) => { const r = REF_DE(id); return Number.isFinite(x) && x >= r.min && x <= r.max; };
 
-const CACHE = {}; const de = (k) => CACHE[k] ??= medir(k);
+const CACHE = {}; const de = (k, g) => CACHE[k + '@' + g] ??= medir(k, g);
 const fmt = (x) => Number.isFinite(x) ? (Math.abs(x) < 10 ? x.toFixed(2) : x.toFixed(1)) : String(x);
 
 // Escenarios que se comparan con la banda del varón sano (los de la parada: lo que no es de la enfermedad tiene que
@@ -99,7 +99,8 @@ for (const k of Object.keys(PREVISTO)) {
 
 // Signos de cada enfermedad según Lang / Mor-Avi (escenarios con su gravedad por defecto)
 const SIGNOS = [
-  { k: 'tep', id: 'vd-basal', ok: (x) => x > 41, texto: 'VD basal >41 mm (Lang p. 17, 20)' },
+  // El dibujo satura el diámetro basal en 41 mm (recorte de corazon-geo): se comprueba en el TEP al 100 % (masivo), donde sí pasa de 41
+  { k: 'tep', g: 1, id: 'vd-basal', ok: (x) => x > 41, texto: 'VD basal >41 mm (Lang p. 17, 20)' },
   { k: 'tep', id: 'vd-fac', ok: (x) => x < 35, texto: 'FAC <35 % (Lang p. 23)' },
   { k: 'tep', id: 'vd-fe3d', ok: (x) => x < 45, texto: 'FE del VD <45 % (Lang p. 23)' },
   { k: 'tep', id: 'tapse', ok: (x) => x < 17, texto: 'TAPSE <17 mm (Lang p. 19, 23)' },
@@ -112,11 +113,13 @@ const SIGNOS = [
   { k: 'hemorragia', id: 'vi-vtsi-h', ok: (x) => x < 21, texto: 'VTS indexado por debajo de la media (21 mL/m²; Lang p. 7)' },
 ];
 for (const c of SIGNOS) {
-  const prueba = (t) => { const x = de(c.k).v[c.id];
+  const prueba = (t) => { const x = de(c.k, c.g).v[c.id];
     if (c.todo && c.ok(x)) t.diagnostic(`${c.k}:${c.id} ya se cumple (${fmt(x)}): quitar la marca todo`);
     assert.ok(c.ok(x), `${c.id} = ${fmt(x)}`); };
   if (c.todo) test(`${ESCENARIOS[c.k].nombre}: ${c.texto}`, { todo: c.todo }, prueba); else test(`${ESCENARIOS[c.k].nombre}: ${c.texto}`, prueba);
 }
+
+test.todo('TEP defecto (submasivo): VD basal >41 mm en el dibujo — recorte de corazon-geo, paso 4 de mv-eco');
 
 test('fallo del VI: la torsión es menor que la del corazón normal (Mor-Avi p. 15)', () => {
   assert.ok(de('fallo').v.torsion < de('normal').v.torsion, `${fmt(de('fallo').v.torsion)}° frente a ${fmt(de('normal').v.torsion)}°`);
