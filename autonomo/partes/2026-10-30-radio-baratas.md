@@ -1,6 +1,6 @@
 # 2026-10-30 · radio-baratas (día 1 de 3)
 
-**Resultado:** día 1 en revisión (PR: ver tablero) · días 2-3 pendientes (tope diario)
+**Resultado:** día 1 en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/39) · días 2-3 pendientes (tope diario)
 **Vueltas:** 1 · **Jueces:** pruebas ✓ (`jueces.mjs` entero + `--ficha` de las 4 pestañas + `pif-radio.mjs`) · móvil ✓ (390/360) · auditoría ✓ (0 graves)
 
 ## Qué se hizo
@@ -21,7 +21,7 @@
 - No se abrieron hoy las URLs de RA (sin web en los agentes): son las del informe del 23/10.
 
 ## Para el usuario
-- Mirar en el móvil la PR (enlace en el tablero) y decir si sigue el día 2.
+- Mirar en el móvil la PR #39 y decir si sigue el día 2.
 
 ## Visto de paso (no tocado)
 - Las fichas de origen enlazan al inicio del capítulo, no a la página del criterio: tubo `#page=17` (es la 18) en
