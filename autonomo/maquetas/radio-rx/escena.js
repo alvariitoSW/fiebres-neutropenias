@@ -65,11 +65,11 @@ function huesos() {
 function geomNtx(e, d) {
   const cI = d.cupulaIzq, sup = e.postura === 'supino';
   if (e.ntx === 'no') return null;
-  if (d.tension) return { zona: pulmonIzq(cI), linea: 'M262 150 C250 120 262 112 276 118 C292 128 290 200 274 206 C260 210 256 180 262 150 Z', mascara: 1, surco: sup ? 34 : 0, colapso: true };
+  if (d.tension) return { zona: pulmonIzq(cI), linea: 'M232 150 C218 124 224 112 236 118 C248 128 246 196 238 204 C224 208 226 178 232 150 Z', mascara: 1, surco: sup ? 34 : 0, colapso: true }; // el pulmón colapsado se retrae al hilio (medial)
   if (sup) {
     const g = e.ntx === 'grande';
     return { zona: g ? `M232 150 C280 140 320 150 332 190 L333 ${250 + cI * 0.6} Q300 ${226 + cI} 265 ${226 + cI} Q232 ${228 + cI} 214 236 Z` : `M262 196 C290 188 318 196 330 214 L333 250 Q300 226 265 226 Q250 226 244 228 Z`,
-      linea: null, mascara: g ? 0.85 : 0.6, surco: g ? 36 : 20 };
+      linea: null, mascara: g ? 0.85 : 0.6, surco: g ? 36 : 20, base: g ? 0.7 : 0.3 };
   }
   if (e.ntx === 'pequeno') return { zona: 'M218 60 C240 34 278 40 302 78 L304 90 C282 60 246 60 222 76 Z', linea: 'M222 76 C246 60 282 60 304 90', mascara: 1, surco: 0 };
   return { zona: 'M218 60 C240 34 278 40 302 78 C322 112 333 170 333 250 L284 238 C290 214 292 178 286 130 C280 84 252 66 222 72 Z',
@@ -80,7 +80,7 @@ function geomNtx(e, d) {
 function geomDerrame(e, d) {
   const n = d.perforacion && e.derrame === 'no' ? 'pequeno' : e.derrame;
   if (n === 'no') return null;
-  if (e.postura === 'supino') return { velo: { pequeno: 0.12, medio: 0.26, grande: 0.42 }[n] };
+  if (e.postura === 'supino') return { velo: { pequeno: 0.12, medio: 0.26, grande: 0.42 }[n] }; // degradado sin borde, más denso abajo (ilustrativo)
   const top = { pequeno: 212, medio: 158, grande: 82 }[n];
   return { menisco: `M40 ${top - 12} Q70 ${top + 18} 120 ${top + 24} Q160 ${top + 28} 196 ${top + 30}`, top };
 }
@@ -101,6 +101,7 @@ export function marcado(entrada) {
 <clipPath id="rx-cl-p"><path d="${pulmonDer()} ${pulmonIzq(cI)}"/></clipPath>
 <mask id="rx-m-trama"><rect width="${ANCHO}" height="${ALTO}" fill="#fff"/>${ntx ? `<path d="${ntx.zona}" fill="#000" fill-opacity="${ntx.mascara}" filter="url(#rx-suave)"/>` : ''}${atelP ? `<path d="${pulmonIzq(cI)}" fill="#000" fill-opacity="0.85"/>` : ''}${der && der.menisco ? `<g clip-path="url(#rx-cl-d)"><path d="${der.menisco} L196 330 L40 330 Z" fill="#000" fill-opacity="0.85" filter="url(#rx-suave)"/></g>` : ''}</mask>
 <pattern id="rx-grano" width="6" height="6" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="1.2" fill="#fff" fill-opacity="0.55"/><circle cx="5" cy="5" r="0.9" fill="#fff" fill-opacity="0.4"/></pattern>
+<linearGradient id="rx-velo" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity="0.3"/><stop offset="1" stop-color="#fff" stop-opacity="1"/></linearGradient>
 <radialGradient id="rx-ala"><stop offset="0" stop-color="#fff" stop-opacity="0.62"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
 </defs>`);
   // 1 · fondo y partes blandas
@@ -120,7 +121,7 @@ export function marcado(entrada) {
   if (e.patron === 'edema') p.push(`<ellipse cx="140" cy="160" rx="56" ry="44" fill="url(#rx-ala)"/><ellipse cx="252" cy="158" rx="52" ry="42" fill="url(#rx-ala)"/>`
     + `<path d="M57 244 L60 220 Q70 232 96 226 L84 240 Z M333 254 L330 230 Q320 240 296 236 L306 250 Z" ${W(0.55)} filter="url(#rx-suave)"/>`);
   if (e.patron === 'sdra') p.push(`<g clip-path="url(#rx-cl-p)"><rect width="${ANCHO}" height="${ALTO}" ${W(0.3)}/><rect width="${ANCHO}" height="${ALTO}" fill="url(#rx-grano)"/></g>`);
-  if (e.patron === 'sdraLoc') p.push(`<g clip-path="url(#rx-cl-p)" filter="url(#rx-muy)"><ellipse cx="88" cy="196" rx="32" ry="24" ${W(0.5)}/><ellipse cx="300" cy="206" rx="30" ry="22" ${W(0.48)}/><ellipse cx="76" cy="132" rx="16" ry="26" ${W(0.42)}/><ellipse cx="314" cy="126" rx="14" ry="22" ${W(0.4)}/></g>`);
+  if (e.patron === 'sdraLoc') p.push(`<g clip-path="url(#rx-cl-p)" filter="url(#rx-muy)"><ellipse cx="88" cy="196" rx="32" ry="24" ${W(0.5)}/><ellipse cx="300" cy="206" rx="30" ry="22" ${W(0.48)}/></g>`);
   if (e.consol === 'si') p.push(`<g clip-path="url(#rx-cl-d)"><ellipse cx="104" cy="196" rx="48" ry="30" ${W(0.62)} filter="url(#rx-suave)"/>`
     + `<path d="M150 168 Q128 182 104 198 M128 182 L110 176 M116 190 L92 202 M104 198 L84 212" stroke="#000" stroke-opacity="0.7" stroke-width="2.4" fill="none" stroke-linecap="round" filter="url(#rx-hueso)"/></g>`);
   if (e.atel === 'lii') p.push(`<path d="M222 150 L298 ${236 + cI} L222 ${236 + cI} Z" ${W(0.42)} filter="url(#rx-suave)"/>`);
@@ -132,11 +133,12 @@ export function marcado(entrada) {
     q.push(`<path d="${ntx.zona}" ${K(ntx.colapso ? 0.75 : ntx.linea ? 0.7 : 0.9)} filter="url(#rx-suave)"/>`);
     if (ntx.colapso) q.push(`<path d="${ntx.linea}" ${W(0.36)} filter="url(#rx-suave)"/>`);
     if (ntx.linea) q.push(`<path d="${ntx.linea}" stroke="#fff" stroke-opacity="0.75" stroke-width="1.3" fill="none"/>`);
+    if (ntx.base) q.push(`<g clip-path="url(#rx-cl-i)"><ellipse cx="288" cy="${212 + cI * 0.8}" rx="62" ry="50" ${K(Math.min(1, ntx.base + 0.25))} filter="url(#rx-muy)"/></g>`);
     if (ntx.surco) q.push(`<path d="M312 ${236 + cI * 0.6} Q332 ${250 + cI * 0.6} 340 ${250 + cI * 0.6 + ntx.surco} Q324 ${244 + cI * 0.6 + ntx.surco * 0.5} 296 ${236 + cI}" ${K(0.8)} filter="url(#rx-hueso)"/>`
       + `<path d="M265 ${226 + cI} Q300 ${226 + cI} 334 ${250 + cI * 0.6}" stroke="#fff" stroke-opacity="0.5" stroke-width="1.6" fill="none"/>`);
   }
   if (der && der.menisco) q.push(`<g clip-path="url(#rx-cl-d)"><path d="${der.menisco} L196 330 L40 330 Z" ${W(0.78)} filter="url(#rx-suave)"/></g>`);
-  if (der && der.velo) q.push(`<g clip-path="url(#rx-cl-d)"><rect width="200" height="${ALTO}" ${W(der.velo)} filter="url(#rx-muy)"/></g>`);
+  if (der && der.velo) q.push(`<rect x="30" y="46" width="176" height="262" fill="url(#rx-velo)" fill-opacity="${der.velo * 2.2}" filter="url(#rx-muy)"/>`);
   out.push(`<g id="rx-c6">${q.join('')}</g>`);
   // 7 · mediastino (se desplaza en bloque con el desvío)
   const ancho = d.perforacion ? 30 : 0, esc = e.patron === 'edema' ? 1.16 : 1;
@@ -172,7 +174,7 @@ export function marcado(entrada) {
   // Rótulos fijos: «R» a la izquierda de la imagen (derecha del paciente) y la proyección.
   out.push(`<text x="14" y="34" fill="#fff" font-size="22" font-weight="700" font-family="system-ui,sans-serif">R</text>`
     + `<text x="378" y="20" fill="#fff" fill-opacity="0.85" font-size="12" text-anchor="end" font-family="system-ui,sans-serif">AP portátil, en la cama</text>`
-    + `<text x="378" y="322" fill="#fff" fill-opacity="0.85" font-size="12" text-anchor="end" font-family="system-ui,sans-serif">${sup ? 'Tumbado (supino)' : 'Sentado (erguido)'}</text>`);
+    + (e.ocultarPostura ? '' : `<text x="378" y="322" fill="#fff" fill-opacity="0.85" font-size="12" text-anchor="end" font-family="system-ui,sans-serif">${sup ? 'Tumbado (supino)' : 'Sentado (erguido)'}</text>`));
   // 9 · «Señálalo»
   out.push(`<g id="rx-c9">${senal(e, d, { ntx, der, puntaTubo, puntaVia, puntaSng, cI, dx })}</g>`);
   return out.join('\n');
@@ -192,7 +194,7 @@ function senal(e, d, g) {
       : lin('M290 120 L290 64 M282 74 L290 62 L298 74') + txt(286, 134, 'aire: al vértice', 'end');
     case 'ntx':
       if (!g.ntx) return txt(CX, 300, 'sin neumotórax', 'middle');
-      if (g.ntx.colapso) return lin(g.ntx.linea) + txt(250, 104, 'pulmón colapsado') + lin(`M150 ${CARINA} L120 ${CARINA} M128 ${CARINA - 6} L118 ${CARINA} L128 ${CARINA + 6}`) + txt(112, CARINA - 8, 'mediastino', 'end');
+      if (g.ntx.colapso) return lin(g.ntx.linea) + txt(252, 150, 'pulmón colapsado') + lin(`M150 ${CARINA} L120 ${CARINA} M128 ${CARINA - 6} L118 ${CARINA} L128 ${CARINA + 6}`) + txt(112, CARINA - 8, 'mediastino', 'end');
       if (g.ntx.linea) return lin(g.ntx.linea, 'stroke-dasharray="6 4"') + txt(232, 50, 'línea pleural');
       return lin(`M312 ${236 + g.cI * 0.6} Q332 ${250 + g.cI * 0.6} 340 ${250 + g.cI * 0.6 + g.ntx.surco}`) + txt(330, 196, 'surco profundo', 'end');
     case 'derrame':
@@ -201,7 +203,7 @@ function senal(e, d, g) {
     case 'patron':
       if (e.patron === 'edema') return `<ellipse cx="140" cy="160" rx="56" ry="44" stroke="${col}" stroke-width="2" fill="none"/><ellipse cx="252" cy="158" rx="52" ry="42" stroke="${col}" stroke-width="2" fill="none"/>` + txt(CX, 96, 'desde los hilios', 'middle');
       if (e.patron === 'sdra') return lin('M60 300 L330 300') + txt(CX, 294, 'todos los campos, sin derrame', 'middle');
-      if (e.patron === 'sdraLoc') return `<ellipse cx="88" cy="196" rx="36" ry="28" stroke="${col}" stroke-width="2" fill="none"/><ellipse cx="300" cy="206" rx="34" ry="26" stroke="${col}" stroke-width="2" fill="none"/>` + txt(CX, 290, 'manchas en bases y periferia', 'middle');
+      if (e.patron === 'sdraLoc') return `<ellipse cx="88" cy="196" rx="36" ry="28" stroke="${col}" stroke-width="2" fill="none"/><ellipse cx="300" cy="206" rx="34" ry="26" stroke="${col}" stroke-width="2" fill="none"/>` + txt(CX, 290, 'manchas en los campos inferiores', 'middle');
       return txt(CX, 300, 'trama normal', 'middle');
     case 'consol': return e.consol === 'si' ? `<ellipse cx="104" cy="196" rx="50" ry="32" stroke="${col}" stroke-width="2" fill="none"/>` + txt(60, 244, 'broncograma aéreo') : txt(80, 300, 'base derecha limpia');
     case 'atel':

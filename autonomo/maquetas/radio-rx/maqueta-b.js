@@ -39,7 +39,7 @@ const E = {}; // elementos del corte, creados una vez
 function el(tag, attrs, padre) { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); padre.append(n); return n; }
 function montarCorte() {
   const s = $('rx-corte');
-  s.setAttribute('viewBox', '0 0 390 214');
+  s.setAttribute('viewBox', '0 0 390 240');
   const t = (x, y, txt, extra = {}) => { const n = el('text', { x, y, fill: '#fff', 'font-size': 11, 'font-family': 'system-ui,sans-serif', ...extra }, s); n.textContent = txt; return n; };
   // rayo: foco delante (arriba), chasis detrás (abajo)
   el('polygon', { points: '195,24 330,188 60,188', fill: 'var(--accent-yellow)', 'fill-opacity': 0.08 }, s);
@@ -60,7 +60,9 @@ function montarCorte() {
   el('rect', { x: 40, y: 188, width: 310, height: 14, fill: '#000', stroke: '#fff', 'stroke-opacity': 0.6 }, s);
   E.tira = [];
   for (let x = 40; x < 350; x += 5) E.tira.push(el('rect', { x, y: 189, width: 5, height: 12, fill: '#fff', 'fill-opacity': 0.5 }, s));
-  t(195, 212, 'Chasis detrás · tira: suma de densidades (ilustrativo)', { 'text-anchor': 'middle' });
+  t(195, 223, 'Lo que ve el chasis (ilustrativo): blanco = más denso', { 'text-anchor': 'middle' });
+  E.muesca = el('path', { d: 'M0 203 L-5 211 L5 211 Z', fill: 'var(--accent-yellow)' }, s);
+  t(195, 235, '▲ marca la columna más negra', { 'text-anchor': 'middle', fill: 'var(--accent-yellow)' });
   t(52, 112, 'D', { 'font-size': 16, 'font-weight': 700 }); t(332, 112, 'I', { 'font-size': 16, 'font-weight': 700 });
   t(8, 40, 'delante ↑'); t(8, 180, 'detrás ↓');
   E.gSup = el('g', {}, s);
@@ -83,6 +85,7 @@ function dibujar(v) {
   set(E.pulI, { cx: icx, cy: icy, rx: irx, ry: iry });
   set(E.med, { rx: 16 + 10 * k, ry: 22 + 16 * k });
   // Suma de densidades por columna: tejido 1, pulmón 0,3, líquido 1, aire 0,02 (ilustrativo).
+  let minD = 1e9, minX = 195;
   E.tira.forEach((r, i) => {
     const x = 42.5 + i * 5;
     const tor = chord(x, 195, 122, 104, 76);
@@ -94,7 +97,9 @@ function dibujar(v) {
     }
     d += Math.max(0, resto);
     r.setAttribute('fill-opacity', (0.12 + 0.88 * Math.min(1, d / 120)).toFixed(3));
+    if (d < minD) { minD = d; minX = x + 2.5; }
   });
+  E.muesca.setAttribute('transform', `translate(${minX} 0)`);
 }
 
 let actual = null, raf = 0;

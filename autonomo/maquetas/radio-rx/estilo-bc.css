@@ -10,6 +10,7 @@
   .rx-idea { color: var(--text-dim); font-size: 14px; }
   .rx-origen { display: inline-block; font-size: 12px; color: var(--text-muted); border: 1px solid var(--border-color); border-radius: 999px; padding: 1px 8px; margin: 2px 4px 0 0; white-space: nowrap; }
   .rx-origen[data-o="ficha"] { color: var(--accent-green); border-color: var(--accent-green); }
+  .rx-origen[data-o="StatPearls"] { color: var(--accent-blue); border-color: var(--accent-blue); }
   .rx-origen[data-o="ilustrativo"] { color: var(--accent-purple); border-color: var(--accent-purple); }
   .rx-fijo { position: sticky; top: 0; z-index: 5; background: var(--bg-main); margin: 0 -12px; padding: 4px 12px 6px; border-bottom: 1px solid var(--border-color); }
   .rx-placa { display: block; width: 100%; max-height: 38vh; aspect-ratio: 390 / 330; margin: 0 auto; border-radius: 8px; background: #000; }
@@ -47,7 +48,7 @@
   .rx-creditos { font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); margin-top: 22px; padding-top: 10px; }
 
   /* Extras de las maquetas B y C */
-  .rx-corte { display: block; width: 100%; max-height: 26vh; aspect-ratio: 390 / 214; margin: 4px auto 0; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border-color); }
+  .rx-corte { display: block; width: 100%; max-height: 26vh; aspect-ratio: 390 / 240; margin: 4px auto 0; border-radius: 8px; background: var(--bg-card); border: 1px solid var(--border-color); }
   .rx-leyenda { font-size: 13px; color: var(--text-dim); margin: 4px 0 0; }
   .rx-grupo { margin: 8px 0 2px; font-size: 14px; color: var(--text-dim); font-weight: 600; }
   .rx-seg > button[aria-disabled="true"] { opacity: .5; }

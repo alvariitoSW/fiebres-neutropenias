@@ -10,7 +10,7 @@ import path from 'node:path';
 
 const fallos = [];
 const mal = (m) => fallos.push(m);
-const ORIGENES = new Set(['ficha', 'fisiología general', 'ilustrativo']);
+const ORIGENES = new Set(['ficha', 'StatPearls', 'fisiología general', 'ilustrativo']);
 let n = 0;
 for (const k of MANDOS) for (const s of ESTADOS[k].estados) for (const postura of ['erguido', 'supino']) {
   const e = { ...ESTADO_INICIAL, postura, [k]: s.id, foco: k, senal: k };
@@ -20,7 +20,7 @@ for (const k of MANDOS) for (const s of ESTADOS[k].estados) for (const postura o
   if (!r.cifras.length) mal(`${q}: sin cifras`);
   for (const c of r.cifras) {
     if (!ORIGENES.has(c.origen)) mal(`${q}: origen raro «${c.origen}»`);
-    if (c.origen === 'ficha' && !/^(\.\.\/\.\.\/docs\/.+\.pdf#page=\d+|https:\/\/www\.ncbi\.nlm\.nih\.gov\/sites\/books\/NBK\d+\/)$/.test(c.href || '')) mal(`${q}: cifra de ficha sin enlace válido (${c.texto})`);
+    if ((c.origen === 'ficha' || c.origen === 'StatPearls') && !/^(\.\.\/\.\.\/docs\/.+\.pdf#page=\d+|https:\/\/www\.ncbi\.nlm\.nih\.gov\/sites\/books\/NBK\d+\/)$/.test(c.href || '')) mal(`${q}: cifra de ficha sin enlace válido (${c.texto})`);
   }
   if (s.peligro && !r.sello) mal(`${q}: peligroso sin sello`);
   if (s.aviso && !r.aviso && k !== 'atel') mal(`${q}: sin aviso al 80 %`);

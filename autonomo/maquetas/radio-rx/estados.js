@@ -28,7 +28,7 @@ const F = {
   tubo: { src: '../../js/modules/neumologia/img/neumo-fig28-1-radiografia-tubo-et.jpg', pie: 'Tubo bien puesto: punta a medio camino entre la entrada del tórax y la carina. Marino, fig. 28.1', href: M27 + 18, pag: 'pág. 18' },
   selectivo: { src: '../../js/modules/neumologia/img/neumo-fig28-2-radiografia-intubacion-selectiva.jpg', pie: 'Tubo en el bronquio derecho y pulmón izquierdo colapsado. Marino, fig. 28.2', href: M27 + 19, pag: 'pág. 19' },
   carina: { src: '../../js/modules/libros/img/mar-fig2-6-punta-carina.jpg', pie: 'Punta del catéter a la altura de la carina. Marino, fig. 2.6', href: AV + 36, pag: 'pág. 36' },
-  vcs: { src: '../../js/modules/libros/img/mar-fig3-1-perforacion-vcs.jpg', pie: 'Catéter izquierdo apoyado en la pared de la vena cava superior: perforación. Marino, fig. 3.1', href: AV + 45, pag: 'pág. 45' },
+  vcs: { src: '../../js/modules/libros/img/mar-fig3-1-perforacion-vcs.jpg', pie: 'Catéter izquierdo apoyado en la pared de la vena cava superior: perforación. Marino, fig. 3.1', href: AV + 46, pag: 'pág. 46' },
   sng: { src: '../../js/modules/libros/img/mar-fig49-2-sonda-correcta.jpg', pie: 'Sonda bien puesta: recta por el mediastino y punta bajo la cúpula izquierda. Marino, fig. 49.2', href: NU + 28, pag: 'pág. 28' },
   sngPulmon: { src: '../../js/modules/libros/img/mar-fig49-3-sonda-pulmon.jpg', pie: 'Sonda en el pulmón derecho: se desvía a la derecha a la altura de la carina. Marino, fig. 49.3', href: NU + 29, pag: 'pág. 29' },
   edema: { src: '../../js/modules/cardiologia/img/mc-fig18-4-edema-pulmonar.jpg', pie: 'Edema pulmonar cardiogénico: infiltrados que salen de los hilios. Marino, fig. 18.4', href: M18 + 8, pag: 'pág. 8' },
@@ -47,7 +47,7 @@ export const ESTADOS = {
     { id: 'grande', rotulo: 'Grande', aviso: true },
     { id: 'tension', rotulo: 'A tensión', peligro: true, figura: F.tension },
   ] },
-  derrame: { titulo: 'Derrame', patologia: true, lado: 'derecho', ficha: FICHA_PLEURA, estados: [
+  derrame: { titulo: 'Derrame paraneumónico', patologia: true, lado: 'derecho', ficha: FICHA_PLEURA, estados: [
     { id: 'no', rotulo: 'No' },
     { id: 'pequeno', rotulo: '< 10 mm' },
     { id: 'medio', rotulo: '10 mm a ½', aviso: true },
@@ -70,14 +70,14 @@ export const ESTADOS = {
   ] },
   tubo: { titulo: 'Tubo', patologia: false, ficha: FICHA_TUBO, estados: [
     { id: 'no', rotulo: 'Sin tubo' },
-    { id: 'alto', rotulo: 'Alto', peligro: true, figura: F.tubo },
+    { id: 'alto', rotulo: 'Alto', peligro: true, figura: { ...F.tubo, pie: 'Referencia: posición correcta del tubo (no es el tubo alto del dibujo). Marino, fig. 28.1' } },
     { id: 'bien', rotulo: 'Bien', figura: F.tubo },
     { id: 'selectivo', rotulo: 'Selectivo derecho', peligro: true, figura: F.selectivo },
   ] },
   via: { titulo: 'Vía central', patologia: false, ficha: FICHA_VIA, estados: [
     { id: 'no', rotulo: 'Sin vía' },
     { id: 'bien', rotulo: 'Bien', figura: F.carina },
-    { id: 'ad', rotulo: 'En aurícula', figura: F.carina },
+    { id: 'ad', rotulo: 'En aurícula', figura: { ...F.carina, pie: 'Referencia: posición correcta de la punta, a la altura de la carina (no es la punta en la aurícula del dibujo). Marino, fig. 2.6' } },
     { id: 'pared', rotulo: 'Contra la pared', peligro: true, figura: F.vcs },
     { id: 'yugular', rotulo: 'Sube a la yugular', peligro: true },
   ] },
@@ -90,7 +90,7 @@ export const ESTADOS = {
 
 export const MANDOS = Object.keys(ESTADOS);
 export const MAX_PATOLOGIAS = 3;
-export const ESTADO_INICIAL = { postura: 'erguido', ntx: 'no', derrame: 'no', patron: 'no', consol: 'no', atel: 'no', tubo: 'no', via: 'no', sng: 'no', foco: 'postura', senal: null };
+export const ESTADO_INICIAL = { postura: 'erguido', ntx: 'no', derrame: 'no', patron: 'no', consol: 'no', atel: 'no', tubo: 'no', via: 'no', sng: 'no', foco: 'postura', senal: null, ocultarPostura: false };
 
 const PATOLOGICOS = MANDOS.filter(k => ESTADOS[k].patologia);
 export const patologiasEncendidas = e => PATOLOGICOS.filter(k => e[k] && e[k] !== 'no');
@@ -129,63 +129,63 @@ function textos(k, id, supino) {
       no: { frase: 'Sin aire en la pleura: la trama de los vasos llega hasta la pared en los dos lados.', cifras: [c('Trama hasta la periferia', 'fisiología general', null, '')] },
       pequeno: supino
         ? { frase: 'Tumbado, el aire se junta delante de la base: la base se ve más negra y el seno costofrénico más hondo. No hay línea que ver en el vértice.',
-          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Supino: colección basal y subpulmonar', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Seno costofrénico hondo («surco profundo»)', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1 (Marino no lo nombra)')] }
+          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Supino: colección basal y subpulmonar', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Seno costofrénico hondo («surco profundo»)', 'StatPearls', SP_PX, 'StatPearls, Pneumothorax, fig. 1 (Marino no lo nombra)')] }
         : { frase: 'Sentado, el aire sube al vértice: arriba se ve una línea fina, la pleura del pulmón, y por fuera de ella nada de trama.',
-          cifras: [c('Línea pleural y vértice sin trama', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Tamaño del dibujo', 'ilustrativo', null, '')] },
+          cifras: [c('Línea pleural y vértice sin trama', 'StatPearls', SP_PX, 'StatPearls, Pneumothorax (Marino no lo nombra)'), c('Tamaño del dibujo', 'ilustrativo', null, '')] },
       grande: supino
         ? { frase: 'Tumbado, el aire se reparte por delante: toda la base izquierda se ve negra y el seno costofrénico baja mucho. Un neumotórax delante puede no verse en la placa y sí en la TC.',
-          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Neumotórax anterior: placa negativa, TC positiva', 'ficha', M27 + 26, 'Marino cap. 28, fig. 28.5, pág. 26'), c('Surco profundo', 'ficha', SP_PX, 'StatPearls, Pneumothorax, fig. 1')],
-          aviso: 'Un paso más y es a tensión: vigila la tensión arterial y la oxigenación.' }
+          cifras: [c('La placa portátil no ve hasta el 50 % de los neumotórax del crítico: en supino el aire se queda delante de las bases', 'ficha', AV + 34, 'Marino cap. 2, pág. 34'), c('Neumotórax anterior: placa negativa, TC positiva', 'ficha', M27 + 27, 'Marino cap. 28, fig. 28.5, pág. 27'), c('Surco profundo', 'StatPearls', SP_PX, 'StatPearls, Pneumothorax, fig. 1')],
+          aviso: 'Un paso más y es a tensión: vigila la tensión arterial y la oxigenación (aviso de fisiología general).' }
         : { frase: 'El pulmón se ha separado mucho de la pared: hay una franja ancha sin trama. Mira el mediastino y la cúpula: si se mueven, ya es a tensión.',
-          cifras: [c('Línea pleural y franja sin trama', 'ficha', M27 + 26, 'Marino cap. 28, pág. 26'), c('Tamaño del dibujo', 'ilustrativo', null, '')],
-          aviso: 'Un paso más y es a tensión: vigila la tensión arterial y la oxigenación.' },
+          cifras: [c('Línea pleural y franja sin trama', 'StatPearls', SP_PX, 'StatPearls, Pneumothorax (Marino no lo nombra)'), c('Tamaño del dibujo', 'ilustrativo', null, '')],
+          aviso: 'Un paso más y es a tensión: vigila la tensión arterial y la oxigenación (aviso de fisiología general).' },
       tension: { frase: 'El aire a presión empuja: el hemitórax izquierdo no tiene trama, el mediastino se va a la derecha y la cúpula izquierda baja.',
         cifras: [c('Mediastino al lado contrario y cúpula deprimida', 'ficha', M27 + 28, 'Marino cap. 28, fig. 28.7, págs. 27-29'), c('Angiocatéter de 14 G en el 5.º espacio, por delante de la axilar media; luego tubo de 8,5-14 Fr', 'ficha', M27 + 29, 'Marino cap. 28, pág. 29')],
-        sello: 'Neumotórax a tensión. Si hay hipoxemia o hipotensión sin causa, descomprime: no esperes la placa.', selloHref: M27 + 29 },
+        sello: 'Neumotórax a tensión. Si hay hipoxemia o hipotensión sin causa, descomprime de inmediato (Marino: descompresión inmediata).', selloHref: M27 + 29 },
     },
     derrame: {
       no: { frase: 'Sin líquido: los senos costofrénicos son agudos y la cúpula derecha se ve entera.', cifras: [c('Senos costofrénicos agudos', 'fisiología general', null, '')] },
       pequeno: supino
-        ? { frase: 'Tumbado, el líquido se extiende por detrás en capa fina: casi no cambia la placa. La eco mide mejor el tamaño.',
-          cifras: [c('Menos de 10 mm: sin toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Eco para tamaño y sitio', 'ficha', M27 + 45, 'Marino cap. 29, pág. 45'), c('Veladura en supino', 'ilustrativo', null, '')] }
-        : { frase: 'Sentado, el líquido baja al seno costofrénico y lo borra: el ángulo agudo se vuelve romo.',
-          cifras: [c('Menos de 10 mm: sin toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Se mide con eco, TC o en decúbito lateral', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46')] },
+        ? { frase: 'Derrame paraneumónico pequeño. Tumbado, el líquido se extiende por detrás en capa fina: casi no cambia la placa. La eco mide mejor el tamaño.',
+          cifras: [c('Derrame paraneumónico, menos de 10 mm: sin toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Eco para tamaño y sitio', 'ficha', M27 + 45, 'Marino cap. 29, pág. 45'), c('Veladura en supino', 'ilustrativo', null, '')] }
+        : { frase: 'Derrame paraneumónico pequeño. Sentado, el líquido baja al seno costofrénico y lo borra: el ángulo agudo se vuelve romo.',
+          cifras: [c('Derrame paraneumónico, menos de 10 mm: sin toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Se mide con eco, TC o en decúbito lateral', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46')] },
       medio: { frase: supino
           ? 'Tumbado no hay menisco: el líquido vela el hemitórax entero por igual y los vasos se siguen viendo a través.'
           : 'Sentado, el líquido sube por la pared y dibuja una curva cóncava, el menisco, más alta por fuera.',
-        cifras: [c('Más de 10 mm y menos de ½ hemitórax: toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c(supino ? 'Veladura sin menisco' : 'Forma del menisco', 'ilustrativo', null, '')],
-        aviso: 'Si pasa de la mitad del hemitórax, el derrame infectado necesita tubo.' },
+        cifras: [c('Derrame paraneumónico, más de 10 mm y menos de ½ hemitórax: toracocentesis', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c(supino ? 'Veladura sin menisco' : 'Forma del menisco', 'ilustrativo', null, '')],
+        aviso: 'Si el derrame paraneumónico pasa de la mitad del hemitórax, el infectado necesita tubo.' },
       grande: { frase: supino
           ? 'Más de la mitad del hemitórax: tumbado, todo el lado derecho se ve gris y la cúpula desaparece. El mediastino se aparta.'
           : 'Más de la mitad del hemitórax: el lado derecho se ve blanco hasta arriba, la cúpula desaparece y el mediastino se aparta.',
-        cifras: [c('Más de ½ o loculado: tubo de 8,5-14 Fr si está infectado (pH < 7,20, glucosa < 60 mg/dL o Gram +)', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Desvío del mediastino', 'ilustrativo', null, 'sin cifra en la fuente')],
-        sello: 'Derrame de más de la mitad del hemitórax: si está infectado, tubo de 8,5-14 Fr.', selloHref: M27 + 46 },
+        cifras: [c('Derrame paraneumónico de más de ½ o loculado: tubo de 8,5-14 Fr si está infectado (pH < 7,20, glucosa < 60 mg/dL o Gram +)', 'ficha', M27 + 46, 'Marino cap. 29, pág. 46'), c('Desvío del mediastino', 'ilustrativo', null, 'sin cifra en la fuente')],
+        sello: 'Derrame paraneumónico de más de la mitad del hemitórax: si está infectado, tubo de 8,5-14 Fr. (Las reglas de Marino son del paraneumónico; el de insuficiencia cardiaca o el hemotórax no las siguen.)', selloHref: M27 + 46 },
     },
     patron: {
       no: { frase: 'Pulmones negros con vasos finos que se afilan hacia la pared.', cifras: [c('Trama normal', 'fisiología general', null, '')] },
       edema: { frase: 'El agua sale de los hilios a los dos lados, en alas. El corazón es grande y suele haber derrame en las dos bases.',
-        cifras: [c('Infiltrados desde los hilios, bilaterales; derrames frecuentes', 'ficha', M18 + 7, 'Marino cap. 18, págs. 7-8'), c('Cardiomegalia y derrames', 'ficha', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Tamaño del corazón', 'ilustrativo', null, 'sin índice: no hay cifra en la fuente')] },
+        cifras: [c('Infiltrados desde los hilios, bilaterales; derrames frecuentes', 'ficha', M18 + 7, 'Marino cap. 18, págs. 7-8'), c('Cardiomegalia y derrames', 'StatPearls', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Tamaño del corazón', 'ilustrativo', null, 'sin índice: no hay cifra en la fuente')] },
       sdra: { frase: 'Blanco fino y parejo en todos los campos, hasta la pared, sin derrame. Este aspecto clásico es la minoría.',
         cifras: [c('Aspecto clásico solo en el 15-25 %', 'ficha', M22 + 36, 'Marino cap. 24, pág. 36'), c('Placa negativa frente a TC: valor predictivo negativo del 47 %', 'ficha', M22 + 36, 'Marino cap. 24, pág. 36')],
         sello: 'La placa no distingue edema de SDRA: orienta, no diagnostica.', selloHref: M22 + 36 },
-      sdraLoc: { frase: 'Lo más frecuente en el SDRA: manchas en las bases y la periferia, que se confunden con edema cardiogénico.',
+      sdraLoc: { frase: 'Lo más frecuente en el SDRA: manchas en los campos inferiores, que se confunden con edema cardiogénico.',
         cifras: [c('Infiltrados localizados: lo más frecuente', 'ficha', M22 + 36, 'Marino cap. 24, pág. 36'), c('Placa normal posible en las primeras horas', 'ficha', M22 + 35, 'Marino cap. 24, pág. 35')],
         sello: 'La placa no distingue edema de SDRA: orienta, no diagnostica.', selloHref: M22 + 36 },
     },
     consol: {
       no: { frase: 'La base derecha está negra y la cúpula derecha se ve entera.', cifras: [c('Base normal', 'fisiología general', null, '')] },
       si: { frase: 'La base derecha está blanca, pero dentro se ven los bronquios llenos de aire en negro. El volumen no cambia: el mediastino no se mueve.',
-        cifras: [c('Infiltrado nuevo: sensibilidad 89 %, especificidad 26 %', 'ficha', M27 + 40, 'Marino cap. 28, pág. 40'), c('Volumen conservado y broncograma aéreo', 'ficha', SP_LI, 'StatPearls, Lung Imaging')],
+        cifras: [c('Infiltrado nuevo: sensibilidad 89 %, especificidad 26 %', 'ficha', M27 + 40, 'Marino cap. 28, pág. 40'), c('Volumen conservado y broncograma aéreo', 'StatPearls', SP_LI, 'StatPearls, Lung Imaging')],
         sello: 'Un infiltrado nuevo no confirma neumonía: puede ser atelectasia, edema o SDRA.', selloHref: M27 + 40 },
     },
     atel: {
       no: { frase: 'Los dos pulmones con su volumen: el mediastino en el centro.', cifras: [c('Sin pérdida de volumen', 'fisiología general', null, '')] },
       lii: { frase: 'El lóbulo inferior izquierdo pierde el aire: un triángulo blanco detrás del corazón. Tira del mediastino hacia su lado y sube la cúpula.',
-        cifras: [c('Pérdida de volumen, desvío hacia el lado y cúpula elevada', 'ficha', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Atelectasia segmentaria con caída brusca de la oxigenación: tapón', 'ficha', M27 + 23, 'Marino cap. 28, pág. 23')],
+        cifras: [c('Pérdida de volumen, desvío hacia el lado y cúpula elevada', 'StatPearls', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Atelectasia segmentaria con caída brusca de la oxigenación: tapón', 'ficha', M27 + 23, 'Marino cap. 28, pág. 23')],
         aviso: 'Si se cierra el pulmón entero, la oxigenación cae de golpe.' },
       pulmon: { frase: 'El pulmón izquierdo entero sin aire: el hemitórax se ve blanco, el mediastino se va hacia la izquierda y la cúpula sube.',
-        cifras: [c('Pérdida de volumen y desvío hacia el lado colapsado', 'ficha', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Con tubo en el bronquio derecho: atelectasia del pulmón izquierdo', 'ficha', M27 + 19, 'Marino cap. 28, fig. 28.2, pág. 19')],
-        sello: 'Caída brusca de la oxigenación: aspira las secreciones o retira el tubo si está metido de más.', selloHref: M27 + 23 },
+        cifras: [c('Pérdida de volumen y desvío hacia el lado colapsado', 'StatPearls', SP_LI, 'StatPearls, Lung Imaging, «Plain Films»'), c('Con tubo en el bronquio derecho: atelectasia del pulmón izquierdo', 'ficha', M27 + 19, 'Marino cap. 28, fig. 28.2, pág. 19')],
+        sello: 'Caída brusca de la oxigenación: aspira las secreciones o retira el tubo si está metido de más (maniobra: fisiología general).', selloHref: M27 + 23 },
     },
     tubo: {
       no: { frase: 'Sin tubo: la tráquea se ve como una columna negra que se parte en dos en la carina.', cifras: [c('Carina a la altura de T4-T5', 'ficha', M27 + 18, 'Marino cap. 28, pág. 18')] },
@@ -196,16 +196,16 @@ function textos(k, id, supino) {
         sello: 'Tubo alto: riesgo de extubarse al mover el cuello. Recolócalo.', selloHref: M27 + 18 },
       selectivo: { frase: 'El tubo pasa la carina y entra en el bronquio derecho, que es más recto. El pulmón izquierdo se queda sin aire y se colapsa.',
         cifras: [c('Intubación del bronquio derecho y atelectasia del pulmón izquierdo', 'ficha', M27 + 19, 'Marino cap. 28, fig. 28.2, pág. 19'), c('Punta a unos 3 cm por debajo de la carina', 'ilustrativo', null, '')],
-        sello: 'Tubo en el bronquio derecho: retíralo hasta 3-5 cm por encima de la carina.', selloHref: M27 + 18 },
+        sello: 'Tubo en el bronquio derecho: retíralo hasta 3-5 cm por encima de la carina (posición correcta: Marino pág. 18).', selloHref: M27 + 18 },
     },
     via: {
       no: { frase: 'Sin vía. La carina queda justo por encima de donde la vena cava superior entra en la aurícula.', cifras: [c('Carina: referencia de la unión cava-aurícula', 'ficha', AV + 36, 'Marino cap. 2, pág. 36')] },
       bien: { frase: 'La punta queda en la vena cava superior, a la altura de la carina o algo por encima.',
         cifras: [c('Punta en la cava, 1-2 cm sobre la aurícula derecha', 'ficha', AV + 36, 'Marino cap. 2, fig. 2.6, pág. 36'), c('Mal puestos: 15-18 %, sobre todo desde la subclavia', 'ficha', AV + 36, 'Marino cap. 2, pág. 36')] },
       ad: { frase: 'La punta baja por debajo de la carina y entra en la aurícula derecha. En un estudio grande no dio problemas: puede dejarse.',
-        cifras: [c('2.348 pacientes con la punta en la aurícula: ni perforaciones ni arritmias', 'ficha', AV + 37, 'Marino cap. 2, pág. 37')] },
+        cifras: [c('2.348 pacientes con la punta en la aurícula: ni perforaciones ni arritmias problemáticas', 'ficha', AV + 37, 'Marino cap. 2, pág. 37')] },
       pared: { frase: 'El catéter izquierdo no gira hacia abajo: cruza recto y apoya la punta en la pared de la cava. Puede perforarla.',
-        cifras: [c('Punta contra la pared lateral de la cava: perforación', 'ficha', AV + 45, 'Marino cap. 3, fig. 3.1, pág. 45'), c('Mediastino ancho y derrame tras la perforación', 'ficha', AV + 45, 'Marino cap. 3, pág. 45'), c('Tamaño del derrame del dibujo', 'ilustrativo', null, '')],
+        cifras: [c('Punta contra la pared lateral de la cava: perforación', 'ficha', AV + 46, 'Marino cap. 3, fig. 3.1, pág. 46'), c('Mediastino ancho y derrame tras la perforación', 'ficha', AV + 45, 'Marino cap. 3, pág. 45'), c('Tamaño del derrame del dibujo', 'ilustrativo', null, '')],
         sello: 'Mediastino que se ensancha y derrame nuevo con esta punta: piensa en perforación de la cava.', selloHref: AV + 45 },
       yugular: { frase: 'Desde la subclavia, la punta no baja: sube por la yugular del mismo lado, hacia el cuello.',
         cifras: [c('La punta puede subir a la yugular: hay que corregirla', 'ficha', AV + 37, 'Marino cap. 2, pág. 37')],
