@@ -49,3 +49,5 @@ a { color:var(--accent-blue); } .cita-pdf { font:.68rem var(--sans); }
 .tapar .lecturas .lect b, .tapar #esc-tubo-l, .tapar #esc-f362-t, .tapar #esc-barras, .tapar #esc-punto, .tapar [id^="esc-sal-t-"] { visibility: hidden; }
 .tapar #esc-ecg path { visibility: hidden; }
 .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; font: .68rem var(--sans); padding: 0; min-height: 0; cursor: pointer; }
+/* El sello del tope se queda a la vista (sobre la frase viva), aunque el monitor quede fuera de pantalla */
+#tarjeta > .tope-mon { position: fixed; left: 0; right: 0; top: auto; bottom: calc(var(--dock-h) + 130px); height: 200px; }

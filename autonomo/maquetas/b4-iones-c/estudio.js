@@ -17,7 +17,7 @@ const ERRORES = [
 ];
 const html = a => a.join('');
 export function montarEstudio({ api, $, frase }) {
-  const M = api.M, cuerpo = $('est-cuerpo'); let modo = 'apuesta', paso = 0, marcas = new Set(), resp = {}, hecho = {};
+  const M = api.M, cuerpo = $('est-cuerpo'); let inicio = 0, modo = 'apuesta', paso = 0, marcas = new Set(), resp = {}, hecho = {};
   const pintarOps = (ops, sel, rev) => ops.map((o, i) => `<button type="button" class="est-op ${rev ? (o.ok ? 'bien' : sel === i ? 'mal' : '') : ''}" data-op="${i}" ${rev ? 'disabled' : ''}>${o.t}${rev && (sel === i || o.ok) ? `<br><small>${o.ok ? '✔ ' : '✘ '}${o.why}</small>` : ''}</button>`).join('');
   const salir = () => { api.ocultarK(false); };
 
@@ -58,7 +58,7 @@ export function montarEstudio({ api, $, frase }) {
     };
   }
   function probar(que) {
-    if (que === 'alb') { api.cargar('damian'); api.s.alb = 2.0; api.repintar(); frase('Albúmina 2: el Ca total cae a 7,7 y el iónico sigue en 1,12. Abre la lupa para ver la Fig. 38.1.', 43); }
+    if (que === 'alb') { api.cargar('damian'); api.s.alb = 2.0; api.repintar(); frase('Albúmina 2: el Ca total cae a 7,2 y el iónico sigue en 1,1. Abre la lupa para ver la Fig. 38.1.', 43); }
     else if (que === 'rufino') { api.cargar('rufino'); api.acc.clkTasa(20); api.acc.clk(); api.avanzar(480); frase('Rufino, 8 h de ClK a 20 mEq/h con Mg bajo: el K⁺ casi no sube. Con Mg normal, sube más.', 23); }
     else { api.cargar('adela'); api.acc.cl(); api.repintar(); frase('Cloruro: 270 mg de golpe; el tope del bolo es 200 mg. Para la hiperK, 10 mL de gluconato (90 mg).', 26); }
     window.dispatchEvent(new CustomEvent('iones:cambio'));
@@ -84,7 +84,7 @@ export function montarEstudio({ api, $, frase }) {
     api.cargar('damian'); paso = 0; resp = {}; pasoVista();
   }
   function pasoVista() {
-    const P = PASOS[paso]; resp = { sel: null, ok: false }; const inicio = api.s.min;
+    const P = PASOS[paso]; resp = { sel: null, ok: false }; inicio = api.s.min;
     const refrescar = () => {
       const hechoAcc = P.ok();
       $('cs-hacer').innerHTML = `<span class="${hechoAcc ? 'listo' : 'falta'}">${hechoAcc ? '✔' : '○'} ${P.hacer}</span>`;

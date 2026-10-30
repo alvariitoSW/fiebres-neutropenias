@@ -74,20 +74,20 @@ export function crearEscena(svg, { reducido = false } = {}) {
       }
       for (const z of falta) {
         const q = exceso.pop();
-        if (q) { q.dest = z; } else if (z === 'plasma') nueva(ion, 'plasma', { x: azar(30, 240), y: Z.plasma.y + 4 }); else nueva(ion, z);
+        if (q) { q.dest = z; } else if (z === 'plasma') nueva(ion, 'plasma', { x: azar(30, 240), y: Z.plasma.y + 4 }).dest = 'plasma'; else nueva(ion, z);
       }
-      for (const q of exceso) { q.sal = q.zona === 'plasma' ? 'orina' : 'plasma'; if (q.zona !== 'plasma') q.dest = 'plasma'; }
+      for (const q of exceso) { if (q.zona === 'plasma') q.sal = 'orina'; else { q.el.remove(); P.splice(P.indexOf(q), 1); } }
     }
   }
   const sino = (q) => (q.sal && q.sal !== 'plasma') ? { x: SAL[q.sal].x + SAL[q.sal].w / 2, y: 126 } : null;
   function mover(dt) {
     for (let i = P.length - 1; i >= 0; i--) {
       const q = P[i], c = caja[q.zona]; let tx = null, ty = null;
-      if (q.dest) { const d = caja[q.dest]; tx = (d.x0 + d.x1) / 2 + Math.sin(i) * (d.x1 - d.x0) / 3; ty = (d.y0 + d.y1) / 2 + Math.cos(i) * (d.y1 - d.y0) / 3; }
+      if (q.dest) { const d = caja[q.dest]; if (q.tx == null) { q.tx = azar(d.x0, d.x1); q.ty = azar(d.y0, d.y1); } tx = q.tx; ty = q.ty; }
       else if (q.sal && q.sal !== 'plasma') { const s = sino(q); tx = s.x; ty = s.y; }
       if (tx != null) {
         const dx = tx - q.x, dy = ty - q.y, L = Math.hypot(dx, dy), pas = (reducido ? 400 : 85) * dt;
-        if (L <= pas) { q.x = tx; q.y = ty; if (q.dest) { q.zona = q.dest; q.dest = null; } else { q.el.remove(); P.splice(i, 1); continue; } } else { q.x += dx / L * pas; q.y += dy / L * pas; }
+        if (L <= pas) { q.x = tx; q.y = ty; if (q.dest) { q.zona = q.dest; q.dest = null; q.tx = null; } else { q.el.remove(); P.splice(i, 1); continue; } } else { q.x += dx / L * pas; q.y += dy / L * pas; }
       } else if (!reducido) {
         q.x += q.vx * dt; q.y += q.vy * dt;
         if (q.x < c.x0 || q.x > c.x1) { q.vx = -q.vx; q.x = Math.min(c.x1, Math.max(c.x0, q.x)); } if (q.y < c.y0 || q.y > c.y1) { q.vy = -q.vy; q.y = Math.min(c.y1, Math.max(c.y0, q.y)); }
@@ -105,7 +105,7 @@ export function crearEscena(svg, { reducido = false } = {}) {
     col(198, caFr({ ...s, alb: N.alb, ph: N.ph, cit: 0, caPico: 0 }), 0.6); barras.lastChild.setAttribute('stroke-dasharray', '2 2');
     col(228, f, 0.6);
     barras.append(rotulo('normal', 211, 396, { a: 'middle' }), rotulo('ahora', 241, 396, { a: 'middle' }),
-      rotulo(`ión ${coma(f.ion, 2)}`, 262, 322, { c: 'var(--text-main)' }), rotulo(`total ${coma(mgdl(f.total))}`, 262, 336, { c: 'var(--text-dim)' }), rotulo('+ albúmina', 262, 350, { c: 'var(--accent-purple)' }), rotulo('+ aniones', 262, 364, { c: 'var(--text-muted)' }));
+      rotulo(`ión ${coma(f.ion, 2)} mmol/L`, 262, 322, { c: 'var(--text-main)' }), rotulo(`total ${coma(mgdl(f.total))} mg/dL`, 262, 336, { c: 'var(--text-dim)' }), rotulo('+ albúmina', 262, 350, { c: 'var(--accent-purple)' }), rotulo('+ aniones', 262, 364, { c: 'var(--text-muted)' }));
     tuboL.innerHTML = '';
     [['K⁺', coma(extra.kMed), 'mEq/L'], ['Mg²⁺', coma(mgSer(s)), 'mEq/L'], ['Ca ión', coma(f.ion, 2), 'mmol/L'], ['P', coma(pSer(s)), 'mg/dL']].forEach(([n, v, u], i) => {
       tuboL.append(rotulo(n, 278, 55 + i * 11.5, { c: 'var(--text-muted)' }), rotulo(v, 346, 55 + i * 11.5, { a: 'end', c: 'var(--text-main)', w: 600 }));

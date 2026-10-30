@@ -51,6 +51,8 @@ function cifras() {
   const L = M.lecturas(s), p = s.p, b = s.bombas, kv = ocultaK ? '?' : f1(L.k);
   const fc = p.fc, fr = L.po4 < 1 ? 26 : 16;
   $('mon-cifras').innerHTML = `<div class="cifra"><b>${fc}</b><span>FC lpm · ilustrativo</span></div><div class="cifra ${L.ca < 0.9 ? 'mal' : ''}"><b>${L.pa.pas}/${L.pa.pad}</b><span>PA mmHg · ilustrativo</span></div><div class="cifra ${L.po4 < 1 ? 'mal' : ''}"><b>${fr}</b><span>FR /min · ilustrativo</span></div>`;
+  const ch = (n, v, u, c) => `<div class="chip ${c}">${n} <b>${v}</b></div>`;
+  $('mon-iones').innerHTML = ch('K⁺', kv, '', ocultaK ? 'ojo' : rango(L.k, 3.5, 5.5)) + ch('Mg²⁺', f1(L.mg), '', rango(L.mg, 1.4, 2)) + ch('Ca²⁺', f1(L.ca, 2), '', rango(L.ca, 1.15, 1.25)) + ch('PO₄', f1(L.po4), '', rango(L.po4, 2.5, 5));
   const g = (id, v, et, u, ref, cls = '') => { const el = $(id); el.className = 'cifra ' + cls; el.innerHTML = `<b>${v}</b><span>${et} ${u}<br><i class="origen">${ref}</i></span>`; };
   g('g-ph', f1(L.ph, 2), 'pH', '', 'ficha · el que fijas', L.ph < 7.35 || L.ph > 7.45 ? 'ojo' : 'bien');
   g('g-hco3', f1(L.hco3, 0), 'HCO₃⁻', 'mEq/L', 'calculado (Henderson)');

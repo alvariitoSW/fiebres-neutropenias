@@ -63,7 +63,7 @@ export function pa(s) {
   return { pas: Math.round(s.p.pas - bajar), pad: Math.round(s.p.pad - bajar * 0.6) };
 }
 // El K⁺ que «nota» la membrana: el calcio la protege sin tocar el K⁺ sérico (p. 26); ilustrativo
-export const kEficaz = s => ks(s) - 1.8 * Math.min(1, s.caB * 1.5 + s.caP * 4);
+export const kEficaz = s => ks(s) - 2.0 * Math.min(1, s.caB * 10 + s.caP * 8);
 
 // --- Mandos ---
 export function realimentar(s) { s.nutriOn = true; s.ins = Math.min(1, s.ins + 0.2); }

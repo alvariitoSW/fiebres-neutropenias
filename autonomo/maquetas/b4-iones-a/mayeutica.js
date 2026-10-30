@@ -6,7 +6,11 @@ const ROT = [0, 1, 3, 3, 0];   // posición de la correcta: 1, 2, 3, 0, 1 (ningu
 export function montarMayeutica(h) {
   const { M } = h, cont = document.getElementById('vista-preg'), dock = document.getElementById('dock-estudio');
   let fase = 0, paso = 0, aciertos = 0, total = 0;
-  const marca = txt => { dock.innerHTML = `<div style="font:.8rem/1.4 var(--sans)"><b>Mayéutica · ${txt}</b><br><span style="color:var(--text-muted)">Contesta primero; después el modelo lo comprueba en el dibujo de arriba. Aciertos: ${aciertos} de ${total}.</span></div>`; };
+  dock.innerHTML = '<div id="m-txt" style="font:.76rem/1.35 var(--sans)"></div><div class="fila"><button type="button" class="btn" id="m-expl" disabled>Ver la explicación</button><button type="button" class="btn" id="m-sig" disabled>Siguiente ›</button></div>';
+  const mSig = dock.querySelector('#m-sig'), mExpl = dock.querySelector('#m-expl');
+  mExpl.onclick = () => cont.querySelector('#res')?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  const habilitar = on => { mSig.disabled = !on; mExpl.disabled = !on; };
+  const marca = txt => { dock.querySelector('#m-txt').innerHTML = `<b>Mayéutica · ${txt}</b> · aciertos ${aciertos} de ${total}`; };
   const citas = l => (l || []).map(c => cita(c)).join(' · ');
   function pregunta(q, rot, alResponder) {
     const ops = q.ops.map((o, i) => ({ ...o, i })), n = ops.length, vis = ops.map((o, i) => ops[(i - rot + n) % n]);
@@ -16,13 +20,13 @@ export function montarMayeutica(h) {
       const o = vis[+b.dataset.i]; total++; if (o.ok) aciertos++;
       cont.querySelectorAll('.opcion').forEach((x, i) => { x.disabled = true; x.classList.toggle('ok', !!vis[i].ok); if (x === b && !o.ok) x.classList.add('mal'); if (x === b) x.classList.add('marcada'); });
       const r = alResponder(o);
-      cont.querySelector('#res').innerHTML = `<p class="expl">${o.ok ? '<b>Correcto.</b> ' : `<b>Si eliges esta:</b> ${ESC(o.porque)}<br>`}${ESC(q.expl)} ${citas(q.c)}</p>${r ? `<p class="expl" id="resultado">${ESC(r)}</p>` : ''}<button type="button" class="btn" id="sig" style="margin-top:6px">${fase === 2 && paso === CASO.pasos.length - 1 ? 'Terminar' : 'Siguiente'}</button>`;
-      cont.querySelector('#sig').onclick = siguiente; marca(texto());
+      cont.querySelector('#res').innerHTML = `<p class="expl">${o.ok ? '<b>Correcto.</b> ' : `<b>Si eliges esta:</b> ${ESC(o.porque)}<br>`}${ESC(q.expl)} ${citas(q.c)}</p>${r ? `<p class="expl" id="resultado">${ESC(r)}</p>` : ''}`;
+      mSig.textContent = fase === 2 && paso === CASO.pasos.length - 1 ? 'Terminar' : 'Siguiente ›'; mSig.onclick = siguiente; habilitar(true); marca(texto()); document.getElementById('tarjeta').scrollIntoView({ block: 'start', behavior: 'smooth' });
     }));
   }
   const texto = () => fase === 0 ? 'apuesta' : fase === 1 ? 'encuentra el error' : `caso de Damián, paso ${paso + 1} de ${CASO.pasos.length}`;
-  function empezar() { fase = 0; paso = 0; aciertos = 0; total = 0; delete cont.dataset.cerrado; apuesta(); }
-  function siguiente() { delete cont.dataset.cerrado; if (fase === 0) { fase = 1; error(); } else if (fase === 1) { fase = 2; paso = 0; caso(); } else if (paso < CASO.pasos.length - 1) { paso++; caso(); } else fin(); }
+  function empezar() { habilitar(false); fase = 0; paso = 0; aciertos = 0; total = 0; delete cont.dataset.cerrado; apuesta(); }
+  function siguiente() { habilitar(false); scrollTo({ top: 0 }); delete cont.dataset.cerrado; if (fase === 0) { fase = 1; error(); } else if (fase === 1) { fase = 2; paso = 0; caso(); } else if (paso < CASO.pasos.length - 1) { paso++; caso(); } else fin(); }
   function resumen(antes, s) { const a = antes, b = h.lee(s), p = []; for (const [c, n, d] of [['k', 'K⁺', 1], ['mg', 'Mg²⁺', 1], ['ca', 'Ca ión', 2], ['p', 'fosfato', 1]]) if (Math.abs(a[c] - b[c]) >= 0.5 * 10 ** -d) p.push(`${n} ${a[c].toFixed(d).replace('.', ',')} → ${b[c].toFixed(d).replace('.', ',')}`); return p.join(' · '); }
   function apuesta() {
     h.set(M.PACIENTES.damian.s(), 'Damián', true); h.decir('Apuesta', ''); h.destapar = h.destapar; document.getElementById('frase').textContent = 'Predice antes de mirar: las cifras están tapadas.'; marca(texto());
@@ -41,7 +45,7 @@ export function montarMayeutica(h) {
       cont.querySelectorAll('.opcion').forEach((b, i) => { b.disabled = true; const f = ERROR.fr[i], m = b.getAttribute('aria-pressed') === 'true'; const ok = m === f.err; if (ok) bien++; b.classList.add(ok ? 'ok' : 'mal'); li.push(`<li>${ok ? '✔' : '✘'} ${f.err ? '<b>Tiene error.</b>' : '<b>Es correcta.</b>'} ${ESC(f.porque)} ${cita(f.c)}</li>`); });
       total++; if (bien === ERROR.fr.length) aciertos++;
       cont.querySelector('#comprobar').hidden = true;
-      cont.querySelector('#res').innerHTML = `<ul class="lista expl">${li.join('')}</ul><button type="button" class="btn" id="sig" style="margin-top:6px">Siguiente</button>`; cont.querySelector('#sig').onclick = siguiente; marca(texto());
+      cont.querySelector('#res').innerHTML = `<ul class="lista expl">${li.join('')}</ul>`; mSig.textContent = 'Siguiente ›'; mSig.onclick = siguiente; habilitar(true); marca(texto()); document.getElementById('tarjeta').scrollIntoView({ block: 'start', behavior: 'smooth' });
     };
   }
   function caso() {
@@ -61,6 +65,6 @@ export function montarMayeutica(h) {
       return `El modelo (conducta correcta): ${r || 'sin cambios'}.${extra}`;
     });
   }
-  function fin() { cont.innerHTML = `<div class="bloque"><b>Lo que te llevas</b><ul><li>El K⁺ del suero no es el potasio del cuerpo: la insulina lo mueve a la célula sin gastarlo.</li><li>Con el Mg²⁺ bajo, el K⁺ no sube: se repone el magnesio.</li><li>El fosfato por debajo de 1 mg/dL es grave y la glucosa lo baja.</li><li>El Mg²⁺ sérico se normaliza antes que los depósitos.</li></ul><button type="button" class="btn" id="otra">Repetir</button></div>`; cont.querySelector('#otra').onclick = empezar; marca('final'); }
+  function fin() { cont.innerHTML = `<div class="bloque"><b>Lo que te llevas</b><ul><li>El K⁺ del suero no es el potasio del cuerpo: la insulina lo mueve a la célula sin gastarlo.</li><li>Con el Mg²⁺ bajo, el K⁺ no sube: se repone el magnesio.</li><li>El fosfato por debajo de 1 mg/dL es grave y la glucosa lo baja.</li><li>El Mg²⁺ sérico se normaliza antes que los depósitos.</li></ul><button type="button" class="btn" id="otra">Repetir</button></div>`; cont.querySelector('#otra').onclick = empezar; habilitar(false); marca('final'); }
   return { empezar };
 }

@@ -1,6 +1,6 @@
 :root { --bg-main:#17140f; --bg-card:rgba(46,38,28,.72); --text-main:#e8dcc4; --text-dim:#a39880; --text-muted:#8a7f6a; --accent-green:#90a06a; --accent-red:#b85c3e; --accent-yellow:#cf9a3e; --accent-blue:#d4af37; --accent-purple:#9c5476; --sans: system-ui, sans-serif; }
 * { box-sizing: border-box; }
-html, body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, sans-serif; overflow-x: hidden; }
+html, body { margin: 0; background: var(--bg-main); color: var(--text-main); font: 15px/1.45 system-ui, sans-serif; overflow-x: clip; }
 main { max-width: 430px; margin: 0 auto; padding: 8px 10px calc(var(--dock-h, 150px) + 16px); }
 h1 { font-size: 1.1rem; margin: 4px 0; } h2 { font-size: .95rem; margin: 0 0 6px; } h3 { font-size: .85rem; margin: 8px 0 4px; }
 .aviso { font-size: .72rem; color: var(--text-dim); margin: 0 0 6px; }
@@ -39,3 +39,11 @@ button:disabled { opacity: .4; }
 .est-box { font-size: .78rem; } .est-box p { margin: 4px 0; } .listo { color: var(--accent-green); } .falta { color: var(--text-dim); }
 .mini-lista { margin: 4px 0; padding-left: 18px; } .mini-lista li { margin: 2px 0; }
 .tarjeta.mon .der { color: var(--text-dim); font-size: .7rem; }
+.nv-especies { display: flex; flex-wrap: wrap; gap: 4px 10px; font-size: .7rem; color: var(--text-dim); margin: 2px 0 6px; }
+.nv-especies span { display: inline-flex; align-items: center; gap: 4px; } .nv-especies svg { width: 14px; height: 14px; flex: none; }
+#mon { position: sticky; top: 0; z-index: 12; background: var(--bg-main); box-shadow: 0 6px 8px -6px #000; }
+#mon .cifras { margin-top: 4px; gap: 3px; grid-template-columns: repeat(3, 1fr); } #mon .cifra { padding: 2px 6px; } #mon .cifra b { font-size: .95rem; } #mon .cifra span { font-size: .6rem; }
+.chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 3px; margin-top: 4px; }
+.chip { background: var(--bg-card); border-radius: 8px; padding: 2px 4px; font-size: .72rem; text-align: center; font-variant-numeric: tabular-nums; min-width: 0; } .chip b { font-size: .88rem; }
+.chip.mal b { color: var(--accent-red); } .chip.ojo b { color: var(--accent-yellow); } .chip.bien b { color: var(--accent-green); }
+#bm-sl { display: block; }

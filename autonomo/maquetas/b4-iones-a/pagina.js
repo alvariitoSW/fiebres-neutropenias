@@ -150,8 +150,8 @@ $('esc').addEventListener('click', e => { const g = e.target.closest('.pieza'); 
 document.addEventListener('click', e => { const b = e.target.closest('.ver-ficha'); if (!b) return; const t = $('toast'); t.textContent = `En la app, esto abre la ficha «${b.dataset.nombre}» en el párrafo exacto.`; t.hidden = false; setTimeout(() => t.hidden = true, 2600); });
 // ---------- modos ----------
 export function ponerModo(m) {
-  modo = m; $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-preguntas').setAttribute('aria-selected', String(m === 'preguntas'));
-  $('dock-explorar').hidden = m !== 'explorar'; $('dock-estudio').hidden = m === 'explorar'; $('vista-preg').hidden = m === 'explorar'; $('abajo').hidden = m !== 'explorar'; $('explicame').hidden = m !== 'explorar'; $('guia').hidden = true;
+  modo = m; document.documentElement.style.setProperty('--dock-h', m === 'explorar' ? '190px' : '118px'); $('modo-explorar').setAttribute('aria-selected', String(m === 'explorar')); $('modo-preguntas').setAttribute('aria-selected', String(m === 'preguntas'));
+  $('dock-explorar').hidden = m !== 'explorar'; $('vista-preg').style.order = '-1'; document.querySelector('header.cab').style.order = '-2'; $('dock-estudio').hidden = m === 'explorar'; $('vista-preg').hidden = m === 'explorar'; $('abajo').hidden = m !== 'explorar'; $('explicame').hidden = m !== 'explorar'; $('guia').hidden = true;
   if (m === 'explorar') { tapar = false; cambiarPaciente(clavePac); } else mayeutica.empezar();
 }
 $('modo-explorar').onclick = () => ponerModo('explorar'); $('modo-preguntas').onclick = () => ponerModo('preguntas');
@@ -165,3 +165,4 @@ function bucle(t) {
 }
 montarDock(); ficha(); cambiarPaciente('sano'); requestAnimationFrame(bucle);
 seguirFrase(document.body, frase, { dock: $('dock') });
+window.__ionesA = API;
