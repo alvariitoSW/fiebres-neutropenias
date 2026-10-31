@@ -464,6 +464,8 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
       return;
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
+    // Dibujo nuevo, A4C: el arco aórtico y las arterias pulmonares quedan por detrás del plano de las cuatro cámaras (no salen en el A4C real; Mitchell 2019 solo pide ver la aorta descendente lateral a la AI): sin ellos no quedan dos anillos bajo la AI.
+    if (P.clave === 'a4c' && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
     const r = ref && ref[k] && ref[k].nombre === p.nombre ? ref[k] : null;
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;

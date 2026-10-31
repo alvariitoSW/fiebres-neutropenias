@@ -980,9 +980,11 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // ajustes.septoRecto (dibujo nuevo): las uniones del tabique plano con el círculo se redondean menos (KU < 1): el eje corto se ve en «D»
   // (ESC/ERS 2022 p. 3645 Tabla 10: tabique aplanado) y el LVEI no se diluye en el redondeo. La escala es ilustrativa.
   const KU = ajustes.septoRecto ? ajustes.septoRecto : 1;
+  // septoRectoEndo (dibujo nuevo): solo el endocardio septal (la cavidad) con uniones aún más vivas; el epicardio sigue con KU (no toca el VD)
+  const KUe = ajustes.septoRectoEndo ? ajustes.septoRectoEndo : KU;
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
-  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KU);   // anatomia.mjs
+  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe);   // anatomia.mjs
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
   const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
@@ -991,7 +993,7 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // radio del VI en (z, ángulo), con el tabique aplanado si toca
   // el tabique aplanado se une al círculo con uniones redondeadas (radioConCuerda, R3)
   const rEndoVi = (z, f) => { const r = rEndoViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    return radioConCuerda(r, r * Math.cos(a), a, f, KU); };
+    return radioConCuerda(r, r * Math.cos(a), a, f, KUe); };
   const rEpiVi = (z, f) => { const r = rEpiViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
     return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f, KU); };
   const endoVi = (z, f) => { const r = rEndoVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
