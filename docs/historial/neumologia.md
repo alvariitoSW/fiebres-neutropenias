@@ -485,3 +485,12 @@ app según el pie (dicho en pantalla). 5 preguntas nuevas (`pifradio-lee`, q040-
 `js/modules/pif-radio/radio-lee.js` (patrón «guardia» de `ecg-lector.js`), datos `js/data/pif-radio-lee.js`.
 **Fuera 49.2 y 49.3** (sondas): sus pies dan el crédito a terceros (ref. 31, Pennsylvania Patient Safety Advisory; ref. 36,
 introductiontoradiology.net); decide el usuario. Parte: `autonomo/partes/2026-10-30-radio-baratas-d3.md`.
+
+## Radiología con imágenes reales (`radio-real`, 31/10/2026)
+
+El usuario rechazó las placas dibujadas (`motor-radio`) y pidió imágenes reales. Se inventariaron todas las Rx y TC
+reales de los PDF y se generalizó «Lee esta placa» (`js/modules/pif-radio/radio-lee.js`, `montarLectura`): zonas
+tocables con rótulo y cita, «Destapar todo» con lista numerada, «encuentra el error» con 0-2 errores y crédito con
+licencia obligatorio. 36 ejercicios en Placa (f6, f7 Abdomen), Tórax (t1-t3) y Neuro (n3, n4), con 4 TC de Commons
+(licencias en `docs/licencias-imagenes-radiologia.md`). Auditor: 1 grave corregido; profesor 8,0 → 8,9. Parte
+`autonomo/partes/2026-10-31-radio-real.md`; acta `autonomo/consejo/2026-10-31-pr73.md`.

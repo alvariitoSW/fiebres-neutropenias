@@ -5013,7 +5013,20 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .radio-toque { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; border: 2px solid var(--accent-purple); box-shadow: 0 0 0 1.5px var(--bg-main); box-sizing: border-box; pointer-events: none; }
 .radio-lee-extra { border-style: dashed; }
 .radio-lee-rot { font-size: 0.72rem; max-width: 46%; }
+.radio-lee-scroll { overflow-x: auto; max-width: 100%; }
 .radio-tapa { position: absolute; background: var(--bg-main); pointer-events: none; }
+.radio-zona { margin: 0; pointer-events: none; }
+.radio-zona-circ { translate: -50% -50%; }
+.radio-zona-rect { border-radius: 4px; }
+.radio-num { display: none; position: absolute; min-width: 14px; height: 14px; padding: 0 2px; box-sizing: border-box; border-radius: 7px; background: var(--bg-main); border: 1px solid var(--accent-yellow); color: var(--text-main); font-size: 0.66rem; font-weight: 700; line-height: 12px; text-align: center; }
+.radio-lee-masivo .radio-num { display: block; }
+.radio-zona-rect .radio-num { left: 1px; top: 1px; }
+.radio-zona-circ .radio-num { left: 100%; top: -9px; margin-left: 1px; }
+.radio-lee-lista { margin: 0 0 8px; padding-left: 20px; font-size: 0.82rem; line-height: 1.35; }
+.radio-lee-lista li { margin-bottom: 4px; }
+.radio-lee-cita { display: block; font-size: 0.66rem; font-weight: 400; color: var(--text-muted); }
+.radio-op-ok { border-color: var(--accent-green); }
+.radio-op-error { border-color: var(--accent-red); border-style: dashed; }
 
 /* ===== Iones vivos · lo que ves y lo que hay (js/modules/libros/iones-vivos/*). Prefijo de ids: iov-. Viene de la maqueta aprobada
    autonomo/maquetas/b4-iones-b.html. Solo tokens de css/variables.css; los alias son los mismos tokens con el nombre corto. ===== */

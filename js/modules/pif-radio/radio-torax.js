@@ -2,6 +2,8 @@
 // Cada final sale de una ficha ya hecha de la app (Marino, The ICU Book, 5.ª ed.) y lleva su página.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
+import { montarLectura } from './radio-lee.js';
+import { EJERCICIOS_LEE_TORAX } from '../../data/pif-radio-lee-torax.js';
 
 const PDF = {
     baro: 'docs/marino-2024-respiratory-management-caps27-30.pdf',
@@ -30,4 +32,5 @@ export function init() {
     if (!document.getElementById('pif-radio-torax-corkboard')) return;
     initCorkboard('pif-radio-torax-corkboard', 'panel-pif-radio-torax-tabs');
     initSiNoWizard('radio-t1', PASOS_TENSION);
+    Object.entries(EJERCICIOS_LEE_TORAX).forEach(([tab, lista]) => lista.forEach(ej => montarLectura(document.getElementById(`${tab}-lee`), ej)));
 }
