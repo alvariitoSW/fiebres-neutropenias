@@ -27,6 +27,7 @@ C('q.reg.iao', 'mL/s', 'Caudal regurgitante aórtico (el motor no lo entrega por
 for (const k of ['mit', 'tri', 'ao', 'pul']) C('valv.' + k, 'bool', 'Válvula ' + k + ' abierta', 'motor', ['b', 'd', 'm'], 'instante');
 C('gradSepto', 'mmHg', 'Presión del VD menos la del VI (de ahí sale el septo)', 'motor', ['g', 'b'], 'instante');
 C('septo', '0-1', 'Aplanamiento del tabique de hoy (aplanamientoSeptal); el −1…+1 llega en el paso 2', 'puente-hoy', ['b', 'g'], 'instante');
+C('septoSigno', '0…+1', 'Tabique continuo del motor: 0 = normal (cóncavo hacia el VD), +1 = aplanado hacia el VI (pVD ≥ pVI); sin valores negativos', 'motor', ['b', 'g'], 'instante');
 // por latido
 const B = (clave, unidad, que, origen, usa, banda) => C(clave, unidad, que, origen, usa, 'latido', banda ? { banda } : {});
 B('fe', '%', 'Fracción de eyección del VI', 'motor', ['l', 'a']);
@@ -71,7 +72,7 @@ B('tiempos.dt', 'ms', 'Desaceleración de la E (= dt de hoy)', 'puente-hoy', ['d
 B('derrame', 'mL', 'Líquido pericárdico', 'motor', ['b', 'l']);
 B('vci.diam', 'mm', 'Diámetro de la VCI (el motor no lo calcula)', 'hueco', ['b', 'l']);
 B('vci.colapso', '%', 'Colapso inspiratorio de la VCI', 'hueco', ['b', 'l']);
-B('septoFase', '-', 'Fase del aplanamiento (sistólico/diastólico, signo D); llega con el paso 2', 'hueco', ['b']);
+B('septoFase', '-', "Fase en que septoSigno pasa de SEPTO_UMBRAL: 'sistole' | 'diastole' | 'ambas' | null (sístole = válvula aórtica abierta)", 'motor', ['b']);
 B('regional', '0-1', 'Acortamiento por segmento (17 del VI + 3 del VD): McConnell; llega con el paso 2', 'hueco', ['b']);
 B('periodo', 's', 'Duración del latido (motor.ultimo.periodo)', 'motor', ['l', 'w']);
 for (const [k, n] of [['s1', 'cierre mitral (S1)'], ['s2', 'cierre aórtico (S2)'], ['s2p', 'cierre pulmonar'], ['aoAbre', 'apertura aórtica'], ['mitAbre', 'apertura mitral'], ['pulAbre', 'apertura pulmonar'], ['triCierra', 'cierre tricuspídeo']])
@@ -81,6 +82,16 @@ B('limites', 'mL', 'LIMITES del dibujo de hoy: { vi, vd, au } = [mín, máx] (co
 B('fueraDeMarco', 'bool', 'La fisiología se sale de lo que el dibujo de hoy puede mostrar (LIMITES)', 'puente-hoy', ['b']);
 
 export const CAMPOS = Object.freeze(Object.fromEntries(lista.map(c => [c.clave, Object.freeze(c)])));
+
+// Septo continuo (mv-eco-2a5 P2). Del gradiente transeptal pVD − pVI (mmHg) que da el motor, que ya lleva el tabique
+// (p.tabique) y la interdependencia (septoDesplaza, septoTope) dentro de pvi/pvd. Curva suave, sin escalón:
+//   r = ln(1 + exp(grad / SEPTO_ESCALA))   (rampa suave: ~0 con el VI muy por encima del VD)
+//   septoSigno = tanh(r / SEPTO_NORMA)     (0 … +1; 0,5 ≈ grad 6 mmHg)
+// No hay negativos: con pVI ≫ pVD el tabique ya es el normal (cóncavo hacia el VD) y el motor no modela un abombamiento
+// extra hacia el VD. Las dos constantes son ILUSTRATIVAS (el motor no da una geometría): se eligieron para que el normal
+// quede <0,3 y el aplanamiento aparezca con pVD ≈ pVI. Umbral de fase 0,5: ilustrativo.
+export const SEPTO_ESCALA = 2, SEPTO_NORMA = 6, SEPTO_UMBRAL = 0.5;
+export const septoSignoDe = (grad) => Math.tanh(Math.log1p(Math.exp(grad / SEPTO_ESCALA)) / SEPTO_NORMA);
 
 const ORIGEN = Object.fromEntries(lista.map(c => [c.clave, c.origen]));
 const L = (v) => Number.isFinite(v) ? v : null;
@@ -96,6 +107,7 @@ export function contratoDe(motor, puente) {
     q: { mit: m.qMit, tri: m.qTri, ao: m.qAo, pul: m.qPul, vp: m.qVp, reg: { im: m.qMitReg, it: m.qTriReg, iao: null } },
     valv: { mit: !!m.vMit, tri: !!m.vTri, ao: !!m.vAo, pul: !!m.vPul },
     gradSepto: m.pvd - m.pvi,
+    septoSigno: septoSignoDe(m.pvd - m.pvi),
     septo: puente ? (serie[i] ?? null) : null,
   }));
   const gradIT = Math.max(...o.map(m => m.pvd - m.pad));
@@ -103,6 +115,9 @@ export function contratoDe(motor, puente) {
   const ms = (x) => x == null ? null : x * 1000;
   const vdTd = Math.max(...o.map(m => m.vvd)), vdTs = Math.min(...o.map(m => m.vvd));
   const P = (k) => puente ? (pv[k] ?? null) : null;
+  // fase: sístole = válvula aórtica abierta; diástole = el resto del latido
+  const hay = (sis) => o.some((m, i) => !!m.vAo === sis && instantes[i].septoSigno >= SEPTO_UMBRAL);
+  const fS = hay(true), fD = hay(false);
   const latido = {
     fe: 100 * u.fe, feVd: 100 * (vdTd - vdTs) / vdTd, vs: u.vs, gc: u.gc, paps: u.paps, papd: u.papd, pvc: u.pvc, pcp: u.pcp,
     pam: u.pam, fc: u.fc, vdvi: vdTd / Math.max(...o.map(m => m.vvi)),
@@ -122,7 +137,7 @@ export function contratoDe(motor, puente) {
     'tiempos.eventos.s1': L(u.tS1), 'tiempos.eventos.s2': L(u.tS2), 'tiempos.eventos.s2p': L(u.tS2p), 'tiempos.eventos.aoAbre': L(u.tAoAbre),
     'tiempos.eventos.mitAbre': L(u.tMitAbre), 'tiempos.eventos.pulAbre': L(u.tPulAbre), 'tiempos.eventos.triCierra': L(u.tTriCierra),
     fusion: puente ? (pv.fusion ?? null) : null, limites: puente ? (puente.limites ?? null) : null,
-    septoFase: null, regional: null, fueraDeMarco: puente ? !!pv.fueraDeMarco : null,
+    septoFase: fS && fD ? 'ambas' : fS ? 'sistole' : fD ? 'diastole' : null, regional: null, fueraDeMarco: puente ? !!pv.fueraDeMarco : null,
   };
   return { latido, instantes, origen: { ...ORIGEN } };
 }
