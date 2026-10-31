@@ -4,7 +4,7 @@
     <h4>En 30 segundos</h4>
     <ol>
         <li>EchoPrime clasifica cada vídeo por su vista, lo convierte en <span class="hl-azul">512 números</span> y lo pondera por grupo de vistas en cada una de las <b>15 secciones</b> del informe<sup class="at-cita" data-ref="vukadinovic2026"></sup>.</li>
-        <li>EchoNet-Measurements tiene un modelo para cada una de <span class="hl-verde">18 medidas</span>; sin la calibración del archivo DICOM, <span class="hl-rojo">no puede dar una cifra</span><sup class="at-cita" data-ref="sahashi2025"></sup>.</li>
+        <li>EchoNet-Measurements tiene un modelo para cada una de <span class="hl-verde">18 medidas</span><sup class="at-cita" data-ref="sahashi2025"></sup>; sin la calibración del archivo DICOM, <span class="hl-rojo">no puede dar una cifra</span>.</li>
         <li>En un ensayo aleatorizado y ciego, el cardiólogo cambió la FEVI más de un 5 % en el <span class="hl-verde">16,8 %</span> de las hechas primero por la IA y en el <span class="hl-rojo">27,2 %</span> de las del ecografista<sup class="at-cita" data-ref="he2023"></sup>.</li>
     </ol>
 </div>
@@ -56,19 +56,19 @@
             <tr><td>B</td><td>Aorta ascendente</td><td>Paraesternal eje largo, aorta ascendente</td><td>Telediástole</td></tr>
             <tr><td>B</td><td>Arteria pulmonar</td><td>Paraesternal eje corto, arteria pulmonar</td><td>Telediástole</td></tr>
             <tr><td>B</td><td>VCI</td><td>Subcostal, VCI</td><td>El mayor del clip</td></tr>
-            <tr><td>Doppler</td><td>Velocidad pico de la IT</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler</td><td>Velocidad pico de la válvula aórtica</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler</td><td>Velocidad pico de la IM</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler</td><td>Velocidad pico del TSVI</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler tisular</td><td>e′ septal</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler tisular</td><td>e′ lateral</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler</td><td>E mitral</td><td>—</td><td>—</td></tr>
-            <tr><td>Doppler</td><td>E/A mitral</td><td>—</td><td>—</td></tr>
-            <tr><td>Modo M</td><td>TAPSE</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>Velocidad pico de la IT</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>Velocidad pico de la válvula aórtica</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>Velocidad pico de la IM</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>Velocidad pico del TSVI</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>e′ septal</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>e′ lateral</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>E mitral</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>E/A mitral</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler o modo M</td><td>TAPSE</td><td>—</td><td>—</td></tr>
         </tbody>
     </table>
     </div>
-    <details class="nota-plegable"><summary>De dónde sale la tabla</summary><p>Es la lista de medidas de la figura del original (<code>src/ch/measure.js</code>: <code>B</code>, las nueve de modo B con su vista y el fotograma que se informa, y <code>D</code>, los ocho modelos de Doppler y modo M). E y E/A salen de un mismo modelo con dos mapas, por eso ocho imágenes dan nueve medidas: nueve más nueve son las 18 del texto<sup class="at-cita" data-ref="sahashi2025"></sup>. Para las de Doppler y modo M, el código no da vista ni fotograma.</p></details>
+    <details class="nota-plegable"><summary>De dónde sale la tabla</summary><p>Es la lista de medidas de la figura del original (<code>src/ch/measure.js</code>: <code>B</code>, las nueve de modo B con su vista y el fotograma que se informa, y <code>D</code>, los ocho modelos de Doppler y modo M). E y E/A salen de un mismo modelo con dos mapas, por eso ocho imágenes dan nueve medidas: nueve más nueve son las 18 del texto<sup class="at-cita" data-ref="sahashi2025"></sup>. Para las de Doppler y modo M, el código no da vista ni fotograma, ni dice cuáles son de Doppler y cuáles de modo M. Los nombres de los siete pasos (clasificar, codificar, ponderar, responder, medir, anclar, informar) salen de los comentarios del código de la figura (<code>src/aifig.js</code>); en pantalla, sus botones dicen «1-4 EchoPrime» y «5-7 medir, anclar, informar».</p></details>
 
     <h4>Rendimiento</h4>
     <p>En 17 tareas de clasificación y 11 de regresión, el AUC medio de EchoPrime fue de <span class="hl-verde">0,92</span> en Cedars-Sinai y de 0,85 a 0,89 en los centros externos. El error absoluto medio de la FEVI fue de <b>4,79 puntos</b> porcentuales en el conjunto de prueba interno y de 4,14 a 6,46 en los centros externos, frente a 6,23 a 10,37 de EchoCLIP<sup class="at-cita" data-ref="vukadinovic2026"></sup>.</p>

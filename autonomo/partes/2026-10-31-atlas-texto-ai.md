@@ -1,6 +1,6 @@
 # 2026-10-31 · atlas-texto · cap. 24 Interpretación y medidas con IA (fase A, solo texto) — cierre de la tarea
 
-**Resultado:** fusionado a `main` por el cierre automático del tablero (PR de `auto/atlas-texto-ai`) · **Vueltas:** VUELTAS · **Jueces:** `jueces --atlas ai` ✓ · auditoría ciega AUDITORIA
+**Resultado:** fusionado a `main` por el cierre automático del tablero (PR de `auto/atlas-texto-ai`) · **Vueltas:** 1 · **Jueces:** `jueces --atlas ai` ✓ · auditoría ciega ✓ (0 graves, 6 menores: 3 arreglados, 3 sin cambio)
 
 ## Qué se hizo
 - El Objetivo 1 marcaba `ai` «probablemente necesita humano»: la figura (los dos modelos sobre un estudio simulado) depende del ecógrafo nuevo, pero el texto sí se podía traducir. Se hizo solo el texto.
@@ -25,7 +25,9 @@
 | Vuelta | Quién | Motivo | Resultado |
 |---|---|---|---|
 | 1 | director | traducción | jueces ✅ |
-VUELTA2
+| 1b | director | 3 menores de la auditoría (tipo Doppler o modo M sin inferir; cita añadida en «En 30 segundos»; origen de los rótulos de los pasos en la nota) | jueces ✅ |
+
+Menores sin cambio: los enlaces a los capítulos 04 y 09 (añadidos de la app, correctos), el subtítulo (lo pinta el índice) y los mandos de la figura (esperan a la figura).
 
 ## Gasto / Cuentas
 Presupuesto 0,45 M (tope 0,6 M). Auditor sonnet ≈0,06 M; director ≈0,25 M. Total ≈0,3 M, dentro del presupuesto. Sin recortes de Hacienda (<2 M).
