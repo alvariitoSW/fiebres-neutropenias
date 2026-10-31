@@ -263,7 +263,11 @@ export function medidasLatido(curva, fuente) {
     // ni (circular) cuando la E sube hasta el final del latido y la onda sigue subiendo hacia la A del latido siguiente (FC alta: la mitral abre dentro de la contracción auricular)
     const iE = curva.indexOf(E), sig = curva[(iE + 1) % curva.length];
     const fusion = (iE > 0 && curva[iE - 1].fase === 'A' && sg * curva[iE - 1].v >= sg * E.v) || (iE === curva.length - 1 && sig.fase === 'A' && sg * sig.v >= sg * E.v);
-    return { tipo: 'llenado', E: Math.abs(E.v), A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: fusion ? null : tdeDe(curva, iE, sg), fusion };
+    // con fusión, el ecógrafo lee UNA onda (la fusionada): su pico es el mayor de los dos, no el «pico de E» que cuelga de la A
+    // (a FC alta la E medida salía de 3-26 cm/s con una A de 126 y el E/e′ del TEP al 90-95 % caía a 0,2-1,7; mv-eco-2a5 P1).
+    // A y E/A se quedan como estaban (E/A con el «pico» precoz)
+    const Ev = fusion && Math.abs(E.v) < 0.5 * Math.abs(A.v) ? Math.abs(A.v) : Math.abs(E.v);   // solo si el «pico» de E es < ½ de A: no hay onda E propia (umbral ilustrativo)
+    return { tipo: 'llenado', E: Ev, A: Math.abs(A.v), ea: A.v ? Math.abs(E.v / A.v) : null, tde: fusion ? null : tdeDe(curva, iE, sg), fusion };
   }
   if (fuente.tipo === 'valvula') {
     let itv = 0; for (let i = 1; i < curva.length; i++) { const v = sg * curva[i].v; if (v > 0) itv += v * (curva[i].t - curva[i - 1].t); }
