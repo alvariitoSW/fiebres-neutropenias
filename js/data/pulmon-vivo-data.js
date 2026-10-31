@@ -402,7 +402,7 @@ Object.assign(C, {
   descompresion: { f: 'neumo-cuidado-barotrauma', id: 'nep-descompresion', sitio: 'Descompresión: angiocatéter 14 G de 8 cm, 5.º espacio, por delante de la línea axilar media', p: 29 },
 });
 export const NEUMOTORAX = {
-  tope: 20, shock: 12, paso: 1.5, spo2Base: 98, spo2PorCmH2O: 0.6,   // ilustrativo: cmH₂O de presión pleural extra (shock obstructivo desde 12; parada sin pulso en el tope de 20); +1,5 por respiración; SpO₂ = 98 − 0,6 · P
+  tope: 20, shock: 10.5, paso: 1.5, spo2Base: 98, spo2PorCmH2O: 0.6,   // ilustrativo: cmH₂O de presión pleural extra (shock obstructivo desde 10,5, donde la PAM del monitor queda en 59 mmHg tras acotar el alivio de la poscarga; parada sin pulso en el tope de 20); +1,5 por respiración; SpO₂ = 98 − 0,6 · P
   figura: 'js/modules/neumologia/img/neumo-fig28-7-radiografia-neumotorax-tension.jpg',
   sitios: {
     correcto: { k: 'correcto', et: '5.º espacio, por delante de la línea axilar media · 14 G, 8 cm', ok: true,

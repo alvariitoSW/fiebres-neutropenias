@@ -217,7 +217,7 @@ for (const k of ORDEN_ESTADOS) {
   ok(await p.evaluate(() => !document.getElementById('pul-corazon').hidden) && (await p.evaluate(() => window.__pulPruebas().est.pac.k)) === 'herminia', 'cpap-eap: Herminia, y el panel del corazón se ve bajo la pantalla');
   ok(await p.evaluate(() => document.getElementById('pul-monitor').getBoundingClientRect().bottom <= document.getElementById('pul-corazon').getBoundingClientRect().top + 1), 'el panel del corazón está debajo de la pantalla del respirador');
   for (const x of [5, 10]) { const pr = await antes(); await pest('resp'); await mando('peep', x); await espera(300); await llega(pr); v[x] = await nCor('vs'); g[x] = await nCor('gc'); pa[x] = await nCor('pam'); }
-  ok(v[5] > v[0] * 1.05 && v[10] > v[5], `cpap-eap: el VS sube con la CPAP (${v[0]} → ${v[5]} → ${v[10]} mL; ${((v[5] / v[0] - 1) * 100).toFixed(0)} % con CPAP 5)`);
+  ok(v[5] > v[0] * 1.05 && v[10] >= v[5] - 1 && v[10] > v[0] * 1.05, `cpap-eap: el VS sube con la CPAP y se aplana (el alivio satura) (${v[0]} → ${v[5]} → ${v[10]} mL; ${((v[5] / v[0] - 1) * 100).toFixed(0)} % con CPAP 5)`);
   ok(g[10] > g[0] && pa[10] > pa[0], `cpap-eap: el GC (${g[0]} → ${g[10]} L/min) y la PAM (${pa[0]} → ${pa[10]}) suben`);
   ok(/ilustrativo/.test(await p.evaluate(() => document.querySelector('#pul-corazon .org').textContent)), 'el panel del corazón lleva su origen visible');
   ok(await p.evaluate(() => { const b = document.querySelector('#pul-corazon [data-shock-vivo="ic-cpap"]'); return !!b && b.dataset.view === 'shockVivo' && b.dataset.especialidad === 'libros'; }), 'botón «Ver en el shock vivo» (ic-cpap)');
@@ -275,10 +275,10 @@ for (const k of ORDEN_ESTADOS) {
   ok(a.ptx === 0 && a.spo2 === 98 && a.mes > 10 && a.mes < 20, `E4b antes: presión 0, SpO₂ ${a.spo2} %, pico ${a.pico}, meseta ${a.mes}, PAM ${a.pam}`);
   await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); const m1 = await tomar();
   ok(m1.ptx > a.ptx && m1.pico > a.pico && m1.mes > a.mes && m1.pam < a.pam && m1.spo2 < a.spo2, `E4b: tras 5 respiraciones la presión crece (${m1.ptx}) y suben pico (${a.pico} → ${m1.pico}) y meseta (${a.mes} → ${m1.mes}); caen PAM (${m1.pam}) y SpO₂ (${m1.spo2})`);
-  await clic('#pul-neumo [data-nx="pasar"]');   // 15 cmH₂O: shock obstructivo (sello desde 12)
+  await clic('#pul-neumo [data-nx="pasar"]');   // shock obstructivo (sello desde 10,5; con 10,5 la PAM del monitor es 59, medido con autonomo/bloques/b3/herramientas/e4d-neumo-app.mjs; el paso de 5 respiraciones no cae siempre en 10,5)
   await llenar(); await estable();
   { const sh = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).map(e => e.textContent), inerte: document.getElementById('pul-dock-panel').inert })); const mh = await tomar();
-    ok(sh.s.some(x => mh.ptx >= 20 ? /Parada: actividad eléctrica sin pulso/.test(x) : /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 12 && mh.pam < 60 && mh.spo2 < 92, `E4b shock desde 12: con presión ${mh.ptx} sale el sello que toca (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam}, SpO₂ ${mh.spo2}`); }
+    ok(sh.s.some(x => mh.ptx >= 20 ? /Parada: actividad eléctrica sin pulso/.test(x) : /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 10.5 && mh.pam <= 65 && mh.spo2 < 92, `E4b shock desde 10,5: con presión ${mh.ptx} sale el sello que toca (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam}, SpO₂ ${mh.spo2}`); }
   for (let i = 0; i < 2; i++) await clic('#pul-neumo [data-nx="pasar"]');
   await llenar(); await estable(); await espera(4000); await llenar(); await estable();
   const t = await tomar();

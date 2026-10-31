@@ -49,3 +49,20 @@ test('PaO₂ (soporte.mjs, perfusion): depende de pvp − pTorax, no del pTorax 
   const a = medir(RAMIRO(1), 0), b = medir(RAMIRO(1), 10);
   assert.ok(b.u.pvp - b.u.pTorax <= a.u.pvp + 0.01 + 0, `transmural ${(b.u.pvp - b.u.pTorax).toFixed(1)} vs ${a.u.pvp.toFixed(1)}`);
 });
+
+// El alivio de la poscarga satura (motor.mjs, alivioEyeccion): ni la CPAP ni el aire a tensión pueden subir el VS por encima de
+// 1,4 × el basal, y con presión pleural alta (≥ 20 cmH₂O) el taponamiento manda: VS y gasto por debajo del basal.
+const medirP = (rec, aj) => { const c = S.crearCabecera(rec); c.ajustar(aj); c.correr(40); return c.lectura; };
+test('el VS nunca pasa de 1,4 × basal con pleura 0-30 ni con CPAP 0-20 (Ramiro g=1 y normal)', () => {
+  for (const rec of [RAMIRO(1), NORMAL]) {
+    const b = medirP(rec, {}).u.vs;
+    for (const pleura of [0, 5, 10, 15, 20, 25, 30]) assert.ok(medirP(rec, { pleura }).u.vs <= 1.4 * b, `pleura ${pleura}`);
+    for (const cpap of [0, 5, 10, 15, 20]) assert.ok(medirP(rec, { cpap }).u.vs <= 1.4 * b, `cpap ${cpap}`);
+  }
+});
+test('pleura ≥ 20: VS y gasto bajo el basal en Ramiro g=1 y en el normal', () => {
+  for (const rec of [RAMIRO(1), NORMAL]) {
+    const b = medirP(rec, {});
+    for (const pleura of [20, 25, 30]) { const a = medirP(rec, { pleura }); assert.ok(a.u.vs < b.u.vs && a.gcTotal < b.gcTotal, `pleura ${pleura}`); }
+  }
+});

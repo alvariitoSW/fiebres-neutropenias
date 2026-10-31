@@ -384,8 +384,16 @@ export function crearMotor(ajustes = {}) {
   // Ees/Ea; Suga y Sagawa 1974, Circ Res 35:117, la relación presión-volumen telesistólica; aquí solo la forma, sin cifras). Con pTorax = 0 vale 0 y el motor es
   // idéntico; con un VI normal (Ees = normal) el factor es 1 y no cambia nada. Resultado a comprobar: PCP ≥12 y CPAP 5 → el VS
   // sube (Bradley 1992, PMID 1736745: +22 % del VS indexado; Marino resp. cap. 26, PDF p. 87)
+  const ALIVIO_P0 = 4;   // mmHg
   function alivioEyeccion() {
-    return s.pTorax > 0 ? (Math.max(1, BASE.vi.ees / s.eesVi) - 1) * s.pTorax : 0;
+    // Techo (§1.14): la reserva que se libera no puede crecer sin límite con la presión pleural. La parte de la poscarga que la pleura
+    // le quita al VI es la presión transmural de la eyección; el ventrículo sufre por ella solo hasta el punto en que su pared ya
+    // está descargada, y a presiones altas manda el taponamiento (el llenado cae, ver pai/pad con pT). Satura como p·p0/(p+p0)
+    // (hipérbola; p0 = ALIVIO_P0 mmHg, ≈ el rango de CPAP/PEEP clínica, 5-10 cmH₂O): igual a p con p ≪ p0, y nunca pasa de p0.
+    // No es un dato de fuente: es la forma que impone Laplace (tensión ∝ presión transmural) con reserva finita (Suga-Sagawa).
+    if (!(s.pTorax > 0)) return 0;
+    const pEf = s.pTorax * ALIVIO_P0 / (s.pTorax + ALIVIO_P0);
+    return (Math.max(1, BASE.vi.ees / s.eesVi) - 1) * pEf;
   }
 
   function flujos(dt) {
