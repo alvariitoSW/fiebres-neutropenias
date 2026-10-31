@@ -17,7 +17,7 @@ export function calcularTopes(S, simT, mo) {
   const apaga = (...l) => l.flat().forEach((a) => { off.add(a); pend.push(`#rtv-dock-panel [data-acc="${a}"]`); });
   const T = new Proxy({}, { set(o, k, v) { v.deshabilita = [...new Set([...(o[k]?.deshabilita || []), ...pend])]; pend = []; o[k] = v; return true; } });
   // 1) adenosina: 6 → 12 → 12 mg; entre bolos, esperar a que acabe el cerrojo
-  const nA = D.ade || 0, actua = !!(m && simT < m.cerrojoFin);
+  const nA = D.ade || 0, actua = !!(m && simT < m.cerrojoFin && m.cerrojoFin < 1e8);
   if (nA >= MAX.ade) { apaga(ADE); T.ade = { nivel: 'sello', titulo: 'Tope de adenosina', texto: 'Tres bolos (6, 12 y 12 mg) son las dosis de la tabla: la ficha no da una cuarta. Si el ritmo sigue, la adenosina ya no lo corta.', cita: C.t194, origen: 'ficha · Tabla 19.4, p. 30 · "si el ritmo sigue": fisiología general' }; }
   else if (actua) { apaga(ADE); T.ade = { nivel: 'aviso', titulo: 'Adenosina actuando', texto: 'Espera a que acabe el cerrojo del nodo antes del siguiente bolo (la ficha deja 2 min entre ellos).', cita: C.t194, origen: 'ficha · Tabla 19.4, p. 30' }; }
   else if (nA === 2) { T.ade = { nivel: 'aviso', titulo: 'Última dosis', texto: 'Tras 6 y 12 mg queda un último bolo de 12 mg; por vía central, la mitad.', cita: C.t194, origen: 'ficha · Tabla 19.4, p. 30' }; rot.ade12 = 'última dosis (12 mg)'; }

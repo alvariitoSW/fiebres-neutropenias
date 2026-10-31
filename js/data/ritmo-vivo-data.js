@@ -95,6 +95,14 @@ const E = {
   bav1: cf('ecg-f8', 'ecg8-tabla-bav', 'BAV 1.º: PR ≥ 300 ms (ESC)', 27, 'E'),
   mobitz: cf('ecg-f8', 'ecg8-nota-mobitz', 'Mobitz I, II y 2:1 (ESC)', 27, 'E'),
   mp: cf('ecg-f8', 'ecg8-nota-mobitz', 'Cuándo marcapasos en el BAV (ESC)', 28, 'E'),
+  bav3: cf('ecg-f8', 'ecg8-tabla-bav', 'BAV completo: síntomas e indicación (ESC)', '27-28', 'E'),
+  temp: cf('ecg-f10', 'ecg10-indicacion', 'Marcapasos temporal en la bradicardia con compromiso (ESC)', 62, 'E'),
+  min70: cf('ecg-f10', 'ecg10-indicacion', 'Frecuencia mínima más alta, p. ej. 70 lpm (ESC)', 29, 'E'),
+};
+// López Ramírez 2012, parte 3 (PDF = impresa − 125): el marcapasos en el ECG
+const M = {
+  tipos: cf('ecg-f10', 'ecg10-tabla-tipos', 'Electrodo en el VD: QRS tipo bloqueo de rama izquierda', '33-34'),
+  espiga: cf('ecg-f10', 'ecg10-captura', 'Espiga antes de cada QRS, captura al 100 %', '34-35'),
 };
 const L = {
   sinusal: cf('ecg-f8', 'ecg8-disf-sinusal', 'Disfunción sinusal', 55),
@@ -103,6 +111,8 @@ const L = {
   bav: cf('ecg-f8', 'ecg8-tabla-bav', 'Bloqueos AV', '57-58'),
   bav2: cf('ecg-f8', 'ecg8-fig-bav2', 'Mobitz I y bloqueo de 2.º grado', 58),
   nota: cf('ecg-f8', 'ecg8-nota-mobitz', 'Mobitz II y 2:1', 58),
+  bav3: cf('ecg-f8', 'ecg8-tabla-bav', 'BAV de 3.er grado: P y QRS a frecuencias distintas', 59),
+  escapes: cf('ecg-f8', 'ecg8-tabla-escapes', 'Escape nodal (40-60) y ventricular (< 40)', 56),
 };
 const KC = { ecg: cf('fisio-hiperpotasemia', 'hk-fig9', 'Figura 9 · ECG', 21) };
 
@@ -205,11 +215,21 @@ export const ESTADOS = {
     aplicar(mo, t, s) {
       if (s.mobitz === 'I') { mo.m.fcSA = 85; mo.m.navRet = 1.6; mo.m.navF = 3.0; } else { mo.m.fcSA = 75; mo.m.hisCada = s.mobitz === '2:1' ? 2 : 3; }
       mo.reiniciarSA(t + 0.05); } },
-  bav3: { fam: 'lentos', nombre: 'Bloqueo AV de 3.er grado', corto: 'BAV 3.er grado', pendiente: true, fuentes: [] },
-  marcapasos: { fam: 'lentos', nombre: 'Marcapasos', corto: 'Marcapasos', pendiente: true, fuentes: [] },
+  bav3: { fam: 'lentos', nombre: 'Bloqueo AV de 3.er grado', corto: 'BAV 3.er grado', fuentes: [L.bav3, L.escapes, E.bav3, E.temp], paciente: 'casilda',
+    frase: ['El torniquete del nodo AV está cerrado: ninguna P pasa. Las aurículas siguen a 75 y los ventrículos laten por libre con un escape propio, sin relación con las P.', 'ficha · p. 115, 118; ESC 2021 · p. 27'],
+    aplicar(mo, t, s) {
+      mo.m.fcSA = 75; mo.m.cerrojo = 0; mo.m.cerrojoFin = 1e9;
+      if (s.escape === 'vent') { mo.m.escapeCada = null; mo.m.foco = { cada: ESCAPE_VENT, jitter: 0, sitio: () => teselaDe('vi', 3, 0) }; mo.proxFoco = t + 0.3; } else mo.m.escapeCada = ESCAPE_NODAL;
+      mo.reiniciarSA(t + 0.05); } },
+  marcapasos: { fam: 'lentos', nombre: 'Marcapasos', corto: 'Marcapasos', fuentes: [M.tipos, M.espiga, E.min70, L.bav3], paciente: 'casilda',
+    frase: ['El electrodo del ventrículo derecho dispara a 70 lpm: una espiga y, justo detrás, un QRS ancho. Las P siguen a su aire.', 'ficha · p. 159-160; ESC 2021 · p. 29'],
+    aplicar(mo, t) {
+      mo.m.fcSA = 75; mo.m.cerrojo = 0; mo.m.cerrojoFin = 1e9; mo.m.escapeCada = null;
+      mo.m.foco = { cada: 60 / 70, jitter: 0, espiga: true, sitio: () => teselaDe('vd', 3, 0) }; mo.proxFoco = t + 0.3;
+      mo.reiniciarSA(t + 0.05); } },
 };
-export const PENDIENTE = 'Pendiente de fuente: Marino (caps. 19-21) no trata las bradicardias ni los bloqueos AV. Llegarán de la guía europea de estimulación cardíaca (ESC 2021), con el mismo torniquete y el mismo ECG. Hasta entonces, ni trazo ni cifra.';
-export const ESC_2021 = 'https://academic.oup.com/eurheartj/article/42/35/3427/6358547';
+// Escapes del BAV completo (ficha ecg-f8, p. 115): nodal 40-60/min (se usa 45 = 1,33 s) · ventricular < 40/min, ejemplo del libro ≈ 30 (se usa ~32 = 1,87 s)
+const ESCAPE_NODAL = 1.33, ESCAPE_VENT = 1.87;
 
 function teselaDe(banda, i, c) { return MOTOR.grafo.teselas.find(t => t.banda === banda && t.i === i && t.c === c).nodo.k; }
 // La torsade: un foco que gira por el ventrículo (el eje del QRS rota y los complejos «giran»). Ilustrativo.
@@ -297,6 +317,12 @@ export const GUIAS = {
   bav2ii: { tit: 'Mobitz II y bloqueo 2:1', pasos: [
     { t: 'El PR de los latidos que conducen no cambia, y de pronto una P se queda sin QRS: el His deja de transmitir una de cada tantas.', r: ['#rtv-his', '#rtv-ecg'], c: L.nota, org: 'ficha' },
     { t: 'Sin causa reversible, indica marcapasos aunque no haya síntomas: puede progresar a bloqueo completo. En un 2:1 se distingue si es nodal o infranodal.', r: ['#rtv-his'], c: E.mobitz, org: 'ESC 2021' }] },
+  bav3: { tit: 'Bloqueo AV completo', pasos: [
+    { t: 'Las P y los QRS no tienen que ver: las P van a 75 y los QRS, a la frecuencia del escape. El PR cambia a cada latido y alguna P se esconde en el QRS o en la T.', r: ['#rtv-lupa-av', '#rtv-ecg'], c: L.bav3, org: 'ficha' },
+    { t: 'Da síncope y mareo, y a la larga insuficiencia cardiaca; puede acabar en muerte súbita. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas.', r: ['#rtv-bomba', '#rtv-marcapasos'], c: E.bav3, org: 'ESC 2021' }] },
+  marcapasos: { tit: 'Marcapasos ventricular', pasos: [
+    { t: 'El electrodo del ventrículo derecho despolariza el corazón: una espiga fina y un QRS ancho, con forma de bloqueo de rama izquierda porque el ventrículo izquierdo se activa el último.', r: ['#rtv-ecg', '#rtv-vents'], c: M.espiga, org: 'ficha' },
+    { t: 'Cada espiga lleva su QRS (captura al 100 %). Las P siguen a su ritmo, sin relación con ellos. La frecuencia mínima la programa el clínico; en la guía, p. ej. 70 lpm en la FA permanente.', r: ['#rtv-ecg', '#rtv-marcapasos'], c: E.min70, org: 'ESC 2021' }] },
   wpwFa: { tit: 'FA con una vía accesoria', pasos: [
     { t: 'Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares.', r: ['#rtv-puente', '#rtv-ecg'], c: C.wpw },
     { t: 'Los fármacos que frenan el nodo (antagonistas del calcio, betabloqueantes, digoxina) no frenan el atajo: la FC no baja.', r: ['#rtv-torn-r', '#rtv-puente'], c: C.wpw },
@@ -421,7 +447,7 @@ export const LAMINAS = [
 export const CRECE = [
   ['Iones y la célula', 'El Libro Azul y Nefrología (potasio, magnesio, calcio)', 'Mandos de K⁺, Mg²⁺ y Ca²⁺ en la célula; estados de T picudas, onda U y torsade por magnesio. El K⁺ alto ya está, como muestra.'],
   ['Fármacos que tocan el ritmo', 'Marino: sedación, delirio, intoxicaciones', 'Haloperidol y QT, betabloqueante y bradicardia, succinilcolina y potasio. El fármaco se verá en su receptor y su efecto, aquí.'],
-  ['Bradicardias, frío y marcapasos', 'Guía ESC 2021 de estimulación (pendiente), Manual UMI, Marino (hipotermia)', 'Bloqueos AV desde el mismo torniquete; el generador de marcapasos (ya dibujado, cerrado) con su código; la onda de Osborn.'],
+  ['Frío y marcapasos a fondo', 'Manual UMI, Marino (hipotermia), guía ESC 2021 de estimulación', 'La onda de Osborn; el generador de marcapasos con su código de letras y sus modos (DDD, VVI), y la espiga que falla (captura, sensado).'],
   ['FA crónica e insuficiencia cardíaca', 'Guía ESC de IC, Manual UMI', 'Frecuencia o ritmo en la IC, la ivabradina y la digoxina, cada una con su fuente.'],
   ['El ciclo entero', 'Eco cardíaca y el motor del latido', 'Un solo ECG en toda la app: el del Wiggers y el del ecógrafo saldrán de este mismo grafo.'],
 ];

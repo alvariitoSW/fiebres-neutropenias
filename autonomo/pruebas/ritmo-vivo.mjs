@@ -128,18 +128,14 @@ async function correr(ANCHO, REDUCIDO) {
   ok(faM < faB - 3, `FA: con «Llenado malo» la PAS media baja (${faB.toFixed(0)} → ${faM.toFixed(0)})`);
   const siB = await pasMedia('sinusal', {}), siM = await pasMedia('sinusal', { llenadoMalo: true });
   ok(Math.abs(siM - siB) <= 2, `sinusal: «Llenado malo» no cambia la PAS (${siB.toFixed(0)} → ${siM.toFixed(0)})`);
-  // 7. Lentos: los que aún no tienen fuente (pendiente) siguen en «—»; bradi, bav1 y bav2 miden el trazo del motor (b3-bradi P2)
-  const pendientes = Object.keys(ESTADOS).filter(k => ESTADOS[k].pendiente);
-  if (pendientes.length) {
-    await R('ponerEstado', pendientes[0], {}); await espera(200);
-    const lent = await cifras(); ok(lent.every(x => /—/.test(x)) && /Pendiente de fuente/i.test(await p.evaluate(() => document.getElementById('rtv-mon-pendiente').innerText)), `Pendiente «${pendientes[0]}»: monitor en «—» y «Pendiente de fuente», sin cifras`);
-  }
+  // 7. Lentos: ya ninguno es «pendiente de fuente» (b3-bradi P3); todos miden el trazo del motor
+  ok(Object.values(ESTADOS).every(e => !e.pendiente) && !(await p.evaluate(() => document.getElementById('rtv-mon-pendiente') || /pendiente de fuente/i.test(document.getElementById('rtv-raiz').innerText))), 'ningún estado «pendiente de fuente» (ni UI de pendiente)');
   // el trazo del motor: QRS y P de los últimos 24 s, PR de cada P que conduce
   const trazo = () => p.evaluate(() => { const r = window.__ritmo, mo = r.mo, t = r.simT, V = mo.latidosV.filter(b => b.t0 > t - 24 && b.t0 < t - 0.3 && b.n >= 0.5 * b.total), A = mo.latidosA.filter(b => b.t0 > t - 24 && b.t0 < t - 0.8 && b.n >= 0.6 * b.total && b.fin - b.t0 < 0.16);
     const seq = A.map(a => { const v = V.find(x => x.t0 > a.t0 && x.t0 < a.t0 + 0.6); return v ? Math.round((v.t0 - a.t0) * 100) / 100 : null; });
     return { fcQRS: 60 * (V.length - 1) / (V[V.length - 1].t0 - V[0].t0), pr: seq, nP: A.length, nV: V.length, nSin: seq.filter(x => x == null).length }; });
   const fcMon = async () => { await R('pintarCifras'); return +(((await cifras())[0] || '').match(/\d+/) || [NaN])[0]; };
-  for (const [k, ex, nom] of [['bradi', {}, 'Bradicardia sinusal'], ['bav1', {}, 'BAV 1.º'], ['bav2', { mobitz: 'I' }, 'Mobitz I'], ['bav2', { mobitz: 'II' }, 'Mobitz II 3:2'], ['bav2', { mobitz: '2:1' }, 'Bloqueo 2:1']]) {
+  for (const [k, ex, nom] of [['bradi', {}, 'Bradicardia sinusal'], ['bav1', {}, 'BAV 1.º'], ['bav2', { mobitz: 'I' }, 'Mobitz I'], ['bav2', { mobitz: 'II' }, 'Mobitz II 3:2'], ['bav2', { mobitz: '2:1' }, 'Bloqueo 2:1'], ['bav3', { escape: 'nodal' }, 'BAV3 escape nodal'], ['bav3', { escape: 'vent' }, 'BAV3 escape ventricular'], ['marcapasos', {}, 'Marcapasos']]) {
     await R('ponerEstado', k, ex); await R('avanzarHasta', (await R('simT')) + 30); await espera(250);
     const T = await trazo(), fm = await fcMon(), c = (await cifras()).join(' | ');
     const conducidos = T.pr.filter(x => x != null), sube = T.pr.some((x, i) => x != null && T.pr[i + 1] != null && T.pr[i + 1] > x + 0.03);
@@ -148,6 +144,15 @@ async function correr(ANCHO, REDUCIDO) {
     if (k === 'bav1') { const m = conducidos.reduce((x, y) => x + y, 0) / conducidos.length; ok(m >= 0.28 && m <= 0.30 && T.nSin === 0 && Math.max(...conducidos) - Math.min(...conducidos) <= 0.03, `${nom}: PR ${m.toFixed(2)} s fijo, toda P conduce`); }
     if (ex.mobitz === 'I') ok(sube && T.nSin >= 3 && (() => { const i = T.pr.findIndex(x => x == null); return i < 0 || T.pr.slice(0, i).length < 1 || true; })(), `${nom}: el PR crece y hay P sin QRS (PR ${T.pr.slice(0, 9).map(x => x ?? '–').join(' ')})`);
     if (ex.mobitz === 'II' || ex.mobitz === '2:1') ok(T.nSin >= 3 && conducidos.length >= 3 && Math.max(...conducidos) - Math.min(...conducidos) <= 0.02, `${nom}: PR constante (${Math.min(...conducidos)}-${Math.max(...conducidos)} s) con ${T.nSin} P bloqueadas`);
+    if (k === 'bav3' || k === 'marcapasos') {
+      const X = await p.evaluate(() => { const r = window.__ritmo, mo = r.mo, t = r.simT, V = mo.latidosV.filter(b => b.t0 > t - 24 && b.t0 < t - 0.3 && b.n >= 0.5 * b.total), nP = mo.latidosA.filter(b => b.t0 > t - 24 && b.t0 < t - 0.8 && b.n >= 0.6 * b.total && b.fin - b.t0 < 0.16).length;
+        const qrs = V.map(b => (b.fin - b.t0) * 1000).sort((a, b) => a - b)[Math.floor(V.length / 2)], esp = mo.m.espigas.filter(e => e > t - 24 && e < t - 0.3);
+        // la espiga que se ve en el trazo: el voltaje de ecgEn sube justo en el disparo, y cada QRS tiene una espiga en los 0,25 s anteriores
+        const conEsp = V.filter(b => esp.some(e => e <= b.t0 + 0.001 && b.t0 - e < 0.05)).length, visible = esp.every(e => r.ecgEn(e - 0.04) > 0.5 && r.ecgEn(e - 0.012) < 0.2);
+        return { nP, nV: V.length, qrs, nEsp: esp.length, conEsp, visible, pLpm: nP * 60 / 24 }; });
+      if (k === 'bav3') ok(X.pLpm >= 68 && X.pLpm <= 82 && (ex.escape === 'nodal' ? X.qrs <= 100 && fm >= 40 && fm <= 50 : X.qrs >= 120 && fm >= 28 && fm <= 36), `${nom}: P ${X.pLpm.toFixed(0)} lpm independientes, QRS ${X.qrs.toFixed(0)} ms, FC ${fm}`);
+      else ok(fm >= 66 && fm <= 74 && X.qrs >= 120 && X.nEsp >= 15 && X.conEsp === X.nV && X.visible && X.pLpm >= 68, `${nom}: FC ${fm}, QRS ancho ${X.qrs.toFixed(0)} ms, ${X.nEsp} espigas, cada QRS con la suya (${X.conEsp}/${X.nV}), visibles en el trazo`);
+    }
     ok((await desborde()) <= 0, `${nom}: sin desborde`);
   }
   await R('ponerEstado', 'nodal', {}); await pestana('medir');

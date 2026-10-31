@@ -329,7 +329,7 @@ export function aparatosEstatico() {
     <path d="M${f1(t2[0])} ${f1(t2[1])} C ${f1(t2[0] + 10)} ${f1(t2[1] + 18)} 300 128 284 136" fill="none" stroke="var(--text-main)" stroke-width="1.2" stroke-opacity=".7"/>
     <g id="rtv-parches-carro"><path d="M316 124 L338 124 L344 132 L322 132 Z" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".6"/><path d="M320 126 L334 126 L338 130 L324 130 Z" fill="var(--text-dim)" fill-opacity=".4"/>
       <path d="M272 132 L294 132 L300 140 L278 140 Z" fill="var(--card2)" stroke="var(--text-main)" stroke-width=".6"/><path d="M276 134 L290 134 L294 138 L280 138 Z" fill="var(--text-dim)" fill-opacity=".4"/></g></g>`;
-  // --- Generador de marcapasos (cerrado: pendiente de fuente): lata redondeada, cabezal de epoxi y el cable enrollado ---
+  // --- Generador de marcapasos (se ilumina en el estado marcapasos): lata redondeada, cabezal de epoxi y el cable enrollado ---
   { const cx = 172, cy = 124, rx = 24, ry = 11, gros = 6;
     const lata = (dy) => `M${cx - rx} ${cy + dy} C${cx - rx} ${cy - ry * 1.2 + dy} ${cx + rx} ${cy - ry * 1.2 + dy} ${cx + rx} ${cy + dy} C${cx + rx} ${cy + ry * 1.2 + dy} ${cx - rx} ${cy + ry * 1.2 + dy} ${cx - rx} ${cy + dy} Z`;
     h += `<g id="rtv-marcapasos" opacity=".55"><ellipse cx="${cx}" cy="${cy + gros + 6}" rx="${rx + 6}" ry="${ry - 2}" fill="var(--bg-main)" fill-opacity=".7"/>

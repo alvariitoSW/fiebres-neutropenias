@@ -3,9 +3,9 @@
 import { crearPlanoGrande } from '../../../core/plano-grande.js';
 import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from '../../../core/monitor.js';
 import { $, IMG, NS, REDUCIR, cita, clamp, coma, org } from './ayudas.js';
-import { C, CRECE, ESC_2021, ESTADOS, F195, F213, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, libroDe, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
+import { C, CRECE, ESTADOS, F195, F213, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, libroDe, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
 import { pintarGraficas } from './graficas.js';
-import { montarEscena, pintarAparatos, pintarEscena, pintarEscenaPendiente, reiniciarD } from './escena.js';
+import { montarEscena, pintarAparatos, pintarEscena, reiniciarD } from './escena.js';
 import { MOTOR } from './motor.js';
 import { crearTope } from '../../../core/tope.js';
 import { ENERGIA_TV, ADE, MAX, calcularTopes, cargando } from './topes.js';
@@ -22,13 +22,12 @@ export const S = {};   // el estado de la sesión (el ritmo y lo que se ha hecho
 function resetS(clave) {
   Object.keys(S).forEach(k => delete S[k]);
   Object.assign(S, { clave, fcSA: { sinusal: 75, taquiSinusal: 120 }[clave], rama: 'i', flutter: 2, fcFA: 138, farmaco: null, horas: 0, llenadoMalo: false,
-    tamCada: 0.5, mobitz: 'I', wpwFa: false, wpwNodo: false, qt: {}, tdp: false, k: 4.2, sexo: 'v', deriv: clave === 'stemi' ? 'V2' : 'II', st: 2.5, inestable: false,
+    tamCada: 0.5, mobitz: 'I', escape: 'nodal', wpwFa: false, wpwNodo: false, qt: {}, tdp: false, k: 4.2, sexo: 'v', deriv: clave === 'stemi' ? 'V2' : 'II', st: 2.5, inestable: false,
     bomba: null, desfib: null, adeno: null, parada: null, mensaje: null, tdpMg: false, dosis: {}, sinusal: false });
   if (clave === 'torsade') S.qt = { haloperidol: true, claritromicina: true, kBajo: true, mgBajo: true };
   if (['fv', 'aesp', 'asistolia'].includes(clave)) S.parada = { comp: false, choques: 0, adrenalina: [], amio: 0, insufl: 10, escenario: 'responde', reloj: 0, ciclo: null, rce: false, minuto: 5, causa: null };
 }
 const est = () => ESTADOS[S.clave];
-export const pend = () => !!est().pendiente;
 
 /* ---------- Arrancar un estado: un motor nuevo con su configuración, y 6 s de historia para llenar la tira ---------- */
 function ponerEstado(clave, extra = {}) {
@@ -41,7 +40,6 @@ function ponerEstado(clave, extra = {}) {
 }
 function arrancarMotor() {
   agenda = [];
-  if (pend()) { mo = null; montarMonitor(); pintarEscenaPendiente(); return; }
   mo = MOTOR.crear({ semilla: 11 });
   const t0 = simT - 6;
   est().aplicar(mo, t0, S);
@@ -62,8 +60,6 @@ const monitor = crearMonitor($('rtv-tiras'), { canales: TIRAS, margen: 0, hueco:
 let SEG = 3.2, acum = 0;
 function montarMonitor() {
   $('mon-reloj').toggleAttribute('hidden', !S.parada);
-  $('mon-pendiente').hidden = !pend(); $('rtv-tiras').toggleAttribute('hidden', pend());
-  if (pend()) { $('mon-pendiente').innerHTML = `<b>${est().nombre}</b>. ${PENDIENTE} <a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 (Eur Heart J)</a>`; pintarCifras(); return; }
   $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`;
   monitor.rotulo('ecg', S.deriv);
   monitor.ver(S.parada ? ['ecg', 'art', 'co2'] : ['ecg', 'art']);
@@ -85,8 +81,8 @@ export function ecgEn(t) {
     let sv = 0, sw = 0; for (const [d, w] of W) { sv += w * MOTOR.voltaje(mo, t + d, S.deriv, {}); sw += w; }
     v = (1 - a) * v + a * (sv / sw) * 1.7;
   }
-  // Espiga del marcapasos: una raya de 1-2 ms justo antes de cada disparo del foco (aparte del voltaje del motor; amplitud ilustrativa)
-  if (mo.m.foco && mo.m.foco.espiga) for (let i = mo.m.espigas.length - 1; i >= 0; i--) { const d = t - mo.m.espigas[i]; if (d < -0.002) continue; if (d > 0.002) break; v += d < 0.0015 ? 0.7 : 0; }
+  // Espiga del marcapasos: una raya fina (9,5 ms: la tira muestrea cada 9 ms y una de 1,5 ms casi nunca caía en un píxel) 45 ms antes de cada disparo del foco (el QRS arranca tras un tramo plano, como en la ficha, p. 159; aparte del voltaje del motor; amplitud ilustrativa)
+  if (mo.m.foco && mo.m.foco.espiga) for (let i = mo.m.espigas.length - 1; i >= 0; i--) { const d = t - mo.m.espigas[i] + 0.045; if (d < 0) continue; if (d > 0.0095) break; v += 0.7; }
   if (compresionesEn(t)) v += 0.32 * Math.pow(Math.max(0, Math.sin(2 * Math.PI * fasComp(t))), 3);
   if (S.desfib && S.desfib.tChoque && t >= S.desfib.tChoque && t < S.desfib.tChoque + 0.2) v += 2.4 * Math.exp(-(t - S.desfib.tChoque) / 0.04);
   return v;
@@ -116,7 +112,7 @@ function capnoEn(t) {
 }
 const valoresEn = t => ({ ecg: ecgEn(t), art: artEn(t), co2: S.parada ? capnoEn(t) : null, t, cz: cerradoEn(t) });
 function muestra(t) { monitor.empujar(valoresEn(t)); }
-const cerradoEn = t => !!(mo && t >= mo.m.cerrojo && t < mo.m.cerrojoFin);
+const cerradoEn = t => !!(mo && t >= mo.m.cerrojo && t < mo.m.cerrojoFin && mo.m.cerrojoFin < 1e8);   // el bloqueo permanente (BAV completo) no es un cerrojo pasajero: sin caja roja
 function pintarTiras() {
   monitor.pintar();
   // el nodo AV cerrado: una caja roja sobre la tira mientras dura el cerrojo
@@ -164,7 +160,7 @@ function leer() {
     qrs = anchos.length ? anchos[Math.floor(anchos.length / 2)] : ult.fin - ult.t0 + 0.022;
     const sq = ult.n && mo.reg ? anchoKernel(cu) : 0.0055;
     const a = mo.latidosA.filter(x => x.t0 < cu.t0 - 0.04 && x.t0 > cu.t0 - 0.4).pop();
-    if (a && !mo.m.fa && !mo.m.flOn && mo.m.sa !== false) pr = (cu.t0 - 2 * sq) - (a.t0 - 0.022);
+    if (a && !mo.m.fa && !mo.m.flOn && mo.m.sa !== false && !bloqueoCompleto()) pr = (cu.t0 - 2 * sq) - (a.t0 - 0.022);
     if (prev) rr = ult.t0 - prev.t0;
     const fin = elec.length >= 2 ? prev : ult;
     qt = (fin.r1 - 0.075 + 2.2 * 0.042 * mo.m.tAncho) - (fin.t0 - 2 * sq);
@@ -173,6 +169,7 @@ function leer() {
   }
   return { midiendo, fa: !!mo.m.fa, fc: caos ? null : fc, pul: caos ? 0 : pul, pas: Math.round(pas), pad: Math.round(pad), qrs, pr, qt, qtc, rr, ult, prev, caos };
 }
+const bloqueoCompleto = () => !!mo && mo.m.cerrojoFin > 1e8;   // BAV completo y marcapasos sobre él: las P no conducen, no hay PR
 function anchoKernel(b) {   // ¿llegó por His-Purkinje (estrecho) o por el músculo (ancho)? Lo dice el registro del motor
   let p = 0, m = 0; for (const a of mo.reg) { if (a.t < b.t0 - 0.001 || a.t > b.fin + 0.001) continue; const nd = G.nodos[a.k]; if (nd.tipo !== 'v') continue; if (a.et === 1) p++; else m++; }
   return m > p ? 0.0055 * 2.1 * Math.max(1, mo.m.musV) : 0.0055;
@@ -180,7 +177,7 @@ function anchoKernel(b) {   // ¿llegó por His-Purkinje (estrecho) o por el mú
 let ultLect = null;
 function pintarCifras() {
   const c = $('mon-cifras');
-  if (pend() || !mo) { pintarColumna(c, ['FC', 'ART', 'Pulso', '—'].map((e, i) => ({ k: ['fc', 'art', 'pulso', 'k4'][i], cls: ['c-ecg', 'c-art', 'c-sat', 'c-co2'][i], et: e, v: '—', obj: 'pendiente de fuente' }))); return; }
+  if (!mo) return;
   const L = leer(); ultLect = L; const p = P_();
   const cel = (k, cls, et, v, u, o, estado = '') => ({ k, cls, et, v, u, obj: o, estado });
   const parada = p && !p.rce;
@@ -208,7 +205,7 @@ const umbralST = () => (S.deriv === 'II' ? 1 : S.sexo === 'm' ? 1.5 : 2);
 const tog = (acc, t, small, extra = '') => `<button type="button" class="rtv-tog${extra.includes('rtv-peligro') ? ' rtv-peligro' : ''}" data-acc="${acc}" ${extra.replace(/class="[^"]*"/, '')}>${t}${small ? `<small>${extra.includes('rtv-peligro') ? '⚠ ' : ''}${small}</small>` : ''}</button>`;
 const MINI = { nodal: ['av', 'El torniquete del nodo AV', 'Mira cómo la onda baja por un carril y vuelve por el otro; la adenosina echa el cerrojo.'], aberrancia: ['av', 'El torniquete del nodo AV', 'La reentrada nace aquí; la rama bloqueada ensancha el QRS.'], flutter: ['av', 'El torniquete del nodo AV', 'Deja pasar uno de cada dos o tres impulsos de la aurícula.'], fa: ['av', 'El torniquete del nodo AV', 'Deja pasar lo que encuentra rearmado: de ahí el R-R irregular.'], tam: ['av', 'El torniquete del nodo AV', 'Los impulsos llegan a destiempo y solo pasan los que lo encuentran rearmado.'], wpw: ['av', 'El atajo junto al nodo', 'El atajo no tiene torniquete: la onda llega antes al ventrículo.'], torsade: ['celula', 'La célula del ventrículo', 'Lo que alarga el potencial de acción alarga el QT.'], hiperk: ['celula', 'La célula del ventrículo', 'El potasio alto cambia el potencial y, con él, el ECG.'] };
 function pintarMini() {
-  const m = MINI[S.clave], c = $('mini-lupa'); c.hidden = !m || pend(); if (!m || pend()) return;
+  const m = MINI[S.clave], c = $('mini-lupa'); c.hidden = !m; if (!m) return;
   const id = m[0] === 'av' ? 'rtv-lupa-av' : 'rtv-celula', vb = m[0] === 'av' ? '4 312 174 108' : '182 312 174 108';
   $('mini-lupa-svg').setAttribute('viewBox', vb); $('mini-lupa-svg').innerHTML = `<use href="#${id}"/>`;
   $('mini-tit').textContent = m[1]; $('mini-txt').textContent = m[2];
@@ -235,7 +232,7 @@ function pintarDock() {
   const h = [];
   if (pest === 'ritmo') {
     h.push(`<div class="rtv-familias" role="group" aria-label="Familias de ritmos">${FAMILIAS.map(([k, n]) => `<button type="button" data-fam="${k}" aria-pressed="${familia === k}">${n}</button>`).join('')}</div>`);
-    h.push(`<div class="rtv-chips" role="group" aria-label="Ritmos">${Object.entries(ESTADOS).filter(([, e]) => e.fam === familia).map(([k, e]) => `<button type="button" data-estado="${k}" class="${e.pendiente ? 'pend' : ''}" aria-pressed="${S.clave === k}">${e.corto}${e.pendiente ? '<small>pendiente de fuente</small>' : ''}</button>`).join('')}</div>`);
+    h.push(`<div class="rtv-chips" role="group" aria-label="Ritmos">${Object.entries(ESTADOS).filter(([, e]) => e.fam === familia).map(([k, e]) => `<button type="button" data-estado="${k}" aria-pressed="${S.clave === k}">${e.corto}</button>`).join('')}</div>`);
   } else if (pest === 'tratar') h.push(mandosTratar());
   else h.push(mandosMedir());
   igualarDock($('dock-panel'), h.join(''));
@@ -246,7 +243,6 @@ function pintarDock() {
 function mandosTratar() {
   const c = S.clave, h = [];
   const nota = t => `<p class="rtv-dock-nota">${t}</p>`;
-  if (pend()) return nota(`${PENDIENTE}`);
   if (c === 'sinusal' || c === 'taquiSinusal') h.push(`<div class="rtv-deslizador"><input type="range" id="rtv-d-fcsa" min="${c === 'sinusal' ? 50 : 100}" max="150" step="5" value="${S.fcSA}" aria-label="Frecuencia del nodo sinusal"><output id="rtv-o-fcsa">${S.fcSA} lpm<small>reloj sinusal · ilustrativo</small></output></div>`, nota(c === 'sinusal' ? 'El reloj del nodo sinusal (Libro Azul: 70-80/min). Por encima de 100, taquicardia sinusal (p. 18).' : 'La taquicardia sinusal es una respuesta: busca la causa (p. 18).'));
   if (c === 'rama') h.push(`<div class="rtv-seg" role="group">${[['i', 'Rama izquierda'], ['d', 'Rama derecha']].map(([k, n]) => `<button type="button" data-rama="${k}" aria-pressed="${S.rama === k}">${n}<small>bloqueada</small></button>`).join('')}</div>`, nota('Qué rama y cómo se dibuja: fisiología general. Que un bloqueo de rama ensancha el QRS: p. 20-21.'));
   if (c === 'nodal') h.push(`<div class="rtv-rejilla" style="--n:3">${tog('vagal-v', 'Valsalva', '24 %')}${tog('vagal-m', 'Valsalva modificada', '44 %')}${tog('vagal-c', 'Masaje carotídeo', '9 %')}</div>`,
@@ -257,6 +253,8 @@ function mandosTratar() {
     `<div class="rtv-rejilla" style="--n:3">${tog('esmolol', 'Esmolol', 'betabloqueante', `aria-pressed="${S.farmaco === 'esmo'}"`)}${tog('llenado', 'Llenado malo', 'estenosis mitral, hipertrofia', `aria-pressed="${S.llenadoMalo}"`)}${tog('cv-fa', 'Cardioversión', '100 J sincronizada')}</div>`);
   if (c === 'tam') h.push(`<div class="rtv-rejilla" style="--n:3">${tog('mg-tam', 'Magnesio', '2 g + 6 g en 6 h')}${tog('meto-tam', 'Metoprolol', 'si no hay EPOC')}${tog('vera-tam', 'Verapamilo', 'con EPOC')}</div>`, `<div class="rtv-rejilla" style="--n:1">${tog('reinicio', 'Empezar otra vez', '')}</div>`);
   if (c === 'bav2') h.push(`<div class="rtv-seg" role="group" aria-label="Tipo de bloqueo">${[['I', 'Mobitz I', 'nodo AV'], ['II', 'Mobitz II', 'His'], ['2:1', 'Bloqueo 2:1', 'His']].map(([k, n, d]) => `<button type="button" data-mobitz="${k}" aria-pressed="${S.mobitz === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('El sitio del bloqueo (nodo o His) no se ve en el ECG de superficie: aquí es ilustrativo. La guía ESC 2021 pide localizarlo para decidir el marcapasos (p. 27). Sin dosis: la guía no las da.'));
+  if (c === 'bav3') h.push(`<div class="rtv-seg" role="group" aria-label="Dónde nace el escape">${[['nodal', 'Escape nodal', '45 lpm · QRS estrecho'], ['vent', 'Escape ventricular', '≈ 32 lpm · QRS ancho']].map(([k, n, d]) => `<button type="button" data-escape="${k}" aria-pressed="${S.escape === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('Escape nodal: 40-60 por minuto, QRS estrecho; ventricular: menos de 40, QRS ancho (ficha, p. 115). Cuánto se ensancha y las cifras exactas del modelo: ilustrativo. Sin dosis: la guía no las da.'));
+  if (c === 'marcapasos') h.push(nota('Marcapasos sobre un bloqueo AV completo: el electrodo del ventrículo derecho dispara a 70 lpm, la frecuencia mínima que da como ejemplo la guía ESC 2021 (p. 29). Las P (75) siguen su ritmo. Sin dosis ni programación: no se simulan.'));
   if (c === 'wpw') {
     if (!S.wpwFa) h.push(`<div class="rtv-rejilla" style="--n:1">${tog('llegafa', 'Llega una FA', 'con la vía accesoria')}</div>`, nota('Fíjate antes en el PR y en el comienzo del QRS (pestaña Medir).'));
     else h.push(`<div class="rtv-rejilla" style="--n:3">${tog('w-dilt', 'Diltiazem', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-bb', 'Betabloqueante', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-digo', 'Digoxina', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}</div>`,
@@ -286,7 +284,7 @@ function mandosTratar() {
   return h.join('');
 }
 function mandosMedir() {
-  if (pend() || !mo) return `<p class="rtv-dock-nota">${PENDIENTE}</p>`;
+  if (!mo) return `<p class="rtv-dock-nota">Sin ritmo que medir.</p>`;
   const b = (k, t, s) => `<button type="button" class="rtv-tog" data-medir="${k}" aria-pressed="${S.medir === k}">${t}<small>${s}</small></button>`;
   const opts = [b('pr', 'PR', 'onda P → QRS'), b('qrs', 'QRS', '≤0,12 s'), b('qt', 'QT y QTc', 'QT / √RR'), b('rr', 'RR', 'regular o no')];
   if (S.clave === 'stemi') opts.push(b('st', 'ST', 'punto J, en mm'));
@@ -302,7 +300,7 @@ function medidas() {
   const b = elec[elec.length - 1] || L.ult, bPrev = elec[elec.length - 2];
   const sq = anchoKernel(b), on = b.t0 - 0.011, off = b.fin + 0.011, tEnd = b.r1 - 0.075 + 2.2 * 0.042 * mo.m.tAncho;
   const a = mo.latidosA.filter(x => x.t0 < b.t0 - 0.04 && x.t0 > b.t0 - 0.4).pop();
-  const pOn = a && !mo.m.fa && !mo.m.flOn ? a.t0 - 0.022 : null;
+  const pOn = a && !mo.m.fa && !mo.m.flOn && !bloqueoCompleto() ? a.t0 - 0.022 : null;
   const rr = bPrev ? b.t0 - bPrev.t0 : null;
   return { on, off, tEnd, pOn, rr, bPrev, qt: tEnd - on, qtc: rr ? (tEnd - on) / Math.sqrt(rr) : null, qrs: off - on, pr: pOn ? on - pOn : null, j: off };
 }
@@ -310,7 +308,8 @@ function textoMedida() {
   const M = medidas(); if (!M) return 'No hay un latido completo en la tira.';
   const s = v => coma(v, 2) + ' s';
   switch (S.medir) {
-    case 'pr': return M.pr ? `PR = ${s(M.pr)} (del comienzo de la P al del QRS) ${org('medido en la tira · ilustrativo')}. ${S.clave === 'wpw' ? 'Corto: la onda entra por el atajo sin pasar por el freno del nodo (p. 27).' : 'El retraso del nodo AV es de 0,12 s (El Libro Azul, p. 7).'}` : 'Sin P delante del QRS: aquí no hay PR que medir.';
+    case 'pr': if (bloqueoCompleto()) return `Aquí no hay PR que medir: las P no conducen. El intervalo entre cada P y el QRS siguiente cambia a cada latido (ficha, p. 118).`;
+      return M.pr ? `PR = ${s(M.pr)} (del comienzo de la P al del QRS) ${org('medido en la tira · ilustrativo')}. ${S.clave === 'wpw' ? 'Corto: la onda entra por el atajo sin pasar por el freno del nodo (p. 27).' : 'El retraso del nodo AV es de 0,12 s (El Libro Azul, p. 7).'}` : 'Sin P delante del QRS: aquí no hay PR que medir.';
     case 'qrs': return `QRS = ${s(M.qrs)}: ${M.qrs > 0.12 ? '<span class="hl-rojo">ancho</span> (>0,12 s): nace debajo del sistema de conducción AV o baja por una vía anómala' : '<span class="hl-verde">estrecho</span> (≤0,12 s): nace por encima del sistema de conducción AV'} (p. 18-21).`;
     case 'qt': return `QT = ${s(M.qt)}${M.qtc ? `; QTc = QT/√RR = <b>${s(M.qtc)}</b>: ${M.qtc > 0.5 ? '<span class="hl-rojo">riesgo de torsade</span> (>0,5 s)' : M.qtc > 0.44 ? 'largo (normal ≤0,44 s)' : '<span class="hl-verde">normal</span> (≤0,44 s)'}` : ''} (p. 34-35).`;
     case 'rr': return M.rr ? `RR = ${s(M.rr)} → ${Math.round(60 / M.rr)} lpm. ${mo.m.fa ? 'Mide varios: en la FA cada RR es distinto (p. 20).' : ''}` : 'Hace falta otro QRS en la tira.';
@@ -449,7 +448,7 @@ const topeVisto = {}; let topeFrase = null;
 $('rtv-monitor').addEventListener('click', (e) => { const sl = e.target.closest('.tope-sello'); if (!sl || e.target.closest('button, a')) return; if (sl.dataset.abierto) delete sl.dataset.abierto; else sl.dataset.abierto = '1'; sl.classList.toggle('tope-compacto', !sl.dataset.abierto); });
 function aplicarTopes(forzar) {
   const quitarTodo = () => { for (const { clave } of tope.activos()) { tope.quitar(clave); delete topeVisto[clave]; } topeFrase = null; };
-  if (!mo || pend()) { quitarTodo(); return; }
+  if (!mo) { quitarTodo(); return; }
   const r = calcularTopes(S, simT, mo); topeFrase = r.frase;
   for (const { clave } of tope.activos()) if (!(clave in r.T)) { tope.quitar(clave); delete topeVisto[clave]; }
   let nuevo = false;
@@ -464,7 +463,6 @@ function aplicarTopes(forzar) {
 /* ---------- La frase viva ---------- */
 function claveGuia() {
   const c = S.clave, p = S.parada;
-  if (pend()) return null;
   if (c === 'nodal' && S.adeno) return 'adenosina';
   if (c === 'fa' && F195[S.farmaco]) return 'faF';
   if (c === 'wpw' && S.wpwFa) return 'wpwFa';
@@ -473,8 +471,7 @@ function claveGuia() {
   return GUIAS[c] ? c : 'sinusal';
 }
 function pintarFrase() {
-  const e = est(); let [t, o] = e.frase || [PENDIENTE, 'pendiente de fuente'], extra = '';
-  if (pend()) { $('frase-txt').innerHTML = `<b>${e.nombre}</b>: pendiente de fuente. Marino no lo trata; llegará de la guía ESC 2021 de estimulación.`; medirDock(); return; }
+  const e = est(); let [t, o] = e.frase, extra = '';
   const p = S.parada;
   if (p && p.rce) [t, o] = ESTADOS.rce.frase;
   if (S.adeno && mo) { if (simT < S.adeno) [t, o] = ['La adenosina va por la vía hasta el corazón: en bolo rápido y con lavado, actúa en menos de 30 s.', 'ficha · p. 30']; else if (simT < mo.m.cerrojoFin) [t, o] = ['La adenosina echa el cerrojo al nodo AV: salen P sin QRS. Si el circuito pasa por el nodo, se rompe. Si pasa más de 1 s sin QRS, la unión AV escapa a unos 50/min. ' + org('el escape: fisiología general', true), 'ficha · p. 29-30']; else if (S.clave === 'nodal' || S.clave === 'aberrancia') [t, o] = [S.clave === 'nodal' ? 'Vuelve el sinusal: la reentrada se cortó. Con 6 mg y luego 12 mg se cortan más del 90 %; por vía central, la mitad de la dosis.' : 'Vuelve el sinusal, con el QRS igual de ancho: el bloqueo de rama ya estaba (Fig. 19.6).', S.clave === 'nodal' ? 'ficha · p. 30' : 'ficha · p. 31']; else if (S.clave === 'tv') [t, o] = ['La adenosina cerró el nodo, pero la TV sigue: su circuito no pasa por él. Si un QRS ancho no responde a la adenosina, probablemente es una TV.', 'ficha · p. 33']; }
@@ -483,6 +480,10 @@ function pintarFrase() {
     : S.wpwNodo ? ['Frenar el nodo no frena el atajo: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV. Con una vía accesoria no se dan antagonistas del calcio, betabloqueantes ni digoxina.', 'ficha · p. 28']
     : ['Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares. Cardioversión eléctrica, o amiodarona o procainamida.', 'ficha · p. 27-28'];
   if (S.clave === 'bav2' && S.mobitz !== 'I') [t, o] = ['El PR de los latidos que pasan no cambia, y de pronto una P se queda sin QRS (' + (S.mobitz === '2:1' ? 'una de cada dos' : 'una de cada tres') + '): el bloqueo está más abajo, en el His. Es el que más preocupa: puede acabar en bloqueo completo.', 'ficha · p. 117; ESC 2021 · p. 27'];
+  if (S.clave === 'bav3') [t, o] = S.escape === 'vent'
+    ? ['Sin escape nodal, un foco del ventrículo toma el mando a unos 32 lpm, con QRS ancho. El volumen por latido no compensa tantas pausas: el gasto cae (FC × volumen) aunque la sistólica se sostenga, y llegan el mareo y el síncope. Si hay compromiso y no responde a los cronotrópicos i.v., marcapasos temporal. ' + org('el gasto = FC × volumen: fisiología general', true), 'ficha · p. 115; ESC 2021 · p. 27, 62']
+    : ['La unión AV escapa por libre a unos 45 lpm y el QRS sale estrecho, porque baja por el His. Las P (75) siguen a su aire y no se relacionan con él. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas.', 'ficha · p. 115, 118; ESC 2021 · p. 28'];
+  if (S.clave === 'marcapasos') extra = ' Con 70 lpm en vez de ~32-45 el gasto sube (FC × volumen). ' + org('el gasto = FC × volumen: fisiología general', true);
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
@@ -501,6 +502,8 @@ function pintarFicha() {
   if (S.clave === 'bradi') h += ' · FC 45, sin síntomas: la ESC 2021 la considera fisiológica en reposo (40-50 lpm, p. 24)';
   if (S.clave === 'bav1') h += ' · ECG de ingreso: PR largo y fijo, asintomática';
   if (S.clave === 'bav2') h += S.mobitz === 'I' ? ' · mareo ocasional; el PR crece y cae una P' : ' · síncope hace una semana; PR fijo y P sin QRS';
+  if (S.clave === 'bav3') h += S.escape === 'vent' ? ' · síncope esta mañana, mareo y disnea; QRS ancho a ≈ 32 lpm' : ' · mareo y cansancio; QRS estrecho a 45 lpm';
+  if (S.clave === 'marcapasos') h += ' · portadora de marcapasos por un bloqueo AV completo';
   if (S.clave === 'stemi') h += ' · ST +2,5 mm en V2-V4';
   if (S.clave === 'fa') h = 'Pacientes con FA sin complicar, como los del estudio de la Fig. 19.5 (FC de partida ~138).';
   if (S.clave === 'nodal') h = 'Una reentrada nodal: suele darse en gente sin cardiopatía, más en mujeres. Palpitaciones y mareo (p. 29).';
@@ -514,7 +517,7 @@ const reloj = () => { const p = S.parada; if (!p) return ''; let r = mmss(p.relo
 let guia = null, gi = 0;
 function abrirGuia() {
   const k = claveGuia();
-  guia = k ? GUIAS[k] : { tit: est().nombre, pasos: [{ t: PENDIENTE, r: ['#rtv-lupa-av', '#rtv-marcapasos'], c: C.hallazgos, org: 'pendiente de fuente' }] };
+  guia = GUIAS[k];
   gi = 0; $('dock-explorar').hidden = true; $('dock-guia').hidden = false; $('frase').hidden = true; pintarGuia();
 }
 function cerrarGuia() { borrarSenal(); guia = null; $('dock-guia').hidden = true; $('frase').hidden = false; $('dock-explorar').hidden = false; medirDock(); }
@@ -553,7 +556,7 @@ function pintarFuentes() {
   const k = claveGuia(), lista = []; const vistas = new Set();
   const de = [...(est().fuentes || []), ...((k && GUIAS[k] ? GUIAS[k].pasos : []).map(p => p.c))];
   for (const c of de) { const kk = c.f + c.id + c.sitio; if (!vistas.has(kk)) { vistas.add(kk); lista.push(c); } }
-  $('lista-fuentes').innerHTML = lista.length ? lista.map(c => `<li><span>${libroDe(c)}, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('') : `<li><span>${PENDIENTE}</span><a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 de estimulación cardíaca (Eur Heart J)</a></li>`;
+  $('lista-fuentes').innerHTML = lista.length ? lista.map(c => `<li><span>${libroDe(c)}, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('') : '';
 }
 function pintarLaminas() {
   const ls = LAMINAS.map((l, i) => [l, i]).sort((a, b) => (b[0].estados.includes(S.clave) ? 1 : 0) - (a[0].estados.includes(S.clave) ? 1 : 0));
@@ -617,6 +620,7 @@ $('dock-panel').addEventListener('click', ev => {
   if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) { ponerPausa(true); S.pausaMedir = true; } if (!S.medir) dejarDeMedir(); pintarTiras(); pintarCalibre(); pintarDock(); return; }
   if ('far' in b.dataset) { ponerFarmaco(b.dataset.far); return; }
   if (b.dataset.mobitz) { ponerEstado('bav2', { mobitz: b.dataset.mobitz }); return; }
+  if (b.dataset.escape) { ponerEstado('bav3', { escape: b.dataset.escape }); return; }
   if (b.dataset.rama) { ponerEstado('rama', { rama: b.dataset.rama }); return; }
   if (b.dataset.flutter) { ponerEstado('flutter', { flutter: +b.dataset.flutter }); return; }
   if (b.dataset.inest) { S.inestable = b.dataset.inest === 'true'; mo.m.contractil = S.inestable ? 0.55 : 1; latCache.t = -1; pintarDock(); pintarFicha(); return; }
@@ -686,4 +690,4 @@ export function abrirEstado(clave, extra = {}) {
 montarEscena(); pintarFijos(); resetS('sinusal'); ponerEstado('sinusal');
 if (REDUCIR) { const b = mo.latidosV[mo.latidosV.length - 1]; pintarEscena(b ? Math.min(simT, b.t0 + 0.05) : simT); }
 medirDock();
-window.__ritmo = { get modo() { return modo; }, setModo, mayeutica, get pausado() { return pausado; }, get corriendo() { return corriendo; }, ponerEstado, accion, S, leer, est, aplicarFarmacoFA, get simT() { return simT; }, get mo() { return mo; }, tras, avanzarHasta, pintarCifras, pintarFrase, taparTodo, arrancarBucle, abrirEstado };
+window.__ritmo = { get modo() { return modo; }, setModo, mayeutica, get pausado() { return pausado; }, get corriendo() { return corriendo; }, ponerEstado, accion, S, leer, est, ecgEn, aplicarFarmacoFA, get simT() { return simT; }, get mo() { return mo; }, tras, avanzarHasta, pintarCifras, pintarFrase, taparTodo, arrancarBucle, abrirEstado };
