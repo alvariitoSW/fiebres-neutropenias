@@ -315,6 +315,7 @@ esta sección.
     Manual UMI) y StatPearls ya verificado en `radio-fichas`; las webs que mandaste (Radiology Assistant, NavRad, los 6
     informes de radiología) **solo como ideas**: sin licencia para copiar textos, imágenes ni contornos. Primer paso:
     informe-propuesta con 2-3 maquetas para que elijas (supongo, ≈3-4 M); construir, después y por trozos.
+  - **31/10, decidido (B-051b)**: el usuario quería un servidor para NV-Reason-CT con TC públicas y de sus pacientes, pero tiene un portátil sin tarjeta gráfica y no quiere pagar alquiler → **servidor descartado**; la regla «sin backend» sigue igual. **TC de pacientes: no** (recomendación de la bitácora: RGPD y el modelo no es producto sanitario; en el hospital sería cosa de informática o del comité de ética). Aprobada la versión sin servidor con TC públicas: tarea `ia-tc-publica` (Objetivo L, 6e). Espera a que abra `zenodo.org` y `huggingface.co`, y que ejecute él el cuaderno de Colab.
   - **B-051b · Estudio del análisis de imágenes** · tipo: informe (sin construir). Qué haría falta para subir una TC
     o una placa de un paciente y que la app la analice: servidor e IA (qué modelos existen, qué leen y qué no; NV-Reason
     ya dijo que no lee cráneo ni placa simple y que no es producto sanitario), privacidad (anonimizar, dónde se procesa),
@@ -444,6 +445,8 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`) · Wiggers (aprobado, `wiggers-movil`).
 
 ## 4. Mejoras de lo que ya existe
+
+- **Iones vivos (PR #65, fusionada el 31/10; acta `autonomo/consejo/2026-10-31-pr65.md`)**: Mayéutica sobre el motor común, mirada C «A pie de cama» y capa A «La célula por dentro» (sesión aparte); aviso de hiperK plegable y el dock que crece 31 px tras «Dar 90 mg»; móvil §7.7 de 9,3 a 9,5; `verFrase` con dos fotogramas en la rama `haz`; cotejar `PAG_FICHA` con el PDF; estados `hipok` y `hiperk-1..4` en el ritmo vivo con el ECG de hipoK, Mg y Ca. Propuestas de regla: choques de rótulos en los SVG en `jueces-movil.mjs`; `jueces.mjs --maqueta` con la prueba propia.
 
 - **Visto de paso (29-30/10, `b3-paso4` g3-g4 y `eco-reforma`)** · ✅ aprobado el 30/10 (`mejoras-30-10`, `mv-eco`, `b3-pulmon-app`, `b3-cierre`):
   - Shock vivo: cambiar de paciente tarda 1-3 s (asienta 30 latidos) y el juez del móvil lo da por «mando no tocable»;
