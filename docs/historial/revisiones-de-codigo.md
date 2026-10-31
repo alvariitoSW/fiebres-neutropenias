@@ -149,3 +149,17 @@ de GitHub Pages, con la CPU frenada y con la versión anterior en la caché). Ha
   mapa del riñón y los 7 cuadernos) y Eco (el atlas). Las llamadas a un modelo que no arrancó van con `?.`.
 - Prueba de sabotaje: con el ácido-base vivo y el atlas de eco rotos a propósito, FRA, la nefrona, el simulador de
   eco y Libros siguieron abriendo, y los dos fallos salieron en consola con su nombre.
+
+## Móvil nativo: hover pegado y zoom en las casillas (31/10/2026)
+
+El usuario pasó `emilkowalski/skills` (MIT); se instalaron 5 skills (`.claude/skills/SKILLS-EXTERNAS.md`) y, con
+`mobile-native`, un arreglo corto pedido por él («haz lo del arreglo corto»):
+- **Hover pegado tras el toque**: las 25 reglas `:hover` de `base.css` y `components.css` van ahora dentro de
+  `@media (hover: hover) and (pointer: fine)`. Las que compartían regla con `:focus-visible` se partieron: el foco
+  del teclado sigue igual.
+- **Zoom del iPhone al tocar una casilla**: Safari amplía la página si la letra de la casilla baja de 16 px y no
+  vuelve. Medido en el móvil emulado: 704 de 712 casillas estaban por debajo (la regla general daba 0,9rem = 14,4 px).
+  Regla nueva en `components.css`: en `(pointer: coarse)`, 16 px como mínimo (`!important`, para ganar a las
+  reglas de cada calculadora). No se bloquea el zoom (`maximum-scale`), que sería un fallo de accesibilidad.
+- Comprobado: 0 casillas por debajo de 16 px; cada una de las 712 desplegada a 390 y 360 px da el mismo resultado de
+  anchura que antes del cambio (ninguna nueva se sale); jueces en verde; versión 20261031-8.
