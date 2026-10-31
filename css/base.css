@@ -92,7 +92,7 @@ body {
     backdrop-filter: blur(5px);
     transition: all 0.2s;
 }
-.accordion-btn:hover { box-shadow: var(--glow-blue); }
+@media (hover: hover) and (pointer: fine) { .accordion-btn:hover { box-shadow: var(--glow-blue); } }
 .accordion-btn > span:last-child { white-space: nowrap; flex-shrink: 0; }
 
 .accordion-content { display: none; padding: 8px 0 16px 0; }
