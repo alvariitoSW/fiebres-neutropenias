@@ -30,6 +30,13 @@ export const TEJIDOS = {
   pleura:        { nombre: 'Pleura-pulmón (interfaz con aire)', db: 20, ancho: 1.6, origen: 'ilustrativo', nota: 'El aire refleja casi todo: línea brillante y, detrás, líneas A repetidas (artefacto), no tejido.' },
   pericardio:    { nombre: 'Pericardio',                   db: 14, ancho: 2, origen: 'fisiología general', nota: 'El reflector más brillante del corazón.' },
 };
+// Pericardio del dibujo nuevo: una línea fina, la más brillante del corazón pero solo unos dB sobre el miocardio
+// (en la eco real no es una cinta blanca; el orden «pericardio > miocardio» es fisiología general, los dB y el grosor, ilustrativos).
+export const PERICARDIO_FINO = { db: 5, ancho: 1.1, origen: 'ilustrativo' };
+// Caída del brillo con la profundidad del dibujo nuevo (dB por mm, neta tras la TGC; ilustrativo): el tejido blando atenúa
+// y la TGC lo compensa solo en parte (POCUS I cap. 2, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9, impresa 41:
+// el capítulo da los mandos de ganancia, no cifras). El campo lejano nunca supera al medio.
+export const CAIDA_PROFUNDIDAD = { desdeMm: 20, dbPorMm: 0.09, origen: 'ilustrativo' };
 // Ajustes globales de la imagen (mismos dB relativos).
 export const DB_IMAGEN = {
   borde: { db: -9, origen: 'ilustrativo' },        // borde endocárdico fino
