@@ -11,7 +11,8 @@
 // tras un escenario, o el corte cambia la topología), el fotograma se construye entero como antes.
 // La mezcla de posiciones y normales la hace la tarjeta gráfica (render-webgl.mjs): por fotograma no se crea
 // ningún array grande ni se sube nada.
-import { construirCorazon, acortamientoVd } from './corazon-geo.mjs';
+import { construirCorazon } from './corazon-geo.mjs';
+import { acortamientoVd } from './anatomia.mjs';   // fisiología del lado del corazón (P3a): la imagen solo lee
 import { normalesSuaves } from './render-webgl.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -22,6 +23,7 @@ const lerp3 = (a, b, t) => [mix(a[0], b[0], t), mix(a[1], b[1], t), mix(a[2], b[
 // inverso cuando está cerrada (la válvula soporta la presión y se abomba). Ilustrativo. Función pura del estado.
 // R3 · La tricúspide usa qRef 250 mL/s (no 600): su llenado rápido (F) es de ~130-280 mL/s en el motor, la mitad que el de la mitral;
 // con 600 apenas separaba las valvas (3 mm). Ilustrativo.
+// Apertura/carga: dibujo de válvula (ilustrativo). Contrato: valv.* (abierta/cerrada) y q.* (caudal) son su entrada.
 export const VALVULAS = [
   { n: 'mitral', abierta: 'vMit', q: 'qMit', arriba: 'pai', abajo: 'pvi', qRef: 600, pRef: 100, nombre: 'Mitral' },
   { n: 'tricus', abierta: 'vTri', q: 'qTri', arriba: 'pad', abajo: 'pvd', qRef: 250, pRef: 20, nombre: 'Tricúspide' },
@@ -36,6 +38,10 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // mioVi: masa del VI de la forma de enfermedad elegida (escenarios.mjs; 1 = normal). mioVd: grosor de la pared libre del VD
 // (hipertrofia del VD, Atlas · 14; 1 = normal).
 // El derrame es el que ya hay en el saco (motor.s.liquidoPeri: entra a su ritmo), no el pedido (motor.p.liquidoPeri)
+// Qué dato del contrato (contrato.mjs, CAMPOS) es cada uno de los que lee de aquí. Se leen del motor y no del contrato porque
+// el contrato no da el valor idéntico (otra unidad, otro instante o sin dato): feLatido = 'fe' (el contrato en %, esto en 0-1);
+// vviTd/vvdTd = máximo de vol.vi/vol.vd del latido (el contrato no lo expone como campo); liquidoPeri = 'derrame' (el contrato
+// cae a 0, esto al pedido); eroaMitral/tenting/vRegMitral/vaiMax/mioVi/mioVd: sin campo de contrato (vRegMitral ~ q.reg.im).
 export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, tenting: Math.min(1, (motor.p.eroaMitral ?? 0) / 0.35), eroaMitral: motor.p.eroaMitral ?? 0, vRegMitral: motor.ultimo?.vReg ?? 0,
   vaiMax: motor.onda?.length ? Math.max(...motor.onda.map(m => m.vai)) : undefined, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
 
