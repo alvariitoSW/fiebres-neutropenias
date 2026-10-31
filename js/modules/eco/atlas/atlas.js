@@ -42,6 +42,7 @@ export const CAPITULOS = {
   endocarditis: { html: 'cap-endocarditis.html', sub: 'Criterios de imagen, ETT y ETE, vegetación y embolia, cirugía a los 10 mm y perforación con IM aguda' },
   prosthetic: { html: 'cap-prosthetic.html', sub: 'Prótesis aórtica: gradientes, AOE y DVI, estenosis frente a desproporción, trombo o pannus y fuga paravalvular' },
   mi: { html: 'cap-mi.html', sub: 'Rotura septal, papilar y de pared libre, pseudoaneurisma frente a aneurisma verdadero e infarto del VD' },
+  lvad: { html: 'cap-lvad.html', sub: 'HeartMate 3: estudio de seguimiento, rampa de velocidad, succión, fallo del VD, IAo nueva y obstrucción' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);
