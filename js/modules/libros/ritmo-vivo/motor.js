@@ -293,7 +293,7 @@ export const MOTOR = (() => {
           continue;
         }
         // Mobitz II: el His bloquea 1 de cada hisCada impulsos que le llegan del nodo (el PR de los conducidos no cambia)
-        if (m.hisCada > 0 && e.k === N.his1.k && e.de != null && nodos[e.de].tipo === 'navC' && ++pasosHis % m.hisCada === 0) continue;
+        if (m.hisCada > 0 && e.k === N.his1.k && e.de != null && nodos[e.de].tipo === 'navC' && ++pasosHis % m.hisCada === 0) { pasoNodo.push({ k: e.k, t: e.t, paso: false, his: true }); continue; }
         // Con el nodo muy deprimido (navF > 2,5) el impulso lento no vuelve hacia la aurícula: sin eco (la P extra que reiniciaba el reloj sinusal)
         if (m.navF > 2.5 && nd.tipo === 'navE' && e.de != null && (nodos[e.de].tipo === 'navR' || nodos[e.de].tipo === 'navL')) continue;
         activar(e.k, e.t, e.de);

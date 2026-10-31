@@ -57,13 +57,15 @@ const TIRAS = [
   { k: 'co2', rot: 'CO₂', alto: 40, col: 'var(--accent-blue)', y: yCo2, oculto: true },
 ];
 const monitor = crearMonitor($('rtv-tiras'), { canales: TIRAS, margen: 0, hueco: 1, borrar: 8, prefijo: 'rtv-', anchoMin: 180 });
-let SEG = 3.2, acum = 0;
+let SEG = 3.2, acum = 0, KB = 1, cuentaB = 0;   // KB: pasos de simulación por píxel (2 = barrido a la mitad, 12,5 mm/s, solo en la familia «Lentos»)
+const rotuloMonitor = () => { $('mon-tit').textContent = `Monitor · derivación ${S.deriv}` + (KB === 2 ? ' · barrido a 12,5 mm/s' : ''); };
 function montarMonitor() {
   $('mon-reloj').toggleAttribute('hidden', !S.parada);
-  $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`;
+  KB = est().fam === 'lentos' ? 2 : 1; cuentaB = 0;
+  rotuloMonitor();
   monitor.rotulo('ecg', S.deriv);
   monitor.ver(S.parada ? ['ecg', 'art', 'co2'] : ['ecg', 'art']);
-  SEG = monitor.NP / PXS;
+  SEG = monitor.NP * KB / PXS;
   const W = monitor.NP, h = TIRAS[0].alto;
   monitor.fondo('ecg').innerHTML = '<g id="rtv-m-ecg"></g>';
   monitor.capa('ecg').innerHTML = `<g id="rtv-m-calibre"></g><rect id="rtv-tapa-tira" x="0" y="0" width="${W}" height="${h}" fill="var(--bg-main)" fill-opacity=".96"${taparTira ? '' : ' hidden'}/><text id="rtv-tapa-tira-txt" x="${W / 2}" y="46" font-size="11" text-anchor="middle" fill="var(--text-dim)" font-family="system-ui, sans-serif"${taparTira ? '' : ' hidden'}>Predice antes de mirar la tira</text>`;
@@ -123,7 +125,7 @@ function pintarTiras() {
 }
 function llenarEstatico() {
   if (!mo) return;
-  const paso = 1 / PXS;
+  const paso = KB / PXS;
   monitor.llenar(i => valoresEn(simT - SEG + i * paso));
   pintarTiras();
 }
@@ -252,9 +254,9 @@ function mandosTratar() {
     `<div class="rtv-deslizador"><input type="range" id="rtv-d-horas" min="0" max="6" step="0.5" value="${S.horas}" aria-label="Horas desde el fármaco" ${F195[S.farmaco] ? '' : 'disabled'}><output id="rtv-o-horas">${coma(S.horas, 1)} h<small>desde la dosis · Fig. 19.5</small></output></div>`,
     `<div class="rtv-rejilla" style="--n:3">${tog('esmolol', 'Esmolol', 'betabloqueante', `aria-pressed="${S.farmaco === 'esmo'}"`)}${tog('llenado', 'Llenado malo', 'estenosis mitral, hipertrofia', `aria-pressed="${S.llenadoMalo}"`)}${tog('cv-fa', 'Cardioversión', '100 J sincronizada')}</div>`);
   if (c === 'tam') h.push(`<div class="rtv-rejilla" style="--n:3">${tog('mg-tam', 'Magnesio', '2 g + 6 g en 6 h')}${tog('meto-tam', 'Metoprolol', 'si no hay EPOC')}${tog('vera-tam', 'Verapamilo', 'con EPOC')}</div>`, `<div class="rtv-rejilla" style="--n:1">${tog('reinicio', 'Empezar otra vez', '')}</div>`);
-  if (c === 'bav2') h.push(`<div class="rtv-seg" role="group" aria-label="Tipo de bloqueo">${[['I', 'Mobitz I', 'nodo AV'], ['II', 'Mobitz II', 'His'], ['2:1', 'Bloqueo 2:1', 'His']].map(([k, n, d]) => `<button type="button" data-mobitz="${k}" aria-pressed="${S.mobitz === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('El sitio del bloqueo (nodo o His) no se ve en el ECG de superficie: aquí es ilustrativo. La guía ESC 2021 pide localizarlo para decidir el marcapasos (p. 27). Sin dosis: la guía no las da.'));
-  if (c === 'bav3') h.push(`<div class="rtv-seg" role="group" aria-label="Dónde nace el escape">${[['nodal', 'Escape nodal', '45 lpm · QRS estrecho'], ['vent', 'Escape ventricular', '≈ 32 lpm · QRS ancho']].map(([k, n, d]) => `<button type="button" data-escape="${k}" aria-pressed="${S.escape === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('Escape nodal: 40-60 por minuto, QRS estrecho; ventricular: menos de 40, QRS ancho (ficha, p. 115). Cuánto se ensancha y las cifras exactas del modelo: ilustrativo. Sin dosis: la guía no las da.'));
-  if (c === 'marcapasos') h.push(nota('Marcapasos sobre un bloqueo AV completo: el electrodo del ventrículo derecho dispara a 70 lpm, la frecuencia mínima que da como ejemplo la guía ESC 2021 (p. 29). Las P (75) siguen su ritmo. Sin dosis ni programación: no se simulan.'));
+  if (c === 'bav2') h.push(`<div class="rtv-seg" role="group" aria-label="Tipo de bloqueo">${[['I', 'Mobitz I', 'nodo AV'], ['II', 'Mobitz II', 'infranodal'], ['2:1', 'Bloqueo 2:1', 'nodo o His']].map(([k, n, d]) => `<button type="button" data-mobitz="${k}" aria-pressed="${S.mobitz === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('El sitio del bloqueo (nodo o His) no se ve en el ECG de superficie; en el 2:1 hay que distinguirlo, y la guía ESC 2021 lo pide para decidir el marcapasos (p. 26; PDF 27). El libro define el Mobitz II como 3 o más P por QRS; aquí se dibuja el clásico, con una P bloqueada de cada tres y el PR fijo: convención habitual, no de la ficha (<button type="button" class="especialidad-link" data-especialidad="pifCardio" data-view="ecgArritmias" data-panel="panel-pif-ecg-tabs" data-tab="ecg-f8" data-resaltar="#ecg8-nota-mobitz">Ver en la ficha</button>). Sin dosis: la guía no las da.'));
+  if (c === 'bav3') h.push(`<div class="rtv-seg" role="group" aria-label="Dónde nace el escape">${[['nodal', 'Escape nodal', '45 lpm · QRS estrecho'], ['vent', 'Escape ventricular', '≈ 32 lpm · QRS ancho']].map(([k, n, d]) => `<button type="button" data-escape="${k}" aria-pressed="${S.escape === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('Escape nodal: 40-60 por minuto, QRS estrecho; ventricular: menos de 40, QRS ancho (ficha, p. 115). Los 45 y ≈ 32 lpm del modelo son valores dentro del rango de la ficha (no cifras de la ficha); cuánto se ensancha el QRS: ilustrativo. Sin dosis: la guía no las da.'));
+  if (c === 'marcapasos') h.push(nota('Marcapasos sobre un bloqueo AV completo: el electrodo del ventrículo derecho dispara a 70 lpm (ilustrativo: la guía ESC 2021 cita 70 como mínimo programado solo para la FA permanente con bloqueo, p. 28). Las P (≈ 90, ilustrativo) siguen su ritmo y se ven caminar respecto a las espigas. Sin dosis ni programación: no se simulan.'));
   if (c === 'wpw') {
     if (!S.wpwFa) h.push(`<div class="rtv-rejilla" style="--n:1">${tog('llegafa', 'Llega una FA', 'con la vía accesoria')}</div>`, nota('Fíjate antes en el PR y en el comienzo del QRS (pestaña Medir).'));
     else h.push(`<div class="rtv-rejilla" style="--n:3">${tog('w-dilt', 'Diltiazem', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-bb', 'Betabloqueante', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-digo', 'Digoxina', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}</div>`,
@@ -479,10 +481,10 @@ function pintarFrase() {
   if (S.clave === 'wpw' && S.wpwFa) [t, o] = S.fvWpw ? ['El bloqueo selectivo del nodo precipitó una FV: sin pulso. Desfibrilar.', 'ficha · p. 28']
     : S.wpwNodo ? ['Frenar el nodo no frena el atajo: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV. Con una vía accesoria no se dan antagonistas del calcio, betabloqueantes ni digoxina.', 'ficha · p. 28']
     : ['Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares. Cardioversión eléctrica, o amiodarona o procainamida.', 'ficha · p. 27-28'];
-  if (S.clave === 'bav2' && S.mobitz !== 'I') [t, o] = ['El PR de los latidos que pasan no cambia, y de pronto una P se queda sin QRS (' + (S.mobitz === '2:1' ? 'una de cada dos' : 'una de cada tres') + '): el bloqueo está más abajo, en el His. Es el que más preocupa: puede acabar en bloqueo completo.', 'ficha · p. 117; ESC 2021 · p. 27'];
+  if (S.clave === 'bav2' && S.mobitz !== 'I') [t, o] = [(S.mobitz === '2:1' ? 'Una P de cada dos no conduce y el PR de las que pasan no cambia. En un 2:1 hay que distinguir si el bloqueo es nodal o infranodal. ' : 'Una P de cada tres no conduce (el Mobitz II clásico) y el PR de las que pasan no cambia. El Mobitz II es infranodal. ') + 'Es el que más preocupa: puede acabar en bloqueo completo.', 'ficha · p. 117; ESC 2021 · p. 26-27'];
   if (S.clave === 'bav3') [t, o] = S.escape === 'vent'
-    ? ['Sin escape nodal, un foco del ventrículo toma el mando a unos 32 lpm, con QRS ancho. El volumen por latido no compensa tantas pausas: el gasto cae (FC × volumen) aunque la sistólica se sostenga, y llegan el mareo y el síncope. Si hay compromiso y no responde a los cronotrópicos i.v., marcapasos temporal. ' + org('el gasto = FC × volumen: fisiología general', true), 'ficha · p. 115; ESC 2021 · p. 27, 62']
-    : ['La unión AV escapa por libre a unos 45 lpm y el QRS sale estrecho, porque baja por el His. Las P (75) siguen a su aire y no se relacionan con él. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas.', 'ficha · p. 115, 118; ESC 2021 · p. 28'];
+    ? ['Sin escape nodal, un foco del ventrículo toma el mando a unos 32 lpm, con QRS ancho. El volumen por latido no compensa tantas pausas: el gasto cae (FC × volumen) aunque la sistólica se sostenga, y llegan el mareo y el síncope. Si hay compromiso y no responde a los cronotrópicos i.v., marcapasos temporal. ' + org('el gasto = FC × volumen: fisiología general', true), 'ficha · p. 115; ESC 2021 · p. 26, 61']
+    : ['La unión AV escapa por libre a unos 45 lpm y el QRS sale estrecho, porque baja por el His. Las P (75) siguen a su aire y no se relacionan con él. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas.', 'ficha · p. 115, 118; ESC 2021 · p. 27'];
   if (S.clave === 'marcapasos') extra = ' Con 70 lpm en vez de ~32-45 el gasto sube (FC × volumen). ' + org('el gasto = FC × volumen: fisiología general', true);
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
@@ -627,7 +629,7 @@ $('dock-panel').addEventListener('click', ev => {
   if (b.dataset.insufl) { S.parada.insufl = +b.dataset.insufl; pintarDock(); pintarFrase(); return; }
   if (b.dataset.esc) { S.parada.escenario = b.dataset.esc; pintarDock(); return; }
   if (b.dataset.sexo) { S.sexo = b.dataset.sexo; pintarDock(); pintarCifras(); return; }
-  if (b.dataset.deriv) { S.deriv = b.dataset.deriv; $('mon-tit').textContent = `Monitor · derivación ${S.deriv}`; montarMonitor(); llenarEstatico(); pintarDock(); return; }
+  if (b.dataset.deriv) { S.deriv = b.dataset.deriv; montarMonitor(); llenarEstatico(); pintarDock(); return; }
   if (b.dataset.acc) accion(b.dataset.acc, b);
 });
 // Al cambiar de ritmo, el corazón queda a la vista sobre el dock (si estaba medio tapado, se sube lo justo)
@@ -659,7 +661,7 @@ function bucle(ts) {
   const dt = Math.min(0.05, (ts - tPrev) / 1000); tPrev = ts;
   if (!pausado && mo) {
     acum += dt; const paso2 = 1 / PXS;
-    while (acum >= paso2) { simT += paso2; acum -= paso2; mo.avanzar(simT + 0.07); procesarAgenda(); sincronizar(); muestra(simT); }
+    while (acum >= paso2) { simT += paso2; acum -= paso2; mo.avanzar(simT + 0.07); procesarAgenda(); sincronizar(); if (++cuentaB >= KB) { cuentaB = 0; muestra(simT); } }
     relojParada(dt);
     pintarTiras(); pintarEscena(simT);
     if (ts - tLect > 400) { tLect = ts; aplicarTopes(false); pintarCifras(); if (S.parada) pintarFicha(); if (S.clave === 'torsade' || S.clave === 'hiperk' || S.adeno) pintarFrase(); }

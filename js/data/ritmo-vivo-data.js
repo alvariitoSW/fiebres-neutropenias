@@ -205,26 +205,26 @@ export const ESTADOS = {
     frase: ['El potasio alto cambia la célula y, con ella, el ECG: T picudas, luego PR largo, sin P y QRS ancho.', 'Nefrología al día · p. 21'],
     aplicar(mo, t, s) { aplicarK(mo, s.k || 4.2); mo.reiniciarSA(t + 0.05); } },
   bradi: { fam: 'lentos', nombre: 'Bradicardia sinusal', corto: 'Bradicardia sinusal', fuentes: [E.dns, L.sinusal, L.causas], paciente: 'casilda',
-    frase: ['El nodo sinusal dispara despacio, pero sigue mandando: una P antes de cada QRS y el PR normal. Solo falta ritmo. Si no hay síntomas ni causa que corregir, no se trata.', 'ficha · p. 114; ESC 2021 · p. 24'],
+    frase: ['El nodo sinusal dispara despacio, pero sigue mandando: una P antes de cada QRS. Solo falta ritmo. Si no hay síntomas ni causa que corregir, no se trata.', 'ficha · p. 114; ESC 2021 · p. 23'],
     aplicar(mo, t, s) { mo.m.fcSA = s.fcSA || 45; mo.reiniciarSA(t + 0.05); } },
   bav1: { fam: 'lentos', nombre: 'Bloqueo AV de 1.er grado', corto: 'BAV 1.er grado', fuentes: [L.bav, E.bav1], paciente: 'casilda',
-    frase: ['Toda P conduce, pero el torniquete del nodo AV deja pasar la onda más despacio: PR largo y fijo. El ritmo y la FC no cambian.', 'ficha · p. 116-117; ESC 2021 · p. 27'],
+    frase: ['Toda P conduce, pero el torniquete del nodo AV deja pasar la onda más despacio: PR > 200 ms (ficha, p. 116). Que sea fijo y que el ritmo y la FC no cambien es fisiología general.', 'ficha · p. 116-117; ESC 2021 · p. 26'],
     aplicar(mo, t) { RITMO_BASE(mo); mo.m.navRet = 2; mo.m.navF = 1.5; mo.reiniciarSA(t + 0.05); } },
   bav2: { fam: 'lentos', nombre: 'Bloqueo AV de 2.º grado', corto: 'BAV 2.º grado', fuentes: [L.bav, L.bav2, L.nota, E.mobitz, E.mp], paciente: 'casilda',
-    frase: ['Hay P que no conducen. En el Mobitz I el PR se alarga latido a latido hasta que una P se queda sin QRS (torniquete del nodo). En el Mobitz II el PR no cambia y de pronto falta un QRS (bloqueo más abajo, en el His).', 'ficha · p. 117; ESC 2021 · p. 27'],
+    frase: ['Hay P que no conducen. En el Mobitz I el PR se alarga latido a latido hasta que una P se queda sin QRS (torniquete del nodo). En el Mobitz II el PR no cambia y falta un QRS cada cierto número de latidos (bloqueo infranodal, ESC 2021).', 'ficha · p. 117; ESC 2021 · p. 26-27'],
     aplicar(mo, t, s) {
       if (s.mobitz === 'I') { mo.m.fcSA = 85; mo.m.navRet = 1.6; mo.m.navF = 3.0; } else { mo.m.fcSA = 75; mo.m.hisCada = s.mobitz === '2:1' ? 2 : 3; }
       mo.reiniciarSA(t + 0.05); } },
   bav3: { fam: 'lentos', nombre: 'Bloqueo AV de 3.er grado', corto: 'BAV 3.er grado', fuentes: [L.bav3, L.escapes, E.bav3, E.temp], paciente: 'casilda',
-    frase: ['El torniquete del nodo AV está cerrado: ninguna P pasa. Las aurículas siguen a 75 y los ventrículos laten por libre con un escape propio, sin relación con las P.', 'ficha · p. 115, 118; ESC 2021 · p. 27'],
+    frase: ['El torniquete del nodo AV está cerrado: ninguna P pasa. Las aurículas siguen a 75 y los ventrículos laten por libre con un escape propio, sin relación con las P: siempre hay más P que QRS, y tanto las P entre sí como los QRS entre sí son regulares (ficha, p. 118).', 'ficha · p. 115, 118; ESC 2021 · p. 26'],
     aplicar(mo, t, s) {
       mo.m.fcSA = 75; mo.m.cerrojo = 0; mo.m.cerrojoFin = 1e9;
       if (s.escape === 'vent') { mo.m.escapeCada = null; mo.m.foco = { cada: ESCAPE_VENT, jitter: 0, sitio: () => teselaDe('vi', 3, 0) }; mo.proxFoco = t + 0.3; } else mo.m.escapeCada = ESCAPE_NODAL;
       mo.reiniciarSA(t + 0.05); } },
   marcapasos: { fam: 'lentos', nombre: 'Marcapasos', corto: 'Marcapasos', fuentes: [M.tipos, M.espiga, E.min70, L.bav3], paciente: 'casilda',
-    frase: ['El electrodo del ventrículo derecho dispara a 70 lpm: una espiga y, justo detrás, un QRS ancho. Las P siguen a su aire.', 'ficha · p. 159-160; ESC 2021 · p. 29'],
+    frase: ['El electrodo del ventrículo derecho dispara a 70 lpm (ilustrativo; la ESC cita 70 solo para la FA permanente): una espiga y, justo detrás, un QRS ancho. Las P, a unos 90 lpm (ilustrativo), siguen a su aire y se ven caminar respecto a las espigas.', 'ficha · p. 159-160'],
     aplicar(mo, t) {
-      mo.m.fcSA = 75; mo.m.cerrojo = 0; mo.m.cerrojoFin = 1e9; mo.m.escapeCada = null;
+      mo.m.fcSA = 90; mo.m.cerrojo = 0; mo.m.cerrojoFin = 1e9; mo.m.escapeCada = null;
       mo.m.foco = { cada: 60 / 70, jitter: 0, espiga: true, sitio: () => teselaDe('vd', 3, 0) }; mo.proxFoco = t + 0.3;
       mo.reiniciarSA(t + 0.05); } },
 };
@@ -306,23 +306,23 @@ export const GUIAS = {
     { t: 'Parte del ventrículo se activa antes, por el atajo, y despacio, de músculo a músculo: PR corto y onda delta antes del QRS.', r: ['#rtv-ecg', '#rtv-vents'], c: C.wpw, org: 'por qué la delta: fisiología general' },
     { t: 'Da taquicardias supraventriculares que se repiten, por reentrada. Si llega una FA, el atajo lo cambia todo: pruébalo en «Tratar».', r: ['#rtv-puente'], c: C.wpw }] },
   bradi: { tit: 'Bradicardia sinusal', pasos: [
-    { t: 'El reloj sinusal dispara despacio, pero el camino es el de siempre: una P antes de cada QRS y el mismo PR.', r: ['#rtv-sa', '#rtv-ecg'], c: L.sinusal, org: 'ficha' },
-    { t: 'Entre 40 y 50 lpm puede ser normal en reposo, sobre todo en deportistas. Se trata si da síntomas y no hay causa que corregir (fármacos, hipoxia, potasio).', r: ['#rtv-sa'], c: E.dns, org: 'ESC 2021' }] },
+    { t: 'El reloj sinusal dispara despacio, pero el camino es el de siempre: una P antes de cada QRS.', r: ['#rtv-sa', '#rtv-ecg'], c: L.sinusal, org: 'ficha' },
+    { t: 'Entre 40 y 50 lpm puede ser normal en reposo, sobre todo en deportistas. Se trata si da síntomas y no hay causa que corregir (ESC 2021, p. 26). Causas a buscar: fármacos, hipoxia, hiperpotasemia (ficha, p. 116).', r: ['#rtv-sa'], c: E.dns, org: 'ESC 2021 y ficha' }] },
   bav1: { tit: 'Bloqueo AV de 1.er grado', pasos: [
-    { t: 'El torniquete del nodo AV frena la onda: el PR se alarga y queda fijo. Toda P va seguida de su QRS.', r: ['#rtv-lupa-av', '#rtv-nav', '#rtv-ecg'], c: L.bav, org: 'ficha' },
+    { t: 'El torniquete del nodo AV frena la onda: el PR se alarga (> 200 ms, ficha p. 116) y queda fijo (fisiología general). Toda P va seguida de su QRS.', r: ['#rtv-lupa-av', '#rtv-nav', '#rtv-ecg'], c: L.bav, org: 'ficha' },
     { t: 'Suele ser asintomático y sin consecuencias. Solo con un PR muy largo (≥ 300 ms) y síntomas parecidos a los del síndrome de marcapasos se plantea tratar.', r: ['#rtv-ecg'], c: E.bav1, org: 'ESC 2021' }] },
   bav2: { tit: 'Mobitz I (Wenckebach)', pasos: [
     { t: 'El PR se alarga latido a latido hasta que una P no conduce; después el PR vuelve a ser corto y el ciclo se repite.', r: ['#rtv-lupa-av', '#rtv-ecg'], c: L.bav2, org: 'ficha' },
-    { t: 'Suele estar en el nodo AV (suprahisiano): curso benigno y poco riesgo de progresar. Solo se pone marcapasos si da síntomas o se demuestra que el bloqueo está en o bajo el His.', r: ['#rtv-nav'], c: E.mp, org: 'ESC 2021' }] },
+    { t: 'Suele estar en el nodo AV (suprahisiano): curso benigno y poco riesgo de progresar (ESC 2021, p. 26). Se plantea marcapasos (IIa C) si da síntomas o se demuestra que el bloqueo está en o bajo el His (p. 27).', r: ['#rtv-nav'], c: E.mp, org: 'ESC 2021' }] },
   bav2ii: { tit: 'Mobitz II y bloqueo 2:1', pasos: [
-    { t: 'El PR de los latidos que conducen no cambia, y de pronto una P se queda sin QRS: el His deja de transmitir una de cada tantas.', r: ['#rtv-his', '#rtv-ecg'], c: L.nota, org: 'ficha' },
-    { t: 'Sin causa reversible, indica marcapasos aunque no haya síntomas: puede progresar a bloqueo completo. En un 2:1 se distingue si es nodal o infranodal.', r: ['#rtv-his'], c: E.mobitz, org: 'ESC 2021' }] },
+    { t: 'El PR de los latidos que conducen no cambia y hay P que no van seguidas de QRS (el libro, p. 117: 3 o más P por QRS; aquí se dibuja una de cada tres, el clásico). El Mobitz II es infranodal (ESC 2021, p. 27).', r: ['#rtv-his', '#rtv-ecg'], c: L.nota, org: 'ficha y ESC 2021' },
+    { t: 'Sin causa reversible, indica marcapasos aunque no haya síntomas: puede progresar a bloqueo completo. En un 2:1 hay que distinguir si el bloqueo es nodal o infranodal (p. 26).', r: ['#rtv-his'], c: E.mobitz, org: 'ESC 2021' }] },
   bav3: { tit: 'Bloqueo AV completo', pasos: [
-    { t: 'Las P y los QRS no tienen que ver: las P van a 75 y los QRS, a la frecuencia del escape. El PR cambia a cada latido y alguna P se esconde en el QRS o en la T.', r: ['#rtv-lupa-av', '#rtv-ecg'], c: L.bav3, org: 'ficha' },
-    { t: 'Da síncope y mareo, y a la larga insuficiencia cardiaca; puede acabar en muerte súbita. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas.', r: ['#rtv-bomba', '#rtv-marcapasos'], c: E.bav3, org: 'ESC 2021' }] },
+    { t: 'Las P y los QRS no tienen que ver: siempre hay más P que QRS, y tanto las P entre sí como los QRS entre sí son regulares (ficha, p. 118). Las P van a 75 y los QRS, a la frecuencia del escape. El PR cambia a cada latido y alguna P se esconde en el QRS o en la T.', r: ['#rtv-lupa-av', '#rtv-ecg'], c: L.bav3, org: 'ficha' },
+    { t: 'Da síncope y mareo, y a la larga insuficiencia cardiaca; puede acabar en muerte súbita. Con ritmo sinusal, el marcapasos está indicado con o sin síntomas. La insuficiencia cardiaca es más propia del bloqueo crónico y la muerte súbita, del paroxístico (ESC 2021, p. 26).', r: ['#rtv-bomba', '#rtv-marcapasos'], c: E.bav3, org: 'ESC 2021' }] },
   marcapasos: { tit: 'Marcapasos ventricular', pasos: [
     { t: 'El electrodo del ventrículo derecho despolariza el corazón: una espiga fina y un QRS ancho, con forma de bloqueo de rama izquierda porque el ventrículo izquierdo se activa el último.', r: ['#rtv-ecg', '#rtv-vents'], c: M.espiga, org: 'ficha' },
-    { t: 'Cada espiga lleva su QRS (captura al 100 %). Las P siguen a su ritmo, sin relación con ellos. La frecuencia mínima la programa el clínico; en la guía, p. ej. 70 lpm en la FA permanente.', r: ['#rtv-ecg', '#rtv-marcapasos'], c: E.min70, org: 'ESC 2021' }] },
+    { t: 'Cada espiga lleva su QRS (captura al 100 %). Las P siguen a su ritmo (≈ 90 lpm, ilustrativo), sin relación con ellos. La frecuencia mínima la programa el clínico; los 70 lpm del modelo son ilustrativos (la guía los cita solo para la FA permanente, p. 28).', r: ['#rtv-ecg', '#rtv-marcapasos'], c: E.min70, org: 'ESC 2021' }] },
   wpwFa: { tit: 'FA con una vía accesoria', pasos: [
     { t: 'Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares.', r: ['#rtv-puente', '#rtv-ecg'], c: C.wpw },
     { t: 'Los fármacos que frenan el nodo (antagonistas del calcio, betabloqueantes, digoxina) no frenan el atajo: la FC no baja.', r: ['#rtv-torn-r', '#rtv-puente'], c: C.wpw },

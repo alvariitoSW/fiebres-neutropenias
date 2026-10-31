@@ -64,6 +64,9 @@ export function pintarEscena(t) {
   const tach = (x, y) => `<path d="M${x - 4} ${y - 4} L${x + 4} ${y + 4} M${x + 4} ${y - 4} L${x - 4} ${y + 4}" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="var(--accent-red)" stroke-width=".8"/>`;
   const clave = (mo.m.ramaI ? 'i' : '') + (mo.m.ramaD ? 'd' : '');
   if ($('rtv-rama-tachada').dataset.k !== clave) { $('rtv-rama-tachada').dataset.k = clave; $('rtv-rama-tachada').innerHTML = (mo.m.ramaI ? '' : tach(185, 188)) + (mo.m.ramaD ? '' : tach(165, 199)); }
+  // el His, tachado un momento cuando bloquea una P (Mobitz II y 2:1), como la vía rápida en el Mobitz I
+  { const b = mo.pasoNodo.filter(e => e.his && e.t <= t && t - e.t < 0.7).pop(), k = b ? '1' : '0', g = $('rtv-his-tachado');
+    if (g && g.dataset.k !== k) { g.dataset.k = k; g.innerHTML = b ? tach(160, 163) : ''; } }
   const shockVisible = !!(S.desfib && S.desfib.modo);
   $('rtv-parches').setAttribute('opacity', shockVisible ? 1 : 0);
   if (S.desfib && S.desfib.tChoque) { const d = t - S.desfib.tChoque; $('rtv-destello').setAttribute('fill-opacity', d >= 0 && d < 0.25 ? (0.35 * (1 - d / 0.25)).toFixed(2) : 0); }
