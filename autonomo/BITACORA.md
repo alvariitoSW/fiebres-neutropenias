@@ -446,6 +446,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 4. Mejoras de lo que ya existe
 
+- **Iones vivos (PR #65, fusionada el 31/10; acta `autonomo/consejo/2026-10-31-pr65.md`)**: Mayéutica sobre el motor común, mirada C «A pie de cama» y capa A «La célula por dentro» (sesión aparte); aviso de hiperK plegable y el dock que crece 31 px tras «Dar 90 mg»; móvil §7.7 de 9,3 a 9,5; `verFrase` con dos fotogramas en la rama `haz`; cotejar `PAG_FICHA` con el PDF; estados `hipok` y `hiperk-1..4` en el ritmo vivo con el ECG de hipoK, Mg y Ca. Propuestas de regla: choques de rótulos en los SVG en `jueces-movil.mjs`; `jueces.mjs --maqueta` con la prueba propia.
+
 - **Visto de paso (29-30/10, `b3-paso4` g3-g4 y `eco-reforma`)** · ✅ aprobado el 30/10 (`mejoras-30-10`, `mv-eco`, `b3-pulmon-app`, `b3-cierre`):
   - Shock vivo: cambiar de paciente tarda 1-3 s (asienta 30 latidos) y el juez del móvil lo da por «mando no tocable»;
     ECMO + Impella da FC 56 y presión de pulso 1; el edema no llega a equilibrio (191 mL al abrir, 475 a los 80 s).
