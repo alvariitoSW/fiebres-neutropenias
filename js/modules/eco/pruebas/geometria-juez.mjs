@@ -56,6 +56,15 @@ export function cruces({ seg, claves }) {
   return mal;
 }
 const cerrar = (c) => c.cerrada || c.ps.length < 3 ? c.ps : [...c.ps, c.ps[0]];
+/** Empalma las cadenas de un contorno: desde la mayor, añade la que tiene un extremo más cerca del final; luego cierra. */
+function empalmar(cad) {
+  const resto = [...cad].sort((a, b) => b.ps.length - a.ps.length), ps = [...resto.shift().ps];
+  while (resto.length) { const e = ps[ps.length - 1], d = (q) => Math.hypot(q[0] - e[0], q[1] - e[1]);
+    let mj = 0, inv = false, md = Infinity;
+    resto.forEach((c, j) => { const a = d(c.ps[0]), b = d(c.ps[c.ps.length - 1]); if (a < md) { md = a; mj = j; inv = false; } if (b < md) { md = b; mj = j; inv = true; } });
+    const c = resto.splice(mj, 1)[0].ps; ps.push(...(inv ? [...c].reverse() : c)); }
+  return ps.length < 3 ? ps : [...ps, ps[0]];
+}
 const area = (ps) => { let s = 0; for (let i = 0; i < ps.length - 1; i++) s += ps[i][0] * ps[i + 1][1] - ps[i + 1][0] * ps[i][1]; return Math.abs(s) / 2; };
 /** Lista de segmentos [a,b] de todas las cadenas, con los extremos sueltos unidos de dos en dos (el más cercano), como la pared cerrada. */
 function segsCerrados(cad) {
@@ -95,10 +104,13 @@ function contornosVista0(clave, est, dibujo) {
 }
 
 // ---------------------------------------------------------------- medidas en el A4C (mm)
-export function medidasA4C(td, ts) {
-  const C = contornosVista('a4c', td), r = {};
-  const poli = (k) => { const c = C[k]?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0]; return c ? cerrar(c) : null; };
-  const vdE = poli('vdEndo'), viE = poli('viEndo'), vdP = poli('vdEpi'), viP = poli('viEpi');
+export function medidasA4C(td, ts, dibujo = 'hoy') {
+  const C = contornosVista('a4c', td, dibujo), r = {};
+  const mayor = (k) => C[k]?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0];
+  const poli = (k) => { const c = mayor(k); return c ? cerrar(c) : null; };
+  // los grosores se miden contra la línea abierta: el tramo recto que la cierra (base→ápex) cruza la cavidad del VD dilatado
+  const linea = (k) => mayor(k)?.ps ?? null;
+  const vdE = poli('vdEndo'), viE = poli('viEndo'), vdP = linea('vdEpi'), viP = poli('viEpi'), viPl = linea('viEpi');
   if (vdE && viE) {
     const ys = vdE.map(p => p[1]), y0 = Math.min(...ys), y1 = Math.max(...ys), L = y1 - y0;   // d crece del ápex a la base
     const ancho = (ps, a, b) => { let m = 0, h = 0.5; for (let y = a; y <= b; y += h) { const e = corteH(ps, y); if (e) m = Math.max(m, e[1] - e[0]); } return m; };
@@ -109,15 +121,17 @@ export function medidasA4C(td, ts) {
     const yi = viE.map(p => p[1]), a0 = Math.min(...yi), a1 = Math.max(...yi);
     r.viBasal = ancho(viE, a0 + (a1 - a0) * 2 / 3, a1); r.viLargo = a1 - a0; r.vdVi = r.vdBasal / r.viBasal;
     // pared libre del VD: distancia del endocardio del VD (lado libre, tercio medio-basal) a su epicardio
-    if (vdP) { const ls = vdE.filter(p => p[1] > y0 + L * 0.35 && p[1] < y0 + L * 0.9); const xm = mediana(ls.map(p => p[0])); r.paredVd = mediana(ls.filter(p => p[0] <= xm).map(p => distA(p, vdP))); }
+    if (vdP) { const ls = vdE.filter(p => p[1] > y0 + L * 0.35 && p[1] < y0 + L * 0.9); const xm = mediana(ls.map(p => p[0])); r.paredVd = mediana(ls.filter(p => p[0] <= xm).map(p => distA(p, vdP))); }   // P4a-1: antes, contra la cuerda de cierre (HP g1: 1,8 mm por 6,4 reales)
     if (viP) { const li = viE.filter(p => p[1] > a0 + (a1 - a0) * 0.35 && p[1] < a0 + (a1 - a0) * 0.8), xs = li.map(p => p[0]), xmin = Math.min(...xs), xmax = Math.max(...xs), q = (xmax - xmin) / 6;
-      r.paredViLat = mediana(li.filter(p => p[0] > xmax - q).map(p => distA(p, viP))); r.paredViSep = mediana(li.filter(p => p[0] < xmin + q).map(p => distA(p, viP))); }
+      r.paredViLat = mediana(li.filter(p => p[0] > xmax - q).map(p => distA(p, viPl))); r.paredViSep = mediana(li.filter(p => p[0] < xmin + q).map(p => distA(p, viPl))); }
   }
   // LVEI (eje corto a la altura de los papilares, telediástole): dimensión anteroposterior / septolateral del endocardio del VI
-  const Ce = contornosVista('psaxPm', td), e = Ce.viEndo?.cad?.flatMap(c => c.ps);
+  const Ce = contornosVista('psaxPm', td, dibujo), e = Ce.viEndo?.cad?.flatMap(c => c.ps);
   if (e?.length) { const ex = (i) => Math.max(...e.map(p => p[i])) - Math.min(...e.map(p => p[i])); r.lvei = ex(1) / ex(0); }
-  const Cs = contornosVista('a4c', ts), ad = Cs.ad?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0];
-  if (ad) r.areaAdTs = area(cerrar(ad)) / 100;   // cm², telesístole
+  // AD: el corte la deja en varios trozos (el mayor y el del tabique interauricular junto a la cruz); se empalman por el
+  // extremo más cercano y se cierra por el anillo tricuspídeo. Antes solo el mayor: su cierre cruzaba la aurícula.
+  const Cs = contornosVista('a4c', ts, dibujo), ad = Cs.ad?.cad?.length ? empalmar(Cs.ad.cad) : null;
+  if (ad) r.areaAdTs = area(ad) / 100;   // cm², telesístole
   return r;
 }
 
@@ -171,7 +185,7 @@ function juzgarGeometria0({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } =
       if (!C.viEndo) mal.push('sin corte del endocardio del VI');
       fila(k, g, v, fase, mal, 'sin cruces; endo dentro de epi', cif.join(' '));
     }
-    const m = medidasA4C(td, ts), rs = rangosDe(k, g === undefined ? 0 : g);
+    const m = medidasA4C(td, ts, dibujo), rs = rangosDe(k, g === undefined ? 0 : g);
     const mal = [], aviso = [];
     for (const rg of rs) { const x = m[rg.medida];
       if (x == null || Number.isNaN(x)) { mal.push(`${rg.medida}: no se pudo medir`); continue; }
