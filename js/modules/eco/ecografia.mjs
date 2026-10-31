@@ -15,11 +15,11 @@
 //
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
-import { baseGeometrica, REF } from './corazon-geo.mjs';
+import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -265,6 +265,8 @@ export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(
 // corte cierra; si no, línea), linea (pared fina de una sola superficie: aurículas, vasos), valva,
 // pericardio. db: ecogenicidad frente al miocardio. ancho (mm) de las líneas.
 const T = TEJIDOS;
+// ¿dibujo nuevo activo? Se lee el interruptor de corazon-geo sin cambiarlo (usarDibujo devuelve el anterior).
+const dibujoNuevo = () => { const d = usarDibujo(1); usarDibujo(d); return d === 2; };
 const TIPOS = [
   [/^VI (endo|epi)cardio$/, { grupo: 'VI', clase: 'pared', db: T.miocardio.db }],
   [/^VD (endocardio|epicardio|borde)$/, { grupo: 'VD', clase: 'pared', db: T.miocardio.db }],
@@ -450,7 +452,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     if (!c.seg.length) return;
     const el = { seg: c.seg, segRef: c.segRef, claves: c.claves, nombre: p.nombre };
     if (t.clase === 'pared') { if (!grupos.has(t.grupo)) grupos.set(t.grupo, { db: t.db, trozos: [] }); grupos.get(t.grupo).trozos.push(el); }
-    else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: 'Pericardio' }); }
+    else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: dibujoNuevo() ? PERICARDIO_FINO.db : t.db, ancho: dibujoNuevo() ? PERICARDIO_FINO.ancho : t.ancho, grupo: 'Pericardio' }); }
     else if (t.clase === 'tubo' || t.clase === 'vaso') tubos.push({ ...el, t });
     else (t.clase === 'valva' ? valvas : lineas).push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: t.db, ancho: t.ancho, grupo: p.nombre });
   });
@@ -613,7 +615,7 @@ export const MEJORAS_DEFECTO = Object.freeze({ trabeculas: 1, paredes: 0.9, mote
 export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = {}) {
   let G = null, geoNueva = false;      // geoNueva: este fotograma ha tenido que construir la rejilla (tarda más de lo normal)
   const geometria = (P, o) => {
-    const m = o.m, clave = [P.prof, P.mitad.toFixed(4), ancho, alto, m.reverb, m.foco, o.focoMm, m.ventana, m.sombra > 0, o.ventanaVista, m.moteado].join('|');
+    const m = o.m, clave = [P.prof, P.mitad.toFixed(4), ancho, alto, m.reverb, m.foco, o.focoMm, m.ventana, m.sombra > 0, o.ventanaVista, m.moteado, dibujoNuevo()].join('|');
     if (G && G.clave === clave) return G;
     geoNueva = true;
     const N = nb * ns, dth = 2 * P.mitad / nb, dr = P.prof / ns;
@@ -655,8 +657,8 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       CL[q] = c * kW;
     }
     // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
-    const GAN = new Float32Array(N);
-    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = -0.025 * Math.max(0, Rr[j] - 60) - 6 * Math.pow(e, 8); }
+    const GAN = new Float32Array(N), nuevoD = dibujoNuevo();
+    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = (nuevoD ? -CAIDA_PROFUNDIDAD.dbPorMm * Math.max(0, Rr[j] - CAIDA_PROFUNDIDAD.desdeMm) : -0.025 * Math.max(0, Rr[j] - 60)) - 6 * Math.pow(e, 8); }
     const k = Math.min((alto - 8) / P.prof, (ancho - 6) / (2 * P.prof * Math.sin(P.mitad))), cx = ancho / 2, top = 4;
     const PIX = [], FB = [], FS = [];
     for (let py = 0; py < alto; py++) for (let px = 0; px < ancho; px++) {
@@ -768,7 +770,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // hueso (columna): como el calcio, con su fila de la tabla; pleura: línea brillante que marca dónde empiezan las líneas A
         if (el.tipo === 'linea' && /^Vértebra/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.hueso.ancho, TEJIDOS.hueso.db, 0, tag, 0); esCal[tag] = 1; hayCal = true; continue; }
         if (el.tipo === 'linea' && /^Pulmón/.test(el.grupo)) { trazar(P, el.seg, TEJIDOS.pleura.ancho, TEJIDOS.pleura.db, 0, tag, 0); esPl[tag] = 1; hayPl = true; continue; }
-        const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? 3 : 0);
+        const espec = el.especular || (m.especular > 0 && el.grupo === 'Pericardio' ? (dibujoNuevo() ? 1.5 : 3) : 0);
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
