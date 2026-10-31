@@ -886,6 +886,12 @@ export function montarSimulador(raiz, opc = {}) {
     return { td: medirVd(est(o.reduce((a, b) => (b.vvi > a.vvi ? b : a), o[0]))), ts: medirVd(est(o.reduce((a, b) => (b.vvi < a.vvi ? b : a), o[0]))) }; };
   function pintarForma(u) {
     const caja = $('#cv-forma-medidas');
+    if (['hemorragia', 'derrame', 'vasoplejia'].includes(escenario)) {   // pseudohipertrofia (decisión del usuario, 31/10/2026): pared gruesa, masa sin cambios
+      const md = medidasDe(motor), gruesa = Math.max(md.paredPost, md.tabique) > 10;
+      caja.hidden = !gruesa;
+      caja.innerHTML = gruesa ? `<p class="cv-criterio"><span class="cv-criterio-txt">Pared del VI gruesa con la cavidad vacía: pseudohipertrofia (la masa no cambia; signo de hipovolemia).<br><span class="cv-muted">Pared de ${f1(Math.max(md.paredPost, md.tabique))} mm. Fuente: <a class="biblio-link" href="https://link.springer.com/doi/10.1186/s13054-015-0980-z" target="_blank" rel="noopener">Crit Care 2015</a> (pseudohipertrofia = pared ≥12 mm con masa normal). Origen: fisiología general.</span></span></p>` : '';
+      return;
+    }
     if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }
     if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0), vd: vdDe(m0) }; }
     // el VD del A4C (basal, FAC) cuesta ~60 ms: se mide a lo sumo una vez por segundo (y al cambiar de escenario)
