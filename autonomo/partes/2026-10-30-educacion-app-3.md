@@ -1,7 +1,7 @@
 # Parte · 30/10/2026 · `educacion-app` parte 3: fichas, capilar con Carmen y gemelas (A en el shock, aplazada)
 
-**Tarea**: `educacion-app` (Objetivo, fila 18), parte 3 · **Resultado**: en revisión → voto del Consejo (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/66) · rama `auto/educacion-app-3`, versión 20261030-71.
-**Vueltas:** 1 · **Jueces:** pruebas [[JUECES]] · móvil ✅ (390 y 360) · auditoría ✅ (1 grave, corregido).
+**Tarea**: `educacion-app` (Objetivo, fila 18), parte 3 · **Resultado**: votada por el Consejo (5 de 5; acta `autonomo/consejo/2026-10-31-educacion-app-3.md`) y fusionada en `main` (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/66) · rama `auto/educacion-app-3`, versión 20261030-71.
+**Vueltas:** 1 · **Jueces:** pruebas ✅ · móvil ✅ (390 y 360) · auditoría ✅ (1 grave, corregido).
 
 ## Qué se hizo
 - **Aplazada la parte c)** (apuesta-mira-explica en el shock vivo): la sesión `shock-scai` estaba viva sobre `shock-vivo*` (REGLAS §4.6). Queda
@@ -31,7 +31,7 @@
 
 ## Jueces
 ✅ `mayeutica-memoria` · ✅ general (390 y 360) · ✅ `--modelo capilar-vivo` · ✅ `--modelo agua-viva` · ✅ `--modelo mayeutica-fichas` ·
-[[FICHA]] `--ficha` ×3 (cardiología, hematología, Libros) + `--forma` · ✅ `capilar-vivo-carmen.mjs` (390 y 360, ramas A y B) ·
+✅ `--ficha` ×3 (cardiología, hematología, Libros) + `--forma` · ✅ `capilar-vivo-carmen.mjs` (390 y 360, ramas A y B) ·
 Auditor sonnet: 1 grave (el porqué del TRALI decía que no se para la transfusión: p. 14 dice lo contrario), 6 medianos, 6 menores: todos corregidos
 en la vuelta 1 (la serie B de la prueba de 3 días, p. 1-5, quedó sin cotejar: límite de páginas del auditor).
 Profesor fable: **A 8,8** (días atrás 8,5 → arreglado el muro de la primera pantalla; «Vuelve en…» 9; firmes y cierre 8,75) · **B 8,15 → 8,77**
@@ -73,11 +73,12 @@ pregunta del porqué) los aplicó el director (≈8,85 estimado por el profesor,
 | Vuelta 1 arreglos | — | — | sonnet (nuevo, R5) | 58 | 0,72 M | 14 puntos, todos ✅; `mayeutica-fichas` entera no terminó en su tiempo (lo pasó el director) |
 
 ## Gasto
-`gasto.mjs --clave educacion-app`: **[[GASTO]] M** equivalentes. Por papel: constructor sonnet 3,4 M (70 %) · profesor fable 0,7 M (14 %) · director
-0,6 M (13 %) · auditor 0,16 M (3 %). Los 3 que más: constructor B1+B2 2,1 M (78 pasos: continuar fue caro) · vuelta 1 0,72 M · director 0,63 M.
+`gasto.mjs --clave educacion-app`: **5,5 M** equivalentes. Por papel: constructor sonnet 3,4 M (62 %) · director 1,2 M (22 %) · profesor fable 0,7 M (13 %) ·
+auditor 0,16 M (3 %) · Consejo 0,06 M. Los 3 que más: constructor B1+B2 2,1 M (78 pasos: continuar fue caro) · director 1,2 M (sesión larga: dos
+horas de jueces repetidos por un filtro mal escrito) · vuelta 1 0,72 M.
 Dónde se fue: la continuación B1 → B2 releía ≈8 M de caché; la próxima vez, constructor nuevo para B2 (ahorro ≈0,5 M).
 
 ## Cuentas
-Presupuesto 4,5 M (Hacienda recortó −1,05 M: sin revisión con agente, sin plan del profesor, B2 continuando, un solo juicio) · gastado [[GASTO]] M ·
-desvío **[[DESVIO]]** (por B1+B2 continuado y 14 puntos de arreglos en vez de los ≈6 previstos). Asignado a la parte 3 ≈4 M para a+b+c: c) no se hizo
+Presupuesto 4,5 M (Hacienda recortó −1,05 M: sin revisión con agente, sin plan del profesor, B2 continuando, un solo juicio) · gastado 5,5 M ·
+desvío **+22 %** (por B1+B2 continuado y 14 puntos de arreglos en vez de los ≈6 previstos). Asignado a la parte 3 ≈4 M para a+b+c: c) no se hizo
 (≈1 M). Del margen de Educación. No se llegó al 25 % que obliga a comparecer.

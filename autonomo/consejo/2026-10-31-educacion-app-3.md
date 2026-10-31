@@ -9,7 +9,7 @@ informes del profesor (`profesor.md`, `profesor-v1.md`), el auditor (`auditoria-
 
 ## 1 · Dictámenes
 - **Interior · SÍ** (condicionado): A, B y G hechos; c) aplazada con razón (§4.6) y escrita. Condición: `--ficha` de hematología con la ruta
-  buena (el ❌ fue una ruta mal escrita por el director). → [[FICHA]]
+  buena (el ❌ fue una ruta mal escrita por el director). → cumplida: `--ficha home:merinoHemato:panel-merino-tabs:merino-transfusion --forma` ✅ Todos los jueces a favor.
 - **Justicia · SÍ**: auditor 0 graves pendientes; cifras con página; monitor manda sobre la maqueta (826 frente a 830) y está anotado; constantes
   ilustrativas rotuladas; sin datos de pacientes; API del motor intacta. Condición: la excepción `sinPensar` («Decide tú» de los casos con error
   integrado) frente a §8 «piensa antes», anotada para REGLAS §8 (va en el parte, «Propuestas sobre las reglas»; el director no edita REGLAS).
@@ -22,10 +22,10 @@ informes del profesor (`profesor.md`, `profesor-v1.md`), el auditor (`auditoria-
 - **Transportes (preside)**: a favor. Vio las capturas (sello sin nombre, tabla antes → después, días atrás) con ojos de residente.
 
 ## Acuerdo
-Mayoría (5 de 5) · [[ACUERDO]]
+Mayoría (5 de 5) · se fusiona la PR #66 en `main` tras traer `main` a la rama (21 commits de la eco, versión 81 → 82) y repetir la pasada general de jueces.
 
 ## Lo que entra en el tablero
-- `educacion-app`: parte 3 [[ESTADO]]; queda la parte c) (A en el shock vivo), con el techo de Hacienda (0,9 M), cuando `shock-scai` esté en `main`.
+- `educacion-app`: parte 3 hecha (fusionada); queda la parte c) (A en el shock vivo), con el techo de Hacienda (0,9 M), cuando `shock-scai` esté en `main`.
 
 ## Lo que espera al gobierno central
 - La prueba de 3 días con las gemelas, cuando quiera (`autonomo/ideas/educacion-pionera/prueba-3-dias-capilar.md`).
