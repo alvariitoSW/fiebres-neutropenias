@@ -61,6 +61,7 @@ const MARGEN_AU = { ai: 3, ad: 3 };
 // alto / ancho de las aurículas: eje mayor / eje menor de la AD del varón en Lang 2015, p. 30 (Tabla 13): 2,4 / 1,9 cm/m².
 // La AI usa la misma proporción (sus ejes están en el Suplemento de Lang, que no tenemos: hueco; ilustrativo)
 const PROPORCION_AU = 2.4 / 1.9;
+const ELONGA_AD = 0.15;   // elongación del cuello de la AD en el plano del A4C (ajustes.auVolumen; ilustrativo)
 const LE_REF = geomVi(REF.vVi).Le;
 // ---- Mallas genéricas -----------------------------------------------------------
 // La topología de una rejilla solo depende de su tamaño: los índices se crean una vez y se reutilizan
@@ -434,7 +435,14 @@ export function construirCorazonHoy(estado, opciones = {}) {
     return ventana(f) > 0.05 && r < rimRV(f) - 2 && !dentroHuella(cR, rhoInf, p, 2) && (r > ReB + 0.5 || ladoTab(p) > RTAB); };
   // el VI (salvo por encima del tabique interauricular, que se apoya en el interventricular) y la raíz aórtica, con corte continuo
   const libreAd = huella(ct, okAd, () => rT + 1.5, [[ac, rA + 3]]), incAd = [-4, 0];
-  const cuelloAd = cuello(libreAd, () => rT, MARGEN_AU.ad), { rho: rhoAd, sep: sepAd } = tabiqueSuelo(ct, cuelloAd);
+  // opciones.ajustes.auVolumen (dibujo nuevo, P4a-2): el cuello de la AD se alarga en el plano del A4C (eje mc→ct) y se estrecha en el
+  // perpendicular, con el mismo ancho medio: la altura sale del volumen del motor (alturaAu), así que el volumen no cambia, y el
+  // corte A4C, que pasa por el eje largo, recoge el área que da el área-longitud monoplano con ese volumen (Lang 2015, p. 29,
+  // Tabla 12: V = 8/(3π)·A²/L); con el cuello redondo el corte daba el 91-94 % (el corte de una cúpula redonda con tabique plano
+  // queda por debajo de la elipse). El estiramiento (ELONGA_AD) es ilustrativo; la huella (libreAd) sigue mandando
+  const psiPl = Math.atan2(nTab[1], nTab[0]);
+  const anilloAd = opciones.ajustes?.auVolumen ? (d) => rT * (1 + ELONGA_AD * Math.cos(2 * (Math.atan2(d[1], d[0]) - psiPl))) : () => rT;
+  const cuelloAd = cuello(libreAd, anilloAd, MARGEN_AU.ad), { rho: rhoAd, sep: sepAd } = tabiqueSuelo(ct, cuelloAd);
   // el suelo de la AD baja además lo que baja la pared libre del VD junto al anillo (pesoVd, media sobre el cuello)
   const bajaAd = descenso + extraVd * rhoAd.reduce((m, r, k) => { const psi = k / NR * TAU; return m + pesoVd(ct[0] + r * Math.cos(psi), ct[1] + r * Math.sin(psi), 0) / NR; }, 0);
   const pliAd = clamp(estado.pliegueAd ?? 0, 0, 1);
@@ -954,7 +962,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo } — sin ajustes, el dibujo de hoy idéntico.
+// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen } — sin ajustes, el dibujo de hoy idéntico.
 const GANANCIA_SEPTO = 4;
 export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
