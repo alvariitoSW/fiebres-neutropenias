@@ -24,7 +24,7 @@ const CSS = `
 #pul-corazon .cor-ir { min-height: 44px; border-radius: 10px; border: 1px solid var(--border-color); background: transparent; color: var(--accent-yellow); font: 600 .72rem/1.2 var(--sans); cursor: pointer; padding: 2px 8px; text-align: left; }
 `;
 const ORIGEN = 'ilustrativo · motor del corazón del shock vivo';
-const LIMITE = 'Bradley 1992 (PMID 1736745): con CPAP 5, +22 % del VS indexado con PCP ≥12; con PCP <12 el gasto bajó (IC 3,14→2,89). El modelo da el sentido y el orden de magnitud (CPAP 5: +14 % en este corazón; con CPAP 15 daría +42 %, probablemente demasiado: extrapolación ilustrativa, por eso el tope es 10). La retirada simpática, el menor trabajo respiratorio y la apertura de los alvéolos no están en el modelo.';
+const LIMITE = 'Bradley 1992 (PMID 1736745): con CPAP 5, +22 % del VS indexado con PCP ≥12; con PCP <12 el gasto bajó (IC 3,14→2,89). El modelo da el sentido y el orden de magnitud (CPAP 5: +8,5 % en este corazón, por debajo del +22 % de Bradley; de 5 a 10 ya no sube más, porque el alivio se aplana con la presión; tope 10, como en el shock vivo). La retirada simpática, el menor trabajo respiratorio y la apertura de los alvéolos no están en el modelo.';
 const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 const f0 = (n) => String(Math.round(n));
 const pct = (a, b) => { const d = Math.round(100 * (a / b - 1)); return (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(d) + ' %'; };
