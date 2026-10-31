@@ -1,0 +1,53 @@
+<!-- PROPUESTA PARA REVISAR (encargo motor-radio, maqueta B «Por qué se ve así: corte + rayo»). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/radio-rx-b.html
+     La placa la dibuja radio-rx/escena.js (pieza común). El corte lo dibuja radio-rx/maqueta-b.js. Solo tokens de color. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Por qué la placa se ve así</title>
+<link rel="stylesheet" href="../../css/variables.css">
+<link rel="stylesheet" href="radio-rx/estilo-bc.css">
+</head>
+<body><main>
+<h1>Por qué la placa se ve así</h1>
+<p class="rx-idea">La placa suma todo lo que cruza el rayo. Mueve la postura y mira <strong>adónde viajan el aire y el líquido</strong> en el corte, y qué ve el chasis.</p>
+
+<div class="rx-fijo">
+  <svg id="rx-placa" class="rx-placa" viewBox="0 0 390 330" role="img" aria-label="Radiografía de tórax portátil dibujada" ></svg>
+  <svg id="rx-corte" class="rx-corte" role="img" aria-label="Corte axial del tórax con el foco del rayo delante y el chasis detrás"></svg>
+</div>
+<p class="rx-leyenda">Corte a la altura de <strong id="rx-que-corte"></strong>, visto desde los pies. Negro: aire · blanco liso: líquido · gris con borde: pulmón. <span class="rx-origen" data-o="ilustrativo">suma de densidades: ilustrativo</span></p>
+
+<div id="rx-mandos"></div>
+
+<div id="rx-sello" role="alert" hidden></div>
+<div class="rx-caja" aria-live="polite">
+  <p id="rx-frase"></p>
+  <p id="rx-porque"></p>
+  <p id="rx-aviso" hidden></p>
+  <ul class="rx-cifras" id="rx-cifras"></ul>
+  <button type="button" class="rx-ver" id="rx-ver">Ver en la ficha</button>
+  <p id="rx-ver-nota" hidden></p>
+</div>
+
+<details class="rx-fig">
+  <summary>Las placas reales: el neumotórax que la placa no ve</summary>
+  <div class="rx-figs">
+    <figure><img src="../../js/modules/libros/img/mar-fig2-5-neumotorax-rx-tc.jpg" alt="Radiografía y TC de un neumotórax anterior en un paciente tumbado" loading="lazy">
+      <figcaption>Marino, fig. 2.5 · <a href="../../docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=34" target="_blank" rel="noopener">cap. 2, pág. 34</a></figcaption></figure>
+    <figure><img src="../../js/modules/neumologia/img/neumo-fig28-5-radiografia-tc-neumotorax.jpg" alt="Radiografía sin neumotórax visible y TC que sí lo enseña" loading="lazy">
+      <figcaption>Marino, fig. 28.5 · <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=26" target="_blank" rel="noopener">cap. 28, pág. 26</a></figcaption></figure>
+  </div>
+</details>
+
+<p class="rx-nota">Rótulos de origen: <span class="rx-origen" data-o="ficha">ficha</span> sale de Marino, con su página · <span class="rx-origen" data-o="StatPearls">StatPearls</span> sale de ese artículo, con su enlace · <span class="rx-origen">fisiología general</span> · <span class="rx-origen" data-o="ilustrativo">ilustrativo</span>: el dibujo enseña la idea; el grosor de las capas no tiene cifra en la fuente. El aire va al pulmón izquierdo y el líquido al derecho.</p>
+
+<h2>Para profundizar</h2>
+<ul class="rx-prof">
+  <li>Neumotórax a tensión y eco pulmonar: Marino, cap. 28, <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=29" target="_blank" rel="noopener">pág. 29</a>.</li>
+  <li>Qué hacer con el líquido pleural: Marino, cap. 29, <a href="../../docs/marino-2024-respiratory-management-caps27-30.pdf#page=46" target="_blank" rel="noopener">pág. 46</a>.</li>
+  <li>Surco costofrénico profundo: <a href="https://www.ncbi.nlm.nih.gov/sites/books/NBK441885/" target="_blank" rel="noopener">StatPearls, Pneumothorax</a>.</li>
+</ul>
+<p class="rx-creditos">Placa y corte dibujados por la app con anatomía general; sin imágenes ni contornos de ningún atlas. Figuras reales: Marino, <em>The ICU Book</em>, 5.ª ed. (2024).</p>
+</main>
+<script type="module" src="radio-rx/maqueta-b.js"></script>
+</body></html>

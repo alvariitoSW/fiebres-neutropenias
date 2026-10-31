@@ -1,0 +1,30 @@
+    <button class="back-btn btn-volver-libros-menu" id="iov-volver">← VOLVER</button>
+    <!-- Iones vivos: lo que ves y lo que hay (Marino caps. 36-38). Modelo vivo de Libros. Viene de la maqueta aprobada
+         autonomo/maquetas/b4-iones-b.html. Lógica en iones-vivos/index.js (arranque) y pagina.js; datos y fuentes en
+         js/data/iones-vivos-data.js. Prefijo de ids: iov-. El ECG es el de El corazón eléctrico (importado). -->
+    <div class="iov-raiz" id="iov-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="iov-eyebrow">Modelo vivo · Marino caps. 36-38</p><h2 class="iov-titulo">Lo que ves y lo que hay</h2></header>
+      <div class="modos" id="iov-modos" role="group" aria-label="Modo"><button type="button" id="iov-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" id="iov-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" id="iov-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" id="iov-modo-caso" data-modo="caso" aria-pressed="false">Caso</button></div>
+      <section id="iov-prueba" class="prueba" hidden aria-live="polite"></section>
+      <p id="iov-idea" class="idea"></p>
+      <section id="iov-monitor" class="monitor-iov" aria-label="Monitor de cabecera">
+        <div class="mon-fila"><span id="iov-mon-k">K⁺</span><span class="vit">PA <b id="iov-mon-pa"></b> · FC <b id="iov-mon-fc"></b> <span id="iov-mon-extra"></span></span><button type="button" id="iov-pausa" aria-pressed="false">Pausa</button></div>
+        <svg id="iov-ecg" viewBox="0 0 340 70" preserveAspectRatio="none" role="img" aria-label="ECG de El corazón eléctrico, derivación II"><path id="iov-ecg-path" d=""/></svg>
+      </section>
+      <details id="iov-nota-ecg" class="plegable" hidden><summary>ECG de la hipopotasemia: pendiente</summary><p id="iov-nota-ecg-txt"></p></details>
+      <div class="selector-ion" id="iov-ion-sel" role="group" aria-label="Elige el ion"></div>
+      <section class="zona-escena" id="iov-escena"><svg id="iov-ion-svg" viewBox="0 0 360 446" role="img" aria-label="El depósito grande del ion, la ventanita del suero y la figura del libro"></svg></section>
+      <section id="iov-guia" class="prueba guia" hidden aria-live="polite"></section>
+      <div id="iov-leyenda"></div>
+      <section class="bloque">
+        <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="iov-fuentes"></ul><ul class="lista" id="iov-fichas"></ul></details>
+        <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="iov-crecera"></ul></details>
+        <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="iov-notas"></div></details>
+        <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="iov-profundizar"></ul></details>
+      </section>
+      <div class="dock" id="iov-dock"><div class="dock-in">
+        <p class="frase" id="iov-frase" role="status" aria-live="polite"><span class="frase-txt" id="iov-frase-txt"></span></p>
+        <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Dar</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y laboratorio</button></div>
+        <div class="dock-panel" id="iov-dock-panel"></div><div class="dock-panel" id="iov-dock-medir" hidden></div>
+      </div></div>
+    </div>

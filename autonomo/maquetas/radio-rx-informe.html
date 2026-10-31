@@ -1,0 +1,165 @@
+<title>Motor de radiología</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Una columna de lectura para el móvil: arriba la decisión, luego las tres placas, topes y coste.
+   Colores de la app (css/variables.css): un solo aspecto oscuro, como la app. */
+:root {
+  --bg: #17140f;
+  --card: #241e16;
+  --line: rgba(196, 154, 74, 0.35);
+  --fg: #ece3cc;
+  --muted: #a5967c;
+  --dim: #c9bda4;
+  --gold: #cf9a3e;
+  --red: #b85c3e;
+  --green: #90a06a;
+  --purple: #9c5476;
+  --serif: Georgia, 'Times New Roman', Times, serif;
+  --mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+body { background: var(--bg); color: var(--fg); font-family: var(--serif); font-size: 16px; line-height: 1.55; }
+.wrap { max-width: 680px; margin: 0 auto; padding-block: 20px 48px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 28px; }
+h1 { font-size: 1.7rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+h2 { font-size: 1.25rem; margin: 0 0 10px; text-wrap: balance; color: var(--gold); }
+h3 { font-size: 1.05rem; margin: 0; }
+p { margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.lead { color: var(--dim); }
+section { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.decide { border: 1px solid var(--gold); border-radius: 10px; padding: 14px 16px; background: var(--card); display: flex; flex-direction: column; gap: 8px; }
+.decide ol { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+.maq { display: grid; grid-template-columns: 1fr; gap: 10px; border-top: 1px solid var(--line); padding-top: 16px; }
+.maq img { width: 100%; border-radius: 8px; border: 1px solid var(--line); background: #000; }
+.maq-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.nota { font-family: var(--mono); font-size: .85rem; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.nota.ok { color: var(--green); } .nota.no { color: var(--red); }
+.abrir { display: inline-block; align-self: flex-start; padding: 10px 16px; border-radius: 8px; background: var(--gold); color: #17140f; font-weight: bold; text-decoration: none; }
+.abrir:focus-visible, a:focus-visible { outline: 2px solid var(--fg); outline-offset: 2px; }
+a { color: var(--gold); }
+ul.pros { margin: 0; padding-left: 1.1em; display: flex; flex-direction: column; gap: 4px; color: var(--dim); }
+.tabla { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; font-size: .85rem; min-width: 560px; width: 100%; }
+th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--line); }
+th { font-family: var(--mono); font-size: .72rem; letter-spacing: .05em; text-transform: uppercase; color: var(--muted); }
+td.num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.peligro { color: var(--red); }
+.chip { font-family: var(--mono); font-size: .72rem; padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.chip.ficha { color: var(--green); border-color: var(--green); }
+.chip.ilu { color: var(--purple); border-color: var(--purple); }
+.pie { color: var(--muted); font-size: .85rem; }
+</style>
+
+<div class="wrap">
+  <header style="display:flex;flex-direction:column;gap:8px">
+    <p class="eyebrow">B-051a · primer trozo · 30/10/2026</p>
+    <h1>Una Rx de tórax portátil que dibuja la app</h1>
+    <p class="lead">Tres maquetas distintas de la misma placa: el mismo paciente de la cama, con mandos que ponen y quitan neumotórax, derrame, edema, SDRA, consolidación, atelectasia, tubo, vía y sonda. Ninguna usa imágenes de pacientes ni contornos de atlas: el dibujo es propio y, al lado, la figura real de Marino.</p>
+  </header>
+
+  <div class="decide">
+    <h2 style="margin:0">Lo que eliges tú</h2>
+    <ol>
+      <li><strong>Qué maqueta llevar a la app</strong>: A, B, C o la mezcla que recomienda el profesor (abajo).</li>
+      <li><strong>Si sigues con el motor</strong> y en qué orden: Rx entera, TC de tórax, TC de cráneo (coste al final).</li>
+      <li><strong>Un cambio sobre el encargo</strong>: pedías «vía en la yugular contralateral». Marino describe la punta que sube a la yugular <em>del mismo lado</em> desde la subclavia (cap. 2, pág. 37). El mando usa lo de Marino.</li>
+    </ol>
+  </div>
+
+  <section>
+    <h2>Las tres maquetas</h2>
+    <p class="pie">Ábrelas en el móvil. Notas del profesor (meta 8,75 en cada una): A 8,8 · B 9,0 · C 8,8 (tras una vuelta de arreglos: A y C partían de 8,3 y 8,1).</p>
+
+    <article class="maq">
+      <div class="maq-head"><h3>A · Placa con capas y mandos</h3><span class="nota ok">8,8</span></div>
+      <img src="img/a.png" alt="Maqueta A: placa portátil dibujada con neumotórax a tensión izquierdo y su frase explicativa" loading="lazy">
+      <p><strong>Qué cambia en la imagen.</strong> Un carril de 9 mandos: postura, neumotórax, derrame, patrón, consolidación, atelectasia, tubo, vía y sonda. Cada estado pinta su capa, su cifra con fuente y una frase que explica por qué ahí es blanco o negro. «Señálalo» colorea lo que buscas.</p>
+      <ul class="pros">
+        <li>El mismo paciente con y sin la patología, y combinaciones reales (tubo selectivo y atelectasia izquierda, tensión con desvío).</li>
+        <li>Como mucho 3 cosas en el pulmón a la vez: con la cuarta sale «placa imposible».</li>
+      </ul>
+      <a class="abrir" href="radio-rx-a.html">Abrir la maqueta A</a>
+    </article>
+
+    <article class="maq">
+      <div class="maq-head"><h3>B · Por qué se ve así: corte y rayo</h3><span class="nota ok">9,0</span></div>
+      <img src="img/b.png" alt="Maqueta B: placa arriba y corte axial del tórax en supino con aire anterior y el rayo de delante atrás" loading="lazy">
+      <p><strong>Por qué la placa engaña.</strong> Debajo de la placa, un corte del tórax con el foco delante y el chasis detrás. Al tumbar al paciente, el aire sube delante de las bases y el líquido se va atrás: el rayo los suma al pulmón y no queda borde que ver. Por eso la placa portátil no ve hasta el 50 % de los neumotórax del crítico (Marino, cap. 2, pág. 34).</p>
+      <ul class="pros">
+        <li>El aire y el líquido se mueven al cambiar la postura; la placa cambia a la vez.</li>
+        <li>El corte es el embrión de la TC de tórax: ese trozo saldría más barato.</li>
+      </ul>
+      <a class="abrir" href="radio-rx-b.html">Abrir la maqueta B</a>
+    </article>
+
+    <article class="maq">
+      <div class="maq-head"><h3>C · Lee esta placa generada</h3><span class="nota ok">8,8</span></div>
+      <img src="img/c.png" alt="Maqueta C: caso inventado con la placa generada y la pregunta de la letra B del recorrido A-E" loading="lazy">
+      <p><strong>Practicar.</strong> «Otro paciente» genera una placa al azar, siempre posible. Recorres A-B-C-D-E: tocas la zona y eliges el hallazgo; las opciones falsas son la patología hermana (atelectasia frente a consolidación, edema frente a SDRA). Cierra con «Encuentra el error» en el informe de otro residente.</p>
+      <ul class="pros">
+        <li>Casos sin fin sin guardar imágenes de pacientes. Nada se guarda.</li>
+        <li>Es la Mayéutica natural del modelo.</li>
+      </ul>
+      <a class="abrir" href="radio-rx-c.html">Abrir la maqueta C</a>
+    </article>
+  </section>
+
+  <section>
+    <h2>La recomendación del profesor</h2>
+    <p><strong>B como pantalla principal, con los mandos de A dentro.</strong> El corte con el rayo es lo único que enseña <em>por qué</em> la placa portátil engaña en supino, y prepara la TC de tórax. <strong>C no va aparte</strong>: es la Mayéutica del modelo (el trozo 2b), sobre la misma pieza de dibujo.</p>
+  </section>
+
+  <section>
+    <h2>Topes de cada mando, con su fuente</h2>
+    <p class="pie"><span class="chip ficha">ficha</span> cifra de Marino o StatPearls con su página · <span class="chip ilu">ilustrativo</span> el dibujo enseña la idea, el tamaño no tiene cifra. Páginas del PDF.</p>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Mando</th><th>Lo que sale</th><th>Fuente</th><th>Estado peligroso → se ve</th></tr></thead>
+        <tbody>
+          <tr><td>Postura</td><td>La placa portátil no ve hasta el 50 % de los neumotórax; en supino el aire va delante de las bases</td><td class="num">Marino cap. 2, pág. 34 · cap. 28, pág. 26</td><td>—</td></tr>
+          <tr><td>Neumotórax</td><td>Erguido: línea pleural en el vértice. Supino: base más negra y surco profundo</td><td class="num">cap. 28, págs. 26-29 · StatPearls</td><td class="peligro">Tensión: sin trama, mediastino al otro lado, cúpula baja. Descompresión inmediata, 14 G en el 5.º espacio</td></tr>
+          <tr><td>Derrame paraneumónico</td><td>&lt;10 mm sin toracocentesis; 10 mm a ½ hemitórax, toracocentesis; &gt;½ o loculado, tubo de 8,5-14 Fr si está infectado</td><td class="num">cap. 29, págs. 45-46</td><td class="peligro">&gt;½: hemitórax blanco (erguido) o velado (supino, <span class="chip ilu">ilustrativo</span>)</td></tr>
+          <tr><td>Patrón</td><td>Edema desde los hilios con derrames; SDRA con aspecto clásico solo en el 15-25 %, VPN de la placa 47 %</td><td class="num">cap. 18, pág. 7 · cap. 24, págs. 35-36</td><td class="peligro">Sello: la placa no distingue edema de SDRA, orienta</td></tr>
+          <tr><td>Consolidación</td><td>Infiltrado nuevo: sensibilidad 89 %, especificidad 26 %</td><td class="num">cap. 28, pág. 40</td><td class="peligro">Sello: no confirma neumonía</td></tr>
+          <tr><td>Atelectasia</td><td>Pierde volumen, el mediastino va hacia ella, la cúpula sube</td><td class="num">StatPearls · cap. 28, fig. 28.2</td><td class="peligro">Pulmón entero: caída brusca de la oxigenación</td></tr>
+          <tr><td>Tubo</td><td>Punta 3-5 cm sobre la carina; carina en T4-T5; el cuello mueve la punta 2 cm</td><td class="num">cap. 28, pág. 18</td><td class="peligro">Selectivo derecho: atelectasia izquierda (fig. 28.2)</td></tr>
+          <tr><td>Vía central</td><td>Punta en la cava 1-2 cm sobre la aurícula, a la altura de la carina; mal puestas el 15-18 %</td><td class="num">cap. 2, págs. 36-37 · cap. 3, pág. 45</td><td class="peligro">Contra la pared de la cava: mediastino ancho y derrame (perforación)</td></tr>
+          <tr><td>Sonda</td><td>Recta, biseca la carina, punta ~10 cm bajo la cúpula izquierda; 1 % va al pulmón</td><td class="num">cap. 49, págs. 26-29</td><td class="peligro">En el bronquio derecho: no nutrir; CO₂ espirado ≥15 mmHg = vía aérea</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="pie">Sin fuente y fuera del motor: el índice cardiotorácico (no está en Marino ni en las fichas). La cardiomegalia sale solo como forma.</p>
+  </section>
+
+  <section>
+    <h2>El motor entero, por trozos</h2>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Trozo</th><th>Qué</th><th>Coste</th></tr></thead>
+        <tbody>
+          <tr><td>1 · este informe</td><td>Pieza de dibujo común, 3 maquetas, jueces</td><td class="num">≈4 M</td></tr>
+          <tr><td>2 · Rx a la app</td><td>La maqueta elegida como modelo vivo, con su prueba y topes</td><td class="num">≈2,0 M</td></tr>
+          <tr><td>2b · casos</td><td>«Lee esta placa» generada como Mayéutica (recorrido A-E, encuentra el error)</td><td class="num">≈1,2 M</td></tr>
+          <tr><td>2c · juicio y arreglos</td><td>Profesor, auditor, arreglos, director</td><td class="num">≈2,9 M</td></tr>
+          <tr><td>3 · TC de tórax</td><td>Sobre el corte de B: ventanas, SDRA en zonas declives, derrame, neumotórax anterior</td><td class="num">≈5,5 M</td></tr>
+          <tr><td>4 · TC de cráneo</td><td>Pieza nueva: epidural, subdural, hemorragia, ictus precoz, HTIC y hernias</td><td class="num">≈8,2 M</td></tr>
+          <tr><td><strong>Total</strong></td><td>Rx entera ≈6 M más; TC tórax 5,5; TC cráneo 8,2</td><td class="num"><strong>≈22 M</strong></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Cómo se comprobó</h2>
+    <ul class="pros">
+      <li>Las tres maquetas se abren a 390 y 360 px sin desbordar y sin errores; todas las figuras reales cargan.</li>
+      <li>Pruebas automáticas: los 62 estados de la placa sacan frase y fuente; 5.000 pacientes generados, ninguno imposible y la tensión siempre con desvío.</li>
+      <li>Auditor contra los PDF: ninguna cifra inventada ni mal copiada. Se corrigieron 2 fallos: los umbrales del derrame son del derrame paraneumónico y ahora lo dicen, y dos figuras que no casaban con su estado llevan «Referencia: posición correcta».</li>
+      <li>Lo dibujado sin cifra en la fuente (tamaños, desvío por derrame, veladura en supino, suma de densidades) va rotulado «ilustrativo».</li>
+    </ul>
+  </section>
+
+  <p class="pie">Dibujo propio con anatomía general; figuras reales de Marino, <em>The ICU Book</em>, 5.ª ed. (2024), las mismas que ya usa la app. Las webs de radiología estudiadas aportaron solo ideas.</p>
+</div>

@@ -123,7 +123,7 @@ const FALLAR_TOCAR = 'ag-05';
 const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
   const pref = '#agv-preg ';
   if (q.tipo === 'test') {
-    await pulsar(pref + '[data-accion="ops"]');
+    if (!q.sinPensar) await pulsar(pref + '[data-accion="ops"]');   // con `sinPensar` las opciones ya están a la vista
     // data-op es la posición en pantalla: las opciones salen barajadas por el motor común (core/mayeutica-motor.js)
     const orden = barajar(q.opciones, q.id), buena = orden.findIndex(o => o.ok), mala = orden.findIndex(o => !o.ok);
     if (foto1) { await p.evaluate(() => document.getElementById('agv-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
@@ -223,7 +223,8 @@ for (const j of [0, 1]) await contestar(TER.pasos[j].pregunta, false, null, fals
   const q = TER.pasos[2].pregunta;
   const antes = await p.evaluate(() => document.getElementById('agv-preg').textContent);
   ok(/Decide tú, sin pistas/.test(antes) && !/Tabla 15\.4/.test(antes.split('Decide tú')[1] || ''), 'P3: el enunciado no da pistas');
-  await pulsar('#agv-preg [data-accion="ops"]');
+  // `sinPensar`: sin la compuerta «Piénsalo antes»; las opciones ya están ahí (las demás preguntas, con compuerta, siguen igual: ver el resto de la prueba)
+  ok(q.sinPensar === true && await p.evaluate(() => !document.querySelector('#agv-preg [data-accion="ops"]') && document.querySelectorAll('#agv-preg [data-op]').length >= 3 && !/Piénsalo antes/.test(document.getElementById('agv-preg').textContent)), 'P3 con sinPensar: opciones a la vista, sin «Piénsalo antes»');
   const orden = barajar(q.opciones, q.id);
   await pulsar(`#agv-preg [data-op="${orden.findIndex(o => o.consecuencia)}"]`); await p.waitForTimeout(REDUCIDO ? 30 : 300);
   const o = await p.evaluate(() => {

@@ -41,6 +41,9 @@ const ORDEN_ESPECIALIDADES = ['home', 'nefrologia', 'uciPapers', 'fisioUci', 'ca
 // index.js de especialidad — nunca inferido, para no arriesgar un
 // resultado de búsqueda que navegue a un sitio equivocado o roto.
 const PANEL_NAV = {
+    // Eco cardíaca (sección Medidas)
+    'panel-eco-medidas-tabs': { especialidad: 'eco', bloque: 'Eco cardíaca · Medidas' },
+
     // Hematología (especialidad 'home' — switcher raíz de home/index.js)
     'panel-reconocimiento-tabs': { especialidad: 'home', view: 'reconocimiento', bloque: 'Reconocimiento Temprano del Paciente Hematológico' },
     'panel-sindromes-tabs': { especialidad: 'home', view: 'sindromes', bloque: 'Síndromes Hematológicos Urgentes' },
@@ -82,6 +85,8 @@ const PANEL_NAV = {
     'panel-pif-ecg-tabs': { especialidad: 'pifCardio', view: 'ecgArritmias', bloque: 'ECG y arritmias' },
     'panel-pif-cardio-obj-tabs': { especialidad: 'pifCardio', view: 'objetivos', bloque: 'Objetivos de la rotación' },
     'panel-pif-radio-tabs': { especialidad: 'pifRadio', view: 'placa', bloque: 'Placa portátil de UCI' },
+    'panel-pif-radio-torax-tabs': { especialidad: 'pifRadio', view: 'torax', bloque: 'Tórax de UCI' },
+    'panel-pif-radio-neuro-tabs': { especialidad: 'pifRadio', view: 'neuro', bloque: 'Neuro urgente' },
 
     // Libros
     'panel-marino-fund-tabs': { especialidad: 'libros', view: 'marinoFundamentos', bloque: 'Marino · Fundamentos (caps. 1-11)' },

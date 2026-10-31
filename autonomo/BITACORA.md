@@ -262,6 +262,7 @@ esta sección.
   `eco-3d-lectura` (≈3 M, carril 2, tras `mv-eco-2a5`; tablero, tarea 15).
 
 ### B-050 · La gran reforma: terminar la app · apuntado 2026-10-30
+- **30/10: aprobada como «plan de 2 semanas»** (actas 13.ª y 14.ª): meta 13/11, sin techos de dinero (límite semanal), Educación elige maquetas, bloques solapados, recortes de Hacienda; 6a y 6b siempre con su modelo vivo (desempate a favor de Educación). Queda pendiente solo el trozo (7) (ACOD y lazos P-V). La fase B del atlas entra si cabe, la semana siguiente.
 - **Lo que dijiste**: «un plan general de la gran reforma para terminar la aplicación ya, de modo que solo queden El
   Libro Azul y cuatro cosas menores. Decid qué falta para llegar ahí y en qué fecha».
 - **Cómo lo entiendo**: tipo `plan`, hecho por el Consejo 12.ª (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP,
@@ -298,10 +299,47 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30
+- **31/10, cambia**: el usuario rechaza las maquetas dibujadas («imágenes de coña que no tienen nada que ver con la realidad; te he pasado mil recursos para poder usar imágenes reales»). Fallo de la bitácora: «dibujadas por la app» era un «(supongo)» que no se le preguntó. Elige la **B**: parar el motor dibujado; imágenes reales de los PDF de `docs/` ya, y Radiopaedia cuando abra la red (`radiopaedia.org`, `prod-images-static.radiopaedia.org`) y se verifique su licencia. Tarea `radio-real` en el tablero (Objetivo L, 6d). **Lección**: en un encargo de imagen médica, «dibujada o real» es duda de las 5, nunca un «(supongo)». · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
+- **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
+  recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
+  radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
+- **Cómo lo entiendo** (dos trozos):
+  - **B-051a · Motor de estudio** · tipo: modelo vivo (maqueta primero). Una Rx de tórax y una TC (tórax y cráneo)
+    **dibujadas por la app** (supongo: SVG/canvas propio, como el motor de la eco), con mandos que ponen y quitan
+    patologías: neumotórax (también en supino), derrame, edema cardiogénico frente a SDRA, consolidación y atelectasia,
+    tubo y vía mal puestos, hematoma epidural/subdural, hemorragia, signos precoces de ictus, HTIC y hernias. Para
+    qué: ver cómo cambia la imagen y por qué, y practicar «lee esta placa» con casos que se generan. Modelo «así sí»:
+    el motor de la eco (`js/modules/eco/motor.mjs`) y «Lee esta placa» (PR #42). Se engancha a los cuadernos Tórax de
+    UCI y Neuro urgente (PR #62) y a la placa de UCI. Fuentes: las cifras, de los PDF de `docs/` (Marino, Libro Azul,
+    Manual UMI) y StatPearls ya verificado en `radio-fichas`; las webs que mandaste (Radiology Assistant, NavRad, los 6
+    informes de radiología) **solo como ideas**: sin licencia para copiar textos, imágenes ni contornos. Primer paso:
+    informe-propuesta con 2-3 maquetas para que elijas (supongo, ≈3-4 M); construir, después y por trozos.
+  - **31/10, decidido (B-051b)**: el usuario quería un servidor para NV-Reason-CT con TC públicas y de sus pacientes, pero tiene un portátil sin tarjeta gráfica y no quiere pagar alquiler → **servidor descartado**; la regla «sin backend» sigue igual. **TC de pacientes: no** (recomendación de la bitácora: RGPD y el modelo no es producto sanitario; en el hospital sería cosa de informática o del comité de ética). Aprobada la versión sin servidor con TC públicas: tarea `ia-tc-publica` (Objetivo L, 6e). Espera a que abra `zenodo.org` y `huggingface.co`, y que ejecute él el cuaderno de Colab.
+  - **B-051b · Estudio del análisis de imágenes** · tipo: informe (sin construir). Qué haría falta para subir una TC
+    o una placa de un paciente y que la app la analice: servidor e IA (qué modelos existen, qué leen y qué no; NV-Reason
+    ya dijo que no lee cráneo ni placa simple y que no es producto sanitario), privacidad (anonimizar, dónde se procesa),
+    legalidad (RGPD, producto sanitario) y coste. **Choca hoy con dos reglas tuyas**: «sin backend» (`CLAUDE.md` §2) y
+    «ningún dato de pacientes reales» (art. 3a de la reforma). El informe solo te da lo necesario para decidir si las
+    cambias; nada se construye sin esa decisión.
+- **Lo que NO quiero**: copiar imágenes, textos o contornos de Radiology Assistant, NavRad o Radiopaedia; cifras sin
+  fuente con página; guardar imágenes de pacientes; un esquema donde la app puede tener la imagen real (las figuras de
+  Marino se quedan al lado del dibujo, REGLAS §4.8 R4).
+- **Depende de**: la PR #42 (Lee esta placa) y la PR #62 (`radio-fichas`) en `main`; para B-051b, nada.
+- **Tamaño**: grande. Trozos: (1) informe + maquetas de B-051a; (2) informe B-051b; (3) motor de Rx de tórax;
+  (4) TC de cráneo; (5) TC de tórax; (6) casos y Mayéutica.
+- **Dudas**: 1) ¿Empezamos por la Rx de tórax o por la TC de cráneo? (supongo: Rx de tórax, la que más ves en UCI).
+  2) ¿B-051b ya, o cuando el motor esté hecho? 3) Presupuesto del bloque (supongo: maquetas ≈3-4 M; el motor entero,
+  a calcular en el informe).
+- **Lista de calidad**: topes con fuente de cada mando (tamaño del neumotórax, derrame, desviación de línea media): a
+  fijar en el informe · cifra que debe salir en cada forma: en el informe · «lo que NO quiero»: sí · fuentes con
+  página: `docs/` + StatPearls por sección · juez: `--modelo` y prueba propia al construir; el informe, el profesor.
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| `motor-radio` | **B-051a · Motor de radiología de estudio** (Rx y TC dibujadas con patologías); primer trozo, informe + 2-3 maquetas | aprobado por ti el 30/10 («haz ahora el B-051a») | 2026-10-30 | ≈3-4 M el primer trozo; B-051b (análisis de imágenes de pacientes) sigue apuntada |
 | `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
 | `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
 | `rea-cierre` | **B-046 · Ingeniería inversa de todas las webs**: lo que falta y la página «Todo lo estudiado» | **hecha (30/10)**: PR #40 en `main` (Consejo 12.ª), 58 recursos con destino, https://claude.ai/artifact/L9ACnf5rSyMPyow9KYLTVM | 2026-10-30 | ≈3-4 M. Las 3 webs cerradas, descartadas por escrito si no las abres (supongo) |
@@ -339,7 +377,7 @@ esta sección.
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
 | `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
-| `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
+| `pulmon-respirador` → `b3d` | **B-013 · Pulmón con respirador** | **en curso** en `auto/b3d` (aprobado de nuevo el 31/10) | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: cuatro hechas y en main (25-27/10); `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | hecha (27/10, PR #33): R1-R9 aprobadas y en `REGLAS.md` §4.8; R1 automático, tarea `jueces-movil` | 2026-10-25 | «apruebo todas las propuestas de regla de R1 a R9» (27/10) |
@@ -368,10 +406,15 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
+
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
-1. **Semiología**: abrir `www.ncbi.nlm.nih.gov` en la red del entorno (StatPearls y Walker, gratis; recomendado) o subir
-   el capítulo cardiovascular de Surós o Bates. Una IA no puede ser la fuente (acta 10.ª); tu repositorio
-   `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de fuente (no tiene páginas).
+1. **Semiología** (31/10): `www.ncbi.nlm.nih.gov` ya abre, pero el libro de Walker (*Clinical Methods*,
+   https://www.ncbi.nlm.nih.gov/books/NBK201/) pone un reCAPTCHA antes del texto y la API oficial solo da fichas: no se
+   salta. **Hace falta tu PDF**: el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica* (el que usaste en la
+   app del Negrín; recomendado), o los capítulos de exploración cardiovascular de Walker guardados desde tu móvil. Una IA
+   no puede ser la fuente (acta 10.ª); tu repositorio `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de
+   fuente (no tiene páginas). Con el PDF en `docs/`, el Congreso lo monta (objetivo «Historia clínica» del PIF).
 2. **Ritmo tras el 02/11**: seguir con vía libre hasta el 22/11 (recomendado) o volver al 18 % el 03/11.
 3. **Techo de la gran reforma** (B-050): ≈165-230 M aparte de Marino.
 4. **`b4`**: maqueta de «iones vivos» (≈+8 M, recomendado) o directo.
@@ -402,6 +445,8 @@ en `docs/historial/bitacora.md`. Aquí queda solo lo que de verdad espera de ti.
 su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`) · Wiggers (aprobado, `wiggers-movil`).
 
 ## 4. Mejoras de lo que ya existe
+
+- **Iones vivos (PR #65, fusionada el 31/10; acta `autonomo/consejo/2026-10-31-pr65.md`)**: Mayéutica sobre el motor común, mirada C «A pie de cama» y capa A «La célula por dentro» (sesión aparte); aviso de hiperK plegable y el dock que crece 31 px tras «Dar 90 mg»; móvil §7.7 de 9,3 a 9,5; `verFrase` con dos fotogramas en la rama `haz`; cotejar `PAG_FICHA` con el PDF; estados `hipok` y `hiperk-1..4` en el ritmo vivo con el ECG de hipoK, Mg y Ca. Propuestas de regla: choques de rótulos en los SVG en `jueces-movil.mjs`; `jueces.mjs --maqueta` con la prueba propia.
 
 - **Visto de paso (29-30/10, `b3-paso4` g3-g4 y `eco-reforma`)** · ✅ aprobado el 30/10 (`mejoras-30-10`, `mv-eco`, `b3-pulmon-app`, `b3-cierre`):
   - Shock vivo: cambiar de paciente tarda 1-3 s (asienta 30 latidos) y el juez del móvil lo da por «mando no tocable»;
@@ -518,6 +563,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · Pieza de física del motor: presupuesto de «estado nuevo con barrido» y profesor al acabar la pieza** (propuesto 2026-10-31 por /ahorro) · Visto en: `mv-eco-2a` (P4 cola del latido 0,4 → 1,4 M, recalibró 5 formas) y `mv-eco-2b` (P1 e′ 0,9 → 1,4 M en 2 encargos; P6 shock 0,35 → 2,4 M en 3 vueltas: cumplió sus cifras pero cambió la enfermedad y solo lo vio el profesor al final) · Cambio: cada pieza que toca la física del motor o la escala g de un escenario se presupuesta a 1,2 M (no 0,4-0,9), su encargo lleva un programa corto que comprueba antes que los objetivos caben juntos en el motor, y el profesor (juicio rápido, 0,1 M) mira esa pieza antes de pasar a la siguiente · Ahorro esperado: ≈1-1,5 M por paso de motor (vueltas evitadas), y presupuestos que no se desvían +70-90 %.
 - **✅ 30/10 (noche): aprobadas las 4 de Hacienda que quedaban** («quedan todas aprobadas») → `reglas-reforma`. Confirmado otra vez en el Congreso («acepto TODAS las propuestas pendientes de Hacienda»): ya estaban en REGLAS §4.14-§4.15; no queda ninguna propuesta de Hacienda pendiente.
 
 - **Ahorro · Tareas técnicas del director: presupuesto con su pasada de jueces y una ruta de apertura** (propuesto 2026-10-30 por /ahorro) · Visto en: `reglas-30-10` (0,79 M frente a 0,3 M, +165 %) y `formula-juez` (≈0,95 M frente a 0,8 M, +19 %): en las dos se fue en buscar dónde estaba cada pieza (el origen de cada regla; cómo se abre cada modelo) y en las pasadas largas de jueces · Cambio: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M fijos por la pasada de jueces más 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (parte de origen, o «especialidad → ficha → Visual» de cada modelo) · Ahorro esperado: ≈0,2-0,3 M por tarea técnica (menos búsqueda) y presupuestos que ya no se pasan.
@@ -537,6 +583,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 - **Ahorro · Medir el gasto tras las piezas, antes del Estudiar** (propuesto 2026-10-30 por /ahorro) · Visto en: b3-paso4 g2 (+29 %, medido al final) y g5 (+30 %, 11,7 M frente a 9,0, medido al final); en g3a se midió a mitad y se compareció a tiempo · Cambio: el director pasa `gasto.mjs --clave` al terminar las piezas y antes de lanzar el Estudiar, y comparece ahí si va a pasar del 25 % · Ahorro esperado: no baja tokens por sí solo, pero deja al usuario decidir antes de gastar ≈2-3 M de más por grupo.
 - **Ahorro · Hacienda no junta piezas con prueba propia en un encargo** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a («estados», 3 en uno: 73 pasos, 2,9 M frente a 1,0) y g5 (5b+5c juntos por recorte de Hacienda: 80 pasos, 1,5 M frente a 0,9) · Cambio: en el modo presupuesto, Hacienda solo une piezas que no llevan prueba ni jueces propios; las que sí, un encargo cada una · Ahorro esperado: ≈0,5 M por grupo (menos esperas a jueces largos dentro de un mismo encargo).
 - **Ahorro · Director del paso 4 a 1,3 M** (propuesto 2026-10-30 por /ahorro) · Visto en: g3a 1,1 · g3b 1,3 · g4 1,9 · g5 1,3 M frente a 0,8-0,9 · Cambio: el presupuesto del director de un grupo con piezas + Estudiar pasa a 1,3 M en «Presupuestos vigentes» (o, si se quiere bajar, partir piezas y Estudiar en dos sesiones) · Ahorro esperado: ninguno directo; presupuestos realistas que evitan comparecer por el director.
+- **Ahorro · Continuar al mismo constructor solo si el primer encargo acabó en ≤30 pasos** (propuesto 2026-10-31 por /ahorro) · Visto en: `educacion-app` río (constructor continuado para E2 y dos vueltas: 72 pasos, 2,3 M frente a 1,4; +40 %) y `educacion-app` parte 3 (B1 33 pasos → B2 continuado hasta 78: 2,1 M frente a 1,6; +31 %); en el motor (E1+E2, 1,1 M frente a 1,8) sí ahorró porque el primero fue corto · Cambio: REGLAS §4.8 R5: el segundo encargo va al mismo constructor solo si el primero acabó en ≤30 pasos; si no, constructor sonnet nuevo con el informe del primero · Ahorro esperado: ≈0,5 M por tarea con dos encargos encadenados.
 
 ## 6. Hecho (últimos 7 días)
 
@@ -636,3 +683,5 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
   (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
   (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
   no cambió.
+
+- **30/10 · Mejoras del bloque 3 que dejó el Consejo 11.ª** (condición de Justicia al fusionar la PR #51; sin aprobar): piezas de los grupos 2-5 que el profesor puntuó entre 8 y 8,75 con la regla vieja (g2 2b/2c; g3 iam-vd, septo 7,75, fármacos, soporte, papilar; g4 f14 8,1, f13, ic-cpap; g5 SCA-diagnóstico, tabique, antiagregantes/lisis, disección): un rejuicio corto por grupo (R8) y lo que el profesor dijo que las subiría, ≈0,4-0,6 M por grupo. También: `js/modules/eco/pruebas/atlas.test.mjs` falla en `main` por el cap. 16 del atlas sin figura (sesiones `atlas-texto`).

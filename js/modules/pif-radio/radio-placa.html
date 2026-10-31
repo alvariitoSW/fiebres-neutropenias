@@ -71,6 +71,51 @@
                 </div>
             </div>
         </div>
+        <div class="field-card" data-tab="radio-f5">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 5</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><ellipse cx="40" cy="28" rx="22" ry="20" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M40,10 v36" fill="none" stroke="var(--accent-purple)" stroke-width="2" stroke-dasharray="3 3"/><path d="M30,26 q4,-6 8,0 q-4,6 -8,0" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">TC de cráneo en 5 preguntas</div>
+                    <div class="field-hook">Sangre, efecto de masa, cisternas, hipodensidad: el orden para leer una TC sin contraste de guardia.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">¿Hay sangre? ¿Empuja la línea media? ¿Están abiertas las cisternas? Si no hay sangre: ¿hipodensidad?</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="radio-f6">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 6</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><circle cx="40" cy="28" r="14" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M40,8 v8 M40,40 v8 M20,28 h8 M52,28 h8" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Lee esta placa</div>
+                    <div class="field-hook">Toca dónde crees que está la punta, elige tu lectura y compruébala con el libro.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Primero decides tú; después ves el punto real y la frase del libro con su página.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
+        <div class="field-card" data-tab="radio-f7">
+            <div class="field-card-inner">
+                <div class="card-face front">
+                    <div class="washi"></div>
+                    <div class="plate-label">Ficha 7</div>
+                    <svg class="field-illust" viewBox="0 0 80 56"><path d="M16,38 q0,-18 24,-18 q24,0 24,18" fill="none" stroke="var(--accent-purple)" stroke-width="2"/><path d="M24,40 h32" fill="none" stroke="var(--accent-purple)" stroke-width="2"/></svg>
+                    <div class="field-name">Abdomen: lee la imagen</div>
+                    <div class="field-hook">Megacolon, aire libre, páncreas y absceso: toca la zona y busca el error.</div>
+                </div>
+                <div class="card-face back">
+                    <div class="back-hook">Seis imágenes del libro, cada rótulo con su página.</div>
+                    <div class="back-cta">Ver contenido completo →</div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="panel-pif-radio-tabs">
 
@@ -138,5 +183,46 @@
                 <div class="result-box" id="radio-sonda-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
                 <button class="siguiente-ficha-btn" id="radio-sonda-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
             </div>
+        </div>
+
+        <div id="radio-f5" class="tab-content">
+            <h3 style="color: var(--accent-purple);">TC de cráneo en 5 preguntas</h3>
+            <div class="card" id="radio-f5-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> en una TC sin contraste, mira <span class="hl-rojo">primero si hay sangre (hiperdensa)</span>; si la hay, <span class="hl-rojo">si empuja la línea media o aplasta las cisternas</span>. Sin sangre, busca <span class="hl-azul">una zona hipodensa</span>. Responde Sí o No según lo que ves.</p>
+                <p class="fuente-ficha" id="radio-f5-cifras" style="margin:8px 0 0;">Cifras: línea media desviada más de 5 mm, factor de mal pronóstico (Manual UMI, <a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=27" target="_blank" rel="noopener">pág. 27</a>); Marshall III, cisternas ausentes, HTIC en el 63,2% (<a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">pág. 42</a>); TAS ≤140 mm Hg en la hemorragia subaracnoidea (Marino, cap. 47, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=47" target="_blank" rel="noopener">pág. 47</a>).</p>
+            </div>
+            <div class="article-figure" id="radio-f5-fig" data-rotulos="fig-47-3">
+                <img src="js/modules/libros/img/mar-fig47-3-hematoma.jpg" alt="TC sin contraste con un gran hematoma hiperdenso que ocupa casi la mitad del hemisferio derecho y entra en los ventrículos" loading="lazy">
+                <div class="article-figure-caption">Hematoma intracerebral hiperdenso que ocupa la mitad del hemisferio derecho y se extiende a los ventrículos. Marino, <em>The ICU Book</em>, fig. 47.3, <a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=43" target="_blank" rel="noopener">pág. 43</a>. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="mn-hic" data-resaltar="#mar-img-47-3">🔗 Ver en el texto: Hemorragia intracerebral →</button></div>
+            </div>
+            <p class="fuente-ficha" id="radio-f5-fuente">Fuentes: Marino, <em>The ICU Book</em>, cap. 47 (<a class="biblio-link" href="docs/marino-2024-neurologia-caps45-47.pdf#page=39" target="_blank" rel="noopener">pág. 39</a>); <em>El Libro Azul</em>, sección VIII (<a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=51" target="_blank" rel="noopener">pág. 51</a>); Manual de orientación de la UMI (<a class="biblio-link" href="docs/hugcdn-umi-manual-guardia-parte2.pdf#page=42" target="_blank" rel="noopener">pág. 42</a>). Es un orden de lectura de esta app; cada final cita lo que dicen las fuentes.</p>
+            <div class="card" id="radio-craneo-wizard" style="padding:14px 16px;">
+                <div id="radio-craneo-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
+                <div id="radio-craneo-botones" style="display:flex; gap:10px;"></div>
+                <div class="result-box" id="radio-craneo-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
+                <button class="siguiente-ficha-btn" id="radio-craneo-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
+            </div>
+            <p class="fuente-ficha" id="radio-f5-limites">Lo que las fuentes de la app no cubren, y por eso no está en el árbol: distinguir un hematoma epidural (lenticular) de un subdural (en semiluna), y qué hacer ante una TC normal en las primeras horas de un ictus.</p>
+            <details class="nota-plegable" id="radio-f5-ia">
+                <summary>🤖 ¿Qué no puede ver esta IA? Piensa y destapa</summary>
+                <p style="font-size:0.88rem;">Existe un modelo de código abierto de NVIDIA, NV-Reason-CT, que lee un TC 3D y responde con texto. Antes de abrirlo, piensa: ¿le pasarías la TC de esta ficha? ¿Y la placa portátil de las fichas 2 a 4?</p>
+                <p style="font-size:0.88rem;"><strong>No.</strong> Su lista de hallazgos es de <strong>tórax y abdomen</strong>: no incluye la TC de cráneo (ni hemorragia, ni hipertensión intracraneal, ni herniación). Tampoco lee <strong>radiografía simple</strong>: solo TC 3D. Y de los dispositivos solo detecta que hay «material médico»; <strong>no dice si la punta está bien colocada</strong> (esto último está deducido de su lista de hallazgos, no lo afirma el repositorio). Es un modelo de investigación, «no un producto sanitario» y sus respuestas deben revisarse. Fuente: <a class="biblio-link" href="https://github.com/NVIDIA-Medtech/NV-Reason-CT" target="_blank" rel="noopener">NV-Reason-CT, NVIDIA-Medtech (GitHub)</a>.</p>
+            </details>
+        </div>
+        <div id="radio-f6" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Lee esta placa</h3>
+            <div class="card" id="radio-f6-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> mira la placa y decide <span class="hl-azul">antes de ver la respuesta</span>. Con la cabeza en posición neutra, el tubo va <span class="hl-verde">3 a 5 cm por encima de la carina</span>; la vía, <span class="hl-verde">en la cava superior, a la altura de la carina o algo por encima</span>. Después, los fallos: tubo en el bronquio derecho, catéter contra la cava y sonda en el pulmón.</p>
+                <p class="fuente-ficha" id="radio-f6-cifras" style="margin:8px 0 0;">Cifras: 3-5 cm sobre la carina; carina en T4-T5 si no se ve (Marino, cap. 28, <a class="biblio-link" href="docs/marino-2024-respiratory-management-caps27-30.pdf#page=18" target="_blank" rel="noopener">pág. 18</a>); punta a la altura de la carina (cap. 2, <a class="biblio-link" href="docs/marino-2024-acceso-vascular-practicas-caps1-4.pdf#page=36" target="_blank" rel="noopener">pág. 36</a>).</p>
+            </div>
+            <div id="radio-f6-ejercicios" style="margin-top:12px;"></div>
+        </div>
+        <div id="radio-f7" class="tab-content">
+            <h3 style="color: var(--accent-purple);">Abdomen: lee la imagen</h3>
+            <div class="card" id="radio-f7-idea" style="padding:12px 14px;">
+                <p style="margin:0; font-size:0.9rem;"><strong>La idea:</strong> en el abdomen la imagen decide: <span class="hl-rojo">aire libre bajo el diafragma</span> es perforación hasta que se demuestre otra cosa; el páncreas que <span class="hl-azul">no realza</span> con contraste es necrosis.</p>
+                <p class="fuente-ficha" id="radio-f7-cifras" style="margin:8px 0 0;">Cifras: sensibilidad de hasta el 85% del aire bajo el diafragma (Marino, cap. 41, <a class="biblio-link" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=31" target="_blank" rel="noopener">pág. 31</a>); drenaje guiado por TC con éxito en el 90-95% de los abscesos (<a class="biblio-link" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=35" target="_blank" rel="noopener">pág. 35</a>).</p>
+            </div>
+            <div id="radio-f7-ejercicios" style="margin-top:12px;"></div>
         </div>
     </div>

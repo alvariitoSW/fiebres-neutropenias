@@ -50,7 +50,8 @@ const SUCCION_VEN = [0.3, 2.2];                    // mmHg de las venas entre lo
 // la PCP y no al edema ya formado: la PaO₂ cae PAO2_PCP mmHg por cada mmHg de PCP sobre P_EDEMA (ver perfusion)
 const P_EDEMA = 18, K_EDEMA = 0.5;
 const PAO2_PCP = 10;                             // mmHg de PaO₂ por mmHg de PCP sobre P_EDEMA (ilustrativo)
-const TEP_CAP = 0.85;                           // la arteria pulmonar del TEP a fondo, un 20 % de distensible (ilustrativo)
+// (TEP_CAP 0,85 retirado: desde el commit 1b7c570 el motor ya baja cAp ÷ R^0,9 con el TEP; descontarle otro 85 % dejaba cAp en 0,11 mL/mmHg
+// y el integrador daba NaN al 90-100 % → AD/AI/VD/VI sin posición en el corte)
 const HEM_SIMPATICO = 0.35;
 // Las bombas de flujo continuo (centrífuga del ECMO, microaxial del Impella) dan menos flujo cuanta más presión tienen que
 // vencer (física de la bomba; la curva de cada aparato no está en la fuente): desde POSCARGA_DESDE mmHg en la aorta el flujo
@@ -66,9 +67,8 @@ export const ESCENARIOS_EXTRA = {
   // Tabla 15.1 (solo flechas, cap. 15, p. 22; las cifras de FC son ilustrativas) es más de lo que da el barorreflejo del
   // motor solo (FC 110 con un 35 % perdido). Ilustrativo: la dirección es de la tabla
   hemorragia: { ...ESCENARIOS.hemorragia, aplicar: (m, g = 0.5) => { ESCENARIOS.hemorragia.aplicar(m, g); m.p.fc = BASE.fc * (1 + HEM_SIMPATICO * g); } },
-  // el TEP del motor, con la arteria pulmonar menos distensible cuanto más resistencia (el producto resistencia × distensibilidad
-  // del lecho pulmonar se mantiene: fisiología general): así la pulmonar late (≈45/20 a fondo) en vez de 40/33. Ilustrativo
-  tep: { ...ESCENARIOS.tep, aplicar: (m, g) => { ESCENARIOS.tep.aplicar(m, g); m.p.cAp *= 1 - TEP_CAP * g; m.p.rigAp += 20 * g; } },
+  // el TEP del motor (que ya baja la distensibilidad pulmonar con la resistencia) y la rigidez de la pulmonar a la presión alta. Ilustrativo
+  tep: { ...ESCENARIOS.tep, aplicar: (m, g) => { ESCENARIOS.tep.aplicar(m, g); m.p.rigAp += 20 * g; } },
   sepsis: {
     nombre: 'Shock séptico', tipo: 'vasodilatador',
     // vasodilatación «de arterias y venas» (Marino, cap. 14, p. 4) y fuga capilar con hipovolemia (cap. 17, p. 57-58,

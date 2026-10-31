@@ -16,6 +16,7 @@
 // js/modules/libros/capilar-vivo-escena.js y la interfaz en capilar-vivo.js.
 
 import { HEMODERIVADOS } from './hemoderivados-data.js';
+import { CASO_CARMEN } from './capilar-vivo-caso-carmen.js';
 
 export const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 export const lerp = (a, b, t) => a + (b - a) * t;
@@ -182,6 +183,8 @@ export function estadoFinal(clave) {
     return Object.assign(e0, { hb: s.transfundir, gcFijo: gastoDe(e0), transf: { de: s.p.hb, a: s.transfundir } });
 }
 // Los que salen como chips en «Ir a un estado» (dual y capno-normal se abren desde sus fichas).
+export { CARMEN, CARMEN_UMBRAL, CARMEN_TACO, CARMEN_TACO_CONSTANTES } from './capilar-vivo-caso-carmen.js';
+
 export const ESTADOS_CHIPS = Object.keys(ESTADOS).filter(k => k !== 'dual' && k !== 'capno-normal');
 export const GRUPOS_CHIPS = [['o2', 'El oxígeno: del pulmón a la mitocondria'], ['anemia', 'Anemia y transfusión'], ['ros', 'El neutrófilo y las ROS']];
 
@@ -755,6 +758,7 @@ export const CASOS = [
             'Capnograma plano tras intubar: esófago hasta que se demuestre lo contrario; auscultar no basta (1 de cada 18).',
             'Con el tubo bien puesto, sin CO₂ puede ser una parada; ≤10 mmHg tras 20 min de RCP: improbable recuperar la circulación.'],
         volver: { nombre: 'Capnografía: el CO₂ que se espira', ficha: 'mar-capnografia', estado: 'capno-rcp' } },
+    CASO_CARMEN,
 ];
 
 /* ============================================================
