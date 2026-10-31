@@ -178,7 +178,7 @@ export function montarSimulador(raiz, opc = {}) {
     else return;
     emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoPendiente = true;
   }
-  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: ilustrativo y fisiología general.
+  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: la regla de cada mando (ganancia, profundidad, foco), ficha: POCUS I cap. 2, Tamagnone et al., docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9 (impresa 41); las cifras (dB, cm), TGC y artefactos, ilustrativo y fisiología general.
   const img = { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null, ventana: false, senal: null };
   const FRASES_SENAL = {
     sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
