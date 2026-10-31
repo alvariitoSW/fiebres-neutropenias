@@ -211,9 +211,10 @@ for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia'
 const scai = async () => p.evaluate(() => document.getElementById('shv-scai-r').textContent.replace(/^SCAI · (\w).*/, '$1'));
 const ajus = o => p.evaluate(o => { const a = window.__shvPruebas(); a.trabajar(() => a.cab.ajustar(o)); }, o);   // como el clic real: repinta también con «reducir movimiento»
 const horas5 = async () => { await pest('reloj'); await p.evaluate(() => document.querySelector('[data-h="5"]')?.click()); await espera(700); };
-{ const T = [['aurelio', 0, {}, 'A'], ['aurelio', 100, {}, 'C'], ['aurelio', 100, { na: 5, dobuta: true, soporte: 'ecmo' }, 'E'], ['amparo', 100, {}, 'C'], ['fermin', 0, {}, 'A'], ['fermin', 100, {}, 'C'], ['aurelio', 0, { dobuta: true }, 'C']];
+{ const T = [['aurelio', 0, {}, 'A'], ['aurelio', 100, {}, 'C'], ['aurelio', 100, { na: 5, dobuta: true, soporte: 'ecmo' }, 'D'], ['amparo', 100, {}, 'C'], ['fermin', 0, {}, 'A'], ['fermin', 100, {}, 'C'], ['aurelio', 0, { dobuta: true }, 'C']];
   for (const [k, g, a, esperada] of T) { await pac(k); await pest('grav'); await grav(g); await ajus({ na: 0, vaso: false, dobuta: false, soporte: 'no', venteo: 'no' }); await ajus(a); for (let i = 0; i < 12 && await scai() !== esperada; i++) await p.waitForTimeout(500);   // espera a que el bucle repinte el rótulo (con la máquina cargada tarda más)
     ok(await scai() === esperada, `SCAI ${k} g${g} ${JSON.stringify(a)} → ${esperada} (da ${await scai()})`); }
+  await pac('aurelio'); await pest('grav'); await grav(100); await ajus({ na: 5, dobuta: true, soporte: 'ecmo' }); await horas5(); ok(await scai() === 'E', 'SCAI aurelio con noradrenalina + dobutamina + ECMO y +5 h (lactato persiste) → E');
   await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 8 }); await horas5(); ok(await scai() === 'D', 'SCAI amparo con noradrenalina y +5 h (lactato persiste) → D');
   await pac('amparo'); await pest('grav'); await grav(100); await ajus({ na: 0 }); await grav(70); await espera(400);
   const rb = await S(); const lb = await p.evaluate(() => window.__shvPruebas().est.lab.lact); ok((await scai()) === (rb.pam < 65 && lb <= 2 ? 'B' : lb > 2 ? 'C' : 'A'), `SCAI amparo g70 (PAM ${rb.pam}, lactato ${lb}): coherente con la regla`);
