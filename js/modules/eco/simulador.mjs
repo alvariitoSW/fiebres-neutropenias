@@ -813,7 +813,7 @@ export function montarSimulador(raiz, opc = {}) {
         ...(VISTAS[vistaEco].ventana === 'subcostal' ? [['VCI', puntoVci(-25)]] : []),
         ...(VISTAS[vistaEco].ventana === 'supraesternal' ? [['Arco', T([0, -14, 75])], ['APD', T([-12, -15, 56])]] : [])];
       for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
-        if ((n === 'VI' && s.vvi < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
+        if ((n === 'VI' && (nuevo ? (motor.ultimo?.edv ?? s.vvi) : s.vvi) < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
         rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.4)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
@@ -898,7 +898,7 @@ export function montarSimulador(raiz, opc = {}) {
     if (['hemorragia', 'derrame', 'vasoplejia'].includes(escenario)) {   // pseudohipertrofia (decisión del usuario, 31/10/2026): pared gruesa, masa sin cambios
       const md = medidasDe(motor), gruesa = Math.max(md.paredPost, md.tabique) > 10;
       caja.hidden = !gruesa;
-      caja.innerHTML = gruesa ? `<p class="cv-criterio"><span class="cv-criterio-txt">Pared del VI gruesa con la cavidad vacía: pseudohipertrofia (la masa no cambia; signo de hipovolemia).<br><span class="cv-muted">Pared de ${f1(Math.max(md.paredPost, md.tabique))} mm. Fuente: <a class="biblio-link" href="https://link.springer.com/doi/10.1186/s13054-015-0980-z" target="_blank" rel="noopener">Crit Care 2015</a> (pseudohipertrofia = pared ≥12 mm con masa normal). Origen: fisiología general.</span></span></p>` : '';
+      caja.innerHTML = gruesa ? `<p class="cv-criterio"><span class="cv-criterio-txt">Pared del VI gruesa con la cavidad vacía: pseudohipertrofia (la masa no cambia; signo de hipovolemia).<br><span class="cv-muted">Pared de ${f1(Math.max(md.paredPost, md.tabique))} mm. Fuente: <a class="biblio-link" href="https://link.springer.com/doi/10.1186/s13054-015-0980-z" target="_blank" rel="noopener">Crit Care 2015</a> (pseudohipertrofia = pared ≥12 mm con masa normal). Origen: artículo citado.</span></span></p>` : '';
       return;
     }
     if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }

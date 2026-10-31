@@ -1020,8 +1020,8 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // ajustes.vdLargoPropio (dibujo nuevo): el largo del VD sale de su volumen, no del largo del VI. Normal: el de hoy
   // (LE_REF·lVdRel); al crecer vvd, con la raíz cúbica. Tope con fuente 83 mm (Lang 2015 Tabla 8 p. 20: 71 ± 6, 2 DE); más allá,
   // sinFuente e ilustrativo, hasta 112 mm (techo de un VD de paciente posible: ápex que alcanza o pasa el del VI)
-  // Con VD/VI de volumen >1,3 el ápex del VD sube hasta el nivel del ápex del VI (Mukherjee 2025 Fig. 4B-C, p. 172: el VD dilatado
-  // comparte o forma el ápex); la transición 1,3→1,8 es ilustrativa.
+  // Con VD/VI de volumen >1,3 el ápex del VD sube hasta el nivel del ápex del VI (Mukherjee 2025 Fig. 4B-C, p. 172: «apical traction»,
+  // el ápex del VD traccionado y cámaras derechas más grandes; que alcance el ápex del VI es ilustrativo); la transición 1,3→1,8 es ilustrativa.
   const Lvd0 = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, LE_REF * REF.lVdRel * Math.cbrt(vvd / REF.vVd)) : 0;
   const Lvd = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, mix(Lvd0, Math.max(Lvd0, vi.Le), paso(1.3, 1.8, estado.vvd / estado.vvi))) : vi.Le * REF.lVdRel;
   const ventana = memo((phi) => { const f = anguloNorm(phi); if (f < REF.phiA || f > REF.phiB) return 0; const a = (f - REF.phiA) / (REF.phiB - REF.phiA);

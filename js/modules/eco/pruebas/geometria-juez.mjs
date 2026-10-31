@@ -128,7 +128,7 @@ export function medidasA4C(td, ts, dibujo = 'hoy') {
   }
   // LVEI (eje corto a la altura de los papilares, telediástole): dimensión anteroposterior / septolateral del endocardio del VI
   const Ce = contornosVista('psaxPm', td, dibujo), e = Ce.viEndo?.cad?.flatMap(c => c.ps);
-  if (e?.length) {   // LVEI = diámetro paralelo al tabique / diámetro perpendicular a él (Mukherjee 2025 p. 148; la pantalla puede estar girada)
+  if (e?.length) {   // LVEI = diámetro paralelo al tabique / diámetro perpendicular a él (Mukherjee 2025 p. 146 y 149; la pantalla puede estar girada)
     const cm = (ps) => [ps.reduce((a, p) => a + p[0], 0) / ps.length, ps.reduce((a, p) => a + p[1], 0) / ps.length];
     const vd = Ce.vdEndo?.cad?.flatMap(c => c.ps), c0 = cm(e), c1 = vd?.length ? cm(vd) : [0, -1];
     const n = Math.hypot(c1[0] - c0[0], c1[1] - c0[1]) || 1, u = [(c1[0] - c0[0]) / n, (c1[1] - c0[1]) / n];   // u = hacia el VD = perpendicular al tabique

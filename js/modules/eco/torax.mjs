@@ -2,7 +2,7 @@
 //
 // Son piezas del cuerpo, no del corazón: se colocan detrás del saco pericárdico de cada fotograma (después de que
 // la base baje, ver construirCorazon). Todo es ilustrativo: ninguna de las fuentes de la app da un diámetro ni una
-// posición (Mitchell 2019, p. 61 solo dice dónde buscar la aorta descendente: detrás de la AI en el eje largo
+// posición (anatomía general, sin página: la aorta descendente va detrás de la AI en el eje largo
 // paraesternal y en el supraesternal; las medidas son «hueco»).
 //
 // Se trabaja en coordenadas del cuerpo alrededor del eje vertical (ARRIBA): lat (+ = derecha del paciente), ant
@@ -30,7 +30,7 @@ export const aEje = (p) => [dot(p, L), dot(p, F), dot(p, ARRIBA)];
 export const deEje = (lat, ant, alt) => [L[0] * lat + F[0] * ant + ARRIBA[0] * alt, L[1] * lat + F[1] * ant + ARRIBA[1] * alt, L[2] * lat + F[2] * ant + ARRIBA[2] * alt];
 
 /** Dibujo nuevo: la aorta sube hasta el nivel de la AI (alt 30), lateral y detrás de ella, para que el A4C y el PLAX la corten donde la eco real. Ilustrativo. */
-export const TORAX_NUEVO = { latAo: -28, rAo: 11,   // ~22 mm, ilustrativo (Mitchell 2019 p. 61 sitúa la aorta descendente lateral a la AI en el A4C y detrás de ella en el PLAX; sin cifra)
+export const TORAX_NUEVO = { latAo: -28, rAo: 11,   // ~22 mm, ilustrativo (anatomía general: lateral a la AI en el A4C y detrás de ella en el PLAX; sin fuente con página)
   antAo: -28 };
 /** Medidas (mm). Todas «ilustrativo»: ninguna tiene página en las fuentes (hueco). */
 export const TORAX = {
