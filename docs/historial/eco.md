@@ -450,3 +450,10 @@ tener escalón: el defecto es el submasivo y el final del mando el masivo (Marin
 Lang del VD se miden al 100 % hasta el dibujo nuevo (el de hoy satura el VD basal en 41 mm). Lo demás del paso 2
 (e′, aceleración pulmonar, septo, regional, shock cardiogénico), en la sesión siguiente. Parte:
 `autonomo/partes/2026-10-30-mv-eco-2a.md`.
+
+**31/10/2026 · `mv-eco-2a5`, paso 2b.** El motor del corazón calcula ya su e′ (llenado precoz del VI con la precarga
+normalizada) y la E toma la onda fusionada cuando E y A se juntan: la E/e′ del TEP grave deja de ser imposible. El TEP
+acorta el tiempo de aceleración pulmonar (<105 ms, ESC/ERS 2022) al perder distensibilidad la arteria pulmonar. El
+contrato entrega el septo continuo (`septoSigno`, `septoFase`) y la contracción por segmentos (`regional`, con
+McConnell en el TEP; Marino cap. 22). El fallo del VI a fondo sigue siendo izquierdo (VI dilatado, retención). Techo
+del VD agudo y DT de la hipertrofia: huecos sin fuente. Parte: `autonomo/partes/2026-10-31-mv-eco-2b.md`.
