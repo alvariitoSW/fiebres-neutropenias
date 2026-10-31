@@ -30,7 +30,10 @@ for (const w of [390, 360]) {
   await p.locator('#rl-prueba-z-tapar').tap();
   if (await p.evaluate(() => !document.getElementById('rl-prueba-z-zt-a').hidden)) fallos.push(`${w} Tapar no oculta`);
   await p.locator('#rl-prueba-z-destapar').tap();
-  if (await p.evaluate(() => document.querySelectorAll('#rl-prueba-z [id*="-zt-"]:not([hidden])').length) !== 2) fallos.push(`${w} Destapar todo`);
+  const dt = await p.evaluate(() => ({ rot: document.querySelectorAll('#rl-prueba-z [id*="-zt-"]:not([hidden])').length, marcos: document.querySelectorAll('#rl-prueba-z .radio-zona:not([hidden])').length, lista: document.querySelectorAll('#rl-prueba-z-lista li').length, listaVisible: !document.getElementById('rl-prueba-z-lista').hidden }));
+  if (dt.rot !== 0 || dt.marcos !== 2 || dt.lista !== 2 || !dt.listaVisible) fallos.push(`${w} Destapar todo: marcos numerados y lista, sin rótulos sobre la imagen ${JSON.stringify(dt)}`);
+  await p.touchscreen.tap(bb.x + bb.width * .5, bb.y + bb.height * .25);
+  if (await p.evaluate(() => document.getElementById('rl-prueba-z-zt-a').hidden)) fallos.push(`${w} tras Destapar todo, tocar una zona no saca su rótulo`);
   await p.locator('#rl-prueba-z-ops button').nth(1).tap(); await p.waitForTimeout(100);
   const e = await p.evaluate(() => ({ ok: document.getElementById('rl-prueba-z-res').dataset.ok, n: document.querySelectorAll('#rl-prueba-z-res li').length, dw: document.documentElement.scrollWidth - innerWidth }));
   if (e.ok !== 'true' || e.n !== 3 || e.dw > 0) fallos.push(`${w} error: ${JSON.stringify(e)}`);

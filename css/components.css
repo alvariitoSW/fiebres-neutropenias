@@ -5002,6 +5002,12 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .radio-zona { margin: 0; pointer-events: none; }
 .radio-zona-circ { translate: -50% -50%; }
 .radio-zona-rect { border-radius: 4px; }
+.radio-num { display: none; position: absolute; min-width: 14px; height: 14px; padding: 0 2px; box-sizing: border-box; border-radius: 7px; background: var(--bg-main); border: 1px solid var(--accent-yellow); color: var(--text-main); font-size: 0.66rem; font-weight: 700; line-height: 12px; text-align: center; }
+.radio-lee-masivo .radio-num { display: block; }
+.radio-zona-rect .radio-num { left: 1px; top: 1px; }
+.radio-zona-circ .radio-num { left: 100%; top: -9px; margin-left: 1px; }
+.radio-lee-lista { margin: 0 0 8px; padding-left: 20px; font-size: 0.82rem; line-height: 1.35; }
+.radio-lee-lista li { margin-bottom: 4px; }
 .radio-lee-cita { display: block; font-size: 0.66rem; font-weight: 400; color: var(--text-muted); }
 .radio-op-ok { border-color: var(--accent-green); }
 .radio-op-error { border-color: var(--accent-red); border-style: dashed; }

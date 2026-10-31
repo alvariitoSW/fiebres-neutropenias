@@ -24,7 +24,7 @@ function validar(ej) {
 function credito(f) {
     if (f.url) {
         const lic = f.licenciaUrl ? `<a class="biblio-link" href="${f.licenciaUrl}" target="_blank" rel="noopener">${f.licencia}</a>` : f.licencia;
-        return `<a class="biblio-link" href="${f.url}" target="_blank" rel="noopener">${f.texto}</a> · ${f.autor} · ${lic} · Wikimedia Commons`;
+        return `<a class="biblio-link" href="${f.url}" target="_blank" rel="noopener">${f.texto}</a> · ${f.autor}${f.fecha ? ', ' + f.fecha : ''} · ${lic} · ${f.sitio || (/commons\.wikimedia\.org|upload\.wikimedia\.org/.test(f.url) ? 'Wikimedia Commons' : '')}`.replace(/ · $/, '');
     }
     return `${f.texto} · <a class="biblio-link" href="${f.pdf}#page=${f.pagina}" target="_blank" rel="noopener">pág. ${f.pagina}</a>`;
 }
@@ -44,6 +44,7 @@ export function montarLectura(contenedor, ej) {
         <p class="fuente-ficha" style="margin:6px 0 2px;" id="${p}-pie">${ej.pieAntes ?? ej.pie ?? ''}</p>
         <p class="fuente-ficha" style="margin:0 0 6px;" id="${p}-credito">${credito(f)}</p>
         <p id="${p}-estado" style="font-size:0.85rem; margin:0 0 8px;" aria-live="polite"></p>
+        <ol class="radio-lee-lista" id="${p}-lista" hidden></ol>
         ${modoZonas ? `<div style="display:flex; gap:8px; margin-bottom:8px;"><button type="button" class="ecg-chip" id="${p}-destapar">Destapar todo</button><button type="button" class="ecg-chip" id="${p}-tapar" disabled>Tapar</button></div>` : ''}
         ${(q || er) ? `<p style="font-size:0.88rem; font-weight:600; margin:0 0 6px;">${(q || er).enunciado}</p>` : ''}
         <div id="${p}-ops" style="display:flex; flex-wrap:wrap; gap:8px;"></div>
@@ -58,7 +59,8 @@ export function montarLectura(contenedor, ej) {
 
     // Zonas: marco + rótulo, ocultos hasta destaparse
     const dom = {};
-    zonas.forEach(z => {
+    let masivo = false;
+    zonas.forEach((z, k) => {
         const m = document.createElement('div'); m.hidden = true; m.id = `${p}-z-${z.id}`;
         m.className = 'radio-zona fig-rot-punto' + (z.id === tq?.confunde ? ' radio-lee-extra' : '');
         if (z.forma === 'rect') { m.classList.add('radio-zona-rect'); m.style.cssText = `left:${pct(z.x)};top:${pct(z.y)};width:${pct(z.w)};height:${pct(z.h)}`; }
@@ -67,9 +69,18 @@ export function montarLectura(contenedor, ej) {
         const t = document.createElement('div'); t.hidden = true; t.id = `${p}-zt-${z.id}`; t.className = 'fig-rot-txt radio-lee-rot';
         t.style.left = pct(Math.min(cx + 4, 52)); t.style.top = pct(Math.max(cy - (z.forma === 'rect' ? 0 : 9), 6));
         t.innerHTML = `${z.rotulo}<span class="radio-lee-cita">${z.cita}</span>`;
-        caja.append(m, t); dom[z.id] = { m, t, abierta: false };
+        const nb = document.createElement('span'); nb.className = 'radio-num'; nb.textContent = k + 1; m.appendChild(nb);
+        caja.append(m, t); dom[z.id] = { m, t, abierta: false, suelta: false };
     });
-    const mostrar = (id, on = true) => { const d = dom[id]; if (!d) return; d.abierta = on; d.m.hidden = d.t.hidden = !on; };
+    const mostrar = (id, on = true) => { const d = dom[id]; if (!d) return; d.abierta = on; d.suelta = on && !masivo; d.m.hidden = !on; d.t.hidden = !d.suelta; };
+    // «Destapar todo»: la imagen solo muestra marcos numerados; los rótulos van en una lista debajo (no tapan la placa)
+    const lista = $('lista');
+    const destaparTodo = () => {
+        masivo = true; caja.classList.add('radio-lee-masivo');
+        zonas.forEach(z => mostrar(z.id));
+        lista.innerHTML = zonas.map(z => `<li>${z.rotulo}<span class="radio-lee-cita">${z.cita}</span></li>`).join(''); lista.hidden = false;
+    };
+    const taparTodo = () => { masivo = false; caja.classList.remove('radio-lee-masivo'); lista.hidden = true; lista.innerHTML = ''; zonas.forEach(z => mostrar(z.id, false)); };
     const abiertas = () => Object.values(dom).filter(d => d.abierta).length;
     const sync = () => {
         if (!modoZonas) return;
@@ -103,12 +114,13 @@ export function montarLectura(contenedor, ej) {
             marcar(toque); estado.textContent = 'Has marcado un punto. Puedes tocar otra vez para moverlo.'; listo();
         } else if (modoZonas) {
             const z = zonaEn(e.clientX - r.left, e.clientY - r.top, r);
-            if (z) { mostrar(z.id, !dom[z.id].abierta); sync(); }
+            if (z && masivo) { const d = dom[z.id]; d.suelta = !d.suelta; d.t.hidden = !d.suelta; }
+            else if (z) { mostrar(z.id, !dom[z.id].abierta); sync(); }
         }
     });
     if (modoZonas) {
-        $('destapar').addEventListener('click', () => { zonas.forEach(z => mostrar(z.id)); quitarTapas(); sync(); });
-        $('tapar').addEventListener('click', () => { zonas.forEach(z => mostrar(z.id, false)); quitarTapas(); ponerTapas(); sync(); });
+        $('destapar').addEventListener('click', () => { destaparTodo(); quitarTapas(); sync(); });
+        $('tapar').addEventListener('click', () => { taparTodo(); quitarTapas(); ponerTapas(); sync(); });
     }
 
     const lineaFuente = () => `<a class="biblio-link" href="${f.pdf}#page=${f.pagina}" target="_blank" rel="noopener">${f.corto || 'Fuente'}, pág. ${f.pagina}</a>`;
@@ -121,7 +133,7 @@ export function montarLectura(contenedor, ej) {
     const repetir = () => {
         hecho = false; toque = null; eleg = -1; res.style.display = 'none'; res.innerHTML = '';
         caja.querySelectorAll('.radio-toque').forEach(n => n.remove());
-        zonas.forEach(z => mostrar(z.id, false)); quitarTapas(); ponerTapas();
+        taparTodo(); quitarTapas(); ponerTapas();
         botones.forEach(x => { x.setAttribute('aria-pressed', 'false'); x.disabled = false; x.classList.remove('radio-op-error', 'radio-op-ok'); });
         pie.textContent = ej.pieAntes ?? ej.pie ?? ''; hint(); listo(); sync();
     };
@@ -141,7 +153,7 @@ export function montarLectura(contenedor, ej) {
 
     function corregirError(i) {
         hecho = true; if (ej.pie) pie.textContent = ej.pie;
-        zonas.forEach(z => mostrar(z.id)); quitarTapas();
+        destaparTodo(); quitarTapas();
         const elegida = er.opciones[i];
         botones.forEach((b, j) => { b.disabled = true; b.classList.add(er.opciones[j].esError ? 'radio-op-error' : 'radio-op-ok'); });
         const lista = er.opciones.map(o => `<li style="margin-bottom:4px;"><strong>${o.esError ? '✗ Aquí está el error.' : '✓ Correcta.'}</strong> «${o.texto}» ${o.explicacion}</li>`).join('');
@@ -156,7 +168,7 @@ export function montarLectura(contenedor, ej) {
     if (btn) btn.addEventListener('click', () => {
         if (btn.disabled) return;
         hecho = true; btn.disabled = true; if (ej.pie) pie.textContent = ej.pie;
-        quitarTapas(); zonas.forEach(z => mostrar(z.id));
+        quitarTapas(); destaparTodo();
         const ok = eleg === q.correcta;
         let linea = '';
         if (tq) {

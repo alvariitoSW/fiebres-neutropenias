@@ -253,16 +253,12 @@ const T3 = [
     },
 ];
 
-export const EJERCICIOS_LEE_TORAX = { 'radio-t1': T1, 'radio-t2': T2, 'radio-t3': T3 };
-
-// Pendiente de decisión del director: la imagen es de PMC (Shroff 2014, CC BY-NC-ND 3.0), pero el crédito de montarLectura
-// añade siempre «Wikimedia Commons» cuando hay url. No se monta hasta que el crédito admita otro sitio.
-export const EJERCICIO_HALO_PENDIENTE = {
+const HALO_A26 = {
     id: 'tx-halo',
     titulo: 'Signo del halo',
     consigna: 'TC de tórax de un paciente neutropénico. Toca la zona para destapar su rótulo.',
     img: 'js/modules/neutropenia-febril/img/aspergillus-signo-halo.jpg', alt: ALT + ': TC con signo del halo',
-    fuente: { texto: 'Shroff S, et al. Clin Case Rep 2014;2(3):113-114, fig. 1', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4184607/', autor: 'Shroff S, Shroff GS, Yust-Katz S, Olar A, Tummala S, Tremont-Lukats IW', licencia: 'CC BY-NC-ND 3.0', licenciaUrl: 'https://creativecommons.org/licenses/by-nc-nd/3.0/' },
+    fuente: { texto: 'Shroff S, et al. Clin Case Rep 2014;2(3):113-114, fig. 1', url: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC4184607/', autor: 'Shroff S, Shroff GS, Yust-Katz S, Olar A, Tummala S, Tremont-Lukats IW', sitio: 'PMC', licencia: 'CC BY-NC-ND 3.0', licenciaUrl: 'https://creativecommons.org/licenses/by-nc-nd/3.0/' },
     pieAntes: 'TC de tórax de un varón de 35 años con síndrome mielodisplásico y neutropenia.',
     pie: 'TC de tórax: signo del halo (opacidad nodular rodeada de un halo en vidrio deslustrado) en el pulmón derecho.',
     zonas: [{ id: 'halo', forma: 'rect', x: 3, y: 34, w: 17, h: 26, rotulo: 'Opacidad nodular rodeada de un halo en vidrio deslustrado, en el pulmón derecho', cita: 'pie de la fig. 1 de Shroff 2014' }],
@@ -275,3 +271,5 @@ export const EJERCICIO_HALO_PENDIENTE = {
         ],
     },
 };
+
+export const EJERCICIOS_LEE_TORAX = { 'radio-t1': T1, 'radio-t2': T2, 'radio-t3': [...T3, HALO_A26] };

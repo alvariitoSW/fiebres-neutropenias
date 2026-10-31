@@ -4,10 +4,10 @@ const MN = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const UMI = 'docs/hugcdn-umi-manual-guardia-parte2.pdf';
 const IMG = 'js/modules/pif-radio/img/';
 const UMI_IMG = 'js/modules/sobrevivir-umi/img/';
-const COMMONS = (archivo, autor = 'Hellerhoff') => ({
+const COMMONS = (archivo, fecha, autor = 'Hellerhoff') => ({
     texto: 'Wikimedia Commons, «' + archivo + '» (zonas y rótulos añadidos por esta app)', corto: 'Commons',
     url: 'https://commons.wikimedia.org/wiki/File:' + archivo.replace(/ /g, '_'),
-    autor, licencia: 'CC BY-SA 4.0', licenciaUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
+    autor, fecha, licencia: 'CC BY-SA 4.0', licenciaUrl: 'https://creativecommons.org/licenses/by-sa/4.0/',
 });
 const umi = (imp, texto) => ({ texto, corto: 'Manual UMI', pdf: UMI, pagina: imp - 52 });
 const op = (texto, esError, explicacion) => ({ texto, esError, explicacion });
@@ -168,25 +168,27 @@ export const EJERCICIOS_LEE_NEURO = [
     },
     {
         id: 'neuro-hsa-basal', titulo: 'Hemorragia subaracnoidea basal',
-        consigna: 'TC axial de un varón de 43 años con aneurisma de la comunicante anterior. Toca el corte donde se ve la sangre basal.',
+        consigna: 'TC axial de un varón de 43 años con aneurisma de la comunicante anterior. Toca cada corte para ver su nivel; la HSA basal es la sangre en el espacio subaracnoideo de la base (Marino, pág. 45).',
         img: IMG + 'neuro-hsa-basal.jpg', alt: 'Tres cortes axiales de TC craneal con hemorragia subaracnoidea basal',
-        fuente: COMMONS('Basale Subarachnoidalblutung bei Anterioraneurysma 43M - CT axial - 001.jpg'),
-        pieAntes: 'Tres cortes axiales de una TC sin contraste.', pie: 'Hemorragia subaracnoidea basal en un varón de 43 años con aneurisma de la comunicante anterior (título del archivo de Commons). Es la sangre en el espacio subaracnoideo tras la rotura de un aneurisma sacular (Marino, pág. 45).',
+        fuente: COMMONS('Basale Subarachnoidalblutung bei Anterioraneurysma 43M - CT axial - 001.jpg', '2022-05-02'),
+        pieAntes: 'Tres cortes axiales de una TC sin contraste.', pie: 'Hemorragia subaracnoidea basal en un varón de 43 años con aneurisma de la comunicante anterior (descripción del autor en Commons). Es la sangre en el espacio subaracnoideo tras la rotura de un aneurisma sacular (Marino, pág. 45).',
         zonas: [
-            { id: 'basal', forma: 'rect', x: 41, y: 33, w: 15, h: 18, rotulo: 'Zona basal con sangre en el espacio subaracnoideo', cita: 'título del archivo de Commons («basal») y Marino, cap. 47, pág. 45' },
+            { id: 'temporales', forma: 'rect', x: 1, y: 3, w: 31, h: 92, rotulo: 'Corte 1 (izquierda): nivel de los lóbulos temporales', cita: 'descripción del autor en Commons («left: … temporal lobes»)' },
+            { id: 'astas', forma: 'rect', x: 34, y: 3, w: 32, h: 92, rotulo: 'Corte 2 (centro): nivel de las astas temporales de los ventrículos laterales', cita: 'descripción del autor en Commons («middle: … temporal horns»)' },
+            { id: 'pineal', forma: 'rect', x: 67, y: 3, w: 32, h: 92, rotulo: 'Corte 3 (derecha): nivel de la glándula pineal', cita: 'descripción del autor en Commons («right: … pineal gland»)' },
         ],
         error: { enunciado: 'Una de estas lecturas es falsa. ¿Cuál?', opciones: [
             op('La sangre está en el espacio subaracnoideo de la base, no dentro del parénquima.', false, 'Cierto: la HSA es la sangre en el espacio subaracnoideo (Marino, pág. 45).'),
             op('La causa habitual es la rotura de un aneurisma sacular.', false, 'Cierto (Marino, pág. 45).'),
-            op('Los cortes son axiales.', false, 'Cierto: así consta en el título del archivo.'),
-            op('Es una hemorragia intraparenquimatosa por hipertensión, sin relación con un aneurisma.', true, 'Falso: el título indica un aneurisma de la comunicante anterior y Marino describe la HSA como sangre subaracnoidea por rotura de un aneurisma (pág. 45).'),
+            op('Los cortes son axiales.', false, 'Cierto: así lo dice la descripción del autor en Commons.'),
+            op('Es una hemorragia intraparenquimatosa por hipertensión, sin relación con un aneurisma.', true, 'Falso: la descripción del autor indica un aneurisma de la arteria cerebral anterior y Marino describe la HSA como sangre subaracnoidea por rotura de un aneurisma (pág. 45).'),
         ] },
     },
     {
         id: 'neuro-hsa-media', titulo: 'HSA extensa y angio-TC del aneurisma',
         consigna: 'Tres imágenes del mismo caso (varón de 63 años). Toca cada una.',
         img: IMG + 'neuro-hsa-media-cta.jpg', alt: 'TC sin contraste, angio-TC en MIP y reconstrucción en volumen de una hemorragia subaracnoidea',
-        fuente: COMMONS('Ausgedehnte Subarachnoidalblutung bei Aneurysma der Media 63M - CT nativ und CTA als MIP und VR - 001.jpg'),
+        fuente: COMMONS('Ausgedehnte Subarachnoidalblutung bei Aneurysma der Media 63M - CT nativ und CTA als MIP und VR - 001.jpg', '2022-07-08'),
         pieAntes: 'Tres imágenes de un mismo paciente.', pie: 'Hemorragia subaracnoidea extensa por aneurisma de la arteria cerebral media en un varón de 63 años: TC sin contraste, angio-TC en proyección de máxima intensidad (MIP) y reconstrucción en volumen (VR). Descripción tomada del título del archivo de Commons.',
         zonas: [
             { id: 'nativo', forma: 'rect', x: 1, y: 3, w: 31, h: 92, rotulo: 'TC sin contraste (nativa)', cita: 'título del archivo de Commons («CT nativ»)' },
@@ -202,31 +204,37 @@ export const EJERCICIOS_LEE_NEURO = [
     },
     {
         id: 'neuro-hsa-traumatica', titulo: 'Hemorragia subaracnoidea traumática',
-        consigna: 'Tres cortes de TC de una mujer de 83 años. Elige la lectura.',
+        consigna: 'Tres cortes de TC de una mujer de 83 años (axial, coronal y sagital). Toca la sangre en el axial y el coronal.',
         img: IMG + 'neuro-hsa-traumatica.jpg', alt: 'Tres cortes de TC craneal con hemorragia subaracnoidea traumática',
-        fuente: COMMONS('Subarachnoidalblutung traumatisch 83W - CT - 001.jpg'),
-        pieAntes: 'Tres cortes de TC craneal.', pie: 'Hemorragia subaracnoidea traumática en una mujer de 83 años (título del archivo de Commons). Sin aneurisma: la sangre llega al espacio subaracnoideo por el traumatismo.',
+        fuente: COMMONS('Subarachnoidalblutung traumatisch 83W - CT - 001.jpg', '2022-09-27'),
+        pieAntes: 'Tres cortes de TC craneal.', pie: 'Hemorragia subaracnoidea traumática en una mujer de 83 años (descripción del autor en Commons: HSA traumática izquierda). Sin aneurisma: la sangre llega al espacio subaracnoideo por el traumatismo.',
+        zonas: [
+            { id: 'axial', forma: 'rect', x: 23, y: 52, w: 6, h: 13, rotulo: 'Corte axial: HSA traumática izquierda (a la derecha de la imagen, por la convención radiológica)', cita: 'descripción del autor en Commons («left traumatic subarachnoid haemorrhage»)' },
+            { id: 'coronal', forma: 'rect', x: 59, y: 42, w: 6.5, h: 12, rotulo: 'Corte coronal: la misma HSA, en el lado izquierdo del paciente', cita: 'descripción del autor en Commons («left traumatic subarachnoid haemorrhage»)' },
+        ],
         error: { enunciado: 'Una de estas lecturas es falsa. ¿Cuál?', opciones: [
-            op('La sangre está en el espacio subaracnoideo.', false, 'Cierto: es una hemorragia subaracnoidea (título del archivo).'),
-            op('El origen es un traumatismo.', false, 'Cierto: «traumatisch» en el título.'),
+            op('La sangre está en el espacio subaracnoideo.', false, 'Cierto: es una hemorragia subaracnoidea (descripción del autor en Commons).'),
+            op('El origen es un traumatismo.', false, 'Cierto: la descripción del autor dice «traumatic».'),
             op('Los cortes son de una TC.', false, 'Cierto: «CT» en el título.'),
-            op('Es una HSA por rotura de un aneurisma sacular.', true, 'Falso: el título la califica de traumática. La HSA por aneurisma sacular es la que describe Marino (pág. 45).'),
+            op('Es una HSA por rotura de un aneurisma sacular.', true, 'Falso: la descripción del autor la califica de traumática. La HSA por aneurisma sacular es la que describe Marino (pág. 45).'),
         ] },
     },
     {
         id: 'neuro-subdural-parafalcino', titulo: 'Hematoma subdural parafalcino',
-        consigna: 'Corte axial, coronal y sagital de un varón de 74 años. Toca el hematoma en el corte axial.',
+        consigna: 'Corte axial, coronal y sagital de un varón de 74 años. Toca el hematoma y la HSA frontal en el corte axial.',
         img: IMG + 'neuro-subdural-parafalcino.jpg', alt: 'Tres cortes de TC con un hematoma subdural junto a la hoz cerebral',
-        fuente: COMMONS('Parafalzines Subduralhaematom 74M - CT - 001.jpg'),
-        pieAntes: 'Tres cortes de TC craneal.', pie: 'Hematoma subdural parafalcino (junto a la hoz cerebral) en un varón de 74 años, según el título del archivo de Commons.',
+        fuente: COMMONS('Parafalzines Subduralhaematom 74M - CT - 001.jpg', '2023-02-05'),
+        pieAntes: 'Tres cortes de TC craneal.', pie: 'Hematoma subdural parafalcino (junto a la hoz cerebral) en un varón de 74 años, según la descripción del autor en Commons, que añade hemorragias subaracnoideas bilaterales (frontal derecha y temporal izquierda) tras una caída. Dónde se opera un hematoma subdural: Manual UMI, pág. 83.',
         zonas: [
-            { id: 'hoz', forma: 'rect', x: 11.5, y: 24, w: 5.5, h: 62, rotulo: 'Hematoma subdural parafalcino, junto a la hoz', cita: 'título del archivo de Commons («parafalzines Subduralhaematom»)' },
+            { id: 'hoz', forma: 'rect', x: 12.3, y: 24, w: 4.2, h: 62, rotulo: 'Corte axial: hematoma subdural parafalcino, junto a la hoz', cita: 'descripción del autor en Commons («parafalcine subdural hematoma»)' },
+            { id: 'hozcor', forma: 'rect', x: 44, y: 9, w: 4, h: 37, rotulo: 'Corte coronal: el mismo hematoma, pegado a la hoz', cita: 'descripción del autor en Commons («parafalcine subdural hematoma»)' },
+            { id: 'hsafront', forma: 'rect', x: 8, y: 14, w: 5.5, h: 24, rotulo: 'Corte axial: HSA frontal derecha (a la izquierda de la imagen)', cita: 'descripción del autor en Commons («right frontal» subarachnoid haemorrhage)' },
         ],
         error: { enunciado: 'Una de estas lecturas es falsa. ¿Cuál?', opciones: [
-            op('El hematoma está junto a la hoz cerebral.', false, 'Cierto: «parafalzines» en el título.'),
-            op('Es un hematoma subdural.', false, 'Cierto: «Subduralhaematom» en el título.'),
+            op('El hematoma está junto a la hoz cerebral.', false, 'Cierto: la descripción del autor dice «parafalcine».'),
+            op('Es un hematoma subdural.', false, 'Cierto: la descripción del autor dice «subdural hematoma».'),
             op('Se ven cortes en tres planos.', false, 'Cierto: axial, coronal y sagital.'),
-            op('Es una hemorragia intraventricular.', true, 'Falso: el título lo califica de subdural parafalcino. La sangre intraventricular es la de Marino, fig. 47.3 (pág. 43).'),
+            op('Es una hemorragia intraventricular.', true, 'Falso: la descripción del autor lo califica de subdural parafalcino. La sangre intraventricular es la de Marino, fig. 47.3 (pág. 43).'),
         ] },
     },
 ];
