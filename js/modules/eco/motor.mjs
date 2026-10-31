@@ -246,7 +246,9 @@ export const BASE = {
   // presión que vence (la curva de cada aparato no está en la fuente): es el que se pide, salvo la succión
   // P4b: hincha 0,03 → 0,025 s (ilustrativo): con la cola de la activación el fallo al 100 % (FC ≈122) tiene ~87 ms de diástole tras cerrarse la aórtica y el
   // balón llegaba a 37,6 de 40 mL (95 %); el inflado de un balón real es rápido (p. 45), no un 5 % de lo que desplaza
-  soporte: null, tauBalon: { hincha: 0.025, vacia: 0.02 }, succionVi: [6, 22], succionVen: [0.15, 1.2],
+  // Vaciado 0,02 → 0,01 s (ilustrativo; la fuente, p. 45-46, solo dice «rápido»): con el fallo al 100 % (contracción isovolumétrica más corta, ~40 ms
+  // entre la onda R y abrirse la aórtica) el balón llegaba abierta la válvula con 4,9 de 40 mL; debe estar desinflado al abrirse
+  soporte: null, tauBalon: { hincha: 0.025, vacia: 0.01 }, succionVi: [6, 22], succionVen: [0.15, 1.2],
   // volumen de sangre total (mL)
   vSangre: 4850,
   // transporte de O₂ (Fick, por latido)
