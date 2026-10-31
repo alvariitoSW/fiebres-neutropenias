@@ -299,7 +299,8 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
-### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30 · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30
+- **31/10, cambia**: el usuario rechaza las maquetas dibujadas («imágenes de coña que no tienen nada que ver con la realidad; te he pasado mil recursos para poder usar imágenes reales»). Fallo de la bitácora: «dibujadas por la app» era un «(supongo)» que no se le preguntó. Elige la **B**: parar el motor dibujado; imágenes reales de los PDF de `docs/` ya, y Radiopaedia cuando abra la red (`radiopaedia.org`, `prod-images-static.radiopaedia.org`) y se verifique su licencia. Tarea `radio-real` en el tablero (Objetivo L, 6d). **Lección**: en un encargo de imagen médica, «dibujada o real» es duda de las 5, nunca un «(supongo)». · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
 - **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
   recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
   radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
@@ -375,7 +376,7 @@ esta sección.
 | `ecg-*`, `arritmias-*`, `competencias-r2r5` | Cardiología del PIF y competencias R2-R5 | aparcadas el 27/10 por la prioridad nueva | 2026-10-27 | «Me quedo con la opción A…» (27/10) |
 | `pif-ecg` | Cuaderno «ECG y arritmias» del PIF de Cardiología (con «La alegría de leer el ECG») | **hecha (28/10, en main)**: PR #36 aprobada por el usuario | 2026-10-27 | `ecg-guardia` (aparcada) seguirá en una PR nueva desde `main` |
 | `jueces-topes` | Jueces que llevan cada mando de un modelo vivo a su tope (REGLAS §1.14) | hecha (27/10, en main): 7 de 8 modelos ✅; el ácido-base da pH 6,36 (tarea `topes-acidobase`) | 2026-10-27 | Técnica: directo a main |
-| `pulmon-respirador` | **B-013 · Pulmón con respirador** | aparcada hasta después del bloque 3 | 2026-10-25 | |
+| `pulmon-respirador` → `b3d` | **B-013 · Pulmón con respirador** | **aprobado el 31/10, empieza ya** (sesión abierta el 31/10) | 2026-10-25 | |
 | `bandeja` | **B-017 · Bandeja del Radar** (issue #27 de GitHub) | ⏸ bandeja creada; la tarea diaria, **pausada**: hay que crearla desde la app con el proyecto elegido (texto en `autonomo/radar/LEEME.md`) | 2026-10-25 | Opción A elegida por el usuario: 0 €, sin Telegram ni clave de pago |
 | `formula-comun`, `potasio-prioritario`, `objetivos-casos`, `eco-vci-retenido`, `monitor-comun` | **B-018 a B-022**, mecánicas nuevas en los modelos vivos (informe de `vuelta-modelos`) | Objetivo V: cuatro hechas y en main (25-27/10); `monitor-comun`, aparcada hasta el bloque 3 | 2026-10-25 | «me parece todo perfecto, estoy de acuerdo en lo que dice el profesor» (25/10) |
 | `notas-meta` | **B-023**, llegar al 8,75 sin gastar de más (modelos, tokens y vueltas) | hecha (27/10, PR #33): R1-R9 aprobadas y en `REGLAS.md` §4.8; R1 automático, tarea `jueces-movil` | 2026-10-25 | «apruebo todas las propuestas de regla de R1 a R9» (27/10) |
@@ -407,9 +408,12 @@ El resto del tablero sigue `aparcada`.
 **Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
-1. **Semiología**: abrir `www.ncbi.nlm.nih.gov` en la red del entorno (StatPearls y Walker, gratis; recomendado) o subir
-   el capítulo cardiovascular de Surós o Bates. Una IA no puede ser la fuente (acta 10.ª); tu repositorio
-   `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de fuente (no tiene páginas).
+1. **Semiología** (31/10): `www.ncbi.nlm.nih.gov` ya abre, pero el libro de Walker (*Clinical Methods*,
+   https://www.ncbi.nlm.nih.gov/books/NBK201/) pone un reCAPTCHA antes del texto y la API oficial solo da fichas: no se
+   salta. **Hace falta tu PDF**: el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica* (el que usaste en la
+   app del Negrín; recomendado), o los capítulos de exploración cardiovascular de Walker guardados desde tu móvil. Una IA
+   no puede ser la fuente (acta 10.ª); tu repositorio `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de
+   fuente (no tiene páginas). Con el PDF en `docs/`, el Congreso lo monta (objetivo «Historia clínica» del PIF).
 2. **Ritmo tras el 02/11**: seguir con vía libre hasta el 22/11 (recomendado) o volver al 18 % el 03/11.
 3. **Techo de la gran reforma** (B-050): ≈165-230 M aparte de Marino.
 4. **`b4`**: maqueta de «iones vivos» (≈+8 M, recomendado) o directo.
