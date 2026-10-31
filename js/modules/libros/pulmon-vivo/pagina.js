@@ -138,7 +138,7 @@ function pintarCifrasTodo() {
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
-    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL/cmH₂O tubo', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
+    celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL × pico (tubo)', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
     celda('flujofin', 'Flujo fin esp.', f0(l.flujoFinEsp), l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'L/min · no llega a cero' : 'L/min · llega a cero', l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si'),

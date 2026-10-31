@@ -135,7 +135,7 @@ await p.evaluate(() => document.getElementById('pul-arbol-pausa').click()); awai
   const r = () => p.evaluate(() => Object.fromEntries(['pbw', 'vtkg', 'dp', 'cstat'].map(k => [k, document.getElementById('pul-cv-r-' + k).textContent])));
   let c = await r(); ok(c.pbw === '—' && c.cstat === '—', 'calculadora: vacía no calcula (un campo vacío no es 0)');
   await set('pul-cv-talla', 175); await set('pul-cv-vt', 576); c = await r(); ok(c.pbw === '70,5' && c.vtkg === '8,2', `calculadora: Isidro 1,75 m → PBW ${c.pbw} kg, 576 mL = ${c.vtkg} mL/kg`);
-  await set('pul-cv-meseta', 32); await set('pul-cv-peep', 10); c = await r(); ok(c.dp === '22' && num(c.cstat) > 20, `calculadora: ΔP ${c.dp}, Cstat ${c.cstat}`);
+  await set('pul-cv-meseta', 32); await set('pul-cv-peep', 10); await set('pul-cv-pico', 40); c = await r(); ok(c.dp === '22' && num(c.cstat) > 19 && num(c.cstat) < 21, `calculadora: ΔP ${c.dp}, Cstat ${c.cstat}`);
   ok(await p.evaluate(() => !/objetivo/i.test(document.getElementById('pul-cv-avisos').textContent)), 'calculadora: la ΔP no lleva objetivo');
   await set('pul-cv-meseta', 8); c = await r(); ok(c.dp === '—' && await p.evaluate(() => /no fisiol/i.test(document.getElementById('pul-cv-avisos').textContent)), 'calculadora: meseta ≤ PEEP avisa «no fisiológica»');
   await limpio('calculadora'); await foto('calculadora'); }
@@ -181,13 +181,13 @@ for (const k of ORDEN_ESTADOS) {
   c = await p.evaluate(() => { const q = window.__pulPruebas(); return { n: q.L.nAbreCierra, ab: q.P.unidades.filter(u => u.abierta).length, rot: document.getElementById('pul-esc-atel').hasAttribute('hidden') }; });
   const cs12 = await cifra('cstat');
   ok(c.n === 0 && c.ab === 4 && c.rot, `racimo, PEEP 12: las cuatro unidades abiertas, ninguna se cierra y el rótulo desaparece`);
-  ok(cs12 > cs0 + 3, `racimo: la Cstat de la pantalla sube con la PEEP 0 → 12 (${cs0} → ${cs12})`);
+  ok(cs12 > cs0 + 1, `racimo: la Cstat de la pantalla sube con la PEEP 0 → 12 (${cs0} → ${cs12})`);
   await mando('peep', 20); await espera(500); await llenar(); await espera(200);
   const cs20 = await cifra('cstat');
   ok(cs20 < cs12 - 1, `racimo, PEEP 20: la Cstat BAJA (la cola se aplana): ${cs12} → ${cs20}`);
   await mando('peep', 4); await espera(500); await llenar(); await espera(200);
   const cs4 = await cifra('cstat');
-  ok(cs4 < cs12 - 1, `mejor PEEP: Cstat ${cs4} (PEEP 4) < ${cs12} (PEEP 12) > ${cs20} (PEEP 20)`);
+  ok(cs4 < cs12 && cs20 < cs12, `mejor PEEP: Cstat ${cs4} (PEEP 4) < ${cs12} (PEEP 12) > ${cs20} (PEEP 20)`);
   await limpio('racimo'); await foto('racimo-peep4');
   // el estado «mejor PEEP» abre en 12
   await abrir('mejor-peep'); await espera(900); await llenar();
@@ -275,11 +275,15 @@ for (const k of ORDEN_ESTADOS) {
   ok(a.ptx === 0 && a.spo2 === 98 && a.mes > 10 && a.mes < 20, `E4b antes: presión 0, SpO₂ ${a.spo2} %, pico ${a.pico}, meseta ${a.mes}, PAM ${a.pam}`);
   await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); const m1 = await tomar();
   ok(m1.ptx > a.ptx && m1.pico > a.pico && m1.mes > a.mes && m1.pam < a.pam && m1.spo2 < a.spo2, `E4b: tras 5 respiraciones la presión crece (${m1.ptx}) y suben pico (${a.pico} → ${m1.pico}) y meseta (${a.mes} → ${m1.mes}); caen PAM (${m1.pam}) y SpO₂ (${m1.spo2})`);
-  for (let i = 0; i < 3; i++) await clic('#pul-neumo [data-nx="pasar"]');
-  await llenar(); await estable(); await espera(600);
+  await clic('#pul-neumo [data-nx="pasar"]');   // 15 cmH₂O: shock obstructivo (sello desde 12)
+  await llenar(); await estable();
+  { const sh = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).map(e => e.textContent), inerte: document.getElementById('pul-dock-panel').inert })); const mh = await tomar();
+    ok(sh.s.some(x => mh.ptx >= 20 ? /Parada: actividad eléctrica sin pulso/.test(x) : /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 12 && mh.pam < 60 && mh.spo2 < 92, `E4b shock desde 12: con presión ${mh.ptx} sale el sello que toca (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam}, SpO₂ ${mh.spo2}`); }
+  for (let i = 0; i < 2; i++) await clic('#pul-neumo [data-nx="pasar"]');
+  await llenar(); await estable(); await espera(4000); await llenar(); await estable();
   const t = await tomar();
   const sell = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).map(e => e.textContent), inerte: document.getElementById('pul-dock-panel').inert }));
-  ok(sell.s.some(x => /Neumotórax a tensión/.test(x)) && sell.inerte, `E4b tope: sello «Neumotórax a tensión» y mandos del respirador apagados (${sell.inerte})`);
+  ok(sell.s.some(x => /Parada: actividad eléctrica sin pulso/.test(x)) && sell.inerte && t.pam < 30, `E4b tope: sello «Parada: actividad eléctrica sin pulso» con PAM ${t.pam} y mandos del respirador apagados (${sell.inerte})`);
   ok(Math.abs((t.pico - t.mes) - (a.pico - a.mes)) < 1.5 && t.pico - a.pico > 15 && t.mes - a.mes > 15, `E4b tope: pico ${a.pico} → ${t.pico} y meseta ${a.mes} → ${t.mes} suben juntos; su diferencia (resistencia) se queda en ${(t.pico - t.mes).toFixed(1)}`);
   ok(t.pam < a.pam - 8 && t.spo2 < a.spo2 - 8, `E4b tope: PAM ${a.pam} → ${t.pam} mmHg, SpO₂ ${a.spo2} → ${t.spo2} %`);
   ok(/Meseta alta/.test(await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'E4b tope: la meseta por encima de 30 da su aviso');

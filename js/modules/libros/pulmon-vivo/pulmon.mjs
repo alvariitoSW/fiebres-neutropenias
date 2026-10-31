@@ -104,7 +104,7 @@ export function crearPulmon(resp, pulmon, maniobras = {}) {
       palvFinInsp: ciclo.palvFinInsp, palvFinEsp: peepTot, autoPeepReal: autoPeep,
       pres: ciclo.pico - ciclo.palvFinInsp,
       // Cstat y presión de conducción: con la PEEP total si se ocluyó; si no, con la aplicada (y se rotula así)
-      cstat: meseta != null && meseta > (peepTotMed ?? r.peep) ? Math.max(0, vtExh - C_TUBULADURA * (meseta - (peepTotMed ?? r.peep))) / (meseta - (peepTotMed ?? r.peep)) : null,
+      cstat: meseta != null && meseta > (peepTotMed ?? r.peep) ? Math.max(0, vtExh - C_TUBULADURA * Math.max(ciclo.pico, meseta)) / (meseta - (peepTotMed ?? r.peep)) : null,   // Marino cap. 27 p. 7: 3 mL × presión pico
       dp: meseta != null ? meseta - (peepTotMed ?? r.peep) : null, conPeepTotal: peepTotMed != null,
       vtIns: ciclo.vtIns, vtExh, vm: vtExh * (psv() ? r.frEsp : r.fr) / 1000, flujoFinEsp: ciclo.flujoFinEsp,
       pMedia: ciclo.nPaw ? ciclo.sumaPaw / ciclo.nPaw : 0,

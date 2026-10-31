@@ -12,7 +12,7 @@ const IR = (tab, txt, resaltar = '') => `<button type="button" class="lam-ir" da
 const NIVELES = [
     { n: 'Tórax y vía aérea', fr: `Con un Vt de 500 mL, <b>150 mL</b> se quedan en la vía que solo conduce (espacio muerto anatómico) y <b>350 mL</b> llegan al alvéolo. ${org('ficha · LA1 p. 389')} Los 150 mL son los de una persona de 68 kg. ${org('ficha · LA1 p. 389')}` },
     { n: 'Alvéolo', fr: `La vía acaba en conductos y sacos alveolares, que son los que intercambian gas. ${org('ficha · LA1 p. 389')} Abajo, la foto real: muchos espacios aéreos separados por tabiques finos que llevan los capilares. ${org('ficha · M22 Fig. 24.1')}` },
-    { n: 'Membrana y capilar', fr: `El gas pasa por difusión pasiva a través de la membrana alveolocapilar: de dentro afuera, surfactante, epitelio alveolar, su membrana, intersticio, membrana basal capilar y endotelio. ${org('ficha · LA1 p. 390')} Cifra de la fuente: ~0,6 µm y 50-100 m² en ambos pulmones. ${org('ficha · LA1 p. 390')}` },
+    { n: 'Membrana y capilar', fr: `El gas pasa por difusión pasiva a través de la membrana alveolocapilar: de dentro afuera, surfactante, epitelio alveolar, su membrana, intersticio, membrana basal capilar y endotelio. ${org('ficha · LA1 p. 390')} Cifra de la fuente: ~0,6 µm «de diámetro» (sic: es un grosor; ver la nota de fidelidad) y 50-100 m² en ambos pulmones. ${org('ficha · LA1 p. 390')}` },
 ];
 const CAPAS = ['surfactante', 'epitelio alveolar', 'membrana del epitelio', 'espacio intersticial', 'membrana basal capilar', 'endotelio capilar'];
 const OPCIONES = [
@@ -24,7 +24,7 @@ const PASOS = [
     { tit: 'El tórax', n: 1, f: '#pl-diaf', txt: 'Al inspirar baja el diafragma y los pulmones se llenan: pulsa «Inspirar» y mira cómo baja la cúpula. Aquí entra el Vt.' },
     { tit: 'La vía que conduce', n: 1, f: '#pl-barra', txt: 'De un Vt de 500 mL, 150 mL se quedan en la vía que solo conduce (en rojo) y 350 mL llegan al alvéolo. La barra de abajo lo reparte. Con Vt 300, los mismos 150 mL son la mitad del soplo.' },
     { tit: 'El alvéolo', n: 2, f: '#pl-foto', txt: 'La vía acaba en alvéolos. En la foto real, los espacios aéreos están separados por tabiques finos con los capilares: ahí se hace el intercambio.' },
-    { tit: 'La membrana', n: 3, f: '#pl-memb', txt: 'El O₂ cruza la membrana hacia el hematíe y el CO₂ hace el camino inverso. Las capas no están a escala: la cifra de la fuente es ~0,6 µm sobre 50-100 m².' },
+    { tit: 'La membrana', n: 3, f: '#pl-memb', txt: 'El O₂ cruza la membrana hacia el hematíe y el CO₂ hace el camino inverso. Las capas no están a escala: la cifra de la fuente es ~0,6 µm (la fuente dice «de diámetro»: un grosor) sobre 50-100 m².' },
 ];
 
 const CSS = `
@@ -161,7 +161,7 @@ export function montarLamina() {
 
     $('pl-fuentes').innerHTML = [
         `Vt 500 mL = 150 mL de espacio muerto anatómico + 350 mL al alvéolo (persona de 68 kg) ${org('ficha')} ${pdf(LA1, 5, 'Libro Azul, pág. 5 (impresa 389)')}`,
-        `Membrana alveolocapilar, sus capas, ~0,6 µm y 50-100 m² ${org('ficha')} ${pdf(LA1, 6, 'Libro Azul, pág. 6 (impresa 390)')}; neumocitos y surfactante: ${pdf(LA1, 7, 'pág. 7 (impresa 391)')}`,
+        `Membrana alveolocapilar, sus capas, ~0,6 µm «de diámetro» (ver la nota de fidelidad) y 50-100 m² ${org('ficha')} ${pdf(LA1, 6, 'Libro Azul, pág. 6 (impresa 390)')}; neumocitos y surfactante: ${pdf(LA1, 7, 'pág. 7 (impresa 391)')}`,
         `Fig. 24.1, pulmón normal frente a SDRA ${org('ficha')} ${pdf(M22, 34, 'Marino, pág. 34')}`,
         `Dibujos esquemáticos, sin escala ${org('ilustrativo', true)}`,
     ].map((x) => `<li>${x}</li>`).join('');

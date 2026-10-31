@@ -101,17 +101,18 @@ export function montarExtras({ $, P, est, leer, PBW, cita, org, hacerPausa }) {
       <label>Sexo<select id="pul-cv-sexo"><option value="v">Varón</option><option value="m">Mujer</option></select></label>
       <label>Vt (mL)<input id="pul-cv-vt" type="number" inputmode="decimal" min="100" max="1000" step="10" placeholder="420"></label>
       <label>Meseta (cmH₂O)<input id="pul-cv-meseta" type="number" inputmode="decimal" min="5" max="60" step="1" placeholder="28"></label>
+      <label>Pico (cmH₂O)<input id="pul-cv-pico" type="number" inputmode="decimal" min="5" max="90" step="1" placeholder="35"></label>
       <label>PEEP (cmH₂O)<input id="pul-cv-peep" type="number" inputmode="decimal" min="0" max="30" step="1" placeholder="10"></label></div>
     <button type="button" id="pul-cv-actual">Copiar el paciente de la pantalla</button>
-    <div class="res"><div><b id="pul-cv-r-pbw">—</b><small>peso ideal (PBW), kg · ${org('ficha · cap. 27 p. 14', false)}</small></div>
+    <div class="res"><div><b id="pul-cv-r-pbw">—</b><small>peso ideal (PBW), kg · ${org('ficha · cap. 27 p. 13', false)}</small></div>
       <div><b id="pul-cv-r-vtkg">—</b><small>Vt por kg de PBW, mL/kg · ${org('ficha · cap. 24 p. 48', false)}</small></div>
       <div><b id="pul-cv-r-dp">—</b><small>ΔP = meseta − PEEP, cmH₂O · ${org('ficha · sin objetivo', false)}</small></div>
-      <div><b id="pul-cv-r-cstat">—</b><small>Cstat, mL/cmH₂O, con −${C_TUBULADURA} mL por cmH₂O de tubuladura · ${org('ficha · cap. 27 p. 6-7', false)}</small></div></div>
+      <div><b id="pul-cv-r-cstat">—</b><small>Cstat, mL/cmH₂O, con −${C_TUBULADURA} mL × presión pico de tubuladura (en PCV, la de fin de inspiración) · ${org('ficha · cap. 27 p. 6-7', false)}</small></div></div>
     <p class="aviso" id="pul-cv-avisos" hidden></p>
     <p id="pul-cv-lectura"></p>
     <p>${org('la fuente no lo dice')} Marino no da un objetivo para la presión de conducción: la calculadora no pone ninguno. <button type="button" class="nota-ir" data-nota="dp-sin-objetivo">Ver la nota →</button> ${cita(C.cstat)}</p></div>`;
   function calcular() {
-    const v = (k) => $('cv-' + k).value, r = calcVentilacion({ talla: v('talla'), sexo: v('sexo'), vt: v('vt'), meseta: v('meseta'), peep: v('peep') });
+    const v = (k) => $('cv-' + k).value, r = calcVentilacion({ talla: v('talla'), sexo: v('sexo'), vt: v('vt'), meseta: v('meseta'), peep: v('peep'), pico: v('pico') });
     $('cv-r-pbw').textContent = f1(r.pbw); $('cv-r-vtkg').textContent = f1(r.vtkg); $('cv-r-dp').textContent = f1(r.dp); $('cv-r-cstat').textContent = f1(r.cstat);
     $('cv-avisos').textContent = r.avisos.join(' '); $('cv-avisos').hidden = !r.avisos.length;
     // el veredicto se compara redondeado (el resultado no contradice lo que se ve)
@@ -124,7 +125,7 @@ export function montarExtras({ $, P, est, leer, PBW, cita, org, hacerPausa }) {
     if (ev.target.closest('#pul-cv-actual')) {
       const l = leer() || {}, p = est.pac;
       $('cv-talla').value = p.talla; $('cv-sexo').value = p.sexo; $('cv-vt').value = l.vtExh != null ? Math.round(l.vtExh) : P.S.resp.vt;
-      $('cv-meseta').value = l.meseta != null ? Math.round(l.meseta * 10) / 10 : ''; $('cv-peep').value = l.peepTot != null ? Math.round(l.peepTot * 10) / 10 : P.S.resp.peep;
+      $('cv-meseta').value = l.meseta != null ? Math.round(l.meseta * 10) / 10 : ''; $('cv-pico').value = l.pico != null ? Math.round(l.pico * 10) / 10 : ''; $('cv-peep').value = l.peepTot != null ? Math.round(l.peepTot * 10) / 10 : P.S.resp.peep;
       calcular();
     }
   });

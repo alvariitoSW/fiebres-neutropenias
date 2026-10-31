@@ -55,13 +55,18 @@ function pintar() {
   if (el.msg.innerHTML !== nx.msg) el.msg.innerHTML = nx.msg;
 }
 function sello() {
-  const { tope, ultima } = ctx, T = nx.ptx >= N.tope && !nx.desc;
+  const { tope, ultima } = ctx, par = activo && nx.ptx >= N.tope && !nx.desc, T = activo && nx.ptx >= N.shock && !nx.desc;
   ctx.raiz.toggleAttribute('data-neumo-sello', T);
   ctx.dockPanel.inert = T;   // solo queda la descompresión: los mandos del respirador no se tocan
   if (!T) { tope.quitar('neumo-tope'); if (selloAct) { selloAct = null; ctx.frase(); } return; }
-  const u = ultima(), S = { titulo: 'Neumotórax a tensión: gasto en caída',
-    texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura, la PAM es ${u ? f0(u.pam) : '—'} mmHg, el gasto ${u ? f1(u.gc) : '—'} L/min (el volumen sistólico ${u ? f0(u.vs) : '—'} mL) y la SpO₂ ${f0(spo2())} %. El respirador no arregla esto: solo la descompresión. Elige el sitio y descomprime.`,
-    origen: 'ficha · neumotórax a tensión y descompresión: cap. 28 p. 28-29 · las cifras: modelo ilustrativo' };
+  const u = ultima(), pam = u ? f0(u.pam) : '—', gc = u ? f1(u.gc) : '—', vs = u ? f0(u.vs) : '—';
+  const S = par
+    ? { titulo: 'Parada: actividad eléctrica sin pulso',
+      texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura, la PAM es ${pam} mmHg, el gasto ${gc} L/min (el volumen sistólico ${vs} mL) y la SpO₂ ${f0(spo2())} %. Marino describe que el neumotórax a tensión acaba en shock obstructivo y paro por actividad eléctrica sin pulso. Solo queda la descompresión: elige el sitio y descomprime.`,
+      origen: 'ficha · shock obstructivo y paro por actividad eléctrica sin pulso: cap. 28 p. 28 · las cifras: modelo ilustrativo' }
+    : { titulo: 'Neumotórax a tensión: shock obstructivo',
+      texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura, la PAM cae a ${pam} mmHg, el gasto a ${gc} L/min (el volumen sistólico ${vs} mL) y la SpO₂ a ${f0(spo2())} %. El respirador no arregla esto: solo la descompresión. Elige el sitio y descomprime antes de que llegue a la parada.`,
+      origen: 'ficha · neumotórax a tensión, shock obstructivo y descompresión: cap. 28 p. 28-29 · las cifras: modelo ilustrativo' };
   tope.poner('neumo-tope', { nivel: 'sello', ...S });
   if (!selloAct || selloAct.texto !== S.texto) { selloAct = S; ctx.frase(); }
 }

@@ -38,7 +38,7 @@ const G1 = test('PG1', 'guia', 'pico y meseta', { predice: true, modelo: { estad
   explicacion: 'Sin flujo no hay caída de presión por la resistencia: la presión que queda es la elástica del alvéolo (Pel), la meseta. Pico − meseta es lo que se gasta en vencer la resistencia.', fuente: [C.meseta, C.fig272],
   comprobar: { txt: 'Compruébalo: pico y meseta de Rafael', mandos: {}, mira: 'El pico baja a la meseta al parar el flujo; la diferencia es la resistencia.', cifras: null } });
 const G2 = { id: 'PG2', grupo: 'guia', tipo: 'destapa', corto: 'SDRA: la meseta', predice: false, org: '', modelo: { estado: 'sdra-rigido', lee: { meseta: 32.1, cstat: 16, dp: 22.1 } },
-  enunciado: 'Isidro, SDRA, Vt 420 mL (6 mL/kg de peso predicho) y PEEP 10: la meseta sale 32 cmH₂O y su Cstat, 16. <b>Escribe las dos cosas que haces con esa cifra.</b>',
+  enunciado: 'Isidro, SDRA, Vt 420 mL (6 mL/kg de peso predicho) y PEEP 10: la meseta sale 32 cmH₂O y su Cstat, 14. <b>Escribe las dos cosas que haces con esa cifra.</b>',
   puntos: ['Reconocer que 32 pasa de 30: por encima de ese valor el riesgo de rotura alveolar deja de ser despreciable.', 'Bajar el Vt de 1 en 1 mL/kg hasta que la meseta baje de 30 o se llegue a 4 mL/kg.'],
   puntosOrg: ['', ''], fuente: [C.riesgo, C.t245], explicacion: 'La meseta es la presión del alvéolo: por eso el objetivo (≤30) se mira en ella y no en el pico.' };
 const G3 = test('PG3', 'guia', 'el flujo que no llega a cero', { predice: true, modelo: { estado: 'broncoespasmo-auto-peep' },
@@ -57,7 +57,7 @@ const G4 = test('PG4', 'guia', 'de PEEP 4 a 12', { predice: true, modelo: { esta
     { t: 'No cambian: la PEEP solo modifica la oxigenación.', porque: 'Sin PEEP el espacio aéreo colapsa al final de la espiración, y eso cambia la mecánica y empeora el intercambio de gases. Isidro seguiría abriendo y cerrando unidades.' + src(C.colapsoPeep) },
     { t: 'La Cstat baja y la presión de conducción sube: un pulmón rígido no tolera más presión de final de espiración.', porque: 'Eso le pasa con una PEEP excesiva (aquí, 20), cuando las unidades llegan a la zona plana de su curva; de 4 a 12 todavía hay unidades que reclutar.' + src(C.mejorPeep) }],
   explicacion: 'Con la PEEP por encima de la presión de cierre, las unidades dejan de colapsar y participan: la Cstat sube y la presión de conducción baja. Es el sentido del estudio de Marino, no una cifra para todos.', fuente: [C.mejorPeep, C.atelect],
-  comprobar: { txt: 'Sube la PEEP a 12 en el respirador', mandos: { peep: 12 }, mira: 'La Cstat sube y la presión de conducción baja: las unidades dejan de cerrarse. (Partiendo de PEEP 12 desde el estado, la Cstat llega a 16: abrir pide más presión que mantener abierto.)', cifras: [['Cstat (mL/cmH₂O)', 'cstat', 11, 14], ['P. de conducción', 'dp', 20.2, 16.9]] } });
+  comprobar: { txt: 'Sube la PEEP a 12 en el respirador', mandos: { peep: 12 }, mira: 'La Cstat sube y la presión de conducción baja: las unidades dejan de cerrarse. (Partiendo de PEEP 12 desde el estado, la Cstat llega a 12: abrir pide más presión que mantener abierto.)', cifras: [['Cstat (mL/cmH₂O)', 'cstat', 11, 14], ['P. de conducción', 'dp', 20.2, 16.9]] } });
 const G5 = test('PG5', 'guia', 'PSV y pulmón rígido', { predice: true, modelo: { estado: 'psv-disparo' },
   enunciado: 'Herminia respira en presión de soporte (PEEP 5, soporte 10) y su Cstat es 40. De pronto el pulmón se vuelve más rígido (Cstat 20) con los mismos ajustes. <b>¿Qué pasa con su volumen corriente?</b>',
   opciones: [
@@ -133,8 +133,8 @@ const X7 = { id: 'PE7', grupo: 'examen', tipo: 'destapa', corto: 'efectos de la 
 // ───────── Casos. `lee` = cifras del estado en el monitor de la app (data-fila); el paso las enseña en la ficha del paciente
 const paso = (momento, modelo, ficha, pregunta, extra = {}) => ({ momento, modelo, ficha, pregunta, ...extra });
 const ISI = { paciente: '64 años, 96 kg, 1,75 m (peso predicho 70,5 kg)', dx: 'Neumonía bilateral → SDRA moderado' };
-const L1 = { meseta: 32.1, cstat: 16, dp: 22.1, vt: 420 }, L2 = { meseta: 28.4, cstat: 16, dp: 18.4, vt: 350, vm: 10.5 };
-const L3 = { meseta: 32.2, cstat: 13, dp: 14.2, vt: 225 }, L4 = { meseta: 27.2, cstat: 16, dp: 15.2, vt: 285 }, L5 = { meseta: 23.7, cstat: 9, dp: 23.7, vt: 285 };
+const L1 = { meseta: 32.1, cstat: 14, dp: 22.1, vt: 420 }, L2 = { meseta: 28.4, cstat: 13, dp: 18.4, vt: 350, vm: 10.5 };
+const L3 = { meseta: 32.2, cstat: 7, dp: 14.2, vt: 225 }, L4 = { meseta: 27.2, cstat: 12, dp: 15.2, vt: 285 }, L5 = { meseta: 23.7, cstat: 8, dp: 23.7, vt: 285 };
 const EUL = { paciente: '27 años, 60 kg, 1,62 m (peso predicho 54 kg)', dx: 'Asma casi fatal; PaCO₂ 42 tras 3 nebulizaciones' };
 const HER = { paciente: '76 años, 92 kg, 1,55 m (peso predicho 47,9 kg)', dx: 'Edema agudo de pulmón, hipertensa' };
 const hacer = (id, o) => ({ ...o, id, grupo: 'caso', corto: id });
@@ -150,7 +150,7 @@ export const CASOS = [
             { t: 'Bajas el Vt a 5 mL/kg y vuelves a medir la meseta; sigues hasta bajar de 30 o llegar a 4 mL/kg.', ok: true },
             { t: 'Subes la PEEP hasta que la meseta baje de 30.', porque: 'La PEEP forma parte de la meseta: subirla la sube. Isidro quedaría con más presión en el alvéolo, no con menos.' + src(C.meseta) },
             { t: 'La dejas: con 6 mL/kg ya cumples el protocolo.', porque: 'El protocolo también pide meseta ≤30; por encima de 30 el riesgo de rotura alveolar ya no es despreciable, y Isidro tendría 32.' + src(C.riesgo) },
-            { t: 'Pasas a presión control y la meseta se arregla sola.', porque: 'En presión control la presión la fijas tú, pero el volumen lo pone el pulmón: con una compliance de 16, Isidro recibiría menos volumen o más presión, no ambos arreglados.' + src(C.pcvPros) }],
+            { t: 'Pasas a presión control y la meseta se arregla sola.', porque: 'En presión control la presión la fijas tú, pero el volumen lo pone el pulmón: con una compliance de 14, Isidro recibiría menos volumen o más presión, no ambos arreglados.' + src(C.pcvPros) }],
           explicacion: 'Si la meseta pasa de 30 con 6 mL/kg, el protocolo baja el Vt de 1 en 1 mL/kg hasta que la meseta baje de 30 o se llegue a 4 mL/kg.', fuente: [C.t245, C.protectora] })),
       paso('Tras bajar el Vt a 5 mL/kg', { estado: 'sdra-rigido', mandos: { vt: 352 }, lee: L2 }, [['Respirador', 'Volumen control · Vt 350 mL (5 mL/kg) · FR 30 · PEEP 10'], ['Meseta', n1(L2.meseta) + ' cmH₂O'], ['P. de conducción', n1(L2.dp) + ' cmH₂O'], ['Volumen minuto', n1(L2.vm) + ' L/min'], ['pH (ejemplo)', '7,22']],
         hacer('I2', { tipo: 'test', modelo: { estado: 'sdra-rigido', mandos: { vt: 352 } }, org: 'ilustrativo (pH) · ficha (protocolo)', enunciado: 'La meseta ya está en 28; el volumen minuto bajó y la gasometría de Isidro da un pH de 7,22 (cifra de ejemplo). Su FR es 30. <b>¿Qué haces según la tercera etapa del protocolo?</b>',
@@ -163,21 +163,21 @@ export const CASOS = [
       paso('Tarde · P/F sigue en 110', { estado: 'mejor-peep', mandos: { peep: 18 }, lee: L3 }, [['Respirador', 'Vt 225 mL (3,2 mL/kg) · PEEP 18 · alarma de presión 40'], ['Meseta', n1(L3.meseta) + ' cmH₂O'], ['Cstat', n1(L3.cstat) + ' mL/cmH₂O'], ['P. de conducción', n1(L3.dp) + ' cmH₂O']],
         hacer('I3', { tipo: 'error', modelo: { estado: 'mejor-peep', mandos: { peep: 18 } }, org: '', enunciado: 'El R1 sube la PEEP de Isidro a 18 y anota su razonamiento. <b>Puede haber 0, 1 o 2 errores.</b>',
           frases: [
-            { t: 'Con PEEP 12 las cuatro unidades estaban abiertas y la Cstat era la mejor del barrido (16 mL/cmH₂O).', mal: false, fuente: C.mejorPeep },
+            { t: 'Con PEEP 12 las cuatro unidades estaban abiertas y la Cstat era la mejor del barrido (12 mL/cmH₂O).', mal: false, fuente: C.mejorPeep },
             { t: 'Subo la PEEP a 18 porque sube el P/F: si oxigena mejor, el aporte de O₂ también sube.', mal: true, c: 'El P/F puede subir y el aporte de O₂ no: DO₂ = gasto × contenido arterial de O₂, y la PEEP puede bajar el gasto cardíaco.', fuente: K.peepGc },
-            { t: 'Con PEEP 18 la meseta sale 32 y no importa: la PEEP no cuenta en la meseta.', mal: true, c: 'La meseta incluye la PEEP: con 18 sale 32,2, por encima de 30, y la Cstat cae a 13.', fuente: C.riesgo }],
+            { t: 'Con PEEP 18 la meseta sale 32 y no importa: la PEEP no cuenta en la meseta.', mal: true, c: 'La meseta incluye la PEEP: con 18 sale 32,2, por encima de 30, y la Cstat cae a 7.', fuente: C.riesgo }],
           explicacion: 'Dos errores: la oxigenación no es el aporte de O₂, y la PEEP forma parte de la meseta.', fuente: [K.peepGc, C.riesgo, C.mejorPeep] })),
       paso('De vuelta a PEEP 12', { estado: 'mejor-peep', lee: L4 }, [['Respirador', 'Vt 285 mL (4 mL/kg) · PEEP 12'], ['Meseta', n1(L4.meseta) + ' cmH₂O'], ['Cstat', n1(L4.cstat) + ' mL/cmH₂O'], ['P. de conducción', n1(L4.dp) + ' cmH₂O']],
-        hacer('I4', { tipo: 'test', modelo: { estado: 'mejor-peep' }, org: '', enunciado: 'Con PEEP 12 la Cstat de Isidro es 16 y la presión de conducción 15; con 18 eran 13 y 14. <b>¿Es 12 la mejor PEEP para todo SDRA?</b>',
+        hacer('I4', { tipo: 'test', modelo: { estado: 'mejor-peep' }, org: '', enunciado: 'Con PEEP 12 la Cstat de Isidro es 12 y la presión de conducción 15; con 18 eran 7 y 14. <b>¿Es 12 la mejor PEEP para todo SDRA?</b>',
           opciones: [
             { t: 'No: es la mejor PEEP de ese estudio y de este modelo; en cada paciente se busca de nuevo.', ok: true },
             { t: 'Sí: 12 es el valor que fija el protocolo para todos.', porque: 'El protocolo empieza en PEEP 5; el 12 sale del estudio de PEEP creciente de Marino. Aplicarlo a ciegas dejaría a otro paciente con una PEEP que no es la suya.' + src(C.t245) },
             { t: 'Sí: porque con 12 el P/F es máximo.', porque: 'Un P/F alto no equivale a mejor aporte de O₂ y este modelo no calcula gases. Elegir por el P/F llevaría de nuevo al error de la PEEP 18.' + src(K.peepGc) },
-            { t: 'No: la mejor PEEP es siempre la más alta que tolere la presión, 20, porque cuanto más PEEP más alvéolos abiertos.', porque: 'Una PEEP alta sobredistiende los alvéolos de las zonas sanas; con 20 la Cstat de Isidro cae a 12 y el Vt baja por la alarma de presión.' + src(C.mejorPeep) }],
+            { t: 'No: la mejor PEEP es siempre la más alta que tolere la presión, 20, porque cuanto más PEEP más alvéolos abiertos.', porque: 'Una PEEP alta sobredistiende los alvéolos de las zonas sanas; con 20 la Cstat de Isidro cae a 6 y el Vt baja por la alarma de presión.' + src(C.mejorPeep) }],
           explicacion: 'El libro lo muestra con un estudio de PEEP creciente: la compliance sube, llega a un máximo y desciende. De ahí sale «la mejor PEEP» de ese estudio: no una cifra para todos.', fuente: [C.mejorPeep] })),
       paso('Un compañero propone quitarle la PEEP', { estado: 'atelectrauma-zeep', lee: L5 }, [['Respirador', 'Vt 285 mL (4 mL/kg) · PEEP 0'], ['Meseta', n1(L5.meseta) + ' cmH₂O'], ['Cstat', n1(L5.cstat) + ' mL/cmH₂O'], ['P. de conducción', n1(L5.dp) + ' cmH₂O']],
         hacer('I5', { tipo: 'destapa', modelo: { estado: 'atelectrauma-zeep' }, org: '', enunciado: 'Con PEEP 0 la meseta de Isidro baja a 24. «Así protegemos el pulmón», dice un compañero. <b>Escribe dos cosas que Isidro pierde sin PEEP.</b>',
-          puntos: ['Las unidades se abren y se cierran en cada respiración (atelectrauma) y su Cstat cae a 9 mL/cmH₂O.', 'Sin PEEP el espacio aéreo colapsa al final de la espiración y empeora el intercambio de gases.'], puntosOrg: ['', ''], fuente: [C.atelect, C.colapsoPeep], explicacion: 'La meseta baja porque la PEEP forma parte de ella, no porque el pulmón esté mejor.' }))
+          puntos: ['Las unidades se abren y se cierran en cada respiración (atelectrauma) y su Cstat cae a 8 mL/cmH₂O.', 'Sin PEEP el espacio aéreo colapsa al final de la espiración y empeora el intercambio de gases.'], puntosOrg: ['', ''], fuente: [C.atelect, C.colapsoPeep], explicacion: 'La meseta baja porque la PEEP forma parte de ella, no porque el pulmón esté mejor.' }))
     ] },
   { titulo: 'Eulalia: asma, auto-PEEP y pulso paradójico', sub: 'Un asma casi fatal: del pulso paradójico a la hipotensión al conectarla', corto: 'Eulalia', paciente: {},
     volver: { nombre: 'PEEP oculta', ancla: 'nep-definicion-oculta' },

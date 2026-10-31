@@ -21,7 +21,7 @@ let L = simular({ modo: 'vcv', vt: 500, fr: 14, peep: 5, flujo: 60 }, { c: 60, r
 console.log('  ' + resumen(L));
 ok(entre(L.pres, 4.5, 5.5), 'Pres = pico − meseta ≈ 5'); ok(entre(L.meseta, 12.5, 14), 'meseta ≈ 13');
 ok(entre(L.pico, 17.5, 19.5), 'pico ≈ 18'); ok(entre(L.peepTot, 4.8, 5.4), 'PEEP total = PEEP aplicada (sin oculta)');
-ok(entre(L.cstat, 55, 60), 'Cstat ≈ 57 (60 menos los 25 mL de la tubuladura, cap. 27 p. 7)'); ok(L.flujoFinEsp > -1.5, 'el flujo llega a cero al final de la espiración');
+ok(entre(L.cstat, 52, 56), 'Cstat ≈ 54 (500 − 3 mL × pico 18,3 de tubuladura, cap. 27 p. 7)'); ok(L.flujoFinEsp > -1.5, 'el flujo llega a cero al final de la espiración');
 ok(entre(L.pMedia, 5, 10), 'presión media 5-10 (pulmón normal, cap. 27 p. 6)');
 
 console.log('Normal en PCV (Pinsp 10 sobre PEEP 5, I:E 1:2) → Vt ≈ C·Pinsp; con C 19 el Vt cae');
@@ -32,7 +32,7 @@ console.log('  ' + resumen(L)); ok(entre(L.vtExh, 150, 220), 'Vt 150-220 con C 1
 
 console.log('SDRA, Isidro (C 19, R 8, PEEP 10): Vt 6 mL/kg = 420 → meseta 32; Vt 5 mL/kg = 352 → meseta < 30');
 L = simular({ modo: 'vcv', vt: 420, fr: 30, peep: 10, flujo: 60, pmax: 50 }, { c: 19, r: 8 }, MAN).lectura;
-console.log('  ' + resumen(L)); ok(entre(L.meseta, 31, 33), 'meseta ≈ 32'); ok(entre(L.pico, 39, 41), 'pico = meseta + R·flujo ≈ 40'); ok(entre(L.cstat, 15, 21), 'Cstat < 25 (cap. 27 p. 6), corregida por la tubuladura'); ok(L.cabe, 'cabe la espiración a FR 30');
+console.log('  ' + resumen(L)); ok(entre(L.meseta, 31, 33), 'meseta ≈ 32'); ok(entre(L.pico, 39, 41), 'pico = meseta + R·flujo ≈ 40'); ok(entre(L.cstat, 12, 16), 'Cstat < 25 (cap. 27 p. 6), corregida por 3 mL × pico (cap. 27 p. 7)'); ok(L.cabe, 'cabe la espiración a FR 30');
 L = simular({ modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60 }, { c: 19, r: 8 }, MAN).lectura;
 console.log('  ' + resumen(L)); ok(entre(L.meseta, 27, 30), 'meseta ≤ 30 con 5 mL/kg'); ok(entre(L.pMedia, 10, 20), 'presión media sube con la PEEP 10');
 L = simular({ modo: 'vcv', vt: 564, fr: 30, peep: 10, flujo: 60, pmax: 50 }, { c: 19, r: 8 }, MAN).lectura;
@@ -150,9 +150,9 @@ const sa = simular(PSVR, PSVP, {}, { ciclos: 12 }), sb = simular(PSVR, PSVP, {},
 ok(JSON.stringify(sa.paw) === JSON.stringify(sb.paw) && sa.lectura.psv.disparo === sb.lectura.psv.disparo, 'las dos corridas PSV son idénticas muestra a muestra');
 
 console.log('Calculadora (PBW, Vt/kg, Cstat, ΔP)');
-let cv = calcVentilacion({ talla: 175, sexo: 'v', vt: 576, meseta: 32, peep: 10 });
+let cv = calcVentilacion({ talla: 175, sexo: 'v', vt: 576, meseta: 32, peep: 10, pico: 40 });
 ok(cv.pbw === 70.5, `Isidro 1,75 m → PBW ${cv.pbw}`); ok(cv.vtkg === 8.2 && cv.avisos.some((a) => /8 mL\/kg/.test(a)), `576 mL = ${cv.vtkg} mL/kg PBW (6 × el peso real 96 kg = 576): avisa`);
-ok(cv.dp === 22 && Math.abs(cv.cstat - (576 - 66) / 22) < 0.1, `ΔP ${cv.dp}, Cstat ${cv.cstat}`);
+ok(cv.dp === 22 && Math.abs(cv.cstat - (576 - 120) / 22) < 0.1, `ΔP ${cv.dp}, Cstat ${cv.cstat}`);
 cv = calcVentilacion({ talla: '', sexo: 'v', vt: 500, meseta: '', peep: '' });
 ok(cv.pbw == null && cv.cstat == null && cv.dp == null, 'un campo vacío no es 0');
 
