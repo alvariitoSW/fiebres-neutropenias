@@ -123,7 +123,7 @@ export function montarLectura(contenedor, ej) {
         $('tapar').addEventListener('click', () => { taparTodo(); quitarTapas(); ponerTapas(); sync(); });
     }
 
-    const lineaFuente = () => `<a class="biblio-link" href="${f.pdf}#page=${f.pagina}" target="_blank" rel="noopener">${f.corto || 'Fuente'}, pág. ${f.pagina}</a>`;
+    const lineaFuente = () => `<a class="biblio-link" href="${f.pdf}#page=${f.pagina}" target="_blank" rel="noopener">${f.corto || 'Fuente'}, ${f.diap ? 'diapositiva ' + f.diap : 'pág. ' + f.pagina}</a>`;
     const pieYvolver = () => {
         const v = ej.ver;
         return `${ej.frase ? `<p style="margin:0;">${ej.frase} ${f.pdf ? lineaFuente() : ''}</p>` : ''}

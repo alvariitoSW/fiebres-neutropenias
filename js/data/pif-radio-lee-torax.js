@@ -228,7 +228,7 @@ const T3 = [
             enunciado: 'Una de estas lecturas es un error. ¿Cuál?',
             opciones: [
                 { texto: 'En el SDRA difuso la pérdida de aireación se reparte de forma homogénea por el parénquima.', esError: false, explicacion: 'Es la definición del libro (pág. 448 impresa, PDF 64).' },
-                { texto: 'En el SDRA difuso la pérdida de aireación afecta solo a los lóbulos inferiores.', esError: true, explicacion: 'Eso describe el SDRA lobar; en el difuso la pérdida es homogénea y bilateral (pág. 448 impresa, PDF 64).' },
+                { texto: 'En el SDRA difuso la pérdida de aireación afecta solo a los lóbulos inferiores.', esError: true, explicacion: 'Eso describe el SDRA focal; en el difuso la pérdida es homogénea y bilateral (pág. 448 impresa, PDF 64).' },
                 { texto: 'En el SDRA difuso, una PEEP mayor de 10 cm H2O induce un reclutamiento marcado, sin sobredistensión de los lóbulos superiores.', esError: false, explicacion: 'Es lo que el libro atribuye a los autores citados (pág. 448 impresa, PDF 64).' },
             ],
         },
@@ -245,9 +245,9 @@ const T3 = [
         error: {
             enunciado: 'Una de estas lecturas es un error. ¿Cuál?',
             opciones: [
-                { texto: 'En el SDRA lobar la pérdida de aireación afecta solo a los lóbulos inferiores, con los superiores preservados.', esError: false, explicacion: 'Es la definición del libro (pág. 448 impresa, PDF 64).' },
-                { texto: 'En el SDRA lobar, una PEEP mayor de 10 cm H2O induce un reclutamiento marcado.', esError: true, explicacion: 'Según el libro, en el lobar ese nivel de PEEP no consiguió reclutar y se asoció con sobredistensión de las áreas aireadas; el reclutamiento marcado fue del SDRA difuso (pág. 448 impresa, PDF 64).' },
-                { texto: 'En el SDRA lobar, una PEEP mayor de 10 cm H2O se asoció con sobredistensión de las áreas previamente aireadas.', esError: false, explicacion: 'Lo dice el libro (pág. 448 impresa, PDF 64).' },
+                { texto: 'En el SDRA focal la pérdida de aireación afecta solo a los lóbulos inferiores, con los superiores preservados.', esError: false, explicacion: 'Es la definición del libro (pág. 448 impresa, PDF 64).' },
+                { texto: 'En el SDRA focal, una PEEP mayor de 10 cm H2O induce un reclutamiento marcado.', esError: true, explicacion: 'Según el libro, en el lobar ese nivel de PEEP no consiguió reclutar y se asoció con sobredistensión de las áreas aireadas; el reclutamiento marcado fue del SDRA difuso (pág. 448 impresa, PDF 64).' },
+                { texto: 'En el SDRA focal, una PEEP mayor de 10 cm H2O se asoció con sobredistensión de las áreas previamente aireadas.', esError: false, explicacion: 'Lo dice el libro (pág. 448 impresa, PDF 64).' },
             ],
         },
     },

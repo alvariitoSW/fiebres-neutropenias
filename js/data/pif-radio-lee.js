@@ -34,7 +34,7 @@ export const EJERCICIOS_LEE = [
         alt: 'Radiografía de tórax portátil',
         fuente: { texto: 'Marino, The ICU Book, fig. 28.1', corto: 'Marino', pdf: 'docs/marino-2024-respiratory-management-caps27-30.pdf', pagina: 18 },
         pieAntes: 'Placa portátil de tórax.',
-        pie: 'Tubo endotraqueal bien colocado.',
+        pie: 'Tubo endotraqueal bien colocado: la punta está a medio camino entre la entrada torácica y la bifurcación traqueal (carina), según el pie de la fig. 28.1.',
         zonas: [
             { id: 'punta', forma: 'circulo', x: R28[0].punto[0], y: R28[0].punto[1], r: 1.5, rotulo: 'Punta del tubo', cita: 'pie de la fig. 28.1' },
             { id: 'carina', forma: 'circulo', x: R28[1].punto[0], y: R28[1].punto[1], r: 1.5, rotulo: 'Carina', cita: 'pie de la fig. 28.1' },
@@ -245,9 +245,9 @@ export const EJERCICIOS_PLACA_ABD = [
         alt: 'TC de abdomen con contraste',
         fuente: { texto: 'Marino, The ICU Book, fig. 40.1', corto: 'Marino', pdf: 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf', pagina: 19 },
         pieAntes: 'TC de abdomen con contraste.',
-        pie: 'Pancreatitis edematosa: el páncreas (contorno punteado) está aumentado de tamaño y realza por completo; el borde borroso es característico del edema (pie de la fig. 40.1).',
+        pie: 'Pancreatitis edematosa: el páncreas (contorno punteado) está aumentado de tamaño y realza por completo; el borde borroso es característico del edema (pie de la fig. 40.1 y texto de la pág. 19).',
         zonas: [
-            { id: 'pancreas', forma: 'rect', x: 43, y: 39, w: 28, h: 26, rotulo: 'Páncreas aumentado de tamaño, que realza por completo (contorno punteado)', cita: 'pie de la fig. 40.1' },
+            { id: 'pancreas', forma: 'rect', x: 43, y: 39, w: 28, h: 26, rotulo: 'Páncreas aumentado de tamaño, que realza por completo (contorno punteado)', cita: 'pie de la fig. 40.1 (contorno punteado) y texto de la pág. 19 (realce y borde borroso)' },
         ],
         error: {
             enunciado: 'Encuentra el error: una de estas lecturas es falsa.',
