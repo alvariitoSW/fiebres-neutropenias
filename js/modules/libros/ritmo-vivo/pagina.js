@@ -3,7 +3,7 @@
 import { crearPlanoGrande } from '../../../core/plano-grande.js';
 import { crearMonitor, pintarCifras as pintarColumna, instalarMonitor } from '../../../core/monitor.js';
 import { $, IMG, NS, REDUCIR, cita, clamp, coma, org } from './ayudas.js';
-import { C, CRECE, ESC_2021, ESTADOS, F195, F213, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
+import { C, CRECE, ESC_2021, ESTADOS, F195, F213, FAMILIAS, FICHAS, GUIAS, LAMINAS, NOMBRE_F, NOTAS, NOTA_TIPO, PACIENTES, PENDIENTE, PIEZAS, PROFUNDIZAR, aplicarK, fcFig, libroDe, navParaFC, qtExtra } from '../../../data/ritmo-vivo-data.js';
 import { pintarGraficas } from './graficas.js';
 import { montarEscena, pintarAparatos, pintarEscena, pintarEscenaPendiente, reiniciarD } from './escena.js';
 import { MOTOR } from './motor.js';
@@ -22,7 +22,7 @@ export const S = {};   // el estado de la sesión (el ritmo y lo que se ha hecho
 function resetS(clave) {
   Object.keys(S).forEach(k => delete S[k]);
   Object.assign(S, { clave, fcSA: { sinusal: 75, taquiSinusal: 120 }[clave], rama: 'i', flutter: 2, fcFA: 138, farmaco: null, horas: 0, llenadoMalo: false,
-    tamCada: 0.5, wpwFa: false, wpwNodo: false, qt: {}, tdp: false, k: 4.2, sexo: 'v', deriv: clave === 'stemi' ? 'V2' : 'II', st: 2.5, inestable: false,
+    tamCada: 0.5, mobitz: 'I', wpwFa: false, wpwNodo: false, qt: {}, tdp: false, k: 4.2, sexo: 'v', deriv: clave === 'stemi' ? 'V2' : 'II', st: 2.5, inestable: false,
     bomba: null, desfib: null, adeno: null, parada: null, mensaje: null, tdpMg: false, dosis: {}, sinusal: false });
   if (clave === 'torsade') S.qt = { haloperidol: true, claritromicina: true, kBajo: true, mgBajo: true };
   if (['fv', 'aesp', 'asistolia'].includes(clave)) S.parada = { comp: false, choques: 0, adrenalina: [], amio: 0, insufl: 10, escenario: 'responde', reloj: 0, ciclo: null, rce: false, minuto: 5, causa: null };
@@ -142,7 +142,7 @@ function leer() {
   const midiendo = desde > simT - ven && elec.length < 2 && !(mo.m.fv || (mo.m.foco && S.tdp));
   // la FC del monitor: media de los últimos latidos (en la FA, de toda la ventana: es irregular); si se hace una pausa,
   // cae con ella (no va detrás del dibujo)
-  const ritmo = (lista, tt) => { const u = mo.m.fa ? lista : lista.slice(-6); if (!u.length) return null; if (u.length < 2) return null; let f = 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])); const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return f == null ? null : Math.round(f); };
+  const ritmo = (lista, tt) => { const u = mo.m.fa || mo.m.hisCada || S.clave === 'bav2' ? lista : lista.slice(-6); if (!u.length) return null; if (u.length < 2) return null; let f = 60 * (u.length - 1) / (tt(u[u.length - 1]) - tt(u[0])); const gap = t - tt(u[u.length - 1]), rrM = f ? 60 / f : 1; if (gap > Math.max(1.1, 1.6 * rrM)) f = 60 / gap; return f == null ? null : Math.round(f); };
   let fc = ritmo(elec, b => b.t0);
   const caos = mo.m.fv || (mo.m.foco && S.tdp);
   const lat = latidos(t).filter(b => b.t > desde && b.t <= t);
@@ -256,6 +256,7 @@ function mandosTratar() {
     `<div class="rtv-deslizador"><input type="range" id="rtv-d-horas" min="0" max="6" step="0.5" value="${S.horas}" aria-label="Horas desde el fármaco" ${F195[S.farmaco] ? '' : 'disabled'}><output id="rtv-o-horas">${coma(S.horas, 1)} h<small>desde la dosis · Fig. 19.5</small></output></div>`,
     `<div class="rtv-rejilla" style="--n:3">${tog('esmolol', 'Esmolol', 'betabloqueante', `aria-pressed="${S.farmaco === 'esmo'}"`)}${tog('llenado', 'Llenado malo', 'estenosis mitral, hipertrofia', `aria-pressed="${S.llenadoMalo}"`)}${tog('cv-fa', 'Cardioversión', '100 J sincronizada')}</div>`);
   if (c === 'tam') h.push(`<div class="rtv-rejilla" style="--n:3">${tog('mg-tam', 'Magnesio', '2 g + 6 g en 6 h')}${tog('meto-tam', 'Metoprolol', 'si no hay EPOC')}${tog('vera-tam', 'Verapamilo', 'con EPOC')}</div>`, `<div class="rtv-rejilla" style="--n:1">${tog('reinicio', 'Empezar otra vez', '')}</div>`);
+  if (c === 'bav2') h.push(`<div class="rtv-seg" role="group" aria-label="Tipo de bloqueo">${[['I', 'Mobitz I', 'nodo AV'], ['II', 'Mobitz II', 'His'], ['2:1', 'Bloqueo 2:1', 'His']].map(([k, n, d]) => `<button type="button" data-mobitz="${k}" aria-pressed="${S.mobitz === k}">${n}<small>${d}</small></button>`).join('')}</div>`, nota('El sitio del bloqueo (nodo o His) no se ve en el ECG de superficie: aquí es ilustrativo. La guía ESC 2021 pide localizarlo para decidir el marcapasos (p. 27). Sin dosis: la guía no las da.'));
   if (c === 'wpw') {
     if (!S.wpwFa) h.push(`<div class="rtv-rejilla" style="--n:1">${tog('llegafa', 'Llega una FA', 'con la vía accesoria')}</div>`, nota('Fíjate antes en el PR y en el comienzo del QRS (pestaña Medir).'));
     else h.push(`<div class="rtv-rejilla" style="--n:3">${tog('w-dilt', 'Diltiazem', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-bb', 'Betabloqueante', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}${tog('w-digo', 'Digoxina', 'frena el nodo', 'class="rtv-tog rtv-peligro"')}</div>`,
@@ -467,6 +468,7 @@ function claveGuia() {
   if (c === 'nodal' && S.adeno) return 'adenosina';
   if (c === 'fa' && F195[S.farmaco]) return 'faF';
   if (c === 'wpw' && S.wpwFa) return 'wpwFa';
+  if (c === 'bav2' && S.mobitz !== 'I') return 'bav2ii';
   if (p) { if (p.rce) return 'rce'; if (c === 'fv' && p.choques >= 3 && p.escenario === 'refractaria') return 'refractaria'; if (c === 'fv' && p.comp) return p.insufl === 30 ? 'rcpInsufl' : p.adrenalina.length ? 'rcpAdre' : 'rcp'; }
   return GUIAS[c] ? c : 'sinusal';
 }
@@ -480,6 +482,7 @@ function pintarFrase() {
   if (S.clave === 'wpw' && S.wpwFa) [t, o] = S.fvWpw ? ['El bloqueo selectivo del nodo precipitó una FV: sin pulso. Desfibrilar.', 'ficha · p. 28']
     : S.wpwNodo ? ['Frenar el nodo no frena el atajo: la FC no baja, y el bloqueo selectivo del nodo puede precipitar una FV. Con una vía accesoria no se dan antagonistas del calcio, betabloqueantes ni digoxina.', 'ficha · p. 28']
     : ['Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares. Cardioversión eléctrica, o amiodarona o procainamida.', 'ficha · p. 27-28'];
+  if (S.clave === 'bav2' && S.mobitz !== 'I') [t, o] = ['El PR de los latidos que pasan no cambia, y de pronto una P se queda sin QRS (' + (S.mobitz === '2:1' ? 'una de cada dos' : 'una de cada tres') + '): el bloqueo está más abajo, en el His. Es el que más preocupa: puede acabar en bloqueo completo.', 'ficha · p. 117; ESC 2021 · p. 27'];
   if (S.clave === 'torsade' && ultLect && ultLect.qtc && !S.tdp) extra = ` QTc ahora: ${coma(ultLect.qtc, 2)} s.`;
   if (S.clave === 'torsade' && S.tdp) [t, o] = ['Torsade de pointes: una TV polimórfica cuyos QRS cambian de forma y de altura, como si giraran. Sostenida: desfibrilar.', 'ficha · p. 34-35'];
   if (S.clave === 'hiperk') extra = S.k >= 8 ? ' >8: el QRS se funde con la T.' : S.k > 7 ? ' >7: PR largo, sin P, QRS que se ensancha.' : S.k >= 6.4 ? ' ~6,5: T picudas.' : '';
@@ -495,6 +498,9 @@ function pintarFicha() {
   let h = e.paciente ? PACIENTES[e.paciente] : '';
   if (S.clave === 'tv') h += ` · TV a 170 lpm, PA 118/72, consciente${S.inestable ? ' · <b>ahora inestable</b>' : ''}`;
   if (S.clave === 'torsade') h += ' · día 3: haloperidol y claritromicina; K⁺ 3,1 y Mg²⁺ 1,4 · su QT: 520 ms a 75 lpm (QTc 0,58 s)';
+  if (S.clave === 'bradi') h += ' · FC 45, sin síntomas: la ESC 2021 la considera fisiológica en reposo (40-50 lpm, p. 24)';
+  if (S.clave === 'bav1') h += ' · ECG de ingreso: PR largo y fijo, asintomática';
+  if (S.clave === 'bav2') h += S.mobitz === 'I' ? ' · mareo ocasional; el PR crece y cae una P' : ' · síncope hace una semana; PR fijo y P sin QRS';
   if (S.clave === 'stemi') h += ' · ST +2,5 mm en V2-V4';
   if (S.clave === 'fa') h = 'Pacientes con FA sin complicar, como los del estudio de la Fig. 19.5 (FC de partida ~138).';
   if (S.clave === 'nodal') h = 'Una reentrada nodal: suele darse en gente sin cardiopatía, más en mujeres. Palpitaciones y mareo (p. 29).';
@@ -547,7 +553,7 @@ function pintarFuentes() {
   const k = claveGuia(), lista = []; const vistas = new Set();
   const de = [...(est().fuentes || []), ...((k && GUIAS[k] ? GUIAS[k].pasos : []).map(p => p.c))];
   for (const c of de) { const kk = c.f + c.id + c.sitio; if (!vistas.has(kk)) { vistas.add(kk); lista.push(c); } }
-  $('lista-fuentes').innerHTML = lista.length ? lista.map(c => `<li><span>${FICHAS[c.f].libro}, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('') : `<li><span>${PENDIENTE}</span><a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 de estimulación cardíaca (Eur Heart J)</a></li>`;
+  $('lista-fuentes').innerHTML = lista.length ? lista.map(c => `<li><span>${libroDe(c)}, ${c.sitio} (${/[-,]/.test(String(c.p)) ? 'pp.' : 'p.'} ${c.p})</span>${cita(c)}</li>`).join('') : `<li><span>${PENDIENTE}</span><a class="cita-pdf" href="${ESC_2021}" target="_blank" rel="noopener">Guía ESC 2021 de estimulación cardíaca (Eur Heart J)</a></li>`;
 }
 function pintarLaminas() {
   const ls = LAMINAS.map((l, i) => [l, i]).sort((a, b) => (b[0].estados.includes(S.clave) ? 1 : 0) - (a[0].estados.includes(S.clave) ? 1 : 0));
@@ -610,6 +616,7 @@ $('dock-panel').addEventListener('click', ev => {
   if (b.dataset.estado) { S.medir = null; if (pausado) ponerPausa(false); ponerEstado(b.dataset.estado); pintarDock(); if (REDUCIR) pintarEscena(simT); return; }
   if (b.dataset.medir) { S.medir = S.medir === b.dataset.medir ? null : b.dataset.medir; if (S.medir && !pausado) { ponerPausa(true); S.pausaMedir = true; } if (!S.medir) dejarDeMedir(); pintarTiras(); pintarCalibre(); pintarDock(); return; }
   if ('far' in b.dataset) { ponerFarmaco(b.dataset.far); return; }
+  if (b.dataset.mobitz) { ponerEstado('bav2', { mobitz: b.dataset.mobitz }); return; }
   if (b.dataset.rama) { ponerEstado('rama', { rama: b.dataset.rama }); return; }
   if (b.dataset.flutter) { ponerEstado('flutter', { flutter: +b.dataset.flutter }); return; }
   if (b.dataset.inest) { S.inestable = b.dataset.inest === 'true'; mo.m.contractil = S.inestable ? 0.55 : 1; latCache.t = -1; pintarDock(); pintarFicha(); return; }

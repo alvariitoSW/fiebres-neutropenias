@@ -14,10 +14,16 @@ export const FICHAS = {
   'mc-paro-monitorizacion': { esp: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', titulo: 'Paro cardíaco: monitorización de la reanimación', corto: 'Paro: monitorización', libro: 'Marino', pdf: 'C' },
   'mc-posresucitacion': { esp: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', titulo: 'Síndrome posparo cardíaco y pronóstico neurológico', corto: 'Síndrome posparo', libro: 'Marino', pdf: 'C' },
   'cardio-fisiologia-aplicada': { esp: 'fisioUci', view: 'cardiologia', panel: 'panel-cardio-tabs', titulo: 'Fisiología cardíaca aplicada', corto: 'Fisiología cardíaca', libro: 'El Libro Azul', pdf: 'LA' },
+  'ecg-f8': { esp: 'pifCardio', view: 'ecgArritmias', panel: 'panel-pif-ecg-tabs', titulo: 'Arritmias (ECG)', corto: 'Arritmias (ECG)', libro: 'López Ramírez 2012', pdf: 'L2' },
+  'ecg-f10': { esp: 'pifCardio', view: 'ecgArritmias', panel: 'panel-pif-ecg-tabs', titulo: 'Marcapasos (ECG)', corto: 'Marcapasos (ECG)', libro: 'López Ramírez 2012', pdf: 'L3' },
   'fisio-hiperpotasemia': { esp: 'nefrologia', view: 'nefrona', panel: 'panel-fisio-tabs', titulo: 'Hiperpotasemia', corto: 'Hiperpotasemia', libro: 'Nefrología al día (De Sequera, 2024)', pdf: 'K' },
 };
-export const PDF = { C: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf', LA: 'docs/libro-azul-seccion-i-cardiovascular-parte1.pdf', K: 'docs/de-sequera-2024-trastornos-potasio.pdf' };
-const cf = (f, id, sitio, p) => ({ f, id, sitio, p });
+export const PDF = { C: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf', LA: 'docs/libro-azul-seccion-i-cardiovascular-parte1.pdf', K: 'docs/de-sequera-2024-trastornos-potasio.pdf',
+  E: 'docs/esc-2021-estimulacion-cardiaca.pdf', L2: 'docs/lopez-ramirez-2012-alegria-leer-ecg-parte2.pdf', L3: 'docs/lopez-ramirez-2012-alegria-leer-ecg-parte3.pdf' };
+// Libro que se nombra al citar: el de la ficha, salvo que la cita traiga su propio PDF (pdf: 'E' → la guía ESC 2021)
+export const LIBRO_PDF = { E: 'ESC 2021' };
+export const libroDe = c => LIBRO_PDF[c.pdf] || FICHAS[c.f].libro;
+const cf = (f, id, sitio, p, pdf) => ({ f, id, sitio, p, pdf });   // p = página del PDF · pdf = clave de PDF si no es el de su ficha
 // Marino, caps. 19-21 (páginas del PDF)
 export const C = {
   hallazgos: cf('mc-taqui-reconocimiento', 'mc-taqui-hallazgos', 'Los tres hallazgos', 18),
@@ -83,6 +89,21 @@ const LA = {
   cond: cf('cardio-fisiologia-aplicada', 'fuci-conduccion', 'Sistema de conducción', 7),
   pa: cf('cardio-fisiologia-aplicada', 'fuci-potencial-accion', 'Potencial de acción', 8),
 };
+// ESC 2021 de estimulación (PDF = impresa + 1) y la ficha de ECG (López Ramírez 2012, parte 2: PDF = impresa − 59)
+const E = {
+  dns: cf('ecg-f8', 'ecg8-nota-pausa', 'Bradicardia sinusal 40-50 lpm (ESC)', 24, 'E'),
+  bav1: cf('ecg-f8', 'ecg8-tabla-bav', 'BAV 1.º: PR ≥ 300 ms (ESC)', 27, 'E'),
+  mobitz: cf('ecg-f8', 'ecg8-nota-mobitz', 'Mobitz I, II y 2:1 (ESC)', 27, 'E'),
+  mp: cf('ecg-f8', 'ecg8-nota-mobitz', 'Cuándo marcapasos en el BAV (ESC)', 28, 'E'),
+};
+const L = {
+  sinusal: cf('ecg-f8', 'ecg8-disf-sinusal', 'Disfunción sinusal', 55),
+  escape: cf('ecg-f8', 'ecg8-tabla-escapes', 'Escapes', '55-56'),
+  causas: cf('ecg-f8', 'ecg8-causas', 'Causas de disfunción sinusal', 57),
+  bav: cf('ecg-f8', 'ecg8-tabla-bav', 'Bloqueos AV', '57-58'),
+  bav2: cf('ecg-f8', 'ecg8-fig-bav2', 'Mobitz I y bloqueo de 2.º grado', 58),
+  nota: cf('ecg-f8', 'ecg8-nota-mobitz', 'Mobitz II y 2:1', 58),
+};
 const KC = { ecg: cf('fisio-hiperpotasemia', 'hk-fig9', 'Figura 9 · ECG', 21) };
 
 // ---------- Calibración de la FA: refractariedad del torniquete → FC media (medida con el motor: 6 semillas × 56 s) ----------
@@ -109,6 +130,7 @@ export const PACIENTES = {
   teodoro: '<b>Teodoro</b>, 74 años, 78 kg · día 2 de una lobectomía · HTA y diabetes',
   hugo: '<b>Hugo</b>, 61 años · cardiopatía isquémica · ingresado por neumonía',
   leandro: '<b>Leandro</b>, 49 años · pancreatitis en planta · FV presenciada',
+  casilda: '<b>Casilda</b>, 71 años, 62 kg · HTA tratada · ingresada por un cuadro gripal',
   joaquin: '<b>Joaquín</b>, 56 años, 84 kg · dolor opresivo desde hace 40 min',
 };
 
@@ -172,11 +194,19 @@ export const ESTADOS = {
   hiperk: { fam: 'mas', nombre: 'Potasio alto', corto: 'K⁺ alto', fuentes: [KC.ecg, LA.pa],
     frase: ['El potasio alto cambia la célula y, con ella, el ECG: T picudas, luego PR largo, sin P y QRS ancho.', 'Nefrología al día · p. 21'],
     aplicar(mo, t, s) { aplicarK(mo, s.k || 4.2); mo.reiniciarSA(t + 0.05); } },
-  'pend-bradi': { fam: 'lentos', nombre: 'Bradicardia sinusal', corto: 'Bradicardia sinusal', pendiente: true, fuentes: [] },
-  'pend-bav1': { fam: 'lentos', nombre: 'Bloqueo AV de 1.er grado', corto: 'BAV 1.er grado', pendiente: true, fuentes: [] },
-  'pend-bav2': { fam: 'lentos', nombre: 'Bloqueo AV de 2.º grado', corto: 'BAV 2.º grado', pendiente: true, fuentes: [] },
-  'pend-bav3': { fam: 'lentos', nombre: 'Bloqueo AV de 3.er grado', corto: 'BAV 3.er grado', pendiente: true, fuentes: [] },
-  'pend-mp': { fam: 'lentos', nombre: 'Marcapasos', corto: 'Marcapasos', pendiente: true, fuentes: [] },
+  bradi: { fam: 'lentos', nombre: 'Bradicardia sinusal', corto: 'Bradicardia sinusal', fuentes: [E.dns, L.sinusal, L.causas], paciente: 'casilda',
+    frase: ['El nodo sinusal dispara despacio, pero sigue mandando: una P antes de cada QRS y el PR normal. Solo falta ritmo. Si no hay síntomas ni causa que corregir, no se trata.', 'ficha · p. 114; ESC 2021 · p. 24'],
+    aplicar(mo, t, s) { mo.m.fcSA = s.fcSA || 45; mo.reiniciarSA(t + 0.05); } },
+  bav1: { fam: 'lentos', nombre: 'Bloqueo AV de 1.er grado', corto: 'BAV 1.er grado', fuentes: [L.bav, E.bav1], paciente: 'casilda',
+    frase: ['Toda P conduce, pero el torniquete del nodo AV deja pasar la onda más despacio: PR largo y fijo. El ritmo y la FC no cambian.', 'ficha · p. 116-117; ESC 2021 · p. 27'],
+    aplicar(mo, t) { RITMO_BASE(mo); mo.m.navRet = 2; mo.m.navF = 1.5; mo.reiniciarSA(t + 0.05); } },
+  bav2: { fam: 'lentos', nombre: 'Bloqueo AV de 2.º grado', corto: 'BAV 2.º grado', fuentes: [L.bav, L.bav2, L.nota, E.mobitz, E.mp], paciente: 'casilda',
+    frase: ['Hay P que no conducen. En el Mobitz I el PR se alarga latido a latido hasta que una P se queda sin QRS (torniquete del nodo). En el Mobitz II el PR no cambia y de pronto falta un QRS (bloqueo más abajo, en el His).', 'ficha · p. 117; ESC 2021 · p. 27'],
+    aplicar(mo, t, s) {
+      if (s.mobitz === 'I') { mo.m.fcSA = 85; mo.m.navRet = 1.6; mo.m.navF = 3.0; } else { mo.m.fcSA = 75; mo.m.hisCada = s.mobitz === '2:1' ? 2 : 3; }
+      mo.reiniciarSA(t + 0.05); } },
+  bav3: { fam: 'lentos', nombre: 'Bloqueo AV de 3.er grado', corto: 'BAV 3.er grado', pendiente: true, fuentes: [] },
+  marcapasos: { fam: 'lentos', nombre: 'Marcapasos', corto: 'Marcapasos', pendiente: true, fuentes: [] },
 };
 export const PENDIENTE = 'Pendiente de fuente: Marino (caps. 19-21) no trata las bradicardias ni los bloqueos AV. Llegarán de la guía europea de estimulación cardíaca (ESC 2021), con el mismo torniquete y el mismo ECG. Hasta entonces, ni trazo ni cifra.';
 export const ESC_2021 = 'https://academic.oup.com/eurheartj/article/42/35/3427/6358547';
@@ -255,6 +285,18 @@ export const GUIAS = {
     { t: 'Además del nodo hay un atajo a través del anillo: la vía accesoria. No tiene torniquete.', r: ['#rtv-ap', '#rtv-puente'], c: C.wpw, org: 'su sitio: fisiología general (ver la nota)' },
     { t: 'Parte del ventrículo se activa antes, por el atajo, y despacio, de músculo a músculo: PR corto y onda delta antes del QRS.', r: ['#rtv-ecg', '#rtv-vents'], c: C.wpw, org: 'por qué la delta: fisiología general' },
     { t: 'Da taquicardias supraventriculares que se repiten, por reentrada. Si llega una FA, el atajo lo cambia todo: pruébalo en «Tratar».', r: ['#rtv-puente'], c: C.wpw }] },
+  bradi: { tit: 'Bradicardia sinusal', pasos: [
+    { t: 'El reloj sinusal dispara despacio, pero el camino es el de siempre: una P antes de cada QRS y el mismo PR.', r: ['#rtv-sa', '#rtv-ecg'], c: L.sinusal, org: 'ficha' },
+    { t: 'Entre 40 y 50 lpm puede ser normal en reposo, sobre todo en deportistas. Se trata si da síntomas y no hay causa que corregir (fármacos, hipoxia, potasio).', r: ['#rtv-sa'], c: E.dns, org: 'ESC 2021' }] },
+  bav1: { tit: 'Bloqueo AV de 1.er grado', pasos: [
+    { t: 'El torniquete del nodo AV frena la onda: el PR se alarga y queda fijo. Toda P va seguida de su QRS.', r: ['#rtv-lupa-av', '#rtv-nav', '#rtv-ecg'], c: L.bav, org: 'ficha' },
+    { t: 'Suele ser asintomático y sin consecuencias. Solo con un PR muy largo (≥ 300 ms) y síntomas parecidos a los del síndrome de marcapasos se plantea tratar.', r: ['#rtv-ecg'], c: E.bav1, org: 'ESC 2021' }] },
+  bav2: { tit: 'Mobitz I (Wenckebach)', pasos: [
+    { t: 'El PR se alarga latido a latido hasta que una P no conduce; después el PR vuelve a ser corto y el ciclo se repite.', r: ['#rtv-lupa-av', '#rtv-ecg'], c: L.bav2, org: 'ficha' },
+    { t: 'Suele estar en el nodo AV (suprahisiano): curso benigno y poco riesgo de progresar. Solo se pone marcapasos si da síntomas o se demuestra que el bloqueo está en o bajo el His.', r: ['#rtv-nav'], c: E.mp, org: 'ESC 2021' }] },
+  bav2ii: { tit: 'Mobitz II y bloqueo 2:1', pasos: [
+    { t: 'El PR de los latidos que conducen no cambia, y de pronto una P se queda sin QRS: el His deja de transmitir una de cada tantas.', r: ['#rtv-his', '#rtv-ecg'], c: L.nota, org: 'ficha' },
+    { t: 'Sin causa reversible, indica marcapasos aunque no haya síntomas: puede progresar a bloqueo completo. En un 2:1 se distingue si es nodal o infranodal.', r: ['#rtv-his'], c: E.mobitz, org: 'ESC 2021' }] },
   wpwFa: { tit: 'FA con una vía accesoria', pasos: [
     { t: 'Las aurículas fibrilan, y el atajo, sin torniquete, deja pasar impulsos muy seguidos: QRS anchos, rápidos e irregulares.', r: ['#rtv-puente', '#rtv-ecg'], c: C.wpw },
     { t: 'Los fármacos que frenan el nodo (antagonistas del calcio, betabloqueantes, digoxina) no frenan el atajo: la FC no baja.', r: ['#rtv-torn-r', '#rtv-puente'], c: C.wpw },
