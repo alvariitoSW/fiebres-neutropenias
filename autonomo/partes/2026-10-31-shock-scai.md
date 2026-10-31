@@ -1,6 +1,6 @@
 # 2026-10-31 · shock-scai
 
-**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/75) · rama `auto/b3-scai` (desde `auto/b3`, con `main` fusionado tras la PR #51)
+**Resultado:** hecha · [PR #75](https://github.com/alvariitoSW/fiebres-neutropenias/pull/75) fusionada por el Consejo (acta `autonomo/consejo/2026-10-31-pr75.md`) · rama `auto/b3-scai` (desde `auto/b3`, con `main` fusionado tras la PR #51)
 **Vueltas:** 3 (auditoría, profesor, jueces) · **Jueces:** suite general + `--ficha` IC + `--modelo shock-vivo` + `--forma`: 497 ✅, 0 ❌ · auditoría ✓ (0 graves, 7 menores arreglados) · profesor 9,0 · 8,75 · 8,9
 
 ## Qué se hizo
