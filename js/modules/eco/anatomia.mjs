@@ -109,27 +109,29 @@ export function radioConCuerda(r, num, a, f, k0 = 1) {   // k0: escala del redon
 }
 // Área (por r², rad) que la cuerda redondeada le quita al círculo unidad según su medio ángulo a: tabla de 0 a ALFA_SEPTO, calculada una vez
 const TABLAS_CUERDA = new Map();
-export function areaCuerda(a, k0 = 1) {
-  let TABLA_CUERDA = TABLAS_CUERDA.get(k0);
+export function areaCuerda(a, k0 = 1, tope = ALFA_SEPTO) {   // tope: hasta qué medio ángulo llega la tabla (el dibujo nuevo corta más hondo a nivel de papilares)
+  const clave = tope === ALFA_SEPTO ? k0 : k0 + '|' + tope;
+  let TABLA_CUERDA = TABLAS_CUERDA.get(clave);
   if (!TABLA_CUERDA) { const N = 40, NA = 120; TABLA_CUERDA = [];
-    for (let i = 0; i <= N; i++) { const ai = ALFA_SEPTO * i / N; let q = 0;
+    for (let i = 0; i <= N; i++) { const ai = tope * i / N; let q = 0;
       for (let j = 0; j < NA; j++) { const f = PHI_SEPTO + (j + 0.5) / NA * TAU - Math.PI, rs = radioConCuerda(1, Math.cos(ai), ai, f, k0); q += 0.5 * (1 - rs * rs) * TAU / NA; }
-      TABLA_CUERDA.push(q); } TABLAS_CUERDA.set(k0, TABLA_CUERDA); }
-  const x = clamp(a / ALFA_SEPTO, 0, 1) * 40, i = Math.min(39, Math.floor(x)); return TABLA_CUERDA[i] + (TABLA_CUERDA[i + 1] - TABLA_CUERDA[i]) * (x - i);
+      TABLA_CUERDA.push(q); } TABLAS_CUERDA.set(clave, TABLA_CUERDA); }
+  const x = clamp(a / tope, 0, 1) * 40, i = Math.min(39, Math.floor(x)); return TABLA_CUERDA[i] + (TABLA_CUERDA[i + 1] - TABLA_CUERDA[i]) * (x - i);
 }
 
 // ---- P3b · anillos, paredes y masa: el corazón los da, el dibujo los lee ----------------------------------------------------
 export const U_VI = 2.234;   // ángulo del eje mitroaórtico en el plano basal (rad)
 /** VI con el tabique aplanado (septo 0-1): la cuerda que se le quita a la cavidad se devuelve al radio (volumen = motor). */
-export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1) {
-  const septo = clamp(septoIn, 0, 1);
-  const alfa = (z, L) => { const sv = -z / L; return ALFA_SEPTO * septo * paso(0, 0.2, sv) * (1 - paso(0.7, 0.95, sv)); };
+export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1, hondo = 0) {   // hondo (opcional, dibujo nuevo): corte más hondo solo a nivel de papilares (fracción extra de ALFA_SEPTO)
+  const septo = clamp(septoIn, 0, 1), tope = hondo ? ALFA_SEPTO * (1 + hondo) : ALFA_SEPTO;
+  const alfa = (z, L) => { const sv = -z / L, base = ALFA_SEPTO * septo * paso(0, 0.2, sv) * (1 - paso(0.7, 0.95, sv));
+    return hondo ? base * (1 + hondo * paso(0.2, 0.3, sv) * (1 - paso(0.6, 0.7, sv))) : base; };
   let vi = geomVi(vvi, mio);
   if (septo > 0) {
     let quitado = 0; const dz = vi.L / N_VOL;
     for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
       if (a <= 0) continue;
-      const q = r * r * areaCuerda(a, k0);
+      const q = r * r * areaCuerda(a, k0, tope);
       quitado += q * dz; }
     vi = geomVi(vvi, mio, quitado / 1000);
   }
