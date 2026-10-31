@@ -12,6 +12,7 @@ import { montarCorazon, montarRecorrido, crearEco } from './corazon.js';
 import { crearTope } from '../../../core/tope.js';
 import { mandosDiseccion, cambioDiseccion, CLAVES_DISEC, AJUSTE_DISEC } from './diseccion.js';
 import * as D from '../../../data/shock-vivo-data.js';
+import { estadioScai } from './scai.mjs';
 import { crearConsolaBalon } from './consola-balon.js';
 import { calcularTopes, bolosQueNoCaben } from './topes.js';
 import { ECO_REAL } from '../../eco/eco-real.mjs';
@@ -338,10 +339,16 @@ function pintarFrase() {
   const k = D.nombreEstado(R, ctxX()), E = D.ESTADOS[k]; claveActual = k;
   if (!E) return;
   $('frase-txt').innerHTML = `<span class="estado">${typeof E.tit === 'function' ? E.tit(R, ctxX()) : E.tit}</span>${E.frase(R, ctxX())} ${org(typeof E.org === 'function' ? E.org(R) : E.org, false)}`;
+  pintarScai();
   const vistas = new Set(), lis = [];
   for (const p of E.guia) { const c = p.c; const kk = c.f + c.id + c.sitio; if (vistas.has(kk)) continue; vistas.add(kk); lis.push(c); }
   const T = D.OBJETIVOS[tablaActual()].cita; lis.push(T);
   $('fuentes').innerHTML = lis.map((c) => `<li><span>${D.FICHA[c.f][4]} · ${c.sitio}${c.p != null ? ` (${pagTxt(c.p)})` : ''}</span>${cita(c)}</li>`).join('');
+}
+
+function pintarScai() {
+  const h = est.historia, n = h.length, sc = estadioScai(R, cab.ajuste, { lact: est.lab.lact, horas: est.horas, baja: n >= 2 && h[n - 1].lact < h[n - 2].lact - 0.05 });
+  $('scai-r').textContent = `SCAI ${sc.letra}`; $('scai-p').textContent = `${sc.nombre}: ${sc.porque}.`;
 }
 
 // ---------------------------------------------------------------- laboratorio y tendencias
@@ -387,8 +394,8 @@ function pintarDock() {
   } else if (est.pest === 'sop') {
     h.push(`<div class="seg" role="group" aria-label="Soporte mecánico">${[['no', 'Ninguno'], ['balon', 'Balón'], ['impella', 'Impella'], ['ecmo', 'ECMO VA']].map(([k, n]) => `<button type="button" data-sop="${k}" aria-pressed="${est.aparato === k}">${n}</button>`).join('')}</div>`);
     if (est.aparato === 'no') h.push(`<p class="dock-nota">La fuente lo reserva para el shock cardiogénico refractario (p. 45): pruébalo con Aurelio.</p>`);
-    if (t === 'ic') h.push(`<div class="seg" role="group" aria-label="CPAP, en cmH₂O">${[0, 5, 10, 15].map((v) => `<button type="button" data-cpap="${v}" aria-pressed="${aj.cpap === v}">${v ? v : 'Sin'}<small>${v ? 'cmH₂O' : 'CPAP'}</small></button>`).join('')}</div><p class="dock-nota">CPAP: presión de la vía aérea, «usualmente 5-10 cmH₂O» (Marino resp. p. 77; el 15 es para ver el tope). En el corazón que falla (Ramiro) no le quita gasto y le seca el pulmón (resp. p. 85, 88). ${org('ficha · resp. p. 77, 85, 88 · las cifras: modelo')}</p>`);
-    if (t === 'ic') h.push(`<p class="dock-nota"><b>Límite del modelo:</b> Marino (p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 en 11 pacientes con PCP ≥12; con PCP <12 el gasto bajó, IC 3,14→2,89) describen que el gasto del corazón que falla puede subir; el modelo no lo reproduce (el motivo es del autor: otros mecanismos del paciente real, como la retirada simpática, no están en el modelo). Tampoco mejora la SpO₂: el modelo no reproduce la apertura de los alvéolos que Marino atribuye a la CPAP (resp. p. 77).</p>`);
+    if (t === 'ic') h.push(`<div class="seg" role="group" aria-label="CPAP, en cmH₂O">${[0, 5, 10, 15].map((v) => `<button type="button" data-cpap="${v}" aria-pressed="${aj.cpap === v}">${v ? v : 'Sin'}<small>${v ? 'cmH₂O' : 'CPAP'}</small></button>`).join('')}</div><p class="dock-nota">CPAP: presión de la vía aérea, «usualmente 5-10 cmH₂O» (Marino resp. p. 77; el 15 es para ver el tope). En el corazón que falla (Ramiro) no le quita gasto, se lo sube, y le seca el pulmón (resp. p. 85, 88). ${org('ficha · resp. p. 77, 85, 88 · las cifras: modelo')}</p>`);
+    if (t === 'ic') h.push(`<p class="dock-nota"><b>Límite del modelo:</b> Marino (p. 83, 88) y Bradley 1992 (PMID 1736745: +22 % de VS indexado con CPAP 5 en 11 pacientes con PCP ≥12; con PCP &lt;12 el gasto bajó, IC 3,14→2,89). El modelo da el sentido y el orden de magnitud: el VI débil nota más el alivio de la poscarga (tensión de la pared y reserva del músculo, su Ees): con CPAP 5, +8,5 % de VS en Ramiro, por debajo del +22 % de Bradley; el normal pierde algo (−7 %). La retirada simpática y el menor trabajo respiratorio del paciente real no están en el modelo. Tampoco mejora la SpO₂: el modelo no reproduce la apertura de los alvéolos que Marino atribuye a la CPAP (resp. p. 77).</p>`);
     const ok = est.aparato !== 'no' && D.indicacion(p, est.aparato).ok;
     if (ok) h.push(`<p class="dock-nota">Los mandos del aparato, bajo su dibujo.</p>`);
     if (!ok && est.aparato !== 'no') h.push(`<p class="dock-nota">${D.indicacion(p, est.aparato).txt}</p>`);
@@ -443,7 +450,7 @@ function refrescar(todo) {
   if (!cab?.lectura) return;
   R = leer();
   pintarCifras(); pintarConsola(); aplicarTopes(false);
-  if (est.modo === 'explorar') { pintarFrase(); pintarLab(); }
+  if (est.modo === 'explorar') { pintarFrase(); pintarLab(); } else pintarScai();   // en la Mayéutica el rótulo SCAI también sigue al monitor
   if (todo) { montarEscena(); pintarPestEscena(); escena.actualizar(cab, 0, true, infoEscena()); if (REDUCIR || est.pausa) monitor.llenar(cab, ctxMon()); monitor.pintar(); pintarMandos(); }
   $('obj-umi').disabled = est.pac.tipo !== 'septico' || est.modo === 'qs';
   $('obj-umi').title = est.pac.tipo !== 'septico' ? 'El Manual UMI da sus objetivos para el shock séptico' : '';

@@ -112,6 +112,12 @@ export const SHV_CSS = `
 .shv-raiz .dock-in { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 3px; }
 .shv-raiz .frase { display: flex; gap: 6px; align-items: flex-start; font: .8rem/1.32 var(--serif); color: var(--text-main); box-shadow: inset 3px 0 0 var(--accent-yellow); padding: 2px 0 2px 8px; }
 .shv-raiz .frase-txt { flex: 1; min-width: 0; }
+.shv-raiz .scai { flex: none; font: .7rem/1.3 var(--serif); color: var(--text-main); }
+.shv-raiz .scai summary { cursor: pointer; min-height: 32px; display: flex; align-items: center; padding: 0 6px; box-shadow: inset 0 -2px 0 var(--accent-red); white-space: nowrap; list-style: none; }
+.shv-raiz .scai-c { position: absolute; left: 8px; right: 8px; bottom: 100%; background: var(--bg-main); border: 1px solid var(--accent-red); padding: 6px 8px; }
+.shv-raiz .scai b { font: 700 .66rem var(--sans); letter-spacing: .04em; color: var(--accent-red); }
+.shv-raiz .scai-o { color: var(--text-dim); font-size: .68rem; }
+.shv-raiz .scai-c .especialidad-link { display: inline; min-height: 32px; font-size: .72rem; }
 .shv-raiz .frase-txt .estado { font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-yellow); display: block; }
 .shv-raiz .btn-guia { flex: none; min-height: 44px; min-width: 48px; border-radius: 10px; border: 1px solid var(--accent-yellow); background: var(--accent-yellow); color: var(--bg-main); font: 700 .7rem/1.1 var(--sans); cursor: pointer; padding: 2px 6px; }
 .shv-raiz .dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
