@@ -16,6 +16,7 @@
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
 import { baseGeometrica, REF } from './corazon-geo.mjs';
+import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
 import { TEJIDOS, DB_IMAGEN } from '../../data/eco-tejidos.js';
@@ -178,7 +179,7 @@ export function medirVd(est) {
 export function medidasCorazon(est, sc = 1.85) {   // est.vaiMax / eroaMitral / vRegMitral: extraDeMotor (formas.mjs)
   const g = baseGeometrica(est), vi = g.vi, z = -0.3 * vi.L, U = g.U, Up = U + Math.PI;
   const pared = (f) => g.rEpiVi(z, f) - g.rEndoVi(z, f);
-  const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), paredPost = pared(Up);
+  const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), pd = paredesDe(est, sc), paredPost = pd.paredVi;   // paredes y masa: anatomia.mjs
   // áreas en el plano A4C: se cuenta qué puntos del plano caen en cada cavidad (bajo el plano AV)
   const P = planoVista('a4c', est), h = 0.6; let nVi = 0, nVd = 0;
   for (let u = -70; u <= 70; u += h) for (let v = 0; v <= P.prof; v += h) {
@@ -189,8 +190,8 @@ export function medidasCorazon(est, sc = 1.85) {   // est.vaiMax / eroaMitral / 
     if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) nVd++; }
   }
   // paredVd: pared libre del VD en esta muestra (mm); medida en la telediástole es el RVWT de Mukherjee 2025 (p. 144)
-  return { tabique: pared(U), paredPost, paredVd: g.tvdW(20), lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
-    masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo,
+  return { tabique: pared(U), paredPost, paredVd: pd.paredVd, lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
+    masaIndice: pd.masaIndice, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo,
     // P5a · AI: el volumen máximo (telesístole, Lang 2015 p. 25) indexado a la superficie corporal (sc, m²; la del paciente del
     // motor, 1,85 por defecto); IM: orificio regurgitante efectivo (cm²) y volumen regurgitante por latido (mL), del motor
     volAI: (est.vaiMax ?? est.vai) / sc, eroa: est.eroaMitral ?? 0, volReg: est.vRegMitral ?? 0 };
