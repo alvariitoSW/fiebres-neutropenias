@@ -77,6 +77,7 @@ function pintar(tipo, x, nombre, pl = 0) {
   sec.dataset.presion = String(x);   // la prueba espera a que el panel llegue a esta presión
   for (const [k, f] of [['vs', f0], ['gc', f1], ['pam', f0]]) {
     const c = celdas[k], d = b[k] / a[k] - 1;
+    const u = c.e.querySelector('.u'); if (u) u.hidden = NX.parada();
     if (NX.parada()) { c.v.textContent = 'sin pulso'; c.sub.textContent = 'parada: actividad eléctrica sin pulso'; c.e.classList.remove('sube'); c.e.classList.add('baja'); continue; }
     c.v.textContent = f(b[k]);
     c.sub.textContent = x === 0 ? 'sin presión positiva' : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
