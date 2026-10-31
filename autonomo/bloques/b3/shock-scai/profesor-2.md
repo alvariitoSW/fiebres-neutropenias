@@ -1,0 +1,13 @@
+# Profesor · shock-scai · rejuicio (REGLAS §4.8 R8) · rama auto/b3-scai, versión 20261031-20
+Visto: capturas de cap4 (5-CF1, 6-CF2-comprueba, 7-CF5, 8-fermin-final), el texto completo del recorrido de Fermín por el programa `scai-profesor-capturas.mjs` (una pasada nueva, sin errores de consola; salida en el scratchpad, cap5/salida.txt), `shock-vivo-scai.js` CF1-CF5 y `mayeutica-shock.js`. Solo se repuntúa lo que quedó bajo la meta.
+
+| Pieza | Antes | Ahora | Por qué |
+|---|---|---|---|
+| Caso de Fermín CF1-CF5 | 8,0 | **8,9** | Los 4 arreglos baratos están y se ven: mezcla los tres formatos de §8 (CF1 «piensa y destapa» con tres datos de razonamiento, CF2/CF3/CF5 test con velo, CF4 «encuentra el error» con 2 errores reales: nitroglicerina en IAM de VD y O₂ con SaO₂ 96 %, 4 frases creíbles con sus citas); el rojo marca solo lo que cambia (CF2 nada, CF4 PA/PVC/IC/lactato/dolor, CF5 «5 h con dobutamina»); el final abre el monitor con FERMÍN (PAM 82, PVC 14, PCP 11, IC 2,0: el estado de CF5) y el botón dice «Abrir el modelo con el paciente del caso»; la ruta cuenta los 5 pasos. Paciente posible: la PAM de 80 ya va rotulada «del monitor» junto a la PA 92/69; el lactato 2,1 (h2) → 1,0 (h4-5) con dobutamina es rápido pero creíble en un respondedor, y CF3, CF4 y CF5 ahora cuentan lo mismo. Giro (vuelve el dolor → lo que no se da) y «Lo que te llevas» con 4 ideas y fuentes. |
+
+**Veredicto**: el caso de Fermín llega a la meta (8,9 ≥ 8,75). Lo que lo separa del 9,5 va al parte, no bloquea:
+- `mayeutica-shock.js:63` (`verEnTexto`): en CF1 sale dos veces «Ver en la ficha: Fallo del corazón derecho» (dos puntos con C.vd); dedupe por destino (el constructor ya lo apuntó).
+- `shock-vivo-scai.js:73` (CF2, opción furosemida): el porqué dice dos veces «inferencia (fisiología general)»; dejar una sola, al final.
+- El caso no pide calcular nada con una calculadora de la app (§8 «interpretar los datos»); vale porque el cociente PVC/PCP y el rótulo SCAI los lee el monitor, pero CF1 podría pedir el cociente (15/11 ≈ 1,4) antes de destapar.
+
+**Letras SCAI nuevas (`scai.mjs`)**: correctas y defendibles para un paciente posible, rotuladas como regla del modelo: D para varias intervenciones recién puestas (se escala sin saber aún si responde) es lo que un intensivista diría; C «en respuesta» con el fármaco aún puesto encaja con que la Tabla 13 no define el estadio tras responder; la E (varias intervenciones, horas y lactato que no baja) es la más generosa, porque en la práctica E es colapso o refractariedad franca (RCP, hipotensión refractaria) y un lactato de 2,5 que no baja a las 5 h sería más un D que no responde: no es un error, pero si se quiere afinar, exigir además PAM <65 o lactato que sube.
