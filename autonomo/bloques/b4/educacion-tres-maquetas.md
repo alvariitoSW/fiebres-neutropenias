@@ -1,0 +1,30 @@
+# Dictamen de Educación · b4 · cómo sirven las tres maquetas de «iones vivos» para estudiar (30/10/2026)
+
+Base: `juicio-iones-{a,b,c}.md`, acta `consejo/2026-10-30-b4-iones.md`, `encargo.md` §3/§7/§9, `cobertura.md` (§0, 16-23, ruta 4D), REGLAS §7.11-7.12 y la regla «un solo motor por fenómeno» (REGLAS línea 20; §2.1b no existe como epígrafe), más la estructura de `autonomo/maquetas/b4-iones-{a,b,c}/` (`ls`, `grep '^export'`). Hoy hay **tres motores** (`a/modelo.js`, `b/modelo.js`, `c/motor.js`) y tres ECG/citas/Mayéuticas paralelos: eso no puede entrar en la app.
+
+## 1. Decisión: un solo modelo, un motor y unos datos, **tres miradas**
+**Un modelo «iones vivos»** (`js/modules/libros/iones-vivos*`, datos `js/data/iones-vivos-data.js` con fuentes en lista, §7.11), con el motor que apruebe la vuelta 2 de la B, y tres formas de mirarlo que son **tres momentos del recorrido**, no tres modelos:
+| Mirada | De | Momento | Qué se ve | Fichas |
+|---|---|---|---|---|
+| **«El análisis engaña»** (vista por defecto) | B | **Mira** y **Piensa** (Guía 3-5 pasos de `b/guia.js`) | ventana del lab sobre el depósito, iceberg por ion, Fig. 36.2 y 38.1 vivas | 16, 19, 21, 23 (y 4 por la Tabla 32.4) |
+| **«La célula por dentro»** (capa, no vista entera: lupa en el depósito de B y botón «¿Por qué?» en C) | A | **Juega**: Realimentar, furosemida, β₂, albúmina/pH, citrato | membrana con bomba Na⁺/K⁺ 3:2, partículas que **cruzan** plasma↔célula↔orina, hueso rotulado (Mg 53 %, Ca 99 %), tubo de muestra (ficticia) | 16, 17 (tubo), 19, 23 |
+| **«A pie de cama»** (segunda vista) | C | **Caso** (y el Examen enlaza aquí con «Pruébalo en la escena») | monitor con ECG común + FC/PA/FR, chips de iones y gasometría, bombas con reloj, apuesta con el K⁺ **oculto**, topes que mandan | 16 (ClK por cava), 18 (Tabla 36.3 con reloj), 20 (6 g/3 h → 5 g/6 h → 5 g/12 h), 21 (bolo 200 mg, 1-2 mg/kg/h) |
+Los casos del bloque viven en la mirada C porque son **tiempo** (Adela: el calcio se disipa a los 45 min; Rufino: 8 h de ClK sin subir hasta el Mg; Damián: día 3 → 4; Valentín: 10 concentrados en 3 h), y la mirada B explica el **porqué** del mismo estado sin cambiar de paciente: un botón «¿Qué hay debajo?» salta de C a B con el mismo `s`. El **Examen** no va en el modelo sino en Estudiar de cada ficha (`js/data/mayeutica/b4-iones.js`, un solo motor de Mayéutica). A no justifica una vista entera: su contenido propio (flujo visible, bomba 3:2, hueso, tubo) cabe en una capa y lo demás ya está en B (depósito dentro/fuera) o ya se injertó (guía de 4 pasos, «Ver en la ficha»). Es la opción «fusionarlas» del usuario.
+
+## 2. Qué se arregla para entrar y qué se descarta
+- **Constantes que no siguen al ion** (grave en las tres): una sola `vitales(s)` en el motor común, con regla y origen. Criterios (R3; cifras de FC/PA **ilustrativas**, declaradas, salvo la página): sello asistolia/parada (ClK >20 mEq/h por cava, E p. 23; Mg ≥13, E p. 39) → FC 0, PA «—», ECG plano; Mg ≥10 → FC 45 y «bloqueo» (E p. 39); Ca iónico <0,9 → PA 98/60; <0,65 → PA 80/45 + ectopia (E p. 45); K⁺ ≥7 → sello «riesgo de parada» + FC 50 (E p. 25-26; «solo el 40 % con cambios»); fosfato <1 → FR 26-28 (E p. 50, músculo respiratorio); K⁺ <2,5 → solo sello (E p. 22: «no arritmias graves sola»). Presets con PA/FC propias (Valentín 98/60 · 110).
+- **Lupa al revés de C** (`lupa.js pintarCelula()`, `dentroK = 22 − …`): muere por construcción: la célula se pinta **una vez** en la capa A desde `kShift` del motor (signo = dirección); C no conserva su lupa.
+- **«Entra en la célula» que no se ve (A)**: en la capa, Realimentar mueve 4-6 partículas de K⁺/fosfato/Mg²⁺ del plasma a la célula con trayecto (Motion o `<animate>`; con «reducir movimiento», estado final) y furosemida las saca a la orina; método «Anatomy», no rectángulos.
+- **Caso de C**: no entra tal cual (paso 4 incoherente, protocolo que salta el 5 g/6 h). Los casos son los de la cobertura §7 (Adela, Rufino, Damián, Valentín) con el protocolo moderado completo (E p. 37) y un segundo fosfato antes de «mejora». **Bombas de C**: en fila de chips bajo el monitor con `bombaMini` (`js/core/bomba.js`), no una pantalla por bomba.
+- **Se descarta**: los tres motores de maqueta (queda uno), el `mayeutica.js` propio de A, la `cita()` solo-PDF de C, los cajones vacíos Heces/Diálisis de A (la diálisis es enlace cruzado al filtro vivo `k-urgente`), los 4 pacientes en 2×2 de C, y el ECG de la hipoK sigue «pendiente» (lo añade el ritmo vivo, no se inventa). Las maquetas A y C se quedan en `autonomo/maquetas/` como referencia; la app no las carga.
+
+## 3. Orden y coste (encargos sonnet ≤60 pasos)
+1. **Espera**: todo lo de abajo espera a que la **vuelta 2 de la B esté aprobada** (ahí se congela el contrato motor + datos). Única petición a esa vuelta, sin coste: que el motor nazca con `avanzar(s, min)` (reloj en minutos y estado `bombas`, como `c/motor.js paso/avanzar`), `vitales(s)` y los flujos `kShift/pShift/mgShift` como cantidades explícitas, para que las miradas C y A sean pintores (`escena-*.js`) y no motores.
+2. **Iones vivos a la app** (anexo §9: 7,8 M, sin cambio): modelo con la mirada B, prueba `--modelo iones-vivos`, Explorar.
+3. **Encargo «A pie de cama»** (`escena-cama.js`, copia patrón monitor + `tope.js` de b3): ≈0,9 M. Guía de 3-5 pasos por paciente y por tope (§7.10) y apuesta con K⁺ oculto.
+4. **Encargo «La célula por dentro»** (`capa-celula.js`): ≈0,7 M. Enganchada desde B y C.
+5. **Juicio conjunto** de las tres miradas (profesor rápido 1,0 + auditor 0,6) y arreglos 0,6, con la misma prueba ampliada.
+**Añade ≈3,8 M** al paso «iones vivos a la app» (7,8 → ≈11,6 M); el b4 pasa de ≈59 a ≈63 M, dentro del 45-72. Si Hacienda recorta, cae antes el punto 4 (la capa) que el 3 (los casos con tiempo son lo que más falta para estudiar la guardia).
+
+## 4. Para el usuario
+Las tres se quedan, pero fundidas en un solo modelo con un solo motor: la B para ver por qué el análisis engaña, la C para llevar al paciente a pie de cama con monitor, bombas y reloj (ahí van los casos), y la A como lupa que enseña la célula por dentro; cuesta unos 4 M más y empieza cuando la B esté aprobada.
