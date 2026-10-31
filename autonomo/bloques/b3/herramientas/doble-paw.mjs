@@ -1,4 +1,4 @@
-// Doble disparo: traza de la Paw (cada 0,1 s) del estado doble-disparo. Uso: node autonomo/bloques/b3d/herramientas/doble-paw.mjs [pmus] [tin]
+// Doble disparo: traza de la Paw (cada 0,1 s) del estado doble-disparo. Uso: node autonomo/bloques/b3/herramientas/doble-paw.mjs [pmus] [tin]
 import { crearPulmon } from '../../../../js/modules/libros/pulmon-vivo/pulmon.mjs';
 const a = process.argv.slice(2).map(Number);
 const resp = { ps: 10, frEsp: 16, tin: 0.8, retraso: null, peep: 5, pinsp: 10, ie: 2, pmax: 40, modo: 'vcv', vt: a[2] ?? 300, fr: 12, flujo: a[3] ?? 30, pmus: a[0] ?? 14, tin: a[1] ?? 2.2, frNeural: 12 };
