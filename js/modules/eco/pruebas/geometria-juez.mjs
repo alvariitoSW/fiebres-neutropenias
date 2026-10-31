@@ -12,6 +12,7 @@ import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
 import { construirCorazon, usarDibujo } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
+import { masaIndiceDe } from '../anatomia.mjs';
 import { planoVista, cortarPieza } from '../ecografia.mjs';
 
 const LANG = (p) => `Lang 2015 p.${p}`, MUK = (p) => `Mukherjee 2025 p.${p}`, ESC = (p) => `ESC/ERS 2022 p.${p}`;
@@ -144,8 +145,17 @@ export function medidasA4C(td, ts, dibujo = 'hoy') {
 const nf = (v, d = 0) => (v == null || Number.isNaN(v) ? '-' : Number(v).toFixed(d));
 const R = (medida, min, max, fuente, extra = {}) => ({ medida, min, max, fuente, ...extra });
 const TECHO = { vdBasal: 70, paredVd: 15, vdVi: 2.5 };   // techos de «paciente posible»: sin fuente
-export function rangosDe(k, g) {
-  const r = [], tope = g >= 0.99, nl = (k === 'normal');
+// Pseudohipertrofia (decisión del usuario, 31/10/2026): con el VI vacío la pared se engruesa sin ganar masa. Solo vale si la masa
+// del VI del motor no sube (±5 % de la forma normal): `masaOk`. Fuentes: Di Segni 1997 (sangrado experimental, pared de 6,3 a 8,3 mm
+// con la masa sin cambios, https://cris.tau.ac.il/en/publications/echocardiographic-left-ventricular-remodeling-and-pseudohypertrop/);
+// shock séptico, pared ≥12 mm con masa normal (Crit Care 2015, https://link.springer.com/doi/10.1186/s13054-015-0980-z);
+// taponamiento (https://cris.tau.ac.il/en/publications/left-ventricular-pseudohypertrophy-in-cardiac-tamponade-an-echoca/).
+const PSEUDO = ['hemorragia', 'derrame', 'vasoplejia', 'tep', 'hpcronica'];
+const PSEUDO_FUENTE = 'pseudohipertrofia, masa del VI sin cambios: Di Segni 1997; Crit Care 2015 (decisión del usuario, 31/10/2026)';
+export const masaVi = (est) => masaIndiceDe(est?.mioVi ?? 1);
+export const masaSinCambios = (est) => Math.abs(masaVi(est) / masaIndiceDe(1) - 1) <= 0.05;
+export function rangosDe(k, g, masaOk = true) {
+  const r = [], tope = g >= 0.99, nl = (k === 'normal'), medio = g >= 0.5, pseudo = PSEUDO.includes(k) && masaOk;
   const lb = (min) => nl ? min : 0;
   const hp = k === 'hpcronica', tep = k === 'tep';
   // VD basal
@@ -156,15 +166,20 @@ export function rangosDe(k, g) {
   if ((hp || tep) && tope) r.push(R('vdVi', 1.0, TECHO.vdVi, ESC(3645) + ' T10 (>1,0)'), R('vdVi', 0, TECHO.vdVi, 'techo de paciente posible', { sinFuente: true }));
   else r.push(R('vdVi', 0, 1.0, ESC(3645) + ' T10 (>1,0 = señal de HP)'));
   // pared libre VD
-  if (hp && tope) r.push(R('paredVd', 5, TECHO.paredVd, LANG(20) + ' (1-5); ' + MUK(145) + ' (<5 normal)'), R('paredVd', 0, TECHO.paredVd, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: la HP crónica desde g 0,5 se juzga como enferma (Mukherjee 2025 p.144-145: 5-7 leve, >7-9 moderada)
+  if (hp && medio) r.push(R('paredVd', 5, TECHO.paredVd, MUK(144) + '-145 (>5 mm = HP leve o más; decisión del usuario, 31/10/2026)'), R('paredVd', 0, TECHO.paredVd, 'techo de paciente posible', { sinFuente: true }));
+  else if (pseudo) r.push(R('paredVd', 0, 6, PSEUDO_FUENTE + ' (techo de 6 mm de la pared libre del VD: sin fuente)', { sinFuente: true }));
   else r.push(R('paredVd', 0, 5, LANG(20) + ' (1-5); ' + MUK(144)));
   // pared VI (septo y lateral): 6-10 mm en varón; en la dilatada/fallo, solo el techo
-  const hip = k === 'hipertrofia' && g > 0.01;
-  if (hip && !tope) r.push(R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
-  else if (hip && tope) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia: derivado del límite normal)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: en `hipertrofia`, pared del VI >10 mm en todo el mando, también g 0 (Lang 2015 p.17, Tabla 6)
+  const hip = k === 'hipertrofia';
+  if (hip) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia: derivado del límite normal; decisión del usuario, 31/10/2026)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
+  else if (pseudo) r.push(R('paredViSep', 0, 15, PSEUDO_FUENTE + ' (techo de 15 mm: sin fuente)', { sinFuente: true }), R('paredViLat', 0, 15, PSEUDO_FUENTE + ' (techo de 15 mm: sin fuente)', { sinFuente: true }));
   else r.push(R('paredViSep', 0, 10, LANG(17) + ' (0,6-1,0 cm)')), r.push(R('paredViLat', 0, 10, LANG(17)));
   // aplanamiento del tabique (LVEI) y AD telesistólica
-  if ((hp || tep) && tope) r.push(R('lvei', 1.1, 2.5, ESC(3645) + ' T10 (LVEI >1,1)'), R('lvei', 0, 2.5, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: HP crónica y TEP desde g 0,5 sin el máximo de 1,1 (ESC/ERS 2022 p.3645 T10); el mínimo 1,1 de la HP, solo en g 1
+  if (hp && tope) r.push(R('lvei', 1.1, 2.5, ESC(3645) + ' T10 (LVEI >1,1)'), R('lvei', 0, 2.5, 'techo de paciente posible', { sinFuente: true }));
+  else if ((hp || tep) && medio) r.push(R('lvei', 0, 2.5, ESC(3645) + ' T10 (LVEI >1,1 = señal de HP; sin máximo desde g 0,5, decisión del usuario, 31/10/2026)', { sinFuente: true }));
   else r.push(R('lvei', 0, 1.1, ESC(3645) + ' T10 (LVEI >1,1 = señal de HP)'));
   if (hp && tope) r.push(R('areaAdTs', 18, 40, ESC(3645) + ' T10 (área AD telesistólica >18 cm²); ' + MUK(145) + ' (<19 normal)'), R('areaAdTs', 0, 40, 'techo de paciente posible', { sinFuente: true }));
   else r.push(R('areaAdTs', 0, 19, MUK(145) + ' (área AD <19 cm²)'));
@@ -190,7 +205,7 @@ function juzgarGeometria0({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } =
       if (!C.viEndo) mal.push('sin corte del endocardio del VI');
       fila(k, g, v, fase, mal, 'sin cruces; endo dentro de epi', cif.join(' '));
     }
-    const m = medidasA4C(td, ts, dibujo), rs = rangosDe(k, g === undefined ? 0 : g);
+    const m = medidasA4C(td, ts, dibujo), rs = rangosDe(k, g === undefined ? 0 : g, masaSinCambios(td));
     const mal = [], aviso = [];
     for (const rg of rs) { const x = m[rg.medida];
       if (x == null || Number.isNaN(x)) { mal.push(`${rg.medida}: no se pudo medir`); continue; }
