@@ -962,8 +962,9 @@ export function construirCorazonHoy(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen } — sin ajustes, el dibujo de hoy idéntico.
+// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen, vdLargoPropio } — sin ajustes, el dibujo de hoy idéntico.
 const GANANCIA_SEPTO = 4;
+const LVD_TOPE_ILUSTRATIVO = 112;
 export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
@@ -999,7 +1000,13 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const anilloAortico = (psi) => [ac[0] + rA * Math.cos(psi), ac[1] + rA * Math.sin(psi), 0];
 
   // VD: media luna en torno al VI; en la base, un contorno casi fijo (entrada tricuspídea y salida)
-  const Lvd = vi.Le * REF.lVdRel;
+  // ajustes.vdLargoPropio (dibujo nuevo): el largo del VD sale de su volumen, no del largo del VI. Normal: el de hoy
+  // (LE_REF·lVdRel); al crecer vvd, con la raíz cúbica. Tope con fuente 83 mm (Lang 2015 Tabla 8 p. 20: 71 ± 6, 2 DE); más allá,
+  // sinFuente e ilustrativo, hasta 112 mm (techo de un VD de paciente posible: ápex que alcanza o pasa el del VI)
+  // Con VD/VI de volumen >1,3 el ápex del VD sube hasta el nivel del ápex del VI (Mukherjee 2025 Fig. 4B-C, p. 172: el VD dilatado
+  // comparte o forma el ápex); la transición 1,3→1,8 es ilustrativa.
+  const Lvd0 = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, LE_REF * REF.lVdRel * Math.cbrt(vvd / REF.vVd)) : 0;
+  const Lvd = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, mix(Lvd0, Math.max(Lvd0, vi.Le), paso(1.3, 1.8, estado.vvd / estado.vvi))) : vi.Le * REF.lVdRel;
   const ventana = memo((phi) => { const f = anguloNorm(phi); if (f < REF.phiA || f > REF.phiB) return 0; const a = (f - REF.phiA) / (REF.phiB - REF.phiA);
     return Math.pow(Math.sin(Math.PI * a), 0.7) * paso(0, 0.12, a) * paso(0, 0.12, 1 - a); });
   const gauss = (f, c, s) => Math.exp(-Math.pow((anguloNorm(f) - c) / s, 2));
