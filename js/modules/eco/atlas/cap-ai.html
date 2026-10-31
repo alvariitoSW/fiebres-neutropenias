@@ -1,0 +1,99 @@
+<div class="at-en-preparacion">Figura y estudio, en preparación: la figura sobre el ecógrafo de la app y las preguntas llegarán con el ecógrafo nuevo.</div>
+<p class="at-entradilla">Un estudio completo tiene muchos vídeos de muchas vistas y decenas de medidas. EchoPrime lee todos los vídeos y redacta un borrador de cada sección del informe; EchoNet-Measurements coloca cada calibre y cada pico, y los convierte con la calibración que guarda la imagen.</p>
+<div class="at-clave">
+    <h4>En 30 segundos</h4>
+    <ol>
+        <li>EchoPrime clasifica cada vídeo por su vista, lo convierte en <span class="hl-azul">512 números</span> y lo pondera por grupo de vistas en cada una de las <b>15 secciones</b> del informe<sup class="at-cita" data-ref="vukadinovic2026"></sup>.</li>
+        <li>EchoNet-Measurements tiene un modelo para cada una de <span class="hl-verde">18 medidas</span>; sin la calibración del archivo DICOM, <span class="hl-rojo">no puede dar una cifra</span><sup class="at-cita" data-ref="sahashi2025"></sup>.</li>
+        <li>En un ensayo aleatorizado y ciego, el cardiólogo cambió la FEVI más de un 5 % en el <span class="hl-verde">16,8 %</span> de las hechas primero por la IA y en el <span class="hl-rojo">27,2 %</span> de las del ecografista<sup class="at-cita" data-ref="he2023"></sup>.</li>
+    </ol>
+</div>
+<div class="at-texto">
+    <h4>Modelos que leen ecocardiogramas</h4>
+    <p>Los primeros modelos de aprendizaje profundo para la ecocardiografía hacían cada uno una sola tarea, solos<sup class="at-cita" data-ref="madani2018"></sup> o en cadena<sup class="at-cita" data-ref="zhang2018"></sup>; los posteriores aprendieron muchas tareas a la vez a partir de vídeos enteros<sup class="at-cita" data-ref="holste2025"></sup>. Un modelo de <span class="hl-purpura">visión y lenguaje</span> aprende además del informe del cardiólogo: EchoCLIP, entrenado con vídeos y el texto de sus informes<sup class="at-cita" data-ref="christensen2024"></sup>, lee una imagen cada vez y hasta 77 tokens de texto<sup class="at-cita" data-ref="vukadinovic2026"></sup>. EchoPrime lee todos los vídeos de un estudio y hasta 512 tokens de su informe.</p>
+
+    <h4>Cómo lee EchoPrime un estudio</h4>
+    <p>EchoPrime tiene cuatro partes:</p>
+    <ul>
+        <li><b>Clasificador de vistas.</b> Clasifica los vídeos en modo B y Doppler color en <b>58 vistas</b> estándar, que el código público agrupa en <b>11 grupos de vistas</b>.</li>
+        <li><b>Codificador de vídeo.</b> Un transformador de vídeo (mViT) convierte cada vídeo, de 16 fotogramas de 224 × 224 píxeles, en una representación (<i>embedding</i>) de <span class="hl-azul">512 números</span>.</li>
+        <li><b>Codificador de texto.</b> Un modelo de lenguaje (PubMedBERT), entrenado junto con el codificador de vídeo, convierte un informe en una representación cercana a las de los vídeos de su estudio.</li>
+        <li><b>Atención anatómica.</b> Para cada una de las 15 secciones del informe, cada grupo de vistas tiene un peso, aprendido por aprendizaje de múltiples instancias; el código público guarda los <b>165 pesos</b>. La representación del estudio para una sección es la suma normalizada de las representaciones de los vídeos, cada una multiplicada por el peso de su grupo de vistas<sup class="at-cita" data-ref="vukadinovic2026"></sup>.</li>
+    </ul>
+    <p>Con un solo vídeo apical de cuatro cámaras, EchoPrime rindió en todas las tareas más o menos igual que con los estudios completos<sup class="at-cita" data-ref="vukadinovic2026"></sup>: los pesos muestran <span class="hl-purpura">cómo mezcla los vídeos que tiene</span>, no qué vídeos necesita un hallazgo. Las vistas transtorácicas están en el <button type="button" class="tx-link" data-at-cap="windows">capítulo 04</button>.</p>
+
+    <h4>Recuperación y cabezas de tarea</h4>
+    <p>El modelo publicado redacta cada sección por <b>recuperación</b> a partir de los estudios anteriores cuyas representaciones quedan más cerca de la del propio estudio. Una cifra, como la FEVI, es la media de los <span class="hl-azul">50 más cercanos</span>; un hallazgo entra en el informe cuando lo tienen <b>más de la mitad</b> de ellos<sup class="at-cita" data-ref="vukadinovic2026"></sup>. Por eso, un hallazgo raro solo se encuentra cuando hay estudios parecidos en la biblioteca. Las versiones recientes, en desarrollo y aún sin publicar, sustituyen la recuperación por unas <b>150 cabezas de tarea</b>, una para cada tarea del informe. Sus cabezas numéricas anclan las medidas y las ajustan.</p>
+
+    <h4>Cómo mide EchoNet-Measurements</h4>
+    <p>Antes, EchoNet-Dynamic estimaba la FEVI a lo largo de varios latidos<sup class="at-cita" data-ref="ouyang2020"></sup>, y EchoNet-LVH medía el grosor de la pared y el diámetro del VI<sup class="at-cita" data-ref="duffy2022"></sup>. EchoNet-Measurements, entrenado con medidas hechas en la práctica habitual, tiene un modelo de segmentación distinto para cada una de <b>18 medidas</b>, nueve en modo B y nueve en Doppler y modo M<sup class="at-cita" data-ref="sahashi2025"></sup>. Cada modelo mide una cosa en la vista que espera. El método biplano de discos para la FEVI está en el <button type="button" class="tx-link" data-at-cap="eject">capítulo 09</button>.</p>
+    <p>Un modelo da un <span class="hl-azul">mapa de calor</span> por cada punto que busca: dos para un calibre, sus dos extremos, y uno para un pico de Doppler. En el código público, cada punto es el centro ponderado de su mapa de calor. La calibración que guarda el archivo DICOM convierte los píxeles en centímetros o velocidades. Una exportación a un formato de vídeo común <span class="hl-rojo">pierde la calibración</span>: los puntos siguen ahí, pero el modelo no puede dar una cifra.</p>
+
+    <h4>Lo que muestra la figura del original</h4>
+    <p>La figura sigue un estudio del corazón que se muestra a través de los dos modelos hasta un informe, en <b>siete pasos</b>. Un toque en la tira de secciones, en un recuadro o en una frase elige una sección.</p>
+    <ol>
+        <li><b>Clasificar</b>: los 14 vídeos del estudio, cada uno con su vista.</li>
+        <li><b>Codificar</b>: un único codificador de vídeo, 512 números por vídeo.</li>
+        <li><b>Ponderar</b>: la mezcla de los 14 vídeos para la sección elegida, con la parte de cada vista según los pesos públicos de las secciones.</li>
+        <li><b>Responder</b>: unas 150 cabezas de tarea.</li>
+        <li><b>Medir</b>: nueve clips en modo B y ocho imágenes de Doppler y modo M, con sus calibres y picos.</li>
+        <li><b>Anclar</b>: cada cabeza numérica comprueba su medida.</li>
+        <li><b>Informar</b>: las palabras de EchoPrime y las cifras medidas.</li>
+    </ol>
+    <p>Las cabezas de tarea y el anclaje son una <span class="hl-purpura">simulación</span>. El valor de cada cabeza es la medida del propio centro sobre el corazón que se muestra, y su rango es ese valor <b>± 10 %</b>: una banda elegida para la figura, no un error del modelo. Fuera del rango, el extremo del calibre se mueve al pico del mapa de calor que coincide con la cabeza; si no hay tal pico, el valor se marca para revisión. Las imágenes y las palabras del informe son las del propio centro, y los mapas de calor están dibujados sobre los puntos de calibre del centro. Ninguno de los dos modelos procesó estas imágenes.</p>
+    <p>Las 18 medidas que coloca la figura (paso 5), con su vista y el fotograma que se informa en las de modo B:</p>
+    <div class="table-wrap" style="overflow-x:auto;">
+    <table class="data-table">
+        <caption>Las 18 medidas de EchoNet-Measurements en la figura del original</caption>
+        <thead><tr><th>Modo</th><th>Medida</th><th>Vista</th><th>Fotograma</th></tr></thead>
+        <tbody>
+            <tr><td>B</td><td>Septo interventricular</td><td>Paraesternal eje largo</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Diámetro interno del VI</td><td>Paraesternal eje largo</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Pared posterior del VI</td><td>Paraesternal eje largo</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Diámetro de la AI</td><td>Paraesternal eje largo</td><td>Telesístole</td></tr>
+            <tr><td>B</td><td>Diámetro basal del VD</td><td>Apical cuatro cámaras centrada en el VD</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Raíz aórtica</td><td>Paraesternal eje largo</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Aorta ascendente</td><td>Paraesternal eje largo, aorta ascendente</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>Arteria pulmonar</td><td>Paraesternal eje corto, arteria pulmonar</td><td>Telediástole</td></tr>
+            <tr><td>B</td><td>VCI</td><td>Subcostal, VCI</td><td>El mayor del clip</td></tr>
+            <tr><td>Doppler</td><td>Velocidad pico de la IT</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler</td><td>Velocidad pico de la válvula aórtica</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler</td><td>Velocidad pico de la IM</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler</td><td>Velocidad pico del TSVI</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler tisular</td><td>e′ septal</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler tisular</td><td>e′ lateral</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler</td><td>E mitral</td><td>—</td><td>—</td></tr>
+            <tr><td>Doppler</td><td>E/A mitral</td><td>—</td><td>—</td></tr>
+            <tr><td>Modo M</td><td>TAPSE</td><td>—</td><td>—</td></tr>
+        </tbody>
+    </table>
+    </div>
+    <details class="nota-plegable"><summary>De dónde sale la tabla</summary><p>Es la lista de medidas de la figura del original (<code>src/ch/measure.js</code>: <code>B</code>, las nueve de modo B con su vista y el fotograma que se informa, y <code>D</code>, los ocho modelos de Doppler y modo M). E y E/A salen de un mismo modelo con dos mapas, por eso ocho imágenes dan nueve medidas: nueve más nueve son las 18 del texto<sup class="at-cita" data-ref="sahashi2025"></sup>. Para las de Doppler y modo M, el código no da vista ni fotograma.</p></details>
+
+    <h4>Rendimiento</h4>
+    <p>En 17 tareas de clasificación y 11 de regresión, el AUC medio de EchoPrime fue de <span class="hl-verde">0,92</span> en Cedars-Sinai y de 0,85 a 0,89 en los centros externos. El error absoluto medio de la FEVI fue de <b>4,79 puntos</b> porcentuales en el conjunto de prueba interno y de 4,14 a 6,46 en los centros externos, frente a 6,23 a 10,37 de EchoCLIP<sup class="at-cita" data-ref="vukadinovic2026"></sup>.</p>
+    <p>EchoNet-Measurements se comparó con los ecografistas mediante la <span class="hl-purpura">probabilidad de cobertura</span>: la proporción de pares de medidas que difieren menos que una diferencia aceptable. En las 18 medidas, la probabilidad de cobertura media fue de <b>0,796</b> en estudios reservados de Cedars-Sinai y de <b>0,839</b> en estudios externos de Stanford Healthcare<sup class="at-cita" data-ref="sahashi2025"></sup>.</p>
+
+    <h4>Límites</h4>
+    <ul>
+        <li>Cada modelo se entrenó con los estudios de un solo centro, y todos los datos de EchoPrime se recogieron de forma retrospectiva<sup class="at-cita" data-ref="vukadinovic2026"></sup>. EchoNet-Measurements aprende las costumbres y los errores de los ecografistas de su centro.</li>
+        <li>Los registros de Doppler espectral y de modo M son imágenes fijas, así que EchoPrime no se entrenó con ellos; los autores remiten a modelos que los miden directamente<sup class="at-cita" data-ref="vukadinovic2026,sahashi2025"></sup>.</li>
+        <li>Ante una imagen mala, un ecografista puede usar el contexto clínico y los fotogramas de alrededor; un modelo de medida, que lee una sola imagen, no puede<sup class="at-cita" data-ref="sahashi2025"></sup>. Las 18 medidas aún no incluyen la <span class="hl-rojo">integral velocidad-tiempo</span>, el <span class="hl-rojo">radio PISA</span> ni el <span class="hl-rojo">volumen de la AI</span><sup class="at-cita" data-ref="sahashi2025"></sup>.</li>
+    </ul>
+
+    <h4>Ensayos prospectivos</h4>
+    <p>En el primer ensayo aleatorizado y ciego de IA en ecocardiografía, un cardiólogo, sin saber el origen, cerraba una FEVI inicial hecha por la IA o por un ecografista. El cardiólogo cambió la FEVI más de un 5 % en el <span class="hl-verde">16,8 %</span> del grupo de la IA y en el <span class="hl-rojo">27,2 %</span> del grupo del ecografista; la IA fue no inferior y superior<sup class="at-cita" data-ref="he2023"></sup>.</p>
+    <p>El ensayo AI ECHO INSIGHT prueba informes enteros: un cardiólogo ciego cierra un informe preliminar redactado por la IA, por un cardiólogo o por un ecografista, y la variable principal es la tasa de cambios sustanciales<sup class="at-cita" data-ref="lee2026"></sup>. Sus resultados aún no se han publicado.</p>
+
+    <details class="nota-plegable"><summary>Los números de capítulo del original</summary><p>El original numera este capítulo como el 32. En la app es el 24; las vistas transtorácicas son el capítulo 04 y la función sistólica, el 09.</p></details>
+
+    <div class="at-clave">
+        <h4>Puntos clave</h4>
+        <ol>
+            <li>EchoPrime clasifica cada vídeo por su vista, lo convierte en 512 números y lo pondera por grupo de vistas para cada una de las 15 secciones del informe.</li>
+            <li>El modelo publicado redacta cada sección a partir de los 50 estudios anteriores más cercanos; los pesos muestran cómo mezcla las vistas, no qué vistas necesita un hallazgo.</li>
+            <li>EchoNet-Measurements tiene un modelo para cada una de 18 medidas. Cada punto es el centro ponderado de un mapa de calor, y la calibración que guarda el archivo DICOM convierte los píxeles en centímetros o velocidades.</li>
+            <li>En un ensayo aleatorizado y ciego, los cardiólogos cambiaron menos a menudo una FEVI hecha primero por la IA que una hecha primero por un ecografista.</li>
+        </ol>
+    </div>
+</div>
