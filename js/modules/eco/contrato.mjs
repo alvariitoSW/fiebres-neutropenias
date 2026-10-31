@@ -6,6 +6,7 @@
 // validarContrato(c, { bandas, clave }) como argumento. Fuentes de esas bandas: ver bandas-paciente.mjs (libro y página).
 
 import { BASE } from './motor.mjs';
+import { tapseDeLatido } from './anatomia.mjs';   // lado del corazón (puro): el TAPSE sale del motor, ya sin el puente
 export const ORIGENES = ['motor', 'puente-hoy', 'hueco'];
 const USO = { b: 'B-mode', d: 'Doppler', m: 'modo M', l: 'lecturas', w: 'Wiggers', a: 'asa', g: 'geometría' };
 
@@ -42,8 +43,8 @@ B('pcp', 'mmHg', 'Presión de enclavamiento (media de la AI)', 'motor', ['l'], '
 B('pam', 'mmHg', 'Presión arterial media', 'motor', ['l']);
 B('fc', 'lpm', 'Frecuencia cardíaca', 'motor', ['l', 'm']);
 B('vdvi', 'ratio', 'VD/VI en volumen telediastólico (las fuentes dan diámetro o área, no volumen: sin banda)', 'motor', ['l']);
-B('tapse', 'mm', 'TAPSE de hoy (tapseDeLatido)', 'puente-hoy', ['l', 'm'], 'tapse');
-B('tapsePaps', 'mm/mmHg', 'TAPSE / PSAP', 'puente-hoy', ['l'], 'tapsePaps');
+B('tapse', 'mm', 'TAPSE (tapseDeLatido, anatomia.mjs)', 'motor', ['l', 'm'], 'tapse');
+B('tapsePaps', 'mm/mmHg', 'TAPSE / PSAP', 'motor', ['l'], 'tapsePaps');
 B('E', 'cm/s', 'Onda E mitral', 'puente-hoy', ['d', 'l'], 'E');
 B('A', 'cm/s', 'Onda A mitral', 'puente-hoy', ['d', 'l'], 'A');
 B('ea', 'ratio', 'E/A mitral', 'puente-hoy', ['d', 'l'], 'ea');
@@ -60,7 +61,7 @@ B('masa.vi', 'g/m²', 'Masa del VI indexada (medidasCorazon)', 'puente-hoy', ['b
 B('masa.vd', 'g', 'Masa del VD', 'hueco', ['b']);
 for (const k of ['mit', 'tri', 'ao', 'pul']) B('anillo.' + k, 'cm²', 'Área del anillo ' + k + ' (areasAnillo)', 'puente-hoy', ['d', 'b']);
 B('raiz', 'mm', 'Diámetro de la raíz aórtica: el dibujo de hoy solo da el anillo; la raíz es ilustrativa', 'hueco', ['b', 'l']);
-B('anillo.excursion.tri', 'mm', 'Excursión del anillo tricuspídeo (= TAPSE de hoy)', 'puente-hoy', ['m', 'l']);
+B('anillo.excursion.tri', 'mm', 'Excursión del anillo tricuspídeo (= TAPSE; tapseDeLatido, anatomia.mjs)', 'motor', ['m', 'l']);
 B('anillo.excursion.mit', 'mm', 'Excursión del anillo mitral (MAPSE: sin fuente en docs/)', 'hueco', ['m']);
 B('anillo.vel.s', 'cm/s', 's′ del anillo (el modelo no calcula velocidades de tejido)', 'hueco', ['d']);
 B('anillo.vel.e', 'cm/s', 'e′ del anillo (= e′ medio de hoy)', 'puente-hoy', ['d']);
@@ -148,7 +149,7 @@ export function contratoDe(motor, puente) {
   const latido = {
     fe: 100 * u.fe, feVd: 100 * (vdTd - vdTs) / vdTd, vs: u.vs, gc: u.gc, paps: u.paps, papd: u.papd, pvc: u.pvc, pcp: u.pcp,
     pam: u.pam, fc: u.fc, vdvi: vdTd / Math.max(...o.map(m => m.vvi)),
-    tapse: P('anillo.excursion.tri'), tapsePaps: puente ? pv['anillo.excursion.tri'] / u.paps : null,
+    tapse: tapseDeLatido(u), tapsePaps: tapseDeLatido(u) / u.paps,
     E: P('E'), A: P('A'), ea: P('ea'), dt: P('dt'), eAvg: P('anillo.vel.e'), eSep: P('eSep'), eLat: P('eLat'), eE: P('eE'),
     trv: gradIT > 0 ? Math.sqrt(gradIT / 4) : 0, gradIT,
     'pared.vd': P('pared.vd'), 'pared.vi': P('pared.vi'), 'masa.vi': P('masa.vi'), 'masa.vd': null,

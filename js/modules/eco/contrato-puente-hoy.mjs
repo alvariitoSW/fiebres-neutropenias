@@ -1,7 +1,8 @@
 // Puente «de hoy» del contrato (mv-eco-1): lo que HOY sale del dibujo o del atlas y no del motor. Cada valor lleva
 // origen 'puente-hoy' y la función de hoy que lo da. Es lo que el paso 2 moverá al motor; así contrato.mjs no importa
 // nada del dibujo. Solo lee el motor (no llama a paso()). La medida es la de pruebas/medir-forma.mjs (misma lógica).
-import { tapseDeLatido, baseGeometrica, LIMITES } from './corazon-geo.mjs';
+import { baseGeometrica, LIMITES } from './corazon-geo.mjs';
+import { tapseDeLatido } from './anatomia.mjs';
 import { estadoGeo, extraDeMotor, aplanamientoSeptal } from './formas.mjs';
 import { medidasCorazon } from './ecografia.mjs';
 import * as D from './doppler.mjs';
@@ -32,7 +33,7 @@ export function puenteHoy(motor) {
     fueraDeMarco: vdTd > LIMITES.vd[1] || vdTs < LIMITES.vd[0] || Math.max(...o.map(x => x.vvi)) > LIMITES.vi[1],
   };
   const funcion = {
-    'anillo.excursion.tri': 'tapseDeLatido (corazon-geo.mjs)', 'pared.vd': 'medidasCorazon().paredVd (ecografia.mjs)',
+    'anillo.excursion.tri': 'tapseDeLatido (anatomia.mjs)', 'pared.vd': 'medidasCorazon().paredVd (ecografia.mjs)',
     'pared.vi': 'medidasCorazon().paredPost (ecografia.mjs)', 'masa.vi': 'medidasCorazon().masaIndice (ecografia.mjs)',
     'anillo.mit': 'areasAnillo (doppler.mjs)', 'anillo.tri': 'areasAnillo (doppler.mjs)', 'anillo.ao': 'areasAnillo (doppler.mjs)',
     'anillo.pul': 'areasAnillo (doppler.mjs)', 'anillo.vel.e': 'ePrimaDeOnda (motor.mjs)', eSep: 'ePrimaDeOnda', eLat: 'ePrimaDeOnda',
