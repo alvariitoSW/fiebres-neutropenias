@@ -36,18 +36,18 @@ export const PERICARDIO_FINO = { db: 3.5, ancho: 1.1, moteadoDb: 3, origen: 'ilu
 // Caída del brillo con la profundidad del dibujo nuevo (dB por mm, neta tras la TGC; ilustrativo): el tejido blando atenúa
 // y la TGC lo compensa solo en parte (POCUS I cap. 2, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9, impresa 41:
 // el capítulo da los mandos de ganancia, no cifras). El campo lejano nunca supera al medio.
-export const CAIDA_PROFUNDIDAD = { desdeMm: 20, dbPorMm: 0.09, origen: 'ilustrativo' };
+export const CAIDA_PROFUNDIDAD = { desdeMm: 20, dbPorMm: 0.06, origen: 'ilustrativo' };
 // Caída lateral (dibujo nuevo): el haz fuera del eje está menos enfocado y recibe menos energía, el brillo baja hacia los bordes
 // del abanico (dB en el borde, ∝ e²; ilustrativo; la teoría de la sonda de sector, POCUS I cap. 2, p. 41 impresa, no da cifras).
 export const CAIDA_LATERAL = { dbBorde: 5, topeDb: 5, origen: 'ilustrativo' };
 // Borde endocárdico (dibujo nuevo): interfaz sangre-tejido, unos dB sobre el miocardio medio, sin ser una línea dibujada (ilustrativo).
-export const BORDE_ENDO = { db: 2.5, origen: 'ilustrativo' };
+export const BORDE_ENDO = { db: 1, origen: 'ilustrativo' };
 // Surco AV, coronarias, venas y seno coronario del dibujo nuevo: cortan el plano como bandas que se cruzan detrás de la aurícula (la «cruz»
 // del PLAX); se apagan unos dB para que no compitan con la pared posterior (ilustrativo).
 export const SURCOS_NUEVO = { db: -9, origen: 'ilustrativo' };
 // Sombra y refuerzo del dibujo nuevo (multiplican los de hoy; ilustrativo): detrás de lo muy ecogénico (pericardio, costilla) el
 // haz pierde más energía, y detrás de la sangre queda más (refuerzo posterior; POCUS I cap. 2, impresa 41, solo lo describe).
-export const SOMBRA_NUEVA = { sombra: 2.2, refuerzo: 1.6, origen: 'ilustrativo' };
+export const SOMBRA_NUEVA = { sombra: 1.6, refuerzo: 1.6, origen: 'ilustrativo' };
 // Septo interauricular fino (fosa oval) en el A4C: paralelo al haz, se pierde a tramos (dropout). Fracción de tramos y dB: ilustrativo
 // (Mitchell 2019, ASE, describe el dropout del septo interauricular como artefacto; no da cifras).
 export const DROPOUT_SEPTO = { umbral: 0.15, db: 22, origen: 'ilustrativo' };
@@ -56,3 +56,6 @@ export const DB_IMAGEN = {
   borde: { db: -9, origen: 'ilustrativo' },        // borde endocárdico fino
   especular: { db: 9, origen: 'ilustrativo' },     // reflejo especular extra cuando el haz es perpendicular
 };
+// Pared libre del VD en el dibujo nuevo: es fina y el haz la corta oblicua; en vez de los −3 dB de hoy (más tenue que el VI) se
+// realza unos dB para que se vea al menos al 60 % del tabique (ilustrativo; fisiología general: el VD es músculo, solo más delgado).
+export const PARED_VD_NUEVO = { db: 4, origen: 'ilustrativo' };
