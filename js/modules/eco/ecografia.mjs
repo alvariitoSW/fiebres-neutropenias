@@ -19,7 +19,7 @@ import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, SOMBRA_NUEVA, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -677,7 +677,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
     const GAN = new Float32Array(N), nuevoD = dibujoNuevo();
-    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = (nuevoD ? -CAIDA_PROFUNDIDAD.dbPorMm * Math.max(0, Rr[j] - CAIDA_PROFUNDIDAD.desdeMm) : -0.025 * Math.max(0, Rr[j] - 60)) - 6 * Math.pow(e, 8) - (nuevoD ? CAIDA_LATERAL.dbBorde * e * e : 0); }
+    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = (nuevoD ? -CAIDA_PROFUNDIDAD.dbPorMm * Math.max(0, Rr[j] - CAIDA_PROFUNDIDAD.desdeMm) : -0.025 * Math.max(0, Rr[j] - 60)) - (nuevoD ? Math.min(CAIDA_LATERAL.topeDb, 6 * Math.pow(e, 8) + CAIDA_LATERAL.dbBorde * e * e) : 6 * Math.pow(e, 8)); }
     const k = Math.min((alto - 8) / P.prof, (ancho - 6) / (2 * P.prof * Math.sin(P.mitad))), cx = ancho / 2, top = 4;
     const PIX = [], FB = [], FS = [];
     for (let py = 0; py < alto; py++) for (let px = 0; px < ancho; px++) {
@@ -796,10 +796,10 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
-        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), el.db - (el.grupo === 'VD' ? 7 : 3) * W2, espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
+        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
-        else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
+        else trazar(P, el.seg, el.ancho, el.db + (dibujoNuevo() && /^(Grasa|Seno|Coronaria|Vena)/.test(el.grupo) ? SURCOS_NUEVO.db : 0), espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }
     }
     // anisotropía: el músculo paralelo al haz devuelve menos eco

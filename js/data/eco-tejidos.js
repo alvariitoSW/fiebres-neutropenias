@@ -39,7 +39,12 @@ export const PERICARDIO_FINO = { db: 3.5, ancho: 1.1, moteadoDb: 3, origen: 'ilu
 export const CAIDA_PROFUNDIDAD = { desdeMm: 20, dbPorMm: 0.09, origen: 'ilustrativo' };
 // Caída lateral (dibujo nuevo): el haz fuera del eje está menos enfocado y recibe menos energía, el brillo baja hacia los bordes
 // del abanico (dB en el borde, ∝ e²; ilustrativo; la teoría de la sonda de sector, POCUS I cap. 2, p. 41 impresa, no da cifras).
-export const CAIDA_LATERAL = { dbBorde: 5, origen: 'ilustrativo' };
+export const CAIDA_LATERAL = { dbBorde: 5, topeDb: 5, origen: 'ilustrativo' };
+// Borde endocárdico (dibujo nuevo): interfaz sangre-tejido, unos dB sobre el miocardio medio, sin ser una línea dibujada (ilustrativo).
+export const BORDE_ENDO = { db: 2.5, origen: 'ilustrativo' };
+// Surco AV, coronarias, venas y seno coronario del dibujo nuevo: cortan el plano como bandas que se cruzan detrás de la aurícula (la «cruz»
+// del PLAX); se apagan unos dB para que no compitan con la pared posterior (ilustrativo).
+export const SURCOS_NUEVO = { db: -9, origen: 'ilustrativo' };
 // Sombra y refuerzo del dibujo nuevo (multiplican los de hoy; ilustrativo): detrás de lo muy ecogénico (pericardio, costilla) el
 // haz pierde más energía, y detrás de la sangre queda más (refuerzo posterior; POCUS I cap. 2, impresa 41, solo lo describe).
 export const SOMBRA_NUEVA = { sombra: 2.2, refuerzo: 1.6, origen: 'ilustrativo' };

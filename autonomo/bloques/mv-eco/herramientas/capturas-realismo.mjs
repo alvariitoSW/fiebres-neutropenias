@@ -27,6 +27,7 @@ const errores = [];
 for (const [clave, esc, g, vista, dib] of LISTA) {
   const pg = await nav.newPage({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true });
   pg.on('pageerror', e => errores.push(`${clave}: ${e.message}`)); pg.on('console', m => m.type() === 'error' && errores.push(`${clave}: ${m.text()}`));
+  if (process.env.SKIP) await pg.addInitScript((r) => { globalThis.__SKIP = new RegExp(r); }, process.env.SKIP);
   await pg.goto(`${base}?depuracion=1${dib === 2 ? '&dibujo=2' : ''}`); await pg.waitForTimeout(1500);
   await pg.waitForFunction(() => window.__ultimoDibujo?.eco, null, { timeout: 60000 });
   if (esc !== 'normal') {
@@ -40,9 +41,10 @@ for (const [clave, esc, g, vista, dib] of LISTA) {
   await pg.click('#cv-ciclo button[data-fase="A"]'); await pg.waitForTimeout(1500);
   await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
   const lienzo = pg.locator('#cv-eco'); await lienzo.scrollIntoViewIfNeeded();
-  await lienzo.screenshot({ path: join(OUT, `${clave}.png`) });
+  await lienzo.screenshot({ path: join(process.env.SKIP_OUT || OUT, `${clave}.png`) });
   const c = await pg.evaluate(() => { const t = (id) => document.getElementById(id)?.textContent.trim(); const u = window.__motor.ultimo || {}; const f = (x, d = 0) => typeof x === 'number' ? +x.toFixed(d) : x;
-    return { fase: t('cv-eco-fase'), titulo: t('cv-eco-titulo'), grav: t('cv-grav-txt'), 'Último latido': t('cv-l-lat'), VI: t('cv-l-vi'), VD: t('cv-l-vd'), Aorta: t('cv-l-ao'), 'Aurículas': t('cv-l-au'),
+    return { fase: t('cv-eco-fase'), titulo: t('cv-eco-titulo'), grav: t('cv-grav-txt'), 'Último latido': t('cv-l-lat'), 'VI en esta fase': t('cv-l-vi'), 'VD en esta fase': t('cv-l-vd'), Aorta: t('cv-l-ao'), 'Aurículas': t('cv-l-au'),
+      'VI/VD telediastólico (el que dibuja la imagen)': (() => { const o = window.__motor.onda, a = o.reduce((x, y) => (y.vvi > x.vvi ? y : x), o[0]), b = o.reduce((x, y) => (y.vvd > x.vvd ? y : x), o[0]); return `VI ${f(a.vvi)} mL · VD ${f(b.vvd)} mL`; })(),
       motor: `FC ${f(u.fc)} · PAM ${f(u.pam)} · PA ${f(u.pas)}/${f(u.pad)} · GC ${f(u.gc, 2)} · PVC ${f(u.pvc, 1)}`, pantalla: window.__ultimoDibujo?.modo }; });
   md += `## ${clave} (${esc}${g != null ? ', g=' + g : ''}, ${vista}, dibujo ${dib})\n` + Object.entries(c).map(([k, v]) => `- ${k}: ${v}`).join('\n') + '\n\n';
   console.log(clave, c.fase);
