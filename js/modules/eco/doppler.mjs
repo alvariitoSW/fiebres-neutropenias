@@ -11,6 +11,7 @@
 // fotogramas: así no depende de cuántas imágenes por segundo dé el móvil. El espectro y el color sí van por fotograma.
 import { nrm, dot, cruz } from './mat.mjs';
 import { VALVULAS, apertura } from './formas.mjs';
+import { anillosDe } from './anatomia.mjs';
 import { AREA_VENA_PULMONAR_CM2 } from './referencias.mjs';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
@@ -26,6 +27,9 @@ export const NOMBRE_FUENTE = { mitral: 'Mitral', tricus: 'Tricúspide', aortica:
 const SALIDA = { aortica: true, pulmonar: true };
 
 /** Áreas de los anillos (mm²) a partir de la geometría (corazon-geo, baseGeometrica). */
+/** Áreas de los anillos (mm²) del corazón (anillosDe, anatomia.mjs): no hace falta construir el dibujo. Mismas cifras que areasAnillo(baseGeometrica). */
+export const areasAnilloDe = (vvi, vvd) => anillosDe(vvi, vvd).areas;
+/** API antigua: desde la geometría ya dibujada. */
 export const areasAnillo = (g) => ({ mitral: Math.PI * g.aM * g.bM, tricus: Math.PI * g.rT * g.rT, aortica: Math.PI * g.rA * g.rA, pulmonar: Math.PI * g.aR * g.bR });
 
 /** Velocidad en el orificio (cm/s) de una válvula en una muestra del motor (0 si está cerrada). */
