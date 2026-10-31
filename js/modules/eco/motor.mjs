@@ -284,6 +284,34 @@ function activacionVi(t, t1, t2, q, r) {
   return E_COLA * Math.exp(-(t - t1 - U_COLA * t2) / (K_COLA * t2 * r));
 }
 
+// e′ desde la dinámica del VI (eco-mega P1, 31/10/2026). El Doppler tisular del anillo mide a qué velocidad se alarga el VI
+// al llenarse en la diástole precoz. Aquí se toma la misma cosa del propio VI del motor: el pico de la velocidad de llenado
+// (dV/dt, en las fases E-F, derivada centrada a ±2 ms) dividido por el volumen del VI en ese instante, o sea la velocidad
+// de alargamiento relativa (como una tasa de deformación), que ya recoge la relajación, la FE (la fuerza de restitución:
+// con la sístole débil el VI no se comprime ni «chupa») y la carga. e′ lateral = E_PRIMA_VI_K · tasa^E_PRIMA_VI_EXP (cm/s);
+// el septal, el SEPTAL del atlas (0,8) del lateral. ILUSTRATIVO: la constante E_PRIMA_VI_K se calibra una sola vez para que el
+// normal dé e′ lateral ≈12 y septal ≈9,5 cm/s (valores normales de Nagueh 2025, Tabla 5, p. 551 aprox.); el exponente 1 (lineal) hace
+// que el shock cardiogénico (FE ~10 %) llegue a e′ septal ~3 cm/s (Nagueh 2025, p. 561: e′ septal 3-4 cm/s en el grado 3 avanzado).
+// No usa la fórmula ^0,6 de la relajación del atlas (ePrima de atlas/diastolica.mjs, que sigue exportada).
+export const E_PRIMA_VI_K = 2.28, E_PRIMA_VI_EXP = 1.0, E_PRIMA_SEPTAL = 0.8;
+export const E_PRIMA_VENTANA = 0.10;   // s tras abrirse la mitral: la diástole precoz (ilustrativo)
+export function ePrimaDeOnda(onda, tMitAbre, periodo) {
+  // Ventana desde la apertura de la mitral (dando la vuelta al latido): a FC alta el llenado precoz cae al principio de la
+  // onda R siguiente, etiquetado A (fusión E-A), y buscarlo solo en las fases E-F lo perdía (el TEP al 90-95 %).
+  let r = 0; const n = onda.length;
+  for (let i = 0; i < n; i++) {
+    const x = onda[i], a = onda[(i + 1) % n], b = onda[(i - 1 + n) % n];
+    const dt = ((a.t - b.t) % periodo + periodo) % periodo;
+    if (tMitAbre != null) { if ((((x.t - tMitAbre) % periodo) + periodo) % periodo > E_PRIMA_VENTANA) continue; }
+    else if (x.fase !== 'E' && x.fase !== 'F') continue;
+    if (dt <= 0 || dt > 0.01) continue;
+    const dv = (a.vvi - b.vvi) / dt;
+    if (dv > 0 && x.vvi > 0) r = Math.max(r, dv / x.vvi * Math.pow(x.vvi / 120, 0.27));   // × L/L₀ (L ∝ V^0,27, como corazon-geo.mjs): de tasa a velocidad
+  }
+  const lat = E_PRIMA_VI_K * Math.pow(r, E_PRIMA_VI_EXP), sep = E_PRIMA_SEPTAL * lat;
+  return { lat, sep, avg: (lat + sep) / 2, tasa: r };
+}
+
 export function crearMotor(ajustes = {}) {
   const p = { ...BASE, ...ajustes };
   for (const c of ['vi', 'vd', 'ai', 'ad']) p[c] = { ...BASE[c], ...(ajustes[c] || {}) };
@@ -621,6 +649,7 @@ export function crearMotor(ajustes = {}) {
       ppc: a.paoMin - (a.pviEnMitralCierre ?? 0),  // presión de perfusión coronaria
       tS1: a.tS1, tS2: a.tS2, tS2p: a.tS2p, tAoAbre: a.tAoAbre, tMitAbre: a.tMitAbre,
       tPulAbre: a.tPulAbre, tTriCierra: a.tTriCierra,
+      ePrima: ePrimaDeOnda(onda, a.tMitAbre, T),   // e′ lateral/septal/media (cm/s) desde la dinámica del VI
       // volumen comprometido total y presión media de llenado sistémico (referencia Guyton)
       vEstresado: (s.vao + s.vBalon - p.vuAo) + (s.vven - ef.vuVen) + (s.vap - p.vuAp) + (s.vvp - p.vuVp),
       pmls: ((s.vven - ef.vuVen) + (s.vao + s.vBalon - p.vuAo)) / (p.cVen + p.cAo),
