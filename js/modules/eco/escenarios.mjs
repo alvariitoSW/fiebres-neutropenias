@@ -12,7 +12,7 @@ import { BASE, escalarRPul } from './motor.mjs';
 // la aplica de golpe y el barorreflejo tarda ~10 s en responder. Los topes de cada mando, ilustrativos salvo lo que se cita.
 const HEM_FRACCION_MAX = 0.42;                 // de la volemia: Clase IV, >40 % (Marino, Tabla 15.1, cap. 15, p. 22)
 const HEM_ML_MAX = HEM_FRACCION_MAX * BASE.vSangre;    // ~2.040 mL
-const EES_VI_MIN = 0.3;
+const EES_VI_MIN = 0.65;
 const FALLO_DEFECTO = Math.log(3.1 / 0.9) / Math.log(3.1 / EES_VI_MIN);   // Ees 0,9 (ver «fallo»)                        // mmHg/mL, ~10 % de la normal (3,1)
 // mL; con el pericardio del modelo, el taponamiento (derrame agudo). 390 → 388 con la RVS calibrada (octubre 2026, segunda
 // vuelta): con 390 el IC a fondo bajaba a 1,19; 388 → 383 con la AI que suma su contracción (eco-calibra-a, 28/10/2026): con 388, 1,15. Un derrame mayor y establecido (crearMotor({ liquidoPeri })), en motor.mjs
@@ -51,6 +51,13 @@ const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm²
 // activación de un VI grande dejaba su presión alta en el llenado rápido y la E no subía; 2,3 con la restitución de e′ (FE ≈30 %)
 // da E/e′ ≥14 (Nagueh 2025 p. 554). La AI con presión alta es más rígida: llena menos en la sístole (S/D <1, p. 549, Tabla 4)
 const FALLO_RELAJACION = 2.3, FALLO_AI_RIGIDEZ = 1.3;
+// P6 (mv-eco-2a5): el fallo a fondo es el llenado restrictivo (PCP >18, E alta, E/e′ >14, e′ septal 3-4 cm/s: Nagueh 2025, ASE,
+// p. 554 (grado 3), p. 547 (TDE <140 ms con PTDVI alta, Tabla 4), p. 557 (E/e′ >14, Tabla 7) y p. 561 (e′ 3-4 cm/s, restrictivo con E/A >2,5 y TDE <150 ms). Con Ees 0,3 (FEVI 11 %) la FC subía a 122 y la E se fundía con la A (E 39 cm/s, e′ 2,2). Ahora la
+// contractilidad llega solo a 0,65 mmHg/mL (FEVI ~19 %, dentro del shock cardiogénico real) y lo que empeora de ahí al final es
+// la rigidez del VI (vi.b × (1 + 1,08·w^0,6), w = 0 en el defecto y 1 a fondo) con la relajación volviendo a 1 (el VI rígido se llena
+// por presión, no por succión). Ilustrativo, buscado con autonomo/bloques/mv-eco/herramientas/medir-p6.mjs: PAM ~55, GC ~2,3, PCP ~33
+const FALLO_VI_RIGIDEZ = 1.08, FALLO_RESTRICTIVO_CURVA = 0.6;
+const restrictivo = (g) => Math.max(0, (g - FALLO_DEFECTO) / (1 - FALLO_DEFECTO)) ** FALLO_RESTRICTIVO_CURVA;   // 0 en el defecto, 1 a fondo
 // FE reducida (dilatada; eco-calibra-a s2, 28/10/2026): su e′ baja por la relajación Y por la pérdida de las fuerzas de
 // restitución (atlas/diastolica.mjs, restitucion; Nagueh 2025 p. 553), así que no hace falta la relajación de la hipertrofia.
 // Con 2,8, la cola de la activación del VI dilatado (que multiplica un volumen grande) dejaba la presión del VI alta en todo el
@@ -109,7 +116,10 @@ export const ESCENARIOS = {
       texto: (g) => `contractilidad del VI al ${Math.round(100 * (EES_VI_MIN / BASE.vi.ees) ** g)} % de la normal` },
     aplicar: (m, g = FALLO_DEFECTO) => { m.p.vi.ees = BASE.vi.ees * (EES_VI_MIN / BASE.vi.ees) ** g;
       const u = Math.min(1, g / FALLO_DEFECTO);
-      m.p.relajacion = 1 + (FALLO_RELAJACION - 1) * u;
+      // Más allá del defecto el VI se vuelve restrictivo (P6, ver FALLO_VI_RIGIDEZ): más rigidez (vi.b) y la relajación vuelve a 1
+      const w = restrictivo(g);
+      m.p.relajacion = 1 + (FALLO_RELAJACION - 1) * u * (1 - w);
+      m.p.vi.b *= 1 + FALLO_VI_RIGIDEZ * w;
       // AI con presión alta: pared más rígida, S venosa pulmonar menor (S/D < 1)
       m.p.ai.b *= 1 + (FALLO_AI_RIGIDEZ - 1) * u; },
   },

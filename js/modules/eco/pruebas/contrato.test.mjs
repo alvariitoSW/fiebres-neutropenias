@@ -63,7 +63,8 @@ const TABLA = [
   // FEVD 15 → 14,1: la tabla §3 era anterior al desplazamiento del tabique M0c (b3-paso4 g3, 0a84f734; Marino cap. 16 p. 40); el motor da 14,1
   ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 6.5],
   ['Taponamiento 100 %', 'derrame', 1, 33, 13.4, 14, 12, 9, 64, 2.8, 0.66, 6.0, 11.1],
-  ['Fallo VI 100 %', 'fallo', 1, 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 17.3],
+  // P6 (mv-eco-2a5): el fallo a fondo es restrictivo (Ees 0,65 + rigidez del VI): antes 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 17.3; el motor (aplicarEscenario) da estas
+  ['Fallo VI 100 %', 'fallo', 1, 21.8, 12.2, 39.5, 30.6, 5.3, 58.3, 2.62, 1.56, 3.95, 21.7],
 ];
 // TRV: la tabla usa √((PSAP−PVC)/4) con las cifras medias; el contrato, el gradiente máximo instantáneo VD−AD (menor): ±10 %
 const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.8, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)

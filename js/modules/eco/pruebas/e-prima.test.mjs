@@ -14,14 +14,15 @@ test('e′ del motor · normal: septal 9-10,5 y lateral 11-13 cm/s', () => {
   assert.ok(Math.abs(p.sep / p.lat - 0.8) < 1e-9, 'el septal conserva el 0,8 del lateral (SEPTAL del atlas)');
 });
 
-test('e′ del motor · fallo VI: septal 3-4 cm/s con el defecto; al 100 %, 2-3 (Nagueh 2025, PDF 25)', async () => {
-  // Al 100 % la onda E-A está fusionada y E = 39 cm/s: con E/e′ ≥14 (Nagueh 2025, Tabla 7, p. 557) el septal no puede pasar de ~2,5.
-  // El J1 manda; el 3-4 de la p. 561 es el grado 3 avanzado, el defecto de la app (FE 30 %).
+test('e′ del motor · fallo VI: septal 3-4 cm/s con el defecto y al 100 %, con E ≥70 y E/e′ >14 al 100 % (Nagueh 2025, p. 557 y p. 561 / PDF 21 y 25)', async () => {
+  // P6: al 100 % el llenado es restrictivo (PCP 33): E alta, E/e′ medio >14 (Tabla 7, p. 557) y e′ 3-4 cm/s (p. 561).
   const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
-  for (const [g, lo, hi] of [['def', 3, 4], [1, 2, 3]]) {
+  for (const g of ['def', 1]) {
     const m = crearMotor(); m.correr(12); if (g === 'def') ESCENARIOS.fallo.aplicar(m); else ESCENARIOS.fallo.aplicar(m, g); m.correr(ESCENARIOS.fallo.forma ? ASENTAR_FORMA : 40);
-    const p = m.ultimo.ePrima;
-    assert.ok(p.sep >= lo && p.sep <= hi, `fallo ${g}: septal ${p.sep.toFixed(2)}`);
+    const p = m.ultimo.ePrima, h = medirForma('fallo', g);
+    assert.ok(p.sep >= 3 && p.sep <= 4, `fallo ${g}: septal ${p.sep.toFixed(2)}`);
+    assert.ok(h.eE > 14, `fallo ${g}: E/e′ ${h.eE.toFixed(1)}`);
+    if (g === 1) { assert.ok(h.E >= 70, `fallo 100 %: E ${h.E.toFixed(0)} cm/s`); assert.ok(m.ultimo.pam >= 50 && m.ultimo.pam <= 65 && m.ultimo.gc <= 2.6 && m.ultimo.pcp > 18, 'PAM 50-65, GC ≤2,6, PCP >18'); }
   }
 });
 
