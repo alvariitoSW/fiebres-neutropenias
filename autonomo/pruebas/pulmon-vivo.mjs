@@ -283,6 +283,9 @@ for (const k of ORDEN_ESTADOS) {
   for (let i = 0; i < 3 && ult.ptx < 10.5; i++) { await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); ult = await tomar(); }
   { const sh = await selloVis(); const mh = ult;
     ok(sh.s.some(x => /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 10.5 && mh.ptx < 13 && mh.pam >= 40 && mh.pam <= 65 && mh.spo2 < 92.5, `E4b shock desde 10,5: con presión ${mh.ptx} sale el sello de shock (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam} (40-65; con 10,5 exactos el monitor da 54), SpO₂ ${mh.spo2}`); }
+  for (let i = 0; i < 4 && ult.ptx < 13.5; i++) { await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); ult = await tomar(); }
+  { const sp = await selloVis();
+    ok(ult.ptx >= 13.5 && sp.s.some(x => /Parada: actividad eléctrica sin pulso/.test(x)) && !sp.s.some(x => /shock obstructivo/.test(x)) && ult.pam === null && ult.spo2 === null, `E4b parada desde 13,5: con presión ${ult.ptx} el corazón ya no bombea y el sello es el de parada, sin PAM ni SpO₂ (${sp.s.map(x => x.slice(0, 40)).join('|')})`); }
   for (let i = 0; i < 12 && ult.ptx < 20; i++) { await clic('#pul-neumo [data-nx="pasar"]'); }
   await llenar(); await estable(); await espera(4000); await llenar(); await estable();
   const t = await tomar();

@@ -34,7 +34,8 @@ const nx = { ptx: 0, desc: false, sitio: null, msg: '' };
 const el = {};
 
 export const ptx = () => (activo ? nx.ptx : 0);
-export function parada() { return activo && nx.ptx >= N.tope && !nx.desc; }
+// la parada llega cuando el corazón ya no bombea (desde N.parada; el motor da GC 0,2 L/min y PAM 18 a 13,5), no solo en el tope
+export function parada() { return activo && nx.ptx >= (N.parada ?? N.tope) && !nx.desc; }
 export const spo2 = () => Math.round(N.spo2Base - N.spo2PorCmH2O * ptx());
 export const estaActivo = () => activo;
 let selloAct = null;
@@ -56,7 +57,7 @@ function pintar() {
   if (el.msg.innerHTML !== nx.msg) el.msg.innerHTML = nx.msg;
 }
 function sello() {
-  const { tope, ultima } = ctx, par = activo && nx.ptx >= N.tope && !nx.desc, T = activo && nx.ptx >= N.shock && !nx.desc;
+  const { tope, ultima } = ctx, par = parada(), T = activo && nx.ptx >= N.shock && !nx.desc;
   ctx.raiz.toggleAttribute('data-neumo-sello', T);
   ctx.dockPanel.inert = T;   // solo queda la descompresión: los mandos del respirador no se tocan
   if (!T) { tope.quitar('neumo-tope'); if (selloAct) { selloAct = null; ctx.frase(); } return; }
