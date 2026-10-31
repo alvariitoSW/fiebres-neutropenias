@@ -299,7 +299,8 @@ esta sección.
   encadena varias, hasta el límite del tablero. Nada se publica sin que apruebes su PR, y la próxima vez que abras
   `/bitacora` lo marca como hecho.
 
-### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30 · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
+### B-051 · Motor de radiología: Rx y TC recreadas con patologías, y estudio del análisis de imágenes · apuntado 2026-10-30
+- **31/10, cambia**: el usuario rechaza las maquetas dibujadas («imágenes de coña que no tienen nada que ver con la realidad; te he pasado mil recursos para poder usar imágenes reales»). Fallo de la bitácora: «dibujadas por la app» era un «(supongo)» que no se le preguntó. Elige la **B**: parar el motor dibujado; imágenes reales de los PDF de `docs/` ya, y Radiopaedia cuando abra la red (`radiopaedia.org`, `prod-images-static.radiopaedia.org`) y se verifique su licencia. Tarea `radio-real` en el tablero (Objetivo L, 6d). **Lección**: en un encargo de imagen médica, «dibujada o real» es duda de las 5, nunca un «(supongo)». · **B-051a aprobada el 30/10 (`motor-radio`); B-051b sigue esperando**
 - **Lo que dijiste**: «construir un motor con todas las páginas de radiología que te he mandado para que pueda incluso
   recrear patologías o ayude a estudiar o incluso se pueda en un futuro más adelante subir imágenes de TC o
   radiografías de pacientes y se pueda analizar la imagen». Elegiste «Motor + preparar el análisis».
