@@ -16,24 +16,24 @@
 - fase: A · Contracción auricular
 - titulo: PSAX papilares
 - grav: 
-- Último latido: PA 105/66 (PAM 86) · FC 69 · GC 5.1 L/min · PVC 4
+- Último latido: PA 105/67 (PAM 86) · FC 69 · GC 5.0 L/min · PVC 4
 - VI: 119 mL · 10 mmHg
 - VD: 138 mL · 6 mmHg
-- Aorta: 71 mmHg · AP 13
+- Aorta: 72 mmHg · AP 13
 - Aurículas: AI 25 · AD 18 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.07 · PVC 4.3
+- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## normal-plax (normal, plax, dibujo 2)
 - fase: A · Contracción auricular
 - titulo: PLAX
 - grav: 
-- Último latido: PA 105/66 (PAM 86) · FC 69 · GC 5.1 L/min · PVC 4
+- Último latido: PA 105/67 (PAM 86) · FC 69 · GC 5.0 L/min · PVC 4
 - VI: 119 mL · 10 mmHg
 - VD: 138 mL · 6 mmHg
-- Aorta: 71 mmHg · AP 13
+- Aorta: 72 mmHg · AP 13
 - Aurículas: AI 25 · AD 18 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.07 · PVC 4.3
+- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## hp-a4c (hpcronica, g=1, a4c, dibujo 2)

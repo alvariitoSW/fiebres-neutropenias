@@ -100,27 +100,28 @@ export const EXP_AREA_VD = 0.58;
 // PHI_SEPTO) le quita el segmento. El mínimo simple deja dos esquinas de ~117° (el VI del TEP salía facetado, como un
 // polígono): se redondean con un promedio del radio en ±KERNEL_UNION rad alrededor de cada unión (peso coseno, 17 muestras);
 // el centro de la cuerda (donde se mide el índice de excentricidad) y el resto del círculo no cambian. Ilustrativo.
-export function radioConCuerda(r, num, a, f) {
+export function radioConCuerda(r, num, a, f, k0 = 1) {   // k0: escala del redondeo de las uniones (1 = el de siempre; el dibujo nuevo usa menos para un tabique recto)
   const crudo = (g) => { const c = Math.cos(g - PHI_SEPTO); return c > 0 ? Math.min(r, num / c) : r; };
-  const d = Math.abs(Math.abs(Math.atan2(Math.sin(f - PHI_SEPTO), Math.cos(f - PHI_SEPTO))) - a), w = 1 - paso(0, ANCHO_UNION, d);
+  const d = Math.abs(Math.abs(Math.atan2(Math.sin(f - PHI_SEPTO), Math.cos(f - PHI_SEPTO))) - a), w = 1 - paso(0, ANCHO_UNION * k0, d);
   if (w <= 0) return crudo(f);
-  let sum = 0, ws = 0; for (let i = -8; i <= 8; i++) { const k = 1 + Math.cos(Math.PI * i / 9); sum += k * crudo(f + i * KERNEL_UNION / 8); ws += k; }
+  let sum = 0, ws = 0; for (let i = -8; i <= 8; i++) { const k = 1 + Math.cos(Math.PI * i / 9); sum += k * crudo(f + i * KERNEL_UNION * k0 / 8); ws += k; }
   return mix(crudo(f), sum / ws, w);
 }
 // Área (por r², rad) que la cuerda redondeada le quita al círculo unidad según su medio ángulo a: tabla de 0 a ALFA_SEPTO, calculada una vez
-let TABLA_CUERDA = null;
-export function areaCuerda(a) {
+const TABLAS_CUERDA = new Map();
+export function areaCuerda(a, k0 = 1) {
+  let TABLA_CUERDA = TABLAS_CUERDA.get(k0);
   if (!TABLA_CUERDA) { const N = 40, NA = 120; TABLA_CUERDA = [];
     for (let i = 0; i <= N; i++) { const ai = ALFA_SEPTO * i / N; let q = 0;
-      for (let j = 0; j < NA; j++) { const f = PHI_SEPTO + (j + 0.5) / NA * TAU - Math.PI, rs = radioConCuerda(1, Math.cos(ai), ai, f); q += 0.5 * (1 - rs * rs) * TAU / NA; }
-      TABLA_CUERDA.push(q); } }
+      for (let j = 0; j < NA; j++) { const f = PHI_SEPTO + (j + 0.5) / NA * TAU - Math.PI, rs = radioConCuerda(1, Math.cos(ai), ai, f, k0); q += 0.5 * (1 - rs * rs) * TAU / NA; }
+      TABLA_CUERDA.push(q); } TABLAS_CUERDA.set(k0, TABLA_CUERDA); }
   const x = clamp(a / ALFA_SEPTO, 0, 1) * 40, i = Math.min(39, Math.floor(x)); return TABLA_CUERDA[i] + (TABLA_CUERDA[i + 1] - TABLA_CUERDA[i]) * (x - i);
 }
 
 // ---- P3b · anillos, paredes y masa: el corazón los da, el dibujo los lee ----------------------------------------------------
 export const U_VI = 2.234;   // ángulo del eje mitroaórtico en el plano basal (rad)
 /** VI con el tabique aplanado (septo 0-1): la cuerda que se le quita a la cavidad se devuelve al radio (volumen = motor). */
-export function viConSeptal(vvi, mio = 1, septoIn = 0) {
+export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1) {
   const septo = clamp(septoIn, 0, 1);
   const alfa = (z, L) => { const sv = -z / L; return ALFA_SEPTO * septo * paso(0, 0.2, sv) * (1 - paso(0.7, 0.95, sv)); };
   let vi = geomVi(vvi, mio);
@@ -128,7 +129,7 @@ export function viConSeptal(vvi, mio = 1, septoIn = 0) {
     let quitado = 0; const dz = vi.L / N_VOL;
     for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
       if (a <= 0) continue;
-      const q = r * r * areaCuerda(a);
+      const q = r * r * areaCuerda(a, k0);
       quitado += q * dz; }
     vi = geomVi(vvi, mio, quitado / 1000);
   }

@@ -61,6 +61,7 @@ const MARGEN_AU = { ai: 3, ad: 3 };
 // alto / ancho de las aurículas: eje mayor / eje menor de la AD del varón en Lang 2015, p. 30 (Tabla 13): 2,4 / 1,9 cm/m².
 // La AI usa la misma proporción (sus ejes están en el Suplemento de Lang, que no tenemos: hueco; ilustrativo)
 const PROPORCION_AU = 2.4 / 1.9;
+const RM_NORMAL = 27.8;   // radio medio de la cavidad del VI normal en telediástole (mm; sale de geomVi con 119 mL)
 const ELONGA_AD = 0.15;   // elongación del cuello de la AD en el plano del A4C (ajustes.auVolumen; ilustrativo)
 const LE_REF = geomVi(REF.vVi).Le;
 // ---- Mallas genéricas -----------------------------------------------------------
@@ -223,8 +224,9 @@ export function construirCorazonHoy(estado, opciones = {}) {
 
   // Trabéculas: crestas que entran en la cavidad (ilustrativo). VI: finas, en el tercio apical; VD: gruesas,
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
+  const kPap = opciones.ajustes?.papilaresEscala ? clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1) : 1;
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
-  const trabVi = (z, f) => { const s = f * rEndoVi(z); return 1.0 * paso(0.45, 0.85, -z / vi.L) * cresta(0.55 * s + 0.12 * z, 0.34 * s - 0.25 * z); };
+  const trabVi = (z, f) => { const s = f * rEndoVi(z); return kPap * paso(0.45, 0.85, -z / vi.L) * cresta(0.55 * s + 0.12 * z, 0.34 * s - 0.25 * z); };
   const trabVd = (z, f) => { const s = f * (rEpiVi(z, f) + wRV(z, f)); return 1.8 * paso(0.2, 0.55, -z / Lvd) * cresta(0.42 * s + 0.15 * z, 0.26 * s - 0.3 * z + 1.3); };
   // cerca del ápex la cavidad se cierra: las trabéculas se desvanecen con el radio (si no, quedaba una "aguja")
   const endoViT = (z, f) => { const re = rEndoVi(z, f), r = Math.max(0, re - trabVi(z, f) * Math.pow(clamp(re / 7, 0, 1), 2)); return [r * Math.cos(f), r * Math.sin(f), z]; };
@@ -620,7 +622,9 @@ export function construirCorazonHoy(estado, opciones = {}) {
     const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
     // v2 Forma: la punta se cierra en el último 15 % y la base en el primer 6 %, metida en la pared (radio → 0): con la punta abierta, un corte oblicuo no cerraba y el papilar se
     // dibujaba como un lazo en S dentro del VI (A4C del TEP en telesístole); cerrado, el corte es una mancha rellena
-    const DEP_PAP = 1.0, R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u) * Math.sqrt(Math.max(0, 1 - Math.pow(paso(0.85, 1, u), 2))) * Math.sqrt(Math.max(0, 1 - Math.pow(1 - paso(0, 0.06, u), 2)));
+    // ajustes.papilaresEscala (dibujo nuevo): el radio de los papilares (5,5 mm en el VI normal) y la altura de las trabéculas siguen al radio
+    // de la cavidad (Rm del VI de telediástole sobre el normal, tope 1): en un VI pequeño (HP, TEP) no llenan la cavidad. Proporción ilustrativa.
+    const DEP_PAP = 1.0, R0 = 5.5 * kPap, radioDe = (rB) => (u) => rB * (1 - 0.6 * u) * Math.sqrt(Math.max(0, 1 - Math.pow(paso(0.85, 1, u), 2))) * Math.sqrt(Math.max(0, 1 - Math.pow(1 - paso(0, 0.06, u), 2)));
     // trazado del eje: pared(z) → [x, y, z] de la pared en el ángulo del papilar; viX: el VI de ese instante
     const trazarPap = (pared, zB, zT, lpX, rB) => [0, 0.2, 0.4, 0.6, 0.8, 1].map((s) => {
       const z = zB + (zT - zB) * s * lpX, W = pared(z), rW = Math.hypot(W[0], W[1]), rad = radioDe(rB);
@@ -973,9 +977,12 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // graves) es de ESC/ERS 2022 p. 3645 Tabla 10; la curva, ilustrativa.
   const septoIn = ajustes.septoContinuo && estado.septoSigno != null ? Math.tanh(GANANCIA_SEPTO * estado.septoSigno) / Math.tanh(GANANCIA_SEPTO) : estado.septo;
   const mio = estado.mioVi ?? 1, septo = clamp(septoIn ?? 0, 0, 1);
+  // ajustes.septoRecto (dibujo nuevo): las uniones del tabique plano con el círculo se redondean menos (KU < 1): el eje corto se ve en «D»
+  // (ESC/ERS 2022 p. 3645 Tabla 10: tabique aplanado) y el LVEI no se diluye en el redondeo. La escala es ilustrativa.
+  const KU = ajustes.septoRecto ? ajustes.septoRecto : 1;
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
-  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo);   // anatomia.mjs
+  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KU);   // anatomia.mjs
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
   const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
@@ -984,9 +991,9 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // radio del VI en (z, ángulo), con el tabique aplanado si toca
   // el tabique aplanado se une al círculo con uniones redondeadas (radioConCuerda, R3)
   const rEndoVi = (z, f) => { const r = rEndoViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    return radioConCuerda(r, r * Math.cos(a), a, f); };
+    return radioConCuerda(r, r * Math.cos(a), a, f, KU); };
   const rEpiVi = (z, f) => { const r = rEpiViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f); };
+    return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f, KU); };
   const endoVi = (z, f) => { const r = rEndoVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const epiVi = (z, f) => { const r = rEpiVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const ReB = vi.ReB;
