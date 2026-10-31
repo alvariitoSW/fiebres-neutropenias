@@ -314,7 +314,7 @@ const contestar = async (q, fallar, foto1, fallarTocar, donde = q.id) => {
     if (sinTapar.length) ok(false, `${donde}: se ven antes de contestar ${sinTapar.join(', ')}`);
   }
   if (q.tipo === 'test') {
-    await pulsar(pref + '[data-accion="ops"]');
+    if (!q.sinPensar) await pulsar(pref + '[data-accion="ops"]');
     // data-op es la posición en pantalla: las opciones salen barajadas por el motor común (core/mayeutica-motor.js)
     const orden = barajar(q.opciones, q.id), buena = orden.findIndex(o => o.ok), mala = orden.findIndex(o => !o.ok);
     if (foto1) { await p.evaluate(() => document.getElementById('cpv-preg').scrollIntoView({ block: 'start' })); await foto(foto1 + '-antes'); }
@@ -388,7 +388,7 @@ for (const [k, C] of CASOS.entries()) {
     await contestar({ ...paso.pregunta, ocultar: paso.ocultar }, j === 0, k === 0 && j === 4 ? '07-caso-giro' : null, false, `${C.id} paso ${j + 1}`);
   }
   ok(await p.evaluate(() => /Lo que te llevas/.test(document.getElementById('cpv-preg').textContent)), `el caso ${C.id} llega a «Lo que te llevas»`);
-  ok(await p.evaluate(() => !!document.querySelector('#cpv-preg [data-tab][data-especialidad="libros"]')), `${C.id}: «Repasar en la ficha» enlaza con su ficha`);
+  ok(await p.evaluate(() => !!document.querySelector('#cpv-preg .cpv-link[data-tab][data-especialidad]')), `${C.id}: «Repasar en la ficha» enlaza con su ficha`);
   if (await desborde() > 0) ok(false, `desborde en «Lo que te llevas» del caso ${C.id}`);
   if (k === 0) {
     await p.evaluate(() => { const r = document.getElementById('cpv-preg').getBoundingClientRect(); const esc = document.getElementById('cpv-escena-bloque').getBoundingClientRect(); window.scrollBy(0, r.top - esc.height - 10); }); await p.waitForTimeout(200);

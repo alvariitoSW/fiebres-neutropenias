@@ -40,7 +40,7 @@ export const CASO_TERESA = {
         nota: '<b>Nota de fuentes.</b> La Tabla 15.4 multiplica por 3 («estimación conservadora», shock p. 29); el cap. 11 calcula ×5 (fluidoterapia p. 26). Las dos son de Marino: no gana ninguna.' } },
     { momento: 'Urgencias · hora 1', datos: { Pérdida: '20 % (clase II)', Fluidos: 'aún ninguno' }, nuevo: ['Fluidos'],
       estado: TERESA, mirar: 'rio',
-      pregunta: { id: 'w4-3', tipo: 'test', fuente: 'mc-hemorragico-fluidos#mc-tabla-15-4 · mar-cristaloides#mar-ringer',
+      pregunta: { id: 'w4-3', tipo: 'test', sinPensar: true, fuente: 'mc-hemorragico-fluidos#mc-tabla-15-4 · mar-cristaloides#mar-ringer',
         enunciado: 'Decide tú, sin pistas: ¿qué le pones ahora?',
         opciones: [
           { t: '≈ 1,3 L de salino 0,9 % a chorro', ok: false, porque: 'La cantidad es la de la Tabla 15.4, pero el fluido no: del salino solo queda en el plasma una parte pequeña; el resto pasa al intersticio y, con él, el exceso de cloro.',

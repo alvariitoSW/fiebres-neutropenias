@@ -37,6 +37,10 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
   «arreglos» con 6 arreglos (76 pasos, 1,5 M frente a 0,6). Si se repite en otro parte: un encargo por estado y tandas
   de ≤3 arreglos. Confirmado: medir `gasto.mjs` a mitad de tarea funcionó (se compareció a 8,2 M, antes del Estudiar).
 
+- (31/10, educacion-app parte 3) Suelto: el director perdió una hora de jueces por un filtro de texto que no recogía la línea
+  «✅ Todos los jueces a favor» (hubo que repetir general + 3 modelos). Si se repite: guardar la salida entera de cada pasada y
+  mirar el código de salida, no el texto. Último parte revisado: `2026-10-30-educacion-app-3.md`.
+
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
@@ -53,3 +57,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-30 | Medir el gasto tras las piezas, antes del Estudiar | propuesta |
 | 2026-10-30 | Hacienda no junta piezas con prueba propia en un encargo | propuesta |
 | 2026-10-30 | Director del paso 4 a 1,3 M | propuesta |
+| 2026-10-31 | Continuar al mismo constructor solo si el primero acabó en ≤30 pasos | propuesta |
