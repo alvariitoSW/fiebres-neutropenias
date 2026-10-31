@@ -1493,3 +1493,12 @@ Tras aprobar R4, el usuario pidió reponer el escenario «Hipotensión con bradi
 el texto del libro. Marino no da un vasopresor para ese escenario. El texto nuevo lo dice y recoge lo que sí da la
 fuente: la dopamina a 3-10 μg/kg/min estimula los receptores β y su riesgo es la taquicardia (pág. 14); la
 fenilefrina puede acompañarse de bradicardia (pág. 15).
+
+## Bradicardias, bloqueos AV y marcapasos en el corazón eléctrico (`b3-bradi`, 31/10/2026)
+
+Versión corta del Consejo del 28/10: los 5 estados `pend-*` de la familia «Lentos» del corazón eléctrico pasan a ser estados vivos
+(`bradi`, `bav1`, `bav2` con Mobitz I/II/2:1, `bav3` con escape nodal/ventricular, `marcapasos`). Dos fuentes, sin fusionar: la ESC 2021
+de estimulación (`docs/esc-2021-estimulacion-cardiaca.pdf`, PDF = impresa + 1) para lesión, síntomas e indicaciones, y la ficha ECG de PIF
+Cardiología (López Ramírez 2012, parte 2 = impresa − 59, parte 3 = impresa − 125) para los criterios ECG, que la ESC no trae. `cf()` admite
+un 5.º campo `pdf`. Motor: `hisCada`, `escapeCada`, espigas y sin eco auricular con `navF` > 2,5. Barrido a 12,5 mm/s en «Lentos».
+Pendiente: Wenckebach progresivo (fatiga gradual del nodo). Parte `autonomo/partes/2026-10-31-b3-bradi.md`.

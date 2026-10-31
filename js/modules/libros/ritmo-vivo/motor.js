@@ -185,11 +185,12 @@ export const MOTOR = (() => {
       fcSA: 75, sa: true, navF: 1, navRet: 1, cerrojo: -1, cerrojoFin: -1, apOn: false, ramaD: true, ramaI: true,
       musV: 1, hpRet: 1, ondasF: [], musA: 1, apd: 0.30, apdExtra: 0, refrA: 0.15, fa: false, fv: false, flOn: false, crOn: false, crRefr: 0.30,
       pAmp: 1, tAmp: 1, tAncho: 1, sinMecanica: false, faTasa: 0.03, fvTasa: 0.022, navRef: null, foco: null, ocultoHis: 0.31, llenadoMalo: false, contractil: 1, pd: 68, tdp: false,
+      hisCada: 0, escapeCada: 1.0, espigas: [],   // hisCada: 1 de cada N pasos se bloquea en el His (0 = apagado) · escapeCada: s entre escapes de la unión con el nodo cerrado (null = sin escape) · espigas: instantes de los disparos de un foco con espiga
     };
     const h = { push(e) { heap.push(e); let i = heap.length - 1; while (i > 0) { const p = (i - 1) >> 1; if (heap[p].t <= e.t) break; [heap[p], heap[i]] = [heap[i], heap[p]]; i = p; } },
       pop() { const top = heap[0], last = heap.pop(); if (heap.length) { heap[0] = last; let i = 0; for (;;) { const l = 2 * i + 1, r = l + 1; let s = i; if (l < heap.length && heap[l].t < heap[s].t) s = l; if (r < heap.length && heap[r].t < heap[s].t) s = r; if (s === i) break; [heap[s], heap[i]] = [heap[i], heap[s]]; i = s; } } return top; } };
     const programar = (k, t, de) => h.push({ k, t, de });
-    let proxSA = 0, proxFA = 0, proxFV = 0, proxFoco = 0, tAhora = 0, escUlt = -1e9;   // escUlt: el último latido de escape del nodo (ver avanzar)
+    let proxSA = 0, proxFA = 0, proxFV = 0, proxFoco = 0, tAhora = 0, escUlt = -1e9, pasosHis = 0;   // escUlt: el último latido de escape del nodo (ver avanzar)
     const apdK = new Float64Array(n).fill(0.3);
     function apd(k, t) {   // duración del potencial de acción ventricular según el RR local (restitución); se fija al activarse
       return apdK[k];
@@ -270,17 +271,18 @@ export const MOTOR = (() => {
         if (m.fa) tg = Math.min(tg, proxFA);
         if (m.fv) tg = Math.min(tg, proxFV);
         if (m.foco) tg = Math.min(tg, proxFoco);
-        // El escape de la unión: con el nodo AV cerrado (adenosina), si pasa 1 s sin QRS, el His late solo (~50/min;
-        // fisiología general: la unión AV escapa a 40-60/min). Sin él, el cerrojo dejaba el ventrículo sin ritmo.
+        // El escape de la unión: con el nodo AV cerrado (adenosina), si pasa m.escapeCada (1,0 s por defecto = 60/min)
+        // sin QRS, el His late solo (fisiología general: la unión AV escapa a 40-60/min; 45/min = 1,33 s). Sin él, el cerrojo
+        // dejaba el ventrículo sin ritmo; con escapeCada = null se apaga (el escape lo pone entonces un foco ventricular).
         let proxEsc = Infinity;
-        if (m.cerrojoFin > m.cerrojo && m.cerrojo >= 0) { const u = latidosV.length ? latidosV[latidosV.length - 1].t0 : -1e9; proxEsc = Math.max(m.cerrojo, u + 1.0, escUlt + 1.0); if (proxEsc < m.cerrojoFin) tg = Math.min(tg, proxEsc); else proxEsc = Infinity; }
+        if (m.escapeCada != null && m.cerrojoFin > m.cerrojo && m.cerrojo >= 0) { const E = m.escapeCada; const u = latidosV.length ? latidosV[latidosV.length - 1].t0 : -1e9; proxEsc = Math.max(m.cerrojo, u + E, escUlt + E); if (proxEsc < m.cerrojoFin) tg = Math.min(tg, proxEsc); else proxEsc = Infinity; }
         const te = heap.length ? heap[0].t : Infinity;
         const t = Math.min(tg, te);
         if (t > hasta) break;
         if (tg <= te) {
           if (m.sa && proxSA === tg) { programar(N.sa.k, tg, null); proxSA = tg + 60 / m.fcSA; }
           if (m.fa && proxFA === tg) { const ts = regiones.a[Math.floor(azar() * regiones.a.length)]; programar(ts.nodo.k, tg, null); proxFA = tg + m.faTasa * (0.5 + azar()); }
-          if (m.foco && proxFoco === tg) { const k = m.foco.sitio(tg, azar); if (k != null) programar(k, tg, null); proxFoco = tg + m.foco.cada * (1 + (m.foco.jitter || 0) * (azar() - 0.5) * 2); }
+          if (m.foco && proxFoco === tg) { const k = m.foco.sitio(tg, azar); if (k != null) { programar(k, tg, null); if (m.foco.espiga) { m.espigas.push(tg); if (m.espigas.length > 80) m.espigas.shift(); } } proxFoco = tg + m.foco.cada * (1 + (m.foco.jitter || 0) * (azar() - 0.5) * 2); }
           if (proxEsc === tg) { programar(N.his1.k, tg, null); escUlt = tg; }
           if (m.fv && proxFV === tg) { const ts = regiones.v[Math.floor(azar() * regiones.v.length)]; programar(ts.nodo.k, tg, null); proxFV = tg + m.fvTasa * (0.5 + azar()); }
           continue;
@@ -290,6 +292,10 @@ export const MOTOR = (() => {
           if (nd.tipo === 'navR' || nd.tipo === 'navL' || nd.tipo === 'ap') { const ult = pasoNodo[pasoNodo.length - 1]; if (!ult || ult.k !== e.k || Math.abs(ult.t - e.t) > 0.02) pasoNodo.push({ k: e.k, t: e.t, paso: false, de: e.de, cerrojo: bloqueado(nd, e.t) && nd.tipo !== 'ap' }); }
           continue;
         }
+        // Mobitz II: el His bloquea 1 de cada hisCada impulsos que le llegan del nodo (el PR de los conducidos no cambia)
+        if (m.hisCada > 0 && e.k === N.his1.k && e.de != null && nodos[e.de].tipo === 'navC' && ++pasosHis % m.hisCada === 0) { pasoNodo.push({ k: e.k, t: e.t, paso: false, his: true }); continue; }
+        // Con el nodo muy deprimido (navF > 2,5) el impulso lento no vuelve hacia la aurícula: sin eco (la P extra que reiniciaba el reloj sinusal)
+        if (m.navF > 2.5 && nd.tipo === 'navE' && e.de != null && (nodos[e.de].tipo === 'navR' || nodos[e.de].tipo === 'navL')) continue;
         activar(e.k, e.t, e.de);
       }
       tAhora = hasta;

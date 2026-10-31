@@ -1,7 +1,7 @@
 // El dibujo vivo de la maqueta b3-ritmo: tinta, torniquete, célula y aparatos leen el motor en cada fotograma.
 import { embolo } from '../../../core/bomba.js';
 import { CABLES, CAMINO, G, OB, TORN, VOLT, angV, aparatosEstatico, bombaDe, canalHtml, contornoBanda, dibujoEstatico, f1, fase, pintarTorniquete, polyTesela, potencial, yPA } from './dibujo.js';
-import { S, ecgEn, latidos, mo, pend } from './pagina.js';
+import { S, ecgEn, latidos, mo } from './pagina.js';
 import { $, NS, clamp } from './ayudas.js';
 
 /* ---------- El dibujo vivo ---------- */
@@ -38,14 +38,6 @@ function geometria(dv, da) {
   $('rtv-trama-musculo').innerHTML = `<path d="${G.teselas.map(t => polyTesela(t, dv, da)).join(' ')}"/>`;
   $('rtv-contornos').innerHTML = G.BANDAS.map(b => contornoBanda(b, b.reg === 'v' ? dv : da)).join('');
 }
-export function pintarEscenaPendiente() {
-  geometria(0, 0);
-  for (const e of EL.tinta) e.setAttribute('fill-opacity', 0);
-  for (const s of EL.segs) s.e.setAttribute('stroke-opacity', 0);
-  ['rtv-ap', 'rtv-circuito-fl', 'rtv-circuito-tv', 'rtv-cicatriz', 'rtv-lesion', 'rtv-parches', 'rtv-puente', 'rtv-cerrojo'].forEach(id => $(id) && $(id).setAttribute('opacity', 0));
-  $('rtv-fichas').innerHTML = ''; pintarTorniquete('L', 0, 1, 1, false, false); pintarTorniquete('R', 0, 1, 1, false, false);
-  $('escena-lectura').innerHTML = `<b>Pendiente de fuente</b>: el torniquete y el His esperan su guía.`;
-}
 export function pintarEscena(t) {
   if (!mo) return;
   const lat = latidos(t), sinMec = mo.m.sinMecanica;
@@ -72,6 +64,9 @@ export function pintarEscena(t) {
   const tach = (x, y) => `<path d="M${x - 4} ${y - 4} L${x + 4} ${y + 4} M${x + 4} ${y - 4} L${x - 4} ${y + 4}" stroke="var(--accent-red)" stroke-width="2" stroke-linecap="round"/><circle cx="${x}" cy="${y}" r="6.5" fill="none" stroke="var(--accent-red)" stroke-width=".8"/>`;
   const clave = (mo.m.ramaI ? 'i' : '') + (mo.m.ramaD ? 'd' : '');
   if ($('rtv-rama-tachada').dataset.k !== clave) { $('rtv-rama-tachada').dataset.k = clave; $('rtv-rama-tachada').innerHTML = (mo.m.ramaI ? '' : tach(185, 188)) + (mo.m.ramaD ? '' : tach(165, 199)); }
+  // el His, tachado un momento cuando bloquea una P (Mobitz II y 2:1), como la vía rápida en el Mobitz I
+  { const b = mo.pasoNodo.filter(e => e.his && e.t <= t && t - e.t < 0.7).pop(), k = b ? '1' : '0', g = $('rtv-his-tachado');
+    if (g && g.dataset.k !== k) { g.dataset.k = k; g.innerHTML = b ? tach(160, 163) : ''; } }
   const shockVisible = !!(S.desfib && S.desfib.modo);
   $('rtv-parches').setAttribute('opacity', shockVisible ? 1 : 0);
   if (S.desfib && S.desfib.tChoque) { const d = t - S.desfib.tChoque; $('rtv-destello').setAttribute('fill-opacity', d >= 0 && d < 0.25 ? (0.35 * (1 - d / 0.25)).toFixed(2) : 0); }
@@ -160,12 +155,12 @@ function pintarCelula(t) {
 /* ---------- Los aparatos ---------- */
 export function pintarAparatos() {
   const b = S.bomba, dfb = S.desfib;
-  $('rtv-bomba').setAttribute('opacity', b ? 1 : 0.6); $('rtv-desfib').setAttribute('opacity', dfb ? 1 : 0.6); $('rtv-marcapasos').setAttribute('opacity', pend() ? 1 : 0.45);
+  $('rtv-bomba').setAttribute('opacity', b ? 1 : 0.6); $('rtv-desfib').setAttribute('opacity', dfb ? 1 : 0.6); $('rtv-marcapasos').setAttribute('opacity', S.clave === 'marcapasos' ? 1 : 0.45);
   $('rtv-bomba-cuerpo').innerHTML = bombaDe(b);
   let lect = '';
   if (b) lect += `Bomba: <b>${b.lectura}</b>. `;
   if (dfb) lect += `Desfibrilador: <b>${dfb.energia} · ${dfb.modo === 'sinc' ? 'sincronizado' : 'no sincronizado'}</b><span id="rtv-desfib-est"></span>. `;
-  if (pend()) lect += 'Generador de marcapasos: <b>pendiente de fuente</b>.';
+  if (S.clave === 'marcapasos') lect += 'Marcapasos: <b>70 lpm, electrodo en el ventrículo derecho</b>. ';
   $('aparatos-lectura').innerHTML = lect || 'Ningún aparato en uso.';
   const ang = dfb ? ({ '100 J': -60, '120 J': -30, '200 J': 30, '120-200 J': 0 }[dfb.energia] ?? 0) : -120;
   const mando = $('rtv-mando'); if (mando) mando.setAttribute('transform', `rotate(${ang})`);
