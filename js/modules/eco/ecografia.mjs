@@ -568,11 +568,7 @@ export function ajusteAfin(seg, segRef) {
 }
 
 // ---------------------------------------------------------------------------- formación de la imagen
-// Haz (2,5 MHz con armónicos, ilustrativo; cae dentro de 1-5 MHz de la sonda cardíaca, POCUS I cap. 3, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=28, impresa 36): ~0,3 mm de resolución axial (σ) y lateral que crece con la
-// profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
-
-// ---------------------------------------------------------------------------- formación de la imagen
-// Haz (2,5 MHz con armónicos, ilustrativo; cae dentro de 1-5 MHz de la sonda cardíaca, POCUS I cap. 3, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=28, impresa 36): ~0,3 mm de resolución axial (σ) y lateral que crece con la
+// Haz (2,5 MHz con armónicos, ilustrativo; cae dentro de 1-5 MHz de la sonda cardíaca, POCUS II cap. 3, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=28, impresa 36): ~0,3 mm de resolución axial (σ) y lateral que crece con la
 // profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
 const SIG_AX = 0.3, DB_LO = -34, DB_HI = 30;
 const SIG_LAT0 = (r) => Math.max(0.45, 0.0085 * r);
@@ -898,7 +894,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
   /**
    * Doppler color sobre la última imagen: vel[q] = velocidad hacia la sonda (cm/s) de cada celda, NaN sin color.
    * Rojo-amarillo hacia la sonda, azul-cian alejándose; por encima de ±nyq la velocidad se "enrolla" al color
-   * contrario (aliasing; una escala baja lo provoca, POCUS I cap. 2, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=11, impresa 43). Por debajo de 4 cm/s no se pinta (filtro de pared).
+   * contrario (aliasing; ajustar la escala al territorio vascular lo evita, POCUS I cap. 2 (que una escala baja lo provoque es deducción), docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=11, impresa 43). Por debajo de 4 cm/s no se pinta (filtro de pared).
    */
   function colorear(vel, nyq) {
     const { PIX, FB, FS, pix } = G;

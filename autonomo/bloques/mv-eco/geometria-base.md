@@ -22,7 +22,7 @@ A4C de cada extremo: `autonomo/bloques/mv-eco/geometria-capturas/*.png` (contorn
 | Pared libre VD | 1-5 mm; HP grave >5 | Lang p.20; Mukherjee p.144-145 (<5 mm; 5-7 leve) |
 | VD/VI basal | ≤1,0; HP/TEP grave >1,0 | ESC/ERS 2022 p.3645 (Tabla 10) |
 | LVEI (eje corto) | ≤1,1; HP/TEP grave >1,1 | ESC/ERS 2022 p.3645 (Tabla 10); Mukherjee p.148 (definición) |
-| Pared VI (septo y posterior) | 6-10 mm; hipertrofia >10 | Lang 2015 p.17 (Tabla 4, varón) |
+| Pared VI (septo y posterior) | 6-10 mm; hipertrofia >10 | Lang 2015 p.17 (Tabla 6, varón; >10 derivado) |
 | Área AD telesistólica | <19 cm²; HP grave >18 | Mukherjee p.145; ESC/ERS p.3645 |
 Techos de «paciente posible» (VD basal 70 mm, pared VD 15, VD/VI 2,5, LVEI 2,5, pared VI 25, AD 40 cm²): **sin fuente**;
 solo avisan. El límite inferior de VD basal (25) solo se exige a «normal».

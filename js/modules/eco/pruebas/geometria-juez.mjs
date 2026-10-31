@@ -127,7 +127,7 @@ export function rangosDe(k, g) {
   const lb = (min) => nl ? min : 0;
   const hp = k === 'hpcronica', tep = k === 'tep';
   // VD basal
-  if (hp && tope || tep && tope) r.push(R('vdBasal', 41, TECHO.vdBasal, LANG(20) + ' (dilatado >41, p.17)', {}), R('vdBasal', 0, TECHO.vdBasal, 'techo de paciente posible', { sinFuente: true }));
+  if (hp && tope || tep && tope) r.push(R('vdBasal', 41, TECHO.vdBasal, LANG(20) + ' (dilatado >41: derivado del límite superior de la Tabla 8)', {}), R('vdBasal', 0, TECHO.vdBasal, 'techo de paciente posible', { sinFuente: true }));
   else if (k === 'fallo' || k === 'dilatada') r.push(R('vdBasal', lb(25), 49, LANG(20) + ' (25-41) / ' + MUK(145) + ' (>49 grave)'));
   else r.push(R('vdBasal', lb(25), 41, LANG(20)));
   // VD/VI basal
@@ -139,7 +139,7 @@ export function rangosDe(k, g) {
   // pared VI (septo y lateral): 6-10 mm en varón; en la dilatada/fallo, solo el techo
   const hip = k === 'hipertrofia' && g > 0.01;
   if (hip && !tope) r.push(R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
-  else if (hip && tope) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
+  else if (hip && tope) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia: derivado del límite normal)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
   else r.push(R('paredViSep', 0, 10, LANG(17) + ' (0,6-1,0 cm)')), r.push(R('paredViLat', 0, 10, LANG(17)));
   // aplanamiento del tabique (LVEI) y AD telesistólica
   if ((hp || tep) && tope) r.push(R('lvei', 1.1, 2.5, ESC(3645) + ' T10 (LVEI >1,1)'), R('lvei', 0, 2.5, 'techo de paciente posible', { sinFuente: true }));
