@@ -35,7 +35,7 @@
 // (localStorage, como el quiz), siempre dentro de try/catch.
 import { initVistaVisual, irAlTexto } from './vista-visual.js';
 import { escapeHtml } from './ui.js';
-import { pintarPregunta, pintarRepaso, Progreso, Casos, rutaDe, entrar as entrarMotor, CLASES_FICHA } from './mayeutica-motor.js';
+import { pintarPregunta, pintarRepaso, Progreso, Casos, rutaDe, entrar as entrarMotor, CLASES_FICHA, lineaVuelve, crearGuardado, elegirDiasAtras, pintarDiasAtras, hoyLocal } from './mayeutica-motor.js';
 
 /* ---------- Utilidades ---------- */
 // Aciertos y fallos de las fichas: en este dispositivo, con su clave de siempre (el motor los guarda).
@@ -119,8 +119,11 @@ function verEnTexto(fuente, tab, origen) {
 }
 
 /* ---------- Una pregunta: el motor común con los enganches de la ficha ---------- */
-const preguntaFicha = tab => ({
+// prog y ids (opcionales): con ellos, tras contestar dice cuándo vuelve la pregunta («Vuelve en 3 días…»); los pasos de
+// los casos no entran (no vuelven en el repaso).
+const preguntaFicha = (tab, prog, ids) => ({
     p: 'may', clases: CLASES_FICHA,
+    ...(prog ? { vuelve: (q, r) => (ids.has(q.id) ? lineaVuelve(prog.previsto(q, r.ok)) : '') } : {}),
     verEnTexto: q => verEnTexto(q.fuente, tab, q.origen),
     trasRespuesta: q => { const m = botonesModelo(modelosDe(q)); return m ? `<div class="may-fila">${m}</div>` : ''; },
 });
@@ -180,6 +183,10 @@ const PASOS = [
 ];
 // Pasos vistos en esta sesión (Mira y Juega), por ficha. Solo en memoria: no se guarda nada nuevo.
 const SESION = new Map();
+// Las fichas con Estudiar montadas en esta sesión (tabId → datos): de aquí salen las preguntas «de días atrás». No se
+// carga nada nuevo; lo contestado se lee del guardado de siempre.
+const REGISTRO = new Map();
+let diasEnsenado = null;   // el día (local) en que esta sesión ya enseñó el repaso de días atrás
 const ZONA = '<div class="may-barra"><span class="may-etq"></span><span class="may-pasos" aria-hidden="true"></span></div><div class="may-zona" aria-live="polite"></div>';
 
 class Estudiar {
@@ -190,10 +197,14 @@ class Estudiar {
         if (!SESION.has(tab.id)) SESION.set(tab.id, new Set());
         this.visto = SESION.get(tab.id);
         this.prog = new Progreso(CLAVE_GUARDADO, this.preguntas);
+        this.idsPreguntas = new Set(this.preguntas.map(q => q.id));
         this.estados = estadosParaJugar(tab, datos);
         this.abierto = null; this.construidos = new Set();
         this.titulos = Object.fromEntries(PASOS.map(p => [p.id, p.id === 'caso' && datos.casos.length > 1 ? 'Los casos' : p.titulo]));
-        raiz.innerHTML = `<div class="est-cabeza"><span class="may-eyebrow">Estudiar · tu recorrido</span>${datos.entrada ? `<p class="may-para">${datos.entrada}</p>` : ''}</div>
+        raiz.innerHTML = `<div class="est-cabeza"><span class="may-eyebrow">Estudiar · tu recorrido</span>${datos.entrada ? `<p class="may-para">${datos.entrada}</p>` : ''}
+                <p class="may-para may-firmes"></p>
+                <details class="nota-plegable"><summary>¿Qué es firme?</summary><p>Firme = acertada en dos días distintos. Criterio de la app, sin prueba propia; nunca bloquea nada.</p></details></div>
+            <section class="est-dias may-zona" hidden></section>
             <ol class="est-resumen">${PASOS.map(p => `<li><button type="button" class="est-ir" data-ir-paso="${p.id}"><span class="est-marca" aria-hidden="true"></span><span class="est-txt"><b></b><small></small></span></button></li>`).join('')}</ol>
             ${PASOS.map(p => `<section class="est-paso" data-paso="${p.id}" hidden></section>`).join('')}
             ${datos.profundizar?.length ? `<details class="may-profundizar"><summary>📚 Para profundizar: lo que no entra en el recorrido (${datos.profundizar.length})</summary><div class="may-prof-lista"></div></details>` : ''}`;
@@ -245,7 +256,12 @@ class Estudiar {
             caso: this.idsCasos.every(id => g[id]),
         };
     }
+    pintarFirmes() {
+        const f = this.prog.firmes();
+        this.raiz.querySelector('.may-firmes').innerHTML = `Ideas firmes: <strong>${f.n} de ${f.total}</strong>${f.total && f.n === f.total ? ' · ficha dominada' : ''}${f.manana ? ` · mañana te tocan ${f.manana}` : ''}`;
+    }
     pintarResumen() {
+        this.pintarFirmes();
         const hecho = this.hechos();
         const nG = this.d.guia.length, hG = this.d.guia.filter(q => this.resultados[q.id]).length;
         const nE = this.d.examen.length, nF = Object.keys(this.fallos).length;
@@ -269,9 +285,39 @@ class Estudiar {
     }
     // Al pulsar «Estudiar»: el paso pedido (Mira, si viene de «Visual»), el que estaba abierto o el primero sin hacer.
     entrar(paso) {
+        this.prog.cargar();   // otra ficha pudo anotar (el repaso de días atrás) desde la última vez
+        if (this.enDias) return;
+        if (!paso && !this.abierto && this.diasAtras()) return;
         if (paso) this.abrir(paso, paso === 'mira' && this.abierto && this.abierto !== 'mira' ? this.abierto : null);
         else if (!this.abierto) { const h = this.hechos(); this.abrir(PASOS.find(p => !h[p.id])?.id || 'mira'); }
         else this.pintarResumen();
+    }
+    // El repaso de días atrás: preguntas de OTRAS fichas ya intentadas que tocan hoy. Una vez por día y sesión; si no toca
+    // nada, devuelve false y se entra directo. Cada respuesta se guarda en el registro de su propia ficha.
+    diasAtras() {
+        const hoy = hoyLocal();
+        if (diasEnsenado === hoy) return false;
+        const g = this.prog.g.leer();
+        const items = [...REGISTRO].filter(([id]) => id !== this.tab.id).flatMap(([id, d]) =>
+            [...d.guia, ...d.examen].filter(q => g[q.id]?.ultimo).map(q => ({ q, ficha: id, a: g[q.id] })));
+        const elegidos = elegirDiasAtras(items, { hoy, max: 5 });
+        if (!elegidos.length) return false;
+        diasEnsenado = hoy; this.enDias = true;
+        const ocultar = h => this.raiz.querySelectorAll(':scope > .est-cabeza, :scope > .est-resumen, :scope > .may-profundizar').forEach(e => { e.hidden = h; });
+        const zona = this.raiz.querySelector('.est-dias');
+        ocultar(true); zona.hidden = false;
+        pintarDiasAtras(zona, elegidos, {
+            p: 'may', hoy, pregunta: () => preguntaFicha(this.tab), finTexto: `Ahora, ${tituloFicha(this.tab)}.`,
+            // sin `resultado`: no pisa el del recorrido de su ficha
+            guardar: (q, r) => {
+                crearGuardado(CLAVE_GUARDADO).guardar(q.id, r.ok, { fallo: r.ok ? undefined : { faltan: r.faltan } });
+            },
+            alFinal: () => {
+                this.enDias = false; zona.hidden = true; zona.innerHTML = ''; ocultar(false);
+                this.prog.cargar(); this.entrar();
+            },
+        });
+        return true;
     }
     abrir(paso, desde = null) {
         if (!this.sec[paso]) return;
@@ -368,7 +414,7 @@ class Estudiar {
         const q = P[k], nF = Object.keys(this.fallos).length;
         this.barra(paso, P.map((p, j) => (this.resultados[p.id] === 'mal' ? 'mal' : this.resultados[p.id] ? 'on' : '') + (j === k ? ' aqui' : '')),
             `${parte === 'guia' ? 'Guía socrática' : 'Examen'} · ${k + 1} de ${P.length}${nF ? ` · para repasar: ${nF}` : ''}`);
-        pintarPregunta(this.zona(paso), { ...q, num: k + 1 }, { ...preguntaFicha(this.tab), alFinal: r => {
+        pintarPregunta(this.zona(paso), { ...q, num: k + 1 }, { ...preguntaFicha(this.tab, this.prog, this.idsPreguntas), alFinal: r => {
             this.prog.anotar(q, r);
             this.pintarResumen();
             this.recorrido(parte, k + 1); this.subir(this.sec[paso]);
@@ -397,7 +443,7 @@ class Estudiar {
                     ${chips}<div class="may-fila"><button class="may-b may-link" type="button" data-ir-paso="caso">Saltar al ${irCaso}</button></div>`
                 : `<h4 class="may-titulo">No queda nada por repasar</h4>
                     <p class="may-para">Has acertado todo, o ya lo repasaste.</p><div class="may-fila"><button class="may-b may-prim" type="button" data-ir-paso="caso">${irCaso}</button></div>`),
-            pregunta: () => preguntaFicha(this.tab),
+            pregunta: () => preguntaFicha(this.tab, this.prog, this.idsPreguntas),
             alAcabar: () => { this.pintarResumen(); this.repaso(); this.subir(this.sec.examen); },
         });
     }
@@ -433,8 +479,9 @@ class Estudiar {
                 <div class="may-fila"><button type="button" class="may-b may-link" data-may-texto="${p.id}">Ver en el texto →</button></div>`;
             const cuerpo = sec.querySelector('.may-prof-cuerpo');
             const origen = el.matches('.micro-prof-item') ? el.querySelector('.micro-prof-body') : null;
-            const copias = origen ? [...origen.children].map(n => n.cloneNode(true)) : [el.cloneNode(true)];
+            const copias = origen ? [...origen.childNodes].map(n => n.cloneNode(true)) : [el.cloneNode(true)];
             for (const c of copias) {
+                if (c.nodeType !== 1) { cuerpo.append(c); continue; }   // texto suelto
                 c.removeAttribute('id'); c.querySelectorAll('[id]').forEach(n => n.removeAttribute('id'));
                 if (c.matches('table')) { const caja = document.createElement('div'); caja.style.overflowX = 'auto'; caja.append(c); cuerpo.append(caja); }
                 else cuerpo.append(c);
@@ -451,6 +498,7 @@ export function montarMayeutica(tabId, datos) {
     if (!tab || tab.querySelector(':scope > .vista-estudiar')) return;
     const previo = tab.querySelector(':scope > .vista-visual') || tab.querySelector(':scope > .vista-texto');
     if (!tab.hasAttribute('data-visual') || !previo) { console.warn('[mayeutica] la ficha no tiene su interruptor Texto | Visual:', tabId); return; }
+    REGISTRO.set(tabId, datos);
     const raiz = document.createElement('div');
     raiz.className = 'vista-estudiar may';
     previo.after(raiz);
