@@ -62,6 +62,9 @@ export const BASE = {
   // por fuera a las cámaras y a los vasos del tórax (pulmonares); la aorta y las venas sistémicas, fuera, no la notan (pero
   // ver kAbdomen). Así la poscarga del VI es la presión de la cámara menos la pleural (Marino cap. 26, Ec. 26.1, PDF p. 87)
   pTorax: 0,
+  // pPleura: presión directa en el espacio pleural (cmH₂O; aire a tensión en un neumotórax). Por defecto 0. Se suma a la que llega de
+  // la vía aérea SIN pasar por fPleura ni por kAbdomen: el aire en la pleura no infla el pulmón ni empuja las venas del abdomen.
+  pPleura: 0,
   // fPleura: fracción de la presión de la vía aérea que llega al espacio pleural. En 19 pacientes con insuficiencia
   // respiratoria aguda, el 37 % con pulmones distensibles, el 32 % y el 24 % con los más rígidos (presión esofágica; Jardin
   // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, en perros; J Appl Physiol 59:1171,
@@ -404,7 +407,7 @@ export function crearMotor(ajustes = {}) {
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
-    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw;   // vía aérea y pleura (mmHg)
+    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw + p.pPleura * CMH2O_MMHG;   // vía aérea y pleura (mmHg); pPleura entra directa
     s.pTorax = pT;
     s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi + pT;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi + pT;
@@ -420,6 +423,25 @@ export function crearMotor(ajustes = {}) {
     s.pven = conCodo((s.vven - ef.vuVen) / p.cVen, p.codoVen) + p.kAbdomen * pAw;   // + el abdomen (kAbdomen)
     s.pap = conRigidez(conCodo((s.vap - p.vuAp) / p.cAp, p.codoPul), p.rigAp, p.kRigAp) + pT;
     s.pvp = conCodo((s.vvp - p.vuVp) / p.cVp, p.codoPul) + pT;
+  }
+
+  // Alivio de la poscarga por la presión pleural, SOLO en la eyección (el llenado y las presiones que se miden no lo ven).
+  // La poscarga que nota el músculo es la tensión de la pared (Laplace: presión transmural × radio / (2·grosor)), y lo que le
+  // queda para acortarse es su reserva: la tensión que puede generar, proporcional a su Ees. Quitar la misma presión pleural
+  // a un VI con la mitad de Ees le quita el doble de fracción de su reserva: el efecto crece como Ees_normal / Ees (acoplamiento
+  // Ees/Ea; Suga y Sagawa 1974, Circ Res 35:117, la relación presión-volumen telesistólica; aquí solo la forma, sin cifras). Con pTorax = 0 vale 0 y el motor es
+  // idéntico; con un VI normal (Ees = normal) el factor es 1 y no cambia nada. Resultado a comprobar: PCP ≥12 y CPAP 5 → el VS
+  // sube (Bradley 1992, PMID 1736745: +22 % del VS indexado; Marino resp. cap. 26, PDF p. 87)
+  const ALIVIO_P0 = 4;   // mmHg
+  function alivioEyeccion() {
+    // Techo (§1.14): la reserva que se libera no puede crecer sin límite con la presión pleural. La parte de la poscarga que la pleura
+    // le quita al VI es la presión transmural de la eyección; el ventrículo sufre por ella solo hasta el punto en que su pared ya
+    // está descargada, y a presiones altas manda el taponamiento (el llenado cae, ver pai/pad con pT). Satura como p·p0/(p+p0)
+    // (hipérbola; p0 = ALIVIO_P0 mmHg, ≈ el rango de CPAP/PEEP clínica, 5-10 cmH₂O): igual a p con p ≪ p0, y nunca pasa de p0.
+    // No es un dato de fuente: es la forma que impone Laplace (tensión ∝ presión transmural) con reserva finita (Suga-Sagawa).
+    if (!(s.pTorax > 0)) return 0;
+    const pEf = s.pTorax * ALIVIO_P0 / (s.pTorax + ALIVIO_P0);
+    return (Math.max(1, BASE.vi.ees / s.eesVi) - 1) * pEf;
   }
 
   function flujos(dt) {
@@ -446,14 +468,14 @@ export function crearMotor(ajustes = {}) {
     s.qTriReg = p.eroaTricus > 0 && dpTri > 0 ? p.eroaTricus * 50 * dpTri / Math.sqrt(dpTri + 0.25) : 0;
     // aórtica: abre por gradiente; abierta, el flujo tiene inercia y puede invertirse un instante;
     // cierra cuando el reflujo acumulado llega al volumen de cierre
-    if (!s.vAo) { if (s.pvi > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
+    if (!s.vAo) { if (s.pvi + alivioEyeccion() > s.paoDist) { s.vAo = true; s.reflujoAo = 0; } }
     s.dpVc = 0; s.dpNeto = 0;
     if (s.vAo && p.areaAortica > 0 && s.qAo > 0) {
       const v = s.qAo / (100 * p.areaAortica), r = Math.min(1, p.areaAortica / (Math.PI * (p.dAorta / 2) ** 2));
       s.dpVc = 4 * v * v; s.dpNeto = s.dpVc * (1 - 2 * r * (1 - r));
     }
     if (s.vAo) {
-      s.qAo += (s.pvi - s.paoDist - (p.rAortica + p.zAo) * s.qAo - s.dpNeto) / p.lAo * dt;
+      s.qAo += (s.pvi + alivioEyeccion() - s.paoDist - (p.rAortica + p.zAo) * s.qAo - s.dpNeto) / p.lAo * dt;
       if (s.qAo < 0) { s.reflujoAo -= s.qAo * dt; if (s.reflujoAo > p.vCierreAo) { s.vAo = false; s.qAo = 0; } }
     }
     s.pao = s.paoDist + p.zAo * s.qAo;

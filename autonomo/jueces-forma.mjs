@@ -40,6 +40,7 @@ export const BANCOS = [
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'pulmón vivo', datos: 'js/data/pulmon-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
@@ -72,6 +73,11 @@ export const MODELOS = {
     // El shock a pie de cama (bloque 3): Explorar | ¿Qué shock es? | Mayéutica
     'shock-vivo': { raiz: '#shv-raiz', enlace: { especialidad: 'libros', view: 'shockVivo' }, clave: 'shockVivo', modo: { explorar: '#shv-modo-explorar', mayeutica: '#shv-modo-may' },
         estados: ['hemo', 'septico', 'cardio', 'tapon', 'tep', 'balon', 'impella', 'ecmo', 'qs', 'rotura-papilar', 'iam-vd', 'rotura-septo', 'ic-etapa-1', 'ic-etapa-2', 'ic-etapa-3', 'ic-cpap'] },
+    // El pulmón con respirador (bloque 3, E1a): sin Mayéutica todavía (la hace M); solo Explorar
+    'pulmon-vivo': { raiz: '#pul-raiz', enlace: { especialidad: 'libros', view: 'pulmonVivo' }, clave: 'pulmonVivo', modo: { explorar: '#pul-modo-explorar' },
+        // la pantalla del respirador (sus curvas) es la imagen de los mandos; la lupa del pulmón, además
+        figuras: ['#pul-trazas', '#pul-esc-svg'],
+        estados: ['normal-vcv', 'pcv', 'pausa-inspiratoria', 'sdra-rigido', 'sdra-protector', 'volutrauma', 'broncoespasmo-auto-peep', 'auto-peep-corregida', 'eulalia-conectada', 'eulalia-ajustada'] },
     // El corazón eléctrico: el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },

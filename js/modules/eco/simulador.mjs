@@ -21,7 +21,7 @@ import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMot
 import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnillo, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
+import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -178,7 +178,7 @@ export function montarSimulador(raiz, opc = {}) {
     else return;
     emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoPendiente = true;
   }
-  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: ilustrativo y fisiología general.
+  // ---- Mandos de imagen (ganancia, TGC, profundidad, foco), ventana pobre y «Señálalo». Origen: la regla de cada mando (ganancia, profundidad, foco), ficha: POCUS I cap. 2, Tamagnone et al., docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9 (impresa 41); las cifras (dB, cm), TGC y artefactos, ilustrativo y fisiología general.
   const img = { gan: 0, tgc: [0, 0, 0, 0], foco: 80, prof: null, ventana: false, senal: null };
   const FRASES_SENAL = {
     sombra: 'Sombra: detrás de la costilla no llega sonido. Ahí no falta tejido.',
@@ -528,7 +528,8 @@ export function montarSimulador(raiz, opc = {}) {
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
   const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral });
-  const areasD = () => areasAnillo(refGeoTd.geo);
+  let areasTd = null;   // áreas de anillo de la telediástole de referencia (anillosDe: del corazón, no del dibujo)
+  const areasD = () => areasTd;
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
     tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
@@ -737,7 +738,7 @@ export function montarSimulador(raiz, opc = {}) {
     // forma de referencia para que el moteado siga al tejido: la telediastólica, con las mismas opciones
     // (el derrame mientras entra, de 10 en 10 mL: la forma de referencia no se rehace en cada fotograma)
     const cr = [Math.round(td.vvi), Math.round(td.vvd), opciones.pericardio, opciones.detalle, calidad, Math.round(motor.s.liquidoPeri / 10), mioVi].join('|');
-    if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); claveRef = cr;
+    if (cr !== claveRef) { refGeoTd = construirCorazon(estadoGeo(td, extraGeo()), { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }); claveRef = cr; { const eg = estadoGeo(td, extraGeo()); areasTd = areasAnilloDe(eg.vvi, eg.vvd); }
       // el abdomen de referencia: en espiración (la VCI en su diámetro máximo), con la misma topología
       const pvc = motor.ultimo ? motor.ultimo.pvc : td.pad; refEco = refGeoTd.partes.concat(construirAbdomen(refGeoTd, { pvc, pad: pvc, t: 0 }).partes); }
     return td;

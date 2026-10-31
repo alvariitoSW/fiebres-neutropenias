@@ -20,6 +20,12 @@
 //                                                      jueces-formula.mjs) en sus 5 modelos: capilar, río y mar,
 //                                                      glomérulo, filtro y Doppler del eco; también con --forma, y
 //                                                      con --modelo capilar-vivo o agua-viva solo en ese modelo
+//   node autonomo/jueces.mjs --geometria [--dibujo hoy]
+//                                                    + juez de geometría de la eco (B-045; js/modules/eco/pruebas/
+//                                                      geometria-juez.mjs): contornos sin cruces y proporciones en el
+//                                                      rango de la guía, por forma y mando; guarda el A4C de cada extremo
+//                                                      en autonomo/bloques/mv-eco/geometria-capturas/. NO va en la suite
+//                                                      por defecto: con el dibujo de hoy da ROJO (esperado hasta el paso 4)
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
@@ -51,7 +57,7 @@
 //   10. La fórmula (autonomo/jueces-formula.mjs; CLAUDE.md §7.10), con --formula, --forma o --modelo: en cada modelo
 //      que pinta renglones con pintarFormula, tras mover cada mando, la cuenta rehecha con los números que se ven da
 //      el resultado mostrado con sus mismos decimales. Su trampa: autonomo/pruebas/formula-juez-trampa.mjs.
-import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, existsSync, readdirSync, statSync, mkdirSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join, dirname, resolve } from 'node:path';
 import { execSync, spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
@@ -291,6 +297,27 @@ if (pide('--eco')) {
         const s = String(e.stdout || '');
         mal(`Eco: fallan pruebas (${(s.match(/^# fail (\d+)/m) || [])[1] || '?'}):\n   ${s.split('\n').filter(l => /^not ok/.test(l.trim())).slice(0, 10).join('\n   ')}`);
     }
+}
+
+// ---- 6. Geometría de la eco (opcional; con el dibujo de hoy da rojo a propósito)
+if (pide('--geometria')) {
+    try {
+        const { juzgarGeometria, capturaSVG, gDe } = await import('../js/modules/eco/pruebas/geometria-juez.mjs');
+        const dibujo = valores('--dibujo')[0] || 'hoy';
+        const { filas, resumen } = juzgarGeometria({ dibujo });
+        for (const f of filas) (f.ok ? ok : mal)(`Geometría ${f.forma}:${f.g} ${f.vista} ${f.fase}: ${f.motivo}${f.ok ? '' : ' · ' + f.cifras}`);
+        console.log(`   geometría (${dibujo}): ${resumen.fallos} fallos de ${resumen.total} filas`);
+        const dir = join(RAIZ, 'autonomo/bloques/mv-eco/geometria-capturas'); mkdirSync(dir, { recursive: true });
+        let n = 0;
+        for (const k of Object.keys((await import('../js/modules/eco/escenarios.mjs')).ESCENARIOS)) {
+            const gs = gDe(k); for (const g of gs.length > 1 ? [gs[0], gs[gs.length - 1]] : gs) {
+                const base = join(dir, `${k}-g${g ?? 'x'}-a4c`);
+                writeFileSync(base + '.svg', capturaSVG(k, g, 'td', 'a4c', dibujo));
+                const svg = readFileSync(base + '.svg', 'utf8'), [, w, h] = svg.match(/width="(\d+)" height="(\d+)"/) || [];
+                try { execSync(`google-chrome --headless --no-sandbox --disable-gpu --hide-scrollbars --screenshot="${base}.png" --window-size=${w},${h} "file://${base}.svg"`, { stdio: 'pipe', timeout: 30000 }); unlinkSync(base + '.svg'); n++; } catch { /* sin Chrome: queda el SVG */ }
+            } }
+        ok(`Geometría: ${n} capturas A4C (telediástole, mín. y máx. de cada mando) en autonomo/bloques/mv-eco/geometria-capturas/`);
+    } catch (e) { mal(`Geometría: ${e.message}`); }
 }
 
 console.log(`\n${fallos.length ? `❌ ${fallos.length} juez(es) en contra` : '✅ Todos los jueces a favor'}${avisos.length ? ` · ${avisos.length} aviso(s)` : ''}`);

@@ -1,0 +1,105 @@
+<!-- PROPUESTA PARA ELEGIR (plan socialista, mv-papel-pulmon). No es parte de la app. Ábrela con el servidor de la app:
+     http://localhost:8000/autonomo/maquetas/mv-papel-pulmon.html
+     Tres láminas: Entrada (del tórax al capilar, 2D), Histéresis P-V y PEEP, Asincronías en paw y flujo. Motores sin DOM en
+     mv-papel-pulmon/histeresis.mjs y asincronias.mjs; prueba en mv-papel-pulmon/pruebas.mjs. Fuentes: ver cada lámina. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El aire hasta el capilar, la PEEP y las asincronías · para elegir</title>
+<link rel="stylesheet" href="b3-pulmon/base.css">
+<style>
+:root { --dock-h: 214px; }
+.interruptor { grid-template-columns: repeat(3, 1fr); }
+.interruptor button { font-size: .74rem; }
+.lamina { display: grid; gap: 6px; grid-template-columns: minmax(0, 1fr); }
+.lamina > * { min-width: 0; }
+.vivo { position: sticky; top: 0; z-index: 5; background: var(--bg-main); display: grid; gap: 4px; padding: 2px 0 4px; }
+.frase-viva { font: .84rem/1.35 var(--serif); box-shadow: inset 3px 0 0 var(--accent-yellow); padding: 2px 0 2px 8px; min-height: 3.1em; }
+.frase-viva .estado { font: 700 .62rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--accent-yellow); display: block; }
+.fig { position: relative; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); overflow: hidden; }
+.fig svg { display: block; width: 100%; height: auto; }
+.fig .lamina-svg text { font-family: var(--sans); fill: var(--text-dim); }
+.t9 { font-size: 9.5px; } .t10 { font-size: 10.5px; }
+.gran { font: 700 15px var(--sans) !important; fill: var(--accent-yellow) !important; }
+.tr { fill: none; stroke: var(--text-dim); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.tr-f { fill: color-mix(in srgb, var(--text-main) 9%, var(--bg-main)); stroke: var(--text-dim); stroke-width: 1.2; }
+.muerto { fill: color-mix(in srgb, var(--accent-red) 22%, transparent); stroke: var(--accent-red); stroke-width: 1; stroke-dasharray: 4 3; }
+.aire { fill: color-mix(in srgb, var(--accent-yellow) 55%, transparent); }
+.l-ins { fill: none; stroke: var(--accent-yellow); stroke-width: 2.2; }
+.l-esp { fill: none; stroke: var(--accent-green); stroke-width: 2.2; stroke-dasharray: 6 4; }
+.l-peep { stroke: var(--accent-blue); stroke-width: 1; stroke-dasharray: 2 3; }
+.eje { stroke: var(--text-muted); stroke-width: 1; }
+.alv-cierra { stroke-dasharray: 3 2; }
+.foto { margin: 0; display: grid; gap: 2px; }
+.foto img { width: 100%; max-width: 320px; justify-self: center; border-radius: 8px; display: block; }
+.foto figcaption { font: .7rem/1.3 var(--sans); color: var(--text-muted); }
+.tarjeta { background: var(--bg-card); border: 1px solid var(--card2); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; font: .84rem/1.4 var(--sans); }
+.tarjeta .btn { min-height: 44px; border-radius: 10px; border: 1px solid var(--accent-yellow); background: transparent; color: var(--text-main); font: 600 .78rem var(--sans); cursor: pointer; }
+.tarjeta .resp { border-left: 3px solid var(--accent-green); padding-left: 8px; }
+.op-as { min-height: 52px; text-align: left; padding: 6px 10px; border-radius: 10px; border: 1px solid var(--line); background: var(--card2); color: var(--text-main); font: .8rem/1.3 var(--sans); cursor: pointer; }
+.op-as small { display: block; color: var(--text-muted); margin-top: 3px; font-size: .72rem; }
+.calc { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.calc .celda .t { display: block; }
+.sello { z-index: 4; }
+.dock-in .btn-guia { align-self: stretch; }
+.fila2 { display: grid; grid-template-columns: minmax(0, 1fr) 84px; gap: 6px; align-items: stretch; }
+.fila2 .seg button { font-size: .66rem; }
+.deslizador { grid-template-columns: 52px minmax(0, 1fr) 70px; }
+.deslizador label { font: 600 .66rem/1.1 var(--sans); color: var(--text-dim); }
+.deslizador output { font-size: .74rem; }
+.volver { min-height: 36px; border: 1px solid var(--accent-red); background: transparent; color: var(--text-main); border-radius: 8px; font: 600 .7rem var(--sans); cursor: pointer; }
+.pruebas-res { font: .72rem/1.35 ui-monospace, Menlo, monospace; white-space: pre-wrap; color: var(--text-dim); }
+.lista li { margin: 3px 0; font: .76rem/1.35 var(--sans); color: var(--text-dim); }
+.lista a, .lista .cita-ir { color: var(--accent-yellow); }
+.lista .cita-ir { background: transparent; border: 1px solid var(--line); border-radius: 8px; min-height: 32px; font: 600 .68rem var(--sans); padding: 2px 6px; cursor: pointer; white-space: normal; text-align: left; }
+.ok-g { color: var(--accent-green); } .mal-g { color: var(--accent-red); }
+#esf-btns { display: grid; gap: 4px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="cab"><h1>Del aire al capilar, la PEEP y las asincronías</h1><span class="aviso">Para elegir · no está en la app</span></div>
+  <div class="interruptor" role="tablist" aria-label="Lámina">
+    <button type="button" role="tab" id="tab-1" aria-selected="true">Entrada</button>
+    <button type="button" role="tab" id="tab-2" aria-selected="false">Histéresis</button>
+    <button type="button" role="tab" id="tab-3" aria-selected="false">Asincronías</button>
+  </div>
+
+  <section class="lamina" id="lam-1" aria-label="Entrada: del tórax al capilar">
+    <div class="vivo"><div class="frase-viva" id="fv-1" role="status" aria-live="polite"></div>
+      <div class="fig" id="fig-1"><svg id="svg-1" class="lamina-svg" viewBox="0 0 320 232" role="img" aria-label="Cuatro niveles: tórax con diafragma, vía aérea con espacio muerto, racimo de alvéolos y membrana alveolocapilar"></svg></div></div>
+    <figure class="foto" id="foto-1" hidden><img id="img-1" src="../../js/modules/neumologia/img/neumo-fig24-1-histologia-sdra.jpg" alt="Fig. 24.1: microscopía de un pulmón normal (muchos espacios aéreos con tabiques finos) y de un pulmón con SDRA" loading="lazy">
+      <figcaption>Fig. 24.1 (Marino, cap. 24, PDF p. 34): pulmón normal frente a SDRA avanzado. Foto real de la ficha.</figcaption></figure>
+    <div id="tarjetas"></div>
+  </section>
+
+  <section class="lamina" id="lam-2" aria-label="Histéresis P-V y PEEP" hidden>
+    <div class="vivo"><div class="frase-viva" id="fv-2" role="status" aria-live="polite"></div>
+      <div class="fig" id="fig-2"><svg id="svg-2" class="lamina-svg" viewBox="0 0 320 282" role="img" aria-label="Curva presión-volumen con rama inspiratoria continua y espiratoria discontinua, puntos de inflexión, línea de PEEP y cuatro alvéolos"></svg>
+        <div class="sello" id="sello-2" hidden></div></div></div>
+    <div class="calc" id="calc-2" aria-label="Cifras del ciclo"></div>
+  </section>
+
+  <section class="lamina" id="lam-3" aria-label="Asincronías" hidden>
+    <div class="vivo"><div class="frase-viva" id="fv-3" role="status" aria-live="polite"></div>
+      <div class="fig monitor" id="fig-3" style="padding:2px"><svg id="svg-3" class="mon-trazas" role="img" aria-label="Presión en la vía aérea, flujo, volumen y esfuerzo del paciente"></svg>
+        <div class="sello" id="sello-3" hidden></div></div></div>
+    <div id="adivina" class="tarjeta" hidden></div>
+  </section>
+
+  <section id="abajo" style="display:grid; gap:6px">
+    <details class="plegable"><summary>Las fuentes de esta lámina</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Para profundizar (lo que esta lámina no cubre)</summary><ul class="lista" id="profundizar"></ul></details>
+    <details class="plegable" id="det-pruebas"><summary>Prueba de los motores (Node)</summary><div class="pruebas-res" id="pruebas-res"></div></details>
+  </section>
+</main>
+
+<div class="dock" id="dock">
+  <div class="dock-in" id="dock-1"></div>
+  <div class="dock-in" id="dock-2" hidden></div>
+  <div class="dock-in" id="dock-3" hidden></div>
+  <div class="dock-in" id="dock-guia" hidden></div>
+</div>
+<div class="toast" id="toast" role="status" hidden></div>
+<script type="module" src="mv-papel-pulmon/pagina.js"></script>
+</body>
+</html>

@@ -23,6 +23,15 @@ const AJUSTES = {
     // (botones que se apagan en su máximo) y los sellos «Cizalla ↑», «Objetivo», «Por debajo de lo tolerado» y bradicardia; los recorre este juez y
     // pruebas/shock-vivo.mjs (sección A4) comprueba la dirección de la FC. No hace falta ajuste: ningún botón del dock es un paso a paso.
     'shock-vivo': {},
+    // El pulmón con respirador: sus mandos son los deslizadores del dock, los alternadores de maniobra y las teclas de la pantalla
+    // (Insp./Esp. mantenida, Congelar: alternan, no acumulan). Los sellos de tope duro (Vt > 12 mL/kg, VM > 20 L/min) y de
+    // «Hiperinflación» los comprueba pruebas/pulmon-vivo.mjs (par 10) con las constantes del paciente.
+    // E4a: el deslizador «Esfuerzo (Pmus)» (0-15, aviso a 12) y el sello P-SILI (Vt ≥9,5 mL/kg en presión de soporte) los lleva al tope
+    // pruebas/pulmon-vivo.mjs (bloque «E4a»): Pmus 15 en Elvira pasa el tope de 12 mL/kg y el mando vuelve; Pmus 9 conserva el P-SILI.
+    // E4b: el estado «neumotorax-tension» lleva dos sellos: «Neumotórax a tensión: shock obstructivo» (desde 10,5 cmH₂O de aire pleural; PAM ≈54, gasto ≈1,9 L/min); la parada sin pulso, desde 13,5 y «Parada: actividad eléctrica sin pulso» (el tope, 20 cmH₂O; PAM ≈20, gasto ≈0,2 L/min; Marino cap. 28 p. 28) (en el tope: «Dejar pasar 5
+    // respiraciones» se apaga y los mandos del respirador quedan inertes hasta descomprimir); «Empezar otra vez» reinicia el caso y no es un mando.
+    // Lo recorre pruebas/pulmon-vivo.mjs (bloque «E4b»): pico y meseta suben juntos, PAM y SpO₂ caen, el sitio clásico falla y el correcto los recupera.
+    'pulmon-vivo': { noPulsar: /^(Empezar otra vez)/ },
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
