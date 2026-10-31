@@ -24,6 +24,7 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 (Aquí se juntan las entradas nuevas con decisión pendiente; `/radar tanda` las lleva al usuario de una vez.)
 
+- 2026-10-31 · repositorio · emilkowalski/skills (a81dbca, MIT): 16 skills de diseño e animación web. Útiles: `mobile-native` (hover pegado: 25 `:hover` sin `@media (hover:hover)`; zoom de iOS en campos <16 px, p. ej. `.ciclo-panel-grid input` 0,85rem), `review-animations`/`animation-performance` (21 `transition: all`, ningún `prefers-reduced-motion` en CSS) y `break-ui` (datos extremos). No sirven: Swift, Expo, Sonner (React). Espera el sí del usuario para instalar 3-4 skills
 - 2026-10-28 · Bandeja #27 · paper HSA (Carden 2026, Neurocrit Care; de pago): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
