@@ -85,6 +85,8 @@ export function ecgEn(t) {
     let sv = 0, sw = 0; for (const [d, w] of W) { sv += w * MOTOR.voltaje(mo, t + d, S.deriv, {}); sw += w; }
     v = (1 - a) * v + a * (sv / sw) * 1.7;
   }
+  // Espiga del marcapasos: una raya de 1-2 ms justo antes de cada disparo del foco (aparte del voltaje del motor; amplitud ilustrativa)
+  if (mo.m.foco && mo.m.foco.espiga) for (let i = mo.m.espigas.length - 1; i >= 0; i--) { const d = t - mo.m.espigas[i]; if (d < -0.002) continue; if (d > 0.002) break; v += d < 0.0015 ? 0.7 : 0; }
   if (compresionesEn(t)) v += 0.32 * Math.pow(Math.max(0, Math.sin(2 * Math.PI * fasComp(t))), 3);
   if (S.desfib && S.desfib.tChoque && t >= S.desfib.tChoque && t < S.desfib.tChoque + 0.2) v += 2.4 * Math.exp(-(t - S.desfib.tChoque) / 0.04);
   return v;
