@@ -9,7 +9,6 @@ import { BANDAS, HUECO_MINIMOS, UNIDADES, RANGOS_GUIA } from './bandas-paciente.
 
 const PENDIENTES = new Set([
   // E/e′ 1,8 con fusión E-A: fuera de todos los rangos de la guía (regla del 30/10/2026). Lo arregla mv-eco (TEP).
-  'J1:tep:def',
 ]);
 const todo = { todo: 'mv-eco' };
 

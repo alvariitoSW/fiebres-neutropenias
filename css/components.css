@@ -3149,6 +3149,12 @@ body.agv-activo .pomodoro-panel { bottom: calc(var(--agv-dock-h, 170px) + 76px);
 .cpv-raiz .cpv-org-ir { position: relative; background: none; border: 0; padding: 0; margin: 0; font: inherit; color: var(--accent-yellow); text-decoration: underline; text-underline-offset: 2px; text-align: left; cursor: pointer; }
 .cpv-raiz .cpv-org-ir::before { content: ''; position: absolute; inset: -14px -4px; }
 .cpv-raiz .cpv-org.cpv-ilu { border-style: dashed; }
+.cpv-raiz .cpv-carmen-nota { display: grid; gap: 3px; margin: 4px 0 0; }
+.cpv-raiz .cpv-carmen-cts { font: 600 .74rem/1.4 var(--cpv-sans); color: var(--accent-red); overflow-wrap: anywhere; }
+.cpv-raiz .cpv-carmen-cts b { color: var(--accent-red); white-space: nowrap; }
+.cpv-raiz .cpv-carmen-honesta { font: .68rem/1.3 var(--cpv-sans); color: var(--text-dim); }
+.cpv-raiz .tope-aviso[data-tope="carmen-umbral"] { border-left-color: var(--text-muted); }
+.cpv-raiz .tope-aviso[data-tope="carmen-umbral"] b { color: var(--text-main); }
 
 /* Interruptor Explorar | Conceptos | Mayéutica */
 .cpv-raiz .cpv-interruptor { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; font: .86rem var(--cpv-sans); }
@@ -5120,3 +5126,9 @@ body.study-mode-on #iov-raiz .dock { padding-right: 82px; }
 @media (prefers-reduced-motion: reduce) { #iov-raiz #iov-ion-svg .entra { animation: none; transform: translate(var(--dx), var(--dy)); } }
 @keyframes iov-entra { 0%, 15% { transform: translate(0, 0); opacity: 1; } 75%, 100% { transform: translate(var(--dx), var(--dy)); opacity: 1; } }
 /* [FIN iones vivos] */
+/* Estudiar: repaso de días atrás, «Vuelve en…» e ideas firmes */
+.may-contador { font-weight: 700; font-size: .76rem; color: var(--accent-yellow); }
+.may-chip { margin: 0; font-size: .78rem; font-weight: 600; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px; width: fit-content; max-width: 100%; }
+.may-vuelve { margin: 0; font-size: .8rem; line-height: 1.4; color: var(--text-dim); border-top: 1px dashed var(--border-color); padding-top: 6px; }
+.may-firmes strong { color: var(--text-main); }
+.may-zona .nota-plegable p, .est-cabeza .nota-plegable p { font-size: .8rem; line-height: 1.45; color: var(--text-muted); margin: 6px 0 0; }

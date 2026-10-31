@@ -28,8 +28,10 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · paper de asincronías de disparo (Mireles-Cabodevila 2022): espera el PDF del usuario
 - 2026-10-28 · Bandeja #27 · idea TV del tracto de salida del VD con el ejercicio: ¿al bloque 3 (fase 1)?
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
-- 2026-10-29 · Bandeja #27 · 3 tuits sin leer (@shinriha_pt, @WithAScalpel, @sindenzu1): x.com ya se lee desde la
-  sesión (30/10); se leen en la próxima Bandeja, no hace falta captura
+- 2026-10-29 · Bandeja #27 · 3 tuits sin leer (@shinriha_pt, @WithAScalpel, @sindenzu1): el 31/10 x.com volvió a
+  dar 402; se pidió en el issue el enlace del paper o una línea de qué tratan
+- 2026-10-31 · Bandeja #27 · 2 tuits nuevos sin leer (@JonathanNefro, @sindenzu1 2115654562…): x.com 402; se pidió
+  lo mismo. Queda para el 01/11 el de @DanRozenbaum (2116153546…), sin abrir aún
 - 2026-10-29 · Bandeja #27 · web CardioTeca, tablas de dosis de anticoagulantes y antiarrítmicos: ¿bibliografía de fase 3?
 - 2026-10-30 · Bandeja #27 · paper neuropronóstico tras parada (Benghanem 2026, Ann Intensive Care; acceso abierto,
   pero la revista está cerrada en la red): espera el PDF del usuario o que se abra el dominio
@@ -42,6 +44,19 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 ## Fichas de triaje (las 30 entradas, la más reciente arriba)
 
 Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente que lo respalda · licencia · coste · veredicto.
+
+### Dos tuits nuevos sin leer (Bandeja del 31/10)
+- **Fecha / tipo**: 2026-10-31 (comentarios del 30/10) · tuit (2 entradas)
+- **Enlace**: https://x.com/JonathanNefro/status/2116150793405681724 ·
+  https://x.com/sindenzu1/status/2115654562749329591
+- **Dijo**: solo los enlaces
+- **Qué es**: no consta. El 31/10, x.com respondió 402 a los cinco tuits pendientes (estos dos y los tres del 29/10);
+  las vías de incrustar (`cdn.syndication.twimg.com`, `publish.twitter.com`) están cerradas en la red
+- **Sirve a**: no consta (por la cuenta, el de @JonathanNefro quizá sea de nefrología; sin leerlo no se da por hecho)
+- **Fuente**: no consta; se pidió en el issue #27 el enlace del paper o una línea de qué tratan
+- **Licencia**: tuits ajenos, no se reproducen
+- **Coste**: 0 €
+- **Veredicto**: pendiente del usuario
 
 ### Repos propios: simulador-UCI- (Pygame) y simulador-uci-3d (Godot)
 - **Fecha / tipo**: 2026-10-30 · repositorios del usuario
@@ -209,7 +224,7 @@ Campos: fecha · tipo · enlace · lo que dijo · qué es · sirve a · fuente q
 - **Veredicto**: SÍ sirve, como ideas y como prueba para la decisión del 3D. Propuesto: informe corto antes del 01/11
 
 ### Cuatro tuits sin leer (Bandeja del 29/10; el de @RitikaTuliMD, leído el 30/10)
-- **Estado (30/10, rea-cierre)**: los de @shinriha_pt, @WithAScalpel (2115405654…) y @sindenzu1 siguen en **no se pudo leer** (402 el 30/10). Hace falta del usuario: pegar el texto o una captura en la Bandeja #27. Destino: no se pudo leer.
+- **Estado (30/10, rea-cierre)**: los de @shinriha_pt, @WithAScalpel (2115405654…) y @sindenzu1 siguen en **no se pudo leer** (402 el 30/10). El 31/10 (Bandeja), otra vez 402; pedido de nuevo en el issue. Hace falta del usuario: pegar el texto o una captura en la Bandeja #27. Destino: no se pudo leer.
 - **Fecha / tipo**: 2026-10-29 (comentarios del 28/10) · tuit (4 entradas)
 - **Enlace**: https://x.com/RitikaTuliMD/status/2115370235091943810 ·
   https://x.com/shinriha_pt/status/2115396011443323199 · https://x.com/WithAScalpel/status/2115405654915514531 ·
