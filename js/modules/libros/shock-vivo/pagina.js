@@ -348,7 +348,7 @@ function pintarFrase() {
 
 function pintarScai() {
   const h = est.historia, n = h.length, sc = estadioScai(R, cab.ajuste, { lact: est.lab.lact, horas: est.horas, baja: n >= 2 && h[n - 1].lact < h[n - 2].lact - 0.05 });
-  $('scai-r').textContent = `SCAI · ${sc.letra} · ${sc.nombre}`; $('scai-p').textContent = sc.porque + '.';
+  $('scai-r').textContent = `SCAI ${sc.letra}`; $('scai-p').textContent = `${sc.nombre}: ${sc.porque}.`;
 }
 
 // ---------------------------------------------------------------- laboratorio y tendencias
