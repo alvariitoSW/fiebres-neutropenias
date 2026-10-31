@@ -2,9 +2,17 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-31-b3d.md` (pasada del 31/10: 26,3 M frente a 15,9 M, +65 %; 2 propuestas: barrido de extremos en cada pieza de motor nueva, y director en dos sesiones por parada con jueces largos por separado. El patrón «director por encima de 1 M» y «mando nuevo con cifras imposibles» pasan a propuesta).
+**Último parte revisado:** `2026-10-31-shock-scai.md` (pasada del 31/10: ≈8,7 M frente a 3,9 M, +123 %; sin propuesta nueva: lo que se repite ya está aprobado o propuesto, abajo)
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- (shock-scai, 31/10) Los menores de una auditoría en una vuelta aparte del constructor (1,7 M por 7 menores de texto, por
+  repetir la prueba larga). Si se repite: los menores de la auditoría, dentro del encargo de la vuelta del profesor.
+- (shock-scai, 31/10) Esperas del director con `pgrep -f`/`pkill -f`, que se encuentran a sí mismas (una espera que no acabó,
+  una suite que se mató sola). Si se repite: esperar por PID guardado (`$!` o `kill -0 <pid>`).
+- (shock-scai, 31/10) Confirma dos reglas que ya existen, sin propuesta nueva. Los constructores relanzaron la prueba larga
+  varias veces por vuelta, aunque la regla aprobada «Suite corta para iterar, la entera al entregar» lo prohíbe: es que no se
+  cumplió, no que falte regla. Y el director gastó 2,2 M sobre 0,9 M, esperando suites tras fusionar `main` dos veces: refuerza
+  «director en dos sesiones por parada con jueces largos» (b3d) y «Director del paso 4 a 1,3 M».
 - Continuar al mismo constructor para la pieza 2 y las vueltas: ahorró en `educacion-app` parte 1 (<60 pasos) y encareció en la parte 2 (72 pasos, 2,3 M frente a 1,45 M; cada paso releía ≈200 k). Si se repite: continuar solo por debajo de 60 pasos (ya lo dice R5); vueltas, a un sonnet nuevo.
 - Director por encima de 1 M en cada grupo del paso 4 (g3a 1,1 · g3b 1,3 · g4 1,9, con un reinicio del contenedor): si sigue, subir el presupuesto del director a 1,3 M o partir el grupo en dos sesiones (piezas / Estudiar).
 - Un mando nuevo de un modelo con muchos pacientes da cifras imposibles en los que la ficha no usa (g4: CPAP en Mateo, PAM 15). Si se repite: el mando solo en los pacientes de la ficha.
