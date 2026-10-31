@@ -4,7 +4,7 @@
 **Vueltas:** 3 (auditoría, profesor, jueces) · **Jueces:** suite general + `--ficha` IC + `--modelo shock-vivo` + `--forma`: 497 ✅, 0 ❌ · auditoría ✓ (0 graves, 7 menores arreglados) · profesor 9,0 · 8,75 · 8,9
 
 ## Qué se hizo
-- **Rótulo «SCAI · letra · nombre»** junto al veredicto del shock vivo, con su porqué en una frase y las cifras del monitor
+- **Pastilla «SCAI X»** junto a «Guía» (al tocarla se abre hacia arriba con el nombre y el porqué; antes era una fila que tapaba la figura con la CPAP de `main`), junto al veredicto del shock vivo, con su porqué en una frase y las cifras del monitor
   (`js/modules/libros/shock-vivo/scai.mjs`). Las reglas del modelo van rotuladas como tales sobre la ESC 2026 de IC (parte 1,
   pdf 44): Tabla 13 (A-E) y lactato >2 mmol/L del texto 7.3.4. Si sigue una intervención, no baja a A: «C · en respuesta».
   D: varias intervenciones recién puestas. E: varias intervenciones, horas y lactato que no baja.
@@ -58,9 +58,10 @@
 | Arreglos de la auditoría | 2 | — | sonnet | 47 | 1,7 M | 7 menores de citas; pruebas repetidas |
 | Vuelta del profesor | 3 | 8,9 | sonnet | 72 | 0,83 M | — |
 | Arreglo de los jueces | 4 | — | sonnet | 20 | 0,44 M | prueba mal planteada (E a las 5 h) |
+| Regresión de la CPAP (tras fusionar `main`) | 5 | — | sonnet | 42 | ≈0,4 M | el bloque SCAI tapaba la figura: pasa a pastilla |
 
 ## Gasto
-**8,1 M equivalentes.** Por papel: constructor (sonnet) ×6, 5,1 M (62 %) · director (opus) 2,2 M (28 %) · profesor (fable) ×2,
+**≈8,7 M equivalentes** (8,1 M al voto + ≈0,6 M después: la regresión de la CPAP y las suites repetidas). Por papel: constructor (sonnet) ×6, 5,1 M (62 %) · director (opus) 2,2 M (28 %) · profesor (fable) ×2,
 0,55 M · auditor 0,15 M · revisión del encargo 0,13 M. Los 3 que más gastaron: el director (2,2 M), los arreglos de la auditoría
 (1,7 M) y la Mayéutica (1,6 M).
 Dónde se fue: los constructores repitieron la prueba larga del shock vivo varias veces por vuelta (los arreglos de la auditoría:
