@@ -14,6 +14,11 @@ A4C de cada extremo: `autonomo/bloques/mv-eco/geometria-capturas/*.png` (contorn
 - Pared del VI >10 mm (Lang p.17) en hemorragia/derrame g≥0,5 (11-14,7 mm), vasoplejía (11,5), TEP y HP g≥0,5: la masa del VI es
   constante y la cavidad pequeña engorda la pared. Hallazgo, sin fuente que lo permita: decide el director.
 - **Hipertrofia g=0 y 0,5**: pared 15 mm ya en el mínimo del mando (el g=0 no es normal).
+- **Arreglo del juez (P4a-1, 31/10; sin cambiar umbrales)**: la pared del VD y la del VI se medían contra la línea del
+  epicardio cerrada con un tramo recto base→ápex, que en el VD dilatado cruza la cavidad (HP g=1: 1,8 mm, real 6,4); ahora
+  contra la línea abierta. La AD se medía solo con su trozo mayor (11,5 cm² en HP g=1); ahora se empalman sus trozos: 17,1.
+  Las medidas respetan `--dibujo` (antes medían siempre el de hoy). Tras el arreglo: hoy 10/147 y nuevo 10/147, las mismas
+  filas; HP g=1 ya no falla por la pared del VD (6,4 > 5) y HP g=0,5 suma «pared VD 7,1 fuera de 0-5» (el motor da 7,8).
 
 ## Rangos usados (páginas impresas = páginas del PDF, comprobadas con pdftotext)
 | Medida | Rango | Fuente |

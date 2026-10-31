@@ -12,6 +12,7 @@
 // La mezcla de posiciones y normales la hace la tarjeta gráfica (render-webgl.mjs): por fotograma no se crea
 // ningún array grande ni se sube nada.
 import { construirCorazon } from './corazon-geo.mjs';
+import { septoSignoDe } from './contrato.mjs';   // tabique continuo del motor (lo lee solo el dibujo nuevo, ajuste septoContinuo)
 import { acortamientoVd } from './anatomia.mjs';   // fisiología del lado del corazón (P3a): la imagen solo lee
 import { normalesSuaves } from './render-webgl.mjs';
 
@@ -75,6 +76,7 @@ export function plieguePared(ptm, pperi, liquido) {
 export function estadoGeo(s, extra = {}) {
   const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0,
     pliegueAd: plieguePared(s.ptmAd, s.pperi, s.liquidoPeri), pliegueVd: plieguePared(s.ptmVd, s.pperi, s.liquidoPeri), ...extra };
+  if (s.pvi != null && s.pvd != null) e.septoSigno = septoSignoDe(s.pvd - s.pvi);
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }

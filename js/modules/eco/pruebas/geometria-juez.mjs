@@ -10,13 +10,16 @@
 // Un límite sin fuente va marcado `sinFuente` y solo avisa (no falla).
 import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
-import { construirCorazon } from '../corazon-geo.mjs';
+import { construirCorazon, usarDibujo } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
+import { masaIndiceDe } from '../anatomia.mjs';
 import { planoVista, cortarPieza } from '../ecografia.mjs';
 
 const LANG = (p) => `Lang 2015 p.${p}`, MUK = (p) => `Mukherjee 2025 p.${p}`, ESC = (p) => `ESC/ERS 2022 p.${p}`;
 export const VISTAS_JUEZ = ['a4c', 'psaxPm', 'plax'];
-export const DIBUJOS = { hoy: { construir: construirCorazon, nota: 'dibujo de hoy (corazon-geo.mjs, sin cambios)' } };
+export const DIBUJOS = { hoy: { construir: construirCorazon, nota: 'dibujo de hoy (corazon-geo.mjs, sin cambios)', n: 1 }, nuevo: { construir: construirCorazon, nota: 'dibujo nuevo (corazon-geo-2.mjs)', n: 2 } };
+// Cada entrada del juez fija el dibujo pedido y lo deja como estaba al terminar
+const conDibujo = (dibujo, f) => { if (!DIBUJOS[dibujo]) throw new Error('dibujo desconocido: ' + dibujo); const antes = usarDibujo(DIBUJOS[dibujo].n); try { return f(); } finally { usarDibujo(antes); } };
 const PIEZAS = { 'VI endocardio': 'viEndo', 'VI epicardio': 'viEpi', 'VD endocardio': 'vdEndo', 'VD epicardio': 'vdEpi', AI: 'ai', AD: 'ad' };
 
 // ---------------------------------------------------------------- geometría 2D
@@ -54,6 +57,15 @@ export function cruces({ seg, claves }) {
   return mal;
 }
 const cerrar = (c) => c.cerrada || c.ps.length < 3 ? c.ps : [...c.ps, c.ps[0]];
+/** Empalma las cadenas de un contorno: desde la mayor, añade la que tiene un extremo más cerca del final; luego cierra. */
+function empalmar(cad) {
+  const resto = [...cad].sort((a, b) => b.ps.length - a.ps.length), ps = [...resto.shift().ps];
+  while (resto.length) { const e = ps[ps.length - 1], d = (q) => Math.hypot(q[0] - e[0], q[1] - e[1]);
+    let mj = 0, inv = false, md = Infinity;
+    resto.forEach((c, j) => { const a = d(c.ps[0]), b = d(c.ps[c.ps.length - 1]); if (a < md) { md = a; mj = j; inv = false; } if (b < md) { md = b; mj = j; inv = true; } });
+    const c = resto.splice(mj, 1)[0].ps; ps.push(...(inv ? [...c].reverse() : c)); }
+  return ps.length < 3 ? ps : [...ps, ps[0]];
+}
 const area = (ps) => { let s = 0; for (let i = 0; i < ps.length - 1; i++) s += ps[i][0] * ps[i + 1][1] - ps[i + 1][0] * ps[i][1]; return Math.abs(s) / 2; };
 /** Lista de segmentos [a,b] de todas las cadenas, con los extremos sueltos unidos de dos en dos (el más cercano), como la pared cerrada. */
 function segsCerrados(cad) {
@@ -80,7 +92,8 @@ export function estadosForma(k, g) {
   const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
   return { td: estadoGeo(td, extra), ts: estadoGeo(ts, extra) };
 }
-export function contornosVista(clave, est, dibujo = 'hoy') {
+export function contornosVista(clave, est, dibujo = 'hoy') { return conDibujo(dibujo, () => contornosVista0(clave, est, dibujo)); }
+function contornosVista0(clave, est, dibujo) {
   const P = planoVista(clave, est), partes = DIBUJOS[dibujo].construir(est).partes, out = {};
   for (const p of partes) { const k = PIEZAS[p.nombre]; if (!k || !p.idx) continue;
     const c = cortarPieza(p, P); if (!c.seg.length) continue;
@@ -92,10 +105,13 @@ export function contornosVista(clave, est, dibujo = 'hoy') {
 }
 
 // ---------------------------------------------------------------- medidas en el A4C (mm)
-export function medidasA4C(td, ts) {
-  const C = contornosVista('a4c', td), r = {};
-  const poli = (k) => { const c = C[k]?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0]; return c ? cerrar(c) : null; };
-  const vdE = poli('vdEndo'), viE = poli('viEndo'), vdP = poli('vdEpi'), viP = poli('viEpi');
+export function medidasA4C(td, ts, dibujo = 'hoy') {
+  const C = contornosVista('a4c', td, dibujo), r = {};
+  const mayor = (k) => C[k]?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0];
+  const poli = (k) => { const c = mayor(k); return c ? cerrar(c) : null; };
+  // los grosores se miden contra la línea abierta: el tramo recto que la cierra (base→ápex) cruza la cavidad del VD dilatado
+  const linea = (k) => mayor(k)?.ps ?? null;
+  const vdE = poli('vdEndo'), viE = poli('viEndo'), vdP = linea('vdEpi'), viP = poli('viEpi'), viPl = linea('viEpi');
   if (vdE && viE) {
     const ys = vdE.map(p => p[1]), y0 = Math.min(...ys), y1 = Math.max(...ys), L = y1 - y0;   // d crece del ápex a la base
     const ancho = (ps, a, b) => { let m = 0, h = 0.5; for (let y = a; y <= b; y += h) { const e = corteH(ps, y); if (e) m = Math.max(m, e[1] - e[0]); } return m; };
@@ -106,15 +122,22 @@ export function medidasA4C(td, ts) {
     const yi = viE.map(p => p[1]), a0 = Math.min(...yi), a1 = Math.max(...yi);
     r.viBasal = ancho(viE, a0 + (a1 - a0) * 2 / 3, a1); r.viLargo = a1 - a0; r.vdVi = r.vdBasal / r.viBasal;
     // pared libre del VD: distancia del endocardio del VD (lado libre, tercio medio-basal) a su epicardio
-    if (vdP) { const ls = vdE.filter(p => p[1] > y0 + L * 0.35 && p[1] < y0 + L * 0.9); const xm = mediana(ls.map(p => p[0])); r.paredVd = mediana(ls.filter(p => p[0] <= xm).map(p => distA(p, vdP))); }
+    if (vdP) { const ls = vdE.filter(p => p[1] > y0 + L * 0.35 && p[1] < y0 + L * 0.9); const xm = mediana(ls.map(p => p[0])); r.paredVd = mediana(ls.filter(p => p[0] <= xm).map(p => distA(p, vdP))); }   // P4a-1: antes, contra la cuerda de cierre (HP g1: 1,8 mm por 6,4 reales)
     if (viP) { const li = viE.filter(p => p[1] > a0 + (a1 - a0) * 0.35 && p[1] < a0 + (a1 - a0) * 0.8), xs = li.map(p => p[0]), xmin = Math.min(...xs), xmax = Math.max(...xs), q = (xmax - xmin) / 6;
-      r.paredViLat = mediana(li.filter(p => p[0] > xmax - q).map(p => distA(p, viP))); r.paredViSep = mediana(li.filter(p => p[0] < xmin + q).map(p => distA(p, viP))); }
+      r.paredViLat = mediana(li.filter(p => p[0] > xmax - q).map(p => distA(p, viPl))); r.paredViSep = mediana(li.filter(p => p[0] < xmin + q).map(p => distA(p, viPl))); }
   }
   // LVEI (eje corto a la altura de los papilares, telediástole): dimensión anteroposterior / septolateral del endocardio del VI
-  const Ce = contornosVista('psaxPm', td), e = Ce.viEndo?.cad?.flatMap(c => c.ps);
-  if (e?.length) { const ex = (i) => Math.max(...e.map(p => p[i])) - Math.min(...e.map(p => p[i])); r.lvei = ex(1) / ex(0); }
-  const Cs = contornosVista('a4c', ts), ad = Cs.ad?.cad?.sort((a, b) => b.ps.length - a.ps.length)[0];
-  if (ad) r.areaAdTs = area(cerrar(ad)) / 100;   // cm², telesístole
+  const Ce = contornosVista('psaxPm', td, dibujo), e = Ce.viEndo?.cad?.flatMap(c => c.ps);
+  if (e?.length) {   // LVEI = diámetro paralelo al tabique / diámetro perpendicular a él (Mukherjee 2025 p. 146 y 149; la pantalla puede estar girada)
+    const cm = (ps) => [ps.reduce((a, p) => a + p[0], 0) / ps.length, ps.reduce((a, p) => a + p[1], 0) / ps.length];
+    const vd = Ce.vdEndo?.cad?.flatMap(c => c.ps), c0 = cm(e), c1 = vd?.length ? cm(vd) : [0, -1];
+    const n = Math.hypot(c1[0] - c0[0], c1[1] - c0[1]) || 1, u = [(c1[0] - c0[0]) / n, (c1[1] - c0[1]) / n];   // u = hacia el VD = perpendicular al tabique
+    const ext = (d) => { const t = e.map(p => p[0] * d[0] + p[1] * d[1]); return Math.max(...t) - Math.min(...t); };
+    r.lvei = ext([-u[1], u[0]]) / ext(u); }
+  // AD: el corte la deja en varios trozos (el mayor y el del tabique interauricular junto a la cruz); se empalman por el
+  // extremo más cercano y se cierra por el anillo tricuspídeo. Antes solo el mayor: su cierre cruzaba la aurícula.
+  const Cs = contornosVista('a4c', ts, dibujo), ad = Cs.ad?.cad?.length ? empalmar(Cs.ad.cad) : null;
+  if (ad) r.areaAdTs = area(ad) / 100;   // cm², telesístole
   return r;
 }
 
@@ -122,8 +145,17 @@ export function medidasA4C(td, ts) {
 const nf = (v, d = 0) => (v == null || Number.isNaN(v) ? '-' : Number(v).toFixed(d));
 const R = (medida, min, max, fuente, extra = {}) => ({ medida, min, max, fuente, ...extra });
 const TECHO = { vdBasal: 70, paredVd: 15, vdVi: 2.5 };   // techos de «paciente posible»: sin fuente
-export function rangosDe(k, g) {
-  const r = [], tope = g >= 0.99, nl = (k === 'normal');
+// Pseudohipertrofia (decisión del usuario, 31/10/2026): con el VI vacío la pared se engruesa sin ganar masa. Solo vale si la masa
+// del VI del motor no sube (±5 % de la forma normal): `masaOk`. Fuentes: Di Segni 1997 (sangrado experimental, pared de 6,3 a 8,3 mm
+// con la masa sin cambios, https://cris.tau.ac.il/en/publications/echocardiographic-left-ventricular-remodeling-and-pseudohypertrop/);
+// shock séptico, pared ≥12 mm con masa normal (Crit Care 2015, https://link.springer.com/doi/10.1186/s13054-015-0980-z);
+// taponamiento (https://cris.tau.ac.il/en/publications/left-ventricular-pseudohypertrophy-in-cardiac-tamponade-an-echoca/).
+const PSEUDO = ['hemorragia', 'derrame', 'vasoplejia', 'tep', 'hpcronica'];
+const PSEUDO_FUENTE = 'pseudohipertrofia, masa del VI sin cambios: Di Segni 1997; Crit Care 2015 (decisión del usuario, 31/10/2026)';
+export const masaVi = (est) => masaIndiceDe(est?.mioVi ?? 1);
+export const masaSinCambios = (est) => Math.abs(masaVi(est) / masaIndiceDe(1) - 1) <= 0.05;
+export function rangosDe(k, g, masaOk = true) {
+  const r = [], tope = g >= 0.99, nl = (k === 'normal'), medio = g >= 0.5, pseudo = PSEUDO.includes(k) && masaOk;
   const lb = (min) => nl ? min : 0;
   const hp = k === 'hpcronica', tep = k === 'tep';
   // VD basal
@@ -134,15 +166,20 @@ export function rangosDe(k, g) {
   if ((hp || tep) && tope) r.push(R('vdVi', 1.0, TECHO.vdVi, ESC(3645) + ' T10 (>1,0)'), R('vdVi', 0, TECHO.vdVi, 'techo de paciente posible', { sinFuente: true }));
   else r.push(R('vdVi', 0, 1.0, ESC(3645) + ' T10 (>1,0 = señal de HP)'));
   // pared libre VD
-  if (hp && tope) r.push(R('paredVd', 5, TECHO.paredVd, LANG(20) + ' (1-5); ' + MUK(145) + ' (<5 normal)'), R('paredVd', 0, TECHO.paredVd, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: la HP crónica desde g 0,5 se juzga como enferma (Mukherjee 2025 p.144-145: 5-7 leve, >7-9 moderada)
+  if (hp && medio) r.push(R('paredVd', 5, TECHO.paredVd, MUK(144) + '-145 (>5 mm = HP leve o más; decisión del usuario, 31/10/2026)'), R('paredVd', 0, TECHO.paredVd, 'techo de paciente posible', { sinFuente: true }));
+  else if (pseudo) r.push(R('paredVd', 0, 6, PSEUDO_FUENTE + ' (techo de 6 mm de la pared libre del VD: sin fuente)', { sinFuente: true }));
   else r.push(R('paredVd', 0, 5, LANG(20) + ' (1-5); ' + MUK(144)));
   // pared VI (septo y lateral): 6-10 mm en varón; en la dilatada/fallo, solo el techo
-  const hip = k === 'hipertrofia' && g > 0.01;
-  if (hip && !tope) r.push(R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
-  else if (hip && tope) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia: derivado del límite normal)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: en `hipertrofia`, pared del VI >10 mm en todo el mando, también g 0 (Lang 2015 p.17, Tabla 6)
+  const hip = k === 'hipertrofia';
+  if (hip) r.push(R('paredViSep', 10, 25, LANG(17) + ' (0,6-1,0 cm; >10 = hipertrofia: derivado del límite normal; decisión del usuario, 31/10/2026)'), R('paredViSep', 0, 25, 'techo de paciente posible', { sinFuente: true }));
+  else if (pseudo) r.push(R('paredViSep', 0, 15, PSEUDO_FUENTE + ' (techo de 15 mm: sin fuente)', { sinFuente: true }), R('paredViLat', 0, 15, PSEUDO_FUENTE + ' (techo de 15 mm: sin fuente)', { sinFuente: true }));
   else r.push(R('paredViSep', 0, 10, LANG(17) + ' (0,6-1,0 cm)')), r.push(R('paredViLat', 0, 10, LANG(17)));
   // aplanamiento del tabique (LVEI) y AD telesistólica
-  if ((hp || tep) && tope) r.push(R('lvei', 1.1, 2.5, ESC(3645) + ' T10 (LVEI >1,1)'), R('lvei', 0, 2.5, 'techo de paciente posible', { sinFuente: true }));
+  // decisión del usuario, 31/10/2026: HP crónica y TEP desde g 0,5 sin el máximo de 1,1 (ESC/ERS 2022 p.3645 T10); el mínimo 1,1 de la HP, solo en g 1
+  if (hp && tope) r.push(R('lvei', 1.1, 2.5, ESC(3645) + ' T10 (LVEI >1,1)'), R('lvei', 0, 2.5, 'techo de paciente posible', { sinFuente: true }));
+  else if ((hp || tep) && medio) r.push(R('lvei', 0, 2.5, ESC(3645) + ' T10 (LVEI >1,1 = señal de HP; sin máximo desde g 0,5, decisión del usuario, 31/10/2026)', { sinFuente: true }));
   else r.push(R('lvei', 0, 1.1, ESC(3645) + ' T10 (LVEI >1,1 = señal de HP)'));
   if (hp && tope) r.push(R('areaAdTs', 18, 40, ESC(3645) + ' T10 (área AD telesistólica >18 cm²); ' + MUK(145) + ' (<19 normal)'), R('areaAdTs', 0, 40, 'techo de paciente posible', { sinFuente: true }));
   else r.push(R('areaAdTs', 0, 19, MUK(145) + ' (área AD <19 cm²)'));
@@ -151,8 +188,8 @@ export function rangosDe(k, g) {
 export function gDe(k) { return k !== 'normal' && ESCENARIOS[k].gravedad ? [0, 0.5, 1] : [undefined]; }
 
 // ---------------------------------------------------------------- juez
-export function juzgarGeometria({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } = {}) {
-  if (!DIBUJOS[dibujo]) throw new Error('dibujo desconocido: ' + dibujo);
+export function juzgarGeometria(op = {}) { return conDibujo(op.dibujo || 'hoy', () => juzgarGeometria0(op)); }
+function juzgarGeometria0({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } = {}) {
   const filas = [];
   const fila = (k, g, vista, fase, mal, ok, cifras = '', aviso = false) => filas.push({ forma: k, g: g ?? '-', vista, fase, ok: !mal.length, aviso, motivo: mal.length ? mal.join('; ') : ok, cifras });
   for (const k of formas) for (const g of gDe(k)) {
@@ -168,7 +205,7 @@ export function juzgarGeometria({ dibujo = 'hoy', formas = Object.keys(ESCENARIO
       if (!C.viEndo) mal.push('sin corte del endocardio del VI');
       fila(k, g, v, fase, mal, 'sin cruces; endo dentro de epi', cif.join(' '));
     }
-    const m = medidasA4C(td, ts), rs = rangosDe(k, g === undefined ? 0 : g);
+    const m = medidasA4C(td, ts, dibujo), rs = rangosDe(k, g === undefined ? 0 : g, masaSinCambios(td));
     const mal = [], aviso = [];
     for (const rg of rs) { const x = m[rg.medida];
       if (x == null || Number.isNaN(x)) { mal.push(`${rg.medida}: no se pudo medir`); continue; }
@@ -182,7 +219,8 @@ export function juzgarGeometria({ dibujo = 'hoy', formas = Object.keys(ESCENARIO
 
 // ---------------------------------------------------------------- captura de los contornos del A4C (SVG; jueces.mjs lo pasa a PNG)
 const COL = { viEndo: '#e06c6c', viEpi: '#a04040', vdEndo: '#6ca0e0', vdEpi: '#4070a0', ai: '#e0c050', ad: '#60c090' };
-export function capturaSVG(k, g, fase = 'td', vista = 'a4c', dibujo = 'hoy') {
+export function capturaSVG(k, g, fase = 'td', vista = 'a4c', dibujo = 'hoy') { return conDibujo(dibujo, () => capturaSVG0(k, g, fase, vista, dibujo)); }
+function capturaSVG0(k, g, fase, vista, dibujo) {
   const { td, ts } = estadosForma(k, g), C = contornosVista(vista, fase === 'td' ? td : ts, dibujo);
   const pts = Object.values(C).flatMap(c => c.cad.flatMap(x => x.ps)), xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
   const x0 = Math.min(...xs) - 10, y0 = Math.min(...ys) - 10, W = Math.max(...xs) - x0 + 10, H = Math.max(...ys) - y0 + 10;

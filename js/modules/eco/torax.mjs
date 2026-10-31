@@ -2,7 +2,7 @@
 //
 // Son piezas del cuerpo, no del corazón: se colocan detrás del saco pericárdico de cada fotograma (después de que
 // la base baje, ver construirCorazon). Todo es ilustrativo: ninguna de las fuentes de la app da un diámetro ni una
-// posición (Mitchell 2019, p. 61 solo dice dónde buscar la aorta descendente: detrás de la AI en el eje largo
+// posición (anatomía general, sin página: la aorta descendente va detrás de la AI en el eje largo
 // paraesternal y en el supraesternal; las medidas son «hueco»).
 //
 // Se trabaja en coordenadas del cuerpo alrededor del eje vertical (ARRIBA): lat (+ = derecha del paciente), ant
@@ -17,6 +17,8 @@
 //    línea media delantera). La interfaz tejido-aire refleja casi todo: línea brillante y, detrás, líneas A en
 //    lugar de tejido (ecografia.mjs). Delante no hay pulmón (ahí están las ventanas, la escotadura cardíaca).
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
+import { usarDibujo } from './corazon-geo.mjs';   // solo dentro de funciones (ciclo de importación)
+const dibujoNuevo = () => { const d = usarDibujo(1); usarDibujo(d); return d === 2; };
 
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const nrm = (a) => { const l = Math.hypot(a[0], a[1], a[2]) || 1; return [a[0] / l, a[1] / l, a[2] / l]; };
@@ -27,6 +29,9 @@ const L = perp(DERECHA, ARRIBA), F = perp(DELANTE, ARRIBA);
 export const aEje = (p) => [dot(p, L), dot(p, F), dot(p, ARRIBA)];
 export const deEje = (lat, ant, alt) => [L[0] * lat + F[0] * ant + ARRIBA[0] * alt, L[1] * lat + F[1] * ant + ARRIBA[1] * alt, L[2] * lat + F[2] * ant + ARRIBA[2] * alt];
 
+/** Dibujo nuevo: la aorta sube hasta el nivel de la AI (alt 30), lateral y detrás de ella, para que el A4C y el PLAX la corten donde la eco real. Ilustrativo. */
+export const TORAX_NUEVO = { latAo: -28, rAo: 11,   // ~22 mm, ilustrativo (anatomía general: lateral a la AI en el A4C y detrás de ella en el PLAX; sin fuente con página)
+  antAo: -28 };
 /** Medidas (mm). Todas «ilustrativo»: ninguna tiene página en las fuentes (hueco). */
 export const TORAX = {
   latAo: -33,            // la aorta descendente, a la izquierda de la línea media del corazón (detrás del borde izquierdo de la AI)
@@ -77,13 +82,13 @@ function lamina(pts, altA, altB) {
  * soloEco: las láminas del pulmón no se dibujan en el 3D (taparían el corazón).
  */
 export function construirTorax(partes, ctx) {
-  const T = TORAX, R = T.rAo, R0 = 0.78 * ctx.rA;            // el arco acaba en 0,78 rA (ver 'Aorta' en corazon-geo)
+  const nuevo = dibujoNuevo(), T = nuevo ? { ...TORAX, ...TORAX_NUEVO } : TORAX, R = T.rAo, R0 = 0.78 * ctx.rA;            // el arco acaba en 0,78 rA (ver 'Aorta' en corazon-geo)
   const resto = partes.filter(p => p.pos && !/^(Aorta|Derrame)$/.test(p.nombre) && !/sangre$/.test(p.nombre)).map(p => p.pos);
   // aorta: lo más cerca del saco que deja el saco, en pasos de T.paso (siempre hacia atrás)
   const hacia = (lat) => Math.floor((holguraAtras(resto, lat, R) - 1) / T.paso) * T.paso;
-  const antAo = hacia(T.latAo), P0 = aEje(ctx.arranque), latM = (P0[0] + T.latAo) / 2;
+  const P0 = aEje(ctx.arranque), antAo = nuevo ? Math.min(hacia(T.latAo), T.antAo) : hacia(T.latAo), latM = (P0[0] + T.latAo) / 2;
   const antM = Math.min(hacia(latM), (P0[1] + antAo) / 2, P0[1]);
-  const ejeAx = [P0, [latM, antM, 20], [T.latAo, antAo, 4], [T.latAo, antAo, -50], [T.latAo, antAo, -100], [T.latAo, antAo, -150]];
+  const ejeAx = [P0, ...(nuevo ? [[T.latAo, T.antAo, 55], [T.latAo, T.antAo, 30]] : [[latM, antM, 20]]), [T.latAo, antAo, 4], [T.latAo, antAo, -50], [T.latAo, antAo, -100], [T.latAo, antAo, -150]];
   const eje = ctx.suave(ejeAx.map(p => deEje(p[0], p[1], p[2])), 5);
   const aorta = ctx.tubo(eje, R, 16, (u) => R0 + (R - R0) * paso(0, 0.25, u));
   const piezas = [{ nombre: 'Aorta descendente', ...aorta, color: ctx.colores.arteria, dobleCara: true }];

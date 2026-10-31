@@ -795,16 +795,25 @@ export function montarSimulador(raiz, opc = {}) {
     if ($('#cv-eco-rotulos').checked && geoEco.flujo) {
       const f = geoEco.flujo, T = (p) => f.transformar(p);
       const cerca = (pts) => pts.map(T).reduce((a, b) => (Math.abs(enPlano(P, b)[2]) < Math.abs(enPlano(P, a)[2]) ? b : a));
+      // dibujo nuevo: el rótulo va al centro de la cavidad cortada (centroide de las muestras que caen en el plano; si el centro
+      // queda fuera de la cavidad, p. ej. en la media luna del VD, la muestra de la cavidad más cercana a él)
+      const nuevo = geoEco.geometriaNueva === true || new URLSearchParams(location.search).get('dibujo') === '2';
+      const centro = (pts) => { const q = pts.map(T), dentro = q.filter(b => Math.abs(enPlano(P, b)[2]) < 4);
+        if (dentro.length < 3) return cerca(pts);
+        const m = [0, 1, 2].map(k => dentro.reduce((a, b) => a + b[k], 0) / dentro.length);
+        return dentro.reduce((a, b) => (Math.hypot(b[0] - m[0], b[1] - m[1], b[2] - m[2]) < Math.hypot(a[0] - m[0], a[1] - m[1], a[2] - m[2]) ? b : a)); };
+      const fino = Array.from({ length: 19 }, (_, i) => 0.05 + i * 0.05), finoV = Array.from({ length: 10 }, (_, i) => 0.05 + i * 0.1);
+      const sel = nuevo ? centro : cerca;
       const alto = [0.1, 0.25, 0.4, 0.55, 0.7, 0.85];
-      const marcas = [['VI', cerca(alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', cerca(alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
-        ['AI', cerca(alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', cerca(alto.map(u => f.enCamara.ad([u, 0, 0])))],
+      const marcas = [['VI', sel(nuevo ? fino.map(u => f.enCamara.vi([u, 0, 0])) : alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', sel(nuevo ? fino.flatMap(u => finoV.map(fv => f.enCamara.vd([u, fv, 0.55]))) : alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
+        ['AI', sel(nuevo ? fino.map(u => f.enCamara.ai([u, 0, 0])) : alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', sel(nuevo ? fino.map(u => f.enCamara.ad([u, 0, 0])) : alto.map(u => f.enCamara.ad([u, 0, 0])))],
         ['Ao', T([f.valvulas.aortica[0], f.valvulas.aortica[1], f.valvulas.aortica[2] + 14])],
         // fuera del corazón, solo en su ventana: la VCI bajo el diafragma (fija al cuerpo) en la subcostal; el arco
         // aórtico y la AP derecha bajo él en la supraesternal
         ...(VISTAS[vistaEco].ventana === 'subcostal' ? [['VCI', puntoVci(-25)]] : []),
         ...(VISTAS[vistaEco].ventana === 'supraesternal' ? [['Arco', T([0, -14, 75])], ['APD', T([-12, -15, 56])]] : [])];
       for (const [n, p] of marcas) { const [u, v, dd] = enPlano(P, p), r = Math.hypot(u, v);
-        if ((n === 'VI' && s.vvi < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
+        if ((n === 'VI' && (nuevo ? (motor.ultimo?.edv ?? s.vvi) : s.vvi) < 35) || Math.abs(dd) > 14 || r > P.prof - 5 || Math.abs(Math.atan2(u, v)) > P.mitad - 0.04) continue;
         rot.push(n); const w = (n.length > 2 ? 34 : 24) * px; ecoCtx.fillStyle = 'rgba(0,0,0,.4)'; ecoCtx.fillRect(X(u) - w / 2, Y(v) - 8 * px, w, 16 * px);
         ecoCtx.fillStyle = '#e8e3d5'; ecoCtx.fillText(n, X(u), Y(v)); }
     }
@@ -886,6 +895,12 @@ export function montarSimulador(raiz, opc = {}) {
     return { td: medirVd(est(o.reduce((a, b) => (b.vvi > a.vvi ? b : a), o[0]))), ts: medirVd(est(o.reduce((a, b) => (b.vvi < a.vvi ? b : a), o[0]))) }; };
   function pintarForma(u) {
     const caja = $('#cv-forma-medidas');
+    if (['hemorragia', 'derrame', 'vasoplejia'].includes(escenario)) {   // pseudohipertrofia (decisión del usuario, 31/10/2026): pared gruesa, masa sin cambios
+      const md = medidasDe(motor), gruesa = Math.max(md.paredPost, md.tabique) > 10;
+      caja.hidden = !gruesa;
+      caja.innerHTML = gruesa ? `<p class="cv-criterio"><span class="cv-criterio-txt">Pared del VI gruesa con la cavidad vacía: pseudohipertrofia (la masa no cambia; signo de hipovolemia).<br><span class="cv-muted">Pared de ${f1(Math.max(md.paredPost, md.tabique))} mm. Fuente: <a class="biblio-link" href="https://link.springer.com/doi/10.1186/s13054-015-0980-z" target="_blank" rel="noopener">Crit Care 2015</a> (pseudohipertrofia = pared ≥12 mm con masa normal). Origen: artículo citado.</span></span></p>` : '';
+      return;
+    }
     if (!ESCENARIOS[escenario]?.forma) { caja.hidden = true; return; }
     if (!normalRef) { const m0 = crearMotor({ barorreflejo: motor.p.barorreflejo }); m0.correr(12); normalRef = { u: m0.ultimo, md: medidasDe(m0), vd: vdDe(m0) }; }
     // el VD del A4C (basal, FAC) cuesta ~60 ms: se mide a lo sumo una vez por segundo (y al cambiar de escenario)

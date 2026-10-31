@@ -12,6 +12,7 @@
 // infundíbulo del VD de su orificio, con los mismos puntos de borde (sin grietas).
 // Todo ilustrativo: proporciones de anatomía general, no medidas de una fuente.
 
+import { construirCorazon2, baseGeometrica2 } from './corazon-geo-2.mjs';
 import { earcut } from './earcut.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { construirTorax } from './torax.mjs';
@@ -60,6 +61,8 @@ const MARGEN_AU = { ai: 3, ad: 3 };
 // alto / ancho de las aurículas: eje mayor / eje menor de la AD del varón en Lang 2015, p. 30 (Tabla 13): 2,4 / 1,9 cm/m².
 // La AI usa la misma proporción (sus ejes están en el Suplemento de Lang, que no tenemos: hueco; ilustrativo)
 const PROPORCION_AU = 2.4 / 1.9;
+const RM_NORMAL = 27.8;   // radio medio de la cavidad del VI normal en telediástole (mm; sale de geomVi con 119 mL)
+const ELONGA_AD = 0.15;   // elongación del cuello de la AD en el plano del A4C (ajustes.auVolumen; ilustrativo)
 const LE_REF = geomVi(REF.vVi).Le;
 // ---- Mallas genéricas -----------------------------------------------------------
 // La topología de una rejilla solo depende de su tamaño: los índices se crean una vez y se reutilizan
@@ -195,7 +198,7 @@ export function puntoValva(v, uu, vv) {
 // ---- Construcción --------------------------------------------------------------
 // estado: { vvi, vvd, vai, vad, mitral, tricus, aortica, pulmonar (0..1), liquidoPeri }
 // opciones: { corte: null | { phi }, detalle, pericardio, calidad }
-export function construirCorazon(estado, opciones = {}) {
+export function construirCorazonHoy(estado, opciones = {}) {
   const partes = [];
   const q = opciones.calidad || 1;
   const corte = planoCorte(opciones.corte);
@@ -215,14 +218,18 @@ export function construirCorazon(estado, opciones = {}) {
   const NR = Math.max(20, Math.round(40 * q));          // puntos por anillo (válvulas, aurículas, vasos)
   const phi0 = corte ? corte.phi : 0, span = corte ? Math.PI : TAU;
   const dentroCorte = (phi) => !corte || (corte.nx * Math.cos(phi) + corte.ny * Math.sin(phi) >= -1e-9);
-  const geo = baseGeometrica(estado);
-  const { vi, rEndoVi, rEpiVi, endoVi, epiVi, Lvd, A, ventana, Wb, wRV, tvdW, endoVd, epiVd,
+  const geo = baseGeometricaHoy(estado, opciones.ajustes);
+  const { alfaZ, vi, rEndoVi, rEpiVi, endoVi, epiVi, Lvd, A, ventana, Wb, wRV, tvdW, endoVd, epiVd,
     anilloMitral, mc, aM, bM, U, anilloAortico, ac, rA, anilloTricus, ct, rT, anilloRVOT, cR, aR, bR, phiR, ReB, rimRV } = geo;
 
   // Trabéculas: crestas que entran en la cavidad (ilustrativo). VI: finas, en el tercio apical; VD: gruesas,
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
+  const kPap = opciones.ajustes?.papilaresEscala ? clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1) : 1;
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
-  const trabVi = (z, f) => { const s = f * rEndoVi(z); return 1.0 * paso(0.45, 0.85, -z / vi.L) * cresta(0.55 * s + 0.12 * z, 0.34 * s - 0.25 * z); };
+  // ajustes.papilaresLibres (dibujo nuevo): ni trabéculas ni papilares en el arco plano del tabique: quedan en la pared libre (anterolateral y posteromedial)
+  const libreSeptal = (z, f) => { if (!opciones.ajustes?.papilaresLibres) return 1; const a = alfaZ(z); if (a <= 0) return 1;
+    return paso(a + 0.05, a + 0.55, Math.abs(Math.atan2(Math.sin(f - PHI_SEPTO), Math.cos(f - PHI_SEPTO)))); };
+  const trabVi = (z, f) => { const s = f * rEndoVi(z); return libreSeptal(z, f) * kPap * paso(0.45, 0.85, -z / vi.L) * cresta(0.55 * s + 0.12 * z, 0.34 * s - 0.25 * z); };
   const trabVd = (z, f) => { const s = f * (rEpiVi(z, f) + wRV(z, f)); return 1.8 * paso(0.2, 0.55, -z / Lvd) * cresta(0.42 * s + 0.15 * z, 0.26 * s - 0.3 * z + 1.3); };
   // cerca del ápex la cavidad se cierra: las trabéculas se desvanecen con el radio (si no, quedaba una "aguja")
   const endoViT = (z, f) => { const re = rEndoVi(z, f), r = Math.max(0, re - trabVi(z, f) * Math.pow(clamp(re / 7, 0, 1), 2)); return [r * Math.cos(f), r * Math.sin(f), z]; };
@@ -433,7 +440,14 @@ export function construirCorazon(estado, opciones = {}) {
     return ventana(f) > 0.05 && r < rimRV(f) - 2 && !dentroHuella(cR, rhoInf, p, 2) && (r > ReB + 0.5 || ladoTab(p) > RTAB); };
   // el VI (salvo por encima del tabique interauricular, que se apoya en el interventricular) y la raíz aórtica, con corte continuo
   const libreAd = huella(ct, okAd, () => rT + 1.5, [[ac, rA + 3]]), incAd = [-4, 0];
-  const cuelloAd = cuello(libreAd, () => rT, MARGEN_AU.ad), { rho: rhoAd, sep: sepAd } = tabiqueSuelo(ct, cuelloAd);
+  // opciones.ajustes.auVolumen (dibujo nuevo, P4a-2): el cuello de la AD se alarga en el plano del A4C (eje mc→ct) y se estrecha en el
+  // perpendicular, con el mismo ancho medio: la altura sale del volumen del motor (alturaAu), así que el volumen no cambia, y el
+  // corte A4C, que pasa por el eje largo, recoge el área que da el área-longitud monoplano con ese volumen (Lang 2015, p. 29,
+  // Tabla 12: V = 8/(3π)·A²/L); con el cuello redondo el corte daba el 91-94 % (el corte de una cúpula redonda con tabique plano
+  // queda por debajo de la elipse). El estiramiento (ELONGA_AD) es ilustrativo; la huella (libreAd) sigue mandando
+  const psiPl = Math.atan2(nTab[1], nTab[0]);
+  const anilloAd = opciones.ajustes?.auVolumen ? (d) => rT * (1 + ELONGA_AD * Math.cos(2 * (Math.atan2(d[1], d[0]) - psiPl))) : () => rT;
+  const cuelloAd = cuello(libreAd, anilloAd, MARGEN_AU.ad), { rho: rhoAd, sep: sepAd } = tabiqueSuelo(ct, cuelloAd);
   // el suelo de la AD baja además lo que baja la pared libre del VD junto al anillo (pesoVd, media sobre el cuello)
   const bajaAd = descenso + extraVd * rhoAd.reduce((m, r, k) => { const psi = k / NR * TAU; return m + pesoVd(ct[0] + r * Math.cos(psi), ct[1] + r * Math.sin(psi), 0) / NR; }, 0);
   const pliAd = clamp(estado.pliegueAd ?? 0, 0, 1);
@@ -536,7 +550,10 @@ export function construirCorazon(estado, opciones = {}) {
   // --- Válvulas: cierran en una línea de coaptación y se abomban con la presión que soportan ---
   // estado.mitral… = apertura (0 cerrada, 1 abierta); estado.carga_mitral… = gradiente inverso con la válvula cerrada (0-1)
   const ap = (k) => clamp(estado[k] ?? 0, 0, 1), cg = (k) => clamp(estado['carga_' + k] ?? 0, 0, 1);
-  const valva = (v) => rejilla(12, 7, (uu, vv) => puntoValva(v, uu, vv));
+  // ajustes.velosFinos (dibujo nuevo): velos con la malla fina (24 pasos del anillo al borde y 24 a lo ancho): el corte del plano sale
+  // como una línea suave y no como una poligonal de 7 tramos («cuencos»); el grosor lo da la imagen (TEJIDOS.valva), ilustrativo.
+  const NV_V = opciones.ajustes?.velosFinos ? 24 : 7, NI_T = opciones.ajustes?.velosFinos ? 24 : 12;
+  const valva = (v) => rejilla(NI_T, NV_V, (uu, vv) => puntoValva(v, uu, vv));
   const abajo = [0, 0, -1], arriba = [0, 0, 1];
   const u3 = [Math.cos(U), Math.sin(U), 0], uP3 = [-Math.sin(U), Math.cos(U), 0];
   // Mitral: anterior (1/3 del anillo, 2/3 del área) y posterior; cierran en una "sonrisa" desplazada hacia atrás
@@ -559,7 +576,7 @@ export function construirCorazon(estado, opciones = {}) {
   const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t, festones: FESTONES_M('A') },
     { ...baseM, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
   for (const v of valvasM) { v.alto = hendidura(v); v.borde = (uu) => puntoValva(v, uu, v.alto(uu));
-    anadirR(v.nombre, rejilla(NU_M, 7, (uu, vv) => puntoValva(v, uu, vv * v.alto(uu))), COLORES.valva, { dobleCara: true, segmentos: v.festones, malla: [NU_M, 7] }); }
+    anadirR(v.nombre, rejilla(NU_M, NV_V, (uu, vv) => puntoValva(v, uu, vv * v.alto(uu))), COLORES.valva, { dobleCara: true, segmentos: v.festones, malla: [NU_M, NV_V] }); }
   // B5 · Cortina aorto-mitral: la continuidad fibrosa entre la raíz aórtica (cúspides no coronaria e izquierda) y la valva
   // anterior de la mitral. Una cinta que parte de la raíz (a 3 mm, donde cuelga el anillo valvular aórtico) y llega al anillo
   // mitral (z = 0), en el tramo de la valva anterior más cercano a la raíz (ψ ±0,75 de 1: hasta 6-9 mm de separación). Se
@@ -578,7 +595,7 @@ export function construirCorazon(estado, opciones = {}) {
   const VALVAS_T = [['anterior', 0.4, 2.685], ['posterior', 2.685, 4.399], ['septal', 4.399, 0.4 + TAU]];
   for (const [nombreT, a, b] of VALVAS_T) {
     const v = { anillo: anilloTricus, psi: (t) => mix(a, b, t), cierre: estrella(anilloTricus, cT3, a, b, 0.88), n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 1.5, apertura: ap('tricus'), carga: cg('tricus'), thAbierta: 1.2 };
-    valvasT.push(v); anadirR('Tricúspide', valva(v), COLORES.valva, { dobleCara: true, segmentos: [[nombreT, 0, 1]], malla: [12, 7] }); }
+    valvasT.push(v); anadirR('Tricúspide', valva(v), COLORES.valva, { dobleCara: true, segmentos: [[nombreT, 0, 1]], malla: [NI_T, NV_V] }); }
   const anilloAoV = (psi) => [ac[0] + (rA - 0.4) * Math.cos(psi), ac[1] + (rA - 0.4) * Math.sin(psi), 3];
   const cAo3 = [ac[0], ac[1], 3];
   // C1 · Cúspides con nombre (Hahn 2013 p. 945): cada una por la coronaria que nace de su seno (ostios en ψ 1,66 y −0,44, abajo)
@@ -611,7 +628,9 @@ export function construirCorazon(estado, opciones = {}) {
     const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
     // v2 Forma: la punta se cierra en el último 15 % y la base en el primer 6 %, metida en la pared (radio → 0): con la punta abierta, un corte oblicuo no cerraba y el papilar se
     // dibujaba como un lazo en S dentro del VI (A4C del TEP en telesístole); cerrado, el corte es una mancha rellena
-    const DEP_PAP = 1.0, R0 = 5.5, radioDe = (rB) => (u) => rB * (1 - 0.6 * u) * Math.sqrt(Math.max(0, 1 - Math.pow(paso(0.85, 1, u), 2))) * Math.sqrt(Math.max(0, 1 - Math.pow(1 - paso(0, 0.06, u), 2)));
+    // ajustes.papilaresEscala (dibujo nuevo): el radio de los papilares (5,5 mm en el VI normal) y la altura de las trabéculas siguen al radio
+    // de la cavidad (Rm del VI de telediástole sobre el normal, tope 1): en un VI pequeño (HP, TEP) no llenan la cavidad. Proporción ilustrativa.
+    const DEP_PAP = 1.0, R0 = 5.5 * kPap, radioDe = (rB) => (u) => rB * (1 - 0.6 * u) * Math.sqrt(Math.max(0, 1 - Math.pow(paso(0.85, 1, u), 2))) * Math.sqrt(Math.max(0, 1 - Math.pow(1 - paso(0, 0.06, u), 2)));
     // trazado del eje: pared(z) → [x, y, z] de la pared en el ángulo del papilar; viX: el VI de ese instante
     const trazarPap = (pared, zB, zT, lpX, rB) => [0, 0.2, 0.4, 0.6, 0.8, 1].map((s) => {
       const z = zB + (zT - zB) * s * lpX, W = pared(z), rW = Math.hypot(W[0], W[1]), rad = radioDe(rB);
@@ -619,7 +638,9 @@ export function construirCorazon(estado, opciones = {}) {
       const dep = s <= 0.85 ? DEP_PAP * rad(s) * paso(0, 0.25, s) : mix(DEP_PAP * rad(0.85), 0.4 * rW, paso(0.85, 1, s));
       return [W[0] * (rW - dep) / rW, W[1] * (rW - dep) / rW, z]; });
     const largoPap = (pts) => pts.slice(1).reduce((t, q, i) => t + Math.hypot(q[0] - pts[i][0], q[1] - pts[i][1], q[2] - pts[i][2]), 0);
-    for (const [phP, nombre] of [[0.55, 'anterolateral'], [3.95, 'posteromedial']]) {
+    for (const [phP0, nombre] of [[0.55, 'anterolateral'], [3.95, 'posteromedial']]) {
+      // fuera del arco plano, los dos a ≥ 0,55 rad (~31°) de sus uniones con el círculo: dos bultos separados en la pared libre, no en las puntas de la «D»
+      const aPap = alfaZ(-vi.L * 0.45), sep = 0.5 * clamp(aPap, 0, 1), phP = opciones.ajustes?.papilaresLibres ? (phP0 > 3 ? Math.max(phP0 + sep, Math.min(5.3, PHI_SEPTO + aPap + 0.55)) : Math.min(phP0 - sep, PHI_SEPTO - aPap - 0.55)) : phP0;   // sep: con el tabique plano, se abren hacia la pared libre
       const zB = -vi.L * 0.6, zT = -vi.L * 0.28, zBd = -viTd.L * 0.6, zTd = -viTd.L * 0.28;
       const paredTd = (z) => { const r = perfil(z, viTd.Rb, viTd.Rm, viTd.L); return [r * Math.cos(phP), r * Math.sin(phP), z]; };
       const p0 = trazarPap((z) => endoVi(z, phP), zB, zT, lp, R0);
@@ -953,13 +974,25 @@ export function construirCorazon(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-export function baseGeometrica(estado) {
+// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen, vdLargoPropio } — sin ajustes, el dibujo de hoy idéntico.
+const GANANCIA_SEPTO = 4;
+const LVD_TOPE_ILUSTRATIVO = 112;
+export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
-  const mio = estado.mioVi ?? 1, septo = clamp(estado.septo ?? 0, 0, 1);
+  // ajustes.septoContinuo (dibujo nuevo, P4b): el tabique sigue el septoSigno continuo del motor (0…1, contrato.mjs) con una
+  // ganancia GANANCIA_SEPTO que lo satura sin escalón; así aplana ya con pVD ≈ pVI. El umbral clínico (LVEI >1,1 en HP/TEP
+  // graves) es de ESC/ERS 2022 p. 3645 Tabla 10; la curva, ilustrativa.
+  const septoIn = ajustes.septoContinuo && estado.septoSigno != null ? Math.tanh(GANANCIA_SEPTO * estado.septoSigno) / Math.tanh(GANANCIA_SEPTO) : estado.septo;
+  const mio = estado.mioVi ?? 1, septo = clamp(septoIn ?? 0, 0, 1);
+  // ajustes.septoRecto (dibujo nuevo): las uniones del tabique plano con el círculo se redondean menos (KU < 1): el eje corto se ve en «D»
+  // (ESC/ERS 2022 p. 3645 Tabla 10: tabique aplanado) y el LVEI no se diluye en el redondeo. La escala es ilustrativa.
+  const KU = ajustes.septoRecto ? ajustes.septoRecto : 1;
+  // septoRectoEndo (dibujo nuevo): solo el endocardio septal (la cavidad) con uniones aún más vivas; el epicardio sigue con KU (no toca el VD)
+  const KUe = ajustes.septoRectoEndo ? ajustes.septoRectoEndo : KU;
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
-  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo);   // anatomia.mjs
+  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe, ajustes.septoHondo || 0);   // anatomia.mjs
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
   const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
@@ -968,9 +1001,9 @@ export function baseGeometrica(estado) {
   // radio del VI en (z, ángulo), con el tabique aplanado si toca
   // el tabique aplanado se une al círculo con uniones redondeadas (radioConCuerda, R3)
   const rEndoVi = (z, f) => { const r = rEndoViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    return radioConCuerda(r, r * Math.cos(a), a, f); };
+    return radioConCuerda(r, r * Math.cos(a), a, f, KUe); };
   const rEpiVi = (z, f) => { const r = rEpiViC(z); if (f === undefined) return r; const a = alfaZ(z); if (a <= 0) return r;
-    return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f); };
+    return radioConCuerda(r, r - rEndoViC(z) * (1 - Math.cos(a)), a, f, KU); };
   const endoVi = (z, f) => { const r = rEndoVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const epiVi = (z, f) => { const r = rEpiVi(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   const ReB = vi.ReB;
@@ -984,7 +1017,13 @@ export function baseGeometrica(estado) {
   const anilloAortico = (psi) => [ac[0] + rA * Math.cos(psi), ac[1] + rA * Math.sin(psi), 0];
 
   // VD: media luna en torno al VI; en la base, un contorno casi fijo (entrada tricuspídea y salida)
-  const Lvd = vi.Le * REF.lVdRel;
+  // ajustes.vdLargoPropio (dibujo nuevo): el largo del VD sale de su volumen, no del largo del VI. Normal: el de hoy
+  // (LE_REF·lVdRel); al crecer vvd, con la raíz cúbica. Tope con fuente 83 mm (Lang 2015 Tabla 8 p. 20: 71 ± 6, 2 DE); más allá,
+  // sinFuente e ilustrativo, hasta 112 mm (techo de un VD de paciente posible: ápex que alcanza o pasa el del VI)
+  // Con VD/VI de volumen >1,3 el ápex del VD sube hasta el nivel del ápex del VI (Mukherjee 2025 Fig. 4B-C, p. 172: «apical traction»,
+  // el ápex del VD traccionado y cámaras derechas más grandes; que alcance el ápex del VI es ilustrativo); la transición 1,3→1,8 es ilustrativa.
+  const Lvd0 = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, LE_REF * REF.lVdRel * Math.cbrt(vvd / REF.vVd)) : 0;
+  const Lvd = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, mix(Lvd0, Math.max(Lvd0, vi.Le), paso(1.3, 1.8, estado.vvd / estado.vvi))) : vi.Le * REF.lVdRel;
   const ventana = memo((phi) => { const f = anguloNorm(phi); if (f < REF.phiA || f > REF.phiB) return 0; const a = (f - REF.phiA) / (REF.phiB - REF.phiA);
     return Math.pow(Math.sin(Math.PI * a), 0.7) * paso(0, 0.12, a) * paso(0, 0.12, 1 - a); });
   const gauss = (f, c, s) => Math.exp(-Math.pow((anguloNorm(f) - c) / s, 2));
@@ -1026,8 +1065,19 @@ export function baseGeometrica(estado) {
   const wRV0 = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
   const wRV = pliVd > 0 ? (z, f) => wRV0(z, f) * fVd(z, f) : wRV0;
   const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f) + tvdW(wRV0(z, f)); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVdSinPliegue = pliVd > 0 ? (z, f) => { const w = wRV0(z, f); const r = rEpiVi(z, f) + w + tvdW(w); return [r * Math.cos(f), r * Math.sin(f), z]; } : epiVd;
+  // ajustes.paredVdNormal (dibujo nuevo, P4a-1): el grosor tVd se pone en la dirección del radio desde el eje del VI, y
+  // donde la pared libre va oblicua a ese radio (el VD dilatado que se abomba) el grosor perpendicular, el que mide la eco,
+  // queda corto (HP crónica g=1: 6,4 mm por 8,2). Con el ajuste, el radio se alarga por 1/cos del ángulo entre el radio y
+  // la normal de la superficie endocárdica sin pliegue: grosor perpendicular = paredVdDe (Lang 2015 Tabla 8 p. 20, pared
+  // libre del VD medida perpendicular a ella). Tope del factor 2 (ilustrativo: evita picos en los bordes de la ventana).
+  const oblicua = ajustes.paredVdNormal ? (z, f) => {
+    const h = 0.5, dfh = 0.01, rE = (zz, ff) => rEpiVi(zz, ff) + wRV0(zz, ff), r0 = rE(z, f);
+    const gz = (rE(z + h, f) - rE(z - h, f)) / (2 * h), gf = (rE(z, f + dfh) - rE(z, f - dfh)) / (2 * dfh * Math.max(r0, 1));
+    const k = Math.sqrt(1 + gz * gz + gf * gf);
+    return Number.isFinite(k) ? Math.min(2, k) : 1;   // fuera del dominio (bordes de z): sin ajuste
+  } : () => 1;
+  const epiVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f) + tvdW(wRV0(z, f)) * oblicua(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const epiVdSinPliegue = pliVd > 0 ? (z, f) => { const w = wRV0(z, f); const r = rEpiVi(z, f) + w + tvdW(w) * oblicua(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; } : epiVd;
   const rimRV = (f) => { const w = Wb(f); return ReB + w + tvdW(w); };
   // anillo tricúspide y orificio de salida (infundíbulo) dentro de la media luna
   const phiT = 3.23, rT = anil.rT, dT = ReB + 2 + rT, ct = [dT * Math.cos(phiT), dT * Math.sin(phiT)];
@@ -1038,7 +1088,7 @@ export function baseGeometrica(estado) {
   const phiR = 1.72, aR = anil.aR, bR = anil.bR, dR = ReB + 2 + aR, cR = [dR * Math.cos(phiR), dR * Math.sin(phiR)];
   const e1R = [Math.cos(phiR), Math.sin(phiR)], e2R = [-Math.sin(phiR), Math.cos(phiR)];
   const anilloRVOT = (psi) => [cR[0] + aR * Math.cos(psi) * e1R[0] + bR * Math.sin(psi) * e2R[0], cR[1] + aR * Math.cos(psi) * e1R[1] + bR * Math.sin(psi) * e2R[1], 0];
-  return { vi, mio, septo, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, wRV0, tvdW, endoVd, epiVd, epiVdSinPliegue, rimRV, kM, kT,
+  return { alfaZ, vi, mio, septo, rEndoVi, rEpiVi, endoVi, epiVi, ReB, Lvd, A, C0, ventana, Wb, wRV, wRV0, tvdW, endoVd, epiVd, epiVdSinPliegue, rimRV, kM, kT,
     U, anilloMitral, mc, aM, bM, anilloAortico, ac, rA, anilloTricus, ct, rT, anilloRVOT, cR, aR, bR, phiR, e1R, e2R };
 }
 
@@ -1082,3 +1132,12 @@ export function diametrosTSVD(g) {
   const a = (k) => mix(g.aR, inf.rP, paso(0, 1, inf.marcos[k].t)), b = (k) => mix(g.bR, inf.rP, paso(0, 1, inf.marcos[k].t));
   return { proximal: 2 * Math.max(a(0), b(0)), plax: 2 * a(Math.round(NK / 2)), distal: 2 * a(NK - 1) };
 }
+
+// ---- Fachada única: elige entre el dibujo de hoy y el nuevo (corazon-geo-2.mjs) --------------------------------
+// Los importadores no cambian: la imagen, los planos y las medidas usan siempre el mismo dibujo.
+// Se activa con ?dibujo=2 en la URL (navegador), ECO_DIBUJO=2 (Node) o usarDibujo(2) (pruebas y jueces). Por defecto, 1.
+let dibujoNuevo = (typeof process !== 'undefined' && process.env?.ECO_DIBUJO === '2') ||
+  (typeof globalThis.location?.search === 'string' && /[?&]dibujo=2(&|$)/.test(globalThis.location.search));
+export function usarDibujo(n) { const antes = dibujoNuevo ? 2 : 1; dibujoNuevo = Number(n) === 2; return antes; }
+export function construirCorazon(estado, opciones = {}) { return dibujoNuevo ? construirCorazon2(estado, opciones) : construirCorazonHoy(estado, opciones); }
+export function baseGeometrica(estado) { return dibujoNuevo ? baseGeometrica2(estado) : baseGeometricaHoy(estado); }

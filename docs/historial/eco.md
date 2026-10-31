@@ -471,3 +471,15 @@ dibujo nuevo): 0 contornos cruzados; caza la «nave espacial» de la HP crónica
 mm, LVEI 0,92, AD pequeña). El libro POCUS de `docs/` es una muestra sin física de ultrasonidos: da las reglas de los
 mandos (el origen del mando de imagen pasa a «ficha», POCUS I p. 41) y las sondas. Parte
 `autonomo/partes/2026-10-31-mv-eco-3.md`.
+
+## mv-eco-2a5, paso 4: el dibujo nuevo, con interruptor (31/10/2026)
+`corazon-geo.mjs` pasa a ser una fachada: `construirCorazon` y `baseGeometrica` eligen el dibujo de hoy o el nuevo
+(`corazon-geo-2.mjs`) con `?dibujo=2`, `ECO_DIBUJO=2` o `usarDibujo(n)`; imagen, planos y medidas siempre del mismo
+dibujo. El nuevo es el de hoy con 13 ajustes que lo hacen salir del motor (pared del VD de `paredVdDe`, tabique continuo
+de `septoSignoDe`, AD por área-longitud, VD con largo propio, D del eje corto, papilares a escala, velos finos) y una
+imagen más real solo con él (pericardio fino, caídas con la profundidad y lateral, sombra y refuerzo, encuadre, rótulos
+al centro de la cavidad, aorta descendente). El juez de geometría tenía tres fallos de medida (arreglados en commits
+aparte) y tres rangos cambiados por decisión del usuario (pseudohipertrofia con cita, HP/TEP moderados a g 0,5,
+hipertrofia en todo el mando): nuevo 0/147, hoy 1/147. El motor del TEP no cambió (los «29 mL» eran el volumen de la
+fase A). Realismo del profesor 8,7 (meta 9,5); el interruptor sigue apagado hasta que el usuario decida. Parte:
+`autonomo/partes/2026-10-31-mv-eco-4.md`.
