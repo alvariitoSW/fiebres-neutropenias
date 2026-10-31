@@ -208,7 +208,7 @@ for (const k of ['mateo', 'amparo', 'aurelio', 'joaquin', 'consuelo', 'virginia'
 }
 
 // ───────── B2. Estadio SCAI (regla del modelo sobre la ESC 2026, p. 44): tabla paciente/ajuste → letra, medida en el monitor de la app
-const scai = async () => p.evaluate(() => document.getElementById('shv-scai-r').textContent.replace(/^SCAI · (\w).*/, '$1'));
+const scai = async () => p.evaluate(() => document.getElementById('shv-scai-r').textContent.replace(/^SCAI (\w).*/, '$1'));
 const ajus = o => p.evaluate(o => { const a = window.__shvPruebas(); a.trabajar(() => a.cab.ajustar(o)); }, o);   // como el clic real: repinta también con «reducir movimiento»
 const horas5 = async () => { await pest('reloj'); await p.evaluate(() => document.querySelector('[data-h="5"]')?.click()); await espera(700); };
 { const T = [['aurelio', 0, {}, 'A'], ['aurelio', 100, {}, 'C'], ['aurelio', 100, { na: 5, dobuta: true, soporte: 'ecmo' }, 'D'], ['amparo', 100, {}, 'C'], ['fermin', 0, {}, 'A'], ['fermin', 100, {}, 'C'], ['aurelio', 0, { dobuta: true }, 'C']];
@@ -338,7 +338,7 @@ async function medir(t, esperaSig = true) {
 async function responder(q, { bien = true, repaso = false, foto: f = null } = {}) {
     const tag = `${q.id}${bien ? '' : ' (fallando)'}${repaso ? ' en el repaso' : ''}`;
     { const L = { S1: 'C', S2: 'C', CF1: 'C', CF2: 'C', CF3: 'C', CF5: 'C' }[q.id];   // la letra del monitor es la que dice la explicación de la pregunta
-      if (L) ok(new RegExp(`SCAI · ${L}`).test(await p.evaluate(() => document.getElementById('shv-scai-r').textContent)), `${q.id}: el rótulo SCAI es ${L}`); }
+      if (L) ok(new RegExp(`SCAI ${L}\\b`).test(await p.evaluate(() => document.getElementById('shv-scai-r').textContent)), `${q.id}: el rótulo SCAI es ${L}`); }
     if (q.predice && !repaso) ok(await velo(), `${tag}: el monitor y el dibujo están tapados antes de contestar («primero predices»)`);
     if (repaso && q.predice) ok(!(await velo()), `${tag}: en el repaso no hay velo`);
     if (q.tipo === 'test') {
