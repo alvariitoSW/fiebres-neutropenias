@@ -283,6 +283,7 @@ export function crearCabecera(rec, { asentar = 40 } = {}) {
   function ajustar(cambio = {}) {
     Object.assign(ajuste, cambio);
     if ('cpap' in cambio) m.p.pTorax = Math.max(0, +ajuste.cpap || 0);   // CPAP (cmH₂O) = presión de la vía aérea; a la pleura llega fPleura de ella (motor.mjs, pTorax)
+    if ('pleura' in cambio) m.p.pPleura = Math.max(0, +ajuste.pleura || 0);   // presión pleural directa (cmH₂O; neumotórax): sin fPleura ni kAbdomen
     if ('na' in cambio || 'vaso' in cambio || 'dobuta' in cambio || ['esmolol', 'nicardipino', 'labetalol', 'nitroprusiato', 'opioide'].some((x) => x in cambio)) aplicarFarmacos();
     if (ajuste.soporte !== 'impella') ajuste.total = ajuste.total;   // (el modo total solo actúa con el Impella solo)
     if (cambio.soporte && cambio.soporte !== 'ecmo') ajuste.venteo = 'no';

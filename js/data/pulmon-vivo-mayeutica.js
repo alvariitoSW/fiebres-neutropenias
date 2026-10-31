@@ -15,7 +15,7 @@ const K = {
   hipovol: { f: 'neumo-vni-uso', id: 'nep-precarga-vpp', sitio: 'La hipovolemia magnifica el efecto sobre el llenado', p: 86 },
   corazon: { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 },
   peepGc: { f: 'neumo-vm-ajuste', id: 'nep-peep-gc', sitio: 'PEEP: oxigenación y aporte de O₂ (Fig. 27.6)', p: 12 },
-  psili: { f: 'neumo-sdra-no-ventilatorio', id: 'neumo-sdra-no-ventilatorio', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
+  psili: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-psili', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
   paradoj26: { f: 'neumo-vni-uso', id: 'neumo-nota-pulso-paradojico-26', sitio: 'Pulso paradójico: caída inspiratoria >10 mmHg (nota de fuentes)', p: 87 },
   paradoj23: { f: 'neumo-asma-epoc-basicos', id: 'neumo-nota-pulso-paradojico-23', sitio: 'Pulso paradójico: caída inspiratoria >12 mmHg (nota de fuentes)', p: 16 },
   muerto: { f: 'libro-azul-resp1', id: null, sitio: 'Espacio muerto: 150 de 500 mL; el volumen alveolar es menor que el minuto (pp. 389-390)', p: 5 },
@@ -45,7 +45,7 @@ const G3 = test('PG3', 'guia', 'el flujo que no llega a cero', { predice: true, 
   enunciado: 'Jacinto, EPOC grave, en volumen control con PEEP 0. En su curva de flujo, justo antes de la siguiente insuflación, el flujo espiratorio todavía no ha llegado a cero. <b>¿Qué significa?</b>',
   opciones: [
     { t: 'Que el pulmón aún se está vaciando cuando empieza la siguiente respiración: hay aire atrapado.', ok: true },
-    { t: 'Que el respirador deja salir el aire contra una PEEP alta que Jacinto tiene puesta.', porque: 'Su PEEP marcada es 0: lo que frena la salida es la resistencia de su vía aérea, no una presión aplicada. Subir la PEEP creyendo esto le sumaría más presión a un pulmón ya hiperinsuflado.' + src(C.defOculta) },
+    { t: 'Que el respirador deja salir el aire contra una PEEP alta que Jacinto tiene puesta y por eso el flujo no llega a cero.', porque: 'Su PEEP marcada es 0: lo que frena la salida es la resistencia de su vía aérea, no una presión aplicada. Subir la PEEP creyendo esto le sumaría más presión a un pulmón ya hiperinsuflado.' + src(C.defOculta) },
     { t: 'Que espira con esfuerzo, tosiendo, y por eso el flujo sale tarde.', porque: 'La espiración es pasiva: el pulmón se vacía solo por su retracción. Sedar o relajar a Jacinto por esto no arreglaría el aire atrapado.' + src(C.finEsp) },
     { t: 'Que el pulmón se llena demasiado deprisa por una resistencia inspiratoria baja.', porque: 'El flujo al final de la espiración habla de cómo se vacía, no de cómo se llena. Jacinto seguiría con el aire atrapado sin que nadie lo buscara.' + src(C.fig235) }],
   explicacion: 'Ese flujo, que sigue saliendo cuando entra la siguiente insuflación, es la prueba de hiperinflación dinámica: el pulmón no ha terminado de vaciarse.', fuente: [C.fig235, C.defOculta] });
@@ -55,7 +55,7 @@ const G4 = test('PG4', 'guia', 'de PEEP 4 a 12', { predice: true, modelo: { esta
     { t: 'La Cstat sube y la presión de conducción baja: las unidades dejan de cerrarse.', ok: true },
     { t: 'Suben las dos: la PEEP distiende más el pulmón y lo vuelve más rígido.', porque: 'En el estudio de PEEP creciente de Marino la compliance sube hasta una PEEP intermedia y la presión de conducción hace lo contrario; con esta idea no subirías la PEEP a quien aún tiene alvéolos por reclutar.' + src(C.mejorPeep) },
     { t: 'No cambian: la PEEP solo modifica la oxigenación.', porque: 'Sin PEEP el espacio aéreo colapsa al final de la espiración, y eso cambia la mecánica y empeora el intercambio de gases. Isidro seguiría abriendo y cerrando unidades.' + src(C.colapsoPeep) },
-    { t: 'La Cstat baja: un pulmón rígido no tolera más presión de final de espiración.', porque: 'Eso le pasa con una PEEP excesiva (aquí, 20), cuando las unidades llegan a la zona plana de su curva; de 4 a 12 todavía hay unidades que reclutar.' + src(C.mejorPeep) }],
+    { t: 'La Cstat baja y la presión de conducción sube: un pulmón rígido no tolera más presión de final de espiración.', porque: 'Eso le pasa con una PEEP excesiva (aquí, 20), cuando las unidades llegan a la zona plana de su curva; de 4 a 12 todavía hay unidades que reclutar.' + src(C.mejorPeep) }],
   explicacion: 'Con la PEEP por encima de la presión de cierre, las unidades dejan de colapsar y participan: la Cstat sube y la presión de conducción baja. Es el sentido del estudio de Marino, no una cifra para todos.', fuente: [C.mejorPeep, C.atelect],
   comprobar: { txt: 'Sube la PEEP a 12 en el respirador', mandos: { peep: 12 }, mira: 'La Cstat sube y la presión de conducción baja: las unidades dejan de cerrarse. (Partiendo de PEEP 12 desde el estado, la Cstat llega a 16: abrir pide más presión que mantener abierto.)', cifras: [['Cstat (mL/cmH₂O)', 'cstat', 11, 14], ['P. de conducción', 'dp', 20.2, 16.9]] } });
 const G5 = test('PG5', 'guia', 'PSV y pulmón rígido', { predice: true, modelo: { estado: 'psv-disparo' },
@@ -91,7 +91,7 @@ const X2 = test('PE2', 'examen', 'el pico sube, ¿y la meseta?', {
   opciones: [
     { t: 'La resistencia de la vía aérea: pico − meseta pasó de 4 a 18, y la parte elástica no cambió.', ok: true },
     { t: 'La compliance: el pulmón se ha puesto más rígido.', porque: 'Si fuera la elastancia, subiría la meseta (Pel) junto con el pico. Con la meseta en 24 buscar un pulmón más rígido haría perder el tiempo con el problema real, la vía aérea.' + src(C.meseta) },
-    { t: 'El volumen entregado: el respirador está dando más Vt del programado.', porque: 'Más volumen en la misma compliance subiría también la meseta. Rafael tiene la meseta igual: lo que cambió fue el gasto de presión por el flujo.' + src(C.ec271) },
+    { t: 'El volumen entregado: el respirador está dando más Vt del programado y por eso sube el pico sin cambiar la elasticidad.', porque: 'Más volumen en la misma compliance subiría también la meseta. Rafael tiene la meseta igual: lo que cambió fue el gasto de presión por el flujo.' + src(C.ec271) },
     { t: 'Nada importante: el pico solo refleja el volumen del pulmón.', porque: 'El pico suma resistencia y elastancia y no mide el volumen pulmonar; ignorar un salto de 14 cmH₂O de resistencia dejaría sin tratar su causa.' + src(C.ec271) }],
   explicacion: 'Pico = Pres + Pel; la meseta es Pel (más la PEEP). Un pico que sube con la meseta quieta es un problema de resistencia; el libro no enumera las causas.', fuente: [C.ec271, C.meseta], org: 'ilustrativo (28 → 42 y 24)' });
 const X3 = test('PE3', 'examen', 'ventilación alveolar', {
@@ -107,7 +107,7 @@ const X4 = test('PE4', 'examen', 'PVC alta con auto-PEEP', { modelo: { estado: '
   opciones: [
     { t: 'La PEEP oculta se transmite a la cava superior y eleva la PVC de forma falsa.', ok: true },
     { t: 'Hipervolemia real: hay que dar un diurético.', porque: 'La PVC está falsamente alta. Un diurético quitaría volumen a una paciente que, por el aire atrapado, ya recibe menos retorno venoso.' + src(C.efectos) },
-    { t: 'La PVC es fiable: la presión del tórax no influye en ella.', porque: 'La PEEP oculta sube la presión intratorácica media, dificulta el retorno venoso y falsea la PVC. Fiarse de la cifra llevaría a tratar un volumen que no sobra.' + src(C.efectos) },
+    { t: 'La PVC es fiable: se mide dentro del tórax contra la presión atmosférica y la presión del tórax no influye en ella.', porque: 'La PEEP oculta sube la presión intratorácica media, dificulta el retorno venoso y falsea la PVC. Fiarse de la cifra llevaría a tratar un volumen que no sobra.' + src(C.efectos) },
     { t: 'Un fallo del catéter: hay que cambiarlo de sitio.', porque: 'El libro da otra explicación, la PEEP oculta transmitida a la cava. Cambiar el catéter no corregiría el aire atrapado ni la hipotensión.' + src(C.efectos) }],
   explicacion: 'Entre los efectos de la PEEP oculta, el libro cita que se transmite a la cava superior y crea un aumento espurio de la PVC.', fuente: [C.efectos, C.monOculta] });
 const X5 = { id: 'PE5', grupo: 'examen', tipo: 'error', corto: 'frases del SDRA', predice: false, org: '', modelo: { estado: 'sdra-rigido' },
@@ -122,7 +122,7 @@ const X6 = test('PE6', 'examen', 'P-SILI', { modelo: { estado: 'p-sili' },
   opciones: [
     { t: 'Esfuerzo aumentado con posible lesión autoinducida (P-SILI): consideras intubar ya.', ok: true },
     { t: 'Buena señal: un volumen alto indica reserva respiratoria.', porque: 'El libro lo lee al revés: esos volúmenes son un esfuerzo respiratorio aumentado. Esperar con Elvira retrasaría la intubación en quien ya fracasa.' + src(K.psili) },
-    { t: 'Subes el soporte para que tome aún más volumen.', porque: 'Un volumen alto con esfuerzo es justo lo que se asocia al daño; empujar más volumen podría empeorar la lesión que se quiere evitar.' + src(K.psili) },
+    { t: 'Subes el soporte para que tome aún más volumen y deje de trabajar tanto con la musculatura respiratoria.', porque: 'Un volumen alto con esfuerzo es justo lo que se asocia al daño; empujar más volumen podría empeorar la lesión que se quiere evitar.' + src(K.psili) },
     { t: 'Sigues otra hora con la misma VNI antes de decidir.', porque: 'La falta de mejoría del P/F tras una hora de VNI es mala respuesta e indica considerar la intubación; esperar otra hora alarga la lesión.' + src(K.psili) }],
   explicacion: 'Los pacientes que fracasan con VNI suelen tener volúmenes ≥9,5 mL/kg de peso predicho (más esfuerzo) y el P-SILI puede contribuir; si el P/F no mejora, se considera intubar.', fuente: [K.psili] });
 const X7 = { id: 'PE7', grupo: 'examen', tipo: 'destapa', corto: 'efectos de la PEEP oculta', predice: false, org: '', modelo: { estado: 'eulalia-conectada' },
@@ -173,7 +173,7 @@ export const CASOS = [
             { t: 'No: es la mejor PEEP de ese estudio y de este modelo; en cada paciente se busca de nuevo.', ok: true },
             { t: 'Sí: 12 es el valor que fija el protocolo para todos.', porque: 'El protocolo empieza en PEEP 5; el 12 sale del estudio de PEEP creciente de Marino. Aplicarlo a ciegas dejaría a otro paciente con una PEEP que no es la suya.' + src(C.t245) },
             { t: 'Sí: porque con 12 el P/F es máximo.', porque: 'Un P/F alto no equivale a mejor aporte de O₂ y este modelo no calcula gases. Elegir por el P/F llevaría de nuevo al error de la PEEP 18.' + src(K.peepGc) },
-            { t: 'No: la mejor PEEP es siempre la más alta que tolere la presión, 20.', porque: 'Una PEEP alta sobredistiende los alvéolos de las zonas sanas; con 20 la Cstat de Isidro cae a 12 y el Vt baja por la alarma de presión.' + src(C.mejorPeep) }],
+            { t: 'No: la mejor PEEP es siempre la más alta que tolere la presión, 20, porque cuanto más PEEP más alvéolos abiertos.', porque: 'Una PEEP alta sobredistiende los alvéolos de las zonas sanas; con 20 la Cstat de Isidro cae a 12 y el Vt baja por la alarma de presión.' + src(C.mejorPeep) }],
           explicacion: 'El libro lo muestra con un estudio de PEEP creciente: la compliance sube, llega a un máximo y desciende. De ahí sale «la mejor PEEP» de ese estudio: no una cifra para todos.', fuente: [C.mejorPeep] })),
       paso('Un compañero propone quitarle la PEEP', { estado: 'atelectrauma-zeep', lee: L5 }, [['Respirador', 'Vt 285 mL (4 mL/kg) · PEEP 0'], ['Meseta', n1(L5.meseta) + ' cmH₂O'], ['Cstat', n1(L5.cstat) + ' mL/cmH₂O'], ['P. de conducción', n1(L5.dp) + ' cmH₂O']],
         hacer('I5', { tipo: 'destapa', modelo: { estado: 'atelectrauma-zeep' }, org: '', enunciado: 'Con PEEP 0 la meseta de Isidro baja a 24. «Así protegemos el pulmón», dice un compañero. <b>Escribe dos cosas que Isidro pierde sin PEEP.</b>',
@@ -188,7 +188,7 @@ export const CASOS = [
           opciones: [
             { t: 'Depende de la fuente: >10 mmHg en el capítulo 26 (sí), >12 mmHg en el 23 (no).', ok: true },
             { t: 'Sí: el libro usa >10 mmHg en todos sus capítulos.', porque: 'El capítulo 23 lo define con una caída de >12 mmHg. Dar por seguro el valor te haría afirmar o negar el signo con una certeza que el libro no tiene.' + src(K.paradoj23) },
-            { t: 'No: el umbral del libro es siempre >12 mmHg.', porque: 'El capítulo 26 lo define con una caída de >10 mmHg. Con 11 mmHg descartarlo sin matices pasaría por alto un signo de esfuerzo inspiratorio exagerado.' + src(K.paradoj26) },
+            { t: 'No: el umbral del libro es siempre >12 mmHg, porque el pulso paradójico se mide igual en todos los capítulos y en todas las fuentes.', porque: 'El capítulo 26 lo define con una caída de >10 mmHg. Con 11 mmHg descartarlo sin matices pasaría por alto un signo de esfuerzo inspiratorio exagerado.' + src(K.paradoj26) },
             { t: 'No existe: en el asma la PAS sube al inspirar.', porque: 'En inspiración espontánea la PAS baja; es la presión positiva la que la sube (pulso paradójico inverso). Confundirlos invertiría la lectura de la curva.' + src(K.paradoj26) }],
           explicacion: 'Dos capítulos del mismo libro lo definen distinto (>10 y >12 mmHg), y el capítulo 23 añade que ninguno de estos signos es sensible ni específico para la obstrucción grave: se recomiendan medidas más objetivas.', fuente: [K.paradoj26, K.paradoj23] })),
       paso('Recién conectada · se hipotensa', { estado: 'eulalia-conectada', lee: { pico: 42.4, peeptot: 14.1, flujofin: -13, pmedia: 10.4, vt: 500 }, },
@@ -207,7 +207,7 @@ export const CASOS = [
             { t: 'Menos del 63 %: ni siquiera se cumple una constante de tiempo.', ok: true },
             { t: 'El 63 %: es lo que sale en una constante de tiempo.', porque: 'Ese porcentaje sale al cumplirse una τ (3,9 s), y aquí la espiración dura menos de la mitad. Creerlo subestimaría el aire que queda atrapado en cada ciclo.' + src(C.tau) },
             { t: 'Casi todo: la espiración activa vacía el pulmón.', porque: 'En ventilación controlada la espiración es pasiva. Con esa idea no alargarías el tiempo espiratorio y el aire atrapado de Eulalia seguiría creciendo.' + src(C.finEsp) },
-            { t: 'Todo: bastan dos constantes de tiempo.', porque: 'Para eliminar la auto-PEEP hacen falta 4-5 constantes de tiempo; con dos, parte del volumen se queda dentro.' + src(C.tau) }],
+            { t: 'Todo: bastan dos constantes de tiempo y el pulmón queda vacío antes de la siguiente respiración.', porque: 'Para eliminar la auto-PEEP hacen falta 4-5 constantes de tiempo; con dos, parte del volumen se queda dentro.' + src(C.tau) }],
           explicacion: 'En una constante de tiempo (R × C) un alvéolo se vacía un 63,2 %; para eliminar la auto-PEEP hacen falta 4 o 5. Con 1,8 s frente a 3,9 s no se completa ni una.', fuente: [C.tau], }) ),
       paso('Plan de ajuste del R1', { estado: 'eulalia-conectada' }, [['Objetivo', 'Dar tiempo para exhalar']],
         hacer('E4', { tipo: 'error', modelo: { estado: 'eulalia-conectada' }, org: '', enunciado: 'El R1 propone el plan para Eulalia. <b>Puede haber 0, 1 o 2 errores.</b>',
@@ -233,7 +233,7 @@ export const CASOS = [
         hacer('H1', { tipo: 'test', modelo: { estado: 'psv-disparo' }, org: '', enunciado: 'Herminia respira en presión de soporte. <b>¿Qué termina cada insuflación?</b>',
           opciones: [
             { t: 'Que el flujo inspiratorio caiga al 25 % de su pico.', ok: true },
-            { t: 'Un tiempo inspiratorio que fija el respirador.', porque: 'Eso es el volumen o la presión control. En soporte el paciente decide cuándo acaba; con un tiempo fijo, Herminia podría estar forzada a seguir inspirando o cortada antes de querer.' + src(C.psv4) },
+            { t: 'Un tiempo inspiratorio que fija el respirador, como en la presión control.', porque: 'Eso es el volumen o la presión control. En soporte el paciente decide cuándo acaba; con un tiempo fijo, Herminia podría estar forzada a seguir inspirando o cortada antes de querer.' + src(C.psv4) },
             { t: 'Haber alcanzado el volumen programado.', porque: 'En presión de soporte no hay volumen programado: el Vt depende del esfuerzo y de la compliance. Esperarlo llevaría a no vigilar su volumen real.' + src(C.psv4) },
             { t: 'Que la presión llegue a la alarma de presión.', porque: 'La alarma es un límite de seguridad, no el criterio de ciclado; si el insuflado terminara así, Herminia estaría en una situación de alarma continua.' + src(C.psv4) }],
           explicacion: 'La insuflación termina cuando el flujo cae al 25 % del pico: por eso el paciente fija el tiempo y el volumen.', fuente: [C.psv4] })),
@@ -241,7 +241,7 @@ export const CASOS = [
         hacer('H2', { tipo: 'test', predice: true, modelo: { estado: 'cpap-eap' }, org: 'modelo (cifras ilustrativas)', enunciado: 'Herminia está en edema agudo de pulmón con un corazón que falla. Pones CPAP de 10 cmH₂O. <b>Antes de mirar: ¿qué le pasa a su volumen sistólico?</b>',
           opciones: [
             { t: 'Sube: la presión positiva baja la poscarga del VI y le ayuda a eyectar.', ok: true },
-            { t: 'Baja: la CPAP frena el llenado y el gasto cae.', porque: 'Eso le pasa al corazón sano o hipovolémico. El que falla está en la parte plana de la curva de precarga y gana más con menos poscarga. Retirar la CPAP por este miedo le quitaría el apoyo.' + src(K.corazon) },
+            { t: 'Baja: la CPAP frena el retorno venoso y el volumen sistólico cae, como en un corazón sano con hipovolemia.', porque: 'Eso le pasa al corazón sano o hipovolémico. El que falla está en la parte plana de la curva de precarga y gana más con menos poscarga. Retirar la CPAP por este miedo le quitaría el apoyo.' + src(K.corazon) },
             { t: 'No cambia: la presión del pulmón no llega al corazón.', porque: 'Llega a la pleura y rodea al corazón: poscarga = presión de la cámara − presión pleural. Sin este efecto no entenderías por qué la CPAP mejora a Herminia.' + src(K.poscarga) },
             { t: 'Solo sube con CPAP de 15 o más.', porque: 'La CPAP habitual es de 5 a 10, y el efecto ya aparece a 5. Subir a 15 sin necesidad le añadiría presión sin más beneficio en el modelo.' + src(K.cpap) }],
           explicacion: 'La presión positiva asiste al VI en la eyección: con la pleura más positiva baja la poscarga y sube el volumen sistólico.', fuente: [K.poscarga, K.edema, K.corazon],

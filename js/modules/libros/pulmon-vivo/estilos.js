@@ -152,7 +152,7 @@ export const PUL_CSS = `
 .pul-raiz .guia .cita-ir { white-space: normal; text-align: left; }
 .pul-raiz .guia-cab { display: flex; align-items: center; gap: 8px; }
 .pul-raiz .guia-n { font: 700 .64rem/1.2 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--accent-yellow); white-space: nowrap; }
-.pul-raiz .guia-tit { flex: 1; min-width: 0; font: 600 .8rem/1.2 var(--sans); color: var(--text-dim); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pul-raiz .guia-tit { flex: 1; min-width: 0; font: 600 .8rem/1.2 var(--sans); color: var(--text-dim); overflow-wrap: anywhere; }   /* el título entero, en dos líneas si hace falta: nunca cortado con «…» (R1) */
 .pul-raiz .guia-x { flex: none; width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line); background: transparent; color: var(--text-main); font-size: 1.2rem; cursor: pointer; }
 .pul-raiz .guia-txt { margin: 0; border-left: 3px solid var(--accent-yellow); padding: 1px 0 1px 9px; max-height: 24vh; overflow-y: auto; }
 .pul-raiz .guia-nav { display: grid; grid-template-columns: minmax(0, auto) minmax(0, 1fr) minmax(0, auto); gap: 6px; align-items: center; }

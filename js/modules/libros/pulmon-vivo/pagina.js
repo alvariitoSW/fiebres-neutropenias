@@ -50,6 +50,11 @@ const pacDe = (k) => D.PACIENTES.find((p) => p.k === k);
 const PBW = () => pbw(est.pac.talla, est.pac.sexo);
 const NOMBRE_MANDO = { pmus: 'Esfuerzo (Pmus)', vt: 'Vt', flujo: 'Flujo', pinsp: 'P. insuflación', ie: 'I:E', fr: 'FR', peep: 'PEEP', pmax: 'Alarma de presión', c: 'Compliance', r: 'Resistencia', modo: 'Modo', ps: 'P. soporte', frEsp: 'FR del paciente', fio2: 'FiO₂' };
 
+// Los paneles de abajo (el corazón, el neumotórax) se enteran por eventos del #pul-raiz: `pul:estado` (cambia el estado) y
+// `pul:lectura` (hay lectura nueva del pulmón). `detail` es la misma lectura que usan las pruebas.
+const api = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
+const avisar = (tipo) => raiz.dispatchEvent(new CustomEvent(tipo, { detail: api() }));
+raiz.addEventListener('pul:pedir', () => avisar('pul:estado'));
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
@@ -61,6 +66,7 @@ function ponerEstado(clave, { llenar = true } = {}) {
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
   pintarTodo();
+  avisar('pul:estado');
 }
 // Llena la pantalla de golpe con el modelo ya estable (al cambiar de estado, en pausa o con «reducir movimiento»)
 function llenarMonitor() {
@@ -75,12 +81,14 @@ function llenarMonitor() {
   for (let i = 0, n85 = Math.round(0.85 * tc / 0.005); i < n85; i++) P.paso(0.005);
   mon.llenar(() => { for (let j = 0; j < n; j++) P.paso(0.005); return muestra(); });
   L = P.lectura(); tProx = tSim;
+  avisar('pul:lectura');
 }
 const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase, pmus: P.pmus, disp: P.disparo ? 1 : 0 });
 function avanzar(dt) {
   const cada = SEG / mon.NP, n = Math.round(dt / 0.005);
   for (let i = 0; i < n; i++) { const f0 = P.fase; P.paso(0.005); if (f0 !== 'insp' && P.fase === 'insp') NX.ciclo(); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
   L = P.lectura() || L;
+  avisar('pul:lectura');
 }
 
 // ---------------------------------------------------------------- tramos de la última respiración completa (para la guía)
@@ -389,7 +397,8 @@ function abrirEstado(clave) {
   mon.montar(); llenarMonitor(); pintarTodo(); reanudar();
 }
 NX.montarNeumotorax({ raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() });
-setInterval(() => { if (raiz.getClientRects().length) NX.vigilar(); }, 400);
-window.__pulPruebas = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
+let tNx = 0;
+raiz.addEventListener('pul:lectura', () => { const t = performance.now(); if (t - tNx < 300 || !raiz.getClientRects().length) return; tNx = t; NX.vigilar(); });
+window.__pulPruebas = api;   // solo para las pruebas automáticas
 return { abrirEstado };
 }

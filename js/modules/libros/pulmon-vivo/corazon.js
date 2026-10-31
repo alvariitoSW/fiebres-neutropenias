@@ -2,7 +2,7 @@
 // la presión media de la vía aérea del pulmón (lectura L.pMedia de pulmon.mjs) se escribe como presión torácica en el motor
 // del corazón del shock vivo (eco/motor.mjs vía shock-vivo/soporte.mjs; no se copia) y el panel enseña VS, GC y PAM.
 // Lo monta index.js al arrancar. Solo se ve en los estados que llevan `corazon` (cpap-eap, vpp-corazon-normal).
-// Lee la página por window.__pulPruebas (pagina.js no se toca). Los botones y las cifras se crean una vez y se repintan.
+// Lee la página por los eventos `pul:estado` y `pul:lectura` de #pul-raiz (su `detail` trae la lectura). Los botones y las cifras se crean una vez y se repintan.
 import { instalarCss } from '../../../core/dibujo-iso.js';
 import * as D from '../../../data/pulmon-vivo-data.js';
 import * as NX from './neumotorax.js';
@@ -29,7 +29,8 @@ const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 const f0 = (n) => String(Math.round(n));
 const pct = (a, b) => { const d = Math.round(100 * (a / b - 1)); return (d > 0 ? '+' : d < 0 ? '−' : '') + Math.abs(d) + ' %'; };
 
-let ultimo = null, sec = null, S = null, cargando = null, temporizador = null, clave = '', pedido = '', tope10 = false;
+let desconectar = () => {};
+let ultimo = null, qUlt = null, pendiente = 0, sec = null, S = null, cargando = null, clave = '', pedido = '', tope10 = false;
 const motores = new Map();   // tipo → { cab, res: Map(presión entera → lectura) }
 const celdas = {};
 
@@ -49,22 +50,30 @@ export function montarCorazon() {
   calc.after(sec);
   for (const k of ['vs', 'gc', 'pam']) { const e = sec.querySelector(`[data-fila="cor-${k}"]`); celdas[k] = { e, v: e.querySelector('.v'), sub: e.querySelector('.sub') }; }
   celdas.pm = sec.querySelector('[data-fila="cor-pm"] .v');
-  temporizador = setInterval(vigilar, 400);
+  // Se entera por los eventos de pagina.js (`pul:estado`, `pul:lectura`), no por sondeo; agrupa los avisos (150 ms)
+  const raiz = document.getElementById('pul-raiz');
+  const aviso = (ev) => { qUlt = ev.detail; if (!pendiente) pendiente = setTimeout(() => { pendiente = 0; vigilar(); }, 150); };
+  raiz?.addEventListener('pul:estado', aviso); raiz?.addEventListener('pul:lectura', aviso);
+  raiz?.dispatchEvent(new CustomEvent('pul:pedir'));   // pagina.js contesta con `pul:estado`
+  desconectar = () => { raiz?.removeEventListener('pul:estado', aviso); raiz?.removeEventListener('pul:lectura', aviso); clearTimeout(pendiente); pendiente = 0; };
 }
 
 function receta(tipo) { return tipo === 'ic' ? { ...S.RECETA_IC, g: 1 } : { esc: 'normal', hb: 14 }; }
 function leer(c) { const L = c.lectura, u = L.u; return { vs: u.vs, gc: L.gcTotal, pam: u.pam }; }
 // Lectura del corazón con esa presión en la pleura (cmH₂O enteros); la de 0 es la del motor recién asentado
-function corazon(tipo, x) {
+// x = presión media de la vía aérea (entra como CPAP: fPleura y kAbdomen); pl = aire a presión en la pleura (neumotórax; entra
+// directa, sin fPleura ni kAbdomen: el aire pleural no infla el pulmón ni empuja las venas del abdomen)
+function corazon(tipo, x, pl = 0) {
   let m = motores.get(tipo);
-  if (!m) { const cab = S.crearCabecera(receta(tipo)); m = { cab, res: new Map([[0, leer(cab)]]) }; motores.set(tipo, m); }
-  if (!m.res.has(x)) { m.cab.ajustar({ cpap: x }); m.cab.correr(30); m.res.set(x, leer(m.cab)); }
-  return m.res.get(x);
+  const k = x + ':' + pl;
+  if (!m) { const cab = S.crearCabecera(receta(tipo)); m = { cab, res: new Map([['0:0', leer(cab)]]) }; motores.set(tipo, m); }
+  if (!m.res.has(k)) { m.cab.ajustar({ cpap: x, pleura: pl }); m.cab.correr(30); m.res.set(k, leer(m.cab)); }
+  return m.res.get(k);
 }
 
-function pintar(tipo, x, nombre) {
-  const a = corazon(tipo, 0), b = corazon(tipo, x);
-  celdas.pm.textContent = f0(x);
+function pintar(tipo, x, nombre, pl = 0) {
+  const a = corazon(tipo, 0), b = corazon(tipo, x, pl);
+  celdas.pm.textContent = f0(x + pl);
   sec.dataset.presion = String(x);   // la prueba espera a que el panel llegue a esta presión
   for (const [k, f] of [['vs', f0], ['gc', f1], ['pam', f0]]) {
     const c = celdas[k], d = b[k] / a[k] - 1;
@@ -78,7 +87,7 @@ function pintar(tipo, x, nombre) {
 }
 
 function vigilar() {
-  const q = window.__pulPruebas?.(); if (!q || !sec) return;
+  const q = qUlt; if (!q || !sec) return;
   const E = D.ESTADOS[q.est.clave], visible = document.getElementById('pul-raiz').offsetParent !== null;
   if (!E?.corazon || !visible) { if (!sec.hidden) sec.hidden = true; return; }
   if (q.est.clave !== clave) { clave = q.est.clave; pedido = ''; tope10 = false; q.tope.quitar('cpap-tope'); }
@@ -97,10 +106,10 @@ function vigilar() {
     return;
   }
   if (tope10 && peep < T) { tope10 = false; q.tope.quitar('cpap-tope'); }
-  const x = Math.round(pm + (E.corazon.neumo ? NX.ptx() : 0)), firma = clave + ':' + x;
+  const x = Math.round(pm), pl = E.corazon.neumo ? Math.round(NX.ptx()) : 0, firma = clave + ':' + x + ':' + pl;
   if (firma === pedido) return;
   pedido = firma;
-  const hacer = () => { if (pedido !== firma) return; pintar(E.corazon.tipo, x, q.est.pac.nombre); };
+  const hacer = () => { if (pedido !== firma) return; pintar(E.corazon.tipo, x, q.est.pac.nombre, pl); };
   if (S) { setTimeout(hacer, 0); return; }
   celdas.vs.v.textContent = '…';
   cargando = cargando || import('../shock-vivo/soporte.mjs').then((m) => { S = m; });
@@ -108,7 +117,7 @@ function vigilar() {
 }
 
 // Para las pruebas: las cifras del panel tal como están en pantalla
-export function parar() { clearInterval(temporizador); }
+export function parar() { desconectar(); }
 
 // Para el neumotórax: la última lectura del corazón (VS, GC, PAM)
 window.__pulCorazon = () => ultimo;

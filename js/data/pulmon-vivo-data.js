@@ -312,9 +312,9 @@ Object.assign(C, {
   asincronia: { f: 'libro-azul-resp2', id: null, sitio: 'Asincronías; esfuerzos ineficaces, la más frecuente (p. 557)', p: 93 },
   doble: { f: 'libro-azul-resp2', id: null, sitio: 'Doble desencadenante: dos inspiraciones en menos de la mitad del Ti; Fig. 27 (pp. 558-559)', p: '94-95' },
   inverso: { f: 'libro-azul-resp2', id: null, sitio: 'Desencadenante inverso: sobredistensión; Hering-Breuer, «en proceso de investigación» (pp. 558-559)', p: '94-95' },
-  psili: { f: 'neumo-sdra-no-ventilatorio', id: 'neumo-sdra-no-ventilatorio', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
-  sbt: { f: 'neumo-sbt', id: 'neumo-sbt', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
-  pimax: { f: 'neumo-sbt', id: 'neumo-sbt', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
+  psili: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-psili', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
+  sbt: { f: 'neumo-sbt', id: 'nep-sbt-tabla', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
+  pimax: { f: 'neumo-sbt', id: 'nep-sbt-pimax', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
 });
 NOTAS.push(
   { k: 'pmus-ilu', tipo: 'calla', txt: 'La ecuación del movimiento (Libro azul IV, p. 511) incluye el esfuerzo del paciente (Pmus), pero ninguna fuente de este plan da su amplitud ni su duración. Aquí el esfuerzo es ilustrativo: 0 a 15 cmH₂O, con aviso a 12 y duración y ritmo propios de cada estado. La presión inspiratoria máxima de Marino (−120 y −84 cmH₂O de media, y amenaza de la ventilación a −20 o −30; cap. 30 p. 58) es un esfuerzo máximo contra vía cerrada, no el esfuerzo de reposo.', citas: [C.ecMov, C.pimax] },

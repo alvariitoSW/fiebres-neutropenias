@@ -62,6 +62,9 @@ export const BASE = {
   // por fuera a las cámaras y a los vasos del tórax (pulmonares); la aorta y las venas sistémicas, fuera, no la notan (pero
   // ver kAbdomen). Así la poscarga del VI es la presión de la cámara menos la pleural (Marino cap. 26, Ec. 26.1, PDF p. 87)
   pTorax: 0,
+  // pPleura: presión directa en el espacio pleural (cmH₂O; aire a tensión en un neumotórax). Por defecto 0. Se suma a la que llega de
+  // la vía aérea SIN pasar por fPleura ni por kAbdomen: el aire en la pleura no infla el pulmón ni empuja las venas del abdomen.
+  pPleura: 0,
   // fPleura: fracción de la presión de la vía aérea que llega al espacio pleural. En 19 pacientes con insuficiencia
   // respiratoria aguda, el 37 % con pulmones distensibles, el 32 % y el 24 % con los más rígidos (presión esofágica; Jardin
   // 1985, Chest 88:653, PMID 3902386); junto al corazón llega algo más que al esófago (O'Quin 1985, en perros; J Appl Physiol 59:1171,
@@ -356,7 +359,7 @@ export function crearMotor(ajustes = {}) {
     const pviLibre = presionCamara(p.vi, s.vvi, s.eVi, 0, ef.eesVi) * (1 - p.kEyec * Math.max(0, s.qAo));
     const pvdLibre = presionCamara(p.vd, s.vvd, eVd, 0, ef.eesVd) * (1 - p.kEyecVd * Math.max(0, s.qPul));
     // tabique: cada ventrículo "siente" una fracción de la presión del otro
-    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw;   // vía aérea y pleura (mmHg)
+    const pAw = p.pTorax * CMH2O_MMHG, pT = p.fPleura * pAw + p.pPleura * CMH2O_MMHG;   // vía aérea y pleura (mmHg); pPleura entra directa
     s.pTorax = pT;
     s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi + pT;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi + pT;
