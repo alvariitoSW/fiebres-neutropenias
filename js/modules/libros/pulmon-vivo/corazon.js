@@ -77,6 +77,7 @@ function pintar(tipo, x, nombre, pl = 0) {
   sec.dataset.presion = String(x);   // la prueba espera a que el panel llegue a esta presión
   for (const [k, f] of [['vs', f0], ['gc', f1], ['pam', f0]]) {
     const c = celdas[k], d = b[k] / a[k] - 1;
+    if (NX.parada()) { c.v.textContent = 'sin pulso'; c.sub.textContent = 'parada: actividad eléctrica sin pulso'; c.e.classList.remove('sube'); c.e.classList.add('baja'); continue; }
     c.v.textContent = f(b[k]);
     c.sub.textContent = x === 0 ? 'sin presión positiva' : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
     c.e.classList.toggle('sube', d > 0.005); c.e.classList.toggle('baja', d < -0.005);
@@ -106,7 +107,7 @@ function vigilar() {
     return;
   }
   if (tope10 && peep < T) { tope10 = false; q.tope.quitar('cpap-tope'); }
-  const x = Math.round(pm), pl = E.corazon.neumo ? Math.round(NX.ptx()) : 0, firma = clave + ':' + x + ':' + pl;
+  const x = Math.round(pm), pl = E.corazon.neumo ? Math.round(NX.ptx()) : 0, firma = clave + ':' + x + ':' + pl + (NX.parada() ? ':p' : '');
   if (firma === pedido) return;
   pedido = firma;
   const hacer = () => { if (pedido !== firma) return; pintar(E.corazon.tipo, x, q.est.pac.nombre, pl); };

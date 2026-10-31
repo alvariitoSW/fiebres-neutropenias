@@ -34,6 +34,7 @@ const nx = { ptx: 0, desc: false, sitio: null, msg: '' };
 const el = {};
 
 export const ptx = () => (activo ? nx.ptx : 0);
+export function parada() { return activo && nx.ptx >= N.tope && !nx.desc; }
 export const spo2 = () => Math.round(N.spo2Base - N.spo2PorCmH2O * ptx());
 export const estaActivo = () => activo;
 let selloAct = null;
@@ -47,7 +48,7 @@ function aplicar() {
 function pintar() {
   if (!sec) return;
   const p = nx.ptx, baja = p > 0;
-  el.p.textContent = f1(p); el.s.textContent = f0(spo2()) + ' %';
+  el.p.textContent = f1(p); el.s.textContent = parada() ? 'sin lectura' : f0(spo2()) + ' %';
   el.pc.classList.toggle('baja', baja); el.sc.classList.toggle('baja', baja);
   el.pas.disabled = nx.desc || p >= N.tope;
   el.desc.disabled = !nx.sitio || nx.desc;
@@ -59,10 +60,10 @@ function sello() {
   ctx.raiz.toggleAttribute('data-neumo-sello', T);
   ctx.dockPanel.inert = T;   // solo queda la descompresión: los mandos del respirador no se tocan
   if (!T) { tope.quitar('neumo-tope'); if (selloAct) { selloAct = null; ctx.frase(); } return; }
-  const u = ultima(), pam = u ? f0(u.pam) : '—', gc = u ? f1(u.gc) : '—', vs = u ? f0(u.vs) : '—';
+  const u = ultima(), pam = u ? f0(u.pam) : '—', gc = u ? f1(u.gc) : '—', vs = u ? f0(u.vs) : '—';   // la parada no usa estas cifras
   const S = par
     ? { titulo: 'Parada: actividad eléctrica sin pulso',
-      texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura, la PAM es ${pam} mmHg, el gasto ${gc} L/min (el volumen sistólico ${vs} mL) y la SpO₂ ${f0(spo2())} %. Marino describe que el neumotórax a tensión acaba en shock obstructivo y paro por actividad eléctrica sin pulso. Solo queda la descompresión: elige el sitio y descomprime.`,
+      texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura no hay pulso: sin PAM ni gasto medibles, y la SpO₂ ya no se lee. Marino describe que el neumotórax a tensión acaba en shock obstructivo y paro por actividad eléctrica sin pulso. Solo queda la descompresión: elige el sitio y descomprime.`,
       origen: 'ficha · shock obstructivo y paro por actividad eléctrica sin pulso: cap. 28 p. 28 · las cifras: modelo ilustrativo' }
     : { titulo: 'Neumotórax a tensión: shock obstructivo',
       texto: `Con ${f1(nx.ptx)} cmH₂O de aire a presión en la pleura, la PAM cae a ${pam} mmHg, el gasto a ${gc} L/min (el volumen sistólico ${vs} mL) y la SpO₂ a ${f0(spo2())} %. El respirador no arregla esto: solo la descompresión. Elige el sitio y descomprime antes de que llegue a la parada.`,
@@ -95,7 +96,7 @@ export function montarNeumotorax(c) {
       <div class="nx-c" data-fila="neumo-p"><span class="t">Presión del neumotórax</span><span class="v">0</span> <span class="t">cmH₂O · ilustrativo</span></div>
       <div class="nx-c" data-fila="neumo-spo2"><span class="t">SpO₂</span><span class="v">98 %</span> <span class="t">ilustrativo</span></div>
     </div>
-    <button type="button" data-nx="pasar">Dejar pasar 5 respiraciones</button>
+    <button type="button" data-nx="pasar">Dejar pasar 2 respiraciones</button>
     <div id="pul-neumo-sitios" style="display:grid; gap:4px" role="group" aria-label="Sitio de la descompresión">
       ${Object.values(N.sitios).map((s) => `<button type="button" data-nx="sitio" data-sitio="${s.k}" aria-pressed="false">${s.et}</button>`).join('')}
     </div>
@@ -114,7 +115,7 @@ export function montarNeumotorax(c) {
   sec.addEventListener('click', (ev) => {
     const b = ev.target.closest('button[data-nx]'); if (!b || b.disabled) return;
     const a = b.dataset.nx;
-    if (a === 'pasar') { for (let i = 0; i < 5; i++) ciclo(); ctx.llenar(); }
+    if (a === 'pasar') { for (let i = 0; i < 2; i++) ciclo(); ctx.llenar(); }
     else if (a === 'sitio') { nx.sitio = b.dataset.sitio; nx.msg = ''; }
     else if (a === 'desc') {
       const s = N.sitios[nx.sitio]; if (!s) return;
