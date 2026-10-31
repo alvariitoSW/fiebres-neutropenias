@@ -4,5 +4,8 @@
 // Ojo con el ciclo de importación: aquí nada de corazon-geo.mjs se usa a nivel superior, solo dentro de funciones.
 import { construirCorazonHoy, baseGeometricaHoy } from './corazon-geo.mjs';
 
-export function construirCorazon2(estado, opciones = {}) { return construirCorazonHoy(estado, opciones); }
-export function baseGeometrica2(estado) { return baseGeometricaHoy(estado); }
+// Ajustes del dibujo nuevo sobre la geometría de hoy (cada uno, comentado con su fuente en baseGeometricaHoy):
+// P4a-1 · paredVdNormal: la pared libre del VD con el grosor de paredVdDe medido perpendicular a ella (Lang 2015 Tabla 8 p. 20).
+const AJUSTES = { paredVdNormal: true };
+export function construirCorazon2(estado, opciones = {}) { return construirCorazonHoy(estado, { ...opciones, ajustes: { ...AJUSTES, ...opciones.ajustes } }); }
+export function baseGeometrica2(estado) { return baseGeometricaHoy(estado, AJUSTES); }

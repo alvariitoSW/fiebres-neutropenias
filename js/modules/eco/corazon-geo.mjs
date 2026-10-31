@@ -216,7 +216,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const NR = Math.max(20, Math.round(40 * q));          // puntos por anillo (válvulas, aurículas, vasos)
   const phi0 = corte ? corte.phi : 0, span = corte ? Math.PI : TAU;
   const dentroCorte = (phi) => !corte || (corte.nx * Math.cos(phi) + corte.ny * Math.sin(phi) >= -1e-9);
-  const geo = baseGeometricaHoy(estado);
+  const geo = baseGeometricaHoy(estado, opciones.ajustes);
   const { vi, rEndoVi, rEpiVi, endoVi, epiVi, Lvd, A, ventana, Wb, wRV, tvdW, endoVd, epiVd,
     anilloMitral, mc, aM, bM, U, anilloAortico, ac, rA, anilloTricus, ct, rT, anilloRVOT, cR, aR, bR, phiR, ReB, rimRV } = geo;
 
@@ -954,7 +954,8 @@ export function construirCorazonHoy(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-export function baseGeometricaHoy(estado) {
+// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal } — sin ajustes, el dibujo de hoy idéntico.
+export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
   const mio = estado.mioVi ?? 1, septo = clamp(estado.septo ?? 0, 0, 1);
@@ -1027,8 +1028,19 @@ export function baseGeometricaHoy(estado) {
   const wRV0 = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
   const wRV = pliVd > 0 ? (z, f) => wRV0(z, f) * fVd(z, f) : wRV0;
   const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f) + tvdW(wRV0(z, f)); return [r * Math.cos(f), r * Math.sin(f), z]; };
-  const epiVdSinPliegue = pliVd > 0 ? (z, f) => { const w = wRV0(z, f); const r = rEpiVi(z, f) + w + tvdW(w); return [r * Math.cos(f), r * Math.sin(f), z]; } : epiVd;
+  // ajustes.paredVdNormal (dibujo nuevo, P4a-1): el grosor tVd se pone en la dirección del radio desde el eje del VI, y
+  // donde la pared libre va oblicua a ese radio (el VD dilatado que se abomba) el grosor perpendicular, el que mide la eco,
+  // queda corto (HP crónica g=1: 6,4 mm por 8,2). Con el ajuste, el radio se alarga por 1/cos del ángulo entre el radio y
+  // la normal de la superficie endocárdica sin pliegue: grosor perpendicular = paredVdDe (Lang 2015 Tabla 8 p. 20, pared
+  // libre del VD medida perpendicular a ella). Tope del factor 2 (ilustrativo: evita picos en los bordes de la ventana).
+  const oblicua = ajustes.paredVdNormal ? (z, f) => {
+    const h = 0.5, dfh = 0.01, rE = (zz, ff) => rEpiVi(zz, ff) + wRV0(zz, ff), r0 = rE(z, f);
+    const gz = (rE(z + h, f) - rE(z - h, f)) / (2 * h), gf = (rE(z, f + dfh) - rE(z, f - dfh)) / (2 * dfh * Math.max(r0, 1));
+    const k = Math.sqrt(1 + gz * gz + gf * gf);
+    return Number.isFinite(k) ? Math.min(2, k) : 1;   // fuera del dominio (bordes de z): sin ajuste
+  } : () => 1;
+  const epiVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f) + tvdW(wRV0(z, f)) * oblicua(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
+  const epiVdSinPliegue = pliVd > 0 ? (z, f) => { const w = wRV0(z, f); const r = rEpiVi(z, f) + w + tvdW(w) * oblicua(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; } : epiVd;
   const rimRV = (f) => { const w = Wb(f); return ReB + w + tvdW(w); };
   // anillo tricúspide y orificio de salida (infundíbulo) dentro de la media luna
   const phiT = 3.23, rT = anil.rT, dT = ReB + 2 + rT, ct = [dT * Math.cos(phiT), dT * Math.sin(phiT)];
