@@ -14,15 +14,23 @@ test('e′ del motor · normal: septal 9-10,5 y lateral 11-13 cm/s', () => {
   assert.ok(Math.abs(p.sep / p.lat - 0.8) < 1e-9, 'el septal conserva el 0,8 del lateral (SEPTAL del atlas)');
 });
 
-test('e′ del motor · fallo VI: septal 3-4 cm/s con el defecto y al 100 %, con E ≥70 y E/e′ >14 al 100 % (Nagueh 2025, p. 557 y p. 561 / PDF 21 y 25)', async () => {
-  // P6: al 100 % el llenado es restrictivo (PCP 33): E alta, E/e′ medio >14 (Tabla 7, p. 557) y e′ 3-4 cm/s (p. 561).
-  const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
+test('e′ del motor · fallo VI: septal 3-4 cm/s con el defecto, ≥2 al 100 %; E/e′ >14; el VI sigue dilatado y mayor que el VD', async () => {
+  // P6b: al 100 % el llenado es restrictivo (PCP ~34): E/e′ medio >14 (Tabla 7, p. 557). Con FEVI ~11 % el motor da e′ septal ~2,2 y E ~50 cm/s,
+  // por debajo de los 3-4 cm/s (p. 561) y de E 70 de P6: ese P6 subía la rigidez del VI, lo achicaba (VTD 96 mL) y dilataba el VD (196 mL):
+  // un patrón de fallo derecho. Un shock cardiogénico izquierdo manda: VTD del VI ≥ el del defecto y VD/VI en volumen <1.
+  const { ESCENARIOS } = await import('../escenarios.mjs');
+  const hDef = medirForma('fallo', 'def');
   for (const g of ['def', 1]) {
-    const m = crearMotor(); m.correr(12); if (g === 'def') ESCENARIOS.fallo.aplicar(m); else ESCENARIOS.fallo.aplicar(m, g); m.correr(ESCENARIOS.fallo.forma ? ASENTAR_FORMA : 40);
+    const m = crearMotor(); m.correr(12); if (g === 'def') ESCENARIOS.fallo.aplicar(m); else ESCENARIOS.fallo.aplicar(m, g); m.correr(40);
     const p = m.ultimo.ePrima, h = medirForma('fallo', g);
-    assert.ok(p.sep >= 3 && p.sep <= 4, `fallo ${g}: septal ${p.sep.toFixed(2)}`);
+    assert.ok(p.sep >= (g === 1 ? 2 : 3) && p.sep <= 4, `fallo ${g}: septal ${p.sep.toFixed(2)}`);
     assert.ok(h.eE > 14, `fallo ${g}: E/e′ ${h.eE.toFixed(1)}`);
-    if (g === 1) { assert.ok(h.E >= 70, `fallo 100 %: E ${h.E.toFixed(0)} cm/s`); assert.ok(m.ultimo.pam >= 50 && m.ultimo.pam <= 65 && m.ultimo.gc <= 2.6 && m.ultimo.pcp > 18, 'PAM 50-65, GC ≤2,6, PCP >18'); }
+    if (g === 1) {
+      assert.ok(h.E >= 45, `fallo 100 %: E ${h.E.toFixed(0)} cm/s`);
+      assert.ok(m.ultimo.pam >= 50 && m.ultimo.pam <= 65 && m.ultimo.gc <= 2.7 && m.ultimo.pcp > 18, 'PAM 50-65, GC ≤2,7, PCP >18');
+      assert.ok(h.viTd >= hDef.viTd, `VTD del VI al 100 % (${h.viTd.toFixed(0)}) ≥ el del defecto (${hDef.viTd.toFixed(0)})`);
+      assert.ok(h.vdTd / h.viTd < 1, `VD/VI en volumen ${(h.vdTd / h.viTd).toFixed(2)} <1`);
+    }
   }
 });
 

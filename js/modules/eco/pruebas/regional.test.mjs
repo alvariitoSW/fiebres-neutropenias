@@ -25,6 +25,6 @@ test('McConnell: TEP defecto, 0,5 y 1: pared libre basal+media < 0,5 × ápex de
 test('HP crónica: sin McConnell (ápex VD no > 1,5 × pared libre)', () => {
   const r = reg('hpcronica'); assert.ok(r[19] <= 1.5 * (r[17] + r[18]) / 2, String(r.slice(17)));
 });
-// Umbral 0,3 → 0,35: desde 6688f67 el fallo al 100 % tiene FEVI ≈19 % (antes 11 %) y la media regional sale 0,32; sigue lejos del normal (≥ 0,9)
-test('fallo 1: VI global bajo', () => assert.ok(media(reg('fallo', 1).slice(0, 17)) < 0.35));
+// Umbral 0,3 (P6b: el fallo al 100 % vuelve a FEVI ≈11 %)
+test('fallo 1: VI global bajo', () => assert.ok(media(reg('fallo', 1).slice(0, 17)) < 0.3));
 test('tabla (informativa)', () => { for (const [k, g] of casos) { const r = reg(k, g); console.log(k, g ?? 'def', 'VI', media(r.slice(0, 17)).toFixed(2), 'VD', r.slice(17).map(x => x.toFixed(2)).join(' ')); } });
