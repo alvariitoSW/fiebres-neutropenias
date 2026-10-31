@@ -639,7 +639,8 @@ export function construirCorazonHoy(estado, opciones = {}) {
       return [W[0] * (rW - dep) / rW, W[1] * (rW - dep) / rW, z]; });
     const largoPap = (pts) => pts.slice(1).reduce((t, q, i) => t + Math.hypot(q[0] - pts[i][0], q[1] - pts[i][1], q[2] - pts[i][2]), 0);
     for (const [phP0, nombre] of [[0.55, 'anterolateral'], [3.95, 'posteromedial']]) {
-      const phP = opciones.ajustes?.papilaresLibres && phP0 > 3 ? Math.max(phP0, Math.min(5, PHI_SEPTO + alfaZ(-vi.L * 0.45) + 0.55)) : phP0;   // fuera del arco plano
+      // fuera del arco plano, los dos a ≥ 0,55 rad (~31°) de sus uniones con el círculo: dos bultos separados en la pared libre, no en las puntas de la «D»
+      const aPap = alfaZ(-vi.L * 0.45), sep = 0.5 * clamp(aPap, 0, 1), phP = opciones.ajustes?.papilaresLibres ? (phP0 > 3 ? Math.max(phP0 + sep, Math.min(5.3, PHI_SEPTO + aPap + 0.55)) : Math.min(phP0 - sep, PHI_SEPTO - aPap - 0.55)) : phP0;   // sep: con el tabique plano, se abren hacia la pared libre
       const zB = -vi.L * 0.6, zT = -vi.L * 0.28, zBd = -viTd.L * 0.6, zTd = -viTd.L * 0.28;
       const paredTd = (z) => { const r = perfil(z, viTd.Rb, viTd.Rm, viTd.L); return [r * Math.cos(phP), r * Math.sin(phP), z]; };
       const p0 = trazarPap((z) => endoVi(z, phP), zB, zT, lp, R0);
