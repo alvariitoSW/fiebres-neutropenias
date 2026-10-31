@@ -4999,6 +4999,12 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .radio-lee-extra { border-style: dashed; }
 .radio-lee-rot { font-size: 0.72rem; max-width: 46%; }
 .radio-tapa { position: absolute; background: var(--bg-main); pointer-events: none; }
+.radio-zona { margin: 0; pointer-events: none; }
+.radio-zona-circ { translate: -50% -50%; }
+.radio-zona-rect { border-radius: 4px; }
+.radio-lee-cita { display: block; font-size: 0.66rem; font-weight: 400; color: var(--text-muted); }
+.radio-op-ok { border-color: var(--accent-green); }
+.radio-op-error { border-color: var(--accent-red); border-style: dashed; }
 /* Estudiar: repaso de días atrás, «Vuelve en…» e ideas firmes */
 .may-contador { font-weight: 700; font-size: .76rem; color: var(--accent-yellow); }
 .may-chip { margin: 0; font-size: .78rem; font-weight: 600; color: var(--text-main); border: 1px solid var(--border-color); border-radius: 8px; padding: 4px 8px; width: fit-content; max-width: 100%; }
