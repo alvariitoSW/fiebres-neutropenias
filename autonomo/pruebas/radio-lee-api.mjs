@@ -34,9 +34,30 @@ for (const w of [390, 360]) {
   if (dt.rot !== 0 || dt.marcos !== 2 || dt.lista !== 2 || !dt.listaVisible) fallos.push(`${w} Destapar todo: marcos numerados y lista, sin rótulos sobre la imagen ${JSON.stringify(dt)}`);
   await p.touchscreen.tap(bb.x + bb.width * .5, bb.y + bb.height * .25);
   if (await p.evaluate(() => document.getElementById('rl-prueba-z-zt-a').hidden)) fallos.push(`${w} tras Destapar todo, tocar una zona no saca su rótulo`);
-  await p.locator('#rl-prueba-z-ops button').nth(1).tap(); await p.waitForTimeout(100);
-  const e = await p.evaluate(() => ({ ok: document.getElementById('rl-prueba-z-res').dataset.ok, n: document.querySelectorAll('#rl-prueba-z-res li').length, dw: document.documentElement.scrollWidth - innerWidth }));
+  // error con 1 fallo: marcar la falsa y corregir; con la 'Todas son correctas' se falla
+  await p.locator('#rl-prueba-z-eops button').nth(1).tap(); await p.locator('#rl-prueba-z-corregir').tap(); await p.waitForTimeout(100);
+  const e = await p.evaluate(() => ({ ok: document.getElementById('rl-prueba-z-res').dataset.ok, n: document.querySelectorAll('#rl-prueba-z-errres li').length, dw: document.documentElement.scrollWidth - innerWidth }));
   if (e.ok !== 'true' || e.n !== 3 || e.dw > 0) fallos.push(`${w} error: ${JSON.stringify(e)}`);
+  // pregunta + error (tubo y vía): las opciones de lectura llaman a listo(); el error sale tras «Comprobar» y puede haber 0 errores
+  const q = await p.evaluate(async () => {
+    const { montarLectura } = await import('./js/modules/pif-radio/radio-lee.js');
+    const h = document.createElement('div'); document.body.appendChild(h);
+    document.getElementById('rl-prueba-z')?.remove();
+    const o = (t, e) => ({ texto: t, esError: e, explicacion: 'x' });
+    montarLectura(h, { id: 'prueba-q', img: 'js/modules/neumologia/img/neumo-fig28-1-radiografia-tubo-et.jpg', alt: 'x', pie: 'pie', fuente: { texto: 'M', pdf: 'docs/x.pdf', pagina: 3 },
+      pregunta: { enunciado: 'Lectura', elecciones: ['a', 'b'], correcta: 0, explicacion: 'ex' }, error: { enunciado: 'e', opciones: [o('L1', false), o('L2', false)] } });
+    return true;
+  });
+  const comp = p.locator('#rl-prueba-q-comprobar'); await comp.scrollIntoViewIfNeeded();
+  if (!(await comp.isDisabled())) fallos.push(`${w} Comprobar activo antes de elegir`);
+  await p.locator('#rl-prueba-q-ops button').nth(0).tap();
+  if (await comp.isDisabled()) fallos.push(`${w} pregunta+error: elegir lectura no activa Comprobar`);
+  if (await p.locator('#rl-prueba-q-eops').count()) fallos.push(`${w} el error sale antes de Comprobar`);
+  await comp.tap(); await p.waitForTimeout(100);
+  if (!(await p.locator('#rl-prueba-q-eops button').count())) fallos.push(`${w} el error no sale tras Comprobar`);
+  await p.locator('#rl-prueba-q-eops button').nth(2).tap(); await p.locator('#rl-prueba-q-corregir').tap(); await p.waitForTimeout(100);
+  const z = await p.evaluate(() => ({ ok: document.getElementById('rl-prueba-q-errres')?.dataset.ok, dw: document.documentElement.scrollWidth - innerWidth }));
+  if (z.ok !== 'true' || z.dw > 0) fallos.push(`${w} 0 errores con «Todas son correctas»: ${JSON.stringify(z)}`);
 }
 await b.close();
 if (fallos.length) { console.log('❌ radio-lee-api\n' + fallos.join('\n')); process.exit(1); } else console.log('✅ radio-lee-api: zonas, dianas, error y validaciones');

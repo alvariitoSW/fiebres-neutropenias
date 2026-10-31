@@ -114,7 +114,7 @@ export const EJERCICIOS_PLACA_DISP = [
             opciones: [
                 { texto: 'El tubo está en el bronquio principal derecho.', esError: false, explicacion: 'Cierto: es lo que dice el pie de la figura 28.2 (Marino, pág. 19).' },
                 { texto: 'El pulmón izquierdo no se ventila y tiene atelectasia.', esError: false, explicacion: 'Cierto: el pie de la figura 28.2 lo da así (pág. 19).' },
-                { texto: 'El tubo ha subido: la punta está por encima de la carina, en la tráquea alta.', esError: true, explicacion: 'Falso: el pie habla de intubación del bronquio principal derecho. Cuando los tubos se mueven hacia los pulmones, a menudo terminan en el bronquio derecho, que sigue un curso más recto desde la tráquea (págs. 18-19).' },
+                { texto: 'Los tubos que avanzan suelen acabar en el bronquio principal derecho, de curso más recto desde la tráquea.', esError: false, explicacion: 'Cierto: es la explicación de Marino de esta migración (págs. 18-19).' },
                 { texto: 'Mantener la punta a no más de 21 cm de los dientes en la mujer y 23 cm en el hombre reduce el riesgo de migración.', esError: false, explicacion: 'Cierto (Marino, pág. 19).' },
             ],
         },
@@ -255,6 +255,7 @@ export const EJERCICIOS_PLACA_ABD = [
                 { texto: 'El páncreas está aumentado de tamaño y realza por completo con el contraste.', esError: false, explicacion: 'Cierto (Marino, pág. 19).' },
                 { texto: 'El borde pancreático borroso es característico del edema.', esError: false, explicacion: 'Cierto (pág. 19).' },
                 { texto: 'Un páncreas que realza entero con contraste indica pancreatitis necrotizante.', esError: true, explicacion: 'Falso: la necrosis es un área sin realce con el contraste; un páncreas que realza por completo es el patrón edematoso (pág. 19).' },
+                { texto: 'La necrosis pancreática se ve como un área que realza más que el resto de la glándula.', esError: true, explicacion: 'Falso: la necrosis es un área sin realce con el contraste (pág. 19).' },
                 { texto: 'Sin contraste intravenoso la TC distingue peor la forma edematosa de la necrotizante; la resonancia es una alternativa.', esError: false, explicacion: 'Cierto (pág. 19).' },
             ],
         },

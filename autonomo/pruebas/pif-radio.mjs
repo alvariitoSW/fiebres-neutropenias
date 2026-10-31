@@ -74,6 +74,7 @@ for (const w of [390, 360]) {
       const r = await p.evaluate(i => { const e = document.getElementById(`rl-${i}-res`); return { cerca: e.dataset.cerca, pag: !!e.querySelector('a[href*="#page="]'), btn: !!e.querySelector('button[data-tab]'), dw: document.documentElement.scrollWidth - innerWidth }; }, id);
       if (r.cerca !== esperado || !r.pag || !r.btn || r.dw > 0) fallos.push(`${w} f6 ${id} lejos=${lejos}: ${JSON.stringify(r)}`);
       if (!/bien colocado/i.test(await pieA())) fallos.push(`${w} f6 ${id}: el pie no dice bien colocado tras comprobar`);
+      await p.locator(`#rl-${id}-eops button`).first().tap(); await p.locator(`#rl-${id}-corregir`).tap();
       await p.locator(`#rl-${id}-repetir`).tap();
     }
   }
@@ -84,6 +85,7 @@ for (const w of [390, 360]) {
     await p.locator(`#rl-${id}-ops button`).first().tap(); await p.locator(`#rl-${id}-comprobar`).tap(); await p.waitForTimeout(150);
     const c = await p.evaluate(i => document.getElementById(`rl-${i}-res`).dataset.carina, id);
     if (c !== 'true') fallos.push(`${w} f6 ${id}: toque en la carina sin mensaje de carina`);
+    await p.locator(`#rl-${id}-eops button`).first().tap(); await p.locator(`#rl-${id}-corregir`).tap();
     await p.locator(`#rl-${id}-repetir`).tap();
   }
   {   // vía: sin toque (el punto no salía de la fuente); elegir activa Comprobar y da la página
@@ -95,6 +97,7 @@ for (const w of [390, 360]) {
     await p.locator('#rl-via-comprobar').tap(); await p.waitForTimeout(150);
     const r = await p.evaluate(() => { const e = document.getElementById('rl-via-res'); return { ok: e.dataset.ok, pag: !!e.querySelector('a[href*="#page="]'), btn: !!e.querySelector('button[data-tab]'), cred: !!document.querySelector('#rl-via-credito a[href*="#page="]'), dw: document.documentElement.scrollWidth - innerWidth }; });
     if (r.ok !== 'true' || !r.pag || !r.btn || !r.cred || r.dw > 0) fallos.push(`${w} f6 via: ${JSON.stringify(r)}`);
+    await p.locator('#rl-via-eops button').first().tap(); await p.locator('#rl-via-corregir').tap();
     await p.locator('#rl-via-repetir').tap();
   }
   if (CAP) await p.screenshot({ path: `${CAP}${w}-radio-f6.png` });

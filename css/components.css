@@ -4998,6 +4998,7 @@ body.study-mode-on .rtv-dock { padding-right: 82px; }
 .radio-toque { position: absolute; width: 28px; height: 28px; margin: -14px 0 0 -14px; border-radius: 50%; border: 2px solid var(--accent-purple); box-shadow: 0 0 0 1.5px var(--bg-main); box-sizing: border-box; pointer-events: none; }
 .radio-lee-extra { border-style: dashed; }
 .radio-lee-rot { font-size: 0.72rem; max-width: 46%; }
+.radio-lee-scroll { overflow-x: auto; max-width: 100%; }
 .radio-tapa { position: absolute; background: var(--bg-main); pointer-events: none; }
 .radio-zona { margin: 0; pointer-events: none; }
 .radio-zona-circ { translate: -50% -50%; }

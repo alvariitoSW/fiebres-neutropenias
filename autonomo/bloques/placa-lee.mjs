@@ -16,9 +16,9 @@ for (const w of [390, 360]) {
       const zonas = await p.locator(`#rl-${id} [id^="rl-${id}-zt-"]`).count();
       const bb = await img.boundingBox();
       if (zonas && await p.locator(`#rl-${id}-destapar`).count()) { await p.locator(`#rl-${id}-destapar`).tap(); await p.waitForTimeout(100); }
-      const ops = p.locator(`#rl-${id}-ops button`); const n = await ops.count();
+      const ops = p.locator(`#rl-${id}-eops button, #rl-${id}-ops button`); const n = await ops.count();
       if (id !== 'tubo' && id !== 'via' && n < 3) fallos.push(`${w} ${id}: ${n} opciones`);
-      if (n) { await ops.nth(0).tap(); await p.waitForTimeout(150); }
+      if (n) { await ops.nth(0).tap(); const cg = p.locator(`#rl-${id}-corregir`); if (await cg.count()) await cg.tap(); await p.waitForTimeout(150); }
       const des = await p.evaluate(() => document.documentElement.scrollWidth > innerWidth);
       if (des) fallos.push(`${w} ${id} desborde`);
       if (w === 390 && ['intub-sel','sonda-ok','pancr-necrosis','absceso'].includes(id)) await p.locator(`#rl-${id}`).screenshot({ path: `${OUT}/${id}-${w}.png` });

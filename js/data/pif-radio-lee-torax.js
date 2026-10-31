@@ -13,7 +13,7 @@ const ALT = 'Imagen real de tórax';
 // ---- Pestaña «Neumotórax y derrame» (radio-t1)
 const T1 = [
     {
-        id: 'tx-neumo-tc',
+        id: 'tx-neumo-tc', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-cuidado-barotrauma', rot: 'Barotrauma (Merino Neumología)' },
         titulo: 'Neumotórax que la placa no ve',
         consigna: 'Arriba, la placa portátil; abajo, la TC del mismo paciente. Toca una zona para destapar su rótulo.',
         img: NEU + 'neumo-fig28-5-radiografia-tc-neumotorax.jpg', alt: ALT + ': placa portátil y TC con neumotórax anterior',
@@ -35,7 +35,7 @@ const T1 = [
         },
     },
     {
-        id: 'tx-tension',
+        id: 'tx-tension', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-cuidado-barotrauma', rot: 'Barotrauma (Merino Neumología)' },
         titulo: 'Neumotórax a tensión',
         consigna: 'Toca cada zona de la placa para destapar lo que nombra el pie de la figura.',
         img: NEU + 'neumo-fig28-7-radiografia-neumotorax-tension.jpg', alt: ALT + ': neumotórax a tensión izquierdo',
@@ -51,7 +51,7 @@ const T1 = [
             enunciado: 'Una de estas lecturas es un error. ¿Cuál?',
             opciones: [
                 { texto: 'Falta la trama pulmonar en el hemitórax izquierdo.', esError: false, explicacion: 'Es el primer signo que da el pie (pág. 29).' },
-                { texto: 'El mediastino se desplaza hacia el lado del neumotórax.', esError: true, explicacion: 'El pie dice lo contrario: el desplazamiento del mediastino es hacia el lado contrario (pág. 29).' },
+                { texto: 'El mediastino se desplaza hacia el lado contrario al neumotórax.', esError: false, explicacion: 'Lo dice el pie de la figura (pág. 29).' },
                 { texto: 'El hemidiafragma izquierdo está deprimido.', esError: false, explicacion: 'Lo dice el pie de la figura (pág. 29).' },
             ],
         },
@@ -61,7 +61,7 @@ const T1 = [
 // ---- Pestaña «Patrones y edema» (radio-t2)
 const T2 = [
     {
-        id: 'tx-sdra-rx',
+        id: 'tx-sdra-rx', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-sdra-diagnostico', rot: 'Diagnóstico del SDRA (Merino Neumología)' },
         titulo: 'SDRA en la placa',
         consigna: 'Dos placas del mismo síndrome. Toca cada zona para destapar su rótulo.',
         img: NEU + 'neumo-fig24-2-radiografia-sdra.jpg', alt: ALT + ': dos radiografías de SDRA',
@@ -79,12 +79,13 @@ const T2 = [
             opciones: [
                 { texto: 'Panel superior: infiltrados finamente granulares, uniformes en ambos pulmones.', esError: false, explicacion: 'Es el aspecto clásico que describe el pie (pág. 38).' },
                 { texto: 'Panel inferior: infiltrados bilaterales limitados a los campos inferiores.', esError: false, explicacion: 'Lo dice el pie para el caso por sepsis gramnegativa (pág. 38).' },
+                { texto: 'Panel superior: los infiltrados son asimétricos y de predominio unilateral.', esError: true, explicacion: 'El pie los describe uniformes en ambos pulmones (pág. 38).' },
                 { texto: 'Panel inferior: el borramiento del hemidiafragma derecho sugiere un derrame pleural.', esError: true, explicacion: 'El pie habla del hemidiafragma izquierdo, no del derecho (pág. 38).' },
             ],
         },
     },
     {
-        id: 'tx-trali',
+        id: 'tx-trali', ver: { esp: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-riesgos', res: '#mh-fig-12-5', rot: 'Riesgos transfusionales (Merino HEMATO)' },
         titulo: 'Infiltrado homogéneo',
         consigna: 'Placa portátil de un paciente tras una transfusión. Toca la zona para destapar su rótulo.',
         img: 'js/modules/merino-hemato/img/fig1-cxr-trali.jpg', alt: ALT + ': placa portátil con infiltrados bilaterales',
@@ -102,7 +103,7 @@ const T2 = [
         },
     },
     {
-        id: 'tx-edema',
+        id: 'tx-edema', ver: { esp: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab: 'mc-ic-tipos', res: '#mc-fig-18-4', rot: 'Tipos de IC (Merino Cardiología)' },
         titulo: 'Edema cardiogénico',
         consigna: 'Placa portátil de un paciente con insuficiencia cardíaca aguda. Toca la zona para destapar su rótulo.',
         img: 'js/modules/cardiologia/img/mc-fig18-4-edema-pulmonar.jpg', alt: ALT + ': edema pulmonar cardiogénico',
@@ -120,7 +121,7 @@ const T2 = [
         },
     },
     {
-        id: 'tx-posicion',
+        id: 'tx-posicion', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-nav-diagnostico', rot: 'Diagnóstico en ventilación (Merino Neumología)' },
         titulo: 'Posición y volumen',
         consigna: 'Dos placas del mismo paciente, con minutos de diferencia. Toca cada zona para destapar su rótulo.',
         img: NEU + 'neumo-fig29-3-radiografias-posicion.jpg', alt: ALT + ': dos placas, supina en espiración y de pie en inspiración',
@@ -146,7 +147,7 @@ const T2 = [
 // ---- Pestaña «Introducción a la TC» (radio-t3)
 const T3 = [
     {
-        id: 'tx-sdra-tc',
+        id: 'tx-sdra-tc', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-sdra-diagnostico', rot: 'Diagnóstico del SDRA (Merino Neumología)' },
         titulo: 'SDRA en la TC',
         consigna: 'Dos cortes de TC en fases distintas del SDRA. Toca cada zona para destapar su rótulo.',
         img: NEU + 'neumo-fig24-3-tc-sdra.jpg', alt: ALT + ': dos cortes de TC de SDRA',
@@ -169,7 +170,7 @@ const T3 = [
         },
     },
     {
-        id: 'tx-tep',
+        id: 'tx-tep', ver: { esp: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs', tab: 'neumo-ep-diagnostico', res: '#nep-fig-22-1', rot: 'Embolia pulmonar: diagnóstico (Merino Neumología)' },
         titulo: 'Embolia pulmonar en la angio-TC',
         consigna: 'Angio-TC de tórax. Toca cada zona para destapar su rótulo.',
         img: NEU + 'neumo-fig22-1-tc-embolia-pulmonar.jpg', alt: ALT + ': angio-TC con defecto de relleno en la arteria pulmonar izquierda',
@@ -185,14 +186,14 @@ const T3 = [
         error: {
             enunciado: 'Una de estas lecturas es un error. ¿Cuál?',
             opciones: [
-                { texto: 'El defecto de relleno está en la arteria pulmonar principal derecha.', esError: true, explicacion: 'El pie lo sitúa en la arteria pulmonar principal izquierda (pág. 5).' },
+                { texto: 'El defecto de relleno está en la arteria pulmonar principal izquierda.', esError: false, explicacion: 'Es lo que dice el pie de la figura (pág. 5).' },
                 { texto: 'El émbolo aparece como un defecto de relleno dentro de la arteria.', esError: false, explicacion: 'Es la descripción del pie (pág. 5).' },
                 { texto: 'La imagen es una angio-TC pulmonar, retocada digitalmente según el pie.', esError: false, explicacion: 'El pie lo indica así (pág. 5).' },
             ],
         },
     },
     {
-        id: 'tx-diseccion',
+        id: 'tx-diseccion', ver: { esp: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab: 'mc-diseccion-aortica', res: '#mc-fig-20-4', rot: 'Disección aórtica (Merino Cardiología)' },
         titulo: 'Disección de aorta ascendente',
         consigna: 'TC con contraste. Toca cada zona para destapar su rótulo.',
         img: 'js/modules/cardiologia/img/mc-fig20-4-tc-diseccion-aortica.jpg', alt: ALT + ': TC con contraste con disección de la aorta ascendente',
