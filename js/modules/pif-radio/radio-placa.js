@@ -3,7 +3,8 @@
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
 import { montarRotulos } from '../../core/figura-rotulos.js';
-import { initLee } from './radio-lee.js';
+import { initLee, montarLectura } from './radio-lee.js';
+import { EJERCICIOS_PLACA_DISP, EJERCICIOS_PLACA_ABD } from '../../data/pif-radio-lee.js';
 import { ROTULOS_PIF_RADIO } from '../../data/pif-radio-rotulos.js';
 
 const PDF = {
@@ -115,5 +116,8 @@ export function init() {
         preg.insertAdjacentHTML('afterbegin', '<span class="radio-craneo-aviso" style="display:block; margin-bottom:6px;"><em>Mira la figura: la sangre hiperdensa está rotulada.</em></span>');
     }, 0));
     initLee();
+    const hDisp = document.getElementById('radio-f6-ejercicios'), hAbd = document.getElementById('radio-f7-ejercicios');
+    if (hDisp) EJERCICIOS_PLACA_DISP.forEach(ej => montarLectura(hDisp, ej));
+    if (hAbd) EJERCICIOS_PLACA_ABD.forEach(ej => montarLectura(hAbd, ej));
     montarRotulos(document.getElementById('pif-radio-placa-view'), ROTULOS_PIF_RADIO);
 }
