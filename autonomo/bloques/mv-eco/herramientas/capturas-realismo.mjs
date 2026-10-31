@@ -14,13 +14,14 @@ await new Promise(r => srv.listen(0, '127.0.0.1', r));
 const base = `http://127.0.0.1:${srv.address().port}/js/modules/eco/laboratorio.html`;
 const nav = await pw.chromium.launch({ args: ['--use-gl=swiftshader', '--enable-unsafe-swiftshader'] });
 // clave, escenario, g (null = sin mando), vista, dibujo
-const LISTA = [
+const LISTA0 = [
   ['normal-a4c', 'normal', null, 'a4c', 2], ['normal-psax', 'normal', null, 'psaxPm', 2], ['normal-plax', 'normal', null, 'plax', 2],
   ['hp-a4c', 'hpcronica', 1, 'a4c', 2], ['hp-psax', 'hpcronica', 1, 'psaxPm', 2],
   ['tep-a4c', 'tep', 1, 'a4c', 2], ['tep-psax', 'tep', 1, 'psaxPm', 2],
   ['dilatada-a4c', 'dilatada', 1, 'a4c', 2], ['derrame-sc4c', 'derrame', 1, 'sc4c', 2], ['hipertrofia-plax', 'hipertrofia', 1, 'plax', 2],
   ['hp-a4c-dibujo-hoy', 'hpcronica', 1, 'a4c', 1],
 ];
+const SOLO = process.env.SOLO?.split(','); const LISTA = SOLO ? LISTA0.filter(x => SOLO.includes(x[0])) : LISTA0;
 let md = '# Cifras de la app en cada captura (telediástole = fase A, contracción auricular; g = mando de gravedad)\n\n';
 const errores = [];
 for (const [clave, esc, g, vista, dib] of LISTA) {

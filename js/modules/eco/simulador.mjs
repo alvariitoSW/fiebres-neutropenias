@@ -795,9 +795,18 @@ export function montarSimulador(raiz, opc = {}) {
     if ($('#cv-eco-rotulos').checked && geoEco.flujo) {
       const f = geoEco.flujo, T = (p) => f.transformar(p);
       const cerca = (pts) => pts.map(T).reduce((a, b) => (Math.abs(enPlano(P, b)[2]) < Math.abs(enPlano(P, a)[2]) ? b : a));
+      // dibujo nuevo: el rótulo va al centro de la cavidad cortada (centroide de las muestras que caen en el plano; si el centro
+      // queda fuera de la cavidad, p. ej. en la media luna del VD, la muestra de la cavidad más cercana a él)
+      const nuevo = geoEco.geometriaNueva === true || new URLSearchParams(location.search).get('dibujo') === '2';
+      const centro = (pts) => { const q = pts.map(T), dentro = q.filter(b => Math.abs(enPlano(P, b)[2]) < 4);
+        if (dentro.length < 3) return cerca(pts);
+        const m = [0, 1, 2].map(k => dentro.reduce((a, b) => a + b[k], 0) / dentro.length);
+        return dentro.reduce((a, b) => (Math.hypot(b[0] - m[0], b[1] - m[1], b[2] - m[2]) < Math.hypot(a[0] - m[0], a[1] - m[1], a[2] - m[2]) ? b : a)); };
+      const fino = Array.from({ length: 19 }, (_, i) => 0.05 + i * 0.05), finoV = Array.from({ length: 10 }, (_, i) => 0.05 + i * 0.1);
+      const sel = nuevo ? centro : cerca;
       const alto = [0.1, 0.25, 0.4, 0.55, 0.7, 0.85];
-      const marcas = [['VI', cerca(alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', cerca(alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
-        ['AI', cerca(alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', cerca(alto.map(u => f.enCamara.ad([u, 0, 0])))],
+      const marcas = [['VI', sel(nuevo ? fino.map(u => f.enCamara.vi([u, 0, 0])) : alto.map(u => f.enCamara.vi([u, 0, 0])))], ['VD', sel(nuevo ? fino.flatMap(u => finoV.map(fv => f.enCamara.vd([u, fv, 0.55]))) : alto.flatMap(u => [0.15, 0.4, 0.65, 0.9].map(fv => f.enCamara.vd([u, fv, 0.55]))))],
+        ['AI', sel(nuevo ? fino.map(u => f.enCamara.ai([u, 0, 0])) : alto.map(u => f.enCamara.ai([u, 0, 0])))], ['AD', sel(nuevo ? fino.map(u => f.enCamara.ad([u, 0, 0])) : alto.map(u => f.enCamara.ad([u, 0, 0])))],
         ['Ao', T([f.valvulas.aortica[0], f.valvulas.aortica[1], f.valvulas.aortica[2] + 14])],
         // fuera del corazón, solo en su ventana: la VCI bajo el diafragma (fija al cuerpo) en la subcostal; el arco
         // aórtico y la AP derecha bajo él en la supraesternal
