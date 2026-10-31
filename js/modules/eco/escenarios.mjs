@@ -1,4 +1,4 @@
-import { tapseDeLatido } from './corazon-geo.mjs';
+import { tapseDeLatido } from './anatomia.mjs';
 import { BASE, escalarRPul } from './motor.mjs';
 // Escenarios de prueba del motor. Los usan la página (botones «Pruebas del barorreflejo») y las pruebas
 // automáticas, que comprueban que cada uno reproduce el patrón de su tipo de shock en la fuente.
@@ -91,11 +91,12 @@ const hviRecorrido = (g) => { const x = Math.min(1, Math.max(0, g));
   // la rigidez de partida a ×1,64 (antes ×1,6) con 330 mL menos de volumen (antes 300): E sube, A sube más y la PCP queda bajo 15. El grado 2 (rigidez ×2,2, +300 mL) queda igual
   return { relajacion: 3.4 - 0.4 * x, b: 1.64 + 0.56 * x * x, vSangre: -330 + 630 * x * x }; };
 // Suelo de volumen en el shock (eco-calibra-a, sesión 2): un VD de 23 mL al final de la sístole o una aurícula de 6-9 mL no son de un
-// paciente real, ni en un shock a fondo (el dibujo exige aurículas ≥15 mL y VD ≥20 mL: LIMITES, corazon-geo.mjs; el VD no lleva suelo: un VD hipovolémico real conserva su FE, y el dibujo admite 20 mL). Se sube el volumen sin
+// paciente real, ni en un shock a fondo (el dibujo exige aurículas ≥15 mL y VD ≥20 mL: LIMITES de anatomia.mjs; el VD no lleva suelo: un VD hipovolémico real conserva su FE, y el dibujo admite 20 mL). Se sube el volumen sin
 // tensión (v0) de cada cámara lo que pide la gravedad; la presión depende de V−V0, así que la presión no cambia. Para que tampoco cambie
 // ninguna otra presión, el mismo volumen se resta al volumen sin tensión de las venas (vuVen: la sangre total no cambia) y se suma al del saco pericárdico (v0Peri). Subirlo en la base (el normal)
 // ensanchaba el VD normal a ~160 mL, con una luz de 47 mm en el SC4C, por encima de los 41 mm de dilatación (Lang 2015, p. 17: «un diámetro >41 mm en la base indica dilatación del VD»; VTD normal 3D 87 mL/m² en varones)
-// y hacía fallar seis pruebas del normal. Los mL, ilustrativos: lo que fija el suelo son los límites del dibujo
+// y hacía fallar seis pruebas del normal. Los mL, ilustrativos: lo que fija el suelo son los mínimos de volumen del corazón (VOL_MIN y LIMITES en anatomia.mjs, ilustrativos:
+// el volumen por debajo del cual la geometría del corazón no se define). El mínimo es del corazón, no del dibujo; la imagen solo lo lee.
 const suelo = (m, vd, ai, ad) => { m.p.vd.v0 += vd; m.p.ai.v0 += ai; m.p.ad.v0 += ad; const t = vd + ai + ad; m.p.v0Peri += t; m.p.vuVen -= t; };
 const SUELO_HEM = [0, 9, 8], SUELO_DER = [0, 10, 8], SUELO_TEP = [0, 6, 0], SUELO_VASO = [0, 5, 3];
 const sueloG = (m, dosis, g) => suelo(m, dosis[0] * g, dosis[1] * g, dosis[2] * g);

@@ -461,3 +461,13 @@ acorta el tiempo de aceleración pulmonar (<105 ms, ESC/ERS 2022) al perder dist
 contrato entrega el septo continuo (`septoSigno`, `septoFase`) y la contracción por segmentos (`regional`, con
 McConnell en el TEP; Marino cap. 22). El fallo del VI a fondo sigue siendo izquierdo (VI dilatado, retención). Techo
 del VD agudo y DT de la hipertrofia: huecos sin fuente. Parte: `autonomo/partes/2026-10-31-mv-eco-2b.md`.
+
+## mv-eco-2a5, paso 3: adaptadores, juez de geometría y libro POCUS (31/10/2026)
+La imagen deja de dar cifras al corazón: TAPSE, mínimos de volumen, paredes, masa y anillos valvulares viven en
+`js/modules/eco/anatomia.mjs` (lado del corazón; `corazon-geo` los reexporta) y el contrato los da con origen `motor`.
+El Doppler toma las áreas de anillo del corazón. Una instantánea congelada (`pruebas/instantanea-dibujo.test.mjs`)
+garantiza que el dibujo sigue idéntico. Juez nuevo `jueces --geometria` (fuera de la suite por defecto hasta el
+dibujo nuevo): 0 contornos cruzados; caza la «nave espacial» de la HP crónica por proporciones (pared libre del VD 1,8
+mm, LVEI 0,92, AD pequeña). El libro POCUS de `docs/` es una muestra sin física de ultrasonidos: da las reglas de los
+mandos (el origen del mando de imagen pasa a «ficha», POCUS I p. 41) y las sondas. Parte
+`autonomo/partes/2026-10-31-mv-eco-3.md`.

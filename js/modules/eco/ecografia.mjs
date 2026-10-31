@@ -16,6 +16,7 @@
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
 import { baseGeometrica, REF } from './corazon-geo.mjs';
+import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
 import { TEJIDOS, DB_IMAGEN } from '../../data/eco-tejidos.js';
@@ -178,7 +179,7 @@ export function medirVd(est) {
 export function medidasCorazon(est, sc = 1.85) {   // est.vaiMax / eroaMitral / vRegMitral: extraDeMotor (formas.mjs)
   const g = baseGeometrica(est), vi = g.vi, z = -0.3 * vi.L, U = g.U, Up = U + Math.PI;
   const pared = (f) => g.rEpiVi(z, f) - g.rEndoVi(z, f);
-  const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), paredPost = pared(Up);
+  const lvdd = g.rEndoVi(z, U) + g.rEndoVi(z, Up), pd = paredesDe(est, sc), paredPost = pd.paredVi;   // paredes y masa: anatomia.mjs
   // áreas en el plano A4C: se cuenta qué puntos del plano caen en cada cavidad (bajo el plano AV)
   const P = planoVista('a4c', est), h = 0.6; let nVi = 0, nVd = 0;
   for (let u = -70; u <= 70; u += h) for (let v = 0; v <= P.prof; v += h) {
@@ -189,8 +190,8 @@ export function medidasCorazon(est, sc = 1.85) {   // est.vaiMax / eroaMitral / 
     if (zp > -g.Lvd && g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) nVd++; }
   }
   // paredVd: pared libre del VD en esta muestra (mm); medida en la telediástole es el RVWT de Mukherjee 2025 (p. 144)
-  return { tabique: pared(U), paredPost, paredVd: g.tvdW(20), lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
-    masaIndice: REF.vMioVi * g.mio * 1.05 / sc, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo,
+  return { tabique: pared(U), paredPost, paredVd: pd.paredVd, lvdd, vdDiam: g.wRV(z, U), rwt: 2 * paredPost / lvdd,
+    masaIndice: pd.masaIndice, areaVdVi: nVi ? nVd / nVi : 0, septo: g.septo,
     // P5a · AI: el volumen máximo (telesístole, Lang 2015 p. 25) indexado a la superficie corporal (sc, m²; la del paciente del
     // motor, 1,85 por defecto); IM: orificio regurgitante efectivo (cm²) y volumen regurgitante por latido (mL), del motor
     volAI: (est.vaiMax ?? est.vai) / sc, eroa: est.eroaMitral ?? 0, volReg: est.vRegMitral ?? 0 };
@@ -567,11 +568,7 @@ export function ajusteAfin(seg, segRef) {
 }
 
 // ---------------------------------------------------------------------------- formación de la imagen
-// Haz (2,5 MHz con armónicos, ilustrativo): ~0,3 mm de resolución axial (σ) y lateral que crece con la
-// profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
-
-// ---------------------------------------------------------------------------- formación de la imagen
-// Haz (2,5 MHz con armónicos, ilustrativo): ~0,3 mm de resolución axial (σ) y lateral que crece con la
+// Haz (2,5 MHz con armónicos, ilustrativo; cae dentro de 1-5 MHz de la sonda cardíaca, POCUS II cap. 3, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=28, impresa 36): ~0,3 mm de resolución axial (σ) y lateral que crece con la
 // profundidad (σ ≈ 0,0085·r, mínimo 0,45 mm). Ventana de visualización: DB_LO..DB_HI.
 const SIG_AX = 0.3, DB_LO = -34, DB_HI = 30;
 const SIG_LAT0 = (r) => Math.max(0.45, 0.0085 * r);
@@ -624,6 +621,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     for (let j = 0; j < ns; j++) { const rr = (j + 0.5) * dr; Rr[j] = rr; for (let i = 0; i < nb; i++) { const th = -P.mitad + (i + 0.5) * dth; X[j * nb + i] = rr * Math.sin(th); Y[j * nb + i] = rr * Math.cos(th); } }
     for (let i = 0; i < nb; i++) EB[i] = (-P.mitad + (i + 0.5) * dth) / P.mitad;
     const kAx = pulsoAxial(SIG_AX / dr, 6); let s2a = 0; for (const w of kAx) s2a += w * w;
+    // foco: eleva la resolución a la distancia elegida (POCUS I cap. 2, Tamagnone et al., docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9, impresa 41); las cifras son ilustrativas
     // desenfoque lateral por muestra: sin la mejora, el de hoy (solo la profundidad); con ella, foco y bordes
     const HB = new Uint8Array(N), NORM = new Float32Array(N), I = m.foco, f = o.focoMm ?? 80;
     for (let j = 0; j < ns; j++) {
@@ -862,6 +860,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       for (let i = 0; i < nb; i++) { const a = E[oo + i], b = T[oo + i]; E[oo + i] = 4.342944819 * Math.log((a * a + b * b) * NORM[oo + i] + 1e-12) + GAN[oo + i] + tg; }
     }
     reloj.push(performance.now());
+    // ganancia: más ganancia = más ecos; muy alta satura (el clamp a 1023) y muy baja pierde señal (POCUS I cap. 2, docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=9, impresa 41); los dB son ilustrativos
     const { PIX, FB, FS, pix } = G, lo = DB_LO - (o.ganancia || 0), esc = 1023 / (DB_HI - DB_LO);
     pix.fill(0);
     for (let mm = 0; mm < PIX.length; mm++) {
@@ -895,7 +894,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
   /**
    * Doppler color sobre la última imagen: vel[q] = velocidad hacia la sonda (cm/s) de cada celda, NaN sin color.
    * Rojo-amarillo hacia la sonda, azul-cian alejándose; por encima de ±nyq la velocidad se "enrolla" al color
-   * contrario (aliasing). Por debajo de 4 cm/s no se pinta (filtro de pared).
+   * contrario (aliasing; ajustar la escala al territorio vascular lo evita, POCUS I cap. 2 (que una escala baja lo provoque es deducción), docs/tamagnone-pocus-ecografia-critica-muestra-parte1.pdf#page=11, impresa 43). Por debajo de 4 cm/s no se pinta (filtro de pared).
    */
   function colorear(vel, nyq) {
     const { PIX, FB, FS, pix } = G;

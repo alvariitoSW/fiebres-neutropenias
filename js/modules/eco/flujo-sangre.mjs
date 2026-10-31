@@ -3,6 +3,9 @@
 // (qMit, qAo, qTri, qPul) y cuántas entran por las venas, de qVp (venas pulmonares) y qRet (cavas).
 // Dentro de una cavidad, la partícula guarda coordenadas normalizadas, así que se mueve con las paredes.
 // Todo ilustrativo (las velocidades de los vasos se exageran poco para que se vea el pulso).
+// Entradas, todas por parámetro (s = instante de motor.onda; no calcula caudales ni volúmenes propios). Contrato: s.vai/vvi/vad/vvd
+// = instantes[i].vol.ai/vi/ad/vd; s.qMit/qTri/qAo/qPul/qVp = instantes[i].q.mit/tri/ao/pul/vp; s.qRet (cavas) sin campo de contrato;
+// pasado = mL integrados por el motor (sin campo de contrato).
 export const VOL_PARTICULA = 2.5;
 const OX = 'ox', VEN = 'ven';
 const CAMARA = { ai: OX, vi: OX, ad: VEN, vd: VEN };
