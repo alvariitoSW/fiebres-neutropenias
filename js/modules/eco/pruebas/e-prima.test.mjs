@@ -14,11 +14,31 @@ test('e′ del motor · normal: septal 9-10,5 y lateral 11-13 cm/s', () => {
   assert.ok(Math.abs(p.sep / p.lat - 0.8) < 1e-9, 'el septal conserva el 0,8 del lateral (SEPTAL del atlas)');
 });
 
-test('e′ del motor · fallo VI al 100 %: septal 3-4 cm/s (Nagueh 2025, PDF 25)', async () => {
+test('e′ del motor · fallo VI: septal 3-4 cm/s con el defecto; al 100 %, 2-3 (Nagueh 2025, PDF 25)', async () => {
+  // Al 100 % la onda E-A está fusionada y E = 39 cm/s: con E/e′ ≥14 (Nagueh 2025, Tabla 7, p. 557) el septal no puede pasar de ~2,5.
+  // El J1 manda; el 3-4 de la p. 561 es el grado 3 avanzado, el defecto de la app (FE 30 %).
   const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
-  const m = crearMotor(); m.correr(12); ESCENARIOS.fallo.aplicar(m, 1); m.correr(ESCENARIOS.fallo.forma ? ASENTAR_FORMA : 40);
-  const p = m.ultimo.ePrima;
-  assert.ok(p.sep >= 3 && p.sep <= 4, `septal ${p.sep.toFixed(2)}`);
+  for (const [g, lo, hi] of [['def', 3, 4], [1, 2, 3]]) {
+    const m = crearMotor(); m.correr(12); if (g === 'def') ESCENARIOS.fallo.aplicar(m); else ESCENARIOS.fallo.aplicar(m, g); m.correr(ESCENARIOS.fallo.forma ? ASENTAR_FORMA : 40);
+    const p = m.ultimo.ePrima;
+    assert.ok(p.sep >= lo && p.sep <= hi, `fallo ${g}: septal ${p.sep.toFixed(2)}`);
+  }
+});
+
+test('e′ del motor · la vasoplejia y la hemorragia no pasan de 16 cm/s lateral (normal de un adulto)', async () => {
+  const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
+  for (const [k, g] of [['vasoplejia'], ['hemorragia', 'def'], ['hemorragia', 1]]) {
+    const m = crearMotor(); m.correr(12); if (g === undefined || g === 'def') ESCENARIOS[k].aplicar(m); else ESCENARIOS[k].aplicar(m, g); m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 40);
+    assert.ok(m.ultimo.ePrima.lat <= 16, `${k} ${g ?? ''}: lateral ${m.ultimo.ePrima.lat.toFixed(1)}`);
+  }
+});
+
+test('e′ del motor · la presión de la AI no la sube: dilatada e hipertrofia con e′ septal ≤6 pese a PCP alta', async () => {
+  const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
+  for (const [k, g] of [['dilatada'], ['hipertrofia', 1]]) {
+    const m = crearMotor(); m.correr(12); if (g === undefined) ESCENARIOS[k].aplicar(m); else ESCENARIOS[k].aplicar(m, g); m.correr(ESCENARIOS[k].forma ? ASENTAR_FORMA : 40);
+    assert.ok(m.ultimo.pcp > 15 && m.ultimo.ePrima.sep <= 6, `${k}: PCP ${m.ultimo.pcp.toFixed(0)}, septal ${m.ultimo.ePrima.sep.toFixed(1)}`);
+  }
 });
 
 test('TEP 0 / def / 0,5 / 0,9 / 0,95 / 1 · E/e′ posible (4-15), con la e′ del motor y con la de hoy', async () => {

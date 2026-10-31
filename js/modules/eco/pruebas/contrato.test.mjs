@@ -43,21 +43,24 @@ const cerca = (a, b, pct, nombre, redondeo = false) => {
 const CONOCIDOS = {
 };
 
+// P1b (31/10/2026): la columna E/e′ pasa a la e′ del MOTOR (motor.ultimo.ePrima, antes la del atlas): TEP 50 % 7,4→7,0; defecto 6,6→6,2;
+// TEP 100 % 8,8→7,1; HP crónica def 7,8→7,0 y 100 % 7,4→6,5; taponamiento 4,0→11,1 (E/e′ del derrame grave; la tabla §3 era un valor no medido);
+// fallo 23,7→17,3 (E 39 cm/s con fusión E-A y e′ septal 2,2). Todas dentro de las bandas J1.
 // Tabla §3 de mapa-motor.md (control grueso ±5 %): [clave, k, g, FEVD, TAPSE, PSAP, PAPd, PVC, PAM, GC, VD/VI vol, pared VD, E/e′]
 const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
   // P5a: 50 % con el mando curvado (u = g^0,6): antes 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7
-  ['TEP 50 %', 'tep', 0.5, 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.4],
+  ['TEP 50 %', 'tep', 0.5, 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.0],
   // P5a vuelta 2: el defecto es g 0,7 (submasivo, PAM 76): cifras de la salida del motor. Antes (g 0,6): 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1
   // P5a: el defecto del TEP pasa a submasivo (g 0,6, u = g^0,6): cifras de la salida del motor (barrido-tep.mjs); antes 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8
-  ['TEP defecto', 'tep', 'def', 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.6],
+  ['TEP defecto', 'tep', 'def', 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.2],
   // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
-  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 8.8],
-  ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.8],
+  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 7.1],
+  ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.0],
   // FEVD 15 → 14,1: la tabla §3 era anterior al desplazamiento del tabique M0c (b3-paso4 g3, 0a84f734; Marino cap. 16 p. 40); el motor da 14,1
-  ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 7.4],
-  ['Taponamiento 100 %', 'derrame', 1, 33, 13.4, 14, 12, 9, 64, 2.8, 0.66, 6.0, 4.0],
-  ['Fallo VI 100 %', 'fallo', 1, 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 23.7],
+  ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 6.5],
+  ['Taponamiento 100 %', 'derrame', 1, 33, 13.4, 14, 12, 9, 64, 2.8, 0.66, 6.0, 11.1],
+  ['Fallo VI 100 %', 'fallo', 1, 33, 16.1, 32, 24, 5, 64, 2.9, 0.85, 4.1, 17.3],
 ];
 // TRV: la tabla usa √((PSAP−PVC)/4) con las cifras medias; el contrato, el gradiente máximo instantáneo VD−AD (menor): ±10 %
 const TRV_TABLA = { normal: 2.1, 'TEP 50 %': 2.6, 'TEP defecto': 2.8, 'TEP 100 %': 2.8, 'HP crónica defecto': 4.7, 'HP crónica 100 %': 4.5 };   // la tabla lo calculó con √((PSAP−PVC)/4)

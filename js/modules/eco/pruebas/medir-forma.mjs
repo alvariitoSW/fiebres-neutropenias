@@ -7,7 +7,6 @@ import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
 import { tapseDeLatido, LIMITES, baseGeometrica } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import * as D from '../doppler.mjs';
-import { ePrima } from '../atlas/diastolica.mjs';
 
 const f = (x, d = 0) => (x == null || Number.isNaN(x)) ? '-' : Number(x).toFixed(d);
 
@@ -22,7 +21,7 @@ export function medirForma(k, g) {
   const areas = D.areasAnillo(baseGeometrica(estadoGeo(td, extraDeMotor(m))));
   const mit = D.medidasLatido(D.curvaLatido(o, { tipo: 'valvula', n: 'mitral', factor: 1 }, 1, areas, {}), { tipo: 'valvula', n: 'mitral', factor: 1 });
   const pv = D.medidasLatido(D.curvaLatido(o, { tipo: 'vaso', vasoTipo: 'pulmonar', factor: 1, r: 5 }, 1, areas, { rRetorno: m.p.rRetorno, pvc: u.pvc }), { tipo: 'vaso', vasoTipo: 'pulmonar', factor: 1 });
-  const e = ePrima(m.p.relajacion, u.fe);
+  const e = u.ePrima;   // e′ del motor (motor.mjs: ePrimaDeOnda)
   const dt = o[1].t - o[0].t, A = o.filter(x => x.fase === 'A');
   const aW = (key) => Math.max(...A.map(x => x[key])) - A[0][key];
   const bomba = (q) => { const ll = o.reduce((a, x) => a + Math.max(0, x[q]) * dt, 0); return 100 * A.reduce((a, x) => a + Math.max(0, x[q]) * dt, 0) / ll; };
