@@ -25,13 +25,20 @@ const DERRAME_DEFECTO = 1 - Math.sqrt(1 - 260 / DERRAME_ML_MAX);
 // TEP: resistencia pulmonar a fondo ×9,0 (antes ×16, luego ×9,3); el defecto, desde P5a, es el submasivo (g 0,7, ver abajo). Con la isquemia del VD en el motor (motor.mjs, isqDesde), ×16 hundía al VD sin freno (PAM 30); y ×16 sin
 // ella daba una pulmonar media de 54 mmHg, que un VD sin hipertrofia no sostiene. A fondo, ~40/33 (media ~36). Ilustrativo
 // P4b: 9,3 → 9,0 con la cola de la activación entre latidos: con 9,3 la PAM caía 8,0 mmHg entre el 95 y el 100 % (el límite de la prueba, 7,5)
-const TEP_RPUL_MAX = 9.0, TEP_EES_VD_PENDIENTE = 0.35 / (Math.log(8) / Math.log(9.0));   // la contractilidad del VD cae con la misma pendiente de siempre (≈0,37 por unidad de u)
+const TEP_RPUL_MAX = 6.6, TEP_EES_VD_PENDIENTE = 0.35 / (Math.log(8) / Math.log(9.0));   // la contractilidad del VD cae con la misma pendiente de siempre (≈0,37 por unidad de u)
 // P5a (mv-eco-2a5): el defecto pasa a ser el TEP de RIESGO INTERMEDIO (submasivo): VD dilatado (VD/VI >1,0) y FEVD/TAPSE bajos con la
 // PAM normal, sin hipotensión; y el tramo final (a partir de TEP_G_MASIVO) es el de ALTO RIESGO: PAM <70 (Marino cap. 22, «Management»,
 // PDF p. 7: riesgo intermedio = disfunción del VD sin inestabilidad hemodinámica; alto riesgo = con inestabilidad). Umbral de hipotensión:
 // PAS <90 o PAM <70 mmHg (Marino cap. 14, «Clinical Features», docs/marino-2024-shock-caps14-17.pdf#page=2). El mando se curva
 // (u = g^0,6) para que la hipotensión empiece hacia el 85 % y no en el último 8 %: la resistencia pulmonar y la contractilidad siguen
 // u, no g. u = g^0,6 es ilustrativo; el defecto es g = 0,7 (resistencia pulmonar ×5,9, antes ×8)
+// P3 (mv-eco-2a5): el émbolo proximal baja también la distensibilidad arterial pulmonar (cAp ÷ R^0,9) y acorta la sístole del VD
+// (×(1 − 0,3 u)): el flujo pulmonar pica pronto y el tiempo de aceleración pulmonar queda <105 ms, signo de sobrecarga del VD
+// (ESC/ERS 2022, Fig. 4 y Tabla 10, docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf, PDF p. 27-28 = p. 3644-3645). Los dos
+// exponentes son ilustrativos (no hay cifra de la fuente). Con ellos la resistencia máxima baja de ×9,0 a ×6,6: la menor
+// distensibilidad ya sube la PSAP, y así PAM, GC y PSAP del TEP quedan donde estaban (PAM 100 % 59, defecto 74)
+const TEP_CAP_EXP = 0.9;
+const TEP_DUR_VD = 0.3;
 const TEP_CURVA = 0.6, TEP_DEFECTO = 0.7, TEP_G_MASIVO = 0.85;
 const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
@@ -167,7 +174,7 @@ export const ESCENARIOS = {
       texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** tepU(g), 1)}. ` + (g < TEP_G_MASIVO
         ? 'Riesgo intermedio (submasivo): disfunción del VD sin inestabilidad hemodinámica (Marino cap. 22, PDF p. 7)'
         : 'Riesgo alto (masivo): disfunción del VD con inestabilidad hemodinámica, PAM <70 mmHg (Marino cap. 22, PDF p. 7; cap. 14, PDF p. 2)') },
-    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.vd.ees *= 1 - TEP_EES_VD_PENDIENTE * u; sueloG(m, SUELO_TEP, g); },
+    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= 1 - TEP_DUR_VD * u; m.p.vd.ees *= 1 - TEP_EES_VD_PENDIENTE * u; sueloG(m, SUELO_TEP, g); },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA

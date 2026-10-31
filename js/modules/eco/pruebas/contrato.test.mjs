@@ -50,12 +50,15 @@ const CONOCIDOS = {
 const TABLA = [
   ['normal', 'normal', undefined, 53, 23, 22, 12, 4, 87, 5.0, 1.15, 4.0, 8.3],
   // P5a: 50 % con el mando curvado (u = g^0,6): antes 33, 14.6, 33, 22, 6, 83, 4.3, 1.74, 3.8, 7.7
-  ['TEP 50 %', 'tep', 0.5, 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.0],
+  // P3 (tiempo de aceleración pulmonar <105 ms): el TEP baja la distensibilidad arterial y su resistencia máxima pasa de ×9,0 a ×6,6; antes 27, 12.9, 39, 26, 7, 81, 4.0, 2.10, 3.7, 7.0
+  ['TEP 50 %', 'tep', 0.5, 24, 12.2, 43, 15, 8, 80, 3.8, 2.34, 3.6, 6.9],
   // P5a vuelta 2: el defecto es g 0,7 (submasivo, PAM 76): cifras de la salida del motor. Antes (g 0,6): 23, 12, 41, 28, 7, 79, 3.7, 2.37, 3.7, 7.1
   // P5a: el defecto del TEP pasa a submasivo (g 0,6, u = g^0,6): cifras de la salida del motor (barrido-tep.mjs); antes 13, 8.4, 43, 34, 9, 67, 2.8, 3.78, 3.5, 1.8
-  ['TEP defecto', 'tep', 'def', 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.2],
+  // P3: antes 20, 11.1, 43, 30, 8, 76, 3.5, 2.69, 3.6, 6.2 (la PAPd de la columna baja: la arteria más rígida pulsa más y su diastólica cae)
+  ['TEP defecto', 'tep', 'def', 17, 10.2, 46, 16, 9, 74, 3.2, 3.05, 3.6, 5.1],
   // P4b: E/e′ 8,3 → 8,8 en la fila del TEP al 100 % (la tabla §3 era de antes de la cola entre latidos y del tope ×9,0; el motor da 8,79)
-  ['TEP 100 %', 'tep', 1, 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 7.1],
+  // P3: antes 9, 6.6, 40, 33, 9, 58, 2.3, 4.83, 3.5, 7.1
+  ['TEP 100 %', 'tep', 1, 9, 6.5, 43, 18, 9, 59, 2.3, 4.84, 3.5, 7.0],
   ['HP crónica defecto', 'hpcronica', 'def', 32, 14.1, 97, 30, 7, 81, 4.0, 1.76, 8.2, 7.0],
   // FEVD 15 → 14,1: la tabla §3 era anterior al desplazamiento del tabique M0c (b3-paso4 g3, 0a84f734; Marino cap. 16 p. 40); el motor da 14,1
   ['HP crónica 100 %', 'hpcronica', 1, 14.1, 9.3, 95, 37, 15, 77, 3.1, 3.69, 8.2, 6.5],
@@ -136,9 +139,17 @@ test('tep:def (P5a, submasivo) E/e′ en la banda normal 4,0-11,5 (antes fallo J
   const e = caso('tep', 'def').c.latido.eE;
   assert.ok(e >= 4.0, `E/e′ ${e.toFixed(2)} fuera de la banda normal 4,0-11,5 (Nagueh 2025, Tabla 5, p. 551)`);
 });
-test('fallo conocido (lo arregla mv-eco-2a5) · tep:def tiempo de aceleración pulmonar < 105 ms [sin clave en PENDIENTES]', { todo: 'mv-eco-2a5' }, () => {
-  const ta = caso('tep', 'def').c.latido['tiempos.tap'];
-  assert.ok(ta < 105, `TA pulmonar ${ta.toFixed(0)} ms; ESC/ERS 2022, Tabla 10 (PDF 28/p. 3645): <105 ms en el TEP`);
+// P3 (mv-eco-2a5): el TEP baja la distensibilidad arterial pulmonar y acorta la sístole del VD (escenarios.mjs, TEP_CAP_EXP, TEP_DUR_VD; la sístole del VD ×(1 − 0,3 u)):
+// tiempo de aceleración pulmonar <105 ms = signo de sobrecarga del VD (ESC/ERS 2022, Fig. 4 PDF p. 27 / p. 3644 y Tabla 10 PDF p. 28 / p. 3645,
+// docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf). Normal >105 (no sobrecarga); la HP crónica no baja de lo posible (≥50 ms)
+for (const g of ['def', 0.5, 1]) test(`TEP ${g}: tiempo de aceleración pulmonar < 105 ms (ESC/ERS 2022, Tabla 10, p. 3645)`, () => {
+  const ta = caso('tep', g).c.latido['tiempos.tap'];
+  assert.ok(ta < 105, `TA pulmonar ${ta.toFixed(0)} ms`);
+});
+test('tiempo de aceleración pulmonar: normal >105 ms y HP crónica (def y 100 %) ≥50 ms', () => {
+  const t = (k, g) => caso(k, g).c.latido['tiempos.tap'];
+  assert.ok(t('tep', 0) > 105, `normal ${t('tep', 0)}`);   // tep con g 0 = el paciente normal
+  for (const g of ['def', 1]) assert.ok(t('hpcronica', g) >= 50, `HP crónica ${g}: ${t('hpcronica', g)} ms`);
 });
 // P5a: umbral de hipotensión PAM <70 mmHg (o PAS <90): Marino cap. 14 «Clinical Features», docs/marino-2024-shock-caps14-17.pdf#page=2.
 // Riesgo intermedio (submasivo) = disfunción del VD sin inestabilidad; alto riesgo (masivo) = con inestabilidad: Marino cap. 22, PDF p. 7
