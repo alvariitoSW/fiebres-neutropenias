@@ -407,9 +407,12 @@ El resto del tablero sigue `aparcada`.
 **Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
-1. **Semiología**: abrir `www.ncbi.nlm.nih.gov` en la red del entorno (StatPearls y Walker, gratis; recomendado) o subir
-   el capítulo cardiovascular de Surós o Bates. Una IA no puede ser la fuente (acta 10.ª); tu repositorio
-   `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de fuente (no tiene páginas).
+1. **Semiología** (31/10): `www.ncbi.nlm.nih.gov` ya abre, pero el libro de Walker (*Clinical Methods*,
+   https://www.ncbi.nlm.nih.gov/books/NBK201/) pone un reCAPTCHA antes del texto y la API oficial solo da fichas: no se
+   salta. **Hace falta tu PDF**: el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica* (el que usaste en la
+   app del Negrín; recomendado), o los capítulos de exploración cardiovascular de Walker guardados desde tu móvil. Una IA
+   no puede ser la fuente (acta 10.ª); tu repositorio `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de
+   fuente (no tiene páginas). Con el PDF en `docs/`, el Congreso lo monta (objetivo «Historia clínica» del PIF).
 2. **Ritmo tras el 02/11**: seguir con vía libre hasta el 22/11 (recomendado) o volver al 18 % el 03/11.
 3. **Techo de la gran reforma** (B-050): ≈165-230 M aparte de Marino.
 4. **`b4`**: maqueta de «iones vivos» (≈+8 M, recomendado) o directo.
