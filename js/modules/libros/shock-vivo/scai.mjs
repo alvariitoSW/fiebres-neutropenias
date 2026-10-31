@@ -16,13 +16,15 @@ export function estadioScai(R, ajuste = {}, lab = {}, parada = false) {
   const lac = String(lact?.toFixed ? lact.toFixed(1) : lact).replace('.', ',');
   let letra, porque, nombre;
   if (parada) { letra = 'E'; porque = 'parada cardíaca'; }
-  else if (!hipo && n > 0) { letra = 'C'; nombre = 'respondiendo al tratamiento'; porque = `lactato ${lac} (≤2) con una intervención aún puesta; la Tabla 13 no define el estadio tras responder, el modelo no lo baja a A mientras siga el tratamiento`; }
+  else if (!hipo && n > 0) { letra = 'C'; nombre = 'en respuesta (regla del modelo)'; porque = `lactato ${lac} (≤2) con una intervención aún puesta; la Tabla 13 no define el estadio tras responder, el modelo no lo baja a A mientras siga el tratamiento`; }
   else if (!hipo) {
     if (R.pam < PAM_INESTABLE) { letra = 'B'; porque = `PAM ${R.pam} (<65) y lactato ${lac} (≤2): inestable sin hipoperfusión`; }
     else { letra = 'A'; porque = `PAM ${R.pam} y lactato ${lac} (≤2): sin hipoperfusión ni inestabilidad`; }
   } else if (n === 0) { letra = 'C'; porque = `lactato ${lac} (>2) y aún sin tratamiento`; }
-  else if (n >= 2) { letra = 'E'; porque = `lactato ${lac} (>2) con varias intervenciones a la vez y la hipoperfusión sigue (la Tabla 13 llama E al shock refractario o la parada con varias intervenciones, incluida la RCP)`; }
-  else if (lab.baja || !(lab.horas > 0)) { letra = 'C'; porque = `lactato ${lac} (>2) con una intervención que aún actúa`; }
+  else if (lab.baja) { letra = 'C'; porque = `lactato ${lac} (>2) con ${n >= 2 ? 'varias intervenciones' : 'una intervención'} que aún actúan: el lactato baja`; }
+  else if (n >= 2 && lab.horas > 0) { letra = 'E'; porque = `lactato ${lac} (>2) que persiste tras horas con varias intervenciones a la vez (la Tabla 13 llama E al shock refractario o la parada con varias intervenciones, incluida la RCP)`; }
+  else if (n >= 2) { letra = 'D'; porque = `lactato ${lac} (>2) con varias intervenciones recién puestas: se escala, pero aún no se sabe si responde`; }
+  else if (!(lab.horas > 0)) { letra = 'C'; porque = `lactato ${lac} (>2) con una intervención que aún actúa`; }
   else { letra = 'D'; porque = `lactato ${lac} (>2) que persiste con una intervención puesta`; }
   return { letra, nombre: nombre || NOMBRES[letra], porque };
 }

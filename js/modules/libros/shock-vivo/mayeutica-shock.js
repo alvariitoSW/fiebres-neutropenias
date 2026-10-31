@@ -29,17 +29,23 @@ function subirMay() { medirDock(); const r = raiz.getBoundingClientRect(); if (r
 // El caso: la ficha del paciente se rellena con las cifras del monitor en ese momento (datos y nuevo se leen al abrir el paso)
 const CASOS_V = CASOS_MAY.map((C) => ({ ...C,
   hueco: `Fuentes: ${(C.corto === 'Fermín' ? [D.C.vd, D.C.dobuta, D.C.csNa] : [D.C.csHemo, D.C.csNa, D.C.papilar, D.C.ecmoPoscarga]).map(cita).join(' ')}`,
-  pasos: C.pasos.map((p, i) => {
-    let claves = [];
-    return Object.defineProperties({ ...p }, {
-      datos: { get() {
-        prepararPregunta(p.modelo); ultimaPrep = p.modelo; refrescar(true);
-        const filas = p.ficha(h.R).map(([k, v]) => [k === 'Hora 18' ? (i === 5 ? 'Soplo' : 'Respiración') : k, v]);
-        claves = filas.map((f) => f[0]); return Object.fromEntries(filas);
-      } },
-      nuevo: { get() { return claves; } },
+  pasos: (() => {
+    const vistas = [];   // las filas de cada paso ya leído: en rojo solo lo que falta o cambia respecto al paso anterior
+    return C.pasos.map((p, i) => {
+      let claves = [];
+      return Object.defineProperties({ ...p }, {
+        datos: { get() {
+          prepararPregunta(p.modelo); ultimaPrep = p.modelo; refrescar(true);
+          const filas = p.ficha(h.R).map(([k, v]) => [k === 'Hora 18' ? (i === 5 ? 'Soplo' : 'Respiración') : k, v]);
+          const ant = i > 0 ? vistas[i - 1] : null;
+          claves = filas.filter(([k, v]) => !ant || ant[k] !== v).map((f) => f[0]);
+          vistas[i] = Object.fromEntries(filas);
+          return vistas[i];
+        } },
+        nuevo: { get() { return claves; } },
+      });
     });
-  }) }));
+  })() }));
 const May = crearMayeuticaModelo({
   p: 'shv', cont: () => $('zona-may'), clave: 'shock-vivo-mayeutica-v1', preguntas: PREG_MAY, casos: CASOS_V,
   subir: subirMay, volverPor: 'El shock a pie de cama',
@@ -74,18 +80,24 @@ const May = crearMayeuticaModelo({
     ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): predices, destapas y lo compruebas en el modelo.</span>
       <span><b>2. Examen, nivel MIR</b> (${nE}): distractores finos que salen de las fichas.</span>
       <span><b>3.</b> Otra vez lo que fallaste, solo eso.</span>
-      <span><b>4.</b> El caso de Aurelio: ${CASOS_V[0].pasos.length} pasos que evolucionan con el reloj.</span>`,
+      <span><b>4.</b> El caso de Aurelio: ${CASOS_V[0].pasos.length} pasos que evolucionan con el reloj, y el de Fermín (${CASOS_V[1].pasos.length} pasos).</span>`,
     empezar: 'Empezar la guía socrática', seguir: 'Seguir',
     pie: 'Cada pregunta pone el monitor y el dibujo en el estado de su pregunta; las cifras se destapan al contestar. Los pacientes se inventan; la medicina sale de las fichas de Merino Cardiología, y cada respuesta dice dónde.',
     conModelo: 'el monitor', casos: 'El monitor se pone en el estado de cada paso antes de la pregunta. Lo nuevo de la ficha del paciente sale en rojo.',
-    abrirPaciente: 'Abrir el modelo con Aurelio en ECMO',
+    abrirPaciente: 'Abrir el modelo con el paciente del caso',
   },
   preguntaDePaso: () => ({}),
-  alTerminarCaso: () => { ultimaPrep = null; tapar(false); prepararPregunta({ pac: 'aurelio', escena: 'corazon' }); refrescar(true); },   // el final del caso no deja los sellos del último paso sobre el monitor
-  abrirPaciente: () => {
-    setModo('explorar'); const p = D.PACIENTES.find((x) => x.k === 'aurelio');
-    est.aparato = 'ecmo'; est.vista = 'aparato';
-    nuevoPaciente(p, { rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } });
+  alTerminarCaso: (C) => { ultimaPrep = null; tapar(false); prepararPregunta({ pac: C?.corto === 'Fermín' ? 'fermin' : 'aurelio', escena: 'corazon' }); refrescar(true); },   // el final del caso no deja los sellos del último paso sobre el monitor
+  abrirPaciente: (C) => {
+    setModo('explorar');
+    if (C?.corto === 'Fermín') {   // el estado del último paso de Fermín: 5 h con dobutamina
+      est.aparato = 'no'; est.vista = 'paciente';
+      nuevoPaciente(D.PACIENTES.find((x) => x.k === 'fermin'), { rec: { g: 1 }, horas: 5, ajuste: { dobuta: true } });
+    } else {
+      const p = D.PACIENTES.find((x) => x.k === 'aurelio');
+      est.aparato = 'ecmo'; est.vista = 'aparato';
+      nuevoPaciente(p, { rec: { eroaMitral: 0.8, pao2: 56 }, volumen: 250, ajuste: { na: 5, dobuta: true, soporte: 'ecmo', ecmo: 4.5 } });
+    }
     pintarPacientes(); refrescar(true); pintarDock();
   },
 });
