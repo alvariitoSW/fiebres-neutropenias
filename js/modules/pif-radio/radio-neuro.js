@@ -1,6 +1,8 @@
 // «Neuro urgente» (PIF Radiología): cuaderno de campo con sus fichas y tarjetas Sí/No.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
+import { montarLectura } from './radio-lee.js';
+import { EJERCICIOS_LEE_NEURO } from '../../data/pif-radio-lee-neuro.js';
 
 const MARINO = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const STROKE = 'https://www.ncbi.nlm.nih.gov/sites/books/NBK546635/';
@@ -50,4 +52,8 @@ export function init() {
     initCorkboard('pif-radio-neuro-corkboard', 'panel-pif-radio-neuro-tabs');
     initSiNoWizard('radio-n1', PASOS_N1);
     initSiNoWizard('radio-n2', PASOS_N2);
+    for (const ej of EJERCICIOS_LEE_NEURO) {
+        const caja = document.getElementById('radio-caja-' + ej.id);
+        if (caja) montarLectura(caja, ej);
+    }
 }
