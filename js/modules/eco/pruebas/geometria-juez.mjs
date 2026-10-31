@@ -10,13 +10,15 @@
 // Un límite sin fuente va marcado `sinFuente` y solo avisa (no falla).
 import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
-import { construirCorazon } from '../corazon-geo.mjs';
+import { construirCorazon, usarDibujo } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { planoVista, cortarPieza } from '../ecografia.mjs';
 
 const LANG = (p) => `Lang 2015 p.${p}`, MUK = (p) => `Mukherjee 2025 p.${p}`, ESC = (p) => `ESC/ERS 2022 p.${p}`;
 export const VISTAS_JUEZ = ['a4c', 'psaxPm', 'plax'];
-export const DIBUJOS = { hoy: { construir: construirCorazon, nota: 'dibujo de hoy (corazon-geo.mjs, sin cambios)' } };
+export const DIBUJOS = { hoy: { construir: construirCorazon, nota: 'dibujo de hoy (corazon-geo.mjs, sin cambios)', n: 1 }, nuevo: { construir: construirCorazon, nota: 'dibujo nuevo (corazon-geo-2.mjs)', n: 2 } };
+// Cada entrada del juez fija el dibujo pedido y lo deja como estaba al terminar
+const conDibujo = (dibujo, f) => { if (!DIBUJOS[dibujo]) throw new Error('dibujo desconocido: ' + dibujo); const antes = usarDibujo(DIBUJOS[dibujo].n); try { return f(); } finally { usarDibujo(antes); } };
 const PIEZAS = { 'VI endocardio': 'viEndo', 'VI epicardio': 'viEpi', 'VD endocardio': 'vdEndo', 'VD epicardio': 'vdEpi', AI: 'ai', AD: 'ad' };
 
 // ---------------------------------------------------------------- geometría 2D
@@ -80,7 +82,8 @@ export function estadosForma(k, g) {
   const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
   return { td: estadoGeo(td, extra), ts: estadoGeo(ts, extra) };
 }
-export function contornosVista(clave, est, dibujo = 'hoy') {
+export function contornosVista(clave, est, dibujo = 'hoy') { return conDibujo(dibujo, () => contornosVista0(clave, est, dibujo)); }
+function contornosVista0(clave, est, dibujo) {
   const P = planoVista(clave, est), partes = DIBUJOS[dibujo].construir(est).partes, out = {};
   for (const p of partes) { const k = PIEZAS[p.nombre]; if (!k || !p.idx) continue;
     const c = cortarPieza(p, P); if (!c.seg.length) continue;
@@ -151,8 +154,8 @@ export function rangosDe(k, g) {
 export function gDe(k) { return k !== 'normal' && ESCENARIOS[k].gravedad ? [0, 0.5, 1] : [undefined]; }
 
 // ---------------------------------------------------------------- juez
-export function juzgarGeometria({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } = {}) {
-  if (!DIBUJOS[dibujo]) throw new Error('dibujo desconocido: ' + dibujo);
+export function juzgarGeometria(op = {}) { return conDibujo(op.dibujo || 'hoy', () => juzgarGeometria0(op)); }
+function juzgarGeometria0({ dibujo = 'hoy', formas = Object.keys(ESCENARIOS) } = {}) {
   const filas = [];
   const fila = (k, g, vista, fase, mal, ok, cifras = '', aviso = false) => filas.push({ forma: k, g: g ?? '-', vista, fase, ok: !mal.length, aviso, motivo: mal.length ? mal.join('; ') : ok, cifras });
   for (const k of formas) for (const g of gDe(k)) {
@@ -182,7 +185,8 @@ export function juzgarGeometria({ dibujo = 'hoy', formas = Object.keys(ESCENARIO
 
 // ---------------------------------------------------------------- captura de los contornos del A4C (SVG; jueces.mjs lo pasa a PNG)
 const COL = { viEndo: '#e06c6c', viEpi: '#a04040', vdEndo: '#6ca0e0', vdEpi: '#4070a0', ai: '#e0c050', ad: '#60c090' };
-export function capturaSVG(k, g, fase = 'td', vista = 'a4c', dibujo = 'hoy') {
+export function capturaSVG(k, g, fase = 'td', vista = 'a4c', dibujo = 'hoy') { return conDibujo(dibujo, () => capturaSVG0(k, g, fase, vista, dibujo)); }
+function capturaSVG0(k, g, fase, vista, dibujo) {
   const { td, ts } = estadosForma(k, g), C = contornosVista(vista, fase === 'td' ? td : ts, dibujo);
   const pts = Object.values(C).flatMap(c => c.cad.flatMap(x => x.ps)), xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
   const x0 = Math.min(...xs) - 10, y0 = Math.min(...ys) - 10, W = Math.max(...xs) - x0 + 10, H = Math.max(...ys) - y0 + 10;

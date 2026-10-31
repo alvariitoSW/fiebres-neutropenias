@@ -12,6 +12,7 @@
 // infundíbulo del VD de su orificio, con los mismos puntos de borde (sin grietas).
 // Todo ilustrativo: proporciones de anatomía general, no medidas de una fuente.
 
+import { construirCorazon2, baseGeometrica2 } from './corazon-geo-2.mjs';
 import { earcut } from './earcut.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { construirTorax } from './torax.mjs';
@@ -195,7 +196,7 @@ export function puntoValva(v, uu, vv) {
 // ---- Construcción --------------------------------------------------------------
 // estado: { vvi, vvd, vai, vad, mitral, tricus, aortica, pulmonar (0..1), liquidoPeri }
 // opciones: { corte: null | { phi }, detalle, pericardio, calidad }
-export function construirCorazon(estado, opciones = {}) {
+export function construirCorazonHoy(estado, opciones = {}) {
   const partes = [];
   const q = opciones.calidad || 1;
   const corte = planoCorte(opciones.corte);
@@ -215,7 +216,7 @@ export function construirCorazon(estado, opciones = {}) {
   const NR = Math.max(20, Math.round(40 * q));          // puntos por anillo (válvulas, aurículas, vasos)
   const phi0 = corte ? corte.phi : 0, span = corte ? Math.PI : TAU;
   const dentroCorte = (phi) => !corte || (corte.nx * Math.cos(phi) + corte.ny * Math.sin(phi) >= -1e-9);
-  const geo = baseGeometrica(estado);
+  const geo = baseGeometricaHoy(estado);
   const { vi, rEndoVi, rEpiVi, endoVi, epiVi, Lvd, A, ventana, Wb, wRV, tvdW, endoVd, epiVd,
     anilloMitral, mc, aM, bM, U, anilloAortico, ac, rA, anilloTricus, ct, rT, anilloRVOT, cR, aR, bR, phiR, ReB, rimRV } = geo;
 
@@ -953,7 +954,7 @@ export function construirCorazon(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-export function baseGeometrica(estado) {
+export function baseGeometricaHoy(estado) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
   const mio = estado.mioVi ?? 1, septo = clamp(estado.septo ?? 0, 0, 1);
@@ -1082,3 +1083,12 @@ export function diametrosTSVD(g) {
   const a = (k) => mix(g.aR, inf.rP, paso(0, 1, inf.marcos[k].t)), b = (k) => mix(g.bR, inf.rP, paso(0, 1, inf.marcos[k].t));
   return { proximal: 2 * Math.max(a(0), b(0)), plax: 2 * a(Math.round(NK / 2)), distal: 2 * a(NK - 1) };
 }
+
+// ---- Fachada única: elige entre el dibujo de hoy y el nuevo (corazon-geo-2.mjs) --------------------------------
+// Los importadores no cambian: la imagen, los planos y las medidas usan siempre el mismo dibujo.
+// Se activa con ?dibujo=2 en la URL (navegador), ECO_DIBUJO=2 (Node) o usarDibujo(2) (pruebas y jueces). Por defecto, 1.
+let dibujoNuevo = (typeof process !== 'undefined' && process.env?.ECO_DIBUJO === '2') ||
+  (typeof globalThis.location?.search === 'string' && /[?&]dibujo=2(&|$)/.test(globalThis.location.search));
+export function usarDibujo(n) { const antes = dibujoNuevo ? 2 : 1; dibujoNuevo = Number(n) === 2; return antes; }
+export function construirCorazon(estado, opciones = {}) { return dibujoNuevo ? construirCorazon2(estado, opciones) : construirCorazonHoy(estado, opciones); }
+export function baseGeometrica(estado) { return dibujoNuevo ? baseGeometrica2(estado) : baseGeometricaHoy(estado); }
