@@ -282,7 +282,7 @@ for (const k of ORDEN_ESTADOS) {
     ok(ult.ptx >= 9 && ult.ptx < 10.5 && s9.s.length === 0 && ult.pam > 65, `E4b antes del shock: presión ${ult.ptx}, PAM ${ult.pam}, sin sello`); }
   for (let i = 0; i < 3 && ult.ptx < 10.5; i++) { await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); ult = await tomar(); }
   { const sh = await selloVis(); const mh = ult;
-    ok(sh.s.some(x => /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 10.5 && mh.ptx < 13 && mh.pam >= 40 && mh.pam <= 65 && mh.spo2 < 92.5, `E4b shock desde 10,5: con presión ${mh.ptx} sale el sello de shock (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam} (40-65; con 10,5 exactos el monitor da 54), SpO₂ ${mh.spo2}`); }
+    ok(sh.s.some(x => /Neumotórax a tensión: shock obstructivo/.test(x)) && sh.inerte && mh.ptx >= 10.5 && mh.ptx < 13 && (mh.ptx <= 10.5 ? mh.pam >= 40 && mh.pam <= 65 : mh.pam >= 30 && mh.pam <= 50) && mh.spo2 < 92.5, `E4b shock desde 10,5: con presión ${mh.ptx} sale el sello de shock (${sh.s.map(x => x.slice(0, 40)).join('|')}), mandos apagados, PAM ${mh.pam} (a 10,5: 40-65, la app da 52; a 12: 30-50, la app da 39), SpO₂ ${mh.spo2}`); }
   for (let i = 0; i < 4 && ult.ptx < 13.5; i++) { await clic('#pul-neumo [data-nx="pasar"]'); await llenar(); await estable(); ult = await tomar(); }
   try { await p.waitForFunction(() => /sin pulso/.test(document.querySelector('#pul-corazon [data-fila="cor-pam"] .v')?.textContent || ''), null, { timeout: 12000 }); } catch {} await espera(200); ult = await tomar();
   { const sp = await selloVis();
