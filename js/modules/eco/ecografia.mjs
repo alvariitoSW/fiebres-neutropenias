@@ -19,7 +19,7 @@ import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, SOMBRA_NUEVA, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -677,7 +677,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     // ganancia que no depende del tejido: la de hoy (caída con la profundidad y en los bordes)
     const GAN = new Float32Array(N), nuevoD = dibujoNuevo();
-    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = (nuevoD ? -CAIDA_PROFUNDIDAD.dbPorMm * Math.max(0, Rr[j] - CAIDA_PROFUNDIDAD.desdeMm) : -0.025 * Math.max(0, Rr[j] - 60)) - 6 * Math.pow(e, 8); }
+    for (let j = 0; j < ns; j++) for (let i = 0; i < nb; i++) { const e = EB[i]; GAN[j * nb + i] = (nuevoD ? -CAIDA_PROFUNDIDAD.dbPorMm * Math.max(0, Rr[j] - CAIDA_PROFUNDIDAD.desdeMm) : -0.025 * Math.max(0, Rr[j] - 60)) - 6 * Math.pow(e, 8) - (nuevoD ? CAIDA_LATERAL.dbBorde * e * e : 0); }
     const k = Math.min((alto - 8) / P.prof, (ancho - 6) / (2 * P.prof * Math.sin(P.mitad))), cx = ancho / 2, top = 4;
     const PIX = [], FB = [], FS = [];
     for (let py = 0; py < alto; py++) for (let px = 0; px < ancho; px++) {
@@ -715,18 +715,20 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
    * Línea gruesa. espec: brillo extra de frente (dB); S: intensidad de la mejora especular (0 = la fórmula de hoy,
    * cos⁴). Con S > 0, apunta además en una franja de 5 mm la orientación del borde (para la anisotropía del músculo).
    */
-  function trazar(P, seg, ancho, dbBase, espec, tag, S, realce = 1, etiquetar = false) {
+  function trazar(P, seg, ancho, dbBase, espec, tag, S, realce = 1, etiquetar = false, variar = 0) {
     const { A, TAG, X, Y, OR, OD, FILL, dth, dr } = G, h = ancho / 2, banda = espec && S > 0 ? 6 : 0, hh = Math.max(h + 0.35, banda);
     for (let i = 0; i < seg.length; i += 4) {
       const ax = seg[i], ay = seg[i + 1], bx = seg[i + 2], by = seg[i + 3];
       let db = dbBase, c = 1;
+      // dibujo nuevo: variar 1 = pericardio con moteado (no un trazo liso); variar 2 = septo interauricular fino con huecos (paralelo al haz)
+      if (variar === 2) { const u = Math.sin(i * 0.61) + 0.6 * Math.sin(i * 1.7 + 1); if (u > DROPOUT_SEPTO.umbral) db -= DROPOUT_SEPTO.db; }
       if (espec) {
         const tx = bx - ax, ty = by - ay, tl = Math.hypot(tx, ty) || 1, mx = (ax + bx) / 2, my = (ay + by) / 2, ml = Math.hypot(mx, my) || 1;
         c = Math.abs((-ty * mx + tx * my) / (tl * ml));
         const p = 4 + 4 * S;
         db += (espec + 4 * S * realce) * Math.pow(c, p) - 6 * S * (1 - c) * (1 - c);
       }
-      const a = amp(db);
+      let a = amp(db); const a0 = a;
       const ra = Math.hypot(ax, ay), rb = Math.hypot(bx, by), ta = Math.atan2(ax, ay), tb = Math.atan2(bx, by);
       const rmin = Math.max(1, Math.min(ra, rb) - hh), mth = Math.asin(Math.min(1, hh / rmin)) + dth;
       const i0 = Math.max(0, Math.floor((Math.min(ta, tb) - mth + P.mitad) / dth)), i1 = Math.min(nb - 1, Math.ceil((Math.max(ta, tb) + mth + P.mitad) / dth));
@@ -739,6 +741,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         if (banda && dd < banda && dd < OD[q]) { OD[q] = dd; OR[q] = c; }
         if (dd >= h + 0.35) continue;
         const cc = clamp((h - dd) / 0.35 + 0.5, 0, 1);
+        if (variar === 1) a = a0 * amp(PERICARDIO_FINO.moteadoDb * Math.sin(q * 12.9898 + 78.233 * Math.sin(q * 0.371)));
         if (espec) { if (cc * a > A[q]) A[q] = cc * a; if (cc >= 0.5) { FILL[q] = 0; if (etiquetar && !TAG[q]) TAG[q] = tag; } }
         else { A[q] += cc * (a - A[q]); if (cc >= 0.5) { TAG[q] = tag; FILL[q] = 0; } }
       }
@@ -796,7 +799,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), el.db - (el.grupo === 'VD' ? 7 : 3) * W2, espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
-        else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio');   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
+        else trazar(P, el.seg, el.ancho, el.db, espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }
     }
     // anisotropía: el músculo paralelo al haz devuelve menos eco
@@ -813,9 +816,9 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     }
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
-    const S = m.sombra;
+    const S = m.sombra, nuevoD2 = dibujoNuevo();
     if (S > 0 || W > 0 || hayCal || hayPl) {
-      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6, tope = amp(12);
+      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr * (nuevoD2 ? SOMBRA_NUEVA.refuerzo : 1)), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6 * (nuevoD2 ? SOMBRA_NUEVA.sombra : 1), tope = amp(12);
       for (let i = 0; i < nb; i++) { let at = 1, rp = 0;
         for (let j = 0, q = i; j < ns; j++, q += nb) {
           // detrás de la pleura no hay tejido: líneas A a múltiplos de su profundidad y el resto, negro
