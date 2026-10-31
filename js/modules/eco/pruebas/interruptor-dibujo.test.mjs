@@ -14,7 +14,7 @@ test('interruptor del dibujo', () => {
   assert.equal(usarDibujo(2), 1);
   assert.equal(firma(), a);
   assert.equal(construirCorazon2(est).partes.length, construirCorazon(est).partes.length);
-  const hp = estadosForma('hpcronica', 1).td;   // HP crónica grave: VD dilatado y abombado, pared gruesa
+  const hp = { ...estadosForma('hpcronica', 1).td, septoSigno: undefined };   // sin septoSigno el tabique es el de hoy (P4b lo cambia aparte)   // HP crónica grave: VD dilatado y abombado, pared gruesa
   const g2 = baseGeometrica(hp), z = -0.4 * g2.Lvd, f = 3.3;   // pared libre del VD, tercio medio
   assert.equal(usarDibujo(1), 2);
   assert.equal(firma(), a);

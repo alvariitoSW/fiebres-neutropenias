@@ -6,6 +6,7 @@ import { construirCorazonHoy, baseGeometricaHoy } from './corazon-geo.mjs';
 
 // Ajustes del dibujo nuevo sobre la geometría de hoy (cada uno, comentado con su fuente en baseGeometricaHoy):
 // P4a-1 · paredVdNormal: la pared libre del VD con el grosor de paredVdDe medido perpendicular a ella (Lang 2015 Tabla 8 p. 20).
-const AJUSTES = { paredVdNormal: true };
+// P4b · septoContinuo: el tabique desde septoSigno del motor, continuo (ESC/ERS 2022 p. 3645 Tabla 10 para el umbral del LVEI).
+const AJUSTES = { paredVdNormal: true, septoContinuo: true };
 export function construirCorazon2(estado, opciones = {}) { return construirCorazonHoy(estado, { ...opciones, ajustes: { ...AJUSTES, ...opciones.ajustes } }); }
 export function baseGeometrica2(estado) { return baseGeometricaHoy(estado, AJUSTES); }

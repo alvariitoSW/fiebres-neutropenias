@@ -19,5 +19,4 @@ for (const [k, gs] of [['normal', [undefined]], ['tep', [0, 0.5, 1]], ['hpcronic
     console.log(`${k} ${g ?? '-'} | ${f} | ${(s.pvd - s.pvi).toFixed(1)} | ${e.septo.toFixed(2)} | ${septoSignoDe(s.pvd - s.pvi).toFixed(2)} | ${(ex(1) / ex(0)).toFixed(2)} | ${(ex(0) / ex(1)).toFixed(2)} | ${ex(1).toFixed(1)} x ${ex(0).toFixed(1)}`);
   }
 }
-// Hallazgo (31/10): en el eje corto del dibujo el tabique queda ARRIBA (270°), así que su dimensión perpendicular es la vertical (y)
-// y el juez (y/x) mide el inverso del índice (D2/D1 de ASE: paralela/perpendicular al tabique). Aplanado del todo: juez 0,92; según el septo 1,09.
+// Hallazgo (31/10): con la pantalla girada el juez antiguo (y/x) medía el inverso; ahora usa paralelo/perpendicular al tabique. Esta columna y/x es la antigua.

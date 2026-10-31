@@ -954,11 +954,16 @@ export function construirCorazonHoy(estado, opciones = {}) {
 }
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
-// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal } — sin ajustes, el dibujo de hoy idéntico.
+// ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo } — sin ajustes, el dibujo de hoy idéntico.
+const GANANCIA_SEPTO = 4;
 export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
   // el tabique en este instante (formas.mjs, aplanamientoSeptal: sale del gradiente de presión VI−VD)
-  const mio = estado.mioVi ?? 1, septo = clamp(estado.septo ?? 0, 0, 1);
+  // ajustes.septoContinuo (dibujo nuevo, P4b): el tabique sigue el septoSigno continuo del motor (0…1, contrato.mjs) con una
+  // ganancia GANANCIA_SEPTO que lo satura sin escalón; así aplana ya con pVD ≈ pVI. El umbral clínico (LVEI >1,1 en HP/TEP
+  // graves) es de ESC/ERS 2022 p. 3645 Tabla 10; la curva, ilustrativa.
+  const septoIn = ajustes.septoContinuo && estado.septoSigno != null ? Math.tanh(GANANCIA_SEPTO * estado.septoSigno) / Math.tanh(GANANCIA_SEPTO) : estado.septo;
+  const mio = estado.mioVi ?? 1, septo = clamp(septoIn ?? 0, 0, 1);
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
   const { vi, alfa } = viConSeptal(estado.vvi, mio, septo);   // anatomia.mjs
