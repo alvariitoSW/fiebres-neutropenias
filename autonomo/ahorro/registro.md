@@ -2,7 +2,7 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-30-educacion-app-rio.md` (duodécima pasada, 30/10: 2,8 M frente a 2,0 M, +40 %; sin propuesta nueva: «medir tras las piezas» ya está propuesta en la undécima y aquí se repite). Antes: `2026-10-30-b3-paso4-g5.md` (undécima pasada, 30/10: 11,7 M frente a 9,0 M, +30 %; 3 propuestas: medir tras las piezas, Hacienda no junta piezas con prueba, director a 1,3 M). Antes: `2026-10-30-formula-juez.md` (décima pasada, 30/10: ≈0,95 M frente a 0,8 M, +19 %; 1 propuesta: tareas técnicas del director con jueces y ruta en el presupuesto, segunda vez tras `reglas-30-10`). Antes: `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
+**Último parte revisado:** `2026-10-31-mv-eco-2b.md` (pasada del 31/10: 6,7 M frente a 3,5 M, +91 %; 1 propuesta: pieza de física del motor a 1,2 M con comprobación previa y profesor por pieza, segunda vez tras `mv-eco-2a`). Antes: `2026-10-30-educacion-app-rio.md` (duodécima pasada, 30/10: 2,8 M frente a 2,0 M, +40 %; sin propuesta nueva: «medir tras las piezas» ya está propuesta en la undécima y aquí se repite). Antes: `2026-10-30-b3-paso4-g5.md` (undécima pasada, 30/10: 11,7 M frente a 9,0 M, +30 %; 3 propuestas: medir tras las piezas, Hacienda no junta piezas con prueba, director a 1,3 M). Antes: `2026-10-30-formula-juez.md` (décima pasada, 30/10: ≈0,95 M frente a 0,8 M, +19 %; 1 propuesta: tareas técnicas del director con jueces y ruta en el presupuesto, segunda vez tras `reglas-30-10`). Antes: `2026-10-30-b3-paso4-g4.md` (novena pasada, 30/10: 10,1 M frente a 5,15 M, +96 %; 3 propuestas: cifras de la app, un estado por encargo, script de dirección del motor). Antes: `2026-10-28-b3-paso4-g2.md` (octava pasada, 28/10: 7,5 M frente a 5,8 M, +29 %; «la pieza era más grande de lo que decía el plan» pasa a propuesta).
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
 - Continuar al mismo constructor para la pieza 2 y las vueltas: ahorró en `educacion-app` parte 1 (<60 pasos) y encareció en la parte 2 (72 pasos, 2,3 M frente a 1,45 M; cada paso releía ≈200 k). Si se repite: continuar solo por debajo de 60 pasos (ya lo dice R5); vueltas, a un sonnet nuevo.
@@ -37,6 +37,10 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
   «arreglos» con 6 arreglos (76 pasos, 1,5 M frente a 0,6). Si se repite en otro parte: un encargo por estado y tandas
   de ≤3 arreglos. Confirmado: medir `gasto.mjs` a mitad de tarea funcionó (se compareció a 8,2 M, antes del Estudiar).
 
+- (31/10, educacion-app parte 3) Suelto: el director perdió una hora de jueces por un filtro de texto que no recogía la línea
+  «✅ Todos los jueces a favor» (hubo que repetir general + 3 modelos). Si se repite: guardar la salida entera de cada pasada y
+  mirar el código de salida, no el texto. Último parte revisado: `2026-10-30-educacion-app-3.md`.
+
 ## Propuestas hechas
 | Fecha | Propuesta | Estado |
 |---|---|---|
@@ -53,3 +57,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-30 | Medir el gasto tras las piezas, antes del Estudiar | propuesta |
 | 2026-10-30 | Hacienda no junta piezas con prueba propia en un encargo | propuesta |
 | 2026-10-30 | Director del paso 4 a 1,3 M | propuesta |
+| 2026-10-31 | Continuar al mismo constructor solo si el primero acabó en ≤30 pasos | propuesta |

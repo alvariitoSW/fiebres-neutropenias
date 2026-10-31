@@ -5,7 +5,6 @@ import { tapseDeLatido, baseGeometrica, LIMITES } from './corazon-geo.mjs';
 import { estadoGeo, extraDeMotor, aplanamientoSeptal } from './formas.mjs';
 import { medidasCorazon } from './ecografia.mjs';
 import * as D from './doppler.mjs';
-import { ePrima } from './atlas/diastolica.mjs';
 
 // Escala del septo de hoy: 0-1 (0 normal; 1 aplanado, binario desde TEP 50 %). El −1…+1 continuo llega en el paso 2.
 export const ESCALA_SEPTO_HOY = '0-1 (aplanamientoSeptal de formas.mjs); el −1…+1 llega en el paso 2';
@@ -20,7 +19,7 @@ export function puenteHoy(motor) {
   const mc = medidasCorazon(est);
   const fm = { tipo: 'valvula', n: 'mitral', factor: 1 };
   const mit = D.medidasLatido(D.curvaLatido(o, fm, 1, areas, {}), fm);
-  const e = ePrima(motor.p.relajacion, u.fe);
+  const e = u.ePrima;   // e′ del motor (motor.mjs: ePrimaDeOnda)
   const vdTd = Math.max(...o.map(x => x.vvd)), vdTs = Math.min(...o.map(x => x.vvd));
   const cm2 = (x) => x / 100;
   const valores = {
@@ -36,9 +35,9 @@ export function puenteHoy(motor) {
     'anillo.excursion.tri': 'tapseDeLatido (corazon-geo.mjs)', 'pared.vd': 'medidasCorazon().paredVd (ecografia.mjs)',
     'pared.vi': 'medidasCorazon().paredPost (ecografia.mjs)', 'masa.vi': 'medidasCorazon().masaIndice (ecografia.mjs)',
     'anillo.mit': 'areasAnillo (doppler.mjs)', 'anillo.tri': 'areasAnillo (doppler.mjs)', 'anillo.ao': 'areasAnillo (doppler.mjs)',
-    'anillo.pul': 'areasAnillo (doppler.mjs)', 'anillo.vel.e': 'ePrima (atlas/diastolica.mjs)', eSep: 'ePrima', eLat: 'ePrima',
+    'anillo.pul': 'areasAnillo (doppler.mjs)', 'anillo.vel.e': 'ePrimaDeOnda (motor.mjs)', eSep: 'ePrimaDeOnda', eLat: 'ePrimaDeOnda',
     E: 'medidasLatido (doppler.mjs)', A: 'medidasLatido', ea: 'medidasLatido', dt: 'medidasLatido (tde)', fusion: 'medidasLatido',
-    eE: 'medidasLatido / ePrima', fueraDeMarco: 'LIMITES (corazon-geo.mjs)', limites: 'LIMITES (corazon-geo.mjs)', septo: 'aplanamientoSeptal (formas.mjs)',
+    eE: 'medidasLatido / ePrimaDeOnda', fueraDeMarco: 'LIMITES (corazon-geo.mjs)', limites: 'LIMITES (corazon-geo.mjs)', septo: 'aplanamientoSeptal (formas.mjs)',
   };
   return { valores, limites: LIMITES, funcion, serie: { septo: o.map(aplanamientoSeptal) } };
 }

@@ -162,7 +162,7 @@ if (!pide('--sin-navegador')) {
     const servidor = spawn('python3', ['-m', 'http.server', String(PUERTO)], { cwd: RAIZ, stdio: 'ignore' });
     const base = `http://localhost:${PUERTO}/`;
     try {
-        for (let i = 0; i < 50; i++) { try { await fetch(base); break; } catch { await new Promise(r => setTimeout(r, 200)); } }
+        for (let i = 0; i < 50; i++) { try { await (await fetch(base)).arrayBuffer(); break; } catch { await new Promise(r => setTimeout(r, 200)); } }
         const { chromium } = await import('/opt/node22/lib/node_modules/playwright/index.mjs');
         const nav = await chromium.launch();
         const fichas = valores('--ficha').map(f => { const [especialidad, view, panel, tab] = f.split(':'); return { especialidad, view, panel, tab, nombre: f }; });

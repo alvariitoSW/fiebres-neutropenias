@@ -1,0 +1,45 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 4, opción A). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b4-iones-a.html
+     «La célula que crece»: la escena del potasio ampliada con magnesio, calcio y fosfato. Plasma arriba, célula abajo,
+     salidas (orina, heces, diálisis), cajones del hueso y del tubo de muestra, las Fig. 36.2 y 38.1 vivas y el ECG del ritmo vivo.
+     Fuente: Marino 2024, caps. 35-38 (docs/marino-2024-electrolitos-caps35-38.pdf). Sin librerías: SVG y JS puro. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iones vivos · la célula que crece · para revisar</title>
+<link rel="stylesheet" href="b4-iones-a/base.css">
+</head>
+<body>
+<main>
+  <header class="cab">
+    <div><h1>Iones vivos</h1><p class="aviso">Para revisar: aún no está en la app</p></div>
+    <div class="interruptor" role="tablist" aria-label="Modo">
+      <button type="button" role="tab" id="modo-explorar" aria-selected="true">Explorar</button>
+      <button type="button" role="tab" id="modo-preguntas" aria-selected="false">Mayéutica</button>
+    </div>
+  </header>
+  <section class="tarjeta" id="tarjeta" aria-label="La célula y sus iones">
+    <div class="tarj-cab"><b id="pac-nombre">Persona sana</b><button type="button" id="explicame">Explícame este estado</button></div>
+    <svg id="esc" viewBox="0 0 360 500" role="img" aria-label="Plasma con sus iones, salidas por orina, heces y diálisis, la célula, el hueso, el tubo de muestra, dos curvas vivas y el electrocardiograma"></svg>
+    <p class="pista" id="pista" style="font:.72rem var(--sans);color:var(--text-muted)">Toca una pieza: su nombre. Las partículas no están a escala: cada una vale unos 12 mEq en la célula y unos 0,5 mEq/L en el plasma <span class="org ilu">ilustrativo</span></p>
+    <div id="leyenda"></div>
+    <div class="lecturas" id="lecturas"></div>
+  </section>
+  <section class="bloque" id="guia" hidden aria-live="polite"></section>
+  <section id="vista-preg" hidden aria-live="polite"></section>
+  <section id="abajo" style="display:grid;gap:8px">
+    <details class="plegable"><summary>Las fuentes de este estado</summary><ul class="lista" id="lista-fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div id="lista-notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="lista-prof"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"></p>
+<div class="dock" id="dock">
+  <div class="dock-in" id="dock-explorar">
+    <div class="dock-tabs" role="tablist" aria-label="Mandos" id="dock-tabs"></div>
+    <div id="dock-panel"></div>
+  </div>
+  <div class="dock-in" id="dock-estudio" hidden></div>
+</div>
+<div id="toast" role="status" hidden style="position:fixed;left:10px;right:10px;bottom:calc(var(--dock-h) + 70px);z-index:40;background:var(--accent-yellow);color:var(--bg-main);padding:8px 12px;border-radius:8px;font:600 .78rem var(--sans)"></div>
+<script type="module" src="b4-iones-a/pagina.js"></script>
+</body></html>

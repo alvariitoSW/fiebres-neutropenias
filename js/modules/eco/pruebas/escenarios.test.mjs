@@ -61,7 +61,9 @@ for (const k of CON_GRAVEDAD) {
     const d = crearMotor(); esc.aplicar(d);
     const esperado = { hemorragia: () => d.p.hemorragia === 1000, fallo: () => Math.abs(d.p.vi.ees - 0.9) < 1e-9,
       derrame: () => Math.abs(d.p.liquidoPeri - 260) < 1e-9,
-      tep: () => Math.abs(d.p.rPul - escalarRPul(BASE, 8)) < 1e-9 && Math.abs(d.p.vd.ees / BASE.vd.ees - 0.65) < 1e-9 };
+      // P5a: el defecto del TEP ya no es ×8 y ees ×0,65 (extremo: FEVD 13 %, PAM 67) sino el submasivo: g = 0,7 con u = g^0,6 →
+      // (P3: la resistencia máxima pasa de ×9 a ×6,6 al bajar también la distensibilidad pulmonar) resistencia ×6,6^u y ees × (1 − 0,376 u) (~0,70). Es una DEFINICIÓN, no un umbral clínico
+      tep: () => { const u = 0.7 ** 0.6; return Math.abs(d.p.rPul - escalarRPul(BASE, 6.6 ** u)) < 1e-9 && Math.abs(d.p.vd.ees / BASE.vd.ees - (1 - 0.35 / (Math.log(8) / Math.log(9)) * u)) < 1e-9; } };
     assert.ok(esperado[k](), 'el defecto no reproduce el escenario de antes');
   });
 

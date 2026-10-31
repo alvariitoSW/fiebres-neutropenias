@@ -36,6 +36,7 @@ import { init as initShockVivo } from './shock-vivo/index.js';
 import { init as initPulmonVivo } from './pulmon-vivo/index.js';
 import { init as initRitmoVivo } from './ritmo-vivo/index.js';
 import { init as initReceptorVivo } from './receptor-vivo/index.js';
+import { init as initIonesVivos } from './iones-vivos/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -62,13 +63,13 @@ const BLOQUES = {
     // de Libros); aquí solo cuenta sus fichas y pone la tira de sus modelos vivos en ese cuaderno. Sus preguntas de
     // repaso están en el quiz de Hematología.
     marinoSangre: { vista: 'merino-hemato-view', panel: 'panel-merino-tabs', nombre: 'Sangre y hemostasia', preguntas: [], vivos: ['cpv-menu-libros', 'vso-menu-libros', 'tel-menu-libros'] },
-    marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros'] },
+    marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros', 'iov-menu-libros'] },
     marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [] },
     marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
-const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo']);
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos']);
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -125,6 +126,8 @@ export function init() {
         pulmonVivo: document.getElementById('pulmon-vivo-view'),
         ritmoVivo: document.getElementById('ritmo-vivo-view'),
         receptorVivo: document.getElementById('receptor-vivo-view'),
+        // Iones vivos (bloque 4, caps. 36-38; fichas en Marino Ácido-base, renal y electrolitos)
+        ionesVivos: document.getElementById('iones-vivos-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -221,6 +224,7 @@ export function init() {
     const pulmonVivo = arrancar('pulmon', initPulmonVivo);
     const ritmoVivo = arrancar('ritmo', initRitmoVivo);
     const receptorVivo = arrancar('receptor', initReceptorVivo);
+    const ionesVivos = arrancar('iones', initIonesVivos);
 
     librosLevel.show('menu');
 
@@ -243,6 +247,8 @@ export function init() {
             pulmonVivo: (estadoClave, origen) => pulmonVivo?.abrir(estadoClave, origen),
             ritmoVivo: (estadoClave, origen) => ritmoVivo?.abrir(estadoClave, origen),
             receptorVivo: (estadoClave, origen) => receptorVivo?.abrir(estadoClave, origen),
+            // data-iones-vivos="<paciente>[:paso|:ion]", los iones vivos
+            ionesVivos: (estadoClave, origen) => ionesVivos?.abrir(estadoClave, origen),
         },
     };
 }

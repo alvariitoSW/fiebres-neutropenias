@@ -40,7 +40,11 @@ export const CAPITULOS = {
   shunts: { html: 'cap-shunts.html', sub: 'CIA, CIV y FOP: Qp/Qs, cuándo cerrar, suero agitado y la presión de la AI por el septo' },
   masses: { html: 'cap-masses.html', sub: 'Mixoma de la AI, trombo del VI y fibroelastoma: describir la masa, falsos positivos y el contraste' },
   endocarditis: { html: 'cap-endocarditis.html', sub: 'Criterios de imagen, ETT y ETE, vegetación y embolia, cirugía a los 10 mm y perforación con IM aguda' },
+  prosthetic: { html: 'cap-prosthetic.html', sub: 'Prótesis aórtica: gradientes, AOE y DVI, estenosis frente a desproporción, trombo o pannus y fuga paravalvular' },
   mi: { html: 'cap-mi.html', sub: 'Rotura septal, papilar y de pared libre, pseudoaneurisma frente a aneurisma verdadero e infarto del VD' },
+  lvad: { html: 'cap-lvad.html', sub: 'HeartMate 3: estudio de seguimiento, rampa de velocidad, succión, fallo del VD, IAo nueva y obstrucción' },
+  tee: { html: 'cap-tee.html', sub: 'La sonda y sus movimientos, la orientación, las 17 vistas con las 11 básicas y lo que añade a la ETT' },
+  ai: { html: 'cap-ai.html', sub: 'EchoPrime y EchoNet-Measurements: vistas, pesos, recuperación, las 18 medidas, rendimiento, límites y ensayos' },
 };
 const ORDEN = ATLAS_PARTES.flatMap(p => p.caps.map(c => c[0]));
 const EN_APP = ORDEN.filter(k => CAPITULOS[k]);

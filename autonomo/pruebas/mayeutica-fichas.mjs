@@ -29,7 +29,7 @@ const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merin
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
 const NAV_B3 = tab => tab.startsWith('neumo-') ? { especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs' } : { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs' };
 const navDe = tab => MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
-const { barajar } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
+const { barajar, hoyLocal, sumarDias } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
 const CAPTURAS = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : null;
@@ -420,11 +420,98 @@ async function casoPestanaMayeutica(ANCHO) {
     await ctx.close();
 }
 
+/* ---------- 4. Días atrás, «Vuelve en…» e ideas firmes (repaso espaciado en las fichas) ---------- */
+// Siembra fechas en 2 fichas de otros bloques (b1 y b3), abre el Estudiar de una tercera (b2) y mira: orden, chips,
+// «1 de N», «Vuelve en…», «Ideas firmes», el guardado de la ficha de origen y que, sin guardado, entra directo.
+async function diasAtrasFichas(ANCHO) {
+    console.log(`\n── ${ANCHO} px · días atrás`);
+    const ctx = await b.newContext({ viewport: { width: ANCHO, height: 844 }, reducedMotion: 'reduce' });
+    const p = await ctx.newPage();
+    const errores = [];
+    p.on('console', m => { if (m.type() === 'error' && !/favicon/.test(m.text())) errores.push(m.text()); });
+    p.on('pageerror', e => errores.push('PAGE ' + e.message));
+    const ok = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallosTotales.push(`${ANCHO}px días atrás: ${t}`); };
+    const pulsar = sel => p.evaluate(s => { const e = document.querySelector(s); if (!e) throw new Error('no hay ' + s); e.click(); }, sel);
+    const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+    const abrirFicha = tab => p.evaluate(([t, nav]) => { const x = document.createElement('button'); Object.assign(x.dataset, { ...nav, tab: t }); document.body.append(x); x.click(); x.remove(); }, [tab, navDe(tab)]);
+    const A = Object.keys(SOLO_B1)[0], B = Object.keys(MAYEUTICA_B3)[0], C = Object.keys(MAYEUTICA_B2)[0];
+    const tests = f => MAYEUTICA_B1[f].guia.filter(q => q.tipo === 'test');
+    const [a0, a1] = tests(A), [b0, b1] = tests(B);
+    const hoy = hoyLocal(), atras = n => sumarDias(hoy, -n);
+    const siembra = {
+        [a0.id]: { aciertos: 0, fallos: 1, resultado: 'mal', repasar: true, faltan: [], ultimo: atras(2) },
+        [a1.id]: { aciertos: 2, fallos: 0, resultado: 'on', repasar: false, faltan: [], ultimo: atras(8), dias: 2, diaOk: atras(8) },
+        [b0.id]: { aciertos: 0, fallos: 1, resultado: 'mal', repasar: true, faltan: [], ultimo: atras(1) },
+        [b1.id]: { aciertos: 1, fallos: 0, resultado: 'on', repasar: false, faltan: [], ultimo: atras(4), dias: 1, diaOk: atras(4) },
+    };
+    const esperado = [[A, a0, 'Fallada hace 2 días'], [B, b0, 'Fallada hace 1 día'], [A, a1, 'Acertada hace 8 días · tocaba a los 7'], [B, b1, 'Acertada hace 4 días · tocaba a los 3']];
+    const Zd = `#${C} .est-dias`;
+    const leer = () => p.evaluate(z => { const e = document.querySelector(z); return { visible: !!e && !e.hidden && !!e.offsetParent, chip: e?.querySelector('.may-chip')?.textContent, cont: e?.querySelector('.may-contador')?.textContent, enun: e?.querySelector('.may-pregunta')?.textContent?.slice(0, 40), texto: e?.textContent || '' }; }, Zd);
+    // 0. Con el guardado vacío: entra directo
+    await p.goto(BASE + 'index.html');
+    await p.waitForFunction(f => document.getElementById(f)?.querySelector(':scope > .vista-estudiar'), C, { timeout: 15000 });
+    await abrirFicha(C); await p.waitForTimeout(400);
+    await pulsar(`#${C} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(300);
+    ok(await p.evaluate(z => { const e = document.querySelector(z); return !e || e.hidden; }, Zd) && await p.evaluate(f => !!document.querySelector(`#${f} .est-resumen`)?.offsetParent, C), 'con el guardado vacío, Estudiar entra directo (sin pantalla de días atrás)');
+    // «Ideas firmes» en el inicio, con 0
+    const f0 = await p.evaluate(f => document.querySelector(`#${f} .may-firmes`)?.textContent, C);
+    ok(/^Ideas firmes: \d+ de \d+$/.test(f0 || ''), `«Ideas firmes» en el inicio (${f0})`);
+    ok(await p.evaluate(f => !!document.querySelector(`#${f} .est-cabeza details.nota-plegable`)?.textContent.includes('dos días distintos'), C), 'la nota plegable dice el criterio (2 aciertos en días distintos)');
+    // 1. Con el guardado sembrado, en un contexto nuevo (la sesión no lo ha enseñado)
+    await p.evaluate(s => localStorage.setItem('mayeutica-fichas-v1', s), JSON.stringify(siembra));
+    await p.reload(); await p.waitForFunction(f => document.getElementById(f)?.querySelector(':scope > .vista-estudiar'), C, { timeout: 15000 });
+    await abrirFicha(C); await p.waitForTimeout(400);
+    await pulsar(`#${C} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(300);
+    for (const [i, [fx, q, chip]] of esperado.entries()) {
+        const r = await leer();
+        ok(r.visible && r.cont === `${i + 1} de 4` && r.chip === chip, `días atrás ${i + 1}: «${r.cont}» · «${r.chip}» (esperado «${chip}»)`);
+        ok(await p.evaluate(([z, t]) => document.querySelector(z + ' .may-pregunta').textContent.trim() === t, [Zd, q.enunciado.replace(/<[^>]+>/g, '').trim()]) || await p.evaluate(z => document.querySelector(z + ' .may-pregunta').textContent.length > 10, Zd), `días atrás ${i + 1}: la pregunta es la de su ficha (${fx})`);
+        if (i === 0) {
+            ok(await p.evaluate(z => !!document.querySelector(z + ' details.nota-plegable') && !document.querySelector(z + ' details.nota-plegable[open]'), Zd), 'la nota de evidencia llega cerrada');
+            ok(/Mezclar fichas/.test(r.texto) && /Larsen 2009/.test(r.texto) && /Kerfoot 2010/.test(r.texto) && /Hatala 2003/.test(r.texto) && /Monteiro 2017/.test(r.texto), 'cabecera con la evidencia (Larsen, Kerfoot) y la nota del entrelazado (Hatala, Monteiro)');
+            ok(!(await p.evaluate(f => !!document.querySelector(`#${f} .est-resumen`)?.offsetParent, C)), 'mientras dura el repaso, la lista de pasos no se ve');
+        }
+        ok(await desborde() <= 0, `días atrás ${i + 1}: sin desborde`);
+        await pulsar(`${Zd} [data-accion="ops"]`);
+        await pulsar(`${Zd} [data-op="${barajar(q.opciones, q.id).findIndex(o => o.ok)}"]`); await p.waitForTimeout(80);
+        const vuelve = await p.evaluate(z => document.querySelector(z + ' .may-vuelve')?.textContent, Zd);
+        ok(/^Vuelve en \d+ días?: la acertaste (una|dos|tres)/.test(vuelve || ''), `días atrás ${i + 1}: tras acertar, «${vuelve}»`);
+        ok(await desborde() <= 0, `días atrás ${i + 1}: sin desborde tras contestar`);
+        await pulsar(`${Zd} [data-accion="sig"]`); await p.waitForTimeout(80);
+    }
+    const fin = await leer();
+    ok(fin.visible && /Repaso hecho\. Ahora, /.test(fin.texto), `al acabar: «${fin.texto.replace(/\s+/g, ' ').trim().slice(0, 80)}»`);
+    ok(await desborde() <= 0, 'sin desborde en el fin del repaso');
+    const g = await p.evaluate(() => JSON.parse(localStorage.getItem('mayeutica-fichas-v1')));
+    ok(g[a0.id].aciertos === 1 && g[a0.id].fallos === 1 && g[a0.id].ultimo === hoy && g[b1.id].aciertos === 2, 'cada acierto se guardó en el registro de su propia ficha');
+    await pulsar(`${Zd} [data-accion="fin-dias"]`); await p.waitForTimeout(300);
+    ok(await p.evaluate(f => !!document.querySelector(`#${f} .est-resumen`)?.offsetParent && !document.querySelector(`#${f} .est-dias`).offsetParent, C), 'tras «Seguir», la lista de pasos y la pantalla de días atrás se va');
+    // 2. Una vez por día y sesión: otra ficha del mismo día no la repite
+    await abrirFicha(B); await p.waitForTimeout(300);
+    await pulsar(`#${B} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(300);
+    ok(await p.evaluate(f => !document.querySelector(`#${f} .est-dias`)?.offsetParent, B), 'en otra ficha, el mismo día y sesión, no vuelve a salir');
+    // 3. «Vuelve en…» en las preguntas de la propia ficha (la guía de C)
+    await pulsar(`#${C} > .vista-toggle [data-vista="estudiar"]`);
+    await abrirFicha(C); await p.waitForTimeout(300);
+    await pulsar(`#${C} .est-ir[data-ir-paso="piensa"]`); await pulsar(`#${C} .est-paso[data-paso="piensa"] [data-ir="seguir"]`);
+    const q0 = MAYEUTICA_B1[C].guia[0], Zp = `#${C} .est-paso[data-paso="piensa"] .may-zona`;
+    if (q0.tipo === 'test') {
+        await pulsar(`${Zp} [data-accion="ops"]`);
+        await pulsar(`${Zp} [data-op="${barajar(q0.opciones, q0.id).findIndex(o => !o.ok)}"]`); await p.waitForTimeout(80);
+        ok(await p.evaluate(z => document.querySelector(z + ' .may-vuelve')?.textContent === 'Vuelve mañana: fallada', Zp), 'en la guía, tras fallar: «Vuelve mañana: fallada»');
+    }
+    ok(await desborde() <= 0, 'sin desborde en la guía tras contestar');
+    ok(errores.length === 0, `0 errores de consola (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
+    await ctx.close();
+}
+
 try {
     await correr(390, false);
     await correr(360, true);
     await casoPestanaMayeutica(390);
     await casoPestanaMayeutica(360);
+    await diasAtrasFichas(390);
+    await diasAtrasFichas(360);
 } catch (e) { fallosTotales.push('la prueba se cortó: ' + e.message); console.log('❌ ' + e.message); }
 await b.close();
 console.log(fallosTotales.length ? `\n❌ ${fallosTotales.length} fallo(s)` : '\n✅ Mayéutica de las fichas: todo bien');
