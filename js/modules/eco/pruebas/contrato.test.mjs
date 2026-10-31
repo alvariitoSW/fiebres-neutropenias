@@ -165,7 +165,7 @@ test('fallo:1 el latido enlaza consigo mismo (P4b: la cola de la activación pas
   assert.deepEqual(v.errores, []);
 });
 test.todo('fallo conocido · HP crónica: VD/VI 0,72 en la imagen (el motor da 1,76 en volumen); se mide en la imagen en mv-eco-2a5');
-test.todo('hueco · regional (McConnell), septoFase, MAPSE, s′/a′, VCI, raíz aórtica, regurgitación aórtica por instante: sin dato en el motor ni fuente en docs/');
+test.todo('hueco · septoFase (regional ya tiene valor: regional.test.mjs), MAPSE, s′/a′, VCI, raíz aórtica, regurgitación aórtica por instante: sin dato en el motor ni fuente en docs/');
 
 test('bandas sin campo: la lista conocida es exactamente la que sale en los 21 casos', () => {
   assert.deepEqual([...VISTAS].sort(), SIN_CAMPO);

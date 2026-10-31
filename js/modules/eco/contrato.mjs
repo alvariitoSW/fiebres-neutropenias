@@ -5,6 +5,7 @@
 // `banda`: nombre de la medida en BANDAS (pruebas/bandas-paciente.mjs); los rangos no se copian aquí, los recibe
 // validarContrato(c, { bandas, clave }) como argumento. Fuentes de esas bandas: ver bandas-paciente.mjs (libro y página).
 
+import { BASE } from './motor.mjs';
 export const ORIGENES = ['motor', 'puente-hoy', 'hueco'];
 const USO = { b: 'B-mode', d: 'Doppler', m: 'modo M', l: 'lecturas', w: 'Wiggers', a: 'asa', g: 'geometría' };
 
@@ -73,7 +74,7 @@ B('derrame', 'mL', 'Líquido pericárdico', 'motor', ['b', 'l']);
 B('vci.diam', 'mm', 'Diámetro de la VCI (el motor no lo calcula)', 'hueco', ['b', 'l']);
 B('vci.colapso', '%', 'Colapso inspiratorio de la VCI', 'hueco', ['b', 'l']);
 B('septoFase', '-', "Fase en que septoSigno pasa de SEPTO_UMBRAL: 'sistole' | 'diastole' | 'ambas' | null (sístole = válvula aórtica abierta)", 'motor', ['b']);
-B('regional', '0-1', 'Acortamiento por segmento (17 del VI + 3 del VD): McConnell; llega con el paso 2', 'hueco', ['b']);
+B('regional', '0-1', 'Acortamiento relativo por segmento (1 = normal, 0 = acinesia): 17 del VI (Lang 2015) + 3 del VD (SEGMENTOS_REGIONAL); McConnell en el TEP. Ilustrativo (ver regionalDe)', 'motor', ['b']);
 B('periodo', 's', 'Duración del latido (motor.ultimo.periodo)', 'motor', ['l', 'w']);
 for (const [k, n] of [['s1', 'cierre mitral (S1)'], ['s2', 'cierre aórtico (S2)'], ['s2p', 'cierre pulmonar'], ['aoAbre', 'apertura aórtica'], ['mitAbre', 'apertura mitral'], ['pulAbre', 'apertura pulmonar'], ['triCierra', 'cierre tricuspídeo']])
   B('tiempos.eventos.' + k, 's', 'Instante en el latido: ' + n + ' (null si el motor no lo da)', 'motor', ['d', 'w']);
@@ -92,6 +93,32 @@ export const CAMPOS = Object.freeze(Object.fromEntries(lista.map(c => [c.clave, 
 // quede <0,3 y el aplanamiento aparezca con pVD ≈ pVI. Umbral de fase 0,5: ilustrativo.
 export const SEPTO_ESCALA = 2, SEPTO_NORMA = 6, SEPTO_UMBRAL = 0.5;
 export const septoSignoDe = (grad) => Math.tanh(Math.log1p(Math.exp(grad / SEPTO_ESCALA)) / SEPTO_NORMA);
+
+// Movimiento regional (mv-eco-2a5 P5b). 20 valores 0-1 = acortamiento de cada segmento ÷ el normal (1 = normal, 0 = acinesia).
+// Orden: 17 del VI en el modelo de 17 segmentos recomendado por Lang 2015 (Fig. 3, PDF p. 11; recomendación, p. 12; nombres,
+// p. 10): basal 1-6, medio 7-12, apical 13-16 y ápex 17; luego 3 del VD.
+export const SEGMENTOS_REGIONAL = Object.freeze([
+  ...['anterior', 'anteroseptal', 'inferoseptal', 'inferior', 'inferolateral', 'anterolateral'].map(n => 'VI basal ' + n),
+  ...['anterior', 'anteroseptal', 'inferoseptal', 'inferior', 'inferolateral', 'anterolateral'].map(n => 'VI medio ' + n),
+  ...['anterior', 'septal', 'inferior', 'lateral'].map(n => 'VI apical ' + n), 'VI ápex',
+  'VD pared libre basal', 'VD pared libre media', 'VD ápex']);
+// FE del motor normal (medida: FEVI 60,9 %, FEVD 53,0 %): el cociente caso ÷ normal es el acortamiento relativo. Ilustrativo.
+const FEVI_NORMAL = 61, FEVD_NORMAL = 53;
+// McConnell: acinesia de la pared libre del VD con movimiento normal del ápex, específico del TEP agudo y presente en el 20 %
+// (Marino 2024, cap. 22, «Diagnostic Aids», PDF p. 7 de docs/marino-2024-respiratory-management-caps22-26.pdf; no trae página impresa).
+// El libro no da cuánto cae la pared libre ni cuánto se conserva el ápex: MCCONNELL_PARED (la pared libre se mueve la mitad de lo que
+// toca por la FEVD) y APEX_DEFICIT (el ápex pierde la mitad del déficit global) son ILUSTRATIVOS. Así sale a partir del defecto
+// (riesgo intermedio) y la pared libre se aleja del ápex al crecer la gravedad. La isquemia regional del VI es un HUECO: el motor
+// no tiene regiones, así que los 17 del VI son uniformes (FEVI ÷ normal). HP crónica (pared gruesa): hipocinesia global del VD.
+const MCCONNELL_PARED = 0.5, APEX_DEFICIT = 0.5;
+const c01 = (x) => Math.min(1, Math.max(0, x));
+/** `motor` solo se lee: la sobrecarga aguda de presión del VD (TEP) es resistencia pulmonar ≥ 2× la normal con la pared del VD fina (mioVd ≤ 1). */
+export function regionalDe(motor, feVi, feVd) {
+  const vi = c01(feVi / FEVI_NORMAL), vd = c01(feVd / FEVD_NORMAL);
+  const tep = motor.p.rPul >= 2 * BASE.rPul && (motor.p.mioVd ?? 1) <= 1;
+  const pared = tep ? vd * MCCONNELL_PARED : vd, apex = tep ? 1 - (1 - vd) * APEX_DEFICIT : vd;
+  return [...Array(17).fill(vi), pared, pared, apex];
+}
 
 const ORIGEN = Object.fromEntries(lista.map(c => [c.clave, c.origen]));
 const L = (v) => Number.isFinite(v) ? v : null;
@@ -137,7 +164,7 @@ export function contratoDe(motor, puente) {
     'tiempos.eventos.s1': L(u.tS1), 'tiempos.eventos.s2': L(u.tS2), 'tiempos.eventos.s2p': L(u.tS2p), 'tiempos.eventos.aoAbre': L(u.tAoAbre),
     'tiempos.eventos.mitAbre': L(u.tMitAbre), 'tiempos.eventos.pulAbre': L(u.tPulAbre), 'tiempos.eventos.triCierra': L(u.tTriCierra),
     fusion: puente ? (pv.fusion ?? null) : null, limites: puente ? (puente.limites ?? null) : null,
-    septoFase: fS && fD ? 'ambas' : fS ? 'sistole' : fD ? 'diastole' : null, regional: null, fueraDeMarco: puente ? !!pv.fueraDeMarco : null,
+    septoFase: fS && fD ? 'ambas' : fS ? 'sistole' : fD ? 'diastole' : null, regional: regionalDe(motor, 100 * u.fe, 100 * (vdTd - vdTs) / vdTd), fueraDeMarco: puente ? !!pv.fueraDeMarco : null,
   };
   return { latido, instantes, origen: { ...ORIGEN } };
 }
