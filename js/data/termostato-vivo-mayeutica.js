@@ -96,7 +96,7 @@ const PREG_RECORRIDO = [
     enunciado: 'Marcial, 28 años y 75 kg, en quirófano con isoflurano: el CO₂ espirado sube, el masetero se pone rígido y la T aún es 37,2 °C. Suspendes el halogenado. <b>¿Cómo pautas el dantroleno?</b>',
     opciones: [
       { t: 'Una dosis de 1 mg/kg (75 mg) y esperar a ver si cede la rigidez antes de repetir.', porque: 'La pauta repite el bolo cada pocos minutos hasta que ceden los síntomas o se llegue a 10 mg/kg (p. 48). Una dosis aislada deja abierto el canal de calcio mientras sube el calor.' },
-      { t: '1-2 mg/kg en bolo rápido, repetido hasta ceder o 10 mg/kg; luego 1-2 mg/kg/6 h 24 h.', ok: true },
+      { t: '1-2 mg/kg en bolo rápido, repetido hasta ceder o 10 mg/kg; luego 1-2 mg/kg/6 h, 24 h o más.', ok: true },
       { t: '10 mg/kg (750 mg) de una vez, para llegar al máximo sin perder tiempo.', porque: 'Los 10 mg/kg son el tope acumulado, no la dosis inicial (p. 48). La pauta empieza en 1-2 mg/kg y repite hasta ese tope (p. 48); saltarse ese escalón no es lo que describe el libro.' },
       { t: 'Hielo y fluidos fríos: el dantroleno solo si la temperatura pasa de 40 °C.', porque: 'La temperatura sube tarde (p. 49) y el hielo no cierra el canal de calcio: lo que baja la temperatura es controlar la rigidez (p. 49). En los casos no tratados la mortalidad es ≥70 % (p. 49).' }],
     explicacion: 'Dantroleno 1-2 mg/kg en bolo rápido IV, repetido hasta que ceda o se llegue a 10 mg/kg; después 1-2 mg/kg cada 6 h al menos 24 h, para prevenir la recaída (Tabla 43.2, p. 48). Según la fuente, la mortalidad de los casos no tratados es ≥70 % y con dantroleno temprano baja la mortalidad de ≥70 % a ≤10 % (p. 49).', fuente: ['48|ma-hm-tto', '49|ma-hm-clinica'] },
@@ -113,9 +113,9 @@ const PREG_RECORRIDO = [
     frases: [
       { t: 'Medir la temperatura con una sonda vesical, esofágica o rectal.', mal: false, c: '' },
       { t: 'Los fluidos a temperatura ambiente (21 °C) son seguros para reponer el volumen mientras se recalienta.', mal: true, c: 'Los fluidos a 21 °C enfrían más al paciente; se infunden calientes, y aun así solo evitan enfriar más (p. 56).' },
-      { t: 'En un paciente intubado, con los gases inspirados a 40-45 °C, la temperatura sube unos 2,5 °C por hora.', mal: false, c: '' },
+      { t: 'En un paciente intubado, con los gases inspirados a 40-45 °C, la temperatura puede subir unos 2,5 °C por hora.', mal: false, c: '' },
       { t: 'En parada por hipotermia no se declara la muerte hasta haberlo recalentado.', mal: false, c: '' }],
-    explicacion: 'Un error: los fluidos a 21 °C enfrían (p. 56). La temperatura central se mide con sonda (p. 55), en intubados los gases calientes suben unos 2,5 °C/h (p. 56) y la muerte no se declara sin recalentar (p. 55).', fuente: ['55|ma-hipo-grados', '56|ma-hipo-externo'] },
+    explicacion: 'Un error: los fluidos a 21 °C enfrían (p. 56). La temperatura central se mide con sonda (p. 55), en intubados los gases calientes pueden subirla unos 2,5 °C/h (p. 56) y la muerte no se declara sin recalentar (p. 55).', fuente: ['55|ma-hipo-grados', '56|ma-hipo-externo'] },
   { grupo: 'examen', num: 'E4', sinModelo: true,
     enunciado: 'Un paciente de 70 kg con fiebre y lesión cerebral isquémica tras una parada: aquí sí se baja. Eliges ibuprofeno IV. <b>¿Qué dosis da el libro?</b>',
     opciones: [
@@ -159,7 +159,7 @@ const CASO_J = { id: 'tmv-jacinta', titulo: 'La rigidez antes que la fiebre (Jac
     frases: [
       { t: 'Bajo el haloperidol a la mitad hasta que ceda la rigidez.', mal: true, c: 'La medida más importante es retirar el fármaco de inmediato, no reducirlo (p. 50).' },
       { t: 'Bromocriptina 10 mg tres veces al día para la rigidez: mejora en horas, aunque la respuesta completa tarda días.', mal: false, c: '' },
-      { t: 'Paracetamol para la fiebre: así baja el termostato.', mal: true, c: 'Es hipertermia, no fiebre: el antipirético es ineficaz (p. 45). Se baja con enfriamiento externo si hace falta, pero lo que corrige el problema es controlar la rigidez (p. 50).' },
+      { t: 'Paracetamol para la fiebre: así baja el termostato.', mal: true, c: 'Es hipertermia, no fiebre: el antipirético es ineficaz (p. 45). Se baja con enfriamiento externo si hace falta, pero lo que corrige el problema es controlar la rigidez (p. 50-51).' },
       { t: 'La CK pasa de 1.000 U/L, lo que separa el SNM de una distonía.', mal: false, c: '' },
       { t: 'Profilaxis tromboembólica: es obligatoria, porque aumenta el riesgo de trombosis venosa profunda.', mal: false, c: '' }],
     explicacion: 'Dos errores: se retira el haloperidol, no se reduce (p. 50), y el paracetamol no sirve en la hipertermia (p. 45). La bromocriptina (p. 51), la CK mayor de 1.000 U/L (p. 50) y la profilaxis tromboembólica obligatoria (p. 50-51) son ciertas.', fuente: ['50|ma-snm-clinica', '51|ma-snm-tto'] },
@@ -203,9 +203,9 @@ const CASO_H = { id: 'tmv-honorato', titulo: 'Nadie está muerto hasta estar cal
     enunciado: '¿Qué le dices al adjunto sobre recalentar a Honorato? <b>Son tres cosas.</b>',
     puntos: [
       { t: 'Los <span class="hl-azul">fluidos calientes</span> solo evitan que se enfríe más; no lo recalientan.', c: '56|ma-hipo-externo' },
-      { t: 'En un paciente intubado, los <span class="hl-azul">gases a 40-45 °C</span> suben la temperatura central unos 2,5 °C por hora.', c: '56|ma-hipo-externo' },
+      { t: 'En un paciente intubado, los <span class="hl-azul">gases a 40-45 °C</span> pueden subir la temperatura central unos 2,5 °C por hora.', c: '56|ma-hipo-externo' },
       { t: 'Ni <span class="hl-rojo">lavado gástrico</span> con líquido caliente (riesgo de aspiración) ni <span class="hl-rojo">lavado vesical</span> caliente (ineficaz).', c: '56|ma-hipo-externo' }],
-    explicacion: 'Recalentamiento interno (p. 56): fluidos calientes (evitan seguir enfriando), gases inspirados a 40-45 °C (≈2,5 °C/h en intubados), y sin lavado gástrico ni vesical.', fuente: ['56|ma-hipo-externo'] },
+    explicacion: 'Recalentamiento interno, para la hipotermia grave en la que el calentamiento externo activo no basta (p. 56): fluidos calientes (evitan seguir enfriando), gases inspirados a 40-45 °C (≈2,5 °C/h en intubados), y sin lavado gástrico ni vesical.', fuente: ['56|ma-hipo-externo'] },
   { momento: 'La parada', estado: est('hipo', 4), dato: fila('hipo', 4), tipo: 'test',
     enunciado: 'Apnea y asistolia con la temperatura por debajo de 24 °C. <b>¿Declaras la muerte?</b>',
     opciones: [
@@ -221,7 +221,7 @@ const CASO_H = { id: 'tmv-honorato', titulo: 'Nadie está muerto hasta estar cal
       { t: 'Lavado gástrico con líquido caliente.', porque: 'Es un método no recomendado por el riesgo de aspiración (p. 56).' },
       { t: 'Un bolo de suero a temperatura ambiente (21 °C) para reponer el volumen.', porque: 'Los fluidos a 21 °C enfrían más al paciente (p. 56): deben ir calientes, y aun así solo evitan enfriar.' },
       { t: 'Lavado vesical caliente: es el método interno más fiable.', porque: 'El lavado vesical caliente es ineficaz (p. 56).' }],
-    explicacion: 'En la parada hipotérmica se ha usado con éxito la ECMO venoarterial (p. 56); los fluidos calientes evitan que se enfríe más, y en intubados, los gases a 40-45 °C suben la temperatura unos 2,5 °C/h (p. 56).', fuente: ['56|ma-hipo-externo'],
+    explicacion: 'En la parada hipotérmica se ha usado con éxito la ECMO venoarterial (p. 56); los fluidos calientes evitan que se enfríe más, y en intubados, los gases a 40-45 °C pueden subir la temperatura unos 2,5 °C/h (p. 56).', fuente: ['56|ma-hipo-externo'],
     tocar: { txt: 'Compruébalo: recalienta a Honorato', patch: est('hipo', 5, 1), cuenta: (a, d) => `la T sube de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc} y la PA es ${d.pa}.` } }],
   lleva: ['La temperatura central se mide con sonda, nunca en la piel (p. 55).', 'Por debajo de 28 °C: riesgo de FV; por debajo de 24 °C, apnea y asistolia esperables (p. 54, 56).', 'La muerte no se declara sin recalentar; la ECMO venoarterial se ha usado con éxito en la parada (p. 55-56).'] };
 const dic = pares => Object.fromEntries(pares.map(([k, v]) => [k, v]));
