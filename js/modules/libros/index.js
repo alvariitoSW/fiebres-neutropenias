@@ -39,6 +39,7 @@ import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
+import { MAYEUTICA_B4 } from '../../data/mayeutica/b4.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -211,6 +212,8 @@ export function init() {
     initMarinoRenal();
     initMarinoAbdomen();
     initVisualMarinoCaps31a44();
+    // Texto | Estudiar en las fichas mr- del bloque 4 que ya tienen su Mayéutica (después de su vista Visual)
+    arrancar('Estudiar en Marino renal', () => Object.entries(MAYEUTICA_B4).forEach(([ficha, datos]) => montarMayeutica(ficha, datos)));
     initMarinoNeuro();
     initMarinoNutricion();
     initMarinoToxicos();
