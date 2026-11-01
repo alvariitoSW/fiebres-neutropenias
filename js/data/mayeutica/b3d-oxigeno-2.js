@@ -1,7 +1,6 @@
 // Mayéutica del bloque 3D, G4b: ficha 9 neumo-o2-toxicidad (Marino cap. 25, págs. 66-73 del PDF), con el caso de Elvira
 // (sigue de la ficha 5: intubada, días 2-3). Formato: cabecera de b1-fluidos.js. Plan: autonomo/bloques/b3/estudio-3d/.
-// No hay estado del pulmón vivo que enseñe la toxicidad del O₂ (no tiene gases ni radicales): el único «Compruébalo» es el
-// del neutrófilo en el capilar vivo; el resto lo hace la vista Visual («Mira»). Las cifras de Elvira son de la ficha o del caso.
+// No hay estado del pulmón vivo que enseñe la toxicidad del O₂ (no tiene gases ni radicales): los «Compruébalo» son la lupa del neutrófilo (tox-g3) y la de la toxicidad (tox-g5, con mando de FiO₂ y horas) en el capilar vivo; el resto lo hace la vista Visual («Mira»). Las cifras de Elvira son de la ficha o del caso.
 const PDF = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
 const p = n => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">pág. ${n}</a>`;
 const NEU = 'data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs"';
@@ -149,6 +148,14 @@ export const MAYEUTICA_OXIGENO_2 = {
           no('Las tortugas marinas mueren a la semana, igual que los primates', `Las tortugas resisten semanas e incluso meses sin daño (${p(71)}).`),
           ok('Ratas: mueren en 5-7 días; primates no humanos: toxicidad en torno a 1 semana')],
         explicacion: `Ratas: fallo respiratorio a los <span class="hl">5-7 días</span> con O₂ al 100 %; primates no humanos: signos tras aproximadamente <span class="hl">1 semana</span>; tortugas marinas: semanas o meses sin daño (${p(71)}).` + enFicha('nep-tox-especies') }
+      { id: 'tox-g5', corto: 'FiO₂ 100 % y tiempo', tipo: 'test', fuente: 'nep-tox-humanos · nep-tox-fio2', modelo: { capilarVivo: 'toxicidad', texto: '🧬 Juega: sube la FiO₂ a 100 % y deja pasar el tiempo' },
+        origen: 'ficha: los umbrales; las barras del modelo, ilustrativas',
+        enunciado: 'Predice y luego compruébalo en el modelo: pones la FiO₂ en 100 % y dejas pasar las horas. ¿Qué vence, y qué ve la ficha en voluntarios sanos a las 6-12 h?',
+        opciones: [
+          no('Las defensas vencen: con la SpO₂ normal, el O₂ puro no daña el pulmón', `La ficha no da ese margen: a las 6-12 h de O₂ al 100 % ya hay traqueobronquitis (${p(72)}). Fiarte de la SpO₂ te llevaría a mantener una FiO₂ que sobra.`),
+          ok('Vencen los radicales: traqueobronquitis y menos capacidad vital'),
+          no('Empatan: el pulmón solo se lesiona tras más de una semana', `En humanos hay lesión pulmonar inflamatoria a los 3-4,5 días de O₂ puro (${p(72)}); esperar una semana dejaría pasar la lesión.`)],
+        explicacion: `Con FiO₂ 100 % y el tiempo, <span class="hl-rojo">las ROS superan a las defensas</span>: a las <span class="hl">6-12 h</span> traqueobronquitis y menos capacidad vital; con <span class="hl-rojo">3-4,5 días</span>, lesión inflamatoria (${p(72)}). Las barras del modelo son ilustrativas; los umbrales, de la ficha.` + enFicha('nep-tox-humanos') },
     ],
     casos: [
       { id: 'c-tox-elvira', titulo: 'Elvira, 45 años: demasiado oxígeno', corto: 'Caso · Elvira (días 2-3)', sub: 'intubada con FiO₂ alta; antioxidantes y toxicidad por O₂',
@@ -208,7 +215,7 @@ export const MAYEUTICA_OXIGENO_2 = {
               explicacion: `Ecuación 25.3: <span class="hl">DO₂ = CaO₂ × GC</span>. El aporte no cambia (${p(72)}), mientras se suma más exposición a ROS. Elvira necesita limitar el O₂, no aumentarlo.` + enFicha('nep-tox-ec-25-3') } }
         ],
         lleva: ['El umbral del 60 % no vale igual para el crítico: con los antioxidantes bajos, la FiO₂ tolerable es menor.', 'Selenio, N-acetilcisteína y el cóctel de vitaminas son el flanco antioxidante; la FiO₂ mínima tolerable, el principal.', 'Más O₂ no sube el aporte (Ecuación 25.3) y la toxicidad por O₂ se parece tanto al SDRA que no se separan.'],
-        volver: { nombre: 'FiO₂ tóxica', ancla: 'nep-tox-fio2', modelo: { capilarVivo: 'neutrofilo', texto: '🧬 Mira el estallido del neutrófilo' } } }
+        volver: { nombre: 'FiO₂ tóxica', ancla: 'nep-tox-fio2', modelo: { capilarVivo: 'toxicidad', texto: '🧬 Prueba FiO₂ y horas en la lupa' } } }
     ],
     profundizar: [
       { id: 'nep-tox-intro', titulo: 'El O₂ también es fuente de lesión celular' },

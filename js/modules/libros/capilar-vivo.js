@@ -71,6 +71,7 @@ function fraseDe(prev, e) {
     if (!prev && JSON.stringify(e) !== JSON.stringify(estadoBase())) return fraseDe(estadoBase(), e);
     const R = D.R, cambio = k => prev && JSON.stringify(prev[k]) !== JSON.stringify(e[k]);
     // ---- Cap. 17: el neutrófilo y las ROS (el modelo no calcula nada nuevo: es la lupa y el tope del O₂) ----
+    if (e.ros === 'toxicidad' && cambio('ros')) return ['El O₂ llega a agua con <span class="hl">4 electrones, de uno en uno</span>, y por el camino deja radicales; los antioxidantes los frenan. <span class="hl-rojo">Sube la FiO₂ y las horas</span> y mira qué vence.', 'ficha · neumo-o2-toxicidad#nep-tox-metabolismo · #nep-tox-fio2 · p. 66-72 · barras: ilustrativas'];
     if (e.ros && cambio('ros')) return e.ros === 'neutrofilo'
         ? ['El neutrófilo <span class="hl-rojo">multiplica por 20 su consumo de O₂</span> durante 15-20 min, pero <span class="hl">no fabrica ATP</span>: la NADPH oxidasa añade electrones al O₂ de uno en uno (superóxido → H₂O₂) y de ahí salen hidroxilo (con Fe²⁺) o hipoclorito (con mieloperoxidasa).', 'ficha · mc-inflamacion-ros#mc-estallido · #mc-fig-17-1 · p. 53-54']
         : ['El H₂O₂ <span class="hl">cruza membranas</span> y viaja por la sangre hasta <span class="hl-rojo">otro órgano</span>, donde el Fe²⁺ lo vuelve radical hidroxilo. El O₂ solo se da si la SaO₂ es &lt;90 %.', 'ficha · mc-inflamacion-ros#mc-lesion-oxidante-foco · p. 55 · mc-posresucitacion#mc-tabla-21-4 · p. 66'];

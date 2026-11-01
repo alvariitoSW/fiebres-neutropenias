@@ -9,7 +9,9 @@ const NS = 'http://www.w3.org/2000/svg';
 const CAJA = 'fill:var(--bg-main);stroke:var(--text-dim);stroke-width:1.1';
 let min = 0;      // el reloj del estallido, en «minutos» del dibujo (1 s = 1 min)
 const FLUJO = [];
-export const reiniciarNeutrofilo = () => { min = 0; FLUJO.length = 0; };
+// Modo «toxicidad» (ficha O₂ tóxico de Merino Neumología, Fig. 25.6): los dos mandos de la lupa.
+let fio = 21, hor = 0;   // FiO₂ en % (21-100) y horas de exposición (0-108)
+export const reiniciarNeutrofilo = () => { min = 0; FLUJO.length = 0; fio = 21; hor = 0; };
 
 // Rutas de los puntos: de la membrana al H₂O₂ y de ahí a su destino (hidroxilo, hipoclorito u otro órgano).
 const COMUN = [[92, 100], [123, 53], [123, 77], [123, 101]];
@@ -19,6 +21,7 @@ const RAMAS = {
 };
 
 export function lupaNeutrofilo(e, T, { exceso = false } = {}) {
+    if (e.ros === 'toxicidad') return lupaToxicidad(T);
     const rep = e.ros === 'reperfusion';
     let h = `<g id="cpv-lupa-neu-titulo">${T(110, 22, 'estallido respiratorio', { a: 'middle', s: 10, b: 1, c: '--text-main', sans: 1 })}${T(110, 34, 'O₂ ×20 · 15-20 min · sin ATP', { a: 'middle', s: 8, b: 1, c: '--accent-yellow', sans: 1 }).replace('<text ', '<text id="cpv-lupa-neu-sub" ')}</g>`;
     // la célula: el neutrófilo (núcleo en lóbulos) y la NADPH oxidasa en su membrana
@@ -65,6 +68,7 @@ function en(r, u) {
 
 // Un fotograma: los puntos recorren la cadena; a los 20 «minutos» el estallido se apaga (y vuelve a empezar).
 export function pasoNeutrofilo(dt, e, svg, quieto) {
+    if (e.ros === 'toxicidad') return pasoToxicidad(svg);
     const g = svg.querySelector('#cpv-lupa-neu-flujo'); if (!g) return;
     const rep = e.ros === 'reperfusion';
     if (!quieto) min = (min + dt) % 25;
@@ -81,4 +85,79 @@ export function pasoNeutrofilo(dt, e, svg, quieto) {
         const dentro = f.t * largo(ruta) > largo(COMUN);
         f.el.style.fill = dentro ? (f.rama === 'cl' ? 'var(--accent-purple)' : 'var(--accent-red)') : 'var(--accent-yellow)';
     }
+}
+
+// ---- Toxicidad del O₂ (Marino cap. 25, Fig. 25.6, p. 66-67; umbrales p. 71-72) ----
+// La cascada y los umbrales son de la ficha; las barras «radicales» y «defensas» son ilustrativas (sin cifra).
+export const TOPE_HORAS = 108;   // 4,5 días: la exposición más larga que cita la ficha (1 voluntario, p. 72)
+// Qué dice la ficha a cada exposición: [nivel, línea 1, línea 2]. Nivel: 0 sin aviso, 1 aviso, 2 sello.
+export function veredictoToxicidad(f, h) {
+    if (f >= 100 && h >= TOPE_HORAS) return [2, 'LESIÓN PULMONAR INFLAMATORIA', 'O₂ puro 4,5 días: tope · p. 72'];
+    if (f >= 100 && h >= 72) return [2, 'Lesión inflamatoria (3-4 días)', 'O₂ al 100 % prolongado · p. 72'];
+    if (f >= 100 && h >= 6) return [1, 'Traqueobronquitis, capacidad vital ↓', 'O₂ al 100 % 6-12 h · p. 72'];
+    if (f > 60) return [1, 'Sobre el umbral clásico del 60 %', 'en el crítico, menos · p. 72'];
+    if (f >= 50) return [1, 'Cerca del 60 % clásico', 'sin antioxidantes, menos · p. 71-72'];
+    return [0, 'Bajo el umbral clásico del 60 %', 'FiO₂ más baja tolerable · p. 72'];
+}
+// Radicales y defensas de 0 a 1 (ilustrativo): más FiO₂ y más horas suben las ROS y gastan las defensas.
+export function balanceToxicidad(f, h) {
+    const x = Math.max(0, Math.min(1, (f - 21) / 79)), t = Math.min(1, h / TOPE_HORAS);
+    return { ros: 0.1 + 0.9 * x * (0.4 + 0.6 * t), def: 0.8 - 0.55 * x * t };
+}
+const PISTA = { fio: [88, 176, 188], hor: [88, 176, 204] };
+function lupaToxicidad(T) {
+    let h = `<g id="cpv-lupa-neu-titulo">${T(110, 22, 'O₂ de más: radicales', { a: 'middle', s: 10, b: 1, c: '--text-main', sans: 1 })}${T(110, 33, 'Fig. 25.6 · barras: ilustrativo', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' })}</g>`;
+    const caja = (id, y, t, c) => `<g id="${id}"><rect x="30" y="${y}" width="84" height="15" rx="4" style="${CAJA}"/>${T(72, y + 11, t, { a: 'middle', s: 8, b: 1, c, sans: 1 })}</g>`;
+    const fl = y => `<path d="M72 ${y}v4m-3-2l3 3 3-3" style="fill:none;stroke:var(--text-dim);stroke-width:1.1"/>`;
+    h += '<g id="cpv-lupa-cadena">' + caja('cpv-lupa-o2', 40, 'O₂ + 1 e⁻', '--text-main') + fl(55) + caja('cpv-lupa-sup', 59, 'superóxido ·', '--accent-yellow') + fl(74) + caja('cpv-lupa-h2o2', 78, 'H₂O₂ (no radical)', '--accent-yellow') + fl(93) + caja('cpv-lupa-oh', 97, 'HO· hidroxilo', '--accent-red') + fl(112) + T(72, 126, '→ 2 H₂O (≥95 %)', { a: 'middle', s: 8, b: 1, c: '--accent-green', sans: 1 }) + '</g>';
+    const def = (y, t) => T(120, y, t, { s: 7.6, b: 1, c: '--accent-green', sans: 1 });
+    h += '<g id="cpv-lupa-defensas">' + def(70, '◂ SOD') + def(89, '◂ glutatión (Se)') + def(108, '◂ vit. E y C') + '</g>';
+    h += T(66, 143, 'radicales', { a: 'end', s: 7.6, b: 1, c: '--accent-red', sans: 1 }) + '<rect id="cpv-tox-ros" x="70" y="136" width="100" height="8" rx="3" style="fill:var(--accent-red)"/>';
+    h += T(66, 156, 'defensas', { a: 'end', s: 7.6, b: 1, c: '--accent-green', sans: 1 }) + '<rect id="cpv-tox-def" x="70" y="149" width="100" height="8" rx="3" style="fill:var(--accent-green)"/>';
+    h += `<g id="cpv-tox-verd">${T(110, 172, '', { a: 'middle', s: 7.6, b: 1, sans: 1 }).replace('<text ', '<text id="cpv-tox-v1" ')}${T(110, 182, '', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' }).replace('<text ', '<text id="cpv-tox-v2" ')}</g>`;
+    for (const [k, [x0, x1, y]] of Object.entries(PISTA)) {
+        h += `<g id="cpv-tox-${k}"><rect x="${x0 - 4}" y="${y - 8}" width="${x1 - x0 + 8}" height="16" rx="8" style="fill:none;stroke:var(--text-dim);stroke-width:1" id="cpv-tox-${k}-caja"/><rect x="${x0}" y="${y - 1.5}" width="${x1 - x0}" height="3" rx="1.5" style="fill:var(--text-dim)"/><circle id="cpv-tox-${k}-p" cx="${x0}" cy="${y}" r="5.5" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.2"/>${T(x0 - 6, y + 3, '', { a: 'end', s: 7.6, b: 1, sans: 1 }).replace('<text ', `<text id="cpv-tox-${k}-t" `)}</g>`;
+    }
+    return h;
+}
+function pasoToxicidad(svg) {
+    if (!svg.querySelector('#cpv-tox-ros')) return;
+    if (!svg.dataset.toxMando) {
+        svg.dataset.toxMando = '1';
+        let activo = null;
+        const poner = ev => {
+            const r = svg.getBoundingClientRect(), x = (ev.clientX - r.left) / r.width * 220;
+            const [x0, x1] = PISTA[activo], u = Math.max(0, Math.min(1, (x - x0) / (x1 - x0)));
+            if (activo === 'fio') fio = Math.max(21, Math.min(100, Math.round((21 + 79 * u) / 5) * 5));
+            else hor = Math.round(u * TOPE_HORAS);
+            pasoToxicidad(svg);
+        };
+        svg.addEventListener('pointerdown', ev => {
+            const r = svg.getBoundingClientRect(), y = (ev.clientY - r.top) / r.height * 220, x = (ev.clientX - r.left) / r.width * 220;
+            if (x < 60 || y < 176) return;
+            activo = y < 196 ? 'fio' : 'hor';
+            if (activo === 'hor' && fio >= 100 && hor >= TOPE_HORAS) { activo = null; return; }
+            try { svg.setPointerCapture(ev.pointerId); } catch (_) { /* sin captura, el arrastre sigue dentro */ }
+            poner(ev); ev.preventDefault();
+        });
+        svg.addEventListener('pointermove', ev => { if (activo) poner(ev); });
+        const suelta = () => { activo = null; };
+        svg.addEventListener('pointerup', suelta); svg.addEventListener('pointercancel', suelta);
+    }
+    const { ros, def } = balanceToxicidad(fio, hor), [niv, l1, l2] = veredictoToxicidad(fio, hor);
+    const set = (id, a, v) => { const n = svg.querySelector('#' + id); if (n) n.setAttribute(a, v); return n; };
+    set('cpv-tox-ros', 'width', (100 * ros).toFixed(1)); set('cpv-tox-def', 'width', (100 * def).toFixed(1));
+    const col = niv === 2 ? '--accent-red' : niv === 1 ? '--accent-yellow' : '--accent-green';
+    const v1 = svg.querySelector('#cpv-tox-v1'), v2 = svg.querySelector('#cpv-tox-v2');
+    if (v1) { v1.textContent = l1; v1.style.fill = `var(${col})`; } if (v2) v2.textContent = l2;
+    const oh = svg.querySelector('#cpv-lupa-oh rect'); if (oh) oh.style.stroke = ros > def ? 'var(--accent-red)' : 'var(--text-dim)';
+    const tope = fio >= 100 && hor >= TOPE_HORAS;
+    for (const [k, [x0, x1]] of Object.entries(PISTA)) {
+        const v = k === 'fio' ? (fio - 21) / 79 : hor / TOPE_HORAS;
+        set(`cpv-tox-${k}-p`, 'cx', (x0 + (x1 - x0) * v).toFixed(1));
+        const t = svg.querySelector(`#cpv-tox-${k}-t`); if (t) t.textContent = k === 'fio' ? `FiO₂ ${fio} %` : `${hor} h`;
+        const g = svg.querySelector(`#cpv-tox-${k}`); if (g) g.style.opacity = k === 'hor' && tope ? '.4' : '1';
+    }
+    const p = svg.querySelector('#cpv-tox-fio-p'); if (p) p.style.fill = fio > 60 ? 'var(--accent-red)' : 'var(--accent-yellow)';
+    if (v2 && tope) v2.textContent = 'tope 4,5 días · baja la FiO₂ · p. 72';
 }
