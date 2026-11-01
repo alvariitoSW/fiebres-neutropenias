@@ -39,7 +39,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         opciones: [
           { t: 'Limpiar a diario el punto de inserción de la sonda', ok: true },
           { t: 'Recambiar periódicamente una sonda impregnada de plata', porque: 'Es lo que hace que la plata reduzca la infección. Dejarías de recambiarla y perderías su efecto.' },
-          { t: 'Mantener la sonda de plata sin recambiarla', porque: 'La plata sin recambio no reduce la infección, pero tampoco sube la bacteriuria; lo que la sube es limpiar el meato.' }],
+          { t: 'Dar profilaxis con antibióticos sistémicos mientras dure la sonda', porque: 'Marino tampoco la recomienda (pág. 39), pero no la liga a más bacteriuria; la medida que sí la sube es limpiar a diario el meato.' }],
         explicacion: 'Limpiar a diario el meato <span class="hl-rojo">puede aumentar la bacteriuria</span>; los antibióticos sistémicos profilácticos, tampoco. Las sondas de plata reducen la infección <span class="hl">solo si se recambian periódicamente</span>.' },
       { id: 'ius-g4', corto: 'criterios NHSN', tipo: 'destapa', fuente: 'ma-itu-nhsn', modelo: visual('ma-itu-sonda', '👁️ Los criterios NHSN (vista Visual)'), cuantas: 'son tres criterios',
         enunciado: 'Los criterios NHSN de la infección urinaria asociada a sonda. Son tres.',
@@ -215,7 +215,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         opciones: [
           { t: 'Que en los dos sitios hay muchos más gérmenes de los que debería haber', porque: 'No es cuántos hay, sino quién se pega al epitelio; medir cantidad no explica la infección.' },
           { t: 'La adherencia al epitelio (pili; la manosa puede bloquearla), no la cantidad', ok: true },
-          { t: 'Que infectan tras antibioterapia previa de amplio espectro', porque: 'La clave es la adherencia, no la antibioterapia previa.' }],
+          { t: 'Que infectan tras antibioterapia previa de amplio espectro', porque: 'La antibioterapia es factor de riesgo de candidiasis (pág. 66), pero lo que el texto da como común a la vejiga y la boca es la adherencia al epitelio.' }],
         explicacion: 'En boca, intestino y vía urinaria la clave es <span class="hl">quién se pega al epitelio</span>, no cuántos hay. E. coli usa sus pili para unirse a glucoproteínas de la vejiga y azúcares como la <span class="hl">manosa</span> pueden bloquear esa unión.' },
     ],
     examen: [

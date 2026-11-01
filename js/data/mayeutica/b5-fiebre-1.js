@@ -22,7 +22,7 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-g1', corto: 'el termómetro', tipo: 'test', fuente: 'ma-fiebre-termometria',
         enunciado: 'Un paciente con taquipnea y un catéter de arteria pulmonar con termistor. ¿Con qué medida decides si tiene fiebre?',
         opciones: [
-          { t: 'Con la central del termistor de la arteria pulmonar; sin él, oral o rectal (nunca axilar ni timpánica)', ok: true },
+          { t: 'Con la central del termistor; sin él, oral o rectal (las periféricas no sirven para decidir)', ok: true },
           { t: 'Con la axilar o la timpánica: son rápidas y, en la práctica, bastan', porque: 'Marino las considera de precisión no aceptable: tomarías decisiones, como pedir cultivos o retirar antibióticos, con una cifra que no es fiable.' },
           { t: 'Con la oral, que coincide con la central', porque: 'Con taquipnea la oral puede ser 0,5 °C más baja que la central: una central de 38,3 °C se leería 37,8 °C y no pedirías el estudio de la fiebre.' }],
         explicacion: 'Lo mejor es la <span class="hl">temperatura central continua</span>: catéter con termistor en la arteria pulmonar, el esófago o la vejiga. Si no hay, oral o rectal (la oral, <span class="hl-rojo">0,5 °C más baja</span> con taquipnea). Timpánica, temporal y axilar: <span class="hl-rojo">no tomar decisiones</span> con ellas.',
@@ -63,7 +63,7 @@ export const MAYEUTICA_FIEBRE_1 = {
           'La acompañan <span class="hl-rojo">escalofríos con temblor intenso (53 %)</span> e hipotensión (~20 %), que pueden parecer graves; la eosinofilia y el exantema faltan en más del 75 %.',
           'Se confirma <span class="hl-azul">retirando el fármaco</span>: la fiebre desaparece en 72 h.'],
         explicacion: 'Hipersensibilidad o idiosincrasia; cualquier fármaco puede darla (Tabla 44.3: anfotericina, carbamazepina, cefalosporinas, heparinas, penicilinas, fenitoína, procainamida, quinidina).',
-        nota: '<b>Nota de fidelidad.</b> El texto dice «alrededor del 20 %» de hipotensión y la Tabla 44.3 da 18 %. Se reproducen las dos (' + pag(63) + ').' },
+        nota: '<b>Nota de fidelidad.</b> El texto dice «alrededor del 20 %» de hipotensión y la Tabla 44.3 da 18 %. Se reproducen las dos (' + pag(63) + ' y ' + pag(64) + ').' },
       { id: 'fbr-g7', corto: 'la nota del R1', tipo: 'error', fuente: 'ma-fiebre-postop · ma-fiebre-otras · ma-fiebre-termometria',
         enunciado: 'La nota de un R1 en el primer día de un posoperatorio de cirugía mayor. Encuentra los errores (0, 1 o 2).',
         frases: [
@@ -233,7 +233,7 @@ export const MAYEUTICA_FIEBRE_1 = {
         enunciado: '¿A cuál de estos pacientes febriles no le demoras ni unas horas el antibiótico empírico?',
         opciones: [
           { t: 'Al neutropénico con menos de 500 neutrófilos: unas horas de retraso ya empeoran el pronóstico', ok: true },
-          { t: 'Al paciente con 38,4 °C aislada y sin foco sospechado', porque: 'La ficha pide antibiótico si la infección es probable; con una fiebre aislada, antes se hacen los hemocultivos y se busca la fuente.' },
+          { t: 'Al paciente con 38,4 °C aislada y sin foco sospechado', porque: 'Sin foco ni neutropenia no hay prisa de horas: hemocultivos (Marino los pide en toda fiebre con posible infección, pág. 67) y antibiótico si la infección es probable.' },
           { t: 'Al del primer día de una cirugía mayor', porque: 'Es respuesta al daño tisular y cede en 24-48 h: un antibiótico sin indicación y sin cultivos previos.' }],
         explicacion: 'Antibiótico empírico si la infección es probable; <span class="hl-rojo">sin demora en el neutropénico (<500)</span>, donde unas horas cuentan. Antes del antibiótico, hemocultivos bien hechos.' },
     ],
@@ -274,7 +274,7 @@ export const MAYEUTICA_FIEBRE_1 = {
         opciones: [
           { t: 'Con fiebre persistente o tardía (≥1 semana) tras cirugía extensa o contaminada', ok: true },
           { t: 'Solo si la fiebre aparece el primer día tras la cirugía abdominal y cede en 48 h', porque: 'La fiebre del día 1 es la respuesta al daño tisular y cede en 24-48 h; no apunta a peritonitis.' },
-          { t: 'Con fiebre a las 48 h de una cirugía limpia, aunque ceda sola', porque: 'La PBE es del cirrótico con ascitis, pero la peritonitis posoperatoria es otra entidad: la perderías tras cirugía contaminada.' }],
+          { t: 'Con fiebre a las 48 h de una cirugía limpia, aunque ceda sola', porque: 'Es fiebre posoperatoria precoz (pág. 62); la peritonitis o el absceso se piensan con fiebre persistente o tardía, de una semana o más (pág. 66).' }],
         explicacion: '<span class="hl">Peritonitis o absceso</span> tras cirugía abdominal extensa o contaminada con fiebre persistente o tardía (≥1 semana); PBE en el cirrótico con ascitis y fiebre sin explicación.' },
       { id: 'nsc-e6', corto: 'cuándo vancomicina', tipo: 'test', fuente: 'ma-empirico',
         enunciado: 'En la fiebre con sospecha de infección, ¿cuándo añades vancomicina al empírico de gramnegativos?',
