@@ -1,0 +1,41 @@
+    <button class="back-btn btn-volver-libros-menu" id="eje-volver">← VOLVER</button>
+    <!-- Eje hormonal vivo: dos glándulas, un enfermo (Marino cap. 51). Modelo vivo de Libros. Arranque en eje-vivo/index.js; la página (mandos, guía, topes) en pagina.js;
+         lo que hace cada mando en acciones.js; física en modelo.js, escena en dibujo.js; datos y fuentes en js/data/eje-vivo-data.js. Prefijo de ids: eje-. -->
+    <div class="eje-raiz" id="eje-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="eje-eyebrow">Modelo vivo · Marino cap. 51</p><h2 class="eje-titulo">Dos glándulas, un enfermo</h2></header>
+      <div class="eje-chips" id="eje-chips" role="group" aria-label="Paciente"></div>
+      <div class="eje-lupas" role="group" aria-label="Lupa y mapa"><button type="button" class="b" id="eje-lupa-sr" data-lup="sr" aria-pressed="true">Lupa: suprarrenal</button><button type="button" class="b" id="eje-lupa-ti" data-lup="ti" aria-pressed="false">Lupa: tiroides</button><button type="button" class="b" id="eje-b-mapa" aria-pressed="false">Ver el mapa</button></div>
+      <section id="eje-monitor" aria-label="Monitor de cabecera"><div class="eje-mon">
+        <span>PA <b id="eje-m-pa"></b></span><span>PAM <b id="eje-m-pam"></b></span><span>FC <b id="eje-m-fc"></b></span><span>Ritmo <b id="eje-m-rit"></b></span>
+        <span>T °C <b id="eje-m-t"></b></span><span>Na⁺ <b id="eje-m-na"></b></span><span>Glucosa <b id="eje-m-gl"></b></span><span>Lactato <b id="eje-m-lac"></b></span><span>NA <b id="eje-m-nor"></b></span><span>Día <b id="eje-m-dia"></b></span></div></section>
+      <div id="eje-sello-zona"></div>
+      <section class="eje-zona-escena"><svg id="eje-svg" viewBox="0 0 390 300" role="img" aria-label="Enfermo en la cama con dos lupas y el eje hormonal de la glándula elegida"></svg></section>
+      <div id="eje-avisos-zona"></div>
+      <p id="eje-idea" class="eje-idea"></p>
+      <section id="eje-guia" class="eje-guia" aria-live="polite"></section>
+      <button type="button" class="b" id="eje-paso-a-paso">▶ Paso a paso: ver cómo se enciende el eje</button>
+      <details class="plegable" id="eje-fig"><summary>Fig. 51.1 · supresión suprarrenal en el enfermo crítico (figura real)</summary><figure style="margin:0"><img id="eje-fig-img" alt="Fig. 51.1: mecanismos de la supresión suprarrenal en el enfermo crítico" loading="lazy"><figcaption id="eje-fig-cap"></figcaption></figure></details>
+      <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="eje-fuentes"></ul></details>
+      <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div id="eje-notas"></div></details>
+      <details class="plegable"><summary>Lo que el modelo podría sumar</summary><ul class="lista" id="eje-crecera"></ul></details>
+      <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="eje-profundizar"></ul></details>
+      <div class="dock" id="eje-dock"><div class="dock-in">
+        <p class="frase" id="eje-frase" role="status" aria-live="polite"><span class="frase-txt" id="eje-frase-txt"></span></p>
+        <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="circ" aria-selected="true">Circulación y corticoide</button><button type="button" role="tab" data-pest="tiro" aria-selected="false">Tiroides</button><button type="button" id="eje-mas" aria-expanded="false">Más mandos ▾</button></div>
+        <div class="dock-panel" id="eje-dock-circ">
+          <div class="mando"><b class="dock-nota">Circulación</b><div class="fila"><button type="button" id="eje-b-vol" data-a="vol" class="b"></button></div><div class="fila"><button type="button" data-a="na-" class="b">NA −0,1</button><output id="eje-o-na"></output><button type="button" data-a="na+" class="b">NA +0,1</button></div></div>
+          <div class="mando"><b class="dock-nota">Corticoide</b><div class="fila"><button type="button" id="eje-b-hc" data-a="hc" class="b" aria-pressed="false"></button><button type="button" id="eje-b-ret" data-a="ret" class="b" aria-pressed="false"></button></div></div>
+          <div class="mando" id="eje-mando-acth"><b class="dock-nota">Prueba de ACTH</b><div class="fila"><button type="button" id="eje-b-acth" data-a="acth" class="b" aria-pressed="false"></button></div></div>
+          <div class="mando" id="eje-mando-es"><b class="dock-nota">Estrés (cirugía, infección)</b><div class="fila"><button type="button" data-a="es-" class="b">Estrés −1</button><output id="eje-o-es"></output><button type="button" data-a="es+" class="b">Estrés +1</button></div></div>
+          <div class="mando"><b class="dock-nota">Reloj</b><div class="fila"><button type="button" data-a="d1" class="b">+1 día</button><button type="button" data-a="d7" class="b">+7 días</button></div></div>
+        </div>
+        <div class="dock-panel" id="eje-dock-tiro" hidden>
+          <div class="mando"><b class="dock-nota">Antitiroideo y yodo</b><div class="fila"><button type="button" data-atd="ninguno" class="b">Ninguno</button><button type="button" data-atd="ptu" class="b">Propiltiouracilo</button><button type="button" data-atd="mti" class="b">Metimazol</button></div><div class="fila"><button type="button" id="eje-b-yodo" data-a="yodo" class="b" aria-pressed="false"></button></div></div>
+          <div class="mando"><b class="dock-nota">Betabloqueante oral o esmolol</b><div class="fila"><button type="button" data-bb="ninguno" class="b">Ninguno</button><button type="button" data-bb="prop" class="b">Propranolol oral</button><button type="button" data-bb="meto" class="b">Metoprolol</button><button type="button" data-bb="esmolol" class="b">Esmolol IV</button></div><div class="fila"><button type="button" id="eje-b-asma" data-a="asma" class="b" aria-pressed="false"></button></div></div>
+          <div class="mando"><b class="dock-nota">Hormona tiroidea</b><div class="fila"><button type="button" id="eje-b-levo" data-a="levo" class="b" aria-pressed="false">Levotiroxina IV 200-400 µg</button><button type="button" id="eje-b-lio" data-a="lio" class="b" aria-pressed="false">Liotironina IV 5-20 µg</button></div></div>
+          <div class="mando" id="eje-mando-pat"><b class="dock-nota">Patrón del laboratorio (Tabla 51.2)</b><div class="fila"><button type="button" data-pat="" class="b">Del caso</button><button type="button" data-pat="t3tox" class="b">T3-toxicosis</button><button type="button" data-pat="hipoS" class="b">Hipot. secundario</button></div></div>
+          <div class="mando" id="eje-mando-farm"><b class="dock-nota">Fármaco de Policarpo</b><div class="fila"><button type="button" data-farm="amio" class="b">Amiodarona</button><button type="button" data-farm="hep" class="b">Heparina</button><button type="button" data-farm="eto" class="b">Etomidato</button><button type="button" data-farm="keto" class="b">Ketoconazol</button></div></div>
+          <div class="mando"><b class="dock-nota">Reloj</b><div class="fila"><button type="button" data-a="d1" class="b">+1 día</button><button type="button" data-a="d7" class="b">+7 días</button></div></div>
+        </div>
+      </div></div>
+    </div>

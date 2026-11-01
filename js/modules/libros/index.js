@@ -39,6 +39,7 @@ import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
 import { init as initHepatocitoVivo } from './hepatocito-vivo/index.js';
 import { init as initTermostatoVivo } from './termostato-vivo/index.js';
+import { init as initEjeVivo } from './eje-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { MAYEUTICA_APENDICES } from '../../data/mayeutica/b6b-apendices.js';
@@ -76,7 +77,7 @@ const BLOQUES = {
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
-const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos', 'hepatocitoVivo', 'termostatoVivo']);
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos', 'hepatocitoVivo', 'termostatoVivo', 'ejeVivo']);
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -138,6 +139,8 @@ export function init() {
         hepatocitoVivo: document.getElementById('hepatocito-vivo-view'),
         // Termostato vivo (bloque 5, caps. 43-44; fichas en Marino Abdomen y temperatura)
         termostatoVivo: document.getElementById('termostato-vivo-view'),
+        // Eje hormonal vivo (bloque 6b, cap. 51; fichas en Marino Nutrición y endocrino)
+        ejeVivo: document.getElementById('eje-vivo-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -239,6 +242,7 @@ export function init() {
     const ionesVivos = arrancar('iones', initIonesVivos);
     const hepatocitoVivo = arrancar('hepatocito', initHepatocitoVivo);
     const termostatoVivo = arrancar('termostato', initTermostatoVivo);
+    const ejeVivo = arrancar('eje', initEjeVivo);
 
     librosLevel.show('menu');
 
@@ -267,6 +271,8 @@ export function init() {
             hepatocitoVivo: (estadoClave, origen) => hepatocitoVivo?.abrir(estadoClave, origen),
             // data-termostato-vivo="<estado>[:paso]", el termostato vivo
             termostatoVivo: (estadoClave, origen) => termostatoVivo?.abrir(estadoClave, origen),
+            // data-eje-vivo="<paciente>[:paso]", el eje hormonal vivo
+            ejeVivo: (estadoClave, origen) => ejeVivo?.abrir(estadoClave, origen),
         },
     };
 }
