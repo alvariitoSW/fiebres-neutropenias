@@ -221,7 +221,8 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      prueba (`autonomo/pruebas/<clave>.mjs`), y después su Mayéutica. Presupuestos de la parada 2 del `b3`: modelo
      sonnet 90 pasos / 2,0 M; Mayéutica sonnet 50 / 1,2 M.
 
-8. **Llegar al 8,75 a la primera** (R1-R9 de `notas-meta`, aprobadas por el usuario el 27/10/2026; datos en
+8. **Llegar a la nota de corte a la primera** (9,5 desde el 01/11/2026; antes 8,75. R1-R9 de `notas-meta`, aprobadas
+   por el usuario el 27/10/2026; R10, el 01/11/2026; datos en
    `autonomo/bloques/notas-meta/datos.md`: 1 de 7 tareas aprobaba a la primera, 0 de 7 llegaban a la meta, 2,4
    vueltas de media).
    - **R1 · Prueba del móvil antes de entregar**: a 390 y 360 px, la frase viva y el enunciado no quedan tapados por
@@ -247,14 +248,25 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      primero (visto en `educacion-app`: +31-40 % al continuar constructores de 72-78 pasos).
    - **R6 · Nada de opus en las vueltas**: opus solo en la primera vuelta de un modelo vivo nuevo. Si un arreglo
      necesita pensar, lo piensa el profesor en una lista y lo hace sonnet.
-   - **R7 · Dónde obliga la meta** (subida por el usuario el 30/10/2026, §4.15): **8,75 obliga en todo** lo que se
-     juzga (fichas, arreglos, informes, modelos). En **modelos vivos nuevos y maquetas la meta es 9,5**: lo que quede
-     entre 8,75 y 9,5 se sube si cabe en una vuelta corta (≤15 pasos de constructor) y, si no, va al parte y a la
-     bitácora como tarea de mejora; no impide la PR. (Hasta el 30/10: 8 en lo que copia un modelo y 8,75 en lo nuevo.)
+   - **R7 · Nota de corte: 9,5; meta 10** (el usuario, 01/11/2026): **9,5 es el suelo en todo** lo que se juzga
+     (fichas, arreglos, informes, modelos, maquetas) y **10 es la meta**. Lo que quede **entre 9,0 y 9,5** se sube en
+     una **vuelta corta** (≤15 pasos de constructor); por debajo de 9,0, vuelta normal. Vale en todo lo que sigue (`b4`,
+     `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo que aún no se ha juzgado; lo ya juzgado (las 55 fichas con Estudiar) **no se
+     rejuzga ahora**: queda para un repaso futuro. El gasto extra lo paga el usuario; Hacienda no baja la nota ni la
+     fidelidad. (Del 30/10 al 01/11: 8,75 obligaba en todo y 9,5 era meta solo en modelos vivos nuevos y maquetas; hasta
+     el 30/10: 8 en lo que copia un modelo y 8,75 en lo nuevo.)
    - **R8 · Rejuicio corto**: en la segunda vuelta y siguientes, el profesor solo vuelve a puntuar los criterios que
      estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera.
    - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, el modelo, los pasos y los tokens de cada
      vuelta (formato en `autonomo/partes/LEEME.md`).
+   - **R10 · Receta del profesor** (el usuario, 01/11/2026). **Antes de construir**, el profesor escribe sobre el
+     encargo los criterios de 9,5 y de 10 de cada punto (cifra, rótulo y comportamiento concretos, con fuente y página).
+     **En cada juicio**, por cada punto por debajo de 9,5 escribe las características específicas para llegar a 9,5; en
+     los que ya están en 9,5 o más, qué los llevaría a 10. Va en el parte, en la tabla «Vueltas». **Tope: 3 vueltas con
+     receta.** Si tras la tercera algún punto sigue por debajo de 9,5, el director **no sigue gastando**: lo lleva al
+     Congreso (Consejo) con la receta, las notas de las tres vueltas y las capturas, y el Congreso decide (otra vuelta
+     con otro enfoque, aceptar el punto con su nota y la mejora anotada, o consultar al usuario). Si el Congreso no
+     puede resolverlo, se lo cuenta al usuario.
 
 9. **El encargo, revisado antes de gastar** (B-031 `encargo-revisado`, aprobado por el usuario el 27/10/2026; dos
    ideas de Spec Kit, https://github.com/github/spec-kit, MIT, reescritas aquí sin instalarlo). Un fallo del encargo
@@ -290,7 +302,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       gastado, desvío y por qué).
     - **Hacienda = `/ahorro`**: revisa el presupuesto **antes** de gastar (modo presupuesto, sin agentes, ≤0,1 M) y
       **puede recortar sola** (modelo más barato, pieza que ya existe, prueba corta, encargo partido), siempre que no
-      baje la nota (8,75) ni la fidelidad. Cada recorte queda escrito en el parte («Hacienda: qué recortó y cuánto»)
+      baje la nota (9,5, §4.8 R7) ni la fidelidad. Cada recorte queda escrito en el parte («Hacienda: qué recortó y cuánto»)
       para que el gobierno central lo vea; si discrepa, se habla y se cambia. Al cerrar un bloque, un balance y una o
       dos propuestas. Sigue revisando lo ya gastado como antes.
       Hacienda **cuida también su propio gasto** (el usuario, 28/10: «si aparece constantemente y gasta dinero porque sí,
@@ -362,7 +374,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       Marino; si se solapan, para. El reparto se puede ajustar.
     - **Presupuesto** (el usuario, 29/10: «puede ser variable, Hacienda y yo tenemos la última palabra y yo delego en
       Hacienda»): el presupuesto del carril 2, y sus ajustes, los decide **Hacienda** (`/ahorro`) por delegación del
-      usuario, sin bajar la nota (8,75), la fidelidad ni los jueces, y lo deja en el parte. El tope diario del 18 % no cambia.
+      usuario, sin bajar la nota (9,5, §4.8 R7), la fidelidad ni los jueces, y lo deja en el parte. El tope diario del 18 % no cambia.
     - **PDF** (el usuario, 29/10: «tienes que empezar a colaborar tú, no te puedo estar pasando constantemente PDF»): antes
       de pedir un PDF al usuario, quien lo necesita lo busca en abierto (Europe PMC por `www.ebi.ac.uk`, PubMed Central,
       la web del editor o de la sociedad) y anota dónde buscó. Solo se pide si es de pago o la red no lo deja bajar, y
@@ -418,7 +430,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     1. **Jueces**: la suite entera en verde sobre el último commit de la rama (general, `--modelo` de cada modelo
        tocado, `--ficha` de cada ficha tocada, `--forma`, `--formula`, pruebas del eco si lo toca), con la versión subida.
     2. **Auditor ciego**: sin hallazgos graves contra la fuente (los medianos y menores, arreglados o en el parte).
-    3. **Profesor**: todos los puntos **≥ 8,75**; en modelos vivos nuevos y maquetas, meta 9,5 (§4.8 R7).
+    3. **Profesor**: todos los puntos **≥ 9,5** (meta 10; §4.8 R7 y R10; desde el 01/11/2026, antes 8,75).
     4. **Voto del Consejo**: Interior, Justicia, Educación y Hacienda votan sobre la PR con los informes y las capturas
        delante (un solo agente barato puede dar dos dictámenes, ≤8 líneas cada uno); preside Transportes, que
        desempata. **Mayoría simple** = se fusiona. El acta (≤30 líneas) enlaza la PR y los informes.
@@ -492,7 +504,7 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
    (tablero, «Límite de gasto por día»).
 7. **Jueces que solo crecen** (art. 6 de la reforma, aprobado por el usuario el 30/10/2026): los jueces
    (`autonomo/jueces.mjs`, `jueces-topes.mjs`, las pruebas de `autonomo/pruebas/` y de la eco) y el auditor ciego solo se
-   amplían. Sus umbrales (8 px, 390/360 px, 7,5 px de rótulo, la meta 8,75, los topes) no bajan ni se quitan sin el sí
+   amplían. Sus umbrales (8 px, 390/360 px, 7,5 px de rótulo, la nota de corte 9,5, los topes) no bajan ni se quitan sin el sí
    del usuario, y un cambio de juez va en un commit aparte. Jueces nuevos pedidos: que cada enlace cruzado apunte a algo
    que existe y que `PANEL_NAV` cubra cada cuaderno.
 
@@ -511,6 +523,8 @@ vez:
   mecanismos y distractores sin fuente rotulados «fisiología general» o «el libro no lo dice». Pedida por el usuario.
 - §4.8 (llegar al 8,75 a la primera, R1-R9): medida de `notas-meta` (27/10/2026), aprobadas por el usuario
   («apruebo todas las propuestas de regla de R1 a R9»).
+- §4.8 R7 reescrita y R10 (receta del profesor), §4.15 punto 3 y §7 «Cómo se juzga»: nota de corte 9,5, meta 10
+  (decisión del usuario del 01/11/2026, directa a `main`).
 - §4.6 (carpeta aparte desde la rama del bloque; nada de `git stash` ni `pkill` amplios; puerto por `PUERTO=`):
   vuelta de límites del `b3` (27/10/2026), aprobadas por el usuario.
 - §1.14 (topes y consecuencias): maquetas v3 del bloque 3 (`b3`, 26/10/2026). El usuario infundió 23 L de suero en el
@@ -605,11 +619,11 @@ pobre que no ayudaba a estudiar. Al usuario le importa **tanto que se entienda y
     cama del norte; el desarrollo es para estudiar.
 
 **Cómo se juzga**: el agente `profesor` puntúa del 0 al 10 cada punto (y los de §8 si hay preguntas) mirando
-capturas al lado de un modelo. Para pasar, **todos los puntos con 8,75 o más** (el usuario, 30/10/2026; del 25 al
-30/10 bastaba 8 con meta 8,75; antes era del 1 al 5 y se pasaba con 4); si alguno queda por debajo, la tarea se
-repite: vuelve al constructor con lo que falta. **En modelos vivos nuevos y maquetas la meta es 9,5**: en los puntos
-entre 8,75 y 9,5 el profesor dice qué los subiría y se hace si es barato y quedan vueltas; si no, va al parte y a la
-bitácora (§4.8 R7).
+capturas al lado de un modelo. Para pasar, **todos los puntos con 9,5 o más** (meta 10; el usuario, 01/11/2026; del
+30/10 al 01/11 bastaba 8,75; del 25 al 30/10, 8 con meta 8,75; antes era del 1 al 5 y se pasaba con 4); si alguno
+queda por debajo, vuelve al constructor con la **receta del profesor** (qué cifra, rótulo y comportamiento lo llevan a
+9,5), **máximo 3 vueltas**; después, al Congreso (§4.8 R7 y R10). En los puntos con 9,5 o más, el profesor dice qué los
+llevaría a 10.
 
 ## 8. Preguntas para estudiar
 

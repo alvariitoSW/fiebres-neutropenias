@@ -387,6 +387,13 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**✅ 01/11 · Nota de corte del profesor: 9,5 (meta 10)** (decisión tuya, aplicada directa a `main`). Vale en todo lo
+que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo no juzgado; las 55 fichas con Estudiar no se rejuzgan ahora
+(repaso futuro). Nueva **R10 · Receta del profesor**: criterios de 9,5 y 10 por punto antes de construir; en cada
+juicio, qué falta para 9,5 (o para 10), en la tabla «Vueltas»; tope de 3 vueltas y después al Congreso, que decide o te
+consulta. El gasto extra lo pagas tú; Hacienda no baja la nota. Cambiados: REGLAS §4.8 (R7 y R10), voto del Consejo
+(punto 3), §7 «Cómo se juzga», `CLAUDE.md` §10 y el tablero.
+
 **🆕 01/11 · AI Engineering Hub** (catálogo de ≈110 tutoriales de IA; Consejo 3.ª, acta
 `autonomo/consejo/2026-11-01-3.md`). Nada para la app. El Consejo propone dos mejoras técnicas de los jueces, sin
 tocar la app: **H3** juez que comprueba los enlaces `#page=N` (≈1 M) y **H1** rúbrica por criterio para el auditor
