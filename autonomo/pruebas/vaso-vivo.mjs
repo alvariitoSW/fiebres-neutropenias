@@ -106,7 +106,7 @@ const ESPERA = {
   warfarina: t => t.estado.rep === 'warf-pfc' && /baja/.test(t.celdas.inr),
   placa: t => t.estado.lesion === 'placa' && t.lupa === 'placa',
   'placa-antiagregantes': t => t.celdas.tapon === 'deja de crecer' && t.lupa === 'placa',
-  trombolisis: t => t.celdas.amenaza === 'TNK 45 mg' && t.celdas.fib === '↓' && t.lupa === 'placa',
+  trombolisis: t => t.celdas.amenaza === 'TNK 45 mg' && t.celdas.tapon === 'se reabre' && t.celdas.fib === '↓' && t.lupa === 'placa',
   'tep-lisis': t => t.estado.emb === true && t.celdas.plaq === 'sigue ahí' && t.celdas.aptt === '46-70 s' && t.celdas.inr === '—' && t.lupa === 'placa',
   'hemorragia-masiva': t => t.celdas.fib === '120' && t.celdas.amenaza === 'sangrado' && t.celdas.tapon === 'no cierra',
 };
