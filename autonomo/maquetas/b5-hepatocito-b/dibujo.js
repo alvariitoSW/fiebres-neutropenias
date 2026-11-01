@@ -2,7 +2,7 @@
 // Formas como las de js/core/particulas.js: círculo = NH₃, cuadrado = urea, rombo = glutamina (las especies nuevas se darán de alta al llevarlo a la app).
 import { VIAS_APAGADAS } from './datos.js';
 import { clamp, fmt } from './modelo.js';
-const NODOS = [['NH₃', 'entra'], ['NH₃ + CO₂', 'mitocondria'], ['Ciclo de', 'la urea'], ['Urea', 'a la sangre']];
+const NODOS = [['NH₃', 'entra'], ['1.º paso del ciclo', '(mitocondria)'], ['Resto', 'del ciclo'], ['Urea', 'a la sangre']];
 export const ZONAS = { colon: [4, 28, 100, 112], carril: [116, 48, 232, 122], apagadas: [4, 302, 352, 40], arterial: [118, 176, 112, 84], astro: [236, 184, 118, 122], cvvh: [4, 192, 96, 58] };
 const nh3 = (x, y) => `<circle class="p-nh3" cx="${x}" cy="${y}" r="3.4"/>`;
 const urea = (x, y) => `<rect class="p-urea" x="${x - 3.2}" y="${y - 3.2}" width="6.4" height="6.4"/>`;
@@ -23,8 +23,8 @@ export function escena(s, L, oculto) {
   o.push(`<path class="flecha" d="M98 84H116"/>`, T(100, 78, 'porta', 'min'));
   // Célula
   o.push(`<rect class="celula" x="116" y="24" width="236" height="148" rx="26"/>`, T(234, 40, 'Hepatocito', 'rot', 'text-anchor="middle"'));
-  o.push(T(120, 167, 'sinusoide', 'min'), T(346, 167, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
-  o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(234, 160, 'Mitocondria (fisiología general)', 'min', 'text-anchor="middle"'));
+  o.push(T(120, 171, 'sinusoide', 'min'), T(346, 171, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
+  o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(234, 156, 'Mitocondria (fisiología general)', 'min', 'text-anchor="middle"'));
   NODOS.forEach(([a, b], i) => {
     const x = 152 + i * 58, op = opNodo(s.func, i);
     o.push(`<g class="nodo" data-nodo="${i}" opacity="${op}"><circle class="nd" cx="${x}" cy="94" r="13"/>${T(x, 98, i + 1, 'num', 'text-anchor="middle"')}${T(x, 121, a, 'min', 'text-anchor="middle"')}${T(x, 132, b, 'min', 'text-anchor="middle"')}`);
