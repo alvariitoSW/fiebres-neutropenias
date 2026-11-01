@@ -2,7 +2,7 @@
 // Partículas de la tabla común (js/data/formas-iones.js): NH₃, urea y glutamina, dibujadas con svgParticula.
 import { svgParticula, leyendaParticulas } from '../../../core/particulas.js';
 import { VIAS_APAGADAS } from '../../../data/hepatocito-vivo-data.js';
-import { clamp, fmt } from './modelo.js';
+import { clamp, fmt, nodosVia, nombresVia } from './modelo.js';
 const NODOS = [['NH₃', 'entra'], ['1.º paso del ciclo', '(mitocondria)'], ['Resto', 'del ciclo'], ['Urea', 'a la sangre']];
 export const ZONAS = { colon: [4, 28, 100, 112], carril: [116, 48, 232, 122], apagadas: [4, 302, 352, 40], arterial: [118, 176, 112, 84], astro: [236, 184, 118, 122], cvvh: [4, 192, 96, 58] };
 const nh3 = (x, y) => svgParticula('nh3', x, y, 3.4);
@@ -25,6 +25,8 @@ export function escena(s, L, oculto) {
   // Célula
   o.push(`<rect class="celula" x="116" y="24" width="236" height="148" rx="26"/>`, T(234, 40, 'Hepatocito', 'rot', 'text-anchor="middle"'));
   o.push(T(120, 168, 'sinusoide', 'min'), T(346, 168, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
+  const nu = s.via === 'urea' ? Math.round(L.nProd * s.func / 100) : 0;
+  if (s.via === 'urea') {
   o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(250, 156, 'Mitocondria', 'min', 'text-anchor="middle"'));
   NODOS.forEach(([a, b], i) => {
     const x = 152 + i * 58, op = opNodo(s.func, i);
@@ -33,9 +35,21 @@ export function escena(s, L, oculto) {
     if (i < 3) o.push(`<path class="flecha" d="M${x + 14} 94H${x + 44}"/>`);
     o.push('</g>');
   });
-  const nu = Math.round(L.nProd * s.func / 100);
   for (let i = 0; i < nu; i++) o.push(urea(330 - (i % 3) * 9, 78 + Math.floor(i / 3) * 9));
   for (let i = 0; i < clamp(L.nProd - nu, 0, 6); i++) o.push(nh3(126 + (i % 3) * 9, 78 + Math.floor(i / 3) * 9));
+  } else {
+  // Vía de un tóxico (paracetamol, alcoholes): las cuatro estaciones del carril cambian de rótulo; sin urea ni mitocondria
+  const v = nodosVia(s), nm = nombresVia(s), tit = s.via === 'paracetamol' ? `Paracetamol · glutatión ${s.glut} %` : `${s.alc === 'met' ? 'Metanol' : 'Etilenglicol'} · pH ${String(s.ph).replace('.', ',')}`;
+  o.push(`<ellipse class="mito via-tx" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, tit, 'rot', 'text-anchor="middle"'));
+  nm.forEach(([a, b], i) => {
+    const x = 152 + i * 58, d = v[i] || { op: 1 };
+    o.push(`<g class="nodo" data-nodo="${i}" opacity="${d.op}"><circle class="nd" cx="${x}" cy="94" r="13"/>${T(x, 98, i + 1, 'num', 'text-anchor="middle"')}${T(x, 121, a, 'min', 'text-anchor="middle"')}${T(x, 132, b, 'min', 'text-anchor="middle"')}`);
+    if (d.off) o.push(`<path class="aspa" d="M${x - 7} 87L${x + 7} 101M${x + 7} 87L${x - 7} 101"/>`);
+    if (d.tag) o.push(T(x, 143, d.tag, d.off ? 'min apag' : 'min', 'text-anchor="middle"'));
+    if (i < nm.length - 1) o.push(`<path class="flecha" d="M${x + 14} 94H${x + 44}"/>`);
+    o.push('</g>');
+  });
+  }
   // Vías apagadas (con candado): dos columnas bajo el dibujo
   o.push(T(6, 307, 'Otras vías · apagadas', 'min'));
   VIAS_APAGADAS.forEach(([n], i) => { const x = 6 + (i % 2) * 176, y = 311 + Math.floor(i / 2) * 17;

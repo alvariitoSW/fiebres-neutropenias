@@ -4,9 +4,10 @@
 // se crean UNA vez y se repintan en su sitio.
 import { crearTope } from '../../../core/tope.js';
 import { seguirFrase } from '../../../core/frase-vista.js';
+import { IMG_VIA } from '../../../data/hepatocito-vivo-data.js';
 import { cargarMotion, sinMovimiento } from '../../../core/motion.js';
-import { PDF, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe, CRECERA, UBICACION, FLUIDOS, TRR_FICHA } from '../../../data/hepatocito-vivo-data.js';
-import { nuevo, leer, topes, fmt, vitales } from './modelo.js';
+import { PDF, PDF_TX, FIG_VIA, VIAS, viaDe, TX, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe, CRECERA, UBICACION, FLUIDOS, TRR_FICHA } from '../../../data/hepatocito-vivo-data.js';
+import { nuevo, leer, topes, fmt, vitales, glutDe, funcDe, p450 } from './modelo.js';
 import { escena, leyenda, opNodo } from './dibujo.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { cara, WH_TXT } from './cara.js';
@@ -17,13 +18,15 @@ const R = $('raiz');
 let s = nuevo(), modo = 'explorar', preset = 'sano', oculto = false, foco = [], guiaApi, topeApi, firma = '', espera = null;
 // Enlace cruzado de siempre al párrafo exacto de la ficha (lo resuelve el listener delegado de home/index.js)
 const ir = (id, txt) => { const u = UBICACION[id]; return `<button type="button" class="ver-ficha" data-especialidad="libros" data-view="${u[0]}" data-panel="${u[1]}" data-tab="${u[2]}" data-resaltar="#${id}">${txt}</button>`; };
-const cita = (c, id) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · ${ir(id || fichaDe(c), `p. ${c} · Ver en la ficha`)}</span>`;
+const cita = (c, id, pdf) => { if (typeof c === 'string' && c.startsWith('TX:')) { const [, p, f] = c.split(':'); return citaTx(+p, f); } return pdf === 'TX' ? citaTx(c, id) : citaB(c, id); };
+const citaTx = (c, id) => `<span class="cita"><a class="cita-pdf" href="${PDF_TX}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · ${ir(id, `p. ${c} · Ver en la ficha`)}</span>`;
+const citaB = (c, id) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · ${ir(id || fichaDe(c), `p. ${c} · Ver en la ficha`)}</span>`;
 function frase(t, org) { $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
 const N = () => (oculto ? '?' : fmt(leer(s).a));
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
-  for (const c of ['edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis', 'tips', 'fl']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['dosis', 'fase3', 'hd', 'nomo', 'nomo2', 'alcohol', 'nac', 'phdial', 'vision', 'fomep', 'hdal', 'edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis', 'tips', 'fl']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, tono: t.tono || '', titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo || null });
 }
 function pintar() {
@@ -42,8 +45,27 @@ function pintar() {
   $('b-tips').textContent = `TIPS · ${s.tips ? 'puesto' : 'sin TIPS'}`; $('b-tips').setAttribute('aria-pressed', String(!!s.tips));
   R.querySelectorAll('[data-fl]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.fl === s.fl)));
   $('o-func').textContent = s.func; if (+$('r-func').value !== s.func) $('r-func').value = s.func;
+  pintarTx();
   if (L.edema && !oculto) $('fig').open = true;
   topeApi.refrescar();
+}
+// Vías de los tóxicos: mandos que se enseñan según la vía, monitor del hígado y figura real de la vía (todo ya creado; solo se repinta)
+const coma = (x) => String(x).replace('.', ',');
+function pintarTx() {
+  const v = s.via, par = v === 'paracetamol', alc = v === 'alcoholes';
+  R.querySelectorAll('[data-via-sel]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.viaSel === v)));
+  for (const id of ['m-prod', 'm-dep', 'm-rifa', 'm-tips', 'm-fl']) $(id).hidden = v !== 'urea';
+  $('m-par').hidden = !par; $('m-alc').hidden = !alc; $('mon-tx').hidden = v === 'urea';
+  const mostrar = (id, on) => { $(id).parentElement.hidden = !on; };
+  mostrar('mon-par', par); mostrar('mon-alt', par); mostrar('mon-ph', alc); mostrar('mon-ga', alc); mostrar('mon-lact', alc);
+  $('mon-reloj').hidden = !par; $('mon-carril').parentElement.hidden = v !== 'urea';
+  $('mon-par').textContent = `${s.par} µg/mL`; $('mon-reloj').innerHTML = `Reloj <b>${s.h} h</b>`;
+  $('mon-alt').textContent = s.lab?.alt ?? '—'; $('mon-inr').textContent = s.lab?.inr ?? '—';
+  $('mon-ph').textContent = coma(s.ph); $('mon-ga').textContent = s.ga ?? '—'; $('mon-go').textContent = s.go ?? '—'; $('mon-lact').textContent = s.lact ?? '—';
+  if (par) { $('o-dosis').textContent = s.dosis; $('r-dosis').value = s.dosis; $('o-h').textContent = s.h; $('r-h').value = s.h; $('o-par').textContent = s.par; $('r-par').value = s.par; $('b-nac').setAttribute('aria-pressed', String(!!s.nac)); $('b-nac').textContent = `NAC · ${s.nac ? 'en marcha' : 'sin NAC'}`; $('b-beb').setAttribute('aria-pressed', String(!!s.bebedor)); $('b-beb').textContent = `Alcohol crónico · ${s.bebedor ? 'sí' : 'no'}`; }
+  if (alc) { $('o-ph').textContent = coma(s.ph); $('r-ph').value = s.ph; R.querySelectorAll('[data-alc]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.alc === s.alc))); for (const [id, k, t] of [['b-fomep', 'fomep', 'Fomepizol'], ['b-coad', 'coad', s.alc === 'met' ? 'Ácido folínico' : 'Tiamina + piridoxina'], ['b-hd', 'hd', 'Hemodiálisis']]) { $(id).setAttribute('aria-pressed', String(!!s[k])); $(id).textContent = `${t} · ${s[k] ? 'sí' : 'no'}`; } }
+  const f = FIG_VIA[v], det = $('fig-via'); det.hidden = !f;
+  if (f) { $('fig-via-t').textContent = `Figura del libro · ${f[0]}`; const im = $('img-via'); const src = IMG_VIA[v]; if (!im.src.endsWith(src)) im.src = src; $('fig-via-c').innerHTML = `${f[0]}, de Marino (cap. ${v === 'paracetamol' ? 52 : 53}). ${cita(f[1], f[2], 'TX')}`; }
 }
 // Cada acción cambia el estado y dice, en una frase, qué se ve y de dónde sale
 function hacer(a, v) {
@@ -54,10 +76,25 @@ function hacer(a, v) {
   if (a === 'cvvh') { s.cvvh = v === 1 ? 1 : s.cvvh ? 0 : 1; frase(s.cvvh ? `CVVH: filtra el NH₃ de la sangre sin pasar por el hígado; amonio ${N()} µmol/L. En el fallo agudo es superior y cuanto antes mejor.` : 'CVVH apagada.', 'ficha · p. 8; efecto ilustrativo'); if (s.cvvh && typeof espera === 'function') espera(); }
   if (a === 'tips') { s.tips = s.tips ? 0 : 1; frase(s.tips ? `TIPS: la sangre de la porta salta el hígado y el NH₃ llega entero a la sangre arterial (${N()} µmol/L). Cambia un problema por otro: más riesgo de encefalopatía.` : 'Sin TIPS: la porta pasa por el hepatocito.', 'ficha · p. 10; cuánto sube: ilustrativo'); }
   if (a === 'fl') { s.fl = s.fl === v ? null : v; const f = s.fl && FLUIDOS[s.fl]; frase(!f ? 'Sin fluido.' : s.fl === 'alb' ? `Albúmina 5 %: cerca del 70 % del volumen se queda en el vaso; PA ${vitales(s).pa}, FC ${vitales(s).fc}.` : s.fl === 'rl' ? `Ringer lactato: hipotónico, favorece la hiponatremia y el astrocito se hincha más (PA ${vitales(s).pa}). No es el fluido recomendado.` : `Salino: sube la PA (${vitales(s).pa}) pero menos volumen se queda en el vaso que con albúmina.`, s.fl === 'sal' ? 'fisiología general; cambios de PA y FC ilustrativos' : 'ficha · p. 5 y 9; cambios de PA y FC ilustrativos'); }
+  if (['via', 'dosis', 'h', 'par', 'nac', 'bebedor', 'alc', 'ph', 'fomep', 'coad', 'hd'].includes(a)) tx(a, v);
   pintar();
 }
+// Recalcula el glutatión y los hepatocitos tras tocar la dosis, el reloj o la NAC. Los hepatocitos nunca suben por encima de los del paciente (func0): el daño hecho no se deshace.
+function recalc() { if (s.glut0 === undefined) s.glut0 = s.glut; s.glut = s.nac ? Math.min(100, s.glut0 + 50) : s.glut0; s.func = Math.min(s.func0 ?? 100, funcDe(s)); s.lab = null; }
+function tx(a, v) {
+  const O = 'ficha · p. 4-5; el reparto exacto es ilustrativo';
+  if (a === 'via') { s.via = v; frase(v === 'paracetamol' ? 'Paracetamol: casi todo se conjuga y sale por la orina (90 %); un 10 % lo oxida el P450 a un metabolito tóxico que el glutatión neutraliza con su cisteína.' : v === 'alcoholes' ? 'Etilenglicol y metanol: la alcohol deshidrogenasa del hígado los convierte en ácidos tóxicos y sube el NADH, y con él el lactato.' : 'Vía de la urea: el hígado convierte el NH₃ en urea.', v === 'paracetamol' ? 'ficha · p. 4' : v === 'alcoholes' ? 'ficha · p. 26' : 'ficha · p. 6'); return; }
+  if (a === 'dosis') { s.dosis = v; s.glut0 = glutDe(s); recalc(); frase(v > TX.saturaG ? `${v} g: la conjugación (hasta 4 g/día) se satura, el P450 fabrica ${p450(s)} g de metabolito y el glutatión baja a ${s.glut} %.` : `${v} g: la conjugación aguanta y el glutatión se mantiene en ${s.glut} %.`, O); }
+  if (a === 'h') { s.h = v; recalc(); frase(v < 24 ? `Hora ${v}: fase 1, aún sin daño en el hígado.` : v <= 72 ? `Hora ${v}: fase 2; con el glutatión agotado, los hepatocitos mueren (quedan ${s.func} %).` : `Hora ${v}: fase 3, el fallo se completa (hepatocitos ${s.func} %).`, 'ficha · p. 5 (fases 24/72/96 h); cuántos mueren por hora: ilustrativo'); }
+  if (a === 'par') { s.par = v; frase(v > TX.hdPar ? `${v} µg/mL: más de 900; con encefalopatía, hemodiálisis.` : `Paracetamol ${v} µg/mL. A las 4 h, por encima de 150 se trata con NAC.`, 'ficha · p. 6 y 8'); }
+  if (a === 'nac') { s.nac = s.nac ? 0 : 1; recalc(); frase(s.nac ? `NAC: repone la cisteína, el glutatión sube a ${s.glut} % y los hepatocitos dejan de caer.` : 'Sin NAC: el glutatión sigue agotado.', 'ficha · p. 7; cuánto sube el glutatión: ilustrativo'); }
+  if (a === 'bebedor') { s.bebedor = s.bebedor ? 0 : 1; s.glut0 = glutDe(s); recalc(); frase(s.bebedor ? `Con alcohol crónico el P450 está inducido y el glutatión bajo: con ${s.dosis} g queda en ${s.glut} %.` : 'Sin alcohol crónico.', 'ficha · p. 5; cuánto baja el umbral: ilustrativo'); }
+  if (a === 'alc') { s.alc = v; s.vision = v === 'met' ? 1 : 0; frase(v === 'met' ? 'Metanol: la alcohol deshidrogenasa lo pasa a ácido fórmico, que inhibe la citocromo oxidasa y daña la retina.' : 'Etilenglicol: el hígado lo pasa por ácidos fuertes hasta el oxálico, que forma cristales en el túbulo.', 'ficha · p. 26-28'); }
+  if (a === 'ph') { s.ph = v; frase(v < TX.phDialisis ? `pH ${coma(v)}: por debajo de 7,1 hace falta diálisis.` : `pH ${coma(v)}: sin criterio de diálisis por el pH.`, 'ficha · p. 28'); }
+  if (a === 'fomep' || a === 'coad' || a === 'hd') { s[a] = s[a] ? 0 : 1; frase(a === 'fomep' ? (s.fomep ? 'Fomepizol: bloquea la alcohol deshidrogenasa y el ácido deja de fabricarse.' : 'Sin fomepizol.') : a === 'coad' ? (s.coad ? 'Coadyuvantes: desvían el metabolismo hacia productos no tóxicos.' : 'Sin coadyuvantes.') : (s.hd ? 'Hemodiálisis: quita el tóxico y los ácidos.' : 'Sin hemodiálisis.'), 'ficha · p. 27-29'); }
+}
 function ponerPreset(clave, sinGuia) {
-  preset = clave; s = nuevo(PRESETS[clave].s); oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(clave);
+  preset = clave; s = nuevo(PRESETS[clave].s); s.func0 = s.func; if (s.glut0 === undefined) s.glut0 = s.glut; oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(clave);
 }
 async function replay() {
   const nodos = [...R.querySelectorAll('#hpv-svg [data-nodo]')];
@@ -105,6 +142,14 @@ function caso(i, caja) {
 function montar() {
   const seg = (id, attr, vals) => `<div class="fila" id="hpv-${id}">${vals.map(([v, t]) => `<button type="button" data-${attr}="${v}" aria-pressed="false">${t}</button>`).join('')}</div>`;
   $('dock-panel').innerHTML = `
+   <div class="mando" id="hpv-m-via"><b class="dock-nota">Vía del hepatocito</b><div class="fila">${VIAS.filter((v) => v.on).map((v) => `<button type="button" data-via-sel="${v.id}" aria-pressed="false">${v.nombre}</button>`).join('')}</div></div>
+   <div class="mando" id="hpv-m-par" hidden><label>Paracetamol ingerido: <output id="hpv-o-dosis"></output> g (tope 30)<input type="range" id="hpv-r-dosis" min="0" max="30" step="1" value="4"></label>
+     <label>Reloj desde la ingesta: <output id="hpv-o-h"></output> h<input type="range" id="hpv-r-h" min="0" max="96" step="4" value="0"></label>
+     <label>Paracetamol en sangre: <output id="hpv-o-par"></output> µg/mL<input type="range" id="hpv-r-par" min="0" max="1000" step="10" value="0"></label>
+     <div class="fila"><button type="button" id="hpv-b-nac" class="b" aria-pressed="false">NAC</button><button type="button" id="hpv-b-beb" class="b" aria-pressed="false">Alcohol crónico</button></div></div>
+   <div class="mando" id="hpv-m-alc" hidden><div class="fila"><button type="button" data-alc="eg" aria-pressed="false">Etilenglicol</button><button type="button" data-alc="met" aria-pressed="false">Metanol</button></div>
+     <label>pH: <output id="hpv-o-ph"></output><input type="range" id="hpv-r-ph" min="6.8" max="7.6" step="0.05" value="7.4"></label>
+     <div class="fila"><button type="button" id="hpv-b-fomep" class="b" aria-pressed="false">Fomepizol</button><button type="button" id="hpv-b-coad" class="b" aria-pressed="false">Coadyuvantes</button><button type="button" id="hpv-b-hd" class="b" aria-pressed="false">Hemodiálisis</button></div></div>
    <div class="mando"><label>Hepatocitos vivos <output id="hpv-o-func"></output> %<input type="range" id="hpv-r-func" min="0" max="100" step="5" value="100"></label></div>
    <div class="mando" id="hpv-m-prod"><b class="dock-nota">Producción intestinal de NH₃ (ilustrativa)</b>${seg('s-prod', 'prod', [[0, 'Baja'], [1, 'Normal'], [2, 'Alta']])}</div>
    <div class="mando" id="hpv-m-dep"><b class="dock-nota">Lactulosa: deposiciones al día</b>${seg('s-dep', 'dep', [[0, 'Sin'], [2, '2'], [3, '3'], [4, '4'], [6, '6']])}</div>
@@ -115,9 +160,10 @@ function montar() {
   $('dock-medir').innerHTML = '<div class="mando"><div class="presets" id="hpv-presets"></div></div>';
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') { modo = 'explorar'; $('prueba').hidden = true; } ponerPreset(b.dataset.pre); } });
-  $('r-func').addEventListener('input', (ev) => hacer('func', +ev.target.value)); $('r-rifa').addEventListener('input', (ev) => hacer('rifa', +ev.target.value));
+  for (const [id, a] of [['r-dosis', 'dosis'], ['r-h', 'h'], ['r-par', 'par'], ['r-ph', 'ph']]) $(id).addEventListener('input', (ev) => hacer(a, +ev.target.value));
+  $('r-func').addEventListener('input', (ev) => { s.func0 = +ev.target.value; hacer('func', +ev.target.value); }); $('r-rifa').addEventListener('input', (ev) => hacer('rifa', +ev.target.value));
   $('dock-panel').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b || b.disabled) return;
-    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'hpv-b-cvvh') hacer('cvvh'); else if (b.id === 'hpv-b-tips') hacer('tips'); else if (b.dataset.fl) hacer('fl', b.dataset.fl); });
+    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'hpv-b-cvvh') hacer('cvvh'); else if (b.id === 'hpv-b-tips') hacer('tips'); else if (b.dataset.fl) hacer('fl', b.dataset.fl); else if (b.dataset.viaSel) hacer('via', b.dataset.viaSel); else if (b.dataset.alc) hacer('alc', b.dataset.alc); else if (b.id === 'hpv-b-nac') hacer('nac'); else if (b.id === 'hpv-b-beb') hacer('bebedor'); else if (b.id === 'hpv-b-fomep') hacer('fomep'); else if (b.id === 'hpv-b-coad') hacer('coad'); else if (b.id === 'hpv-b-hd') hacer('hd'); });
   $('modos').addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); });
   $('b-replay').addEventListener('click', replay);
   $('svg').addEventListener('click', (ev) => { const g = ev.target.closest('.via-off'); if (g) { const [n, d] = VIAS_APAGADAS[+g.dataset.via]; frase(`${n}: ${d}. Aquí no hace nada. ${ir(VIAS_APAGADAS[+g.dataset.via][2], 'Ver en la ficha')}`, 'otras fichas del libro'); } });
@@ -125,7 +171,7 @@ function montar() {
   $('leyenda').innerHTML = leyenda();
   guiaApi = crearGuia({ dock: () => $('dock'), caja: $('guia'), hacer: (a) => hacer(a, 1), setFoco: (z) => { foco = z; pintar(); }, cita });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`; $('cita-fig').innerHTML = cita(6);
-  $('fuentes').innerHTML = FUENTES.map(([t, p]) => `<li>${t} · ${cita(p)}</li>`).join('');
+  $('fuentes').innerHTML = FUENTES.map(([t, p, k]) => `<li>${t} · ${k === 'TX' ? cita(p, p < 20 ? (p === 4 ? 'mt-para-mecanismo' : p === 6 ? 'mt-para-nomograma' : p === 7 ? 'mt-tabla-52-1' : 'mt-nac-hd-txt') : (p === 28 ? 'mt-tabla-53-2' : 'mt-eg-mecanismo'), 'TX') : cita(p)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuente no lo dice' ? 'La fuente no lo dice' : t === 'las fuentes discrepan' ? 'Las fuentes discrepan' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
   $('crecera').innerHTML = CRECERA.map(([t, id, pg]) => `<li>${t} ${cita(pg, id)}</li>`).join('');
   $('profundizar').innerHTML = PROFUNDIZAR.map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('');
@@ -134,8 +180,10 @@ function montar() {
 function ajustarDock() { R.style.setProperty('--hpv-dock-h', $('dock').offsetHeight + 'px'); }
 // Estado: «casimira» (un paciente), «sano:tips» (ese paciente con el TIPS puesto) o «casimira:rl» / «casimira:alb» (con ese fluido). Vacío = el hígado sano.
 export function abrirEstado(clave) {
-  const [p, x] = String(clave || '').split(':'); if (modo === 'preguntas') vistaPreguntas(false); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
+  const [p0, x] = String(clave || '').split(':'); const es = VIAS.flatMap((v) => Object.entries(v.estados || {}).filter(([k]) => k === p0).map(([, e]) => e))[0];
+  const p = PRESETS[p0] ? p0 : es ? es[0] : p0; if (modo === 'preguntas') vistaPreguntas(false); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
   ponerPreset(PRESETS[p] ? p : 'sano');
+  if (!PRESETS[p0] && es) { Object.assign(s, es[1]); if (es[1].nac !== undefined || es[1].dosis !== undefined) recalc(); pintar(); }
   if (x === 'tips') { const a0 = fmt(leer(s).a); hacer('tips'); frase(`TIPS puesto: el amonio arterial pasa de ${a0} a ${N()} µmol/L, porque el NH₃ de la porta salta el hígado. Cambia un problema por otro.`, 'ficha · p. 10; cuánto sube: ilustrativo'); }
   else if (x === 'rl' || x === 'alb') hacer('fl', x);
   ajustarDock();
