@@ -5614,3 +5614,73 @@ body.study-mode-on #hpv-raiz .dock { padding-right: 82px; }
 #hpv-raiz .hpv-dock-estudio { display: grid; gap: 4px; }
 #hpv-raiz .hpv-dock-estudio[hidden] { display: none; }
 /* [FIN HUECO hepatocito] */
+/* ===== Termostato vivo · Mayéutica (modo Preguntas). Las mismas reglas que el receptor vivo, con el prefijo tmv-. Solo tokens. ===== */
+#tmv-raiz button.tmv-b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+#tmv-raiz button.tmv-b.tmv-prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+#tmv-raiz button.tmv-b:disabled { opacity: .55; cursor: default; }
+#tmv-raiz .tmv-fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#tmv-raiz .tmv-para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+#tmv-raiz .tmv-pasos { display: flex; gap: 4px; }
+#tmv-raiz .tmv-pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+#tmv-raiz .tmv-pasos i.tmv-on { background: var(--oro); border-color: var(--oro); }
+#tmv-raiz .tmv-pasos i.tmv-mal { background: var(--rojo); border-color: var(--rojo); }
+#tmv-raiz .tmv-pasos i.tmv-aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
+#tmv-raiz .tmv-formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+#tmv-raiz .tmv-cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+#tmv-raiz .tmv-num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+#tmv-raiz .tmv-tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+#tmv-raiz .tmv-grupo { font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 6px; padding: 1px 6px; }
+#tmv-raiz .tmv-grupo.tmv-examen { background: var(--rojo); color: var(--fg); }
+#tmv-raiz .tmv-grupo.tmv-caso { background: var(--purpura); color: var(--fg); }
+#tmv-raiz .tmv-pregunta { font-size: 1rem; line-height: 1.45; }
+#tmv-raiz .tmv-op { display: grid; gap: 8px; }
+#tmv-raiz .tmv-op button.tmv-elegida-bien { border-color: var(--verde); }
+#tmv-raiz .tmv-op button.tmv-elegida-mal { border-color: var(--rojo); }
+#tmv-raiz .tmv-respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; font: .9rem/1.45 var(--serif); }
+#tmv-raiz .tmv-ok { color: var(--verde); font: 600 .9rem var(--sans); }
+#tmv-raiz .tmv-mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+#tmv-raiz .tmv-dia { font: 700 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); }
+#tmv-raiz dl.tmv-paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .82rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 8px 10px; }
+#tmv-raiz dl.tmv-paciente dt { color: var(--muted); }
+#tmv-raiz dl.tmv-paciente dd { margin: 0; color: var(--fg); }
+#tmv-raiz dl.tmv-paciente dd.tmv-cambia { color: var(--rojo); font-weight: 600; }
+#tmv-raiz .tmv-formato [data-accion], .tmv-formato button { scroll-margin-bottom: calc(var(--tmv-dock-h, 190px) + 16px); }
+#tmv-raiz .tmv-eyebrow { font: 600 .68rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+#tmv-raiz .tmv-h { font: 600 1.15rem/1.25 var(--serif); margin: 2px 0 6px; }
+#tmv-raiz .tmv-ruta { font: .84rem/1.5 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+#tmv-raiz .tmv-punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+#tmv-raiz .tmv-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+#tmv-raiz .tmv-frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--serif); background: transparent; color: var(--text-main); border: 1px solid var(--card2); border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+#tmv-raiz .tmv-frase-e .tmv-n { font: 700 .76rem var(--sans); color: var(--muted); padding-top: 3px; }
+#tmv-raiz .tmv-frase-e.tmv-marcada { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .1); }
+#tmv-raiz .tmv-frase-e.tmv-acierto { border-color: var(--accent-green); }
+#tmv-raiz .tmv-frase-e.tmv-fallo { border-color: var(--accent-red); background: rgba(184, 92, 62, .12); }
+#tmv-raiz .tmv-correccion { font: .88rem/1.45 var(--sans); color: var(--dim); padding: 2px 0 0 26px; }
+#tmv-raiz .tmv-mando { border: 1px dashed var(--accent-yellow); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+#tmv-raiz .tmv-mando .tmv-pista { font: .84rem/1.4 var(--sans); color: var(--accent-yellow); }
+#tmv-raiz .tmv-fuente-p { font: .72rem/1.6 var(--sans); color: var(--muted); }
+#tmv-raiz .tmv-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+#tmv-raiz .tmv-lleva li { font: .94rem/1.45 var(--serif); }
+#tmv-raiz .tmv-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#tmv-raiz .tmv-casos-lista { display: grid; gap: 8px; }
+#tmv-raiz .tmv-casos-lista button small { display: block; font-weight: 400; color: var(--muted); }
+#tmv-raiz button.tmv-b.tmv-link { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; background: transparent; border-style: dashed; color: var(--accent-yellow); }
+#tmv-raiz .tmv-nuevo { font: 700 .62rem var(--sans); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--rojo); border-radius: 4px; padding: 0 4px; }
+#tmv-raiz .tmv-consecuencia p { margin: 2px 0 0; }
+#tmv-raiz .tmv-dock-est { display: grid; gap: 4px; padding: 6px 0; }
+#tmv-raiz .tmv-entra { animation: tmv-entra .25s ease-out; }
+@keyframes tmv-entra { from { opacity: .3; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #tmv-raiz .tmv-entra { animation: none; } }
+#tmv-raiz #tmv-dock-estudio, #tmv-raiz #tmv-aviso-tapa { display: none; }
+#tmv-raiz.preg-on #tmv-dock-estudio { display: grid; }
+#tmv-raiz.preg-on .dock .frase, #tmv-raiz.preg-on .dock .dock-tabs, #tmv-raiz.preg-on .dock .dock-panel,
+#tmv-raiz.preg-on #tmv-idea, #tmv-raiz.preg-on #tmv-paso-caja, #tmv-raiz.preg-on #tmv-prueba, #tmv-raiz.preg-on #tmv-mon-pie, #tmv-raiz.preg-on #tmv-leyenda,
+#tmv-raiz.preg-on details.fig, #tmv-raiz.preg-on section.bloque { display: none; }
+#tmv-raiz.tapado #tmv-monitor, #tmv-raiz.tapado #tmv-sello-zona, #tmv-raiz.tapado #tmv-avisos-zona, #tmv-raiz.tapado #tmv-escena, #tmv-raiz.tapado .capas,
+#tmv-raiz.sin-modelo #tmv-monitor, #tmv-raiz.sin-modelo #tmv-sello-zona, #tmv-raiz.sin-modelo #tmv-avisos-zona, #tmv-raiz.sin-modelo #tmv-escena, #tmv-raiz.sin-modelo .capas { display: none; }
+#tmv-raiz.tapado #tmv-aviso-tapa { display: block; }
+#tmv-raiz #tmv-preg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+#tmv-raiz .modos { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+#tmv-raiz .modos button { padding: 8px 2px; text-align: center; }
+#tmv-raiz .tmv-pasos i.tmv-on { background: var(--oro); border-color: var(--oro); }
+#tmv-raiz .tmv-dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }

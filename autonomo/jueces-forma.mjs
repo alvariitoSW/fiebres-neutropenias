@@ -46,6 +46,7 @@ export const BANCOS = [
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -88,8 +89,8 @@ export const MODELOS = {
     // Hepatocito vivo (b5): Explorar | Apuesta | Error | Error de Hilario | Caso (Mayéutica del motor común en «Preguntas»: el estado va en data-hepatocito-vivo; «alta:tips» pone el TIPS)
     'hepatocito-vivo': { raiz: '#hpv-raiz', enlace: { especialidad: 'libros', view: 'hepatocitoVivo' }, clave: 'hepatocitoVivo', modo: { explorar: '#hpv-modo-explorar', mayeutica: '#hpv-modo-preguntas' },
         estados: ['sano', 'casimira', 'edema', 'hilario', 'alta', 'alta:tips'] },
-    // El termostato vivo (b5): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-termostato-vivo)
-    'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar' },
+    // El termostato vivo (b5): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común)
+    'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar', mayeutica: '#tmv-modo-preguntas' },
         estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
