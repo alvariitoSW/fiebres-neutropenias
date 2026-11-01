@@ -1,0 +1,7 @@
+Revisión del encargo b6b (Explore sonnet, 01/11). 25 fichas e ids ✅; receptores-animados, tope, frase-vista, mayeutica-motor, motion ✅; ningún eje hormonal en la app (nuevo).
+GRAVE 1: el hepatocito solo está en origin/auto/b5 (sin fusionar): leer con git show; la construcción depende de que b5 entre antes.
+GRAVE 2: VIAS_APAGADAS apunta «Paracetamol» a ma-fha-paracetamol (p. 3 del PDF de abdomen) y «Alcoholes» a mt-alcoholes con página 0; la cobertura decide si mt-paracetamol convive y pone páginas (Fig. 52.2, 53.3). Casimira ya existe en el b5: se reusa, no se repite.
+Huecos: las fichas del cap. 51 citan solo rangos (#page=47/52/55): la cobertura da página a cada cifra (cortisol <10 o Δ<9 p. 50; ≥35, hidrocortisona 100/8 h, fludro 50 µg, Tabla 51.1 p. 51; Tabla 51.2 p. 52; tormenta p. 53-55, Tablas 51.3-51.4 p. 54-55; mixedema p. 56-57). Marino no da retroalimentación negativa ni TRH→TSH→T4→T3: otra fuente en encargo aparte. Unidad de la TSH incoherente en la fuente (mU/mL frente a mU/dL): la de la ficha. Propranolol IV sin dosis en Marino: no dibujar bolo IV.
+Ningún juez mide las maquetas: programa de prueba con solapes, cambio de paciente, cifra imposible con sello, rótulos ≥8 px, ≤700 líneas.
+Caso difícil a dibujar: cortisol aleatorio no descarta supresión secundaria (p. 51); CBG baja (el total engaña).
+Consulta probables: mt-unidades, mt-referencias, mt-cuerpo, mu-formulas, mu-vitaminas-oligo, mu-gasto-energetico (inferencia; la decide la cobertura).

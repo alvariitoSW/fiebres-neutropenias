@@ -38,6 +38,8 @@ const AJUSTES = {
     'hepatocito-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|▶ Ver el carril|Ver la frase buena|Ver la modalidad)/ },
     // Termostato vivo: «Paso ›», «‹ Paso» y «Siguiente paso» son pasos; los selectores de estado y los botones de capa no acumulan (la prueba propia lleva «Juega» a sus topes)
     'termostato-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Siguiente|‹ Paso|Paso ›|Piel|Músculo|Cerebro|Bien|Error)/ },
+    // Eje vivo: el reloj (+1/+7 días), la retirada de la hidrocortisona, los pasos de la guía y los cambios de paciente o de lupa no acumulan (la prueba propia lleva cada mando a su tope)
+    'eje-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|\+1 día|\+7 días|Retirar poco a poco|Retirada gradual|Ver el mapa|Ver el eje|Lupa|▶ Paso a paso|Circulación|Tiroides|Más mandos|Menos mandos)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.

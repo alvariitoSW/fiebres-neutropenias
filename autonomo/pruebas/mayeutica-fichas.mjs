@@ -25,7 +25,13 @@ const { MAYEUTICA_B3 } = await import(new URL('../../js/data/mayeutica/b3.js', i
 const { MAYEUTICA_B4 } = await import(new URL('../../js/data/mayeutica/b4.js', import.meta.url));
 const { MAYEUTICA_B5 } = await import(new URL('../../js/data/mayeutica/b5.js', import.meta.url));
 // Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
-const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3, ...MAYEUTICA_B4, ...MAYEUTICA_B5 };
+// Los del b6b: todo `MAYEUTICA_*` de js/data/mayeutica/b6b-*.js (los módulos de ayudas, como b6b-eje-comun.js, no lo tienen); se salta lo que no trae `guia`.
+const MAYEUTICA_B6B = {};
+for (const n of readdirSync(new URL('../../js/data/mayeutica/', import.meta.url)).filter(n => /^b6b-.*\.js$/.test(n))) {
+    const mod = await import(new URL('../../js/data/mayeutica/' + n, import.meta.url));
+    for (const [k, v] of Object.entries(mod)) if (k.startsWith('MAYEUTICA_')) for (const [f, d] of Object.entries(v)) if (Array.isArray(d?.guia)) MAYEUTICA_B6B[f] = d;
+}
+const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3, ...MAYEUTICA_B4, ...MAYEUTICA_B5, ...MAYEUTICA_B6B };
 // Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
@@ -34,7 +40,7 @@ const NAV_B3 = tab => tab.startsWith('neumo-') ? { especialidad: 'neumologia', v
 const NAV_B4 = { especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs' };
 // Las del bloque 5 (abdomen y temperatura), en Libros → Marino · Abdomen.
 const NAV_B5 = { especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs' };
-const navDe = tab => MAYEUTICA_B5[tab] ? NAV_B5 : MAYEUTICA_B4[tab] ? NAV_B4 : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
+const navDe = tab => tab.startsWith('mu-') ? { especialidad: 'libros', view: 'marinoNutricion', panel: 'panel-marino-nutri-tabs' } : tab.startsWith('mt-') ? { especialidad: 'libros', view: 'marinoToxicos', panel: 'panel-marino-tox-tabs' } : MAYEUTICA_B5[tab] ? NAV_B5 : MAYEUTICA_B4[tab] ? NAV_B4 : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
 const { barajar, hoyLocal, sumarDias } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
@@ -58,7 +64,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
         if (!idsHtml.has(ficha)) m.push('la ficha no existe');
         if (!d.guia?.length) m.push('sin Guía socrática');
         if (!d.examen?.length) m.push('sin Examen');
-        if (!d.casos?.length) m.push('sin casos');
+        if (!d.casos?.length && ficha !== 'mt-cuerpo') m.push('sin casos'); // mt-cuerpo: ficha de consulta sin caso propio (cobertura del b6b; el caso del grupo 6L va en mt-unidades/mt-referencias)
         const preguntas = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))];
         const tests = preguntas.filter(q => q.tipo === 'test');
         let masLarga = 0; const posiciones = {};
@@ -102,7 +108,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
     for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b\d+[a-z]?-.+\.js$/.test(n))) {
         const mod = await import(new URL('../../js/data/mayeutica/' + arch, import.meta.url));
         let n = 0, larga = 0, corta = 0;
-        for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
+        for (const d of Object.values(mod).flatMap(g => Object.values(g)).filter(d => Array.isArray(d?.guia))) {
             const qs = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))].filter(q => q.tipo === 'test');
             for (const q of qs) {
                 const ls = q.opciones.map(o => largo(o.t)), ok = largo(q.opciones.find(o => o.ok)?.t || '');
@@ -187,7 +193,7 @@ async function correr(ANCHO, REDUCIDO) {
         ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}${juega.filter(j => !(j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))).map(j => ' [falla: «' + j.texto.slice(0, 70) + '»]').join('')}`);
         ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
         if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
-        if (!REDUCIDO && !juegaProbado) {
+        if (!REDUCIDO && !juegaProbado && juega.length) {
             juegaProbado = true;
             await pulsar(`${PASO(ficha, 'juega')} .est-juega`); await p.waitForTimeout(1500);
             const v = await volverVisible();
@@ -295,7 +301,8 @@ async function correr(ANCHO, REDUCIDO) {
         }
         ok(await p.evaluate(z => /No queda nada por repasar/.test(document.querySelector(z).textContent), ZE), `${ficha}: el repaso se vacía al acertarlas`);
         ok(await p.evaluate(f => document.querySelector(`#${f} .est-ir[data-ir-paso="examen"] .est-marca`).textContent === '✓', ficha), `${ficha}: «Examínate» queda marcado`);
-        // Casos
+        // Casos (mt-cuerpo, ficha de consulta, no tiene caso propio)
+        if (d.casos.length) {
         Z = ZC;
         await pulsar(`${ZE} [data-ir-paso="caso"]`); await p.waitForTimeout(100);
         for (const [k, caso] of d.casos.entries()) {
@@ -308,7 +315,7 @@ async function correr(ANCHO, REDUCIDO) {
                 await siguiente(Z);
             }
             const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent, ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: !!document.querySelector(z + ' .may-modelo') }), Z);
-            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && fin.modelo, `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
+            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && (fin.modelo || !juega.length), `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha${juega.length ? ' y al modelo' : ' (ficha sin modelo vivo: excepción del Congreso del 01/11)'}`);
             ok(await desborde() <= 0, `${ficha}: sin desborde en «Lo que te llevas» (${caso.id})`);
             if (nf === 0 && k === 0) await foto('07-fin-caso', Z);
             if (k < d.casos.length - 1) await pulsar(`${Z} [data-fin="otro"]`);
@@ -318,6 +325,7 @@ async function correr(ANCHO, REDUCIDO) {
         await pulsar(`${Z} [data-may-texto]`); await p.waitForTimeout(900);   // el scroll de «Ver en el texto» es suave
         const ancla = d.casos.at(-1).volver.ancla;
         ok(await p.evaluate(([f, a]) => { const t = document.getElementById(f), e = document.getElementById(a); const r = e.getBoundingClientRect(); return !t.classList.contains('modo-estudiar') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, ancla]), `${ficha}: «Repasar en la ficha» vuelve al texto, a «${ancla}»`);
+        }
         // «Para profundizar»
         await pulsar(`#${ficha} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(150);
         const prof = await p.evaluate(f => {

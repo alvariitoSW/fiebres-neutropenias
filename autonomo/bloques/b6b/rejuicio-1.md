@@ -1,0 +1,5 @@
+# Rejuicio (profesor, 01/11) · hepatocito 6,5 → **8,4** · 6I 7,5 → **8,5** · 6H 7,8 → **8,5** (pasan; meta 8,75)
+Hepatocito: la vía se lee como su modelo, monitor propio, metabolito que se acumula, sin restos de la urea.
+Receta hepatocito: (1) `dibujo.js`: quitar/rotular el rectángulo y el círculo vacíos (colon y astrocito apagados); «bilis» cortado (l. 27, x≈336). (2) `hemodialisis`: la diálisis no se ve; sello de edema bajo el dock; «hepatocitos 15 %» sin mostrar. (3) `pagina.js` l. 113: cita fija «p. 6-8» también en Ruperto (p. 26-29): cita por preset; Ruperto con hiatos y lactato «—». (4) `hemodialisis-alcohol`: el pH no sube (ilustrativo).
+6I: Eleuterio INR 4,1 → 2,8 tras la diálisis → 3,6: la diálisis no corrige el INR (≥4,1 y ≈5 en el giro). `&lt;` l. 332-334, 346, 355.
+6H: Policarpo paso 2 «heparina en lugar de amiodarona» → «además recibe heparina»; Fulgencio paso 4 «otro paciente» → su evolución (giro); Bibiana «En la práctica» y Policarpo paso 3 sin dato nuevo → cifra o día.

@@ -41,6 +41,7 @@ export const BANCOS = [
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · cuánto y qué dar (6E)', datos: 'js/data/mayeutica/b6b-cuanto.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · bloque 4 (Marino caps. 31-38)', datos: 'js/data/mayeutica/b4.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · bloque 5 (Marino caps. 39-44)', datos: 'js/data/mayeutica/b5.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
@@ -52,6 +53,7 @@ export const BANCOS = [
     { nombre: 'iones vivos', datos: 'js/data/iones-vivos-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'eje hormonal vivo', datos: 'js/data/eje-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -97,6 +99,9 @@ export const MODELOS = {
     // El termostato vivo (b5): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común)
     'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar', mayeutica: '#tmv-modo-preguntas' },
         estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
+    // El eje hormonal vivo (b6b): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común). El estado es el paciente.
+    'eje-vivo': { raiz: '#eje-raiz', enlace: { especialidad: 'libros', view: 'ejeVivo' }, clave: 'ejeVivo', modo: { explorar: '#eje-modo-explorar', mayeutica: '#eje-modo-preguntas' },
+        estados: ['toribio', 'bibiana', 'sinforoso', 'lucrecia', 'obdulia', 'policarpo', 'fulgencio'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa

@@ -11,6 +11,7 @@
       <section id="hpv-monitor" aria-label="Monitor de cabecera">
         <div class="mon-fila"><span>NH₃ arterial <b id="hpv-mon-nh3"></b></span><span>West Haven <b id="hpv-mon-wh"></b></span><span>Carril <b id="hpv-mon-carril"></b></span></div>
         <div class="mon-fila"><span>Lactulosa <b id="hpv-mon-dep"></b></span><span>PA <b id="hpv-mon-pa"></b> · FC <b id="hpv-mon-fc"></b></span><span id="hpv-mon-astro"></span></div>
+        <div class="mon-fila" id="hpv-mon-tx" hidden><span>Paracetamol <b id="hpv-mon-par"></b></span><span>pH <b id="hpv-mon-ph"></b></span><span>ALT <b id="hpv-mon-alt"></b> · INR <b id="hpv-mon-inr"></b></span><span>Hiato aniónico <b id="hpv-mon-ga"></b> · osmolar <b id="hpv-mon-go"></b></span><span>Lactato <b id="hpv-mon-lact"></b></span><span id="hpv-mon-reloj"></span></div>
         <p class="mon-ch cita"><span class="chip-ilus">ilustrativo</span> escala 60 / 150 µmol/L: normal &lt;60, riesgo &gt;150 <a class="cita-pdf" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=7" target="_blank" rel="noopener">PDF p. 7</a> · <button type="button" class="ver-ficha" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-encefalopatia-hepatica" data-resaltar="#ma-eh-amonio">Ver en la ficha</button></p>
       </section>
       <section class="zona-escena" id="hpv-escena"><svg id="hpv-svg" viewBox="0 22 360 324" role="img" aria-label="Un hepatocito grande: entra el amonio del colon, el carril de la urea lo procesa y lo que sobra llega al astrocito"></svg></section>
@@ -21,7 +22,9 @@
       <details class="plegable" id="hpv-fig"><summary>Figura del libro · Fig. 39.2 · TC de cráneo antes y después del edema</summary>
         <figure class="fig-tc"><img id="hpv-img-tc" loading="lazy" alt="Dos TC de cráneo de un paciente con fallo hepático agudo, antes y después del edema cerebral: a la derecha se borran los surcos" src="js/modules/libros/img/mar-fig39-2-tc-edema-cerebral.jpg">
         <figcaption>TC de cráneo en el fallo hepático agudo, antes (izquierda) y después (derecha) del edema cerebral: se borran los surcos y se pierde la interfaz entre sustancia gris y blanca. Imagen de Marino (Reference 6), la misma que ya está en la ficha. <span id="hpv-cita-fig"></span></figcaption></figure>
-        <p class="min-nota">Hueco reservado: aquí irá la Fig. 52.2 cuando se encienda la vía del paracetamol.</p></details>
+      </details>
+      <details class="plegable" id="hpv-fig-via" hidden><summary id="hpv-fig-via-t">Figura del libro</summary>
+        <figure class="fig-tc"><img id="hpv-img-via" loading="lazy" alt="Esquema del libro de la vía activa del hepatocito" src="js/modules/libros/img/mar-fig52-2-metabolismo-paracetamol.jpg"><figcaption id="hpv-fig-via-c"></figcaption></figure></details>
       <section class="bloque">
         <details class="plegable"><summary>Cómo crece este modelo</summary><ul class="lista crecera" id="hpv-crecera"></ul></details>
         <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="hpv-fuentes"></ul></details>

@@ -1,0 +1,45 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6b). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6b-eje-a.html
+     Eje hormonal, opción A «El termostato hormonal»: tres estaciones (hipotálamo, hipófisis, glándula) y el cable de la retroalimentación, con Motion;
+     suprarrenal (CIRCI, supresión por corticoides con la Fig. 51.1) y tiroides (Tabla 51.2, tormenta, mixedema, eutiroideo enfermo).
+     Fuente: Marino 2024, cap. 51 (docs/marino-2024-nutricion-endocrino-caps48-51.pdf). El cable y las desyodasas: Libro Azul, Younes 2017, Huang-Bianco 2008. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El termostato hormonal · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6b-eje-a/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>El termostato hormonal</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
+    <span>PA mmHg<b id="m-pa"></b></span><span>FC<b id="m-fc"></b></span><span>Temperatura<b id="m-t"></b></span><span>Na⁺ mEq/L<b id="m-na"></b></span>
+    <span>Lactato mmol/L<b id="m-lac"></b></span><span>Noradrenalina<b id="m-nor"></b></span><span><em id="m-c1l">Cortisol</em><b id="m-c1"></b></span>
+    <span><em id="m-c2l">ACTH</em><b id="m-c2"></b></span><span><em id="m-c3l">Cortisol/día</em><b id="m-c3"></b></span><span>Reloj<b id="m-c4"></b></span></div></section>
+  <div id="sellos" class="sellos" aria-label="Sellos y avisos"></div>
+  <section class="zona-escena"><svg id="eje-svg" viewBox="0 0 360 300" role="img" aria-label="Eje hormonal: hipotálamo, hipófisis y glándula unidos por flechas de hormona, con el cable de retroalimentación y, a la derecha, el mapa del laboratorio"><g id="est"></g></svg></section>
+  <div id="avisos"></div>
+  <p id="lectura" class="lectura"></p>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <div id="tabla-512"></div>
+  <section class="figuras" aria-label="Figura real del libro">
+    <figure id="fig"><img src="../../js/modules/libros/img/mar-fig51-1-supresion-suprarrenal.jpg" alt="Mecanismos de supresión suprarrenal en el crítico: hipotálamo, hipófisis y glándula con los puntos de bloqueo"><figcaption>Fig. 51.1 · Mecanismos de supresión suprarrenal (Marino 2024, p. 49). Esteroides exógenos y citocinas sobre el hipotálamo; toxinas, citocinas, VIH, hemorragia, etomidato y ketoconazol sobre la glándula.</figcaption></figure>
+  </section>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script src="../../js/vendor/motion.js"></script>
+<script type="module" src="b6b-eje-a/pagina.js"></script>
+</body></html>

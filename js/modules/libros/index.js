@@ -39,8 +39,17 @@ import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
 import { init as initHepatocitoVivo } from './hepatocito-vivo/index.js';
 import { init as initTermostatoVivo } from './termostato-vivo/index.js';
+import { init as initEjeVivo } from './eje-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
+import { MAYEUTICA_APENDICES } from '../../data/mayeutica/b6b-apendices.js';
+import { MAYEUTICA_HIGADO } from '../../data/mayeutica/b6b-higado.js';
+import { MAYEUTICA_EJE } from '../../data/mayeutica/b6b-eje.js';
+import { MAYEUTICA_CUANTO } from '../../data/mayeutica/b6b-cuanto.js';
+import { MAYEUTICA_ENTERAL } from '../../data/mayeutica/b6b-enteral.js';
+import { MAYEUTICA_NPT } from '../../data/mayeutica/b6b-npt.js';
+import { MAYEUTICA_RECEPTOR } from '../../data/mayeutica/b6b-receptor.js';
+import { MAYEUTICA_OXIGENO } from '../../data/mayeutica/b6b-oxigeno.js';
 import { MAYEUTICA_B4 } from '../../data/mayeutica/b4.js';
 import { MAYEUTICA_B5 } from '../../data/mayeutica/b5.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -77,7 +86,7 @@ const BLOQUES = {
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
-const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos', 'hepatocitoVivo', 'termostatoVivo']);
+const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos', 'hepatocitoVivo', 'termostatoVivo', 'ejeVivo']);
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -139,6 +148,8 @@ export function init() {
         hepatocitoVivo: document.getElementById('hepatocito-vivo-view'),
         // Termostato vivo (bloque 5, caps. 43-44; fichas en Marino Abdomen y temperatura)
         termostatoVivo: document.getElementById('termostato-vivo-view'),
+        // Eje hormonal vivo (bloque 6b, cap. 51; fichas en Marino Nutrición y endocrino)
+        ejeVivo: document.getElementById('eje-vivo-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -226,6 +237,18 @@ export function init() {
     initMarinoNutricion();
     initMarinoToxicos();
     initVisualMarinoCaps45a53();
+    // Texto | Visual | Estudiar en las fichas de consulta de los apéndices (6L, después de su vista Visual)
+    Object.entries(MAYEUTICA_APENDICES).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    // Estudiar en el hígado que se envenena (6I: paracetamol, NAC, alcoholes), con el hepatocito vivo como modelo
+    Object.entries(MAYEUTICA_HIGADO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    // Estudiar en el eje que calla (6H: suprarrenal, tiroides, hipotiroidismo), con el eje vivo como modelo
+    Object.entries(MAYEUTICA_EJE).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_CUANTO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_ENTERAL).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    // Texto | Visual | Estudiar en las fichas de nutrición parenteral (6G, después de su vista Visual)
+    Object.entries(MAYEUTICA_NPT).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_RECEPTOR).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_OXIGENO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
@@ -242,6 +265,7 @@ export function init() {
     const ionesVivos = arrancar('iones', initIonesVivos);
     const hepatocitoVivo = arrancar('hepatocito', initHepatocitoVivo);
     const termostatoVivo = arrancar('termostato', initTermostatoVivo);
+    const ejeVivo = arrancar('eje', initEjeVivo);
 
     librosLevel.show('menu');
 
@@ -270,6 +294,8 @@ export function init() {
             hepatocitoVivo: (estadoClave, origen) => hepatocitoVivo?.abrir(estadoClave, origen),
             // data-termostato-vivo="<estado>[:paso]", el termostato vivo
             termostatoVivo: (estadoClave, origen) => termostatoVivo?.abrir(estadoClave, origen),
+            // data-eje-vivo="<paciente>[:paso]", el eje hormonal vivo
+            ejeVivo: (estadoClave, origen) => ejeVivo?.abrir(estadoClave, origen),
         },
     };
 }

@@ -63,6 +63,7 @@ const MODELOS = {
     pulmonVivo: { especialidad: 'libros', view: 'pulmonVivo', nombre: '🫁 el pulmón con respirador' },
     receptorVivo: { especialidad: 'libros', view: 'receptorVivo', nombre: '💊 el receptor vivo' },
     hepatocitoVivo: { especialidad: 'libros', view: 'hepatocitoVivo', nombre: '🏭 el hepatocito vivo' },
+    ejeVivo: { especialidad: 'libros', view: 'ejeVivo', nombre: '⚖️ dos glándulas, un enfermo' },
     termostatoVivo: { especialidad: 'libros', view: 'termostatoVivo', nombre: '🌡️ el cuerpo que arde y tirita' },
     nefronaViva: { especialidad: 'nefrologia', view: 'nefrona', nombre: '💧 la nefrona viva' },
     glomerulo: { especialidad: 'nefrologia', view: 'nefrona', nombre: '🫘 el glomérulo vivo' },
@@ -174,7 +175,8 @@ function estadosParaJugar(tab, d) {
     });
     d.guia.forEach((q, k) => desde(q, `Guía ${k + 1} («${q.corto}»)`));
     d.examen.forEach((q, k) => desde(q, `Examen ${k + 1} («${q.corto}»)`));
-    d.casos.forEach(c => c.pasos.forEach((p, j) => desde(p.pregunta, `Caso, paso ${j + 1}`)));
+    // Con el nombre del paciente si el caso lo trae al principio del título («Toribio, 61 años…»): «Caso de Toribio, paso 1»; si no, «Caso, paso 1».
+    d.casos.forEach(c => { const nombre = c.titulo?.match(/^(\p{Lu}[\p{L}]+),\s*\d+ años/u)?.[1]; c.pasos.forEach((p, j) => desde(p.pregunta, `${nombre ? `Caso de ${nombre}` : 'Caso'}, paso ${j + 1}`)); });
     return lista;
 }
 
