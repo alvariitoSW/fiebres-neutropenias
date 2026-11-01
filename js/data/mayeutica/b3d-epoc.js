@@ -33,7 +33,7 @@ export const MAYEUTICA_EPOC = {
         opciones: [
           { t: 'Metilprednisolona IV a dosis altas durante dos semanas, porque la vía IV es más potente', porque: `La vía IV no ofrece ventaja sobre la oral y la pauta recomendada es de 5 días (${p(25)}-${p(26)}); alargarla solo suma efectos adversos (hiperglucemia, por ejemplo).` },
           { t: 'Prednisona 40 mg diarios durante 5 días; por vía oral equivale a la IV en eficacia', ok: true },
-          { t: 'Ninguno: el EPOC no responde a broncodilatadores y los esteroides no ayudan', porque: `Los corticoides se asocian a una recuperación más rápida y a menos fracasos de tratamiento (${p(25)}); sin ellos, el paciente tendría más riesgo de fracaso.` }],
+          { t: 'Hidrocortisona IV 100 mg cada 8 horas durante 7-10 días, como en el asma', porque: `La pauta de Marino es prednisona 40 mg × 5 días (${p(25)}-${p(26)}); alargarla a 7-10 días solo suma hiperglucemia y otros efectos adversos sin más beneficio.` }],
         explicacion: `<span class="hl-azul">40 mg de prednisona (o equivalente) diarios durante 5 días</span>; la vía IV no ofrece ventaja sobre la oral (${p(25)}-${p(26)}).` + enFicha(EV, 'nep-corticoides-epoc') },
       { id: 'ev-g4', corto: 'antibióticos', tipo: 'test', fuente: 'nep-antibioticos-epoc',
         enunciado: 'Un paciente con EPOC ingresa en UCI y necesita VNI. No tiene neumonía. ¿Qué haces con el antibiótico y cuánto dura?',
@@ -136,7 +136,7 @@ export const MAYEUTICA_EPOC = {
     ],
     casos: [
       { id: 'c-epoc-jacinto', titulo: 'Jacinto, 58 años: EPOC hipercápnico', corto: 'Caso · Jacinto (EPOC)', sub: 'Exacerbación grave: oxígeno, VNI, intubación y auto-PEEP',
-        paciente: { Edad: '58 años, varón', Peso: '70 kg', Antecedentes: 'EPOC grave, fumador', Motivo: 'disnea y somnolencia creciente (del caso)' },
+        paciente: { Edad: '58 años, varón', Peso: '70 kg (PBW 65,9 kg, por su talla)', Antecedentes: 'EPOC grave, fumador', Motivo: 'disnea y somnolencia creciente (del caso)' },
         pasos: [
           { momento: 'Urgencias', datos: { 'PaCO₂': '80 mmHg (del paciente)', pH: '7,24 (del paciente)', 'SpO₂': '84 % (del paciente)' }, nuevo: ['PaCO₂', 'pH', 'SpO₂'],
             pregunta: { id: 'ev-c1', tipo: 'test', fuente: 'nep-o2-epoc', origen: 'ficha; las cifras, del paciente',
@@ -171,35 +171,35 @@ export const MAYEUTICA_EPOC = {
                 { t: 'Subir el O₂ hasta SpO₂ 98 % para mejorarle la conciencia', porque: `El O₂ alto puede subir más la PaCO₂ (${p(26)}); empeoraría la somnolencia.` },
                 { t: 'Intubar y ventilar: ya fracasó el criterio de la hora y no se espera más', ok: true }],
               explicacion: `Fallar en bajar la PaCO₂ tras una hora <span class="hl-rojo">es indicación de intubación</span> (${p(26)}); esperar otra hora solo trae un paciente con peor nivel de consciencia.` + enFicha(EV, 'nep-vni-epoc') } },
-          { momento: 'Ya intubado', datos: { Ajustes: 'Vt 500 (7,6 mL/kg), FR 24 (monitor)', 'Flujo final': '−10 L/min: no llega a cero', 'PEEP oculta': '6,4 cmH₂O', Pico: '34,7 cmH₂O', 'Volumen minuto': '12 L/min' }, nuevo: ['Ajustes', 'Flujo final', 'PEEP oculta', 'Pico', 'Volumen minuto'],
+          { momento: 'Ya intubado', datos: { Ajustes: 'Vt 500 (7,6 mL/kg de su PBW 65,9), FR 24 (monitor)', 'Flujo final': '−10 L/min: no llega a cero', 'PEEP oculta': '6,4 cmH₂O', Pico: '34,7 cmH₂O', 'Volumen minuto': '12 L/min' }, nuevo: ['Ajustes', 'Flujo final', 'PEEP oculta', 'Pico', 'Volumen minuto'],
             pregunta: { id: 'ev-c5', tipo: 'test', fuente: 'nep-monitor-flujo', origen: 'ficha; el monitor, de la app',
               modeloVivo: pv('broncoespasmo-auto-peep', '🫁 Jacinto con FR 24'),
               enunciado: 'Jacinto ya está ventilado con FR 24 y Vt 500. ¿Qué te dice la curva de flujo?',
               opciones: [
                 { t: 'El flujo espiratorio cesa antes de la siguiente insuflación: ventilación normal y sin atrapamiento de aire', porque: `Eso es la curva normal (${p(28)}); aquí el flujo final es −10 L/min y no llega a cero. Pasarías por alto el atrapamiento.` },
-                { t: 'Que la presión pico de 34,7 prueba por sí sola la PEEP intrínseca', porque: `La señal es el flujo al final de la espiración; la pico depende también de la resistencia (${p(28)}).` },
+                { t: 'La PEEP total de 6,4 es la que puse en el mando, así que no hay atrapamiento', porque: `Esos 6,4 cmH₂O son la PEEP intrínseca (oculta): el mando está a 0 y lo que la produce es el flujo espiratorio que no llega a cero (${p(28)}); pasarías por alto el atrapamiento.` },
                 { t: 'El flujo espiratorio continúa al llegar la siguiente insuflación: hiperinflación dinámica', ok: true }],
               explicacion: `<span class="hl-rojo">Flujo espiratorio al final de la espiración</span> (−10 L/min en el monitor) = hiperinflación dinámica, con PEEP intrínseca de unos 6,4 cmH₂O (Fig. 23.5, ${p(28)}).` + enFicha(EV, 'nep-monitor-flujo') } },
           { momento: 'El plan del residente', datos: { Plan: 'cuatro frases del residente' }, nuevo: ['Plan'],
-            pregunta: { id: 'ev-c6', tipo: 'error', fuente: 'nep-o2-epoc · nep-estrategias-ventilador', origen: 'ficha; los 15 L/min y los 10 mL/kg, ilustrativos',
+            pregunta: { id: 'ev-c6', tipo: 'error', fuente: 'nep-o2-epoc · nep-estrategias-ventilador', origen: 'ficha; los 15 L/min y la FR 28, ilustrativos',
               modeloVivo: pv('broncoespasmo-auto-peep', '🫁 Jacinto con Vt 500'),
               enunciado: 'Plan del residente para Jacinto. Hay dos errores. Encuéntralos.',
               frases: [
                 { t: 'Mantengo la SaO₂ en 88-92 %, no más alta.' },
                 { t: 'Cuando lo extube, reservorio a 15 L/min hasta que la SpO₂ llegue a 98 %.', mal: true, c: 'En el EPOC con retención crónica, el objetivo es 88-92 % y no más; el O₂ alto puede subir la PaCO₂.' },
-                { t: 'Subo el Vt a 10 mL/kg para bajar el CO₂.', mal: true, c: 'Hay que evitar volúmenes de insuflación mayores de 6-8 mL/kg: más volumen agrava la hiperinflación.' },
+                { t: 'Subo la FR a 28 para bajar el CO₂.', mal: true, c: 'Con más frecuencia queda menos tiempo para espirar y el atrapamiento aumenta: la estrategia es frecuencia lenta y flujo alto.' },
                 { t: 'Vigilo el flujo espiratorio al final para ver si sigue el atrapamiento.' }],
-              explicacion: `Dos errores clásicos: <span class="hl-rojo">saturar a 98 %</span> y <span class="hl-rojo">ventilar con volúmenes altos</span> (${p(26)}; ${p(29)}).` + enFicha(EV, 'nep-estrategias-ventilador') } },
-          { momento: 'El ajuste', datos: { Ajustes: 'Vt 400 (6,1 mL/kg), FR 12, flujo 80 (monitor)', 'PEEP oculta': '1,1 cmH₂O', 'Flujo final': 'llega a cero', 'Volumen minuto': '4,8 L/min' }, nuevo: ['Ajustes', 'PEEP oculta', 'Flujo final', 'Volumen minuto'],
+              explicacion: `Dos errores clásicos: <span class="hl-rojo">saturar a 98 %</span> y <span class="hl-rojo">subir la frecuencia con un EPOC atrapando aire</span> (${p(26)}; ${p(29)}).` + enFicha(EV, 'nep-estrategias-ventilador') } },
+          { momento: 'El ajuste', datos: { Ajustes: 'Vt 400 (6,1 mL/kg de su PBW 65,9), FR 12, flujo 80 (monitor)', 'PEEP oculta': '1,1 cmH₂O', 'Flujo final': 'llega a cero', 'Volumen minuto': '4,8 L/min' }, nuevo: ['Ajustes', 'PEEP oculta', 'Flujo final', 'Volumen minuto'],
             pregunta: { id: 'ev-c7', tipo: 'test', fuente: 'nep-estrategias-ventilador', origen: 'ficha: el precio; el monitor, de la app',
               modeloVivo: pv('auto-peep-corregida', '🫁 Jacinto ajustado: FR 12, flujo 80'),
               enunciado: 'Con FR 12, flujo 80 y Vt 400, el atrapamiento casi desaparece. Pero el volumen minuto bajó de 12 a 4,8 L/min. ¿Qué has pagado?',
               opciones: [
-                { t: 'Nada: al vaciarse el pulmón, la ventilación mejora siempre', porque: `Dar más tiempo para exhalar baja el volumen minuto (Vt × FR = 4,8 L/min en el monitor); el CO₂ de Jacinto, ya alto, seguiría subiendo.` },
+                { t: 'Nada: la PaCO₂ baja sola porque sale el aire atrapado', porque: `Dar más tiempo para exhalar baja el volumen minuto (Vt × FR = 4,8 L/min en el monitor); el CO₂ de Jacinto, ya alto, seguiría subiendo.` },
                 { t: 'Oxigenación: con menos frecuencia, el oxígeno no entra', porque: `Lo que se paga es el volumen minuto (Vt × FR), es decir, la eliminación de CO₂; el texto no da base para pensar en la oxigenación.` },
                 { t: 'Volumen minuto: ventilas menos y la PaCO₂ puede subir más', ok: true }],
               explicacion: `Vt × FR = 400 × 12 ≈ <span class="hl-rojo">4,8 L/min</span> frente a 12 antes (monitor). La regla del libro es dar tiempo para exhalar (<span class="hl-azul">1/3 del ciclo para insuflar</span>, ${p(29)}).`,
-              nota: `<b>La fuente no lo dice</b>: cuánta hipercapnia se tolera en el EPOC; es fisiología general.` + enFicha(EV, 'nep-estrategias-ventilador') } }
+              nota: `<b>La fuente no lo dice para la EPOC</b>: Marino da, en el SDRA (<a class="biblio-link" href="${PDF}#page=49" target="_blank" rel="noopener">cap. 24, pág. 49</a>), PaCO₂ de 60-70 mmHg y pH de 7,2-7,25 como seguros para la mayoría; para la EPOC no da un límite.` + enFicha('neumo-sdra-ventilacion', 'nep-hipercapnia') + enFicha(EV, 'nep-estrategias-ventilador') } }
         ],
         lleva: [
           'En el EPOC, la saturación se apunta a 88-92 % y no más: el O₂ alto puede subir la PaCO₂.',
