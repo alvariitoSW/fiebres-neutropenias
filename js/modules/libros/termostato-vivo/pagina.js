@@ -140,7 +140,7 @@ function pagina() {
   ir({});
 }
 pagina();
-seguirFrase(R, () => $('frase'), { dock: () => $('dock') });
+seguirFrase(R, () => $('escena'), { dock: () => $('dock') });
 
 // Abre un estado: «fiebre», «golpe:4» (estado y paso) o «juega». Se reinicia el modo a Explorar.
 export function abrirEstado(clave) {
