@@ -1,6 +1,6 @@
 // Dibujo nuevo del corazón de la eco. Toma su forma del contrato del motor (B-045, paso 4): lee del motor lo que
 // necesita y no calcula fisiología por su cuenta. Hoy es idéntico al dibujo de corazon-geo.mjs (delega en él);
-// se irá sustituyendo pieza a pieza. Se activa con la fachada de corazon-geo.mjs (?dibujo=2, ECO_DIBUJO=2 o usarDibujo(2)).
+// se irá sustituyendo pieza a pieza. Se activa con la fachada de corazon-geo.mjs (?dibujo=2, ECO_DIBUJO=2 o usarDibujo(2); desde el 01/11 es el de por defecto).
 // Ojo con el ciclo de importación: aquí nada de corazon-geo.mjs se usa a nivel superior, solo dentro de funciones.
 import { construirCorazonHoy, baseGeometricaHoy } from './corazon-geo.mjs';
 

@@ -10,7 +10,7 @@ const est = { vvi: 0.9, vvd: 0.9, vai: 0.8, vad: 0.8, mitral: 1, tricus: 1, aort
 const sinVd = (g) => ({ ...g, Lvd: 0, A: 0, C0: 0 });   // el largo del VD es propio del dibujo nuevo (vdLargoPropio)
 const firma = () => JSON.stringify([sinVd(baseGeometrica(est)), construirCorazon(est).partes.map(p => [p.nombre ?? p.id ?? '', p.tris?.length ?? p.verts?.length ?? 0])]);
 test('interruptor del dibujo', () => {
-  assert.equal(usarDibujo(1), 1);
+  assert.equal(usarDibujo(1), 2, 'por defecto es el dibujo nuevo (encendido el 01/11/2026)');   // ahora dibujo 1 = el de antes
   const a = firma();
   assert.equal(usarDibujo(2), 1);
   assert.equal(firma(), a);
@@ -26,4 +26,5 @@ test('interruptor del dibujo', () => {
   const grosor1 = grosor(g1, -0.4 * g1.Lvd), grosor2 = grosor(g2, -0.4 * g2.Lvd);
   assert.ok(grosor2 > grosor1 + 0.3 || grosor2 > g1.tvdW(99) * 0.9, 'en HP el nuevo mantiene el grosor de la pared del VD oblicua');
   assert.ok(grosor2 < 2 * g1.tvdW(99) + 0.5, 'el ajuste oblicuo no pasa de doblar la pared');
+  assert.equal(usarDibujo(2), 1);   // vuelve al defecto
 });

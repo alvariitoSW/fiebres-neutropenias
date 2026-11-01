@@ -1158,9 +1158,10 @@ export function diametrosTSVD(g) {
 
 // ---- Fachada única: elige entre el dibujo de hoy y el nuevo (corazon-geo-2.mjs) --------------------------------
 // Los importadores no cambian: la imagen, los planos y las medidas usan siempre el mismo dibujo.
-// Se activa con ?dibujo=2 en la URL (navegador), ECO_DIBUJO=2 (Node) o usarDibujo(2) (pruebas y jueces). Por defecto, 1.
-let dibujoNuevo = (typeof process !== 'undefined' && process.env?.ECO_DIBUJO === '2') ||
-  (typeof globalThis.location?.search === 'string' && /[?&]dibujo=2(&|$)/.test(globalThis.location.search));
+// Por defecto, el dibujo nuevo (encendido el 01/11/2026, realismo 9,5). ?dibujo=1 en la URL (navegador), ECO_DIBUJO=1 (Node)
+// o usarDibujo(1) (pruebas y jueces) devuelven el dibujo de antes.
+let dibujoNuevo = !((typeof process !== 'undefined' && process.env?.ECO_DIBUJO === '1') ||
+  (typeof globalThis.location?.search === 'string' && /[?&]dibujo=1(&|$)/.test(globalThis.location.search)));
 export function usarDibujo(n) { const antes = dibujoNuevo ? 2 : 1; dibujoNuevo = Number(n) === 2; return antes; }
 export function construirCorazon(estado, opciones = {}) { return dibujoNuevo ? construirCorazon2(estado, opciones) : construirCorazonHoy(estado, opciones); }
 export function baseGeometrica(estado) { return dibujoNuevo ? baseGeometrica2(estado) : baseGeometricaHoy(estado); }
