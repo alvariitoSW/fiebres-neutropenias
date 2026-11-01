@@ -13,3 +13,10 @@
   objetivos de la IT cumplidos salvo el sobrepico de lPul; falta (en orden, informe `paso6/v4m-informe.md` en esa rama): decidir
   qué es la «telediástole» con el reloj nuevo y la inercia mitral (lMit), recuperar el gasto del normal, lPul, tabla del
   contrato e instantánea con --congelar, shock-vivo. Siguiente encargo: opus, desde wt/mv6-v4m.
+## ~18:30 UTC
+- Rejuicio: **9,50, pasa la puerta** (`juicio-2.md`). Suite de la eco en verde con la versión -21.
+- En curso (todas empujan al remoto tras cada commit): `wt/mv6-on` encender el dibujo 2 por defecto (+ --geometria a la suite,
+  versión -22); `wt/mv6-v3d` E/A anchas y escala del CW; `wt/mv6-v3g` aorta en foco VD y zoom re-render.
+- Luego: juntar las tres (on primero), suite + shock-vivo + --eco + --geometria; rejuicio; seguir el motor desde `wt/mv6-v4m`
+  (reloj auricular, en rojo) con opus. Lista para 9,85-10 en `juicio-2.md`.
+- v3d (18:50 UTC): la onda A tricuspídea del normal sale a ~257 cm/s en ~40 ms (qTri 1133 mL/s; lo real ~30-40 cm/s): cifra mala del motor (AD con Ees 0,70; ver wt/mv6-v4m). Para el carril del motor.

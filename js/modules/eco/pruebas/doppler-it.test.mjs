@@ -61,3 +61,33 @@ test('columnaEspectro con línea de base arriba: el chorro negativo cae en su fi
   assert.ok(col[3 * fila(-300)] > col[3 * fila(-100)] && col[3 * fila(-300)] > col[3 * fila(100)]);
   const centro = columnaEspectro([-100], 100, 250, 1), arr = columnaEspectro([-100], 100, 250, 1, 0.5); assert.deepEqual(centro, arr);
 });
+
+// ---- CW de la IT/IM: llenado E/A con su duración y escala automática (mv-eco-2a5 paso 6, vuelta 3)
+import { velCwReg, escalaCw, areasAnilloDe } from '../doppler.mjs';
+function cw(k, g, reg, e) {
+  const m = crearMotor(); m.correr(12); if (k !== 'normal') ESCENARIOS[k].aplicar(m, g);
+  if (reg === 'mit') m.p.eroaMitral = e; else m.p.eroaTricus = e;
+  m.correr(k !== 'normal' && ESCENARIOS[k].forma ? ASENTAR_FORMA : 40);
+  const o = m.onda, a = areasAnilloDe(Math.max(...o.map(s => s.vvi)), Math.max(...o.map(s => s.vvd)));
+  const f = { n: reg === 'mit' ? 'regMitral' : 'regTricus' }, mm = { eroaMitral: reg === 'mit' ? e : 0, eroaTricus: reg === 'mit' ? 0 : e };
+  return { v: o.map(s => velCwReg(s, f, -1, a, mm)), per: m.periodo };   // factor −1: el chorro se aleja de la sonda
+}
+test('CW de la IT normal: la onda E sobre la base dura ≥ 120 ms (curva real de la válvula, no una púa)', () => {
+  const { v } = cw('normal', undefined, 'tri', 0.1); let mx = 0, run = 0;
+  for (const x of [...v, ...v]) { if (x > 5) { run++; mx = Math.max(mx, run); } else run = 0; }
+  assert.ok(mx * 2 >= 120, 'tramo positivo más largo ' + mx * 2 + ' ms');
+});
+test('CW de la IM: sin meseta plana de baja velocidad tras el domo (corte de Bernoulli, ΔP < 1,4 mmHg)', () => {
+  const { v } = cw('fallo', 1, 'mit', 0.2);
+  // el corte solo toca el chorro: sin llenado, o es 0 o es ≤ −60
+  const sinLlenado = v.filter((x, i) => x < 0 && x > -60).length; assert.ok(sinLlenado < 15, sinLlenado + ' muestras (2 ms) con chorro entre 0 y −60 cm/s');
+});
+test('escala automática: el chorro ocupa ≥ 60 % de su lado en IT normal, HP, TEP e IM dilatada, sin recortarse', () => {
+  for (const [k, g, r, e] of [['normal', 0, 'tri', 0.1], ['hpcronica', 1, 'tri', 0.1], ['tep', 1, 'tri', 0.1], ['dilatada', 1, 'mit', 0.2]]) {
+    const { v } = cw(k, g, r, e), arriba = Math.max(0, ...v), abajo = Math.max(0, -Math.min(0, ...v)), bs = 0.2, esc = escalaCw(arriba, abajo, bs);
+    const lado = 2 * esc * (1 - bs);
+    assert.ok(abajo <= lado, `${k}: recorta el chorro (pico ${abajo}, ±${esc})`);
+    assert.ok(abajo / lado >= 0.6, `${k}: pico ${abajo.toFixed(0)} en ±${esc} = ${(100 * abajo / lado).toFixed(0)} %`);
+  }
+});
+test('escala automática: el TEP de pico 250,8 cm/s no salta a ±400', () => assert.equal(escalaCw(100, 250.8, 0.2), 250));
