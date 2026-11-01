@@ -264,6 +264,7 @@
         <div class="card cv-tarjeta" id="cv-tarjeta-eco">
             <div class="cv-chips" id="cv-vistas" role="group" aria-label="Vista ecográfica"></div>
             <div class="cv-fila cv-modos" role="group" aria-label="Modo de imagen">
+                <button type="button" class="cv-mini" id="cv-zoom" aria-pressed="false">Zoom ×2 en la región</button>
                 <button type="button" class="cv-mini on" data-modo="B">Modo B</button>
                 <button type="button" class="cv-mini" data-modo="M">Modo M</button>
                 <button type="button" class="cv-mini" data-modo="D">Doppler pulsado</button>
@@ -279,6 +280,7 @@
                 <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
                 <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
                 <div class="cv-eco-fase" id="cv-eco-fase"></div>
+                <div class="cv-eco-zoom" id="cv-eco-zoom" hidden>ZOOM ×2</div>
             </div>
             <p class="cv-muted cv-senal-frase" id="cv-senal-frase" aria-live="polite" hidden></p>
             <div class="cv-gravedad" id="cv-gravedad" hidden>
@@ -387,8 +389,19 @@
                         <option value="60">±60 cm/s</option>
                         <option value="100">±100 cm/s</option>
                         <option value="150" selected>±150 cm/s</option>
+                        <option value="200">±200 cm/s</option>
+                        <option value="225">±225 cm/s</option>
                         <option value="250">±250 cm/s</option>
+                        <option value="300">±300 cm/s</option>
+                        <option value="350">±350 cm/s</option>
+                        <option value="400">±400 cm/s</option>
                         <option value="500">±500 cm/s</option>
+                        <option value="700">±700 cm/s</option>
+                    </select>
+                    <select class="cv-mini" id="cv-d-base" aria-label="Línea de base del espectro">
+                        <option value="centro" selected>Base al centro</option>
+                        <option value="arriba">Base arriba</option>
+                        <option value="abajo">Base abajo</option>
                     </select>
                 </div>
                 <p class="cv-muted" id="cv-d-guia">Toca la imagen para poner el volumen de muestra (o elige dónde arriba). Arriba de la línea de base, flujo hacia la sonda; abajo, alejándose.</p>

@@ -12,7 +12,7 @@
 // La mezcla de posiciones y normales la hace la tarjeta gráfica (render-webgl.mjs): por fotograma no se crea
 // ningún array grande ni se sube nada.
 import { construirCorazon } from './corazon-geo.mjs';
-import { septoSignoDe } from './contrato.mjs';   // tabique continuo del motor (lo lee solo el dibujo nuevo, ajuste septoContinuo)
+import { septoSignoDe, mcconnellDe } from './contrato.mjs';   // tabique continuo del motor (lo lee solo el dibujo nuevo, ajuste septoContinuo)
 import { acortamientoVd } from './anatomia.mjs';   // fisiología del lado del corazón (P3a): la imagen solo lee
 import { normalesSuaves } from './render-webgl.mjs';
 
@@ -43,8 +43,15 @@ export const carga = (v, s) => s[v.q] > 0 ? 0 : clamp((s[v.abajo] - s[v.arriba])
 // el contrato no da el valor idéntico (otra unidad, otro instante o sin dato): feLatido = 'fe' (el contrato en %, esto en 0-1);
 // vviTd/vvdTd = máximo de vol.vi/vol.vd del latido (el contrato no lo expone como campo); liquidoPeri = 'derrame' (el contrato
 // cae a 0, esto al pedido); eroaMitral/tenting/vRegMitral/vaiMax/mioVi/mioVd: sin campo de contrato (vRegMitral ~ q.reg.im).
+// M3 (McConnell): el tabique del instante de máximo volumen del VD (telediástole). El dibujo nuevo deja la pared libre media donde estaba
+// entonces, y para eso necesita la misma forma del VI de aquel instante (septo y septoSigno); si no hay McConnell, nada.
+const tabiqueTd = (motor) => {
+  if (!(mcconnellDe(motor) > 0)) return {};
+  const o = motor.onda, m = o.reduce((b, x) => x.vvd > b.vvd ? x : b, o[0]), e = estadoGeo(m);
+  return { septoTd: e.septo, septoSignoTd: e.septoSigno };
+};
 export const extraDeMotor = (motor) => ({ vviTd: motor.ultimo?.edv, vvdTd: motor.ultimo?.edvD, feLatido: motor.ultimo?.fe, liquidoPeri: motor.s.liquidoPeri ?? motor.p.liquidoPeri, tenting: Math.min(1, (motor.p.eroaMitral ?? 0) / 0.35), eroaMitral: motor.p.eroaMitral ?? 0, vRegMitral: motor.ultimo?.vReg ?? 0,
-  vaiMax: motor.onda?.length ? Math.max(...motor.onda.map(m => m.vai)) : undefined, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1 });
+  vaiMax: motor.onda?.length ? Math.max(...motor.onda.map(m => m.vai)) : undefined, mioVi: motor.p.mioVi ?? 1, mioVd: motor.p.mioVd ?? 1, mcconnell: mcconnellDe(motor), ...tabiqueTd(motor) });
 
 // Cuánto se aplana el tabique (0-1) según el gradiente de presión transeptal VI−VD de este instante. Fuente de lo
 // que se ve (que el tabique se aplana cuando el VD se sobrecarga): Merino, Fig. 18.2 (septo aplanado en diástole) y
@@ -76,7 +83,7 @@ export function plieguePared(ptm, pperi, liquido) {
 export function estadoGeo(s, extra = {}) {
   const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0,
     pliegueAd: plieguePared(s.ptmAd, s.pperi, s.liquidoPeri), pliegueVd: plieguePared(s.ptmVd, s.pperi, s.liquidoPeri), ...extra };
-  if (s.pvi != null && s.pvd != null) e.septoSigno = septoSignoDe(s.pvd - s.pvi);
+  if (s.pvi != null && s.pvd != null) e.septoSigno = septoSignoDe(s.pvd - s.pvi, s.pvi);
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }

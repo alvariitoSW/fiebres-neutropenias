@@ -276,7 +276,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Paracetamol</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-paracetamol">
+                    <div class="micro-prof-body" id="ma-fha-paracetamol" data-nombre="Paracetamol">
                         <dl class="kv-row"><dt>Peso</dt><dd>Primera causa en EE. UU. (<strong>46%</strong>) y Reino Unido (<strong>64%</strong>).</dd></dl>
                         <dl class="kv-row"><dt>Mecanismo</dt><dd>Se agota el glutatión hepático (el principal antioxidante intracelular) y un metabolito del paracetamol produce daño oxidativo. Empieza ya a las <strong>12 h</strong> y es máximo a los <strong>3-5 días</strong>; ALT muy alta con bilirrubina poco elevada.</dd></dl>
                         <dl class="kv-row"><dt>Dos trampas</dt><dd>1) La mitad de las sobredosis son <strong>involuntarias</strong> (para aliviar dolor; el paracetamol está en más de 600 productos sin receta). 2) En la mitad de los casos con daño hepático el paracetamol es <span class="hl-rojo">indetectable en plasma</span>: riesgo de no diagnosticar algo tratable.</dd></dl>
@@ -285,7 +285,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Otros fármacos</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-farmacos">
+                    <div class="micro-prof-body" id="ma-fha-farmacos" data-nombre="Otros fármacos">
                         <p>Daño dependiente de la dosis o idiosincrásico; más probable en ancianos, debilitados o alcohólicos. Las reacciones <strong>idiosincrásicas</strong> son las peores: supervivencia del <strong>40%</strong> sin trasplante.</p>
                         <div style="overflow-x:auto;">
                         <table class="data-table" id="ma-tabla-39-1">
@@ -306,11 +306,11 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Isquemia</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-isquemia"><p>"Hepatitis isquémica" tras un periodo de hipoperfusión (p. ej. shock hemorrágico): transaminasas muy altas (<strong>&gt;3.000 UI/L</strong>) con bilirrubina poco elevada (<strong>&lt;5 mg/dL</strong>). Suele resolverse si se resuelve la hipoperfusión, pero un <strong>25%</strong> necesita trasplante.</p></div>
+                    <div class="micro-prof-body" id="ma-fha-isquemia" data-nombre="Isquemia"><p>"Hepatitis isquémica" tras un periodo de hipoperfusión (p. ej. shock hemorrágico): transaminasas muy altas (<strong>&gt;3.000 UI/L</strong>) con bilirrubina poco elevada (<strong>&lt;5 mg/dL</strong>). Suele resolverse si se resuelve la hipoperfusión, pero un <strong>25%</strong> necesita trasplante.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Hepatitis aguda</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-hepatitis">
+                    <div class="micro-prof-body" id="ma-fha-hepatitis" data-nombre="Hepatitis aguda">
                         <dl class="kv-row"><dt>Autoinmune</dt><dd>Inicio más insidioso; historia de autoinmunidad o serologías (ANA, antimúsculo liso). El <strong>80%</strong> en mujeres; hipergammaglobulinemia frecuente.</dd></dl>
                         <dl class="kv-row"><dt>Vírica</dt><dd>&lt;10% en países desarrollados; sobre todo <strong>hepatitis B</strong>, nueva o reactivada por inmunosupresión. Con el fallo ya instaurado, los análogos de nucleósidos aportan poco: supervivencia del <strong>25%</strong> sin trasplante.</dd></dl>
                         <dl class="kv-row"><dt>Otras</dt><dd>Síndrome HELLP, Budd-Chiari (oclusión de las venas hepáticas), otros virus (herpes simple) y neoplasias infiltrantes.</dd></dl>
@@ -333,7 +333,7 @@
 
             <p class="section-label">Clínica y soporte</p>
             <dl class="kv-row" id="ma-fha-clinica"><dt>Qué la distingue</dt><dd>Sin ascitis ni varices (a diferencia de la cirrosis): domina la <strong>inflamación sistémica</strong> que sale del hígado dañado, con inestabilidad hemodinámica y disfunción multiorgánica, como un shock inflamatorio.</dd></dl>
-            <dl class="kv-row" id="ma-fha-hemodinamica"><dt>Hemodinámica</dt><dd>Vasodilatación y volumen circulante ineficaz por hipoalbuminemia. Volumen y vasopresores si hace falta; <strong>albúmina</strong> como fluido de reanimación, sobre todo con albúmina sérica &lt;3 g/dL (la del 5%, 5 g/dL, deja un 70% en el espacio intravascular). <span class="hl-rojo">Evitar el Ringer lactato</span>: favorece la hiponatremia, que empeora el edema cerebral.</dd></dl>
+            <dl class="kv-row" id="ma-fha-hemodinamica"><dt>Hemodinámica</dt><dd>Vasodilatación y volumen circulante ineficaz por hipoalbuminemia. Volumen y vasopresores si hace falta; <strong>albúmina</strong> como fluido de reanimación, sobre todo con albúmina sérica &lt;3 g/dL (la del 5%, 5 g/dL, deja un 70% en el espacio intravascular). <span class="hl-rojo">Evitar el Ringer lactato</span>: favorece la hiponatremia, que empeora el edema cerebral. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="casimira:rl">Albúmina 5 % y no Ringer lactato: el astrocito lo enseña →</button></dd></dl>
             <dl class="kv-row" id="ma-fha-ira"><dt>Fracaso renal agudo</dt><dd>En el <strong>70%</strong>, sobre todo con paracetamol o con hipotensión que necesita vasopresores. La TRR se usa de forma más agresiva: además del volumen, <strong>retira amonio</strong> y protege frente a la encefalopatía.</dd></dl>
             <dl class="kv-row" id="ma-fha-trasplante"><dt>Trasplante</dt><dd>Tratamiento definitivo: ha bajado la mortalidad del <strong>80% al 33%</strong>. Hay escalas para decidir a quién, pero es terreno del especialista en trasplante: consulta en todo fallo hepático agudo con encefalopatía progresiva.</dd></dl>
 
@@ -361,7 +361,7 @@
                 <li>Se produce al degradar proteínas, sobre todo en el <strong>intestino</strong> (menos en músculo y riñón).</li>
                 <li>El hígado lo elimina convirtiéndolo en <strong>urea</strong> (ciclo de la urea); en el fallo hepático esto se pierde y el amonio sube.</li>
                 <li>Cruza la barrera hematoencefálica y los <strong>astrocitos</strong> lo usan para fabricar <strong>glutamina</strong>.</li>
-                <li>La glutamina acumulada arrastra agua por ósmosis al astrocito: edema cerebral <strong>citotóxico</strong>.</li>
+                <li>La glutamina acumulada arrastra agua por ósmosis al astrocito: edema cerebral <strong>citotóxico</strong>. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="casimira">Ver el recorrido del amonio: colon, hígado y astrocito (&gt;150 µmol/L) →</button></li>
             </ol>
 
             <p class="section-label">Clínica</p>
@@ -377,29 +377,29 @@
                 </tbody>
             </table>
             </div>
-            <dl class="kv-row" id="ma-eh-nh3"><dt>Amonio plasmático</dt><dd>Casi siempre elevado; en muchos casos (no todos) su nivel se correlaciona con la gravedad, más en el fallo agudo que en la cirrosis. El <strong>arterial</strong> quizá predice mejor que el venoso, al menos al principio. Amonio arterial <span class="hl-rojo">&gt;150 µmol/L</span> (normal &lt;60) = más riesgo de edema cerebral.</dd></dl>
+            <dl class="kv-row" id="ma-eh-nh3"><dt>Amonio plasmático</dt><dd>Casi siempre elevado; en muchos casos (no todos) su nivel se correlaciona con la gravedad, más en el fallo agudo que en la cirrosis. El <strong>arterial</strong> quizá predice mejor que el venoso, al menos al principio. Amonio arterial <span class="hl-rojo">&gt;150 µmol/L</span> (normal &lt;60) = más riesgo de edema cerebral. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="edema">Ver cómo se hincha el astrocito →</button></dd></dl>
 
             <p class="section-label">Tratamiento: menos amonio en el SNC</p>
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🥛 Lactulosa</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-lactulosa">
+                    <div class="micro-prof-body" id="ma-eh-lactulosa" data-nombre="Lactulosa">
                         <p>Disacárido que las bacterias lácticas del colon convierten en ácidos grasos de cadena corta; la acidificación de la luz elimina los microbios productores de amonio.</p>
                         <dl class="kv-row"><dt>Oral o por sonda</dt><dd><strong>20-30 g (30-45 mL) cada hora</strong> hasta que haga deposición; luego 20 g (30 mL) cada 8 h, ajustando a <strong>2-3 deposiciones blandas al día</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Enema de retención</dt><dd>200 g (300 mL) en 700 mL de agua del grifo, enema alto, retenido <strong>30-60 min</strong> en Trendelenburg.</dd></dl>
-                        <dl class="kv-row"><dt>Cuidado</dt><dd>Diarrea osmótica: reducir o parar si aparece.</dd></dl>
+                        <dl class="kv-row"><dt>Cuidado</dt><dd>Diarrea osmótica: reducir o parar si aparece. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="casimira">Ver la lactulosa y la rifaximina en el colon →</button></dd></dl>
                     </div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Rifaximina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg 3 veces al día al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
+                    <div class="micro-prof-body" id="ma-eh-rifaximina" data-nombre="Rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg 3 veces al día al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Hemofiltración (CVVH)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-cvvh"><p>Baja el amonio y mejora el pronóstico en el fallo hepático agudo, sobre todo si se mantiene. Hoy se considera <strong>superior a la lactulosa o la rifaximina</strong> en el fallo agudo con encefalopatía. Indicaciones: <strong>oliguria persistente</strong>, <strong>amonio &gt;150 µmol/L</strong> o <strong>edema cerebral</strong>, sea cual sea la creatinina. Cuanto antes, mejor: su eficacia depende del tiempo.</p></div>
+                    <div class="micro-prof-body" id="ma-eh-cvvh" data-nombre="Hemofiltración (CVVH)"><p>Baja el amonio y mejora el pronóstico en el fallo hepático agudo, sobre todo si se mantiene. Hoy se considera <strong>superior a la lactulosa o la rifaximina</strong> en el fallo agudo con encefalopatía. Indicaciones: <strong>oliguria persistente</strong>, <strong>amonio &gt;150 µmol/L</strong> o <strong>edema cerebral</strong>, sea cual sea la creatinina. Cuanto antes, mejor: su eficacia depende del tiempo. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="edema">Ver la CVVH sacar el amonio de la sangre →</button></p></div>
                 </div>
             </div>
-            <div class="agua-simulador" id="ma-cvvh-calc">
+            <div class="agua-simulador" id="ma-cvvh-calc" data-nombre="Calculadora: ¿hemofiltración?">
                 <h4 style="color: var(--accent-yellow);">🧮 Fallo hepático agudo con encefalopatía: ¿hemofiltración?</h4>
                 <div class="form-group"><label for="ma-cvvh-nh3">Amonio arterial (µmol/L)</label><input type="number" id="ma-cvvh-nh3" min="0" max="1000" step="1" value="50" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-cvvh-oliguria">Oliguria persistente</label><select id="ma-cvvh-oliguria"><option value="no">No</option><option value="si">Sí</option></select></div>
@@ -446,7 +446,7 @@
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto pone el Ringer lactato como ejemplo de fluido «hipotónico» y explica que se evita por el riesgo de edema cerebral, «responsable de la encefalopatía hepática» (pág. 9). Se reproduce tal cual. Fuera de Marino, las fuentes no se ponen de acuerdo en la etiqueta: el Ringer lactato tiene unos 273 mOsm/L, algo por debajo del plasma (275-295). Por eso unas lo llaman <strong>ligeramente hipotónico</strong> (<a class="biblio-link" href="https://wikem.org/wiki/Lactated_Ringer%27s" target="_blank" rel="noopener">WikEM, «Lactated Ringer's»</a>) y otras <strong>isotónico</strong> (<a class="biblio-link" href="https://ncbi.nlm.nih.gov/books/NBK500033" target="_blank" rel="noopener">StatPearls, NCBI</a>). La de Marino no es una errata: es la lectura estricta. En la ficha de fallo hepático agudo, Marino lo desaconseja por la hiponatremia, que empeora el edema cerebral.</p></details>
             <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-encefalopatia-hepatica">🧠 Encefalopatía hepática y amonio →</button></p>
             <dl class="kv-row" id="ma-var-octreotido"><dt>Octreótido y antibiótico</dt><dd>El octreótido (análogo de la somatostatina, vasoconstrictor esplácnico) y la profilaxis antibiótica se empiezan <strong>cuanto antes</strong>. La ceftriaxona asume que los gérmenes resistentes no abundan en tu UCI.</dd></dl>
-            <dl class="kv-row" id="ma-var-tips"><dt>Hemorragia refractaria</dt><dd>En un <strong>20%</strong> la hemorragia no cede con endoscopia y tratamiento óptimo: valorar el <strong>TIPS</strong> (derivación portosistémica entre la porta y las venas hepáticas). Cambia un problema por otro: al saltarse el hígado, <span class="hl-rojo">aumenta la encefalopatía</span>.</dd></dl>
+            <dl class="kv-row" id="ma-var-tips"><dt>Hemorragia refractaria</dt><dd>En un <strong>20%</strong> la hemorragia no cede con endoscopia y tratamiento óptimo: valorar el <strong>TIPS</strong> (derivación portosistémica entre la porta y las venas hepáticas). Cambia un problema por otro: al saltarse el hígado, <span class="hl-rojo">aumenta la encefalopatía</span>. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="sano:tips">Ver cómo el TIPS salta el hígado: el amonio sube →</button></dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la fuente lo llama "transesophageal portosystemic shunt" y lo describe como "no invasivo". El TIPS es una derivación portosistémica intrahepática <em>transyugular</em>, y es un procedimiento mínimamente invasivo (radiología intervencionista), no un método no invasivo.</p></details>
             <div class="agua-simulador" id="ma-var-calc">
                 <h4 style="color: var(--accent-yellow);">✅ Checklist de la hemorragia por varices</h4>
@@ -482,21 +482,21 @@
                 <p class="article-figure-caption">Figura 39.4 — Antibiótico empírico de la PBE: comunitaria → cefalosporina de 3.ª generación; asociada a cuidados o nosocomial → con muchos resistentes, carbapenémico ± vancomicina o daptomicina; sin ellos, piperacilina-tazobactam.</p>
             </div>
             <dl class="kv-row" id="ma-pbe-resistentes"><dt>Si caben resistentes</dt><dd>Gradación: en la PBE <strong>comunitaria</strong> son improbables; se aíslan típicamente en la <strong>nosocomial</strong> y con menos frecuencia en la asociada a cuidados. Pauta: carbapenémico (p. ej. <strong>meropenem 1 g cada 8 h</strong>), más vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Nosocomial: aparece tras 48 h de ingreso; asociada a cuidados: en las primeras 48 h en alguien con contacto sanitario en los 90 días previos.</dd></dl>
-            <div class="agua-simulador" id="ma-pbe-calc">
+            <div class="agua-simulador" id="ma-pbe-calc" data-nombre="Calculadora del antibiótico (Fig. 39.4)">
                 <h4 style="color: var(--accent-yellow);">🧭 Antibiótico empírico de la PBE (Figura 39.4)</h4>
                 <div id="ma-pbe-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
                 <div id="ma-pbe-botones" style="display:flex; gap:10px;"></div>
                 <div class="result-box" id="ma-pbe-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
                 <button class="siguiente-ficha-btn" id="ma-pbe-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
             </div>
-            <div class="agua-simulador" id="ma-pmn-calc">
+            <div class="agua-simulador" id="ma-pmn-calc" data-nombre="Calculadora de neutrófilos">
                 <h4 style="color: var(--accent-yellow);">🧮 Neutrófilos en ascitis: diagnóstico y respuesta</h4>
                 <div class="form-group"><label for="ma-pmn-inicial">Neutrófilos iniciales (/mm³)</label><input type="number" id="ma-pmn-inicial" min="0" max="50000" step="1" value="800" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-pmn-48">Neutrófilos a las 48 h (/mm³, opcional)</label><input type="number" id="ma-pmn-48" min="0" max="50000" step="1" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-pmn-resultado"></div>
             </div>
             <dl class="kv-row" id="ma-pbe-albumina"><dt>Albúmina</dt><dd>Mejora la supervivencia en la PBE. Se atribuyó a la función renal (fracaso renal en el <strong>30%</strong> de las PBE, que empeora mucho el pronóstico), pero el beneficio es independiente de la creatinina. Pauta: <strong>1,5 g/kg el día 1 y 1 g/kg el día 3</strong>, con albúmina al 25% (25 g/100 mL) para limitar el volumen.</dd></dl>
-            <div class="agua-simulador" id="ma-alb-calc">
+            <div class="agua-simulador" id="ma-alb-calc" data-nombre="Calculadora de albúmina">
                 <h4 style="color: var(--accent-yellow);">🧮 Albúmina en la PBE</h4>
                 <div class="form-group"><label for="ma-alb-peso">Peso (kg)</label><input type="number" id="ma-alb-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-alb-resultado"></div>
@@ -515,7 +515,7 @@
                 </tbody>
             </table>
             </div>
-            <div class="agua-simulador" id="ma-shr-calc">
+            <div class="agua-simulador" id="ma-shr-calc" data-nombre="Calculadora de criterios de SHR">
                 <h4 style="color: var(--accent-yellow);">✅ ¿Cumple los criterios de SHR?</h4>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-shr-check"> Cirrosis con ascitis</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-shr-check"> Creatinina +0,3 mg/dL en 48 h o ≥1,5 × basal</label>
@@ -863,7 +863,7 @@
             </div>
             <div class="agua-simulador" id="ma-cob-calc">
                 <h4 style="color: var(--accent-green);">🧮 ¿Qué antibiótico cubre todo lo que necesito? (Tabla 41.3)</h4>
-                <p class="subtitle">Marca lo que tienes que cubrir; "+/−" no cuenta como cobertura.</p>
+                <p class="subtitle">Marca lo que tienes que cubrir; "+/−" no cuenta como cubierto.</p>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-cob-germen" value="0" checked> Bacilos gramnegativos aerobios</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-cob-germen" value="1"> <em>Pseudomonas</em></label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-cob-germen" value="2"> Enterococos (no resistentes)</label>
@@ -955,6 +955,13 @@
             <h3 style="color: var(--accent-blue);">Candiduria</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 42 "Urinary Tract Infections in the ICU".</p>
 
+            <p class="section-label">En 30 segundos</p>
+            <p>La <em>Candida</em> en la orina del sondado <strong>suele ser colonización</strong>; si persiste con fiebre, <span class="hl-rojo">busca la diseminada</span>.</p>
+            <ul>
+                <li>Hemocultivos negativos en <strong>&gt;50 %</strong> de las diseminadas (p. 42). <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-que">Ver en el texto ↗</button></li>
+                <li>Fluconazol oral <strong>200-400 mg/día, 2 semanas</strong> (p. 42). <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-tto">Ver en el texto ↗</button></li>
+                <li>Especie resistente: anfotericina B <strong>0,3-0,6 mg/kg/día, 1-7 días</strong> (p. 42). <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-tto">Ver en el texto ↗</button></li>
+            </ul>
             <dl class="kv-row" id="ma-cand-que"><dt>Colonización o algo más</dt><dd>Con sonda, la <em>Candida</em> en orina suele ser colonización, pero puede ser <strong>signo de candidiasis diseminada</strong> (consecuencia, no causa). Puede ser la única pista: los hemocultivos son negativos en <strong>más del 50%</strong> de las candidiasis diseminadas. (El Cap. 44 lo ve al revés: si es <strong>persistente</strong>, suele ser consecuencia de una candidiasis diseminada; ver la nota de fuentes en «Fiebre: infecciones y hemocultivos».)</dd></dl>
             <dl class="kv-row" id="ma-cand-micro"><dt>Microbiología</dt><dd>El recuento de colonias <strong>no predice</strong> la afectación renal ni la diseminación. <em>C. albicans</em> en ~50%, seguida de <em>C. glabrata</em>, notable por su resistencia al <strong>fluconazol</strong>.</dd></dl>
             <dl class="kv-row" id="ma-cand-asintomatica"><dt>Asintomática</dt><dd><strong>No se trata</strong>, salvo en el <strong>neutropénico</strong> (riesgo de diseminación): profilaxis con una equinocandina (caspofungina, micafungina o anidulafungina).</dd></dl>
@@ -994,7 +1001,7 @@
             <h3 style="color: var(--accent-red);">Agotamiento por calor y golpe de calor</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 43 "Thermoregulatory Disorders".</p>
 
-            <p>El cuerpo produce calor suficiente para subir su temperatura <strong>1 °C por hora</strong> en reposo; la piel lo disipa como un radiador, y un termostato limita la variación diaria a <strong>±0,6 °C</strong>. Este capítulo trata lo que pasa cuando el termostato falla.</p>
+            <p id="ma-calor-intro">El cuerpo produce calor suficiente para subir su temperatura <strong>1 °C por hora</strong> en reposo; la piel lo disipa como un radiador, y un termostato limita la variación diaria a <strong>±0,6 °C</strong>. Este capítulo trata lo que pasa cuando el termostato falla.</p>
             <dl class="kv-row" id="ma-calor-hipertermia"><dt>Hipertermia no es fiebre</dt><dd>La <strong>hipertermia</strong> es un fallo de la regulación; la <strong>fiebre</strong>, una regulación normal con el punto de ajuste más alto. Por eso los antipiréticos (paracetamol) <span class="hl-rojo">no sirven en la hipertermia</span>.</dd></dl>
 
             <p class="section-label">Cómo se pierde calor</p>
@@ -1018,7 +1025,7 @@
             </div>
             <dl class="kv-row" id="ma-calor-agotamiento"><dt>Agotamiento por calor</dt><dd>Cuadro pseudogripal: temperatura moderada, calambres, náuseas y malestar. Lo característico: <strong>deshidratación sin compromiso hemodinámico</strong>, con hiper- o hiponatremia (si el sudor se repone con agua); mentalmente bien. Tratamiento: volumen y medidas generales (habitación con aire acondicionado); <strong>no hace falta enfriar</strong> de forma activa.</dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto escribe «&lt;38-39 °C» para la temperatura del agotamiento por calor, mientras que la Tabla 43.1 da «38-39 °C». La ficha usa 38-39 °C, el de la tabla.</p></details>
-            <dl class="kv-row" id="ma-calor-golpe"><dt>Golpe de calor</dt><dd>Amenaza vital: <strong>≥41 °C</strong>, disfunción neurológica grave (delirio, coma, convulsiones), depleción grave de volumen con hipotensión y afectación multiorgánica (rabdomiólisis, fracaso renal, CID, transaminasas muy altas por "hepatitis isquémica"). La anhidrosis es típica, no constante. <strong>Clásico</strong> (por el ambiente) o <strong>de esfuerzo</strong>, que suele ser más grave.</dd></dl>
+            <dl class="kv-row" id="ma-calor-golpe"><dt>Golpe de calor</dt><dd>Amenaza vital: <strong>≥41 °C</strong>, disfunción neurológica grave (delirio, coma, convulsiones), depleción grave de volumen con hipotensión y afectación multiorgánica (rabdomiólisis, fracaso renal, CID, transaminasas muy altas por "hepatitis isquémica"). La anhidrosis es típica, no constante. <strong>Clásico</strong> (por el ambiente) o <strong>de esfuerzo</strong>, que suele ser más grave. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="golpe:4">🌡️ Golpe de calor ≥41 °C en el termostato vivo →</button></dd></dl>
 
             <p class="section-label">Enfriamiento del golpe de calor</p>
             <p>Volumen y enfriamiento activo hasta <strong>38 °C</strong>.</p>
@@ -1049,7 +1056,7 @@
 
             <p class="section-label">Hipertermia maligna</p>
             <dl class="kv-row" id="ma-hm-que"><dt>Qué es</dt><dd>Trastorno hereditario raro, <strong>autosómico dominante</strong> (1 de cada 50.000 adultos): el retículo sarcoplásmico del músculo suelta demasiado calcio ante <strong>anestésicos halogenados</strong> (halotano, isoflurano) o la <strong>succinilcolina</strong>.</dd></dl>
-            <dl class="kv-row" id="ma-hm-clinica"><dt>Clínica</dt><dd>Primer signo, a menudo: una <span class="hl-azul">subida brusca e inesperada del CO₂ espirado</span> (hipermetabolismo por desacoplamiento de la fosforilación oxidativa). Después (minutos a horas) <strong>rigidez</strong>, a veces empezando por el masetero; la temperatura sube más tarde (a menudo &gt;40 °C). Alteración mental, inestabilidad autonómica y rabdomiólisis con fracaso renal.</dd></dl>
+            <dl class="kv-row" id="ma-hm-clinica"><dt>Clínica</dt><dd>Primer signo, a menudo: una <span class="hl-azul">subida brusca e inesperada del CO₂ espirado</span> (hipermetabolismo por desacoplamiento de la fosforilación oxidativa). Después (minutos a horas) <strong>rigidez</strong>, a veces empezando por el masetero; la temperatura sube más tarde (a menudo &gt;40 °C). Alteración mental, inestabilidad autonómica y rabdomiólisis con fracaso renal. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="hm:3">🌡️ Hipertermia maligna: primero el CO₂ →</button></dd></dl>
             <div style="overflow-x:auto;">
             <table class="data-table" id="ma-tabla-43-2">
                 <thead><tr><th colspan="2">Hipertermia maligna (Tabla 43.2)</th></tr></thead>
@@ -1061,7 +1068,7 @@
                 </tbody>
             </table>
             </div>
-            <dl class="kv-row" id="ma-hm-tto"><dt>Tratamiento</dt><dd>Ante la primera sospecha, <strong>suspender el anestésico</strong>. El dantroleno (bloquea la salida de calcio del retículo) baja la mortalidad de <strong>≥70% a ≤10%</strong> si se da pronto. Efecto adverso más frecuente: debilidad (sobre todo de la prensión), que cede en 2-4 días; el daño hepático es un riesgo del oral durante meses. Vigilar hiperpotasemia y fracaso renal si hay rabdomiólisis. Al controlar la rigidez baja la temperatura: rara vez hace falta enfriar. Al alta: <strong>pulsera médica</strong> y avisar a la familia directa (herencia dominante).</dd></dl>
+            <dl class="kv-row" id="ma-hm-tto"><dt>Tratamiento</dt><dd>Ante la primera sospecha, <strong>suspender el anestésico</strong>.<ul style="margin:6px 0 0;padding-left:18px;"><li>El dantroleno (bloquea la salida de calcio del retículo) baja la mortalidad de <strong>≥70% a ≤10%</strong> si se da pronto.</li><li>Efecto adverso más frecuente: debilidad (sobre todo de la prensión), que cede en 2-4 días; el daño hepático es un riesgo del oral durante meses.</li><li>Vigilar hiperpotasemia y fracaso renal si hay rabdomiólisis. Al controlar la rigidez baja la temperatura: rara vez hace falta enfriar.</li><li>Al alta: <strong>pulsera médica</strong> y avisar a la familia directa (herencia dominante).</li></ul></dd></dl>
             <p class="fuente-ficha">La fuente cita una línea telefónica de EE. UU. para la hipertermia maligna (MHAUS); en España, consulta el protocolo de tu hospital.</p>
 
             <p class="section-label">Síndrome neuroléptico maligno (SNM)</p>
@@ -1078,8 +1085,8 @@
                 </tbody>
             </table>
             </div>
-            <dl class="kv-row" id="ma-snm-clinica"><dt>Clínica</dt><dd>Empieza a las <strong>24-72 h</strong> de iniciar el fármaco y casi siempre en las 2 primeras semanas; inicio gradual con <strong>rigidez</strong> y agitación o confusión. La fiebre puede retrasarse <strong>8-10 h</strong> tras la rigidez. Hiperactividad autonómica (taquicardia, sudoración). Graves: rigidez en "tubo de plomo", rabdomiólisis y depresión de conciencia. Para distinguirlo de una <strong>distonía</strong>: la CK es solo algo alta en la distonía y suele superar <strong>1.000 U/L</strong> en el SNM.</dd></dl>
-            <dl class="kv-row" id="ma-snm-tto"><dt>Tratamiento</dt><dd>Lo más importante: <strong>retirar el fármaco</strong> (o, si fue una retirada, <strong>reiniciarlo</strong> ya y bajarlo despacio después). Fluidos si hay rabdomiólisis o hipotensión; enfriamiento externo si hace falta (el control de la rigidez suele bastar); <strong>profilaxis tromboembólica obligatoria</strong>; benzodiacepinas si hay agitación. Para la rigidez: <strong>bromocriptina 10 mg VO 3 veces al día</strong> (mejora en horas, respuesta completa en días; hipotensión y alucinaciones) o, en los graves, <strong>dantroleno 1 mg/kg IV cada 8 h</strong> hasta resolución o 10 mg/kg acumulados, y luego 50-200 mg/día VO en 3-4 dosis (resultados inconsistentes). Mantener unos <strong>10 días</strong> tras la resolución, y <strong>2-3 semanas</strong> si fue un depot.</dd></dl>
+            <dl class="kv-row" id="ma-snm-clinica"><dt>Clínica</dt><dd>Empieza a las <strong>24-72 h</strong> de iniciar el fármaco y casi siempre en las 2 primeras semanas; inicio gradual con <strong>rigidez</strong> y agitación o confusión. La fiebre puede retrasarse <strong>8-10 h</strong> tras la rigidez. Hiperactividad autonómica (taquicardia, sudoración). Graves: rigidez en "tubo de plomo", rabdomiólisis y depresión de conciencia. Para distinguirlo de una <strong>distonía</strong>: la CK es solo algo alta en la distonía y suele superar <strong>1.000 U/L</strong> en el SNM. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="snm:3">🌡️ SNM: la fiebre llega tarde →</button></dd></dl>
+            <dl class="kv-row" id="ma-snm-tto"><dt>Tratamiento</dt><dd>Lo más importante: <strong>retirar el fármaco</strong> (o, si fue una retirada, <strong>reiniciarlo</strong> ya y bajarlo despacio después).<ul style="margin:6px 0 0;padding-left:18px;"><li>Fluidos si hay rabdomiólisis o hipotensión; enfriamiento externo si hace falta (el control de la rigidez suele bastar).</li><li><span class="hl-rojo">Profilaxis tromboembólica obligatoria</span>; benzodiacepinas si hay agitación.</li><li>Rigidez: <strong>bromocriptina 10 mg VO 3 veces al día</strong> (mejora en horas, respuesta completa en días; hipotensión y alucinaciones).</li><li>Graves: <strong>dantroleno 1 mg/kg IV cada 8 h</strong> hasta resolución o 10 mg/kg acumulados, y luego 50-200 mg/día VO en 3-4 dosis (resultados inconsistentes).</li><li>Mantener unos <strong>10 días</strong> tras la resolución, y <strong>2-3 semanas</strong> si fue un depot.</li></ul></dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: la Tabla 43.3 escribe "respiradone" y "Amantidine" (risperidona y amantadina).</p></details>
 
             <p class="section-label">Síndrome serotoninérgico (SS)</p>
@@ -1108,7 +1115,7 @@
             </table>
             </div>
             <p class="fuente-ficha">*Los hallazgos más específicos del síndrome serotoninérgico.</p>
-            <dl class="kv-row" id="ma-ss-claves"><dt>Claves</dt><dd>Lo más específico: <strong>hiperreflexia, mioclonías y clonus</strong>; el <strong>clonus ocular</strong> (movimientos horizontales espontáneos), aunque raro, es el hallazgo más fiable. Los leves: hiperreflexia, taquicardia y agitación; la rigidez aparece en los graves y puede tapar la hiperreflexia. La temperatura sube solo en el <strong>60%</strong>; rabdomiólisis en el 15%.</dd></dl>
+            <dl class="kv-row" id="ma-ss-claves"><dt>Claves</dt><dd>Lo más específico: <strong>hiperreflexia, mioclonías y clonus</strong>; el <strong>clonus ocular</strong> (movimientos horizontales espontáneos), aunque raro, es el hallazgo más fiable. Los leves: hiperreflexia, taquicardia y agitación; la rigidez aparece en los graves y puede tapar la hiperreflexia. La temperatura sube solo en el <strong>60%</strong>; rabdomiólisis en el 15%. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="ss:3">🌡️ Síndrome serotoninérgico: clonus ocular →</button></dd></dl>
             <dl class="kv-row" id="ma-ss-snm"><dt>SS frente a SNM</dt><dd>Comparten rigidez, alteración mental, fiebre e hiperactividad adrenérgica; lo que distingue al SS es la <strong>hiperreflexia y el clonus</strong>, pero en el SS grave la rigidez los tapa. Ayuda la historia farmacológica (aunque comparten algunos fármacos).</dd></dl>
             <p class="section-label">Los tres síndromes, rasgo a rasgo (resumen de esta ficha)</p>
             <div style="overflow-x:auto;"><table class="data-table" id="ma-tabla-rasgos-hipertermias">
@@ -1175,7 +1182,7 @@
                 </tbody>
             </table>
             </div>
-            <dl class="kv-row" id="ma-hipo-grados"><dt>Por fases</dt><dd><strong>Leve</strong>: confusos pero con signos de adaptación (vasoconstricción, escalofrío intenso, taquicardia, PA a veces alta). <strong>Moderada</strong>: letárgicos; escalofrío solo si &gt;30 °C; bradicardia y bradipnea por debajo de 32 °C. <strong>Grave</strong>: coma y pupilas fijas. Por debajo de 24 °C se esperan apnea y asistolia, pero <span class="hl-rojo">no se puede declarar la muerte en hipotermia</span>: hay que recalentar antes.</dd></dl>
+            <dl class="kv-row" id="ma-hipo-grados"><dt>Por fases</dt><dd><strong>Leve</strong>: confusos pero con signos de adaptación (vasoconstricción, escalofrío intenso, taquicardia, PA a veces alta). <strong>Moderada</strong>: letárgicos; escalofrío solo si &gt;30 °C; bradicardia y bradipnea por debajo de 32 °C. <strong>Grave</strong>: coma y pupilas fijas. Por debajo de 24 °C se esperan apnea y asistolia, pero <span class="hl-rojo">no se puede declarar la muerte en hipotermia</span>: hay que recalentar antes. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="hipo:3">🌡️ Hipotermia &lt;28 °C y onda de Osborn →</button></dd></dl>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto llama "hipertermia moderada" a la hipotermia de 28-31,9 °C y escribe "Hpothermia".</p></details>
 
             <p class="section-label">Evaluación</p>
@@ -1225,7 +1232,7 @@
                 <li>Si no hay: <strong>oral o rectal</strong>. La oral puede ser <strong>0,5 °C más baja</strong> que la central con taquipnea.</li>
                 <li><strong>Periféricas</strong> (timpánica, arteria temporal, axilar): precisión <span class="hl-rojo">no aceptable</span>; no tomar decisiones con ellas.</li>
             </ol>
-            <dl class="kv-row" id="ma-fiebre-def"><dt>Definición</dt><dd>La temperatura varía a lo largo del día (mínimo de 4 a 8 h, máximo de 16 a 18 h; hasta 1,3 °C). Según las guías de fiebre en la UCI: una sola medida de <strong>≥38,3 °C</strong> es fiebre y merece estudio; en el <strong>neutropénico</strong> vale un umbral de <strong>38,0 °C mantenido al menos 1 hora</strong>.</dd></dl>
+            <dl class="kv-row" id="ma-fiebre-def"><dt>Definición</dt><dd>La temperatura varía a lo largo del día (mínimo de 4 a 8 h, máximo de 16 a 18 h; hasta 1,3 °C). Según las guías de fiebre en la UCI: una sola medida de <strong>≥38,3 °C</strong> es fiebre y merece estudio; en el <strong>neutropénico</strong> vale un umbral de <strong>38,0 °C mantenido al menos 1 hora</strong>. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="fiebre:2">🌡️ Ver cómo sube la llama del hipotálamo →</button></dd></dl>
             <div class="agua-simulador" id="ma-tconv-calc">
                 <h4 style="color: var(--accent-red);">🧮 Conversor °C ↔ °F y ¿es fiebre? (Tabla 44.1)</h4>
                 <p class="subtitle">°F = (9/5 × °C) + 32 · °C = 5/9 × (°F − 32)</p>
@@ -1287,7 +1294,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔪 Postoperatoria precoz y la atelectasia</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fiebre-postop">
+                    <div class="micro-prof-body" id="ma-fiebre-postop" data-nombre="Fiebre postoperatoria precoz">
                         <p>Fiebre el primer día en el <strong>15-40%</strong> de la cirugía mayor: es la respuesta al daño tisular; casi nunca hay infección y cede en 24-48 h.</p>
                         <p><span class="hl-rojo">La atelectasia NO da fiebre.</span> En un estudio de cirugía cardíaca, casi el 90% de los febriles tenían atelectasia, pero el <strong>75% de los que tenían atelectasia no tenían fiebre</strong>; y hace más de 50 años, una atelectasia lobar provocada en animales no dio fiebre. La atelectasia aparece en más del 90% de las anestesias generales: es frecuente, no causa fiebre.</p>
                         <div class="article-figure" id="mar-img-44-2">
@@ -1300,7 +1307,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Trombosis y transfusiones</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fiebre-tev-transfusion">
+                    <div class="micro-prof-body" id="ma-fiebre-tev-transfusion" data-nombre="Tromboembolismo y transfusión">
                         <dl class="kv-row"><dt>Tromboembolismo</dt><dd>La TVP hospitalaria suele ser asintomática, pero la <strong>embolia pulmonar</strong> puede dar fiebre durante una semana. El riesgo es mayor en el <strong>trauma y el postoperatorio</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Hematíes</dt><dd>La fiebre no hemolítica es la reacción adversa más frecuente: durante la transfusión o en las 6 h siguientes, por anticuerpos del receptor contra leucocitos del donante; más en politransfundidos.</dd></dl>
                         <dl class="kv-row"><dt>Plaquetas</dt><dd>Citada sobre todo con plaquetas de donante único, pero infrecuente (~1 por 1.000 unidades).</dd></dl>
@@ -1405,7 +1412,7 @@
                 <p class="article-figure-caption">Figura 44.3 — Bacteriemias detectadas según el número de hemocultivos en 24 h (20 mL cada uno): endocarditis 89%, 94%, 94% y 100%; otras infecciones 65%, 80%, 96% y 100%.</p>
             </div>
             <div style="overflow-x:auto;">
-            <table class="data-table" id="ma-tabla-fig44-3">
+            <table class="data-table" id="ma-tabla-fig44-3" data-nombre="Tabla de la Figura 44.3">
                 <thead><tr><th>Hemocultivos en 24 h</th><th>Endocarditis (%)</th><th>Otras infecciones (%)</th></tr></thead>
                 <tbody>
                     <tr><td>1</td><td>89</td><td>65</td></tr>
@@ -1441,6 +1448,7 @@
                 <li>Cubrir <em>S. aureus</em> (vancomicina, SARM y sensible) si se sospecha catéter o neumonía asociada al ventilador.</li>
                 <li><strong>Antifúngico</strong> (equinocandina) si hay riesgo de candidiasis invasiva (vía central) con fiebre persistente sin causa, fiebre tras cirugía intestinal contaminada o candiduria persistente.</li>
             </ol>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="fiebre:1">🌡️ Llega el pirógeno: ¿cuál? →</button></p>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Comparativa de fuentes.</strong> El consenso SEIMC-SEHH (Neutropenia Febril) también usa un diferencial de ≥2 h entre catéter y periferia; la bacteriemia por catéter completa, en Fundamentos (Cap. 3).</p>

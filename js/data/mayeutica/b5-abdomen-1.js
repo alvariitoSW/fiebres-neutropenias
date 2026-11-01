@@ -1,0 +1,385 @@
+// Mayéutica del bloque 5, grupo 5B · Pancreatitis aguda (Marino cap. 40): fichas 5 ma-pancreatitis-dx y 6 ma-pancreatitis-tto,
+// y el caso de Bartolomé (vive bajo la ficha 6). La pinta js/core/mayeutica.js. Datos puros. Formato: ver b1-fluidos.js.
+//
+// Toda la medicina sale de la ficha (js/modules/libros/marino-abdomen.html) y de su PDF (docs/marino-2024-abdomen-temperatura-caps39-44.pdf,
+// cap. 40 = págs. 16-24; página del PDF = página impresa, desplazamiento 0). El paciente del caso se inventa.
+const PDF = 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf';
+const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
+const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const DX = 'ma-pancreatitis-dx', TTO = 'ma-pancreatitis-tto';
+const BANKS = '<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/23100216/" target="_blank" rel="noopener">Banks PA, et al. Gut 2013;62:102-11</a>';
+const NOTA_DRENAJE = `<b>Nota de fuentes.</b> Marino dice que el drenaje precoz da mejores resultados (${pag(22)}). El ensayo que cita (Boxhoorn L, et al. N Engl J Med 2021;385:1372-81, <a class="biblio-link" href="https://scholarlypublications.universiteitleiden.nl/handle/1887/3279868" target="_blank" rel="noopener">texto</a>) concluyó que el drenaje inmediato no fue superior al diferido y que el diferido necesitó menos intervenciones. No se elige ganadora: aquí se enseña lo que ambos comparten.`;
+const CASO = 'ficha; la cuenta con los datos del caso';
+
+export const MAYEUTICA_ABDOMEN_1 = {
+  /* =================================================================================================
+     Ficha 5 · Pancreatitis aguda: causas, diagnóstico y gravedad (cap. 40, págs. 16-20)
+     ================================================================================================= */
+  [DX]: {
+    entrada: `La tripsina digiere el páncreas y la inflamación sale al cuerpo. Diagnóstico: 2 de 3 criterios (${pag(18)}); grave = fallo orgánico &gt;48 h (${pag(18)}); mortalidad de las graves 20-25 % (${pag(20)}).`,
+    guia: [
+      { id: 'pdx-g1', corto: 'la autodigestión', tipo: 'test', fuente: 'ma-panc-fisio', modelo: { capilarVivo: 'sepsis', texto: '🩸 De la inflamación al fallo multiorgánico (capilar vivo)' },
+        enunciado: 'El páncreas tiene células de los islotes y células acinares. En la pancreatitis aguda, ¿cuáles se rompen, y por qué el daño no se queda en el sitio?',
+        opciones: [
+          { t: 'Las de los islotes: sin insulina, glucagón ni somatostatina el páncreas se inflama solo, sin enzimas', porque: 'Los islotes son la parte endocrina y no son el blanco principal. Si buscas el fallo en la insulina, pensarás en un problema de glucosa y no en la inflamación que va a lesionar pulmón, riñón y circulación.' },
+          { t: 'Las acinares: liberan enzimas, la tripsina digiere el páncreas y la inflamación sale al cuerpo', ok: true },
+          { t: 'Las acinares, pero el daño se queda en la glándula y solo hay riesgo si se infecta', porque: 'La lesión del páncreas dispara una respuesta inflamatoria sistémica que daña otros órganos. Creer que se queda en la glándula te hace relajar la vigilancia de pulmón, riñón y tensión.' }],
+        explicacion: `Es un proceso inflamatorio que afecta sobre todo a las <span class="hl">células acinares</span> (exocrinas). Al romperse liberan enzimas, y la <span class="hl-azul">tripsina agrava la lesión y promueve la «autodigestión»</span>. La lesión dispara una respuesta inflamatoria sistémica que puede acabar en fallo multiorgánico (${pag(16)}).` },
+      { id: 'pdx-g2', corto: 'bebe y vía biliar', tipo: 'test', fuente: 'ma-tabla-40-1 · ma-panc-imagen',
+        enunciado: 'Pancreatitis aguda confirmada en un varón que bebe a diario. ¿Por qué evalúas igualmente la vesícula y la vía biliar?',
+        opciones: [
+          { t: 'Porque la litiasis es la primera causa (21-33 %; alcohol, 16-27 %) y la vía biliar se evalúa en todos ellos', ok: true },
+          { t: 'Solo si la ecografía previa lo pidió: en un bebedor la causa es el alcohol, que va por delante de las piedras', porque: 'El alcohol es la segunda causa (16-27 %), no la primera. Si das el diagnóstico por el antecedente, puedes dejar sin tratar una litiasis y exponerle a otro episodio.' },
+          { t: 'Porque la causa idiopática (10-15 %) exige descartar la vía biliar, pero no las demás causas conocidas', porque: 'La evaluación biliar se pide en todos los casos confirmados porque la litiasis es la primera causa, no solo en las idiopáticas. Limitarla deja escapar una litiasis tratable.' }],
+        explicacion: `Tabla 40.1: litiasis biliar 21-33 %, alcohol 16-27 %, idiopática 10-15 % (${pag(17)}); como la litiasis es la primera causa, se evalúan vesícula y vía biliar en todos los casos confirmados (${pag(20)}). El texto agrupa las tres como «unas tres cuartas partes» (${pag(16)}).`,
+        nota: `<b>Nota de fidelidad.</b> El libro dice «unas tres cuartas partes», pero los rangos de la Tabla 40.1 suman entre el 47 % (21+16+10) y el 75 % (33+27+15). Se reproduce la frase tal cual (${pag(16)}).${enFicha(DX, 'ma-tabla-40-1')}` },
+      { id: 'pdx-g3', corto: 'TG 3.200', tipo: 'test', fuente: 'ma-panc-tg',
+        enunciado: 'Un varón de 51 años llega con dolor típico y triglicéridos de 3.200 mg/dL. Antes de leer la ficha: frente a una pancreatitis por otra causa, ¿es esta más leve o más grave, y por qué?',
+        opciones: [
+          { t: 'Más leve: se trata con insulina y por eso se resuelve antes que las demás', porque: 'Que haya un tratamiento eficaz no la hace más leve: es más grave. Si la tomas por benigna, dejarás pasar el fallo de órganos que da la inflamación sistémica extra.' },
+          { t: 'Igual que las demás: la gravedad no depende de la causa y solo cuenta el fallo orgánico', porque: 'En esta causa la gravedad sí es mayor: más inflamación sistémica y más daño extrapancreático. Tratarla como una pancreatitis cualquiera subestima el riesgo desde el primer día.' },
+          { t: 'Más grave: los ácidos grasos poliinsaturados que liberan son oxidables e inflaman', ok: true }],
+        explicacion: `TG <span class="hl-rojo">&gt;1.000 mg/dL</span> causan hasta el 7 % de las pancreatitis. Los triglicéridos liberan <span class="hl-azul">ácidos grasos poliinsaturados</span>, muy oxidables (la oxidación de esos ácidos «enrancia» los alimentos), que inician una respuesta inflamatoria. Es más grave que otras: más inflamación sistémica y más daño extrapancreático; pero tiene tratamiento eficaz (${pag(16)}, ${pag(17)}).` },
+      { id: 'pdx-g4', corto: 'dos de tres', tipo: 'test', fuente: 'ma-tabla-40-2',
+        enunciado: 'Urgencias, hora 0: dolor epigástrico típico irradiado a la espalda y lipasa cuatro veces el límite alto. No hay TC todavía. ¿Es ya el diagnóstico?',
+        opciones: [
+          { t: 'No: falta la imagen, hay que esperar a la TC con contraste para confirmarla', porque: 'Los criterios piden dos de tres, no los tres. Esperar la TC retrasa los fluidos y la vigilancia a quien ya cumple el diagnóstico.' },
+          { t: 'Sí: dolor característico más enzima >3 veces el límite son dos de tres criterios', ok: true },
+          { t: 'Solo si la enzima es amilasa: la lipasa no entra en los criterios diagnósticos de Atlanta', porque: 'En los criterios entran amilasa o lipasa >3 veces el límite alto, sin distinción. Descartar la lipasa te haría pedir otra prueba y retrasar el diagnóstico.' }],
+        explicacion: `Tabla 40.2: «cualquiera de 2»: <span class="hl">dolor característico</span>, <span class="hl">amilasa o lipasa &gt;3 veces el límite alto</span>, imagen característica. Dolor más enzimas diagnostican alrededor del 75-80 % de los casos (${pag(18)}). Pruébalo en la calculadora de la ficha: marca solo dos casillas y no marques la TC.` },
+      { id: 'pdx-g5', corto: 'lipasa o amilasa', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
+        enunciado: 'Los criterios de Atlanta admiten amilasa o lipasa. Pero Marino prefiere una. Antes de abrir la tabla de cinética: ¿cuál y por qué?',
+        opciones: [
+          { t: 'La amilasa: sube antes y se normaliza antes, así que reflejaría mejor el episodio actual', porque: 'Es al revés: la lipasa sube antes (4-8 h frente a 6-12 h). Con amilasa te perderías el diagnóstico en un paciente con varios días de evolución.' },
+          { t: 'Ninguna: hay que pedir las dos siempre, porque medir una sola pierde casos', porque: 'Medir solo la lipasa diagnostica igual que medir las dos. Pedir ambas no añade rendimiento.' },
+          { t: 'La lipasa: más específica, sube antes (4-8 h), dura 8-14 días y sola rinde igual', ok: true }],
+        explicacion: `Tres motivos: (1) lipasa &gt;3× tiene <span class="hl">mayor especificidad</span>; (2) <span class="hl">sube antes (4-8 h frente a 6-12 h) y dura más (8-14 días frente a 3-5)</span>; (3) medir solo la lipasa tiene la misma exactitud que medir las dos (${pag(18)}).` },
+      { id: 'pdx-g6', corto: 'edema o necrosis', tipo: 'test', fuente: 'ma-panc-morfologia · mar-img-40-2', modelo: visual(DX, '👁️ Figs. 40.1 y 40.2 (vista Visual)'),
+        enunciado: 'Predice antes de ver la Figura 40.2: en una TC con contraste, ¿qué distingue una pancreatitis necrotizante de una edematosa?',
+        opciones: [
+          { t: 'Una zona del páncreas que no capta el contraste en la TC: es necrosis', ok: true },
+          { t: 'Un páncreas aumentado, que realza entero, con el borde borroso', porque: 'Eso es el edema (Figura 40.1), la forma más frecuente, leve y autolimitada. Llamarlo necrotizante te llevaría a sobretratar a un paciente que probablemente evolucionará bien.' },
+          { t: 'Burbujas de gas dentro de la glándula, que indican que hay necrosis establecida', porque: 'El gas indica infección de la necrosis (Figura 40.3), una complicación posterior, no la forma de reconocer la necrosis. Esperarlo para decir «necrotizante» retrasaría el diagnóstico.' }],
+        explicacion: `<span class="hl-verde">Edematosa</span> (Fig. 40.1): glándula engrosada que realza completa, borde borroso por el edema. <span class="hl-rojo">Necrotizante</span> (Fig. 40.2): un área grande que no realza con contraste = necrosis, aquí en cuello y cuerpo (${pag(19)}, ${pag(20)}).` },
+      { id: 'pdx-g7', corto: 'la TC del día 2', tipo: 'test', fuente: 'ma-panc-imagen',
+        enunciado: 'Una pancreatitis con fallo renal y respiratorio. La TC con contraste del día 2 no muestra necrosis y el paciente sigue mal. ¿Está descartada la necrotizante?',
+        opciones: [
+          { t: 'No: la necrosis puede no verse la primera semana; repetir la imagen si persiste', ok: true },
+          { t: 'Sí: la TC con contraste es la prueba que distingue las dos formas y no se repite', porque: 'La TC distingue las formas, pero la necrosis puede no aparecer en la primera semana. Darla por descartada te haría perder una necrotizante en un enfermo que empeora.' },
+          { t: 'Sí, y la TC con contraste sin necrosis ya anticipa un curso leve del paciente', porque: 'Imagen y enzimas se correlacionan mal con la gravedad. Este enfermo tiene fallo de órganos: el curso no es leve aunque la TC lo parezca.' }],
+        explicacion: `La TC identifica el tipo de pancreatitis y sus complicaciones locales, pero la necrosis <span class="hl-rojo">puede no aparecer en la primera semana</span>: repetir la imagen si los síntomas persisten o es grave (${pag(19)}).` },
+      { id: 'pdx-g8', corto: 'moderada o grave', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'ma-panc-gravedad',
+        enunciado: 'Según el fallo orgánico, la Atlanta revisada separa moderadamente grave y grave. ¿Qué las separa, y dónde se concentra la mortalidad?',
+        puntos: [
+          'Lo separa el <span class="hl">tiempo</span> del fallo orgánico: <span class="hl-verde">transitorio, &lt;48 h</span> (moderada) frente a <span class="hl-rojo">persistente, &gt;48 h</span> (grave), único o múltiple. La moderada incluye también complicaciones locales o sistémicas sin fallo persistente (Tabla 40.2, pág. 18).',
+          'La mortalidad se concentra en las graves: <span class="hl-rojo">20-25 %</span>. La mitad de los casos son leves; la otra mitad se reparte a partes iguales entre moderados y graves.'],
+        explicacion: `Tabla 40.2 y texto (${pag(18)}, ${pag(19)}, ${pag(20)}). Pulmón (SDRA), riñón y circulación son los órganos típicos, y a veces no fallan al principio.`,
+        nota: `<b>Nota de fidelidad.</b> El capítulo da una mortalidad global de ~25 % en la introducción (${pag(16)}) y de 20-25 % limitada a las graves (${pag(20)}): si solo mueren las graves (un 25 % del total), la global no puede ser del 25 %. Aquí se usa 20-25 % para las graves.${enFicha(DX, 'ma-panc-gravedad')}` },
+    ],
+    examen: [
+      { id: 'pdx-e1', corto: 'fármacos', tipo: 'test', fuente: 'ma-panc-farmacos',
+        enunciado: 'Mujer hipertensa y trasplantada en tratamiento crónico, con una pancreatitis sin otra causa. ¿Qué fármacos son los más citados como causa, según Marino?',
+        opciones: [
+          { t: 'Hidroclorotiazida, azatioprina y doxiciclina, los más citados entre los 36 implicados', ok: true },
+          { t: 'Furosemida, metronidazol y ácido valproico, que más pancreatitis han producido', porque: 'Están en la lista de implicados, pero los más citados son otros. Retirar el equivocado deja el fármaco culpable en marcha.' },
+          { t: 'Paracetamol, enalapril y cotrimoxazol, que son los tres más frecuentes de los 36 descritos', porque: 'Son implicados, pero los más citados son otros. Sospechar de ellos primero te hace pasar por alto el fármaco más probable.' }],
+        explicacion: `Al menos 36 fármacos implicados, muchos en casos aislados. <span class="hl">Los más citados: hidroclorotiazida, azatioprina y doxiciclina</span>; también figuran paracetamol, enalapril, furosemida, metronidazol, procainamida, cotrimoxazol y ácido valproico (${pag(17)}).` },
+      { id: 'pdx-e2', corto: 'la vía biliar', tipo: 'test', fuente: 'ma-tabla-40-1 · ma-panc-imagen',
+        enunciado: 'Pancreatitis aguda confirmada; la TC con contraste del ingreso no muestra bien la vesícula ni la vía biliar. ¿Qué pides?',
+        opciones: [
+          { t: 'Nada más: la TC ya evaluó la vía biliar', porque: 'La TC puede no valorar vesícula ni vía biliar. Darla por evaluada deja sin detectar una litiasis, la primera causa, que se puede tratar.' },
+          { t: 'Una ecografía a pie de cama de la vía biliar', ok: true },
+          { t: 'CPRE diagnóstica de entrada, para ver la vía biliar', porque: `Marino reserva la CPRE para cuando hay obstrucción biliar (${pag(23, 'pág. 23')}); para mirar la vía biliar pide ecografía (${pag(20, 'pág. 20')}).` }],
+        explicacion: `Por ser la litiasis la primera causa, se evalúan vesícula y vía biliar en todos: <span class="hl">la TC o, si no basta, la ecografía a pie de cama</span> (${pag(20)}).` },
+      { id: 'pdx-e3', corto: 'amilasa normal', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
+        enunciado: 'Llega al 6.º día de dolor abdominal intenso con la amilasa normal. ¿Queda descartada la pancreatitis?',
+        opciones: [
+          { t: 'Sí: una enzima normal descarta la pancreatitis aguda', porque: 'No: la amilasa solo dura 3-5 días, así que a los 6 días puede haberse normalizado. Darla por descartada deja sin diagnosticar una pancreatitis real.' },
+          { t: 'Repetir la amilasa en 24 h para ver si sube', porque: 'Ya habrá pasado su ventana de 3-5 días: seguirá normal y se perderá tiempo. La enzima que sigue alta a los 6 días es otra.' },
+          { t: 'No: pide lipasa, que sigue alta 8-14 días', ok: true }],
+        explicacion: `<span class="hl-rojo">No se descarta</span>: la amilasa se mantiene alta 3-5 días y la lipasa 8-14, así que a los 6 días la lipasa aún puede estar elevada (${pag(18)}).` },
+      { id: 'pdx-e4', corto: 'enzimas y TC', tipo: 'test', fuente: 'ma-panc-gravedad',
+        enunciado: 'Pancreatitis con lipasa de 9.000 U/L y una TC con necrosis extensa, pero sin ningún órgano en fallo a las 72 h. ¿Cómo la clasificas?',
+        opciones: [
+          { t: 'Grave: una lipasa tan alta y una necrosis extensa se correlacionan con la gravedad', porque: 'Enzimas y TC tienen mala correlación con la gravedad. Llamarla grave por la imagen te llevaría a decisiones de paciente grave en uno que quizá no lo es.' },
+          { t: 'Leve: sin fallo orgánico a las 72 h no puede haber ni complicaciones locales', porque: 'Con necrosis hay una complicación local (Atlanta revisada, Banks 2013): eso la hace al menos moderadamente grave, aunque no haya fallo persistente.' },
+          { t: 'Por el fallo orgánico >48 h; sin fallo, pero con necrosis, es moderadamente grave', ok: true }],
+        explicacion: `<span class="hl">Ni las enzimas ni la TC se correlacionan bien con la gravedad</span>; la clasificación la dan el fallo orgánico y su duración. Moderadamente grave: fallo transitorio &lt;48 h o complicaciones locales o sistémicas sin fallo persistente; grave: fallo &gt;48 h (${pag(18)}, ${pag(20)}). Que la necrosis cuente como complicación local no es de Marino: viene de la Atlanta revisada (Banks 2013).`,
+        nota: `Fuente de la complicación local: ${BANKS}.` },
+      { id: 'pdx-e5', corto: 'las dos formas', tipo: 'test', fuente: 'ma-panc-morfologia',
+        enunciado: '¿Cuál de estas frases sobre la morfología de la pancreatitis aguda es la correcta?',
+        opciones: [
+          { t: 'Necrotizante 5-40 % según series; edematosa, la más frecuente, leve y autolimitada', ok: true },
+          { t: 'La edematosa es la que se complica con infección y daño extrapancreático, y la necrotizante es la leve', porque: 'Está al revés: la necrotizante, con áreas de necrosis que se extienden alrededor, es la que se complica. Confundirlas lleva a vigilar poco al enfermo de más riesgo.' },
+          { t: 'La necrotizante es siempre un 40 % de los casos, y la edematosa es la excepción', porque: '40 % es el extremo alto de un rango (5-40 %, según la serie). Creerlo fijo lleva a esperar necrosis en casi la mitad y a sobretratar.' }],
+        explicacion: `Edematosa: inflamación difusa sin necrosis, la más frecuente, leve y autolimitada. Necrotizante: áreas de necrosis que pueden extenderse a los tejidos peripancreáticos y complicarse; su frecuencia varía <span class="hl">del 5 % al 40 %</span> según el informe (${pag(17)}, ${pag(18)}).` },
+      { id: 'pdx-e6', corto: 'alergia al contraste', tipo: 'test', fuente: 'ma-panc-imagen',
+        enunciado: 'Una grave con alergia grave al contraste yodado; quieres saber si hay necrosis. ¿Qué haces?',
+        opciones: [
+          { t: 'TC sin contraste: distingue igual edematosa de necrotizante, y se repite si el cuadro persiste', porque: 'Sin contraste la TC distingue peor las dos formas. Te quedarías con una imagen que no responde a la pregunta.' },
+          { t: 'Resonancia magnética, una alternativa adecuada cuando no puede darse contraste IV (alergia)', ok: true },
+          { t: 'Renunciar a la imagen: con dolor y enzimas basta y la necrosis no cambia el manejo', porque: 'Dolor y enzimas bastan para el diagnóstico, pero la imagen identifica el tipo y las complicaciones locales (p. ej. infección). Prescindir de ella te deja ciego ante lo que determina el curso.' }],
+        explicacion: `Si no se puede dar contraste IV (p. ej. alergia), la TC distingue peor edematosa de necrotizante; <span class="hl">la RM es una alternativa adecuada</span> (${pag(19)}).` },
+    ],
+    casos: [
+      { id: 'c1a', titulo: 'Bartolomé (1/2): ¿qué tiene y cómo de grave?', corto: 'Caso · Bartolomé 1', sub: 'pancreatitis por TG 3.200, 80 kg',
+        paciente: { Edad: '51 años', Peso: '80 kg', Motivo: 'Dolor epigástrico irradiado a la espalda; TG 3.200 mg/dL' },
+        pasos: [
+          { momento: 'Día 1 · 09:00', datos: { Dolor: 'epigástrico típico, irradiado a la espalda', Lipasa: '2.400 U/L (límite alto 60)' }, nuevo: ['Dolor', 'Lipasa'],
+            pregunta: { id: 'c1-1', tipo: 'test', fuente: 'ma-tabla-40-2', origen: CASO,
+              enunciado: 'Dolor típico y lipasa 40 veces el límite alto. ¿Diagnóstico ya, o esperas la TC?',
+              opciones: [
+                { t: 'Sí: dolor característico más lipasa >3 veces son dos de tres criterios', ok: true },
+                { t: 'Esperar la TC con contraste: sin imagen no se puede hacer el diagnóstico', porque: 'Bastan dos de tres criterios. Esperar la TC retrasa los fluidos y la vigilancia a un paciente que ya cumple el diagnóstico.' },
+                { t: 'Pedir primero la amilasa: la lipasa sola no vale para el diagnóstico', porque: 'La lipasa es la preferida: más específica, sube antes y dura 8-14 días, frente a 3-5 de la amilasa. Pedir amilasa añade una espera que no cambia nada.' }],
+              explicacion: `Cumple <span class="hl">dolor característico + enzima &gt;3 veces el límite alto</span>: dos de tres criterios, sin imagen (${pag(18)}). La lipasa de 2.400 con límite 60 es 40 veces.` } },
+          { momento: 'Día 1 · 11:00', datos: { TG: '3.200 mg/dL' }, nuevo: ['TG'],
+            pregunta: { id: 'c1-2b', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'ma-panc-tg · ma-panc-imagen · ma-tabla-40-1', origen: CASO,
+              enunciado: 'Los triglicéridos de Bartolomé son 3.200 mg/dL. ¿Qué te dice eso de su pancreatitis? Son tres cosas.',
+              puntos: [
+                'TG <span class="hl-rojo">&gt;1.000 mg/dL</span> son causa de hasta el 7 % de las pancreatitis (Tabla 40.1: 2-7 %).',
+                'Es una pancreatitis <span class="hl">más grave</span>: los ácidos grasos poliinsaturados oxidables inflaman, con más daño extrapancreático.',
+                'Tiene tratamiento eficaz, pero igualmente se evalúan <span class="hl-azul">vesícula y vía biliar</span> en todos los casos confirmados.'],
+              explicacion: `Hipertrigliceridemia grave: ${pag(16)}, ${pag(17)}; evaluación biliar en todos: ${pag(20)}.` } },
+          { momento: 'Día 2', datos: { TG: '480 mg/dL', 'PaO₂/FiO₂': '180', Creatinina: '2,0 mg/dL', PA: '104/62 mmHg (con Ringer)', Nutrición: 'sonda nasogástrica con fórmula elemental' }, nuevo: ['TG', 'PaO₂/FiO₂', 'Creatinina', 'PA', 'Nutrición'],
+            pregunta: { id: 'c1-4', tipo: 'test', fuente: 'ma-tabla-40-2 · ma-panc-gravedad · ma-panc-imagen', origen: CASO, modelo: { nefronaViva: 'prerrenal', texto: '💧 La creatinina con fuga e hipovolemia (nefrona viva)' },
+              enunciado: 'Los TG han bajado a 480 (−85 %), pero hay fallo respiratorio (PaO₂/FiO₂ 180) y renal (Cr 2,0). La TC del día 2 no ve necrosis. ¿Qué gravedad tiene hoy?',
+              opciones: [
+                { t: 'Leve: la TC de hoy no ve necrosis y los TG ya están por debajo de 500', porque: 'Hay fallo orgánico: no es leve. La necrosis puede no verse la primera semana y la TC no mide la gravedad.' },
+                { t: 'Grave: hay dos órganos afectados, y con dos órganos ya es grave', porque: 'Lo que cuenta es el tiempo, no el número. Si cediese en <48 h sería moderadamente grave. Etiquetarla hoy podría llevar a decisiones precipitadas.' },
+                { t: 'Aún no se sabe: moderada si cede pronto (<48 h), grave si persiste', ok: true }],
+              explicacion: `Moderadamente grave: fallo orgánico transitorio (&lt;48 h); grave: <span class="hl-rojo">persistente (&gt;48 h)</span>, único o múltiple. La necrosis puede no verse la primera semana y la TC se correlaciona mal con la gravedad (${pag(18)}, ${pag(19)}, ${pag(20)}).` } },
+          { momento: 'Día 4 · el giro', datos: { Creatinina: '1,1 mg/dL', 'PaO₂/FiO₂': '170' }, nuevo: ['Creatinina', 'PaO₂/FiO₂'], calculadora: { ir: 'ma-atl-resultado', nombre: 'Atlanta revisada' },
+            pregunta: { id: 'c1-5', tipo: 'test', fuente: 'ma-atl-calc · ma-tabla-40-2 · ma-panc-gravedad', origen: CASO,
+              enunciado: 'Día 4: la creatinina ha vuelto a 1,1 (el riñón se recuperó), pero el pulmón sigue en fallo (PaO₂/FiO₂ 170) desde hace más de 48 h. ¿Es grave con un solo órgano que persiste?',
+              opciones: [
+                { t: 'Moderadamente grave, porque el riñón se recuperó en menos de 48 h y ya no hay fallo múltiple', porque: 'La grave es el fallo orgánico persistente, único o múltiple: basta el pulmón. Llamarla moderada rebaja la vigilancia en un enfermo con 20-25 % de mortalidad.' },
+                { t: 'Sí: el fallo persistente >48 h, de uno o de varios órganos, define la grave (20-25 %)', ok: true },
+                { t: 'No: para ser grave hacen falta al menos dos órganos en fallo, y ahora solo hay uno', porque: 'El número no cuenta, cuenta el tiempo: la Tabla 40.2 dice «único o múltiple». Esperar a un segundo órgano retrasa decisiones de paciente grave.' }],
+              explicacion: `Grave = <span class="hl-rojo">fallo orgánico persistente &gt;48 h, único o múltiple</span> (Tabla 40.2); la mortalidad se concentra ahí (<span class="hl-rojo">20-25 %</span>) (${pag(18)}, ${pag(20)}). Con «Sí, persiste >48 h» la calculadora dice «grave».` } },
+          { momento: 'Día 4 · los apuntes del R1', datos: { Lipasa: '2.400 U/L al ingreso' },
+            pregunta: { id: 'c1-5b', tipo: 'error', fuente: 'ma-tabla-40-2 · ma-panc-gravedad · ma-panc-imagen', origen: CASO,
+              enunciado: 'El R1 resume el diagnóstico y la gravedad de Bartolomé. Encuentra los errores.',
+              frases: [
+                { t: 'Diagnóstico el día 1: dolor característico y lipasa >3 veces el límite, dos de tres criterios.' },
+                { t: 'La lipasa de 2.400 al ingreso ya anunciaba que sería grave.', mal: true,
+                  c: 'Ni las enzimas ni la TC se correlacionan bien con la gravedad: la dan el <span class="hl-rojo">fallo orgánico y su duración</span>.' },
+                { t: 'La TC del día 2 sin necrosis la hace leve.', mal: true,
+                  c: 'La necrosis <span class="hl">puede no verse la primera semana</span>, y con fallo orgánico no es leve.' },
+                { t: 'Grave porque el fallo respiratorio persiste más de 48 h.' }],
+              explicacion: `Tabla 40.2 y texto (${pag(18)}, ${pag(19)}, ${pag(20)}).` } },
+        ],
+        lleva: [
+          'Dolor típico más lipasa >3 veces el límite son dos de tres criterios: no se espera a la TC.',
+          'La hipertrigliceridemia grave da pancreatitis más graves, pero tratables; la vía biliar se evalúa igualmente.',
+          'La gravedad la dice el reloj (fallo orgánico >48 h), no la TC ni la lipasa.'],
+        volver: { nombre: 'Gravedad y mortalidad', ancla: 'ma-panc-gravedad', modelo: { capilarVivo: 'sepsis', texto: '🩸 De la inflamación al fallo multiorgánico' } } },
+    ],
+    profundizar: [
+      { id: 'ma-panc-infecciones', titulo: 'Infecciones que causan pancreatitis (virus, bacterias, hongos, parásitos)' },
+    ],
+  },
+
+  /* =================================================================================================
+     Ficha 6 · Pancreatitis aguda: fluidos, nutrición y complicaciones (cap. 40, págs. 21-23)
+     ================================================================================================= */
+  [TTO]: {
+    entrada: `Fluidos justos, comida pronto, nada de profilaxis. Ringer lactato, bolo de 10 mL/kg solo si hay hipovolemia (${pag(21)}); nutrición en &lt;48 h (${pag(21)}); necrosis infectada hacia el día 7-10 (${pag(22)}).`,
+    guia: [
+      { id: 'ptt-g1', corto: 'la fuga capilar', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: { capilarVivo: 'sepsis', texto: '🩸 La inflamación que sale del páncreas (capilar vivo)' },
+        enunciado: 'Marino insiste en la reanimación con volumen precoz en la pancreatitis grave. ¿Qué pasa si el paciente se queda hipovolémico?',
+        opciones: [
+          { t: 'Nada específico del páncreas: la hipovolemia solo amenaza al riñón y a la tensión', porque: 'En la pancreatitis grave la hipovolemia puede producir necrosis pancreática añadida. Si piensas que solo afecta al riñón, retrasarás el volumen justo en el órgano enfermo.' },
+          { t: 'Los capilares fugan y la hipovolemia puede producir más necrosis pancreática añadida', ok: true },
+          { t: 'Se retiene líquido en exceso por la sed y el edema; lo que hay que evitar es el volumen', porque: 'La pancreatitis grave pierde líquido intravascular por capilares con fuga. Restringir el volumen por miedo al edema extiende la necrosis.' }],
+        explicacion: `La pancreatitis grave se asocia con pérdida de líquido intravascular por <span class="hl-azul">capilares sistémicos con fuga</span>, y la hipovolemia resultante puede producir <span class="hl-rojo">más necrosis pancreática</span>; por eso se recomienda atender el volumen pronto (${pag(21)}).` },
+      { id: 'ptt-g2', corto: 'Ringer o salino', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: [{ aguaViva: 'ringer', texto: '🌊 Ringer lactato: dónde acaba el litro' }, { aguaViva: 'salino', texto: '🌊 Salino 0,9 %: dónde acaba el litro' }],
+        enunciado: 'Pancreatitis grave con hipovolemia. ¿Qué cristaloide eliges, y en qué caso no lo usarías?',
+        opciones: [
+          { t: 'Salino al 0,9 %, el suero fisiológico, siempre; el Ringer solo en la hipocalcemia', porque: 'Marino recomienda Ringer lactato, con mejores resultados que el salino, y lo contraindica en la hipercalcemia, no en la hipocalcemia. Con salino pierdes el beneficio demostrado.' },
+          { t: 'Ringer lactato, salvo en la pancreatitis por hipercalcemia, pues el Ringer lleva calcio', ok: true },
+          { t: 'Ringer lactato siempre, porque su lactato tampona y el calcio que lleva no afecta a nadie', porque: 'El Ringer lleva calcio y no debe usarse en la pancreatitis por hipercalcemia: sumaría calcio a un paciente que ya lo tiene alto.' }],
+        explicacion: `<span class="hl">Ringer lactato</span> por la evidencia de mejores resultados que el salino isotónico; <span class="hl-rojo">no en la pancreatitis relacionada con hipercalcemia</span>, porque lleva calcio (${pag(21)}). El reparto en el modelo del río y mar es ilustrativo.`,
+        nota: `Los cristaloides, en Fundamentos: <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cristaloides">Ver en la ficha ↗</button>` },
+      { id: 'ptt-g3', corto: 'sin hipovolemia', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc',
+        enunciado: 'Predice y luego lo compruebas en la calculadora: un paciente de 80 kg con pancreatitis grave, sin hipovolemia y sin hipercalcemia. ¿Qué pautas?',
+        opciones: [
+          { t: 'Un bolo de 800 mL de Ringer y luego 120 mL/h', porque: 'El bolo de 10 mL/kg es solo para la hipovolemia. Dárselo a quien no la tiene suma volumen sin beneficio y favorece el edema.' },
+          { t: 'Sin bolo y 120 mL/h de Ringer lactato (1,5 mL/kg/h)', ok: true },
+          { t: 'Un bolo de 1.600 mL y 240 mL/h, para anticiparse a la fuga capilar', porque: 'Es la pauta agresiva (20 mL/kg y 3 mL/kg/h): sobrecarga de volumen sin mejorar el pronóstico.' }],
+        explicacion: `Bolo de 10 mL/kg <span class="hl">solo si hay hipovolemia</span> («evítese el bolo si no la hay»); después 1,5 mL/kg/h: con 80 kg, <span class="hl">120 mL/h</span> (${pag(21)}). La calculadora de la ficha lo da con «Hipovolemia: No».`,
+        origen: CASO },
+      { id: 'ptt-g4', corto: 'el plan del R1', tipo: 'error', fuente: 'ma-panc-fluidos · ma-panc-vasopresores',
+        enunciado: 'Un R1 escribe el plan de fluidos de una pancreatitis grave hipovolémica de 80 kg. Encuentra los errores.',
+        frases: [
+          { t: 'Ringer lactato como fluido de elección, con bolo de 10 mL/kg por la hipovolemia.' },
+          { t: 'Bolo de 20 mL/kg y luego 3 mL/kg/h, para ser agresivo y anticiparme a la fuga.', mal: true,
+            c: 'El régimen agresivo <span class="hl-rojo">sobrecarga de volumen sin mejorar los resultados</span>. Lo recomendado es 10 mL/kg de bolo y 1,5 mL/kg/h.' },
+          { t: 'Objetivo: PAM ≥65 mmHg y diuresis ≥0,5 mL/kg/h.' },
+          { t: 'Si con volumen no sube la PAM, fenilefrina, que es el más limpio.', mal: true,
+            c: 'Todos los vasoconstrictores reducen el flujo esplácnico, sobre todo la <span class="hl-rojo">fenilefrina</span>: se evita. La <span class="hl">noradrenalina</span> es una elección adecuada.' }],
+        explicacion: `Ringer lactato; bolo de 10 mL/kg solo con hipovolemia y luego 1,5 mL/kg/h; PAM ≥65 y diuresis ≥0,5 mL/kg/h; noradrenalina si los fluidos no bastan (${pag(21)}).` },
+      { id: 'ptt-g5', corto: 'enteral', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'ma-panc-nutricion',
+        enunciado: 'Marino prefiere nutrir pronto y por el intestino. ¿Cuándo se empieza y qué razones da a favor de la enteral frente a la parenteral?',
+        puntos: [
+          'Pronto: en las primeras <span class="hl">48 h</span>, oral si se tolera o por sonda; parenteral solo si no se tolera (p. ej. íleo).',
+          'La enteral <span class="hl-azul">nutre la mucosa intestinal y reduce la traslocación bacteriana</span>, la principal fuente de infección pancreática.',
+          'En graves hay <span class="hl-verde">menos infecciones, menos fallo multiorgánico y menos mortalidad</span> que con la parenteral total.'],
+        explicacion: `No está claro si la sonda debe ser gástrica o yeyunal; la nasogástrica no parece dañar, así que es razonable empezar por ella, con fórmulas elementales (pobres en grasa) (${pag(21)}, ${pag(22)}).` },
+      { id: 'ptt-g6', corto: 'fiebre día 9', tipo: 'test', fuente: 'ma-panc-infeccion · mar-img-40-3', modelo: visual(TTO, '👁️ El gas de la Fig. 40.3 (vista Visual)'),
+        enunciado: 'Una necrotizante, día 9: fiebre y leucocitos de 19.000. ¿Está ya demostrada la infección de la necrosis?',
+        opciones: [
+          { t: 'Sí: fiebre y leucocitosis persistentes en una necrotizante son criterio de infección', porque: 'También aparecen en la necrotizante sin infección. Con esos dos datos solos, darías antibiótico por inercia sin la prueba que confirma.' },
+          { t: 'No: aún no; la TC con contraste puede mostrar burbujas de gas, que sí sugieren infección', ok: true },
+          { t: 'No: la infección no aparece hasta pasadas las 4-6 semanas, así que es pronto para pensarla', porque: 'La infección suele aparecer a los 7-10 días del inicio. Descartarla por la fecha retrasaría el antibiótico y el drenaje.' }],
+        explicacion: `Un tercio de las necrotizantes se infectan, típicamente a los <span class="hl">7-10 días</span>. Fiebre y leucocitosis la sugieren, pero también están sin infección; la TC con contraste muestra <span class="hl-rojo">burbujas de gas</span> (Fig. 40.3). Si se sospecha, antibiótico que cubre enterobacterias (${pag(22)}).` },
+      { id: 'ptt-g7', corto: 'profilaxis', tipo: 'test', fuente: 'ma-panc-infeccion',
+        enunciado: 'Una pancreatitis necrotizante recién ingresada, sin fiebre. ¿Pones antibiótico para prevenir la infección de la necrosis?',
+        opciones: [
+          { t: 'Sí: la necrosis se infecta en un tercio de los casos y prevenirlo es más barato que tratarlo', porque: 'Los antibióticos profilácticos no reducen las infecciones. Los pones sin beneficio y con sus efectos secundarios.' },
+          { t: 'Sí, pero solo si la necrosis supera la mitad de la glándula', porque: 'La ficha no da ese umbral y no recomienda profilaxis. Inventar un límite añade antibiótico sin base.' },
+          { t: 'No: los antibióticos profilácticos no reducen las infecciones y no se recomiendan', ok: true }],
+        explicacion: `<span class="hl-rojo">Los antibióticos profilácticos no reducen la incidencia de infecciones pancreáticas y no se recomiendan</span>. Se dan ante la sospecha de infección (${pag(22)}).` },
+      { id: 'ptt-g8', corto: 'oliguria y abdomen', tipo: 'test', fuente: 'ma-panc-scompartimental',
+        enunciado: 'Pancreatitis grave, día 5: diuresis de 0,3 mL/kg/h y abdomen distendido. ¿Qué mides?',
+        opciones: [
+          { t: 'La presión intraabdominal, porque por encima de 20 cmH₂O puede dar oliguria en una grave', ok: true },
+          { t: 'La presión venosa central, porque la oliguria con distensión orienta a un riñón congestivo', porque: 'Aquí el problema es un abdomen a presión que comprime el riñón. Medir presiones venosas y dar diurético no resuelve el problema.' },
+          { t: 'La creatinina cada hora, ya que la oliguria solo se explica por necrosis tubular', porque: 'Con colecciones, ascitis y edema de pared intestinal, la presión intraabdominal puede ser la causa. Esperar a la creatinina retrasa la medida.' }],
+        explicacion: `Colecciones peripancreáticas, ascitis y edema de la pared intestinal (por la reanimación agresiva) elevan la presión: &gt;12 cmH₂O en el <span class="hl">55 %</span> de las graves y &gt;20 cmH₂O puede dar oliguria; se recomienda medirla en toda grave con oliguria (${pag(23)}). Cómo se mide, en Marino renal (botón del caso).`,
+        nota: `<b>Nota de fidelidad.</b> Aquí la presión se da en cmH₂O; el cap. 34 (bloque renal) usa mmHg: 22 cmH₂O son unos 16 mmHg.${enFicha(TTO, 'ma-panc-scompartimental')}` },
+      { id: 'ptt-g9', corto: 'bajar los TG', tipo: 'test', fuente: 'ma-panc-tg-tto · ma-tg-calc',
+        enunciado: 'Predice: pancreatitis con TG 3.200 mg/dL, insulina IV y ayuno. ¿Cuánto bajan los TG en 24 h y hasta dónde quieres llegar?',
+        opciones: [
+          { t: 'Un 85-90 % en 24 h (de 3.200 a unos 320-480 mg/dL); el objetivo es <500 mg/dL', ok: true },
+          { t: 'Un 30-40 % en 24 h; hasta 1.000 mg/dL, que es el umbral de la hipertrigliceridemia grave', porque: 'Con insulina más ayuno la bajada es del 85-90 %, y el objetivo es <500. Aceptar 1.000 deja al paciente en la zona en que enferma.' },
+          { t: 'Un 50 % en 24 h; hasta normalizarlos del todo antes de empezar a alimentarlo', porque: 'El objetivo es <500 mg/dL, no la normalidad, y no se espera para nutrir: se come pronto. Retrasar la nutrición no mejora la pancreatitis.' }],
+        explicacion: `Insulina IV 0,1-0,4 U/kg/h (activa la lipoproteína lipasa), con ayuno: <span class="hl">85-90 % en 24 h</span>. De 3.200, unos 320-480 mg/dL. Objetivo <span class="hl-rojo">&lt;500 mg/dL</span>, con glucosado al 5-10 % y glucemias estrechas (${pag(23)}).`,
+        origen: CASO },
+      { id: 'ptt-g10', corto: 'la colecistectomía', tipo: 'test', fuente: 'ma-panc-biliar',
+        enunciado: 'Pancreatitis litiásica leve. ¿Cuándo operas la vesícula, y cuándo haces una CPRE con esfinterotomía?',
+        opciones: [
+          { t: 'En el mismo ingreso; la CPRE solo si hay obstrucción de la vía biliar', ok: true },
+          { t: 'Siempre a las 4-6 semanas, y CPRE en toda pancreatitis litiásica', porque: 'Las 4-6 semanas son para la pancreatitis grave. La CPRE se reserva para la obstrucción biliar. En la leve, esperar deja la vesícula litiásica y expone a otro episodio.' },
+          { t: 'Nunca en la leve, y CPRE con esfinterotomía a todas para evitar recidivas', porque: 'La colecistectomía sí se hace, en el mismo ingreso. La CPRE solo con obstrucción: indicarla a todas expone a una prueba invasiva sin necesidad.' }],
+        explicacion: `<span class="hl">CPRE con esfinterotomía si hay evidencia de obstrucción biliar</span> (p. ej. por ecografía). Colecistectomía durante el ingreso inicial si fue leve; diferida <span class="hl">4-6 semanas</span> si fue grave (${pag(23)}).` },
+    ],
+    examen: [
+      { id: 'ptt-e1', corto: 'objetivos', tipo: 'test', fuente: 'ma-panc-fluidos',
+        enunciado: 'Pancreatitis grave de 80 kg en reanimación con Ringer lactato. ¿Qué objetivos de perfusión marcas?',
+        opciones: [
+          { t: 'PAM ≥70 mmHg y diuresis ≥1 mL/kg/h, hasta normalizar el lactato antes de bajar el ritmo', porque: 'Los objetivos de Marino son PAM ≥65 y diuresis ≥0,5 mL/kg/h. Perseguir cifras más altas empuja a un régimen agresivo, que sobrecarga sin mejorar.' },
+          { t: 'PAM ≥65 mmHg y diuresis ≥0,5 mL/kg/h, es decir, unos 40 mL/h con un peso real de 80 kg', ok: true },
+          { t: 'PVC de 12-15 mmHg y diuresis de 0,3 mL/kg/h, porque en la pancreatitis hay que ir justo', porque: 'No es el objetivo de la ficha y una diuresis de 0,3 mL/kg/h es oliguria. Lo tomarías como éxito en un enfermo que sigue hipoperfundido.' }],
+        explicacion: `Objetivo: <span class="hl">PAM ≥65 mmHg y diuresis ≥0,5 mL/kg/h</span>; con 80 kg, 40 mL/h (${pag(21)}).`, origen: CASO },
+      { id: 'ptt-e2', corto: 'vasopresor', tipo: 'test', fuente: 'ma-panc-vasopresores',
+        enunciado: 'Pancreatitis grave que no alcanza la PAM con fluidos. ¿Qué vasopresor y por qué?',
+        opciones: [
+          { t: 'Noradrenalina, adecuada, titulando con cuidado porque todos reducen el flujo esplácnico', ok: true },
+          { t: 'Fenilefrina: no tiene efecto cardiaco y es la que menos flujo esplácnico reduce', porque: 'Es la que más reduce el flujo esplácnico y debe evitarse: podría extender la necrosis.' },
+          { t: 'Ninguno: en la pancreatitis los vasopresores están contraindicados, porque extienden la necrosis', porque: 'No están contraindicados: se aconsejan si los fluidos no bastan. Negarlos dejaría al paciente hipotenso.' }],
+        explicacion: `Sin recomendaciones oficiales; la <span class="hl">noradrenalina es adecuada</span>. Todos reducen el flujo esplácnico (<span class="hl-rojo">sobre todo la fenilefrina, a evitar</span>) y podrían promover la necrosis: titular con cuidado (${pag(21)}).` },
+      { id: 'ptt-e3', corto: 'gástrica o yeyunal', tipo: 'test', fuente: 'ma-panc-nutricion',
+        enunciado: 'Pancreatitis grave que no tolera la vía oral. ¿Cómo la nutres, según Marino?',
+        opciones: [
+          { t: 'Por sonda yeyunal siempre: la nasogástrica estimula el páncreas y empeora la enfermedad', porque: 'La nasogástrica no parece dañar y no hay evidencia de que la yeyunal sea mejor. Exigir un acceso yeyunal retrasa la nutrición.' },
+          { t: 'Parenteral desde el inicio, porque deja el intestino en reposo y evita estimular la glándula', porque: 'La enteral da menos infecciones, menos fallo multiorgánico y menos mortalidad. La parenteral queda para cuando no se tolera.' },
+          { t: 'Enteral por sonda, y es razonable empezar por la sonda nasogástrica con fórmula elemental', ok: true }],
+        explicacion: `Nutrición en las primeras 48 h; <span class="hl">no está claro si gástrica o yeyunal</span>; como la nasogástrica no parece dañar, es razonable empezar por ella, con fórmulas elementales (pobres en grasa) (${pag(21)}, ${pag(22)}).` },
+      { id: 'ptt-e4', corto: 'apuntes de la PIA', tipo: 'error', fuente: 'ma-panc-scompartimental',
+        enunciado: 'Apuntes de un residente sobre el síndrome compartimental en la pancreatitis. Encuentra los errores.',
+        frases: [
+          { t: 'La presión intraabdominal supera 12 cmH₂O en el 55 % de las pancreatitis graves.' },
+          { t: 'Por encima de 20 cmH₂O puede aparecer oliguria.' },
+          { t: 'Hay que medirla en toda pancreatitis, también la leve, para no perderse el síndrome compartimental.', mal: true,
+            c: 'Marino la recomienda en <span class="hl">toda pancreatitis grave con oliguria</span>, no en todas.' },
+          { t: 'El síndrome compartimental aparece solo si no se ha reanimado bien con volumen.', mal: true,
+            c: 'Colecciones, ascitis y <span class="hl-rojo">edema de la pared intestinal por la reanimación agresiva</span> lo producen: el exceso de volumen también lo favorece.' }],
+        explicacion: `Presión &gt;12 cmH₂O en el 55 % de las graves, &gt;20 cmH₂O puede dar oliguria; medirla en la grave con oliguria (${pag(23)}).` },
+      { id: 'ptt-e5', corto: 'drenaje', tipo: 'test', fuente: 'ma-panc-infeccion',
+        enunciado: 'Necrosis infectada con respuesta pobre al antibiótico. ¿Qué plan comparten Marino y el ensayo que cita?',
+        opciones: [
+          { t: 'Necrosectomía quirúrgica abierta de primera elección, antes de intentar drenar, porque el gas indica tejido muerto', porque: 'La cirugía (necrosectomía) es el recurso si el drenaje no invasivo guiado por TC no tiene éxito, no la primera medida: operarlo primero expone a un enfermo grave a cirugía mayor.' },
+          { t: 'Antibiótico frente a enterobacterias y drenaje guiado por TC si hace falta; necrosectomía si falla', ok: true },
+          { t: 'Solo antibiótico, sin plantear nunca el drenaje, hasta que el cultivo identifique el germen', porque: 'Estas infecciones son difíciles de tratar solo con antibiótico y puede ser necesario el drenaje guiado por TC; sin plan de drenaje el foco puede seguir activo.' }],
+        explicacion: `Estas infecciones responden mal al antibiótico: antibiótico que cubre enterobacterias, <span class="hl">drenaje guiado por TC</span> cuando hace falta y, si el drenaje no invasivo no lo logra, necrosectomía (${pag(22)}). El momento del drenaje es el punto en que las fuentes discrepan.`,
+        nota: NOTA_DRENAJE },
+      { id: 'ptt-e6', corto: 'CPRE', tipo: 'test', fuente: 'ma-panc-biliar',
+        enunciado: 'Pancreatitis litiásica moderadamente grave, ecografía sin dilatación de la vía biliar ni signos de obstrucción. ¿CPRE urgente con esfinterotomía?',
+        opciones: [
+          { t: 'Sí: en toda pancreatitis litiásica la esfinterotomía precoz reduce las recidivas', porque: 'La CPRE se indica con evidencia de obstrucción biliar, no en toda litiásica. Hacerla sin ella suma un procedimiento invasivo sin indicación.' },
+          { t: 'Sí, a las 4-6 semanas, junto con la colecistectomía, porque ambas se programan a la vez', porque: 'Las 4-6 semanas son el plazo de la colecistectomía tras una grave; la CPRE tiene otra indicación (obstrucción). Mezclarlas lleva a aplazar lo que debe hacerse ya.' },
+          { t: 'No: sin evidencia de obstrucción biliar no hay indicación de CPRE con esfinterotomía', ok: true }],
+        explicacion: `<span class="hl">CPRE con esfinterotomía si hay evidencia de obstrucción biliar</span> (por ejemplo, por ecografía). Colecistectomía diferida 4-6 semanas tras una grave, en el mismo ingreso si fue leve (${pag(23)}).` },
+      { id: 'ptt-e7', corto: 'alcohol', tipo: 'test', fuente: 'ma-panc-alcohol',
+        enunciado: 'Pancreatitis en un bebedor, con amilasa elevada al ingreso. ¿Qué dice Marino sobre atribuirla al alcohol?',
+        opciones: [
+          { t: 'Que el alcohol es la causa principal y no hay que buscar otra', porque: 'La asociación se estableció cuando se diagnosticaba solo por la amilasa, y el alcohol libera amilasa salival. Cerrar el diagnóstico deja sin tratar la litiasis o la hipertrigliceridemia.' },
+          { t: 'Que la asociación pudo ser un artefacto de la amilasa salival; busca otra causa', ok: true },
+          { t: 'Que solo es causa si hay amilasa elevada, porque la amilasa es la prueba del alcohol', porque: 'La amilasa alta del bebedor es en parte salival (40 % de las intoxicaciones agudas) y no prueba la pancreatitis alcohólica. Fiarte de ella te lleva a un diagnóstico erróneo.' }],
+        explicacion: `La hiperamilasemia salival se da en el <span class="hl">40 %</span> de las intoxicaciones alcohólicas agudas. Con unos 30 millones de alcohólicos en EE. UU. y unos 69.000 casos al año atribuibles al alcohol (el autor lo calcula suponiendo que el 25 % de las pancreatitis son alcohólicas: supuesto suyo), solo el <span class="hl-azul">0,2 %</span> de los alcohólicos la tiene cada año. Consecuencia práctica: no dejes de buscar otra causa (${pag(23)}, ${pag(24)}).`,
+        nota: `<b>Nota de fuentes.</b> Esta cifra es una estimación del propio autor («una asociación no muy fuerte»); es una opinión del autor, no un dato de ensayo.${enFicha(TTO, 'ma-panc-alcohol')}` },
+    ],
+    casos: [
+      { id: 'c1b', titulo: 'Bartolomé (2/2): el tratamiento', corto: 'Caso · Bartolomé 2', sub: 'pancreatitis por TG 3.200, 80 kg',
+        paciente: { Edad: '51 años', Peso: '80 kg', Motivo: 'Pancreatitis aguda por TG 3.200 mg/dL, ya diagnosticada' },
+        pasos: [
+          { momento: 'Día 1 · 09:30', datos: { PA: '98/60 mmHg', FC: '112 lpm', Hto: '51 %', Calcio: '9,0 mg/dL' }, nuevo: ['PA', 'FC', 'Hto', 'Calcio'], calculadora: { ir: 'ma-rl-resultado', nombre: 'Ringer lactato en la pancreatitis' },
+            pregunta: { id: 'c1-2', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc', origen: CASO, modelo: { aguaViva: 'ringer', texto: '🌊 Ringer lactato: dónde acaba el litro' },
+              enunciado: 'Recuerda: Bartolomé, 51 años, dolor típico y lipasa 40 veces el límite: pancreatitis aguda ya diagnosticada. Pesa 80 kg, está hipovolémico (PA 98/60, FC 112, Hto 51 %) y calcio normal. La pauta de Marino es para la pancreatitis grave; con su hipovolemia y la causa por TG la tratas como tal. ¿Qué fluido y cuánto?',
+              opciones: [
+                { t: 'Salino al 0,9 %: bolo de 1.600 mL (20 mL/kg) y luego 240 mL/h (3 mL/kg/h)', porque: 'Es la pauta agresiva: sobrecarga de volumen y edema de pared sin mejorar el pronóstico. Además, el RL ha dado mejores resultados que el salino.' },
+                { t: 'Ringer lactato: 800 mL en bolo (10 mL/kg) y luego 120 mL/h (1,5 mL/kg/h)', ok: true },
+                { t: 'Otro cristaloide que no sea Ringer, porque el Ringer lleva calcio', porque: 'Solo se evita el Ringer en la pancreatitis por hipercalcemia, y su calcio es 9,0 mg/dL. Evitarlo sin motivo pierde el beneficio sobre el salino.' }],
+              explicacion: `Ringer lactato; hay hipovolemia, así que bolo de <span class="hl">10 mL/kg = 800 mL</span> y después <span class="hl">1,5 mL/kg/h = 120 mL/h</span>. Objetivo: PAM ≥65 y diuresis ≥0,5 mL/kg/h (40 mL/h) (${pag(21)}).` } },
+          { momento: 'Día 1 · 12:00', calculadora: { ir: 'ma-tg-resultado', nombre: 'Insulina en la hipertrigliceridemia' },
+            pregunta: { id: 'c1-3', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'ma-panc-tg-tto · ma-tg-calc', origen: CASO,
+              enunciado: 'La causa es el TG 3.200. ¿Qué haces con la grasa de la sangre? Son cuatro cosas.',
+              puntos: [
+                'Insulina IV a <span class="hl">0,1-0,4 U/kg/h</span>: con 80 kg, <span class="hl-rojo">8-32 U/h</span>.',
+                'Glucosado al <span class="hl">5-10 %</span> mientras dure la insulina.',
+                'Glucemias <span class="hl-rojo">estrechas</span>.',
+                'Ayuno: con él, la insulina baja los TG un 85-90 % en 24 h. Objetivo <span class="hl">&lt;500 mg/dL</span>.'],
+              explicacion: `La insulina activa la lipoproteína lipasa. Después pueden hacer falta gemfibrozilo o ácido fenofíbrico (${pag(23)}).` } },
+          { momento: 'Día 5 · el giro', datos: { Diuresis: '0,3 mL/kg/h', Abdomen: 'distendido', PA: '108/66 mmHg', FC: '94 lpm', Hto: '40 %' }, nuevo: ['Diuresis', 'Abdomen', 'PA', 'FC', 'Hto'],
+            pregunta: { id: 'c1-6', tipo: 'test', fuente: 'ma-panc-scompartimental', origen: CASO,
+              modelo: { especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-fra-causas', resaltar: '#mr-pia-calc', texto: '📏 La PIA en Marino renal (ojo: en mmHg, 22 cmH₂O ≈ 16)' },
+              enunciado: 'Oliguria de 0,3 mL/kg/h y abdomen distendido en una grave tras la reanimación. ¿Qué haces primero?',
+              opciones: [
+                { t: 'Otro bolo de 800 mL de Ringer: la oliguria es hipovolemia', porque: 'El abdomen distendido sugiere presión intraabdominal. Más volumen suma edema de pared intestinal y más presión.' },
+                { t: 'Furosemida: es un riñón congestivo que no orina', porque: 'No es un riñón congestivo: es un abdomen a presión. El diurético no resuelve la causa de la oliguria.' },
+                { t: 'Medir la presión intraabdominal antes de dar más volumen', ok: true }],
+              explicacion: `Presión &gt;12 cmH₂O en el 55 % de las graves; &gt;20 cmH₂O puede dar oliguria; se mide en toda grave con oliguria (${pag(23)}). Dato nuevo: <b>PIA 22 cmH₂O</b> (&gt;20). Abre la calculadora de Marino renal: allí la presión va en mmHg (22 cmH₂O ≈ 16 mmHg).`,
+              nota: `<b>Nota de fidelidad.</b> La ficha da la presión en cmH₂O; el cap. 34 (bloque renal) usa mmHg.${enFicha(TTO, 'ma-panc-scompartimental')}` } },
+          { momento: 'Día 8 · el plan del R1', datos: { Temperatura: '38,6 °C', Leucocitos: '19.000/µL', PIA: '22 cmH₂O (día 5)' }, nuevo: ['Temperatura', 'Leucocitos'],
+            pregunta: { id: 'c1-7', tipo: 'error', fuente: 'ma-panc-infeccion', origen: CASO,
+              enunciado: 'Fiebre y leucocitosis en una necrotizante de 8 días. El R1 escribe el plan. Encuentra los errores.',
+              frases: [
+                { t: 'Pido TC con contraste: busco burbujas de gas.' },
+                { t: 'Mientras, meropenem «de profilaxis», que debió llevar desde el día 1.', mal: true,
+                  c: 'No existe la profilaxis: <span class="hl-rojo">no reduce las infecciones y no se recomienda</span>. El antibiótico se pone ante la sospecha, que cubre enterobacterias.' },
+                { t: 'La fiebre con leucocitosis confirma la infección.', mal: true,
+                  c: 'También se dan en la necrotizante <span class="hl">sin infección</span>; lo que la sugiere es el <span class="hl-rojo">gas en la TC</span>.' },
+                { t: 'Si hay gas, antibiótico y drenaje guiado por TC si hace falta.' }],
+              explicacion: `La infección se da en un tercio de las necrotizantes, típicamente a los 7-10 días; los antibióticos profilácticos no reducen las infecciones; el drenaje guiado por TC se hace si hace falta (${pag(22)}).`, nota: NOTA_DRENAJE } },
+          { momento: 'Día 8 · la TC', datos: { TC: 'Figura 40.3: necrosis extensa con numerosas burbujas de gas' }, nuevo: ['TC'],
+            pregunta: { id: 'c1-8', tipo: 'test', fuente: 'ma-panc-infeccion · mar-img-40-3', origen: CASO,
+              enunciado: 'La TC muestra necrosis extensa con muchas burbujas de gas. ¿Y ahora?',
+              opciones: [
+                { t: 'Necrosectomía directa, porque el gas indica que el tejido está muerto', porque: 'La necrosectomía es el recurso si el drenaje no invasivo falla. Operar primero expone a un enfermo grave a cirugía mayor.' },
+                { t: 'Solo antibiótico y esperar a que el cultivo guíe el tratamiento, sin plantear drenaje', porque: 'Estas infecciones responden mal al antibiótico y puede hacer falta el drenaje guiado por TC; sin plan de drenaje el foco sigue sin control.' },
+                { t: 'Antibiótico frente a enterobacterias y drenaje guiado por TC si hace falta', ok: true }],
+              explicacion: `Antibiótico que cubre enterobacterias y <span class="hl">drenaje guiado por TC</span>; necrosectomía solo si el drenaje no basta (${pag(22)}).`, nota: NOTA_DRENAJE } },
+        ],
+        lleva: [
+          'Sin hipovolemia no hay bolo; con ella, 10 mL/kg y 1,5 mL/kg/h: con 80 kg son 800 mL y 120 mL/h.',
+          'Oliguria con abdomen distendido: mide la presión intraabdominal; >20 cmH₂O da oliguria (pág. 23).',
+          'Gas en la TC es infección y nunca hubo profilaxis: se trata y se drena guiado por TC.'],
+        volver: { nombre: 'Infección de la necrosis', ancla: 'ma-panc-infeccion', modelo: [{ capilarVivo: 'sepsis', texto: '🩸 La inflamación que sale del páncreas' }, visual(TTO, '👁️ Fig. 40.3 (vista Visual)')] } },
+    ],
+    profundizar: [
+      { id: 'ma-panc-locales', titulo: 'Complicaciones locales: el pseudoquiste (solo nombrado en el libro)' },
+    ],
+  },
+};

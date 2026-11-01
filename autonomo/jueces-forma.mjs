@@ -34,12 +34,15 @@ export const BANCOS = [
     { nombre: 'fichas · fluidos', datos: 'js/data/mayeutica/b1-fluidos.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemodinámica', datos: 'js/data/mayeutica/b1-hemodinamica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · oxígeno', datos: 'js/data/mayeutica/b1-oxigeno.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · termostato (calor)', datos: 'js/data/mayeutica/b5-termostato-calor.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · termostato (frío)', datos: 'js/data/mayeutica/b5-termostato-frio.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · accesos', datos: 'js/data/mayeutica/b1-accesos.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el cráneo (bloque 6a, grupo 6D)', datos: 'js/data/mayeutica/b6a.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · bloque 5 (Marino caps. 39-44)', datos: 'js/data/mayeutica/b5.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'pulmón vivo', datos: 'js/data/pulmon-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     // el vaso usa las preguntas de las fichas 4-6 (las mismas) más 4 propias de «predice y compruébalo»
@@ -48,6 +51,8 @@ export const BANCOS = [
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'placa viva', datos: 'js/data/placa-viva-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'cráneo vivo', datos: 'js/data/craneo-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -87,6 +92,12 @@ export const MODELOS = {
     // Iones vivos (b4): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-iones-vivos)
     'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar' },
         estados: ['normal', 'damian', 'rufino', 'valentin', 'adela'] },
+    // Hepatocito vivo (b5): Explorar | Apuesta | Error | Error de Hilario | Caso (Mayéutica del motor común en «Preguntas»: el estado va en data-hepatocito-vivo; «alta:tips» pone el TIPS)
+    'hepatocito-vivo': { raiz: '#hpv-raiz', enlace: { especialidad: 'libros', view: 'hepatocitoVivo' }, clave: 'hepatocitoVivo', modo: { explorar: '#hpv-modo-explorar', mayeutica: '#hpv-modo-preguntas' },
+        estados: ['sano', 'casimira', 'edema', 'hilario', 'alta', 'alta:tips'] },
+    // El termostato vivo (b5): Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común)
+    'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar', mayeutica: '#tmv-modo-preguntas' },
+        estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa

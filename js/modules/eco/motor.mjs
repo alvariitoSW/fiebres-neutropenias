@@ -50,9 +50,17 @@ export const BASE = {
   // meseta de ~6,5 mmHg de toda la sístole subía la PVC media a 5,02 (Tabla 8.1 de Marino: 0-5). Ahora, 4,19. Más baja
   // no cabe sin sacar la VD sistólica de 20-25 (Ficha 5) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con
   // 1,5 L y EPP (pruebas/maniobras.test.mjs, paciente posible)
+  // v3m (mv-eco paso 6, 01/11/2026), MEDIDO Y NO APLICADO: con Ees 0,22 y picoAurAntes 0 (abajo) el gradiente VD−AD telediastólico
+  // del TEP/HP baja a ≤1,5 mmHg y el VD del TEP masivo vuelve a llenarse en la diástole (sin IT diastólica), pero sube la PVC normal
+  // (4,2 → 4,6, fuera del contrato) y cambia la diástole izquierda del atlas. Ver autonomo/bloques/mv-eco/paso6/v3m-informe.md
   ad: { ees: 0.70, v0: 8,  a: 0.13, b: 0.080 },   // v0 5 → 8: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
+  // v3m: picoAurAntes (s) = la contracción auricular llega a su pico ese tiempo antes de la sístole ventricular (pr) y se relaja durante
+  // la isovolumétrica: la onda A acaba al cerrarse la tricúspide y empezar la IT (Mukherjee 2025, ASE, PDF p. 16 y 18: TCO = del final de la
+  // A al comienzo de la E = duración del chorro de IT; onda c en la contracción isovolumétrica, Marino cap. 8, PDF p. 53). null = desde el
+  // comienzo del latido (60 ms antes del QRS mecánico), como siempre. anilloAd: descenso x′ de la AD (ver presiones). Los dos, inertes
+  picoAurAntes: null, anilloAd: 0,
   // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
   // relajación lenta, como en la disfunción diastólica). Ver activacionVi
   relajacion: 1,
@@ -190,6 +198,11 @@ export const BASE = {
   // contrae más tiempo que el VI (asincronía interventricular; fisiología general): su presión sigue alta cuando el VI
   // ya se relaja y el tabique se aplana al final de la sístole. Ver Atlas · 14
   durVd: 1,
+  // fracción de subida de la activación del VD (null = la del VI). Con la del VI la presión VD−AD en el chorro de IT acaba en rampa en la
+  // sobrecarga de presión; subiendo antes hace domo (Zoghbi 2017, Fig. 29, PDF p. 49). Lo fijan las enfermedades en escenarios.mjs. ILUSTRATIVO
+  fSubidaVd: null, qSubidaVd: null,
+  // tricúspide abierta en toda la diástole (ver flujos): 0 = diodo por gradiente de antes; 1 = flujo de vuelta hasta igualar AD y VD (lo fijan TEP y HP)
+  tricRev: 0,
   // insuficiencia tricuspídea: orificio regurgitante efectivo (cm²), igual que eroaMitral. 0 = competente
   eroaTricus: 0,
   // ISQUEMIA DEL VD: el VD se perfunde en sístole y en diástole porque su presión es baja; cuando su presión sistólica se acerca
@@ -337,7 +350,7 @@ export function crearMotor(ajustes = {}) {
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pTorax: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
     qMit: 0, qMitReg: 0, qCiv: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
-    vMit: false, vTri: false, vAo: false, vPul: false,
+    vMit: false, vTri: false, tricAbierta: false, eVdAnt: 0, vvdTd: 110, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
     pamSensor: null, efFc: 0, efR: 0, efVu: 0, efEes: 0, fc: p.fc, paoDist: 0, isqVd: 0, isqVdObj: 0,
@@ -383,6 +396,9 @@ export function crearMotor(ajustes = {}) {
     return c.a * (Math.exp(c.b * dv) - 1) + e * c.ees * dv + colapso + pperi;
   }
 
+  // comienzo de la activación auricular en el latido (s; k = √(T/T70)). picoAurAntes = null: al empezar el latido, como siempre;
+  // un número: la activación auricular llega a su pico ese tiempo antes del QRS mecánico (pr)
+  const inicioAur = (k) => p.picoAurAntes == null ? 0 : Math.max(0, p.pr - p.picoAurAntes - 0.5 * p.tsAur * k);
   function presiones() {
     const T = periodo, k = Math.sqrt(T / (60 / 70));
     const tl = s.tLatido;
@@ -390,7 +406,7 @@ export function crearMotor(ajustes = {}) {
     // (tv0), la activación no baja y el VI no se llena (FC 178: PAM 26). Por encima de ~133 lpm la sístole se acorta más deprisa
     // que √T (la relajación se acelera con la frecuencia y con el simpático: fisiología general; el 0,45 s, ilustrativo)
     const kV = k * Math.min(1, T / T_SIS_APRIETA);
-    const eAur = activacion(tl, 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
+    const eAur = activacion(tl - inicioAur(k), 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
     const tv0 = tl < p.pr ? tl + T - p.pr : tl - p.pr;   // misma continuidad de la cola que en eVi (abajo)
     const eVen = activacion(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida);
     // el VI puede relajarse más despacio que el VD (relajacion): solo se alarga la caída de su activación
@@ -398,7 +414,8 @@ export function crearMotor(ajustes = {}) {
     // y relajación lenta la cola era aún ~0,1 y la presión daba un salto de 4-5 mmHg al volver a empezar el latido)
     s.eVi = activacionVi(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida, p.relajacion);
     // activación del VD: la del VI salvo que su sístole dure más (durVd)
-    const eVd = p.durVd === 1 ? eVen : activacion(tv0, p.fSubida * p.tsVen * kV * p.durVd, (1 - p.fSubida) * p.tsVen * kV * p.durVd, p.qSubida);
+    const fV = p.fSubidaVd ?? p.fSubida, qV = p.qSubidaVd ?? p.qSubida;
+    const eVd = activacion(tv0, fV * p.tsVen * kV * p.durVd, (1 - fV) * p.tsVen * kV * p.durVd, qV);
     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri - s.estiraPeri) / p.phiPeri);
@@ -412,7 +429,10 @@ export function crearMotor(ajustes = {}) {
     s.pvi = pviLibre + p.tabique * pvdLibre + p.septoDesplaza * (s.pperi ** 2 / (s.pperi ** 2 + p.septoP50 ** 2)) * (1 - eVd) * clamp(pvdLibre - pviLibre, 0, p.septoTope) + s.pperi + pT;
     s.pvd = pvdLibre + p.tabique * pviLibre + s.pperi + pT;
     s.pai = presionAurícula(p.ai, s.vai, eAur, s.pperi + pT);
-    s.pad = presionAurícula(p.ad, s.vad, eAur, s.pperi + pT);
+    // descenso x′: al vaciarse el VD, el anillo tricuspídeo baja hacia la punta y agranda la AD (fase de reservorio): la AD se comporta
+    // como si tuviera anilloAd × (volumen del VD al empezar su sístole − el de ahora) mL menos de sangre. Se anula sola al rellenarse el VD
+    if (eVd >= 0.02 && s.eVdAnt < 0.02) s.vvdTd = s.vvd;
+    s.pad = presionAurícula(p.ad, s.vad - p.anilloAd * Math.max(0, s.vvdTd - s.vvd), eAur, s.pperi + pT);
     // P1 · presión TRANSMURAL de las cavidades derechas (la de dentro menos la del saco): la que mantiene la pared abierta.
     // La presión de cada cámara ya lleva pperi dentro, así que pperi − pad nunca es > 0; lo que se acerca a 0 en el
     // taponamiento es la transmural (formas.mjs, plieguePared, la convierte en el pliegue de la pared libre)
@@ -446,7 +466,16 @@ export function crearMotor(ajustes = {}) {
 
   function flujos(dt) {
     // válvulas: diodo por gradiente
-    s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
+    // tricúspide abierta en diástole: se abre por gradiente (AD > VD) y sigue abierta, con flujo en los dos sentidos, hasta que el VD empieza a
+    // contraerse (eVd sube): AD y VD son una cavidad común y su presión se iguala (fisiología general). Antes, tras la contracción auricular la
+    // AD caía a 1-7 mmHg con el VD a 17 y la válvula, cerrada por el gradiente, dejaba pVD−pAD de 8-16 mmHg en diástole (CW del TEP: −1,4 m/s)
+    if (p.tricRev > 0) {
+      if (s.pad > s.pvd) s.tricAbierta = true;
+      else if (s.eVd > 0.02 && s.eVd > s.eVdAnt) s.tricAbierta = false;
+      const dT = s.pad - s.pvd;
+      s.qTri = s.tricAbierta ? (dT > 0 ? dT : p.tricRev * dT) / p.rTricus : 0;
+    } else s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
+    s.eVdAnt = s.eVd;
     if (p.lPul > 0) {
       // pulmonar con inercia, como la mitral: abre por gradiente y cierra cuando el flujo llega a 0
       if (!s.vPul && s.pvd > s.pap) s.vPul = true;
@@ -593,7 +622,7 @@ export function crearMotor(ajustes = {}) {
       // ventricular, no onda A: F/G. Así la E se mide como el pico precoz de la onda fundida (Nagueh 2025, p. 547 (11) y
       // p. 557 T7) y la D de las venas pulmonares no queda en cero. Con la mitral ya abierta al empezar el latido (llenado
       // normal), la A sigue siendo A hasta el QRS. Fisiología general
-      if (f === 'A' && s._fusion && s.vMit && s.tLatido >= p.tsAur * Math.sqrt(periodo / (60 / 70))) {
+      if (f === 'A' && s._fusion && s.vMit && s.tLatido >= inicioAur(Math.sqrt(periodo / (60 / 70))) + p.tsAur * Math.sqrt(periodo / (60 / 70))) {
         if (s.qMit > 120) s._picoLlenado = true; f = (!s._picoLlenado || s.qMit > 120) ? 'F' : 'G'; }
     }
     else if (!s._aoCerro) f = s.pvi >= s._pviPrev ? 'C' : 'D';

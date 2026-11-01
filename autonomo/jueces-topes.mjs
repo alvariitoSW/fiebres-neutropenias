@@ -34,6 +34,10 @@ const AJUSTES = {
     'pulmon-vivo': { noPulsar: /^(Empezar otra vez)/ },
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
+    // Hepatocito vivo: la guía (Hazlo / Siguiente), el carril animado y las respuestas de las pruebas no son mandos que acumulen
+    'hepatocito-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|▶ Ver el carril|Ver la frase buena|Ver la modalidad)/ },
+    // Termostato vivo: «Paso ›», «‹ Paso» y «Siguiente paso» son pasos; los selectores de estado y los botones de capa no acumulan (la prueba propia lleva «Juega» a sus topes)
+    'termostato-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Siguiente|‹ Paso|Paso ›|Piel|Músculo|Cerebro|Bien|Error)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
     'craneo-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Más mandos|Menos mandos)/ },
     // ·

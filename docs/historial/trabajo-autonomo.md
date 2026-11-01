@@ -489,3 +489,33 @@ skills `plan-socialista`, `ahorro` y `radar` y la lista del constructor. El art.
 de B-045 (corazón y contrato; los consumidores migran de uno en uno). Parte `autonomo/partes/2026-10-30-reglas-reforma.md`.
 
 - **30/10/2026 · PR por votos del Consejo** (Consejo 9.ª, acta `autonomo/consejo/2026-10-30-9.md`): el usuario pidió que las PR no dependan de su presencia. Regla nueva REGLAS §4.15 (jueces + auditor sin graves + profesor ≥ 8,75 + mayoría del Consejo = se fusiona; meta 9,5 en modelos vivos nuevos); cambian §2.3, §4.12, §4.8 R7, §7, `CLAUDE.md` §10 y el cierre de la skill del plan socialista. Lo escribió la sesión `educacion-app` sin agentes.
+
+## Nota de corte del profesor 9,5 y receta (01/11/2026)
+
+El usuario sube la nota de corte del profesor de 8,75 a 9,5 (meta 10) y crea la R10 (receta del profesor: criterios
+de 9,5 y 10 antes de construir, qué falta en cada juicio, tope de 3 vueltas y Congreso). Dos Consejos ese día: el 4.º
+(Sonnet) encontró lo que seguía diciendo 8,75 (agente profesor, skills, tablero); el 5.º (Fable) cerró los huecos:
+toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto de la PR, nota atada a la receta, anclas de
+10 con calibración única, registro `autonomo/bajo-95.md` y solo la maqueta elegida llega a 9,5. Desde entonces, el
+Consejo y el Congreso deciden con un modelo grande cuando el asunto toca reglas o calidad (REGLAS §4.12).
+
+## Vídeos del usuario: fábrica en `main` y voces de España (01/11/2026)
+
+Una sesión de resumen del Plan Marino entregó primero una página animada en vez de vídeo, y luego un MP4 cuyo
+portavoz (Kokoro `em_alex`) sonaba latinoamericano. La causa: la fábrica de vídeos solo vivía en la rama
+`ccr-9b1626a6-8w7auz`, y Kokoro no tiene voces de España (la pronunciación sí es de España, con «θ»; el timbre no).
+Arreglo: la fábrica entra en `autonomo/consejo/video/` (scripts y plantillas, sin MP4 ni modelos), con
+`instalar.sh` (incluye el apaño de `docopt`, que no compila con el setuptools de Debian), `render.js` para montar,
+todo el reparto en Piper de España, skill `video` y una línea en `CLAUDE.md` §1: todo vídeo, con voces de España y en
+este formato.
+
+## Vista previa de los bloques en el móvil (01/11/2026)
+
+El enlace «Ver en el móvil» de las PR (raw.githack.com, la rama) dejó de cargar en el móvil del usuario: la barra se
+quedaba parada en todos los navegadores (la app pide ~430 archivos al arrancar). Interior y Hacienda aprobaron (acta
+`autonomo/consejo/2026-11-01-vista-previa.md`) que GitHub Pages, en vez de servir `main` desde la rama, lo publique un
+workflow (`.github/workflows/vista-previa.yml` + `.github/vista-previa.sh`): `main` en la raíz, igual que antes, y cada
+rama `auto/*` con PR abierta (las 5 más recientes, solo index, css y js) en `vista/<clave>/`, con una franja dorada
+«Vista previa · borrador» dentro de `.app-container` (en el `<body>`, que es flex en fila, salía como columna). Corre al
+subir `main`, cada 20 min si algo cambió y a mano. Retirada: Settings → Pages → Source «Deploy from a branch».
+Las copias comparten el `localStorage` de la app (mismo dominio).

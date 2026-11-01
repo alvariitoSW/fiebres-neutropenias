@@ -93,7 +93,19 @@ export const CAMPOS = Object.freeze(Object.fromEntries(lista.map(c => [c.clave, 
 // extra hacia el VD. Las dos constantes son ILUSTRATIVAS (el motor no da una geometría): se eligieron para que el normal
 // quede <0,3 y el aplanamiento aparezca con pVD ≈ pVI. Umbral de fase 0,5: ilustrativo.
 export const SEPTO_ESCALA = 2, SEPTO_NORMA = 6, SEPTO_UMBRAL = 0.5;
-export const septoSignoDe = (grad) => Math.tanh(Math.log1p(Math.exp(grad / SEPTO_ESCALA)) / SEPTO_NORMA);
+// SEGUNDO ARGUMENTO OPCIONAL (paso 6, M2): `pvi` (mmHg). En SÍSTOLE el aplanamiento no sigue al signo de pVD−pVI sino a la presión
+// RELATIVA del VD: con la presión sistólica del VD >50 % de la sistémica el tabique pierde la curvatura ya en mesosístole (King 1983,
+// Circulation 68:68-75, https://pubmed.ncbi.nlm.nih.gov/6851056/: curvatura septal en telediástole, mesosístole y telesístole frente a la
+// presión relativa del VD; mejor correlación en telesístole, r = 0,86). Ryan 1985 (JACC 5:918-27, https://pubmed.ncbi.nlm.nih.gov/3973294/):
+// EI ≈ 1,0 en el normal, 1,44 en telesístole en la sobrecarga de presión. Así, con pVI de sístole, grad_eff = pVD − 0,5·pVI; el término
+// se apaga (puerta suave 20-40 mmHg de pVI) en diástole, donde manda el signo. El umbral 0,5 es de King; la puerta, ILUSTRATIVA.
+// Sin `pvi` la función es la de siempre (misma firma de un argumento, mismo rango 0…+1).
+export const SEPTO_RELATIVA = 0.5;
+export const septoSignoDe = (grad, pvi) => {
+  const w = pvi == null ? 0 : Math.min(1, Math.max(0, (pvi - 20) / 20)), puerta = w * w * (3 - 2 * w);
+  const ge = grad + SEPTO_RELATIVA * puerta * (pvi ?? 0);
+  return Math.tanh(Math.log1p(Math.exp(ge / SEPTO_ESCALA)) / SEPTO_NORMA);
+};
 
 // Movimiento regional (mv-eco-2a5 P5b). 20 valores 0-1 = acortamiento de cada segmento ÷ el normal (1 = normal, 0 = acinesia).
 // Orden: 17 del VI en el modelo de 17 segmentos recomendado por Lang 2015 (Fig. 3, PDF p. 11; recomendación, p. 12; nombres,
@@ -107,18 +119,27 @@ export const SEGMENTOS_REGIONAL = Object.freeze([
 const FEVI_NORMAL = 61, FEVD_NORMAL = 53;
 // McConnell: acinesia de la pared libre del VD con movimiento normal del ápex, específico del TEP agudo y presente en el 20 %
 // (Marino 2024, cap. 22, «Diagnostic Aids», PDF p. 7 de docs/marino-2024-respiratory-management-caps22-26.pdf; no trae página impresa).
-// El libro no da cuánto cae la pared libre ni cuánto se conserva el ápex: MCCONNELL_PARED (la pared libre se mueve la mitad de lo que
-// toca por la FEVD) y APEX_DEFICIT (el ápex pierde la mitad del déficit global) son ILUSTRATIVOS. Así sale a partir del defecto
-// (riesgo intermedio) y la pared libre se aleja del ápex al crecer la gravedad. La isquemia regional del VI es un HUECO: el motor
-// no tiene regiones, así que los 17 del VI son uniformes (FEVI ÷ normal). HP crónica (pared gruesa): hipocinesia global del VD.
-const MCCONNELL_PARED = 0.5, APEX_DEFICIT = 0.5;
+// Fuente de la magnitud: McConnell 1996 (Am J Cardiol 78:469-73, PMID 8752195, https://pubmed.ncbi.nlm.nih.gov/8752195/): en el TEP
+// agudo la excursión de la línea media de la pared libre MEDIA fue −0,2 ± 0,8 mm (acinesia) y la del ápex 5,7 ± 0,8 mm (normal, p = NS);
+// en la HP primaria, anormal en todas las regiones. De ahí: la pared libre media se mueve MCCONNELL_MEDIA (0,15) de lo que toca por la
+// FEVD (≈ acinesia), el ápex se conserva (APEX_DEFICIT 0,1 del déficit global: «normal») y la basal queda en MCCONNELL_PARED (0,5,
+// ILUSTRATIVO: McConnell no mide la base; el TAPSE bajo la pone el motor). La isquemia regional del VI es un HUECO: el motor no tiene
+// regiones, así que los 17 del VI son uniformes (FEVI ÷ normal). HP crónica (pared gruesa): hipocinesia global del VD.
+const MCCONNELL_PARED = 0.5, MCCONNELL_MEDIA = 0.15, APEX_DEFICIT = 0.1;
 const c01 = (x) => Math.min(1, Math.max(0, x));
+const esTep = (motor) => motor.p.rPul >= 2 * BASE.rPul && (motor.p.mioVd ?? 1) <= 1;
 /** `motor` solo se lee: la sobrecarga aguda de presión del VD (TEP) es resistencia pulmonar ≥ 2× la normal con la pared del VD fina (mioVd ≤ 1). */
 export function regionalDe(motor, feVi, feVd) {
   const vi = c01(feVi / FEVI_NORMAL), vd = c01(feVd / FEVD_NORMAL);
-  const tep = motor.p.rPul >= 2 * BASE.rPul && (motor.p.mioVd ?? 1) <= 1;
-  const pared = tep ? vd * MCCONNELL_PARED : vd, apex = tep ? 1 - (1 - vd) * APEX_DEFICIT : vd;
-  return [...Array(17).fill(vi), pared, pared, apex];
+  const tep = esTep(motor);
+  const basal = tep ? vd * MCCONNELL_PARED : vd, media = tep ? vd * MCCONNELL_MEDIA : vd, apex = tep ? 1 - (1 - vd) * APEX_DEFICIT : vd;
+  return [...Array(17).fill(vi), basal, media, apex];
+}
+/** Intensidad 0-1 del signo de McConnell para el dibujo (0 fuera del TEP): crece con el déficit de la FEVD hasta 0,5 de él (ilustrativo). */
+export function mcconnellDe(motor) {
+  const o = motor.onda; if (!esTep(motor) || !o?.length) return 0;
+  const td = Math.max(...o.map(m => m.vvd)), ts = Math.min(...o.map(m => m.vvd));
+  return c01((1 - c01((100 * (td - ts) / td) / FEVD_NORMAL)) / 0.5);
 }
 
 const ORIGEN = Object.fromEntries(lista.map(c => [c.clave, c.origen]));
@@ -135,7 +156,7 @@ export function contratoDe(motor, puente) {
     q: { mit: m.qMit, tri: m.qTri, ao: m.qAo, pul: m.qPul, vp: m.qVp, reg: { im: m.qMitReg, it: m.qTriReg, iao: null } },
     valv: { mit: !!m.vMit, tri: !!m.vTri, ao: !!m.vAo, pul: !!m.vPul },
     gradSepto: m.pvd - m.pvi,
-    septoSigno: septoSignoDe(m.pvd - m.pvi),
+    septoSigno: septoSignoDe(m.pvd - m.pvi, m.pvi),
     septo: puente ? (serie[i] ?? null) : null,
   }));
   const gradIT = Math.max(...o.map(m => m.pvd - m.pad));

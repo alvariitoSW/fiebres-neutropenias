@@ -25,6 +25,8 @@ const FRASES = {
     'craneo-vivo': '#crv-frase',
     // ·
     'placa-viva': '#plv-frase',
+    'hepatocito-vivo': '#hpv-frase-txt',
+    'termostato-vivo': '#tmv-frase',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';
