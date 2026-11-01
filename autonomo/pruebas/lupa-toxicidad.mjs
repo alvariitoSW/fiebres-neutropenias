@@ -16,7 +16,7 @@ for (const W of [390, 360]) {
       minfs: Math.min(...[...sv.querySelectorAll('text')].filter(t => t.textContent).map(t => { const m = t.getScreenCTM(); return parseFloat(getComputedStyle(t).fontSize) * m.a; })), des: document.documentElement.scrollWidth - innerWidth }; });
   const casos = [[21, 0], [50, 0], [80, 24], [100, 4], [100, 8], [100, 80], [100, 108]];
   for (const [f, h] of casos) { await arrastrar(137, (f - 21) / 79); await arrastrar(149, h / 108); const s = await lee();
-    console.log(W, f, h, JSON.stringify(s)); if (s.des > 0 || s.minfs < 7.4) mal++; if (f === 100 && h === 108 && !/TOPE/.test(s.v1)) mal++;
+    console.log(W, f, h, JSON.stringify(s)); if (s.des > 0 || s.minfs < (W === 390 ? 9.95 : 8.9)) mal++; if (f === 100 && h === 108 && !/TOPE/.test(s.v1)) mal++;
     if (W === 390 && [[80, 24], [100, 108]].some(c => c[0] === f && c[1] === h)) await p.screenshot({ path: `${OUT}toxicidad-${f}-${h}-${W}.png` }); }
   // con el tope puesto, el mando de horas está apagado: tocarlo no lo mueve
   await arrastrar(149, 0.2); const s2 = await lee(); if (s2.hor !== '108 h') { mal++; console.log('mando de horas no apagado', s2.hor); }

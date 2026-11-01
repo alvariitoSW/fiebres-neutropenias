@@ -97,7 +97,7 @@ function pintar(tipo, x, nombre, pl = 0) {
     const u = c.e.querySelector('.u'); if (u) u.hidden = NX.parada();
     if (NX.parada()) { c.v.textContent = 'sin pulso'; c.sub.textContent = 'parada: actividad eléctrica sin pulso'; c.e.classList.remove('sube'); c.e.classList.add('baja'); continue; }
     c.v.textContent = f(b[k]);
-    c.sub.textContent = x === 0 ? 'sin presión positiva' : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
+    c.sub.textContent = x === 0 ? (k === 'vs' ? 'sin presión positiva' : '') : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
     c.e.classList.toggle('sube', d > 0.005); c.e.classList.toggle('baja', d < -0.005);
   }
   dibujar(a, b, NX.parada());
