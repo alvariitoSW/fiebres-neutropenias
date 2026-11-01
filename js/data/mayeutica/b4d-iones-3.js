@@ -7,7 +7,6 @@
 // marcan como ilustrativas. Cobertura y casos: autonomo/bloques/b4/cobertura-anexo.md §3 (4D) y §7.
 
 const IV = (estado, texto) => ({ ionesVivos: estado, texto });
-const NEFRONA_HPT = { nefronaViva: 'normal|hiperpara', texto: 'Compruébalo en la nefrona viva (hiperparatiroidismo)' };
 
 export const MAYEUTICA_IONES_3 = {
   /* =================================================================================================
@@ -45,7 +44,7 @@ export const MAYEUTICA_IONES_3 = {
           { t: 'La alcalosis lo baja (más calcio unido a albúmina, y el bicarbonato infundido forma complejos); la acidosis de la insuficiencia renal ayuda a mantenerlo', ok: true },
           { t: 'El pH no lo mueve: el iónico solo depende de la PTH y de la vitamina D', porque: 'La unión a la albúmina depende del pH. Ignorarlo te haría pasar por alto una causa inmediata y corregible en el ventilado o con bicarbonato.' }],
         explicacion: 'Tabla 38.2: lo más frecuente es <span class="hl-rojo">alcalosis, déficit de magnesio, insuficiencia renal y sepsis</span>. La alcalosis aumenta la unión a la albúmina y el bicarbonato forma complejos con el calcio libre; en la insuficiencia renal la acidosis <span class="hl-azul">reduce la unión a albúmina</span> y ayuda a mantener el iónico (E p. 44).' },
-      { id: 'ion-ca-g5', corto: 'el citrato', tipo: 'test', fuente: 'mr-hipoca-transfusion', modelo: IV('transfusion', 'Compruébalo en los iones vivos (Valentín, 16 concentrados)'),
+      { id: 'ion-ca-g5', corto: 'el citrato', tipo: 'test', fuente: 'mr-hipoca-transfusion', modelo: IV('transfusion', 'Compruébalo en los iones vivos (Valentín, 15 concentrados)'),
         enunciado: 'Un politraumatizado recibe una transfusión masiva. Antes de pedir el análisis: ¿qué esperas del calcio iónico y por qué?',
         opciones: [
           { t: 'Casi seguro bajo, y grave (<0,9 mmol/L) en más de la mitad: el citrato anticoagulante de la sangre de banco forma complejos con el calcio', ok: true },
@@ -55,7 +54,7 @@ export const MAYEUTICA_IONES_3 = {
       { id: 'ion-ca-g6', corto: 'tratarla o no', tipo: 'test', fuente: 'mr-hipoca-clinica · mr-ca-cuidado',
         enunciado: 'Un enfermo crítico tiene calcio iónico bajo y ninguna manifestación. ¿Qué dice Marino que hay que hacer, y por qué?',
         opciones: [
-          { t: 'Reponer siempre: cuanto antes se normalice, menos riesgo de tetania y arritmias', porque: 'La tetania y la arritmia son raras y casi solo con iónico extremo. Además el calcio IV se ha asociado a fallo multiorgánico: reponer por reflejo puede hacer daño.' },
+          { t: 'Reponer siempre: cuanto antes se normalice, menos riesgo de tetania y arritmias', porque: 'Las manifestaciones neuromusculares son raras y las cardiovasculares solo se describen con <0,65 mmol/L. Además el calcio IV se ha asociado a fallo multiorgánico: reponer por reflejo puede hacer daño.' },
           { t: 'No tratarla: la mayoría no tiene efectos y es más un marcador de enfermedad; solo se repone ante una reacción adversa grave', ok: true },
           { t: 'Reponer solo si el total corregido por albúmina es bajo, y reevaluar el calcio total a las 24 horas para confirmar la corrección', porque: 'Esa corrección no es fiable y el criterio para tratar es clínico, no un número corregido.' }],
         explicacion: 'La mayoría de las hipocalcemias iónicas de la UCI <span class="hl">no tienen efectos aparentes</span> y se ha propuesto dejar de monitorizar el calcio de rutina. El calcio IV se asocia a <span class="hl-rojo">fallo multiorgánico</span> (¿sobrecarga de calcio intracelular?): se reserva para una reacción adversa grave (E p. 45-46).' },
@@ -82,9 +81,9 @@ export const MAYEUTICA_IONES_3 = {
           { t: 'Gluconato cálcico al 10 %: menos calcio por mL (9 mg/mL) pero menor osmolaridad (680 mOsm/L) e irrita menos', ok: true },
           { t: 'Es indiferente: las dos ampollas de 10 mL aportan el mismo calcio elemental', porque: 'No es así: 27 frente a 9 mg/mL. Si las confundieras, darías el triple o un tercio de la dosis que querías.' }],
         explicacion: 'Cloruro: 27 mg/mL y 2.000 mOsm/L; gluconato: 9 mg/mL y 680 mOsm/L. <span class="hl">El cloruro contiene tres veces más calcio</span>, pero se prefiere el gluconato (E p. 45-46).',
-        nota: '<b>Opinión del autor.</b> El uso del cloruro solo en el colapso circulatorio es la recomendación de la fuente (fichas 17-18).' },
+        nota: '<b>Criterio del autor.</b> Reservar el cloruro para el colapso circulatorio es la recomendación de Marino (cap. 36, E p. 27).' },
       { id: 'ion-ca-e4', corto: 'la pauta', tipo: 'error', fuente: 'mr-tabla-38-3 · mr-ca-pauta',
-        enunciado: 'Un residente apunta la pauta de reposición de calcio de un iónico gravemente bajo. Encuentra el error (puede haber 0, 1 o 2).',
+        enunciado: 'Un residente apunta la pauta de reposición de calcio de un paciente con iónico gravemente bajo y hipotensión: se pauta por el efecto adverso, no por la cifra sola (E p. 45). Encuentra el error (puede haber 0, 1 o 2).',
         frases: [
           { t: 'Bolo de 200 mg de calcio elemental (22 mL de gluconato al 10 %) en 100 mL de salino isotónico en 5-10 minutos.' },
           { t: 'Con el bolo basta: el calcio se mantiene alto varias horas y no hace falta perfusión.', mal: true,
@@ -113,7 +112,7 @@ export const MAYEUTICA_IONES_3 = {
               puntos: [
                 'Casi universal en la transfusión masiva: el <span class="hl-rojo">citrato anticoagulante</span> de la sangre de banco forma complejos con el calcio.',
                 'Es grave (<span class="hl">&lt;0,9 mmol/L</span>) en más de la mitad de estos pacientes: su cifra entra en ese grupo.',
-                'La <span class="hl-azul">acidosis</span> (pH 7,22) reduce la unión a la albúmina y ayuda a mantener el iónico: sin ella estaría aún más bajo.'],
+                'La <span class="hl-azul">acidosis</span> (pH 7,22) reduce la unión a la albúmina y ayuda a mantener el iónico: sin ella estaría aún más bajo (fisiología general).'],
               explicacion: 'Massive transfusion en la Tabla 38.2; la acidosis disminuye la unión a la albúmina (E p. 44).' } },
           { momento: 'Hora 3 · el total',
             pregunta: { id: 'ion-ca-c2', tipo: 'error', fuente: 'mr-ca-albumina · mr-caconv-calc', modeloVivo: IV('normal:ca', 'Compruébalo en los iones vivos'),
@@ -122,20 +121,21 @@ export const MAYEUTICA_IONES_3 = {
                 { t: 'Corrijo el total con la fórmula de la albúmina y sale normal: no hago nada.', mal: true,
                   c: 'Ningún factor de corrección es fiable: <span class="hl-rojo">hay que medir el iónico con electrodo</span> (E p. 43).' },
                 { t: 'Pido un calcio iónico con la muestra sin burbujas y en un tubo sin heparina, citrato ni EDTA.' },
-                { t: 'Pido el iónico con la muestra sin burbujas y sin anticoagulantes que fijen calcio.' },
+                { t: 'La albúmina de 3,0 g/dL puede bajar el total sin que cambie el iónico: por eso no me fío del total para decidir.' },
                 { t: 'Si el iónico confirma el citrato como causa, lo interpreto con el pH (7,22) delante.' }],
-              explicacion: 'El iónico es la fracción activa y la única que se mide de forma fiable; la muestra debe evitar burbujas y los anticoagulantes que fijan calcio (E p. 43).' } },
+              explicacion: 'El iónico es la fracción activa y la única que se mide de forma fiable; con albúmina baja el total cae sin que cambie el iónico (E p. 42-43), y la muestra debe evitar burbujas y los anticoagulantes que fijan calcio (E p. 43).' } },
           { momento: 'Hora 3 · sin síntomas',
             pregunta: { id: 'ion-ca-c3', tipo: 'test', fuente: 'mr-hipoca-clinica · mr-hipoca-cv · mr-ca-cuidado',
-              enunciado: 'Con el iónico en 0,82 mmol/L, PA estable y sin ectopia ventricular, ¿qué haces?',
+              enunciado: 'Con el iónico en 0,82 mmol/L, PA estable y sin ectopia ventricular, ¿qué haces según el criterio de Marino?',
               opciones: [
                 { t: 'Un bolo de 200 mg de calcio elemental de inmediato: es un iónico grave', porque: 'Las complicaciones cardiovasculares solo se describen con <0,65 mmol/L, y el calcio IV se asocia a fallo multiorgánico. Un bolo sin efecto adverso lo expone al riesgo sin beneficio.' },
                 { t: 'Sigo con el iónico seriado, sin reponer mientras no haya una reacción adversa grave', ok: true },
                 { t: 'Sustituyo el control del iónico por el total, que es más estable', porque: 'El total no informa de la fracción activa y el citrato la baja. Perderías el momento en que sí haga falta tratar.' }],
-              explicacion: 'La reposición se recomienda <span class="hl">solo ante una reacción adversa grave</span> (E p. 45).' } },
+              explicacion: 'Marino recomienda la reposición <span class="hl">solo ante una reacción adversa grave</span> (E p. 45).',
+              nota: '<b>Criterio del autor.</b> Es la postura de Marino (E p. 45); el libro no contrasta aquí con otras guías.' } },
           { momento: 'Hora 6 · el giro', datos: { 'Ca iónico': '0,60 mmol/L (ilustrativo)', PA: '78/45 mmHg', Monitor: 'extrasístoles ventriculares frecuentes' }, nuevo: ['Ca iónico', 'PA', 'Monitor'],
             pregunta: { id: 'ion-ca-c4', tipo: 'test', fuente: 'mr-tabla-38-3 · mr-ca-pauta', modeloVivo: IV('transfusion', 'Compruébalo en los iones vivos (citrato)'),
-              enunciado: 'Con 6 concentrados más, el iónico baja a 0,60 mmol/L con hipotensión y ectopia ventricular. ¿Qué pauta pones?',
+              enunciado: 'Con 5 concentrados más, el iónico baja a 0,60 mmol/L con hipotensión y ectopia ventricular. ¿Qué pauta pones?',
               opciones: [
                 { t: 'Bolo de 200 mg de calcio elemental (22 mL de gluconato al 10 %) en 100 mL de salino en 5-10 min, y después 1-2 mg/kg/h durante 6-12 h', ok: true },
                 { t: 'Solo la perfusión de 1-2 mg/kg/h, sin bolo: así se evita sobrecargar de calcio', porque: 'Con hipotensión y ectopia ventricular hace falta subir el calcio ya; la perfusión sola tardaría en hacerlo.' },
@@ -164,7 +164,7 @@ export const MAYEUTICA_IONES_3 = {
           'En la transfusión masiva el citrato baja el iónico: se mide el iónico, no se corrige el total por albúmina.',
           'Un iónico bajo sin efectos adversos graves no se repone; con hipotensión y ectopia (<0,65 mmol/L), bolo de 200 mg y 1-2 mg/kg/h.',
           'El bolo cae a los 30 minutos: sin perfusión ni iónico horario se pierde el efecto.'],
-        volver: { nombre: 'Hipocalcemia en la transfusión masiva', ancla: 'mr-hipoca-transfusion', modeloVivo: IV('transfusion', 'Iones vivos: Valentín con 16 concentrados') } },
+        volver: { nombre: 'Hipocalcemia en la transfusión masiva', ancla: 'mr-hipoca-transfusion', modeloVivo: IV('transfusion', 'Iones vivos: Valentín con 15 concentrados') } },
     ],
     profundizar: [
       { id: 'mr-ca-muestra', titulo: 'Cómo sacar la muestra (burbujas y tubos)' },
@@ -179,13 +179,13 @@ export const MAYEUTICA_IONES_3 = {
   'mr-hipercalcemia': {
     entrada: 'Por qué el suero salino va primero, por qué la furosemida casi nunca, qué hace cada fármaco y cuánto tarda, y cuándo se trata una hipercalcemia.',
     guia: [
-      { id: 'ion-ca-hg1', corto: 'la causa', tipo: 'test', fuente: 'mr-hiperca-causas', modelo: NEFRONA_HPT,
+      { id: 'ion-ca-hg1', corto: 'la causa', tipo: 'test', fuente: 'mr-hiperca-causas',
         enunciado: 'Un paciente ingresado en UCI con hipercalcemia. Antes de otra prueba: ¿cuál es la causa que esperas encontrar, según Marino?',
         opciones: [
           { t: 'Una neoplasia (mieloma, mama, pulmón, ovario, epidermoide de cabeza y cuello, algunos linfomas): es la causa habitual en la UCI', ok: true },
           { t: 'Un hiperparatiroidismo primario: es la causa de toda hipercalcemia grave en el hospital', porque: 'El hiperparatiroidismo es la otra gran causa, pero en la UCI manda el cáncer. Quedarte en la paratiroides te haría retrasar la búsqueda del tumor.' },
           { t: 'La inmovilización y la vitamina D del suero: no hace falta buscar cáncer', porque: 'No son las causas que da la fuente para la UCI; descartar el cáncer sin buscarlo retrasaría el diagnóstico.' }],
-        explicacion: 'Se debe sobre todo a <span class="hl">hiperparatiroidismo o cáncer</span>, y <span class="hl-rojo">en la UCI, el cáncer</span> (E p. 46). La nefrona viva enseña el hiperparatiroidismo en el túbulo.' },
+        explicacion: 'Se debe sobre todo a <span class="hl">hiperparatiroidismo o cáncer</span>, y <span class="hl-rojo">en la UCI, el cáncer</span> (E p. 46).' },
       { id: 'ion-ca-hg2', corto: 'cuándo tratar', tipo: 'test', fuente: 'mr-hiperca-clinica · mr-hiperca-umbral',
         enunciado: 'Predice: ¿a partir de qué calcio total suelen aparecer los síntomas, y cuándo está indicado tratar?',
         opciones: [
@@ -212,12 +212,12 @@ export const MAYEUTICA_IONES_3 = {
         enunciado: 'Los bisfosfonatos tardan 2-4 días en actuar. ¿Cuándo los empiezas?',
         opciones: [
           { t: 'En cuanto se decide tratar, sin esperar a que el salino haya hecho efecto', ok: true },
-          { t: 'Cuando el calcio ya haya bajado con el salino, para no sumar nefrotoxicidad', porque: 'Retrasarlos añade días de calcio alto: su pico llega a los 4-7 días. La nefrotoxicidad se maneja ajustando la dosis si el aclaramiento es <50 mL/min.' },
+          { t: 'Cuando el calcio ya haya bajado con el salino, para no sumar nefrotoxicidad', porque: 'Retrasarlos añade días de calcio alto: su pico llega a los 4-7 días. La nefrotoxicidad se maneja con precaución: algunos autores reducen la dosis si el aclaramiento es <50 mL/min.' },
           { t: 'Solo cuando fallen la calcitonina y los corticoides', porque: 'Son de primera línea; la calcitonina dura 24-48 h y los corticoides sirven sobre todo en mieloma y linfoma.' }],
         explicacion: 'Potentes inhibidores de los osteoclastos y primera línea: <span class="hl">zoledronato 4 mg IV en 15 min</span> (preferido) o pamidronato. Acción tardía (2-4 días, pico a los 4-7 días y efecto de 1-4 semanas): <span class="hl-rojo">se empiezan en cuanto se decide tratar</span> (E p. 48).',
         nota: '<b>Nota de fuentes.</b> La Tabla 38.4 da pamidronato 60-90 mg en 4 h e inicio a las 48 h; el texto, 90 mg en 2 h e inicio a los 2-4 días. Se reproducen ambas.' },
       { id: 'ion-ca-hg6', corto: 'calcitonina y corticoides', tipo: 'destapa', fuente: 'mr-hiperca-calcitonina · mr-hiperca-corticoides',
-        enunciado: 'Dos fármacos más de la Tabla 38.4: calcitonina y glucocorticoides. Tres datos de cada uno que debes saber.',
+        enunciado: 'Dos fármacos más de la Tabla 38.4: calcitonina y glucocorticoides. Tres datos que debes saber de ellos.',
         cuantas: 'son tres cosas',
         puntos: [
           '<span class="hl-azul">Calcitonina</span>: frena la salida de calcio del hueso; 4 U/kg SC cada 12 h, con respuesta en pocas horas (baja 1-2 mg/dL).',
@@ -263,7 +263,7 @@ export const MAYEUTICA_IONES_3 = {
         pasos: [
           { momento: 'Urgencias',
             datos: { 'Ca total': '14,6 mg/dL', Creatinina: '1,8 mg/dL', PA: '90/50 mmHg' }, nuevo: ['Ca total', 'Creatinina', 'PA'],
-            pregunta: { id: 'ion-ca-hc1', tipo: 'test', fuente: 'mr-hiperca-umbral · mr-hiperca-salino', modeloVivo: NEFRONA_HPT,
+            pregunta: { id: 'ion-ca-hc1', tipo: 'test', fuente: 'mr-hiperca-umbral · mr-hiperca-salino',
               enunciado: 'Con calcio 14,6, confusión, hipotensión y fracaso renal, ¿qué es lo primero?',
               opciones: [
                 { t: 'Salino isotónico hasta una diuresis de 100-150 mL/h: reponer la hipovolemia por la diuresis osmótica', ok: true },
@@ -320,7 +320,7 @@ export const MAYEUTICA_IONES_3 = {
           'El salino va primero: la hipovolemia retiene calcio; el objetivo es una diuresis de 100-150 mL/h.',
           'La furosemida solo para la sobrecarga de volumen; la calcitonina rápida pero con taquifilaxia a las 24-48 h.',
           'Los bisfosfonatos tardan 2-4 días: se empiezan ya; con aclaramiento <50 mL/min algunos reducen la dosis.'],
-        volver: { nombre: 'Tratamiento de la hipercalcemia grave', ancla: 'mr-tabla-38-4', modeloVivo: NEFRONA_HPT } },
+        volver: { nombre: 'Tratamiento de la hipercalcemia grave', ancla: 'mr-tabla-38-4' } },
     ],
     profundizar: [
       { id: 'mr-hiperca-corticoides', titulo: 'Glucocorticoides y diálisis' },
@@ -431,10 +431,10 @@ export const MAYEUTICA_IONES_3 = {
               frases: [
                 { t: 'No lo repongo: está asintomático y la hipofosfatemia suele ser silente, aunque sea grave.', mal: true,
                   c: 'La reposición IV se recomienda en toda hipofosfatemia <span class="hl-rojo">&lt;1,0 mg/dL</span>, aunque sea silente (E p. 51).' },
-                { t: 'Voy a vigilar el fosfato durante toda la NPT, porque la glucosa lo seguirá bajando.' },
-                { t: 'Con fosfato <1 mg/dL está indicada la reposición IV.' },
-                { t: 'La glucosa de la NPT seguirá metiendo fosfato en las células.' }],
-              explicacion: 'Con 0,9 mg/dL cumple el criterio de hipofosfatemia grave (E p. 49, 51).' } },
+                { t: 'Vigilo el fosfato durante toda la NPT, porque la glucosa seguirá metiéndolo en las células.' },
+                { t: 'Si el potasio está por debajo de 4 mEq/L, la sal de elección será el fosfato potásico.' },
+                { t: 'Si aparecen disnea o debilidad, repongo con cualquier cifra de fosfato.' }],
+              explicacion: 'Con 0,9 mg/dL cumple el criterio de hipofosfatemia grave y se repone aunque sea silente; la sal depende del potasio y la disfunción respiratoria indica reponer con cualquier cifra (E p. 51).' } },
           { momento: 'Día 3 · la pauta',
             calculadora: { ir: 'mr-fosfato-calc', nombre: 'Reposición de fosfato IV (Tabla 38.5)' },
             pregunta: { id: 'ion-p-c3', tipo: 'test', fuente: 'mr-tabla-38-5 · mr-fosfato-soluciones',
