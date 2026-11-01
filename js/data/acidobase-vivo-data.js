@@ -104,10 +104,10 @@ export const CAUSAS = [
   // HCO₃⁻ 18, PaCO₂ 33 → HA 26, pH ≈ 7,36); la fuente solo dice «acidemia leve, algunos alcalémicos».
   { id: 'caa', t: 'Cetoacidosis alcohólica', e: { na: 136, cl: 92, hco3: 18, paco2: 33, anion: 'ceto', reloj: 'h', etiqueta: 'Cetoacidosis alcohólica' }, f: 'mr-cetoacidosis#mr-caa-diagnostico', fd: 'mr-cetoacidosis#mr-redox',
     dice: 'Hiato alto sin hiperglucemia, pero el nitroprusiato puede salir <span class="hl-rojo">negativo</span>: el NADH del etanol desvía el acetoacetato a β-hidroxibutirato (hasta 8:1) y la tira no lo detecta. Los vómitos añaden una alcalosis: el pH sale casi normal. Basta salino con glucosa y tiamina (cifras ilustrativas).' },
-  // Alcalosis grave (Marino p. 40): HCO₃⁻ 52 (el ejemplo de la ficha, >50), PaCO₂ 58 por ΔPaCO₂ = 0,7 × ΔHCO₃⁻ (Ec. 33.1), Cl⁻ 80 (tope del mando)
+  // Alcalosis grave (Marino p. 39-41: salino y ClK primero, HCl solo tras K⁺ y acetazolamida; «p. ej. <7,5» y necrosis incluso por vía central, p. 41): HCO₃⁻ 52 (el ejemplo de la ficha, >50), PaCO₂ ≈ 58-60 por ΔPaCO₂ ≈ 0,7 × ΔHCO₃⁻ (Ec. 33.1; 40 + 0,7·28 = 59,6), Cl⁻ 80 (tope del mando; el paciente ya recibió salino y ClK sin respuesta)
   // → pH ≈ 7,57 (>7,55). ILUSTRATIVAS. Mando de dosis no hay: el tope (0,2 mEq/kg/h, vena central) va en la frase y en la pregunta.
   { id: 'hcl', t: 'Alcalosis grave (HCl)', e: { na: 140, cl: 80, hco3: 52, paco2: 58, reloj: 'dias', etiqueta: 'Alcalosis grave' }, f: 'mr-alcalosis-tratamiento#mr-hcl-indicacion', fd: 'mr-alcalosis-tratamiento#mr-tabla-33-3',
-    dice: 'HCO₃⁻ &gt;50 o pH &gt;7,55 y sin respuesta a K⁺ y acetazolamida: solo entonces <span class="hl-rojo">HCl 0,1 N</span>. Déficit de H⁺ = 0,5 × peso magro × (HCO₃⁻ − 24): con HCO₃⁻ 52, 14 mEq por kg. Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> por una vena central grande; se para al llegar a un pH &lt;7,5 (cifras ilustrativas).' },
+    dice: 'Ya recibió salino y ClK sin respuesta (p. 39-41). HCO₃⁻ &gt;50 o pH &gt;7,55 y sin respuesta a K⁺ y acetazolamida: solo entonces <span class="hl-rojo">HCl 0,1 N</span>. Déficit de H⁺ = 0,5 × peso magro × (HCO₃⁻ − 24): con HCO₃⁻ 52, 14 mEq por kg (cálculo con la Ec. 33.4). Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> por una vena central grande; se para al llegar a un pH aceptable (p. ej., &lt;7,5; p. 41) (cifras ilustrativas).' },
   // Titulación del bicarbonato (Marino p. 22, Fig. 32.2): láctica grave ILUSTRATIVA (HCO₃⁻ 8, PaCO₂ 22 → pH 7,18); el punto sale del motor
   { id: 'titulacion', t: 'Curva del bicarbonato', e: { hco3: 8, paco2: 22, anion: 'lact', reloj: 'h', etiqueta: 'Láctica grave' }, f: 'mr-lactato-bicarbonato#mr-bicarb-tampon', fd: 'mr-lactato-bicarbonato#mr-bicarb-contra',
     dice: 'El pK del ácido carbónico es <span class="hl-azul">6,1</span>: un tampón solo es eficaz a ±1 unidad, entre 5,1 y 7,1. El pH de la sangre (7,35-7,45) queda <span class="hl-rojo">fuera de esa zona</span>: el HCO₃⁻ es más el producto final del transporte de CO₂ que un tampón (cifras ilustrativas).' },
@@ -294,11 +294,11 @@ export const PREGUNTAS = [
       'Salino con glucosa, electrolitos y <strong>tiamina</strong>; se resuelve en unas 24 h. Descarta pancreatitis.'],
     fuente: ['mr-cetoacidosis#mr-caa-diagnostico', 'mr-cetoacidosis#mr-redox', 'mr-cetoacidosis#mr-nitroprusiato', 'mr-cetoacidosis#mr-caa-clinica', 'mr-cetoacidosis#mr-caa-tratamiento'] },
   { id: 'ab-16', corto: 'HCl', tipo: 'destapa', estado: CAUSA.hcl.e, vista: 'carta', mirar: '#k-punto',
-    enunciado: 'Vómitos prolongados, HCO₃⁻ 52, pH {ph:58:52}, sin respuesta a potasio y acetazolamida. Pesa 70 kg magro. ¿Cómo planteas el HCl?',
-    puntos: ['Solo con <span class="hl-rojo">HCO₃⁻ &gt;50 o pH &gt;7,55</span>: aquí se cumplen las dos, y ya se probaron K⁺ y acetazolamida.',
-      'Déficit de H⁺ = 0,5 × 70 × (52 − 24) = <span class="hl-azul">980 mEq</span>; a 100 mEq/L, hasta 9,8 L de HCl 0,1 N.',
-      'No se repone todo: <strong>se para cuando el pH baja a &lt;7,5</strong>.',
-      'Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> (14 mEq/h, 140 mL/h en este paciente) por <strong>vena central grande</strong>: es corrosivo y la extravasación necrosa el tejido.'],
+    enunciado: 'Vómitos prolongados, HCO₃⁻ 52, pH {ph:58:52}. Ya recibió salino y cloruro potásico sin respuesta, y tampoco responde a acetazolamida (p. 39-41). Pesa 70 kg magro. ¿Cómo planteas el HCl?',
+    puntos: ['Solo con <span class="hl-rojo">HCO₃⁻ &gt;50 o pH &gt;7,55</span>: aquí se cumplen las dos. Antes recibió <strong>salino y ClK sin respuesta</strong> y ya se probó la acetazolamida (p. 39-41).',
+      'Déficit de H⁺ = 0,5 × 70 × (52 − 24) = <span class="hl-azul">980 mEq</span>; a 100 mEq/L, hasta 9,8 L de HCl 0,1 N (cálculo con la Ec. 33.4).',
+      'No se repone todo: <strong>se para al llegar a un pH aceptable (p. ej., &lt;7,5)</strong> (p. 41).',
+      'Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> (14 mEq/h, 140 mL/h en este paciente; cálculo con la Ec. 33.4) por <strong>vena central grande</strong>: es corrosivo y la extravasación necrosa el tejido, incluso por vía central (p. 41).'],
     fuente: ['mr-alcalosis-tratamiento#mr-hcl-indicacion', 'mr-alcalosis-tratamiento#mr-tabla-33-3', 'mr-alcalosis-tratamiento#mr-hcl-riesgo'] },  { id: 'ab-17', corto: 'titulación', tipo: 'destapa', estado: CAUSA.titulacion.e, ocultar: ['punto'], vista: 'titulacion', mirar: '#t-punto',
     enunciado: 'Acidosis láctica grave, pH {ph:22:8}. Un compañero dice que el bicarbonato es el tampón principal de la sangre y que por eso basta con darlo. ¿Qué le contestas?',
     puntos: ['El pK del ácido carbónico es <span class="hl-azul">6,1</span>: está al 50 % disociado a ese pH.',
