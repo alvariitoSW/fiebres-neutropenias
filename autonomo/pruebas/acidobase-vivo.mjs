@@ -81,6 +81,40 @@ for (const [especialidad, view, panel, tab, cond, vista] of fichas) {
   if (tab === 'mr-alcalosis-mecanismos' || tab === 'mt-alcoholes') await foto('entrada-' + tab);
   ok(await desborda() <= 0, `sin desborde tras ${tab}`);
 }
+// caa: cetoacidosis alcohólica desde su ficha + barrido de extremos de los mandos
+await pulsar({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-cetoacidosis' }); await espera(700);
+await clic('#mr-caa-ver'); await espera(4000);
+{ const p = await P(); ok(await visible() && p.causa === 'caa' && p.estado.hco3 === 18, `ficha caa abre la cetoacidosis alcohólica (causa ${p.causa})`);
+  const fv = await pag.evaluate(() => document.querySelector('#abv-raiz .abv-frase, #abv-raiz [id*="frase"]')?.innerText || document.getElementById('abv-raiz').innerText);
+  ok(/nitroprusiato/.test(fv) && /casi normal/.test(fv), 'caa: la frase viva dice nitroprusiato negativo y pH casi normal');
+  const rangos = await pag.$$('#abv-raiz input[type=range]'); let mal = 0;
+  for (const r of rangos) for (const ext of ['min', 'max']) {
+    await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
+    await espera(150); const q = await P(); if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || await desborda() > 0) mal++; }
+  ok(mal === 0 && rangos.length > 0, `caa: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
+// hcl: alcalosis grave desde su ficha + barrido de extremos
+await pulsar({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-alcalosis-tratamiento' }); await espera(700);
+await clic('#mr-hcl-ver'); await espera(4000);
+{ const p = await P(); ok(await visible() && p.causa === 'hcl' && p.estado.hco3 === 52, `ficha hcl abre la alcalosis grave (causa ${p.causa})`);
+  const fv = await pag.evaluate(() => document.getElementById('abv-raiz').innerText);
+  ok(/0,2 mEq\/kg\/h/.test(fv) && /vena central/.test(fv), 'hcl: la frase viva da el tope 0,2 mEq/kg/h y la vena central');
+  const rangos = await pag.$$('#abv-raiz input[type=range]'); let mal = 0;
+  for (const r of rangos) for (const ext of ['min', 'max']) {
+    await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
+    await espera(150); const q = await P(); if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || await desborda() > 0) mal++; }
+  ok(mal === 0 && rangos.length > 0, `hcl: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
+// titulacion: curva del bicarbonato desde su ficha + el punto sale del motor + barrido de extremos
+await pulsar({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-lactato-bicarbonato' }); await espera(700);
+await clic('#mr-titulacion-ver'); await espera(4000);
+{ const p = await P(); ok(await visible() && p.causa === 'titulacion' && p.estado.hco3 === 8, `ficha titulacion abre la curva (causa ${p.causa})`);
+  const fv = await pag.evaluate(() => ({ f: document.getElementById('abv-titu-frase').innerText, t: document.getElementById('abv-t-punto-t').textContent, w: document.getElementById('abv-svg-titu').getBoundingClientRect().width }));
+  ok(/entre 5,1 y 7,1/.test(fv.f) && /pH 7,18/.test(fv.t) && /92 %/.test(fv.f), `titulacion: el punto sale del motor (${fv.t}) y la frase da la zona 5,1-7,1`);
+  const rangos = await pag.$$('#abv-raiz input[type=range]'); let mal = 0;
+  for (const r of rangos) for (const ext of ['min', 'max']) {
+    await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
+    await espera(150); const q = await P(); const t = await pag.evaluate(() => document.getElementById('abv-t-punto-t').textContent);
+    if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || !/^pH \d,\d\d$/.test(t) || await desborda() > 0) mal++; }
+  ok(mal === 0 && rangos.length > 0, `titulacion: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
 // paso del riñón (paso 4, vómitos → célula del colector)
 await pulsar({ especialidad: 'nefrologia', view: 'acidobase', acidobaseVivo: 'paso-4' }); await espera(5000);
 ok((await P()).estado.obj === 'rinon', 'el paso 4 abre el riñón');
@@ -168,7 +202,7 @@ ok(contestadas > 20, `sin desborde tras cada una de las ${contestadas} respuesta
 await pag.reload(); await pag.waitForTimeout(1500);
 await pulsar({ especialidad: 'nefrologia', view: 'acidobase', acidobaseVivo: 'mayeutica' }); await espera(1500);
 const marcas = await pag.evaluate(() => ({ on: document.querySelectorAll('#abv-est-prog .abv-on').length, mal: document.querySelectorAll('#abv-est-prog .abv-mal').length }));
-ok(marcas.on === 12 && marcas.mal === 2, `al recargar, siguen 12 aciertos y 2 fallos (${JSON.stringify(marcas)})`);
+ok(marcas.on === PREGUNTAS.length - 2 && marcas.mal === 2, `al recargar, siguen ${PREGUNTAS.length - 2} aciertos y 2 fallos (${JSON.stringify(marcas)})`);
 await clic('#abv-est-ant'); // nada
 await pag.evaluate(() => [...document.querySelectorAll('[data-sig], [data-ir]')]);
 
