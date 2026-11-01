@@ -10,6 +10,7 @@ export const PDF_LA2 = 'docs/libro-azul-seccion-iv-respiratorio-parte2.pdf';
 const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
 export const FICHA = {
   'neumo-vm-modos': [NEUMO, 'Ventilación mecánica: los modos', 'VM: modos', PDF_B, 'Marino 2024'],
+  'neumo-o2-sistemas': [NEUMO, 'Oxígeno: sistemas de administración', 'O₂: sistemas', PDF_A, 'Marino 2024'],
   'neumo-vni-metodos': [NEUMO, 'Ventilación no invasiva: métodos', 'VNI: métodos', PDF_A, 'Marino 2024'],
   // El libro azul no tiene ficha en la app: la cita lleva solo al PDF (sin «Ver en la ficha»)
   'libro-azul-resp1': [null, 'El libro azul, sección IV (parte 1)', 'Libro azul IV', PDF_LA1, 'El libro azul IV'],
@@ -317,6 +318,13 @@ Object.assign(C, {
   sbt: { f: 'neumo-sbt', id: 'nep-sbt-tabla', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
   pimax: { f: 'neumo-sbt', id: 'nep-sbt-pimax', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
 });
+Object.assign(C, {
+  flujoFio2: { f: 'neumo-o2-sistemas', id: 'nep-flujo-fio2', sitio: 'Tasa de flujo y FiO₂: la FiO₂ es el balance entre el flujo de O₂ y el inspiratorio del paciente (15 L/min en reposo, hasta 120 en insuficiencia respiratoria)', p: 61 },
+  hfnoDiseno: { f: 'neumo-o2-sistemas', id: 'nep-hfno-diseno', sitio: 'HFNO: 40-60 L/min, lavado del espacio muerto (30 % del Vt), sumidero y volumen al final de la espiración', p: '64-65' },
+  hfnoPeep: { f: 'neumo-o2-sistemas', id: 'nep-hfno-peep', sitio: 'HFNO: PEEP de 2-3 cmH₂O solo con la boca cerrada', p: 65 },
+  t253: { f: 'neumo-o2-sistemas', id: 'nep-tabla-25-3', sitio: 'Tabla 25.3: beneficios del oxígeno nasal de alto flujo', p: 65 },
+  hfnoSustituye: { f: 'neumo-o2-sistemas', id: 'nep-tabla-25-3', sitio: 'Beneficios clínicos: el HFNO debería sustituir a la oxigenoterapia convencional en la insuficiencia respiratoria hipoxémica aguda', p: '65-66' },
+});
 NOTAS.push(
   { k: 'pmus-ilu', tipo: 'calla', txt: 'La ecuación del movimiento (Libro azul IV, p. 511) incluye el esfuerzo del paciente (Pmus), pero ninguna fuente de este plan da su amplitud ni su duración. Aquí el esfuerzo es ilustrativo: 0 a 15 cmH₂O, con aviso a 12 y duración y ritmo propios de cada estado. La presión inspiratoria máxima de Marino (−120 y −84 cmH₂O de media, y amenaza de la ventilación a −20 o −30; cap. 30 p. 58) es un esfuerzo máximo contra vía cerrada, no el esfuerzo de reposo.', citas: [C.ecMov, C.pimax] },
   { k: 'refractario-ilu', tipo: 'calla', txt: 'El Libro azul define el doble disparo como dos inspiraciones en menos de la mitad del tiempo inspiratorio (Fig. 27) pero no da el valle entre ambas. El modelo usa un tiempo refractario de 0,25 s (ilustrativo) tras acabar la insuflación; el valle de la curva sale de ahí. El disparo inverso se rotula «en investigación» porque el propio libro dice que su mecanismo (Hering-Breuer) no está establecido.', citas: [C.doble, C.inverso] },
@@ -404,7 +412,27 @@ ESTADOS['disparo-inverso'] = {
   ],
   fuentes: [C.asincronia, C.inverso, C.doble, C.ecMov],
 };
-ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
+ESTADOS.hfno = {
+  tit: 'Alto flujo nasal: la cánula que lava el espacio muerto', pac: 'elvira', pmus: true, hfno: true, seg: 8,
+  resp: { ...RESP_E4, modo: 'psv', ps: 0, peep: 0, frEsp: 28, pmus: 14, tin: 1 }, pulmon: { c: 40, r: 8 }, man: {},
+  frase: 'Sin respirador: la cánula solo aporta flujo. Sube el flujo y mira qué le pasa a la FiO₂ que llega al alvéolo y al esfuerzo de Elvira.',
+  guia: [
+    { t: 'Elvira respira por su cuenta, sin presión de soporte ni PEEP: la cánula nasal de alto flujo es lo único que le llega. Con 10 L/min no se distingue de una cánula convencional: mucho esfuerzo (Pmus 14) y FR de 28.', org: 'ficha (cánula de alto flujo: Marino cap. 25 p. 64) · Pmus 14 y FR 28: ilustrativo', s: ['pmus:insp', '#pul-esc-pantalla'], c: C.hfnoDiseno },
+    { t: 'La FiO₂ que llega al alvéolo no es la del mando: es el balance entre el flujo de O₂ de la cánula y el flujo inspiratorio de la paciente. Si ella inspira más de lo que da la cánula, el sobrante lo toma de la habitación y la FiO₂ baja. Marino cifra el flujo inspiratorio en unos 15 L/min en reposo y hasta 120 en insuficiencia respiratoria.', org: 'ficha (Marino cap. 25 p. 61) · la cifra de la casilla FiO₂: ilustrativo (mezcla lineal)', s: ['[data-fila="fio2"]', 'flujo:insp'], c: C.flujoFio2 },
+    { t: 'Sube el flujo de la cánula hacia 40-60 L/min (los equipos dan 40-60 según el fabricante). Al superar el flujo inspiratorio de Elvira, la cánula cubre toda su inspiración: ya no entra aire de la habitación y la FiO₂ efectiva alcanza la del mando.', org: 'ficha (Marino cap. 25 p. 64) · flujo inspiratorio de Elvira: del modelo', s: ['[data-fila="fio2"]', 'flujo:insp'], c: C.hfnoDiseno },
+    { t: 'Además el flujo alto lava el espacio muerto de la nasofaringe (cerca del 30 % de cada volumen corriente sale del espacio muerto anatómico), evita reinhalar CO₂ y mantiene la FiO₂ aunque ella sobrerrespire. Marino atribuye a todo esto la menor FR y el menor trabajo respiratorio: en la curva «Pmus», el empujón baja de 14 a 8 cmH₂O y la FR de 28 a 20.', org: 'ficha (Marino cap. 25 p. 64-65, Tabla 25.3) · 14→8 y 28→20: ilustrativo', s: ['pmus:insp', '[data-fila="fr"]'], c: C.t253 },
+    { t: 'No es VNI: el alto flujo genera una PEEP baja, de 2-3 cmH₂O, solo con la boca cerrada, algo raro en un paciente con insuficiencia respiratoria. Activa «Boca cerrada» para verla en la PEEP; con la boca abierta, la presión es 0. El aumento del volumen al final de la espiración no se explica solo por esa PEEP.', org: 'ficha (Marino cap. 25 p. 65) · 2,5: punto medio de 2-3', s: ['[data-fila="peeptot"]', 'paw:esp'], c: C.hfnoPeep },
+    { t: 'Lo que cuenta es la comodidad: respirar con menos esfuerzo reduce el riesgo de lesión autoinducida (P-SILI) y puede evitar la intubación. Marino recomienda que el alto flujo sustituya a la oxigenoterapia convencional en la insuficiencia respiratoria hipoxémica aguda.', org: 'ficha (Marino cap. 25 p. 65-66; cap. 24 p. 40-42)', s: ['#pul-esc-pantalla'], c: C.hfnoSustituye },
+  ],
+  fuentes: [C.flujoFio2, C.hfnoDiseno, C.hfnoPeep, C.t253, C.hfnoSustituye],
+};
+export const HFNO = {
+  min: 10, max: 60, tope: 60, paso: 5, inicio: 10, fio2Mando: 80, inspNormal: 15,   // tope: 40-60 L/min según el fabricante (Marino cap. 25 p. 64); 15: p. 61; 10, 5 y 80 (FiO₂ del caso): ilustrativo
+  pmus: [14, 8], frEsp: [28, 20],   // de 10 a 60 L/min (ilustrativo: Marino dice que baja la FR y el trabajo respiratorio, p. 65, pero no da cifras)
+  peepBoca: 2.5,   // 2-3 cmH₂O con la boca cerrada (Marino cap. 25 p. 65)
+  spo2: { aire: 84, alta: 95, fio2Alta: 80 },   // los dos puntos del caso de Elvira (SpO₂ 84 con aire; 95 con FiO₂ 80 %): ilustrativo, el modelo no calcula gases
+};
+ORDEN_ESTADOS.push('p-sili', 'hfno', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];

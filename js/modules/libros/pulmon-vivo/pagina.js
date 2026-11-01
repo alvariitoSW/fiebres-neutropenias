@@ -6,6 +6,7 @@ import { montarPantalla, flujoTope } from './pantalla.js';
 import { instalarCss } from '../../../core/dibujo-iso.js';
 import { crearDock } from '../../../core/dock.js';
 import { crearPulmon, pbw, ORIGEN_MODELO, T_PAUSA, T_OCLUSION } from './pulmon.mjs';
+import * as HFN from './hfno.js';
 import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
@@ -55,12 +56,20 @@ const NOMBRE_MANDO = { pmus: 'Esfuerzo (Pmus)', vt: 'Vt', flujo: 'Flujo', pinsp:
 const api = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
 const avisar = (tipo) => raiz.dispatchEvent(new CustomEvent(tipo, { detail: api() }));
 raiz.addEventListener('pul:pedir', () => avisar('pul:estado'));
+// La cánula de alto flujo (hfno.js): el flujo fija el esfuerzo y la FR de Elvira; de ahí salen la FiO₂ al alvéolo y la SpO₂
+function canula(pedido, { ya = false } = {}) {
+  const q = HFN.limitar(pedido), e = HFN.efecto(q), aj = { pmus: e.pmus, frEsp: e.frEsp, peep: est.boca ? D.HFNO.peepBoca : 0 };
+  (ya ? P.ajustarYa : P.ajustar)(aj);
+  est.q = q; est.hfno = HFN.lectura(q, est.fio2, { ...P.S.resp, ...aj }, P.S.pulmon); est.avisoCanula = HFN.avisoCanula(q, est.hfno);
+  topeMando = pedido > D.HFNO.tope ? HFN.selloCanula(pedido, est.hfno) : null;
+}
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
   est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
-  P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
+  if (E.hfno) { est.boca = false; est.fio2 = D.HFNO.fio2Mando; canula(D.HFNO.inicio, { ya: true }); } else { est.hfno = null; est.q = null; est.avisoCanula = null; } P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
@@ -165,7 +174,8 @@ let topeMando = null;   // el sello de un mando que se pasó del tope y se qued�
 function aplicarTopes() {
   const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
   if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
-  for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'sello', 'sello2', 'sello3', 'sello4']) {
+  if (est.hfno && est.avisoCanula) hay.canula = est.avisoCanula;
+  for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'canula', 'sello', 'sello2', 'sello3', 'sello4']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
@@ -213,7 +223,12 @@ function repintar(panel, html) {
 function pintarMandos() {
   const r = P.S.resp, pu = P.S.pulmon, m = P.S.man, kg = PBW();
   let h = '';
-  if (est.pest === 'resp') {
+  if (est.pest === 'resp' && est.hfno) {
+    h += `<p class="dock-nota dock-grupo"><b>Cánula nasal de alto flujo</b>: sin respirador, sin presión de soporte</p>`;
+    h += desl('canula', 'Flujo de O₂ (cánula)', est.q, D.HFNO.min, D.HFNO.max, D.HFNO.paso, 'L/min', `tope ${D.HFNO.tope}: los equipos dan 40-60 según el fabricante (Marino cap. 25 p. 64) · el efecto en la FR y el esfuerzo: ilustrativo`);
+    h += desl('fio2', 'FiO₂ del mando', est.fio2, 21, 100, 1, '%', `llega al alvéolo: ${f0(est.hfno.fio2Alv)} % (flujo inspiratorio de la paciente ${f0(est.hfno.vi)} L/min, del modelo) · ilustrativo`);
+    h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="boca" aria-pressed="${!!est.boca}">Boca cerrada<small>PEEP 2-3 cmH₂O solo así (Marino cap. 25 p. 65)</small></button></div>`;
+  } else if (est.pest === 'resp') {
     const psv = r.modo === 'psv', pend = P.pendientes().map((k) => NOMBRE_MANDO[k] || k);
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button><button type="button" data-m="modo" data-v="psv" aria-pressed="${psv}">PSV<small>presión de soporte</small></button></div>`;
     h += `<p class="dock-nota dock-grupo"><b>Ventilar</b> (CO₂): Vt × FR = ${f1(L?.vm)} L/min</p>`;
@@ -250,7 +265,8 @@ $('dock-panel').addEventListener('input', (ev) => {
 });
 function cambiarMando(k, v) {
   if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
-  if (k === 'fio2') { est.fio2 = v; pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
+  if (k === 'canula') { canula(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarCifrasTodo(); pintarMonitor(); return; }
+  if (k === 'fio2') { est.fio2 = v; if (est.hfno) { canula(est.q); pintarMandos(); } pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
   guardarTope(k, antes);
@@ -260,6 +276,7 @@ function cambiarMando(k, v) {
 }
 // Las pestañas de modo y las teclas de la pantalla
 function cambiarModo(k) {
+  if (est.hfno && k !== 'detener') { PANT.R.info('<b>Cánula de alto flujo</b> · No hay modos: la paciente respira sola y la cánula solo da flujo · ilustrativo'); return; }
   if (k === 'detener') { detener(!est.detenido); return; }
   if (est.detenido) detener(false);
   const antes = P.S.resp.modo; P.ajustar({ modo: k }); guardarTope('modo', antes);
@@ -292,6 +309,7 @@ $('dock-panel').addEventListener('click', (ev) => {
   else if (k === 'fesp') { est.factorEsp = +b.dataset.v; P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); }
   else if (k === 'pausa' || k === 'oclusion') { P.maniobra({ [k]: !P.S.man[k] }); topeMando = null; }
   else if (k === 'monpausa') est.pausa = !est.pausa;
+  else if (k === 'boca') { est.boca = !est.boca; canula(est.q); }
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();
 });
