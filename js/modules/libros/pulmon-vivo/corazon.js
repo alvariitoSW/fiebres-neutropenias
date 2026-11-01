@@ -12,12 +12,20 @@ const CSS = `
 #pul-corazon[hidden] { display: none; }
 #pul-corazon h3 { margin: 0; font: 700 .84rem/1.3 var(--sans); color: var(--text-main); }
 #pul-corazon .cor-pm { margin: 0; font: .78rem/1.4 var(--sans); color: var(--text-dim); }
-#pul-corazon .cor-fila { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
-#pul-corazon .cor-c { border: 1px solid var(--border-color); border-radius: 10px; padding: 4px 6px; background: var(--bg-main); min-width: 0; }
+#pul-corazon .cor-cuerpo { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 8px; align-items: center; }
+#pul-corazon svg text { font-family: var(--sans); }
+#pul-corazon svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 10px; }
+#pul-corazon .cor-lat { transform-box: fill-box; transform-origin: 50% 60%; animation: cor-lat var(--lat, .9s) ease-in-out infinite; }
+@keyframes cor-lat { 0%, 100% { transform: scale(1); } 18% { transform: scale(var(--amp, 1.05)); } }
+@media (prefers-reduced-motion: reduce) { #pul-corazon .cor-lat { animation: none; } }
+#pul-corazon .cor-fila { display: grid; gap: 3px; }
+#pul-corazon .cor-c { border-left: 3px solid var(--border-color); padding: 1px 6px; min-width: 0; }
 #pul-corazon .cor-c .t { display: block; font: .66rem/1.2 var(--sans); color: var(--text-muted); }
-#pul-corazon .cor-c .v { font: 700 1.05rem/1.2 var(--sans); color: var(--text-main); }
+#pul-corazon .cor-c .v { font: 700 .9rem/1.2 var(--sans); color: var(--text-main); }
 #pul-corazon .cor-c .u { font: .66rem/1.2 var(--sans); color: var(--text-muted); margin-left: 2px; }
 #pul-corazon .cor-c .sub { display: block; font: .66rem/1.25 var(--sans); color: var(--text-dim); }
+#pul-corazon .cor-c.sube { border-left-color: var(--accent-green); }
+#pul-corazon .cor-c.baja { border-left-color: var(--accent-red); }
 #pul-corazon .cor-c.sube .sub { color: var(--accent-green); }
 #pul-corazon .cor-c.baja .sub { color: var(--accent-red); }
 #pul-corazon .cor-nota { margin: 0; font: .72rem/1.4 var(--sans); color: var(--text-dim); }
@@ -40,11 +48,20 @@ export function montarCorazon() {
   sec = document.createElement('section'); sec.id = 'pul-corazon'; sec.hidden = true; sec.setAttribute('aria-label', 'El corazón con la presión del pulmón');
   sec.innerHTML = `<h3 id="pul-cor-tit">El corazón con esta presión</h3>
     <p class="cor-pm" data-fila="cor-pm">Presión media de la vía aérea → pleura: <b class="v">—</b> cmH₂O <span class="org ilu">${ORIGEN}</span></p>
+    <div class="cor-cuerpo">
+    <svg id="pul-cor-svg" viewBox="0 0 120 110" role="img" aria-label="Corazón: el nivel de llenado es el volumen sistólico">
+      <defs><clipPath id="pul-cor-clip"><path id="pul-cor-forma" d="M60 98 C20 72 10 48 10 32 C10 18 21 8 34 8 C46 8 55 15 60 24 C65 15 74 8 86 8 C99 8 110 18 110 32 C110 48 100 72 60 98 Z"/></clipPath></defs>
+      <rect id="pul-cor-nivel" x="0" y="98" width="120" height="100" fill="var(--accent-red)" opacity=".7" clip-path="url(#pul-cor-clip)"/>
+      <line id="pul-cor-base" x1="4" x2="116" y1="30" y2="30" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="3 3"/>
+      <text x="116" y="27" text-anchor="end" font-size="7" fill="var(--text-muted)">sin presión</text>
+      <g id="pul-cor-lat" class="cor-lat"><path d="M60 98 C20 72 10 48 10 32 C10 18 21 8 34 8 C46 8 55 15 60 24 C65 15 74 8 86 8 C99 8 110 18 110 32 C110 48 100 72 60 98 Z" fill="none" stroke="var(--text-main)" stroke-width="2.5"/></g>
+      <text id="pul-cor-rot" x="60" y="62" text-anchor="middle" font-size="7" font-weight="700" fill="var(--text-main)"></text>
+    </svg>
     <div class="cor-fila">
       <div class="cor-c" data-fila="cor-vs"><span class="t">Volumen sistólico</span><span class="v">—</span><span class="u">mL</span><span class="sub"></span></div>
       <div class="cor-c" data-fila="cor-gc"><span class="t">Gasto cardíaco</span><span class="v">—</span><span class="u">L/min</span><span class="sub"></span></div>
       <div class="cor-c" data-fila="cor-pam"><span class="t">PAM</span><span class="v">—</span><span class="u">mmHg</span><span class="sub"></span></div>
-    </div>
+    </div></div>
     <details class="plegable" id="pul-cor-limite"><summary>Límites del modelo y de la CPAP</summary><p class="cor-nota">${LIMITE}</p></details>
     <button type="button" class="cor-ir" data-especialidad="libros" data-view="shockVivo" data-shock-vivo="ic-cpap">Ver en el shock vivo →</button>`;
   calc.after(sec);
@@ -59,7 +76,7 @@ export function montarCorazon() {
 }
 
 function receta(tipo) { return tipo === 'ic' ? { ...S.RECETA_IC, g: 1 } : { esc: 'normal', hb: 14 }; }
-function leer(c) { const L = c.lectura, u = L.u; return { vs: u.vs, gc: L.gcTotal, pam: u.pam }; }
+function leer(c) { const L = c.lectura, u = L.u; return { vs: u.vs, gc: L.gcTotal, pam: u.pam, fc: u.fc }; }
 // Lectura del corazón con esa presión en la pleura (cmH₂O enteros); la de 0 es la del motor recién asentado
 // x = presión media de la vía aérea (entra como CPAP: fPleura y kAbdomen); pl = aire a presión en la pleura (neumotórax; entra
 // directa, sin fPleura ni kAbdomen: el aire pleural no infla el pulmón ni empuja las venas del abdomen)
@@ -83,15 +100,35 @@ function pintar(tipo, x, nombre, pl = 0) {
     c.sub.textContent = x === 0 ? 'sin presión positiva' : `sin presión: ${f(a[k])} (${pct(b[k], a[k])})`;
     c.e.classList.toggle('sube', d > 0.005); c.e.classList.toggle('baja', d < -0.005);
   }
-  ultimo = b;
+  dibujar(a, b, NX.parada());
+  ultimo = { ...b, pl, ptx: pl };
+  sec.dispatchEvent(new CustomEvent('pul:corazon', { bubbles: true }));   // el neumotórax escribe su frase con estas cifras
   document.getElementById('pul-cor-tit').textContent = `El corazón de ${nombre} con esta presión`;
   return b;
+}
+
+// El corazón: se llena según el VS (la línea discontinua es el VS sin presión) y late a la FC del motor, con una amplitud que sigue al GC
+function dibujar(a, b, parada) {
+  const ref = Math.max(a.vs * 1.25, 1), fr = parada ? 0 : Math.max(0, Math.min(1, b.vs / ref));
+  const y = (v) => 98 - 90 * v;   // del ápex (98) a la base (8)
+  document.getElementById('pul-cor-nivel').setAttribute('y', String(y(fr)));
+  document.getElementById('pul-cor-base').setAttribute('y1', String(y(a.vs / ref))); document.getElementById('pul-cor-base').setAttribute('y2', String(y(a.vs / ref)));
+  const g = document.getElementById('pul-cor-lat'), q = Math.max(0, Math.min(1, b.gc / a.gc));
+  g.style.animationPlayState = parada ? 'paused' : 'running';
+  g.style.setProperty('--lat', (60 / Math.max(b.fc, 30)).toFixed(2) + 's'); g.style.setProperty('--amp', (1 + 0.06 * q).toFixed(3));
+  document.getElementById('pul-cor-rot').textContent = parada ? 'sin pulso' : '';
+}
+
+// Al salir del estado, las filas ocultas no guardan las cifras de la última presión (7,5 / 77 del neumotórax)
+function reiniciar() {
+  for (const k of ['vs', 'gc', 'pam']) { celdas[k].v.textContent = '—'; celdas[k].sub.textContent = ''; celdas[k].e.classList.remove('sube', 'baja'); }
+  celdas.pm.textContent = '—'; ultimo = null; pedido = ''; delete sec.dataset.presion;
 }
 
 function vigilar() {
   const q = qUlt; if (!q || !sec) return;
   const E = D.ESTADOS[q.est.clave], visible = document.getElementById('pul-raiz').offsetParent !== null;
-  if (!E?.corazon || !visible) { if (!sec.hidden) sec.hidden = true; return; }
+  if (!E?.corazon || !visible) { if (!sec.hidden) { sec.hidden = true; reiniciar(); } return; }
   if (q.est.clave !== clave) { clave = q.est.clave; pedido = ''; tope10 = false; q.tope.quitar('cpap-tope'); }
   const pm = q.L?.pMedia; if (pm == null || !isFinite(pm)) return;
   sec.hidden = false;
