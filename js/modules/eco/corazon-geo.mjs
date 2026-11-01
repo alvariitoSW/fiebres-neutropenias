@@ -224,7 +224,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 
   // Trabéculas: crestas que entran en la cavidad (ilustrativo). VI: finas, en el tercio apical; VD: gruesas,
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
-  const kPap = opciones.ajustes?.papilaresEscala ? clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1) : 1;
+  const kPap = opciones.ajustes?.papilaresEscala ? Math.pow(clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1), opciones.ajustes?.papilaresExp ?? 1) : 1;
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
   // ajustes.papilaresLibres (dibujo nuevo): ni trabéculas ni papilares en el arco plano del tabique: quedan en la pared libre (anterolateral y posteromedial)
   const libreSeptal = (z, f) => { if (!opciones.ajustes?.papilaresLibres) return 1; const a = alfaZ(z); if (a <= 0) return 1;
