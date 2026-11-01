@@ -76,7 +76,7 @@ export function plieguePared(ptm, pperi, liquido) {
 export function estadoGeo(s, extra = {}) {
   const e = { vvi: s.vvi, vvd: s.vvd, vai: s.vai, vad: s.vad, septo: aplanamientoSeptal(s), eVi: s.eVi ?? 0, eVd: s.eVd ?? 0,
     pliegueAd: plieguePared(s.ptmAd, s.pperi, s.liquidoPeri), pliegueVd: plieguePared(s.ptmVd, s.pperi, s.liquidoPeri), ...extra };
-  if (s.pvi != null && s.pvd != null) e.septoSigno = septoSignoDe(s.pvd - s.pvi);
+  if (s.pvi != null && s.pvd != null) e.septoSigno = septoSignoDe(s.pvd - s.pvi, s.pvi);
   for (const v of VALVULAS) { e[v.n] = apertura(v, s); e['carga_' + v.n] = carga(v, s); }
   return e;
 }

@@ -93,7 +93,19 @@ export const CAMPOS = Object.freeze(Object.fromEntries(lista.map(c => [c.clave, 
 // extra hacia el VD. Las dos constantes son ILUSTRATIVAS (el motor no da una geometría): se eligieron para que el normal
 // quede <0,3 y el aplanamiento aparezca con pVD ≈ pVI. Umbral de fase 0,5: ilustrativo.
 export const SEPTO_ESCALA = 2, SEPTO_NORMA = 6, SEPTO_UMBRAL = 0.5;
-export const septoSignoDe = (grad) => Math.tanh(Math.log1p(Math.exp(grad / SEPTO_ESCALA)) / SEPTO_NORMA);
+// SEGUNDO ARGUMENTO OPCIONAL (paso 6, M2): `pvi` (mmHg). En SÍSTOLE el aplanamiento no sigue al signo de pVD−pVI sino a la presión
+// RELATIVA del VD: con la presión sistólica del VD >50 % de la sistémica el tabique pierde la curvatura ya en mesosístole (King 1983,
+// Circulation 68:68-75, https://pubmed.ncbi.nlm.nih.gov/6851056/: curvatura septal en telediástole, mesosístole y telesístole frente a la
+// presión relativa del VD; mejor correlación en telesístole, r = 0,86). Ryan 1985 (JACC 5:918-27, https://pubmed.ncbi.nlm.nih.gov/3973294/):
+// EI ≈ 1,0 en el normal, 1,44 en telesístole en la sobrecarga de presión. Así, con pVI de sístole, grad_eff = pVD − 0,5·pVI; el término
+// se apaga (puerta suave 20-40 mmHg de pVI) en diástole, donde manda el signo. El umbral 0,5 es de King; la puerta, ILUSTRATIVA.
+// Sin `pvi` la función es la de siempre (misma firma de un argumento, mismo rango 0…+1).
+export const SEPTO_RELATIVA = 0.5;
+export const septoSignoDe = (grad, pvi) => {
+  const w = pvi == null ? 0 : Math.min(1, Math.max(0, (pvi - 20) / 20)), puerta = w * w * (3 - 2 * w);
+  const ge = grad + SEPTO_RELATIVA * puerta * (pvi ?? 0);
+  return Math.tanh(Math.log1p(Math.exp(ge / SEPTO_ESCALA)) / SEPTO_NORMA);
+};
 
 // Movimiento regional (mv-eco-2a5 P5b). 20 valores 0-1 = acortamiento de cada segmento ÷ el normal (1 = normal, 0 = acinesia).
 // Orden: 17 del VI en el modelo de 17 segmentos recomendado por Lang 2015 (Fig. 3, PDF p. 11; recomendación, p. 12; nombres,
@@ -135,7 +147,7 @@ export function contratoDe(motor, puente) {
     q: { mit: m.qMit, tri: m.qTri, ao: m.qAo, pul: m.qPul, vp: m.qVp, reg: { im: m.qMitReg, it: m.qTriReg, iao: null } },
     valv: { mit: !!m.vMit, tri: !!m.vTri, ao: !!m.vAo, pul: !!m.vPul },
     gradSepto: m.pvd - m.pvi,
-    septoSigno: septoSignoDe(m.pvd - m.pvi),
+    septoSigno: septoSignoDe(m.pvd - m.pvi, m.pvi),
     septo: puente ? (serie[i] ?? null) : null,
   }));
   const gradIT = Math.max(...o.map(m => m.pvd - m.pad));

@@ -1,4 +1,4 @@
-// M0 paso 6 · medir (no cambia nada): pVD-pAD en sístole, excentricidad del VI por fases, regional TEP.
+// M0 paso 6 (ampliada en M1+M2: TAPSE/FEVD; septoSigno con pvi) · medir (no cambia nada): pVD-pAD en sístole, excentricidad del VI por fases, regional TEP.
 //   node autonomo/bloques/mv-eco/herramientas/m0-paso6.mjs
 import { crearMotor } from '../../../../js/modules/eco/motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../../../../js/modules/eco/escenarios.mjs';
@@ -25,8 +25,9 @@ for (const [k, g] of casos) {
   for (const [nom, t] of [['telediástole', t0 - 0.02], ['sístole media', t0 + ds / 2], ['fin sístole', t1 - 0.01]]) {
     const s = cerca(t), e = estadoGeo(s, extra), C = contornosVista('psaxPm', e, 'nuevo'), p = C.viEndo?.cad?.flatMap(c => c.ps);
     const ex = (j) => Math.max(...p.map(q => q[j])) - Math.min(...p.map(q => q[j])), a = ex(0) / ex(1);
-    console.log(`  ${nom}: EI=max(x/y,y/x)=${Math.max(a, 1 / a).toFixed(2)} (x/y=${a.toFixed(2)}) septoSigno=${septoSignoDe(s.pvd - s.pvi).toFixed(2)} septoEst=${e.septo.toFixed(2)} pvd-pvi=${(s.pvd - s.pvi).toFixed(1)}`);
+    console.log(`  ${nom}: EI=max(x/y,y/x)=${Math.max(a, 1 / a).toFixed(2)} (x/y=${a.toFixed(2)}) septoSigno=${septoSignoDe(s.pvd - s.pvi, s.pvi).toFixed(2)} septoEst=${e.septo.toFixed(2)} pvd-pvi=${(s.pvd - s.pvi).toFixed(1)}`);
   }
+  { const L = (await import('../../../../js/modules/eco/contrato.mjs')).contratoDe(m).latido; console.log(`  TAPSE=${L.tapse?.toFixed(1)} mm · FEVD=${L.feVd?.toFixed(1)} % · PSAP=${L.paps?.toFixed?.(0)}`); }
   // 3. regional
   if (k === 'tep' || k === 'normal') { const c = (await import('../../../../js/modules/eco/contrato.mjs')).contratoDe(m); console.log('  regional VD (pared basal, media, ápex) =', c.latido.regional.slice(17).map(v => v.toFixed(2)).join(' '), '· VI[0]=', c.latido.regional[0].toFixed(2)); }
 }
