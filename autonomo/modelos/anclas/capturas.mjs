@@ -50,23 +50,43 @@ async function guardar(page, nombre) {
 }
 
 const CAPTURAS = [
-  ['7-1-3-13-4ts.jpg', 390, async p => {
+  ['7-1-13-atlas-im.jpg', 390, async p => {
+    await ir(p, { especialidad: 'eco', ecoAtlas: 'mr' });
+    await p.waitForTimeout(3500);
+    await p.evaluate(() => { const h = [...document.querySelectorAll('#eco-view h4')].find(e => e.offsetParent && /En 30 segundos/.test(e.textContent)); window.scrollTo(0, h.getBoundingClientRect().top + scrollY - 560); });
+    await p.waitForTimeout(400);
+    return p.evaluate(() => [...document.querySelectorAll('#eco-view h4')].some(e => e.offsetParent && /En 30 segundos/.test(e.textContent)));
+  }],
+  ['7-7-atlas-im-360.jpg', 360, async p => {
+    await ir(p, { especialidad: 'eco', ecoAtlas: 'mr' });
+    await p.waitForTimeout(3500);
+    await p.evaluate(() => { const h = [...document.querySelectorAll('#eco-view h4')].find(e => e.offsetParent && /En 30 segundos/.test(e.textContent)); window.scrollTo(0, h.getBoundingClientRect().top + scrollY - 560); });
+    await p.waitForTimeout(400);
+    return p.evaluate(() => document.documentElement.scrollWidth <= 360);
+  }],
+  ['7-3-4ts.jpg', 390, async p => {
     await ir(p, { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-trombocitopenia' });
     await p.waitForTimeout(800);
     await ver(p, '#merino-trombocitopenia', 'start'); await p.evaluate(() => window.scrollTo(0, document.querySelector('#merino-trombocitopenia').getBoundingClientRect().top + scrollY - 70));
     return p.evaluate(() => document.getElementById('merino-trombocitopenia').offsetParent !== null);
   }],
-  ['7-1-3-13-4ts-calculadora.jpg', 390, async p => {
+  ['7-2-4ts-manejo.jpg', 390, async p => {
     await ir(p, { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-trombocitopenia' });
     await p.waitForTimeout(800);
-    await p.evaluate(() => { const c = document.getElementById('mh-4ts'); c.querySelectorAll('select').forEach(s => { s.selectedIndex = 3; s.dispatchEvent(new Event('change', { bubbles: true })); }); window.scrollTo(0, c.getBoundingClientRect().top + scrollY - 70); });
-    return p.evaluate(() => document.getElementById('mh-4ts').offsetParent !== null);
+    await p.evaluate(() => { const e = document.getElementById('mh-hit-manejo').previousElementSibling; window.scrollTo(0, e.getBoundingClientRect().top + scrollY - 80); });
+    await p.waitForTimeout(300);
+    return p.evaluate(() => document.getElementById('mh-hit-manejo').offsetParent !== null);
   }],
-  ['7-7-4ts-360.jpg', 360, async p => {
+  // Calculadora 4Ts en riesgo alto: 8 puntos, cada select por su texto.
+  ['7-3-4ts-calculadora.jpg', 390, async p => {
     await ir(p, { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-trombocitopenia' });
     await p.waitForTimeout(800);
-    await p.evaluate(() => { const c = document.getElementById('mh-4ts'); window.scrollTo(0, c.getBoundingClientRect().top + scrollY - 70); });
-    return p.evaluate(() => document.getElementById('mh-4ts').offsetParent !== null && document.documentElement.scrollWidth <= 360);
+    await p.evaluate(() => {
+      const pon = (id, re) => { const s = document.getElementById(id); s.selectedIndex = [...s.options].findIndex(o => re.test(o.textContent)); s.dispatchEvent(new Event('change', { bubbles: true })); };
+      pon('ts4-trombo', /Caída >50%/); pon('ts4-tiempo', /^5-10 días tras/); pon('ts4-trombosis', /^Nueva trombosis/); pon('ts4-otras', /^Ninguna otra/);
+      window.scrollTo(0, document.getElementById('mh-4ts').getBoundingClientRect().top + scrollY - 70);
+    });
+    return p.evaluate(() => document.getElementById('mh-4ts').offsetParent !== null);
   }],
   ['7-6-visual-4ts.jpg', 390, async p => {
     await ir(p, { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs', tab: 'merino-trombocitopenia' });
@@ -76,23 +96,33 @@ const CAPTURAS = [
     await p.waitForTimeout(600);
     await p.evaluate(() => document.querySelector('#merino-trombocitopenia [data-ir-paso="mira"]')?.click());
     await p.waitForTimeout(1200);
-    await p.evaluate(() => { const v = document.querySelector('#merino-trombocitopenia .est-paso[data-paso="mira"]'); window.scrollTo(0, v.getBoundingClientRect().top + scrollY - 90); });
-    return p.evaluate(() => { const v = document.querySelector('#merino-trombocitopenia .est-paso[data-paso="mira"]'); return !!v && !v.hidden && v.offsetParent !== null; });
+    // Toca el nodo «Fibrina» para abrir su detalle y «Ver en el texto ↓».
+    await p.evaluate(() => { const n = [...document.querySelectorAll('#merino-trombocitopenia .vk-nodo')].find(b => /Fibrina/.test(b.textContent)); n?.click(); n?.scrollIntoView({ block: 'start' }); window.scrollBy(0, -90); });
+    await p.waitForTimeout(700);
+    return p.evaluate(() => [...document.querySelectorAll('#merino-trombocitopenia button')].some(b => b.offsetParent && /Ver en el texto/.test(b.textContent)));
   }],
   ['7-4-nefrona.jpg', 390, async p => {
     await ir(p, { especialidad: 'nefrologia', view: 'nefrona', nefronaViva: 'normal|furosemida' });
     await p.waitForTimeout(3500);
-    await p.evaluate(() => { const v = document.getElementById('nefrona-viva'); window.scrollTo(0, v.getBoundingClientRect().top + scrollY - 60); });
+    await p.evaluate(() => { const v = document.getElementById('nv-situaciones'); window.scrollTo(0, v.getBoundingClientRect().top + scrollY - 70); });
     await p.waitForTimeout(500);
-    return p.evaluate(() => document.getElementById('nefrona-viva').offsetParent !== null);
+    return p.evaluate(() => document.getElementById('nv-situaciones').offsetParent !== null);
   }],
-  ['7-5-8-atlas-vd.jpg', 390, async p => {
+  ['7-5-nefrona-frase.jpg', 390, async p => {
+    await ir(p, { especialidad: 'nefrologia', view: 'nefrona', nefronaViva: 'normal|furosemida' });
+    await p.waitForTimeout(3500);
+    await p.evaluate(() => { const v = document.getElementById('nv-explica-titulo'); window.scrollTo(0, v.getBoundingClientRect().top + scrollY - 70); });
+    await p.waitForTimeout(500);
+    return p.evaluate(() => document.getElementById('nv-explica').offsetParent !== null);
+  }],
+  ['7-5-atlas-vd-signos.jpg', 390, async p => {
     await ir(p, { especialidad: 'eco', ecoAtlas: 'rv' });
     await p.waitForTimeout(3500);
     await p.evaluate(() => { const f = document.querySelector('.at-figura[data-figura="vd"]'); [...f.querySelectorAll('button')].find(b => /TEP agudo/.test(b.textContent))?.click(); const r = f.querySelector('input[type=range]'); if (r) { r.value = Math.round((+r.min + +r.max) * 0.66); r.dispatchEvent(new Event('input', { bubbles: true })); } });
     await p.waitForTimeout(1500);
-    await p.evaluate(() => { const h = [...document.querySelectorAll('#eco-view *')].find(e => e.offsetParent && /ventr[ií]culo derecho|VD/i.test(e.textContent) && e.children.length === 0); h?.scrollIntoView({ block: 'start' }); });
-    return p.evaluate(() => document.getElementById('eco-view')?.offsetParent !== null || !!document.querySelector('svg, canvas'));
+    await p.evaluate(() => { const h = [...document.querySelectorAll('#eco-view h4')].find(e => /Signos de sobrecarga del VD/.test(e.textContent)); window.scrollTo(0, h.getBoundingClientRect().top + scrollY - 80); });
+    await p.waitForTimeout(300);
+    return p.evaluate(() => [...document.querySelectorAll('#eco-view h4')].some(e => e.offsetParent && /Signos de sobrecarga del VD/.test(e.textContent)));
   }],
   ['7-9-10-capilar.jpg', 390, async p => {
     await ir(p, { especialidad: 'libros', view: 'capilarVivo', capilarVivo: 'anemia-compensada' });
@@ -100,15 +130,27 @@ const CAPTURAS = [
     await p.evaluate(() => window.scrollTo(0, document.getElementById('capilar-vivo-view').getBoundingClientRect().top + scrollY));
     return p.evaluate(() => document.getElementById('capilar-vivo-view').offsetParent !== null);
   }],
+  ['7-10-capilar-explicame.jpg', 390, async p => {
+    await ir(p, { especialidad: 'libros', view: 'capilarVivo', capilarVivo: 'anemia-compensada' });
+    await p.waitForTimeout(3500);
+    await p.evaluate(() => document.querySelector('#capilar-vivo-view [data-cpv-guia]')?.click());
+    await p.waitForTimeout(800);
+    await p.evaluate(() => [...document.querySelectorAll('button')].find(b => b.offsetParent && /^Siguiente/.test(b.textContent.trim()))?.click());
+    await p.waitForTimeout(1500);
+    return p.evaluate(() => /PASO 2 DE 4/i.test(document.body.innerText));
+  }],
   ['mecanismo-receptores.jpg', 390, async p => {
     await ir(p, { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs', tab: 'mc-vasopresores' });
     await p.waitForTimeout(800);
     await p.evaluate(() => { const s = document.getElementById('mc-receptor-farmaco'); s.value = 'norepi'; s.dispatchEvent(new Event('change', { bubbles: true })); });
     await p.waitForTimeout(1200);
-    await p.evaluate(() => { const d = document.getElementById('mc-receptor-dosis'); if (d && d.options.length > 2) { d.selectedIndex = 2; d.dispatchEvent(new Event('change', { bubbles: true })); } });
-    await p.waitForTimeout(1300); // a mitad de la animación
+    await p.evaluate(() => { const d = document.getElementById('mc-receptor-dosis'); if (d && d.options.length > 1) { d.selectedIndex = d.options.length - 1; d.dispatchEvent(new Event('change', { bubbles: true })); } });
+    await p.waitForTimeout(500);
+    // Paso a paso: al paso 4 de 5, con la cascada encendida.
+    await p.waitForTimeout(12000); // acaba la reproducción solo al cambiar la dosis; luego se retrocede al paso 4
+    await p.evaluate(() => document.querySelector('#mc-recep-anim [data-ra="prev"]')?.click()); await p.waitForTimeout(2500);
     await p.evaluate(() => window.scrollTo(0, document.getElementById('mc-recep-anim').getBoundingClientRect().top + scrollY - 40));
-    return p.evaluate(() => document.getElementById('mc-receptores').offsetParent !== null);
+    return p.evaluate(() => /Paso 4 de 5/.test(document.getElementById('mc-recep-anim').textContent));
   }],
   ['8-estudiar-b1.jpg', 390, async p => {
     await ir(p, { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs', tab: 'mar-cristaloides' });
@@ -120,6 +162,27 @@ const CAPTURAS = [
     for (const s of ['#mar-cristaloides [data-accion="ops"]', '#mar-cristaloides [data-op="0"]']) { await p.evaluate(s => document.querySelector(s)?.click(), s); await p.waitForTimeout(600); }
     await p.evaluate(() => { const z = document.querySelector('#mar-cristaloides .may-zona'); window.scrollTo(0, z.getBoundingClientRect().top + scrollY - 120); });
     return p.evaluate(() => [...document.querySelectorAll('#mar-cristaloides .may-zona')].some(z => z.offsetParent));
+  }],
+  // Examen de b1-fluidos contestado mal a propósito: prueba cada opción hasta que falle.
+  ['8-examen-fallado.jpg', 390, async p => {
+    const abre = async () => {
+      await ir(p, { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs', tab: 'mar-cristaloides' });
+      await p.waitForTimeout(1000);
+      await p.evaluate(() => document.querySelector('#mar-cristaloides button[data-vista="mayeutica"]')?.click()); await p.waitForTimeout(600);
+      await p.evaluate(() => document.querySelector('#mar-cristaloides [data-ir-paso="examen"]')?.click()); await p.waitForTimeout(700);
+      await p.evaluate(() => [...document.querySelectorAll('#mar-cristaloides .may-zona button')].find(b => b.offsetParent && /Empezar|Comenzar/.test(b.textContent))?.click()); await p.waitForTimeout(600);
+    };
+    await abre();
+    for (const s of ['#mar-cristaloides [data-accion="ops"]']) { await p.evaluate(s => document.querySelector(s)?.click(), s); await p.waitForTimeout(500); }
+    for (let k = 0; k < 4; k++) {
+      await p.evaluate(k => [...document.querySelectorAll('#mar-cristaloides [data-op]')].find(b => b.offsetParent && b.dataset.op === String(k))?.click(), k);
+      await p.waitForTimeout(700);
+      const mal = await p.evaluate(() => !!document.querySelector('#mar-cristaloides .may-op.mal, #mar-cristaloides .may-op[class*="mal"], #mar-cristaloides .may-op.fallo'));
+      if (mal) break;
+      await abre(); await p.evaluate(() => document.querySelector('#mar-cristaloides [data-accion="ops"]')?.click()); await p.waitForTimeout(500);
+    }
+    await p.evaluate(() => { const z = [...document.querySelectorAll('#mar-cristaloides .may-zona')].find(z => z.offsetParent); window.scrollTo(0, z.getBoundingClientRect().top + scrollY - 120); });
+    return true;
   }],
   ['8-caso-clinico.jpg', 390, async p => {
     await p.goto(BASE + 'autonomo/modelos/preguntas-para-estudiar.html');
@@ -135,6 +198,29 @@ const CAPTURAS = [
     await p.waitForTimeout(300);
     await p.evaluate(() => window.scrollTo(0, document.getElementById('caso').getBoundingClientRect().top + scrollY - 10));
     return true;
+  }],
+  // Paso «encuentra el error» del caso, ya corregido (con las correcciones a la vista).
+  ['8-caso-error.jpg', 390, async p => {
+    await p.goto(BASE + 'autonomo/modelos/preguntas-para-estudiar.html');
+    await p.waitForSelector('#caso-paso');
+    for (let i = 0; i < 15 && !(await p.evaluate(() => !!document.querySelector('#caso-paso .frase'))); i++) {
+      await p.evaluate(() => { const c = document.querySelector('#caso-paso'); (c.querySelector('[data-accion="ops"]') || c.querySelector('[data-accion="destapa"]')) ?.click(); c.querySelector('[data-op="0"]')?.click(); c.querySelector('[data-accion="puntos"]')?.click(); c.querySelector('[data-accion="sig"]')?.click(); });
+      await p.waitForTimeout(250);
+    }
+    await p.evaluate(() => { document.querySelector('#caso-paso .frase[data-fr="0"]')?.click(); document.querySelector('#caso-paso [data-accion="corregir"]')?.click(); });
+    await p.waitForTimeout(300);
+    await p.evaluate(() => window.scrollTo(0, document.getElementById('caso').getBoundingClientRect().top + scrollY - 10));
+    return p.evaluate(() => !!document.querySelector('#caso-paso .frase.fallo, #caso-paso .frase.acierto'));
+  }],
+  ['8-caso-final.jpg', 390, async p => {
+    await p.goto(BASE + 'autonomo/modelos/preguntas-para-estudiar.html');
+    await p.waitForSelector('#caso-paso');
+    for (let i = 0; i < 25 && !(await p.evaluate(() => !!document.querySelector('#caso-paso .lleva'))); i++) {
+      await p.evaluate(() => { const c = document.querySelector('#caso-paso'); (c.querySelector('[data-accion="ops"]') || c.querySelector('[data-accion="destapa"]'))?.click(); c.querySelector('[data-op="0"]')?.click(); c.querySelector('[data-accion="puntos"]')?.click(); c.querySelector('[data-accion="corregir"]')?.click(); c.querySelector('[data-accion="sig"]')?.click(); });
+      await p.waitForTimeout(250);
+    }
+    await p.evaluate(() => window.scrollTo(0, document.getElementById('caso').getBoundingClientRect().top + scrollY - 10));
+    return p.evaluate(() => !!document.querySelector('#caso-paso .lleva'));
   }],
 ];
 
