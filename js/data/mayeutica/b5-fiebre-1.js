@@ -7,6 +7,9 @@
 // (ids `ma-…` de la ficha; los de otras fichas salen como enlace cruzado). Las cifras de los pacientes se inventan y se marcan
 // con `origen`. Formato: el de b1-fluidos.js. `modelo: { termostatoVivo: 'fiebre:2' }` abre el termostato vivo en ese paso.
 
+const PDF = 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf';
+const pag = n => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">PDF pág. ${n}</a>`;
+
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 
 export const MAYEUTICA_FIEBRE_1 = {
@@ -19,19 +22,19 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-g1', corto: 'el termómetro', tipo: 'test', fuente: 'ma-fiebre-termometria',
         enunciado: 'Un paciente con taquipnea y un catéter de arteria pulmonar con termistor. ¿Con qué medida decides si tiene fiebre?',
         opciones: [
-          { t: 'Con la temperatura central del termistor; sin él, oral o rectal', ok: true },
+          { t: 'Con la central del termistor; sin él, oral o rectal (las periféricas no sirven para decidir)', ok: true },
           { t: 'Con la axilar o la timpánica: son rápidas y, en la práctica, bastan', porque: 'Marino las considera de precisión no aceptable: tomarías decisiones, como pedir cultivos o retirar antibióticos, con una cifra que no es fiable.' },
           { t: 'Con la oral, que coincide con la central', porque: 'Con taquipnea la oral puede ser 0,5 °C más baja que la central: una central de 38,3 °C se leería 37,8 °C y no pedirías el estudio de la fiebre.' }],
         explicacion: 'Lo mejor es la <span class="hl">temperatura central continua</span>: catéter con termistor en la arteria pulmonar, el esófago o la vejiga. Si no hay, oral o rectal (la oral, <span class="hl-rojo">0,5 °C más baja</span> con taquipnea). Timpánica, temporal y axilar: <span class="hl-rojo">no tomar decisiones</span> con ellas.',
         origen: 'ficha · la resta 38,3 − 0,5 es la cuenta del ejemplo' },
-      { id: 'fbr-g2', corto: 'cuánto es fiebre', tipo: 'test', fuente: 'ma-fiebre-def · ma-tconv-calc', calculadora: { ir: 'ma-tconv-calc', nombre: 'Conversor °C ↔ °F y ¿es fiebre?' }, modelo: [{ termostatoVivo: 'juega' }, visual('ma-fiebre-basicos', '👁️ Cuánto es fiebre (vista Visual)')],
+      { id: 'fbr-g2', corto: 'cuánto es fiebre', tipo: 'test', fuente: 'ma-fiebre-def · ma-tconv-calc', modelo: [{ termostatoVivo: 'juega' }, visual('ma-fiebre-basicos', '👁️ Cuánto es fiebre (vista Visual)')],
         enunciado: 'Dos pacientes marcan 38,1 °C en la vejiga: el primero una sola vez y no es neutropénico; el segundo, neutropénico, lo mantiene durante 90 minutos. ¿Quién tiene fiebre según las guías?',
         opciones: [
           { t: 'Los dos: en la práctica cualquier cifra desde 38 °C ya se considera fiebre en la UCI', porque: 'Para el paciente no neutropénico el umbral es una sola medida de ≥38,3 °C. Con 38,1 °C una vez abrirías un estudio de fiebre que la guía no pide.' },
           { t: 'Solo el neutropénico: 38,0 °C mantenidos al menos 1 hora', ok: true },
           { t: 'Ninguno: en los dos hace falta ≥38,3 °C', porque: 'En el neutropénico basta 38,0 °C mantenido ≥1 h. Esperar a los 38,3 °C retrasaría el estudio y el antibiótico donde unas horas cuentan.' }],
         explicacion: 'Una sola medida de <span class="hl-rojo">≥38,3 °C</span> es fiebre y merece estudio; en el <span class="hl-rojo">neutropénico</span>, <span class="hl">38,0 °C mantenido al menos 1 hora</span>. La calculadora de la ficha lo aplica con 38,1 °C.' },
-      { id: 'fbr-g3', corto: 'tirita con 37,1', tipo: 'test', fuente: 'ma-fiebre-adaptativa · ma-fiebre-def · inmuno-fiebre-fisiologia · ma-antipireticos', modelo: [{ termostatoVivo: 'fiebre:2' }, { termostatoVivo: 'fiebre:4' }],
+      { id: 'fbr-g3', corto: 'tirita con 37,1', tipo: 'test', fuente: 'ma-fiebre-adaptativa · ma-fiebre-def · inmuno-fiebre-fisiologia · ma-antipireticos', modelo: [{ termostatoVivo: 'fiebre:2', texto: '🌡️ Paso 2: tirita con 37,1 °C y el ajuste en 39,6' }, { termostatoVivo: 'fiebre:4', texto: '🌡️ Paso 4: la temperatura alcanza el ajuste y deja de tiritar' }],
         enunciado: 'Predice, y luego lo compruebas en el modelo: una paciente con la temperatura en 37,1 °C tirita, con la piel fría y cerrada. ¿Por qué tirita si no tiene calor?',
         opciones: [
           { t: 'El hipotálamo subió el ajuste: se cree frío y fabrica calor', ok: true },
@@ -42,9 +45,9 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-g4', corto: 'fiebre alta', tipo: 'test', fuente: 'ma-fiebre-inflamacion',
         enunciado: 'Un paciente tiene 39,8 °C y otro 38,4 °C. ¿Pesa más la fiebre de 39,8 °C para decir «es una infección»?',
         opciones: [
-          { t: 'Sí: cuanto más alta es la fiebre, más probable es que haya una infección detrás', porque: 'Ni la presencia ni la altura de la fiebre se correlacionan con la infección. Pedirías antibióticos por la cifra y dejarías de buscar la causa inflamatoria no infecciosa.' },
+          { t: 'Sí: cuanto más alta la fiebre, más probable la infección', porque: 'Ni la presencia ni la altura de la fiebre se correlacionan con la infección. Pedirías antibióticos por la cifra y dejarías de buscar la causa inflamatoria no infecciosa.' },
           { t: 'Sí, pero solo por encima de 39 °C', porque: 'La ficha no da ningún corte: hay fiebres altas sin infección e infecciones graves sin fiebre. Con ese corte atribuirías infección a una fiebre inflamatoria.' },
-          { t: 'No: ni la presencia ni la altura se correlacionan con infección o gravedad', ok: true }],
+          { t: 'No: ni la presencia de fiebre ni su altura se correlacionan con infección ni con gravedad', ok: true }],
         explicacion: 'Las citocinas inflamatorias (pirógenos endógenos) actúan sobre el hipotálamo: <span class="hl">cualquier inflamación sistémica da fiebre</span>. Por eso <span class="hl-rojo">el 50 % de las fiebres de la UCI no tienen infección</span> y distinguirlo ahorra antibióticos.' },
       { id: 'fbr-g5', corto: 'atelectasia', tipo: 'test', fuente: 'ma-fiebre-postop · mar-img-44-2',
         enunciado: 'Primer día tras cirugía cardíaca (100 pacientes, Figura 44.2): casi el 90 % de los febriles tienen atelectasia. ¿Es la atelectasia la causa de la fiebre?',
@@ -60,7 +63,7 @@ export const MAYEUTICA_FIEBRE_1 = {
           'La acompañan <span class="hl-rojo">escalofríos con temblor intenso (53 %)</span> e hipotensión (~20 %), que pueden parecer graves; la eosinofilia y el exantema faltan en más del 75 %.',
           'Se confirma <span class="hl-azul">retirando el fármaco</span>: la fiebre desaparece en 72 h.'],
         explicacion: 'Hipersensibilidad o idiosincrasia; cualquier fármaco puede darla (Tabla 44.3: anfotericina, carbamazepina, cefalosporinas, heparinas, penicilinas, fenitoína, procainamida, quinidina).',
-        nota: '<b>Nota de fidelidad.</b> El texto dice «alrededor del 20 %» de hipotensión y la Tabla 44.3 da 18 %. Se reproducen las dos.' },
+        nota: '<b>Nota de fidelidad.</b> El texto dice «alrededor del 20 %» de hipotensión y la Tabla 44.3 da 18 %. Se reproducen las dos (' + pag(63) + ' y ' + pag(64) + ').' },
       { id: 'fbr-g7', corto: 'la nota del R1', tipo: 'error', fuente: 'ma-fiebre-postop · ma-fiebre-otras · ma-fiebre-termometria',
         enunciado: 'La nota de un R1 en el primer día de un posoperatorio de cirugía mayor. Encuentra los errores (0, 1 o 2).',
         frases: [
@@ -89,15 +92,15 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'fbr-e3', corto: 'fiebre del día 1', tipo: 'test', fuente: 'ma-fiebre-postop',
         enunciado: 'Fiebre el primer día tras cirugía mayor. ¿Con qué frecuencia ocurre y cuál es su causa habitual?',
         opciones: [
-          { t: 'En más del 90 %, por la atelectasia de la anestesia', porque: 'El 90 % es la frecuencia de atelectasia en las anestesias generales; la atelectasia es frecuente, pero no causa fiebre. Tratarías con antibiótico lo que se pasa solo.' },
-          { t: 'En el 15-40 %, por la respuesta al daño tisular; cede en 24-48 h', ok: true },
+          { t: 'En más del 90 %, por la atelectasia', porque: 'El 90 % es la frecuencia de atelectasia en las anestesias generales; la atelectasia es frecuente, pero no causa fiebre. Tratarías con antibiótico lo que se pasa solo.' },
+          { t: 'En el 15-40 %, por la respuesta inflamatoria al daño tisular, sin infección en la mayoría; cede en 24-48 h', ok: true },
           { t: 'En menos del 5 %, y casi siempre se debe a una infección de la herida quirúrgica', porque: 'La herida se infecta típicamente a los 5-7 días, no el día 1, donde en la mayoría no hay infección. Pedirías cultivos y antibiótico de entrada.' }],
         explicacion: 'Fiebre el primer día en el <span class="hl">15-40 %</span> de la cirugía mayor: respuesta al daño tisular, en la mayoría no hay infección, cede en <span class="hl-verde">24-48 h</span>.' },
       { id: 'fbr-e4', corto: 'fiebre no hemolítica', tipo: 'test', fuente: 'ma-fiebre-tev-transfusion · merino-riesgos',
         enunciado: 'La fiebre no hemolítica de una transfusión de hematíes aparece:',
         opciones: [
-          { t: 'Durante la transfusión o en las 6 h siguientes', ok: true },
-          { t: 'A los 3-5 días de la transfusión, por hemólisis del donante', porque: 'No es hemolítica: la causan anticuerpos del receptor contra leucocitos del donante. Esperar días hace atribuirla a otra cosa o confundirla con una reacción grave.' },
+          { t: 'Durante la transfusión o en las 6 h siguientes, por anticuerpos del receptor contra leucocitos del donante', ok: true },
+          { t: 'A los 3-5 días, por hemólisis del donante', porque: 'No es hemolítica: la causan anticuerpos del receptor contra leucocitos del donante. Esperar días hace atribuirla a otra cosa o confundirla con una reacción grave.' },
           { t: 'Más con plaquetas que con hematíes', porque: 'Es al revés: con hematíes es la reacción adversa más frecuente; con plaquetas es infrecuente (~1 por 1.000 unidades de donante único).' }],
         explicacion: 'Es la reacción adversa más frecuente de los hematíes: <span class="hl-rojo">durante la transfusión o en las 6 h siguientes</span>, por anticuerpos del receptor contra leucocitos del donante; más en politransfundidos. Con plaquetas, ~1 por 1.000 unidades.' },
       { id: 'fbr-e5', corto: 'fármaco sin exantema', tipo: 'test', fuente: 'ma-fiebre-farmacos · ma-tabla-44-3-hallazgos',
@@ -111,7 +114,7 @@ export const MAYEUTICA_FIEBRE_1 = {
         enunciado: 'Según la Tabla 44.2, ¿cuál de estas causas no infecciosas figura entre las «menos frecuentes»?',
         opciones: [
           { t: 'Abstinencia de alcohol o drogas', porque: 'Está entre las más frecuentes. Si la crees rara, no la buscarás en un paciente agitado y febril unos días después del ingreso.' },
-          { t: 'Síndrome de Dressler (Tabla 44.2)', ok: true },
+          { t: 'Síndrome de Dressler', ok: true },
           { t: 'Lesión pulmonar inflamatoria (SDRA)', porque: 'También entre las más frecuentes: un SDRA es una fuente inflamatoria habitual de fiebre sin infección.' }],
         explicacion: 'Más frecuentes: postoperatoria precoz, tromboembolismo, fármacos, transfusiones, infarto de miocardio, abstinencia, lesión pulmonar inflamatoria, ictus isquémico. <span class="hl">Menos frecuentes</span>: insuficiencia suprarrenal, infarto intestinal, <span class="hl">síndrome de Dressler</span>, embolia grasa, lisis tumoral, hipertermia maligna, síndrome serotoninérgico, fiebre iatrogénica.' },
     ],
@@ -209,16 +212,16 @@ export const MAYEUTICA_FIEBRE_1 = {
           'El hemocultivo <span class="hl-rojo">no la descarta</span>: su sensibilidad puede ser tan baja como el 20 % (hay una PCR con >90 %).',
           'Una <span class="hl-azul">equinocandina</span> (o anfotericina si grave), no fluconazol: la mitad no son C. albicans.'],
         explicacion: 'La candiduria persistente o la infección urinaria por Candida suele ser consecuencia de la candidiasis diseminada: un signo valioso de enfermedad invasiva.',
-        nota: '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización»; este capítulo, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada». Se muestran las dos; no se elige una. (Los hemocultivos negativos en más del 50 % y la sensibilidad «tan baja como el 20 %» no se contradicen.)' },
-      { id: 'nsc-g5', corto: 'cuántos hemocultivos', tipo: 'test', fuente: 'ma-hemoc-numero · ma-tabla-fig44-3 · mar-img-44-3 · ma-hemoc-calc', calculadora: { ir: 'ma-hemoc-calc', nombre: '¿Cuántas bacteriemias detecto?' }, modelo: visual('ma-infecciones-nosocomiales', '👁️ Los hemocultivos (vista Visual)'),
+        nota: '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización»; este capítulo, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada». Se muestran las dos; no se elige una. (Los hemocultivos negativos en más del 50 % y la sensibilidad «tan baja como el 20 %» no se contradicen.) Cap. 42: ' + pag(42) + '; cap. 44: ' + pag(67) + '.' },
+      { id: 'nsc-g5', corto: 'cuántos hemocultivos', tipo: 'test', fuente: 'ma-hemoc-numero · ma-tabla-fig44-3 · mar-img-44-3 · ma-hemoc-calc', modelo: visual('ma-infecciones-nosocomiales', '👁️ Los hemocultivos (vista Visual)'),
         enunciado: 'Predice con la Figura 44.3: ¿cuántos hemocultivos en 24 h necesitas para pasar del 90 % de bacteriemias detectadas en «otras infecciones», y cuántos en la endocarditis?',
         opciones: [
           { t: '2 en otras infecciones (80 %) y 1 en la endocarditis (89 %), y así evito extraer sangre de más', porque: 'Los dos números se quedan por debajo del 90 %: con 2 hemocultivos en otras infecciones te escaparía 1 bacteriemia de cada 5.' },
           { t: '3 en otras (96 %) y 2 en la endocarditis (94 %), pues su bacteriemia es continua', ok: true },
-          { t: 'Siempre 4: solo con el cuarto se llega al 100 %', porque: 'El 100 % con 4 es por construcción del estudio (pacientes con ≥4 hemocultivos). Con 3 ya detectas el 96 %, y en la endocarditis bastan 2: extraerías sangre de más.' }],
+          { t: '4: solo con el cuarto se llega al 100 %', porque: 'El 100 % con 4 es por construcción del estudio (pacientes con ≥4 hemocultivos). Con 3 ya detectas el 96 %, y en la endocarditis bastan 2: extraerías sangre de más.' }],
         explicacion: '3-4 hemocultivos en 24 h; en la endocarditis bastan 2 (la bacteriemia es continua). Endocarditis: 89, 94, 94 y 100 %; otras infecciones: 65, 80, <span class="hl">96</span> y 100 %.',
         origen: 'ficha · Figura 44.3 · cuenta propia: 100 − 80 = 20 % se escapa, 1 de cada 5' },
-      { id: 'nsc-g6', corto: 'luz frente a periférica', tipo: 'test', fuente: 'ma-hemoc-multilumen · ma-dtp-calc · mar-bacteriemia-cateter', calculadora: { ir: 'ma-dtp-calc', nombre: 'Tiempo hasta la positividad' },
+      { id: 'nsc-g6', corto: 'luz frente a periférica', tipo: 'test', fuente: 'ma-hemoc-multilumen · ma-dtp-calc · mar-bacteriemia-cateter',
         enunciado: 'Predice: el frasco de una luz del catéter crece a las 10 h y el de la sangre periférica, con el mismo germen, a las 11 h. ¿Demuestra que el catéter es la fuente?',
         opciones: [
           { t: 'No: crece solo 1 h antes, menos de las 2 h que se exigen', ok: true },
@@ -229,8 +232,8 @@ export const MAYEUTICA_FIEBRE_1 = {
       { id: 'nsc-g7', corto: 'sin demora', tipo: 'test', fuente: 'ma-empirico', modelo: { termostatoVivo: 'fiebre:1' },
         enunciado: '¿A cuál de estos pacientes febriles no le demoras ni unas horas el antibiótico empírico?',
         opciones: [
-          { t: 'Al neutropénico con menos de 500 neutrófilos', ok: true },
-          { t: 'Al paciente con 38,4 °C aislada y sin foco sospechado', porque: 'La ficha pide antibiótico si la infección es probable; con una fiebre aislada, antes se hacen los hemocultivos y se busca la fuente.' },
+          { t: 'Al neutropénico con menos de 500 neutrófilos: unas horas de retraso ya empeoran el pronóstico', ok: true },
+          { t: 'Al paciente con 38,4 °C aislada y sin foco sospechado', porque: 'Sin foco ni neutropenia no hay prisa de horas: hemocultivos (Marino los pide en toda fiebre con posible infección, pág. 67) y antibiótico si la infección es probable.' },
           { t: 'Al del primer día de una cirugía mayor', porque: 'Es respuesta al daño tisular y cede en 24-48 h: un antibiótico sin indicación y sin cultivos previos.' }],
         explicacion: 'Antibiótico empírico si la infección es probable; <span class="hl-rojo">sin demora en el neutropénico (<500)</span>, donde unas horas cuentan. Antes del antibiótico, hemocultivos bien hechos.' },
     ],
@@ -243,12 +246,12 @@ export const MAYEUTICA_FIEBRE_1 = {
           { t: 'La bacteriemia asociada a catéter (14.003 en UCI)', porque: 'Es más que la urinaria (12.208), pero los eventos del ventilador la triplican con holgura.' }],
         origen: 'ficha · Tabla 44.4 · cuenta propia: 47.254 / 14.003 ≈ 3,4 veces',
         explicacion: '<span class="hl">Eventos asociados al ventilador: 47.254</span> en UCI (de 50.050 en total); bacteriemia por catéter 14.003 e infección urinaria por sonda 12.208 en UCI.',
-        nota: '<b>Nota de fidelidad.</b> El pie de la tabla atribuye los datos a la referencia 21, pero el texto los cita como referencia 22.' },
+        nota: '<b>Nota de fidelidad.</b> El pie de la tabla atribuye los datos a la referencia 21, pero el texto los cita como referencia 22 (' + pag(65) + ').' },
       { id: 'nsc-e2', corto: 'volumen de sangre', tipo: 'test', fuente: 'ma-hemoc-volumen',
         enunciado: 'Pasar de 20 a 30 mL de sangre por punción:',
         opciones: [
-          { t: 'Sube el rendimiento un 10 %, con los 10 mL extra en el frasco aerobio', ok: true },
-          { t: 'Sube el rendimiento un 30 %, con el extra repartido entre ambos frascos', porque: 'La subida es del 10 % y el volumen extra va al aerobio. Con 30 % esperado, creerías que un negativo es más fiable de lo que es.' },
+          { t: 'Sube el rendimiento un 10 %; los 10 mL extra van al frasco aerobio, no repartidos', ok: true },
+          { t: 'Sube un 30 %, repartido entre ambos frascos', porque: 'La subida es del 10 % y el volumen extra va al aerobio. Con 30 % esperado, creerías que un negativo es más fiable de lo que es.' },
           { t: 'No cambia el rendimiento: lo importante es el número de punciones', porque: 'El número de punciones importa (3-4 en 24 h), pero el volumen también: lo óptimo son 20-30 mL.' }],
         explicacion: 'Lo óptimo es <span class="hl">20-30 mL por punción</span>. Lo habitual son 20 mL (10 aerobio + 10 anaerobio); con 30 mL el rendimiento sube <span class="hl">un 10 %</span> poniendo los 10 mL extra en el aerobio.' },
       { id: 'nsc-e3', corto: 'panel molecular', tipo: 'test', fuente: 'ma-hemoc-molecular',
@@ -258,20 +261,20 @@ export const MAYEUTICA_FIEBRE_1 = {
           { t: 'Porque tarda 48 h o más en dar resultado', porque: 'Eso es lo que tarda el cultivo convencional; el panel da resultado en 3-5 h. Confundirlos te haría descartarlo por un defecto que no tiene.' },
           { t: 'Porque su sensibilidad y su especificidad son de solo el 20 % para cualquiera de las seis bacterias', porque: 'El 20 % es la sensibilidad del hemocultivo para la candidiasis invasiva; el panel tiene un 90 %. Descartarías la prueba por una cifra que no es suya.' }],
         explicacion: 'El panel detecta E. coli, P. aeruginosa, K. pneumoniae, S. aureus, E. faecium y A. baumannii; <span class="hl-rojo">un positivo necesita el antibiograma y un negativo no descarta otros gérmenes</span>.',
-        nota: '<b>Nota de fidelidad.</b> El texto escribe «A. baumannni» (errata de A. baumannii).' },
+        nota: '<b>Nota de fidelidad.</b> El texto escribe «A. baumannni» (errata de A. baumannii; ' + pag(69) + ').' },
       { id: 'nsc-e4', corto: 'ETT protésica', tipo: 'test', fuente: 'ma-endocarditis',
         enunciado: 'Sensibilidad de la ecocardiografía transtorácica para la endocarditis en una válvula protésica:',
         opciones: [
           { t: '60-70 %, como en la válvula nativa', porque: 'Es la cifra de la válvula nativa; en la protésica es menor (50 %). Te fiarías de una ETT negativa más de lo debido.' },
           { t: '≥90 %, como la transesofágica', porque: 'El ≥90 % es de la ETE. Descartarías una endocarditis protésica con una ETT que se escapa la mitad.' },
-          { t: 'Un 50 %, menos que en la nativa', ok: true }],
+          { t: 'Un 50 %: menos que en la nativa, así que la negativa obliga a la ETE', ok: true }],
         explicacion: 'ETT primero: sensibilidad <span class="hl">60-70 % en válvula nativa y 50 % en protésica</span>; si es negativa, <span class="hl-rojo">ETE (≥90 %)</span>.' },
       { id: 'nsc-e5', corto: 'peritonitis', tipo: 'test', fuente: 'ma-peritonitis',
         enunciado: 'Un posoperatorio de cirugía abdominal extensa con fiebre persistente. ¿Cuándo debes pensar en peritonitis o absceso?',
         opciones: [
           { t: 'Con fiebre persistente o tardía (≥1 semana) tras cirugía extensa o contaminada', ok: true },
           { t: 'Solo si la fiebre aparece el primer día tras la cirugía abdominal y cede en 48 h', porque: 'La fiebre del día 1 es la respuesta al daño tisular y cede en 24-48 h; no apunta a peritonitis.' },
-          { t: 'Es la PBE: solo en el cirrótico con ascitis', porque: 'La PBE es del cirrótico con ascitis, pero la peritonitis posoperatoria es otra entidad: la perderías tras cirugía contaminada.' }],
+          { t: 'Con fiebre a las 48 h de una cirugía limpia, aunque ceda sola', porque: 'Es fiebre posoperatoria precoz (pág. 62); la peritonitis o el absceso se piensan con fiebre persistente o tardía, de una semana o más (pág. 66).' }],
         explicacion: '<span class="hl">Peritonitis o absceso</span> tras cirugía abdominal extensa o contaminada con fiebre persistente o tardía (≥1 semana); PBE en el cirrótico con ascitis y fiebre sin explicación.' },
       { id: 'nsc-e6', corto: 'cuándo vancomicina', tipo: 'test', fuente: 'ma-empirico',
         enunciado: 'En la fiebre con sospecha de infección, ¿cuándo añades vancomicina al empírico de gramnegativos?',
