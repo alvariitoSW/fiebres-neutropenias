@@ -188,9 +188,9 @@ export function puntoValva(v, uu, vv) {
   const a = clamp(v.apertura, 0, 1);
   if (a === 0) return cerr;
   let w = res(BK, esc(v.n, pto(BK, v.n))); w = esc(w, 1 / (largo(w) || 1));
-  const la = l * 1.05 * vv;
+  const la = (v.largoMm ?? l * (v.largoAbierta ?? 1.05)) * vv;
   // thPunta (dibujo nuevo): el ángulo crece de thAbierta en el anillo a thPunta en el borde libre (sin gancho en la base)
-  const girada = (th) => { const t = v.thPunta === undefined ? th : th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(w, la * Math.cos(t)), esc(v.n, la * Math.sin(t)))); };
+  const girada = (th) => { if (v.haciaSepto) { const f = th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(v.haciaSepto, la * Math.sin(f)), esc(v.n, la * Math.cos(f)))); } const t = v.thPunta === undefined ? th : th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(w, la * Math.cos(t)), esc(v.n, la * Math.sin(t)))); };
   const media = girada(v.thAbierta / 2), abie = girada(v.thAbierta);
   const k0 = (1 - a) * (1 - 2 * a), k1 = 4 * a * (1 - a), k2 = a * (2 * a - 1);
   return [0, 1, 2].map(c => k0 * cerr[c] + k1 * media[c] + k2 * abie[c]);
@@ -566,7 +566,8 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const tentM = clamp(estado.tenting ?? 0, 0, 1) * TENTING_MM * (1 - ap('mitral'));
   const coapM = (t) => { const s0 = 1 - t, P0 = [0.508, 0.79], P1 = [-1.2, 0], P2 = [0.508, -0.79];
     const q = enAnilloM(s0 * s0 * P0[0] + 2 * s0 * t * P1[0] + t * t * P2[0], s0 * s0 * P0[1] + 2 * s0 * t * P1[1] + t * t * P2[1]); return [q[0], q[1], q[2] - tentM]; };
-  const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: opciones.ajustes?.mitralTh ?? 1.2, thPunta: opciones.ajustes?.mitralThPunta };
+  const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: opciones.ajustes?.mitralTh ?? 1.2, thPunta: opciones.ajustes?.mitralThPunta, largoAbierta: opciones.ajustes?.mitralLargo, largoMm: opciones.ajustes?.mitralLargoMm };
+  if (opciones.ajustes?.mitralSepto) { const d = [ac[0] - mc[0], ac[1] - mc[1]], nd = Math.hypot(d[0], d[1]) || 1; baseM.haciaSepto = [d[0] / nd, d[1] / nd, 0]; }   // dibujo nuevo: la valva anterior abierta se curva hacia el tabique (dirección centro mitral → centro aórtico)
   // C1 · Festones (Carpentier, Hahn 2013 p. 942-943): uu = 0 es la comisura posteromedial (ψ = 1) y uu = 1 la anterolateral
   // (ψ = −1), en las dos valvas, que cierran en la misma línea con el mismo uu: así A1-A3 quedan frente a P1-P3. Posterior:
   // tres festones con dos hendiduras (P2, el central, el mayor); anterior: sin hendiduras, solo las mismas tres regiones.
@@ -575,7 +576,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const HENDIDURA = 0.35, ANCHO_HEND = 0.05, NU_M = 20;
   const hendidura = (v) => v.hendido ? (uu) => 1 - HENDIDURA * v.apertura * Math.max(0, ...[0.3, 0.7].map(s => 1 - Math.abs(uu - s) / ANCHO_HEND)) : () => 1;
   const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t, festones: FESTONES_M('A') },
-    { ...baseM, thPunta: undefined, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
+    { ...baseM, thPunta: undefined, largoAbierta: undefined, largoMm: undefined, haciaSepto: undefined, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
   for (const v of valvasM) { v.alto = hendidura(v); v.borde = (uu) => puntoValva(v, uu, v.alto(uu));
     anadirR(v.nombre, rejilla(NU_M, NV_V, (uu, vv) => puntoValva(v, uu, vv * v.alto(uu))), COLORES.valva, { dobleCara: true, segmentos: v.festones, malla: [NU_M, NV_V] }); }
   // B5 · Cortina aorto-mitral: la continuidad fibrosa entre la raíz aórtica (cúspides no coronaria e izquierda) y la valva
@@ -602,7 +603,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   // C1 · Cúspides con nombre (Hahn 2013 p. 945): cada una por la coronaria que nace de su seno (ostios en ψ 1,66 y −0,44, abajo)
   const CUSPIDES_AO = ['coronaria derecha', 'no coronaria', 'coronaria izquierda'];
   for (let k = 0; k < 3; k++) { const a = Math.PI / 6 + k * TAU / 3, b = a + TAU / 3;
-    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: opciones.ajustes?.cuspidesPlanas ? 0.4 : 2.5, pot: 3, hundir: opciones.ajustes?.cuspidesPlanas ? 0 : 2, abomba: opciones.ajustes?.cuspidesPlanas ? 1.2 : 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true, segmentos: [[CUSPIDES_AO[k], 0, 1]], malla: [12, 7] }); }
+    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, pot: 3, hundir: opciones.ajustes?.cuspidesPlanas ? 0 : 2, abomba: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true, segmentos: [[CUSPIDES_AO[k], 0, 1]], malla: [12, 7] }); }
   const mT = inf.marcos[NK];
   const anilloPuV = (psi) => sum(P, sum(esc(mT.e1, (rP - 0.4) * Math.cos(psi)), esc(mT.e2, (rP - 0.4) * Math.sin(psi))));
   for (let k = 0; k < 3; k++) { const a = k * TAU / 3, b = a + TAU / 3;
