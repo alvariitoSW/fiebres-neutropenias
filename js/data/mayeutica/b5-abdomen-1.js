@@ -29,7 +29,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
       { id: 'pdx-g2', corto: 'bebe y vía biliar', tipo: 'test', fuente: 'ma-tabla-40-1 · ma-panc-imagen',
         enunciado: 'Pancreatitis aguda confirmada en un varón que bebe a diario. ¿Por qué evalúas igualmente la vesícula y la vía biliar?',
         opciones: [
-          { t: 'Porque la litiasis es la primera causa (21-33 %; alcohol, 16-27 %) y la vía biliar se evalúa en todos', ok: true },
+          { t: 'Porque la litiasis es la primera causa (21-33 %; alcohol, 16-27 %) y la vía biliar se evalúa en todos ellos', ok: true },
           { t: 'Solo si la ecografía previa lo pidió: en un bebedor la causa es el alcohol, que va por delante de las piedras', porque: 'El alcohol es la segunda causa (16-27 %), no la primera. Si das el diagnóstico por el antecedente, puedes dejar sin tratar una litiasis y exponerle a otro episodio.' },
           { t: 'Porque la causa idiopática (10-15 %) exige descartar la vía biliar, pero no las demás causas conocidas', porque: 'La evaluación biliar se pide en todos los casos confirmados porque la litiasis es la primera causa, no solo en las idiopáticas. Limitarla deja escapar una litiasis tratable.' }],
         explicacion: `Tabla 40.1: litiasis biliar 21-33 %, alcohol 16-27 %, idiopática 10-15 % (${pag(17)}); como la litiasis es la primera causa, se evalúan vesícula y vía biliar en todos los casos confirmados (${pag(20)}). El texto agrupa las tres como «unas tres cuartas partes» (${pag(16)}).`,
