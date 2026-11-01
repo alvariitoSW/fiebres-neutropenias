@@ -45,7 +45,7 @@ const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
 // más temprana y la sístole algo más larga hace domo (máximo entre el 30 y el 65 % del chorro; Zoghbi 2017, Fig. 29, PDF p. 49).
 // Valores ILUSTRATIVOS, calibrados a esa forma sin mover vIT, PSAP, FEVD ni TAPSE más de un 5 %
 const TEP_U_MED = 0.66;   // u de g = 0,5
-const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) }; };
+const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) + 0.03 * Math.max(0, (u - 0.85) / 0.15) }; };
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 // Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
@@ -85,7 +85,7 @@ const HPC_DEFECTO = 0.55;
 const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
   return { k: x < 0.55 ? 1 + 13.5 * x : 8.425 + (12 - 8.425) * (x - 0.55) / 0.45, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
     // activación del VD con domo en el chorro de IT (motor.mjs, fSubidaVd): subida más temprana, sístole un 3 % más larga y Ees un 8 % mayor (ilustrativo, ver tepVd)
-    fSubidaVd: 0.55 - 0.08 * Math.min(1, x / 0.6), durX: 1 + 0.03 * Math.min(1, x / 0.6), eesX: 1 + 0.08 * Math.min(1, x / 0.6),
+    fSubidaVd: 0.55 - 0.08 * Math.min(1, x / 0.6), durX: 1 + 0.03 * Math.min(1, x / 0.6), eesX: 1 + 0.08 * Math.min(1, x / 0.6), kEyecVdX: 1 + 0.3 * Math.min(1, x / 0.6) * (1 - c01((x - 0.6) / 0.4)),
     mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 1200 * c01((x - 0.6) / 0.4), b: 1 + 0.4 * x, tab: 0.05 + 0.15 * c01((x - 0.6) / 0.4), v0: 60 * c01((x - 0.5) / 0.5) ** 1.5 }; };
 // Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
 const HVI_DEFECTO = 0.2;
@@ -204,7 +204,7 @@ export const ESCENARIOS = {
     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
-      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd * r.durX; m.p.fSubidaVd = r.fSubidaVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd * r.durX; m.p.fSubidaVd = r.fSubidaVd; m.p.kEyecVd *= r.kEyecVdX; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
       m.p.vd.ees *= r.ees * r.eesX; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
   },
 };
