@@ -117,6 +117,41 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   await p.evaluate(() => { document.getElementById('dock').classList.add('abierto'); }); await p.waitForTimeout(200); await p.screenshot({ path: `${CAP}08-dock-${ANCHO}.png` });
   // ---- citas con doble enlace ----
   const cc = await p.evaluate(() => ({ n: document.querySelectorAll('.cita').length, mal: [...document.querySelectorAll('.cita')].filter((c) => !c.querySelector('.cita-pdf') || (c.querySelector('.ver-ficha') === null && !/Libro Azul|Younes|Huang/.test(c.textContent))).length })); console.log(' citas', cc); ok(cc.mal === 0, 'cita sin enlace');
+  // ---- v3: chip y frase siguen al caso y a la apuesta; lupa tras la retirada brusca; rótulo TSH/T4 coherente; sin NA con PAM >=65; un solo sello; notas y rótulos ----
+  { const chip = () => p.evaluate(() => [...document.querySelectorAll('[data-pre]')].filter((x) => x.getAttribute('aria-pressed') === 'true').map((x) => x.dataset.pre).join(','));
+    const frs = () => p.evaluate(() => document.getElementById('frase-txt').textContent);
+    const svgT = () => p.evaluate(() => document.getElementById('eje-svg').textContent);
+    const sigue = [['apuesta', 0, 'toribio', 'Toribio'], ['apuesta', 1, 'bibiana', 'Bibiana'], ['error', 0, 'obdulia', 'Obdulia'], ['error', 1, 'lucrecia', 'Lucrecia']];
+    await pre('policarpo');
+    for (const [m, k, pc, nom] of sigue) { await p.evaluate(([m, k]) => window.__eje.modoPrueba(m, k), [m, k]); ok((await chip()) === pc, `${ANCHO}: chip en ${m} ${k} es «${await chip()}», no ${pc}`); ok((await frs()).includes(nom), `${ANCHO}: frase viva en ${m} ${k} no nombra a ${nom}: ${await frs()}`); await pre('policarpo'); }
+    const bienC = [[/^Sospecho mixedema/, /^Primario/, /^Pongo ya la hidrocortisona/, /^Levotiroxina 50-100/], [/^Sigo con la hidrocortisona/, /^La mantengo/, /^Reinicio/]];
+    const nomC = [['obdulia', 'Obdulia'], ['toribio', 'Toribio']]; const frAnt = [];
+    for (const k of [0, 1]) { await pre('policarpo'); await p.evaluate((k) => window.__eje.modoPrueba('caso', k), k); let largas = 0, pasosC = k ? 3 : 4;
+      for (let i = 0; i < pasosC; i++) { ok((await chip()) === nomC[k][0], `${ANCHO}: chip en caso ${k} paso ${i + 1}: «${await chip()}»`); ok((await frs()).includes(nomC[k][1]), `${ANCHO}: frase viva en caso ${k} paso ${i + 1} no nombra a ${nomC[k][1]}: ${await frs()}`);
+        frAnt.push(await frs()); const ops = await p.$$eval('#prueba .op', (o) => o.map((x) => x.textContent)); const iBien = ops.findIndex((x) => bienC[k][i].test(x)); const lens = ops.map((x) => x.length);
+        if (k) { ok(iBien >= 0 && lens[iBien] === Math.max(...lens) ? (++largas, true) : true, ''); const o2 = lens.filter((_, j) => j !== iBien); ok(iBien < 0 || lens[iBien] <= Math.max(...o2) * 1.2 && lens[iBien] >= Math.min(...o2) * 0.8, `${ANCHO}: Toribio paso ${i + 1}: la correcta (${lens[iBien]}) se aparta >20 % de las otras (${o2})`); }
+        if (i < pasosC - 1) { await (await p.$$('#prueba .op'))[iBien].click(); await p.evaluate(() => document.querySelector('#prueba [data-sig]').click()); } }
+      if (k) ok(largas <= 1, `${ANCHO}: Toribio, la correcta es la más larga en ${largas} pasos`); }
+    ok(new Set(frAnt).size === frAnt.length, `${ANCHO}: la frase viva no cambia entre pasos del caso`);
+    // lupa de Toribio tras la retirada brusca (paso 3 del caso): sin hidrocortisona externa y sin «cubierto»
+    await p.evaluate(() => window.__eje.modoPrueba('caso', 1)); await p.evaluate(() => { window.__eje.setVista('eje'); window.__eje.set({ hc: 1, hcD: 0, dia: 5, parada: true }); }); { const x = await svgT(); ok(!/hidrocortisona/.test(x) && !/cubierto/.test(x) && /insuficiente/.test(x), `${ANCHO}: lupa de Toribio con parada pinta «${x.match(/hidrocortisona|cubierto/g)}»`); }
+    // Obdulia día 2 con levotiroxina: el rótulo no dice «TSH N · T4 N» junto a TSH 44,8 / T4 0,26
+    await pre('obdulia'); await p.evaluate(() => window.__eje.set({ hor: 'levo', horD: 1, dia: 2 })); { const x = await svgT(); ok(/TSH 4\d,\d/.test(x) && !/TSH N/.test(x) && !/T4 N/.test(x), `${ANCHO}: Obdulia con levotiroxina día 2 rotula «${(x.match(/TSH [^ ]+ · T4 [^ ]+|TSH N|T4 N/g) || []).join('|')}» junto a ${(x.match(/TSH 4\d,\d/) || [''])[0]}`); }
+    // Toribio sin NA con hidrocortisona a 3 días: PAM >= 65 y la FC baja; magnitudes ilustrativas
+    await pre('toribio'); await clic('#b-hc'); await dias(3); await p.evaluate(() => window.__eje.set({ na: 0 })); { const l = await rd(); ok(l.pam >= 65 && l.fc < 118 && l.fc >= 90, `${ANCHO}: Toribio sin NA a 3 días: PAM ${l.pam}, FC ${l.fc}`); ok(await clic('[data-a="ret"]') && await p.evaluate(() => window.__eje.s.ret), `${ANCHO}: la retirada no se puede hacer con PAM>=65 y lactato <2`); }
+    await pre('toribio'); await clic('#b-hc'); await p.evaluate(() => window.__eje.set({ na: 0 })); ok(!(await clic('[data-a="ret"]')), `${ANCHO}: retirar tocable el día 0 sin NA`);
+    await pre('bibiana'); await p.evaluate(() => window.__eje.set({ estres: 3, hc: 1, hcD: 0 })); { const l = await rd(); ok(l.pam >= 76 && l.pam <= 80, `${ANCHO}: Bibiana con cobertura PAM ${l.pam} (basal 78)`); }
+    // un solo sello bajo el monitor: nunca el mismo tope como sello y como chip amarillo
+    for (const c of PAC) { await pre(c); await p.evaluate(() => window.__eje.set({ vol: 3000, na: 1, estres: 3 })); await p.waitForTimeout(30); const dup = await p.evaluate(() => [...document.querySelectorAll('.tope-sello')].filter((s) => !s.hidden).map((s) => s.dataset.tope).filter((c) => [...document.querySelectorAll('.tope-linea span')].some((l) => l.dataset.tope === c && !l.hidden)));
+      ok(!dup.length, `${ANCHO}: ${c}: sello repetido como chip: ${dup}`); }
+    await pre('toribio'); { const dup = await p.evaluate(() => [...document.querySelectorAll('.tope-sello')].filter((s) => !s.hidden).map((s) => s.dataset.tope).filter((c) => [...document.querySelectorAll('.tope-linea span')].some((l) => l.dataset.tope === c && !l.hidden))); ok(!dup.length, `${ANCHO}: Toribio inicial: sello repetido ${dup}`); }
+    // 60 y 150 mg/día rotulados ilustrativo; nota de fuentes Langouche frente a Marino
+    await pre('bibiana'); await clic('[data-a="es+"]'); ok(/ilustrativo/.test(await p.evaluate(() => document.getElementById('eje-svg').textContent + document.getElementById('o-es').textContent)) && /60/.test(await svgT()), `${ANCHO}: «≈60 mg/día» sin rótulo ilustrativo`);
+    await clic('[data-a="es+"]'); await clic('[data-a="es+"]'); ok(/350/.test(await p.evaluate(() => document.getElementById('o-es').textContent)) && /Langouche/.test(await p.evaluate(() => [...document.querySelectorAll('.tope-sello')].map((x) => x.textContent).join(' '))), `${ANCHO}: tope 350 sin la nota de Langouche`);
+    ok(await p.evaluate(() => /producción de cortisol en el crítico/.test(document.body.textContent) && /~30-60 mg\/día/.test(document.body.textContent) && /350/.test(document.body.textContent)), `${ANCHO}: falta la nota de fuentes Langouche/Marino`);
+    // Langouche no apoya «insuficiente»: la guía de Toribio no dice que el cortisol no alcance
+    ok(await p.evaluate(() => !/no alcanza lo que el estrés exige/.test(document.body.textContent)), `${ANCHO}: queda «no alcanza lo que el estrés exige» atribuido a Langouche`);
+    await desb('v3'); }
   await ctx.close();
 }
 // ---- Motion y «reducir movimiento» ----

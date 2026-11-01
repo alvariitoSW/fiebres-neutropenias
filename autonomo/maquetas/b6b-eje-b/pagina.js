@@ -19,6 +19,8 @@ function aplicarTopes(L) {
   if (f === firma) { topeApi.refrescar(); return; } firma = f;
   for (const c of CLAVES) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag ? { p: t.pag, f: t.ficha } : null, origen: t.origen, deshabilita: t.off });
+  // un solo sello bajo el monitor: el chip amarillo solo para los topes que no están abiertos como sello
+  document.querySelectorAll('.tope-linea span[data-tope]').forEach((l) => { const sl = document.querySelector(`.tope-sello[data-tope="${l.dataset.tope}"]`); l.hidden = !!(sl && !sl.hidden); });
 }
 function pintar() {
   const P = PRES[s.pac], L = leer(s); aplicarTopes(L);
@@ -27,7 +29,7 @@ function pintar() {
   $('m-pa').textContent = q || `${L.pas}/${L.pad}`; $('m-pam').textContent = q || L.pam.toFixed(0); $('m-fc').textContent = L.fc; $('m-rit').textContent = L.ritmo; $('m-t').textContent = num(L.t); $('m-na').textContent = L.na;
   $('m-gl').textContent = L.gluc; $('m-lac').textContent = num(L.lact); $('m-nor').textContent = num(s.na.toFixed(1)); $('m-dia').textContent = s.dia;
   $('b-mapa').setAttribute('aria-pressed', String(vista === 'mapa')); $('b-mapa').textContent = vista === 'mapa' ? 'Ver el eje' : 'Ver el mapa';
-  $('mando-es').hidden = s.pac !== 'bibiana'; $('o-es').textContent = `Estrés ${s.estres} · ≈${PROD[s.estres]} mg/día`; $('b-ret').hidden = s.pac !== 'toribio'; $('b-ret').setAttribute('aria-pressed', String(s.ret)); $('b-ret').textContent = s.ret ? 'Retirada gradual en curso ✔' : 'Retirar la hidrocortisona poco a poco';
+  $('mando-es').hidden = s.pac !== 'bibiana'; $('o-es').textContent = `Estrés ${s.estres} · ≈${PROD[s.estres]} mg/día${s.estres === 1 || s.estres === 2 ? ' · ilustrativo' : ''}`; $('b-ret').hidden = s.pac !== 'toribio'; $('b-ret').setAttribute('aria-pressed', String(s.ret)); $('b-ret').textContent = s.ret ? 'Retirada gradual en curso ✔' : 'Retirar la hidrocortisona poco a poco';
   $('mando-pat').hidden = !(s.pac === 'sinforoso' || s.pac === 'obdulia'); document.querySelectorAll('[data-pat]').forEach((b) => { b.hidden = (b.dataset.pat === 't3tox' && s.pac !== 'sinforoso') || (b.dataset.pat === 'hipoS' && s.pac !== 'obdulia'); b.setAttribute('aria-pressed', String(b.dataset.pat === s.pat)); });
   $('m-pa').parentElement.className = !oculto && L.pam < 65 ? 'mal' : ''; $('m-t').parentElement.className = L.t > 40 || L.t < 35 ? 'mal' : '';
   document.querySelectorAll('[data-pre]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === preset)));
@@ -114,12 +116,12 @@ const opsHtml = (ops, extra = '') => `<div class="ops">${ops.map((o, i) => `<but
 function modoPrueba(m, k = 0) {
   modo = m; const caja = $('prueba'); caja.dataset.fin = ''; caja.dataset.k = k; caja.dataset.found = 0; caja.hidden = m === 'explorar'; caja.innerHTML = ''; if (m !== 'explorar') { $('guia').hidden = true; foco = null; } else if (guiaC) $('guia').hidden = false;
   if (m === 'explorar') { oculto = false; vista = 'eje'; return pintar(); }
-  if (m === 'apuesta') { const A = APUESTAS[k % APUESTAS.length]; caja.dataset.k = k % APUESTAS.length; s = nuevo(A.p); lup = PRES[A.p].lup; vista = A.vista; oculto = true; caja.innerHTML = `<h3>Apuesta</h3><p class="enun">${A.enun}</p>${opsHtml(A.ops)}`; }
-  if (m === 'error') { const E = ERRORES[k % ERRORES.length]; caja.dataset.k = k % ERRORES.length; s = nuevo(E.p); lup = E.lup; vista = 'eje'; oculto = false; caja.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${E.enun}</p>${opsHtml(E.fr, '<button type="button" class="op neutra" data-nada="1">No hay ningún error</button>')}`; }
+  if (m === 'apuesta') { const A = APUESTAS[k % APUESTAS.length]; caja.dataset.k = k % APUESTAS.length; s = nuevo(A.p); preset = A.p; lup = PRES[A.p].lup; vista = A.vista; oculto = true; frase(`${PRES[A.p].n}, ${PRES[A.p].e} años · ${PRES[A.p].caso}. Decide antes de ver la PA.`, 'caso inventado · constantes: ilustrativo'); caja.innerHTML = `<h3>Apuesta</h3><p class="enun">${A.enun}</p>${opsHtml(A.ops)}`; }
+  if (m === 'error') { const E = ERRORES[k % ERRORES.length]; caja.dataset.k = k % ERRORES.length; s = nuevo(E.p); preset = E.p; lup = E.lup; vista = 'eje'; oculto = false; frase(`Nota de ${PRES[E.p].n}, ${PRES[E.p].e} años: toca la frase con el error.`, 'caso inventado · constantes: ilustrativo'); caja.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${E.enun}</p>${opsHtml(E.fr, '<button type="button" class="op neutra" data-nada="1">No hay ningún error</button>')}`; }
   if (m === 'caso') { oculto = false; caja.dataset.k = k % CASOS.length; lup = CASOS[k % CASOS.length].lup; return paso(0); }
   pintar();
 }
-function paso(i) { const C = CASOS[+$('prueba').dataset.k], p = C.pasos[i]; s = { ...nuevo(C.pac), ...p.e }; vista = p.vista; $('prueba').dataset.paso = i; $('prueba').dataset.fin = ''; $('prueba').innerHTML = `<h3>Caso · ${C.titulo} · paso ${i + 1} de ${C.pasos.length}</h3><p class="enun">${p.enun}</p>${opsHtml(p.ops)}`; pintar(); }
+function paso(i) { const C = CASOS[+$('prueba').dataset.k], p = C.pasos[i]; s = { ...nuevo(C.pac), ...p.e }; preset = C.pac; vista = p.vista; frase(...p.fr); $('prueba').dataset.paso = i; $('prueba').dataset.fin = ''; $('prueba').innerHTML = `<h3>Caso · ${C.titulo} · paso ${i + 1} de ${C.pasos.length}</h3><p class="enun">${p.enun}</p>${opsHtml(p.ops)}`; pintar(); }
 $('prueba').addEventListener('click', (ev) => {
   const sig = ev.target.closest('[data-sig]'); if (sig) return paso(+sig.dataset.sig);
   const otro = ev.target.closest('[data-otro]'); if (otro) return modoPrueba(otro.dataset.otro, +$('prueba').dataset.k + 1);

@@ -29,7 +29,8 @@ export function leer(s) {
   const P = PRES[s.pac], hcOn = !!s.hc, toribio = s.pac === 'toribio';
   const falta = !!P.estres && !hcOn && s.estres >= 1;               // Bibiana: el estrés sin cobertura (p. 50)
   const sinHcLevo = s.pac === 'obdulia' && s.hor !== 'ninguna' && !hcOn;   // hormona antes que la hidrocortisona (p. 57): la PA cae
-  const crudo = P.pam + 6 * (1 - Math.exp(-s.vol / 1500)) + 21.8 * (1 - Math.exp(-s.na / 0.5)) + P.hcEf * s.hc - (falta ? 9 * s.estres : 0) - (sinHcLevo ? 12 : 0) - (s.parada ? 8 : 0);
+  const resol = toribio && hcOn ? 12 * rp(s, s.hcD, 3) * clamp(1 - s.na / 0.4, 0, 1) : 0;   // la sepsis cede con los días: sin vasopresor mantiene la PA (ilustrativo)
+  const crudo = P.pam + resol + 6 * (1 - Math.exp(-s.vol / 1500)) + 21.8 * (1 - Math.exp(-s.na / 0.5)) + P.hcEf * s.hc - (falta ? 9 * s.estres : 0) - (sinHcLevo ? 12 : 0) - (s.parada ? 8 : 0);
   const pam = Math.round(clamp(crudo, 30, 140) * 10) / 10;
   let fc = P.fc, t = P.t, na = P.na, lact = P.lact;
   // tirotoxicosis: antitiroideo, yodo, betabloqueante e hidrocortisona bajan T y FC en días (sentido p. 53-55)
@@ -41,7 +42,7 @@ export function leer(s) {
   // mixedema: hidrocortisona y hormona suben T, FC y Na⁺ en días (sentido p. 56-57)
   if (s.pac === 'obdulia') { const e2 = 0.4 * (hcOn ? rp(s, s.hcD, 4) : 0) + 0.6 * (s.hor !== 'ninguna' ? rp(s, s.horD, 4) : 0); t = Math.round((P.t + 3.2 * e2) * 10) / 10; fc = Math.round(P.fc + 27 * e2); na = Math.round(P.na + 14 * e2); }
   // CIRCI: con la hidrocortisona el lactato baja en días (p. 51: se retira con el lactato normal)
-  if (toribio && hcOn) lact = Math.round((P.lact - 2.6 * rp(s, s.hcD, 3)) * 10) / 10;
+  if (toribio && hcOn) { lact = Math.round((P.lact - 2.6 * rp(s, s.hcD, 3)) * 10) / 10; fc = Math.round(P.fc - 23 * rp(s, s.hcD, 3)); }   // FC 118 → ≈95 al resolverse: ilustrativo
   if (s.parada) fc += 12;   // rebote por la retirada brusca (p. 51): cifras ilustrativas
   if (falta) { fc += 8 * s.estres; lact = Math.round((P.lact + 0.7 * s.estres) * 10) / 10; } else if (P.estres) fc += 3 * s.estres;
   if (fc > 90) { const d = { prop: 35, meto: 30, esmolol: 45 }[s.bb] || 0; fc = Math.max(80, fc - d); }
@@ -49,7 +50,7 @@ export function leer(s) {
 }
 // ---- los dos ejes: niveles 0-1 (solo dibujo), texto del laboratorio solo cuando el caso lo da ----
 const SR = {
-  toribio: { need: .9, crh: .2, acth: .2, cort: .3, bl: ['hip', 'glan', 'org'], atro: 0, lab: 'Cortisol insuficiente para el estrés · no hace falta pedirlo' },
+  toribio: { need: .9, crh: .2, acth: .2, cort: .3, bl: ['hip', 'glan', 'org'], atro: 0, lab: 'Acción insuficiente (Fig. 51.1) · el «↓» del dibujo: ilustrativo' },
   bibiana: { need: .15, crh: .05, acth: .05, cort: .2, bl: ['hip'], atro: .8, ext0: .5, lab: 'Cortisol aleatorio 22 µg/dL' },
   sinforoso: { need: .3, crh: .3, acth: .3, cort: .3, bl: [], atro: 0, lab: 'Cortisol: no pedido' },
   lucrecia: { need: .8, crh: .6, acth: .6, cort: .45, bl: [], atro: 0, lab: 'Cortisol: no pedido' },
@@ -67,9 +68,10 @@ const fmt = (x) => (x < 0.01 ? '<0,01' : x < 1 ? String(Math.round(x * 100) / 10
 export function eje(s) {
   const a = { ...SR[s.pac] }, t = { ...TI[s.pac] }, lb = lab(s);
   a.ext = a.ext0 || 0; a.bloqueos = [...a.bl];
-  if (s.pac === 'bibiana') { a.need = .15 + .15 * s.estres; a.lab = `Cortisol aleatorio 22 µg/dL · necesita ≈${PROD[s.estres]} mg/día`; }
+  if (s.pac === 'bibiana') { a.need = .15 + .15 * s.estres; a.lab = `Cortisol aleatorio 22 µg/dL · necesita ≈${PROD[s.estres]} mg/día${s.estres === 0 || s.estres === 3 ? '' : ' (ilustrativo)'}`; }
   if (fEje(s)) { a.cort = .1; a.crh = .6; a.acth = .8; a.bloqueos = ['glan']; a.lab = 'Cortisol aleatorio 8 µg/dL (ilustrativo)'; }
-  if (s.hc) { a.ext = 1; a.crh *= .4; a.acth *= .4; a.cort = Math.max(a.cort, .9); }
+  if (s.hc && !s.parada) { a.ext = 1; a.crh *= .4; a.acth *= .4; a.cort = Math.max(a.cort, .9); }
+  if (s.parada) a.lab = 'Retirada brusca · tejido insuficiente · rebote (ilustrativo)';
   a.estado = a.cort >= a.need ? 'cubierto' : 'falta';
   if (lb) {
     const q = lb.t4 > 1.8 ? 1 : lb.t4 < 0.8 ? .1 : .5, r = lb.tsh > 4.5 ? 1 : lb.tsh < 0.3 ? 0 : .5;
@@ -84,7 +86,7 @@ export function eje(s) {
   if (s.bb === 'prop' && s.pac === 'lucrecia' && !t.bloq.includes('tij')) t.bloq.push('tij');
   if (s.hc && s.pac === 'lucrecia' && !t.bloq.includes('tij')) t.bloq.push('tij');
   t.ext = s.hor === 'levo' ? 'T4' : s.hor === 'lio' ? 'T3' : '';
-  if (s.hor === 'levo') { t.t4 = Math.max(t.t4, .55); t.tsh *= .6; } if (s.hor === 'lio') t.t3 = Math.max(t.t3, .6);
+  if (s.hor === 'levo' && !lb) { t.t4 = Math.max(t.t4, .55); t.tsh *= .6; } if (s.hor === 'lio') t.t3 = Math.max(t.t3, .6);
   return { a, t, lb };
 }
 // ---- topes: cada uno con título, consecuencia, página, origen y los botones que apaga ----
@@ -101,7 +103,7 @@ export function topes(s, L) {
   if (L.t > 40) sello('tormenta', 'Tormenta tiroidea', `T ${c1(L.t)} °C y FC ${L.fc}: fiebre mayor de 40 °C, delirio e insuficiencia cardíaca de gasto alto; mortalidad hasta el 25 %. Antitiroideo, yodo, betabloqueante e hidrocortisona, y dar tiempo.`, 53, 'mu-ti-tormenta', 'ficha p. 53 · días y cuánto baja: ilustrativo');
   if (L.fc >= 140) aviso('fc140', 'FC de 140 o más', 'En la tormenta, la taquicardia grave lleva a insuficiencia cardíaca de gasto alto.', 53, 'mu-ti-tormenta', 'ficha p. 53');
   if (L.t < 35 && !s.hc) sello('mixedema', 'Mixedema: hidrocortisona primero', `T ${c1(L.t)} °C, Na⁺ ${L.na}, FC ${L.fc}: mortalidad hasta el 60 %. La hidrocortisona va antes de la hormona.`, 56, 'mu-hipo-coma', 'ficha p. 56-57');
-  if (s.intento === 'levo' && !s.hc) sello('levo', 'Primero la hidrocortisona', 'Suele haber insuficiencia suprarrenal: la primera dosis de hidrocortisona va antes de la hormona tiroidea. Sin ella, la PA cae.', 57, 'mu-hipo-coma-tto', 'ficha p. 57 · cuánto cae la PA: ilustrativo', ['[data-a="levo"]', '[data-a="lio"]']);
+  if (s.intento === 'levo' && !s.hc) sello('levo', 'Primero la hidrocortisona', 'Suele haber insuficiencia suprarrenal: la primera dosis de hidrocortisona va antes de la hormona tiroidea. Que la PA caiga sin ella es inferencia de la maqueta: la ficha solo dice que la hidrocortisona va antes.', 57, 'mu-hipo-coma-tto', 'ficha p. 57 · la caída de la PA: inferencia, ilustrativo', ['[data-a="levo"]', '[data-a="lio"]']);
   if (s.intento === 'yodo') sello('yodo', 'Con un antitiroideo', 'La ficha da el yodo añadido al antitiroideo, en combinación: pon antes propiltiouracilo o metimazol.', 55, 'mu-ti-yodo', 'ficha p. 55', ['[data-a="yodo"]']);
   if (s.intento === 'eutiro') sello('eutiro', 'Eutiroideo enfermo: no se trata', 'La T3 baja con TSH normal no es hipotiroidismo clínico: no está indicada ninguna hormona ni antitiroideo.', 57, 'mu-hipo-eutiroideo-tto', 'ficha p. 57', ['[data-a="levo"]', '[data-a="lio"]', '[data-atd]', '[data-a="yodo"]']);
   if (s.intento === 'hiperx') sello('hiperx', 'Amiodarona: no se trata', 'T4 alta con TSH normal por amiodarona no es hipertiroidismo: la ficha no la trata.', 54, 'mu-ti-hipertiroxinemia', 'ficha p. 54', ['[data-atd]', '[data-a="yodo"]', '[data-a="levo"]', '[data-a="lio"]']);
@@ -117,12 +119,12 @@ export function topes(s, L) {
   // reloj, estrés y retirada
   if (s.dia >= U.dia) sello('dia', 'Reloj al máximo: 28 días', 'Tope de la maqueta: pasado un mes ya no se ve nada nuevo.', 0, '', 'fisiología general', ['[data-a="d1"]', '[data-a="d7"]']);
   if (s.pac === 'bibiana') {
-    if (s.estres >= 3) sello('estresMax', 'Tope: 350 mg al día', `El estrés máximo no da más: una glándula sana produce como mucho 350 mg/día (reposo, 15-25). Con PA ${L.pas}/${L.pad} y FC ${L.fc}, la suya no llega ni a eso: cobertura con hidrocortisona.`, 48, 'mu-sr-cortisol', 'ficha p. 48 · PA y FC: ilustrativo', ['[data-a="es+"]']);
+    if (s.estres >= 3) sello('estresMax', 'Tope: 350 mg al día', `El estrés máximo no da más: una glándula sana produce como mucho 350 mg/día (reposo, 15-25; Langouche 2023 da en el crítico ~30-60, ver notas). Con PA ${L.pas}/${L.pad} y FC ${L.fc}, la suya no llega ni a eso: cobertura con hidrocortisona.`, 48, 'mu-sr-cortisol', 'ficha p. 48 · PA y FC: ilustrativo', ['[data-a="es+"]']);
     else if (s.estres === 2) aviso('estres2', 'Cerca del tope', 'A un paso del máximo de 350 mg/día de cortisol.', 48, 'mu-sr-cortisol', 'ficha p. 48');
     if (L.falta) aviso('sincob', 'Estrés sin cobertura', `PA ${L.pas}/${L.pad} y FC ${L.fc}: el estrés sube la demanda de cortisol y la glándula atrofiada no responde.`, 50, 'mu-sr-clinica', 'ficha p. 50 · cuánto cae: ilustrativo');
   }
-  if (toribioRet(s, L)) aviso('retirar', 'Aún no retires', `Sigue el vasopresor o el lactato (${c1(L.lact)}) no es normal: espera a quitar la noradrenalina y a un lactato por debajo de 2.`, 51, 'mu-sr-retirada', 'ficha p. 51 · lactato normal; corte de 2 mmol/L: fisiología general', ['[data-a="ret"]']);
+  if (toribioRet(s, L)) aviso('retirar', 'Aún no retires', `Sigue el vasopresor, el lactato (${c1(L.lact)}) no es normal o la PA aún es baja: espera a quitar la noradrenalina, a un lactato por debajo de 2 y a una PAM de 65 o más.`, 51, 'mu-sr-retirada', 'ficha p. 51 · lactato normal; corte de 2 mmol/L: fisiología general', ['[data-a="ret"]']);
   if (L.crudo !== undefined && (s.vol > U.vol || s.na > U.na + 1e-9 || L.crudo < 30 || L.fc > 180 || L.fc < 30)) sello('imposible', 'Cifra imposible', 'Ningún paciente vivo tiene esa constante: el modelo se para.', 0, '', 'fisiología general');
   return T;
 }
-export const toribioRet = (s, L) => s.pac === 'toribio' && s.hc && !s.ret && (s.na > 0 || L.lact >= 2);
+export const toribioRet = (s, L) => s.pac === 'toribio' && s.hc && !s.ret && (s.na > 0 || L.lact >= 2 || L.pam < 65);
