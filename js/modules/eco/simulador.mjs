@@ -23,9 +23,9 @@ import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg } from './doppler.mjs';
 
-export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
+export const NOMBRE_VISTA = { a4c: 'A4C', a4cVd: 'A4C foco VD', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
-const ORDEN_VISTAS = ['a4c', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm', 'sc4c', 'scVci', 'sse'];
+const ORDEN_VISTAS = ['a4c', 'a4cVd', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm', 'sc4c', 'scVci', 'sse'];
 export { VISTAS, ESCENARIOS };
 
 /**

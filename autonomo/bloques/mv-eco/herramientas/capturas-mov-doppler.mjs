@@ -46,7 +46,7 @@ const secc = (clave, desc, lineas) => { md += `## ${clave} (${desc})\n` + lineas
 
 // 1. Movimiento: A, C (sístole media: eyección rápida), D (fin de sístole: eyección lenta), F (llenado rápido)
 const FASES4 = [['A', 'A · telediástole'], ['C', 'C · sístole media'], ['D', 'D · fin de sístole'], ['F', 'F · llenado rápido']];
-for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'], ['mov-normal-plax', 'normal', null, 'plax'], ['mov-hipertrofia-plax', 'hipertrofia', 1, 'plax'], ['mov-normal-psax', 'normal', null, 'psaxPm'], ['mov-hp-psax', 'hpcronica', 1, 'psaxPm'], ['mov-tep-a4c', 'tep', 1, 'a4c']]) {
+for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'], ['mov-normal-plax', 'normal', null, 'plax'], ['mov-hipertrofia-plax', 'hipertrofia', 1, 'plax'], ['mov-normal-psax', 'normal', null, 'psaxPm'], ['mov-hp-psax', 'hpcronica', 1, 'psaxPm'], ['mov-tep-a4c', 'tep', 1, 'a4c'], ['mov-normal-a4cvd', 'normal', null, 'a4cVd'], ['mov-hp-a4cvd', 'hpcronica', 1, 'a4cVd'], ['mov-tep-a4cvd', 'tep', 1, 'a4cVd']]) {
   if (!quiere('movimiento', clave)) continue;
   const pg = await abrir(clave, esc, g, vista); const trozos = [], L = [];
   await pg.waitForSelector('#cv-ciclo button[data-fase="A"]', { timeout: 60000 });
