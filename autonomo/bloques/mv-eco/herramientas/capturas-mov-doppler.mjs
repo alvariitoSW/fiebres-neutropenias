@@ -46,7 +46,7 @@ const secc = (clave, desc, lineas) => { md += `## ${clave} (${desc})\n` + lineas
 
 // 1. Movimiento: A, C (sístole media: eyección rápida), D (fin de sístole: eyección lenta), F (llenado rápido)
 const FASES4 = [['A', 'A · telediástole'], ['C', 'C · sístole media'], ['D', 'D · fin de sístole'], ['F', 'F · llenado rápido']];
-for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'], ['mov-normal-psax', 'normal', null, 'psaxPm'], ['mov-hp-psax', 'hpcronica', 1, 'psaxPm'], ['mov-tep-a4c', 'tep', 1, 'a4c']]) {
+for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'], ['mov-normal-plax', 'normal', null, 'plax'], ['mov-hipertrofia-plax', 'hipertrofia', 1, 'plax'], ['mov-normal-psax', 'normal', null, 'psaxPm'], ['mov-hp-psax', 'hpcronica', 1, 'psaxPm'], ['mov-tep-a4c', 'tep', 1, 'a4c']]) {
   if (!quiere('movimiento', clave)) continue;
   const pg = await abrir(clave, esc, g, vista); const trozos = [], L = [];
   await pg.waitForSelector('#cv-ciclo button[data-fase="A"]', { timeout: 60000 });
@@ -57,8 +57,9 @@ for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'],
     trozos.push((await lienzo.screenshot()).toString('base64'));
     L.push([rot, `VI ${await t(pg, 'cv-l-vi')} · VD ${await t(pg, 'cv-l-vd')} · Ao ${await t(pg, 'cv-l-ao')} · rótulo «${await t(pg, 'cv-eco-fase')}»`, 'monitor']);
   }
-  const edv = vol(L[0][1]), esv = vol(L[2][1]);
-  L.push(['VTD (VI, fase A)', edv + ' mL', 'monitor'], ['VTS (VI, fase D)', esv + ' mL', 'monitor'], ['FEVI', Math.round((edv - esv) / edv * 100) + ' %', 'derivado (VTD−VTS)/VTD'],
+  // máximo y mínimo del volumen del VI a lo largo del latido (no el de la fase: con barorreflejo la fase D no es el mínimo)
+  const { edv, esv } = await pg.evaluate(() => { const o = window.__motor.onda.map(x => x.vvi); return { edv: Math.max(...o), esv: Math.min(...o) }; });
+  L.push(['VTD (VI, máximo del latido)', edv.toFixed(0) + ' mL', 'motor.onda (volumen del VI)'], ['VTS (VI, mínimo del latido)', esv.toFixed(0) + ' mL', 'motor.onda (volumen del VI)'], ['FEVI', Math.round((edv - esv) / edv * 100) + ' %', 'derivado (VTD−VTS)/VTD'],
     ['Último latido', await t(pg, 'cv-l-lat'), 'monitor'], ['TAPSE', (await tapseApp(pg)) + ' mm', 'anatomia.mjs']);
   secc(clave, `${esc}${g != null ? ', g=' + g : ''}, ${vista}; recortes izquierda→derecha, arriba→abajo: A, C, D, F`, L);
   const h = await nav.newPage({ viewport: { width: 800, height: 800 } });
