@@ -706,7 +706,7 @@ export const ESTADOS_ANCLA = {
   di: { estado: { fijo: { na: 156 }, orina: { tipo: 'central', osm: 110, mlh: 400, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
   pseudo: { estado: { na0: 140, pseudo: true, fijo: { na: 128 } }, pestana: 'sodio', lupa: 'tubo' },
   // Hipernatremia con diurético (E p. 8): Na⁺ 160 ilustrativo (el de `hipernatremia`); la orina con furosemida lleva ~80 mEq/L
-  'furosemida-glucosado': { estado: { na0: 160, reloj: 'dias', perdida: 'diuretico' }, pestana: 'solutos', lupa: 'neurona' },
+  'furosemida-glucosado': { estado: { na0: 160, reloj: 'dias', perdida: 'diuretico' }, pestana: 'solutos', lupa: null },
   // Casilda (dato del caso): Na⁺ 116 → 6 h 126 con 180 mL/h de diuresis; un bolo de 150 mL, y sube 10 el primer día
   sobrecorreccion: { estado: { na0: 116, bolos3: 1, periodo3: '24h', fijo: { na: 126 }, orina: { tipo: 'acuosa', osm: null, mlh: 180, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
   desmopresina: { estado: { na0: 116, bolos3: 1, periodo3: '24h', fijo: { na: 126 }, orina: { tipo: 'acuosa', osm: null, mlh: 180, vaso: false }, desmo: true, restr: true }, pestana: 'sodio', lupa: 'neurona' },
