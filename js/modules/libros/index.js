@@ -45,6 +45,7 @@ import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { MAYEUTICA_APENDICES } from '../../data/mayeutica/b6b-apendices.js';
 import { MAYEUTICA_HIGADO } from '../../data/mayeutica/b6b-higado.js';
 import { MAYEUTICA_EJE } from '../../data/mayeutica/b6b-eje.js';
+import { MAYEUTICA_CUANTO } from '../../data/mayeutica/b6b-cuanto.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -232,6 +233,7 @@ export function init() {
     Object.entries(MAYEUTICA_HIGADO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Estudiar en el eje que calla (6H: suprarrenal, tiroides, hipotiroidismo), con el eje vivo como modelo
     Object.entries(MAYEUTICA_EJE).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_CUANTO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
