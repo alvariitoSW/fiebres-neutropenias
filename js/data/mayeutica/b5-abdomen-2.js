@@ -14,6 +14,9 @@ const pg = (...n) => ' (' + (n.length > 1 ? 'págs. ' : 'pág. ') + n.map(x => p
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado de siempre al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const SSC = '<a class="biblio-link" href="https://www.sccm.org/sccm/media/PDFs/Surviving-Sepsis-Campaign-2021-Guidelines-Infographic_Vasoactive-Agent.pdf?lang=en-US" target="_blank" rel="noopener">Surviving Sepsis Campaign 2021, vasoactivos</a>';
+const ACG = '<a class="biblio-link" href="https://www.pubmed.gov/34003176/" target="_blank" rel="noopener">Kelly CR et al., Am J Gastroenterol 2021;116:1124-47</a>';
+const TOK = '<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/29090866/" target="_blank" rel="noopener">Tokyo Guidelines 2018, antibióticos</a>';
 const septico = texto => ({ shockVivo: 'septico', texto });
 
 export const MAYEUTICA_ABDOMEN_2 = {
@@ -51,11 +54,11 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Una vesícula distendida con barro', porque: 'Sugieren la enfermedad, pero no son específicos: el barro aparece en muchos críticos. Operar o drenar por ese solo hallazgo se pasa de largo.' },
           { t: 'Mucosa desprendida en la luz', ok: true },
           { t: 'Una eco normal, porque la descarta', porque: 'Con sensibilidad del 81 % pierde casi 1 de cada 5. Quedarte tranquilo con una eco normal deja sin diagnosticar a quien tiene el cuadro.' }],
-        explicacion: 'Distensión y barro <span class="hl-rojo">sugieren pero no son específicos</span>. En la enfermedad avanzada se ve <span class="hl">mucosa desprendida en la luz</span>, típica de la colecistitis gangrenosa (Figura 41.1). En 26 estudios agrupados: sensibilidad del 81 % y especificidad del 83 %' + pg(26) + '.' },
+        explicacion: 'Distensión y barro <span class="hl-rojo">sugieren pero no son específicos</span>. En la enfermedad avanzada se ve <span class="hl">mucosa desprendida en la luz</span>, típica de la colecistitis gangrenosa (Figura 41.1). En 26 estudios agrupados: sensibilidad del 81 % y especificidad del 83 %. Ojo: esa cifra viene de un metaanálisis de colecistitis aguda en general (ref. 9 de Marino), no solo de la alitiásica' + pg(26) + '.' },
       { id: 'cole-g5', corto: 'cuándo el HIDA', tipo: 'test', fuente: 'ma-cole-hida', origen: 'ficha; los datos del paciente son ilustrativos',
         enunciado: 'La eco no es concluyente en un paciente con una insuficiencia hepática grave (bilirrubina 9 mg/dL). ¿Qué esperas de la gammagrafía HIDA, el patrón oro?',
         opciones: [
-          { t: 'Que rinda más que la TC, que es la prueba poco precisa del cuadro', porque: 'Es verdad que la TC rinde poco, pero ese no es el problema del HIDA: depende de que el hígado lleve el trazador a la bilis.' },
+          { t: 'Que no sirva, porque la TC rinde más que cualquier gammagrafía', porque: 'La TC es la prueba de precisión pobre; el HIDA sigue siendo el patrón oro, con la condición de que el hígado lleve el trazador a la bilis.' },
           { t: 'Que sea el patrón oro y no dependa del hígado', porque: 'Depende de él. Con un hígado que no funciona el trazador no llega a la bilis y pedirla pierde horas que este paciente no tiene.' },
           { t: 'Que falle si el hígado no mueve el trazador a la bilis', ok: true }],
         explicacion: 'Si la eco no es diagnóstica, el patrón oro es el HIDA, pero <span class="hl-rojo">necesita un hígado funcionante</span> para llevar el trazador a la bilis. La RM rinde como la eco; la TC, poco' + pg(26) + '.' },
@@ -67,7 +70,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Empiezo meropenem porque llega bien a la bilis.', mal: true, c: 'El meropenem es de <span class="hl-rojo">mala penetración</span> en la bilis (Tabla 41.1). Llegan bien piperacilina-tazobactam, ceftriaxona, ampicilina-sulbactam, ciprofloxacino, levofloxacino y tigeciclina.' },
           { t: 'El antibiótico empírico, en cuanto se confirme, y cubriendo enterobacterias.' }],
         explicacion: 'El tratamiento: colecistectomía laparoscópica o drenaje percutáneo si hay inestabilidad, y antibiótico que cubra enterobacterias y llegue a la bilis. Marino no da dosis ni duración' + pg(27) + '.',
-        nota: '<b>La fuente no lo dice.</b> El libro no da dosis ni duración del antibiótico en la colecistitis: la ficha tampoco.' + enFicha('ma-colecistitis', 'ma-cole-tto') }
+        nota: '<b>La fuente no lo dice.</b> El libro no da dosis ni duración del antibiótico en la colecistitis: la ficha tampoco. Las ' + TOK + ' revisan la duración del tratamiento; aquí no se pone ninguna cifra.' + enFicha('ma-colecistitis', 'ma-cole-tto') }
     ],
     examen: [
       { id: 'cole-e1', corto: 'el germen', tipo: 'test', fuente: 'ma-cole-clinica · ma-cole-tto',
@@ -88,8 +91,8 @@ export const MAYEUTICA_ABDOMEN_2 = {
         enunciado: 'Con la Tabla 41.1 delante, ¿qué pareja de antibióticos llega bien a la bilis?',
         opciones: [
           { t: 'Tigeciclina y ciprofloxacino', ok: true },
-          { t: 'Cefepima, cefotaxima y gentamicina', porque: 'Los dos son de mala penetración en la bilis. En una colecistitis, el foco quedaría con una concentración insuficiente.' },
-          { t: 'Ceftazidima, vancomicina y meropenem', porque: 'Tampoco: ambos están en la columna de mala penetración, junto con cefotaxima y meropenem.' }],
+          { t: 'Cefepima y gentamicina juntas', porque: 'Las dos son de mala penetración en la bilis. En una colecistitis, el foco quedaría con una concentración insuficiente.' },
+          { t: 'Ceftazidima y vancomicina juntas', porque: 'Tampoco: ambas están en la columna de mala penetración, junto con cefepima, cefotaxima, gentamicina y meropenem.' }],
         explicacion: 'Buena penetración: ampicilina-sulbactam, ceftriaxona, ciprofloxacino, levofloxacino, piperacilina-tazobactam y tigeciclina. Mala: cefepima, cefotaxima, ceftazidima, gentamicina, meropenem y vancomicina' + pg(27) + '.' },
       { id: 'cole-e4', corto: 'drenaje', tipo: 'test', fuente: 'ma-cole-tto',
         enunciado: '¿Cuál es el tratamiento de elección de la colecistitis alitiásica, y cuándo se cambia?',
@@ -151,7 +154,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 { t: 'Drenaje percutáneo por inestable, y meropenem por el shock séptico', porque: 'El drenaje es lo correcto, pero el meropenem es de mala penetración en la bilis (Tabla 41.1). Su papel de elección en el shock séptico es en la infección intraabdominal con BLEE, no en la vesícula.' },
                 { t: 'Drenaje percutáneo y piperacilina-tazobactam (llega a la bilis)', ok: true }],
               explicacion: 'Si el paciente está <span class="hl-rojo">demasiado inestable para operar</span>, el drenaje percutáneo es una alternativa adecuada; el antibiótico debe cubrir enterobacterias y llegar a la bilis' + pg(27) + '.',
-              nota: '<b>La fuente no lo dice.</b> Marino no da dosis ni duración del antibiótico en la colecistitis; por eso aquí no se pone ninguna.' + enFicha('ma-colecistitis', 'ma-cole-tto') } },
+              nota: '<b>La fuente no lo dice.</b> Marino no da dosis ni duración del antibiótico en la colecistitis; por eso aquí no se pone ninguna. Las ' + TOK + ' revisan la duración del tratamiento.' + enFicha('ma-colecistitis', 'ma-cole-tto') } },
         ],
         lleva: [
           'Sin dolor no se descarta la colecistitis alitiásica: falta en un tercio.',
@@ -189,7 +192,8 @@ export const MAYEUTICA_ABDOMEN_2 = {
         puntos: [
           'Se <span class="hl">pierde mucho líquido al peritoneo</span> por el contenido intestinal: la oliguria o la hipotensión piden reponer volumen.',
           'El vasopresor produce <span class="hl-rojo">vasoconstricción esplácnica</span> y agrava la isquemia intestinal de fondo.'],
-        explicacion: 'Lo primero suele ser la cirugía; en el periodo perioperatorio, volumen si hay compromiso circulatorio y evitar el vasopresor si es posible' + pg(32) + '.' },
+        explicacion: 'Lo primero suele ser la cirugía; en el periodo perioperatorio, volumen si hay compromiso circulatorio y evitar el vasopresor si es posible' + pg(32) + '.',
+        nota: '<b>Las fuentes difieren.</b> Marino prefiere evitar el vasopresor antes de operar (' + pag(32, 'pág. 32') + '); la Surviving Sepsis 2021 pone la noradrenalina como primera línea en el shock séptico (' + SSC + '). No se elige ganadora.' },
       { id: 'iia-g4', corto: 'sin resistentes', tipo: 'test', fuente: 'ma-iia-sin-resistentes · ma-tabla-41-3', modelo: visual('ma-infeccion-abdominal', '👁️ Tabla 41.3 en la vista Visual'),
         calculadora: { ir: 'ma-cob-resultado', nombre: '¿Qué antibiótico cubre lo que necesito?' },
         enunciado: 'Perforación sin sospecha de gérmenes resistentes. Predice con la calculadora (marca gramnegativos, anaerobios y enterococos): ¿qué empírico en monoterapia?',
@@ -225,7 +229,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
         puntos: [
           'El empírico <span class="hl-rojo">debe cubrir BLEE</span>.',
           'Cubrir <span class="hl">Candida</span> si el paciente está inestable o grave.'],
-        explicacion: 'Es la infección abdominal más frecuente en la UCI y casi siempre es una fuga. Se reconoce tarde (el aire dura una semana) y la reintervención llega a menudo cuando ya ha empeorado' + pg(34) + '.' },
+        explicacion: 'Es la infección abdominal más frecuente en la UCI y suele ser una fuga. Se reconoce tarde (el aire dura una semana) y la reintervención llega a menudo cuando ya ha empeorado' + pg(34) + '.' },
       { id: 'iia-g9', corto: 'absceso', tipo: 'test', fuente: 'ma-iia-absceso · mar-img-41-5', modelo: visual('ma-infeccion-abdominal', '👁️ Fig. 41.5: el absceso multiloculado (vista Visual)'),
         enunciado: 'Día 10 tras una esplenectomía: fiebre sin dolor abdominal localizado. ¿Cuándo pides la TC y qué haces si hay absceso?',
         opciones: [
@@ -283,14 +287,15 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 { t: 'Sí: el aire libre bajo el diafragma confirma la perforación', porque: 'Tras la cirugía el aire persiste al menos una semana. Reoperar por esa placa podría ser una reintervención innecesaria.' },
                 { t: 'No: el aire se reabsorbe en 48 horas, así que esto es otra cosa distinta de la fuga', porque: 'Persiste al menos una semana. Descartar la fuga por «aire que ya no debería estar» retrasa el diagnóstico.' }],
               explicacion: 'Tras una cirugía abdominal el <span class="hl-rojo">neumoperitoneo dura al menos una semana y no sirve</span> para el diagnóstico. Por eso la fuga se reconoce tarde. La TC localiza la perforación en el 85 %' + pg(31, 34) + '.' } },
-          { momento: 'Día 5 · mediodía', datos: { TC: 'colección junto a la anastomosis', Diuresis: '0,4 mL/kg/h', PA: '92/58' }, nuevo: ['TC', 'Diuresis', 'PA'],
+          { momento: 'Día 5 · mediodía', datos: { TC: 'colección junto a la anastomosis', Diuresis: '0,4 mL/kg/h', PA: '84/48' }, nuevo: ['TC', 'Diuresis', 'PA'],
             pregunta: { id: 'isidora-2', tipo: 'test', fuente: 'ma-iia-manejo', modeloVivo: septico('🫀 La hipotensión del shock séptico, a pie de cama'),
-              enunciado: 'La diuresis cae y la PA es 92/58. Va a reintervenirse. ¿Empiezas un vasopresor ya?',
+              enunciado: 'La diuresis cae y la PA es 84/48. Va a reintervenirse. ¿Empiezas un vasopresor ya?',
               opciones: [
-                { t: 'Noradrenalina ya: la PA es baja y hay que subirla cuanto antes', porque: 'Antes de la cirugía el vasopresor puede agravar la isquemia intestinal de fondo por vasoconstricción esplácnica.' },
+                { t: 'Noradrenalina ya: la PA es baja y hay que subirla cuanto antes', porque: 'Es lo que hace la guía de sepsis, pero Marino prefiere volumen antes de la cirugía: el vasopresor puede agravar la isquemia intestinal de fondo por vasoconstricción esplácnica.' },
                 { t: 'Volumen primero; el vasopresor, mejor tras la cirugía', ok: true },
                 { t: 'Nada hasta el quirófano: la oliguria es normal', porque: 'La oliguria o la hipotensión son signos de compromiso circulatorio y piden reponer volumen: se pierde mucho líquido al peritoneo.' }],
-              explicacion: 'Se pierde mucho líquido al peritoneo: la caída de la diuresis o de la PA <span class="hl">pide volumen</span>. Evitar el vasopresor antes de la cirugía, si se puede, porque la vasoconstricción esplácnica agrava la isquemia' + pg(32) + '.' } },
+              explicacion: 'Se pierde mucho líquido al peritoneo: la caída de la diuresis o de la PA <span class="hl">pide volumen</span>. Evitar el vasopresor antes de la cirugía, si se puede, porque la vasoconstricción esplácnica agrava la isquemia' + pg(32) + '.',
+              nota: '<b>Las fuentes difieren.</b> Marino prefiere evitar el vasopresor antes de operar (' + pag(32, 'pág. 32') + '); la Surviving Sepsis 2021 pone la noradrenalina como primera línea en el shock séptico (' + SSC + '). No se elige ganadora.' } },
           { momento: 'Día 5 · tarde', datos: { Plan: 'antibiótico empírico' }, nuevo: ['Plan'], calculadora: { ir: 'ma-cob-resultado', nombre: '¿Qué antibiótico cubre lo que necesito?' },
             pregunta: { id: 'isidora-3', tipo: 'test', fuente: 'ma-iia-postop · ma-iia-blee · ma-tabla-41-3',
               enunciado: 'Peritonitis posoperatoria en una colonizada por E. coli BLEE. Abre la calculadora si quieres: ¿qué empírico eliges?',
@@ -299,7 +304,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 { t: 'Ceftriaxona con metronidazol', porque: 'Su espectro es muy inferior y la ceftriaxona no cubre BLEE (−); no es una opción para una paciente grave.' },
                 { t: 'Meropenem: cubre la BLEE y es el de espectro más amplio', ok: true }],
               explicacion: 'En la peritonitis posoperatoria el <span class="hl-rojo">empírico debe cubrir BLEE</span>. Con BLEE: meropenem (el de espectro más amplio), tigeciclina o ceftazidima-avibactam (esta, sin enterococos ni anaerobios)' + pg(33, 34) + '.',
-              nota: '<b>La fuente no lo dice.</b> El capítulo 41 no da la dosis de meropenem; la que da la app (1 g cada 8 horas) está en la ficha de la peritonitis bacteriana espontánea del cap. 39, pág. 11, y no se funde aquí.' } },
+              nota: '<b>La fuente no lo dice.</b> El capítulo 41 no da la dosis de meropenem; la única dosis del libro, 1 g cada 8 horas, está en Marino, cap. 39 (PBE), ' + pag(11, 'pág. 11') + ', para otro cuadro; no se traslada a esta pregunta.' } },
           { momento: 'Día 5 · noche · el giro', datos: { Constantes: 'PA 78/44 con noradrenalina', Analítica: 'lactato 4 mmol/L' }, nuevo: ['Constantes', 'Analítica'],
             pregunta: { id: 'isidora-4', tipo: 'error', fuente: 'ma-iia-blee · ma-iia-candida · ma-iia-postop', modeloVivo: septico('🫀 El shock con noradrenalina, a pie de cama'),
               enunciado: 'Está ya en shock séptico y camino de la reintervención. La nota del R1: encuentra el error (puede haber 0, 1 o 2).',
@@ -359,13 +364,13 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Protege la mucosa del colon frente al daño de las toxinas', porque: 'La asociación es la contraria: más riesgo. Suponer protección te lleva a mantener el fármaco en quien ya tiene la infección.' }],
         explicacion: 'Los <span class="hl">inhibidores de la bomba de protones se asocian a más infección por C. difficile</span>, coherente con el papel antibacteriano del ácido gástrico (Cap. 4, Figura 4.3): un argumento contra su uso excesivo como profilaxis de úlcera de estrés' + pg(28) + '.' },
       { id: 'cdi-g4', corto: 'fiebre y leucos', tipo: 'test', fuente: 'ma-cdi-clinica', origen: 'ficha; los datos del paciente son ilustrativos',
-        enunciado: 'Diarrea acuosa con T 39,5 °C y 28.000 leucocitos/mm³ en un paciente con antibiótico. ¿Es lo típico de la infección por C. difficile?',
+        enunciado: 'Diarrea acuosa con T 39,5 °C y 28.000 leucocitos/mm³ en un paciente con antibiótico. ¿Es lo típico de la infección por C. difficile según Marino?',
         opciones: [
           { t: 'Sí: lo habitual son la fiebre alta y la leucocitosis muy marcada', porque: 'Lo habitual es fiebre baja y leucocitosis leve. Esperar fiebre alta hace no sospecharlo en el que tiene fiebre baja.' },
           { t: 'No: lo típico es fiebre ≤38,3 °C y menos de 15.000 leucocitos', ok: true },
           { t: 'Lo descarta, porque nunca hay leucocitosis', porque: 'La forma típica sí cursa con leucocitosis leve. Y una cifra fuera de lo típico no se usa para descartarla: el diagnóstico lo dan las pruebas en heces.' }],
         explicacion: 'El cuadro principal es la diarrea acuosa, con <span class="hl">fiebre baja (≤38,3 °C) y leucocitosis leve (<15.000/mm³)</span>. La forma fulminante (3-5 %) añade <span class="hl-rojo">hipotensión y distensión</span>' + pg(28) + '.',
-        nota: '<b>La fuente no lo dice.</b> Marino describe lo típico, pero no explica qué significan una fiebre o unos leucocitos mayores. La pregunta solo comprueba lo típico.' + enFicha('ma-cdifficile', 'ma-cdi-clinica') },
+        nota: '<b>La fuente no lo dice.</b> Marino describe lo típico, pero no clasifica la gravedad. La ACG 2021, con los criterios de IDSA/SHEA, llama «grave» a leucocitos ≥15.000 o creatinina >1,5 mg/dL, y «fulminante» a hipotensión o shock, íleo o megacolon: 39,5 °C y 28.000 leucocitos no son lo típico de Marino, sino una forma grave (' + ACG + ').' + enFicha('ma-cdifficile', 'ma-cdi-clinica') },
       { id: 'cdi-g5', corto: 'PCR sí, ELISA no', tipo: 'test', fuente: 'ma-cdi-pruebas · ma-cdi-aviso · mar-img-41-3', modelo: visual('ma-cdifficile', '👁️ Fig. 41.3: el árbol diagnóstico (vista Visual)'),
         calculadora: { ir: 'ma-cdi-calc', nombre: 'Interpretar las pruebas (Figura 41.3)' },
         enunciado: 'Predice con la calculadora: PCR positiva y ELISA negativa, y la sospecha clínica no es alta. ¿Infección por C. difficile?',
@@ -374,15 +379,16 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'No: una ELISA negativa elimina la infección', porque: 'La ELISA tiene baja sensibilidad y pierde un 20 %. Con sospecha alta no se descartaría.' },
           { t: 'Probable colonización: la mayoría va bien sin tratar', ok: true }],
         explicacion: 'La PCR (gen de la toxina B) es muy sensible: negativa, descarta; positiva, confirma el germen toxigénico pero <span class="hl-rojo">no la infección</span>. La ELISA de toxinas, si es positiva, confirma, pero pierde un 20 %. Con PCR positiva y toxina negativa, la mayoría <span class="hl">evoluciona bien sin tratamiento</span>' + pg(29) + '.',
-        nota: '<b>Las fuentes discrepan.</b> El protocolo del hospital (trasplante renal, Nefrología) usa un algoritmo GDH + toxina + PCR; Marino empieza por la PCR y confirma con ELISA. Se enlazan, no se elige ganadora.' + enFicha('ma-cdifficile', 'ma-cdi-pruebas') },
+        nota: '<b>Las fuentes difieren.</b> El protocolo del hospital (trasplante renal, Nefrología) usa un algoritmo GDH + toxina + PCR; Marino empieza por la PCR y confirma con ELISA. Se enlazan, no se elige ganadora.' + enFicha('ma-cdifficile', 'ma-cdi-pruebas') },
       { id: 'cdi-g6', corto: 'nota del R1', tipo: 'error', fuente: 'ma-cdi-aviso · ma-tabla-41-2', modelo: visual('ma-cdifficile', '👁️ Tabla 41.2 en la vista Visual'),
         enunciado: 'La nota del R1 ante unas heces con PCR positiva. Encuentra los errores (puede haber 0, 1 o 2).',
         frases: [
           { t: 'La PCR positiva confirma C. difficile toxigénico, pero no distingue colonización de infección.' },
           { t: 'PCR positiva: empiezo vancomicina oral ya.', mal: true, c: 'Tratar solo por la PCR lleva al <span class="hl-rojo">sobrediagnóstico</span>: cerca de la mitad de las PCR positivas no tienen toxinas y evolucionan bien sin antibiótico. Primero la ELISA.' },
           { t: 'Si la ELISA es positiva: vancomicina 125 mg VO 4 veces al día, 10 días.' },
-          { t: 'Pauta: metronidazol oral 10 días.', mal: true, c: 'La Tabla 41.2 <span class="hl-rojo">no usa metronidazol oral</span>: el primer episodio es vancomicina o fidaxomicina; el metronidazol (500 mg IV cada 8 h) solo se añade en el fulminante.' }],
-        explicacion: 'Dos errores: tratar por la PCR sola y una pauta que la Tabla 41.2 no recoge' + pg(29, 30) + '.' },
+          { t: 'Pauta: metronidazol oral 10 días.', mal: true, c: '<span class="hl-rojo">No es la pauta de Marino</span>: en la Tabla 41.2 el primer episodio es vancomicina o fidaxomicina; el metronidazol (500 mg IV cada 8 h) solo se añade en el fulminante.' }],
+        explicacion: 'Dos errores según Marino: tratar por la PCR sola y una pauta que la Tabla 41.2 no recoge' + pg(29, 30) + '.',
+        nota: '<b>Las fuentes difieren.</b> Marino (Tabla 41.2) no recoge el metronidazol oral; la ACG 2021 lo admite en el episodio inicial no grave de bajo riesgo (' + ACG + '). No se elige ganadora: la pregunta sigue la Tabla 41.2.' },
       { id: 'cdi-g7', corto: 'hipotensión y distensión', tipo: 'test', fuente: 'ma-cdi-clinica · ma-tabla-41-2 · ma-cdi-curso', modelo: visual('ma-cdifficile', '👁️ Fig. 41.2: el megacolon tóxico (vista Visual)'),
         calculadora: { ir: 'ma-cditto-resultado', nombre: '¿Qué pauta? (Tabla 41.2)' },
         enunciado: 'Un paciente con C. difficile confirmado tiene ahora hipotensión y el abdomen distendido. ¿Qué cambia?',
@@ -391,7 +397,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Nada cambia: sigue con vancomicina 125 mg cuatro veces al día durante 10 días', porque: 'Es la pauta del primer episodio. En el fulminante queda corta: sin el aumento ni el metronidazol IV, la enfermedad grave avanza.' },
           { t: 'Cambiar a fidaxomicina 200 mg dos veces al día', porque: 'No es pauta del fulminante en la Tabla 41.2, y se trata con vancomicina enteral más metronidazol IV.' }],
         explicacion: 'La forma <span class="hl-rojo">fulminante (3-5 %)</span> se trata con vancomicina enteral 500 mg cada 6 h más metronidazol IV 500 mg cada 8 h. El megacolon tóxico es una urgencia quirúrgica; si se opera, se prefiere la colectomía subtotal' + pg(28, 30) + '.',
-        nota: '<b>La fuente no lo dice.</b> Marino no da criterios de cuándo operar el megacolon ni plazos; solo dice que si hace falta cirugía se prefiere la colectomía subtotal.' + enFicha('ma-cdifficile', 'ma-cdi-curso') },
+        nota: '<b>La fuente no lo dice.</b> Marino no da criterios de cuándo operar el megacolon ni plazos; solo dice que, si hace falta cirugía, se prefiere la colectomía subtotal.'+ ' La ACG 2021 propone como cirugía del fulminante la colectomía total con ileostomía terminal o, según el caso, la ileostomía en asa con lavado colónico y vancomicina intraluminal (' + ACG + '). Sobre cuándo operar: buscado en la ACG 2021; no da plazo.' + enFicha('ma-cdifficile', 'ma-cdi-curso') },
       { id: 'cdi-g8', corto: 'las recaídas', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'ma-cdi-recaidas · ma-tabla-41-2',
         enunciado: 'El paciente mejora y a las dos semanas vuelve la diarrea. ¿Cuánto recae cada pauta y qué haces en la segunda recurrencia?',
         puntos: [
@@ -476,7 +482,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
               frases: [
                 { t: 'La PCR positiva confirma C. difficile toxigénico.' },
                 { t: 'Empiezo vancomicina oral ya, por la PCR.', mal: true, c: 'Cerca de la mitad de los PCR positivos <span class="hl-rojo">no tienen toxinas</span> y van bien sin antibiótico; tratar por la PCR sola es sobrediagnosticar. Espera a la ELISA.' },
-                { t: 'Si la ELISA sale negativa, queda descartado.', mal: true, c: 'La ELISA <span class="hl-rojo">pierde un 20 %</span>: con sospecha alta, colonoscopia, que mejor que la rectosigmoidoscopia.' },
+                { t: 'Si la ELISA sale negativa, queda descartado.', mal: true, c: 'La ELISA <span class="hl-rojo">pierde un 20 %</span>: con sospecha alta, colonoscopia (mejor que la rectosigmoidoscopia).' },
                 { t: 'Guantes y bata para entrar en la habitación.' }],
               explicacion: 'Dos errores: tratar solo por la PCR y dar por descartado con una ELISA negativa' + pg(29, 30, 31) + '.' } },
           { momento: 'Día 11 · tarde', datos: { Heces: 'ELISA de toxinas A y B positiva' }, nuevo: ['Heces'], calculadora: { ir: 'ma-cditto-resultado', nombre: '¿Qué pauta? (Tabla 41.2)' },
@@ -495,7 +501,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 { t: 'Fulminante con megacolon: vancomicina y metronidazol IV, y cirugía', ok: true },
                 { t: 'Hay que subir a fidaxomicina', porque: 'No es una pauta del fulminante en la Tabla 41.2, y no trata la complicación quirúrgica que ya existe.' }],
               explicacion: 'Hipotensión más distensión por íleo o megacolon: <span class="hl-rojo">infección fulminante</span> (3-5 %). Vancomicina 500 mg cada 6 h por boca, sonda o enema, más metronidazol 500 mg IV cada 8 h. El megacolon tóxico es una urgencia quirúrgica' + pg(28, 30) + '.',
-              nota: '<b>La fuente no lo dice.</b> Marino no da criterios de cuándo operar el megacolon ni plazos.' + enFicha('ma-cdifficile', 'ma-cdi-curso') } },
+              nota: '<b>La fuente no lo dice.</b> Marino no da criterios de cuándo operar el megacolon ni plazos.'+ ' La ACG 2021 propone la colectomía total con ileostomía terminal o la ileostomía en asa con lavado colónico y vancomicina intraluminal (' + ACG + '). Sobre cuándo operar: buscado en la ACG 2021; no da plazo.' + enFicha('ma-cdifficile', 'ma-cdi-curso') } },
           { momento: 'Día 13 · quirófano', datos: { Decisión: 'cirugía' }, nuevo: ['Decisión'],
             pregunta: { id: 'prudencio-6', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'ma-cdi-curso · ma-cdi-prevencion',
               enunciado: 'El cirujano pregunta tres cosas: ¿qué operación, cuánto dura el tratamiento aunque ceda y qué le dices a la familia sobre los probióticos?',
@@ -504,7 +510,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 'En la pauta habitual, la fiebre cede en 24-48 h y la diarrea en 4-5 días, pero el tratamiento se completa los <span class="hl">10 días</span>.',
                 'Probióticos: el American College of Gastroenterology <span class="hl-rojo">no los recomienda</span>.'],
               explicacion: 'Si hace falta cirugía por megacolon tóxico se prefiere la colectomía subtotal; los probióticos no se recomiendan por resultados no concluyentes' + pg(30, 31) + '.',
-              nota: '<b>La fuente no lo dice.</b> Los 10 días y los plazos de la fiebre y la diarrea son los del tratamiento habitual; Marino no da la duración del fulminante.' + enFicha('ma-cdifficile', 'ma-cdi-curso') } },
+              nota: '<b>La fuente no lo dice.</b> Los 10 días y los plazos de la fiebre y la diarrea son los del tratamiento habitual; Marino no da la duración del fulminante; buscado en la ACG 2021 (' + ACG + '), que tampoco da plazo. Esa guía propone, como cirugía, la colectomía total con ileostomía terminal o la ileostomía en asa con lavado colónico y vancomicina intraluminal, según el caso.' + enFicha('ma-cdifficile', 'ma-cdi-curso') } },
         ],
         lleva: [
           'La PCR dice «está»; la toxina dice «hace daño»: no se trata solo por la PCR.',
