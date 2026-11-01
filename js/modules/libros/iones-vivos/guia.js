@@ -38,7 +38,7 @@ export function crearGuia({ dock, caja, hacer, unidades, ponerIon, setFoco, cita
   caja.addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-paso]'); if (!b || !g) return; const a = b.dataset.paso, p = g[1][i];
     if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); }
-    else if (a === 'haz') { if (p.haz[0] === 'unidades') unidades(p.haz[1]); else hacer(p.haz[0], p.haz[1]); ponerIon(p.ion); setFoco(p.z); }
+    else if (a === 'haz') { if (p.haz[0] === 'unidades') unidades(p.haz[1]); else hacer(p.haz[0], p.haz[1]); ponerIon(p.ion); setFoco(p.z); const ver = () => verFrase(caja, { dock, techo: 8, margen: 6 }); ver(); requestAnimationFrame(() => requestAnimationFrame(ver)); }   // el aviso que sale tras «Hazlo» hace crecer el dock: se vuelve a mirar dos fotogramas después
   });
   return { abrir: (clave, k = 0) => { if (!GUIAS[clave]) return cerrar(); g = GUIAS[clave]; paso(k); }, cerrar };
 }

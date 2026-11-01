@@ -82,18 +82,74 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await resetea('normal'); await p.evaluate(() => window.__iones.set({ ins: 4, po4b: 1 })); ok((await L()).po4 >= 0, 'fosfato negativo');
   // citas: todas las del documento llevan su botón doble
   const cc = await p.evaluate(() => ({ cita: document.querySelectorAll('#iov-raiz .cita').length, sinBoton: [...document.querySelectorAll('#iov-raiz .cita')].filter((c) => !c.querySelector('.ver-ficha[data-resaltar]') || !c.querySelector('.cita-pdf')).length })); console.log(` citas a la vista: ${cc.cita}, sin doble botón: ${cc.sinBoton}`); ok(cc.sinBoton === 0, 'cita sin doble botón');
-  // ---- apuesta, error, caso ----
-  console.log('-- Apuesta'); await p.evaluate(() => window.__iones.modoPrueba('apuesta')); const kA = (await L()).k; const monK0 = await p.evaluate(() => document.getElementById('iov-mon-k').textContent); const vent0 = await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('?')); console.log(` antes de contestar: monitor «${monK0}», ventana con «?»=${vent0}`); ok(monK0.includes('?') && vent0, 'apuesta: K no oculto');
-  const ops = await p.$$('#iov-prueba .op'); ok(ops.length === 3, 'apuesta: 3 opciones'); ok(!(await p.evaluate(() => document.getElementById('iov-prueba').innerHTML.includes('data-ok'))), 'respuesta en el HTML');
-  const txt = await Promise.all(ops.map((o) => o.textContent())); const iok = txt.findIndex((t) => t.startsWith('Baja')); await ops[iok].click(); await p.waitForTimeout(200);
-  console.log(` K antes ${kA} → después ${(await L()).k}; fosfato ${(await L()).po4}; fin=${await p.evaluate(() => document.getElementById('iov-prueba').dataset.fin)}`); ok((await L()).k < kA, 'apuesta: el K no bajó'); console.log(' monitor tras contestar:', await p.evaluate(() => document.getElementById('iov-mon-k').textContent), '· lleva-te:', await p.evaluate(() => document.querySelectorAll('#iov-prueba .llevas li .ver-ficha').length)); ok(await p.evaluate(() => document.querySelectorAll('#iov-prueba .llevas li').length >= 2), 'sin «Lo que te llevas»'); await desb('apuesta respondida'); await rotulos('apuesta');
-  console.log('-- Error'); await p.evaluate(() => window.__iones.modoPrueba('error')); const ocu = await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('iónico 4,6')); ok(!ocu, 'error: el iónico se ve antes de contestar');
-  const grupos = await p.$$('#iov-prueba .ops'); ok(grupos.length === 3, 'error: 3 frases'); for (let i = 0; i < 3; i++) { const bs = await grupos[i].$$('.op'); await bs[i < 2 ? 0 : 1].click(); }
-  await p.waitForTimeout(150); console.log(` error resuelto: fin=${await p.evaluate(() => document.getElementById('iov-prueba').dataset.fin)} iónico visible=${await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('iónico'))}`); ok(await p.evaluate(() => !!document.getElementById('iov-prueba').dataset.fin), 'error sin completar'); await desb('error'); CAP && await p.screenshot({ path: `${CAP}06-error-${ANCHO}.png`, fullPage: true });
-  console.log('-- Caso (Valentín, 3 pasos)'); await p.evaluate(() => window.__iones.modoPrueba('caso'));
-  const bien = [/^Pido/, /^22 mL/, /^Sigo/];
-  for (let i = 0; i < 3; i++) { const o = await p.$$(`#iov-prueba .paso:nth-of-type(${i + 1}) .op`); ok(o.length === 3, `caso paso ${i + 1}: opciones`); const tt = await Promise.all(o.map((x) => x.textContent())); await o[tt.findIndex((t) => bien[i].test(t))].click(); await p.waitForTimeout(120); const l = await L(); console.log(` paso ${i + 1}: Ca iónico ${l.caIon} (${l.caIonMmol} mmol/L) K ${l.k} Ca total ${l.caTotal} topes[${await tp()}]`); await desb('caso ' + (i + 1)); if (i < 2) await p.evaluate(() => [...document.querySelectorAll('#iov-prueba .b.prim')].at(-1).click()); }
-  ok(await p.evaluate(() => !!document.getElementById('iov-prueba').dataset.fin), 'caso sin completar'); CAP && await p.screenshot({ path: `${CAP}07-caso-${ANCHO}.png`, fullPage: true });
+  // ---- La Mayéutica: las 13 preguntas (acertando y fallando), el repaso y los 2 casos; sin desborde tras cada respuesta ----
+  console.log('-- Mayéutica');
+  {
+    await resetea('normal'); await p.waitForTimeout(200);
+    const DATOS = await p.evaluate(async () => { const m = await import('/js/data/iones-vivos-preguntas.js'); return JSON.parse(JSON.stringify({ P: m.PREGUNTAS, C: m.CASOS })); });
+    const { P: PREG, C: CASOS } = DATOS;
+    const clicM = (s) => p.evaluate((s) => { const e = document.querySelector(s); if (!e) return false; e.click(); return true; }, s);
+    const cuenta = (s) => p.evaluate((s) => document.querySelectorAll(s).length, s);
+    const textoDe = (h) => p.evaluate((h) => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent.trim(); }, h);
+    const libre = async (t) => { await p.waitForTimeout(500); const r = await p.evaluate(() => { const s = document.querySelector('#iov-preg [data-accion="sig"]'); const d = document.getElementById('iov-dock').getBoundingClientRect(); if (!s) return { sin: true }; const b = s.getBoundingClientRect(); return { bottom: b.bottom, dock: d.top }; });
+      await desb(t); ok(r.sin || r.bottom <= r.dock + 1, `${ANCHO}: ${t}: «Siguiente» a la vista sobre el dock`); };
+    const contestar = async (q, bien, et) => {
+      if (q.tipo === 'test') {
+        ok((await cuenta('#iov-preg [data-op]')) === 0, `${et}: las opciones no están en el HTML antes de «Ya lo tengo»`);
+        await clicM('#iov-preg [data-accion="ops"]');
+        const quiero = q.opciones.find((o) => !!o.ok === bien) || q.opciones[0], txt = await textoDe(quiero.t);
+        ok(await p.evaluate((txt) => { const b = [...document.querySelectorAll('#iov-preg [data-op]')].find((x) => x.textContent.trim() === txt); if (!b) return false; b.click(); return true; }, txt), `${et}: elige una opción`);
+        ok(await p.evaluate((b) => !!document.querySelector('#iov-preg .iov-' + (b ? 'ok' : 'mal')), bien), `${et}: dice ${bien ? 'Bien' : 'qué le habría pasado'}`);
+      } else if (q.tipo === 'destapa') {
+        await clicM('#iov-preg [data-accion="destapa"]'); await p.evaluate((b) => document.querySelectorAll('#iov-preg input[type=checkbox]').forEach((c) => { if (b) c.checked = true; }), bien); await clicM('#iov-preg [data-accion="puntos"]');
+      } else if (q.tipo === 'error') {
+        await p.evaluate(([b, mal]) => document.querySelectorAll('#iov-preg [data-fr]').forEach((x, i) => { if (b === mal[i]) x.click(); }), [true, q.frases.map((f) => !!f.mal)]);
+        if (!bien) await p.evaluate(() => document.querySelector('#iov-preg [data-fr]').click());
+        await clicM('#iov-preg [data-accion="corregir"]'); await clicM('#iov-preg [data-ver]');
+      }
+      await libre(et);
+    };
+    await clicM('#iov-modo-preguntas'); await p.waitForTimeout(400);
+    ok(await p.evaluate(() => !document.getElementById('iov-vista-preguntas').hidden && document.getElementById('iov-dock-in').hidden && !document.getElementById('iov-dock-estudio').hidden), 'Mayéutica: abre la vista de preguntas y el dock de progreso');
+    await desb('Mayéutica: inicio'); CAP && await p.screenshot({ path: `${CAP}08-may-inicio-${ANCHO}.png` });
+    await clicM('[data-ir="recorrido"]'); await p.waitForTimeout(300);
+    ok(PREG.length === 13, `13 preguntas (hay ${PREG.length})`);
+    for (let i = 0; i < PREG.length; i++) {
+      const q = PREG[i], bien = i % 2 === 0;
+      const antes = await p.evaluate(() => ({ svg: document.getElementById('iov-ion-svg').textContent, mon: document.getElementById('iov-mon-k').textContent }));
+      ok(/\?/.test(antes.svg + antes.mon), `${q.num}: las cifras del suero están tapadas antes de contestar`);
+      if (i === 0) CAP && await p.screenshot({ path: `${CAP}09-may-pregunta-${ANCHO}.png` });
+      await contestar(q, bien, `${q.num} ${bien ? 'acertada' : 'fallada'}`);
+      const des = await p.evaluate(() => document.getElementById('iov-mon-k').textContent); ok(!/\?/.test(des), `${q.num}: tras contestar el modelo enseña la cifra (${des})`);
+      if (i === 1) CAP && await p.screenshot({ path: `${CAP}10-may-respuesta-${ANCHO}.png` });
+      await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(250);
+    }
+    const nBien = PREG.filter((_, i) => i % 2 === 0).length, nRep = await cuenta('#iov-preg [data-rep]');
+    ok(nRep === PREG.length - nBien, `repaso: vuelven las falladas (${PREG.length - nBien}; salen ${nRep})`);
+    for (let k = 0; k < PREG.length; k++) { const id = await p.evaluate(() => document.querySelector('#iov-preg [data-rep]')?.dataset.rep); if (!id) break; await clicM(`#iov-preg [data-rep="${id}"]`); await p.waitForTimeout(250); await contestar(PREG.find((q) => q.id === id), true, `repaso ${id}`); await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(250); }
+    ok((await cuenta('#iov-preg [data-rep]')) === 0, 'repaso: tras acertarlas, no queda nada');
+    await clicM('#iov-preg [data-ir="casos"]'); await p.waitForTimeout(250); await desb('casos: lista');
+    for (let c = 0; c < CASOS.length; c++) {
+      await clicM(`#iov-preg [data-caso="${c}"]`); await p.waitForTimeout(300);
+      const C = CASOS[c];
+      for (let i = 0; i < C.pasos.length; i++) {
+        const q = C.pasos[i].pregunta, bien = i !== 1;
+        ok(await p.evaluate(() => !!document.querySelector('#iov-preg dl.iov-paciente') && !!document.querySelector('#iov-preg .iov-dia')), `${C.corto} paso ${i + 1}: ficha del paciente y momento`);
+        const estado = await p.evaluate(() => ({ k: document.getElementById('iov-mon-k').textContent, ion: document.querySelector('.selector-ion [aria-pressed="true"]')?.dataset.ion }));
+        if (c === 0 && i === 3) CAP && await p.screenshot({ path: `${CAP}11-may-caso-${ANCHO}.png` });
+        await contestar(q, bien, `${C.corto} paso ${i + 1} (${estado.k})`);
+        const cif = await p.evaluate(() => ({ k: document.getElementById('iov-mon-k').textContent, ca: window.__iones.leer().caIonMmol, kv: window.__iones.leer().k })); console.log(`  ${C.corto} paso ${i + 1}: monitor «${cif.k}» · Ca iónico ${cif.ca.toFixed(2)} mmol/L`);
+        await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(300);
+      }
+      ok(/lo que te llevas/i.test(await p.evaluate(() => document.getElementById('iov-preg').innerText)), `${C.corto}: final con «Lo que te llevas»`);
+      ok(await p.evaluate(() => { const b = document.querySelector('#iov-preg [data-especialidad][data-resaltar]'); return !!b && !!document.querySelector(b.dataset.resaltar); }), `${C.corto}: «Repasar en la ficha» apunta a un párrafo que existe`);
+      await desb(`${C.corto}: final`);
+      if (c === 0) { await clicM('#iov-preg [data-fin="modelo"]'); await p.waitForTimeout(300); ok(await p.evaluate(() => !document.getElementById('iov-dock-in').hidden), 'caso: «Abrir el modelo» vuelve a Explorar'); await clicM('#iov-modo-preguntas'); await p.waitForTimeout(300); await clicM('[data-ir="casos"]'); await p.waitForTimeout(250); }
+    }
+    const faltan = await p.evaluate(async (ids) => { const m = await import('/js/data/iones-vivos-data.js'); return ids.filter((pg) => !m.PAG_FICHA[pg] && !m.fichaDe(pg)); }, [19, 20, 21, 23, 24, 25, 27, 28, 29, 37, 38, 43, 44, 45, 46, 49]);
+    ok(faltan.length === 0, 'cada página citada tiene su párrafo de la ficha');
+    await p.evaluate(() => window.__iones.setModo('explorar')); await p.waitForTimeout(200); await desb('Mayéutica → Explorar');
+  }
   // ---- Los 4 pendientes del rejuicio y el ECG plano con la parada ----
   console.log('-- Pendientes');
   await resetea('rufino'); await p.waitForTimeout(150);
