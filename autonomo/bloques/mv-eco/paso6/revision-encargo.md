@@ -9,3 +9,4 @@
 - Menores: D1+D2 en serie (simulador.mjs); D3 (torax) y D4 (corazon-geo) en paralelo; sin juez para domo, esfericidad,
   escalera y base del CW → pruebas nuevas donde se pueda (domo, esfericidad) y el resto al profesor; TAPSE antes/después.
 Umbral del domo: máximo de pVD−pAD entre el 35 y el 65 % de la eyección, valores al 25 y 75 % ≤0,92 del máximo.
+- 01/11, el usuario: «Sí, recalibrar» el reloj auricular (onda A acaba al cerrar las válvulas; Mukherjee 2025 p. 16-18, Marino cap. 8 p. 52-53), recalibrar la diástole izquierda sin tocar rangos con fuente y rehacer la tabla congelada del contrato.
