@@ -2,7 +2,7 @@
 // con el eje de tres estaciones (óvalo = hipotálamo, gota = hipófisis, triángulo sobre riñón = suprarrenal, mariposa = tiroides).
 import { SILUETA_SVG, ORGANOS } from '../../../core/silueta.js';
 import { eje, FILAS, PROD, acthVals } from './modelo.js';
-export const ZONAS = { cuello: [28, 44, 58, 50], rinon: [78, 44, 60, 66], suero: [256, 4, 74, 98], termo: [334, 4, 52, 100], eje: [4, 126, 382, 170] };
+export const ZONAS = { cuello: [28, 42, 48, 52], rinon: [78, 44, 60, 66], suero: [256, 4, 74, 98], termo: [334, 4, 52, 100], eje: [4, 126, 382, 170] };
 const CX = [48, 143, 238, 333], CY = 176;
 const niv = (v) => (v > .7 ? '↑' : v < .25 ? '↓' : 'N');
 const num = (x) => String(x).replace('.', ',');
@@ -10,8 +10,8 @@ const flecha = (x1, x2, lv, i, lab) => `<g class="paso" data-i="${i}"><line clas
 const bloqueo = (x, y) => `<g class="bloq"><circle cx="${x}" cy="${y}" r="7"/><path d="M${x - 4} ${y - 4} l8 8 M${x + 4} ${y - 4} l-8 8"/></g>`;
 const esc = (k, n, t) => `<g transform="translate(${CX[k]} ${CY}) scale(${n}) translate(${-CX[k]} ${-CY})">${t}</g>`;
 // La silueta de tinta de la app (js/core/silueta.js) tumbada en la cama: cabeza a la izquierda. Los dos puntos de las lupas salen de ORGANOS
-// (el cuello bajo la boca y el riñón) con el mismo giro que la silueta: x' = 0,44·y + 20, y' = 0,44·x + 28.
-const GIRO = 'matrix(0 .44 .44 0 20 28)', alCuerpo = ([x, y]) => [+(.44 * y + 20).toFixed(1), +(.44 * x + 28).toFixed(1)];
+// (el cuello bajo la boca y el riñón) con el mismo giro que la silueta: x' = 0,5·y + 14, y' = 0,5·x + 20.
+const GIRO = 'matrix(0 .5 .5 0 14 20)', alCuerpo = ([x, y]) => [+(.5 * y + 14).toFixed(1), +(.5 * x + 20).toFixed(1)];
 export const PUNTO = { ti: alCuerpo([ORGANOS.boca[0], ORGANOS.boca[1] + 10]), sr: alCuerpo(ORGANOS.rinon) };
 const SIL_DENTRO = SILUETA_SVG.replace(/^[\s\S]*?<svg[^>]*>/, '').replace(/<\/svg>[\s\S]*$/, '');
 const silueta = () => {
@@ -62,7 +62,7 @@ export function escena(s, L, o = {}) {
   // ---- el enfermo ----
   h += `<line class="cama" x1="8" y1="104" x2="250" y2="104"/>${silueta()}`;
   const [tx, ty] = PUNTO.ti, [rx, ry] = PUNTO.sr;
-  h += `<circle class="lupa${!sr ? ' sel' : ''}" cx="${tx}" cy="${ty}" r="17"/><circle class="lupa${sr ? ' sel' : ''}" cx="${rx}" cy="${ry}" r="19"/>`;
+  h += `<circle class="lupa${!sr ? ' sel' : ''}" cx="${tx}" cy="${ty}" r="13"/><circle class="lupa${sr ? ' sel' : ''}" cx="${rx}" cy="${ry}" r="15"/>`;
   h += `<text class="min" x="${tx}" y="118" text-anchor="middle">Tiroides</text><text class="min" x="${rx + 4}" y="118" text-anchor="middle">Suprarrenal</text>`;
   // suero, noradrenalina y temperatura
   h += `<rect class="tanque" x="262" y="10" width="34" height="52" rx="8"/><rect class="liq" x="264" y="${(60 - 48 * v).toFixed(1)}" width="30" height="${(48 * v).toFixed(1)}" rx="6"/><text class="min" x="279" y="76" text-anchor="middle">Suero</text><text class="rot" x="279" y="88" text-anchor="middle">${num(s.vol / 1000)} L</text>`;
