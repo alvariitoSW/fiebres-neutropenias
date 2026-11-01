@@ -131,7 +131,7 @@ export const MAYEUTICA_6A = {
               opciones: [
                 { t: 'Aún no: hay que esperar a los 3 meses', porque: 'El libro no da ese plazo (p. 3): solo habla de un mes y del estado vegetativo.' },
                 { t: 'Sí: lleva 30 días así, ya es persistente', porque: 'El término es del estado vegetativo (p. 3) y Leovigildo está consciente. Decírselo sugeriría una inconsciencia permanente que no tiene.' },
-                { t: '«Persistente» es del vegetativo al mes; Leovigildo no está vegetativo', ok: true }],
+                { t: 'No: «persistente» se dice del estado vegetativo, y él está consciente', ok: true }],
               explicacion: `«Persistente» es del <span class="hl">estado vegetativo</span> al mes (${pag(3)}); Leovigildo está enclaustrado y consciente.` } }
         ] }
     ],
@@ -205,7 +205,7 @@ export const MAYEUTICA_6A = {
           { t: 'Ziprasidona IM: 10 mg/2 h o 20 mg/4 h, máx. 40 mg/día', ok: true },
           { t: 'Haloperidol 5 mg IV, buscando la vía', porque: 'Sin vía venosa no se puede dar IV (p. 6-7); perder minutos con un paciente que se arranca los accesos es peligroso.' }],
         explicacion: `Tabla 45.2 (${pag(6, 'p. 6-7')}): ziprasidona IM, <span class="hl">10 mg/2 h o 20 mg/4 h, máx. 40 mg/día</span>.`,
-        nota: '<b>Las fuentes discrepan.</b> Marino (p. 6) dice que la ziprasidona «solo» se puede dar por vía IM; la ziprasidona también existe por vía oral (conocimiento general, no de la fuente). Aquí se pregunta por su vía IM, útil sin acceso venoso.' + enFicha('mn-delirio', 'mn-tabla-45-2') },
+        nota: '<b>Nota de interpretación.</b> Marino (p. 6) dice que la ziprasidona «solo» se puede dar por vía IM; la ziprasidona también existe por vía oral (conocimiento general, no de la fuente). Aquí se pregunta por su vía IM, útil sin acceso venoso.' + enFicha('mn-delirio', 'mn-tabla-45-2') },
       { id: 'mnd-e4', corto: 'efecto de la dexmedetomidina', tipo: 'test', fuente: 'mn-tabla-45-2',
         enunciado: 'Además de bradicardia e hipotensión, ¿qué efecto adverso de la dexmedetomidina describe la Tabla 45.2?',
         opciones: [
@@ -426,7 +426,7 @@ export const MAYEUTICA_6A = {
                 '<span class="hl-rojo">Delirio que reaparece o pasa de 5 días</span>: buscar otra causa.',
                 '<span class="hl-rojo">Wernicke</span>: la glucosa gasta la tiamina que quedaba.',
                 'Los 100 mg/día de tiamina <span class="hl">no bastan para tratarlo</span>.'],
-              explicacion: `Delirio >5 días (${pag(8, 'p. 8')}); glucosa y tiamina, y dosis insuficiente (${pag(9, 'p. 9')}). La dosis de tratamiento no está en el cap. 45: está en el cap. 48.` + enFicha('mu-tiamina', 'mu-tiamina', 'marinoNutricion', 'panel-marino-nutri-tabs') } },
+              explicacion: `Delirio que reaparece o pasa de 5 días (${pag(8, 'p. 8')}); glucosa y tiamina, y dosis insuficiente (${pag(9, 'p. 9')}). La dosis de tratamiento no está en el cap. 45: está en el cap. 48.` + enFicha('mu-tiamina', 'mu-tiamina', 'marinoNutricion', 'panel-marino-nutri-tabs') } },
           { momento: 'Día 7 · después', datos: { Sospecha: 'Wernicke en un alcohólico con glucosa y 100 mg/día de tiamina' }, nuevo: ['Sospecha'],
             pregunta: { id: 'mna-b-7', corto: 'la dosis de tiamina', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'mu-tiamina · mn-oh-wernicke',
               enunciado: 'Piensa antes de abrir el cap. 48: ¿qué pauta de tiamina da para tratar el Wernicke?',
