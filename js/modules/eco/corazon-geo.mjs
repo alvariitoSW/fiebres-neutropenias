@@ -979,7 +979,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 // ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen, vdLargoPropio } — sin ajustes, el dibujo de hoy idéntico.
 // el largo del VD solo crece con un VD dilatado (raíz cúbica por encima de su volumen normal): uno vacío (hipovolemia, 20 mL) no se acorta, el volumen va al ancho; así conserva luz (≥ 3 mm a media altura)
 const LVD_PISO_REL = 1;
-const GANANCIA_SEPTO = 8;   // 8 (antes 4): con pVD > pVI el tabique ya está plano y el IE de la TEP en telesístole no baja del de telediástole (Ryan 1985 JACC 5:918: máximo en telesístole); el motor da menos gradiente en telesístole (4 frente a 9 mmHg) y con 4 el dibujo seguía ese gradiente; ilustrativo
+const GANANCIA_SEPTO = 4;   // ilustrativo; sin saturar: el dibujo sigue la cifra del motor (REGLAS §1.14). En la TEP el gradiente pVD−pVI al final de la relajación es 4 mmHg (9 en telediástole): el motor, no el dibujo, fija que el IE de telesístole quede por debajo del de telediástole
 const LVD_TOPE_ILUSTRATIVO = 112;
 export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana
