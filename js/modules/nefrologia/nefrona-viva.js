@@ -109,7 +109,7 @@ function modelo(sit, farm, glucemia) {
 // Fracaso renal agudo: la orina es la de la Tabla 3 de la ficha (en `fra`),
 // y el reparto por tramos se ajusta para que la animación llegue a ella.
 function modeloFra(s, farm) {
-    const f = fraDe(s);
+    const f = fraDe(s, farm);
     const M = f.M, Umin = CIF.osmMin, a = s.adh;
     const rDesc = rDescDe(M);
     const aguaCol = CIF.filtradoL * f.tfg * (1 - CIF.aguaProximal) * (1 - rDesc);

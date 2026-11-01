@@ -21,8 +21,8 @@ for (const ancho of [390, 360]) {
     console.log(`-- ${t}\n   ${r.med.join(' | ')}\n   botón: ${r.boton}\n   avisos: ${r.avisos.length}`);
     if (r.desb > 0) fallos.push(`${ancho} desborde ${r.desb} en ${t}`);
   };
-  for (const id of ['prerrenal', 'nta', 'rabdo']) {
-    await p.evaluate(id => document.querySelector(`[data-nefrona-viva="${id}"]`).click(), id);
+  for (const id of ['prerrenal', 'prerrenal|furosemida', 'nta', 'nta|furosemida', 'rabdo']) {
+    await p.evaluate(id => { let b = document.querySelector(`[data-nefrona-viva="${id}"]`); if (!b) { b = document.createElement('button'); b.dataset.especialidad = 'nefrologia'; b.dataset.view = 'nefrona'; b.dataset.nefronaViva = id; document.body.append(b); } b.click(); }, id);
     await p.waitForTimeout(500); await ver(id);
   }
   await p.evaluate(() => document.getElementById('nv-rabdo-volumen').click()); await p.waitForTimeout(400); await ver('rabdo + salino');

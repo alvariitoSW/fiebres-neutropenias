@@ -3,8 +3,18 @@
 let volumenOn = false;
 
 // Qué datos de FRA usa el motor: con el volumen puesto, los de `fraVolumen`.
-export function fraDe(s) {
+export function fraDe(s, farm) {
+    if (s.id === 'prerrenal' && farm === 'furosemida') return fraPrerrenalFuro(s.fra);
     return s.id === 'rabdo' && volumenOn && s.fraVolumen ? s.fraVolumen : s.fra;
+}
+
+// Prerrenal con furosemida (Marino cap. 34, Tabla 34.4 y excepciones, PDF p. 53-54): el diurético
+// sube la EFNa (>1 %) y el Na⁺ urinario aunque haya hipoperfusión; la EF de urea no se altera.
+// El 2 % es un punto ilustrativo por encima del 1 %; el resto del reparto es el de la prerrenal.
+function fraPrerrenalFuro(f) {
+    return { ...f, fena: 0.02, diuretico: true, tabla: { ...f.tabla,
+        naOrina: '<10 mmol/l; el diurético puede subirlo (>40 mEq/l)', fena: '>1% por el diurético: engaña',
+        feurea: '<35%: la EFU no la altera el diurético, dice hipoperfusión' } };
 }
 
 // Botón único (se crea una vez y se repinta): suero salino con diuresis objetivo.
@@ -38,6 +48,7 @@ export function dibujarRabdo(c, f, etiqueta, rojo, verde) {
 }
 
 export function avisosRabdo(estado) {
+    if (estado.sit === 'prerrenal' && estado.farm === 'furosemida') return ['El diurético sube la excreción de sodio aunque falte perfusión: la EFNa puede ser >1% y el sodio en orina alto (Marino cap. 34, p. 53-54). La EF de urea no se altera con diuréticos y sigue <35%: es la que dice hipoperfusión (p. 54). La Tabla 34.4 imprime EFNa >12% en la lesión tubular; el texto dice >2% (errata de la fuente).'];
     if (estado.sit !== 'rabdo') return [];
     const av = ['La mioglobina filtrada lesiona el epitelio del túbulo proximal (quizá por el hierro del hemo) y se aglomera en cilindros que obstruyen la luz (Marino cap. 34, p. 51; formación de cilindros, p. 52).',
         'La CK sola no predice el riesgo renal: se correlaciona más con la lesión muscular. La mioglobinuria sí: tira de sangre positiva sin hematíes en el sedimento (p. 52).'];
