@@ -56,6 +56,13 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   tarea a tarea. Cada director abre la sesión de la siguiente al cerrar la suya (vía libre: hasta 7 sesiones a la vez si
   no comparten archivos). Una tarea que pida pasar más de un **25 %** de su presupuesto **comparece**. Vía libre hasta
   el 22/11. Ahorros nuevos del 01/11 en REGLAS §4.16
+- **🚀 Día libre de Marino (el usuario, 01/11, 16:34, al Congreso): «tenemos 24 h de uso libre 100 %, como si queremos
+  abrir 25 carriles para Marino y adelantar lo máximo que podamos en un día»**. Captura de Uso: 61 % de la semana gastado,
+  se restablece el **lunes 02/11 a las 14:00**. Hasta entonces: **sin tope de carriles de Marino ni de sesiones**
+  (abiertas 12 el 01/11 a las 16:40; ver la bitácora); el límite es el semanal (≈39 % ≈ 105-117 M); si se agota, todo
+  se para hasta las 14:00 y sigue solo. Cada carril trabaja en su rama y sus archivos; los archivos comunes (versión,
+  `index.html`, registros) los junta el director del bloque al fusionar. Siguen los jueces, el 8,75 y la fidelidad.
+  Tras el reinicio, vuelve lo de §4.17 (7 sesiones) salvo que el usuario diga otra cosa
 - **Más rápido (el usuario, 01/11: «Haz A, B y C»; REGLAS §4.17)**: la cola va **en paralelo** en lo que no comparte
   archivos (01/11, 15:20, 6 sesiones a la vez: eco paso 6, pulmón sesión 2, `b4` (parado desde el 31/10), modelos del `b5` y del `b6a`, tanda de `radar-tuits`; ya hechas hoy: `marino-unido`, mapa y maquetas del `b5` y del `b6a`);
   el **Consejo sube techos hasta +25 %** sin parar al usuario (se le cuenta después); **papeleo mínimo** (acta solo
