@@ -387,6 +387,10 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**🆕 01/11 · Consejo 4.ª: lo que aún dice 8,75** (acta `autonomo/consejo/2026-11-01-4.md`). Todos votan «sí con
+cambios». Elige sí a todo / sí con cambios / no sobre 5 puntos; el 3 es solo tuyo: lo juzgado en ramas sin fusionar
+(`b4`, `b5`, `b6a`, pulmón) ¿se sube a 9,5 antes de su PR o cuenta como ya juzgado?
+
 **✅ 01/11 · Nota de corte del profesor: 9,5 (meta 10)** (decisión tuya, aplicada directa a `main`). Vale en todo lo
 que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo no juzgado; las 55 fichas con Estudiar no se rejuzgan ahora
 (repaso futuro). Nueva **R10 · Receta del profesor**: criterios de 9,5 y 10 por punto antes de construir; en cada
