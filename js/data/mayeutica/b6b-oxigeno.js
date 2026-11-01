@@ -302,7 +302,7 @@ export const MAYEUTICA_OXIGENO = {
             pregunta: { id: 'co-ata-4', tipo: 'test', fuente: 'mt-co-corazon',
               enunciado: 'Atanasio, 64 años, fumador, COHb del 31 %, confuso y atáxico, sin dolor en el pecho. La residente duda de pedir ECG y troponina. ¿Qué dato suyo los pide?',
               opciones: [
-                { t: 'La confusión y la ataxia: por clínica es moderada o grave (p. 21), y ahí hay lesión miocárdica en ~40 % (p. 22)', ok: true },
+                { t: 'La confusión y la ataxia: los síntomas neurológicos (p. 21) hacen pensar en intoxicación moderada o grave, con lesión miocárdica en ~40 % (p. 22)', ok: true },
                 { t: 'La COHb del 31 %', porque: 'La COHb se correlaciona mal con la gravedad (p. 20); dejarías sin ECG a un grave con COHb baja.' },
                 { t: 'La cefalea frontal: es el síntoma que avisa del daño cardíaco por CO', porque: 'La cefalea es neurológica; la lesión miocárdica (cerca del 40 % de las moderadas o graves) se busca con ECG y marcadores aunque no haya síntomas cardíacos (p. 20-22).' }],
               explicacion: 'Lesión miocárdica en cerca del <span class="hl-rojo">40 %</span> de las moderadas o graves, de mal pronóstico: <span class="hl">ECG y biomarcadores</span> (' + pdf(22) + ').' } },
@@ -379,7 +379,7 @@ export const MAYEUTICA_OXIGENO = {
       { id: 'cn-g4', corto: 'tiosulfato y riñón', tipo: 'test', fuente: 'mt-cn-tiosulfato',
         enunciado: 'El tiosulfato convierte el cianuro en tiocianato. ¿Por qué no se da en la insuficiencia renal?',
         opciones: [
-          { t: 'Porque el tiocianato, neurotóxico, se acumula sin riñón y da psicosis', ok: true },
+          { t: 'Porque el tiocianato, neurotóxico, se acumula en la insuficiencia renal y puede dar psicosis', ok: true },
           { t: 'Porque sin riñón el tiosulfato deja de convertir el cianuro en tiocianato', porque: 'La conversión no depende del riñón; lo que depende de él es la eliminación del tiocianato. Con esa idea no entenderías el riesgo real, la neurotoxicidad (p. 25).' },
           { t: 'Porque sin riñón el tiosulfato empeora la acidosis láctica y la hipotensión', porque: 'El libro no dice eso: el motivo es el tiocianato que se acumula. Con un riñón sano no habría problema y lo evitarías sin razón (p. 25).' }],
         explicacion: 'El tiosulfato lo convierte en tiocianato (Ecuación 53.1), que <span class="hl-azul">elimina el riñón</span>; es <span class="hl-rojo">neurotóxico</span> y en la insuficiencia renal se acumula y puede dar una psicosis aguda (' + pdf(24) + ' y ' + pdf(25) + ').' },
@@ -395,7 +395,7 @@ export const MAYEUTICA_OXIGENO = {
       { id: 'cn-e1', corto: 'dosis en la parada', tipo: 'test', fuente: 'mt-tabla-53-1 · mt-cn-hidroxo',
         enunciado: 'Una adulta con cianuro entra en parada cardíaca. ¿Qué hidroxocobalamina le das?',
         opciones: [
-          { t: '5 g y otros 5 g a los 15 min, como en cualquier otro caso', porque: 'En la parada el libro da 10 g, no 5. Infundir 5 g y esperar retrasaría el antídoto a quien tiene minutos (p. 24).' },
+          { t: '5 g y otros 5 g a los 15 min, como en cualquier otro caso', porque: 'La fuente no fija el intervalo de la 2.ª dosis. En la parada el libro da 10 g, no 5. Infundir 5 g y esperar retrasaría el antídoto a quien tiene minutos (p. 24).' },
           { t: 'Hidroxocobalamina 10 g IV en la parada, no los 5 g usuales', ok: true },
           { t: 'Solo tiosulfato sódico 12,5 g, el antídoto de elección', porque: 'El de elección es la hidroxocobalamina; el tiosulfato se usa en combinación con ella (p. 24-25).' }],
         explicacion: 'Hidroxocobalamina, <span class="hl">antídoto de elección</span>: 5 g IV en 15 min y <span class="hl-rojo">10 g en la parada</span> (Tabla 53.1, ' + pdf(24) + ').' },
@@ -407,13 +407,13 @@ export const MAYEUTICA_OXIGENO = {
           { t: 'El nitrito de amilo inhalado es el antídoto de elección cuando hay humo.', mal: true,
             c: 'Está <span class="hl-rojo">contraindicado en la inhalación de humo</span>; solo es un alivio temporal cuando no hay vía IV (p. 24).' },
           { t: 'Segunda dosis de 5 g a los 15 min en todos los casos.', mal: true,
-            c: 'Solo <span class="hl-rojo">si amenaza la vida</span>; en la parada, 10 g (p. 24).' }],
+            c: 'La fuente no fija el intervalo de la 2.ª dosis (15 min es la duración de la infusión). Solo <span class="hl-rojo">si amenaza la vida</span>; en la parada, 10 g (p. 24).' }],
         explicacion: 'Tabla 53.1 y comentarios de la hidroxocobalamina, en ' + pdf(24) + '.' },
       { id: 'cn-e3', corto: 'sólo el Cyanokit', tipo: 'test', fuente: 'mt-cn-kits',
         enunciado: 'En la parada por cianuro solo tienes un Cyanokit®. ¿Qué te falta?',
         opciones: [
           { t: 'La segunda dosis (10 − 5 g), el diluyente y el tiosulfato', ok: true },
-          { t: 'Solo el diluyente: 5 g repetidos a los 15 min equivalen a los 10 g', porque: 'En la parada son 10 g de una vez y el kit no trae segunda dosis; además falta el tiosulfato (p. 24-25).' },
+          { t: 'Solo el diluyente: 5 g repetidos a los 15 min equivalen a los 10 g', porque: 'La fuente no fija el intervalo de la 2.ª dosis. En la parada son 10 g de una vez y el kit no trae segunda dosis; además falta el tiosulfato (p. 24-25).' },
           { t: 'Solo el nitrito de amilo, que sí viene en el otro kit y es el principal', porque: 'El nitrito de amilo viene en el Cyanide Antidote Kit y está contraindicado en el humo; el que falta es la segunda dosis (p. 24-25).' }],
         explicacion: 'Cyanokit®: 5 g de hidroxocobalamina en polvo, <span class="hl-rojo">sin diluyente, sin segunda dosis, sin tiosulfato ni nitrito de amilo</span>. En la parada se necesitan 10 g (' + pdf(24) + ' y ' + pdf(25) + '). El resto es de la lectura propia.',
         origen: 'ficha · los 10 g en parada y los 5 g del kit' },
@@ -422,7 +422,7 @@ export const MAYEUTICA_OXIGENO = {
         opciones: [
           { t: 'Un shock séptico: pides cultivos y empiezas antibióticos sin tocar el nitroprusiato', porque: 'Puede coexistir, pero el nitroprusiato es una fuente iatrogénica de cianuro "que nunca debe pasarse por alto". Seguir infundiéndolo agravaría la intoxicación (p. 22).' },
           { t: 'Cianuro por el nitroprusiato: es una fuente iatrogénica que no hay que olvidar', ok: true },
-          { t: 'Toxicidad por tiocianato: paro el nitroprusiato y aviso a psiquiatría', porque: 'El tiocianato da psicosis sin riñón (p. 25); el lactato que sube es cianuro (p. 22-23). Pararías la perfusión pero dejarías el cianuro sin antídoto.' }],
+          { t: 'Toxicidad por tiocianato: paro el nitroprusiato y aviso a psiquiatría', porque: 'El tiocianato se acumula en la insuficiencia renal y puede dar psicosis; con riñón sano se elimina (p. 25); el lactato que sube es cianuro (p. 22-23). Pararías la perfusión pero dejarías el cianuro sin antídoto.' }],
         explicacion: 'Fuentes: inhalación en incendios, ingesta de cianuro potásico o sódico y <span class="hl-rojo">el nitroprusiato</span> sódico en infusión, que «nunca debe pasarse por alto» (' + pdf(22) + '). El caso es inventado.' },
       { id: 'cn-e5', corto: 'la ingesta', tipo: 'test', fuente: 'mt-cn-clinica · mt-cn-fuentes',
         enunciado: 'Una mujer tomó cianuro potásico hace 20 minutos y está asintomática. ¿Qué piensas?',
