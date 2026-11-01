@@ -187,7 +187,7 @@ async function correr(ANCHO, REDUCIDO) {
         ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}${juega.filter(j => !(j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))).map(j => ' [falla: «' + j.texto.slice(0, 70) + '»]').join('')}`);
         ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
         if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
-        if (!REDUCIDO && !juegaProbado) {
+        if (!REDUCIDO && !juegaProbado && juega.length) {
             juegaProbado = true;
             await pulsar(`${PASO(ficha, 'juega')} .est-juega`); await p.waitForTimeout(1500);
             const v = await volverVisible();
