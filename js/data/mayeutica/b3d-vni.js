@@ -23,8 +23,8 @@ export const MAYEUTICA_VNI = {
           { t: 'Con mascarilla facial desde el principio; la CPAP nació para el fallo respiratorio agudo y de ahí pasó a la apnea del sueño', porque: `Es al revés: primero fue una boquilla y la CPAP triunfó en la apnea del sueño (${p(76)}). Con esa idea creerías que la mascarilla ya estaba resuelta, y es justo donde falla la técnica.` },
           { t: 'Con boquilla, solo 10-15 minutos; la CPAP de la apnea del sueño mejoró las mascarillas y abrió el fallo agudo', ok: true },
           { t: 'Con un casco transparente durante horas; la CPAP del sueño no tuvo relación con la VNI aguda', porque: `El casco es una alternativa actual, rara en adultos (${p(80)}); la historia pasa por la boquilla y por la mascarilla de la CPAP (${p(76)}).` }],
-        explicacion: `La VNI se introdujo en los años 40 <span class="hl-azul">por una boquilla, solo 10-15 minutos</span> (IPPB). La CPAP de los años 80 se hizo popular en la apnea obstructiva del sueño, <span class="hl-azul">mejoró el diseño de las mascarillas</span>, y en los 90 llegó al fallo respiratorio agudo (${p(76)}).` + enFicha(M, 'nep-historia-vni') },
-      { id: 'vni-g2', corto: 'qué sube con la CPAP', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'nep-cpap-presion',
+        explicacion: `La VNI se introdujo en los años 40 <span class="hl-azul">por una boquilla, solo 10-15 minutos</span> (IPPB). La CPAP de los años 80 se hizo popular en la apnea obstructiva del sueño, <span class="hl-azul">mejoró las mascarillas</span>, y en los 90 llegó al fallo respiratorio agudo (${p(76)}).` + enFicha(M, 'nep-historia-vni') },
+      { id: 'vni-g2', corto: 'qué sube con la CPAP', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'nep-cpap-presion', origen: 'ficha; el monitor, ilustrativo',
         modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: sube el mando PEEP (hace de CPAP) de 0 a 10'),
         enunciado: 'Una paciente respira con CPAP de 10 cmH₂O. ¿Qué sube con esa presión y qué no sube?',
         puntos: [
@@ -38,7 +38,7 @@ export const MAYEUTICA_VNI = {
           { t: 'Apnea del sueño y edema pulmonar cardiogénico; rara vez en el fallo respiratorio agudo', ok: true },
           { t: 'Casi solo el fallo respiratorio agudo; en la apnea del sueño es insuficiente porque el colapso es inspiratorio', porque: `El uso principal es la apnea obstructiva del sueño: la presión evita el colapso inspiratorio de la faringe (${p(77)}). Dejarías sin tratar la causa de la obstrucción.` }],
         explicacion: `El uso principal es la <span class="hl-azul">apnea obstructiva del sueño</span>; también ha tenido éxito en el <span class="hl-azul">edema pulmonar cardiogénico agudo</span>, y <span class="hl-rojo">rara vez se usa en el fallo respiratorio agudo</span> (${p(77)}).` + enFicha(M, 'nep-cpap-usos') },
-      { id: 'vni-g4', corto: 'IPAP y PEEP', tipo: 'test', fuente: 'nep-bipap',
+      { id: 'vni-g4', corto: 'IPAP y PEEP', tipo: 'test', fuente: 'nep-bipap', origen: 'ficha; el pico de 15 del monitor, ilustrativo',
         modeloVivo: pv('psv-disparo', '🫁 Presión de soporte: pico 15 = PEEP 5 + soporte 10'),
         enunciado: 'En la ventilación no invasiva con dos niveles de presión (bilevel) el paciente dispara cada insuflación. ¿Qué presiones se usan y por qué no más altas?',
         opciones: [
