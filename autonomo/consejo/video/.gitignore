@@ -1,0 +1,9 @@
+# Modelos de voz (≈570 MB, los baja instalar.sh), audios intermedios y vídeos montados
+voces/kokoro/
+voces/*.onnx
+voces/*.onnx.json
+*/audio/
+*.wav
+*.mp4
+*.mp3
+__pycache__/
