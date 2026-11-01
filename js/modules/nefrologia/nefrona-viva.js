@@ -263,7 +263,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         ca: { nombre: 'Ca²⁺', clave: 'ca', tasa: 2.5, r: 2 },
         mg: { nombre: 'Mg²⁺', clave: 'mg', tasa: 2, r: 2 },
         p: { nombre: 'Fosfato', clave: 'p', tasa: 2.5, r: 2.2 },
-        celula: { nombre: 'Célula desprendida (NTA)', clave: 'celula', tasa: 0, r: 2.4 },
+        celula: { nombre: 'Célula desprendida', clave: 'celula', tasa: 0, r: 2.4 },
     };
     // Vista de célula: [nombre del rótulo, color (para rótulos y guías), especie de la tabla].
     // `ca` es el paso de Ca²⁺ y Mg²⁺ entre las células: alterna las dos formas.
@@ -560,7 +560,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         return `<g>${g}<animateMotion dur="${dur}s" begin="${retraso}s" repeatCount="indefinite" path="${ruta}"/>${fade}</g>`;
     }
     const bloqueado = (seg, canal) => {
-        if (M.fra?.nta && (seg === 'tubulo-proximal' || seg === 'asa-ascendente-gruesa')) return { nombre: 'NTA', danio: true };
+        if (M.fra?.nta && (seg === 'tubulo-proximal' || seg === 'asa-ascendente-gruesa')) return { nombre: M.fra.rabdo ? 'daño por mioglobina' : 'NTA', danio: true };
         const f = farmacosNefrona.find(x => x.id === estado.farm);
         if (f.segmento === seg && f.canal === canal) return f;
         return efecto(seg, canal, 'bloquea'); // lo que falla en la situación (ATR, PTH, FGF23)
@@ -687,7 +687,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 const yl = f.y0 + f.h - 4;
                 textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal || act ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
                 let nota = '';
-                if (danada) nota = 'Célula dañada (NTA): apenas reabsorbe';
+                if (danada) nota = `Célula dañada ${M.fra.rabdo ? 'por la mioglobina' : '(NTA)'}: apenas reabsorbe`;
                 else if (bl) nota = bl.nota ?? `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
                 else if (sinK) nota = `Sin K⁺ que reciclar: ${sinK.nombre} bloquea ${cn.depende}`;
                 else if (act) nota = act.nota;
@@ -718,7 +718,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 }
                 const yl = f.y0 + f.h - 4;
                 textos += txt(lblX, yl - 11, 'Anhidrasa carbónica (enzima)', { size: 10, peso: 'bold' });
-                textos += txt(lblX, yl, off ? (danada ? 'Célula dañada (NTA)' : bl.nota ?? 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
+                textos += txt(lblX, yl, off ? (danada ? (M.fra.rabdo ? 'Célula dañada por la mioglobina' : 'Célula dañada (NTA)') : bl.nota ?? 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
             } else if (f.t === 'para') {
                 const yc = f.y0 + f.h / 2;
                 // Sin la carga positiva de la luz (NKCC2 bloqueado), el Ca²⁺ y el Mg²⁺ se quedan en la luz.
@@ -916,7 +916,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             ['Osmolalidad', `${Math.round(M.Uosm)} mOsm/kg`, extremo, signo(M.Uosm, REF.Uosm), estado.sit === 'siadh' && sinFarm ? 'Ficha: >100 mOsm/kg, inapropiadamente concentrada' : notaOsm(M.Uosm)],
             sit.naOrina && sinFarm
                 ? ['Na⁺ en orina', sit.naOrina, true, 'sube', 'Con ingesta normal de sal y agua']
-                : [enPico() ? 'Na⁺ excretado en el pico' : 'Na⁺ excretado', `${fen < 1.95 ? fen.toFixed(1).replace('.', ',') : Math.round(fen)}% del filtrado`, sinFarm, signo(M.fena, REF.fena, 0.3), 'El resto se reabsorbe'],
+                : [enPico() ? 'Na⁺ excretado en el pico' : 'Na⁺ excretado', `${fen < 1.95 ? fen.toFixed(1).replace('.', ',') : Math.round(fen)}% del filtrado`, sinFarm && estado.sit !== 'rabdo', signo(M.fena, REF.fena, 0.3), estado.sit === 'rabdo' ? 'Ilustrativo: la EFNa puede ser falsamente baja con mioglobinuria (Marino, p. 54)' : 'El resto se reabsorbe'],
             ['K⁺ en orina', `×${num(M.kRel)}`, false, signo(M.kRel, 1, 0.12), M.kRel > 1.15 ? 'Se pierde K⁺' : M.kRel < 0.85 ? 'Se ahorra K⁺' : 'Respecto a lo normal'],
             ['Glucosa', M.gGdia > 0.5 ? `${Math.round(M.gGdia)} g/día` : 'No', M.gGdia <= 0.5 && estado.farm !== 'isglt2', M.gGdia > 0.5 ? 'sube' : '', M.gGdia > 0.5 ? 'Glucosuria' : 'Se reabsorbe el 100%'],
             ['HCO₃⁻', M.hco3 > 0.05 ? 'Sale' : 'Casi nada', false, M.hco3 > 0.05 ? 'sube' : '', M.hco3 > 0.05 ? 'Orina alcalina' : 'Lo recupera el proximal'],
@@ -972,7 +972,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 const bl = bloqueado(estado.seg, cn.nombre);
                 const sinK = !bl && cn.depende && bloqueado(estado.seg, cn.depende);
                 const act = efecto(estado.seg, cn.nombre, 'activa');
-                const estadoTxt = bl ? (bl.danio ? 'célula dañada (NTA)' : bl.nota ?? `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : act ? act.nota : '';
+                const estadoTxt = bl ? (bl.danio ? (M.fra.rabdo ? 'célula dañada por la mioglobina' : 'célula dañada (NTA)') : bl.nota ?? `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : act ? act.nota : '';
                 return `<div class="nv-canal${bl || sinK ? ' bloq' : ''}"><h4>${cn.nombre}${estadoTxt ? ` <span>· ${estadoTxt}</span>` : ''}</h4>${cn.funcion}${cn.diana ? `<div class="nv-canal-diana">Diana: ${cn.diana}</div>` : ''}</div>`;
             }).join('')
             + (d.general ? `<p class="nv-general">${d.general}</p>` : '');

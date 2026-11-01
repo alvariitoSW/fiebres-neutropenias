@@ -48,8 +48,8 @@ export function lecturasK(e, nombreModo) {
             : 'Entre la HD y la continua; el ritmo es ilustrativo';
     const items = [[`K⁺ sérico esperado a las ${e.horas} h`, valor, ficha, k > K_CALCIO ? 'malo' : '', nota]];
     const av = [];
-    if (e.k0 >= K_CALCIO && e.calcio === 'no') av.push(['danger', `K⁺ ${String(e.k0).replace('.', ',')} mEq/L sin calcio: primero estabiliza la membrana con calcio IV (gluconato al 10 %, 10 ml en 3 min); la diálisis tarda y el calcio actúa en minutos (Marino, electrolitos, p. 26-27).`]);
-    if (e.k0 >= K_CALCIO && e.calcio === 'si') av.push(['warn', 'El calcio no baja el potasio y su efecto dura 30-60 min: la eliminación (diálisis) no puede esperar (Marino, electrolitos, p. 27).']);
+    if (e.k0 > K_CALCIO && e.calcio === 'no') av.push(['danger', `K⁺ ${String(e.k0).replace('.', ',')} mEq/L sin calcio: primero estabiliza la membrana con calcio IV (gluconato al 10 %, 10 ml en 3 min); la diálisis tarda y el calcio actúa en minutos (Marino, electrolitos, p. 26-27).`]);
+    if (e.k0 > K_CALCIO && e.calcio === 'si') av.push(['warn', 'El calcio no baja el potasio y su efecto dura 30-60 min: la eliminación (diálisis) no puede esperar (Marino, electrolitos, p. 27).']);
     if (lento) av.push(['warn', 'La hemofiltración aclara despacio los solutos pequeños: no es adecuada para la hiperpotasemia que amenaza la vida (Marino, ácido-base y renal, p. 57-58). Con K⁺ alto, hemodiálisis.']);
     if (e.modo === 'hd' && e.horas >= 1) av.push(['ok', 'Hemodiálisis: ≈1 mEq/L menos en la 1.ª hora y ≈2 mEq/L menos a las 3 h; bastan unas horas para vaciar una carga de K⁺ que amenaza la vida (Marino, electrolitos, p. 28-29; ácido-base y renal, p. 57).']);
     const tope = horaTope(e.k0, e.modo);
