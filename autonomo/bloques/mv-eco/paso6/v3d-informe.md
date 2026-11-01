@@ -1,0 +1,7 @@
+# v3d · carril Doppler, vuelta 3 (arreglos 2 y 3) · rama wt/mv6-v3d
+**2. Escala** (`doppler.mjs` `escalaCw`/`ESCALAS_CW`, usada por `escalarPorPico`): escalones ±150/200/225/250/300/350/400/500/700 (añadidos 200, 225, 300, 350 a `eco.html`). Manda el chorro: el menor escalón en que cabe entero (≤100 %); el llenado solo entra si no baja el chorro del 60 %. TEP 250,8 → ±250 (63 %, antes ±400 al 40 %); IM dilatada/fallo 222 → ±225 (62 %); HP −408 → ±400 (64 %); IT normal en su escalón (≥60 %). Prueba en `doppler-it.test.mjs` (4 casos + TEP 250,8).
+**3. `velCwReg`**: las E y A salen de la curva real de la válvula (`velOrificio`), sin forma inventada. Quitada la meseta: chorro < 60 cm/s (ΔP = 4v² < 1,4 mmHg) = flujo de cierre, no chorro (Bernoulli; fisiología general, ilustrativo). Captura fallo: sin meseta tras el domo (`v3d-despues/`).
+**Duración de E/A**: en la IT normal (FC 71) E+llenado sobre la base dura ~290 ms (prueba ≥120 ms en verde). Las «púas» salían de la FC: fallo 122 lpm y TEP 119 lpm dejan ~40 ms de E y A; es del motor (diástole de ~200 ms), no del dibujo.
+## No comprobado / riesgo
+- **Cifra mala del motor, no tapada**: la A de la tricúspide del normal llega a ~257 cm/s en ~40 ms (qTri 1133 mL/s); real ~30-40 cm/s. En el dibujo se sale por arriba (recorte). Además en el TEP el chorro persiste en diástole y se come la E. Ambos: motor.mjs, otro carril.
+- Captura del TEP tomada al arrancar el trazado (solo un latido); HP y hp no revisadas a ojo. Las pruebas pedidas se lanzaron con la máquina cargada: ver entrega.
