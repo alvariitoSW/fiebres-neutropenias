@@ -42,7 +42,7 @@ function pintar(mover = false) {
   document.querySelectorAll('.modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
   document.querySelectorAll('.presets button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === clave)));
   document.querySelectorAll('[data-paso]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.paso === paso)));
-  const pa = PASOS[paso - 1]; $('paso-txt').innerHTML = pa ? `<b>${paso}. ${pa[0]}.</b> ${pa[1]} ${cita(pa[2])}` : 'Reposo: elige un paso del ciclo.';
+  const pa = PASOS[paso - 1]; $('paso-txt').innerHTML = pa ? `<b>${paso}. ${pa[0]}.</b> ${pa[1]} ${pa[2] ? cita(pa[2]) : ''}<span class="origen-paso"> · ${pa[3] || 'ficha'}</span>` : 'Reposo: elige un paso del ciclo.';
   $('fig-hielo').classList.toggle('resalta', s.hielo >= 2);
   const enl = []; if (L.crit) enl.push(['pulmón vivo «debilidad neuromuscular»']); if (L.k >= 5.5) enl.push(['ritmo vivo «hiperpotasemia»']);
   $('enlaces').innerHTML = enl.map(([t]) => `<button type="button" class="enlace-app">Abrir el ${t}</button>`).join(''); $('enlaces').hidden = !enl.length;

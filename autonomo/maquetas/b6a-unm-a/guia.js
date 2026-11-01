@@ -10,7 +10,7 @@ export const GUIAS = {
     { t: 'En la miastenia, anticuerpos (las Y rojas) rompen las copas: quedan menos receptores. El porcentaje de receptores es ilustrativo.', z: ['copas'], paso: 3, p: '24:mn-mg-anticuerpos', o: 'ficha; porcentaje ilustrativo' },
     { t: 'Con estímulo repetido la respuesta decae: cada sacudida gasta ACh y quedan pocas copas libres. Por eso empeora con la actividad y mejora con el reposo.', z: ['pulgar'], paso: 3, p: '24:mn-miastenia', o: 'ficha; magnitud ilustrativa', haz: [['est', { v: true }]], btn: 'Estímulo repetido' },
     { t: 'Prueba del hielo: 2 minutos sobre el párpado con ptosis; más de 2 mm de mejoría es positiva. El mecanismo no lo explica Marino: otra fuente pendiente.', z: ['copas'], paso: 3, p: '25:mn-mg-hielo', o: 'ficha', haz: [['hielo', 2]], btn: 'Hielo 2 min' },
-    { t: 'La CV (1,26 L, 18 mL/kg) y la PIM (−30) son el semáforo: se intuba con CV ≤15 mL/kg (o <1 L) o PIM −20. Un aminoglucósido empeora la placa: pulsa «Hazlo».', z: ['cv'], paso: 3, p: '25:mn-mg-intubacion', o: 'ficha; CV y PIM del modelo ilustrativas', haz: [['gent', 1]], btn: 'Gentamicina' }]],
+    { t: 'La CV (1,47 L, 21 mL/kg) y la PIM (−30) son el semáforo: se intuba con CV ≤15 mL/kg (o <1 L) o PIM −20. Un aminoglucósido empeora la placa: pulsa «Hazlo».', z: ['cv'], paso: 3, p: '25:mn-mg-intubacion', o: 'ficha; CV y PIM del modelo ilustrativas', haz: [['gent', 1]], btn: 'Gentamicina' }]],
 };
 export function crearGuia({ caja, hacer, cita, setFoco }) {
   let g = null, i = 0;

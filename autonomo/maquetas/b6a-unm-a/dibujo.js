@@ -46,8 +46,8 @@ export function escena(s, L, paso, foco, oculto) {
   for (let i = 0; i < n; i++) { const h = oculto ? 0 : L.amp[i] * 0.5; o.push(`<rect class="barra" x="${34 + 40 * i}" y="${f(270 - h)}" width="26" height="${f(h)}" rx="2"/><text class="min" x="${47 + 40 * i}" y="283" text-anchor="middle">${s.est ? 'T' + (i + 1) : 'T1'}</text>`); }
   o.push(`<text class="oro" x="196" y="198" text-anchor="end">${s.est ? (oculto ? 'TOF ?' : `TOF ${L.tof}/4`) : ''}</text>`);
   // CV y PIM
-  const cvh = oculto ? 0 : Math.min(60, L.cv), pimh = oculto ? 0 : Math.min(60, -L.pim * 0.6);
-  o.push(`<rect class="caja" x="232" y="210" width="30" height="60"/><rect class="barra ${L.crit ? 'roja' : ''}" x="232" y="${f(270 - cvh)}" width="30" height="${f(cvh)}"/><line class="umbral" x1="228" y1="255" x2="266" y2="255"/><text class="min" x="268" y="258">15</text>`);
+  const cvh = oculto ? 0 : Math.min(60, L.cv * 6 / 7), pimh = oculto ? 0 : Math.min(60, -L.pim * 0.6);
+  o.push(`<rect class="caja" x="232" y="210" width="30" height="60"/><rect class="barra ${L.crit ? 'roja' : ''}" x="232" y="${f(270 - cvh)}" width="30" height="${f(cvh)}"/><line class="umbral" x1="228" y1="257" x2="266" y2="257"/><text class="min" x="268" y="260">15</text>`);
   o.push(`<rect class="caja" x="296" y="210" width="30" height="60"/><rect class="barra ${L.crit ? 'roja' : ''}" x="296" y="${f(270 - pimh)}" width="30" height="${f(pimh)}"/><line class="umbral" x1="292" y1="258" x2="330" y2="258"/><text class="min" x="332" y="256">−20</text>`);
   o.push(`<text x="247" y="283" text-anchor="middle">CV</text><text x="311" y="283" text-anchor="middle">PIM</text><text class="oro" x="247" y="204" text-anchor="middle">${s.via ? 'VM' : oculto ? '?' : fmt(L.cv)}</text><text class="oro" x="311" y="204" text-anchor="middle">${s.via ? 'VM' : oculto ? '?' : fmt(L.pim)}</text>`);
   for (const z of foco) { const r = ZONAS[z]; if (r) o.push(`<rect class="foco" x="${r[0]}" y="${r[1]}" width="${r[2]}" height="${r[3]}" rx="8"/>`); }

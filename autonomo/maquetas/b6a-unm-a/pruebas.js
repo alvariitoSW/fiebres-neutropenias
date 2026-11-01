@@ -11,10 +11,10 @@ export const APUESTA = {
 };
 export const ERROR = {
   preset: 'sera', titulo: 'Encuentra el error (hay 0, 1 o 2)',
-  antes: 'Serapio, miastenia, neumonía. CV 1.260 mL (18 mL/kg) y PIM −30. El R1 escribe la orden: juzga cada línea.',
+  antes: 'Serapio, miastenia, neumonía. CV 1.470 mL (21 mL/kg) y PIM −30. El R1 escribe la orden: juzga cada línea.',
   frases: [
     { t: 'Neumonía: se añade gentamicina al tratamiento.', error: true, por: 'Error: los aminoglucósidos están en la Tabla 46.5 de fármacos que empeoran la miastenia; la fuerza cae y puede llevar a la intubación (p. 24).' },
-    { t: 'Aún no cumple criterio de intubar: se vigilan la CV y la PIM de cerca.', error: false, por: 'Cierto: se intuba con CV ≤15 mL/kg (o <1 L) o PIM −20; aquí hay 18 mL/kg y −30, pero sin esperar al in extremis (p. 25).' },
+    { t: 'Aún no cumple criterio de intubar: se vigilan la CV y la PIM de cerca.', error: false, por: 'Cierto: se intuba con CV ≤15 mL/kg (o <1 L) o PIM −20; aquí hay 21 mL/kg y −30, pero sin esperar al in extremis (p. 25).' },
     { t: 'Piridostigmina para mejorar la fuerza mientras respira bien.', error: false, por: 'Cierto: solo se evita en el fracaso respiratorio por las secreciones; aquí no lo hay (p. 26).' },
     { t: 'Si empeora, plasmaféresis antes que inmunoglobulina.', error: false, por: 'Cierto: la plasmaféresis actúa antes (IgIV tarda 4-5 días) (p. 26).' }],
 };

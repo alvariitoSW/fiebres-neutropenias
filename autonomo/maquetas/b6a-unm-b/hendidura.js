@@ -15,4 +15,4 @@ export function pintarHend(svg, s, paso, oculto) {
   if (paso === 1) pulso(svg);
   return moverAch(svg, previas, nuevas, 0.8);
 }
-export const pasoHtml = (paso, cita) => { const pa = PASOS[paso - 1]; return pa ? `<b>${paso}. ${pa[0]}.</b> ${pa[1]} ${cita(pa[2])}` : 'Reposo: elige un paso del ciclo o pulsa «Ver el ciclo».'; };
+export const pasoHtml = (paso, cita) => { const pa = PASOS[paso - 1]; return pa ? `<b>${paso}. ${pa[0]}.</b> ${pa[1]} ${pa[2] ? cita(pa[2]) : ''}<span class="origen-paso"> · ${pa[3] || 'ficha'}</span>` : 'Reposo: elige un paso del ciclo o pulsa «Ver el ciclo».'; };
