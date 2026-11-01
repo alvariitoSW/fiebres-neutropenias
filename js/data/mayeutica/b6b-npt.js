@@ -46,7 +46,7 @@ export const MAYEUTICA_NPT = {
         enunciado: 'Un preparado de oligoelementos de los de la tabla, frente a las necesidades diarias. ¿Cuántos de los 7 oligoelementos quedan cortos?',
         opciones: [
           { t: 'Ninguno: está hecho para cubrir las necesidades', porque: 'El libro avisa de lo contrario: el preparado no las cubre. Si lo das por completo, tu paciente de nutrición parenteral larga puede quedarse corto sin que lo sospeches (p. 39).' },
-          { t: '5 de los 7, con consecuencias desconocidas', ok: true },
+          { t: '5 de los 7 oligoelementos de la tabla', ok: true },
           { t: 'Solo el hierro, que no lleva', porque: 'El hierro y el yodo faltan, pero la tabla deja cortos además cromo, cobre, manganeso y zinc (el texto cuenta 5 de los 7). Corregir solo el hierro dejaría el resto sin vigilar (p. 39).' }],
         explicacion: '«Las necesidades diarias de <span class="hl-rojo">5 de los 7</span> oligoelementos no se cubren con este producto; las consecuencias de este desajuste no se conocen» (' + pdf(39) + ').',
         nota: '<b>Nota de fidelidad.</b> La tabla imprime el cobre como «1 µg» y el selenio y el zinc sin unidades. Con el cobre en 1 µg quedarían cortos seis, no cinco: se reproduce la tabla tal cual y el texto («5 of the 7»), sin corregirlos (' + pdf(39) + ').' },
@@ -137,13 +137,6 @@ export const MAYEUTICA_NPT = {
   'mu-npt-pauta': {
     entrada: 'Cómo se construye la bolsa: calorías y proteína, aminoácidos, primero lípidos y luego glucosa, el ritmo, y qué cambia con propofol o con riesgo de realimentación.',
     guia: [
-      { id: 'npt-p-g1', corto: 'primero los lípidos', tipo: 'test', fuente: 'mu-npt-paso3 · mu-npt-calc',
-        enunciado: 'Para repartir las calorías no proteicas, ¿por qué el libro empieza por los lípidos y deja la glucosa para después?',
-        opciones: [
-          { t: 'Los lípidos se fijan en una cantidad estándar (250 mL al 20 % = 500 kcal) y la D50 rellena el resto', ok: true },
-          { t: 'Porque los lípidos son la fuente principal, el 70 % de las calorías, y la glucosa solo un complemento', porque: 'El 70 % de las calorías no proteicas lo pone la glucosa; los lípidos, en torno al 30 %. Con la idea cambiada darías de más grasa y de menos glucosa (p. 36-37).' },
-          { t: 'Porque la D50 no se puede mezclar con los aminoácidos', porque: 'Los aminoácidos «se pueden mezclar con las soluciones de glucosa y las emulsiones lipídicas» en la 3 en 1; no es un problema de compatibilidad sino de orden de cálculo (p. 37).' }],
-        explicacion: 'Paso 3: «empieza por los lípidos»: 250 mL al 20 % = 500 kcal. Quedan 1.750 − 500 = <span class="hl">1.250 kcal</span> de glucosa; la D50 da 1,7 kcal/mL: 1.250 ÷ 1,7 = <span class="hl-rojo">735 mL</span> (' + pdf(40) + ').' },
       { id: 'npt-p-g2', corto: 'propofol 15 mL/h', tipo: 'test', fuente: 'mu-npt-paso1 · mu-nota-propofol',
         enunciado: 'Un adulto de 70 kg lleva propofol a 15 mL/h. Predice: ¿qué le quitas a las calorías de su NPT, con la cuenta del cap. 50?',
         opciones: [
@@ -152,6 +145,13 @@ export const MAYEUTICA_NPT = {
           { t: 'Nada: el propofol es sedante, no nutriente', porque: 'El propofol va en una emulsión lipídica al 10 % y aporta calorías de lípido. Ignorarlas es darle más calorías de las que necesita (p. 40).' }],
         explicacion: 'El propofol va en una emulsión al 10 % (1 kcal/mL en el cap. 50): <span class="hl">los mL/h son las kcal/h</span>. 15 mL/h × 24 h = <span class="hl-rojo">360 kcal</span> a restar de las 1.750 kcal: quedan 1.390 kcal (' + pdf(40) + ').',
         nota: NOTA_PROPOFOL },
+      { id: 'npt-p-g1', corto: 'primero los lípidos', tipo: 'test', fuente: 'mu-npt-paso3 · mu-npt-calc',
+        enunciado: 'Para repartir las calorías no proteicas, ¿por qué el libro empieza por los lípidos y deja la glucosa para después?',
+        opciones: [
+          { t: 'Los lípidos se fijan en una cantidad estándar (250 mL al 20 % = 500 kcal) y la D50 rellena el resto', ok: true },
+          { t: 'Porque los lípidos son la fuente principal, el 70 % de las calorías, y la glucosa solo un complemento', porque: 'El 70 % de las calorías no proteicas lo pone la glucosa; los lípidos, en torno al 30 %. Con la idea cambiada darías de más grasa y de menos glucosa (p. 36-37).' },
+          { t: 'Porque la D50 no se puede mezclar con los aminoácidos', porque: 'Los aminoácidos «se pueden mezclar con las soluciones de glucosa y las emulsiones lipídicas» en la 3 en 1; no es un problema de compatibilidad sino de orden de cálculo (p. 37).' }],
+        explicacion: 'Paso 3: «empieza por los lípidos»: 250 mL al 20 % = 500 kcal. Quedan 1.750 − 500 = <span class="hl">1.250 kcal</span> de glucosa; la D50 da 1,7 kcal/mL: 1.250 ÷ 1,7 = <span class="hl-rojo">735 mL</span> (' + pdf(40) + ').' },
       { id: 'npt-p-g3', corto: '42 mL/h', tipo: 'test', fuente: 'mu-npt-paso4 · mu-npt-calc',
         enunciado: 'La bolsa del ejemplo del libro sale a 84 mL/h. ¿Por qué empezar a 42 mL/h si hay riesgo de realimentación?',
         opciones: [
@@ -190,7 +190,7 @@ export const MAYEUTICA_NPT = {
           { t: '2.015 mL en 12 h: 168 mL/h', porque: 'La NPT del ejemplo se infunde en 24 h. En 12 h doblarías el ritmo de glucosa y empeorarías la hiperglucemia y la hipofosfatemia (p. 40-41).' },
           { t: '1.000 mL en 24 h: 42 mL/h', porque: 'Eso es solo el litro de aminoácidos, o el ritmo al 50 %. La bolsa completa suma aminoácidos, lípidos, D50 y 30 mL de aditivos (p. 40-41).' }],
         explicacion: '1 L + 250 mL + 735 mL + 30 mL = 2.015 mL; ÷ 24 = <span class="hl-rojo">84 mL/h</span> (' + pdf(40) + ').' },
-      { id: 'npt-p-e4', corto: 'NPP y osmolaridad', tipo: 'test', fuente: 'mu-npp-limite · mu-npp-pauta',
+      { id: 'npt-p-e4', corto: 'NPP y osmolaridad', tipo: 'test', fuente: 'mu-npp-limite · mu-npp-pauta', modeloVivo: { murallaViva: 'enteral' },
         enunciado: 'Una vía periférica para nutrición parenteral. ¿Qué osmolaridad máxima admite y qué calorías da la pauta clásica?',
         opciones: [
           { t: '<900 mOsm/L; 850 kcal de glucosa + 500 de lípidos = 1.350 kcal', ok: true },
@@ -253,16 +253,16 @@ export const MAYEUTICA_NPT = {
                 { t: '84 mL/h completo; empezar a 42 mL/h', porque: 'Son las cifras del ejemplo del libro sin propofol. A Froilán, con 240 kcal de propofol menos, le tocaría una bolsa más pequeña (p. 40-41).' },
                 { t: '77 mL/h desde el primer día, para no retrasar la nutrición', porque: 'Con riesgo de realimentación la ASPEN aconseja empezar al 40-50 % y subir con el fosfato, potasio y magnesio; a ritmo pleno arriesgas hipofosfatemia y arritmias (p. 41 y 43).' }],
               explicacion: '1.854 mL ÷ 24 = <span class="hl-rojo">77 mL/h</span>; al 40-50 %, 31-39 mL/h, y subir en 4-7 días (calculadora; criterio de ' + pdf(41) + ').' } },
-          { momento: 'Día 5 · la glucemia', datos: { 'Glucemia': '230 mg/dL', 'Bolsa': 'NPT completa en curso' }, nuevo: ['Glucemia', 'Bolsa'],
-            pregunta: { id: 'npt-fro-8', tipo: 'test', fuente: 'mu-npt-hiperglucemia · mu-npt-insulina',
-              enunciado: 'Con la bolsa en marcha, la glucemia de Froilán es 230 mg/dL. ¿Qué haces?',
+          { momento: 'Día 5 · los triglicéridos', datos: { 'Triglicéridos': '480 mg/dL (cifra del caso; el libro no da umbral)', 'Propofol': '10 mL/h', 'Lípidos': '250 mL al 20 %' }, nuevo: ['Triglicéridos', 'Propofol', 'Lípidos'],
+            pregunta: { id: 'npt-fro-8', tipo: 'test', fuente: 'mu-nota-propofol · mu-npt-sobrecarga · mu-propofol',
+              enunciado: 'Triglicéridos de 480 con propofol y 250 mL de lípidos. ¿Qué haces?',
               opciones: [
-                { t: 'Insulina regular en perfusión (a menudo dentro de la mezcla); objetivo 140-180 mg/dL', ok: true },
-                { t: 'Quitar la glucosa de la bolsa y dejar solo aminoácidos y lípidos', porque: 'La glucosa pone en torno al 70 % de las calorías no proteicas; sin ella la bolsa dejaría a Froilán sin energía, y el libro trata la hiperglucemia con insulina (p. 36 y 41).' },
-                { t: 'Insulina hasta bajar de 110 mg/dL: cuanto más estricto, mejor', porque: 'El control estricto no se recomienda en el crítico por el riesgo de hipoglucemia, más grave que la hiperglucemia; el objetivo es 140-180 (p. 41).' }],
-              explicacion: 'Glucemia >200 mg/dL en el 45 % de los pacientes con NPT; <span class="hl">insulina regular en perfusión continua</span>, que a menudo se puede añadir a la mezcla, con objetivo <span class="hl-rojo">140-180 mg/dL</span> (' + pdf(41) + '). Cifra del caso: inventada.' } },
+                { t: 'El propofol ya es lípido (1 kcal/mL): vigilar los triglicéridos y, si hay sobrecarga lipídica, parar los lípidos de la bolsa', ok: true },
+                { t: 'Quitar la D50: la glucosa es la que sube los triglicéridos', porque: 'La glucosa pone en torno al 70 % de las calorías no proteicas, pero aquí la fuente de grasa es doble, propofol y bolsa; quitarla dejaría sin energía a Froilán y los lípidos seguirían sumando (p. 36 y 40).' },
+                { t: 'Subir el ritmo de la bolsa para diluirlos', porque: 'Más ritmo es más lípido por hora: empeoras la sobrecarga lipídica, que se resuelve al parar los lípidos (p. 42).' }],
+              explicacion: 'El propofol va en una emulsión lipídica (<span class="hl">1 kcal/mL</span>, ' + pdf(40) + ') y se cuenta como grasa; puede dar hipertrigliceridemia y hay que vigilar los triglicéridos (' + pdf(5) + '). El síndrome de sobrecarga lipídica <span class="hl-rojo">se resuelve al parar los lípidos</span> (' + pdf(42) + '). Cifra del caso: inventada.' } },
           { momento: 'Día 6 · si fuera solo una semana', datos: { 'Pregunta': '¿una vía periférica?' }, nuevo: ['Pregunta'],
-            pregunta: { id: 'npt-fro-6', tipo: 'test', fuente: 'mu-npp-que · mu-npp-limite · mu-npp-pauta',
+            pregunta: { id: 'npt-fro-6', tipo: 'test', fuente: 'mu-npp-que · mu-npp-limite · mu-npp-pauta', modeloVivo: { murallaViva: 'enteral' },
               enunciado: 'Un compañero propone pasar la bolsa por una vena periférica «unos días». ¿Qué pides?',
               opciones: [
                 { t: 'Osmolaridad <900 mOsm/L: no vale la D50; la NPP no es para el hipercatabólico', ok: true },
@@ -284,7 +284,7 @@ export const MAYEUTICA_NPT = {
         lleva: [
           'Primero lípidos (250 mL al 20 % = 500 kcal) y luego D50 para el resto; en la calculadora, 594 mL con propofol a 10 mL/h.',
           'El propofol cuenta: los mL/h son kcal/h (1 kcal/mL en el cap. 50; 1,1 en el cap. 49).',
-          'Con riesgo de realimentación se empieza al 40-50 % y se sube en 4-7 días según fosfato, potasio y magnesio; si la glucemia pasa de 180, insulina en perfusión.'],
+          'Con riesgo de realimentación se empieza al 40-50 % y se sube en 4-7 días según fosfato, potasio y magnesio; el propofol y la bolsa suman lípidos: vigilar triglicéridos.'],
         volver: { nombre: 'Construir la NPT', ancla: 'mu-npt-calc' } },
     ],
     profundizar: [
@@ -300,6 +300,13 @@ export const MAYEUTICA_NPT = {
   'mu-npt-complicaciones': {
     entrada: 'Qué se tuerce con la glucosa y los lípidos de la bolsa, qué mata en la realimentación, y qué corregir antes de nutrir a un desnutrido.',
     guia: [
+      { id: 'npt-c-g5', corto: 'meta de glucemia', tipo: 'test', fuente: 'mu-npt-hiperglucemia · mu-npt-insulina · mu-comparativa-glucemia',
+        enunciado: 'La glucemia en NPT: ¿qué objetivo y qué insulina en el crítico?',
+        opciones: [
+          { t: 'Control estricto de 80-110 mg/dL con insulina en bolos', porque: 'El control estricto no se recomienda en el crítico: la hipoglucemia tiene peores consecuencias que la hiperglucemia (p. 41). El libro no da cifras de ese control; 80-110 es un ejemplo inventado.' },
+          { t: '140-180 mg/dL, insulina regular en perfusión', ok: true },
+          { t: '250 mg/dL con insulina NPH', porque: 'El libro no admite 250 como objetivo, y la NPH (inicio de 1-2 h, duración de 16-24 h, Tabla 50.4) es poco manejable en el crítico. Dejarías al paciente hiperglucémico (p. 41-42).' }],
+        explicacion: 'Objetivo hospitalario <span class="hl-rojo">140-180 mg/dL</span>; en el crítico, <span class="hl">insulina regular en perfusión continua</span>, a menudo añadida a la mezcla (' + pdf(41) + '). La comparativa con el Manual UMI está en la ficha.' },
       { id: 'npt-c-g1', corto: 'el fosfato baja', tipo: 'test', fuente: 'mu-npt-fosfato · mu-real-que',
         enunciado: 'Al empezar la NPT, el fosfato baja. Antes de leer: ¿por qué baja al meter glucosa?',
         opciones: [
@@ -307,6 +314,13 @@ export const MAYEUTICA_NPT = {
           { t: 'Porque el riñón lo elimina de golpe cuando empieza la glucosa y deja al paciente sin reservas', porque: 'El mecanismo es un desplazamiento hacia el interior de la célula, no una pérdida renal. Si piensas en el riñón, no vigilarás el fosfato al empezar la NPT (p. 42).' },
           { t: 'Porque la D50 lo precipita en la bolsa y llega menos fosfato al paciente de lo previsto', porque: 'No es un problema de la bolsa. El fosfato baja en la sangre porque la glucosa lo arrastra a la célula; sin vigilarlo, aparece debilidad y arritmias (p. 42-43).' }],
         explicacion: 'El movimiento de la glucosa a las células se acompaña de fosfato (cofactores como el <span class="hl-azul">pirofosfato de tiamina</span>): hipofosfatemia progresiva, «un componente importante del síndrome de realimentación» (' + pdf(42) + ').' },
+      { id: 'npt-c-g4', corto: 'colecistitis sin grasa', tipo: 'test', fuente: 'mu-npt-colestasis',
+        enunciado: '¿Por qué una NPT larga puede acabar en colecistitis alitiásica?',
+        opciones: [
+          { t: 'Sin lípidos en el intestino proximal no hay colecistocinina y la vesícula no se contrae', ok: true },
+          { t: 'Por los cálculos que forma la glucosa en la vesícula al cabo de varias semanas de perfusión', porque: 'Es una colecistitis alitiásica, sin cálculos; la causa es la ausencia de lípidos en el intestino, no la glucosa. Tratarías un cálculo que no existe (p. 43).' },
+          { t: 'Por la infección del catéter central, que se extiende a la vía biliar por contigüidad', porque: 'Las complicaciones del catéter están en otros capítulos (2 y 3). Esta es una complicación metabólica de la NPT por ausencia de estímulo intestinal (p. 41 y 43).' }],
+        explicacion: 'Colestasis, que puede llevar a colecistitis alitiásica por la «ausencia de lípidos en el intestino delgado proximal, que impide la contracción de la vesícula mediada por colecistocinina» (' + pdf(43) + ').' },
       { id: 'npt-c-g2', corto: 'qué mata', tipo: 'destapa', fuente: 'mu-real-clinica · mu-tabla-50-5 · mu-real-recomendaciones',
         enunciado: 'En la realimentación, ¿qué manifestaciones graves ves y qué tres cosas vigilas al subir la nutrición?',
         cuantas: 'son cuatro cosas',
@@ -317,27 +331,13 @@ export const MAYEUTICA_NPT = {
           'Se vigilan <span class="hl">fosfato, potasio y magnesio</span> mientras se avanza en 4-7 días.'],
         explicacion: 'Manifestaciones (' + pdf(43) + ' y ' + pdf(44) + '); vigilancia al avanzar (' + pdf(44) + '). El orden de vigilancia es el de la recomendación del libro: fosfato, potasio, magnesio.',
         nota: '<b>Nota de fidelidad.</b> La Tabla 50.5 imprime «Hidroxizina» y «Multivitaminas» entre los mecanismos: parecen un error de maquetación (la tabla 49.6 los trae como fármacos). Se reproduce la tabla tal cual (' + pdf(44) + ').' },
-      { id: 'npt-c-g3', corto: 'tiamina antes', tipo: 'test', fuente: 'mu-real-recomendaciones · mu-tiamina',
+      { id: 'npt-c-g3', corto: 'tiamina antes', tipo: 'test', fuente: 'mu-real-recomendaciones · mu-tiamina', modeloVivo: { acidobaseVivo: 'lactica' },
         enunciado: 'Un desnutrido de alto riesgo va a empezar NPT. ¿Qué haces con la tiamina y con qué pauta?',
         opciones: [
           { t: 'Tiamina antes de nutrir, con la pauta de la Tabla 48.4', ok: true },
           { t: '100-200 mg de tiamina al día, como dice la ASPEN', porque: 'El libro califica esa dosis de insuficiente para corregir el déficit y propone la pauta de la Tabla 48.4. Con ella el déficit seguiría y la glucosa lo empeoraría (p. 44).' },
           { t: 'Después de la primera semana de NPT, cuando haya estabilidad', porque: 'La tiamina se empieza antes de la nutrición: la carga de glucosa agota unas reservas escasas (unos 30 mg). Esperar una semana arriesga encefalopatía y acidosis láctica (p. 8 y 44).' }],
         explicacion: '«Antes de empezar la nutrición se corrigen los electrolitos y se <span class="hl-rojo">empieza la tiamina</span>»: la ASPEN da 100-200 mg/día, <span class="hl">inadecuado para corregir el déficit</span>; es más apropiada la pauta de la Tabla 48.4 (' + pdf(44) + ' y ' + pdf(8) + ').' },
-      { id: 'npt-c-g4', corto: 'colecistitis sin grasa', tipo: 'test', fuente: 'mu-npt-colestasis',
-        enunciado: '¿Por qué una NPT larga puede acabar en colecistitis alitiásica?',
-        opciones: [
-          { t: 'Sin lípidos en el intestino proximal no hay colecistocinina y la vesícula no se contrae', ok: true },
-          { t: 'Por los cálculos que forma la glucosa en la vesícula al cabo de varias semanas de perfusión', porque: 'Es una colecistitis alitiásica, sin cálculos; la causa es la ausencia de lípidos en el intestino, no la glucosa. Tratarías un cálculo que no existe (p. 43).' },
-          { t: 'Por la infección del catéter central, que se extiende a la vía biliar por contigüidad', porque: 'Las complicaciones del catéter están en otros capítulos (2 y 3). Esta es una complicación metabólica de la NPT por ausencia de estímulo intestinal (p. 41 y 43).' }],
-        explicacion: 'Colestasis, que puede llevar a colecistitis alitiásica por la «ausencia de lípidos en el intestino delgado proximal, que impide la contracción de la vesícula mediada por colecistocinina» (' + pdf(43) + ').' },
-      { id: 'npt-c-g5', corto: 'meta de glucemia', tipo: 'test', fuente: 'mu-npt-hiperglucemia · mu-npt-insulina · mu-comparativa-glucemia',
-        enunciado: 'La glucemia en NPT: ¿qué objetivo y qué insulina en el crítico?',
-        opciones: [
-          { t: 'Control estricto de 80-110 mg/dL con insulina en bolos', porque: 'El control estricto no se recomienda en el crítico: la hipoglucemia tiene peores consecuencias que la hiperglucemia (p. 41). El libro no da cifras de ese control; 80-110 es un ejemplo inventado.' },
-          { t: '140-180 mg/dL, insulina regular en perfusión', ok: true },
-          { t: '250 mg/dL con insulina NPH', porque: 'El libro no admite 250 como objetivo, y la NPH (inicio de 1-2 h, duración de 16-24 h, Tabla 50.4) es poco manejable en el crítico. Dejarías al paciente hiperglucémico (p. 41-42).' }],
-        explicacion: 'Objetivo hospitalario <span class="hl-rojo">140-180 mg/dL</span>; en el crítico, <span class="hl">insulina regular en perfusión continua</span>, a menudo añadida a la mezcla (' + pdf(41) + '). La comparativa con el Manual UMI está en la ficha.' },
     ],
     examen: [
       { id: 'npt-c-e1', corto: 'hiperglucemia', tipo: 'test', fuente: 'mu-npt-hiperglucemia',
@@ -347,10 +347,17 @@ export const MAYEUTICA_NPT = {
           { t: 'El 15 %: pocos pacientes', porque: 'Subestimas la frecuencia: la serie dio el 45 %, y el libro la llama frecuente. Con el 15 % no pensarías en vigilar la glucemia desde el primer día de la bolsa (p. 41).' },
           { t: 'El 75 %: la mayoría', porque: 'Sobrestimas la frecuencia: la serie dio el 45 %. Con el 75 % creerías que la insulina es siempre obligatoria y no ajustarías a cada paciente (p. 41).' }],
         explicacion: '«Glucemia >200 mg/dL en el <span class="hl-rojo">45 %</span> de los pacientes con NPT» (' + pdf(41) + ').' },
+      { id: 'npt-c-e4', corto: 'lípidos y SDRA', tipo: 'test', fuente: 'mu-npt-inflamacion',
+        enunciado: 'Un modelo animal de SDRA se hace con ácido oleico. ¿Qué enseña eso de los lípidos de soja de la NPT?',
+        opciones: [
+          { t: 'Que sus ω-6 y ω-9 inflaman y se asocian a peor oxigenación y fallo respiratorio', ok: true },
+          { t: 'Que la soja solo empeora el SDRA si se pasa de 1,5 g/kg/día; por debajo es inocua', porque: 'Es un umbral inventado como distractor: el libro asocia los ω-6 y ω-9 con peor oxigenación y fallo respiratorio más largo sin fijar una dosis segura para eso. Con esa idea darías soja sin cautela a un SDRA por quedarte bajo 1,5 (p. 43).' },
+          { t: 'Que los ω-3 del pescado son proinflamatorios y por eso se añaden a las emulsiones modernas', porque: 'Es al revés: los ω-3 del pescado tienen actividad antiinflamatoria, y por eso se incorporan a emulsiones como Smoflipid® (p. 43).' }],
+        explicacion: 'El aceite de soja es rico en <span class="hl">ω-6 y ω-9</span>, precursores de eicosanoides; el <span class="hl-rojo">ácido oleico</span> (ω-9) infundido en la arteria pulmonar es un modelo animal de SDRA (' + pdf(43) + ').' },
       { id: 'npt-c-e2', corto: 'criterios ASPEN', tipo: 'test', fuente: 'mu-real-calc · mu-real-clinica',
         enunciado: 'Alto riesgo de realimentación según el libro. ¿Cuál NO es uno de los cinco criterios?',
         opciones: [
-          { t: 'Haber perdido un 5 % del peso en 6 meses (no en un mes)', ok: true },
+          { t: 'Haber perdido un 5 % del peso en los últimos 6 meses', ok: true },
           { t: 'IMC ≤18,5 kg/m²', porque: 'Sí es un criterio: IMC ≤18,5. Si lo descartases, nutrirías a ritmo pleno a un desnutrido de riesgo (p. 44).' },
           { t: 'Ingesta pobre en los últimos 5 días', porque: 'Sí es un criterio. Si lo ignoras no pides los electrolitos ni la tiamina antes de nutrir (p. 44).' }],
         explicacion: 'Los cinco: pérdida de peso del <span class="hl-rojo">5 % en un mes</span> o >10 % en 6 meses (un 5 % en 6 meses no cuenta); <span class="hl-rojo">IMC ≤18,5</span>; ingesta pobre 5 días; potasio, fosfato o magnesio bajos de entrada; alto riesgo de desnutrición (p. ej. drogas) (' + pdf(44) + ').' },
@@ -361,13 +368,6 @@ export const MAYEUTICA_NPT = {
           { t: '100 % del objetivo desde el primer día, para recuperar cuanto antes el déficit acumulado', porque: 'Es lo que provoca el síndrome: carga de glucosa sobre reservas de fosfato, potasio, magnesio y tiamina al límite. Arritmias y edema pulmonar (p. 43-44).' },
           { t: '25 kcal/kg el primer día y 40 kcal/kg a la semana', porque: 'Las 25 kcal/kg son la meta plena del ejemplo, no el comienzo del que tiene riesgo. Las cifras de arranque son 10-15 kcal/kg (p. 40 y 44).' }],
         explicacion: '40-50 % de lo necesario (o <span class="hl-rojo">10-15 kcal/kg/día</span>), o glucosa a <span class="hl">150 g/día (300 mL de D50)</span>, y avanzar durante <span class="hl">4-7 días</span> vigilando fosfato, potasio y magnesio (' + pdf(44) + ').' },
-      { id: 'npt-c-e4', corto: 'lípidos y SDRA', tipo: 'test', fuente: 'mu-npt-inflamacion',
-        enunciado: 'Un modelo animal de SDRA se hace con ácido oleico. ¿Qué enseña eso de los lípidos de soja de la NPT?',
-        opciones: [
-          { t: 'Que sus ω-6 y ω-9 inflaman y se asocian a peor oxigenación y fallo respiratorio', ok: true },
-          { t: 'Que la soja solo empeora el SDRA si se pasa de 1,5 g/kg/día; por debajo es inocua', porque: 'Es un umbral inventado como distractor: el libro asocia los ω-6 y ω-9 con peor oxigenación y fallo respiratorio más largo sin fijar una dosis segura para eso. Con esa idea darías soja sin cautela a un SDRA por quedarte bajo 1,5 (p. 43).' },
-          { t: 'Que los ω-3 del pescado son proinflamatorios y por eso se añaden a las emulsiones modernas', porque: 'Es al revés: los ω-3 del pescado tienen actividad antiinflamatoria, y por eso se incorporan a emulsiones como Smoflipid® (p. 43).' }],
-        explicacion: 'El aceite de soja es rico en <span class="hl">ω-6 y ω-9</span>, precursores de eicosanoides; el <span class="hl-rojo">ácido oleico</span> (ω-9) infundido en la arteria pulmonar es un modelo animal de SDRA (' + pdf(43) + ').' },
       { id: 'npt-c-e5', corto: 'nota de nutrición', tipo: 'error', fuente: 'mu-real-calc · mu-real-recomendaciones · mu-npt-hiperglucemia',
         enunciado: 'Una nota de evolución. Encuentra los errores (puede haber 0, 1 o 2).',
         frases: [
@@ -400,7 +400,7 @@ export const MAYEUTICA_NPT = {
                 'Un criterio más de la ASPEN: tres en total, y la glucosa de la NPT agravaría los tres iones.'],
               explicacion: 'Antes de iniciar el soporte nutricional: corregir los electrolitos y empezar la tiamina (' + pdf(44) + '). Cifras del caso: inventadas, bajas respecto a los rangos habituales.' } },
           { momento: 'Ingreso · la tiamina', datos: { 'Tiamina': '100-200 mg/día (ASPEN)', 'Fosfato tras reponer': '2,6 mg/dL' }, nuevo: ['Tiamina', 'Fosfato tras reponer'],
-            pregunta: { id: 'npt-eng-3', tipo: 'test', fuente: 'mu-real-recomendaciones · mu-tiamina',
+            pregunta: { id: 'npt-eng-3', tipo: 'test', fuente: 'mu-real-recomendaciones · mu-tiamina', modeloVivo: { acidobaseVivo: 'lactica' },
               enunciado: 'Quieren pautar tiamina oral 100 mg al día. ¿Qué propones?',
               opciones: [
                 { t: 'La pauta de la Tabla 48.4 (IV al principio)', ok: true },
@@ -425,9 +425,9 @@ export const MAYEUTICA_NPT = {
                 { t: 'Alternativa de arranque: glucosa a 150 g/día (300 mL de D50).' },
                 { t: 'La tiamina por la pauta de la Tabla 48.4, no por 100-200 mg.' }],
               explicacion: 'Recomendaciones de realimentación (' + pdf(44) + ').' } },
-          { momento: 'Día 2 · la debilidad', datos: { 'Fosfato': '0,6 mg/dL', 'Clínica': 'debilidad generalizada' }, nuevo: ['Fosfato', 'Clínica'],
+          { momento: 'Día 2 · la debilidad', datos: { 'Fosfato': '1,2 mg/dL', 'Clínica': 'debilidad generalizada' }, nuevo: ['Fosfato', 'Clínica'],
             pregunta: { id: 'npt-eng-6', tipo: 'test', fuente: 'mu-tabla-50-5 · mu-npt-fosfato · mu-real-clinica',
-              enunciado: 'Engracia, con 400 kcal desde ayer, está débil y el fosfato ha bajado de 2,6 (tras reponerlo) a 0,6 mg/dL. ¿Qué haces?',
+              enunciado: 'Engracia, con 400 kcal desde ayer, está débil y el fosfato ha bajado de 2,6 (tras reponerlo) a 1,2 mg/dL. ¿Qué haces?',
               opciones: [
                 { t: 'Frenar el avance de la nutrición y reponer el fosfato: hipofosfatemia por la glucosa', ok: true },
                 { t: 'Subir a 1.000 kcal: la debilidad es de la desnutrición y mejorará al darle más energía', porque: 'La debilidad generalizada es la manifestación de la hipofosfatemia en la Tabla 50.5. Subir la glucosa empeoraría el fosfato: la glucosa arrastra fosfato a la célula (p. 42; Tabla 50.5, p. 43-44).' },

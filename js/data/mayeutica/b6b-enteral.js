@@ -42,11 +42,11 @@ export const MAYEUTICA_ENTERAL = {
           { t: 'Empiezo ya: dentro de las 48 h del ingreso, sin exigir ruidos', ok: true }],
         explicacion: 'Si no puede comer: <span class="hl">enteral en las primeras 48 h</span> salvo contraindicación, y <span class="hl-rojo">no hace falta oír ruidos intestinales</span> (' + pdf(19) + '). El inicio precoz se asocia a una menor tasa de infecciones (' + pdf(19) + ').' },
       { id: 'en-i-g3', corto: 'noradrenalina estable', tipo: 'test', fuente: 'mu-ent-vasopresor · mu-ent-calc', modelo: visual('mu-enteral-indicaciones', '👁️ Compruébalo en ¿Puedo empezar la enteral? (vista Visual)'),
-        enunciado: 'Predice y luego comprueba en la calculadora: shock séptico, noradrenalina a 0,12 µg/kg/min desde hace 12 h, sin cambios. ¿Empiezas la enteral?',
+        enunciado: 'Predice y luego comprueba en la calculadora: shock séptico, noradrenalina a 0,18 µg/kg/min desde hace 12 h, sin cambios. ¿Empiezas la enteral?',
         opciones: [
           { t: 'No: cualquier vasopresor contraindica la enteral', porque: 'El libro dice lo contrario: las perfusiones estables o en descenso no la contraindican. Con ese «no» dejarías sin barrera a un paciente séptico durante días (p. 19).' },
           { t: 'No hasta retirar el vasopresor por completo y confirmar que el shock se ha resuelto', porque: 'No hace falta retirarlo: solo se frena en el shock no controlado o progresivo. Esperar a la retirada retrasa la enteral más allá de las 48 h que se asocian a menos infecciones (p. 18-19).' },
-          { t: 'Sí: estable o en descenso no la contraindica, y 0,12 no supera 0,2', ok: true }],
+          { t: 'Sí: estable o en descenso no la contraindica, y 0,18 no supera 0,2', ok: true }],
         explicacion: 'Solo el shock <span class="hl-rojo">no controlado o progresivo</span> contraindica la enteral. Con la perfusión estable se empieza; el umbral de 0,2 µg/kg/min solo recorta las calorías, no prohíbe (' + pdf(19) + ').' },
     ],
     examen: [
@@ -143,7 +143,7 @@ export const MAYEUTICA_ENTERAL = {
           'Vasopresor estable o en descenso no contraindica; shock no controlado o progresivo, sí.',
           'Por encima de 0,2 µg/kg/min: 10-15 kcal/kg/día los primeros 7 días; no se prohíbe, se recorta.',
           'Empezar en 48 h, sin ruidos: la enteral protege la barrera del intestino.'],
-        volver: { nombre: '¿Puedo empezar la enteral?', ancla: 'mu-ent-calc' } },
+        volver: { nombre: '¿Puedo empezar la enteral?', ancla: 'mu-ent-calc', modelo: { murallaViva: 'enteral' } } },
     ],
     profundizar: [
       { id: 'mu-ent-trofismo', titulo: 'Las cuatro frases del trofismo, con la nota sobre la IgA' },
@@ -379,7 +379,7 @@ export const MAYEUTICA_ENTERAL = {
               opciones: [
                 { t: 'Añadir proteína en polvo a la fórmula', ok: true },
                 { t: 'Cambiar a una fórmula de 2 kcal/mL', porque: 'No hay restricción de líquidos y las más densas solo se usan cuando el volumen es una prioridad (p. 25).' },
-                { t: 'Aceptar la diferencia: la proteína no importa en la fase aguda', porque: 'El capítulo exige ajustar la proteína (1,2-2,0 g/kg/día; mediana 1,6) y no admite ese desfase (p. 25).' }],
+                { t: 'Aceptar la diferencia: la proteína no importa en la fase aguda', porque: 'El capítulo exige ajustar la proteína (1,2-2,0 g/kg/día; 1,6 como valor medio) y no admite ese desfase (p. 25).' }],
               explicacion: 'Paso 4: si la proteína aportada queda corta, <span class="hl-rojo">se añade proteína en polvo</span> (' + pdf(25) + '). 33 g es 0,581 L × 56 g/L; 112 g es 1,6 × 70 (cálculo propio).' } },
         ],
         lleva: [
@@ -457,7 +457,7 @@ export const MAYEUTICA_ENTERAL = {
         enunciado: 'La diarrea llega al 70 % de los pacientes con enteral. Para tratarla, ¿qué NO ayuda?',
         opciones: [
           { t: 'Una fórmula de menor osmolalidad, si es posible', porque: 'Es una de las medidas del capítulo (p. 32).' },
-          { t: 'Una fórmula con fibra, que mezcla ambas', ok: true },
+          { t: 'Una fórmula con fibra', ok: true },
           { t: 'Una fórmula con proteínas predigeridas', porque: 'Facilita la absorción y la reabsorción de agua, útil en la diarrea rebelde (p. 32).' }],
         explicacion: 'Las fórmulas con fibra llevan una mezcla de fermentable y no fermentable: <span class="hl-rojo">no aportan ventaja en la diarrea</span>. Sí menor osmolalidad, predigeridas y evitar los líquidos de la Tabla 49.6 (' + pdf(32) + ').' },
     ],
