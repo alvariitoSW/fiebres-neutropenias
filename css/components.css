@@ -5246,6 +5246,10 @@ body.study-mode-on #tmv-raiz .dock { padding-right: 82px; }
 #tmv-raiz #tmv-sello-zona .tope-linea { display: none; }
 #tmv-raiz #tmv-prueba .org { display: inline; white-space: normal; text-overflow: clip; overflow: visible; }
 #tmv-raiz #tmv-sello-zona .tope-sello.tope-compacto small { display: block; }
+#tmv-raiz #tmv-avisos-zona:empty { display: none; }
+#tmv-raiz #tmv-avisos-zona { margin: 6px 0; }
+#tmv-raiz.juega-on .dock .lt { display: none; }   /* en Juega el dock no pasa del 30 %: los selects llevan aria-label */
+#tmv-raiz.juega-on #tmv-mando-juega .fila > button { min-width: 0; padding: 2px 3px; font-size: .72rem; }
 #tmv-raiz { --tmv-dock-h: 150px; }
 /* [FIN termostato vivo] */
 /* ===== Iones vivos · lo que ves y lo que hay (js/modules/libros/iones-vivos/*). Prefijo de ids: iov-. Viene de la maqueta aprobada
