@@ -85,6 +85,7 @@ export function eje(s) {
   if (s.yodo) t.bloq.push('sint', 'sec');
   if (s.bb === 'prop' && s.pac === 'lucrecia' && !t.bloq.includes('tij')) t.bloq.push('tij');
   if (s.hc && s.pac === 'lucrecia' && !t.bloq.includes('tij')) t.bloq.push('tij');
+  if (s.hor === 'levo' && lb) t.t3 = Math.max(t.t3, .2 + .3 * clamp((lb.t4 - .2) / .9, 0, 1));   // la T3 sigue a la T4 con levotiroxina (conversión periférica); cuánto: ilustrativo
   t.ext = s.hor === 'levo' ? 'T4' : s.hor === 'lio' ? 'T3' : '';
   if (s.hor === 'levo' && !lb) { t.t4 = Math.max(t.t4, .55); t.tsh *= .6; } if (s.hor === 'lio') t.t3 = Math.max(t.t3, .6);
   return { a, t, lb };

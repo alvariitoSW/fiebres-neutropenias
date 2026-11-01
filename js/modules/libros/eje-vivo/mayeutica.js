@@ -34,8 +34,8 @@ export function montarMayeutica({ R, $, org, ir, leer, modoPrueba }) {
       },
     },
     textos: {
-      ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): dos apuestas, Toribio y Bibiana; la PA sale cuando contestas.</span>
-        <span><b>2. Examen, nivel MIR</b> (${nE}): dos notas de evolución con «encuentra el error».</span>
+      ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): siete apuestas con Toribio, Bibiana, Sinforoso, Policarpo, Fulgencio y Lucrecia; la PA sale cuando contestas.</span>
+        <span><b>2. Examen, nivel MIR</b> (${nE}): cuatro notas de evolución con «encuentra el error».</span>
         <span><b>3.</b> Otra vez lo que fallaste, solo eso.</span>
         <span><b>4.</b> Dos casos que evolucionan, con un giro: Obdulia y Toribio.</span>`,
       empezar: 'Empezar la guía socrática', seguir: 'Seguir',
