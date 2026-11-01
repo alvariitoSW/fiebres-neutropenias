@@ -153,7 +153,7 @@ export const MAYEUTICA_COMA = {
                 { t: 'Descerebración: mesencéfalo y protuberancia alta', ok: true },
                 { t: 'Decorticación: lesión talámica, con flexión de los brazos', porque: 'La decorticación es flexión de los brazos, no extensión. Pensar en el tálamo subestima la compresión del mesencéfalo que causa el hematoma.' },
                 { t: 'Flacidez: tronco bajo', porque: 'La flacidez es la respuesta de la lesión del tronco bajo. Aquí hay extensión, que indica una lesión más alta, y esperar flacidez haría descartar el tronco comprimido.' }],
-              explicacion: `Extensión y pronación de brazos y piernas: <span class="hl-rojo">descerebración</span>; lesión de mesencéfalo y protuberancia alta (${pag(10, 'pág. 10')}).` } },
+              explicacion: `Esa postura es <span class="hl-rojo">descerebración</span>: lesión de mesencéfalo y protuberancia alta (${pag(10, 'pág. 10')}).` } },
           { momento: 'Día 1 · la nota del R1', datos: { 'Nota del R1': 'Resumen de la evolución' }, nuevo: ['Nota del R1'],
             pregunta: { id: 'mnk-c6', tipo: 'error', fuente: 'mn-gcs-usos · mn-coma-oculocefalico',
               enunciado: 'La nota del R1. Encuentra los errores.',
@@ -170,13 +170,13 @@ export const MAYEUTICA_COMA = {
           'Una pupila dilatada y fija = masa en expansión: TC urgente.',
           'GCS ≤8: coma e intubar; no es fiable con sedación profunda o relajantes.'],
         // [cráneo: herniacion-uncal]
-        volver: { nombre: 'Pupila dilatada y fija', ancla: 'mn-pup-unilateral' } },
+        volver: { nombre: 'Pupila dilatada y fija', ancla: 'mn-pup-unilateral', modelo: visual('mn-coma', '👁️ La cara de Glasgow con la pupila, en la vista Visual') } },
     ],
     profundizar: [
       { id: 'mn-coma-causas', titulo: 'Causas del coma (incluido el coma aparente)' },
       { id: 'mn-coma-motor', titulo: 'Respuesta motora: movimientos y déficit focal' },
       { id: 'mn-gcs-origen', titulo: 'Origen y rango del Glasgow' },
-      { id: 'mn-pup-horner', titulo: 'Síndrome de Horner: la pupila más pequeña' },
+      { id: 'mn-tabla-45-4', titulo: 'Síndrome de Horner: la pupila más pequeña' },
     ],
   },
 
@@ -342,7 +342,7 @@ export const MAYEUTICA_COMA = {
           'Apnea: PaCO₂ >60 y +20 sobre la basal, 6-7 min a 3 mmHg/min.',
           'El EEG no confirma; el signo de Lázaro es médula, no cerebro.'],
         // [cráneo: muerte-encefalica]
-        volver: { nombre: 'Pruebas confirmatorias', ancla: 'mn-me-confirmatorias' } },
+        volver: { nombre: 'Pruebas confirmatorias', ancla: 'mn-me-confirmatorias', modelo: visual('mn-muerte-encefalica', '👁️ La lista de comprobación de la muerte encefálica (vista Visual)') } },
     ],
     profundizar: [
       { id: 'mn-me-definicion', titulo: 'Definición legal (UDDA)' },

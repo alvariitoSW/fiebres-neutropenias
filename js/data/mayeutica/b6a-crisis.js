@@ -7,6 +7,7 @@ const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoNeuro', panel: 'panel-marino-neuro-tabs', tab, enVisual: '', texto });
 export const MAYEUTICA_CRISIS = {
   /* =================================================================================================
      Convulsiones y estado epiléptico no convulsivo (págs. 19-21)
@@ -132,7 +133,7 @@ export const MAYEUTICA_CRISIS = {
           'Consciencia alterada en la UCI: piensa en crisis, y más si hay lesión cerebral.',
           'EEG continuo encuentra el 16 %; los registros intermitentes, el 4-8 %.',
           'La lesión cerebral, no la gravedad del shock, pone el riesgo de convulsionar.'],
-        volver: { nombre: 'Cuánto se encuentra', ancla: 'mn-conv-eeg' } },
+        volver: { nombre: 'Cuánto se encuentra', ancla: 'mn-conv-eeg', modelo: visual('mn-convulsiones', '👁️ Qué se ve de la crisis en la vista Visual') } },
     ],
     profundizar: [
       { id: 'mn-conv-se', titulo: 'Los unos 20 tipos de estado epiléptico' },
@@ -285,7 +286,7 @@ export const MAYEUTICA_CRISIS = {
           '≥5 minutos ya es estado: benzodiacepina primero, sin esperar a los 30.',
           'Máximos del paso 2: levetiracetam 4.500 mg, fosfenitoína 1.500 mg EF, valproico 3.000 mg.',
           'Intubar antes del paso 3; el propofol, ≤5 mg/kg/h tras 48 horas.'],
-        volver: { nombre: 'Tabla 46.4', ancla: 'mn-tabla-46-4' } },
+        volver: { nombre: 'Tabla 46.4', ancla: 'mn-tabla-46-4', modelo: visual('mn-estado-epileptico', '👁️ La escalera del estado epiléptico (vista Visual)') } },
     ],
     profundizar: [
       { id: 'mn-tabla-46-4', titulo: 'Tabla 46.4 — Pentobarbital y midazolam en el refractario' },
