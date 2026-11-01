@@ -60,7 +60,7 @@ por color.
 ## 6. Pasos
 | Paso | Estado | Salida |
 |---|---|---|
-| 1 · Cobertura (profesor) | en curso | `cobertura.md` (+ `cobertura-anexo.md`) |
+| 1 · Cobertura (profesor) | en curso (01/11) | `cobertura.md` (+ `cobertura-anexo.md`) |
 | 2 · Maquetas hepatocito y termostato | — | `autonomo/maquetas/b5-{hepatocito,termostato}-<x>.html` + carpeta |
 | 2 · Juicio y elección (Educación, Consejo) | — | `juicio-*.md`, `eleccion.md` |
 | 3 · Modelos en la app · 4 · Estudiar | tras el `b4` | sesiones aparte |
@@ -73,5 +73,24 @@ Las nombra la cobertura (§ «Piezas comunes»). De partida: el **hepatocito** c
 Los da la cobertura (§ «Pacientes»). Ninguno repite nombre de b1-b4 (listas en `autonomo/bloques/b{1,2,3}/encargo.md` § «Pacientes»; de b4: Sofía, Benito, Damián, Rufino,
 Matilde, Gregorio, Casilda, Nicolás, Adela, Valentín, Encarna; más Lucía, Carmen y Teresa de los modelos).
 
-## 9. Encargo de las maquetas
-Se escribe tras la cobertura (abajo, §9a hepatocito y §9b termostato).
+## 9. Encargo de las maquetas (5 fijas: hepatocito A, B, C · termostato A, B)
+
+**Común a las cinco** (cada opción concreta, en `cobertura-anexo.md` § Maquetas):
+- **Una pieza por encargo**: un constructor sonnet por maqueta. Hepatocito ≤40 pasos / 0,75 M; termostato ≤30 pasos /
+  0,55 M. Sin Mayéutica completa: la guía de 3-5 pasos, la apuesta, el «encuentra el error» y el caso bastan.
+- Lo que pide el anexo para tu opción: mecanismo, mandos, topes con página y consecuencia visible (sello, constantes,
+  frase viva; combinación imposible → «combinación no fisiológica»), la figura real al lado (`js/modules/libros/img/`,
+  con su `<img>` que cargue), apuesta + error + caso con un paciente de la lista y cifras de paciente posible.
+- 390 × ≤600 px de escena; español llano; «Ver en el texto» con su página (`#page=` del PDF B); origen visible
+  (`ficha`, `fisiología general`, `ilustrativo`); identidad nunca solo por color; rótulos ≥8 px a 360; solo tokens de
+  `css/variables.css` (cópialos a la maqueta).
+- Declara al principio de tu `pagina.js` qué motores o piezas de la app reutiliza (importados, no copiados).
+- Archivos: `autonomo/maquetas/b5-<modelo>-<x>.html` + carpeta `autonomo/maquetas/b5-<modelo>-<x>/` en módulos ≤700
+  líneas (molde: `autonomo/maquetas/b4-iones-b/` y su `.html`). `<modelo>` = `hepatocito` o `termostato`.
+- **Programa de prueba obligatorio** (ningún juez mide las maquetas): `autonomo/bloques/b5/herramientas/<modelo>-<x>.mjs`
+  (molde `autonomo/bloques/b4/herramientas/iones-b.mjs`; Playwright, 390 y 360; cierra su servidor por número de
+  proceso). Devuelve en texto: desborde, rótulos <8 px, cifras de cada mando en mínimo/medio/máximo, que cada tope
+  dispara su sello, que la apuesta, el error y el caso se completan, imágenes con `naturalWidth > 0` y errores de
+  consola; y deja ≤4 capturas en `/tmp/plan-socialista/b5/capturas/<modelo>-<x>/`. Su salida va a tu entrega.
+- **Lista de frases nuevas con página** al final: `autonomo/bloques/b5/frases-<modelo>-<x>.md`.
+- No toques nada de `js/`, `css/` ni `index.html` (otras sesiones trabajan ahí); solo importas.
