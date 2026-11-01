@@ -17,3 +17,8 @@ Base: `node autonomo/bloques/b6a/herramientas/craneo-b.mjs` TODO EN VERDE a 390 
 4. `corte.js` + `herramientas/craneo-b.mjs` l. 31: subir el rótulo mínimo del corte a ≥ 9 px a 360 (acortar «Arterias de la base» / «Sensor de PIC» o ampliar `font-size`), y que el programa imprima cuál es el rótulo más pequeño.
 
 No visto con los ojos: la guía de Leovigildo (locked-in), la penumbra de Clotilde y el Doppler de Petronila (solo por el programa); captura 10 y 03 quedan para el constructor.
+
+## Rejuicio final (tras los 4 retoques) — **global 9,5** (meta de modelo vivo nuevo cumplida)
+Móvil 9,25→9,5 · apuesta/error/caso 9,25→9,5 · paciente posible y topes 9,25→9,5. El aviso «PAS >140 con aneurisma
+abierto» se quedaba pegado al cambiar de paciente: faltaba `resang0` en la lista de avisos que limpia `pagina.js`
+(arreglado por el director; programa en verde). No visto a ojo: guía de Leovigildo, penumbra de Clotilde, Doppler.
