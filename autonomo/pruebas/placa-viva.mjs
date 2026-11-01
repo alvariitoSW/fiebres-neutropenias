@@ -96,6 +96,68 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   await pr.evaluate(() => { window.__plv.ponerPreset('sera'); window.__plv.irPaso(2); }); await pr.evaluate(() => window.__plv.irPaso(3)); const t0 = Date.now(); const yr = await pr.evaluate(() => +document.querySelector('#plv-lupa .ach').getAttribute('cy')); await pr.evaluate(() => window.__plv.ciclo()); const fr = await pr.evaluate(() => ({ paso: window.__plv.paso, n: document.querySelectorAll('#plv-lupa .ach').length, op: [...document.querySelectorAll('#plv-lupa .ach')].map((c) => c.getAttribute('opacity')).join(',') }));
   console.log(`   reducir movimiento: cy inmediato ${yr.toFixed(1)} · ciclo en ${Date.now() - t0} ms ·`, JSON.stringify(fr)); ok(Math.abs(yr - 121) < 1.5 || Math.abs(yr - 92) < 1.5, 'reducir movimiento: la ACh no está ya en su sitio final'); ok(fr.paso === 5 && fr.n === 6, 'reducir movimiento: el ciclo no se completa'); await cr.close();
   await p.screenshot({ path: `${CAP}05-caso-${ANCHO}.png` });
+  // ---- Barrido de extremos (REGLAS §4.16): cada mando en mínimo, medio y máximo en cada paciente, con las cifras y el sello ----
+  console.log('-- Barrido de extremos (3 pacientes × mandos: mín / medio / máx)');
+  const MALO = /NaN|undefined|Infinity/;
+  const PACIENTES = { flor: 'Florentina', sera: 'Serapio', mel: 'Melquíades' };
+  const SEQ = [
+    ['día', [[['#plv-b-dia', 0]], [['#plv-b-dia', 5]], [['#plv-b-dia', 40]]]],
+    ['plasmaféresis', [[['#plv-b-pla', 0]], [['#plv-b-pla', 3]], [['#plv-b-pla', 9]]]],
+    ['IgIV + días', [[['#plv-b-igiv', 1]], [['#plv-b-igiv', 1], ['#plv-b-dia', 6]], [['#plv-b-igiv', 1], ['#plv-b-dia', 40]]]],
+    ['hielo', [[['#plv-b-hielo', 0]], [['#plv-b-hielo', 1]], [['#plv-b-hielo', 4]]]],
+    ['piridostigmina', [[['#plv-b-piri', 0]], [['#plv-b-piri', 1]]]],
+    ['fármaco', [[['#plv-raiz [data-farm="gent"]', 1]], [['#plv-raiz [data-farm="mg"]', 1]], [['#plv-raiz [data-farm="cort"]', 1]]]],
+    ['estímulo', [[['#plv-raiz [data-estim="unico"]', 1]], [['#plv-raiz [data-estim="rep"]', 1]], [['#plv-raiz [data-estim="tof"]', 1]]]],
+    ['vía + día', [[['#plv-b-via', 1]], [['#plv-b-dia', 3], ['#plv-b-via', 1]]]],
+    ['succinilcolina + reloj', [[['#plv-b-succi', 1]], [['#plv-b-succi', 1], ['#plv-b-min', 1]], [['#plv-b-succi', 1], ['#plv-b-min', 3]]]],
+    ['rocuronio + reloj', [[['#plv-b-roc', 1]], [['#plv-b-roc', 1], ['#plv-b-min', 1]], [['#plv-b-roc', 1], ['#plv-b-min', 7], ['#plv-b-min', 7]]]],
+    ['cisatracurio + reloj', [[['#plv-b-cis', 1]], [['#plv-b-cis', 1], ['#plv-b-min', 1]], [['#plv-b-cis', 1], ['#plv-b-min', 9]]]],
+    ['perfusión', [[['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-min', 1], ['#plv-b-perf-mas', 0]], [['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-min', 1], ['#plv-b-perf-mas', 2]], [['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-min', 1], ['#plv-b-perf-mas', 9]]]],
+    ['neostigmina', [[['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-neo', 0]], [['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-neo', 1]], [['#plv-b-via', 1], ['#plv-b-roc', 1], ['#plv-b-neo', 5]]]],
+    ['sugammadex', [[['#plv-b-roc', 1], ['#plv-raiz [data-sug="2"]', 1]], [['#plv-b-roc', 1], ['#plv-b-min', 1], ['#plv-raiz [data-sug="4"]', 1]], [['#plv-b-roc', 1], ['#plv-raiz [data-sug="16"]', 1]]]],
+  ];
+  let barridos = 0;
+  for (const [pc, nom] of Object.entries(PACIENTES)) for (const [mando, variantes] of SEQ) for (const [vi, seq] of variantes.entries()) {
+    await preset(pc); for (const [sel, n] of seq) if (n) await clic(sel, n);
+    const l = await L(), tpx = await tp(), txt = await p.evaluate(() => document.getElementById('plv-raiz').innerText), d = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+    barridos++; if (ANCHO === 390) console.log(`   ${nom} · ${mando} [${['mín', 'medio', 'máx'][vi]}]: fuerza ${l.f} % · CV ${l.cv} mL (${l.cvkg} mL/kg) · PIM ${l.pim} · TOF ${l.tof} · FC ${l.fc} · K ${l.k} · neo ${l.neo} · sellos[${tpx}]`);
+    ok(!MALO.test(txt), `${nom} · ${mando}: NaN/undefined en pantalla`); ok(l.f >= 3 && l.f <= 100 && l.cv > 0 && l.cvkg <= 70.1, `${nom} · ${mando}: cifras imposibles ${JSON.stringify(l)}`); ok(+l.fc >= 30 && +l.fc <= 160, `${nom} · ${mando}: FC ${l.fc}`); ok(d <= 0, `${ANCHO}: desborde ${d}px en ${nom} · ${mando}`);
+    const sell = await p.evaluate(() => [...document.querySelectorAll('#plv-sellos .tope-sello')].filter((x) => !x.hidden).length); ok(sell === tpx.split(' ').filter((x) => x.endsWith(':sello')).length || sell <= tpx.split(' ').length, `${nom} · ${mando}: sellos en pantalla ${sell} frente a ${tpx}`);
+  }
+  console.log(`   ${barridos} combinaciones sin NaN, sin cifras imposibles y sin desborde`);
+  // ---- Cambio de paciente: avisos y sellos del anterior se limpian ----
+  console.log('-- Cambio de paciente');
+  for (const [a, pasos, b2] of [['mel', async () => { await clic('#plv-b-roc'); await clic('#plv-b-min'); }, 'flor'], ['sera', async () => { await clic('#plv-raiz [data-farm="gent"]'); await clic('#plv-b-piri'); }, 'mel'], ['flor', async () => { await clic('#plv-b-dia', 4); await clic('#plv-b-pla', 7); }, 'sera']]) {
+    await preset(a); await pasos(); const antes = await tp(); await preset(b2); const desp = await tp(), vis = await p.evaluate(() => [...document.querySelectorAll('#plv-sellos .tope-sello, #plv-avisos .tope-aviso, #plv-dock .tope-avisos > *')].filter((x) => x.offsetParent).length);
+    console.log(`   ${a} → ${b2}: antes[${antes}] después[${desp}] visibles ${vis}`); ok(!/sello/.test(desp) && vis <= 1, `cambio ${a}→${b2}: quedan sellos del paciente anterior: ${desp} (${vis})`);
+  }
+  // ---- La frase viva y el dock no tapan la escena (Pulgar ni Pulmón) con un sello grande ----
+  await preset('sera'); await p.evaluate(() => scrollTo(0, 0)); await clic('#plv-raiz [data-farm="gent"]'); await p.waitForTimeout(400);
+  const vis2 = await p.evaluate(() => { const e = document.getElementById('plv-escena').getBoundingClientRect(), d = document.getElementById('plv-dock').getBoundingClientRect(), f = document.getElementById('plv-frase').getBoundingClientRect(); return { escenaBajo: Math.round(e.bottom), dockTop: Math.round(d.top), dock: Math.round(d.height), vh: innerHeight, fraseEnDock: f.top >= d.top - 1 }; });
+  console.log('   escena hasta', vis2.escenaBajo, '· dock desde', vis2.dockTop, '(', vis2.dock, 'de', vis2.vh, 'px )'); ok(vis2.escenaBajo <= vis2.dockTop + 1, 'la frase/dock tapa Pulgar o Pulmón con un sello grande'); ok(vis2.dock <= 300, 'el dock ocupa más de 300 px: ' + vis2.dock);
+  await p.screenshot({ path: `${CAP}11-sello-frase-${ANCHO}.png` });
+  // ---- Guías de la polineuropatía y la miopatía (pnc, mcc): 3-5 pasos con foco y cita doble ----
+  console.log('-- Guías pnc y mcc');
+  for (const c of ['pnc', 'mcc']) { await p.evaluate((c) => window.__plv.abrirEstado(c), c); let pasos = 0;
+    for (let i = 0; i < 6; i++) { const g = await p.evaluate(() => ({ vis: !document.getElementById('plv-guia').hidden, foco: document.querySelectorAll('#plv-svg .foco').length + document.querySelectorAll('#plv-raiz .foco-caja').length, cit: document.querySelectorAll('#plv-guia .ver-ficha[data-resaltar^="#mn-"]').length, pdf: document.querySelectorAll('#plv-guia .cita-pdf').length, est: window.__plv.s.est })); if (!g.vis) break; pasos++; ok(g.foco > 0 && g.cit === 1 && g.pdf === 1 && g.est === c, `${c}: paso ${pasos} sin foco, sin cita doble o estado ${g.est}`); await clic('#plv-guia [data-g="sig"]'); }
+    console.log(`   guía ${c}: ${pasos} pasos`); ok(pasos >= 3 && pasos <= 5, `${c}: guía de ${pasos} pasos`); }
+  // ---- Lupa abierta con la hendidura (miastenia, paso 3) ----
+  await preset('sera'); await p.evaluate(() => { document.getElementById('plv-detalle-lupa').open = true; window.__plv.irPaso(3); }); await p.waitForTimeout(1200); await p.locator('#plv-detalle-lupa').scrollIntoViewIfNeeded(); await p.screenshot({ path: `${CAP}12-lupa-${ANCHO}.png` });
+  // ---- Enlaces de las fichas: cada botón lleva a su paciente y «← VOLVER» vuelve a la ficha ----
+  console.log('-- Fichas de origen');
+  for (const [tab, btns] of [['mn-miastenia', [['sera', 'miastenia']]], ['mn-gbs-pnc', [['flor', 'gbs'], ['pnc', 'pnc'], ['mcc', 'mcc']]], ['mn-relajantes', [['mel', 'bloqueo']]]]) for (const [v, estEsp] of btns) {
+    await p.evaluate((tab) => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'marinoNeuro', panel: 'panel-marino-neuro-tabs', tab }); document.body.append(t); t.click(); t.remove(); }, tab); await p.waitForTimeout(500);
+    const bt = await p.evaluate(([tab, v]) => { const x = document.querySelector(`#${tab} [data-placa-viva="${v}"]`); if (!x) return null; x.click(); return x.dataset.placaViva; }, [tab, v]); await p.waitForTimeout(800);
+    const r = await p.evaluate(() => ({ abre: !!document.getElementById('plv-raiz')?.offsetParent, est: window.__plv.s.est, nombre: window.__plv.s.peso })); ok(bt !== null && r.abre && r.est === estEsp, `ficha ${tab}: su botón «${v}» no abre ${estEsp} (abre ${r.est})`); await desb('ficha ' + tab);
+    await p.evaluate(() => document.getElementById('plv-volver').click()); await p.waitForTimeout(600); ok(await p.evaluate((tab) => !!document.getElementById(tab)?.offsetParent, tab), `ficha ${tab}: «← VOLVER» no vuelve a la ficha`);
+    console.log(`   ${tab} · ${v} → ${estEsp}: abre y vuelve`);
+  }
+  // ---- Enlaces cruzados a otros modelos: ritmo vivo (potasio alto) y pulmón vivo ----
+  await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'placaViva', placaViva: 'mel' }); document.body.append(t); t.click(); t.remove(); }); await p.waitForTimeout(600);
+  await clic('#plv-b-succi'); ok(await p.evaluate(() => !document.getElementById('plv-ritmo-vivo').hidden && !!document.querySelector('#plv-ritmo-vivo [data-ritmo-vivo="hiperk"]')), 'succinilcolina con K 6,1: sin enlace al ritmo vivo');
+  await p.evaluate(() => document.querySelector('#plv-ritmo-vivo [data-ritmo-vivo]').click()); await p.waitForTimeout(800); ok(await p.evaluate(() => !!document.getElementById('rtv-raiz')?.offsetParent), 'el enlace «ritmo vivo» no abre el ritmo vivo'); await p.evaluate(() => document.querySelector('#rtv-raiz .back-btn, #rtv-volver')?.click()); await p.waitForTimeout(500);
+  ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id^="plv-"], #plv-raiz [id]')].map((e) => e.id); return ids.length === new Set(ids).size; }), 'ids plv- duplicados');
+  ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id]')].map((e) => e.id).filter((i) => /^plv-/.test(i)); return ids.length > 0; }), 'sin ids plv-');
   await ctx.close();
 }
 // motor del bloqueo (importado de A): inicios de la Tabla 46.7, neostigmina sin efecto con TOF 0 y sin ganancia pasado el tope, sugammadex 2/4/16
