@@ -46,7 +46,7 @@ function pintar() {
   e.caMg = (e.amp === 'glu' ? 90 : 270) * e.n; const L = leer(s); aplicarTopes();
   $('ion-svg').innerHTML = escena(ion, s, L, oculto) + focoSvg(foco);
   const v = vitales(s, e, preset); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
-  $('mon-k').textContent = `K⁺ ${oculto ? '?' : kVer(L.k)}` + (!oculto && L.k > 5.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
+  $('mon-k').textContent = `K⁺ ${oculto ? '?' : kVer(L.k)}` + (!oculto && L.k >= 6.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
   $('nota-ecg').hidden = L.k >= 3.5; $('nota-ecg-txt').textContent = PENDIENTE;
   const marca = (q, f) => todos(q).forEach((b) => b.setAttribute('aria-pressed', String(f(b))));
   marca('.selector-ion button', (b) => b.dataset.ion === ion); marca('.modos button', (b) => b.dataset.modo === modo); marca('.presets button', (b) => b.dataset.pre === preset);

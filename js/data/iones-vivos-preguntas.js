@@ -180,7 +180,7 @@ const VALENTIN = [
         { t: '22 mL de gluconato al 10 % (200 mg de calcio elemental) y luego 1-2 mg/kg/h.', ok: true }],
       explicacion: 'Bolo de 200 mg de calcio elemental (22 mL de gluconato al 10 %) en 100 mL de salino en 5-10 min, seguido de 1-2 mg/kg/h durante al menos 6 h (p. 45-46). El monitor muestra el iónico en 1,07 mmol/L, ilustrativo: el libro da 0,5 mg/dL del total por 200 mg.', fuente: 45, fuente2: 46 } },
   { momento: 'Siguen sangrando · 14 concentrados', datos: { 'Concentrados': '14', 'Ca iónico': '0,90 mmol/L' }, nuevo: ['Concentrados', 'Ca iónico'], estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] },
-    pregunta: { num: 'Paso 3', estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] }, enunciado: 'Siguen sangrando: 4 concentrados más, 14 en total. Mira el K⁺ en el monitor. <b>¿Qué haces con el calcio y el potasio?</b>',
+    pregunta: { num: 'Paso 3', verCifras: true, estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] }, enunciado: 'Siguen sangrando: 4 concentrados más, 14 en total. Mira el K⁺ en el monitor. <b>¿Qué haces con el calcio y el potasio?</b>',
       opciones: [
         { t: 'Paro el calcio: el iónico ya se corrigió.', porque: 'Con 4 bolsas más, el iónico vuelve a 0,90 mmol/L, en el límite de lo grave (<0,9, p. 44), y el efecto del bolo cae a los 30 min (p. 46).' },
         { t: 'Pongo bolos de 500 mg cada vez que baje.', porque: 'Cada bolo pasa de los 200 mg recomendados (p. 45): en el modelo, el sello de exceso, y el calcio IV puede dañar la célula (p. 46).' },
