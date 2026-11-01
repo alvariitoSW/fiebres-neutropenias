@@ -63,3 +63,6 @@
 /* el sello va debajo del monitor, en el flujo, sin tapar cifras */
 #sello-zona { position: relative; } #sello-zona .tope-mon { position: static; inset: auto; } #sello-zona .tope-sellos { position: static; transform: none; width: auto; max-width: 100%; max-height: none; bottom: auto; padding: 0; margin: 4px 0; overflow: visible; }
 #sello-zona .tope-sello { transform: none; } #sello-zona .tope-sellos:empty { display: none; }
+#sello-zona .tope-sello { max-height: none; overflow: visible; width: auto; }
+#sello-zona .tope-linea { position: static; } #sello-zona .tope-linea span { white-space: normal; overflow: visible; text-overflow: clip; }
+#sello-zona .tope-mon { height: auto; }

@@ -81,3 +81,16 @@
 - Cifras de cada paso (T, FC, CO₂, K⁺, CK, PA): ilustrativas, rotuladas así.
 - SNM sin retirar el fármaco: «CK sigue sobre 3.400 (rabdomiólisis)»: inferencia de p. 50.
 - Los nombres de enlaces nefrona «rabdo» y iones «hiperk» son destinos de b4 aún sin comprobar.
+
+## Vuelta 2a (arreglos 1, 2, 3, 5, 6, 7, 8)
+Frases nuevas, con su página (PDF Marino 2024, caps. 39-44; páginas por cotejar por el auditor):
+- «Hidratar al paciente» y «Restringir líquidos»: la rabdomiólisis exige fluidos (SNM, p. 51).
+- «El cuadro aparece 24-72 h después de empezar el fármaco» (p. 50).
+- «Con rigidez y CK >1.000 U/L se piensa en SNM, no en distonía; la distonía eleva la CK solo un poco» (p. 50).
+- «La fiebre aparece 8-10 h antes que la rigidez» (frase falsa): la temperatura sube 8-10 h después de la rigidez (p. 50).
+- Paso 4 de hipertermia maligna: «La CK tarda horas en subir: los 24.000 U/L son de la hora 6»: la cifra es ilustrativa; la fuente solo dice rabdomiólisis (p. 49). La dinámica de la CK en horas queda SIN página (fisiología general): buscar otra fuente.
+- Caso, paso 3: «Hora 6 en la UCI, el dantroleno ha frenado la rigidez, CK 24.000, K⁺ 6,2, orina oscura»: cifras ilustrativas; paciente coherente con el paso 5 del estado (T 37,8 °C con dantroleno). Los fluidos ya no bajan la temperatura.
+- Dial del hipotálamo: escala 34-42 °C y «real − ajuste» son cuenta del dibujo, no de Marino; tope 42 °C ilustrativo (rotulado).
+- Estados por sumar (CRECERA): hipotermia terapéutica (Manual UMI), posparada (mc-posresucitacion) y fiebre por fármacos: sin cifras ni página; el mando de dosis de dantroleno con tope 10 mg/kg (p. 48) solo se describe, no se construye.
+- Rondas del error: 2 errores (ciproheptadina IV p. 53; fiebre antes de la rigidez p. 50), 0 y 1 (restringir líquidos p. 51).
+- Apuesta: opciones igualadas en longitud (correcta de longitud intermedia: 49 caracteres frente a 47 y 50).
