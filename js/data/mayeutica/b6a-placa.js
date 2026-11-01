@@ -265,7 +265,7 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: 'Florentina tiene dolor urente en las piernas en la fase aguda. ¿Qué recomienda la guía?',
         opciones: [
           { t: 'Solo AINE y paracetamol, porque el dolor es nociceptivo y de origen muscular', porque: 'El dolor es neuropático (' + pag(28) + '), no nociceptivo ni muscular; tratarlo como tal te deja sin la gabapentina que pauta la guía.' },
-          { t: 'Gabapentina 3.000 mg/día desde el primer día', porque: 'Son más de tres veces los 900 mg/día de la guía (300 mg tres veces al día, ' + pag(28) + '); 3.000 mg es la dosis de la abstinencia de gabapentina (cap. 45, ' + pag(9) + '), no la del dolor del Guillain-Barré.' },
+          { t: 'Gabapentina 3.000 mg/día desde el primer día', porque: 'Son más de tres veces los 900 mg/día de la guía (300 mg tres veces al día, ' + pag(28) + '); 3.000 mg/día es la dosis a partir de la cual retirarla de golpe da un delirio como el de la abstinencia (cap. 45, ' + pag(9) + '), no una pauta para el dolor del Guillain-Barré.' },
           { t: 'Gabapentina 300 mg tres veces al día; opioides si urge', ok: true }],
         explicacion: 'Dolor <span class="hl">neuropático</span>, prominente en las fases aguda y de resolución: <span class="hl">gabapentina 300 mg tres veces al día</span> y, para alivio más inmediato, considerar opioides (' + pag(28) + ').' },
       { id: 'mng-e3', corto: 'punción lumbar', tipo: 'test', fuente: 'mn-gbs-dx',
@@ -355,7 +355,7 @@ export const MAYEUTICA_B6A_PLACA = {
               opciones: [
                 { t: 'Gabapentina 300 mg cada 8 h; opioides si urge', ok: true },
                 { t: 'Paracetamol y AINE, porque es un dolor nociceptivo', porque: 'El dolor del Guillain-Barré es neuropático (' + pag(28) + '), no nociceptivo; tratarlo como tal te deja sin la gabapentina que pauta la guía.' },
-                { t: 'Gabapentina 3.000 mg/día', porque: 'Son más de tres veces los 900 mg/día de la guía (300 mg tres veces al día, ' + pag(28) + '); 3.000 mg es la dosis de la abstinencia de gabapentina (' + pag(9) + '), no la del dolor.' }],
+                { t: 'Gabapentina 3.000 mg/día', porque: 'Son más de tres veces los 900 mg/día de la guía (300 mg tres veces al día, ' + pag(28) + '); 3.000 mg/día es la dosis a partir de la cual retirarla de golpe da un delirio como el de la abstinencia (cap. 45, ' + pag(9) + '), no una pauta para el dolor.' }],
               explicacion: 'Dolor <span class="hl">neuropático</span>: gabapentina 300 mg tres veces al día; considerar opioides para alivio más inmediato (' + pag(28) + ').' } },
           { momento: 'Día 20', datos: { Evolución: 'sepsis por catéter; mejora la fuerza de brazos pero no se desteta; flácida, arreflexia' }, nuevo: ['Evolución'],
             modeloVivo: capSepsis('🩸 La sepsis en el capilar vivo'),
@@ -514,7 +514,7 @@ export const MAYEUTICA_B6A_PLACA = {
             pregunta: { id: 'mnr-c1-2', tipo: 'test', fuente: 'mn-bnm-rocuronio · mn-bnm-sugammadex', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'No se puede intubar ni ventilar y la saturación cae. ¿Qué das?',
               opciones: [
-                { t: 'Neostigmina 70 µg/kg', porque: 'La fuente da 8-45 min para un bloqueo moderado (' + pag(31) + '); este es profundo y recién puesto: el paciente moriría hipoxémico antes.' },
+                { t: 'Neostigmina 70 µg/kg', porque: 'La fuente da 8-45 min para un bloqueo moderado (' + pag(31) + '); este es profundo y recién puesto: tarda demasiado para una vía aérea que no se puede asegurar.' },
                 { t: 'Sugammadex 2 mg/kg, la dosis del bloqueo moderado', porque: 'Se queda corto con un bloqueo recién puesto; seguiría paralizado.' },
                 { t: 'Sugammadex 16 mg/kg = 1.120 mg', ok: true },
                 { t: 'Esperar: el rocuronio es de duración intermedia', porque: 'Dura una hora; la espera con SpO₂ de 84 % sería una parada hipóxica.' }],
