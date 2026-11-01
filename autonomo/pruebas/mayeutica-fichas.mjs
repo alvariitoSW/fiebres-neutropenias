@@ -58,7 +58,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
         if (!idsHtml.has(ficha)) m.push('la ficha no existe');
         if (!d.guia?.length) m.push('sin Guía socrática');
         if (!d.examen?.length) m.push('sin Examen');
-        if (!d.casos?.length) m.push('sin casos');
+        if (!d.casos?.length && ficha !== 'mt-cuerpo') m.push('sin casos'); // mt-cuerpo: ficha de consulta sin caso propio (cobertura del b6b; el caso del grupo 6L va en mt-unidades/mt-referencias)
         const preguntas = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))];
         const tests = preguntas.filter(q => q.tipo === 'test');
         let masLarga = 0; const posiciones = {};
