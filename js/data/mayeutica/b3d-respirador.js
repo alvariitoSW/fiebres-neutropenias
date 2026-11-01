@@ -256,7 +256,7 @@ export const MAYEUTICA_RESPIRADOR = {
         enunciado: '¿Cuál es la indicación principal de la ventilación mandatoria intermitente?',
         opciones: [
           no('La insuficiencia cardíaca izquierda, porque baja la poscarga', `La IMV hace lo contrario y baja el gasto cardíaco en la disfunción del VI (${p(10)}).`),
-          ok('La respiración rápida con exhalación incompleta durante ACV: las pausas espontáneas dejan vaciar el alvéolo'),
+          ok('La respiración rápida que no deja exhalar en ACV'),
           no('El paciente con debilidad muscular, para que se entrene', `En la debilidad de la musculatura respiratoria no se aconseja: sube el trabajo respiratorio (${p(10)}).`)],
         explicacion: `Los periodos espontáneos <span class="hl-azul">promueven el vaciado alveolar</span> y reducen el atrapamiento y la PEEP intrínseca (${p(10)}).` + enFicha(AJ, 'nep-imv') },
       { id: 'raj-g7', corto: 'nota de SIMV', tipo: 'error', fuente: 'nep-imv-adversos · nep-imv', origen: 'ficha: la contraindicación; el paciente es inventado',
@@ -286,7 +286,7 @@ export const MAYEUTICA_RESPIRADOR = {
         enunciado: 'Al subir la PEEP, el PaO₂/FiO₂ sube pero el gasto cardíaco cae. ¿Qué has ganado?',
         opciones: [
           no('Más aporte de O₂ a los tejidos, porque el cociente PaO₂/FiO₂ es el aporte', `Que suba el cociente no es sinónimo de más aporte (${p(12)}); si el GC cae, los tejidos pueden recibir menos.`),
-          ok('Mejor oxigenación arterial, pero el aporte DO₂ = GC × CaO₂ puede no mejorar; la ScvO₂ sirve de sustituto del GC'),
+          ok('Sube la PaO₂, pero el DO₂ puede no subir si cae el GC'),
           no('Nada: el cociente no se modifica con la PEEP', `Sube cuando la PEEP recluta alvéolos (${p(12)}).`)],
         explicacion: `<span class="hl-rojo">P/F ↑ no es DO₂ ↑</span>: la PEEP recluta, pero estorba el llenado del corazón (${p(12)}-${p(13)}). Como el GC no se monitoriza a menudo, la saturación venosa central lo sustituye (${p(13)}).` + enFicha(AJ, 'nep-do2') },
       { id: 'raj-g11', corto: 'Tabla 27.1', tipo: 'test', fuente: 'nep-tabla-27-1',
@@ -315,7 +315,7 @@ export const MAYEUTICA_RESPIRADOR = {
         opciones: [
           no('Subir la PEEP externa por encima de la oculta', `Debe quedar justo por debajo; por encima sumarías presión al final de la espiración a la que ya existe (${p(15)}).`),
           no('Subir la FR para sacar el aire antes', `Más FR acorta la espiración y atrapa más aire (${p(9)}).`),
-          ok('Medir la PEEP oculta con la oclusión al final de la espiración y añadir PEEP externa justo por debajo')],
+          ok('Medirla con oclusión y poner PEEP externa justo por debajo')],
         explicacion: `Si alargar la espiración no es posible, se mide con <span class="hl-azul">oclusión al final de la espiración</span> y se añade PEEP extrínseca justo por debajo (${p(15)}).`,
         nota: 'La fuente escribe aquí «oclusión al final de la inspiración» (pág. 15); la ficha usa «espiración», como en las págs. 6 y 31.' + enFicha(AJ, 'nep-ajustes-oculta') },
     ],
@@ -324,7 +324,7 @@ export const MAYEUTICA_RESPIRADOR = {
         enunciado: 'Con Vt 6 mL/kg, el pH es 7,10. ¿Qué dice la tercera etapa de la Tabla 27.1?',
         opciones: [
           no('Bajar la FR para no atrapar aire', `La acidosis respiratoria se trata subiendo la FR primero (${p(14)}).`),
-          ok('FR a 35 y, si el pH sigue <7,15, subir el Vt de 1 en 1 mL/kg hasta pH >7,15'),
+          ok('FR a 35; si sigue <7,15, Vt de 1 en 1 mL/kg'),
           no('Subir el Vt a 8 mL/kg directamente', `Primero la FR a 35; el Vt sube de 1 en 1 solo si sigue <7,15 (${p(14)}).`)],
         explicacion: `pH 7,15-7,30: subir la FR hasta pH >7,30 o FR 35; <span class="hl-rojo">pH <7,15</span>: FR 35 y después el Vt (${p(14)}).` + enFicha(AJ, 'nep-tabla-27-1') },
       { id: 'raj-e2', corto: 'cuándo más PEEP', tipo: 'test', fuente: 'nep-ajustes',
@@ -389,7 +389,7 @@ export const MAYEUTICA_RESPIRADOR = {
               enunciado: 'Subes la PEEP de 4 a 20 con el Vt fijo. La compliance sube hasta 12 y baja después; la presión de conducción baja hasta 12 y sube después. ¿Dónde está la mejor PEEP de Isidro?',
               opciones: [
                 no('En 20, donde hay más reclutamiento', `Por encima del punto de transición la compliance baja y la presión de conducción sube: predomina la sobredistensión (${p(11)}).`),
-                ok('En 12: la compliance máxima y la presión de conducción mínima marcan el punto de transición'),
+                ok('En 12: compliance máxima, conducción mínima'),
                 no('En 4, porque es la que menos presión alveolar da', `A 4 todavía hay espacio por reclutar: la compliance sigue subiendo hasta 12 (${p(11)}).`)],
               explicacion: `El punto de transición entre reclutamiento y sobredistensión identifica la <span class="hl-azul">mejor PEEP</span> (${p(11)}).`,
               nota: '<b>La fuente no lo dice</b> para Isidro: el 12 es el del estudio de la Fig. 27.5; las cifras del modelo del pulmón son ilustrativas y no la reproducen punto por punto.' + enFicha(AJ, 'nep-fig-27-5') } },

@@ -14,7 +14,7 @@ export const RECETAS_3D_G1 = {
             ] },
             { tipo: 'flujo', titulo: 'De la presión pico a la meseta', nodos: [
                 { fuente: '#nep-ec-27-1', etiqueta: 'Pico = Pres + Pel (Ec. 27.1)', color: 'dorado' },
-                { fuente: '#nep-fig-27-2', etiqueta: 'Pausa sin flujo: la presión que queda es la meseta', color: 'azul' },
+                { fuente: '#nep-fig-27-2', etiqueta: 'Pausa sin flujo: la presión que queda es la meseta', color: 'purpura' },
                 { fuente: '#nep-fig-27-2', etiqueta: 'Pico − meseta = Pres (resistencia de la vía aérea)', color: 'verde' },
                 { fuente: '#nep-riesgo-alveolar', etiqueta: 'Riesgo alveolar despreciable con meseta ≤30 cmH₂O', color: 'rojo' }
             ] },
@@ -57,7 +57,7 @@ export const RECETAS_3D_G1 = {
             { tipo: 'comparar', titulo: 'Qué ve el monitor y qué hay dentro', columnas: [
                 { titulo: 'Presión proximal', color: 'dorado', nodos: [{ fuente: '#nep-monitorizacion-oculta', etiqueta: 'Vuelve a 0 al final de la espiración' }] },
                 { titulo: 'Presión alveolar', color: 'rojo', nodos: [{ fuente: '#nep-monitorizacion-oculta', etiqueta: 'Sigue positiva: la PEEP oculta' }] },
-                { titulo: 'Flujo', color: 'azul', nodos: [{ fuente: '#nep-fig-28-9', etiqueta: 'No llega a cero' }] }
+                { titulo: 'Flujo', color: 'purpura', nodos: [{ fuente: '#nep-fig-28-9', etiqueta: 'No llega a cero' }] }
             ] },
             { tipo: 'racimos', titulo: 'Qué le hace al paciente', grupos: [{ titulo: 'Cuatro efectos', color: 'rojo', nodos: [
                 { fuente: '#nep-efectos', etiqueta: 'PVC espuria' },
