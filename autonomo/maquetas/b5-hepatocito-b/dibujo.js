@@ -8,7 +8,9 @@ const nh3 = (x, y) => `<circle class="p-nh3" cx="${x}" cy="${y}" r="3.4"/>`;
 const urea = (x, y) => `<rect class="p-urea" x="${x - 3.2}" y="${y - 3.2}" width="6.4" height="6.4"/>`;
 const glu = (x, y) => `<path class="p-glu" d="M${x} ${y - 4.6}L${x + 3.4} ${y}L${x} ${y + 4.6}L${x - 3.4} ${y}Z"/>`;
 const T = (x, y, t, c = '', a = '') => `<text x="${x}" y="${y}" class="${c}" ${a}>${t}</text>`;
-export const opNodo = (func, i) => +clamp(func / 100 * 4 - i, 0.15, 1).toFixed(2);
+export const opNodo = (func, i) => +clamp(func / 100 * 4 - i, 0.35, 1).toFixed(2);
+// Un paso está apagado cuando le quedan menos de la mitad de los hepatocitos que necesita: se marca con aspa y rótulo, no solo con la opacidad.
+export const apagado = (func, i) => func / 100 * 4 - i < 0.5;
 export function escena(s, L, oculto) {
   const o = [];
   // Colon
@@ -26,6 +28,7 @@ export function escena(s, L, oculto) {
   NODOS.forEach(([a, b], i) => {
     const x = 152 + i * 58, op = opNodo(s.func, i);
     o.push(`<g class="nodo" data-nodo="${i}" opacity="${op}"><circle class="nd" cx="${x}" cy="94" r="13"/>${T(x, 98, i + 1, 'num', 'text-anchor="middle"')}${T(x, 121, a, 'min', 'text-anchor="middle"')}${T(x, 132, b, 'min', 'text-anchor="middle"')}`);
+    if (apagado(s.func, i)) o.push(`<path class="aspa" d="M${x - 7} 87L${x + 7} 101M${x + 7} 87L${x - 7} 101"/>`, T(x, 143, 'apagado', 'min apag', 'text-anchor="middle"'));
     if (i < 3) o.push(`<path class="flecha" d="M${x + 14} 94H${x + 44}"/>`);
     o.push('</g>');
   });
@@ -40,7 +43,7 @@ export function escena(s, L, oculto) {
   o.push(`<path class="flecha" d="M234 262V316"/>`, T(240, 292, 'sangre arterial', 'min'));
   for (let i = 0; i < L.nSale; i++) o.push(nh3(222 - (i % 2) * 10, 270 + Math.floor(i / 2) * 11));
   o.push(`<rect class="${s.cvvh ? 'cvvh on' : 'cvvh'}" x="116" y="296" width="84" height="44" rx="8"/>`, T(158, 313, 'CVVH', 'rot', 'text-anchor="middle"'), T(158, 328, s.cvvh ? 'filtrando NH₃' : 'apagada', 'min', 'text-anchor="middle"'), `<path class="flecha" d="M200 318H224" opacity="${s.cvvh ? 1 : 0.3}"/>`);
-  // Astrocito
+  // Astrocito (el hueco de la derecha, x 226-356, queda reservado para el astrocito grande de la vuelta siguiente)
   const r = 30 + 18 * (oculto ? 0.2 : L.sw);
   o.push(`<circle class="astro ${!oculto && L.sw > 0.4 ? 'hincha' : ''}" cx="292" cy="372" r="${r.toFixed(1)}"/>`, T(292, 430, oculto ? 'Astrocito' : `Astrocito · ${L.sw > 0.4 ? 'hinchado' : 'normal'}`, 'rot', 'text-anchor="middle"'));
   if (!oculto) { for (let i = 0; i < L.nGlu; i++) o.push(glu(274 + (i % 3) * 18, 362 + Math.floor(i / 3) * 18)); o.push(T(292, 350, 'glutamina + agua', 'min', 'text-anchor="middle"')); }

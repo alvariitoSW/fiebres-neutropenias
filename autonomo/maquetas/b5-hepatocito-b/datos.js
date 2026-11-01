@@ -21,5 +21,14 @@ export const NOTAS = [
   ['opinión del autor', 'Que más producción intestinal y menos del 30 % de hepatocitos adelanten el riesgo de edema (umbral ilustrativo de 120 en el modelo) es una simplificación del modelo; el libro solo da >150 y que el amonio arterial predice mejor que el venoso al principio (p. 7).'],
 ];
 export const PROFUNDIZAR = [['Asterixis y signos motores: pueden aparecer en cualquier fase (p. 6)', 6], ['Enema de retención: 200 g de lactulosa en 700 mL, 30-60 min en Trendelenburg (p. 7)', 7], ['Trasplante: mortalidad del fallo agudo del 80 al 33 % (p. 8)', 8], ['Amonio arterial frente a venoso (p. 7)', 7]];
-export const VIAS_APAGADAS = [['Paracetamol → glutatión', 'Se enciende en la ficha del paracetamol (otro bloque)'], ['Cetonas', 'Se enciende en la ficha de la cetoacidosis (otro bloque)'], ['Lactato → glucosa', 'Se enciende en la ficha del lactato (otro bloque)'], ['Alcoholes', 'Se enciende en la ficha de los alcoholes (otro bloque)']];
+// [nombre, qué pasa, id de su ficha, página del PDF si la hay]
+export const VIAS_APAGADAS = [['Paracetamol → glutatión', 'Se enciende en la ficha del paracetamol', 'ma-fha-paracetamol', 3], ['Cetonas', 'Se enciende en la ficha de la cetoacidosis', 'mr-cetoacidosis', 0], ['Lactato → glucosa', 'Se enciende en la ficha del lactato', 'mar-lactato-aerobio', 0], ['Alcoholes', 'Se enciende en la ficha de los alcoholes', 'mt-alcoholes', 0]];
+// Cómo crece el modelo: un carril por ficha del libro (la misma célula; solo se añaden datos). Ficha y página de cada una.
+export const CRECERA = [
+  ['Encefalopatía hepática: carril de la urea, colon, astrocito, lactulosa, rifaximina y CVVH (este modelo)', 'ma-encefalopatia-hepatica', 6],
+  ['Varices: el TIPS salta el hígado y el amonio sube; enlace al shock hemorrágico', 'ma-varices', 9],
+  ['Peritonitis bacteriana y síndrome hepatorrenal: el riñón del cirrótico, con el filtro vivo', 'ma-pbe-shr', 10],
+  ['Paracetamol: la vía del glutatión y la NAC', 'ma-fha-paracetamol', 3]];
+export const ASTRO = ['El astrocito grande (con su glutamina y su agua) ocupará el hueco de la derecha del dibujo; hoy se ve en tamaño normal.', 'ma-eh-nh3', 6];
+export const FILTRO_AMONIO = 'ma-eh-amonio';
 export const IDEA = ['El hígado convierte el NH₃ del intestino en urea; si falla, el NH₃ llega al astrocito, que lo vuelve glutamina y se hincha de agua.', 6];

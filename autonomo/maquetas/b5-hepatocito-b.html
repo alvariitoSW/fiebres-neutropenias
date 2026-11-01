@@ -11,22 +11,24 @@
 <body>
 <main>
   <header class="cabecera"><div class="cab-fila"><h1>La fábrica por dentro</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <p id="idea" class="idea"></p>
   <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
   <section id="prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="monitor" aria-label="Monitor de cabecera">
-    <div class="mon-fila"><span>Amonio arterial <b id="mon-nh3"></b></span><span>West Haven <b id="mon-wh"></b></span><span>Carril urea <b id="mon-carril"></b></span></div>
+    <div class="mon-fila"><span>NH₃ arterial <b id="mon-nh3"></b></span><span>West Haven <b id="mon-wh"></b></span><span>Carril <b id="mon-carril"></b></span></div>
     <div class="mon-fila"><span>Deposiciones <b id="mon-dep"></b></span><span>PA <b id="mon-pa"></b> · FC <b id="mon-fc"></b></span><span id="mon-astro"></span></div>
+    <p class="mon-ch cita"><span class="chip-ilus">ilustrativo</span> Escala del monitor: normal &lt;60, riesgo &gt;150 µmol/L (<button type="button" class="ver-ficha" data-resaltar="#ma-eh-amonio" data-pag-ficha="7">ficha p. 7</button>); el resto del eje es del modelo.</p>
   </section>
   <section class="zona-escena"><svg id="hep-svg" viewBox="0 0 360 436" role="img" aria-label="Un hepatocito grande: entra el amonio del colon, el carril de la urea lo procesa y lo que sobra llega al astrocito"></svg></section>
   <div class="mando"><button type="button" id="b-replay" class="btn-replay">▶ Ver el carril de la urea paso a paso</button></div>
   <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
   <div id="leyenda"></div>
-  <p id="idea" class="idea"></p>
-  <details class="plegable" id="fig"><summary>Figura del libro · Fig. 39.2 · TC de cráneo antes y después del edema</summary>
+    <details class="plegable" id="fig"><summary>Figura del libro · Fig. 39.2 · TC de cráneo antes y después del edema</summary>
     <figure class="fig-tc"><img id="img-tc" alt="Dos TC de cráneo de un paciente con fallo hepático agudo, antes y después del edema cerebral: a la derecha se borran los surcos" src="../../js/modules/libros/img/mar-fig39-2-tc-edema-cerebral.jpg">
     <figcaption>TC de cráneo en el fallo hepático agudo, antes (izquierda) y después (derecha) del edema cerebral: se borran los surcos y se pierde la interfaz entre sustancia gris y blanca. Imagen de Marino (Reference 6), la misma que ya está en la app. <span id="cita-fig"></span></figcaption></figure>
     <p class="min-nota">Hueco reservado: aquí irá la Fig. 52.2 cuando se encienda la vía del paracetamol.</p></details>
   <section class="bloque">
+    <details class="plegable"><summary>Cómo crece este modelo</summary><ul class="lista crecera" id="crecera"></ul></details>
     <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
     <details class="plegable"><summary>Notas: lo que la fuente no dice</summary><div class="bloque" id="notas"></div></details>
     <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>

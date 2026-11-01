@@ -12,10 +12,13 @@ export const APUESTA = {
 };
 export const ERROR = {
   preset: 'casimira', pag: 7,
-  antes: 'Texto de la guardia para una paciente con encefalopatía hepática. Juzga cada frase antes de ver qué hace la lactulosa en el colon.',
-  frases: [
+  antes: 'Texto de la guardia para una paciente con encefalopatía hepática. Hay 0, 1 o 2 errores: juzga cada frase antes de ver qué hace la lactulosa en el colon.',
+  frases: [  // orden: 5 frases, 1 error (la 3.ª); el recuento «hay 0, 1 o 2» no dice cuántos hay
+
     { t: 'Objetivo de lactulosa: 2-3 deposiciones blandas al día; si aparece diarrea, se reduce o se para.', error: false, por: 'Cierto (p. 7): la diarrea osmótica obliga a reducir o parar.' },
     { t: 'Las bacterias lácticas convierten la lactulosa en ácidos grasos de cadena corta, la luz se alcaliniza y desaparecen los productores de amonio.', error: true, por: 'Falso: la luz se acidifica, y ese ácido es lo que elimina los microbios productores de amonio (p. 7). Con una luz alcalina el amonio seguiría subiendo.' },
+    { t: 'Rifaximina: 400 mg tres veces al día durante al menos 10 días, y suele combinarse con lactulosa.', error: false, por: 'Cierto (p. 7): es un antibiótico que no se absorbe; solo, es eficaz, pero se suele asociar a lactulosa.' },
+    { t: 'Un amonio arterial >150 µmol/L (normal <60) marca un riesgo aumentado de edema cerebral.', error: false, por: 'Cierto (p. 7); el arterial lo predice mejor que el venoso al principio.' },
     { t: 'La CVVH se plantea con oliguria persistente, amonio >150 µmol/L o edema cerebral, sea cual sea la creatinina.', error: false, por: 'Cierto (p. 8): el criterio no depende de la creatinina.' }],
 };
 export const CASO = {
@@ -31,7 +34,7 @@ export const CASO = {
       ops: [{ t: 'Ringer lactato en bolos para reponer volumen y noradrenalina si la PA no sube.', ok: false, por: 'El Ringer lactato baja el sodio y favorece el edema cerebral: no es el fluido de ella (p. 5).' },
         { t: 'Albúmina al 5 % y noradrenalina; nada de Ringer lactato.', ok: true, por: 'La albúmina al 5 % deja el 70 % en el espacio intravascular y no baja el sodio (p. 5).' },
         { t: 'Furosemida para sacar la oliguria y luego volumen.', ok: false, por: 'Vacías más el espacio intravascular con 82/45: la hipotensión empeora (fisiología general).' }] },
-    { enun: 'Día 4: estupor, desorientada en lugar y tiempo (West Haven 3). La TC muestra surcos borrados, como la Fig. 39.2. ¿Qué haces?', estado: { func: 8, cvvh: 1, vit: { pa: '104/60', fc: '66' } }, pag: 8, orden: [1, 2, 0],
+    { enun: 'Día 4: estupor, desorientada en lugar y tiempo (West Haven 3). La TC muestra surcos borrados, como la Fig. 39.2. ¿Qué haces?', estado: { func: 8, cvvh: 1, edema: true, vit: { pa: '104/60', fc: '92', nota: 'con noradrenalina' } }, pag: 8, orden: [1, 2, 0],
       ops: [{ t: 'Consulto ya con trasplante: es el tratamiento definitivo (mortalidad del 80 al 33 %).', ok: true, por: 'Hay que avisar al equipo de trasplante ante toda encefalopatía progresiva (p. 8).' },
         { t: 'Subo la lactulosa hasta 5-6 deposiciones al día para bajar el amonio más deprisa que con la CVVH.', ok: false, por: 'Deshidratas a una paciente hipotensa y no tratas la causa; el sello de hipovolemia salta a las 6 deposiciones (p. 7).' },
         { t: 'Mantengo la CVVH 48 h más y reevalúo antes de llamar a nadie.', ok: false, por: 'Con encefalopatía progresiva, esperar es perder la ventana: el trasplante es el tratamiento definitivo (p. 8).' }] },
