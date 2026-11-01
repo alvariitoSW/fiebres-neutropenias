@@ -144,10 +144,12 @@ for (const k of ['neutrofilo', 'reperfusion']) {
   const esperado = k === 'neutrofilo' ? ['cadena', 'nadph', 'sup', 'h2o2', 'fork', 'fe'] : ['cadena', 'nadph', 'vaso', 'organo', 'fe'];
   ok(t.lupa === 'neutrofilo' && t.estado.ros === k && esperado.every(i => q.ids.includes(i)) && (k === 'reperfusion' ? !q.ids.includes('fork') : !q.ids.includes('organo')) && q.pt >= 6 && /×20/.test(q.titulo),
     `«${k}» abre la lupa del neutrófilo (${q.ids.join(', ')}; ${q.pt} puntos; ${q.titulo.slice(0, 40)})`);
-  ok(await p.evaluate(() => !document.querySelector('.tope-sello') && !!document.querySelector('.tope-aviso[data-tope="hiperoxia"]')), `«${k}»: aviso «solo si SaO₂ <90 %» y sin sello con la PaO₂ normal`);
+  if (k === 'reperfusion') ok(await p.evaluate(() => !document.querySelector('.tope-sello') && !!document.querySelector('.tope-aviso[data-tope="hiperoxia"]')), `«${k}»: aviso «solo si SaO₂ <90 %» y sin sello con la PaO₂ normal`);
+  else ok(await p.evaluate(() => !document.querySelector('.tope-sello') && !document.querySelector('.tope-aviso[data-tope="hiperoxia"]')), `«${k}»: sin aviso del O₂ (la Tabla 21.4 es del posparo, no del estallido del neutrófilo; G4 A1)`);
   await deslizar('#cpv-m-pao2', 100); await p.waitForTimeout(200);
   const s2 = await T();
-  ok(await p.evaluate(() => !document.querySelector('.tope-sello') && /sin indicación/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '') && !/iperoxia/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '')) && s2.R.sao2 >= 90 && s2.estado.pao2 === 100, `«${k}» con PaO₂ 100 (SaO₂ ${s2.R.sao2} %): solo aviso «O₂ sin indicación», sin sello ni «hiperoxia»`);
+  if (k === 'reperfusion') ok(await p.evaluate(() => !document.querySelector('.tope-sello') && /sin indicación/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '') && !/iperoxia/.test(document.querySelector('.tope-aviso[data-tope="hiperoxia"]')?.textContent || '')) && s2.R.sao2 >= 90 && s2.estado.pao2 === 100, `«${k}» con PaO₂ 100 (SaO₂ ${s2.R.sao2} %): solo aviso «O₂ sin indicación», sin sello ni «hiperoxia»`);
+  else ok(await p.evaluate(() => !document.querySelector('.tope-sello') && !document.querySelector('.tope-aviso[data-tope="hiperoxia"]')), `«${k}» con PaO₂ 100: sin aviso ni sello del O₂ (solo el posparo)`);
   ok(await p.evaluate(() => { const b = document.querySelector('[data-cpv-lupa="neutrofilo"]'); return !!b && !b.hidden && b.getBoundingClientRect().width > 0; }), `«${k}»: el botón de lupa «Neutrófilo» está en la barra`);
   ok(await p.evaluate(() => /más/.test(document.getElementById('cpv-lupa-svg').textContent)), `«${k}»: el dibujo dice que con O₂ de más hay más daño`);
   if (await desborde() > 0) ok(false, `desborde en «${k}»`);
