@@ -1,0 +1,58 @@
+name: Vista previa en el móvil
+
+# Publica en GitHub Pages la app de main en la raíz (igual que antes) y cada bloque en curso (rama auto/* con PR
+# abierta) en vista/<clave>/. Script: .github/vista-previa.sh. Decisión del Consejo (Interior y Hacienda), 01/11/2026.
+# Requiere Settings → Pages → Source = «GitHub Actions». Retirada: volver a «Deploy from a branch» (main) y la web
+# queda como estaba. Corre en main (el entorno github-pages solo deja publicar desde ahí): al subir main, cada
+# 20 minutos (si algo cambió) y a mano.
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '7,27,47 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: read
+
+concurrency:
+  group: vista-previa
+  cancel-in-progress: false
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Montar la web (raíz + bloques en curso)
+        id: montar
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          bash .github/vista-previa.sh
+          # En las pasadas programadas, si nada cambió desde la última publicación, no se vuelve a publicar.
+          ANTES="$(curl -fsSL "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/vista/estado.txt" || true)"
+          if [ "${{ github.event_name }}" = "schedule" ] && [ "$ANTES" = "$(cat _site/vista/estado.txt)" ]; then
+            echo "publicar=no" >> "$GITHUB_OUTPUT"; echo "Sin cambios: no se publica."
+          else
+            echo "publicar=si" >> "$GITHUB_OUTPUT"
+          fi
+
+      - if: steps.montar.outputs.publicar == 'si'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - if: steps.montar.outputs.publicar == 'si'
+        id: despliegue
+        uses: actions/deploy-pages@v4

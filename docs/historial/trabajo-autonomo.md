@@ -498,3 +498,13 @@ de 9,5 y 10 antes de construir, qué falta en cada juicio, tope de 3 vueltas y C
 toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto de la PR, nota atada a la receta, anclas de
 10 con calibración única, registro `autonomo/bajo-95.md` y solo la maqueta elegida llega a 9,5. Desde entonces, el
 Consejo y el Congreso deciden con un modelo grande cuando el asunto toca reglas o calidad (REGLAS §4.12).
+
+## Vídeos del usuario: fábrica en `main` y voces de España (01/11/2026)
+
+Una sesión de resumen del Plan Marino entregó primero una página animada en vez de vídeo, y luego un MP4 cuyo
+portavoz (Kokoro `em_alex`) sonaba latinoamericano. La causa: la fábrica de vídeos solo vivía en la rama
+`ccr-9b1626a6-8w7auz`, y Kokoro no tiene voces de España (la pronunciación sí es de España, con «θ»; el timbre no).
+Arreglo: la fábrica entra en `autonomo/consejo/video/` (scripts y plantillas, sin MP4 ni modelos), con
+`instalar.sh` (incluye el apaño de `docopt`, que no compila con el setuptools de Debian), `render.js` para montar,
+todo el reparto en Piper de España, skill `video` y una línea en `CLAUDE.md` §1: todo vídeo, con voces de España y en
+este formato.
