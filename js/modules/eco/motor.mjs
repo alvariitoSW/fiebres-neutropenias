@@ -50,16 +50,18 @@ export const BASE = {
   // meseta de ~6,5 mmHg de toda la sístole subía la PVC media a 5,02 (Tabla 8.1 de Marino: 0-5). Ahora, 4,19. Más baja
   // no cabe sin sacar la VD sistólica de 20-25 (Ficha 5) o pasar de 40 mmHg las venas pulmonares en la hipertrofia con
   // 1,5 L y EPP (pruebas/maniobras.test.mjs, paciente posible)
-  // v3m (mv-eco paso 6, 01/11/2026), MEDIDO Y NO APLICADO: con Ees 0,22 y picoAurAntes 0 (abajo) el gradiente VD−AD telediastólico
-  // del TEP/HP baja a ≤1,5 mmHg y el VD del TEP masivo vuelve a llenarse en la diástole (sin IT diastólica), pero sube la PVC normal
-  // (4,2 → 4,6, fuera del contrato) y cambia la diástole izquierda del atlas. Ver autonomo/bloques/mv-eco/paso6/v3m-informe.md
-  ad: { ees: 0.22, v0: 2,  a: 0.13, b: 0.080 },   // v0 5 → 8: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo
+  // v4m (mv-eco paso 6, 01/11/2026, decisión del usuario «Sí, recalibrar»): Ees 0,70 → 0,22 (la AD, una bomba como la AI o menos;
+  // la diastólica del VD ≈ la media de la AD, Marino cap. 8, Fig. 8.2, PDF p. 52) y V0 8 → 2 (la AD mínima vuelve a 10-30 mL). Con el
+  // reloj nuevo (picoAurAntes 0) el gradiente VD−AD telediastólico del TEP/HP baja a ≤2,6 mmHg y el VD del TEP masivo se llena en la
+  // diástole (sin IT diastólica). Ilustrativo. Ver autonomo/bloques/mv-eco/paso6/v3m-informe.md y v4m-informe.md
+  ad: { ees: 0.22, v0: 2,  a: 0.13, b: 0.080 },   // v0: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo (mínima ~24)
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
   // v3m: picoAurAntes (s) = la contracción auricular llega a su pico ese tiempo antes de la sístole ventricular (pr) y se relaja durante
   // la isovolumétrica: la onda A acaba al cerrarse la tricúspide y empezar la IT (Mukherjee 2025, ASE, PDF p. 16 y 18: TCO = del final de la
   // A al comienzo de la E = duración del chorro de IT; onda c en la contracción isovolumétrica, Marino cap. 8, PDF p. 53). null = desde el
-  // comienzo del latido (60 ms antes del QRS mecánico), como siempre. anilloAd: descenso x′ de la AD (ver presiones). Los dos, inertes
+  // comienzo del latido (60 ms antes del QRS mecánico), el reloj de antes. v4m: 0 (aplicado). fSubidaAur: fracción de tsAur que sube (0,5).
+  // anilloAd: descenso x′ de la AD (ver presiones), inerte
   picoAurAntes: 0, anilloAd: 0,
   // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
   // relajación lenta, como en la disfunción diastólica). Ver activacionVi
