@@ -59,7 +59,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'No: <span class="hl-rojo">el 10-15 % no tiene anti-AChR</span> (seronegativos).',
           'Pide <span class="hl">anti-MuSK</span> (cinasa específica del músculo): está presente en un <span class="hl">40 %</span> de esos seronegativos.'],
         explicacion: 'Los anticuerpos contra el receptor confirman el diagnóstico, pero su ausencia no lo descarta (' + pag(25) + ').' },
-      { id: 'mnm-g5', modelo: { placaViva: 'sera' }, corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
+      { id: 'mnm-g5', corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
         enunciado: 'Serapio toma piridostigmina, que le va bien. ¿Por qué no se usa en el fracaso respiratorio?',
         opciones: [
           { t: 'Porque no llega a la placa y no inhibe la acetilcolinesterasa', porque: 'Sí actúa: es un inhibidor de la acetilcolinesterasa y se usa en la miastenia leve-moderada. Pensar que no funciona te haría retirarla a quien la necesita sin motivo.' },
@@ -135,7 +135,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'Fatiga con el uso y alivio con el reposo: la placa tiene menos receptores. La Tabla 46.6 la separa del Guillain-Barré.',
           'Antes de prescribir, se lee la Tabla 46.5; y se intuba con CV ≤15 mL/kg (o <1 L) y PIM peor que −20, sin esperar al in extremis.',
           'En la crisis: plasmaféresis o IgIV, retirar piridostigmina (secreciones); un timoma explica el 10 %.'],
-        volver: { nombre: '¿Cuándo intubar?', ancla: 'mn-mg-intubacion', modelo: { placaViva: 'sera:1' } },
+        volver: { nombre: '¿Cuándo intubar?', ancla: 'mn-mg-intubacion', modelo: { placaViva: 'flor:4' } },
         pasos: [
           { momento: 'Consulta · día 0', datos: { Exploración: 'ptosis derecha que empeora por la tarde; reflejos conservados', 'Prueba del hielo': 'hendidura de 6 a 9 mm (+3 mm)' }, nuevo: ['Exploración', 'Prueba del hielo'], calculadora: C_GBS,
             pregunta: { id: 'mnm-c1-1', tipo: 'test', fuente: 'mn-mg-hielo · mn-tabla-46-6 · mn-mg-clinica', origen: 'ficha; cifras del paciente: ilustrativo',
@@ -405,7 +405,7 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Objetivo logrado: 0 respuestas evitan la asincronía', porque: 'El objetivo es 1 o 2 respuestas perceptibles. Mantener 0 expone al paciente a más relajante, más miopatía y más días de parálisis.' },
           { t: 'Bloqueo insuficiente: hay que subir la perfusión', porque: 'Sin aducción del pulgar el bloqueo es excesivo, no insuficiente. Subir la dosis añadiría parálisis sin beneficio.' }],
         explicacion: 'Cuatro estímulos a 2 Hz sobre el nervio cubital: <span class="hl-rojo">sin aducción del pulgar, bloqueo excesivo</span>; objetivo <span class="hl">1 o 2 respuestas</span> (' + pag(30) + ').' },
-      { id: 'mnr-g5', modelo: { placaViva: 'mel' }, corto: 'neostigmina', tipo: 'test', fuente: 'mn-bnm-neostigmina',
+      { id: 'mnr-g5', corto: 'neostigmina', tipo: 'test', fuente: 'mn-bnm-neostigmina', calculadora: C_BNM,
         enunciado: 'Revertir un bloqueo moderado de un no despolarizante. ¿Cómo lo hace la neostigmina?',
         opciones: [
           { t: 'Se une directamente al rocuronio y lo inactiva', porque: 'Eso es el sugammadex. Esperar de la neostigmina una reversión inmediata a cualquier profundidad sería pasarse de dosis.' },
