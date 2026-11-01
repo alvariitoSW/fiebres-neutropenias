@@ -226,8 +226,8 @@ export const MAYEUTICA_RINON_1 = {
         paciente: { Edad: '61 años', Motivo: 'Sepsis de origen abdominal, oliguria', Balance: '+6 L en 24 h por cristaloides (ilustrativo, paciente inventado)' },
         lleva: [
           'El filtrado depende de (Pā − Pv) − PPT: la presión venosa y la del túbulo restan.',
-          'La sepsis obstruye el túbulo con células descamadas y sube la presión del túbulo proximal.',
-          'Con la PIA alta el gradiente es Pā − (PIA × 2): pesa el doble que la presión arterial.'],
+          'Con la PIA alta el gradiente es Pā − (PIA × 2): pesa el doble que la presión arterial.',
+          'Con balance >5 L en 24 h los cristaloides suben la PIA (85 % con hipertensión intraabdominal, A p. 50) y, con ella, baja el gradiente de filtración.'],
         volver: { nombre: 'Las presiones del filtrado', ancla: 'mr-gradiente-filtracion', modelo: GLOM_PIA },
         pasos: [
           { momento: 'Hora 0 · hemodinámica', datos: { PAM: '75 mmHg', PVC: '14 mmHg' }, nuevo: ['PAM', 'PVC'],
