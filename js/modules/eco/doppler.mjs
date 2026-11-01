@@ -232,8 +232,24 @@ export function curvaLatido(onda, fuente, factor, areas, m) {
  * (curvaLatido) siguen leyendo el chorro. El ángulo del llenado se toma igual que el del chorro (ilustrativo).
  */
 export function velCwReg(s, fuente, factor, areas, m) {
-  const mit = fuente.n === 'regMitral', chorro = mit ? velRegMitral(s, m.eroaMitral) : velRegTricus(s, m.eroaTricus);
+  const mit = fuente.n === 'regMitral', c0 = mit ? velRegMitral(s, m.eroaMitral) : velRegTricus(s, m.eroaTricus);
+  // Bernoulli (ΔP = 4v²): por debajo de 0,6 m/s (ΔP ≈ 1,4 mmHg) no hay chorro, solo el flujo de cierre de la válvula; sin este corte quedaba una
+  // meseta plana de decenas de cm/s en la contracción isovolumétrica (fisiología general; ilustrativo). E y A son la curva real del motor (velOrificio).
+  const chorro = c0 < VCW_MIN_CHORRO ? 0 : c0;
   return factor * chorro - factor * velOrificio(mit ? 'mitral' : 'tricus', s, areas);
+}
+export const VCW_MIN_CHORRO = 60;
+
+/**
+ * Escalón del CW (cm/s, ilustrativo) para el espectro de una IM/IT. base: fracción de la altura a la que está la línea (0,2 = arriba).
+ * Manda el chorro (abajo, cm/s): el escalón más pequeño en que cabe entero en su lado de la base (≤ 100 %), que lo deja en ≥ 60-70 % de su lado.
+ * El llenado (arriba) entra solo si cabe sin bajar el chorro del 60 %: un pico de llenado que lo exigiría (la onda A de la tricúspide del motor) se sale por arriba.
+ */
+export const ESCALAS_CW = [150, 200, 225, 250, 300, 350, 400, 500, 700];
+export function escalaCw(arriba, abajo, base) {
+  const cabe = (e, ar) => abajo <= 2 * e * (1 - base) && (!ar || arriba <= 2 * e * base);
+  const e0 = ESCALAS_CW.find(e => cabe(e, false)) ?? 700, e1 = ESCALAS_CW.find(e => cabe(e, true)) ?? 700;
+  return abajo >= 0.6 * 2 * e1 * (1 - base) ? e1 : e0;
 }
 
 /** Qué fuente domina en la muestra y con qué factor (velocidad medida / velocidad de la fuente). */
