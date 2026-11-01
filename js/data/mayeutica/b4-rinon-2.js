@@ -125,7 +125,7 @@ export const MAYEUTICA_RINON_2 = {
               enunciado: 'Con 80 kg: ¿qué volumen de salino pones al inicio, a qué diuresis apuntas, y cómo interpretas la creatinina de 2,4?',
               opciones: [
                 { t: '800-1.600 mL; ≥80 mL/h; creatinina sobrestimada por la creatina', ok: true },
-                { t: '80-160 mL; diuresis ≥8 mL/h; la creatinina es fiable', porque: 'Es un error de coma (10-20 mL/kg × 80 kg son 800-1.600 mL): quedarías 10 veces corto y la mioglobina seguiría atascando el túbulo. Y la creatinina no es fiable aquí.' },
+                { t: '80-160 mL de inicio; diuresis ≥8 mL/h; la creatinina sigue siendo un marcador fiable', porque: 'Es un error de coma (10-20 mL/kg × 80 kg son 800-1.600 mL): quedarías 10 veces corto y la mioglobina seguiría atascando el túbulo. Y la creatinina no es fiable aquí.' },
                 { t: '4.000 mL de golpe; diuresis ≥200 mL/h; la creatinina es fiable', porque: 'No es la cifra de la ficha: volumen inicial 10-20 mL/kg y luego el ritmo que dé ≥1 mL/kg/h. Y con la creatina liberada, la creatinina sobreestima el FRA.' }],
               explicacion: '80 kg × 10-20 mL/kg = <span class="hl">800-1.600 mL</span>; luego, ritmo para <span class="hl">≥1 mL/kg/h</span> = 80 mL/h (el libro imprime «1 mg/kg/hr»: errata, por el contexto son mL/kg/h). La creatinina sube también por la <span class="hl-rojo">creatina</span> que libera el músculo.' } },
           { momento: 'Hora 3 · el plan del R1', datos: { Diuresis: '45 mL/h' }, nuevo: ['Diuresis'],
@@ -143,7 +143,7 @@ export const MAYEUTICA_RINON_2 = {
             pregunta: { id: 'rin-gr-4', tipo: 'test', fuente: 'mr-hiperk-grave · mr-tabla-36-3 · mr-ecg-hiperk', origen: 'ficha (E págs. 26-28)',
               enunciado: 'El K⁺ es 6,3 y el ECG muestra T picudas. La rabdomiólisis libera potasio de las células. ¿Qué haces primero?',
               opciones: [
-                { t: 'Esperar al control: el K⁺ no llega a 6,5 y todavía no hay que tratarlo', porque: 'El umbral de gravedad es K⁺ >6,5 o cualquier K⁺ con cambios del ECG. Aquí hay cambios: esperar es dejar una conducción cardíaca sin proteger.' },
+                { t: 'Esperar al control de la tarde: el K⁺ no llega a 6,5 y todavía no hace falta tratarlo', porque: 'El umbral de gravedad es K⁺ >6,5 o cualquier K⁺ con cambios del ECG. Aquí hay cambios: esperar es dejar una conducción cardíaca sin proteger.' },
                 { t: 'Gluconato cálcico al 10 %, 10 mL en 3 min, y luego insulina con glucosa', ok: true },
                 { t: 'Bicarbonato sódico en bolo para meter el K⁺ en las células', porque: 'Sin acidosis metabólica no cambia el K⁺, y forma complejos con el calcio, contraproducente si lo estás dando.' }],
               explicacion: 'Hiperpotasemia grave: <span class="hl-rojo">K⁺ >6,5 o cambios del ECG con cualquier K⁺</span>. Primero estabilizar el corazón con gluconato cálcico al 10 % (10 mL en 3 min, repetible a los 5); luego insulina regular 10 U + 50 mL de glucosa al 50 %.' } },
