@@ -1,0 +1,9 @@
+// Mayéutica del bloque 5 (Marino caps. 39-44: abdomen y temperatura): un archivo por grupo de fichas.
+// Para añadir uno: su archivo (mismo formato que b1-fluidos.js) y una línea aquí. Lo monta libros/index.js.
+import { MAYEUTICA_ABDOMEN_1 } from './b5-abdomen-1.js';   // 5B: pancreatitis (fichas 5-6) y el caso de Bartolomé
+import { MAYEUTICA_ABDOMEN_2 } from './b5-abdomen-2.js';   // 5B: colecistitis, peritonitis y C. difficile (fichas 7-9)
+
+export const MAYEUTICA_B5 = {
+    ...MAYEUTICA_ABDOMEN_1,
+    ...MAYEUTICA_ABDOMEN_2,
+};
