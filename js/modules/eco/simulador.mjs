@@ -637,7 +637,7 @@ export function montarSimulador(raiz, opc = {}) {
     if (medD.tipo === 'regurgitacion' && medD.vIT != null) {
       poner('warn', cab + `Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, <b>vIT ${fx(medD.vIT, 2)} m/s</b> · ITV ${fx(medD.itv, 1)} cm`
         + (medD.psap != null ? `<br>PSAP estimada = 4·vIT² + PVC = <b>${fx(angD != null && angD < 60 ? 4 * Math.pow(medD.vIT / Math.cos(angD * Math.PI / 180), 2) + (medD.psap - 4 * medD.vIT * medD.vIT) : medD.psap)} mmHg</b>${angD != null && angD < 60 ? ` (vIT corregida por el ángulo: ${fx(medD.vIT / Math.cos(angD * Math.PI / 180), 2)} m/s; sin corregir sería ${fx(medD.psap)})` : ''} (normal: vIT ≤ 2,8 m/s; &gt; 3,4 m/s sugiere hipertensión pulmonar, <a href="docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf" target="_blank" rel="noopener">ESC/ERS 2022</a>).` : '')
-        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. Ilustrativo.</span>`);
+        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. La vIT es el pico del latido (la máxima presión VD − AD de ese instante, con la AD de ese instante); la PSAP suma la PVC media, por eso difiere unos mmHg de la presión máxima del VD del motor. Ilustrativo.</span>`);
       return;
     }
     if (medD.tipo === 'regurgitacion') {
@@ -777,7 +777,22 @@ export function montarSimulador(raiz, opc = {}) {
       const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
       // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
       if (fuenteD && fuenteD.n === 'regTricus') { const jt = Fd.valvulas.find(x => x.n === 'regTricus'); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
-      if (!revision && s === motor.s && ultimoTD !== s.t) { espectro.anadir(s.t, (f) => columnaEspectro(us, f, espectro.estado.vmax, ++frameD)); ultimoTD = s.t; }
+      if (!revision && s === motor.s && ultimoTD !== s.t) {
+        // una columna por muestra del motor (2 ms) desde el fotograma anterior: la onda sale con su envolvente y su pendiente, no en escalones.
+        // Cada muestra desplaza las velocidades del fotograma por lo que cambia la curva de la fuente entre ese instante y este
+        const lote = [], vmaxD = espectro.estado.vmax, aD = areasD(), mD = datosFlujo();
+        const vEn = (x) => curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
+        if (fuenteD && ultimoTD != null && s.t - ultimoTD < 0.25 && s.t > ultimoTD) {
+          const ini = s.t - s.tLatido, cur = motor.ondaActual, prev = motor.onda, v0 = vEn(s);
+          const emitir = (x, tAbs) => { if (tAbs <= ultimoTD || tAbs > s.t || Math.round(x.t / 0.002) % 2) return;   // una de cada dos (4 ms ≈ 0,5 px a 390 px): la mitad de coste
+           const dv = vEn(x) - v0, uk = fuenteD.n === 'regTricus' ? [vEn(x)] : us.map(u => u + dv);
+            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD) }); };
+          if (prev.length && ultimoTD < ini) { const t0 = ini - (prev[prev.length - 1].t + 0.002); for (const x of prev) emitir(x, t0 + x.t); }
+          for (const x of cur) emitir(x, ini + x.t);
+        }
+        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD));
+        ultimoTD = s.t;
+      }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);
       // haz punteado y volumen de muestra (dos marcas cruzadas al haz)
       const pxm = ecoC.width / ecoC.clientWidth, X = (u) => im.cx + u * im.escala, Y = (v) => im.arriba + v * im.escala, L = Math.hypot(gate.u, gate.v), tu = gate.u / L, tv = gate.v / L;

@@ -16,7 +16,7 @@ const HUECO = 0.04;                // fracción borrada delante del cursor, como
 
 export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   const ctx = lienzo.getContext('2d'), cc = capa.getContext('2d');
-  let prof = 160, vmax = 100, barrido = BARRIDO, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null;
+  let prof = 160, vmax = 100, barrido = BARRIDO, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null, colPrev = null;
   let A = null, B = null, activo = null;           // calibres en fracciones del lienzo { x, y }
 
   function ajustar() {
@@ -30,7 +30,7 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   function limpiar() {
     if (img) { img.data.fill(0); for (let i = 3; i < img.data.length; i += 4) img.data[i] = 255; ctx.putImageData(img, 0, 0); }
     const habia = A || B; A = B = null; activo = null;
-    xPrev = null; tPrev = null; tEscrito = null; dibujarCapa();
+    xPrev = null; tPrev = null; tEscrito = null; colPrev = null; dibujarCapa();
     if (habia) onMedida?.(null);
   }
   function setProf(p) { if (p !== prof) { prof = p; limpiar(); } }
@@ -53,15 +53,54 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
     for (const [a, b] of [...tramos, ...huecos]) ctx.putImageData(img, 0, 0, a, 0, b - a + 1, H);
   }
 
-  /** Añade la columna del instante t (s, tiempo del motor); columna(filas) → RGB por fila. */
+  /** Añade la columna del instante t (s, tiempo del motor); columna(filas) → RGB por fila.
+   *  Modo M (eje 'prof'): entre la columna anterior y esta se pintan las de cada 2 ms (muestreo del motor) con el desplazamiento
+   *  de cada tramo de pared interpolado (emparejado por bloques), para que las paredes tracen una curva y no escalones. */
   function anadir(t, columna) {
     if (!img) return;
-    const x = Math.floor(((t % barrido) / barrido) * W) % W;
     // si ha pasado más de un barrido o el tiempo ha ido hacia atrás (otro escenario), se empieza de cero
-    if (tPrev == null || t < tPrev || t - tPrev > barrido * 0.5) { xPrev = null; }
+    if (tPrev == null || t < tPrev || t - tPrev > barrido * 0.5) { xPrev = null; colPrev = null; }
     const col = columna(H);
-    pintarTramo(xPrev == null ? x : (xPrev + 1) % W, x, col);
-    xPrev = x; tPrev = t; tEscrito = t; dibujarCapa();
+    if (eje === 'prof' && colPrev && colPrev.length === col.length && t - tPrev > 0.004) {
+      const n = Math.min(40, Math.round((t - tPrev) / 0.002)), d = desplazamientos(colPrev, col);
+      for (let i = 1; i <= n; i++) { const k = i / n; pintarColumna(tPrev + (t - tPrev) * k, interpolar(colPrev, col, d, k)); }
+    } else pintarColumna(t, col);
+    colPrev = col; tPrev = t; tEscrito = t; dibujarCapa();
+  }
+  /** Varias columnas de golpe [{ t, columna }] en orden de tiempo (el espectro: una por muestra del motor); la capa se redibuja una vez. */
+  function anadirLote(lote) {
+    if (!img || !lote.length) return;
+    if (tPrev == null || lote[0].t < tPrev || lote[0].t - tPrev > barrido * 0.5) { xPrev = null; colPrev = null; }
+    let ult = tPrev ?? -Infinity;
+    for (const { t, columna } of lote) { if (t <= ult) continue; pintarColumna(t, columna(H)); ult = t; }   // nunca hacia atrás: pintarTramo lo tomaría por una vuelta entera
+    tPrev = ult; tEscrito = tPrev; dibujarCapa();
+  }
+  function pintarColumna(t, col) {
+    const x = Math.floor(((t % barrido) / barrido) * W) % W;
+    // misma x que la columna anterior (2 ms son menos de un píxel): se repinta esa x; si no, el tramo iría «hacia atrás» y daría la vuelta entera
+    pintarTramo(xPrev == null || x === xPrev ? x : (xPrev + 1) % W, x, col);
+    xPrev = x;
+  }
+  // desplazamiento (filas) de cada fila entre dos columnas: mejor coincidencia de la luminancia en un bloque de ±7 filas, buscando ±MAXD
+  const MAXD = 14;
+  function desplazamientos(a, b) {
+    const n = a.length / 3, d = new Int8Array(n), la = new Float32Array(n), lb = new Float32Array(n);
+    for (let y = 0; y < n; y++) { la[y] = a[3 * y]; lb[y] = b[3 * y]; }
+    for (let y = 0; y < n; y += 2) {
+      let mejor = 0, em = Infinity;
+      for (let s = -MAXD; s <= MAXD; s++) { let e = 0;
+        for (let j = -7; j <= 7; j += 2) { const ya = Math.min(n - 1, Math.max(0, y + j)), yb = Math.min(n - 1, Math.max(0, y + j + s)); const q = la[ya] - lb[yb]; e += q * q; }
+        e += 4 * Math.abs(s); if (e < em) { em = e; mejor = s; } }
+      d[y] = mejor; if (y + 1 < n) d[y + 1] = mejor;
+    }
+    return d;
+  }
+  // columna intermedia (k de 0 a 1): lo de la anterior que avanzó k·d y lo de la nueva que le falta (1−k)·d, mezclado
+  function interpolar(a, b, d, k) {
+    const n = a.length / 3, out = new Uint8ClampedArray(a.length), cl = (v) => Math.min(n - 1, Math.max(0, Math.round(v)));
+    for (let y = 0; y < n; y++) { const ya = cl(y - k * d[y]), yb = cl(y + (1 - k) * d[y]);
+      for (let c = 0; c < 3; c++) out[3 * y + c] = (1 - k) * a[3 * ya + c] + k * b[3 * yb + c]; }
+    return out;
   }
 
   // ---- capa: escala de profundidad (cm), marcas de tiempo, cursor y calibres
@@ -71,8 +110,8 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
     cc.clearRect(0, 0, W, H);
     cc.fillStyle = 'rgba(220,214,196,.75)'; cc.font = `${Math.round(10 * k)}px system-ui,sans-serif`; cc.textAlign = 'right'; cc.textBaseline = 'middle';
     if (eje === 'vel') {
-      // línea de base y marcas cada 20 cm/s (cifra cada 40 si la escala es grande)
-      const paso = vmax > 120 ? 40 : 20;
+      // línea de base y marcas: cada 100 cm/s (1 m/s, como Zoghbi 2017 Fig. 29) con ±500; en escalas menores cada 50 o 20 según quepa (≥ 16 px entre rótulos de 10 px)
+      const pxCm = (capa.clientHeight || H) / (2 * vmax), paso = [20, 50, 100, 200].find(p => p * pxCm >= 16) ?? 200;
       cc.fillRect(0, yDeVel(0) * H - 0.5 * k, W, 1 * k);
       for (let v = paso; v < vmax; v += paso) for (const sg of [1, -1]) { const y = yDeVel(sg * v) * H; cc.fillRect(W - 6 * k, y - 0.5 * k, 6 * k, 1 * k); cc.fillText((sg * v) + '', W - 9 * k, y); }
       cc.textAlign = 'left'; cc.fillText('cm/s', 4 * k, 9 * k);
@@ -117,7 +156,7 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) capa.addEventListener(t, () => { activo = null; });
 
   function borrarCalibres() { A = B = null; dibujarCapa(); onMedida?.(null); }
-  return { ajustar, limpiar, setProf, setEscala, setBarrido, anadir, medida, borrarCalibres, dibujarCapa,
+  return { ajustar, limpiar, setProf, setEscala, setBarrido, anadir, anadirLote, medida, borrarCalibres, dibujarCapa,
     // para las pruebas: poner los calibres en coordenadas del lienzo (0-1)
     ponerCalibres(a, b) { A = a; B = b; dibujarCapa(); onMedida?.(medida()); },
     get estado() { return { W, H, prof, vmax, barrido, tEscrito, columnas: xPrev } }, };
