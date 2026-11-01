@@ -331,7 +331,7 @@ NOTAS.push(
 );
 PACIENTES.push(
   { k: 'ceferino', nombre: 'Ceferino', chip: '67 a · neumonía en resolución', linea: '67 años, 1,75 m, neumonía en resolución, sedación ligera: dispara el respirador y se prueba su destete. PBW 70,5 kg.', talla: 175, sexo: 'v', estado: 'asincronia-ineficaz' },
-  { k: 'elvira', nombre: 'Elvira', chip: '45 a · trasplantada renal · P-SILI', linea: '45 años, 58 kg, 1,60 m (talla ilustrativa), trasplantada renal; neumonía con fallo hipoxémico que sigue respirando con mucho esfuerzo; intubada. PBW 52,4 kg.', talla: 160, sexo: 'm', estado: 'p-sili' },
+  { k: 'elvira', nombre: 'Elvira', chip: '45 a · trasplantada renal · P-SILI', linea: '45 años, 58 kg, 1,60 m (talla ilustrativa), trasplantada renal; neumonía con fallo hipoxémico que sigue respirando con mucho esfuerzo (en el P-SILI, intubada con soporte; en el alto flujo, con cánula). PBW 52,4 kg.', talla: 160, sexo: 'm', estado: 'p-sili' },
 );
 const RESP_E4 = { vt: 500, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 };
 Object.assign(ESTADOS, {

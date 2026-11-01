@@ -22,7 +22,7 @@ export const RECETAS_3D_G3B = {
                 { fuente: '#nep-fig-24-5', etiqueta: 'Mod. 42', en: 42, color: 'amarillo', fila: 'abajo' },
                 { fuente: '#nep-fig-24-5', etiqueta: 'Grave 47', en: 47, color: 'rojo', fila: 'abajo' }] },
             { tipo: 'comparar', titulo: 'Alto flujo y VNI', columnas: [
-                { titulo: 'HFNO', color: 'verde', nodos: [{ fuente: '#nep-hfno-sdra', etiqueta: '40-60 L/min, FiO₂ independiente; confort; menos intubaciones sin cambio en mortalidad' }, { fuente: '#nep-toxicidad-aviso', etiqueta: 'Cuidado: FiO₂ ≥70 % prolongada es tóxica' }] },
+                { titulo: 'HFNO', color: 'verde', nodos: [{ fuente: '#nep-hfno-sdra', etiqueta: '40-60 L/min, FiO₂ independiente; confort; menos intubaciones sin cambio en mortalidad' }, { fuente: '#nep-toxicidad-aviso', etiqueta: 'Cuidado: FiO₂ ≥70 % prolongada, riesgo de toxicidad' }] },
                 { titulo: 'VNI', color: 'dorado', nodos: [{ fuente: '#nep-vni-sdra', etiqueta: 'Mejor en el SDRA leve; si el P/F no sube a la hora, intubar' }, { fuente: '#nep-fig-24-5', etiqueta: 'Mortalidad 16 % si acierta, 45 % si fracasa' }] }
             ] },
             { tipo: 'racimos', titulo: 'Fluidos', grupos: [{ titulo: 'Evitar los dos extremos', color: 'gris', nodos: [
@@ -41,7 +41,7 @@ export const RECETAS_3D_G3B = {
               nodos: [
                 { fuente: '#nep-prono-como', etiqueta: '8 h (espontáneo)', en: 8, color: 'dorado', fila: 'abajo' },
                 { fuente: '#nep-prono-como', etiqueta: '16 h (ventilado)', en: 16, color: 'verde', fila: 'abajo' },
-                { fuente: '#nep-prono-como', etiqueta: '4 h después', en: 4, color: 'purpura', fila: 'abajo' }] }
+                { fuente: '#nep-prono-como', etiqueta: 'Control a las 4 h de volver a supino', en: 4, color: 'purpura', fila: 'abajo' }] }
         ]
     }
 };

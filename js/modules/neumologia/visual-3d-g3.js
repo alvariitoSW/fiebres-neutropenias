@@ -14,8 +14,10 @@ export const RECETAS_3D_G3 = {
             ] },
             { tipo: 'racimos', titulo: 'Condiciones predisponentes (Tabla 24.1)', grupos: [
                 { titulo: 'Infecciosas', color: 'rojo', nodos: [{ fuente: '#nep-tabla-24-1', etiqueta: 'Neumonía 60 %' }, { fuente: '#nep-tabla-24-1', etiqueta: 'Sepsis extrapulmonar 16 %' }, { fuente: '#nep-tabla-24-1', etiqueta: 'Shock séptico 8 %' }] },
-                { titulo: 'No infecciosas', color: 'amarillo', nodos: [{ fuente: '#nep-tabla-24-1', etiqueta: 'Aspiración gástrica 14 %' }, { fuente: '#nep-tabla-24-1', etiqueta: 'Contusión pulmonar 6 %' }, { fuente: '#nep-predisponentes', etiqueta: 'Sin fuente: cerca del 10 %' }] }
+                { titulo: 'No infecciosas', color: 'amarillo', nodos: [{ fuente: '#nep-tabla-24-1', etiqueta: 'Aspiración gástrica 14 %' }, { fuente: '#nep-tabla-24-1', etiqueta: 'Contusión pulmonar 6 %' }] },
+                { titulo: 'Sin causa identificable', color: 'gris', nodos: [{ fuente: '#nep-predisponentes', etiqueta: 'Alrededor del 10 %' }] }
             ] },
+            { tipo: 'racimos', titulo: 'Las imágenes de la ficha', grupos: [{ titulo: 'Fotos reales (Figs. 24.2 y 24.3)', color: 'dorado', nodos: [{ fuente: '#nep-rx', etiqueta: 'Fig. 24.2: radiografía clásica y variante' }, { fuente: '#nep-tc', etiqueta: 'Fig. 24.3: TC temprana y avanzada' }] }] },
             { tipo: 'requisitos', modo: 'todos', titulo: 'Tabla 24.2: ¿cumple los cinco criterios? (lista de la ficha)', puerta: 'Los 5 criterios', items: [{ checks: '.neumo-sdra-criterio-check' }], resultado: ['#neumo-sdra-criterio-resultado'] },
             { tipo: 'escalera', titulo: 'Gravedad por PaO₂/FiO₂', nodos: [
                 { fuente: '#nep-gravedad', etiqueta: 'Leve: 201-300 mmHg (mortalidad ≈35 %)' },
@@ -26,13 +28,14 @@ export const RECETAS_3D_G3 = {
             { tipo: 'comparar', titulo: 'Qué falla al diagnosticar', columnas: [
                 { titulo: 'Radiografía', color: 'amarillo', nodos: [{ fuente: '#nep-rx', etiqueta: 'Clásica en solo el 15-25 %; valor predictivo negativo del 47 %' }] },
                 { titulo: 'Wedge', color: 'rojo', nodos: [{ fuente: '#nep-wedge', etiqueta: 'No mide la presión capilar: una wedge normal no excluye lo cardiogénico' }] },
-                { titulo: 'TC', color: 'verde', nodos: [{ fuente: '#nep-tc', etiqueta: 'La más fiable: consolidación posterior al inicio, fibrosis reticular después' }] }
+                { titulo: 'TC', color: 'verde', nodos: [{ fuente: '#nep-tc', etiqueta: 'La más fiable: consolidación posterior al inicio; después, infiltrados reticulados que pueden representar fibrosis' }] }
             ] }
         ]
     },
     'neumo-sdra-ventilacion': {
-        guia: 'El respirador lesiona por volumen, no por presión: 6 mL/kg de peso predicho y meseta ≤30 son la estrategia con beneficio de supervivencia, y la mortalidad la marcan los otros órganos.',
+        guia: 'El respirador lesiona por volumen, no por presión: 6 mL/kg de peso predicho y meseta ≤30 son la estrategia ventilatoria con beneficio de supervivencia, y la mortalidad la marcan los otros órganos.',
         paneles: [
+            { tipo: 'racimos', titulo: 'La imagen de la ficha', grupos: [{ titulo: 'Micrografía real (Fig. 24.6)', color: 'dorado', nodos: [{ fuente: '#nep-vili', etiqueta: 'Fig. 24.6: fracturas por estrés de la interfaz' }] }] },
             { tipo: 'comparar', titulo: 'Tres formas de lesión por el respirador', columnas: [
                 { titulo: 'Volutrauma', color: 'rojo', nodos: [{ fuente: '#nep-volutrauma', etiqueta: 'Volumen alto en un pulmón al 50 %: rotura de la interfaz' }] },
                 { titulo: 'Atelectrauma', color: 'amarillo', nodos: [{ fuente: '#nep-atelectrauma', etiqueta: 'Abrir y cerrar vías pequeñas: cizalla; la PEEP lo evita' }] },
