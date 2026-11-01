@@ -40,7 +40,7 @@ export const GUIAS_ESTADO = {
     { t: 'Pulsa «Esperar 15 min»: el bolo empieza a caer a los 15 minutos al repartirse por el cuerpo (el ritmo es ilustrativo).', ion: 'mg', z: ['ven', 'fig'], p: 38, o: 'ficha (dirección); ritmo ilustrativo', haz: ['esp'], btn: 'Esperar 15 min', mas: true }]],
   transfusion: ['Valentín · 15 concentrados', [
     { t: 'El calcio total (8,4) parece casi normal: mide las tres fracciones juntas. El iónico, el que actúa, está en 0,60 mmol/L.', ion: 'ca', z: ['fig'], p: 43, o: 'ficha; cifras del paciente: ilustrativas' },
-    { t: 'El citrato de las bolsas quela el calcio: baja la parte iónica y el total apenas se mueve. Por debajo de 0,65 mmol/L es grave (sello).', ion: 'ca', z: ['fig', 'ven'], p: 44, o: 'ficha' },
+    { t: 'El citrato de las bolsas quela el calcio: baja la parte iónica y el total apenas se mueve. Por debajo de 0,9 mmol/L es grave en la transfusión (E p. 44); por debajo de 0,65 hay hipotensión y ectopia (E p. 45) (sello).', ion: 'ca', z: ['fig', 'ven'], p: 44, o: 'ficha' },
     { t: 'Cada concentrado de 18 días trae 2-3 mEq de K⁺: el suero sube hasta ~6 mEq/L.', ion: 'k', z: ['ven', 'fig'], p: 25, o: 'ficha; cifra del suero: ilustrativa' },
     { t: 'Pulsa «Dar 200 mg de calcio»: el bolo recomendado sube el calcio y vuelve a caer a los 30 minutos; después, 1-2 mg/kg/h.', ion: 'ca', z: ['ven', 'fig'], p: 46, o: 'ficha', haz: ['ca', { mg: 200 }], btn: 'Dar 200 mg de calcio', mas: true }]],
   realimentar: ['Damián · una dosis de insulina con glucosa', [

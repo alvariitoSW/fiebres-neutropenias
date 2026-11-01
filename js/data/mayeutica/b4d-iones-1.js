@@ -258,7 +258,7 @@ export const MAYEUTICA_IONES_1 = {
           { t: 'Trato ya con calcio e insulina: K⁺ >6,5 es grave sea cual sea la causa', porque: 'Con plaquetas >500 y sin causa aparente la cifra puede no existir en la sangre; tratarla sin confirmar expone al paciente a un tratamiento que no necesita.' },
           { t: 'Pido que el laboratorio repita la cifra en el mismo tubo', porque: 'Las plaquetas siguen liberando K⁺ en el tubo: repetirlo en él da la misma cifra falsa y retrasa la decisión.' },
           { t: 'Saco yo la muestra evitando puño y succión fuerte, la proceso pronto y miro el ECG', ok: true }],
-        explicacion: 'Sospecha la hiperpotasemia ficticia si no hay causa aparente (a menudo el laboratorio no la detecta): saca tú la muestra evitando el puño cerrado, la aspiración fuerte, el tubo neumático y el retraso; las plaquetas >500 × 10⁹/L y la leucocitosis grave también la producen (E p. 23-24). Mientras tanto, el ECG decide (E p. 27).' },
+        explicacion: 'Sospecha la hiperpotasemia ficticia si no hay causa aparente (a menudo el laboratorio no la detecta): saca tú la muestra evitando el puño cerrado, la aspiración fuerte, el tubo neumático y el retraso; las plaquetas >500 × 10⁹/L y la leucocitosis grave también la producen (E p. 23-24). Con el ECG sin cambios, la fuente deja el calcio para cuando los haya (E p. 27); lo primero es otra muestra bien extraída (E p. 24).' },
     ],
     casos: [
       { id: 'ion-k-gregorio', titulo: 'Gregorio, 57 años: el potasio del músculo', corto: 'Caso · Gregorio', sub: 'rabdomiólisis tras 14 h en el suelo',

@@ -133,7 +133,7 @@ export const MAYEUTICA_IONES_2 = {
                 { t: 'El de amenaza vital, porque un alcohólico tiene riesgo alto de arritmia', porque: 'Ese esquema es para arritmia grave o convulsiones ya presentes; sin ellas, el bolo rápido no se justifica.' }],
               explicacion: 'Moderada: Mg <span class="hl">&lt;1 mEq/L</span> <span class="hl-azul">o hipomagnesemia con otras alteraciones electrolíticas</span>: 6 g en 3 h, 5 g en 6 h y 5 g/12 h durante 5 días (E p. 37).' } },
           { momento: 'Día 2', datos: { 'Mg²⁺': '1,6 mEq/L', 'K⁺': '3,6 mEq/L' }, nuevo: ['Mg²⁺', 'K⁺'],
-            pregunta: { id: 'ion-mg-d4', tipo: 'error', fuente: 'mr-mg-monitor · mr-tabla-37-1 · mr-mg-final', modeloVivo: IV('realimentar', 'Compruébalo en los iones vivos (Damián)'),
+            pregunta: { id: 'ion-mg-d4', tipo: 'error', fuente: 'mr-mg-monitor · mr-tabla-37-1 · mr-mg-final',
               enunciado: 'Tras 24 h de perfusión el Mg está en rango. El residente anota su plan. Encuentra el error (puede haber 0, 1 o 2).',
               frases: [
                 { t: 'El K⁺ ha subido a 3,6: la hipopotasemia refractaria cede al reponer el Mg.' },
@@ -143,7 +143,7 @@ export const MAYEUTICA_IONES_2 = {
                 { t: 'Para decidir cuándo parar me guiaré por la prueba de retención, no por el sérico.' }],
               explicacion: 'La mejor guía de la repleción es la retención urinaria; el sérico engaña porque se normaliza antes que los depósitos (E p. 37-39).' } },
           { momento: 'Día 2 · noche · el giro', datos: { 'Ca iónico': '0,98 mmol/L', Tratamiento: 'gluconato cálcico IV hace 6 h, sin cambio' }, nuevo: ['Ca iónico', 'Tratamiento'],
-            pregunta: { id: 'ion-mg-d5', tipo: 'test', fuente: 'mr-mg-electrolitos', modeloVivo: IV('realimentar', 'Compruébalo en los iones vivos (Damián)'),
+            pregunta: { id: 'ion-mg-d5', tipo: 'test', fuente: 'mr-mg-electrolitos',
               enunciado: 'Damián tiene el calcio bajo y no sube con el calcio IV. ¿Cómo lo interpretas?',
               opciones: [
                 { t: 'Falta calcio: subo la dosis de calcio IV hasta que corrija', porque: 'Con el Mg bajo la hipocalcemia no se corrige por más calcio que des; subir la dosis añade riesgo sin tratar la causa.' },

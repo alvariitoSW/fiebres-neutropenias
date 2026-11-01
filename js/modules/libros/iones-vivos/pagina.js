@@ -150,7 +150,7 @@ function bucle() {
 // Estado: «rufino» (un paciente), «rufino:3» (su guía en el paso 3) o «normal:ca» (el paciente normal y ese ion). Vacío = el normal.
 export function abrirEstado(clave) {
   if (modo !== 'explorar') setModo('explorar', false);
-  if (ESTADOS[clave]) { ponerEstadoMay(ESTADOS[clave], clave); bucle(); ajustarDock(); return; }
+  if (ESTADOS[clave]) { ponerEstadoMay(ESTADOS[clave], clave); bucle(); ajustarDock(); $('iov-guia')?.scrollIntoView({ block: 'nearest' }); return; }
   const [p, x] = String(clave || '').split(':');
   ponerPreset(PRESETS[p] ? p : 'normal', /^\d+$/.test(x || '') ? +x - 1 : 0);
   if (['k', 'mg', 'ca', 'p'].includes(x)) ponerIon(x);
