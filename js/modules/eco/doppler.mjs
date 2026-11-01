@@ -238,7 +238,11 @@ export function fuenteEnMuestra(pts, haz, F) {
   const reg = F.geom.find(j => j.n === 'regMitral');
   if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: u }; }
   const regT = F.geom.find(j => j.n === 'regTricus');
-  if (regT) { const u = medir({ valvulas: [regT], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regTricus', nombre: 'Insuficiencia tricuspídea · chorro', tubo: false, factor: u }; }
+  if (regT) { const u = medir({ valvulas: [regT], vasos: [] }); if (Math.abs(u) > 0.2) {
+    // Doppler continuo: la línea del haz atraviesa todo el chorro y el ecógrafo lee su máximo (la vena contracta), no la velocidad
+    // a la distancia de la muestra, donde el chorro libre ya se abrió y frenó. Queda solo el ángulo (cos θ) entre el haz y el chorro.
+    const cos = Math.abs(haz[0] * regT.dir[0] + haz[1] * regT.dir[1] + haz[2] * regT.dir[2]);
+    return { tipo: 'valvula', n: 'regTricus', nombre: 'Insuficiencia tricuspídea · chorro', tubo: false, factor: Math.sign(u) * cos }; } }
   return mejor && Math.abs(mejor.factor) > 0.08 ? mejor : null;
 }
 

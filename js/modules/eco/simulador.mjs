@@ -588,7 +588,7 @@ export function montarSimulador(raiz, opc = {}) {
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
-    if (k === 'regmitral' || k === 'regtricus') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
+    if (k === 'regmitral' || k === 'regtricus') { const e = k === 'regtricus' ? '500' : '250'; $('#cv-d-escala').value = e; espectro.setEscala(+e); }   // el chorro supera los 150 cm/s; la IT con HP llega a ~450 cm/s: el CW no da aliasing
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -636,8 +636,8 @@ export function montarSimulador(raiz, opc = {}) {
     }
     if (medD.tipo === 'regurgitacion' && medD.vIT != null) {
       poner('warn', cab + `Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, <b>vIT ${fx(medD.vIT, 2)} m/s</b> · ITV ${fx(medD.itv, 1)} cm`
-        + (medD.psap != null ? `<br>PSAP estimada = 4·vIT² + PVC = <b>${fx(medD.psap)} mmHg</b> (normal: vIT ≤ 2,8 m/s; &gt; 3,4 m/s sugiere hipertensión pulmonar, <a href="docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf" target="_blank" rel="noopener">ESC/ERS 2022</a>).` : '')
-        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; en la muestra se mide v·cos θ y la PSAP se infraestima si el haz no está alineado con el chorro. Ilustrativo.</span>`);
+        + (medD.psap != null ? `<br>PSAP estimada = 4·vIT² + PVC = <b>${fx(angD != null && angD < 60 ? 4 * Math.pow(medD.vIT / Math.cos(angD * Math.PI / 180), 2) + (medD.psap - 4 * medD.vIT * medD.vIT) : medD.psap)} mmHg</b>${angD != null && angD < 60 ? ` (vIT corregida por el ángulo: ${fx(medD.vIT / Math.cos(angD * Math.PI / 180), 2)} m/s; sin corregir sería ${fx(medD.psap)})` : ''} (normal: vIT ≤ 2,8 m/s; &gt; 3,4 m/s sugiere hipertensión pulmonar, <a href="docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf" target="_blank" rel="noopener">ESC/ERS 2022</a>).` : '')
+        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. Ilustrativo.</span>`);
       return;
     }
     if (medD.tipo === 'regurgitacion') {
@@ -774,7 +774,9 @@ export function montarSimulador(raiz, opc = {}) {
     }
     if (modoEco === 'D' && gate) {
       const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrm(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
-      const pts = puntosMuestra(P, g, haz), us = velocidadesMuestra(pts, haz, Fd);
+      const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
+      // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
+      if (fuenteD && fuenteD.n === 'regTricus') { const jt = Fd.valvulas.find(x => x.n === 'regTricus'); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
       if (!revision && s === motor.s && ultimoTD !== s.t) { espectro.anadir(s.t, (f) => columnaEspectro(us, f, espectro.estado.vmax, ++frameD)); ultimoTD = s.t; }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);
       // haz punteado y volumen de muestra (dos marcas cruzadas al haz)
