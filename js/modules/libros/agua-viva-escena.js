@@ -527,7 +527,7 @@ export const Estuario = {
         texto(g, 'acuaporinas', (this.puertas[1].x + this.puertas[2].x) / 2, (this.dunaArriba(W * 0.52) + this.dunaAbajo(W * 0.52)) / 2 + 3.5, { size: 9 * s, color: C.dim, align: 'center', italic: true, peso: '600' });
         if (estado.albBaja || estado.inflamacion) texto(g, 'la marisma desborda · ilustrativo', W * 0.5, H - 52 * s, { size: 9.5 * s, color: C.rojo, align: 'center', caja: true });
         if (estado.hemorragia > 0 && !compacto) texto(g, `herida · −${estado.hemorragia} %`, this.herida.x - 4 * s, H - 56 * s, { size: 9 * s, color: C.rojo, align: 'right', caja: true });
-        dibujarOrina(g, { o: D.orina, W, H, rioY: x => this.rioY(x), anchoRio: this.anchoRio(), texto, rgba, C, tiempo, ocultar: ocultos.has('orina'), reducir: REDUCIR });
+        dibujarOrina(g, { o: D.orina || (estado.perdida === 'diuretico' ? { tipo: 'diuretico', furo: true } : null), W, H, rioY: x => this.rioY(x), anchoRio: this.anchoRio(), texto, rgba, C, tiempo, ocultar: ocultos.has('orina'), reducir: REDUCIR });
         if (D.relleno > 0) texto(g, 'la marisma cede agua · hasta 1 L', W * 0.5, this.rioY(W * 0.5) + this.anchoRio() + 22 * s, { size: 9 * s, color: C.verde, align: 'center', caja: true });
     },
 };

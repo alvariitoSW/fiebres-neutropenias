@@ -105,7 +105,7 @@ function fraseOrina(o) {
         : `Orina de ${o.osm} mOsm/kg (cifra ilustrativa): la nefrogénica da 200-500. <span class="hl-rojo">Orina diluida con plasma hipertónico</span>; falla la respuesta a la ADH.`, 'ficha · mr-di-dx · diuresis y Posm: dato del caso'];
 }
 function fraseDesmo(v, n) {
-    if (n.desmo && n.adh) return [`Desmopresina con ADH por estrés: la Tabla 35.4 no la aconseja si la ADH no está regulada, y el estrés libera ADH sin control osmótico. <span class="hl-rojo">La tabla no dice si el estrés cuenta aquí: valóralo.</span>`, 'ficha · mr-tabla-35-4 · mr-estres-adh · las fuentes discrepan'];
+    if (n.desmo && n.adh) return [`Desmopresina con ADH por estrés: la Tabla 35.4 no la aconseja si la ADH no está regulada, y el estrés libera ADH sin control osmótico. <span class="hl-rojo">La tabla no dice si el estrés cuenta aquí: valóralo.</span>`, 'ficha · mr-tabla-35-4 · mr-estres-adh · la fuente no lo dice'];
     if (n.desmo && !n.restr) return [`Desmopresina 2 μg SC sin restricción hídrica: <span class="hl-rojo">la restricción es obligatoria</span>; sin ella el agua retenida puede dar una hiponatremia grave.`, 'ficha · mr-tabla-35-4'];
     if (n.desmo) return [`Desmopresina 2 μg SC cada 12 h con restricción hídrica: <span class="hl-verde">frena la diuresis acuosa</span>; la orina baja y el Na⁺ deja de subir (${Math.round(D.naMed)}). Cuánto baja la diuresis, la ficha no lo dice.`, 'ficha · mr-tabla-35-4 · sin cifra'];
     if (v.desmo) return ['Sin desmopresina: la diuresis acuosa sigue concentrando el sodio.', 'ficha · mr-sobrecorreccion'];
@@ -210,6 +210,8 @@ function elegirFluido(k) {
 function pestana(tab) {
     enRaiz('.agv-dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.agvTab === tab)));
     enRaiz('#agv-dock-explorar .agv-dock-panel').forEach(p => { p.hidden = p.dataset.agvPanel !== tab; });
+    // el chip activo de la fila (p. ej. «Diurético») queda a la vista sin desplazar la fila a mano
+    raiz.querySelector(`#agv-dock-explorar .agv-dock-panel[data-agv-panel="${tab}"] [aria-pressed="true"]`)?.scrollIntoView?.({ block: 'nearest', inline: 'center' });
 }
 function sincronizarMandos() {
     if ($('m-hemorragia').value != estado.hemorragia) $('m-hemorragia').value = estado.hemorragia;

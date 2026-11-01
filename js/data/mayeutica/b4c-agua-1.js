@@ -143,7 +143,7 @@ export const MAYEUTICA_B4C_1 = {
         volver: { nombre: 'Osmolalidad efectiva', ancla: 'mr-osm-efectiva-calc', modelo: av('osmolalidad') } },
     ],
     profundizar: [
-      { id: 'mr-osm-patron', titulo: 'La crioscopia: cómo se mide la osmolalidad' },
+      { id: 'mr-osm-relativa', titulo: 'Actividad osmótica relativa: cuando el soluto cruza' },
     ],
   },
 
@@ -177,7 +177,7 @@ export const MAYEUTICA_B4C_1 = {
       { id: 'hna-g4', corto: 'salino 0,9', tipo: 'test', fuente: 'mr-hiperna-tto',
         enunciado: 'Una hipernatremia con hipotensión. ¿Qué papel tiene el salino isotónico?',
         opciones: [
-          { t: 'Corrige las dos cosas a la vez: sube la presión y baja el sodio del plasma por simple dilución del suero', porque: `Es ineficaz para corregir la hipernatremia (${p(6)}): su sodio (154) está cerca del plasma. Seguirías infundiendo salino sin bajar la cifra.` },
+          { t: 'Corrige las dos cosas a la vez: sube la presión y baja el sodio del plasma por simple dilución del suero', porque: `Es ineficaz para corregir la hipernatremia (${p(6)}): su sodio (154, <a class="biblio-link" href="docs/marino-2024-fluidoterapia-caps10-11.pdf#page=6" target="_blank" rel="noopener">fluidoterapia, pág. 6</a>) está cerca del plasma. Seguirías infundiendo salino sin bajar la cifra.` },
           { t: 'Corrige la hipotensión pero no la hipernatremia; se corrige con glucosado al 5 % o agua por la sonda', ok: true },
           { t: 'Es el fluido de elección para la hipernatremia hipovolémica porque contiene sodio', porque: `Para la hipotensión sí, pero no para la hipernatremia (${p(6)}). El libro prefiere un hipotónico como el salino 0,45 %.` }],
         explicacion: `<span class="hl">Salino isotónico: para la hipotensión, no para la hipernatremia</span> (ineficaz). Se recomienda glucosado al 5 % o agua en la sonda (p. ej., 200 mL cada 8 h); como se perdió también sodio, al autor le parece más adecuado el salino al 0,45 % (${p(6)}).`,

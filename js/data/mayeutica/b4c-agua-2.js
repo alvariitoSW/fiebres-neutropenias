@@ -8,7 +8,7 @@ const p = n => pag(n, `pág. ${n}`);
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado de siempre al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 const av = clave => ({ aguaViva: clave });
-const NOTA_513 = `<b>Las fuentes discrepan (errata).</b> El texto da el NaCl al 3 % con Na⁺ 513 mEq/L; la Tabla 35.3 imprime 153 (${p(13)}). Con 513 sale la osmolaridad de 1.026 mOsm/L que dan los dos; se reproducen las dos cifras y no se elige.`;
+const NOTA_513 = `<b>Errata de la fuente.</b> El texto da el NaCl al 3 % con Na⁺ 513 mEq/L; la Tabla 35.3 imprime 153 (${p(13)}). Con 513 sale la osmolaridad de 1.026 mOsm/L que dan los dos; se reproducen las dos cifras y no se elige.`;
 
 export const MAYEUTICA_B4C_2 = {
   /* =================================================================================================
@@ -66,7 +66,7 @@ export const MAYEUTICA_B4C_2 = {
         puntos: [
           `Mides la <span class="hl">osmolalidad urinaria</span>: 300-500 mOsm/kg en el SIADH, porque la ADH sin control concentra la orina (${p(12)}).`,
           `<span class="hl-azul">&lt;200 mOsm/kg</span> en la intoxicación hídrica: orina diluida (${p(12)}).`,
-          `En la polidipsia primaria suele haber además un aclaramiento de agua libre alterado: probablemente hacen falta los dos factores (${p(12)}).`],
+          `En la polidipsia primaria suele haber además un aclaramiento de agua libre alterado: puede que hagan falta los dos factores (${p(12)}).`],
         explicacion: `La osmolalidad urinaria separa SIADH (concentrada) de agua en exceso (diluida). La potomanía de cerveza del alcohólico malnutrido es otro ejemplo de consumo de un líquido diluido (${p(12)}).` },
       { id: 'hpd-g8', corto: 'el hipervolémico', tipo: 'test', fuente: 'mr-hipona-hipervolemica',
         enunciado: 'Hiponatremia hipervolémica con edemas. ¿Cómo te orienta el Na⁺ urinario entre insuficiencia renal, insuficiencia cardíaca y cirrosis?',
@@ -240,7 +240,7 @@ export const MAYEUTICA_B4C_2 = {
         opciones: [
           { t: 'Unos 1.000 mL/día: 500 mL menos que la diuresis, porque hay exceso de agua sin exceso de sodio', ok: true },
           { t: 'Salino al 3 % de entrada, porque con la cifra tan baja hay que subir el sodio cuanto antes', porque: `En el asintomático no hace falta la corrección rápida (${p(14)}); el 3 % es para la encefalopatía.` },
-          { t: 'Más salino al 0,9 %, porque falta sodio', porque: `La hiponatremia indica exceso de agua, no falta de sodio (${p(15)}); el isotónico es para la hipovolemia, no para la normovolémica (${p(14)}-15).` }],
+          { t: 'Más salino al 0,9 %, porque falta sodio', porque: `La hiponatremia indica exceso de agua, no falta de sodio (${p(15)}); el isotónico es para la hipovolemia, no para la normovolémica (${p(14)}-15; deducción de la Tabla 35.4, el libro no lo dice así).` }],
         explicacion: `Sin síntomas no hay prisa; el manejo depende del VEC. En la normovolemia hay agua en exceso sin exceso de sodio: restricción, con una ingesta <span class="hl">500 mL menor que la diuresis</span> (${p(15)}). En la hipovolemia el isotónico ayuda a la perfusión, pero el Na⁺ puede no mejorar hasta tratar la causa (${p(14)}-15).`,
         origen: 'ilustrativo: 1.500 mL/día es una cifra inventada con la regla de la ficha' },
     ],
@@ -261,7 +261,7 @@ export const MAYEUTICA_B4C_2 = {
           { t: 'Si la hiponatremia es de una liberación de ADH sin control, la desmopresina frena la subida.', mal: true, c: `La desmopresina <span class="hl-rojo">no se aconseja</span> si la hiponatremia se debe a liberación no regulada de ADH, y la restricción hídrica es obligatoria (${p(14)}).` },
           { t: 'La diuresis acuosa durante el hipertónico concentra el sodio y lo sube más rápido.' }],
         explicacion: 'Dos errores: dejar que la cifra decida el 3 % y dar desmopresina en el SIADH.',
-        nota: `<b>La fuente no lo dice.</b> El libro no explica si el ADH del estrés (${p(11)}) cuenta como «no regulada» para la Tabla 35.4; se cita tal cual (${p(14)}). ${enFicha('mr-hiponatremia-tto', 'mr-tabla-35-4')}` },
+        nota: `<b>La fuente no lo dice.</b> El libro no explica si el ADH del estrés (${p(11)}) cuenta como «no regulada» para la Tabla 35.4 (${p(14)}). No hay otra fuente citada que lo resuelva (la guía europea de hiponatremia 2014 no se ha podido consultar): es una duda abierta, no una discrepancia. ${enFicha('mr-hiponatremia-tto', 'mr-tabla-35-4')}` },
       { id: 'hpt-e3', corto: 'a quién se le da desmopresina de rutina', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mr-tabla-35-4',
         enunciado: 'El adjunto pregunta cuándo se usa la desmopresina de rutina y qué cuidados lleva. ¿Qué le dices?',
         puntos: [
@@ -307,13 +307,13 @@ export const MAYEUTICA_B4C_2 = {
                 { t: 'Sigue confusa con Na⁺ 121: pongo un segundo bolo de 3 % para llegar antes a 130.', mal: true, c: `Con +5 sin mejoría hay que <span class="hl-rojo">buscar otra causa</span>, y un segundo bolo la acercaría a pasar el límite de 5 mEq/L en 2 h (${p(13)}).` },
                 { t: 'El Na⁺ final no debe pasar de 130 mEq/L.' }],
               explicacion: 'Un error: más 3 % por la persistencia de síntomas tras +5.',
-              nota: `${enFicha('mr-hiponatremia-tto', 'mr-tabla-35-3')}` } },
+              nota: `<b>Cifra del caso.</b> Según el libro cada bolo sube hasta 2 mEq/L (${p(13)}); +5 tras un solo bolo es más de lo esperable (como avisa el modelo), y el plan se lee como si hubiera habido un segundo bolo o una diuresis que ya ayuda. ${enFicha('mr-hiponatremia-tto', 'mr-tabla-35-3')}` } },
           { momento: 'Hora 6 · la diuresis', datos: { 'Na⁺': '126 mEq/L (+10 en 6 h)', Diuresis: '180 mL/h' }, nuevo: ['Na⁺', 'Diuresis'], calculadora: { ir: 'mr-sal3-calc', nombre: 'Vigilar los límites' },
             pregunta: { id: 'cas-b3', tipo: 'test', fuente: 'mr-tabla-35-3 · mr-tabla-35-4 · mr-sobrecorreccion', modelo: av('sobrecorreccion'),
               enunciado: 'A las 6 h el Na⁺ es 126 (+10) y la diuresis 180 mL/h. ¿Cómo lo interpretas?',
               opciones: [
-                { t: 'Casi en el límite diario de 10 y con una diuresis >100 mL/h: riesgo de sobrecorrección', ok: true },
-                { t: 'Va bien: 126 sigue por debajo de 130, el final de la corrección, y queda margen para más', porque: `El 130 es el punto final, pero el límite diario es 10 mEq/L el primer día; +10 en 6 h lo agota (${p(13)}). La diuresis puede seguir subiendo el sodio.` },
+                { t: 'En el límite diario de 10 y con una diuresis >100 mL/h: riesgo de sobrecorrección', ok: true },
+                { t: 'Va bien: 126 sigue por debajo de 130, el final de la corrección, y queda margen para más', porque: `El 130 es el punto final, pero el límite diario es 10 mEq/L el primer día; +10 en 6 h ya lo alcanza, no deja margen (${p(13)}). La diuresis puede seguir subiendo el sodio.` },
                 { t: 'Es buena señal de que el riñón recupera; sigo con el 3 %', porque: `La diuresis acuosa espontánea durante el hipertónico concentra el sodio y acelera la corrección; es frecuente con tiazidas (${p(14)}). Seguir con 3 % empujaría a Casilda hacia la desmielinización.` }],
               explicacion: `+10 en 6 h está en el límite de los 10 mEq/L del primer día; con <span class="hl-rojo">&gt;100 mL/h</span> (aquí 180) ya hay indicación de desmopresina (${p(13)}-14).`,
               nota: `<b>La fuente no lo dice.</b> El libro da 10 mEq/L en 5 h y 10 en el día (${p(13)}); no dice cuánto había subido a las 5 h. +10 en 6 h se lee «en el límite». Las cifras de Casilda son del caso (ilustrativas).` } },
@@ -334,7 +334,7 @@ export const MAYEUTICA_B4C_2 = {
                 { t: 'Desmopresina 2 μg SC y suero libre para mantener la diuresis', porque: `La restricción hídrica es obligatoria mientras dure la desmopresina para prevenir una hiponatremia grave (${p(14)}).` },
                 { t: 'Furosemida IV para eliminar el exceso de sodio', porque: `La fuente trata la sobrecorrección con desmopresina (${p(14)}); la furosemida no aparece para esto y aumentaría la diuresis que concentra el sodio.` }],
               explicacion: `Tabla 35.4: <span class="hl">2 μg SC cada 12 h</span>, con <span class="hl-rojo">restricción hídrica obligatoria</span> (${p(14)}). Es una hiponatremia por fármaco, un caso de riesgo de sobrecorrección (${p(14)}).`,
-              nota: `<b>La fuente no lo dice así.</b> El libro no explica por qué el ADH de Casilda, estimulado por la hipovolemia, es «regulado» (${p(10)}), pero sí dice que la desmopresina no se aconseja si es «no regulada» (${p(14)}).` } },
+              nota: `<b>La fuente no lo dice.</b> El libro no explica por qué el ADH de Casilda, estimulado por la hipovolemia, es «regulado» (${p(10)}); solo dice que la desmopresina no se aconseja si es «no regulada» (${p(14)}) y que el estrés libera ADH por vía no osmótica (${p(11)}), sin decir si cuenta como «no regulada». No hay otra fuente citada que lo resuelva: es una duda abierta, no una discrepancia.` } },
         ],
         lleva: [
           'La dosis del 3 % es 2 mL/kg o 150 mL, y con +5 sin mejoría no se repite: se busca otra causa.',
