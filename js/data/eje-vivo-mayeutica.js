@@ -126,8 +126,8 @@ const SUB = { obdulia: 'Del mixedema a la hormona y la hidrocortisona', toribio:
 const VUELTA = { obdulia: 'mu-hipo-coma-tto', toribio: 'mu-sr-retirada' };
 const filas = (pac, e) => { const s = estadoDe({ pac, set: e }), L = leer(s);
   return [['PA', `${L.pas}/${L.pad} mmHg`], ['FC', `${L.fc} lpm`], ['T central', `${coma(L.t)} °C`], ['Na⁺', `${L.na} mEq/L`], ...(pac === 'toribio' ? [['Lactato', `${coma(L.lact)} mmol/L`], ['Noradrenalina', `${coma(s.na)} µg/kg/min`]] : []), ['Día', String(s.dia)]]; };
-// Toribio, día 3: las cifras de la pregunta son las que da el monitor (leer), las mismas que el 6H (PA 99/51 con noradrenalina 0,4).
-const enunToribio3 = (s) => { const L = leerEn({ pac: 'toribio', set: s.e }), na = coma(nuevo('toribio').na); return `Día 3: PA ${L.pas}/${L.pad} con noradrenalina ${na} y lactato ${coma(L.lact)}. ¿Qué haces con la hidrocortisona?`; };
+// Toribio, día 3: las cifras de la pregunta son las que da el monitor (leer), las mismas que el 6H (PA 104/53 con noradrenalina 0,1).
+const enunToribio3 = (s) => { const L = leerEn({ pac: 'toribio', set: s.e }), na = coma(s.e.na ?? nuevo('toribio').na); return `Día 3: PA ${L.pas}/${L.pad} con noradrenalina ${na} y lactato ${coma(L.lact)}. ¿Qué haces con la hidrocortisona?`; };
 export const CASOS = CASOS_BRUTOS.map((C) => {
   const dic = (f) => Object.fromEntries(f), P = PRES[C.pac];
   return {
