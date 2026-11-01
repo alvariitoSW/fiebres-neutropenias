@@ -91,7 +91,9 @@ export const MODELOS = {
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
     // [HUECO crv: 'craneo-vivo']
     // ·
-    // [HUECO plv: 'placa-viva']
+    // Placa viva: Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía): el estado va en data-placa-viva
+    'placa-viva': { raiz: '#plv-raiz', enlace: { especialidad: 'libros', view: 'placaViva' }, clave: 'placaViva', modo: { explorar: '#plv-modo-explorar' },
+        estados: ['flor', 'sera', 'mel', 'pnc', 'mcc'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
