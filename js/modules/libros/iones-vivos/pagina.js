@@ -46,7 +46,7 @@ function pintar() {
   e.caMg = (e.amp === 'glu' ? 90 : 270) * e.n; const L = leer(s); aplicarTopes();
   $('ion-svg').innerHTML = escena(ion, s, L, oculto) + focoSvg(foco);
   const v = vitales(s, e, preset); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
-  $('mon-k').textContent = `K⁺ ${oculto ? '?' : kVer(L.k)}` + (!oculto && L.k > 5.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
+  $('mon-k').textContent = `K⁺ ${oculto ? '?' : kVer(L.k)}` + (!oculto && L.k >= 6.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
   if (ideaIon !== ion) { ideaIon = ion; const [ti, pi] = IDEAS[ion]; $('idea').innerHTML = `${ti} ${cita(pi)} <span class="org">ficha</span>`; }
   if (ion === 'mg') $('mon-k').textContent += ` · Mg²⁺ ${oculto ? '?' : fmt(L.mg)}`;
   $('nota-ecg').hidden = L.k >= 3.5; $('nota-ecg-txt').textContent = PENDIENTE;

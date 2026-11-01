@@ -16,7 +16,7 @@ export function crearMayeutica(d) {
   const preparar = q => {
     if (!q.estado) return;
     d.ponerEstado(q.estado);
-    d.taparTodo(true);
+    d.taparTodo(!q.verCifras);                                 // verCifras: el paso pide leer el monitor antes de contestar
   };
   const destapar = q => {
     d.taparTodo(false);
