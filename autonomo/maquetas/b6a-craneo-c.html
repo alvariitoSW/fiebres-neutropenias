@@ -1,0 +1,43 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6a). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6a-craneo-c.html
+     Cráneo vivo, opción C «El flujo»: la arteria con la PAM, la mano de la PIC, la PPC = PAM − PIC que empuja la sangre por el hemisferio,
+     el infarto con su penumbra que se apaga si baja la presión (autorregulación rota), el gráfico flujo-PAM y el Doppler transcraneal.
+     Fuente: Marino 2024, caps. 45-47 (docs/marino-2024-neurologia-caps45-47.pdf). Sin librerías: SVG y JS puro. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cráneo vivo · el flujo · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6a-craneo-c/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>El flujo</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
+    <span>PA<b id="m-pa"></b></span><span>PAM<b id="m-pam"></b></span><span>PIC<b id="m-pic"></b></span>
+    <span>PPC<b id="m-ppc"></b></span><span>Flujo relativo<b id="m-flujo"></b></span><span>SaO₂<b id="m-sat"></b></span>
+    <span>Doppler cm/s<b id="m-dtc"></b></span><span>Glucosa<b id="m-glu"></b></span><span>T °C<b id="m-t"></b></span><span>GCS<b id="m-gcs"></b></span></div></section>
+  <section class="zona-escena"><svg id="cr-svg" viewBox="0 0 360 300" role="img" aria-label="La arteria con la presión media, la mano gris de la presión intracraneal, el hemisferio con el infarto y su penumbra, el gráfico del flujo frente a la presión y el Doppler transcraneal"></svg></section>
+  <div id="avisos"></div>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <div id="leyenda"></div>
+  <section class="figuras" aria-label="Figuras reales del libro">
+    <figure id="fig-tpa"><img src="../../js/modules/libros/img/mar-fig47-2-hemorragia-tpa.jpg" alt="Tomografía con hemorragia tras trombólisis"><figcaption>Fig. 47.2 · Hemorragia tras trombólisis (Marino 2024, p. 39). Se enciende cuando la PA pasa de 180/105 con tPA.</figcaption></figure>
+    <details class="plegable"><summary>Fig. 47.1 · burbujas en el foramen oval permeable</summary><figure><img src="../../js/modules/libros/img/mar-fig47-1-burbujas-fop.jpg" alt="Ecocardiograma con burbujas que pasan por el foramen oval"><figcaption>El émbolo paradójico es un origen del ictus (Marino 2024, p. 38-39).</figcaption></figure></details>
+  </section>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b6a-craneo-c/pagina.js"></script>
+</body></html>
