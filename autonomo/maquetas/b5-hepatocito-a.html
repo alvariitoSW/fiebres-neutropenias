@@ -1,0 +1,51 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 5). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b5-hepatocito-a.html
+     Hepatocito, opción A «El sinusoide»: intestino → porta → cordón de hepatocitos → vena hepática → cerebro (astrocito en lupa),
+     con CVVH (desvío), TIPS (puente) y 5 mandos con topes. Fuente: Marino 2024, cap. 39 (docs/marino-2024-abdomen-temperatura-caps39-44.pdf).
+     Sin librerías: SVG y JS puro. Con «reducir movimiento», las partículas quedan quietas. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El sinusoide · amonio, hígado y cerebro · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b5-hepatocito-a/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>El sinusoide</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" class="b" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <section id="monitor" aria-label="Monitor de cabecera">
+    <div class="mon-fila"><span>Amonio arterial <b id="mon-nh3"></b> µmol/L <span class="org ilu">ilustrativo</span></span><span>West Haven <b id="mon-wh"></b></span></div>
+    <div class="mon-fila"><span>Deposiciones/día <b id="mon-dep"></b></span><span>Astrocito <b id="mon-ast"></b></span><span>PA <b id="mon-pa"></b> · FC <b id="mon-fc"></b></span></div>
+    <div class="barra" aria-hidden="true"><i id="barra"></i><u style="left:20%"></u><u style="left:50%"></u><span style="left:20%">60</span><span style="left:50%">150</span></div>
+  </section>
+  <section class="zona-escena"><svg id="hep-svg" viewBox="0 0 360 340" role="img" aria-label="Sinusoide hepático: intestino, vena porta, hepatocitos, vena hepática, cerebro con astrocito, TIPS y filtro CVVH"></svg></section>
+  <button type="button" class="b" id="btn-guia">Guía: el recorrido del amonio, en 5 pasos</button>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <div id="leyenda"></div>
+  <details class="fig" id="fig392"><summary>Fig. 39.2 · TC con edema cerebral (foto real)</summary><figure style="margin:0"><img id="img392" alt="TC craneal antes y después del edema cerebral en un fallo hepático agudo" loading="lazy"><figcaption>TC de cabeza antes (izquierda) y después (derecha) del edema: surcos borrados y pérdida de la unión entre sustancia gris y blanca. Marino 2024, Fig. 39.2, p. 6.</figcaption></figure></details>
+  <details class="fig" id="fig393"><summary>Fig. 39.3 · varices esofágicas (hipertensión portal)</summary><figure style="margin:0"><img id="img393" alt="Visión endoscópica de varices esofágicas" loading="lazy"><figcaption>Venas submucosas dilatadas por la hipertensión portal; el TIPS la alivia. Marino 2024, Fig. 39.3, p. 8.</figcaption></figure></details>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y enlaces</button></div>
+  <div class="dock-panel" id="dock-panel">
+    <div class="mando" id="m-fn-wrap"><label>Hepatocitos que funcionan <output id="o-fn"></output><input type="range" id="m-fn" min="0" max="100" step="1" value="100"></label></div>
+    <div class="mando" id="m-dep"><output id="o-dep"></output><div class="fila"><button type="button" class="b" id="m-dep-menos">− Lactulosa</button><button type="button" class="b" id="m-dep-mas">+ Lactulosa</button></div></div>
+    <div class="mando" id="m-rifwrap"><div class="fila"><button type="button" class="b" id="m-rif" aria-pressed="false">Rifaximina 400 mg ×3: no</button><label>Duración <output id="o-rifd"></output><input type="range" id="m-rifd" min="1" max="14" step="1" value="10"></label></div></div>
+    <div class="mando"><div class="fila"><button type="button" class="b" id="m-cvvh" aria-pressed="false">CVVH: apagada</button><button type="button" class="b" id="m-tips" aria-pressed="false">TIPS: no</button></div></div>
+  </div>
+  <div class="dock-panel" id="dock-medir" hidden>
+    <div class="presets"><button type="button" class="b" data-preset="normal" aria-pressed="true">Hígado sano</button><button type="button" class="b" data-preset="casimira" aria-pressed="false">Casimira, 44 años</button></div>
+    <button type="button" class="b enlace" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="filtro">Abrir el filtro vivo (CVVH)</button>
+  </div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b5-hepatocito-a/pagina.js"></script>
+</body></html>

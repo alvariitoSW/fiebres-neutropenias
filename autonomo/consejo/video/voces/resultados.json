@@ -1,0 +1,47 @@
+{
+ "piper-davefx": {
+  "wer": 3.3,
+  "f0": 129,
+  "ppm": 179
+ },
+ "piper-sharvard-h": {
+  "wer": 2.6,
+  "f0": 124,
+  "ppm": 168
+ },
+ "piper-sharvard-m": {
+  "wer": 2.6,
+  "f0": 200,
+  "ppm": 170
+ },
+ "piper-daniela": {
+  "wer": 11.4,
+  "f0": 179,
+  "ppm": 202
+ },
+ "piper-claude": {
+  "wer": 6.9,
+  "f0": 178,
+  "ppm": 145
+ },
+ "piper-ald": {
+  "wer": 1.0,
+  "f0": 153,
+  "ppm": 148
+ },
+ "kokoro-dora": {
+  "wer": 1.5,
+  "f0": 172,
+  "ppm": 180
+ },
+ "kokoro-alex": {
+  "wer": 1.5,
+  "f0": 130,
+  "ppm": 179
+ },
+ "kokoro-santa": {
+  "wer": 1.5,
+  "f0": 131,
+  "ppm": 176
+ }
+}

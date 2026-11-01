@@ -15,11 +15,11 @@
 //
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
-import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, PARED_AURICULAR_NUEVO, AORTA_DESC_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -42,6 +42,10 @@ function normalAjustada(o, pts) {
 const amp = (db) => Math.pow(10, db / 20);
 
 // ---------------------------------------------------------------------------- vistas
+// Encuadre del A4C/SC4C (dibujo nuevo): margen (rad) entre la pared libre más lejana (VD o lateral del VI) y el borde del sector, para
+// que el VD dilatado no quede en la franja donde el haz pierde energía. Origen: ilustrativo (Mitchell 2019, ASE, docs/mitchell-2019-ett-completa-ase.pdf#page=26: en el A4C se ven las paredes y los
+// septos de cada cámara; no da ángulos).
+const ENCUADRE_A4C = { margenRad: 0.2, origen: 'ilustrativo' };
 // prof (mm) y ángulo del sector (grados), como se suelen ajustar en un adulto. nivel: altura del corte
 // transversal (mm sobre el plano AV, en telediástole; el ápex está a −Le).
 export const VISTAS = {
@@ -50,6 +54,9 @@ export const VISTAS = {
   psaxMv: { corto: 'PSAX', nombre: 'Paraesternal eje corto · válvula mitral', ventana: 'paraesternal', prof: 140, angulo: 80, nivel: () => -7 },
   psaxPm: { corto: 'PSAX', nombre: 'Paraesternal eje corto · músculos papilares', ventana: 'paraesternal', prof: 140, angulo: 80, nivel: (vi) => -0.45 * vi.L },
   a4c: { corto: 'A4C', nombre: 'Apical 4 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
+  // foco VD (Mitchell 2019 p. 26 y Tabla 3, p. 30; Lang 2015 p. 17): desde el A4C, la sonda gira un poco en sentido antihorario
+  // en el ápex hasta el máximo de área del VD, con el VI parcial a la derecha y la pared libre entera
+  a4cVd: { corto: 'A4C VD', nombre: 'Apical 4 cámaras · foco VD', ventana: 'apical', prof: 170, angulo: 80 },
   a2c: { corto: 'A2C', nombre: 'Apical 2 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
   a3c: { corto: 'A3C', nombre: 'Apical 3 cámaras (eje largo)', ventana: 'apical', prof: 170, angulo: 80 },
   // subcostal: la sonda bajo la apófisis xifoides, el haz hacia arriba y a la izquierda a través del hígado
@@ -62,6 +69,7 @@ export const VISTAS = {
 // Grosor de la pared torácica bajo el transductor (mm) y separación hasta el pericardio: así el corazón
 // empieza a unos 2-2,5 cm de profundidad, como en un adulto delgado.
 const PARED = 12, HUECO = 22;
+const DIST_AO_FOCO = 14.3;   // mm: raíz aórtica (rA·1,28 ≈ 12,8) + margen; con más, el rótulo «Ao» tampoco sale (|dd| < 14). Ilustrativo
 
 /**
  * El plano de una vista para un corazón con estos volúmenes telediastólicos ({ vvi, vvd }). Se calcula
@@ -115,6 +123,27 @@ export function planoVista(clave, est) {
     porTres(o, asc, desc, sum(esc(asc, 0.5), esc(desc, 0.5)));
   } else if (v.ventana === 'apical') {
     if (clave === 'a4c') apical(A(mix2(g.ct, g.mc, 0.55), 8), [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0]);      // VI a la derecha
+    else if (clave === 'a4cVd') {
+      // foco VD: el haz por el eje del VI y el plano del A4C girado sobre ese eje el ángulo que da más área de VD (Mitchell p. 26: «rotated slightly
+      // counterclockwise ... to maximize the RV area»; sin inclinar hacia delante, hacia el cinco cámaras). Tope ±22° («slightly»).
+      // El plano tampoco debe cortar la raíz aórtica ni el TSVI (eso es un cinco cámaras): la raíz está a ~13 mm del eje del VI y mide hasta 12,8 de
+      // radio, así que se parte de la inclinación del A4C (que ya la deja fuera) y solo se gira alrededor del ápex: se descarta el giro cuyo plano
+      // pasa a menos de DIST_AO_FOCO (mm) del eje de la raíz (z de 0 a 16). El giro 0 (el A4C) siempre es válido.
+      const T = A(mix2(g.ct, g.mc, 0.55), 8), r4 = [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], O4 = [0, 0, -vi.Le - HUECO], d4 = nrm(res(T, O4));
+      const area = (rr) => { let n = 0;
+        for (let u = -70; u <= 70; u += 2) for (let v = 20; v <= 170; v += 2) {
+          const p = sum(O4, sum(esc(rr, u), esc(d4, v))), zp = p[2]; if (zp >= 0 || zp < -g.Lvd) continue;
+          const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
+          if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) n++; } }
+        return n; };
+      const rotar = (a) => { const c = Math.cos(a), s = Math.sin(a); return [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0]; };
+      const libreAo = (rr) => { const n = nrm(cruz(rr, d4)); return [0, 8, 16].every(z => Math.abs(dot(res([g.ac[0], g.ac[1], z], O4), n)) >= DIST_AO_FOCO); };
+      let mejor = 0, aMax = -1;
+      for (let gr = -22; gr <= 22; gr += 2) { const a = gr * Math.PI / 180, rr = perp(rotar(a), d4);
+        if (gr !== 0 && !libreAo(rr)) continue;
+        const A2 = area(rr); if (A2 > aMax) { aMax = A2; mejor = a; } }
+      apical(T, rotar(mejor));
+    }
     else if (clave === 'a3c') apical(A(mix2(g.mc, g.ac, 0.5), 8), [g.ac[0] - g.mc[0], g.ac[1] - g.mc[1], 0]);  // aorta a la derecha
     else {
       // 2 cámaras: el plano por el eje que menos toca la media luna del VD (que abarca más de media vuelta),
@@ -150,8 +179,24 @@ export function planoVista(clave, est) {
           const q = res(p, O); if (Math.abs(dot(q, n0)) < 5 && dot(q, d) > 35) ang.push(Math.atan2(dot(q, r), dot(q, d))); } } }
     if (ang.length > 10) {
       // si aun girado el contorno no cabe (VD muy dilatado), se abre el sector lo justo, con margen (tope 110°)
-      mitad = clamp((Math.max(...ang) - Math.min(...ang)) / 2 + 0.07, mitad, 0.96);
+      mitad = clamp((Math.max(...ang) - Math.min(...ang)) / 2 + ENCUADRE_A4C.margenRad, mitad, 0.96);
       const giro = clamp((Math.min(...ang) + Math.max(...ang)) / 2, -0.5, 0.5);
+      if (Math.abs(giro) > 0.01) { const d2 = nrm(sum(esc(d, Math.cos(giro)), esc(r, Math.sin(giro)))); r = nrm(cruz(d2, n0)); d = d2; }
+    }
+  }
+  if (clave === 'a4cVd') {
+    // foco VD: el sector se abre para que entre toda la pared libre del VD y se desplaza hacia el VD (un 30 % de su semiancho):
+    // el VD ocupa el centro y la pared lateral del VI queda parcial a la derecha. Ilustrativo (Lang 2015 p. 17: ápex del VI hacia el centro).
+    // Un sector más estrecho (zoom) daba una cuña sin VI ni aurículas: no se usa.
+    const ang = []; const NZ = 14, NF = 90, n0 = nrm(cruz(r, d));
+    for (let i = 0; i <= NZ; i++) { const z = -vi.Le * 0.98 + (vi.Le * 0.98) * (i / NZ);
+      for (let j = 0; j < NF; j++) { const f = -Math.PI + 2 * Math.PI * j / NF;
+        for (const p of [g.epiVi(z, f), (z > -g.Lvd ? g.epiVd(z, f) : null)]) { if (!p) continue;
+          const q = res(p, O); if (Math.abs(dot(q, n0)) < 5 && dot(q, d) > 35) ang.push(Math.atan2(dot(q, r), dot(q, d))); } } }
+    if (ang.length > 10) {
+      const lo = Math.min(...ang), hi = Math.max(...ang), medio = (hi - lo) / 2;
+      mitad = clamp(medio * 0.85 + ENCUADRE_A4C.margenRad, mitad, 0.96);
+      const giro = clamp((lo + hi) / 2 - 0.3 * medio, -0.5, 0.5);
       if (Math.abs(giro) > 0.01) { const d2 = nrm(sum(esc(d, Math.cos(giro)), esc(r, Math.sin(giro)))); r = nrm(cruz(d2, n0)); d = d2; }
     }
   }
@@ -276,6 +321,31 @@ export function distMin(seg, pared) {
 
 /** Un punto del corazón en el plano: [u, v, distancia al plano]. */
 export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(q, P.d), dot(q, P.n)]; }
+
+/**
+ * Centro (u, v en mm del plano) de la región que amplía el botón «Zoom ×2» del ecógrafo (ilustrativo: los equipos reales tienen «zoom» de una
+ * región). En el foco VD, la pared libre del VD con el ápex (la caja que contiene la sección de la cavidad del VD en el plano y el ápex del VI);
+ * en las demás vistas, el centro del sector. Solo es un encuadre: no recalcula nada de la física.
+ */
+export function regionZoom(P, est) {
+  const centro = { u: 0, v: P.prof * 0.5 };
+  if (!P || P.clave !== 'a4cVd' || !est) return centro;
+  const g = baseGeometrica(est); let u0 = 1e9, u1 = -1e9, v0 = 1e9, v1 = -1e9;
+  for (let u = -90; u <= 90; u += 2) for (let v = 10; v <= P.prof; v += 2) {
+    const p = sum(P.O, sum(esc(P.r, u), esc(P.d, v))), zp = p[2]; if (zp >= 0 || zp < -g.Lvd || Math.abs(dot(res(p, P.O), P.n)) > 1) continue;
+    const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
+    if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } }
+  if (u0 > u1) return centro;
+  const ap = enPlano(P, [0, 0, -g.vi.Le]); u0 = Math.min(u0, ap[0]); u1 = Math.max(u1, ap[0]); v0 = Math.min(v0, ap[1]); v1 = Math.max(v1, ap[1]);
+  // v3g: el anillo tricuspídeo y la AD (el encuadre no los recorta): los puntos de la AD que caen en el plano ensanchan la caja
+  try { const ad = construirCorazon(est, { pericardio: false, detalle: false }).partes.find(p => p.nombre === 'AD');
+    for (let i = 0; ad && i < ad.pos.length; i += 3) { const [u, v, n] = enPlano(P, [ad.pos[i], ad.pos[i + 1], ad.pos[i + 2]]);
+      if (Math.abs(n) < 3 && v > 5 && v < P.prof) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } } catch { /* sin AD: queda la caja del VD */ }
+  // la ventana del zoom ×2 abarca ~98 mm de profundidad (lienzo de 300 px a 1,53 px/mm, a la mitad): si la caja es más alta (VD + ápex + AD), manda
+  // lo que pide la vista, el anillo tricuspídeo y la AD (el suelo de la AD queda dentro) y el ápex del VI se sale por arriba
+  const VENT = 98, m = 4;
+  return { u: (u0 + u1) / 2, v: v1 - v0 > VENT ? v1 + m - VENT / 2 : (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0 };
+}
 
 // ---------------------------------------------------------------------------- qué es cada pieza en la imagen
 // clase: pared (miocardio de dos superficies, endo y epi: se rellena lo de en medio), tubo (relleno si su
@@ -466,10 +536,10 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
     // Dibujo nuevo, A4C: el arco aórtico y las arterias pulmonares quedan por detrás del plano de las cuatro cámaras (no salen en el A4C real; anatomía general, sin página): sin ellos no quedan dos anillos bajo la AI.
-    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'a4cVd' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
     // Dibujo nuevo, A4C: el pulmón lateral no se corta en láminas (la línea de pleura salía como una escalera de rayas regulares en el borde del
     // sector); en Lang 2015, Fig. 4 esa zona es sombra oscura sin patrón. La ventana pobre ya la tapa con su sombra irregular (nuevoP).
-    if (P.clave === 'a4c' && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
     const r = ref && ref[k] && ref[k].nombre === p.nombre ? ref[k] : null;
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;
@@ -504,7 +574,8 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
       // líneas que acaban donde acaba el tubo: se cierran uniendo sus extremos, como las paredes
       const c = cerrado ? null : cerrarExtremos([x], 45);
       if (cerrado || c.abiertos === 0) out.push({ tipo: 'relleno', seg: cerrado ? x.seg : x.seg.concat(c.puentes), segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
-      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
+      const aoD = dibujoNuevo() && x.nombre === 'Aorta descendente', oblicua = aoD && P.clave === 'a4cVd' ? AORTA_DESC_NUEVO.dbOblicuo : 0;   // v2g: pared más fina y tenue (calibre real ~2-2,5 cm; ilustrativo)
+      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db + (aoD ? AORTA_DESC_NUEVO.db + oblicua : 0), ancho: aoD ? AORTA_DESC_NUEVO.ancho : x.t.ancho, grupo: x.nombre });
       continue;
     }
     out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0, distPared: paredVI && /^Papilar/.test(x.nombre) ? distMin(x.seg, paredVI) : null }
@@ -747,6 +818,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         if (dd >= h + 0.35) continue;
         const cc = clamp((h - dd) / 0.35 + 0.5, 0, 1);
         if (variar === 1) a = a0 * amp(PERICARDIO_FINO.moteadoDb * Math.sin(q * 12.9898 + 78.233 * Math.sin(q * 0.371)));
+        else if (variar === 3) a = a0 * amp(PARED_AURICULAR_NUEVO.moteadoDb * Math.sin(q * 12.9898 + 78.233 * Math.sin(q * 0.371)));   // pared auricular: moteado como el miocardio
         if (espec) { if (cc * a > A[q]) A[q] = cc * a; if (cc >= 0.5) { FILL[q] = 0; if (etiquetar && !TAG[q]) TAG[q] = tag; } }
         else { A[q] += cc * (a - A[q]); if (cc >= 0.5) { TAG[q] = tag; FILL[q] = 0; } }
       }
@@ -803,6 +875,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
         if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db + (el.radioCavidad != null ? BORDE_ENDO.extraPequenoDb * clamp((BORDE_ENDO.rmDesdeMm - el.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1) : 0) : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
+        else if (W2 > 0 && dibujoNuevo() && /^(AI|AD|Orejuela)/.test(el.grupo)) trazar(P, el.seg, PARED_AURICULAR_NUEVO.ancho, el.db + PARED_AURICULAR_NUEVO.db * W2, espec, tag, m.especular, 1, false, 3);
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db + (dibujoNuevo() && /^(Grasa|Seno|Coronaria|Vena)/.test(el.grupo) ? SURCOS_NUEVO.db : 0), espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }
@@ -814,8 +887,12 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     // dibujo nuevo: detrás del pulmón no hay un «peine» de líneas A regulares sino una sombra irregular (costilla y aire; Lang 2015, Fig. 4,
     // la zona lateral del A4C): manchas de tamaño mixto y sin periodicidad, entre -26 y -42 dB (nitidez ilustrativa, sin dato de fuente)
     const nuevoP = dibujoNuevo();
-    const sombraIrregular = (i, j) => { const h = Math.sin(i * 12.9898 + (j >> 3) * 78.233) * 43758.5453, h2 = Math.sin((i >> 2) * 39.346 + j * 11.135) * 24634.6345;
-      return amp(-26 - 16 * (0.5 * (h - Math.floor(h)) + 0.5 * (h2 - Math.floor(h2)))); };
+    // v2g · la sombra del pulmón/costilla del dibujo nuevo: caída de señal continua (ruido de valor suave, celdas de 7 haces × 28 muestras,
+    // -36 a -24 dB; ilustrativo), no el hash por haz y por bloque de 8 muestras de antes, que salía en rayas horizontales «a pincel»
+    const rv = (a, b) => { const h = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return h - Math.floor(h); };
+    const sombraIrregular = (i, j) => { const x = i / 7, y = j / 28, x0 = Math.floor(x), y0 = Math.floor(y), u = x - x0, v = y - y0, su = u * u * (3 - 2 * u), sv = v * v * (3 - 2 * v);
+      const n = (rv(x0, y0) * (1 - su) + rv(x0 + 1, y0) * su) * (1 - sv) + (rv(x0, y0 + 1) * (1 - su) + rv(x0 + 1, y0 + 1) * su) * sv;
+      return amp(-36 + 12 * n); };
     let pulmon = null;
     if (W > 0.25 && o.ventanaVista !== 'subcostal') {
       const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;

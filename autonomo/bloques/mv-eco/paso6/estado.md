@@ -1,0 +1,25 @@
+# Estado del paso 6 (para retomar si se corta; 01/11 ~17:20)
+- En `auto/mv-eco-2a5`: M0, M2 (tabique sístole media), M1+M1c (pico del chorro de IT a mitad), M3 (McConnell en el dibujo,
+  ápex 5,7 mm = McConnell 1996), D1-D6 (IM en domo, base del CW, dilatada esférica, SC4C, aurículas, pared libre VD), v2 Doppler
+  (escala automática, llenado diastólico, móvil), v2 dibujo (aorta desc., SC4C), v2 motor (g=0 ≡ normal), foco VD (`a4cVd`).
+  Versión 20261101-20 (subir otra al juntar lo que falta). Juicio 1: realismo 9,29 (`juicio-1.md`).
+- En curso: `wt/mv6-v4m` (opus): reloj auricular aprobado por el usuario (ver revision-encargo.md, última línea) + diástole
+  izquierda + tabla congelada del contrato. `wt/mv6-zoom` (sonnet): foco VD sin aorta + botón Zoom ×2.
+- Después: juntar las dos ramas, versión nueva, suite eco + shock-vivo + --geometria + --eco a solas; rejuicio (profesor fable);
+  si ≥9,5 → encender dibujo 2 (por defecto, instantánea, --geometria a la suite, versión) y seguir a 9,85-10.
+## 18:00 UTC
+- Juntado en la rama: zoom ×2 y foco VD sin aorta. Versión 20261101-21.
+- `wt/mv6-v4m` (en el remoto, NO fusionar: ≈37 pruebas rojas): reloj auricular aprobado aplicado (picoAurAntes 0, AD Ees 0,22);
+  objetivos de la IT cumplidos salvo el sobrepico de lPul; falta (en orden, informe `paso6/v4m-informe.md` en esa rama): decidir
+  qué es la «telediástole» con el reloj nuevo y la inercia mitral (lMit), recuperar el gasto del normal, lPul, tabla del
+  contrato e instantánea con --congelar, shock-vivo. Siguiente encargo: opus, desde wt/mv6-v4m.
+## ~18:30 UTC
+- Rejuicio: **9,50, pasa la puerta** (`juicio-2.md`). Suite de la eco en verde con la versión -21.
+- En curso (todas empujan al remoto tras cada commit): `wt/mv6-on` encender el dibujo 2 por defecto (+ --geometria a la suite,
+  versión -22); `wt/mv6-v3d` E/A anchas y escala del CW; `wt/mv6-v3g` aorta en foco VD y zoom re-render.
+- Luego: juntar las tres (on primero), suite + shock-vivo + --eco + --geometria; rejuicio; seguir el motor desde `wt/mv6-v4m`
+  (reloj auricular, en rojo) con opus. Lista para 9,85-10 en `juicio-2.md`.
+- v3d (18:50 UTC): la onda A tricuspídea del normal sale a ~257 cm/s en ~40 ms (qTri 1133 mL/s; lo real ~30-40 cm/s): cifra mala del motor (AD con Ees 0,70; ver wt/mv6-v4m). Para el carril del motor.
+- v3g (19:20 UTC): aorta del foco VD apagada ✓; zoom: entra AD y tricúspide pero el ápex sale por arriba → la ventana del zoom debe incluir el ápex del VD (McConnell) y re-render ×2 en simulador.mjs (aplicarZoom). Pendiente.
+- 19:45 UTC: encender (wt/mv6-on, versión -23, en remoto, NO fusionar aún): partes 1-2 hechas; parte 3 en curso (deshacer GANANCIA_SEPTO 8 → arreglar en septoSignoDe; 5 fallos de geometria.test: SC4C, aorta desc. N3, festones, cúspides; luego suite, --eco, shock-vivo). Al acabar: fusionar a auto/mv-eco-2a5, rejuicio.
+- 20:35 UTC: encender parte 3 → quedan 2 rojos (154 IE del TEP: la «telesístole» de muestrasClave cae en la relajación isovolumétrica; 223 festones #15 por mitralSepto). Parte 4 en curso (wt/mv6-on). Parados por número 6 procesos colgados de worktrees borrados.

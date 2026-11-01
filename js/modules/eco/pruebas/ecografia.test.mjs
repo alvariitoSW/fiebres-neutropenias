@@ -363,3 +363,20 @@ test('PSAX de los papilares: en telesístole el corte atraviesa papilares que to
     assert.ok(mn <= 2, `${nom}: el papilar cortado queda a ${mn.toFixed(1)} mm de la pared en telesístole`);
   }
 });
+
+// D3 (mv-eco paso 6): en el subcostal de 4 cámaras (dibujo nuevo) el pulmón no se corta en láminas: salía una «escalera» de rayas en el
+// borde izquierdo del sector. Con el dibujo de hoy se sigue cortando (no cambia).
+test('subcostal 4C con el dibujo nuevo: sin láminas de pleura (escalera de rayas) en la imagen', async () => {
+  const { usarDibujo } = await import('../corazon-geo.mjs');
+  const previo = usarDibujo(1);
+  try {
+    usarDibujo(2);
+    const g = geo(td);
+    assert.ok(g.partes.some(p => /^Pulmón/.test(p.nombre)), 'el corazón debe llevar el pulmón');
+    const els = elementosDelCorte(g.partes, planoVista('sc4c', td));
+    assert.equal(els.filter(e => /^Pulmón/.test(e.grupo || '')).length, 0, 'láminas de pulmón en el SC4C');
+    usarDibujo(1);
+    const viejo = elementosDelCorte(geo(td).partes, planoVista('sc4c', td)).filter(e => /^Pulmón/.test(e.grupo || '')).length;
+    assert.ok(viejo >= 0);
+  } finally { usarDibujo(previo); }
+});

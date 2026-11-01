@@ -45,7 +45,7 @@ for (const [clave, esc, g, vista, dib] of LISTA) {
   const c = await pg.evaluate(() => { const t = (id) => document.getElementById(id)?.textContent.trim(); const u = window.__motor.ultimo || {}; const f = (x, d = 0) => typeof x === 'number' ? +x.toFixed(d) : x;
     return { fase: t('cv-eco-fase'), titulo: t('cv-eco-titulo'), grav: t('cv-grav-txt'), 'Último latido': t('cv-l-lat'), 'VI en esta fase': t('cv-l-vi'), 'VD en esta fase': t('cv-l-vd'), Aorta: t('cv-l-ao'), 'Aurículas': t('cv-l-au'),
       'VI/VD telediastólico (el que dibuja la imagen)': (() => { const o = window.__motor.onda, a = o.reduce((x, y) => (y.vvi > x.vvi ? y : x), o[0]), b = o.reduce((x, y) => (y.vvd > x.vvd ? y : x), o[0]); return `VI ${f(a.vvi)} mL · VD ${f(b.vvd)} mL`; })(),
-      motor: `FC ${f(u.fc)} · PAM ${f(u.pam)} · PA ${f(u.pas)}/${f(u.pad)} · GC ${f(u.gc, 2)} · PVC ${f(u.pvc, 1)}`, pantalla: window.__ultimoDibujo?.modo }; });
+      motor: `FC ${f(u.fc)} · PAM ${f(u.pam)} · PA ${f(u.pas)}/${f(u.pad_)} · GC ${f(u.gc, 2)} · PVC ${f(u.pvc, 1)}`, pantalla: window.__ultimoDibujo?.modo }; });
   md += `## ${clave} (${esc}${g != null ? ', g=' + g : ''}, ${vista}, dibujo ${dib})\n` + Object.entries(c).map(([k, v]) => `- ${k}: ${v}`).join('\n') + '\n\n';
   console.log(clave, c.fase);
   await pg.close();

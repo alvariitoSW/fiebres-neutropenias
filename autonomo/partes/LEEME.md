@@ -25,10 +25,15 @@ Problemas encontrados fuera de la tarea.
 Si alguna regla falló o faltó (el agente no las edita; las propone aquí).
 
 ## Vueltas
-Una fila por vuelta (REGLAS §4.8 R9): pieza · vuelta · nota mínima del profesor (y su criterio) · modelo del
-constructor · pasos · tokens equivalentes · qué falló.
+Una fila por vuelta (REGLAS §4.8 R9 y R10): pieza · vuelta (n.º de 3, corta o normal) · punto(s) por debajo de 9,5 con
+su nota antes → después · receta (enlace a la sección «Receta») · modelo del constructor · pasos · tokens
+equivalentes · qué falló. Si un punto no sube tras su receta, se dice: la receta no era concreta.
+
+## Receta
+La del profesor (R10), por punto: criterio de 9,5 · criterio de 10 · cumplido ✓/✗ con su captura o juez.
 
 ## Gasto
 `node autonomo/gasto.mjs --clave <clave>`: total en tokens equivalentes, la tabla «Por papel» y los 3 agentes que más
-gastaron. Una línea: dónde se fue el gasto y cómo se ahorraría la próxima vez.
+gastaron. Una línea: dónde se fue el gasto y cómo se ahorraría la próxima vez. Al cerrar un bloque, la nota media
+del profesor del bloque (Hacienda; REGLAS §4.8 R10).
 ```

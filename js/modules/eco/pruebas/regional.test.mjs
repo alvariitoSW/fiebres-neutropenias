@@ -28,3 +28,12 @@ test('HP crónica: sin McConnell (ápex VD no > 1,5 × pared libre)', () => {
 // Umbral 0,3 (P6b: el fallo al 100 % vuelve a FEVI ≈11 %)
 test('fallo 1: VI global bajo', () => assert.ok(media(reg('fallo', 1).slice(0, 17)) < 0.3));
 test('tabla (informativa)', () => { for (const [k, g] of casos) { const r = reg(k, g); console.log(k, g ?? 'def', 'VI', media(r.slice(0, 17)).toFixed(2), 'VD', r.slice(17).map(x => x.toFixed(2)).join(' ')); } });
+// M3 · McConnell 1996 (PMID 8752195): pared libre media −0,2 ± 0,8 mm, ápex 5,7 ± 0,8 mm (normal)
+test('McConnell: ápex del VD cerca de lo normal, pared media casi acinética (TEP g=1)', () => {
+  const r = reg('tep', 1); assert.ok(r[19] >= 0.7, String(r.slice(17))); assert.ok(r[18] <= 0.3 * r[19], String(r.slice(17)));
+});
+test('McConnell en el dibujo 2 (TEP g=1): la pared media se mueve ≤ 0,3 × el ápex y el ápex ≥ 5 mm', async () => {
+  const { desplazamientos } = await import('../../../../autonomo/bloques/mv-eco/herramientas/m3-mcconnell.mjs');
+  const d = desplazamientos(1).despues; console.log('M3 desplazamientos (mm)', JSON.stringify(d));
+  assert.ok(Math.abs(d.media) <= 0.3 * d.apice, JSON.stringify(d)); assert.ok(d.apice >= 5, JSON.stringify(d)); assert.ok(Math.abs(d.media) <= 2, JSON.stringify(d));
+});

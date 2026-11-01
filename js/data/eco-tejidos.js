@@ -59,4 +59,11 @@ export const DB_IMAGEN = {
 };
 // Pared libre del VD en el dibujo nuevo: es fina y el haz la corta oblicua; en vez de los −3 dB de hoy (más tenue que el VI) se
 // realza unos dB para que se vea al menos al 60 % del tabique (ilustrativo; fisiología general: el VD es músculo, solo más delgado).
-export const PARED_VD_NUEVO = { db: 4, origen: 'ilustrativo' };
+// Pared de las aurículas del dibujo nuevo (con «paredes reales»): ~2,5 mm de grosor y moteado como el miocardio, algo más tenue
+// que el VI (db: dB extra sobre la pared de aurícula; moteadoDb: amplitud del grano). En la eco la pared auricular fina se ve gris
+// y granulosa, no como un alambre (idea de Lang 2015 / Mitchell 2019, que no dan el grosor): grosor y dB, ilustrativos.
+export const PARED_AURICULAR_NUEVO = { ancho: 2.5, db: -7, moteadoDb: 4, origen: 'ilustrativo' };
+export const PARED_VD_NUEVO = { db: 8, origen: 'ilustrativo' };
+// Aorta descendente del dibujo nuevo (detrás de la AI): pared más fina y 8 dB más tenue que los grandes vasos, para que no compita con la AI
+// (calibre real ~2-2,5 cm; el radio del dibujo, en torax.mjs TORAX_NUEVO.rAo; ni Lang 2015 ni Mitchell 2019 dan su calibre: ilustrativo).
+export const AORTA_DESC_NUEVO = { db: -8, ancho: 1.3, dbOblicuo: -8,  /* foco VD: corte oblicuo (24 × 53 mm), más tenue aún */ origen: 'ilustrativo' };
