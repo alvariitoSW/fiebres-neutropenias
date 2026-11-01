@@ -21,7 +21,7 @@ export const MAYEUTICA_CRANEO_2 = {
         opciones: [
           { t: 'Nada: la autorregulación cerebral mantiene el flujo', porque: 'Eso vale para el cerebro sano. En el ictus la autorregulación está alterada (pág. 36) y si esperas que proteja el flujo, bajarás la presión a ciegas.' },
           { t: 'Pierde flujo: con la autorregulación alterada, el flujo sigue a la presión', ok: true },
-          { t: 'Mejora: menos presión significa menos edema en la penumbra', porque: 'La ficha no lo recoge: bajar la PA en los primeros días no ha mejorado el pronóstico (pág. 36). Con ese razonamiento dejarías sin riego una zona que aún se podía salvar.' }],
+          { t: 'Mejora: con menos presión hay menos edema en la penumbra y se protege la zona que rodea al infarto', porque: 'La ficha no lo recoge: bajar la PA en los primeros días no ha mejorado el pronóstico (pág. 36). Con ese razonamiento dejarías sin riego una zona que aún se podía salvar.' }],
         explicacion: 'Más del <span class="hl">60 %</span> de los ictus tiene la PA alta: es una respuesta que <span class="hl-azul">mantiene el flujo de la penumbra</span>. Como la autorregulación está alterada, el flujo depende de la presión y su bajada precoz no ha mejorado los resultados (' + pag(36, 'pág. 36') + ').',
         nota: '<b>Otra fuente.</b> En el cerebro sano el flujo se mantiene casi constante con una presión de perfusión de 50 a 150 mmHg (autorregulación); el ictus pierde esa meseta (' + LIBRO_AZUL + '). Marino lo dice solo en palabras.' },
       { id: 'mni-g2', corto: 'el oxígeno de más', tipo: 'test', fuente: 'mn-isq-oxigeno · mn-isq-o2-recomendacion', calculadora: { ir: 'mn-o2-calc', nombre: '¿Y la SaO₂ de este paciente con ictus?' },
@@ -36,7 +36,7 @@ export const MAYEUTICA_CRANEO_2 = {
         opciones: [
           { t: 'Baja la PaCO₂ y, con ella, la presión intracraneal', porque: 'La ficha dice lo contrario. Si cuentas con ese alivio, no vigilarás que el ventilador pueda empeorar la perfusión del cerebro (pág. 35).' },
           { t: 'Sube la presión intracraneal y baja la de perfusión cerebral', ok: true },
-          { t: 'Ninguno: solo importa en la hemorragia, no en el isquémico', porque: 'Marino lo advierte en el ictus isquémico (pág. 35). Si lo descartas, ventilarás sin tener en cuenta que baja el flujo a una penumbra que depende de la presión.' }],
+          { t: 'Ninguno: la presión positiva solo importa en la hemorragia cerebral, no en el infarto isquémico', porque: 'Marino lo advierte en el ictus isquémico (pág. 35). Si lo descartas, ventilarás sin tener en cuenta que baja el flujo a una penumbra que depende de la presión.' }],
         explicacion: 'Está indicada si la consciencia no protege la vía aérea o hay fracaso respiratorio que no se maneja de otro modo; pero <span class="hl-rojo">la presión positiva puede subir la PIC y bajar la PPC</span>, por lo que se usa con juicio (' + pag(35, 'pág. 35') + ').' },
       { id: 'mni-g4', corto: 'el nitroprusiato', tipo: 'test', fuente: 'mn-isq-evitar · mn-tabla-47-2',
         enunciado: 'Quieres bajar la PA en un ictus que lo necesita. ¿Por qué no el nitroprusiato?',
@@ -57,7 +57,7 @@ export const MAYEUTICA_CRANEO_2 = {
         opciones: [
           { t: 'Insulina para dejar 140-180, sin sueros glucosados; busco infección y bajo la fiebre', ok: true },
           { t: 'Insulina hasta glucosa normal (<110) y dejo la fiebre, que es de origen cerebral', porque: 'Un control tan estricto arriesga hipoglucemia (pág. 37). Y la fiebre se trata y se busca su foco: muchos ictus febriles tienen infección.' },
-          { t: 'Solo bajo la fiebre con hipotermia terapéutica, que mejora el pronóstico', porque: 'El manejo dirigido de temperatura no mejora los resultados del ictus isquémico (pág. 37). Y tampoco resuelve la glucosa por encima de 180.' }],
+          { t: 'Solo bajo la fiebre con hipotermia terapéutica, porque mejora el pronóstico del ictus isquémico', porque: 'El manejo dirigido de temperatura no mejora los resultados del ictus isquémico (pág. 37). Y tampoco resuelve la glucosa por encima de 180.' }],
         explicacion: 'Glucosa >180: tratar con objetivo <span class="hl-verde">140-180</span> y sin glucosados (un control más estricto arriesga hipoglucemia). Fiebre en las primeras 24-48 h: <span class="hl">buscar siempre infección</span> y bajarla sin demora; el manejo dirigido de temperatura no mejora el pronóstico (' + pag(37, 'pág. 37') + ').' },
     ],
     examen: [
@@ -66,19 +66,19 @@ export const MAYEUTICA_CRANEO_2 = {
         opciones: [
           { t: 'Menos de 180/105', porque: 'Es el objetivo tras trombólisis o trombectomía (pág. 36). Sin ellas llevarlo a 180/105 es un descenso mayor del 15 % que la guía desaconseja.' },
           { t: 'Una PAS de unos 204: no bajar más del 15 % en 24 h', ok: true },
-          { t: 'Menos de 140/90, para proteger de la hemorragia', porque: 'Esa cifra es de algunos protocolos tras reperfusión (pág. 36). Aplicarla aquí baja la PA un 40 % y le quita flujo a la penumbra.' }],
+          { t: 'Menos de 140/90, para proteger al paciente de una hemorragia cerebral y de la reperfusión', porque: 'Esa cifra es de algunos protocolos tras reperfusión (pág. 36). Aplicarla aquí baja la PA un 40 % y le quita flujo a la penumbra.' }],
         explicacion: 'Sin trombólisis se baja solo si >220/120 las primeras 72 h, y <span class="hl-rojo">sin pasar del 15 %</span> en 24 h: 15 % de 240 son 36, o sea una PAS de unos 204 (cuenta nuestra sobre la cifra del libro) (' + pag(36, 'pág. 36') + ').' },
       { id: 'mni-e2', corto: '210/115 sin lisis', tipo: 'test', fuente: 'mn-isq-hta-recomendaciones · mn-tabla-47-1',
         enunciado: 'Ictus sin trombólisis, a las 20 h tiene 210/115 y no hay insuficiencia cardíaca ni otra causa para bajarla. ¿La bajas?',
         opciones: [
-          { t: 'Sí, hasta menos de 180/105', porque: 'Es la cifra de después de la trombólisis (pág. 35). Sin ella, bajar una presión que no pasa de 220/120 le quita flujo a la penumbra sin beneficio demostrado.' },
+          { t: 'Sí, hasta menos de 180/105, que es el objetivo que se aplica a cualquier ictus con la presión alta', porque: 'Es la cifra de después de la trombólisis (pág. 35). Sin ella, bajar una presión que no pasa de 220/120 le quita flujo a la penumbra sin beneficio demostrado.' },
           { t: 'Sí, un 30 % para que no sangre', porque: 'Pasarse del 15 % en 24 h es lo que la guía pide evitar (pág. 36); además la cifra no llega al umbral de 220/120.' },
           { t: 'No: el umbral para tratar es >220/120', ok: true }],
         explicacion: 'Sin trombólisis, la PA solo se baja si <span class="hl-rojo">supera 220/120</span> en las primeras 72 h (salvo insuficiencia cardíaca izquierda y similares). 210/115 queda por debajo (' + pag(36, 'pág. 36') + ').' },
       { id: 'mni-e3', corto: 'Tabla 47.2', tipo: 'test', fuente: 'mn-tabla-47-2',
         enunciado: 'Vas a poner nicardipina a un ictus que lo necesita. ¿Qué pauta da la Tabla 47.2?',
         opciones: [
-          { t: '1-2 mg/h, duplicando cada 2-5 min hasta 21 mg/h', porque: 'Es la clevidipina (pág. 36). Con esa pauta, doble cada pocos minutos, se pasaría de dosis una nicardipina.' },
+          { t: '1-2 mg/h, duplicando la velocidad cada 2-5 min si hace falta hasta llegar a 21 mg/h', porque: 'Es la clevidipina (pág. 36). Con esa pauta, doble cada pocos minutos, se pasaría de dosis una nicardipina.' },
           { t: '10 mg en bolo y luego 2-8 mg/min', porque: 'Es el labetalol (pág. 36). En mg/min la nicardipina daría una sobredosis enorme.' },
           { t: '5 mg/h, subiendo 2,5 mg/h si hace falta hasta 15 mg/h', ok: true }],
         explicacion: 'Nicardipina: <span class="hl">5 mg/h, +2,5 mg/h</span> hasta un máximo de 15 mg/h; equivalente al labetalol en eficacia y seguridad (' + pag(36, 'pág. 36') + ').' },
@@ -186,13 +186,13 @@ export const MAYEUTICA_CRANEO_2 = {
         enunciado: 'En 3 millones de ictus en Alemania la embolia pulmonar fue solo del 0,4 %. ¿Cambia eso la profilaxis de la trombosis venosa?',
         opciones: [
           { t: 'No: sigue indicada, con HBPM y, tras el tPA, compresión neumática 24 h', ok: true },
-          { t: 'Sí: con tan poca incidencia ya no hace falta profilaxis', porque: 'Marino lo dice expresamente: aun así la profilaxis está justificada (pág. 38). Retirarla deja a un paciente inmóvil expuesto a una trombosis.' },
+          { t: 'Sí: con una incidencia tan baja de embolia pulmonar ya no hace falta ninguna profilaxis', porque: 'Marino lo dice expresamente: aun así la profilaxis está justificada (pág. 38). Retirarla deja a un paciente inmóvil expuesto a una trombosis.' },
           { t: 'Sí: solo se hace con compresión, nunca con heparina', porque: 'La heparina de bajo peso molecular es la elección (pág. 38); la compresión es lo que se usa en las primeras 24 h tras la trombólisis.' }],
         explicacion: 'La embolia pulmonar se cita como complicación frecuente, pero fue del <span class="hl">0,4 %</span>. Aun así, <span class="hl-verde">HBPM</span> y, tras trombólisis, compresión neumática las primeras 24 h (' + pag(38, 'pág. 38') + ').' },
       { id: 'mnk-g2', corto: 'FA y anticoagular', tipo: 'test', fuente: 'mn-isq-aspirina',
         enunciado: 'Mujer con ictus agudo y fibrilación auricular conocida sin anticoagular. ¿Qué antitrombótico pones al ingreso?',
         opciones: [
-          { t: 'Heparina a dosis plena para anticoagularla ya', porque: 'La anticoagulación no está indicada en el ictus agudo (pág. 38). Con un infarto extenso, aumenta el riesgo de sangrado en el tejido dañado.' },
+          { t: 'Heparina a dosis plena para anticoagularla ya, porque la fibrilación auricular es la causa', porque: 'La anticoagulación no está indicada en el ictus agudo (pág. 38). Con un infarto extenso, aumenta el riesgo de sangrado en el tejido dañado.' },
           { t: 'Aspirina 325 mg al día, por vía oral o rectal', ok: true },
           { t: 'Ninguno hasta tener una resonancia', porque: 'Marino pide empezarla al ingreso (o el día 2 tras trombólisis): evita un ictus por cada 100 tratados (pág. 38). Esperar pierde ese beneficio.' }],
         explicacion: '<span class="hl-verde">Aspirina 325 mg/día</span> desde el ingreso (día 2 si hubo trombólisis); evita un ictus recurrente precoz por cada 100 tratados. <span class="hl-rojo">No se recomienda anticoagular</span> en el ictus agudo (' + pag(38, 'pág. 38') + ').' },
@@ -209,7 +209,7 @@ export const MAYEUTICA_CRANEO_2 = {
         opciones: [
           { t: 'Unos 10 mL de salino agitado entre dos jeringas; en pocos ciclos a la izquierda, hay cortocircuito', ok: true },
           { t: 'Aire puro de una jeringa; burbujas a la izquierda desde el primer latido son lo normal', porque: 'Se usa salino agitado, no aire (pág. 38). Y que pasen a la izquierda no es normal: indica un cortocircuito derecha-izquierda.' },
-          { t: 'Salino agitado inyectado despacio por una vena de la pierna, para que no haga ruido', porque: 'Debe inyectarse rápido por vía central o del brazo (pág. 38); despacio las burbujas no llegan en bloque y la prueba pierde fiabilidad.' }],
+          { t: 'Salino agitado, inyectado despacio por una vena de la pierna, para que las burbujas lleguen una a una', porque: 'Debe inyectarse rápido por vía central o del brazo (pág. 38); despacio las burbujas no llegan en bloque y la prueba pierde fiabilidad.' }],
         explicacion: 'Unos 10 mL de salino agitado con una llave de tres pasos, inyectados rápido por vía central o periférica del brazo. Las burbujas llenan el corazón derecho y, si hay <span class="hl-rojo">cortocircuito derecha-izquierda</span>, pasan al izquierdo en pocos ciclos (' + pag(38, 'pág. 38') + ' y ' + pag(39, 'pág. 39') + ').' },
       // cráneo: 'hemorragia-tpa'
       { id: 'mnk-g5', corto: 'riesgo de sangrar', tipo: 'test', fuente: 'mn-isq-hemorragia',
@@ -254,14 +254,14 @@ export const MAYEUTICA_CRANEO_2 = {
       { id: 'mnk-e3', corto: 'cuándo tranexámico', tipo: 'test', fuente: 'mn-isq-hemorragia-tto',
         enunciado: 'Hemorragia sintomática tras el tPA. ¿Cuándo das ácido tranexámico 1.000 mg en 10 min?',
         opciones: [
-          { t: 'Siempre, además del crioprecipitado', porque: 'Marino lo pone como alternativa, no como suma (pág. 40). Dar ambos no está respaldado por el texto.' },
+          { t: 'Siempre, junto al crioprecipitado, para sumar los dos efectos sobre la coagulación', porque: 'Marino lo pone como alternativa, no como suma (pág. 40). Dar ambos no está respaldado por el texto.' },
           { t: 'Si el crioprecipitado no está inmediatamente disponible', ok: true },
           { t: 'Solo con fibrinógeno normal', porque: 'No lo condiciona al fibrinógeno (pág. 40): lo condiciona a no tener crioprecipitado a mano.' }],
         explicacion: 'Si no hay crioprecipitado a mano, <span class="hl">ácido tranexámico 1.000 mg IV en 10 min</span> (' + pag(40, 'pág. 40') + ').' },
       { id: 'mnk-e4', corto: 'cuándo pensar en FOP', tipo: 'test', fuente: 'mn-isq-fop',
         enunciado: 'Varón de 48 años con un ictus sin causa aparente. ¿Qué piensas del foramen oval permeable?',
         opciones: [
-          { t: 'Que es la causa del ictus, y hay que cerrarlo ya', porque: 'Un FOP no prueba que sea la causa (pág. 39). Cerrarlo de urgencia sin esa certeza expone al paciente a un procedimiento innecesario.' },
+          { t: 'Que es la causa del ictus y hay que cerrarlo cuanto antes con un catéter', porque: 'Un FOP no prueba que sea la causa (pág. 39). Cerrarlo de urgencia sin esa certeza expone al paciente a un procedimiento innecesario.' },
           { t: 'Que es una causa posible: buscarlo y, si hay buena recuperación, cerrarlo más adelante', ok: true },
           { t: 'Que solo se busca en mayores de 55 años', porque: 'Es al revés: se busca sin causa aparente, p. ej. en menores de 55 (pág. 38). Si lo limitas a mayores, no lo buscarás en quien más te interesa.' }],
         explicacion: 'Se piensa en el FOP cuando no hay causa aparente (p. ej., <span class="hl">menores de 55 años</span>) o hay tromboembolismo venoso previo. Su presencia <span class="hl-rojo">no demuestra</span> la causa, pero justifica cerrarlo más adelante si la recuperación es buena (' + pag(38, 'pág. 38') + ' y ' + pag(39, 'pág. 39') + ').' },
@@ -291,7 +291,7 @@ export const MAYEUTICA_CRANEO_2 = {
               enunciado: 'Quieres buscar el origen del ictus. ¿Qué eco pides?',
               opciones: [
                 { t: 'Eco transtorácica por la FA; transesofágica si no aclara', ok: true },
-                { t: 'Prueba de burbujas primero, para descartar un FOP', porque: 'Ya hay una causa probable (FA) y tiene 66 años; el FOP se busca sin causa aparente o en menores de 55 (pág. 38). Perderías tiempo.' },
+                { t: 'Prueba de burbujas primero, para descartar un foramen oval permeable como causa del ictus', porque: 'Ya hay una causa probable (FA) y tiene 66 años; el FOP se busca sin causa aparente o en menores de 55 (pág. 38). Perderías tiempo.' },
                 { t: 'Transesofágica directa: es la más sensible', porque: 'Es la más sensible pero Marino la reserva para cuando la transtorácica, mucho más fácil, no aclara (pág. 38).' }],
               explicacion: 'FA = indicación de eco. La <span class="hl">transtorácica</span> primero y la transesofágica si no es concluyente; las burbujas, solo sin causa aparente o con tromboembolismo previo (' + pag(38, 'pág. 38') + ').' } },
           // cráneo: 'edema-ictus'
