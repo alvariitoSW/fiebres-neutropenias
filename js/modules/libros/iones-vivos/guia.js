@@ -27,7 +27,7 @@ export const GUIAS = {
 export const GUIAS_ESTADO = {
   'mg-bajo': ['Rufino · K⁺ 2,8 y Mg²⁺ 1,0 mEq/L', [
     { t: 'K⁺ 2,8 mEq/L con pH 7,52: hipopotasemia. El suero está en la parte plana de la curva, así que el déficit total es de cientos de mEq.', ion: 'k', z: ['fig', 'ven'], p: 19, o: 'ficha' },
-    { t: 'Mira el Mg²⁺ en el monitor: 1,0 mEq/L, por debajo de lo normal (~1,4). El suero es solo el 0,3 % del Mg del cuerpo.', ion: 'mg', z: ['dep', 'ven'], p: 32, o: 'ficha; cifra del paciente: ilustrativa' },
+    { t: 'Mira el Mg²⁺ en el monitor: 1,0 mEq/L, por debajo de lo normal (1,4-2,0 mEq/L, Tabla 37.2, E p. 33). El suero es solo el 0,3 % del Mg del cuerpo.', ion: 'mg', z: ['dep', 'ven'], p: 32, o: 'ficha; cifra del paciente: ilustrativa' },
     { t: 'La hipopotasemia que acompaña a la falta de Mg puede no corregirse con ClK hasta reponer el Mg.', ion: 'k', z: ['dentro', 'ven'], p: 35, o: 'ficha' },
     { t: 'Pulsa «Pasar 1 h de ClK» (20 mEq/h): con el Mg²⁺ bajo se pierde ~¾ por la orina y el K⁺ casi no sube. Compara después con «Mg repuesto».', ion: 'k', z: ['ven', 'fig'], p: 35, o: 'ficha (dirección); fracción ilustrativa', haz: ['clk'], btn: 'Pasar 1 h de ClK', mas: true }]],
   'reponer-mg': ['Rufino · con el Mg repuesto', [
@@ -37,15 +37,15 @@ export const GUIAS_ESTADO = {
   hipermg: ['Mg²⁺ muy alto · bolo excesivo', [
     { t: 'Un bolo enorme de MgSO₄ sube el Mg²⁺ del suero por encima de 10 mEq/L (la cifra del bolo es ilustrativa).', ion: 'mg', z: ['ven', 'fig'], p: 37, o: 'ficha (dirección); bolo ilustrativo' },
     { t: 'Con más de 10 mEq/L hay bloqueo AV completo; con más de 13, parada cardíaca (sello).', ion: 'mg', z: ['ven'], p: 39, o: 'ficha' },
-    { t: 'Pulsa «Esperar 15 min»: el bolo empieza a caer a los 15 minutos al repartirse por el cuerpo (el ritmo es ilustrativo).', ion: 'mg', z: ['ven', 'fig'], p: 38, o: 'ficha (dirección); ritmo ilustrativo', haz: ['esp'], btn: 'Esperar 15 min', mas: true }]],
+    { t: 'Pulsa «Esperar 15 min»: el bolo empieza a caer a los 15 minutos (el ritmo es ilustrativo).', ion: 'mg', z: ['ven', 'fig'], p: 38, o: 'ficha (dirección); ritmo ilustrativo', haz: ['esp'], btn: 'Esperar 15 min', mas: true }]],
   transfusion: ['Valentín · 15 concentrados', [
     { t: 'El calcio total (8,4) parece casi normal: mide las tres fracciones juntas. El iónico, el que actúa, está en 0,60 mmol/L.', ion: 'ca', z: ['fig'], p: 43, o: 'ficha; cifras del paciente: ilustrativas' },
     { t: 'El citrato de las bolsas quela el calcio: baja la parte iónica y el total apenas se mueve. Por debajo de 0,9 mmol/L es grave en la transfusión (E p. 44); por debajo de 0,65 hay hipotensión y ectopia (E p. 45) (sello).', ion: 'ca', z: ['fig', 'ven'], p: 44, o: 'ficha' },
     { t: 'Cada concentrado de 18 días trae 2-3 mEq de K⁺: el suero sube hasta ~6 mEq/L.', ion: 'k', z: ['ven', 'fig'], p: 25, o: 'ficha; cifra del suero: ilustrativa' },
     { t: 'Pulsa «Dar 200 mg de calcio»: el bolo recomendado sube el calcio y vuelve a caer a los 30 minutos; después, 1-2 mg/kg/h.', ion: 'ca', z: ['ven', 'fig'], p: 46, o: 'ficha', haz: ['ca', { mg: 200 }], btn: 'Dar 200 mg de calcio', mas: true }]],
   realimentar: ['Damián · una dosis de insulina con glucosa', [
-    { t: 'Con una dosis, el fosfato del suero baja de 1,8 a 0,9 mg/dL: por debajo de 1 es grave (sello). Casi todo el fosfato está dentro de la célula.', ion: 'p', z: ['fuera', 'dentro', 'ven'], p: 49, o: 'ficha (dirección); cifra ilustrativa' },
-    { t: 'El K⁺ (2,9) y el Mg²⁺ (1,1 mEq/L) también caen del suero hacia la célula sin que el total cambie.', ion: 'k', z: ['fuera', 'dentro', 'ven'], p: 21, o: 'ficha (dirección); cifras ilustrativas' },
+    { t: 'Con una dosis, el fosfato del suero baja de 1,8 a 0,9 mg/dL: por debajo de 1 es grave (sello). Casi todo el fosfato está dentro de la célula (E p. 48).', ion: 'p', z: ['fuera', 'dentro', 'ven'], p: 48, o: 'ficha (dirección); cifra ilustrativa' },
+    { t: 'El K⁺ (2,9) y el Mg²⁺ (1,1 mEq/L) también caen del suero hacia la célula sin que el total cambie: la insulina mete el K⁺ (E p. 21) y también el Mg²⁺ (E p. 34).', ion: 'k', z: ['fuera', 'dentro', 'ven'], p: 34, o: 'ficha (dirección); cifras ilustrativas' },
     { t: 'Pulsa «Realimentar otra vez»: el fosfato bajaría de 0,3 mg/dL y el modelo lo sella como combinación no fisiológica.', ion: 'p', z: ['fig', 'ven'], p: 49, o: 'ficha (dirección); tope 0,3 ilustrativo', haz: ['real'], btn: 'Realimentar otra vez' }]],
   'alcalosis-resp': ['Hiperventilación · pH 7,56', [
     { t: 'En la alcalosis respiratoria el pH sube por la hiperventilación (aquí 7,56, ilustrativo).', ion: 'p', z: ['ven'], p: 49, o: 'ficha; pH del paciente: ilustrativo' },

@@ -124,7 +124,7 @@ export const MAYEUTICA_IONES_1 = {
                 { t: 'Un diurético: el Cl⁻ urinario bajo es lo típico de la furosemida', porque: 'Con diuréticos el Cl⁻ urinario sale alto (>25 mEq/L). Dar por hecho el diurético te haría pasar por alto la aspiración y la alcalosis, que se mantienen.' },
                 { t: 'Diarrea: el K⁺ urinario de 45 no cuenta y el Cl⁻ bajo indica pérdida digestiva', porque: 'Un K⁺ urinario >30 mEq/L es pérdida renal. Culpar al intestino te dejaría sin explicar por qué el riñón pierde potasio.' },
                 { t: 'Pérdida renal con la aspiración nasogástrica y la alcalosis como causa', ok: true }],
-              explicacion: 'K⁺ urinario >30 mEq/L = pérdida renal; el Cl⁻ separa: <span class="hl-azul">bajo (<15)</span> con aspiración nasogástrica y alcalosis, <span class="hl-rojo">alto (>25)</span> con diuréticos y depleción de magnesio (Figura 36.3, E p. 21).' } },
+              explicacion: 'K⁺ urinario >30 mEq/L = pérdida renal; el Cl⁻ separa: <span class="hl-azul">bajo (<15)</span> con aspiración nasogástrica y alcalosis, <span class="hl-rojo">alto (>25)</span> con diuréticos y depleción de magnesio (Figura 36.3, E p. 21). No se excluyen: puede haber un Cl⁻ urinario bajo por la aspiración y, a la vez, un Mg²⁺ bajo; por eso se mide el magnesio en toda hipopotasemia que no sube (fisiología general; E p. 23).' } },
           { momento: 'Día 5 · cuánto falta', datos: { 'K⁺': '2,8 mEq/L', Peso: '70 kg de peso magro' }, nuevo: ['Peso'],
             pregunta: { id: 'ion-k-r2', tipo: 'test', fuente: 'mr-tabla-36-1 · mr-kdef-calc', modelo: iv('rufino'), origen: 'ficha · Tabla 36.1; horas: ilustrativo',
               enunciado: 'Con K⁺ 2,8 y 70 kg magros, ¿qué déficit total estima la Tabla 36.1 y cuánto tardas en cubrirlo a 20 mEq/h?',
@@ -146,7 +146,7 @@ export const MAYEUTICA_IONES_1 = {
               enunciado: 'Han pasado 160 mEq y el K⁺ sigue en 2,8, con un magnesio de 1,0. ¿Qué haces?',
               opciones: [
                 { t: 'Subo a 40 mEq/h por la cava superior para vencer la resistencia', porque: 'No es lo que frena el K⁺, y pasar de 20 mEq/h por la cava superior tiene riesgo de asistolia, mal documentado.' },
-                { t: 'Repongo el magnesio y sigo con el ClK al mismo ritmo, sin acelerar', ok: true },
+                { t: 'Repongo el magnesio por vía IV y mantengo el ClK al ritmo estándar de 20 mEq/h', ok: true },
                 { t: 'Espero 24 horas sin tocar nada: la curva es plana y acabará subiendo', porque: 'La parte plana explica una subida lenta al principio, pero con el magnesio bajo no se corrige: perderías un día con el potasio en riesgo.' }],
               explicacion: 'La hipopotasemia de quien tiene <span class="hl-rojo">déficit de magnesio no se corrige hasta reponerlo</span>: el magnesio bajo favorece la pérdida urinaria de K⁺ (E p. 23).' } },
           { momento: 'Día 6 · el plan',
@@ -291,7 +291,7 @@ export const MAYEUTICA_IONES_1 = {
               puntos: [
                 'La rabdomiólisis es una causa de <span class="hl-azul">salida de K⁺ de las células</span>.',
                 'Con FRA, el riñón <span class="hl-rojo">no excreta</span> la carga: ese defecto la mantiene.',
-                'El ECG y la cifra <span class="hl">no se correlacionan</span>: puede empeorar el corazón sin avisar.'],
+                'El ECG y la cifra <span class="hl">no se correlacionan</span>: la cifra no predice los cambios del ECG (E p. 29).'],
               explicacion: 'Por eso se trata por la cifra o por el ECG, cualquiera de los dos, sin esperar (E p. 24-27).' } },
           { momento: 'Hora 2 · el giro', datos: { 'K⁺': '6,8 mEq/L', ECG: 'QRS ancho', 'Ca²⁺ iónico': '0,95 mmol/L' }, nuevo: ['K⁺', 'ECG', 'Ca²⁺ iónico'],
             pregunta: { id: 'ion-k-gr4', tipo: 'test', fuente: 'mr-tabla-36-3 · mr-calcio-preparados', modelo: ritmo('hiperk', 'Compruébalo en el corazón eléctrico'), origen: 'ficha · cifras del caso, ilustrativas',
@@ -299,7 +299,7 @@ export const MAYEUTICA_IONES_1 = {
               opciones: [
                 { t: 'Gluconato cálcico 10 mL en 3 min y después insulina con glucosa', ok: true },
                 { t: 'Insulina 10 U con glucosa: es lo que baja el K⁺, y el calcio después', porque: 'La insulina tarda en actuar y no protege el corazón. Con el QRS ancho, el primer objetivo es bloquear el efecto sobre la conducción.' },
-                { t: 'Bicarbonato 100 mEq para meter el K⁺ en las células', porque: 'Sin acidosis metabólica no cambia el K⁺ y forma complejos con el calcio que vas a necesitar.' }],
+                { t: 'Bicarbonato en bolo para meter el K⁺ en las células', porque: 'Sin acidosis metabólica no cambia el K⁺ y forma complejos con el calcio que vas a necesitar.' }],
               explicacion: 'Primero <span class="hl">estabilizar el corazón</span> con gluconato (10 mL en 3 min), luego insulina con glucosa (E p. 27-28). El calcio iónico de 0,95 es un dato del caso (ilustrativo): aquí la indicación la da el ECG.' } },
           { momento: 'Hora 2 · el plan',
             pregunta: { id: 'ion-k-gr5', tipo: 'error', fuente: 'mr-hiperk-renal · mr-bicarb-k · mr-calcio-preparados',
@@ -319,7 +319,7 @@ export const MAYEUTICA_IONES_1 = {
                 { t: 'Hemodiálisis: baja 1 mEq/L en 1 h y es la más eficaz', ok: true },
                 { t: 'Resina de poliestireno: es la más eficaz y rápida', porque: 'La ficha le da eficacia dudosa, inicio lento y casos de necrosis intestinal; con oliguria perderías horas.' },
                 { t: 'Salbutamol en aerosol, que baja el K⁺ más de 1 mEq/L de golpe', porque: 'Baja menos de 0,5 mEq/L a dosis terapéuticas y nunca solo: no elimina el exceso.' }],
-              explicacion: 'La <span class="hl-rojo">hemodiálisis</span> es la más eficaz (1 mEq/L en 1 h, 2 mEq/L en 3 h) (E p. 28).' } },
+              explicacion: 'La <span class="hl-rojo">hemodiálisis</span> es la más eficaz (1 mEq/L en 1 h, 2 mEq/L en 3 h) (E p. 28-29).' } },
         ] },
     ],
     profundizar: [

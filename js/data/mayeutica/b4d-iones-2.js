@@ -54,8 +54,8 @@ export const MAYEUTICA_IONES_2 = {
             { t: 'La espironolactona: actúa en el colector, donde se decide el magnesio final', porque: 'Los ahorradores de potasio no dan depleción de magnesio; el que lo gasta es el de asa. Culparla dejaría la furosemida sin tocar.' },
             { t: 'Los dos por igual: cualquier diurético frena la reabsorción de sodio y arrastra magnesio con él', porque: 'Los ahorradores de potasio no producen depleción de magnesio. Si los pusieras en el mismo saco, retirarías la espironolactona sin resolver la causa.' }],
         explicacion: 'Los diuréticos son una causa líder de déficit en la UCI: al frenar la reabsorción de Na⁺ frenan la de Mg, y <span class="hl-rojo">el de asa más que ninguno</span> (furosemida, ácido etacrínico): déficit en el 50 % de los tratados de forma crónica. Las tiazidas también; <span class="hl-verde">los ahorradores de potasio no</span> (E p. 34).' },
-      { id: 'ion-mg-g6', corto: 'K⁺ que no sube', tipo: 'test', fuente: 'mr-mg-electrolitos · mr-mg-final', modelo: IV('mg-bajo', 'Compruébalo en los iones vivos (K⁺ y Mg bajo)'),
-        enunciado: 'Un paciente con hipopotasemia por diuréticos recibe ClK varias horas y el potasio apenas se mueve. ¿Qué haces antes de subir la velocidad?',
+      { id: 'ion-mg-g6', corto: 'K⁺ que no sube', tipo: 'test', fuente: 'mr-mg-hipok · mr-mg-electrolitos · mr-mg-final', modelo: IV('mg-bajo', 'Compruébalo en los iones vivos (K⁺ y Mg bajo)'),
+        enunciado: 'Un paciente con hipopotasemia por diuréticos recibe ClK varias horas y el potasio sigue en 2,8 mEq/L. ¿Qué haces antes de subir la velocidad?',
         opciones: [
           { t: 'Subir el ClK al doble: la hipopotasemia refractaria solo es cuestión de dosis y de velocidad de infusión', porque: 'Con el magnesio bajo el K⁺ puede no corregirse por más ClK que des; subir la velocidad añade riesgo (un ClK rápido y concentrado irrita la vena y pide vena central grande, E p. 23) sin resolver la causa.' },
           { t: 'Cambiar a potasio oral: la absorción digestiva evita lo que bloquea el IV', porque: 'El problema no es la vía. Mientras falte magnesio, la hipopotasemia no se corrige, entre por donde entre.' },
@@ -107,9 +107,9 @@ export const MAYEUTICA_IONES_2 = {
       { id: 'ion-mg-caso-damian', titulo: 'Damián, 52 años: el magnesio que engaña', corto: 'Caso · Damián', sub: 'alcohólico desnutrido con K⁺ bajo',
         paciente: { Edad: '52 años', Motivo: 'alcoholismo crónico, desnutrido, con vómitos', Análisis: 'valores ilustrativos de un paciente inventado' },
         pasos: [
-          { momento: 'Ingreso', datos: { 'K⁺': '3,0 mEq/L' }, nuevo: ['K⁺'],
+          { momento: 'Ingreso', datos: { 'K⁺': '2,9 mEq/L' }, nuevo: ['K⁺'],
             pregunta: { id: 'ion-mg-d1', tipo: 'test', fuente: 'mr-mg-otras · mr-mg-electrolitos', modeloVivo: IV('realimentar', 'Compruébalo en los iones vivos (Damián)'),
-              enunciado: 'Damián llega desnutrido, con vómitos y un K⁺ de 3,0. Además de reponer potasio, ¿qué pides?',
+              enunciado: 'Damián llega desnutrido, con vómitos y un K⁺ de 2,9. Además de reponer potasio, ¿qué pides?',
               opciones: [
                 { t: 'Nada más: los vómitos pierden magnesio y la reposición de K⁺ lo corregirá todo', porque: 'La secreción del tubo alto lleva solo 1-2 mEq/L de Mg. Y con el magnesio bajo el K⁺ puede no subir por más ClK que des.' },
                 { t: 'Un Mg sérico: el alcoholismo crónico lo baja en el 44 % y el K⁺ puede quedar refractario', ok: true },
@@ -120,13 +120,13 @@ export const MAYEUTICA_IONES_2 = {
               enunciado: 'El Mg de Damián es 1,1 mEq/L. Si mañana saliera normal, ¿por qué no te fiarías de él para saber lo que le falta? Son tres cosas.',
               cuantas: 'son tres cosas',
               puntos: [
-                'El plasma tiene solo unos <span class="hl">6 de los 2.000 mEq</span> del cuerpo (0,3 %): el hueso y el músculo guardan el resto.',
+                'El plasma tiene solo unos <span class="hl">6 de los 2.000 mEq</span> del cuerpo (0,3 %): el hueso (53 %), el músculo (27 %), los tejidos blandos (19 %) y los hematíes (0,7 %) guardan el resto (Tabla 37.1, E p. 32).',
                 'El sérico <span class="hl-azul">se normaliza en 1-2 días</span> de reposición, pero los depósitos tardan varios días en llenarse.',
                 'La orina de 24 h cae a casi nada <span class="hl-rojo">antes</span> de que baje el plasma: un sérico normal no descarta el déficit.'],
               explicacion: 'Tabla 37.1 (plasma 6 mEq, 0,3 %) y Figura 37.1 (E p. 31-33); la normalización del sérico frente a los depósitos, en el apartado de vigilancia (E p. 37-38).' } },
           { momento: 'Ingreso · plan',
             pregunta: { id: 'ion-mg-d3', tipo: 'test', fuente: 'mr-mg-leve · mr-mg-moderada', modeloVivo: IV('reponer-mg', 'Compruébalo en los iones vivos (reponer Mg)'),
-              enunciado: 'Mg 1,1 mEq/L y K⁺ 3,0, sin arritmia ni convulsiones y con función renal normal. El Mg cae en el rango del protocolo leve (1-1,4). ¿Qué eliges?',
+              enunciado: 'Mg 1,1 mEq/L y K⁺ 2,9, sin arritmia ni convulsiones y con función renal normal. El Mg cae en el rango del protocolo leve (1-1,4). ¿Qué eliges?',
               opciones: [
                 { t: 'El moderado, porque hay otra alteración electrolítica asociada (el K⁺ bajo)', ok: true },
                 { t: 'El leve: 1 mEq/kg el primer día, porque el Mg está entre 1 y 1,4 mEq/L', porque: 'El leve es solo para el paciente sin otros trastornos electrolíticos; con el K⁺ bajo te quedarías corto.' },
@@ -234,7 +234,7 @@ export const MAYEUTICA_IONES_2 = {
         enunciado: 'Hipermagnesemia con bloqueo AV avanzado. ¿Qué haces mientras llega la hemodiálisis?',
         opciones: [
             { t: 'Sueroterapia con furosemida y esperar la hemodiálisis sin dar calcio, porque el bloqueo todavía no es completo', porque: 'Esa pauta es de los casos menos avanzados y con función renal conservada. Con bloqueo AV avanzado dejarías sin el antagonista que protege la conducción mientras llega la diálisis.' },
-            { t: 'Ringer lactato en perfusión: el calcio que lleva corrige el magnesio', porque: 'El calcio del Ringer en esa cantidad no revierte un bloqueo AV. Esperar a eso retrasaría el antagonista real y el bloqueo progresaría.' },
+            { t: 'Gluconato cálcico solo si llega a la parada: hasta entonces, esperar la hemodiálisis', porque: 'El gluconato cálcico se da ya, mientras llega la hemodiálisis, para antagonizar el efecto cardiovascular (E p. 39). Esperar a la parada es llegar tarde al bloqueo.' },
             { t: 'Gluconato cálcico 1 g IV en 2-3 minutos, que antagoniza el efecto cardiovascular temporalmente', ok: true }],
         explicacion: 'El magnesio es el «<span class="hl-azul">calcioantagonista fisiológico</span>»: lo grave es el bloqueo de la conducción AV. Tratamiento de elección: <span class="hl">hemodiálisis</span>; entre tanto, <span class="hl">gluconato cálcico 1 g IV en 2-3 min</span>. Con volumen permitido y algo de función renal, sueroterapia con furosemida en los casos menos avanzados (E p. 39).' },
       { id: 'ion-mg-x4', corto: 'la hoja', tipo: 'error', fuente: 'mr-mg-preparados · mr-mg-retencion-limite · mr-hipermg-causas',

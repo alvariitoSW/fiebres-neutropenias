@@ -123,7 +123,7 @@ export const MAYEUTICA_IONES_3 = {
                 { t: 'Pido un calcio iónico con la muestra sin burbujas y en un tubo sin heparina, citrato ni EDTA.' },
                 { t: 'La albúmina de 3,0 g/dL puede bajar el total sin que cambie el iónico: por eso no me fío del total para decidir.' },
                 { t: 'Si el iónico confirma el citrato como causa, lo interpreto con el pH (7,22) delante.' }],
-              explicacion: 'El iónico es la fracción activa y la única que se mide de forma fiable; con albúmina baja el total cae sin que cambie el iónico (E p. 42-43), y la muestra debe evitar burbujas y los anticoagulantes que fijan calcio (E p. 43).' } },
+              explicacion: 'El iónico es la fracción activa y la única que se mide de forma fiable; con albúmina baja el total cae sin que cambie el iónico (E p. 42-43), y la muestra debe evitar burbujas y los anticoagulantes que fijan calcio (E p. 43). Interpretar el iónico con el pH delante (cuarta frase) es fisiología general.' } },
           { momento: 'Hora 3 · sin síntomas',
             pregunta: { id: 'ion-ca-c3', tipo: 'test', fuente: 'mr-hipoca-clinica · mr-hipoca-cv · mr-ca-cuidado',
               enunciado: 'Con el iónico en 0,82 mmol/L, PA estable y sin ectopia ventricular, ¿qué haces según el criterio de Marino?',
@@ -416,7 +416,7 @@ export const MAYEUTICA_IONES_3 = {
         paciente: { Edad: '52 años', Motivo: 'alcohólico desnutrido, atracón 2 días antes, vómitos; nutrición parenteral', Peso: '70 kg (ilustrativo)' },
         pasos: [
           { momento: 'Día 3 de NPT',
-            datos: { 'Fosfato': '0,9 mg/dL (ilustrativo)', 'K⁺': '3,0 mEq/L (ilustrativo)', Síntomas: 'ninguno' }, nuevo: ['Fosfato', 'K⁺'],
+            datos: { 'Fosfato': '0,9 mg/dL (ilustrativo)', 'K⁺': '2,9 mEq/L (ilustrativo)', Síntomas: 'ninguno' }, nuevo: ['Fosfato', 'K⁺'],
             pregunta: { id: 'ion-p-c1', tipo: 'test', fuente: 'mr-hipop-glucosa · mar-img-38-2', modeloVivo: IV('realimentar', 'Compruébalo en los iones vivos (Damián con insulina)'),
               enunciado: 'El fosfato de Damián cae a 0,9 mg/dL al tercer día de nutrición parenteral. ¿Qué mecanismo explica la caída?',
               opciones: [
@@ -438,10 +438,10 @@ export const MAYEUTICA_IONES_3 = {
           { momento: 'Día 3 · la pauta',
             calculadora: { ir: 'mr-fosfato-calc', nombre: 'Reposición de fosfato IV (Tabla 38.5)' },
             pregunta: { id: 'ion-p-c3', tipo: 'test', fuente: 'mr-tabla-38-5 · mr-fosfato-soluciones',
-              enunciado: 'Con fosfato 0,9 mg/dL, 70 kg y K⁺ 3,0 mEq/L, ¿qué dosis y qué solución?',
+              enunciado: 'Con fosfato 0,9 mg/dL, 70 kg y K⁺ 2,9 mEq/L, ¿qué dosis y qué solución?',
               opciones: [
                 { t: '40 mmol de fosfato potásico (K⁺ <4)', ok: true },
-                { t: '40 mmol de fosfato sódico (cualquier K⁺)', porque: 'La dosis es correcta, pero con K⁺ 3,0 la sal de potasio aporta también el potasio que falta; el sódico es para K⁺ ≥4.' },
+                { t: '40 mmol de fosfato sódico (cualquier K⁺)', porque: 'La dosis es correcta, pero con K⁺ 2,9 la sal de potasio aporta también el potasio que falta; el sódico es para K⁺ ≥4.' },
                 { t: '30 mmol de fosfato potásico (fila de 1-1,7)', porque: 'Con 0,9 mg/dL corresponde la fila <1: te quedarías corto en un fosfato grave.' }],
               explicacion: 'Tabla 38.5: 61-80 kg con PO₄ <1 mg/dL = <span class="hl">40 mmol</span>; K⁺ <4 mEq/L → <span class="hl-azul">potásico</span> (3 mmol de PO₄ y 4,3 mEq de K⁺ por mL) (E p. 51).' } },
           { momento: 'Día 4 · el giro', datos: { Síntomas: 'disnea y debilidad generalizada', Fosfato: '0,7 mg/dL (ilustrativo)' }, nuevo: ['Síntomas', 'Fosfato'],
