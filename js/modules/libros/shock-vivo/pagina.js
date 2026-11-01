@@ -140,7 +140,7 @@ function marca(k, v) {
   const T = D.OBJETIVOS[tablaActual()], f = T.filas[k];
   if (!f) return { cls: '', html: '' };
   if (k === 'pcp' && conSoporte()) return { cls: '', html: '<span class="marca sin" title="Con soporte mecánico, la fuente no da una PCP objetivo">—</span>', obj: 'con soporte: sin meta' };
-  if (k === 'pcp' && est.pac.tipo === 'septo') return { cls: '', html: '<span class="marca sin" title="Con el cortocircuito, el VI se descarga hacia el VD y la PCP no mide cuánto se inunda el pulmón">—</span>', obj: 'cortocircuito: sin meta' };
+  if (k === 'pcp' && est.pac.tipo === 'septo') return { cls: '', html: '<span class="marca sin" title="Con el cortocircuito, el VI se descarga hacia el VD y la PCP no mide cuánto se inunda el pulmón">—</span>', obj: 'el modelo no sube la PCP; el libro: inunda la circulación pulmonar (p. 38)' };
   const ok = f[1](v);
   return { cls: ok ? 'si' : 'no', html: `<span class="marca ${ok ? 'si' : 'no'}">${ok ? '✓' : '✗'}</span>`, obj: `obj. ${f[0]}` };
 }
@@ -188,6 +188,7 @@ function pintarCifras() {
     let t = p.t ?? (T.filas[p.k] ? 'obj. ' + T.filas[p.k][0] : 'sin objetivo en esta tabla');
     if (p.k === 'ven' && tablaActual() === 'umi-sepsis-6h') t = 'obj. ≥70 % · Marino >50 % ⚖';
     if (p.k === 'ic' && conSoporte()) t = 'total: bomba + corazón';
+    if (p.k === 'vs' && est.pac.tipo === 'ic' && cab.ajuste.cpap > 0) t = '≈ igual (modelo) · libro: sube (p. 14)';
     return `<button type="button" class="celda ${m.cls}" data-fila="${p.k}" title="${t}"><span class="k"><span>${et}</span>${m.html}</span><span class="g">${tap ? '?' : coma(v, p.d || 0)}<small>${p.u}</small></span><span class="t">${t}</span></button>`;
   }).join(''));
   // las fuentes que discrepan, a la vista (no solo en las notas)

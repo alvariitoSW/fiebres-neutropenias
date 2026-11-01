@@ -66,10 +66,26 @@ export function montarCorazon(svg) {
   const c = crearCorazonCorte(svg.querySelector('#cor-corazon'), { pre: 'cor', vci: 160, aorta: 'corta' });
   const gg = svg.querySelector('#cor-gotas'), ga = svg.querySelector('#cor-arteriola');
   let edPrev = -1, rPrev = -1;
+  // capa propia del shock vivo sobre el corte: el cortocircuito VI → VD (grosor ∝ Qp/Qs) y la arteria pulmonar inundada
+  const capaCiv = document.createElementNS('http://www.w3.org/2000/svg', 'g'); capaCiv.id = 'cor-civ'; svg.querySelector('#cor-corazon').append(capaCiv);
+  let civPrev = '';
+  const pintarCiv = (cab) => {
+    const orif = cab.m.p.civ || 0, qpqs = cab.lectura?.u?.qpqs ?? 1, sept = svg.querySelector('#cor-tabique'), vd = svg.querySelector('#cor-vd');
+    if (orif < 0.2 || qpqs < 1.05 || !sept || !vd) { if (civPrev) { civPrev = ''; capaCiv.innerHTML = ''; } return; }
+    const a = sept.getBBox(), b = vd.getBBox(), q = f1(cl(qpqs, 1, 3));
+    const k = q + '|' + f1(a.x) + f1(a.y) + f1(b.x) + f1(b.y); if (k === civPrev) return; civPrev = k;
+    const ax = a.x + a.width / 2, ay = a.y + a.height * 0.5, bx = b.x + b.width * 0.55, w = f1(2 + 5 * (q - 1));   // grosor: ilustrativo
+    const rojo = 'fill:none;stroke:color-mix(in srgb, var(--accent-red) 70%, var(--text-main));stroke-linecap:round', txt = 'font:600 11px system-ui,sans-serif;fill:var(--text-main);paint-order:stroke;stroke:var(--bg-main);stroke-width:2px';
+    // la arteria pulmonar: del infundíbulo (detrás de la raíz aórtica) arqueada hacia la izquierda del paciente, llena de flujo
+    capaCiv.innerHTML = `<path d="M${f1(ax + 4)} ${f1(ay)}L${f1(bx)} ${f1(ay - 2)}" style="${rojo};stroke-width:${w}" opacity=".6"/><path d="M${f1(bx - 4)} ${f1(ay - 3)}l-4 -2m4 2l-4 3" style="${rojo};stroke-width:1.6"/>`
+      + `<path d="M110 114C118 74 150 50 196 48" style="${rojo};stroke-width:${f1(5 + 4 * (q - 1))}" opacity=".5"/>`
+      + `<text x="${f1(b.x + 2)}" y="${f1(ay - w / 2 - 6)}" style="${txt}">CIV: VI → VD</text><text x="142" y="38" style="${txt}">AP inundada</text>`;
+  };
   return {
     pintar(cab, dt = 1 / 60, quieto = false) {
       if (!cab?.m) return;
       c.pintar(estadoCorte(cab), dt, quieto);
+      pintarCiv(cab);
       const L = cab.lectura, ed = Math.round((L?.u?.vEdema || 0) / 12) + (L?.u?.vEdema >= 1000 ? 1000 : 0);
       if (ed !== edPrev) { edPrev = ed; gg.innerHTML = gotas(L?.u?.vEdema); }
       // la luz de la arteriola con la resistencia (Poiseuille: r ∝ R^-1/4; fisiología general)
