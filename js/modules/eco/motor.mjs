@@ -190,6 +190,9 @@ export const BASE = {
   // contrae más tiempo que el VI (asincronía interventricular; fisiología general): su presión sigue alta cuando el VI
   // ya se relaja y el tabique se aplana al final de la sístole. Ver Atlas · 14
   durVd: 1,
+  // fracción de subida de la activación del VD (null = la del VI). Con la del VI la presión VD−AD en el chorro de IT acaba en rampa en la
+  // sobrecarga de presión; subiendo antes hace domo (Zoghbi 2017, Fig. 29, PDF p. 49). Lo fijan las enfermedades en escenarios.mjs. ILUSTRATIVO
+  fSubidaVd: null, qSubidaVd: null,
   // insuficiencia tricuspídea: orificio regurgitante efectivo (cm²), igual que eroaMitral. 0 = competente
   eroaTricus: 0,
   // ISQUEMIA DEL VD: el VD se perfunde en sístole y en diástole porque su presión es baja; cuando su presión sistólica se acerca
@@ -398,7 +401,8 @@ export function crearMotor(ajustes = {}) {
     // y relajación lenta la cola era aún ~0,1 y la presión daba un salto de 4-5 mmHg al volver a empezar el latido)
     s.eVi = activacionVi(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida, p.relajacion);
     // activación del VD: la del VI salvo que su sístole dure más (durVd)
-    const eVd = p.durVd === 1 ? eVen : activacion(tv0, p.fSubida * p.tsVen * kV * p.durVd, (1 - p.fSubida) * p.tsVen * kV * p.durVd, p.qSubida);
+    const fV = p.fSubidaVd ?? p.fSubida, qV = p.qSubidaVd ?? p.qSubida;
+    const eVd = activacion(tv0, fV * p.tsVen * kV * p.durVd, (1 - fV) * p.tsVen * kV * p.durVd, qV);
     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri - s.estiraPeri) / p.phiPeri);
