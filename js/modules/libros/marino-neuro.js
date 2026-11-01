@@ -5,9 +5,6 @@
 // tablas y del texto citados en la propia ficha.
 import { initCorkboard } from '../../core/corkboard.js';
 import { initSiNoWizard } from '../../core/wizard.js';
-import { arrancar } from '../../core/ui.js';
-import { montarMayeutica } from '../../core/mayeutica.js';
-import { MAYEUTICA_B6A } from '../../data/mayeutica/b6a.js';
 
 const $ = id => document.getElementById(id);
 const num = el => (el && el.value !== '' ? Number(el.value) : null);
@@ -392,7 +389,4 @@ export function init() {
     enlazar(['mn-rev-farmaco', 'mn-rev-peso', 'mn-rev-inr', 'mn-rev-dosis', 'mn-rev-horas', 'mn-rev-andexanet'], calcReversion);
     enlazar(['mn-ppc-pam', 'mn-ppc-pic'], calcPpc);
     enlazar(['mn-nimo-dia'], calcNimodipino);
-    // Texto | Estudiar en las fichas que ya tienen su Mayéutica (bloque 6a). Arranca aparte: si falla, el cuaderno sigue.
-    arrancar('Estudiar en Marino Neurología', () => Object.entries(MAYEUTICA_B6A)
-        .forEach(([ficha, datos]) => montarMayeutica(ficha, datos)));
 }
