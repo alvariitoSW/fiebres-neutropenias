@@ -52,7 +52,7 @@ const contestar = async (Z, q, mal) => {
   const r = await p.evaluate(z => { const res = document.querySelector(z + ' .may-res'); if (!res) return null; return { txt: res.textContent.replace(/\s+/g, ' ').trim().slice(0, 110), sig: !!res.querySelector('[data-accion="sig"]'), modelo: [...res.querySelectorAll('.may-modelo')].map(e => e.textContent.trim()), ver: res.querySelectorAll('.may-ir').length }; }, Z);
   return { ...r, antesModelo, desb: await desb() };
 };
-const FOTOS = { 'mr-fra-criterios': { paso: 5, foto: '4-ruben-error', fin: '5-ruben-lleva' }, 'mr-fra-causas': { paso: 4, foto: '6-alvaro-gradiente' } };
+const FOTOS = { 'mr-fra-criterios': { paso: 5, foto: '4-ruben-error', fin: '5-ruben-lleva' }, 'mr-fra-causas': { paso: 6, foto: '6-alvaro-adjunto', fin: '7-alvaro-lleva' } };
 for (const ficha of ['mr-fra-criterios', 'mr-fra-causas']) {
   const d = MAYEUTICA_RINON_1[ficha], F = FOTOS[ficha];
   await abrir(ficha); await p.waitForTimeout(400);
