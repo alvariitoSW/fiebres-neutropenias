@@ -3,7 +3,7 @@
 // Las respuestas viven aquí: el HTML no las lleva hasta que se contesta. Orden de la guía: intestino → hígado → astrocito.
 // Formato de una pregunta: { id, num, grupo ('guia'|'examen'), tipo ('test'|'destapa'|'error'), corto, enunciado, opciones[{ t, ok, porque }]
 // | puntos[] | frases[{ t, mal, c }], explicacion, fuente[páginas del PDF], estado (clave de paciente), ajustes (mandos), predice, sinModelo,
-// tocar { txt, k, de, a } }. Todas las páginas son del PDF docs/marino-2024-abdomen-temperatura-caps39-44.pdf (el cap. 39 es p. 2-13).
+// tocar { txt, k, de, a } }. Todas las páginas son del PDF docs/marino-2024-abdomen-temperatura-caps39-44.pdf (el cap. 39 es p. 2-15).
 // Las cifras de los pacientes salen del monitor del modelo (ilustrativo); los umbrales, de la ficha.
 const T = (id, num, grupo, corto, o) => ({ id: 'hpv-' + id, num, grupo, tipo: 'test', corto, ...o });
 export const PREGUNTAS = [
@@ -28,7 +28,7 @@ export const PREGUNTAS = [
     enunciado: 'Casimira ya lleva lactulosa. La R1 pregunta: «¿para qué sumar rifaximina, y por qué no basta con las dos?». <b>¿Qué le contestas?</b> Son tres cosas.',
     puntos: ['La rifaximina es un <span class="hl-azul">antibiótico no absorbible</span> de amplio espectro: reduce la producción de amonio en el colon, en pauta de <span class="hl-azul">400 mg tres veces al día durante al menos 10 días</span> (p. 7).',
       'Es eficaz sola, pero <span class="hl-azul">suele combinarse con la lactulosa</span> (p. 7).',
-      'En el fallo agudo, ninguna de las dos basta: la <span class="hl-rojo">CVVH es superior</span> a la lactulosa y a la rifaximina, porque depura la sangre (p. 8).'],
+      'En el fallo agudo, la <span class="hl-rojo">CVVH es superior</span> a la lactulosa y a la rifaximina (p. 7-8); depura la sangre, y ellas solo frenan lo que fabrica el colon (razonamiento).'],
     explicacion: 'La lactulosa y la rifaximina bajan el amonio que fabrica el intestino; la hemofiltración lo retira de la sangre. En el fallo agudo con encefalopatía, la CVVH es superior a las dos (p. 7-8).', fuente: [7, 8] },
   T('g4', 'G4', 'guia', 'por qué sube el amonio', { estado: 'sano', predice: true,
     enunciado: 'El intestino de Casimira fabrica amonio como el de cualquiera. Su hígado pierde el 80 % de los hepatocitos. <b>¿Por qué sube su amonio arterial?</b>',
@@ -42,9 +42,9 @@ export const PREGUNTAS = [
   T('g5', 'G5', 'guia', 'TIPS y amonio', { estado: 'hilario', predice: true,
     enunciado: 'Un cirrótico sangra por varices pese a la endoscopia y al octreótido. Se plantea un TIPS, que comunica la porta con las venas hepáticas. <b>¿Qué esperas de su amonio?</b>',
     opciones: [
-      { t: 'Baja: al descomprimirse la porta, el hígado trabaja mejor.', porque: 'Descomprime la porta, sí, pero la sangre ya no atraviesa el hígado: sube el riesgo de encefalopatía (p. 10). Si esperas que baje, no vigilarás su mente y la encefalopatía llegará sin lactulosa.' },
+      { t: 'Baja: al descomprimirse la porta, el hígado trabaja mejor.', porque: 'Descomprime la porta, sí, pero la sangre ya no atraviesa el hígado: sube el riesgo de encefalopatía (p. 10). Si esperas que baje (razonamiento), no vigilarás su mente y la encefalopatía llegará sin lactulosa.' },
       { t: 'No cambia: el TIPS solo trata las varices y no tiene relación con el amonio ni con la mente.', porque: 'La ficha lo dice sin rodeos: el TIPS «cambia un problema por otro» porque saltar el hígado aumenta el riesgo de encefalopatía (p. 10). Creerlo inocuo deja al paciente sin vigilancia.' },
-      { t: 'Sube: la sangre de la porta se salta el hígado y el NH₃ llega entero.', ok: true },
+      { t: 'Sube: la sangre de la porta se salta el hígado y aumenta el riesgo de encefalopatía.', ok: true },
       { t: 'Baja: sin hipertensión portal, el colon produce menos amonio.', porque: 'La ficha no atribuye nada a la producción del colon; el riesgo viene de saltar el hígado (p. 10). Con esa idea retirarías la lactulosa y llegaría la encefalopatía.' }],
     explicacion: 'El TIPS crea una derivación entre la porta y las venas hepáticas que alivia la hipertensión portal. Al saltar el hígado, aumenta el riesgo de encefalopatía (p. 10); en el modelo (ilustrativo) el amonio sube, aunque la ficha no da una cifra.', fuente: [10],
     tocar: { txt: 'Compruébalo: pon el TIPS', k: 'tips', de: 0, a: 1 } }),
@@ -61,7 +61,7 @@ export const PREGUNTAS = [
     enunciado: 'Casimira, día 2: apática, no sabe en qué día está, pero responde bien y sabe dónde se encuentra. <b>¿Qué grado de West Haven tiene?</b>',
     opciones: [
       { t: 'Grado 1: atención corta y cambio de personalidad.', porque: 'La desorientación en el tiempo ya es grado 2 (p. 7). Si la dejas en el 1, retrasarás la vigilancia del edema de una paciente que ya pasa de 150.' },
-      { t: 'Grado 3: estuporosa, desorientada en lugar y tiempo, pero reactiva.', porque: 'Casimira responde y sabe dónde está; el grado 3 exige estupor y desorientación en lugar y tiempo (p. 7). Sobrestimarla la llevaría a intubar sin razón.' },
+      { t: 'Grado 3: estuporosa, desorientada en lugar y tiempo, pero reactiva.', porque: 'Casimira responde y sabe dónde está; el grado 3 exige estupor y desorientación en lugar y tiempo (p. 7). Sobrestimarla la llevaría a intubar sin razón (razonamiento).' },
       { t: 'Grado 2: apatía o letargia y desorientación en el tiempo.', ok: true },
       { t: 'Grado 4: coma.', porque: 'El coma es el grado 4 (p. 7); Casimira habla. Con esa idea esperarías a verla en coma para consultar a trasplante, que se avisa ante una encefalopatía progresiva (p. 8).' }],
     explicacion: 'La escala West Haven (Tabla 39.2): grado 1, atención corta y cambio de personalidad (p. 6); grado 2, apatía o letargia y desorientación en el tiempo; grado 3, estupor con respuesta y desorientación en lugar y tiempo; grado 4, coma (p. 7).', fuente: [6, 7] }),
@@ -78,8 +78,8 @@ export const PREGUNTAS = [
     opciones: [
       { t: 'Baja más el amonio sin coste: más deposiciones, menos bacterias productoras y ninguna pérdida.', porque: 'La lactulosa produce diarrea osmótica (p. 7). Casimira perdería volumen y presión sin ganar nada: el objetivo es de 2-3 deposiciones.' },
       { t: 'Aparece diarrea osmótica: se reduce o se para; el objetivo son 2-3 blandas.', ok: true },
-      { t: 'Nada: seis es el objetivo cuando el grado es 2.', porque: 'El objetivo es de 2-3 deposiciones blandas al día, con cualquier grado (p. 7). Con seis, la hipovolemia de Casimira empeoraría la perfusión.' },
-      { t: 'Hay que pasar al enema de 200 g cada hora.', porque: 'El enema es una vía alternativa (200 g en 700 mL, 30-60 min en Trendelenburg, p. 7), no una forma de subir la dosis. Aplicarlo cada hora la deshidrataría.' }],
+      { t: 'Nada: seis es el objetivo cuando el grado es 2.', porque: 'El objetivo es de 2-3 deposiciones blandas al día (p. 7). Con seis, la hipovolemia de Casimira empeoraría la perfusión.' },
+      { t: 'Hay que pasar al enema de 200 g cada hora.', porque: 'El enema es una vía alternativa (200 g, 300 mL, en 700 mL de agua, 30-60 min en Trendelenburg, p. 7), no una forma de subir la dosis. Aplicarlo cada hora la deshidrataría (razonamiento).' }],
     explicacion: 'La lactulosa puede producir diarrea osmótica: la dosis se reduce, o se suspende un tiempo, si aparece (p. 7). Se titula a 2-3 deposiciones blandas al día.', fuente: [7],
     tocar: { txt: 'Compruébalo: sube la lactulosa de 3 a 6 deposiciones', k: 'dep', de: 3, a: 6 } }),
   T('e3', 'E3', 'examen', 'albúmina o Ringer', { estado: 'casimira', predice: true,
@@ -98,7 +98,7 @@ export const PREGUNTAS = [
       { t: 'En el astrocito, el amonio se transforma en glutamina, que atrae agua y lo hincha.', mal: false, c: '' },
       { t: 'El TIPS evita la encefalopatía porque descomprime la porta y deja que el amonio llegue mejor al hígado.', mal: true, c: 'El TIPS comunica la porta con las venas hepáticas y, al saltar el hígado, aumenta el riesgo de encefalopatía (p. 10).' },
       { t: 'La rifaximina se absorbe bien y limpia el amonio de la sangre.', mal: true, c: 'Es un antibiótico no absorbible: reduce la producción de amonio en el intestino (p. 7). Depurar la sangre es la hemofiltración.' },
-      { t: 'La hemofiltración retira el amonio de la sangre sin pasar por el hígado.', mal: false, c: '' }],
+      { t: 'La hemofiltración retira el amonio de la sangre sin pasar por el hígado (fisiología general).', mal: false, c: '' }],
     explicacion: 'Dos errores: el TIPS aumenta el riesgo de encefalopatía (p. 10) y la rifaximina no se absorbe, actúa en el colon (p. 7). El ciclo de la urea y la glutamina del astrocito son lo que dice la ficha (p. 6); la hemofiltración aclara el amonio de la sangre (p. 7).', fuente: [6, 7, 10] },
   T('e5', 'E5', 'examen', 'pauta de rifaximina', { estado: 'hilario', sinModelo: true,
     enunciado: 'Hilario, cirrótico, empieza con encefalopatía y ya toma lactulosa. Vas a añadir rifaximina. <b>¿Con qué pauta?</b>',
@@ -108,6 +108,14 @@ export const PREGUNTAS = [
       { t: '400 mg cada 8 h solo 3 días, hasta que despierte del todo y deje de estar confuso.', porque: 'La mejoría se consigue con al menos 10 días (p. 7). Parar a los 3 días le devolvería al colon los microbios productores de amonio.' },
       { t: 'Rifaximina sola: asociarla a la lactulosa es redundante.', porque: 'Es eficaz sola, pero se combina con lactulosa (p. 7). Retirar la lactulosa le quita el único freno del colon que ya funcionaba.' }],
     explicacion: 'La rifaximina es un antibiótico no absorbible de amplio espectro: 400 mg tres veces al día durante al menos 10 días alivia los síntomas de la encefalopatía; aunque eficaz sola, se suele combinar con lactulosa (p. 7).', fuente: [7] }),
+  T('e6', 'E6', 'examen', 'NAC y paracetamol', { estado: 'casimira', sinModelo: true,
+    enunciado: 'Casimira llega con ALT 5.800 e INR 3,4, tres productos con paracetamol en casa y <b>paracetamol indetectable</b> en sangre. <b>¿Qué haces con la N-acetilcisteína?</b>',
+    opciones: [
+      { t: 'La inicio igualmente: es el antídoto, y se da ante una sobredosis sospechada.', ok: true },
+      { t: 'No la doy: sin paracetamol en sangre no hay sobredosis que tratar.', porque: 'El paracetamol es indetectable en el plasma en cerca del 50 % de los casos en que daña el hígado (p. 3). Descartarla por eso dejaría a Casimira sin el antídoto de su causa.' },
+      { t: 'Espero a una segunda determinación de paracetamol, que debe confirmar la sobredosis antes de empezar.', porque: 'La N-acetilcisteína se empieza ante una sobredosis confirmada o sospechada (p. 3); esperar la confirmación resta tiempo a un antídoto que rinde más cuanto antes (p. 3).' },
+      { t: 'Solo la doy si la ALT sigue subiendo en 48 h.', porque: 'No se condiciona a la evolución de la ALT: se da ante la sospecha y se mantiene hasta que mejora la función hepática (p. 3). Esperar dos días la retrasaría (razonamiento).' }],
+    explicacion: 'El antídoto de la hepatotoxicidad por paracetamol es la N-acetilcisteína, un sustituto del glutatión; se empieza en cuanto la sobredosis está confirmada o sospechada, rinde más en las primeras 10 h y se sigue hasta que mejora la función hepática. El paracetamol es indetectable en cerca del 50 % de los casos, lo que causa diagnósticos perdidos (p. 3).', fuente: [3] }),
 ];
 
 /* ---------- Los dos casos ---------- */
@@ -120,10 +128,10 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c1-1', tipo: 'test', corto: 'paso 1', estado: 'casimira', ajustes: {},
         enunciado: 'El R1 propone lactulosa y rifaximina y revisar mañana, «porque la creatinina es normal». <b>¿Qué haces?</b>',
         opciones: [
-          { t: 'Añadir la CVVH ya: con amonio >150 se indica aunque la creatinina sea normal.', ok: true },
+          { t: 'Añadir la CVVH ya: con amonio >150 se considera aunque la creatinina sea normal.', ok: true },
           { t: 'Esperar a que la creatinina suba: la CVVH es para el fallo renal y se pone cuando falla el riñón.', porque: 'Se considera con oliguria persistente, amonio >150 o edema cerebral, sea cual sea la creatinina (p. 8). Esperar deja a Casimira horas con el astrocito cargándose de glutamina.' },
           { t: 'Subir la lactulosa a 6 deposiciones y seguir con la rifaximina.', porque: 'La CVVH es superior a la lactulosa y a la rifaximina en el fallo agudo (p. 8), y más de 2-3 deposiciones solo trae diarrea osmótica (p. 7). Casimira seguiría sobre 150.' },
-          { t: 'Intubarla ya: tiene un grado 3 por estar apática.', porque: 'Apática y desorientada en el tiempo es grado 2 (p. 7). Intubarla sin razón no baja el amonio.' }],
+          { t: 'Intubarla ya: tiene un grado 3 por estar apática.', porque: 'Apática y desorientada en el tiempo es grado 2 (p. 7). Intubarla sin razón no baja el amonio (razonamiento).' }],
         explicacion: 'La CVVH es superior a la lactulosa y a la rifaximina en el fallo hepático agudo con encefalopatía: se considera con oliguria persistente, amonio >150 µmol/L o edema cerebral, sea cual sea la creatinina, y se empieza cuanto antes porque su eficacia depende del tiempo (p. 8).', fuente: [8],
         tocar: { txt: 'Compruébalo: enciende la hemofiltración', k: 'cvvh', de: 0, a: 1 } } },
     { momento: 'Día 2 · la noche', estado: 'casimira', ajustes: { cvvh: 1 }, datos: { 'Amonio arterial': '64 µmol/L', Hemofiltración: 'en marcha' }, nuevo: ['Amonio arterial', 'Hemofiltración'],
@@ -137,20 +145,20 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c1-3', tipo: 'error', corto: 'paso 3', estado: 'casimira', ajustes: { cvvh: 1 },
         enunciado: 'El R1 escribe el plan de la noche. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
         frases: [
-          { t: 'Mantener la hemofiltración: su eficacia depende de mantenerla.', mal: false, c: '' },
-          { t: 'Retirar la CVVH en cuanto el amonio baje de 150.', mal: true, c: 'La CVVH baja el amonio y mejora el pronóstico «especialmente con el uso continuado» (p. 7), y su eficacia depende del tiempo (p. 8). Retirarla al bajar de 150 devuelve el amonio a su cifra.' },
+          { t: 'Seguir con la hemofiltración, que baja el amonio sobre todo con el uso continuado.', mal: false, c: '' },
+          { t: 'Esperar a que suba la creatinina para empezar la CVVH.', mal: true, c: 'La CVVH debe empezarse cuanto antes, porque su eficacia depende del tiempo (p. 8), y se considera con oliguria, amonio >150 o edema (p. 8); no hace falta fallo renal.' },
           { t: 'Seguir la lactulosa hasta 2-3 deposiciones blandas al día.', mal: false, c: '' },
           { t: 'Avisar a trasplante si la encefalopatía progresa.', mal: false, c: '' }],
-        explicacion: 'Un error: la CVVH se mantiene; su eficacia depende del tiempo y del uso continuado (p. 7-8). El resto es lo que dice la ficha: lactulosa hasta 2-3 deposiciones (p. 7) y consulta a trasplante ante encefalopatía progresiva (p. 8).', fuente: [7, 8] } },
+        explicacion: 'Un error: la CVVH debe empezarse cuanto antes porque su eficacia depende del tiempo (p. 8), y con el uso continuado baja el amonio (p. 7); la ficha no pide esperar a la creatinina. El resto es lo que dice la ficha: lactulosa hasta 2-3 deposiciones (p. 7) y consulta a trasplante ante encefalopatía progresiva (p. 8).', fuente: [7, 8] } },
     { momento: 'Día 4 · el giro', estado: 'edema', ajustes: { cvvh: 1 }, datos: { 'Estado mental': 'estuporosa, desorientada en lugar y tiempo', TC: 'surcos borrados, como la Fig. 39.2', 'Amonio arterial': '86 µmol/L' }, nuevo: ['Estado mental', 'TC', 'Amonio arterial'],
       pregunta: { id: 'hpv-c1-4', tipo: 'test', corto: 'paso 4', estado: 'edema', ajustes: { cvvh: 1 },
-        enunciado: 'Casimira está estuporosa. La TC muestra los surcos borrados y el monitor marca amonio 86, por debajo de 150, con la CVVH en marcha. <b>¿Qué manda, la cifra o la TC?</b>',
+        enunciado: 'Casimira está estuporosa. La TC muestra los surcos borrados y el monitor marca amonio 86, por debajo de 150, con la CVVH en marcha. <b>¿Qué haces?</b>',
         opciones: [
-          { t: 'La cifra: está por debajo de 150, la CVVH funciona; se revisa en 48 h.', porque: 'La TC muestra edema cerebral aunque el amonio sea 86 (p. 6); es una indicación de CVVH sea cual sea el resto (p. 8). Esperar 48 h pierde la ventana.' },
-          { t: 'La TC: hay edema y la encefalopatía progresa; se avisa a trasplante.', ok: true },
-          { t: 'Ninguna: se sube la lactulosa a 6 deposiciones.', porque: 'La CVVH es superior a la lactulosa (p. 8) y más de 2-3 deposiciones solo trae diarrea osmótica y deshidratación (p. 7).' },
-          { t: 'La cifra: se retira la CVVH, que ya ha cumplido.', porque: 'Su eficacia depende del tiempo y del uso continuado (p. 7-8). Quitarla con edema devolvería el amonio a su cifra.' }],
-        explicacion: 'El edema cerebral (surcos borrados y pérdida de la interfaz gris-blanca, Fig. 39.2) manda sobre la cifra: la CVVH se indica con edema sea cual sea la creatinina, y ante una encefalopatía progresiva se consulta al especialista de trasplante (p. 6 y 8).', fuente: [6, 8] } },
+          { t: 'La cifra: está por debajo de 150, la CVVH funciona; se revisa en 48 h.', porque: 'La TC muestra edema cerebral aunque el amonio sea 86 (p. 6), y el edema es una de las situaciones en que se considera la CVVH (p. 8). Esperar 48 h pierde tiempo, del que depende su eficacia (razonamiento).' },
+          { t: 'Hay edema y la encefalopatía progresa: se sigue la CVVH y se avisa a trasplante.', ok: true },
+          { t: 'Ninguna: se sube la lactulosa a 6 deposiciones.', porque: 'La CVVH es superior a la lactulosa (p. 8) y más de 2-3 deposiciones solo trae diarrea osmótica (p. 7).' },
+          { t: 'La cifra: se retira la CVVH, que ya ha cumplido.', porque: 'La ficha no da criterio para retirarla y su eficacia depende del tiempo y del uso continuado (p. 7-8). Quitarla con edema sería perder lo que la mantiene baja (razonamiento).' }],
+        explicacion: 'El edema cerebral (surcos borrados y pérdida de la interfaz gris-blanca, Fig. 39.2) es, junto con la oliguria persistente y el amonio >150, una de las tres situaciones en que se considera la CVVH (p. 8); con la cifra en 86, la TC sigue pidiendo actuar. Ante una encefalopatía progresiva se consulta al especialista de trasplante (p. 6 y 8).', fuente: [6, 8] } },
     { momento: 'Día 4 · la familia', estado: 'edema', ajustes: { cvvh: 1 }, datos: {}, nuevo: [],
       pregunta: { id: 'hpv-c1-5', tipo: 'test', corto: 'paso 5', estado: 'edema', ajustes: { cvvh: 1 },
         enunciado: 'La familia pregunta qué esperar si se trasplanta y si no. <b>¿Qué cifras les das?</b>',
@@ -161,7 +169,7 @@ export const CASOS = [{
           { t: 'Solo se trasplanta si el amonio pasa de 300.', porque: 'No hay tal umbral en la ficha: se avisa ante una encefalopatía progresiva (p. 8). Esperar a una cifra dejaría pasar el momento.' }],
         explicacion: 'El trasplante es el tratamiento definitivo del fallo hepático agudo y ha reducido la mortalidad del 80 % al 33 %; se consulta ante toda encefalopatía progresiva (p. 8).', fuente: [8] } },
   ],
-  lleva: ['Con amonio >150, la CVVH se indica aunque la creatinina sea normal, y se mantiene (p. 7-8).', 'El amonio nace en el colon, el hígado lo convierte en urea y, si no, el astrocito lo vuelve glutamina y agua (p. 6).', 'El edema en la TC manda sobre la cifra, y la encefalopatía progresiva se avisa a trasplante (p. 8).'],
+  lleva: ['Con amonio >150, la CVVH se considera aunque la creatinina sea normal, y se empieza cuanto antes porque su eficacia depende del tiempo (p. 8).', 'El amonio nace en el colon, el hígado lo convierte en urea y, si no, el astrocito lo vuelve glutamina y agua (p. 6).', 'El edema en la TC es por sí solo una situación para considerar la CVVH, y la encefalopatía progresiva se avisa a trasplante (p. 8).'],
   volver: { nombre: 'Encefalopatía hepática (Marino, cap. 39)', ancla: 'ma-eh-cvvh' },
 }, {
   id: 'hpv-hilario', titulo: 'Hilario, 58 años · el TIPS y el amonio', sub: 'Cirrótico alcohólico con hematemesis · de la lactulosa al TIPS', corto: 'Hilario',
@@ -169,12 +177,12 @@ export const CASOS = [{
   pasos: [
     { momento: 'Día 0 · tras la endoscopia', estado: 'hilario', ajustes: {}, datos: { 'Estado mental': 'atención corta, carácter cambiado' }, nuevo: ['Estado mental'],
       pregunta: { id: 'hpv-c2-1', tipo: 'test', corto: 'paso 1', estado: 'hilario', ajustes: {},
-        enunciado: 'Su mujer cuenta que desde hace dos días duerme de día, atiende poco y está irritable; hoy sabe dónde está y qué día es. <b>¿Qué grado es y qué pautas?</b>',
+        enunciado: 'Su mujer cuenta que desde hace dos días atiende poco y está irritable; hoy sabe dónde está y qué día es. <b>¿Qué grado es y qué pautas?</b>',
         opciones: [
-          { t: 'Grado 2: hemofiltración, como en el fallo agudo, para bajar el amonio cuanto antes.', porque: 'No tiene desorientación en el tiempo (p. 7), y la CVVH es la medida del fallo agudo (p. 8). Una cirrótica hemorrágica no la necesita para esto.' },
-          { t: 'Grado 1: sin tratamiento, porque no está desorientado.', porque: 'La atención corta y el cambio de personalidad son ya encefalopatía grado 1 (p. 6). Esperar sin tratar la deja progresar a la apatía y la desorientación.' },
+          { t: 'Grado 2: hemofiltración, como en el fallo agudo, para bajar el amonio cuanto antes.', porque: 'No tiene desorientación en el tiempo (p. 7), y la CVVH es la medida del fallo agudo (p. 8). Un cirrótico hemorrágico no la necesita para esto (razonamiento).' },
+          { t: 'Grado 0: no hay encefalopatía, porque no está desorientado.', porque: 'La atención corta y el cambio de personalidad ya son encefalopatía grado 1 (p. 6). Ignorarlos dejaría pasar la encefalopatía hasta que aparezca la desorientación (razonamiento).' },
           { t: 'Grado 1: lactulosa, 20-30 g/h hasta la primera deposición y luego 20 g/8 h.', ok: true },
-          { t: 'Grado 1: enema de 200 g cada 4 h desde el principio.', porque: 'El enema es la alternativa a la vía oral o por sonda (200 g en 700 mL, 30-60 min en Trendelenburg, p. 7), no la primera pauta. Cada 4 h le provocaría diarrea osmótica.' }],
+          { t: 'Grado 1: enema de 200 g cada 4 h desde el principio.', porque: 'El enema es la alternativa a la vía oral o por sonda (200 g, 300 mL, en 700 mL de agua, 30-60 min en Trendelenburg, p. 7), no la primera pauta. Cada 4 h le provocaría diarrea osmótica (razonamiento).' }],
         explicacion: 'Grado 1 de la escala West Haven: atención corta y cambio de personalidad (p. 6). Lactulosa por vía oral o sonda: 20-30 g cada hora hasta que haya deposición, luego 20 g cada 8 h, ajustando a 2-3 deposiciones blandas al día (p. 7).', fuente: [6, 7],
         tocar: { txt: 'Compruébalo: pon la lactulosa a 3 deposiciones al día', k: 'dep', de: 0, a: 3 } } },
     { momento: 'Día 2 · resangra', estado: 'hilario', ajustes: { dep: 3 }, datos: { Sangrado: 'vuelve a sangrar con tratamiento óptimo', 'Amonio arterial': '47 µmol/L' }, nuevo: ['Sangrado', 'Amonio arterial'],
@@ -206,10 +214,10 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c2-5', tipo: 'test', corto: 'paso 5', estado: 'hilario', ajustes: { func: 38, dep: 3, tips: 1, rifa: 10 },
         enunciado: 'La hija pregunta: «¿el TIPS fue un error?». <b>¿Qué le contestas?</b>',
         opciones: [
-          { t: 'Sí: debió esperar a que el sangrado parase solo.', porque: 'Era un sangrado refractario, con riesgo vital (p. 8-9): esperar solo lo prolongaba. Decírselo así le haría perder la confianza en un tratamiento que lo frenó.' },
+          { t: 'Sí: debió esperar a que el sangrado parase solo.', porque: 'Era un sangrado refractario a la endoscopia y al tratamiento óptimo (p. 9-10): esperar solo lo prolongaba (razonamiento). Decírselo así le haría perder la confianza en un tratamiento que lo frenó.' },
           { t: 'No: cambió un problema por otro y por eso se vigila la encefalopatía.', ok: true },
           { t: 'No: el TIPS corrige también la encefalopatía.', porque: 'Al saltar el hígado, la aumenta (p. 10). Prometer lo contrario deja a la familia sin entender por qué debe seguir con la lactulosa y la rifaximina.' },
-          { t: 'Sí: el TIPS es un tratamiento que solo se usa en el fallo agudo.', porque: 'El TIPS se considera en la hemorragia por varices refractaria (p. 9-10); el fallo agudo no lo usa. Decirlo confundiría las dos situaciones.' }],
+          { t: 'Sí: el TIPS es un tratamiento que solo se usa en el fallo agudo.', porque: 'El TIPS se considera en la hemorragia por varices refractaria (p. 9-10). Decirlo confundiría las dos situaciones.' }],
         explicacion: 'El TIPS alivia la hipertensión portal que causa las varices, pero salta el hígado y aumenta el riesgo de encefalopatía: «cambia un problema por otro» (p. 10). Por eso se sigue con lactulosa y rifaximina (p. 7).', fuente: [7, 10] } },
   ],
   lleva: ['El TIPS para el sangrado refractario (el 20 %) y sube el riesgo de encefalopatía (p. 9-10).', 'Lactulosa a 2-3 deposiciones blandas; si hay diarrea, se reduce o se suspende (p. 7).', 'Rifaximina: 400 mg tres veces al día, al menos 10 días, no se absorbe (p. 7).'],
