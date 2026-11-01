@@ -1,2 +1,3 @@
 - visual-3d-g2b.js: 5 nodos por comienzo de texto ('≥70%', '40-69%', '<40%', 'Evitar volúmenes de insuflación', 'Maximizar el tiempo') → ids `nep-pefr-70`, `nep-pefr-40-69`, `nep-pefr-40`, `nep-estrategia-volumen`, `nep-estrategia-tiempo` en el HTML (fichas 1 y 3) y en la receta (CLAUDE.md §5).
 - Tabla 23.3: dexametasona «30-40» dibujada con un valor: revisar cómo lo pinta el kit (barras de rango o nota).
+- Ficha 10: el constructor cambió «el diseño de mascarillas» → «el desarrollo de las mascarillas» en el texto fiel para callar el juez de nombres internos: valorar volver a «diseño» (fidelidad) y ver por qué el juez lo marca.
