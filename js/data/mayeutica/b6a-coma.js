@@ -257,8 +257,8 @@ export const MAYEUTICA_COMA = {
         calculadora: { ir: 'mn-me-calc', nombre: 'Lista de comprobación de la muerte encefálica' },
         enunciado: 'En el adulto, ¿cuántos exploradores hacen falta para la exploración?',
         opciones: [
-          { t: 'Dos, y uno de ellos neurólogo', porque: 'El libro no lo exige (pág. 15): basta un explorador con experiencia en el adulto. Esperar a un segundo especialista retrasaría la decisión.' },
-          { t: 'Dos, de servicios distintos al que trata al paciente', porque: 'La pág. 15 no pide dos: basta un explorador con experiencia en el adulto. Exigir otro servicio retrasa la información a la familia.' },
+          { t: 'Dos, y uno de ellos neurólogo', porque: 'El libro no lo exige (pág. 15): basta un explorador con experiencia en el adulto.' },
+          { t: 'Dos, de servicios distintos al que trata al paciente', porque: 'La pág. 15 no pide dos: basta un explorador con experiencia en el adulto.' },
           { t: 'Uno, si tiene experiencia', ok: true }],
         explicacion: `<span class="hl">Un solo explorador basta en el adulto</span> si tiene experiencia en la prueba (${pag(15, 'pág. 15')}).` },
       { id: 'mnm-e5', corto: 'cómo se sospecha', tipo: 'test', fuente: 'mn-me-causas',
