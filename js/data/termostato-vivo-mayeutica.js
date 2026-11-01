@@ -15,10 +15,10 @@ const PREG_RECORRIDO = [
     enunciado: 'Dorotea tiene una infección y un pirógeno llega a su hipotálamo. <b>¿Qué es lo primero que cambia?</b> Mira después el dial del hipotálamo.',
     opciones: [
       { t: 'El punto de ajuste: sube, y 37 °C pasa a ser «frío» para su hipotálamo.', ok: true },
-      { t: 'La producción de calor: el pirógeno calienta el cuerpo directamente y la temperatura sube sola.', porque: 'La fiebre es un termostato sano con el punto de ajuste más alto (p. 45), no un calentamiento sin control. Si lo piensas así, buscarás enfriar a Dorotea a la fuerza, justo lo que le hace tiritar (p. 72).' },
+      { t: 'La producción de calor: el pirógeno calienta el cuerpo directamente y la temperatura sube sola.', porque: 'La fiebre es un termostato sano con el punto de ajuste más alto (p. 45, 60), no un calentamiento sin control. Si lo piensas así, buscarás enfriar a Dorotea a la fuerza, justo lo que le hace tiritar (p. 72).' },
       { t: 'La pérdida de calor: el pirógeno estropea el radiador de la piel y no puede soltar calor.', porque: 'Un defecto de la regulación es hipertermia, no fiebre (p. 45). En Dorotea la regulación funciona: lo cierra el propio hipotálamo para llegar a su ajuste nuevo (p. 72).' },
       { t: 'Nada, hasta que la temperatura real suba: el termostato solo reacciona a lo que mide.', porque: 'El ajuste se mueve antes que la temperatura real, y por eso el cuerpo ya responde como si tuviera frío (p. 72). Esperar a ver la temperatura es llegar tarde a lo que ya está pasando.' }],
-    explicacion: 'En la fiebre, el sistema regula con normalidad pero con el punto de ajuste más alto (p. 45): la respuesta febril imita la respuesta al frío (p. 72).', fuente: ['45|ma-fiebre-def', '72|ma-antip-mantas'],
+    explicacion: 'En la fiebre, el sistema regula con normalidad pero con el punto de ajuste más alto (p. 45): las citocinas actúan sobre el hipotálamo para elevar la temperatura (p. 60) y la respuesta febril imita la respuesta al frío (p. 72).', fuente: ['45|ma-fiebre-def', '72|ma-antip-mantas'],
     tocar: { txt: 'Compruébalo: deja que el pirógeno suba el ajuste', patch: est('fiebre', 2), cuenta: (a, d) => `el ajuste pasa de ${coma(a.pt)} a ${coma(d.pt)} °C con la temperatura real todavía en ${coma(d.T)} °C: ya hay escalofrío y los vasos de la piel se cierran.` } },
   { grupo: 'guia', num: 'G2', predice: true, estado: est('fiebre', 2),
     enunciado: 'Ahora el ajuste de Dorotea está en 39,6 °C y su temperatura real, bastante por debajo. <b>¿Qué hace su cuerpo para llegar al ajuste?</b>',
@@ -27,7 +27,7 @@ const PREG_RECORRIDO = [
       { t: 'Cierra la piel y tirita: así conserva y fabrica calor hasta alcanzar el ajuste.', ok: true },
       { t: 'No hace nada: la infección sube la temperatura por su cuenta y el hipotálamo lo acepta.', porque: 'El hipotálamo no acepta: persigue su ajuste con las defensas contra el frío (p. 72). Sin entender eso, verías el escalofrío como una complicación y no como el mecanismo de la fiebre.' },
       { t: 'Solo acelera el corazón; los vasos y el músculo no intervienen.', porque: 'La piel se cierra y el músculo tirita (p. 72), y el escalofrío puede duplicar el calor que produce el cuerpo (p. 53). Ignorarlo te haría pasar por alto el trabajo muscular que hay detrás.' }],
-    explicacion: 'Cutánea y muscular: la vasoconstricción de la piel (menos pérdida) y el escalofrío (hasta el doble de calor) llevan la temperatura al ajuste (p. 72; p. 53).', fuente: ['72|ma-antip-mantas', '53|ma-hipo-fisio'],
+    explicacion: 'Las citocinas elevan el ajuste (p. 60). Cutánea y muscular: la vasoconstricción de la piel (menos pérdida) y el escalofrío (hasta el doble de calor) llevan la temperatura al ajuste (p. 72; p. 53).', fuente: ['72|ma-antip-mantas', '53|ma-hipo-fisio'],
     tocar: { txt: 'Compruébalo: pasa de hora', patch: est('fiebre', 3), cuenta: (a, d) => `la temperatura sube de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc} y sigue el escalofrío, con la piel cerrada.` } },
   { grupo: 'guia', num: 'G3', tipo: 'destapa', estado: est('golpe', 2),
     enunciado: 'Ovidio, 34 años, termina una carrera en verano. Su cuerpo fabrica calor y tiene que soltarlo. <b>¿Qué tienes que saber de cómo se pierde?</b> Son tres cosas.',
@@ -41,7 +41,7 @@ const PREG_RECORRIDO = [
     opciones: [
       { t: 'Bajará poco a poco, como en cualquier fiebre.', porque: 'No es fiebre: el punto de ajuste no se ha movido y el antipirético no tiene sobre qué actuar (p. 45). Esperar a que baje es perder minutos con un golpe de calor.' },
       { t: 'Nada: el ajuste sigue en 37 °C, así que el antipirético no actúa.', ok: true },
-      { t: 'Bajará menos que en la fiebre, pero algo ayudará mientras llega el hielo.', porque: 'En la hipertermia los antipiréticos son ineficaces (p. 45), no «menos eficaces». Cada minuto que Ovidio pase a 41,6 °C sin enfriar daña más órganos (p. 47).' },
+      { t: 'Bajará menos que en la fiebre, pero algo ayudará mientras llega el hielo.', porque: 'En la hipertermia los antipiréticos son ineficaces (p. 45), no «menos eficaces». Razonamiento: el golpe de calor afecta a varios órganos (p. 47), así que conviene enfriar ya.' },
       { t: 'Subirá: el paracetamol es hepatotóxico y Ovidio ya tiene el hígado afectado.', porque: 'El paracetamol es hepatotóxico (p. 72), pero no sube la temperatura. Quedarte en ese miedo te hará olvidar lo importante: enfriar ya (p. 47).' }],
     explicacion: 'Hipertermia es un defecto de la regulación; fiebre, un sistema normal con el ajuste alto. Por eso los antipiréticos (el paracetamol) no sirven en la hipertermia (p. 45).', fuente: ['45|ma-calor-hipertermia'],
     tocar: { txt: 'Compruébalo: dale el paracetamol', patch: { ...est('golpe', 4), ysi: 'golpe' }, cuenta: (a, d) => `Ovidio sigue en ${coma(d.T)} °C con PA ${d.pa}, y el dial del hipotálamo sigue en ${coma(d.pt, 0)} °C: no se ha movido.` } },
@@ -49,10 +49,10 @@ const PREG_RECORRIDO = [
     enunciado: 'Ovidio, 41,6 °C: lo enfrías con evaporación e hielo en ingles, axilas y cuello. <b>¿Hasta qué temperatura sigues enfriando?</b>',
     opciones: [
       { t: 'Hasta unos 38 °C, y ahí se para.', ok: true },
-      { t: 'Hasta 35 °C, para asegurar que no vuelve a subir.', porque: 'La meta de la ficha es 38 °C (p. 47). Enfriar de más favorece el escalofrío, que es contraproducente porque sube la temperatura (p. 47).' },
-      { t: 'Hasta 37 °C, el ajuste de su hipotálamo.', porque: 'La meta es 38 °C (p. 47). Insistir por debajo acerca el escalofrío del enfriamiento externo, que le devolvería calor a Ovidio (p. 47).' },
+      { t: 'Hasta 35 °C, para asegurar que no vuelve a subir.', porque: 'La meta de la ficha es 38 °C (p. 47). Razonamiento: pasarse de frío no aporta nada, y el escalofrío es el inconveniente del enfriamiento externo (p. 47).' },
+      { t: 'Hasta 37 °C, el ajuste de su hipotálamo.', porque: 'La meta es 38 °C (p. 47). Razonamiento: seguir enfriando por debajo de la meta no tiene respaldo en la fuente, y el escalofrío es el inconveniente del enfriamiento externo (p. 47).' },
       { t: 'Hasta que deje de delirar, sin mirar la cifra.', porque: 'El delirio no es un objetivo medible: la meta es la temperatura, 38 °C (p. 47). Sin cifra, Ovidio podría pasarse de frío o quedarse corto.' }],
-    explicacion: 'El enfriamiento activo se dirige a 38 °C (p. 47); a 0,3 °C por minuto con la evaporación, de 41,6 a 38,2 °C son unos 11 minutos (cuenta del modelo). El escalofrío del enfriamiento externo es contraproducente (p. 47).', fuente: ['47|ma-calor-golpe'],
+    explicacion: 'El enfriamiento activo se dirige a 38 °C (p. 47); en el campo, la evaporación enfría unos 0,3 °C por minuto (p. 47); es la velocidad de esa técnica, no la del hielo de urgencias. El escalofrío es el inconveniente del enfriamiento externo (p. 47).', fuente: ['47|ma-calor-golpe'],
     tocar: { txt: 'Compruébalo: enfría a Ovidio', patch: est('golpe', 4, 1), cuenta: (a, d) => `la temperatura baja de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc}, la PA sube de ${a.pa} a ${d.pa} y vuelve el sudor.` } },
   { grupo: 'guia', num: 'G6', predice: true, estado: est('snm', 2),
     enunciado: 'Jacinta, 47 años, lleva haloperidol desde hace unos días. Ahora tiene rigidez en tubo de plomo y 37,6 °C. El termostato de Jacinta no se ha movido. <b>¿Cuándo se espera que suba su temperatura?</b>',
@@ -78,7 +78,7 @@ const PREG_RECORRIDO = [
       { t: 'Paracetamol 1 g cada 8 h, de rutina: toda fiebre en la UCI se baja.', porque: 'La guía más reciente recomienda no suprimir la fiebre de forma sistemática (p. 71). En un shock séptico, Dorotea perdería una defensa (p. 70), y un estudio vio más mortalidad en sépticos tratados con antipiréticos (p. 70).' },
       { t: 'No la bajas de rutina: es una defensa, y las guías no recomiendan suprimirla.', ok: true },
       { t: 'La bajas con una manta de enfriamiento, que no tiene efectos adversos como los fármacos.', porque: 'La manta es contraproducente en la fiebre: cierra la piel y provoca escalofrío, que sube la temperatura (p. 72). Dorotea tiritaría más.' },
-      { t: 'La bajas porque a más temperatura, más mortalidad en la sepsis.', porque: 'Es al revés: en 2.225 pacientes con sepsis grave y shock la temperatura inicial se asoció de forma inversa con la mortalidad (p. 70-71). La figura es observacional, pero no apoya bajarla.' }],
+      { t: 'La bajas porque a más temperatura, más mortalidad en la sepsis.', porque: 'Es al revés: en 2.225 pacientes con sepsis grave y shock la temperatura inicial se asoció de forma inversa con la mortalidad (p. 70-71). Eso no apoya bajarla.' }],
     explicacion: 'Fiebre no es una enfermedad sino una respuesta adaptativa de defensa; se baja con lesión cerebral isquémica (parada, ictus), no de rutina (p. 71).', fuente: ['70|ma-antip-defensa', '71|ma-antipireticos'] },
   { grupo: 'guia', num: 'G9', predice: true, estado: est('fiebre', 4),
     enunciado: 'Dorotea tiene 39,6 °C y le pones una manta de enfriamiento. <b>¿Qué hace su cuerpo?</b>',
@@ -90,13 +90,13 @@ const PREG_RECORRIDO = [
     explicacion: 'La respuesta febril hace que el cuerpo se comporte como si estuviera envuelto en una manta de enfriamiento; añadir una agrava la vasoconstricción y el escalofrío (p. 72). Las mantas son más apropiadas en el golpe de calor.', fuente: ['72|ma-antip-mantas'],
     tocar: { txt: 'Compruébalo: ponle la manta', patch: { ...est('fiebre', 4), ysi: 'fiebre' }, cuenta: (a, d) => `con la manta, el escalofrío pasa de ${a.esc ? 'sí' : 'no'} a ${d.esc ? 'sí' : 'no'} y los vasos de la piel se cierran; la temperatura real sigue en ${coma(d.T)} °C.` } },
   { grupo: 'examen', num: 'E1', estado: est('hm', 3),
-    enunciado: 'Marcial, 28 años y 75 kg, en quirófano con sevoflurano: el CO₂ espirado sube, el masetero se pone rígido y la T aún es 37,2 °C. Suspendes el halogenado. <b>¿Cómo pautas el dantroleno?</b>',
+    enunciado: 'Marcial, 28 años y 75 kg, en quirófano con isoflurano: el CO₂ espirado sube, el masetero se pone rígido y la T aún es 37,2 °C. Suspendes el halogenado. <b>¿Cómo pautas el dantroleno?</b>',
     opciones: [
       { t: 'Una dosis de 1 mg/kg (75 mg) y esperar a ver si cede la rigidez antes de repetir.', porque: 'La pauta repite el bolo cada pocos minutos hasta que ceden los síntomas o se llegue a 10 mg/kg (p. 48). Una dosis aislada deja abierto el canal de calcio mientras sube el calor.' },
       { t: '1-2 mg/kg (75-150 mg) en bolo rápido, repetido hasta que ceda o se llegue a 10 mg/kg, y luego 1-2 mg/kg cada 6 h al menos 24 h.', ok: true },
-      { t: '10 mg/kg (750 mg) de una vez, para llegar al máximo sin perder tiempo.', porque: 'Los 10 mg/kg son el tope acumulado, no la dosis inicial (p. 48). Darle más dantroleno del que hace falta suma debilidad muscular de 2-4 días (p. 49).' },
-      { t: 'Hielo y fluidos fríos: el dantroleno solo si la temperatura pasa de 40 °C.', porque: 'La temperatura sube tarde (p. 49) y el hielo no cierra el canal de calcio: lo que baja la temperatura es controlar la rigidez (p. 49). Sin dantroleno temprano, la mortalidad es ≥70 % (p. 49).' }],
-    explicacion: 'Dantroleno 1-2 mg/kg en bolo rápido IV, repetido hasta que ceda o se llegue a 10 mg/kg; después 1-2 mg/kg cada 6 h al menos 24 h, para prevenir la recaída (Tabla 43.2, p. 48). Temprano baja la mortalidad de ≥70 % a ≤10 % (p. 49).', fuente: ['48|ma-hm-tto', '49|ma-hm-clinica'] },
+      { t: '10 mg/kg (750 mg) de una vez, para llegar al máximo sin perder tiempo.', porque: 'Los 10 mg/kg son el tope acumulado, no la dosis inicial (p. 48). La pauta empieza en 1-2 mg/kg y repite hasta ese tope (p. 48); saltarse ese escalón no es lo que describe el libro.' },
+      { t: 'Hielo y fluidos fríos: el dantroleno solo si la temperatura pasa de 40 °C.', porque: 'La temperatura sube tarde (p. 49) y el hielo no cierra el canal de calcio: lo que baja la temperatura es controlar la rigidez (p. 49). En los casos no tratados la mortalidad es ≥70 % (p. 49).' }],
+    explicacion: 'Dantroleno 1-2 mg/kg en bolo rápido IV, repetido hasta que ceda o se llegue a 10 mg/kg; después 1-2 mg/kg cada 6 h al menos 24 h, para prevenir la recaída (Tabla 43.2, p. 48). Según la fuente, la mortalidad de los casos no tratados es ≥70 % y con dantroleno temprano baja la mortalidad de ≥70 % a ≤10 % (p. 49).', fuente: ['48|ma-hm-tto', '49|ma-hm-clinica'] },
   { grupo: 'examen', num: 'E2', sinModelo: true,
     enunciado: 'Jacinta, día 8 de una neumonía, con linezolid y fentanilo: clonus ocular, hiperreflexia y 38,0 °C. <b>¿Qué rasgo orienta al síndrome serotoninérgico y no al neuroléptico maligno?</b>',
     opciones: [
@@ -110,9 +110,9 @@ const PREG_RECORRIDO = [
     frases: [
       { t: 'Medir la temperatura con una sonda vesical, esofágica o rectal.', mal: false, c: '' },
       { t: 'Los fluidos a temperatura ambiente (21 °C) son seguros para reponer el volumen mientras se recalienta.', mal: true, c: 'Los fluidos a 21 °C enfrían más al paciente; se infunden calientes, y aun así solo evitan enfriar más (p. 56).' },
-      { t: 'Con los gases inspirados a 40-45 °C, la temperatura sube unos 2,5 °C por hora.', mal: false, c: '' },
+      { t: 'En un paciente intubado, con los gases inspirados a 40-45 °C, la temperatura sube unos 2,5 °C por hora.', mal: false, c: '' },
       { t: 'En parada por hipotermia no se declara la muerte hasta haberlo recalentado.', mal: false, c: '' }],
-    explicacion: 'Un error: los fluidos a 21 °C enfrían (p. 56). La temperatura central se mide con sonda (p. 55), los gases calientes suben unos 2,5 °C/h (p. 56) y la muerte no se declara sin recalentar (p. 55).', fuente: ['55|ma-hipo-grados', '56|ma-hipo-externo'] },
+    explicacion: 'Un error: los fluidos a 21 °C enfrían (p. 56). La temperatura central se mide con sonda (p. 55), en intubados los gases calientes suben unos 2,5 °C/h (p. 56) y la muerte no se declara sin recalentar (p. 55).', fuente: ['55|ma-hipo-grados', '56|ma-hipo-externo'] },
   { grupo: 'examen', num: 'E4', sinModelo: true,
     enunciado: 'Un paciente de 70 kg con fiebre y lesión cerebral isquémica tras una parada: aquí sí se baja. Eliges ibuprofeno IV. <b>¿Qué dosis da el libro?</b>',
     opciones: [
@@ -120,7 +120,7 @@ const PREG_RECORRIDO = [
       { t: '10 mg/kg (700 mg), hasta 800 mg cada 6 h; el libro no fija un máximo diario.', ok: true },
       { t: 'Ninguna: los AINE están contraindicados en el paciente crítico por el riñón.', porque: 'El libro dice que su uso en la UCI es limitado por un miedo exagerado a la toxicidad renal y a la hemorragia digestiva (p. 72), no que estén contraindicados. Descartarlos te dejaría sin una opción que la fuente describe.' },
       { t: 'Ketorolaco 0,5 mg/kg cada 6 h, la pauta repetida habitual.', porque: 'La fuente describe una sola dosis IV de ketorolaco de 0,5 mg/kg (p. 72). Repetirla cada 6 h es una pauta que el libro no da.' }],
-    explicacion: 'Ibuprofeno IV 10 mg/kg, hasta 800 mg cada 6 h (p. 72). El libro no da un máximo diario. Los antipiréticos se usan sobre todo en la lesión cerebral isquémica (p. 71).', fuente: ['72|ma-antip-aine', '71|ma-antipireticos'] },
+    explicacion: 'Ibuprofeno IV 10 mg/kg, hasta 800 mg cada 6 h (p. 72). El libro no da un máximo diario. La fiebre se baja sobre todo en la lesión cerebral isquémica, donde es dañina (p. 71).', fuente: ['72|ma-antip-aine', '71|ma-antipireticos'] },
 ];
 const CORTO = { G1: 'el ajuste sube', G2: 'piel y escalofrío', G3: 'perder calor', G4: 'paracetamol en el golpe', G5: 'enfriar hasta 38', G6: 'SNM: la fiebre tarda', G7: 'hipotermia', G8: 'fiebre en sepsis', G9: 'la manta', E1: 'dantroleno', E2: 'SS frente a SNM', E3: 'plan de Honorato', E4: 'ibuprofeno' };
 const sinHtml = s => String(s).replace(/<[^>]+>/g, '');
@@ -158,7 +158,7 @@ const CASO_J = { id: 'tmv-jacinta', titulo: 'La rigidez antes que la fiebre (Jac
       { t: 'Un síndrome serotoninérgico: el clonus ocular es el signo más fiable.', ok: true },
       { t: 'Una hipertermia maligna por el fentanilo.', porque: 'La hipertermia maligna es por halogenados y succinilcolina (p. 48). El fentanilo no es el desencadenante.' },
       { t: 'No es un síndrome: la fiebre es de la neumonía y los ojos, del fentanilo.', porque: 'El clonus ocular es el signo más fiable del serotoninérgico (p. 52). Ignorarlo dejaría puestos los dos fármacos.' }],
-    explicacion: 'Hiperreflexia, mioclonías y clonus (el ocular, el más fiable) con dos fármacos serotoninérgicos: síndrome serotoninérgico (p. 52).', fuente: ['52|ma-ss-claves'] },
+    explicacion: 'Hiperreflexia, mioclonías y clonus (el ocular, el más fiable) con dos fármacos serotoninérgicos: síndrome serotoninérgico (p. 52). Nota de fidelidad: en la p. 52 el libro escribe «fentanilo y linezolid pueden causar NMS» donde corresponde SS; aquí se reproduce la errata solo en esta nota.', fuente: ['52|ma-ss-claves'] },
   { momento: 'Día 8 · el tratamiento', estado: est('ss', 5), dato: fila('ss', 5), tipo: 'test', predice: true,
     enunciado: 'Retirados los dos fármacos, sigue con clonus. <b>¿Qué más?</b>',
     opciones: [
@@ -198,13 +198,13 @@ const CASO_H = { id: 'tmv-honorato', titulo: 'Nadie está muerto hasta estar cal
   { momento: 'Recalentar', estado: est('hipo', 5), dato: fila('hipo', 5), tipo: 'test', predice: true,
     enunciado: 'Honorato sigue en parada. <b>¿Cómo lo recalientas?</b>',
     opciones: [
-      { t: 'ECMO venoarterial, con calor externo y fluidos calientes.', ok: true },
+      { t: 'ECMO venoarterial, que se ha usado con éxito, con calor externo y fluidos calientes.', ok: true },
       { t: 'Lavado gástrico con líquido caliente.', porque: 'Es un método no recomendado por el riesgo de aspiración (p. 56).' },
       { t: 'Un bolo de suero a temperatura ambiente (21 °C) para reponer el volumen.', porque: 'Los fluidos a 21 °C enfrían más al paciente (p. 56): deben ir calientes, y aun así solo evitan enfriar.' },
       { t: 'Lavado vesical caliente: es el método interno más fiable.', porque: 'El lavado vesical caliente es ineficaz (p. 56).' }],
-    explicacion: 'En la parada hipotérmica se ha usado con éxito la ECMO venoarterial (p. 56); los fluidos calientes evitan que se enfríe más, y los gases a 40-45 °C suben la temperatura unos 2,5 °C/h (p. 56).', fuente: ['56|ma-hipo-externo'],
+    explicacion: 'En la parada hipotérmica se ha usado con éxito la ECMO venoarterial (p. 56); los fluidos calientes evitan que se enfríe más, y en intubados, los gases a 40-45 °C suben la temperatura unos 2,5 °C/h (p. 56).', fuente: ['56|ma-hipo-externo'],
     tocar: { txt: 'Compruébalo: recalienta a Honorato', patch: est('hipo', 5, 1), cuenta: (a, d) => `la T sube de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc} y la PA es ${d.pa}.` } }],
-  lleva: ['La temperatura central se mide con sonda, nunca en la piel (p. 55).', 'Por debajo de 28 °C: riesgo de FV; por debajo de 24 °C, apnea y asistolia esperables (p. 54, 56).', 'La muerte no se declara sin recalentar; ECMO venoarterial en la parada (p. 55-56).'] };
+  lleva: ['La temperatura central se mide con sonda, nunca en la piel (p. 55).', 'Por debajo de 28 °C: riesgo de FV; por debajo de 24 °C, apnea y asistolia esperables (p. 54, 56).', 'La muerte no se declara sin recalentar; la ECMO venoarterial se ha usado con éxito en la parada (p. 55-56).'] };
 const dic = pares => Object.fromEntries(pares.map(([k, v]) => [k, v]));
 export const CASOS = [CASO_J, CASO_H].map(C => {
   const [p1] = C.pasos;
