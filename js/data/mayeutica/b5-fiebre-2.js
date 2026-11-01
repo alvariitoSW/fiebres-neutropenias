@@ -7,7 +7,7 @@
 
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 
-const NOTA_CANDIDURIA = '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización» y que los hemocultivos son negativos en más del 50 % de las candidiasis diseminadas; el cap. 44, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada» y que la sensibilidad de los hemocultivos puede ser «tan baja como el 20 %». Se muestran las dos; no se elige una.';
+const NOTA_CANDIDURIA = '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización»; el cap. 44, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada». Se muestran las dos; no se elige una. (Los hemocultivos negativos en más del 50 % de las diseminadas y la sensibilidad «tan baja como el 20 %» no se contradicen: son compatibles.)';
 
 export const MAYEUTICA_FIEBRE_2 = {
   /* =================================================================================================
@@ -30,7 +30,7 @@ export const MAYEUTICA_FIEBRE_2 = {
           { t: 'De 15 % a 8 %, casi la mitad', ok: true },
           { t: 'No cambia: depende del germen', porque: 'Cambia (p <0,0001 en los dos paneles): el riesgo depende sobre todo de la duración del sondaje. Mantendrías sondas innecesarias.' }],
         explicacion: 'Retirada precoz frente a tardía: <span class="hl">infección asociada a sonda 8 % frente a 15 %</span> y bacteriuria asintomática 10 % frente a 27 %. Retirar la sonda en cuanto no haga falta es <span class="hl-verde">la medida más eficaz</span>.',
-        origen: 'ficha · Figura 42.2 (cifras impresas sobre las barras)' },
+        origen: 'ficha · Figura 42.2 (cifras impresas sobre las barras) · cuenta propia: 15 → 8 baja 7 de 15, un 47 %' },
       { id: 'ius-g3', corto: 'lo que no', tipo: 'test', fuente: 'ma-itu-no',
         enunciado: '¿Cuál de estas medidas «de higiene» puede aumentar la bacteriuria en el paciente sondado?',
         opciones: [
@@ -87,14 +87,14 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'ius-e3', corto: 'excepción', tipo: 'test', fuente: 'ma-itu-asintomatica',
         enunciado: 'Bacteriuria asintomática en un paciente sondado, con una sola bacteria >10⁵ UFC/mL y hemocultivos negativos. ¿Cuándo se trata?',
         opciones: [
-          { t: 'Siempre, para evitar que la bacteriuria pase a ser una infección sintomática', porque: 'No se trata: darías antibiótico sin indicación y seleccionarías resistencias.' },
+          { t: 'Cuando la sonda lleva más de 2 semanas', porque: 'El tiempo de sonda no es indicación de tratar: darías antibiótico sin indicación y seleccionarías resistencias.' },
           { t: 'Antes de un procedimiento urológico que haga sangrar la mucosa', ok: true },
           { t: 'Cuando el recuento supera 10⁶ UFC/mL', porque: 'El recuento no es la regla de tratamiento: sin síntomas ni procedimiento con sangrado, no se trata.' }],
         explicacion: 'No se trata, <span class="hl">salvo antes de un procedimiento urológico que haga sangrar la mucosa</span>.' },
       { id: 'ius-e4', corto: 'empírico', tipo: 'test', fuente: 'ma-itu-empirico',
-        enunciado: 'Ante la sospecha de infección urinaria asociada a sonda, ¿qué empírico en monoterapia cubre bacilos gramnegativos aerobios y enterococos?',
+        enunciado: 'Ante la sospecha de infección urinaria asociada a sonda, ¿qué empírico de primera línea en monoterapia cubre bacilos gramnegativos aerobios y enterococos?',
         opciones: [
-          { t: 'Ceftazidima, que es la segunda línea', porque: 'La ceftazidima, la cefepima y el levofloxacino son segunda línea, no la primera. Los enterococos son el motivo de preferir pip-tazo o meropenem.' },
+          { t: 'Cefepima o levofloxacino', porque: 'Son alternativas de segunda línea, no la primera. Los enterococos son el motivo de preferir pip-tazo o meropenem.' },
           { t: 'Piperacilina-tazobactam o meropenem, en monoterapia', ok: true },
           { t: 'Vancomicina en monoterapia, para cubrir los enterococos', porque: 'No figura entre las pautas de la ficha, que pide cubrir bacilos gramnegativos aerobios y enterococos: dejarías los gramnegativos sin cobertura.' }],
         explicacion: 'Cubrir bacilos gramnegativos aerobios y enterococos: <span class="hl">pip-tazo o un carbapenémico (meropenem) en monoterapia</span>; segunda línea, ceftazidima, cefepima o levofloxacino.' },
@@ -118,7 +118,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         paciente: { Edad: '82 años', Peso: '58 kg', Motivo: 'ingreso por insuficiencia cardíaca', Sonda: 'vesical desde el día 0, «para el balance»', Vías: 'solo periférica' },
         pasos: [
           { momento: 'Día 6', datos: { 'Temperatura': '38,4 °C', FC: '92/min', PA: '132/70 mmHg', 'Dolor': 'sin dolor suprapúbico ni costovertebral', Leucocitos: '12.800/µl', Creatinina: '1,1 mg/dl', Urocultivo: 'E. coli 10⁶ UFC/mL', Sedimento: 'sin piuria' }, nuevo: ['Temperatura', 'FC', 'PA', 'Dolor', 'Leucocitos', 'Creatinina', 'Urocultivo', 'Sedimento'], calculadora: { ir: 'ma-nhsn-calc', nombre: 'NHSN: ¿ITU de sonda?' },
-            pregunta: { id: 'c5c2-1', tipo: 'test', fuente: 'ma-itu-nhsn · ma-itu-fiebre · ma-itu-piuria · ma-hemoc-numero', origen: 'ficha · las cifras de la paciente son ilustrativas',
+            pregunta: { id: 'c5c2-1', tipo: 'test', fuente: 'ma-itu-nhsn · ma-itu-fiebre · ma-itu-piuria · ma-hemoc-numero', modelo: { termostatoVivo: 'fiebre:1' }, origen: 'ficha · las cifras de la paciente son ilustrativas',
               enunciado: 'La calculadora dice que cumple criterios. ¿Qué pesa en contra de atribuirle la fiebre a la orina?',
               opciones: [
                 { t: 'Nada en contra: cumple los criterios del NHSN, así que es una ITU segura y empiezo el tratamiento ya', porque: 'Habrías tratado una bacteriuria y seguido sin buscar la causa de la fiebre.' },
@@ -137,15 +137,15 @@ export const MAYEUTICA_FIEBRE_2 = {
             pregunta: { id: 'c5c2-3', tipo: 'test', fuente: 'ma-itu-abuti · ma-itu-dirigido', origen: 'ficha · las cifras de la paciente son ilustrativas',
               enunciado: 'Dos de los tres hemocultivos crecen con el mismo E. coli de la orina. ¿Qué es ahora?',
               opciones: [
-                { t: 'Bacteriuria asintomática: no se trata y se vigila la evolución sin antibiótico', porque: 'El hemocultivo con el mismo germen la saca de esa definición; no tratarla sería dejar una bacteriemia sin antibiótico.' },
-                { t: 'Infección urinaria bacteriémica asintomática: se ajusta al antibiograma', ok: true },
+                { t: 'Bacteriuria asintomática: no se trata y se vigila la evolución sin antibiótico', porque: 'Tiene fiebre y el hemocultivo con el mismo germen la saca de esa definición; no tratarla sería dejar una bacteriemia sin antibiótico.' },
+                { t: 'Infección urinaria asociada a sonda con bacteriemia (mismo germen en orina y sangre): se ajusta al antibiograma', ok: true },
                 { t: 'Una bacteriemia por catéter venoso', porque: 'Felisa no tiene vía central, solo una periférica; buscarías un catéter que no hay.' }],
-              explicacion: 'Mismo germen en orina (>10⁵) y en sangre = <span class="hl-rojo">infección urinaria, aunque no haya síntomas</span>. Se ajusta al antibiograma.' } },
+              explicacion: 'Mismo germen en orina (>10⁵) y en sangre = <span class="hl-rojo">infección urinaria asociada a sonda con bacteriemia</span> (sonda ≥2 días y fiebre). Se ajusta al antibiograma.' } },
           { momento: 'Día 7', datos: {}, nuevo: [],
             pregunta: { id: 'c5c2-4', tipo: 'error', fuente: 'ma-itu-dirigido · ma-itu-retirar · ma-itu-no',
               enunciado: 'El plan del R1 para Felisa. Encuentra los errores (0, 1 o 2).',
               frases: [
-                { t: 'E. coli en orina >10⁵ y en sangre: infección urinaria bacteriémica aunque no tenga síntomas urinarios.' },
+                { t: 'E. coli en orina >10⁵ y en sangre: infección urinaria con bacteriemia, aunque no tenga síntomas urinarios.' },
                 { t: 'Ajusto al antibiograma y mantengo 7 días si responde pronto.' },
                 { t: 'Mantengo la sonda: no llega a las 2 semanas, aunque ya no la necesita para el balance.', mal: true, c: 'Retirar la sonda en cuanto no haga falta <span class="hl-verde">es la medida más eficaz</span>.' },
                 { t: 'Limpieza diaria del meato con antiséptico para que no se repita.', mal: true, c: 'Limpiar a diario el punto de inserción <span class="hl-rojo">puede aumentar la bacteriuria</span>.' }],
@@ -196,7 +196,7 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'cdu-g3', corto: 'el neutropénico', tipo: 'test', fuente: 'ma-cand-asintomatica', modelo: visual('ma-candiduria', '👁️ Candiduria (vista Visual)'), calculadora: { ir: 'ma-cand-calc', nombre: 'Candiduria: ¿qué hago?' },
         enunciado: 'Predice con el selector: candiduria asintomática en un neutropénico. ¿La tratas, y con qué?',
         opciones: [
-          { t: 'No: la asintomática no se trata nunca', porque: 'En el neutropénico hay riesgo de diseminación; esperarías a que se disemine.' },
+          { t: 'No: sin síntomas no se trata', porque: 'En el neutropénico hay riesgo de diseminación; esperarías a que se disemine.' },
           { t: 'Sí: por el riesgo de diseminación, con una equinocandina', ok: true },
           { t: 'Sí, con fluconazol oral a 200-400 mg/día durante 2 semanas, como en la cistitis', porque: 'Es la pauta de la infección urinaria por especie sensible; en el neutropénico la ficha da una equinocandina.' }],
         explicacion: 'No se trata <span class="hl">salvo en el neutropénico</span> (riesgo de diseminación): profilaxis con una equinocandina (caspofungina, micafungina o anidulafungina).' },
@@ -226,16 +226,16 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'cdu-e2', corto: 'sintomática', tipo: 'test', fuente: 'ma-cand-sintomatica',
         enunciado: 'Candiduria con fiebre y dolor costovertebral. ¿Qué haces?',
         opciones: [
-          { t: 'Solo un antifúngico sistémico durante dos semanas y control clínico', porque: 'Faltaría descartar la diseminación y las complicaciones renales.' },
+          { t: 'Retirar la sonda y observar', porque: 'La retirada no sustituye el tratamiento de una candiduria sintomática.' },
           { t: 'Antifúngico, hemocultivos e imagen renal (ecografía o TC)', ok: true },
-          { t: 'Retirar la sonda y observar', porque: 'La retirada no sustituye el tratamiento de una candiduria sintomática.' }],
+          { t: 'Fluconazol 2 semanas sin más pruebas', porque: 'Faltaría descartar la diseminación y las complicaciones renales con hemocultivos e imagen.' }],
         explicacion: 'Sintomática: <span class="hl">antifúngico + hemocultivos + imagen renal</span> (ecografía o TC) para buscar abscesos u obstrucción.' },
       { id: 'cdu-e3', corto: 'sistémica', tipo: 'test', fuente: 'ma-cand-tto',
         enunciado: 'Candidiasis sistémica sospechada o confirmada. ¿Por qué se prefiere una equinocandina al fluconazol?',
         opciones: [
           { t: 'Porque es activa frente a todas las especies', ok: true },
           { t: 'Porque penetra mejor en la orina y alcanza concentraciones altas', porque: 'Al contrario: las equinocandinas penetran mal en la orina.' },
-          { t: 'Porque el fluconazol es nefrotóxico', porque: 'La ficha no da esa razón; la razón es la especie.' }],
+          { t: 'Porque penetra mejor en el riñón', porque: 'La ficha no da esa razón; la razón es la especie, y las equinocandinas penetran mal en la orina.' }],
         explicacion: 'Equinocandina: <span class="hl">activa frente a todas las especies; mejor que el fluconazol</span>.' },
       { id: 'cdu-e4', corto: 'nefrostomía', tipo: 'test', fuente: 'ma-cand-tto',
         enunciado: 'En un paciente con nefrostomía y bola fúngica, ¿qué lavados se hacen?',
@@ -256,13 +256,13 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'c5c3', titulo: 'Felisa, 82 años: la candiduria que no se va', corto: 'Caso · Felisa', sub: 'insuficiencia cardíaca, sonda desde el día 0, 58 kg',
         paciente: { Edad: '82 años', Peso: '58 kg', Motivo: 'ingreso por insuficiencia cardíaca', Antecedente: 'infección urinaria bacteriémica por E. coli tratada con pip-tazo' },
         pasos: [
-          { momento: 'Día 10', datos: { Vía: 'central, para nutrición parenteral', Antibiótico: 'pip-tazo desde el día 6', Sonda: 'puesta desde el día 0' }, nuevo: ['Vía', 'Antibiótico', 'Sonda'],
+          { momento: 'Día 10', datos: { Vía: 'central, para nutrición parenteral', Antibiótico: 'pip-tazo desde el día 6', Sonda: 'retirada el día 9' }, nuevo: ['Vía', 'Antibiótico', 'Sonda'],
             pregunta: { id: 'c5c3-1', tipo: 'test', fuente: 'ma-candidiasis', origen: 'ficha · los datos de la paciente son ilustrativos',
               enunciado: 'Felisa lleva ahora una vía central y un antibiótico de amplio espectro. ¿Qué cambia respecto al riesgo de candidiasis invasiva?',
               opciones: [
                 { t: 'Nada: esos factores solo importan en el neutropénico', porque: 'La ficha los da como factores de riesgo generales de candidiasis invasiva, que casi todos los pacientes de UCI tienen; ignorarlos te haría olvidar a Candida cuando la fiebre persista.' },
                 { t: 'Tiene factores de riesgo: vía central y antibióticos de amplio espectro', ok: true },
-                { t: 'Se descarta Candida, porque el antibiótico la elimina', porque: 'El antibiótico de amplio espectro es un factor de riesgo, no una protección; confiarías en él y no pensarías en el hongo.' }],
+                { t: 'Solo cuenta si hay cirugía abdominal reciente', porque: 'La cirugía abdominal es un factor más, no el único: la vía central y los antibióticos de amplio espectro también lo son, y no pensarías en el hongo.' }],
               explicacion: 'Factores de riesgo de candidiasis invasiva: <span class="hl">vía central, cirugía abdominal reciente, antibióticos de amplio espectro</span>; casi todos los tienen, por eso se piensa en ella ante una fiebre persistente sin causa.' } },
           { momento: 'Día 14', datos: { Fiebre: 'afebril desde el día 9', Antibiótico: 'terminado', Sonda: 'nueva, por retención', Urocultivo: 'Candida albicans 10⁴', Síntomas: 'ninguno' }, nuevo: ['Fiebre', 'Antibiótico', 'Sonda', 'Urocultivo', 'Síntomas'], calculadora: { ir: 'ma-cand-calc', nombre: 'Candiduria: ¿qué hago?' },
             pregunta: { id: 'c5c3-2', tipo: 'test', fuente: 'ma-cand-asintomatica · ma-cand-micro', origen: 'ficha · las cifras de la paciente son ilustrativas',
@@ -281,8 +281,8 @@ export const MAYEUTICA_FIEBRE_2 = {
                 { t: 'Si fuera un neutropénico, daría una equinocandina por el riesgo de diseminación.' },
                 { t: 'Si creciera C. glabrata y hubiera infección urinaria, daría fluconazol.', mal: true, c: 'La glabrata es <span class="hl-rojo">resistente al fluconazol</span>: se da anfotericina B 0,3-0,6 mg/kg/día 1-7 días.' }],
               explicacion: 'Asintomática sin neutropenia: no se trata; con neutropenia, equinocandina; glabrata o krusei, anfotericina.' } },
-          { momento: 'Día 18 · el giro', datos: { Temperatura: '38,6 °C', FC: '104/min', PA: '104/58 mmHg', Vía: 'central desde el día 10, para nutrición parenteral', Hemocultivos: 'del día 16, negativos', Candiduria: 'persistente', Fuente: 'ninguna otra' }, nuevo: ['Temperatura', 'FC', 'PA', 'Vía', 'Hemocultivos', 'Candiduria', 'Fuente'], modelo: { termostatoVivo: 'fiebre' },
-            pregunta: { id: 'c5c3-4', tipo: 'destapa', fuente: 'ma-candidiasis · ma-cand-que · ma-empirico', cuantas: 'son tres cosas', origen: 'ficha · las cifras de la paciente son ilustrativas', nota: NOTA_CANDIDURIA,
+          { momento: 'Día 18 · el giro', datos: { Temperatura: '38,6 °C', Fiebre: 'desde el día 15', FC: '104/min', PA: '104/58 mmHg', Vía: 'central desde el día 10, para nutrición parenteral', Hemocultivos: 'del día 16, centrales y periféricos negativos', Candiduria: 'persistente', Fuente: 'sin foco tras revisar catéter y pulmones' }, nuevo: ['Temperatura', 'Fiebre', 'FC', 'PA', 'Vía', 'Hemocultivos', 'Candiduria', 'Fuente'],
+            pregunta: { id: 'c5c3-4', modelo: { termostatoVivo: 'fiebre' }, tipo: 'destapa', fuente: 'ma-candidiasis · ma-cand-que · ma-empirico', cuantas: 'son tres cosas', origen: 'ficha · las cifras de la paciente son ilustrativas', nota: NOTA_CANDIDURIA,
               enunciado: '¿Por qué piensas en candidiasis diseminada y qué das? Son tres cosas.',
               puntos: [
                 'Tiene los factores (<span class="hl">vía central, antibiótico de amplio espectro</span>) y fiebre persistente sin otra causa, con candiduria persistente: consecuencia, no causa.',
