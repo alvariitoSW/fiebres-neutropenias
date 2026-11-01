@@ -5,6 +5,7 @@
 // calculadoras de la ficha se conectan, nunca se copian.
 import { montarVisual } from '../../core/visual-kit.js';
 import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
+import { montarGlomerulo } from '../nefrologia/glomerulo-vivo.js';
 import { curvaPh, mapaGasometria, icebergK, escalaHiperMg, cineticaEnzimas, semaforoAntibioticos, simuladorSalino, retoVolumen, asistenteVisual } from './visual-marino-piezas.js';
 import { DI_WIZARD } from './marino-renal.js';
 import { PBE_WIZARD, CDI_WIZARD } from './marino-abdomen.js';
@@ -141,6 +142,8 @@ function renal() {
             FIGURAS,
             { tipo: 'racimos', titulo: 'Mecanismos (Tabla 34.2)', tabla: '#mr-tabla-34-2', color: 'rojo' },
             { tipo: 'flujo', titulo: 'El gradiente de filtración', nodos: [n('#mr-gradiente-filtracion', 'Gradiente de filtración', 'dorado'), [n('#mr-congestion', 'Congestión venosa', 'amarillo'), n('#mr-gradiente-pia', 'Presión abdominal', 'rojo')]] },
+            { tipo: 'propio', titulo: 'Glomérulo vivo: congestión y presión abdominal', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'pia', 'congestion'], textos: { pia: 'mr-gradiente-pia', congestion: 'mr-congestion' } }) },
             calc('Presión abdominal (calculadora de la ficha)', ['#mr-pia-pam', '#mr-pia-valor', '#mr-pia-unidad', '#mr-pia-organo'], ['#mr-pia-resultado']),
             { tipo: 'racimos', titulo: 'Presión intraabdominal', grupos: [{ titulo: 'PIA', color: 'purpura', nodos: [n('#mr-pia-definiciones', 'Definiciones'), n('#mr-ppa', 'Presión de perfusión abdominal'), n('#mr-pia-medida', 'Cómo medirla')] }] }
         ]
