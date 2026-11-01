@@ -9,7 +9,7 @@ export const HUANG = web('Huang-Bianco 2008', 'https://pmc.ncbi.nlm.nih.gov/arti
 export const LAZUL = web('Libro Azul, cap. 45, p. 4-6', 'docs/libro-azul-seccion-vi-endocrino.pdf#page=4');
 // El eje vivo: data-eje-vivo="<paciente>[:paso]". La clave `ejeVivo` aún no está en MODELOS de js/core/mayeutica.js: el botón
 // «Compruébalo» ya funciona; el paso «Juega» lo listará cuando esa línea exista (lo anota el informe).
-export const V = (pac, paso = 0) => ({ especialidad: 'libros', view: 'ejeVivo', ejeVivo: paso ? `${pac}:${paso}` : pac });
+export const V = (pac, paso = 0, texto) => ({ especialidad: 'libros', view: 'ejeVivo', ejeVivo: paso ? `${pac}:${paso}` : pac, ...(texto ? { texto } : {}) });
 // Test: `ok` es la buena, `malas` son [texto, qué le habría pasado al paciente]; `pos` la coloca (la app las baraja).
 export const T = (id, corto, fuente, enunciado, ok, malas, explicacion, pos = 0, extra = {}) => {
   const o = malas.map(([t, porque]) => ({ t, porque })); o.splice(pos, 0, { t: ok, ok: true });
