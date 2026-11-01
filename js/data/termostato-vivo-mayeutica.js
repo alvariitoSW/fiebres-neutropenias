@@ -57,7 +57,7 @@ const PREG_RECORRIDO = [
   { grupo: 'guia', num: 'G6', predice: true, estado: est('snm', 2),
     enunciado: 'Jacinta, 47 años, lleva haloperidol desde hace unos días. Ahora tiene rigidez en tubo de plomo y 37,6 °C. El termostato de Jacinta no se ha movido. <b>¿Cuándo se espera que suba su temperatura?</b>',
     opciones: [
-      { t: 'Antes que la rigidez: el haloperidol calienta y el músculo se pone rígido por la fiebre.', porque: 'Es al revés: la rigidez va primero (p. 50). Si esperas fiebre para sospechar, tardarás en retirar el haloperidol mientras el músculo rígido produce calor.' },
+      { t: 'Antes que la rigidez: el haloperidol calienta primero y el músculo se pone rígido por la fiebre.', porque: 'Es al revés: la rigidez va primero (p. 50). Si esperas fiebre para sospechar, tardarás en retirar el haloperidol mientras el músculo rígido produce calor.' },
       { t: 'Nunca: el síndrome neuroléptico maligno se diagnostica sin fiebre.', porque: 'La hipertermia es parte del cuadro (p. 49). Descartarlo por tener 37,6 °C te haría seguir con el fármaco, que es lo que lo causa (p. 50).' },
       { t: 'Hasta 8-10 horas después de empezar la rigidez, porque el músculo rígido produce el calor.', ok: true },
       { t: 'Al mismo tiempo que los primeros síntomas, de golpe, porque la dosis lo marca.', porque: 'No hay relación entre la dosis y la aparición del síndrome (p. 50): es una reacción idiosincrásica, no tóxica. La fiebre se retrasa respecto a la rigidez (p. 50).' }],
@@ -118,7 +118,7 @@ const PREG_RECORRIDO = [
     opciones: [
       { t: '800 mg fijos cada 4 h, sin ajustar al peso.', porque: 'La dosis es de 10 mg/kg, hasta 800 mg cada 6 h (p. 72). Cada 4 h sumaría más dosis al día de las que describe la fuente.' },
       { t: '10 mg/kg (700 mg), hasta 800 mg cada 6 h; el libro no fija un máximo diario.', ok: true },
-      { t: 'Ninguna: los AINE están contraindicados en el paciente crítico por el riñón.', porque: 'El libro dice que su uso en la UCI es limitado por un miedo exagerado a la toxicidad renal y a la hemorragia digestiva (p. 72), no que estén contraindicados. Descartarlos te dejaría sin una opción que la fuente describe.' },
+      { t: 'Ninguna: los AINE están contraindicados en el paciente crítico por el riñón y el estómago.', porque: 'El libro dice que su uso en la UCI es limitado por un miedo exagerado a la toxicidad renal y a la hemorragia digestiva (p. 72), no que estén contraindicados. Descartarlos te dejaría sin una opción que la fuente describe.' },
       { t: 'Ketorolaco 0,5 mg/kg cada 6 h, la pauta repetida habitual.', porque: 'La fuente describe una sola dosis IV de ketorolaco de 0,5 mg/kg (p. 72). Repetirla cada 6 h es una pauta que el libro no da.' }],
     explicacion: 'Ibuprofeno IV 10 mg/kg, hasta 800 mg cada 6 h (p. 72). El libro no da un máximo diario. La fiebre se baja sobre todo en la lesión cerebral isquémica, donde es dañina (p. 71).', fuente: ['72|ma-antip-aine', '71|ma-antipireticos'] },
 ];
@@ -140,7 +140,7 @@ const CASO_J = { id: 'tmv-jacinta', titulo: 'La rigidez antes que la fiebre (Jac
       { t: 'Un síndrome neuroléptico maligno que empieza: la rigidez va antes que la fiebre.', ok: true },
       { t: 'No puede ser un SNM sin fiebre; esperas a que suba para decidir.', porque: 'La fiebre se retrasa hasta 8-10 horas tras la rigidez (p. 50). Mientras esperas, el haloperidol sigue y el músculo rígido produce calor.' },
       { t: 'Una distonía por el haloperidol; le pones un anticolinérgico y se resuelve.', porque: 'La distonía se confunde con el SNM al principio, pero se separa con la CK: solo sube un poco, frente a más de 1.000 U/L en el SNM (p. 50). Sin medirla, la tratarías mal.' },
-      { t: 'Sepsis: cultivos y antibiótico, sin tocar el haloperidol, que no tiene que ver.', porque: 'Quitar el fármaco causante es lo más importante en el SNM (p. 50). Sin retirarlo, la rigidez y el calor siguen subiendo.' }],
+      { t: 'Sepsis: cultivos y antibiótico de amplio espectro, sin tocar el haloperidol, que no tiene que ver.', porque: 'Quitar el fármaco causante es lo más importante en el SNM (p. 50). Sin retirarlo, la rigidez y el calor siguen subiendo.' }],
     explicacion: 'Rigidez y confusión son las primeras manifestaciones del SNM, 24-72 h después de empezar el fármaco; la fiebre puede retrasarse (p. 50).', fuente: ['50|ma-snm-clinica'] },
   { momento: 'Día 5 · 23:00', estado: est('snm', 4), dato: fila('snm', 4), tipo: 'test', predice: true,
     enunciado: 'La temperatura sube y la CK pasa de 1.000. <b>¿Qué haces primero?</b>',
@@ -198,7 +198,7 @@ const CASO_H = { id: 'tmv-honorato', titulo: 'Nadie está muerto hasta estar cal
   { momento: 'Recalentar', estado: est('hipo', 5), dato: fila('hipo', 5), tipo: 'test', predice: true,
     enunciado: 'Honorato sigue en parada. <b>¿Cómo lo recalientas?</b>',
     opciones: [
-      { t: 'ECMO venoarterial, que se ha usado con éxito, con calor externo y fluidos calientes.', ok: true },
+      { t: 'ECMO venoarterial, con calor externo y fluidos calientes.', ok: true },
       { t: 'Lavado gástrico con líquido caliente.', porque: 'Es un método no recomendado por el riesgo de aspiración (p. 56).' },
       { t: 'Un bolo de suero a temperatura ambiente (21 °C) para reponer el volumen.', porque: 'Los fluidos a 21 °C enfrían más al paciente (p. 56): deben ir calientes, y aun así solo evitan enfriar.' },
       { t: 'Lavado vesical caliente: es el método interno más fiable.', porque: 'El lavado vesical caliente es ineficaz (p. 56).' }],
