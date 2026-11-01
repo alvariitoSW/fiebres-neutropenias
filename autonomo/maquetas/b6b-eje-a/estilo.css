@@ -1,0 +1,60 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css, que se enlaza sin tocarlo). */
+#monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; min-height: 150px; }
+.mon-rejilla { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2px 6px; font: 600 .66rem/1.25 var(--sans); color: var(--text-dim); } .mon-rejilla b { display: block; color: var(--text-main); font-size: .92rem; }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button { min-height: 40px; font: 700 .76rem/1.15 var(--sans); } .modos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); } .mando .fila { display: flex; flex-wrap: wrap; gap: 4px; } .mando .fila > * { flex: 1 1 0; min-width: 76px; min-height: 36px; font: 700 .7rem/1.15 var(--sans); }
+.mando button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); } .dock-nota { font: 700 .66rem/1.2 var(--sans); color: var(--text-dim); }
+.presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 38px; font: 700 .7rem/1.1 var(--sans); } .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.dock-panel { max-height: 24vh !important; min-height: 0 !important; } .dock-tabs button { min-height: 34px !important; }
+.prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); } .prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+.ops { display: grid; gap: 4px; } .op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.frase .org, .idea .org, .guia .org { color: var(--text-muted); font-weight: 400; } .idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); } .idea .cita { white-space: nowrap; }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+.llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); } .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+.cita { font: .68rem/1.3 var(--sans); } .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; }
+.toast { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h, 190px) + var(--frase-h, 60px) + 8px); z-index: 40; margin: 0; padding: 6px 10px; border: 1px solid var(--oro); border-radius: 10px; background: var(--bg-card); font: .76rem/1.35 var(--sans); }
+.figuras { display: grid; gap: 6px; margin: 6px 0; } .figuras figure { margin: 0; border: 1px solid var(--line); border-radius: 10px; padding: 4px; background: var(--bg-card); } .figuras img { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--text-main); } .figuras figcaption { font: .7rem/1.3 var(--sans); color: var(--text-dim); margin-top: 3px; }
+.figuras figure.resalta { border-color: var(--accent-red); box-shadow: 0 0 0 2px var(--accent-red); } .min-nota { font: .68rem/1.3 var(--sans); color: var(--text-muted); margin: 3px 0 0; }
+#imp { fill: var(--oro); stroke: var(--bg-main); stroke-width: 1.5; }
+.zona-escena { position: relative; } #capa-imp { pointer-events: none; }
+.foco-caja { outline: 2.5px dashed var(--oro); outline-offset: 2px; } details.lupa > summary { min-height: 40px; display: flex; align-items: center; font: 700 .78rem/1.2 var(--sans); cursor: pointer; }
+#tabla-466 { overflow-x: auto; margin: 6px 0; } #tabla-466 table { width: 100%; font: .72rem/1.3 var(--sans); } #tabla-466[data-col="1"] td:nth-child(2), #tabla-466[data-col="1"] th:nth-child(2), #tabla-466[data-col="2"] td:nth-child(3), #tabla-466[data-col="2"] th:nth-child(3) { background: color-mix(in srgb, var(--accent-yellow) 18%, var(--bg-card)); font-weight: 800; }
+#pulmon-vivo { margin: 4px 0; padding: 6px 10px; border: 1px solid var(--accent-red); border-radius: 10px; font: .76rem/1.35 var(--sans); }
+/* Vuelta 2: sello debajo del monitor (no encima), CV en dos líneas, sin hueco bajo las barras */
+#monitor { min-height: 0; } .mon-rejilla small { display: block; font: 600 .62rem/1.2 var(--sans); color: var(--text-muted); }
+.sellos { position: relative; margin: 0; } .sellos:has(.tope-linea [data-tope]) { min-height: 44px; } #sellos .tope-sellos { position: static; transform: none; margin: 0 auto; max-height: none; }
+#ritmo-vivo, #pulmon-vivo { margin: 4px 0; padding: 6px 10px; border: 1px solid var(--accent-red); border-radius: 10px; font: .76rem/1.35 var(--sans); }
+
+/* Hendidura importada del modelo A: sus clases de dibujo, dentro de la lupa. */
+.mando [data-est] { padding-inline: 3px; min-width: 70px; overflow-wrap: anywhere; }
+
+/* Retoque final: los sellos van en columna (flujo normal), nunca absolutos ni encima de la escena. */
+#sellos .tope-linea { position: static; display: flex; flex-direction: column; gap: 3px; }
+#sellos .tope-linea span, #sellos .tope-sello { white-space: normal; overflow: visible; text-overflow: clip; }
+#sellos .tope-sellos { position: static; transform: none; display: flex; flex-direction: column; gap: 4px; width: auto; max-width: 100%; max-height: none; overflow: visible; }
+#sellos .tope-mon { position: static; inset: auto; display: flex; flex-direction: column; gap: 4px; } #sellos .tope-sello { transform: none; width: auto; max-width: 100%; white-space: normal; } #sellos .tope-sello small { display: block; }
+/* Eje · opción A */
+#eje-svg { width: 100%; height: auto; display: block; border-radius: 12px; border: 1px solid var(--line); background: var(--bg-main); }
+#eje-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); } #eje-svg .rot { fill: var(--text-main); font-weight: 700; font-size: 10px; } #eje-svg .hor { fill: var(--oro); font-weight: 800; } #eje-svg .min { fill: var(--text-muted); } #eje-svg .oro { fill: var(--accent-red); font-weight: 800; }
+#eje-svg .est { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--text-muted); stroke-width: 2; } #eje-svg .tri { fill: color-mix(in srgb, var(--accent-yellow) 25%, var(--bg-card)); } #eje-svg .ap { stroke-dasharray: 3 3; } #eje-svg .cand { stroke: var(--accent-red); stroke-width: 3; }
+#eje-svg .fl path { fill: none; stroke: var(--oro); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; } #eje-svg .fl.rojo path { stroke: var(--accent-red); }
+#eje-svg .cable path { fill: none; stroke: var(--text-main); stroke-width: 2; stroke-dasharray: 5 3; } #eje-svg .cable.ext path { stroke: var(--accent-red); stroke-width: 4; stroke-dasharray: none; }
+#eje-svg .menos { fill: var(--bg-main); stroke: var(--text-main); stroke-width: 1.5; } #eje-svg .menos-t { fill: var(--text-main); font-weight: 800; font-size: 12px; }
+#eje-svg .bloq circle { fill: var(--bg-main); stroke: var(--accent-red); stroke-width: 2; } #eje-svg .bloq path, #eje-svg .bloq-l { stroke: var(--accent-red); stroke-width: 2; fill: none; }
+#eje-svg .cand-i rect { fill: var(--accent-red); } #eje-svg .cand-i path { fill: none; stroke: var(--accent-red); stroke-width: 2; }
+#eje-svg .tij path { stroke: var(--text-main); stroke-width: 2; fill: none; } #eje-svg .tij circle { fill: none; stroke: var(--text-main); stroke-width: 1.5; } #eje-svg .tij.rota path, #eje-svg .tij.rota circle { stroke: var(--text-muted); stroke-dasharray: 2 2; }
+#eje-svg .b-r { fill: color-mix(in srgb, var(--accent-red) 55%, var(--bg-main)); } #eje-svg .b-a { fill: color-mix(in srgb, var(--accent-yellow) 45%, var(--bg-main)); } #eje-svg .b-v { fill: color-mix(in srgb, var(--accent-green) 55%, var(--bg-main)); }
+#eje-svg .pt { fill: var(--oro); stroke: var(--bg-main); stroke-width: 2; } #eje-svg .pt.hueco { fill: none; stroke: var(--oro); } #eje-svg .caja { fill: none; stroke: var(--line); } #eje-svg .norm { fill: color-mix(in srgb, var(--accent-green) 25%, transparent); stroke: var(--accent-green); stroke-dasharray: 3 2; }
+#eje-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+.zona-escena { position: relative; } .foco-caja { outline: 2.5px dashed var(--oro); outline-offset: 2px; }
+.mon-rejilla small { display: block; font: 600 .62rem/1.2 var(--sans); color: var(--text-muted); } #monitor { min-height: 0; }
+.modos { grid-template-columns: repeat(4, minmax(0, 1fr)); } .dock-panel { max-height: 26vh !important; min-height: 0 !important; } .dock-tabs button { min-height: 34px !important; }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); } .mando .fila { display: flex; flex-wrap: wrap; gap: 4px; } .mando .fila > * { flex: 1 1 0; min-width: 76px; min-height: 36px; font: 700 .7rem/1.15 var(--sans); white-space: normal; overflow-wrap: anywhere; padding-inline: 3px; }
+.mando button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); } .dock-nota { font: 700 .66rem/1.2 var(--sans); color: var(--text-dim); } .mando input[type=range] { width: 100%; min-height: 32px; } .mando input[type=number] { min-height: 36px; width: 100%; }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+#tabla-512 { overflow-x: auto; margin: 6px 0; } #tabla-512 table { width: 100%; font: .72rem/1.3 var(--sans); } #tabla-512 tr.lit td { background: color-mix(in srgb, var(--oro) 28%, transparent); font-weight: 800; }
+#sellos .tope-linea { position: static; display: flex; flex-direction: column; gap: 3px; } #sellos .tope-linea span, #sellos .tope-sello { white-space: normal; overflow: visible; text-overflow: clip; }
+#sellos .tope-mon { position: static; inset: auto; display: flex; flex-direction: column; gap: 4px; } #sellos .tope-sellos { position: static; transform: none; width: auto; max-width: 100%; max-height: none; overflow: visible; } #sellos .tope-sello { transform: none; width: auto; max-width: 100%; white-space: normal; } #sellos .tope-sello small { display: block; }
+.sellos { position: relative; margin: 0; } .lectura { margin: 4px 0; font: .74rem/1.35 var(--sans); color: var(--text-dim); }
+#monitor em { font-style: normal; }
