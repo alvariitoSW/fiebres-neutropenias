@@ -527,12 +527,12 @@ export function montarSimulador(raiz, opc = {}) {
   let colorOn = false, nyq = 60, gate = null, ultimoTD = null, fuenteD = null, medD = null, latidoD = -1, frameD = 0, angD = null;
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
-  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral });
+  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral, eroaTricus: motor.p.eroaTricus });
   let areasTd = null;   // áreas de anillo de la telediástole de referencia (anillosDe: del corazón, no del dibujo)
   const areasD = () => areasTd;
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
-    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
+    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, regtricus: { vista: 'a4c', n: 'regTricus', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
     // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
     vci: { vista: 'scVci', vaso: 'vci' }, vpulm: { vista: 'a4c', venaPulm: true }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
@@ -588,7 +588,7 @@ export function montarSimulador(raiz, opc = {}) {
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
-    if (k === 'regmitral') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
+    if (k === 'regmitral' || k === 'regtricus') { const e = k === 'regtricus' ? '500' : '250'; $('#cv-d-escala').value = e; espectro.setEscala(+e); }   // el chorro supera los 150 cm/s; la IT con HP llega a ~450 cm/s: el CW no da aliasing
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -607,7 +607,7 @@ export function montarSimulador(raiz, opc = {}) {
   function actualizarMedidasD(pts, haz, F) {
     latidoD = motor.s.nLatido; fuenteD = fuenteEnMuestra(pts, haz, F); angD = null;
     if (fuenteD && fuenteD.tipo === 'valvula') { const j = F.geom.find(x => x.n === fuenteD.n); angD = Math.acos(Math.min(1, Math.abs(haz[0] * j.dir[0] + haz[1] * j.dir[1] + haz[2] * j.dir[2]))) * 180 / Math.PI; }
-    medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD) : null;
+    medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD, datosFlujo()) : null;
     pintarResultadoD();
   }
   // El renglón «fórmula → números → resultado» es de la app (core/formula.js); el laboratorio suelto no lo carga y deja el texto de siempre.
@@ -632,6 +632,12 @@ export function montarSimulador(raiz, opc = {}) {
         poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en <a href="docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=15" target="_blank" rel="noopener">Nagueh 2025 p. 551</a>: dos fuentes, sin elegir ganadora) · TDE ${fx(medD.tde)} ms (normal 140-250)`
           + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).</span>`);
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
+      return;
+    }
+    if (medD.tipo === 'regurgitacion' && medD.vIT != null) {
+      poner('warn', cab + `Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, <b>vIT ${fx(medD.vIT, 2)} m/s</b> · ITV ${fx(medD.itv, 1)} cm`
+        + (medD.psap != null ? `<br>PSAP estimada = 4·vIT² + PVC = <b>${fx(angD != null && angD < 60 ? 4 * Math.pow(medD.vIT / Math.cos(angD * Math.PI / 180), 2) + (medD.psap - 4 * medD.vIT * medD.vIT) : medD.psap)} mmHg</b>${angD != null && angD < 60 ? ` (vIT corregida por el ángulo: ${fx(medD.vIT / Math.cos(angD * Math.PI / 180), 2)} m/s; sin corregir sería ${fx(medD.psap)})` : ''} (normal: vIT ≤ 2,8 m/s; &gt; 3,4 m/s sugiere hipertensión pulmonar, <a href="docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf" target="_blank" rel="noopener">ESC/ERS 2022</a>).` : '')
+        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. La vIT es el pico del latido (la máxima presión VD − AD de ese instante, con la AD de ese instante); la PSAP suma la PVC media, por eso difiere unos mmHg de la presión máxima del VD del motor. Ilustrativo.</span>`);
       return;
     }
     if (medD.tipo === 'regurgitacion') {
@@ -768,8 +774,25 @@ export function montarSimulador(raiz, opc = {}) {
     }
     if (modoEco === 'D' && gate) {
       const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrm(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
-      const pts = puntosMuestra(P, g, haz), us = velocidadesMuestra(pts, haz, Fd);
-      if (!revision && s === motor.s && ultimoTD !== s.t) { espectro.anadir(s.t, (f) => columnaEspectro(us, f, espectro.estado.vmax, ++frameD)); ultimoTD = s.t; }
+      const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
+      // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
+      if (fuenteD && fuenteD.n === 'regTricus') { const jt = Fd.valvulas.find(x => x.n === 'regTricus'); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
+      if (!revision && s === motor.s && ultimoTD !== s.t) {
+        // una columna por muestra del motor (2 ms) desde el fotograma anterior: la onda sale con su envolvente y su pendiente, no en escalones.
+        // Cada muestra desplaza las velocidades del fotograma por lo que cambia la curva de la fuente entre ese instante y este
+        const lote = [], vmaxD = espectro.estado.vmax, aD = areasD(), mD = datosFlujo();
+        const vEn = (x) => curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
+        if (fuenteD && ultimoTD != null && s.t - ultimoTD < 0.25 && s.t > ultimoTD) {
+          const ini = s.t - s.tLatido, cur = motor.ondaActual, prev = motor.onda, v0 = vEn(s);
+          const emitir = (x, tAbs) => { if (tAbs <= ultimoTD || tAbs > s.t || Math.round(x.t / 0.002) % 2) return;   // una de cada dos (4 ms ≈ 0,5 px a 390 px): la mitad de coste
+           const dv = vEn(x) - v0, uk = fuenteD.n === 'regTricus' ? [vEn(x)] : us.map(u => u + dv);
+            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD) }); };
+          if (prev.length && ultimoTD < ini) { const t0 = ini - (prev[prev.length - 1].t + 0.002); for (const x of prev) emitir(x, t0 + x.t); }
+          for (const x of cur) emitir(x, ini + x.t);
+        }
+        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD));
+        ultimoTD = s.t;
+      }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);
       // haz punteado y volumen de muestra (dos marcas cruzadas al haz)
       const pxm = ecoC.width / ecoC.clientWidth, X = (u) => im.cx + u * im.escala, Y = (v) => im.arriba + v * im.escala, L = Math.hypot(gate.u, gate.v), tu = gate.u / L, tv = gate.v / L;
