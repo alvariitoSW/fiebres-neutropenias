@@ -61,8 +61,8 @@ por color.
 | Paso | Estado | Salida |
 |---|---|---|
 | 1 · Cobertura (profesor) | ✅ 01/11 (≈86 %; grupos 5A-5D) | `cobertura.md` (+ `cobertura-anexo.md`) |
-| 2 · Maquetas hepatocito y termostato | en curso (01/11) | `autonomo/maquetas/b5-{hepatocito,termostato}-<x>.html` + carpeta |
-| 2 · Juicio y elección (Educación, Consejo) | — | `juicio-*.md`, `eleccion.md` |
+| 2 · Maquetas hepatocito y termostato | ✅ 01/11 (hepatocito B 9,45 · termostato B 9,5) | `autonomo/maquetas/b5-{hepatocito,termostato}-<x>.html` + carpeta |
+| 2 · Juicio y elección (Educación, Consejo) | ✅ 01/11 | `juicio-*.md`, `eleccion.md` |
 | 3 · Modelos en la app · 4 · Estudiar | tras el `b4` | sesiones aparte |
 
 ## 7. Piezas comunes
