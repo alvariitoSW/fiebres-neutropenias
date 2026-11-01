@@ -365,3 +365,12 @@ Copiado tal cual de la bitácora al cerrar los cabos sueltos (acta `autonomo/con
   miocardiopatías ya están en `docs/`, 27/10: los huecos que cubren se pueden citar ya.)
 - **Rutina nocturna** (que el plan trabaje solo de madrugada, ~3:00 de Canarias, con aviso al móvil): **no montarla
   aún**; límite fijado el 27/10: como mucho el 18 % del uso semanal en un día (tablero).
+
+## Salido de la bitácora el 2026-11-01
+
+- 2026-10-23 · **Ingeniería inversa de 6 simuladores** (anesthbeta, EchoSuite, AngioView, NavRad con imagen,
+  Radiology Assistant, RitmoLab): 5 informes y el informe final «Del simulador a la cama»
+  (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill `/ingenieria-reversa` y 8 skills de terceros. La app no
+  cambió. (Hecho hace más de 7 días.)
+- B-002 (atlas cap. 18, fase B) y B-006 (atlas, 20 capítulos): salen de «Apuntado» al aprobarse el 01/11 como
+  `atlas-fase-b` (fase A ya hecha: los 30 capítulos con texto en `main`, PR #77); la PR #2 queda abierta y aparcada.
