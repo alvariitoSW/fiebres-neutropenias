@@ -341,7 +341,10 @@ export function regionZoom(P, est) {
   try { const ad = construirCorazon(est, { pericardio: false, detalle: false }).partes.find(p => p.nombre === 'AD');
     for (let i = 0; ad && i < ad.pos.length; i += 3) { const [u, v, n] = enPlano(P, [ad.pos[i], ad.pos[i + 1], ad.pos[i + 2]]);
       if (Math.abs(n) < 3 && v > 5 && v < P.prof) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } } catch { /* sin AD: queda la caja del VD */ }
-  return { u: (u0 + u1) / 2, v: (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0 };
+  // la ventana del zoom ×2 abarca ~98 mm de profundidad (lienzo de 300 px a 1,53 px/mm, a la mitad): si la caja es más alta (VD + ápex + AD), manda
+  // lo que pide la vista, el anillo tricuspídeo y la AD (el suelo de la AD queda dentro) y el ápex del VI se sale por arriba
+  const VENT = 98, m = 4;
+  return { u: (u0 + u1) / 2, v: v1 - v0 > VENT ? v1 + m - VENT / 2 : (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0 };
 }
 
 // ---------------------------------------------------------------------------- qué es cada pieza en la imagen
