@@ -272,6 +272,13 @@ export const MAYEUTICA_APENDICES = {
           { t: '31 millones por segundo', porque: 'Te has pasado de un cero: 270.000 millones al día ÷ 86.400 s son unos 3,1 millones. Con esa cifra calcularías diez veces más producción de la que da el libro (p. 46).' },
           { t: '310.000 por segundo', porque: 'Es diez veces menos de lo que sale. Calcularías diez veces menos producción que la del libro, unos 27 billones de hematíes con renovación del 1 % diario (p. 46).' }],
         explicacion: '5,4 billones de hematíes por litro × 5 L = 27 billones; se renueva un <span class="hl">1 % al día</span>: 270.000 millones, es decir, <span class="hl-rojo">3,1 millones por segundo</span> (' + pdf(46) + ').' },
+      { id: 'ap-c-adn', corto: 'el error al copiar', tipo: 'test', fuente: 'mt-cuerpo-polimerasa',
+        enunciado: 'La ADN polimerasa copia 3.200 millones de pares de nucleótidos. ¿Con qué frecuencia se equivoca?',
+        opciones: [
+          { t: 'Una vez por cada 10.000 millones de nucleótidos', ok: true },
+          { t: 'Una vez por cada 3.200 millones: una equivocación por genoma copiado', porque: 'Es el tamaño del genoma, no la tasa de error. El libro da un error por cada 10.000 millones de nucleótidos; con tu cifra supondrías muchas más mutaciones en cada replicación (p. 45).' },
+          { t: 'Una vez por cada millón de nucleótidos, aunque luego se corrige', porque: 'La cifra del libro ya incluye la comprobación de cada nucleótido antes de añadirlo: un error por cada 10.000 millones. Con tu cifra sobrestimarías 10.000 veces el error de la copia (p. 45).' }],
+        explicacion: 'Un error por cada <span class="hl-rojo">10.000 millones de nucleótidos</span>: la polimerasa comprueba cada nucleótido antes de añadirlo (' + pdf(45) + ').' },
       { id: 'ap-c-e1', corto: 'longitudes', tipo: 'error', fuente: 'mt-cuerpo-vasos · mt-cuerpo-vias',
         enunciado: 'Una diapositiva de curiosidades. Encuentra los errores (puede haber 0, 1 o 2).',
         frases: [

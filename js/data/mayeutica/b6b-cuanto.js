@@ -317,7 +317,7 @@ export const MAYEUTICA_CUANTO = {
         enunciado: 'Predice: un déficit de tiamina, ¿por qué sube el lactato?',
         opciones: [
           { t: 'Porque la hipoperfusión obliga al metabolismo anaerobio, como en el shock', porque: 'La hipoperfusión es otra causa de lactato y el libro la separa: aquí falta un cofactor, no flujo. Con esa idea correrías a dar volumen a alguien con la presión normal (p. 10).' },
-          { t: 'Sin pirofosfato de tiamina, la piruvato deshidrogenasa no mete el piruvato en la mitocondria', ok: true },
+          { t: 'Sin pirofosfato de tiamina, la piruvato deshidrogenasa no mete el piruvato', ok: true },
           { t: 'Porque el alcohol inhibe la absorción de tiamina y además se convierte en lactato', porque: 'Es mezcla de verdad y error: el alcohol sí inhibe la absorción intestinal de tiamina, pero no se convierte en lactato; ese no es el mecanismo. Perderías la tiamina como causa (p. 8).' }],
         explicacion: 'La tiamina se convierte en <span class="hl">pirofosfato de tiamina</span>, cofactor de la piruvato deshidrogenasa; sin ella el piruvato no entra en la mitocondria y se forma <span class="hl-rojo">más lactato</span> (' + pdf(8) + ' y ' + pdf(10) + ').' },
       { id: 'cu-ti-g2', corto: 'las reservas', tipo: 'test', fuente: 'mu-tia-reservas',
@@ -367,7 +367,7 @@ export const MAYEUTICA_CUANTO = {
       { id: 'cu-ti-e2', corto: 'qué medir', tipo: 'test', fuente: 'mu-tia-lab',
         enunciado: 'Quieres confirmar el déficit con una analítica. ¿Qué miras?',
         opciones: [
-          { t: 'Tiamina plasmática: es lo habitual', porque: 'Los niveles plasmáticos no son fiables. Te fiarías de una cifra normal y descartarías un déficit real (p. 11).' },
+          { t: 'Tiamina plasmática, la prueba habitual y de la que te puedes fiar', porque: 'Los niveles plasmáticos no son fiables. Te fiarías de una cifra normal y descartarías un déficit real (p. 11).' },
           { t: 'Pirofosfato de tiamina en sangre total: normal 63-229 nmol/L', ok: true },
           { t: 'Pirofosfato de tiamina en plasma: normal 63-229 nmol/L', porque: 'La cifra es la del pirofosfato en sangre total, no en plasma, donde la tiamina no es fiable. Pedirías la muestra equivocada y te fiarías de un resultado sin valor (p. 11).' }],
         explicacion: 'Casi toda la tiamina es pirofosfato en los hematíes: el ensayo en sangre total (normal <span class="hl">63-229 nmol/L</span>) tiene sentido; la plasmática no es fiable y el diagnóstico es clínico (' + pdf(11) + ').' },
@@ -433,9 +433,9 @@ export const MAYEUTICA_CUANTO = {
             pregunta: { id: 'cu-ani-5', tipo: 'test', fuente: 'mu-tia-rm · mu-tia-wernicke · mar-img-48-2',
               enunciado: 'La RM (como la Figura 48.2) muestra hiperseñal en ambos tálamos mediales. ¿Qué haces con la tríada y la RM?',
               opciones: [
-                { t: 'Es compatible con Wernicke; una RM normal no lo habría descartado (sensibilidad 53 %)', ok: true },
-                { t: 'Una RM normal lo habría descartado: sensibilidad del 93 %', porque: 'La sensibilidad es 53 % y la especificidad 93 %: has invertido las cifras, y con sensibilidad de 53 % una RM normal no descarta. Con una RM normal lo descartarías y no tratarías a un Wernicke real (p. 11).' },
-                { t: 'Sin la tríada completa no es Wernicke', porque: 'La tríada solo aparece en el 20 %. Exigirla dejaría sin tratar a la mayoría (p. 9).' }],
+                { t: 'Compatible con Wernicke; una RM normal no lo descartaría (sensibilidad 53 %)', ok: true },
+                { t: 'Una RM normal lo habría descartado, porque su sensibilidad es del 93 %', porque: 'La sensibilidad es 53 % y la especificidad 93 %: has invertido las cifras, y con sensibilidad de 53 % una RM normal no descarta. Con una RM normal lo descartarías y no tratarías a un Wernicke real (p. 11).' },
+                { t: 'Sin la tríada completa no es Wernicke: espera a que aparezcan los tres signos', porque: 'La tríada solo aparece en el 20 %. Exigirla dejaría sin tratar a la mayoría (p. 9).' }],
               explicacion: 'Aumento de señal T2 bilateral en el <span class="hl">tálamo medial</span> (' + pdf(11) + '). Sensibilidad <span class="hl-rojo">53 %</span>, especificidad 93 %: una RM normal no excluye el diagnóstico; la tríada solo aparece en el 20 % (' + pdf(9) + ').' } },
         ],
         lleva: [
@@ -462,7 +462,7 @@ export const MAYEUTICA_CUANTO = {
         enunciado: 'Un paciente con 25-OHD de 25 nmol/L. ¿Cómo lo clasificas y qué dice el libro de reponer?',
         opciones: [
           { t: 'Déficit grave (<30); 150.000 UI IM normalizan el nivel en el 90 %', ok: true },
-          { t: 'Déficit leve; basta la dieta: 600 UI orales', porque: 'Por debajo de 30 nmol/L el déficit es grave, y la absorción oral no es fiable en el crítico. Te quedarías con un déficit sin corregir (p. 12).' },
+          { t: 'Déficit leve; basta la dieta o la vía oral con 600 UI al día', porque: 'Por debajo de 30 nmol/L el déficit es grave, y la absorción oral no es fiable en el crítico. Te quedarías con un déficit sin corregir (p. 12).' },
           { t: 'Normal: el déficit empieza por debajo de 10 nmol/L', porque: 'El déficit se define por debajo de 50 nmol/L, y es grave por debajo de 30. Dejarías sin tratar un déficit grave que se asocia a más infecciones (p. 11-12).' }],
         explicacion: 'Déficit en el <span class="hl">40-100 %</span> de los pacientes de UCI; las nutriciones dan 200-400 UI frente a 600. <span class="hl"><50 nmol/L déficit; <30 grave</span>; una sola inyección IM de 150.000 UI normaliza el nivel en el 90 % (' + pdf(11) + ' y ' + pdf(12) + ').' },
       { id: 'cu-vo-g2', corto: 'por qué no hierro', tipo: 'test', fuente: 'mu-hierro-oxidativo',
@@ -492,8 +492,8 @@ export const MAYEUTICA_CUANTO = {
         enunciado: '¿Para qué sirve el selenio, cuándo baja la actividad enzimática y cuál es la dosis IV máxima segura?',
         opciones: [
           { t: 'Cofactor de la glutatión peroxidasa; <100 µg/L la reduce; selenito IV máx. 225 µg/día', ok: true },
-          { t: 'Cofactor de la catalasa; <55 µg/L; máx. 400 µg/día', porque: 'La enzima es la glutatión peroxidasa y el máximo 225 µg/día; 400 se pasa del libro. Intoxicarías con selenio (p. 13).' },
-          { t: 'Cofactor de la glutatión peroxidasa; <100 µg/L; máx. 55 µg/día', porque: '55 µg/día es la necesidad diaria del sano, no el máximo seguro de 225. Darías una dosis bajísima en un crítico con mayor consumo (p. 13).' }],
+          { t: 'Cofactor de la catalasa; <55 µg/L la reduce; selenito IV máx. 400 µg/día', porque: 'La enzima es la glutatión peroxidasa y el máximo 225 µg/día; 400 se pasa del libro. Intoxicarías con selenio (p. 13).' },
+          { t: 'Cofactor de la glutatión peroxidasa; <100 µg/L la reduce; selenito máx. 55 µg/día', porque: '55 µg/día es la necesidad diaria del sano, no el máximo seguro de 225. Darías una dosis bajísima en un crítico con mayor consumo (p. 13).' }],
         explicacion: 'Cofactor esencial de la <span class="hl">glutatión peroxidasa</span>; por debajo de 100 µg/L hay menos actividad; selenito sódico IV, máximo seguro <span class="hl-rojo">225 µg/día</span> (' + pdf(13) + ').' },
       { id: 'cu-vo-e3', corto: 'una mosca en la sopa', tipo: 'destapa', fuente: 'mu-glucosa-lactato',
         enunciado: 'Un residente dice: “nutrimos para evitar la desnutrición, así que cuanto antes al 100 %”. ¿Qué le contestas con el cierre del capítulo?',
@@ -527,7 +527,7 @@ export const MAYEUTICA_CUANTO = {
             pregunta: { id: 'cu-eme-3', tipo: 'test', fuente: 'mu-glucosa-lactato · mar-img-48-3', modelo: { acidobaseVivo: 'lactica' },
               enunciado: 'Sube el lactato a 2,6 con la presión y la diuresis normales, tras varios litros de glucosado al 5 %. ¿Cuál es la explicación más probable?',
               opciones: [
-                { t: 'Es falta de hierro: la ferritina baja sube el lactato', porque: 'El déficit de hierro causa anemia, no lactato (fisiología general). Darías hierro sin causa y no retirarías el glucosado.' },
+                { t: 'Es falta de hierro: una ferritina baja hace subir el lactato del enfermo', porque: 'El déficit de hierro causa anemia, no lactato (fisiología general). Darías hierro sin causa y no retirarías el glucosado.' },
                 { t: 'La glucosa se convierte en lactato en el enfermo agudo, hasta el 85 %', ok: true },
                 { t: 'Hipoperfusión oculta por la sepsis, aunque la PA sea normal', porque: 'No hay datos de hipoperfusión (diuresis normal) y el lactato aparece tras varios litros de glucosado. Darías más volumen y no retirarías el glucosado (p. 14).' }],
               explicacion: 'En el enfermo agudo hasta el <span class="hl-rojo">85 %</span> de una carga de glucosa se recupera como lactato (menos del 5 % en el sano); en la Fig. 48.3 el glucosado elevó el lactato y el Ringer no (' + pdf(14) + ').' } },
