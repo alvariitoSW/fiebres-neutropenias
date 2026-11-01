@@ -505,3 +505,20 @@ test('bomba auricular: en la fase A la AI dibujada se vacía y su techo baja con
   assert.ok(d.vol > b.vol + 2, `AI ${b.vol.toFixed(1)} → ${d.vol.toFixed(1)} mL`);
   assert.ok(Math.abs(d.vol - d.motor) <= 0.12 * d.motor + 1);
 });
+
+// D4 · índice de esfericidad (largo/ancho máximo del VI en telediástole) con el dibujo nuevo: la dilatada, más globular que la normal.
+// Rango 1,2-1,4 de la dilatada grave y 1,6-2 del normal: del encargo, ilustrativos (Mitchell 2019 Fig. 8 p. 8 solo muestra el VI dilatado
+// redondeado; Lang 2015 no da el índice). El volumen del dibujo sigue siendo el del motor.
+test('D4 esfericidad: con el dibujo nuevo la dilatada es más globular que la normal y cae en 1,2-1,4', async () => {
+  const { usarDibujo } = await import('../corazon-geo.mjs'); const { perfil } = await import('../anatomia.mjs');
+  const { ESCENARIOS, ASENTAR_FORMA } = await import('../escenarios.mjs');
+  const indice = (k, dibujo) => { const m = crearMotor(); m.correr(12); if (ESCENARIOS[k]?.aplicar) ESCENARIOS[k].aplicar(m); m.correr(ASENTAR_FORMA);
+    const edv = m.ultimo.edv, antes = usarDibujo(dibujo);
+    try { const g = baseGeometrica({ vvi: edv, vvd: 140, mioVi: m.p.mioVi }); let w = 0;
+      for (let i = 0; i < 200; i++) w = Math.max(w, 2 * perfil(-g.vi.L * i / 200, g.vi.Rb, g.vi.Rm, g.vi.L));
+      return { idx: g.vi.L / w, edv }; } finally { usarDibujo(antes); } };
+  const n2 = indice('normal', 2), d2 = indice('dilatada', 2), d1 = indice('dilatada', 1);
+  assert.ok(d2.idx < n2.idx - 0.1, `dilatada ${d2.idx.toFixed(2)} vs normal ${n2.idx.toFixed(2)}`);
+  assert.ok(d2.idx >= 1.2 && d2.idx <= 1.4, `dilatada dibujo 2: ${d2.idx.toFixed(2)}`);
+  assert.ok(d1.idx > d2.idx, 'el dibujo 1 no cambia: más alargado');
+});

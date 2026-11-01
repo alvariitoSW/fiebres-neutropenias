@@ -36,9 +36,9 @@ for (let i = 0; i < N_VOL; i++) { const sv = (i + 0.5) / N_VOL, w = paso(0, SB, 
 export const volPerfil = (Rb, Rm, L) => Math.PI * L / N_VOL / 1000 * (Rb * Rb * S00 + 2 * Rb * Rm * S01 + Rm * Rm * S11);   // mL
 // mio: masa del VI respecto a la normal (formas de enfermedad, escenarios.mjs); extra: volumen que se añade al
 // radio (no a la longitud) para compensar lo que el tabique aplanado le quita a la cavidad (baseGeometrica)
-export function geomVi(vMotor, mio = 1, extra = 0) {
+export function geomVi(vMotor, mio = 1, extra = 0, expLargoDil = null) {   // expLargoDil (dibujo nuevo, esfericidad): exponente del largo por encima del volumen normal (null = 0,27 de siempre)
   const v = clamp(vMotor, LIMITES.vi[0], LIMITES.vi[1]), vc = v + extra;
-  const L = REF.lVi * Math.pow(v / REF.vVi, 0.27);
+  const L = REF.lVi * Math.pow(v / REF.vVi, expLargoDil != null && v > REF.vVi ? expLargoDil : 0.27);
   const Rb = 25.5 * (0.88 + 0.12 * clamp((v - 40) / 80, 0, 2));
   // Rm: raíz positiva de la cuadrática del volumen
   const k = Math.PI * L / N_VOL / 1000, a = k * S11, b = 2 * k * Rb * S01, c = k * Rb * Rb * S00 - vc;
@@ -122,18 +122,18 @@ export function areaCuerda(a, k0 = 1, tope = ALFA_SEPTO) {   // tope: hasta qué
 // ---- P3b · anillos, paredes y masa: el corazón los da, el dibujo los lee ----------------------------------------------------
 export const U_VI = 2.234;   // ángulo del eje mitroaórtico en el plano basal (rad)
 /** VI con el tabique aplanado (septo 0-1): la cuerda que se le quita a la cavidad se devuelve al radio (volumen = motor). */
-export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1, hondo = 0) {   // hondo (opcional, dibujo nuevo): corte más hondo solo a nivel de papilares (fracción extra de ALFA_SEPTO)
+export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1, hondo = 0, expLargoDil = null) {   // hondo (opcional, dibujo nuevo): corte más hondo solo a nivel de papilares (fracción extra de ALFA_SEPTO)
   const septo = clamp(septoIn, 0, 1), tope = hondo ? ALFA_SEPTO * (1 + hondo) : ALFA_SEPTO;
   const alfa = (z, L) => { const sv = -z / L, base = ALFA_SEPTO * septo * paso(0, 0.2, sv) * (1 - paso(0.7, 0.95, sv));
     return hondo ? base * (1 + hondo * paso(0.2, 0.3, sv) * (1 - paso(0.6, 0.7, sv))) : base; };
-  let vi = geomVi(vvi, mio);
+  let vi = geomVi(vvi, mio, 0, expLargoDil);
   if (septo > 0) {
     let quitado = 0; const dz = vi.L / N_VOL;
     for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
       if (a <= 0) continue;
       const q = r * r * areaCuerda(a, k0, tope);
       quitado += q * dz; }
-    vi = geomVi(vvi, mio, quitado / 1000);
+    vi = geomVi(vvi, mio, quitado / 1000, expLargoDil);
   }
   return { vi, alfa, septo };
 }
