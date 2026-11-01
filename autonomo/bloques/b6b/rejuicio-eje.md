@@ -23,3 +23,18 @@ Base: `node autonomo/bloques/b6b/herramientas/eje-b.mjs 390` (TODO EN VERDE: 30 
 8. `pagina.js` (pintado de topes) / `estilo.css`: un solo sello bajo el monitor; la fila amarilla solo para los topes que no son el abierto.
 
 **No visto con los ojos**: Sinforoso, Fulgencio, apuesta 1 y error 1 (sin cambios desde la vuelta 1), el paso a paso con Motion (programa en verde).
+
+## Rejuicio 2 (vuelta 3, R8: solo los 8 puntos) · profesor, 01/11/2026
+
+Base: `herramientas/rejuicio-eje.mjs` (todo en texto, sin errores de consola) + una pasada extra de lupa y chips en cada paso de los casos; 3 capturas miradas (01 Toribio, 05 giro de Toribio, 07 giro de Obdulia).
+1 ✅ chip y frase siguen al caso (Toribio* en el caso 2 tras Policarpo, Obdulia* en el caso 1; «Toribio, día 5: PA lábil y FC en alza…», «Obdulia, día 2: PA 77/40 tras la hormona sin la hidrocortisona de las 6 h») · 2 ✅ paso 3 de Toribio: lupa sin hidrocortisona externa y rótulo «Retirada brusca · tejido insuficiente · rebote (ilustrativo)» (captura 05) · 3 ✅ Obdulia con levotiroxina: «TSH ↑ · T4 ↓» junto a 0,26/44,8 (captura 07) y con el reloj baja a 0,65/25,3 el día 7 y «TSH N · T4 N» 1,1/2,5 el día 14 · 4 ✅ Toribio 88 (79/95) · 86 (83/89) · 81 (84/80): la correcta no es la más larga en ningún paso y `eje-b.mjs` l. 132-134 lo vigila (±20 %, `largas ≤1`) · 5 ✅ día 1 «tras la primera dosis de hidrocortisona» y día 2 «el turno anterior pasó la levotiroxina IV y no dio la dosis de las 6 h» · 6 ✅ NA 0 e hidrocortisona a 3 días: PAM 67, y 67 tras retirar y +3 días; FC de Toribio 110 (día 1) → 95 (día 3) con el lactato 3,3 → 1,6 · 7 ✅ Bibiana estrés 3 + hidrocortisona vuelve a 115/59, PAM 78 (su basal) · 8 ✅ un solo `.tope-sello` bajo el monitor; la fila amarilla solo lleva «Noradrenalina >0,2», que no es el abierto (captura 01).
+
+| Criterio | Rejuicio 1 | Ahora | Por qué |
+|---|---|---|---|
+| ¿Se ve el mecanismo? | 9,25 | 9,5 | La lupa cuenta lo que pasa en cada paso del caso; el tiroides de Obdulia se mueve con la hormona y el reloj |
+| ¿Se entiende a 390 px? | 9,25 | 9,4 | Chip, frase y sello en su sitio; queda un título repetido: el aviso «Noradrenalina >0,2» sale en la fila amarilla y otra vez como caja bajo la tarjeta (captura 01) |
+| ¿Apuesta, error y caso? | 9,0 | 9,5 | Longitudes niveladas, enunciados coherentes, giro y rebote con su sello |
+| Paciente posible y topes | 9,0 | 9,5 | PAM, FC y cobertura de Bibiana encajan; la retirada ya no hunde la PAM |
+| **Global** | **9,1** | **9,5** (9,475) | Llega a la meta de modelo vivo nuevo |
+
+Retoques (opcionales, no frenan): (a) `pagina.js`, pintado de topes: cuando un aviso ya tiene su caja bajo la tarjeta, no repetirlo en la fila amarilla (o al revés) · (b) `modelo.js` `eje()` l. 89: con levotiroxina y el reloj a 14 días el rótulo dice «T3 ↓ · levotiroxina ↓» junto a «T4 N · TSH N»; que `t.t3` siga a `t.t4` como `lb` (ilustrativo).
