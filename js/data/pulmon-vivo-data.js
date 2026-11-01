@@ -393,7 +393,18 @@ Object.assign(ESTADOS, {
     fuentes: [C.sbt, C.pimax],
   },
 });
-ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'sbt-ok', 'sbt-fracaso');
+ESTADOS['disparo-inverso'] = {
+  tit: 'Disparo inverso: el esfuerzo llega con la insuflación ya empezada', pac: 'ceferino', pmus: true, seg: 6, resp: { ...RESP_E4, modo: 'vcv', vt: 400, fr: 12, flujo: 30, pmus: 12, tin: 1.5, frNeural: 20, retraso: 0.4 }, pulmon: { c: 60, r: 8 }, man: {},
+  frase: 'La insuflación la empieza el respirador por tiempo y el esfuerzo llega después: puede disparar otra y apilar el volumen.',
+  guia: [
+    { t: 'Aquí el respirador insufla por tiempo (FR 12) y el esfuerzo de Ceferino llega 0,4 s después de empezar la insuflación, no antes. En la curva «Pmus» el empujón cae ya dentro de la inspiración del respirador; en el disparo normal precede al pico.', org: 'ficha (concepto) · retraso 0,4 s y amplitud 12: ilustrativo', s: ['pmus:insp', 'paw:insp'], c: C.inverso },
+    { t: 'Es el disparo inverso: un nuevo disparo dentro de un ciclo inspiratorio. El libro lo relaciona con la sobredistensión y con el reflejo de Hering-Breuer, pero dice que el mecanismo está en proceso de investigación: por eso aquí es una demostración de lo que se ve, no una explicación cerrada.', org: 'ficha (Libro Azul IV-2, pp. 558-559)', s: ['paw:insp'], c: C.inverso },
+    { t: 'Consecuencia: el esfuerzo sigue cuando acaba la insuflación, baja la Paw por debajo de la PEEP y el respirador dispara una segunda vez. Los dos volúmenes se apilan: programaste 400 mL y entran unos 800 (el doble). Es la misma cadena que el doble disparo.', org: 'ficha (disparo; doble disparo) · 800 mL: modelo', s: ['paw:esp', 'flujo:insp'], c: C.doble },
+    { t: 'Fíjate en la diferencia con el doble disparo: allí el esfuerzo empieza antes de la insuflación y dispara el respirador; aquí la insuflación ya iba en marcha y el esfuerzo la sorprende. Cuando ves un pico de presión extra en plena inspiración, piensa en esta asincronía.', org: 'ficha (definiciones) · lectura de la curva: modelo', s: ['pmus:insp', '#pul-trazas'], c: C.asincronia },
+  ],
+  fuentes: [C.asincronia, C.inverso, C.doble, C.ecMov],
+};
+ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
@@ -403,6 +414,7 @@ Object.assign(C, {
 });
 export const NEUMOTORAX = {
   tope: 20, shock: 10.5, parada: 13.5, paso: 0.75, spo2Base: 98, spo2PorCmH2O: 0.6,   // ilustrativo: cmH₂O de presión pleural extra (shock obstructivo desde 10,5, donde la PAM del monitor queda en 59 mmHg tras acotar el alivio de la poscarga; parada sin pulso desde 13,5, donde el motor ya da un gasto de 0,2 L/min y una PAM de 18: sin pulso palpable); +0,75 por respiración (2 respiraciones por pulsación = +1,5); SpO₂ = 98 − 0,6 · P
+  recuperacion: 6,   // respiraciones que tarda en volver el aire pleural a 0 tras descomprimir (ilustrativo: Marino no da el tiempo de recuperación)
   figura: 'js/modules/neumologia/img/neumo-fig28-7-radiografia-neumotorax-tension.jpg',
   sitios: {
     correcto: { k: 'correcto', et: '5.º espacio, por delante de la línea axilar media · 14 G, 8 cm', ok: true,

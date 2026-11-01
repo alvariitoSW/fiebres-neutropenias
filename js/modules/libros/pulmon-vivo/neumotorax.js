@@ -30,7 +30,7 @@ const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 const f0 = (n) => String(Math.round(n));
 
 let sec = null, ctx = null, activo = false;
-const nx = { ptx: 0, desc: false, sitio: null, msg: '' };
+const nx = { ptx: 0, ptx0: 0, desc: false, sitio: null, msg: '' };
 const el = {};
 
 export const ptx = () => (activo ? nx.ptx : 0);
@@ -75,6 +75,9 @@ function sello() {
 
 // Una insuflación más: la presión del neumotórax crece (lo llama pagina.js al empezar cada inspiración)
 export function ciclo() {
+  if (activo && nx.desc && nx.ptx > 0) {   // recuperación tras descomprimir: el aire pleural baja linealmente en N.recuperacion respiraciones (ilustrativo)
+    nx.ptx = Math.max(0, nx.ptx - nx.ptx0 / N.recuperacion); if (nx.ptx < 1e-6) nx.ptx = 0; aplicar(); pintar(); return;
+  }
   if (!activo || nx.desc || nx.ptx >= N.tope) return;
   nx.ptx = Math.min(N.tope, nx.ptx + N.paso); aplicar(); pintar();
 }
@@ -120,8 +123,8 @@ export function montarNeumotorax(c) {
     else if (a === 'sitio') { nx.sitio = b.dataset.sitio; nx.msg = ''; }
     else if (a === 'desc') {
       const s = N.sitios[nx.sitio]; if (!s) return;
-      nx.msg = `<span class="${s.ok ? 'ok' : 'mal'}">${s.ok ? 'Descomprimido.' : 'No descomprime.'}</span> ${s.e} ${ctx.cita(s.c)}`;
-      if (s.ok) { nx.desc = true; nx.ptx = 0; aplicar(); ctx.llenar(); }
+      nx.msg = `<span class="${s.ok ? 'ok' : 'mal'}">${s.ok ? 'Descomprimido.' : 'No descomprime.'}</span> ${s.e}${s.ok ? ` Las constantes no vuelven de golpe: en unas ${N.recuperacion} respiraciones (ilustrativo) la presión pleural, la PAM y la SpO₂ regresan a lo normal.` : ''} ${ctx.cita(s.c)}`;
+      if (s.ok) { nx.desc = true; nx.ptx0 = nx.ptx; if (matchMedia('(prefers-reduced-motion: reduce)').matches) nx.ptx = 0; aplicar(); ctx.llenar(); }   // con «reducir movimiento» el reloj no corre: se muestra el estado final
     } else if (a === 'otra') { estado(CLAVE); ctx.llenar(); return; }
     sello(); pintar();
   });
