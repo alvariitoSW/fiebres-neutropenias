@@ -217,7 +217,7 @@ export function init() {
     initMarinoRenal();
     initMarinoAbdomen();
     initVisualMarinoCaps31a44();
-    // Mayéutica del bloque 5 (fichas ma-), después de su vista Visual
+    // Texto | Visual | Estudiar en las fichas del bloque 5 (abdomen y temperatura), después de su vista Visual
     Object.entries(MAYEUTICA_B5).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     initMarinoNeuro();
     initMarinoNutricion();

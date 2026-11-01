@@ -29,7 +29,9 @@ const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3, ...MAYEUTIC
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
 const NAV_B3 = tab => tab.startsWith('neumo-') ? { especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs' } : { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs' };
-const navDe = tab => MAYEUTICA_B5[tab] ? { especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs' } : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
+// Las del bloque 5 (abdomen), en Libros → Marino · Abdomen.
+const NAV_B5 = { especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs' };
+const navDe = tab => MAYEUTICA_B5[tab] ? NAV_B5 : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
 const { barajar, hoyLocal, sumarDias } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
