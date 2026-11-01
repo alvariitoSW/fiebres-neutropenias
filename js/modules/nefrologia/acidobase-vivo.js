@@ -17,6 +17,7 @@ import { nombreFicha } from '../../core/corkboard.js';
 import { rutaDePanel } from '../../core/search.js';
 import { marcarVolver } from '../../core/volver-ficha.js';
 import { CNM, OTROS_A, ALB_A, FUENTES, BASE, PASOS, FRASES_PASO, CAUSAS, CAUSA, CONCEPTOS, PREGUNTAS, CASOS } from '../../data/acidobase-vivo-data.js';
+import { construirTitulacion, pintarTitulacion } from './acidobase-vivo-b4.js';
 import { hNeq, calcPH, espPaco2, espHco3, haBase, derivar, palabraPH, r1, r2 } from './acidobase-vivo-calculo.js';
 
 // ═════════════════════════════════════════════════════════════════════
@@ -1147,7 +1148,7 @@ function pintarTodo(animar) {
   tandas = requestAnimationFrame(() => {
     _cacheE = null; pintarAlveolo(); pintarRinon(); brilloLinea(); tendenciaCarta(); pintarMarcas(); pedirPintura();
     tandas = requestAnimationFrame(() => {
-      fraseCarta(); pintarTextos(); pintarPlasma(false);
+      fraseCarta(); pintarTextos(); pintarPlasma(false); pintarTitulacion(R, E, O);
       tandas = requestAnimationFrame(() => { sincronizarMandos(); pintarEstudioVivo?.(); tandas = null; });
     });
   });
@@ -1162,7 +1163,7 @@ function fraseGenerica(d) {
   if (c && c.dice) f += c.dice + ' ';
   if (d.HA > 12.5 && !E.tendencia) f += `Hiato <span class="hl-rojo">${fmt(d.HA)}</span>${d.delta != null ? `, delta ${fmt(d.delta, 2)}` : ''}.`;
   else if (E.hco3 < 22 && !E.tendencia && (l.prim === 'acidMet' || l.anadido === 'acidMet')) f += `Hiato normal (${fmt(d.HA)}): hiperclorémica.`;
-  const org = (c ? O('f', c.f) + (c.fd ? O('f', c.fd) : '') : O('f', 'mr-acidobase-analisis#mr-regla-1')) + (CAUSA_ACTUAL && !['normal', 'cad', 'vomitos', 'caa', 'hcl'].includes(CAUSA_ACTUAL) && !['metanol', 'salic', 'lactica', 'hiperaldo', 'mixta', 'respAg', 'respCr', 'acetazol', 'bicarb', 'caa', 'hcl'].includes(CAUSA_ACTUAL) ? O('i', 'HCO₃⁻ dentro del rango de la tabla; PaCO₂ la esperada') : '') + (CAUSA_ACTUAL && ['respAg', 'respCr', 'mixta', 'salic', 'hiperaldo'].includes(CAUSA_ACTUAL) ? O('i', 'Cl⁻ derivado para dejar el HA') : '') + (!CAUSA_ACTUAL && !PASOS.find(p => p.id === pasoActual) ? O('i', 'gasometría del laboratorio') : '');
+  const org = (c ? O('f', c.f) + (c.fd ? O('f', c.fd) : '') : O('f', 'mr-acidobase-analisis#mr-regla-1')) + (CAUSA_ACTUAL && !['normal', 'cad', 'vomitos', 'caa', 'hcl', 'titulacion'].includes(CAUSA_ACTUAL) && !['metanol', 'salic', 'lactica', 'hiperaldo', 'mixta', 'respAg', 'respCr', 'acetazol', 'bicarb', 'caa', 'hcl', 'titulacion'].includes(CAUSA_ACTUAL) ? O('i', 'HCO₃⁻ dentro del rango de la tabla; PaCO₂ la esperada') : '') + (CAUSA_ACTUAL && ['respAg', 'respCr', 'mixta', 'salic', 'hiperaldo'].includes(CAUSA_ACTUAL) ? O('i', 'Cl⁻ derivado para dejar el HA') : '') + (!CAUSA_ACTUAL && !PASOS.find(p => p.id === pasoActual) ? O('i', 'gasometría del laboratorio') : '');
   return [f, org];
 }
 function pintarTextos() {
@@ -1371,7 +1372,7 @@ function tostada(txt) { const t = $('#abv-toast'); t.textContent = txt; t.hidden
 // ═════════════════════════════════════════════════════════════════════
 // 10 · Capa de estudio: Explorar | Conceptos | Mayéutica
 // ═════════════════════════════════════════════════════════════════════
-const VISTAS = { carta: 'vista-carta', plasma: 'vista-plasma', rinon: 'vista-rinon', alveolo: 'vista-alveolo', osmoles: 'vista-osmoles' };
+const VISTAS = { carta: 'vista-carta', plasma: 'vista-plasma', rinon: 'vista-rinon', alveolo: 'vista-alveolo', osmoles: 'vista-osmoles', titulacion: 'vista-titulacion' };
 const PRESTADAS = [];
 function prestar(clave, slot) {
   const id = VISTAS[clave]; if (!id || !slot) return;
@@ -1763,7 +1764,7 @@ function construir() {
   construido = true;
   C = leerTokens();
   cargar();
-  construirInstrumento(); construirCadena(); construirAlveolo(); construirPlasma(); construirNefrona(); construirCelula(); construirCarta(); construirDock(); construirLab();
+  construirInstrumento(); construirCadena(); construirAlveolo(); construirPlasma(); construirNefrona(); construirCelula(); construirCarta(); construirTitulacion($('#abv-svg-titu'), C); construirDock(); construirLab();
   lienzo('cv-alveolo', 360, 250); lienzo('cv-plasma', 360, 352); lienzo('cv-celula', 360, 340);
   const io = new IntersectionObserver(es => es.forEach(e => { const L = Object.values(LIENZOS).find(x => x.cv === e.target); if (L) { L.visible = e.isIntersecting; if (L.visible) { ajustarLienzo(L); pedirPintura(); arrancarBucle(); } } }), { rootMargin: '60px' });
   Object.values(LIENZOS).forEach(L => io.observe(L.cv));
@@ -1846,7 +1847,7 @@ async function abrir(ancla = '', origen) {
 // Al entrar desde una ficha: qué vista enseñar ([lo que se baja a ver, lo que lleva el anillo]).
 // La carta para los trastornos que se leen en ella; si no, la vista del objeto del estado (riñón, alvéolo, plasma).
 const FOCO = {
-  metanol: ['#abv-vista-osmoles', '#svg-osm'],
+  metanol: ['#abv-vista-osmoles', '#svg-osm'], titulacion: ['#abv-vista-titulacion', '#t-punto'],
   salic: ['#abv-vista-carta', '#k-punto'], respCr: ['#abv-vista-carta', '#k-punto'], respAg: ['#abv-vista-carta', '#k-punto'],
   mixta: ['#abv-vista-carta', '#k-punto'],
 };

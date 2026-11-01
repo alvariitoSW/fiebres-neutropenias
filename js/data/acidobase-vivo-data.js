@@ -108,6 +108,9 @@ export const CAUSAS = [
   // → pH ≈ 7,57 (>7,55). ILUSTRATIVAS. Mando de dosis no hay: el tope (0,2 mEq/kg/h, vena central) va en la frase y en la pregunta.
   { id: 'hcl', t: 'Alcalosis grave (HCl)', e: { na: 140, cl: 80, hco3: 52, paco2: 58, reloj: 'dias', etiqueta: 'Alcalosis grave' }, f: 'mr-alcalosis-tratamiento#mr-hcl-indicacion', fd: 'mr-alcalosis-tratamiento#mr-tabla-33-3',
     dice: 'HCO₃⁻ &gt;50 o pH &gt;7,55 y sin respuesta a K⁺ y acetazolamida: solo entonces <span class="hl-rojo">HCl 0,1 N</span>. Déficit de H⁺ = 0,5 × peso magro × (HCO₃⁻ − 24): con HCO₃⁻ 52, 14 mEq por kg. Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> por una vena central grande; se para al llegar a un pH &lt;7,5 (cifras ilustrativas).' },
+  // Titulación del bicarbonato (Marino p. 22, Fig. 32.2): láctica grave ILUSTRATIVA (HCO₃⁻ 8, PaCO₂ 22 → pH 7,18); el punto sale del motor
+  { id: 'titulacion', t: 'Curva del bicarbonato', e: { hco3: 8, paco2: 22, anion: 'lact', reloj: 'h', etiqueta: 'Láctica grave' }, f: 'mr-lactato-bicarbonato#mr-bicarb-tampon', fd: 'mr-lactato-bicarbonato#mr-bicarb-contra',
+    dice: 'El pK del ácido carbónico es <span class="hl-azul">6,1</span>: un tampón solo es eficaz a ±1 unidad, entre 5,1 y 7,1. El pH de la sangre (7,35-7,45) queda <span class="hl-rojo">fuera de esa zona</span>: el HCO₃⁻ es más el producto final del transporte de CO₂ que un tampón (cifras ilustrativas).' },
 ];
 export const CAUSA = Object.fromEntries(CAUSAS.map(c => [c.id, c]));
 
@@ -296,7 +299,13 @@ export const PREGUNTAS = [
       'Déficit de H⁺ = 0,5 × 70 × (52 − 24) = <span class="hl-azul">980 mEq</span>; a 100 mEq/L, hasta 9,8 L de HCl 0,1 N.',
       'No se repone todo: <strong>se para cuando el pH baja a &lt;7,5</strong>.',
       'Ritmo <span class="hl-rojo">≤0,2 mEq/kg/h</span> (14 mEq/h, 140 mL/h en este paciente) por <strong>vena central grande</strong>: es corrosivo y la extravasación necrosa el tejido.'],
-    fuente: ['mr-alcalosis-tratamiento#mr-hcl-indicacion', 'mr-alcalosis-tratamiento#mr-tabla-33-3', 'mr-alcalosis-tratamiento#mr-hcl-riesgo'] },
+    fuente: ['mr-alcalosis-tratamiento#mr-hcl-indicacion', 'mr-alcalosis-tratamiento#mr-tabla-33-3', 'mr-alcalosis-tratamiento#mr-hcl-riesgo'] },  { id: 'ab-17', corto: 'titulación', tipo: 'destapa', estado: CAUSA.titulacion.e, ocultar: ['punto'], vista: 'titulacion', mirar: '#t-punto',
+    enunciado: 'Acidosis láctica grave, pH {ph:22:8}. Un compañero dice que el bicarbonato es el tampón principal de la sangre y que por eso basta con darlo. ¿Qué le contestas?',
+    puntos: ['El pK del ácido carbónico es <span class="hl-azul">6,1</span>: está al 50 % disociado a ese pH.',
+      'Un tampón es eficaz a <strong>±1 unidad de su pK</strong>: entre <span class="hl-azul">5,1 y 7,1</span>.',
+      'El pH extracelular (7,35-7,45) y el de este paciente caen <span class="hl-rojo">fuera de esa zona</span>: tampona mal.',
+      'Más que un tampón, el HCO₃⁻ es el <strong>producto final del transporte de CO₂</strong> (el H⁺ lo tampona la hemoglobina). Por eso el bicarbonato IV sube poco el pH.'],
+    fuente: ['mr-lactato-bicarbonato#mr-bicarb-tampon', 'mr-lactato-bicarbonato#mr-bicarb-contra'] },
 ];
 
 export const AB1 = {
