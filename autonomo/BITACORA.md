@@ -397,6 +397,8 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**🆕 01/11 · Reforma de la Constitución** (vídeo del Consejo; acta `autonomo/consejo/2026-11-01-reforma-constitucional.md`): el Consejo recomienda una **reforma moderada, de limpieza**, de 9 artículos (7 votos a favor, Ciencia con reserva en el 9; ≈5,8 M, techo 7,3 M). No toca la arquitectura, las reglas clínicas, la nota 9,5, el voto del Consejo ni los vídeos. Artículos: 1) Quién decide qué, en una sola tabla · 2) Gasto: una tabla con fecha de fin y un aviso que no dependa de la memoria · 3) Una sola nota de corte y un procedimiento para cambiar reglas · 4) Una regla incumplida dos veces se convierte en herramienta o juez · 5) Lo común, arreglado antes de abrir carriles · 6) Las esperas al usuario caducan, sin tocar lo reservado · 7) La Constitución dice lo que la app enseña y lo que la prueba exige · 8) Un número por regla; lo sustituido se borra · 9) Cada agente lee solo lo suyo. **Vota artículo a artículo** (sí / no / con cambios).
+
 **✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
 y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
 todo» de la 5.ª: toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto (las ramas sin fusionar
