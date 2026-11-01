@@ -1,6 +1,6 @@
 // Mayéutica del bloque 3D, G5: ficha 15 neumo-cuidado-barotrauma (caso de Rafael, día 2: sigue de la ficha de modos del respirador,
 // con meseta 44, SpO₂ 89 % y PA 84/50). Marino cap. 28, págs. 23-31 del PDF caps27-30. Formato: cabecera de b1-fluidos.js.
-// Las cifras del neumotórax a tensión (PAM ≈59 mmHg con 10,5 cmH₂O de aire pleural) son las del monitor de la app (guía del estado
+// Las cifras del neumotórax a tensión (PAM ≈52 mmHg con 10,5 cmH₂O de aire pleural) son las del monitor de la app (guía del estado
 // neumotorax-tension en pulmon-vivo-data.js), ilustrativas; las demás de Rafael son del caso.
 const PDF = 'docs/marino-2024-respiratory-management-caps27-30.pdf';
 const p = n => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">pág. ${n}</a>`;
@@ -163,8 +163,8 @@ export const MAYEUTICA_TUBO_2 = {
                 ok('El punto pulmonar: el borde del neumotórax, patognomónico del diagnóstico'),
                 no('Un deslizamiento normal, que descarta el neumotórax', `Si el deslizamiento reaparece solo en un punto, ese punto marca dónde vuelven a tocarse las pleuras: el borde del neumotórax (${p(27)}).`)],
               explicacion: `El <span class="hl-rojo">punto pulmonar</span> es donde las dos pleuras vuelven a contactar y reaparece el deslizamiento; es patognomónico (${p(27)}).` + enFicha(CB, 'nep-eco-pleural') } },
-          { momento: 'Día 2 · giro: se hunde', datos: { PAM: '≈59 mmHg (monitor del modelo, ilustrativo)', Presiones: 'pico y meseta siguen subiendo', Aire: 'el pulmón del lado afectado, colapsado' }, nuevo: ['PAM', 'Presiones', 'Aire'],
-            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar respiraciones hasta el sello de shock (unas 5: aire pleural 10,5 cmH₂O, PAM ≈59)'),
+          { momento: 'Día 2 · giro: se hunde', datos: { PAM: '≈52 mmHg (monitor del modelo, ilustrativo)', Presiones: 'pico y meseta siguen subiendo', Aire: 'el pulmón del lado afectado, colapsado' }, nuevo: ['PAM', 'Presiones', 'Aire'],
+            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar respiraciones hasta el sello de shock (unas 7: aire pleural 10,5 cmH₂O, PAM ≈52)'),
               enunciado: 'Con el neumotórax confirmado, la PAM de Rafael cae a 59 y el pico y la meseta suben a cada respiración. ¿Qué haces?',
               opciones: [
                 no('Pides una radiografía de control para confirmar antes de actuar y esperando a que suba la PAM por sí sola', `El neumotórax a tensión es una emergencia médica y requiere descompresión inmediata (${p(28)}-${p(29)}).`),
