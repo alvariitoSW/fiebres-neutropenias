@@ -8,7 +8,9 @@
 
 const iv = (estado, texto) => ({ ionesVivos: estado, texto });
 const ritmo = (clave, texto) => ({ ritmoVivo: clave, texto });
-const FILTRO_K = { especialidad: 'nefrologia', view: 'nefrona', tab: 'mr-trr', filtroVivo: 'k-urgente', texto: 'Compruébalo en el filtro' };
+// El filtro vivo (k-urgente) llega con el grupo 4B (auto/b4-4b): mismo enlace que su botón en mr-trr.
+const FILTRO_K = { filtroVivo: 'k-urgente', especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-trr', texto: 'Compruébalo en el filtro' };
+const VISUAL_HIPOK = { especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-hipopotasemia', enVisual: '', texto: 'Míralo en la vista Visual de la ficha' };
 const FUROSEMIDA = { nefronaViva: 'normal|furosemida', especialidad: 'nefrologia', view: 'nefrona', texto: 'La furosemida en la nefrona' };
 
 export const MAYEUTICA_IONES_1 = {
@@ -26,7 +28,7 @@ export const MAYEUTICA_IONES_1 = {
           { t: 'Unos 350 mEq, el 10 % del total', porque: 'El 98 % está dentro de las células y solo el 2 % fuera. Fiarte de un 10 % te haría tomar el K⁺ sérico por un reflejo fiel del total y no sospecharías el déficit.' }],
         explicacion: 'Con 50 mEq/kg, 3.500 mEq: <span class="hl-azul">98 % dentro</span>, <span class="hl">70 mEq (2 %) fuera</span>, y el plasma (20 % del extracelular) contiene unos <span class="hl-rojo">15 mEq: el 0,4 %</span>. Medir el K⁺ plasmático es juzgar el iceberg por su punta (E p. 18).',
         nota: '<b>Nota de fidelidad.</b> El libro imprime «50 mg/kg» donde quiere decir mEq/kg, y más adelante dice que el plasma tiene «9-10 mEq» de potasio, no los 15 de este cálculo. Se reproducen las dos cifras (E p. 18, 25).' },
-      { id: 'ion-k-g2', corto: 'la curva plana', tipo: 'test', fuente: 'mr-k-curva · mar-img-36-2', modelo: iv('normal:k'),
+      { id: 'ion-k-g2', corto: 'la curva plana', tipo: 'test', fuente: 'mr-k-curva · mar-img-36-2', modelo: [iv('normal:k'), VISUAL_HIPOK],
         enunciado: 'Con K⁺ de 4 mEq/L: ¿cuánto potasio hay que perder para bajar 1 mEq/L, y cuánto hay que ganar para subirlo 1? Primero predices, luego lo ves en el modelo.',
         opciones: [
           { t: 'Perder 100-200 mEq y ganar 200-400 mEq', porque: 'Es al revés. Con esa idea creerías que subir el K⁺ es lo difícil y repondrías de menos a quien tiene un déficit grande.' },

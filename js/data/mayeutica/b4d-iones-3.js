@@ -320,7 +320,7 @@ export const MAYEUTICA_IONES_3 = {
           'El salino va primero: la hipovolemia retiene calcio; el objetivo es una diuresis de 100-150 mL/h.',
           'La furosemida solo para la sobrecarga de volumen; la calcitonina rápida pero con taquifilaxia a las 24-48 h.',
           'Los bisfosfonatos tardan 2-4 días: se empiezan ya; con aclaramiento <50 mL/min algunos reducen la dosis.'],
-        volver: { nombre: 'Tratamiento de la hipercalcemia grave', ancla: 'mr-tabla-38-4' } },
+        volver: { nombre: 'Tratamiento de la hipercalcemia grave', ancla: 'mr-tabla-38-4', modelo: { aguaViva: 'salino', texto: 'Río y mar: adónde va el salino que repone el volumen' } } },
     ],
     profundizar: [
       { id: 'mr-hiperca-corticoides', titulo: 'Glucocorticoides y diálisis' },
