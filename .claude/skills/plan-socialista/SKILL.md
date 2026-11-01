@@ -254,10 +254,12 @@ a presupuesto por agente, por qué, y la tabla del tablero actualizada.
 entregar (R1); al aprobar una maqueta, el profesor escribe la lista de lo que hace y el constructor la tacha al
 llevarla a la app (R2); los criterios clínicos (avisos, objetivos, umbrales) van escritos con su fuente en el plan del
 profesor antes de construir (R3); en la eco y la anatomía, cada plano al lado de una imagen real (R4); **las vueltas
-de arreglo, con un constructor sonnet nuevo** y la lista exacta, salvo que el anterior lleve menos de 60 pasos (R5);
+de arreglo, con un constructor sonnet nuevo** y la lista exacta, salvo que el anterior lleve menos de 60 pasos, y un segundo encargo solo al mismo si el primero acabó en ≤30 pasos (R5);
 **nada de opus en las vueltas** (R6); la meta 8,75 obliga en modelos vivos nuevos, maquetas y archivos modelo, y en
 lo demás basta el 8 (R7); el rejuicio solo puntúa lo que quedó por debajo (R8); y el parte lleva la tabla «Vueltas»
-(R9).
+(R9). **Ahorros del 01/11** (REGLAS §4.16): barrido de extremos en la primera prueba de una pieza de motor;
+director partido en dos sesiones por parada (≤150 pasos); pieza de física del motor a 1,2 M con profesor al acabarla;
+`git merge-base origin/main origin/auto/<clave>` antes de presupuestar una tarea que continúa una PR antigua.
 
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 

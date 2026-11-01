@@ -242,6 +242,9 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      de entregar.
    - **R5 · Vueltas de arreglo con un constructor nuevo**: la vuelta la hace un constructor sonnet nuevo con la lista
      exacta de fallos (archivo y función). Solo se continúa el mismo (SendMessage) si lleva menos de 60 pasos.
+     **Desde el 01/11/2026** (tarea `reglas-01-11`; Consejo del 01/11, «Aprobar los 6»): un **segundo encargo** va al
+     mismo constructor solo si el primero acabó en **≤30 pasos**; si no, constructor sonnet nuevo con el informe del
+     primero (visto en `educacion-app`: +31-40 % al continuar constructores de 72-78 pasos).
    - **R6 · Nada de opus en las vueltas**: opus solo en la primera vuelta de un modelo vivo nuevo. Si un arreglo
      necesita pensar, lo piensa el profesor en una lista y lo hace sonnet.
    - **R7 · Dónde obliga la meta** (subida por el usuario el 30/10/2026, §4.15): **8,75 obliga en todo** lo que se
@@ -428,6 +431,30 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
     - **Sigue reservado al usuario** (sin voto): la arquitectura (`CLAUDE.md` §2), quitar contenido, el presupuesto
       total y las reglas (§4.12).
     - **Lo que no vota**: lo técnico y los arreglos siguen yendo directo a `main` con los jueces en verde (§2.3).
+
+16. **Ahorros aprobados el 01/11/2026** (tarea `reglas-01-11`; el usuario: «PUNTO 5 (ahorro), aprobadas todas las
+    pendientes»; propuestas de `/ahorro` del 31/10 y del parte de `mr`):
+    - **Barrido de extremos en la primera prueba de una pieza de motor nueva**: toda pieza nueva del motor de un
+      modelo vivo lleva en su prueba, ya en el primer encargo, un barrido de 0 al doble de su tope en cada paciente
+      que la use, con «VS ≤ 1,4 × basal» y «paciente posible» (§1.14), antes de entregar. (Visto en `b3-paso4` g4,
+      CPAP con PAM 15, y en `b3d`, VS 232 mL con 30 cmH₂O: 3 vueltas, ≈2,5 M.)
+    - **Director: una sesión por mitad de la parada, tope ≈150 pasos**: el director cierra su sesión tras juntar las
+      piezas (con `gasto.mjs`) y abre otra para arreglos, jueces y cierre. Cada juez largo se lanza por separado,
+      nunca la batería entera de una vez. (Visto en `b3d`: 355 pasos, 6,0 M de director.)
+    - **Pieza de física del motor: presupuesto de «estado nuevo con barrido» y profesor al acabar la pieza**: cada
+      pieza que toca la física del motor o la escala g de un escenario se presupuesta a **1,2 M** (no 0,4-0,9); su
+      encargo lleva un programa corto que comprueba antes que los objetivos caben juntos en el motor, y el profesor
+      (juicio rápido, ≈0,1 M) mira esa pieza antes de pasar a la siguiente. (Visto en `mv-eco-2a` y `2b`: +70-90 %.)
+    - **Continuar una PR antigua: mirar antes la historia común**: antes de presupuestar una tarea que continúa una
+      rama `auto/<clave>` vieja, el director pasa `git merge-base origin/main origin/auto/<clave>`. Si no hay historia
+      común (o es muy antigua), se presupuesta como rama nueva desde `main` que copia lo útil, no como continuación.
+      (Visto en `mr`: `auto/mr` no compartía historia con `main` y hubo que abrir `auto/mr-texto`.)
+    - **Juicio de realismo: primero la herramienta de capturas** (aprobada el 01/11, parte `mv-eco-5`): un juicio de
+      realismo con criterios nuevos (movimiento, Doppler, modo M…) no empieza sin la herramienta que los captura; sin
+      ella, el criterio no se da por «sin juzgar». (En el paso 4 de la eco quedaron sin juzgar y en el 5 fueron las
+      notas más bajas, 8,25 y 7,5, con el presupuesto ya gastado.)
+    - **Presupuesto de realismo por criterio que falta** (aprobada el 01/11, parte `mv-eco-5`): ≈0,5 M por cada
+      criterio por debajo de la meta, no por la lista de arreglos del profesor anterior.
 
 ## 5. Lo que el agente puede y no puede tocar
 

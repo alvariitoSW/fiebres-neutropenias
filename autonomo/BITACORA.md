@@ -5,7 +5,7 @@ aprobado**, lo que espera algo del usuario y lo hecho en la última semana. Lo a
 lo único que trabaja el plan socialista. Lo hecho hace más de 7 días y lo descartado pasan a
 `docs/historial/bitacora.md`.
 
-Última sincronización: 2026-10-30, 19:00 (Congreso, Consejo 12.ª, acta `autonomo/consejo/2026-10-30-12.md`, página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP): PR #37, #40 y #41 fusionadas (solo `autonomo/`); #47 y los capítulos del atlas `as`, `tr`, `peri`, `ms`, `segments`, `strain` y `stress` ya en `main`; abiertas #42, #44, #46, #49 (tarea `fusiones-30-10`) y #51 (bloque 3, voto 11.ª con condiciones); partes del 30/10 leídos. **Marino: 38 de 155 en `main`, 55 al fusionar el `b3`**. Gasto de hoy ≈50-56 M (estimado con los partes; vía libre). Antes, 2026-10-30 (Consejo, 7.ª): sin PR nuevas fusionadas ni cerradas; PR #37 sigue en borrador. Antes, 2026-10-30 (rumbo): partes del 29 y 30/10 leídos (Ley de Ciencia, `educacion-pionera` f3, `b3-paso4` g3a, g3b y g4, `eco-reforma`); ninguna PR fusionada ni cerrada desde el 28/10; PR #37 (Educación) abierta en borrador; **Marino: 50 de 155** fichas con Estudiar (42 + 8 de los grupos 2-4, en `auto/b3`).
+Última sincronización: 2026-11-01 (decisiones del usuario, puntos 3-5): solo queda abierta la PR #2 (`mr`, aparcada para la fase B, no se cierra); `mv-eco-2a5` sigue su paso 5 con el techo a ≈35 M (parte `2026-11-01-mv-eco-5.md` en `auto/mv-eco-2a5`: realismo 8,58, 8 arreglos); parte de `mr` leído (su propuesta, a REGLAS §4.16). Antes, 2026-10-30, 19:00 (Congreso, Consejo 12.ª, acta `autonomo/consejo/2026-10-30-12.md`, página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP): PR #37, #40 y #41 fusionadas (solo `autonomo/`); #47 y los capítulos del atlas `as`, `tr`, `peri`, `ms`, `segments`, `strain` y `stress` ya en `main`; abiertas #42, #44, #46, #49 (tarea `fusiones-30-10`) y #51 (bloque 3, voto 11.ª con condiciones); partes del 30/10 leídos. **Marino: 38 de 155 en `main`, 55 al fusionar el `b3`**. Gasto de hoy ≈50-56 M (estimado con los partes; vía libre). Antes, 2026-10-30 (Consejo, 7.ª): sin PR nuevas fusionadas ni cerradas; PR #37 sigue en borrador. Antes, 2026-10-30 (rumbo): partes del 29 y 30/10 leídos (Ley de Ciencia, `educacion-pionera` f3, `b3-paso4` g3a, g3b y g4, `eco-reforma`); ninguna PR fusionada ni cerrada desde el 28/10; PR #37 (Educación) abierta en borrador; **Marino: 50 de 155** fichas con Estudiar (42 + 8 de los grupos 2-4, en `auto/b3`).
 
 ---
 
@@ -23,22 +23,6 @@ esta sección.
   ni mucho código. El encargo completo está en el tablero (Objetivo 0).
 - **Depende de**: nada. **Todo lo demás depende de esta** (sin ella no hay dónde poner las preguntas nuevas).
 - **Tamaño**: mediana (1-2 sesiones).
-
-### B-002 · Atlas cap. 18 (insuficiencia mitral): la parte de estudio · apuntado 2026-10-14
-- **Lo que dijiste**: «está bien como base de texto, no hace falta que lo rehagas, pero le falta la parte del
-  profesor […] y la parte de las preguntas rehacerla».
-- **Cómo lo entiendo**: tipo `estudio` **sobre la rama del piloto** (`auto/mr`, PR #2). El texto se queda (fase A ya
-  hecha y auditada). Solo fase B:
-  - el profesor diseña lo visual en el **ecógrafo** de la app: chorro en color hacia la AI, convergencia PISA,
-    Doppler continuo y de venas pulmonares, VI y AI que se dilatan con la gravedad, PISA paso a paso; y quita la
-    figura de tarjetas de números;
-  - el texto se reorganiza para estudiar (idea arriba, tablas, resaltado);
-  - las preguntas del capítulo se rehacen con el formato nuevo, con un caso de IM aguda frente a crónica (supongo).
-  
-  Encargo de `mr` en el tablero.
-- **Depende de**: B-001 (para las preguntas).
-- **Tamaño**: mediana. El ecógrafo aún no pinta el chorro regurgitante: hay que añadirlo al simulador, con pruebas.
-- **Dudas**: la PR #2 se queda abierta y esta tarea la completa; no se abre otra.
 
 ### B-003 · Plan Marino (The ICU Book): revisar, mapa visual y estudio · apuntado 2026-10-14
 - **Lo que dijiste**: «como ya está subida la fuente […] no haría falta construir nada […] el director que compruebe
@@ -153,14 +137,6 @@ esta sección.
      (supongo: la busco yo, y si es de pago te la pido).
   3. ¿Empiezo por Cardiología por la fecha de la rotación? (supongo: sí).
 
-### B-006 · Atlas de eco: los 20 capítulos que faltan · apuntado 2026-10-14
-- **30/10: fase A aprobada** (texto, `atlas-texto`). Aquí queda solo la fase B (figura y estudio con el ecógrafo nuevo).
-- **Lo que dijiste**: (aprobado antes como Objetivo 1; con el método nuevo, lo vuelvo a poner a tu visto bueno).
-- **Cómo lo entiendo**: tipo `visual`, las dos fases por capítulo: traducción completa y auditada; después, estudio
-  con el ecógrafo y el motor, y preguntas nuevas. Lista y «hecho» en el tablero (Objetivo 1).
-- **Depende de**: B-001 y de cómo salga B-002 (es el mismo tipo de capítulo).
-- **Tamaño**: grande, 20 tareas.
-
 ### B-007 · Acceso rápido a las herramientas grandes · apuntado 2026-10-19
 - **Lo que dijiste**: «que viva en su apartado correspondiente, aunque si vamos a meter maquetas tochas como esta, la
   nefrona, la de eco cardíaca, ya pondremos un acceso rápido a todas ellas».
@@ -267,7 +243,7 @@ esta sección.
   Libro Azul y cuatro cosas menores. Decid qué falta para llegar ahí y en qué fecha».
 - **Cómo lo entiendo**: tipo `plan`, hecho por el Consejo 12.ª (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP,
   sección «Gran reforma»). Falta ≈370-510 M: Marino 205-280 (aprobado) · eco 19-25 (aprobado) · atlas texto 5-7
-  (aprobado) y **fase B 30-45 (B-006, por aprobar)** · carril 2 y webs 65-85 (casi todo aprobado) · PIF 22-34 (Radiología
+  (aprobado) y **fase B 30-45 (B-006, aprobada el 01/11: `atlas-fase-b`)** · carril 2 y webs 65-85 (casi todo aprobado) · PIF 22-34 (Radiología
   aprobada; las 5 rotaciones sin cuaderno, informe antes) · Educación 3-5 · menú 5-8 (maqueta antes; art. 7) · **preguntas
   viejas fuera de Marino, ≈267, 10-15 M (por aprobar)** · arreglos 5-8. Fecha objetivo 22/11 (lo grande) y 28/11
   (restos) si la vía libre sigue; con el 18 %, segunda quincena de diciembre.
@@ -339,6 +315,11 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
+| cola del 01/11 | **Tu orden del 01/11**: (a) eco, arreglos del paso 5 y rejuicio → (b) `b3-pulmon-estudio` y `b3-cierre` → (c) `marino-unido` → (d) `b5`, `b6a`, `b6b` → (e) `reforma-techo` por trozos | (a) **en curso** en su sesión (`auto/mv-eco-2a5`); (b) **en curso** en `auto/b3d-estudio` (presupuesto ≈38,4 M tras Hacienda; quedan ≈5,6 M del techo del `b3d` para `b3-cierre`, que pide 8-14: posible comparecencia al cerrar); el resto, cada director abre la siguiente | 2026-11-01 | Interior y Hacienda vigilan; comparece la tarea que pida >25 %; vía libre hasta el 22/11 |
+| `mv-eco-2a5` | **B-045, paso 5, opción A**: techo de `mv-eco` a ≈35 M (+2,5 M), los 8 arreglos del juicio 1 (`autonomo/bloques/mv-eco/paso5/juicio-1.md`; el que más sube: espectro y modo M «en escalera») y un rejuicio, buscando el 9,5 | en curso | 2026-11-01 | El dibujo nuevo sigue apagado hasta el 9,5 |
+| `atlas-fase-b` (B-006 y B-002) | **Fase B del atlas**: figura y Estudiar de los 30 capítulos con el ecógrafo nuevo; empieza por `mr` sobre la **PR #2, abierta y aparcada** (no se cierra) | aparcada hasta que el dibujo nuevo llegue al 9,5 | 2026-11-01 | ≈30-45 M, del techo de la reforma; recomendación del Consejo |
+| `acod-lazos`, `preguntas-viejas`, `radar-tuits`, `estudio-04-11` | **Los opcionales del punto 3**, aprobados con la recomendación del Consejo: calculadora de ACOD (fichas técnicas y EHRA, no CardioTeca) y lazos P-V tras la eco; preguntas viejas fuera de Marino al final, si cabe; tuits por tandas, sin prisa; las candidatas del 04/11 **las decide el Consejo**; solape de bloques de Marino, sí (máx. 4 carriles) | en el tablero (trozos 17c-17f de `reforma-techo` y fila 7 de la Ley de Ciencia) | 2026-11-01 | ≈1,5-5 M, 10-15 M y 1-2 M por tanda |
+| `reglas-01-11` | **Ahorros del 01/11**: R5 (segundo encargo al mismo constructor solo si el primero acabó en ≤30 pasos) y las 4 de tu punto 5 (REGLAS §4.16) | **hecha (01/11, en `main`)** | 2026-11-01 | ≈0,3 M |
 | `motor-radio` | **B-051a · Motor de radiología de estudio** (Rx y TC dibujadas con patologías); primer trozo, informe + 2-3 maquetas | aprobado por ti el 30/10 («haz ahora el B-051a») | 2026-10-30 | ≈3-4 M el primer trozo; B-051b (análisis de imágenes de pacientes) sigue apuntada |
 | `b3-corazon-pr`, `b3d`, `b4-cobertura` | **B-044 · Terminar Marino ya**: la parte del corazón del `b3` a tu parada 3 y a `main` sin esperar al pulmón; el pulmón como bloque propio (`b3d`, horquilla ≈12-18 M); cobertura del `b4` ya | aprobado por ti el 30/10 (con lo recomendado: dos PR, dos sesiones de Marino a la vez durante la vía libre, 12-18 M) | 2026-10-30 | Mismo techo, 400 M. Acta `autonomo/consejo/2026-10-30-7.md` |
 | `mv-eco-1`, `mv-eco-2a5` | **B-045 · El motor de la eco ya**: **dos motores** (corazón y eco) unidos por un contrato; realismo «como la eco del hospital», comparado lado a lado con imágenes reales; la «nave espacial» de la HP al máximo, con juez de geometría | aprobado por ti el 30/10; paso 1 ya, pasos 2-5 al fusionar el corazón del `b3` | 2026-10-30 | 20-26 M; comparece si el realismo pide más. Encargo en el tablero (Objetivo C) |
@@ -347,7 +328,7 @@ esta sección.
 | `reglas-reforma` | **La reforma**: los 7 artículos con «sí» | **hecha el 30/10, en `main`** (con las 4 de Hacienda): REGLAS §4.15 y las demás | 2026-10-30 | ≈1,3 M, directo a `main` |
 | `raiz-aortica` | **B-041 · Raíz aórtica**, en la eco | en revisión (PR #46; profesor 8,5: arreglo corto en `fusiones-30-10`) | 2026-10-30 | ≈0,8-1,2 M |
 | `marino-unido` | **B-048 · Todo Marino en Libros → Marino**: tarjetas de Cardiología (14-21) y Neumología (22-30) en el índice, y los modelos vivos por temas | aprobado por ti el 30/10 | 2026-10-30 | ≈0,8-1,5 M, tras el corazón del `b3` en `main` |
-| `atlas-texto` | **B-006, fase A**: el texto de los 20 capítulos del atlas de eco, uno por sesión; figuras y estudio, con el ecógrafo nuevo | en curso: 7 en `main` el 30/10 (16 de 30 en el atlas), `ar` en la PR #49; la cadena se cortó en `hcm` y la reabre el Consejo 12.ª | 2026-10-30 | ≈20-30 M en el carril 2 |
+| `atlas-texto` | **B-006, fase A**: el texto de los 20 capítulos del atlas de eco, uno por sesión; figuras y estudio, con el ecógrafo nuevo | **hecha (31/10-01/11)**: los 30 capítulos con su texto en `main` (`mr` por la PR #77) | 2026-10-30 | ≈20-30 M en el carril 2 |
 | `radar-tuits` | **B-047, parte 2**: los tuits que mandas, con su PDF, a UCI / Papers Tuiter | aprobado por ti el 30/10, sin prisa | 2026-10-30 | ≈1-2 M por tanda |
 | `wiggers-movil` | Arreglo de la Wiggers a 360 px | **hecha (30/10, en `main`)** | 2026-10-30 | ≈0,3 M |
 | `pif-cardio-minimo`, `eco-sueltas`, `arteria-culpable`, `guardia-shock`, `pif-cardio`, `radio-baratas`, `estudio-04-11`, `radar-hoja` | **Ley de Ciencia** (27 informes de ingeniería inversa en 7 proyectos) | validada por ti el 29/10: Objetivo L del tablero; `pif-cardio-minimo` **pasa al 31/10** (el 30/10 el día ya iba en ≈34 M: no se empezó), el resto en su turno | 2026-10-29 | ≈92-114 M en total, ≈17-23 M nuevos. https://claude.ai/artifact/YbR2Z9chFJBaye1HvtV9e3 |
@@ -405,6 +386,14 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+**⏰ Recordatorio: el PDF de Semiología** (el usuario, 01/11: «no tengo el PDF todavía. Déjalo en "Esperando algo tuyo" y recuérdamelo»). Vale el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica*, o los de exploración cardiovascular de Walker (*Clinical Methods*) o Surós/Bates. Con él en `docs/`, se monta el objetivo «Historia clínica» del PIF.
+
+**Resuelto el 01/11 (tus decisiones, puntos 3-5)**: eco paso 5, opción A (≈35 M); PR #2 abierta y aparcada para la fase B; lo opcional (4, 5, 6, 7, 8, 9 y 10 de la lista del Congreso), aprobado con la recomendación del Consejo (las candidatas del 04/11 las decide el Consejo); lo de mirar en el móvil lo miras tú. Sigue esperando de ti: **el PDF de Semiología** y **pegar los tuits #26-28** en la Bandeja (x.com da 402).
+
+✅ 01/11 («Sí, R1 y R2») → REGLAS §4.16. **Propuestas de regla del parte `mv-eco-5` (01/11, en `auto/mv-eco-2a5`)**:
+- Un juicio de realismo con criterios nuevos (movimiento, Doppler) lleva **antes** su herramienta de capturas (en el paso 4 quedaron «sin juzgar» y en el 5 fueron las notas más bajas, 8,25 y 7,5, con el presupuesto ya gastado).
+- Presupuestos de realismo **por criterio que falta** (≈0,5 M cada uno), no por la lista del profesor anterior.
 
 **Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
@@ -565,9 +554,11 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
-- **Ahorro · Pieza de motor nueva: barrido de extremos en su primera prueba** (propuesto 2026-10-31 por /ahorro) · Visto en: `b3-paso4` g4 (CPAP en Mateo, PAM 15) y `b3d` (alivio de la poscarga sin techo: VS 232 mL con 30 cmH₂O; neumotórax a saltos; 3 vueltas, ≈2,5 M) · Cambio: toda pieza de motor nueva lleva en su prueba un barrido de 0 al doble de su tope en cada paciente que la use, con «VS ≤ 1,4 × basal» y «paciente posible» (§1.14), antes de entregar · Ahorro esperado: ≈1,5-2,5 M por pieza de motor (una o dos vueltas de arreglos y un rejuicio).
-- **Ahorro · Director: una sesión por mitad de la parada (piezas | arreglos y cierre), tope ≈150 pasos** (propuesto 2026-10-31 por /ahorro) · Visto en: `b3-paso4` g3a 1,1 · g3b 1,3 · g4 1,9 M y `b3d` 6,0 M (355 pasos; suite repetida tras dos fusiones de `main` y una batería cortada a la hora) · Cambio: el director cierra su sesión tras juntar las piezas (con `gasto.mjs`) y abre otra para arreglos, jueces y cierre; cada juez largo, lanzado por separado y nunca la batería entera de una vez · Ahorro esperado: ≈2-3 M por parada larga (cada paso del director relee su conversación).
-- **Ahorro · Pieza de física del motor: presupuesto de «estado nuevo con barrido» y profesor al acabar la pieza** (propuesto 2026-10-31 por /ahorro) · Visto en: `mv-eco-2a` (P4 cola del latido 0,4 → 1,4 M, recalibró 5 formas) y `mv-eco-2b` (P1 e′ 0,9 → 1,4 M en 2 encargos; P6 shock 0,35 → 2,4 M en 3 vueltas: cumplió sus cifras pero cambió la enfermedad y solo lo vio el profesor al final) · Cambio: cada pieza que toca la física del motor o la escala g de un escenario se presupuesta a 1,2 M (no 0,4-0,9), su encargo lleva un programa corto que comprueba antes que los objetivos caben juntos en el motor, y el profesor (juicio rápido, 0,1 M) mira esa pieza antes de pasar a la siguiente · Ahorro esperado: ≈1-1,5 M por paso de motor (vueltas evitadas), y presupuestos que no se desvían +70-90 %.
+- **✅ 01/11: aprobadas todas las pendientes de Hacienda** («PUNTO 5 (ahorro), aprobadas todas las pendientes») y la del parte de `mr` → REGLAS §4.16 (`reglas-01-11`). No queda ninguna propuesta de ahorro pendiente.
+- ✅ 01/11 (REGLAS §4.16) **Ahorro · Continuar una PR antigua: `git merge-base` antes de presupuestar** (parte de `mr`, 01/11) · Visto en: `mr` (`auto/mr` no compartía historia con `main`; hubo que abrir `auto/mr-texto`).
+- ✅ 01/11 (REGLAS §4.16) **Ahorro · Pieza de motor nueva: barrido de extremos en su primera prueba** (propuesto 2026-10-31 por /ahorro) · Visto en: `b3-paso4` g4 (CPAP en Mateo, PAM 15) y `b3d` (alivio de la poscarga sin techo: VS 232 mL con 30 cmH₂O; neumotórax a saltos; 3 vueltas, ≈2,5 M) · Cambio: toda pieza de motor nueva lleva en su prueba un barrido de 0 al doble de su tope en cada paciente que la use, con «VS ≤ 1,4 × basal» y «paciente posible» (§1.14), antes de entregar · Ahorro esperado: ≈1,5-2,5 M por pieza de motor (una o dos vueltas de arreglos y un rejuicio).
+- ✅ 01/11 (REGLAS §4.16) **Ahorro · Director: una sesión por mitad de la parada (piezas | arreglos y cierre), tope ≈150 pasos** (propuesto 2026-10-31 por /ahorro) · Visto en: `b3-paso4` g3a 1,1 · g3b 1,3 · g4 1,9 M y `b3d` 6,0 M (355 pasos; suite repetida tras dos fusiones de `main` y una batería cortada a la hora) · Cambio: el director cierra su sesión tras juntar las piezas (con `gasto.mjs`) y abre otra para arreglos, jueces y cierre; cada juez largo, lanzado por separado y nunca la batería entera de una vez · Ahorro esperado: ≈2-3 M por parada larga (cada paso del director relee su conversación).
+- ✅ 01/11 (REGLAS §4.16) **Ahorro · Pieza de física del motor: presupuesto de «estado nuevo con barrido» y profesor al acabar la pieza** (propuesto 2026-10-31 por /ahorro) · Visto en: `mv-eco-2a` (P4 cola del latido 0,4 → 1,4 M, recalibró 5 formas) y `mv-eco-2b` (P1 e′ 0,9 → 1,4 M en 2 encargos; P6 shock 0,35 → 2,4 M en 3 vueltas: cumplió sus cifras pero cambió la enfermedad y solo lo vio el profesor al final) · Cambio: cada pieza que toca la física del motor o la escala g de un escenario se presupuesta a 1,2 M (no 0,4-0,9), su encargo lleva un programa corto que comprueba antes que los objetivos caben juntos en el motor, y el profesor (juicio rápido, 0,1 M) mira esa pieza antes de pasar a la siguiente · Ahorro esperado: ≈1-1,5 M por paso de motor (vueltas evitadas), y presupuestos que no se desvían +70-90 %.
 - **✅ 30/10 (noche): aprobadas las 4 de Hacienda que quedaban** («quedan todas aprobadas») → `reglas-reforma`. Confirmado otra vez en el Congreso («acepto TODAS las propuestas pendientes de Hacienda»): ya estaban en REGLAS §4.14-§4.15; no queda ninguna propuesta de Hacienda pendiente.
 
 - **Ahorro · Tareas técnicas del director: presupuesto con su pasada de jueces y una ruta de apertura** (propuesto 2026-10-30 por /ahorro) · Visto en: `reglas-30-10` (0,79 M frente a 0,3 M, +165 %) y `formula-juez` (≈0,95 M frente a 0,8 M, +19 %): en las dos se fue en buscar dónde estaba cada pieza (el origen de cada regla; cómo se abre cada modelo) y en las pasadas largas de jueces · Cambio: el presupuesto de un `arreglo` técnico que hace el director suma 0,2 M fijos por la pasada de jueces más 0,1 M por regla o modelo tocado, y el encargo trae la ruta de cada pieza (parte de origen, o «especialidad → ficha → Visual» de cada modelo) · Ahorro esperado: ≈0,2-0,3 M por tarea técnica (menos búsqueda) y presupuestos que ya no se pasan.
@@ -591,6 +582,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).
+- 2026-11-01 · **Atlas: los 30 capítulos con su texto** (`mr` por la PR #77, Consejo 4-0).
 - 2026-11-01 · **Consejo del 01/11** (vídeo https://claude.ai/artifact/RTgGFnbio4SJAA52ZH6Lf3): vía libre hasta el 22/11; eco al 9,5 antes de encender el dibujo nuevo; `mr` a `main` solo con texto; 6 recortes de ahorro aprobados (`reglas-01-11`); Radiología parte 2 aparcada; Semiología espera tu PDF.
 
 - 2026-10-30 · **Congreso (Consejo 12.ª)**: revisión de todas las sesiones de hoy, tres planes (Marino, motor de la eco,
@@ -683,11 +676,5 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
   ahorro (una tarea o parada por sesión, encargos de una pieza con tope de ~100 pasos, modelo potente solo para lo
   nuevo, lecturas acotadas de REGLAS). Aprobadas B-012 a B-017 y el megaproyecto «La UCI en el bolsillo». La app no
   cambió.
-
-- 2026-10-23 · **Ingeniería inversa de 6 simuladores** (anesthbeta, EchoSuite, AngioView, NavRad con imagen,
-  Radiology Assistant, RitmoLab): 5 informes y el **informe final «Del simulador a la cama»**
-  (https://claude.ai/artifact/3hnNvcEsvsotfViShnXLee). Skill nueva `/ingenieria-reversa` y 8 skills de terceros
-  (`claim-check`, `sr-screening` y 6 de research-agent-skills). Memoria del día en `docs/historial/radar.md`. La app
-  no cambió.
 
 - **30/10 · Mejoras del bloque 3 que dejó el Consejo 11.ª** (condición de Justicia al fusionar la PR #51; sin aprobar): piezas de los grupos 2-5 que el profesor puntuó entre 8 y 8,75 con la regla vieja (g2 2b/2c; g3 iam-vd, septo 7,75, fármacos, soporte, papilar; g4 f14 8,1, f13, ic-cpap; g5 SCA-diagnóstico, tabique, antiagregantes/lisis, disección): un rejuicio corto por grupo (R8) y lo que el profesor dijo que las subiría, ≈0,4-0,6 M por grupo. También: `js/modules/eco/pruebas/atlas.test.mjs` falla en `main` por el cap. 16 del atlas sin figura (sesiones `atlas-texto`).
