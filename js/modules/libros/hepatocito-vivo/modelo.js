@@ -18,7 +18,7 @@ export function topes(s) {
   const L = leer(s), t = [], a = fmt(L.a), rapido = umbral(s) !== FIG.umbral;
   if (L.edema) t.push({ c: 'edema', n: 'sello', titulo: L.manda ? 'Edema cerebral' : 'Riesgo alto de edema', texto: L.manda ? `La TC muestra edema (surcos borrados, como la Fig. 39.2) aunque el modelo marque ${a} µmol/L: la TC manda, no la cifra. West Haven ${L.wh}. En el fallo agudo la CVVH es superior a la lactulosa y la rifaximina.` : `Amonio arterial ${a} µmol/L (más de ${umbral(s)}${rapido ? ': umbral rápido de 120, opinión del autor, no de la ficha' : ''}): riesgo aumentado de edema: el astrocito tiende a hincharse (West Haven ${L.wh}); la TC acaba pareciéndose a la Fig. 39.2. En el fallo agudo la CVVH es superior a la lactulosa y la rifaximina.`, pag: 7, origen: L.manda ? 'ficha · p. 6-7 (la TC manda)' : !rapido ? 'ficha · p. 7-8' : 'ficha · p. 7 (>150); umbral 120: opinión del autor', off: ['#hpv-raiz [data-dep]', '#hpv-r-rifa'] });
   if (s.dep === 4) t.push({ c: 'diarrea', n: 'aviso', titulo: 'Diarrea osmótica', texto: 'Con 4 deposiciones ya pasas del objetivo de 2-3 blandas al día: reduce o para la lactulosa si hay diarrea.', pag: 7, origen: 'ficha · p. 7 (objetivo 2-3; reducir ante diarrea); el umbral de 4: opinión del autor', bajo: '#hpv-m-dep' });
-  if (s.dep >= 6) t.push({ c: 'hipovol', n: 'sello', titulo: 'Hipovolemia', texto: 'Seis deposiciones o más: pérdida de líquido, PA 85/50 y FC 115. Para la lactulosa.', pag: null, origen: 'fisiología general; cifras ilustrativas', off: ['#hpv-raiz [data-dep="6"]'] });
+  if (s.dep >= 6) t.push({ c: 'hipovol', n: 'sello', titulo: 'Hipovolemia', texto: `Seis deposiciones o más: pérdida de líquido, PA ${vitales(s).pa} y FC ${vitales(s).fc} (−15 de sistólica y +15 de pulso sobre su base). Para la lactulosa.`, pag: null, origen: 'fisiología general; cifras ilustrativas', off: ['#hpv-raiz [data-dep="6"]'] });
   if (s.cvvh && !s.edema && L.sinCvvh <= FIG.umbral) t.push({ c: 'cvvh', n: 'aviso', titulo: 'Sin criterio de amonio', texto: `CVVH con amonio ${fmt(L.sinCvvh)} sin ella (no pasa de ${FIG.umbral}). El modelo no mide la diuresis; la ficha pide oliguria, amonio >150 o edema.`, pag: 8, origen: 'ficha · p. 8', bajo: '#hpv-m-cvvh' });
   if (s.rifa > 0 && s.rifa < 10) t.push({ c: 'rifa', n: 'aviso', titulo: 'Mínimo 10 días', texto: `Llevas ${s.rifa} día${s.rifa > 1 ? 's' : ''}: la rifaximina 400 mg tres veces al día se da al menos 10 días y suele combinarse con lactulosa. Un ciclo más corto no es el que describe el libro.`, pag: 7, origen: 'ficha · p. 7', bajo: '#hpv-m-rifa' });
   if (s.tips) t.push({ c: 'tips', n: 'aviso', titulo: 'Cambia un problema por otro', texto: 'El TIPS alivia la hipertensión portal, pero al saltarse el hígado aumenta el riesgo de encefalopatía: sube el amonio arterial.', pag: 10, origen: 'ficha · p. 10; cuánto sube: ilustrativo', bajo: '#hpv-m-tips' });
@@ -28,7 +28,8 @@ export function topes(s) {
   return t;
 }
 export function vitales(s) {
-  if (s.dep >= 6) return { pa: '85/50', fc: '115' };
-  const b = s.vit || { pa: '118/72', fc: '76' }, f = FLUIDOS[s.fl]; if (!f) return b;
+  const b = s.vit || { pa: '118/72', fc: '76' };
+  if (s.dep >= 6) { const [sy, di] = b.pa.split('/').map(Number), sy2 = Math.max(70, sy - 15); return { ...b, pa: `${sy2}/${Math.max(40, Math.round(di * sy2 / sy))}`, fc: String(+b.fc + 15) }; }
+  const f = FLUIDOS[s.fl]; if (!f) return b;
   const [sy, di] = b.pa.split('/').map(Number); return { ...b, pa: `${sy + f.dpa[0]}/${di + f.dpa[1]}`, fc: String(+b.fc + f.dfc) };
 }
