@@ -38,7 +38,7 @@ export const MAYEUTICA_COMA = {
         opciones: [
           { t: 'Masa intracraneal en expansión, trauma o cirugía ocular o una crisis focal', ok: true },
           { t: 'Atropina o un anticolinérgico, que dilatan las dos pupilas y siguen reaccionando', porque: 'La atropina y los anticolinérgicos dilatan las dos pupilas y son reactivas, no una sola y fija. Atribuirlo al fármaco retrasa el TC ante una masa que comprime el tronco.' },
-          { t: 'Síndrome de Horner', porque: 'El Horner da una pupila más pequeña, no dilatada. Con esa idea, buscarías una lesión simpática y no mirarías el hematoma que empuja el cerebro.' }],
+          { t: 'Síndrome de Horner', porque: '(fisiología general) El Horner da una pupila más pequeña, no dilatada. Con esa idea, buscarías una lesión simpática y no mirarías el hematoma que empuja el cerebro.' }],
         explicacion: `Tabla 45.4: <span class="hl-rojo">una dilatada y fija</span> = masa intracraneal en expansión (herniación uncal), trauma o cirugía ocular, o crisis focal. Dilatadas y <span class="hl">reactivas</span> las dos: atropina y anticolinérgicos, dopamina, anfetaminas (${pag(11, 'pág. 11')}).` },
       { id: 'mnk-g4', corto: 'puntiformes', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-pup-pequenas · mn-pup-puntiformes',
         enunciado: 'Dos pacientes en coma tienen las pupilas puntiformes: uno por opiáceos y otro por una lesión de la protuberancia. ¿Cómo los separas?',
@@ -83,7 +83,7 @@ export const MAYEUTICA_COMA = {
         opciones: [
           { t: '8: coma grave por traumatismo craneal', porque: 'Con tubo el máximo es 11 y la parte verbal vale 1 como pseudopuntuación; clasificarlo por los tramos de gravedad sin escribir la T lo lee como un TCE grave sin serlo necesariamente.' },
           { t: '8T: 2 + 1 (pseudopuntuación) + 5, máximo 11 con tubo', ok: true },
-          { t: '10: sin voz por el tubo se omite el componente verbal', porque: 'No se omite: se da 1 punto de pseudopuntuación. Sumar solo ojos y motor engaña la gravedad.' }],
+          { t: '7: sin voz por el tubo se omite el componente verbal', porque: 'No se omite: se da 1 punto de pseudopuntuación (pág. 14), así que 2 + 5 + 1 = 8, no 7. Sumar solo ojos y motor engaña la gravedad.' }],
         explicacion: `Ojos 2 + verbal <span class="hl">1 (pseudopuntuación, tubo)</span> + motor 5 = 8T. Con tubo endotraqueal la puntuación máxima es <span class="hl-rojo">11</span> (${pag(13, 'págs. 13')}-${pag(14, '14')}).` },
       { id: 'mnk-e4', corto: 'GCS no fiable', tipo: 'test', fuente: 'mn-gcs-usos',
         enunciado: '¿En qué situación no es fiable el Glasgow?',
@@ -96,8 +96,8 @@ export const MAYEUTICA_COMA = {
         nota: 'Nota de fidelidad: la fuente compara «GCS ≤6» con «GCS ≤5»; los dos grupos se solapan. Se reproduce tal cual.' + enFicha('mn-coma', 'mn-gcs-usos'),
         enunciado: 'Coma no traumático: ¿qué dice Marino del GCS inicial y el pronóstico?',
         opciones: [
-          { t: 'Un GCS inicial ≤8 no despierta nunca', porque: 'El ≤8 define el coma, no un pronóstico fatal. Retirar el tratamiento por esta cifra sola sería una conducta que el libro no sostiene.' },
-          { t: 'No tiene valor pronóstico: solo sirve para decidir la intubación', porque: 'El libro cita cuatro usos, uno de ellos el pronóstico. Ignorarlo te hace perder una referencia que se le explica a la familia.' },
+          { t: 'Un GCS inicial ≤8 no despierta nunca', porque: 'El ≤8 define el coma, no un pronóstico fatal. El libro solo da la cifra (pág. 14) y no dice que justifique retirar el tratamiento.' },
+          { t: 'No tiene valor pronóstico: solo sirve para decidir la intubación', porque: 'El libro cita cuatro usos, uno de ellos el pronóstico. Ignorarlo te hace perder una referencia que el libro sí recoge.' },
           { t: 'Con ≤6 hay 7 veces más probabilidad de despertar que con ≤5', ok: true }],
         explicacion: `En el coma no traumático, un GCS inicial <span class="hl">≤6 tiene siete veces más probabilidades de despertar que uno ≤5</span> (${pag(14, 'pág. 14')}). La fuente compara grupos que se solapan.` },
       { id: 'mnk-e6', corto: 'mirada fija', tipo: 'test', fuente: 'mn-coma-motilidad',
@@ -142,8 +142,8 @@ export const MAYEUTICA_COMA = {
             pregunta: { id: 'mnk-c4', tipo: 'test', fuente: 'mn-pup-unilateral · mn-tabla-45-4',
               enunciado: 'Ahora una pupila izquierda dilatada y fija. ¿Qué piensas?',
               opciones: [
-                { t: 'El efecto residual del fentanilo, que sigue actuando en el cerebro', porque: 'El opiáceo da pupilas pequeñas y simétricas. Esperar a que se disipe retrasa el TC ante una masa que comprime el tronco.' },
-                { t: 'Un síndrome de Horner', porque: 'El Horner es una pupila más pequeña, no dilatada. Con esa idea no se pide el TC urgente.' },
+                { t: 'El efecto residual del fentanilo, que sigue actuando en el cerebro', porque: '(fisiología general) El opiáceo da pupilas pequeñas y simétricas. Esperar a que se disipe retrasa el TC ante una masa que comprime el tronco.' },
+                { t: 'Un síndrome de Horner', porque: '(fisiología general) El Horner es una pupila más pequeña, no dilatada. Con esa idea no se pide el TC urgente.' },
                 { t: 'Ya no es el opiáceo: masa en expansión, TC urgente', ok: true }],
               explicacion: `Una dilatada y fija = masa intracraneal en expansión (herniación uncal) (${pag(11, 'pág. 11')}). El TC muestra un hematoma subdural izquierdo (dato del caso).` } },
           { momento: 'Día 0 · 15:00', datos: { 'Respuesta al dolor': 'Extensión y pronación de los cuatro miembros' }, nuevo: ['Respuesta al dolor'],
@@ -291,10 +291,10 @@ export const MAYEUTICA_COMA = {
                 { t: 'Sí, y si dudas, haz un EEG', porque: 'El EEG no es una prueba confirmatoria aceptada; no resuelve la duda de los requisitos.' },
                 { t: 'Aún no: <48 h, T ≤36 °C y sedantes', ok: true }],
               explicacion: `Requisitos: al menos <span class="hl">48 h</span> desde la lesión, PAM ≥75, T >36 °C y sin efecto de depresores (5 semividas) (${pag(14, 'págs. 14')}-${pag(15, '15')}).` } },
-          { momento: 'Día 3 · hora 54', datos: { Constantes: 'T 36,6 °C, PAS 112, PAM 78', Analítica: 'Glucosa 118', Sedantes: 'Sin ellos desde hace más de 5 semividas', 'Exploración 1': 'Los 6 reflejos ausentes' }, nuevo: ['Constantes', 'Analítica', 'Sedantes', 'Exploración 1'],
+          { momento: 'Día 2 · hora 54', datos: { Constantes: 'T 36,6 °C, PAS 112, PAM 78', Analítica: 'Glucosa 118', Sedantes: 'Sin ellos desde hace más de 5 semividas', 'Exploración 1': 'Los 6 reflejos ausentes' }, nuevo: ['Constantes', 'Analítica', 'Sedantes', 'Exploración 1'],
             calculadora: { ir: 'mn-me-calc', nombre: 'Lista de comprobación de la muerte encefálica' },
             pregunta: { id: 'mnm-c3', tipo: 'test', fuente: 'mn-me-calc',
-              enunciado: 'Cumple los requisitos y la primera exploración es completa. ¿Qué falta?',
+              enunciado: 'Cumple los requisitos de la lista (sin sedantes, T y PAM adecuadas; sin hipotiroidismo ni otras causas reversibles descartadas por la analítica del caso) y la primera exploración es completa. ¿Qué falta?',
               opciones: [
                 { t: 'Nada: puede declararse ya con la primera exploración', porque: 'Faltan la segunda exploración (≥12 h) y el test de apnea. Declararlo ahora saltaría pasos de la lista.' },
                 { t: 'Solo el EEG', porque: 'El EEG no es una prueba confirmatoria aceptada ni un paso de la lista.' },

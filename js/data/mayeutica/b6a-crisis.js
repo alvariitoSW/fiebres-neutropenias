@@ -7,6 +7,9 @@ const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="
 // «Ver en la ficha» dentro de una nota (REGLAS §7.9): el enlace cruzado al párrafo exacto.
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 
+// Dos cifras del libro para la hemorragia intracerebral (Tabla 46.1 y cap. 47); no se elige ganadora.
+const NOTA_HIC = '<b>Las fuentes discrepan.</b> Convulsiones en la hemorragia intracerebral: 20-30 % en la Tabla 46.1 (' + pag(19, 'pág. 19') + ') frente a «alrededor del 15 %» de crisis sintomáticas la primera semana en el cap. 47 (' + pag(45, 'pág. 45') + '); el libro no las concilia.' + enFicha('mn-convulsiones', 'mn-tabla-46-1');
+
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoNeuro', panel: 'panel-marino-neuro-tabs', tab, enVisual: '', texto });
 export const MAYEUTICA_CRISIS = {
   /* =================================================================================================
@@ -55,15 +58,15 @@ export const MAYEUTICA_CRISIS = {
       { id: 'mnv-e1', corto: 'tabla 46.1', tipo: 'test', fuente: 'mn-tabla-46-1',
         enunciado: 'Según la Tabla 46.1, ¿en qué situación es más frecuente el estado epiléptico?',
         opciones: [
-          { t: 'Traumatismo craneal, 15-25 %, la situación con más estado epiléptico', porque: 'Es la segunda en la tabla. Un paciente con isquemia cerebral tiene más riesgo de estado epiléptico (30 %) y no lo vigilarías tanto.' },
+          { t: 'Traumatismo craneal, 15-25 %, la situación con más estado epiléptico', porque: 'El traumatismo craneal tiene 15-25 %, por debajo del 30 % de la isquemia. Un paciente con isquemia cerebral tiene más riesgo de estado epiléptico (30 %) y no lo vigilarías tanto.' },
           { t: 'Lesión cerebral isquémica, 30 %', ok: true },
           { t: 'Encefalitis, 20 %', porque: 'En la encefalitis son más frecuentes las convulsiones (35-45 %) que el estado epiléptico (20 %). Confundir las dos columnas lleva a infravalorar la isquemia.' }],
         explicacion: 'Tabla 46.1: <span class="hl-rojo">lesión isquémica 30 %</span>, traumatismo craneal 15-25 %, encefalitis 20 %, hemorragia subaracnoidea 15 %, hemorragia intracerebral 10-20 % y sin enfermedad neurológica <1 % (' + pag(19, 'pág. 19') + ').' },
       { id: 'mnv-e2', corto: 'ictus y crisis', tipo: 'test', fuente: 'mn-tabla-46-1 · mn-isq-convulsiones',
-        enunciado: '¿Qué porcentaje de pacientes con ictus isquémico agudo tiene convulsiones en la primera semana?',
+        enunciado: '¿Qué dice el libro del porcentaje de pacientes con ictus isquémico agudo que tienen convulsiones o una crisis sintomática en la primera semana?',
         opciones: [
-          { t: '2-5 %, según la Tabla 46.1', porque: 'Es solo una de las dos cifras del libro; el capítulo 47 dice «alrededor del 20 %». Quedarte con una como si fuera la única es elegir ganadora donde el libro no lo hace.' },
-          { t: 'Alrededor del 20 %, según el capítulo 47', porque: 'Es la otra de las dos cifras. El libro no concilia ninguna, así que no se puede decir que una sea la correcta.' },
+          { t: 'Solo 2-5 %, según la Tabla 46.1', porque: 'Es solo una de las dos cifras del libro; el capítulo 47 dice «alrededor del 20 %». Quedarte con una como si fuera la única es elegir ganadora donde el libro no lo hace.' },
+          { t: 'Solo alrededor del 20 %, según el capítulo 47', porque: 'Es la otra de las dos cifras. El libro no concilia ninguna, así que no se puede decir que una sea la correcta.' },
           { t: 'El libro da dos cifras distintas (2-5 % y alrededor del 20 %) y no las concilia', ok: true }],
         explicacion: 'La Tabla 46.1 da un <span class="hl">2-5 %</span> (' + pag(19, 'pág. 19') + ') y el capítulo 47 dice que <span class="hl">alrededor del 20 %</span> tiene una crisis sintomática esa semana (' + pag(41, 'pág. 41') + '). Se muestran las dos.',
         nota: '<b>Las fuentes discrepan.</b> Tabla 46.1 (' + pag(19, 'pág. 19') + ') frente a cap. 47 (' + pag(41, 'pág. 41') + '); el libro no las concilia.' + enFicha('mn-convulsiones', 'mn-tabla-46-1') },
@@ -94,7 +97,8 @@ export const MAYEUTICA_CRISIS = {
                 { t: 'Es delirio: haloperidol y reorientar', porque: 'El delirio explica la confusión, pero no las sacudidas ni la lesión cerebral. Sedarla con un neuroléptico taparía una crisis que sigue en marcha.' },
                 { t: 'El CAM-ICU positivo no excluye una crisis: con lesión cerebral (convulsiones en el 20-30 %), pensar en ella', ok: true },
                 { t: 'Esperar: sin convulsión generalizada no hay crisis', porque: 'La consciencia alterada es justo la forma de presentarse del estado no convulsivo. Esperar la convulsión la deja sin tratar.' }],
-              explicacion: 'Tabla 46.1: hemorragia intracerebral, <span class="hl-rojo">convulsiones 20-30 %</span> (' + pag(19, 'pág. 19') + '). Hay que <span class="hl">pensar en crisis no convulsivas</span> en cualquier paciente de UCI con la consciencia alterada (' + pag(21, 'pág. 21') + ').' } },
+              explicacion: 'Tabla 46.1: hemorragia intracerebral, <span class="hl-rojo">convulsiones 20-30 %</span> (' + pag(19, 'pág. 19') + '). Hay que <span class="hl">pensar en crisis no convulsivas</span> en cualquier paciente de UCI con la consciencia alterada (' + pag(21, 'pág. 21') + ').',
+              nota: NOTA_HIC } },
           { momento: 'Día 3 · 11:15', datos: { Plan: 'Apuntes del R1' }, nuevo: ['Plan'],
             pregunta: { id: 'mnv-s2', tipo: 'error', fuente: 'mn-conv-movimientos · mn-conv-eeg · mn-hic-otras',
               enunciado: 'Plan del R1 para Saturnina. Puede haber 0, 1 o 2 errores: encuéntralos.',
@@ -103,7 +107,8 @@ export const MAYEUTICA_CRISIS = {
                 { t: 'Pido un EEG de rutina y, si es normal, la descarto.', mal: true, c: 'El intermitente encuentra crisis en el <span class="hl">4-8 %</span> frente al <span class="hl">16 %</span> del continuo (pág. 21); en la hemorragia intracerebral, EEG continuo 24-36 h (pág. 45).' },
                 { t: 'Glucosa y sodio normales: no es la causa metabólica.' },
                 { t: 'No inicio profilaxis anticonvulsiva previa.' }],
-              explicacion: 'Dos fallos: la mioclonía no basta para llamarlo crisis y un EEG corto normal no descarta nada. Sin profilaxis anticonvulsiva en la hemorragia intracerebral, pero con EEG continuo 24-36 h si la consciencia está alterada (' + pag(45, 'pág. 45') + ').' } },
+              explicacion: 'Dos fallos: la mioclonía no basta para llamarlo crisis y un EEG corto normal no descarta nada. Sin profilaxis anticonvulsiva en la hemorragia intracerebral, pero con EEG continuo 24-36 h si la consciencia está alterada (' + pag(45, 'pág. 45') + ').',
+              nota: NOTA_HIC } },
           { momento: 'Día 3 · 14:00', datos: { EEG: 'Continuo: descargas rítmicas continuas' }, nuevo: ['EEG'],
             pregunta: { id: 'mnv-s3', tipo: 'test', fuente: 'mn-conv-se · mn-conv-pensar',
               enunciado: 'El EEG continuo muestra descargas rítmicas continuas: estado epiléptico no convulsivo. ¿Qué haces?',
@@ -171,16 +176,16 @@ export const MAYEUTICA_CRISIS = {
       { id: 'mns-g4', corto: 'antes del paso 3', tipo: 'test', fuente: 'mn-se-refractario',
         enunciado: 'El estado sigue tras la benzodiacepina y un anticonvulsivo. Vas a dar un anestésico. ¿Qué haces antes?',
         opciones: [
-          { t: 'Pedir primero un EEG y decidir después', porque: 'El EEG continuo se aconseja, pero no es lo que hay que hacer antes del anestésico. Es retrasar el tratamiento de un paciente que ya lleva muchos minutos en crisis.' },
+          { t: 'Pedir primero un EEG y decidir después', porque: 'El EEG continuo se aconseja, pero el libro lo pone junto al anestésico, no como requisito previo. Esperarlo retrasaría el tratamiento de un paciente que ya lleva muchos minutos en crisis (lectura del plan).' },
           { t: 'Dar el bolo en ventilación espontánea para no tener que intubarlo', porque: 'Todos los fármacos de la Tabla 46.4 deprimen la ventilación en dosis recomendadas: sin intubar, la depresión respiratoria será el siguiente problema.' },
           { t: 'Intubarlo y ventilarlo, porque todos deprimen la respiración', ok: true }],
-        explicacion: 'Se intuba y se ventila <span class="hl-rojo">antes</span>, porque todos deprimen la respiración en las dosis recomendadas (' + pag(23, 'pág. 23') + '). Después, EEG continuo y consulta con neurología crítica o epileptología.' },
+        explicacion: 'Se intuba y se ventila <span class="hl-rojo">antes</span>, porque todos deprimen la respiración en las dosis recomendadas (' + pag(23, 'pág. 23') + '). El EEG continuo también se aconseja, y la consulta con neurología crítica o epileptología (' + pag(23, 'pág. 23') + ').' },
       { id: 'mns-g5', corto: 'propofol y 48 h', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-tabla-46-4',
         enunciado: 'En la Tabla 46.4, el propofol tiene un techo de 15 mg/kg/h. ¿Qué cambia pasadas 48 horas?',
         puntos: [
           'El techo baja de 15 a <span class="hl-rojo">5 mg/kg/h</span> si la perfusión dura más de 48 h.',
           'Coincide con el <span class="hl-azul">umbral del síndrome de infusión de propofol</span> del cap. 6 (>5 mg/kg/h durante más de 48 h).'],
-        explicacion: 'La ficha lo enlaza con el síndrome de infusión de propofol del capítulo 6 (' + pag(23, 'pág. 23') + ').' },
+        explicacion: 'Techo de la Tabla 46.4 (' + pag(23, 'pág. 23') + '); el umbral del síndrome de infusión de propofol (>5 mg/kg/h durante más de 48 h) está en el ' + '<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=28" target="_blank" rel="noopener">cap. 6, PDF pág. 28</a>' + '.' },
     ],
     examen: [
       { id: 'mns-e1', corto: 'dosis máxima', tipo: 'test', fuente: 'mn-tabla-46-3',
@@ -215,10 +220,10 @@ export const MAYEUTICA_CRISIS = {
         enunciado: '¿Qué dosis de lorazepam da el libro?',
         opciones: [
           { t: 'Solo 4 mg, sin límite de repeticiones', porque: 'El libro permite repetir una vez, no sin límite. Encadenar dosis eleva el riesgo de depresión respiratoria antes del paso 2.' },
-          { t: 'El texto: 0,05-0,1 mg/kg (o 4 mg), repetible una vez; la tabla: 0,1 mg/kg a los 5 min; no se concilian', ok: true },
-          { t: 'Siempre 0,1 mg/kg sin tope, repetido a los 2 min', porque: 'La dosis tiene tope de 4 mg y se repite a los 5 min, no a los 2 (2 min es la duración de la infusión). Podría pasarse de dosis en un paciente grande.' }],
+          { t: 'El texto: 0,05-0,1 mg/kg (o 4 mg), repetible una vez; la tabla: 0,1 mg/kg (o 4 mg), repetir a los 5 min', ok: true },
+          { t: 'Siempre 0,1 mg/kg sin tope, repetido a los 2 min', porque: 'La tabla da «0,1 mg/kg (o 4 mg)», que la calculadora de la ficha lee como tope de 4 mg, y se repite a los 5 min, no a los 2 (2 min es la duración de la infusión). Podría pasarse de dosis en un paciente grande.' }],
         explicacion: 'El texto da <span class="hl">0,05-0,1 mg/kg (o 4 mg)</span> IV en 2 min, repetible una vez (' + pag(21, 'pág. 21') + '); la Tabla 46.3, 0,1 mg/kg (o 4 mg) y repetir a los 5 min (' + pag(22, 'pág. 22') + ').',
-        nota: '<b>Nota de fidelidad.</b> El libro imprime dos pautas ligeramente distintas (texto y tabla) y no las concilia; la calculadora de la ficha usa la tabla con 4 mg como tope.' + enFicha('mn-estado-epileptico', 'mn-se-lorazepam') },
+        nota: '<b>Nota de fidelidad.</b> El libro imprime «0,1 mg/kg (or 4 mg)»; la calculadora de la ficha lee «4 mg» como tope (lectura de la ficha, no palabra del libro). La tabla añade el intervalo de 5 min al texto.' + enFicha('mn-estado-epileptico', 'mn-se-lorazepam') },
     ],
     casos: [
       { id: 'mns-tiburcio', titulo: 'Tiburcio, 57 años: la crisis que no paraba', corto: 'Caso · Tiburcio', sub: 'epilepsia que dejó la medicación; 80 kg',
@@ -240,7 +245,7 @@ export const MAYEUTICA_CRISIS = {
                 { t: 'Lorazepam 4 mg IV en 2 minutos, repetible a los 5 minutos', ok: true },
                 { t: 'Diazepam 10 mg IV, repetido si no cede', porque: 'El diazepam es eficaz, pero sale rápido del cerebro y la crisis recurre; no es el preferido.' },
                 { t: 'Levetiracetam 4.500 mg directamente, sin benzodiacepina previa', porque: 'El paso 1 son las benzodiacepinas. Saltarlo retrasa el fármaco que corta el estado en unos 2 minutos.' }],
-              explicacion: 'Tabla 46.3: lorazepam <span class="hl-verde">0,1 mg/kg o 4 mg</span>; a 80 kg la calculadora lo toma como tope: 4 mg (' + pag(22, 'pág. 22') + ').' } },
+              explicacion: 'Tabla 46.3: lorazepam <span class="hl-verde">0,1 mg/kg o 4 mg</span>; a 80 kg la calculadora lee «(or 4 mg)» como tope: 4 mg (' + pag(22, 'pág. 22') + ').' } },
           { momento: 'Urgencias · 09:12', datos: { Estado: 'Sigue en crisis tras dos dosis de lorazepam', Plan: 'Apuntes del R1' }, nuevo: ['Estado', 'Plan'],
             pregunta: { id: 'mns-t3', tipo: 'error', fuente: 'mn-tabla-46-3 · mn-se-fosfenitoina · mn-se-levetiracetam',
               enunciado: 'Plan del R1 para el paso 2. Puede haber 0, 1 o 2 errores: encuéntralos.',
@@ -255,7 +260,7 @@ export const MAYEUTICA_CRISIS = {
               enunciado: 'Sigue tras la benzodiacepina y el levetiracetam. ¿Qué haces?',
               opciones: [
                 { t: 'Es refractario: intubar y ventilar antes, y dar un anestésico de la Tabla 46.4', ok: true },
-                { t: 'Dar valproico: el paso 2 tiene tres fármacos y solo se ha probado uno', porque: 'Los tres son equivalentes: tras fallar uno, el siguiente paso es el 3. Cambiar de fármaco en el paso 2 gasta tiempo y el estado sigue.' },
+                { t: 'Dar valproico: el paso 2 tiene tres fármacos y solo se ha probado uno', porque: 'Los tres fármacos del paso 2 son equivalentes para cortar el estado, pero ya lleva más de 30 minutos y no cede tras la benzodiacepina y el levetiracetam: es un estado refractario, que pide dosis anestésicas. Repetir un fármaco equivalente retrasa la vía aérea segura mientras la crisis sigue.' },
                 { t: 'Dar el anestésico sin intubar, para poder seguir vigilando la clínica del paciente', porque: 'Todos deprimen la respiración en las dosis recomendadas: sin vía aérea segura, la apnea sería la nueva urgencia.' }],
               explicacion: 'Un <span class="hl">10-15 %</span> es refractario a los pasos 1 y 2: dosis anestésicas, con intubación y ventilación antes, EEG continuo y neurología crítica (' + pag(23, 'pág. 23') + ').' } },
           { momento: 'Urgencias · 09:50', datos: { 'Vía aérea': 'Intubado y ventilado' }, nuevo: ['Vía aérea'],
@@ -272,8 +277,8 @@ export const MAYEUTICA_CRISIS = {
               opciones: [
                 { t: 'Subir a 10 mg/kg/h: el techo del propofol es 15 mg/kg/h', porque: 'El techo de 15 es para menos de 48 h; después es 5. Con 10 mg/kg/h pasadas 48 h se acumularía riesgo de síndrome de infusión de propofol.' },
                 { t: 'Seguir igual: 8 mg/kg/h sigue por debajo del techo de 15 mg/kg/h y la crisis aún no cede', porque: 'Pasadas 48 h el techo es 5 mg/kg/h; 8 lo supera y expone al síndrome de infusión de propofol.' },
-                { t: 'Cambiar a otro anestésico de la Tabla 46.4: midazolam o pentobarbital', ok: true }],
-              explicacion: 'Pasadas 48 h el techo del propofol es de <span class="hl-rojo">5 mg/kg/h</span>, que coincide con el umbral del síndrome de infusión de propofol; 8 lo supera. Las alternativas de la tabla son el midazolam o el pentobarbital (' + pag(23, 'pág. 23') + ').' } },
+                { t: 'Bajar a ≤5 mg/kg/h, el techo del propofol tras 48 h', ok: true }],
+              explicacion: 'Pasadas 48 h el techo del propofol es de <span class="hl-rojo">5 mg/kg/h</span>, que coincide con el umbral del síndrome de infusión de propofol; 8 lo supera. La Tabla 46.4 solo fija ese techo (' + pag(23, 'pág. 23') + '); también ofrece midazolam y pentobarbital como otros anestésicos, pero no manda cambiar. El umbral del síndrome de infusión de propofol está en el ' + '<a class="biblio-link" href="docs/marino-2024-practicas-monitorizacion-caps5-9.pdf#page=28" target="_blank" rel="noopener">cap. 6, PDF pág. 28</a>' + ' (>5 mg/kg/h más de 48 h).' } },
           { momento: 'Día 3 · familia', datos: { Pregunta: '¿Qué le cuentas a la familia?' }, nuevo: ['Pregunta'],
             pregunta: { id: 'mns-t7', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-se-mortalidad · mn-se-paso2',
               enunciado: 'La familia pregunta por el pronóstico. ¿Qué le cuentas?',
