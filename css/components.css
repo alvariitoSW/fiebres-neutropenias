@@ -5380,3 +5380,150 @@ body.study-mode-on #iov-raiz .dock { padding-right: 82px; }
 .may-vuelve { margin: 0; font-size: .8rem; line-height: 1.4; color: var(--text-dim); border-top: 1px dashed var(--border-color); padding-top: 6px; }
 .may-firmes strong { color: var(--text-main); }
 .may-zona .nota-plegable p, .est-cabeza .nota-plegable p { font-size: .8rem; line-height: 1.45; color: var(--text-muted); margin: 6px 0 0; }
+
+/* ===== Hepatocito vivo · la fábrica por dentro (js/modules/libros/hepatocito-vivo/*). Prefijo de ids: hpv-. Viene de la maqueta aprobada
+   autonomo/maquetas/b5-hepatocito-b.html. Solo tokens de css/variables.css; los alias son los mismos tokens con el nombre corto. ===== */
+#hpv-raiz { --line: var(--border-color); --fg: var(--text-main); --dim: var(--text-dim); --muted: var(--text-muted); --card: var(--bg-card); --card2: rgba(46, 38, 28, 1);
+  --oro: var(--accent-yellow); --oro-claro: var(--accent-blue); --rojo: var(--accent-red); --verde: var(--accent-green); --purpura: var(--accent-purple); --bg: var(--bg-main);
+  --sans: system-ui, -apple-system, 'Segoe UI', sans-serif; --serif: Georgia, 'Times New Roman', serif; --hpv-dock-h: 150px; --hpv-frase-h: 40px;
+  display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr); font: 16px/1.5 var(--serif); color: var(--text-main);
+  padding-bottom: calc(var(--hpv-dock-h) + 24px); }
+#hpv-raiz > *, #hpv-raiz .bloque > * { min-width: 0; }
+#hpv-raiz p { margin: 0; }
+#hpv-raiz h2, #hpv-raiz h3 { text-transform: none; letter-spacing: 0; text-shadow: none; font-weight: normal; }
+#hpv-raiz h2.hpv-titulo { font-size: 1.22rem; line-height: 1.2; margin: 0; color: var(--accent-yellow); }
+#hpv-raiz h3 { font: 600 .72rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); margin: 4px 0 2px; }
+#hpv-raiz .hpv-eyebrow { font: 600 .68rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); }
+#hpv-raiz .cabecera { display: grid; gap: 4px; }
+#hpv-raiz button { font-family: var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+#hpv-raiz button:disabled { opacity: .55; cursor: default; }
+#hpv-raiz button:focus-visible, #hpv-raiz input:focus-visible, #hpv-raiz summary:focus-visible, #hpv-raiz a:focus-visible { outline: 2px solid var(--oro); outline-offset: 2px; }
+#hpv-raiz .org { font: .64rem/1.25 var(--sans); color: var(--muted); border: 1px solid var(--line); border-radius: 999px; padding: 0 6px; vertical-align: 1px; }
+#hpv-raiz .frase { margin: 0; border-bottom: 1px solid var(--line); font: .78rem/1.25 var(--serif); color: var(--fg); padding: 3px 0 3px 8px; box-shadow: inset 3px 0 0 var(--oro); }
+#hpv-raiz .frase-txt { display: block; max-height: 5.2em; overflow-y: auto; }
+#hpv-raiz .frase-txt .org { white-space: normal; }
+#hpv-raiz button.b { min-height: 44px; font: 600 .84rem/1.2 var(--sans); border-radius: 10px; padding: 8px 12px; text-align: left; }
+#hpv-raiz button.b.prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+#hpv-raiz .dock { isolation: isolate; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: var(--bg-main); border-top: 1px solid var(--line); padding: 0 max(8px, env(safe-area-inset-left, 0px)) calc(4px + env(safe-area-inset-bottom, 0px)); }
+#hpv-raiz .dock-in { max-width: 560px; margin: 0 auto; display: grid; gap: 3px; }
+#hpv-raiz .dock-tabs { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, 1fr); gap: 2px; }
+#hpv-raiz .dock-tabs button { background: transparent; border: 0; border-bottom: 2px solid transparent; border-radius: 0; color: var(--muted); font: 600 .74rem/1.1 var(--sans); padding: 0 1px; }
+#hpv-raiz .dock-tabs button[aria-selected="true"] { color: var(--oro); border-bottom-color: var(--oro); }
+#hpv-raiz .dock-panel { display: grid; gap: 4px; align-content: start; overflow-y: auto; overscroll-behavior: contain; padding-bottom: 2px; }
+#hpv-raiz .dock-nota { font: .66rem/1.3 var(--sans); color: var(--muted); }
+#hpv-raiz details.mas > summary { cursor: pointer; min-height: 36px; display: flex; align-items: center; font: 600 .76rem var(--sans); color: var(--oro); list-style: none; }
+#hpv-raiz details.mas > summary::-webkit-details-marker { display: none; }
+#hpv-raiz details.mas > summary::after { content: '+'; margin-left: auto; padding-left: 8px; } #hpv-raiz details.mas[open] > summary::after { content: '−'; }
+#hpv-raiz .bloque { display: grid; gap: 8px; }
+#hpv-raiz details.plegable { background: var(--card); border: 1px solid var(--card2); border-radius: 12px; padding: 2px 12px; }
+#hpv-raiz details.plegable summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; font: 600 .84rem var(--sans); color: var(--dim); list-style: none; }
+#hpv-raiz details.plegable summary::-webkit-details-marker { display: none; }
+#hpv-raiz details.plegable summary::after { content: '+'; margin-left: auto; padding-left: 8px; } #hpv-raiz details.plegable[open] summary::after { content: '−'; }
+#hpv-raiz details.plegable[open] { padding-bottom: 12px; }
+#hpv-raiz details.plegable p { font: .74rem/1.4 var(--sans); color: var(--muted); }
+#hpv-raiz ul.lista { margin: 6px 0 0; padding: 0; list-style: none; display: grid; gap: 8px; font: .8rem/1.45 var(--sans); color: var(--dim); }
+#hpv-raiz ul.lista li { border-left: 2px solid var(--line); padding-left: 8px; min-width: 0; overflow-wrap: anywhere; display: grid; gap: 2px; }
+#hpv-raiz .bloque p { font: .8rem/1.45 var(--sans); color: var(--dim); }
+#hpv-raiz .fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#hpv-raiz .cita { display: inline; font: .68rem/1.3 var(--sans); } #hpv-raiz .cita-pdf { display: inline; min-height: 0; font: inherit; color: var(--muted); }
+#hpv-raiz .ver-ficha { font: inherit; }
+#hpv-raiz .mon-fila button { min-height: 32px; min-width: 44px; padding: 0 8px; font: 600 .68rem var(--sans); color: var(--dim); background: transparent; }
+#hpv-raiz input[type=range] { width: 100%; }
+#hpv-raiz .tope-sello { max-height: none; }
+body.study-mode-on #hpv-raiz .dock { padding-right: 82px; }
+/* ---- de la maqueta ---- */
+#hpv-raiz .zona-escena { position: relative; }
+#hpv-raiz #hpv-monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; }
+#hpv-raiz #hpv-monitor .mon-fila { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
+#hpv-raiz #hpv-monitor .vit b { color: var(--text-main); font-size: .9rem; }
+#hpv-raiz .mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); }
+#hpv-raiz .mando .fila { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+#hpv-raiz .mando .fila > * { flex: 1 1 0; min-width: 72px; }
+#hpv-raiz .mando label { font: 600 .7rem/1.2 var(--sans); color: var(--text-dim); display: grid; gap: 2px; }
+#hpv-raiz .mando label output { color: var(--oro); }
+#hpv-raiz .modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+#hpv-raiz .modos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#hpv-raiz .prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); }
+#hpv-raiz .prueba h3 { margin: 0; font-size: .95rem; }
+#hpv-raiz .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+#hpv-raiz .op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); }
+#hpv-raiz .op.bien { border-color: var(--accent-green); }
+#hpv-raiz .op.mal { border-color: var(--accent-red); }
+#hpv-raiz .op.neutra { opacity: .6; }
+#hpv-raiz .por { margin: 0; font: .78rem/1.4 var(--sans); }
+#hpv-raiz .por.ok { color: var(--accent-green); }
+#hpv-raiz .por.no { color: var(--accent-red); }
+#hpv-raiz .frase .org { color: var(--text-muted); font-weight: 400; }
+#hpv-raiz .presets { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; }
+#hpv-raiz .presets button { min-height: 38px; font: 700 .68rem/1.1 var(--sans); }
+#hpv-raiz .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#hpv-raiz .dock-panel { max-height: 20vh !important; min-height: 0 !important; }
+#hpv-raiz .dock-tabs button { min-height: 34px !important; }
+#hpv-raiz .mando button, #hpv-raiz .mando select { min-height: 34px; padding: 2px 4px; }
+#hpv-raiz .mando .fila > * { min-width: 60px; }
+#hpv-raiz #hpv-leyenda .nv-especies { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 600 .74rem/1.2 var(--sans); }
+#hpv-raiz #hpv-leyenda .nv-especies > span { display: inline-flex; align-items: center; gap: 4px; }
+#hpv-raiz .idea .cita { white-space: nowrap; }
+#hpv-raiz .idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); }
+#hpv-raiz .idea .org, #hpv-raiz .guia .org { color: var(--text-muted); font-weight: 400; }
+#hpv-raiz .guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; }
+#hpv-raiz .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+#hpv-raiz .llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); }
+#hpv-raiz .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+#hpv-raiz .cita { font: .68rem/1.3 var(--sans); }
+#hpv-raiz .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; }
+/* ---- propio del hepatocito (de la maqueta aprobada) ---- */
+#hpv-raiz #hpv-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#hpv-raiz #hpv-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
+#hpv-raiz #hpv-svg .min { font-size: 9.6px; fill: var(--text-muted); }
+#hpv-raiz #hpv-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
+#hpv-raiz #hpv-svg .oro { fill: var(--oro); font-weight: 800; }
+#hpv-raiz #hpv-svg .gran { font-size: 30px; fill: var(--oro); font-weight: 800; }
+#hpv-raiz #hpv-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+#hpv-raiz #hpv-svg .tanque { fill: color-mix(in srgb, var(--accent-yellow) 8%, var(--bg-main)); stroke: var(--line); stroke-width: 1.5; }
+#hpv-raiz #hpv-svg .celula { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--oro); stroke-width: 2; }
+#hpv-raiz #hpv-svg .mito { fill: color-mix(in srgb, var(--accent-purple) 14%, transparent); stroke: var(--accent-purple); stroke-width: 1.6; }
+#hpv-raiz #hpv-svg .nd { fill: var(--bg-main); stroke: var(--oro); stroke-width: 2; }
+#hpv-raiz #hpv-svg .num { font-size: 11px; fill: var(--text-main); font-weight: 800; }
+#hpv-raiz #hpv-svg .flecha { stroke: var(--text-muted); stroke-width: 1.6; fill: none; }
+#hpv-raiz #hpv-svg .bilis { stroke: var(--accent-green); stroke-width: 3; }
+#hpv-raiz #hpv-svg .bact { fill: var(--accent-green); stroke: var(--bg-main); }
+#hpv-raiz #hpv-svg .gris { fill: color-mix(in srgb, var(--text-muted) 14%, var(--bg-main)); stroke: var(--text-muted); stroke-dasharray: 3 2; }
+#hpv-raiz #hpv-svg .cand { fill: var(--text-muted); }
+#hpv-raiz #hpv-svg .cand-a { fill: none; stroke: var(--text-muted); stroke-width: 1.4; }
+#hpv-raiz #hpv-svg .via-off { cursor: pointer; }
+#hpv-raiz #hpv-svg .cvvh { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-dasharray: 4 3; }
+#hpv-raiz #hpv-svg .cvvh.on { fill: color-mix(in srgb, var(--accent-green) 22%, transparent); stroke: var(--accent-green); stroke-dasharray: none; stroke-width: 2.2; }
+#hpv-raiz #hpv-svg .astro { fill: color-mix(in srgb, var(--accent-purple) 18%, var(--bg-main)); stroke: var(--accent-purple); stroke-width: 2.4; }
+#hpv-raiz #hpv-svg .astro.hincha { stroke: var(--accent-red); stroke-width: 3.2; }
+#hpv-raiz #hpv-svg .aspa { stroke: var(--accent-red); stroke-width: 2.2; fill: none; }
+#hpv-raiz #hpv-svg .apag { fill: var(--accent-red); font-weight: 700; }
+#hpv-raiz #hpv-svg .puente { fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-dasharray: 4 3; }
+#hpv-raiz #hpv-svg .puente.on { stroke: var(--accent-red); stroke-width: 3.4; stroke-dasharray: none; }
+#hpv-raiz #hpv-svg .p-agua { fill: none; stroke: var(--accent-blue); stroke-width: 1.4; }
+#hpv-raiz #hpv-monitor #hpv-mon-nh3 { font-weight: 800; font-size: 1.15rem; color: var(--accent-yellow); }
+#hpv-raiz #hpv-monitor #hpv-mon-wh { font-weight: 800; }
+#hpv-raiz #hpv-monitor .mon-fila b { font-weight: 400; color: var(--text-main); }
+#hpv-raiz #hpv-monitor #hpv-mon-nh3, #hpv-raiz #hpv-monitor #hpv-mon-wh { font-weight: 800; }
+#hpv-raiz #hpv-monitor .mon-ch { font-size: .62rem; line-height: 1.3; margin: 1px 0 0; }
+#hpv-raiz #hpv-monitor .mon-ch *, #hpv-raiz .idea .cita, #hpv-raiz .idea .org { display: inline; }
+#hpv-raiz #hpv-monitor .mon-ch a, #hpv-raiz #hpv-monitor .mon-ch button, #hpv-raiz .idea .cita a, #hpv-raiz .idea .cita button { min-height: 0 !important; height: auto; padding: 0; margin: 0; line-height: 1.3; }
+#hpv-raiz .idea { font-size: .72rem; line-height: 1.3; margin: 2px 0; }
+#hpv-raiz .modos { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+#hpv-raiz .modos button { padding-left: 2px; padding-right: 2px; font-size: .72rem; }
+#hpv-raiz .chip-ilus { display: inline-block; border: 1px solid var(--text-muted); border-radius: 999px; padding: 0 6px; font: 600 .64rem/1.4 var(--sans); color: var(--text-muted); }
+#hpv-raiz .cara-wh { vertical-align: middle; }
+#hpv-raiz .cara-wh .pi { fill: color-mix(in srgb, var(--accent-yellow) 18%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.2; }
+#hpv-raiz .cara-wh .tr { fill: none; stroke: var(--text-main); stroke-width: 1.4; stroke-linecap: round; }
+#hpv-raiz .cara-wh .pu { fill: var(--text-main); }
+#hpv-raiz .fig-tc img { width: 100%; height: auto; display: block; border-radius: 8px; }
+#hpv-raiz .fig-tc figcaption, #hpv-raiz .min-nota { font: .7rem/1.35 var(--sans); color: var(--text-muted); margin-top: 3px; }
+#hpv-raiz .btn-replay { min-height: 36px; font: 700 .76rem/1.15 var(--sans); }
+#hpv-raiz .crecera li { margin-bottom: 3px; }
+#hpv-raiz .mando output { color: var(--oro); }
+#hpv-raiz .dock-panel { max-height: 14vh !important; }
+#hpv-raiz .mando button[aria-pressed="true"], #hpv-raiz .mando .fila button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+/* [FIN hepatocito vivo] */
+/* hepatocito: con un sello, el monitor crece para que lo quepa entero (el sello se pinta sobre el monitor) */
+#hpv-raiz #hpv-monitor:has(.tope-sello) { min-height: 215px; }
+#hpv-raiz .mando label { display: block; } #hpv-raiz .mando label output { display: inline; }

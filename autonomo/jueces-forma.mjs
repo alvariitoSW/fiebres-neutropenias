@@ -84,7 +84,9 @@ export const MODELOS = {
     // Iones vivos (b4): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-iones-vivos)
     'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar' },
         estados: ['normal', 'damian', 'rufino', 'valentin', 'adela'] },
-    // [HUECO hepatocito: MODELOS]
+    // Hepatocito vivo (b5): Explorar | Apuesta | Error | Error de Hilario | Caso (sin Mayéutica del motor común todavía: el estado va en data-hepatocito-vivo; «alta:tips» pone el TIPS)
+    'hepatocito-vivo': { raiz: '#hpv-raiz', enlace: { especialidad: 'libros', view: 'hepatocitoVivo' }, clave: 'hepatocitoVivo', modo: { explorar: '#hpv-modo-explorar' },
+        estados: ['sano', 'casimira', 'edema', 'hilario', 'alta', 'alta:tips'] },
     // El termostato vivo (b5): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-termostato-vivo)
     'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar' },
         estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
