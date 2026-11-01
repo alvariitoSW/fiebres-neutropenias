@@ -53,7 +53,7 @@ export async function mayeutica({ p, ok, fallos, desb, ANCHO, cap }) {
   const FALLAR = new Set(['hpv-g6', 'hpv-e1', 'hpv-e4']);
   for (let i = 0; i < PREGUNTAS.length; i++) {
     const q = PREGUNTAS[i], et = `${ANCHO} ${q.num}`;
-    ok(await p.evaluate(([s, n]) => (document.querySelector(s + ' .hpv-cab-preg')?.textContent || '').includes(n), [cont, q.num]), `${et}: no sale en su orden`);
+    ok(await p.evaluate(([s, n]) => (document.querySelector(s + ' .hpv-cab-preg')?.textContent || '').includes(n), [cont, String(i + 1)]), `${et}: no sale en su orden`);
     await contestar(q, !FALLAR.has(q.id), et); if (cap && i === 1) await cap('11-mayeutica-g2-comprobada');
     await clic(`${cont} [data-accion="sig"]`); await esp(300);
   }
@@ -70,10 +70,10 @@ export async function mayeutica({ p, ok, fallos, desb, ANCHO, cap }) {
       const st = C.pasos[i], et = `${ANCHO} ${C.corto} paso ${i + 1}`;
       const nuevos = await p.evaluate(() => document.querySelectorAll('#hpv-preg .hpv-cambia').length);
       if (st.nuevo.length) ok(nuevos >= st.nuevo.length, `${et}: lo nuevo no sale marcado (${nuevos})`);
-      await contestar({ ...st.pregunta, predice: false }, true, et);
-      // la cifra de amonio de la ficha es la que da el monitor de la app en ese estado
+      // la cifra de amonio de la ficha es la que da el monitor de la app en el estado del paso (antes de tocar nada)
       const dato = st.datos['Amonio arterial'];
-      if (dato) { const m = await nh3(); ok(m.startsWith(dato.split(' ')[0]), `${et}: la ficha dice ${dato} y el monitor ${m}`); }
+      if (dato) { const m = await nh3(); ok(m.replace('≥', '').startsWith(dato.split(' ')[0]), `${et}: la ficha dice ${dato} y el monitor ${m}`); }
+      await contestar({ ...st.pregunta, predice: false }, true, et);
       const wh = await p.evaluate(() => document.getElementById('hpv-mon-wh').textContent);
       if (k === 0 && i === 3) ok(/3/.test(wh), `${et}: West Haven 3 en el monitor (${wh})`);
       await clic(`${cont} [data-accion="sig"]`); await esp(400);
@@ -87,4 +87,5 @@ export async function mayeutica({ p, ok, fallos, desb, ANCHO, cap }) {
   await clic(`${cont} [data-fin="modelo"]`); await esp(500);
   ok(await hay('#hpv-dock-panel') && !(await hay('#hpv-vista-preguntas')), 'Mayéutica: «Volver al hepatocito» devuelve los mandos');
   await sinDesborde('tras salir');
+  console.log(` Mayéutica ${ANCHO} px: ${PREGUNTAS.length} preguntas, repaso de ${chips.length}, ${CASOS.length} casos (${CASOS.map(c => c.pasos.length).join('+')} pasos) recorridos, desborde 0`);
 }

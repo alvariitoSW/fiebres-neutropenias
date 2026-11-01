@@ -10,7 +10,7 @@ export const PREGUNTAS = [
   T('g1', 'G1', 'guia', 'dónde nace el amonio', { estado: 'sano',
     enunciado: 'Un hígado sano, ya puesto en el modelo. Antes de mirar nada: <b>¿dónde se fabrica, sobre todo, el amonio que el hígado tiene que limpiar?</b>',
     opciones: [
-      { t: 'En el hígado mismo, al romper las proteínas que le llegan.', porque: 'El hígado es el órgano que lo limpia, no el que lo fabrica (p. 6). Si crees que nace allí, buscarás tratarlo en el hígado y no pondrás nada que frene su fuente en el colon.' },
+      { t: 'En el hígado mismo, al romper las proteínas que le llegan por la vena porta.', porque: 'El hígado es el órgano que lo limpia, no el que lo fabrica (p. 6). Si crees que nace allí, buscarás tratarlo en el hígado y no pondrás nada que frene su fuente en el colon.' },
       { t: 'En el intestino, como subproducto de la degradación de proteínas.', ok: true },
       { t: 'En el riñón, que lo retiene cuando filtra mal.', porque: 'El riñón y el músculo aportan algo, «en menor grado» (p. 6). Quien lo piense tratará el riñón y dejará intacta la fuente del colon.' },
       { t: 'En el músculo esquelético, sobre todo en el paciente encamado.', porque: 'Produce una parte menor; la mayor está en el intestino (p. 6). Si te fías del músculo, no pensarás en la lactulosa ni en la rifaximina, que actúan en el colon (p. 7).' }],
@@ -21,7 +21,7 @@ export const PREGUNTAS = [
       { t: 'No baja: la lactulosa solo arrastra heces y el amonio ya está en la sangre.', porque: 'Actúa antes de la sangre: se acidifica la luz del colon y desaparecen los microbios que fabrican amonio (p. 7). Si la tomas por un laxante, la retirarás por inútil y Casimira seguirá fabricando amonio en el colon.' },
       { t: 'Baja: acidifica la luz del colon y desaparecen las bacterias que lo fabrican.', ok: true },
       { t: 'Baja de golpe: limpia la sangre como la hemofiltración.', porque: 'Reduce lo que se produce; depurar la sangre es cosa de la CVVH (p. 7). Si esperas un efecto de filtro, no pedirás la CVVH que el fallo agudo necesita (p. 8) y el amonio seguirá por encima de 150.' },
-      { t: 'Sube: es un azúcar y alimenta a las bacterias del colon.', porque: 'Las bacterias lácticas lo convierten en ácidos grasos de cadena corta (p. 7): ese ácido las elimina, no las alimenta. Si lo crees, la retirarás justo cuando le baja el amonio.' }],
+      { t: 'Sube: es un azúcar y alimenta a las bacterias productoras del colon, que se multiplican.', porque: 'Las bacterias lácticas lo convierten en ácidos grasos de cadena corta (p. 7): ese ácido las elimina, no las alimenta. Si lo crees, la retirarás justo cuando le baja el amonio.' }],
     explicacion: 'La lactulosa es un disacárido que las bacterias lácticas transforman en ácidos grasos de cadena corta: la luz del colon se acidifica y se erradican los microbios productores de amonio. Se titula a 2-3 deposiciones blandas al día (p. 7).', fuente: [7],
     tocar: { txt: 'Compruébalo: pon la lactulosa a 3 deposiciones al día', k: 'dep', de: 0, a: 3 } }),
   { id: 'hpv-g3', num: 'G3', grupo: 'guia', tipo: 'destapa', corto: 'rifaximina', estado: 'casimira', ajustes: { dep: 3 },
@@ -34,16 +34,16 @@ export const PREGUNTAS = [
     enunciado: 'El intestino de Casimira fabrica amonio como el de cualquiera. Su hígado pierde el 80 % de los hepatocitos. <b>¿Por qué sube su amonio arterial?</b>',
     opciones: [
       { t: 'Porque el intestino fabrica más cuando el hígado falla.', porque: 'Lo que se pierde es la depuración, no se gana producción (p. 6). Si buscas más producción, pondrás solo lactulosa y te sorprenderá que Casimira siga alta.' },
-      { t: 'Porque el ciclo de la urea depura menos y el mismo amonio ya no se convierte en urea.', ok: true },
+      { t: 'Porque el ciclo de la urea depura menos: el amonio ya no se convierte en urea.', ok: true },
       { t: 'Porque los hepatocitos muertos sueltan su amonio a la sangre.', porque: 'La ficha atribuye la subida a la pérdida del aclaramiento por el ciclo de la urea (p. 6), no a una liberación. Si lo pensaras, esperarías que bajase en cuanto cesa la lesión y retrasarías el filtro.' },
-      { t: 'Porque el astrocito deja de captarlo y se queda en la sangre.', porque: 'Es al revés: el astrocito lo capta para hacer glutamina (p. 6), y eso viene después. Confundirlo te lleva a buscar en el cerebro lo que ocurre en el hígado.' }],
+      { t: 'Porque el astrocito deja de captarlo y entonces el amonio se queda acumulado en la sangre.', porque: 'Es al revés: el astrocito lo capta para hacer glutamina (p. 6), y eso viene después. Confundirlo te lleva a buscar en el cerebro lo que ocurre en el hígado.' }],
     explicacion: 'El hígado limpia el amonio convirtiéndolo en urea (ciclo de la urea). Cuando ese aclaramiento falla, el amonio de la sangre sube de forma progresiva (p. 6). En el modelo, cada estación del carril se apaga a medida que mueren hepatocitos (ilustrativo).', fuente: [6],
     tocar: { txt: 'Compruébalo: baja los hepatocitos de 100 a 20 %', k: 'func', de: 100, a: 20 } }),
   T('g5', 'G5', 'guia', 'TIPS y amonio', { estado: 'hilario', predice: true,
     enunciado: 'Un cirrótico sangra por varices pese a la endoscopia y al octreótido. Se plantea un TIPS, que comunica la porta con las venas hepáticas. <b>¿Qué esperas de su amonio?</b>',
     opciones: [
       { t: 'Baja: al descomprimirse la porta, el hígado trabaja mejor.', porque: 'Descomprime la porta, sí, pero la sangre ya no atraviesa el hígado: sube el riesgo de encefalopatía (p. 10). Si esperas que baje, no vigilarás su mente y la encefalopatía llegará sin lactulosa.' },
-      { t: 'No cambia: el TIPS solo trata las varices.', porque: 'La ficha lo dice sin rodeos: el TIPS «cambia un problema por otro» porque saltar el hígado aumenta el riesgo de encefalopatía (p. 10). Creerlo inocuo deja al paciente sin vigilancia.' },
+      { t: 'No cambia: el TIPS solo trata las varices y no tiene relación con el amonio ni con la mente.', porque: 'La ficha lo dice sin rodeos: el TIPS «cambia un problema por otro» porque saltar el hígado aumenta el riesgo de encefalopatía (p. 10). Creerlo inocuo deja al paciente sin vigilancia.' },
       { t: 'Sube: la sangre de la porta se salta el hígado y el NH₃ llega entero.', ok: true },
       { t: 'Baja: sin hipertensión portal, el colon produce menos amonio.', porque: 'La ficha no atribuye nada a la producción del colon; el riesgo viene de saltar el hígado (p. 10). Con esa idea retirarías la lactulosa y llegaría la encefalopatía.' }],
     explicacion: 'El TIPS crea una derivación entre la porta y las venas hepáticas que alivia la hipertensión portal. Al saltar el hígado, aumenta el riesgo de encefalopatía (p. 10); en el modelo (ilustrativo) el amonio sube, aunque la ficha no da una cifra.', fuente: [10],
@@ -51,7 +51,7 @@ export const PREGUNTAS = [
   T('g6', 'G6', 'guia', 'el astrocito', { estado: 'sano', predice: true,
     enunciado: 'Un hígado que pierde casi todo (5 % de hepatocitos), como en un fallo agudo. El amonio ya cruza la barrera hematoencefálica. <b>¿Qué verás en el astrocito, y por qué?</b>',
     opciones: [
-      { t: 'Se encoge: el amonio lo vuelve hipertónico y pierde agua.', porque: 'Al revés: la glutamina que se acumula crea una fuerza osmótica que mete agua en la célula (p. 6). Si esperas un cerebro seco, no pensarás en el edema ni pedirás la TC ni la consulta a trasplante.' },
+      { t: 'Se encoge: el amonio lo vuelve hipertónico y el astrocito pierde agua hacia la sangre.', porque: 'Al revés: la glutamina que se acumula crea una fuerza osmótica que mete agua en la célula (p. 6). Si esperas un cerebro seco, no pensarás en el edema ni pedirás la TC ni la consulta a trasplante.' },
       { t: 'Se hincha: transforma el amonio en glutamina, que atrae agua.', ok: true },
       { t: 'Se destruye: el amonio lo mata directamente.', porque: 'La ficha describe un edema «citotóxico» por glutamina y agua, no una muerte directa (p. 6). Si buscas necrosis, no actuarás sobre el amonio que lo causa.' },
       { t: 'No cambia: el amonio solo lo captan las neuronas.', porque: 'Es el astrocito quien lo capta para producir glutamina (p. 6). Creer que no pasa nada te lleva a esperar a que el paciente despierte mientras el edema avanza.' }],
@@ -61,7 +61,7 @@ export const PREGUNTAS = [
     enunciado: 'Casimira, día 2: apática, no sabe en qué día está, pero responde bien y sabe dónde se encuentra. <b>¿Qué grado de West Haven tiene?</b>',
     opciones: [
       { t: 'Grado 1: atención corta y cambio de personalidad.', porque: 'La desorientación en el tiempo ya es grado 2 (p. 7). Si la dejas en el 1, retrasarás la vigilancia del edema de una paciente que ya pasa de 150.' },
-      { t: 'Grado 3: estuporosa, desorientada en lugar y tiempo.', porque: 'Casimira responde y sabe dónde está; el grado 3 exige estupor y desorientación en lugar y tiempo (p. 7). Sobrestimarla la llevaría a intubar sin razón.' },
+      { t: 'Grado 3: estuporosa, desorientada en lugar y tiempo, pero reactiva.', porque: 'Casimira responde y sabe dónde está; el grado 3 exige estupor y desorientación en lugar y tiempo (p. 7). Sobrestimarla la llevaría a intubar sin razón.' },
       { t: 'Grado 2: apatía o letargia y desorientación en el tiempo.', ok: true },
       { t: 'Grado 4: coma.', porque: 'El coma es el grado 4 (p. 7); Casimira habla. Con esa idea esperarías a verla en coma para consultar a trasplante, que se avisa ante una encefalopatía progresiva (p. 8).' }],
     explicacion: 'La escala West Haven (Tabla 39.2): grado 1, atención corta y cambio de personalidad (p. 6); grado 2, apatía o letargia y desorientación en el tiempo; grado 3, estupor con respuesta y desorientación en lugar y tiempo; grado 4, coma (p. 7).', fuente: [6, 7] }),
@@ -76,7 +76,7 @@ export const PREGUNTAS = [
   T('e2', 'E2', 'examen', 'lactulosa a 6', { estado: 'casimira', predice: true, ajustes: { dep: 3 },
     enunciado: 'Casimira va con 3 deposiciones al día con lactulosa. El residente de guardia quiere llevarla a 6 «para bajar más el amonio». <b>¿Qué pasa?</b>',
     opciones: [
-      { t: 'Baja más el amonio sin coste: más deposiciones, menos bacterias.', porque: 'La lactulosa produce diarrea osmótica (p. 7). Casimira perdería volumen y presión sin ganar nada: el objetivo es de 2-3 deposiciones.' },
+      { t: 'Baja más el amonio sin coste: más deposiciones, menos bacterias productoras y ninguna pérdida.', porque: 'La lactulosa produce diarrea osmótica (p. 7). Casimira perdería volumen y presión sin ganar nada: el objetivo es de 2-3 deposiciones.' },
       { t: 'Aparece diarrea osmótica: se reduce o se para; el objetivo son 2-3 blandas.', ok: true },
       { t: 'Nada: seis es el objetivo cuando el grado es 2.', porque: 'El objetivo es de 2-3 deposiciones blandas al día, con cualquier grado (p. 7). Con seis, la hipovolemia de Casimira empeoraría la perfusión.' },
       { t: 'Hay que pasar al enema de 200 g cada hora.', porque: 'El enema es una vía alternativa (200 g en 700 mL, 30-60 min en Trendelenburg, p. 7), no una forma de subir la dosis. Aplicarlo cada hora la deshidrataría.' }],
@@ -85,10 +85,10 @@ export const PREGUNTAS = [
   T('e3', 'E3', 'examen', 'albúmina o Ringer', { estado: 'casimira', predice: true,
     enunciado: 'Casimira necesita volumen: vasodilatada y con la albúmina baja. <b>¿Qué fluido eliges, y por qué?</b>',
     opciones: [
-      { t: 'Ringer lactato: reanima rápido y es el cristaloide habitual.', porque: 'No se aconseja: favorece la hiponatremia, que agrava el edema cerebral (p. 5). En el modelo, el astrocito se hincha más.' },
+      { t: 'Ringer lactato: reanima rápido, es el cristaloide habitual y no pesa sobre el sodio.', porque: 'No se aconseja: favorece la hiponatremia, que agrava el edema cerebral (p. 5). En el modelo, el astrocito se hincha más.' },
       { t: 'Albúmina al 70 %, porque es la que se queda en el vaso.', porque: 'El 70 % es la parte de la solución que se queda en el espacio intravascular, no la concentración (p. 5). Confundirlo da una solución que no existe en el libro.' },
       { t: 'Ninguno: con vasopresores no hace falta volumen.', porque: 'El manejo es volumen y vasopresores si hacen falta (p. 5). Sin volumen, la hipoalbuminemia deja un volumen circulante ineficaz.' },
-      { t: 'Albúmina al 5 %: el 70 % se queda en el vaso; el Ringer favorece la hiponatremia.', ok: true }],
+      { t: 'Albúmina al 5 %: se queda en el vaso; el Ringer agrava el edema.', ok: true }],
     explicacion: 'La inestabilidad del fallo agudo es vasodilatación y un volumen circulante ineficaz por hipoalbuminemia. Se recomienda albúmina, sobre todo con albúmina sérica <3 g/dL: la solución al 5 % tiene 5 g/dL y cerca del 70 % se queda en el vaso. No se aconseja el Ringer lactato, que favorece la hiponatremia y empeora el edema cerebral (p. 5).', fuente: [5],
     tocar: { txt: 'Compruébalo: pon un bolo de Ringer lactato', k: 'fl', de: null, a: 'rl' } }),
   { id: 'hpv-e4', num: 'E4', grupo: 'examen', tipo: 'error', corto: 'resumen del mecanismo', sinModelo: true, estado: 'hilario',
@@ -105,7 +105,7 @@ export const PREGUNTAS = [
     opciones: [
       { t: '400 mg tres veces al día, al menos 10 días, junto con la lactulosa.', ok: true },
       { t: '400 mg una vez al día mientras dure el ingreso.', porque: 'La pauta es de 400 mg tres veces al día (p. 7): una sola dosis diaria queda corta y Hilario seguiría con la encefalopatía.' },
-      { t: '400 mg cada 8 h solo 3 días, hasta que despierte del todo.', porque: 'La mejoría se consigue con al menos 10 días (p. 7). Parar a los 3 días le devolvería al colon los microbios productores de amonio.' },
+      { t: '400 mg cada 8 h solo 3 días, hasta que despierte del todo y deje de estar confuso.', porque: 'La mejoría se consigue con al menos 10 días (p. 7). Parar a los 3 días le devolvería al colon los microbios productores de amonio.' },
       { t: 'Rifaximina sola: asociarla a la lactulosa es redundante.', porque: 'Es eficaz sola, pero se combina con lactulosa (p. 7). Retirar la lactulosa le quita el único freno del colon que ya funcionaba.' }],
     explicacion: 'La rifaximina es un antibiótico no absorbible de amplio espectro: 400 mg tres veces al día durante al menos 10 días alivia los síntomas de la encefalopatía; aunque eficaz sola, se suele combinar con lactulosa (p. 7).', fuente: [7] }),
 ];
@@ -120,8 +120,8 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c1-1', tipo: 'test', corto: 'paso 1', estado: 'casimira', ajustes: {},
         enunciado: 'El R1 propone lactulosa y rifaximina y revisar mañana, «porque la creatinina es normal». <b>¿Qué haces?</b>',
         opciones: [
-          { t: 'Añadir la CVVH ya: con amonio >150 se indica aunque la creatinina sea normal, y su eficacia depende del tiempo.', ok: true },
-          { t: 'Esperar a que la creatinina suba: la CVVH es para el fallo renal.', porque: 'Se considera con oliguria persistente, amonio >150 o edema cerebral, sea cual sea la creatinina (p. 8). Esperar deja a Casimira horas con el astrocito cargándose de glutamina.' },
+          { t: 'Añadir la CVVH ya: con amonio >150 se indica aunque la creatinina sea normal.', ok: true },
+          { t: 'Esperar a que la creatinina suba: la CVVH es para el fallo renal y se pone cuando falla el riñón.', porque: 'Se considera con oliguria persistente, amonio >150 o edema cerebral, sea cual sea la creatinina (p. 8). Esperar deja a Casimira horas con el astrocito cargándose de glutamina.' },
           { t: 'Subir la lactulosa a 6 deposiciones y seguir con la rifaximina.', porque: 'La CVVH es superior a la lactulosa y a la rifaximina en el fallo agudo (p. 8), y más de 2-3 deposiciones solo trae diarrea osmótica (p. 7). Casimira seguiría sobre 150.' },
           { t: 'Intubarla ya: tiene un grado 3 por estar apática.', porque: 'Apática y desorientada en el tiempo es grado 2 (p. 7). Intubarla sin razón no baja el amonio.' }],
         explicacion: 'La CVVH es superior a la lactulosa y a la rifaximina en el fallo hepático agudo con encefalopatía: se considera con oliguria persistente, amonio >150 µmol/L o edema cerebral, sea cual sea la creatinina, y se empieza cuanto antes porque su eficacia depende del tiempo (p. 8).', fuente: [8],
@@ -171,9 +171,9 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c2-1', tipo: 'test', corto: 'paso 1', estado: 'hilario', ajustes: {},
         enunciado: 'Su mujer cuenta que desde hace dos días duerme de día, atiende poco y está irritable; hoy sabe dónde está y qué día es. <b>¿Qué grado es y qué pautas?</b>',
         opciones: [
-          { t: 'Grado 2: hemofiltración, como en el fallo agudo.', porque: 'No tiene desorientación en el tiempo (p. 7), y la CVVH es la medida del fallo agudo (p. 8). Una cirrótica hemorrágica no la necesita para esto.' },
+          { t: 'Grado 2: hemofiltración, como en el fallo agudo, para bajar el amonio cuanto antes.', porque: 'No tiene desorientación en el tiempo (p. 7), y la CVVH es la medida del fallo agudo (p. 8). Una cirrótica hemorrágica no la necesita para esto.' },
           { t: 'Grado 1: sin tratamiento, porque no está desorientado.', porque: 'La atención corta y el cambio de personalidad son ya encefalopatía grado 1 (p. 6). Esperar sin tratar la deja progresar a la apatía y la desorientación.' },
-          { t: 'Grado 1: lactulosa, 20-30 g cada hora hasta la primera deposición y luego 20 g/8 h.', ok: true },
+          { t: 'Grado 1: lactulosa, 20-30 g/h hasta la primera deposición y luego 20 g/8 h.', ok: true },
           { t: 'Grado 1: enema de 200 g cada 4 h desde el principio.', porque: 'El enema es la alternativa a la vía oral o por sonda (200 g en 700 mL, 30-60 min en Trendelenburg, p. 7), no la primera pauta. Cada 4 h le provocaría diarrea osmótica.' }],
         explicacion: 'Grado 1 de la escala West Haven: atención corta y cambio de personalidad (p. 6). Lactulosa por vía oral o sonda: 20-30 g cada hora hasta que haya deposición, luego 20 g cada 8 h, ajustando a 2-3 deposiciones blandas al día (p. 7).', fuente: [6, 7],
         tocar: { txt: 'Compruébalo: pon la lactulosa a 3 deposiciones al día', k: 'dep', de: 0, a: 3 } } },
@@ -181,7 +181,7 @@ export const CASOS = [{
       pregunta: { id: 'hpv-c2-2', tipo: 'test', corto: 'paso 2', estado: 'hilario', ajustes: { dep: 3 },
         enunciado: 'Resangra pese a endoscopia, octreótido y antibiótico. <b>¿Qué haces y qué precio tiene?</b>',
         opciones: [
-          { t: 'Repetir la endoscopia y doblar el octreótido, sin más.', porque: 'Es el 20 % refractario a la endoscopia y al tratamiento óptimo, en el que se considera el TIPS (p. 9-10). Repetir el mismo plan alarga el sangrado.' },
+          { t: 'Repetir la endoscopia y doblar el octreótido, sin más cambios en el plan de tratamiento.', porque: 'Es el 20 % refractario a la endoscopia y al tratamiento óptimo, en el que se considera el TIPS (p. 9-10). Repetir el mismo plan alarga el sangrado.' },
           { t: 'TIPS, y retirar la lactulosa porque ya no hará falta.', porque: 'Al saltar el hígado, aumenta el riesgo de encefalopatía (p. 10): la lactulosa hará más falta, no menos.' },
           { t: 'TIPS, y vigilar la encefalopatía: saltar el hígado la hace más probable.', ok: true },
           { t: 'Intubarlo de entrada y esperar a que pare.', porque: 'La intubación se considera si hay alteración mental (p. 9); su atención corta no la justifica, y no trata la causa del sangrado.' }],
