@@ -1,8 +1,7 @@
 // Mayéutica del bloque 6a, grupo 6B · Coma y muerte encefálica (Marino cap. 45, págs. 9-16). Datos puros; formato en
 // la cabecera de b1-fluidos.js. La medicina sale de la ficha (js/modules/libros/marino-neuro.html) y de su PDF
 // (docs/marino-2024-neurologia-caps45-47.pdf); cada pregunta dice dónde con `fuente`. Los pacientes se inventan.
-// Plan: autonomo/bloques/b6a/plan-estudio-6b.md §4 y §5. El cráneo vivo no existe aún: los `modelo:` del cráneo
-// se añaden cuando exista (los puntos van marcados con [cráneo: …]).
+// Plan: autonomo/bloques/b6a/plan-estudio-6b.md §4 y §5. Los `modelo:` del cráneo vivo apuntan a «paciente:paso».
 const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
 // La vista Visual de una ficha de Marino Neurología, como botón «modelo» (sale tras contestar).
@@ -24,8 +23,7 @@ export const MAYEUTICA_COMA = {
           { t: 'No: retirar el miembro es una respuesta con propósito', ok: true },
           { t: 'Sí: la retirada es la respuesta típica de la decorticación', porque: 'La decorticación es una flexión anormal de los brazos (3 puntos), no una retirada (4 puntos). Confundirlas desplaza la lesión supuesta al tálamo sin motivo.' }],
         explicacion: `En el coma la respuesta al dolor <span class="hl-rojo">nunca es intencionada</span>: es sin propósito o no hay. Retirar el miembro es una respuesta con propósito y <span class="hl">no es propia del coma</span> (${pag(10, 'pág. 10')}).` },
-      { id: 'mnk-g2', corto: 'las posturas', tipo: 'test', fuente: 'mn-coma-posturas · mn-coma-dolor',
-        // [cráneo: herniacion-uncal]
+      { id: 'mnk-g2', modelo: { craneoVivo: 'abundio:4' }, corto: 'las posturas', tipo: 'test', fuente: 'mn-coma-posturas · mn-coma-dolor',
         enunciado: 'Al pinchar, un paciente en coma extiende y pronuncia los brazos y las piernas. Antes de mirar la tabla: ¿dónde está la lesión?',
         opciones: [
           { t: 'Mesencéfalo y protuberancia alta (descerebración)', ok: true },
@@ -138,8 +136,7 @@ export const MAYEUTICA_COMA = {
                 'Oculovestibular presente: con 50 mL de salino frío, los ojos se <span class="hl">desvían despacio hacia el oído irrigado</span>.'],
               explicacion: `Ambos reflejos están presentes con el tronco intacto y se pierden si no lo está (Fig. 45.3; ${pag(12, 'págs. 12')}-${pag(13, '13')}).` } },
           { momento: 'Día 0 · 14:30 · el giro', datos: { Situación: 'Intubada', Pupilas: 'Izquierda dilatada y fija; derecha puntiforme' }, nuevo: ['Situación', 'Pupilas'],
-            // [cráneo: herniacion-uncal]
-            pregunta: { id: 'mnk-c4', tipo: 'test', fuente: 'mn-pup-unilateral · mn-tabla-45-4',
+            pregunta: { id: 'mnk-c4', modelo: { craneoVivo: 'abundio:3' }, tipo: 'test', fuente: 'mn-pup-unilateral · mn-tabla-45-4',
               enunciado: 'Ahora una pupila izquierda dilatada y fija. ¿Qué piensas?',
               opciones: [
                 { t: 'El efecto residual del fentanilo, que sigue actuando en el cerebro', porque: '(fisiología general) El opiáceo da pupilas pequeñas y simétricas. Esperar a que se disipe retrasa el TC ante una masa que comprime el tronco.' },
@@ -169,8 +166,7 @@ export const MAYEUTICA_COMA = {
           'Pupilas puntiformes reactivas = opiáceos; puntiformes no reactivas = lesión pontina.',
           'Una pupila dilatada y fija = masa en expansión: TC urgente.',
           'GCS ≤8: coma e intubar; no es fiable con sedación profunda o relajantes.'],
-        // [cráneo: herniacion-uncal]
-        volver: { nombre: 'Pupila dilatada y fija', ancla: 'mn-pup-unilateral', modelo: visual('mn-coma', '👁️ La cara de Glasgow con la pupila, en la vista Visual') } },
+        volver: { nombre: 'Pupila dilatada y fija', ancla: 'mn-pup-unilateral', modelo: [{ craneoVivo: 'abundio:3' }, visual('mn-coma', '👁️ La cara de Glasgow con la pupila, en la vista Visual')] } },
     ],
     profundizar: [
       { id: 'mn-coma-causas', titulo: 'Causas del coma (incluido el coma aparente)' },

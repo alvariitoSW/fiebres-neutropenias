@@ -1,7 +1,6 @@
 // Mayéutica del bloque 6a, grupo 6D «El cráneo que sangra y se hincha» · fichas mn-ictus-soporte y mn-ictus-complicaciones
 // (Marino, cap. 47, págs. 34-41 del PDF). Datos puros; formato de b1-fluidos.js. Ids de pregunta: mni- (soporte), mnk- (complicaciones).
-// El cráneo vivo aún no existe: los comentarios `// cráneo: '<estado>'` marcan dónde engancharlo; mientras, «Compruébalo» abre la
-// calculadora o la figura de la ficha. Otras fuentes (REGLAS §1.15): Libro Azul (autorregulación) y DESTINY II (resumen en PubMed).
+// «Compruébalo» abre el cráneo vivo en el paciente y el paso de `modelo: { craneoVivo: 'paciente:paso' }` (penumbra y tPA no tienen estado propio: calculadora o figura). Otras fuentes (REGLAS §1.15): Libro Azul (autorregulación) y DESTINY II (resumen en PubMed).
 const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
@@ -15,7 +14,6 @@ export const MAYEUTICA_CRANEO_2 = {
   'mn-ictus-soporte': {
     entrada: 'Por qué en el ictus isquémico no se baja la presión de más ni se da oxígeno de más, qué fármacos sí y cuáles no, cómo se trata la hipotensión, y qué hacer con la glucosa y la fiebre.',
     guia: [
-      // cráneo: 'ictus-penumbra'
       { id: 'mni-g1', corto: 'bajar la PAM', tipo: 'test', fuente: 'mn-isq-hta', calculadora: { ir: 'mn-pa-calc', nombre: '¿Bajo la presión en este ictus isquémico?' },
         enunciado: 'Antes de mirar la ficha, predice: a un hombre con un infarto de cerebral media le bajas la PAM un 25 % el primer día. ¿Qué le pasa a la zona de penumbra, la que rodea al infarto?',
         opciones: [
@@ -137,7 +135,6 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'Si hay fiebre, paracetamol y buscar el foco.' }],
               explicacion: 'Dos errores: el suero glucosado y la aspirina precoz tras el tPA (' + pag(35, 'pág. 35') + ' y ' + pag(37, 'pág. 37') + ').' } },
           { momento: 'Hora 5 · el giro', datos: { Evolución: 'GCS de 15 a 9; PA 192/108', Analítica: 'fibrinógeno 160 mg/dL' }, nuevo: ['Evolución', 'Analítica'],
-            // cráneo: 'hemorragia-tpa'
             pregunta: { id: 'mni-p4', tipo: 'test', fuente: 'mn-isq-hemorragia · mn-isq-hemorragia-tto · mar-img-47-2', origen: 'ficha',
               enunciado: 'El TC es como el de la Figura 47.2: gran hemorragia con desviación de la línea media. ¿Qué haces ya?',
               opciones: [
@@ -211,7 +208,6 @@ export const MAYEUTICA_CRANEO_2 = {
           { t: 'Aire puro de una jeringa; burbujas a la izquierda desde el primer latido son lo normal', porque: 'Se usa salino agitado, no aire (' + pag(38, 'pág. 38') + '). Y que pasen a la izquierda no es normal: indica un cortocircuito derecha-izquierda.' },
           { t: 'Salino agitado, inyectado despacio por una vena de la pierna, para que las burbujas lleguen una a una', porque: 'Debe inyectarse rápido por vía central o del brazo (' + pag(38, 'pág. 38') + '); despacio no sigue la técnica descrita.' }],
         explicacion: 'Unos 10 mL de salino agitado con una llave de tres pasos, inyectados rápido por vía central o periférica del brazo. Las burbujas llenan el corazón derecho y, si hay <span class="hl-rojo">cortocircuito derecha-izquierda</span>, pasan al izquierdo en pocos ciclos (' + pag(38, 'pág. 38') + ' y ' + pag(39, 'pág. 39') + ').' },
-      // cráneo: 'hemorragia-tpa'
       { id: 'mnk-g5', corto: 'riesgo de sangrar', tipo: 'test', fuente: 'mn-isq-hemorragia',
         enunciado: 'Antes del tPA, predice: ¿qué tres factores aumentan el riesgo de hemorragia sintomática?',
         opciones: [
@@ -219,8 +215,7 @@ export const MAYEUTICA_CRANEO_2 = {
           { t: 'Edad avanzada, PA >180/105 e infarto de más de un tercio del hemisferio', ok: true },
           { t: 'Edad joven, PA baja e infarto lacunar pequeño', porque: 'Son al revés de lo que dice la ficha (' + pag(39, 'pág. 39') + '). Con esta idea confiarías de más en el paciente que más riesgo tiene.' }],
         explicacion: 'Hemorragia sintomática en el <span class="hl-rojo">6,4-8,8 %</span> tras trombólisis. Factores: <span class="hl">edad avanzada, PA >180/105 y ictus de más de un tercio de un hemisferio</span>. Por eso 24 h en UCI o unidad de ictus (' + pag(39, 'pág. 39') + ').' },
-      // cráneo: 'edema-ictus'
-      { id: 'mnk-g6', corto: 'dos edemas', tipo: 'test', fuente: 'mn-isq-edema',
+      { id: 'mnk-g6', modelo: { craneoVivo: 'clotilde:1' }, corto: 'dos edemas', tipo: 'test', fuente: 'mn-isq-edema',
         enunciado: 'Una paciente con un infarto muy extenso empeora al segundo día. ¿Qué dos tipos de edema tiene y cuál crece con el tamaño del infarto?',
         opciones: [
           { t: 'Citotóxico (necrosis) y vasogénico (barrera rota); más área, más edema', ok: true },
@@ -294,9 +289,8 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'Prueba de burbujas primero, para descartar un foramen oval permeable como causa del ictus', porque: 'Ya hay una causa probable (FA) y tiene 66 años; el FOP se busca sin causa aparente o en menores de 55 (' + pag(38, 'pág. 38') + '). Perderías tiempo.' },
                 { t: 'Transesofágica directa: es la más sensible', porque: 'Es la más sensible pero Marino la reserva para cuando la transtorácica, mucho más fácil, no aclara (' + pag(38, 'pág. 38') + ').' }],
               explicacion: 'FA = indicación de eco. La <span class="hl">transtorácica</span> primero y la transesofágica si no es concluyente; las burbujas, solo sin causa aparente o con tromboembolismo previo (' + pag(38, 'pág. 38') + ').' } },
-          // cráneo: 'edema-ictus'
           { momento: 'Día 2', datos: { Evolución: 'GCS de 15 a 12', Analítica: 'Na⁺ 138 mEq/L' }, nuevo: ['Evolución', 'Analítica'], calculadora: { ir: 'mn-hiper-calc', nombre: 'Bolo de salino hipertónico (Tabla 47.3)' },
-            pregunta: { id: 'mnk-p2', tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', origen: 'ficha; la cuenta en mL/kg, con el peso del caso',
+            pregunta: { id: 'mnk-p2', modelo: { craneoVivo: 'clotilde:3' }, tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', origen: 'ficha; la cuenta en mL/kg, con el peso del caso',
               enunciado: 'El edema la empeora. ¿Qué haces?',
               opciones: [
                 { t: 'Catéter de PIC y manitol en perfusión', porque: 'La monitorización de la PIC no se recomienda en el isquémico (' + pag(40, 'pág. 40') + ') y el manitol es menos eficaz que el hipertónico (' + pag(41, 'pág. 41') + ').' },
@@ -322,9 +316,8 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'Sí, pero de manitol para compensar', porque: 'Marino no lo propone (' + pag(41, 'pág. 41') + '): el manitol es menos eficaz y no corrige un sodio fuera de rango.' },
                 { t: 'No: está por encima del objetivo de 145-155', ok: true }],
               explicacion: 'El Na⁺ objetivo es <span class="hl-verde">145-155 mEq/L</span>; con 157 no se dan más bolos (' + pag(41, 'pág. 41') + ').' } },
-          // cráneo: 'edema-ictus'
           { momento: 'Día 5 · el giro', datos: { Evolución: 'GCS 8, midriasis derecha', Analítica: 'Na⁺ 152 mEq/L' }, nuevo: ['Evolución', 'Analítica'],
-            pregunta: { id: 'mnk-p5', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-isq-hemorragia-tto · mn-isq-edema-manejo · mn-isq-vm',
+            pregunta: { id: 'mnk-p5', modelo: { craneoVivo: 'clotilde:4' }, tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-isq-hemorragia-tto · mn-isq-edema-manejo · mn-isq-vm',
               enunciado: 'Clotilde sigue empeorando con el sodio en objetivo. ¿Qué toca hacer?',
               puntos: [
                 'El hipertónico <span class="hl-rojo">no ha cambiado el pronóstico</span> (' + pag(41, 'pág. 41') + ') y ya no basta: avisar a neurocirugía (extrapolación nuestra: Marino nombra la neurocirugía solo en la hemorragia tras el tPA, ' + pag(40, 'pág. 40') + ').',

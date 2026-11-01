@@ -6,9 +6,8 @@
 // (docs/marino-2024-neurologia-caps45-47.pdf, págs. 24-31); cada pregunta dice dónde con `fuente` y con la página.
 // Los pacientes de los casos son inventados; sus cifras (FC, PA, CV, PIM, K⁺…) son del paciente, no de la fuente.
 //
-// La placa viva (modelo de la unión neuromuscular) y el estado `debilidad-neuromuscular` del pulmón vivo aún no
-// existen: mientras tanto, «Compruébalo» abre la calculadora de la ficha (`calculadora`). Donde irá el modelo, queda
-// un comentario `// [placa viva: estado 'x']`. Pasos de la hendidura (para la sesión de los modelos): 1 llega el impulso,
+// «Compruébalo» abre la placa viva en el paciente y el paso de `modelo: { placaViva: 'paciente:paso' }`; donde la cuenta importa se deja
+// también la calculadora de la ficha (`calculadora`). Pasos de la hendidura (para la sesión de los modelos): 1 llega el impulso,
 // 2 salen las vesículas y 5 el músculo se relaja = `fisiología general` (Marino no los describe); 3 el
 // ligando (ACh o relajante) se une al receptor = p. 29; 4 la acetilcolinesterasa rompe la ACh = p. 30-31.
 const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
@@ -32,8 +31,7 @@ export const MAYEUTICA_B6A_PLACA = {
   'mn-miastenia': {
     entrada: 'Por qué la fuerza cae con el uso y vuelve con el reposo, qué músculos van primero, qué fármacos empeoran la placa, cuándo intubar y cómo se trata la crisis.',
     guia: [
-      { id: 'mnm-g1', corto: 'fatiga', tipo: 'test', fuente: 'mn-mg-definicion · mn-mg-clinica', calculadora: C_GBS,
-        // [placa viva: estado 'miastenia']
+      { id: 'mnm-g1', modelo: { placaViva: 'sera:2' }, corto: 'fatiga', tipo: 'test', fuente: 'mn-mg-definicion · mn-mg-clinica',
         enunciado: 'Serapio, de 35 años, ve doble por la tarde y por la mañana no. Antes de mirar la ficha: ¿qué explica que la debilidad empeore con el uso y mejore con el reposo?',
         opciones: [
           { t: 'Hay menos receptores de ACh en la placa', ok: true },
@@ -47,8 +45,7 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Los proximales de las piernas, con los ojos respetados', porque: 'La debilidad de los miembros viene después de los ojos, y en el 15 % ni llega. Buscar solo debilidad en las piernas te haría perder una miastenia ocular.' },
           { t: 'Los oculares siempre; en el 15 % solo ellos', ok: true }],
         explicacion: 'Los músculos oculares (párpados y oculomotores) <span class="hl">se afectan siempre</span>: diplopía y ptosis son los primeros signos. Después suele venir debilidad simétrica de los miembros, pero <span class="hl-rojo">en el 15 % se queda en los ojos</span>; al progresar fallan diafragma y pared torácica (' + pag(24) + ').' },
-      { id: 'mnm-g3', corto: 'prueba del hielo', tipo: 'test', fuente: 'mn-mg-hielo · mar-img-46-1',
-        // [placa viva: estado 'hielo']
+      { id: 'mnm-g3', modelo: { placaViva: 'sera:3' }, corto: 'prueba del hielo', tipo: 'test', fuente: 'mn-mg-hielo · mar-img-46-1',
         enunciado: 'Hielo sobre el párpado con ptosis, con el ojo cerrado, 2 minutos. ¿Qué cuenta como positivo y qué fiabilidad tiene?',
         opciones: [
           { t: 'Un aumento de la hendidura de 5 mm; sensibilidad del 95 %', porque: 'La fuente no da esas cifras. Con un umbral inventado más alto, dejarías sin diagnosticar a un miasténico con una mejoría real de 2 o 3 mm.' },
@@ -62,8 +59,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'No: <span class="hl-rojo">el 10-15 % no tiene anti-AChR</span> (seronegativos).',
           'Pide <span class="hl">anti-MuSK</span> (cinasa específica del músculo): está presente en un <span class="hl">40 %</span> de esos seronegativos.'],
         explicacion: 'Los anticuerpos contra el receptor confirman el diagnóstico, pero su ausencia no lo descarta (' + pag(25) + ').' },
-      { id: 'mnm-g5', corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
-        // [placa viva: estado 'piridostigmina']
+      { id: 'mnm-g5', modelo: { placaViva: 'sera' }, corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
         enunciado: 'Serapio toma piridostigmina, que le va bien. ¿Por qué no se usa en el fracaso respiratorio?',
         opciones: [
           { t: 'Porque no llega a la placa y no inhibe la acetilcolinesterasa', porque: 'Sí actúa: es un inhibidor de la acetilcolinesterasa y se usa en la miastenia leve-moderada. Pensar que no funciona te haría retirarla a quien la necesita sin motivo.' },
@@ -139,7 +135,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'Fatiga con el uso y alivio con el reposo: la placa tiene menos receptores. La Tabla 46.6 la separa del Guillain-Barré.',
           'Antes de prescribir, se lee la Tabla 46.5; y se intuba con CV ≤15 mL/kg (o <1 L) y PIM peor que −20, sin esperar al in extremis.',
           'En la crisis: plasmaféresis o IgIV, retirar piridostigmina (secreciones); un timoma explica el 10 %.'],
-        volver: { nombre: '¿Cuándo intubar?', ancla: 'mn-mg-intubacion' /* [placa viva: estado 'miastenia'] */ },
+        volver: { nombre: '¿Cuándo intubar?', ancla: 'mn-mg-intubacion', modelo: { placaViva: 'sera:1' } },
         pasos: [
           { momento: 'Consulta · día 0', datos: { Exploración: 'ptosis derecha que empeora por la tarde; reflejos conservados', 'Prueba del hielo': 'hendidura de 6 a 9 mm (+3 mm)' }, nuevo: ['Exploración', 'Prueba del hielo'], calculadora: C_GBS,
             pregunta: { id: 'mnm-c1-1', tipo: 'test', fuente: 'mn-mg-hielo · mn-tabla-46-6 · mn-mg-clinica', origen: 'ficha; cifras del paciente: ilustrativo',
@@ -215,8 +211,7 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Una infección aguda 1-3 semanas antes (p. ej., Campylobacter)', ok: true },
           { t: 'Una infección de 1-3 días antes', porque: 'El intervalo es de semanas: con 1-3 días no relacionarías la diarrea de hace 14 días con la debilidad de hoy.' }],
         explicacion: 'Suele seguir a una infección aguda <span class="hl">1-3 semanas</span> antes, con <span class="hl-azul">mimetismo molecular</span>: anticuerpos contra un componente del germen que reaccionan con el nervio periférico (' + pag(26) + ').' },
-      { id: 'mng-g2', corto: 'qué no verás', tipo: 'test', fuente: 'mn-tabla-46-6', calculadora: C_GBS,
-        // [placa viva: estado 'gbs']
+      { id: 'mng-g2', modelo: { placaViva: 'flor:3' }, corto: 'qué no verás', tipo: 'test', fuente: 'mn-tabla-46-6',
         enunciado: 'En el Guillain-Barré la lesión está en la mielina. Predice, con la Tabla 46.6 tapada: ¿qué NO verás?',
         opciones: [
           { t: 'Conducción nerviosa enlentecida', porque: 'Sí la verás: es el signo de la desmielinización. Si no esperas lentitud, no pedirás el estudio de conducción que lo confirma.' },
@@ -237,8 +232,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'A quien <span class="hl">no camina sin ayuda o tiene fracaso respiratorio</span>.',
           '<span class="hl">IgIV o plasmaféresis</span> con las mismas pautas que en la miastenia; <span class="hl-azul">la guía no prefiere ninguna</span>.'],
         explicacion: 'Además se vigilan la capacidad vital y la presión inspiratoria para intubar a tiempo (' + pag(27) + ').' },
-      { id: 'mng-g5', corto: 'PNC y MCC', tipo: 'test', fuente: 'mn-pnc-pnc · mn-pnc-mcc',
-        // [placa viva: estados 'pnc' y 'mcc']
+      { id: 'mng-g5', modelo: [{ placaViva: 'pnc', texto: 'Compruébalo en la polineuropatía' }, { placaViva: 'mcc', texto: 'Compruébalo en la miopatía' }], corto: 'PNC y MCC', tipo: 'test', fuente: 'mn-pnc-pnc · mn-pnc-mcc',
         enunciado: 'En el crítico, ¿dónde está la lesión en la polineuropatía (PNC) y dónde en la miopatía (MCC)?',
         opciones: [
           { t: 'PNC desmielinizante, como el Guillain-Barré; MCC en la placa', porque: 'La PNC es axonal, no desmielinizante, y la MCC es del músculo, no de la placa. Tratarlas como un Guillain-Barré con IgIV no ayuda: no tienen tratamiento.' },
@@ -304,7 +298,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'Nervio frente a placa: sin fatiga, reflejos disminuidos, inestabilidad autonómica y conducción lenta (Tabla 46.6).',
           'Marino decide por la CV y la PIM, sin esperar al in extremis; la BiPAP solo si se espera mejoría en días.',
           'Si no se desteta y está flácida tras una sepsis, piensa en PNC y MCC: no tienen tratamiento.'],
-        volver: { nombre: 'Tabla 46.6', ancla: 'mn-tabla-46-6' /* [placa viva: estado 'gbs'] */ },
+        volver: { nombre: 'Tabla 46.6', ancla: 'mn-tabla-46-6', modelo: { placaViva: 'flor:3' } },
         pasos: [
           { momento: 'Día 0', datos: { Clínica: 'parestesias y debilidad simétrica que sube en 4 días; arreflexia; sin ptosis' }, nuevo: ['Clínica'], calculadora: C_GBS,
             pregunta: { id: 'mng-c1-1', tipo: 'test', fuente: 'mn-tabla-46-6 · mn-gbs-clinica · mn-pnc-que',
@@ -381,8 +375,7 @@ export const MAYEUTICA_B6A_PLACA = {
   'mn-relajantes': {
     entrada: 'Qué hace cada relajante en el receptor, cuándo la succinilcolina está prohibida, cómo se vigila con el tren de cuatro y cómo se revierte, con sus topes.',
     guia: [
-      { id: 'mnr-g1', corto: 'K⁺ y succinilcolina', tipo: 'test', fuente: 'mn-bnm-mecanismo · mn-bnm-succi', calculadora: C_BNM,
-        // [placa viva: estado 'succinilcolina']
+      { id: 'mnr-g1', modelo: { placaViva: 'mel:1' }, corto: 'K⁺ y succinilcolina', tipo: 'test', fuente: 'mn-bnm-mecanismo · mn-bnm-succi',
         enunciado: 'Melquíades, de 62 años, tiene el potasio en 6,1 mmol/L. ¿Por qué la succinilcolina sube el K⁺?',
         opciones: [
           { t: 'Libera histamina, que desplaza el potasio de las células', porque: 'Eso lo hace el atracurio; el cisatracurio no libera histamina (' + pag(30) + '). Con esa idea, vigilarías la tensión y no el potasio.' },
@@ -405,16 +398,14 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Es lento (5-7 min) y no depende de riñón ni hígado', porque: 'Eso es el cisatracurio: inicio 5-7 min y sus niveles no dependen de riñón ni hígado (Tabla 46.7, ' + pag(29) + '-30). Esperar 5-7 min con un rocuronio es retrasar una intubación urgente.' }],
         explicacion: 'A 1 mg/kg su inicio equivale al de 1 mg/kg de succinilcolina, <span class="hl">pero dura una hora</span>: si la vía aérea no se asegura a tiempo, revertir con sugammadex 16 mg/kg (' + pag(30) + ').',
         nota: NOTA_ROC + enFicha('mn-relajantes', 'mn-tabla-46-7') },
-      { id: 'mnr-g4', corto: 'TOF 0/4', tipo: 'test', fuente: 'mn-bnm-monitor',
-        // [placa viva: estado 'bloqueo', con TOF]
+      { id: 'mnr-g4', modelo: { placaViva: 'mel:4' }, corto: 'TOF 0/4', tipo: 'test', fuente: 'mn-bnm-monitor',
         enunciado: 'Melquíades tiene una perfusión de relajante y el tren de cuatro marca 0 de 4. ¿Qué significa?',
         opciones: [
           { t: 'Bloqueo excesivo: el objetivo es 1 o 2 respuestas', ok: true },
           { t: 'Objetivo logrado: 0 respuestas evitan la asincronía', porque: 'El objetivo es 1 o 2 respuestas perceptibles. Mantener 0 expone al paciente a más relajante, más miopatía y más días de parálisis.' },
           { t: 'Bloqueo insuficiente: hay que subir la perfusión', porque: 'Sin aducción del pulgar el bloqueo es excesivo, no insuficiente. Subir la dosis añadiría parálisis sin beneficio.' }],
         explicacion: 'Cuatro estímulos a 2 Hz sobre el nervio cubital: <span class="hl-rojo">sin aducción del pulgar, bloqueo excesivo</span>; objetivo <span class="hl">1 o 2 respuestas</span> (' + pag(30) + ').' },
-      { id: 'mnr-g5', corto: 'neostigmina', tipo: 'test', fuente: 'mn-bnm-neostigmina', calculadora: C_BNM,
-        // [placa viva: estado 'neostigmina']
+      { id: 'mnr-g5', modelo: { placaViva: 'mel' }, corto: 'neostigmina', tipo: 'test', fuente: 'mn-bnm-neostigmina',
         enunciado: 'Revertir un bloqueo moderado de un no despolarizante. ¿Cómo lo hace la neostigmina?',
         opciones: [
           { t: 'Se une directamente al rocuronio y lo inactiva', porque: 'Eso es el sugammadex. Esperar de la neostigmina una reversión inmediata a cualquier profundidad sería pasarse de dosis.' },
@@ -422,8 +413,7 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Igual que la piridostigmina, que se puede usar para revertir', porque: 'Edrofonio y piridostigmina no se usan para revertir. Cambiar de fármaco por esa idea retrasa la recuperación.' }],
         explicacion: 'Inhibe la acetilcolinesterasa: <span class="hl-azul">el aumento de acetilcolina supera el bloqueo competitivo</span> de los no despolarizantes (' + pag(30) + '-31). Edrofonio y piridostigmina no se usan para revertir.',
         nota: NOTA_NEO },
-      { id: 'mnr-g6', corto: 'sugammadex', tipo: 'test', fuente: 'mn-bnm-sugammadex', calculadora: C_BNM,
-        // [placa viva: estado 'sugammadex']
+      { id: 'mnr-g6', modelo: { placaViva: 'mel:3' }, corto: 'sugammadex', tipo: 'test', fuente: 'mn-bnm-sugammadex',
         enunciado: '¿Por qué el sugammadex revierte más rápido que la neostigmina?',
         opciones: [
           { t: 'Porque inhibe la acetilcolinesterasa con más potencia', porque: 'No actúa sobre la enzima. Con esa idea esperarías efectos colinérgicos que el sugammadex no tiene.' },
@@ -499,7 +489,7 @@ export const MAYEUTICA_B6A_PLACA = {
           'Con K⁺ alto no se usa succinilcolina; el rocuronio la sustituye, pero dura una hora: sugammadex 16 mg/kg si no hay vía aérea.',
           'Perfusión con cisatracurio (ni riñón ni hígado) y TOF de 1-2 respuestas; nunca paralizado sin sedación.',
           'Neostigmina nunca >70 µg/kg; sugammadex solo con aminoesteroides.'],
-        volver: { nombre: 'Sugammadex', ancla: 'mn-bnm-sugammadex' /* [placa viva: estado 'sugammadex'] */ },
+        volver: { nombre: 'Sugammadex', ancla: 'mn-bnm-sugammadex', modelo: { placaViva: 'mel:3' } },
         pasos: [
           { momento: 'Día 0 · 03:00', datos: { Indicación: 'intubación urgente', 'K⁺': '6,1 mmol/L', Bilirrubina: '4 mg/dL' }, nuevo: ['Indicación', 'K⁺', 'Bilirrubina'], calculadora: C_BNM,
             pregunta: { id: 'mnr-c1-1', tipo: 'test', fuente: 'mn-tabla-46-7 · mn-bnm-succi · mn-bnm-rocuronio', origen: 'ficha; cifras del paciente: ilustrativo', modeloVivo: rv('hiperk', '⚡ El potasio alto en el ritmo vivo'),
@@ -528,8 +518,7 @@ export const MAYEUTICA_B6A_PLACA = {
                 { t: 'Cisatracurio 42-126 mg/h', porque: 'Es la cuenta con un error ×10: 1-3 µg/kg/min en 70 kg son 4,2-12,6 mg/h; con esa pauta darías diez veces la dosis de la fuente (' + pag(29) + ').' }],
               explicacion: 'Cisatracurio: niveles independientes de riñón e hígado (' + pag(30) + '); perfusión 1-3 µg/kg/min (' + pag(29) + '): 1 × 70 = 70 µg/min = 4,2 mg/h y 3 × 70 = 210 µg/min = 12,6 mg/h.' } },
           { momento: 'Día 2', datos: { TOF: '0/4' }, nuevo: ['TOF'],
-            // [placa viva: estado 'bloqueo', con TOF]
-            pregunta: { id: 'mnr-c1-4', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-bnm-monitor · mn-bnm-ruego',
+            pregunta: { id: 'mnr-c1-4', modelo: { placaViva: 'mel:4' }, tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-bnm-monitor · mn-bnm-ruego',
               enunciado: 'El TOF marca 0/4 en la perfusión. ¿Qué haces?',
               puntos: [
                 'Es un <span class="hl-rojo">bloqueo excesivo</span>: bajar la perfusión hasta 1 o 2 respuestas.',

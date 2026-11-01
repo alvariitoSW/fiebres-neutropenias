@@ -24,7 +24,6 @@ export const MAYEUTICA_6A = {
           { t: 'Ninguno: abrir los ojos sin seguir con la mirada es un coma', porque: 'Abrir los ojos es despertar (p. 10). Llamarlo coma lo deja sin estimulación ni búsqueda de la causa del estado vegetativo o del estupor.' }],
         explicacion: `Tabla 45.1 (${pag(2)}): el <span class="hl">despertar</span> (ojos abiertos) y la <span class="hl">conciencia del entorno</span> son ejes distintos; este paciente tiene el primero y no el segundo. El coma no abre los ojos (${pag(10, 'p. 10')}) y la letargia conserva la conciencia (${pag(3, 'p. 3')}).` + enFicha('mn-consciencia', 'mn-tabla-45-1'),
         modelo: visual('mn-consciencia', '👁️ Los dos componentes (vista Visual)') },
-      // ESPERA AL CRÁNEO: modelo { craneoVivo: 'locked-in' }
       { id: 'mnc-g2', corto: 'locked-in', tipo: 'test', fuente: 'mn-cons-lockedin',
         enunciado: '¿Qué le queda a quien tiene rota la vía motora de los dos lados de la protuberancia ventral?',
         opciones: [
@@ -32,7 +31,7 @@ export const MAYEUTICA_6A = {
           { t: 'La mirada lateral y el parpadeo, pero no los movimientos verticales ni la conciencia', porque: 'La mirada lateral también depende del tronco: solo quedan los movimientos oculares verticales (p. 3). Pedirle «mira a la derecha» y no obtener respuesta lo haría pasar por inconsciente.' },
           { t: 'Movimientos oculares verticales y parpadeo, con despertar y conciencia intactos', ok: true }],
         explicacion: `Es el <span class="hl-purpura">enclaustramiento</span> (locked-in): lesión bilateral de las vías motoras en la protuberancia ventral. Respeta los <span class="hl">movimientos oculares verticales y el parpadeo</span>, y el despertar y la conciencia están intactos (${pag(3)}).` + enFicha('mn-consciencia', 'mn-cons-lockedin'),
-        modelo: visual('mn-consciencia', '👁️ Los dos componentes (vista Visual)') },
+        modelo: [{ craneoVivo: 'leovigildo:2' }, visual('mn-consciencia', '👁️ Los dos componentes (vista Visual)')] },
       { id: 'mnc-g3', corto: 'coma o vegetativo', tipo: 'test', fuente: 'mn-cons-vegetativo · mn-cons-coma',
         enunciado: 'El estado vegetativo y el coma pueden tener movimientos espontáneos y respuestas motoras al dolor profundo, pero sin propósito (p. 3). ¿Qué los separa?',
         opciones: [
@@ -91,7 +90,7 @@ export const MAYEUTICA_6A = {
       { id: 'mnc-leovigildo', titulo: 'Leovigildo, 38 años: ojos abiertos y sin moverse', corto: 'Caso · Leovigildo', sub: 'ictus de tronco; hipertenso mal controlado',
         paciente: { Edad: '38 años', Antecedentes: 'HTA mal controlada', Motivo: 'Cefalea brusca y caída' },
         lleva: ['Ojos abiertos no es coma: es despertar.', 'Locked-in: protuberancia ventral bilateral; mira arriba y parpadea.', '«Persistente» es del estado vegetativo, al mes.'],
-        volver: { nombre: 'Consciencia: locked-in', ancla: 'mn-cons-lockedin' }, // ESPERA AL CRÁNEO: modelo { craneoVivo: 'locked-in' }
+        volver: { nombre: 'Consciencia: locked-in', ancla: 'mn-cons-lockedin', modelo: { craneoVivo: 'leovigildo:2' } },
         pasos: [
           { momento: 'Día 0 · 23:10', datos: { Constantes: 'PA 170/95, FC 88, SpO₂ 96 %', Exploración: 'ojos abiertos, no habla, no mueve brazos ni piernas', 'Nota del R1': '«Coma»' }, nuevo: ['Constantes', 'Exploración', 'Nota del R1'],
             pregunta: { id: 'mnc-l1', corto: '¿coma?', tipo: 'test', fuente: 'mn-cons-coma · mn-cons-despertar',

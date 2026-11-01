@@ -1,6 +1,6 @@
 // Grupo 6D «El cráneo que sangra y se hincha» · fichas mn-hic y mn-hsa (Marino cap. 47). Datos puros.
 // Fuente: docs/marino-2024-neurologia-caps45-47.pdf (págs. 41-48) y la ficha js/modules/libros/marino-neuro.html.
-// Los comentarios «cráneo:» marcan dónde se enganchará el cráneo vivo cuando exista; mientras, «Compruébalo» abre la calculadora o la figura.
+// «Compruébalo» abre el cráneo vivo en el paciente y el paso de `modelo: { craneoVivo: 'paciente:paso' }`; donde la cuenta importa, también la calculadora.
 const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
@@ -13,16 +13,14 @@ export const MAYEUTICA_CRANEO_1 = {
   'mn-hic': {
     entrada: 'Por qué en las primeras horas el hematoma crece, qué se revierte y con qué dosis, a qué presión se baja la PA y cómo se vigila la presión dentro del cráneo.',
     guia: [
-      // cráneo: 'hematoma-crece'
-      { id: 'mnh-g1', corto: 'por qué empeora', tipo: 'test', fuente: 'mn-hic · mar-img-47-3',
+      { id: 'mnh-g1', modelo: { craneoVivo: 'segismundo:2' }, corto: 'por qué empeora', tipo: 'test', fuente: 'mn-hic · mar-img-47-3',
         enunciado: 'Un hombre con hematoma intracerebral se deteriora en las primeras horas. Antes de leer la ficha: ¿qué explica ese deterioro precoz y qué lo frena?',
         opciones: [
           { t: 'El hematoma sigue creciendo; lo primero es revertir cualquier antitrombótico.', ok: true },
           { t: 'El edema citotóxico del día 3, que exige suero hipertónico.', porque: `El edema citotóxico es el del infarto isquémico (${pag(40)}), no el motivo del deterioro precoz de un hematoma. Esperar al suero hipertónico mientras el hematoma crece deja a la sangre sin freno.` },
           { t: 'El vasoespasmo; hay que dar nimodipino.', porque: `El vasoespasmo es de la hemorragia subaracnoidea y cae entre los días 4 y 14 (${pag(47)}). Nimodipino en un hematoma no frena el sangrado de las primeras horas.` }],
         explicacion: `El deterioro rápido de las primeras horas se atribuye a la <span class="hl-rojo">expansión del hematoma</span>: lo primero es frenarla, y para eso es <span class="hl">obligado revertir ya</span> cualquier antitrombótico (${pag(42)}).${enFicha('mn-hic', 'mn-hic')}` },
-      // cráneo: 'hematoma-crece'
-      { id: 'mnh-g2', corto: 'CCP y no plasma', tipo: 'test', fuente: 'mn-hic-warfarina',
+      { id: 'mnh-g2', modelo: { craneoVivo: 'segismundo:3' }, corto: 'CCP y no plasma', tipo: 'test', fuente: 'mn-hic-warfarina',
         enunciado: 'Con warfarina e INR alto se pone vitamina K y concentrado de complejo protrombínico (CCP) de 4 factores. ¿Por qué CCP y no plasma fresco?',
         opciones: [
           { t: 'Normaliza el INR en 30 min en el 60 % (con plasma, 9 %) y con mucho menos volumen.', ok: true },
@@ -51,8 +49,7 @@ export const MAYEUTICA_CRANEO_1 = {
           '<span class="hl-rojo">Sangre en el sistema ventricular</span>.',
           'Signos clínicos de <span class="hl-rojo">herniación transtentorial</span> (p. ej., midriasis unilateral).'],
         explicacion: `Una vez monitorizada, la PIC se mantiene <span class="hl-verde">por debajo de 20 mmHg</span>, normalmente drenando LCR del catéter ventricular (${pag(45)}).${enFicha('mn-hic', 'mn-hic-pic')}` },
-      // cráneo: 'hematoma-crece' (sangre ventricular)
-      { id: 'mnh-g6', corto: 'sangre ventricular', tipo: 'test', fuente: 'mn-hic-otras · mar-img-47-3',
+      { id: 'mnh-g6', modelo: { craneoVivo: 'abundio:1' }, corto: 'sangre ventricular', tipo: 'test', fuente: 'mn-hic-otras · mar-img-47-3',
         enunciado: 'La TC de la figura muestra el hematoma abierto a los ventrículos. ¿Por qué esa sangre pide un catéter de drenaje?',
         opciones: [
           { t: 'Causa hidrocefalia obstructiva: el catéter drena y mide la PIC.', ok: true },
@@ -128,10 +125,9 @@ export const MAYEUTICA_CRANEO_1 = {
       { id: 'mnh-c', titulo: 'Segismundo, 71 años: el hematoma que crecía con warfarina', corto: 'Caso · Segismundo', sub: 'FA con warfarina; 80 kg',
         paciente: { Edad: '71 años', Peso: '80 kg', Antecedentes: 'Fibrilación auricular con warfarina; INR 3,2' },
         pasos: [
-          // cráneo: 'hematoma-crece'
           { momento: 'Día 0 · 10:00', datos: { Clínica: 'Hemiparesia izquierda brusca, GCS 13', Constantes: 'PA 196/104', Analítica: 'INR 3,2', TC: 'Hematoma con extensión ventricular, como la Fig. 47.3' }, nuevo: ['Clínica', 'Constantes', 'Analítica', 'TC'],
             calculadora: { ir: 'mn-rev-calc', nombre: 'Reversión del anticoagulante' },
-            pregunta: { id: 'mnh-c1', tipo: 'test', fuente: 'mn-hic · mn-tabla-47-4',
+            pregunta: { id: 'mnh-c1', modelo: { craneoVivo: 'segismundo:1' }, tipo: 'test', fuente: 'mn-hic · mn-tabla-47-4',
               enunciado: '¿Qué va primero?',
               opciones: [
                 { t: 'Vitamina K 10 mg IV y CCP a 25 U/kg (2.000 U) ya.', ok: true },
@@ -155,10 +151,9 @@ export const MAYEUTICA_CRANEO_1 = {
                 'GCS de 8 o menos y sangre ventricular son <span class="hl">indicaciones de medir la PIC</span>.',
                 'El mismo catéter <span class="hl-azul">drena la hidrocefalia obstructiva</span> (y permite la trombólisis intraventricular).'],
               explicacion: `La PIC se monitoriza con GCS ≤8, sangre ventricular o herniación, y se mantiene <span class="hl-verde">por debajo de 20 mmHg</span> (${pag(45)}).` } },
-          // cráneo: 'hematoma-crece' (PIC)
           { momento: 'Día 0 · 18:00', datos: { Constantes: 'PAM 100, PIC 26 → PPC 74' }, nuevo: ['Constantes'],
             calculadora: { ir: 'mn-ppc-calc', nombre: 'PPC = PAM − PIC' },
-            pregunta: { id: 'mnh-c4', tipo: 'test', fuente: 'mn-hic-ppc · mn-hic-pic',
+            pregunta: { id: 'mnh-c4', modelo: { craneoVivo: 'abundio:1' }, tipo: 'test', fuente: 'mn-hic-ppc · mn-hic-pic',
               enunciado: 'PAM 100 y PIC 26 (PPC 74). ¿Qué haces?',
               opciones: [
                 { t: 'Drenar LCR por el catéter hasta PIC <20, y comprobar que la PPC queda en 50-70.', ok: true },
@@ -188,7 +183,7 @@ export const MAYEUTICA_CRANEO_1 = {
           'Revertir el antitrombótico es lo primero: el hematoma crece en las primeras horas.',
           'PAS por debajo de 140 mmHg.',
           'PPC = PAM − PIC, con PPC 50-70 y PIC <20 (se drena LCR).'],
-        volver: { nombre: 'PPC = PAM − PIC', ancla: 'mn-hic-ppc' } }, // cráneo: 'hematoma-crece'
+        volver: { nombre: 'PPC = PAM − PIC', ancla: 'mn-hic-ppc', modelo: { craneoVivo: 'abundio:1' } } },
     ],
     profundizar: [
       { id: 'mn-hic-datos', titulo: 'Cuánto pesa la hemorragia intracerebral' },
@@ -225,16 +220,14 @@ export const MAYEUTICA_CRANEO_1 = {
           { t: 'Sí, 1 g en 10 minutos, igual que en la hemorragia tras el tPA, para frenar el resangrado.', porque: `Esa dosis es la de la hemorragia por tPA cuando no hay crioprecipitado (${pag(40)}). En la subaracnoidea no previene el resangrado (${pag(47)}) y solo añade riesgo.` },
           { t: 'Sí, pero solo después de cerrar el aneurisma.', porque: `Marino no lo condiciona al cierre: los antifibrinolíticos no previenen el resangrado y no se recomiendan (${pag(47)}). Se daría un fármaco inútil.` }],
         explicacion: `Los antifibrinolíticos (ácido tranexámico) <span class="hl-rojo">no son eficaces para prevenir el resangrado</span> y no se recomiendan; lo que lo previene es cerrar el aneurisma (${pag(47)}).${enFicha('mn-hsa', 'mn-hsa-inmediato')}` },
-      // cráneo: 'hsa' día 2
-      { id: 'mns-g4', corto: 'cuándo cerrar', tipo: 'test', fuente: 'mn-hsa-aneurisma',
+      { id: 'mns-g4', modelo: { craneoVivo: 'petronila:2' }, corto: 'cuándo cerrar', tipo: 'test', fuente: 'mn-hsa-aneurisma',
         enunciado: 'Es el día 2 de una hemorragia subaracnoidea. ¿Cuándo se debe cerrar el aneurisma?',
         opciones: [
           { t: 'Cuanto antes: lo mejor es en 3 días y sin pasar de 7-10 días.', ok: true },
           { t: 'Esperar entre los días 4 y 14, a que pase el vasoespasmo.', porque: `El vasoespasmo ocurre justo en esos días (${pag(47)}), pero la mejor prevención del resangrado es cerrar el aneurisma pronto: Marino aconseja no retrasarlo más de 7-10 días (${pag(47)}). Esperar al día 14 deja siempre sin proteger el aneurisma.` },
           { t: 'Solo cuando vuelva a sangrar, para no operar en balde.', porque: `El resangrado es justo lo que se quiere evitar (${pag(47)}). Cerrar el aneurisma después de que sangre otra vez es llegar tarde.` }],
         explicacion: `La mejor manera de evitar el resangrado es <span class="hl">obliterar el aneurisma</span> (clips u otra técnica): con mejores resultados si se hace <span class="hl-verde">en 3 días</span> y sin retrasarlo <span class="hl-rojo">más de 7-10 días</span> (${pag(47)}).${enFicha('mn-hsa', 'mn-hsa-aneurisma')}` },
-      // cráneo: 'hsa' día 6
-      { id: 'mns-g5', corto: 'qué vigilas', tipo: 'test', fuente: 'mn-hsa-vigilar', calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+      { id: 'mns-g5', modelo: { craneoVivo: 'petronila:3' }, corto: 'qué vigilas', tipo: 'test', fuente: 'mn-hsa-vigilar', calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
         enunciado: 'Día 6 de una hemorragia subaracnoidea, en plena ventana de la isquemia diferida. Antes de comprobar la ficha: ¿qué vigilas y con qué?',
         opciones: [
           { t: 'Déficit focal nuevo o caída de 2 puntos del GCS; angio-TC y Doppler.', ok: true },
@@ -316,9 +309,8 @@ export const MAYEUTICA_CRANEO_1 = {
                 { t: 'Por vía IV desde ahora, para que actúe antes.', porque: `La vía IV no se recomienda por la hipotensión (${pag(48)}); bajarle la PA a Petronila con el aneurisma sin cerrar sería arriesgado.` },
                 { t: 'El día 4, cuando empieza la ventana de la isquemia diferida.', porque: `Marino lo da desde el diagnóstico, no desde el día 4 (${pag(48)}). Empezar tarde deja sin cobertura los primeros días.` }],
               explicacion: `Nimodipino <span class="hl">60 mg orales cada 4 h</span>, <span class="hl">desde el diagnóstico</span> y durante <span class="hl">3 semanas</span> (${pag(48)}).` } },
-          // cráneo: 'hsa' día 1
           { momento: 'Día 1', datos: { Procedimiento: 'Aneurisma de la basilar embolizado', Nota: 'Plan del R1 en la historia' }, nuevo: ['Procedimiento', 'Nota'],
-            pregunta: { id: 'mns-c3', tipo: 'error', fuente: 'mn-hsa-aneurisma · mn-hsa-nimodipino · mn-hsa-generales',
+            pregunta: { id: 'mns-c3', modelo: { craneoVivo: 'petronila:2' }, tipo: 'error', fuente: 'mn-hsa-aneurisma · mn-hsa-nimodipino · mn-hsa-generales',
               enunciado: 'El plan del R1 tras el cierre. Encuentra los errores.',
               frases: [
                 { t: 'El aneurisma se cerró en el día 1, dentro de los 3 días.' },
@@ -327,19 +319,17 @@ export const MAYEUTICA_CRANEO_1 = {
                 { t: 'Glucemia 210: objetivo 140-180, como en el isquémico.', mal: true, c: `En la subaracnoidea la guía <span class="hl">no da recomendación</span> de control glucémico (${pag(48)}).` },
                 { t: 'Bajo la fiebre, sabiendo que no mejora el pronóstico.' }],
               explicacion: `Cerrar en 3 días y enoxaparina tras reparar son correctos (${pag(47)}-${pag(48, '48')}); el nimodipino sigue oral y la hiperglucemia empeora el pronóstico pero la guía no fija objetivo (${pag(48)}).` } },
-          // cráneo: 'hsa' día 6
           { momento: 'Día 6', datos: { Clínica: 'GCS 12 (−2) y afasia nueva' }, nuevo: ['Clínica'],
             calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
-            pregunta: { id: 'mns-c4', tipo: 'test', fuente: 'mn-hsa-vigilar',
+            pregunta: { id: 'mns-c4', modelo: { craneoVivo: 'petronila:3' }, tipo: 'test', fuente: 'mn-hsa-vigilar',
               enunciado: '¿Qué haces?',
               opciones: [
                 { t: 'Isquemia diferida: angio-TC o Doppler; si es grave, angioplastia.', ok: true },
                 { t: 'Es un resangrado: reintervenir el aneurisma de inmediato.', porque: `El aneurisma ya está embolizado y la ventana de los días 4-14 es la de la isquemia diferida (${pag(47)}). Reintervenir sin imagen retrasa el tratamiento correcto.` },
                 { t: 'El nimodipino ha fallado: subirlo a 120 mg cada 4 h.', porque: `La pauta es 60 mg cada 4 h (${pag(48)}) y no se dobla; el vasoespasmo grave exige tratamiento endovascular.` }],
               explicacion: `Caída de 2 puntos en el GCS y déficit nuevo en el día 6: <span class="hl-rojo">isquemia cerebral diferida</span> hasta demostrar lo contrario. Se confirma con angio-TC o Doppler transcraneal (≈90 %); si el vasoespasmo es grave, vasodilatadores intraarteriales o angioplastia (${pag(48)}).` } },
-          // cráneo: 'hsa' día 9
           { momento: 'Día 9 · el giro', datos: { Clínica: 'Cefalea, vómitos, GCS 10', TC: 'Ventrículos dilatados' }, nuevo: ['Clínica', 'TC'],
-            pregunta: { id: 'mns-c5', tipo: 'test', fuente: 'mn-hsa-hidrocefalia · mn-hsa-pic',
+            pregunta: { id: 'mns-c5', modelo: { craneoVivo: 'petronila:4' }, tipo: 'test', fuente: 'mn-hsa-hidrocefalia · mn-hsa-pic',
               enunciado: '¿Qué ha cambiado y qué haces?',
               opciones: [
                 { t: 'Hidrocefalia: drenaje ventricular con PIC <20; derivación permanente si sobrevive.', ok: true },
@@ -360,7 +350,7 @@ export const MAYEUTICA_CRANEO_1 = {
           'Presión sistólica ≤140 y cerrar el aneurisma en 3 días; sin ácido tranexámico.',
           'Días 4-14: vigila el GCS y el déficit focal; angio-TC o Doppler transcraneal.',
           'El nimodipino oral salva déficits, no vidas.'],
-        volver: { nombre: 'Detectar la isquemia diferida', ancla: 'mn-hsa-vigilar' } }, // cráneo: 'hsa' día 6
+        volver: { nombre: 'Detectar la isquemia diferida', ancla: 'mn-hsa-vigilar', modelo: { craneoVivo: 'petronila:3' } } },
     ],
     profundizar: [
       { id: 'mn-hsa-inflamacion', titulo: 'Inflamación y hierro (ferroptosis)' },

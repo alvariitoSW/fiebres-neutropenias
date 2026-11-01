@@ -61,6 +61,8 @@ const MODELOS = {
     ritmoVivo: { especialidad: 'libros', view: 'ritmoVivo', nombre: '⚡ el corazón eléctrico' },
     shockVivo: { especialidad: 'libros', view: 'shockVivo', nombre: '🫀 el shock a pie de cama' },
     pulmonVivo: { especialidad: 'libros', view: 'pulmonVivo', nombre: '🫁 el pulmón con respirador' },
+    craneoVivo: { especialidad: 'libros', view: 'craneoVivo', nombre: '🧠 el cráneo vivo' },
+    placaViva: { especialidad: 'libros', view: 'placaViva', nombre: '💪 la placa motora viva' },
     receptorVivo: { especialidad: 'libros', view: 'receptorVivo', nombre: '💊 el receptor vivo' },
     nefronaViva: { especialidad: 'nefrologia', view: 'nefrona', nombre: '💧 la nefrona viva' },
     glomerulo: { especialidad: 'nefrologia', view: 'nefrona', nombre: '🫘 el glomérulo vivo' },
