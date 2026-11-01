@@ -7,3 +7,9 @@
   izquierda + tabla congelada del contrato. `wt/mv6-zoom` (sonnet): foco VD sin aorta + botón Zoom ×2.
 - Después: juntar las dos ramas, versión nueva, suite eco + shock-vivo + --geometria + --eco a solas; rejuicio (profesor fable);
   si ≥9,5 → encender dibujo 2 (por defecto, instantánea, --geometria a la suite, versión) y seguir a 9,85-10.
+## 18:00 UTC
+- Juntado en la rama: zoom ×2 y foco VD sin aorta. Versión 20261101-21.
+- `wt/mv6-v4m` (en el remoto, NO fusionar: ≈37 pruebas rojas): reloj auricular aprobado aplicado (picoAurAntes 0, AD Ees 0,22);
+  objetivos de la IT cumplidos salvo el sobrepico de lPul; falta (en orden, informe `paso6/v4m-informe.md` en esa rama): decidir
+  qué es la «telediástole» con el reloj nuevo y la inercia mitral (lMit), recuperar el gasto del normal, lPul, tabla del
+  contrato e instantánea con --congelar, shock-vivo. Siguiente encargo: opus, desde wt/mv6-v4m.
