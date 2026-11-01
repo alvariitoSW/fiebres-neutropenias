@@ -58,7 +58,7 @@ export const MAYEUTICA_IONES_1 = {
         enunciado: 'Varón de 70 kg de peso magro con K⁺ 3,0, un valor «solo un poco bajo». ¿Qué déficit total estima la Tabla 36.1?',
         opciones: [
           { t: 'Unos 35 mEq: una ampolla y media de ClK, y repongo ya', porque: 'Esos 35 mEq corresponden a un K⁺ de 3,4. Con 3,0 repondrías de menos y el K⁺ volvería a bajar en horas.' },
-          { t: 'Unos 175 mEq: el 10 % del total por cada mEq/L', ok: true },
+          { t: 'Unos 175 mEq: el 10 % del total por cada 1 mEq/L que baja', ok: true },
           { t: 'Unos 350 mEq: el 10 % del total de 3.500 mEq, sea cual sea el K⁺', porque: 'El 10 % es por cada 1 mEq/L que baja, y 3,0 está a 0,5 de 3,5; 350 mEq serían los de un K⁺ de 2,5.' }],
         explicacion: 'Tabla 36.1: <span class="hl">se pierde un 10 % del K⁺ total por cada 1 mEq/L que baja</span>; incluso una hipopotasemia leve (3,0) supone <span class="hl-rojo">175 mEq</span>; 2,5 son 350 (E p. 22).',
         nota: '<b>Nota de precisión.</b> El libro da dos magnitudes en el mismo capítulo: 200-400 mEq por mEq/L desde un K⁺ de 4 (E p. 19) y la Tabla 36.1 desde 3,5 (E p. 22). Se muestran ambas, sin elegir una.' },
@@ -67,7 +67,7 @@ export const MAYEUTICA_IONES_1 = {
       { id: 'ion-k-e1', corto: 'sube despacio', tipo: 'test', fuente: 'mr-kcl-respuesta · mr-k-curva',
         enunciado: 'Un paciente con furosemida crónica lleva 8 h con 20 mEq/h de ClK y su K⁺ casi no se mueve de 2,8. ¿Qué piensas primero?',
         opciones: [
-          { t: 'La curva es plana al principio; si persiste, miro el magnesio y no acelero el ritmo', ok: true },
+          { t: 'La curva es plana al principio; si persiste, miro antes el magnesio y no acelero', ok: true },
           { t: 'Que 20 mEq/h es poco y subir a 100 mEq/h por la cava superior, para compensar', porque: 'Pasar de 20 mEq/h por la cava superior tiene un riesgo mal documentado de asistolia, y no arreglarías la causa si falta magnesio.' },
           { t: 'Que el ClK no hace efecto en quien toma furosemida crónica, y cambiar de preparado', porque: 'No existe esa inhibición. Lo que ocurre es que el déficit de magnesio altera la reabsorción tubular de K⁺ y bloquea la corrección hasta que se repone.' }],
         explicacion: 'Al principio sube despacio (la parte plana de la curva). La hipopotasemia de quien tiene déficit de magnesio <span class="hl-rojo">no se corrige hasta reponerlo</span> (E p. 23).',
@@ -129,7 +129,7 @@ export const MAYEUTICA_IONES_1 = {
               opciones: [
                 { t: 'Unos 245 mEq según la Tabla 36.1: más de 12 horas a 20 mEq/h de ClK, sin parar', ok: true },
                 { t: 'Unos 175 mEq: algo más de 8 horas, que es el déficit de un K⁺ de 3,0', porque: 'Esos 175 mEq son los de 3,0. Con 2,8 te faltarían 70 mEq y daría por terminada la reposición con el K⁺ aún bajo.' },
-                { t: 'Unos 40 mEq: dos ampollas, porque Rufino solo tiene una hipopotasemia moderada', porque: 'Ya con 3,4 son 35 mEq; con 2,8 reponer 40 sería cubrir el 16 % del déficit y el K⁺ se quedaría bajo.' }],
+                { t: 'Unos 40 mEq: dos ampollas, porque Rufino solo tiene una hipopotasemia moderada y estable', porque: 'Ya con 3,4 son 35 mEq; con 2,8 reponer 40 sería cubrir el 16 % del déficit y el K⁺ se quedaría bajo.' }],
               explicacion: 'Tabla 36.1: <span class="hl-rojo">245 mEq</span> para 2,8 (un 10 % del total por cada mEq/L). A 20 mEq/h son unas 12 horas (E p. 22-23).' } },
           { momento: 'Día 5 · la pauta', datos: { Pauta: 'ClK' }, nuevo: ['Pauta'],
             pregunta: { id: 'ion-k-r3', tipo: 'destapa', fuente: 'mr-kcl-ritmo · mr-kcl-preparados', modelo: iv('rufino'), origen: 'ficha',
@@ -236,7 +236,7 @@ export const MAYEUTICA_IONES_1 = {
         enunciado: 'Linfoma no Hodgkin recién iniciada la quimioterapia. ¿Cuándo aparece el síndrome de lisis tumoral y qué amenaza es la más inmediata?',
         opciones: [
           { t: 'En 7 días tras la quimioterapia; la hiperpotasemia es la inmediata', ok: true },
-          { t: 'A las 6 semanas del inicio; la hiperuricemia, que da el FRA', porque: 'Aparece en la primera semana. Esperar a las semanas te haría no vigilar el K⁺ cuando es más peligroso.' },
+          { t: 'A las 6 semanas del inicio de la quimioterapia; la hiperuricemia, que da el FRA', porque: 'Aparece en la primera semana. Esperar a las semanas te haría no vigilar el K⁺ cuando es más peligroso.' },
           { t: 'En los 7 días tras iniciar la citotoxicidad; la hipocalcemia', porque: 'La hipocalcemia forma parte del síndrome, pero la ficha señala la hiperpotasemia como la amenaza más inmediata.' }],
         explicacion: 'En los <span class="hl">7 días</span> tras iniciar la citotoxicidad: hiperpotasemia, hiperfosfatemia, hipocalcemia e hiperuricemia, a menudo con FRA. La hiperpotasemia es la amenaza más inmediata (E p. 24).' },
       { id: 'ion-k-x3', corto: 'la succinilcolina', tipo: 'error', fuente: 'mr-digital-succi · mr-hiperk-acidosis',
@@ -280,7 +280,7 @@ export const MAYEUTICA_IONES_1 = {
               enunciado: 'El ECG de Gregorio tiene T picudas con K⁺ 6,3, por debajo de 6,5. ¿Lo tratas como grave?',
               opciones: [
                 { t: 'No: grave es K⁺ >6,5, y espero al próximo análisis', porque: 'La definición de grave incluye cualquier K⁺ con cambios del ECG. Esperar con T picudas es dejar avanzar el bloqueo.' },
-                { t: 'Sí: cualquier K⁺ con cambios del ECG es grave, aunque no pase de 6,5', ok: true },
+                { t: 'Sí: con cambios del ECG ya es grave aunque no pase de 6,5', ok: true },
                 { t: 'Solo si aparece el QRS ancho: la T picuda es el último cambio', porque: 'La T picuda abre la serie del ECG; el QRS ancho llega después, cuando el bloqueo ya está en marcha.' }],
               explicacion: 'Grave: <span class="hl-rojo">K⁺ >6,5 o cualquier K⁺ con cambios del ECG</span>; y la T alta y picuda es el primero de esos cambios (E p. 26-27).' } },
           { momento: 'Urgencias · lo que viene', datos: { Orina: 'oliguria' }, nuevo: ['Orina'],
@@ -316,7 +316,7 @@ export const MAYEUTICA_IONES_1 = {
               opciones: [
                 { t: 'Hemodiálisis: baja 1 mEq/L en 1 h y es la más eficaz', ok: true },
                 { t: 'Resina de poliestireno: es la más eficaz y rápida', porque: 'La ficha le da eficacia dudosa, inicio lento y casos de necrosis intestinal; con oliguria perderías horas.' },
-                { t: 'Salbutamol en aerosol, que baja el K⁺ más de 1 mEq/L', porque: 'Baja menos de 0,5 mEq/L a dosis terapéuticas y nunca solo: no elimina el exceso.' }],
+                { t: 'Salbutamol en aerosol, que baja el K⁺ más de 1 mEq/L de golpe', porque: 'Baja menos de 0,5 mEq/L a dosis terapéuticas y nunca solo: no elimina el exceso.' }],
               explicacion: 'La <span class="hl-rojo">hemodiálisis</span> es la más eficaz (1 mEq/L en 1 h, 2 mEq/L en 3 h) (E p. 28).' } },
         ] },
     ],
