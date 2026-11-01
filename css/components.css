@@ -5114,6 +5114,7 @@ body.study-mode-on #tmv-raiz .dock { padding-right: 82px; }
 #tmv-raiz .mando button, #tmv-raiz .mando select { min-height: 34px; padding: 2px 4px; }
 #tmv-raiz .mando .fila > * { min-width: 60px; }
 #tmv-raiz .idea .cita { white-space: nowrap; }
+#tmv-raiz .idea .cita .org { white-space: normal; overflow-wrap: anywhere; }
 #tmv-raiz .idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); }
 #tmv-raiz .idea .org, #tmv-raiz .guia .org { color: var(--text-muted); font-weight: 400; }
 #tmv-raiz .guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; }
