@@ -19,3 +19,4 @@
   versión -22); `wt/mv6-v3d` E/A anchas y escala del CW; `wt/mv6-v3g` aorta en foco VD y zoom re-render.
 - Luego: juntar las tres (on primero), suite + shock-vivo + --eco + --geometria; rejuicio; seguir el motor desde `wt/mv6-v4m`
   (reloj auricular, en rojo) con opus. Lista para 9,85-10 en `juicio-2.md`.
+- v3d (18:50 UTC): la onda A tricuspídea del normal sale a ~257 cm/s en ~40 ms (qTri 1133 mL/s; lo real ~30-40 cm/s): cifra mala del motor (AD con Ees 0,70; ver wt/mv6-v4m). Para el carril del motor.
