@@ -6,6 +6,7 @@
 import { montarVisual } from '../../core/visual-kit.js';
 import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
 import { montarGlomerulo } from '../nefrologia/glomerulo-vivo.js';
+import { montarFiltro } from '../nefrologia/filtro-vivo.js';
 import { curvaPh, mapaGasometria, icebergK, escalaHiperMg, cineticaEnzimas, semaforoAntibioticos, simuladorSalino, retoVolumen, asistenteVisual } from './visual-marino-piezas.js';
 import { DI_WIZARD } from './marino-renal.js';
 import { PBE_WIZARD, CDI_WIZARD } from './marino-abdomen.js';
@@ -180,6 +181,7 @@ function renal() {
         guia: 'Difusión o convección: qué limpia cada técnica.',
         paneles: [
             FIGURAS,
+            { tipo: 'propio', titulo: 'K⁺ urgente: cuánto baja con cada técnica', nota: 'Elige el K⁺ de partida, la técnica y las horas de tratamiento.', render: (c, ctx) => montarFiltro(c, ctx, { textos: { hd: 'mr-hemodialisis', cont: 'mr-hemofiltracion' }, mandos: ['modo', 'k'], inicial: { modo: 'hd', k0: 7, horas: 0, calcio: 'no' } }) },
             { tipo: 'comparar', titulo: 'Las técnicas', columnas: [
                 { titulo: 'Hemodiálisis', color: 'dorado', nodos: [n('#mr-hemodialisis', 'Difusión')] },
                 { titulo: 'Hemofiltración', color: 'verde', nodos: [n('#mr-hemofiltracion', 'Convección')] },
