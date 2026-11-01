@@ -63,6 +63,9 @@ marca `hecha` al fusionarse su PR) y el director del plan (estados). Una tarea p
   se para hasta las 14:00 y sigue solo. Cada carril trabaja en su rama y sus archivos; los archivos comunes (versión,
   `index.html`, registros) los junta el director del bloque al fusionar. Siguen los jueces, el 8,75 y la fidelidad.
   Tras el reinicio, vuelve lo de §4.17 (7 sesiones) salvo que el usuario diga otra cosa
+- **Cerrar cada sesión al acabar** (el usuario, 01/11): cuando su tarea esté completa y sin cabos sueltos (todo
+  subido, parte escrito, fila en `SESIONES.md`, PR o fusión hecha, siguientes sesiones abiertas si tocan), la sesión
+  se archiva (`archive_session` con su propio id). Ninguna sesión se queda abierta y vacía
 - **Más rápido (el usuario, 01/11: «Haz A, B y C»; REGLAS §4.17)**: la cola va **en paralelo** en lo que no comparte
   archivos (01/11, 15:20, 6 sesiones a la vez: eco paso 6, pulmón sesión 2, `b4` (parado desde el 31/10), modelos del `b5` y del `b6a`, tanda de `radar-tuits`; ya hechas hoy: `marino-unido`, mapa y maquetas del `b5` y del `b6a`);
   el **Consejo sube techos hasta +25 %** sin parar al usuario (se le cuenta después); **papeleo mínimo** (acta solo
