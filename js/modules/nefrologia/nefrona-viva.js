@@ -17,6 +17,7 @@ import { openCorkboardTopic } from '../../core/corkboard.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { fraDe, montarVolumen, repintarVolumen, dibujarRabdo, avisosRabdo } from './nefrona-viva-b4.js';
 import { pintarParticula, svgParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const CIF = cifrasNefrona;
@@ -108,7 +109,7 @@ function modelo(sit, farm, glucemia) {
 // Fracaso renal agudo: la orina es la de la Tabla 3 de la ficha (en `fra`),
 // y el reparto por tramos se ajusta para que la animación llegue a ella.
 function modeloFra(s, farm) {
-    const f = s.fra;
+    const f = fraDe(s, farm);
     const M = f.M, Umin = CIF.osmMin, a = s.adh;
     const rDesc = rDescDe(M);
     const aguaCol = CIF.filtradoL * f.tfg * (1 - CIF.aguaProximal) * (1 - rDesc);
@@ -427,7 +428,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         // FRA: cilindros en el colector, obstrucción y perfusión
         if (M.fra) {
             const hialino = !M.fra.nta && !M.fra.obstruccion;
-            if (!M.fra.obstruccion) for (const y of [300, 384]) {
+            if (!M.fra.obstruccion && !M.fra.volumenOn) for (const y of [300, 384]) {
                 c.fillStyle = hialino ? alfa(C.texto, 0.4) : '#7a5230';
                 c.beginPath(); c.roundRect(88.5, y, 7, 24, 3.5); c.fill();
                 if (!hialino) { c.fillStyle = '#c9a678'; for (let k = 0; k < 5; k++) { c.beginPath(); c.arc(90.5 + (k % 2) * 3, y + 4 + k * 4, 0.9, 0, 7); c.fill(); } }
@@ -439,6 +440,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 etiqueta(c, '↑ presión hacia atrás', 160, 300, CLARO.rojo);
             }
             if (!M.fra.nta && !M.fra.obstruccion) etiqueta(c, '↓ perfusión renal', 76, 40, CLARO.rojo);
+            dibujarRabdo(c, M.fra, etiqueta, CLARO.rojo, C.verde);
             if (M.fra.nta) etiqueta(c, 'células desprendidas', 300, 186, CLARO.rojo, 'right');
         }
         // Lo que sigue en la luz (L/día)
@@ -952,6 +954,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         if (estado.sit === 'siadh') av.push('La orina se parece a la de la deshidratación, pero la sangre no: la ADH actúa sin que el plasma lo pida, el agua retenida diluye el sodio y el riñón sigue eliminando Na⁺ (más de 40 mEq/l en orina).');
         if (estado.sit === 'prerrenal') av.push('Llega poca sangre: se filtra menos, pero el túbulo sano recupera casi todo el sodio y la ADH concentra la orina.');
         if (estado.sit === 'nta') av.push('Las células que se caen viajan con la orina y forman cilindros granulosos en el colector.');
+        av.push(...avisosRabdo(estado));
         if (estado.sit === 'obstruccion') av.push('La orina no puede salir: se acumula en el colector y la presión sube hacia atrás hasta el glomérulo.');
         if (s.aviso && f.id === 'ninguno') av.push(s.aviso);
         if ((M.acido || M.mineral) && f.id !== 'ninguno') av.push('Con un fármaco puesto, las cifras de la orina son las del fármaco; quita el fármaco para ver las de la tabla de la ficha.');
@@ -995,7 +998,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         raiz.querySelectorAll('#nv-situaciones .visual-mini').forEach(b => { const on = b.dataset.id === estado.sit; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
         raiz.querySelectorAll('#nv-farmacos .visual-mini').forEach(b => { const on = b.dataset.id === estado.farm; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
         $('#nv-glucemia-box').hidden = estado.sit !== 'hiperglucemia';
-        pintarFondo(); pintarMedidores(); pintarExplica();
+        repintarVolumen(raiz, estado); pintarFondo(); pintarMedidores(); pintarExplica();
         lienzo.setAttribute('aria-label', `Nefrona animada. ${situacionesNefrona.find(x => x.id === estado.sit).nombre}${estado.farm !== 'ninguno' ? ' con ' + farmacosNefrona.find(x => x.id === estado.farm).nombre : ''}: orina ${enPico() ? num(M.V * 1000 / 1440) + ' ml/min en el pico' : num(M.V) + ' L/día'}, ${Math.round(M.Uosm)} mOsm/kg.`);
         if (estado.seg) pintarDetalle();
         // Sin tramo elegido no hay célula que pintar (p. ej. un botón de la ficha
@@ -1032,6 +1035,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
 
     chips('#nv-situaciones', situacionesNefrona, 'sit');
     chips('#nv-farmacos', farmacosNefrona, 'farm');
+    montarVolumen(raiz, estado, actualizar);
     actualizar();
 
     return {
