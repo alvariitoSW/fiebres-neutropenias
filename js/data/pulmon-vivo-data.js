@@ -548,3 +548,32 @@ ESTADOS['neumotorax-tension'] = {
 };
 ORDEN_ESTADOS.push('neumotorax-tension');
 NOTAS.push({ k: 'neumo-pico-meseta', tipo: 'calla', txt: 'Marino no dice cómo cambian el pico y la meseta en el neumotórax a tensión. Que suban juntos, con la misma diferencia, es una deducción de las Ec. 27.1-27.3 (pico = Pres + Pel; meseta = Pel; pico − meseta = Pres). La presión del neumotórax (1,5 cmH₂O por respiración, sello de shock desde 10,5, sello de parada sin pulso desde 13,5), la SpO₂ (98 − 0,6 por cmH₂O) y los 5 cm de la aguja corta son ilustrativos; la fuente no da cifras de saturación ni de presión pleural, solo dice «hipoxemia o hipotensión inexplicadas».', citas: [C.ec271, C.meseta, C.tension] });
+
+// ---------------------------------------------------------------- M1 · secreciones sobre el balón y aspiración subglótica (subglotica.js)
+FICHA['neumo-nav-prevencion'] = [NEUMO_E4, 'NAV: generalidades y prevención', 'NAV: prevención', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  subglotica: { f: 'neumo-nav-prevencion', id: 'nep-subglotica', sitio: 'Tubo con puerto sobre el manguito, succión continua ≤ −20 cmH₂O: menos NAV', p: 38 },
+  biofilm: { f: 'neumo-cuidado-barotrauma', id: 'nep-aspiracion', sitio: 'Biofilm con patógenos en la superficie interna del tubo (Fig. 28.4)', p: 23 },
+});
+export const SUBGL = {
+  bajo: 15,   // por debajo, el sello falla (hueco entre balón y pared): ilustrativo; Marino no da un mínimo, solo «hasta que no haya fuga audible» (cap. 28 p. 21)
+  succion: 20,   // −20 cmH₂O, «habitualmente no superior» (cap. 29 p. 38): ficha
+  nivel: [1, 0.15],   // altura de la colección sobre el balón sin / con aspiración: ilustrativo
+  gotas: { sin: [2, 4], con: [1, 2] },   // gotas que escurren hacia el pulmón [balón sellado, balón bajo], sin / con aspiración: ilustrativo (Marino solo dice «reducción significativa de NAV»)
+};
+NOTAS.push({ k: 'subgl-ilu', tipo: 'calla', txt: 'Marino dice que el manguito inflado no impide que pasen las secreciones de la boca y que despejarlas por el puerto subglótico (succión continua, habitualmente no superior a −20 cmH₂O) reduce la NAV de forma significativa. No da una presión mínima del balón, ni cuántas secreciones pasan con cada presión, ni cuánto baja la NAV. Los 15 cmH₂O de «balón bajo», la altura de la colección y el número de gotas del dibujo son ilustrativos y solo marcan la dirección.', citas: [C.subglotica, C.cuffFuga] });
+ESTADOS.subglotica = {
+  tit: 'Secreciones sobre el balón: ¿aspiración subglótica?', pac: 'gaspar', subgl: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 410, fr: 16, peep: 6, flujo: 60 }, pulmon: { c: 45, r: 10 }, man: {},
+  frase: 'Las secreciones de la boca se acumulan sobre el balón y un poco baja por los pliegues aunque esté inflado.',
+  guia: [
+    { t: 'Gaspar lleva 4 días intubado. El tubo es un conducto de plástico donde se forma un biofilm con organismos patógenos en la superficie interna (Fig. 28.4): por eso las guías no recomiendan aspirar de rutina, porque el catéter puede desprenderlo hacia el pulmón.', org: 'ficha (cap. 28 p. 23)', s: ['#pul-esc-subgl'], c: C.biofilm },
+    { t: 'El balón inflado sella la tráquea para que el gas del respirador no se escape, pero no impide que las secreciones de la boca se acumulen encima y bajen hacia las vías aéreas inferiores. Mira la colección sobre el balón y las gotas que escurren.', org: 'ficha (cap. 29 p. 38) · gotas y nivel: ilustrativo', s: ['#pul-esc-subgl'], c: C.subglotica },
+    { t: 'Activa la aspiración subglótica: un puerto justo sobre el balón, conectado a succión continua (habitualmente no más de −20 cmH₂O), despeja la colección. En los estudios la NAV baja de forma significativa.', org: 'ficha (cap. 29 p. 38)', s: ['#pul-esc-subgl', '[data-fila="secr"]'], c: C.subglotica },
+    { t: 'Baja la presión del balón por debajo de 15: queda un hueco con la pared, hay fuga audible (el Vt espirado cae) y las secreciones pasan más. El 15 es ilustrativo: Marino pide inflar hasta que no haya fuga audible y no da un mínimo.', org: 'ficha (cap. 28 p. 21-22) · 15 cmH₂O: ilustrativo', s: ['[data-fila="fuga"]', '#pul-esc-subgl'], c: C.cuffFuga },
+    { t: 'Sube la presión por encima de 25: el mando se queda en 25 y sale el sello. Más presión comprime los capilares de la pared de la tráquea (25 mmHg) y la mucosa se isquemia. El balón no se sobreinfla para sellar mejor.', org: 'ficha (cap. 28 p. 21-22: 25 mmHg y 25 cmH₂O, nota de fuentes)', s: ['#pul-esc-subgl'], c: C.cuffPresion },
+  ],
+  fuentes: [C.biofilm, C.subglotica, C.cuffFuga, C.cuffPresion],
+};
+PACIENTES.push({ k: 'gaspar', nombre: 'Gaspar', chip: '67 a · día 4 · tubo con puerto', linea: '67 años, 80 kg, 1,72 m, traumatismo craneal, intubado desde hace 4 días; cabecera elevada. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'subglotica' });
+ORDEN_ESTADOS.push('subglotica');

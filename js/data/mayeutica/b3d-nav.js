@@ -9,6 +9,7 @@ const enFicha = (tab, id) => ` <button type="button" class="may-ir" ${NEU} data-
 const NP = 'neumo-nav-prevencion', ND = 'neumo-nav-diagnostico';
 const ok = t => ({ t, ok: true });
 const no = (t, porque) => ({ t, porque });
+const pl = (clave, texto) => ({ pulmonVivo: clave, texto });
 const FIC = 'ficha: Marino cap. 29';
 const CASO = 'ficha: las categorías y cifras de la fuente; los datos del paciente, inventados';
 
@@ -69,6 +70,7 @@ const DATOS = {
           no('Cabecera a 60°, SOD, tubo con aspiración subglótica, suspensión diaria de la sedación y destete en 24 horas', `Ni la SOD ni el tubo subglótico figuran en la Tabla 29.2 y la cabecera es de 30-45° (${p(37)}-${p(38)}).`)],
         explicacion: `Cinco prácticas: <span class="hl-azul">cabecera 30-45°, profilaxis de úlcera, profilaxis del TEV, suspensión diaria de la sedación y valoración diaria de la extubación</span>. Algunas no tienen relación directa con la neumonía, pero su uso reduce la NAV (${p(37)}-${p(38)}).` + enFicha(NP, 'nep-tabla-29-2') },
       { id: 'nvp-g8', corto: 'plan de prevención', tipo: 'error', fuente: 'nep-clorhexidina · nep-cuidado-via-aerea-nav', origen: FIC,
+        modeloVivo: pl('subglotica', '🫁 Mira el biofilm del tubo y la colección sobre el balón de Gaspar'),
         enunciado: 'Plan de prevención escrito para un paciente ventilado. Hay dos errores. Encuéntralos.',
         frases: [
           { t: 'Cabecera de la cama elevada a 30-45°.' },
@@ -77,6 +79,7 @@ const DATOS = {
           { t: 'Valoración diaria de si puede extubarse.' }],
         explicacion: 'Dos errores: la clorhexidina no es del paquete ni se recomienda ya, y la aspiración del tubo no se hace por rutina.' + enFicha(NP, 'nep-cuidado-via-aerea-nav') },
       { id: 'nvp-g9', corto: 'aspiración subglótica', tipo: 'test', fuente: 'nep-subglotica', origen: FIC,
+        modeloVivo: pl('subglotica', '🫁 Enciende la aspiración subglótica y mira cuánto baja la colección sobre el balón'),
         enunciado: 'Existe un tubo con un puerto de aspiración especial. ¿Dónde está el puerto, con qué aspiración se conecta y qué se ha visto con él?',
         opciones: [
           no('Sobre el manguito, conectado a aspiración continua; no cambia la NAV porque el manguito inflado ya impide la aspiración', `El manguito inflado no previene la aspiración de secreciones de la boca, y con este tubo la incidencia de NAV baja de forma significativa (${p(38)}).`),

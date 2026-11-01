@@ -307,6 +307,27 @@ for (const k of ORDEN_ESTADOS) {
     await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); ok((await pr()).pf > 120, 'S2 prono: sin contraindicaciones se puede girar');
     await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => document.querySelectorAll('.esc-alv.prono-cons').length === 0 && !document.querySelector('#pul-dock-panel [data-m="horas"]')), 'S2 prono: al salir del estado desaparecen los mandos y las rayas');
     await abrir('prono'); await espera(500); await llenar(); }
+  // M1 · secreciones sobre el balón (Gaspar): mandos = presión del balón 0-30 (tope 25) y aspiración subglótica; barrido de extremos y medio
+  await abrir('subglotica'); await espera(900); await llenar();
+  { const pide = async (v) => { await p.evaluate((v) => { const d = document.querySelector('#pul-dock-panel input[data-m="cuff"]'); d.max = 200; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, v); await espera(150); await llenar(); };
+    const sg = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const l = q.L, v = (e) => e && !e.hasAttribute('hidden'); const d = document.querySelector('#pul-esc-subgl');
+      return { p: q.est.cuff.p, asp: q.est.subgl.asp, vtI: Math.round(l.vtIns), vtE: g('vt'), fuga: g('fuga'), vm: g('vm'), fr: g('fr'), kg: g('vtkg'), sello: q.est.sello?.titulo || '', frase: document.getElementById('pul-frase-txt').innerText, secr: c('secr')?.querySelector('.g')?.textContent || '', visible: v(d), gotas: [...d.querySelectorAll('.sg-gota')].filter((x) => !x.hasAttribute('hidden')).length, chocan: [...d.querySelectorAll('.sg-t')].some((t) => parseFloat(getComputedStyle(t).fontSize) < 9), inicio: !!document.querySelector('#pul-dock-panel [data-m="asp"]'), tope: document.querySelector('#pul-dock-panel input[data-m="cuff"]').max }; });
+    const a = await sg(); await limpio('subglotica inicio'); await foto('m1-inicio');
+    ok(a.visible && a.p === 25 && !a.asp && a.vtE === 410 && a.fuga === 0 && a.secr === 'acumuladas' && a.gotas === 2 && a.inicio, `M1 inicio: balón 25, sin aspiración, secreciones ${a.secr}, ${a.gotas} gotas, Vt esp ${a.vtE}`);
+    const f0 = a.frase; await clicM('asp'); const b = await sg(); await limpio('subglotica aspirando'); await foto('m1-aspirando');
+    ok(b.asp && b.secr === 'despejadas' && b.gotas === 1 && b.frase !== f0, `M1 aspiración: secreciones ${b.secr}, ${b.gotas} gota, la frase viva cambia`);
+    let mal = []; for (const asp of [false, true]) { if ((await sg()).asp !== asp) await clicM('asp');
+      for (const v of [0, 8, 14, 15, 20, 24, 25, 26, 30, 60]) { await pide(v); const x = await sg(); const exp = Math.round(200 * (1 - Math.min(v, 25) / 25));
+        const bajo = v < 15, selloOk = v > 25 ? /lesión de la mucosa/.test(x.sello) : bajo ? /Balón bajo/.test(x.sello) : x.sello === '';
+        const gOk = x.gotas === (asp ? (bajo ? 2 : 1) : (bajo ? 4 : 2));
+        if (!(x.p === Math.min(v, 25) && x.fuga === exp && x.vtE === 410 - exp && x.vtE >= 210 && x.vm >= 3 && x.vm <= 7 && x.fr === 16 && x.kg >= 3 && x.kg <= 6.1 && selloOk && gOk && !/NaN/.test(x.frase))) mal.push(`${asp ? 'asp' : 'sin'} ${v}: ${JSON.stringify({ p: x.p, f: x.fuga, vtE: x.vtE, vm: x.vm, s: x.sello, g: x.gotas })}`); } }
+    ok(mal.length === 0, `M1 barrido balón 0-60 con y sin aspiración: fuga proporcional, Vt esp 210-410, VM 3-7, sello y gotas coherentes${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    await pide(60); const t = await sg(); await limpio('subglotica tope'); await foto('m1-tope');
+    ok(t.p === 25 && /lesión de la mucosa/.test(t.sello) && t.fuga === 0 && t.vtE === 410, `M1 tope: pedir 60 → el mando queda en ${t.p}, sello «${t.sello}»`);
+    await pide(5); await limpio('subglotica balón bajo'); await foto('m1-bajo');
+    await pide(20); ok(/cerca del tope/.test((await sg()).frase + await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'M1: a 20 avisa de que está cerca del tope');
+    await abrir('fuga-cuff'); await espera(500); ok(await p.evaluate(() => !document.querySelector('#pul-esc-subgl') || document.querySelector('#pul-esc-subgl').hasAttribute('hidden')), 'M1: al salir del estado la lupa se oculta');
+    await abrir('subglotica'); await espera(500); await llenar(); }
   // S3 · fuga del cuff y estridor (Benito): sin lupa ni tipo. Mandos: presión del cuff 0-30 (tope 25), edema, esteroide, desinflar, extubar, 30 min
   await abrir('fuga-cuff'); await espera(900); await llenar();
   { const clic = async (k) => { await p.evaluate(k => document.querySelector(`#pul-dock-panel [data-m="${k}"]`).click(), k); await espera(200); await llenar(); };
