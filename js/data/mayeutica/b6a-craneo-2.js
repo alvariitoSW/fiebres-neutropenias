@@ -1,5 +1,5 @@
 // Mayéutica del bloque 6a, grupo 6D «El cráneo que sangra y se hincha» · fichas mn-ictus-soporte y mn-ictus-complicaciones
-// (Marino, cap. 47, págs. 34-41 del PDF). Datos puros; formato de b1-fluidos.js. Ids de pregunta: mni- (soporte), mnk- (complicaciones).
+// (Marino, cap. 47, págs. 34-41 del PDF). Datos puros; formato de b1-fluidos.js. Ids de pregunta: mni- (soporte), mic- (complicaciones).
 // «Compruébalo» abre el cráneo vivo en el paciente y el paso de `modelo: { craneoVivo: 'paciente:paso' }` (penumbra y tPA no tienen estado propio: calculadora o figura). Otras fuentes (REGLAS §1.15): Libro Azul (autorregulación) y DESTINY II (resumen en PubMed).
 const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
@@ -179,21 +179,21 @@ export const MAYEUTICA_CRANEO_2 = {
   'mn-ictus-complicaciones': {
     entrada: 'Qué se previene y qué se busca (embolia pulmonar, recurrencia, émbolos del corazón), y las dos complicaciones que más pesan: la hemorragia tras la trombólisis y el edema.',
     guia: [
-      { id: 'mnk-g1', corto: 'profilaxis y TEP', tipo: 'test', fuente: 'mn-isq-tvp',
+      { id: 'mic-g1', corto: 'profilaxis y TEP', tipo: 'test', fuente: 'mn-isq-tvp',
         enunciado: 'En 3 millones de ictus en Alemania la embolia pulmonar fue solo del 0,4 %. ¿Cambia eso la profilaxis de la trombosis venosa?',
         opciones: [
           { t: 'No: sigue indicada, con HBPM y, tras el tPA, compresión neumática 24 h', ok: true },
           { t: 'Sí: con una incidencia tan baja de embolia pulmonar ya no hace falta ninguna profilaxis', porque: 'Marino lo dice expresamente: aun así la profilaxis está justificada (' + pag(38, 'pág. 38') + '). Retirarla deja a un paciente inmóvil expuesto a una trombosis.' },
           { t: 'Sí: solo se hace con compresión, nunca con heparina', porque: 'La heparina de bajo peso molecular es la elección (' + pag(38, 'pág. 38') + '); la compresión es lo que se usa en las primeras 24 h tras la trombólisis.' }],
         explicacion: 'La embolia pulmonar se cita como complicación frecuente, pero fue del <span class="hl">0,4 %</span>. Aun así, <span class="hl-verde">HBPM</span> y, tras trombólisis, compresión neumática las primeras 24 h (' + pag(38, 'pág. 38') + ').' },
-      { id: 'mnk-g2', corto: 'FA y anticoagular', tipo: 'test', fuente: 'mn-isq-aspirina',
+      { id: 'mic-g2', corto: 'FA y anticoagular', tipo: 'test', fuente: 'mn-isq-aspirina',
         enunciado: 'Mujer con ictus agudo y fibrilación auricular conocida sin anticoagular. ¿Qué antitrombótico pones al ingreso?',
         opciones: [
           { t: 'Aspirina 325 mg, pero solo a partir del día 7', porque: 'Marino la pide al ingreso, o el día 2 si hubo trombólisis (' + pag(38, 'pág. 38') + '). Esperar una semana pierde el beneficio precoz.' },
           { t: 'Aspirina 325 mg al día, por vía oral o rectal', ok: true },
           { t: 'Ninguno hasta tener una resonancia', porque: 'Marino pide empezarla al ingreso (o el día 2 tras trombólisis): evita un ictus por cada 100 tratados (' + pag(38, 'pág. 38') + '). Esperar pierde ese beneficio.' }],
         explicacion: '<span class="hl-verde">Aspirina 325 mg/día</span> desde el ingreso (día 2 si hubo trombólisis); evita un ictus recurrente precoz por cada 100 tratados. <span class="hl-rojo">No se recomienda anticoagular</span> en el ictus agudo (' + pag(38, 'pág. 38') + ').' },
-      { id: 'mnk-g3', corto: 'cuándo hacer eco', tipo: 'test', fuente: 'mn-isq-eco',
+      { id: 'mic-g3', corto: 'cuándo hacer eco', tipo: 'test', fuente: 'mn-isq-eco',
         enunciado: 'La ficha enumera seis indicaciones de ecocardiograma en el ictus. ¿Cuál de estas NO está entre ellas?',
         opciones: [
           { t: 'Ictus lacunar con causa clara', ok: true },
@@ -201,28 +201,28 @@ export const MAYEUTICA_CRANEO_2 = {
           { t: 'Hemocultivos positivos', porque: 'Sí es indicación (' + pag(38, 'pág. 38') + '): sospecha de endocarditis. Sin eco no verías las vegetaciones.' }],
         explicacion: 'Indicaciones: ictus embólico, FA, infarto transmural previo, hemocultivos positivos, tromboembolismo venoso previo e ictus criptogénico. La <span class="hl">transtorácica</span> va primero; la transesofágica, si no aclara (' + pag(38, 'pág. 38') + ').',
         nota: '<b>La fuente no lo dice.</b> El ictus lacunar con causa clara no figura en la lista; que sea «no indicación» se deduce de que no aparece.' },
-      { id: 'mnk-g4', corto: 'prueba de burbujas', tipo: 'test', fuente: 'mn-isq-burbujas · mar-img-47-1',
+      { id: 'mic-g4', corto: 'prueba de burbujas', tipo: 'test', fuente: 'mn-isq-burbujas · mar-img-47-1',
         enunciado: 'Haces una prueba de burbujas con la vista apical de 4 cámaras. ¿Cómo se prepara y qué significa ver burbujas a la izquierda?',
         opciones: [
           { t: 'Unos 10 mL de salino agitado entre dos jeringas; en pocos ciclos a la izquierda, hay cortocircuito', ok: true },
           { t: 'Aire puro de una jeringa; burbujas a la izquierda desde el primer latido son lo normal', porque: 'Se usa salino agitado, no aire (' + pag(38, 'pág. 38') + '). Y que pasen a la izquierda no es normal: indica un cortocircuito derecha-izquierda.' },
           { t: 'Salino agitado, inyectado despacio por una vena de la pierna, para que las burbujas lleguen una a una', porque: 'Debe inyectarse rápido por vía central o del brazo (' + pag(38, 'pág. 38') + '); despacio no sigue la técnica descrita.' }],
         explicacion: 'Unos 10 mL de salino agitado con una llave de tres pasos, inyectados rápido por vía central o periférica del brazo. Las burbujas llenan el corazón derecho y, si hay <span class="hl-rojo">cortocircuito derecha-izquierda</span>, pasan al izquierdo en pocos ciclos (' + pag(38, 'pág. 38') + ' y ' + pag(39, 'pág. 39') + ').' },
-      { id: 'mnk-g5', corto: 'riesgo de sangrar', tipo: 'test', fuente: 'mn-isq-hemorragia',
+      { id: 'mic-g5', corto: 'riesgo de sangrar', tipo: 'test', fuente: 'mn-isq-hemorragia',
         enunciado: 'Antes del tPA, predice: ¿qué tres factores aumentan el riesgo de hemorragia sintomática?',
         opciones: [
           { t: 'Edad avanzada, glucosa >180 y fibrilación auricular', porque: 'La edad avanzada sí cuenta, pero la glucosa y la fibrilación auricular no figuran entre los factores (' + pag(39, 'pág. 39') + '); falta la PA >180/105. Te distraerías de lo que sí se corrige.' },
           { t: 'Edad avanzada, PA >180/105 e infarto de más de un tercio del hemisferio', ok: true },
           { t: 'Edad joven, PA baja e infarto lacunar pequeño', porque: 'Son al revés de lo que dice la ficha (' + pag(39, 'pág. 39') + '). Con esta idea confiarías de más en el paciente que más riesgo tiene.' }],
         explicacion: 'Hemorragia sintomática en el <span class="hl-rojo">6,4-8,8 %</span> tras trombólisis. Factores: <span class="hl">edad avanzada, PA >180/105 y ictus de más de un tercio de un hemisferio</span>. Por eso 24 h en UCI o unidad de ictus (' + pag(39, 'pág. 39') + ').' },
-      { id: 'mnk-g6', modelo: { craneoVivo: 'clotilde:1' }, corto: 'dos edemas', tipo: 'test', fuente: 'mn-isq-edema',
+      { id: 'mic-g6', modelo: { craneoVivo: 'clotilde:1' }, corto: 'dos edemas', tipo: 'test', fuente: 'mn-isq-edema',
         enunciado: 'Una paciente con un infarto muy extenso empeora al segundo día. ¿Qué dos tipos de edema tiene y cuál crece con el tamaño del infarto?',
         opciones: [
           { t: 'Citotóxico (necrosis) y vasogénico (barrera rota); más área, más edema', ok: true },
           { t: 'Solo vasogénico, por la rotura de la barrera; a mayor área, igual edema', porque: 'Marino distingue los dos tipos y dice que cuanto mayor el área, más edema (' + pag(40, 'pág. 40') + '). Ignorar el citotóxico es olvidar la necrosis.' },
           { t: 'Citotóxico (necrosis) y vasogénico (barrera rota); el tamaño no influye', porque: 'Marino dice que cuanto mayor el área isquémica, más edema (' + pag(40, 'pág. 40') + '). Creer que el tamaño no importa subestima el riesgo del infarto extenso.' }],
         explicacion: 'Hemorragia y edema son los que más determinan el mal pronóstico. <span class="hl-azul">Citotóxico</span> (necrosis celular) y <span class="hl-azul">vasogénico</span> (pérdida del control vascular y rotura de la barrera). Cuanto mayor el área isquémica, más edema (' + pag(40, 'pág. 40') + ').' },
-      { id: 'mnk-g7', corto: 'sin catéter de PIC', tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', calculadora: { ir: 'mn-hiper-calc', nombre: 'Bolo de salino hipertónico (Tabla 47.3)' },
+      { id: 'mic-g7', corto: 'sin catéter de PIC', tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', calculadora: { ir: 'mn-hiper-calc', nombre: 'Bolo de salino hipertónico (Tabla 47.3)' },
         enunciado: 'El edema de un infarto empeora la clínica. ¿Colocas un catéter de PIC y qué administras?',
         opciones: [
           { t: 'Sí, el catéter, y manitol en perfusión continua', porque: 'La monitorización de la PIC no se recomienda en el isquémico (' + pag(40, 'pág. 40') + ') y el manitol es menos eficaz que el hipertónico (' + pag(41, 'pág. 41') + ').' },
@@ -231,7 +231,7 @@ export const MAYEUTICA_CRANEO_2 = {
         explicacion: 'No se monitoriza la PIC: basta vigilar la clínica. Si el edema empeora al paciente, <span class="hl-verde">salino hipertónico</span> (más eficaz que el manitol), <span class="hl">en bolos</span>, con <span class="hl-verde">Na⁺ 145-155 mEq/L</span>; no se ha demostrado que cambie el pronóstico (' + pag(40, 'pág. 40') + ' y ' + pag(41, 'pág. 41') + ').' },
     ],
     examen: [
-      { id: 'mnk-e1', corto: 'Tabla 47.3', tipo: 'test', fuente: 'mn-tabla-47-3',
+      { id: 'mic-e1', corto: 'Tabla 47.3', tipo: 'test', fuente: 'mn-tabla-47-3',
         enunciado: 'Un adulto necesita un bolo de NaCl al 23,4 % por el edema cerebral. ¿Qué da la Tabla 47.3?',
         opciones: [
           { t: '100 mL, o entre 2 y 4 mL/kg', porque: 'Es el bolo del NaCl 7,5 % (' + pag(41, 'pág. 41') + '). Con el 23,4 %, mucho más concentrado, esa dosis sería una sobrecarga de sodio.' },
@@ -239,28 +239,28 @@ export const MAYEUTICA_CRANEO_2 = {
           { t: '30 mL, o 0,68-2 mL/kg', ok: true }],
         explicacion: 'NaCl 23,4 %: <span class="hl">30 mL o 0,68-2 mL/kg</span>. Las más concentradas sirven con menos volumen; hay otros bolos para 3 % (250 mL o 5 mL/kg), 5 % (100 mL), 7,5 % (100 mL o 2-4 mL/kg) y 14,6 % (24-48 mL) (' + pag(41, 'pág. 41') + ').',
         nota: '<b>Las fuentes discrepan.</b> La Tabla 47.3 da dos cifras para cada bolo y no coinciden en un adulto de 70 kg (p. ej., NaCl 3 %: 250 mL o 5 mL/kg = 350 mL). Se muestran las dos.' + enFicha('mn-ictus-complicaciones', 'mn-tabla-47-3') },
-      { id: 'mnk-e2', corto: 'fibrinógeno concentrado', tipo: 'test', fuente: 'mn-isq-hemorragia-tto',
+      { id: 'mic-e2', corto: 'fibrinógeno concentrado', tipo: 'test', fuente: 'mn-isq-hemorragia-tto',
         enunciado: 'Hemorragia tras el tPA. ¿Por qué Marino prefiere el concentrado de fibrinógeno al crioprecipitado?',
         opciones: [
           { t: 'No hay que descongelarlo y su concentración es constante', ok: true },
           { t: 'Porque contiene además plaquetas y factores de coagulación', porque: 'No es lo que dice Marino (' + pag(40, 'pág. 40') + '). Contar con otros factores te haría esperar efectos que el concentrado de fibrinógeno no tiene.' },
           { t: 'Porque tiene menos riesgo de transmitir infecciones', porque: 'Marino da solo dos ventajas, sin hablar de infecciones (' + pag(40, 'pág. 40') + '): no hay retraso de descongelación y la concentración es constante.' }],
         explicacion: 'El crioprecipitado debe descongelarse (retraso de al menos 20 min). El concentrado de fibrinógeno <span class="hl-verde">se empieza al momento</span> y su concentración es más consistente (20 g/L) (' + pag(40, 'pág. 40') + ').' },
-      { id: 'mnk-e3', corto: 'cuándo tranexámico', tipo: 'test', fuente: 'mn-isq-hemorragia-tto',
+      { id: 'mic-e3', corto: 'cuándo tranexámico', tipo: 'test', fuente: 'mn-isq-hemorragia-tto',
         enunciado: 'Hemorragia sintomática tras el tPA. ¿Cuándo das ácido tranexámico 1.000 mg en 10 min?',
         opciones: [
           { t: 'Siempre, junto al crioprecipitado, para sumar los dos efectos sobre la coagulación', porque: 'Marino lo pone como alternativa, no como suma (' + pag(40, 'pág. 40') + '). Dar ambos no está respaldado por el texto.' },
           { t: 'Si el crioprecipitado no está inmediatamente disponible', ok: true },
           { t: 'Solo con fibrinógeno normal', porque: 'No lo condiciona al fibrinógeno (' + pag(40, 'pág. 40') + '): lo condiciona a no tener crioprecipitado a mano.' }],
         explicacion: 'Si no hay crioprecipitado a mano, <span class="hl">ácido tranexámico 1.000 mg IV en 10 min</span> (' + pag(40, 'pág. 40') + ').' },
-      { id: 'mnk-e4', corto: 'cuándo pensar en FOP', tipo: 'test', fuente: 'mn-isq-fop',
+      { id: 'mic-e4', corto: 'cuándo pensar en FOP', tipo: 'test', fuente: 'mn-isq-fop',
         enunciado: 'Varón de 48 años con un ictus sin causa aparente. ¿Qué piensas del foramen oval permeable?',
         opciones: [
           { t: 'Que es la causa y hay que cerrarlo ya con un catéter', porque: 'Un FOP no prueba que sea la causa (' + pag(39, 'pág. 39') + '). Cerrarlo de urgencia sin esa certeza expone al paciente a un procedimiento innecesario.' },
           { t: 'Que es una causa posible: buscarlo y, si hay buena recuperación, cerrarlo más adelante', ok: true },
           { t: 'Que solo se busca en mayores de 55 años, porque en ellos el ictus sin causa es más frecuente', porque: 'Es al revés: se busca sin causa aparente, p. ej. en menores de 55 (' + pag(38, 'pág. 38') + '). Si lo limitas a mayores, no lo buscarás en quien más te interesa.' }],
         explicacion: 'Se piensa en el FOP cuando no hay causa aparente (p. ej., <span class="hl">menores de 55 años</span>) o hay tromboembolismo venoso previo. Su presencia <span class="hl-rojo">no demuestra</span> la causa, pero justifica cerrarlo más adelante si la recuperación es buena (' + pag(38, 'pág. 38') + ' y ' + pag(39, 'pág. 39') + ').' },
-      { id: 'mnk-e5', corto: 'las crisis', tipo: 'test', fuente: 'mn-isq-convulsiones',
+      { id: 'mic-e5', corto: 'las crisis', tipo: 'test', fuente: 'mn-isq-convulsiones',
         enunciado: 'Tras un ictus isquémico, ¿qué proporción de las crisis de la primera semana recurre en los 4 años siguientes?',
         opciones: [
           { t: 'Alrededor de la mitad', porque: 'La ficha dice una cuarta parte (' + pag(41, 'pág. 41') + '). Con la mitad se sobrestima el riesgo y se mantendría el antiepiléptico sin criterio.' },
@@ -268,7 +268,7 @@ export const MAYEUTICA_CRANEO_2 = {
           { t: 'Una cuarta parte', ok: true }],
         explicacion: 'Un 20 % tiene una crisis sintomática la primera semana y <span class="hl">una cuarta parte</span> recurre en 4 años (' + pag(41, 'pág. 41') + ').',
         nota: '<b>Las fuentes discrepan.</b> 20 % la primera semana (cap. 47, ' + pag(41, 'pág. 41') + ') frente a 2-5 % en la Tabla 46.1 de su capítulo de crisis (' + pag(20, 'pág. 20') + '). Se muestran las dos.' },
-      { id: 'mnk-e6', corto: 'aspirina', tipo: 'error', fuente: 'mn-isq-aspirina',
+      { id: 'mic-e6', corto: 'aspirina', tipo: 'error', fuente: 'mn-isq-aspirina',
         enunciado: 'Resumen de la antiagregación en un ictus agudo. Encuentra el error, si lo hay.',
         frases: [
           { t: 'Aspirina por vía rectal si no puede tragar.' },
@@ -278,11 +278,11 @@ export const MAYEUTICA_CRANEO_2 = {
         explicacion: 'Todo es correcto: aspirina 325 mg/día oral o rectal desde el ingreso, sin anticoagular (' + pag(38, 'pág. 38') + '). Si no encontraste error, lo hiciste bien.' },
     ],
     casos: [
-      { id: 'mnk-caso', titulo: 'Clotilde, el infarto que se hincha', corto: 'Clotilde', sub: 'Un infarto de más de un tercio del hemisferio derecho',
+      { id: 'mic-caso', titulo: 'Clotilde, el infarto que se hincha', corto: 'Clotilde', sub: 'Un infarto de más de un tercio del hemisferio derecho',
         paciente: { Edad: '66 años, 65 kg', Antecedentes: 'fibrilación auricular sin anticoagular', Diagnóstico: 'Infarto de más de un tercio del hemisferio derecho' },
         pasos: [
           { momento: 'Día 1', datos: { Evolución: 'estable, FA conocida' }, nuevo: ['Evolución'],
-            pregunta: { id: 'mnk-p1', tipo: 'test', fuente: 'mn-isq-eco · mn-isq-burbujas', origen: 'ficha',
+            pregunta: { id: 'mic-p1', tipo: 'test', fuente: 'mn-isq-eco · mn-isq-burbujas', origen: 'ficha',
               enunciado: 'Quieres buscar el origen del ictus. ¿Qué eco pides?',
               opciones: [
                 { t: 'Eco transtorácica por la FA; transesofágica si no aclara', ok: true },
@@ -290,7 +290,7 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'Transesofágica directa: es la más sensible', porque: 'Es la más sensible pero Marino la reserva para cuando la transtorácica, mucho más fácil, no aclara (' + pag(38, 'pág. 38') + ').' }],
               explicacion: 'FA = indicación de eco. La <span class="hl">transtorácica</span> primero y la transesofágica si no es concluyente; las burbujas, solo sin causa aparente o con tromboembolismo previo (' + pag(38, 'pág. 38') + ').' } },
           { momento: 'Día 2', datos: { Evolución: 'GCS de 15 a 12', Analítica: 'Na⁺ 138 mEq/L' }, nuevo: ['Evolución', 'Analítica'], calculadora: { ir: 'mn-hiper-calc', nombre: 'Bolo de salino hipertónico (Tabla 47.3)' },
-            pregunta: { id: 'mnk-p2', modelo: { craneoVivo: 'clotilde:3' }, tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', origen: 'ficha; la cuenta en mL/kg, con el peso del caso',
+            pregunta: { id: 'mic-p2', modelo: { craneoVivo: 'clotilde:3' }, tipo: 'test', fuente: 'mn-isq-edema-manejo · mn-tabla-47-3', origen: 'ficha; la cuenta en mL/kg, con el peso del caso',
               enunciado: 'El edema la empeora. ¿Qué haces?',
               opciones: [
                 { t: 'Catéter de PIC y manitol en perfusión', porque: 'La monitorización de la PIC no se recomienda en el isquémico (' + pag(40, 'pág. 40') + ') y el manitol es menos eficaz que el hipertónico (' + pag(41, 'pág. 41') + ').' },
@@ -299,7 +299,7 @@ export const MAYEUTICA_CRANEO_2 = {
               explicacion: 'Sin catéter de PIC, <span class="hl-verde">hipertónico en bolos</span> y Na⁺ objetivo <span class="hl-verde">145-155</span> (' + pag(40, 'pág. 40') + ' y ' + pag(41, 'pág. 41') + ').',
               nota: '<b>Las fuentes discrepan.</b> La Tabla 47.3 da dos cifras para el bolo de NaCl 3 %: 250 mL o 5 mL/kg, que en Clotilde (65 kg) son 325 mL. Se muestran las dos.' + enFicha('mn-ictus-complicaciones', 'mn-tabla-47-3') } },
           { momento: 'Día 3', datos: { Analítica: 'Na⁺ 149 mEq/L', Evolución: 'más despierta' }, nuevo: ['Analítica', 'Evolución'],
-            pregunta: { id: 'mnk-p3', tipo: 'error', fuente: 'mn-isq-aspirina · mn-isq-convulsiones · mn-isq-tvp',
+            pregunta: { id: 'mic-p3', tipo: 'error', fuente: 'mn-isq-aspirina · mn-isq-convulsiones · mn-isq-tvp',
               enunciado: 'Plan del R1 para el día 3. Encuentra los errores.',
               frases: [
                 { t: 'Na⁺ de 149, dentro del objetivo.' },
@@ -309,7 +309,7 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'HBPM profiláctica.' }],
               explicacion: 'Dos errores: la anticoagulación y la profilaxis antiepiléptica precoz (' + pag(38, 'pág. 38') + ' y ' + pag(41, 'pág. 41') + ').' } },
           { momento: 'Día 4', datos: { Analítica: 'Na⁺ 157 mEq/L tras otro bolo' }, nuevo: ['Analítica'],
-            pregunta: { id: 'mnk-p4', tipo: 'test', fuente: 'mn-isq-edema-manejo', origen: 'ficha',
+            pregunta: { id: 'mic-p4', tipo: 'test', fuente: 'mn-isq-edema-manejo', origen: 'ficha',
               enunciado: 'El sodio es 157 mEq/L. ¿Pones otro bolo?',
               opciones: [
                 { t: 'Sí: más sodio significa más descompresión y mejor pronóstico', porque: 'El objetivo es 145-155 (' + pag(41, 'pág. 41') + '); pasarse es seguir llevando un sodio que ya excede ese rango, sin beneficio demostrado.' },
@@ -317,7 +317,7 @@ export const MAYEUTICA_CRANEO_2 = {
                 { t: 'No: está por encima del objetivo de 145-155', ok: true }],
               explicacion: 'El Na⁺ objetivo es <span class="hl-verde">145-155 mEq/L</span>; con 157 no se dan más bolos (' + pag(41, 'pág. 41') + ').' } },
           { momento: 'Día 5 · el giro', datos: { Evolución: 'GCS 8, midriasis derecha', Analítica: 'Na⁺ 152 mEq/L' }, nuevo: ['Evolución', 'Analítica'],
-            pregunta: { id: 'mnk-p5', modelo: { craneoVivo: 'clotilde:4' }, tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-isq-hemorragia-tto · mn-isq-edema-manejo · mn-isq-vm',
+            pregunta: { id: 'mic-p5', modelo: { craneoVivo: 'clotilde:4' }, tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-isq-hemorragia-tto · mn-isq-edema-manejo · mn-isq-vm',
               enunciado: 'Clotilde sigue empeorando con el sodio en objetivo. ¿Qué toca hacer?',
               puntos: [
                 'El hipertónico <span class="hl-rojo">no ha cambiado el pronóstico</span> (' + pag(41, 'pág. 41') + ') y ya no basta: avisar a neurocirugía (extrapolación nuestra: Marino nombra la neurocirugía solo en la hemorragia tras el tPA, ' + pag(40, 'pág. 40') + ').',

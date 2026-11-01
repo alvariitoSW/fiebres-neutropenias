@@ -81,7 +81,7 @@ const API = { hacer: (a, o) => hacer(a, o), poner: (o) => { Object.assign(s, o);
 const espera = (ms) => new Promise((r) => setTimeout(r, ms));
 function irPaso(p) { paso = p; pintar(); }
 async function ciclo() { await prepararMotion(); for (let p = 1; p <= PASOS.length; p++) { irPaso(p); await ultMov; await espera(sinMovimiento() ? 0 : 450); } }
-function ponerPreset(c, k = 0) { clave = c; s = nuevo(c); oculto = false; foco = []; frase(PRESETS[c].txt, 'paciente inventado; cifras de la ficha'); pintar(); if (guiaApi) guiaApi.abrir(c, k); }
+function ponerPreset(c, k = 0, previos = false) { clave = c; s = nuevo(c); oculto = false; foco = []; frase(PRESETS[c].txt, 'paciente inventado; cifras de la ficha'); pintar(); if (guiaApi) guiaApi.abrir(c, k, previos); }
 const GUIA_DE = { gbs: 'flor', miastenia: 'sera', bloqueo: 'mel', pnc: 'pnc', mcc: 'mcc' };
 /* ============================================================
    Mayéutica: el motor común (core/mayeutica-motor.js) con los enganches de la placa viva
@@ -188,9 +188,10 @@ function montar() {
 export function abrirEstado(clave) {
   const [p, x] = String(clave || '').split(':'); setModo('explorar');
   const k = /^\d+$/.test(x || '') ? +x - 1 : 0;
-  if (PRESETS[p]) ponerPreset(p, k); else if (p === 'pnc' || p === 'mcc') { ponerPreset('flor'); hacer('est', { v: p }); guiaApi.abrir(p, k); } else ponerPreset('flor', k);
-  ajustar();
+  if (PRESETS[p]) ponerPreset(p, k, true); else if (p === 'pnc' || p === 'mcc') { ponerPreset('flor'); hacer('est', { v: p }); guiaApi.abrir(p, k, true); } else ponerPreset('flor', k, true);
+  ajustar(); if (k > 0) verGuia();
 }
+function verGuia() { requestAnimationFrame(() => { const c = $('guia'); if (c && !c.hidden) c.scrollIntoView({ block: 'center' }); }); }
 function ajustar() { R.style.setProperty('--plv-dock-h', $('dock').offsetHeight + 'px'); }
 montar(); ponerPreset('flor'); ajustar();
 new ResizeObserver(ajustar).observe($('dock'));

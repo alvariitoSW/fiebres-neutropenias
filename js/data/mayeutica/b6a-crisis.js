@@ -189,12 +189,12 @@ export const MAYEUTICA_CRISIS = {
     ],
     examen: [
       { id: 'mns-e1', corto: 'dosis máxima', tipo: 'test', fuente: 'mn-tabla-46-3',
-        enunciado: '¿Cuál es la dosis máxima por dosis de levetiracetam en el estado epiléptico?',
+        enunciado: 'Varón de 80 kg en estado epiléptico, sin respuesta a benzodiacepinas: vas a pasar levetiracetam. ¿Qué dosis pones?',
         opciones: [
-          { t: '4.500 mg por dosis', ok: true },
-          { t: '3.000 mg', porque: 'Es el máximo del ácido valproico. Quedarte corto con el levetiracetam (60 mg/kg) infradosifica a cualquier paciente de más de 50 kg.' },
-          { t: '1.500 mg por dosis, como la fosfenitoína', porque: 'Es el máximo de la fosfenitoína (en equivalentes de fenitoína). Daría una dosis muy baja de levetiracetam y el estado seguiría.' }],
-        explicacion: 'Tabla 46.3: <span class="hl-verde">levetiracetam 60 mg/kg, máx. 4.500 mg</span>; fosfenitoína 20 mg EF/kg, máx. 1.500 mg EF; valproico 40 mg/kg, máx. 3.000 mg (' + pag(22, 'pág. 22') + ').' },
+          { t: '4.800 mg (60 mg/kg × 80 kg), sin aplicar el máximo por dosis', porque: 'Es la cuenta por peso, pero la tabla pone un máximo por dosis (p. 22). Pasarías 300 mg de más de lo que recomienda la tabla.' },
+          { t: '4.500 mg, el máximo por dosis', ok: true },
+          { t: '3.200 mg (40 mg/kg, la pauta por kilo del valproico)', porque: 'Es la pauta por kilo del ácido valproico (40 mg/kg), no la del levetiracetam. El paciente recibiría un tercio menos de dosis y el estado seguiría.' }],
+        explicacion: 'Tabla 46.3: <span class="hl-verde">levetiracetam 60 mg/kg, máx. 4.500 mg</span>. En 80 kg, 60 mg/kg son 4.800 mg: se pone el tope, 4.500 mg. Fosfenitoína 20 mg EF/kg, máx. 1.500 mg EF; valproico 40 mg/kg, máx. 3.000 mg (' + pag(22, 'pág. 22') + ').' },
       { id: 'mns-e2', corto: 'valproico', tipo: 'test', fuente: 'mn-se-valproico',
         enunciado: '¿Qué efecto adverso debe vigilarse con el ácido valproico?',
         opciones: [

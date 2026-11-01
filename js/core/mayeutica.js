@@ -471,7 +471,7 @@ class Estudiar {
     // «Para profundizar»: cada trozo se copia del texto de la ficha la primera vez que se abre (sin ids repetidos).
     profundizar() {
         const lista = this.raiz.querySelector('.may-prof-lista');
-        if (lista.dataset.hecho) return;
+        if (lista.dataset.hecho !== undefined) return;
         lista.dataset.hecho = '';
         for (const p of this.d.profundizar) {
             const el = document.getElementById(p.id);

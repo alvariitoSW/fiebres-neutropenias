@@ -14,5 +14,6 @@ export function crearGuia({ caja, hacer, setFoco, cita }) {
     const b = ev.target.closest('[data-g]'); if (!b || !g) return; const a = b.dataset.g, p = g[1][i];
     if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); } else if (a === 'haz') { hacer(...p.haz); setFoco(p.z); }
   });
-  return { abrir: (c, k = 0) => { if (!GUIAS[c]) return cerrar(); g = GUIAS[c]; paso(k); }, cerrar };
+  // previos: al abrir en el paso k, se hacen antes los «haz» de los pasos 1..k-1
+  return { abrir: (c, k = 0, previos = false) => { if (!GUIAS[c]) return cerrar(); g = GUIAS[c]; if (previos) for (const q of g[1].slice(0, k)) if (q.haz) hacer(...q.haz); paso(k); }, cerrar };
 }

@@ -186,9 +186,9 @@ export const MAYEUTICA_6A = {
         enunciado: '¿Qué porcentaje de hospitalizados con delirio tiene síntomas psicóticos?',
         opciones: [
           { t: '>40 %', ok: true },
-          { t: '25-50 %', porque: 'Es la incidencia del delirio en la UCI (p. 4), no los síntomas psicóticos. Con esa cifra mezclarías dos datos.' },
-          { t: 'Alrededor del 10 %', porque: 'Subestima la frecuencia de la ficha (p. 5): el delirio con psicosis sería una rareza y se confundiría con una psicosis primaria.' }],
-        explicacion: `Más del 40 % de los hospitalizados con delirio tienen síntomas psicóticos (${pag(5)}). El 25-50 % es la incidencia en la UCI (${pag(4, 'p. 4')}).` + enFicha('mn-delirio', 'mn-del-psicosis') },
+          { t: 'Entre el 15 y el 25 %', porque: 'Subestima la frecuencia de la ficha (p. 5): más de 4 de cada 10 los tienen. Con esa cifra el delirio con psicosis parecería poco habitual y no lo buscarías.' },
+          { t: 'Menos del 5 %', porque: 'Subestima mucho la frecuencia de la ficha (p. 5): el delirio con psicosis sería una rareza y se confundiría con una psicosis primaria.' }],
+        explicacion: `Más del 40 % de los hospitalizados con delirio tienen síntomas psicóticos (${pag(5)}). No lo confundas con la incidencia del delirio en la UCI, que es del 25-50 % (${pag(4, 'p. 4')}).` + enFicha('mn-delirio', 'mn-del-psicosis') },
       { id: 'mnd-e2', corto: 'haloperidol sin efecto', tipo: 'test', fuente: 'mn-tabla-45-2 · mn-comparativa-delirio',
         enunciado: 'Haloperidol 5 mg IV sin efecto a los 15 min. ¿Qué dice la Tabla 45.2?',
         opciones: [

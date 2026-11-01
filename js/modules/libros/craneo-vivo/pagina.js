@@ -62,7 +62,7 @@ function hacer(a, v) {
   else if (a === 'sens') s.sensor = !s.sensor;
   const m = msg[a]; if (m) frase(...m); pintar();
 }
-function ponerPreset(c, k = 0) { preset = c; s = nuevo(PRES[c][1]); oculto = false; foco = []; guiaApi.abrir(c, k); frase('El cráneo es una caja cerrada: si crece algo dentro, la presión sube y lo ves en la pupila y en la mano.', 'ficha p. 10-11, 45 · cuánto: ilustrativo'); modoPrueba('explorar'); pintar(); }
+function ponerPreset(c, k = 0, previos = false) { preset = c; s = nuevo(PRES[c][1]); oculto = false; foco = []; guiaApi.abrir(c, k, previos); frase('El cráneo es una caja cerrada: si crece algo dentro, la presión sube y lo ves en la pupila y en la mano.', 'ficha p. 10-11, 45 · cuánto: ilustrativo'); modoPrueba('explorar'); pintar(); }
 function ponerTipo(t) { s = { ...nuevo({ tipo: t, pas: s.pas }) }; s.sensor = t !== 'edema'; frase(`Paciente con ${TIPOS[t].toLowerCase()}: mismo corte, otra lesión.`, 'ilustrativo'); pintar(); }
 // ---- apuesta, error, caso ----
 let fin = '';
@@ -149,6 +149,8 @@ ponerPreset('abundio'); ajustarDock();
 export function abrirEstado(clave) {
   if (preg) setPreg(false);
   const [c, x] = String(clave || '').split(':'); R.querySelector('.modos [data-modo="explorar"]') && modoPrueba('explorar');
-  ponerPreset(PRES[c] ? c : 'abundio', /^\d+$/.test(x || '') ? +x - 1 : 0); ajustarDock();
+  const k = /^\d+$/.test(x || '') ? +x - 1 : 0;
+  ponerPreset(PRES[c] ? c : 'abundio', k, true); ajustarDock();
+  if (k > 0) requestAnimationFrame(() => { const g = $('guia'); if (g && !g.hidden) g.scrollIntoView({ block: 'center' }); });
 }
 window.__craneo = { get s() { return s; }, leer: () => leer(s), topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); }, hacer, ponerPreset, modoPrueba, ponerTipo, pintar, abrirEstado, get oculto() { return oculto; }, set oculto(v) { oculto = v; } };

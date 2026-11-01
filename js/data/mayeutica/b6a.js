@@ -5,10 +5,14 @@ import { MAYEUTICA_COMA } from './b6a-coma.js';
 import { MAYEUTICA_CRISIS } from './b6a-crisis.js';
 import { MAYEUTICA_CRANEO_1 } from './b6a-craneo-1.js';
 import { MAYEUTICA_CRANEO_2 } from './b6a-craneo-2.js';
+import { MAYEUTICA_6A } from './b6a-despierto.js';
+import { MAYEUTICA_B6A_PLACA } from './b6a-placa.js';
 
 export const MAYEUTICA_B6A = {
     ...MAYEUTICA_COMA,
     ...MAYEUTICA_CRISIS,
     ...MAYEUTICA_CRANEO_1,
     ...MAYEUTICA_CRANEO_2,
+    ...MAYEUTICA_6A,
+    ...MAYEUTICA_B6A_PLACA,
 };

@@ -31,21 +31,21 @@ export const MAYEUTICA_B6A_PLACA = {
   'mn-miastenia': {
     entrada: 'Por qué la fuerza cae con el uso y vuelve con el reposo, qué músculos van primero, qué fármacos empeoran la placa, cuándo intubar y cómo se trata la crisis.',
     guia: [
-      { id: 'mnm-g1', modelo: { placaViva: 'sera:2' }, corto: 'fatiga', tipo: 'test', fuente: 'mn-mg-definicion · mn-mg-clinica',
+      { id: 'mmg-g1', modelo: { placaViva: 'sera:2' }, corto: 'fatiga', tipo: 'test', fuente: 'mn-mg-definicion · mn-mg-clinica',
         enunciado: 'Serapio, de 35 años, ve doble por la tarde y por la mañana no. Antes de mirar la ficha: ¿qué explica que la debilidad empeore con el uso y mejore con el reposo?',
         opciones: [
           { t: 'Hay menos receptores de ACh en la placa', ok: true },
           { t: 'El nervio conduce cada vez más lento al cansarse', porque: 'Eso sería desmielinización (Guillain-Barré): conducción enlentecida y sin fatiga (Tabla 46.6). Si lo piensas aquí, pedirías neurofisiología y retrasarías vigilar la capacidad vital de un miasténico.' },
           { t: 'Falta acetilcolina en el terminal del nervio', porque: 'Marino sitúa la lesión en el receptor postsináptico (anticuerpos que lo destruyen), no en el terminal (' + pag(24) + '). Con esa idea no entenderías por qué la piridostigmina, que frena la destrucción de ACh, mejora al paciente, y buscarías la lesión en el terminal nervioso, cuando los anticuerpos van contra el receptor.' }],
         explicacion: 'Los anticuerpos destruyen los <span class="hl-azul">receptores de acetilcolina postsinápticos</span>: con menos receptores, la debilidad <span class="hl">empeora con la actividad y mejora con el reposo</span> (' + pag(24) + '). Solo afecta al músculo esquelético.' },
-      { id: 'mnm-g2', corto: 'ojos primero', tipo: 'test', fuente: 'mn-mg-clinica',
+      { id: 'mmg-g2', corto: 'ojos primero', tipo: 'test', fuente: 'mn-mg-clinica',
         enunciado: 'Serapio tiene ptosis y diplopía. ¿Qué músculos afecta siempre la miastenia, y qué pasa después?',
         opciones: [
           { t: 'Los respiratorios primero; los ojos se afectan al final', porque: 'Es al revés: el diafragma y la pared torácica se debilitan al progresar (crisis). Si esperas disnea para sospechar miastenia, llegarás a la crisis sin haber vigilado la capacidad vital.' },
           { t: 'Los proximales de las piernas, con los ojos respetados', porque: 'La debilidad de los miembros viene después de los ojos, y en el 15 % ni llega. Buscar solo debilidad en las piernas te haría perder una miastenia ocular.' },
           { t: 'Los oculares siempre; en el 15 % solo ellos', ok: true }],
         explicacion: 'Los músculos oculares (párpados y oculomotores) <span class="hl">se afectan siempre</span>: diplopía y ptosis son los primeros signos. Después suele venir debilidad simétrica de los miembros, pero <span class="hl-rojo">en el 15 % se queda en los ojos</span>; al progresar fallan diafragma y pared torácica (' + pag(24) + ').' },
-      { id: 'mnm-g3', modelo: { placaViva: 'sera:3' }, corto: 'prueba del hielo', tipo: 'test', fuente: 'mn-mg-hielo · mar-img-46-1',
+      { id: 'mmg-g3', modelo: { placaViva: 'sera:3' }, corto: 'prueba del hielo', tipo: 'test', fuente: 'mn-mg-hielo · mar-img-46-1',
         enunciado: 'Hielo sobre el párpado con ptosis, con el ojo cerrado, 2 minutos. ¿Qué cuenta como positivo y qué fiabilidad tiene?',
         opciones: [
           { t: 'Un aumento de la hendidura de 5 mm; sensibilidad del 95 %', porque: 'La fuente no da esas cifras. Con un umbral inventado más alto, dejarías sin diagnosticar a un miasténico con una mejoría real de 2 o 3 mm.' },
@@ -53,20 +53,20 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Cualquier cambio visible; sensibilidad y especificidad del 100 %', porque: 'La prueba falla en 1 de cada 5 casos en los dos sentidos. Fiarte de ella como definitiva te llevaría a descartar la miastenia con un hielo negativo, sin pedir anticuerpos.' }],
         explicacion: 'Se mide la hendidura palpebral, se aplica el hielo 2 min y se vuelve a medir: <span class="hl">+2 mm es positivo</span>, con sensibilidad y especificidad del <span class="hl-rojo">80 %</span> (' + pag(25) + ', Figura 46.1 en la misma página).',
         nota: '<b>La fuente no lo dice.</b> Marino solo escribe que el frío «mejora la transmisión neuromuscular»; su mecanismo íntimo no lo da el libro.' },
-      { id: 'mnm-g4', corto: 'anti-AChR negativo', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-mg-anticuerpos',
+      { id: 'mmg-g4', corto: 'anti-AChR negativo', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-mg-anticuerpos',
         enunciado: 'Los anticuerpos anti-receptor de acetilcolina salen negativos. ¿Descartas la miastenia?',
         puntos: [
           'No: <span class="hl-rojo">el 10-15 % no tiene anti-AChR</span> (seronegativos).',
           'Pide <span class="hl">anti-MuSK</span> (cinasa específica del músculo): está presente en un <span class="hl">40 %</span> de esos seronegativos.'],
         explicacion: 'Los anticuerpos contra el receptor confirman el diagnóstico, pero su ausencia no lo descarta (' + pag(25) + ').' },
-      { id: 'mnm-g5', corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
+      { id: 'mmg-g5', corto: 'piridostigmina', tipo: 'test', fuente: 'mn-mg-piridostigmina',
         enunciado: 'Serapio toma piridostigmina, que le va bien. ¿Por qué no se usa en el fracaso respiratorio?',
         opciones: [
           { t: 'Porque no llega a la placa y no inhibe la acetilcolinesterasa', porque: 'Sí actúa: es un inhibidor de la acetilcolinesterasa y se usa en la miastenia leve-moderada. Pensar que no funciona te haría retirarla a quien la necesita sin motivo.' },
           { t: 'Aumenta las secreciones (efecto colinérgico)', ok: true },
           { t: 'Porque produce hiperpotasemia', porque: 'La hiperpotasemia es de la succinilcolina (Tabla 46.7), no de la piridostigmina. Ese error te haría pedir potasios inútiles y no prever el moco que sí acumulará un paciente con la vía aérea comprometida.' }],
         explicacion: 'Es un inhibidor de la acetilcolinesterasa para la miastenia leve-moderada; no se usa en el fracaso respiratorio <span class="hl-rojo">porque aumenta las secreciones</span> (efecto colinérgico) (' + pag(26) + ').' },
-      { id: 'mnm-g6', corto: 'plasmaféresis o IgIV', tipo: 'test', fuente: 'mn-mg-crisis',
+      { id: 'mmg-g6', corto: 'plasmaféresis o IgIV', tipo: 'test', fuente: 'mn-mg-crisis',
         enunciado: 'En la crisis, IgIV y plasmaféresis responden en un 70 %. ¿Por qué se prefiere la plasmaféresis?',
         opciones: [
           { t: 'Responde antes: tras la 2.ª sesión (IgIV: 4-5 días)', ok: true },
@@ -75,7 +75,7 @@ export const MAYEUTICA_B6A_PLACA = {
         explicacion: 'Dos opciones <span class="hl">igual de eficaces (70 %)</span>; se prefiere la plasmaféresis porque <span class="hl-azul">responde antes</span>: tras la segunda sesión, frente a 4-5 días de la IgIV (' + pag(26) + ').' },
     ],
     examen: [
-      { id: 'mnm-e1', corto: 'Tabla 46.5', tipo: 'test', fuente: 'mn-tabla-46-5', calculadora: C_FARM,
+      { id: 'mmg-e1', corto: 'Tabla 46.5', tipo: 'test', fuente: 'mn-tabla-46-5', calculadora: C_FARM,
         enunciado: 'Serapio tiene fiebre y le van a pautar un fármaco. ¿Cuál de estos NO figura en la Tabla 46.5 de fármacos que pueden empeorar la miastenia?',
         opciones: [
           { t: 'Paracetamol', ok: true },
@@ -83,14 +83,14 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Litio', porque: 'Está en la Tabla 46.5 (' + pag(24) + '): mantenerlo sin mirar la tabla es seguir con un fármaco de los que pueden empeorar la miastenia.' },
           { t: 'Procainamida', porque: 'Es un antiarrítmico Ia, grupo de la tabla con quinidina y disopiramida. Usarla en una FA del miasténico es darle un fármaco de la lista.' }],
         explicacion: 'El paracetamol <span class="hl">no figura en la Tabla 46.5</span> (' + pag(24) + '). Eso no es una lista de fármacos seguros: la tabla solo nombra los que pueden empeorar la miastenia (antibióticos, cardiovasculares, relajantes y otros).' },
-      { id: 'mnm-e2', corto: 'corticoides en la tabla', tipo: 'test', fuente: 'mn-tabla-46-5 · mn-mg-corticoides',
+      { id: 'mmg-e2', corto: 'corticoides en la tabla', tipo: 'test', fuente: 'mn-tabla-46-5 · mn-mg-corticoides',
         enunciado: '¿Qué fármaco de la Tabla 46.5 se usa también para tratar la miastenia?',
         opciones: [
           { t: 'Los anestésicos inhalados', porque: 'Están en la tabla solo como fármacos a evitar. Usarlos «para tratar» dejaría al paciente más débil.' },
           { t: 'Los corticoides a dosis altas', ok: true },
           { t: 'Los calcioantagonistas, para el temblor', porque: 'Están en la tabla como fármacos que empeoran la miastenia y no se emplean para tratarla; darlos con esa idea la agravaría.' }],
         explicacion: 'La tabla lo marca con asterisco: <span class="hl">los corticoides a dosis altas también se usan para tratarla</span> (' + pag(24) + '). Metilprednisolona 2 g/día dos días, con algún éxito pero discutida porque las dosis altas pueden empeorarla (' + pag(26) + ').' },
-      { id: 'mnm-e3', corto: '1.050 mL en 70 kg', tipo: 'test', fuente: 'mn-mg-intubacion', calculadora: C_MG,
+      { id: 'mmg-e3', corto: '1.050 mL en 70 kg', tipo: 'test', fuente: 'mn-mg-intubacion', calculadora: C_MG,
         enunciado: 'Serapio pesa 70 kg y tiene una CV de 1.050 mL y una PIM de −18 cmH₂O. ¿Cumple criterio para pensar en intubar?',
         opciones: [
           { t: 'No: hacen falta menos de 1 L', porque: 'El criterio es «≤15 mL/kg o <1 L». 1.050 mL son exactamente 15 mL/kg (≤15); descartarlo por no bajar de 1 L es esperar a que esté in extremis (' + pag(25) + ').' },
@@ -98,28 +98,28 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: 'Sí: CV 15 mL/kg (≤15) y PIM peor que −20', ok: true }],
         explicacion: 'CV ≤<span class="hl-rojo">15 mL/kg</span> (o <1 L) y PIM de −20 cmH₂O deben hacer pensar seriamente en intubar (' + pag(25) + '): 1.050 mL / 70 kg = 15 mL/kg y la PIM de −18 es peor que −20. «No esperar a que esté in extremis».',
         nota: NOTA_PIM + enFicha('mn-miastenia', 'mn-mg-intubacion') },
-      { id: 'mnm-e4', corto: 'BiPAP', tipo: 'test', fuente: 'mn-mg-intubacion',
+      { id: 'mmg-e4', corto: 'BiPAP', tipo: 'test', fuente: 'mn-mg-intubacion',
         enunciado: 'La CV de Serapio ya está en el límite. ¿Cuándo vale la BiPAP en vez de intubar?',
         opciones: [
           { t: 'Siempre, como paso previo a intubar y ganar tiempo', porque: 'Un deterioro que puede ser muy rápido con un soporte que no cubre la debilidad lleva a una intubación urgente peor planificada.' },
           { t: 'Solo si la PaCO₂ es normal', porque: 'La fuente no da ese criterio: Marino decide por la CV y la PIM, sin esperar al in extremis (' + pag(25) + '). Esperar a que la gasometría se altere retrasa la intubación.' },
           { t: 'Solo si se espera mejoría en pocos días, lo que no suele ser el caso', ok: true }],
         explicacion: '<span class="hl-rojo">La BiPAP solo si se espera mejoría en pocos días</span> (lo que no suele ser el caso) (' + pag(25) + ').' },
-      { id: 'mnm-e5', corto: 'pauta de la crisis', tipo: 'test', fuente: 'mn-mg-crisis',
+      { id: 'mmg-e5', corto: 'pauta de la crisis', tipo: 'test', fuente: 'mn-mg-crisis',
         enunciado: '¿Cuál es la pauta de plasmaféresis en la crisis miasténica?',
         opciones: [
           { t: '3 sesiones en 3 días, 3 volúmenes plasmáticos cada una', porque: 'Es una pauta que no está en la fuente. Con menos sesiones de las pautadas, el paciente podría no llegar a la respuesta.' },
           { t: '5 sesiones en 7-10 días, 1-1,5 volúmenes cada una', ok: true },
           { t: '2 g/kg en 2-5 días', porque: 'Es la IgIV (2 g/kg en 2-5 días), no la plasmaféresis. Confundirlas te llevaría a calcular gramos en lugar de pautar sesiones.' }],
         explicacion: 'Plasmaféresis: <span class="hl">5 sesiones en 7-10 días</span>, cada una con 1-1,5 volúmenes plasmáticos; IgIV 2 g/kg en 2-5 días (' + pag(26) + ').' },
-      { id: 'mnm-e6', corto: 'timoma', tipo: 'test', fuente: 'mn-mg-desencadenantes',
+      { id: 'mmg-e6', corto: 'timoma', tipo: 'test', fuente: 'mn-mg-desencadenantes',
         enunciado: '¿Qué porcentaje de las miastenias lo causa un timoma?',
         opciones: [
           { t: '15 %', porque: 'Es el porcentaje que se queda solo en los ojos. Con esa cifra pedirías un TC de tórax a quien no lo necesita o lo olvidarías en la crisis.' },
           { t: '10 %', ok: true },
           { t: '15-20 %', porque: 'Es la cifra de las crisis miasténicas. Mezclarlas lleva a asociar el timoma con la gravedad respiratoria, que no es lo que dice el libro.' }],
         explicacion: 'Un timoma causa el <span class="hl">10 %</span> (' + pag(24) + '). El 15 % es la miastenia solo ocular y el 15-20 %, la crisis (' + pag(24) + ').' },
-      { id: 'mnm-e7', corto: 'plan de la crisis', tipo: 'error', fuente: 'mn-mg-corticoides',
+      { id: 'mmg-e7', corto: 'plan de la crisis', tipo: 'error', fuente: 'mn-mg-corticoides',
         enunciado: 'Plan que deja un compañero para Serapio en crisis. Léelo despacio: ¿hay algún error?',
         frases: [
           { t: 'Metilprednisolona 2 g/día dos días, aunque discutida.' },
@@ -129,7 +129,7 @@ export const MAYEUTICA_B6A_PLACA = {
         explicacion: 'Ninguna es falsa: <span class="hl">las cuatro frases están en la ficha</span> (' + pag(26) + '). Parecen un error porque los corticoides a dosis altas están en la Tabla 46.5; por eso se dan «con algún éxito, pero discutidos».' },
     ],
     casos: [
-      { id: 'mnm-c1', titulo: 'Serapio, 35 años: la ptosis de la tarde', corto: 'Caso · Serapio', sub: 'miastenia con neumonía, 70 kg',
+      { id: 'mmg-c1', titulo: 'Serapio, 35 años: la ptosis de la tarde', corto: 'Caso · Serapio', sub: 'miastenia con neumonía, 70 kg',
         paciente: { Edad: '35 años', Peso: '70 kg', Motivo: 'Ptosis y diplopía que empeoran por la tarde' },
         lleva: [
           'Fatiga con el uso y alivio con el reposo: la placa tiene menos receptores. La Tabla 46.6 la separa del Guillain-Barré.',
@@ -138,7 +138,7 @@ export const MAYEUTICA_B6A_PLACA = {
         volver: { nombre: '¿Cuándo intubar?', ancla: 'mn-mg-intubacion', modelo: { placaViva: 'flor:4' } },
         pasos: [
           { momento: 'Consulta · día 0', datos: { Exploración: 'ptosis derecha que empeora por la tarde; reflejos conservados', 'Prueba del hielo': 'hendidura de 6 a 9 mm (+3 mm)' }, nuevo: ['Exploración', 'Prueba del hielo'], calculadora: C_GBS,
-            pregunta: { id: 'mnm-c1-1', tipo: 'test', fuente: 'mn-mg-hielo · mn-tabla-46-6 · mn-mg-clinica', origen: 'ficha; cifras del paciente: ilustrativo',
+            pregunta: { id: 'mmg-c1-1', tipo: 'test', fuente: 'mn-mg-hielo · mn-tabla-46-6 · mn-mg-clinica', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Ptosis vespertina con reflejos conservados y +3 mm tras el hielo. ¿Qué sugiere?',
               opciones: [
                 { t: 'Síndrome de Guillain-Barré, por la debilidad simétrica', porque: 'En el Guillain-Barré los reflejos están disminuidos y no hay debilidad oculomotora. Tratarlo con IgIV sin ver la ptosis dejaría sin vigilar la causa real.' },
@@ -146,7 +146,7 @@ export const MAYEUTICA_B6A_PLACA = {
                 { t: 'Síndrome de Miller Fisher', porque: 'Miller Fisher es la variante del GBS con oftalmoplejía y ataxia (' + pag(27) + '); aquí no hay ataxia y los reflejos se conservan.' }],
               explicacion: 'Debilidad que se fatiga, afectación ocular y reflejos conservados (Tabla 46.6, ' + pag(27) + '); el hielo con +3 mm supera el umbral de <span class="hl">+2 mm</span> (' + pag(24) + ').' } },
           { momento: 'Día 3 · UCI intermedia', datos: { Evolución: 'neumonía; CV 1.300 mL (18,6 mL/kg), PIM −28' }, nuevo: ['Evolución'], calculadora: C_FARM,
-            pregunta: { id: 'mnm-c1-2', tipo: 'error', fuente: 'mn-tabla-46-5 · mn-mg-intubacion · mn-mg-crisis · mn-mg-corticoides', origen: 'ficha; cifras del paciente: ilustrativo',
+            pregunta: { id: 'mmg-c1-2', tipo: 'error', fuente: 'mn-tabla-46-5 · mn-mg-intubacion · mn-mg-crisis · mn-mg-corticoides', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'El R1 escribe el plan de la neumonía. Encuentra los errores.',
               frases: [
                 { t: 'Gentamicina 5 mg/kg/día.', mal: true, c: 'Los aminoglucósidos figuran en la <span class="hl-rojo">Tabla 46.5</span> (' + pag(24) + '): elige un antibiótico que no esté en la tabla, según el antibiograma.' },
@@ -157,7 +157,7 @@ export const MAYEUTICA_B6A_PLACA = {
               explicacion: 'Intubar con CV ≤15 mL/kg (o <1 L) y PIM peor que −20 (' + pag(25) + '); piridostigmina para la miastenia leve-moderada y enoxaparina como profilaxis (' + pag(26) + ').' } },
           { momento: 'Día 4 · 6 horas después', datos: { Clínica: 'disfagia', CV: '950 mL (13,6 mL/kg)', PIM: '−18 cmH₂O', 'SpO₂': '95 % aire', 'PaCO₂': '41 mmHg' }, nuevo: ['Clínica', 'CV', 'PIM', 'SpO₂', 'PaCO₂'], calculadora: C_MG,
             // [pulmón vivo: estado 'debilidad-neuromuscular']
-            pregunta: { id: 'mnm-c1-3', tipo: 'test', fuente: 'mn-mg-intubacion', origen: 'ficha; cifras del paciente: ilustrativo',
+            pregunta: { id: 'mmg-c1-3', tipo: 'test', fuente: 'mn-mg-intubacion', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Serapio no está disneico y tiene una gasometría normal, pero la CV es de 950 mL y la PIM de −18. ¿Qué haces?',
               opciones: [
                 { t: 'Esperar a que suba la PaCO₂ para decidir', porque: 'Marino decide por la CV y la PIM, sin esperar al in extremis (' + pag(25) + '); esperar a que suba la PaCO₂ es llegar in extremis.' },
@@ -166,7 +166,7 @@ export const MAYEUTICA_B6A_PLACA = {
               explicacion: 'CV ≤15 mL/kg (o <1 L) y PIM −20 son criterio (' + pag(25) + '): <span class="hl-rojo">no esperar a que esté in extremis</span>.',
               nota: NOTA_PIM } },
           { momento: 'Día 4 · ya intubado', datos: { Soporte: 'ventilación mecánica' }, nuevo: ['Soporte'], calculadora: C_FARM,
-            pregunta: { id: 'mnm-c1-4', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-mg-crisis · mn-mg-piridostigmina · mn-tabla-46-5',
+            pregunta: { id: 'mmg-c1-4', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-mg-crisis · mn-mg-piridostigmina · mn-tabla-46-5',
               enunciado: 'Con Serapio intubado, ¿qué pones en marcha y qué retiras?',
               puntos: [
                 '<span class="hl">Plasmaféresis</span>: 5 sesiones en 7-10 días (mejoría tras la 2.ª); la IgIV es la alternativa.',
@@ -174,7 +174,7 @@ export const MAYEUTICA_B6A_PLACA = {
                 'Retirar la <span class="hl-rojo">gentamicina</span>: es un aminoglucósido de la Tabla 46.5.'],
               explicacion: 'Pautas de la crisis (' + pag(26) + ') y fármacos de la Tabla 46.5 (' + pag(24) + ').' } },
           { momento: 'Día 9 · el giro', datos: { 'Tras la 3.ª sesión': 'CV 1.500 mL', 'TC de tórax con contraste': 'masa en el mediastino anterior' }, nuevo: ['Tras la 3.ª sesión', 'TC de tórax con contraste'],
-            pregunta: { id: 'mnm-c1-5', tipo: 'test', fuente: 'mn-mg-otros · mn-mg-desencadenantes', origen: 'ficha; cifras del paciente: ilustrativo',
+            pregunta: { id: 'mmg-c1-5', tipo: 'test', fuente: 'mn-mg-otros · mn-mg-desencadenantes', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Serapio mejora, y el TC de tórax muestra una masa en el mediastino anterior. ¿Qué cambia?',
               opciones: [
                 { t: 'Un timoma (10 %): la timectomía la valora neurología', ok: true },
@@ -182,7 +182,7 @@ export const MAYEUTICA_B6A_PLACA = {
                 { t: 'Es paraneoplásica: no se trata la placa, solo la masa', porque: 'La miastenia sigue necesitando su tratamiento (plasmaféresis o IgIV). Dejarlo por la masa deja al paciente con una placa que sigue fallando.' }],
               explicacion: 'Un timoma causa el <span class="hl">10 %</span> (' + pag(24) + '); se busca con TC con contraste y la timectomía queda a valorar por neurología (' + pag(26) + ').' } },
           { momento: 'Día 14 · extubado', datos: { Situación: 'extubado, sin soporte' }, nuevo: ['Situación'],
-            pregunta: { id: 'mnm-c1-6', tipo: 'test', fuente: 'mn-mg-pronostico · mn-gbs-pronostico',
+            pregunta: { id: 'mmg-c1-6', tipo: 'test', fuente: 'mn-mg-pronostico · mn-gbs-pronostico',
               enunciado: 'Serapio pregunta qué le espera. ¿Qué dice Marino del pronóstico de la miastenia en la UCI?',
               opciones: [
                 { t: 'Sobrevive al ingreso un 97 % y el 10-15 % queda con discapacidad grave', porque: 'Esa es la cifra del Guillain-Barré (' + pag(28) + '). Dársela a Serapio sería hablarle del pronóstico de otra enfermedad.' },

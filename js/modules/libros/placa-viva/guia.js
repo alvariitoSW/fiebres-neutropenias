@@ -38,5 +38,6 @@ export function crearGuia({ caja, hacer, cita, setFoco }) {
     if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); }
     else if (a === 'haz') { const [acc, op] = p.haz; if (typeof op === 'number') for (let n = 0; n < op; n++) hacer(acc); else hacer(acc, op || {}); setFoco(p.z); }
   });
-  return { abrir: (c, k = 0) => { if (!GUIAS[c]) return cerrar(); g = GUIAS[c]; paso(k); }, cerrar };
+  // previos: al abrir en el paso k, se hacen antes los «haz» de los pasos 1..k-1 (el modelo queda como si se hubieran hecho)
+  return { abrir: (c, k = 0, previos = false) => { if (!GUIAS[c]) return cerrar(); g = GUIAS[c]; if (previos) for (const q of g[1].slice(0, k)) if (q.haz) { const [acc, op] = q.haz; if (typeof op === 'number') for (let n = 0; n < op; n++) hacer(acc); else hacer(acc, op || {}); } paso(k); }, cerrar };
 }
