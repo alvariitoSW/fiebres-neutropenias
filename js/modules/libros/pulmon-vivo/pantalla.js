@@ -103,7 +103,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       vt: { v: v(f0(l.vtExh)), sub: tapado || l.vtExh == null ? '' : `${f1(l.vtExh / kg)} /kg`, lim: `≤${vtMax}` },
       vm: { v: v(f1(l.vm)), lim: `<span>≤${TOPE.vmMax}</span><span>≥${TOPE.vmMin}</span>` },
       ie: { v: v(l.ie != null && isFinite(l.ie) ? `1:${f1(l.ie)}` : null) },
-      fio2: est.prono ? { v: f0(est.fio2), sub: `P/F ${est.prono.pf} · PaO₂ ${est.prono.pao2}` } : est.hfno ? { v: f0(est.hfno.fio2Alv), sub: `SpO₂ ${f0(est.hfno.spo2)} %` } : { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
+      fio2: est.prono ? { v: f0(est.fio2), sub: `P/F ${est.prono.pf} · PaO₂ ${est.prono.pao2}` } : est.cuff?.ext ? { v: f0(est.fio2), sub: `SpO₂ ${est.cuff.spo2} %` } : est.hfno ? { v: f0(est.hfno.fio2Alv), sub: `SpO₂ ${f0(est.hfno.spo2)} %` } : { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
     };
     for (const [k, n] of Object.entries(marca)) if (val[k] && !tapado) val[k].estado = n;
     R.casillas(val);
@@ -122,7 +122,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       pinsp: vcv || psv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });
-    R.modo(r.modo, { detenido }); R.interfaz(est.hfno ? 'Cánula' : 'Tubo');
+    R.modo(r.modo, { detenido }); R.interfaz(est.interfaz || (est.hfno ? 'Cánula' : 'Tubo'));
     R.tecla('inspmant', !!P.S.man.pausa); R.tecla('espmant', !!P.S.man.oclusion); R.tecla('congelar', !!est.pausa); R.congelado(est.pausa && !detenido);
   }
   function infoAlarmas() {

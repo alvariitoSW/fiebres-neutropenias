@@ -307,6 +307,46 @@ for (const k of ORDEN_ESTADOS) {
     await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); ok((await pr()).pf > 120, 'S2 prono: sin contraindicaciones se puede girar');
     await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => document.querySelectorAll('.esc-alv.prono-cons').length === 0 && !document.querySelector('#pul-dock-panel [data-m="horas"]')), 'S2 prono: al salir del estado desaparecen los mandos y las rayas');
     await abrir('prono'); await espera(500); await llenar(); }
+  // S3 · fuga del cuff y estridor (Benito): sin lupa ni tipo. Mandos: presión del cuff 0-30 (tope 25), edema, esteroide, desinflar, extubar, 30 min
+  await abrir('fuga-cuff'); await espera(900); await llenar();
+  { const clic = async (k) => { await p.evaluate(k => document.querySelector(`#pul-dock-panel [data-m="${k}"]`).click(), k); await espera(200); await llenar(); };
+    const cuffPide = async (v) => { await p.evaluate((v) => { const d = document.querySelector('#pul-dock-panel input[data-m="cuff"]'); d.max = 200; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, v); await espera(150); await llenar(); };
+    const cf = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const l = q.L;
+      return { p: q.est.cuff.p, ext: q.est.cuff.ext, vtI: Math.round(l.vtIns), vtE: g('vt'), fuga: g('fuga'), vm: g('vm'), fr: g('fr'), kg: g('vtkg'), spo2: +((c('fio2').querySelector('.sub')?.textContent || '').match(/SpO₂ (\d+)/) || [])[1] || null, int: document.querySelector('#pul-raiz [data-resp="int"]').textContent, sello: q.est.sello?.titulo || '', txt: document.getElementById('pul-raiz').innerText, flujo: Math.max(...q.mon.dato('flujo').filter((x) => x != null)), ps: q.P.S.resp.modo }; });
+    const a25 = await cf(); await limpio('cuff 25');
+    ok(a25.p === 25 && a25.vtI === 410 && a25.vtE === 410 && a25.fuga === 0 && a25.int === 'Tubo', `S3 cuff: a 25 Vt insp ${a25.vtI} = Vt esp ${a25.vtE}, fuga ${a25.fuga}`);
+    await cuffPide(15); const a15 = await cf(); await limpio('cuff 15');
+    ok(a15.fuga === 80 && a15.vtE === 330 && /Fuga audible/.test(a15.txt), `S3 cuff: a 15 fuga audible, Vt esp ${a15.vtE}, fuga ${a15.fuga}`);
+    await cuffPide(22); ok(/Cuff cerca del tope/.test((await cf()).txt), 'S3 cuff: a 22 avisa de que está cerca del tope');
+    await clic('apagar'); const sana = await cf(); await limpio('cuff 0 sin edema'); await foto('s3-fuga-sana');
+    ok(sana.p === 0 && sana.fuga === 200 && sana.vtE === 210 && sana.fuga > 110 && /extubar, nada más/.test(sana.txt) && sana.vm >= 2, `S3 cuff 0 sin edema: Vt insp ${sana.vtI}, esp ${sana.vtE}, fuga ${sana.fuga} (>110: «extubar, nada más»)`);
+    await clic('edema'); const ed = await cf(); await limpio('cuff 0 edema'); await foto('s3-fuga-edema');
+    ok(ed.fuga === 80 && ed.vtE === 330 && /Fuga baja: riesgo ×7/.test(ed.sello) && ed.fuga < 110, `S3 cuff 0 con edema: Vt insp ${ed.vtI}, esp ${ed.vtE}, fuga ${ed.fuga} (<110) → sello «${ed.sello}»`);
+    // tope: pedir 26..60 → el mando se queda en 25, sello de isquemia, constantes sin fuga
+    for (const v of [26, 30, 50, 60]) { await cuffPide(v); const t = await cf(); await limpio('cuff pide ' + v);
+      ok(t.p === 25 && /Presión del cuff por encima del tope/.test(t.sello) && t.fuga === 0 && t.vtE === 410 && t.vm >= 6 && t.vm <= 7, `S3 cuff tope: pedir ${v} → sello «${t.sello}», el mando queda en ${t.p}; Vt esp ${t.vtE}, fuga ${t.fuga}`); }
+    await cuffPide(10); ok(!/por encima del tope/.test((await cf()).sello), 'S3 cuff tope: al volver a un valor válido se quita el sello');
+    // barrido del cuff 0..30 con y sin edema: todo paciente posible
+    let mal = []; for (const e of [false, true]) { if (((await p.evaluate(() => window.__pulPruebas().est.cuff.edema)) !== e)) await clic('edema');
+      for (const v of [0, 5, 10, 15, 20, 24, 25, 30, 60]) { await cuffPide(v); const x = await cf(); const exp = Math.round((e ? 80 : 200) * (1 - Math.min(v, 25) / 25));
+        if (!(x.fuga === exp && x.vtE === 410 - exp && x.vtE >= 210 && x.vm >= 3 && x.vm <= 7 && x.fr === 16 && x.kg >= 3 && x.kg <= 6.1)) mal.push(`${e ? 'edema' : 'sano'} ${v}: ${JSON.stringify({ f: x.fuga, vtE: x.vtE, vm: x.vm, kg: x.kg })}`); } }
+    ok(mal.length === 0, `S3 cuff barrido 0-60 cmH₂O con y sin edema: fuga proporcional, Vt esp 210-410, VM 3-7${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    // Extubar: solo con el cuff a 0
+    await clic('edema'); await cuffPide(10);
+    ok(await p.evaluate(() => document.querySelector('#pul-dock-panel [data-m="extubar"]').disabled), 'S3 cuff: «Extubar» apagado con el cuff inflado');
+    await clic('apagar'); await clic('edema');
+    // con edema y sin esteroide: extubar → 30 min → estridor
+    await clic('extubar'); const r0 = await cf(); await limpio('extubado');
+    ok(r0.ext === 'recien' && r0.int === 'Sin tubo' && r0.ps === 'psv' && r0.spo2 === 96 && r0.vm >= 4, `S3 extubado: sin tubo, respira solo (Vt ${r0.vtE}, FR ${r0.fr}, VM ${r0.vm}), SpO₂ ${r0.spo2}`);
+    await clic('esperar'); const es = await cf(); await limpio('estridor'); await foto('s3-estridor');
+    ok(/reintubar sin demora/i.test(es.sello) && es.spo2 === 86 && es.vtE < r0.vtE && es.fr >= 25 && es.vm >= 2 && es.flujo < r0.flujo, `S3 estridor (edema, sin esteroide): sello «${es.sello}», SpO₂ ${es.spo2}, Vt ${es.vtE} (antes ${r0.vtE}), FR ${es.fr}, flujo máx. ${es.flujo.toFixed(1)} (antes ${r0.flujo.toFixed(1)})`);
+    { const v = []; for (let i = 0; i < 4; i++) { await espera(900); v.push((await cf()).vtE); } ok(Math.max(...v) - Math.min(...v) <= 6, `S3 estridor: el Vt espirado en vivo es estable en cada respiración (${v.join(', ')})`); }
+    await clic('reintubar'); const re = await cf(); ok(re.ext === null && re.int === 'Tubo' && re.p === 25 && re.fuga === 0, 'S3 cuff: «Reintubar» vuelve al respirador con el cuff a 25');
+    // con el esteroide 12 h antes: sin estridor
+    await clic('apagar'); await clic('ester'); await clic('extubar'); await clic('esperar'); const st = await cf(); await limpio('con esteroide');
+    ok(st.ext === '30' && !/reintubar sin demora/i.test(st.sello) && !/Volumen bajo/.test(st.txt) && !/Volumen bajo/.test(es.txt) && st.spo2 === 96 && /22 % a 3 %/.test(st.txt) && st.fr === 16, `S3 con metilpred 12 h antes: sin estridor (SpO₂ ${st.spo2}, FR ${st.fr}), riesgo 22 % → 3 %`);
+    await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => !document.querySelector('#pul-dock-panel [data-m="cuff"]') && document.querySelector('#pul-raiz [data-resp="int"]').textContent === 'Tubo'), 'S3 cuff: al salir del estado desaparecen los mandos y la interfaz vuelve a «Tubo»');
+    await abrir('fuga-cuff'); await espera(500); await llenar(); }
   await abrir('sbt-ok'); await espera(900); await llenar(); e = await esf(); const f1v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];

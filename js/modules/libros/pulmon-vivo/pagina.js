@@ -8,6 +8,7 @@ import { crearDock } from '../../../core/dock.js';
 import { crearPulmon, pbw, ORIGEN_MODELO, T_PAUSA, T_OCLUSION } from './pulmon.mjs';
 import * as HFN from './hfno.js';
 import * as PR from './prono.js';
+import * as CU from './cuff.js';
 import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
@@ -71,6 +72,19 @@ function girar(pedido, post, { ya = false } = {}) {
   P.pulmonAjustar({ c: lec.c }); est.prono = lec; est.avisoCanula = PR.avisoHoras(lec);
   topeMando = quiere ? PR.selloContra(ci, lec) : pedido > D.PRONO.tope ? PR.selloHoras(pedido, lec) : null;
 }
+// La fuga del cuff (cuff.js): la presión, el edema, el esteroide y el paso fijan los ajustes del motor, la fuga, el aviso y el sello
+function fugar(pedido) {
+  const c = est.cuff, r = CU.evaluar(c, pedido); c.p = r.p;
+  P.ajustarYa(r.resp); P.pulmonAjustar(r.pulmon);
+  if (est.conPmus !== !!c.ext) { est.conPmus = !!c.ext; PANT.verPmus(est.conPmus); }
+  est.interfaz = c.ext ? 'Sin tubo' : 'Tubo'; est.fio2 = 40; c.spo2 = r.lec.spo2; est.avisoCanula = r.aviso; topeMando = r.sello;
+}
+function cuffMando(k) {
+  const c = est.cuff;
+  if (k === 'edema') c.edema = !c.edema; else if (k === 'ester') c.ester = !c.ester; else if (k === 'apagar') c.p = 0;
+  else if (k === 'extubar') c.ext = 'recien'; else if (k === 'esperar') c.ext = '30'; else if (k === 'reintubar') { c.ext = null; c.p = D.CUFF.inicio; }
+  fugar(c.p); llenarMonitor();
+}
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
@@ -78,7 +92,8 @@ function ponerEstado(clave, { llenar = true } = {}) {
   est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
   P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
   if (E.hfno) { est.boca = false; est.fio2 = D.HFNO.fio2Mando; canula(D.HFNO.inicio, { ya: true }); } else { est.hfno = null; est.q = null; est.avisoCanula = null; } P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
-  if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno) est.avisoCanula = null; }
+  if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno && !E.cuff) est.avisoCanula = null; }
+  if (E.cuff) { est.cuff = CU.estado0(); fugar(est.cuff.p); } else { est.cuff = null; est.interfaz = null; }
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
@@ -87,6 +102,8 @@ function ponerEstado(clave, { llenar = true } = {}) {
   avisar('pul:estado');
 }
 // Llena la pantalla de golpe con el modelo ya estable (al cambiar de estado, en pausa o con «reducir movimiento»)
+// La lectura del motor; con el cuff, el volumen espirado descuenta la fuga (cuff.js)
+const leer = () => { const l = P.lectura(); return l && est.cuff ? CU.conFuga(l, est.cuff) : l; };
 function llenarMonitor() {
   if (est.detenido) { const peep = P.S.resp.peep; mon.llenar(() => ({ paw: peep, flujo: 0, vol: 0, fase: 'esp' })); return; }   // sin ventilación: planas en la PEEP
   const cada = SEG / mon.NP, n = Math.round(cada / 0.005);
@@ -98,14 +115,14 @@ function llenarMonitor() {
   const tc = P.duracion();
   for (let i = 0, n85 = Math.round(0.85 * tc / 0.005); i < n85; i++) P.paso(0.005);
   mon.llenar(() => { for (let j = 0; j < n; j++) P.paso(0.005); return muestra(); });
-  L = P.lectura(); tProx = tSim;
+  L = leer(); tProx = tSim;
   avisar('pul:lectura');
 }
 const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase, pmus: P.pmus, disp: P.disparo ? 1 : 0 });
 function avanzar(dt) {
   const cada = SEG / mon.NP, n = Math.round(dt / 0.005);
   for (let i = 0; i < n; i++) { const f0 = P.fase; P.paso(0.005); if (f0 !== 'insp' && P.fase === 'insp') NX.ciclo(); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
-  L = P.lectura() || L;
+  L = leer() || L;
   avisar('pul:lectura');
 }
 
@@ -159,6 +176,7 @@ function pintarCifrasTodo() {
     celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL × pico (tubo)', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
+    ...(est.cuff ? [CU.celda(est.cuff, l, celda)] : []),
     celda('flujofin', 'Flujo fin esp.', f0(l.flujoFinEsp), l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'L/min · no llega a cero' : 'L/min · llega a cero', l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si'),
   ].join('');
   $('consola').hidden = !l.alarmaPresion;
@@ -181,9 +199,9 @@ const tope = crearTope({ monitor: PANT.R.curvas, dock: $('dock'), cita });
 const topeVisto = {};
 let topeMando = null;   // el sello de un mando que se pasó del tope y se quedó donde estaba
 function aplicarTopes() {
-  const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
+  const hay = est.tapado ? {} : calcularTopes(P.S, est.cuff && L ? { ...L, vtExh: est.cuff.ext ? null : L.vtIns } : L, PBW());
   if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
-  if ((est.hfno || est.prono) && est.avisoCanula) hay.canula = est.avisoCanula;
+  if ((est.hfno || est.prono || est.cuff) && est.avisoCanula) hay.canula = est.avisoCanula;
   for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'canula', 'sello', 'sello2', 'sello3', 'sello4']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (topeVisto[k] === firma) continue;
@@ -237,6 +255,8 @@ function pintarMandos() {
     h += desl('canula', 'Flujo de O₂ (cánula)', est.q, D.HFNO.min, D.HFNO.max, D.HFNO.paso, 'L/min', `tope ${D.HFNO.tope}: los equipos dan 40-60 según el fabricante (Marino cap. 25 p. 64) · el efecto en la FR y el esfuerzo: ilustrativo`);
     h += desl('fio2', 'FiO₂ del mando', est.fio2, 21, 100, 1, '%', `llega al alvéolo: ${f0(est.hfno.fio2Alv)} % (flujo inspiratorio de la paciente ${f0(est.hfno.vi)} L/min, del modelo) · ilustrativo`);
     h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="boca" aria-pressed="${!!est.boca}">Boca cerrada<small>PEEP 2-3 cmH₂O solo así (Marino cap. 25 p. 65)</small></button></div>`;
+  } else if (est.pest === 'resp' && est.cuff) {
+    h += CU.mandosHtml(est.cuff, desl);
   } else if (est.pest === 'resp' && est.prono) {
     h += PR.mandosHtml(est, desl);
   } else if (est.pest === 'resp') {
@@ -277,6 +297,7 @@ $('dock-panel').addEventListener('input', (ev) => {
 function cambiarMando(k, v) {
   if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
   if (k === 'canula') { canula(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarCifrasTodo(); pintarMonitor(); return; }
+  if (k === 'cuff') { fugar(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
   if (k === 'horas') { girar(v, false); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
   if (k === 'fio2') { est.fio2 = v; if (est.hfno) { canula(est.q); pintarMandos(); } pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
@@ -288,6 +309,7 @@ function cambiarMando(k, v) {
 }
 // Las pestañas de modo y las teclas de la pantalla
 function cambiarModo(k) {
+  if (est.cuff && k !== 'detener') { PANT.R.info('<b>Fuga del cuff</b> · El modo lo fija el paso en que está Benito (volumen control con tubo; sin tubo, respira solo) · ilustrativo'); return; }
   if (est.hfno && k !== 'detener') { PANT.R.info('<b>Cánula de alto flujo</b> · No hay modos: la paciente respira sola y la cánula solo da flujo · ilustrativo'); return; }
   if (k === 'detener') { detener(!est.detenido); return; }
   if (est.detenido) detener(false);
@@ -323,6 +345,7 @@ $('dock-panel').addEventListener('click', (ev) => {
   else if (k === 'monpausa') est.pausa = !est.pausa;
   else if (k === 'pos') { const h = est.prono.h; girar(b.dataset.v === 'supino' ? 0 : b.dataset.v === 'post' ? h : h || D.PRONO.inicio, b.dataset.v === 'post'); }
   else if (k === 'ci') { est.ci[b.dataset.v] = !est.ci[b.dataset.v]; girar(est.prono.h, est.prono.post); }
+  else if (['edema', 'ester', 'apagar', 'extubar', 'esperar', 'reintubar'].includes(k)) cuffMando(k);
   else if (k === 'boca') { est.boca = !est.boca; canula(est.q); }
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();
