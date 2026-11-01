@@ -63,4 +63,4 @@ export const DB_IMAGEN = {
 // que el VI (db: dB extra sobre la pared de aurícula; moteadoDb: amplitud del grano). En la eco la pared auricular fina se ve gris
 // y granulosa, no como un alambre (idea de Lang 2015 / Mitchell 2019, que no dan el grosor): grosor y dB, ilustrativos.
 export const PARED_AURICULAR_NUEVO = { ancho: 2.5, db: -4, moteadoDb: 4, origen: 'ilustrativo' };
-export const PARED_VD_NUEVO = { db: 4, origen: 'ilustrativo' };
+export const PARED_VD_NUEVO = { db: 8, origen: 'ilustrativo' };

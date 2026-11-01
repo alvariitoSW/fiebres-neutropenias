@@ -42,6 +42,10 @@ function normalAjustada(o, pts) {
 const amp = (db) => Math.pow(10, db / 20);
 
 // ---------------------------------------------------------------------------- vistas
+// Encuadre del A4C/SC4C (dibujo nuevo): margen (rad) entre la pared libre más lejana (VD o lateral del VI) y el borde del sector, para
+// que el VD dilatado no quede en la franja donde el haz pierde energía. Origen: ilustrativo (Mitchell 2019, ASE, docs/mitchell-2019-ett-completa-ase.pdf#page=26: en el A4C se ven las paredes y los
+// septos de cada cámara; no da ángulos).
+const ENCUADRE_A4C = { margenRad: 0.2, origen: 'ilustrativo' };
 // prof (mm) y ángulo del sector (grados), como se suelen ajustar en un adulto. nivel: altura del corte
 // transversal (mm sobre el plano AV, en telediástole; el ápex está a −Le).
 export const VISTAS = {
@@ -150,7 +154,7 @@ export function planoVista(clave, est) {
           const q = res(p, O); if (Math.abs(dot(q, n0)) < 5 && dot(q, d) > 35) ang.push(Math.atan2(dot(q, r), dot(q, d))); } } }
     if (ang.length > 10) {
       // si aun girado el contorno no cabe (VD muy dilatado), se abre el sector lo justo, con margen (tope 110°)
-      mitad = clamp((Math.max(...ang) - Math.min(...ang)) / 2 + 0.07, mitad, 0.96);
+      mitad = clamp((Math.max(...ang) - Math.min(...ang)) / 2 + ENCUADRE_A4C.margenRad, mitad, 0.96);
       const giro = clamp((Math.min(...ang) + Math.max(...ang)) / 2, -0.5, 0.5);
       if (Math.abs(giro) > 0.01) { const d2 = nrm(sum(esc(d, Math.cos(giro)), esc(r, Math.sin(giro)))); r = nrm(cruz(d2, n0)); d = d2; }
     }
