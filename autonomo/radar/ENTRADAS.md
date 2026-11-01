@@ -3,6 +3,12 @@
 Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más reciente, arriba.
 «no consta» = no está en las fuentes del proyecto; no se rellena.
 
+## 2026-11-01
+
+| Fecha | Tipo | Qué | Veredicto |
+|---|---|---|---|
+| 2026-11-01 | organización de GitHub | **MedMLX** (https://github.com/MedMLX, 23 repositorios; casi todos Apache-2.0, `med-vlm-mlx` MIT, `sam3-mlx` sin licencia clara): modelos de IA de imagen médica (segmentar Rx y TC, nódulos, TotalSegmentator, NV-Reason-CT, TC y RM sintéticas) en MLX, **solo para Mac con Apple Silicon**. El usuario: «para rayos usa este repo también» | **Apuntado, sin estudiar.** Para la Radiología con imágenes reales (`radio-real`, parte 2 aparcada el 01/11). Lo que puede servir: `flexray-mlx` (segmenta la anatomía de una Rx) para preparar fuera de la app las **zonas tocables** de nuestras placas reales. No trae imágenes de pacientes; no corre en el móvil ni en este contenedor (Linux); las TC «sintéticas» no valen como imagen real (acta 10.ª: una IA no es fuente) y el código no entra en la app (CLAUDE.md §7.9). Siguiente paso, si se retoma la parte 2: `/ingenieria-reversa` corta de `flexray-mlx` y `medmlx`, y ver si su modelo corre sin Mac |
+
 ## 2026-10-23/25 · primeras entradas (ya estudiadas)
 
 | Fecha | Tipo | Qué | Veredicto |

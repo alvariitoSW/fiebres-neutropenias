@@ -408,7 +408,7 @@ El resto del tablero sigue `aparcada`.
 
 **Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
-**Resuelto el 01/11 (Consejo del 01/11, acta `autonomo/consejo/2026-11-01.md`, vídeo https://claude.ai/artifact/RTgGFnbio4SJAA52ZH6Lf3)**: (2) **vía libre hasta el 22/11**; dibujo nuevo de la eco: **seguir hasta el 9,5** (≈3 M; techo de `mv-eco` a ≈32 M) antes de encenderlo; atlas `mr`: **a `main` solo con su texto**; **los 6 recortes de /ahorro aprobados** (5 ya estaban en REGLAS; el 6.º, tarea `reglas-01-11`); Radiología parte 2, **aparcada**; Semiología: **el usuario manda el PDF**. Sigue esperando: el PDF de Semiología, el techo de la gran reforma (3) y los opcionales (8-10).
+**Resuelto el 01/11 (Consejo del 01/11, acta `autonomo/consejo/2026-11-01.md`, vídeo https://claude.ai/artifact/RTgGFnbio4SJAA52ZH6Lf3)**: (2) **vía libre hasta el 22/11**; dibujo nuevo de la eco: **seguir hasta el 9,5** (≈3 M; techo de `mv-eco` a ≈32 M) antes de encenderlo; atlas `mr`: **a `main` solo con su texto**; **los 6 recortes de /ahorro aprobados** (5 ya estaban en REGLAS; el 6.º, tarea `reglas-01-11`); Radiología parte 2, **aparcada**; Semiología: **el usuario manda el PDF**. Después, el mismo día: **techo de la gran reforma aprobado** (≈165-230 M aparte de Marino); MedMLX apuntado en el Radar para la Radiología; abiertas las sesiones de `mr` (texto a `main`) y `mv-eco-2a5` (al 9,5). Sigue esperando: el PDF de Semiología y los opcionales (8-10).
 
 **Del Congreso (Consejo 12.ª, 30/10)**, lo más urgente primero (página https://claude.ai/artifact/FDmogy5RHB419Z9iBXCoNP):
 1. **Semiología** (31/10): `www.ncbi.nlm.nih.gov` ya abre, pero el libro de Walker (*Clinical Methods*,
@@ -418,7 +418,7 @@ El resto del tablero sigue `aparcada`.
    no puede ser la fuente (acta 10.ª); tu repositorio `sobreviviendo_a_urgencias_en_el_Negrin` sirve de guion, no de
    fuente (no tiene páginas). Con el PDF en `docs/`, el Congreso lo monta (objetivo «Historia clínica» del PIF).
 2. ✅ **Ritmo tras el 02/11**: vía libre hasta el 22/11 (el usuario, 01/11).
-3. **Techo de la gran reforma** (B-050): ≈165-230 M aparte de Marino.
+3. ✅ **Techo de la gran reforma** (B-050): ≈165-230 M aparte de Marino, **aprobado por el usuario el 01/11** («lo del techo de la gran reforma, apruebo el gasto»).
 4. **`b4`**: maqueta de «iones vivos» (≈+8 M, recomendado) o directo.
 5. **Solapar** mapa y maquetas de un bloque de Marino con la construcción del anterior.
 6. **Fase B del atlas** (B-006, ≈30-45 M) cuando pase el ecógrafo nuevo.
