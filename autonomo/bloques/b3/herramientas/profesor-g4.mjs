@@ -1,30 +1,26 @@
-// Profesor G3 (b3-pulmon-estudio): recorre Estudiar en las fichas 4, 6 y 5 (SDRA) a 390 px y devuelve un resumen en texto.
-// Copia de profesor-g2.mjs con doce «Compruébalo» (guía y caso) que abren el estado, leen el monitor, mueven el mando que enseña
-// (Vt, PEEP, cánula, horas en prono, Pmus) y vuelven; y la lista de pacientes y cifras que se repiten entre las tres fichas.
+// Profesor G4 (b3-pulmon-estudio): recorre Estudiar en las fichas 7, 8 y 9 (oxígeno) a 390 px y devuelve un resumen en texto.
+// Copia de profesor-g3.mjs: los «Compruébalo» abren el capilar vivo (anemia, hipoxemia, neutrófilo) o el pulmón vivo (hfno),
+// leen el monitor, mueven la cánula a 50 o activan «Boca cerrada» y vuelven; y la lista de Elvira (fichas 8, 5, 9) y Jacinto (3, 7).
 // Mira (paneles y figuras), Juega (modelos), Piensa y Examínate (contesta todo, falla una; comprueba que las opciones no
 // salen antes de «Ya lo tengo» y que «Compruébalo» sale solo después), los tres casos hasta «Lo que te llevas», dos
 // «Compruébalo en el modelo» (lee el estado y el monitor del pulmón vivo y vuelve), forma de los tests (longitud y
-// posición de la buena) y desborde tras cada respuesta. Uso: node profesor-g3.mjs http://localhost:PUERTO/ /carpeta/
+// posición de la buena) y desborde tras cada respuesta. Uso: node profesor-g4.mjs http://localhost:PUERTO/ /carpeta/
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const BASE = process.argv[2].replace(/\/?$/, '/'), OUT = process.argv[3].replace(/\/?$/, '/');
 const { MAYEUTICA_B3 } = await import(new URL('../../../../js/data/mayeutica/b3.js', import.meta.url));
 const { barajar } = await import(new URL('../../../../js/core/mayeutica-motor.js', import.meta.url));
 const { ESTADOS } = await import(new URL('../../../../js/data/pulmon-vivo-data.js', import.meta.url));
-const FICHAS = ['neumo-sdra-diagnostico', 'neumo-sdra-ventilacion', 'neumo-sdra-no-ventilatorio'];
+const FICHAS = ['neumo-o2-indicaciones', 'neumo-o2-sistemas', 'neumo-o2-toxicidad'];
 // id de pregunta → qué mando mover tras leer el estado (name=valor) · foto: sí/no
-const COMPRUEBA = { 'sd-g1': { foto: true }, 'sd-c3': { foto: true }, 'sv-g2': { mando: ['vt', 420] }, 'sv-g3': { mando: ['peep', 5], foto: true }, 'sv-g9': {}, 'sv-c4': { mando: ['vt', 420], foto: true },
-  'snv-g2': { mando: ['pmus', 4] }, 'snv-c1': { foto: true }, 'snv-g4': { mando: ['canula', 50] }, 'snv-c2': { mando: ['canula', 50], foto: true }, 'snv-g10': { mando: ['horas', 16] }, 'snv-c5': {}, 'snv-c8': { mando: ['horas', 16], foto: true } };
-const FOTOS = {};
+const COMPRUEBA = { 'o2i-g2': { foto: true, todos: true }, 'o2s-g1': {}, 'o2s-g8': { boca: true }, 'o2s-c4': { mando: ['canula', 50], foto: true }, 'o2s-c5': { boca: true, foto: true }, 'tox-g3': { foto: true } };
+const FOTOS = { 'neumo-o2-indicaciones': 'caso-o2i', 'neumo-o2-sistemas': 'caso-o2s' };
 const fallos = [];
 const nota = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallos.push(t); };
 
-/* ---------- 0. Estados del pulmón vivo que usan las fichas ---------- */
-for (const k of ['sdra-rigido', 'sdra-protector', 'volutrauma', 'atelectrauma-zeep', 'p-sili', 'hfno', 'prono']) { const e = ESTADOS[k]; console.log(`estado ${k}: paciente ${e?.pac} · guía ${e?.guia?.length ?? 0} pasos (con resalte ${e?.guia?.filter(g => g.s?.length).length ?? 0}, con ficha ${e?.guia?.filter(g => /ficha|may-ir|data-resaltar/.test(JSON.stringify(g))).length ?? 0}) · resp ${JSON.stringify(e?.resp || {}).slice(0, 110)}`); }
-// Isidro en las tres fichas: pasos con sus datos, para ver repeticiones literales y choques de fechas
-const isidros = FICHAS.flatMap(f => MAYEUTICA_B3[f].casos.filter(c => /Isidro/.test(c.titulo)).map(c => ({ f, c })));
-for (const { f, c } of isidros) console.log(`Isidro en ${f}: ${JSON.stringify(c.paciente)} · ${c.pasos.map(p => p.momento + ' {' + Object.entries(p.datos).map(([k, v]) => k + ': ' + v).join('; ') + '}').join(' | ')}`);
-for (let i = 0; i < isidros.length; i++) for (let j = i + 1; j < isidros.length; j++) { const A = isidros[i].c.pasos, B = isidros[j].c.pasos; for (const a of A) for (const b of B) { const ta = new Set((a.pregunta.enunciado.toLowerCase().match(/[a-záéíóúñ₂]{4,}/g) || [])), tb = new Set((b.pregunta.enunciado.toLowerCase().match(/[a-záéíóúñ₂]{4,}/g) || [])); let n = 0; for (const w of ta) if (tb.has(w)) n++; const r = n / Math.max(1, Math.min(ta.size, tb.size)); if (r >= 0.5) console.log(`  enunciados parecidos entre fichas: ${a.pregunta.id}≈${b.pregunta.id} (${Math.round(100 * r)} %)`); } }
-
+/* ---------- 0. Estado hfno y los pacientes compartidos ---------- */
+for (const k of ['hfno']) { const e = ESTADOS[k]; console.log(`estado ${k}: paciente ${e?.pac} · guía ${e?.guia?.length ?? 0} pasos (con resalte ${e?.guia?.filter(g => g.s?.length).length ?? 0}, con ficha ${e?.guia?.filter(g => /ficha|may-ir|data-resaltar|"c":/.test(JSON.stringify(g))).length ?? 0})`); }
+const PAC = [['Elvira', ['neumo-o2-sistemas', 'neumo-sdra-no-ventilatorio', 'neumo-o2-toxicidad']], ['Jacinto', ['neumo-epoc-vpp', 'neumo-o2-indicaciones']]];
+for (const [nom, fs] of PAC) for (const f of fs) for (const c of (MAYEUTICA_B3[f]?.casos || []).filter(c => c.titulo.includes(nom))) console.log(`${nom} en ${f}: ${JSON.stringify(c.paciente)}\n   ${c.pasos.map(p => p.momento + ' {' + Object.entries(p.datos).map(([k, v]) => k + ': ' + v).join('; ') + '}').join('\n   ')}`);
 /* ---------- 1. Forma de los tests, sin navegador ---------- */
 console.log('== FORMA (por ficha: tests, buena más larga, más corta, posición más repetida) ==');
 for (const f of FICHAS) {
@@ -84,7 +80,7 @@ const contestar = async (q, fallar, Z) => {
     for (const i of q.frases.map((f, j) => f.mal ? j : -1).filter(j => j >= 0)) { try { await pulsar(`${Z} [data-ver="${i}"]`); } catch {} }
   }
   await p.waitForTimeout(250);
-  const r = await p.evaluate(z => { const res = document.querySelector(z + ' .may-res'); return { txt: res?.textContent || '', sig: !!res?.querySelector('[data-accion="sig"]'), modelo: [...(res?.querySelectorAll('.may-modelo') || [])].map(m => (m.dataset.pulmonVivo || m.dataset.receptorVivo || m.dataset.enVisual || '?') + '|' + m.textContent.trim().slice(0, 40)), ver: res?.querySelectorAll('.may-ir').length || 0, org: res?.querySelector('.may-org')?.textContent.trim().slice(0, 70) || '' }; }, Z);
+  const r = await p.evaluate(z => { const res = document.querySelector(z + ' .may-res'); return { txt: res?.textContent || '', sig: !!res?.querySelector('[data-accion="sig"]'), modelo: [...(res?.querySelectorAll('.may-modelo') || [])].map(m => (m.dataset.pulmonVivo || m.dataset.capilarVivo || m.dataset.receptorVivo || m.dataset.enVisual || '?') + '|' + m.textContent.trim().slice(0, 40)), ver: res?.querySelectorAll('.may-ir').length || 0, org: res?.querySelector('.may-org')?.textContent.trim().slice(0, 70) || '' }; }, Z);
   if (!r.sig) nota(false, `${q.id}: sin «Siguiente» tras contestar`);
   if ((q.modelo || q.modeloVivo) && !r.modelo.length) nota(false, `${q.id}: falta «Compruébalo»`);
   if (!r.ver) nota(false, `${q.id}: falta «Ver en la ficha»`);
@@ -95,7 +91,9 @@ const siguiente = Z => pulsar(`${Z} [data-accion="sig"]`);
 const leerPulmon = () => p.evaluate(() => { const ley = document.querySelector('#pul-leyenda [aria-pressed="true"]')?.textContent.trim(); const filas = [...document.querySelectorAll('.pul-raiz [data-fila]')].map(e => e.dataset.fila + '=' + (e.querySelector('.v')?.textContent.trim() || e.textContent.trim().slice(0, 20))); const mandos = [...document.querySelectorAll('#pul-mandos input[type=range], .pul-mando input')].map(i => (i.name || i.id || i.dataset.mando) + '=' + i.value); const sellos = [...document.querySelectorAll('.pul-sello, [class*="sello"]')].filter(e => e.offsetParent).map(e => e.textContent.trim().slice(0, 60)); const pos = [...document.querySelectorAll('[data-m="pos"]')].map(b => b.dataset.v + (b.getAttribute('aria-pressed') === 'true' ? '*' : '')).join('/'); return { visible: !!document.getElementById('pul-monitor')?.offsetParent, estado: ley, frase: document.getElementById('pul-frase-txt')?.textContent.trim().slice(0, 200), filas: filas.slice(0, 26), mandos: mandos.slice(0, 10), sellos: sellos.slice(0, 4), pos, guia: document.querySelectorAll('.pul-guia-paso, [data-guia-paso], .pul-guia li').length, rotulo: /ilustrativ|fisiolog/i.test(document.getElementById('pul-monitor')?.parentElement?.textContent || '') }; });
 const mover = async (k, v) => { const ok = await p.evaluate(([k, v]) => { const i = document.querySelector(`#pul-mandos input[name="${k}"], .pul-mando input[name="${k}"], input[data-mando="${k}"], input[name="${k}"]`); if (!i) return false; i.value = v; i.dispatchEvent(new Event('input', { bubbles: true })); i.dispatchEvent(new Event('change', { bubbles: true })); return true; }, [k, v]); await p.waitForTimeout(2200); await p.evaluate(() => window.__pulPruebas?.().llenar?.()); return ok; };
 const comprobar = async (q, Z, f, r) => {
-  const cfg = COMPRUEBA[q.id]; const btn = `${Z} .may-res .may-modelo`;
+  const cfg = COMPRUEBA[q.id]; const nBtn = cfg.todos ? r.modelo.length : 1;
+  for (let ib = 0; ib < nBtn; ib++) {
+  const btn = `${Z} .may-res .may-modelo:nth-of-type(${ib + 1})`;
   const tipo = await p.evaluate(s => { const m = document.querySelector(s); return m?.dataset.pulmonVivo ? 'pulmon' : m?.dataset.capilarVivo ? 'capilar' : 'otro'; }, btn);
   await pulsar(btn); await p.waitForTimeout(2500);
   if (tipo === 'pulmon') {
@@ -104,13 +102,16 @@ const comprobar = async (q, Z, f, r) => {
     console.log(`  COMPRUÉBALO ${q.id} → ${r.modelo.join(' / ')} · visible ${m.visible} · estado «${m.estado}» · pos ${m.pos || '—'} · rótulo ilustrativo ${m.rotulo}`);
     console.log(`    frase: ${m.frase}`); console.log(`    monitor: ${m.filas.join(' · ')}`); console.log(`    mandos: ${m.mandos.join(' · ')} · sellos: ${m.sellos.join(' | ') || '—'}`);
     if (cfg.foto) { try { await p.evaluate(() => document.getElementById('esc-svg')?.scrollIntoView({ block: 'start' })); } catch {} await p.waitForTimeout(300); await foto(`comprueba-${q.id}`); }
+    if (cfg.boca) { const hay = await p.evaluate(() => { const b = document.querySelector('[data-m="boca"]'); if (b) b.click(); return !!b; }); await p.waitForTimeout(1500); await p.evaluate(() => window.__pulPruebas?.().llenar?.()); const m3 = await leerPulmon(); console.log(`    tras «Boca cerrada» (botón ${hay}): frase: ${m3.frase}`); console.log(`    monitor: ${m3.filas.join(' · ')} · sellos: ${m3.sellos.join(' | ') || '—'}`); if (cfg.foto) await foto(`comprueba-${q.id}-boca`); }
     if (cfg.mando) { const [k, v] = cfg.mando; const ok = await mover(k, v); const m2 = await leerPulmon(); console.log(`    tras ${k}=${v} (${ok ? 'mando encontrado' : 'MANDO NO ENCONTRADO'}): estado «${m2.estado}» · frase: ${m2.frase}`); console.log(`    monitor: ${m2.filas.join(' · ')} · sellos: ${m2.sellos.join(' | ') || '—'}`); if (cfg.foto && /horas|canula/.test(k)) await foto(`comprueba-${q.id}-tras`); }
   } else {
-    const c = await p.evaluate(() => { const v = document.getElementById('capilar-vivo-view'); const est = document.querySelector('[data-cpv-estado][aria-pressed="true"]')?.textContent.trim(); const lupa = document.querySelector('.cpv-lupa, [data-lupa]')?.textContent.trim().slice(0, 80); return { visible: !!v?.offsetParent, estado: est, lupa, frase: (document.querySelector('.cpv-frase, #cpv-frase')?.textContent || '').trim().slice(0, 200), txt: (v?.textContent || '').replace(/\s+/g, ' ').slice(0, 260) }; });
-    console.log(`  COMPRUÉBALO ${q.id} → ${r.modelo.join(' / ')} · capilar visible ${c.visible} · estado «${c.estado}» · frase: ${c.frase}`); console.log(`    texto: ${c.txt}`);
-    if (cfg.foto) { try { await p.evaluate(() => document.getElementById('cpv-escena')?.scrollIntoView({ block: 'start' })); } catch {} await p.waitForTimeout(300); await foto(`comprueba-${q.id}`); }
+    const c = await p.evaluate(() => { const v = document.getElementById('cpv-raiz') || document.getElementById('capilar-vivo-view'); const est = document.querySelector('[data-cpv-estado][aria-pressed="true"]')?.textContent.trim(); const lupa = document.querySelector('[data-cpv-lupa][aria-pressed="true"]')?.textContent.trim().slice(0, 80); const t = (v?.textContent || '').replace(/\s+/g, ' '); const m = t.match(/CaO₂[^0-9]{0,30}([0-9][0-9,.]*)/); const pao2 = t.match(/PaO₂[^0-9]{0,30}([0-9][0-9,.]*)/); const hb = t.match(/Hb[^0-9]{0,20}([0-9][0-9,.]*)/); const vol = [...document.querySelectorAll('button')].find(b => /VOLVER/.test(b.textContent) && b.offsetParent)?.textContent.trim(); return { visible: !!v?.offsetParent, estado: est, lupa, cao2: m?.[1], pao2: pao2?.[1], hb: hb?.[1], frase: (document.querySelector('.cpv-frase, #cpv-frase, #cpv-frase-txt')?.textContent || '').trim().slice(0, 220), txt: t.slice(0, 300), vol }; });
+    console.log(`  COMPRUÉBALO ${q.id} → ${r.modelo[ib]} · capilar visible ${c.visible} · estado «${c.estado}» · lupa «${c.lupa || '—'}» · Hb ${c.hb} · PaO₂ ${c.pao2} · CaO₂ ${c.cao2} · volver «${c.vol}»`); console.log(`    frase: ${c.frase}`); console.log(`    texto: ${c.txt}`);
+    if (cfg.foto) { try { await p.evaluate(() => document.getElementById('cpv-escena')?.scrollIntoView({ block: 'start' })); } catch {} await p.waitForTimeout(300); await foto(`comprueba-${q.id}-${ib}`); }
   }
   await p.evaluate(() => [...document.querySelectorAll('button')].find(b => /VOLVER/.test(b.textContent) && b.offsetParent)?.click()); await p.waitForTimeout(900);
+  if (ib < nBtn - 1) { const v0 = await p.evaluate(z => !!document.querySelector(z + ' .may-res [data-accion="sig"]'), Z); if (!v0) { nota(false, `${q.id}: tras el botón ${ib + 1} no vuelve a la pregunta`); break; } }
+  }
   const v = await p.evaluate(([f, z]) => { const t = document.getElementById(f); return { abierta: t.classList.contains('active') && !!t.offsetParent, est: t.classList.contains('modo-estudiar'), sig: !!document.querySelector(z + ' .may-res [data-accion="sig"]') }; }, [f, Z]);
   nota(v.abierta && v.est && v.sig, `${q.id}: «← VOLVER» deja la misma pregunta (${JSON.stringify(v)})`);
 };
@@ -130,7 +131,7 @@ for (const f of FICHAS) {
   await foto(`mira-${f}`, `#${f} .est-paso[data-paso="mira"]`);
   // Juega
   await pulsar(`#${f} .est-ir[data-ir-paso="juega"]`); await p.waitForTimeout(300);
-  const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => (b.dataset.pulmonVivo || '?') + ' «' + b.textContent.trim().slice(0, 45) + '»'), f);
+  const juega = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-paso[data-paso="juega"] .est-juega`)].map(b => (b.dataset.pulmonVivo || b.dataset.capilarVivo || '?') + ' «' + b.textContent.trim().slice(0, 45) + '»'), f);
   console.log(`Juega (${juega.length}): ` + juega.join(' · '));
   // Piensa
   await pulsar(`#${f} .est-ir[data-ir-paso="piensa"]`); await p.waitForTimeout(300);
@@ -162,16 +163,15 @@ for (const f of FICHAS) {
     for (const [j, paso] of caso.pasos.entries()) {
       const fp = await p.evaluate(z => ({ nuevos: document.querySelectorAll(z + ' .may-paciente dd.may-cambia .may-nuevo').length, dia: document.querySelector(z + ' .may-dia')?.textContent, calc: !!document.querySelector(z + ' [data-calculadora], ' + z + ' .may-calc') }), ZC);
       const q = paso.pregunta;
-      if (FOTOS[f] && j === 1) await foto(FOTOS[f] + '-paso2', ZC);
+      if (FOTOS[f] === 'caso-o2s' && j === 0) await foto(FOTOS[f] + '-calc', ZC);
       const r = await contestar(q, j === 0, ZC);
       console.log(`  ${j + 1}. ${fp.dia} · nuevos ${fp.nuevos}/${paso.nuevo?.length ?? 0} · ${q.tipo} ${q.id} · modelo ${r.modelo.join(' / ') || '—'} · origen «${r.org}»`);
-      if (FOTOS[f] && q.tipo === 'error') await foto(FOTOS[f] + '-error', ZC);
+      if (q.id === 'o2i-c4') await foto(FOTOS[f] + '-error', ZC);
       if (COMPRUEBA[q.id] && r.modelo.length) await comprobar(q, ZC, f, r);
       await siguiente(ZC); await p.waitForTimeout(150);
     }
-    const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent.replace(/\s+/g, ' ').slice(0, 400), ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: document.querySelector(z + ' .may-modelo')?.dataset.pulmonVivo }), ZC);
+    const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent.replace(/\s+/g, ' ').slice(0, 400), ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: document.querySelector(z + ' .may-modelo')?.dataset.pulmonVivo || document.querySelector(z + ' .may-modelo')?.dataset.capilarVivo }), ZC);
     nota(/Lo que te llevas/.test(fin.txt) && fin.ficha && !!fin.modelo, `${caso.id}: llega a «Lo que te llevas» (vuelta a la ficha y al modelo «${fin.modelo}»)`);
-    if (FOTOS[f]) await foto(FOTOS[f] + '-fin', ZC);
     if (k < d.casos.length - 1) await pulsar(`${ZC} [data-fin="otro"]`);
   }
   const marcas = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-ir`)].map(b => b.querySelector('b').textContent + ':' + b.querySelector('.est-marca')?.textContent).join(' '), f);
