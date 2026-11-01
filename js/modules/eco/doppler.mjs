@@ -179,12 +179,12 @@ export function puntosMuestra(P, g, haz) {
 export const velocidadesMuestra = (pts, haz, F) => pts.map(p => -dot(velocidad(p, F), haz));
 
 /** Columna del espectro (RGB por fila) para unas velocidades medidas; escala ±vmax, con aliasing. */
-export function columnaEspectro(us, filas, vmax, semilla = 1) {
+export function columnaEspectro(us, filas, vmax, semilla = 1, base = 0.5) {
   const out = new Uint8ClampedArray(filas * 3);
   let a = (semilla * 2654435761) >>> 0; const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const envolver = (u) => ((u + vmax) % (2 * vmax) + 2 * vmax) % (2 * vmax) - vmax;
+  const lo = -2 * (1 - base) * vmax, envolver = (u) => ((u - lo) % (2 * vmax) + 2 * vmax) % (2 * vmax) + lo;   // el aliasing envuelve en el rango visible (con la base desplazada, también)
   for (let y = 0; y < filas; y++) {
-    const vy = vmax * (1 - 2 * (y + 0.5) / filas); let I = 0;
+    const vy = 2 * vmax * (base - (y + 0.5) / filas); let I = 0;
     for (const u0 of us) { if (Math.abs(u0) < 4) continue;          // filtro de pared
       const u = envolver(u0), sg = 2.5 + 0.05 * Math.abs(u0), z = (vy - u) / sg;
       I += Math.exp(-z * z) + (vy * u > 0 && Math.abs(vy) < Math.abs(u) ? 0.12 : 0); }   // relleno hasta la línea de base
@@ -236,7 +236,10 @@ export function fuenteEnMuestra(pts, haz, F) {
   for (const v of F.vasos) { const u = medir({ valvulas: [], vasos: [{ ...v, vm: 1 }] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor)) mejor = { tipo: 'vaso', vasoTipo: v.tipo, nombre: v.nombre, r: v.r, factor: u }; }
   // el chorro regurgitante, si la muestra cae de verdad en él, manda sobre la convergencia de la mitral (que no sabe de cierres)
   const reg = F.geom.find(j => j.n === 'regMitral');
-  if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: u }; }
+  if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) {
+    // CW de la IM: igual que la IT, el haz atraviesa todo el chorro y se lee su máximo (vena contracta); solo cuenta el ángulo (cos θ)
+    const cos = Math.abs(haz[0] * reg.dir[0] + haz[1] * reg.dir[1] + haz[2] * reg.dir[2]);
+    return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: Math.sign(u) * cos }; } }
   const regT = F.geom.find(j => j.n === 'regTricus');
   if (regT) { const u = medir({ valvulas: [regT], vasos: [] }); if (Math.abs(u) > 0.2) {
     // Doppler continuo: la línea del haz atraviesa todo el chorro y el ecógrafo lee su máximo (la vena contracta), no la velocidad

@@ -588,10 +588,13 @@ export function montarSimulador(raiz, opc = {}) {
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
+    ponerBase(k === 'regmitral' || k === 'regtricus' ? 'arriba' : 'centro');   // CW de un chorro que se aleja: línea de base arriba (ilustrativo)
     if (k === 'regmitral' || k === 'regtricus') { const e = k === 'regtricus' ? '500' : '250'; $('#cv-d-escala').value = e; espectro.setEscala(+e); }   // el chorro supera los 150 cm/s; la IT con HP llega a ~450 cm/s: el CW no da aliasing
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
+  function ponerBase(k) { $('#cv-d-base').value = k; espectro.setBase(k === 'arriba' ? 0.2 : k === 'abajo' ? 0.8 : 0.5); ultimoTD = null; }
+  $('#cv-d-base').addEventListener('change', () => ponerBase($('#cv-d-base').value));
   $('#cv-d-escala').addEventListener('change', () => { espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
   $('#cv-color').addEventListener('change', () => { colorOn = $('#cv-color').checked; $('#cv-nyquist').hidden = !colorOn; ecoPendiente = true; });
   $('#cv-nyquist').addEventListener('change', () => { nyq = +$('#cv-nyquist').value; ecoPendiente = true; });
@@ -646,7 +649,7 @@ export function montarSimulador(raiz, opc = {}) {
         + `<br>En el orificio el chorro llega a ${fx(vOri)} cm/s (ΔP VI−AI ≈ 4v² = ${fx(dp)} mmHg).`
         + `<br><b>Vena contracta ${fx(vc, 2)} cm</b> (calculada del EROA como un orificio redondo, no medida en la imagen; Zoghbi: &lt;0,3 cm leve, ≥0,7 cm grave; ${vc < 0.3 ? 'leve' : vc >= 0.7 ? 'grave' : 'intermedia: los valores intermedios se solapan entre grados, confírmalo con otros métodos'}). Tras ella el chorro se abre en cono y arrastra sangre: ocupa más AI cuanto más EROA, pero el área del chorro no sirve sola para graduar. En la IM secundaria el orificio es elíptico y la vena contracta en 2D la subestima.`
         + ` <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=26" target="_blank" rel="noopener">Zoghbi p. 328</a> · <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=6" target="_blank" rel="noopener">p. 308 (área del chorro)</a>`
-        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.</span>`);
+        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En el CW el haz atraviesa el chorro y se lee su máximo × cos θ (la línea de base sube para aprovechar la pantalla; escala e inclinación ilustrativas).</span>`);
       return;
     }
     if (medD.tipo === 'eyeccion') {
@@ -776,21 +779,22 @@ export function montarSimulador(raiz, opc = {}) {
       const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrm(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
       const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
       // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
-      if (fuenteD && fuenteD.n === 'regTricus') { const jt = Fd.valvulas.find(x => x.n === 'regTricus'); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
+      const esReg = fuenteD && (fuenteD.n === 'regTricus' || fuenteD.n === 'regMitral');
+      if (esReg) { const jt = Fd.valvulas.find(x => x.n === fuenteD.n); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
       if (!revision && s === motor.s && ultimoTD !== s.t) {
         // una columna por muestra del motor (2 ms) desde el fotograma anterior: la onda sale con su envolvente y su pendiente, no en escalones.
         // Cada muestra desplaza las velocidades del fotograma por lo que cambia la curva de la fuente entre ese instante y este
-        const lote = [], vmaxD = espectro.estado.vmax, aD = areasD(), mD = datosFlujo();
+        const lote = [], vmaxD = espectro.estado.vmax, baseD = espectro.estado.base, aD = areasD(), mD = datosFlujo();
         const vEn = (x) => curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
         if (fuenteD && ultimoTD != null && s.t - ultimoTD < 0.25 && s.t > ultimoTD) {
           const ini = s.t - s.tLatido, cur = motor.ondaActual, prev = motor.onda, v0 = vEn(s);
           const emitir = (x, tAbs) => { if (tAbs <= ultimoTD || tAbs > s.t || Math.round(x.t / 0.002) % 2) return;   // una de cada dos (4 ms ≈ 0,5 px a 390 px): la mitad de coste
-           const dv = vEn(x) - v0, uk = fuenteD.n === 'regTricus' ? [vEn(x)] : us.map(u => u + dv);
-            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD) }); };
+           const dv = vEn(x) - v0, uk = esReg ? [vEn(x)] : us.map(u => u + dv);
+            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD, baseD) }); };
           if (prev.length && ultimoTD < ini) { const t0 = ini - (prev[prev.length - 1].t + 0.002); for (const x of prev) emitir(x, t0 + x.t); }
           for (const x of cur) emitir(x, ini + x.t);
         }
-        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD));
+        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD, baseD));
         ultimoTD = s.t;
       }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);

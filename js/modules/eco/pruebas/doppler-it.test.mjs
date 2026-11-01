@@ -40,3 +40,24 @@ test('envolvente sistólica redondeada, sin NaN', () => {
   assert.ok(sist > 0.25 * T && sist < 0.9 * T, 'duración sistólica ' + sist);
   const iP = curva.findIndex(c => c.v === pico); assert.ok(iP > 0 && curva[iP].v >= curva[iP - 1].v);
 });
+
+// D1 · CW de la IM: el haz lee el máximo del chorro (vena contracta) × cos θ, y la columna admite línea de base desplazada
+import { fuenteEnMuestra, columnaEspectro, velRegMitral } from '../doppler.mjs';
+test('IM CW: el factor es ±cos θ (no depende de dónde cae la muestra en el chorro) y la curva es lisa', () => {
+  const dir = [0, 1, 0], pts = Array.from({ length: 9 }, (_, i) => [0, 5 + i, 0]), geom = [{ n: 'regMitral', c: [0, 0, 0], dir, a: 30, v0: 1, vTubo: 1, salida: false, libre: true }];
+  for (const haz of [[0, 1, 0], [Math.sin(0.35), Math.cos(0.35), 0]]) {
+    const f = fuenteEnMuestra(pts, haz, { geom, valvulas: [], vasos: [] });
+    if (!f) continue;
+    assert.equal(f.n, 'regMitral'); assert.ok(Math.abs(Math.abs(f.factor) - Math.abs(haz[1])) < 1e-9, 'factor ' + f.factor);
+  }
+  const m = crearMotor(); m.correr(12); ESCENARIOS.dilatada.aplicar(m, 1); m.correr(ASENTAR_FORMA); m.p.eroaMitral = 0.3; m.correr(40);
+  const c = curvaLatido(m.onda, { n: 'regMitral', factor: -0.94 }, -0.94, {}, { eroaMitral: 0.3 }), v = c.map(x => Math.abs(x.v));
+  const pico = Math.max(...v), salto = Math.max(...v.slice(1).map((x, i) => Math.abs(x - v[i])));
+  assert.ok(pico > 0 && salto < 0.2 * pico, `salto ${salto} pico ${pico}`);
+  assert.ok(Math.abs(pico - 0.94 * Math.max(...m.onda.map(s => velRegMitral(s, 0.3)))) < 1e-6);
+});
+test('columnaEspectro con línea de base arriba: el chorro negativo cae en su fila y no hay fila por encima de la base', () => {
+  const col = columnaEspectro([-300], 100, 250, 1, 0.2), fila = (v) => Math.floor((0.2 - v / 500) * 100);
+  assert.ok(col[3 * fila(-300)] > col[3 * fila(-100)] && col[3 * fila(-300)] > col[3 * fila(100)]);
+  const centro = columnaEspectro([-100], 100, 250, 1), arr = columnaEspectro([-100], 100, 250, 1, 0.5); assert.deepEqual(centro, arr);
+});
