@@ -61,6 +61,8 @@ const MODELOS = {
     ritmoVivo: { especialidad: 'libros', view: 'ritmoVivo', nombre: '⚡ el corazón eléctrico' },
     shockVivo: { especialidad: 'libros', view: 'shockVivo', nombre: '🫀 el shock a pie de cama' },
     pulmonVivo: { especialidad: 'libros', view: 'pulmonVivo', nombre: '🫁 el pulmón con respirador' },
+    craneoVivo: { especialidad: 'libros', view: 'craneoVivo', nombre: '🧠 el cráneo vivo' },
+    placaViva: { especialidad: 'libros', view: 'placaViva', nombre: '💪 la placa motora viva' },
     receptorVivo: { especialidad: 'libros', view: 'receptorVivo', nombre: '💊 el receptor vivo' },
     hepatocitoVivo: { especialidad: 'libros', view: 'hepatocitoVivo', nombre: '🏭 el hepatocito vivo' },
     termostatoVivo: { especialidad: 'libros', view: 'termostatoVivo', nombre: '🌡️ el cuerpo que arde y tirita' },
@@ -471,7 +473,7 @@ class Estudiar {
     // «Para profundizar»: cada trozo se copia del texto de la ficha la primera vez que se abre (sin ids repetidos).
     profundizar() {
         const lista = this.raiz.querySelector('.may-prof-lista');
-        if (lista.dataset.hecho) return;
+        if (lista.dataset.hecho !== undefined) return;
         lista.dataset.hecho = '';
         for (const p of this.d.profundizar) {
             const el = document.getElementById(p.id);

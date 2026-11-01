@@ -1,0 +1,37 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6a). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6a-craneo-a.html
+     Cráneo A «La caja cerrada»: corte sagital rígido con cerebro, sangre y LCR, una masa que empuja y la curva presión-volumen (ilustrativa).
+     Fuente: Marino 2024, caps. 45-47 (docs/marino-2024-neurologia-caps45-47.pdf). Sin librerías: SVG y JS puro. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La caja cerrada · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6a-craneo-a/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>La caja cerrada</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-g">
+    <span>PAM <b id="mon-pam"></b></span><span>PIC <b id="mon-pic"></b></span><span id="mon-ppc-c">PPC <b id="mon-ppc"></b> <small id="mon-ppc-nota"></small></span>
+    <span>GCS <b id="mon-gcs"></b></span><span>PaCO₂ <b id="mon-co2"></b></span><span class="ancho">Pupilas <b id="mon-pup"></b></span></div></section>
+  <section class="zona-escena"><svg id="cr-svg" viewBox="0 0 360 300" role="img" aria-label="Corte sagital del cráneo con cerebro, sangre y LCR, la masa y la curva presión-volumen"></svg></section>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <section class="bloque">
+    <details class="plegable" open><summary>Figuras reales del libro</summary><div class="figs">
+      <figure><img src="../../js/modules/libros/img/mar-fig47-3-hematoma.jpg" alt="TC con hematoma de ganglios basales y sangre en los ventrículos" loading="lazy"><figcaption>Fig. 47.3 · hematoma con sangre ventricular (Marino, p. 45)</figcaption></figure>
+      <figure><img src="../../js/modules/libros/img/mar-fig47-2-hemorragia-tpa.jpg" alt="TC con hemorragia tras trombólisis" loading="lazy"><figcaption>Fig. 47.2 · hemorragia tras tPA (Marino, p. 39)</figcaption></figure></div></details>
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Masa y presión</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Respirador, tiempo, pacientes</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b6a-craneo-a/pagina.js"></script>
+</body></html>

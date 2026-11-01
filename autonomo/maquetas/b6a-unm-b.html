@@ -1,0 +1,49 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6a). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6a-unm-b.html
+     Unión neuromuscular, opción B «Del nervio al pulgar»: cadena axón → placa → fibra → pulgar (TOF) → pulmón (CV, PIM), un impulso animado con Motion,
+     la lupa de la placa, la Tabla 46.6 que se enciende y los topes de relajantes, reversión y debilidad respiratoria.
+     Fuente: Marino 2024, cap. 46 (docs/marino-2024-neurologia-caps45-47.pdf). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unión neuromuscular · del nervio al pulgar · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6a-unm-b/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>Del nervio al pulgar</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="modos m3" aria-label="Pruebas con Melquíades"><button type="button" data-modo="apuesta2" aria-pressed="false">Apuesta · Melquíades</button><button type="button" data-modo="error2" aria-pressed="false">Error · Serapio</button><button type="button" data-modo="caso2" aria-pressed="false">Caso · Melquíades</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
+    <span>Conducción<b id="m-cond"></b></span><span>TOF<b id="m-tof"></b></span><span>Fuerza<b id="m-f"></b></span><span>Reflejos<b id="m-ref"></b></span>
+    <span>LCR<b id="m-lcr"></b></span><span>CV mL · mL/kg<b id="m-cv"></b></span><span>PIM cmH₂O<b id="m-pim"></b></span><span>K⁺<b id="m-k"></b></span>
+    <span>FC<b id="m-fc"></b></span><span>PA<b id="m-pa"></b></span><span>Hielo<b id="m-hielo"></b></span><span>Secreciones<b id="m-sec"></b></span></div></section>
+  <div id="sellos" class="sellos" aria-label="Sellos y avisos"></div>
+  <section class="zona-escena"><svg id="un-svg" viewBox="0 0 360 184" role="img" aria-label="Cadena del nervio al pulgar: axón con mielina, placa motora, fibra muscular, pulgar del TOF y pulmón con la capacidad vital; debajo, las sacudidas del pulgar"><g id="est"></g><g id="capa-imp"><circle id="imp" cx="10" cy="70" r="4" opacity="0"/></g></svg></section>
+  <div id="avisos"></div>
+  <p id="ritmo-vivo" hidden>Con este K⁺ y la succinilcolina, en la app se abre el ritmo vivo «hiperpotasemia»: <button type="button" data-ritmo-vivo="hiperk" class="ver-ficha">Ver el ritmo</button></p>
+  <p id="pulmon-vivo" hidden>Con estas cifras, en la app se abre el pulmón vivo «debilidad neuromuscular» con la CV y la PIM de este paciente.</p>
+  <details class="lupa plegable" id="detalle-lupa"><summary>Lupa de la placa motora</summary><div id="un-pasos" class="fila-g"></div><p id="paso-txt" class="idea"></p><svg id="un-lupa" viewBox="0 0 360 184" role="img" aria-label="Terminal del nervio, hendidura con acetilcolina y músculo con receptores y acetilcolinesterasa"></svg></details>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <div id="tabla-466"></div>
+  <div id="leyenda"></div>
+  <section class="figuras" aria-label="Figura real del libro">
+    <figure id="fig-hielo"><img src="../../js/modules/libros/img/mar-fig46-1-prueba-hielo.jpg" alt="Prueba del hielo en la miastenia: ptosis antes y después"><figcaption>Fig. 46.1 · Prueba del hielo (Marino 2024, p. 24-25). Es la prueba de la miastenia; el Guillain-Barré no tiene debilidad ocular.</figcaption></figure>
+  </section>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script src="../../js/vendor/motion.js"></script>
+<script type="module" src="b6a-unm-b/pagina.js"></script>
+</body></html>

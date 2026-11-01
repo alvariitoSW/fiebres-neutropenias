@@ -22,16 +22,17 @@ import { join } from 'node:path';
 const { MAYEUTICA_B1: SOLO_B1 } = await import(new URL('../../js/data/mayeutica/b1.js', import.meta.url));
 const { MAYEUTICA_B2 } = await import(new URL('../../js/data/mayeutica/b2.js', import.meta.url));
 const { MAYEUTICA_B3 } = await import(new URL('../../js/data/mayeutica/b3.js', import.meta.url));
+const { MAYEUTICA_B6A } = await import(new URL('../../js/data/mayeutica/b6a.js', import.meta.url));
 const { MAYEUTICA_B5 } = await import(new URL('../../js/data/mayeutica/b5.js', import.meta.url));
 // Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
-const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3, ...MAYEUTICA_B5 };
+const MAYEUTICA_B1 = { ...SOLO_B1, ...MAYEUTICA_B2, ...MAYEUTICA_B3, ...MAYEUTICA_B5, ...MAYEUTICA_B6A };
 // Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
 const NAV_B3 = tab => tab.startsWith('neumo-') ? { especialidad: 'neumologia', view: 'merinoNeumologia', panel: 'panel-merino-neumo-tabs' } : { especialidad: 'cardiologia', view: 'merinoCardiologia', panel: 'panel-merino-cardio-tabs' };
 // Las del bloque 5 (abdomen y temperatura), en Libros → Marino · Abdomen.
 const NAV_B5 = { especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs' };
-const navDe = tab => MAYEUTICA_B5[tab] ? NAV_B5 : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
+const navDe = tab => MAYEUTICA_B6A[tab] ? { especialidad: 'libros', view: 'marinoNeuro', panel: 'panel-marino-neuro-tabs' } : MAYEUTICA_B5[tab] ? NAV_B5 : MAYEUTICA_B3[tab] ? NAV_B3(tab) : MAYEUTICA_B2[tab] ? NAV_B2 : { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };
 const { barajar, hoyLocal, sumarDias } = await import(new URL('../../js/core/mayeutica-motor.js', import.meta.url));
 const args = process.argv.slice(2);
 const BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/');
@@ -184,7 +185,7 @@ async function correr(ANCHO, REDUCIDO) {
         ok(sinModeloAun || (juega.length > 0 && juega.every(j => j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))), `${ficha}: «Juega» con ${juega.length} estado(s) de modelo vivo, cada uno con su qué mirar${sinModeloAun ? ' (su modelo aún no existe: lo dice)' : ''}${juega.filter(j => !(j.modelo && j.texto.length > 3 && !/\b(mar|mr|mh)-[a-z0-9-]+/.test(j.texto))).map(j => ' [falla: «' + j.texto.slice(0, 70) + '»]').join('')}`);
         ok(await desborde() <= 0, `${ficha}: sin desborde en «Juega»`);
         if (nf === 0) await foto('01c-juega', PASO(ficha, 'juega'));
-        if (!REDUCIDO && !juegaProbado) {
+        if (!REDUCIDO && !juegaProbado && juega.length) {   // una ficha cuyo modelo aún no existe no tiene botón que pulsar
             juegaProbado = true;
             await pulsar(`${PASO(ficha, 'juega')} .est-juega`); await p.waitForTimeout(1500);
             const v = await volverVisible();

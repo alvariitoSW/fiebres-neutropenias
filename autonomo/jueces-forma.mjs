@@ -41,6 +41,7 @@ export const BANCOS = [
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · el cráneo (bloque 6a, grupo 6D)', datos: 'js/data/mayeutica/b6a.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · bloque 5 (Marino caps. 39-44)', datos: 'js/data/mayeutica/b5.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'pulmón vivo', datos: 'js/data/pulmon-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
@@ -48,6 +49,8 @@ export const BANCOS = [
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'placa viva', datos: 'js/data/placa-viva-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'cráneo vivo', datos: 'js/data/craneo-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
@@ -100,6 +103,13 @@ export const MODELOS = {
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa
         figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
+    // Cráneo vivo (b6a): Explorar | Apuesta | Error | Caso; el estado va en data-craneo-vivo
+    'craneo-vivo': { raiz: '#crv-raiz', enlace: { especialidad: 'libros', view: 'craneoVivo' }, clave: 'craneoVivo', modo: { explorar: '#crv-raiz [data-modo="explorar"]', mayeutica: '#crv-modo-preguntas' },
+        estados: ['abundio', 'segismundo', 'clotilde', 'petronila', 'leovigildo'] },
+    // ·
+    // Placa viva: Explorar | Preguntas (Mayéutica del motor común): el estado va en data-placa-viva
+    'placa-viva': { raiz: '#plv-raiz', enlace: { especialidad: 'libros', view: 'placaViva' }, clave: 'placaViva', modo: { explorar: '#plv-modo-explorar', mayeutica: '#plv-modo-preguntas' },
+        estados: ['flor', 'sera', 'mel', 'pnc', 'mcc'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };

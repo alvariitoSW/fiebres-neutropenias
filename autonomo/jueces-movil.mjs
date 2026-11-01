@@ -22,6 +22,9 @@ const FRASES = {
     'muralla-viva': '#mur-frase', 'telar-vivo': '#tel-frase', 'inmersion-viva': '#inm-frase', 'vaso-vivo': '#vso-frase', 'shock-vivo': '#shv-frase-txt', 'pulmon-vivo': '#pul-frase-txt',
     'ritmo-vivo': '#rtv-frase',
     'receptor-vivo': '#rcv-frase', 'iones-vivos': '#iov-frase',
+    'craneo-vivo': '#crv-frase',
+    // ·
+    'placa-viva': '#plv-frase',
     'hepatocito-vivo': '#hpv-frase-txt',
     'termostato-vivo': '#tmv-frase',
 };

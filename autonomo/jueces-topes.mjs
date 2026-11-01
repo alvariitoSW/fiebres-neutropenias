@@ -39,6 +39,10 @@ const AJUSTES = {
     // Termostato vivo: «Paso ›», «‹ Paso» y «Siguiente paso» son pasos; los selectores de estado y los botones de capa no acumulan (la prueba propia lleva «Juega» a sus topes)
     'termostato-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Siguiente|‹ Paso|Paso ›|Piel|Músculo|Cerebro|Bien|Error)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
+    'craneo-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Más mandos|Menos mandos)/ },
+    // ·
+    // Placa viva: «Hazlo / Siguiente / Cerrar» de la guía, «Ver el ciclo», los pasos de la lupa y el reloj (+10 min, Día ±1) no son mandos de dosis (la prueba propia recorre todos)
+    'placa-viva': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Ver el ciclo|\d )/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
 const NO_MANDO = '[data-especialidad], [data-view], [data-resaltar], [data-volver], [data-modo], .back-btn, [class*="-org-ir"], [class*="-ir"], [id$="-lupa-cerrar"], [id*="-modo-"], [id$="-guia-abrir"], [data-accion]';

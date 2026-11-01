@@ -1,0 +1,37 @@
+    <button class="back-btn btn-volver-libros-menu" id="plv-volver">← VOLVER</button>
+    <!-- Placa motora viva: del nervio al pulgar (Marino cap. 46). Modelo vivo de Libros. Lógica en placa-viva/index.js (arranque) y pagina.js;
+         datos y fuentes en js/data/placa-viva-data.js. Prefijo de ids: plv-. -->
+    <div class="plv-raiz" id="plv-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="plv-eyebrow">Modelo vivo · Marino cap. 46</p><h2 class="plv-titulo">Placa motora viva: del nervio al pulgar</h2></header>
+      <div class="modos m2" id="plv-modos" role="group" aria-label="Modo"><button type="button" id="plv-modo-explorar" aria-pressed="true">Explorar</button><button type="button" id="plv-modo-preguntas" aria-pressed="false">Preguntas</button></div>
+      <section id="plv-vista-preguntas" class="plv-bloque" hidden aria-live="polite"><div class="plv-formato" id="plv-preg"></div><p class="plv-para" id="plv-aviso-tapa" hidden>El monitor y el dibujo salen cuando contestes.</p></section>
+      <section id="plv-monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
+        <span>Conducción<b id="plv-m-cond"></b></span><span>TOF<b id="plv-m-tof"></b></span><span>Fuerza<b id="plv-m-f"></b></span><span>Reflejos<b id="plv-m-ref"></b></span>
+        <span>LCR<b id="plv-m-lcr"></b></span><span>CV mL · mL/kg<b id="plv-m-cv"></b></span><span>PIM cmH₂O<b id="plv-m-pim"></b></span><span>K⁺<b id="plv-m-k"></b></span>
+        <span>FC<b id="plv-m-fc"></b></span><span>PA<b id="plv-m-pa"></b></span><span>Hielo<b id="plv-m-hielo"></b></span><span>Secreciones<b id="plv-m-sec"></b></span></div></section>
+      <div id="plv-sellos" class="sellos" aria-label="Sellos y avisos"></div>
+      <section class="zona-escena" id="plv-escena"><svg id="plv-svg" viewBox="0 0 360 184" role="img" aria-label="Cadena del nervio al pulgar: axón con mielina, placa motora, fibra muscular, pulgar del TOF y pulmón con la capacidad vital; debajo, las sacudidas del pulgar"><g id="plv-est"></g><g id="plv-capa-imp"><circle id="plv-imp" cx="10" cy="70" r="4" opacity="0"/></g></svg></section>
+      <div id="plv-avisos"></div>
+      <p id="plv-ritmo-vivo" class="plv-enlace" hidden>Con este K⁺ y la succinilcolina, el potasio sube otros 0,5 mEq/L. <button type="button" class="ver-ficha" data-especialidad="libros" data-view="ritmoVivo" data-ritmo-vivo="hiperk">Ver el ritmo vivo «potasio alto» →</button></p>
+      <p id="plv-pulmon-vivo" class="plv-enlace" hidden>Intubado con estas cifras de CV y PIM: <button type="button" class="ver-ficha" data-especialidad="libros" data-view="pulmonVivo" data-pulmon-vivo="sbt-fracaso">ver en el pulmón vivo el destete que fracasa →</button></p>
+      <details class="lupa plegable" id="plv-detalle-lupa"><summary>Lupa de la placa motora</summary><div id="plv-pasos" class="fila-g"></div><p id="plv-paso-txt" class="idea"></p><svg id="plv-lupa" viewBox="0 0 360 184" role="img" aria-label="Terminal del nervio, hendidura con acetilcolina y músculo con receptores y acetilcolinesterasa"></svg></details>
+      <section id="plv-guia" class="prueba guia" hidden aria-live="polite"></section>
+      <p id="plv-idea" class="idea"></p>
+      <div id="plv-tabla-466"></div>
+      <div id="plv-leyenda"></div>
+      <section class="figuras" aria-label="Figura real del libro">
+        <div class="article-figure"><img loading="lazy" src="js/modules/libros/img/mar-fig46-1-prueba-hielo.jpg" alt="Prueba del hielo en la miastenia: ptosis antes y después"><p class="article-figure-caption">Fig. 46.1 · Prueba del hielo (Marino 2024, p. 24-25). Es la prueba de la miastenia; el Guillain-Barré no tiene debilidad ocular.</p></div>
+      </section>
+      <section class="bloque">
+        <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="plv-fuentes"></ul></details>
+        <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="plv-crecera"></ul></details>
+        <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="plv-notas"></div></details>
+        <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="plv-profundizar"></ul></details>
+      </section>
+      <div class="dock" id="plv-dock"><div class="dock-in" id="plv-dock-explorar">
+        <p class="frase" id="plv-frase" role="status" aria-live="polite"><span class="frase-txt" id="plv-frase-txt"></span></p>
+        <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
+        <div class="dock-panel" id="plv-dock-panel"></div><div class="dock-panel" id="plv-dock-medir" hidden></div>
+      </div>
+      <div class="dock-in plv-dock-est" id="plv-dock-estudio" hidden><div class="plv-pasos" id="plv-dock-pasos"></div><div class="plv-dock-est-txt"><span id="plv-dock-est-izq"></span><span id="plv-dock-est-der"></span></div></div></div>
+    </div>

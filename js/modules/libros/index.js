@@ -37,11 +37,15 @@ import { init as initPulmonVivo } from './pulmon-vivo/index.js';
 import { init as initRitmoVivo } from './ritmo-vivo/index.js';
 import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
+import { init as initCraneoVivo } from './craneo-vivo/index.js';
+// ·
+import { init as initPlacaViva } from './placa-viva/index.js';
 import { init as initHepatocitoVivo } from './hepatocito-vivo/index.js';
 import { init as initTermostatoVivo } from './termostato-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { MAYEUTICA_B5 } from '../../data/mayeutica/b5.js';
+import { MAYEUTICA_B6A } from '../../data/mayeutica/b6a.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -77,6 +81,9 @@ const BLOQUES = {
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
 const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos', 'hepatocitoVivo', 'termostatoVivo']);
+MODELOS.add('craneoVivo'); BLOQUES.marinoNeuro.vivos.push('crv-menu-libros');
+// ·
+MODELOS.add('placaViva'); BLOQUES.marinoNeuro.vivos.push('plv-menu-libros');
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -135,6 +142,11 @@ export function init() {
         receptorVivo: document.getElementById('receptor-vivo-view'),
         // Iones vivos (bloque 4, caps. 36-38; fichas en Marino Ácido-base, renal y electrolitos)
         ionesVivos: document.getElementById('iones-vivos-view'),
+        // Cráneo vivo (bloque 6a, caps. 45-47; fichas en Marino Neurología)
+        craneoVivo: document.getElementById('craneo-vivo-view'),
+        // ·
+        // Placa motora viva (Marino cap. 46; fichas en Neurología)
+        placaViva: document.getElementById('placa-viva-view'),
         hepatocitoVivo: document.getElementById('hepatocito-vivo-view'),
         // Termostato vivo (bloque 5, caps. 43-44; fichas en Marino Abdomen y temperatura)
         termostatoVivo: document.getElementById('termostato-vivo-view'),
@@ -223,6 +235,7 @@ export function init() {
     initMarinoNutricion();
     initMarinoToxicos();
     initVisualMarinoCaps45a53();
+    Object.entries(MAYEUTICA_B6A).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));   // Estudiar del b6a (tras su vista Visual)
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
@@ -237,8 +250,9 @@ export function init() {
     const ritmoVivo = arrancar('ritmo', initRitmoVivo);
     const receptorVivo = arrancar('receptor', initReceptorVivo);
     const ionesVivos = arrancar('iones', initIonesVivos);
-    const hepatocitoVivo = arrancar('hepatocito', initHepatocitoVivo);
-    const termostatoVivo = arrancar('termostato', initTermostatoVivo);
+    const craneoVivo = arrancar('craneo', initCraneoVivo);
+    // ·
+    const placaViva = arrancar('placa motora', initPlacaViva);
 
     librosLevel.show('menu');
 
@@ -263,6 +277,11 @@ export function init() {
             receptorVivo: (estadoClave, origen) => receptorVivo?.abrir(estadoClave, origen),
             // data-iones-vivos="<paciente>[:paso|:ion]", los iones vivos
             ionesVivos: (estadoClave, origen) => ionesVivos?.abrir(estadoClave, origen),
+            // data-craneo-vivo="<paciente>[:paso]", el cráneo vivo
+            craneoVivo: (estadoClave, origen) => craneoVivo?.abrir(estadoClave, origen),
+            // ·
+            // data-placa-viva="<paciente>[:paso]", la placa motora viva
+            placaViva: (estadoClave, origen) => placaViva?.abrir(estadoClave, origen),
             // data-hepatocito-vivo="<paciente>[:tips]", el hepatocito vivo
             hepatocitoVivo: (estadoClave, origen) => hepatocitoVivo?.abrir(estadoClave, origen),
             // data-termostato-vivo="<estado>[:paso]", el termostato vivo
