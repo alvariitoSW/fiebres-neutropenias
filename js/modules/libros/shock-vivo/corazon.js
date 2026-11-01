@@ -81,11 +81,36 @@ export function montarCorazon(svg) {
       + `<text x="${f1(b.x + 2)}" y="${f1(ay - w / 2 - 6)}" style="${txt}">VI → VD</text>`
       + `<text x="${f1(b.x + 2)}" y="${f1(ay - w / 2 - 20)}" style="${txt}">al pulmón ×${String(q).replace('.', ',')} (Qp/Qs)</text>`;
   };
+  // capa de la disección (solo Joaquín): colgajo de la íntima y luz falsa en la ascendente (Marino Fig. 20.4, p. 51: el colgajo
+  // separa la luz verdadera de la falsa) y la cizalla ∝ FC × presión de pulso (dirección: p. 52; la escala, ilustrativa)
+  const capaDis = document.createElementNS('http://www.w3.org/2000/svg', 'g'); capaDis.id = 'cor-diseccion'; svg.querySelector('#cor-corazon').append(capaDis);
+  let disPrev = '';
+  const pintarDis = (cab, info) => {
+    const u = cab.lectura?.u;
+    if (!info?.diseccion || !u) { if (disPrev) { disPrev = ''; capaDis.innerHTML = ''; } return; }
+    const pp = Math.round(u.pas - u.pad_), idx = cl(u.fc * pp / (140 * 80), 0, 1), k = Math.round(u.fc) + '|' + pp + '|' + (disPrev ? 1 : 0);
+    if (k === disPrev) return; disPrev = k;
+    const [ax, ay] = c.puertos().aorta, R = 12.5;
+    const txt = 'font:600 11px system-ui,sans-serif;fill:var(--text-main);paint-order:stroke;stroke:var(--bg-main);stroke-width:2px';
+    const rojo = 'color-mix(in srgb, var(--accent-red) 70%, var(--text-main))';
+    // el colgajo: una línea ondulada dentro de la luz, de la sección cortada hacia abajo; la luz falsa, el lado derecho sombreado
+    const cx = ax + 2, fl = `M${f1(cx)} ${f1(ay - 3)}C${f1(cx + 4)} ${f1(ay + 14)} ${f1(cx - 4)} ${f1(ay + 30)} ${f1(cx + 1)} ${f1(ay + 48)}`;
+    const falsa = `M${f1(cx)} ${f1(ay - 3)}C${f1(cx + 4)} ${f1(ay + 14)} ${f1(cx - 4)} ${f1(ay + 30)} ${f1(cx + 1)} ${f1(ay + 48)}L${f1(ax + R)} ${f1(ay + 48)}L${f1(ax + R)} ${f1(ay)}Z`;
+    // el indicador: barra de 0 a 1 (ilustrativa) bajo los rótulos, a la izquierda de la aorta
+    const bx = ax + 36, by = ay - 4, bw = 84;
+    capaDis.innerHTML = `<path d="${falsa}" style="fill:${rojo}" opacity=".35"/><path d="${fl}" style="fill:none;stroke:var(--text-main);stroke-width:1.8;stroke-linecap:round"/>`
+      + `<text x="${f1(ax - 15)}" y="${f1(ay - 9)}" text-anchor="end" style="${txt}">luz verdadera</text>`
+      + `<text x="${f1(ax + 15)}" y="${f1(ay - 9)}" style="${txt}">luz falsa</text>`
+      + `<text x="${bx}" y="${by + 9}" style="${txt}">Cizalla (ilustrativa)</text>`
+      + `<rect x="${bx}" y="${by + 14}" width="${bw}" height="9" rx="3" style="fill:none;stroke:var(--text-main);stroke-width:1" opacity=".7"/>`
+      + `<rect x="${bx + 1}" y="${by + 15}" width="${f1(Math.max(1, (bw - 2) * idx))}" height="7" rx="2" style="fill:${rojo}"/>`
+      + `<text x="${bx}" y="${by + 36}" style="${txt}">FC ${Math.round(u.fc)} × PP ${pp}</text>`;
+  };
   return {
-    pintar(cab, dt = 1 / 60, quieto = false) {
+    pintar(cab, dt = 1 / 60, quieto = false, info = null) {
       if (!cab?.m) return;
       c.pintar(estadoCorte(cab), dt, quieto);
-      pintarCiv(cab);
+      pintarCiv(cab); pintarDis(cab, info);
       const L = cab.lectura, ed = Math.round((L?.u?.vEdema || 0) / 12) + (L?.u?.vEdema >= 1000 ? 1000 : 0);
       if (ed !== edPrev) { edPrev = ed; gg.innerHTML = gotas(L?.u?.vEdema); }
       // la luz de la arteriola con la resistencia (Poiseuille: r ∝ R^-1/4; fisiología general)

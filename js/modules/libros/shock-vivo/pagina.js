@@ -252,7 +252,7 @@ function montarEscena() {
   svg.toggleAttribute('hidden', k === 'eco'); $('esc-eco').hidden = k !== 'eco';
   if (k !== 'eco') { eco.parar(); ecoCab = null; }
   if (k === 'eco') { ecoCab = cab; eco.preparar(cab); escena = { actualizar: (cb, dt, q) => eco.tick(dt, q) }; }
-  else if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q) => c.pintar(cb, dt, q) }; }
+  else if (k === 'corazon') { const c = montarCorazon(svg); escena = { actualizar: (cb, dt, q, info) => c.pintar(cb, dt, q, info) }; }
   else {
     const [ap, pl] = k.split(':');
     if (pl === 'recorrido') { const r = montarRecorrido(svg); r.poner(ap); escena = { actualizar: (cb, dt, q) => r.tick(dt, q, cb), get texto() { return r.texto; } }; }
@@ -261,7 +261,7 @@ function montarEscena() {
   }
   est.foco = null; pintarLeyenda(); pintarPestEscena();
 }
-function infoEscena() { const ap = est.aparato; return { on: ap !== 'no' && D.indicacion(est.pac, ap).ok }; }
+function infoEscena() { const ap = est.aparato; return { on: ap !== 'no' && D.indicacion(est.pac, ap).ok, diseccion: est.pac.tipo === 'diseccion' }; }
 function pintarPestEscena() {
   if (est.modo === 'qs') {
     // «¿Qué shock es?»: la eco (ecógrafo de la app) desde el segundo tiempo; tras contestar, también el corte
