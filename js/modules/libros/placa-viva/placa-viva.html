@@ -3,9 +3,8 @@
          datos y fuentes en js/data/placa-viva-data.js. Prefijo de ids: plv-. -->
     <div class="plv-raiz" id="plv-raiz" data-modelo-vivo>
       <header class="cabecera"><p class="plv-eyebrow">Modelo vivo · Marino cap. 46</p><h2 class="plv-titulo">Placa motora viva: del nervio al pulgar</h2></header>
-      <div class="modos" id="plv-modos" role="group" aria-label="Modo"><button type="button" id="plv-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" id="plv-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" id="plv-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" id="plv-modo-caso" data-modo="caso" aria-pressed="false">Caso</button></div>
-      <div class="modos m3" role="group" aria-label="Pruebas con Melquíades y Serapio"><button type="button" id="plv-modo-apuesta2" data-modo="apuesta2" aria-pressed="false">Apuesta · Melquíades</button><button type="button" id="plv-modo-error2" data-modo="error2" aria-pressed="false">Error · Serapio</button><button type="button" id="plv-modo-caso2" data-modo="caso2" aria-pressed="false">Caso · Melquíades</button></div>
-      <section id="plv-prueba" class="prueba" hidden aria-live="polite"></section>
+      <div class="modos m2" id="plv-modos" role="group" aria-label="Modo"><button type="button" id="plv-modo-explorar" aria-pressed="true">Explorar</button><button type="button" id="plv-modo-preguntas" aria-pressed="false">Preguntas</button></div>
+      <section id="plv-vista-preguntas" class="plv-bloque" hidden aria-live="polite"><div class="plv-formato" id="plv-preg"></div><p class="plv-para" id="plv-aviso-tapa" hidden>El monitor y el dibujo salen cuando contestes.</p></section>
       <section id="plv-monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
         <span>Conducción<b id="plv-m-cond"></b></span><span>TOF<b id="plv-m-tof"></b></span><span>Fuerza<b id="plv-m-f"></b></span><span>Reflejos<b id="plv-m-ref"></b></span>
         <span>LCR<b id="plv-m-lcr"></b></span><span>CV mL · mL/kg<b id="plv-m-cv"></b></span><span>PIM cmH₂O<b id="plv-m-pim"></b></span><span>K⁺<b id="plv-m-k"></b></span>
@@ -29,9 +28,10 @@
         <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="plv-notas"></div></details>
         <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="plv-profundizar"></ul></details>
       </section>
-      <div class="dock" id="plv-dock"><div class="dock-in">
+      <div class="dock" id="plv-dock"><div class="dock-in" id="plv-dock-explorar">
         <p class="frase" id="plv-frase" role="status" aria-live="polite"><span class="frase-txt" id="plv-frase-txt"></span></p>
         <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
         <div class="dock-panel" id="plv-dock-panel"></div><div class="dock-panel" id="plv-dock-medir" hidden></div>
-      </div></div>
+      </div>
+      <div class="dock-in plv-dock-est" id="plv-dock-estudio" hidden><div class="plv-pasos" id="plv-dock-pasos"></div><div class="plv-dock-est-txt"><span id="plv-dock-est-izq"></span><span id="plv-dock-est-der"></span></div></div></div>
     </div>

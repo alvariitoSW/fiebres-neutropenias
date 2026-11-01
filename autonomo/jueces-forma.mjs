@@ -45,6 +45,7 @@ export const BANCOS = [
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'placa viva', datos: 'js/data/placa-viva-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -91,8 +92,8 @@ export const MODELOS = {
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
     // [HUECO crv: 'craneo-vivo']
     // ·
-    // Placa viva: Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía): el estado va en data-placa-viva
-    'placa-viva': { raiz: '#plv-raiz', enlace: { especialidad: 'libros', view: 'placaViva' }, clave: 'placaViva', modo: { explorar: '#plv-modo-explorar' },
+    // Placa viva: Explorar | Preguntas (Mayéutica del motor común): el estado va en data-placa-viva
+    'placa-viva': { raiz: '#plv-raiz', enlace: { especialidad: 'libros', view: 'placaViva' }, clave: 'placaViva', modo: { explorar: '#plv-modo-explorar', mayeutica: '#plv-modo-preguntas' },
         estados: ['flor', 'sera', 'mel', 'pnc', 'mcc'] },
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.

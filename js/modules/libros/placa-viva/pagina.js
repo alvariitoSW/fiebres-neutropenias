@@ -6,13 +6,14 @@ import { seguirFrase } from '../../../core/frase-vista.js';
 import { cargarMotion, sinMovimiento } from '../../../core/motion.js';
 import { leyendaParticulas } from '../../../core/particulas.js';
 import { PDF, PRESETS, IDEA, FUENTES, NOTAS, PROFUNDIZAR, CRECERA, ENLACES, TABLA, DUR, NOMBRE, fichaDe, tabDe, pagDe } from '../../../data/placa-viva-data.js';
-import { nuevo, cambiar, leer, fmt, clamp } from './modelo.js';
+import { nuevo, cambiar, leer, fmt, clamp, sacudidas } from './modelo.js';
 import { NEO, bloqueoDe, sugNecesita } from './bloqueo-motor.js';
 import { topes } from './topes.js';
 import { escena } from './dibujo.js';
 import { pintarHend, pasoHtml, prepararMotion, PASOS } from './hendidura.js';
 import { crearGuia, GUIAS } from './guia.js';
-import { APUESTA, ERROR, CASO, APUESTA2, ERROR2, CASO2, LLEVAS, opciones } from './pruebas.js';
+import { crearMayeuticaModelo } from '../../../core/mayeutica-motor.js';
+import { PREGUNTAS, CASOS } from '../../../data/placa-viva-mayeutica.js';
 const $ = (id) => document.getElementById('plv-' + id);
 const R = $('raiz');
 const todos = (q) => R.querySelectorAll(q);
@@ -41,12 +42,11 @@ function pintar() {
   $('b-via').setAttribute('aria-pressed', String(s.via)); $('b-via').textContent = s.via ? 'Intubado (vía asegurada)' : 'Intubar (vía sin asegurar)';
   $('b-hielo').textContent = s.hielo ? `Hielo: ${s.hielo} min` : 'Hielo 2 min'; $('b-neo').textContent = `Neostigmina +35 µg/kg (${s.neo} de ${NEO.max})`;
   $('b-pla').textContent = `Plasmaféresis +1 sesión (${s.ses})`; $('b-perf-mas').textContent = `Perfusión + (${s.perf})`;
-  todos('[data-modo]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
   todos('[data-pre]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === clave)));
   $('detalle-lupa').classList.toggle('foco-caja', foco.includes('lupa')); $('tabla-466').classList.toggle('foco-caja', foco.includes('tabla'));
   if (foco.includes('lupa')) $('detalle-lupa').open = true;
-  $('pulmon-vivo').hidden = !(s.via && L.crit);
-  $('ritmo-vivo').hidden = !(s.rel === 'succi' && s.k >= 5.5);
+  $('pulmon-vivo').hidden = !(!$('escena').hidden && s.via && L.crit);
+  $('ritmo-vivo').hidden = !(!$('escena').hidden && s.rel === 'succi' && s.k >= 5.5);
   if (s.est !== ultEst) { ultEst = s.est; $('detalle-lupa').open = s.est === 'miastenia' || s.est === 'bloqueo'; }
 }
 async function pulso() {
@@ -83,28 +83,78 @@ function irPaso(p) { paso = p; pintar(); }
 async function ciclo() { await prepararMotion(); for (let p = 1; p <= PASOS.length; p++) { irPaso(p); await ultMov; await espera(sinMovimiento() ? 0 : 450); } }
 function ponerPreset(c, k = 0) { clave = c; s = nuevo(c); oculto = false; foco = []; frase(PRESETS[c].txt, 'paciente inventado; cifras de la ficha'); pintar(); if (guiaApi) guiaApi.abrir(c, k); }
 const GUIA_DE = { gbs: 'flor', miastenia: 'sera', bloqueo: 'mel', pnc: 'pnc', mcc: 'mcc' };
-function modoPrueba(m) {
-  modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false; foco = []; delete caja.dataset.fin; if (guiaApi) guiaApi.cerrar();
-  if (m === 'explorar') { pintar(); return; }
-  const def = { apuesta: APUESTA, error: ERROR, caso: CASO, apuesta2: APUESTA2, error2: ERROR2, caso2: CASO2 }[m]; clave = def.preset; s = nuevo(def.preset); firma = '';
-  const tit = document.createElement('h3'); tit.textContent = def.titulo; caja.append(tit);
-  if (m.startsWith('apuesta')) {
-    oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `${def.antes} ${def.pregunta}`; const c = document.createElement('div'); c.className = 'ops'; caja.append(p, c);
-    opciones(c, def.ops, () => { oculto = false; def.tras(API); fin(caja, m); }, def.orden);
-  } else if (m.startsWith('error')) {
-    const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes; caja.append(p); let hechas = 0;
-    def.frases.forEach((f) => { const c = document.createElement('div'), t = document.createElement('p'), b = document.createElement('div'); t.className = 'enun'; t.textContent = f.t; b.className = 'ops'; c.append(t, b); caja.append(c);
-      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) fin(caja, m); }); });
-  } else caso(0, caja, def, m);
-  pintar();
+/* ============================================================
+   Mayéutica: el motor común (core/mayeutica-motor.js) con los enganches de la placa viva
+   ============================================================ */
+const subir = () => { const r = R.getBoundingClientRect(); if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' }); };
+// Lo que se esconde cuando se predice (el monitor, el dibujo y los sellos salen al contestar) o no hay modelo en la pregunta
+function verModelo(si) { for (const i of ['monitor', 'sellos', 'escena', 'avisos']) $(i).hidden = !si; if (!si) { $('ritmo-vivo').hidden = true; $('pulmon-vivo').hidden = true; } }
+function tapar(si) { $('aviso-tapa').hidden = !si; if (si) verModelo(false); }
+// Cada acción es [nombre, opciones]: las mismas del dock; «poner» fija el reloj y «via» intuba
+function aplicarAcc(lista) { for (const [a, o] of lista || []) { if (a === 'poner') API.poner(o); else if (a === 'via') API.via(); else hacer(a, o || {}); } }
+// El modelo vuelve al paciente de la pregunta, sin abrir su guía
+function reponer(c) { clave = c; s = nuevo(c); firma = ''; oculto = false; foco = []; pintar(); }
+function prepararPregunta(q) {
+  verModelo(!q.sinModelo);
+  if (q.estado) { reponer(q.estado); aplicarAcc(q.ajustes); }
+  tapar(!!q.predice && !q.sinModelo);
 }
-function caso(i, caja, def, m) {
-  const st = def.pasos[i]; const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${def.pasos.length}. ${st.enun}`; const o = document.createElement('div'); o.className = 'ops'; c.append(p, o); caja.append(c);
-  opciones(o, st.ops, (op) => { if (op.haz) op.haz(API); pintar(); if (i + 1 < def.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja, def, m); pintar(); }); c.append(b); } else fin(caja, m); }, st.orden);
+const citasDe = (q) => [].concat(q.fuente || []);
+let cuentaTocar = '';   // lo que el monitor dice tras «Compruébalo»
+function comprobarEnModelo(m, cont, q) {
+  const T = q.tocar, Ls = [leer(s)], ss = [{ ...s }];
+  m.disabled = true;
+  for (const grupo of T.haz) { aplicarAcc(grupo); Ls.push(leer(s)); ss.push({ ...s }); }
+  cuentaTocar = `${T.cuenta(Ls[0], Ls[1], sacudidas(s, Ls[Ls.length - 1]), Ls[2], ss[0], ss[1])} <span class="org">cifras: ilustrativo</span>`;
+  $('monitor').scrollIntoView({ behavior: sinMovimiento() ? 'auto' : 'smooth', block: 'start' });
+  cont.querySelector('[data-accion="comprobar"]').click();
+  requestAnimationFrame(() => cont.querySelector('[data-hueco="fin"]')?.scrollIntoView({ block: 'start', behavior: 'auto' }));
 }
-function fin(caja, k) { const b = document.createElement('div'); b.className = 'llevas'; b.innerHTML = '<b>Lo que te llevas</b><ul>' + LLEVAS[k].map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('') + '</ul>'; caja.append(b); caja.dataset.fin = '1'; }
+export const mayeutica = crearMayeuticaModelo({
+  p: 'plv', cont: () => $('preg'), clave: 'placa-viva-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
+  subir, volverPor: 'La placa viva',
+  reiniciar: () => { verModelo(true); tapar(false); reponer('flor'); },
+  pregunta: {
+    alEmpezar: (q) => prepararPregunta(q),
+    verEnTexto: (q) => `<p class="plv-fuente-p">${citasDe(q).map(cita).join('<br>')}</p>`,
+    alCerrar: (q) => { tapar(false); verModelo(!q.sinModelo); if (!q.sinModelo) pintar(); },
+    tocar: {
+      mandoHTML: (t) => `<p class="plv-para"><b>Compruébalo en el modelo:</b></p><button type="button" class="plv-b plv-prim" data-mando="sube">${t.txt}</button>`,
+      alMostrar: (q, cont) => { tapar(false); verModelo(true); pintar(); const f = cont.querySelector('[data-accion="comprobar"]').closest('.plv-fila'); if (f) f.hidden = true; },
+      comprobar: () => true,
+      confirma: () => cuentaTocar,
+      accion: comprobarEnModelo,
+    },
+  },
+  textos: {
+    ruta: (nG, nE) => `<span><b>1. Guía socrática</b> (${nG}): predices, y luego lo compruebas en el monitor.</span>
+      <span><b>2. Examen, nivel MIR</b> (${nE}): distractores finos que salen de la ficha.</span>
+      <span><b>3.</b> Otra vez lo que fallaste, solo eso.</span>
+      <span><b>4.</b> Dos casos que evolucionan: Florentina y Melquíades.</span>`,
+    empezar: 'Empezar la guía socrática', seguir: 'Seguir',
+    pie: 'Las cifras del monitor salen cuando contestas: primero predices, luego compruebas. Los pacientes se inventan; la medicina sale de la ficha, y cada pregunta dice dónde.',
+    conModelo: 'la placa', casos: 'El modelo se pone en el estado de cada paso. Lo nuevo de la ficha del paciente sale en rojo.',
+    abrirPaciente: 'Volver a la placa viva',
+  },
+  preguntaDePaso: (paso) => ({ estado: paso.estado, ajustes: paso.ajustes }),
+  alTerminarCaso: () => { verModelo(true); tapar(false); },
+  abrirPaciente: () => setModo('explorar'),
+});
+// Explorar o Preguntas: en Preguntas se esconden los mandos, la lupa y el resto del modo Explorar
+export function setModo(m) {
+  if (guiaApi) guiaApi.cerrar();
+  modo = m; foco = []; oculto = false;
+  for (const k of ['explorar', 'preguntas']) $('modo-' + k).setAttribute('aria-pressed', String(m === k));
+  const ex = m === 'explorar';
+  $('vista-preguntas').hidden = ex; $('dock-explorar').hidden = !ex; $('dock-estudio').hidden = ex;
+  for (const e of [$('detalle-lupa'), $('idea'), $('tabla-466'), $('leyenda'), ...R.querySelectorAll(':scope > .bloque, :scope > .figuras')]) e.hidden = !ex;
+  verModelo(true); tapar(false);
+  if (ex) { reponer(clave in PRESETS ? clave : 'flor'); } else mayeutica.entrar();
+  ajustar();
+}
+
 function montar() {
-  todos('.modos').forEach((m) => m.addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); }));
+  $('modo-explorar').onclick = () => setModo('explorar'); $('modo-preguntas').onclick = () => setModo('preguntas'); mayeutica.cargar();
   const cortos = ['Impulso', 'Vesículas', 'Copas', 'Enzima', 'Relajado'];
   $('pasos').innerHTML = PASOS.map((_, i) => `<button type="button" data-paso="${i + 1}" aria-pressed="false">${i + 1} ${cortos[i]}</button>`).join('') + '<button type="button" id="plv-b-ciclo">Ver el ciclo</button>';
   $('pasos').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b) return; if (b.id === 'plv-b-ciclo') ciclo(); else irPaso(+b.dataset.paso); });
@@ -123,7 +173,7 @@ function montar() {
   const ACC = { 'b-hielo': ['hielo'], 'b-igiv': ['igiv'], 'b-pla': ['pla'], 'b-piri': ['piri'], 'b-via': ['via'], 'b-succi': ['succi'], 'b-roc': ['roc'], 'b-cis': ['cis'], 'b-perf-menos': ['perfMenos'], 'b-perf-mas': ['perfMas'], 'b-neo': ['neo'], 'b-min': ['min'], 'b-dia': ['dia'], 'b-dia-': ['diaMenos'] };
   $('dock-panel').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b || b.disabled) return;
     if (b.dataset.est) { hacer('est', { v: b.dataset.est }); if (modo === 'explorar') { if (GUIA_DE[b.dataset.est]) guiaApi.abrir(GUIA_DE[b.dataset.est]); else guiaApi.cerrar(); } } else if (b.dataset.estim) hacer('estim', { v: b.dataset.estim }); else if (b.dataset.sug) hacer('sug', { v: +b.dataset.sug }); else if (b.dataset.farm) hacer('farm', { v: b.dataset.farm }); else if (ACC[b.id.replace(/^plv-/, '')]) hacer(ACC[b.id.replace(/^plv-/, '')][0]); });
-  $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { modo = 'explorar'; $('prueba').hidden = true; ponerPreset(b.dataset.pre); } });
+  $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { setModo('explorar'); ponerPreset(b.dataset.pre); } });
   const dock = $('dock'); dock.querySelector('.dock-tabs').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pest]'); if (!b) return; dock.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); $('dock-panel').hidden = b.dataset.pest !== 'dar'; $('dock-medir').hidden = b.dataset.pest !== 'medir'; });
   guiaApi = crearGuia({ caja: $('guia'), hacer, cita, setFoco: (z) => { foco = z; pintar(); } });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`;
@@ -136,7 +186,7 @@ function montar() {
 }
 // Estado: «flor» (un paciente), «flor:2» (su guía en el paso 2), «pnc» o «mcc» (esa guía). Vacío = Florentina.
 export function abrirEstado(clave) {
-  const [p, x] = String(clave || '').split(':'); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = '';
+  const [p, x] = String(clave || '').split(':'); setModo('explorar');
   const k = /^\d+$/.test(x || '') ? +x - 1 : 0;
   if (PRESETS[p]) ponerPreset(p, k); else if (p === 'pnc' || p === 'mcc') { ponerPreset('flor'); hacer('est', { v: p }); guiaApi.abrir(p, k); } else ponerPreset('flor', k);
   ajustar();
@@ -145,4 +195,4 @@ function ajustar() { R.style.setProperty('--plv-dock-h', $('dock').offsetHeight 
 montar(); ponerPreset('flor'); ajustar();
 new ResizeObserver(ajustar).observe($('dock'));
 seguirFrase(R, () => $('escena'), { dock: () => $('dock') });
-window.__plv = { abrirEstado, get s() { return s; }, get paso() { return paso; }, irPaso, ciclo, get mov() { return ultMov; }, leer: () => leer(s), hacer, ponerPreset, modoPrueba, pintar, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); } };
+window.__plv = { abrirEstado, get s() { return s; }, get paso() { return paso; }, irPaso, ciclo, get mov() { return ultMov; }, leer: () => leer(s), hacer, ponerPreset, setModo, pintar, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); } };

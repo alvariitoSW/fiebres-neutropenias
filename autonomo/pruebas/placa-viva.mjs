@@ -4,7 +4,6 @@
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const RAIZ = new URL('../../',import.meta.url).pathname, CAP = (process.argv.includes('--capturas') ? process.argv[process.argv.indexOf('--capturas')+1] : '/tmp/plan-socialista/b6a/plv/cap/').replace(/\/?$/,'/');
 const BASE = (process.argv.find(a => /^https?:/.test(a)) || 'http://localhost:8291/').replace(/\/?$/,'/'); const pid = 0;
-const PR = await import(RAIZ + 'js/modules/libros/placa-viva/pruebas.js');
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const b = await chromium.launch();
 try {
@@ -62,16 +61,7 @@ for (const ANCHO of (process.argv.find((a) => /^\d+$/.test(a)) ? [+process.argv.
   await preset('sera'); await clic('#plv-raiz [data-estim="rep"]'); const bar = await p.evaluate(() => [...document.querySelectorAll('#plv-barras .barra')].map((r) => +r.getAttribute('height'))); console.log('   miastenia ×10, alturas', bar.map((x) => Math.round(x)).join(',')); ok(bar.length === 10 && bar[9] < bar[0] * 0.8, 'fatiga no visible en las barras');
   console.log('-- Guía (3-5 pasos, con cita doble y foco)');
   for (const c of ['flor', 'sera', 'mel']) { await preset(c); let pasos = 0; for (let i = 0; i < 6; i++) { const g = await p.evaluate(() => ({ vis: !document.getElementById('plv-guia').hidden, foco: document.querySelectorAll('#plv-svg .foco').length + document.querySelectorAll('#plv-raiz .foco-caja').length, cit: document.querySelectorAll('#plv-guia .ver-ficha[data-resaltar^="#mn-"]').length, pdf: document.querySelectorAll('#plv-guia .cita-pdf').length, haz: !!document.querySelector('#plv-guia [data-g="haz"]') })); if (!g.vis) break; pasos++; ok((g.foco > 0 || pasos > 0) && g.cit === 1 && g.pdf === 1, `${c}: paso ${pasos} sin cita doble`); if (g.haz) await clic('#plv-guia [data-g="haz"]'); await clic('#plv-guia [data-g="sig"]'); } console.log(`   ${c}: ${pasos} pasos`); ok(pasos >= 3 && pasos <= 5, `${c}: guía de ${pasos} pasos`); }
-  const modo = async (m, fn, ...r) => { await clic(`#plv-raiz [data-modo="${m}"]`); await p.waitForTimeout(100); await fn(); await estado(m + ' al acabar'); const f = await p.evaluate(() => document.getElementById('plv-prueba').dataset.fin === '1'); ok(f, `${m}: no se completó`); console.log(`   ${m}: completado ${f}, citas en el cierre: ${await p.evaluate(() => document.querySelectorAll('#plv-prueba .llevas .ver-ficha').length)}`); };
-  console.log('-- Apuesta (conducción/LCR ocultos antes de contestar)');
-  await modo('apuesta', async () => { ok(await p.evaluate(() => document.getElementById('plv-m-cond').textContent === '?' && document.getElementById('plv-m-lcr').textContent === '?'), 'la apuesta enseña conducción o LCR antes de contestar'); await clic('#plv-prueba .op'); });
-  console.log('-- Error'); await modo('error', async () => { const n = await p.evaluate(() => document.querySelectorAll('#plv-prueba .ops').length); for (let i = 0; i < n; i++) await p.evaluate((i) => document.querySelectorAll('#plv-prueba .ops')[i].querySelector('.op').click(), i); });
-  console.log('-- Caso (cifras de cada paso)'); await modo('caso', async () => { for (let i = 0; i < 5; i++) { await p.evaluate((txt) => { const o = [...document.querySelectorAll('#plv-prueba .paso:last-of-type .op')]; o.find((x) => x.textContent === txt).click(); }, PR.CASO.pasos[i].ops.find((x) => x.ok).t); console.log(`   paso ${i + 1}:`, JSON.stringify(await L()), await tp()); await estado('caso paso ' + (i + 1)); if (i < 4) await clic('#plv-prueba .paso:last-of-type button.prim'); } });
-
-  console.log('-- Segundo juego (Melquíades / Serapio): camino correcto'); await modo('apuesta2', async () => { await p.evaluate((t) => [...document.querySelectorAll('#plv-prueba .op')].find((x) => x.textContent === t).click(), PR.APUESTA2.ops.find((x) => x.ok).t); });
-  await modo('error2', async () => { const n = await p.evaluate(() => document.querySelectorAll('#plv-prueba .ops').length); ok(n === 4, 'error2: no son 4 frases'); for (let i = 0; i < n; i++) await p.evaluate(([i, t]) => [...document.querySelectorAll('#plv-prueba .ops')[i].querySelectorAll('.op')].find((x) => x.textContent === t).click(), [i, PR.ERROR2.frases[i].error ? 'Es un error' : 'Es correcta']); });
-  await modo('caso2', async () => { for (let i = 0; i < 5; i++) { await p.evaluate((txt) => { const o = [...document.querySelectorAll('#plv-prueba .paso:last-of-type .op')]; o.find((x) => x.textContent === txt).click(); }, PR.CASO2.pasos[i].ops.find((x) => x.ok).t); console.log(`   paso ${i + 1}:`, JSON.stringify(await L()), await tp()); await estado('caso2 paso ' + (i + 1)); if (i < 4) await clic('#plv-prueba .paso:last-of-type button.prim'); } ok((await L()).est === 'mcc', 'caso2: no gira a miopatía el día 9'); });
-  await p.screenshot({ path: `${CAP}07-caso2-${ANCHO}.png` });
+  await (await import('./placa-viva-mayeutica.mjs')).mayeutica({ p, ok, fallos, ANCHO, CAP, desb });
   console.log('-- Injertos: hendidura de A en la lupa, fármacos, Motion, botones, eslabones');
   await preset('sera'); ok(await p.evaluate(() => document.getElementById('plv-detalle-lupa').open), 'miastenia: la lupa no se abre sola'); ok(await p.evaluate(() => document.querySelectorAll('#plv-lupa .anti').length >= 3), 'miastenia: sin anticuerpos (Y rojas) en la hendidura');
   await preset('mel'); ok(await p.evaluate(() => document.getElementById('plv-detalle-lupa').open), 'bloqueo: la lupa no se abre sola');
@@ -167,13 +157,6 @@ for (const [r, mn] of [['roc', 0], ['roc', 2], ['roc', 5], ['cis', 0], ['cis', 5
 ok(bl('roc', 0).tof === 4 && bl('cis', 0).tof === 4 && bl('succi', 0).tof === 4, 'inicio: en el minuto 0 el TOF no es 4/4'); ok(bl('roc', 2).tof < 4 && bl('roc', 2).tof > 0 && bl('roc', 5).tof === 0, 'rocuronio: 0/2/5 min mal'); ok(bl('cis', 5).tof > 0, 'cisatracurio a 5 min ya sin respuesta');
 for (const mn of [20, 58, 66, 75]) { ok(Math.abs(bl('roc', mn, { neo: 70, neoOk: false, neoT: 10 }).lvl - bl('roc', mn).lvl) < 1e-9, `neostigmina con TOF 0 (min ${mn}) cambia el bloqueo`); ok(Math.abs(bl('roc', mn, { neo: 105, neoOk: true, neoT: 58 }).lvl - bl('roc', mn, { neo: 70, neoOk: true, neoT: 58 }).lvl) < 1e-9, `neostigmina 105 revierte más que 70 (min ${mn})`); }
 ok(bl('roc', 70, { neo: 70, neoOk: true, neoT: 58 }).lvl <= bl('roc', 70).lvl, 'neostigmina 70 no revierte'); console.log('   sugammadex necesario: inmediato', sugNecesita({ rel: 'roc', min: 1 }, 4), '· profundo', sugNecesita({ rel: 'roc', min: 10 }, 0), '· moderado', sugNecesita({ rel: 'roc', min: 30 }, 2), '· tope neo', NEO.max); ok(sugNecesita({ rel: 'roc', min: 1 }, 4) === 16 && sugNecesita({ rel: 'roc', min: 10 }, 0) === 4 && sugNecesita({ rel: 'roc', min: 30 }, 2) === 2, 'sugammadex 2/4/16 mal');
-// reparto de la opción correcta (datos del módulo de pruebas)
-const { APUESTA, CASO, APUESTA2, CASO2 } = PR;
-const tests = [{ ops: APUESTA.ops, orden: APUESTA.orden }, ...CASO.pasos.map((x) => ({ ops: x.ops, orden: x.orden })), { ops: APUESTA2.ops, orden: APUESTA2.orden }, ...CASO2.pasos.map((x) => ({ ops: x.ops, orden: x.orden }))];
-const pos = [0, 0, 0], larga = tests.filter((t) => { const l = t.ops.map((o) => o.t.length), i = t.ops.findIndex((o) => o.ok); return l[i] === Math.max(...l); }).length, corta = tests.filter((t) => { const l = t.ops.map((o) => o.t.length), i = t.ops.findIndex((o) => o.ok); return l[i] === Math.min(...l); }).length;
-tests.forEach((t) => pos[t.orden.indexOf(t.ops.findIndex((o) => o.ok))]++);
-console.log(`\nReparto de la correcta en ${tests.length} tests: posiciones ${pos.join('/')} · más larga ${larga} · más corta ${corta}`);
-ok(larga <= tests.length / 3 && corta <= tests.length / 3 && Math.max(...pos) <= tests.length / 2, `reparto desigual: pos ${pos} larga ${larga} corta ${corta}`);
 } finally { await b.close(); }
 const unicos = [...new Set(errores)]; ok(unicos.length === 0, 'consola: ' + unicos.join(' | '));
 [...new Set(fallos)].forEach((f) => console.log('❌ ' + f));
