@@ -37,9 +37,9 @@ export function escena(s, L, { oculto = false } = {}) {
     (s.sensor && s.tipo !== 'edema') || s.drenaje ? t(178, 156, s.drenaje ? 'Drenaje LCR' : 'Sensor PIC') : ''].join('');
   const cara = `<g transform="translate(248,6) scale(.62)">${dibujarCara({ o: L.O, v: L.V, m: L.M, pup: L.pup, lock: tr })}</g>`;
   const der = [t(248, 166, tr ? 'Mira arriba, obedece' : L.O >= 4 ? 'Ojos abiertos' : L.O >= 2 ? 'Abre al estímulo' : 'Ojos cerrados'),
-    ...textoPupila(L.pup).split(';').map((x, i) => t(248, 178 + 11 * i, x.trim())),
-    `<g transform="translate(248,200)">${dibujarMano(tr ? 6 : L.M)}</g>`, t(310, 216, tr ? 'Mueve los ojos' : MANO[L.M] || '', 'ct'), t(310, 228, tr ? 'y parpadea' : '', 'ct'),
-    t(248, 276, oculto ? 'GCS ?' : gcsT, 'ct fuerte'), t(248, 292, L.me ? 'Sin respuesta ni reflejos' : '', 'ct'), t(248, 308, 'Paciente: ' + TIPOS[s.tipo], 'ct dim')].join('');
+    ...textoPupila(L.pup).split(';').map((x, i) => t(248, 178 + 13 * i, x.trim())),
+    `<g transform="translate(248,200)">${dibujarMano(tr ? 6 : L.M)}</g>`, t(386, 216, tr ? 'Mueve los ojos' : MANO[L.M] || '', 'ct', 'end'), t(386, 229, tr ? 'y parpadea' : '', 'ct', 'end'),
+    t(248, 276, oculto ? 'GCS ?' : gcsT, 'ct fuerte'), t(248, 292, L.me ? 'Sin respuesta ni reflejos' : '', 'ct'), t(248, 308, TIPOS[s.tipo], 'ct dim')].join('');
   return `<ellipse cx="118" cy="128" rx="108" ry="118" class="craneo"/><ellipse cx="118" cy="100" rx="94" ry="80" class="cerebro"/>
     ${abre}${masa}${vent(118 - 22 + sh, vL, 1)}${vent(118 + 22 + sh, vR, -1)}${ciste}
     <path d="M${fx},26 L${fx},182" class="falx"/>

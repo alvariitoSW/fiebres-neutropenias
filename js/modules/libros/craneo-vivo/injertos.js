@@ -4,7 +4,7 @@ import { leer, clamp, U } from './modelo.js';
 import { cita } from '../../../data/craneo-vivo-data.js';
 const D = 'docs/libro-azul-seccion-viii-neurologia-parte', pdf = (n, p, t) => `<a class="cita-pdf" href="${D}${n}.pdf#page=${p}" target="_blank" rel="noopener">${t}</a>`;
 const ST = 'https://www.statpearls.com/point-of-care/23700';
-const F = 10.3, tx = (x, y, t, a = 'start', c = 'var(--text-main)') => `<text x="${x}" y="${y}" font-size="${F}" text-anchor="${a}" fill="${c}">${t}</text>`;
+const F = 11, tx = (x, y, t, a = 'start', c = 'var(--text-main)') => `<text x="${x}" y="${y}" font-size="${F}" text-anchor="${a}" fill="${c}">${t}</text>`;
 const DIM = 'var(--text-muted)', ROJO = 'var(--accent-red)', VERDE = 'var(--accent-green)', ORO = 'var(--accent-yellow)';
 export const FUENTES_EXTRA = [[`Libro Azul, neurología, parte 1 · p. 3-5 (Monro-Kellie, curva presión-volumen), p. 11 (meseta 50-150), p. 30-31 (CO₂)`, 'otra fuente'], [`Libro Azul, neurología, parte 2 · p. 30-31 (cifras de la caja cerrada, curva)`, 'otra fuente'], [`StatPearls, reparto cerebro 80 % · sangre 10 % · LCR 10 % (<a href="${ST}" target="_blank" rel="noopener">enlace</a>)`, 'otra fuente']];
 export const NOTAS_EXTRA = [['la fuente no lo dice', 'La curva presión-volumen y el reparto 80/10/10 no son de Marino: vienen del Libro Azul y de StatPearls. Los ejes de la curva son «unidades arbitrarias» (Libro Azul): el volumen que se compensa no tiene cifra en las fuentes y el modelo no la inventa.'], ['ilustrativo', 'La velocidad del Doppler (60 cm/s; sube a ~90 en los días 4-14), la forma de la meseta y el número de anillos vivos de la penumbra son ilustrativos: las fuentes dicen la dirección, no la medida.']];
@@ -35,7 +35,7 @@ export function svgAuto(s, L) {
   let a = '', b = ''; for (let p = 0; p <= 200; p += 5) { a += `${p ? 'L' : 'M'}${X(p).toFixed(1)},${Y(sano(p)).toFixed(1)} `; b += `${p ? 'L' : 'M'}${X(p).toFixed(1)},${Y(ict(p)).toFixed(1)} `; }
   const pp = clamp(L.ppc, 0, 200);
   return `<path d="M28,16 L28,106 L186,106" fill="none" stroke="${DIM}"/><path d="${a}" fill="none" stroke="${VERDE}" stroke-width="2.2"/><path d="${b}" fill="none" stroke="${ORO}" stroke-width="2" stroke-dasharray="5 3"/>
-    <path d="M${X(50)},106 L${X(50)},20 M${X(150)},106 L${X(150)},20" stroke="${DIM}" stroke-dasharray="2 3"/>${tx(X(50), 118, '50', 'middle')}${tx(X(150), 118, '150', 'middle')}${tx(28, 12, 'flujo')}${tx(186, 118, 'PPC →', 'end', DIM)}
+    <path d="M${X(50)},106 L${X(50)},20 M${X(150)},106 L${X(150)},20" stroke="${DIM}" stroke-dasharray="2 3"/>${tx(X(50), 118, '50', 'middle')}${tx(X(150), 118, '150', 'middle')}${tx(28, 12, 'flujo')}${tx(215, 118, 'PPC →', 'end', DIM)}
     <circle cx="${X(pp)}" cy="${Y(s.tipo === 'edema' ? ict(pp) : sano(pp))}" r="5" fill="${ROJO}" stroke="var(--bg-main)" stroke-width="1.5"/>
     ${tx(200, 34, '━ sano: meseta 50-150')}${tx(200, 48, '╌ ictus: sigue a la presión')}${tx(200, 66, `Tú: PPC ${L.ppc}`, 'start', ORO)}${tx(200, 84, 'forma ilustrativa,', 'start', DIM)}${tx(200, 96, 'sin cifras de flujo', 'start', DIM)}`;
 }
