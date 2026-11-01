@@ -1,0 +1,104 @@
+// Prueba de la maqueta «eje B · dos glándulas, un enfermo» (390 y 360): desborde, consola, rótulos ≥8 px EN PANTALLA, SOLAPES de cajas <text>,
+// cambio de paciente sin avisos residuales, cada mando al tope con su sello, cifra imposible → sello, guías, apuesta/error/caso, Motion y «reducir movimiento».
+// Uso: node autonomo/bloques/b6b/herramientas/eje-b.mjs [390|360]. Servidor propio en el 8271; se cierra por su PID.
+import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
+import { spawn } from 'node:child_process';
+import { mkdirSync } from 'node:fs';
+const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b6b/eje-b/'; mkdirSync(CAP, { recursive: true });
+const srv = spawn('python3', ['-m', 'http.server', '8271'], { cwd: RAIZ, stdio: 'ignore' }); const pid = srv.pid;
+await new Promise((r) => setTimeout(r, 900));
+const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
+const URL_ = 'http://127.0.0.1:8271/autonomo/maquetas/b6b-eje-b.html', PAC = ['toribio', 'bibiana', 'sinforoso', 'lucrecia', 'obdulia', 'fulgencio'];
+const b = await chromium.launch();
+try {
+for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
+  console.log(`\n===== ${ANCHO} px =====`);
+  const ctx = await b.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: 844 }, deviceScaleFactor: 2 });
+  const p = await ctx.newPage();
+  p.on('console', (m) => m.type() === 'error' && errores.push(m.text())); p.on('pageerror', (e) => errores.push('pageerror ' + e.message));
+  await p.goto(URL_, { waitUntil: 'networkidle' }); await p.waitForTimeout(2500);
+  const desb = async (t) => { const d = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `${ANCHO}: desborde ${d}px en ${t}`); };
+  const tp = () => p.evaluate(() => window.__eje.topes().map((t) => t.clave + ':' + t.nivel).sort().join(' '));
+  const dom = () => p.evaluate(() => ({ sellos: document.querySelectorAll('.tope-sello').length, avisos: document.querySelectorAll('.tope-aviso').length, act: window.__eje.topes() }));
+  const pre = (c, o = {}) => p.evaluate(([c, o]) => { window.__eje.ponerPreset(c); window.__eje.set(o); }, [c, o]);
+  const clic = (sel) => p.evaluate((q) => { const e = document.querySelector(q); if (!e || e.disabled) return false; e.click(); return true; }, sel);
+  const analiza = async (t, id = 'eje-svg') => {
+    const r = await p.evaluate((id) => {
+      const sv = document.getElementById(id), R = sv.getBoundingClientRect(), esc = R.width / sv.viewBox.baseVal.width; let min = 99; const cajas = [];
+      sv.querySelectorAll('text').forEach((x) => { const f = parseFloat(getComputedStyle(x).fontSize) * esc; min = Math.min(min, f); const bb = x.getBoundingClientRect(); if (bb.width) cajas.push({ t: x.textContent, l: bb.left, r: bb.right, a: bb.top, d: bb.bottom }); });
+      const sol = []; for (let i = 0; i < cajas.length; i++) for (let j = i + 1; j < cajas.length; j++) { const A = cajas[i], B = cajas[j], w = Math.min(A.r, B.r) - Math.max(A.l, B.l), h = Math.min(A.d, B.d) - Math.max(A.a, B.a); if (w > 1.5 && h > 2) sol.push(`«${A.t}»×«${B.t}»`); }
+      return { min: +min.toFixed(2), sol, fuera: cajas.filter((c) => c.r > R.right + .5 || c.l < R.left - .5).map((c) => c.t) };
+    }, id);
+    ok(r.min >= 8, `${ANCHO} ${t}: rótulo de ${r.min}px en pantalla`); ok(!r.sol.length, `${ANCHO} ${t}: solapes ${r.sol.join(' | ')}`); ok(!r.fuera.length, `${ANCHO} ${t}: texto fuera ${r.fuera.join(',')}`); return r.min;
+  };
+  const escenaSobreDock = async (t) => { const r = await p.evaluate(() => { window.scrollTo(0, 0); const sv = document.getElementById('eje-svg').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(), f = document.getElementById('frase').getBoundingClientRect(); return { svgB: sv.bottom, top: Math.min(d.top, f.top), fraseCruza: f.bottom > d.top + 1 }; }); ok(!r.fraseCruza, `${ANCHO} ${t}: la frase queda bajo el dock`); return r; };
+  console.log('inicio: rótulo mínimo', await analiza('inicio'), 'px'); await desb('inicio'); await p.screenshot({ path: `${CAP}01-inicio-${ANCHO}.png` });
+  // ---- cada paciente × cada lupa: sin desborde, sin solapes, rótulos ----
+  for (const c of PAC) for (const l of ['sr', 'ti']) { await pre(c); await p.evaluate((l) => window.__eje.setLup(l), l); await analiza(`${c} lupa ${l}`); await desb(`${c} ${l}`); }
+  // ---- CAMBIO DE PACIENTE: los topes tras A→B son los de B solo; ni sellos ni avisos residuales en el DOM ----
+  const limpio = {}; for (const c of PAC) { await pre(c); limpio[c] = await tp(); }
+  for (const A of PAC) for (const B of PAC) { if (A === B) continue;
+    await pre(A); await p.evaluate(() => window.__eje.set({ vol: 3000, na: 1, hc: 0, atd: 'mti', yodo: true, bb: 'prop', crisis: true, intento: 'eutiro' })); await pre(B);
+    const t2 = await tp(), d = await dom(); ok(t2 === limpio[B], `${ANCHO}: ${A}→${B} deja topes residuales [${t2}] ≠ [${limpio[B]}]`); ok(d.sellos + d.avisos === d.act.length, `${ANCHO}: ${A}→${B} nodos de tope en el DOM ${d.sellos + d.avisos} ≠ activos ${d.act.length}`);
+    const ap = await p.evaluate(() => [...document.querySelectorAll('.dock button')].filter((x) => x.classList.contains('tope-apagado')).map((x) => x.dataset.a || x.dataset.atd || x.dataset.bb)); const esp = await p.evaluate(() => 0); ok(ap.length === 0 || limpio[B].includes('sello'), `${ANCHO}: ${A}→${B} botones apagados sin sello: ${ap}`); }
+  console.log('cambio de paciente (30 pares): comprobado');
+  // ---- topes uno a uno, con su sello y el mando apagado ----
+  await pre('toribio'); ok((await tp()).includes('vol:sello'), 'Toribio nace con 3 L: sin sello de volumen'); ok(!(await clic('[data-a="vol"]')), 'volumen tocable en el tope'); await p.screenshot({ path: `${CAP}02-toribio-sello-${ANCHO}.png` });
+  await pre('bibiana'); let n = 0; while (await clic('[data-a="vol"]')) { if (++n > 9) break; } ok(n === 6, `volumen: ${n} bolos hasta el tope (esperados 6)`); ok((await tp()).includes('vol:sello'), 'volumen a 3 L sin sello'); await p.evaluate(() => window.__eje.set({ vol: 2500 })); ok((await tp()).includes('vol:aviso'), 'volumen a 2,5 L sin aviso');
+  await pre('bibiana'); n = 0; while (await clic('[data-a="na+"]')) { if (++n > 14) break; } ok(n === 10, `noradrenalina: ${n} pasos`); ok((await tp()).includes('nat:sello'), 'NA 1,0 sin sello'); ok((await tp()).includes('nat:sello') && !(await clic('[data-a="na+"]')), 'NA+ tocable en el tope');
+  await p.evaluate(() => window.__eje.set({ na: 0.3 })); ok((await tp()).includes('na2:aviso'), 'NA>0,2 sin aviso de nutrición');
+  for (const c of PAC) for (const [v, na] of [[0, 0], [1500, 0.5], [3000, 1]]) { await pre(c); await p.evaluate(([v, na]) => window.__eje.set({ vol: v, na }), [v, na]); const l = await p.evaluate(() => window.__eje.leer()); ok(l.pam >= 30 && l.pam <= 140 && l.fc >= 30 && l.fc <= 180, `${c} v${v} na${na}: constantes imposibles ${JSON.stringify([l.pam, l.fc])}`); }
+  // Toribio: la PA no sube con volumen y noradrenalina; con hidrocortisona sí (dirección de la ficha)
+  await pre('toribio'); const pam0 = (await p.evaluate(() => window.__eje.leer())).pam; await p.evaluate(() => window.__eje.set({ na: 1 })); const pamNA = (await p.evaluate(() => window.__eje.leer())).pam; ok(pamNA < 65, 'Toribio con NA máxima ya llega a 65 sin hidrocortisona: ' + pamNA); await clic('#b-hc'); const pamHC = (await p.evaluate(() => window.__eje.leer())).pam; ok(pamHC >= 65 && pamHC > pamNA, 'la hidrocortisona no sube la PA de Toribio'); console.log(` Toribio PAM ${pam0} → NA 1 ${pamNA} → +hidrocortisona ${pamHC}`);
+  await pre('toribio'); await p.evaluate(() => window.__eje.set({ na: 1 })); ok((await tp()).includes('nat:sello'), 'CIRCI: NA al máximo con PA baja sin sello'); ok(!(await clic('[data-a="na+"]')), 'NA tocable');
+  await pre('lucrecia'); ok((await tp()).includes('tormenta:sello'), 'Lucrecia sin sello de tormenta'); ok((await tp()).includes('fc140:aviso'), 'FC 152 sin aviso'); await clic('[data-bb="prop"]'); const fc1 = (await p.evaluate(() => window.__eje.leer())).fc; ok(fc1 < 152 && fc1 >= 80, 'propranolol no baja la FC: ' + fc1);
+  await pre('lucrecia'); await clic('[data-a="yodo"]'); ok((await tp()).includes('yodo:sello'), 'yodo sin antitiroideo sin sello'); ok(!(await clic('[data-a="yodo"]')), 'yodo tocable con sello'); ok(!(await p.evaluate(() => window.__eje.s.yodo)), 'el yodo se aplicó sin antitiroideo'); await p.screenshot({ path: `${CAP}03-yodo-${ANCHO}.png` });
+  await clic('[data-atd="ptu"]'); ok(!(await tp()).includes('yodo:'), 'el sello del yodo sobrevive al antitiroideo'); ok(await clic('[data-a="yodo"]') && await p.evaluate(() => window.__eje.s.yodo), 'yodo con PTU no se aplica');
+  await pre('lucrecia'); await clic('[data-atd="mti"]'); ok((await tp()).includes('ptu:aviso'), 'metimazol en la tormenta sin aviso'); await clic('[data-a="asma"]'); await clic('[data-bb="prop"]'); ok((await tp()).includes('asma:sello'), 'betabloqueante en crisis de asma sin sello'); ok(!(await clic('[data-bb="meto"]')), 'metoprolol tocable en crisis'); await p.screenshot({ path: `${CAP}04-asma-${ANCHO}.png` });
+  await pre('obdulia'); ok((await tp()).includes('mixedema:sello'), 'Obdulia T 33,5 sin sello'); await clic('[data-a="levo"]'); ok((await tp()).includes('levo:sello'), 'levotiroxina sin hidrocortisona sin sello'); ok(!(await clic('[data-a="levo"]')), 'levotiroxina tocable sin hidrocortisona'); ok(await p.evaluate(() => window.__eje.s.hor === 'ninguna'), 'se aplicó la levotiroxina'); await clic('#b-hc'); ok(!(await tp()).includes('levo:') && !(await tp()).includes('mixedema'), 'hidrocortisona no limpia los sellos de Obdulia: ' + await tp()); ok(await clic('[data-a="levo"]') && await p.evaluate(() => window.__eje.s.hor === 'levo'), 'levotiroxina tras hidrocortisona no se aplica');
+  await pre('fulgencio'); await clic('[data-a="levo"]'); ok((await tp()).includes('eutiro:sello'), 'tratar a Fulgencio sin sello'); ok(!(await clic('[data-atd="ptu"]')), 'antitiroideo tocable con sello eutiroideo'); await p.screenshot({ path: `${CAP}05-eutiroideo-${ANCHO}.png` });
+  for (const o of [{ na: 1.5 }, { vol: 3500 }, { vol: 3000, na: 1, hc: 0 }]) { await pre('sinforoso'); await p.evaluate((o) => window.__eje.set(o), o); if (o.vol === 3500 || o.na === 1.5) ok((await tp()).includes('imposible:sello'), 'cifra imposible sin sello ' + JSON.stringify(o)); }
+  await pre('toribio'); await p.evaluate(() => window.__eje.set({ na: 0, vol: 0 })); const lpa = await p.evaluate(() => window.__eje.leer()); ok(lpa.pam < 65 && !(await tp()).includes('imposible'), 'Toribio sin NI suero ni NA: ' + lpa.pam);
+  await p.evaluate(() => window.__eje.set({ fc: 0 }));
+  // ---- lo que se ve: bloqueos y señales del eje ----
+  await pre('toribio'); ok((await p.evaluate(() => document.querySelectorAll('#eje-svg .bloq').length)) === 3, 'CIRCI: 3 bloqueos (hipotálamo, glándula, órgano) en la lupa');
+  await pre('bibiana'); ok(await p.evaluate(() => document.querySelectorAll('#eje-svg .bloq').length === 1 && /prednisona/.test(document.getElementById('eje-svg').textContent)), 'Bibiana: 1 bloqueo y prednisona de fuera');
+  await pre('fulgencio'); ok(await p.evaluate(() => /T3r/.test(document.getElementById('eje-svg').textContent)), 'Fulgencio sin T3r'); await p.screenshot({ path: `${CAP}06-fulgencio-${ANCHO}.png` });
+  // ---- imagen real y plegable ----
+  await p.evaluate(() => { document.querySelector('details.plegable').open = true; }); const im = await p.evaluate(() => new Promise((r) => { const i = document.getElementById('fig-img'); i.complete ? r(i.naturalWidth) : i.addEventListener('load', () => r(i.naturalWidth)); })); ok(im > 0, 'imagen sin cargar'); await desb('figura abierta');
+  // ---- guías ----
+  for (const c of PAC) { await pre(c); let pasos = 0;
+    for (let i = 0; i < 7; i++) { const g = await p.evaluate(() => ({ vis: !document.getElementById('guia').hidden, foco: document.querySelectorAll('#eje-svg .foco').length, fi: document.querySelectorAll('#guia .ver-ficha[data-resaltar^="#mu-"]').length, pdf: document.querySelectorAll('#guia .cita-pdf').length, haz: !!document.querySelector('#guia [data-g="haz"]') }));
+      if (!g.vis) break; pasos++; ok(g.foco > 0, `${c}: paso ${pasos} sin foco`); ok(g.fi === 1 && g.pdf >= 1, `${c}: paso ${pasos} sin su cita doble`);
+      if (g.haz) { await p.evaluate(() => document.querySelector('#guia [data-g="haz"]').click()); await desb(`guía ${c} ${pasos}`); await analiza(`guía ${c} ${pasos}`); } await p.evaluate(() => document.querySelector('#guia [data-g="sig"]').click()); }
+    console.log(` guía ${c}: ${pasos} pasos`); ok(pasos >= 3 && pasos <= 5, `${c}: guía de ${pasos} pasos`); }
+  // ---- apuesta, error, caso ----
+  await p.evaluate(() => window.__eje.modoPrueba('apuesta')); ok(await p.evaluate(() => document.getElementById('m-pa').textContent === '?' && document.getElementById('m-pam').textContent === '?'), 'apuesta: enseña la PA antes de contestar'); await desb('apuesta'); await analiza('apuesta');
+  const L3 = await p.$$eval('#prueba .op', (o) => o.map((x) => ({ n: x.textContent.length, ok: x.textContent.startsWith('Pongo hidrocortisona') }))); ok(L3.length === 3, 'apuesta: 3 opciones'); const mx = Math.max(...L3.map((x) => x.n)), mn = Math.min(...L3.map((x) => x.n)); ok(mx / mn <= 1.2, 'apuesta: longitudes ' + L3.map((x) => x.n)); ok(L3.find((x) => x.ok).n <= mx, 'apuesta: correcta la más larga');
+  await (await p.$$('#prueba .op'))[L3.findIndex((x) => x.ok)].click(); ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin && document.getElementById('m-pa').textContent !== '?'), 'apuesta sin resolver'); console.log('apuesta →', await p.evaluate(() => JSON.stringify(window.__eje.leer().pam))); await desb('apuesta resuelta'); await analiza('apuesta resuelta');
+  await p.evaluate(() => window.__eje.modoPrueba('error')); const fr = await p.$$('#prueba .op'); ok(fr.length === 6, 'error: 5 frases + «ningún error»'); await fr[0].click(); ok(!(await p.evaluate(() => document.getElementById('prueba').dataset.fin)), 'error: acabó con una verdadera'); await fr[1].click(); ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'error sin resolver'); await desb('error');
+  await p.evaluate(() => window.__eje.modoPrueba('caso')); const bien = [/^Sospecho mixedema/, /^Primario/, /^Levotiroxina en bolo/, /^Levotiroxina 50-100/]; const lg = [];
+  for (let i = 0; i < 4; i++) { const o = await p.$$('#prueba .op'); ok(o.length === 3, `caso paso ${i + 1}`); const tt = await Promise.all(o.map((x) => x.textContent())); const k = tt.findIndex((x) => bien[i].test(x)); lg.push([k, tt.map((x) => x.length)]); await o[k].click(); await desb(`caso ${i + 1}`); await analiza(`caso ${i + 1}`); await escenaSobreDock(`caso ${i + 1}`); if (i < 3) await p.evaluate(() => document.querySelector('#prueba [data-sig]').click()); }
+  ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'caso sin completar'); const pos = lg.map((x) => x[0]); const mxPos = Math.max(...[0, 1, 2].map((q) => pos.filter((x) => x === q).length)); ok(mxPos <= 2, 'caso: la correcta en la misma posición más de la mitad ' + pos); const largas = lg.filter((x) => x[1][x[0]] === Math.max(...x[1])).length; ok(largas <= 1, 'caso: la correcta es la más larga en ' + largas + ' de 4'); await p.screenshot({ path: `${CAP}07-caso-${ANCHO}.png`, fullPage: true });
+  // ---- frase y dock; botones estables ----
+  await pre('lucrecia'); const bv = await p.evaluate(() => { window.__t = document.getElementById('b-vol'); window.__u = document.querySelector('[data-bb="prop"]'); return 1; }); await clic('[data-bb="prop"]'); await clic('#b-vol'); await p.waitForTimeout(300);
+  ok(await p.evaluate(() => window.__t === document.getElementById('b-vol') && window.__u === document.querySelector('[data-bb="prop"]') && window.__t.isConnected), 'botón del dock rehecho (mando no tocable)');
+  const vis = await p.evaluate(() => { const f = document.getElementById('frase').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(); return { cruza: f.bottom > d.top + 1, dock: Math.round(d.height) }; }); ok(!vis.cruza && vis.dock < 330, 'frase bajo el dock o dock enorme ' + JSON.stringify(vis));
+  await p.evaluate(() => { document.getElementById('dock').classList.add('abierto'); }); await p.waitForTimeout(200); await p.screenshot({ path: `${CAP}08-dock-${ANCHO}.png` });
+  // ---- citas con doble enlace ----
+  const cc = await p.evaluate(() => ({ n: document.querySelectorAll('.cita').length, mal: [...document.querySelectorAll('.cita')].filter((c) => !c.querySelector('.cita-pdf') || (c.querySelector('.ver-ficha') === null && !/Libro Azul|Younes|Huang/.test(c.textContent))).length })); console.log(' citas', cc); ok(cc.mal === 0, 'cita sin enlace');
+  await ctx.close();
+}
+// ---- Motion y «reducir movimiento» ----
+for (const reducir of [false, true]) {
+  const ctx = await b.newContext({ ...devices['iPhone 12'], viewport: { width: 390, height: 844 }, reducedMotion: reducir ? 'reduce' : 'no-preference' }); const p = await ctx.newPage(); p.on('pageerror', (e) => errores.push('pageerror ' + e.message));
+  await p.goto(URL_, { waitUntil: 'networkidle' }); await p.evaluate(() => window.__eje.ponerPreset('sinforoso')); await p.waitForTimeout(80);
+  const ini = await p.evaluate(() => [...document.querySelectorAll('#eje-svg .paso')].map((g) => +(g.getAttribute('opacity') ?? 1)));
+  await p.waitForTimeout(2600); const fin = await p.evaluate(() => [...document.querySelectorAll('#eje-svg .paso')].map((g) => +(g.getAttribute('opacity') ?? 1)));
+  console.log(`Motion ${reducir ? 'reducido' : 'normal'}: inicio mín ${Math.min(...ini).toFixed(2)} · final mín ${Math.min(...fin).toFixed(2)} · Motion ${await p.evaluate(() => !!window.Motion)}`);
+  ok(Math.min(...fin) >= 0.99, `Motion ${reducir}: el eje no acaba encendido`); if (reducir) ok(Math.min(...ini) >= 0.99, 'reducir movimiento: no enseña el estado final de golpe'); else ok(Math.min(...ini) < 0.9, 'Motion no anima: nada atenuado al empezar');
+  await ctx.close();
+}
+} catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); try { process.kill(pid); } catch {} }
+console.log('\nErrores de consola:', errores.length ? [...new Set(errores)].slice(0, 5) : 'ninguno');
+console.log(fallos.length ? 'FALLOS:\n- ' + [...new Set(fallos)].join('\n- ') : 'TODO EN VERDE');

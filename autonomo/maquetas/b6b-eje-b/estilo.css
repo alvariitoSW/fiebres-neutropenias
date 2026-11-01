@@ -1,0 +1,36 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css, que se enlaza sin tocarlo). */
+#eje-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#eje-svg text { font: 600 9.8px/1 system-ui, sans-serif; fill: var(--text-dim); } #eje-svg .min { fill: var(--text-muted); } #eje-svg .dim { fill: var(--text-muted); font-weight: 400; }
+#eje-svg .rot { fill: var(--text-main); font-weight: 700; } #eje-svg .oro { fill: var(--oro); font-weight: 800; font-size: 11px; }
+#eje-svg .cama { stroke: var(--text-muted); stroke-width: 3; } #eje-svg .cuerpo { fill: color-mix(in srgb, var(--accent-yellow) 12%, var(--bg-main)); stroke: var(--text-muted); }
+#eje-svg .forma { fill: color-mix(in srgb, var(--accent-purple) 28%, var(--bg-main)); stroke: var(--text-main); stroke-width: 1.5; } #eje-svg .rinon { fill: color-mix(in srgb, var(--accent-red) 22%, var(--bg-main)); stroke: var(--text-dim); }
+#eje-svg .lupa { fill: none; stroke: var(--text-muted); stroke-width: 1.5; stroke-dasharray: 3 3; } #eje-svg .lupa.sel { stroke: var(--oro); stroke-width: 3; stroke-dasharray: none; }
+#eje-svg .tanque { fill: none; stroke: var(--text-dim); stroke-width: 1.5; } #eje-svg .liq { fill: color-mix(in srgb, var(--accent-yellow) 55%, transparent); } #eje-svg .liq.t { fill: var(--accent-red); }
+#eje-svg .panel { fill: color-mix(in srgb, var(--bg-card) 80%, transparent); stroke: var(--line); }
+#eje-svg .fl { stroke: var(--oro); fill: none; } #eje-svg .fl-p { fill: var(--oro); }
+#eje-svg .freno { stroke: var(--accent-red); fill: none; } #eje-svg .ext { stroke: var(--oro); stroke-width: 2.5; fill: none; marker-end: none; }
+#eje-svg .bloq circle { fill: var(--bg-main); stroke: var(--accent-red); stroke-width: 2; } #eje-svg .bloq path { stroke: var(--accent-red); stroke-width: 2; fill: none; }
+#eje-svg .tij { stroke: var(--text-main); stroke-width: 2; fill: none; }
+#eje-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+#monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 3px 8px 4px; margin: 2px 0; }
+#monitor .mon-fila { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px 6px; font: 600 .62rem/1.25 var(--sans); color: var(--text-dim); } #monitor .mon-fila > span { display: grid; white-space: nowrap; } #monitor .mon-fila b { color: var(--text-main); font-size: .86rem; }
+#monitor .mal b { color: var(--accent-red); }
+#monitor .tope-mon { position: static; } #monitor .tope-sellos { position: static; transform: none; width: auto; max-width: 100%; max-height: none; padding: 2px 0 0; margin-top: 8px; } #monitor .tope-linea { position: static; margin-top: 2px; } #monitor .tope-sello { transform: none; }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); } .mando .fila { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; } .mando .fila > * { flex: 1 1 0; min-width: 60px; }
+.mando button { min-height: 34px; padding: 2px 4px; font: 600 .7rem/1.15 var(--sans); } .mando button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.mando output { color: var(--oro); font: 700 .72rem var(--sans); text-align: center; } .mando b.dock-nota { font: 700 .66rem/1.2 var(--sans); color: var(--text-dim); } .peq { font: .64rem/1.3 var(--sans); color: var(--text-muted); }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button { min-height: 34px; } .modos button[aria-pressed="true"], .presets button[aria-pressed="true"], .lupas button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.presets { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 34px; font: 700 .58rem/1.1 var(--sans); padding: 2px 0; }
+.lupas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; margin: 3px 0; } .lupas button { min-height: 34px; font: 600 .66rem/1.1 var(--sans); }
+.prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); } .prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+.op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+.llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); } .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+.idea { margin: 2px 0; font: 600 .72rem/1.35 var(--sans); } .org, .idea .org, .guia .org, .frase .org { color: var(--text-muted); font-weight: 400; white-space: normal; }
+.cita { font: .68rem/1.3 var(--sans); } .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; } .para a, .org, .cita a { overflow-wrap: anywhere; word-break: break-word; }
+.fig { margin: 4px 0; } .fig img { width: 100%; max-height: 260px; object-fit: contain; background: var(--bg-main); border-radius: 8px; display: block; } .fig figcaption { font: .68rem/1.35 var(--sans); color: var(--text-dim); }
+.toast { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h, 190px) + var(--frase-h, 60px) + 8px); z-index: 40; margin: 0; padding: 6px 10px; border: 1px solid var(--oro); border-radius: 10px; background: var(--bg-card); font: .76rem/1.35 var(--sans); }
+.cabecera .cab-fila h1 { font-size: 1rem; } .cabecera .aviso { margin: 0; font-size: .64rem; } main { gap: 4px; } .frase { font-size: .74rem; line-height: 1.22; } .frase-txt { max-height: 2.5em; overflow-y: auto; }
+#dock .dock-panel { max-height: 90px !important; min-height: 0 !important; overflow-y: auto; } #dock.abierto .dock-panel { max-height: 30vh !important; } .dock-tabs { grid-auto-columns: minmax(0, 1fr) auto; } .dock-tabs button { min-height: 34px !important; }
+#mas-mandos { background: transparent; border: 0; color: var(--text-dim); font: 600 .7rem/1.1 var(--sans); padding: 0 6px; } .dock-pliega { display: grid; gap: 4px; }

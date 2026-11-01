@@ -1,0 +1,40 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6b). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6b-eje-b.html
+     Eje hormonal, opción B «Dos glándulas, un enfermo»: el enfermo en la cama con dos lupas (suprarrenal y tiroides) y, en cada lupa, el eje hipotálamo → hipófisis → glándula con su freno.
+     Fuente: Marino 2024, cap. 51 (docs/marino-2024-nutricion-endocrino-caps48-51.pdf). El freno y la cadena TRH → TSH → T4 → T3: Libro Azul p. 4-6, Younes 2017, Huang-Bianco 2008.
+     Reutiliza (importados) js/core/tope.js y js/core/frase-vista.js; Motion (js/vendor/motion.js) cargado a mano. Sin otras librerías. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dos glándulas, un enfermo · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6b-eje-b/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>Dos glándulas, un enfermo</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="presets" id="presets" role="group" aria-label="Paciente"></div>
+  <div class="lupas" role="group" aria-label="Lupa"><button type="button" data-lup="sr" aria-pressed="true">Lupa suprarrenal</button><button type="button" data-lup="ti" aria-pressed="false">Lupa tiroides</button><button type="button" id="paso-a-paso">Ver el eje paso a paso</button></div>
+  <section class="zona-escena"><svg id="eje-svg" viewBox="0 0 390 300" role="img" aria-label="Enfermo en la cama con dos lupas y el eje hormonal de la glándula elegida"></svg></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
+    <span>PA <b id="m-pa"></b></span><span>PAM <b id="m-pam"></b></span><span>FC <b id="m-fc"></b></span><span>Ritmo <b id="m-rit"></b></span>
+    <span>T °C <b id="m-t"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Glucosa <b id="m-gl"></b></span><span>Lactato <b id="m-lac"></b></span><span>NA <b id="m-nor"></b></span></div></section>
+  <p id="idea" class="idea"></p>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="guia" class="prueba guia" aria-live="polite"></section>
+  <details class="plegable"><summary>Figura real: supresión suprarrenal</summary><figure class="fig"><img id="fig-img" alt="Figura 51.1 del libro: mecanismos de la supresión suprarrenal" loading="eager"><figcaption id="fig-cap"></figcaption></figure></details>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="circ" aria-selected="true">Circulación</button><button type="button" role="tab" data-pest="tiro" aria-selected="false">Tiroides</button><button type="button" id="mas-mandos" aria-expanded="false">Más mandos ▾</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-tiro" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script src="../../js/vendor/motion.js"></script>
+<script type="module" src="b6b-eje-b/pagina.js"></script>
+</body></html>
