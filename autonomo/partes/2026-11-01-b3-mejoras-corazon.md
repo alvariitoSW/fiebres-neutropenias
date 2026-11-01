@@ -1,7 +1,7 @@
 # 2026-11-01 · b3-mejoras-corazon
 
 **Resultado:** hecha, a `main` (arreglos con jueces en verde; REGLAS §2.3) · rama `auto/b3-mejoras`
-**Vueltas:** 1 + retoques del director · **Jueces:** JUECES_AQUI · móvil 390/360 ✓ · auditoría: sin auditor aparte (recorte de Hacienda; el rejuicio comprobó PMID y páginas)
+**Vueltas:** 1 + retoques del director · **Jueces:** `--modelo shock-vivo/vaso-vivo/capilar-vivo` y `--ficha` de las 9 fichas tocadas ✅ (en tres tandas; una pasada única se cortó por tiempo). `--forma` en verde en la rama del constructor 2; aquí colgó una vez en «Fórmula · eco-doppler» (no tocado) con 545 ✅ y 0 ❌ · móvil 390/360 ✓ · auditoría: sin auditor aparte (recorte de Hacienda; el rejuicio comprobó PMID y páginas)
 
 ## Qué se hizo
 Las 13 piezas del corazón del bloque 3 que el profesor dejó entre 7,75 y 8,6 (Consejo 11.ª): dos profesores rejuzgaron
@@ -41,9 +41,9 @@ mira la barra de cizalla).
 | aorta disección | 1 | 8,5 → sin rejuicio | sonnet | 33 | 0,47 M | cizalla con FC × PP iba al revés (director: FC × IC) |
 
 ## Gasto
-GASTO_AQUI
+≈5,8 M (5,5 M medidos antes del cierre). Por papel: constructor sonnet ×5, 3,0 M (54 %); profesor ×3, 1,3 M; director ≈1,5 M. Los que más: constructor septo y CPAP 0,98 M (49 pasos: dos piezas en un encargo, partirlo), constructor datos g4+g5 0,63 M, constructor g2+g3 0,63 M. Ahorro: el diagnóstico del profesor debió ir con capturas en los dos extremos del mando; habría evitado mis dos retoques.
 
 ## Cuentas
-Presupuesto 3,9 M (Hacienda en casa: 2 profesores en vez de 4, sin auditor). Gastado ≈GASTADO. Desvío DESVIO: se
+Presupuesto 3,9 M (Hacienda en casa: 2 profesores en vez de 4, sin auditor). Gastado ≈5,8 M. Desvío +49 %: se
 añadieron dos piezas de dibujo que el diagnóstico pidió (septo y aorta, ≈1,4 M) y no estaban en la tarea. Vía libre:
 entre +25 y +50 % comparece ante el Consejo, no ante el usuario; anotado aquí.
