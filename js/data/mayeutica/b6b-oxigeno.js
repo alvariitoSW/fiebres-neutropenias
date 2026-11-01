@@ -146,7 +146,7 @@ export const MAYEUTICA_OXIGENO = {
             pregunta: { id: 'sal-ros-5', tipo: 'error', fuente: 'mt-tabla-52-3',
               enunciado: 'Las órdenes escritas para alcalinizar a Rosendo. Encuentra los errores (puede haber 0, 1 o 2).',
               frases: [
-                { t: 'Solución: 3 ampollas de NaHCO₃ (44 mEq) en 1 L de glucosado al 5%.' },
+                { t: 'Solución: 3 ampollas de NaHCO₃ de 44 mEq cada una (132 mEq/L) en 1 L de glucosado al 5%, con 40 mEq de KCl.' },
                 { t: 'Carga de bicarbonato de 1-2 mEq/kg y luego 2-3 mL/kg/h.' },
                 { t: 'Para 70 kg, la carga es de 70-140 mEq de bicarbonato.' },
                 { t: 'Objetivo: pH urinario ≥7,5 y diuresis de 1-2 mL/kg/h.' }],
@@ -296,7 +296,7 @@ export const MAYEUTICA_OXIGENO = {
               opciones: [
                 { t: 'Sí: si sube de 98 a 100 %, es que la COHb está bajando', porque: 'El pulsioxímetro cuenta la COHb como oxihemoglobina: ya marcaba 98 % con la COHb alta y no la distingue. Darías el alta por una cifra que no mide el CO (p. 21).' },
                 { t: 'No: no distingue la COHb; repite la cooximetría en sangre', ok: true },
-                { t: 'Sí, pero solo si la medida se hace en otro dedo distinto', porque: 'Cambiar de dedo no cambia el principio: a 660 nm la COHb absorbe casi como la oxihemoglobina y el error se repite (p. 21).' }],
+                { t: 'Sí, si además la PaO₂ de la gasometría va subiendo', porque: 'La PaO₂ mide el O₂ disuelto y no ve la COHb (fisiología general): en la Fig. 53.1 lo que cae con la COHb es el contenido arterial de O₂ (p. 19-20). El pulsioxímetro sigue leyendo la COHb como oxihemoglobina; solo el cooxímetro la mide (p. 21).' }],
               explicacion: 'El pulsioxímetro de 2 longitudes de onda no distingue la COHb; se sigue con el <span class="hl">cooxímetro</span> (' + pdf(21) + '). La semivida con O₂ al 100 % (74 min) se calcula en el examen y en el caso de Teófila.' } },
           { momento: 'Antes de nada más', datos: { 'Pregunta': 'de la residente' }, nuevo: ['Pregunta'],
             pregunta: { id: 'co-ata-4', tipo: 'test', fuente: 'mt-co-corazon',
@@ -483,7 +483,7 @@ export const MAYEUTICA_OXIGENO = {
                 { t: 'Se añade el tiosulfato, el de elección en la parada', porque: 'El antídoto de elección es la hidroxocobalamina, y el tiosulfato no se da con insuficiencia renal. Lo añadirías con un riñón que no elimina el tiocianato (p. 24-25).' },
                 { t: 'Se cambia a nitrito de amilo inhalado, más rápido que la vía IV', porque: 'Está contraindicado en el humo, y es solo un alivio temporal sin vía IV; Teófila la tiene. Empeoraría la hipoxia tisular (p. 24-25).' }],
               explicacion: 'En la parada, <span class="hl">10 g</span> de hidroxocobalamina (' + pdf(24) + '); cómo completarlos desde lo ya infundido es lectura propia. Los <span class="hl-rojo">menos de 5 min</span> (' + pdf(23) + ') van de los síntomas a la parada, no desde el ingreso.' } },
-          { momento: 'Hora 1 · el CO', datos: { 'COHb al ingreso': '22 %', 'O₂': '100 % desde el ingreso', 'Fumadora': 'no' }, nuevo: ['COHb al ingreso', 'O₂', 'Fumadora'],
+          { momento: 'Hora 1 · el CO', datos: { 'Ritmo': 'recupera pulso tras la RCP y los 10 g', 'COHb al ingreso': '22 %', 'O₂': '100 % desde el ingreso', 'Fumadora': 'no' }, nuevo: ['Ritmo', 'COHb al ingreso', 'O₂', 'Fumadora'],
             calculadora: { ir: 'mt-co-calc', nombre: 'COHb: ¿alta? y cuánto tarda en bajar' },
             pregunta: { id: 'cn-teo-7', tipo: 'test', fuente: 'mt-co-o2 · mt-co-calc', origen: 'ficha · el cálculo, propio sobre la semivida',
               enunciado: 'Con O₂ al 100 % desde el ingreso (semivida 74 min), ¿cuánto tarda su COHb en bajar desde el 22 % del ingreso hasta el 4 %? Compruébalo en la calculadora del CO.',
