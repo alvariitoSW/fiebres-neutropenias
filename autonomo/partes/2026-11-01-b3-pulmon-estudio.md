@@ -1,6 +1,6 @@
 # 2026-11-01 · b3-pulmon-estudio (sesiones 1 y 2 del director)
 
-**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/80)
+**Resultado:** en revisión (PR: https://github.com/alvariitoSW/fiebres-neutropenias/pull/80); Consejo: 3 sí, 1 no; no se fusiona hasta 8,75 en todo (acta `autonomo/consejo/2026-11-01-b3-pulmon-estudio.md`)
 **Vueltas:** G1 2 · G2 3 · G3 2 · G4 2 · G5 1 (+ rejuicio final) · **Jueces:** pruebas ✓ · móvil ✓ · auditoría ✓ (graves corregidos)
 
 ## Qué se hizo
