@@ -354,6 +354,10 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       Justicia (si choca con `CLAUDE.md` o REGLAS) y Transportes (prioridad y calendario). Ciencia (`/ingenieria-reversa`)
       y Exteriores (`/radar`), si el asunto es suyo. Para ahorrar, un mismo agente barato puede dar dos dictámenes, y
       Hacienda y Transportes los da quien preside, sin agente. Gasto de una reunión: ≤2 M.
+    - **Modelo de los dictámenes** (el usuario, 01/11/2026; Consejo 4.ª): **piensa un modelo grande** (Fable u Opus)
+      cuando el asunto toca reglas o calidad, cuando los ministerios discrepan, y en el **Congreso** tras 3 vueltas (R10).
+      Las búsquedas previas (qué archivo, qué línea) las hace sonnet y se le dan hechas al modelo grande, que solo
+      decide. El **voto rutinario de una PR** (§4.15) con los jueces en verde y el profesor ≥9,5 sigue con sonnet.
     - **Aprueba sin pasar por el usuario**: dudas de los planes, orden, tareas, opciones de los informes y cambios de
       estudio, **dentro del presupuesto que apruebe el usuario**. Lo acordado entra en el tablero con «(Consejo, fecha)».
     - **Reservado al gobierno central (el usuario)**: el presupuesto total, la arquitectura (`CLAUDE.md` §2, p. ej.

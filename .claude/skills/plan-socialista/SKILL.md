@@ -335,7 +335,7 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    huecos. Lo técnico y los arreglos van directo a `main` con los jueces en verde (`REGLAS.md` §2.3).
    **El contenido entra en `main` por votos del Consejo, sin esperar al usuario** (REGLAS §4.15, aprobado el
    30/10/2026): con la suite entera de jueces en verde, el auditor sin graves y el profesor ≥ 9,5 en
-   todos los puntos (meta 10; desde el 01/11/2026), lanzas un agente barato (`Explore`, sonnet) con los dictámenes de Interior, Justicia,
+   todos los puntos (meta 10; desde el 01/11/2026), lanzas un agente barato (`Explore`, sonnet; modelo grande si hay discrepancia o toca reglas, REGLAS §4.12) con los dictámenes de Interior, Justicia,
    Educación y Hacienda sobre la PR (le das los informes y las capturas; ≤8 líneas y un voto cada uno); tú presides
    como Transportes y desempatas; escribes el acta en `autonomo/consejo/` y, con mayoría, fusionas la PR
    (`mcp__github__merge_pull_request`, sin reescribir historia). Si falta una condición, la PR queda en borrador con
