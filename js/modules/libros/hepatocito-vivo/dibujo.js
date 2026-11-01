@@ -18,7 +18,7 @@ export function escena(s, L, oculto) {
   o.push(`<rect class="tanque" x="6" y="30" width="92" height="104" rx="14"/>`, T(52, 46, 'Colon', 'rot', 'text-anchor="middle"'), T(52, 58, 'grifo de NH₃', 'min', 'text-anchor="middle"'));
   for (let i = 0; i < 8; i++) o.push(`<ellipse class="bact" cx="${20 + (i % 4) * 20}" cy="${i < 4 ? 74 : 90}" rx="6" ry="3.4" opacity="${s.dep >= 2 && !oculto ? 0.25 : 0.9}"/>`);
   for (let i = 0; i < L.nProd; i++) o.push(nh3(18 + (i % 4) * 20, 74 + Math.floor(i / 4) * 16 + 7));
-  if (s.dep > 0 && !oculto) o.push(T(52, 112, 'Lactulosa: más ácido', 'min', 'text-anchor="middle"'));
+  if (s.dep > 0 && !oculto) o.push(T(52, 112, 'Luz: más ácido', 'min', 'text-anchor="middle"'));
   if (s.rifa) o.push(T(52, 126, 'Rifaximina', 'min', 'text-anchor="middle"'));
   // Porta
   o.push(`<path class="flecha" d="M98 84H116"/>`, T(100, 78, 'porta', 'min'));
@@ -41,8 +41,8 @@ export function escena(s, L, oculto) {
   VIAS_APAGADAS.forEach(([n], i) => { const x = 6 + (i % 2) * 176, y = 311 + Math.floor(i / 2) * 17;
     o.push(`<g class="via-off" data-via="${i}"><rect class="gris" x="${x}" y="${y}" width="170" height="15" rx="5"/><rect class="cand" x="${x + 6}" y="${y + 6}" width="7" height="6" rx="1"/><path class="cand-a" d="M${x + 7.5} ${y + 6}V${y + 4.5}a2 2 0 0 1 4 0V${y + 6}"/>${T(x + 20, y + 11, n.split(' ')[0] + ' · apagada', 'min')}</g>`); });
   // TIPS: puente que salta el hígado (del colon/porta a la sangre arterial)
-  o.push(`<path class="${s.tips ? 'puente on' : 'puente'}" d="M98 112H104V204H156"/>`, T(94, 172, s.tips ? 'TIPS' : 'TIPS: apagado', s.tips ? 'rot' : 'min', 'text-anchor="end"'));
-  if (s.tips) for (let i = 0; i < 3; i++) o.push(nh3(104, 124 + i * 20));
+  o.push(`<path class="${s.tips ? 'puente on' : 'puente'}" d="M98 112H106V204H156"/>`, T(94, 172, s.tips ? 'TIPS' : 'TIPS: apagado', s.tips ? 'rot' : 'min', 'text-anchor="end"'));
+  if (s.tips) for (let i = 0; i < 3; i++) o.push(nh3(106, 124 + i * 20));
   // Sangre arterial y CVVH (a la izquierda del astrocito)
   o.push(`<path class="flecha" d="M160 172V214"/>`, `<path class="flecha" d="M160 220H206"/>`, T(166, 200, 'sangre arterial', 'min'));
   for (let i = 0; i < L.nSale; i++) o.push(nh3(126 + (i % 4) * 13, 232 + Math.floor(i / 4) * 12));
@@ -53,8 +53,8 @@ export function escena(s, L, oculto) {
   o.push(`<rect class="${s.cvvh ? 'cvvh on' : 'cvvh'}" x="6" y="196" width="88" height="48" rx="8"/>`, T(50, 214, 'CVVH', 'rot', 'text-anchor="middle"'), T(50, 230, s.cvvh ? 'filtrando NH₃' : 'apagada', 'min', 'text-anchor="middle"'), `<path class="flecha" d="M94 220H124" opacity="${s.cvvh ? 1 : 0.3}"/>`);
   // Astrocito (el hueco de la derecha, x 226-356, queda reservado para el astrocito grande de la vuelta siguiente)
   const r = 28 + 22 * (oculto ? 0.2 : L.sw);
-  o.push(`<circle class="astro ${!oculto && L.sw > 0.4 ? 'hincha' : ''}" cx="292" cy="240" r="${r.toFixed(1)}"/>`, T(292, 299, oculto ? 'Astrocito' : `Astrocito · ${L.sw > 0.4 ? 'hinchado' : 'normal'}`, 'rot', 'text-anchor="middle"'));
-  if (!oculto) { for (let i = 0; i < L.nGlu; i++) o.push(glu(272 + (i % 3) * 18, 232 + Math.floor(i / 3) * 14)); for (let i = 0; i < L.nGlu; i++) o.push(`<path class="p-agua" d="M${272 + (i % 3) * 18 - 4} ${248 + Math.floor(i / 3) * 12}q2 -3 4 0t4 0"/>`); o.push(T(292, +(240 - r - 4).toFixed(1), 'glutamina + agua', 'min', 'text-anchor="middle"')); }
+  o.push(`<circle class="astro ${!oculto && L.sw > 0.4 ? 'hincha' : ''}" cx="292" cy="240" r="${r.toFixed(1)}"/>`, T(292, 303, oculto ? 'Astrocito' : `Astrocito · ${L.sw > 0.4 ? 'hinchado' : 'normal'}`, 'rot', 'text-anchor="middle"'));
+  if (!oculto) { for (let i = 0; i < L.nGlu; i++) o.push(glu(272 + (i % 3) * 18, 232 + Math.floor(i / 3) * 14)); for (let i = 0; i < L.nGlu; i++) o.push(`<path class="p-agua" d="M${272 + (i % 3) * 18 - 4} ${248 + Math.floor(i / 3) * 12}q2 -3 4 0t4 0"/>`); o.push(T(292, +(240 - r - 5).toFixed(1), 'glutamina + agua', 'min', 'text-anchor="middle"')); }
   else o.push(T(292, 250, '?', 'gran', 'text-anchor="middle"'));
   return o.join('');
 }

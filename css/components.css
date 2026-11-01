@@ -5301,7 +5301,7 @@ body.study-mode-on #hpv-raiz .dock { padding-right: 82px; }
 #hpv-raiz .btn-replay { min-height: 36px; font: 700 .76rem/1.15 var(--sans); }
 #hpv-raiz .crecera li { margin-bottom: 3px; }
 #hpv-raiz .mando output { color: var(--oro); }
-#hpv-raiz .dock-panel { max-height: 15vh !important; }
+#hpv-raiz .dock-panel { max-height: 14vh !important; }
 #hpv-raiz .mando button[aria-pressed="true"], #hpv-raiz .mando .fila button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
 /* [FIN hepatocito vivo] */
 /* hepatocito: con un sello, el monitor crece para que lo quepa entero (el sello se pinta sobre el monitor) */
