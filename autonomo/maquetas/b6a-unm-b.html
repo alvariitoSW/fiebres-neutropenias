@@ -12,6 +12,7 @@
 <main>
   <header class="cabecera"><div class="cab-fila"><h1>Del nervio al pulgar</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
   <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="modos m3" aria-label="Pruebas con Melquíades"><button type="button" data-modo="apuesta2" aria-pressed="false">Apuesta · Melquíades</button><button type="button" data-modo="error2" aria-pressed="false">Error · Serapio</button><button type="button" data-modo="caso2" aria-pressed="false">Caso · Melquíades</button></div>
   <section id="prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
     <span>Conducción<b id="m-cond"></b></span><span>TOF<b id="m-tof"></b></span><span>Fuerza<b id="m-f"></b></span><span>Reflejos<b id="m-ref"></b></span>
@@ -22,7 +23,7 @@
   <div id="avisos"></div>
   <p id="ritmo-vivo" hidden>Con este K⁺ y la succinilcolina, en la app se abre el ritmo vivo «hiperpotasemia»: <button type="button" data-ritmo-vivo="hiperk" class="ver-ficha">Ver el ritmo</button></p>
   <p id="pulmon-vivo" hidden>Con estas cifras, en la app se abre el pulmón vivo «debilidad neuromuscular» con la CV y la PIM de este paciente.</p>
-  <details class="lupa plegable" id="detalle-lupa"><summary>Lupa de la placa motora</summary><svg id="un-lupa" viewBox="0 0 360 150" role="img" aria-label="Terminal del nervio, hendidura con acetilcolina y músculo con receptores y acetilcolinesterasa"></svg></details>
+  <details class="lupa plegable" id="detalle-lupa"><summary>Lupa de la placa motora</summary><div id="un-pasos" class="fila-g"></div><p id="paso-txt" class="idea"></p><svg id="un-lupa" viewBox="0 0 360 184" role="img" aria-label="Terminal del nervio, hendidura con acetilcolina y músculo con receptores y acetilcolinesterasa"></svg></details>
   <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
   <p id="idea" class="idea"></p>
   <div id="tabla-466"></div>

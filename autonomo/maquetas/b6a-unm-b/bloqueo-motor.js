@@ -18,3 +18,5 @@ export function aA(s) {
 export const bloqueoDe = (s) => leerA(aA(s));
 // Dosis de sugammadex que hace falta (N p. 31): 16 mg/kg si el rocuronio es de hace <3 min; 4 en bloqueo profundo (TOF 0); 2 en moderado.
 export const sugNecesita = (s, tof) => (!s.rel || s.min < 3 ? 16 : tof === 0 ? 4 : 2);
+// Estado de A para dibujar la hendidura: miastenia = 15 % de receptores (el preset de Serapio en A); fármaco y piridostigmina como en A.
+export function aLupa(s) { const a = aA(s); if (s.est === 'miastenia') a.rec = 15; a.hielo = s.hielo || 0; a.emp = !!s.farm; a.piri = !!(s.piri && s.piriOk); return a; }

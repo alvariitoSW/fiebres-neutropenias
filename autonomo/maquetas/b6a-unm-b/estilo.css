@@ -46,5 +46,18 @@
 #pulmon-vivo { margin: 4px 0; padding: 6px 10px; border: 1px solid var(--accent-red); border-radius: 10px; font: .76rem/1.35 var(--sans); }
 /* Vuelta 2: sello debajo del monitor (no encima), CV en dos líneas, sin hueco bajo las barras */
 #monitor { min-height: 0; } .mon-rejilla small { display: block; font: 600 .62rem/1.2 var(--sans); color: var(--text-muted); }
-.sellos { position: relative; margin: 0; } .sellos:has(.tope-linea [data-tope]) { min-height: 44px; } #sellos.sellos:has(.tope-sello) { min-height: 176px; }
+.sellos { position: relative; margin: 0; } .sellos:has(.tope-linea [data-tope]) { min-height: 44px; } #sellos .tope-sellos { position: static; transform: none; margin: 0 auto; max-height: none; }
 #ritmo-vivo, #pulmon-vivo { margin: 4px 0; padding: 6px 10px; border: 1px solid var(--accent-red); border-radius: 10px; font: .76rem/1.35 var(--sans); }
+
+/* Hendidura importada del modelo A: sus clases de dibujo, dentro de la lupa. */
+#un-lupa .nervio { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--text-muted); stroke-width: 2; } #un-lupa .hend { fill: none; stroke: none; }
+#un-lupa .ves { fill: var(--bg-main); stroke: var(--text-muted); stroke-width: 1.5; } #un-lupa .ach-v, #un-lupa .ach { fill: var(--accent-green); stroke: var(--bg-main); stroke-width: 1; } #un-lupa .ach-v { stroke: none; }
+#un-lupa .imp { fill: none; stroke: var(--oro); stroke-width: 2; } #un-lupa .mem { stroke: var(--text-muted); stroke-width: 2; fill: none; }
+#un-lupa .copa { fill: none; stroke: var(--text-main); stroke-width: 2; } #un-lupa .copa.abierta { fill: color-mix(in srgb, var(--oro) 40%, transparent); } #un-lupa .copa.rota { stroke-dasharray: 3 3; stroke: var(--text-muted); } #un-lupa .anti { fill: none; stroke: var(--accent-red); stroke-width: 2; }
+#un-lupa .tijera { stroke: var(--text-dim); stroke-width: 2; fill: none; } #un-lupa .neo { fill: var(--oro); stroke: var(--bg-main); stroke-width: 1; } #un-lupa .suc { fill: var(--accent-red); stroke: var(--accent-red); stroke-width: 1.2; } #un-lupa .roc { fill: var(--text-main); stroke: var(--bg-main); stroke-width: 1; }
+#un-lupa .anillo { fill: none; stroke: var(--oro); stroke-width: 2; stroke-dasharray: 3 2; animation: none; } #un-lupa .fibra { fill: color-mix(in srgb, var(--accent-red) 45%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.5; } #un-lupa .kdot { fill: var(--text-dim); stroke: var(--bg-main); stroke-width: 1; }
+.modos.m3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } #un-pasos { display: flex; flex-wrap: wrap; gap: 4px; margin: 4px 0; } #un-pasos > * { flex: 1 1 0; min-width: 62px; min-height: 36px; font: 700 .68rem/1.15 var(--sans); padding: 2px 3px; } #un-pasos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.mando [data-est] { padding-inline: 3px; min-width: 70px; overflow-wrap: anywhere; }
+#un-svg .tubo { fill: color-mix(in srgb, var(--bg-card) 90%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.5; } #un-svg .tubo.fino { fill: var(--text-muted); } #un-svg .bulbo { fill: color-mix(in srgb, var(--accent-green) 35%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.5; }
+#un-svg .hendid, #un-svg .bronq, #un-svg .dedo { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-linecap: round; } #un-svg .dedo { stroke-width: 6; stroke: color-mix(in srgb, var(--text-muted) 55%, var(--bg-main)); }
+.mando .fila > *, #un-pasos > * { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; padding-inline: 3px; }

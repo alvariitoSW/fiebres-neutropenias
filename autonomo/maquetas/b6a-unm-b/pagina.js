@@ -9,11 +9,12 @@ import { PDF, PRESETS, IDEA, FUENTES, NOTAS, PROFUNDIZAR, CRECERA, TABLA, DUR, N
 import { nuevo, cambiar, leer, fmt, clamp } from './modelo.js';
 import { NEO, bloqueoDe, sugNecesita } from './bloqueo-motor.js';
 import { topes } from './topes.js';
-import { escena, lupa } from './dibujo.js';
+import { escena } from './dibujo.js';
+import { pintarHend, pasoHtml, prepararMotion, PASOS } from './hendidura.js';
 import { crearGuia } from './guia.js';
-import { APUESTA, ERROR, CASO, LLEVAS, opciones } from './pruebas.js';
+import { APUESTA, ERROR, CASO, APUESTA2, ERROR2, CASO2, LLEVAS, opciones } from './pruebas.js';
 const $ = (id) => document.getElementById(id);
-let ultEst = '', s = nuevo('flor'), clave = 'flor', modo = 'explorar', oculto = false, foco = [], guiaApi, topeApi, firma = '';
+let ultEst = '', s = nuevo('flor'), clave = 'flor', modo = 'explorar', oculto = false, foco = [], paso = 3, ultMov = Promise.resolve(), guiaApi, topeApi, firma = '';
 const cita = (c) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${pagDe(c)}" target="_blank" rel="noopener">PDF p. ${pagDe(c)}</a> · <button type="button" class="ver-ficha" data-resaltar="#${fichaDe(c)}" data-pag-ficha="${pagDe(c)}">p. ${pagDe(c)} · Ver en la ficha</button></span>`;
 function frase(t, org) { $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
 const TODOS = ['succiK', 'parada', 'neo70', 'neo5', 'succik', 'rocaire', 'sugmal', 'tof0', 'par48', 'intub', 'piri', 'ses', 'igiv', 'sintto', 'mccrap', 'farm', 'hielo2'];
@@ -25,7 +26,7 @@ function aplicarTopes(L) {
 }
 function pintar() {
   const L = leer(s); aplicarTopes(L);
-  $('est').innerHTML = escena(s, L, oculto, foco); $('un-lupa').innerHTML = lupa(s, L);
+  $('est').innerHTML = escena(s, L, oculto, foco); ultMov = pintarHend($('un-lupa'), s, paso, oculto); $('paso-txt').innerHTML = pasoHtml(paso, cita); document.querySelectorAll('[data-paso]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.paso === paso)));
   const q = oculto ? '?' : null, mg = s.est === 'miastenia';
   $('m-cond').textContent = q || L.cond; $('m-tof').textContent = s.est === 'bloqueo' && s.rel ? L.tof + '/4' : '4/4'; $('m-f').textContent = L.f + ' %';
   $('m-ref').textContent = q || L.ref; $('m-lcr').textContent = q || L.lcr; const apnea = s.est === 'bloqueo' && s.rel && L.tof === 0; $('m-cv').innerHTML = apnea ? 'apnea' : `${Math.round(L.cv)} mL<small>${fmt(L.cvkg, 1)} mL/kg${s.cvFijo ? ' · fija' : ''}</small>`; $('m-pim').textContent = apnea ? 'apnea' : '−' + L.f;
@@ -72,31 +73,40 @@ function hacer(a, o = {}) {
   if (a === 'diaMenos') { s.dia = Math.max(0, s.dia - 1); t = `Día ${s.dia}.`; org = 'ficha'; }
   frase(t, org); pintar();
 }
+// Lo que las pruebas pueden tocar del modelo (el caso obedece a cada opción).
+const API = { hacer: (a, o) => hacer(a, o), poner: (o) => { Object.assign(s, o); pintar(); }, via: () => { if (!s.via) hacer('via'); } };
+const espera = (ms) => new Promise((r) => setTimeout(r, ms));
+function irPaso(p) { paso = p; pintar(); }
+async function ciclo() { await prepararMotion(); for (let p = 1; p <= PASOS.length; p++) { irPaso(p); await ultMov; await espera(sinMovimiento() ? 0 : 450); } }
 function ponerPreset(c) { clave = c; s = nuevo(c); oculto = false; foco = []; frase(PRESETS[c].txt, 'paciente inventado; cifras de la ficha'); pintar(); if (guiaApi) guiaApi.abrir(c); }
 function modoPrueba(m) {
   modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false; foco = []; delete caja.dataset.fin; if (guiaApi) guiaApi.cerrar();
   if (m === 'explorar') { pintar(); return; }
-  const def = m === 'apuesta' ? APUESTA : m === 'error' ? ERROR : CASO; clave = def.preset; s = nuevo(def.preset); firma = '';
+  const def = { apuesta: APUESTA, error: ERROR, caso: CASO, apuesta2: APUESTA2, error2: ERROR2, caso2: CASO2 }[m]; clave = def.preset; s = nuevo(def.preset); firma = '';
   const tit = document.createElement('h3'); tit.textContent = def.titulo; caja.append(tit);
-  if (m === 'apuesta') {
+  if (m.startsWith('apuesta')) {
     oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `${def.antes} ${def.pregunta}`; const c = document.createElement('div'); c.className = 'ops'; caja.append(p, c);
-    opciones(c, def.ops, () => { oculto = false; def.tras({ hacer }); fin(caja, 'apuesta'); }, def.orden);
-  } else if (m === 'error') {
+    opciones(c, def.ops, () => { oculto = false; def.tras(API); fin(caja, m); }, def.orden);
+  } else if (m.startsWith('error')) {
     const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes; caja.append(p); let hechas = 0;
     def.frases.forEach((f) => { const c = document.createElement('div'), t = document.createElement('p'), b = document.createElement('div'); t.className = 'enun'; t.textContent = f.t; b.className = 'ops'; c.append(t, b); caja.append(c);
-      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) fin(caja, 'error'); }); });
-  } else caso(0, caja);
+      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) fin(caja, m); }); });
+  } else caso(0, caja, def, m);
   pintar();
 }
-function caso(i, caja) {
-  const st = CASO.pasos[i]; const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${CASO.pasos.length}. ${st.enun}`; const o = document.createElement('div'); o.className = 'ops'; c.append(p, o); caja.append(c);
-  opciones(o, st.ops, (op) => { if (op.haz) op.haz({ hacer }); pintar(); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja); pintar(); }); c.append(b); } else fin(caja, 'caso'); }, st.orden);
+function caso(i, caja, def, m) {
+  const st = def.pasos[i]; const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${def.pasos.length}. ${st.enun}`; const o = document.createElement('div'); o.className = 'ops'; c.append(p, o); caja.append(c);
+  opciones(o, st.ops, (op) => { if (op.haz) op.haz(API); pintar(); if (i + 1 < def.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja, def, m); pintar(); }); c.append(b); } else fin(caja, m); }, st.orden);
 }
 function fin(caja, k) { const b = document.createElement('div'); b.className = 'llevas'; b.innerHTML = '<b>Lo que te llevas</b><ul>' + LLEVAS[k].map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('') + '</ul>'; caja.append(b); caja.dataset.fin = '1'; }
 function montar() {
-  $('modos').addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); });
+  document.querySelectorAll('.modos').forEach((m) => m.addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); }));
+  const cortos = ['Impulso', 'Vesículas', 'Copas', 'Enzima', 'Relajado'];
+  $('un-pasos').innerHTML = PASOS.map((_, i) => `<button type="button" data-paso="${i + 1}" aria-pressed="false">${i + 1} ${cortos[i]}</button>`).join('') + '<button type="button" id="b-ciclo">Ver el ciclo</button>';
+  $('un-pasos').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b) return; if (b.id === 'b-ciclo') ciclo(); else irPaso(+b.dataset.paso); });
+  prepararMotion();
   const bt = (id, txt, extra = '') => `<button type="button" id="${id}" class="b" ${extra}>${txt}</button>`, d = (a, txt, v, k) => `<button type="button" data-a="${a}" data-v="${v}" ${k ? `data-${k.split('=')[0]}="${v}"` : ''} aria-pressed="false">${txt}</button>`;
-  const ests = Object.entries({ sano: 'Sano', gbs: 'Guillain-Barré', miastenia: 'Miastenia', pnc: 'Polineuropatía', mcc: 'Miopatía', bloqueo: 'Relajante' }).map(([k, t]) => `<button type="button" data-est="${k}" aria-pressed="false">${t}</button>`).join('');
+  const ests = Object.entries({ sano: 'Sano', gbs: 'Guillain-Barré', miastenia: 'Miastenia', pnc: 'Polineuro&shy;patía', mcc: 'Miopatía', bloqueo: 'Relajante' }).map(([k, t]) => `<button type="button" data-est="${k}" aria-pressed="false">${t}</button>`).join('');
   $('dock-panel').innerHTML = `
    <div class="mando"><b class="dock-nota">Estado de la cadena</b><div class="fila">${ests}</div></div>
    <div class="mando"><b class="dock-nota">Estímulo (cada pulsación lanza un impulso)</b><div class="fila"><button type="button" data-estim="unico" aria-pressed="false">Único</button><button type="button" data-estim="rep" aria-pressed="false">Repetido ×10</button><button type="button" data-estim="tof" aria-pressed="false">TOF</button>${bt('b-hielo', 'Hielo 2 min')}</div></div>
@@ -118,11 +128,11 @@ function montar() {
   $('fuentes').innerHTML = FUENTES.map(([t, p]) => `<li>${t} · <a class="enlace" href="${PDF}#page=${p}" target="_blank" rel="noopener">p. ${p}</a></li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuentes discrepan' ? 'Las fuentes discrepan' : t === 'fuente no lo dice' ? 'La fuente no lo dice' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
   $('crecera').innerHTML = CRECERA.map((t) => `<li>${t}</li>`).join(''); $('profundizar').innerHTML = PROFUNDIZAR.map((t) => `<li>${t}</li>`).join('');
-  $('leyenda').innerHTML = leyendaParticulas(['k', 'igg'], { titulo: 'Qué es cada partícula' }) + '<p class="min-nota">Manguitos: mielina. Copas: receptores. Tapón: relajante. Y roja: anticuerpo. Aspas: acetilcolinesterasa. Línea de la campana: 15 mL/kg. Cifras de fuerza, CV y PIM: ilustrativas.</p>';
+  $('leyenda').innerHTML = leyendaParticulas(['k', 'igg'], { titulo: 'Qué es cada partícula' }) + '<p class="min-nota">Manguitos: mielina. Copas: receptores. Doble círculo: succinilcolina. Hexágono: rocuronio. Anillo: sugammadex. Triángulo: neostigmina. Y roja: anticuerpo. Aspas: acetilcolinesterasa. Línea de la campana: 15 mL/kg. Cifras de fuerza, CV y PIM: ilustrativas.</p>';
   topeApi = crearTope({ monitor: $('sellos'), dock, cita });
 }
 function ajustar() { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px'); }
 montar(); ponerPreset('flor'); ajustar();
 new ResizeObserver(ajustar).observe($('dock')); new ResizeObserver(ajustar).observe($('frase'));
 seguirFrase(document.body, () => $('frase'), { dock: () => $('dock') });
-window.__un = { get s() { return s; }, leer: () => leer(s), hacer, ponerPreset, modoPrueba, pintar, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); } };
+window.__un = { get s() { return s; }, get paso() { return paso; }, irPaso, ciclo, get mov() { return ultMov; }, leer: () => leer(s), hacer, ponerPreset, modoPrueba, pintar, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); } };
