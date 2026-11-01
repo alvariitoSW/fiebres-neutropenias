@@ -96,7 +96,6 @@ export function veredictoToxicidad(f, h) {
     if (f >= 100 && h >= 72) return [2, 'Lesión inflamatoria 3-4 d', 'O₂ al 100 % prolongado · p. 72'];
     if (f >= 100 && h >= 6) return [1, 'Traqueobronquitis 6-12 h', 'capacidad vital ↓ · O₂ 100 % · p. 72'];
     if (f > 60) return [1, 'Sobre el 60 % clásico', 'en el crítico tolera menos · p. 72'];
-    if (f >= 50) return [1, 'Cerca del 60 % clásico', 'sin antioxidantes, menos · p. 71-72'];
     return [0, 'Bajo el 60 % clásico', 'FiO₂ más baja tolerable · p. 72'];
 }
 // Radicales y defensas de 0 a 1 (ilustrativo): más FiO₂ y más horas suben las ROS y gastan las defensas.
