@@ -582,6 +582,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-11-01 · **Más rápido** (REGLAS §4.17, «Haz A, B y C»): cola en paralelo (4 sesiones: eco, pulmón, `marino-unido`, mapa y maquetas del `b5`), el Consejo sube techos hasta +25 % sin pararte, papeleo mínimo. R1 y R2 de realismo, en §4.16.
 - 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).
 - 2026-11-01 · **Atlas: los 30 capítulos con su texto** (`mr` por la PR #77, Consejo 4-0).
 - 2026-11-01 · **Consejo del 01/11** (vídeo https://claude.ai/artifact/RTgGFnbio4SJAA52ZH6Lf3): vía libre hasta el 22/11; eco al 9,5 antes de encender el dibujo nuevo; `mr` a `main` solo con texto; 6 recortes de ahorro aprobados (`reglas-01-11`); Radiología parte 2 aparcada; Semiología espera tu PDF.

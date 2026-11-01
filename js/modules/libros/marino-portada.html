@@ -32,6 +32,22 @@
                 <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
                 <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
             </button>
+            <!-- Caps. 14-21 viven en Cardiología → Merino Cardiología y caps. 22-30 en Neumología → Merino Neumología: enlaces
+                 cruzados, como Sangre y hemostasia (las fichas no se mueven) -->
+            <button type="button" class="lib-bloque" id="btn-marino-corazon" data-lib-bloque="marinoCorazon" data-especialidad="cardiologia" data-view="merinoCardiologia" style="--lib-color: var(--accent-red);">
+                <span class="lib-bloque-icono" aria-hidden="true">🫀</span>
+                <span class="lib-bloque-nombre">Corazón y shock</span>
+                <span class="lib-bloque-dato">caps. 14-21 · <span data-lib-fichas></span> · en Cardiología</span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
+            <button type="button" class="lib-bloque" id="btn-marino-pulmon" data-lib-bloque="marinoPulmon" data-especialidad="neumologia" data-view="merinoNeumologia" style="--lib-color: var(--accent-purple);">
+                <span class="lib-bloque-icono" aria-hidden="true">🫁</span>
+                <span class="lib-bloque-nombre">Pulmón y respirador</span>
+                <span class="lib-bloque-dato">caps. 22-30 · <span data-lib-fichas></span> · en Neumología</span>
+                <span class="lib-bloque-vivos" data-lib-vivos hidden></span>
+                <span class="lib-bloque-progreso" data-lib-progreso hidden><span class="lib-bloque-barra"><i></i></span><span class="lib-bloque-progreso-txt"></span></span>
+            </button>
             <button type="button" class="lib-bloque" id="btn-marino-renal" data-lib-bloque="marinoRenal" style="--lib-color: var(--accent-purple);">
                 <span class="lib-bloque-icono" aria-hidden="true">⚗️</span>
                 <span class="lib-bloque-nombre">Ácido-base, renal y electrolitos</span>
@@ -84,7 +100,8 @@
     </div>
 
     <div class="lib-panel" id="lib-panel-vivos" role="tabpanel" aria-labelledby="lib-pest-vivos" hidden>
-        <p class="lib-panel-nota">Cada modelo se mueve con mandos, explica sus conceptos y te pregunta con casos. En el orden de los capítulos.</p>
+        <p class="lib-panel-nota">Cada modelo se mueve con mandos, explica sus conceptos y te pregunta con casos. Agrupados por temas, en el orden de los capítulos.</p>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-cuidados">💉 Accesos y cuidados del enfermo <span class="lib-vivos-grupo-caps">caps. 1-6</span></p>
         <div class="lib-vivos">
             <button class="const-node" id="ctv-menu-libros" data-lib-corto="Catéter vivo" data-lib-caps="caps. 1-3" data-especialidad="libros" data-view="cateterVivo" data-cateter-vivo="">
                 <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">💉</span>
@@ -102,14 +119,6 @@
                     <span class="const-tag" style="--orb-color: var(--accent-purple);">Abrir el modelo →</span>
                 </span>
             </button>
-            <button class="const-node" id="tel-menu-libros" data-lib-corto="El telar de la trombina" data-lib-caps="cap. 5" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="">
-                <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🧵</span>
-                <span class="const-card">
-                    <span class="const-title">La cama 7 · El telar de la trombina</span>
-                    <span class="const-desc">La trombina teje la red del trombo en el bolsillo de una válvula de la femoral: qué hilo corta la HNF, la HBPM, el fondaparinux y los ACOD, la TIH, la dosis según el riñón y el peso, medias y CNI, el filtro, el reloj neuroaxial y la adivinanza de la inmovilidad. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 5)</span>
-                    <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
-                </span>
-            </button>
             <button class="const-node" id="inm-menu-libros" data-lib-corto="La inmersión" data-lib-caps="cap. 6" data-especialidad="libros" data-view="inmersionViva" data-inmersion-viva="">
                 <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">🤿</span>
                 <span class="const-card">
@@ -118,11 +127,33 @@
                     <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
                 </span>
             </button>
+        </div>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-oxigeno">💧 Oxígeno, fluidos y agua <span class="lib-vivos-grupo-caps">caps. 7-11</span></p>
+        <div class="lib-vivos">
             <button class="const-node" id="cpv-menu-libros" data-lib-corto="Capilar y oxígeno" data-lib-caps="caps. 7 y 9" data-especialidad="libros" data-view="capilarVivo" data-capilar-vivo="">
                 <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🩸</span>
                 <span class="const-card">
                     <span class="const-title">Capilar y oxígeno: del pulmón a la mitocondria</span>
                     <span class="const-desc">Hematíes con sus 4 perlas de O₂: contenido, aporte, consumo y extracción; la saturación venosa, el lactato, el pulsioxímetro y el capnograma. Explorar, conceptos y mayéutica con 4 casos (Marino caps. 7 y 9)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
+                </span>
+            </button>
+            <button class="const-node" id="agv-menu-libros" data-lib-corto="Río y mar" data-lib-caps="caps. 10-11, 15 y 35" data-especialidad="libros" data-view="aguaViva" data-agua-viva="">
+                <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">🌊</span>
+                <span class="const-card">
+                    <span class="const-title">Río y mar: el agua del cuerpo</span>
+                    <span class="const-desc">Adónde va cada suero (salino, Ringer, glucosado, albúmina, hipertónico), la hemorragia y el Hto, el sodio y la neurona. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 10-11, 15 y 35)</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
+                </span>
+            </button>
+        </div>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-sangre">🩸 Sangre y coagulación <span class="lib-vivos-grupo-caps">caps. 5 y 13</span></p>
+        <div class="lib-vivos">
+            <button class="const-node" id="tel-menu-libros" data-lib-corto="El telar de la trombina" data-lib-caps="cap. 5" data-especialidad="libros" data-view="telarVivo" data-telar-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🧵</span>
+                <span class="const-card">
+                    <span class="const-title">La cama 7 · El telar de la trombina</span>
+                    <span class="const-desc">La trombina teje la red del trombo en el bolsillo de una válvula de la femoral: qué hilo corta la HNF, la HBPM, el fondaparinux y los ACOD, la TIH, la dosis según el riñón y el peso, medias y CNI, el filtro, el reloj neuroaxial y la adivinanza de la inmovilidad. Explorar, conceptos y mayéutica con 3 casos (Marino cap. 5)</span>
                     <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
                 </span>
             </button>
@@ -134,6 +165,9 @@
                     <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
                 </span>
             </button>
+        </div>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-corazon">🫀 Corazón y shock <span class="lib-vivos-grupo-caps">caps. 14-21</span></p>
+        <div class="lib-vivos">
             <button class="const-node" id="shv-menu-libros" data-lib-corto="El shock a pie de cama: monitor y soporte" data-lib-caps="caps. 14-17" data-especialidad="libros" data-view="shockVivo" data-shock-vivo="">
                 <span class="const-orb" style="--orb-color: var(--accent-red); --orb-glow: rgba(184,92,62,0.5);">🫀</span>
                 <span class="const-card">
@@ -142,11 +176,11 @@
                     <span class="const-tag" style="--orb-color: var(--accent-red);">Abrir el modelo →</span>
                 </span>
             </button>
-            <button class="const-node" id="pul-menu-libros" data-lib-corto="El pulmón con respirador" data-lib-caps="caps. 22-28" data-especialidad="libros" data-view="pulmonVivo" data-pulmon-vivo="">
-                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🫁</span>
+            <button class="const-node" id="rcv-menu-libros" data-lib-corto="El receptor vivo: vasopresores e inotrópicos" data-lib-caps="caps. 14 y 16" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(150,110,190,0.5);">💉</span>
                 <span class="const-card">
-                    <span class="const-title">El pulmón con respirador</span>
-                    <span class="const-desc">Presión, flujo y volumen en volumen y presión control, con la pausa inspiratoria y la oclusión espiratoria: la meseta, la compliance, la PEEP oculta y el SDRA protector (Marino caps. 22-28)</span>
+                    <span class="const-title">El receptor vivo: vasopresores e inotrópicos</span>
+                    <span class="const-desc">Qué receptor toca cada fármaco y qué le pasa a la presión y al gasto. En construcción (Marino caps. 14 y 16)</span>
                     <span class="const-tag" style="--orb-color: var(--accent-purple);">Abrir el modelo →</span>
                 </span>
             </button>
@@ -158,12 +192,26 @@
                     <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
                 </span>
             </button>
-            <button class="const-node" id="rcv-menu-libros" data-lib-corto="El receptor vivo: vasopresores e inotrópicos" data-lib-caps="caps. 14 y 16" data-especialidad="libros" data-view="receptorVivo" data-receptor-vivo="">
-                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(150,110,190,0.5);">💉</span>
+        </div>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-pulmon">🫁 Pulmón y respirador <span class="lib-vivos-grupo-caps">caps. 22-30</span></p>
+        <div class="lib-vivos">
+            <button class="const-node" id="pul-menu-libros" data-lib-corto="El pulmón con respirador" data-lib-caps="caps. 22-28" data-especialidad="libros" data-view="pulmonVivo" data-pulmon-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-purple); --orb-glow: rgba(156,84,118,0.5);">🫁</span>
                 <span class="const-card">
-                    <span class="const-title">El receptor vivo: vasopresores e inotrópicos</span>
-                    <span class="const-desc">Qué receptor toca cada fármaco y qué le pasa a la presión y al gasto. En construcción (Marino caps. 14 y 16)</span>
+                    <span class="const-title">El pulmón con respirador</span>
+                    <span class="const-desc">Presión, flujo y volumen en volumen y presión control, con la pausa inspiratoria y la oclusión espiratoria: la meseta, la compliance, la PEEP oculta y el SDRA protector (Marino caps. 22-28)</span>
                     <span class="const-tag" style="--orb-color: var(--accent-purple);">Abrir el modelo →</span>
+                </span>
+            </button>
+        </div>
+        <p class="lib-vivos-grupo" id="lib-vivos-grupo-rinon">⚗️ Riñón, ácido-base e iones <span class="lib-vivos-grupo-caps">caps. 31-38</span></p>
+        <div class="lib-vivos">
+            <button class="const-node" id="abv-menu-libros" data-lib-corto="Ácido-base vivo" data-lib-caps="cap. 31 · vive en Nefrología" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="">
+                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">⚖️</span>
+                <span class="const-card">
+                    <span class="const-title">Ácido-base vivo</span>
+                    <span class="const-desc">El pH cuelga del cociente PaCO₂ / HCO₃⁻: pulmón, plasma y riñón moviéndose, la carta de la gasometría, un laboratorio de 16 estados, conceptos, Mayéutica y 4 casos</span>
+                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
                 </span>
             </button>
             <button class="const-node" id="iov-menu-libros" data-lib-corto="Iones vivos: lo que ves y lo que hay" data-lib-caps="caps. 36-38" data-especialidad="libros" data-view="ionesVivos" data-iones-vivos="">
@@ -172,22 +220,6 @@
                     <span class="const-title">Iones vivos: lo que ves y lo que hay</span>
                     <span class="const-desc">Potasio, magnesio, calcio y fosfato: el número del laboratorio frente a lo que hay en todo el cuerpo, con el ECG y los mandos de reposición (Marino caps. 36-38)</span>
                     <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
-                </span>
-            </button>
-            <button class="const-node" id="agv-menu-libros" data-lib-corto="Río y mar" data-lib-caps="caps. 10-11, 15 y 35" data-especialidad="libros" data-view="aguaViva" data-agua-viva="">
-                <span class="const-orb" style="--orb-color: var(--accent-yellow); --orb-glow: rgba(207,154,62,0.5);">🌊</span>
-                <span class="const-card">
-                    <span class="const-title">Río y mar: el agua del cuerpo</span>
-                    <span class="const-desc">Adónde va cada suero (salino, Ringer, glucosado, albúmina, hipertónico), la hemorragia y el Hto, el sodio y la neurona. Explorar, conceptos y mayéutica con 3 casos (Marino caps. 10-11, 15 y 35)</span>
-                    <span class="const-tag" style="--orb-color: var(--accent-yellow);">Abrir el modelo →</span>
-                </span>
-            </button>
-            <button class="const-node" id="abv-menu-libros" data-lib-corto="Ácido-base vivo" data-lib-caps="cap. 31 · vive en Nefrología" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="">
-                <span class="const-orb" style="--orb-color: var(--accent-blue); --orb-glow: rgba(212,175,55,0.5);">⚖️</span>
-                <span class="const-card">
-                    <span class="const-title">Ácido-base vivo</span>
-                    <span class="const-desc">El pH cuelga del cociente PaCO₂ / HCO₃⁻: pulmón, plasma y riñón moviéndose, la carta de la gasometría, un laboratorio de 16 estados, conceptos, Mayéutica y 4 casos</span>
-                    <span class="const-tag" style="--orb-color: var(--accent-blue);">Abrir el modelo →</span>
                 </span>
             </button>
         </div>
