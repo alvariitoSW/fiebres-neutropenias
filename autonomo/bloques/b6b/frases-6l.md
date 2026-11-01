@@ -22,3 +22,10 @@ Páginas corregidas respecto a la cobertura (comprobadas en el PDF): 1 kPa = 7,5
 - Consecuencias clínicas de los distractores («creerías hipotermia», «sobrealimentan», «anemia se corrige en horas», etc.): razonamiento genérico, sin cifra. Buscar fuente solo si el auditor lo pide.
 - El 80 W del libro con su propio factor (1,16 W por kcal/h) daría ≈ 96 W: cálculo propio, nota de fidelidad en ap-c-g1.
 - Peso ideal 55 kg de Visitación: extremo bajo del rango 55-61 kg de la tabla; marcado «ilustrativo» en el paso.
+
+## Correcciones tras auditoría (1/11)
+- Calcio: distractor 8 mEq/L (valencia aplicada dos veces): cálculo, p. 33. Calcio 8 mg/dL marcado «caso inventado».
+- IMC: gráfico con cifras y bandas Underweight…Extremely Obese: p. 38 (no 37). 92 kg/160 cm = banda «Obese».
+- 50 mSv EPA: solo «para comparar», p. 37; sin decir que sea tope del paciente.
+- ATP, hematíes: frases de «fisiología general» y de recuperación quitadas; solo cifras del libro p. 45-46. «Varón adulto» y «80 kg» acotados.
+- Peso ajustado: «el libro recomienda el ajustado» (NE p. 4); realimentación: IMC ≤18,5 criterio de riesgo (NE p. 44).
