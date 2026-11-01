@@ -94,7 +94,7 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'ius-e4', corto: 'empírico', tipo: 'test', fuente: 'ma-itu-empirico',
         enunciado: 'Ante la sospecha de infección urinaria asociada a sonda, ¿qué empírico de primera línea en monoterapia cubre bacilos gramnegativos aerobios y enterococos?',
         opciones: [
-          { t: 'Cefepima o levofloxacino', porque: 'Son alternativas de segunda línea, no la primera. Los enterococos son el motivo de preferir pip-tazo o meropenem.' },
+          { t: 'Cefepima o levofloxacino', porque: 'Son alternativas de segunda línea, no la primera.' },
           { t: 'Piperacilina-tazobactam o meropenem, en monoterapia', ok: true },
           { t: 'Vancomicina en monoterapia, para cubrir los enterococos', porque: 'No figura entre las pautas de la ficha, que pide cubrir bacilos gramnegativos aerobios y enterococos: dejarías los gramnegativos sin cobertura.' }],
         explicacion: 'Cubrir bacilos gramnegativos aerobios y enterococos: <span class="hl">pip-tazo o un carbapenémico (meropenem) en monoterapia</span>; segunda línea, ceftazidima, cefepima o levofloxacino.' },
