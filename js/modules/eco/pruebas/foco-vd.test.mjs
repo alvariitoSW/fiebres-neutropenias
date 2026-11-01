@@ -34,3 +34,17 @@ test('foco VD: la sección del VD en el plano no es menor (≥90 %) que la del A
     if (g.ventana(f) > 0) { const re = g.rEpiVi(p[2], f); if (rho > re && rho < re + g.wRV(p[2], f)) n++; } } return n; };
   const aF = area(planoVista('a4cVd', est)), a4 = area(planoVista('a4c', est)); assert.ok(aF >= 0.9 * a4, `foco ${aF} frente a A4C ${a4}`);
 });
+// Mitchell 2019 p. 26: el foco VD no se inclina al cinco cámaras. Se cuentan las celdas del plano (rejilla de 1 mm, hasta 160 mm de profundidad) dentro de la
+// raíz aórtica (radio 1,28·rA, de z -15 a 16: TSVI y raíz); han de ser 0 en cada escenario y dibujo, y el rótulo «Ao» (|dd| < 14 a z=16) no sale.
+for (const dib of [1, 2]) test(`foco VD, dibujo ${dib}: el plano no corta la raíz aórtica ni el TSVI`, () => {
+  usarDibujo(dib);
+  for (const esc of [null, 'tep', 'hpcronica']) {
+    const m = crearMotor(); m.correr(12); if (esc) { ESCENARIOS[esc].aplicar(m, 1); m.correr(ASENTAR_FORMA); }
+    const est = tdDe(m), g = baseGeometrica(est), P = planoVista('a4cVd', est); let n = 0;
+    for (let u = -80; u <= 80; u += 1) for (let v = 0; v <= 160; v += 1) {
+      const p = [P.O[0] + P.r[0] * u + P.d[0] * v, P.O[1] + P.r[1] * u + P.d[1] * v, P.O[2] + P.r[2] * u + P.d[2] * v];
+      if (p[2] >= -15 && p[2] <= 16 && Math.hypot(p[0] - g.ac[0], p[1] - g.ac[1]) < 1.28 * g.rA) n++; }
+    assert.equal(n, 0, `${esc}: área de Ao en el corte`);
+    assert.ok(Math.abs(enPlano(P, [g.ac[0], g.ac[1], 16])[2]) >= 14, `${esc}: sin rótulo Ao`);
+  }
+});

@@ -264,6 +264,7 @@
         <div class="card cv-tarjeta" id="cv-tarjeta-eco">
             <div class="cv-chips" id="cv-vistas" role="group" aria-label="Vista ecográfica"></div>
             <div class="cv-fila cv-modos" role="group" aria-label="Modo de imagen">
+                <button type="button" class="cv-mini" id="cv-zoom" aria-pressed="false">Zoom ×2 en la región</button>
                 <button type="button" class="cv-mini on" data-modo="B">Modo B</button>
                 <button type="button" class="cv-mini" data-modo="M">Modo M</button>
                 <button type="button" class="cv-mini" data-modo="D">Doppler pulsado</button>
@@ -279,6 +280,7 @@
                 <canvas id="cv-eco" width="360" height="288" aria-label="Imagen ecográfica modo B del corte elegido, en el instante del corazón"></canvas>
                 <div class="cv-eco-titulo" id="cv-eco-titulo"></div>
                 <div class="cv-eco-fase" id="cv-eco-fase"></div>
+                <div class="cv-eco-zoom" id="cv-eco-zoom" hidden>ZOOM ×2</div>
             </div>
             <p class="cv-muted cv-senal-frase" id="cv-senal-frase" aria-live="polite" hidden></p>
             <div class="cv-gravedad" id="cv-gravedad" hidden>
