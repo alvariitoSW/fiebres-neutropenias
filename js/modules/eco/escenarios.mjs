@@ -32,20 +32,23 @@ const TEP_RPUL_MAX = 6.6, TEP_EES_VD_PENDIENTE = 0.35 / (Math.log(8) / Math.log(
 // PAS <90 o PAM <70 mmHg (Marino cap. 14, «Clinical Features», docs/marino-2024-shock-caps14-17.pdf#page=2). El mando se curva
 // (u = g^0,6) para que la hipotensión empiece hacia el 85 % y no en el último 8 %: la resistencia pulmonar y la contractilidad siguen
 // u, no g. u = g^0,6 es ilustrativo; el defecto es g = 0,7 (resistencia pulmonar ×5,9, antes ×8)
-// P3 (mv-eco-2a5): el émbolo proximal baja también la distensibilidad arterial pulmonar (cAp ÷ R^0,9) y acorta la sístole del VD
-// (×(1 − 0,3 u)): el flujo pulmonar pica pronto y el tiempo de aceleración pulmonar queda <105 ms, signo de sobrecarga del VD
+// P3 (mv-eco-2a5): el émbolo proximal baja también la distensibilidad arterial pulmonar (cAp ÷ R^0,9)
+// (la sístole del VD ya no se acorta: ver 154 y tepVd): el flujo pulmonar pica pronto y el tiempo de aceleración pulmonar queda <105 ms, signo de sobrecarga del VD
 // (ESC/ERS 2022, Fig. 4 y Tabla 10, docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf, PDF p. 27-28 = p. 3644-3645). Los dos
 // exponentes son ilustrativos (no hay cifra de la fuente). Con ellos la resistencia máxima baja de ×9,0 a ×6,6: la menor
 // distensibilidad ya sube la PSAP, y así PAM, GC y PSAP del TEP quedan donde estaban (PAM 100 % 59, defecto 74)
 const TEP_CAP_EXP = 0.9;
-const TEP_DUR_VD = 0.3;
 const TEP_CURVA = 0.6, TEP_DEFECTO = 0.7, TEP_G_MASIVO = 0.85;
 const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
-// Activación del VD en el TEP (motor.mjs, fSubidaVd): con la del VI la presión VD−AD en el chorro de IT acababa en rampa; con la subida
-// más temprana y la sístole algo más larga hace domo (máximo entre el 30 y el 65 % del chorro; Zoghbi 2017, Fig. 29, PDF p. 49).
-// Valores ILUSTRATIVOS, calibrados a esa forma sin mover vIT, PSAP, FEVD ni TAPSE más de un 5 %
-const TEP_U_MED = 0.66;   // u de g = 0,5
-const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) + 0.03 * Math.max(0, (u - 0.85) / 0.15) }; };
+// Activación del VD en el TEP (motor.mjs, fSubidaVd, durVd): con la del VI la presión VD−AD en el chorro de IT acababa en rampa; con la
+// subida más temprana hace domo (máximo entre el 30 y el 65 % del chorro; Zoghbi 2017, Fig. 29, PDF p. 49).
+// 154 (decisión del usuario, 01/11/2026): en la sobrecarga de presión el VD se contrae MÁS que el VI (Marcus 2008, J Am Coll Cardiol
+// 51:750, PMID 18279740: pico del acortamiento VD 387 frente a VI 293 ms, ×1,32, con el mismo comienzo) y el tabique se abomba al máximo ya
+// cerrada la aórtica. Antes el escenario acortaba el VD (×(1 − 0,3 u)) y la pulmonar cerraba 34 ms ANTES que la aórtica. Ahora: subida algo
+// precoz (f 0,62 → 0,24 con u = 1: domo del chorro de IT, Zoghbi 2017, Fig. 29, PDF p. 49) y caída larga (durVd ×(1 + 0,32 u)); la Ees del VD baja
+// ×(1 − 0,06 u) (0,95 en el defecto; con 0,88 la PSAP caía un 8 %) para que el VD que eyecta más tiempo no suba gasto ni PAM. ILUSTRATIVO: Marcus es HAP crónica; en el
+// TEP agudo es extrapolación. Con u = 0 todo vale 1 y f = fSubida (0,62): g = 0 es el normal
+const tepVd = (u) => ({ f: 0.62 - 0.38 * u, durX: 1 + 0.32 * u, ees: 1 - 0.06 * u });
 // Con g = 0 el TEP y la HP son el normal del motor: la subida del VD pasa de la del VI (g = 0) a la de la enfermedad (g ≥ FUNDE_VD_G) sin salto
 const FUNDE_VD_G = 0.15, fundeVd = (g) => Math.min(1, Math.max(0, g) / FUNDE_VD_G);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
@@ -195,7 +198,7 @@ export const ESCENARIOS = {
       texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** tepU(g), 1)}. ` + (g < TEP_G_MASIVO
         ? 'Riesgo intermedio (submasivo): disfunción del VD sin inestabilidad hemodinámica (Marino cap. 22, PDF p. 7)'
         : 'Riesgo alto (masivo): disfunción del VD con inestabilidad hemodinámica, PAM <70 mmHg (Marino cap. 22, PDF p. 7; cap. 14, PDF p. 2)') },
-    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= (1 - TEP_DUR_VD * u) * tepVd(u).durX; m.p.fSubidaVd = m.p.fSubida + (tepVd(u).f - m.p.fSubida) * fundeVd(g); m.p.vd.ees *= (1 - TEP_EES_VD_PENDIENTE * u) * tepVd(u).ees; sueloG(m, SUELO_TEP, g); },
+    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= tepVd(u).durX; m.p.fSubidaVd = m.p.fSubida + (tepVd(u).f - m.p.fSubida) * fundeVd(g); m.p.vd.ees *= (1 - TEP_EES_VD_PENDIENTE * u) * tepVd(u).ees; sueloG(m, SUELO_TEP, g); },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA

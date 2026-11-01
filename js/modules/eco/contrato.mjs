@@ -101,10 +101,18 @@ export const SEPTO_ESCALA = 2, SEPTO_NORMA = 6, SEPTO_UMBRAL = 0.5;
 // se apaga (puerta suave 20-40 mmHg de pVI) en diástole, donde manda el signo. El umbral 0,5 es de King; la puerta, ILUSTRATIVA.
 // Sin `pvi` la función es la de siempre (misma firma de un argumento, mismo rango 0…+1).
 export const SEPTO_RELATIVA = 0.5;
+// TOPE DIASTÓLICO (154, decisión del usuario 01/11/2026): con `pvi` y fuera de la sístole (puerta apagada) el signo satura suave en
+// SEPTO_TOPE_DIAST (s → T·tanh(s/T)). Sin él la telediástole del TEP saturaba (IE 1,60, pVD 13 / pVI 4); en la clínica el IE de
+// telediástole del TEP agudo es 1,21 ± 0,21 (Demertzis 2025, PMC12485522) y 1,26 ± 0,11 en la sobrecarga de presión crónica (Ryan 1985,
+// PMID 3973294). Con 0,25 el TEP del defecto da IE TD 1,32 y la HP crónica 1,30; el normal no cambia (signo ~0,06). Valor ILUSTRATIVO
+// (calibrado a esas dos cifras). La sístole (puerta = 1, King 1983) y la llamada de un argumento quedan como estaban.
+export const SEPTO_TOPE_DIAST = 0.25;
 export const septoSignoDe = (grad, pvi) => {
   const w = pvi == null ? 0 : Math.min(1, Math.max(0, (pvi - 20) / 20)), puerta = w * w * (3 - 2 * w);
   const ge = grad + SEPTO_RELATIVA * puerta * (pvi ?? 0);
-  return Math.tanh(Math.log1p(Math.exp(ge / SEPTO_ESCALA)) / SEPTO_NORMA);
+  const s = Math.tanh(Math.log1p(Math.exp(ge / SEPTO_ESCALA)) / SEPTO_NORMA);
+  if (pvi == null) return s;
+  return puerta * s + (1 - puerta) * SEPTO_TOPE_DIAST * Math.tanh(s / SEPTO_TOPE_DIAST);
 };
 
 // Movimiento regional (mv-eco-2a5 P5b). 20 valores 0-1 = acortamiento de cada segmento ÷ el normal (1 = normal, 0 = acinesia).

@@ -18,6 +18,7 @@
 import { crearMotor, BASE, escalarRPul } from '../motor.mjs';
 import { baseGeometrica, construirCorazon, PHI_SEPTO } from '../corazon-geo.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
+import { septoSignoDe } from '../contrato.mjs';
 import { planoVista, crearEcografo, enPlano, VISTAS } from '../ecografia.mjs';
 import { areasAnillo } from '../doppler.mjs';
 import { modeloVci } from '../abdomen.mjs';
@@ -94,7 +95,20 @@ const nivelPm = (g) => -0.45 * g.vi.L;
 export function muestrasClave(o) {
   const td = o.reduce((a, x) => (x.vvi > a.vvi ? x : a));
   const iE = o.filter(x => x.fase === 'E'), es = iE.length ? iE[iE.length - 1] : o.reduce((a, x) => (x.vvi < a.vvi ? x : a));
-  return { td, es, tdD: o.reduce((a, x) => (x.vvd > a.vvd ? x : a)), tsD: o.reduce((a, x) => (x.vvd < a.vvd ? x : a)) };
+  return { td, es, ie: muestraIeSistole(o) ?? es, tdD: o.reduce((a, x) => (x.vvd > a.vvd ? x : a)), tsD: o.reduce((a, x) => (x.vvd < a.vvd ? x : a)) };
+}
+
+/** 154 (decisión del usuario, 01/11/2026): el IE de «telesístole» se mide en el instante de máximo abombamiento del tabique (máximo
+ *  septoSigno del contrato) entre el cierre aórtico y la apertura mitral + 20 ms. Ryan 1985 (JACC 5:918, PMID 3973294) mide el IE de
+ *  telesístole en el fotograma de cavidad mínima del VI en eje corto, y Marcus 2008 (JACC 51:750, PMID 18279740) halla el máximo
+ *  abombamiento septal a 395 ± 45 ms, ya cerrada la aórtica, en la relajación isovolumétrica. Los volúmenes siguen con la telesístole de
+ *  Lang 2015 (p. 6: volumen mínimo; muestra `es`). Sin relajación isovolumétrica en la onda: null. */
+export function muestraIeSistole(o) {
+  const i0 = o.findIndex(x => x.fase === 'E'); if (i0 < 0) return null;
+  let i1 = i0; while (i1 + 1 < o.length && o[i1 + 1].fase === 'E') i1++;
+  const tFin = o[i1].t + 0.020, sig = (x) => septoSignoDe(x.pvd - x.pvi, x.pvi);
+  let im = i0; for (let i = i0; i < o.length && o[i].t <= tFin; i++) if (sig(o[i]) > sig(o[im])) im = i;
+  return o[im];
 }
 
 /** Tiempo de aceleración del TSVD (ms): del comienzo del flujo sistólico a su pico (desde que empieza la sístole). */
@@ -120,7 +134,7 @@ export function medirVd(m) {
     dVd: D.dVd.d, dVi: Dv.dVi.d, ratio: D.dVd.d / Math.max(0.1, Dv.dVi.d), dVdLinea: D.dVd,
     aD: D.aVd, aS: S.aVd, fac: (D.aVd - S.aVd) / Math.max(0.1, D.aVd) * 100, pared: D.pared,
     tapse: Math.min(35, 0.285 * (u.edvD - u.esvD)),
-    eiD: eiDe(k.td).ei, eiS: eiDe(k.es).ei,
+    eiD: eiDe(k.td).ei, eiS: eiDe(k.ie).ei,
     vTr, gradTr: grad, padEst: pad.pad, vci, rvsp: grad + pad.pad,
     act: ac.act, et: ac.et,
     paps: u.paps, papm: u.papm, pvc: u.pvc, pcp: u.pcp, gc: u.gc, pam: u.pam, fe: u.fe, feD: u.feD,
@@ -284,7 +298,7 @@ export function montar(el) {
     const { m, v, c: cv } = actual, k = planos.k, o = m.onda;
     let s, clave;
     if (st.cuadro === 'td') { s = k.td; clave = 'td'; }
-    else if (st.cuadro === 'ts') { s = k.es; clave = 'ts'; }
+    else if (st.cuadro === 'ts') { s = k.ie; clave = 'ts'; }   // fotograma del IE de telesístole (muestraIeSistole)
     else { const i = Math.floor((st.t % 1) * N_CINE); s = o[Math.min(o.length - 1, Math.round(i / N_CINE * o.length))]; clave = 'c' + i; }
     // cada fotograma se calcula una vez (en cine, uno nuevo por fotograma de pantalla como mucho)
     const f = foto(s, clave);
