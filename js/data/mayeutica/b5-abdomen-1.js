@@ -90,7 +90,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
         opciones: [
           { t: 'Nada más: la TC ya evaluó la vía biliar', porque: 'La TC puede no valorar vesícula ni vía biliar. Darla por evaluada deja sin detectar una litiasis, la primera causa, que se puede tratar.' },
           { t: 'Una ecografía a pie de cama de la vía biliar', ok: true },
-          { t: 'CPRE diagnóstica de entrada, para ver la vía biliar', porque: 'Es una técnica invasiva con riesgo propio y no es la prueba de primera elección para evaluar la vía biliar; la CPRE se reserva para la obstrucción.' }],
+          { t: 'CPRE diagnóstica de entrada, para ver la vía biliar', porque: `Marino reserva la CPRE para cuando hay obstrucción biliar (${pag(23, 'pág. 23')}); para mirar la vía biliar pide ecografía (${pag(20, 'pág. 20')}).` }],
         explicacion: `Por ser la litiasis la primera causa, se evalúan vesícula y vía biliar en todos: <span class="hl">la TC o, si no basta, la ecografía a pie de cama</span> (${pag(20)}).` },
       { id: 'pdx-e3', corto: 'amilasa normal', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
         enunciado: 'Llega al 6.º día de dolor abdominal intenso con la amilasa normal. ¿Queda descartada la pancreatitis?',
