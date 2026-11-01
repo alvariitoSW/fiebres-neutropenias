@@ -82,6 +82,10 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
      durante cuánto tiempo, desde qué cifra) y su fuente. El constructor no los decide.
    - **Al aprobar una maqueta (R2)**: la lista de «lo que hace» (cada mando, cada estado, lo que queda fijo en
      pantalla), para que el constructor la tache al llevarla a la app.
+   - **Receta antes de construir (REGLAS §4.8 R10, el usuario, 01/11/2026)**: para cada punto de §7 (y de §8 si hay
+     preguntas), el **criterio de 9,5 y el de 10**, con cifra, rótulo y comportamiento concretos, y su fuente y página.
+     Cada criterio se tiene que poder comprobar con una captura o un juez. El constructor tacha esa lista y tú la
+     usas después para juzgar.
 3. Nada inventado: el paciente sí, la medicina no (REGLAS §8).
 
 ## Modo juzgar (después de construir)
@@ -89,7 +93,7 @@ Partes de un contenido que **ya es fiel** (el texto de la app, su fuente con pá
 Al juzgar, comprueba también que cada cita lleve «Ver en la ficha», que cada estado de un modelo tenga su explicación guiada (REGLAS §7.9-7.10), y que cada paso de los casos sea un **paciente posible** con cifras que encajan entre sí
 (REGLAS §1.12) y que las **piezas comunes** del encargo se usen tal cual.
 **Topes (REGLAS §1.14, siempre que haya mandos)**: lleva cada mando a su máximo (y repite cada acción) con el programa
-de prueba. Es un fallo grave (nota por debajo de 8) un mando sin tope, un tope sin origen, pasarse sin consecuencia
+de prueba. Es un fallo grave (nota por debajo de 9,5; como mucho 9,0) un mando sin tope, un tope sin origen, pasarse sin consecuencia
 visible (sello, constantes que cambian como en un paciente real, frase viva) o una cifra imposible en cualquier estado.
 Da cada fallo con su archivo y función.
 
@@ -104,8 +108,14 @@ ahí el que escribas). Mira **como mucho 10 capturas**, solo las de lo que hay q
 queda en tu conversación y la relees en todos los pasos siguientes. Comprueba lo pedido en el juicio anterior y lo
 nuevo; no repitas la exploración entera. Da a cada fallo su dirección exacta (archivo y función o línea).
 **Rejuicio corto (REGLAS §4.8 R8)**: en la segunda vuelta y siguientes, vuelve a puntuar solo los criterios que
-estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera. **Dónde obliga la meta
-(R7)**: 8,75 en modelos vivos nuevos, maquetas y archivos modelo; en lo demás aprueba el 8 y lo que falte va al parte.
+estaban por debajo de 9,5, con el mismo programa de prueba y las capturas de la primera. **Nota de corte (R7, el
+usuario, 01/11/2026)**: 9,5 en todo lo que juzgas; la meta es 10. Entre 9,0 y 9,5, vuelta corta; por debajo de 9,0,
+vuelta normal. Tope de 3 vueltas con receta; después, el director lo lleva al Congreso (R10). Lo juzgado antes del
+01/11 con 8,75 **y ya en `main`** (las 55 fichas con Estudiar, `autonomo/bajo-95.md`) no se rejuzga ahora; lo de ramas
+sin fusionar, sí (manda la nota del día del voto de la PR). En el rejuicio no repuntúes lo que ya tiene 9,5 o más. De
+las 2-3 maquetas de un modelo, solo la elegida tiene que llegar a 9,5. **Nota atada a la receta**: criterio de 9,5
+cumplido con captura o juez → 9,5; no cumplido → 9,0 como mucho. Compara cada punto con su **ancla de 10**
+(`autonomo/modelos/anclas/`, REGLAS §7 «Cómo se juzga»): 9,5 es «el ancla con un solo fallo pequeño y nombrado».
 
 1. Abre la app a 390×844 (móvil, táctil) y haz capturas de lo nuevo: la primera pantalla, la figura en 2-3 estados
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,
@@ -116,9 +126,12 @@ estaban por debajo de la meta, con el mismo programa de prueba y las capturas de
      enseña, vista Visual, móvil, modelo grande);
    - si hay preguntas, REGLAS §8: recorrido completo y en orden, formatos permitidos, **dificultad** (¿se acierta sin
      estudiar?), caso que evoluciona con datos que interpretar, giro y «Lo que te llevas».
-3. Para cada punto por debajo de 8,75 (se aprueba con 8; 8,75 es la meta), di **qué haría falta en concreto**, con archivo y línea.
+3. **Receta (R10)**: para cada punto por debajo de 9,5, escribe las características concretas que lo suben a 9,5
+   (cifra, rótulo y comportamiento, con archivo y línea, y fuente y página si es contenido). Para cada punto con 9,5 o
+   más, escribe qué lo llevaría a 10; si no sabes decirlo, la nota está inflada. La receta y las notas de cada vuelta
+   van en la tabla «Vueltas» del parte.
 
 **No puedes:** editar archivos de la app. Escribe solo tu plan o tu informe donde te diga el director.
 
-Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥8; meta, todo ≥8,75) y la
+Responde con el plan de estudio (modo diseñar) o con la tabla de puntuaciones, el veredicto (pasa si todo ≥9,5; meta, todo 10) y la
 lista de lo que falta (modo juzgar).

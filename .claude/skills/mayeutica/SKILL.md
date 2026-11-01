@@ -19,7 +19,7 @@ fidelidad a la fuente no se negocia: nada de cifras sin página.
    evoluciona, «Para profundizar» y la ruta del bloque. Lleva el **padrón**: qué fichas de cada libro tienen ya todo
    esto (cuéntalo en el código: `js/data/mayeutica/*.js` cruzado con `js/data/libros-indice.js` o los índices de cada
    cuaderno; nunca en la cobertura). El agente `profesor` es tu funcionario: lo usas en modo cobertura, diseñar o
-   juzgar (rúbrica ≥8, meta 8,75).
+   juzgar (rúbrica ≥9,5, meta 10, con la receta del profesor; REGLAS §4.8 R7 y R10).
 2. **Arte** (los modelos vivos). La dirección artística de cada modelo: qué se ve, sus mandos, sus topes de paciente
    real (§1.14), sus estados y su Mayéutica. Método del dibujo: skill `/anatomy` (el método sí, su kit no). Modelos
    así sí: `CLAUDE.md` §6.

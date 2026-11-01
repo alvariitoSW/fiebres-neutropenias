@@ -38,6 +38,7 @@ export const SHV_CSS = `
 .shv-raiz .chip-b[aria-pressed="true"] { background: color-mix(in srgb, var(--accent-yellow) 24%, transparent); border-color: var(--accent-yellow); color: var(--text-main); }
 .shv-raiz .chip-b:disabled { opacity: .45; cursor: default; }
 .shv-raiz .monitor { --mon-v: .95rem; }
+.shv-raiz .monitor:has(.tope-linea span) { padding-bottom: 22px; }   /* la línea ámbar del tope (core/tope.js) no tapa la última fila de casillas */
 .shv-raiz .cifra { padding-left: 5px; }
 .shv-raiz .c-sat { color: var(--text-dim); }
 .shv-raiz .cifra.c-sat .v { color: var(--text-dim); }

@@ -2,9 +2,11 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-11-01-b5-maquetas.md` (pasada del 01/11: ≈11,0 M frente a 8,85 M, +24 %; una propuesta: presupuesto de maquetas con injertos y vuelta 3)
+**Último parte revisado:** `2026-11-01-b6a-maquetas.md` (pasada del 01/11: ≈12,8 M frente a 10,5 M, +22 %; una propuesta: maqueta de primera vuelta a 0,9 M)
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- (b6a, 01/11) Un aviso de un paciente se queda pegado al cambiar a otro (la lista de limpieza de la maqueta no tenía la clave); ningún programa de prueba lo cazó, lo vio el profesor. Si se repite: el molde de `herramientas/*.mjs` cambia de paciente y comprueba que no queda ningún aviso del anterior.
+- (b6a, 01/11) Cumplidas dos lecciones del b5: la búsqueda de fuentes en encargo aparte (3 encargos de 0,12-0,18 M) y la medida de solapes de `<text>` en los programas. El patrón de solapes del b5 se da por resuelto.
 - (b5, 01/11) Constructor de una vuelta 3 con 24 arreglos y una búsqueda de fuentes en el mismo encargo (58 pasos, 0,84 M). Si se repite: la búsqueda de fuentes (§1.15) en un encargo sonnet de ≤10 pasos aparte.
 - (b5, 01/11) Solapes de texto en SVG que ningún programa de prueba mide (los vio el director en una captura). Si se repite: el molde de `herramientas/*.mjs` compara las cajas de los `<text>`.
 - (b5, 01/11) Director 2,3 M en una sola sesión de ≈200 pasos (confirma la regla ya aprobada de partir al director, §4.16; no se cumplió).
@@ -70,4 +72,5 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-30 | Hacienda no junta piezas con prueba propia en un encargo | propuesta |
 | 2026-10-30 | Director del paso 4 a 1,3 M | propuesta |
 | 2026-10-31 | Continuar al mismo constructor solo si el primero acabó en ≤30 pasos | propuesta |
-- **Presupuesto de maquetas con injertos y vuelta 3** (01/11, b4-iones + b5): propuesta.
+- **Presupuesto de maquetas con injertos y vuelta 3** (01/11, b4-iones + b5): propuesta (el b6a la aplicó y cumplió: vueltas 2a/2b/3 ≈1,4 M por modelo).
+- **Maqueta de primera vuelta a 0,9 M** (01/11, b5 + b6a): propuesta.
