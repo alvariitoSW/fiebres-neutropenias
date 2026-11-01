@@ -182,7 +182,7 @@ const DATOS = {
                 ok('Que era ansiedad: se calmó y el Vt no cayó, así que no hay datos de fracaso ventilatorio'),
                 no('Que el soporte de 5 cmH₂O ha mejorado su trabajo respiratorio y por eso respira mejor', `La presión de soporte de 5 no reduce de forma significativa el trabajo respiratorio (${p(53)}).`)],
               explicacion: `Si tras calmar la disnea el volumen se mantiene, el problema era la <span class="hl-azul">ansiedad</span>, no el fracaso ventilatorio (${p(54)}-${p(55)}). FR 22 y Vt ≈400, cifras del modelo (ilustrativo).` + enFicha(SB, 'nep-sbt-rapida') } },
-          { momento: 'Día 7 · giro: a los 20 minutos', datos: { FR: '34 por minuto', 'Vt': '173 mL (2,5 mL/kg PBW)', 'FR/Vt': '199 rpm/L', Aspecto: 'sudoración, uso de músculos accesorios' }, nuevo: ['FR', 'Vt', 'FR/Vt', 'Aspecto'],
+          { momento: 'Día 7 · giro: a los 20 minutos', datos: { FR: '34 por minuto', 'Vt': '173 mL (2,5 mL/kg PBW)', 'FR/Vt': '≈199 rpm/L (monitor; 34/0,173 ≈ 197)', Aspecto: 'sudoración, uso de músculos accesorios' }, nuevo: ['FR', 'Vt', 'FR/Vt', 'Aspecto'],
             pregunta: { id: 'sbt-c5', tipo: 'test', fuente: 'nep-sbt-rapida · nep-sbt-tabla', origen: ILU, modelo: pv('sbt-fracaso', '🫁 Rápido y superficial (con otro paciente): FR 34, Vt 173'),
               enunciado: 'A los 20 minutos Benito respira a 34 con un Vt de 173 mL y suda. ¿Y ahora?',
               opciones: [

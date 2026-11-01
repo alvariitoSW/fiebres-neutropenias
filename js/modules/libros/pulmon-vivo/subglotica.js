@@ -15,11 +15,11 @@ export function evaluar(s, pedido) {
   const t = `Vt inspirado ${f0(CUFF.vt)} − espirado ${f0(CUFF.vt - f)} mL`;
   const dib = { p, asp: s.asp, bajo, isq: pedido > CUFF.tope, nivel: SUBGL.nivel[a], gotas: (s.asp ? SUBGL.gotas.con : SUBGL.gotas.sin)[bajo ? 1 : 0] };
   let aviso = null, sello = null;
-  if (pedido > CUFF.tope) sello = { k: 'subgl-mucosa', titulo: 'Balón por encima del tope: lesión de la mucosa', texto: `Pides ${f0(pedido)} cmH₂O y el mando se queda en ${CUFF.tope}: por encima, el balón comprime los capilares de la pared de la tráquea (unos 25 mmHg) y la mucosa se isquemia. A ${CUFF.tope} cmH₂O el sello es total (${t}); más presión no sella mejor y daña la tráquea.`, cita: C.cuffPresion, origen: 'ficha, cap. 28 p. 21-22 (25 mmHg y 25 cmH₂O: nota de fuentes)' };
+  if (pedido > CUFF.tope) sello = { k: 'subgl-mucosa', titulo: 'Balón por encima del tope: lesión de la mucosa', texto: `Pides ${f0(pedido)} cmH₂O y el mando se queda en ${CUFF.tope}: por encima, el balón comprime los capilares de la pared de la tráquea (unos 25 mmHg) y la mucosa se isquemia. A ${CUFF.tope} cmH₂O el sello es total (${t}); más presión no sella mejor y daña la tráquea (deducción a partir de la isquemia, ilustrativo).`, cita: C.cuffPresion, origen: 'ficha, cap. 28 p. 21-22 (25 mmHg y 25 cmH₂O: nota de fuentes); «no sella mejor»: deducción, ilustrativo' };
   else if (bajo) sello = { k: 'subgl-bajo', titulo: 'Balón bajo: el sello falla y pasan las secreciones', texto: `A ${f0(p)} cmH₂O queda un hueco entre el balón y la pared: hay fuga audible (${t}) y las secreciones acumuladas encima resbalan por él hacia las vías aéreas inferiores${s.asp ? ', aunque el puerto las despeje en parte' : ''}. Infla hasta que no haya fuga audible, sin pasar de ${CUFF.tope}.`, cita: C.cuffFuga, origen: 'ficha, cap. 28 p. 21-22 y cap. 29 p. 38 · 15 cmH₂O y las gotas: ilustrativo (Marino no da un mínimo)' };
   else if (p >= CUFF.aviso && p < CUFF.tope) aviso = { nivel: 'aviso', titulo: 'Balón cerca del tope', texto: `${f0(p)} cmH₂O está cerca del límite de ${CUFF.tope}; por encima la mucosa traqueal se isquemia.`, cita: C.cuffPresion, origen: 'ficha, cap. 28 p. 21' };
   else if (s.asp) aviso = { nivel: 'aviso', titulo: 'Aspiración subglótica en marcha', texto: 'El puerto sobre el balón despeja las secreciones con succión continua (habitualmente no más de −20 cmH₂O): menos NAV en los estudios.', cita: C.subglotica, origen: 'ficha, cap. 29 p. 38' };
-  else aviso = { nivel: 'aviso', titulo: 'Secreciones sobre el balón', texto: 'Con el balón inflado y sellado, las secreciones de la boca se acumulan encima y algo baja: el balón no impide la aspiración. Con un tubo de puerto subglótico se pueden despejar.', cita: C.subglotica, origen: 'ficha, cap. 29 p. 38' };
+  else aviso = { nivel: 'aviso', titulo: 'Secreciones sobre el balón', texto: 'Con el balón inflado y sellado, las secreciones de la boca se acumulan encima, y el balón inflado no impide la aspiración (p. 38). Con un tubo de puerto subglótico se pueden despejar.', cita: C.subglotica, origen: 'ficha, cap. 29 p. 38' };
   s.r = dib;
   return { ...r, aviso, sello, dib };
 }
@@ -27,7 +27,7 @@ export function evaluar(s, pedido) {
 export function frase(s, p) {
   const pie = 'ficha: el balón no impide la aspiración y el puerto subglótico baja la NAV (cap. 29 p. 38) · cifras del dibujo: ilustrativo';
   if (p < SUBGL.bajo) return `Con el balón a ${f0(p)} cmH₂O el sello falla: las secreciones resbalan por el hueco hacia el pulmón${s.asp ? ' (el puerto despeja parte)' : ''}. ${pie}`;
-  return (s.asp ? 'La succión continua del puerto despeja las secreciones sobre el balón: casi no queda nada que escurra hacia el pulmón.' : 'Las secreciones de la boca se acumulan sobre el balón y un poco baja por los pliegues aunque esté inflado.') + ' ' + pie;
+  return (s.asp ? 'La succión continua del puerto despeja las secreciones sobre el balón: casi no queda nada que escurra hacia el pulmón.' : 'Las secreciones de la boca se acumulan sobre el balón y el balón inflado no impide la aspiración (p. 38).') + ' ' + pie;
 }
 export function celda(s, celdaFn) {
   const d = s.r; if (!d) return '';
@@ -35,7 +35,7 @@ export function celda(s, celdaFn) {
 }
 export function mandosHtml(c, s, desl) {
   return `<p class="dock-nota dock-grupo"><b>Gaspar, día 4</b>: intubado, volumen control (410 mL), tubo con puerto subglótico</p>`
-    + desl('cuff', 'Presión del balón', c.p, 0, CUFF.max, 1, 'cmH₂O', `tope ${CUFF.tope} (Marino cap. 28 p. 21-22: isquemia de la mucosa) · por debajo de ${SUBGL.bajo} el sello falla: ilustrativo`)
+    + desl('cuff', 'Presión del balón', c.p, 0, CUFF.max, 1, 'cmH₂O', `tope ${CUFF.tope} cmH₂O (nota: la ficha da 25 mmHg y 25 cmH₂O) (Marino cap. 28 p. 21-22: isquemia de la mucosa) · por debajo de ${SUBGL.bajo} el sello falla: ilustrativo`)
     + `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="asp" aria-pressed="${s.asp}">Aspiración subglótica<small>${s.asp ? 'sí: succión continua ≤ −20 cmH₂O' : 'no'} (cap. 29 p. 38)</small></button></div>`;
 }
 
