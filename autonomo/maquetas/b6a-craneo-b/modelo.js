@@ -10,7 +10,7 @@ export const nuevo = (o = {}) => ({ tipo: 'hematoma', masa: 0, pas: 128, anti: '
   nitro: false, cran: false, sensor: true, nimo: false, exc: false, na: 138, ...o });
 export const pad = (s) => Math.round(0.55 * s.pas);                  // PAD supuesta: ilustrativo
 export const pam = (s) => Math.round((s.pas + 2 * pad(s)) / 3);
-export const resangra = (s) => s.tipo === 'hsa' && !s.exc && s.pas > U.pasHic && s.t <= 3;
+export const resangra = (s) => s.tipo === 'hsa' && !s.exc && s.pas > U.pasHic && s.t >= 1 && s.t <= 3;   // a la hora 0 solo aviso (Marino p. 47)
 // Estadios por PIC (ilustrativo): 0 normal · 1 línea media desplazada · 2 uncal (pupila D fija) · 3 decorticación · 4 descerebración · 5 flácido · 6 sin flujo
 export function leer(s) {
   const m = resangra(s) ? Math.max(s.masa, 70) : s.masa, P = pam(s);
@@ -31,7 +31,7 @@ export function topes(s) {
   const L = leer(s), t = [], hem = s.tipo === 'hematoma' || s.tipo === 'ventricular';
   if (L.me) t.push(T('me', 'sello', 'Sin flujo cerebral', 'PIC igual o casi igual a la PAM (PPC <10): casi no entra sangre; umbral PPC <10 ilustrativo. La muerte encefálica exige además la Tabla 45.6 (≥48 h, T >36 °C, PAM ≥75, causa suficiente).', 14, 'mn-me-definicion', 'ficha · p. 14-15 · umbral ilustrativo', ['#b-mas', '#b-hora']));
   else {
-    if (L.est >= 4) t.push(T('desc', 'sello', 'Compresión del tronco', 'Descerebración, pupilas dilatadas y fijas: el mesencéfalo y la protuberancia están comprimidos (Tabla 45.4).', 10, 'mn-coma-posturas', 'ficha · p. 10-11', ['#b-mas']));
+    if (L.est >= 4) t.push(T('desc', 'sello', 'Compresión del tronco', L.est >= 5 ? 'Extremidades flácidas, pupilas dilatadas y fijas: el daño llega al tronco bajo (p. 10; Tabla 45.4).' : 'Descerebración (mesencéfalo y protuberancia alta), pupilas dilatadas y fijas (p. 10; Tabla 45.4).', 10, 'mn-coma-posturas', 'ficha · p. 10-11', ['#b-mas']));
     else if (L.est >= 2 && s.tipo !== 'hsa') t.push(T('uncal', 'sello', 'Herniación uncal: masa en expansión', 'Una pupila dilatada y fija (la del lado de la masa); si sigue, la mano pasa a flexión y luego a extensión.', 11, 'mn-tabla-45-4', 'ficha · p. 10-11', ['#b-mas']));
   }
   if (!L.me && L.ppc < U.ppcMin) t.push(T('ppc', 'aviso', 'PPC <50', `PPC ${L.ppc}: el cerebro recibe poca presión de riego. Objetivo 50-70 en la hemorragia intracerebral.`, 45, 'mn-hic-ppc', 'ficha · p. 45; Manual UMI: <50 a evitar'));
@@ -46,6 +46,7 @@ export function topes(s) {
   if (s.na > U.naMax) t.push(T('na', 'sello', 'Na⁺ >155', `Na⁺ ${s.na}: por encima del objetivo 145-155 del salino hipertónico; no se repite el bolo.`, 41, 'mn-isq-edema-manejo', 'ficha · p. 41', ['#b-hiper']));
   if (s.cran) t.push(T('cran', 'sello', 'Hueso retirado', 'La caja se abre por un lado y la PIC cae (magnitud ilustrativa); se plantea en el infarto maligno (≤60 años, ≤48 h: fuente web RCEM, no Marino).', null, null, 'fuente web RCEM · magnitud ilustrativa', ['#b-cran']));
   if (resangra(s)) t.push(T('resang', 'sello', 'Resangrado', 'Aneurisma sin excluir con PAS >140 en los primeros días: la sangre vuelve a salir (la mejor prevención es cerrarlo).', 47, 'mn-hsa-aneurisma', 'ficha · p. 47', ['#b-hora']));
+  else if (s.tipo === 'hsa' && !s.exc && s.t === 0 && s.pas > U.pasHic) t.push(T('resang0', 'aviso', 'PAS >140 con aneurisma abierto', 'Riesgo de resangrado: la mejor prevención es cerrar el aneurisma; controla la PAS.', 47, 'mn-hsa-aneurisma', 'ficha · p. 47'));
   else if (s.tipo === 'hsa' && !s.exc && s.t > 3) t.push(T('exc', 'aviso', 'Aneurisma abierto', 'Cerrarlo en 3 días; nunca más allá de 7-10.', 47, 'mn-hsa-aneurisma', 'ficha · p. 47'));
   if (L.hsaDiasEsp) t.push(T('vaso', 'aviso', 'Días 4-14', 'Las arterias de la base se estrechan; el Doppler transcraneal sube su velocidad y el GCS pierde 2 puntos. Vigilar.', 48, 'mn-hsa-vigilar', 'ficha · p. 48'));
   return t;

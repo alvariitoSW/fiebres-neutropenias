@@ -28,7 +28,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
       const fuera = cajas.filter((c) => c.r > R.right + 0.5 || c.l < R.left - 0.5).map((c) => c.t);
       return { min: +min.toFixed(2), sol, fuera };
     });
-    ok(r.min >= 8, `${ANCHO} ${t}: rótulo de ${r.min}px`); ok(!r.sol.length, `${ANCHO} ${t}: solapes ${r.sol.join(' | ')}`); ok(!r.fuera.length, `${ANCHO} ${t}: texto fuera del dibujo ${r.fuera.join(',')}`);
+    ok(r.min >= 9, `${ANCHO} ${t}: rótulo de ${r.min}px`); if (t === 'inicio') console.log('rótulo mínimo del corte:', r.min, 'px en pantalla'); ok(!r.sol.length, `${ANCHO} ${t}: solapes ${r.sol.join(' | ')}`); ok(!r.fuera.length, `${ANCHO} ${t}: texto fuera del dibujo ${r.fuera.join(',')}`);
     return `min ${r.min}px solapes ${r.sol.length}`;
   };
   await desb('inicio'); console.log('inicio:', await analiza('inicio'), '|', await L(), '| topes', await tp());
@@ -70,8 +70,8 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   ok((await (async () => { await pre('clotilde'); await p.evaluate(() => window.__cr.set({ sensor: true })); return tp(); })()).includes('edemasens'), 'edema con sensor sin aviso');
   await pre('abundio', { masa: 85, sensor: false }); ok((await tp()).includes('sensor:aviso'), 'GCS≤8 sin sensor sin aviso');
   await pre('abundio', { masa: 20 }); await p.evaluate(() => window.__cr.set({ vent: 'vpp' })); ok((await tp()).includes('vpp:aviso'), 'VPP sin aviso'); await p.evaluate(() => window.__cr.set({ vent: 'hv' })); console.log('hiperventilar:', await L(), await tp());
-  await pre('petronila', { pas: 165 }); ok((await tp()).includes('resang:sello'), 'HSA día 0 PAS165 sin resangrado'); ok(!(await clic('b-hora')), 'avanzar tocable con resangrado'); console.log('Petronila inicio:', await L(), await tp()); await pre('petronila'); { const l = await p.evaluate(() => window.__cr.leer()); ok(l.pic <= 25 && l.gcs === 9 && !(await tp()).includes('uncal'), `Petronila nace con PIC ${l.pic} GCS ${l.gcs} ${await tp()}`); await pre('petronila', { pas: 165 }); }
-  await clic('b-exc'); ok(!(await tp()).includes('resang'), 'cerrar aneurisma no quita el resangrado'); await p.evaluate(() => window.__cr.set({ t: 5 })); ok((await tp()).includes('vaso:aviso'), 'días 4-14 sin aviso'); console.log('Petronila día 5:', await L(), await tp()); await p.screenshot({ path: `${CAP}03-hsa-dia5-${ANCHO}.png` });
+  await pre('petronila', { pas: 165 }); { const a = await tp(); ok(a.includes('resang0:aviso') && !a.includes('resang:sello'), 'HSA hora 0 PAS165: aviso, sin sello ' + a); } await pre('petronila', { pas: 165, t: 1 }); ok((await tp()).includes('resang:sello'), 'HSA t=1 PAS165 sin resangrado'); ok(!(await clic('b-hora')), 'avanzar tocable con resangrado'); console.log('Petronila inicio:', await L(), await tp()); await pre('petronila'); await p.screenshot({ path: `${CAP}11-petronila-inicio-${ANCHO}.png` }); { const l = await p.evaluate(() => window.__cr.leer()); ok(l.pic <= 25 && l.gcs === 9 && !(await tp()).includes('uncal'), `Petronila nace con PIC ${l.pic} GCS ${l.gcs} ${await tp()}`); await pre('petronila', { pas: 165, t: 1 }); }
+  await clic('b-exc'); ok(!(await tp()).includes('resang:'), 'cerrar aneurisma no quita el resangrado'); await p.evaluate(() => window.__cr.set({ t: 5 })); ok((await tp()).includes('vaso:aviso'), 'días 4-14 sin aviso'); console.log('Petronila día 5:', await L(), await tp()); await p.screenshot({ path: `${CAP}03-hsa-dia5-${ANCHO}.png` });
   await pre('petronila', { exc: false, pas: 130, t: 5 }); ok((await tp()).includes('exc:aviso'), 'aneurisma abierto >3 días sin aviso');
   await pre('leovigildo'); console.log('Leovigildo:', await L()); await analiza('leovigildo');
   // ---- guías ----

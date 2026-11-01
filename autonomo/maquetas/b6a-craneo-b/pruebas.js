@@ -25,7 +25,7 @@ export const CASO = { p: 'abundio', pasos: [
     ['Dentro de objetivo (PIC <20, PPC 50-70): vigilar y mantener.', true, 'PIC <20 y PPC 50-70 son los objetivos de la hemorragia intracerebral.', 45, 'mn-hic-ppc', {}],
     ['PIC alta: más salino hipertónico.', false, 'Con PIC 16 no hay indicación; sin indicación, el salino repetido empuja el Na⁺ hacia el límite de 155 (objetivo 145-155, p. 41; el efecto de cada bolo es ilustrativo).', 41, 'mn-isq-edema-manejo', { hiper: 1 }],
     ['PPC baja: subir la PAM hasta PPC 100.', false, 'La PPC ya está en 50-70; la ficha da 50-70 como objetivo y no respalda subirla más (inferencia sobre p. 45).', 45, 'mn-hic-ppc', {}]] },
-  { e: { tipo: 'hematoma', masa: 100, pas: 110 }, enun: 'Paso 4 · Día 2, la PIC subió hasta igualar a la PAM. Pupilas medias y fijas, sin reflejos, sin esfuerzo respiratorio; 30 horas de la lesión, T 35,4 °C. ¿Muerte encefálica?', ops: [
+  { e: { tipo: 'hematoma', masa: 100, pas: 110 }, enun: 'Paso 4 · Día 2: nuevo resangrado del lecho quirúrgico con edema (TC de control; magnitud ilustrativa), y la PIC sube hasta igualar a la PAM. Pupilas medias y fijas, sin reflejos, sin esfuerzo respiratorio; 30 horas de la lesión, T 35,4 °C. ¿Muerte encefálica?', ops: [
     ['Aún no: faltan horas (≥48) y la temperatura es <36 °C.', true, 'Tabla 45.6: ≥48 h de la lesión y T >36 °C antes de explorar.', 14, 'mn-me-definicion', {}],
     ['Sí: sin reflejos ni respiración se declara ya.', false, 'Declararla sin cumplir las condiciones previas es un error que no se puede deshacer.', 14, 'mn-me-definicion', {}],
     ['Sí, y se confirma con EEG plano.', false, 'El EEG no figura entre las pruebas confirmatorias aceptadas (p. 16).', 16, 'mn-me-confirmatorias', {}]] },

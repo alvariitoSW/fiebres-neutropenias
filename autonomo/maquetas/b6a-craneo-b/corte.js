@@ -34,7 +34,7 @@ export function escena(s, L, { oculto = false } = {}) {
     hsa ? t(52, 276, 'Sangre en cisternas') + t(52, 292, L.hsaDiasEsp ? 'Arterias estrechas (vasoespasmo)' : 'Arterias de la base') : t(52, 292, 'Arterias de la base'),
     tr ? t(134, 278, 'Lesión ventral') + lin(130, 270, 120, 244) : '', s.cran ? t(30, 22, 'Hueso retirado', 'ct') : '',
     s.tipo === 'edema' ? t(24, 52, 'Edema') : hsa || tr ? '' : t(24, 52, hv ? 'Sangre ventricular' : 'Hematoma D'),
-    (s.sensor && s.tipo !== 'edema') || s.drenaje ? t(190, 156, s.drenaje ? 'Drenaje de LCR' : 'Sensor de PIC') : ''].join('');
+    (s.sensor && s.tipo !== 'edema') || s.drenaje ? t(178, 156, s.drenaje ? 'Drenaje LCR' : 'Sensor PIC') : ''].join('');
   const cara = `<g transform="translate(248,6) scale(.62)">${dibujarCara({ o: L.O, v: L.V, m: L.M, pup: L.pup, lock: tr })}</g>`;
   const der = [t(248, 166, tr ? 'Mira arriba, obedece' : L.O >= 4 ? 'Ojos abiertos' : L.O >= 2 ? 'Abre al estímulo' : 'Ojos cerrados'),
     ...textoPupila(L.pup).split(';').map((x, i) => t(248, 178 + 11 * i, x.trim())),
