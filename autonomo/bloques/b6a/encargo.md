@@ -80,3 +80,29 @@ por color; ningún rótulo que se pise con otro.
 ## 7-9. Piezas comunes, pacientes y encargo de las maquetas
 Los escribe la cobertura (`cobertura.md` «Piezas comunes» y «Pacientes»; `cobertura-anexo.md` § Maquetas). Pacientes:
 nombres que no repitan los de b1-b5 (comprobar con grep en `autonomo/bloques/`). Nadie inventa otro.
+
+## 9. Encargo de las maquetas (5 fijas: cráneo A, B, C · unión neuromuscular A, B)
+Cada opción concreta: `cobertura-anexo.md` §4.1-4.5 (criterios R3 en §2, pacientes en §7, errores en §8, huecos en §10).
+**Común a las cinco:**
+- Un constructor sonnet por maqueta. Cráneo ≤40 pasos / 0,75 M; UNM ≤30 pasos / 0,55 M. Sin Mayéutica completa: guía
+  de 3-5 pasos, la apuesta, el «encuentra el error» y el caso bastan.
+- Mecanismo, mandos, topes con página y consecuencia visible (sello, constantes, frase viva; combinación imposible →
+  «combinación no fisiológica»; PIC ≥ PAM o PPC ≤ 0 nunca sin sello), la figura real al lado (`js/modules/libros/img/`,
+  su `<img>` carga), apuesta + error + caso con un paciente de la lista y cifras de paciente posible.
+- Lo que Marino no trae (Monro-Kellie, curva presión-volumen, autorregulación, hiperventilación): rótulo visible
+  `fisiología general` o `ilustrativo` + «otra fuente pendiente»; no inventes cifras. El Manual UMI de la app
+  (`umi-pic-*`) sí vale como fuente citada (hiperventilación 30-35, PPC, cabecera 30°).
+- 390 × ≤600 px de escena; español llano; «Ver en el texto» con su página (`docs/marino-2024-neurologia-caps45-47.pdf#page=N`);
+  origen visible; identidad nunca solo por color; rótulos ≥8 px a 360; solo tokens de `css/variables.css` (cópialos).
+- Declara al principio de tu `pagina.js` qué motores o piezas de la app reutiliza (importados, no copiados).
+- Archivos: `autonomo/maquetas/b6a-<modelo>-<x>.html` + carpeta `autonomo/maquetas/b6a-<modelo>-<x>/`, módulos ≤700
+  líneas (molde: `autonomo/maquetas/b4-iones-b/` y su `.html`). `<modelo>` = `craneo` o `unm`.
+- **Programa de prueba obligatorio**: `autonomo/bloques/b6a/herramientas/<modelo>-<x>.mjs` (molde
+  `autonomo/bloques/b4/herramientas/iones-b.mjs`; Playwright de `/opt/node22/lib/node_modules/playwright/index.mjs`,
+  390 y 360; servidor en un puerto propio, cerrado por su número de proceso). Devuelve en texto: desborde, rótulos <8 px,
+  **solapes entre las cajas de los `<text>` del SVG**, cifras de cada mando en mínimo/medio/máximo, que cada tope
+  dispara su sello, que la apuesta, el error y el caso se completan, imágenes con `naturalWidth > 0` y errores de
+  consola; ≤4 capturas en `/tmp/plan-socialista/b6a/capturas/<modelo>-<x>/`.
+- Lista de frases nuevas con página: `autonomo/bloques/b6a/frases-<modelo>-<x>.md`.
+- No toques nada de `js/`, `css/` ni `index.html` (otras sesiones trabajan ahí); solo importas. No hagas commit (lo
+  hace el director).
