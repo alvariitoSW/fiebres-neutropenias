@@ -13,7 +13,8 @@ export async function abrirEstado(clave, origen) {
     cargando = cargando || import('./pagina.js').then(m => { pagina = m; });
     await cargando;
     pagina.abrirEstado(String(clave || ''));
-    requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
+    // Con «paciente:paso», pagina.abrirEstado ya centra la caja del paso; subir al principio la dejaría bajo el pliegue.
+    if (!String(clave || '').includes(':')) requestAnimationFrame(() => raiz.scrollIntoView({ block: 'start' }));
 }
 
 export function init() {
