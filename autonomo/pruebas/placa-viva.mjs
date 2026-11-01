@@ -8,7 +8,7 @@ const PR = await import(RAIZ + 'js/modules/libros/placa-viva/pruebas.js');
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const b = await chromium.launch();
 try {
-for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
+for (const ANCHO of (process.argv.find((a) => /^\d+$/.test(a)) ? [+process.argv.find((a) => /^\d+$/.test(a))] : [390, 360])) {
   console.log(`\n===== ${ANCHO} px =====`);
   const ctx = await b.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: 800 }, deviceScaleFactor: 2 });
   const p = await ctx.newPage();
@@ -176,5 +176,6 @@ console.log(`\nReparto de la correcta en ${tests.length} tests: posiciones ${pos
 ok(larga <= tests.length / 3 && corta <= tests.length / 3 && Math.max(...pos) <= tests.length / 2, `reparto desigual: pos ${pos} larga ${larga} corta ${corta}`);
 } finally { await b.close(); }
 const unicos = [...new Set(errores)]; ok(unicos.length === 0, 'consola: ' + unicos.join(' | '));
-console.log(fallos.length ? '\nFALLOS (' + fallos.length + '):\n- ' + [...new Set(fallos)].join('\n- ') : '\nTODO EN VERDE');
+[...new Set(fallos)].forEach((f) => console.log('❌ ' + f));
+if (!fallos.length) console.log('✅ Placa viva: todas las comprobaciones en verde (390 y 360 px; ' + (process.argv.find((a) => /^\d+$/.test(a)) || 'ambos') + ')');
 process.exit(fallos.length ? 1 : 0);

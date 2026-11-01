@@ -21,5 +21,6 @@ export function topes(s, L) {
   if (s.est === 'mcc' && s.cort && (s.rel || s.perf)) poner('mccrap', 'aviso', 'La miosina se pierde más deprisa', 'Relajante, corticoides y sepsis la agravan (magnitud ilustrativa).', '28:mn-pnc-mcc');
   if (mg && s.farm) poner('farm', 'sello', 'Empeora la miastenia', `${{ gent: 'Gentamicina', mg: 'Magnesio', cort: 'Corticoide a dosis alta' }[s.farm]} dificulta la transmisión (Tabla 46.5): la fuerza cae.`, '24:mn-tabla-46-5', ['#plv-raiz [data-farm]']);
   if (s.hielo > U.hielo) poner('hielo2', 'aviso', 'El test dura 2 minutos', 'Marino describe el test de 2 minutos con el ojo cerrado (p. 24-25); no dice qué pasa con más tiempo.', '24:mn-mg-hielo', [], '', 'ficha (2 min); resto: la fuente no lo dice');
+  if (s.hielo >= 3 * U.hielo) poner('hielo6', 'sello', 'Tope del modelo: 6 minutos de hielo', 'Marino describe solo el test de 2 minutos (p. 24-25); más tiempo no se simula y el mando se apaga.', '24:mn-mg-hielo', ['#plv-b-hielo'], '', 'ilustrativo (tope del modelo); la fuente da 2 min');
   return t;
 }

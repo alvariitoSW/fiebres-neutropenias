@@ -20,7 +20,7 @@ let ultEst = '', s = nuevo('flor'), clave = 'flor', modo = 'explorar', oculto = 
 // Cada cita: «PDF p. N» (abre el libro) y «p. N · Ver en la ficha» (el enlace cruzado de siempre, al párrafo exacto de la ficha de Neurología)
 const cita = (c) => { const id = fichaDe(c); return `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${pagDe(c)}" target="_blank" rel="noopener">PDF p. ${pagDe(c)}</a> · <button type="button" class="ver-ficha" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tabDe(id)}" data-resaltar="#${id}">p. ${pagDe(c)} · Ver en la ficha</button></span>`; };
 function frase(t, org) { $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
-const TODOS = ['succiK', 'parada', 'neo70', 'neo5', 'succik', 'rocaire', 'sugmal', 'tof0', 'par48', 'intub', 'piri', 'ses', 'igiv', 'sintto', 'mccrap', 'farm', 'hielo2'];
+const TODOS = ['succiK', 'parada', 'neo70', 'neo5', 'succik', 'rocaire', 'sugmal', 'tof0', 'par48', 'intub', 'piri', 'ses', 'igiv', 'sintto', 'mccrap', 'farm', 'hielo2', 'hielo6'];
 function aplicarTopes(L) {
   const lista = topes(s, L), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
