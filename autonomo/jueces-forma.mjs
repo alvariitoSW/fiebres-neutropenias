@@ -89,6 +89,9 @@ export const MODELOS = {
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa
         figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
+    // [HUECO crv: 'craneo-vivo']
+    // ·
+    // [HUECO plv: 'placa-viva']
 };
 // Las fichas del bloque 1 (Libros → Marino → Fundamentos): se leen del DOM, todas las del cuaderno.
 export const B1 = { especialidad: 'libros', view: 'marinoFundamentos', panel: 'panel-marino-fund-tabs' };

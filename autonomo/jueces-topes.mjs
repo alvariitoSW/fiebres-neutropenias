@@ -35,6 +35,9 @@ const AJUSTES = {
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
+    // [HUECO crv: 'craneo-vivo']
+    // ·
+    // [HUECO plv: 'placa-viva']
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
 const NO_MANDO = '[data-especialidad], [data-view], [data-resaltar], [data-volver], [data-modo], .back-btn, [class*="-org-ir"], [class*="-ir"], [id$="-lupa-cerrar"], [id*="-modo-"], [id$="-guia-abrir"], [data-accion]';

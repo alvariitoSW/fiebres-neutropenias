@@ -37,6 +37,9 @@ import { init as initPulmonVivo } from './pulmon-vivo/index.js';
 import { init as initRitmoVivo } from './ritmo-vivo/index.js';
 import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
+// [HUECO crv: import del cráneo vivo]
+// ·
+// [HUECO plv: import de la placa viva]
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -74,6 +77,9 @@ const BLOQUES = {
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
 };
 const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos']);
+// [HUECO crv: MODELOS.add('craneoVivo') y BLOQUES.marinoNeuro.vivos.push('crv-menu-libros')]
+// ·
+// [HUECO plv: MODELOS.add('placaViva') y BLOQUES.marinoNeuro.vivos.push('plv-menu-libros')]
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -132,6 +138,9 @@ export function init() {
         receptorVivo: document.getElementById('receptor-vivo-view'),
         // Iones vivos (bloque 4, caps. 36-38; fichas en Marino Ácido-base, renal y electrolitos)
         ionesVivos: document.getElementById('iones-vivos-view'),
+        // [HUECO crv: vista craneoVivo]
+        // ·
+        // [HUECO plv: vista placaViva]
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -229,6 +238,9 @@ export function init() {
     const ritmoVivo = arrancar('ritmo', initRitmoVivo);
     const receptorVivo = arrancar('receptor', initReceptorVivo);
     const ionesVivos = arrancar('iones', initIonesVivos);
+    // [HUECO crv: arrancar el cráneo vivo]
+    // ·
+    // [HUECO plv: arrancar la placa viva]
 
     librosLevel.show('menu');
 
@@ -253,6 +265,9 @@ export function init() {
             receptorVivo: (estadoClave, origen) => receptorVivo?.abrir(estadoClave, origen),
             // data-iones-vivos="<paciente>[:paso|:ion]", los iones vivos
             ionesVivos: (estadoClave, origen) => ionesVivos?.abrir(estadoClave, origen),
+            // [HUECO crv: craneoVivo en modelosVivos]
+            // ·
+            // [HUECO plv: placaViva en modelosVivos]
         },
     };
 }
