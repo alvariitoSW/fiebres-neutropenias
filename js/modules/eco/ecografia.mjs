@@ -466,7 +466,10 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
     // Dibujo nuevo, A4C: el arco aórtico y las arterias pulmonares quedan por detrás del plano de las cuatro cámaras (no salen en el A4C real; anatomía general, sin página): sin ellos no quedan dos anillos bajo la AI.
-    if (P.clave === 'a4c' && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    // Dibujo nuevo, A4C: el pulmón lateral no se corta en láminas (la línea de pleura salía como una escalera de rayas regulares en el borde del
+    // sector); en Lang 2015, Fig. 4 esa zona es sombra oscura sin patrón. La ventana pobre ya la tapa con su sombra irregular (nuevoP).
+    if (P.clave === 'a4c' && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
     const r = ref && ref[k] && ref[k].nombre === p.nombre ? ref[k] : null;
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;
@@ -808,23 +811,28 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     if (m.especular > 0) { const k = -(22 - 5 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
     // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
     const W = m.ventana;
+    // dibujo nuevo: detrás del pulmón no hay un «peine» de líneas A regulares sino una sombra irregular (costilla y aire; Lang 2015, Fig. 4,
+    // la zona lateral del A4C): manchas de tamaño mixto y sin periodicidad, entre -26 y -42 dB (nitidez ilustrativa, sin dato de fuente)
+    const nuevoP = dibujoNuevo();
+    const sombraIrregular = (i, j) => { const h = Math.sin(i * 12.9898 + (j >> 3) * 78.233) * 43758.5453, h2 = Math.sin((i >> 2) * 39.346 + j * 11.135) * 24634.6345;
+      return amp(-26 - 16 * (0.5 * (h - Math.floor(h)) + 0.5 * (h2 - Math.floor(h2)))); };
     let pulmon = null;
     if (W > 0.25 && o.ventanaVista !== 'subcostal') {
       const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;
       pulmon = { borde, rl };
       for (let i = 0; i < nb; i++) { if (EB[i] < borde) continue;
         for (let j = 0; j < ns; j++) { const r = Rr[j]; if (r < rl) continue; const q = j * nb + i, k = Math.round(r / rl), d = r - k * rl;
-          A[q] = (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
+          A[q] = nuevoP ? sombraIrregular(i, j) : (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
     }
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
     const S = m.sombra, nuevoD2 = dibujoNuevo();
     if (S > 0 || W > 0 || hayCal || hayPl) {
-      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr * (nuevoD2 ? SOMBRA_NUEVA.refuerzo : 1)), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6 * (nuevoD2 ? SOMBRA_NUEVA.sombra : 1), tope = amp(12);
+      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr * (nuevoD2 ? (o.ventanaVista === 'subcostal' ? 0 : SOMBRA_NUEVA.refuerzo) : 1)), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6 * (nuevoD2 ? SOMBRA_NUEVA.sombra : 1), tope = amp(12);
       for (let i = 0; i < nb; i++) { let at = 1, rp = 0;
         for (let j = 0, q = i; j < ns; j++, q += nb) {
           // detrás de la pleura no hay tejido: líneas A a múltiplos de su profundidad y el resto, negro
-          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
+          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = nuevoP ? sombraIrregular(i, j) : Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
           else if (hayPl && esPl[TAG[q]] && A[q] > a6) rp = Rr[j];
           const a = A[q]; A[q] = a * at;
           if (Rr[j] < G.pared) at *= fT;
