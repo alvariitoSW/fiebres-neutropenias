@@ -1,6 +1,6 @@
 // Escena SVG 360×330: silueta con tres capas (piel, músculo, cerebro), lupa del hipotálamo y lupa del retículo del músculo.
 import { svgParticula } from '../../../js/core/particulas.js';
-import { fmt } from './modelo.js';
+import { fmt, clamp } from './modelo.js';
 const LIMB = [['m1', 100, 84, 70, 172], ['m2', 160, 84, 190, 172], ['m3', 112, 176, 108, 306], ['m4', 148, 176, 152, 306]];
 const CAPS = [[124, 98], [136, 120], [124, 142], [136, 160], [84, 120], [176, 120], [76, 150], [184, 150], [106, 220], [154, 220], [108, 262], [152, 262], [130, 52], [116, 44]];
 export function escena(l, capas, foco, cerrado) {
@@ -29,12 +29,16 @@ export function escena(l, capas, foco, cerrado) {
   o += '</g>';
   o += '<text class="pq" x="130" y="192" text-anchor="middle">calor</text>';
   // ---- lupa hipotálamo (cerebro) ----
-  const base = 118, esc = 2.6, hF = (l.pt - 22) * esc, yR = base - (l.T - 22) * esc;
+  const cx = 298, cy = 84, R = 32, P = (t, r) => { const a = Math.PI * (clamp(t, 34, 42) - 34) / 8; return [cx - r * Math.cos(a), cy - r * Math.sin(a)]; };
+  const [ax, ay] = P(l.pt, R - 5), [rx, ry] = P(l.T, R + 1), [tx, ty] = P(l.T, R - 8), merc = 52 * (clamp(l.T, 34, 42) - 34) / 8, dif = l.T - l.pt;
   o += `<g id="c-cer"${on('cer')}><circle class="lupa" cx="290" cy="76" r="62"/><line class="guion" x1="154" y1="36" x2="238" y2="52"/>`;
-  o += `<text class="rot" x="290" y="26" text-anchor="middle">Hipotálamo</text><rect class="escala" x="262" y="${base - 52}" width="6" height="52" rx="3"/>`;
-  o += `<g id="llama" transform="translate(0 0)"><path class="llama" d="M265 ${base} q-10 -${hF * 0.5} 0 -${hF} q10 ${hF * 0.4} 0 ${hF} z" /></g>`;
-  o += `<path class="real" d="M300 ${yR} l-9 -5 l0 10 z"/><text class="pq" x="276" y="46">ajuste ${fmt(l.pt)}</text><text class="pq" x="276" y="58">real ${fmt(l.T)}</text>`;
-  o += `<text class="pq" x="290" y="130" text-anchor="middle">${l.clon ? 'clonus ocular' : ''}</text>${ring('cer', 290, 76, 66)}</g>`;
+  o += `<text class="rot" x="290" y="26" text-anchor="middle">Hipotálamo</text>`;
+  o += `<path class="dial" d="M${cx - R} ${cy} A${R} ${R} 0 0 1 ${cx + R} ${cy}"/><text class="pq" x="${cx - R - 3}" y="${cy + 9}" text-anchor="middle">34</text><text class="pq" x="${cx + R + 3}" y="${cy + 9}" text-anchor="middle">42</text>`;
+  o += `<g id="llama"><line class="aguja" x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}"/><circle class="eje" cx="${cx}" cy="${cy}" r="3"/></g>`;
+  o += `<path class="real" d="M${rx.toFixed(1)} ${ry.toFixed(1)} L${(rx + (tx - rx) * 0.4 - (ty - ry) * 0.25).toFixed(1)} ${(ry + (ty - ry) * 0.4 + (tx - rx) * 0.25).toFixed(1)} L${(rx + (tx - rx) * 0.4 + (ty - ry) * 0.25).toFixed(1)} ${(ry + (ty - ry) * 0.4 - (tx - rx) * 0.25).toFixed(1)} z"/>`;
+  o += `<rect class="escala" x="240" y="48" width="7" height="52" rx="3.5"/><rect class="merc" x="241" y="${100 - merc}" width="5" height="${merc}" rx="2.5"/><text class="pq" x="243" y="112" text-anchor="middle">real</text>`;
+  o += `<text class="pq oro" x="${cx}" y="102" text-anchor="middle">ajuste ${fmt(l.pt)}</text><text class="pq rj" x="${cx}" y="113" text-anchor="middle">real ${fmt(l.T)}</text><text class="pq" x="${cx}" y="124" text-anchor="middle">real − ajuste ${dif > 0 ? '+' : ''}${fmt(dif)}</text>`;
+  o += `<text class="pq" x="290" y="136" text-anchor="middle">${l.clon ? 'clonus ocular' : ''}</text>${ring('cer', 290, 76, 66)}</g>`;
   // ---- lupa retículo ----
   o += `<g id="c-ret"${on('mus')}><circle class="lupa" cx="290" cy="238" r="58"/><line class="guion" x1="174" y1="210" x2="236" y2="226"/>`;
   o += `<text class="rot" x="290" y="190" text-anchor="middle">Fibra del músculo</text>`;

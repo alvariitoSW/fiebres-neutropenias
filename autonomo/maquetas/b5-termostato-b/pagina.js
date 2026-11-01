@@ -5,11 +5,11 @@ import { crearTope } from '../../../js/core/tope.js';
 import { seguirFrase } from '../../../js/core/frase-vista.js';
 import { leyendaParticulas } from '../../../js/core/particulas.js';
 import { cargarMotion, sinMovimiento } from '../../../js/core/motion.js';
-import { PDF, IMG, IDEA, ESTADOS, YSI, FUENTES, NOTAS, PROFUNDIZAR, APUESTA, ERROR, CASO } from './datos.js';
+import { PDF, IMG, IDEA, ESTADOS, YSI, FUENTES, NOTAS, PROFUNDIZAR, APUESTA, ERROR, CASO, CRECERA } from './datos.js';
 import { nuevo, leer, topes, fmt, clamp } from './modelo.js';
 import { escena } from './dibujo.js';
 const $ = (id) => document.getElementById(id);
-let s = nuevo(), modo = 'explorar', activos = new Set(), topeApi, prev = { pt: 37 }, oculto = false;
+let s = nuevo(), modo = 'explorar', activos = new Set(), topeApi, prev = { pt: 37 }, oculto = false, ronda = 0;
 const capas = { piel: true, mus: true, cer: true }, CAPA = { cer: 'cer', piel: 'piel', mus: 'mus', ret: 'mus' };
 const FICHAOK = (id) => id;
 const cita = (c) => { const [p, id] = String(c).split('|'); return `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${p}" target="_blank" rel="noopener">PDF p. ${p}</a> · <button type="button" class="ver-ficha" data-resaltar="#${FICHAOK(id)}" data-pag-ficha="${p}">p. ${p} · Ver en la ficha</button></span>`; };
@@ -17,10 +17,12 @@ const org = (t) => `<span class="org${/ilustrativ/.test(t) ? ' ilu' : ''}">${t}<
 function frase(txt, o = 'ficha') { $('frase-txt').innerHTML = `${txt} ${org(o)}`; }
 // cargarMotion() pide `js/vendor/motion.js` relativo a la página; desde esta carpeta hay que dejar Motion cargado con la ruta buena (en la app no hace falta).
 const motionAqui = () => (window.Motion ? Promise.resolve() : new Promise((ok, mal) => { const e = document.createElement('script'); e.src = '../../js/vendor/motion.js?v=11.18.2'; e.onload = ok; e.onerror = mal; document.head.append(e); }));
+// La aguja del ajuste gira del valor anterior al nuevo (Motion); con «reducir movimiento» queda en el estado final.
+const ang = (t) => 180 * (clamp(t, 34, 42) - 34) / 8;
 async function llama(antes, ahora) {
   const g = $('llama'); if (!g || antes === ahora || sinMovimiento()) return;
-  try { await motionAqui(); const M = await cargarMotion(), r = clamp((antes - 22) / Math.max(1, ahora - 22), 0.3, 3);
-    M.animate(0, 1, { duration: 0.7, ease: 'easeOut', onUpdate: (v) => g.setAttribute('transform', `translate(0 118) scale(1 ${r + (1 - r) * v}) translate(0 -118)`) }); } catch { /* sin Motion se queda el estado final */ }
+  try { await motionAqui(); const M = await cargarMotion(), d = ang(antes) - ang(ahora);
+    M.animate(0, 1, { duration: 0.7, ease: 'easeOut', onUpdate: (v) => g.setAttribute('transform', `rotate(${d * (1 - v)} 298 84)`) }); } catch { /* sin Motion se queda el estado final */ }
 }
 function pintar() {
   const l = leer(s), E = ESTADOS[s.est], P = E.pasos[s.paso - 1], mask = oculto;
@@ -81,38 +83,39 @@ function apuesta() {
   }));
 }
 function error() {
-  const c = $('prueba'), E = ERROR, marca = [];
-  c.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${E.enun}</p>` + E.fr.map((f, i) => `<div class="ops" data-i="${i}"><p class="enun">${f.f}</p><div class="fila-g"><button type="button" class="b op" data-v="0">Bien</button><button type="button" class="b op" data-v="1">Error</button></div></div>`).join('');
+  const c = $('prueba'), E = ERROR, R = E.rondas[ronda++ % E.rondas.length], marca = [];
+  c.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${E.enun}</p>` + R.map((f, i) => `<div class="ops" data-i="${i}"><p class="enun">${f.f}</p><div class="fila-g"><button type="button" class="b op" data-v="0">Bien</button><button type="button" class="b op" data-v="1">Error</button></div></div>`).join('');
   c.querySelectorAll('.ops').forEach((g) => g.querySelectorAll('.op').forEach((b) => b.addEventListener('click', () => {
     if (c.dataset.fin) return; marca[+g.dataset.i] = +b.dataset.v; g.querySelectorAll('.op').forEach((x) => x.setAttribute('aria-pressed', x === b));
-    if (E.fr.every((_, i) => marca[i] !== undefined)) {
+    if (R.every((_, i) => marca[i] !== undefined)) {
       c.dataset.fin = '1';
-      c.querySelectorAll('.ops').forEach((gg, i) => { const f = E.fr[i], bien = (marca[i] === 1) === !!f.mal; gg.insertAdjacentHTML('beforeend', `<p class="por ${bien ? 'ok' : 'no'}">${bien ? 'Acertaste. ' : 'Fallaste. '}${f.por} ${cita(f.c)}</p>`); });
-      c.insertAdjacentHTML('beforeend', llevas(E.ll)); ir({ paso: 5, trat: 1 });
+      c.querySelectorAll('.ops').forEach((gg, i) => { const f = R[i], bien = (marca[i] === 1) === !!f.mal; gg.insertAdjacentHTML('beforeend', `<p class="por ${bien ? 'ok' : 'no'}">${bien ? 'Acertaste. ' : 'Fallaste. '}${f.por} ${cita(f.c)}</p>`); });
+      const n = R.filter((f) => f.mal).length; c.insertAdjacentHTML('beforeend', `<p class="por">${n === 0 ? 'Esta vez no había ningún error.' : `Había ${n} error${n > 1 ? 'es' : ''}.`}</p>` + llevas(E.ll)); ir({ paso: 5, trat: 1 });
     }
   })));
 }
 function caso(i) {
-  const c = $('prueba'), P = CASO.pasos[i], ult = i === CASO.pasos.length - 1; s = { est: 'hm', paso: P.paso, trat: i >= 3 ? 1 : 0, ysi: null }; delete c.dataset.fin; delete c.dataset.paso;
+  const c = $('prueba'), P = CASO.pasos[i], ult = i === CASO.pasos.length - 1; s = { est: 'hm', paso: P.paso, trat: i >= 2 ? 1 : 0, ysi: null }; delete c.dataset.fin; delete c.dataset.paso;
   c.innerHTML = `<h3>${CASO.paciente} · paso ${i + 1} de ${CASO.pasos.length}</h3><div class="paso"><p class="ctx">${P.ctx}</p><p class="enun"><b>${P.q}</b></p>` + P.ops.map((o, j) => `<button type="button" class="b op" data-i="${j}">${o[0]}</button>`).join('') + '</div>';
   c.querySelectorAll('.op').forEach((b) => b.addEventListener('click', () => {
     if (c.querySelector('.por')) return; const j = +b.dataset.i;
     c.querySelectorAll('.op').forEach((x, k) => x.classList.add(k === P.ok ? 'bien' : x === b ? 'mal' : 'neutra'));
     c.querySelector('.paso').insertAdjacentHTML('beforeend', `<p class="por ${j === P.ok ? 'ok' : 'no'}">${j === P.ok ? 'Bien. ' : 'No era esa. '}${P.ops[j][1]} ${j === P.ok ? '' : 'Lo correcto: ' + P.ops[P.ok][0] + '.'} ${cita(P.c)}</p>`);
-    s.trat = i >= 1 && j === P.ok ? 1 : s.trat; pintar();
+    s.trat = i >= 1 && j === P.ok ? 1 : s.trat; fraseDe(); pintar();
     if (ult) { c.dataset.fin = '1'; c.insertAdjacentHTML('beforeend', llevas(CASO.ll)); }
     else { const nx = document.createElement('button'); nx.type = 'button'; nx.className = 'b prim'; nx.textContent = 'Siguiente paso'; nx.addEventListener('click', () => caso(i + 1)); c.append(nx); }
   }));
-  pintar();
+  fraseDe(); pintar();
 }
 function pagina() {
   const dock = $('dock');
-  topeApi = crearTope({ monitor: $('monitor'), dock, cita });
+  topeApi = crearTope({ monitor: $('sello-zona'), dock, cita });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} ${org('ficha')}`;
-  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Llama amarilla: punto de ajuste; flecha roja: temperatura real.</p>';
+  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Dial del hipotálamo: aguja dorada = punto de ajuste; marca roja y termómetro = temperatura real. Escala 34-42 °C: el tope 42 °C es del dibujo (ilustrativo).</p>';
   $('paso-caja').innerHTML = '<h3 id="pc-t"></h3><p id="pc-x"></p><p id="pc-c"></p><div class="fila-g"><button type="button" class="b prim" id="pc-sig">Siguiente paso</button></div>';
   $('fuentes').innerHTML = FUENTES.map(([t, o]) => `<li>${t} ${org(o)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([k, t]) => `<p class="para"><b>${k}.</b> ${t}</p>`).join('');
+  $('crecera').innerHTML = CRECERA.map(([t, o]) => `<li>${t} ${org(o.includes('ilustrativ') ? o : 'ficha · ' + o)}</li>`).join('');
   $('profundizar').innerHTML = PROFUNDIZAR.map((t) => `<li>${t}</li>`).join('');
   $('imgosb').src = IMG.osborn; $('img445').src = IMG.f445;
   mandos();
@@ -120,7 +123,7 @@ function pagina() {
   document.body.addEventListener('click', (e) => { const v = e.target.closest('.ver-ficha'); if (v) { $('toast').textContent = `En la app: lleva al párrafo de la ficha (p. ${v.dataset.pagFicha}).`; $('toast').hidden = false; setTimeout(() => ($('toast').hidden = true), 2200); } });
   const ajustar = () => { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px'); };
   new ResizeObserver(ajustar).observe($('dock')); new ResizeObserver(ajustar).observe($('frase')); ajustar();
-  window.__ter = { get s() { return s; }, leer: () => leer(s), topes: () => topes(s, leer(s)), ir, modoPrueba, pintar, ESTADOS };
+  window.__ter = { rondaDatos: (r) => ERROR.rondas[r % ERROR.rondas.length].map((f) => f.mal), get s() { return s; }, leer: () => leer(s), topes: () => topes(s, leer(s)), ir, modoPrueba, pintar, ESTADOS };
   ir({});
 }
 pagina();

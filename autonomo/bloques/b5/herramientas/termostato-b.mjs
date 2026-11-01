@@ -29,7 +29,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   await desb('inicio'); console.log('rótulos', JSON.stringify(await rotulos('inicio')));
   const dk = await p.evaluate(() => { const f = document.getElementById('frase').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(); return { dock: Math.round(d.height), frase: Math.round(f.height), tapa: Math.round(innerHeight - f.top), pct: +(((innerHeight - f.top) / innerHeight) * 100).toFixed(0) }; });
   console.log('dock+frase a 800 px de alto:', JSON.stringify(dk)); ok(dk.tapa <= 800 / 3, `${ANCHO}: dock+frase tapan ${dk.tapa}px (>1/3)`);
-  if (ANCHO === 390) await p.screenshot({ path: `${CAP}01-inicio-${ANCHO}.png` });
+  await p.screenshot({ path: `${CAP}01-inicio-${ANCHO}.png` });
   const est = await p.evaluate(() => Object.keys(window.__ter.ESTADOS));
   for (const e of est) {
     console.log(`-- ${e}`);
@@ -58,14 +58,25 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   const ops = await p.$$('#prueba .op'); ok(ops.length === 3, 'apuesta: 3 opciones'); await ops[1].click(); await p.waitForTimeout(150);
   console.log(` ${await L()}; fin=${await p.evaluate(() => document.getElementById('prueba').dataset.fin)}; llevas ${await p.evaluate(() => document.querySelectorAll('#prueba .llevas li').length)}`); ok((await L()).includes('CO2 68'), 'apuesta: no enseña CO₂ 68 tras contestar'); await desb('apuesta');
   // error
-  console.log('-- Error'); await p.evaluate(() => window.__ter.modoPrueba('error')); const gr = await p.$$('#prueba .ops'); ok(gr.length === 4, 'error: 4 frases'); const mal = [0, 0, 0, 1];
-  for (let i = 0; i < 4; i++) { const bs = await gr[i].$$('.op'); await bs[mal[i]].click(); }
-  console.log(` fin=${await p.evaluate(() => document.getElementById('prueba').dataset.fin)} aciertos ${await p.evaluate(() => document.querySelectorAll('#prueba .por.ok').length)}/4`); ok(await p.evaluate(() => document.querySelectorAll('#prueba .por.ok').length) === 4, 'error: no acierta con la respuesta correcta'); await desb('error');
+  console.log('-- Error (3 rondas: 2, 0 y 1 errores, en posiciones distintas)'); const nErr = []; const posErr = [];
+  for (let r = 0; r < 3; r++) { await p.evaluate(() => window.__ter.modoPrueba('error')); const gr = await p.$$('#prueba .ops'); ok(gr.length >= 5 && gr.length <= 6, `error ronda ${r}: ${gr.length} frases`);
+    ok(!(await p.evaluate(() => /data-mal|data-ok/.test(document.getElementById('prueba').innerHTML))), 'error: respuesta en el HTML');
+    const datos = await p.evaluate((r) => window.__ter.rondaDatos(r), r); nErr.push(datos.filter((x) => x).length); datos.forEach((x, i) => x && posErr.push(i));
+    for (let i = 0; i < gr.length; i++) { const bs = await gr[i].$$('.op'); await bs[datos[i] ? 1 : 0].click(); }
+    const ac = await p.evaluate(() => document.querySelectorAll('#prueba .por.ok').length); ok(ac === gr.length && !!(await p.evaluate(() => document.getElementById('prueba').dataset.fin)), `error ronda ${r}: aciertos ${ac}/${gr.length}`);
+    console.log(` ronda ${r}: ${gr.length} frases, errores en posiciones [${datos.map((x, i) => x ? i : null).filter((x) => x !== null)}]`); }
+  ok(nErr.join() === '2,0,1', 'error: rondas con ' + nErr.join() + ' errores'); ok(new Set(posErr).size >= 3, 'error: el error va siempre en la misma posición');
   // caso
   console.log('-- Caso (Marcial, 4 pasos)'); await p.evaluate(() => window.__ter.modoPrueba('caso')); const bien = [0, 1, 1, 0];
-  for (let i = 0; i < 4; i++) { const o = await p.$$('#prueba .paso .op'); ok(o.length === 3, `caso paso ${i + 1}: opciones`); await o[bien[i]].click(); await p.waitForTimeout(120); console.log(` paso ${i + 1}: ${await L()} sellos ${await sellos()} topes[${await tp()}]`); await desb(`caso ${i + 1}`); if (i < 3) { await (await p.$('#prueba .prim')).click(); } }
+  for (let i = 0; i < 4; i++) { const o = await p.$$('#prueba .paso .op'); ok(o.length === 3, `caso paso ${i + 1}: opciones`);
+    const fv0 = await p.evaluate(() => document.getElementById('frase-txt').textContent); ok(/halogenado|CO₂|dantroleno|Primer signo|calcio|fiebre llega/i.test(fv0) && !/plomo|haloperidol/.test(fv0), `caso paso ${i + 1}: frase viva no es la de Marcial: ${fv0.slice(0, 60)}`);
+    await o[bien[i]].click(); await p.waitForTimeout(120);
+    const fv = await p.evaluate(() => document.getElementById('frase-txt').textContent); ok(fv === fv0, `caso paso ${i + 1}: la frase cambió tras contestar`);
+    const sol = await p.evaluate(() => { const m = document.getElementById('monitor').getBoundingClientRect(); return [...document.querySelectorAll('.tope-sello')].filter((e) => !e.hidden).map((e) => { const r = e.getBoundingClientRect(); return r.top < m.bottom - 1 && r.bottom > m.top + 1; }); }); ok(sol.every((x) => !x), `caso paso ${i + 1}: sello sobre el monitor`);
+    console.log(` paso ${i + 1}: ${await L()} sellos ${await sellos()} | frase: ${fv.slice(0, 50)}`);
+    if (i < 3) await (await p.$('#prueba > button.prim')).click(); }
   ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'caso sin completar');
-  if (ANCHO === 390) { await p.evaluate(() => scrollTo(0, 0)); await p.screenshot({ path: `${CAP}04-caso-paso4-${ANCHO}.png`, fullPage: true }); }
+  { await p.evaluate(() => scrollTo(0, 0)); await p.screenshot({ path: `${CAP}04-caso-paso4-${ANCHO}.png`, fullPage: true }); }
   const cc = await p.evaluate(() => [...document.querySelectorAll('.cita')].filter((c) => !c.querySelector('.ver-ficha[data-resaltar]') || !c.querySelector('.cita-pdf')).length); ok(cc === 0, 'cita sin doble botón');
   await p.evaluate(() => window.__ter.modoPrueba('explorar')); console.log('rótulos finales', JSON.stringify(await rotulos('final')));
   await ctx.close();

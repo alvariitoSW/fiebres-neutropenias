@@ -13,14 +13,15 @@
   <header class="cabecera"><div class="cab-fila"><h1>El cuerpo que arde y tirita</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
   <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" class="b" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" data-modo="caso" aria-pressed="false">Caso</button></div>
   <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
   <section id="monitor" aria-label="Monitor de cabecera">
-    <div class="mon-fila"><span>T central <b id="mon-t"></b> °C</span><span>FC <b id="mon-fc"></b></span><span>CO₂ espirado <b id="mon-co2"></b></span><span>CK <b id="mon-ck"></b></span></div>
+    <div class="mon-fila"><span>T central <b id="mon-t"></b> °C</span><span>FC <b id="mon-fc"></b><small>ilustrativo</small></span><span>CO₂ espirado <b id="mon-co2"></b></span><span>CK <b id="mon-ck"></b><small>ilustrativo</small></span></div>
     <div class="mon-fila"><span>Escalofrío <b id="mon-esc"></b></span><span>Sudor <b id="mon-sud"></b></span><span>Rigidez <b id="mon-rig"></b></span></div>
   </section>
+  <div id="sello-zona"></div>
   <section class="zona-escena"><svg id="ter-svg" viewBox="0 0 360 330" role="img" aria-label="Silueta humana con piel, músculo y cerebro; lupa del hipotálamo con el punto de ajuste y la temperatura real; lupa de la fibra muscular con el retículo y el calcio"></svg></section>
   <div class="capas" role="group" aria-label="Capas del cuerpo"><button type="button" class="b" id="l-piel" aria-pressed="true">Piel</button><button type="button" class="b" id="l-mus" aria-pressed="true">Músculo</button><button type="button" class="b" id="l-cer" aria-pressed="true">Cerebro</button></div>
   <section id="paso-caja" aria-live="polite"></section>
-  <p id="idea" class="idea"></p>
   <p class="mon-pie" id="mon-pie"></p>
   <div id="leyenda"></div>
   <details class="fig" id="figosb"><summary>Fig. 43.1 · onda de Osborn en la hipotermia (ECG real)</summary><figure style="margin:0"><img id="imgosb" alt="Electrocardiograma con onda de Osborn en una hipotermia" loading="lazy"><figcaption>Onda de Osborn (Fig. 43.1, Marino 2024, p. 56): inespecífica; no se da una temperatura umbral. Foto real de la ficha.</figcaption></figure></details>
@@ -28,6 +29,7 @@
   <section class="bloque">
     <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
     <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Lo que el modelo podría sumar</summary><ul class="lista" id="crecera"></ul></details>
     <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
   </section>
 </main>

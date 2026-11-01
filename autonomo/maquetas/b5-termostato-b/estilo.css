@@ -33,7 +33,6 @@
 .plegable { border: 1px solid var(--line); border-radius: 10px; padding: 4px 8px; background: var(--bg-card); } .plegable summary { font: 600 .78rem/1.3 var(--sans); min-height: 32px; display: flex; align-items: center; cursor: pointer; }
 .lista { margin: 0; padding-left: 16px; font: .74rem/1.4 var(--sans); } .bloque { display: grid; gap: 6px; }
 .enlace { min-height: 40px; font: 700 .74rem/1.2 var(--sans); }
-#monitor { min-height: 168px; }
 .barra { position: relative; height: 28px; margin: 6px 0 0; border-bottom: 1px solid var(--line); } .barra i { position: absolute; left: 0; bottom: 14px; height: 8px; border-radius: 4px; background: var(--accent-yellow); display: block; max-width: 100%; }
 .barra u { position: absolute; bottom: 10px; height: 16px; border-left: 2px solid var(--accent-red); } .barra span { position: absolute; bottom: -2px; font: 600 .6rem/1 var(--sans); color: var(--text-muted); transform: translateX(3px); }
 /* termostato B */
@@ -54,6 +53,13 @@
 .capas { display: flex; gap: 4px; margin: 4px 0; } .capas button { flex: 1 1 0; min-height: 36px; font: 700 .74rem/1.1 var(--sans); } .capas button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
 #paso-caja { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; background: var(--bg-card); display: grid; gap: 4px; } #paso-caja h3 { margin: 0; font-size: .95rem; } #paso-caja p { margin: 0; font: .84rem/1.4 var(--sans); }
 #paso-caja .fila-g { display: flex; gap: 4px; } #paso-caja .fila-g button { flex: 1 1 0; min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
-#monitor { min-height: 132px; } .mando select { min-height: 36px; font: 600 .74rem/1.2 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; width: 100%; }
+.mando select { min-height: 36px; font: 600 .74rem/1.2 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; width: 100%; }
 .mando .fila.dos > * { flex: 1 1 0; } #m-trat { min-height: 36px; text-align: left; font: 700 .72rem/1.2 var(--sans); }
 .mon-pie { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
+#ter-svg text { font-size: 9.4px; } #ter-svg .pq { font-size: 9.2px; } #ter-svg .rot { font-size: 10.5px; }
+#ter-svg .dial { fill: none; stroke: var(--line); stroke-width: 5; stroke-linecap: round; } #ter-svg .aguja { stroke: var(--oro); stroke-width: 3; stroke-linecap: round; } #ter-svg .eje { fill: var(--oro); }
+#ter-svg .merc { fill: var(--accent-red); } #ter-svg .pq.oro { fill: var(--oro); } #ter-svg .pq.rj { fill: var(--accent-red); }
+#monitor small { font: 500 .6rem/1 var(--sans); color: var(--text-muted); margin-left: 2px; }
+/* el sello va debajo del monitor, en el flujo, sin tapar cifras */
+#sello-zona { position: relative; } #sello-zona .tope-mon { position: static; inset: auto; } #sello-zona .tope-sellos { position: static; transform: none; width: auto; max-width: 100%; max-height: none; bottom: auto; padding: 0; margin: 4px 0; overflow: visible; }
+#sello-zona .tope-sello { transform: none; } #sello-zona .tope-sellos:empty { display: none; }
