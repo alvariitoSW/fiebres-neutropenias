@@ -452,6 +452,7 @@ function cortarLineas(p, P, h = 2) {
  * ref: las mismas piezas en la forma de referencia (telediástole), o null.
  */
 export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = true } = {}) {
+  let radioVI = null;
   const grupos = new Map(), lineas = [], valvas = [], tubos = [], mascara = { tipo: 'mascara', seg: [] }, peri = [];
   let base = 0;
   partes.forEach((p, k) => {
@@ -465,11 +466,15 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
     // Dibujo nuevo, A4C: el arco aórtico y las arterias pulmonares quedan por detrás del plano de las cuatro cámaras (no salen en el A4C real; anatomía general, sin página): sin ellos no quedan dos anillos bajo la AI.
-    if (P.clave === 'a4c' && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    // Dibujo nuevo, A4C: el pulmón lateral no se corta en láminas (la línea de pleura salía como una escalera de rayas regulares en el borde del
+    // sector); en Lang 2015, Fig. 4 esa zona es sombra oscura sin patrón. La ventana pobre ya la tapa con su sombra irregular (nuevoP).
+    if (P.clave === 'a4c' && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
     const r = ref && ref[k] && ref[k].nombre === p.nombre ? ref[k] : null;
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;
     const el = { seg: c.seg, segRef: c.segRef, claves: c.claves, nombre: p.nombre };
+    if (p.radioCavidad != null && t.grupo === 'VI') radioVI = p.radioCavidad;
     if (t.clase === 'pared') { if (!grupos.has(t.grupo)) grupos.set(t.grupo, { db: t.db, trozos: [] }); grupos.get(t.grupo).trozos.push(el); }
     else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: dibujoNuevo() ? PERICARDIO_FINO.db : t.db, ancho: dibujoNuevo() ? PERICARDIO_FINO.ancho : t.ancho, grupo: 'Pericardio' }); }
     else if (t.clase === 'tubo' || t.clase === 'vaso') tubos.push({ ...el, t });
@@ -487,7 +492,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     const segRef = conRef ? trozos.flatMap(x => x.segRef).concat(puentesRef) : null;
     out.push({ tipo: 'relleno', seg, segRef, db, grupo: g, abiertos });
     // borde de la pared: más brillante donde el haz le da de frente (reflexión especular)
-    out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g });
+    out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g, radioCavidad: g === 'VI' ? radioVI : null });
   }
   // papilares y trabéculas: nacen de la pared, así que lo que queda lejos de ella se desvanece (en formar)
   const paredVI = cuerdasYPapilares && grupos.has('VI') ? grupos.get('VI').trozos.flatMap(x => x.seg) : null;
@@ -796,7 +801,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
-        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
+        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db + (el.radioCavidad != null ? BORDE_ENDO.extraPequenoDb * clamp((BORDE_ENDO.rmDesdeMm - el.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1) : 0) : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db + (dibujoNuevo() && /^(Grasa|Seno|Coronaria|Vena)/.test(el.grupo) ? SURCOS_NUEVO.db : 0), espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
@@ -806,23 +811,28 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     if (m.especular > 0) { const k = -(22 - 5 * m.paredes) * m.especular; for (let q = 0; q < N; q++) if (FILL[q] && OD[q] < 6) { const c = 1 - OR[q]; A[q] *= Math.pow(10, k * c * Math.sqrt(c) / 20); } }
     // ventana pobre: el borde del pulmón tapa el lado derecho del sector (entra y sale con la respiración, ciclo de 5 s)
     const W = m.ventana;
+    // dibujo nuevo: detrás del pulmón no hay un «peine» de líneas A regulares sino una sombra irregular (costilla y aire; Lang 2015, Fig. 4,
+    // la zona lateral del A4C): manchas de tamaño mixto y sin periodicidad, entre -26 y -42 dB (nitidez ilustrativa, sin dato de fuente)
+    const nuevoP = dibujoNuevo();
+    const sombraIrregular = (i, j) => { const h = Math.sin(i * 12.9898 + (j >> 3) * 78.233) * 43758.5453, h2 = Math.sin((i >> 2) * 39.346 + j * 11.135) * 24634.6345;
+      return amp(-26 - 16 * (0.5 * (h - Math.floor(h)) + 0.5 * (h2 - Math.floor(h2)))); };
     let pulmon = null;
     if (W > 0.25 && o.ventanaVista !== 'subcostal') {
       const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;
       pulmon = { borde, rl };
       for (let i = 0; i < nb; i++) { if (EB[i] < borde) continue;
         for (let j = 0; j < ns; j++) { const r = Rr[j]; if (r < rl) continue; const q = j * nb + i, k = Math.round(r / rl), d = r - k * rl;
-          A[q] = (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
+          A[q] = nuevoP ? sombraIrregular(i, j) : (k <= 2 && Math.abs(d) < 0.8) ? amp(-2 - 9 * (k - 1)) : amp(-38); TAG[q] = 0; } }   // pocas líneas A y tenues: el pulmón tapa el borde sin dibujar un «peine»
     }
     reloj.push(performance.now());
     // sombra y refuerzo: cada haz, de la sonda hacia abajo, pierde lo que no atraviesa
     const S = m.sombra, nuevoD2 = dibujoNuevo();
     if (S > 0 || W > 0 || hayCal || hayPl) {
-      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr * (nuevoD2 ? SOMBRA_NUEVA.refuerzo : 1)), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6 * (nuevoD2 ? SOMBRA_NUEVA.sombra : 1), tope = amp(12);
+      const fC = amp(-TEJIDOS.calcio.atenuacion * G.dr), dr = G.dr, ABS = G.ABS, a6 = amp(6), fT = amp(-W * 0.5 * dr), fB = amp(S * 0.24 * dr * (nuevoD2 ? (o.ventanaVista === 'subcostal' ? 0 : SOMBRA_NUEVA.refuerzo) : 1)), fH = amp(-S * 7.5 * dr), kb = -S * 1.2 * dr / 6 * (nuevoD2 ? SOMBRA_NUEVA.sombra : 1), tope = amp(12);
       for (let i = 0; i < nb; i++) { let at = 1, rp = 0;
         for (let j = 0, q = i; j < ns; j++, q += nb) {
           // detrás de la pleura no hay tejido: líneas A a múltiplos de su profundidad y el resto, negro
-          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
+          if (rp) { const r = Rr[j]; if (r > rp + 1.6) { const k = Math.round(r / rp), d = r - k * rp; A[q] = nuevoP ? sombraIrregular(i, j) : Math.abs(d) < 1 ? amp(10 - 7 * (k - 1)) : amp(-38); TAG[q] = 0; continue; } }
           else if (hayPl && esPl[TAG[q]] && A[q] > a6) rp = Rr[j];
           const a = A[q]; A[q] = a * at;
           if (Rr[j] < G.pared) at *= fT;
@@ -872,7 +882,13 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       }
     }
     reloj.push(performance.now());
-    desenfocar(I); desenfocar(Q); reloj.push(performance.now());
+    desenfocar(I); desenfocar(Q);
+    // dibujo nuevo, VI pequeño (Rm < 26 mm, diámetro <52 mm): el borde nítido de la cavidad. La mezcla lateral de la pared hacia la sangre
+    // se reduce (la sangre conserva solo el resto del halo): nitidez ilustrativa, sin dato de fuente
+    const elRC = dibujoNuevo() ? els.find(e => e.radioCavidad != null) : null;
+    if (elRC) { const kc = clamp((BORDE_ENDO.rmDesdeMm - elRC.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1), fS = 1 - BORDE_ENDO.mezclaSangre * kc;
+      if (kc > 0) for (let q = 0; q < N; q++) if (TAG[q] === 255) { I[q] *= fS; Q[q] *= fS; } }
+    reloj.push(performance.now());
     // ganancia por profundidad: 4 mandos repartidos de arriba abajo, interpolados
     const TG = new Float32Array(ns);
     if (m.tgc > 0 && o.tgc) for (let j = 0; j < ns; j++) { const f = j / (ns - 1) * 3, k = Math.min(2, Math.floor(f)), u = f - k; TG[j] = o.tgc[k] + (o.tgc[k + 1] - o.tgc[k]) * u; }

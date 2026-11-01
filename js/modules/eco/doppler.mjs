@@ -45,6 +45,13 @@ export function velOrificio(n, s, areas) {
  */
 export const velRegMitral = (s, eroa) => (eroa > 0 && (s.qMitReg || 0) > 0 ? s.qMitReg / eroa : 0);
 
+/**
+ * Velocidad (cm/s) del chorro de la insuficiencia tricuspídea: Q / EROA con Q = EROA · 50 · ΔP/√(ΔP+0,25) (motor.mjs), es
+ * decir v ≈ 50·√ΔP cm/s = √(ΔP VD−AD / 4) m/s (Bernoulli simplificado). Sale de la presión del motor (pvd − pad), igual que
+ * la mitral. 0 sin reflujo; con EROA 0 (tricúspide competente) la IT trivial fisiológica no se pinta.
+ */
+export const velRegTricus = (s, eroa) => (eroa > 0 && (s.qTriReg || 0) > 0 ? s.qTriReg / eroa : 0);
+
 /** Chorro libre de la IM (ilustrativo): tangente del semiángulo del cono (20°), radio a mitad de altura a la distancia s (mm) y velocidad del eje / v0. */
 export const CONO_CHORRO = 0.37;
 export const chorroLibreAncho = (a, s) => a + CONO_CHORRO * s;
@@ -84,6 +91,13 @@ export function fuentesFlujo(flujo, s, areas, vasos = [], m = {}) {
     const c = T(flujo.coaptacionMitral), dir = nrm(res(T(flujo.enCamara.ai([0.5, 0, 0])), c)), a = Math.sqrt(eroa * 100 / Math.PI);   // orificio: EROA en mm²
     geom.push({ n: 'regMitral', c, dir, a, v0: 1, vTubo: 1, salida: false, libre: true });
     const v0 = velRegMitral(s, eroa); if (v0 > 0 && !s.vMit) valvulas.push({ n: 'regMitral', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false, libre: true });
+  }
+  // P5f · chorro de la insuficiencia tricuspídea: VD → AD desde el centro del anillo, solo en sístole (qTriReg > 0)
+  const eroaT = m.eroaTricus || 0;
+  if (eroaT > 0) {
+    const c = T(V.tricus), dir = nrm(res(T(flujo.enCamara.ad([0.5, 0.5, 0])), c)), a = Math.sqrt(eroaT * 100 / Math.PI);
+    geom.push({ n: 'regTricus', c, dir, a, v0: 1, vTubo: 1, salida: false, libre: true });
+    const v0 = velRegTricus(s, eroaT); if (v0 > 0) valvulas.push({ n: 'regTricus', c, dir, a, aTubo: a, v0, vTubo: 0, salida: false, libre: true });
   }
   // F3 · las 4 venas pulmonares (eje en el sentido del flujo, hacia la AI; las mismas que dibuja la geometría y mueve el latido)
   const vp = [];
@@ -206,6 +220,7 @@ export function mapaColor(P, im, F) {
  */
 export function curvaLatido(onda, fuente, factor, areas, m) {
   if (fuente.n === 'regMitral') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velRegMitral(s, m.eroaMitral) }));
+  if (fuente.n === 'regTricus') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velRegTricus(s, m.eroaTricus) }));
   if (fuente.tipo === 'valvula') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * (fuente.tubo ? velTubo(fuente.n, s, areas) : velOrificio(fuente.n, s, areas)) }));
   return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velVaso(fuente.vasoTipo, fuente.r, s, m) }));
 }
@@ -217,11 +232,17 @@ export function fuenteEnMuestra(pts, haz, F) {
   // a velocidad 1: u es directamente el factor (forma del chorro o del perfil, y ángulo con el haz)
   const g = pts[0 + 4];        // el centro de la muestra (puntosMuestra lo pone en el índice 4)
   for (const j of F.geom) { const u = medir({ valvulas: [j], vasos: [] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor))
-    mejor = { tipo: 'valvula', n: j.n, nombre: (NOMBRE_FUENTE[j.n] ?? 'Insuficiencia mitral · chorro') + (j.salida && dot(res(g, j.c), j.dir) < 0 ? ' · tracto de salida' : ''), tubo: j.salida && dot(res(g, j.c), j.dir) < 0, factor: u }; }
+    mejor = { tipo: 'valvula', n: j.n, nombre: (NOMBRE_FUENTE[j.n] ?? (j.n === 'regTricus' ? 'Insuficiencia tricuspídea · chorro' : 'Insuficiencia mitral · chorro')) + (j.salida && dot(res(g, j.c), j.dir) < 0 ? ' · tracto de salida' : ''), tubo: j.salida && dot(res(g, j.c), j.dir) < 0, factor: u }; }
   for (const v of F.vasos) { const u = medir({ valvulas: [], vasos: [{ ...v, vm: 1 }] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor)) mejor = { tipo: 'vaso', vasoTipo: v.tipo, nombre: v.nombre, r: v.r, factor: u }; }
   // el chorro regurgitante, si la muestra cae de verdad en él, manda sobre la convergencia de la mitral (que no sabe de cierres)
   const reg = F.geom.find(j => j.n === 'regMitral');
   if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: u }; }
+  const regT = F.geom.find(j => j.n === 'regTricus');
+  if (regT) { const u = medir({ valvulas: [regT], vasos: [] }); if (Math.abs(u) > 0.2) {
+    // Doppler continuo: la línea del haz atraviesa todo el chorro y el ecógrafo lee su máximo (la vena contracta), no la velocidad
+    // a la distancia de la muestra, donde el chorro libre ya se abrió y frenó. Queda solo el ángulo (cos θ) entre el haz y el chorro.
+    const cos = Math.abs(haz[0] * regT.dir[0] + haz[1] * regT.dir[1] + haz[2] * regT.dir[2]);
+    return { tipo: 'valvula', n: 'regTricus', nombre: 'Insuficiencia tricuspídea · chorro', tubo: false, factor: Math.sign(u) * cos }; } }
   return mejor && Math.abs(mejor.factor) > 0.08 ? mejor : null;
 }
 
@@ -248,7 +269,7 @@ export function tdeDe(curva, iE, sg = 1) {
  * Eyección (aórtica, pulmonar): pico e integral velocidad-tiempo (ITV). Venas hepáticas: S (sístole, B-D),
  * D (diástole, E-G) y A (onda retrógrada, A). Porta y VCI: media y pulsatilidad ((máx − mín) / máx).
  */
-export function medidasLatido(curva, fuente) {
+export function medidasLatido(curva, fuente, m = {}) {
   if (!curva.length) return null;
   // sentido del flujo (+ = hacia la sonda): el de la propia fuente, que factor ya trae (los puntos de un vaso van en
   // el sentido de su flujo: hacia el corazón o hepatópeta; un chorro, en el de su dirección). No se deduce de la onda
@@ -259,6 +280,11 @@ export function medidasLatido(curva, fuente) {
   if (fuente.n === 'regMitral') {   // sístole: pico del chorro (v = 4v² → ΔP VI−AI) e integral velocidad-tiempo
     let itv = 0; for (let i = 1; i < curva.length; i++) itv += Math.abs(curva[i].v) * (curva[i].t - curva[i - 1].t);
     return { tipo: 'regurgitacion', pico: Math.abs(pico(curva).v), itv };
+  }
+  if (fuente.n === 'regTricus') {   // IT: pico (vIT, m/s) e ITV; PSAP estimada = 4·vIT² + PVC (Bernoulli; ESC/ERS 2022: vIT > 3,4 m/s sugiere HP)
+    let itv = 0; for (let i = 1; i < curva.length; i++) itv += Math.abs(curva[i].v) * (curva[i].t - curva[i - 1].t);
+    const pico_ = Math.abs(pico(curva).v), vIT = pico_ / 100;
+    return { tipo: 'regurgitacion', pico: pico_, itv, vIT, psap: Number.isFinite(m.pvc) ? 4 * vIT * vIT + m.pvc : null };
   }
   if (fuente.tipo === 'valvula' && !SALIDA[fuente.n]) {
     const E = pico(en('FG')), A = pico(en('A'));
