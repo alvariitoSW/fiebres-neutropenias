@@ -91,3 +91,12 @@ preguntas, casos y figuras nuevas contra el PDF; profesor (fable) juzga: ≥8,75
   las cruza. Ancla y pregunta, con la tabla que es.
 - Fig. 23.3 paso 3: la app no copia el PEFR de las cajas «incompleta/pobre» (menor; no se pregunta por él).
 - El 22 → 3 % del edema laríngeo sale de una figura no cotejada: el constructor de G5 lo mira en el PDF antes de preguntarlo.
+
+## Decisión del director tras el plan G3-G5 (01/11)
+- Los 4 estados que usa el plan (`hfno`, `prono`, `fuga-cuff` con el paso «estridor», `sbt-ansiedad`) **se construyen**,
+  cada uno en su encargo y con la pieza de pantalla que necesite (mando de flujo y rótulo «Cánula», racimo en dos
+  mitades, casilla f/Vt, teclas «Extubar» y «opiáceo»): presupuesto de estado sin lupa ni tipo, **1,2 M** c/u (REGLAS
+  §4.14), barrido de extremos y profesor rápido al acabar cada uno (§4.16). Benito entra como paciente del modelo.
+  Antes de su Estudiar; el Estudiar de G3-G5 usa sus claves.
+- Ids: `nep-sod-enzima` (ficha 9) y `nep-sod-oral` (ficha 17); `nep-neumotorax-tension` y `nep-psili` ya existen.
+- PBW del modelo (Eulalia 54, Elvira 52,4), no los de cobertura §5.
