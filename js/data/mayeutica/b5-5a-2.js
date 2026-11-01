@@ -23,7 +23,7 @@ export const MAYEUTICA_B5_5A_2 = {
      Ficha 3 · Fallo agudo sobre crónico y hemorragia por varices (cap. 39, págs. 8-10)
      ================================================================================================= */
   'ma-varices': {
-    entrada: 'Cómo se reanima una hemorragia por varices: lo que comparte con el shock hemorrágico, las tres cosas que cambian, el octreótido, la ceftriaxona y el precio del TIPS.',
+    entrada: 'Cómo se reanima una hemorragia por varices, con endoscopia en ≤12 h: lo que comparte con el shock hemorrágico, las tres cosas que cambian, el octreótido, la ceftriaxona y el precio del TIPS.',
     guia: [
       { id: 'var-g1', corto: 'las cuatro complicaciones', tipo: 'test', fuente: 'ma-aclf',
         enunciado: 'Un cirrótico ingresa en la UCI porque su hígado ha empeorado de golpe. Antes de leer la ficha: ¿con qué cuatro complicaciones suele venir ese fallo agudo sobre crónico?',
@@ -47,7 +47,7 @@ export const MAYEUTICA_B5_5A_2 = {
           { t: 'PAM de 80 mmHg para asegurar la perfusión del cerebro', porque: 'La tabla fija una PAM de 65 mmHg; ni el libro ni la ficha piden más. Perseguir otra cifra sin respaldo en la tabla es salirse de la pauta.' },
           { t: 'PAS por encima de 100 mmHg, que es lo que mira el manguito', porque: 'Marino no usa la sistólica: la tabla fija la PAM. Con 85/50 su PAM es ≈62, por debajo de 65, y habría que seguir reanimando.' }],
         explicacion: 'Tabla 39.3: <span class="hl">mantener una PAM de 65 mmHg</span>. La PAM de Hilario (85/50) es ≈62: aún por debajo. Es el mismo shock hemorrágico, con las tres excepciones de la pregunta anterior.',
-        origen: 'ficha; la PAM de 62 es la cuenta (85 + 2 × 50) ÷ 3, ilustrativo' },
+        origen: 'ficha; PAM ≈62: cuenta ilustrativa' },
       { id: 'var-g4', corto: 'octreótido', tipo: 'test', fuente: 'ma-var-octreotido · ma-tabla-39-3',
         enunciado: '¿Qué es el octreótido en esta hemorragia, cómo se pauta y cuándo se empieza?',
         opciones: [
@@ -71,7 +71,7 @@ export const MAYEUTICA_B5_5A_2 = {
           { t: 'Casi ninguna: la hemorragia refractaria no se da con octreótido', porque: 'Se da en cerca del 20 %. Creer que no existe te hace llegar tarde al TIPS en el paciente que no responde.' }],
         explicacion: 'La hemorragia es refractaria a la endoscopia y al tratamiento óptimo en <span class="hl-rojo">cerca del 20 %</span>: se considera el TIPS (derivación entre la porta y las venas hepáticas, que alivia la hipertensión portal).',
         nota: '<b>Errata de la fuente.</b> Marino escribe «transesophageal portosystemic shunt» y lo llama «noninvasive» (' + pag(10, 'pág. 10') + '). El TIPS es una derivación portosistémica intrahepática transyugular y mínimamente invasiva. Se reproduce tal cual.' + enFicha(V, 'ma-var-tips') },
-      { id: 'var-g7', corto: 'el TIPS salta el hígado', tipo: 'test', fuente: 'ma-var-tips', origen: 'ficha (sube); cuánto sube: ilustrativo', modelo: hv('hilario:tips', '🏭 Hilario con TIPS en el hepatocito vivo'),
+      { id: 'var-g7', corto: 'el TIPS salta el hígado', tipo: 'test', fuente: 'ma-var-tips', origen: 'ficha; la cifra, del modelo', modelo: hv('hilario:tips', '🏭 Hilario con TIPS en el hepatocito vivo'),
         enunciado: 'Pones el TIPS a Hilario. Sin mirar el modelo: ¿qué le pasa al amonio arterial y por qué?',
         opciones: [
           { t: 'Sube: la sangre de la porta, con el NH₃ del intestino, se salta el hígado', ok: true },
@@ -161,9 +161,9 @@ export const MAYEUTICA_B5_5A_2 = {
                 { t: 'Permite suspender el octreótido ese mismo día, porque ya no hay vaso sangrante', porque: 'La tabla pide octreótido durante 2-5 días, no hasta la ligadura. Suspenderlo ya expone a un resangrado.' },
                 { t: 'Evita la intubación en todos los casos, aunque haya alteración mental', porque: 'Puede hacer falta intubar si hay alteración mental; la endoscopia no lo evita.' }],
               explicacion: 'La endoscopia identifica el origen (<span class="hl">valor pronóstico</span>) y permite clipar o ligar el vaso. La ligadura de las 9 h cumple el límite de 12 h.',
-              origen: 'ficha; las 9 h del caso, ilustrativo' } },
+              origen: 'ficha; la hora, del caso' } },
           { momento: 'Día 2 · resangra', datos: { Evolución: 'Resangra pese al tratamiento óptimo (el 20 % refractario)' }, nuevo: ['Evolución'],
-            pregunta: { id: 'var-c1-5', tipo: 'test', fuente: 'ma-var-tips', modeloVivo: hv('hilario:tips', '🏭 Hilario con TIPS: el amonio sube'), origen: 'ficha; el cambio de amonio del modelo, ilustrativo',
+            pregunta: { id: 'var-c1-5', tipo: 'test', fuente: 'ma-var-tips', modeloVivo: hv('hilario:tips', '🏭 Hilario con TIPS: el amonio sube'), origen: 'ficha; la cifra, del modelo',
               enunciado: 'Es una hemorragia refractaria. ¿Qué haces y qué precio tiene?',
               opciones: [
                 { t: 'TIPS: alivia la hipertensión portal, pero aumenta la encefalopatía', ok: true },
@@ -206,8 +206,8 @@ export const MAYEUTICA_B5_5A_2 = {
       { id: 'pbe-g3', corto: 'nosocomial', tipo: 'test', fuente: 'ma-pbe-resistentes · ma-pbe-abx · ma-pbe-calc · mar-img-39-4', calculadora: { ir: 'ma-pbe-calc', nombre: 'Antibiótico empírico de la PBE (Figura 39.4)' },
         enunciado: 'Hilario lleva 72 h ingresado por sus varices. Hoy: fiebre, dolor y 610 neutrófilos/mm³ en la ascitis. ¿Qué tipo de PBE es y qué le pones sin esperar el cultivo?',
         opciones: [
-          { t: 'Nosocomial, porque aparece tras 48 h de ingreso: resistentes posibles, así que un carbapenémico como meropenem 1 g cada 8 h', ok: true },
-          { t: 'Comunitaria: ceftriaxona, la misma que ya lleva por las varices', porque: 'La que lleva es profilaxis, y una infección a las 72 h de ingreso es nosocomial, donde típicamente se aíslan resistentes. Con ceftriaxona quedaría sin cubrir.' },
+          { t: 'Nosocomial (tras 48 h de ingreso): resistentes posibles, así que meropenem 1 g cada 8 h', ok: true },
+          { t: 'Comunitaria: ceftriaxona, la misma que ya lleva por las varices, que cubre E. coli y Klebsiella', porque: 'La que lleva es profilaxis, y una infección a las 72 h de ingreso es nosocomial, donde típicamente se aíslan resistentes. Con ceftriaxona quedaría sin cubrir.' },
           { t: 'Asociada a cuidados: esperar el cultivo antes de decidir', porque: 'Asociada a cuidados es la que aparece en las primeras 48 h con contacto sanitario previo. Y con >250 neutrófilos el antibiótico no espera al cultivo.' }],
         explicacion: '<span class="hl">Nosocomial = aparece tras 48 h de ingreso</span>; resistentes típicos → carbapenémico (p. ej. meropenem 1 g/8 h), con vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Con sospecha menor, piperacilina-tazobactam (Fig. 39.4).' + ` (${pag(11, 'pág. 11')})` },
       { id: 'pbe-g4', corto: 'respuesta a 48 h', tipo: 'test', fuente: 'ma-pbe-abx · ma-pmn-calc', calculadora: { ir: 'ma-pmn-calc', nombre: 'Neutrófilos en ascitis: diagnóstico y respuesta' },
@@ -217,14 +217,14 @@ export const MAYEUTICA_B5_5A_2 = {
           { t: 'No: siguen por encima de 250, el umbral que define el diagnóstico', porque: 'El criterio no es volver a <250, sino bajar al menos el 25 %. Cambiar el antibiótico a un paciente que responde sería exponerlo a más toxicidad sin motivo.' },
           { t: 'No: hasta que bajen un 50 % no se considera respuesta favorable', porque: 'El libro define la respuesta favorable como una caída ≥25 %. Con el 50 % esperarías de más y quizá cambiarías el tratamiento de un paciente que mejora.' }],
         explicacion: 'Paracentesis a las <span class="hl">48 h</span>: respuesta favorable si los neutrófilos bajan <span class="hl-verde">≥25 %</span>. De 610 a 400 es una bajada del 34 %. El antibiótico se mantiene al menos 7 días, sea cual sea el cultivo.' + ` (${pag(11, 'pág. 11')})`,
-        origen: 'ficha (≥25 %, ≥7 días); la cuenta (610 − 400) ÷ 610, ilustrativo' },
+        origen: 'ficha; la cuenta, ilustrativa' },
       { id: 'pbe-g5', corto: 'albúmina en la PBE', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'ma-pbe-albumina · ma-alb-calc', calculadora: { ir: 'ma-alb-calc', nombre: 'Albúmina en la PBE' },
         enunciado: 'Además del antibiótico, ¿por qué se da albúmina en la PBE y cuánta le pones a Hilario, de 70 kg?',
         puntos: [
           'El porqué: <span class="hl-verde">mejora la supervivencia</span>, y el beneficio es <span class="hl">independiente de la creatinina</span> (se había atribuido a proteger el riñón).',
           'La pauta: <span class="hl">1,5 g/kg el día 1 y 1 g/kg el día 3</span>, con albúmina al 25 % para limitar el volumen.'],
         explicacion: 'Para Hilario: 1,5 × 70 = 105 g el día 1 (≈420 mL al 25 %) y 70 g el día 3 (≈280 mL).' + ` (${pag(11, 'pág. 11')})`,
-        origen: 'ficha; la cuenta con 70 kg, ilustrativo' },
+        origen: 'ficha; cuenta con 70 kg' },
       { id: 'pbe-g6', corto: 'riñón a merced', tipo: 'test', fuente: 'ma-shr-fisio', modeloVivo: [glomerulo('🫘 La arteriola contraída por renina (el glomérulo, en depleción de volumen: el modelo no tiene síndrome hepatorrenal)'), { capilarVivo: 'sepsis', texto: '🧫 La sepsis aumenta la vasodilatación' }],
         enunciado: 'En el cirrótico el riñón está sano, pero se vuelve «vulnerable a pequeñas caídas del gasto cardíaco». ¿Qué cadena lo explica?',
         opciones: [
@@ -233,13 +233,13 @@ export const MAYEUTICA_B5_5A_2 = {
           { t: 'Hipovolemia franca por ascitis → riñón seco como en la deshidratación → falta de volumen circulante', porque: 'El mecanismo del libro no es la falta de volumen sino la vasodilatación del territorio esplácnico. Aumentar la diuresis o deplecionar más empeoraría el riñón.' }],
         explicacion: 'La cirrosis dilata el lecho esplácnico; la <span class="hl-azul">respuesta neurohumoral (renina) contrae otros territorios, incluido el riñón</span>, que queda a merced de pequeñas caídas del gasto. La sepsis aumenta la vasodilatación: el SHR es más frecuente con sepsis.' + ` (${pag(12, 'pág. 12')})`,
         nota: 'El glomérulo vivo no tiene un estado de síndrome hepatorrenal: «depleción de volumen» enseña la arteriola aferente y la eferente contraídas por renina, que es la parte del mecanismo que se parece. Es una aproximación.' },
-      { id: 'pbe-g7', corto: 'Na⁺ urinario bajo', tipo: 'test', fuente: 'ma-shr-fisio', modeloVivo: nefrona('prerrenal', '💧 La nefrona en estado prerrenal (el SHR comparte sus índices; no tiene estado propio)'), origen: 'ficha; el Na⁺ urinario de 8 mEq/L es una cifra del caso, ilustrativo',
-        enunciado: 'La creatinina de Hilario pasa de 0,9 a 1,6 mg/dL en 48 h y su Na⁺ urinario es de 8 mEq/L. ¿Qué te dicen esos índices urinarios en el cirrótico?',
+      { id: 'pbe-g7', corto: 'Na⁺ urinario bajo', tipo: 'test', fuente: 'ma-shr-fisio', modeloVivo: nefrona('prerrenal', '💧 La nefrona en estado prerrenal (el SHR comparte sus índices; no tiene estado propio)'), origen: 'ficha; el Na⁺ urinario, del caso',
+        enunciado: 'La creatinina de Hilario pasa de 0,9 a 1,6 mg/dL en 48 h. ¿Sodio urinario alto o bajo? Piénsalo y mira la nefrona: ¿qué te dicen los índices urinarios en el cirrótico?',
         opciones: [
-          { t: 'Son «prerrenales» (sodio bajo, osmolaridad alta): orientan a un fracaso funcional y podrían diferenciarlo de la necrosis tubular', ok: true },
+          { t: 'Son «prerrenales» (sodio bajo, osmolaridad alta): orientan a un fracaso funcional, no a necrosis tubular', ok: true },
           { t: 'Descartan el síndrome hepatorrenal: ese cursa con sodio urinario alto', porque: 'Al revés: en el SHR los índices son prerrenales. Descartarlo por esa cifra lo deja sin vasoconstrictor.' },
           { t: 'Confirman necrosis tubular aguda y la indicación de diálisis', porque: 'Los índices prerrenales distinguen el SHR de la necrosis tubular, no la confirman. Dializar sin más es tratar de más a un riñón que puede recuperar con albúmina y vasoconstricción.' }],
-        explicacion: 'Los índices urinarios del SHR son «prerrenales» (<span class="hl">sodio bajo y osmolaridad alta</span>) y <span class="hl-purpura">podrían diferenciarlo de la necrosis tubular aguda</span>. Es un fracaso funcional, sin enfermedad renal intrínseca.' + ` (${pag(12, 'pág. 12')})` },
+        explicacion: 'Los índices urinarios del SHR son «prerrenales» (<span class="hl">sodio bajo y osmolaridad alta</span>) y <span class="hl-purpura">podrían diferenciarlo de la necrosis tubular aguda</span>. Es un fracaso funcional, sin enfermedad renal intrínseca. En el caso, el Na⁺ urinario es de 8 mEq/L.' + ` (${pag(12, 'pág. 12')})` },
       { id: 'pbe-g8', corto: 'la prueba que falta', tipo: 'test', fuente: 'ma-tabla-39-4 · ma-shr-calc', calculadora: { ir: 'ma-shr-calc', nombre: '¿Cumple los criterios de SHR?' },
         enunciado: 'Hilario cumple «creatinina +0,3 mg/dL en 48 h» y no tiene shock ni nefrotóxicos. ¿Qué prueba falta antes de llamarlo síndrome hepatorrenal?',
         opciones: [
@@ -307,7 +307,7 @@ export const MAYEUTICA_B5_5A_2 = {
                 { t: 'Esperar el cultivo, porque 610 neutrófilos no bastan sin germen', porque: 'Los >250 neutrófilos aseguran el diagnóstico sea cual sea el cultivo. Esperar días con 38,4 °C es dejar progresar una infección de la ascitis.' }],
               explicacion: '<span class="hl-azul">>250 neutrófilos/mm³</span> = antibiótico sin esperar al cultivo. Nosocomial → resistentes posibles → carbapenémico (meropenem 1 g/8 h), con vancomicina si hay riesgo de SARM.' } },
           { momento: 'Día 3 · albúmina', datos: { Plan: 'Albúmina al 25 % para la PBE' }, nuevo: ['Plan'], calculadora: { ir: 'ma-alb-calc', nombre: 'Albúmina en la PBE' },
-            pregunta: { id: 'pbe-c2-3b', tipo: 'test', fuente: 'ma-pbe-albumina · ma-alb-calc', origen: 'ficha; las cuentas con 70 kg, ilustrativo',
+            pregunta: { id: 'pbe-c2-3b', tipo: 'test', fuente: 'ma-pbe-albumina · ma-alb-calc', origen: 'ficha; cuenta con 70 kg',
               enunciado: '¿Cuánta albúmina hoy y qué hay que programar?',
               opciones: [
                 { t: '105 g hoy (1,5 g/kg, ≈420 mL al 25 %) y 70 g el día 3 del tratamiento (1 g/kg)', ok: true },
@@ -315,7 +315,7 @@ export const MAYEUTICA_B5_5A_2 = {
                 { t: '105 g hoy y ya está, porque solo mejora la función renal', porque: 'El beneficio en la supervivencia no depende de la creatinina y la pauta tiene una segunda dosis (1 g/kg el día 3).' }],
               explicacion: '<span class="hl">1,5 g/kg el día 1 (105 g) y 1 g/kg el día 3 (70 g)</span>, con albúmina al 25 % (25 g/100 mL) para limitar el volumen.' } },
           { momento: 'Día 5 · segunda paracentesis', datos: { Ascitis: '400 neutrófilos/mm³ a las 48 h' }, nuevo: ['Ascitis'], calculadora: { ir: 'ma-pmn-calc', nombre: 'Neutrófilos en ascitis: diagnóstico y respuesta' },
-            pregunta: { id: 'pbe-c2-4', tipo: 'test', fuente: 'ma-pbe-abx · ma-pmn-calc', origen: 'ficha (≥25 %, ≥7 días); la cuenta, ilustrativo',
+            pregunta: { id: 'pbe-c2-4', tipo: 'test', fuente: 'ma-pbe-abx · ma-pmn-calc', origen: 'ficha; la cuenta, ilustrativa',
               enunciado: '¿Responde al meropenem?',
               opciones: [
                 { t: 'Sí: 610 → 400 es una bajada del 34 % (≥25 %); se completan ≥7 días', ok: true },
