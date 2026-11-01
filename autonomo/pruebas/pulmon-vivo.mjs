@@ -259,6 +259,28 @@ for (const k of ORDEN_ESTADOS) {
   await mando('pmus', 15); await llenar(); await limpio('P-SILI, Pmus 15'); e = await esf(); const v15 = await p.evaluate(() => +document.querySelector('#pul-dock-panel input[data-m="pmus"]').value);
   ok(/no fisiológico/.test(e.sello || '') && v15 < 15, `E4a P-SILI: Pmus 15 pasa el tope de 12 mL/kg: sello «${e.sello}» y el mando vuelve a ${v15}`);
   await foto('e4a-psili');
+  // S1 · cánula de alto flujo (hfno): sin lupa ni tipo. Mandos: flujo 10-60, boca cerrada; barrido de extremos 0..120 (doble del tope)
+  await abrir('hfno'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(250); };
+    const hf = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`); return { q: q.est.q, fio2: +c('fio2').querySelector('.v').textContent, spo2: c('fio2').querySelector('.sub').textContent, peep: c('peeptot').querySelector('.v').textContent, pmus: q.P.S.resp.pmus, fr: q.P.S.resp.frEsp, int: document.querySelector('#pul-raiz [data-resp="int"]').textContent, sello: q.est.sello?.titulo || '', alarma: document.querySelector('#pul-resp-alarma')?.textContent || '', frase: document.querySelector('#pul-frase-txt')?.textContent || '' }; });
+    const R = {}; for (const q of [10, 30, 60]) { await mando('canula', q); await llenar(); R[q] = await hf(); await limpio('hfno ' + q + ' L/min'); }
+    ok(R[10].int === 'Cánula' && R[10].pmus === 14 && R[60].pmus === 8 && R[60].fr < R[10].fr, `S1 hfno: interfaz «Cánula»; al subir el flujo de 10 a 60 bajan el esfuerzo (${R[10].pmus} → ${R[60].pmus}) y la FR (${R[10].fr} → ${R[60].fr})`);
+    ok(R[10].fio2 < R[30].fio2 && R[30].fio2 < R[60].fio2 && R[60].fio2 === 80 && R[10].fio2 > 21, `S1 hfno: la FiO₂ al alvéolo sube con el flujo y alcanza la del mando (${R[10].fio2} → ${R[30].fio2} → ${R[60].fio2} con mando 80) · ${R[10].spo2} → ${R[30].spo2} → ${R[60].spo2}`);
+    ok(R[10].peep.replace(',', '.') === '0' && R[60].peep.replace(',', '.') === '0', 'S1 hfno: con la boca abierta no hay PEEP');
+    await mando('canula', 10); await llenar();
+    ok(/Flujo bajo/.test(R[10].alarma + (await p.evaluate(() => document.getElementById('pul-raiz').innerText))), 'S1 hfno: por debajo de 15 L/min avisa de que arrastra aire');
+    await clic('#pul-dock-panel [data-m="boca"]'); await llenar(); const bc = await hf(); ok(+bc.peep.replace(',', '.') === 2.5, `S1 hfno: «Boca cerrada» da la PEEP de 2-3 (${bc.peep})`);
+    await clic('#pul-dock-panel [data-m="boca"]');
+    // tope: el mando llega a 60 y se queda; pedir más (hasta el doble) pone el sello con las constantes de la paciente
+    for (const q of [90, 120]) { await p.evaluate((q) => { const d = document.querySelector('#pul-dock-panel input[data-m="canula"]'); d.max = 200; d.value = q; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, q); const t = await hf(); ok(/Más flujo del que da el equipo/.test(t.sello) && t.q === 60 && t.pmus === 8 && t.fio2 === 80, `S1 hfno tope: pedir ${q} L/min → sello «${t.sello}», el flujo se queda en ${t.q}; Pmus ${t.pmus}, FR ${t.fr}, FiO₂ ${t.fio2}, ${t.spo2}`); await limpio('hfno tope ' + q); }
+    await mando('canula', 30); await llenar(); ok((await hf()).sello === '', 'S1 hfno tope: al volver a un flujo válido el sello se quita');
+    await abrir('p-sili'); await espera(500); ok((await hf()).int === 'Tubo', 'S1 hfno: al salir del estado la interfaz vuelve a «Tubo»');
+    await abrir('hfno'); await espera(500); await llenar(); await foto('s1-hfno');
+    // barrido de motor de 0 al doble del tope: ninguna cifra imposible
+    const H = await import(new URL('../../js/modules/libros/pulmon-vivo/hfno.js', import.meta.url)), PM = await import(new URL('../../js/modules/libros/pulmon-vivo/pulmon.mjs', import.meta.url)), E = ESTADOS.hfno, kgE = PM.pbw(160, 'm'); let mal = [];
+    for (const q of [0, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120]) { const x = H.lectura(q, 80, E.resp, E.pulmon), l = PM.simular({ ...E.resp, pmus: x.pmus, frEsp: x.frEsp }, { ...E.pulmon, rEsp: E.pulmon.r }, {}, { ciclos: 10, ventana: 0.01 }).lectura;
+      if (!(x.fio2Alv >= 21 && x.fio2Alv <= 80 && x.spo2 >= 84 && x.spo2 <= 95 && l.vm >= 2 && l.vm <= 20 && l.vtExh / kgE >= 4 && l.vtExh / kgE <= 12 && x.frEsp >= 14 && x.frEsp <= 30 && l.frReal > 0)) mal.push(`${q}: FiO₂ ${x.fio2Alv} SpO₂ ${x.spo2} VM ${l.vm} Vt/kg ${l.vtExh / kgE}`); }
+    ok(mal.length === 0, `S1 hfno barrido 0-120 L/min: todo paciente posible${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`); }
   await abrir('sbt-ok'); await espera(900); await llenar(); e = await esf(); const f1v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];

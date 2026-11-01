@@ -30,7 +30,7 @@ export const CASILLAS = [
   { k: 'vt', et: 'VTe', u: 'mL', que: 'Volumen corriente espirado (y por kg de peso ideal). Límite 12 mL/kg: brazo tradicional de ARDS Network 2000 (PMID 10793162); ficha, cap. 24 p. 46: 12-15, normal 6-7.', c: C.t271 },
   { k: 'vm', et: 'VMe', u: 'L/min', que: 'Volumen minuto espirado = VTe × FR. Límites 2 y 20: fisiología general.', c: C.t271 },
   { k: 'ie', et: 'I:E', u: '', que: 'Relación inspiración:espiración. La ficha pide 1:2 o más.', c: C.flujoIE },
-  { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, que: 'Copia el mando FiO₂. Este modelo no tiene gases: no cambia nada (ilustrativo).' },
+  { k: 'fio2', et: 'FiO₂', u: 'Vol%', ilu: true, que: 'Copia el mando FiO₂. Este modelo no tiene gases: no cambia nada (ilustrativo). Con la cánula de alto flujo es la FiO₂ que llega al alvéolo (balance entre el flujo de la cánula y el inspiratorio de la paciente; SpO₂ ilustrativa).' },
   { k: 'frespon', et: 'FRespon', u: '/min', ilu: true, que: 'Frecuencia del paciente en presión de soporte (ilustrativa: 16 por minuto). Vacía en volumen y presión control, que no tienen respiración espontánea en este modelo.' },
   { k: 'vmespon', et: 'VMe espon', u: 'L/min', ilu: true, que: 'Volumen minuto espontáneo en presión de soporte. Vacío en volumen y presión control.' },
 ];
@@ -96,14 +96,14 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
     const val = {
       pico: { v: v(f1(l.pico)), lim: `≤${r.pmax ?? 40}` },
       meseta: { v: v(f1(l.meseta)), sub: l.meseta == null && !tapado ? (r.modo === 'psv' ? 'no en PSV' : 'pausa: Insp. mant.') : '', lim: `≤${TOPE.meseta}` },
-      peeptot: l.peepTot != null ? { v: v(f1(l.peepTot)), sub: tapado ? '' : `total · oculta ${f1(l.autoPeep) ?? '—'}`, lim: `≤${TOPE.peepTotMax}` } : { v: v(f0(r.peep)), sub: 'aplicada', lim: `≤${TOPE.peepTotMax}` },
+      peeptot: l.peepTot != null ? { v: v(f1(l.peepTot)), sub: tapado ? '' : `total · oculta ${f1(l.autoPeep) ?? '—'}`, lim: `≤${TOPE.peepTotMax}` } : { v: v(est.hfno ? f1(r.peep) : f0(r.peep)), sub: 'aplicada', lim: `≤${TOPE.peepTotMax}` },
       pmedia: { v: v(f1(l.pMedia)) },
       frmand: r.modo === 'psv' ? {} : { v: f0(r.fr) },
       fr: { v: v(f0(l.frReal)) },
       vt: { v: v(f0(l.vtExh)), sub: tapado || l.vtExh == null ? '' : `${f1(l.vtExh / kg)} /kg`, lim: `≤${vtMax}` },
       vm: { v: v(f1(l.vm)), lim: `<span>≤${TOPE.vmMax}</span><span>≥${TOPE.vmMin}</span>` },
       ie: { v: v(l.ie != null && isFinite(l.ie) ? `1:${f1(l.ie)}` : null) },
-      fio2: { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
+      fio2: est.hfno ? { v: f0(est.hfno.fio2Alv), sub: `SpO₂ ${f0(est.hfno.spo2)} %` } : { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
     };
     for (const [k, n] of Object.entries(marca)) if (val[k] && !tapado) val[k].estado = n;
     R.casillas(val);
@@ -122,7 +122,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       pinsp: vcv || psv ? { v: r.pinsp, txt: '—', apagado: 'Solo en PC-AC.' } : { v: r.pinsp, nota: 'Presión de insuflación, sobre la PEEP. Modelo lineal: con la PEEP alta el VTe no cae (no hay sobredistensión en el modelo).' },
       pmax: { v: r.pmax ?? 40 },
     });
-    R.modo(r.modo, { detenido });
+    R.modo(r.modo, { detenido }); R.interfaz(est.hfno ? 'Cánula' : 'Tubo');
     R.tecla('inspmant', !!P.S.man.pausa); R.tecla('espmant', !!P.S.man.oclusion); R.tecla('congelar', !!est.pausa); R.congelado(est.pausa && !detenido);
   }
   function infoAlarmas() {
