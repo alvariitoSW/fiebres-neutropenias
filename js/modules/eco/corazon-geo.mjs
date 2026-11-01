@@ -225,7 +225,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 
   // Trabéculas: crestas que entran en la cavidad (ilustrativo). VI: finas, en el tercio apical; VD: gruesas,
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
-  const kPap = opciones.ajustes?.papilaresEscala ? Math.pow(clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1), opciones.ajustes?.papilaresExp ?? 1) : 1;
+  const kPap = opciones.ajustes?.papilaresEscala ? Math.pow(clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null) : vi).Rm / RM_NORMAL, 0.45, 1), opciones.ajustes?.papilaresExp ?? 1) : 1;
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
   // ajustes.papilaresLibres (dibujo nuevo): ni trabéculas ni papilares en el arco plano del tabique: quedan en la pared libre (anterolateral y posteromedial)
   const libreSeptal = (z, f) => { if (!opciones.ajustes?.papilaresLibres) return 1; const a = alfaZ(z); if (a <= 0) return 1;
@@ -310,11 +310,11 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const rhoInf = huella(cR, (p) => { const r = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
     return ventana(f) > 0.02 && r > ReB + 0.5 && r < rimRV(f) - 1 && Math.hypot(p[0] - ct[0], p[1] - ct[1]) > rT + 3 && Math.hypot(p[0] - cR[0], p[1] - cR[1]) < 24; }, (d) => Math.max(aR, bR) + 3.5);
   // Descenso de la base (MAPSE): se usa al final, en «mover»; aquí ya, porque estira las aurículas (alturaAu)
-  const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
+  const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
   const descenso = clamp(vi.Le - LeTd, -18, 6);
   // (el TAPSE: la pared libre del VD baja más; explicado en «mover»)
   // F5: acortamiento longitudinal de la pared libre = fracción del largo telediastólico del VD, según lo que el VD se ha vaciado
-  const LvdTd = (estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : vi.Le) * REF.lVdRel, vdTd = estado.vvdTd ?? REF.vVd;
+  const LvdTd = (estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null).Le : vi.Le) * REF.lVdRel, vdTd = estado.vvdTd ?? REF.vVd;
   const excVd = clamp(acortamientoVd(1 - estado.vvd / vdTd) * LvdTd, 0, 35);
   const extraVd = clamp(-excVd - descenso, -25, 6);
   const angTric = Math.atan2(geo.ct[1], geo.ct[0]), ReBase = geo.ReB;
@@ -627,7 +627,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
     // objetivo × el telediastólico. El radio sale del largo medido del trazado (÷ √ el cociente con el de telediástole),
     // así que largo × radio² se conserva (B4).
     const LP_SIS = 0.82, objetivo = 1 - (1 - LP_SIS) * clamp(estado.eVi ?? 0, 0, 1);
-    const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
+    const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
     // v2 Forma: la punta se cierra en el último 15 % y la base en el primer 6 %, metida en la pared (radio → 0): con la punta abierta, un corte oblicuo no cerraba y el papilar se
     // dibujaba como un lazo en S dentro del VI (A4C del TEP en telesístole); cerrado, el corte es una mancha rellena
     // ajustes.papilaresEscala (dibujo nuevo): el radio de los papilares (5,5 mm en el VI normal) y la altura de las trabéculas siguen al radio
@@ -994,7 +994,7 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const KUe = ajustes.septoRectoEndo ? ajustes.septoRectoEndo : KU;
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
-  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe, ajustes.septoHondo || 0);   // anatomia.mjs
+  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe, ajustes.septoHondo || 0, ajustes.esfericidad ?? null);   // anatomia.mjs
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
   const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
