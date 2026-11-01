@@ -103,3 +103,18 @@ Páginas del PDF de Marino 2024 (caps. 39-44); el auditor las coteja.
 - Error de Ovidio: «paracetamol» (p. 45), «hielo en ingles, axilas y cuello» (p. 47), «evaporación 0,3 °C/min» (p. 47), «hasta 35 °C» falsa (p. 47), «≥41 °C, delirio y sin sudor = golpe» (p. 46), «agotamiento 38-39 °C con sudor» (p. 46).
 - Caso de Ovidio: paso 3 «CK 18.000, creatinina 2,1, plaquetas 60.000, ALT 2.900» ilustrativas (la ficha solo dice que hay daño de cerebro, hígado, riñón, coagulación y rabdomiólisis, p. 47); paso 4 (día 2, ajuste 38,6 °C): «con el ajuste en 38,6 °C es fiebre» p. 45; «hielo con el ajuste alto provoca escalofrío» p. 72 por analogía con las mantas (inferencia). El giro del día 2 es invención didáctica (sin fuente): CK 2.400 y 30 h ilustrativas.
 - Apuesta 2 (Fig. 44.5): «menos temperatura inicial, más mortalidad en sepsis grave», 2.225 pacientes, «un estudio vio más mortalidad con antipiréticos», «la guía recomienda no suprimir la fiebre de rutina»: p. 70-71. «Baja el gasto de oxígeno y sobrevive más» (opción falsa) y «mantas hasta <37 °C» (opción falsa; mantas p. 72): sin cita para la parte de «no hay datos de que enfriar mejore la supervivencia» (inferencia de p. 70-71).
+
+## Vuelta 3 (auditoría + rejuicio)
+Páginas del PDF de Marino 2024 (caps. 39-44); el auditor las coteja.
+- Apuesta 2: «asociación observacional, no causa»; «un estudio vio más mortalidad con antipiréticos» (p. 70-71, línea de «45»); «la guía recomienda no suprimir la fiebre de rutina» (p. 71); sepsis afebril calentada 1,5 °C (p. 71).
+- Tope 42 °C: Libro Azul, sección III (inmunitario, parte 1), p. 30 del PDF: «más allá de 42 °C citotoxicidad… falla de órganos». Ya no es ilustrativo.
+- Buscado en: Marino cap. 34 (p. 44-60, «CK correlaciona con la gravedad», sin cinética), cap. 43 p. 47-49, Libro Azul sección III, AHA 2025 novedades, neurología caps. 45-47 — NO lo da: cinética de la CK (pico 24-72 h) y velocidad de subida de la T en golpe de calor / HM. Siguen `ilustrativo` (CK día 2 = 9.000; CK hora 6 = 24.000). El director los apunta para buscarlos en la web al llevarlo a la app.
+- Errata p. 52 («NMS» por fentanilo/linezolid): nota de fidelidad en NOTAS y en el origen del paso 1 del SS.
+- Dorotea paso 3: p. 72 (piel cerrada + tiritona = «como una manta fría»); paso 5: «inhibe la prostaglandina E» (p. 71).
+- Ovidio paso 3: anhidrosis «típica, no universal» (p. 47). Paso 4: escalofrío con piel fría delata el ajuste alto (p. 45; 72). Contexto sin «ajuste en 38,6 °C».
+- SNM: CK «típicamente >1.000» (p. 50); fiebre «puede retrasarse hasta 8-10 h» (p. 50); TVP (p. 51); dantroleno en SNM 1 mg/kg/8 h hasta 10 mg/kg (p. 51).
+- SS: mantenimiento 8 mg/6 h y rocuronio (p. 53). Hipotermia: escalofrío «se reduce o falta» en la moderada (p. 54); T central, K⁺, coagulopatía <34 °C, gasometría (p. 55).
+- Golpe: inmersión en agua fría, suero a 4 °C (p. 47); CK ≥5 veces (p. 47). HM: debilidad 2-4 días, hepatotoxicidad oral, brazalete (p. 49); mortalidad ≤10 % «si se da temprano» (p. 49).
+- Paracetamol: cap. 52, 4 g y ≤3 g con riesgo (PDF toxicología p. 5); cap. 44 máx. 3 g (p. 72).
+- Sello «Calor por fármaco» ahora desde ≥40 °C (HM, p. 49).
+- Sin cita (cuenta del modelo, rotulada): 11 minutos (3,4 °C ÷ 0,3 °C/min); «sin la pauta de 24 h puede volver» (esquema de p. 48).

@@ -51,7 +51,7 @@ function pintar() {
   $('figosb').open = s.est === 'hipo' && s.paso >= 3; $('fig445').open = s.est === 'fiebre' && s.paso === 5;
   window.__ter.lista = lista;
 }
-const fraseDe = () => { if (s.est === 'juega') { const [x, p, o] = fraseLibre(s.j, leer(s)); return frase(`${x} · p. ${p}`, o); } const P = ESTADOS[s.est].pasos[s.paso - 1]; frase(`${P.t}. ${P.x} · p. ${P.c.split('|')[0]}`, P.o); };
+const fraseDe = () => { if (s.est === 'juega') { const [x, p, o] = fraseLibre(s.j, leer(s)); return frase(`${x} · p. ${p}`, o); } const P = ESTADOS[s.est].pasos[s.paso - 1]; frase(`${P.t} · p. ${P.c.split('|')[0]}`, P.o); };
 function ir(p) { Object.assign(s, p); if (s.est === 'juega' && (p.est === 'juega' || !s.j)) s.j = p.j || nuevoLibre(); if (s.est === 'juega') s.paso = 1; s.paso = clamp(s.paso, 1, 5); fraseDe(); pintar(); }
 function mandos() {
   $('m-est').innerHTML = Object.entries(ESTADOS).map(([k, e]) => `<option value="${k}">${e.nombre}</option>`).join('');
@@ -89,7 +89,7 @@ function apuesta() {
     if (c.dataset.fin) return; const i = +b.dataset.i; c.dataset.fin = '1'; oculto = false;
     c.querySelectorAll('.op').forEach((x, j) => x.classList.add(j === A.ok ? 'bien' : x === b ? 'mal' : 'neutra'));
     c.insertAdjacentHTML('beforeend', `<p class="por ${i === A.ok ? 'ok' : 'no'}">${i === A.ok ? 'Bien apostado. ' : 'No era esa. '}${A.ops[i][1]}</p><p class="por">${A.por} ${cita(A.c)}</p>` + llevas(A.ll));
-    if (dos) { antipiretico(s.j, 'para'); pasar(s.j); ir({}); frase('Con paracetamol la T baja, pero la mortalidad no: en la sepsis grave la temperatura inicial se relacionaba al revés con ella. · p. 71', 'ficha · p. 70-71'); return; }
+    if (dos) { antipiretico(s.j, 'para'); pasar(s.j); ir({}); frase('Con paracetamol la T baja; la Fig. 44.5 solo muestra una asociación (no una causa) entre T inicial baja y más mortalidad. · p. 71', 'ficha · p. 70-71'); return; }
     ir({ paso: 3 }); frase('El CO₂ espirado de Marcial sube a 68 mmHg con T 37,2 °C: el primer signo es el CO₂, la fiebre llega después. · p. 49', 'ficha · p. 49; cifras ilustrativas');
   }));
 }
@@ -123,7 +123,7 @@ function pagina() {
   const dock = $('dock');
   topeApi = crearTope({ monitor: $('sello-zona'), dock, cita });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} ${org('ficha')}`;
-  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Dial del hipotálamo: aguja dorada = punto de ajuste; marca roja y termómetro = temperatura real. Escala 34-42 °C: el tope 42 °C es del dibujo (ilustrativo).</p>';
+  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Dial del hipotálamo: aguja dorada = punto de ajuste; marca roja y termómetro = temperatura real. Escala 34-42 °C: el tope 42 °C es el de la citotoxicidad (Libro Azul, sección III, p. 30).</p>';
   $('paso-caja').innerHTML = '<h3 id="pc-t"></h3><p id="pc-x"></p><p id="pc-c"></p><div class="fila-g"><button type="button" class="b prim" id="pc-sig">Siguiente paso</button></div>';
   $('fuentes').innerHTML = FUENTES.map(([t, o]) => `<li>${t} ${org(o)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([k, t]) => `<p class="para"><b>${k}.</b> ${t}</p>`).join('');

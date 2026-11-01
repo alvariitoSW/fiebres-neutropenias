@@ -2,7 +2,7 @@
 .zona-escena { position: relative; }
 #ter-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
 #ter-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
-#ter-svg .min { fill: var(--text-muted); } #ter-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; } #ter-svg .pq { font-size: 8.8px; fill: var(--text-muted); }
+#ter-svg .min { fill: var(--text-muted); } #ter-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; } #ter-svg .pq { font-size: 9.9px; fill: var(--text-muted); }
 #ter-svg .guion { stroke: var(--text-muted); stroke-dasharray: 3 3; fill: none; }
 #ter-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
 #ter-svg .mueve { animation: mueve 2.6s ease-in-out infinite; }
@@ -56,7 +56,7 @@
 .mando select { min-height: 36px; font: 600 .74rem/1.2 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; width: 100%; }
 .mando .fila.dos > * { flex: 1 1 0; } #m-trat { min-height: 36px; text-align: left; font: 700 .72rem/1.2 var(--sans); }
 .mon-pie { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
-#ter-svg text { font-size: 9.4px; } #ter-svg .pq { font-size: 9.2px; } #ter-svg .rot { font-size: 10.5px; }
+#ter-svg text { font-size: 9.4px; } #ter-svg .pq { font-size: 9.9px; } #ter-svg .rot { font-size: 10.5px; }
 #ter-svg .dial { fill: none; stroke: var(--line); stroke-width: 5; stroke-linecap: round; } #ter-svg .aguja { stroke: var(--oro); stroke-width: 3; stroke-linecap: round; } #ter-svg .eje { fill: var(--oro); }
 #ter-svg .merc { fill: var(--accent-red); } #ter-svg .pq.oro { fill: var(--oro); } #ter-svg .pq.rj { fill: var(--accent-red); }
 #monitor small { font: 500 .6rem/1 var(--sans); color: var(--text-muted); margin-left: 2px; }
@@ -68,3 +68,5 @@
 #sello-zona .tope-mon { height: auto; }
 .juega-on .lt { display: none; } #mando-juega .fila > * { min-width: 0; } #mando-juega button { font: 700 .7rem/1.1 var(--sans); } #mando-juega select { min-height: 36px; font: 600 .72rem/1.1 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; }
 .juega-on #dock-panel .mando { padding: 2px 0; }
+
+#sello-zona .tope-sello:not(:first-child) { display: none; } #sello-zona .tope-linea { display: none; }

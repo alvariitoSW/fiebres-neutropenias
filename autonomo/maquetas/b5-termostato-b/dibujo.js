@@ -37,7 +37,7 @@ export function escena(l, capas, foco, cerrado) {
   o += `<g id="llama"><line class="aguja" x1="${cx}" y1="${cy}" x2="${ax.toFixed(1)}" y2="${ay.toFixed(1)}"/><circle class="eje" cx="${cx}" cy="${cy}" r="3"/></g>`;
   o += `<path class="real" d="M${rx.toFixed(1)} ${ry.toFixed(1)} L${(rx + (tx - rx) * 0.4 - (ty - ry) * 0.25).toFixed(1)} ${(ry + (ty - ry) * 0.4 + (tx - rx) * 0.25).toFixed(1)} L${(rx + (tx - rx) * 0.4 + (ty - ry) * 0.25).toFixed(1)} ${(ry + (ty - ry) * 0.4 - (tx - rx) * 0.25).toFixed(1)} z"/>`;
   o += `<rect class="escala" x="240" y="48" width="7" height="52" rx="3.5"/><rect class="merc" x="241" y="${100 - merc}" width="5" height="${merc}" rx="2.5"/><text class="pq" x="243" y="112" text-anchor="middle">real</text>`;
-  o += `<text class="pq oro" x="${cx}" y="102" text-anchor="middle">ajuste ${fmt(l.pt)}</text><text class="pq rj" x="${cx}" y="113" text-anchor="middle">real ${fmt(l.T)}</text><text class="pq" x="${cx}" y="124" text-anchor="middle">real − ajuste ${dif > 0 ? '+' : ''}${fmt(dif)}</text>`;
+  o += `<text class="pq oro" x="${cx}" y="99" text-anchor="middle">ajuste ${fmt(l.pt)}</text><text class="pq rj" x="${cx}" y="111.5" text-anchor="middle">real ${fmt(l.T)}</text><text class="pq" x="${cx}" y="124" text-anchor="middle">real − ajuste ${dif > 0 ? '+' : ''}${fmt(dif)}</text>`;
   o += `<text class="pq" x="290" y="136" text-anchor="middle">${l.clon ? 'clonus ocular' : ''}</text>${ring('cer', 290, 76, 66)}</g>`;
   // ---- lupa retículo ----
   o += `<g id="c-ret"${on('mus')}><circle class="lupa" cx="290" cy="238" r="58"/><line class="guion" x1="174" y1="210" x2="236" y2="226"/>`;

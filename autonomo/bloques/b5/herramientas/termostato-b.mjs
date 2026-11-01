@@ -16,7 +16,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   const p = await ctx.newPage();
   p.on('console', (m) => m.type() === 'error' && errores.push(m.text())); p.on('response', (r) => r.status() >= 400 && errores.push('HTTP ' + r.status() + ' ' + r.url())); p.on('pageerror', (e) => errores.push('pageerror ' + e.message));
   await p.goto('http://127.0.0.1:8163/autonomo/maquetas/b5-termostato-b.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(700);
-  const desb = async (t) => { const d = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `${ANCHO}: desborde ${d}px en ${t}`); };
+  const desb = async (t) => { const d = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); let q = ''; if (d > 0) q = await p.evaluate(() => [...document.querySelectorAll('body *')].filter((e) => e.scrollWidth > e.clientWidth + 1 && e.clientWidth > 0 || e.getBoundingClientRect().right > innerWidth + 1 && !(e.closest('details') && !e.closest('details').open) && getComputedStyle(e).display !== 'none').slice(0, 3).map((e) => e.tagName + '#' + e.id + '.' + e.className + ':' + Math.round(e.getBoundingClientRect().right)).join(' ')); ok(d <= 0, `${ANCHO}: desborde ${d}px en ${t} ${q}`); };
   const L = () => p.evaluate(() => { const l = window.__ter.leer(); return `T ${l.T} pt ${l.pt} FC ${l.fc} CO2 ${l.co2 ?? '-'} CK ${l.ck ?? '-'} esc${l.esc} sud${l.sud} rig${l.rig}${l.pa ? ' PA ' + l.pa : ''}`; });
   const tp = () => p.evaluate(() => window.__ter.topes().map((t) => t.c + ':' + t.n).sort().join(' '));
   const sellos = () => p.evaluate(() => [...document.querySelectorAll('.tope-sello')].filter((e) => !e.hidden).length);
