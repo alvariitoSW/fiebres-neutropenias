@@ -1,0 +1,29 @@
+# Profesor · rejuicio R8 del b3-cierre · 01/11/2026 · `auto/b3d-estudio` (3d39722, versión 20261101-100)
+Programas tal cual (0 px de desborde, 0 errores de consola): `p1-captura.mjs` y `a4b-frase-neumo.mjs` (neumotórax pulsación a pulsación), `a4b-mira-altura.mjs` (Mira de la 11), `lupa-toxicidad.mjs` (✅, 7 puntos del mando + tope), `m1-captura.mjs` (`subglotica` en 4 situaciones), `a4b-sbt-cifras.mjs` (monitor de `sbt-fracaso`), `m-pulmon-cifras.mjs` (`eulalia-ajustada` a FR 10/18/26). 8 capturas miradas en `/tmp/plan-socialista/b3-cierre/rejuicio/`. Solo se repuntúan las celdas que estaban por debajo de 8,75.
+
+| Ficha · criterio | Antes → ahora | Por qué |
+|---|---|---|
+| 1 · §7.5 | 8,5 → **8,75** | segundo Juega as1-g10 sobre `auto-peep-corregida`, con las cifras del monitor en la explicación |
+| 2 · §7.4 / §7.5 / Compruébalo | 8,5 / 8,5 / 8,5 → **8,75 / 9 / 8,75** | as2-c6 manda al mando de FR (8-35, tope cap. 27 p. 14) y el modelo responde como un asmático: FR 10 → 18 → 26 da PEEP oculta 1,6 → 4,6 → 7,9, pico 33,9 → 40,2, I:E 1:23 → 1:8 |
+| 5 · giro | 8,5 → **9** | snv-c3b: Elvira mejora y el giro es la FiO₂ 0,8 sostenida (p. 40); la trampa «nada, se mantiene igual» es la que elige quien no estudió |
+| 7 · §7.4 / Compruébalo | 8,5 / 8,5 → **8,75 / 8,75** | o2i-g2 abre `hipoxemia-60`: SaO₂ 89 %, CaO₂ ≈18 mL/dL (−9 %; la ficha −8 % con SaO₂ 90 %, y la guía lo dice), frente al −20 % de PaO₂ 45 |
+| 9 · §7.4 / §7.5 | 8,5 / 8 → **9 / 8,75** | lupa con mandos de FiO₂ y horas: el título clínico cambia (bajo el 60 %, traqueobronquitis 6-12 h, lesión 3-4 d, TOPE 4,5 d) y el mando de horas se apaga en el tope y se libera al bajar la FiO₂. Texto mínimo 9,5 px a 390 (8,7 a 360): el más pequeño del bloque |
+| 11 · §7.1 | 8,5 → **8,75** | Mira 1720 → 939 px (paso entero 1096; paneles 138 y 261 px) |
+| 15 · §7.5 | 8,5 → **9** | frase por pulsación con el monitor: 1,5 → 9 cmH₂O da PAM 84 → 74, gasto 4,5 → 3,1, SpO₂ 97 → 93; sello al 7.º toque; a 19,5 «sin pulso (AESP)» |
+| 15 · Compruébalo | 8,5 → 8,5 | baro-c4: enunciado (PAM 52) y texto del modelo («unas 7 pulsaciones… PAM 52») ya encajan con el monitor, pero la `nota` sigue diciendo «La PAM de 59 sale del monitor»: dos cifras en la misma pregunta |
+| 17 · §7.4 | 8,5 → **9** | `subglotica` (nvp-g8, nvp-g9): biofilm, colección sobre el balón, puerto a −20 cmH₂O, gotas que escurren |
+| 19 · §7.4 | 8,5 → 8,5 | sin modelo (derrame y antibióticos): ver abajo |
+| Repeticiones (18, 19, 20, 17, 1) | anotadas → **resueltas** | nvd-g2 (Fig. 29.3) ≠ nvd-e4/c1; dea-g7 (ATB 90 días) ≠ dea-e3 (antibiograma); sbt-g5 (FiO₂ 0,6) ≠ sbt-c1 (cinco criterios); nvp-g5 (biofilm) ≠ nvp-c2 (plan); as1-g6 (pronóstico) ≠ as1-c4 (plan). sbt-c5 = monitor (FR 34, Vt 173, FR/Vt 199) |
+
+**Nota mínima por ficha**: 1 8,75 · 2 8,75 · 5 8,75 · 7 8,75 · 9 8,75 · 11 8,75 · 15 8,5 · 17 8,75 · 19 8,5 (las otras 12, sin cambio, ≥ 8,75).
+**Veredicto**: ≥ 8 en todo, 21 de 21; **llegan a la meta 19 de 21** (faltan 15 y 19).
+
+## Las tres piezas
+- **P1 (corazón y neumotórax)**: 9. De un vistazo: corazón rojo empujado por el aire pleural (caja punteada), pulmón colapsado, mediastino desplazado, y la frase con PAM, gasto y SpO₂ a cada toque. Paciente posible: la caída es progresiva y acaba en AESP, no en cifras imposibles. Pega: en «El corazón de Herminia» a pleura 0 el rótulo «sin presión positiva» se repite cuatro veces (ruido).
+- **`subglotica`**: 9. Se entiende sin leer: tráquea ampliada con balón, secreciones encima, biofilm en la luz, puerto y gotas al pulmón; con aspiración la colección casi desaparece; balón a 8 abre hueco y el Vt espirado cae a 274; a 60 el mando se queda en 25 y aparece «mucosa isquémica» en rojo. Gaspar (67 a, 80 kg, PBW 68, Vt 410 = 6 mL/kg) es posible. Pega menor: la frase de entrada «y un poco baja por los pliegues» se lee torpe.
+- **Lupa de la toxicidad**: 8,75. La cascada de 4 electrones con su defensa al lado (SOD, glutatión, vit. E) y las barras radicales/defensas se leen de un vistazo; el tope (108 h) apaga el mando y la frase manda bajar la FiO₂. No es un paciente sino una célula: la clínica va en el título (capacidad vital ↓, traqueobronquitis). Texto a 9,5 px a 390 y 8,7 a 360, justo en el límite de «nada diminuto».
+
+## Lo que aún falta para 8,75 (barato primero)
+1. **Ficha 15 · Compruébalo** — `js/data/mayeutica/b3d-tubo-2.js`, pregunta `baro-c4`, campo `nota`: «La PAM de 59 sale del monitor del modelo (aire pleural de 10,5 cmH₂O)» → «La PAM de 52 sale del monitor del modelo (7 pulsaciones, aire pleural de 10,5 cmH₂O)». Una línea; con ella la 15 llega a 8,75 en todo.
+2. **Ficha 19 · §7.4** — con lo que hay no llega: el paso «Mira» (`js/modules/neumologia/visual-3d-g5c.js`, `neumo-nav-diagnostico`) es texto ordenado, no el mecanismo. La pieza más barata que lo sube: un estado **`derrame-paraneumonico`** del pulmón vivo que reutilice el espacio pleural, el tubo y el sello de agua que ya dibuja el neumotórax (`js/modules/libros/pulmon-vivo/neumotorax.js`): líquido en vez de aire, un chip con los datos del líquido (pH, glucosa, LDH, pus: Tabla 29.5, p. 45) que encienda la categoría y diga «tubo» o «no tubo», y un mando «días con tubo» que a las 24-48 h sin mejoría muestre el loculado («drenaje ineficaz», p. 46). Explicaría dea-g1…g6 y el paso del derrame de Casimiro. La antibioterapia (Tabla 29.6, 7 días) es contenido de consulta: texto y preguntas bastan. Si no se construye, la 19 se queda en 8,5 y va al parte.
+3. **Parte, sin nota**: nvp-g8 y nvp-c2 son los dos «plan de prevención con dos errores» y los dos usan la clorhexidina de trampa (`b3d-nav.js`): cambiar en nvp-g8 la frase de la clorhexidina por otra del paquete (Tabla 29.2, p. 37; p. ej. «profilaxis de úlcera de estrés solo si está ventilado» mal puesta) deja los dos planes distintos. Y en la lupa de la toxicidad, subir el texto mínimo a ≥10 px a 390 (`js/modules/libros/capilar-vivo-neutrofilo.js`, modo toxicidad).
