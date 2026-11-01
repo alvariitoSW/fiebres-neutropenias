@@ -1,7 +1,7 @@
 import json, wave, sys, numpy as np
-sys.path.insert(0,'..'); from tts import say
+sys.path.insert(0,'..'); from tts2 import say
 FPS=25; SR=22050
-V={'tra':('es+m1',178,45,55),'hac':('es+m7',175,25,40),'edu':('es+f2',180,65,60)}
+V={'tra':('es_ES-davefx-medium',0,1.0,1.0),'hac':('es_ES-sharvard-medium',0,0.92,1.08),'edu':('es_ES-sharvard-medium',1,1.0,1.0)}
 G=[
  ('tra','Estado del plan Marino cien por cien, a treinta de octubre. Son ciento cincuenta y cinco fichas en ocho bloques. Veintinueve ya están en la app, y otras veintiséis, construidas a falta de fusionar.',0.8),
  ('tra','Los bloques uno y dos están hechos. El corazón del bloque tres ya pasó al profesor y al auditor, y espera en la PR cincuenta y uno. El pulmón con respirador y el bloque cuatro arrancan en cuanto entre.',0.8),

@@ -1,9 +1,7 @@
 import json, wave, numpy as np
-from tts import say
+from tts2 import say
 FPS=25
-V={ # voz, velocidad, tono, rango
- 'tra':('es+m1',180,45,55),'int':('es+m3',185,35,50),'hac':('es+m7',175,25,40),
- 'edu':('es+f2',180,65,60),'jus':('es+f4',172,50,40),'cie':('es+f3',185,70,65),'ext':('es+m2',185,50,60)}
+V={'tra':('es_ES-davefx-medium',0,1.0,1.0),'int':('es_ES-sharvard-medium',0,1.0,1.0),'hac':('es_ES-sharvard-medium',0,0.92,1.08),'edu':('es_ES-sharvard-medium',1,1.0,1.0),'jus':('es_ES-sharvard-medium',1,0.93,1.05),'cie':('es_AR-daniela-high',0,1.0,1.0),'ext':('es_MX-ald-medium',0,1.0,1.0)}
 G=[ # (quién, texto, pausa después)
  ('tra','Se abre la sesión. Soy el ministro de Transportes: llevo la bitácora y el calendario. El gobernador pide mucho y rápido, y lo lee todo en el móvil. Me obliga a ser breve.',0.7),
  ('int','Ministro del Interior. Dirijo las obras con siete agentes. El gobernador dice «aplica todo», y confía. Mi única pesadilla es la PR cincuenta y uno.',0.7),

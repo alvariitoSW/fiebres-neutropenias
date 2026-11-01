@@ -1,7 +1,7 @@
 import json, wave, sys, numpy as np
-sys.path.insert(0,'..'); from tts import say
+sys.path.insert(0,'..'); from tts2 import say
 FPS=25; SR=22050; rng=np.random.default_rng(7)
-V={'tra':('es+m1',174,45,55),'p1':('es+m5',180,50,60),'p2':('es+f1',182,60,60)}
+V={'tra':('es_ES-davefx-medium',0,1.0,1.0),'p1':('es_ES-sharvard-medium',0,1.07,0.95),'p2':('es_MX-claude-high',0,1.0,0.95)}
 LLEGA=9.6  # segundos de entrada (pasillo + sala)
 G=[ # (quién, plano, hablado, subtítulo, pausa)
  ('tra','atril','Buenas tardes, estimados ciudadanos y ciudadanas. Comparezco ante ustedes y ante los medios de comunicación para comunicarles los acuerdos del Consejo de Ministros.',None,0.5),
