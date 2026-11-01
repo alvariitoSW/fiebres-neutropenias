@@ -20,12 +20,12 @@
 //                                                      jueces-formula.mjs) en sus 5 modelos: capilar, río y mar,
 //                                                      glomérulo, filtro y Doppler del eco; también con --forma, y
 //                                                      con --modelo capilar-vivo o agua-viva solo en ese modelo
-//   node autonomo/jueces.mjs --geometria [--dibujo hoy]
+//   node autonomo/jueces.mjs --geometria [--dibujo hoy]   (por defecto el dibujo nuevo; también corre con --eco)
 //                                                    + juez de geometría de la eco (B-045; js/modules/eco/pruebas/
 //                                                      geometria-juez.mjs): contornos sin cruces y proporciones en el
 //                                                      rango de la guía, por forma y mando; guarda el A4C de cada extremo
-//                                                      en autonomo/bloques/mv-eco/geometria-capturas/. NO va en la suite
-//                                                      por defecto: con el dibujo de hoy da ROJO (esperado hasta el paso 4)
+//                                                      en autonomo/bloques/mv-eco/geometria-capturas/. Va con --eco (no en la
+//                                                      suite por defecto: lanza Chrome); con --dibujo hoy da ROJO
 //   node autonomo/jueces.mjs --sin-navegador         solo lo estático (rápido)
 // Se pueden repetir --atlas, --ficha y --modelo. Sale con código 1 si algún juez falla.
 //
@@ -299,11 +299,11 @@ if (pide('--eco')) {
     }
 }
 
-// ---- 6. Geometría de la eco (opcional; con el dibujo de hoy da rojo a propósito)
-if (pide('--geometria')) {
+// ---- 6. Geometría de la eco (con --geometria o --eco; con --dibujo hoy da rojo a propósito)
+if (pide('--geometria') || pide('--eco')) {
     try {
         const { juzgarGeometria, capturaSVG, gDe } = await import('../js/modules/eco/pruebas/geometria-juez.mjs');
-        const dibujo = valores('--dibujo')[0] || 'hoy';
+        const dibujo = valores('--dibujo')[0] || 'nuevo';
         const { filas, resumen } = juzgarGeometria({ dibujo });
         for (const f of filas) (f.ok ? ok : mal)(`Geometría ${f.forma}:${f.g} ${f.vista} ${f.fase}: ${f.motivo}${f.ok ? '' : ' · ' + f.cifras}`);
         console.log(`   geometría (${dibujo}): ${resumen.fallos} fallos de ${resumen.total} filas`);
