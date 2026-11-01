@@ -7,7 +7,7 @@ import { seguirFrase } from '../../../core/frase-vista.js';
 import { IMG_VIA } from '../../../data/hepatocito-vivo-data.js';
 import { cargarMotion, sinMovimiento } from '../../../core/motion.js';
 import { PDF, PDF_TX, FIG_VIA, VIAS, viaDe, TX, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe, CRECERA, UBICACION, FLUIDOS, TRR_FICHA } from '../../../data/hepatocito-vivo-data.js';
-import { nuevo, leer, topes, fmt, vitales, glutDe, funcDe, p450 } from './modelo.js';
+import { nuevo, leer, topes, fmt, vitales, phVista, glutDe, funcDe, p450 } from './modelo.js';
 import { escena, leyenda, opNodo } from './dibujo.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { cara, WH_TXT } from './cara.js';
@@ -63,14 +63,14 @@ function pintarTx() {
   $('leyenda').hidden = !u || pr; $('b-replay').parentElement.hidden = !u || pr;
   R.querySelectorAll('#hpv-modos [data-modo]').forEach((b) => { if (['apuesta', 'error', 'hilario', 'caso'].includes(b.dataset.modo)) b.hidden = !u; });
   const mostrar = (id, on) => { $(id).parentElement.hidden = !on; };
-  mostrar('mon-par', par); mostrar('mon-alt', par); mostrar('mon-ph', alc); mostrar('mon-ga', alc); mostrar('mon-lact', alc);
+  mostrar('mon-par', par); mostrar('mon-alt', par); mostrar('mon-ph', alc); mostrar('mon-ga', alc); mostrar('mon-lact', alc); mostrar('mon-func', par);
   for (const id of ['mon-glut', 'mon-met', 'mon-enc']) mostrar(id, par);
   $('mon-reloj').hidden = !par; $('mon-carril').parentElement.hidden = !u;
   $('mon-glut').textContent = `${s.glut} %`; $('mon-met').textContent = s.glut < TX.glutDano ? 'se acumula' : 'neutralizado';
   const wh = leer(s).wh; $('mon-enc').textContent = wh ? `West Haven ${wh}` : 'no'; 
   $('mon-par').textContent = `${s.par} µg/mL`; $('mon-reloj').innerHTML = `Reloj <b>${s.h} h</b>`;
   $('mon-alt').textContent = s.lab?.alt ?? '—'; $('mon-inr').textContent = s.lab?.inr ?? '—';
-  $('mon-ph').textContent = coma(s.ph) + (alc && s.hd ? ' ↑ con diálisis' : ''); $('mon-ga').textContent = s.ga ?? '—'; $('mon-go').textContent = s.go ?? '—'; $('mon-lact').textContent = s.lact ?? '—';
+  $('mon-ph').textContent = coma(phVista(s)) + (alc && s.hd ? ' ↑ con diálisis (ilustrativo)' : ''); const il = (x, d) => (x ?? (alc ? `${d} (ilustr.)` : '—')); $('mon-ga').textContent = il(s.ga, 22); $('mon-go').textContent = il(s.go, 30); $('mon-lact').textContent = il(s.lact, 3); $('mon-func').textContent = `${s.func} %`;
   if (par) { $('o-dosis').textContent = s.dosis; $('r-dosis').value = s.dosis; $('o-h').textContent = s.h; $('r-h').value = s.h; $('o-par').textContent = s.par; $('r-par').value = s.par; $('b-nac').setAttribute('aria-pressed', String(!!s.nac)); $('b-nac').textContent = `NAC · ${s.nac ? 'en marcha' : 'sin NAC'}`; $('b-beb').setAttribute('aria-pressed', String(!!s.bebedor)); $('b-beb').textContent = `Alcohol crónico · ${s.bebedor ? 'sí' : 'no'}`; $('b-hdp').setAttribute('aria-pressed', String(!!s.hd)); $('b-hdp').textContent = `Hemodiálisis · ${s.hd ? 'sí' : 'no'}`; }
   if (alc) { $('o-ph').textContent = coma(s.ph); $('r-ph').value = s.ph; R.querySelectorAll('[data-alc]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.alc === s.alc))); for (const [id, k, t] of [['b-fomep', 'fomep', 'Fomepizol'], ['b-coad', 'coad', s.alc === 'met' ? 'Ácido folínico' : 'Tiamina + piridoxina'], ['b-hd', 'hd', 'Hemodiálisis']]) { $(id).setAttribute('aria-pressed', String(!!s[k])); $(id).textContent = `${t} · ${s[k] ? 'sí' : 'no'}`; } }
   if (viaPintada !== v) { // título, subtítulo con su cita y figura de la vía: solo al cambiar de vía
@@ -110,7 +110,7 @@ function tx(a, v) {
   if (a === 'fomep' || a === 'coad' || a === 'hd') { s[a] = s[a] ? 0 : 1; frase(a === 'fomep' ? (s.fomep ? `Fomepizol: bloquea la alcohol deshidrogenasa y deja de fabricarse el ${s.alc === 'met' ? 'ácido fórmico' : 'ácido glicólico y oxálico'} (p. 27); mejor en las primeras 4 h (p. 28). El ácido ya formado sigue ahí: ${s.ph < TX.phDialisis ? 'con este pH hace falta diálisis' : 'vigila el pH'} (inferencia del modelo).` : 'Sin fomepizol: la enzima sigue fabricando ácido.') : a === 'coad' ? (s.coad ? (s.alc === 'met' ? 'Ácido folínico: convierte el ácido fórmico en metabolitos no tóxicos (p. 29); es el coadyuvante del metanol, en lugar de la tiamina y la piridoxina.' : 'Tiamina y piridoxina: desvían el ácido glioxílico hacia productos no tóxicos (p. 28); no sustituyen al fomepizol ni a la diálisis.') : 'Sin coadyuvantes.') : (s.hd ? (s.via === 'paracetamol' ? 'Hemodiálisis: con paracetamol >900 µg/mL y encefalopatía quita el fármaco de la sangre, junto con la NAC (a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina). No devuelve hepatocitos.' : `Hemodiálisis: quita el ${s.alc === 'met' ? 'metanol' : 'etilenglicol'} y sus ácidos; el pH tiende a subir y el sello de «diálisis ya» queda en pausa mientras dura (cuánto sube: ilustrativo).`) : 'Sin hemodiálisis.'), 'ficha · p. 27-29; efecto sobre el pH: ilustrativo'); }
 }
 function ponerPreset(clave, sinGuia, guiaClave) {
-  preset = clave; s = nuevo(PRESETS[clave].s); s.func0 = s.func; if (s.glut0 === undefined) s.glut0 = s.glut; oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(guiaClave || clave);
+  preset = clave; s = nuevo(PRESETS[clave].s); s.func0 = s.func; if (s.glut0 === undefined) s.glut0 = s.glut; oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · ' + (PRESETS[clave].cita ?? (PRESETS[clave].via === 'alcoholes' ? 'p. 26-29' : 'p. 6-8'))); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(guiaClave || clave);
 }
 async function replay() {
   const nodos = [...R.querySelectorAll('#hpv-svg [data-nodo]')];
@@ -157,7 +157,7 @@ function caso(i, caja) {
 // ---- Montaje (una vez) ----
 function montar() {
   R.__orig = { eyebrow: R.querySelector('.hpv-eyebrow').textContent, titulo: R.querySelector('.hpv-titulo').textContent, aria: $('svg').getAttribute('aria-label'), idea: '' };
-  $('mon-tx').insertAdjacentHTML('afterbegin', '<span>Glutatión <b id="hpv-mon-glut" style="font-size:1.25em;color:var(--accent-yellow)"></b></span><span>Metabolito tóxico <b id="hpv-mon-met"></b></span><span>Encefalopatía <b id="hpv-mon-enc"></b> <i class="chip-ilus">ilustrativo</i></span>');
+  $('mon-tx').insertAdjacentHTML('afterbegin', '<span>Glutatión <b id="hpv-mon-glut" style="font-size:1.25em;color:var(--accent-yellow)"></b></span><span>Hepatocitos vivos <b id="hpv-mon-func"></b></span><span>Metabolito tóxico <b id="hpv-mon-met"></b></span><span>Encefalopatía <b id="hpv-mon-enc"></b> <i class="chip-ilus">ilustrativo</i></span>');
   const seg = (id, attr, vals) => `<div class="fila" id="hpv-${id}">${vals.map(([v, t]) => `<button type="button" data-${attr}="${v}" aria-pressed="false">${t}</button>`).join('')}</div>`;
   $('dock-panel').innerHTML = `
    <div class="mando" id="hpv-m-via"><b class="dock-nota">Vía del hepatocito</b><div class="fila">${VIAS.filter((v) => v.on).map((v) => `<button type="button" data-via-sel="${v.id}" aria-pressed="false">${v.nombre}</button>`).join('')}</div></div>

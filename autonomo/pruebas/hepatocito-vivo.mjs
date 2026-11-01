@@ -106,10 +106,10 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
     const gap = (a, b) => Math.max(Math.max(a.x - (b.x + b.w), b.x - (a.x + a.w)), Math.max(a.y - (b.y + b.h), b.y - (a.y + a.h)));
     const o = []; for (let i = 0; i < T.length; i++) for (let j = i + 1; j < T.length; j++) if (gap(T[i], T[j]) < -0.5) o.push(`«${T[i].t}» × «${T[j].t}»`);
     const rect = (q) => { const e = sv.querySelector(q); return e ? e.getBBox() : null; };
-    const c = sv.querySelector('.astro'), cx = +c.getAttribute('cx'), cy = +c.getAttribute('cy'), r = +c.getAttribute('r');
+    const c = sv.querySelector('.astro'), cx = c ? +c.getAttribute('cx') : -99, cy = c ? +c.getAttribute('cy') : -99, r = c ? +c.getAttribute('r') : 0;
     for (const t of T) { const dx = Math.max(t.x - cx, 0, cx - (t.x + t.w)), dy = Math.max(t.y - cy, 0, cy - (t.y + t.h)); if (t.t !== '?' && Math.hypot(dx, dy) < r + 0.5) o.push(`«${t.t}» toca el astrocito`); }
-    const pu = sv.querySelector('.puente'), L = pu.getTotalLength();
-    for (let k = 0; k <= 60; k++) { const q = pu.getPointAtLength(L * k / 60); for (const t of T) if (q.x > t.x - 1 && q.x < t.x + t.w + 1 && q.y > t.y - 1 && q.y < t.y + t.h + 1) { o.push(`línea del TIPS cruza «${t.t}»`); break; } }
+    const pu = sv.querySelector('.puente'), L = pu ? pu.getTotalLength() : 0;
+    for (let k = 0; pu && k <= 60; k++) { const q = pu.getPointAtLength(L * k / 60); for (const t of T) if (q.x > t.x - 1 && q.x < t.x + t.w + 1 && q.y > t.y - 1 && q.y < t.y + t.h + 1) { o.push(`línea del TIPS cruza «${t.t}»`); break; } }
     const m = T.find((x) => x.t === 'Mitocondria'), s = T.find((x) => x.t === 'sinusoide'); const gm = m && s ? Math.round(gap(m, s) * 10) / 10 : null;
     return { n: T.length, o: [...new Set(o)], gapMitoSinus: gm };
   });

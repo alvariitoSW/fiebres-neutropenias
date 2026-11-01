@@ -25,6 +25,8 @@ export function nodosVia(s) {
   if (s.via === 'alcoholes') return [{ op: 1, tag: s.fomep ? 'bloqueada' : '', off: !!s.fomep }, { op: s.fomep ? 0.35 : 1, tag: '' }, { op: s.fomep ? 0.35 : 1, tag: s.coad ? 'desvío' : '' }, { op: s.fomep ? 0.35 : 1, tag: '' }];
   return [];
 }
+// pH que se ve: con la diálisis en marcha sube (sentido de la ficha p. 28; cuánto, ilustrativo). s.ph no cambia.
+export const phVista = (s) => (s.via === 'alcoholes' && s.hd ? +Math.min(7.4, s.ph + 0.15).toFixed(2) : s.ph);
 export const nombresVia = (s) => (s.via === 'alcoholes' && s.alc === 'met' ? viaDe('alcoholes').nodosMet : viaDe(s.via).nodos) || [];
 export function amonio(s, conCvvh = s.cvvh) {
   const p = FIG.prod[s.prod] * (1 - FIG.lactPorDep * Math.min(s.dep, FIG.lactMaxDep)) * (s.rifa ? FIG.rifa : 1);
