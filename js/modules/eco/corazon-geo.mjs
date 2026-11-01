@@ -1024,8 +1024,8 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   // sinFuente e ilustrativo, hasta 112 mm (techo de un VD de paciente posible: ápex que alcanza o pasa el del VI)
   // Con VD/VI de volumen >1,3 el ápex del VD sube hasta el nivel del ápex del VI (Mukherjee 2025 Fig. 4B-C, p. 172: «apical traction»,
   // el ápex del VD traccionado y cámaras derechas más grandes; que alcance el ápex del VI es ilustrativo); la transición 1,3→1,8 es ilustrativa.
-  const Lvd0 = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, LE_REF * REF.lVdRel * Math.cbrt(vvd / REF.vVd)) : 0;
-  const Lvd = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, mix(Lvd0, Math.max(Lvd0, vi.Le), paso(1.3, 1.8, estado.vvd / estado.vvi))) : vi.Le * REF.lVdRel;
+  const Lvd0 = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, LE_REF * REF.lVdRel * Math.cbrt(clamp(estado.vvdTd ?? vvd, LIMITES.vd[0], LIMITES.vd[1]) / REF.vVd)) * (estado.vviTd ? vi.Le / geomVi(estado.vviTd, mio, 0, ajustes.esfericidad ?? null).Le : 1) : 0;   // el largo sale del volumen de telediástole del VD y sigue al VI en el latido (como el de siempre: nunca pasa el ápex del VI)
+  const Lvd = ajustes.vdLargoPropio ? Math.min(LVD_TOPE_ILUSTRATIVO, mix(Lvd0, Math.max(Lvd0, vi.Le), paso(1.3, 1.8, (estado.vvdTd ?? estado.vvd) / (estado.vviTd ?? estado.vvi)))) : vi.Le * REF.lVdRel;
   const ventana = memo((phi) => { const f = anguloNorm(phi); if (f < REF.phiA || f > REF.phiB) return 0; const a = (f - REF.phiA) / (REF.phiB - REF.phiA);
     return Math.pow(Math.sin(Math.PI * a), 0.7) * paso(0, 0.12, a) * paso(0, 0.12, 1 - a); });
   const gauss = (f, c, s) => Math.exp(-Math.pow((anguloNorm(f) - c) / s, 2));

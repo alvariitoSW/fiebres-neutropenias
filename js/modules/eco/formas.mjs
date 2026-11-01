@@ -89,7 +89,7 @@ export function estadoGeo(s, extra = {}) {
 }
 
 // Tolerancia de la mezcla frente al estado mostrado
-export const TOLERANCIA = { volumen: 2, apertura: 0.2, septo: 0.15, activacion: 0.1, pliegue: 0.15, acortVd: 0.007 };   // acortVd: fracción del largo del VD (0,007 ≈ 0,5 mm de TAPSE); la curva del TAPSE no es lineal en vvd, hay que vigilarla
+export const TOLERANCIA = { volumen: 2, apertura: 0.12, septo: 0.15, activacion: 0.1, pliegue: 0.15, acortVd: 0.007 };   // acortVd: fracción del largo del VD (0,007 ≈ 0,5 mm de TAPSE); la curva del TAPSE no es lineal en vvd, hay que vigilarla
 const VOLS = ['vvi', 'vvd', 'vai', 'vad'];
 
 // Valor de una muestra del latido en el instante t, interpolando entre las dos muestras vecinas (cada 2 ms)
