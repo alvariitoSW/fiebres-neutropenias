@@ -367,10 +367,10 @@ export const MAYEUTICA_RECEPTOR = {
             pregunta: { id: 'op-nat-7', tipo: 'test', fuente: 'mt-bzd-dx',
               enunciado: 'El cribado de orina sale negativo para benzodiacepinas. Toma lorazepam a diario. ¿Qué concluyes?',
               opciones: [
-                { t: 'No excluye el lorazepam: el cribado no lo detecta', ok: true },
-                { t: 'Que no toma benzodiacepinas, así que el estupor es solo por la oxicodona', porque: 'El lorazepam no se detecta en el cribado (p. 9), y ella lo toma a diario. Olvidarlo te haría pasar por alto una dependencia que cambia el manejo.' },
+                { t: 'No excluye el lorazepam: el cribado puede pasarlo por alto', ok: true },
+                { t: 'Que no toma benzodiacepinas, así que el estupor es solo por la oxicodona', porque: 'El cribado puede pasar por alto el lorazepam (p. 9), y ella lo toma a diario. Olvidarlo te haría pasar por alto una dependencia que cambia el manejo.' },
                 { t: 'Que hay que repetir el cribado hasta que dé positivo para decidir el flumazenil', porque: 'Un cribado negativo no cambia la decisión: sigue habiendo causa no aclarada y dependencia crónica, y repetirlo no cambia lo que ya has hecho (p. 9-10; la conducta es razonamiento propio).' }],
-              explicacion: 'El lorazepam <span class="hl-rojo">no se detecta</span> en el cribado de orina, así que un resultado negativo no descarta la benzodiacepina (' + pdf(9) + ').' } },
+              explicacion: 'El cribado de orina <span class="hl-rojo">puede pasar por alto</span> agentes comunes como el lorazepam, así que un resultado negativo no descarta la benzodiacepina (' + pdf(9) + ').' } },
           { momento: 'Hora 1 · sin perfusión', datos: { FR: '7/min', Consciencia: 'vuelve a dormirse' }, nuevo: ['FR', 'Consciencia'],
             pregunta: { id: 'op-nat-5', tipo: 'test', fuente: 'mt-nal-nasal',
               enunciado: 'Nadie puso la perfusión y a la hora Natividad vuelve a dormirse con 7 rpm. ¿Por qué?',

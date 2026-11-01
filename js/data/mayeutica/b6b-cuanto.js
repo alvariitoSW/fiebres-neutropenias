@@ -547,7 +547,7 @@ export const MAYEUTICA_CUANTO = {
                 { t: 'Su vecino, ferritina 320 y Hb 9: hierro también.', mal: true,
                   c: 'Con ferritina >100 el déficit es <span class="hl-rojo">improbable</span>; el libro no da hierro al crítico sin evidencia de déficit tisular (p. 13).' },
                 { t: '25-OHD de 22: déficit grave, 150.000 UI IM.' },
-                { t: 'Selenio de 80 µg/L (<100): selenito IV, máximo 225 µg/día.' }],
+                { t: 'Selenio de 80 µg/L (<100): menor actividad de glutatión peroxidasa; si se repone, selenito IV con máximo 225 µg/día.' }],
               explicacion: 'Ferritina y hierro (' + pdf(13) + '); vitamina D (' + pdf(12) + '); selenio, <100 µg/L menos actividad y máximo 225 µg/día (' + pdf(13) + ').' } },
         ],
         lleva: [
