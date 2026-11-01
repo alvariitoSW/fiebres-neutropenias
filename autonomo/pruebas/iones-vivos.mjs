@@ -182,6 +182,25 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
     await desb('ficha ' + f); await p.evaluate(() => document.getElementById('iov-volver').click()); await p.waitForTimeout(600);
     ok(await p.evaluate((f) => !!document.getElementById(f)?.offsetParent, f), `ficha ${f}: «← VOLVER» vuelve a la ficha`);
   }
+  // ---- Estados con nombre (abrirEstado) y acople Mg→K ----
+  console.log('-- Estados con nombre');
+  const est = async (c) => { await p.evaluate((c) => window.__iones.abrirEstado(c), c); await p.waitForTimeout(150); };
+  const clk1h = async () => { const k0 = (await L()).k; await p.evaluate(() => { window.__iones.e.rate = 20; window.__iones.e.via = 'central'; window.__iones.hacer('clk'); }); return +((await L()).k - k0).toFixed(2); };
+  const frs = () => p.evaluate(() => document.getElementById('iov-frase-txt').textContent);
+  const R6 = {};
+  for (const c of ['mg-bajo', 'reponer-mg', 'hipermg', 'transfusion', 'realimentar', 'alcalosis-resp']) { await est(c); await desb('estado ' + c); R6[c] = await L(); ok((await frs()).length > 20, 'estado sin frase: ' + c); console.log(` ${c}: K ${R6[c].k} Mg ${R6[c].mg} PO4 ${R6[c].po4} Ca ${R6[c].caIon} topes[${await tp()}]`); }
+  await est('mg-bajo'); const dBajo = await clk1h(); const fBajo = await frs(); await est('reponer-mg'); const dOk = await clk1h();
+  console.log(` ClK 20 mEq × 1 h: ΔK con Mg bajo ${dBajo}, con Mg repuesto ${dOk}`); ok(dBajo < dOk * 0.85 && dOk > 0, 'mg-bajo: el ClK sube el K tanto como con Mg normal'); ok(/Mg²⁺ bajo/.test(fBajo), 'mg-bajo: la frase viva no lo dice');
+  await est('mg-bajo'); await p.evaluate(() => { window.__iones.e.g = 6; for (let i = 0; i < 3; i++) { window.__iones.hacer('mg'); window.__iones.hacer('esp'); } }); const dMgDado = await clk1h(); console.log(` tras 3×6 g de MgSO4: ΔK ${dMgDado}`); ok(dMgDado > dBajo, 'tras dar MgSO4 el ClK no mejora');
+  ok(R6.hipermg.mg >= 10, 'hipermg: Mg < 10'); await est('hipermg'); ok((await tp()).includes('mg:aviso'), 'hipermg: sin aviso de bloqueo AV');
+  await est('normal'); const po7 = (await L()).po4; ok(R6['alcalosis-resp'].po4 < po7, `alcalosis-resp: fosfato ${R6['alcalosis-resp'].po4} no menor que ${po7}`);
+  ok(R6.transfusion.k > 4.5 && R6.realimentar.po4 < 1.8, 'transfusión o realimentar sin efecto');
+  console.log('-- Barrido de extremos del acople (Mg 0,5 / 1,1 / 1,45 / 3 × ClK 10/20/40 × 1-6 h)');
+  for (const mgv of [0.5, 1.1, 1.45, 3]) for (const r of [10, 20, 40]) {
+    await resetea('rufino'); const dMg = (mgv - 1.45) / 0.0035; await p.evaluate(([d, r]) => { window.__iones.set({ dMg: d }); window.__iones.e.rate = r; window.__iones.e.via = 'central'; }, [dMg, r]);
+    for (let h = 0; h < 6; h++) { await p.evaluate(() => window.__iones.hacer('clk')); const l = await L(); ok(Number.isFinite(l.k) && l.k >= 1.5 && l.k <= 8, `barrido Mg ${mgv} ClK ${r} h${h + 1}: K ${l.k}`); }
+    console.log(` Mg ${mgv} ClK ${r}: K final ${(await L()).k}`);
+  }
   ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id^="iov-"]')].map(e => e.id); return ids.length === new Set(ids).size; }), 'ids iov- sin duplicar');
   await ctx.close();
 }

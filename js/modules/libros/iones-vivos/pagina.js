@@ -3,7 +3,7 @@
 import { crearTope } from '../../../core/tope.js';
 import { seguirFrase } from '../../../core/frase-vista.js';
 import { leyendaParticulas } from '../../../core/particulas.js';
-import { PDF, PRESETS, FUENTES, NOTAS, PENDIENTE, CRECIMIENTO, P, fichaDe, IDEA } from '../../../data/iones-vivos-data.js';
+import { PDF, PRESETS, FUENTES, NOTAS, PENDIENTE, CRECIMIENTO, P, ESTADOS, fichaDe, IDEA } from '../../../data/iones-vivos-data.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { nuevo, leer, topes, fmt, clamp, avanzar, vitales, kVer, enParada } from './motor.js';
 import { escena, NOMBRE } from './dibujo.js';
@@ -63,7 +63,9 @@ function hacer(a, o = {}) {
   const L0 = leer(s);
   if (a === 'real') { s.ins = Math.min(4, s.ins + 1); ion = ion === 'ca' ? 'k' : ion; frase(`Entra glucosa con insulina: el K⁺ del suero pasa de ${kVer(L0.k)} a ${kVer(leer(s).k)} sin que el total cambie; el fosfato cae a ${fmt(leer(s).po4)} mg/dL y el Mg²⁺ a ${fmt(leer(s).mg)}.`, 'dirección: ficha · p. 21, 34, 49; cifras ilustrativas'); }
   if (a === 'furo') { s.dK = Math.max(-900, s.dK - P.kFurosemida); s.dMg -= P.mgFurosemida; frase('Furosemida: se van 20 mEq de K⁺ y 6 de Mg²⁺ por la orina; el total baja y el suero apenas lo nota.', 'dirección: ficha · p. 21, 23, 34; cantidades ilustrativas'); }
-  if (a === 'clk') { s.bombas.clk = { rate: e.rate }; avanzar(s, 60); delete s.bombas.clk; frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
+  if (a === 'clk') { s.bombas.clk = { rate: e.rate }; s.clkPerdido = 0; avanzar(s, 60); delete s.bombas.clk; const pf = s.clkPerdido;
+    if (pf >= 0.5) frase(`Con el Mg²⁺ bajo, ${fmt(pf)} de los ${e.rate} mEq de ClK se pierden por la orina: el K⁺ sube poco hasta reponer el Mg.`, 'ficha · p. 35; fracción perdida: ilustrativa');
+    else frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
   if (a === 'mg') { s.mgBolo += 8 * e.g; s.dMg += 4 * e.g; ion = 'mg'; frase(`${e.g} g de MgSO₄ = ${8 * e.g} mEq: la mitad se va por la orina; el suero sube rápido y baja a los 15 minutos.`, 'ficha · p. 36-38; subida: ilustrativa'); }
   if (a === 'esp') { const min = o.min ?? 15; avanzar(s, min); frase(min < 30 ? `Pasan ${min} minutos: el bolo de Mg²⁺ se reparte por el cuerpo y el calcio, a medias de los 30 min tras los que su efecto se acaba.` : `Pasan ${min} minutos: el efecto del calcio ya se ha disipado (30 min en el modelo) y el bolo de Mg²⁺ se ha repartido.`, 'Mg: ficha · p. 37-38; calcio: p. 46 (30-60 min en hiperK, p. 27); tiempos ilustrativos'); }
   if (a === 'ca') { s.caIV += o.mg ?? e.caMg; ion = 'ca'; frase(`${o.mg ?? e.caMg} mg de calcio elemental: el iónico sube de ${fmt(L0.caIon)} a ${fmt(leer(s).caIon)} mg/dL. En la hiperpotasemia (10 mL de gluconato = 90 mg, p. 27) el calcio protege el ECG y el K⁺ no baja: se deduce de la Tabla 36.3.`, 'gluconato 9 y cloruro 27 mg/mL: ficha · p. 27, 45; subida: ilustrativa'); }
@@ -79,7 +81,7 @@ function ponerIon(i) { ion = i; frase(FRASES[i], ORIG[i]); pintar(); }
 function ponerEstadoMay(est) {
   preset = est.preset; s = nuevo({ ...PRESETS[est.preset].s, ...(est.s || {}) }); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); foco = []; guiaApi.cerrar();
   for (const [a, n] of est.acc || []) { if (a === 'ca') s.caIV += n; else if (a === 'real') s.ins = Math.min(4, s.ins + 1); else if (a === 'esperar') avanzar(s, n); }
-  ion = est.ion; const pr = PRESETS[est.preset].txt; frase(pr || FRASES[ion], pr ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
+  ion = est.ion; const pr = PRESETS[est.preset].txt; frase(est.txt || pr || FRASES[ion], est.txt ? est.org : pr ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
 }
 function taparTodo(si) { oculto = si; pintar(); }
 function accion(a, n) { const i0 = ion; if (a === 'mg2') { e.g = 2; a = 'mg'; } if (a === 'clk40') { e.rate = 40; e.via = 'cava'; a = 'clk'; } hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
@@ -144,7 +146,9 @@ function bucle() {
 }
 // Estado: «rufino» (un paciente), «rufino:3» (su guía en el paso 3) o «normal:ca» (el paciente normal y ese ion). Vacío = el normal.
 export function abrirEstado(clave) {
-  const [p, x] = String(clave || '').split(':'); if (modo !== 'explorar') setModo('explorar', false);
+  if (modo !== 'explorar') setModo('explorar', false);
+  if (ESTADOS[clave]) { ponerEstadoMay(ESTADOS[clave]); bucle(); ajustarDock(); return; }
+  const [p, x] = String(clave || '').split(':');
   ponerPreset(PRESETS[p] ? p : 'normal', /^\d+$/.test(x || '') ? +x - 1 : 0);
   if (['k', 'mg', 'ca', 'p'].includes(x)) ponerIon(x);
   bucle(); ajustarDock();

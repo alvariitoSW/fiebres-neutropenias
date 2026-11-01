@@ -10,8 +10,10 @@ export const nuevo = (o = {}) => ({ dK: 0, dMg: 0, po4b: 3.5, alb: 4, ph: 7.4, u
 // Lo que cada dosis de insulina mueve del suero a la célula (ilustrativo; la fuente da la dirección): en unidades del suero y en partículas del dibujo
 export const flujos = (s) => ({ kShift: P.kInsulina * s.ins, mgShift: P.mgInsulina * s.ins, pShift: P.poInsulina * s.ins, partK: s.ins ? Math.min(6, 2 + 2 * s.ins) : 0, partP: 3 * s.ins });
 // Avanza el reloj `min` minutos: las bombas dan su dosis; el bolo de Mg baja con el tiempo (el libro dice que empieza a caer a los 15 min, p. 38, sin dar semivida: el ritmo es ilustrativo) y el efecto del calcio IV se acaba a los 30 min (p. 46; 30-60 min en hiperK, p. 27). Los tiempos son ilustrativos.
+// Acople Mg→K. Libro (E p. 35): «the hypokalemia that accompanies Mg depletion can be refractory to K+ replacement, and Mg replacement is necessary before the hypokalemia can be corrected». La fracción que se pierde es ilustrativa (P.clkPerdidaMax).
+export const fraccionPerdida = (mg) => P.clkPerdidaMax * clamp((P.mgUmbral - mg) / (P.mgUmbral - P.mgPiso), 0, 1);
 export function avanzar(s, min) {
-  if (s.bombas.clk) s.dK = Math.min(FIG.dKmax, s.dK + s.bombas.clk.rate * min / 60);
+  if (s.bombas.clk) { const dosis = s.bombas.clk.rate * min / 60, perd = dosis * fraccionPerdida(leer(s).mg); s.clkPerdido = perd; s.dK = Math.min(FIG.dKmax, s.dK + dosis - perd); }
   s.mgBolo *= 0.5 ** (min / 15); s.caIV = Math.max(0, s.caIV * (1 - min / 30)); s.t += min;
 }
 export const FIG = { dKmin: -900, dKmax: 300 };
@@ -19,7 +21,8 @@ export function leer(s) {
   const dKef = s.dK + P.kPorUnidad * s.units;   // los concentrados traen 2-3 mEq de K⁺ cada uno (E p. 25)
   const f = flujos(s), k = curvaK(dKef) - f.kShift - P.phK * (s.ph - 7.4);
   const mg = P.mgBase + P.mgPendiente * s.dMg - f.mgShift + s.mgBolo * 0.4 / P.mgPlasmaL;
-  const po4 = Math.max(0, s.po4b - f.pShift);
+  // Alcalosis respiratoria (E p. 49): «Respiratory alkalosis can increase intracellular pH... glucose and PO4 movement into cells»: solo con pH alto de origen respiratorio
+  const po4 = Math.max(0, s.po4b - f.pShift - (s.resp && s.ph > 7.4 ? P.poResp * (s.ph - 7.4) / 0.1 : 0));
   const unidos = CA.albumina * s.alb / 4;
   const ion = Math.max(0.8, CA.ion - P.phCa * (s.ph - 7.4) - P.citrato * s.units + P.caIVpor100 * s.caIV / 100);
   const total = CA.ion + CA.quelatos + unidos;             // el ensayo mide las tres fracciones: el pH y el citrato no lo mueven
