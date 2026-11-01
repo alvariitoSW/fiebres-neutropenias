@@ -15,6 +15,11 @@ import { MAYEUTICA_IC } from './b3b-ic.js';
 import { MAYEUTICA_SCA } from './b3b-sca.js';
 import { MAYEUTICA_DISECCION } from './b3b-diseccion.js';
 import { MAYEUTICA_TEP } from './b3b-tep.js';
+import { MAYEUTICA_RESPIRADOR } from './b3d-respirador.js';
+import { MAYEUTICA_PEEP_OCULTA } from './b3d-peep.js';
+import { MAYEUTICA_EPOC } from './b3d-epoc.js';
+import { MAYEUTICA_ASMA } from './b3d-asma.js';
+import { MAYEUTICA_VNI } from './b3d-vni.js';
 
 export const MAYEUTICA_B3 = {
     ...MAYEUTICA_SHOCK_1,
@@ -31,4 +36,9 @@ export const MAYEUTICA_B3 = {
     ...MAYEUTICA_SCA,
     ...MAYEUTICA_DISECCION,
     ...MAYEUTICA_TEP,
+    ...MAYEUTICA_RESPIRADOR,
+    ...MAYEUTICA_PEEP_OCULTA,
+    ...MAYEUTICA_EPOC,
+    ...MAYEUTICA_ASMA,
+    ...MAYEUTICA_VNI,
 };
