@@ -24,7 +24,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
      Ficha 7 · Colecistitis alitiásica (cap. 41, págs. 25-27)
      ================================================================================================= */
   'ma-colecistitis': {
-    entrada: 'Por qué se infecta la vesícula del crítico sin una sola piedra, por qué puede no doler, qué prueba pedir primero y qué antibiótico llega a la bilis.',
+    entrada: `La vesícula del crítico se infecta sin piedras y a menudo sin dolor: falta en un tercio, hemocultivos positivos en el 90 % (${pg(26)}); la ecografía tiene S 81 % y E 83 % (${pg(26)}).`,
     guia: [
       { id: 'cole-g1', corto: 'los mecanismos', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'ma-cole-mecanismo · ma-cole-riesgo',
         enunciado: 'Un paciente lleva seis días con nutrición parenteral tras un shock y desarrolla colecistitis sin ningún cálculo. Antes de mirar la ficha: ¿qué le pasa a su vesícula?',
@@ -77,7 +77,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
         enunciado: 'Un paciente con colecistitis alitiásica tiene hemocultivos positivos. ¿Qué espera encontrar y qué debe cubrir el antibiótico empírico?',
         opciones: [
           { t: 'Cocos grampositivos de la piel, y bastaría con vancomicina', porque: 'La vancomicina es de mala penetración en la bilis y no cubre gramnegativos: el paciente seguiría con el foco biliar sin tratar.' },
-          { t: 'Gramnegativos aerobios casi siempre: cubrir enterobacterias', ok: true },
+          { t: 'Gramnegativos aerobios: cubrir enterobacterias', ok: true },
           { t: 'Anaerobios en exclusiva, y basta con metronidazol', porque: 'El hallazgo casi constante son los gramnegativos aerobios. Un esquema solo contra anaerobios deja sin cubrir a los gérmenes que dan la bacteriemia.' }],
         explicacion: 'Los hemocultivos son positivos en el 90 % y se aíslan <span class="hl">bacilos gramnegativos aerobios casi siempre</span>; el empírico debe cubrir los gramnegativos entéricos' + pg(26, 27) + '.' },
       { id: 'cole-e2', corto: 'RM y TC', tipo: 'test', fuente: 'ma-cole-hida',
@@ -94,13 +94,13 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Cefepima y gentamicina juntas, que cubren gramnegativos', porque: 'Las dos son de mala penetración en la bilis. En una colecistitis, el foco quedaría con una concentración insuficiente.' },
           { t: 'Ceftazidima y vancomicina juntas, que cubren gramnegativos y grampositivos', porque: 'Tampoco: ambas están en la columna de mala penetración, junto con cefepima, cefotaxima, gentamicina y meropenem.' }],
         explicacion: 'Buena penetración: ampicilina-sulbactam, ceftriaxona, ciprofloxacino, levofloxacino, piperacilina-tazobactam y tigeciclina. Mala: cefepima, cefotaxima, ceftazidima, gentamicina, meropenem y vancomicina' + pg(27) + '.' },
-      { id: 'cole-e4', corto: 'drenaje', tipo: 'test', fuente: 'ma-cole-tto',
-        enunciado: '¿Cuál es el tratamiento de elección de la colecistitis alitiásica, y cuándo se cambia?',
+      { id: 'cole-e4', corto: 'más grave', tipo: 'test', fuente: 'ma-cole-def · ma-cole-tto',
+        enunciado: 'Comparada con la colecistitis litiásica, la colecistitis alitiásica del paciente crítico es…',
         opciones: [
-          { t: 'Drenaje percutáneo siempre, porque es menos agresivo que operar', porque: 'Es la alternativa, no la elección. Dárselo a todos deja a pacientes operables sin el tratamiento definitivo.' },
-          { t: 'Solo antibiótico, y operar si no mejora en una semana', porque: 'Puede empeorar muy rápido y hay que intervenir pronto. Esperar una semana es dar tiempo a la gangrena.' },
-          { t: 'Colecistectomía laparoscópica; percutáneo si hay inestabilidad', ok: true }],
-        explicacion: '«Prompt intervention is mandatory»: de elección, <span class="hl">colecistectomía laparoscópica</span>; si el paciente está demasiado inestable para la cirugía, <span class="hl">drenaje percutáneo</span> de la vesícula' + pg(27) + '.' },
+          { t: 'Más leve: sin obstrucción del cístico, la inflamación es menor', porque: 'Es al revés: es más grave. Tratarla como una litiásica leve retrasa una intervención que no admite demora.' },
+          { t: 'Igual: solo cambia la causa y se maneja del mismo modo', porque: 'No es igual: puede empeorar muy rápido. Esperar la evolución con tratamiento conservador da tiempo a la gangrena.' },
+          { t: 'Más grave, y puede deteriorarse muy deprisa', ok: true }],
+        explicacion: '<span class="hl-rojo">Más grave que la litiásica</span> (' + pag(25, 'pág. 25') + '); puede empeorar muy rápido, por eso «la intervención pronta es obligada»: colecistectomía laparoscópica o, si está inestable, drenaje percutáneo' + pg(27) + '.' },
       { id: 'cole-e5', corto: 'lo que la eco no ve', tipo: 'test', fuente: 'ma-cole-eco',
         enunciado: 'Marino cita para la eco una sensibilidad del 81 %. Si la hicieras a 100 pacientes con colecistitis, ¿a cuántos no se la verías?',
         opciones: [
@@ -171,7 +171,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
      Ficha 8 · Infección intraabdominal complicada (cap. 41, págs. 31-35)
      ================================================================================================= */
   'ma-infeccion-abdominal': {
-    entrada: 'Qué prueba el aire libre y cuándo no vale, por qué volumen sí y vasopresor mejor no, qué antibiótico cubre lo que hay y qué cambia tras la cirugía.',
+    entrada: `Aire libre, cirugía pronto y un antibiótico que cubra lo que hay. Rx de pie hasta 85 %, TC localiza 85 %; tras cirugía el aire dura ≥1 semana (${pg(31)}); meropenem en el shock, tigeciclina no (${pg(33)}).`,
     guia: [
       { id: 'iia-g1', corto: 'aire libre', tipo: 'test', fuente: 'ma-iia-neumoperitoneo · mar-img-41-4', modelo: visual('ma-infeccion-abdominal', '👁️ Fig. 41.4: aire bajo los dos diafragmas (vista Visual)'),
         enunciado: 'Un paciente con dolor abdominal de inicio brusco y signos de irritación peritoneal. ¿Qué exige el diagnóstico de perforación y qué prueba ve más?',
@@ -341,7 +341,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
      Ficha 9 · Clostridioides difficile (cap. 41, págs. 27-31)
      ================================================================================================= */
   'ma-cdifficile': {
-    entrada: 'Por qué un antibiótico abre la puerta, qué daño hacen las toxinas, cómo se leen la PCR y la ELISA, qué pauta toca en cada situación y qué hacer con las recaídas.',
+    entrada: `No invade: sus toxinas hacen el daño y la PCR sola no basta. PCR negativa descarta; ELISA positiva confirma y pierde un 20 % (${pg(29)}); vancomicina oral 125 mg ×4, 10 días (${pg(30)}).`,
     guia: [
       { id: 'cdi-g1', corto: 'la puerta', tipo: 'test', fuente: 'ma-cdi-patogenia',
         enunciado: 'Un paciente sin diarrea previa empieza con diarrea acuosa en el día 10 de un antibiótico. ¿Por qué un antibiótico abre la puerta a C. difficile?',
@@ -390,7 +390,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
           { t: 'Pauta: metronidazol oral 10 días.', mal: true, c: '<span class="hl-rojo">No es la pauta de Marino</span>: en la Tabla 41.2 el primer episodio es vancomicina o fidaxomicina; el metronidazol (500 mg IV cada 8 h) solo se añade en el fulminante.' }],
         explicacion: 'Dos errores según Marino: tratar por la PCR sola y una pauta que la Tabla 41.2 no recoge' + pg(29, 30) + '.',
         nota: '<b>Las fuentes difieren.</b> Marino (Tabla 41.2) no recoge el metronidazol oral; la ACG 2021 lo admite en el episodio inicial no grave de bajo riesgo (' + ACG + '). No se elige ganadora: la pregunta sigue la Tabla 41.2.' },
-      { id: 'cdi-g7', corto: 'hipotensión y distensión', tipo: 'test', fuente: 'ma-cdi-clinica · ma-tabla-41-2 · ma-cdi-curso', modelo: visual('ma-cdifficile', '👁️ Fig. 41.2: el megacolon tóxico (vista Visual)'),
+      { id: 'cdi-g7', corto: 'hipotensión y distensión', tipo: 'test', fuente: 'ma-cdi-clinica · ma-tabla-41-2 · ma-cdi-curso', modelo: visual('ma-cdifficile', '👁️ Fig. 41.2: el megacolon tóxico (vista Visual)'), modeloVivo: septico('🫀 La hipotensión del fulminante, a pie de cama'),
         calculadora: { ir: 'ma-cditto-resultado', nombre: '¿Qué pauta? (Tabla 41.2)' },
         enunciado: 'Un paciente con C. difficile confirmado tiene ahora hipotensión y el abdomen distendido. ¿Qué cambia?',
         opciones: [
@@ -483,7 +483,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
               frases: [
                 { t: 'La PCR positiva confirma C. difficile toxigénico.' },
                 { t: 'Empiezo vancomicina oral ya, por la PCR.', mal: true, c: 'Cerca de la mitad de los PCR positivos <span class="hl-rojo">no tienen toxinas</span> y van bien sin antibiótico; tratar por la PCR sola es sobrediagnosticar. Espera a la ELISA.' },
-                { t: 'Si la ELISA sale positiva: vancomicina 125 mg IV cada 6 h.', mal: true, c: 'La vancomicina del primer episodio va por <span class="hl-rojo">vía oral</span>, 125 mg cuatro veces al día (Tabla 41.2). Por vía IV no llega a la luz del colon (fisiología general, no está en Marino).' },
+                { t: 'Si la ELISA sale positiva: vancomicina 125 mg IV cada 6 h.', mal: true, c: `La vancomicina del primer episodio va por <span class="hl-rojo">vía oral</span>, 125 mg cuatro veces al día (Tabla 41.2, ${pag(30, "pág. 30")}). La guía IDSA/SHEA 2017 también la recomienda por vía oral: <a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/29462280/" target="_blank" rel="noopener">McDonald LC et al., Clin Infect Dis 2018;66:e1-48</a>.` },
                 { t: 'Guantes y bata para entrar en la habitación.' }],
               explicacion: 'Dos errores: tratar solo por la PCR y dar la vancomicina por vía IV, cuando la pauta es oral' + pg(29, 30, 31) + '.' } },
           { momento: 'Día 11 · tarde', datos: { Heces: 'ELISA de toxinas A y B positiva' }, nuevo: ['Heces'], calculadora: { ir: 'ma-cditto-resultado', nombre: '¿Qué pauta? (Tabla 41.2)' },
@@ -495,7 +495,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
                 { t: 'Vancomicina 125 mg ×4 al día o fidaxomicina 200 mg ×2, 10 días', ok: true }],
               explicacion: 'Primer episodio: <span class="hl">vancomicina 125 mg VO cuatro veces al día durante 10 días, o fidaxomicina 200 mg VO dos veces al día durante 10 días</span> (Tabla 41.2)' + pg(30) + '.' } },
           { momento: 'Día 13 · el giro', datos: { Constantes: 'PA 85/55', Abdomen: 'distendido; sin deposiciones desde ayer', Radiografía: 'Figura 41.2' }, nuevo: ['Constantes', 'Abdomen', 'Radiografía'],
-            pregunta: { id: 'prudencio-5', tipo: 'test', fuente: 'ma-cdi-clinica · ma-tabla-41-2 · mar-img-41-2', modelo: visual('ma-cdifficile', '👁️ Fig. 41.2: el megacolon tóxico (vista Visual)'),
+            pregunta: { id: 'prudencio-5', tipo: 'test', fuente: 'ma-cdi-clinica · ma-tabla-41-2 · mar-img-41-2', modelo: visual('ma-cdifficile', '👁️ Fig. 41.2: el megacolon tóxico (vista Visual)'), modeloVivo: septico('🫀 La hipotensión del fulminante, a pie de cama'),
               enunciado: 'Dos días después ya no tiene diarrea, pero sí hipotensión y el abdomen distendido. ¿Qué es y qué cambia?',
               opciones: [
                 { t: 'Ha mejorado: ya no tiene diarrea y puede seguir con la misma pauta', porque: 'La falta de deposiciones con distensión es un íleo o un megacolon: la forma más temida de la enfermedad. Tranquilizarte la deja avanzar.' },
@@ -517,7 +517,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
           'La PCR dice «está»; la toxina dice «hace daño»: no se trata solo por la PCR.',
           'Fiebre baja y leucocitos <15.000 es lo típico; hipotensión con distensión es lo fulminante.',
           'El omeprazol no es inocente: quita una defensa del estómago.'],
-        volver: { nombre: 'Aviso: no trates solo por la PCR', ancla: 'ma-cdi-aviso', modelo: visual('ma-cdifficile', '👁️ Figs. 41.2 y 41.3 (vista Visual)') } },
+        volver: { nombre: 'Aviso: no trates solo por la PCR', ancla: 'ma-cdi-aviso', modeloVivo: septico('🫀 El shock séptico, en el estado de Prudencio'), modelo: visual('ma-cdifficile', '👁️ Figs. 41.2 y 41.3 (vista Visual)') } },
     ],
     profundizar: [
       { id: 'ma-tabla-41-2', titulo: 'Tabla 41.2 completa', nota: 'La vancomicina en pauta descendente de la primera recurrencia, completa.' },

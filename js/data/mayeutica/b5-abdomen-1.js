@@ -17,7 +17,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
      Ficha 5 · Pancreatitis aguda: causas, diagnóstico y gravedad (cap. 40, págs. 16-20)
      ================================================================================================= */
   [DX]: {
-    entrada: 'Por qué el páncreas se digiere solo, qué causas mandan, cómo se diagnostica con dos criterios de tres, por qué lipasa y no amilasa, y qué separa una pancreatitis moderada de una grave.',
+    entrada: `La tripsina digiere el páncreas y la inflamación sale al cuerpo. Diagnóstico: 2 de 3 criterios (${pag(18)}); grave = fallo orgánico &gt;48 h (${pag(18)}); mortalidad de las graves 20-25 % (${pag(20)}).`,
     guia: [
       { id: 'pdx-g1', corto: 'la autodigestión', tipo: 'test', fuente: 'ma-panc-fisio', modelo: { capilarVivo: 'sepsis', texto: '🩸 De la inflamación al fallo multiorgánico (capilar vivo)' },
         enunciado: 'El páncreas tiene células de los islotes y células acinares. En la pancreatitis aguda, ¿cuáles se rompen, y por qué el daño no se queda en el sitio?',
@@ -85,20 +85,20 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Furosemida, metronidazol y ácido valproico, que más pancreatitis han producido', porque: 'Están en la lista de implicados, pero los más citados son otros. Retirar el equivocado deja el fármaco culpable en marcha.' },
           { t: 'Paracetamol, enalapril y cotrimoxazol, que son los tres más frecuentes de los 36 descritos', porque: 'Son implicados, pero los más citados son otros. Sospechar de ellos primero te hace pasar por alto el fármaco más probable.' }],
         explicacion: `Al menos 36 fármacos implicados, muchos en casos aislados. <span class="hl">Los más citados: hidroclorotiazida, azatioprina y doxiciclina</span>; también figuran paracetamol, enalapril, furosemida, metronidazol, procainamida, cotrimoxazol y ácido valproico (${pag(17)}).` },
-      { id: 'pdx-e2', corto: 'litiasis o alcohol', tipo: 'test', fuente: 'ma-tabla-40-1 · ma-panc-imagen',
-        enunciado: 'Varón de 58 años con pancreatitis aguda confirmada, sin antecedente de alcohol. ¿Qué causa encabeza la Tabla 40.1 y qué evaluación pide Marino en todos los casos confirmados?',
+      { id: 'pdx-e2', corto: 'la vía biliar', tipo: 'test', fuente: 'ma-tabla-40-1 · ma-panc-imagen',
+        enunciado: 'Pancreatitis aguda confirmada; la TC con contraste del ingreso no muestra bien la vesícula ni la vía biliar. ¿Qué pides?',
         opciones: [
-          { t: 'Alcohol (16-27 %): se pregunta la ingesta, y la vesícula solo se mira si hay sospecha de piedras', porque: 'Alcohol es la segunda causa. La evaluación de vesícula y vía biliar se pide en todos: saltársela deja sin detectar una litiasis que se puede tratar.' },
-          { t: 'Idiopática (10-15 %): si no hay causa clara, se repite la imagen y se espera sin mirar la vía biliar', porque: 'Idiopática es la tercera y se llama así cuando se ha descartado todo. Dar ese diagnóstico sin evaluar la vía biliar puede dejar una litiasis oculta.' },
-          { t: 'Litiasis (21-33 %): evaluar la vesícula y la vía biliar en todos, con TC o ecografía a pie de cama', ok: true }],
-        explicacion: `La litiasis biliar es la primera causa (21-33 %, frente a alcohol 16-27 %), por eso se evalúan vesícula y vía biliar en todos los casos confirmados: la TC puede bastar y, si no hay o no concluye, la ecografía a pie de cama (${pag(17)}, ${pag(20)}).` },
-      { id: 'pdx-e3', corto: 'la amilasa', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
-        enunciado: 'Un compañero afirma que, en el diagnóstico de pancreatitis, la amilasa es más específica que la lipasa. ¿Qué respondes?',
+          { t: 'Nada más: la TC ya evaluó la vía biliar', porque: 'La TC puede no valorar vesícula ni vía biliar. Darla por evaluada deja sin detectar una litiasis, la primera causa, que se puede tratar.' },
+          { t: 'Una ecografía a pie de cama de la vía biliar', ok: true },
+          { t: 'CPRE diagnóstica de entrada, para ver la vía biliar', porque: 'Es una técnica invasiva con riesgo propio y no es la prueba de primera elección para evaluar la vía biliar; la CPRE se reserva para la obstrucción.' }],
+        explicacion: `Por ser la litiasis la primera causa, se evalúan vesícula y vía biliar en todos: <span class="hl">la TC o, si no basta, la ecografía a pie de cama</span> (${pag(20)}).` },
+      { id: 'pdx-e3', corto: 'amilasa normal', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
+        enunciado: 'Llega al 6.º día de dolor abdominal intenso con la amilasa normal. ¿Queda descartada la pancreatitis?',
         opciones: [
-          { t: 'Tiene razón: a 3 veces el límite alto la amilasa es más específica, aunque la lipasa dure más', porque: 'Es al revés: la lipasa a 3 veces tiene mayor especificidad. Fiarte de la amilasa te dejaría más falsos positivos.' },
-          { t: 'Al revés: la lipasa es más específica, sube antes y medirla sola basta igual que las dos', ok: true },
-          { t: 'Da igual: ambas enzimas tienen la misma cinética y se interpretan igual', porque: 'No: la lipasa empieza a subir a las 4-8 h y dura 8-14 días; la amilasa, a las 6-12 h y 3-5 días. En un paciente que llega tarde, la amilasa puede haberse normalizado.' }],
-        explicacion: `<span class="hl-rojo">Es al revés</span>: la lipasa &gt;3× tiene mayor especificidad, sube antes (4-8 h frente a 6-12 h), dura más (8-14 días frente a 3-5) y medirla sola tiene la misma exactitud que medir las dos (${pag(18)}).` },
+          { t: 'Sí: una enzima normal descarta la pancreatitis aguda', porque: 'No: la amilasa solo dura 3-5 días, así que a los 6 días puede haberse normalizado. Darla por descartada deja sin diagnosticar una pancreatitis real.' },
+          { t: 'Repetir la amilasa en 24 h para ver si sube', porque: 'Ya habrá pasado su ventana de 3-5 días: seguirá normal y se perderá tiempo. La enzima que sigue alta a los 6 días es otra.' },
+          { t: 'No: pide lipasa, que sigue alta 8-14 días', ok: true }],
+        explicacion: `<span class="hl-rojo">No se descarta</span>: la amilasa se mantiene alta 3-5 días y la lipasa 8-14, así que a los 6 días la lipasa aún puede estar elevada (${pag(18)}).` },
       { id: 'pdx-e4', corto: 'enzimas y TC', tipo: 'test', fuente: 'ma-panc-gravedad',
         enunciado: 'Pancreatitis con lipasa de 9.000 U/L y una TC con necrosis extensa, pero sin ningún órgano en fallo a las 72 h. ¿Cómo la clasificas?',
         opciones: [
@@ -185,7 +185,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
      Ficha 6 · Pancreatitis aguda: fluidos, nutrición y complicaciones (cap. 40, págs. 21-23)
      ================================================================================================= */
   [TTO]: {
-    entrada: 'Qué fluido y cuánto, cuándo no hay bolo, por qué se come pronto, cómo se reconoce la infección de la necrosis, y qué se hace con los triglicéridos, la presión del abdomen y las piedras.',
+    entrada: `Fluidos justos, comida pronto, nada de profilaxis. Ringer lactato, bolo de 10 mL/kg solo si hay hipovolemia (${pag(21)}); nutrición en &lt;48 h (${pag(21)}); necrosis infectada hacia el día 7-10 (${pag(22)}).`,
     guia: [
       { id: 'ptt-g1', corto: 'la fuga capilar', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: { capilarVivo: 'sepsis', texto: '🩸 La inflamación que sale del páncreas (capilar vivo)' },
         enunciado: 'Marino insiste en la reanimación con volumen precoz en la pancreatitis grave. ¿Qué pasa si el paciente se queda hipovolémico?',
