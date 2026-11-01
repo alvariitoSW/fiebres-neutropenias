@@ -38,3 +38,32 @@ y réplica. Asunto y ronda 1: `/tmp/plan-socialista/b6b-cierre/congreso-asunto.m
 - Idea para el departamento de ideas: un «metabolismo vivo» (gasto energético, sustratos, la bolsa de NPT), 2-3 maquetas.
 
 **Gasto de la reunión**: ≈0,9 M (4 ministros fable, esfuerzo alto, 2 rondas).
+
+---
+
+# 2.º Congreso · 01/11/2026 · cinco piezas de la sesión 2 por debajo de 9,5 (R10)
+
+**Asunto**: tras sus vueltas, el rejuicio final de la sesión 2 (`autonomo/bloques/b6b/rejuicio-final.md`) da eje vivo
+**9,4** · Mayéutica del eje **8,6** · hepatocito **8,3** · 6H **8,75** · 6I **8,75**; auditor 0 graves. Ese rejuicio
+se hizo con el corte viejo: hay recetas para la Mayéutica del eje y el hepatocito (nadie las aplicó), no para 9,5 en
+6H, 6I ni el eje vivo. Vueltas reales (Justicia): eje vivo 1, Mayéutica del eje 2, hepatocito 3, 6H 3, 6I 3.
+
+## Dictámenes (misma composición, fable con esfuerzo alto)
+- **Hacienda**: el bloque va por ≈44 M de 45; recetas baratas (tope 1 M) y lo demás aceptado con fecha. Eje A,
+  Mayéutica C, hepatocito C, 6H A, 6I A.
+- **Interior**: lo mismo, y tarea aparte `b6b-95` para subir lo que quede. Eje A, Mayéutica C, hepatocito C, 6H A, 6I A.
+- **Justicia**: R10 permite aceptar un punto con su nota, no fusionar con piezas < 9,0 (sería volver al 8,75 sin el
+  usuario, §4.12/§5.7). Ninguna vuelta sin receta de 9,5 del profesor. Eje A, Mayéutica B, hepatocito B, 6H y 6I B
+  condicionada (receta → vuelta sonnet → si 9,0-9,5, A; si < 9,0, D).
+- **Educación**: Eje A (enseña bien; lo que falta es pulido). Mayéutica B (guía que se acierta por la forma no enseña).
+  Hepatocito B (dos recetas son de coherencia del modelo). 6H y 6I B corta: primero rúbrica y receta del profesor.
+
+## Acuerdos (Transportes preside y desempata 6H/6I con Justicia y Educación)
+1. **Eje vivo**: se acepta con 9,4 y la mejora anotada (excepción fechada, como el 7.8). (4-0)
+2. **Mayéutica del eje y hepatocito**: se aplican ya sus 8 recetas (dos constructores sonnet, encargos separados) y
+   rejuicio R8 solo de esas piezas. Si quedan entre 9,0 y 9,5, excepción fechada; si < 9,0, al usuario. (4-0)
+3. **6H y 6I**: el profesor escribe la rúbrica y la receta de 9,5; una vuelta sonnet ≤15 pasos por grupo; rejuicio R8.
+   Entre 9,0 y 9,5, excepción fechada; < 9,0, al usuario. (desempate 3-2 con Transportes)
+4. **Gasto**: ≈1,8 M sobre el techo del bloque (45 M), dentro del +25 % que puede subir el Consejo (§4.17.B); anotado
+   en `SESIONES.md`. Tarea aparte `b6b-95` (Interior) solo si algo queda con excepción.
+5. Corregir en el parte de la sesión 2 «3 vueltas por pieza» con las cifras reales.
