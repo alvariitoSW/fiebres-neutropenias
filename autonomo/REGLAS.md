@@ -250,15 +250,21 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      necesita pensar, lo piensa el profesor en una lista y lo hace sonnet.
    - **R7 · Nota de corte: 9,5; meta 10** (el usuario, 01/11/2026): **9,5 es el suelo en todo** lo que se juzga
      (fichas, arreglos, informes, modelos, maquetas) y **10 es la meta**. Lo que quede **entre 9,0 y 9,5** se sube en
-     una **vuelta corta** (≤15 pasos de constructor); por debajo de 9,0, vuelta normal. Vale en todo lo que sigue (`b4`,
-     `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo que aún no se ha juzgado; lo ya juzgado (las 55 fichas con Estudiar) **no se
-     rejuzga ahora**: queda para un repaso futuro. El gasto extra lo paga el usuario; Hacienda no baja la nota ni la
+     una **vuelta corta** (≤15 pasos de constructor); por debajo de 9,0, vuelta normal. **Toda vuelta, corta o normal,
+     cuenta como una de las 3 de R10.** Vale en todo lo que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo que aún
+     no se ha juzgado; lo ya juzgado **y fusionado en `main`** (las 55 fichas con Estudiar) **no se rejuzga ahora**: queda
+     para un repaso futuro y está en `autonomo/bajo-95.md`. **Manda la nota vigente el día del voto de la PR** (Consejo
+     5.ª, aprobado por el usuario el 01/11): lo juzgado antes del 01/11 en ramas sin fusionar se sube a 9,5 antes de su
+     PR, con una vuelta corta por pieza (vuelta 1 de 3); si no llega, Congreso. **Maquetas**: de las 2-3 de cada modelo,
+     solo la elegida tiene que llegar a 9,5. El gasto extra lo paga el usuario; Hacienda no baja la nota ni la
      fidelidad. (Del 30/10 al 01/11: 8,75 obligaba en todo y 9,5 era meta solo en modelos vivos nuevos y maquetas; hasta
      el 30/10: 8 en lo que copia un modelo y 8,75 en lo nuevo.)
    - **R8 · Rejuicio corto**: en la segunda vuelta y siguientes, el profesor solo vuelve a puntuar los criterios que
-     estaban por debajo de la meta, con el mismo programa de prueba y las capturas de la primera.
-   - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, el modelo, los pasos y los tokens de cada
-     vuelta (formato en `autonomo/partes/LEEME.md`).
+     estaban **por debajo de 9,5**, con el mismo programa de prueba y las capturas de la primera; lo que ya tiene 9,5 o
+     más no se toca ni se repuntúa, y el «qué lo llevaría a 10» se escribe solo en el primer juicio.
+   - **R9 · Cada vuelta, en el parte**: tabla «Vueltas» con la nota mínima, si fue corta o normal, la nota de antes →
+     después de cada punto que se arregló, la referencia a la receta, el modelo, los pasos y los tokens de cada vuelta
+     (formato en `autonomo/partes/LEEME.md`).
    - **R10 · Receta del profesor** (el usuario, 01/11/2026). **Antes de construir**, el profesor escribe sobre el
      encargo los criterios de 9,5 y de 10 de cada punto (cifra, rótulo y comportamiento concretos, con fuente y página).
      **En cada juicio**, por cada punto por debajo de 9,5 escribe las características específicas para llegar a 9,5; en
@@ -266,7 +272,13 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
      receta.** Si tras la tercera algún punto sigue por debajo de 9,5, el director **no sigue gastando**: lo lleva al
      Congreso (Consejo) con la receta, las notas de las tres vueltas y las capturas, y el Congreso decide (otra vuelta
      con otro enfoque, aceptar el punto con su nota y la mejora anotada, o consultar al usuario). Si el Congreso no
-     puede resolverlo, se lo cuenta al usuario.
+     puede resolverlo, se lo cuenta al usuario. **Si chocan el tope de 3 vueltas y el presupuesto de la pieza, manda el
+     que se alcance primero**: al tocar cualquiera de los dos, el director va al Congreso, que puede subir el gasto hasta
+     +25 % una sola vez (§4.17 B). Lo que el Congreso acepte por debajo de 9,5 se apunta en `autonomo/bajo-95.md`.
+     **Contra el 9,5 «de cortesía»** (Consejo 5.ª): la nota va atada a la receta (criterio de 9,5 cumplido con captura o
+     juez → 9,5; no cumplido → 9,0 como mucho; un 9,5 sin su casilla cumplida es un fallo del profesor y va al parte) y
+     cada punto tiene **una ancla de 10** (abajo, §7 «Cómo se juzga»). Hacienda lleva en «Cuentas» la nota media de cada
+     bloque: si sube más de 0,5 sobre el bloque anterior sin que suban las vueltas, se mira su receta.
 
 9. **El encargo, revisado antes de gastar** (B-031 `encargo-revisado`, aprobado por el usuario el 27/10/2026; dos
    ideas de Spec Kit, https://github.com/github/spec-kit, MIT, reescritas aquí sin instalarlo). Un fallo del encargo
@@ -628,6 +640,13 @@ capturas al lado de un modelo. Para pasar, **todos los puntos con 9,5 o más** (
 queda por debajo, vuelve al constructor con la **receta del profesor** (qué cifra, rótulo y comportamiento lo llevan a
 9,5), **máximo 3 vueltas**; después, al Congreso (§4.8 R7 y R10). En los puntos con 9,5 o más, el profesor dice qué los
 llevaría a 10.
+**Anclas de 10** (Consejo 5.ª, aprobado por el usuario el 01/11/2026): el 10 de cada punto es «como su ancla» y el 9,5,
+«como el ancla con un solo fallo pequeño y nombrado». Capturas congeladas en `autonomo/modelos/anclas/` (tarea
+`anclas-profesor`). Candidatas: §7.1-7.3 y 7.13, la ficha de la escala 4Ts (`merino-hemato.html`); §7.4, 7.5 y 7.8, la
+nefrona viva y el atlas cap. 14 (VD); §7.6, las recetas de `merino-hemato/visual.js`; §7.9-7.10, el capilar vivo; §7.7,
+una ficha que pase `jueces --ficha` a 360 px sin aviso; §8, `autonomo/modelos/preguntas-para-estudiar.html` y
+`js/data/mayeutica/b1-fluidos.js`; mecanismo animado, los receptores animados. **Calibración única**: al adoptarlas, el
+profesor las puntúa (deben dar 10); se repite solo si cambia `.claude/agents/profesor.md` o el modelo del profesor.
 
 ## 8. Preguntas para estudiar
 

@@ -111,7 +111,11 @@ nuevo; no repitas la exploración entera. Da a cada fallo su dirección exacta (
 estaban por debajo de 9,5, con el mismo programa de prueba y las capturas de la primera. **Nota de corte (R7, el
 usuario, 01/11/2026)**: 9,5 en todo lo que juzgas; la meta es 10. Entre 9,0 y 9,5, vuelta corta; por debajo de 9,0,
 vuelta normal. Tope de 3 vueltas con receta; después, el director lo lleva al Congreso (R10). Lo juzgado antes del
-01/11 con 8,75 (las 55 fichas con Estudiar) no se rejuzga ahora.
+01/11 con 8,75 **y ya en `main`** (las 55 fichas con Estudiar, `autonomo/bajo-95.md`) no se rejuzga ahora; lo de ramas
+sin fusionar, sí (manda la nota del día del voto de la PR). En el rejuicio no repuntúes lo que ya tiene 9,5 o más. De
+las 2-3 maquetas de un modelo, solo la elegida tiene que llegar a 9,5. **Nota atada a la receta**: criterio de 9,5
+cumplido con captura o juez → 9,5; no cumplido → 9,0 como mucho. Compara cada punto con su **ancla de 10**
+(`autonomo/modelos/anclas/`, REGLAS §7 «Cómo se juzga»): 9,5 es «el ancla con un solo fallo pequeño y nombrado».
 
 1. Abre la app a 390×844 (móvil, táctil) y haz capturas de lo nuevo: la primera pantalla, la figura en 2-3 estados
    de sus mandos, el texto entero en tramos y **las preguntas: recorre el recorrido y el caso hasta el final**,

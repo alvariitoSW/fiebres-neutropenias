@@ -387,10 +387,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-**🆕 01/11 · Consejo 5.ª (Fable): puntos abiertos de la nota 9,5** (acta `autonomo/consejo/2026-11-01-5.md`; la 4.ª,
-de Sonnet, queda como antecedente; punto 1 y regla del modelo grande ya en `main`). Elige sí a todo / sí con cambios /
-no sobre 6 puntos: vueltas, ramas sin fusionar a 9,5, nota atada a la receta y anclas, sin fichas a ciegas, registro
-`bajo-95.md`, maquetas.
+**✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
+y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
+todo» de la 5.ª: toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto (las ramas sin fusionar
+suben a 9,5), nota atada a la receta y anclas de 10, sin fichas a ciegas, registro `bajo-95.md`, solo la maqueta
+elegida llega a 9,5. Tareas nuevas en el tablero: `anclas-profesor` y `bajo-95`.
 
 **✅ 01/11 · Nota de corte del profesor: 9,5 (meta 10)** (decisión tuya, aplicada directa a `main`). Vale en todo lo
 que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo no juzgado; las 55 fichas con Estudiar no se rejuzgan ahora
