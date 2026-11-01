@@ -42,6 +42,7 @@ import { init as initIonesVivos } from './iones-vivos/index.js';
 // [HUECO plv: import de la placa viva]
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
+import { MAYEUTICA_B6A } from '../../data/mayeutica/b6a.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -224,6 +225,7 @@ export function init() {
     initMarinoNutricion();
     initMarinoToxicos();
     initVisualMarinoCaps45a53();
+    Object.entries(MAYEUTICA_B6A).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));   // Estudiar del b6a (tras su vista Visual)
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
