@@ -20,7 +20,7 @@ function frase(t, o) { fraseT = t; fraseO = o; $('frase-txt').innerHTML = `${t} 
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.titulo, t.texto]));
   if (f === firma) { topeApi.refrescar(); return; } firma = f;
-  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'resang0', 'exc', 'vaso', 'tronco', 'dren3', 'mani3', 'tmax']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'resang0', 'exc', 'vaso', 'tronco', 'dren3', 'mani3', 'tmax', 'dren2', 'mani2', 'tfin']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag ? { p: t.pag, f: t.ficha } : null, origen: t.origen, deshabilita: t.off, bajo: null });
 }
 function pintar() {
@@ -135,12 +135,12 @@ function setPreg(on) {
   preg = on; if (on) modoPrueba('explorar');
   $('modo-preguntas').setAttribute('aria-pressed', String(on));
   R.querySelectorAll('.modos [data-modo]').forEach((b) => b.setAttribute('aria-pressed', String(!on && b.dataset.modo === modo)));
-  $('vista-preguntas').hidden = !on; $('dock-estudio').hidden = !on; $('presets').hidden = on; $('frase').hidden = on; $('idea').hidden = on;
+  $('vista-preguntas').hidden = !on; $('dock-estudio').hidden = !on; $('presets').hidden = on; $('frase').hidden = on; $('idea').hidden = on; if (on) $('guia').hidden = true;
   R.querySelector('.dock-tabs').hidden = on; $('dock-panel').hidden = on; $('dock-medir').hidden = true;
   if (on) mayeutica.entrar(); else { oculto = false; ponerPreset(preset); R.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.pest === 'dar'))); $('dock-panel').hidden = false; }
   ajustarDock();
 }
-const mayeutica = crearMayeutica({ R, antes: () => { setPreg(false); ponerPreset('abundio'); },
+const mayeutica = crearMayeutica({ R, antes: (k) => { setPreg(false); ponerPreset(PRES[k] ? k : 'abundio'); },
   api: { poner: (o, ocu) => { s = nuevo(o); oculto = ocu; foco = []; pintar(); }, oculto: (v) => { oculto = v; pintar(); }, aplicar: (patch) => { Object.assign(s, patch); pintar(); }, leer: () => leer(s) } });
 $('modo-preguntas').addEventListener('click', () => setPreg(true));
 mayeutica.cargar();

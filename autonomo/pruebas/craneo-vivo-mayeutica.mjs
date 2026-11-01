@@ -1,4 +1,4 @@
-// La Mayéutica del cráneo vivo (parte de autonomo/pruebas/craneo-vivo.mjs): recorrido entero (fallando G1, G4 y E3), repaso, los dos casos,
+// La Mayéutica del cráneo vivo (parte de autonomo/pruebas/craneo-vivo.mjs): recorrido entero (fallando G1, G4 y E2), repaso, los dos casos,
 // «nada tapado» y desborde tras cada respuesta. Sale de la del receptor vivo (autonomo/pruebas/receptor-vivo.mjs).
 import { PREGUNTAS, CASOS } from '../../js/data/craneo-vivo-mayeutica.js';
 export async function mayeuticaCraneo({ abre, p, ok, fallos, foto, ANCHO }) {
@@ -50,7 +50,7 @@ export async function mayeuticaCraneo({ abre, p, ok, fallos, foto, ANCHO }) {
   ok(await p.evaluate(() => document.getElementById('crv-dock-estudio').hidden === false && document.getElementById('crv-dock-panel').hidden), `${ANCHO}: el dock de progreso sustituye al de mandos`);
   await foto('mayeutica-inicio'); await sinDesborde('inicio');
   await clic(`${cont} [data-ir="recorrido"]`); await esp(300);
-  const FALLAR = new Set(['G1', 'G4', 'E3']); let tot = 0;
+  const FALLAR = new Set(['G1', 'G4', 'E2']); let tot = 0;
   for (let i = 0; i < PREGUNTAS.length; i++) {
     const q = PREGUNTAS[i];
     tot += await contestar(q, !FALLAR.has(q.num), q.num);
@@ -59,9 +59,9 @@ export async function mayeuticaCraneo({ abre, p, ok, fallos, foto, ANCHO }) {
   }
   ok(tot >= PREGUNTAS.length, `${ANCHO}: ${PREGUNTAS.length} preguntas, cada una con su «Ver en la ficha» (${tot})`);
   const chips = await p.evaluate(() => [...document.querySelectorAll('#crv-preg [data-rep]')].map((b) => b.dataset.rep));
-  ok(chips.join() === 'crv-g1,crv-g4,crv-e3', `${ANCHO}: repaso: vuelve solo lo fallado (${chips})`);
+  ok(chips.join() === 'crv-g1,crv-g4,crv-e2', `${ANCHO}: repaso: vuelve solo lo fallado (${chips})`);
   await sinDesborde('repaso');
-  for (const id of ['crv-g1', 'crv-g4', 'crv-e3']) { await clic(`${cont} [data-rep="${id}"]`); await esp(300); await contestar(PREGUNTAS.find((x) => x.id === id), true, 'repaso ' + id); await clic(`${cont} [data-accion="sig"]`); await esp(300); }
+  for (const id of ['crv-g1', 'crv-g4', 'crv-e2']) { await clic(`${cont} [data-rep="${id}"]`); await esp(300); await contestar(PREGUNTAS.find((x) => x.id === id), true, 'repaso ' + id); await clic(`${cont} [data-accion="sig"]`); await esp(300); }
   ok(await p.evaluate(() => /No queda nada por repasar/.test(document.getElementById('crv-preg').textContent)), `${ANCHO}: repaso: acertar saca las preguntas de la lista`);
   await clic(`${cont} [data-ir="casos"]`); await esp(300); await sinDesborde('lista de casos');
   for (let k = 0; k < CASOS.length; k++) {
@@ -80,5 +80,7 @@ export async function mayeuticaCraneo({ abre, p, ok, fallos, foto, ANCHO }) {
   ok(await hay(`${cont} [data-fin="modelo"]`), `${ANCHO}: caso: sale «Volver al cráneo»`);
   await clic(`${cont} [data-fin="modelo"]`); await esp(500);
   ok(await p.evaluate(() => document.getElementById('crv-vista-preguntas').hidden && !document.getElementById('crv-presets').hidden), `${ANCHO}: «Volver al cráneo» abre el modelo`);
+  ok(await p.evaluate(() => window.__craneo.s.tipo === 'ventricular'), `${ANCHO}: «Volver al cráneo» del caso de Segismundo abre a Segismundo`);
+  console.log('✅ volver al paciente del caso (Segismundo)');
   await sinDesborde('de vuelta en Explorar');
 }

@@ -10,7 +10,7 @@ const citaH = (c) => cita(c.p, c.f).replace(PDF, c.pdf || PDF) + (c.url ? ` <a c
 export function crearMayeutica({ R, api, antes }) {
   instalarCssMayeutica();
   let cuentaTocar = '';
-  const subir = () => { const r = R.getBoundingClientRect(); if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' }); };
+  const subir = () => { const r = document.getElementById('crv-monitor').getBoundingClientRect(); if (r.top < 0) window.scrollBy({ top: r.top, behavior: 'auto' }); };
   return crearMayeuticaModelo({
     p: 'crv', cont: () => document.getElementById('crv-preg'), clave: 'craneo-vivo-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,
     subir, volverPor: 'El cráneo vivo',
@@ -39,10 +39,10 @@ export function crearMayeutica({ R, api, antes }) {
       empezar: 'Empezar la guía socrática', seguir: 'Seguir',
       pie: 'Las cifras del monitor salen cuando contestas: primero predices, luego compruebas. Los pacientes se inventan; la medicina sale de las fichas, y cada pregunta dice dónde.',
       conModelo: 'el cráneo', casos: 'El cráneo se pone en el estado de cada paso. Lo nuevo de la ficha del paciente sale en rojo.',
-      abrirPaciente: 'Volver al cráneo de Abundio',
+      abrirPaciente: 'Volver al cráneo de este paciente',
     },
     preguntaDePaso: (paso) => ({ estado: paso.estado }),
     alTerminarCaso: () => api.oculto(false),
-    abrirPaciente: () => antes(),
+    abrirPaciente: (C) => { antes(C.id === 'crv-segismundo' ? 'segismundo' : 'abundio'); api.poner(C.pasos[C.pasos.length - 1].estado, false); },
   });
 }

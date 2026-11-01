@@ -32,7 +32,7 @@ export function topes(s) {
   if (L.me) t.push(T('me', 'sello', 'Sin flujo cerebral', 'PIC igual o casi igual a la PAM (PPC <10): casi no entra sangre; umbral PPC <10 ilustrativo. La muerte encefálica exige además la Tabla 45.6 (≥48 h, T >36 °C, PAM ≥75, causa suficiente).', 14, 'mn-me-definicion', 'ficha · p. 14-15 · umbral ilustrativo', ['#crv-b-mas', '#crv-b-hora']));
   else {
     if (L.est >= 4) t.push(T('desc', 'sello', 'Compresión del tronco', L.est >= 5 ? 'Extremidades flácidas, pupilas dilatadas y fijas: el daño llega al tronco bajo (p. 10; Tabla 45.4).' : 'Descerebración (mesencéfalo y protuberancia alta), pupilas dilatadas y fijas (p. 10; Tabla 45.4).', 10, 'mn-coma-posturas', 'ficha · p. 10-11', ['#crv-b-mas']));
-    else if (L.est >= 2 && s.tipo !== 'hsa') t.push(T('uncal', 'sello', 'Herniación uncal: masa en expansión', 'Una pupila dilatada y fija (la del lado de la masa); si sigue, la mano pasa a flexión y luego a extensión.', 11, 'mn-tabla-45-4', 'ficha · p. 10-11', ['#crv-b-mas']));
+    else if (L.est >= 2 && s.tipo !== 'hsa') t.push(T('uncal', 'sello', 'Herniación uncal: masa en expansión', 'Una pupila dilatada y fija (el lado de la masa es fisiología general); si sigue, la mano pasa a flexión y luego a extensión.', 11, 'mn-tabla-45-4', 'ficha · p. 10-11', ['#crv-b-mas']));
   }
   if (!L.me && L.ppc < U.ppcMin) t.push(T('ppc', 'aviso', 'PPC <50', `PPC ${L.ppc}: el cerebro recibe poca presión de riego. Objetivo 50-70 en la hemorragia intracerebral.`, 45, 'mn-hic-ppc', 'ficha · p. 45; Manual UMI: <50 a evitar'));
   if (L.picBruta > U.picMax) t.push(T('pic80', 'aviso', 'PIC 80 mmHg', 'Tope del modelo: más de 80 mmHg no se muestra (fisiología general).', 45, 'mn-hic-pic', 'fisiología general'));
@@ -50,10 +50,13 @@ export function topes(s) {
   else if (s.tipo === 'hsa' && !s.exc && s.t > 3) t.push(T('exc', 'aviso', 'Aneurisma abierto', 'Cerrarlo en 3 días; nunca más allá de 7-10.', 47, 'mn-hsa-aneurisma', 'ficha · p. 47'));
   if (L.hsaDiasEsp) t.push(T('vaso', 'aviso', 'Días 4-14', 'Las arterias de la base se estrechan; el Doppler transcraneal sube su velocidad y el GCS pierde 2 puntos. Vigilar.', 48, 'mn-hsa-vigilar', 'ficha · p. 48'));
   // Topes de los mandos que no tenían consecuencia (REGLAS §1.14): el modelo no los deja pasar de aquí. Los límites son del modelo (ilustrativos); la ficha no da una dosis máxima.
-  if (s.tipo === 'tronco') t.push(T('tronco', 'sello', 'Lesión del tronco: la masa no aplica', 'En el síndrome del cautiverio el problema es la protuberancia ventral, no la caja: la PIC no sube con más masa.', 3, 'mn-cons-lockedin', 'ficha · p. 3', ['#crv-b-mas', '#crv-b-menos']));
+  if (s.drenaje === 2) t.push(T('dren2', 'aviso', 'Último tramo de LCR', 'Queda un tramo de drenaje: en el modelo la vía se agota a los tres (límite ilustrativo).', 45, 'mn-hic-pic', 'límite del modelo · ilustrativo'));
+  if (s.mani === 2) t.push(T('mani2', 'aviso', 'Última dosis de manitol', 'Queda una dosis: el modelo no pasa de tres; la ficha prefiere el salino hipertónico (límite ilustrativo).', 41, 'mn-isq-edema-manejo', 'límite del modelo · ilustrativo'));
+  if (s.t >= Math.ceil(0.8 * tMax(s)) && s.t < tMax(s)) t.push(T('tfin', 'aviso', 'Se acaba el seguimiento', `Quedan ${tMax(s) - s.t} ${unidad(s) === 'h' ? 'h' : 'días'} de seguimiento en el modelo (límite ilustrativo).`, hem ? 42 : 48, hem ? 'mn-hic-warfarina' : 'mn-hsa-nimodipino', hem ? 'ficha p. 42 · horas: ilustrativo' : 'ficha · p. 48 · límite ilustrativo'));
+  if (s.tipo === 'tronco') t.push(T('tronco', 'sello', 'Lesión del tronco: la masa no aplica', 'En el síndrome del cautiverio el problema es la protuberancia ventral, no la caja: la PIC no sube con más masa (lógica del modelo, ilustrativo).', 3, 'mn-cons-lockedin', 'ficha · p. 3 · la PIC fija: ilustrativo', ['#crv-b-mas', '#crv-b-menos']));
   if (s.drenaje >= 3) t.push(T('dren3', 'sello', 'Drenaje agotado', 'Tres tramos de LCR: en el modelo no queda más líquido que sacar y la PIC no baja más por esta vía (límite ilustrativo).', 45, 'mn-hic-pic', 'límite del modelo · ilustrativo', ['#crv-b-dren']));
   if (s.mani >= 3) t.push(T('mani3', 'sello', 'Manitol: tres dosis', 'En el modelo el efecto sobre la PIC no pasa de tres dosis; la ficha prefiere el salino hipertónico y no da una dosis máxima (límite ilustrativo).', 41, 'mn-isq-edema-manejo', 'límite del modelo · ilustrativo', ['#crv-b-mani']));
-  if (s.t >= tMax(s)) t.push(T('tmax', 'sello', 'Fin del seguimiento', hem ? 'A las 12 h el modelo deja de seguir el hematoma: lo que pase después no se simula (límite ilustrativo).' : 'A los 14 días el modelo deja de seguir al paciente: el vasoespasmo de la HSA ocupa los días 4 a 14 (p. 48); en los demás, límite ilustrativo.', hem ? null : 48, hem ? null : 'mn-hsa-nimodipino', hem ? 'límite del modelo · ilustrativo' : 'ficha · p. 48 · límite ilustrativo', ['#crv-b-hora']));
+  if (s.t >= tMax(s)) t.push(T('tmax', 'sello', 'Fin del seguimiento', hem ? 'A las 12 h el modelo deja de seguir el hematoma, que con anticoagulante sin revertir sigue creciendo (p. 42); lo que pase después no se simula (las horas son ilustrativas).' : 'A los 14 días el modelo deja de seguir al paciente: el vasoespasmo de la HSA ocupa los días 4 a 14 (p. 48); en los demás, límite ilustrativo.', hem ? 42 : 48, hem ? 'mn-hic-warfarina' : 'mn-hsa-nimodipino', hem ? 'ficha p. 42 · horas: ilustrativo' : 'ficha · p. 48 · límite ilustrativo', ['#crv-b-hora']));
   return t;
 }
 export const tMax = (s) => (s.tipo === 'hematoma' || s.tipo === 'ventricular' ? 12 : 14);
@@ -62,6 +65,6 @@ export function avanzar(s) {
   if (s.t >= tMax(s)) return;
   s.t++;
   if (s.tipo === 'hematoma' || s.tipo === 'ventricular') s.masa = clamp(s.masa + (s.anti !== 'ninguno' && !s.rev ? (s.pas > U.pasHic ? 9 : 6) : s.pas > U.pasHic ? 2 : 0), 0, 100);
-  else if (s.tipo === 'edema') s.masa = clamp(s.masa + 6, 0, 100);
+  else if (s.tipo === 'edema') s.masa = clamp(s.masa + (s.t <= 5 ? 6 : -3), 0, 100);   // meseta: crece 5 días y cede (ilustrativo; la ficha no da el pico)
 }
 export const unidad = (s) => (s.tipo === 'hematoma' || s.tipo === 'ventricular' ? 'h' : 'día');

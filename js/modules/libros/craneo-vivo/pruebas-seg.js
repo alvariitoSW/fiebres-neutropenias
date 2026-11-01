@@ -19,7 +19,7 @@ const CA = {
         { t: 'No monitorizo: en el hematoma basta mirar las pupilas.', ok: false, por: 'Cuando la pupila se dilata ya hay herniación; sin PIC no ves la PPC ni el drenaje (p. 45, 10).' },
         { t: 'Subo la PAM a 150 por si el cerebro pide más flujo.', ok: false, por: 'Más presión con la PIC alta no cabe en la caja: más sangrado y PPC sobre 70.' }] },
     { enun: 'PIC 26 con PAM 100: PPC 74. PIC ≥20. ¿Qué haces?', pag: 45, orden: [2, 0, 1],
-      ops: [{ t: 'Drenar LCR por el catéter (un tramo) y bajar la PAM a 80: la PIC cede y la PPC queda en 50-70.', ok: true, por: 'PIC <20 se consigue drenando LCR y la PPC objetivo es 50-70 (p. 45): con la PIC en torno a 14 y la PAM en 80, la PPC es de unos 66 (cifras del modelo, ilustrativas).', },
+      ops: [{ t: 'Drenar LCR por el catéter (un tramo) y mantener la PAS por debajo de 140.', ok: true, por: 'PIC <20 se consigue drenando LCR y la PPC objetivo es 50-70 (p. 45); la PAS objetivo es <140 (p. 45).', },
         { t: 'Hiperventilar a PaCO₂ 25 para bajar la PIC ya.', ok: false, por: 'Solo moderada y transitoria (30-35), no las primeras 24 h: el vasoespasmo empeora el flujo (Manual UMI).' },
         { t: 'Poner presión positiva alta para mejorar la oxigenación del cerebro.', ok: false, por: 'La presión positiva sube la PIC y baja la PPC (p. 35).' }] },
     { enun: 'Día 3: hidrocefalia en la TC, la sangre ventricular bloquea el LCR. ¿Y ahora?', orden: [1, 2, 0], pag: 45,
@@ -39,7 +39,7 @@ export const ERROR_SEG = { p: 'segismundo', enun: 'Segismundo, hemorragia intrac
 const E = [{ tipo: 'ventricular', masa: 52, pas: 196, anti: 'warfarina' }, { tipo: 'ventricular', masa: 73, pas: 190, anti: 'warfarina', rev: true }, { tipo: 'ventricular', masa: 61, pas: 143, anti: 'warfarina', rev: true }, { tipo: 'ventricular', masa: 61, pas: 114, anti: 'warfarina', rev: true, drenaje: 1 }];
 const EF = [{}, {}, { dren: 1, pas: 114 }, { dren: 1 }];
 const ENUN = ['Paso 1 · TC: hematoma de ganglios basales con sangre ventricular (Fig. 47.3). Segismundo, 71 años, warfarina, INR 3,2, PA 196/108, GCS 13. Pesa 80 kg. ¿Qué es lo primero?', 'Paso 2 · A las 6 h: GCS 6 con sangre en los ventrículos. ¿Qué haces con la presión dentro de la cabeza?', 'Paso 3 · PIC 26 con PAM 100: PPC 74. PIC ≥20. ¿Qué haces?', 'Paso 4 · Día 3: hidrocefalia en la TC, la sangre ventricular bloquea el LCR. ¿Y ahora?'];
-const POR3 = 'PIC <20 se consigue drenando LCR y la PPC objetivo es 50-70 (p. 45): con la PIC en torno a 18 y la PAM en 80, la PPC es de unos 62 (cifras del modelo, ilustrativas).';
+const POR3 = 'PIC <20 se consigue drenando LCR y la PPC objetivo es 50-70; la PAS objetivo es <140 (p. 45). En el modelo, con PAS 114 la PAM es 80 y, con la PIC en torno a 18, la PPC queda en unos 62 (cifras del modelo, ilustrativas).';
 export const CASO_SEG = { p: 'segismundo', titulo: 'Segismundo 71 años', pasos: CA.pasos.map((p, k) => ({ e: E[k], enun: ENUN[k],
   ops: p.ops.map((o, i) => [...fila(p.pag, o.t, o.ok, k === 2 && i === 0 ? POR3 : o.por), o.ok ? EF[k] : {}]) })),
   llevas: [['Revertir ya es lo primero en la HIC con anticoagulante.', 42], ['GCS ≤8 y sangre ventricular: monitorizar la PIC; PIC <20 drenando LCR.', 45], ['La presión positiva sube la PIC y baja la PPC.', 35]] };
