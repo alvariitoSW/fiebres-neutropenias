@@ -597,7 +597,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
-- 2026-11-01 · **Día libre de Marino** (al Congreso, 16:34): 39 % de la semana hasta el lunes 14:00 para Marino, sin tope de carriles. 12 sesiones: eco, cierre del bloque 3, b4 (4D iones), 4A ácido-base, 4B riñón, 4C agua, modelos del b5 y del b6a, plan de Estudiar del b5 y del b6a, b6b (mapa y maquetas) y rejuicio del corazón del bloque 3. Vídeos de la app y de ingeniería inversa enviados.
+- 2026-11-01 · **Día libre de Marino** (al Congreso, 16:34): 39 % de la semana hasta el lunes 14:00 para Marino, sin tope de carriles. 12 sesiones: eco, cierre del bloque 3, b4 (4D iones), 4A ácido-base, 4B riñón, 4C agua, modelos del b5 y del b6a, plan de Estudiar del b5 y del b6a, b6b (mapa y maquetas) y rejuicio del corazón del bloque 3; a las 17:09, +8 carriles con el Estudiar de los grupos 5A-5D y 6A-6D (planes ya escritos), 18 sesiones; los modelos del b5 y del b6a dirigen y juntan sus grupos. Vídeos de la app y de ingeniería inversa enviados.
 - 2026-11-01 · **Más rápido** (REGLAS §4.17, «Haz A, B y C»): cola en paralelo (4 sesiones: eco, pulmón, `marino-unido`, mapa y maquetas del `b5`), el Consejo sube techos hasta +25 % sin pararte, papeleo mínimo. R1 y R2 de realismo, en §4.16.
 - 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).
 - 2026-11-01 · **Atlas: los 30 capítulos con su texto** (`mr` por la PR #77, Consejo 4-0).
