@@ -977,7 +977,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 
 // ---- Dimensiones de la base y funciones de superficie -------------------------
 // ajustes (opcional; solo el dibujo nuevo, corazon-geo-2.mjs): { paredVdNormal, septoContinuo, auVolumen, vdLargoPropio } — sin ajustes, el dibujo de hoy idéntico.
-const GANANCIA_SEPTO = 4;
+const GANANCIA_SEPTO = 8;   // 8 (antes 4): con pVD > pVI el tabique ya está plano y el IE de la TEP en telesístole no baja del de telediástole (Ryan 1985 JACC 5:918: máximo en telesístole); el motor da menos gradiente en telesístole (4 frente a 9 mmHg) y con 4 el dibujo seguía ese gradiente; ilustrativo
 const LVD_TOPE_ILUSTRATIVO = 112;
 export function baseGeometricaHoy(estado, ajustes = {}) {
   // Formas de enfermedad (escenarios.mjs): mioVi = masa del VI respecto a la normal; septo (0-1) = cuánto se aplana

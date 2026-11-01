@@ -128,12 +128,16 @@ export function viConSeptal(vvi, mio = 1, septoIn = 0, k0 = 1, hondo = 0, expLar
     return hondo ? base * (1 + hondo * paso(0.2, 0.3, sv) * (1 - paso(0.6, 0.7, sv))) : base; };
   let vi = geomVi(vvi, mio, 0, expLargoDil);
   if (septo > 0) {
-    let quitado = 0; const dz = vi.L / N_VOL;
-    for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
-      if (a <= 0) continue;
-      const q = r * r * areaCuerda(a, k0, tope);
-      quitado += q * dz; }
-    vi = geomVi(vvi, mio, quitado / 1000, expLargoDil);
+    // el radio que se devuelve a la cavidad agranda lo que se quita (la cuerda es proporcional a r²): con el corte hondo del dibujo nuevo
+    // la pasada única dejaba la cavidad un 6 % corta (61 frente a 65 mL); se repite hasta que el volumen es el del motor
+    for (let it = 0; it < (hondo ? 6 : 1); it++) {
+      let quitado = 0; const dz = vi.L / N_VOL;
+      for (let i = 0; i < N_VOL; i++) { const z = -(i + 0.5) * dz, r = perfil(z, vi.Rb, vi.Rm, vi.L), a = alfa(z, vi.L);
+        if (a <= 0) continue;
+        const q = r * r * areaCuerda(a, k0, tope);
+        quitado += q * dz; }
+      vi = geomVi(vvi, mio, quitado / 1000, expLargoDil);
+    }
   }
   return { vi, alfa, septo };
 }
