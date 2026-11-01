@@ -69,6 +69,7 @@ export const VISTAS = {
 // Grosor de la pared torácica bajo el transductor (mm) y separación hasta el pericardio: así el corazón
 // empieza a unos 2-2,5 cm de profundidad, como en un adulto delgado.
 const PARED = 12, HUECO = 22;
+const DIST_AO_FOCO = 14.3;   // mm: raíz aórtica (rA·1,28 ≈ 12,8) + margen; con más, el rótulo «Ao» tampoco sale (|dd| < 14). Ilustrativo
 
 /**
  * El plano de una vista para un corazón con estos volúmenes telediastólicos ({ vvi, vvd }). Se calcula
@@ -125,18 +126,23 @@ export function planoVista(clave, est) {
     else if (clave === 'a4cVd') {
       // foco VD: el haz por el eje del VI y el plano del A4C girado sobre ese eje el ángulo que da más área de VD (Mitchell p. 26: «rotated slightly
       // counterclockwise ... to maximize the RV area»; sin inclinar hacia delante, hacia el cinco cámaras). Tope ±22° («slightly»).
-      const T = [0, 0, 8], r4 = [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], O4 = [0, 0, -vi.Le - HUECO], d4 = nrm(res(T, O4));
-      const area = (rr) => { const n0 = nrm(cruz(rr, d4)); let n = 0;
+      // El plano tampoco debe cortar la raíz aórtica ni el TSVI (eso es un cinco cámaras): la raíz está a ~13 mm del eje del VI y mide hasta 12,8 de
+      // radio, así que se parte de la inclinación del A4C (que ya la deja fuera) y solo se gira alrededor del ápex: se descarta el giro cuyo plano
+      // pasa a menos de DIST_AO_FOCO (mm) del eje de la raíz (z de 0 a 16). El giro 0 (el A4C) siempre es válido.
+      const T = A(mix2(g.ct, g.mc, 0.55), 8), r4 = [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], O4 = [0, 0, -vi.Le - HUECO], d4 = nrm(res(T, O4));
+      const area = (rr) => { let n = 0;
         for (let u = -70; u <= 70; u += 2) for (let v = 20; v <= 170; v += 2) {
           const p = sum(O4, sum(esc(rr, u), esc(d4, v))), zp = p[2]; if (zp >= 0 || zp < -g.Lvd) continue;
           const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
           if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) n++; } }
         return n; };
+      const rotar = (a) => { const c = Math.cos(a), s = Math.sin(a); return [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0]; };
+      const libreAo = (rr) => { const n = nrm(cruz(rr, d4)); return [0, 8, 16].every(z => Math.abs(dot(res([g.ac[0], g.ac[1], z], O4), n)) >= DIST_AO_FOCO); };
       let mejor = 0, aMax = -1;
-      for (let gr = -22; gr <= 22; gr += 2) { const a = gr * Math.PI / 180, c = Math.cos(a), s = Math.sin(a), q = [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0];
-        const A2 = area(perp(q, d4)); if (A2 > aMax) { aMax = A2; mejor = a; } }
-      const c = Math.cos(mejor), s = Math.sin(mejor);
-      apical(T, [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0]);
+      for (let gr = -22; gr <= 22; gr += 2) { const a = gr * Math.PI / 180, rr = perp(rotar(a), d4);
+        if (gr !== 0 && !libreAo(rr)) continue;
+        const A2 = area(rr); if (A2 > aMax) { aMax = A2; mejor = a; } }
+      apical(T, rotar(mejor));
     }
     else if (clave === 'a3c') apical(A(mix2(g.mc, g.ac, 0.5), 8), [g.ac[0] - g.mc[0], g.ac[1] - g.mc[1], 0]);  // aorta a la derecha
     else {
@@ -315,6 +321,24 @@ export function distMin(seg, pared) {
 
 /** Un punto del corazón en el plano: [u, v, distancia al plano]. */
 export function enPlano(P, p) { const q = res(p, P.O); return [dot(q, P.r), dot(q, P.d), dot(q, P.n)]; }
+
+/**
+ * Centro (u, v en mm del plano) de la región que amplía el botón «Zoom ×2» del ecógrafo (ilustrativo: los equipos reales tienen «zoom» de una
+ * región). En el foco VD, la pared libre del VD con el ápex (la caja que contiene la sección de la cavidad del VD en el plano y el ápex del VI);
+ * en las demás vistas, el centro del sector. Solo es un encuadre: no recalcula nada de la física.
+ */
+export function regionZoom(P, est) {
+  const centro = { u: 0, v: P.prof * 0.5 };
+  if (!P || P.clave !== 'a4cVd' || !est) return centro;
+  const g = baseGeometrica(est); let u0 = 1e9, u1 = -1e9, v0 = 1e9, v1 = -1e9;
+  for (let u = -90; u <= 90; u += 2) for (let v = 10; v <= P.prof; v += 2) {
+    const p = sum(P.O, sum(esc(P.r, u), esc(P.d, v))), zp = p[2]; if (zp >= 0 || zp < -g.Lvd || Math.abs(dot(res(p, P.O), P.n)) > 1) continue;
+    const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
+    if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } }
+  if (u0 > u1) return centro;
+  const ap = enPlano(P, [0, 0, -g.vi.Le]); u0 = Math.min(u0, ap[0]); u1 = Math.max(u1, ap[0]); v0 = Math.min(v0, ap[1]); v1 = Math.max(v1, ap[1]);
+  return { u: (u0 + u1) / 2, v: (v0 + v1) / 2 };
+}
 
 // ---------------------------------------------------------------------------- qué es cada pieza en la imagen
 // clase: pared (miocardio de dos superficies, endo y epi: se rellena lo de en medio), tubo (relleno si su

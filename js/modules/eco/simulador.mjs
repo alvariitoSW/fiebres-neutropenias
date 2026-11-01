@@ -18,7 +18,7 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, regionZoom, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg } from './doppler.mjs';
@@ -152,6 +152,17 @@ export function montarSimulador(raiz, opc = {}) {
   let reto = null;
   let ecoVisible = true, ultimoEco = -1e9, ecoInfo = null, ecoPendiente = true, ecoMs = 0;
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
+  // Zoom ×2 de lectura (ilustrativo): el mismo fotograma ampliado, centrado en la región que da regionZoom; el lienzo se escala con CSS (el recorte lo hace .cv-eco).
+  let zoomEco = false, regionZ = null;
+  function aplicarZoom() {
+    const b = $('#cv-zoom'), ins = $('#cv-eco-zoom'); if (!b) return;
+    b.setAttribute('aria-pressed', String(zoomEco)); b.classList.toggle('on', zoomEco); b.textContent = zoomEco ? 'Quitar zoom ×2' : 'Zoom ×2 en la región'; ins.hidden = !zoomEco;
+    ecoC.classList.toggle('zoom', zoomEco); if (!zoomEco || !ecoGeom || !planoEco) { ecoC.style.transform = ''; return; }
+    if (!regionZ || regionZ.P !== planoEco) regionZ = { P: planoEco, ...regionZoom(planoEco, estGeo) };
+    const W = ecoC.width, H = ecoC.height, x = ecoGeom.cx + regionZ.u * ecoGeom.k, y = ecoGeom.arriba + regionZ.v * ecoGeom.k;
+    const tx = clamp(W / 2 - 2 * x, -W, 0), ty = clamp(H / 2 - 2 * y, -H, 0);
+    ecoC.style.transform = `translate(${(tx / W * 100).toFixed(2)}%, ${(ty / H * 100).toFixed(2)}%) scale(2)`;
+  }
   function elegirVista(k) {
     if (!VISTAS[k]) return;
     vistaEco = k; claveTd = ''; ecoPendiente = true; img.prof = null; ponerMandosImg();
@@ -511,6 +522,7 @@ export function montarSimulador(raiz, opc = {}) {
     a.dispatchEvent(new Event('input', { bubbles: true })); b.dispatchEvent(new Event('input', { bubbles: true }));
   });
   $$('[data-modo]').forEach(b => b.addEventListener('click', () => elegirModo(b.dataset.modo)));
+  $('#cv-zoom').addEventListener('click', () => { zoomEco = !zoomEco; aplicarZoom(); });
   $('#cv-medir').addEventListener('click', (e) => { const b = e.target.closest('[data-medir]'); if (b) elegirMedida(b.dataset.medir); });
   // arrastrar en horizontal sobre la imagen B mueve la línea M (en vertical, la página se desplaza)
   ecoC.style.touchAction = 'pan-y';
@@ -778,7 +790,7 @@ export function montarSimulador(raiz, opc = {}) {
     const Fd = colorOn || (modoEco === 'D' && gate) ? fuentesFlujo(geoEco.flujo, s, areasD(), abdEco.vasos, datosFlujo()) : null;
     if (colorOn) ecografo.colorear(mapaColor(planoEco, im, Fd), nyq);
     ecoImg.data.set(im.pix); ecoCtx.putImageData(ecoImg, 0, 0);
-    ecoGeom = { cx: im.cx, arriba: im.arriba, k: im.escala };
+    ecoGeom = { cx: im.cx, arriba: im.arriba, k: im.escala }; aplicarZoom();
     if (modoEco === 'M') {
       // la columna del modo M sale de esta misma imagen; al revisar un instante pasado no se escribe (el trazado
       // vive en el tiempo del motor)
@@ -1058,7 +1070,7 @@ export function montarSimulador(raiz, opc = {}) {
 
   if (opc.depuracion) {
     window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
-    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM, sonda: ponerSonda,
+    window.__eco = { zoom: (on) => { zoomEco = on !== false; aplicarZoom(); }, info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM, sonda: ponerSonda,
       doppler: { muestra: ponerMuestra, ponerEn: (u, v) => { gate = { u, v }; reiniciarD(); }, color: (on, n) => { $('#cv-color').checked = on; colorOn = on; if (n) nyq = n; ecoPendiente = true; }, espectro, medidas: () => medD, fuente: () => fuenteD }, reto: (r) => { reto = r ?? null; claveTd = ''; ecoPendiente = true; } };
     window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
   }

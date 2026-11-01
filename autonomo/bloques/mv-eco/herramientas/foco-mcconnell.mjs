@@ -24,14 +24,15 @@ const m = crearMotor(); m.correr(12); ESCENARIOS.tep.aplicar(m, 1); m.correr(ASE
 const ex = extraDeMotor(m), o = m.onda, iTd = o.reduce((b, x, i) => x.vvd > o[b].vvd ? i : b, 0), iTs = o.reduce((b, x, i) => x.vvd < o[b].vvd ? i : b, 0);
 const gs = [iTd, iTs].map(i => baseGeometrica({ ...estadoGeo(o[i], ex), mcconnell: ex.mcconnell })), P = planoVista(VISTA, estadoGeo(o[iTd], ex));
 const k = Math.min((cv.h - 8) / P.prof, (cv.w - 6) / (2 * P.prof * Math.sin(P.mitad))) * cv.css / cv.w;   // misma cuenta que crearEcografo (ecografia.mjs, G.k), en px CSS
-const sal = { vista: VISTA, pxPorMm: +k.toFixed(2) };
+const ZOOM = +(process.env.ZOOM || 1), kz = k * ZOOM;   // ZOOM=2: el botón «Zoom ×2» (mismo fotograma ampliado)
+const sal = { vista: VISTA, zoom: ZOOM, pxPorMm: +kz.toFixed(2) };
 for (const [seg, fz] of [['base', 0.10], ['media', 0.45], ['apice', 0.85]]) {
   // el ángulo de la pared libre que mejor cae en el plano: el que maximiza el desplazamiento visible (barrido) con el punto en el plano (|n| < 3 mm)
   let mejor = null;
   for (let f = 1.4; f <= 3.6; f += 0.05) { const ps = gs.map(G => G.endoVd(-G.Lvd * fz, f)), q = enPlano(P, ps[0]);
     if (Math.abs(q[2]) > 3) continue; const a = enPlano(P, ps[0]), b = enPlano(P, ps[1]), d = Math.hypot(a[0] - b[0], a[1] - b[1]);
     if (!mejor || d > mejor.d) mejor = { f, d }; }
-  sal[seg] = mejor ? +(mejor.d * k).toFixed(1) : null;
+  sal[seg] = mejor ? +(mejor.d * kz).toFixed(1) : null;
 }
 sal.dif_apice_menos_media_px = sal.apice != null && sal.media != null ? +(sal.apice - sal.media).toFixed(1) : null;
 console.log(JSON.stringify(sal));

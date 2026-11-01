@@ -29,6 +29,7 @@ async function abrir(clave, esc, g, vista) {
   await pg.waitForTimeout(1500);
   await pg.evaluate(() => { const d = document.querySelector('#cv-plegable-cifras'); if (d) d.open = true; });   // el monitor solo se pinta con «cifras» abierto
   if (vista) await pg.evaluate((v) => window.__eco.vista(v), vista);
+  if (process.env.ZOOM) await pg.evaluate(() => window.__eco.zoom(true));   // ZOOM=1 → con «Zoom ×2» puesto
   return pg;
 }
 const t = (pg, id) => pg.evaluate((id) => document.getElementById(id)?.innerText.replace(/\s+/g, ' ').trim(), id);
@@ -53,7 +54,7 @@ for (const [clave, esc, g, vista] of [['mov-normal-a4c', 'normal', null, 'a4c'],
   for (const [f, rot] of FASES4) {
     await pg.click(`#cv-ciclo button[data-fase="${f}"]`); await pg.waitForTimeout(1200);
     await pg.evaluate(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
-    const lienzo = pg.locator('#cv-eco'); await lienzo.scrollIntoViewIfNeeded();
+    const lienzo = pg.locator(process.env.ZOOM ? '#cv-eco >> xpath=..' : '#cv-eco'); await lienzo.scrollIntoViewIfNeeded();
     trozos.push((await lienzo.screenshot()).toString('base64'));
     L.push([rot, `VI ${await t(pg, 'cv-l-vi')} · VD ${await t(pg, 'cv-l-vd')} · Ao ${await t(pg, 'cv-l-ao')} · rótulo «${await t(pg, 'cv-eco-fase')}»`, 'monitor']);
   }
