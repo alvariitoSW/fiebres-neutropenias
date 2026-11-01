@@ -9,6 +9,8 @@
 // calculadora son las que da la calculadora real de la ficha.
 
 const NE = 'docs/marino-2024-nutricion-endocrino-caps48-51.pdf';
+// La vista Visual de una ficha de Marino · Nutrición, como botón «modelo» (sale tras contestar).
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoNutricion', panel: 'panel-marino-nutri-tabs', tab, enVisual: '', texto });
 const pdf = (p, t = `PDF pág. ${p}`) => `<a class="biblio-link" href="${NE}#page=${p}" target="_blank" rel="noopener">${t}</a>`;
 
 export const MAYEUTICA_ENTERAL = {
@@ -18,34 +20,34 @@ export const MAYEUTICA_ENTERAL = {
   'mu-enteral-indicaciones': {
     entrada: 'Por qué comer protege del intestino como fuente de sepsis, cuándo empezar sin esperar ruidos y qué contraindica de verdad la enteral (Tabla 49.1), con el vasopresor como duda típica.',
     guia: [
-      { id: 'en-i-g1', corto: 'ayuno y sepsis', tipo: 'test', fuente: 'mu-ent-trofismo · mu-ent-infeccion',
+      { id: 'en-i-g1', corto: 'ayuno y sepsis', tipo: 'test', fuente: 'mu-ent-trofismo · mu-ent-infeccion', modeloVivo: { murallaViva: 'enteral' },
         enunciado: 'Lleva cuatro días en ayunas «para dejar descansar el intestino». ¿Por qué eso le expone a más sepsis y no a menos?',
         opciones: [
           { t: 'Sin nutrientes en la luz se pierde el efecto trófico: la mucosa se atrofia, falla la barrera y los gérmenes entéricos pasan con más facilidad', ok: true },
-          { t: 'Sin comer, la flora del intestino se multiplica más deprisa, satura la pared y la invade desde dentro por exceso de carga bacteriana sobre la mucosa', porque: 'El libro no habla de proliferación: habla de pérdida del trofismo y atrofia de la mucosa. Si piensas que el ayuno es solo un problema de flora, te quedarás con antibióticos y no con restablecer la barrera (p. 18).' },
+          { t: 'Sin comer, la flora del intestino se multiplica más deprisa, satura la pared y la invade desde dentro por exceso de carga bacteriana sobre la mucosa', porque: 'El libro no habla de proliferación: habla de pérdida del trofismo y atrofia de la mucosa. Si piensas que el ayuno es solo un problema de flora, te quedarás con antibióticos y no con restablecer la barrera (p. 19).' },
           { t: 'Sin comer, el organismo no tiene energía para fabricar sus defensas generales y el paciente se infecta por una carencia calórica global', porque: 'El mecanismo del libro es local, en la pared del intestino (barrera e inmunidad de la mucosa), no una carencia calórica general. Con esa idea creerías que basta con suero glucosado IV (p. 18).' }],
-        explicacion: 'El volumen de nutrientes en la luz tiene un <span class="hl">efecto trófico</span> que mantiene la barrera frente a la translocación de gérmenes. En el reposo intestinal hay <span class="hl-rojo">atrofia progresiva</span> de la mucosa y más riesgo de invasión bacteriana (' + pdf(18) + '). Por eso la enteral se ve como una medida de control de la infección.' },
+        explicacion: 'El volumen de nutrientes en la luz tiene un <span class="hl">efecto trófico</span> que mantiene la barrera frente a la translocación de gérmenes. En el reposo intestinal hay <span class="hl-rojo">atrofia progresiva</span> de la mucosa y más riesgo de invasión bacteriana (' + pdf(19) + '). Por eso la enteral se ve como una medida de control de la infección.' },
       { id: 'en-i-g2', corto: 'la solución parenteral por boca', tipo: 'test', fuente: 'mu-ent-trofismo',
         enunciado: 'Alguien propone dar la bolsa de nutrición parenteral por la sonda para «conseguir lo mismo». ¿Por qué no funciona?',
         opciones: [
           { t: 'Porque el intestino no absorbe bien las soluciones con glucosa concentrada y aminoácidos libres en la luz', porque: 'No es un problema de absorción: el libro dice que el efecto trófico no se produce con esa solución porque necesita masa de nutrientes en la luz. Quien cree lo contrario acabaría con una barrera sin proteger (p. 18).' },
           { t: 'Porque la barrera necesita volumen de nutrientes en la luz, no solo los combustibles (hidratos, proteínas, lípidos)', ok: true },
           { t: 'Porque la parenteral lleva demasiadas proteínas y electrolitos para la tolerancia del estómago y no se tolera bien en cantidades grandes', porque: 'El motivo del libro no es la cantidad de proteína, sino que el efecto depende del volumen de nutrientes y no de los combustibles. Pensarlo así lleva a buscar una bolsa «mejor» en vez de una fórmula enteral (p. 18).' }],
-        explicacion: 'El efecto trófico requiere <span class="hl">volumen de nutrientes</span> («nutritional bulk»), no los combustibles en sí: la solución parenteral dada por vía oral <span class="hl-rojo">no lo produce</span>. La glutamina, combustible principal del enterocito, podría participar (' + pdf(18) + ').' },
-      { id: 'en-i-g3', corto: 'noradrenalina estable', tipo: 'test', fuente: 'mu-ent-vasopresor · mu-ent-calc',
-        enunciado: 'Predice y luego comprueba en la calculadora: shock séptico, noradrenalina a 0,12 µg/kg/min desde hace 12 h, sin cambios. ¿Empiezas la enteral?',
-        opciones: [
-          { t: 'No: cualquier vasopresor contraindica la enteral', porque: 'El libro dice lo contrario: las perfusiones estables o en descenso no la contraindican. Con ese «no» dejarías sin barrera a un paciente séptico durante días (p. 19).' },
-          { t: 'No hasta retirar el vasopresor por completo y confirmar que el shock se ha resuelto', porque: 'No hace falta retirarlo: solo se frena en el shock no controlado o progresivo. Esperar a la retirada retrasa la enteral más allá de las 48 h que se asocian a menos infecciones (p. 18-19).' },
-          { t: 'Sí: estable o en descenso no la contraindica, y 0,12 no supera 0,2', ok: true }],
-        explicacion: 'Solo el shock <span class="hl-rojo">no controlado o progresivo</span> contraindica la enteral. Con la perfusión estable se empieza; el umbral de 0,2 µg/kg/min solo recorta las calorías, no prohíbe (' + pdf(19) + ').' },
+        explicacion: 'El efecto trófico requiere <span class="hl">volumen de nutrientes</span> («nutritional bulk»), no los combustibles en sí: la solución parenteral dada por vía oral <span class="hl-rojo">no lo produce</span>. La glutamina, combustible principal del enterocito, podría participar (' + pdf(18, 'PDF págs. 18-19') + ').' },
       { id: 'en-i-g4', corto: '48 h y ruidos', tipo: 'test', fuente: 'mu-ent-cuando',
         enunciado: 'Intubado, con 30 h de ingreso, sin contraindicaciones y sin ruidos intestinales a la auscultación. ¿Qué haces?',
         opciones: [
           { t: 'Espero a oír ruidos intestinales y después empiezo', porque: 'El libro dice que la presencia de ruidos no es necesaria para empezar. Esperar hace perder el margen de las 48 h y la reducción de infecciones que se le asocia (p. 18-19).' },
           { t: 'Espero a las 72 h para confirmar que no hay íleo y que el paciente está estable', porque: 'La recomendación es empezar dentro de las primeras 48 h del ingreso, salvo contraindicación; no hay un periodo de espera de 72 h en el capítulo (p. 19).' },
           { t: 'Empiezo ya: dentro de las 48 h del ingreso, sin exigir ruidos', ok: true }],
-        explicacion: 'Si no puede comer: <span class="hl">enteral en las primeras 48 h</span> salvo contraindicación, y <span class="hl-rojo">no hace falta oír ruidos intestinales</span> (' + pdf(19) + '). El inicio precoz se asocia a una menor tasa de infecciones (' + pdf(18) + ').' },
+        explicacion: 'Si no puede comer: <span class="hl">enteral en las primeras 48 h</span> salvo contraindicación, y <span class="hl-rojo">no hace falta oír ruidos intestinales</span> (' + pdf(19) + '). El inicio precoz se asocia a una menor tasa de infecciones (' + pdf(19) + ').' },
+      { id: 'en-i-g3', corto: 'noradrenalina estable', tipo: 'test', fuente: 'mu-ent-vasopresor · mu-ent-calc', modelo: visual('mu-enteral-indicaciones', '👁️ Compruébalo en ¿Puedo empezar la enteral? (vista Visual)'),
+        enunciado: 'Predice y luego comprueba en la calculadora: shock séptico, noradrenalina a 0,12 µg/kg/min desde hace 12 h, sin cambios. ¿Empiezas la enteral?',
+        opciones: [
+          { t: 'No: cualquier vasopresor contraindica la enteral', porque: 'El libro dice lo contrario: las perfusiones estables o en descenso no la contraindican. Con ese «no» dejarías sin barrera a un paciente séptico durante días (p. 19).' },
+          { t: 'No hasta retirar el vasopresor por completo y confirmar que el shock se ha resuelto', porque: 'No hace falta retirarlo: solo se frena en el shock no controlado o progresivo. Esperar a la retirada retrasa la enteral más allá de las 48 h que se asocian a menos infecciones (p. 18-19).' },
+          { t: 'Sí: estable o en descenso no la contraindica, y 0,12 no supera 0,2', ok: true }],
+        explicacion: 'Solo el shock <span class="hl-rojo">no controlado o progresivo</span> contraindica la enteral. Con la perfusión estable se empieza; el umbral de 0,2 µg/kg/min solo recorta las calorías, no prohíbe (' + pdf(19) + ').' },
     ],
     examen: [
       { id: 'en-i-e1', corto: 'qué sí contraindica', tipo: 'test', fuente: 'mu-tabla-49-1',
@@ -71,7 +73,7 @@ export const MAYEUTICA_ENTERAL = {
             c: 'La presencia de ruidos intestinales <span class="hl-rojo">no es necesaria</span> para empezar (p. 19).' },
           { t: 'La perfusión de noradrenalina estable no contraindica la enteral.' },
           { t: 'Un residuo gástrico >500 mL en 6 h es una contraindicación.' }],
-        explicacion: 'La enteral precoz se asocia a menos infecciones (' + pdf(18) + '); no exige ruidos, el vasopresor estable no la contraindica y el residuo >500 mL en 6 h figura en la tabla (' + pdf(19) + ').' },
+        explicacion: 'La enteral precoz se asocia a menos infecciones (' + pdf(19) + '); no exige ruidos, el vasopresor estable no la contraindica y el residuo >500 mL en 6 h figura en la tabla (' + pdf(19) + ').' },
       { id: 'en-i-e4', corto: 'umbral de calorías', tipo: 'error', fuente: 'mu-ent-vasopresor',
         enunciado: 'Otra nota, sobre un paciente de 70 kg con noradrenalina. Puede tener 0, 1 o 2 errores.',
         frases: [
@@ -133,9 +135,9 @@ export const MAYEUTICA_ENTERAL = {
               enunciado: 'La familia pregunta por qué insistís en la sonda si «el suero le da lo mismo». ¿Qué respondes?',
               opciones: [
                 { t: 'La sonda mantiene las defensas del intestino; la parenteral no lo hace', ok: true },
-                { t: 'El suero no aporta calorías suficientes para cubrir el gasto del paciente séptico', porque: 'La diferencia que cuenta el libro no es calórica: la barrera de la mucosa se mantiene con la enteral y no con la parenteral (p. 18, 33).' },
+                { t: 'El suero no aporta calorías suficientes para cubrir el gasto del paciente séptico', porque: 'La diferencia que cuenta el libro no es calórica: la barrera de la mucosa se mantiene con la enteral y no con la parenteral (p. 19, 33).' },
                 { t: 'La sonda es más barata y más cómoda de manejar para la enfermería', porque: 'No es el argumento del capítulo: la enteral es una medida de control de la infección porque la mucosa mantiene su barrera (p. 18).' }],
-              explicacion: 'Las defensas antimicrobianas del intestino se sostienen con la enteral, <span class="hl-rojo">no con la parenteral</span>: comer es un mecanismo de defensa (' + pdf(18) + ' y ' + pdf(33) + ').' } },
+              explicacion: 'Las defensas antimicrobianas del intestino se sostienen con la enteral, <span class="hl-rojo">no con la parenteral</span>: comer es un mecanismo de defensa (' + pdf(19) + ' y ' + pdf(33) + ').' } },
         ],
         lleva: [
           'Vasopresor estable o en descenso no contraindica; shock no controlado o progresivo, sí.',
@@ -168,9 +170,9 @@ export const MAYEUTICA_ENTERAL = {
         puntos: [
           'Las de aceite de pescado (omega-3, p. ej. Oxepa) <span class="hl">no se usan de rutina</span>, pero hay algún beneficio en el <span class="hl-azul">SDRA</span>.',
           'La <span class="hl-rojo">arginina no</span> se usa en la UCI médica, sobre todo en la sepsis grave: el óxido nítrico puede dar hipotensión.',
-          'La arginina se «considera» en el traumatismo craneoencefálico y en el perioperatorio de la cirugía mayor.'],
-        explicacion: 'Omega-3: no rutinario, algo de beneficio en el SDRA (' + pdf(22) + '; Tabla 49.3 en ' + pdf(21) + '). Arginina: reduce infecciones en el perioperatorio de cirugía mayor y no se usa en la UCI médica (' + pdf(22) + ').' },
-      { id: 'en-f-g3', corto: 'glutamina en el quemado', tipo: 'test', fuente: 'mu-for-glutamina · mu-glut-calc',
+          'La arginina se «considera» en el traumatismo craneoencefálico y en los perioperatorios de la UCI quirúrgica.'],
+        explicacion: 'Omega-3: no rutinario, algo de beneficio en el SDRA (' + pdf(22) + '; Tabla 49.3, ' + pdf(21, 'págs. 21-22') + '). Arginina: reduce infecciones en el perioperatorio de cirugía mayor y no se usa en la UCI médica (' + pdf(22) + ').' },
+      { id: 'en-f-g3', corto: 'glutamina en el quemado', tipo: 'test', fuente: 'mu-for-glutamina · mu-glut-calc', modelo: visual('mu-formulas', '👁️ Compruébalo en la calculadora de glutamina'),
         enunciado: 'Quemado del 40 % de la superficie, 80 kg, con enteral. Predice y comprueba en la calculadora: ¿qué glutamina añades?',
         opciones: [
           { t: '16-24 g/día durante los primeros 5 días', porque: 'Esa es la dosis del trauma crítico (0,2-0,3 g/kg/día, 5 días). En el quemado >20 % la pauta es otra y te quedarías corto en dosis y en duración (p. 23).' },
@@ -223,7 +225,7 @@ export const MAYEUTICA_ENTERAL = {
               puntos: [
                 'Una fórmula de <span class="hl">menor osmolalidad</span>, si es posible, aunque exija más volumen: lo hablas con el equipo.',
                 'Una fórmula con proteínas <span class="hl">predigeridas</span> (elemental o semielemental): favorece la reabsorción de agua.',
-                'La <span class="hl-rojo">fibra no ayuda</span> en la diarrea, ni la fermentable, porque las fórmulas llevan una mezcla.'],
+                'La <span class="hl-rojo">fibra de las fórmulas no aporta ventaja</span> en la diarrea: es una mezcla de fermentable y no fermentable (la fermentable sola podría ayudar a la mucosa, p. 32).'],
               explicacion: 'Lo que dice el capítulo para la diarrea: menor osmolalidad si es posible, predigeridas y evitar los fármacos líquidos de la Tabla 49.6 (' + pdf(32) + '). Que choque con la restricción de líquidos es una decisión de equipo; el libro no la resuelve.' } },
           { momento: 'Día 11 · nota del residente', datos: { Nota: 'plan escrito por el residente' }, nuevo: ['Nota'],
             pregunta: { id: 'en-f-c4', tipo: 'error', fuente: 'mu-for-proteina · mu-for-fibra',
@@ -263,6 +265,13 @@ export const MAYEUTICA_ENTERAL = {
   'mu-pauta-enteral': {
     entrada: 'Los cuatro pasos de la pauta (calorías, proteínas, fórmula, ritmo), el propofol que cuenta como comida y cómo saber dónde está la sonda cuando el paciente no tose.',
     guia: [
+      { id: 'en-p-g4', corto: 'la pauta con propofol', tipo: 'test', fuente: 'mu-pauta-calc · mu-tabla-49-4 · mu-pauta-propofol', modelo: visual('mu-pauta-enteral', '👁️ Compruébalo en Crear la pauta enteral'),
+        enunciado: 'Predice y luego usa la calculadora: 70 kg, propofol a 20 mL/h, Osmolite 1.2, primer día (70 % del GER). ¿A cuántos mL/h?',
+        opciones: [
+          { t: '42 mL/h: el GER entero menos el propofol', porque: 'Has dado el 100 % del GER (1.750 − 528 = 1.222 kcal), o el 70 % sin restar el propofol. Con ecuación se empieza al 70 % y descontando el propofol: así sobrealimentarías (p. 25-26).' },
+          { t: '61 mL/h: el GER entero sin descontar el propofol', porque: 'El propofol aporta calorías (1,1 kcal/mL) y hay que restarlas: sin hacerlo sobrealimentarías con 528 kcal de más (p. 25).' },
+          { t: '24 mL/h: (70 % del GER − propofol) ÷ 1,2 ÷ 24', ok: true }],
+        explicacion: 'GER 25 × 70 = 1.750; 70 % = 1.225; propofol 20 × 1,1 × 24 = 528; 1.225 − 528 = 697 kcal ÷ 1,2 = 581 mL ÷ 24 = <span class="hl-rojo">24 mL/h</span> (la calculadora, con la Tabla 49.4 y la nota del propofol, ' + pdf(25) + ' y ' + pdf(26) + ').' },
       { id: 'en-p-g1', corto: 'sonda sin tos', tipo: 'test', fuente: 'mu-sonda-pulmon',
         enunciado: 'Intubada y sedada, le pasas la sonda fina y no tose ni se queja. ¿Qué te dice eso de dónde está la punta?',
         opciones: [
@@ -284,31 +293,8 @@ export const MAYEUTICA_ENTERAL = {
           { t: 'Yeyuno desde el inicio, para no tener nunca residuo ni reflujo hacia el esófago', porque: 'El avance al duodeno o yeyuno se reserva para cuando falla el estómago y persiste el problema (p. 30-31).' },
           { t: 'Estómago: no cambia el riesgo de aspiración y es mucho más fácil', ok: true }],
         explicacion: 'Estómago por consenso; el duodeno es una opción <span class="hl">solo si hay regurgitación y aspiración problemáticas</span> (' + pdf(30) + ').' },
-      { id: 'en-p-g4', corto: 'la pauta con propofol', tipo: 'test', fuente: 'mu-pauta-calc · mu-tabla-49-4 · mu-pauta-propofol',
-        enunciado: 'Predice y luego usa la calculadora: 70 kg, propofol a 20 mL/h, Osmolite 1.2, primer día (70 % del GER). ¿A cuántos mL/h?',
-        opciones: [
-          { t: '42 mL/h: el GER entero menos el propofol', porque: 'Has dado el 100 % del GER (1.750 − 528 = 1.222 kcal), o el 70 % sin restar el propofol. Con ecuación se empieza al 70 % y descontando el propofol: así sobrealimentarías (p. 25-26).' },
-          { t: '61 mL/h: el GER entero sin descontar el propofol', porque: 'El propofol aporta calorías (1,1 kcal/mL) y hay que restarlas: sin hacerlo sobrealimentarías con 528 kcal de más (p. 25).' },
-          { t: '24 mL/h: (70 % del GER − propofol) ÷ 1,2 ÷ 24', ok: true }],
-        explicacion: 'GER 25 × 70 = 1.750; 70 % = 1.225; propofol 20 × 1,1 × 24 = 528; 1.225 − 528 = 697 kcal ÷ 1,2 = 581 mL ÷ 24 = <span class="hl-rojo">24 mL/h</span> (la calculadora, con la Tabla 49.4 y la nota del propofol, ' + pdf(25) + ' y ' + pdf(26) + ').' },
     ],
     examen: [
-      { id: 'en-p-e1', corto: 'cifras de la sonda', tipo: 'error', fuente: 'mu-sonda-pulmon · mu-sonda-co2 · mu-sonda-eco · mu-sonda-rx',
-        enunciado: 'Un resumen sobre cómo comprobar la sonda. Encuentra los errores (puede haber 0, 1 o 2).',
-        frases: [
-          { t: 'La sonda entra en el pulmón en cerca del 1 % de las inserciones.' },
-          { t: 'La capnografía por la sonda tiene sensibilidad del 96 % y especificidad del 99 % para el pulmón.' },
-          { t: 'La ecografía (sensibilidad 96 %, especificidad 91 %) ya ha sustituido a la radiografía.', mal: true,
-            c: 'La ecografía <span class="hl-rojo">no ha sustituido</span> a la radiografía: se duda de su utilidad para detectar sondas mal colocadas (p. 28).' },
-          { t: 'La punta ideal queda unos 10 cm bajo la cúpula del hemidiafragma.' }],
-        explicacion: 'Pulmón ~1 % (' + pdf(27) + '); CO₂ 96/99 y la ecografía 96/91 sin sustituir a la radiografía (' + pdf(28) + ' y ' + pdf(29) + ').' },
-      { id: 'en-p-e2', corto: 'límite del CO₂', tipo: 'test', fuente: 'mu-sonda-co2',
-        enunciado: 'Mientras avanzas la sonda, el CO₂ no sube de 2 mmHg y no hay onda. ¿Qué conclusión es defendible?',
-        opciones: [
-          { t: 'No está en la vía aérea, pero no basta: hace falta la radiografía de tórax', ok: true },
-          { t: 'Está en el estómago y puedes alimentar sin más pruebas porque no hay onda de CO₂', porque: 'No detecta la colocación errónea en el esófago (enrollada). Hace falta la radiografía antes de alimentar (p. 29).' },
-          { t: 'Está en el pulmón: una cifra de CO₂ baja significa que la punta está en vía aérea', porque: 'La señal de vía aérea es la onda o el aumento a 15 mmHg, no un valor bajo (p. 29).' }],
-        explicacion: 'Una onda o <span class="hl">15 mmHg</span> indica vía aérea (sensibilidad 96 %, especificidad 99 %). No detecta la sonda <span class="hl-rojo">enrollada en el esófago</span>, así que no reemplaza la radiografía (' + pdf(29) + ' y ' + pdf(30) + ').' },
       { id: 'en-p-e3', corto: 'pasos de la pauta', tipo: 'test', fuente: 'mu-tabla-49-4',
         enunciado: 'Según la Tabla 49.4, ¿qué hace el paso 4?',
         opciones: [
@@ -323,6 +309,22 @@ export const MAYEUTICA_ENTERAL = {
           { t: 'El 100 % del GER desde el primer día, para recuperar el balance cuanto antes', porque: 'Se empieza por debajo: la adaptación endógena (gluconeogénesis) de la fase aguda sumada a toda la nutrición lleva a sobrealimentar (p. 25).' },
           { t: 'No más del 70 % solo los 3 primeros días, y luego el 100 %', porque: 'Esos 3 días son para cuando el GER se mide con calorimetría indirecta; con ecuación el 70 % se mantiene 7 días (p. 25-26).' }],
         explicacion: 'Con calorimetría: ≤70 % los 3 primeros días y subir al 100 % en la primera semana. Con ecuaciones: <span class="hl-rojo">≤70 % los 7 primeros días</span> (' + pdf(25) + ' y ' + pdf(26) + ').' },
+      { id: 'en-p-e1', corto: 'cifras de la sonda', tipo: 'error', fuente: 'mu-sonda-pulmon · mu-sonda-co2 · mu-sonda-eco · mu-sonda-rx',
+        enunciado: 'Un resumen sobre cómo comprobar la sonda. Encuentra los errores (puede haber 0, 1 o 2).',
+        frases: [
+          { t: 'La sonda entra en el pulmón en cerca del 1 % de las inserciones.' },
+          { t: 'La capnografía por la sonda tiene sensibilidad del 96 % y especificidad del 99 % para el pulmón.' },
+          { t: 'La ecografía (sensibilidad 96 %, especificidad 91 %) ya ha sustituido a la radiografía.', mal: true,
+            c: 'La ecografía <span class="hl-rojo">no ha sustituido</span> a la radiografía: se duda de su utilidad para detectar sondas mal colocadas (p. 28).' },
+          { t: 'La punta ideal queda unos 10 cm bajo la cúpula del hemidiafragma.' }],
+        explicacion: 'Pulmón ~1 % (' + pdf(27) + '); CO₂ 96/99 y la ecografía 96/91 sin sustituir a la radiografía (' + pdf(28) + ' y ' + pdf(29) + ').' },
+      { id: 'en-p-e2', corto: 'límite del CO₂', tipo: 'test', fuente: 'mu-sonda-co2',
+        enunciado: 'Mientras avanzas la sonda, el CO₂ no sube de 2 mmHg y no hay onda. ¿Qué conclusión es defendible?',
+        opciones: [
+          { t: 'No hay señal de vía aérea, pero no basta: hace falta la radiografía de tórax', ok: true },
+          { t: 'Está en el estómago y puedes alimentar sin más pruebas porque no hay onda de CO₂', porque: 'No detecta la colocación errónea en el esófago (enrollada). Hace falta la radiografía antes de alimentar (p. 29).' },
+          { t: 'Está en el pulmón: una cifra de CO₂ baja significa que la punta está en vía aérea', porque: 'La señal de vía aérea es la onda o el aumento a 15 mmHg, no un valor bajo (p. 29).' }],
+        explicacion: 'Una onda o <span class="hl">15 mmHg</span> indica vía aérea (sensibilidad 96 %, especificidad 99 %). No detecta la sonda <span class="hl-rojo">enrollada en el esófago</span>, así que no reemplaza la radiografía (' + pdf(29) + ' y ' + pdf(30) + ').' },
     ],
     casos: [
       { id: 'en-caso-filomena', titulo: 'Filomena, 44 años: la sonda que no dice nada', corto: 'Filomena', sub: 'Colocar la sonda, descubrirla en el pulmón y calcular la pauta',
@@ -337,7 +339,7 @@ export const MAYEUTICA_ENTERAL = {
                 { t: 'Empezar con la mitad del ritmo y vigilar durante unas horas si tose o se queja', porque: 'Una sedada e intubada no tose aunque la sonda esté en el pulmón (p. 27).' }],
               explicacion: 'Radiografía de tórax tras <span class="hl-rojo">cada</span> inserción; las 55 cm del caso están dentro de los 50-60 cm de la distancia NEX (cálculo del caso, ' + pdf(26) + ' y ' + pdf(27) + ').' } },
           { momento: 'Día 1 · la radiografía', datos: { Rx: 'la sonda se desvía a la derecha a la altura de la carina' }, nuevo: ['Rx'],
-            pregunta: { id: 'en-p-c2', tipo: 'destapa', fuente: 'mar-img-49-3 · mu-sonda-mal',
+            pregunta: { id: 'en-p-c2', tipo: 'destapa', fuente: 'mar-img-49-3 · mu-sonda-mal', modelo: visual('mu-pauta-enteral', '👁️ Mira la Figura 49.3 en la vista Visual'),
               enunciado: 'Ves la radiografía de Filomena. ¿Qué haces y por qué?',
               cuantas: 'son tres cosas',
               puntos: [
@@ -356,7 +358,7 @@ export const MAYEUTICA_ENTERAL = {
                 { t: 'Si la punta queda bajo la cúpula izquierda, es probable que esté en el estómago.' }],
               explicacion: 'El capítulo manda abandonar el soplido (' + pdf(27) + '); el CO₂ detecta el pulmón pero no sustituye a la radiografía (' + pdf(29) + ').' } },
           { momento: 'Día 1 · segunda inserción', datos: { 'CO₂ por la sonda': 'sin onda, <15 mmHg', Rx: 'recta por el mediastino, punta 10 cm bajo la cúpula izquierda' }, nuevo: ['CO₂ por la sonda', 'Rx'],
-            pregunta: { id: 'en-p-c4', tipo: 'test', fuente: 'mar-img-49-2 · mu-sonda-rx',
+            pregunta: { id: 'en-p-c4', tipo: 'test', fuente: 'mar-img-49-2 · mu-sonda-rx', modelo: visual('mu-pauta-enteral', '👁️ Mira la Figura 49.2 en la vista Visual'),
               enunciado: 'Segunda radiografía: ¿es la posición óptima y puedes alimentar?',
               opciones: [
                 { t: 'No: si la punta está bajo la cúpula, hay que subirla hasta la unión gastroesofágica para evitar el reflujo', porque: 'Al revés: unos 10 cm bajo la cúpula está lejos de la unión gastroesofágica y reduce el reflujo al esófago (p. 27).' },
@@ -398,6 +400,13 @@ export const MAYEUTICA_ENTERAL = {
   'mu-complicaciones-enteral': {
     entrada: 'La sonda que se obstruye, el residuo gástrico que no hay que medir de rutina, los procinéticos con su límite de días y la diarrea que traen los fármacos líquidos.',
     guia: [
+      { id: 'en-c-g4', corto: 'sonda ocluida', tipo: 'test', fuente: 'mu-oclusion · mu-oclusion-pasos',
+        enunciado: 'La sonda fina va lenta. ¿Qué haces primero, y qué sigue si no funciona?',
+        opciones: [
+          { t: 'Pasar directamente la guía flexible y, si no funciona, cambiar la sonda', porque: 'La guía y el recambio son para la oclusión completa; con el flujo lento primero se prueba el agua tibia y las enzimas (p. 30).' },
+          { t: 'Inyectar Viokase con carbonato sódico, y el agua tibia solo después', porque: 'El orden del capítulo es agua tibia primero (resuelve un 30 %) y las enzimas pancreáticas después, con pinzamiento de 5 minutos (p. 30).' },
+          { t: 'Agua tibia (30 %); si no, Viokase con carbonato sódico (75 %) y pinzar', ok: true }],
+        explicacion: 'Flujo lento: agua tibia (30 %); si no, <span class="hl">1 comprimido de Viokase y 1 de carbonato sódico (324 mg) en 5 mL</span>, pinzar 5 min y lavar (75 %). Oclusión completa: guía flexible o cambiar la sonda sin demora (' + pdf(30) + ').' },
       { id: 'en-c-g1', corto: 'residuo de rutina', tipo: 'test', fuente: 'mu-grv · mu-aspiracion',
         enunciado: 'En tu UCI miden el residuo gástrico cada turno y paran si pasa de 200 mL. ¿Por qué eso puede empeorar la nutrición del paciente?',
         opciones: [
@@ -408,24 +417,17 @@ export const MAYEUTICA_ENTERAL = {
       { id: 'en-c-g2', corto: 'eritromicina 3 días', tipo: 'test', fuente: 'mu-procineticos · mu-tabla-49-5',
         enunciado: 'Residuo de 600 mL en 6 h: paras la nutrición y pones eritromicina. ¿Por qué solo 3 días?',
         opciones: [
-          { t: 'Porque alarga la microbiota y favorece las resistencias si se prolonga', porque: 'El libro dice lo contrario: tres días de eritromicina no alteran la microbiota. La razón del límite es otra (p. 31).' },
+          { t: 'Porque altera la microbiota residente si se prolonga', porque: 'El libro dice lo contrario: tres días de eritromicina no alteran la microbiota. La razón del límite es otra (p. 31).' },
           { t: 'Porque su eficacia decae en pocos días (taquifilaxia)', ok: true },
           { t: 'Porque a partir del 4.º día prolonga el QT', porque: 'El QT se alarga con la eritromicina y la metoclopramida desde el principio (p. 31-32); no depende de pasar de 3 días.' }],
         explicacion: 'Es el procinético más eficaz y de primera línea, pero hay <span class="hl-rojo">taquifilaxia tras pocos días</span>: no más de 3 días (100-200 mg IV cada 8 h). Tres días no afectan a la microbiota residente (' + pdf(31) + ').' },
       { id: 'en-c-g3', corto: 'naloxona enteral', tipo: 'test', fuente: 'mu-procineticos',
         enunciado: 'Dismotilidad gástrica en un paciente con fentanilo que necesita seguir con analgesia. ¿Qué opción bloquea el opioide en el intestino sin quitar el efecto analgésico?',
         opciones: [
-          { t: 'Naloxona IV en bolos, que antagoniza el opioide', porque: 'La IV revertiría también la analgesia. La opción que el libro propone es la naloxona directamente por la sonda (p. 32).' },
+          { t: 'Naloxona IV en bolos, que antagoniza el opioide', porque: 'La IV revertiría también la analgesia (fisiología general). La opción que el libro propone es la naloxona directamente por la sonda (p. 32).' },
           { t: 'Metoclopramida 10 mg IV cada 8 h, que bloquea los receptores opioides', porque: 'La metoclopramida antagoniza la dopamina, no los receptores opioides, y su eficacia decae en pocos días (p. 31).' },
           { t: 'Naloxona enteral por la sonda: 8 mg cada 6 h, solo para opiáceos', ok: true }],
         explicacion: 'La naloxona intragástrica bloquea los receptores opioides del intestino <span class="hl">sin antagonizar la analgesia</span>: 8 mg por la sonda cada 6 h, solo para la dismotilidad por opiáceos (experiencia limitada) (' + pdf(31) + ' y ' + pdf(32) + ').' },
-      { id: 'en-c-g4', corto: 'sonda ocluida', tipo: 'test', fuente: 'mu-oclusion · mu-oclusion-pasos',
-        enunciado: 'La sonda fina va lenta. ¿Qué haces primero, y qué sigue si no funciona?',
-        opciones: [
-          { t: 'Pasar directamente la guía flexible y, si no funciona, cambiar la sonda', porque: 'La guía y el recambio son para la oclusión completa; con el flujo lento primero se prueba el agua tibia y las enzimas (p. 30).' },
-          { t: 'Inyectar Viokase con carbonato sódico, y el agua tibia solo después', porque: 'El orden del capítulo es agua tibia primero (resuelve un 30 %) y las enzimas pancreáticas después, con pinzamiento de 5 minutos (p. 30).' },
-          { t: 'Agua tibia (30 %); si no, Viokase con carbonato sódico (75 %) y pinzar', ok: true }],
-        explicacion: 'Flujo lento: agua tibia (30 %); si no, <span class="hl">1 comprimido de Viokase y 1 de carbonato sódico (324 mg) en 5 mL</span>, pinzar 5 min y lavar (75 %). Oclusión completa: guía flexible o cambiar la sonda sin demora (' + pdf(30) + ').' },
     ],
     examen: [
       { id: 'en-c-e1', corto: 'nota de residuo', tipo: 'error', fuente: 'mu-grv-recomendaciones · mu-tabla-49-5',
@@ -437,6 +439,13 @@ export const MAYEUTICA_ENTERAL = {
             c: 'No más de <span class="hl-rojo">3 días</span>: su eficacia decae en pocos días (p. 31).' },
           { t: 'Si persiste al reanudar, avanzo el punto de infusión (estómago a duodeno).' }],
         explicacion: 'Residuo >500 mL en 6 h, cabecero ≥30° y procinético; si persiste, avanzar el punto de infusión (' + pdf(31) + ').' },
+      { id: 'en-c-e4', corto: 'aspiración silenciosa', tipo: 'test', fuente: 'mu-aspiracion',
+        enunciado: 'No ves fórmula en la vía aérea. ¿Descarta eso la microaspiración?',
+        opciones: [
+          { t: 'Sí: si no se ve fórmula en las vías aéreas, no hay aspiración', porque: 'La microaspiración ocurre en casi la mitad de los críticos y normalmente no se ve fórmula en las vías aéreas (p. 30).' },
+          { t: 'No: ocurre en casi la mitad de los críticos y suele no verse fórmula', ok: true },
+          { t: 'Sí, si el residuo gástrico es normal', porque: 'Vigilar el residuo se ha usado para estimar el riesgo con éxito limitado; un residuo normal no la descarta (p. 30).' }],
+        explicacion: 'Microaspiración en <span class="hl-rojo">casi la mitad</span> de los críticos, habitualmente sin fórmula visible, por mala motilidad gástrica y tono bajo del esfínter esofágico inferior (' + pdf(30) + ').' },
       { id: 'en-c-e2', corto: 'diarrea y fármacos', tipo: 'test', fuente: 'mu-diarrea · mu-diarrea-farmacos',
         enunciado: 'Diarrea en un paciente con enteral. ¿Qué rasgo de los fármacos líquidos por la sonda favorece la diarrea?',
         opciones: [
@@ -451,13 +460,6 @@ export const MAYEUTICA_ENTERAL = {
           { t: 'Una fórmula con fibra, que mezcla ambas', ok: true },
           { t: 'Una fórmula con proteínas predigeridas', porque: 'Facilita la absorción y la reabsorción de agua, útil en la diarrea rebelde (p. 32).' }],
         explicacion: 'Las fórmulas con fibra llevan una mezcla de fermentable y no fermentable: <span class="hl-rojo">no aportan ventaja en la diarrea</span>. Sí menor osmolalidad, predigeridas y evitar los líquidos de la Tabla 49.6 (' + pdf(32) + ').' },
-      { id: 'en-c-e4', corto: 'aspiración silenciosa', tipo: 'test', fuente: 'mu-aspiracion',
-        enunciado: 'No ves fórmula en la vía aérea. ¿Descarta eso la microaspiración?',
-        opciones: [
-          { t: 'Sí: si no se ve fórmula en las vías aéreas, no hay aspiración', porque: 'La microaspiración ocurre en casi la mitad de los críticos y normalmente no se ve fórmula en las vías aéreas (p. 30).' },
-          { t: 'No: ocurre en casi la mitad de los críticos y suele no verse fórmula', ok: true },
-          { t: 'Sí, si el residuo gástrico es normal', porque: 'Vigilar el residuo se ha usado para estimar el riesgo con éxito limitado; un residuo normal no la descarta (p. 30).' }],
-        explicacion: 'Microaspiración en <span class="hl-rojo">casi la mitad</span> de los críticos, habitualmente sin fórmula visible, por mala motilidad gástrica y tono bajo del esfínter esofágico inferior (' + pdf(30) + ').' },
     ],
     casos: [
       { id: 'en-caso-cipriano', titulo: 'Cipriano, 69 años: la sonda, el residuo y el fentanilo', corto: 'Cipriano', sub: 'Complicaciones de la enteral en un posoperatorio con opioides',
@@ -496,13 +498,14 @@ export const MAYEUTICA_ENTERAL = {
                 { t: 'Las dos alargan el QT y hay que valorarlo al decidir la combinación.' },
                 { t: 'Con QTc 510 ms seguimos con las dos sin más: el QT no importa aquí.', mal: true,
                   c: 'Ambos fármacos <span class="hl-rojo">prolongan el QT</span> y esto debe considerarse al decidir la combinación (p. 31-32).' },
-                { t: 'La naloxona enteral bloquea los receptores opioides del intestino sin quitar la analgesia.' }],
+                { t: 'La naloxona enteral bloquea los receptores opioides del intestino, pero obliga a bajar el fentanilo porque revierte parte de la analgesia.', mal: true,
+                  c: 'Por la sonda bloquea los receptores del intestino <span class="hl-rojo">sin antagonizar la analgesia</span> (p. 31-32).' }],
               explicacion: 'La combinación es más eficaz pero ambos alargan el QT (' + pdf(31) + ' y ' + pdf(32) + '). El libro no fija un valor de QTc; la cifra del caso es ilustrativa.' } },
           { momento: 'Día 6 · persiste', datos: { Residuo: 'sigue >500 mL al reanudar', Fentanilo: 'se mantiene' }, nuevo: ['Residuo', 'Fentanilo'], calculadora: { ir: 'mu-grv-calc', nombre: 'Persiste = Sí' },
             pregunta: { id: 'en-c-c5', tipo: 'test', fuente: 'mu-grv-calc · mu-grv-recomendaciones',
               enunciado: 'Persiste al reanudar tras los procinéticos. ¿Qué indica la calculadora?',
               opciones: [
-                { t: 'Duplicar la eritromicina', porque: 'No más de 3 días, y la eficacia decae (p. 31). El libro no propone aumentar la dosis.' },
+                { t: 'Duplicar la dosis de eritromicina y mantenerla varios días más', porque: 'No más de 3 días, y la eficacia decae (p. 31). El libro no propone aumentar la dosis.' },
                 { t: 'Avanzar el punto de infusión: estómago a duodeno', ok: true },
                 { t: 'Dejar de alimentar hasta que mejore el residuo', porque: 'Interrumpir la nutrición es justo lo que el capítulo intenta evitar; si persiste, se avanza el punto de infusión (p. 31).' }],
               explicacion: 'Si persiste al reanudar: <span class="hl-rojo">avanzar el punto de infusión</span> (estómago a duodeno o duodeno a yeyuno) (' + pdf(31) + ').' } },

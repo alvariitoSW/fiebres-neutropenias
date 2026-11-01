@@ -437,7 +437,7 @@ async function diasAtrasFichas(ANCHO) {
     const pulsar = sel => p.evaluate(s => { const e = document.querySelector(s); if (!e) throw new Error('no hay ' + s); e.click(); }, sel);
     const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     const abrirFicha = tab => p.evaluate(([t, nav]) => { const x = document.createElement('button'); Object.assign(x.dataset, { ...nav, tab: t }); document.body.append(x); x.click(); x.remove(); }, [tab, navDe(tab)]);
-    const A = Object.keys(SOLO_B1)[0], B = Object.keys(MAYEUTICA_B3)[0], C = Object.keys(MAYEUTICA_B2)[0];
+    const [A, B, C] = Object.keys(MAYEUTICA_B1);
     const tests = f => MAYEUTICA_B1[f].guia.filter(q => q.tipo === 'test');
     const [a0, a1] = tests(A), [b0, b1] = tests(B);
     const hoy = hoyLocal(), atras = n => sumarDias(hoy, -n);
