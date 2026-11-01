@@ -202,3 +202,10 @@ export const MAYEUTICA_ASMA_AGUDO = {
     ],
   },
 };
+
+// Reparte la posición de la buena (tras el barajado por id, 6-6-6): cada test, su lugar de escritura.
+const colocarAsma2 = (d, pat) => {
+  const qs = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(s => s.pregunta))].filter(q => q.tipo === 'test');
+  qs.forEach((q, i) => { const j = q.opciones.findIndex(o => o.ok); const [o] = q.opciones.splice(j, 1); q.opciones.splice(pat[i], 0, o); });
+};
+colocarAsma2(Object.values(MAYEUTICA_ASMA_AGUDO)[0], [0,0,2,0,1,2,0,1,2,0,1,2,0,0,1,0,1,2]);

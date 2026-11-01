@@ -37,7 +37,7 @@ export const MAYEUTICA_SDRA = {
       { id: 'sd-g3', corto: 'el COVID', tipo: 'test', fuente: 'nep-covid',
         enunciado: 'Una neumonía por SARS-CoV-2 con hipoxemia grave se clasifica como SDRA. ¿Qué la distingue y por qué importa a la hora de leer estudios?',
         opciones: [
-          no('Tiene la compliance más baja de todos los SDRA, así que los estudios de volumen valen igual para cualquier paciente', `Es lo contrario: con frecuencia la compliance cambia poco (${p(33)}). Aplicar sin matiz una estrategia pensada para un pulmón muy rígido puede ser un exceso de restricción.`),
+          no('Tiene la compliance más baja de todos los SDRA, así que los estudios de volumen valen igual para los demás', `Es lo contrario: con frecuencia la compliance cambia poco (${p(33)}). Aplicar sin matiz una estrategia pensada para un pulmón muy rígido puede ser un exceso de restricción.`),
           ok('Hipoxemia grave con poco cambio de la compliance, algo atípico; sus estudios pueden no valer para otros SDRA'),
           no('Es el SDRA más frecuente de la serie, y los estudios de COVID valen para el SDRA bacteriano porque el P/F es el mismo', `Marino advierte lo contrario: es un tipo único y muchos estudios recientes son de COVID (${p(33)}). Extrapolar sin cautela puede aplicar a un SDRA bacteriano un efecto que no se probó en él.`)],
         explicacion: `En el COVID-19 la hipoxemia grave <span class="hl-rojo">no suele acompañarse de pérdida de compliance</span>, y por eso se considera un SDRA «único»; los resultados de los estudios recientes pueden no aplicar a otros casos (${p(33)}).` + enFicha(SD, 'nep-covid') },
@@ -51,13 +51,13 @@ export const MAYEUTICA_SDRA = {
         enunciado: 'Un SDRA ingresa en UCI. Sin mirar las tablas: ¿qué parte de estos pacientes acaba intubada y en cuánto tiempo, típicamente?',
         opciones: [
           no('Alrededor de la mitad, y casi siempre pasada la primera semana', `Es mucho más frecuente y más rápido: el 80 % y en las primeras 48 h (${p(35)}). Si esperas una semana, no prepararás a tiempo la ventilación protectora.`),
-          ok('El 80 %, típicamente en las primeras 48 h tras la presentación'),
+          ok('El 80 %, típicamente, en las primeras 48 horas tras la presentación'),
           no('Menos de un 20 %, porque casi todos responden a oxígeno de alto flujo', `Marino da el 80 % (${p(35)}); la ventilación mecánica es la regla. Confiar en que no se intuba retrasaría el ingreso en una unidad con respirador.`)],
         explicacion: `<span class="hl-rojo">El 80 % requiere intubación y ventilación mecánica, típicamente en las primeras 48 h</span> (${p(35)}). Por eso la forma de ventilar (ficha siguiente) pesa tanto.` + enFicha(SD, 'nep-criterios-clinicos') },
       { id: 'sd-g6', corto: 'PEEP y definición', tipo: 'test', fuente: 'nep-peep-criterio',
         enunciado: 'El criterio de oxigenación exige una PEEP mínima. ¿Por qué se ha cuestionado esa exigencia?',
         opciones: [
-          ok('Porque pedir PEEP exige intubar y deja fuera los SDRA sin ventilación mecánica'),
+          ok('Porque pedir PEEP exige intubar y deja fuera los SDRA de pacientes que no están ventilados'),
           no('Porque una PEEP alta sube el cociente y oculta un SDRA grave, falseando la gravedad del paciente', `Marino no argumenta eso (${p(35)}). El problema es de definición, no de efecto: dejar fuera casos reales hace infradiagnosticar el SDRA de un paciente con alto flujo.`),
           no('Porque la PEEP no se puede medir con fiabilidad en la cabecera de un paciente ventilado', `Se mide en el respirador sin dificultad; la crítica es que exige un tubo (${p(35)}). Un paciente no intubado quedaría sin diagnóstico aunque cumpliera el resto.`)],
         explicacion: `La definición estándar incluye PEEP, y su aplicación <span class="hl-azul">requiere intubación y ventilación mecánica</span>: excluye al SDRA que aún respira sin respirador (${p(35)}).` + enFicha(SD, 'nep-peep-criterio') },
@@ -96,8 +96,8 @@ export const MAYEUTICA_SDRA = {
         enunciado: '¿Con qué PEEP se exige un PaO₂/FiO₂ ≤300 en los criterios de la Tabla 24.2?',
         opciones: [
           no('Con PEEP ≥10, el nivel habitual de un SDRA moderado', `El criterio pide 5 (${p(35)}); exigir 10 dejaría fuera pacientes con SDRA ventilados con PEEP 5.`),
-          ok('Con PEEP ≥5 (cmH₂O en el texto, mmHg en la tabla)'),
-          no('Sin PEEP: basta el cociente, con cualquier modo de ventilación', `La definición incluye un requisito de PEEP (${p(35)}); medir el cociente sin ella cambiaría los casos que cumplen.`)],
+          ok('Con PEEP ≥5 (cmH₂O en el texto, mmHg en la Tabla 24.2)'),
+          no('Sin PEEP: basta el cociente, con el modo de ventilación que haya', `La definición incluye un requisito de PEEP (${p(35)}); medir el cociente sin ella cambiaría los casos que cumplen.`)],
         explicacion: `<span class="hl-azul">PaO₂/FiO₂ ≤300 con PEEP de 5</span> (${p(35)}).`,
         nota: '<b>Nota de fidelidad.</b> La fuente usa cmH₂O en el texto y mmHg en la Tabla 24.2: probable errata del libro; se reproduce tal cual, no es un error del residente.' + enFicha(SD, 'neumo-nota-peep-unidades') },
       { id: 'sd-e2', corto: 'el informe de 1967', tipo: 'test', fuente: 'nep-patogenesis',
@@ -181,7 +181,7 @@ export const MAYEUTICA_SDRA = {
               opciones: [
                 no('Que ya hay fibrosis y toca esperar a que se resuelva el infiltrado sin cambiar nada del manejo', `La fibrosis es la fase tardía, reticular y difusa (${p(38)}). Esperar con una consolidación posterior densa desperdicia una indicación posible de la posición prono.`),
                 no('Que el paciente tiene un neumomediastino y requiere drenaje urgente del aire extrapulmonar', `El neumomediastino es del panel inferior, avanzado (${p(38)}). Drenar sin indicación expone a un riesgo sin beneficio.`),
-                ok('Fase temprana: la consolidación dependiente es un argumento para valorar el prono')],
+                ok('Fase temprana: la consolidación dependiente (posterior) es un argumento para valorar el prono')],
               explicacion: `Consolidación densa en las regiones dependientes de la posición supina: <span class="hl-purpura">fase temprana</span>, y la fuente propone que, con consolidación posterior densa, el prono tiene más probabilidad de éxito: una propuesta que merece atención, no una regla (${p(44)}).` + enFicha(SD, 'nep-tc') } },
         ],
         lleva: [
@@ -242,7 +242,7 @@ export const MAYEUTICA_SDRA = {
         enunciado: 'Con Vt 5 mL/kg la meseta sigue en 31. Según la 2.ª etapa de la Tabla 24.5, ¿hasta dónde puedes seguir bajando el Vt?',
         opciones: [
           no('Hasta 2 mL/kg, porque la tabla no marca un límite inferior', `El límite está escrito: Vt de 4 mL/kg (${p(48)}); pasar de ahí ventilaría con un volumen que la tabla no contempla.`),
-          ok('De 1 en 1 mL/kg hasta meseta <30 o Vt de 4 mL/kg'),
+          ok('De 1 en 1 mL/kg hasta lograr meseta <30 o Vt de 4 mL/kg'),
           no('Hasta 3 mL/kg, y después subes la PEEP para compensar', `El suelo es 4 mL/kg (${p(48)}); subir la PEEP no es el paso que la tabla indica para bajar la meseta.`)],
         explicacion: `Si la meseta supera 30, <span class="hl-azul">bajar el Vt 1 mL/kg</span> cada vez hasta que sea <30 o el Vt sea 4 mL/kg (${p(48)}).` + enFicha(SV, 'nep-tabla-24-5') },
       { id: 'sv-g7', corto: 'si el pH baja de 7,15', tipo: 'test', fuente: 'nep-tabla-24-5',
@@ -270,7 +270,7 @@ export const MAYEUTICA_SDRA = {
         opciones: [
           no('Que, como el ECMO, tiene un beneficio de supervivencia consistente, y que la aplica casi todo el mundo', `El ECMO ha dado resultados negativos o inconsistentes (${p(51)}) y menos de dos tercios recibe ≤8 mL/kg (${p(49)}). Dar por hecho su uso encubre un tratamiento mal aplicado.`),
           no('Que solo reduce los días de respirador, como la APRV, sin beneficio sobre la mortalidad', `Eso se dice de la APRV (${p(50)}); la protectora es la única estrategia ventilatoria con beneficio de supervivencia.`),
-          ok('Única estrategia ventilatoria con beneficio de supervivencia, pero se aplica poco')],
+          ok('Única estrategia ventilatoria con beneficio de supervivencia, pero se aplica poco en la práctica')],
         explicacion: `<span class="hl-purpura">Única estrategia ventilatoria con beneficio de supervivencia</span>; en una encuesta, menos de dos tercios recibió volúmenes ≤8 mL/kg de peso predicho (${p(49)}).` + enFicha(SV, 'nep-supervivencia') },
       { id: 'sv-g11', corto: 'APRV', tipo: 'test', fuente: 'nep-aprv',
         enunciado: 'En la APRV se alternan periodos largos de presión alta con liberaciones breves. ¿Qué presión alta y baja se fijan y qué logró en el estudio comparativo?',
@@ -306,7 +306,7 @@ export const MAYEUTICA_SDRA = {
         enunciado: 'En la 1.ª etapa de la Tabla 24.5, ¿con qué ritmo se reduce el Vt desde 8 hasta 6 mL/kg?',
         opciones: [
           no('1 mL/kg cada 6 horas', `El intervalo es 2 h (${p(48)}); cada 6 h tardaría más de lo debido en proteger.`),
-          ok('1 mL/kg cada 2 horas'),
+          ok('1 mL/kg cada 2 horas, de 8 a 6'),
           no('2 mL/kg a la vez, en una sola vez', `La tabla reduce de 1 en 1 mL/kg cada 2 h (${p(48)}); el salto brusco no es el ritmo descrito.`)],
         explicacion: `<span class="hl-azul">Reducir el Vt en 1 mL/kg cada 2 h hasta 6 mL/kg</span> (${p(48)}).` + enFicha(SV, 'nep-tabla-24-5') },
       { id: 'sv-e3', corto: 'el techo de la meseta', tipo: 'test', fuente: 'nep-protectora · nep-tabla-24-5',
@@ -322,7 +322,7 @@ export const MAYEUTICA_SDRA = {
         opciones: [
           no('SpO₂ ≥95 % con la FiO₂ que haga falta, y pH 7,20-7,25', `La SpO₂ objetivo es 88-95 % con la FiO₂ más baja; 7,20-7,25 es lo que se tolera en la hipercapnia permisiva (${p(49)}).`),
           no('SpO₂ 88-95 % con la FiO₂ más baja posible, y pH 7,15-7,30', `El pH objetivo es 7,30-7,45; 7,15-7,30 es el rango en que se sube la FR (${p(48)}-${p(49)}).`),
-          ok('SpO₂ 88-95 % y pH 7,30-7,45')],
+          ok('SpO₂ 88-95 % con la FiO₂ más baja posible y pH 7,30-7,45')],
         explicacion: `<span class="hl-azul">SpO₂ 88-95 % y pH 7,30-7,45</span> (${p(48)}-${p(49)}).` + enFicha(SV, 'nep-tabla-24-5') },
       { id: 'sv-e5', corto: 'dos órganos fallados', tipo: 'test', fuente: 'nep-fig-24-8',
         enunciado: 'Según la Figura 24.8, ¿cuál es la mortalidad con dos órganos extrapulmonares fallados?',

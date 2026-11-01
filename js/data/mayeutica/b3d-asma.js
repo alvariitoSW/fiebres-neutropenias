@@ -101,12 +101,12 @@ export const MAYEUTICA_ASMA = {
           { t: '12 %, 80 % y 20 %, porque el MDI sin espaciador deposita casi todo', porque: `El 80 % del MDI sin espaciador es el depósito en la orofaringe, no en el pulmón, que recibe el 9 % (${p(17)}).` }],
         explicacion: `Pulmones: nebulizador <span class="hl-rojo">12 %</span>, MDI <span class="hl-rojo">9 %</span>, MDI con espaciador <span class="hl-verde">20 %</span> (más del doble). La dosis de 200 μg es 2 puffs (${p(17)}).` + enFicha(BA, 'nep-tabla-23-1') },
       { id: 'as1-e3', corto: 'MDI sin espaciador', tipo: 'test', fuente: 'nep-tabla-23-1',
-        enunciado: 'Con el MDI de 0,36 mg sin espaciador, ¿cuánto albuterol llega al pulmón y cómo se compara con los 72 μg del MDI con espaciador?',
+        enunciado: 'Con el MDI sin espaciador, ¿qué parte de la dosis llega al pulmón y cómo se compara con el MDI con espaciador?',
         opciones: [
-          { t: 'Unos 32 μg (9 %): menos de la mitad', ok: true },
-          { t: '72 μg, igual: el espaciador solo evita la tos y el sabor', porque: `Sin espaciador llega el 9 % y con él el 20 % (${p(17)}); darías por equivalente un método que deposita menos de la mitad.` },
-          { t: 'Unos 290 μg (80 %): casi todo el spray llega, porque sale a más de 30 m/s', porque: `El 80 % es lo que choca en la orofaringe, no lo que llega al pulmón (${p(17)}); el paciente tragaría casi toda la dosis.` }],
-        explicacion: `9 % de 0,36 mg ≈ 32 μg frente a 72 μg con espaciador (20 %): <span class="hl-rojo">menos de la mitad</span> (${p(17)}).` + enFicha(BA, 'nep-tabla-23-1') },
+          { t: 'El 9 % de la dosis: menos de la mitad de lo que deposita con espaciador', ok: true },
+          { t: 'El 20 %, igual: el espaciador solo evita la tos y el sabor', porque: `Sin espaciador llega el 9 % y con él el 20 % (${p(17)}); darías por equivalente un método que deposita menos de la mitad.` },
+          { t: 'El 80 %: casi todo el spray llega, porque sale a más de 30 m/s', porque: `El 80 % es lo que choca en la orofaringe, no lo que llega al pulmón (${p(17)}); el paciente tragaría casi toda la dosis.` }],
+        explicacion: `El 9 % frente al 20 % con espaciador: <span class="hl-rojo">menos de la mitad</span> (${p(17)}).` + enFicha(BA, 'nep-tabla-23-1') },
       { id: 'as1-e4', corto: 'ajustes en ventilación', tipo: 'test', fuente: 'nep-aerosol-vm',
         enunciado: 'Nebulizas albuterol en un paciente con respirador. ¿Qué ajuste mejora el depósito y qué dosis das?',
         opciones: [
@@ -152,7 +152,7 @@ export const MAYEUTICA_ASMA = {
               enunciado: 'Plan del residente de guardia para Eulalia. Hay dos errores. Encuéntralos.',
               frases: [
                 { t: 'Albuterol 2,5 mg por nebulizador, porque en la exacerbación aguda se prefiere el nebulizador.' },
-                { t: 'Si no hay nebulizador, 2 puffs de MDI directos a la boca, sin espaciador, para ir más rápido.', mal: true, c: `Con MDI siempre espaciador: sin él el 80 % del spray choca en la orofaringe y llega el 9 % a los pulmones (${p(17)}).` },
+                { t: 'Si no hay nebulizador, 2 puffs de MDI directos a la boca, sin espaciador, para ir más rápido.', mal: true, c: `Con MDI siempre espaciador: sin él el spray choca en la orofaringe y el pulmón recibe menos de la mitad de lo que recibiría con él (${p(17)}).` },
                 { t: 'Oxígeno para mantener la SaO₂ en 90 % o más.' },
                 { t: 'El nebulizador deposita en el pulmón 7 veces más fármaco que el MDI, así que no hace falta más dosis.', mal: true, c: `Lo que difiere 7 veces es la dosis administrada (2,5 mg frente a 0,36 mg); lo inhalado difiere 4 veces (300 μg frente a 72 μg) (${p(18)}).` }],
               explicacion: 'Dos errores: el MDI sin espaciador y confundir la dosis administrada con la depositada.',

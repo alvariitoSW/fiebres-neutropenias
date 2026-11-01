@@ -96,7 +96,7 @@ export const MAYEUTICA_VNI = {
       { id: 'vni-e2', corto: 'fugas de la mascarilla', tipo: 'test', fuente: 'nep-mascarillas',
         enunciado: 'La mascarilla facial de una BiPAP tiene una pequeña fuga. ¿Qué cabe esperar del equipo?',
         opciones: [
-          { t: 'Que ninguna máquina lo compense, por lo que cualquier fuga obliga a pasar a CPAP', porque: `La mayoría de las máquinas de BiPAP pueden compensar las fugas (${p(79)}). Cambiarías de método sin necesidad.` },
+          { t: 'Que no lo compense la máquina, por lo que una fuga obliga a pasar a CPAP', porque: `La mayoría de las máquinas de BiPAP pueden compensar las fugas (${p(79)}). Cambiarías de método sin necesidad.` },
           { t: 'Que la compense la mayoría de las máquinas, con la mascarilla ajustada', ok: true },
           { t: 'Que la compense subiendo la PEEP hasta que deje de fugar', porque: `Las presiones altas promueven fugas (${p(77)}) y la mascarilla debe ajustarse para minimizarlas (${p(79)}); subir la PEEP incomodaría más a la paciente.` }],
         explicacion: `Las mascarillas deben ser ajustadas para minimizar fugas, <span class="hl-azul">aunque la mayoría de las máquinas de BiPAP pueden compensarlas</span> (${p(79)}).` + enFicha(M, 'nep-mascarillas') },

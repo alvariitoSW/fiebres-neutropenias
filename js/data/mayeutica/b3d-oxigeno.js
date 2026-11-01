@@ -93,7 +93,7 @@ const DATOS = {
         enunciado: 'La guía de 1984 indica oxígeno con PaO₂ <60 mmHg o SaO₂ <90 %. ¿Qué se asume a esos valores y qué opina Marino?',
         opciones: [
           no('Que el tejido está bien hasta una PaO₂ <40 mmHg, y Marino lo confirma con sus estudios', `La guía asume lo contrario: que a esos valores hay hipoxia tisular (${p(56)}). Y Marino la cuestiona; con ese error darías por buena una asunción que los estudios con lactato normal no sostienen (${p(58)}).`),
-          ok('Que hay hipoxia tisular, una asunción que Marino cuestiona'),
+          ok('Que hay hipoxia tisular, una asunción que Marino cuestiona con sus propios estudios'),
           no('Que hace falta un lactato >2 mmol/L para dar oxígeno, y Marino lo confirma', `La guía de 1984 se basa solo en la PaO₂ y la SaO₂ (${p(56)}); el lactato lo usa Marino para mostrar que el tejido tolera valores peores (${p(58)}). Con ese criterio retrasarías oxígeno a quien lo necesita.`)],
         explicacion: `La guía asume que a PaO₂ <60 o SaO₂ <90 % <span class="hl-rojo">«la hipoxia tisular está presente»</span>; Marino lo pone en duda: «el problema principal» es esa asunción (${p(56)}).` + enFicha(O2I, 'nep-indicaciones-o2') },
       { id: 'o2i-e4', corto: 'oxígeno y coronarias', tipo: 'test', fuente: 'nep-vasoconstrictor',
@@ -146,9 +146,9 @@ const DATOS = {
               frases: [
                 { t: 'Objetivo de SpO₂ 88-92 % con oxígeno de bajo flujo.' },
                 { t: 'Ajusto a SpO₂ 94-98 %, el objetivo de las guías recientes.', mal: true, c: `Las guías recientes piden 88-92 % si retiene CO₂ y 90-94 % en el resto, no 94-98 % (${p(56)}).` },
-                { t: 'Si vuelve el dolor torácico, más oxígeno porque dilata las coronarias.', mal: true, c: `El oxígeno vasoconstriñe las coronarias y puede disminuir su flujo (${p(60)}).` },
+                { t: 'Subo el oxígeno porque libera óxido nítrico y dilata los vasos de los órganos principales.', mal: true, c: `Al revés: el superóxido oxida el óxido nítrico y se pierde la vasodilatación (${p(60)}).` },
                 { t: 'Reviso el lactato: ≤2 mmol/L indica que el tejido no sufre.' }],
-              explicacion: 'Dos errores: el objetivo de las guías recientes no es 94-98 % y el oxígeno no dilata las coronarias.' + enFicha(O2I, 'nep-vasoconstrictor') } },
+              explicacion: 'Dos errores: el objetivo de las guías recientes no es 94-98 % y el oxígeno no dilata los vasos de los órganos principales.' + enFicha(O2I, 'nep-vasoconstrictor') } },
           { momento: 'Día 10 · el sistema', datos: { 'SpO₂': '97 % con la mascarilla', 'PaCO₂': '84 mmHg' }, nuevo: ['SpO₂', 'PaCO₂'],
             pregunta: { id: 'o2i-c5', tipo: 'test', fuente: 'nep-objetivo-spo2', origen: 'ficha: objetivo y Tabla 25.2; las cifras, del paciente (inventado)',
               enunciado: 'Retiras la mascarilla. ¿Con qué sigues y con qué objetivo?',
@@ -310,7 +310,7 @@ const DATOS = {
               puntos: [
                 `La FiO₂ teórica es del 100 %, pero la real se acerca al <span class="hl-rojo">80 %</span> por fugas y mal funcionamiento de la válvula, y menos aún si el inspiratorio del distrés supera el flujo (${p(61)}-${p(62)}).`,
                 `Si la bolsa queda <span class="hl-rojo">insuficientemente llenada</span>, aparece una hipoxemia problemática (${p(62)}).`,
-                `Es un sistema que <span class="hl-azul">ya no se favorece</span>; la ficha recomienda el alto flujo nasal en lugar de la oxigenoterapia convencional (${p(62)}, ${p(66)}).`],
+                `Con ≥10 L/min da como mucho 60-80 %; el alto flujo nasal llega a 24-100 % con 1-60 L/min, y por eso es la alternativa cuando el P/F es tan bajo (${p(62)}).`],
               explicacion: `La mascarilla de no reinhalación cayó en desuso por la reinhalación de CO₂ con válvulas defectuosas y por las bolsas mal llenadas (${p(62)}).` + enFicha(O2S, 'nep-reservorio') } },
           { momento: 'Urgencias · alto flujo', datos: { Oxígeno: 'HFNO 50 L/min, FiO₂ 0,8', FR: '22', 'SpO₂': '94 %' }, nuevo: ['Oxígeno', 'FR', 'SpO₂'],
             pregunta: { id: 'o2s-c4', tipo: 'test', fuente: 'nep-hfno-diseno · nep-tabla-25-3', origen: 'ilustrativo: la FR, del monitor de la app; el mecanismo, de la ficha', modeloVivo: pv('hfno', '🫁 Sube el flujo de la cánula a 50 L/min'),
