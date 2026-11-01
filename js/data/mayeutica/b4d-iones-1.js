@@ -135,7 +135,7 @@ export const MAYEUTICA_IONES_1 = {
         opciones: [
           { t: 'Un exceso de aporte de los suplementos: un riñón sano siempre elimina una carga de K⁺, sin más', porque: 'Un riñón sano sí elimina la carga, y por eso mismo, si la hiperpotasemia se mantiene, hay un defecto renal detrás. Culpar solo al aporte te haría seguir con el IECA.' },
           { t: 'Una salida de K⁺ de las células, porque no se mantiene sin ella', porque: 'La salida celular da una subida transitoria. Una mantenida implica, al menos en parte, un defecto de excreción.' },
-          { t: 'Hay un defecto renal en la excreción, aunque sea parcial: el IECA actúa sobre el eje renina-angiotensina-aldosterona', ok: true }],
+          { t: 'Hay un defecto renal en la excreción, aunque sea parcial, y el IECA pesa en él', ok: true }],
         explicacion: 'Como el riñón puede eliminar una carga de K⁺, <span class="hl-rojo">toda hiperpotasemia mantenida implica, al menos en parte, un defecto renal</span>: enfermedad renal, insuficiencia suprarrenal (solo la crónica) o fármacos. Todos los de la Tabla 36.2 actúan sobre el eje renina-angiotensina-aldosterona, salvo el trimetoprim-sulfametoxazol (E p. 25).' },
       { id: 'ion-k-h4', corto: 'las bolsas', tipo: 'test', fuente: 'mr-hiperk-transfusion', modelo: iv('valentin'),
         enunciado: 'Un politrauma recibe 10 concentrados de hematíes en 3 h. Predice: ¿cuánto potasio lleva cada unidad de 18 días de almacenamiento?',
@@ -148,7 +148,7 @@ export const MAYEUTICA_IONES_1 = {
         enunciado: 'Predice el orden en que aparecen los cambios del ECG con el K⁺ subiendo.',
         opciones: [
           { t: 'QRS ancho; después T picuda; después P larga y plana; después FV o asistolia', porque: 'El orden es otro: la T picuda abre la serie. Esperar al QRS ancho para actuar es llegar cuando el bloqueo ya ha empezado.' },
-          { t: 'T alta y picuda (V2-V3); P baja con PR largo; sin P y QRS ancho; FV o asistolia', ok: true },
+          { t: 'T picuda; P baja y PR largo; sin P y QRS ancho; FV', ok: true },
           { t: 'Onda U prominente; T aplanada; QT largo; torsade', porque: 'Esos son los cambios de la hipopotasemia, no de la hiperpotasemia.' }],
         explicacion: 'La hiperpotasemia despolariza el miocardio y enlentece la conducción: T alta y picuda, baja la P y se alarga el PR, desaparece la P y se ensancha el QRS (bloqueo completo), FV o asistolia (Figura 36.4, E p. 26).' },
       { id: 'ion-k-h6', corto: 'el ECG engaña', tipo: 'destapa', fuente: 'mr-ecg-correlacion',
@@ -170,9 +170,9 @@ export const MAYEUTICA_IONES_1 = {
       { id: 'ion-k-x2', corto: 'lisis tumoral', tipo: 'test', fuente: 'mr-hiperk-lisis',
         enunciado: 'Linfoma no Hodgkin recién iniciada la quimioterapia. ¿Cuándo aparece el síndrome de lisis tumoral y qué amenaza es la más inmediata?',
         opciones: [
-          { t: 'En los 7 días tras iniciar la citotoxicidad; la hiperpotasemia', ok: true },
+          { t: 'En 7 días; la hiperpotasemia', ok: true },
           { t: 'A las 6 semanas del inicio; la hiperuricemia, que da el FRA', porque: 'Aparece en la primera semana. Esperar a las semanas te haría no vigilar el K⁺ cuando es más peligroso.' },
-          { t: 'En los 7 días; la hipocalcemia, que mata antes que el potasio', porque: 'La hipocalcemia forma parte del síndrome, pero la ficha señala la hiperpotasemia como la amenaza más inmediata.' }],
+          { t: 'En los 7 días tras iniciar la citotoxicidad; la hipocalcemia', porque: 'La hipocalcemia forma parte del síndrome, pero la ficha señala la hiperpotasemia como la amenaza más inmediata.' }],
         explicacion: 'En los <span class="hl">7 días</span> tras iniciar la citotoxicidad: hiperpotasemia, hiperfosfatemia, hipocalcemia e hiperuricemia, a menudo con FRA. La hiperpotasemia es la amenaza más inmediata (E p. 24).' },
       { id: 'ion-k-x3', corto: 'la succinilcolina', tipo: 'error', fuente: 'mr-digital-succi · mr-hiperk-acidosis',
         enunciado: 'Un residente repasa causas de hiperpotasemia. Encuentra los errores (puede haber 0, 1 o 2).',
@@ -228,7 +228,7 @@ export const MAYEUTICA_IONES_1 = {
       { id: 'ion-k-t4', corto: 'insulina y β₂', tipo: 'test', fuente: 'mr-insulina-k · mr-beta2-k', modelo: iv('adela:4'),
         enunciado: 'Predice: tras 10 U de insulina con 50 mL de glucosa al 50 %, ¿cuánto baja el K⁺, cuándo es el pico y qué hay del salbutamol?',
         opciones: [
-          { t: 'Baja al menos 0,6 mEq/L con pico a los 30-60 min; el salbutamol solo baja <0,5 y nunca va solo', ok: true },
+          { t: 'Baja ≥0,6 mEq/L con pico a los 30-60 min; el salbutamol, <0,5 y nunca solo', ok: true },
           { t: 'Baja 3 mEq/L en 5 min y es definitivo; el salbutamol a dosis habituales es igual de potente', porque: 'Es temporal (pico a los 30-60 min) y modesto. Si lo crees definitivo, no seguirás con la eliminación y el K⁺ volverá a subir.' },
           { t: 'Baja 0,6 mEq/L pero el salbutamol a dosis doble lo supera sin riesgo', porque: 'Para bajar 0,5-1 el salbutamol exige al menos 4 veces la dosis, con efectos adversos como la taquicardia.' }],
         explicacion: 'La insulina-glucosa activa la bomba en el músculo: baja el K⁺ <span class="hl">al menos 0,6 mEq/L</span>, con <span class="hl">pico a los 30-60 min</span>, temporal. Los β₂ bajan <0,5 mEq/L a dosis terapéuticas; nunca solos (E p. 28).' },
@@ -242,7 +242,7 @@ export const MAYEUTICA_IONES_1 = {
         enunciado: 'Para sacar potasio del cuerpo tienes resina de poliestireno, ciclosilicato de sodio y zirconio y hemodiálisis. ¿Cuál es el método más eficaz y cuál es hoy el preferido entre las resinas?',
         opciones: [
           { t: 'La resina de poliestireno es la más eficaz y rápida de todas; la diálisis es la última opción', porque: 'La resina tiene eficacia dudosa, inicio lento y casos de necrosis intestinal. No es la más eficaz ni la más rápida.' },
-          { t: 'Hemodiálisis (baja 1 mEq/L en 1 h y 2 en 3 h); entre los fijadores, el ciclosilicato (10 g tres veces al día 48 h)', ok: true },
+          { t: 'Hemodiálisis (1 mEq/L en 1 h); entre los fijadores, el ciclosilicato', ok: true },
           { t: 'Ciclosilicato en bolo único de 10 g; la hemodiálisis solo para el K⁺ >10', porque: 'La pauta es repetida (cada 8 h durante 48 h), y la ficha no pone el corte de 10 para la diálisis.' }],
         explicacion: 'La <span class="hl-rojo">hemodiálisis</span> es el método más eficaz (1 mEq/L en 1 h, 2 mEq/L en 3 h). El ciclosilicato (efecto significativo a la 1 h) equivale al poliestireno en la aguda sin sus riesgos y es hoy el preferido (E p. 28).' },
     ],
@@ -274,7 +274,7 @@ export const MAYEUTICA_IONES_1 = {
       { id: 'ion-k-y4', corto: 'el digital', tipo: 'test', fuente: 'mr-calcio-digital',
         enunciado: 'Hiperpotasemia grave en un paciente intoxicado con digital. ¿Qué dice la ficha del calcio?',
         opciones: [
-          { t: 'Está clásicamente contraindicado, pero estudios retrospectivos muestran muchos casos con calcio IV sin daño', ok: true },
+          { t: 'Clásicamente contraindicado, pero muchos casos con calcio IV sin daño', ok: true },
           { t: 'Sigue estando absolutamente contraindicado en toda intoxicación digitálica: ninguna excepción', porque: 'La ficha matiza: hay estudios con muchos casos tratados sin daño. Negar el calcio te dejaría sin el tratamiento de elección.' },
           { t: 'Se da sin precauciones, porque la digital no afecta al calcio', porque: 'La contraindicación clásica es por la sobrecarga celular de calcio; no se trata de algo trivial.' }],
         explicacion: 'Clásicamente contraindicado en la intoxicación digitálica (sobrecarga celular de calcio), pero estudios retrospectivos muestran muchos casos con calcio IV sin daño (E p. 27).' },
@@ -309,14 +309,14 @@ export const MAYEUTICA_IONES_1 = {
               enunciado: 'Adela está estable, sin colapso. ¿Qué calcio y cómo?',
               opciones: [
                 { t: 'Gluconato cálcico al 10 %, 10 mL IV en 3 min, repetible a los 5 min', ok: true },
-                { t: 'Cloruro cálcico al 10 %, 10 mL en 3 min, por ser más potente', porque: 'El cloruro es el triple de calcio y se reserva para el colapso o la parada; en una paciente estable es innecesario.' },
+                { t: 'Cloruro cálcico al 10 %, 10 mL en 3 min, por ser más potente que el gluconato y actuar antes', porque: 'El cloruro es el triple de calcio y se reserva para el colapso o la parada; en una paciente estable es innecesario.' },
                 { t: 'Gluconato cálcico 10 mL en 30 min, para no irritar la vena ni la conducción', porque: 'Tan lento no frena a tiempo la conducción: la pauta es en 3 min.' }],
               explicacion: 'Gluconato cálcico al 10 %: 10 mL IV en 3 min; repetir a los 5 min si hace falta. El ECG se arregla a los pocos minutos (E p. 27).' } },
           { momento: 'Minuto 10 · meter y sacar', datos: { Pauta: 'insulina + glucosa + ciclosilicato' }, nuevo: ['Pauta'],
             pregunta: { id: 'ion-k-a4', tipo: 'test', fuente: 'mr-tabla-36-3 · mr-insulina-k · mr-szc', modelo: iv('adela:4'), origen: 'ficha',
               enunciado: 'El ECG ha mejorado. ¿Qué añades ahora para meter y sacar el potasio?',
               opciones: [
-                { t: 'Salbutamol 20 mg como único tratamiento adicional', porque: 'Nunca solo, y baja menos de 0,5 mEq/L; no elimina el exceso.' },
+                { t: 'Salbutamol 20 mg en aerosol como único tratamiento adicional, y esperar a ver cómo evoluciona', porque: 'Nunca solo, y baja menos de 0,5 mEq/L; no elimina el exceso.' },
                 { t: 'Insulina regular 10 U + 50 mL G50 en bolo, y ciclosilicato 10 g cada 8 h 48 h', ok: true },
                 { t: 'Bicarbonato 100 mEq porque la acidosis sube el K⁺', porque: 'Sin acidosis metabólica no cambia el K⁺ y forma complejos con el calcio que acabas de dar.' }],
               explicacion: 'Insulina regular 10 U IV + 50 mL de glucosa al 50 %: baja al menos 0,6 mEq/L con pico a los 30-60 min; ciclosilicato 10 g cada 8 h durante 48 h, con efecto a la 1 h (E p. 27-28).' } },
@@ -324,7 +324,7 @@ export const MAYEUTICA_IONES_1 = {
             pregunta: { id: 'ion-k-a5', tipo: 'test', fuente: 'mr-calcio-efecto · mr-hd-k', modelo: [iv('adela:4'), FILTRO_K], origen: 'ficha · K⁺ del caso, ilustrativo',
               enunciado: 'A los 45 min el QRS vuelve a ensancharse y el K⁺ está en 6,3. ¿Qué ha pasado y qué haces?',
               opciones: [
-                { t: 'El calcio se ha disipado (30-60 min) y el K⁺ sigue alto: repito el calcio y preparo hemodiálisis', ok: true },
+                { t: 'El calcio se ha disipado y el K⁺ sigue alto: repito calcio y preparo diálisis', ok: true },
                 { t: 'La insulina ha fallado: doy otras 10 U inmediatamente sin calcio', porque: 'El problema inmediato es el corazón, no la cifra; sin calcio el bloqueo avanza.' },
                 { t: 'Es un artefacto de la monitorización: un K⁺ de 6,3 es demasiado bajo para cambiar el ECG', porque: 'La correlación es impredecible: hay cambios con cifras moderadas. Llamarlo artefacto retrasa el tratamiento.' }],
               explicacion: 'El calcio actúa en minutos y <span class="hl-rojo">se disipa en 30-60 min</span>; si no has bajado el K⁺, vuelve el efecto. La hemodiálisis es el método más eficaz: 1 mEq/L en 1 h (E p. 27-28).' } },
