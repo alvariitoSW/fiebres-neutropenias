@@ -23,10 +23,10 @@ import { join } from 'node:path';
 const { MAYEUTICA_B1: SOLO_B1 } = await import(new URL('../../../../js/data/mayeutica/b1.js', import.meta.url));
 const { MAYEUTICA_B2 } = await import(new URL('../../../../js/data/mayeutica/b2.js', import.meta.url));
 const { MAYEUTICA_B3 } = await import(new URL('../../../../js/data/mayeutica/b3.js', import.meta.url));
-// Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
+// Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_FICHAS sustituye al viejo MAYEUTICA_B1 para no tocar el resto de la prueba).
 const { MAYEUTICA_EJE } = await import(new URL('../../../../js/data/mayeutica/b6b-eje.js', import.meta.url));
 const { MAYEUTICA_HIGADO } = await import(new URL('../../../../js/data/mayeutica/b6b-higado.js', import.meta.url));
-const MAYEUTICA_B1 = { ...MAYEUTICA_EJE };
+const MAYEUTICA_FICHAS = { ...MAYEUTICA_EJE };
 // Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
@@ -40,7 +40,7 @@ const RAIZ = new URL('../../../../', import.meta.url).pathname;
 const fallosTotales = [];
 const okG = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallosTotales.push(t); };
 // MAY_SOLO=<prefijo> (variable de entorno) limita la parte del navegador a esas fichas, para probar un bloque deprisa.
-const FICHAS = Object.keys(MAYEUTICA_B1).filter(f => !process.env.MAY_SOLO || f.startsWith(process.env.MAY_SOLO));
+const FICHAS = Object.keys(MAYEUTICA_FICHAS).filter(f => !process.env.MAY_SOLO || f.startsWith(process.env.MAY_SOLO));
 const largo = s => s.replace(/<[^>]+>/g, '').length;
 
 /* ---------- 1. Los datos (sin navegador) ---------- */
@@ -50,7 +50,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
     recorrer(join(RAIZ, 'js')); html.push(readFileSync(join(RAIZ, 'index.html'), 'utf8'));
     const idsHtml = new Set(html.join('\n').match(/\sid="[^"]+"/g).map(s => s.slice(5, -1)));
     const vistos = new Map();
-    for (const [ficha, d] of Object.entries(MAYEUTICA_B1)) {
+    for (const [ficha, d] of Object.entries(MAYEUTICA_FICHAS)) {
         const m = [];
         if (!idsHtml.has(ficha)) m.push('la ficha no existe');
         if (!d.guia?.length) m.push('sin Guía socrática');
@@ -147,7 +147,7 @@ async function correr(ANCHO, REDUCIDO) {
 
     // Una ficha sin Mayéutica sigue con Texto | Visual
     // (la primera ficha del cuaderno que aún no tiene Mayéutica; si ya la tienen todas, no hay nada que mirar)
-    const sinMay = null; void await p.evaluate(f => [...document.querySelectorAll('#panel-marino-fund-tabs .tab-content[data-visual]')].map(t => t.id).find(id => !f.includes(id)), Object.keys(MAYEUTICA_B1));
+    const sinMay = null; void await p.evaluate(f => [...document.querySelectorAll('#panel-marino-fund-tabs .tab-content[data-visual]')].map(t => t.id).find(id => !f.includes(id)), Object.keys(MAYEUTICA_FICHAS));
     if (sinMay) {
         await abrirFicha(sinMay); await p.waitForTimeout(400);
         ok(await p.evaluate(t => [...document.querySelectorAll(`#${t} > .vista-toggle button`)].map(b => b.textContent).join('|'), sinMay) === 'Texto|Visual', `una ficha sin Mayéutica (${sinMay}) sigue con Texto | Visual`);
@@ -158,7 +158,7 @@ async function correr(ANCHO, REDUCIDO) {
     const irPaso = (f, paso) => pulsar(`#${f} .est-ir[data-ir-paso="${paso}"]`);
     const volverVisible = () => p.evaluate(() => [...document.querySelectorAll('button')].find(b => /VOLVER A LA FICHA/.test(b.textContent) && b.offsetParent)?.id || null);
     for (const [nf, ficha] of FICHAS.entries()) {
-        const d = MAYEUTICA_B1[ficha];
+        const d = MAYEUTICA_FICHAS[ficha];
         await abrirFicha(ficha); await p.waitForTimeout(500);
         ok(await fichaAbierta(ficha), `${ficha}: la ficha abre`);
         const botones = await p.evaluate(f => [...document.querySelectorAll(`#${f} > .vista-toggle button`)].map(b => b.textContent).join('|'), ficha);
@@ -347,7 +347,7 @@ async function correr(ANCHO, REDUCIDO) {
     ok(await p.evaluate(f => !document.getElementById(f).classList.contains('modo-estudiar'), FICHAS[1]), '«🖼️ Visual» apagado: la ficha vuelve al texto');
 
     // Lo guardado sigue al recargar
-    const nPreg = FICHAS.reduce((a, f) => a + MAYEUTICA_B1[f].guia.length + MAYEUTICA_B1[f].examen.length, 0);
+    const nPreg = FICHAS.reduce((a, f) => a + MAYEUTICA_FICHAS[f].guia.length + MAYEUTICA_FICHAS[f].examen.length, 0);
     const g = await p.evaluate(() => JSON.parse(localStorage.getItem('mayeutica-fichas-v1') || '{}'));
     const guardadas = Object.values(g).filter(x => x.resultado).length;
     ok(guardadas === nPreg && !Object.values(g).some(x => x.repasar), `localStorage: ${guardadas} de ${nPreg} con resultado y ninguna pendiente de repaso`);
@@ -357,7 +357,7 @@ async function correr(ANCHO, REDUCIDO) {
     const marcas = await p.evaluate(f => [...document.querySelectorAll(`#${f} .est-ir .est-marca`)].map(m => m.textContent).join(''), FICHAS[0]);
     ok(marcas === '✓2✓✓✓', `tras recargar, ${FICHAS[0]}: Mira, Piensa, Examínate y El caso marcados; Juega, de esta sesión, no («${marcas}»)`);
     await irPaso(FICHAS[0], 'piensa'); await p.waitForTimeout(150);
-    const nG0 = MAYEUTICA_B1[FICHAS[0]].guia.length;
+    const nG0 = MAYEUTICA_FICHAS[FICHAS[0]].guia.length;
     ok(await p.evaluate(([f, n]) => new RegExp(`de ${n} bien a la primera`).test(document.querySelector(`#${f} .est-paso[data-paso="piensa"] .may-zona`).textContent), [FICHAS[0], nG0]), `tras recargar, ${FICHAS[0]} recuerda las ${nG0} de la guía`);
 
     ok(errores.length === 0, `0 errores de consola (${errores.length}) ${errores.slice(0, 3).join(' | ')}`);
@@ -378,7 +378,7 @@ async function casoPestanaMayeutica(ANCHO) {
     const ok = (c, t) => { console.log(`${c ? '✅' : '❌'} ${t}`); if (!c) fallosTotales.push(`${ANCHO}px mayéutica: ${t}`); };
     const pulsar = sel => p.evaluate(s => { const e = document.querySelector(s); if (!e) throw new Error('no hay ' + s); e.click(); }, sel);
     const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
-    const ficha = FICHAS[0], d = MAYEUTICA_B1[ficha];
+    const ficha = FICHAS[0], d = MAYEUTICA_FICHAS[ficha];
     await p.goto(BASE + 'index.html');
     await p.waitForFunction(f => document.getElementById(f)?.querySelector(':scope > .vista-estudiar'), ficha, { timeout: 15000 });
     await p.evaluate(([t, nav]) => { const x = document.createElement('button'); Object.assign(x.dataset, { ...nav, tab: t }); document.body.append(x); x.click(); x.remove(); }, [ficha, navDe(ficha)]);
@@ -440,7 +440,7 @@ async function diasAtrasFichas(ANCHO) {
     const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     const abrirFicha = tab => p.evaluate(([t, nav]) => { const x = document.createElement('button'); Object.assign(x.dataset, { ...nav, tab: t }); document.body.append(x); x.click(); x.remove(); }, [tab, navDe(tab)]);
     const A = Object.keys(SOLO_B1)[0], B = Object.keys(MAYEUTICA_B3)[0], C = Object.keys(MAYEUTICA_B2)[0];
-    const tests = f => MAYEUTICA_B1[f].guia.filter(q => q.tipo === 'test');
+    const tests = f => MAYEUTICA_FICHAS[f].guia.filter(q => q.tipo === 'test');
     const [a0, a1] = tests(A), [b0, b1] = tests(B);
     const hoy = hoyLocal(), atras = n => sumarDias(hoy, -n);
     const siembra = {
@@ -499,7 +499,7 @@ async function diasAtrasFichas(ANCHO) {
     await pulsar(`#${C} > .vista-toggle [data-vista="estudiar"]`);
     await abrirFicha(C); await p.waitForTimeout(300);
     await pulsar(`#${C} .est-ir[data-ir-paso="piensa"]`); await pulsar(`#${C} .est-paso[data-paso="piensa"] [data-ir="seguir"]`);
-    const q0 = MAYEUTICA_B1[C].guia[0], Zp = `#${C} .est-paso[data-paso="piensa"] .may-zona`;
+    const q0 = MAYEUTICA_FICHAS[C].guia[0], Zp = `#${C} .est-paso[data-paso="piensa"] .may-zona`;
     if (q0.tipo === 'test') {
         await pulsar(`${Zp} [data-accion="ops"]`);
         await pulsar(`${Zp} [data-op="${barajar(q0.opciones, q0.id).findIndex(o => !o.ok)}"]`); await p.waitForTimeout(80);

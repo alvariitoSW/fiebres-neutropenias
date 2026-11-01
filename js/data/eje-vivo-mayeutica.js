@@ -52,7 +52,7 @@ const guiaMas = [
     ops: [
       ['Baja la FC y frena la conversión de T4 a T3; la T4 libre sigue alta y aún falta el antitiroideo.', true, '', 54, 'mu-tabla-51-3'],
       ['La T4 libre baja a lo normal en pocos días: el betabloqueante apaga la glándula y sobra el antitiroideo.', false, 'El propranolol no frena la síntesis de T4: eso lo hacen el metimazol o el propiltiouracilo (Tabla 51.4). Sin antitiroideo, la glándula sigue a toda marcha y la T4 libre queda en 2,9.', 55, 'mu-tabla-51-4'],
-      ['La FC no cambia: en la fibrilación auricular el betabloqueante no actúa sobre el ritmo.', false, 'La Tabla 51.3 da el propranolol precisamente para frenar la taquicardia de la tirotoxicosis; no ponerlo deja a Sinforoso a 128 lpm.', 54, 'mu-tabla-51-3'],
+      ['Baja la FC, pero sube la T4 libre: el propranolol acelera la síntesis de la glándula.', false, 'El propranolol no toca la síntesis de T4 (eso lo hace el antitiroideo, Tabla 51.4): la T4 libre no sube, se queda en 2,9 mientras no pongas el antitiroideo; creer que la sube haría retirarlo y dejar a Sinforoso a 128 lpm.', 55, 'mu-tabla-51-3'],
     ], tocar: { txt: 'Compruébalo: pon el propranolol', patch: { pac: 'sinforoso', set: { bb: 'prop', bbD: 0 } },
       cuenta: (a, d) => `la FC de Sinforoso pasa de ${a.fc} a ${d.fc} lpm y la T4 libre sigue en 2,9 ng/dL: ha frenado el pulso, no la glándula.` } },
   { num: 'G4', corto: 'Policarpo: cortisol con etomidato', estado: { pac: 'policarpo', lup: 'sr', vista: 'eje' },
@@ -60,15 +60,15 @@ const guiaMas = [
     ops: [
       ['Cae por debajo de 10 µg/dL: el etomidato inhibe la síntesis de cortisol.', true, '', 50, 'mu-sr-causas'],
       ['Sube: el etomidato estimula la suprarrenal frente al estrés de la intubación.', false, 'El etomidato inhibe la síntesis de cortisol, no la estimula. Un cortisol alto te haría descartar una supresión real en un enfermo que puede necesitar hidrocortisona.', 50, 'mu-sr-causas'],
-      ['No cambia: el etomidato solo actúa en el cerebro, como hipnótico.', false, 'La ficha lo cita, junto al ketoconazol, entre los fármacos que inhiben la síntesis de cortisol: pasarlo por alto retrasa el diagnóstico de la supresión.', 50, 'mu-sr-causas'],
+      ['Baja algo, pero sigue por encima de 10 µg/dL por el estrés de la intubación.', false, 'La ficha cita el etomidato, junto al ketoconazol, entre los fármacos que inhiben la síntesis de cortisol, y un aleatorio menor de 10 µg/dL es la señal de supresión: esperarlo por encima de 10 retrasa el diagnóstico y la hidrocortisona.', 50, 'mu-sr-causas'],
     ], tocar: { txt: 'Compruébalo: pon el etomidato', patch: { pac: 'policarpo', set: { farm: 'eto' } },
       cuenta: () => `el cortisol aleatorio de Policarpo pasa de ${aA.b} a ${aE.b} µg/dL: menor de 10, supresión.` } },
   { num: 'G5', corto: 'Policarpo: prueba de la ACTH', estado: { pac: 'policarpo', lup: 'sr', vista: 'mapa', set: { farm: 'eto' } },
     enunciado: `Con el etomidato puesto, el cortisol aleatorio de Policarpo es de ${aE.b} µg/dL. Si haces la prueba de la ACTH con 250 µg, ¿qué cifra esperas a la hora y qué te dice? <b>Elige antes de ver nada.</b>`,
     ops: [
       ['Sube pocos puntos, menos de 9 µg/dL: es supresión, y con el basal ya bajo la prueba sobra.', true, '', 50, 'mu-sr-acth'],
-      ['Sube 9 µg/dL o más: la respuesta normal descarta cualquier supresión, también la secundaria.', false, 'Un aumento de 9 o más es respuesta normal, pero no excluye la supresión secundaria por fallo hipotálamo-hipofisario: la diagnostica la ACTH plasmática.', 51, 'mu-sr-practica'],
-      ['Hay que hacerla siempre antes de tratar: sin la prueba no se puede hablar de supresión.', false, 'Con el basal menor de 10 ya hay supresión y la ficha llama a la prueba «popular pero a menudo innecesaria»; esperarla retrasaría la hidrocortisona si hay hipotensión.', 50, 'mu-sr-acth'],
+      ['Sube 9 µg/dL o más: la respuesta es normal y descarta la supresión.', false, 'Un aumento de 9 o más es respuesta normal, pero no excluye la supresión secundaria por fallo hipotálamo-hipofisario: la diagnostica la ACTH plasmática.', 51, 'mu-sr-practica'],
+      ['Hay que hacerla antes de tratar: sin la prueba no se puede hablar de supresión.', false, 'Con el basal menor de 10 ya hay supresión y la ficha llama a la prueba «popular pero a menudo innecesaria»; esperarla retrasaría la hidrocortisona si hay hipotensión.', 50, 'mu-sr-acth'],
     ], tocar: { txt: 'Compruébalo: haz la prueba de la ACTH', patch: { pac: 'policarpo', set: { farm: 'eto', acth: true } },
       cuenta: () => `el cortisol de Policarpo pasa de ${aE.b} a ${aE.post} µg/dL: aumento de ${aE.d}, menor de 9 µg/dL.` } },
   { num: 'G6', corto: 'Fulgencio: ¿se trata?', estado: { pac: 'fulgencio', lup: 'ti', vista: 'mapa' },
@@ -84,7 +84,7 @@ const guiaMas = [
     ops: [
       ['Casi igual: la hormona que ya circula sigue ahí y los fármacos solo frenan la glándula.', false, `Con antitiroideo, yodo, betabloqueante e hidrocortisona a la vez, la T y la FC bajan en días (sentido de la ficha, p. 53-55; el modelo pasa de ${T4('lucrecia').t} a ${T4('lucrecia', con).t} °C). Creerla sin respuesta te haría añadir fármacos de más.`, 55, 'mu-ti-tormenta'],
       [`Ya sin sello: la T baja a unos ${coma(T4('lucrecia', con).t)} °C y la FC a ${T4('lucrecia', con).fc}, pero ha hecho falta darle días.`, true, '', 55, 'mu-ti-tormenta'],
-      ['Normal desde las primeras horas: el yodo bloquea la secreción de T4 al instante.', false, 'El yodo bloquea la síntesis y la secreción de T4 (p. 55), pero el modelo da la respuesta en días, no en horas (cifras ilustrativas): esperar un cambio inmediato lleva a doblar dosis sin necesidad.', 55, 'mu-ti-yodo'],
+      ['A las 24 h ya 37 °C y FC normal: el yodo bloquea la secreción de T4 de inmediato.', false, 'El yodo bloquea la síntesis y la secreción de T4 (p. 55), pero el modelo da la respuesta en días, no en 24 h (cifras ilustrativas): esperar 37 °C al día siguiente lleva a doblar dosis sin necesidad.', 55, 'mu-ti-yodo'],
     ], tocar: { txt: 'Compruébalo: pon todo y avanza 7 días', patch: { pac: 'lucrecia', set: con },
       cuenta: (a, d) => `la temperatura de Lucrecia pasa de ${coma(a.t)} a ${coma(d.t)} °C y la FC de ${a.fc} a ${d.fc} lpm; el reloj corre ${con.dia} días (el sentido es el de la ficha; los días, ilustrativos).` } },
   { num: 'G8', corto: 'Lucrecia con asma', estado: { pac: 'lucrecia', lup: 'ti', vista: 'eje', set: { atd: 'ptu', atdD: 0 } },
