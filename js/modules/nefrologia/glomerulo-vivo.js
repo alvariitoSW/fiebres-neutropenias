@@ -54,12 +54,16 @@ export const MANDOS = {
     obstruccionMantenida: 'Obstrucción mantenida',
     albuminuria: 'Albuminuria (barrera dañada)',
     congestion: 'Congestión venosa (PVC 20)',
+    critico: 'Paciente crítico (sepsis, pérdida de masa muscular)',
 };
 // Presión venosa central con el mando de congestión (ilustrativo: un valor alto de insuficiencia cardiaca
 // congestiva; es también el tope del mando) y preajustes: cada clave de data-glomerulo puede fijar la PAM.
 export const PVC_CONGESTION = 20;
 // Presión intraabdominal: tope del mando (ilustrativo; el SCA se define como PIA >20, Marino cap. 34, PDF p. 49).
 export const PIA_MAX = 40;
+// «La creatinina engaña»: Marino cap. 34 (PDF p. 45-46) dice que la estimación basada en la creatinina sobrestima el filtrado
+// real del crítico, pero no da cuánto; este factor es ilustrativo.
+export const SOBRESTIMA_CREATININA = 1.3;
 const PREAJUSTE = { congestion: { pam: 80 } };
 
 // Presión capilar glomerular y resto del glomérulo para un estado dado.
@@ -72,11 +76,10 @@ function modelo(e) {
     // Marino cap. 18 (PDF p. 7): la congestión reduce el gradiente arteriovenoso renal: perfusión = PAM − PVC.
     let pa = e.pam - (e.deplecion ? 20 : 0) - (e.congestion ? PVC_CONGESTION : 0);
     if (e.estenosis) pa *= 0.85; // la ficha: la presión distal cae un 10-20%
-    // Marino cap. 34 (PDF p. 49, Ec. 34.2-34.3): PPA = PAM − PIA mueve la autorregulación y el gradiente de
-    // filtración es PAM − 2·PIA: la PIA resta también como presión del túbulo. Con PIA 0 no cambia nada.
+    // Marino cap. 34 (PDF p. 49, Ec. 34.2-34.3): el gradiente de filtración es PAM − 2·PIA (PPA = PAM − PIA y
+    // la PIA resta además como presión del túbulo). El filtrado se escala con ese gradiente, de forma gradual.
     // Los 7 mmHg normales ya están dentro del filtrado de base (125): el modelo resta solo lo que pasa de ahí (ilustrativo).
     const pia = e.pia || 0, piaEf = Math.max(0, pia - 7), paSinPia = pa;
-    pa = Math.max(0, pa - piaEf);
     const obstr = e.obstruccion || e.obstruccionMantenida;
     const renina = pa < 90 || e.deplecion || e.estenosis || e.obstruccionMantenida;
     const A = !renina ? 0 : e.estenosis ? 5 : e.deplecion ? 2.5 : e.obstruccionMantenida ? 2 : clamp((90 - pa) * 0.3, 0, 4);
@@ -124,7 +127,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
     const css = getComputedStyle(document.documentElement);
     const tk = v => css.getPropertyValue(v).trim();
     const C = { texto: tk('--text-main'), suave: tk('--text-muted'), verde: tk('--accent-green'), rojo: tk('--accent-red'), amarillo: tk('--accent-yellow'), oro: tk('--accent-blue'), purpura: tk('--accent-purple') };
-    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, congestion: false, pia: 0, ...opciones.inicial };
+    const e = { pam: 100, ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, congestion: false, critico: false, pia: 0, ...opciones.inicial };
     const textos = opciones.textos || {};
     const enlace = clave => textos[clave] ? ` <button type="button" class="visual-link" data-gl-ver="${textos[clave]}">Texto ↓</button>` : '';
     const toggles = opciones.mandos.filter(m => m !== 'pam' && m !== 'pia');
@@ -290,6 +293,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             ['Presión neta', `${M.pnf.toFixed(1).replace('.', ',')} mmHg`, normal, dir(M.pnf, 10, 0.5), `Capilar − Bowman ${Math.round(M.pb)} − oncótica 30`, M.pnf < 9.5 ? 'malo' : ''],
             ['TFG', `${Math.round(M.tfg)} ml/min`, normal, dir(d, 0, 3), Math.abs(d) < 3 ? 'Como la normal' : `${d > 0 ? '+' : ''}${Math.round(d)}% respecto a la normal`, d < -3 ? 'malo' : ''],
         ];
+        if (e.critico) items.push(['Filtrado que estima la creatinina', `${Math.round(M.tfg * SOBRESTIMA_CREATININA)} ml/min`, false, 'sube', `Real: ${Math.round(M.tfg)} ml/min. Sobrestima (cuánto, ilustrativo)`, 'malo']);
         if (opciones.mandos.includes('albuminuria')) items.push(['Albúmina que se escapa', e.albuminuria ? `${Math.round(M.albumina * 100)}%` : 'Nada', !e.albuminuria,
             e.albuminuria ? dir(M.albumina, 1, 0.05) : '', e.albuminuria ? 'Respecto a la barrera dañada sin tratar' : 'Barrera sana', e.albuminuria ? (M.albumina < 0.95 ? 'bueno' : 'malo') : '']);
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(([n, v, ficha, s, nota, tono]) => `
@@ -321,6 +325,7 @@ export function montarGlomerulo(cuerpo, { tab }, opciones) {
             const cuenta = `Presión de perfusión abdominal = PAM ${Math.round(M.paSinPia)} − PIA ${e.pia} = ${ppa} mmHg (Ec. 34.2); gradiente de filtración = ${Math.round(M.paSinPia)} − 2 × ${e.pia} = ${grad} mmHg (Ec. 34.3). La PIA pesa el doble que la PAM: ${e.pia > 20 ? 'oliguria' : 'la oliguria es de los primeros signos'}. Fuente: Marino cap. 34, PDF p. 49 (PPA >60 se asocia a mejores resultados; el dibujo descuenta los 7 mmHg normales ya incluidos en el filtrado de base y cuánto filtrado se pierde es ilustrativo).`;
             av.push(e.pia > 20 ? ['danger', 'PIA >20 mmHg: síndrome compartimental abdominal si hay disfunción orgánica: oliguria. ' + cuenta + enlace('pia')] : ['warn', 'PIA ≥12 mmHg: hipertensión intraabdominal. ' + cuenta + enlace('pia')]);
         } else if (e.pia > 0) av.push(['ok', `PIA ${e.pia} mmHg: normal en decúbito supino, 5-7 mmHg (Marino cap. 34, PDF p. 49).` + enlace('pia')]);
+        if (e.critico) av.push(['warn', `La creatinina engaña: el crítico pierde alrededor del 2% de su masa muscular cada día y en la sepsis se produce menos creatina; la creatinina sale más baja de lo que corresponde y la fórmula sobrestima el filtrado real (aquí ${Math.round(M.tfg * SOBRESTIMA_CREATININA)} estimado frente a ${Math.round(M.tfg)} real; cuánto sobrestima, ilustrativo: el libro no da cifra). Cuenta para dosificar fármacos. Fuente: Marino cap. 34, PDF p. 45-46.` + enlace('critico')]);
         if (e.isglt2) av.push(['ok', 'La retroalimentación tubuloglomerular contrae la aferente: baja la presión dentro del glomérulo.' + enlace('isglt2')]);
         if (e.estenosis) av.push(['warn', e.ieca ? 'Sin angiotensina II la eferente se relaja y la presión que sostenía el filtrado se pierde.' + enlace('estenosis') : 'Detrás de la estenosis la presión cae un 10-20%; la renina sube y la angiotensina II contrae la eferente para sostener el filtrado.' + enlace('estenosis')]);
         if (e.deplecion && !e.ieca) av.push(['warn', e.aine ? 'Con AINE no hay prostaglandinas que dilaten la aferente: solo queda la angiotensina II para sostener el filtrado.' + enlace('aine') : 'Con poco volumen, la angiotensina II (eferente) y las prostaglandinas (aferente) sostienen el filtrado.' + enlace('deplecion')]);

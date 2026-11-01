@@ -131,6 +131,8 @@ function renal() {
         guia: 'KDIGO: creatinina o diuresis; y por qué la creatinina engaña en la UCI.',
         paneles: [
             FIGURAS,
+            { tipo: 'propio', titulo: 'Glomérulo vivo: la creatinina engaña', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'critico'], textos: { critico: 'mr-creatinina-critico' } }) },
             calc('¿Cumple criterios de FRA? (Tabla 34.1)', ['#mr-kdigo-basal', '#mr-kdigo-actual', '#mr-kdigo-tiempo', '#mr-kdigo-diuresis'], ['#mr-kdigo-resultado']),
             calc('Filtrado estimado (calculadora de la ficha)', ['#mr-fg-edad', '#mr-fg-peso', '#mr-fg-cr', '#mr-fg-sexo'], ['#mr-fg-resultado']),
             { tipo: 'racimos', titulo: 'Los límites de la creatinina', grupos: [{ titulo: 'Creatinina', color: 'rojo', nodos: [n('#mr-creatinina-limites', 'Tres límites de la creatinina'), n('#mr-creatinina-critico', 'En el crítico'), n('#mr-cistatina', 'Cistatina C')] }] }
