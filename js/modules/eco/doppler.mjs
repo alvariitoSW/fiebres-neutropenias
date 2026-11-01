@@ -179,15 +179,15 @@ export function puntosMuestra(P, g, haz) {
 export const velocidadesMuestra = (pts, haz, F) => pts.map(p => -dot(velocidad(p, F), haz));
 
 /** Columna del espectro (RGB por fila) para unas velocidades medidas; escala ±vmax, con aliasing. */
-export function columnaEspectro(us, filas, vmax, semilla = 1) {
+export function columnaEspectro(us, filas, vmax, semilla = 1, base = 0.5, modal = false) {
   const out = new Uint8ClampedArray(filas * 3);
   let a = (semilla * 2654435761) >>> 0; const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
-  const envolver = (u) => ((u + vmax) % (2 * vmax) + 2 * vmax) % (2 * vmax) - vmax;
+  const lo = -2 * (1 - base) * vmax, envolver = (u) => ((u - lo) % (2 * vmax) + 2 * vmax) % (2 * vmax) + lo;   // el aliasing envuelve en el rango visible (con la base desplazada, también)
   for (let y = 0; y < filas; y++) {
-    const vy = vmax * (1 - 2 * (y + 0.5) / filas); let I = 0;
+    const vy = 2 * vmax * (base - (y + 0.5) / filas); let I = 0;
     for (const u0 of us) { if (Math.abs(u0) < 4) continue;          // filtro de pared
       const u = envolver(u0), sg = 2.5 + 0.05 * Math.abs(u0), z = (vy - u) / sg;
-      I += Math.exp(-z * z) + (vy * u > 0 && Math.abs(vy) < Math.abs(u) ? 0.12 : 0); }   // relleno hasta la línea de base
+      I += Math.exp(-z * z) + (vy * u > 0 && Math.abs(vy) < Math.abs(u) ? (modal ? 0.03 + 0.1 * Math.pow(vy / u, 2) : 0.12) : 0); }   // relleno hasta la línea de base; con modal (CW de un chorro), borde denso e interior más tenue (densidad modal, Zoghbi 2017 Fig. 29)
     I = I / us.length * (0.7 + 0.6 * rnd()) + 0.03 * rnd();
     const g = 255 * Math.min(1, Math.pow(I, 0.6) * 1.35);
     out[3 * y] = g; out[3 * y + 1] = g * 0.97; out[3 * y + 2] = g * 0.9;
@@ -225,6 +225,33 @@ export function curvaLatido(onda, fuente, factor, areas, m) {
   return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velVaso(fuente.vasoTipo, fuente.r, s, m) }));
 }
 
+/**
+ * Velocidad (cm/s, + hacia la sonda) que dibuja el espectro CW de una insuficiencia (IM, IT) en una muestra del motor: el chorro
+ * sistólico (factor · v del chorro, negativo si se aleja) y, en diástole, el llenado de esa válvula (E y A) con el signo contrario,
+ * porque el haz atraviesa el mismo orificio (Zoghbi 2017 Fig. 29: los tres paneles lo muestran). Solo para dibujar: las medidas
+ * (curvaLatido) siguen leyendo el chorro. El ángulo del llenado se toma igual que el del chorro (ilustrativo).
+ */
+export function velCwReg(s, fuente, factor, areas, m) {
+  const mit = fuente.n === 'regMitral', c0 = mit ? velRegMitral(s, m.eroaMitral) : velRegTricus(s, m.eroaTricus);
+  // Bernoulli (ΔP = 4v²): por debajo de 0,6 m/s (ΔP ≈ 1,4 mmHg) no hay chorro, solo el flujo de cierre de la válvula; sin este corte quedaba una
+  // meseta plana de decenas de cm/s en la contracción isovolumétrica (fisiología general; ilustrativo). E y A son la curva real del motor (velOrificio).
+  const chorro = c0 < VCW_MIN_CHORRO ? 0 : c0;
+  return factor * chorro - factor * velOrificio(mit ? 'mitral' : 'tricus', s, areas);
+}
+export const VCW_MIN_CHORRO = 60;
+
+/**
+ * Escalón del CW (cm/s, ilustrativo) para el espectro de una IM/IT. base: fracción de la altura a la que está la línea (0,2 = arriba).
+ * Manda el chorro (abajo, cm/s): el escalón más pequeño en que cabe entero en su lado de la base (≤ 100 %), que lo deja en ≥ 60-70 % de su lado.
+ * El llenado (arriba) entra solo si cabe sin bajar el chorro del 60 %: un pico de llenado que lo exigiría (la onda A de la tricúspide del motor) se sale por arriba.
+ */
+export const ESCALAS_CW = [150, 200, 225, 250, 300, 350, 400, 500, 700];
+export function escalaCw(arriba, abajo, base) {
+  const cabe = (e, ar) => abajo <= 2 * e * (1 - base) && (!ar || arriba <= 2 * e * base);
+  const e0 = ESCALAS_CW.find(e => cabe(e, false)) ?? 700, e1 = ESCALAS_CW.find(e => cabe(e, true)) ?? 700;
+  return abajo >= 0.6 * 2 * e1 * (1 - base) ? e1 : e0;
+}
+
 /** Qué fuente domina en la muestra y con qué factor (velocidad medida / velocidad de la fuente). */
 export function fuenteEnMuestra(pts, haz, F) {
   let mejor = null;
@@ -236,7 +263,10 @@ export function fuenteEnMuestra(pts, haz, F) {
   for (const v of F.vasos) { const u = medir({ valvulas: [], vasos: [{ ...v, vm: 1 }] }); if (!mejor || Math.abs(u) > Math.abs(mejor.factor)) mejor = { tipo: 'vaso', vasoTipo: v.tipo, nombre: v.nombre, r: v.r, factor: u }; }
   // el chorro regurgitante, si la muestra cae de verdad en él, manda sobre la convergencia de la mitral (que no sabe de cierres)
   const reg = F.geom.find(j => j.n === 'regMitral');
-  if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: u }; }
+  if (reg) { const u = medir({ valvulas: [reg], vasos: [] }); if (Math.abs(u) > 0.2) {
+    // CW de la IM: igual que la IT, el haz atraviesa todo el chorro y se lee su máximo (vena contracta); solo cuenta el ángulo (cos θ)
+    const cos = Math.abs(haz[0] * reg.dir[0] + haz[1] * reg.dir[1] + haz[2] * reg.dir[2]);
+    return { tipo: 'valvula', n: 'regMitral', nombre: 'Insuficiencia mitral · chorro', tubo: false, factor: Math.sign(u) * cos }; } }
   const regT = F.geom.find(j => j.n === 'regTricus');
   if (regT) { const u = medir({ valvulas: [regT], vasos: [] }); if (Math.abs(u) > 0.2) {
     // Doppler continuo: la línea del haz atraviesa todo el chorro y el ecógrafo lee su máximo (la vena contracta), no la velocidad

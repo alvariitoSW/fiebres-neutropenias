@@ -178,7 +178,7 @@ function calcCobertura() {
     // Parejas que la ficha cita (pág. 33), cada una con su salvedad. Ceftriaxona + metronidazol es
     // para el paciente no grave: con shock séptico no se ofrece.
     const parejas = [
-        ['Ceftriaxona', 'Metronidazol', ' (solo si no está grave; cobertura muy inferior a piperacilina-tazobactam, pág. 33)', !shock],
+        ['Ceftriaxona', 'Metronidazol', ' (solo si no está grave; muy inferior a piperacilina-tazobactam, pág. 33)', !shock],
         ['Amikacina', 'Metronidazol', ' (la de la alergia a betalactámicos)', true],
     ].filter(([a, b, , ofrecer]) => { const ca = TABLA_41_3.find(x => x[0] === a)[1], cb = TABLA_41_3.find(x => x[0] === b)[1]; return ofrecer && cols.every(i => ca[i] === '+' || cb[i] === '+'); })
         .map(([a, b, nota]) => `${a} + ${b}${nota}`);

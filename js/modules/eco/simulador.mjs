@@ -18,14 +18,14 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, regionZoom, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
+import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg, escalaCw } from './doppler.mjs';
 
-export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
+export const NOMBRE_VISTA = { a4c: 'A4C', a4cVd: 'A4C foco VD', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
-const ORDEN_VISTAS = ['a4c', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm', 'sc4c', 'scVci', 'sse'];
+const ORDEN_VISTAS = ['a4c', 'a4cVd', 'a2c', 'a3c', 'plax', 'psaxAo', 'psaxMv', 'psaxPm', 'sc4c', 'scVci', 'sse'];
 export { VISTAS, ESCENARIOS };
 
 /**
@@ -152,6 +152,17 @@ export function montarSimulador(raiz, opc = {}) {
   let reto = null;
   let ecoVisible = true, ultimoEco = -1e9, ecoInfo = null, ecoPendiente = true, ecoMs = 0;
   $('#cv-vistas').innerHTML = ORDEN_VISTAS.filter(k => VISTAS[k]).map(k => `<button type="button" class="cv-mini${k === vistaEco ? ' on' : ''}" data-eco="${k}" title="${VISTAS[k].nombre}">${NOMBRE_VISTA[k]}</button>`).join('');
+  // Zoom ×2 de lectura (ilustrativo): el mismo fotograma ampliado, centrado en la región que da regionZoom; el lienzo se escala con CSS (el recorte lo hace .cv-eco).
+  let zoomEco = false, regionZ = null;
+  function aplicarZoom() {
+    const b = $('#cv-zoom'), ins = $('#cv-eco-zoom'); if (!b) return;
+    b.setAttribute('aria-pressed', String(zoomEco)); b.classList.toggle('on', zoomEco); b.textContent = zoomEco ? 'Quitar zoom ×2' : 'Zoom ×2 en la región'; ins.hidden = !zoomEco;
+    ecoC.classList.toggle('zoom', zoomEco); if (!zoomEco || !ecoGeom || !planoEco) { ecoC.style.transform = ''; return; }
+    if (!regionZ || regionZ.P !== planoEco) regionZ = { P: planoEco, ...regionZoom(planoEco, estGeo) };
+    const W = ecoC.width, H = ecoC.height, x = ecoGeom.cx + regionZ.u * ecoGeom.k, y = ecoGeom.arriba + regionZ.v * ecoGeom.k;
+    const tx = clamp(W / 2 - 2 * x, -W, 0), ty = clamp(H / 2 - 2 * y, -H, 0);
+    ecoC.style.transform = `translate(${(tx / W * 100).toFixed(2)}%, ${(ty / H * 100).toFixed(2)}%) scale(2)`;
+  }
   function elegirVista(k) {
     if (!VISTAS[k]) return;
     vistaEco = k; claveTd = ''; ecoPendiente = true; img.prof = null; ponerMandosImg();
@@ -397,6 +408,7 @@ export function montarSimulador(raiz, opc = {}) {
   function elegirModo(m) {
     modoEco = m; $$('[data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === m));
     $('#cv-m-zona').hidden = m !== 'M'; $('#cv-d-zona').hidden = m !== 'D';
+    $('#cv-eco-fijo').classList.toggle('cv-sin-fijo', m === 'M' || m === 'D');   // el bloque fijo (imagen + gravedad) taparía el espectro
     if (m === 'M') { modoM.ajustar(); colocarLineaM(); pintarGuia(); }
     if (m === 'D') { espectro.ajustar(); if (!gate) muestraPorDefecto(); else reiniciarD(); }
     ecoPendiente = true;
@@ -510,6 +522,7 @@ export function montarSimulador(raiz, opc = {}) {
     a.dispatchEvent(new Event('input', { bubbles: true })); b.dispatchEvent(new Event('input', { bubbles: true }));
   });
   $$('[data-modo]').forEach(b => b.addEventListener('click', () => elegirModo(b.dataset.modo)));
+  $('#cv-zoom').addEventListener('click', () => { zoomEco = !zoomEco; aplicarZoom(); });
   $('#cv-medir').addEventListener('click', (e) => { const b = e.target.closest('[data-medir]'); if (b) elegirMedida(b.dataset.medir); });
   // arrastrar en horizontal sobre la imagen B mueve la línea M (en vertical, la página se desplaza)
   ecoC.style.touchAction = 'pan-y';
@@ -588,11 +601,24 @@ export function montarSimulador(raiz, opc = {}) {
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
+    ponerBase(k === 'regmitral' || k === 'regtricus' ? 'arriba' : 'centro');   // CW de un chorro que se aleja: línea de base arriba (ilustrativo)
+    escalaAuto = k === 'regmitral' || k === 'regtricus';   // el mando manual manda si el usuario lo toca
     if (k === 'regmitral' || k === 'regtricus') { const e = k === 'regtricus' ? '500' : '250'; $('#cv-d-escala').value = e; espectro.setEscala(+e); }   // el chorro supera los 150 cm/s; la IT con HP llega a ~450 cm/s: el CW no da aliasing
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
-  $('#cv-d-escala').addEventListener('change', () => { espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
+  // Escala automática del CW de la IM y la IT, como un ecógrafo: el escalón más pequeño (ESCALAS_CW de doppler.mjs, ilustrativo) en que el chorro y el llenado del latido
+  // caben en su lado de la línea de base (≤ 100 %), para que el chorro ocupe la pantalla sin recortarse
+  let escalaAuto = false;
+  function escalarPorPico() {
+    const vs = motor.onda.map(x => velCwReg(x, fuenteD, fuenteD.factor, areasD(), datosFlujo())), arriba = Math.max(0, ...vs), abajo = Math.max(0, -Math.min(0, ...vs)), bs = espectro.estado.base;
+    const v = escalaCw(arriba, abajo, bs);
+    if (v === espectro.estado.vmax) return;
+    $('#cv-d-escala').value = String(v); espectro.setEscala(v); ultimoTD = null;
+  }
+  function ponerBase(k) { $('#cv-d-base').value = k; espectro.setBase(k === 'arriba' ? 0.2 : k === 'abajo' ? 0.8 : 0.5); ultimoTD = null; }
+  $('#cv-d-base').addEventListener('change', () => ponerBase($('#cv-d-base').value));
+  $('#cv-d-escala').addEventListener('change', () => { escalaAuto = false; espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
   $('#cv-color').addEventListener('change', () => { colorOn = $('#cv-color').checked; $('#cv-nyquist').hidden = !colorOn; ecoPendiente = true; });
   $('#cv-nyquist').addEventListener('change', () => { nyq = +$('#cv-nyquist').value; ecoPendiente = true; });
   // tocar (o arrastrar) sobre la imagen B en modo Doppler pone el volumen de muestra
@@ -608,6 +634,7 @@ export function montarSimulador(raiz, opc = {}) {
     latidoD = motor.s.nLatido; fuenteD = fuenteEnMuestra(pts, haz, F); angD = null;
     if (fuenteD && fuenteD.tipo === 'valvula') { const j = F.geom.find(x => x.n === fuenteD.n); angD = Math.acos(Math.min(1, Math.abs(haz[0] * j.dir[0] + haz[1] * j.dir[1] + haz[2] * j.dir[2]))) * 180 / Math.PI; }
     medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD, datosFlujo()) : null;
+    if (escalaAuto && medD && medD.tipo === 'regurgitacion' && medD.pico > 0) escalarPorPico();
     pintarResultadoD();
   }
   // El renglón «fórmula → números → resultado» es de la app (core/formula.js); el laboratorio suelto no lo carga y deja el texto de siempre.
@@ -646,7 +673,7 @@ export function montarSimulador(raiz, opc = {}) {
         + `<br>En el orificio el chorro llega a ${fx(vOri)} cm/s (ΔP VI−AI ≈ 4v² = ${fx(dp)} mmHg).`
         + `<br><b>Vena contracta ${fx(vc, 2)} cm</b> (calculada del EROA como un orificio redondo, no medida en la imagen; Zoghbi: &lt;0,3 cm leve, ≥0,7 cm grave; ${vc < 0.3 ? 'leve' : vc >= 0.7 ? 'grave' : 'intermedia: los valores intermedios se solapan entre grados, confírmalo con otros métodos'}). Tras ella el chorro se abre en cono y arrastra sangre: ocupa más AI cuanto más EROA, pero el área del chorro no sirve sola para graduar. En la IM secundaria el orificio es elíptico y la vena contracta en 2D la subestima.`
         + ` <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=26" target="_blank" rel="noopener">Zoghbi p. 328</a> · <a href="docs/zoghbi-2017-insuficiencias-valvulares-ase.pdf#page=6" target="_blank" rel="noopener">p. 308 (área del chorro)</a>`
-        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.</span>`);
+        + `<br><span class="cv-muted">Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En el CW el haz atraviesa el chorro y se lee su máximo × cos θ (la línea de base sube para aprovechar la pantalla; escala e inclinación ilustrativas).</span>`);
       return;
     }
     if (medD.tipo === 'eyeccion') {
@@ -763,7 +790,7 @@ export function montarSimulador(raiz, opc = {}) {
     const Fd = colorOn || (modoEco === 'D' && gate) ? fuentesFlujo(geoEco.flujo, s, areasD(), abdEco.vasos, datosFlujo()) : null;
     if (colorOn) ecografo.colorear(mapaColor(planoEco, im, Fd), nyq);
     ecoImg.data.set(im.pix); ecoCtx.putImageData(ecoImg, 0, 0);
-    ecoGeom = { cx: im.cx, arriba: im.arriba, k: im.escala };
+    ecoGeom = { cx: im.cx, arriba: im.arriba, k: im.escala }; aplicarZoom();
     if (modoEco === 'M') {
       // la columna del modo M sale de esta misma imagen; al revisar un instante pasado no se escribe (el trazado
       // vive en el tiempo del motor)
@@ -776,21 +803,22 @@ export function montarSimulador(raiz, opc = {}) {
       const P = planoEco, g = sumV(P.O, sumV(escV(P.r, gate.u), escV(P.d, gate.v))), haz = nrm(sumV(escV(P.r, gate.u), escV(P.d, gate.v)));
       const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
       // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
-      if (fuenteD && fuenteD.n === 'regTricus') { const jt = Fd.valvulas.find(x => x.n === 'regTricus'); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
+      const esReg = fuenteD && (fuenteD.n === 'regTricus' || fuenteD.n === 'regMitral');
+      if (esReg) us = [velCwReg(s, fuenteD, fuenteD.factor, areasD(), datosFlujo())];   // chorro sistólico y, en diástole, el llenado E y A de esa válvula
       if (!revision && s === motor.s && ultimoTD !== s.t) {
         // una columna por muestra del motor (2 ms) desde el fotograma anterior: la onda sale con su envolvente y su pendiente, no en escalones.
         // Cada muestra desplaza las velocidades del fotograma por lo que cambia la curva de la fuente entre ese instante y este
-        const lote = [], vmaxD = espectro.estado.vmax, aD = areasD(), mD = datosFlujo();
-        const vEn = (x) => curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
+        const lote = [], vmaxD = espectro.estado.vmax, baseD = espectro.estado.base, aD = areasD(), mD = datosFlujo();
+        const vEn = (x) => esReg ? velCwReg(x, fuenteD, fuenteD.factor, aD, mD) : curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
         if (fuenteD && ultimoTD != null && s.t - ultimoTD < 0.25 && s.t > ultimoTD) {
           const ini = s.t - s.tLatido, cur = motor.ondaActual, prev = motor.onda, v0 = vEn(s);
           const emitir = (x, tAbs) => { if (tAbs <= ultimoTD || tAbs > s.t || Math.round(x.t / 0.002) % 2) return;   // una de cada dos (4 ms ≈ 0,5 px a 390 px): la mitad de coste
-           const dv = vEn(x) - v0, uk = fuenteD.n === 'regTricus' ? [vEn(x)] : us.map(u => u + dv);
-            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD) }); };
+           const dv = vEn(x) - v0, uk = esReg ? [vEn(x)] : us.map(u => u + dv);
+            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD, baseD, esReg) }); };
           if (prev.length && ultimoTD < ini) { const t0 = ini - (prev[prev.length - 1].t + 0.002); for (const x of prev) emitir(x, t0 + x.t); }
           for (const x of cur) emitir(x, ini + x.t);
         }
-        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD));
+        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD, baseD, esReg));
         ultimoTD = s.t;
       }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);
@@ -1042,7 +1070,7 @@ export function montarSimulador(raiz, opc = {}) {
 
   if (opc.depuracion) {
     window.__revisar = (t) => revisar(estadoRevision(motor.onda, t)); window.__estado = () => estadoMostrado();
-    window.__eco = { info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM, sonda: ponerSonda,
+    window.__eco = { zoom: (on) => { zoomEco = on !== false; aplicarZoom(); }, info: () => ecoInfo, vista: elegirVista, plano: () => planoEco, modo: elegirModo, medir: elegirMedida, modoM, sonda: ponerSonda,
       doppler: { muestra: ponerMuestra, ponerEn: (u, v) => { gate = { u, v }; reiniciarD(); }, color: (on, n) => { $('#cv-color').checked = on; colorOn = on; if (n) nyq = n; ecoPendiente = true; }, espectro, medidas: () => medD, fuente: () => fuenteD }, reto: (r) => { reto = r ?? null; claveTd = ''; ecoPendiente = true; } };
     window.__ensuciar = ensuciar; window.__sangre = sangre; window.__motor = motor; window.__cam = cam; window.__tabla = tabla;
   }

@@ -86,7 +86,7 @@ function trombo(e) {
 // 5b · la plaqueta con sus tres interruptores (Tabla 20.4): aspirina → tromboxano, P2Y12 → receptor del ADP, IIb/IIIa →
 // puentes de fibrinógeno. En verde, bloqueado; en rojo, sellado por una contraindicación del paciente.
 function plaquetaAntiag(e) {
-    const x0 = e.lisis && e.t === 4 ? 110 : 6, w = (356 - x0) / 3, y = 301;
+    const x0 = e.lisis && e.t === 4 ? 110 : 6, w = (356 - x0) / 3, y = e.lisis && e.t === 4 ? 320 : 301;   // con la lisis, más abajo: la rama baja hasta y≈292
     const cols = [
         { id: 'asa', tit: 'aspirina', diana: 'tromboxano', on: e.asa && !sellaAsa(e), sello: sellaAsa(e), hay: e.asa },
         { id: 'p2y', tit: e.p2y ? P2Y12[e.p2y].n.toLowerCase() : 'P2Y12', diana: 'ADP', on: e.p2y && !sellaP2y(e), sello: sellaP2y(e), hay: e.p2y },
@@ -103,20 +103,34 @@ function plaquetaAntiag(e) {
     return `<g id="vso-pl-plaq">${h}</g>`;
 }
 // 5c · la Fig. 20.3 viva (cifras de la ficha, p. 44): vidas salvadas por 100 tratados según las horas; la barra de la hora
-// del reloj, resaltada; con la dosis de tenecteplasa para el peso (la última barra, 13-18 h, se rotula «13+»)
+// del reloj, resaltada y con su cifra encima; los rangos, en dos filas para que se lean a 390 px (la última, 13-18 h);
+// con la dosis de tenecteplasa para el peso
 function figuraLisis(e) {
-    const act = lisisActiva(e), i0 = barraFig203(e.horas), bw = 18, x0 = 6, base = 308, k = 7;
-    let h = tx(4, 262, `TNK ${tnkMg(e.peso)} mg`, { c: act ? 'accent-green' : 'text-muted', b: true }) + tx(4, 274, 'vidas salvadas/100', { c: 'text-dim' });
+    const act = lisisActiva(e), i0 = barraFig203(e.horas), bw = 18, x0 = 6, base = 304, k = 7;
+    let h = tx(4, 248, `TNK ${tnkMg(e.peso)} mg`, { c: act ? 'accent-green' : 'text-muted', b: true }) + tx(4, 260, 'vidas salvadas/100', { c: 'text-dim' });
     FIG203.forEach(([r, v], i) => {
         const x = x0 + i * 21, alto = v * k, on = i === i0;
         h += `<rect x="${x}" y="${n2(base - alto)}" width="${bw}" height="${n2(alto)}" rx="2" style="fill:${on ? `var(--${i === 4 ? 'accent-red' : act ? 'accent-green' : 'text-main'})` : mezcla('text-muted', 45)}"/>`;
-        h += tx(x + bw / 2, base + 12, i === 4 ? '13+' : r, { c: on ? 'text-main' : 'text-muted', a: 'middle' });
+        if (on) h += tx(x + bw / 2, base - alto - 3, String(v).replace('.', ','), { c: 'text-main', a: 'middle', b: true });
+        const fin = i === FIG203.length - 1;
+        h += tx(fin ? x + bw + 2 : x + bw / 2, base + (i % 2 ? 23 : 12), `${r} h`, { c: on ? 'text-main' : 'text-muted', a: fin ? 'end' : 'middle', b: on });
     });
     return `<g id="vso-pl-lisis">${h}</g>`;
 }
 
 // El reloj «horas desde el dolor»: una regla de 0 a 24 h con sus carriles (cada uno, un antes y un después de su
 // hora). Lo comparte la trombólisis (5c): svgReloj(horas, [carril…]).
+// El texto de un carril, en el trozo del carril que no cruza el cursor (centro, o pegado a un extremo; si no cabe, la forma corta)
+function textoSinCursor(xs, xe, y, xa, formas) {
+    for (const t of formas.filter(Boolean)) {
+        const w = t.length * 6.2;
+        for (const [x, a, i0] of [[(xs + xe) / 2, 'middle', (xs + xe) / 2 - w / 2], [xs + 3, 'start', xs + 3], [xe - 3, 'end', xe - 3 - w]]) {
+            if (i0 >= xs - 1 && i0 + w <= xe + 1 && (xa < i0 - 3 || xa > i0 + w + 3)) return tx(x, y, t, { c: 'text-main', a, b: true });
+        }
+    }
+    const t = formas.filter(Boolean).pop() || '';
+    return t ? tx((xs + xe) / 2, y, t, { c: 'text-main', a: 'middle', b: true }) : '';
+}
 const RX = h => 40 + (h / RELOJ.max) * 300;
 export function svgReloj(horas, carriles, y0 = 34) {
     let h = `<g id="vso-reloj-svg">${tx(40, y0, 'horas desde el dolor', { c: 'text-muted' })}`;
@@ -127,8 +141,9 @@ export function svgReloj(horas, carriles, y0 = 34) {
         const y = yR + 30 + i * 22, xc = RX(c.hora);
         h += tx(4, y + 4, c.etq, { c: 'text-muted' });
         h += `<rect x="${RX(0)}" y="${y - 6}" width="${n2(xc - RX(0))}" height="12" rx="3" style="fill:${mezcla(c.antesColor, 30)}"/><rect x="${n2(xc)}" y="${y - 6}" width="${n2(RX(RELOJ.max) - xc)}" height="12" rx="3" style="fill:${mezcla(c.despuesColor, 30)}"/>`;
-        const enDespues = horas >= c.hora;
-        h += tx(enDespues ? (xc + RX(RELOJ.max)) / 2 : (RX(0) + xc) / 2, y + 4, enDespues ? c.despues : c.antes, { c: 'text-main', a: 'middle', b: true });
+        const enDespues = horas >= c.hora, xa0 = RX(horas);
+        const [xs, xe] = enDespues ? [xc, RX(RELOJ.max)] : [RX(0), xc];
+        h += textoSinCursor(xs, xe, y + 4, xa0, enDespues ? [c.despues] : [c.antes, c.antesCorto]);
     });
     const xa = RX(horas), yb = yR + 30 + carriles.length * 22 - 12;
     h += `<path id="vso-reloj-aguja" d="M${n2(xa)} ${yR - 8}V${yb}" style="stroke:var(--text-main)" stroke-width="2"/><circle cx="${n2(xa)}" cy="${yR}" r="4.5" style="fill:var(--text-main)"/>`;
@@ -137,7 +152,7 @@ export function svgReloj(horas, carriles, y0 = 34) {
 // Los carriles del reloj en la placa: la hs-cTn (desde 3 h; en la angina inestable la ficha no lo dice) y la lisis (12 h)
 function carrilesPlaca(e) {
     const c = [];
-    if (e.ocl !== 'intermitente') c.push({ etq: 'hs-cTn', hora: RELOJ.tropo, antes: 'aún no', despues: '>p99', antesColor: 'text-muted', despuesColor: 'accent-red' });
+    if (e.ocl !== 'intermitente') c.push({ etq: 'hs-cTn', hora: RELOJ.tropo, antes: 'aún no', antesCorto: 'no', despues: '>p99', antesColor: 'text-muted', despuesColor: 'accent-red' });
     c.push(e.ocl === 'completa'
         ? { etq: 'lisis', hora: RELOJ.lisis, antes: 'sirve', despues: 'sin beneficio', antesColor: 'accent-green', despuesColor: 'accent-red' }
         : { etq: 'lisis', hora: 0, antes: '', despues: 'sin beneficio en el SCASEST', antesColor: 'text-muted', despuesColor: 'text-muted' });

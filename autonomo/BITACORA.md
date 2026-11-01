@@ -311,6 +311,16 @@ esta sección.
   fijar en el informe · cifra que debe salir en cada forma: en el informe · «lo que NO quiero»: sí · fuentes con
   página: `docs/` + StatPearls por sección · juez: `--modelo` y prueba propia al construir; el informe, el profesor.
 
+### B-052 · Llevar las anclas del profesor a 10 · apuntado 2026-11-01
+- **De dónde sale**: calibración de `anclas-profesor` (parte `autonomo/partes/2026-11-01-anclas-profesor.md`). 7 puntos dan 10;
+  7.1, 7.13 y el mecanismo animado se quedan en 9,0 y 7.2, 7.5 (nefrona), 7.6, 7.7 y §8 en 9,5, por fallos **del modelo de la app**.
+- **Cómo lo entiendo**: tipo `arreglo`, ≈0,6 M (sonnet). (1) Carril «En 30 segundos» (3 cifras de la ESC 2019 con cita) bajo
+  la figura de `eco/atlas/cap-vd.html`, ancla de 7.1 y 7.13; (2) receptores animados: nota de fidelidad en
+  `<details class="nota-plegable">` y mandos encima de la figura; (3) maqueta `preguntas-para-estudiar.html` l. 236:
+  «Heparina … desde hoy» → «desde el día 1 (sin exposición previa)»; (4) 4Ts: selects que no corten a 390 y conductas en
+  `kv-row`; (5) resaltes en la frase viva de la nefrona. Después, `capturas.mjs` y rejuicio solo de esos puntos.
+- **Visto de paso**: la app dice «Texto | Mayéutica | Estudiar» y REGLAS §8 «Texto | Estudiar»: o cambia la regla o la app.
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |
@@ -386,6 +396,12 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+**✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
+y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
+todo» de la 5.ª: toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto (las ramas sin fusionar
+suben a 9,5), nota atada a la receta y anclas de 10, sin fichas a ciegas, registro `bajo-95.md`, solo la maqueta
+elegida llega a 9,5. Tareas nuevas en el tablero: `anclas-profesor` y `bajo-95`.
 
 **✅ 01/11 · Nota de corte del profesor: 9,5 (meta 10)** (decisión tuya, aplicada directa a `main`). Vale en todo lo
 que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo no juzgado; las 55 fichas con Estudiar no se rejuzgan ahora
@@ -604,6 +620,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-11-01 · **Anclas del profesor y registro bajo-95** (`anclas-profesor`, `bajo-95`): 16 capturas congeladas en `autonomo/modelos/anclas/` y calibración única (7 puntos en 10, el resto ejemplo de 9,5/9,0 con su fallo; arreglos en B-052); `autonomo/bajo-95.md` con las 55 fichas (b1 sin nota, b2 en escala 1-5, b3 media 8,57).
 - 2026-11-01 · **Día libre de Marino** (al Congreso, 16:34): 39 % de la semana hasta el lunes 14:00 para Marino, sin tope de carriles. 12 sesiones: eco, cierre del bloque 3, b4 (4D iones), 4A ácido-base, 4B riñón, 4C agua, modelos del b5 y del b6a, plan de Estudiar del b5 y del b6a, b6b (mapa y maquetas) y rejuicio del corazón del bloque 3; a las 17:09, +8 carriles con el Estudiar de los grupos 5A-5D y 6A-6D (planes ya escritos), 18 sesiones; los modelos del b5 y del b6a dirigen y juntan sus grupos. Vídeos de la app y de ingeniería inversa enviados.
 - 2026-11-01 · **Más rápido** (REGLAS §4.17, «Haz A, B y C»): cola en paralelo (4 sesiones: eco, pulmón, `marino-unido`, mapa y maquetas del `b5`), el Consejo sube techos hasta +25 % sin pararte, papeleo mínimo. R1 y R2 de realismo, en §4.16.
 - 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).

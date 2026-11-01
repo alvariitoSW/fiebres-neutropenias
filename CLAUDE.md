@@ -24,6 +24,9 @@ Este archivo son **las reglas vigentes**, cortas a propósito:
   contenido). Lo pequeño y obvio, hazlo.
 - Manda las fuentes en PDF (a veces en varias partes) y espera que no se resuma por debajo de la fuente.
 - Si pide algo que contradice una regla de aquí, avísale y que decida él.
+- **Vídeos** (Consejo, Congreso, rueda de prensa, estado de un plan o lo que sea; regla del usuario, 01/11/2026):
+  siempre un MP4 vertical **con voces de España**, hecho con la fábrica de `autonomo/consejo/video/` (skill `video`).
+  Nunca una página animada ni un vídeo mudo, y nunca voces con acento latinoamericano.
 
 ## 2. Decisiones de arquitectura (no las reabras sin preguntar)
 

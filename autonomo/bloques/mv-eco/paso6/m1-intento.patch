@@ -1,0 +1,79 @@
+diff --git a/js/modules/eco/escenarios.mjs b/js/modules/eco/escenarios.mjs
+index 707ed36..002520b 100644
+--- a/js/modules/eco/escenarios.mjs
++++ b/js/modules/eco/escenarios.mjs
+@@ -79,6 +79,8 @@ const HPC_DEFECTO = 0.55;
+ // con el VD dilatado), que mantiene llena la AI (≥15 mL del dibujo). Parámetros ilustrativos; lo exigido son las bandas de los jueces
+ const hpcRecorrido = (g) => { const x = Math.min(1, Math.max(0, g)), c01 = (v) => Math.min(1, Math.max(0, v));
+   return { k: x < 0.55 ? 1 + 13.5 * x : 8.425 + (12 - 8.425) * (x - 0.55) / 0.45, ees: x < 0.6 ? 1 + 2.4 * x / 0.6 : 3.4 - 1.9 * (x - 0.6) / 0.4, durVd: 1 + 0.25 * x,
++    // activación del VD (domo de la presión, ver motor.mjs fSubidaVd): del normal (0,55; 6) a la rampa corta de la HP (0,2; 0,55) hacia g 0,6
++    fSubidaVd: 0.55 - 0.35 * Math.min(1, x / 0.6), qSubidaVd: 6 - 5.45 * Math.min(1, x / 0.6),
+     mioVd: 1 + 1.4 * Math.min(1, x / 0.7), vSangre: 1200 * c01((x - 0.6) / 0.4), b: 1 + 0.4 * x, tab: 0.05 + 0.15 * c01((x - 0.6) / 0.4), v0: 60 * c01((x - 0.5) / 0.5) ** 1.5 }; };
+ // Hipertrofia (HTA): del grado 1 (relajación lenta, PAI normal) al grado 2 (rigidez y volumen: PAI >15). El defecto, un grado 1 franco
+ const HVI_DEFECTO = 0.2;
+@@ -101,6 +103,8 @@ const suelo = (m, vd, ai, ad) => { m.p.vd.v0 += vd; m.p.ai.v0 += ai; m.p.ad.v0 +
+ const SUELO_HEM = [0, 9, 8], SUELO_DER = [0, 10, 8], SUELO_TEP = [0, 6, 0], SUELO_VASO = [0, 5, 3];
+ const sueloG = (m, dosis, g) => suelo(m, dosis[0] * g, dosis[1] * g, dosis[2] * g);
+ 
++// El Ees del VD normal subió ×1,2 (0,50 → 0,60, motor.mjs) al darle la activación con domo; las enfermedades conservan su Ees absoluto de siempre
++const K_EES_VD_NORMAL = 1.2;
+ export const ESCENARIOS = {
+   normal: { nombre: 'Normal', aplicar: () => {} },
+   hemorragia: {
+@@ -186,7 +190,7 @@ export const ESCENARIOS = {
+       texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** tepU(g), 1)}. ` + (g < TEP_G_MASIVO
+         ? 'Riesgo intermedio (submasivo): disfunción del VD sin inestabilidad hemodinámica (Marino cap. 22, PDF p. 7)'
+         : 'Riesgo alto (masivo): disfunción del VD con inestabilidad hemodinámica, PAM <70 mmHg (Marino cap. 22, PDF p. 7; cap. 14, PDF p. 2)') },
+-    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= 1 - TEP_DUR_VD * u; m.p.vd.ees *= 1 - TEP_EES_VD_PENDIENTE * u; sueloG(m, SUELO_TEP, g); },
++    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= 1 - TEP_DUR_VD * u; m.p.fSubidaVd = 0.55 - 0.25 * u; m.p.qSubidaVd = 6 + 2 * u; m.p.vd.ees *= (1 - TEP_EES_VD_PENDIENTE * u) / K_EES_VD_NORMAL; sueloG(m, SUELO_TEP, g); },
+   },
+   hpcronica: {
+     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
+@@ -197,8 +201,8 @@ export const ESCENARIOS = {
+     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
+     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
+     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
+-      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+-      m.p.vd.ees *= r.ees; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
++      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd; m.p.fSubidaVd = r.fSubidaVd; m.p.qSubidaVd = r.qSubidaVd; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
++      m.p.vd.ees *= r.ees / K_EES_VD_NORMAL; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
+   },
+ };
+ 
+diff --git a/js/modules/eco/motor.mjs b/js/modules/eco/motor.mjs
+index 5a5cd1e..092df0a 100644
+--- a/js/modules/eco/motor.mjs
++++ b/js/modules/eco/motor.mjs
+@@ -41,7 +41,7 @@ export const BASE = {
+   vi: { ees: 3.1,  v0: 10, a: 1.8, b: 0.017 },
+   // VD: a 2,0 → 1,9 (calibración del 20/10/2026, con la AD, vuVen y rRetorno: su presión telediastólica tiene que bajar
+   // con la PVC, porque el catéter las lee iguales, #mar-termodilucion). Ilustrativo
+-  vd: { ees: 0.50, v0: 25, a: 1.9, b: 0.012 },
++  vd: { ees: 0.60, v0: 25, a: 1.9, b: 0.012 },
+   // AI: la contracción se SUMA a la pasiva (presionAurícula): Ees 0,70 → 0,37 y A 0,20 → 0,25 (eco-calibra-a, 28/10/2026). Bomba ≈ 25 %
+   // del llenado del VI (Lang 2015, p. 24: 15-30 %) y la onda A sobrevive en la AI dilatada. Ilustrativo
+   ai: { ees: 0.37, v0: 5,  a: 0.25, b: 0.090 },
+@@ -190,6 +190,13 @@ export const BASE = {
+   // contrae más tiempo que el VI (asincronía interventricular; fisiología general): su presión sigue alta cuando el VI
+   // ya se relaja y el tabique se aplana al final de la sístole. Ver Atlas · 14
+   durVd: 1,
++  // forma de la activación del VD (fracción de subida y exponente; null = la del VI). La del VD sube más tarde y de golpe
++  // (q alto: arranque lento y subida rápida) y empieza a caer antes: así la presión del VD hace domo en mesosístole y la
++  // IT da un CW parabólico (Zoghbi 2017, Fig. 29, PDF p. 49). Con la del VI la presión del VD es una meseta (normal) o
++  // una rampa hasta el final (HP). Valores ILUSTRATIVOS, calibrados a la forma (máximo entre el 35 y el 65 % de la eyección)
++  // sin cambiar la vIT del normal más de un 1 %; las enfermedades la modifican en escenarios.mjs
++  fSubidaVd: 0.55, qSubidaVd: 6,
++  // (con esa activación el VD normal expulsa menos área: su Ees pasó de 0,50 a 0,60 para recuperar la FEVD y el TAPSE; ilustrativo)
+   // insuficiencia tricuspídea: orificio regurgitante efectivo (cm²), igual que eroaMitral. 0 = competente
+   eroaTricus: 0,
+   // ISQUEMIA DEL VD: el VD se perfunde en sístole y en diástole porque su presión es baja; cuando su presión sistólica se acerca
+@@ -398,7 +405,8 @@ export function crearMotor(ajustes = {}) {
+     // y relajación lenta la cola era aún ~0,1 y la presión daba un salto de 4-5 mmHg al volver a empezar el latido)
+     s.eVi = activacionVi(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida, p.relajacion);
+     // activación del VD: la del VI salvo que su sístole dure más (durVd)
+-    const eVd = p.durVd === 1 ? eVen : activacion(tv0, p.fSubida * p.tsVen * kV * p.durVd, (1 - p.fSubida) * p.tsVen * kV * p.durVd, p.qSubida);
++    const fV = p.fSubidaVd ?? p.fSubida, qV = p.qSubidaVd ?? p.qSubida;
++    const eVd = activacion(tv0, fV * p.tsVen * kV * p.durVd, (1 - fV) * p.tsVen * kV * p.durVd, qV);
+     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
+     const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
+     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri - s.estiraPeri) / p.phiPeri);

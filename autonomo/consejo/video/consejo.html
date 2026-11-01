@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Consejo de Ministros</title>
+<style>
+:root{--bg:#17140f;--panel:#221d16;--panel2:#2c251c;--text:#ece3cc;--muted:#a5967c;--dim:#c9bda4;--gold:#d4af37;--red:#b85c3e;--green:#90a06a;--purple:#9c5476}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:720px;height:1280px;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,"DejaVu Sans",sans-serif}
+#stage{position:relative;width:720px;height:1280px;background:radial-gradient(ellipse at 50% 30%,#2e2619 0%,#17140f 62%)}
+#header{position:absolute;top:28px;left:0;right:0;text-align:center}
+#header h1{font-family:"Inter Display",Inter,sans-serif;font-weight:800;font-size:42px;letter-spacing:4px;color:var(--gold)}
+#header p{margin-top:6px;font-size:20px;color:var(--muted)}
+#table{position:absolute;left:120px;top:300px;width:480px;height:220px;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 40%,#5a3f24,#3a2716 70%);box-shadow:0 0 0 10px #2a1d10,0 30px 60px rgba(0,0,0,.6)}
+#table .sello{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:19px;color:rgba(236,227,204,.35);letter-spacing:3px;font-weight:700}
+.seat{position:absolute;width:130px;margin-left:-65px;text-align:center;transform-origin:50% 45%}
+.marco{width:100px;height:100px;margin:0 auto;border-radius:50%;background:#3a3124;border:3px solid var(--muted);overflow:hidden}
+.marco svg{display:block;width:100px;height:110px}
+.seat .lbl{margin-top:5px;font-size:15px;font-weight:700;color:var(--dim);white-space:nowrap}
+.seat .voto{position:absolute;top:-16px;left:82%;z-index:2;background:var(--green);color:#17140f;font-weight:800;font-size:16px;padding:3px 10px;border-radius:12px;opacity:0;white-space:nowrap}
+#gob .marco{border-color:var(--gold)}
+#gob .lbl{color:var(--gold)}
+#card{position:absolute;left:28px;right:28px;top:690px;height:560px;background:var(--panel);border-radius:26px;border:2px solid #3a3124;padding:22px 26px;text-align:center;opacity:0}
+#retrato{width:210px;height:210px;margin:0 auto;border-radius:50%;overflow:hidden;background:#3a3124;border:4px solid var(--gold)}
+#retrato svg{display:block;width:210px;height:231px}
+#cNom{margin-top:12px;font-size:32px;font-weight:800}
+#cTag{margin-top:4px;font-size:18px;color:var(--muted);font-family:"JetBrains Mono",monospace}
+#sub{margin-top:16px;font-size:25px;line-height:1.36;text-align:left;background:var(--panel2);border-radius:16px;padding:14px 18px;border-left:6px solid var(--purple)}
+#sub .no{color:#5c5241}
+#intro,#final{position:absolute;left:28px;right:28px;top:690px;height:560px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;opacity:0}
+#intro .mazo{font-size:100px;font-family:"Noto Color Emoji",sans-serif}
+#intro h2{font-size:38px;font-weight:800;margin-top:14px}
+#intro p{font-size:23px;color:var(--dim);margin-top:12px;line-height:1.4}
+#marcador{font-size:84px;font-weight:900;color:var(--gold);letter-spacing:6px}
+#marcador small{display:block;font-size:20px;letter-spacing:3px;color:var(--muted);font-weight:700}
+#estampa{margin:26px 0 22px;border:5px solid var(--red);color:var(--red);font-weight:900;font-size:34px;padding:10px 22px;border-radius:10px;letter-spacing:3px;opacity:0}
+#finTx{font-size:24px;line-height:1.4;opacity:0}
+#pie{position:absolute;bottom:10px;left:0;right:0;text-align:center;font-size:14px;color:#5c5241}
+</style></head><body>
+<div id="stage">
+  <div id="header"><h1>CONSEJO DE MINISTROS</h1><p>Sala del Consejo · 30/10/2026 · sesión extraordinaria</p></div>
+  <div id="table"><div class="sello">HUD CLÍNICO UCI</div></div>
+  <div id="seats"></div>
+  <div id="intro"><div class="mazo">🔨</div><h2>El gobierno central convoca al Consejo</h2>
+    <p>Punto único: que cada ministro se presente<br>y diga qué opina del gobernador.</p></div>
+  <div id="card"><div id="retrato"></div><div id="cNom"></div><div id="cTag"></div><div id="sub"></div></div>
+  <div id="final"><div id="marcador"></div><div id="estampa">APROBADO POR UNANIMIDAD</div>
+    <p id="finTx">Se levanta la sesión.<br><span style="color:var(--muted);font-size:20px">Lo que espera al gobierno central: la captura de Uso,<br>el sábado 31/10 por la noche.</span></p></div>
+  <div id="pie">Basado en las actas reales de autonomo/consejo/ · voces sintéticas</div>
+</div>
+<script src="timeline.js"></script>
+<script>
+// Cada ministro, una persona: piel, pelo, peinado, traje y complementos
+const P={
+ gob:{piel:'#e0b58f',pelo:'#3b2a1c',peinado:'corto',traje:'#ece3cc',camisa:'#8fb3c9',bata:true,lbl:'Gobernador (tú)'},
+ tra:{piel:'#d9a47c',pelo:'#9a9a9a',peinado:'calvo',barba:'#9a9a9a',gafas:true,traje:'#2f4a6b',corbata:'#d4af37',nom:'Ministro de Transportes',tag:'/bitacora · preside',lbl:'Transportes',ang:90},
+ int:{piel:'#c68b62',pelo:'#1e1612',peinado:'raya',traje:'#3d3d45',corbata:'#b85c3e',nom:'Ministro del Interior',tag:'/plan-socialista',lbl:'Interior',ang:134},
+ hac:{piel:'#e8c19d',pelo:'#5a3a22',peinado:'entradas',bigote:'#5a3a22',gafas:true,traje:'#253a2a',corbata:'#90a06a',nom:'Ministro de Hacienda',tag:'/ahorro',lbl:'Hacienda',ang:178},
+ edu:{piel:'#f0cba8',pelo:'#7a3b1e',peinado:'melena',traje:'#6b2f4c',collar:'#d4af37',mujer:true,nom:'Ministra de Educación',tag:'/mayeutica',lbl:'Educación',ang:220},
+ jus:{piel:'#8d5a3b',pelo:'#141010',peinado:'mono',gafas:true,traje:'#1c1c22',collar:'#ece3cc',mujer:true,nom:'Ministra de Justicia',tag:'jueces + auditor ciego',lbl:'Justicia',ang:-40},
+ cie:{piel:'#e5b892',pelo:'#c99a4a',peinado:'coleta',traje:'#2d4f5a',collar:'#9c5476',mujer:true,nom:'Ministra de Ciencia',tag:'/ingenieria-reversa',lbl:'Ciencia',ang:46},
+ ext:{piel:'#b97d55',pelo:'#2a1d14',peinado:'rizos',barba:'#2a1d14',traje:'#4a3a28',corbata:'#3d6b8f',nom:'Ministro de Exteriores',tag:'/radar',lbl:'Exteriores',ang:2},
+};
+function persona(p,boca,parpado,id){
+ const ry=1.2+11*boca, ojo=parpado?0.6:5.5;
+ let atras='',delante='';
+ const h=p.pelo;
+ if(p.peinado==='melena')atras=`<path d="M52 92 Q50 30 100 32 Q150 30 148 92 L156 170 Q130 160 128 120 L72 120 Q70 160 44 170 Z" fill="${h}"/>`;
+ if(p.peinado==='coleta')atras=`<ellipse cx="148" cy="80" rx="16" ry="28" fill="${h}"/>`;
+ if(p.peinado==='mono')atras=`<circle cx="100" cy="34" r="20" fill="${h}"/>`;
+ if(p.peinado==='rizos')atras=`<g fill="${h}">${[56,70,85,100,115,130,144].map((x,i)=>`<circle cx="${x}" cy="${52-(i%2)*6-(i>1&&i<5?6:0)}" r="16"/>`).join('')}<circle cx="54" cy="72" r="12"/><circle cx="146" cy="72" r="12"/></g>`;
+ if(p.peinado==='corto')delante=`<path d="M58 84 Q56 40 100 40 Q144 40 142 84 Q130 58 100 58 Q72 58 58 84 Z" fill="${h}"/>`;
+ if(p.peinado==='raya')delante=`<path d="M58 86 Q54 38 104 40 Q146 42 142 86 Q138 62 118 56 Q90 64 70 62 Q62 70 58 86 Z" fill="${h}"/>`;
+ if(p.peinado==='entradas')delante=`<path d="M58 88 Q58 56 74 52 L76 70 Q66 76 58 88 Z M142 88 Q142 56 126 52 L124 70 Q134 76 142 88 Z" fill="${h}"/>`;
+ if(p.peinado==='calvo')delante=`<path d="M58 92 Q58 72 66 66 L66 88 Z M142 92 Q142 72 134 66 L134 88 Z" fill="${h}"/>`;
+ if(p.peinado==='melena')delante=`<path d="M58 90 Q56 40 100 40 Q146 40 142 90 Q134 60 110 56 Q84 62 58 90 Z" fill="${h}"/>`;
+ if(p.peinado==='mono'||p.peinado==='coleta')delante=`<path d="M58 88 Q56 42 100 42 Q144 42 142 88 Q128 60 100 60 Q72 60 58 88 Z" fill="${h}"/>`;
+ const cuello=p.bata?`<path d="M30 230 Q32 168 100 160 Q168 168 170 230 Z" fill="${p.traje}"/><path d="M84 158 L100 196 L116 158 Z" fill="${p.camisa}"/>
+   <path d="M66 172 Q60 205 82 214 M134 172 Q140 205 118 214" stroke="#3d3d45" stroke-width="4" fill="none"/><circle cx="100" cy="216" r="7" fill="#9a9a9a"/><path d="M82 214 Q100 226 100 216 M118 214 Q100 226 100 216" stroke="#3d3d45" stroke-width="3" fill="none"/>`
+  :`<path d="M26 230 Q28 166 100 158 Q172 166 174 230 Z" fill="${p.traje}"/>
+   <path d="M82 158 L100 ${p.mujer?186:200} L118 158 Z" fill="${p.mujer?p.piel:'#f2ece0'}"/>
+   ${p.corbata?`<path d="M96 168 L104 168 L108 210 L100 220 L92 210 Z" fill="${p.corbata}"/><path d="M94 160 L106 160 L104 170 L96 170 Z" fill="${p.corbata}"/>`:''}
+   ${p.collar?`<path d="M84 162 Q100 190 116 162" stroke="${p.collar}" stroke-width="3" fill="none"/><circle cx="100" cy="182" r="4" fill="${p.collar}"/>`:''}
+   <path d="M82 158 L72 200 L92 176 Z M118 158 L128 200 L108 176 Z" fill="rgba(0,0,0,.25)"/>`;
+ return `<svg viewBox="0 0 200 220">${atras}${cuello}
+  <rect x="88" y="128" width="24" height="34" rx="8" fill="${p.piel}" style="filter:brightness(.88)"/>
+  <ellipse cx="57" cy="100" rx="7" ry="11" fill="${p.piel}"/><ellipse cx="143" cy="100" rx="7" ry="11" fill="${p.piel}"/>
+  <ellipse cx="100" cy="94" rx="43" ry="52" fill="${p.piel}"/>
+  ${p.barba?`<path d="M58 100 Q60 150 100 150 Q140 150 142 100 Q136 128 118 130 Q100 122 82 130 Q64 128 58 100 Z" fill="${p.barba}"/>`:''}
+  ${delante}
+  <path d="M74 80 Q84 74 94 80 M106 80 Q116 74 126 80" stroke="${p.pelo==='#9a9a9a'?'#6e6e6e':p.pelo}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="84" cy="94" rx="5" ry="${ojo}" fill="#1a1410"/><ellipse cx="116" cy="94" rx="5" ry="${ojo}" fill="#1a1410"/>
+  ${p.gafas?`<g stroke="#1a1410" stroke-width="2.5" fill="rgba(255,255,255,.08)"><rect x="70" y="84" width="27" height="20" rx="7"/><rect x="103" y="84" width="27" height="20" rx="7"/><path d="M97 92 L103 92"/></g>`:''}
+  <path d="M100 98 Q96 112 102 114" stroke="rgba(0,0,0,.3)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  ${p.mujer?`<ellipse cx="74" cy="114" rx="7" ry="4" fill="#d9776b" opacity=".35"/><ellipse cx="126" cy="114" rx="7" ry="4" fill="#d9776b" opacity=".35"/>`:''}
+  ${p.bigote?`<path d="M84 122 Q100 114 116 122 Q100 120 84 122 Z" fill="${p.bigote}" stroke="${p.bigote}" stroke-width="4"/>`:''}
+  <ellipse cx="100" cy="129" rx="${10+2*boca}" ry="${ry}" fill="#5a1f1a"/>
+  ${boca>0.25?`<rect x="${92-boca}" y="${129-ry}" width="${16+2*boca}" height="3" fill="#f2ece0"/>`:''}
+ </svg>`;
+}
+const TL=window.TL, C=TL.clips, ORDEN=['tra','int','hac','edu','jus','cie','ext'];
+const CX=360,CY=410,RX=290,RY=190;
+const seatsEl=document.getElementById('seats'),S={};
+function mkSeat(k,x,y){const d=document.createElement('div');d.className='seat';d.id=k==='gob'?'gob':'s-'+k;d.style.left=x+'px';d.style.top=(y-55)+'px';
+ d.innerHTML=`<div class="voto">SÍ ✋</div><div class="marco"></div><div class="lbl">${P[k].lbl}</div>`;seatsEl.appendChild(d);S[k]=d}
+mkSeat('gob',CX,CY-RY-30);
+ORDEN.forEach(k=>{const a=P[k].ang*Math.PI/180;mkSeat(k,CX+RX*Math.cos(a),CY+RY*Math.sin(a))});
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+const $=id=>document.getElementById(id);
+const hablando=t=>C.find(c=>t>=c.t0&&t<c.t0+c.d);
+function boca(c,t){if(!c)return 0;const i=Math.floor((t-c.t0)*25);return c.env[i]||0}
+function parpadeo(k,t){const off={gob:.3,tra:1.1,int:2.3,hac:.7,edu:1.9,jus:2.9,cie:.2,ext:1.5}[k];return ((t+off)%3.4)<0.13}
+const PRES=C.slice(0,8), VOTOS=C.slice(8,15), CIERRE=C[15];
+const INI=C[0].t0, FIN0=VOTOS[0].t0-0.6;
+let cache={};
+function pinta(el,html,key){if(cache[key]!==html){el.innerHTML=html;cache[key]=html}}
+function render(t){
+ const c=hablando(t);
+ $('header').style.opacity=ease(t/0.8);
+ // intro
+ $('intro').style.opacity=t<INI?ease(t/0.6)*ease((INI-0.2-t)/0.4):0;
+ // presentaciones (incluye la pregunta de Transportes)
+ const turno=PRES.find((p,i)=>t>=p.t0-0.35&&t<(PRES[i+1]?PRES[i+1].t0-0.35:FIN0));
+ ['gob',...ORDEN].forEach((k,i)=>{
+  const ap=ease((t-0.4-i*0.22)/0.5);
+  const act=turno&&turno.k===k;let s=0.7+0.3*ap,op=ap,glow=0,bob=0;
+  if(t>=INI-0.35&&t<FIN0&&k!=='gob'){if(act){s=1.25;glow=1}else op=0.42}
+  if(c&&c.k===k)bob=Math.sin(t*9)*2;
+  const e=S[k];e.style.opacity=op;e.style.transform=`translateY(${bob}px) scale(${s})`;e.style.zIndex=glow?5:1;
+  const m=e.querySelector('.marco');m.style.borderColor=glow||k==='gob'?'var(--gold)':'var(--muted)';
+  m.style.boxShadow=glow?'0 0 34px 8px rgba(212,175,55,.5)':(k==='gob'&&t>=FIN0?'0 0 40px 12px rgba(212,175,55,.45)':'none');
+  pinta(m,persona(P[k],c&&c.k===k?boca(c,t):0,parpadeo(k,t)),'s'+k);
+  if(k!=='gob'){const v=VOTOS.find(x=>x.k===k);const vk=ease((t-v.t0)/0.25);const vb=e.querySelector('.voto');vb.style.opacity=vk;vb.style.transform=`translateX(-50%) scale(${0.5+0.5*vk})`}
+ });
+ // tarjeta
+ const card=$('card');
+ if(turno&&t<FIN0){const i=PRES.indexOf(turno);const a=turno.t0-0.35,b=PRES[i+1]?PRES[i+1].t0-0.35:FIN0;
+  card.style.opacity=ease((t-a)/0.3)*ease((b-t)/0.3);const p=P[turno.k];
+  pinta($('retrato'),persona(p,c&&c.k===turno.k?boca(c,t):0,parpadeo(turno.k,t)),'r');
+  $('cNom').textContent=p.nom;$('cTag').textContent=p.tag;
+  const pal=turno.tx.split(' '),n=Math.ceil(pal.length*Math.min(1,(t-turno.t0)/turno.d+0.02));
+  pinta($('sub'),pal.slice(0,Math.max(0,n)).join(' ')+' <span class="no">'+pal.slice(Math.max(0,n)).join(' ')+'</span>','sub');
+ }else card.style.opacity=0;
+ // votación y cierre
+ $('final').style.opacity=t>=FIN0?ease((t-FIN0)/0.5):0;
+ if(t>=FIN0){const sies=VOTOS.filter(v=>t>=v.t0).length;
+  $('marcador').innerHTML=`<small>¿CONFÍA EL CONSEJO EN SU GOBERNADOR?</small>${sies} · 0`;
+  const ek=ease((t-CIERRE.t0)/0.35);const e=$('estampa');e.style.opacity=ek;e.style.transform=`rotate(-6deg) scale(${1.8-0.8*ek})`;
+  $('finTx').style.opacity=ease((t-CIERRE.t0-1.2)/0.6);
+ }
+}
+window.TOTAL=TL.total;window.render=render;render(0);
+</script></body></html>

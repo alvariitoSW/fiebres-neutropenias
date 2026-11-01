@@ -16,7 +16,7 @@ const HUECO = 0.04;                // fracción borrada delante del cursor, como
 
 export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   const ctx = lienzo.getContext('2d'), cc = capa.getContext('2d');
-  let prof = 160, vmax = 100, barrido = BARRIDO, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null, colPrev = null;
+  let prof = 160, vmax = 100, base = 0.5, barrido = BARRIDO, img = null, W = 0, H = 0, xPrev = null, tPrev = null, tEscrito = null, colPrev = null;
   let A = null, B = null, activo = null;           // calibres en fracciones del lienzo { x, y }
 
   function ajustar() {
@@ -38,7 +38,10 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   function setBarrido(s) { if (s !== barrido) { barrido = s; limpiar(); } }
   // Doppler: escala de ±vmax cm/s con la línea de base en el centro
   function setEscala(v) { if (v !== vmax) { vmax = v; limpiar(); } }
-  const velDeY = (y) => vmax * (1 - 2 * y), yDeVel = (v) => (1 - v / vmax) / 2;
+  // la línea de base se puede subir o bajar (fracción de la altura desde arriba; 0,5 = centro) como en los ecógrafos: con un chorro
+  // que se aleja de la sonda (IT, IM) se sube, y la pantalla no queda medio vacía. La escala sigue siendo ±vmax con la base al centro.
+  function setBase(b) { if (b !== base) { base = b; limpiar(); } }
+  const velDeY = (y) => 2 * vmax * (base - y), yDeVel = (v) => base - v / (2 * vmax);
 
   // pinta la columna en las x de [x0, x1] (con vuelta al principio) y borra un hueco por delante
   function pintarTramo(x0, x1, col) {
@@ -113,7 +116,7 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
       // línea de base y marcas: cada 100 cm/s (1 m/s, como Zoghbi 2017 Fig. 29) con ±500; en escalas menores cada 50 o 20 según quepa (≥ 16 px entre rótulos de 10 px)
       const pxCm = (capa.clientHeight || H) / (2 * vmax), paso = [20, 50, 100, 200].find(p => p * pxCm >= 16) ?? 200;
       cc.fillRect(0, yDeVel(0) * H - 0.5 * k, W, 1 * k);
-      for (let v = paso; v < vmax; v += paso) for (const sg of [1, -1]) { const y = yDeVel(sg * v) * H; cc.fillRect(W - 6 * k, y - 0.5 * k, 6 * k, 1 * k); cc.fillText((sg * v) + '', W - 9 * k, y); }
+      for (let v = paso; v < 2 * vmax; v += paso) for (const sg of [1, -1]) { const y = yDeVel(sg * v) * H; if (y < 8 * k || y > H - 8 * k) continue; cc.fillRect(W - 6 * k, y - 0.5 * k, 6 * k, 1 * k); cc.fillText((sg * v) + '', W - 9 * k, y); }
       cc.textAlign = 'left'; cc.fillText('cm/s', 4 * k, 9 * k);
     } else for (let cm = 1; cm * 10 < prof; cm++) { const y = cm * 10 / prof * H; cc.fillRect(W - (cm % 5 ? 4 : 8) * k, y - 0.5 * k, (cm % 5 ? 4 : 8) * k, 1 * k);
       if (cm % 5 === 0) cc.fillText(cm + ' cm', W - 10 * k, y); }
@@ -156,8 +159,8 @@ export function crearModoM(lienzo, capa, { onMedida, eje = 'prof' } = {}) {
   for (const t of ['pointerup', 'pointercancel', 'lostpointercapture']) capa.addEventListener(t, () => { activo = null; });
 
   function borrarCalibres() { A = B = null; dibujarCapa(); onMedida?.(null); }
-  return { ajustar, limpiar, setProf, setEscala, setBarrido, anadir, anadirLote, medida, borrarCalibres, dibujarCapa,
+  return { ajustar, limpiar, setProf, setEscala, setBase, setBarrido, anadir, anadirLote, medida, borrarCalibres, dibujarCapa,
     // para las pruebas: poner los calibres en coordenadas del lienzo (0-1)
     ponerCalibres(a, b) { A = a; B = b; dibujarCapa(); onMedida?.(medida()); },
-    get estado() { return { W, H, prof, vmax, barrido, tEscrito, columnas: xPrev } }, };
+    get estado() { return { W, H, prof, vmax, base, barrido, tEscrito, columnas: xPrev } }, };
 }

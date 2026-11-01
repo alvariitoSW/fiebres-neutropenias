@@ -14,6 +14,10 @@ export const QUE_MIRAR = {
         { fuente: '#cardio-eco-simpson', ...MONITORIZACION },
         { fuente: '#cardio-eco-tapse', ...MONITORIZACION, pendiente: 'Mídelo aquí: «Modo M» → «TAPSE (A4C)».' },
     ],
+    a4cVd: [
+        { fuente: '#cardio-eco-vd', ...CORAZON_PULMON },
+        { fuente: '#cardio-eco-tapse', ...MONITORIZACION, pendiente: 'Mídelo aquí: «Modo M» → «TAPSE (A4C)».' },
+    ],
     a2c: [
         { fuente: '#umi-fate-extendido', ...FATE },
         { fuente: '#cardio-eco-simpson', ...MONITORIZACION },

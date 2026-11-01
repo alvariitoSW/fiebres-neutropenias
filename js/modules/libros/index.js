@@ -50,6 +50,7 @@ import { MAYEUTICA_ENTERAL } from '../../data/mayeutica/b6b-enteral.js';
 import { MAYEUTICA_NPT } from '../../data/mayeutica/b6b-npt.js';
 import { MAYEUTICA_RECEPTOR } from '../../data/mayeutica/b6b-receptor.js';
 import { MAYEUTICA_OXIGENO } from '../../data/mayeutica/b6b-oxigeno.js';
+import { MAYEUTICA_B5 } from '../../data/mayeutica/b5.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -227,6 +228,8 @@ export function init() {
     initMarinoRenal();
     initMarinoAbdomen();
     initVisualMarinoCaps31a44();
+    // Texto | Visual | Estudiar en las fichas del bloque 5 (abdomen y temperatura), después de su vista Visual
+    Object.entries(MAYEUTICA_B5).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     initMarinoNeuro();
     initMarinoNutricion();
     initMarinoToxicos();
