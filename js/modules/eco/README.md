@@ -361,6 +361,11 @@ transesofágico equivalente: eje largo P2-A2 (p. 937), 4 cámaras A3A2 / P2P1 (p
 con los seis (p. 939). Pruebas en `geometria.test.mjs` (marca C1): qué festones corta cada vista y el plano comisural (P3-A2-P1,
 p. 935), posición de cúspides y valvas, sin cruces entre valvas ni con la cortina, hendiduras solo abierta, apertura y cierre a su
 tiempo y cuerdas desde su papilar. Pendiente: color por festón en el 3D y la pulmonar con nombre.
+**Dibujo nuevo, 223 (01/11/2026):** con `mitralSepto` solo el centro de la anterior (A2) se vuelca hacia el tracto de salida; hacia las
+comisuras (A1, A3) cada franja gira sobre su bisagra hacia la línea de cierre, con el largo de la cerrada (ventana ±0,05 plena → 0 en
+±0,2, ilustrativa): la comisura ya no se abre y el A4C/A2C siguen cortando A2 con la valva abierta. La posterior abre 1,2 rad (69°) desde
+el anillo, como en el dibujo de hoy (antes heredaba los 0,4 de la anterior, medidos desde la vertical, y casi no abría): el eje corto
+mitral (nivel −7 mm, sin cambiar) ve la «boca de pez» de las dos valvas en diástole. Diagnóstico: `autonomo/bloques/mv-eco/paso6/herramientas/festones-223.mjs`.
 
 **Hipovolemia con «beso de papilares» (P2, eco-mega parada 2, octubre 2026).** `LIMITES.vi` baja de [35, 320] a [8, 320]: el dibujo ya sigue
 al motor hasta cavidades de ~10 mL (a 8 mL el radio medio aún es 5,9 mm y la pared de volumen constante llega a 24 mm; sin cruces).
