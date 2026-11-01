@@ -69,4 +69,5 @@
 .juega-on .lt { display: none; } #mando-juega .fila > * { min-width: 0; } #mando-juega button { font: 700 .7rem/1.1 var(--sans); } #mando-juega select { min-height: 36px; font: 600 .72rem/1.1 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; }
 .juega-on #dock-panel .mando { padding: 2px 0; }
 
-#sello-zona .tope-sello:not(:first-child) { display: none; } #sello-zona .tope-linea { display: none; }
+#sello-zona .tope-sello.cola { display: none; } #sello-zona .tope-linea { display: none; }
+#prueba .org { display: inline; white-space: normal; text-overflow: clip; overflow: visible; } #sello-zona .tope-sello.tope-compacto small { display: block; }

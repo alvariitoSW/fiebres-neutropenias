@@ -49,7 +49,7 @@ export function topesLibre(s, l) {
   const t = [], f = s.flags, fm = s.calor === 3;
   const poner = (c, n, titulo, texto, pag, origen, off = []) => t.push({ c, n, titulo, texto, pag, origen, off });
   const fmt = (x) => x.toFixed(1).replace('.', ',');
-  if (l.T >= TOPE.max) poner('tmax', 'sello', 'Tope del termómetro: 42 °C', `T ${fmt(l.T)} °C, FC ${l.fc}, ${l.snc}: por encima de 42 °C hay citotoxicidad y fallo de órganos (Libro Azul).`, '47|ma-calor-golpe', 'Libro Azul, sección III, p. 30 del PDF', ['#j-calor', '#j-hora']);
+  if (l.T >= TOPE.max) poner('tmax', 'sello', 'Tope del termómetro: 42 °C', `T ${fmt(l.T)} °C, FC ${l.fc}, ${l.snc}: por encima de 42 °C hay citotoxicidad y fallo de órganos (Libro Azul).`, 'azul|30', 'Libro Azul, sección III, p. 30 del PDF', ['#j-calor', '#j-hora']);
   if (l.T >= TOPE.golpe && !fm) poner('golpe', 'sello', 'Golpe de calor', `T ${fmt(l.T)} °C, FC ${l.fc}, ${l.snc} y sin sudor: el radiador falla. Enfriar ya, hasta 38 °C.`, '46|ma-calor-golpe', 'ficha · p. 46-47; FC ilustrativa');
   else if (l.T >= 40 && fm) poner('farm', 'sello', 'Calor por fármaco: ¿HM, SNM o SS?', `T ${fmt(l.T)} °C con un fármaco como causa: no es golpe de calor. Mira los estados Hipertermia maligna, SNM y síndrome serotoninérgico.`, '48|ma-hipertermia-farmacos', 'ficha · p. 48-52; umbral ≥40 °C de la hipertermia maligna, p. 49');
   else if (l.T >= 39 && s.calor) poner('agot', 'aviso', 'Se acerca al golpe de calor', 'El agotamiento por calor llega a 38-39 °C sin afectar al sistema nervioso; a ≥41 °C con delirio es golpe.', '46|ma-calor-agotamiento', 'ficha · p. 46-47');

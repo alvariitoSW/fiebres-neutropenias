@@ -13,7 +13,7 @@ const $ = (id) => document.getElementById(id);
 let s = nuevo(), modo = 'explorar', activos = new Set(), topeApi, prev = { pt: 37 }, oculto = false, ronda = 0, casoN = 0, apN = 0, casoAct = CASO;
 const capas = { piel: true, mus: true, cer: true }, CAPA = { cer: 'cer', piel: 'piel', mus: 'mus', ret: 'mus' };
 const FICHAOK = (id) => id;
-const cita = (c) => { const [p, id] = String(c).split('|'); return `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${p}" target="_blank" rel="noopener">PDF p. ${p}</a> · <button type="button" class="ver-ficha" data-resaltar="#${FICHAOK(id)}" data-pag-ficha="${p}">p. ${p} · Ver en la ficha</button></span>`; };
+const cita = (c) => { const [p, id] = String(c).split('|'); if (p === 'azul') return `<span class="cita"><a class="cita-pdf cita-azul" href="../../docs/libro-azul-seccion-iii-inmunitario-parte1.pdf#page=30" target="_blank" rel="noopener">Libro Azul, sección III, p. 30</a></span>`; return `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${p}" target="_blank" rel="noopener">PDF p. ${p}</a> · <button type="button" class="ver-ficha" data-resaltar="#${FICHAOK(id)}" data-pag-ficha="${p}">p. ${p} · Ver en la ficha</button></span>`; };
 const org = (t) => `<span class="org${/ilustrativ/.test(t) ? ' ilu' : ''}">${t}</span>`;
 function frase(txt, o = 'ficha') { $('frase-txt').innerHTML = `${txt} ${org(o)}`; }
 // cargarMotion() pide `js/vendor/motion.js` relativo a la página; desde esta carpeta hay que dejar Motion cargado con la ruta buena (en la app no hace falta).
@@ -47,7 +47,7 @@ function pintar() {
   const lista = topes(s, l), nuevas = new Set(lista.map((t) => t.c));
   for (const c of activos) if (!nuevas.has(c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo });
-  activos = nuevas; topeApi.refrescar?.();
+  activos = nuevas; topeApi.refrescar?.(); { const ss = [...document.querySelectorAll('#sello-zona .tope-sello')]; const cab = ss.find((e) => e.dataset.tope === 'tmax') || ss[0]; ss.forEach((e) => e.classList.toggle('cola', e !== cab)); }
   $('figosb').open = s.est === 'hipo' && s.paso >= 3; $('fig445').open = s.est === 'fiebre' && s.paso === 5;
   window.__ter.lista = lista;
 }
@@ -108,7 +108,7 @@ function error() {
 }
 function caso(i) {
   const CS = casoAct, c = $('prueba'), P = CS.pasos[i], ult = i === CS.pasos.length - 1; s = P.s ? P.s() : { est: 'hm', paso: P.paso, trat: i >= 2 ? 1 : 0, ysi: null }; delete c.dataset.fin; delete c.dataset.paso;
-  c.innerHTML = `<h3>${CS.paciente} · paso ${i + 1} de ${CS.pasos.length}</h3><div class="paso"><p class="ctx">${P.ctx}</p><p class="enun"><b>${P.q}</b></p>` + P.ops.map((o, j) => `<button type="button" class="b op" data-i="${j}">${o[0]}</button>`).join('') + '</div>';
+  c.innerHTML = `<h3>${CS.paciente} · paso ${i + 1} de ${CS.pasos.length}</h3><div class="paso"><p class="ctx">${P.ctx}${P.rot ? ` ${org(P.rot)}` : ''}</p><p class="enun"><b>${P.q}</b></p>` + P.ops.map((o, j) => `<button type="button" class="b op" data-i="${j}">${o[0]}</button>`).join('') + '</div>';
   c.querySelectorAll('.op').forEach((b) => b.addEventListener('click', () => {
     if (c.querySelector('.por')) return; const j = +b.dataset.i;
     c.querySelectorAll('.op').forEach((x, k) => x.classList.add(k === P.ok ? 'bien' : x === b ? 'mal' : 'neutra'));
