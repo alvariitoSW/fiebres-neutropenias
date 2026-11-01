@@ -15,6 +15,7 @@ Orden que propongo (de arriba abajo). Cada tarea pasa por las fases que dice; ve
 esta sección.
 
 ### B-001 · Preguntas para estudiar en la app · apuntado 2026-10-14
+- **❌ Cerrada el 01/11/2026 (tu decisión, art. 7 de la reforma: «Cerrar: sustituida»)**: la sustituye el Estudiar de cada ficha. Pasa al historial en la próxima limpieza.
 - **Lo que dijiste**: «lo primero […] la tarea de preguntas está por hacer, sería la primera cosa».
 - **Cómo lo entiendo**: tipo `visual`. Llevar la maqueta aprobada (`autonomo/modelos/preguntas-para-estudiar.html`) a
   la app: interruptor **Texto | Visual | Preguntas**, recorrido en orden, repaso de lo fallado, caso clínico, y los
@@ -397,7 +398,7 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
-**🆕 01/11 · Reforma de la Constitución** (vídeo del Consejo; acta `autonomo/consejo/2026-11-01-reforma-constitucional.md`): el Consejo recomienda una **reforma moderada, de limpieza**, de 9 artículos (7 votos a favor, Ciencia con reserva en el 9; ≈5,8 M, techo 7,3 M). No toca la arquitectura, las reglas clínicas, la nota 9,5, el voto del Consejo ni los vídeos. Artículos: 1) Quién decide qué, en una sola tabla · 2) Gasto: una tabla con fecha de fin y un aviso que no dependa de la memoria · 3) Una sola nota de corte y un procedimiento para cambiar reglas · 4) Una regla incumplida dos veces se convierte en herramienta o juez · 5) Lo común, arreglado antes de abrir carriles · 6) Las esperas al usuario caducan, sin tocar lo reservado · 7) La Constitución dice lo que la app enseña y lo que la prueba exige · 8) Un número por regla; lo sustituido se borra · 9) Cada agente lee solo lo suyo. **Vota artículo a artículo** (sí / no / con cambios).
+**✅ 01/11 · Reforma de la Constitución: los 9 artículos aprobados** (acta `autonomo/consejo/2026-11-01-reforma-constitucional.md`; votados uno a uno en la sesión de debate). Tus votos, literales: art. 1 **con cambios**; arts. 2, 3, 4, 5, 6, 7 y 8 **«Sí»**; art. 9 **«Sí, con la medida»**. Cambio del art. 1, tus palabras: «Yo, como gobernador decido todo lo que se hace, pero tras formar este gobierno, hay funciones en las que DELEGO en el gobierno con su buena fé y siempre siguiendo la filosofía de la app. Entonces yo he dado la orden de todas estas funciones delegarlas en el gobierno, con la condición de que se me informe de lo que se está haciendo, con sesiones de control, que ya hay cosas que intentan hacer esa función pero quizá deberiamos hacer una skill de esto o algo para dejarlo mejor entendido». Forma de la sesión de control: «Puede ser una parte de la skill de bitácora, o una diferente, se puede plantear su fusión en algo mejorado» (el Consejo te traerá opciones para elegir). Decisiones sueltas: art. 2, tramos del Consejo; art. 3, **«La del día del voto»** (se mantiene); art. 4, **«Sí, voz de España»** (fuera la voz mexicana de Exteriores); art. 7, **«Cerrar: sustituida»** (B-001); siguiente paso, **«Al tablero»**. → Tarea `reforma-constitucion` en el tablero (Objetivo L, n.º 13; ≈5,8 M, techo 7,3 M).
 
 **✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
 y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
