@@ -5,7 +5,7 @@ import { baseGeometrica, construirCorazon, LIMITES, REF, puntoValva } from '../c
 import { crearMotor } from '../motor.mjs';
 import { crearFlujo, VOL_PARTICULA } from '../flujo-sangre.mjs';
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
-import { planoVista, cortarPieza, valvasEnPlano } from '../ecografia.mjs';
+import { planoVista, cortarPieza, valvasEnPlano, planoSigueAnillo } from '../ecografia.mjs';
 import { aplicarEscenario } from '../escenarios.mjs';
 import { TORAX, aEje } from '../torax.mjs';
 import { TEJIDOS } from '../../../data/eco-tejidos.js';
@@ -301,6 +301,17 @@ test('C1: cada vista corta los festones de la mitral que da Hahn 2013 para su pl
     if (n('psaxMv').size === 6) seis++;
   }
   assert.ok(seis >= 2, `el eje corto mitral corta los seis festones en algún momento del latido (${seis} instantes)`);
+});
+
+test('C1: el eje corto mitral que sigue al anillo toca las dos valvas en cada instante y nunca la AI (normal, dilatada, fallo)', () => {
+  for (const k of ['normal', 'dilatada', 'fallo']) {
+    const { td, instantes } = latidoC1(k), P0 = planoVista('psaxMv', td);
+    for (const { g: gi } of instantes) {
+      const P = planoSigueAnillo(P0, gi), n = new Set(cortados(gi, P, 'Mitral').map(x => x.nombre));
+      assert.ok([...n].some(x => x[0] === 'A') && [...n].some(x => x[0] === 'P'), `${k}: toca anterior y posterior (${[...n]})`);
+      assert.equal(cortarPieza(gi.partes.find(p => p.nombre === 'AI'), P).seg.length, 0, `${k}: no corta la AI`);
+    }
+  }
 });
 
 test('C1: el plano por las dos comisuras corta P3-A2-P1 (vista comisural, Hahn p. 935), con el A1-A3 como mucho de lado', () => {

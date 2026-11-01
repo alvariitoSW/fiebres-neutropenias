@@ -72,6 +72,21 @@ const PARED = 12, HUECO = 22;
 const DIST_AO_FOCO = 14.3;   // mm: raíz aórtica (rA·1,28 ≈ 12,8) + margen; con más, el rótulo «Ao» tampoco sale (|dd| < 14). Ilustrativo
 
 /**
+ * Eje corto mitral que sigue al anillo (dibujo nuevo): el plano fijo a -7 mm corta la AI en sístole, porque el anillo baja (MAPSE,
+ * hasta 13,6 mm en el normal). En la eco real el corte se coloca en los bordes libres de las valvas, la «boca de pez» (Mitchell 2019,
+ * ASE, docs/mitchell-2019-ett-completa-ase.pdf#page=21). Aquí: PSAX_MV_BAJO mm por debajo del centro de la línea de cierre del instante
+ * (`g.comisuras.centro`, que baja con el anillo), donde el corte toca las dos valvas, abiertas o cerradas (barrido en
+ * autonomo/bloques/mv-eco/paso6/herramientas/psax-barrido.mjs). Ilustrativo: la fuente no da la cifra.
+ * Devuelve el plano del instante (el mismo si es otra vista, o el dibujo de hoy).
+ */
+export const PSAX_MV_BAJO = 1.5;
+export function planoSigueAnillo(P, g) {
+  const c = g?.comisuras?.centro;
+  if (!P || P.clave !== 'psaxMv' || !dibujoNuevo() || !c) return P;
+  return { ...P, O: [P.O[0], P.O[1], c[2] - PSAX_MV_BAJO] };
+}
+
+/**
  * El plano de una vista para un corazón con estos volúmenes telediastólicos ({ vvi, vvd }). Se calcula
  * una vez por latido estable: el transductor no se mueve con el corazón (el corazón cruza el plano).
  */

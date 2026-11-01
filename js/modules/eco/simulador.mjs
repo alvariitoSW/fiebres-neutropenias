@@ -18,7 +18,7 @@ import { ESCENARIOS, evaluarForma, aplicarEscenario } from './escenarios.mjs';
 import { crearFlujo } from './flujo-sangre.mjs';
 import { COLOR_FASE, segmentosFase, estadoRevision, crearDiagramas, crearPanelesHemo } from './diagramas.mjs';
 import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMotor } from './formas.mjs';
-import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, regionZoom, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
+import { VISTAS, planoVista, planoSigueAnillo, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, regionZoom, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
 import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg, escalaCw } from './doppler.mjs';
@@ -788,6 +788,8 @@ export function montarSimulador(raiz, opc = {}) {
     if (!ecoPendiente || ahora - ultimoEco < (propia ? 80 : modoEco === 'M' ? 20 : 30)) return;
     if (!prepararPlanoEco()) return;
     const geoEco = propia ? construirCorazon(est, { pericardio: opciones.pericardio, detalle: opciones.detalle, calidad }) : g;
+    // PSAX mitral: el corte baja con el anillo (dibujo nuevo); con la sonda movida a mano manda el usuario
+    if (vistaEco === 'psaxMv' && !sondaMovida(sonda)) { const p2 = planoSigueAnillo(planoEco, geoEco); if (Math.abs(p2.O[2] - planoEco.O[2]) > 0.05) planoEco = p2; }
     // el corte lleva siempre el abdomen (aunque en el 3D esté oculto): es anatomía, no una opción de dibujo
     const abdEco = !propia && abd ? abd : construirAbdomen(geoEco, datosVci(s));
     const im = ecografo.formar(geoEco.partes.concat(abdEco.partes), planoEco, { ref: refEco, t: s.t ?? 0, ventanaVista: VISTAS[vistaEco].ventana, ganancia: img.gan, tgc: img.tgc, focoMm: img.foco, m: { ventana: img.ventana ? 0.7 : 0 } });
