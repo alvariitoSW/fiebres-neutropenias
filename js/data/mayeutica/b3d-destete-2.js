@@ -37,7 +37,7 @@ export const MAYEUTICA_DESTETE_2 = {
           no('Solo el catéter de arteria pulmonar, y la saturación venosa sube al caer el gasto, porque la sangre tarda más en volver', `El catéter se usa raramente y no es la única herramienta; al caer el gasto sube la extracción y la saturación baja (${p(55)}-${p(56)}).`),
           no('La eco cardíaca y la ScvO₂, que sube en los ensayos fallidos de 61 a 71 %', `Descendió progresivamente de unos 61 a unos 51 % en los ensayos fallidos (${p(56)}).`),
           ok('Eco, catéter de arteria pulmonar o ScvO₂; la saturación baja porque el tejido extrae más cuando el gasto cae')],
-        explicacion: `Menos gasto → más extracción periférica → menos saturación venosa. En el estudio, la SvO₂ se mantuvo en ~65-66 % en los ensayos exitosos y bajó de ~61 a ~51 % en los fallidos; <span class="hl-azul">la ScvO₂ imita a la SvO₂</span> (${p(56)}).` + enFicha(WE, 'nep-ext-scvo2') },
+        explicacion: `Menos gasto → más extracción periférica → menos saturación venosa. En el estudio, la SvO₂ se mantuvo en ~65-66 % en los ensayos exitosos y bajó de ~61 a ~51 % en los fallidos; <span class="hl-azul">la ScvO₂ imita a la SvO₂</span> (${p(56)}-${p(57)}, Fig. 30.4).` + enFicha(WE, 'nep-ext-scvo2') },
       { id: 'ext-g4', corto: 'manejo del corazón', tipo: 'error', fuente: 'nep-ext-manejo-cardiaco',
         enunciado: 'Un residente resume qué hacer si el corazón falla en la prueba. Hay dos errores. Encuéntralos.',
         frases: [
@@ -127,7 +127,7 @@ export const MAYEUTICA_DESTETE_2 = {
         enunciado: 'En un paciente con intubación prolongada, la fuga del manguito es mayor de 110 mL. ¿Qué se concluye?',
         opciones: [
           no('Que hay que dar esteroides igualmente y extubar a VNI, porque un solo dato no excluye el edema', `Con >110 mL el riesgo se descarta con cerca del 95 % de certeza y no hace falta nada más antes de extubar (${p(59)}).`),
-          ok('Que descarta el edema con cerca del 95 % de certeza y no hace falta nada más'),
+          ok('Que descarta el edema con cerca del 95 % de certeza: no hace falta pretratamiento ni nada más antes de extubar'),
           no('Que el riesgo es de la mitad que con un valor <110 mL, y se pretrata con una dosis única', `No es un riesgo a la mitad: >110 mL lo elimina con cerca del 95 % de certeza (${p(59)}).`)],
         explicacion: `La fuga <span class="hl-verde">&gt;110 mL</span> descarta el edema con ~95 % de certeza y «nada más es necesario antes de la extubación» (${p(59)}). La prueba se reserva para los de alto riesgo.` + enFicha(WE, 'nep-cuff-recomendacion') },
       { id: 'ext-e3', corto: 'pauta del esteroide', tipo: 'test', fuente: 'nep-cuff-esteroides', origen: 'ficha',
@@ -135,12 +135,12 @@ export const MAYEUTICA_DESTETE_2 = {
         opciones: [
           no('Metilprednisolona 20 mg intravenosos en una sola dosis, administrada justo al extubar al paciente', `La pauta es 20 mg cada 4 horas desde 12 horas antes; el efecto no está presente si se da cerca de la extubación (${p(59)}).`),
           no('Metilprednisolona 20 mg cada 4 horas, empezando 2 horas antes de la extubación planificada', `La primera dosis se da 12 horas antes: el pretratamiento debe empezar horas antes (${p(59)}).`),
-          ok('Metilprednisolona IV 20 mg cada 4 h, con la primera dosis 12 h antes de la extubación')],
+          ok('Metilprednisolona IV 20 mg cada 4 h, con la primera dosis 12 h antes de la extubación, no cerca de ella')],
         explicacion: `<span class="hl-azul">20 mg IV cada 4 h, primera dosis 12 h antes</span>; «el efecto no está presente si los esteroides se administran cerca del momento de la extubación» (${p(59)}).` + enFicha(WE, 'nep-cuff-esteroides') },
       { id: 'ext-e4', corto: 'cuándo aparece el estridor', tipo: 'test', fuente: 'nep-cuff-estridor', origen: 'ficha',
         enunciado: '¿Con qué grado de obstrucción de la vía aérea superior se hace evidente por primera vez el estridor?',
         opciones: [
-          ok('Cuando la obstrucción alcanza cerca del 50 %'),
+          ok('Cuando la obstrucción alcanza cerca del 50 % del calibre de la vía aérea superior'),
           no('Con una obstrucción próxima al 90 %, ya casi completa', `El estridor aparece con cerca del 50 % de obstrucción, mucho antes de que sea completa (${p(60)}).`),
           no('Solo con obstrucciones del 20 % o menos, y desaparece al aumentar', `Se hace evidente por primera vez cuando la obstrucción alcanza cerca del 50 % (${p(60)}).`)],
         explicacion: `El estridor aparece «cuando la obstrucción alcanza <span class="hl-azul">cerca del 50 %</span>»; es audible sin estetoscopio y más evidente al inspirar (${p(60)}).` + enFicha(WE, 'nep-cuff-estridor') },
@@ -174,7 +174,7 @@ export const MAYEUTICA_DESTETE_2 = {
               puntos: [
                 `Es el <span class="hl-rojo">corazón</span>: la disfunción cardíaca (FEVI 35 %) se desenmascara al pasar a respirar solo, y trae congestión pulmonar (${p(55)}).`,
                 `Cae el gasto, los tejidos <span class="hl-azul">extraen más O₂</span> y la saturación venosa baja (${p(56)}).`],
-              explicacion: `En los ensayos fallidos del estudio la SvO₂ descendió de ~61 a ~51 %; la ScvO₂ imita a la SvO₂ (${p(56)}). Las cifras de Benito son las del caso (ilustrativo).` + enFicha(WE, 'nep-ext-scvo2') } },
+              explicacion: `En los ensayos fallidos del estudio la SvO₂ descendió de ~61 a ~51 %; la ScvO₂ imita a la SvO₂ (${p(56)}-${p(57)}, Fig. 30.4). Las cifras de Benito son las del caso (ilustrativo).` + enFicha(WE, 'nep-ext-scvo2') } },
           { momento: 'Día 7 · el plan', datos: { Decisión: 'intervenir sobre el corazón antes de repetir' }, nuevo: ['Decisión'],
             pregunta: { id: 'ext-c2', tipo: 'test', fuente: 'nep-ext-manejo-cardiaco', origen: ILU,
               enunciado: 'Con hipertensión, crepitantes y FEVI de 35 %, ¿qué haces antes de la próxima prueba?',
@@ -192,7 +192,7 @@ export const MAYEUTICA_DESTETE_2 = {
                 { t: 'Sin una PImax medida no se puede decidir el destete.', mal: true, c: `Los pacientes con fallo agudo a menudo no pueden hacer la maniobra, lo que limita el valor de la PImax en la UCI (${p(58)}).` },
                 { t: 'Corrijo el magnesio y el fósforo si están bajos.' }],
               explicacion: 'Dos errores: extubar «para descansar» y exigir una PImax que el paciente agudo a menudo no puede hacer.' + enFicha(WE, 'nep-ext-extubacion') } },
-          { momento: 'Día 9 · nueva prueba', datos: { Prueba: 'presión de soporte de 5, 2 horas', Vt: '340 mL (5,0 mL/kg PBW)', FR: '22 por minuto', 'FR/Vt': '≈65 rpm/L (con la calculadora)', 'ScvO₂': '66 %', PImax: '−30 cmH₂O' }, nuevo: ['Prueba', 'Vt', 'FR', 'FR/Vt', 'ScvO₂', 'PImax'],
+          { momento: 'Día 9 · nueva prueba', datos: { Prueba: 'presión de soporte de 5, 2 horas', Vt: '340 mL (5,0 mL/kg PBW)', FR: '22 por minuto', 'FR/Vt': '≈65 rpm/L (con la calculadora)', 'ScvO₂': '66 %', PImax: '−35 cmH₂O' }, nuevo: ['Prueba', 'Vt', 'FR', 'FR/Vt', 'ScvO₂', 'PImax'],
             calculadora: { ir: 'neumo-sbt-vt', nombre: 'Predictores de éxito' },
             pregunta: { id: 'ext-c4', tipo: 'test', fuente: 'nep-sbt-tiempo · nep-ext-extubacion · nep-ext-reflejos', origen: ILU,
               enunciado: 'Benito completa 2 horas con esas cifras y la ScvO₂ se mantiene. ¿Extubas?',
@@ -204,14 +204,14 @@ export const MAYEUTICA_DESTETE_2 = {
           { momento: 'Día 9 · prueba de fuga', datos: { Modo: 'volumen control, manguito desinflado', 'Vt inhalado': '410 mL', 'Vt exhalado (del modelo)': '330 mL', Fuga: '80 mL' }, nuevo: ['Modo', 'Vt inhalado', 'Vt exhalado (del modelo)', 'Fuga'],
             calculadora: { ir: 'neumo-fuga-volumen', nombre: 'Prueba de fuga del manguito' },
             pregunta: { id: 'ext-c5', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-cuff-recomendacion · nep-cuff-esteroides', origen: ILU, modelo: pv('fuga-cuff', '🫁 Benito: manguito a 0 con edema laríngeo, fuga de 80'),
-              enunciado: 'Benito lleva siete días intubado y fuga de 80 mL. Piensas extubarlo mañana a las 9. ¿Qué haces?',
+              enunciado: 'Benito lleva nueve días intubado y fuga de 80 mL. Piensas extubarlo mañana a las 9. ¿Qué haces?',
               puntos: [
                 `La fuga está <span class="hl-rojo">por debajo de 110</span>: el riesgo de edema post-extubación es 7 veces mayor (${p(59)}).`,
                 `<span class="hl-azul">Pretratas con esteroide</span> y la primera dosis, 12 horas antes: esta noche a las 21:00 (${p(59)}).`,
                 `Al extubar, <span class="hl-azul">VNI inmediata</span> (${p(59)}-${p(60)}).`],
               explicacion: `La calculadora de la ficha da el mismo veredicto con 80 mL. Los esteroides dados cerca de la extubación no sirven, así que la extubación se programa tras las 12 horas (${p(59)}). La fuga de 80 es del modelo (ilustrativo).` + enFicha(WE, 'nep-cuff-recomendacion') } },
           { momento: 'Día 10 · giro: 40 minutos tras extubar', datos: { Situación: 'extubado a VNI, con el esteroide dado', Ruido: 'estridor inspiratorio', 'SpO₂': '88 %' }, nuevo: ['Situación', 'Ruido', 'SpO₂'],
-            pregunta: { id: 'ext-c6', tipo: 'test', fuente: 'nep-cuff-manejo · nep-cuff-estridor', origen: ILU, modelo: pv('fuga-cuff', '🫁 Benito: extuba con edema y mira el estridor'),
+            pregunta: { id: 'ext-c6', tipo: 'test', fuente: 'nep-cuff-manejo · nep-cuff-estridor', origen: ILU, modelo: pv('fuga-cuff', '🫁 Así se ve el estridor del edema (Benito es el ~3 % que lo tiene pese al esteroide)'),
               enunciado: 'A los 40 minutos de extubar, Benito tiene estridor inspiratorio y SpO₂ de 88 %. ¿Adrenalina nebulizada y esperar a ver?',
               opciones: [
                 no('Sí: nebulizas adrenalina y observas una hora, porque es el tratamiento del edema laríngeo', `La adrenalina en aerosol es un tratamiento popular pero no probado, y la desaturación obliga a reintubar sin esperar (${p(60)}).`),

@@ -170,6 +170,7 @@ function pintarCifrasTodo() {
   const hay = aplicarTopes();
   PANT.pintar(L, hay, { tapado: est.tapado, detenido: est.detenido });
   if (est.clave.startsWith('sbt') && l.vtExh > 0 && !est.tapado) { const fvt = (l.frReal || r.frEsp) / (l.vtExh / 1000); PANT.R.info(`<b>FR/Vt ${f0(fvt)}</b> resp/min por litro · FR ${f0(l.frReal || r.frEsp)} · Vt ${f0(l.vtExh)} mL (${f1(l.vtExh / kg)} mL/kg) · predictor de éxito: ${fvt <= 105 ? '≤105' : '>105: fracaso probable'} (Marino cap. 30 p. 52, Tabla 30.1) ${cita(D.C.sbt)}`); }
+  else if (!est.clave.startsWith('sbt')) PANT.R.info('');
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),

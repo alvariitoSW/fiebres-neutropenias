@@ -21,7 +21,7 @@ export const RECETAS_3D_G5B = {
                     { fuente: '#nep-sbt-tpiece', etiqueta: 'O₂ de pared a flujo mayor que el inspiratorio' },
                     { fuente: '#nep-sbt-tpiece', etiqueta: 'No se pueden monitorizar FR ni Vt' }] }
             ] },
-            { tipo: 'linea', titulo: 'Fig. 30.2: trabajo respiratorio (J/L)', nota: 'Valores aproximados que da el texto de la ficha.', min: 0, max: 100, ticks: [0, 40, 50, 90, 100], unidad: 'J/L', nodos: [
+            { tipo: 'linea', titulo: 'Fig. 30.2: trabajo respiratorio (J/L)', nota: 'Valores aproximados leídos en la figura de Marino.', min: 0, max: 100, ticks: [0, 40, 50, 90, 100], unidad: 'J/L', nodos: [
                 { fuente: '#nep-sbt-fig-30-2', etiqueta: 'Con PS 5: ≈40', en: 40, fila: 'abajo', color: 'verde' },
                 { fuente: '#nep-sbt-fig-30-2', etiqueta: 'Sin PS: ≈50', en: 50, color: 'amarillo' },
                 { fuente: '#nep-sbt-fig-30-2', etiqueta: '1 h tras extubar: ≈90', en: 90, color: 'rojo' }
@@ -50,7 +50,7 @@ export const RECETAS_3D_G5B = {
                 { fuente: '#nep-ext-cardiaca', etiqueta: 'Isquemia silente', color: 'purpura' },
                 { fuente: '#nep-ext-cardiaca-efectos', etiqueta: 'Congestión pulmonar y diafragma más débil (extrae el O₂ al máximo)', color: 'dorado' }
             ] },
-            { tipo: 'linea', titulo: 'Fig. 30.4: saturación venosa mixta en la prueba (%)', nota: 'Valores aproximados que da el texto de la ficha.', min: 40, max: 80, ticks: [40, 50, 60, 70, 80], unidad: '%', nodos: [
+            { tipo: 'linea', titulo: 'Fig. 30.4: saturación venosa mixta en la prueba (%)', nota: 'Valores aproximados leídos en la figura de Marino.', min: 40, max: 80, ticks: [40, 50, 60, 70, 80], unidad: '%', nodos: [
                 { fuente: '#nep-ext-scvo2', etiqueta: 'Fallida: cae a ≈51', en: 51, fila: 'abajo', color: 'rojo' },
                 { fuente: '#nep-ext-scvo2', etiqueta: 'Fallida: empieza en ≈61', en: 61, color: 'amarillo' },
                 { fuente: '#nep-ext-scvo2', etiqueta: 'Exitosa: estable ≈65-66', en: 66, fila: 'abajo', color: 'verde' }
