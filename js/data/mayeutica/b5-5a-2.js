@@ -207,7 +207,7 @@ export const MAYEUTICA_B5_5A_2 = {
         enunciado: 'Hilario lleva 72 h ingresado por sus varices. Hoy: fiebre, dolor y 610 neutrófilos/mm³ en la ascitis. ¿Qué tipo de PBE es y qué le pones sin esperar el cultivo?',
         opciones: [
           { t: 'Nosocomial (tras 48 h de ingreso): resistentes posibles, así que meropenem 1 g cada 8 h', ok: true },
-          { t: 'Comunitaria: ceftriaxona, la misma que ya lleva por las varices, que cubre E. coli y Klebsiella', porque: 'La que lleva es profilaxis, y una infección a las 72 h de ingreso es nosocomial, donde típicamente se aíslan resistentes. Con ceftriaxona quedaría sin cubrir.' },
+          { t: 'Comunitaria: ceftriaxona, la misma que ya lleva por las varices, la recomendada en la comunitaria', porque: 'Es la recomendada en la comunitaria (pág. 10), pero la que lleva es profilaxis, y una infección a las 72 h de ingreso es nosocomial, donde típicamente se aíslan resistentes. Con ceftriaxona quedaría sin cubrir.' },
           { t: 'Asociada a cuidados: esperar el cultivo antes de decidir', porque: 'Asociada a cuidados es la que aparece en las primeras 48 h con contacto sanitario previo. Y con >250 neutrófilos el antibiótico no espera al cultivo.' }],
         explicacion: '<span class="hl">Nosocomial = aparece tras 48 h de ingreso</span>; resistentes típicos → carbapenémico (p. ej. meropenem 1 g/8 h), con vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Con sospecha menor, piperacilina-tazobactam (Fig. 39.4).' + ` (${pag(11, 'pág. 11')})` },
       { id: 'pbe-g4', corto: 'respuesta a 48 h', tipo: 'test', fuente: 'ma-pbe-abx · ma-pmn-calc', calculadora: { ir: 'ma-pmn-calc', nombre: 'Neutrófilos en ascitis: diagnóstico y respuesta' },

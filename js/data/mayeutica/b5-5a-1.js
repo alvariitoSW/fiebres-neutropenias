@@ -37,7 +37,7 @@ export const MAYEUTICA_B5_5A_1 = {
         opciones: [
           { t: 'Sí: si no hay nivel detectable en plasma, el paracetamol no es la causa', porque: 'En la mitad de los casos con daño hepático el paracetamol es indetectable. Descartarlo deja sin antídoto a un enfermo con una causa tratable.' },
           { t: 'No: es indetectable en el 50 % de los casos con daño hepático ya visible', ok: true },
-          { t: 'Sí, si la ALT pasa de 3.000 UI/L: ese patrón es de la hepatitis isquémica', porque: '«>3.000 con bilirrubina <5» es el patrón isquémico, pero exige hipoperfusión previa (pág. 4); el paracetamol da la misma ALT alta con bilirrubina baja (pág. 3): buscarías un shock que no hubo y dejarías el antídoto.' }],
+          { t: 'Sí, si la ALT pasa de 3.000 UI/L: ese patrón es de la hepatitis isquémica', porque: '«>3.000 con bilirrubina <5» es el patrón isquémico, pero exige hipoperfusión previa (pág. 4); el paracetamol da también ALT alta con bilirrubina poco elevada (pág. 3): buscarías un shock que no hubo y dejarías el antídoto.' }],
         explicacion: 'El paracetamol es <span class="hl-rojo">indetectable en el 50 %</span> de los casos con daño hepático, y la mitad de las sobredosis son <span class="hl">involuntarias</span> (el paracetamol está en más de 600 productos sin receta): el riesgo es no diagnosticar algo tratable (' + pag(3, 'pág. 3') + ').' },
       { id: 'fha-g4', corto: 'vs cirrótico', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'ma-fha-clinica', modeloVivo: { shockVivo: 'septico', texto: '🫀 El mismo patrón hemodinámico: el shock séptico a pie de cama' },
         enunciado: 'El adjunto pregunta: «¿en qué se distingue este enfermo del cirrótico descompensado?».',
@@ -146,7 +146,7 @@ export const MAYEUTICA_B5_5A_1 = {
               opciones: [
                 { t: 'El 75 % se resuelve sin trasplante, pero si la encefalopatía progresa se consulta ya', ok: true },
                 { t: 'Que seguro se recupera: el 75 % se resuelve sin trasplante y ella ya lleva la NAC', porque: 'Es una cifra general de los casos de paracetamol; no promete nada a una enferma que sigue grave y puede necesitar trasplante.' },
-                { t: 'Que sin trasplante no hay posibilidades: la mortalidad del fallo hepático es del 80 %', porque: 'El 75 % se resuelve sin él en el paracetamol; decirlo así sería falso.' }],
+                { t: 'Que sin trasplante no hay posibilidades: la mortalidad del fallo hepático es del 80 %', porque: 'El 80 % era la mortalidad antes del trasplante (hoy 33 %, pág. 8), y en el paracetamol el 75 % se resuelve sin él (pág. 3).' }],
               explicacion: 'Con paracetamol, el <span class="hl-verde">75 %</span> se resuelve sin trasplante (' + pag(3, 'pág. 3') + '). El trasplante, tratamiento definitivo, ha bajado la mortalidad del <span class="hl-rojo">80 % al 33 %</span>, y se consulta ante cualquier encefalopatía progresiva (' + pag(8, 'pág. 8') + ').' } },
         ],
         lleva: [
@@ -236,7 +236,7 @@ export const MAYEUTICA_B5_5A_1 = {
           { t: 'Creatinina >2 mg/dL', porque: 'No es una indicación: la ficha dice «sea cual sea la creatinina». Esperarías al riñón.' },
           { t: 'Encefalopatía de grado 3 o más', porque: 'El grado de West Haven no es la indicación. Llegarías al estupor para empezarla.' },
           { t: 'Oliguria persistente', ok: true },
-          { t: 'Amonio venoso >100 µmol/L', porque: 'El corte de 150 es del amonio arterial, que predice mejor al menos al principio (pág. 7); el venoso no es criterio y esperarías una cifra que la ficha no da.' }],
+          { t: 'Amonio venoso >100 µmol/L', porque: 'El corte de 150 se define para el amonio arterial, que puede predecir mejor, al menos al principio (pág. 7); la ficha no da corte para el venoso.' }],
         explicacion: 'Tres indicaciones: <span class="hl">oliguria persistente</span>, <span class="hl-rojo">amonio >150</span> o <span class="hl-rojo">edema cerebral</span>, sea cual sea la creatinina (' + pag(8, 'pág. 8') + ').' },
       { id: 'eh-e4', corto: 'enema de retención', tipo: 'test', fuente: 'ma-eh-lactulosa',
         enunciado: 'Enema de retención de lactulosa. ¿Cuál es la pauta de la ficha?',
@@ -269,7 +269,7 @@ export const MAYEUTICA_B5_5A_1 = {
             pregunta: { id: 'eh-c3', tipo: 'error', fuente: 'ma-eh-nh3 · ma-eh-cvvh',
               enunciado: 'La nota del R1 de guardia. Hay 0, 1 o 2 errores: encuéntralos.',
               frases: [
-                { t: 'Amonio venoso 138: está por debajo de 150, así que descarto riesgo de edema.', mal: true, c: 'El corte de <span class="hl-rojo">150 µmol/L</span> es del amonio <span class="hl-azul">arterial</span>, que quizá predice mejor que el venoso, al menos al principio (pág. 7): mide el arterial.' },
+                { t: 'Amonio venoso 138: está por debajo de 150, así que descarto riesgo de edema.', mal: true, c: 'El corte de <span class="hl-rojo">150 µmol/L</span> es del amonio <span class="hl-azul">arterial</span>, que quizá predice mejor que el venoso, al menos al principio (pág. 7): el corte no vale para el venoso.' },
                 { t: 'Sigo con lactulosa, ajustando a 2-3 deposiciones blandas al día.' },
                 { t: 'Mantengo la rifaximina al menos 10 días.' },
                 { t: 'Vigilo la diuresis, porque una oliguria persistente es una de las indicaciones de la hemofiltración.' }],
