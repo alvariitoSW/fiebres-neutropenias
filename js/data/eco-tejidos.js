@@ -66,4 +66,4 @@ export const PARED_AURICULAR_NUEVO = { ancho: 2.5, db: -7, moteadoDb: 4, origen:
 export const PARED_VD_NUEVO = { db: 8, origen: 'ilustrativo' };
 // Aorta descendente del dibujo nuevo (detrás de la AI): pared más fina y 8 dB más tenue que los grandes vasos, para que no compita con la AI
 // (calibre real ~2-2,5 cm; el radio del dibujo, en torax.mjs TORAX_NUEVO.rAo; ni Lang 2015 ni Mitchell 2019 dan su calibre: ilustrativo).
-export const AORTA_DESC_NUEVO = { db: -8, ancho: 1.3, origen: 'ilustrativo' };
+export const AORTA_DESC_NUEVO = { db: -8, ancho: 1.3, dbOblicuo: -8,  /* foco VD: corte oblicuo (24 × 53 mm), más tenue aún */ origen: 'ilustrativo' };
