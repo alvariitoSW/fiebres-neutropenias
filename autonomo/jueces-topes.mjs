@@ -37,7 +37,8 @@ const AJUSTES = {
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
     // [HUECO crv: 'craneo-vivo']
     // ·
-    // [HUECO plv: 'placa-viva']
+    // Placa viva: «Hazlo / Siguiente / Cerrar» de la guía, «Ver el ciclo», los pasos de la lupa y el reloj (+10 min, Día ±1) no son mandos de dosis (la prueba propia recorre todos)
+    'placa-viva': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Ver el ciclo|\d )/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
 const NO_MANDO = '[data-especialidad], [data-view], [data-resaltar], [data-volver], [data-modo], .back-btn, [class*="-org-ir"], [class*="-ir"], [id$="-lupa-cerrar"], [id*="-modo-"], [id$="-guia-abrir"], [data-accion]';

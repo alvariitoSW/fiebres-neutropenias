@@ -39,7 +39,7 @@ import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
 // [HUECO crv: import del cráneo vivo]
 // ·
-// [HUECO plv: import de la placa viva]
+import { init as initPlacaViva } from './placa-viva/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -79,7 +79,7 @@ const BLOQUES = {
 const MODELOS = new Set(['aguaViva', 'capilarVivo', 'cateterVivo', 'murallaViva', 'telarVivo', 'inmersionViva', 'vasoVivo', 'shockVivo', 'pulmonVivo', 'ritmoVivo', 'receptorVivo', 'ionesVivos']);
 // [HUECO crv: MODELOS.add('craneoVivo') y BLOQUES.marinoNeuro.vivos.push('crv-menu-libros')]
 // ·
-// [HUECO plv: MODELOS.add('placaViva') y BLOQUES.marinoNeuro.vivos.push('plv-menu-libros')]
+MODELOS.add('placaViva'); BLOQUES.marinoNeuro.vivos.push('plv-menu-libros');
 
 // Tira «Modelos vivos de este bloque» arriba de cada bloque: copia los atributos del enlace cruzado de su botón
 // en la portada (una sola fuente) y se pinta tras la cabecera del bloque.
@@ -140,7 +140,8 @@ export function init() {
         ionesVivos: document.getElementById('iones-vivos-view'),
         // [HUECO crv: vista craneoVivo]
         // ·
-        // [HUECO plv: vista placaViva]
+        // Placa motora viva (Marino cap. 46; fichas en Neurología)
+        placaViva: document.getElementById('placa-viva-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -240,7 +241,7 @@ export function init() {
     const ionesVivos = arrancar('iones', initIonesVivos);
     // [HUECO crv: arrancar el cráneo vivo]
     // ·
-    // [HUECO plv: arrancar la placa viva]
+    const placaViva = arrancar('placa motora', initPlacaViva);
 
     librosLevel.show('menu');
 
@@ -267,7 +268,8 @@ export function init() {
             ionesVivos: (estadoClave, origen) => ionesVivos?.abrir(estadoClave, origen),
             // [HUECO crv: craneoVivo en modelosVivos]
             // ·
-            // [HUECO plv: placaViva en modelosVivos]
+            // data-placa-viva="<paciente>[:paso]", la placa motora viva
+            placaViva: (estadoClave, origen) => placaViva?.abrir(estadoClave, origen),
         },
     };
 }

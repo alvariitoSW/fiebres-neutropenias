@@ -24,7 +24,7 @@ const FRASES = {
     'receptor-vivo': '#rcv-frase', 'iones-vivos': '#iov-frase',
     // [HUECO crv: 'craneo-vivo']
     // ·
-    // [HUECO plv: 'placa-viva']
+    'placa-viva': '#plv-frase',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';
