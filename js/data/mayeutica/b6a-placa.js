@@ -36,7 +36,7 @@ export const MAYEUTICA_B6A_PLACA = {
         // [placa viva: estado 'miastenia']
         enunciado: 'Serapio, de 35 años, ve doble por la tarde y por la mañana no. Antes de mirar la ficha: ¿qué explica que la debilidad empeore con el uso y mejore con el reposo?',
         opciones: [
-          { t: 'Hay menos receptores de acetilcolina en la placa: cada impulso activa menos fibras', ok: true },
+          { t: 'Hay menos receptores de ACh en la placa', ok: true },
           { t: 'El nervio conduce cada vez más lento al cansarse', porque: 'Eso sería desmielinización (Guillain-Barré): conducción enlentecida y sin fatiga (Tabla 46.6). Si lo piensas aquí, pedirías neurofisiología y retrasarías vigilar la capacidad vital de un miasténico.' },
           { t: 'Falta acetilcolina en el terminal del nervio', porque: 'Marino sitúa la lesión en el receptor postsináptico (anticuerpos que lo destruyen), no en el terminal. Con esa idea no entenderías por qué la piridostigmina, que frena la destrucción de ACh, mejora al paciente.' }],
         explicacion: 'Los anticuerpos destruyen los <span class="hl-azul">receptores de acetilcolina postsinápticos</span>: con menos receptores, la debilidad <span class="hl">empeora con la actividad y mejora con el reposo</span> (' + pag(24) + '). Solo afecta al músculo esquelético.' },
@@ -45,14 +45,14 @@ export const MAYEUTICA_B6A_PLACA = {
         opciones: [
           { t: 'Los respiratorios primero; los ojos se afectan al final', porque: 'Es al revés: el diafragma y la pared torácica se debilitan al progresar (crisis). Si esperas disnea para sospechar miastenia, llegarás a la crisis sin haber vigilado la capacidad vital.' },
           { t: 'Los proximales de las piernas, con los ojos respetados', porque: 'La debilidad de los miembros viene después de los ojos, y en el 15 % ni llega. Buscar solo debilidad en las piernas te haría perder una miastenia ocular.' },
-          { t: 'Los oculares, siempre; luego miembros, y en el 15 % se queda en los ojos', ok: true }],
+          { t: 'Los oculares siempre; en el 15 % solo ellos', ok: true }],
         explicacion: 'Los músculos oculares (párpados y oculomotores) <span class="hl">se afectan siempre</span>: diplopía y ptosis son los primeros signos. Después suele venir debilidad simétrica de los miembros, pero <span class="hl-rojo">en el 15 % se queda en los ojos</span>; al progresar fallan diafragma y pared torácica (' + pag(24) + ').' },
       { id: 'mnm-g3', corto: 'prueba del hielo', tipo: 'test', fuente: 'mn-mg-hielo · mar-img-46-1',
         // [placa viva: estado 'hielo']
         enunciado: 'Hielo sobre el párpado con ptosis, con el ojo cerrado, 2 minutos. ¿Qué cuenta como positivo y qué fiabilidad tiene?',
         opciones: [
           { t: 'Un aumento de la hendidura de 5 mm; sensibilidad del 95 %', porque: 'La fuente no da esas cifras. Con un umbral inventado más alto, dejarías sin diagnosticar a un miasténico con una mejoría real de 2 o 3 mm.' },
-          { t: 'Un aumento de 2 mm en la hendidura palpebral; sensibilidad y especificidad del 80 %', ok: true },
+          { t: '+2 mm en la hendidura; sensibilidad y especificidad del 80 %', ok: true },
           { t: 'Cualquier cambio visible; sensibilidad y especificidad del 100 %', porque: 'La prueba falla en 1 de cada 5 casos en los dos sentidos. Fiarte de ella como definitiva te llevaría a descartar la miastenia con un hielo negativo, sin pedir anticuerpos.' }],
         explicacion: 'Se mide la hendidura palpebral, se aplica el hielo 2 min y se vuelve a medir: <span class="hl">+2 mm es positivo</span>, con sensibilidad y especificidad del <span class="hl-rojo">80 %</span> (' + pag(24) + ', Figura 46.1 en ' + pag(25) + ').',
         nota: '<b>La fuente no lo dice.</b> Marino solo escribe que el frío «mejora la transmisión neuromuscular»; su mecanismo íntimo no lo da el libro.' },
@@ -67,13 +67,13 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: 'Serapio toma piridostigmina, que le va bien. ¿Por qué no se usa en el fracaso respiratorio?',
         opciones: [
           { t: 'Porque no llega a la placa y no inhibe la acetilcolinesterasa', porque: 'Sí actúa: es un inhibidor de la acetilcolinesterasa y se usa en la miastenia leve-moderada. Pensar que no funciona te haría retirarla a quien la necesita sin motivo.' },
-          { t: 'Porque aumenta las secreciones respiratorias (efecto colinérgico)', ok: true },
+          { t: 'Aumenta las secreciones (efecto colinérgico)', ok: true },
           { t: 'Porque produce hiperpotasemia', porque: 'La hiperpotasemia es de la succinilcolina (Tabla 46.7), no de la piridostigmina. Ese error te haría pedir potasios inútiles y no prever el moco que sí acumulará un paciente con la vía aérea comprometida.' }],
         explicacion: 'Es un inhibidor de la acetilcolinesterasa para la miastenia leve-moderada; no se usa en el fracaso respiratorio <span class="hl-rojo">porque aumenta las secreciones</span> (efecto colinérgico) (' + pag(26) + ').' },
       { id: 'mnm-g6', corto: 'plasmaféresis o IgIV', tipo: 'test', fuente: 'mn-mg-crisis',
         enunciado: 'En la crisis, IgIV y plasmaféresis responden en un 70 %. ¿Por qué se prefiere la plasmaféresis?',
         opciones: [
-          { t: 'Porque responde antes: se nota tras la 2.ª sesión, y la IgIV tarda 4-5 días', ok: true },
+          { t: 'Responde antes: tras la 2.ª sesión (IgIV: 4-5 días)', ok: true },
           { t: 'Porque es más eficaz: responde el 90 %', porque: 'Marino las da por igual de eficaces (70 %). Con esa idea elegirías la técnica por una ventaja que no existe y no preguntarías por la disponibilidad.' },
           { t: 'Porque la IgIV está contraindicada con piridostigmina', porque: 'La ficha no dice tal cosa. Si lo creyeras, retirarías la piridostigmina de la lista de causas de secreciones por un motivo equivocado.' }],
         explicacion: 'Dos opciones <span class="hl">igual de eficaces (70 %)</span>; se prefiere la plasmaféresis porque <span class="hl-azul">responde antes</span>: tras la segunda sesión, frente a 4-5 días de la IgIV (' + pag(26) + ').' },
@@ -99,13 +99,13 @@ export const MAYEUTICA_B6A_PLACA = {
         opciones: [
           { t: 'No: hacen falta menos de 1 L', porque: 'El criterio es «≤15 mL/kg o <1 L». 1.050 mL son exactamente 15 mL/kg; descartarlo por no bajar de 1 L es esperar a que esté in extremis.' },
           { t: 'No: manda la PIM, y −24 es mejor que −20', porque: 'No hay un criterio que mande: se mira la CV y la PIM, y basta que la CV cumpla. Si te quedas con la PIM, no verás un fracaso respiratorio que avanza rápido.' },
-          { t: 'Sí: 1.050 mL son 15 mL/kg (≤15), aunque la PIM aún no llegue a −20', ok: true }],
+          { t: 'Sí: 1.050 mL son 15 mL/kg (≤15)', ok: true }],
         explicacion: 'CV ≤<span class="hl-rojo">15 mL/kg</span> (o <1 L) y PIM de −20 cmH₂O deben hacer pensar seriamente en intubar (' + pag(25) + '): 1.050 mL / 70 kg = 15 mL/kg. «No esperar a que esté in extremis».',
         nota: NOTA_PIM + enFicha('mn-miastenia', 'mn-mg-intubacion') },
       { id: 'mnm-e4', corto: 'BiPAP', tipo: 'test', fuente: 'mn-mg-intubacion',
         enunciado: 'La CV de Serapio ya está en el límite. ¿Cuándo vale la BiPAP en vez de intubar?',
         opciones: [
-          { t: 'Siempre, como paso previo a intubar', porque: 'Un deterioro que puede ser muy rápido con un soporte que no cubre la debilidad lleva a una intubación urgente peor planificada.' },
+          { t: 'Siempre, como paso previo a intubar y ganar tiempo', porque: 'Un deterioro que puede ser muy rápido con un soporte que no cubre la debilidad lleva a una intubación urgente peor planificada.' },
           { t: 'Solo si la PaCO₂ es normal', porque: 'La fuente no da ese criterio, y la hipercapnia llega tarde en la debilidad neuromuscular. Fiarse de la gasometría retrasa la intubación.' },
           { t: 'Solo si se espera mejoría en pocos días, lo que no suele ser el caso', ok: true }],
         explicacion: '<span class="hl-rojo">La BiPAP solo si se espera mejoría en pocos días</span> (lo que no suele ser el caso) (' + pag(25) + ').' },
@@ -113,7 +113,7 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: '¿Cuál es la pauta de plasmaféresis en la crisis miasténica?',
         opciones: [
           { t: '3 sesiones en 3 días, 3 volúmenes plasmáticos cada una', porque: 'Es una pauta que no está en la fuente. Con menos sesiones de las pautadas, el paciente podría no llegar a la respuesta.' },
-          { t: '5 sesiones en 7-10 días, con 1-1,5 volúmenes plasmáticos cada una', ok: true },
+          { t: '5 sesiones en 7-10 días, 1-1,5 volúmenes cada una', ok: true },
           { t: '2 g/kg en 2-5 días', porque: 'Es la IgIV (2 g/kg en 2-5 días), no la plasmaféresis. Confundirlas te llevaría a calcular gramos en lugar de pautar sesiones.' }],
         explicacion: 'Plasmaféresis: <span class="hl">5 sesiones en 7-10 días</span>, cada una con 1-1,5 volúmenes plasmáticos; IgIV 2 g/kg en 2-5 días (' + pag(26) + ').' },
       { id: 'mnm-e6', corto: 'timoma', tipo: 'test', fuente: 'mn-mg-desencadenantes',
@@ -123,7 +123,7 @@ export const MAYEUTICA_B6A_PLACA = {
           { t: '10 %', ok: true },
           { t: '15-20 %', porque: 'Es la cifra de las crisis miasténicas. Mezclarlas lleva a asociar el timoma con la gravedad respiratoria, que no es lo que dice el libro.' }],
         explicacion: 'Un timoma causa el <span class="hl">10 %</span> (' + pag(24) + '). El 15 % es la miastenia solo ocular y el 15-20 %, la crisis (' + pag(24) + ').' },
-      { id: 'mnm-e7', corto: 'plan de la crisis', tipo: 'error', fuente: 'mn-mg-corticoides · mn-mg-otros',
+      { id: 'mnm-e7', corto: 'plan de la crisis', tipo: 'error', fuente: 'mn-mg-corticoides',
         enunciado: 'Plan que deja un compañero para Serapio en crisis. Léelo despacio: ¿hay algún error?',
         frases: [
           { t: 'Metilprednisolona 2 g/día dos días, aunque discutida.' },
@@ -145,8 +145,8 @@ export const MAYEUTICA_B6A_PLACA = {
             pregunta: { id: 'mnm-c1-1', tipo: 'test', fuente: 'mn-mg-hielo · mn-tabla-46-6 · mn-mg-clinica', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Ptosis vespertina con reflejos conservados y +3 mm tras el hielo. ¿Qué sugiere?',
               opciones: [
-                { t: 'Síndrome de Guillain-Barré', porque: 'En el Guillain-Barré los reflejos están disminuidos y no hay debilidad oculomotora. Tratarlo con IgIV sin ver la ptosis dejaría sin vigilar la causa real.' },
-                { t: 'Miastenia gravis: fatiga, reflejos conservados y hielo positivo (≥2 mm)', ok: true },
+                { t: 'Síndrome de Guillain-Barré, por la debilidad simétrica', porque: 'En el Guillain-Barré los reflejos están disminuidos y no hay debilidad oculomotora. Tratarlo con IgIV sin ver la ptosis dejaría sin vigilar la causa real.' },
+                { t: 'Miastenia gravis: fatiga y hielo positivo', ok: true },
                 { t: 'Síndrome de Miller Fisher', porque: 'Es la variante del Guillain-Barré con oftalmoplejía y ataxia; Serapio no tiene ataxia y conserva los reflejos, y el hielo no mejoraría una oftalmoplejía así.' }],
               explicacion: 'Debilidad que se fatiga, afectación ocular y reflejos conservados (Tabla 46.6, ' + pag(27) + '); el hielo con +3 mm supera el umbral de <span class="hl">+2 mm</span> (' + pag(24) + ').' } },
           { momento: 'Día 3 · UCI intermedia', datos: { Evolución: 'neumonía; CV 1.300 mL (18,6 mL/kg), PIM −28' }, nuevo: ['Evolución'], calculadora: C_FARM,
@@ -161,11 +161,11 @@ export const MAYEUTICA_B6A_PLACA = {
               explicacion: 'Intubar con CV ≤15 mL/kg (o <1 L) y PIM −20 (' + pag(25) + '); piridostigmina para la miastenia leve-moderada y enoxaparina como profilaxis (' + pag(26) + ').' } },
           { momento: 'Día 4 · 6 horas después', datos: { Clínica: 'disfagia', CV: '950 mL (13,6 mL/kg)', PIM: '−18 cmH₂O', 'SpO₂': '95 % aire', 'PaCO₂': '41 mmHg' }, nuevo: ['Clínica', 'CV', 'PIM', 'SpO₂', 'PaCO₂'], calculadora: C_MG,
             // [pulmón vivo: estado 'debilidad-neuromuscular']
-            pregunta: { id: 'mnm-c1-3', tipo: 'test', fuente: 'mn-mg-intubacion', origen: 'ficha; cifras del paciente: ilustrativo', sinPensar: true,
+            pregunta: { id: 'mnm-c1-3', tipo: 'test', fuente: 'mn-mg-intubacion', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Serapio no está disneico y tiene una gasometría normal, pero la CV es de 950 mL y la PIM de −18. ¿Qué haces?',
               opciones: [
                 { t: 'Esperar a que suba la PaCO₂ para decidir', porque: 'La hipercapnia llega cuando el fracaso es ya grave. En la debilidad neuromuscular se decide por la CV y la PIM, no por la gasometría: esperar es llegar in extremis.' },
-                { t: 'BiPAP y revalorar mañana', porque: 'La BiPAP solo vale si se espera mejoría en pocos días, y con una miastenia que empeora no suele ser el caso. Una noche con CV de 13,6 mL/kg puede acabar en una parada.' },
+                { t: 'BiPAP esta noche y revalorar mañana con una nueva CV y gasometría', porque: 'La BiPAP solo vale si se espera mejoría en pocos días, y con una miastenia que empeora no suele ser el caso. Una noche con CV de 13,6 mL/kg puede acabar en una parada.' },
                 { t: 'Intubar: CV <1 L y ≤15 mL/kg, y PIM peor que −20', ok: true }],
               explicacion: 'CV ≤15 mL/kg (o <1 L) y PIM −20 son criterio (' + pag(25) + '): <span class="hl-rojo">no esperar a que esté in extremis</span>.',
               nota: NOTA_PIM } },
@@ -181,7 +181,7 @@ export const MAYEUTICA_B6A_PLACA = {
             pregunta: { id: 'mnm-c1-5', tipo: 'test', fuente: 'mn-mg-otros · mn-mg-desencadenantes', origen: 'ficha; cifras del paciente: ilustrativo',
               enunciado: 'Serapio mejora, y el TC de tórax muestra una masa en el mediastino anterior. ¿Qué cambia?',
               opciones: [
-                { t: 'Es un timoma (10 % de las miastenias): la timectomía la valora neurología', ok: true },
+                { t: 'Un timoma (10 %): la timectomía la valora neurología', ok: true },
                 { t: 'Timectomía urgente, porque está en crisis', porque: 'Marino pone la timectomía «a valorar por neurología», no como urgencia de la crisis. Operar a un paciente ventilado y débil añade riesgo sin que la ficha lo indique.' },
                 { t: 'Es paraneoplásica: no se trata la placa, solo la masa', porque: 'La miastenia sigue necesitando su tratamiento (plasmaféresis o IgIV). Dejarlo por la masa deja al paciente con una placa que sigue fallando.' }],
               explicacion: 'Un timoma causa el <span class="hl">10 %</span> (' + pag(24) + '); se busca con TC con contraste y la timectomía queda a valorar por neurología (' + pag(26) + ').' } },
@@ -211,8 +211,8 @@ export const MAYEUTICA_B6A_PLACA = {
       { id: 'mng-g1', corto: 'qué precede', tipo: 'test', fuente: 'mn-gbs-definicion',
         enunciado: 'Florentina, de 52 años, tuvo diarrea hace dos semanas y ahora tiene debilidad. ¿Qué precede al Guillain-Barré y con qué retraso?',
         opciones: [
-          { t: 'Una vacuna en las 48 horas previas', porque: 'La ficha no relaciona el síndrome con ninguna vacuna. Atribuirlo a eso te haría buscar por ahí y no preguntar por la diarrea que sí precede al cuadro.' },
-          { t: 'Una infección aguda 1-3 semanas antes (Campylobacter jejuni, Zika, SARS-CoV-2)', ok: true },
+          { t: 'Una vacuna puesta en las 48 horas previas al inicio de los síntomas', porque: 'La ficha no relaciona el síndrome con ninguna vacuna. Atribuirlo a eso te haría buscar por ahí y no preguntar por la diarrea que sí precede al cuadro.' },
+          { t: 'Una infección aguda 1-3 semanas antes (p. ej., Campylobacter)', ok: true },
           { t: 'Una infección de 1-3 días antes', porque: 'El intervalo es de semanas: con 1-3 días no relacionarías la diarrea de hace 14 días con la debilidad de hoy.' }],
         explicacion: 'Suele seguir a una infección aguda <span class="hl">1-3 semanas</span> antes, con <span class="hl-azul">mimetismo molecular</span>: anticuerpos contra un componente del germen que reaccionan con el nervio periférico (' + pag(26) + ').' },
       { id: 'mng-g2', corto: 'qué no verás', tipo: 'test', fuente: 'mn-tabla-46-6', calculadora: C_GBS,
@@ -227,7 +227,7 @@ export const MAYEUTICA_B6A_PLACA = {
       { id: 'mng-g3', corto: 'Miller Fisher', tipo: 'test', fuente: 'mn-gbs-clinica · mn-tabla-46-6',
         enunciado: 'Florentina tiene diplopía y ataxia. ¿Descarta el Guillain-Barré?',
         opciones: [
-          { t: 'Sí: la afectación ocular es de la miastenia', porque: 'La Tabla 46.6 tiene una excepción. Descartarlo por ese motivo le quitaría la IgIV o la plasmaféresis a quien las necesita.' },
+          { t: 'Sí: la afectación ocular con ataxia es propia de la miastenia gravis y no del Guillain-Barré', porque: 'La Tabla 46.6 tiene una excepción. Descartarlo por ese motivo le quitaría la IgIV o la plasmaféresis a quien las necesita.' },
           { t: 'No: es el síndrome de Miller Fisher, variante con oftalmoplejía y ataxia', ok: true }],
         explicacion: 'Excepción de la Tabla 46.6 (' + pag(27) + '): el <span class="hl">síndrome de Miller Fisher</span>, variante del Guillain-Barré con oftalmoplejía y ataxia.' },
       { id: 'mng-g4', corto: 'a quién tratar', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-gbs-tratamiento',
@@ -241,14 +241,14 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: 'En el crítico, ¿dónde está la lesión en la polineuropatía (PNC) y dónde en la miopatía (MCC)?',
         opciones: [
           { t: 'PNC desmielinizante, como el Guillain-Barré; MCC en la placa', porque: 'La PNC es axonal, no desmielinizante, y la MCC es del músculo, no de la placa. Tratarlas como un Guillain-Barré con IgIV no ayuda: no tienen tratamiento.' },
-          { t: 'PNC: axón sensitivo y motor; MCC: el músculo, con pérdida de filamentos de miosina', ok: true },
+          { t: 'PNC: axón sensitivo y motor; MCC: el músculo', ok: true },
           { t: 'Las dos son musculares y solo difieren en la extensión', porque: 'La PNC es del nervio. Confundirlas te llevaría a pedir una biopsia muscular cuando el estudio de conducción ya lo aclara.' }],
         explicacion: 'PNC: <span class="hl">neuropatía axonal difusa sensitiva y motora</span>; MCC: <span class="hl">miopatía inflamatoria difusa</span> con pérdida de filamentos de miosina en la biopsia (' + pag(28) + ').' },
       { id: 'mng-g6', corto: 'lo que comparten', tipo: 'test', fuente: 'mn-pnc-que · mn-pnc-mcc',
         enunciado: '¿Qué comparten la PNC y la MCC?',
         opciones: [
-          { t: 'Son secundarias a una enfermedad inflamatoria sistémica grave y se descubren al no poder retirar el respirador', ok: true },
-          { t: 'Los corticoides a dosis altas las predisponen a las dos', porque: 'Los corticoides y la relajación se citan en asmáticos con un cuadro parecido a la MCC, no en la PNC. Atribuirlo a las dos te llevaría a retirar un corticoide necesario.' },
+          { t: 'Secundarias a una inflamación sistémica grave; salen al no destetar', ok: true },
+          { t: 'Los corticoides a dosis altas las predisponen a las dos, y por eso se retiran', porque: 'Los corticoides y la relajación se citan en asmáticos con un cuadro parecido a la MCC, no en la PNC. Atribuirlo a las dos te llevaría a retirar un corticoide necesario.' },
           { t: 'Se curan con inmunoglobulinas', porque: 'No hay tratamiento. Esperar respuesta a la IgIV retrasa la movilización y la nutrición, que son lo único propuesto.' }],
         explicacion: 'Son trastornos secundarios de las enfermedades inflamatorias sistémicas graves; a menudo coexisten y <span class="hl">se descubren cuando el paciente no se puede retirar del respirador</span> (' + pag(28) + ').' },
     ],
@@ -256,28 +256,28 @@ export const MAYEUTICA_B6A_PLACA = {
       { id: 'mng-e1', corto: 'se resuelve solo', tipo: 'test', fuente: 'mn-gbs-clinica',
         enunciado: '¿Qué porcentaje de los Guillain-Barré se resuelve solo?',
         opciones: [
-          { t: '25 %', porque: 'Es el porcentaje con fracaso respiratorio. Pensar que solo se resuelve uno de cada cuatro llevaría a tratar sin criterio.' },
+          { t: '25 %, la cifra de los que acaban ventilados', porque: 'Es el porcentaje con fracaso respiratorio. Pensar que solo se resuelve uno de cada cuatro llevaría a tratar sin criterio.' },
           { t: '80 %, a menudo con secuelas', ok: true },
-          { t: '97 %', porque: 'Es la supervivencia al ingreso, no la resolución espontánea. Creerlo dejaría sin IgIV a quien no camina.' }],
+          { t: '97 %, la cifra de los que sobreviven al ingreso', porque: 'Es la supervivencia al ingreso, no la resolución espontánea. Creerlo dejaría sin IgIV a quien no camina.' }],
         explicacion: 'Se resuelve solo en un <span class="hl">80 %</span>, a menudo con secuelas (' + pag(27) + '); fracaso respiratorio en el 25 % y supervivencia del 97 % (' + pag(28) + ').' },
       { id: 'mng-e2', corto: 'dolor urente', tipo: 'test', fuente: 'mn-gbs-dolor',
         enunciado: 'Florentina tiene dolor urente en las piernas en la fase aguda. ¿Qué recomienda la guía?',
         opciones: [
-          { t: 'Solo AINE, porque el dolor es nociceptivo', porque: 'El dolor es neuropático. Los AINE no lo alivian y el paciente seguiría con dolor.' },
+          { t: 'Solo AINE y paracetamol, porque el dolor es nociceptivo y de origen muscular', porque: 'El dolor es neuropático. Los AINE no lo alivian y el paciente seguiría con dolor.' },
           { t: 'Gabapentina 3.000 mg/día desde el primer día', porque: 'Es una cifra de otro capítulo (abstinencia de gabapentina). La guía pone 300 mg tres veces al día; ir a la dosis alta de entrada sedaría a una paciente ventilada.' },
-          { t: 'Gabapentina 300 mg tres veces al día; opioides si hace falta alivio inmediato', ok: true }],
+          { t: 'Gabapentina 300 mg tres veces al día; opioides si urge', ok: true }],
         explicacion: 'Dolor <span class="hl">neuropático</span>, prominente en las fases aguda y de resolución: <span class="hl">gabapentina 300 mg tres veces al día</span> y, para alivio más inmediato, considerar opioides (' + pag(28) + ').' },
       { id: 'mng-e3', corto: 'punción lumbar', tipo: 'test', fuente: 'mn-gbs-dx',
         enunciado: '¿Para qué sirve la punción lumbar en el Guillain-Barré?',
         opciones: [
           { t: 'Descartar otras causas; muestra proteínas elevadas', ok: true },
-          { t: 'Confirmar el diagnóstico con pleocitosis', porque: 'La ficha no dice que haya pleocitosis, sino proteínas elevadas. Esperar células llevaría a descartarlo con un LCR típico.' },
+          { t: 'Confirmar el diagnóstico al ver pleocitosis en el LCR', porque: 'La ficha no dice que haya pleocitosis, sino proteínas elevadas. Esperar células llevaría a descartarlo con un LCR típico.' },
           { t: 'Medir la presión de apertura, que está elevada', porque: 'No es lo que dice Marino. Buscarla retrasaría el diagnóstico mientras la capacidad vital cae.' }],
         explicacion: 'La punción lumbar <span class="hl">descarta otras causas</span> y muestra <span class="hl-rojo">proteínas elevadas</span>; el diagnóstico es clínico y por la conducción disminuida (' + pag(27) + ').' },
       { id: 'mng-e4', corto: 'neuropatía frecuente', tipo: 'test', fuente: 'mn-pnc-pnc',
         enunciado: '¿Cuál es la neuropatía periférica más frecuente del paciente crítico?',
         opciones: [
-          { t: 'Guillain-Barré', porque: 'Es raro en la UCI comparado con la del crítico; pensarlo ante todo paciente que no se desteta llevaría a dar IgIV sin motivo.' },
+          { t: 'Síndrome de Guillain-Barré, el más frecuente en la UCI', porque: 'Es raro en la UCI comparado con la del crítico; pensarlo ante todo paciente que no se desteta llevaría a dar IgIV sin motivo.' },
           { t: 'Polineuropatía del crítico (PNC)', ok: true },
           { t: 'Miastenia gravis', porque: 'Es una enfermedad de la placa, no una neuropatía. Esperarla te haría buscar ptosis y fatiga que el paciente flácido no tiene.' }],
         explicacion: 'La PNC es la <span class="hl">neuropatía periférica más frecuente del crítico</span>, muy frecuente en la sepsis grave y el shock séptico (' + pag(28) + ').' },
@@ -285,15 +285,15 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: '¿Qué confirma la miopatía del crítico (MCC)?',
         opciones: [
           { t: 'Conducción enlentecida en fibras sensitivas y motoras', porque: 'Eso es la PNC. Confirmar una MCC con una conducción lenta te llevaría a un diagnóstico equivocado.' },
-          { t: 'EMG con cambios miopáticos y biopsia con pérdida de filamentos de miosina', ok: true },
+          { t: 'EMG miopático y biopsia con pérdida de miosina', ok: true },
           { t: 'Proteínas elevadas en el LCR', porque: 'Es del Guillain-Barré. Una punción lumbar no distingue la MCC y solo añadiría una prueba inútil.' }],
         explicacion: 'MCC: <span class="hl">electromiograma miopático y biopsia</span> (pérdida de filamentos de miosina, infiltrado inflamatorio); la conducción enlentecida es de la PNC (' + pag(28) + ').' },
       { id: 'mng-e6', corto: 'tratamiento', tipo: 'test', fuente: 'mn-pnc-manejo',
         enunciado: '¿Qué tratamiento tienen la PNC y la MCC?',
         opciones: [
-          { t: 'IgIV, como el Guillain-Barré', porque: 'La IgIV es del Guillain-Barré y de la miastenia; no está indicada aquí, así que gastarías un fármaco caro sin efecto.' },
+          { t: 'IgIV 2 g/kg en 2-5 días, como en el Guillain-Barré', porque: 'La IgIV es del Guillain-Barré y de la miastenia; no está indicada aquí, así que gastarías un fármaco caro sin efecto.' },
           { t: 'Control glucémico estricto, que las revierte', porque: 'La hiperglucemia predispone a la MCC, pero Marino no da el control glucémico como tratamiento validado. Prometer reversión sería engañar a la familia.' },
-          { t: 'Ninguno; se han propuesto movilización precoz y mejor nutrición, sin validar', ok: true }],
+          { t: 'Ninguno validado; se propone movilizar y nutrir', ok: true }],
         explicacion: '<span class="hl-rojo">No hay tratamiento</span>: se han propuesto movilización precoz y mejor nutrición, ninguna validada ni dirigida a la inflamación. Recuperación completa en la mitad, a lo largo de meses (' + pag(28) + '-29).' },
     ],
     casos: [
@@ -326,7 +326,7 @@ export const MAYEUTICA_B6A_PLACA = {
               opciones: [
                 { t: 'Vigilar: el 80 % se resuelve solo', porque: 'Una paciente que no camina sin ayuda tiene indicación de tratamiento. Esperar deja que progrese hasta el fracaso respiratorio (25 %).' },
                 { t: 'Solo plasmaféresis: la IgIV no sirve en el Guillain-Barré', porque: 'La guía acepta ambas y no prefiere ninguna. Negarle la IgIV retrasa el tratamiento si no hay plasmaféresis disponible.' },
-                { t: 'IgIV 2 g/kg (120 g) en 2-5 días o plasmaféresis, sin preferencia, y vigilar CV y PIM', ok: true }],
+                { t: 'IgIV 2 g/kg (120 g) o plasmaféresis, y vigilar CV y PIM', ok: true }],
               explicacion: 'Si no camina sin ayuda o hay fracaso respiratorio: <span class="hl">IgIV o plasmaféresis</span> con las pautas de la miastenia; 2 g/kg × 60 kg = 120 g (' + pag(27) + ', pautas en ' + pag(26) + ').' } },
           { momento: 'Día 2', datos: { CV: '850 mL (14 mL/kg)', PIM: '−22 cmH₂O', 'SpO₂': '96 %' }, nuevo: ['CV', 'PIM', 'SpO₂'], calculadora: C_MG,
             // [pulmón vivo: estado 'debilidad-neuromuscular']
@@ -344,15 +344,15 @@ export const MAYEUTICA_B6A_PLACA = {
             pregunta: { id: 'mng-c1-5', tipo: 'test', fuente: 'mn-gbs-clinica · mn-tabla-46-6', origen: 'ilustrativo: oscilaciones de FC y PA del paciente; la fuente solo dice «inestabilidad autonómica»',
               enunciado: 'Intubada y con IgIV, su FC y su PA oscilan mucho. ¿Qué es?',
               opciones: [
-                { t: 'Sepsis: antibióticos y fluidos', porque: 'Hay que buscarla en un paciente ventilado, pero la oscilación brusca de FC y PA es del Guillain-Barré avanzado; dar fluidos a una crisis hipertensiva la empeora.' },
-                { t: 'Inestabilidad autonómica de los casos avanzados del Guillain-Barré', ok: true },
+                { t: 'Sepsis asociada a la ventilación: antibióticos y una carga de fluidos', porque: 'Hay que buscarla en un paciente ventilado, pero la oscilación brusca de FC y PA es del Guillain-Barré avanzado; dar fluidos a una crisis hipertensiva la empeora.' },
+                { t: 'Inestabilidad autonómica del Guillain-Barré avanzado', ok: true },
                 { t: 'La miastenia también la da', porque: 'Según la Tabla 46.6, en la miastenia no hay inestabilidad autonómica. Atribuirla a otra enfermedad llevaría a cambiar el diagnóstico.' }],
               explicacion: 'Fracaso respiratorio en el 25 % e <span class="hl">inestabilidad autonómica en los casos avanzados</span> (' + pag(27) + '); en la miastenia no hay (Tabla 46.6).' } },
           { momento: 'Día 8', datos: { Síntoma: 'dolor urente en las piernas' }, nuevo: ['Síntoma'],
             pregunta: { id: 'mng-c1-6', tipo: 'test', fuente: 'mn-gbs-dolor',
               enunciado: 'Dolor urente en las piernas. ¿Qué pautas?',
               opciones: [
-                { t: 'Gabapentina 300 mg cada 8 h; opioides si hace falta alivio inmediato', ok: true },
+                { t: 'Gabapentina 300 mg cada 8 h; opioides si urge', ok: true },
                 { t: 'Paracetamol y AINE, porque es un dolor nociceptivo', porque: 'El dolor es neuropático y los AINE no lo controlan; la paciente seguiría con dolor.' },
                 { t: 'Gabapentina 3.000 mg/día', porque: 'Es diez veces la pauta de la guía (300 mg tres veces al día): sedación excesiva en la paciente que intentas destetar.' }],
               explicacion: 'Dolor <span class="hl">neuropático</span>: gabapentina 300 mg tres veces al día; considerar opioides para alivio más inmediato (' + pag(28) + ').' } },
@@ -386,12 +386,12 @@ export const MAYEUTICA_B6A_PLACA = {
         opciones: [
           { t: 'Libera histamina, que desplaza el potasio de las células', porque: 'Eso lo hace el atracurio, no el cisatracurio ni la succinilcolina. Con esa idea, vigilarías la tensión y no el potasio.' },
           { t: 'Bloquea la bomba renal de potasio', porque: 'No es su mecanismo. Con esa idea la darías creyendo que solo importa si el riñón falla, cuando el peligro es el músculo.' },
-          { t: 'La despolarización mantenida saca K⁺ del músculo: sube hasta 0,5 mEq/L', ok: true }],
+          { t: 'La despolarización mantenida saca K⁺ del músculo', ok: true }],
         explicacion: 'Es el único despolarizante: su despolarización mantenida saca K⁺ del músculo, hasta <span class="hl">0,5 mEq/L</span>, sin consecuencias si no estaba alto; con hiperpotasemia previa puede ser <span class="hl-rojo">mortal</span> (' + pag(29) + '-30).' },
       { id: 'mnr-g2', corto: 'contraindicaciones', tipo: 'test', fuente: 'mn-tabla-46-7',
         enunciado: 'Melquíades además tiene un fracaso renal con K⁺ basal de 4,2. ¿Cuál de estas situaciones NO contraindica la succinilcolina?',
         opciones: [
-          { t: 'Rabdomiólisis', porque: 'Está en la lista de la Tabla 46.7. Dar succinilcolina a un rabdomiolítico es arriesgar una hiperpotasemia mortal.' },
+          { t: 'Rabdomiólisis con CK muy elevada', porque: 'Está en la lista de la Tabla 46.7. Dar succinilcolina a un rabdomiolítico es arriesgar una hiperpotasemia mortal.' },
           { t: 'Quemaduras', porque: 'Está en la lista. Intubar a un quemado con succinilcolina puede disparar el potasio.' },
           { t: 'Lesión medular con inmovilidad', porque: 'Está en la lista junto a la hipertermia maligna. Usarla en este paciente puede ser mortal.' },
           { t: 'Un fracaso renal con K⁺ de 4,2', ok: true }],
@@ -399,7 +399,7 @@ export const MAYEUTICA_B6A_PLACA = {
       { id: 'mnr-g3', corto: 'rocuronio para intubar', tipo: 'test', fuente: 'mn-bnm-rocuronio · mn-tabla-46-7', calculadora: C_BNM,
         enunciado: 'Rocuronio 1 mg/kg para intubar. ¿Qué tiene de bueno y de malo?',
         opciones: [
-          { t: 'Su inicio equivale al de 1 mg/kg de succinilcolina; el problema es que dura una hora', ok: true },
+          { t: 'Inicio igual al de la succinilcolina, pero dura una hora', ok: true },
           { t: 'Es más rápido que la succinilcolina, y dura 7-12 min', porque: 'La duración de 7-12 min es de la succinilcolina; el rocuronio es de duración intermedia. Contar con una recuperación rápida deja sin ventilar a quien no se intuba.' },
           { t: 'Es lento (5-7 min) pero se elimina por riñón e hígado', porque: 'Esos son el inicio del cisatracurio y su vía de eliminación. Esperar 5-7 min con un rocuronio es retrasar una intubación urgente.' }],
         explicacion: 'A 1 mg/kg su inicio equivale al de 1 mg/kg de succinilcolina, <span class="hl">pero dura una hora</span>: si la vía aérea no se asegura a tiempo, revertir con sugammadex 16 mg/kg (' + pag(30) + ').',
@@ -408,7 +408,7 @@ export const MAYEUTICA_B6A_PLACA = {
         // [placa viva: estado 'bloqueo', con TOF]
         enunciado: 'Melquíades tiene una perfusión de relajante y el tren de cuatro marca 0 de 4. ¿Qué significa?',
         opciones: [
-          { t: 'Bloqueo excesivo: objetivo, 1 o 2 respuestas', ok: true },
+          { t: 'Bloqueo excesivo: el objetivo es 1 o 2 respuestas', ok: true },
           { t: 'Objetivo logrado: 0 respuestas evitan la asincronía', porque: 'El objetivo es 1 o 2 respuestas perceptibles. Mantener 0 expone al paciente a más relajante, más miopatía y más días de parálisis.' },
           { t: 'Bloqueo insuficiente: hay que subir la perfusión', porque: 'Sin aducción del pulgar el bloqueo es excesivo, no insuficiente. Subir la dosis añadiría parálisis sin beneficio.' }],
         explicacion: 'Cuatro estímulos a 2 Hz sobre el nervio cubital: <span class="hl-rojo">sin aducción del pulgar, bloqueo excesivo</span>; objetivo <span class="hl">1 o 2 respuestas</span> (' + pag(30) + ').' },
@@ -417,7 +417,7 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: 'Revertir un bloqueo moderado de un no despolarizante. ¿Cómo lo hace la neostigmina?',
         opciones: [
           { t: 'Se une directamente al rocuronio y lo inactiva', porque: 'Eso es el sugammadex. Esperar de la neostigmina una reversión inmediata a cualquier profundidad sería pasarse de dosis.' },
-          { t: 'Inhibe la acetilcolinesterasa: la acetilcolina acumulada vence el bloqueo competitivo', ok: true },
+          { t: 'Inhibe la acetilcolinesterasa: más ACh vence al bloqueo', ok: true },
           { t: 'Igual que la piridostigmina, que se puede usar para revertir', porque: 'Edrofonio y piridostigmina no se usan para revertir. Cambiar de fármaco por esa idea retrasa la recuperación.' }],
         explicacion: 'Inhibe la acetilcolinesterasa: <span class="hl-azul">el aumento de acetilcolina supera el bloqueo competitivo</span> de los no despolarizantes (' + pag(30) + '-31). Edrofonio y piridostigmina no se usan para revertir.',
         nota: NOTA_NEO },
@@ -426,7 +426,7 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: '¿Por qué el sugammadex revierte más rápido que la neostigmina?',
         opciones: [
           { t: 'Porque inhibe la acetilcolinesterasa con más potencia', porque: 'No actúa sobre la enzima. Con esa idea esperarías efectos colinérgicos que el sugammadex no tiene.' },
-          { t: 'Se une directamente a los aminoesteroides: revierte en 2-3 min, sin efectos colinérgicos', ok: true },
+          { t: 'Se une a los aminoesteroides y revierte en 2-3 min', ok: true },
           { t: 'Porque revierte todos los relajantes, también cisatracurio y succinilcolina', porque: 'Solo se une a los aminoesteroides (rocuronio, vecuronio; pancuronio mucho menos). Ponerlo con cisatracurio no tendría efecto y dejaría al paciente paralizado.' }],
         explicacion: 'Se une directamente a los <span class="hl">aminoesteroides</span> (rocuronio, vecuronio y, mucho menos, pancuronio); revierte siempre en <span class="hl">2-3 min</span> y sin efectos colinérgicos (' + pag(31) + ').' },
       { id: 'mnr-g7', corto: 'evitar la parálisis', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-bnm-ruego',
@@ -447,22 +447,22 @@ export const MAYEUTICA_B6A_PLACA = {
       { id: 'mnr-e2', corto: 'fallo renal y hepático', tipo: 'test', fuente: 'mn-bnm-cisatracurio · mn-tabla-46-7',
         enunciado: 'Intubado, con fallo renal y hepático, y necesita relajación en perfusión. ¿Cuál eliges?',
         opciones: [
-          { t: 'Rocuronio 5-12 µg/kg/min', porque: 'Tiene efecto prolongado en el fallo hepático (cuánto, mal estudiado): el paciente seguiría paralizado más de lo previsto.' },
-          { t: 'Cisatracurio 1-3 µg/kg/min: sus niveles no dependen del riñón ni del hígado', ok: true },
+          { t: 'Rocuronio 5-12 µg/kg/min, que no depende del hígado ni del riñón', porque: 'Tiene efecto prolongado en el fallo hepático (cuánto, mal estudiado): el paciente seguiría paralizado más de lo previsto.' },
+          { t: 'Cisatracurio 1-3 µg/kg/min: no depende de riñón ni hígado', ok: true },
           { t: 'Succinilcolina en perfusión', porque: 'Está contraindicada en varias situaciones y en la tabla no se da perfusión para ella; sería arriesgar hiperpotasemia sin base.' }],
         explicacion: 'Sus niveles no dependen del riñón ni del hígado: <span class="hl">atractivo en la UCI</span> (' + pag(29) + '-30).' },
       { id: 'mnr-e3', corto: 'bloqueo profundo', tipo: 'test', fuente: 'mn-bnm-sugammadex', calculadora: C_BNM,
         enunciado: 'Bloqueo profundo por rocuronio en un paciente de 70 kg. ¿Qué dosis de sugammadex?',
         opciones: [
           { t: '2 mg/kg, la del bloqueo moderado', porque: 'Con un bloqueo profundo se quedaría corto: el paciente seguiría parcialmente paralizado.' },
-          { t: '4 mg/kg = 280 mg', ok: true },
+          { t: '4 mg/kg = 280 mg (bloqueo profundo)', ok: true },
           { t: '16 mg/kg = 1.120 mg, la de justo tras la intubación', porque: 'Es la dosis del bloqueo recién puesto; usarla en un bloqueo profundo no es lo que dice la fuente.' }],
         explicacion: 'Dosis según la profundidad: <span class="hl">16 mg/kg</span> justo tras la intubación, <span class="hl">4 mg/kg</span> con bloqueo profundo y 2 mg/kg con moderado (' + pag(31) + '): 4 × 70 = 280 mg.' },
       { id: 'mnr-e4', corto: 'tiempo de neostigmina', tipo: 'test', fuente: 'mn-bnm-neostigmina',
         enunciado: 'Neostigmina 70 µg/kg en un bloqueo moderado. ¿Cuánto tarda en revertir?',
         opciones: [
           { t: '2-3 min, como el sugammadex', porque: 'Eso es el sugammadex. Esperar 2-3 min con neostigmina te llevaría a repetir la dosis y pasarte de 70 µg/kg.' },
-          { t: '8-45 min, según el relajante, la profundidad y el anestésico', ok: true },
+          { t: '8-45 min, según relajante y profundidad', ok: true },
           { t: 'Unos 60 min, como la duración del rocuronio', porque: 'La fuente no da esa cifra para la neostigmina; lo esperarías para decidir otra cosa antes de tiempo.' }],
         explicacion: '70 µg/kg IV revierte un bloqueo moderado en <span class="hl">8-45 min</span> según el relajante, la profundidad y el anestésico (' + pag(31) + ').',
         nota: NOTA_NEO },
@@ -478,7 +478,7 @@ export const MAYEUTICA_B6A_PLACA = {
         enunciado: '¿Con qué peso dosifican muchos expertos los relajantes?',
         opciones: [
           { t: 'Con el peso real, siempre', porque: 'En un obeso daría una dosis de más; la parálisis se prolongaría.' },
-          { t: 'Con el peso ideal', ok: true }],
+          { t: 'Con el peso ideal, según muchos expertos', ok: true }],
         explicacion: 'Muchos expertos dosifican por el <span class="hl">peso ideal</span> (' + pag(29) + ').' },
       { id: 'mnr-e7', corto: 'reversión', tipo: 'error', fuente: 'mn-bnm-sugammadex · mn-bnm-neostigmina',
         enunciado: 'Resumen de la reversión que escribe un compañero. Encuentra el error.',
@@ -505,7 +505,7 @@ export const MAYEUTICA_B6A_PLACA = {
               opciones: [
                 { t: 'Succinilcolina 1,5 mg/kg, porque dura menos', porque: 'Con hiperpotasemia previa está contraindicada: sube hasta 0,5 mEq/L más y puede ser mortal sobre un K⁺ de 6,1.' },
                 { t: 'Cisatracurio 0,2 mg/kg, porque no depende del hígado', porque: 'Tarda 5-7 min en empezar: demasiado para una intubación urgente.' },
-                { t: 'Rocuronio 1 mg/kg = 70 mg', ok: true }],
+                { t: 'Rocuronio 1 mg/kg = 70 mg, por su inicio rápido', ok: true }],
               explicacion: 'Rocuronio 1 mg/kg (70 kg: <span class="hl">70 mg</span>) equivale en inicio a la succinilcolina y sirve si ésta está contraindicada (' + pag(30) + '); la hiperpotasemia la contraindica (' + pag(29) + ').',
               nota: NOTA_ROC } },
           { momento: 'Día 0 · 03:04 · el giro', datos: { 'Vía aérea': 'Cormack 4; no se intuba ni se ventila con mascarilla', 'SpO₂': '84 %' }, nuevo: ['Vía aérea', 'SpO₂'], calculadora: C_BNM,
@@ -514,15 +514,15 @@ export const MAYEUTICA_B6A_PLACA = {
               opciones: [
                 { t: 'Neostigmina 70 µg/kg', porque: 'En un bloqueo recién puesto tarda 8-45 min; el paciente moriría hipoxémico antes.' },
                 { t: 'Sugammadex 2 mg/kg, la dosis del bloqueo moderado', porque: 'Se queda corto con un bloqueo recién puesto; seguiría paralizado.' },
-                { t: 'Sugammadex 16 mg/kg = 1.120 mg: revierte en 2-3 min', ok: true },
+                { t: 'Sugammadex 16 mg/kg = 1.120 mg', ok: true },
                 { t: 'Esperar: el rocuronio es de duración intermedia', porque: 'Dura una hora; la espera con SpO₂ de 84 % sería una parada hipóxica.' }],
               explicacion: 'Si la vía aérea no se asegura a tiempo: <span class="hl">sugammadex 16 mg/kg</span> (70 kg: 1.120 mg), que revierte en 2-3 min (' + pag(30) + '-31).' } },
           { momento: 'Día 0 · 05:00', datos: { Situación: 'intubado con fibrobroncoscopio; SDRA con asincronía grave' }, nuevo: ['Situación'], calculadora: C_BNM,
             pregunta: { id: 'mnr-c1-3', tipo: 'test', fuente: 'mn-bnm-cisatracurio · mn-tabla-46-7',
               enunciado: 'SDRA con asincronía grave, fracaso renal y cirrosis. ¿Qué relajante en perfusión?',
               opciones: [
-                { t: 'Rocuronio 5-12 µg/kg/min', porque: 'Su efecto se prolonga en la hepatopatía: horas de parálisis imprevistas.' },
-                { t: 'Cisatracurio 0,15-0,2 mg/kg y luego 1-3 µg/kg/min: no depende de riñón ni hígado', ok: true }],
+                { t: 'Rocuronio 5-12 µg/kg/min, por su inicio rápido y duración intermedia', porque: 'Su efecto se prolonga en la hepatopatía: horas de parálisis imprevistas.' },
+                { t: 'Cisatracurio 0,15-0,2 mg/kg y 1-3 µg/kg/min', ok: true }],
               explicacion: 'Cisatracurio: niveles independientes de riñón e hígado (' + pag(30) + '); perfusión 1-3 µg/kg/min (' + pag(29) + ').' } },
           { momento: 'Día 2', datos: { TOF: '0/4' }, nuevo: ['TOF'], calculadora: C_BNM,
             // [placa viva: estado 'bloqueo', con TOF]
@@ -547,8 +547,8 @@ export const MAYEUTICA_B6A_PLACA = {
             pregunta: { id: 'mnr-c1-6', tipo: 'test', fuente: 'mn-pnc-mcc · mn-pnc-pnc · mn-pnc-manejo', modeloVivo: capSepsis('🩸 La sepsis en el capilar vivo'),
               enunciado: 'Despierto, flácido y sin poder retirar el respirador. ¿Qué piensas?',
               opciones: [
-                { t: 'Bloqueo residual: sugammadex', porque: 'El cisatracurio dura 35-50 min; a los 9 días no es bloqueo residual y el sugammadex ni actúa sobre él.' },
-                { t: 'Neuromiopatía del crítico: sepsis, relajantes e hiperglucemia predisponen; sin tratamiento', ok: true },
+                { t: 'Bloqueo residual del cisatracurio: más sugammadex', porque: 'El cisatracurio dura 35-50 min; a los 9 días no es bloqueo residual y el sugammadex ni actúa sobre él.' },
+                { t: 'Neuromiopatía del crítico, sin tratamiento', ok: true },
                 { t: 'Guillain-Barré: IgIV', porque: 'El contexto es el de la inflamación sistémica y los relajantes; dar IgIV a una MCC no tiene tratamiento validado.' }],
               explicacion: 'La inmovilidad (p. ej., por relajantes), la sepsis grave y la hiperglucemia predisponen a la MCC; conducción y EMG o biopsia para distinguir de la PNC; sin tratamiento (' + pag(28) + ').' } },
         ] },
