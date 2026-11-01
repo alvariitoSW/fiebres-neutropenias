@@ -26,7 +26,7 @@ const ORIG = { k: 'ficha · p. 18-20', mg: 'ficha · p. 32', ca: 'ficha · p. 42
 const FICHA_ION = { k: 'mr-hipopotasemia', mg: 'mr-magnesio-deficit', ca: 'mr-calcio-hipoca', p: 'mr-fosforo' };
 // Cada cita: «PDF p. N» (abre el libro) y «p. N · Ver en la ficha» (el enlace cruzado de siempre, al párrafo exacto de la ficha)
 const ir = (tab, id, txt) => `<button type="button" class="ver-ficha" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="${tab}" data-resaltar="#${id}">${txt}</button>`;
-const cita = (c) => { const [tab, id] = fichaDe(c); return `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · ${ir(tab, id, `p. ${c} · Ver en la ficha`)}</span>`; };
+const cita = (c) => { const [tab, id] = fichaDe(c); return `<span class="cita">p. ${c} (<a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF</a> · ${ir(tab, id, 'Ver en la ficha')})</span>`; };
 function frase(t, org) { $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
 const ecgK = (L) => (L.k > 5.5 ? Math.max(5.5, L.k - 1.2 * clamp(s.caIV / 90, 0, 1)) : L.k);
 function aplicarTopes() {
@@ -79,10 +79,10 @@ function ponerIon(i) { ion = i; frase(FRASES[i], ORIG[i]); pintar(); }
 function ponerEstadoMay(est) {
   preset = est.preset; s = nuevo({ ...PRESETS[est.preset].s, ...(est.s || {}) }); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); foco = []; guiaApi.cerrar();
   for (const [a, n] of est.acc || []) { if (a === 'ca') s.caIV += n; else if (a === 'real') s.ins = Math.min(4, s.ins + 1); else if (a === 'esperar') avanzar(s, n); }
-  ion = est.ion; pintar();
+  ion = est.ion; const pr = PRESETS[est.preset].txt; frase(pr || FRASES[ion], pr ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
 }
 function taparTodo(si) { oculto = si; pintar(); }
-function accion(a, n) { const i0 = ion; if (a === 'clk40') { e.rate = 40; e.via = 'cava'; a = 'clk'; } hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
+function accion(a, n) { const i0 = ion; if (a === 'mg2') { e.g = 2; a = 'mg'; } if (a === 'clk40') { e.rate = 40; e.via = 'cava'; a = 'clk'; } hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
 let mayeutica = null;
 function setModo(m, reiniciar = true) {
   modo = m; const est = m === 'preguntas'; guiaApi.cerrar(); oculto = false; foco = [];

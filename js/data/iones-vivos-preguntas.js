@@ -8,7 +8,7 @@ const G = (num, o) => ({ grupo: 'guia', num, predice: true, ...o });
 const X = (num, o) => ({ grupo: 'examen', num, ...o });
 
 const RECORRIDO_BASE = [
-  G('G1', { estado: { preset: 'normal', ion: 'k' }, corto: 'el iceberg del K⁺',
+  G('G1', { estado: { preset: 'normal', ion: 'k' }, corto: 'el iceberg del K⁺', tras: 'furo',
     enunciado: 'Un adulto de 70 kg tiene unos 3.500 mEq de potasio y casi todo está dentro de las células. Antes de mirar la ventanita: <b>si el K⁺ del suero baja de 4 a 3 mEq/L por pérdida, ¿cuánto potasio total ha perdido? ¿Y cuánto habría ganado si hubiera subido de 4 a 5?</b>',
     opciones: [
       { t: 'Lo mismo en los dos sentidos: 100-200 mEq por cada mEq/L.', porque: 'Eso vale solo para el exceso. Con déficit, el potasio de dentro de la célula repone el del suero y hacen falta 200-400 mEq (p. 19). Si lo supones simétrico, repondrás la mitad de lo que falta.' },
@@ -64,7 +64,7 @@ const RECORRIDO_BASE = [
       { t: 'Salbutamol inhalado a dosis ×4, solo, para bajar 0,5-1 mEq/L.', porque: 'Mueve el potasio a la célula, no lo elimina; con 4 veces la dosis da taquicardia y nunca debe usarse solo (p. 28).' },
       { t: 'Bicarbonato sódico para alcalinizarlo y sacar el potasio.', porque: 'Sin acidosis metabólica no tiene efecto sobre el K⁺ en 4 h, y forma complejos con el calcio que acabas de dar (p. 28).' }],
     explicacion: 'Hay que eliminar el potasio, no solo moverlo: resinas de intercambio por el intestino (el SZC, 10 g tres veces al día durante 48 h, es hoy la favorita y actúa tras una hora) o hemodiálisis, lo más eficaz: 1 mEq/L en 1 h y 2 mEq/L en 3 h (p. 28-29).', fuente: 28, fuente2: 29 }),
-  G('G5', { estado: { preset: 'rufino', ion: 'mg' }, corto: 'reponer Mg²⁺: el doble',
+  G('G5', { estado: { preset: 'rufino', ion: 'mg' }, corto: 'reponer Mg²⁺: el doble', tras: 'mg2', haz: ['esp', 15],
     enunciado: 'Rufino tiene un Mg²⁺ bajo pero silente (1-1,4 mEq/L) y el riñón funciona. El libro supone un déficit total de 1-2 mEq/kg. <b>¿Cuánto Mg²⁺ tienes que prever dar en total, y por qué?</b>',
     opciones: [
       { t: 'El doble del déficit, porque hasta el 50 % de lo que infundes se pierde por la orina.', ok: true },
@@ -72,7 +72,7 @@ const RECORRIDO_BASE = [
       { t: 'La mitad: el hueso, con el 53 % del magnesio, repone el resto.', porque: 'El libro no dice que el hueso lo reponga (el reparto es de la Tabla 37.1, p. 32); asume el doble de déficit (p. 37). Rufino seguiría vacío y su K⁺ sin subir.' },
       { t: 'Igual con insuficiencia renal: el riñón sigue eliminando lo que sobre, así que no hay que ajustar.', porque: 'Con insuficiencia renal se da no más del 50 % de la pauta (p. 37): el riñón elimina menos y el Mg²⁺ puede subir hacia cifras de bloqueo.' }],
     explicacion: 'Se asume un déficit de 1-2 mEq/kg y, como hasta el 50 % se pierde por la orina, se prevé el doble: 1 mEq/kg el primer día y 0,5 mEq/kg los 3-5 siguientes. El bolo sube el suero, pero empieza a caer a los 15 min (p. 37-38). Con insuficiencia renal, no más del 50 % de la pauta (p. 37).', fuente: 37, fuente2: 38 }),
-  X('E4', { estado: { preset: 'rufino', ion: 'mg' }, corto: 'Mg²⁺ con torsade',
+  X('E4', { estado: { preset: 'rufino', ion: 'mg' }, corto: 'Mg²⁺ con torsade', tras: 'mg2', haz: ['esp', 15],
     enunciado: 'Rufino, con hipomagnesemia, hace una torsade de pointes. <b>¿Cómo repones el magnesio?</b>',
     opciones: [
       { t: '2 g de MgSO₄ (16 mEq) IV en 2-5 min, y luego 5 g en 250-500 mL de salino en 6 h.', ok: true },
@@ -145,15 +145,15 @@ const ADELA = [
         { t: 'Baja 3 mEq/L en pocos minutos, igual que el calcio protege el ECG, y con eso el potasio queda resuelto.', porque: 'La cifra del libro es de al menos 0,6 mEq/L y de efecto pico a los 30-60 min (p. 28), no minutos. Esperar más de la cuenta retrasa la eliminación.' },
         { t: 'No baja el K⁺, solo protege el corazón como el calcio.', porque: 'La insulina sí mueve el potasio a las células (p. 28); el que protege la conducción es el calcio (p. 27).' }],
       explicacion: 'La insulina-glucosa baja el K⁺ al menos 0,6 mEq/L, con efecto temporal (pico a los 30-60 min): hay que añadir medidas para eliminar el potasio (resinas, SZC o hemodiálisis) (p. 28). El modelo baja 0,6 mEq/L por dosis.', fuente: 28, fuente2: 27 } },
-  { momento: 'Pasan 45 minutos', datos: { 'K⁺ ahora': '6,0 mEq/L (era 6,6)', 'Ca iónico': '1,15 mmol/L (1,26 con el calcio)' }, nuevo: ['K⁺ ahora', 'Ca iónico'], estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] },
-    pregunta: { num: 'Paso 4', estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] }, enunciado: 'Pasan 45 minutos desde el gluconato y la insulina. En el monitor, el K⁺ ha bajado de 6,6 a 6,0 mEq/L y el Ca iónico ha vuelto a 1,15 mmol/L (era 1,26 con el calcio). <b>¿Qué ha pasado y qué haces?</b>',
+  { momento: 'Pasan 45 minutos', datos: { 'Insulina': '10 U + glucosa 50 %', 'K⁺ ahora': '6,0 mEq/L (era 6,6)', 'Ca iónico': '1,15 mmol/L' }, nuevo: ['K⁺ ahora', 'Ca iónico'], estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] },
+    pregunta: { num: 'Paso 4', estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] }, enunciado: 'Pasan 45 minutos desde el gluconato y la insulina. Mira el monitor y la ficha de la paciente. <b>¿Qué significan esas cifras y qué haces?</b>',
       opciones: [
         { t: 'Repito el calcio cada pocos minutos hasta que el Ca iónico se mantenga.', porque: 'El libro repite el calcio a los 5 min si hace falta, sumado a otras medidas (p. 27), pero el calcio no baja el K⁺: se disiparía otra vez en 30-60 min con el potasio sin eliminar.' },
-        { t: 'Ha bajado casi un punto: está resuelto y basta con vigilar.', porque: 'La insulina es temporal (pico a los 30-60 min, p. 28) y el calcio ya no protege (iónico de vuelta a 1,15); sin eliminar potasio, el K⁺ de Adela volvería a subir.' },
+        { t: 'Ha bajado 0,6: está resuelto y basta con vigilar.', porque: 'La insulina es temporal (pico a los 30-60 min, p. 28) y el calcio ya no protege (iónico de vuelta a 1,15); sin eliminar potasio, el K⁺ de Adela volvería a subir.' },
         { t: 'Paso directo a hemodiálisis, sin resina: es lo único que elimina potasio.', porque: 'La hemodiálisis es lo más eficaz, pero las resinas (SZC, favorita) también lo eliminan (p. 28); Adela, estable, empezaría una técnica invasiva sin necesitarla aún.' },
         { t: 'El calcio se disipó y la insulina es temporal: elimino potasio (SZC; hemodiálisis si no baja).', ok: true }],
       explicacion: 'El efecto del calcio se disipa en 30-60 min (p. 27) y el de la insulina es temporal (p. 28): el modelo lo muestra con el iónico de vuelta a 1,15 y el K⁺ en 6,0 (la bajada mínima de la insulina, 0,6 mEq/L, p. 28). Se elimina potasio con SZC (10 g tres veces al día) o, si no baja, con hemodiálisis: 1 mEq/L en 1 h y 2 mEq/L en 3 h (p. 28-29).', fuente: 27, fuente2: 29 } },
-  { momento: 'Antes de pasarla a planta', datos: { 'Hemodiálisis': 'en marcha' }, nuevo: ['Hemodiálisis'], estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] },
+  { momento: 'Antes de pasarla a planta', datos: { 'SZC': 'dado', 'K⁺': 'de control' }, nuevo: ['SZC', 'K⁺'], estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] },
     pregunta: { num: 'Paso 5', tipo: 'error', estado: { ...T, acc: [['ca', 90], ['real'], ['esperar', 45]] }, enunciado: 'El residente escribe el plan. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
       frases: [
         { t: 'Hemodiálisis: baja el K⁺ 1 mEq/L tras una hora y 2 mEq/L tras tres.', cita: 29 },
@@ -179,8 +179,8 @@ const VALENTIN = [
         { t: 'Solo la perfusión de 1-2 mg/kg/h, sin bolo.', porque: 'El bolo de 200 mg va primero; la perfusión es su continuación (p. 46). Valentín seguiría con el iónico bajo durante horas.' },
         { t: '22 mL de gluconato al 10 % (200 mg de calcio elemental) y luego 1-2 mg/kg/h.', ok: true }],
       explicacion: 'Bolo de 200 mg de calcio elemental (22 mL de gluconato al 10 %) en 100 mL de salino en 5-10 min, seguido de 1-2 mg/kg/h durante al menos 6 h (p. 45-46). El monitor muestra el iónico en 1,07 mmol/L, ilustrativo: el libro da 0,5 mg/dL del total por 200 mg.', fuente: 45, fuente2: 46 } },
-  { momento: 'Siguen sangrando · 14 concentrados', datos: { 'Concentrados': '14', 'K⁺': '5,9 mEq/L', 'Ca iónico': '0,90 mmol/L' }, nuevo: ['Concentrados', 'K⁺', 'Ca iónico'], estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] },
-    pregunta: { num: 'Paso 3', estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] }, enunciado: 'Siguen sangrando: 4 concentrados más, 14 en total. <b>¿Qué haces con el calcio y el potasio?</b>',
+  { momento: 'Siguen sangrando · 14 concentrados', datos: { 'Concentrados': '14', 'Ca iónico': '0,90 mmol/L' }, nuevo: ['Concentrados', 'Ca iónico'], estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] },
+    pregunta: { num: 'Paso 3', estado: { ...VAL, s: { units: 14 }, acc: [['ca', 200]] }, enunciado: 'Siguen sangrando: 4 concentrados más, 14 en total. Mira el K⁺ en el monitor. <b>¿Qué haces con el calcio y el potasio?</b>',
       opciones: [
         { t: 'Paro el calcio: el iónico ya se corrigió.', porque: 'Con 4 bolsas más, el iónico vuelve a 0,90 mmol/L, en el límite de lo grave (<0,9, p. 44), y el efecto del bolo cae a los 30 min (p. 46).' },
         { t: 'Pongo bolos de 500 mg cada vez que baje.', porque: 'Cada bolo pasa de los 200 mg recomendados (p. 45): en el modelo, el sello de exceso, y el calcio IV puede dañar la célula (p. 46).' },
