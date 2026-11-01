@@ -603,7 +603,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   // C1 · Cúspides con nombre (Hahn 2013 p. 945): cada una por la coronaria que nace de su seno (ostios en ψ 1,66 y −0,44, abajo)
   const CUSPIDES_AO = ['coronaria derecha', 'no coronaria', 'coronaria izquierda'];
   for (let k = 0; k < 3; k++) { const a = Math.PI / 6 + k * TAU / 3, b = a + TAU / 3;
-    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, pot: 3, hundir: opciones.ajustes?.cuspidesPlanas ? 0 : 2, abomba: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true, segmentos: [[CUSPIDES_AO[k], 0, 1]], malla: [12, 7] }); }
+    anadirR('Aórtica', valva({ anillo: anilloAoV, psi: (t) => mix(a, b, t), cierre: estrella(anilloAoV, cAo3, a, b, 0.92), n: arriba, prof: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, pot: 3, hundir: opciones.ajustes?.cuspidesPlanas ? 0 : 2, abomba: opciones.ajustes?.cuspidesPlanas ? 0 : 2.5, apertura: ap('aortica'), carga: cg('aortica'), thAbierta: 1.35 }), COLORES.valva, { dobleCara: true, segmentos: [[CUSPIDES_AO[k], 0, 1]], malla: [NI_T, NV_V] }); }
   const mT = inf.marcos[NK];
   const anilloPuV = (psi) => sum(P, sum(esc(mT.e1, (rP - 0.4) * Math.cos(psi)), esc(mT.e2, (rP - 0.4) * Math.sin(psi))));
   for (let k = 0; k < 3; k++) { const a = k * TAU / 3, b = a + TAU / 3;
