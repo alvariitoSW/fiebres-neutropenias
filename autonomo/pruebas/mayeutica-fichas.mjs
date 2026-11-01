@@ -102,7 +102,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
     for (const arch of readdirSync(join(RAIZ, 'js/data/mayeutica')).filter(n => /^b\d+[a-z]?-.+\.js$/.test(n))) {
         const mod = await import(new URL('../../js/data/mayeutica/' + arch, import.meta.url));
         let n = 0, larga = 0, corta = 0;
-        for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
+        for (const d of Object.values(mod).flatMap(g => Object.values(g)).filter(d => Array.isArray(d?.guia))) {
             const qs = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))].filter(q => q.tipo === 'test');
             for (const q of qs) {
                 const ls = q.opciones.map(o => largo(o.t)), ok = largo(q.opciones.find(o => o.ok)?.t || '');
