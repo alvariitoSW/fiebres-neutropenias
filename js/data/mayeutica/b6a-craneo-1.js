@@ -159,7 +159,7 @@ export const MAYEUTICA_CRANEO_1 = {
           { momento: 'Día 0 · 18:00', datos: { Constantes: 'PAM 100, PIC 26 → PPC 74' }, nuevo: ['Constantes'],
             calculadora: { ir: 'mn-ppc-calc', nombre: 'PPC = PAM − PIC' },
             pregunta: { id: 'mnh-c4', tipo: 'test', fuente: 'mn-hic-ppc · mn-hic-pic',
-              enunciado: 'PIC 26. ¿Qué haces?',
+              enunciado: 'PAM 100 y PIC 26 (PPC 74). ¿Qué haces?',
               opciones: [
                 { t: 'Drenar LCR por el catéter hasta PIC <20, y comprobar que la PPC queda en 50-70.', ok: true },
                 { t: 'Subir la PAM con un vasopresor hasta ganar PPC, aunque la PIC siga alta.', porque: `Marino fija PAS <140 (${pag(45)}); subir la PAM va contra ese objetivo (inferencia nuestra) y la PIC seguiría en 26.` },
