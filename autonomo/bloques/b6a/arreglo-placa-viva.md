@@ -1,0 +1,9 @@
+# b6a · arreglo de la placa viva (rama wt/b6a-plv)
+✅ A1 Neostigmina: G6 (opciones, «porque», explicación y frase viva), sello neo70, G5 op.3 y caso 2 paso 2: de Marino solo «70 µg/kg para bloqueo moderado, nunca más por efectos parasimpaticomiméticos» (p. 31). «No eficaz en bloqueo profundo»: drugs.com (otra-fuente §9, no abierta por mí: el proxy la bloquea); bradicardia y secreciones: fisiología general.
+⚠ A2 Aminoglucósidos y Mg: sin fuente abierta; queda el hueco anotado (apunta a la ref. 19 de Marino, Sheikh 2021). No inventé URL.
+✅ A3 Caso 2 paso 4: opción 4 ahora «Quitar la sedación…», con una sola correcta («sedación profunda y, como mínimo, algo de analgesia»).
+✅ A4 Umbrales de intubación rotulados «de la miastenia (p. 25); GBS: manejo similar (p. 27)» en caso 1 (pasos 1-2 y «lleva»), E3, E1 y sello intub; nota nueva por el «y» frente al «o».
+✅ Menores (9): E1; G3 (rótulo de inferencia y Fig. 46.1→p. 25); G2 (PMC9941475); G5/E6 («hiperpotasemia que amenaza la vida», «hasta 0,5»); caso 2 pasos 3-4-5 (inferencias rotuladas); NOTAS neo5 → «la fuente no lo dice» (máximo de 5 mg de la FDA, sin enlace); errata PIM → «fuentes discrepan»; sello succiK (corte 5,5 ilustrativo) y piri (inferencia rotulada).
+✅ P1 sello «70 microgramos/kg» (único sello con «µ» en el título). P2 caso 2 paso 5: `mcc` sin relajante y `predice`. P3 pnc f0 20 y monitor pnc FC 112, PA 95/55 (modelo.js). P4 caso 1 paso 3 `destapa` y caso 2 paso 3 `error`. P5 G6 rotulado; E3/E4 sin la instrucción duplicada. P6 frase viva del hielo a 6 min.
+✅ Pruebas: placa-viva.mjs verde (390/360); placa-viva-mayeutica.mjs sin salida (exit 0); `jueces --modelo placa-viva` (incluye forma): «Todos los jueces a favor».
+No comprobado / riesgo: URLs de drugs.com/PMC no abiertas; no vi capturas; los textos nuevos de los casos 1-3 y 2-3 (destapa/error) no pasaron revisión del profesor.

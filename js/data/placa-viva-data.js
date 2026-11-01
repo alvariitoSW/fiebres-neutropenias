@@ -16,7 +16,7 @@ export const ESTADOS = {
   sano: { n: 'Sano', f0: 100, lesion: null },
   gbs: { n: 'Guillain-Barré', f0: 26, lesion: [0, 'Lesión: mielina'] },
   miastenia: { n: 'Miastenia', f0: 27, lesion: [1, 'Lesión: receptores de la placa'] },
-  pnc: { n: 'Polineuropatía', f0: 45, lesion: [0, 'Lesión: axón'] },
+  pnc: { n: 'Polineuropatía', f0: 20, lesion: [0, 'Lesión: axón'] },
   mcc: { n: 'Miopatía del crítico', f0: 40, lesion: [2, 'Lesión: fibra (miosina)'] },
   bloqueo: { n: 'Relajante', f0: 100, lesion: [1, 'Placa tapada por el relajante'], perfusion: 'rocuronio 5-12 µg/kg/min o cisatracurio 1-3 µg/kg/min (N p. 29)' },
 };
@@ -32,8 +32,9 @@ export const FUENTES = [['Marino 2024, cap. 46: miastenia (anticuerpos, hielo, i
 export const NOTAS = [
   ['fuente no lo dice', 'Marino solo dice que el hielo «mejora» la transmisión y que aminoglucósidos y Mg «la dificultan» (p. 24-25): el mecanismo íntimo no está. La lupa lo dibuja sin explicarlo (fisiología general).'],
   ['fuentes discrepan', 'Duración del rocuronio: 50-70 min en la tabla y 30-70 min en el texto (p. 29-30). El modelo usa 60 min como valor ilustrativo. '],
-  ['opinión del autor', 'Neostigmina: Marino dice «nunca más de 70 µg/kg» (p. 31); el máximo de 5 mg de la FDA es una nota de la ficha, no de Marino. Las inferencias de los avisos (rocuronio sin vía aérea, TOF 0, IgIV en el Guillain-Barré) se rotulan en cada aviso.'],
-  ['fuente no lo dice', 'Errata reproducida: Marino imprime la PIM normal como «>−100» (p. 25). El modelo usa PIM = −fuerza % (100 % = −100 cmH₂O) y la CV normal de 70 mL/kg como cifras ilustrativas (ilustrativo, igual en las dos opciones), no de la ficha.'],
+  ['fuente no lo dice', 'Neostigmina: Marino dice «nunca más de 70 µg/kg» por sus efectos parasimpaticomiméticos (p. 31) y no da un máximo en mg. El máximo de 5 mg es de la ficha técnica de la FDA, sin enlace abierto por el autor (hueco de cita). Que la neostigmina no revierta el bloqueo profundo y que cause bradicardia y secreciones no está en Marino: es de otra fuente (drugs.com, monografía de neostigmina) y de fisiología general. Las inferencias de los avisos (rocuronio sin vía aérea, TOF 0, IgIV en el Guillain-Barré) se rotulan en cada aviso.'],
+  ['fuente no lo dice', 'Umbrales de intubación: Marino los da para la miastenia (p. 25: CV ≤15 mL/kg y PIM −20 «prompt serious consideration of intubation», con «y»); en el Guillain-Barré solo dice vigilar CV y PIM, con manejo similar (p. 27). La app aplica «o» en los avisos y los rotula como umbral de la miastenia.'],
+  ['fuentes discrepan', 'Errata de la fuente, reproducida: Marino imprime la PIM normal como «>−100» (p. 25), incoherente con el umbral de −20 que da en la misma frase. El modelo usa PIM = −fuerza % (100 % = −100 cmH₂O) y la CV normal de 70 mL/kg como cifras ilustrativas (ilustrativo, igual en las dos opciones), no de la ficha.'],
   ['fuente no lo dice', 'Cuánto tarda cada estado en empeorar o mejorar (−3 puntos de fuerza al día en el GBS, +6 al día tras la IgIV, etc.) no figura en Marino: solo la dirección (p. 26-28). Magnitudes ilustrativas.'],
 ];
 // Enlaces a otros modelos vivos (enlace cruzado de siempre): [texto, vista, atributo, estado]
@@ -43,7 +44,7 @@ export const ENLACES = [
   ['El pulmón vivo: el destete que fracasa (PIM y capacidad vital)', 'pulmonVivo', 'pulmonVivo', 'sbt-fracaso'],
 ];
 export const CRECERA = ['Capilar vivo «sepsis» para la polineuropatía y la miopatía del crítico: aún no se enlaza.', 'Cifras ilustrativas con fuente por buscar: CV normal de 70 mL/kg, decremento de la miastenia, velocidad de la conducción en el Guillain-Barré (ver las notas).'];
-export const PROFUNDIZAR = ['Miller Fisher y otras variantes del GBS: Marino solo las menciona (p. 27).', 'Metilprednisolona 2 g/día en la crisis miasténica, discutida (p. 26).', 'Gabapentina 300 mg cada 8 h para el dolor neuropático del GBS (p. 28).', 'Timoma (10 %) y anticuerpos MuSK en la miastenia seronegativa (p. 24-25).', 'Por qué empeora la miastenia con aminoglucósidos y magnesio: Marino los lista en la Tabla 46.5 (p. 24) pero no explica el mecanismo, y no se encontró otra fuente fiable que lo explique; hueco anotado.', 'Cómo mejora el hielo la transmisión: Marino solo dice «mejora» (p. 24); se ha propuesto que enfriar inhibe la acetilcolinesterasa, sin certeza (PubMed 3614664).'];
+export const PROFUNDIZAR = ['Miller Fisher y otras variantes del GBS: Marino solo las menciona (p. 27).', 'Metilprednisolona 2 g/día en la crisis miasténica, discutida (p. 26).', 'Gabapentina 300 mg cada 8 h para el dolor neuropático del GBS (p. 28).', 'Timoma (10 %) y anticuerpos MuSK en la miastenia seronegativa (p. 24-25).', 'Por qué empeora la miastenia con aminoglucósidos y magnesio: Marino los lista en la Tabla 46.5 (p. 24) pero no explica el mecanismo; no se abrió ninguna fuente que lo cite, así que queda como hueco anotado (la ref. 19 de Marino, Sheikh 2021, J Clin Med 10:1537, es el sitio donde mirar).', 'Cómo mejora el hielo la transmisión: Marino solo dice «mejora» (p. 24); se ha propuesto que enfriar inhibe la acetilcolinesterasa, sin certeza (PubMed 3614664).'];
 // ---- Motor del bloqueo y hendidura: Tabla 46.7 (p. 29), neostigmina y sugammadex (p. 30-31); lo ilustrativo, rotulado ----
 // Tabla 46.7 (p. 29) y texto p. 30-31. Lo que no es de Marino va como ILUS y se rotula «ilustrativo» en pantalla.
 export const DOSIS = { suc: { paso: 0.5, lleno: 1.0, max: 1.5, on: 1.25, pl: 7, fin: 12 }, roc: { paso: 0.5, lleno: 1.0, max: 1.0, on: 2.25, pl: 50, fin: 70 }, cis: { paso: 0.05, lleno: 0.15, max: 0.2, on: 6, pl: 35, fin: 50 } };

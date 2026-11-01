@@ -25,7 +25,7 @@ export function leer(s) {
   const cvkg = s.cvFijo ? s.cvFijo.cvkg : 70 * f / 100, cv = s.cvFijo ? s.cvFijo.cv : cvkg * s.peso, pim = -f;   // intubado: la CV queda la de ese momento
   const crit = (gbs || mg) && (cvkg <= U.cvkg || cv < U.cvL || f <= U.pim), intub = crit && !s.via;
   const aut = gbs && s.dia >= 3;
-  const impar = s.dia % 2 === 1, fc = aut ? (impar ? '48' : '132') : String(Math.round(78 - s.neo * 0.3)), pa = aut ? (impar ? '190/100' : '80/40') : '120/75';   // inestabilidad autonómica: oscila por día (cifras ilustrativas; N p. 27 solo da el rasgo)
+  const impar = s.dia % 2 === 1, fc = aut ? (impar ? '48' : '132') : (s.est === 'pnc' ? '112' : String(Math.round(78 - s.neo * 0.3))), pa = aut ? (impar ? '190/100' : '80/40') : (s.est === 'pnc' ? '95/55' : '120/75');   // inestabilidad autonómica: oscila por día (cifras ilustrativas; N p. 27 solo da el rasgo)
   return { tof, aut, f, cvkg, cv, pim, crit, intub, cond: gbs ? 'lenta' : 'normal', ref: gbs || s.est === 'pnc' || mcc ? '↓' : '=', lcr: gbs ? 'prot. ↑' : 'normal', fc, pa, sec: s.neo > 0 || s.piri, ptosis: s.hielo ? (mg ? 3 : 0) : null };
 }
 // Sacudidas del pulgar (0-1) según el estímulo. Fatiga solo en la miastenia (N p. 24-25) y en el bloqueo no despolarizante; el hielo la reduce (ilustrativa).
