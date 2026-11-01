@@ -16,6 +16,14 @@ libros:marinoNeuro:panel-marino-neuro-tabs:<id>`.
 - **N** = `docs/marino-2024-neurologia-caps45-47.pdf` (51 páginas). Página = página del PDF; la cobertura comprueba el
   desplazamiento con un `#page=` de una ficha.
 - Capítulos: 45 = p. 2-18 · 46 = 19-33 · 47 = 34-51.
+- Anclas (revisión del encargo): PIC <20 mmHg y PPC = PAM − PIC objetivo 50-70 (HIC) p. 45 · PIC <20 en la HSA p. 48 ·
+  salino hipertónico mejor que manitol (Tabla 47.3) p. 41 · la VPP puede bajar la PPC p. 35 · edema vasogénico y
+  citotóxico p. 47 · intubar si CV ≤15 mL/kg (<1 L) o PIM −20 cmH₂O p. 25 · rocuronio 1 mg/kg, sugammadex 16 mg/kg
+  p. 30-31 · apnea: PaCO₂ +20 p. 16. **Marino no trae** Monro-Kellie, hiperventilación ni la curva de autorregulación
+  (solo una mención, p. 45), ni objetivo de PPC fuera de la HIC: otra fuente en encargo aparte, o hueco y `fisiología
+  general`/`ilustrativo` visible.
+- Ya existen: `caraGlasgow` y las pupilas (`visual-marino-piezas-45-53.js`), `calcPpc()` con sellos
+  (`marino-neuro.js`), `calcGcs()`. No hay pieza de PIC ni de placa motora.
 - Figuras reales ya extraídas (`js/modules/libros/img/`): `mar-fig45-1-causas-consciencia`, `45-2-delirio`,
   `45-3-reflejos-oculares`, `46-1-prueba-hielo`, `47-1-burbujas-fop`, `47-2-hemorragia-tpa`, `47-3-hematoma`,
   `47-4-hsa` (.jpg). Usa la imagen real donde la haya; no la redibujes.
