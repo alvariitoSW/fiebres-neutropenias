@@ -92,31 +92,31 @@ export function pasoNeutrofilo(dt, e, svg, quieto) {
 export const TOPE_HORAS = 108;   // 4,5 días: la exposición más larga que cita la ficha (1 voluntario, p. 72)
 // Qué dice la ficha a cada exposición: [nivel, línea 1, línea 2]. Nivel: 0 sin aviso, 1 aviso, 2 sello.
 export function veredictoToxicidad(f, h) {
-    if (f >= 100 && h >= TOPE_HORAS) return [2, 'LESIÓN PULMONAR INFLAMATORIA', 'O₂ puro 4,5 días: tope · p. 72'];
-    if (f >= 100 && h >= 72) return [2, 'Lesión inflamatoria (3-4 días)', 'O₂ al 100 % prolongado · p. 72'];
-    if (f >= 100 && h >= 6) return [1, 'Traqueobronquitis, capacidad vital ↓', 'O₂ al 100 % 6-12 h · p. 72'];
-    if (f > 60) return [1, 'Sobre el umbral clásico del 60 %', 'en el crítico, menos · p. 72'];
+    if (f >= 100 && h >= TOPE_HORAS) return [2, 'LESIÓN INFLAMATORIA · TOPE', 'O₂ puro 4,5 días · p. 72'];
+    if (f >= 100 && h >= 72) return [2, 'Lesión inflamatoria 3-4 d', 'O₂ al 100 % prolongado · p. 72'];
+    if (f >= 100 && h >= 6) return [1, 'Traqueobronquitis 6-12 h', 'capacidad vital ↓ · O₂ 100 % · p. 72'];
+    if (f > 60) return [1, 'Sobre el 60 % clásico', 'en el crítico tolera menos · p. 72'];
     if (f >= 50) return [1, 'Cerca del 60 % clásico', 'sin antioxidantes, menos · p. 71-72'];
-    return [0, 'Bajo el umbral clásico del 60 %', 'FiO₂ más baja tolerable · p. 72'];
+    return [0, 'Bajo el 60 % clásico', 'FiO₂ más baja tolerable · p. 72'];
 }
 // Radicales y defensas de 0 a 1 (ilustrativo): más FiO₂ y más horas suben las ROS y gastan las defensas.
 export function balanceToxicidad(f, h) {
     const x = Math.max(0, Math.min(1, (f - 21) / 79)), t = Math.min(1, h / TOPE_HORAS);
     return { ros: 0.1 + 0.9 * x * (0.4 + 0.6 * t), def: 0.8 - 0.55 * x * t };
 }
-const PISTA = { fio: [88, 176, 188], hor: [88, 176, 204] };
+const PISTA = { fio: [88, 176, 137], hor: [88, 176, 149] };   // x desde, x hasta, y (a 360 px la barra de abajo tapa la lupa desde y ≈ 156)
 function lupaToxicidad(T) {
-    let h = `<g id="cpv-lupa-neu-titulo">${T(110, 22, 'O₂ de más: radicales', { a: 'middle', s: 10, b: 1, c: '--text-main', sans: 1 })}${T(110, 33, 'Fig. 25.6 · barras: ilustrativo', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' })}</g>`;
-    const caja = (id, y, t, c) => `<g id="${id}"><rect x="30" y="${y}" width="84" height="15" rx="4" style="${CAJA}"/>${T(72, y + 11, t, { a: 'middle', s: 8, b: 1, c, sans: 1 })}</g>`;
+    // arriba, el veredicto de la ficha (el rótulo que cambia con los mandos); la cadena, las defensas, las barras y los mandos
+    let h = `<g id="cpv-lupa-neu-titulo">${T(110, 21, '', { a: 'middle', s: 7.6, b: 1, sans: 1 }).replace('<text ', '<text id="cpv-tox-v1" ')}${T(110, 32, '', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' }).replace('<text ', '<text id="cpv-tox-v2" ')}</g>`;
+    const caja = (id, y, t, c) => `<g id="${id}"><rect x="30" y="${y}" width="84" height="12" rx="4" style="${CAJA}"/>${T(72, y + 9, t, { a: 'middle', s: 7.6, b: 1, c, sans: 1 })}</g>`;
     const fl = y => `<path d="M72 ${y}v4m-3-2l3 3 3-3" style="fill:none;stroke:var(--text-dim);stroke-width:1.1"/>`;
-    h += '<g id="cpv-lupa-cadena">' + caja('cpv-lupa-o2', 40, 'O₂ + 1 e⁻', '--text-main') + fl(55) + caja('cpv-lupa-sup', 59, 'superóxido ·', '--accent-yellow') + fl(74) + caja('cpv-lupa-h2o2', 78, 'H₂O₂ (no radical)', '--accent-yellow') + fl(93) + caja('cpv-lupa-oh', 97, 'HO· hidroxilo', '--accent-red') + fl(112) + T(72, 126, '→ 2 H₂O (≥95 %)', { a: 'middle', s: 8, b: 1, c: '--accent-green', sans: 1 }) + '</g>';
+    h += '<g id="cpv-lupa-cadena">' + caja('cpv-lupa-o2', 40, 'O₂ + 1 e⁻', '--text-main') + fl(52) + caja('cpv-lupa-sup', 55, 'superóxido ·', '--accent-yellow') + fl(67) + caja('cpv-lupa-h2o2', 70, 'H₂O₂ (no radical)', '--accent-yellow') + fl(82) + caja('cpv-lupa-oh', 85, 'HO· hidroxilo', '--accent-red') + fl(97) + T(72, 108, '→ 2 H₂O (≥95 %)', { a: 'middle', s: 7.6, b: 1, c: '--accent-green', sans: 1 }) + '</g>';
     const def = (y, t) => T(120, y, t, { s: 7.6, b: 1, c: '--accent-green', sans: 1 });
-    h += '<g id="cpv-lupa-defensas">' + def(70, '◂ SOD') + def(89, '◂ glutatión (Se)') + def(108, '◂ vit. E y C') + '</g>';
-    h += T(66, 143, 'radicales', { a: 'end', s: 7.6, b: 1, c: '--accent-red', sans: 1 }) + '<rect id="cpv-tox-ros" x="70" y="136" width="100" height="8" rx="3" style="fill:var(--accent-red)"/>';
-    h += T(66, 156, 'defensas', { a: 'end', s: 7.6, b: 1, c: '--accent-green', sans: 1 }) + '<rect id="cpv-tox-def" x="70" y="149" width="100" height="8" rx="3" style="fill:var(--accent-green)"/>';
-    h += `<g id="cpv-tox-verd">${T(110, 172, '', { a: 'middle', s: 7.6, b: 1, sans: 1 }).replace('<text ', '<text id="cpv-tox-v1" ')}${T(110, 182, '', { a: 'middle', s: 7.6, i: 1, c: '--text-muted' }).replace('<text ', '<text id="cpv-tox-v2" ')}</g>`;
+    h += '<g id="cpv-lupa-defensas">' + def(64, '◂ SOD') + def(79, '◂ glutatión (Se)') + def(94, '◂ vit. E y C') + '</g>';
+    h += T(66, 119, 'radicales', { a: 'end', s: 7.6, b: 1, c: '--accent-red', sans: 1 }) + '<rect id="cpv-tox-ros" x="70" y="112.5" width="100" height="8" rx="3" style="fill:var(--accent-red)"/>';
+    h += T(66, 129, 'defensas', { a: 'end', s: 7.6, b: 1, c: '--accent-green', sans: 1 }) + '<rect id="cpv-tox-def" x="70" y="122.5" width="100" height="8" rx="3" style="fill:var(--accent-green)"/>';
     for (const [k, [x0, x1, y]] of Object.entries(PISTA)) {
-        h += `<g id="cpv-tox-${k}"><rect x="${x0 - 4}" y="${y - 8}" width="${x1 - x0 + 8}" height="16" rx="8" style="fill:none;stroke:var(--text-dim);stroke-width:1" id="cpv-tox-${k}-caja"/><rect x="${x0}" y="${y - 1.5}" width="${x1 - x0}" height="3" rx="1.5" style="fill:var(--text-dim)"/><circle id="cpv-tox-${k}-p" cx="${x0}" cy="${y}" r="5.5" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.2"/>${T(x0 - 6, y + 3, '', { a: 'end', s: 7.6, b: 1, sans: 1 }).replace('<text ', `<text id="cpv-tox-${k}-t" `)}</g>`;
+        h += `<g id="cpv-tox-${k}"><rect x="${x0 - 4}" y="${y - 6}" width="${x1 - x0 + 8}" height="12" rx="6" style="fill:none;stroke:var(--text-dim);stroke-width:1"/><rect x="${x0}" y="${y - 1.5}" width="${x1 - x0}" height="3" rx="1.5" style="fill:var(--text-dim)"/><circle id="cpv-tox-${k}-p" cx="${x0}" cy="${y}" r="5.5" style="fill:var(--accent-yellow);stroke:var(--bg-main);stroke-width:1.2"/>${T(x0 - 8, y + 3, '', { a: 'end', s: 7.6, b: 1, sans: 1 }).replace('<text ', `<text id="cpv-tox-${k}-t" `)}</g>`;
     }
     return h;
 }
@@ -134,8 +134,8 @@ function pasoToxicidad(svg) {
         };
         svg.addEventListener('pointerdown', ev => {
             const r = svg.getBoundingClientRect(), y = (ev.clientY - r.top) / r.height * 220, x = (ev.clientX - r.left) / r.width * 220;
-            if (x < 60 || y < 176) return;
-            activo = y < 196 ? 'fio' : 'hor';
+            if (x < 40 || y < 130 || y > 156) return;
+            activo = y < 143 ? 'fio' : 'hor';
             if (activo === 'hor' && fio >= 100 && hor >= TOPE_HORAS) { activo = null; return; }
             try { svg.setPointerCapture(ev.pointerId); } catch (_) { /* sin captura, el arrastre sigue dentro */ }
             poner(ev); ev.preventDefault();
@@ -159,5 +159,5 @@ function pasoToxicidad(svg) {
         const g = svg.querySelector(`#cpv-tox-${k}`); if (g) g.style.opacity = k === 'hor' && tope ? '.4' : '1';
     }
     const p = svg.querySelector('#cpv-tox-fio-p'); if (p) p.style.fill = fio > 60 ? 'var(--accent-red)' : 'var(--accent-yellow)';
-    if (v2 && tope) v2.textContent = 'tope 4,5 días · baja la FiO₂ · p. 72';
+    if (v2 && tope) v2.textContent = 'tope 4,5 días: baja la FiO₂ · p. 72';
 }

@@ -147,7 +147,7 @@ export const MAYEUTICA_OXIGENO_2 = {
           no('Los humanos sanos muestran lesión inflamatoria a las 12 h, como las ratas', `A las 12 h hay traqueobronquitis y atelectasia; las ratas tardan 5-7 días en morir (${p(71)}-${p(72)}).`),
           no('Las tortugas marinas mueren a la semana, igual que los primates', `Las tortugas resisten semanas e incluso meses sin daño (${p(71)}).`),
           ok('Ratas: mueren en 5-7 días; primates no humanos: toxicidad en torno a 1 semana')],
-        explicacion: `Ratas: fallo respiratorio a los <span class="hl">5-7 días</span> con O₂ al 100 %; primates no humanos: signos tras aproximadamente <span class="hl">1 semana</span>; tortugas marinas: semanas o meses sin daño (${p(71)}).` + enFicha('nep-tox-especies') }
+        explicacion: `Ratas: fallo respiratorio a los <span class="hl">5-7 días</span> con O₂ al 100 %; primates no humanos: signos tras aproximadamente <span class="hl">1 semana</span>; tortugas marinas: semanas o meses sin daño (${p(71)}).` + enFicha('nep-tox-especies') },
       { id: 'tox-g5', corto: 'FiO₂ 100 % y tiempo', tipo: 'test', fuente: 'nep-tox-humanos · nep-tox-fio2', modelo: { capilarVivo: 'toxicidad', texto: '🧬 Juega: sube la FiO₂ a 100 % y deja pasar el tiempo' },
         origen: 'ficha: los umbrales; las barras del modelo, ilustrativas',
         enunciado: 'Predice y luego compruébalo en el modelo: pones la FiO₂ en 100 % y dejas pasar las horas. ¿Qué vence, y qué ve la ficha en voluntarios sanos a las 6-12 h?',
@@ -155,7 +155,7 @@ export const MAYEUTICA_OXIGENO_2 = {
           no('Las defensas vencen: con la SpO₂ normal, el O₂ puro no daña el pulmón', `La ficha no da ese margen: a las 6-12 h de O₂ al 100 % ya hay traqueobronquitis (${p(72)}). Fiarte de la SpO₂ te llevaría a mantener una FiO₂ que sobra.`),
           ok('Vencen los radicales: traqueobronquitis y menos capacidad vital'),
           no('Empatan: el pulmón solo se lesiona tras más de una semana', `En humanos hay lesión pulmonar inflamatoria a los 3-4,5 días de O₂ puro (${p(72)}); esperar una semana dejaría pasar la lesión.`)],
-        explicacion: `Con FiO₂ 100 % y el tiempo, <span class="hl-rojo">las ROS superan a las defensas</span>: a las <span class="hl">6-12 h</span> traqueobronquitis y menos capacidad vital; con <span class="hl-rojo">3-4,5 días</span>, lesión inflamatoria (${p(72)}). Las barras del modelo son ilustrativas; los umbrales, de la ficha.` + enFicha('nep-tox-humanos') },
+        explicacion: `Con FiO₂ 100 % y el tiempo, <span class="hl-rojo">las ROS superan a las defensas</span>: a las <span class="hl">6-12 h</span> traqueobronquitis y menos capacidad vital; con <span class="hl-rojo">3-4,5 días</span>, lesión inflamatoria (${p(72)}). Las barras del modelo son ilustrativas; los umbrales, de la ficha.` + enFicha('nep-tox-humanos') }
     ],
     casos: [
       { id: 'c-tox-elvira', titulo: 'Elvira, 45 años: demasiado oxígeno', corto: 'Caso · Elvira (días 2-3)', sub: 'intubada con FiO₂ alta; antioxidantes y toxicidad por O₂',
