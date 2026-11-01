@@ -1,2 +1,368 @@
-// Grupo 6D «El cráneo que sangra y se hincha» · fichas mn-hic y mn-hsa (Marino cap. 47). Lo llena el constructor.
-export const MAYEUTICA_CRANEO_1 = {};
+// Grupo 6D «El cráneo que sangra y se hincha» · fichas mn-hic y mn-hsa (Marino cap. 47). Datos puros.
+// Fuente: docs/marino-2024-neurologia-caps45-47.pdf (págs. 41-48) y la ficha js/modules/libros/marino-neuro.html.
+// Los comentarios «cráneo:» marcan dónde se enganchará el cráneo vivo cuando exista; mientras, «Compruébalo» abre la calculadora o la figura.
+const PDF = 'docs/marino-2024-neurologia-caps45-47.pdf';
+const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
+const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoNeuro" data-panel="panel-marino-neuro-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
+const UMI = (tab, texto) => `<button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="${tab}">${texto}</button>`;
+
+export const MAYEUTICA_CRANEO_1 = {
+  /* =================================================================================================
+     Ficha 13 · Hemorragia intracerebral espontánea (cap. 47, págs. 41-45)
+     ================================================================================================= */
+  'mn-hic': {
+    entrada: 'Por qué en las primeras horas el hematoma crece, qué se revierte y con qué dosis, a qué presión se baja la PA y cómo se vigila la presión dentro del cráneo.',
+    guia: [
+      // cráneo: 'hematoma-crece'
+      { id: 'mnh-g1', corto: 'por qué empeora', tipo: 'test', fuente: 'mn-hic · mar-img-47-3',
+        enunciado: 'Un hombre con hematoma intracerebral se deteriora en las primeras horas. Antes de leer la ficha: ¿qué explica ese deterioro precoz y qué lo frena?',
+        opciones: [
+          { t: 'El hematoma sigue creciendo; lo primero es revertir cualquier antitrombótico.', ok: true },
+          { t: 'El edema citotóxico del día 3; hay que dar suero hipertónico.', porque: `El edema citotóxico es del isquémico y llega más tarde (${pag(40)}). Esperar al suero hipertónico mientras el hematoma crece deja a la sangre sin freno.` },
+          { t: 'El vasoespasmo; hay que dar nimodipino.', porque: `El vasoespasmo es de la hemorragia subaracnoidea y cae entre los días 4 y 14 (${pag(47)}). Nimodipino en un hematoma no frena el sangrado de las primeras horas.` }],
+        explicacion: `El deterioro rápido de las primeras horas se atribuye a la <span class="hl-rojo">expansión del hematoma</span>: lo primero es frenarla, y para eso es <span class="hl">obligado revertir ya</span> cualquier antitrombótico (${pag(42)}).${enFicha('mn-hic', 'mn-hic')}` },
+      // cráneo: 'hematoma-crece'
+      { id: 'mnh-g2', corto: 'CCP y no plasma', tipo: 'test', fuente: 'mn-hic-warfarina',
+        enunciado: 'Con warfarina e INR alto se pone vitamina K y concentrado de complejo protrombínico (CCP) de 4 factores. ¿Por qué CCP y no plasma fresco?',
+        opciones: [
+          { t: 'Normaliza el INR en 30 min en el 60 % (con plasma, 9 %) y con mucho menos volumen.', ok: true },
+          { t: 'Porque la vitamina K sola ya basta y el CCP es solo un refuerzo.', porque: `La vitamina K empieza a actuar a las 2 h y es máxima a las 24 h (${pag(42)}). Con un hematoma que crece, esperar tanto es dejar la sangre sin freno.` },
+          { t: 'Porque el plasma contiene menos factores y por eso es más caro.', porque: `El argumento de Marino no es el precio ni el contenido: es la rapidez y el volumen. Con plasma harían falta litros y solo el 9 % normaliza el INR a los 30 min (${pag(42)}).` }],
+        explicacion: `En un estudio de sangrado excesivo por warfarina, el CCP de 4 factores (II, VII, IX y X) <span class="hl-verde">normalizó el INR en 30 min en el 60 %</span> de los pacientes; el plasma, en el <span class="hl-rojo">9 %</span>. La vitamina K se da a la vez, pero su efecto empieza a las 2 h y es máximo a las 24 h (${pag(42)}).${enFicha('mn-hic', 'mn-hic-warfarina')}` },
+      { id: 'mnh-g3', corto: 'el andexanet', tipo: 'test', fuente: 'mn-hic-andexanet · mn-hic-dabigatran', calculadora: { ir: 'mn-rev-calc', nombre: 'Reversión del anticoagulante' },
+        enunciado: 'Apixabán o rivaroxabán con hemorragia intracerebral: se usa andexanet alfa. ¿Qué hace y qué efecto adverso destaca Marino?',
+        opciones: [
+          { t: 'Es un factor Xa «señuelo» que fija el fármaco; destaca el tromboembolismo venoso (≈10 %).', ok: true },
+          { t: 'Es un anticuerpo que fija la trombina; destaca el sangrado.', porque: `Eso describe al idarucizumab, que revierte el dabigatrán, no los inhibidores del Xa (${pag(43)}). Con apixabán, ese fármaco no sirve y el paciente seguiría anticoagulado.` },
+          { t: 'Es un concentrado de factores que sustituye lo que falta; destaca la anafilaxia.', porque: `Eso es el CCP de 4 factores, la alternativa si no hay andexanet (50 U/kg, ${pag(44)}). Marino no destaca la anafilaxia, sino el tromboembolismo venoso.` }],
+        explicacion: `El andexanet alfa es un <span class="hl-azul">factor Xa señuelo</span>: fija apixabán y rivaroxabán sin anticoagular. Baja la actividad anti-Xa un <span class="hl">90 % en unos 10 min</span> y restablece la hemostasia a las 12 h; el efecto adverso que merece mención es el <span class="hl-rojo">tromboembolismo venoso en un 10 %</span> (${pag(43)}-${pag(44, '44')}). El dabigatrán se revierte con idarucizumab en 10-30 min (${pag(43)}).` },
+      { id: 'mnh-g4', corto: 'antiagregantes', tipo: 'test', fuente: 'mn-hic-antiagregantes · mn-tabla-47-4 · mn-nota-dosis-47-4',
+        enunciado: 'Un paciente con aspirina o clopidogrel sangra en el cerebro. Las plaquetas ya no se pueden «desinhibir». ¿Cómo ayuda la desmopresina?',
+        opciones: [
+          { t: 'Libera factor de von Willebrand del endotelio; la inhibición dura 7-10 días.', ok: true },
+          { t: 'Revierte la inhibición del receptor plaquetario, que desaparece en 2 h.', porque: `La inhibición es irreversible y dura toda la vida de la plaqueta, 7-10 días (${pag(44)}). Esperar a que desaparezca sola deja al paciente sin hemostasia una semana.` },
+          { t: 'Aporta fibrinógeno, que une plaquetas entre sí.', porque: `La desmopresina no aporta fibrinógeno: libera factor de von Willebrand del endotelio (${pag(44)}). Contar con él para suplir plaquetas inhibidas llevaría a un tratamiento equivocado.` }],
+        explicacion: `Aspirina y clopidogrel producen una <span class="hl-rojo">inhibición irreversible</span> que dura lo que la plaqueta (7-10 días); la desmopresina la antagoniza porque <span class="hl-azul">libera factor de von Willebrand</span> del endotelio (${pag(44)}).${enFicha('mn-hic', 'mn-hic-antiagregantes')}`,
+        nota: `Nota de fidelidad: el libro imprime «3 µg/kg SC o IV» en la Tabla 47.4 (${pag(44)}); la ficha muestra la dosis habitual de 0,3-0,4 µg/kg, porque las fuentes consultadas discrepan entre sí (0,3 y 0,4) y se muestran las dos.${enFicha('mn-hic', 'mn-nota-dosis-47-4')}` },
+      { id: 'mnh-g5', corto: 'cuándo medir PIC', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'mn-hic-pic',
+        enunciado: 'La guía recomienda monitorizar la presión intracraneal (PIC) en la hemorragia intracerebral. ¿En qué tres situaciones?',
+        puntos: [
+          'GCS de <span class="hl">8 o menos</span>.',
+          '<span class="hl-rojo">Sangre en el sistema ventricular</span>.',
+          'Signos clínicos de <span class="hl-rojo">herniación transtentorial</span> (p. ej., midriasis unilateral).'],
+        explicacion: `Una vez monitorizada, la PIC se mantiene <span class="hl-verde">por debajo de 20 mmHg</span>, normalmente drenando LCR del catéter ventricular (${pag(45)}).${enFicha('mn-hic', 'mn-hic-pic')}` },
+      // cráneo: 'hematoma-crece' (sangre ventricular)
+      { id: 'mnh-g6', corto: 'sangre ventricular', tipo: 'test', fuente: 'mn-hic-otras · mar-img-47-3',
+        enunciado: 'La TC de la figura muestra el hematoma abierto a los ventrículos. ¿Por qué esa sangre pide un catéter de drenaje?',
+        opciones: [
+          { t: 'Causa hidrocefalia obstructiva; el catéter drena, permite trombólisis intraventricular y mide la PIC.', ok: true },
+          { t: 'Para aspirar el hematoma y no hace falta tratarlo de otro modo.', porque: `El catéter ventricular no extrae el hematoma del parénquima: drena líquido (${pag(45)}). Creer que lo resuelve retrasa la consulta a neurocirugía con un hematoma grande.` },
+          { t: 'Solo para dar antibiótico intraventricular.', porque: `Marino da tres usos: drenar, trombólisis intraventricular y medir la PIC (${pag(45)}). Ninguno es antibiótico; olvidar el drenaje deja la hidrocefalia sin tratar.` }],
+        explicacion: `La sangre intraventricular suele provocar una <span class="hl-rojo">hidrocefalia obstructiva</span> y exige un catéter ventricular para <span class="hl">drenar</span>, para la <span class="hl-azul">trombólisis intraventricular</span> y para <span class="hl">medir la PIC</span> (${pag(45)}). La figura es la TC real de Marino (${pag(43)}).${enFicha('mn-hic', 'mar-img-47-3')}` },
+      { id: 'mnh-g7', corto: 'PPC con PIC alta', tipo: 'test', fuente: 'mn-hic-ppc · mn-hic-pic', calculadora: { ir: 'mn-ppc-calc', nombre: 'PPC = PAM − PIC' },
+        enunciado: 'PAM 100 mmHg y PIC 26 mmHg dan una PPC de 74. ¿Qué haces?',
+        opciones: [
+          { t: 'Drenar LCR hasta bajar la PIC por debajo de 20; la PIC alta se trata aunque la PPC parezca buena.', ok: true },
+          { t: 'Bajar la PAM a 90 para dejar la PPC en 64, dentro del rango.', porque: `Con PAM 90 y PIC 26 la PPC es 64, pero la PIC sigue en 26. Marino pide mantener la PIC <20 (${pag(45)}); bajar la PAM con la PIC alta solo resta flujo al cerebro.` },
+          { t: 'Nada: la PPC casi está en rango y no hace falta intervenir.', porque: `La PPC de 74 supera el rango 50-70 (${pag(45)}) y, sobre todo, la PIC de 26 pasa del límite de 20. No actuar deja crecer la presión dentro del cráneo.` }],
+        explicacion: `PPC = PAM − PIC (Ecuación 47.1): 100 − 26 = 74. El objetivo razonable es una <span class="hl-verde">PPC de 50-70</span> y una <span class="hl-verde">PIC <20</span>, que se logra sobre todo drenando LCR por el catéter (${pag(45)}).${enFicha('mn-hic', 'mn-hic-ppc')}` },
+    ],
+    examen: [
+      { id: 'mnh-e1', corto: 'CCP con INR 5', tipo: 'test', fuente: 'mn-tabla-47-4 · mn-rev-calc', calculadora: { ir: 'mn-rev-calc', nombre: 'Reversión del anticoagulante' },
+        enunciado: 'Varón de 80 kg con warfarina, hemorragia intracerebral e INR 5. ¿Qué reversión pones?',
+        opciones: [
+          { t: 'Vitamina K 10 mg IV y CCP de 4 factores a 35 U/kg: 2.800 U.', ok: true },
+          { t: 'Vitamina K 10 mg IV y CCP a 25 U/kg: 2.000 U.', porque: `25 U/kg es el tramo de INR 2-4. Con INR 5, 2.000 U se quedan cortas y el INR seguiría alto con el hematoma en expansión (${pag(44)}).` },
+          { t: 'Vitamina K 10 mg IV y CCP a 50 U/kg: 4.000 U.', porque: `50 U/kg es el tramo de INR >6 (${pag(44)}). Con INR 5 se sobredosifica y el paciente queda expuesto a un riesgo trombótico innecesario.` },
+          { t: 'Plasma fresco 15 mL/kg, que repone todos los factores.', porque: `El plasma normaliza el INR en el 9 % a los 30 min frente al 60 % del CCP, y con litros de volumen (${pag(42)}). El hematoma crece mientras se espera.` }],
+        explicacion: `Tabla 47.4: vitamina K 10 mg IV más CCP de 4 factores según el INR (2-4 → 25 U/kg; 4-6 → 35 U/kg; >6 → 50 U/kg). Con INR 5: 35 × 80 = <span class="hl">2.800 U</span> (${pag(44)}).`,
+        nota: `Nota de interpretación: el libro da los tramos «2-4», «4-6» y «>6», de modo que el 4 y el 6 caben en dos. La calculadora de la ficha pone el INR 4 en 25 U/kg y el INR 6 en 35 U/kg; es una elección de la app y el libro no la resuelve.${enFicha('mn-hic', 'mn-tabla-47-4')}` },
+      { id: 'mnh-e2', corto: 'idarucizumab', tipo: 'test', fuente: 'mn-tabla-47-4 · mn-nota-dosis-47-4 · mn-hic-dabigatran',
+        enunciado: 'Hemorragia intracerebral con dabigatrán. ¿Qué dosis de idarucizumab usas?',
+        opciones: [
+          { t: '5 g en total: 2,5 g IV en bolo y otros 2,5 g a los 15 min.', ok: true },
+          { t: '2,5 mg IV en bolo y repetir a los 15 min, como imprime la tabla.', porque: `Es la errata del libro (${pag(44)}): 2,5 mg es una cantidad ínfima, mil veces menor, y el dabigatrán seguiría anticoagulando.` },
+          { t: 'CCP de 4 factores a 25 U/kg como primera elección.', porque: `El CCP solo es la alternativa si no hay idarucizumab, y a dosis altas de 50 U/kg (${pag(43)}-${pag(44, '44')}). Con 25 U/kg quedaría infratratado un paciente con hematoma en crecimiento.` }],
+        explicacion: `El idarucizumab (anticuerpo que fija el dabigatrán) lo revierte en 10-30 min (${pag(43)}). Se da <span class="hl">2,5 g IV y se repite a los 15 min (5 g en total)</span>; si no hay, CCP de 4 factores a 50 U/kg (${pag(44)}).`,
+        nota: `Nota de fidelidad: la Tabla 47.4 del libro imprime «2,5 mg» (${pag(44)}). La ficha técnica de Praxbind da 5 g en dos viales de 2,5 g/50 mL; la ficha muestra esa dosis y dice aquí lo que imprime el libro.${enFicha('mn-hic', 'mn-nota-dosis-47-4')}` },
+      { id: 'mnh-e3', corto: 'andexanet con rivaroxabán', tipo: 'test', fuente: 'mn-tabla-47-5 · mn-hic-andexanet', calculadora: { ir: 'mn-rev-calc', nombre: 'Reversión del anticoagulante' },
+        enunciado: 'Hemorragia intracerebral. Tomó rivaroxabán 20 mg hace 3 horas y hay andexanet. ¿Qué pauta?',
+        opciones: [
+          { t: 'Pauta alta: bolo de 800 mg a 30 mg/min y 8 mg/min hasta 120 min.', ok: true },
+          { t: 'Pauta baja: bolo de 400 mg a 30 mg/min y 4 mg/min hasta 120 min.', porque: `La pauta baja es para rivaroxabán ≤10 mg o ≥8 h desde la última dosis (${pag(44)}). Con 20 mg y 3 h estarías infradosificando y el anti-Xa seguiría alto.` },
+          { t: 'Ninguna: con 3 horas aún no se puede revertir, hay que esperar a las 8 h.', porque: `Marino no pone un tiempo mínimo para revertir: el tiempo solo elige la pauta (${pag(44)}). Esperar cinco horas más es dejar crecer el hematoma.` }],
+        explicacion: `Tabla 47.5: pauta alta si rivaroxabán >10 mg (o apixabán >5 mg) <span class="hl">y</span> hace menos de 8 h (o desconocido): <span class="hl">800 mg a 30 mg/min y luego 8 mg/min hasta 120 min</span> (${pag(44)}).`,
+        nota: `Nota de fuentes: los criterios de la Tabla 47.5 se solapan en algunos casos (p. ej., apixabán 5 mg hace 4 h) y el libro no lo resuelve; la ficha sigue la ficha técnica de la FDA. Este caso cumple solo una pauta.${enFicha('mn-hic', 'mn-nota-andexanet')}` },
+      { id: 'mnh-e4', corto: 'protamina y enoxaparina', tipo: 'test', fuente: 'mn-tabla-47-4',
+        enunciado: 'Hemorragia intracerebral en un paciente que se puso 80 mg de enoxaparina hace 4 horas. ¿Cuánta protamina?',
+        opciones: [
+          { t: '80 mg: 1 mg por cada mg de enoxaparina; es menos eficaz que con heparina no fraccionada.', ok: true },
+          { t: '0,8 mg, a razón de 1 mg por cada 100 U.', porque: `1 mg por 100 U es la regla de la heparina no fraccionada (${pag(44)}). Aplicada a la enoxaparina daría una dosis ridícula y no revertiría nada.` },
+          { t: 'Ninguna: la protamina no tiene efecto sobre las heparinas de bajo peso.', porque: `Marino sí la indica, 1 mg por mg, aunque «menos eficaz» (${pag(44)}). Renunciar a ella deja sin tratar la anticoagulación activa.` }],
+        explicacion: `Tabla 47.4: enoxaparina → protamina <span class="hl">1 mg por cada mg de la última dosis</span> (80 mg); heparina no fraccionada → 1 mg por 100 U. Con la enoxaparina la protamina es <span class="hl-rojo">menos eficaz</span> (${pag(44)}).` },
+      { id: 'mnh-e5', corto: 'PA objetivo', tipo: 'test', fuente: 'mn-hic',
+        enunciado: 'Hemorragia intracerebral, PA 196/104. ¿Qué cifra de PAS buscas?',
+        opciones: [
+          { t: 'Sistólica por debajo de 140 mmHg.', ok: true },
+          { t: 'Por debajo de 180/105, como tras una trombólisis.', porque: `Esa cifra es la del isquémico tratado con trombólisis (${pag(35)}). En la hemorragia, 180 de sistólica es demasiado alta y el hematoma sigue creciendo.` },
+          { t: 'Bajarla como mucho un 15 % en 24 h y tolerar hasta 220/120.', porque: `Es la pauta del isquémico sin trombólisis (${pag(36)}). Aplicada a un hematoma que se expande, mantiene presiones que lo agravan.` }],
+        explicacion: `Una PA alta es <span class="hl-rojo">especialmente dañina en la hemorragia aguda</span>: se recomienda mantener la sistólica <span class="hl-verde">por debajo de 140 mmHg</span> (${pag(45)}).${enFicha('mn-hic', 'mn-hic')}` },
+      { id: 'mnh-e6', corto: 'efecto del andexanet', tipo: 'test', fuente: 'mn-hic-andexanet',
+        enunciado: '¿Qué efecto adverso del andexanet alfa destaca Marino?',
+        opciones: [
+          { t: 'Tromboembolismo venoso, en un 10 %.', ok: true },
+          { t: 'Hemorragia intracraneal más grave.', porque: `Marino no lo cita: destaca el tromboembolismo venoso (${pag(44)}). Vigilar un sangrado que no menciona hace olvidar la profilaxis frente a la trombosis.` },
+          { t: 'Anafilaxia en más de la mitad de los pacientes.', porque: `Marino no habla de anafilaxia con el andexanet (${pag(44)}). Esa cifra no sale de la fuente y desviaría la vigilancia lejos de la trombosis.` }],
+        explicacion: `«Un efecto adverso que merece mención»: <span class="hl-rojo">tromboembolismo venoso en un 10 %</span> de los pacientes (${pag(44)}).` },
+      { id: 'mnh-e7', corto: 'otras medidas', tipo: 'error', fuente: 'mn-hic',
+        enunciado: 'El plan de un compañero para la hemorragia intracerebral. Encuentra el error.',
+        frases: [
+          { t: 'Compresión neumática las primeras 24 h para la trombosis venosa.' },
+          { t: 'Levetiracetam profiláctico desde el ingreso.', mal: true, c: `<span class="hl-rojo">No se recomienda la profilaxis anticonvulsiva</span>; se trata el 15 % que convulsiona en la primera semana (${pag(45)}).` },
+          { t: 'EEG continuo 24-36 h si la consciencia está alterada.' },
+          { t: 'Neurocirugía si el hematoma es grande, crece o hay sangre ventricular.' }],
+        explicacion: `Marino: sin profilaxis anticonvulsiva, pero un 15 % tiene crisis sintomáticas la primera semana y se tratan (p. ej., con levetiracetam) (${pag(45)}).${enFicha('mn-hic', 'mn-hic')}` },
+    ],
+    casos: [
+      { id: 'mnh-c', titulo: 'Segismundo, 71 años: el hematoma que crecía con warfarina', corto: 'Caso · Segismundo', sub: 'FA con warfarina; 80 kg',
+        paciente: { Edad: '71 años', Peso: '80 kg', Antecedentes: 'Fibrilación auricular con warfarina; INR 3,2' },
+        pasos: [
+          // cráneo: 'hematoma-crece'
+          { momento: 'Día 0 · 10:00', datos: { Clínica: 'Hemiparesia izquierda brusca, GCS 13', Constantes: 'PA 196/104', Analítica: 'INR 3,2', TC: 'Hematoma con extensión ventricular, como la Fig. 47.3' }, nuevo: ['Clínica', 'Constantes', 'Analítica', 'TC'],
+            calculadora: { ir: 'mn-rev-calc', nombre: 'Reversión del anticoagulante' },
+            pregunta: { id: 'mnh-c1', tipo: 'test', fuente: 'mn-hic · mn-tabla-47-4',
+              enunciado: '¿Qué va primero?',
+              opciones: [
+                { t: 'Vitamina K 10 mg IV y CCP de 4 factores a 25 U/kg (2.000 U).', ok: true },
+                { t: 'Plasma fresco 15 mL/kg y esperar al INR de control.', porque: `El plasma normaliza el INR en el 9 % a los 30 min frente al 60 % del CCP (${pag(42)}). Mientras tanto el hematoma sigue creciendo.` },
+                { t: 'Vitamina K 10 mg IV sola; el CCP queda para si empeora.', porque: `La vitamina K empieza a las 2 h y es máxima a las 24 h (${pag(42)}). Sin CCP, el INR de 3,2 persiste durante las horas críticas.` },
+                { t: 'Esperar a repetir el INR antes de revertir nada.', porque: `Marino pide revertir ya, sin esperar (${pag(42)}). Cada hora de espera es hematoma que se expande.` }],
+              explicacion: `Revertir es lo primero. INR 2-4 → <span class="hl">CCP 25 U/kg</span>: 25 × 80 = <span class="hl">2.000 U</span>, más vitamina K 10 mg IV (${pag(42)}, ${pag(44, '44')}).` } },
+          { momento: 'Día 0 · 10:30', datos: { Constantes: 'PA 196/104 persistente' }, nuevo: ['Constantes'],
+            pregunta: { id: 'mnh-c2', tipo: 'test', fuente: 'mn-hic · mn-tabla-47-2',
+              enunciado: '¿Qué PA buscas y con qué fármaco?',
+              opciones: [
+                { t: 'PAS <140 con labetalol (10 mg y 2-8 mg/min) o nicardipina.', ok: true },
+                { t: 'Menos de 180/105 durante 24 h, con labetalol.', porque: `Esa cifra es la del isquémico tras trombólisis (${pag(35)}). En la hemorragia, 180 de sistólica es demasiado alta.` },
+                { t: 'PAS <140 con nitroprusiato, que baja la PA más rápido.', porque: `El nitroprusiato sube la presión intracraneal y se evita (${pag(36)}). Con un hematoma que ya comprime, empeora el cuadro.` }],
+              explicacion: `Mantener la sistólica <span class="hl-verde">por debajo de 140 mmHg</span> (${pag(45)}) con un fármaco de la Tabla 47.2: labetalol 10 mg IV y 2-8 mg/min, o nicardipina (${pag(36)}).` } },
+          { momento: 'Día 0 · 16:00', datos: { Clínica: 'GCS 7', TC: 'Sangre en ventrículos' }, nuevo: ['Clínica', 'TC'],
+            pregunta: { id: 'mnh-c3', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-hic-pic · mn-hic-otras',
+              enunciado: 'Con GCS 7 y sangre ventricular, el neurocirujano coloca un catéter ventricular. ¿Por qué?',
+              puntos: [
+                'GCS de 8 o menos y sangre ventricular son <span class="hl">indicaciones de medir la PIC</span>.',
+                'El mismo catéter <span class="hl-azul">drena la hidrocefalia obstructiva</span> (y permite la trombólisis intraventricular).'],
+              explicacion: `La PIC se monitoriza con GCS ≤8, sangre ventricular o herniación, y se mantiene <span class="hl-verde">por debajo de 20 mmHg</span> (${pag(45)}).` } },
+          // cráneo: 'hematoma-crece' (PIC)
+          { momento: 'Día 0 · 18:00', datos: { Constantes: 'PAM 100, PIC 26 → PPC 74' }, nuevo: ['Constantes'],
+            calculadora: { ir: 'mn-ppc-calc', nombre: 'PPC = PAM − PIC' },
+            pregunta: { id: 'mnh-c4', tipo: 'test', fuente: 'mn-hic-ppc · mn-hic-pic',
+              enunciado: 'PIC 26. ¿Qué haces? (Después del drenaje: PAM 84, PIC 14, PPC 70.)',
+              opciones: [
+                { t: 'Drenar LCR por el catéter hasta PIC <20, y comprobar que la PPC queda en 50-70.', ok: true },
+                { t: 'Subir la PAM con vasopresor para ganar PPC.', porque: `Con PAM más alta se empeora el sangrado: el objetivo es PAS <140 (${pag(45)}). Y la PIC seguiría en 26.` },
+                { t: 'Dejarlo como está porque la PPC de 74 es adecuada.', porque: `La PIC de 26 supera el límite de 20 (${pag(45)}); fiarse de la PPC deja la presión intracraneal sin tratar.` }],
+              explicacion: `Se drena LCR hasta <span class="hl-verde">PIC <20</span>. Tras drenar: 84 − 14 = <span class="hl-verde">PPC 70</span>, en el rango razonable de 50-70 (${pag(45)}).` } },
+          { momento: 'Día 0 · noche', datos: { 'Plan del R1': 'Escrito en la historia' }, nuevo: ['Plan del R1'],
+            pregunta: { id: 'mnh-c5', tipo: 'error', fuente: 'mn-hic · mn-hic-ppc',
+              enunciado: 'El plan del R1 para la noche. Encuentra los errores.',
+              frases: [
+                { t: 'PAS objetivo por debajo de 160 mmHg.', mal: true, c: `El objetivo es <span class="hl-verde">PAS <140</span> (${pag(45)}).` },
+                { t: 'Levetiracetam profiláctico desde esta noche.', mal: true, c: `<span class="hl-rojo">No se recomienda la profilaxis</span> anticonvulsiva (${pag(45)}).` },
+                { t: 'Compresión neumática ahora; heparina más adelante según la estabilidad.' },
+                { t: 'PPC 50-70 con PIC <20.' },
+                { t: 'EEG continuo si sigue con la consciencia alterada.' }],
+              explicacion: `Marino: PAS <140, compresión neumática las primeras 24 h y heparina según la estabilidad, sin profilaxis anticonvulsiva, EEG continuo 24-36 h si la consciencia está alterada (${pag(45)}).` } },
+          { momento: 'Día 3 · el giro', datos: { Evolución: 'Crisis focal que generaliza' }, nuevo: ['Evolución'],
+            pregunta: { id: 'mnh-c6', tipo: 'test', fuente: 'mn-hic',
+              enunciado: 'Convulsiona. ¿Qué cambia?',
+              opciones: [
+                { t: 'Ahora sí se trata: levetiracetam; el 15 % tiene crisis sintomáticas en la primera semana.', ok: true },
+                { t: 'Habría sido correcto dar fenitoína profiláctica desde el ingreso.', porque: `Marino no recomienda la profilaxis (${pag(45)}). Habría expuesto a toxicidad a quien quizá nunca convulsionara.` },
+                { t: 'Es la hidrocefalia: basta con drenar y no tratar la crisis.', porque: `Una crisis sintomática se trata con anticonvulsivante (${pag(45)}); drenar no la corta y se arriesga un estado epiléptico.` }],
+              explicacion: `Las crisis sintomáticas (≈15 % en la primera semana) <span class="hl">se tratan</span>, p. ej., con levetiracetam; la profilaxis no se recomienda (${pag(45)}).` } },
+        ],
+        lleva: [
+          'Revertir el antitrombótico es lo primero: el hematoma crece en las primeras horas.',
+          'PAS por debajo de 140 mmHg.',
+          'PPC = PAM − PIC, con PPC 50-70 y PIC <20 (se drena LCR).'],
+        volver: { nombre: 'PPC = PAM − PIC', ancla: 'mn-hic-ppc' } }, // cráneo: 'hematoma-crece'
+    ],
+    profundizar: [
+      { id: 'mn-hic-datos', titulo: 'Cuánto pesa la hemorragia intracerebral' },
+      { id: 'mn-hic-otras', titulo: 'Otras medidas (fibrinólisis intraventricular)' },
+      { id: 'umi-tce-escalones', titulo: 'Del TCE (Manual UMI): escalones de la hipertensión intracraneal', nota: 'Es el manejo de la hipertensión intracraneal del traumatismo; no se aplica tal cual al hematoma espontáneo.' },
+    ],
+  },
+
+  /* =================================================================================================
+     Ficha 14 · Hemorragia subaracnoidea aneurismática (cap. 47, págs. 45-48)
+     ================================================================================================= */
+  'mn-hsa': {
+    entrada: 'De dónde viene el daño de la sangre en la base del cráneo, cómo se evita que vuelva a sangrar, qué amenaza cada semana y qué hace el nimodipino.',
+    guia: [
+      { id: 'mns-g1', corto: 'de dónde el daño', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'mn-hsa-inflamacion · mn-hsa-hidrocefalia · mn-hsa-icd · mn-hsa-organos',
+        enunciado: 'Los malos resultados de la hemorragia subaracnoidea se explican por varias fuentes de daño. ¿Cuáles?',
+        puntos: [
+          '<span class="hl-azul">Inflamación intensa</span>: edema vasogénico y citotóxico; el hierro de la sangre favorece la ferroptosis.',
+          '<span class="hl-rojo">Hidrocefalia obstructiva</span> y PIC alta, porque la sangre bloquea el LCR.',
+          '<span class="hl-rojo">Isquemia cerebral diferida</span> en un tercio de los pacientes, entre los días 4 y 14.',
+          'Daño en otros órganos: sobre todo <span class="hl">SDRA</span> y <span class="hl">fracaso renal agudo</span>.'],
+        explicacion: `Es la lista de «fuentes de daño tisular» de Marino (${pag(47)}); el tratamiento va dirigido a cada una.${enFicha('mn-hsa', 'mn-hsa-inflamacion')}` },
+      { id: 'mns-g2', corto: 'por qué labetalol', tipo: 'test', fuente: 'mn-hsa-inmediato',
+        enunciado: 'Para evitar el resangrado se baja la PA hasta ≤140 mmHg. ¿Por qué el labetalol es un fármaco adecuado?',
+        opciones: [
+          { t: 'Porque baja la PA sin aumentar el gasto cardíaco, que favorecería el sangrado.', ok: true },
+          { t: 'Porque es el único antihipertensivo que no sube la PIC.', porque: `Marino no da esa exclusiva (${pag(47)}); su razón es que no aumenta el gasto. Descartar la nicardipina por un motivo falso limita las opciones del paciente.` },
+          { t: 'Porque eleva el gasto y así protege la perfusión cerebral.', porque: `Es justo lo contrario: un fármaco que subiera el gasto podría promover el sangrado (${pag(47)}). Con el aneurisma sin cerrar, eso puede ser el resangrado.` }],
+        explicacion: `La guía no fija objetivo, pero el resangrado es raro con la sistólica por debajo de 140: <span class="hl-verde">objetivo razonable ≤140 mmHg</span>. La bajada <span class="hl">no debe aumentar el gasto</span> (podría promover el sangrado), y por eso el labetalol es adecuado (${pag(47)}).${enFicha('mn-hsa', 'mn-hsa-inmediato')}` },
+      { id: 'mns-g3', corto: 'ácido tranexámico', tipo: 'test', fuente: 'mn-hsa-inmediato',
+        enunciado: 'Hemorragia subaracnoidea con aneurisma sin cerrar. ¿Das ácido tranexámico para evitar el resangrado?',
+        opciones: [
+          { t: 'No: los antifibrinolíticos no previenen el resangrado y no se recomiendan.', ok: true },
+          { t: 'Sí, 1 g en 10 minutos, igual que en la hemorragia tras el tPA.', porque: `Esa dosis es la de la hemorragia por tPA cuando no hay crioprecipitado (${pag(40)}). En la subaracnoidea no previene el resangrado (${pag(47)}) y solo añade riesgo.` },
+          { t: 'Sí, pero solo si el INR es normal.', porque: `Marino no condiciona nada al INR: no es eficaz para el resangrado y no se recomienda (${pag(47)}). Se daría un fármaco inútil mientras se descuida el cierre del aneurisma.` }],
+        explicacion: `Los antifibrinolíticos (ácido tranexámico) <span class="hl-rojo">no son eficaces para prevenir el resangrado</span> y no se recomiendan; lo que lo previene es cerrar el aneurisma (${pag(47)}).${enFicha('mn-hsa', 'mn-hsa-inmediato')}` },
+      // cráneo: 'hsa' día 2
+      { id: 'mns-g4', corto: 'cuándo cerrar', tipo: 'test', fuente: 'mn-hsa-aneurisma',
+        enunciado: 'Es el día 2 de una hemorragia subaracnoidea. ¿Cuándo se debe cerrar el aneurisma?',
+        opciones: [
+          { t: 'Cuanto antes: mejor pronóstico en 3 días y sin pasar de 7-10.', ok: true },
+          { t: 'Esperar a los días 4-14, cuando pase el vasoespasmo.', porque: `El vasoespasmo ocurre justo en esos días (${pag(47)}), pero la mejor prevención del resangrado es cerrar el aneurisma pronto: Marino aconseja no retrasarlo más de 7-10 días (${pag(47)}). Esperar al día 14 deja siempre sin proteger el aneurisma.` },
+          { t: 'Solo si vuelve a sangrar.', porque: `El resangrado es justo lo que se quiere evitar (${pag(47)}). Cerrar el aneurisma después de que sangre otra vez es llegar tarde.` }],
+        explicacion: `La mejor manera de evitar el resangrado es <span class="hl">obliterar el aneurisma</span> (clips u otra técnica): con mejores resultados si se hace <span class="hl-verde">en 3 días</span> y sin retrasarlo <span class="hl-rojo">más de 7-10 días</span> (${pag(47)}).${enFicha('mn-hsa', 'mn-hsa-aneurisma')}` },
+      // cráneo: 'hsa' día 6
+      { id: 'mns-g5', corto: 'qué vigilas', tipo: 'test', fuente: 'mn-hsa-vigilar', calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+        enunciado: 'Día 6 de una hemorragia subaracnoidea, en plena ventana de la isquemia diferida. Antes de comprobar la ficha: ¿qué vigilas y con qué?',
+        opciones: [
+          { t: 'Déficit focal nuevo o caída de 2 puntos del GCS; angio-TC y Doppler transcraneal (≈90 %).', ok: true },
+          { t: 'Solo la PIC; si es menor de 20, descartas la isquemia diferida.', porque: `La isquemia diferida es un vasoespasmo y no depende de la PIC: se detecta con la clínica y el Doppler o la angio-TC (${pag(48)}). Fiarse de la PIC deja pasar un déficit nuevo.` },
+          { t: 'La fiebre; si está controlada, no hace falta explorar.', porque: `Marino no usa la fiebre para vigilar el vasoespasmo (${pag(48)}). Un déficit focal nuevo sin explorar frecuentemente se detecta tarde.` }],
+        explicacion: `Clínica: <span class="hl-rojo">déficit focal nuevo o caída de 2 puntos en el Glasgow</span>, con exploraciones frecuentes. La angio-TC y el Doppler transcraneal (velocidad en la cerebral media) detectan el vasoespasmo con una <span class="hl">sensibilidad del 90 %</span> (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-vigilar')}` },
+      { id: 'mns-g6', corto: 'el nimodipino', tipo: 'test', fuente: 'mn-hsa-nimodipino', calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+        enunciado: '¿Qué consigue el nimodipino en la hemorragia subaracnoidea y por qué no se da IV?',
+        opciones: [
+          { t: 'Reduce los déficits neurológicos, no la mortalidad; por vía IV causa hipotensión.', ok: true },
+          { t: 'Reduce la mortalidad a los 6 meses; por vía IV tarda demasiado.', porque: `Con la pauta oral no cambia la supervivencia (${pag(48)}). Prometer que salva vidas lleva a esperar de él lo que no da.` },
+          { t: 'Evita el resangrado; la vía IV no se absorbe bien.', porque: `El resangrado se evita cerrando el aneurisma (${pag(47)}); el nimodipino es contra la isquemia diferida. La vía IV se evita por hipotensión, no por absorción (${pag(48)}).` }],
+        explicacion: `Nimodipino <span class="hl">60 mg por vía oral cada 4 h</span> desde el diagnóstico y durante <span class="hl">3 semanas</span>: reduce los déficits neurológicos, sin efecto sobre la supervivencia. La vía IV no se recomienda por el riesgo de <span class="hl-rojo">hipotensión</span> (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-nimodipino')}` },
+    ],
+    examen: [
+      { id: 'mns-e1', corto: 'a los 6 meses', tipo: 'test', fuente: 'mn-hsa-gravedad',
+        enunciado: '¿Qué porcentaje de los pacientes con hemorragia subaracnoidea aneurismática está muerto o discapacitado 6 meses después del ingreso?',
+        opciones: [
+          { t: '35 %.', ok: true },
+          { t: '25 %: los que mueren antes de llegar al hospital.', porque: `El 25 % es la mortalidad antes del hospital (${pag(45)}), no el estado a los 6 meses (${pag(46)}). Subestimar así el desenlace minimiza la gravedad.` },
+          { t: '20 %: los que mueren durante el ingreso.', porque: `El 20 % es la mortalidad durante la hospitalización (${pag(46)}); a los 6 meses el 35 % está muerto o discapacitado. Con esa cifra se subestimaría la carga de secuelas.` }],
+        explicacion: `Hasta el 25 % muere antes del hospital (${pag(45)}), otro 20 % durante el ingreso y, a los 6 meses, el <span class="hl-rojo">35 % está muerto o discapacitado</span> (${pag(46)}). Más de la mitad muere o queda discapacitada en 6 meses.${enFicha('mn-hsa', 'mn-hsa-gravedad')}` },
+      { id: 'mns-e2', corto: 'vasoespasmo grave', tipo: 'test', fuente: 'mn-hsa-vigilar',
+        enunciado: 'Vasoespasmo grave confirmado en la hemorragia subaracnoidea. ¿Qué se plantea?',
+        opciones: [
+          { t: 'Vasodilatadores intraarteriales o angioplastia.', ok: true },
+          { t: 'Nimodipino IV en bolo para dilatar la arteria.', porque: `La vía IV no se recomienda por el riesgo de hipotensión (${pag(48)}); un bolo en un cerebro con vasoespasmo puede bajar aún más la perfusión.` },
+          { t: 'Subir la dosis oral de nimodipino a 120 mg cada 4 h.', porque: `Marino da 60 mg cada 4 h (${pag(48)}) y no propone doblar la dosis. El vasoespasmo grave exige tratamiento endovascular, no más fármaco oral.` }],
+        explicacion: `En los casos graves de vasoespasmo, Marino plantea <span class="hl">vasodilatadores intraarteriales o angioplastia</span> (${pag(48)}).` },
+      { id: 'mns-e3', corto: 'trombosis venosa', tipo: 'test', fuente: 'mn-hsa-generales',
+        enunciado: '¿Qué dice Marino de la profilaxis de la enfermedad tromboembólica en la hemorragia subaracnoidea?',
+        opciones: [
+          { t: 'Hasta el 25 % la sufre; es obligada y la enoxaparina 40 mg/día se ha usado tras reparar el aneurisma.', ok: true },
+          { t: 'Está contraindicada hasta el día 14.', porque: `Marino la declara «obligada» y cita la enoxaparina tras reparar el aneurisma (${pag(48)}). Esperar al día 14 deja sin cobertura a un cuarto de los pacientes.` },
+          { t: 'Solo se hace con compresión neumática, nunca con heparina.', porque: `Marino cita enoxaparina profiláctica 40 mg/día en la hemorragia subaracnoidea (${pag(48)}). Descartarla por regla deja una trombosis sin prevenir.` }],
+        explicacion: `La incidencia de tromboembolismo venoso llega al <span class="hl-rojo">25 %</span>: profilaxis obligada; la <span class="hl">enoxaparina 40 mg SC/día</span> se ha usado con seguridad <span class="hl">después de reparar el aneurisma</span> (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-generales')}` },
+      { id: 'mns-e4', corto: 'sodio 128', tipo: 'test', fuente: 'mn-hsa-generales',
+        enunciado: 'Día 7 de una hemorragia subaracnoidea, Na⁺ 128 mEq/L. ¿Qué dice Marino de la hiponatremia?',
+        opciones: [
+          { t: 'Afecta al 35 %, quizá por pérdida cerebral de sal; su importancia está por determinar.', ok: true },
+          { t: 'Es siempre un SIADH: hay que restringir agua.', porque: `Marino no atribuye la hiponatremia al SIADH: habla de pérdida cerebral de sal y dice que su importancia está por determinar (${pag(48)}). Restringir agua podría empeorar a un paciente en riesgo de isquemia diferida.` },
+          { t: 'Es rara, un 5 %, y no requiere vigilancia.', porque: `La cifra de Marino es del 35 % (${pag(48)}), no un 5 %. Ignorarla es pasar por alto un trastorno frecuente.` }],
+        explicacion: `Hiponatremia en el <span class="hl">35 %</span>, posiblemente por <span class="hl-azul">pérdida cerebral de sal</span>; su significado clínico aún está por determinar (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-generales')}`,
+        nota: `La fuente no dice cómo tratarla en esta enfermedad (Marino: «por determinar»). El manejo general de la hiponatremia está en su ficha de Nefrología. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-hiponatremia-tto">Hiponatremia: tratamiento (Marino renal) →</button>` },
+      { id: 'mns-e5', corto: 'bajar la fiebre', tipo: 'test', fuente: 'mn-hsa-generales',
+        enunciado: 'Fiebre de 38,6 °C en una hemorragia subaracnoidea. ¿Bajarla mejora el pronóstico?',
+        opciones: [
+          { t: 'No: la fiebre empeora el pronóstico, pero bajarla no lo ha mejorado.', ok: true },
+          { t: 'Sí: antipiréticos y enfriamiento mejoran la supervivencia, como en el isquémico.', porque: `Marino lo niega para la subaracnoidea (${pag(48)}); y en el isquémico el manejo dirigido de temperatura tampoco mejora el pronóstico (${pag(37)}). Prometer beneficio es dar una falsa seguridad.` },
+          { t: 'Sí, pero solo con dispositivos de enfriamiento, no con fármacos.', porque: `Marino cita juntos los antipiréticos y los dispositivos de enfriamiento: ninguno ha mejorado los resultados (${pag(48)}). Elegir uno no cambia nada.` }],
+        explicacion: `La fiebre es frecuente y tiene una influencia negativa, pero <span class="hl">suprimirla con antipiréticos o dispositivos no ha mejorado los resultados</span> (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-generales')}` },
+      { id: 'mns-e6', corto: 'presión y derivación', tipo: 'error', fuente: 'mn-hsa-pic',
+        enunciado: 'Un compañero resume la presión intracraneal en la hemorragia subaracnoidea. Encuentra el error.',
+        frases: [
+          { t: 'Se coloca un catéter de drenaje si hay hidrocefalia.' },
+          { t: 'Se mantiene la PIC <20 mmHg con drenajes periódicos de LCR.' },
+          { t: 'El que sobrevive no necesita derivación del LCR.', mal: true, c: `Los supervivientes <span class="hl-rojo">necesitarán una derivación permanente</span> del LCR al abdomen (${pag(48)}).` },
+          { t: 'El mismo catéter sirve para medir la PIC.' }],
+        explicacion: `Misma pauta que en la hemorragia intracerebral: catéter si hay hidrocefalia, que también mide la PIC, <20 mmHg con drenajes periódicos y derivación permanente a quien sobrevive (${pag(48)}).${enFicha('mn-hsa', 'mn-hsa-pic')}` },
+    ],
+    casos: [
+      { id: 'mns-c', titulo: 'Petronila, 48 años: la cefalea en trueno', corto: 'Caso · Petronila', sub: 'aneurisma de la basilar',
+        paciente: { Edad: '48 años', Motivo: 'Cefalea en trueno', Hallazgo: 'Aneurisma sacular de la arteria basilar' },
+        pasos: [
+          { momento: 'Día 0 · 14:00', datos: { Clínica: 'GCS 14', Constantes: 'PA 168/96', TC: 'Sangre en las cisternas de la base' }, nuevo: ['Clínica', 'Constantes', 'TC'],
+            pregunta: { id: 'mns-c1', tipo: 'test', fuente: 'mn-hsa-inmediato',
+              enunciado: 'Lo inmediato para que no vuelva a sangrar:',
+              opciones: [
+                { t: 'PAS ≤140 con labetalol (10 mg y 2-8 mg/min); sin ácido tranexámico.', ok: true },
+                { t: 'Dejar la PA como está: solo se baja si pasa de 220/120.', porque: `Eso es el isquémico sin trombólisis (${pag(36)}). En la subaracnoidea el objetivo es ≤140 para evitar el resangrado (${pag(47)}).` },
+                { t: 'Bajar la PA con nitroprusiato y añadir tranexámico 1 g.', porque: `El nitroprusiato se evita (sube la PIC, ${pag(36)}) y el tranexámico no previene el resangrado (${pag(47)}). Se sumarían dos errores.` }],
+              explicacion: `Objetivo razonable <span class="hl-verde">PAS ≤140</span> con un fármaco que no suba el gasto (labetalol 10 mg IV y 2-8 mg/min, Tabla 47.2); <span class="hl-rojo">sin antifibrinolíticos</span> (${pag(47)}).` } },
+          { momento: 'Día 0 · 15:00', datos: { Plan: 'Prevención de la isquemia diferida' }, nuevo: ['Plan'],
+            calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+            pregunta: { id: 'mns-c2', tipo: 'test', fuente: 'mn-hsa-nimodipino',
+              enunciado: '¿Cuándo y cómo empiezas el nimodipino?',
+              opciones: [
+                { t: 'Ya, por vía oral: 60 mg cada 4 h durante 3 semanas.', ok: true },
+                { t: 'Por vía IV desde ahora, para que actúe antes.', porque: `La vía IV no se recomienda por la hipotensión (${pag(48)}); bajarle la PA a Petronila con el aneurisma sin cerrar sería arriesgado.` },
+                { t: 'El día 4, cuando empieza la ventana de la isquemia diferida.', porque: `Marino lo da desde el diagnóstico, no desde el día 4 (${pag(48)}). Empezar tarde deja sin cobertura los primeros días.` }],
+              explicacion: `Nimodipino <span class="hl">60 mg orales cada 4 h</span>, <span class="hl">desde el diagnóstico</span> y durante <span class="hl">3 semanas</span> (${pag(48)}).` } },
+          // cráneo: 'hsa' día 1
+          { momento: 'Día 1', datos: { Procedimiento: 'Aneurisma de la basilar embolizado', Nota: 'Plan del R1 en la historia' }, nuevo: ['Procedimiento', 'Nota'],
+            pregunta: { id: 'mns-c3', tipo: 'error', fuente: 'mn-hsa-aneurisma · mn-hsa-nimodipino · mn-hsa-generales',
+              enunciado: 'El plan del R1 tras el cierre. Encuentra los errores.',
+              frases: [
+                { t: 'El aneurisma se cerró en el día 1, dentro de los 3 días.' },
+                { t: 'Enoxaparina 40 mg al día, ya reparado el aneurisma.' },
+                { t: 'Paso el nimodipino a IV para controlarlo mejor.', mal: true, c: `La vía IV <span class="hl-rojo">no se recomienda</span> por la hipotensión; sigue por vía oral (${pag(48)}).` },
+                { t: 'Glucemia 210: objetivo 140-180, como en el isquémico.', mal: true, c: `En la subaracnoidea la guía <span class="hl">no da recomendación</span> de control glucémico (${pag(48)}).` },
+                { t: 'Bajo la fiebre, sabiendo que no mejora el pronóstico.' }],
+              explicacion: `Cerrar en 3 días y enoxaparina tras reparar son correctos (${pag(47)}-${pag(48, '48')}); el nimodipino sigue oral y la hiperglucemia empeora el pronóstico pero la guía no fija objetivo (${pag(48)}).` } },
+          // cráneo: 'hsa' día 6
+          { momento: 'Día 6', datos: { Clínica: 'GCS 12 (−2) y afasia nueva' }, nuevo: ['Clínica'],
+            calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+            pregunta: { id: 'mns-c4', tipo: 'test', fuente: 'mn-hsa-vigilar',
+              enunciado: '¿Qué haces?',
+              opciones: [
+                { t: 'Sospechar isquemia diferida: angio-TC o Doppler transcraneal; si hay vasoespasmo grave, angioplastia o vasodilatadores intraarteriales.', ok: true },
+                { t: 'Es un resangrado: reintervenir el aneurisma.', porque: `El aneurisma ya está embolizado y la ventana de los días 4-14 es la de la isquemia diferida (${pag(47)}). Reintervenir sin imagen retrasa el tratamiento correcto.` },
+                { t: 'El nimodipino ha fallado: subirlo a 120 mg cada 4 h.', porque: `La pauta es 60 mg cada 4 h (${pag(48)}) y no se dobla; el vasoespasmo grave exige tratamiento endovascular.` }],
+              explicacion: `Caída de 2 puntos en el GCS y déficit nuevo en el día 6: <span class="hl-rojo">isquemia cerebral diferida</span> hasta demostrar lo contrario. Se confirma con angio-TC o Doppler transcraneal (≈90 %); si el vasoespasmo es grave, vasodilatadores intraarteriales o angioplastia (${pag(48)}).` } },
+          // cráneo: 'hsa' día 9
+          { momento: 'Día 9 · el giro', datos: { Clínica: 'Cefalea, vómitos, GCS 10', TC: 'Ventrículos dilatados' }, nuevo: ['Clínica', 'TC'],
+            pregunta: { id: 'mns-c5', tipo: 'test', fuente: 'mn-hsa-hidrocefalia · mn-hsa-pic',
+              enunciado: '¿Qué ha cambiado y qué haces?',
+              opciones: [
+                { t: 'Hidrocefalia: drenaje ventricular, PIC <20 con drenajes periódicos; derivación permanente si sobrevive.', ok: true },
+                { t: 'Nuevo vasoespasmo: angioplastia inmediata.', porque: `Los ventrículos dilatados con cefalea y vómitos son hidrocefalia obstructiva (${pag(47)}). La angioplastia no drena el LCR y la PIC seguiría subiendo.` },
+                { t: 'Retirar el nimodipino porque ya han pasado 9 días.', porque: `El nimodipino dura 3 semanas (${pag(48)}); retirarlo en el día 9 deja sin cobertura una ventana que sigue abierta hasta el día 14 (${pag(47)}).` }],
+              explicacion: `La sangre bloquea el LCR y causa <span class="hl-rojo">hidrocefalia obstructiva</span> (${pag(47)}). Se coloca un catéter de drenaje, que también mide la PIC (<span class="hl-verde"><20 mmHg</span> con drenajes periódicos); quien sobrevive necesita una derivación permanente al abdomen (${pag(48)}).` } },
+          { momento: 'Día 21', datos: { Estado: 'Estable' }, nuevo: ['Estado'],
+            calculadora: { ir: 'mn-nimo-calc', nombre: 'Calendario del nimodipino y de la isquemia diferida' },
+            pregunta: { id: 'mns-c6', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'mn-hsa-nimodipino · mn-hsa-icd',
+              enunciado: 'Es el día 21. ¿Qué se cierra hoy?',
+              puntos: [
+                'Termina el <span class="hl">nimodipino</span>: las 3 semanas de tratamiento.',
+                'La <span class="hl">ventana de la isquemia diferida</span> (días 4 a 14) ya ha pasado.'],
+              explicacion: `El nimodipino se da durante 3 semanas (${pag(48)}) y la isquemia diferida aparece entre los días 4 y 14 (${pag(47)}).` } },
+        ],
+        lleva: [
+          'Presión sistólica ≤140 y cerrar el aneurisma en 3 días; sin ácido tranexámico.',
+          'Días 4-14: vigila el GCS y el déficit focal; angio-TC o Doppler transcraneal.',
+          'El nimodipino oral salva déficits, no vidas.'],
+        volver: { nombre: 'Detectar la isquemia diferida', ancla: 'mn-hsa-vigilar' } }, // cráneo: 'hsa' día 6
+    ],
+    profundizar: [
+      { id: 'mn-hsa-inflamacion', titulo: 'Inflamación y hierro (ferroptosis)' },
+      { id: 'mn-hsa-pic', titulo: 'Presión intracraneal y derivación' },
+      { id: 'mn-hsa-final', titulo: '«¿Dónde está la chicha?» (cuentas del autor)' },
+    ],
+  },
+};
