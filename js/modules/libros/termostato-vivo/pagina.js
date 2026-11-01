@@ -30,8 +30,8 @@ async function llama(antes, ahora) {
 function pintar() {
   const l = leer(s), E = ESTADOS[s.est], P = E.pasos[s.paso - 1], mask = oculto;
   $('mon-t').textContent = mask ? '?' : fmt(l.T); $('mon-t').className = !mask && (l.T >= 40 || l.T < 32) ? 'rojo' : '';
-  $('mon-fc').textContent = l.fc === 0 ? 'asistolia' : l.fc; $('mon-co2').textContent = l.co2 ? l.co2 + ' mmHg' : '—'; $('mon-co2').className = l.co2 >= 60 ? 'rojo' : '';
-  $('mon-ck').textContent = l.ck ? l.ck.toLocaleString('es') : '—'; $('mon-ck').className = l.ck > 1000 ? 'rojo' : '';
+  $('mon-fc').textContent = l.fc === 0 ? 'asistolia' : l.fc == null ? 'FV' : l.fc; $('mon-co2').textContent = l.co2 ? l.co2 + ' mmHg' : '—'; $('mon-co2').className = l.co2 >= 60 ? 'rojo' : '';
+  $('mon-ck').textContent = l.ck ? l.ck.toLocaleString('es') : '—'; $('mon-ck').className = l.ck > 1000 ? 'rojo' : ''; $('mon-ck-tope').textContent = s.est === 'juega' ? 'ilustrativo · tope 24.000' : 'ilustrativo';
   $('mon-esc').textContent = l.esc ? 'sí' : 'no'; $('mon-sud').textContent = l.sud ? 'sí' : 'no'; $('mon-rig').textContent = l.rig ? 'sí' : 'no';
   $('mon-pie').innerHTML = `${l.nombre}: ${l.pac}${l.pa ? ' · PA ' + l.pa : ''}${l.k ? ' · K⁺ ' + fmt(l.k) : ''}${l.extra ? ' · ' + l.extra : ''} · umbrales: ficha; cifra de cada paso: ilustrativa`;
   const f = CAPA[P.foco]; if (f && !capas[f]) { capas[f] = true; }
@@ -48,16 +48,21 @@ function pintar() {
   $('pc-t').textContent = `${s.paso}/5 · ${P.t}`; $('pc-x').textContent = P.x; $('pc-c').innerHTML = cita(P.c) + ' ' + org(P.o); $('pc-sig').disabled = s.paso >= 5;
   const lista = topes(s, l), nuevas = new Set(lista.map((t) => t.c));
   for (const c of activos) if (!nuevas.has(c)) topeApi.quitar(c);
-  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo });
+  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], });
   activos = nuevas; topeApi.refrescar?.(); { const ss = [...todos('#tmv-sello-zona .tope-sello')]; const cab = ss.find((e) => e.dataset.tope === 'tmax') || ss[0]; ss.forEach((e) => e.classList.toggle('cola', e !== cab)); }
   $('figosb').open = s.est === 'hipo' && s.paso >= 3; $('fig445').open = s.est === 'fiebre' && s.paso === 5;
   window.__tmv.lista = lista;
 }
-const fraseDe = () => { if (s.est === 'juega') { const [x, p, o] = fraseLibre(s.j, leer(s)); return frase(`${x} · p. ${p}`, o); } const P = ESTADOS[s.est].pasos[s.paso - 1]; frase(`${P.t} · p. ${P.c.split('|')[0]}`, P.o); };
-function ir(p) { Object.assign(s, p); if (s.est === 'juega' && (p.est === 'juega' || !s.j)) s.j = p.j || nuevoLibre(); if (s.est === 'juega') s.paso = 1; s.paso = clamp(s.paso, 1, 5); fraseDe(); pintar(); }
+const primera = (x) => { const u = (x.match(/^.*?[.!?](?=\s|$)/) || [x])[0]; return u.length > 105 && u.includes('; ') ? u.split('; ')[0] + '.' : u; };   // frase corta en el dock (≤30 %)
+const fraseDe = () => { if (s.est === 'juega') { const [x, p, o] = fraseLibre(s.j, leer(s)); return frase(`${x} · p. ${p}`, o); } const P = ESTADOS[s.est].pasos[s.paso - 1]; frase(`<b>${P.t}.</b> ${primera(P.x)} · p. ${P.c.split('|')[0]}`, P.o); };
+// Tras cambiar de paso, la página sube lo justo para que la capa señalada (fibra, retículo, cerebro) quede sobre el dock.
+function verFoco() { requestAnimationFrame(() => requestAnimationFrame(() => { const e = $('svg').querySelector('.foco'), d = $('dock'); if (!e || !d.offsetHeight) return;
+  const r = e.getBoundingClientRect(), bajo = innerHeight - d.offsetHeight - 8, dy = r.bottom > bajo ? Math.min(r.bottom - bajo, r.top - 8) : r.top < 8 ? r.top - 8 : 0;
+  if (Math.abs(dy) > 1) scrollBy({ top: dy, behavior: 'instant' }); })); }
+function ir(p) { Object.assign(s, p); if (s.est === 'juega' && (p.est === 'juega' || !s.j)) s.j = p.j || nuevoLibre(); if (s.est === 'juega') s.paso = 1; s.paso = clamp(s.paso, 1, 5); fraseDe(); pintar(); if (p.paso != null || p.est || p.ysi) verFoco(); }
 function mandos() {
   $('m-est').innerHTML = Object.entries(ESTADOS).map(([k, e]) => `<option value="${k}">${e.nombre}</option>`).join('');
-  $('m-ysi').innerHTML = '<option value="">Tratamiento de la ficha</option>' + Object.entries(YSI).map(([k, y]) => `<option value="${k}">${y.n}</option>`).join('');
+  $('m-ysi').innerHTML = '<option value="">De la ficha</option>' + Object.entries(YSI).map(([k, y]) => `<option value="${k}">${y.n}</option>`).join('');
   $('presets').innerHTML = Object.entries(ESTADOS).map(([k, e]) => `<button type="button" class="b" data-preset="${k}" aria-pressed="false">${e.pac.split(' · ')[0]}<br>${e.nombre}</button>`).join('');
   $('m-est').addEventListener('change', (e) => ir({ est: e.target.value, paso: 1, trat: 0, ysi: null }));
   $('m-ysi').addEventListener('change', (e) => { const k = e.target.value; if (!k) return ir({ ysi: null }); ir({ est: k, ysi: k, trat: 0, paso: k === 'fiebre' ? 4 : k === 'golpe' ? 4 : k === 'hipo' ? 3 : 4 }); frase(YSI[k].x, YSI[k].o); });
@@ -115,15 +120,16 @@ function caso(i) {
     if (c.querySelector('.por')) return; const j = +b.dataset.i;
     c.querySelectorAll('.op').forEach((x, k) => x.classList.add(k === P.ok ? 'bien' : x === b ? 'mal' : 'neutra'));
     c.querySelector('.paso').insertAdjacentHTML('beforeend', `<p class="por ${j === P.ok ? 'ok' : 'no'}">${j === P.ok ? 'Bien. ' : 'No era esa. '}${P.ops[j][1]} ${j === P.ok ? '' : 'Lo correcto: ' + P.ops[P.ok][0] + '.'} ${cita(P.c)}</p>`);
-    if (!P.s) s.trat = i >= 1 && j === P.ok ? 1 : s.trat; fraseDe(); pintar();
+    if (!P.s) s.trat = i >= 1 && j === P.ok ? 1 : s.trat;
+    const yk = j !== P.ok && P.ops[j][2]; if (yk) Object.assign(s, { est: yk, ysi: yk, trat: 0, paso: yk === 'hm' ? 4 : 4 });
+    fraseDe(); pintar(); if (yk) frase(YSI[yk].x, YSI[yk].o); verFoco();
     if (ult) { c.dataset.fin = '1'; c.insertAdjacentHTML('beforeend', llevas(CS.ll)); }
     else { const nx = document.createElement('button'); nx.type = 'button'; nx.className = 'b prim'; nx.textContent = 'Siguiente paso'; nx.addEventListener('click', () => caso(i + 1)); c.append(nx); }
   }));
   fraseDe(); pintar();
 }
 function pagina() {
-  const dock = $('dock');
-  topeApi = crearTope({ monitor: $('sello-zona'), dock, cita });
+  topeApi = crearTope({ monitor: $('sello-zona'), dock: $('avisos-zona'), cita });   // los avisos van bajo el dibujo, no en el dock (que no pasa del 30 %)
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} ${org('ficha')}`;
   $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Dial del hipotálamo: aguja dorada = punto de ajuste; marca roja y termómetro = temperatura real. Escala 34-42 °C: el tope 42 °C es el de la citotoxicidad (Libro Azul, sección III, p. 30).</p>';
   $('paso-caja').innerHTML = '<h3 id="tmv-pc-t"></h3><p id="tmv-pc-x"></p><p id="tmv-pc-c"></p><div class="fila-g"><button type="button" class="b prim" id="tmv-pc-sig">Siguiente paso</button></div>';
