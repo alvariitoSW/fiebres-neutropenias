@@ -89,7 +89,7 @@ function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
-  est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
+  est.conPmus = !!E.pmus; est.cpap = !!E.cpap; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
   P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
   if (E.hfno) { est.boca = false; est.fio2 = D.HFNO.fio2Mando; canula(D.HFNO.inicio, { ya: true }); } else { est.hfno = null; est.q = null; est.avisoCanula = null; } P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
   if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno && !E.cuff) est.avisoCanula = null; }
@@ -265,7 +265,7 @@ function pintarMandos() {
     h += `<p class="dock-nota dock-grupo"><b>Ventilar</b> (CO₂): Vt × FR = ${f1(L?.vm)} L/min</p>`;
     if (est.conPmus) h += desl('pmus', 'Esfuerzo (Pmus)', r.pmus ?? 0, 0, TOPE.pmusMax, 0.5, 'cmH₂O', `ilustrativo · aviso a ${TOPE.pmusAviso}; ecuación del movimiento: Libro azul IV p. 511`);
     if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
-    else if (psv) h += desl('ps', 'P. soporte', r.ps, 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
+    else if (psv) h += desl('ps', 'P. soporte', r.ps, est.cpap ? 0 : 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
     h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, 8, 30, 1, 'rpm', 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
     h += desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
