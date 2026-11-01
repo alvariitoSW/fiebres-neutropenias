@@ -7,6 +7,7 @@ import { instalarCss } from '../../../core/dibujo-iso.js';
 import { crearDock } from '../../../core/dock.js';
 import { crearPulmon, pbw, ORIGEN_MODELO, T_PAUSA, T_OCLUSION } from './pulmon.mjs';
 import * as HFN from './hfno.js';
+import * as PR from './prono.js';
 import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
@@ -63,6 +64,13 @@ function canula(pedido, { ya = false } = {}) {
   est.q = q; est.hfno = HFN.lectura(q, est.fio2, { ...P.S.resp, ...aj }, P.S.pulmon); est.avisoCanula = HFN.avisoCanula(q, est.hfno);
   topeMando = pedido > D.HFNO.tope ? HFN.selloCanula(pedido, est.hfno) : null;
 }
+// La posición prono (prono.js): las horas fijan la Cstat (el motor la usa) y el P/F (rótulo); una contraindicación marcada impide girar
+function girar(pedido, post, { ya = false } = {}) {
+  const ci = Object.keys(est.ci || {}).find((k) => est.ci[k]), quiere = (pedido > 0 || post) && ci;
+  const lec = PR.lectura(quiere ? 0 : pedido, quiere ? false : post && pedido > 0);
+  P.pulmonAjustar({ c: lec.c }); est.prono = lec; est.avisoCanula = PR.avisoHoras(lec);
+  topeMando = quiere ? PR.selloContra(ci, lec) : pedido > D.PRONO.tope ? PR.selloHoras(pedido, lec) : null;
+}
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
   est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
@@ -70,6 +78,7 @@ function ponerEstado(clave, { llenar = true } = {}) {
   est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
   P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
   if (E.hfno) { est.boca = false; est.fio2 = D.HFNO.fio2Mando; canula(D.HFNO.inicio, { ya: true }); } else { est.hfno = null; est.q = null; est.avisoCanula = null; } P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno) est.avisoCanula = null; }
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
   NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
@@ -174,7 +183,7 @@ let topeMando = null;   // el sello de un mando que se pasó del tope y se qued�
 function aplicarTopes() {
   const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
   if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
-  if (est.hfno && est.avisoCanula) hay.canula = est.avisoCanula;
+  if ((est.hfno || est.prono) && est.avisoCanula) hay.canula = est.avisoCanula;
   for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'canula', 'sello', 'sello2', 'sello3', 'sello4']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (topeVisto[k] === firma) continue;
@@ -184,7 +193,7 @@ function aplicarTopes() {
   if (JSON.stringify(antes) !== JSON.stringify(est.sello)) pintarFrase();
   return hay;
 }
-function pintarTodo() { pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); pintarFrase(); pintarMandos(); aplicarTopes(); medirDock(); }
+function pintarTodo() { PR.pintarRacimo($('esc-svg'), est.prono); pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); pintarFrase(); pintarMandos(); aplicarTopes(); medirDock(); }
 // Predice y comprueba: mientras el monitor está tapado, la presión alveolar del dibujo tampoco se enseña
 
 // ---------------------------------------------------------------- bucle
@@ -228,6 +237,8 @@ function pintarMandos() {
     h += desl('canula', 'Flujo de O₂ (cánula)', est.q, D.HFNO.min, D.HFNO.max, D.HFNO.paso, 'L/min', `tope ${D.HFNO.tope}: los equipos dan 40-60 según el fabricante (Marino cap. 25 p. 64) · el efecto en la FR y el esfuerzo: ilustrativo`);
     h += desl('fio2', 'FiO₂ del mando', est.fio2, 21, 100, 1, '%', `llega al alvéolo: ${f0(est.hfno.fio2Alv)} % (flujo inspiratorio de la paciente ${f0(est.hfno.vi)} L/min, del modelo) · ilustrativo`);
     h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="boca" aria-pressed="${!!est.boca}">Boca cerrada<small>PEEP 2-3 cmH₂O solo así (Marino cap. 25 p. 65)</small></button></div>`;
+  } else if (est.pest === 'resp' && est.prono) {
+    h += PR.mandosHtml(est, desl);
   } else if (est.pest === 'resp') {
     const psv = r.modo === 'psv', pend = P.pendientes().map((k) => NOMBRE_MANDO[k] || k);
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button><button type="button" data-m="modo" data-v="psv" aria-pressed="${psv}">PSV<small>presión de soporte</small></button></div>`;
@@ -266,6 +277,7 @@ $('dock-panel').addEventListener('input', (ev) => {
 function cambiarMando(k, v) {
   if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
   if (k === 'canula') { canula(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarCifrasTodo(); pintarMonitor(); return; }
+  if (k === 'horas') { girar(v, false); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
   if (k === 'fio2') { est.fio2 = v; if (est.hfno) { canula(est.q); pintarMandos(); } pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
@@ -309,6 +321,8 @@ $('dock-panel').addEventListener('click', (ev) => {
   else if (k === 'fesp') { est.factorEsp = +b.dataset.v; P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); }
   else if (k === 'pausa' || k === 'oclusion') { P.maniobra({ [k]: !P.S.man[k] }); topeMando = null; }
   else if (k === 'monpausa') est.pausa = !est.pausa;
+  else if (k === 'pos') { const h = est.prono.h; girar(b.dataset.v === 'supino' ? 0 : b.dataset.v === 'post' ? h : h || D.PRONO.inicio, b.dataset.v === 'post'); }
+  else if (k === 'ci') { est.ci[b.dataset.v] = !est.ci[b.dataset.v]; girar(est.prono.h, est.prono.post); }
   else if (k === 'boca') { est.boca = !est.boca; canula(est.q); }
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();

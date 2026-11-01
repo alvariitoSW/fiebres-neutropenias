@@ -432,7 +432,35 @@ export const HFNO = {
   peepBoca: 2.5,   // 2-3 cmH₂O con la boca cerrada (Marino cap. 25 p. 65)
   spo2: { aire: 84, alta: 95, fio2Alta: 80 },   // los dos puntos del caso de Elvira (SpO₂ 84 con aire; 95 con FiO₂ 80 %): ilustrativo, el modelo no calcula gases
 };
-ORDEN_ESTADOS.push('p-sili', 'hfno', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
+Object.assign(C, {
+  pronoFisio: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-fisiologia', sitio: 'Prono: más flujo en la región anterior y aireación posterior; mejora la oxigenación y la eliminación de CO₂; sube la distensibilidad', p: '43-44' },
+  pronoCuando: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-cuando', sitio: 'Cuándo usarlo: ventilados con P/F <150 y Vt de ~6 mL/kg (beneficio en la supervivencia)', p: 44 },
+  tabla244: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-tabla-24-4', sitio: 'Tabla 24.4: indicaciones y 5 contraindicaciones absolutas del prono', p: 44 },
+  pronoComo: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-como', sitio: 'Cómo usarlo: al menos 16 h al día con ventilación mecánica; la mejoría que persiste 4 h tras la sesión; complicaciones', p: 45 },
+});
+ESTADOS.prono = {
+  tit: 'Prono: el pulmón se airea por detrás', pac: 'isidro', prono: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60, pinsp: 15, ie: 2, pmax: 40 }, pulmon: { c: 19, r: 8 }, man: { pausa: true },
+  frase: 'Girar a Isidro boca abajo airea la zona de atrás, consolidada en supino: la compliance sube y el P/F mejora con las horas.',
+  guia: [
+    { t: 'Isidro tiene un SDRA moderado: P/F 120 con PEEP 10 y FiO₂ 60 % (el caso de la ficha), ventilado con Vt bajo (aquí 5 mL/kg; Marino pide ~6). El TC muestra consolidación densa en la zona posterior: en el racimo, la mitad dorsal está rayada. Cumple la indicación: P/F <150 con FiO₂ ≥60 % y PEEP ≥5.', org: 'ficha (Marino cap. 24 p. 43-44, Tabla 24.4) · P/F 120: caso del plan', s: ['#pul-esc-racimo', '[data-fila="fio2"]'], c: C.pronoCuando },
+    { t: 'Pulsa «Prono» y sube las horas. El prono no solo manda más flujo sanguíneo a la región anterior: también airea los segmentos posteriores, lo que mejora la oxigenación y facilita la salida de CO₂. En el dibujo, la mitad dorsal pasa arriba y sus alvéolos van saliendo del rayado.', org: 'ficha (Marino cap. 24 p. 43-44)', s: ['#pul-esc-racimo'], c: C.pronoFisio },
+    { t: 'Marino dice que con el prono «aumenta la distensibilidad», sin dar cifra. Aquí la Cstat sube con las horas (de 13 a unos 17 mL/cmH₂O en el monitor) y la meseta baja con el mismo Vt, porque hay más pulmón abierto que reparte el volumen.', org: 'ficha (la subida) · las cifras: ilustrativo', s: ['[data-fila="cstat"]', '[data-fila="meseta"]'], c: C.pronoFisio },
+    { t: 'La sesión de un paciente ventilado dura al menos 16 horas al día. A las 16 h el P/F de Isidro sube de 120 a 180, la cifra del caso del plan. Con menos de 16 h sale el aviso. Si se piden más horas, el mando se queda en 16 h: la fuente no da un máximo.', org: 'ficha (≥16 h, Marino cap. 24 p. 45) · 120 → 180: ilustrativo', s: ['[data-fila="fio2"]', '[data-m="horas"]'], c: C.pronoComo },
+    { t: 'Después se evalúa. Pulsa «Supino, 4 h después»: la mejoría persiste (P/F 175, Cstat casi igual) y entonces no hace falta otra sesión. Si no hay beneficio tras la primera sesión, tampoco están justificadas más.', org: 'ficha (Marino cap. 24 p. 45) · 175: ilustrativo', s: ['[data-fila="fio2"]', '[data-fila="cstat"]'], c: C.pronoComo },
+    { t: 'No se puede girar a cualquiera. Abre «Contraindicaciones absolutas» y marca una: hemorragia activa, inestabilidad espinal, fracturas múltiples, presión intracraneal elevada o traqueostomía o esternotomía de menos de 2 semanas. El mando de horas se apaga y sale el sello. Las relativas (shock circulatorio, embarazo, arritmias recientes, tubos de tórax) no se modelan.', org: 'ficha (Marino cap. 24 p. 44, Tabla 24.4)', s: ['#pul-dock-panel'], c: C.tabla244 },
+  ],
+  fuentes: [C.pronoCuando, C.pronoFisio, C.tabla244, C.pronoComo],
+};
+export const PRONO = {
+  tope: 16, inicio: 1, fio2: 60, persiste: 55 / 60, alvCons: 6,   // tope 16 h: mínimo diario con ventilación (Marino cap. 24 p. 45); FiO₂ 60 %: Tabla 24.4; 6 alvéolos de 12 en la mitad dorsal; persiste: 175 de 180 a las 4 h (el caso)
+  c: [19, 24], pf: [120, 180],   // ilustrativo: la ficha solo dice que sube la distensibilidad (p. 43-44); P/F 120 → 180 a las 16 h y 175 4 h después, las cifras del caso del plan
+  contra: [
+    { k: 'hemorragia', et: 'Hemorragia activa' }, { k: 'espinal', et: 'Inestabilidad espinal' }, { k: 'fracturas', et: 'Fracturas múltiples' },
+    { k: 'pic', et: 'Presión intracraneal elevada' }, { k: 'reciente', et: 'Traqueostomía o esternotomía reciente (2 sem)' },
+  ],
+};
+ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
