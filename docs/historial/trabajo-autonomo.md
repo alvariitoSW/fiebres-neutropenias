@@ -508,3 +508,14 @@ Arreglo: la fábrica entra en `autonomo/consejo/video/` (scripts y plantillas, s
 `instalar.sh` (incluye el apaño de `docopt`, que no compila con el setuptools de Debian), `render.js` para montar,
 todo el reparto en Piper de España, skill `video` y una línea en `CLAUDE.md` §1: todo vídeo, con voces de España y en
 este formato.
+
+## Vista previa de los bloques en el móvil (01/11/2026)
+
+El enlace «Ver en el móvil» de las PR (raw.githack.com, la rama) dejó de cargar en el móvil del usuario: la barra se
+quedaba parada en todos los navegadores (la app pide ~430 archivos al arrancar). Interior y Hacienda aprobaron (acta
+`autonomo/consejo/2026-11-01-vista-previa.md`) que GitHub Pages, en vez de servir `main` desde la rama, lo publique un
+workflow (`.github/workflows/vista-previa.yml` + `.github/vista-previa.sh`): `main` en la raíz, igual que antes, y cada
+rama `auto/*` con PR abierta (las 5 más recientes, solo index, css y js) en `vista/<clave>/`, con una franja dorada
+«Vista previa · borrador» dentro de `.app-container` (en el `<body>`, que es flex en fila, salía como columna). Corre al
+subir `main`, cada 20 min si algo cambió y a mano. Retirada: Settings → Pages → Source «Deploy from a branch».
+Las copias comparten el `localStorage` de la app (mismo dominio).

@@ -652,3 +652,13 @@ El usuario (30/10) pidió ver en Libros → Marino los temas de cardio y neumo. 
 en `BLOQUES` de `libros/index.js` (`marinoCorazon`, `marinoPulmon`: cuentan fichas y ponen la tira de modelos vivos en esos
 cuadernos). La pestaña Modelos vivos se agrupa en 6 temas (`.lib-vivos-grupo`), con los mismos ids. Las fichas no se mueven.
 Parte `autonomo/partes/2026-11-01-marino-unido.md`.
+
+## Marino bloque 5 (caps. 39-44: hígado, abdomen y temperatura) · 01/11/2026
+
+PR #78, fusionada por el Consejo (4-0; acta `autonomo/consejo/2026-11-01-b5.md`). Dos modelos vivos nuevos: el
+**hepatocito vivo** (fallo hepático, amonio y astrocito, varices, TIPS, lactulosa con su hipovolemia) y el **termostato
+vivo** («El cuerpo que arde y tirita»: fiebre, golpe de calor, hipertermia maligna, SNM, serotoninérgico, hipotermia),
+cada uno con su Mayéutica (13 preguntas y 2 casos; profesor 9,6 · 9,6). Las 17 fichas con Texto | Estudiar en cuatro
+grupos (5A hígado, 5B abdomen, 5C fiebre en la UCI, 5D termostato), hechos en sesiones paralelas y juntados por el
+director; la nota de corte subió a 9,5 a mitad de bloque y los cuatro grupos necesitaron una vuelta más. Datos en
+`js/data/mayeutica/b5*.js`, `hepatocito-vivo-*.js` y `termostato-vivo-*.js`. Partes: `autonomo/partes/2026-11-01-b5-*.md`.
