@@ -1,0 +1,36 @@
+# Profesor · juicio rápido G1 (fichas 12 `neumo-vm-modos`, 13 `neumo-vm-ajuste`, 16 `neumo-peep-oculta`) · 01/11/2026
+Programa: `autonomo/bloques/b3/herramientas/profesor-g1.mjs` (390 px; 67 respuestas, 3 casos enteros, Isidro con capturas; «Compruébalo» en raj-c4 y po-c2). Resultado: 0 px de desborde, 0 errores de consola, opciones ocultas hasta «Ya lo tengo», «Compruébalo» solo tras contestar, «Ver en la ficha» en todas, 46 anclas `nep-` existen una vez. raj-c4 abre `mejor-peep` (PEEP 12, pico 35,2, meseta 27,2, Cstat y ΔP en pantalla tras la pausa) y po-c2 abre `eulalia-conectada` con **las mismas cifras del caso** (oclusión 14,1 · Pmedia 10,4 · pico 42,4 · VM 13 · «fin esp. −13»); «← VOLVER» deja la misma pregunta. Capturas en `/tmp/plan-socialista/b3-pulmon-estudio/prof-g1/` (8 miradas). Modelo «así sí»: `neumo-ep-diagnostico` (mismo motor y mismo formato).
+
+| Criterio | 12 | 13 | 16 | Por qué |
+|---|---|---|---|---|
+| §7.1 primera vista | 9 | 9 | 8,5 | Entrada en 1 frase + Mira; la 16 abre con un panel de chips (434 px) y un chip con la definición cortada («…PEEP intríns…») |
+| §7.2 párrafos / §7.3 resaltado | 9 | 9 | 9 | Preguntas cortas, puntos con hl-azul/rojo/verde con sentido; sin muros |
+| §7.4 lo que enseña se ve | 9 | 9 | 9,5 | Pausa pico→meseta, barrido de PEEP con Cstat/ΔP, flujo que no llega a cero y oclusión: el pulmón vivo lo enseña todo |
+| §7.5 interactivo + frase viva | 9 | 9 | 9 | Mandos FR/PEEP/Vt con frase del estado y «modelo · umbrales: ficha» visible |
+| §7.6 vista Visual (Mira) | 8,75 | 8,25 | 8 | 12: comparar+flujo+calculadora+línea, bien. 13: la «escalera» de la Tabla 27.1 solo enseña «Primera etapa / Segunda etapa», sin las celdas (lo que hay que aprender). 16: 2 paneles de chips, sin ninguna imagen del flujo. En las 3, `LAMINAS` desaparece en silencio: las Figs. 27.1-27.5 y 28.9 son texto sin `<img>` |
+| §7.7 móvil | 9,5 | 9,5 | 9,5 | 0 px en 67 respuestas y en el modelo; nada diminuto |
+| §7.8 modelo grande / §7.9 Ver en la ficha | 9,5 | 9,5 | 9,5 | Todo sobre el pulmón vivo en estados propios del paciente; cada pregunta y cada «Lo que te llevas» con su enlace |
+| §8 recorrido en orden, formatos | 9 | 9 | 9 | Orden del texto; solo test/destapa/error; destapa dice cuántas; error con 1-2 |
+| §8 dificultad | 8,5 | 8,5 | 8 | Buena la más larga 29 / 33 / 14 % (13 en el límite). Repeticiones del mismo hecho (raj-g13≈raj-c7; po-g8≈po-c7; po-g6≈po-e2≈po-c6) y distractores casi absurdos (po-c5 «no hace falta vigilar nada», po-g4 «más fiable cuanto más respira», raj-g3 «no tiene ninguna pega»). po-c4: el enunciado delata la buena («pasó de 13 a 3,3») |
+| §8 caso (evoluciona, datos, calculadora, error+destapa) | 8,5 | 9 | 8,5 | Isidro: PBW con calculadora, Tabla 27.1 por etapas, giro ScvO₂, cifras del monitor coherentes. Rafael y Eulalia: bien, pero con los graves 1-4 del auditor **sin corregir** quedarían en 8 (po-c2 «el pico lo refleja» contradice la idea central de la 12; rsp-c6 da por falsa una conducta de la Tabla 27.1; raj-c6 castiga el flujo 60 sin decir que dispara). Con los arreglos del auditor, 8,75 / 9 / 8,75 |
+| §8 giro + «Lo que te llevas» + vuelta | 9 | 9 | 9 | Giro real en los 3; 3 puntos con enlace; vuelta a la ficha y al estado del paciente |
+| «Compruébalo» abre lo preguntado | 9 | 9,5 | 9 | Todos correctos salvo: rsp-g8 (tres presiones al final de la espiración) abre solo la oculta; po-g6 (PEEP aplicada) abre `auto-peep-corregida`, que no la enseña (el plan decía sin «Compruébalo») |
+| Pacientes / rótulos | 10 | 9,5 | 9 | Rafael, Isidro, Eulalia (continúa de la 2 con los mismos datos; PBW 54 como el modelo). Todas las preguntas de caso con `origen`; po-g5 cita cifras del monitor (6,4 → 1,5; 12 → 6) sin `origen` |
+
+**Veredicto: pasa (todo ≥ 8). Meta 8,75 no alcanzada en**: Visual 13 (8,25) y 16 (8), dificultad 12-13 (8,5) y 16 (8), caso 12 y 16 (8,5 hasta que entren los arreglos del auditor).
+
+## Arreglos (baratos primero)
+1. `js/data/mayeutica/b3d-peep.js` po-g5: añadir `origen: 'ilustrativo: cifras del monitor del pulmón vivo (Jacinto)'`.
+2. `b3d-peep.js` po-c4: quitar «Pero el volumen minuto pasó de 13 a 3,3 L/min» del enunciado (ya está en la ficha del paciente) y cambiar el distractor «Nada…» por una confusión real que la fuente aclara: «Un pico más alto por el flujo de 80, con más riesgo de barotrauma» (lo desmiente cap. 27 pág. 4: el riesgo es la meseta).
+3. `b3d-peep.js` po-c5 opción 2 → «Que ya no hace falta: con respiración espontánea la PVC vuelve a ser fiable y basta con ella» (pág. 31: la PVC sigue espuria); po-g4 opción 3 → «Porque solo es fiable por debajo de 20 resp/min: por encima la espiración es demasiado corta para ocluir» (la fuente no pone límite de FR; el requisito es que no respire solo, pág. 31). `b3d-respirador.js` raj-g3 opción 3 → «Porque dispara con 2-3 cmH₂O, igual que el de presión, pero sin esfuerzos fallidos» (pág. 8-9: el disparo por flujo no es por presión).
+4. `b3d-respirador.js` raj-c7: en vez de repetir «30 minutos» (raj-g13), que interprete el dato: «A los 30 min, con FR 30, el pH es 7,31. ¿Subes más la FR?» → no: el objetivo de la tabla es pH >7,30 (pág. 14); distractores «sí, hasta 35» y «no, subir el Vt».
+5. `b3d-peep.js` po-g8 → destapa de dos puntos: «sin mejoría tras la primera semana» (pág. 33) y «poca probabilidad de extubar la siguiente» (cap. 28, pág. 29; lo pide el auditor), y po-c7 se queda como cierre del caso. po-c6: quitar el distractor «Ninguna» (contradice a po-e3) y poner «Igual a 12, para neutralizarla» (ya en po-e2: entonces reformular po-e2 como «la PEEP aplicada que impide el flujo espiratorio es la que…»).
+6. `b3d-respirador.js` rsp-g8: `modelo: [pv('atelectrauma-zeep', '🫁 ZEEP: la presión vuelve a cero'), pv('broncoespasmo-auto-peep', '🫁 La oculta')]` (el motor acepta lista). `b3d-peep.js` po-g6: quitar `modeloVivo`.
+7. `js/modules/neumologia/visual-3d-g1.js` 13: la escalera de la Tabla 27.1 con `nodos` explícitos (fuente `#nep-tabla-27-1`): «1.ª: 8 mL/kg PBW, PEEP 5, −1 mL/kg cada 2 h hasta 6», «2.ª: meseta >30 → −1 mL/kg hasta <30 o 4», «3.ª: pH 7,15-7,30 FR hasta 35; <7,15, FR 35 y Vt +1», «Objetivos: SpO₂ 88-95, pH 7,30-7,45, FiO₂ ≤60 %».
+8. `visual-3d-g1.js` 16: sustituir el racimo por `comparar` de 3 columnas «Presión proximal: vuelve a 0 | Alveolar: sigue positiva | Flujo: no llega a cero» (`#nep-monitorizacion-oculta`, `#nep-fig-28-9`) y un `racimos` con los 4 efectos escritos (PVC espuria · GC ↓ · trabajo ↑ · volu/barotrauma; `#nep-efectos`), en vez de un chip con el párrafo cortado. En las 3 recetas, quitar `LAMINAS` (no hay `<img>`: las figuras 27.1-28.9 son texto) o, mejor, un `flujo` que recree la Fig. 28.9 en 3 pasos; y los dos ids del auditor (`#nep-fig-27-2`).
+9. Los 4 graves del auditor: entran tal cual (po-c2, rsp-c6, po-c4 nota, raj-c6 «dispara con distrés»); al corregirlos el caso de 12 y 16 sube a 8,75.
+
+## No comprobado / riesgo
+- El Mira de la 12 no lo recorrí a 360 px (el juez `--ficha` lo mide). No abrí la PDF: las páginas las coteja el auditor.
+- raj-c2 abre `sdra-rigido` con FR 30 cuando el caso aún dice FR 20 (paso 3); la meseta 32 sí cuadra (420/19 + 10). Si el enlace admite `mandos: { fr: 20 }`, ponerlo; si no, basta «(monitor con FR 30)».
+- El repaso de Examínate no lo vacié (la marca queda en «4»); el juez `mayeutica-fichas` lo cubre.
