@@ -2,9 +2,10 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-10-31-shock-scai.md` (pasada del 31/10: ≈8,7 M frente a 3,9 M, +123 %; sin propuesta nueva: lo que se repite ya está aprobado o propuesto, abajo)
+**Último parte revisado:** `2026-11-01-mr.md` (pasada del 01/11: 0,71 M frente a 0,6 M, +18 %; sin propuesta nueva, un patrón suelto abajo)
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- (mr, 01/11) Tarea que continúa una rama anterior al 28/10 (main rehecho): la rama no comparte historia con `main`, el plan «fusionar main en la rama» no sirve y el director gasta en diagnosticarlo. Si se repite: comprobar `git merge-base` al presupuestar y llevar el contenido a una rama nueva desde `main`.
 - (shock-scai, 31/10) Los menores de una auditoría en una vuelta aparte del constructor (1,7 M por 7 menores de texto, por
   repetir la prueba larga). Si se repite: los menores de la auditoría, dentro del encargo de la vuelta del profesor.
 - (shock-scai, 31/10) Esperas del director con `pgrep -f`/`pkill -f`, que se encuentran a sí mismas (una espera que no acabó,
