@@ -38,7 +38,7 @@ function pintar() {
   // mandos (ya creados)
   const JG = s.est === 'juega'; document.body.classList.toggle('juega-on', JG);
   for (const id of ['mando-pasos', 'lab-ysi']) $(id).hidden = JG; for (const id of ['mando-juega', 'lab-pir']) $(id).hidden = !JG; $('pc-sig').hidden = JG;
-  if (JG) { const j = s.j; $('j-pir').value = j.pir; $('j-calor').value = j.calor; $('j-frio').value = j.frio; $('j-para').textContent = `Paracetamol 1 g (${j.paraG} g)`; }
+  if (JG) { const j = s.j; $('j-pir').value = j.pir; $('j-calor').value = j.calor; $('j-frio').value = j.frio; $('j-para').textContent = `Paracetamol (${j.paraG} g)`; }
   $('m-est').value = s.est; $('m-ysi').value = s.ysi || ''; $('o-paso').textContent = `Paso ${s.paso} de 5`;
   $('m-ant').disabled = s.paso <= 1; $('m-sig').disabled = s.paso >= 5;
   $('m-trat').setAttribute('aria-pressed', !!s.trat); $('m-trat').textContent = `${s.trat ? 'Dado' : 'Dar'}: ${E.trat[0]}`;

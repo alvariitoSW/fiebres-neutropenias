@@ -76,7 +76,7 @@ export function fraseLibre(s, l) {
   if (f.sinEfecto) return ['El ajuste no se ha movido: el antipirético no tiene nada que bajar.', 45, 'ficha · p. 45'];
   if (f.manta) return ['La manta cierra la piel y provoca escalofrío: sube más calor.', 72, 'ficha · p. 72'];
   if (f.parar) return ['A unos 38 °C se deja de enfriar: más frío provoca escalofrío.', 47, 'ficha · p. 47'];
-  if (l.T >= TOPE.golpe) return [`${l.snc}, sin sudor: la piel seca ya no evapora.`, 46, 'ficha · p. 46; cifras ilustrativas'];
+  if (l.T >= TOPE.golpe) return [`Con ${l.snc} y sin sudor, la piel seca ya no evapora.`, 46, 'ficha · p. 46; cifras ilustrativas'];
   if (l.d < -0.05 && l.T >= TOPE.tirita) { x = `T ${l.T.toFixed(1).replace('.', ',')} por debajo del ajuste: la piel se cierra y el músculo tirita.`; p = 45; o = 'ficha · p. 45 y 53'; }
   else if (l.d > 0.05) { x = `T ${l.T.toFixed(1).replace('.', ',')} por encima del ajuste: vasos abiertos y sudor para perder calor.`; p = 45; o = 'ficha · p. 45'; }
   else { x = 'La temperatura sigue al ajuste del hipotálamo.'; p = 45; }
