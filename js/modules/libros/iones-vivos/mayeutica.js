@@ -23,7 +23,7 @@ export function crearMayeutica(d) {
     if (q.tras) d.accion(q.tras);                             // el modelo hace lo que la pregunta anunciaba
     if (q.haz) d.accion(q.haz[0], q.haz[1]);
   };
-  const citas = q => [q.fuente, q.fuente2, q.fuente3, ...(q.puntosC || []), ...(q.frases || []).map(f => f.cita)].filter(Boolean).filter((c, i, a) => a.indexOf(c) === i).map(d.cita).join('');
+  const citas = q => [q.fuente, q.fuente2, q.fuente3, ...(q.puntosC || []), ...(q.frases || []).map(f => f.cita)].filter(Boolean).filter((c, i, a) => a.indexOf(c) === i).map(d.cita).join(' · ');
   const subir = () => scrollTo({ top: 0, behavior: REDUCIR ? 'auto' : 'smooth' });
   return crearMayeuticaModelo({
     p: 'iov', cont: () => document.getElementById('iov-preg'), clave: 'iones-vivos-mayeutica-v1', preguntas: PREGUNTAS, casos: CASOS,

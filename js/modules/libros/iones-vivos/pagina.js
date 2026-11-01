@@ -78,11 +78,11 @@ function ponerIon(i) { ion = i; frase(FRASES[i], ORIG[i]); pintar(); }
 // est: { preset, ion, s (cambios al paciente), acc (lo ya hecho: ['ca', mg] o ['esperar', min]) }. Directo al estado: sin frases ni guía.
 function ponerEstadoMay(est) {
   preset = est.preset; s = nuevo({ ...PRESETS[est.preset].s, ...(est.s || {}) }); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); foco = []; guiaApi.cerrar();
-  for (const [a, n] of est.acc || []) { if (a === 'ca') s.caIV += n; else if (a === 'esperar') avanzar(s, n); }
+  for (const [a, n] of est.acc || []) { if (a === 'ca') s.caIV += n; else if (a === 'real') s.ins = Math.min(4, s.ins + 1); else if (a === 'esperar') avanzar(s, n); }
   ion = est.ion; pintar();
 }
 function taparTodo(si) { oculto = si; pintar(); }
-function accion(a, n) { const i0 = ion; hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
+function accion(a, n) { const i0 = ion; if (a === 'clk40') { e.rate = 40; e.via = 'cava'; a = 'clk'; } hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
 let mayeutica = null;
 function setModo(m, reiniciar = true) {
   modo = m; const est = m === 'preguntas'; guiaApi.cerrar(); oculto = false; foco = [];
