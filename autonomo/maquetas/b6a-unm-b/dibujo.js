@@ -18,7 +18,7 @@ export function escena(s, L, oculto, foco) {
   o += `<rect class="pulgar-c" x="240" y="66" width="48" height="30" rx="8"/><g transform="rotate(${-ang} 262 74)"><rect class="pulgar-r" x="256" y="40" width="14" height="38" rx="7" opacity="${(0.25 + 0.75 * L.f / 100).toFixed(2)}"/></g>`;
   const lob = 'M312,48 q-12,6 -12,32 q0,16 10,16 q6,0 6,-12 z M324,48 q12,6 12,32 q0,16 -10,16 q-6,0 -6,-12 z', nv = 50 * L.f / 100;   // dos pulmones; el nivel es la CV
   o += `<clipPath id="cl-pul"><path d="${lob}"/></clipPath><path class="campana" d="${lob}"/><rect class="campana-n" clip-path="url(#cl-pul)" x="298" y="${96 - nv}" width="42" height="${nv}"/><line class="tope15" x1="298" x2="340" y1="${96 - 50 * 15 / 70}" y2="${96 - 50 * 15 / 70}"/>`;
-  o += '<path class="bronq" d="M324,38 v20 M324,58 l-10,10 M324,58 l10,10"/><path class="flecha" d="M118,70 h2 M160,70 h6 M232,70 h6 M290,70 h6"/>';
+  o += '<text class="min" x="344" y="94" text-anchor="end">CV</text><path class="bronq" d="M324,38 v20 M324,58 l-10,10 M324,58 l10,10"/><path class="flecha" d="M118,70 h2 M160,70 h6 M232,70 h6 M290,70 h6"/>';
   for (let i = 0; i < 3; i++) o += `<path class="dedo" d="M${246 + i * 14},66 v-${14 + (i === 1 ? 6 : 0)}"/>`;
   [['Axón', 60], ['Placa', 140], ['Fibra', 199], ['Pulgar', 264], ['Pulmón', 324]].forEach(([t, x]) => { o += `<text class="rot" x="${x}" y="108" text-anchor="middle">${t}</text>`; });
   const le = ESTADOS[s.est].lesion;

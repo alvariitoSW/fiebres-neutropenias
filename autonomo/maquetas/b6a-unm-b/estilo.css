@@ -61,3 +61,9 @@
 #un-svg .tubo { fill: color-mix(in srgb, var(--bg-card) 90%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.5; } #un-svg .tubo.fino { fill: var(--text-muted); } #un-svg .bulbo { fill: color-mix(in srgb, var(--accent-green) 35%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.5; }
 #un-svg .hendid, #un-svg .bronq, #un-svg .dedo { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-linecap: round; } #un-svg .dedo { stroke-width: 6; stroke: color-mix(in srgb, var(--text-muted) 55%, var(--bg-main)); }
 .mando .fila > *, #un-pasos > * { white-space: normal; overflow: visible; text-overflow: clip; overflow-wrap: anywhere; padding-inline: 3px; }
+
+/* Retoque final: los sellos van en columna (flujo normal), nunca absolutos ni encima de la escena. */
+#sellos .tope-linea { position: static; display: flex; flex-direction: column; gap: 3px; }
+#sellos .tope-linea span, #sellos .tope-sello { white-space: normal; overflow: visible; text-overflow: clip; }
+#sellos .tope-sellos { position: static; transform: none; display: flex; flex-direction: column; gap: 4px; width: auto; max-width: 100%; max-height: none; overflow: visible; }
+#sellos .tope-mon { position: static; inset: auto; display: flex; flex-direction: column; gap: 4px; } #sellos .tope-sello { transform: none; width: auto; max-width: 100%; white-space: normal; } #sellos .tope-sello small { display: block; }

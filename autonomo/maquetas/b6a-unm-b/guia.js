@@ -10,6 +10,16 @@ export const GUIAS = {
     { t: 'Con estímulos repetidos la respuesta decae: es la fatiga. Pulsa «Repetido ×10».', z: ['barras'], p: '24:mn-mg-clinica', o: 'ficha; caída ilustrativa', haz: ['estim', { v: 'rep' }], btn: 'Repetido ×10' },
     { t: 'El hielo sobre el ojo cerrado 2 minutos recupera la ptosis (+2 mm es positivo). El mecanismo no lo da Marino.', z: ['barras'], p: '24:mn-mg-hielo', o: 'ficha', haz: ['hielo'], btn: 'Hielo 2 min' },
     { t: 'Un aminoglucósido dificulta la transmisión (Tabla 46.5): la fuerza cae. Pulsa «Gentamicina».', z: ['placa', 'lupa'], p: '24:mn-tabla-46-5', o: 'ficha; caída ilustrativa', haz: ['farm', { v: 'gent' }], btn: 'Gentamicina' }]],
+  pnc: ['Polineuropatía del crítico', [
+    { t: 'Es una neuropatía axonal difusa, sensitiva y motora, frecuente en la sepsis grave y el shock séptico. El daño está en el axón: mira la lesión marcada.', z: ['axon'], p: '28:mn-pnc-pnc', o: 'ficha' },
+    { t: 'Produce parálisis flácida de miembros y tronco, con hiporreflexia o arreflexia. Suele pasar inadvertida hasta que el paciente no se despega del respirador.', z: ['pulgar', 'pulmon'], p: '28:mn-pnc-pnc', o: 'ficha' },
+    { t: 'Se confirma con estudios de conducción nerviosa: conducción lenta en fibras sensitivas y motoras. El tratamiento no existe.', z: ['axon', 'barras'], p: '28:mn-pnc-pnc', o: 'ficha', haz: ['estim', { v: 'unico' }], btn: 'Estímulo único' },
+    { t: 'Cerca de la mitad se recupera por completo, pero tarda meses. Mientras, no se puede retirar la ventilación.', z: ['pulmon'], p: '29:mn-pnc-manejo', o: 'ficha' }]],
+  mcc: ['Miopatía del crítico', [
+    { t: 'Es una miopatía inflamatoria difusa de miembros y tronco. El nervio y la placa están sanos: la lesión está en la fibra muscular.', z: ['fibra'], p: '28:mn-pnc-mcc', o: 'ficha' },
+    { t: 'Se favorece por sepsis grave, shock séptico, inmovilidad (p. ej. la parálisis con relajantes) e hiperglucemia.', z: ['placa', 'fibra'], p: '28:mn-pnc-mcc', o: 'ficha' },
+    { t: 'La electromiografía muestra cambio miopático y la biopsia, pérdida de filamentos de miosina e infiltrado inflamatorio.', z: ['fibra', 'barras'], p: '28:mn-pnc-mcc', o: 'ficha' },
+    { t: 'No hay tratamiento; la prevención propuesta (movilización precoz, nutrición) no está validada. Se nota al no poder retirar el respirador.', z: ['pulmon'], p: '29:mn-pnc-manejo', o: 'ficha' }]],
   mel: ['Melquíades · relajante', [
     { t: 'Con K⁺ 6,1 la succinilcolina está contraindicada: sube otros 0,5 mEq/L. Mira el aviso; si la pulsas, sale el sello.', z: ['placa'], p: '30:mn-bnm-contra', o: 'ficha' },
     { t: 'Rocuronio 1 mg/kg tapa los receptores: empieza en 1,5-3 min (al principio el TOF sigue 4/4) y cae a 0/4. Pulsa «Rocuronio» y pasa el reloj.', z: ['pulgar', 'lupa'], p: '29:mn-relajantes', o: 'ficha', haz: ['roc'], btn: 'Rocuronio' },
