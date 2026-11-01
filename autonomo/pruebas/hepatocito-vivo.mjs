@@ -158,5 +158,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
 }
 } catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); }
 console.log('\nErrores de consola:', errores.length ? errores.slice(0, 5) : 'ninguno');
-console.log(fallos.length ? 'FALLOS:\n- ' + fallos.join('\n- ') : 'TODO EN VERDE');
+console.log(errores.length ? '❌ Errores de consola: ' + errores.slice(0, 5).join(' | ') : '✅ Consola limpia');
+fallos.forEach((f) => console.log('❌ ' + f));
+if (!fallos.length) console.log('✅ Hepatocito vivo: todas las comprobaciones en verde (390 y 360 px)');
 process.exit(fallos.length || errores.length ? 1 : 0);
