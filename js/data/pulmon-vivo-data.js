@@ -316,6 +316,8 @@ Object.assign(C, {
   inverso: { f: 'libro-azul-resp2', id: null, sitio: 'Desencadenante inverso: sobredistensión; Hering-Breuer, «en proceso de investigación» (pp. 558-559)', p: '94-95' },
   psili: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-psili', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
   sbt: { f: 'neumo-sbt', id: 'nep-sbt-tabla', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
+  sbtRapida: { f: 'neumo-sbt', id: 'nep-sbt-rapida', sitio: 'Respiración rápida: la taquipnea puede ser ansiedad (Vt aumentado) o fallo ventilatorio (Vt disminuido)', p: 54 },
+  sbtOpiaceo: { f: 'neumo-sbt', id: 'nep-sbt-manejo', sitio: 'Manejo: si es ansiedad, un sedante; los opiáceos calman la disnea', p: 55 },
   pimax: { f: 'neumo-sbt', id: 'nep-sbt-pimax', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
 });
 Object.assign(C, {
@@ -473,6 +475,8 @@ Object.assign(C, {
   cuffEstridor: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-estridor', sitio: 'Estridor post-extubación: ruido inspiratorio, aparece con ~50 % de obstrucción', p: 60 },
   cuffManejo: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-manejo', sitio: 'Estridor: dentro de 30 min; signos de fallo → reintubar sin demora', p: 60 },
 });
+// Sbt-ansiedad (Marino cap. 30 pp. 52-55): FR <40 y FR/Vt 60-105 (Tabla 30.1) y el opiáceo (p. 55) son de la ficha; Pmus, FR 30/22 y compliance: ilustrativo
+export const ANSIEDAD = { pmus: 4.5, frOpi: 22, pmusOpi: 3.5, frMax: 40, frMando: 45, frMin: 10 };
 export const CUFF = {
   tope: 25, aviso: 20, max: 30, inicio: 25, corte: 110,   // tope 25 (Marino cap. 28 p. 21: 25 mmHg; p. 22: 25 cmH₂O); aviso a 20 = 80 % del tope; corte 110 mL (cap. 30 p. 59); el mando llega a 30 para poder pedir de más
   fuga0: 200, fugaEdema0: 80,   // fuga con el cuff a 0 sin edema / con edema: ilustrativo (Marino solo da el corte de 110 mL; 80 es la cifra del caso de Benito)
@@ -496,8 +500,21 @@ ESTADOS['fuga-cuff'] = {
   ],
   fuentes: [C.cuffPresion, C.cuffFuga, C.cuffPrueba, C.cuffRecom, C.cuffEster, C.cuffManejo],
 };
+ESTADOS['sbt-ansiedad'] = {
+  tit: 'Prueba de respiración espontánea: rápido y profundo, ansiedad', pac: 'benito', pmus: true, ansiedad: true, resp: { ...RESP_E4, modo: 'psv', ps: 5, frEsp: 30, pmus: ANSIEDAD.pmus, tin: 1 }, pulmon: { c: 60, r: 5 }, man: {},
+  frase: 'Respira a 30 por minuto, pero con volumen: rápido y profundo es ansiedad, no fracaso. Dale el opiáceo y mira si el Vt cae.',
+  fraseOpi: 'Se calmó (FR 22) y el Vt no cayó: era ansiedad, no fracaso ventilatorio.',
+  guia: [
+    { t: 'Benito (PBW 68 kg) está en la prueba con PSV 5, como en la prueba superada, pero respira a 30 por minuto. Es el motivo de alarma más frecuente: la respiración rápida durante la prueba.', org: 'ficha (cap. 30 p. 54) · FR 30: ilustrativo', s: ['#pul-esc-pantalla'], c: C.sbtRapida },
+    { t: 'Mira el volumen: unos 450 mL (6,6 mL/kg PBW) y un cociente FR/Vt de unos 67, dentro del intervalo de 60 a 105. La ansiedad produce hiperventilación: la frecuencia y el volumen suben a la vez.', org: 'ficha (Tabla 30.1 p. 52; cap. 30 p. 54) · cifras: modelo, compliance 60 ilustrativa', s: ['[data-fila="vt"]'], c: C.sbt },
+    { t: 'Compáralo con el fracaso ventilatorio: allí la frecuencia sube y el volumen baja (rápido y superficial, FR/Vt por encima de 105). Con el Vt aumentado, la causa de la taquipnea es la ansiedad; con el Vt disminuido, el fallo ventilatorio y hay que volver al respirador.', org: 'ficha (cap. 30 p. 54)', s: ['flujo:insp', '[data-fila="vt"]'], c: C.sbtRapida },
+    { t: 'Pulsa «Opiáceo»: la FR baja a 22 y el esfuerzo se reduce, y el Vt se queda en unos 400 mL. Si se sospecha ansiedad se considera un sedante, y los opiáceos son los preferidos porque calman la sensación de disnea.', org: 'ficha (cap. 30 p. 55) · FR 22, Vt 400: ilustrativo', s: ['pmus:insp', '[data-fila="vt"]'], c: C.sbtOpiaceo },
+    { t: 'El mando «FR del paciente» llega hasta 40: la ficha da FR <40 como predictor de éxito. Por encima el mando se queda en 40 y sale el sello.', org: 'ficha (Tabla 30.1 p. 52)', s: ['#pul-esc-pantalla'], c: C.sbt },
+  ],
+  fuentes: [C.sbt, C.sbtRapida, C.sbtOpiaceo],
+};
 PACIENTES.push({ k: 'benito', nombre: 'Benito', chip: '71 a · destete · cuff', linea: '71 años, 78 kg, 1,72 m, FEVI 35 %, día 7 de ventilación por neumonía: cumple los criterios de destete y se le prueba la fuga del cuff. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'fuga-cuff' });
-ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'fuga-cuff', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
+ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'fuga-cuff', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso', 'sbt-ansiedad');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
