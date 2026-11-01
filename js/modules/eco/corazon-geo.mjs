@@ -225,7 +225,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
 
   // Trabéculas: crestas que entran en la cavidad (ilustrativo). VI: finas, en el tercio apical; VD: gruesas,
   // en los dos tercios apicales (la entrada y el ápex son trabeculados; el infundíbulo es liso)
-  const kPap = opciones.ajustes?.papilaresEscala ? Math.pow(clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi).Rm / RM_NORMAL, 0.45, 1), opciones.ajustes?.papilaresExp ?? 1) : 1;
+  const kPap = opciones.ajustes?.papilaresEscala ? Math.pow(clamp((estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null) : vi).Rm / RM_NORMAL, 0.45, 1), opciones.ajustes?.papilaresExp ?? 1) : 1;
   const cresta = (a, b) => { const x = Math.max(0, Math.sin(a)), y = Math.max(0, Math.sin(b)); return x * x * x + 0.6 * y * y * y; };
   // ajustes.papilaresLibres (dibujo nuevo): ni trabéculas ni papilares en el arco plano del tabique: quedan en la pared libre (anterolateral y posteromedial)
   const libreSeptal = (z, f) => { if (!opciones.ajustes?.papilaresLibres) return 1; const a = alfaZ(z); if (a <= 0) return 1;
@@ -310,11 +310,11 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const rhoInf = huella(cR, (p) => { const r = Math.hypot(p[0], p[1]), f = Math.atan2(p[1], p[0]);
     return ventana(f) > 0.02 && r > ReB + 0.5 && r < rimRV(f) - 1 && Math.hypot(p[0] - ct[0], p[1] - ct[1]) > rT + 3 && Math.hypot(p[0] - cR[0], p[1] - cR[1]) < 24; }, (d) => Math.max(aR, bR) + 3.5);
   // Descenso de la base (MAPSE): se usa al final, en «mover»; aquí ya, porque estira las aurículas (alturaAu)
-  const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
+  const LeTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null).Le : geo.mio === 1 ? LE_REF : geomVi(REF.vVi, geo.mio).Le;
   const descenso = clamp(vi.Le - LeTd, -18, 6);
   // (el TAPSE: la pared libre del VD baja más; explicado en «mover»)
   // F5: acortamiento longitudinal de la pared libre = fracción del largo telediastólico del VD, según lo que el VD se ha vaciado
-  const LvdTd = (estado.vviTd ? geomVi(estado.vviTd, geo.mio).Le : vi.Le) * REF.lVdRel, vdTd = estado.vvdTd ?? REF.vVd;
+  const LvdTd = (estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null).Le : vi.Le) * REF.lVdRel, vdTd = estado.vvdTd ?? REF.vVd;
   const excVd = clamp(acortamientoVd(1 - estado.vvd / vdTd) * LvdTd, 0, 35);
   const extraVd = clamp(-excVd - descenso, -25, 6);
   const angTric = Math.atan2(geo.ct[1], geo.ct[0]), ReBase = geo.ReB;
@@ -627,7 +627,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
     // objetivo × el telediastólico. El radio sale del largo medido del trazado (÷ √ el cociente con el de telediástole),
     // así que largo × radio² se conserva (B4).
     const LP_SIS = 0.82, objetivo = 1 - (1 - LP_SIS) * clamp(estado.eVi ?? 0, 0, 1);
-    const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
+    const viTd = estado.vviTd ? geomVi(estado.vviTd, geo.mio, 0, opciones.ajustes?.esfericidad ?? null) : vi, lp = clamp(objetivo * viTd.L / vi.L, 0.5, 1.25);
     // v2 Forma: la punta se cierra en el último 15 % y la base en el primer 6 %, metida en la pared (radio → 0): con la punta abierta, un corte oblicuo no cerraba y el papilar se
     // dibujaba como un lazo en S dentro del VI (A4C del TEP en telesístole); cerrado, el corte es una mancha rellena
     // ajustes.papilaresEscala (dibujo nuevo): el radio de los papilares (5,5 mm en el VI normal) y la altura de las trabéculas siguen al radio
@@ -994,7 +994,7 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const KUe = ajustes.septoRectoEndo ? ajustes.septoRectoEndo : KU;
   // Tabique aplanado: en la zona media del VI, la parte del tabique se corta por una cuerda (corte en «D»). La pared
   // conserva su grosor (el epicardio se corta por una cuerda paralela). α: medio ángulo del arco aplanado (ilustrativo)
-  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe, ajustes.septoHondo || 0);   // anatomia.mjs
+  const { vi, alfa } = viConSeptal(estado.vvi, mio, septo, KUe, ajustes.septoHondo || 0, ajustes.esfericidad ?? null);   // anatomia.mjs
   const vvd = clamp(estado.vvd, LIMITES.vd[0], LIMITES.vd[1]);
   // se piden muchas veces con el mismo z o el mismo ángulo (filas y columnas de las rejillas)
   const rEndoViC = memo((z) => perfil(z, vi.Rb, vi.Rm, vi.L));
@@ -1047,14 +1047,35 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const plieg = pliVd > 0 ? memo((f) => Math.exp(-Math.pow((anguloNorm(f) - 2.4) / 0.35, 2))) : null;
   const pliegZ = (z) => { const e = (-z / Lvd - 0.4) / 0.2; return Math.exp(-e * e); };
   const fVd = pliVd > 0 ? (z, f) => 1 - 0.75 * pliVd * plieg(f) * pliegZ(z) : () => 1;
-  // volumen del VD = C0 + C1·A + C2·A² (cuadrática exacta en A)
-  let C0 = 0, C1 = 0, C2 = 0;
-  { const nz = 20, nf = 40, span = REF.phiB - REF.phiA, df = span / nf, dz = Lvd / nz;
+  // M3 · McConnell (ajuste mcconnell, dibujo nuevo; estado.mcconnell 0-1 lo da contrato.mjs, mcconnellDe): la pared libre MEDIA del VD
+  // no se mueve (acinesia) y el ápex se contrae con normalidad (McConnell 1996, Am J Cardiol 78:469-73, PMID 8752195: excursión de la
+  // línea media −0,2 ± 0,8 mm en la pared libre media y 5,7 ± 0,8 mm en el ápex, normal). La luz de esa zona se queda en la de la
+  // telediástole (Atd, el A del volumen telediastólico); el resto de la cavidad cede el volumen y el ápex se cierra más. Como la luz
+  // sigue siendo a + A·b (con b recortada por (1−s)), el volumen del motor se conserva exacto. Zona (centro 0,45 del largo, σ 0,16;
+  // σ angular 0,8 en torno a la pared libre, 2,4 rad): ilustrativa.
+  const mcc = ajustes.mcconnell && estado.vvdTd ? clamp(estado.mcconnell ?? 0, 0, 1) : 0;
+  const sReg = mcc > 0 ? (z, f) => { const e = (-z / Lvd - 0.45) / 0.16, d = (anguloNorm(f) - 2.4) / 0.8; return mcc * Math.exp(-e * e - d * d); } : () => 0;
+  // El ápex, en cambio, se cierra con la sístole (excursión normal, 5,7 mm de McConnell sobre una luz apical de unos 11 mm: cierra
+  // APEX_CIERRE = 0,5 de su luz: el ápex se mueve ~5,7 mm, la cifra de McConnell 1996 (5,7 ± 0,8 mm; pubmed 8752195). La v2g lo subió a 0,85 (9,6 mm) para leerse mejor; el director lo devolvió a 0,5: no se exagera la fuente, la legibilidad va por el foco VD); p = 1 en cuanto el VD expulsa algo (≥ 5 % de su telediástole), 0 en telediástole. Cifras ilustrativas.
+  const APEX_CIERRE = 0.5, pSis = mcc > 0 ? clamp((1 - vvd / estado.vvdTd) / 0.05, 0, 1) : 0;
+  const qApex = mcc > 0 ? (z, f) => { const e = (-z / Lvd - 0.85) / 0.15, d = (anguloNorm(f) - 2.4) / 0.8; return 1 - APEX_CIERRE * mcc * pSis * Math.exp(-e * e - d * d); } : () => 1;
+  // El endocardio de esa zona se queda donde estaba en la telediástole (radio de la geometría del volumen telediastólico): luz objetivo
+  // = radio de la telediástole − radio del epicardio del VI de ahora. Así tampoco lo arrastra el tabique. La luz sigue siendo a + A·b con
+  // (1−s) en a y b, y el volumen del motor se conserva exacto.
+  const gTd = mcc > 0 ? baseGeometricaHoy({ ...estado, vvd: clamp(estado.vvdTd, LIMITES.vd[0], LIMITES.vd[1]), vvi: estado.vviTd ?? estado.vvi, mcconnell: 0, pliegueVd: 0, septo: estado.septoTd ?? estado.septo, septoSigno: estado.septoSignoTd ?? estado.septoSigno }, ajustes) : null;
+  const lObj = mcc > 0 ? (z, f) => gTd.rEpiVi(z, f) + gTd.wRV0(z, f) - rEpiVi(z, f) : null;
+  const coefs = (conTd) => { let c0 = 0, c1 = 0, c2 = 0;
+    const nz = 20, nf = 40, span = REF.phiB - REF.phiA, df = span / nf;
     for (let i = 0; i < nz; i++) { const z = -Lvd * (i + 0.5) / nz, w = wz(z), pz = perfilZ(z);
-      for (let j = 0; j < nf; j++) { const f = REF.phiA + span * (j + 0.5) / nf, re = rEpiVi(z, f), k = fVd(z, f); const a = (1 - w) * Wb(f) * k, b = w * ventana(f) * pz * k;
-        C0 += (re * a + 0.5 * a * a) * df * dz; C1 += (re * b + a * b) * df * dz; C2 += 0.5 * b * b * df * dz; } } }
+      for (let j = 0; j < nf; j++) { const f = REF.phiA + span * (j + 0.5) / nf, re = rEpiVi(z, f), k = fVd(z, f), sr = conTd ? sReg(z, f) : 0;
+        const b0 = w * ventana(f) * pz * k * (conTd ? qApex(z, f) : 1), a = (1 - sr) * (1 - w) * Wb(f) * k + (sr > 0 ? sr * lObj(z, f) : 0), b = (1 - sr) * b0;
+        c0 += (re * a + 0.5 * a * a) * df * (Lvd / nz); c1 += (re * b + a * b) * df * (Lvd / nz); c2 += 0.5 * b * b * df * (Lvd / nz); } }
+    return [c0, c1, c2]; };
+  const resolverA = ([c0, c1, c2], Vm) => c0 >= Vm ? 1 : Math.max(1, (-c1 + Math.sqrt(c1 * c1 - 4 * c2 * (c0 - Vm))) / (2 * c2));
   const V = vvd * 1000;
-  const A = C0 >= V ? 1 : Math.max(1, (-C1 + Math.sqrt(C1 * C1 - 4 * C2 * (C0 - V))) / (2 * C2));
+  const sinMc = coefs(false);
+  const A = resolverA(mcc > 0 ? coefs(true) : sinMc, V);
+  const C0 = sinMc[0];
   // pared libre del VD: más fina al dilatarse; mioVd la engrosa (hipertrofia del VD por sobrecarga de presión, Atlas · 14)
   // B4: engrosa en sístole al activarse el VD (estado.eVd). La parte crónica (dilatación, mioVd) sigue al volumen
   // telediastólico del latido; la sistólica, a la activación, y conserva el volumen de la pared: grosor × área constante, con el
@@ -1064,7 +1085,7 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const tVd = paredVdDe(estado);   // anatomia.mjs (mismo cálculo; el grosor lo da el corazón)
   const tvdW = (w) => tVd * paso(0, 8, w);
   // wRV0: la luz sin pliegue (de ella sale el grosor de la pared, que no adelgaza al plegarse, y el saco, que no se hunde)
-  const wRV0 = (z, f) => mix(Wb(f), A * ventana(f) * perfilZ(z), wz(z));
+  const wRV0 = (z, f) => { const l = mix(Wb(f), A * ventana(f) * perfilZ(z) * qApex(z, f), wz(z)), sr = sReg(z, f); return sr > 0 ? (1 - sr) * l + sr * lObj(z, f) : l; };
   const wRV = pliVd > 0 ? (z, f) => wRV0(z, f) * fVd(z, f) : wRV0;
   const endoVd = (z, f) => { const r = rEpiVi(z, f) + wRV(z, f); return [r * Math.cos(f), r * Math.sin(f), z]; };
   // ajustes.paredVdNormal (dibujo nuevo, P4a-1): el grosor tVd se pone en la dirección del radio desde el eje del VI, y

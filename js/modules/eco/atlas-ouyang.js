@@ -70,6 +70,7 @@ const enlace = (clave, titulo = TITULO[clave]) => ({ clave, titulo });
 // Para cada vista del simulador, el capítulo del atlas donde ver la misma vista (o su tema).
 export const ATLAS_VISTA = {
     a4c: [enlace('windows'), enlace('eject')],
+    a4cVd: [enlace('windows')],
     a2c: [enlace('windows'), enlace('eject')],
     a3c: [enlace('windows')],
     plax: [enlace('windows')],

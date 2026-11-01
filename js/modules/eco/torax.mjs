@@ -30,7 +30,7 @@ export const aEje = (p) => [dot(p, L), dot(p, F), dot(p, ARRIBA)];
 export const deEje = (lat, ant, alt) => [L[0] * lat + F[0] * ant + ARRIBA[0] * alt, L[1] * lat + F[1] * ant + ARRIBA[1] * alt, L[2] * lat + F[2] * ant + ARRIBA[2] * alt];
 
 /** Dibujo nuevo: la aorta sube hasta el nivel de la AI (alt 30), lateral y detrás de ella, para que el A4C y el PLAX la corten donde la eco real. Ilustrativo. */
-export const TORAX_NUEVO = { latAo: -28, rAo: 11,   // ~22 mm, ilustrativo (anatomía general: lateral a la AI en el A4C y detrás de ella en el PLAX; sin fuente con página)
+export const TORAX_NUEVO = { latAo: -28, rAo: 10,   // ~20 mm (v2g: era 22), ilustrativo (anatomía general: lateral a la AI en el A4C y detrás de ella en el PLAX; sin fuente con página)
   antAo: -28 };
 /** Medidas (mm). Todas «ilustrativo»: ninguna tiene página en las fuentes (hueco). */
 export const TORAX = {

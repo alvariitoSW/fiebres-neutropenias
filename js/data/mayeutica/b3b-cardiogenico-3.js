@@ -82,9 +82,9 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
       { id: 'mcs-e2', corto: 'gas y volumen', tipo: 'test', fuente: 'mc-iabp-metodo',
         enunciado: '¿Con qué se infla el balón de contrapulsación y qué volumen suele tener?',
         opciones: [
-          { t: 'Helio, 35-40 mL', ok: true },
-          { t: 'Aire comprimido, 350-400 mL', porque: `El gas es helio, de baja densidad, para inflar y desinflar rápido; el volumen son 35-40 mL (${p(45)}). Diez veces ese volumen es una cifra que la fuente no da (${DED}).` },
-          { t: 'Helio, 2,5-5,5 L por minuto', porque: `Esos son los litros por minuto del flujo del Impella (${p(47)}), no el volumen de inflado del balón (${p(45)}).` }],
+          { t: 'Helio, gas de baja densidad, 35-40 mL', ok: true },
+          { t: 'Aire comprimido de quirófano, 350-400 mL', porque: `El gas es helio, de baja densidad, para inflar y desinflar rápido; el volumen son 35-40 mL (${p(45)}). Diez veces ese volumen es una cifra que la fuente no da (${DED}).` },
+          { t: 'Helio, 2,5-5,5 L por minuto de flujo', porque: `Esos son los litros por minuto del flujo del Impella (${p(47)}), no el volumen de inflado del balón (${p(45)}).` }],
         explicacion: `Bomba con <span class="hl">helio</span> (gas de baja densidad): <span class="hl-azul">35-40 mL</span> de volumen de inflado (${p(45)}).` },
       { id: 'mcs-e3', corto: 'el Impella no', tipo: 'test', fuente: 'mc-impella-efectos',
         enunciado: '¿En cuál de estos pacientes está contraindicado el Impella?',
@@ -112,8 +112,8 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
         enunciado: 'En pacientes con balón, la fiebre aparece en el 50 %. ¿En qué proporción hay bacteriemia?',
         opciones: [
           { t: 'En el 50 %: la fiebre del balón es siempre una infección', porque: `La fuente separa las dos cifras: fiebre 50 %, bacteriemia solo 15 % (${p(47)}). Tratar toda fiebre como bacteriemia lleva a retirar un balón útil. ${DED}` },
-          { t: 'En el 15 %', ok: true },
-          { t: 'En el 5-10 %', porque: `Esa es la incidencia de hemólisis significativa con el Impella (${p(48)}), no la de bacteriemia con el balón.` }],
+          { t: 'En el 15 %: la fiebre no siempre es infección', ok: true },
+          { t: 'En el 5-10 %, como la hemólisis del Impella', porque: `Esa es la incidencia de hemólisis significativa con el Impella (${p(48)}), no la de bacteriemia con el balón.` }],
         explicacion: `<span class="hl">Fiebre en el 50 %, bacteriemia en el 15 %</span> (${p(47)}). La septicemia es una de las complicaciones del balón.` },
     ],
     casos: [
@@ -129,7 +129,7 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
                 { t: 'Rotura de la pared libre: taponamiento por hemopericardio', porque: `Sería hemopericardio de acumulación rápida y colapso (1 %, ${p(38)}), sin soplo con frémito ni salto de saturación (${DED}). Irías a pericardiocentesis en vez de al soporte.` }],
               explicacion: `La rotura del septo (4 % de los shocks cardiogénicos del infarto) produce <span class="hl-rojo">un gran shunt izquierda-derecha que inunda la circulación pulmonar y desvía flujo de la sistémica</span>; aparece típicamente en las primeras 24 h (${p(38)}). Que la saturación suba de la AD a la AP es consecuencia del shunt (${DED}).`,
               nota: `<b>La fuente no lo dice.</b> Marino no da un criterio de «salto de saturación» ni de Qp/Qs para diagnosticar la rotura; esas cifras son del modelo y de este paciente.${enFicha('mc-cardiogenico-fisio', 'mc-septo-rotura')}` } },
-          { momento: 'Hora 23', datos: { Tratamiento: 'noradrenalina y dobutamina en marcha', Monitor: 'PA 75/60 · FC 109', Analítica: 'lactato 5,8 mmol/L' }, nuevo: ['Tratamiento', 'Analítica'],
+          { momento: 'Hora 23', datos: { Tratamiento: 'noradrenalina y dobutamina en marcha', Monitor: 'PA 75/60 · FC 118', Analítica: 'lactato 5,8 mmol/L' }, nuevo: ['Tratamiento', 'Analítica'],
             pregunta: { id: 'c8r-2', tipo: 'test', fuente: 'mc-carga-trabajo · mc-mcs', modeloVivo: septo, origen: 'ilustrativo: lactato del modelo; la conducta, de la ficha',
               enunciado: 'Con noradrenalina y dobutamina la presión no mejora y el lactato sigue en 5,8. ¿Cómo sigues?',
               opciones: [
@@ -138,8 +138,8 @@ export const MAYEUTICA_CARDIOGENICO_3 = {
                 { t: 'No retrasar el soporte mecánico: la mejoría con fármacos no es rápida', ok: true }],
               explicacion: `Los aparatos están diseñados para <span class="hl">reducir el trabajo cardíaco</span>; si no hay <span class="hl-rojo">mejoría rápida con fármacos</span>, hay que evitar retrasos en pasar a soporte mecánico (${p(44)}-45). Está indicado en el shock refractario donde se espera mejoría de la función cardíaca, o hay otra intervención planeada (${p(45)}).` } },
           { momento: 'Hora 24 · qué aparato', datos: { Pregunta: 'el equipo repasa los aparatos posibles' }, nuevo: ['Pregunta'],
-            pregunta: { id: 'c8r-3', tipo: 'error', fuente: 'mc-iabp · mc-impella-efectos · mc-ecmo', modeloVivo: ecmo,
-              enunciado: 'Un residente repasa qué aparato admitiría el historial de cualquier paciente. Encuentra los errores.',
+            pregunta: { id: 'c8r-3', tipo: 'error', origen: 'ilustrativo: FC 118 en el rango de la p. 43 (Tabla 16.3: +5-15 lpm con dobutamina); las contraindicaciones, de la ficha', fuente: 'mc-iabp · mc-impella-efectos · mc-ecmo', modeloVivo: ecmo,
+              enunciado: 'El equipo repasa sus notas de contraindicaciones antes de elegir aparato. Encuentra los errores.',
               frases: [
                 { t: 'Un balón de contrapulsación sirve aunque la TC mostrara una disección aórtica.', mal: true, c: `La <span class="hl-rojo">disección aórtica</span> (y la insuficiencia valvular aórtica) contraindican el balón (${p(45)}).` },
                 { t: 'Un Impella sirve aunque la paciente lleve una prótesis aórtica mecánica.', mal: true, c: `La <span class="hl-rojo">prótesis o enfermedad valvular aórtica</span> y el trombo del VI contraindican el Impella (${p(48)}).` },
