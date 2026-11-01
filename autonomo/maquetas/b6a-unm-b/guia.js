@@ -1,0 +1,32 @@
+// Explicación guiada por paciente: 3-5 pasos que encienden una zona del dibujo. Cada paso: t texto · z zonas · p página · o origen · haz [acción, opciones o repeticiones].
+export const GUIAS = {
+  flor: ['Florentina · Guillain-Barré', [
+    { t: 'El impulso viaja por el axón, cruza la placa, activa la fibra y mueve el pulgar. En el Guillain-Barré la mielina está dañada: pulsa «Único» y mira el destello avanzar a saltos lentos.', z: ['axon'], p: '27:mn-tabla-46-6', o: 'ficha (conducción lenta)', haz: ['estim', { v: 'unico' }], btn: 'Estímulo único' },
+    { t: 'Cuando el impulso llega, la placa responde entera y no se fatiga: con el estímulo repetido las diez sacudidas salen iguales.', z: ['barras', 'pulgar'], p: '27:mn-tabla-46-6', o: 'ficha', haz: ['estim', { v: 'rep' }], btn: 'Repetido ×10' },
+    { t: 'La Tabla 46.6 enciende su columna: sin debilidad ocular, sin fatiga, reflejos disminuidos, inestabilidad autonómica, conducción lenta y proteínas altas en el LCR.', z: ['tabla'], p: '27:mn-tabla-46-6', o: 'ficha' },
+    { t: 'Se intuba con CV ≤15 mL/kg, CV <1 L o PIM −20, sin esperar al extremo. Pasa dos días sin tratar y mira el pulmón.', z: ['pulmon'], p: '25:mn-mg-intubacion', o: 'ficha; −3 puntos de fuerza al día ilustrativo', haz: ['dia', 2], btn: 'Día +1 ×2' }]],
+  sera: ['Serapio · miastenia', [
+    { t: 'En la miastenia el nervio está sano: lo que falla es la placa, con pocos receptores por los anticuerpos. Abre la lupa.', z: ['placa', 'lupa'], p: '24:mn-mg-anticuerpos', o: 'ficha' },
+    { t: 'Con estímulos repetidos la respuesta decae: es la fatiga. Pulsa «Repetido ×10».', z: ['barras'], p: '24:mn-mg-clinica', o: 'ficha; caída ilustrativa', haz: ['estim', { v: 'rep' }], btn: 'Repetido ×10' },
+    { t: 'El hielo sobre el ojo cerrado 2 minutos recupera la ptosis (+2 mm es positivo). El mecanismo no lo da Marino.', z: ['barras'], p: '24:mn-mg-hielo', o: 'ficha', haz: ['hielo'], btn: 'Hielo 2 min' },
+    { t: 'Un aminoglucósido dificulta la transmisión (Tabla 46.5): la fuerza cae. Pulsa «Gentamicina».', z: ['placa', 'lupa'], p: '24:mn-tabla-46-5', o: 'ficha; caída ilustrativa', haz: ['farm', { v: 'gent' }], btn: 'Gentamicina' }]],
+  mel: ['Melquíades · relajante', [
+    { t: 'Con K⁺ 6,1 la succinilcolina está contraindicada: sube otros 0,5 mEq/L. Mira el sello.', z: ['placa'], p: '30:mn-bnm-contra', o: 'ficha' },
+    { t: 'Rocuronio 1 mg/kg tapa los receptores: el TOF cae a 0/4. Pulsa «Rocuronio».', z: ['pulgar', 'lupa'], p: '29:mn-relajantes', o: 'ficha', haz: ['roc'], btn: 'Rocuronio' },
+    { t: 'Si no se intuba, a los 3 minutos dura una hora. Sugammadex 16 mg/kg lo revierte en 2-3 minutos.', z: ['pulgar'], p: '31:mn-bnm-sugammadex', o: 'ficha', haz: ['min', 3], btn: '+10 min ×3' },
+    { t: 'En la perfusión el objetivo es 1-2 respuestas del TOF, no 0.', z: ['pulgar'], p: '30:mn-bnm-monitor', o: 'ficha' }]],
+};
+export function crearGuia({ caja, hacer, cita, setFoco }) {
+  let g = null, i = 0;
+  const cerrar = () => { caja.hidden = true; g = null; setFoco([]); };
+  function paso(k) {
+    i = Math.max(0, Math.min(g[1].length - 1, k)); const p = g[1][i]; caja.hidden = false; setFoco(p.z);
+    caja.innerHTML = `<h3>${g[0]} · paso ${i + 1} de ${g[1].length}</h3><p class="enun">${p.t} <span class="org">${p.o}</span> ${cita(p.p)}</p><div class="fila-g">${p.haz ? `<button type="button" class="b prim" data-g="haz">Hazlo: ${p.btn}</button>` : ''}<button type="button" data-g="ant" ${i ? '' : 'disabled'}>‹ Anterior</button><button type="button" data-g="sig">${i < g[1].length - 1 ? 'Siguiente ›' : 'Cerrar'}</button></div>`;
+  }
+  caja.addEventListener('click', (ev) => {
+    const b = ev.target.closest('[data-g]'); if (!b || !g) return; const a = b.dataset.g, p = g[1][i];
+    if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); }
+    else if (a === 'haz') { const [acc, op] = p.haz; if (typeof op === 'number') for (let n = 0; n < op; n++) hacer(acc); else hacer(acc, op || {}); setFoco(p.z); }
+  });
+  return { abrir: (c) => { if (!GUIAS[c]) return cerrar(); g = GUIAS[c]; paso(0); }, cerrar };
+}
