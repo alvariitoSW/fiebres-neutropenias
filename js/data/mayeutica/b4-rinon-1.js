@@ -9,6 +9,8 @@
 const GLOM = { especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs' };
 const GLOM_PIA = { glomerulo: 'pam=75,pia=19', ...GLOM, tab: 'mr-fra-causas', texto: 'Compruébalo en el glomérulo (PIA)' };
 const GLOM_CONGESTION = { glomerulo: 'congestion', ...GLOM, tab: 'mr-fra-causas', texto: 'Compruébalo en el glomérulo (congestión)' };
+const GLOM_IND_PIA = { glomerulo: 'pam=70,pia=19', ...GLOM, tab: 'mr-fra-indices', texto: 'Compruébalo en el glomérulo (PIA)' };
+const GLOM_IND_CONGESTION = { glomerulo: 'congestion', ...GLOM, tab: 'mr-fra-indices', texto: 'Compruébalo en el glomérulo (congestión)' };
 const GLOM_CRITICO = { glomerulo: 'critico', ...GLOM, tab: 'mr-fra-criterios', texto: 'Compruébalo en el glomérulo (creatinina)' };
 
 export const MAYEUTICA_RINON_1 = {
@@ -62,7 +64,7 @@ export const MAYEUTICA_RINON_1 = {
           { t: 'Alrededor del 15 %; hasta el 60 % necesita terapia de reemplazo renal en la UCI', porque: 'Has cambiado las cifras: el 60 % es el que sufre el deterioro y el 15 % el que necesita diálisis. Subestimarías mucho la frecuencia del fracaso renal en tu UCI.' },
           { t: 'Hasta el 30 %; todos los que lo sufren acaban en terapia de reemplazo', porque: 'Ni la frecuencia ni la proporción son esas: solo una minoría de los que tienen fracaso renal llega a diálisis.' }],
         explicacion: 'Hasta el 60 % de los pacientes de UCI sufre un deterioro agudo de la función renal; un 15 % necesita terapia de reemplazo y hasta el 60 % no sobrevive (A p. 44).',
-        nota: '<b>Nota de fidelidad.</b> El capítulo da un 15 % de terapia de reemplazo aquí y un 10-15 % de los pacientes de UCI al hablar de la terapia; las dos cifras se reproducen tal cual.' },
+        nota: '<b>Nota de fidelidad.</b> El capítulo da un 15 % de terapia de reemplazo aquí y un 10-15 % de los pacientes de UCI al hablar de la terapia (A p. 55); las dos cifras se reproducen tal cual.' },
       { id: 'rin-cri-e2', corto: 'cumple o no', tipo: 'test', fuente: 'mr-tabla-34-1',
         enunciado: 'Una paciente con creatinina basal conocida de 1,0 mg/dL llega a 1,6 mg/dL a los 6 días. No se mide la diuresis. ¿Cumple criterio de fracaso renal agudo?',
         opciones: [
@@ -109,9 +111,9 @@ export const MAYEUTICA_RINON_1 = {
           'La necrosis tubular <span class="hl-azul">descama células a la luz</span> y la obstruye.',
           'Sube la <span class="hl-rojo">presión del túbulo proximal</span> y el gradiente neto baja.'],
         explicacion: 'La sepsis causa alrededor de la mitad de los fracasos renales de la UCI. Lo que obstruye el túbulo sube la PPT y por la Ecuación 34.1 baja el filtrado (A p. 47-48).',
-        nota: '<b>Nota de interpretación.</b> En fisiología renal «retroalimentación tubuloglomerular» suele ser la señal de la mácula densa; aquí el capítulo usa el término para la obstrucción luminal.' },
+        nota: '<b>Nota de interpretación.</b> En fisiología renal «retroalimentación tubuloglomerular» suele ser la señal de la mácula densa; aquí el capítulo usa el término para la obstrucción luminal (fisiología general; Marino lo usa así en A p. 47-48).' },
       { id: 'rin-cau-g3', corto: 'la congestión', tipo: 'test', fuente: 'mr-fra-cardiorrenal · mr-congestion', modelo: GLOM_CONGESTION,
-        enunciado: 'En pacientes con catéter de arteria pulmonar y disfunción renal, ¿qué parámetro hemodinámico fue el único que se correlacionó con ella?',
+        enunciado: 'En pacientes con insuficiencia cardíaca, catéter de arteria pulmonar y disfunción renal, ¿qué parámetro hemodinámico fue el único que se correlacionó con ella?',
         opciones: [
           { t: 'La presión venosa central (auricular derecha)', ok: true },
           { t: 'El gasto cardíaco, como en cualquier hipoperfusión', porque: 'Sería el razonamiento de «menos perfusión», pero el estudio vio que no se correlacionó: pensar solo en bajo gasto te haría pasar por alto la congestión.' },
@@ -130,7 +132,7 @@ export const MAYEUTICA_RINON_1 = {
           'Cuando la PIA supera la presión venosa renal, el motor del flujo es <span class="hl">PPA = Pā − PIA</span>.',
           'Con la PIA alta, <span class="hl-azul">la presión del túbulo proximal se iguala a ella</span>: resta una vez como venosa y otra como PPT.',
           'Una subida de PIA pesa más que una bajada igual de presión arterial: <span class="hl-rojo">la oliguria es de los primeros signos</span>.'],
-        explicacion: 'Ecuaciones 34.2 y 34.3 (A p. 49). Una PPA >60 mmHg se asocia a mejores resultados.' },
+        explicacion: 'Ecuaciones 34.2 y 34.3 (A p. 50). Una PPA >60 mmHg se asocia a mejores resultados.' },
     ],
     examen: [
       { id: 'rin-cau-e1', corto: 'primera causa', tipo: 'test', fuente: 'mr-tabla-34-2 · mr-fra-sepsis',
@@ -163,7 +165,7 @@ export const MAYEUTICA_RINON_1 = {
           { t: 'PPA 105 mmHg; hipertensión intraabdominal, aún sin disfunción', porque: 'Has sumado en vez de restar. PPA = Pā − PIA, y con 25 mmHg y oliguria es ya síndrome compartimental.' },
           { t: 'PPA 55 mmHg, por debajo de 60; síndrome compartimental', ok: true },
           { t: 'PPA 55 mmHg; solo hipertensión intraabdominal', porque: 'PIA >20 con FRA u otra disfunción orgánica aguda ya es síndrome compartimental; clasificarlo como hipertensión te haría subestimar el riesgo.' }],
-        explicacion: 'PPA = 80 − 25 = <span class="hl">55 mmHg</span> (<60: peor pronóstico). PIA >20 con disfunción orgánica = <span class="hl-rojo">síndrome compartimental</span> (A p. 49).' },
+        explicacion: 'PPA = 80 − 25 = <span class="hl">55 mmHg</span> (<60: peor pronóstico). PIA >20 con disfunción orgánica = <span class="hl-rojo">síndrome compartimental</span> (A p. 50).' },
     ],
     casos: [],
     profundizar: [
@@ -212,7 +214,7 @@ export const MAYEUTICA_RINON_1 = {
           { t: 'Reto de 500 mL en 10-15 min; sin furosemida para subir la diuresis ni dopamina a 2 μg/kg/min', ok: true },
           { t: 'Furosemida en bolo para subir la diuresis y dopamina a 2 μg/kg/min para dilatar la arteria renal', porque: 'La furosemida nunca debe darse para subir la diuresis si la hipoperfusión contribuye, y la dopamina a dosis baja no mejora la función renal y quita flujo esplácnico.' },
           { t: 'Esperar a los índices urinarios y no dar líquidos hasta tener la EFNa', porque: 'El reto de volumen suele ser lo primero justamente porque al principio no se puede descartar la hipoperfusión; esperar retrasa corregir lo que se corrige.' }],
-        explicacion: 'Reto de volumen: 500 mL de cristaloide en 10-15 minutos (importa más el ritmo que el volumen), valorado con el volumen sistólico; se para si no responden ni este ni la diuresis. La furosemida solo sirve para manejar el volumen; la dopamina a 2 μg/kg/min hoy se considera «mala medicina» (A p. 54).' },
+        explicacion: 'Reto de volumen: 500 mL de cristaloide en 10-15 minutos (importa más el ritmo que el volumen), valorado con el volumen sistólico; se para si no responden ni este ni la diuresis. La furosemida solo sirve para manejar el volumen; la dopamina a 2 μg/kg/min hoy se considera «mala medicina» (A p. 54-55).' },
     ],
     examen: [
       { id: 'rin-ind-e1', corto: 'Tabla 34.4', tipo: 'test', fuente: 'mr-tabla-34-4',
@@ -241,7 +243,7 @@ export const MAYEUTICA_RINON_1 = {
             c: 'Dilata la arteria renal pero <span class="hl-rojo">no mejora la función renal</span> y baja el flujo esplácnico: «mala medicina».' }],
         explicacion: 'Dos prácticas que se mantienen por inercia y que el capítulo desaconseja (A p. 54).' },
       { id: 'rin-ind-e4', corto: 'con furosemida', tipo: 'test', fuente: 'mr-efu · mr-efna', origen: 'ficha · la cuenta, ilustrativa',
-        enunciado: 'Paciente con furosemida: EFNa 2,0 % y EFU 25 %. ¿Qué orientación te da cada índice?',
+        enunciado: 'Paciente con furosemida: EFNa 2,3 % y EFU 25 %. ¿Qué orientación te da cada índice?',
         opciones: [
           { t: 'Ambos indican lesión tubular, porque la EFNa es mayor del 2 % y eso basta', porque: 'Solo la EFNa lo parece, y está elevada por el diurético. La EFU <35 % apunta a hipoperfusión: dar por necrosis lo que es hipoperfusión quita al paciente un volumen que le haría falta.' },
           { t: 'La EFNa no vale con diurético; la EFU <35 % orienta a hipoperfusión', ok: true },
@@ -254,8 +256,8 @@ export const MAYEUTICA_RINON_1 = {
         lleva: [
           'Con furosemida, la EFNa no vale; la excreción fraccional de urea, sí.',
           'Una presión venosa alta y una PIA alta bajan el filtrado: la congestión, no la hipovolemia, manda.',
-          'No se da un reto de 500 mL por una EFNa >1 % con diurético.'],
-        volver: { nombre: 'Índices urinarios', ancla: 'mr-fra-indices', modelo: GLOM_CONGESTION },
+          'No se da un reto de 500 mL por una EFNa >1 % con diurético (interpretación a partir de A p. 48, 50 y 54; Marino no trata este caso).'],
+        volver: { nombre: 'Índices urinarios', ancla: 'mr-fra-indices', modelo: GLOM_IND_CONGESTION },
         pasos: [
           { momento: 'Día 2 · creatinina', datos: { Creatinina: '0,9 → 1,5 mg/dL en 36 h' }, nuevo: ['Creatinina'],
             calculadora: { ir: 'mr-kdigo-calc', nombre: '¿Cumple algún criterio de la Tabla 34.1?' },
@@ -267,7 +269,7 @@ export const MAYEUTICA_RINON_1 = {
                 { t: 'Solo si la diuresis cae por debajo de 0,5 mL/kg/h', porque: 'Basta uno de los tres criterios; con la creatinina ya está cumplido.' }],
               explicacion: 'Cumple dos criterios de la Tabla 34.1: ≥0,3 mg/dL en 48 h y ≥1,5 veces la basal en 7 días (A p. 44).' } },
           { momento: 'Día 2 · hemodinámica', datos: { PVC: '18 mmHg', PAM: '70 mmHg' }, nuevo: ['PVC', 'PAM'],
-            pregunta: { id: 'rin-mat-2', tipo: 'test', fuente: 'mr-gradiente-filtracion · mr-congestion', modelo: GLOM_CONGESTION, origen: 'ficha · la cuenta, ilustrativa',
+            pregunta: { id: 'rin-mat-2', tipo: 'test', fuente: 'mr-gradiente-filtracion · mr-congestion', modelo: GLOM_IND_CONGESTION, origen: 'ficha · la cuenta, ilustrativa',
               enunciado: 'PAM 70 mmHg no es una hipotensión. ¿Qué te dice la PVC de 18 sobre el gradiente de filtración?',
               opciones: [
                 { t: 'Nada: con una PAM de 70 el riñón está bien perfundido y solo importa la presión arterial', porque: 'El filtrado depende de (Pā − Pv) − PPT: con una venosa de 18 mmHg el gradiente se queda en 52 antes de restar el túbulo, y no verías la causa del fracaso renal.' },
@@ -284,14 +286,14 @@ export const MAYEUTICA_RINON_1 = {
               explicacion: 'Supino, transductor a cero en la línea medioaxilar, 25 mL de salino 30-60 s antes, al final de la espiración. 1 mmHg = 1,36 cmH₂O: 26 cmH₂O = <span class="hl">19 mmHg</span> (A p. 50).' } },
           { momento: 'Día 2 · clasificar', datos: { PIA: '19 mmHg', PPA: '51 mmHg', Gradiente: '32 mmHg' }, nuevo: ['PIA', 'PPA', 'Gradiente'],
             calculadora: { ir: 'mr-pia-calc', nombre: 'Presión de perfusión abdominal y gradiente' },
-            pregunta: { id: 'rin-mat-4', tipo: 'test', fuente: 'mr-ppa · mr-gradiente-pia · mr-pia-definiciones', modelo: GLOM_PIA, origen: 'ficha · la cuenta, del caso',
+            pregunta: { id: 'rin-mat-4', tipo: 'test', fuente: 'mr-ppa · mr-gradiente-pia · mr-pia-definiciones', modelo: GLOM_IND_PIA, origen: 'ficha · la cuenta, del caso',
               enunciado: 'Con PAM 70 y PIA 19: ¿cuánto es la PPA, cuánto el gradiente de filtración con la PIA alta y cómo la clasificas?',
               opciones: [
                 { t: 'PPA 51; gradiente 32; hipertensión intraabdominal, no síndrome compartimental', ok: true },
                 { t: 'PPA 89; gradiente 51; normal', porque: 'Has sumado en vez de restar y has dejado de multiplicar por dos la PIA. 19 mmHg está muy por encima de lo normal (5-7).' },
                 { t: 'PPA 51; gradiente 51 (PIA restada una sola vez); síndrome compartimental con oliguria', porque: 'El gradiente descuenta la PIA dos veces: 70 − 38 = 32. Y para el síndrome hace falta PIA >20.' }],
-              explicacion: 'PPA = 70 − 19 = <span class="hl">51</span> (por debajo de 60). Gradiente = Pā − (PIA × 2) = 70 − 38 = <span class="hl-rojo">32</span> (Ecuaciones 34.2 y 34.3). 19 está en la zona de hipertensión intraabdominal (A p. 49).' } },
-          { momento: 'Día 2 · orina', datos: { 'Na⁺ orina / plasma': '15 / 135 mEq/L', 'Creatinina orina / plasma': '8 / 1,5 mg/dL', 'Urea (BUN) orina / plasma': '60 / 40 mg/dL', EFNa: '2,1 %', EFU: '28 %' }, nuevo: ['Na⁺ orina / plasma', 'Creatinina orina / plasma', 'Urea (BUN) orina / plasma', 'EFNa', 'EFU'],
+              explicacion: 'PPA = 70 − 19 = <span class="hl">51</span> (por debajo de 60). Gradiente = Pā − (PIA × 2) = 70 − 38 = <span class="hl-rojo">32</span> (Ecuaciones 34.2 y 34.3, A p. 50). 19 está en la zona de hipertensión intraabdominal (A p. 49).' } },
+          { momento: 'Día 2 · orina', datos: { 'Na⁺ orina / plasma': '113 / 135 mEq/L', 'Creatinina orina / plasma': '60 / 1,5 mg/dL', 'Urea (BUN) orina / plasma': '448 / 40 mg/dL', EFNa: '2,1 %', EFU: '28 %' }, nuevo: ['Na⁺ orina / plasma', 'Creatinina orina / plasma', 'Urea (BUN) orina / plasma', 'EFNa', 'EFU'],
             calculadora: { ir: 'mr-indices-calc', nombre: 'EFNa y EFU' },
             pregunta: { id: 'rin-mat-5', tipo: 'test', fuente: 'mr-efna · mr-efu · mr-tabla-34-4', modelo: { nefronaViva: 'prerrenal|furosemida' }, origen: 'ficha · las cuentas, ilustrativas del caso',
               enunciado: 'Con furosemida, la muestra da EFNa 2,1 % y EFU 28 %. ¿Cómo lees cada una?',
@@ -299,7 +301,7 @@ export const MAYEUTICA_RINON_1 = {
                 { t: 'EFNa >2 % ⇒ lesión tubular, y la EFU no se tiene en cuenta con furosemida', porque: 'La EFNa está elevada por el diurético y no vale; la EFU sí vale con diurético.' },
                 { t: 'Las dos indican hipoperfusión', porque: 'La EFNa >2 % no orienta a hipoperfusión en ningún caso; con diuréticos, simplemente no es interpretable.' },
                 { t: 'EFNa no interpretable con diurético; EFU <35 % orienta a hipoperfusión', ok: true }],
-              explicacion: 'EFNa = (15/135)/(8/1,5) ≈ 2,1 %; EFU = (60/40)/(8/1,5) ≈ 28 %. La EFNa sube con diuréticos; la EFU no la altera el diurético y <35 % apunta a hipoperfusión (A p. 54).' } },
+              explicacion: 'EFNa = (113/135)/(60/1,5) ≈ 2,1 %; EFU = (448/40)/(60/1,5) = 28 %. La EFNa sube con diuréticos; la EFU no la altera el diurético y <35 % apunta a hipoperfusión (A p. 54).' } },
           { momento: 'Día 2 · el plan del R1', datos: { Plan: 'reto de volumen' }, nuevo: ['Plan'],
             pregunta: { id: 'rin-mat-6', tipo: 'error', fuente: 'mr-efna · mr-pia-definiciones · mr-pia-cristaloides',
               enunciado: 'El residente de guardia anota su plan. Encuentra los errores (puede haber 0, 1 o 2).',
@@ -307,18 +309,18 @@ export const MAYEUTICA_RINON_1 = {
                 { t: 'La EFNa es 2,1 % con furosemida: el sodio de la orina no es interpretable.' },
                 { t: 'La EFNa es >1 %, así que debe estar seca: pongo un reto de 500 mL de cristaloide.', mal: true,
                   c: 'La EFNa >1 % <span class="hl-rojo">sube con diuréticos</span> y no indica nada aquí; con balance +6 L y PIA 19, más cristaloide empeora el edema de las vísceras y la PIA.' },
-                { t: 'La PIA de 15 mmHg es normal en una ascítica.', mal: true,
+                { t: 'La PIA de 19 mmHg es normal en una ascítica.', mal: true,
                   c: 'La PIA normal es <span class="hl-verde">5-7 mmHg</span>; ≥12 ya es hipertensión intraabdominal.' },
                 { t: 'Reviso la presión de perfusión abdominal con la PAM y la PIA.' }],
               explicacion: 'Dos confusiones reales: leer la EFNa con furosemida y dar por normal una PIA que no lo es (A p. 49-50, 54).' } },
           { momento: 'Día 3 · el giro', datos: { Balance: '+6 L en 48 h, ascitis tensa' }, nuevo: ['Balance'],
-            pregunta: { id: 'rin-mat-7', tipo: 'destapa', fuente: 'mr-congestion · mr-pia-cristaloides · mr-gradiente-pia', modelo: GLOM_CONGESTION,
+            pregunta: { id: 'rin-mat-7', tipo: 'destapa', fuente: 'mr-congestion · mr-pia-cristaloides · mr-gradiente-pia', modelo: GLOM_IND_CONGESTION,
               enunciado: 'La residente de 4º te pregunta: «¿por qué no ponemos líquido a Matilde si la EFU dice hipoperfusión?». Son tres cosas.',
               puntos: [
                 'La PVC de 18 y la PIA de 19 <span class="hl-rojo">restan del gradiente de filtración</span>: el obstáculo es venoso y abdominal.',
-                'Los cristaloides son causa frecuente de hipertensión intraabdominal: con balance <span class="hl">>5 L en 24 h, el 85 %</span> la tenía.',
-                'El autor solo da el reto de volumen ante la duda de hipoperfusión y <span class="hl-azul">se para si no responden ni el volumen sistólico ni la diuresis</span>.'],
-              explicacion: 'En esta paciente la congestión manda (Figura 34.2); probablemente pesa más en la insuficiencia cardíaca crónica descompensada (A p. 47-48, 50, 54).' } },
+                'Matilde lleva <span class="hl">+6 L en 48 h</span> y una PIA de 19: más cristaloide empeora el edema de las vísceras y la presión abdominal (la ficha cita el 85 % de hipertensión intraabdominal con balances >5 L en 24 h, pero en otra serie, no en pacientes como ella).',
+                'Marino da el reto de volumen como primera intervención cuando no se puede descartar la hipoperfusión, y <span class="hl-azul">se para si no responden ni el volumen sistólico ni la diuresis</span>: aquí la congestión es evidente y no hay duda que resolver.'],
+              explicacion: 'En esta paciente la congestión manda (Figura 34.2); probablemente pesa más en la insuficiencia cardíaca crónica descompensada (A p. 48). <b>Interpretación</b> a partir de A p. 48, 50 y 54; Marino no trata este caso.' } },
         ] },
     ],
     profundizar: [
