@@ -19,7 +19,7 @@ import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, PARED_AURICULAR_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, PARED_AURICULAR_NUEVO, AORTA_DESC_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -508,7 +508,8 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
       // líneas que acaban donde acaba el tubo: se cierran uniendo sus extremos, como las paredes
       const c = cerrado ? null : cerrarExtremos([x], 45);
       if (cerrado || c.abiertos === 0) out.push({ tipo: 'relleno', seg: cerrado ? x.seg : x.seg.concat(c.puentes), segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
-      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db, ancho: x.t.ancho, grupo: x.nombre });
+      const aoD = dibujoNuevo() && x.nombre === 'Aorta descendente';   // v2g: pared más fina y tenue (calibre real ~2-2,5 cm; ilustrativo)
+      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db + (aoD ? AORTA_DESC_NUEVO.db : 0), ancho: aoD ? AORTA_DESC_NUEVO.ancho : x.t.ancho, grupo: x.nombre });
       continue;
     }
     out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0, distPared: paredVI && /^Papilar/.test(x.nombre) ? distMin(x.seg, paredVI) : null }
@@ -820,8 +821,12 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
     // dibujo nuevo: detrás del pulmón no hay un «peine» de líneas A regulares sino una sombra irregular (costilla y aire; Lang 2015, Fig. 4,
     // la zona lateral del A4C): manchas de tamaño mixto y sin periodicidad, entre -26 y -42 dB (nitidez ilustrativa, sin dato de fuente)
     const nuevoP = dibujoNuevo();
-    const sombraIrregular = (i, j) => { const h = Math.sin(i * 12.9898 + (j >> 3) * 78.233) * 43758.5453, h2 = Math.sin((i >> 2) * 39.346 + j * 11.135) * 24634.6345;
-      return amp(-26 - 16 * (0.5 * (h - Math.floor(h)) + 0.5 * (h2 - Math.floor(h2)))); };
+    // v2g · la sombra del pulmón/costilla del dibujo nuevo: caída de señal continua (ruido de valor suave, celdas de 7 haces × 28 muestras,
+    // -36 a -24 dB; ilustrativo), no el hash por haz y por bloque de 8 muestras de antes, que salía en rayas horizontales «a pincel»
+    const rv = (a, b) => { const h = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return h - Math.floor(h); };
+    const sombraIrregular = (i, j) => { const x = i / 7, y = j / 28, x0 = Math.floor(x), y0 = Math.floor(y), u = x - x0, v = y - y0, su = u * u * (3 - 2 * u), sv = v * v * (3 - 2 * v);
+      const n = (rv(x0, y0) * (1 - su) + rv(x0 + 1, y0) * su) * (1 - sv) + (rv(x0, y0 + 1) * (1 - su) + rv(x0 + 1, y0 + 1) * su) * sv;
+      return amp(-36 + 12 * n); };
     let pulmon = null;
     if (W > 0.25 && o.ventanaVista !== 'subcostal') {
       const resp = 0.5 - 0.5 * Math.cos(2 * Math.PI * ((o.t || 0) % 5) / 5), borde = 1 - (W - 0.25) * 0.6 * (0.5 + 0.5 * resp), rl = G.pared + 4;
