@@ -15,8 +15,11 @@
   <div class="presets" id="presets" role="group" aria-label="Paciente"></div>
   <section class="zona-escena"><svg id="cr-svg" viewBox="0 0 390 330" role="img" aria-label="Corte coronal del cráneo y la cara del enfermo"></svg></section>
   <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
-    <span>PA <b id="m-pa"></b></span><span>PAM <b id="m-pam"></b></span><span>PIC <b id="m-pic"></b></span><span>PPC <b id="m-ppc"></b></span><span>GCS <b id="m-gcs"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Tiempo <b id="m-t"></b></span></div></section>
+    <span>PA <b id="m-pa"></b></span><span>PAM <b id="m-pam"></b></span><span>PIC <b id="m-pic"></b></span><span>PPC <b id="m-ppc"></b></span><span>GCS <b id="m-gcs"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Tiempo <b id="m-t"></b></span><span id="dtc-s" hidden>Doppler <b id="m-dtc"></b></span></div></section>
   <p id="idea" class="idea"></p>
+  <details class="plegable" id="pv-det"><summary>La caja cerrada: por qué sube la presión</summary><svg id="pv-svg" viewBox="0 0 390 150" role="img" aria-label="Curva presión-volumen y reparto de lo que ocupa la caja"></svg><p id="pv-txt" class="para"></p></details>
+  <details class="plegable" id="pa-det"><summary>Flujo, autorregulación, CO₂ y penumbra</summary><svg id="pa-svg" viewBox="0 0 390 124" role="img" aria-label="Autorregulación del flujo cerebral"></svg><p id="pa-txt" class="para"></p><p id="co2-txt" class="para"></p>
+    <div id="pen-caja" hidden><svg id="pen-svg" viewBox="0 0 390 110" role="img" aria-label="Penumbra del ictus en anillos"></svg><div id="ictus-lista"></div></div></details>
   <section id="prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
   <figure class="fig"><img id="fig-img" alt="Imagen real del libro" loading="eager"><figcaption id="fig-cap"></figcaption></figure>

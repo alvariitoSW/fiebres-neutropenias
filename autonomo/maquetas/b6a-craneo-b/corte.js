@@ -2,6 +2,11 @@
 // Convención radiológica: el lado D del enfermo queda a la izquierda del dibujo, igual que en la cara.
 import { dibujarCara, dibujarMano, MANO, textoPupila } from './cara.js';
 import { TIPOS } from './modelo.js';
+import { svgParticula } from '../../../js/core/particulas.js';
+const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// Sangre en las arterias de la base: corre más deprisa con más PPC y en el vasoespasmo; sin flujo se para y no se pinta.
+const RIO = 'M64,216 L172,216';
+const flujoBase = (L) => (L.me ? '' : [0, 1, 2, 3].map((i) => { const dur = L.hsaDiasEsp ? 1.4 : Math.min(6, Math.max(1.8, 240 / Math.max(L.ppc, 20))); return `<g>${REDUCIR ? '' : `<animateMotion dur="${dur.toFixed(1)}s" repeatCount="indefinite" begin="-${(i * dur / 4).toFixed(2)}s" path="${RIO}"/>`}${svgParticula(i % 2 ? 'o2' : 'rbc', REDUCIR ? 64 + 28 * i : 0, REDUCIR ? 216 : 0, 2.6)}</g>`; }).join(''));
 export const ZONAS = { uncus: [56, 160, 62, 44], tronco: [98, 178, 44, 82], ventr: [64, 62, 112, 70], cist: [40, 166, 160, 80], cara: [244, 2, 144, 160], mano: [244, 196, 140, 40] };
 const t = (x, y, s, c = 'ct', a = 'start') => !s ? '' : `<text x="${x}" y="${y}" class="${c}" text-anchor="${a}">${s}</text>`;
 const lin = (a, b, c, d) => `<path d="M${a},${b} L${c},${d}" class="lider"/>`;
@@ -17,7 +22,7 @@ export function escena(s, L, { oculto = false } = {}) {
   const ung = L.est >= 2 ? 1 : 0;                              // el uncus baja y aprieta el III par
   const uncus = `<ellipse cx="${84 + 12 * ung}" cy="${177 + 6 * ung}" rx="14" ry="9" class="uncus"/>`;
   const ciste = hsa ? `<path d="M52,206 Q118,226 184,206" class="sangre-linea"/>` : '';
-  const vaso = hsa ? `<path d="M64,216 L108,216 M128,216 L172,216" class="vaso" style="stroke-width:${L.hsaDiasEsp ? 1.5 : 4.5}"/>` : '';
+  const vaso = `<path d="M64,216 L108,216 M128,216 L172,216" class="vaso" style="stroke-width:${hsa ? (L.hsaDiasEsp ? 1.5 : 4.5) : 3}"/>`;
   const lesion = tr ? `<rect x="112" y="222" width="12" height="20" rx="3" class="lesion"/>` : '';
   const cat = (s.sensor && s.tipo !== 'edema') || s.drenaje ? `<path d="M170,28 L${fx + 22},84 M170,28 L170,12 L231,12 L231,126" class="cat"/><rect x="224" y="126" width="14" height="14" rx="3" class="cat-c"/>` : '';
   const flecha = L.est >= 2 && !L.me ? `<path d="M84,170 L102,196" class="flecha"/>` : '';
@@ -26,7 +31,7 @@ export function escena(s, L, { oculto = false } = {}) {
   const lab = [t(4, 9, 'D', 'ct dim'), t(232, 9, 'I', 'ct dim', 'end'), t(fx, 9, 'Línea media', 'ct', 'middle'),
     t(4, 205, 'Uncus'), lin(30, 201, 72, 178), t(4, 232, 'III par'), lin(34, 228, 106, 190), t(203, 205, 'Tienda'), lin(204, 200, 168, 190), t(138, 262, 'Tronco'),
     t(150, 119, 'Ventrículos', 'ct dim'),
-    hsa ? t(52, 276, 'Sangre en cisternas') + t(52, 292, L.hsaDiasEsp ? 'Arterias estrechas (vasoespasmo)' : 'Arterias de la base') : '',
+    hsa ? t(52, 276, 'Sangre en cisternas') + t(52, 292, L.hsaDiasEsp ? 'Arterias estrechas (vasoespasmo)' : 'Arterias de la base') : t(52, 292, 'Arterias de la base'),
     tr ? t(134, 278, 'Lesión ventral') + lin(130, 270, 120, 244) : '', s.cran ? t(30, 22, 'Hueso retirado', 'ct') : '',
     s.tipo === 'edema' ? t(24, 52, 'Edema') : hsa || tr ? '' : t(24, 52, hv ? 'Sangre ventricular' : 'Hematoma D'),
     (s.sensor && s.tipo !== 'edema') || s.drenaje ? t(190, 156, s.drenaje ? 'Drenaje de LCR' : 'Sensor de PIC') : ''].join('');
@@ -39,7 +44,7 @@ export function escena(s, L, { oculto = false } = {}) {
     ${abre}${masa}${vent(118 - 22 + sh, vL, 1)}${vent(118 + 22 + sh, vR, -1)}${ciste}
     <path d="M${fx},26 L${fx},182" class="falx"/>
     <path d="M30,176 L100,194 M206,176 L136,194" class="tienda"/><ellipse cx="118" cy="218" rx="70" ry="24" class="cerebelo"/>
-    <rect x="106" y="180" width="24" height="70" rx="10" class="tronco"/>${lesion}${uncus}${flecha}${vaso}
+    <rect x="106" y="180" width="24" height="70" rx="10" class="tronco"/>${lesion}${uncus}${flecha}${vaso}${flujoBase(L)}
     <path d="M${106},188 L${96 + 12 * ung},${178 + 6 * ung}" class="par3"/>${cat}
     ${L.me ? '<ellipse cx="118" cy="128" rx="108" ry="118" class="apagado"/>' + t(118, 132, 'Sin flujo', 'ct fuerte', 'middle') : ''}
     ${lab}${cara}${der}`;

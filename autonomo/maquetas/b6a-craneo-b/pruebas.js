@@ -1,9 +1,9 @@
 // Apuesta, «encuentra el error» y caso. Las respuestas NO están en el HTML: viven aquí y se comprueban al tocar.
 import { cita } from './datos.js';
 export const APUESTA = { p: 'abundio', enun: 'Abundio, 23 años, traumatismo craneal: pupila derecha dilatada y fija, izquierda reactiva; retira el brazo izquierdo al dolor. ¿Dónde está la masa y qué pasará con la mano si no se opera?',
-  ops: [['Derecha, del lado de la pupila fija. La mano pasará a flexión y luego a extensión según el tronco se comprime.', true, 'La pupila fija es la del lado de la masa (uncus sobre el III par). Sin operar, la compresión baja por el tronco: flexión (tálamo) y después extensión (mesencéfalo-protuberancia alta).', 10, 'mn-coma-posturas'],
-    ['Izquierda, porque es la pupila que reacciona y el lado que se mueve.', false, 'Operarías el lado equivocado. La pupila dilatada y fija es la del lado de la masa en expansión (Tabla 45.4).', 11, 'mn-tabla-45-4'],
-    ['Derecha, pero la mano se queda como está.', false, 'La herniación no se detiene sola: si la masa sigue, el tronco se comprime y el paciente pasa a flexión, extensión y flaccidez.', 10, 'mn-coma-posturas']], fin: { masa: 77 } };
+  ops: [['Derecha, del lado de la pupila fija; sin operar, la mano irá a flexión y luego a extensión.', true, 'La pupila fija es la del lado de la masa (uncus sobre el III par). Sin operar, la compresión baja por el tronco: flexión (tálamo) y después extensión (mesencéfalo-protuberancia alta).', 10, 'mn-coma-posturas'],
+    ['Izquierda, del lado de la pupila que reacciona y del brazo que se mueve; la mano seguirá igual.', false, 'Operarías el lado equivocado. La pupila dilatada y fija es la del lado de la masa en expansión (Tabla 45.4).', 11, 'mn-tabla-45-4'],
+    ['Derecha, pero la herniación se frena sola y la mano seguirá igual aunque no se opere.', false, 'La herniación no se detiene sola: si la masa sigue, el tronco se comprime y el paciente pasa a flexión, extensión y flaccidez.', 10, 'mn-coma-posturas']], fin: { masa: 77 } };
 export const ERROR = { p: 'petronila', enun: 'Petronila, HSA, día 1. Hay 0, 1 o 2 frases falsas. Toca las que contienen un error; si crees que no hay más, pulsa «No hay más errores».', fr: [
   ['Nimodipino 60 mg cada 4 horas por vía oral, 3 semanas.', false, 'Correcto: por vía oral, no intravenosa, y 3 semanas.', 48, 'mn-hsa-nimodipino'],
   ['PAS ≤140 con labetalol hasta cerrar el aneurisma.', false, 'Correcto: reduce el riesgo de resangrado mientras el aneurisma sigue abierto.', 47, 'mn-hsa-inmediato'],
@@ -35,4 +35,5 @@ export const CASO = { p: 'abundio', pasos: [
     ['No importa la PAM, solo la PaCO₂.', false, 'La PAM es una condición del test: sin ella el resultado no vale.', 15, 'mn-me-pam', {}]] }] };
 export const LLEVAS = [`Pupila fija = masa del mismo lado ${cita(11, 'mn-tabla-45-4')}`, `Flexión → extensión → flácido: el tronco se comprime ${cita(10, 'mn-coma-posturas')}`, `PIC <20 y PPC 50-70 ${cita(45, 'mn-hic-ppc')}`, `Muerte encefálica: ≥48 h, T >36 °C, PAM ≥75 ${cita(14, 'mn-me-definicion')}`];
 export const html = (o) => o;
+export { ERROR_SEG, CASO_SEG } from './pruebas-seg.js';
 export { cita };

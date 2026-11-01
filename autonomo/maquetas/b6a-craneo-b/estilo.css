@@ -68,3 +68,10 @@ main { gap: 4px; } .idea { font-size: .72rem; margin: 2px 0; } .frase { font-siz
 #dock .dock-panel { max-height: 78px !important; overflow-y: auto; } #dock.abierto .dock-panel { max-height: 30vh !important; }
 .dock-tabs { grid-auto-columns: minmax(0, 1fr) auto; } #mas-mandos { background: transparent; border: 0; color: var(--text-dim); font: 600 .7rem/1.1 var(--sans); min-height: 34px; padding: 0 6px; }
 #monitor .tope-sellos { margin-top: 8px; } #monitor .tope-sello { transform: none; }
+/* vuelta 2b: injertos (plegables bajo la idea; la cabecera PPC dentro del dock) */
+#pv-svg, #pa-svg, #pen-svg { display: block; width: 100%; height: auto; background: var(--bg-main); }
+.ppc-cab { display: block; width: 100%; height: 32px; flex: none; }
+#pv-det .para, #pa-det .para { margin: 4px 0; }
+#dtc-s[hidden] { display: none; }
+#pv-svg text, #pa-svg text, #pen-svg text, #ppc-cab text { font-family: var(--sans); }
+.para .cita-pdf { display: inline; min-height: 0; }
