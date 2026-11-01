@@ -8,6 +8,8 @@ const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
 const DX = 'ma-pancreatitis-dx', TTO = 'ma-pancreatitis-tto';
+const BANKS = '<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/23100216/" target="_blank" rel="noopener">Banks PA, et al. Gut 2013;62:102-11</a>';
+const NOTA_DRENAJE = `<b>Nota de fuentes.</b> Marino dice que el drenaje precoz da mejores resultados (${pag(22)}). El ensayo que cita (Boxhoorn L, et al. N Engl J Med 2021;385:1372-81, <a class="biblio-link" href="https://scholarlypublications.universiteitleiden.nl/handle/1887/3279868" target="_blank" rel="noopener">texto</a>) concluyó que el drenaje inmediato no fue superior al diferido y que el diferido necesitó menos intervenciones. No se elige ganadora: aquí se enseña lo que ambos comparten.`;
 const CASO = 'ficha; la cuenta con los datos del caso';
 
 export const MAYEUTICA_ABDOMEN_1 = {
@@ -45,8 +47,8 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'No: falta la imagen, hay que esperar a la TC con contraste para confirmarla', porque: 'Los criterios piden dos de tres, no los tres. Esperar la TC retrasa los fluidos y la vigilancia a quien ya cumple el diagnóstico.' },
           { t: 'Sí: dolor característico más enzima >3 veces el límite son dos de tres criterios', ok: true },
           { t: 'Solo si la enzima es amilasa: la lipasa no entra en los criterios diagnósticos de Atlanta', porque: 'En los criterios entran amilasa o lipasa >3 veces el límite alto, sin distinción. Descartar la lipasa te haría pedir otra prueba y retrasar el diagnóstico.' }],
-        explicacion: `Tabla 40.2: «cualquiera de 2»: <span class="hl">dolor característico</span>, <span class="hl">amilasa o lipasa &gt;3 veces el límite alto</span>, imagen característica. Dolor más enzimas diagnostican alrededor del 75-80 % de los casos (${pag(18)}). Pruébalo en la calculadora de la ficha: marca solo dos casillas y no marques la TC.`,
-        modelo: { aguaViva: 'ringer', texto: '🌊 El volumen que no esperó a la TC (río y mar)' } },
+        explicacion: `Tabla 40.2: «cualquiera de 2»: <span class="hl">dolor característico</span>, <span class="hl">amilasa o lipasa &gt;3 veces el límite alto</span>, imagen característica. Dolor más enzimas diagnostican alrededor del 75-80 % de los casos (${pag(18)}). Pruébalo en la calculadora de la ficha: marca solo dos casillas y no marques la TC. El reparto en el modelo del río y mar es ilustrativo.`,
+        modelo: { aguaViva: 'ringer', texto: '🌊 Fluidos en el río y mar (ilustrativo)' } },
       { id: 'pdx-g5', corto: 'lipasa o amilasa', tipo: 'test', fuente: 'ma-panc-lipasa · ma-enzimas-cinetica',
         enunciado: 'Los criterios de Atlanta admiten amilasa o lipasa. Pero Marino prefiere una. Antes de abrir la tabla de cinética: ¿cuál y por qué?',
         opciones: [
@@ -60,7 +62,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Una zona del páncreas que no capta el contraste en la TC: es necrosis', ok: true },
           { t: 'Un páncreas aumentado, que realza entero, con el borde borroso', porque: 'Eso es el edema (Figura 40.1), la forma más frecuente, leve y autolimitada. Llamarlo necrotizante te llevaría a sobretratar a un paciente que probablemente evolucionará bien.' },
           { t: 'Burbujas de gas dentro de la glándula, que indican que hay necrosis establecida', porque: 'El gas indica infección de la necrosis (Figura 40.3), una complicación posterior, no la forma de reconocer la necrosis. Esperarlo para decir «necrotizante» retrasaría el diagnóstico.' }],
-        explicacion: `<span class="hl-verde">Edematosa</span> (Fig. 40.1): glándula engrosada que realza completa, borde borroso por el edema. <span class="hl-rojo">Necrotizante</span> (Fig. 40.2): un área grande que no realza con contraste = necrosis, aquí en cuello y cuerpo (${pag(18)}, ${pag(19)}).` },
+        explicacion: `<span class="hl-verde">Edematosa</span> (Fig. 40.1): glándula engrosada que realza completa, borde borroso por el edema. <span class="hl-rojo">Necrotizante</span> (Fig. 40.2): un área grande que no realza con contraste = necrosis, aquí en cuello y cuerpo (${pag(19)}, ${pag(20)}).` },
       { id: 'pdx-g7', corto: 'la TC del día 2', tipo: 'test', fuente: 'ma-panc-imagen',
         enunciado: 'Una pancreatitis con fallo renal y respiratorio. La TC con contraste del día 2 no muestra necrosis y el paciente sigue mal. ¿Está descartada la necrotizante?',
         opciones: [
@@ -71,7 +73,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
       { id: 'pdx-g8', corto: 'moderada o grave', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'ma-panc-gravedad',
         enunciado: 'Según el fallo orgánico, la Atlanta revisada separa moderadamente grave y grave. ¿Qué las separa, y dónde se concentra la mortalidad?',
         puntos: [
-          'Lo separa el <span class="hl">tiempo</span> del fallo orgánico: <span class="hl-verde">transitorio, &lt;48 h</span> (moderada) frente a <span class="hl-rojo">persistente, &gt;48 h</span> (grave), único o múltiple.',
+          'Lo separa el <span class="hl">tiempo</span> del fallo orgánico: <span class="hl-verde">transitorio, &lt;48 h</span> (moderada) frente a <span class="hl-rojo">persistente, &gt;48 h</span> (grave), único o múltiple. La moderada incluye también complicaciones locales o sistémicas sin fallo persistente (Tabla 40.2, pág. 18).',
           'La mortalidad se concentra en las graves: <span class="hl-rojo">20-25 %</span>. La mitad de los casos son leves; la otra mitad se reparte a partes iguales entre moderados y graves.'],
         explicacion: `Tabla 40.2 y texto (${pag(18)}, ${pag(19)}, ${pag(20)}). Pulmón (SDRA), riñón y circulación son los órganos típicos, y a veces no fallan al principio.`,
         nota: `<b>Nota de fidelidad.</b> El capítulo da una mortalidad global de ~25 % en la introducción (${pag(16)}) y de 20-25 % limitada a las graves (${pag(20)}): si solo mueren las graves (un 25 % del total), la global no puede ser del 25 %. Aquí se usa 20-25 % para las graves.${enFicha(DX, 'ma-panc-gravedad')}` },
@@ -102,9 +104,10 @@ export const MAYEUTICA_ABDOMEN_1 = {
         enunciado: 'Pancreatitis con lipasa de 9.000 U/L y una TC con necrosis extensa, pero sin ningún órgano en fallo a las 72 h. ¿Cómo la clasificas?',
         opciones: [
           { t: 'Grave: una lipasa tan alta y una necrosis extensa se correlacionan con la gravedad', porque: 'Enzimas y TC tienen mala correlación con la gravedad. Llamarla grave por la imagen te llevaría a decisiones de paciente grave en uno que quizá no lo es.' },
-          { t: 'Leve: sin fallo orgánico a las 72 h no puede haber ni complicaciones locales', porque: 'Con necrosis hay una complicación local: eso la hace al menos moderadamente grave, aunque no haya fallo persistente.' },
+          { t: 'Leve: sin fallo orgánico a las 72 h no puede haber ni complicaciones locales', porque: 'Con necrosis hay una complicación local (Atlanta revisada, Banks 2013): eso la hace al menos moderadamente grave, aunque no haya fallo persistente.' },
           { t: 'Por el fallo orgánico >48 h; sin fallo, pero con necrosis, es moderadamente grave', ok: true }],
-        explicacion: `<span class="hl">Ni las enzimas ni la TC se correlacionan bien con la gravedad</span>; la clasificación la dan el fallo orgánico y su duración. Moderadamente grave: fallo transitorio &lt;48 h o complicaciones locales o sistémicas sin fallo persistente; grave: fallo &gt;48 h (${pag(18)}, ${pag(20)}).` },
+        explicacion: `<span class="hl">Ni las enzimas ni la TC se correlacionan bien con la gravedad</span>; la clasificación la dan el fallo orgánico y su duración. Moderadamente grave: fallo transitorio &lt;48 h o complicaciones locales o sistémicas sin fallo persistente; grave: fallo &gt;48 h (${pag(18)}, ${pag(20)}). Que la necrosis cuente como complicación local no es de Marino: viene de la Atlanta revisada (Banks 2013).`,
+        nota: `Fuente de la complicación local: ${BANKS}.` },
       { id: 'pdx-e5', corto: 'las dos formas', tipo: 'test', fuente: 'ma-panc-morfologia',
         enunciado: '¿Cuál de estas frases sobre la morfología de la pancreatitis aguda es la correcta?',
         opciones: [
@@ -129,7 +132,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
               enunciado: 'Dolor típico y lipasa 40 veces el límite alto. ¿Diagnóstico ya, o esperas la TC?',
               opciones: [
                 { t: 'Sí: dolor característico más lipasa >3 veces son dos de tres criterios', ok: true },
-                { t: 'Esperar la TC con contraste: sin imagen no se puede hacer el diagnóstico', porque: 'Bastan dos de tres criterios. Esperar la TC retrasa los fluidos a un paciente con PA 98/60 y FC 112.' },
+                { t: 'Esperar la TC con contraste: sin imagen no se puede hacer el diagnóstico', porque: 'Bastan dos de tres criterios. Esperar la TC retrasa los fluidos y la vigilancia a un paciente que ya cumple el diagnóstico.' },
                 { t: 'Pedir primero la amilasa: la lipasa sola no vale para el diagnóstico', porque: 'La lipasa es la preferida: más específica, sube antes y dura 8-14 días, frente a 3-5 de la amilasa. Pedir amilasa añade una espera que no cambia nada.' }],
               explicacion: `Cumple <span class="hl">dolor característico + enzima &gt;3 veces el límite alto</span>: dos de tres criterios, sin imagen (${pag(18)}). La lipasa de 2.400 con límite 60 es 40 veces.` } },
           { momento: 'Día 1 · 11:00', datos: { TG: '3.200 mg/dL' }, nuevo: ['TG'],
@@ -192,15 +195,16 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Los capilares fugan y la hipovolemia puede producir más necrosis pancreática añadida', ok: true },
           { t: 'Se retiene líquido en exceso por la sed y el edema; lo que hay que evitar es el volumen', porque: 'La pancreatitis grave pierde líquido intravascular por capilares con fuga. Restringir el volumen por miedo al edema extiende la necrosis.' }],
         explicacion: `La pancreatitis grave se asocia con pérdida de líquido intravascular por <span class="hl-azul">capilares sistémicos con fuga</span>, y la hipovolemia resultante puede producir <span class="hl-rojo">más necrosis pancreática</span>; por eso se recomienda atender el volumen pronto (${pag(21)}).` },
-      { id: 'ptt-g2', corto: 'Ringer o salino', tipo: 'test', fuente: 'ma-panc-fluidos · mar-cristaloides', modelo: [{ aguaViva: 'ringer' }, { aguaViva: 'salino' }],
+      { id: 'ptt-g2', corto: 'Ringer o salino', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: [{ aguaViva: 'ringer' }, { aguaViva: 'salino' }],
         enunciado: 'Pancreatitis grave con hipovolemia. ¿Qué cristaloide eliges, y en qué caso no lo usarías?',
         opciones: [
           { t: 'Salino al 0,9 %, el suero fisiológico, siempre; el Ringer solo en la hipocalcemia', porque: 'Marino recomienda Ringer lactato, con mejores resultados que el salino, y lo contraindica en la hipercalcemia, no en la hipocalcemia. Con salino pierdes el beneficio demostrado.' },
           { t: 'Ringer lactato, salvo en la pancreatitis por hipercalcemia, pues el Ringer lleva calcio', ok: true },
           { t: 'Ringer lactato siempre, porque su lactato tampona y el calcio que lleva no afecta a nadie', porque: 'El Ringer lleva calcio y no debe usarse en la pancreatitis por hipercalcemia: sumaría calcio a un paciente que ya lo tiene alto.' }],
-        explicacion: `<span class="hl">Ringer lactato</span> por la evidencia de mejores resultados que el salino isotónico; <span class="hl-rojo">no en la pancreatitis relacionada con hipercalcemia</span>, porque lleva calcio (${pag(21)}). El reparto en el modelo del río y mar es ilustrativo.` },
+        explicacion: `<span class="hl">Ringer lactato</span> por la evidencia de mejores resultados que el salino isotónico; <span class="hl-rojo">no en la pancreatitis relacionada con hipercalcemia</span>, porque lleva calcio (${pag(21)}). El reparto en el modelo del río y mar es ilustrativo.`,
+        nota: `Los cristaloides, en Fundamentos: <button type="button" class="may-ir" data-especialidad="libros" data-view="marinoFundamentos" data-panel="panel-marino-fund-tabs" data-tab="mar-cristaloides">Ver en la ficha ↗</button>` },
       { id: 'ptt-g3', corto: 'sin hipovolemia', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc',
-        enunciado: 'Predice y luego lo compruebas en la calculadora: un paciente de 80 kg con pancreatitis, sin hipovolemia y sin hipercalcemia. ¿Qué pautas?',
+        enunciado: 'Predice y luego lo compruebas en la calculadora: un paciente de 80 kg con pancreatitis grave, sin hipovolemia y sin hipercalcemia. ¿Qué pautas?',
         opciones: [
           { t: 'Un bolo de 800 mL de Ringer y luego 120 mL/h', porque: 'El bolo de 10 mL/kg es solo para la hipovolemia. Dárselo a quien no la tiene suma volumen sin beneficio y favorece el edema.' },
           { t: 'Sin bolo y 120 mL/h de Ringer lactato (1,5 mL/kg/h)', ok: true },
@@ -230,7 +234,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Sí: fiebre y leucocitosis persistentes en una necrotizante son criterio de infección', porque: 'También aparecen en la necrotizante sin infección. Con esos dos datos solos, darías antibiótico por inercia sin la prueba que confirma.' },
           { t: 'No: aún no; la TC con contraste puede mostrar burbujas de gas, que sí sugieren infección', ok: true },
           { t: 'No: la infección no aparece hasta pasadas las 4-6 semanas, así que es pronto para pensarla', porque: 'La infección suele aparecer a los 7-10 días del inicio. Descartarla por la fecha retrasaría el antibiótico y el drenaje.' }],
-        explicacion: `Un tercio de las necrotizantes se infectan, típicamente a los <span class="hl">7-10 días</span>. Fiebre y leucocitosis la sugieren, pero también están sin infección; la TC con contraste muestra <span class="hl-rojo">burbujas de gas</span> (Fig. 40.3). Si se sospecha, antibiótico con cobertura de enterobacterias (${pag(22)}).` },
+        explicacion: `Un tercio de las necrotizantes se infectan, típicamente a los <span class="hl">7-10 días</span>. Fiebre y leucocitosis la sugieren, pero también están sin infección; la TC con contraste muestra <span class="hl-rojo">burbujas de gas</span> (Fig. 40.3). Si se sospecha, antibiótico que cubre enterobacterias (${pag(22)}).` },
       { id: 'ptt-g7', corto: 'profilaxis', tipo: 'test', fuente: 'ma-panc-infeccion',
         enunciado: 'Una pancreatitis necrotizante recién ingresada, sin fiebre. ¿Pones antibiótico para prevenir la infección de la necrosis?',
         opciones: [
@@ -295,12 +299,13 @@ export const MAYEUTICA_ABDOMEN_1 = {
             c: 'Colecciones, ascitis y <span class="hl-rojo">edema de la pared intestinal por la reanimación agresiva</span> lo producen: el exceso de volumen también lo favorece.' }],
         explicacion: `Presión &gt;12 cmH₂O en el 55 % de las graves, &gt;20 cmH₂O puede dar oliguria; medirla en la grave con oliguria (${pag(23)}).` },
       { id: 'ptt-e5', corto: 'drenaje', tipo: 'test', fuente: 'ma-panc-infeccion',
-        enunciado: 'Necrosis infectada con respuesta pobre al antibiótico. Un compañero propone esperar semanas al drenaje porque «el drenaje tardío es mejor que el precoz». ¿Qué dice la ficha?',
+        enunciado: 'Necrosis infectada con respuesta pobre al antibiótico. ¿Qué plan comparten Marino y el ensayo que cita?',
         opciones: [
-          { t: 'Que hay debate, pero que el drenaje tardío da mejores resultados que el precoz', porque: 'Es al revés: hay evidencia de que el drenaje precoz da mejores resultados. Esperar mantiene la infección sin control.' },
-          { t: 'Que el drenaje guiado por TC es mejor precoz que tardío; si falla, necrosectomía', ok: true },
-          { t: 'Que la necrosectomía quirúrgica abierta es de primera elección, antes del drenaje', porque: 'La cirugía (necrosectomía) es el recurso si el drenaje no invasivo guiado por TC no tiene éxito, no la primera medida.' }],
-        explicacion: `Estas infecciones responden mal al antibiótico: <span class="hl">drenaje guiado por TC</span>; hay debate sobre el momento, pero la evidencia es que <span class="hl-rojo">el drenaje precoz da mejores resultados que el tardío</span>. Si el drenaje no invasivo no lo logra, necrosectomía (${pag(22)}).` },
+          { t: 'Necrosectomía quirúrgica abierta de primera elección, antes de intentar drenar, porque el gas indica tejido muerto', porque: 'La cirugía (necrosectomía) es el recurso si el drenaje no invasivo guiado por TC no tiene éxito, no la primera medida: operarlo primero expone a un enfermo grave a cirugía mayor.' },
+          { t: 'Antibiótico frente a enterobacterias y drenaje guiado por TC si hace falta; necrosectomía si falla', ok: true },
+          { t: 'Solo antibiótico, sin plantear nunca el drenaje, hasta que el cultivo identifique el germen', porque: 'Estas infecciones son difíciles de tratar solo con antibiótico y puede ser necesario el drenaje guiado por TC; sin plan de drenaje el foco puede seguir activo.' }],
+        explicacion: `Estas infecciones responden mal al antibiótico: antibiótico que cubre enterobacterias, <span class="hl">drenaje guiado por TC</span> cuando hace falta y, si el drenaje no invasivo no lo logra, necrosectomía (${pag(22)}). El momento del drenaje es el punto en que las fuentes discrepan.`,
+        nota: NOTA_DRENAJE },
       { id: 'ptt-e6', corto: 'CPRE', tipo: 'test', fuente: 'ma-panc-biliar',
         enunciado: 'Pancreatitis litiásica moderadamente grave, ecografía sin dilatación de la vía biliar ni signos de obstrucción. ¿CPRE urgente con esfinterotomía?',
         opciones: [
@@ -314,7 +319,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Que el alcohol es la causa principal y no hay que buscar otra', porque: 'La asociación se estableció cuando se diagnosticaba solo por la amilasa, y el alcohol libera amilasa salival. Cerrar el diagnóstico deja sin tratar la litiasis o la hipertrigliceridemia.' },
           { t: 'Que la asociación pudo ser un artefacto de la amilasa salival; busca otra causa', ok: true },
           { t: 'Que solo es causa si hay amilasa elevada, porque la amilasa es la prueba del alcohol', porque: 'La amilasa alta del bebedor es en parte salival (40 % de las intoxicaciones agudas) y no prueba la pancreatitis alcohólica. Fiarte de ella te lleva a un diagnóstico erróneo.' }],
-        explicacion: `La hiperamilasemia salival se da en el <span class="hl">40 %</span> de las intoxicaciones alcohólicas agudas. Con unos 30 millones de alcohólicos en EE. UU. y unos 69.000 casos al año atribuibles al alcohol, solo el <span class="hl-azul">0,2 %</span> de los alcohólicos la tiene cada año. Consecuencia práctica: no dejes de buscar otra causa (${pag(23)}, ${pag(24)}).`,
+        explicacion: `La hiperamilasemia salival se da en el <span class="hl">40 %</span> de las intoxicaciones alcohólicas agudas. Con unos 30 millones de alcohólicos en EE. UU. y unos 69.000 casos al año atribuibles al alcohol (el autor lo calcula suponiendo que el 25 % de las pancreatitis son alcohólicas: supuesto suyo), solo el <span class="hl-azul">0,2 %</span> de los alcohólicos la tiene cada año. Consecuencia práctica: no dejes de buscar otra causa (${pag(23)}, ${pag(24)}).`,
         nota: `<b>Nota de fuentes.</b> Esta cifra es una estimación del propio autor («una asociación no muy fuerte»); es una opinión del autor, no un dato de ensayo.${enFicha(TTO, 'ma-panc-alcohol')}` },
     ],
     casos: [
@@ -323,7 +328,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
         pasos: [
           { momento: 'Día 1 · 09:30', datos: { PA: '98/60 mmHg', FC: '112 lpm', Hto: '51 %', Calcio: '9,0 mg/dL' }, nuevo: ['PA', 'FC', 'Hto', 'Calcio'], calculadora: { ir: 'ma-rl-resultado', nombre: 'Ringer lactato en la pancreatitis' },
             pregunta: { id: 'c1-2', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc', origen: CASO, modelo: { aguaViva: 'ringer' },
-              enunciado: 'Recuerda: Bartolomé, 51 años, dolor típico y lipasa 40 veces el límite: pancreatitis aguda ya diagnosticada. Pesa 80 kg, está hipovolémico (PA 98/60, FC 112, Hto 51 %) y calcio normal. ¿Qué fluido y cuánto?',
+              enunciado: 'Recuerda: Bartolomé, 51 años, dolor típico y lipasa 40 veces el límite: pancreatitis aguda ya diagnosticada. Pesa 80 kg, está hipovolémico (PA 98/60, FC 112, Hto 51 %) y calcio normal. La pauta de Marino es para la pancreatitis grave; con su hipovolemia y la causa por TG la tratas como tal. ¿Qué fluido y cuánto?',
               opciones: [
                 { t: 'Salino al 0,9 %: bolo de 1.600 mL (20 mL/kg) y luego 240 mL/h (3 mL/kg/h)', porque: 'Es la pauta agresiva: sobrecarga de volumen y edema de pared sin mejorar el pronóstico. Además, el RL ha dado mejores resultados que el salino.' },
                 { t: 'Ringer lactato: 800 mL en bolo (10 mL/kg) y luego 120 mL/h (1,5 mL/kg/h)', ok: true },
@@ -354,19 +359,19 @@ export const MAYEUTICA_ABDOMEN_1 = {
               frases: [
                 { t: 'Pido TC con contraste: busco burbujas de gas.' },
                 { t: 'Mientras, meropenem «de profilaxis», que debió llevar desde el día 1.', mal: true,
-                  c: 'No existe la profilaxis: <span class="hl-rojo">no reduce las infecciones y no se recomienda</span>. El antibiótico se pone ante la sospecha, con cobertura de enterobacterias.' },
+                  c: 'No existe la profilaxis: <span class="hl-rojo">no reduce las infecciones y no se recomienda</span>. El antibiótico se pone ante la sospecha, que cubre enterobacterias.' },
                 { t: 'La fiebre con leucocitosis confirma la infección.', mal: true,
                   c: 'También se dan en la necrotizante <span class="hl">sin infección</span>; lo que la sugiere es el <span class="hl-rojo">gas en la TC</span>.' },
-                { t: 'Si hay gas, drenaje guiado por TC cuanto antes.' }],
-              explicacion: `La infección se da en un tercio de las necrotizantes, típicamente a los 7-10 días; los antibióticos profilácticos no reducen las infecciones; el drenaje precoz da mejores resultados (${pag(22)}).` } },
+                { t: 'Si hay gas, antibiótico y drenaje guiado por TC si hace falta.' }],
+              explicacion: `La infección se da en un tercio de las necrotizantes, típicamente a los 7-10 días; los antibióticos profilácticos no reducen las infecciones; el drenaje guiado por TC se hace si hace falta (${pag(22)}).`, nota: NOTA_DRENAJE } },
           { momento: 'Día 8 · la TC', datos: { TC: 'Figura 40.3: necrosis extensa con numerosas burbujas de gas' }, nuevo: ['TC'],
             pregunta: { id: 'c1-8', tipo: 'test', fuente: 'ma-panc-infeccion · mar-img-40-3', origen: CASO,
               enunciado: 'La TC muestra necrosis extensa con muchas burbujas de gas. ¿Y ahora?',
               opciones: [
                 { t: 'Necrosectomía directa, porque el gas indica que el tejido está muerto', porque: 'La necrosectomía es el recurso si el drenaje no invasivo falla. Operar primero expone a un enfermo grave a cirugía mayor.' },
-                { t: 'Antibiótico y esperar al cultivo del drenaje, que se hará tras la semana 3-4', porque: 'Hay evidencia de que el drenaje precoz da mejores resultados que el tardío. Esperar mantiene la infección sin control.' },
-                { t: 'Antibiótico frente a enterobacterias y drenaje guiado por TC cuanto antes', ok: true }],
-              explicacion: `Antibiótico con cobertura de enterobacterias y <span class="hl">drenaje guiado por TC</span> (mejor precoz que tardío); necrosectomía si no basta (${pag(22)}).` } },
+                { t: 'Solo antibiótico y esperar a que el cultivo guíe el tratamiento, sin plantear drenaje', porque: 'Estas infecciones responden mal al antibiótico y puede hacer falta el drenaje guiado por TC; sin plan de drenaje el foco sigue sin control.' },
+                { t: 'Antibiótico frente a enterobacterias y drenaje guiado por TC si hace falta', ok: true }],
+              explicacion: `Antibiótico que cubre enterobacterias y <span class="hl">drenaje guiado por TC</span>; necrosectomía solo si el drenaje no basta (${pag(22)}).`, nota: NOTA_DRENAJE } },
         ],
         lleva: [
           'Sin hipovolemia no hay bolo; con ella, 10 mL/kg y 1,5 mL/kg/h: con 80 kg son 800 mL y 120 mL/h.',
