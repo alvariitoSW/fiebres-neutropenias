@@ -46,6 +46,8 @@ const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
 // Valores ILUSTRATIVOS, calibrados a esa forma sin mover vIT, PSAP, FEVD ni TAPSE más de un 5 %
 const TEP_U_MED = 0.66;   // u de g = 0,5
 const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) + 0.03 * Math.max(0, (u - 0.85) / 0.15) }; };
+// Con g = 0 el TEP y la HP son el normal del motor: la subida del VD pasa de la del VI (g = 0) a la de la enfermedad (g ≥ FUNDE_VD_G) sin salto
+const FUNDE_VD_G = 0.15, fundeVd = (g) => Math.min(1, Math.max(0, g) / FUNDE_VD_G);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
 const EROA_IM_POR_DIL = 0.25, EROA_IM_TOPE = 0.35, AI_V0_POR_DIL = 20;   // cm² y mL, ilustrativos (ver «dilatada»)
 // Relajación lenta del VI (motor.relajacion: alarga la cola de su activación). Es la MISMA que baja e′ en el Doppler tisular
@@ -193,7 +195,7 @@ export const ESCENARIOS = {
       texto: (g) => `resistencia pulmonar ×${coma(TEP_RPUL_MAX ** tepU(g), 1)}. ` + (g < TEP_G_MASIVO
         ? 'Riesgo intermedio (submasivo): disfunción del VD sin inestabilidad hemodinámica (Marino cap. 22, PDF p. 7)'
         : 'Riesgo alto (masivo): disfunción del VD con inestabilidad hemodinámica, PAM <70 mmHg (Marino cap. 22, PDF p. 7; cap. 14, PDF p. 2)') },
-    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= (1 - TEP_DUR_VD * u) * tepVd(u).durX; m.p.fSubidaVd = tepVd(u).f; m.p.vd.ees *= (1 - TEP_EES_VD_PENDIENTE * u) * tepVd(u).ees; sueloG(m, SUELO_TEP, g); },
+    aplicar: (m, g = TEP_DEFECTO) => { const u = tepU(g); m.p.rPul = escalarRPul(m.p, TEP_RPUL_MAX ** u); m.p.cAp /= (TEP_RPUL_MAX ** u) ** TEP_CAP_EXP; m.p.durVd *= (1 - TEP_DUR_VD * u) * tepVd(u).durX; m.p.fSubidaVd = m.p.fSubida + (tepVd(u).f - m.p.fSubida) * fundeVd(g); m.p.vd.ees *= (1 - TEP_EES_VD_PENDIENTE * u) * tepVd(u).ees; sueloG(m, SUELO_TEP, g); },
   },
   hpcronica: {
     // Hipertensión pulmonar crónica (cor pulmonale crónico): se distingue del TEP agudo por la pared libre del VD GRUESA
@@ -204,7 +206,7 @@ export const ESCENARIOS = {
     // aplanado, TAPSE algo bajo; hacia 1 el VD se dilata y falla)
     gravedad: { fin: 'el VD que claudica', defecto: HPC_DEFECTO, texto: (g) => `resistencia pulmonar ×${coma(hpcRecorrido(g).k, 1)}, pared del VD ×${coma(hpcRecorrido(g).mioVd, 1)}` },
     aplicar: (m, g = HPC_DEFECTO) => { const r = hpcRecorrido(g);
-      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd * r.durX; m.p.fSubidaVd = r.fSubidaVd; m.p.kEyecVd *= r.kEyecVdX; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
+      m.p.rPul = escalarRPul(m.p, r.k); m.p.cAp /= r.k ** 0.5; m.p.durVd *= r.durVd * r.durX; m.p.fSubidaVd = m.p.fSubida + (r.fSubidaVd - m.p.fSubida) * fundeVd(g); m.p.kEyecVd *= r.kEyecVdX; m.p.mioVd = r.mioVd; m.s.vven += r.vSangre;
       m.p.vd.ees *= r.ees * r.eesX; m.p.vd.b *= r.b; m.p.vd.v0 += r.v0; m.p.tabique = r.tab; },
   },
 };

@@ -193,6 +193,8 @@ export const BASE = {
   // fracción de subida de la activación del VD (null = la del VI). Con la del VI la presión VD−AD en el chorro de IT acaba en rampa en la
   // sobrecarga de presión; subiendo antes hace domo (Zoghbi 2017, Fig. 29, PDF p. 49). Lo fijan las enfermedades en escenarios.mjs. ILUSTRATIVO
   fSubidaVd: null, qSubidaVd: null,
+  // tricúspide abierta en toda la diástole (ver flujos): 0 = diodo por gradiente de antes; 1 = flujo de vuelta hasta igualar AD y VD (lo fijan TEP y HP)
+  tricRev: 0,
   // insuficiencia tricuspídea: orificio regurgitante efectivo (cm²), igual que eroaMitral. 0 = competente
   eroaTricus: 0,
   // ISQUEMIA DEL VD: el VD se perfunde en sístole y en diástole porque su presión es baja; cuando su presión sistólica se acerca
@@ -340,7 +342,7 @@ export function crearMotor(ajustes = {}) {
     vao: 837, vven: 3294, vap: 151, vvp: 265, reflujoAo: 0,
     pad: 0, pvd: 0, pai: 0, pvi: 0, pao: 0, pven: 0, pap: 0, pvp: 0, pTorax: 0, pperi: 0, ptmAd: 0, ptmVd: 0,
     qMit: 0, qMitReg: 0, qCiv: 0, qTri: 0, qTriReg: 0, qAo: 0, dpVc: 0, dpNeto: 0, qPul: 0, qSis: 0, qRet: 0, qPulm: 0, qVp: 0,
-    vMit: false, vTri: false, vAo: false, vPul: false,
+    vMit: false, vTri: false, tricAbierta: false, eVdAnt: 0, vAo: false, vPul: false,
     nLatido: 0, fase: 'G', _aoAbrio: false, _aoCerro: false, _mitAbrio: false, _pviPrev: 0,
     // barorreflejo: PAM que "siente" el seno carotídeo y efecto de cada brazo (0 = sin cambio)
     pamSensor: null, efFc: 0, efR: 0, efVu: 0, efEes: 0, fc: p.fc, paoDist: 0, isqVd: 0, isqVdObj: 0,
@@ -450,7 +452,16 @@ export function crearMotor(ajustes = {}) {
 
   function flujos(dt) {
     // válvulas: diodo por gradiente
-    s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
+    // tricúspide abierta en diástole: se abre por gradiente (AD > VD) y sigue abierta, con flujo en los dos sentidos, hasta que el VD empieza a
+    // contraerse (eVd sube): AD y VD son una cavidad común y su presión se iguala (fisiología general). Antes, tras la contracción auricular la
+    // AD caía a 1-7 mmHg con el VD a 17 y la válvula, cerrada por el gradiente, dejaba pVD−pAD de 8-16 mmHg en diástole (CW del TEP: −1,4 m/s)
+    if (p.tricRev > 0) {
+      if (s.pad > s.pvd) s.tricAbierta = true;
+      else if (s.eVd > 0.02 && s.eVd > s.eVdAnt) s.tricAbierta = false;
+      s.eVdAnt = s.eVd;
+      const dT = s.pad - s.pvd;
+      s.qTri = s.tricAbierta ? (dT > 0 ? dT : p.tricRev * dT) / p.rTricus : 0;
+    } else s.qTri = s.pad > s.pvd ? (s.pad - s.pvd) / p.rTricus : 0;
     if (p.lPul > 0) {
       // pulmonar con inercia, como la mitral: abre por gradiente y cierra cuando el flujo llega a 0
       if (!s.vPul && s.pvd > s.pap) s.vPul = true;
