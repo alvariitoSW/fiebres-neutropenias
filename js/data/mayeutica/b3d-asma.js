@@ -5,6 +5,8 @@
 import { MAYEUTICA_ASMA_AGUDO } from './b3d-asma-2.js';
 
 const PDF = 'docs/marino-2024-respiratory-management-caps22-26.pdf';
+const PDF_B = 'docs/marino-2024-respiratory-management-caps27-30.pdf';
+const pb = n => `<a class="biblio-link" href="${PDF_B}#page=${n}" target="_blank" rel="noopener">cap. 27, pág. ${n}</a>`;
 const p = n => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">pág. ${n}</a>`;
 const NEU = 'data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs"';
 const enFicha = (tab, id) => ` <button type="button" class="may-ir" ${NEU} data-tab="${tab}" data-resaltar="#${id}">Ver en la ficha ↗</button>`;
@@ -48,6 +50,13 @@ export const MAYEUTICA_ASMA = {
           { t: 'La PEEP que programas en el respirador; refleja el nivel de reclutamiento y se ajusta según la oxigenación y la compliance del paciente', porque: `Esa es la extrínseca. La intrínseca nace del aire que no sale (${p(16)}); si las confundes, no buscarás el atrapamiento que lleva a la hipotensión.` },
           { t: 'La presión del circuito en la inspiración; se mide con la pausa', porque: `Esa es la presión pico o la meseta; la intrínseca es positiva al final de la espiración y se monitoriza durante la ventilación mecánica (${p(16)}).` }],
         explicacion: `Si no se exhala por completo, el volumen retenido causa <span class="hl-azul">hiperinflación</span> y presión positiva alveolar al final de la espiración: la PEEP intrínseca, <span class="hl-rojo">reflejo de la gravedad de la obstrucción</span>, que se monitoriza en ventilación mecánica (${p(16)}). Cómo medirla: ficha «EPOC y ventilación con presión positiva».` + enFicha(BA, 'nep-peep-intrinseca-basicos') },
+      { id: 'as1-g10', corto: 'quitar la PEEP oculta', tipo: 'test', fuente: 'nep-ajustes-oculta', origen: 'ficha (conducta); cifras del monitor de la app (modelo, Jacinto)', modeloVivo: pl('auto-peep-corregida', '🫁 Jacinto con FR 12 y flujo 80: mira cómo el flujo final llega a cero'),
+        enunciado: 'Un obstructivo ventilado con FR 24 y Vt 500 tiene el flujo espiratorio lejos de cero al final de cada espiración. ¿Qué haces primero para quitarle la PEEP oculta?',
+        opciones: [
+          { t: 'Alargar el tiempo de espiración (menos FR o más flujo inspiratorio) hasta que el flujo final llegue a cero', ok: true },
+          { t: 'Subir la FR para lavar CO₂ y compensar el volumen minuto que pierde por el atrapamiento de aire', porque: `Más FR acorta aún más la espiración y atrapa más aire (${pb(15)}); el paciente se hiperinsuflaría y caería su presión arterial.` },
+          { t: 'Poner una PEEP extrínseca igual a la oculta desde el principio, sin tocar el tiempo espiratorio', porque: `La PEEP extrínseca solo se añade, justo por debajo de la oculta, si prolongar la espiración no es posible o no tiene éxito (${pb(15)}); empezar por ahí deja el atrapamiento sin tratar.` }],
+        explicacion: `Primero se mira el flujo final y se <span class="hl-verde">prolonga la espiración</span>; la PEEP extrínseca queda para cuando eso no basta (${pb(15)}). En el modelo (monitor de la app): con FR 24 y Vt 500, PEEP oculta 6,4 cmH₂O y flujo final −10 L/min; con FR 12, Vt 400 y flujo 80, 1,1 cmH₂O y el flujo llega a cero. El volumen minuto baja de 12 a 4,8 L/min: es el precio.` + enFicha('neumo-vm-ajuste', 'nep-ajustes-oculta') },
       { id: 'as1-g5', corto: 'nebulizador jet', tipo: 'test', fuente: 'nep-nebulizador',
         enunciado: '¿Cómo genera el aerosol un nebulizador jet y cuánto volumen lleva el de pequeño volumen?',
         opciones: [

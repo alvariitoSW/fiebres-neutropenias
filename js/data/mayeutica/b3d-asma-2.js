@@ -186,13 +186,13 @@ export const MAYEUTICA_ASMA_AGUDO = {
                 { t: 'Intubar: la BiPAP no ha conseguido bajar la PaCO₂', ok: true }],
               explicacion: `<span class="hl-rojo">El fracaso de la BiPAP en reducir la PaCO₂</span> es a menudo indicación de intubar y ventilar (${p(24)}-${p(25)}).` + enFicha('nep-vni-asma') } },
           { momento: '08:15 · antes del tubo', datos: { Decisión: 'intubar', Peso: '60 kg (PBW 54)', Pendiente: 'sedación una vez conectada al respirador' }, nuevo: ['Decisión', 'Pendiente'],
-            pregunta: { id: 'as2-c6', tipo: 'test', fuente: 'nep-ketamina', modeloVivo: pl('eulalia-ajustada', '🫁 Eulalia con menos FR: el aire atrapado baja'), origen: 'ficha: la dosis; la paciente es inventada',
+            pregunta: { id: 'as2-c6', tipo: 'test', fuente: 'nep-ketamina', modeloVivo: pl('eulalia-ajustada', '🫁 Compruébalo con el mando: en el respirador sube la FR de 10 a 26 y mira la PEEP oculta y el flujo final'), origen: 'ficha: la dosis; la paciente es inventada; cifras del monitor de la app (modelo, Vt 333 fijo)',
               enunciado: 'Una vez conectada al respirador, sigue el asma refractaria. Para bajar la FR y el atrapamiento de aire, ¿qué ketamina pautas?',
               opciones: [
                 { t: 'Infusión de ketamina de 0,15-0,25 mg/kg/min, sin carga previa, durante 1-5 horas', porque: `La infusión de Marino es por hora, no por minuto (${p(24)}); en minutos serían 60 veces más dosis y la paciente tendría disforia y alucinaciones intensas.` },
                 { t: 'Ketamina: carga de 0,1-0,2 mg/kg y luego 0,15-0,25 mg/kg/h', ok: true },
                 { t: 'Una sedación ligera que deje la FR espontánea alta, para seguir lavando CO₂ con más respiraciones', porque: `Una FR alta acorta la espiración y aumenta el atrapamiento de aire; sedar sirve para bajarla (${p(24)}), y la paciente seguiría hiperinsuflándose.` }],
-              explicacion: `Menos FR = <span class="hl-azul">menos atrapamiento de aire</span>; la ketamina aporta además cierta broncodilatación: carga 0,1-0,2 mg/kg y 0,15-0,25 mg/kg/h durante 1-5 h (${p(24)}). Al conectarla, el problema pasa a ser el aire atrapado: sigue en la ficha «PEEP oculta».` + enFicha('nep-ketamina') } },
+              explicacion: `Menos FR = <span class="hl-azul">menos atrapamiento de aire</span>; la ketamina aporta además cierta broncodilatación: carga 0,1-0,2 mg/kg y 0,15-0,25 mg/kg/h durante 1-5 h (${p(24)}). En el modelo (monitor de la app, Vt 333 mL fijo): con FR 10 la PEEP oculta es 1,6 cmH₂O y el flujo final llega a cero; subiendo el mando a FR 18 pasa a 4,6, y a FR 26 a 7,9 con el flujo final a −7 L/min, sin llegar a cero. Bajar la FR la devuelve. Al conectarla, el problema pasa a ser el aire atrapado: sigue en la ficha «PEEP oculta».` + enFicha('nep-ketamina') } },
         ],
         lleva: [
           'Una PaCO₂ de 42 frente a una ventilación minuto alta es retención de CO₂: UCI.' + enFicha('nep-paco2-42'),
