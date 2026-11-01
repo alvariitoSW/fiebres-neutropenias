@@ -14,8 +14,8 @@ const u = (pAp, pCi, pSob) => ({ w: 0.25, pAp, pCi, pSob });
 export const RACIMOS = {
   // sin colapso: ninguna unidad se cierra ni se sobredistiende; es el pulmón de un compartimento de siempre
   sano: { nombre: 'Sin colapso', lineal: true, unidades: [u(-99, -99, 999), u(-99, -99, 999), u(-99, -99, 999), u(-99, -99, 999)] },
-  // SDRA reclutable: la primera unidad (zona no dependiente) siempre está abierta; las otras tres se abren a 16, 20 y 24 y se cierran a 5, 4 y 3
-  sdra: { nombre: 'SDRA reclutable', lineal: false, unidades: [u(-99, -99, 26), u(16, 5, 27), u(20, 4, 28), u(24, 3, 29)] },
+  // SDRA reclutable: la primera unidad (zona no dependiente) siempre está abierta; las otras tres se abren a 16, 20 y 24 y se cierran a 5
+  sdra: { nombre: 'SDRA reclutable', lineal: false, unidades: [u(-99, -99, 26), u(16, 5, 27), u(20, 5, 28), u(24, 5, 29)] },
 };
 export const perfilRacimo = (k) => RACIMOS[k] || RACIMOS.sano;
 export const g = (un, p) => (p <= un.pSob ? p : un.pSob + KAPPA * (p - un.pSob));
