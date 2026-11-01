@@ -85,7 +85,9 @@ export const MODELOS = {
     'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar' },
         estados: ['normal', 'damian', 'rufino', 'valentin', 'adela'] },
     // [HUECO hepatocito: MODELOS]
-    // [HUECO termostato: MODELOS]
+    // El termostato vivo (b5): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-termostato-vivo)
+    'termostato-vivo': { raiz: '#tmv-raiz', enlace: { especialidad: 'libros', view: 'termostatoVivo' }, clave: 'termostatoVivo', modo: { explorar: '#tmv-modo-explorar' },
+        estados: ['fiebre', 'golpe', 'hm', 'snm', 'ss', 'hipo', 'juega'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa

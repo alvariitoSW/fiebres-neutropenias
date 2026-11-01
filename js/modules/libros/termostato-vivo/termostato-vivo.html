@@ -1,0 +1,43 @@
+    <button class="back-btn btn-volver-libros-menu" id="tmv-volver">← VOLVER</button>
+    <!-- Termostato vivo: el cuerpo que arde y tirita (Marino caps. 43-44). Modelo vivo de Libros. Viene de la maqueta aprobada
+         autonomo/maquetas/b5-termostato-b.html. Lógica en termostato-vivo/index.js (arranque) y pagina.js; datos y fuentes en
+         js/data/termostato-vivo-data.js. Prefijo de ids: tmv-. -->
+    <div class="tmv-raiz" id="tmv-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="tmv-eyebrow">Modelo vivo · Marino caps. 43-44</p><h2 class="tmv-titulo">El cuerpo que arde y tirita</h2></header>
+
+  <div class="modos" id="tmv-modos" role="group" aria-label="Modo"><button type="button" class="b" id="tmv-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" id="tmv-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" id="tmv-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" id="tmv-modo-caso" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="tmv-prueba" class="prueba" hidden aria-live="polite"></section>
+  <p id="tmv-idea" class="idea"></p>
+  <section id="tmv-monitor" aria-label="Monitor de cabecera">
+    <div class="mon-fila"><span>T central <b id="tmv-mon-t"></b> °C</span><span>FC <b id="tmv-mon-fc"></b><small>ilustrativo</small></span><span>CO₂ espirado <b id="tmv-mon-co2"></b></span><span>CK <b id="tmv-mon-ck"></b><small>ilustrativo</small></span></div>
+    <div class="mon-fila"><span>Escalofrío <b id="tmv-mon-esc"></b></span><span>Sudor <b id="tmv-mon-sud"></b></span><span>Rigidez <b id="tmv-mon-rig"></b></span></div>
+  </section>
+  <div id="tmv-sello-zona"></div>
+  <section class="zona-escena"><svg id="tmv-svg" viewBox="0 0 360 330" role="img" aria-label="Silueta humana con piel, músculo y cerebro; lupa del hipotálamo con el punto de ajuste y la temperatura real; lupa de la fibra muscular con el retículo y el calcio"></svg></section>
+  <div class="capas" role="group" aria-label="Capas del cuerpo"><button type="button" class="b" id="tmv-l-piel" aria-pressed="true">Piel</button><button type="button" class="b" id="tmv-l-mus" aria-pressed="true">Músculo</button><button type="button" class="b" id="tmv-l-cer" aria-pressed="true">Cerebro</button></div>
+  <section id="tmv-paso-caja" aria-live="polite"></section>
+  <p class="mon-pie" id="tmv-mon-pie"></p>
+  <div id="tmv-leyenda"></div>
+  <details class="fig" id="tmv-figosb"><summary>Fig. 43.1 · onda de Osborn en la hipotermia (ECG real)</summary><figure style="margin:0"><img id="tmv-imgosb" alt="Electrocardiograma con onda de Osborn en una hipotermia" loading="lazy"><figcaption>Onda de Osborn (Fig. 43.1, Marino 2024, p. 56): inespecífica; no se da una temperatura umbral. Foto real de la ficha.</figcaption></figure></details>
+  <details class="fig" id="tmv-fig445"><summary>Fig. 44.5 · temperatura y mortalidad (fiebre)</summary><figure style="margin:0"><img id="tmv-img445" alt="Gráfico de la temperatura máxima y la mortalidad en la sepsis" loading="lazy"><figcaption>Fig. 44.5 (Marino 2024, p. 70-71): la fiebre no se baja de rutina en la sepsis.</figcaption></figure></details>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="tmv-fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="tmv-notas"></div></details>
+    <details class="plegable"><summary>Lo que el modelo podría sumar</summary><ul class="lista" id="tmv-crecera"></ul></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="tmv-profundizar"></ul></details>
+  </section>
+
+<div class="dock" id="tmv-dock"><div class="dock-in">
+  <p class="frase" id="tmv-frase" role="status" aria-live="polite"><span class="frase-txt" id="tmv-frase-txt"></span></p>
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y enlaces</button></div>
+  <div class="dock-panel" id="tmv-dock-panel">
+    <div class="mando"><div class="fila dos"><label><span class="lt">Estado</span><select id="tmv-m-est"></select></label><label id="tmv-lab-ysi">¿Y si…?<select id="tmv-m-ysi"></select></label><label id="tmv-lab-pir" hidden><span class="lt">Pirógeno</span><select id="tmv-j-pir" aria-label="Pirógeno (sube el ajuste)"><option value="0">Sin pirógeno</option><option value="1">Pirógeno: 38,3 °C</option><option value="2">Pirógeno: 39,4 °C</option><option value="3">Pirógeno: >39,4 °C</option></select></label></div></div>
+    <div class="mando" id="tmv-mando-juega" hidden><div class="fila"><select id="tmv-j-calor" aria-label="Carga de calor"><option value="0">Sin carga de calor</option><option value="1">Calor: ambiente</option><option value="2">Calor: esfuerzo</option><option value="3">Calor: fármaco</option></select><select id="tmv-j-frio" aria-label="Carga de frío"><option value="0">Sin carga de frío</option><option value="1">Frío: aire</option><option value="2">Frío: agua &lt;15 °C</option><option value="3">Frío: alcohol</option></select></div><div class="fila"><button type="button" class="b" id="tmv-j-para">Paracetamol 1 g</button><button type="button" class="b" id="tmv-j-ibu">Ibuprofeno</button><button type="button" class="b" id="tmv-j-hora">+1 h</button></div><div class="fila"><select id="tmv-j-enf" aria-label="Enfriar una tanda de 5 minutos"><option value="">Enfriar (5 min)…</option><option value="evap">Evaporativo (0,3 °C/min)</option><option value="inm">Inmersión en agua</option><option value="hielo">Hielo en ingles y axilas</option><option value="sal">Suero frío</option><option value="manta">Manta de enfriamiento</option></select><select id="tmv-j-rec" aria-label="Recalentar"><option value="">Recalentar…</option><option value="pasivo">Pasivo</option><option value="activo">Activo externo</option><option value="gases">Gases 40-45 °C</option><option value="fcal">Fluidos calientes</option><option value="f21">Fluidos a 21 °C</option><option value="ecmo">ECMO VA</option></select></div></div>
+    <div class="mando" id="tmv-mando-pasos"><div class="fila"><button type="button" class="b" id="tmv-m-ant">‹ Paso</button><output id="tmv-o-paso" class="paso-o"></output><button type="button" class="b" id="tmv-m-sig">Paso ›</button></div><button type="button" class="b" id="tmv-m-trat" aria-pressed="false"></button></div>
+  </div>
+  <div class="dock-panel" id="tmv-dock-medir" hidden>
+    <div class="presets" id="tmv-presets"></div>
+    <button type="button" class="b enlace" data-especialidad="libros" data-view="ionesVivos" data-iones-vivos="adela">Hiperpotasemia en los iones vivos</button>
+    </div>
+</div></div>
+    </div>

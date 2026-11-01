@@ -23,7 +23,7 @@ const FRASES = {
     'ritmo-vivo': '#rtv-frase',
     'receptor-vivo': '#rcv-frase', 'iones-vivos': '#iov-frase',
     // [HUECO hepatocito: frase]
-    // [HUECO termostato: frase]
+    'termostato-vivo': '#tmv-frase',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';

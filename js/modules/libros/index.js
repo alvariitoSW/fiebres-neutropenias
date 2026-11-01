@@ -38,7 +38,7 @@ import { init as initRitmoVivo } from './ritmo-vivo/index.js';
 import { init as initReceptorVivo } from './receptor-vivo/index.js';
 import { init as initIonesVivos } from './iones-vivos/index.js';
 // [HUECO hepatocito: import]
-// [HUECO termostato: import]
+import { init as initTermostatoVivo } from './termostato-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { librosIndice } from '../../data/libros-indice.js';
@@ -70,7 +70,7 @@ const BLOQUES = {
     marinoCorazon: { vista: 'merino-cardio-view', panel: 'panel-merino-cardio-tabs', nombre: 'Corazón y shock', preguntas: [], vivos: ['shv-menu-libros', 'rcv-menu-libros', 'rtv-menu-libros'] },
     marinoPulmon: { vista: 'merino-neumo-view', panel: 'panel-merino-neumo-tabs', nombre: 'Pulmón y respirador', preguntas: [], vivos: ['pul-menu-libros'] },
     marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros', 'iov-menu-libros'] },
-    marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [/* [HUECO hepatocito: vivos] */ /* [HUECO termostato: vivos] */] },
+    marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [/* [HUECO hepatocito: vivos] */ 'tmv-menu-libros'] },
     marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },
     marinoNutricion: { vista: 'marino-nutri-view', panel: 'panel-marino-nutri-tabs', nombre: 'Nutrición y endocrino', preguntas: preguntasMarinoNutricion, vivos: [] },
     marinoToxicos: { vista: 'marino-tox-view', panel: 'panel-marino-tox-tabs', nombre: 'Tóxicos y apéndices', preguntas: preguntasMarinoToxicos, vivos: ['abv-menu-libros'] },
@@ -135,7 +135,8 @@ export function init() {
         // Iones vivos (bloque 4, caps. 36-38; fichas en Marino Ácido-base, renal y electrolitos)
         ionesVivos: document.getElementById('iones-vivos-view'),
         // [HUECO hepatocito: vista]
-        // [HUECO termostato: vista]
+        // Termostato vivo (bloque 5, caps. 43-44; fichas en Marino Abdomen y temperatura)
+        termostatoVivo: document.getElementById('termostato-vivo-view'),
     }, (key) => {
         if (MODELOS.has(key) && !MODELOS.has(previa)) volverDeModelo = BLOQUES[previa] ? previa : 'marinoPortada';
         if (BLOQUES[key]) ultimoBloque = key;
@@ -234,7 +235,7 @@ export function init() {
     const receptorVivo = arrancar('receptor', initReceptorVivo);
     const ionesVivos = arrancar('iones', initIonesVivos);
     // [HUECO hepatocito: arrancar]
-    // [HUECO termostato: arrancar]
+    const termostatoVivo = arrancar('termostato', initTermostatoVivo);
 
     librosLevel.show('menu');
 
@@ -260,7 +261,8 @@ export function init() {
             // data-iones-vivos="<paciente>[:paso|:ion]", los iones vivos
             ionesVivos: (estadoClave, origen) => ionesVivos?.abrir(estadoClave, origen),
             // [HUECO hepatocito: modelosVivos]
-            // [HUECO termostato: modelosVivos]
+            // data-termostato-vivo="<estado>[:paso]", el termostato vivo
+            termostatoVivo: (estadoClave, origen) => termostatoVivo?.abrir(estadoClave, origen),
         },
     };
 }

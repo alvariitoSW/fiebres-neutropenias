@@ -35,7 +35,8 @@ const AJUSTES = {
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
     // [HUECO hepatocito: noPulsar]
-    // [HUECO termostato: noPulsar]
+    // Termostato vivo: «Paso ›», «‹ Paso» y «Siguiente paso» son pasos; los selectores de estado y los botones de capa no acumulan (la prueba propia lleva «Juega» a sus topes)
+    'termostato-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Siguiente|‹ Paso|Paso ›|Piel|Músculo|Cerebro|Bien|Error)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.
