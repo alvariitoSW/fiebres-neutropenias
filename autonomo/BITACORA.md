@@ -391,7 +391,7 @@ El resto del tablero sigue `aparcada`.
 
 **Resuelto el 01/11 (tus decisiones, puntos 3-5)**: eco paso 5, opción A (≈35 M); PR #2 abierta y aparcada para la fase B; lo opcional (4, 5, 6, 7, 8, 9 y 10 de la lista del Congreso), aprobado con la recomendación del Consejo (las candidatas del 04/11 las decide el Consejo); lo de mirar en el móvil lo miras tú. Sigue esperando de ti: **el PDF de Semiología** y **pegar los tuits #26-28** en la Bandeja (x.com da 402).
 
-**Propuestas de regla del parte `mv-eco-5` (01/11, en `auto/mv-eco-2a5`)**, esperan tu sí:
+✅ 01/11 («Sí, R1 y R2») → REGLAS §4.16. **Propuestas de regla del parte `mv-eco-5` (01/11, en `auto/mv-eco-2a5`)**:
 - Un juicio de realismo con criterios nuevos (movimiento, Doppler) lleva **antes** su herramienta de capturas (en el paso 4 quedaron «sin juzgar» y en el 5 fueron las notas más bajas, 8,25 y 7,5, con el presupuesto ya gastado).
 - Presupuestos de realismo **por criterio que falta** (≈0,5 M cada uno), no por la lista del profesor anterior.
 
