@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Rueda de prensa</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:720px;height:1280px;overflow:hidden;background:#000;font-family:Inter,"DejaVu Sans",sans-serif}
+#tv{position:relative;width:720px;height:1280px;overflow:hidden}
+.esc{position:absolute;left:0;top:0;width:720px;height:1280px;transform-origin:0 0;display:none;overflow:hidden}
+.esc svg.capa{position:absolute;left:0;top:0}
+/* letreros sobre la imagen */
+#titular{position:absolute;left:60px;right:60px;top:150px;text-align:center}
+#titular p{display:inline;background:#fff;color:#111;font-weight:700;font-size:25px;line-height:1.45;padding:4px 10px;box-decoration-break:clone;-webkit-box-decoration-break:clone;border-radius:6px}
+#sub{position:absolute;left:30px;right:30px;top:820px;text-align:center;font-weight:900;font-size:40px;color:#fff;
+  text-shadow:0 0 6px #000,0 0 3px #000,2px 2px 0 #000,-2px -2px 0 #000,2px -2px 0 #000,-2px 2px 0 #000}
+#marca{position:absolute;right:22px;top:930px;text-align:center;color:#fff;font-weight:900;font-size:18px;text-shadow:0 0 4px #000;opacity:.9}
+#marca small{display:block;font-size:12px;font-weight:600}
+#negro{position:absolute;inset:0;background:#000}
+#fin{position:absolute;left:0;right:0;top:560px;text-align:center;opacity:0}
+#fin b{display:inline-block;background:#fff;color:#111;padding:12px 24px;font-size:26px;border-radius:6px}
+</style></head><body>
+<div id="tv">
+ <div class="esc" id="pasillo"></div>
+ <div class="esc" id="sala"></div>
+ <div class="esc" id="atril"></div>
+ <div class="esc" id="perios"></div>
+ <div id="titular"><p>🔴 El portavoz del Gobierno comparece para informar del estado del Plan Marino: 55 de 155 fichas ya en la app</p></div>
+ <div id="sub"></div>
+ <div id="marca">HUD 24h<small>@consejo</small></div>
+ <div id="fin"><b>Fin de la comparecencia</b></div>
+ <div id="negro"></div>
+</div>
+<script src="timeline.js"></script>
+<script src="persona.js"></script>
+<script>
+const TL=window.TL,C=TL.clips;
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+const lerp=(a,b,k)=>a+(b-a)*k;
+const $=id=>document.getElementById(id);
+const OR='#d4af37',PUR='#9c5476';
+// ── Nuestra simbología: escudo del HUD Clínico UCI ──
+// relieve=true: solo trazo claro, como el escudo en relieve de la pared
+function escudo(relieve){
+ const f=relieve?'none':'#17140f', s=relieve?'#cfd3da':OR, w=relieve?3:3, c1=relieve?'none':'#9c5476', c2=relieve?'none':'#2c251c';
+ return `<g fill="none" stroke="${s}" stroke-width="${w}" stroke-linejoin="round" stroke-linecap="round">
+  ${[...Array(9)].map((_,i)=>{const a=(200+i*16)*Math.PI/180;return `<ellipse cx="${100+92*Math.cos(a)}" cy="${120+98*Math.sin(a)}" rx="7" ry="15" transform="rotate(${200+i*16+90} ${100+92*Math.cos(a)} ${120+98*Math.sin(a)})"/>`}).join('')}
+  ${[...Array(9)].map((_,i)=>{const a=(-20-i*16)*Math.PI/180;return `<ellipse cx="${100+92*Math.cos(a)}" cy="${120-98*Math.sin(a)}" rx="7" ry="15" transform="rotate(${20+i*16+90} ${100+92*Math.cos(a)} ${120-98*Math.sin(a)})"/>`}).join('')}
+  <path d="M40 40 L160 40 L160 120 Q160 185 100 210 Q40 185 40 120 Z" fill="${f}"/>
+  <path d="M100 40 L100 205 M40 118 L160 118"/>
+  <path d="M48 46 L96 46 L96 114 L48 114 Z" fill="${c1}" stroke="none"/><path d="M104 122 L156 122 L156 130 Q150 178 104 200 Z" fill="${c1}" stroke="none"/>
+  <path d="M72 64 C60 52 48 66 60 80 L72 94 L84 80 C96 66 84 52 72 64 Z" stroke="${relieve?s:'#ece3cc'}" ${relieve?'':'fill="#b85c3e"'}/>
+  <path d="M106 80 L118 80 L123 66 L130 98 L136 74 L141 80 L154 80" stroke="${relieve?s:'#ece3cc'}"/>
+  <path d="M70 128 Q56 132 56 160 Q58 178 70 176 Q78 172 78 150 L78 130 Z M78 128 L78 124" stroke="${relieve?s:'#ece3cc'}"/>
+  <path d="M124 136 Q140 128 144 146 Q146 160 134 160 Q130 166 136 176 Q120 178 118 160 Q114 140 124 136 Z" stroke="${relieve?s:'#ece3cc'}"/>
+  <path d="M52 30 L60 12 L76 24 L100 6 L124 24 L140 12 L148 30 Z" fill="${relieve?'none':OR}" stroke="${s}"/>
+  <path d="M28 214 Q100 234 172 214 L166 236 Q100 254 34 236 Z" fill="${c2}"/>
+ </g>${relieve?'':`<text x="100" y="236" text-anchor="middle" font-size="11" font-weight="900" fill="${OR}" font-family="Inter" letter-spacing="1">HUD CLÍNICO UCI</text>`}`}
+// bandera nuestra (morado-oro-morado, colgando del mástil) y la del Consejo (7 estrellas: 7 ministerios)
+function bandera(x,y,h,tipo){
+ const w=h*0.24, palo=`<rect x="${x-3}" y="${y-20}" width="6" height="${h+260}" fill="#b9b2a0"/><circle cx="${x}" cy="${y-24}" r="7" fill="${OR}"/>`;
+ const pl=[...Array(5)].map((_,i)=>`<path d="M${x+3+i*w/5} ${y} q${w/10} ${h/2} 0 ${h}" stroke="rgba(0,0,0,.18)" stroke-width="2" fill="none"/>`).join('');
+ if(tipo==='hud')return palo+`<path d="M${x+3} ${y} h${w} v${h} q${-w/2} 14 ${-w} 0 Z" fill="${PUR}"/><rect x="${x+3+w*0.3}" y="${y}" width="${w*0.4}" height="${h+6}" fill="${OR}"/>
+   <g transform="translate(${x+3+w*0.5-14} ${y+h*0.38}) scale(0.14)">${escudo(false)}</g>`+pl;
+ const est=[...Array(7)].map((_,i)=>{const a=i/7*2*Math.PI;return `<circle cx="${x+3+w/2+w*0.28*Math.cos(a)}" cy="${y+h*0.3+w*0.28*Math.sin(a)}" r="${w*0.05}" fill="${OR}"/>`}).join('');
+ return palo+`<path d="M${x+3} ${y} h${w} v${h} q${-w/2} 14 ${-w} 0 Z" fill="#1d2b4a"/>`+est+pl}
+// ── El portavoz de cuerpo entero (de frente o de espaldas), andando ──
+function cuerpo(p,fase,vista,boca,parp){
+ const sw=Math.sin(fase), a1=sw*14, a2=-sw*14, l1=Math.max(0,sw), l2=Math.max(0,-sw);
+ const brazo=(x,ang)=>`<g transform="rotate(${ang} ${x} 196)"><path d="M${x} 190 L${x+(x<100?-8:8)} 340" stroke="${p.traje}" stroke-width="30" stroke-linecap="round"/><circle cx="${x+(x<100?-8:8)}" cy="352" r="13" fill="${p.piel}"/></g>`;
+ const piernas=`<rect x="64" y="330" width="34" height="${160-14*l1}" rx="8" fill="#20232b"/><rect x="102" y="330" width="34" height="${160-14*l2}" rx="8" fill="#1b1e25"/>
+  <ellipse cx="80" cy="${492-14*l1}" rx="22" ry="9" fill="#0c0c0e"/><ellipse cx="120" cy="${492-14*l2}" rx="22" ry="9" fill="#0c0c0e"/>`;
+ const torso=`<path d="M30 220 L170 220 L164 344 L36 344 Z" fill="${p.traje}"/>`;
+ if(vista==='frente'){
+  const busto=persona(p,boca,parp).replace('<svg ','<svg x="0" y="0" width="200" height="220" ');
+  return `<svg viewBox="0 0 200 510" width="200" height="510" overflow="visible">${piernas}${brazo(38,a1)}${brazo(162,a2)}${torso}
+   <rect x="96" y="214" width="8" height="40" fill="${p.corbata||p.traje}"/><circle cx="100" cy="300" r="3" fill="#111"/>${busto}</svg>`}
+ // de espaldas
+ const pelo=p.peinado==='calvo'?`<path d="M58 100 Q60 140 100 146 Q140 140 142 100 Q120 118 100 118 Q80 118 58 100 Z" fill="${p.pelo}"/>`:`<ellipse cx="100" cy="92" rx="44" ry="52" fill="${p.pelo}"/>`;
+ return `<svg viewBox="0 0 200 510" width="200" height="510" overflow="visible">${piernas}${brazo(38,-a1)}${brazo(162,-a2)}${torso}
+  <path d="M26 230 Q28 166 100 158 Q172 166 174 230 Z" fill="${p.traje}"/><path d="M100 160 L100 340" stroke="rgba(0,0,0,.25)" stroke-width="3"/>
+  <rect x="88" y="128" width="24" height="34" rx="8" fill="${p.piel}"/><path d="M84 156 Q100 150 116 156 L116 166 L84 166 Z" fill="#f2ece0"/>
+  <ellipse cx="57" cy="100" rx="7" ry="11" fill="${p.piel}"/><ellipse cx="143" cy="100" rx="7" ry="11" fill="${p.piel}"/>
+  <ellipse cx="100" cy="94" rx="43" ry="52" fill="${p.piel}"/>${pelo}</svg>`}
+const POR=P.tra;
+// ── Escena 1: pasillo (viene hacia la cámara) ──
+$('pasillo').innerHTML=`<div style="position:absolute;inset:0;background:#7d1d1d"></div>
+ <div style="position:absolute;left:0;right:0;top:0;height:120px;background:#ece7dc"></div>
+ <div style="position:absolute;left:180px;top:170px;width:360px;height:620px;background:#4a1010;border:16px solid #ece7dc;border-bottom:none"></div>
+ <div style="position:absolute;left:560px;top:250px;width:130px;height:170px;background:#f4f1ea;border:6px solid #222;padding:10px"><div style="height:18px;background:#222;margin-bottom:8px"></div><div style="height:60px;background:#bbb"></div><div style="height:6px;background:#999;margin-top:8px"></div><div style="height:6px;background:#999;margin-top:6px"></div></div>
+ <div style="position:absolute;left:250px;top:150px;width:60px;height:26px;background:#cfd3da"></div>
+ <div style="position:absolute;left:0;right:0;top:860px;bottom:0;background:linear-gradient(#5a5c63,#3b3d44)"></div>
+ <div id="pas-per" style="position:absolute;left:0;top:0;transform-origin:100px 500px"></div>
+ <svg class="capa" width="720" height="1280">${[0,1,2,3].map(i=>`<rect x="${-40+i*120}" y="${1040+i*30}" width="150" height="160" rx="40" fill="#2c4a86"/><rect x="${-30+i*120}" y="${1150+i*30}" width="130" height="80" rx="20" fill="#223a6c"/>`).join('')}</svg>`;
+// ── Escena 2: la sala, de espaldas hasta el atril ──
+const ATX=470,ATY=820;
+$('sala').innerHTML=`<div style="position:absolute;inset:0;background:linear-gradient(#f1f2f4,#e3e5e9)"></div>
+ <svg class="capa" width="720" height="1280"><g transform="translate(330 260) scale(2.2)">${escudo(true)}</g>
+  ${bandera(250,330,300,'hud')}${bandera(330,330,300,'consejo')}
+  <rect x="600" y="300" width="140" height="300" fill="#2f4a8f"/><text x="616" y="420" fill="#fff" font-size="26" font-weight="900" font-family="Inter">Plan</text><text x="616" y="452" fill="#fff" font-size="26" font-weight="900" font-family="Inter">Marino</text><text x="616" y="484" fill="${OR}" font-size="26" font-weight="900" font-family="Inter">100 %</text>
+  <rect x="0" y="990" width="720" height="290" fill="#3f434c"/></svg>
+ <div id="sal-per" style="position:absolute;left:0;top:0;transform-origin:100px 500px"></div>
+ <svg class="capa" width="720" height="1280"><g id="atril-sala"><rect x="${ATX-62}" y="${ATY}" width="124" height="14" fill="#15171c" transform="rotate(-4 ${ATX} ${ATY})"/>
+  <rect x="${ATX-7}" y="${ATY+10}" width="14" height="${990-ATY-10}" fill="#15171c"/><rect x="${ATX-40}" y="985" width="80" height="10" fill="#15171c"/>
+  <path d="M${ATX-20} ${ATY} L${ATX-34} ${ATY-60} M${ATX+20} ${ATY} L${ATX+34} ${ATY-60}" stroke="#15171c" stroke-width="3"/></g>
+  ${[0,1,2,3,4].map(i=>`<rect x="${300+i*95}" y="${1060+((i%2)*10)}" width="88" height="110" rx="14" fill="#1b2232"/>`).join('')}
+  ${[0,1,2,3,4,5].map(i=>`<rect x="${230+i*100}" y="${1170}" width="94" height="130" rx="16" fill="#141a27"/>`).join('')}</svg>`;
+// ── Escena 3: plano medio en el atril ──
+$('atril').innerHTML=`<div style="position:absolute;inset:0;background:linear-gradient(#eef0f3,#e2e4e8)"></div>
+ <svg class="capa" width="720" height="1280"><g transform="translate(-60 -120) scale(4.2)">${escudo(true)}</g>
+  <g transform="translate(-250 0)">${bandera(40,-40,1300,'consejo')}</g></svg>
+ <svg class="capa" id="at-cuerpo" width="720" height="1280"></svg>
+ <div id="at-busto" style="position:absolute;left:80px;top:150px;width:560px;height:616px"></div>
+ <svg class="capa" id="at-manos" width="720" height="1280"></svg>
+ <svg class="capa" width="720" height="1280"><rect x="0" y="1010" width="720" height="270" fill="#3a3d45"/><rect x="0" y="1000" width="720" height="16" fill="#2a2c32"/>
+  <rect x="150" y="986" width="210" height="16" fill="#f7f7f5" transform="rotate(-2 255 994)"/>
+  <path d="M250 1000 L232 640 M470 1000 L488 640" stroke="#111" stroke-width="5"/><rect x="224" y="610" width="16" height="40" rx="7" fill="#111"/><rect x="480" y="610" width="16" height="40" rx="7" fill="#111"/>
+  <g transform="translate(318 1090) scale(0.42)">${escudo(false)}</g></svg>`;
+// ── Escena 4: los periodistas ──
+Object.assign(P,{
+ p1:{piel:'#d9a47c',pelo:'#2a1d14',peinado:'raya',traje:'#5a4636'},
+ p2:{piel:'#f0cba8',pelo:'#1e1612',peinado:'melena',traje:'#2d4f5a',collar:'#ece3cc',mujer:true},
+ x1:{piel:'#e8c19d',pelo:'#c99a4a',peinado:'coleta',traje:'#4a3a28',mujer:true},
+ x2:{piel:'#c68b62',pelo:'#5a3a22',peinado:'entradas',traje:'#253a2a',gafas:true},
+ x3:{piel:'#e5b892',pelo:'#7a3b1e',peinado:'mono',traje:'#6b2f4c',mujer:true},
+ x4:{piel:'#b97d55',pelo:'#2a1d14',peinado:'rizos',traje:'#2f4a6b'},
+ x5:{piel:'#8d5a3b',pelo:'#141010',peinado:'corto',barba:'#141010',gafas:true,traje:'#3d3d45'}});
+const PER=[['x1',110,430,.85],['p1',300,420,.85],['x2',490,430,.85],['x3',650,440,.85],['x4',120,720,1],['x5',330,720,1],['p2',540,720,1]];
+$('perios').innerHTML=`<div style="position:absolute;inset:0;background:linear-gradient(#d9dbe0,#c4c7ce)"></div>
+ <div style="position:absolute;left:0;right:0;top:620px;height:16px;background:#9aa0ab"></div>`+
+ PER.map(([k,x,y,s])=>`<div style="position:absolute;left:${x-80*s}px;top:${y+60*s}px;width:${160*s}px;height:${190*s}px;border-radius:30px;background:#2c4a86"></div>
+ <div id="pe-${k}" style="position:absolute;left:${x-80*s}px;top:${y}px;width:${160*s}px;height:${176*s}px"></div>`).join('')+
+ `<div style="position:absolute;left:0;right:0;top:1000px;bottom:0;background:#2c4a86"></div>`;
+// cámara por plano
+const PLANO={atril:['atril',360,640,1.0],general:['sala',ATX,700,1.25],p1:['perios',300,560,1.9],p2:['perios',540,820,1.85]};
+const cache={};function pinta(el,h,k){if(cache[k]!==h){el.innerHTML=h;cache[k]=h}}
+function cam(esc,cx,cy,z,shake){['pasillo','sala','atril','perios'].forEach(id=>$(id).style.display=id===esc?'block':'none');
+ const tx=Math.min(0,Math.max(720-720*z,360-cx*z))+shake[0],ty=Math.min(0,Math.max(1280-1280*z,640-cy*z))+shake[1];
+ $(esc).style.transform=`translate(${tx}px,${ty}px) scale(${z})`}
+function subtitulo(c,t){ // de 3 en 3 palabras, al ritmo de la voz
+ const pal=c.sub.split(' ');const largo=pal.map(w=>w.length+1);const tot=largo.reduce((a,b)=>a+b,0);
+ const x=Math.min(0.999,Math.max(0,(t-c.t0)/c.d))*tot;let acc=0,i=0;for(;i<pal.length;i++){acc+=largo[i];if(acc>x)break}
+ const g=Math.floor(Math.min(i,pal.length-1)/3)*3;return pal.slice(g,g+3).join(' ')}
+function render(t){
+ const L=TL.llega, sh=[Math.sin(t*1.7)*3+Math.sin(t*4.1)*1.5,Math.cos(t*1.3)*3];
+ const habla=C.find(c=>t>=c.t0&&t<c.t0+c.d);
+ const boca=k=>habla&&habla.k===k?(habla.env[Math.floor((t-habla.t0)*25)]||0):0;
+ const parp=((t+0.4)%3.7)<0.13;
+ const fase=t/0.52*Math.PI;
+ let titOp=0;
+ if(t<3.4){ // pasillo: se acerca
+  const k=t/3.4, s=lerp(0.7,1.35,k);
+  const el=$('pas-per');pinta(el,cuerpo(POR,fase,'frente',0,parp),'pas'+Math.round(fase*4)+parp);
+  el.style.transform=`translate(${lerp(300,280,k)}px,${lerp(320,620,k)+Math.abs(Math.sin(fase))*-6}px) scale(${s})`;
+  cam('pasillo',360,640,1.0,sh);titOp=ease(t/0.6);
+ }else if(t<L-0.2){ // sala: de espaldas hasta el atril; al llegar se gira
+  const k=ease((t-3.4)/(L-1.6-3.4)), girado=t>L-1.4;
+  const el=$('sal-per');const s=lerp(1.05,0.56,k);
+  pinta(el,cuerpo(POR,girado?0:fase,girado?'frente':'espalda',0,parp),'sal'+(girado?'g'+parp:Math.round(fase*4)));
+  el.style.transform=`translate(${lerp(120,ATX-100,k)}px,${lerp(780,990-510,k)+(girado?0:Math.abs(Math.sin(fase))*-5)}px) scale(${s})`;
+  cam('sala',lerp(300,ATX,k),lerp(820,700,k),lerp(1.0,1.15,k),sh);titOp=1;
+ }else{
+  let i=C.findIndex((c,j)=>t<(C[j+1]?C[j+1].t0-0.15:1e9));if(i<0)i=C.length-1;const cur=C[i];
+  const ini=i===0?L-0.2:cur.t0-0.15, fin=C[i+1]?C[i+1].t0-0.15:TL.total, push=(t-ini)/(fin-ini);
+  const [esc,cx,cy,z]=PLANO[cur.plano];
+  if(esc==='atril'){
+   const b=boca('tra'), g=habla&&habla.k==='tra'?ease(Math.sin(t*2.3)*0.5+0.5)*Math.min(1,b*2.5):0;
+   pinta($('at-busto'),persona(POR,b,parp).replace('<svg ','<svg width="560" height="616" '),'ab');
+   const inc=Math.sin(t*0.9)*1.5;$('at-busto').style.transform=`rotate(${inc}deg)`;
+   // torso y brazos: las manos se levantan al hablar
+   const hx=170-50*g, hy=976-150*g, hx2=550+50*g*Math.sin(t*3.1+1), hy2=976-120*g*(0.6+0.4*Math.sin(t*2.7));
+   pinta($('at-cuerpo'),`<path d="M152 760 L568 760 L560 1010 L160 1010 Z" fill="${POR.traje}"/><rect x="348" y="760" width="24" height="200" fill="${POR.corbata}"/><path d="M336 760 L360 800 L384 760 Z" fill="${POR.corbata}"/>`,'ac');
+   $('at-manos').innerHTML=`<path d="M175 700 Q120 860 ${hx} ${hy}" stroke="${POR.traje}" stroke-width="78" fill="none" stroke-linecap="round"/>
+    <path d="M545 700 Q600 860 ${hx2} ${hy2}" stroke="${POR.traje}" stroke-width="78" fill="none" stroke-linecap="round"/>
+    <ellipse cx="${hx+20}" cy="${hy-6}" rx="34" ry="26" fill="${POR.piel}"/><ellipse cx="${hx2-20}" cy="${hy2-6}" rx="34" ry="26" fill="${POR.piel}"/>
+    <rect x="${hx-14}" y="${hy-30}" width="42" height="12" fill="#f2ece0"/><rect x="${hx2-28}" y="${hy2-30}" width="42" height="12" fill="#f2ece0"/>`;
+   cam('atril',cx,cy,z*(1+0.04*push),[sh[0]*0.5,sh[1]*0.5]);
+  }else if(esc==='sala'){
+   const el=$('sal-per');pinta(el,cuerpo(POR,0,'frente',boca('tra'),parp),'sgen'+boca('tra')+parp);
+   el.style.transform=`translate(${ATX-100}px,${990-510}px) scale(0.56)`;
+   cam('sala',cx,cy,z*(1+0.05*push),sh);
+  }else{
+   PER.forEach(([k],j)=>{const de=k===cur.k;const el=$('pe-'+k);const w=parseFloat(el.style.width),h=parseFloat(el.style.height);
+    pinta(el,persona(P[k],boca(k),((t+j*0.6)%3.4)<0.13).replace('<svg ',`<svg width="${w}" height="${h}" `),'pe'+k+boca(k)+(((t+j*0.6)%3.4)<0.13));
+    el.style.transform=`translateY(${de?-30:0}px)`});
+   cam('perios',cx,cy,z*(1+0.05*push),sh);
+  }
+  titOp=1-ease((t-(L+4))/0.6);
+ }
+ $('titular').style.opacity=titOp;
+ $('sub').textContent=habla?subtitulo(habla,t):'';
+ const last=C[C.length-1], acabado=t>last.t0+last.d+0.5;
+ $('fin').style.opacity=acabado?ease((t-last.t0-last.d-0.5)/0.5):0;
+ $('negro').style.opacity=Math.max(1-ease(t/0.5),ease((t-TL.total+0.8)/0.7));
+}
+window.TOTAL=TL.total;window.render=render;render(0);
+</script></body></html>

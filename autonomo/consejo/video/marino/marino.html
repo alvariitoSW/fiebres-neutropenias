@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><title>Plan Marino 100 %</title>
+<style>
+:root{--bg:#17140f;--panel:#221d16;--panel2:#2c251c;--text:#ece3cc;--muted:#a5967c;--dim:#c9bda4;--gold:#d4af37;--yellow:#cf9a3e;--red:#b85c3e;--green:#90a06a;--purple:#9c5476}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:720px;height:1280px;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,"DejaVu Sans",sans-serif}
+#stage{position:relative;width:720px;height:1280px;background:radial-gradient(ellipse at 50% 28%,#2e2619 0%,#17140f 65%)}
+#header{position:absolute;top:28px;left:0;right:0;text-align:center}
+#header h1{font-family:"Inter Display",Inter,sans-serif;font-weight:800;font-size:46px;letter-spacing:2px;color:var(--gold)}
+#header p{margin-top:6px;font-size:20px;color:var(--muted)}
+.esc{position:absolute;left:32px;right:32px;top:140px;height:760px;opacity:0}
+.tit{font-size:30px;font-weight:800;text-align:center;margin-bottom:22px}
+/* escena 1: anillo */
+#anillo{display:block;margin:10px auto 0}
+.ley{display:flex;justify-content:center;gap:26px;margin-top:22px;font-size:21px;color:var(--dim)}
+.ley b{display:inline-block;width:16px;height:16px;border-radius:4px;margin-right:8px;vertical-align:-2px}
+/* escena 2: bloques */
+.fila{display:flex;align-items:center;gap:14px;background:var(--panel);border:2px solid #3a3124;border-radius:16px;padding:11px 16px;margin-bottom:10px}
+.fila .n{width:58px;font-weight:900;font-size:22px;color:var(--gold)}
+.fila .q{flex:1;font-size:19px;line-height:1.25}
+.fila .q small{display:block;color:var(--muted);font-size:15px}
+.chip{font-size:15px;font-weight:800;padding:5px 10px;border-radius:10px;white-space:nowrap}
+.ok{background:var(--green);color:#17140f}.pr{background:var(--gold);color:#17140f}.ya{background:var(--yellow);color:#17140f}.pe{background:#3a3124;color:var(--dim)}
+/* escena 3: calendario */
+.hito{display:flex;gap:18px;align-items:flex-start;margin-bottom:22px}
+.hito .f{width:120px;flex:none;text-align:center;background:var(--panel2);border-radius:14px;padding:10px 0;font-weight:900;font-size:26px;color:var(--gold)}
+.hito .f small{display:block;font-size:14px;color:var(--muted);letter-spacing:2px}
+.hito .d{font-size:22px;line-height:1.35;padding-top:6px}
+.hito.meta .f{background:var(--gold);color:#17140f}.hito.meta .f small{color:#3a2716}
+/* escena 4: dinero */
+.barra{margin:26px 0 8px;font-size:20px;color:var(--dim)}
+.pista{height:46px;background:var(--panel2);border-radius:12px;position:relative;overflow:hidden}
+.pista i{position:absolute;top:0;bottom:0;left:0;border-radius:12px}
+.pista span{position:absolute;right:14px;top:9px;font-weight:900;font-size:22px}
+.veredicto{margin-top:30px;text-align:center;font-size:30px;font-weight:900;color:var(--yellow)}
+.nota{margin-top:10px;text-align:center;font-size:17px;color:var(--muted)}
+/* escena 5: calidad */
+.notas{display:flex;gap:16px;justify-content:center;margin-top:10px}
+.caja{flex:1;background:var(--panel);border:2px solid #3a3124;border-radius:18px;padding:18px 10px;text-align:center}
+.caja .g{font-size:44px;white-space:nowrap;font-weight:900;color:var(--gold)}
+.caja .e{font-size:18px;color:var(--dim);margin-top:4px}
+.promesa{margin-top:26px;background:var(--panel2);border-left:6px solid var(--purple);border-radius:14px;padding:16px 20px;font-size:23px;line-height:1.35}
+/* escena 6: cierre */
+.paso{display:flex;gap:14px;align-items:center;background:var(--panel);border:2px solid #3a3124;border-radius:16px;padding:16px 18px;margin-bottom:14px;font-size:22px;line-height:1.3}
+.paso .ic{font-size:34px;font-family:"Noto Color Emoji",sans-serif}
+#cuenta{text-align:center;margin-top:20px;font-size:120px;font-weight:900;color:var(--gold);line-height:1}
+#cuenta small{display:block;font-size:22px;letter-spacing:3px;color:var(--muted);margin-top:6px}
+/* quien habla */
+#voz{position:absolute;left:24px;right:24px;top:910px;height:340px;background:var(--panel);border:2px solid #3a3124;border-radius:24px;padding:18px 20px;display:flex;gap:18px}
+#ret{width:150px;height:150px;flex:none;border-radius:50%;overflow:hidden;background:#3a3124;border:4px solid var(--gold)}
+#ret svg{display:block;width:150px;height:165px}
+#vNom{font-size:24px;font-weight:800}
+#vTag{font-size:15px;color:var(--muted);font-family:"JetBrains Mono",monospace;margin-top:2px}
+#sub{margin-top:12px;font-size:24px;line-height:1.36}
+#sub .no{color:#5c5241}
+#pie{position:absolute;bottom:8px;left:0;right:0;text-align:center;font-size:13px;color:#5c5241}
+</style></head><body>
+<div id="stage">
+  <div id="header"><h1>PLAN MARINO 100 %</h1><p>Estado a 30/10/2026 · The ICU Book en modelos vivos</p></div>
+
+  <div class="esc" id="e0"><div class="tit">155 fichas · 8 bloques</div>
+    <svg id="anillo" width="440" height="440" viewBox="0 0 440 440"></svg>
+    <div class="ley"><span><b style="background:var(--green)"></b>En la app</span><span><b style="background:var(--gold)"></b>Construidas, sin fusionar</span><span><b style="background:#3a3124"></b>Por hacer</span></div></div>
+
+  <div class="esc" id="e1"><div class="tit">Bloque a bloque</div><div id="filas"></div></div>
+
+  <div class="esc" id="e2"><div class="tit">Calendario</div>
+    <div class="hito" data-k="0"><div class="f"><small>HOY</small>30/10</div><div class="d">Fusionar la PR #51 (corazón). Después, pulmón con respirador, piezas del bloque 4 y la eco</div></div>
+    <div class="hito" data-k="1"><div class="f"><small>DESDE</small>02/11</div><div class="d">Bloque 5 (caps. 39-44) y el motor de la eco</div></div>
+    <div class="hito" data-k="2"><div class="f"><small>DESDE</small>09/11</div><div class="d">Bloques 6A y 6B y el cierre</div></div>
+    <div class="hito meta" data-k="3"><div class="f"><small>META</small>13/11</div><div class="d"><b>Marino 100 %</b> y motor de la eco. Las figuras del atlas, la semana siguiente si no caben</div></div></div>
+
+  <div class="esc" id="e3"><div class="tit">Las cuentas (Hacienda)</div>
+    <div class="barra">Lo que le queda a Marino</div><div class="pista"><i id="b1" style="background:var(--yellow)"></i><span>213-281 M</span></div>
+    <div class="barra">Toda la obra hasta el 13/11</div><div class="pista"><i id="b2" style="background:var(--red)"></i><span>370-510 M</span></div>
+    <div class="barra">Lo que cabe hasta el 13/11</div><div class="pista"><i id="b3" style="background:var(--green)"></i><span>≈530-580 M</span></div>
+    <div class="veredicto">«Posible, no seguro»</div>
+    <div class="nota">M = millones de tokens · estimación de Hacienda del 30/10 · alarma: ≤95 % del límite semanal el 02/11</div></div>
+
+  <div class="esc" id="e4"><div class="tit">La calidad (Educación)</div>
+    <div class="notas"><div class="caja"><div class="g">8,8-8,9</div><div class="e">nota del profesor<br>(corazón, grupo 6)</div></div>
+      <div class="caja"><div class="g">0</div><div class="e">fallos graves<br>del auditor ciego</div></div>
+      <div class="caja"><div class="g">8,75</div><div class="e">nota mínima<br>para entrar</div></div></div>
+    <div class="promesa">«Los bloques 6A y 6B nunca salen sin su modelo vivo: si no caben, se retrasa la fecha, no el modelo».<br><span style="font-size:17px;color:var(--muted)">Desempate del gobernador, Consejo 14.ª</span></div></div>
+
+  <div class="esc" id="e5"><div class="tit">Lo siguiente</div>
+    <div class="paso" data-k="0"><span class="ic">🔀</span><span>Fusionar la <b>PR #51</b>: el corazón del bloque 3 a la app</span></div>
+    <div class="paso" data-k="1"><span class="ic">📸</span><span><b>Para ti:</b> la captura de Ajustes → Uso, el sábado 31/10 por la noche</span></div>
+    <div id="cuenta">14<small>DÍAS PARA EL 13/11</small></div></div>
+
+  <div id="voz"><div id="ret"></div><div><div id="vNom"></div><div id="vTag"></div><div id="sub"></div></div></div>
+  <div id="pie">Datos: autonomo/TABLERO.md, actas del Consejo 13.ª y 14.ª y PR #51 · voces sintéticas</div>
+</div>
+<script src="timeline.js"></script>
+<script src="persona.js"></script>
+<script>
+const TL=window.TL,C=TL.clips;
+const SUBS=[
+ 'Estado del plan Marino 100 %, a 30 de octubre. Son 155 fichas en 8 bloques. 29 ya están en la app, y otras 26, construidas a falta de fusionar.',
+ 'Los bloques 1 y 2 están hechos. El corazón del bloque 3 ya pasó al profesor y al auditor, y espera en la PR #51. El pulmón con respirador y el bloque 4 arrancan en cuanto entre.',
+ 'Calendario: desde el 2 de noviembre, el bloque 5 y la eco. Desde el 9, los bloques 6A y 6B. Fecha firme: el 13 de noviembre.',
+ 'Hacienda. A Marino le quedan entre 213 y 281 millones. Hasta el 13 caben unos 550. Es posible, no seguro. Vigilo el límite semanal cada día.',
+ 'Educación. El corazón sacó entre 8,8 y 8,9 con el profesor, y cero fallos graves con el auditor. Y los bloques 6A y 6B nunca saldrán sin su modelo vivo.',
+ 'Siguiente paso: fusionar la PR #51. Lo que espera de ti, gobernador: la captura de Uso, el sábado por la noche. Quedan 14 días.'];
+
+const ease=x=>x<=0?0:x>=1?1:x*x*(3-2*x);
+const $=id=>document.getElementById(id);
+const BLOQ=[
+ ['1','Caps. 1-11 · fluidos, accesos, oxígeno','23 fichas','ok','HECHO'],
+ ['2','Caps. 12-13 · sangre','6 fichas','ok','HECHO'],
+ ['3','Caps. 14-21 · corazón y shock','26 fichas · profesor ≥8,8','pr','PR #51'],
+ ['3D','Caps. 22-30 · pulmón con respirador','21 fichas · maqueta aprobada','ya','TRAS #51'],
+ ['4','Caps. 31-38 · electrolitos y ácido-base','23 fichas · cobertura ≈88 %','ya','TRAS #51'],
+ ['5','Caps. 39-44','17 fichas · hepatocito y termostato','pe','02/11'],
+ ['6A','Caps. 45-47 · cráneo vivo','14 fichas','pe','09/11'],
+ ['6B','Caps. 48-53 y apéndices','25 fichas','pe','09/11'],
+];
+$('filas').innerHTML=BLOQ.map(b=>`<div class="fila"><div class="n">${b[0]}</div><div class="q">${b[1]}<small>${b[2]}</small></div><span class="chip ${b[3]}">${b[4]}</span></div>`).join('');
+// anillo
+function arco(r,a0,a1,col,w){const p=a=>[220+r*Math.cos(a),220+r*Math.sin(a)];const [x0,y0]=p(a0),[x1,y1]=p(a1);
+ return `<path d="M${x0} ${y0} A${r} ${r} 0 ${a1-a0>Math.PI?1:0} 1 ${x1} ${y1}" stroke="${col}" stroke-width="${w}" fill="none" stroke-linecap="butt"/>`}
+function anillo(k1,k2){const A0=-Math.PI/2,TOT=155,f1=29/TOT*k1,f2=26/TOT*k2;
+ let s=`<circle cx="220" cy="220" r="170" stroke="#3a3124" stroke-width="44" fill="none"/>`;
+ if(f1>0.001)s+=arco(170,A0,A0+2*Math.PI*f1,'var(--green)',44);
+ if(f2>0.001)s+=arco(170,A0+2*Math.PI*f1,A0+2*Math.PI*(f1+f2),'var(--gold)',44);
+ const n=Math.round(29*k1+26*k2);
+ s+=`<text x="220" y="215" text-anchor="middle" font-size="96" font-weight="900" fill="#ece3cc" font-family="Inter">${n}</text>
+  <text x="220" y="262" text-anchor="middle" font-size="24" fill="#a5967c" font-family="Inter">de 155 fichas</text>
+  <text x="220" y="296" text-anchor="middle" font-size="16" fill="#a5967c" font-family="Inter">(${Math.round(29*k1)} en la app + ${Math.round(26*k2)} sin fusionar)</text>`;
+ return s}
+const cache={};function pinta(el,h,k){if(cache[k]!==h){el.innerHTML=h;cache[k]=h}}
+function render(t){
+ $('header').style.opacity=ease(t/0.8);
+ const idx=C.findIndex((c,i)=>t<(C[i+1]?C[i+1].t0-0.4:1e9));const turno=C[Math.max(0,idx)];
+ C.forEach((c,i)=>{const a=i===0?0:c.t0-0.4,b=C[i+1]?C[i+1].t0-0.4:1e9;const e=$('e'+i);
+  e.style.opacity=t>=a&&t<b?ease((t-a)/0.4)*ease((b-t)/0.4):0;e.style.transform=`translateY(${t>=a&&t<b?(1-ease((t-a)/0.4))*20:0}px)`});
+ const r=(i)=>(t-C[i].t0)/C[i].d; // avance de la frase i (0-1)
+ // 0: anillo
+ pinta($('anillo'),anillo(ease((r(0)-0.55)/0.18),ease((r(0)-0.78)/0.18)),'an');
+ // 1: filas por orden de lo narrado
+ const umb=[0.02,0.06,0.18,0.62,0.74,0.82,0.86,0.9];
+ [...document.querySelectorAll('.fila')].forEach((f,i)=>{const k=ease((r(1)-umb[i])/0.06);f.style.opacity=0.25+0.75*k;
+  f.style.borderColor=(i===2&&r(1)>0.18&&r(1)<0.62)||((i===3||i===4)&&r(1)>0.62)?'var(--gold)':'#3a3124'});
+ // 2: hitos
+ const uh=[0,0.1,0.42,0.72];document.querySelectorAll('.hito').forEach((h,i)=>{const k=ease((r(2)-uh[i])/0.08);h.style.opacity=0.15+0.85*k;h.style.transform=`translateX(${(1-k)*30}px)`});
+ // 3: barras (escala 600 M = 100 %)
+ const kb=x=>ease((r(3)-x)/0.15);
+ $('b1').style.width=(281/600*100*kb(0.1))+'%';$('b2').style.width=(510/600*100*kb(0.25))+'%';$('b3').style.width=(580/600*100*kb(0.45))+'%';
+ document.querySelector('.veredicto').style.opacity=ease((r(3)-0.62)/0.1);
+ // 4: calidad
+ document.querySelectorAll('.caja').forEach((c,i)=>{const k=ease((r(4)-[0.1,0.3,0.42][i])/0.1);c.style.opacity=0.15+0.85*k;c.style.transform=`scale(${0.85+0.15*k})`});
+ document.querySelector('.promesa').style.opacity=ease((r(4)-0.6)/0.1);
+ // 5: cierre
+ document.querySelectorAll('.paso').forEach((p,i)=>{p.style.opacity=0.15+0.85*ease((r(5)-[0.02,0.3][i])/0.1)});
+ const kc=ease((r(5)-0.8)/0.12);$('cuenta').style.opacity=kc;$('cuenta').style.transform=`scale(${1.4-0.4*kc})`;
+ // quién habla
+ const c=C.find(c=>t>=c.t0&&t<c.t0+c.d);const p=P[turno.k];
+ const boca=c?(c.env[Math.floor((t-c.t0)*25)]||0):0;const parp=((t+0.7)%3.3)<0.13;
+ pinta($('ret'),persona(p,boca,parp),'r');$('vNom').textContent=p.nom;$('vTag').textContent=p.tag;
+ const pal=SUBS[C.indexOf(turno)].split(' '),n=Math.ceil(pal.length*Math.min(1,Math.max(0,(t-turno.t0)/turno.d+0.02)));
+ pinta($('sub'),pal.slice(0,n).join(' ')+' <span class="no">'+pal.slice(n).join(' ')+'</span>','sub');
+ $('voz').style.opacity=ease((t-0.3)/0.6);
+}
+window.TOTAL=TL.total;window.render=render;render(0);
+</script></body></html>

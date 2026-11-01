@@ -113,7 +113,11 @@ su fase A ya está hecha (p. ej. la continuación de un piloto), se salta.
      los casos y lo que dice cada figura** (el paciente del caso es inventado; su medicina no).
    - **Profesor en modo juzgar** (`profesor`) → `profesor.md`; dile cómo llegar a lo nuevo y qué modelo «así sí» usar.
 7. **Decide.** Si hay ❌ del verificador, fallos de los jueces, hallazgos **graves** del auditor o **alguna nota del
-   profesor por debajo de 8 (sobre 10)** (la meta es 8,75: lo que falte hasta ahí, si es barato): vuelve al paso 5 con la lista exacta (máximo las vueltas del tablero). Los huecos y
+   profesor por debajo de 9,5 (sobre 10)** (meta 10; REGLAS §4.8 R7 y R10, desde el 01/11/2026): vuelve al paso 5 con la
+   **receta del profesor** (máximo 3 vueltas con receta; entre 9,0 y 9,5, vuelta corta de ≤15 pasos). Si tras la tercera
+   algún punto sigue por debajo de 9,5, **no sigas gastando**: llévalo al Congreso (Consejo) con la receta, las notas
+   de las tres vueltas y las capturas; el Congreso decide (otra vuelta con otro enfoque, aceptar el punto con nota y
+   mejora anotada, o consultar al usuario). Los huecos y
    menores se arreglan si es barato; si no, van al parte. Si tras las vueltas máximas sigue fallando →
    `necesita humano`.
 
@@ -248,16 +252,16 @@ a presupuesto por agente, por qué, y la tabla del tablero actualizada.
 - **Presupuestos**: tu sesión de un grupo con piezas y Estudiar, 1,3 M; Hacienda no junta en un encargo piezas con
   prueba o jueces propios.
 
-### Llegar al 8,75 a la primera (aprobado por el usuario el 27/10/2026)
+### Llegar a la nota de corte a la primera (R1-R9 del 27/10/2026; nota 9,5 y R10 desde el 01/11/2026)
 
 `autonomo/REGLAS.md` §4.8 (R1-R9 de `notas-meta`). En resumen: el constructor pasa la prueba del móvil antes de
 entregar (R1); al aprobar una maqueta, el profesor escribe la lista de lo que hace y el constructor la tacha al
 llevarla a la app (R2); los criterios clínicos (avisos, objetivos, umbrales) van escritos con su fuente en el plan del
 profesor antes de construir (R3); en la eco y la anatomía, cada plano al lado de una imagen real (R4); **las vueltas
 de arreglo, con un constructor sonnet nuevo** y la lista exacta, salvo que el anterior lleve menos de 60 pasos, y un segundo encargo solo al mismo si el primero acabó en ≤30 pasos (R5);
-**nada de opus en las vueltas** (R6); la meta 8,75 obliga en modelos vivos nuevos, maquetas y archivos modelo, y en
-lo demás basta el 8 (R7); el rejuicio solo puntúa lo que quedó por debajo (R8); y el parte lleva la tabla «Vueltas»
-(R9). **Ahorros del 01/11** (REGLAS §4.16): barrido de extremos en la primera prueba de una pieza de motor;
+**nada de opus en las vueltas** (R6); **9,5 es el suelo en todo y 10 la meta** (R7); el rejuicio solo puntúa lo que
+quedó por debajo de 9,5 (R8); el parte lleva la tabla «Vueltas» (R9); y la **receta del profesor**: criterios de 9,5 y
+10 antes de construir, qué falta en cada juicio, tope de 3 vueltas y después al Congreso (R10). **Ahorros del 01/11** (REGLAS §4.16): barrido de extremos en la primera prueba de una pieza de motor;
 director partido en dos sesiones por parada (≤150 pasos); pieza de física del motor a 1,2 M con profesor al acabarla;
 `git merge-base origin/main origin/auto/<clave>` antes de presupuestar una tarea que continúa una PR antigua.
 
@@ -330,8 +334,8 @@ solo; mira su salida y `git diff --name-only --diff-filter=U`; si hay conflictos
    que rellenaste tú), jueces (✅/❌), las notas del profesor, los modelos nuevos que propone (para que decidas) y
    huecos. Lo técnico y los arreglos van directo a `main` con los jueces en verde (`REGLAS.md` §2.3).
    **El contenido entra en `main` por votos del Consejo, sin esperar al usuario** (REGLAS §4.15, aprobado el
-   30/10/2026): con la suite entera de jueces en verde, el auditor sin graves y el profesor ≥ 8,75 (meta 9,5 en modelos
-   vivos nuevos y maquetas), lanzas un agente barato (`Explore`, sonnet) con los dictámenes de Interior, Justicia,
+   30/10/2026): con la suite entera de jueces en verde, el auditor sin graves y el profesor ≥ 9,5 en
+   todos los puntos (meta 10; desde el 01/11/2026), lanzas un agente barato (`Explore`, sonnet; modelo grande si hay discrepancia o toca reglas, REGLAS §4.12) con los dictámenes de Interior, Justicia,
    Educación y Hacienda sobre la PR (le das los informes y las capturas; ≤8 líneas y un voto cada uno); tú presides
    como Transportes y desempatas; escribes el acta en `autonomo/consejo/` y, con mayoría, fusionas la PR
    (`mcp__github__merge_pull_request`, sin reescribir historia). Si falta una condición, la PR queda en borrador con

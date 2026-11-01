@@ -7,6 +7,10 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 
 | Fecha | Tipo | Qué | Veredicto |
 |---|---|---|---|
+| 2026-11-01 | tuit → paper | **@JonathanNefro** (2116150793…): Pourafshar N, Nam, Madapoosi, Choi, Shah, Pitt, Xiong, Rossignol… *Intrarenal Determinants of GFR Decline During Loop Diuretic Therapy*. Hypertension, nov 2026. doi:10.1161/HYPERTENSIONAHA.126.27712 · PMID 42670726 (Crossref y Europe PMC, 01/11). El tuit: la caída del FG al descongestionar con diuréticos no se debería a la depleción de volumen sino a mecanismos intrarrenales | **Integrar en UCI / Papers Tuiter cuando haya PDF.** De pago (sin licencia abierta ni copia en PMC); `ahajournals.org` cerrado en la red. Pedido en el issue #27. Enlaza con Nefrología (FRA, diuréticos) y el síndrome cardiorrenal |
+| 2026-11-01 | tuit → idea | **@DanRozenbaum** (2116153546…, hilo): la «muesca» de la curva de flujo espiratorio en el asma y la EPOC; con obstrucción grave el pulmón ya no se vacía con una sola constante de tiempo (la vía proximal se vacía rápido y lo distal, lento) | **Idea, sin paper** (el hilo no cita ninguno). Para las curvas del respirador (Neumología, asincronías; enlaza con Mireles-Cabodevila 2022, aún sin PDF). Sin imágenes del tuit |
+| 2026-11-01 | tuit → idea | **@sindenzu1** (2115654562…): fenómeno de Ashman (secuencia RR larga-corta → aberrancia de rama) | **Idea, sin paper** (ECG docente en japonés). Para el bloque de arritmias (`arritmias-maqueta`), junto al bloqueo de rama dependiente de la frecuencia |
+| 2026-11-01 | tuit → idea | **@sindenzu1** (2116749825…, Bandeja del 01/11): torsade de pointes, cómo leer el giro del eje del QRS | **Idea, sin paper.** Para el bloque de arritmias. Sin imágenes del tuit |
 | 2026-11-01 | organización de GitHub | **MedMLX** (https://github.com/MedMLX, 23 repositorios; casi todos Apache-2.0, `med-vlm-mlx` MIT, `sam3-mlx` sin licencia clara): modelos de IA de imagen médica (segmentar Rx y TC, nódulos, TotalSegmentator, NV-Reason-CT, TC y RM sintéticas) en MLX, **solo para Mac con Apple Silicon**. El usuario: «para rayos usa este repo también» | **Apuntado, sin estudiar.** Para la Radiología con imágenes reales (`radio-real`, parte 2 aparcada el 01/11). Lo que puede servir: `flexray-mlx` (segmenta la anatomía de una Rx) para preparar fuera de la app las **zonas tocables** de nuestras placas reales. No trae imágenes de pacientes; no corre en el móvil ni en este contenedor (Linux); las TC «sintéticas» no valen como imagen real (acta 10.ª: una IA no es fuente) y el código no entra en la app (CLAUDE.md §7.9). Siguiente paso, si se retoma la parte 2: `/ingenieria-reversa` corta de `flexray-mlx` y `medmlx`, y ver si su modelo corre sin Mac |
 
 ## 2026-10-23/25 · primeras entradas (ya estudiadas)
@@ -37,8 +41,8 @@ Formato en `LEEME.md`. Norte en `NORTE.md`; fases en `HOJA-DE-RUTA.md`. La más 
 - 2026-10-28 · Bandeja #27 · idea lazo presión-volumen (precarga y distensibilidad) y la web CardioRender: ¿a fase 2?
 - 2026-10-29 · Bandeja #27 · 3 tuits sin leer (@shinriha_pt, @WithAScalpel, @sindenzu1): el 31/10 x.com volvió a
   dar 402; se pidió en el issue el enlace del paper o una línea de qué tratan
-- 2026-10-31 · Bandeja #27 · 2 tuits nuevos sin leer (@JonathanNefro, @sindenzu1 2115654562…): x.com 402; se pidió
-  lo mismo. Queda para el 01/11 el de @DanRozenbaum (2116153546…), sin abrir aún
+- 2026-10-31 · Bandeja #27 · @JonathanNefro, @sindenzu1 (2115654562…) y @DanRozenbaum: **leídos el 01/11** (x.com
+  abrió); ver la tabla del 01/11. El de @JonathanNefro espera el PDF (Pourafshar 2026, Hypertension; de pago)
 - 2026-10-29 · Bandeja #27 · web CardioTeca, tablas de dosis de anticoagulantes y antiarrítmicos: ¿bibliografía de fase 3?
 - 2026-10-30 · Bandeja #27 · paper neuropronóstico tras parada (Benghanem 2026, Ann Intensive Care; acceso abierto,
   pero la revista está cerrada en la red): espera el PDF del usuario o que se abra el dominio

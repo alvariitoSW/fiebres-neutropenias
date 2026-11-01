@@ -37,7 +37,7 @@ export const MAYEUTICA_DISECCION = {
           { t: 'No cambia: el nicardipino actúa en el vaso, no en el corazón', porque: `Actúa en el vaso, pero la bajada de presión dispara el reflejo simpático (${la(51)}); por eso Marino avisa de que la bajada no debe acompañarse de taquicardia (${p(52)}).` },
           { t: 'Sube: la bajada de presión activa el reflejo simpático sobre el corazón', ok: true }],
         explicacion: `Cuando la presión cae, los barorreceptores activan el simpático (efecto inotrópico y cronotrópico positivo, ${la(51)}). En la disección es justo lo que <span class="hl-rojo">no puede pasar</span>: la bajada de presión <b>no debe acompañarse de taquicardia ni de más gasto</b> (${p(52)}).`,
-        nota: `<b>En el modelo (ilustrativo):</b> Joaquín parte de 167/96, FC 93 e IC 2,8; con nicardipino 10 mg/h solo, 133/94, FC 127 e IC 3,3 y el sello «Cizalla ↑». <b>La fuente no lo dice:</b> cuánto sube la frecuencia; Marino da el aviso, no la cifra.` + enFicha(D, 'mc-diseccion-manejo') },
+        nota: `<b>En el modelo (ilustrativo):</b> Joaquín parte de 167/96, FC 94 e IC 2,8; con nicardipino 10 mg/h solo, 127/91, FC 136 e IC 3,1 y el sello «Cizalla ↑». <b>La fuente no lo dice:</b> cuánto sube la frecuencia; Marino da el aviso, no la cifra.` + enFicha(D, 'mc-diseccion-manejo') },
       { id: 'dis-g3', corto: 'por qué cizalla', tipo: 'test', fuente: 'mc-diseccion-manejo',
         enunciado: 'Un compañero dice: «Si la PAS ya está en 120, qué más da que la frecuencia esté en 120 también». ¿Por qué empeora la disección con la taquicardia y el gasto altos?',
         opciones: [
