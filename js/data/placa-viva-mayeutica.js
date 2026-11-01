@@ -169,7 +169,7 @@ const CASO2 = { id: 'plv-melquiades', titulo: 'Melquíades, 62 años · intubaci
     { momento: 'Intubado con fibroscopio · SDRA', estado: 'mel', ajustes: [['roc'], ['poner', { min: 1 }], ['sug', { v: 16 }]], datos: { 'Tras el sugammadex': 'TOF 4/4' }, nuevo: ['Tras el sugammadex'], q: { corto: 'TOF objetivo', tipo: 'error',
       enunciado: 'Se intuba con fibroscopio. SDRA: el R1 escribe el plan de relajación de Melquíades. <b>Puede haber 0, 1 o 2 errores.</b>',
       frases: [{ t: 'Cisatracurio 0,15 mg/kg y perfusión de 1-3 µg/kg/min.' },
-        { t: 'Objetivo: TOF 0/4, para que no se mueva nada.', mal: true, c: 'El objetivo son 1-2 respuestas del TOF, ajustando la perfusión (p. 30). Que 0/4 sea un bloqueo excesivo es inferencia del autor.' },
+        { t: 'Objetivo: TOF 0/4, para que no se mueva nada.', mal: true, c: 'El objetivo son 1-2 respuestas del TOF, ajustando la perfusión (p. 30). La ausencia total de respuesta es señal de bloqueo excesivo (p. 30).' },
         { t: 'Si hay que revertir el cisatracurio, sugammadex.', mal: true, c: 'El sugammadex solo actúa con los aminoesteroides (rocuronio), no con el cisatracurio (p. 31).' },
         { t: 'Sedación profunda mientras siga relajado.' }],
       explicacion: 'Dos errores: el punto final son 1-2 respuestas del TOF (p. 30) y el sugammadex solo vale con aminoesteroides (p. 31). El cisatracurio no depende de riñón ni hígado (p. 29) y el paciente relajado necesita sedación profunda con analgesia (p. 31).', fuente: [P.mon, P.cis, P.sug] } },
