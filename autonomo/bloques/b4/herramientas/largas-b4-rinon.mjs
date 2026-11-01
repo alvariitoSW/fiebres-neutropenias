@@ -1,5 +1,5 @@
 // Lista los tests de un archivo de Mayéutica donde la opción buena es la más larga (uso: node largas-b4-rinon.mjs b4-rinon-2.js [ficha])
-const m = await import(new URL('../../js/data/mayeutica/' + process.argv[2], import.meta.url));
+const m = await import(new URL('../../../../js/data/mayeutica/' + process.argv[2], import.meta.url));
 const largo = s => s.replace(/<[^>]+>/g, '').length;
 for (const [fid, d] of Object.entries(Object.values(m)[0])) {
   if (process.argv[3] && fid !== process.argv[3]) continue;
