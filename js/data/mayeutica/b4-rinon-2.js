@@ -165,7 +165,7 @@ export const MAYEUTICA_RINON_2 = {
     ],
     profundizar: [
       { id: 'mr-tabla-34-3', titulo: 'Tabla 34.3 · el resto de fármacos («otros»)' },
-      { id: 'mr-rabdo-trr', titulo: 'La diálisis en la rabdomiólisis (hasta el 30 %)' },
+      { id: 'mr-rabdo-tira', titulo: 'La tira de orina en la rabdomiólisis (mioglobina o hematíes)' },
     ],
   },
 
