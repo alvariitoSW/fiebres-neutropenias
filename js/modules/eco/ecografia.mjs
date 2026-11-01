@@ -15,7 +15,7 @@
 //
 // Valores de ecogenicidad, resolución y ganancia: ilustrativos (física general de la ecografía), no de
 // una fuente concreta.
-import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
+import { baseGeometrica, construirCorazon, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
@@ -337,7 +337,11 @@ export function regionZoom(P, est) {
     if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } }
   if (u0 > u1) return centro;
   const ap = enPlano(P, [0, 0, -g.vi.Le]); u0 = Math.min(u0, ap[0]); u1 = Math.max(u1, ap[0]); v0 = Math.min(v0, ap[1]); v1 = Math.max(v1, ap[1]);
-  return { u: (u0 + u1) / 2, v: (v0 + v1) / 2 };
+  // v3g: el anillo tricuspídeo y la AD (el encuadre no los recorta): los puntos de la AD que caen en el plano ensanchan la caja
+  try { const ad = construirCorazon(est, { pericardio: false, detalle: false }).partes.find(p => p.nombre === 'AD');
+    for (let i = 0; ad && i < ad.pos.length; i += 3) { const [u, v, n] = enPlano(P, [ad.pos[i], ad.pos[i + 1], ad.pos[i + 2]]);
+      if (Math.abs(n) < 3 && v > 5 && v < P.prof) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } } catch { /* sin AD: queda la caja del VD */ }
+  return { u: (u0 + u1) / 2, v: (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0 };
 }
 
 // ---------------------------------------------------------------------------- qué es cada pieza en la imagen
@@ -529,7 +533,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     }
     const t = tipoDe(p.nombre); if (!t || !p.idx) { base += p.pos ? p.pos.length / 3 : 0; return; }
     // Dibujo nuevo, A4C: el arco aórtico y las arterias pulmonares quedan por detrás del plano de las cuatro cámaras (no salen en el A4C real; anatomía general, sin página): sin ellos no quedan dos anillos bajo la AI.
-    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'a4cVd' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
     // Dibujo nuevo, A4C: el pulmón lateral no se corta en láminas (la línea de pleura salía como una escalera de rayas regulares en el borde del
     // sector); en Lang 2015, Fig. 4 esa zona es sombra oscura sin patrón. La ventana pobre ya la tapa con su sombra irregular (nuevoP).
     if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
@@ -567,8 +571,8 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
       // líneas que acaban donde acaba el tubo: se cierran uniendo sus extremos, como las paredes
       const c = cerrado ? null : cerrarExtremos([x], 45);
       if (cerrado || c.abiertos === 0) out.push({ tipo: 'relleno', seg: cerrado ? x.seg : x.seg.concat(c.puentes), segRef: null, db: DB.sangre, sangre: true, grupo: x.nombre, abiertos: 0 });
-      const aoD = dibujoNuevo() && x.nombre === 'Aorta descendente';   // v2g: pared más fina y tenue (calibre real ~2-2,5 cm; ilustrativo)
-      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db + (aoD ? AORTA_DESC_NUEVO.db : 0), ancho: aoD ? AORTA_DESC_NUEVO.ancho : x.t.ancho, grupo: x.nombre });
+      const aoD = dibujoNuevo() && x.nombre === 'Aorta descendente', oblicua = aoD && P.clave === 'a4cVd' ? AORTA_DESC_NUEVO.dbOblicuo : 0;   // v2g: pared más fina y tenue (calibre real ~2-2,5 cm; ilustrativo)
+      out.push({ tipo: 'linea', seg: x.seg, segRef: x.segRef, db: x.t.db + (aoD ? AORTA_DESC_NUEVO.db + oblicua : 0), ancho: aoD ? AORTA_DESC_NUEVO.ancho : x.t.ancho, grupo: x.nombre });
       continue;
     }
     out.push(cerrado ? { tipo: 'relleno', seg: x.seg, segRef: x.segRef, db: x.t.db, grupo: x.nombre, abiertos: 0, distPared: paredVI && /^Papilar/.test(x.nombre) ? distMin(x.seg, paredVI) : null }
