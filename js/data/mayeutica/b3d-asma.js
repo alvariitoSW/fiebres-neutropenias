@@ -64,13 +64,13 @@ export const MAYEUTICA_ASMA = {
           { t: 'Como una mascarilla de arrastre: un gas a alta presión pulveriza la solución; 3-6 mL, en menos de 10 min', ok: true },
           { t: 'Con ultrasonidos que vibran la solución; un reservorio de 3-6 mL dura más de una hora', porque: `El nebulizador de la ficha es neumático (jet) y vacía el reservorio en menos de 10 minutos (${p(17)}).` }],
         explicacion: `Mismo principio que la mascarilla de arrastre de aire: un chorro de gas a alta velocidad (p. ej., 50 psi de la pared) arrastra la solución por un tubo y la pulveriza. El reservorio de pequeño volumen, de <span class="hl-azul">3-6 mL</span>, se aerosoliza en menos de 10 min (${p(17)}).` + enFicha(BA, 'nep-nebulizador') },
-      { id: 'as1-g6', corto: 'dónde acaba el albuterol', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-tabla-23-1 · nep-mdi',
-        enunciado: 'Con la Tabla 23.1 delante: ¿dónde acaba el albuterol del nebulizador y por qué el espaciador dobla el depósito pulmonar del MDI?',
-        puntos: [
-          `<span class="hl-azul">Nebulizador (2,5 mg)</span>: solo el 12 % llega a los pulmones; el 66 % se queda en el aparato y el 20 % sale con el gas exhalado (${p(17)}).`,
-          `<span class="hl-azul">MDI sin espaciador</span>: el spray sale a más de 30 m/s y el 80 % choca en la orofaringe (impactación inercial); a los pulmones llega el 9 % (${p(17)}).`,
-          `<span class="hl-verde">Con espaciador</span> se frena el spray: la orofaringe pasa al 1 % y los pulmones al 20 %, más del doble (${p(17)}).`],
-        explicacion: `Toda la terapia en aerosol es ineficiente; no es cosa del nebulizador. Por eso <span class="hl-verde">se recomiendan espaciadores para todo tratamiento con MDI</span> (${p(17)}).` + enFicha(BA, 'nep-tabla-23-1') },
+      { id: 'as1-g6', corto: 'qué pronostica el ingreso', tipo: 'test', fuente: 'nep-asma-epoc-ominoso',
+        enunciado: 'Antes de leer: ¿qué anuncia el ingreso en UCI de una exacerbación de EPOC y qué factor se asocia más a morir en el asma?',
+        opciones: [
+          { t: 'En el EPOC, 1 de cada 4 no sobrevive y el 40 % reingresa en un año; en el asma, la ventilación mecánica', ok: true },
+          { t: 'En el EPOC, 1 de cada 10 no sobrevive y el 40 % reingresa; en el asma, la hipercapnia', porque: `La ficha da 1 de cada 4, no 1 de cada 10, y el factor de riesgo más fuerte de muerte en el asma es la necesidad de ventilación mecánica, no la hipercapnia (${p(15)}).` },
+          { t: 'En el EPOC, 1 de cada 4 no sobrevive y casi ninguno reingresa en el año; en el asma, el uso de músculos accesorios', porque: `El 40 % de los supervivientes reingresa en un año, y el factor más fuerte en el asma es la ventilación mecánica; los signos clínicos no son fiables para la gravedad (${p(15)}-${p(16)}).` }],
+        explicacion: `El ingreso en UCI es un <span class="hl-rojo">signo ominoso</span>: en el EPOC, 1 de cada 4 no sobrevivirá a la hospitalización y el 40 % de los supervivientes reingresará en un año; en el asma, la ventilación mecánica es el factor de riesgo más fuerte de muerte (${p(15)}).` + enFicha(BA, 'nep-asma-epoc-ominoso') },
       { id: 'as1-g7', corto: 'nebulizador frente a MDI', tipo: 'test', fuente: 'nep-neb-vs-mdi',
         enunciado: 'La respuesta broncodilatadora con 2,5 mg por nebulizador y con 0,36 mg por MDI con espaciador es la misma, aunque la dosis difiere 7 veces. ¿Qué concluyes?',
         opciones: [

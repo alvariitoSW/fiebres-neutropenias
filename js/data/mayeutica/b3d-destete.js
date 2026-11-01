@@ -1,6 +1,6 @@
 // Mayéutica del bloque 3D, G5: fichas 20 neumo-sbt (aquí) y 21 neumo-weaning-extubacion (en b3d-destete-2.js). Marino cap. 30,
 // págs. 50-61 del PDF caps27-30. Formato: cabecera de b1-fluidos.js. Caso de Benito (71 a, 78 kg, 1,72 m, PBW 68, FEVI 35 %,
-// día 7 de ventilación por neumonía). Las cifras de los estados del pulmón vivo (sbt-ok: Vt 300, FR 20; sbt-fracaso: Vt 170, FR 34;
+// día 7 de ventilación por neumonía). Las cifras de los estados del pulmón vivo (sbt-ok: Vt 300, FR 20; sbt-fracaso: Vt 173, FR 34;
 // sbt-ansiedad: Vt 450, FR 30, con el opiáceo FR 22 y Vt 400) son las del monitor de la app (js/data/pulmon-vivo-data.js), rotuladas
 // ilustrativo; las demás cifras de Benito son del caso (ilustrativo).
 import { MAYEUTICA_DESTETE_2 } from './b3d-destete-2.js';
@@ -46,15 +46,13 @@ const DATOS = {
           no('Sedación profunda al principio y benzodiacepinas en infusión para proteger al paciente de la ansiedad', `La sedación profunda (paciente no despertable) y el midazolam sostenido retrasan el despertar y, con él, la liberación del ventilador (${p(51)}).`),
           no('Sedación ligera, pero con midazolam continuo, que es más fácil de titular', `Las benzodiacepinas, en especial el midazolam, son justo lo que la guía pide evitar o minimizar (${p(51)}).`)],
         explicacion: `Mantener un nivel <span class="hl-verde">ligero</span>, considerar <span class="hl-verde">vacaciones de sedación</span> diarias para que no se acumule el fármaco y <span class="hl-rojo">evitar o minimizar las benzodiacepinas</span> (${p(51)}).` + enFicha(SB, 'nep-sbt-sedacion') },
-      { id: 'sbt-g5', corto: 'los 5 de disposición', tipo: 'destapa', cuantas: 'son cuatro líneas', fuente: 'nep-sbt-disposicion · nep-sbt-tabla',
-        enunciado: 'Antes de hacer una prueba de respiración espontánea, ¿qué cinco criterios de disposición debe cumplir el paciente? (Cuatro líneas: la primera lleva dos.)',
-        puntos: [
-          `Oxigenación y PEEP: <span class="hl-azul">SpO₂ ≥90 % con FiO₂ ≤50 %</span> y <span class="hl-azul">PEEP ≤8 cmH₂O</span> (${p(52)}).`,
-          `<span class="hl-azul">PaCO₂ normal o basal</span> (${p(52)}).`,
-          `<span class="hl-azul">Hemodinámicamente estable</span> (${p(52)}).`,
-          `<span class="hl-azul">Despertable y cooperador</span> (${p(52)}).`],
-        nota: `<b>La fuente no define «estable» ni usa escalas como RASS:</b> la Tabla 30.1 escribe solo «hemodinámicamente estable» y «despertable y cooperador» (${p(52)}).`,
-        explicacion: `Son los criterios de la columna izquierda de la Tabla 30.1 (${p(52)}); la calculadora de la ficha los pasa uno a uno.` + enFicha(SB, 'nep-sbt-tabla') },
+      { id: 'sbt-g5', corto: 'qué falla para la prueba', tipo: 'test', fuente: 'nep-sbt-disposicion · nep-sbt-tabla', origen: 'ficha; los datos del paciente, inventados',
+        enunciado: 'Un ventilado con SpO₂ 95 % con FiO₂ 0,6 y PEEP 6, estable, despierto y con PaCO₂ basal. ¿Está listo para una prueba de respiración espontánea?',
+        opciones: [
+          no('Sí: la SpO₂ pasa de 90 %, la PEEP es baja y cumple los demás criterios, así que la FiO₂ no importa', `La SpO₂ ≥90 % se exige respirando concentraciones no tóxicas de O₂, FiO₂ ≤50 % (${p(52)}); con 0,6 no cumple y la prueba podría empezar con una oxigenación aún dependiente del respirador.`),
+          ok('No todavía: la FiO₂ de 0,6 supera el 50 % que se admite para empezar; los otros criterios sí se cumplen'),
+          no('No: la PEEP de 6 cmH₂O es demasiado alta, porque para la prueba se necesita PEEP cero', `El criterio es PEEP ≤8 cmH₂O, no cero (${p(52)}); con PEEP 6 el criterio se cumple, y esperarías sin motivo mientras el paciente sigue ventilado.`)],
+        explicacion: `La oxigenación exige <span class="hl-azul">SpO₂ ≥90 % con FiO₂ ≤50 %</span> y PEEP ≤8 cmH₂O (${p(52)}): aquí falla la FiO₂, aunque los otros criterios se cumplan. Los cinco están en la Tabla 30.1; la calculadora de la ficha los pasa uno a uno.` + enFicha(SB, 'nep-sbt-tabla') },
       { id: 'sbt-g6', corto: 'cuánto valen los predictores', tipo: 'test', fuente: 'nep-sbt-predictores', modelo: pv('sbt-ok', '🫁 Ceferino supera la prueba: Vt 300, FR 20'),
         enunciado: 'Durante la prueba mides Vt, FR y la presión inspiratoria máxima. ¿Cómo se leen según la fuente?',
         opciones: [
@@ -184,14 +182,14 @@ const DATOS = {
                 ok('Que era ansiedad: se calmó y el Vt no cayó, así que no hay datos de fracaso ventilatorio'),
                 no('Que el soporte de 5 cmH₂O ha mejorado su trabajo respiratorio y por eso respira mejor', `La presión de soporte de 5 no reduce de forma significativa el trabajo respiratorio (${p(53)}).`)],
               explicacion: `Si tras calmar la disnea el volumen se mantiene, el problema era la <span class="hl-azul">ansiedad</span>, no el fracaso ventilatorio (${p(54)}-${p(55)}). FR 22 y Vt ≈400, cifras del modelo (ilustrativo).` + enFicha(SB, 'nep-sbt-rapida') } },
-          { momento: 'Día 7 · giro: a los 20 minutos', datos: { FR: '34 por minuto', 'Vt': '250 mL (3,7 mL/kg PBW)', 'FR/Vt': '136 rpm/L', Aspecto: 'sudoración, uso de músculos accesorios' }, nuevo: ['FR', 'Vt', 'FR/Vt', 'Aspecto'],
-            pregunta: { id: 'sbt-c5', tipo: 'test', fuente: 'nep-sbt-rapida · nep-sbt-tabla', origen: ILU, modelo: pv('sbt-fracaso', '🫁 Rápido y superficial (con otro paciente): FR 34, Vt 170'),
-              enunciado: 'A los 20 minutos Benito respira a 34 con un Vt de 250 mL y suda. ¿Y ahora?',
+          { momento: 'Día 7 · giro: a los 20 minutos', datos: { FR: '34 por minuto', 'Vt': '173 mL (2,5 mL/kg PBW)', 'FR/Vt': '199 rpm/L', Aspecto: 'sudoración, uso de músculos accesorios' }, nuevo: ['FR', 'Vt', 'FR/Vt', 'Aspecto'],
+            pregunta: { id: 'sbt-c5', tipo: 'test', fuente: 'nep-sbt-rapida · nep-sbt-tabla', origen: ILU, modelo: pv('sbt-fracaso', '🫁 Rápido y superficial (con otro paciente): FR 34, Vt 173'),
+              enunciado: 'A los 20 minutos Benito respira a 34 con un Vt de 173 mL y suda. ¿Y ahora?',
               opciones: [
                 no('Repetir el opiáceo: sigue siendo ansiedad y el volumen bajo se debe al sedante', `El Vt ahora baja mientras la FR sube: eso es rápido y superficial, que sugiere fracaso ventilatorio (${p(54)}).`),
                 no('Seguir otros 10 minutos y decidir con la gasometría, porque los gases distinguen ansiedad de fracaso', `Los gases pueden no distinguir una de otra; el Vt ya da la respuesta (${p(54)}).`),
                 ok('Fracaso ventilatorio: vuelve al ventilador, porque el Vt baja mientras la FR sube')],
-              explicacion: `FR que sube y Vt que baja: <span class="hl-rojo">rápida y superficial</span>, y el cociente de 136 supera el 105 de la tabla (${p(52)}, ${p(54)}). Se vuelve al ventilador (${p(55)}). El modelo lo enseña con otro paciente (Ceferino).` + enFicha(SB, 'nep-sbt-rapida') } },
+              explicacion: `FR que sube y Vt que baja: <span class="hl-rojo">rápida y superficial</span>, y el cociente de 199 supera el 105 de la tabla (${p(52)}, ${p(54)}). Se vuelve al ventilador (${p(55)}). Cifras del monitor del modelo en el estado de fracaso (ilustrativo).` + enFicha(SB, 'nep-sbt-rapida') } },
           { momento: 'Día 7 · ya en el ventilador', datos: { Situación: 'prueba fracasada a los 20 minutos' }, nuevo: ['Situación'],
             pregunta: { id: 'sbt-c6', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-sbt-exito', origen: ILU,
               enunciado: 'Benito vuelve al ventilador. Para entender por qué fracasó, ¿qué tres cosas miras?',
