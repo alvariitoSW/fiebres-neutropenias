@@ -955,6 +955,7 @@
             <h3 style="color: var(--accent-blue);">Candiduria</h3>
             <p class="fuente-ficha">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 42 "Urinary Tract Infections in the ICU".</p>
 
+            <p class="carril-30"><strong>En 30 segundos.</strong> La <em>Candida</em> en la orina del sondado suele ser colonización; si persiste con fiebre, busca la diseminada. Hemocultivos negativos en más del 50 % de las diseminadas (Marino p. 42) <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-que">Ver en el texto ↗</button> · fluconazol oral 200-400 mg/día 2 semanas (p. 42) <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-tto">Ver en el texto ↗</button> · anfotericina B 0,3-0,6 mg/kg/día 1-7 días en la especie resistente (p. 42) <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-candiduria" data-resaltar="#ma-cand-tto">Ver en el texto ↗</button>.</p>
             <dl class="kv-row" id="ma-cand-que"><dt>Colonización o algo más</dt><dd>Con sonda, la <em>Candida</em> en orina suele ser colonización, pero puede ser <strong>signo de candidiasis diseminada</strong> (consecuencia, no causa). Puede ser la única pista: los hemocultivos son negativos en <strong>más del 50%</strong> de las candidiasis diseminadas. (El Cap. 44 lo ve al revés: si es <strong>persistente</strong>, suele ser consecuencia de una candidiasis diseminada; ver la nota de fuentes en «Fiebre: infecciones y hemocultivos».)</dd></dl>
             <dl class="kv-row" id="ma-cand-micro"><dt>Microbiología</dt><dd>El recuento de colonias <strong>no predice</strong> la afectación renal ni la diseminación. <em>C. albicans</em> en ~50%, seguida de <em>C. glabrata</em>, notable por su resistencia al <strong>fluconazol</strong>.</dd></dl>
             <dl class="kv-row" id="ma-cand-asintomatica"><dt>Asintomática</dt><dd><strong>No se trata</strong>, salvo en el <strong>neutropénico</strong> (riesgo de diseminación): profilaxis con una equinocandina (caspofungina, micafungina o anidulafungina).</dd></dl>
@@ -1287,7 +1288,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🔪 Postoperatoria precoz y la atelectasia</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fiebre-postop">
+                    <div class="micro-prof-body" id="ma-fiebre-postop" data-nombre="Fiebre postoperatoria precoz">
                         <p>Fiebre el primer día en el <strong>15-40%</strong> de la cirugía mayor: es la respuesta al daño tisular; casi nunca hay infección y cede en 24-48 h.</p>
                         <p><span class="hl-rojo">La atelectasia NO da fiebre.</span> En un estudio de cirugía cardíaca, casi el 90% de los febriles tenían atelectasia, pero el <strong>75% de los que tenían atelectasia no tenían fiebre</strong>; y hace más de 50 años, una atelectasia lobar provocada en animales no dio fiebre. La atelectasia aparece en más del 90% de las anestesias generales: es frecuente, no causa fiebre.</p>
                         <div class="article-figure" id="mar-img-44-2">
@@ -1300,7 +1301,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Trombosis y transfusiones</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fiebre-tev-transfusion">
+                    <div class="micro-prof-body" id="ma-fiebre-tev-transfusion" data-nombre="Tromboembolismo y transfusión">
                         <dl class="kv-row"><dt>Tromboembolismo</dt><dd>La TVP hospitalaria suele ser asintomática, pero la <strong>embolia pulmonar</strong> puede dar fiebre durante una semana. El riesgo es mayor en el <strong>trauma y el postoperatorio</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Hematíes</dt><dd>La fiebre no hemolítica es la reacción adversa más frecuente: durante la transfusión o en las 6 h siguientes, por anticuerpos del receptor contra leucocitos del donante; más en politransfundidos.</dd></dl>
                         <dl class="kv-row"><dt>Plaquetas</dt><dd>Citada sobre todo con plaquetas de donante único, pero infrecuente (~1 por 1.000 unidades).</dd></dl>
@@ -1405,7 +1406,7 @@
                 <p class="article-figure-caption">Figura 44.3 — Bacteriemias detectadas según el número de hemocultivos en 24 h (20 mL cada uno): endocarditis 89%, 94%, 94% y 100%; otras infecciones 65%, 80%, 96% y 100%.</p>
             </div>
             <div style="overflow-x:auto;">
-            <table class="data-table" id="ma-tabla-fig44-3">
+            <table class="data-table" id="ma-tabla-fig44-3" data-nombre="Tabla de la Figura 44.3">
                 <thead><tr><th>Hemocultivos en 24 h</th><th>Endocarditis (%)</th><th>Otras infecciones (%)</th></tr></thead>
                 <tbody>
                     <tr><td>1</td><td>89</td><td>65</td></tr>
@@ -1441,6 +1442,7 @@
                 <li>Cubrir <em>S. aureus</em> (vancomicina, SARM y sensible) si se sospecha catéter o neumonía asociada al ventilador.</li>
                 <li><strong>Antifúngico</strong> (equinocandina) si hay riesgo de candidiasis invasiva (vía central) con fiebre persistente sin causa, fiebre tras cirugía intestinal contaminada o candiduria persistente.</li>
             </ol>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="termostatoVivo" data-termostato-vivo="fiebre:1">🌡️ Llega el pirógeno: ¿cuál? →</button></p>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Comparativa de fuentes.</strong> El consenso SEIMC-SEHH (Neutropenia Febril) también usa un diferencial de ≥2 h entre catéter y periferia; la bacteriemia por catéter completa, en Fundamentos (Cap. 3).</p>

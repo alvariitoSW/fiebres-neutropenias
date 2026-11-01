@@ -5,9 +5,12 @@
 // (docs/marino-2024-abdomen-temperatura-caps39-44.pdf, cap. 42 = págs. 38-43); cada pregunta dice dónde con `fuente`.
 // Las cifras de la paciente se inventan y se marcan con `origen`. Formato: el de b1-fluidos.js.
 
+const PDF = 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf';
+const pag = n => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">PDF pág. ${n}</a>`;
+
 const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 
-const NOTA_CANDIDURIA = '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización»; el cap. 44, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada». Se muestran las dos; no se elige una. (Los hemocultivos negativos en más del 50 % de las diseminadas y la sensibilidad «tan baja como el 20 %» no se contradicen: son compatibles.)';
+const NOTA_CANDIDURIA = '<b>Nota de fuentes.</b> El cap. 42 dice que la Candida en orina con sonda «suele ser colonización»; el cap. 44, que la candiduria persistente «suele ser consecuencia de la candidiasis diseminada». Se muestran las dos; no se elige una. (Los hemocultivos negativos en más del 50 % de las diseminadas y la sensibilidad «tan baja como el 20 %» no se contradicen: son compatibles.) Cap. 42: ' + pag(42) + '; cap. 44: ' + pag(67) + '.';
 
 export const MAYEUTICA_FIEBRE_2 = {
   /* =================================================================================================
@@ -21,7 +24,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         opciones: [
           { t: 'Que la sonda introduzca muchas más bacterias de las que se inyectaron en el experimento con el sano', porque: 'No es cuestión de cantidad: se inyectan patógenos y no hay infección. Si piensas en cantidad, buscarás una sonda más estéril en vez de quitarla.' },
           { t: 'La adherencia: el epitelio va tapizado de comensales y la sonda lo inflama y lo descama', ok: true },
-          { t: 'Que la orina esté siempre estéril antes del sondaje', porque: 'Lo que protege es el epitelio con sus comensales, no una orina estéril. Dejarías de ver que lo que cambia con la sonda es el epitelio.' }],
+          { t: 'Que la orina fuera estéril antes del sondaje', porque: 'Lo que protege es el epitelio con sus comensales, no una orina estéril. Dejarías de ver que lo que cambia con la sonda es el epitelio.' }],
         explicacion: 'Con sonda aparece bacteriuria (≥10⁵ UFC/mL) en un <span class="hl-rojo">3-8 % por día</span>, con biopelículas dentro y fuera de la sonda. Pero no basta: <span class="hl-azul">el epitelio está tapizado de comensales</span> que impiden que se peguen los patógenos; la sonda lo inflama y lo descama (Figura 42.1).' },
       { id: 'ius-g2', corto: 'retirar pronto', tipo: 'test', fuente: 'mar-img-42-2 · ma-itu-retirar',
         enunciado: 'Predice con la Figura 42.2 (16 ensayos): retirar la sonda al día 1 frente a los días 2-7. ¿Cuánto baja la infección asociada a sonda?',
@@ -36,7 +39,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         opciones: [
           { t: 'Limpiar a diario el punto de inserción de la sonda', ok: true },
           { t: 'Recambiar periódicamente una sonda impregnada de plata', porque: 'Es lo que hace que la plata reduzca la infección. Dejarías de recambiarla y perderías su efecto.' },
-          { t: 'Retirar la sonda en cuanto no haga falta', porque: 'Es la medida más eficaz, no la que aumenta la bacteriuria. Mantenerla «por si acaso» alargaría el sondaje.' }],
+          { t: 'Mantener la sonda de plata sin recambiarla', porque: 'La plata sin recambio no reduce la infección, pero tampoco sube la bacteriuria; lo que la sube es limpiar el meato.' }],
         explicacion: 'Limpiar a diario el meato <span class="hl-rojo">puede aumentar la bacteriuria</span>; los antibióticos sistémicos profilácticos, tampoco. Las sondas de plata reducen la infección <span class="hl">solo si se recambian periódicamente</span>.' },
       { id: 'ius-g4', corto: 'criterios NHSN', tipo: 'destapa', fuente: 'ma-itu-nhsn', modelo: visual('ma-itu-sonda', '👁️ Los criterios NHSN (vista Visual)'), cuantas: 'son tres criterios',
         enunciado: 'Los criterios NHSN de la infección urinaria asociada a sonda. Son tres.',
@@ -52,7 +55,7 @@ export const MAYEUTICA_FIEBRE_2 = {
           { t: 'No: la fiebre fue igual de frecuente con y sin ITU, y sin piuria va en contra', ok: true },
           { t: 'Sí, si el recuento pasa de 10⁶', porque: 'El umbral es >10⁵; un recuento mayor no demuestra que la fiebre venga de la orina.' }],
         explicacion: 'Hay muchas causas de fiebre en la UCI. La <span class="hl-rojo">piuria</span> (>10 leucocitos por campo) no diagnostica, pero <span class="hl">su ausencia va en contra</span>. Sin hemocultivo con el mismo germen, la calculadora da bacteriuria asintomática.' },
-      { id: 'ius-g6', corto: 'ABUTI', tipo: 'test', fuente: 'ma-itu-abuti', calculadora: { ir: 'ma-nhsn-calc', nombre: '¿Infección asociada a sonda o bacteriuria asintomática?' },
+      { id: 'ius-g6', corto: 'ABUTI', tipo: 'test', fuente: 'ma-itu-abuti',
         enunciado: 'El mismo E. coli en la orina (>10⁵ UFC/mL) y en los hemocultivos, sin síntomas urinarios. ¿Qué es?',
         opciones: [
           { t: 'Bacteriuria asintomática: sin síntomas no se trata', porque: 'El hemocultivo con el mismo germen la saca de esa definición: dejarías sin tratar una bacteriemia.' },
@@ -183,7 +186,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         enunciado: 'Candida en la orina de un paciente sondado. ¿Es causa o consecuencia de una candidiasis diseminada?',
         opciones: [
           { t: 'Causa: la Candida sube desde la vejiga hasta el riñón y la sangre y disemina', porque: 'El libro la describe como consecuencia, no causa. Buscarías la fuente en la vía urinaria y perderías la candidiasis sistémica.' },
-          { t: 'Siempre colonización: no hace falta pensar en nada más', porque: 'Suele serlo, pero puede ser la única pista: los hemocultivos son negativos en más del 50 % de las diseminadas.' },
+          { t: 'Colonización sin más: con sonda no hace falta pensar en otra cosa', porque: 'Suele serlo, pero puede ser la única pista: los hemocultivos son negativos en más del 50 % de las diseminadas.' },
           { t: 'Suele ser colonización, pero puede ser consecuencia de una diseminada', ok: true }],
         explicacion: 'Con sonda, la Candida en orina <span class="hl">suele ser colonización</span>, pero puede ser signo de candidiasis diseminada (<span class="hl-rojo">consecuencia, no causa</span>); los hemocultivos son negativos en más del 50 % de las diseminadas.' },
       { id: 'cdu-g2', corto: 'el recuento', tipo: 'test', fuente: 'ma-cand-micro',
@@ -193,7 +196,7 @@ export const MAYEUTICA_FIEBRE_2 = {
           { t: 'No: el recuento de colonias no predice la afectación renal ni la diseminación', ok: true },
           { t: 'Sí: con 10⁴ se repite el cultivo hasta 10⁵ antes de decidir', porque: 'Esperarías una cifra que no orienta, y la decisión depende de síntomas y neutropenia.' }],
         explicacion: '<span class="hl-rojo">El recuento no predice</span>. C. albicans en ~50 %, seguida de <span class="hl">C. glabrata</span>, notable por su resistencia al fluconazol.' },
-      { id: 'cdu-g3', corto: 'el neutropénico', tipo: 'test', fuente: 'ma-cand-asintomatica', modelo: visual('ma-candiduria', '👁️ Candiduria (vista Visual)'), calculadora: { ir: 'ma-cand-calc', nombre: 'Candiduria: ¿qué hago?' },
+      { id: 'cdu-g3', corto: 'el neutropénico', tipo: 'test', fuente: 'ma-cand-asintomatica', modelo: visual('ma-candiduria', '👁️ Candiduria (vista Visual)'),
         enunciado: 'Predice con el selector: candiduria asintomática en un neutropénico. ¿La tratas, y con qué?',
         opciones: [
           { t: 'No: sin síntomas no se trata', porque: 'En el neutropénico hay riesgo de diseminación; esperarías a que se disemine.' },
@@ -212,7 +215,7 @@ export const MAYEUTICA_FIEBRE_2 = {
         opciones: [
           { t: 'Que en los dos sitios hay muchos más gérmenes de los que debería haber', porque: 'No es cuántos hay, sino quién se pega al epitelio; medir cantidad no explica la infección.' },
           { t: 'La adherencia al epitelio (pili; la manosa puede bloquearla), no la cantidad', ok: true },
-          { t: 'Que solo infectan cuando el paciente ha recibido antibioterapia previa de amplio espectro', porque: 'La clave es la adherencia, no la antibioterapia previa.' }],
+          { t: 'Que infectan tras antibioterapia previa de amplio espectro', porque: 'La clave es la adherencia, no la antibioterapia previa.' }],
         explicacion: 'En boca, intestino y vía urinaria la clave es <span class="hl">quién se pega al epitelio</span>, no cuántos hay. E. coli usa sus pili para unirse a glucoproteínas de la vejiga y azúcares como la <span class="hl">manosa</span> pueden bloquear esa unión.' },
     ],
     examen: [
@@ -256,7 +259,7 @@ export const MAYEUTICA_FIEBRE_2 = {
       { id: 'c5c3', titulo: 'Felisa, 82 años: la candiduria que no se va', corto: 'Caso · Felisa', sub: 'insuficiencia cardíaca, sonda desde el día 0, 58 kg',
         paciente: { Edad: '82 años', Peso: '58 kg', Motivo: 'ingreso por insuficiencia cardíaca', Antecedente: 'infección urinaria bacteriémica por E. coli tratada con pip-tazo' },
         pasos: [
-          { momento: 'Día 10', datos: { Vía: 'central, para nutrición parenteral', Antibiótico: 'pip-tazo desde el día 6', Sonda: 'retirada el día 9' }, nuevo: ['Vía', 'Antibiótico', 'Sonda'],
+          { momento: 'Día 10', datos: { Vía: 'central desde hoy, para nutrición parenteral (íleo y vómitos desde el día 8)', Antibiótico: 'pip-tazo desde el día 6', Sonda: 'retirada el día 9' }, nuevo: ['Vía', 'Antibiótico', 'Sonda'],
             pregunta: { id: 'c5c3-1', tipo: 'test', fuente: 'ma-candidiasis', origen: 'ficha · los datos de la paciente son ilustrativos',
               enunciado: 'Felisa lleva ahora una vía central y un antibiótico de amplio espectro. ¿Qué cambia respecto al riesgo de candidiasis invasiva?',
               opciones: [
@@ -281,7 +284,7 @@ export const MAYEUTICA_FIEBRE_2 = {
                 { t: 'Si fuera un neutropénico, daría una equinocandina por el riesgo de diseminación.' },
                 { t: 'Si creciera C. glabrata y hubiera infección urinaria, daría fluconazol.', mal: true, c: 'La glabrata es <span class="hl-rojo">resistente al fluconazol</span>: se da anfotericina B 0,3-0,6 mg/kg/día 1-7 días.' }],
               explicacion: 'Asintomática sin neutropenia: no se trata; con neutropenia, equinocandina; glabrata o krusei, anfotericina.' } },
-          { momento: 'Día 18 · el giro', datos: { Temperatura: '38,6 °C', Fiebre: 'desde el día 15', FC: '104/min', PA: '104/58 mmHg', Vía: 'central desde el día 10, para nutrición parenteral', Hemocultivos: 'del día 16, centrales y periféricos negativos', Candiduria: 'persistente', Fuente: 'sin foco tras revisar catéter y pulmones' }, nuevo: ['Temperatura', 'Fiebre', 'FC', 'PA', 'Vía', 'Hemocultivos', 'Candiduria', 'Fuente'],
+          { momento: 'Día 18 · el giro', datos: { Temperatura: '38,6 °C', Fiebre: 'desde el día 15', FC: '104/min', PA: '104/58 mmHg', Vía: 'central desde el día 10, para nutrición parenteral', Hemocultivos: 'del día 16, centrales y periféricos negativos', Candiduria: 'persistente', Fuente: 'sin foco tras revisar catéter y pulmones', Síntomas: 'fiebre; sin síntomas urinarios' }, nuevo: ['Temperatura', 'Fiebre', 'FC', 'PA', 'Vía', 'Hemocultivos', 'Candiduria', 'Fuente', 'Síntomas'],
             pregunta: { id: 'c5c3-4', modelo: { termostatoVivo: 'fiebre' }, tipo: 'destapa', fuente: 'ma-candidiasis · ma-cand-que · ma-empirico', cuantas: 'son tres cosas', origen: 'ficha · las cifras de la paciente son ilustrativas', nota: NOTA_CANDIDURIA,
               enunciado: '¿Por qué piensas en candidiasis diseminada y qué das? Son tres cosas.',
               puntos: [
