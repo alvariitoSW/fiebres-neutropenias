@@ -22,7 +22,7 @@ import { enlacesFuente, origenEnlazado, citaExacta, hrefPdf } from '../../core/c
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import {
     FLUIDOS, ORDEN_FLUIDOS, PACIENTES, PERDIDAS, BUN_ALTO, CONCEPTOS, PREGUNTAS, CASOS, ESTADOS_ANCLA, GUIAS, NOMBRE_ESTADO,
-    estadoBase, copia, clamp, fmt, fmtL, dec, pruebasAguaViva,
+    estadoBase, copia, clamp, fmt, fmtL, dec, pruebasAguaViva, ORINA,
 } from '../../data/agua-viva-data.js';
 import {
     $, estado, D, REDUCIR, Lupa, ocultos, initEscena, aplicarModelo, setOcultos, pintarLectura, medir, dibujar,
@@ -81,6 +81,9 @@ function fraseHemorragia() {
     const nota = c.n === 4 ? ' <span class="agv-org agv-ilu">Nota de fidelidad: la Tabla 15.1 da dos criterios para la clase IV, >40 % y >30 mL/kg, que no casan con una volemia de 66 mL/kg; aquí manda el %.</span>' : '';
     return [`${c.nombre} (${pct} %, ${fmt(D.perdidaSangre)} mL${c.n === 4 ? '' : `, ${mlkg} mL/kg`}): ${txt}${reloj}${nota}`, 'ficha · mc-hemorragico-clasificacion (Tabla 15.1, Fig. 15.1)'];
 }
+function fraseSeudo() {
+    return [`Na⁺ medido ${Math.round(D.naMed)}, pero <span class="hl-azul">el del agua sigue en ${Math.round(estado.na0)}</span>: con proteínas de 12 g/dL o triglicéridos de 1.500 mg/dL la fase no acuosa del plasma crece. La Posm medida es normal (${Math.round(D.posm)}) y <span class="hl">la neurona no cambia</span>: no hay que tratarla. La ficha no dice cuánto baja el Na⁺.`, 'ficha · mr-pseudohipona · mr-pseudo-dx · dato del caso'];
+}
 function fraseNa() {
     const na = Math.round(D.naMed);
     if (na < 135) return [`Na⁺ ${na}: plasma hipotónico, <span class="hl-rojo">el agua entra en las células</span>: el mar y la neurona se hinchan. Es exceso de agua, no falta de sodio.`, 'ficha · mr-osm-efectiva · mr-hiponatremia-tto'];
@@ -91,7 +94,32 @@ function fraseNa() {
     return [`Na⁺ ${na}: entre 135 y 145, el agua no entra ni sale de las células.`, 'ficha · mr-hiponatremia-dx · mr-hipernatremia'];
 }
 
+function fraseOrina(o) {
+    if (!o) return ['Sin dato de orina.', ''];
+    if (o.vaso) return [o.subeMin
+        ? `Con vasopresina la osmolalidad de la orina sube al menos un 50 % (de ${o.osm} a ≥ ${o.osmVaso}): <span class="hl-verde">DI central</span>; el riñón responde, falta la hormona.`
+        : `Con vasopresina la orina no cambia (${o.osm}): <span class="hl-rojo">DI nefrogénica</span>; el riñón no responde a la ADH.`, 'ficha · mr-di-dx'];
+    const na = Math.round(D.naMed);
+    return [o.tipo === 'central'
+        ? `Orina de ${o.osm} mOsm/kg y ${o.mlh} mL/h con Na⁺ ${na}: <span class="hl-rojo">orina casi sin solutos con plasma hipertónico</span>. En la central suele ser <200; la neurona se encoge.`
+        : `Orina de ${o.osm} mOsm/kg (cifra ilustrativa): la nefrogénica da 200-500. <span class="hl-rojo">Orina diluida con plasma hipertónico</span>; falla la respuesta a la ADH.`, 'ficha · mr-di-dx · diuresis y Posm: dato del caso'];
+}
+function fraseDesmo(v, n) {
+    if (n.desmo && n.adh) return [`Desmopresina con ADH por estrés: la Tabla 35.4 no la aconseja si la ADH no está regulada, y el estrés libera ADH sin control osmótico. <span class="hl-rojo">La tabla no dice si el estrés cuenta aquí: valóralo.</span>`, 'ficha · mr-tabla-35-4 · mr-estres-adh · la fuente no lo dice'];
+    if (n.desmo && !n.restr) return [`Desmopresina 2 μg SC sin restricción hídrica: <span class="hl-rojo">la restricción es obligatoria</span>; sin ella el agua retenida puede dar una hiponatremia grave.`, 'ficha · mr-tabla-35-4'];
+    if (n.desmo) return [`Desmopresina 2 μg SC cada 12 h con restricción hídrica: <span class="hl-verde">frena la diuresis acuosa</span>; la orina baja y el Na⁺ deja de subir (${Math.round(D.naMed)}). Cuánto baja la diuresis, la ficha no lo dice.`, 'ficha · mr-tabla-35-4 · sin cifra'];
+    if (v.desmo) return ['Sin desmopresina: la diuresis acuosa sigue concentrando el sodio.', 'ficha · mr-sobrecorreccion'];
+    return n.restr ? ['Restricción hídrica: se limita el agua que entra. Con desmopresina es obligatoria.', 'ficha · mr-tabla-35-4'] : ['Sin restricción hídrica.', ''];
+}
+function fraseSobre() {
+    return [`Na⁺ ${Math.round(D.naMed)}${D.subida ? ` (+${D.subida})` : ''} con <span class="hl-rojo">diuresis acuosa de ${estado.orina.mlh} mL/h</span>: el agua que se pierde concentra el sodio y sube más de lo que dan los bolos (hasta 2 cada uno). Es más frecuente con tiazidas e intoxicación hídrica; la desmopresina la frena.`, 'ficha · mr-sobrecorreccion · mr-tabla-35-3 · Na⁺ y diuresis: dato del caso'];
+}
 function fraseDe(v, n) {
+    if (n.desmo !== v.desmo || (n.restr !== v.restr && (n.desmo || v.desmo))) return fraseDesmo(v, n);
+    if (n.orina && n.orina.tipo === 'acuosa' && (!v.orina || v.orina.tipo !== 'acuosa')) return fraseSobre();
+    if (n.perdida === 'diuretico' && v.perdida !== 'diuretico') return [`Orina con furosemida: ~80 mEq/L de Na⁺, menos que el plasma (${Math.round(D.naMed)}). <span class="hl-rojo">Pierde más agua que sal: sola, la diuresis agrava la hipernatremia</span>; se combina con glucosado al 5 % (sin cifra de cuánto sube).`, 'ficha · mr-hiperna-hiper · mr-tabla-35-1'];
+    if (JSON.stringify(v.orina) !== JSON.stringify(n.orina)) return fraseOrina(n.orina);
+    if (n.pseudo !== v.pseudo && n.pseudo) return fraseSeudo();
     if (v.paciente !== n.paciente) {
         const [h, f] = FRASE_INICIO(); return [h + ` Volemia ≈ ${dec(D.V0 / 1000)} L.`, f + ' · mc-hemorragico-clasificacion'];
     }
@@ -101,6 +129,7 @@ function fraseDe(v, n) {
         if (f.ref && inf.ml !== f.ref) { h += ' Cifras proporcionales a la Fig. 10.1.'; fu += ' · proporcional, ilustrativo'; }
         if (n.adh && f.hipotonico) { h += ' <span class="hl-rojo">Con ADH, ese agua se queda: el Na⁺ tiende a bajar</span> (la ficha no da cuánto).'; fu += ' · mr-estres-adh'; }
         if (inf.f.startsWith('alb') && n.albBaja) { h += ' Toda albúmina expande más si hay hipoalbuminemia.'; fu += ' · mar-albumina'; }
+        if (n.perdida === 'diuretico' && inf.f === 'glucosado') { h += ' <span class="hl-verde">Con la diuresis de furosemida, repone el agua que se lleva</span>: la tendencia del Na⁺ deja de subir (sin cifra).'; fu += ' · mr-hiperna-hiper'; }
         if (n.hemorragia > 0 && inf.f !== 'sangre') { h += ` Hto ${Math.round(D.hto)} %: el fluido sin hematíes lo diluye.`; }
         return [h, fu];
     }
@@ -181,6 +210,8 @@ function elegirFluido(k) {
 function pestana(tab) {
     enRaiz('.agv-dock-tabs button').forEach(o => o.setAttribute('aria-selected', String(o.dataset.agvTab === tab)));
     enRaiz('#agv-dock-explorar .agv-dock-panel').forEach(p => { p.hidden = p.dataset.agvPanel !== tab; });
+    // el chip activo de la fila (p. ej. «Diurético») queda a la vista sin desplazar la fila a mano
+    raiz.querySelector(`#agv-dock-explorar .agv-dock-panel[data-agv-panel="${tab}"] [aria-pressed="true"]`)?.scrollIntoView?.({ block: 'nearest', inline: 'center' });
 }
 function sincronizarMandos() {
     if ($('m-hemorragia').value != estado.hemorragia) $('m-hemorragia').value = estado.hemorragia;
@@ -188,6 +219,11 @@ function sincronizarMandos() {
     const c = D.clase; const oc = $('o-clase'); oc.textContent = c.n ? `${c.nombre} · Hto ${Math.round(D.hto)} %` : 'Sin pérdida'; oc.className = 'agv-clase agv-c' + c.n;
     for (const id of ['m-reloj', 'm-reloj2']) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.reloj)));
     $('m-na').value = estado.na0; $('o-na').textContent = estado.na0;
+    $('m-orina').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === (estado.orina ? estado.orina.tipo : ''))));
+    $('m-vaso').disabled = !estado.orina || estado.orina.tipo === 'acuosa'; $('m-vaso').setAttribute('aria-pressed', String(!!(estado.orina && estado.orina.vaso)));
+    $('m-desmo').disabled = !estado.orina || estado.orina.tipo !== 'acuosa'; $('m-desmo').setAttribute('aria-pressed', String(estado.desmo));
+    $('m-restr').setAttribute('aria-pressed', String(estado.restr));
+    pintarSello();
     $('m-glucosa').value = estado.glucosa; $('o-glucosa').textContent = estado.glucosa;
     $('m-adh').setAttribute('aria-pressed', String(estado.adh)); $('m-urea').setAttribute('aria-pressed', String(estado.urea));
     enRaiz('[data-agv-perdida]').forEach(b => b.setAttribute('aria-pressed', String(estado.perdida === b.dataset.agvPerdida)));
@@ -195,6 +231,14 @@ function sincronizarMandos() {
     $('m-paciente').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.paciente)));
     pintarInfundir();
     sincronizarGuia();
+}
+// El sello de las consecuencias clínicas del sodio (REGLAS §1.14): sale solo, sin rehacer nada (el <p> existe desde el principio).
+function pintarSello() {
+    let t = '';
+    if (D.sinRestr) t = 'Desmopresina sin restricción hídrica: el paciente retiene agua y puede caer en una hiponatremia grave (Marino, p. 14). La restricción es obligatoria.';
+    else if (D.sobrecorr && !estado.desmo) t = `Sube ${D.subida} mEq/L: más de lo que dan los bolos. Con diuresis acuosa, el riesgo es la desmielinización osmótica (disartria, tetraparesia, enclaustramiento; Marino, p. 13-14).`;
+    else if (D.avisos.some(a => /pasa del límite/.test(a))) t = 'Pasa del límite de la Tabla 35.3: riesgo de desmielinización osmótica (Marino, p. 13).';
+    const sello = $('sello'); sello.hidden = !t; if (sello.textContent !== t) sello.textContent = t;
 }
 function engancharDock() {
     $('chips-fluido').addEventListener('click', e => { const b = e.target.closest('.agv-chip-f'); if (b) elegirFluido(b.dataset.fluido); });
@@ -215,19 +259,24 @@ function engancharDock() {
     enRaiz('.agv-dock-tabs button').forEach(b => b.addEventListener('click', () => pestana(b.dataset.agvTab)));
     $('m-hemorragia').addEventListener('input', e => cambiar(s => { s.hemorragia = +e.target.value; }));
     for (const id of ['m-reloj', 'm-reloj2']) $(id).addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.reloj = b.dataset.v; }); });
-    $('m-na').addEventListener('input', e => cambiar(s => { s.na0 = +e.target.value; s.bolos3 = 0; s.fijo = {}; }));
+    $('m-na').addEventListener('input', e => cambiar(s => { s.na0 = +e.target.value; s.bolos3 = 0; s.pseudo = false; s.fijo = {}; s.desmo = false; s.restr = false; }));
+    $('m-orina').addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.desmo = false; s.orina = b.dataset.v ? { tipo: b.dataset.v, osm: ORINA[b.dataset.v].osm, mlh: ORINA[b.dataset.v].mlh, vaso: false } : null; }); });
+    $('m-vaso').addEventListener('click', () => cambiar(s => { if (s.orina) s.orina.vaso = !s.orina.vaso; }));
+    $('m-desmo').addEventListener('click', () => cambiar(s => { if (s.orina && s.orina.tipo === 'acuosa') s.desmo = !s.desmo; }));
+    $('m-restr').addEventListener('click', () => cambiar(s => { s.restr = !s.restr; }));
     $('m-glucosa').addEventListener('input', e => cambiar(s => { s.glucosa = +e.target.value; }));
     $('m-adh').addEventListener('click', () => cambiar(s => { s.adh = !s.adh; }));
     $('m-urea').addEventListener('click', () => cambiar(s => { s.urea = !s.urea; }));
     enRaiz('[data-agv-perdida]').forEach(b => b.addEventListener('click', () => cambiar(s => { s.perdida = s.perdida === b.dataset.agvPerdida ? null : b.dataset.agvPerdida; })));
     $('m-albbaja').addEventListener('click', () => cambiar(s => { s.albBaja = !s.albBaja; }));
     $('m-inflamacion').addEventListener('click', () => cambiar(s => { s.inflamacion = !s.inflamacion; }));
-    $('m-paciente').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.v !== estado.paciente) cambiar(s => { s.paciente = b.dataset.v; s.infusiones = []; s.hemorragia = 0; s.bolos3 = 0; s.fijo = {}; }); });
+    $('m-paciente').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.v !== estado.paciente) cambiar(s => { s.paciente = b.dataset.v; s.infusiones = []; s.hemorragia = 0; s.bolos3 = 0; s.pseudo = false; s.fijo = {}; s.desmo = false; s.restr = false; }); });
     $('m-reinicio').addEventListener('click', () => { const p = estado.paciente; const e = estadoBase(); e.paciente = p; aplicar(e, { reiniciar: true, frase: false }); decir(...FRASE_INICIO()); });
 
     // Lupas y toques en el estuario
     $('lupa-orilla').addEventListener('click', () => Lupa.abierta === 'orilla' ? Lupa.cerrar() : Lupa.abrir('orilla'));
     $('lupa-neurona').addEventListener('click', () => Lupa.abierta === 'neurona' ? Lupa.cerrar() : Lupa.abrir('neurona'));
+    $('lupa-tubo').addEventListener('click', () => Lupa.abierta === 'tubo' ? Lupa.cerrar() : Lupa.abrir('tubo'));
     $('lupa-cerrar').addEventListener('click', () => Lupa.cerrar());
     $('lienzo').addEventListener('click', e => {
         const r = $('lienzo').getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;

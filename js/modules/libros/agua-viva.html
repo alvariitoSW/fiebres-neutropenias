@@ -21,6 +21,7 @@
           <div class="agv-lectura" id="agv-lectura" aria-live="off"></div>
           <button type="button" class="agv-lupa-btn" id="agv-lupa-orilla" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Lupa: orilla</button>
           <button type="button" class="agv-lupa-btn" id="agv-lupa-neurona" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.5" cy="6.5" r="4.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M10 10 L14.5 14.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>Lupa: neurona</button>
+          <button type="button" class="agv-lupa-btn" id="agv-lupa-tubo" aria-pressed="false"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M5 1.5 V10 a3 3 0 0 0 6 0 V1.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Tubo</button>
           <div class="agv-lupa" id="agv-lupa" hidden>
             <canvas id="agv-lupa-lienzo" role="img" aria-label="Lupa"></canvas>
             <p class="agv-lupa-tit" id="agv-lupa-tit" hidden></p>
@@ -199,6 +200,10 @@
             <div class="agv-dock-panel" data-agv-panel="sodio" hidden>
               <label class="agv-desliza"><span>Na⁺ del paciente</span><input type="range" id="agv-m-na" min="110" max="165" step="1" value="140" aria-label="Sodio del paciente"><output id="agv-o-na">140</output></label>
               <div class="agv-fila agv-sin-salto"><span class="agv-para">Reloj</span><div class="agv-seg agv-crece" id="agv-m-reloj2" aria-label="Reloj"><button type="button" data-v="1h" aria-pressed="true">1 h</button><button type="button" data-v="8-12h" aria-pressed="false">8-12 h</button><button type="button" data-v="dias" aria-pressed="false">Días</button></div></div>
+              <div class="agv-fila agv-sin-salto"><span class="agv-para">Orina</span><div class="agv-seg agv-crece" id="agv-m-orina" aria-label="Orina del paciente"><button type="button" data-v="" aria-pressed="true">Sin dato</button><button type="button" data-v="central" aria-pressed="false">DI central</button><button type="button" data-v="nefro" aria-pressed="false">DI nefrogénica</button><button type="button" data-v="acuosa" aria-pressed="false">Diuresis acuosa</button></div></div>
+              <div class="agv-raya"><button type="button" class="agv-tog" id="agv-m-vaso" aria-pressed="false" disabled>Prueba de vasopresina</button></div>
+              <div class="agv-raya"><button type="button" class="agv-tog" id="agv-m-desmo" aria-pressed="false" disabled>Desmopresina <small>2 μg SC / 12 h</small></button><button type="button" class="agv-tog" id="agv-m-restr" aria-pressed="false">Restricción hídrica</button></div>
+              <p class="agv-sello" id="agv-sello" role="status" hidden></p>
             </div>
             <div class="agv-dock-panel" data-agv-panel="solutos" hidden>
               <label class="agv-desliza"><span>Glucosa<br><small>sin insulina</small></span><input type="range" id="agv-m-glucosa" min="90" max="600" step="10" value="90" aria-label="Glucosa sin insulina"><output id="agv-o-glucosa">90</output></label>

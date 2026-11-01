@@ -15,6 +15,8 @@
 import { pintarParticula, colorParticula } from '../../core/particulas.js';
 import { pintarFormula } from '../../core/formula.js';
 import { sinMovimiento } from '../../core/motion.js';
+import { dibujarOrina, puntoOrina, filasLecturaOrina } from './agua-viva-orina.js';
+import { Tubo } from './agua-viva-tubo.js';
 import {
     COMP, HTO0, NA0, FLUIDOS, estadoBase, derivar, clamp, copia, fmt, fmtD,
 } from '../../data/agua-viva-data.js';
@@ -301,6 +303,7 @@ export const Estuario = {
         if (obj === 'marisma') { const x = 0.7 * W; return [x, lerp(this.dunaAbajo(x), this.rioY(x) - this.anchoRio(), 0.5)]; }
         if (obj === 'mar') return [0.42 * W, H * 0.12];
         if (obj === 'herida') return [this.herida.x, this.rioY(this.herida.x) + this.anchoRio() + 10 * s];
+        if (obj === 'orina') return puntoOrina(W, H, x => this.rioY(x), this.anchoRio());
         if (obj === 'compuertas') { const pu = this.puertas[1]; return [pu.x, (this.dunaArriba(pu.x) + this.dunaAbajo(pu.x)) / 2]; }
         return [W / 2, H / 2];
     },
@@ -524,6 +527,7 @@ export const Estuario = {
         texto(g, 'acuaporinas', (this.puertas[1].x + this.puertas[2].x) / 2, (this.dunaArriba(W * 0.52) + this.dunaAbajo(W * 0.52)) / 2 + 3.5, { size: 9 * s, color: C.dim, align: 'center', italic: true, peso: '600' });
         if (estado.albBaja || estado.inflamacion) texto(g, 'la marisma desborda · ilustrativo', W * 0.5, H - 52 * s, { size: 9.5 * s, color: C.rojo, align: 'center', caja: true });
         if (estado.hemorragia > 0 && !compacto) texto(g, `herida · −${estado.hemorragia} %`, this.herida.x - 4 * s, H - 56 * s, { size: 9 * s, color: C.rojo, align: 'right', caja: true });
+        dibujarOrina(g, { o: D.orina || (estado.perdida === 'diuretico' ? { tipo: 'diuretico', furo: true } : null), W, H, rioY: x => this.rioY(x), anchoRio: this.anchoRio(), texto, rgba, C, tiempo, ocultar: ocultos.has('orina'), reducir: REDUCIR });
         if (D.relleno > 0) texto(g, 'la marisma cede agua · hasta 1 L', W * 0.5, this.rioY(W * 0.5) + this.anchoRio() + 22 * s, { size: 9 * s, color: C.verde, align: 'center', caja: true });
     },
 };
@@ -587,12 +591,14 @@ function finalizarParticulas() {
    Las lupas: el corte de la orilla (vaso · intersticio · células) y una neurona.
    Muestran el mecanismo; sus cantidades son ilustrativas.
    ============================================================ */
+export { rgba, pinta, texto, brillo };
 export const Lupa = {
     abierta: null, parts: [], MAX: 60, S: 200, dpr: 1, el: null, cv: null, tit: null, btnX: null,
     abrir(tipo) {
         this.abierta = tipo; this.parts = []; this.acum = {};
         this.el.hidden = false; this.btnX.hidden = false; $('escena').classList.add('agv-con-lupa');
         $('lupa-orilla').setAttribute('aria-pressed', String(tipo === 'orilla'));
+        $('lupa-tubo').setAttribute('aria-pressed', String(tipo === 'tubo'));
         $('lupa-neurona').setAttribute('aria-pressed', String(tipo === 'neurona'));
         this.colocar(); this.sembrar();
         if (!REDUCIR && window.Motion) {
@@ -603,6 +609,7 @@ export const Lupa = {
     },
     cerrar() {
         this.abierta = null; this.parts = []; this.el.hidden = true; this.btnX.hidden = true; this.el.style.transform = ''; $('escena').classList.remove('agv-con-lupa');
+        $('lupa-tubo').setAttribute('aria-pressed', 'false');
         $('lupa-orilla').setAttribute('aria-pressed', 'false'); $('lupa-neurona').setAttribute('aria-pressed', 'false');
         if (REDUCIR) pintarUnaVez();
     },
@@ -663,6 +670,7 @@ export const Lupa = {
         this.parts.push({ tipo, pts: [[x0, y0], [viaX, yCruce], [x1, y1]], t: 0, vel: 0.55 + Math.random() * 0.3, g: Math.random() * TAU });
     },
     dibujar(dt) {
+        if (this.abierta === 'tubo') return Tubo.dibujar(this, dt);
         const g = this.cv.getContext('2d'); const S = this.S;
         g.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
         const firma = this.abierta + '|' + S + '|' + (this.abierta === 'orilla' ? this.firmaOrilla() : this.firmaNeurona());
@@ -898,13 +906,15 @@ export function pintarLectura() {
     const q = (k, v) => ocultos.has(k) ? '?' : v;
     let h = `<span class="agv-k">Na⁺</span><b>${q('na', `${estado.bolos3 && f.na == null ? '≤' : ''}${Math.round(D.naMed)}${flecha}`)}</b>${naOrg}`;
     if (estado.glucosa > 100) h += `<span class="agv-k">corr.</span><b>${q('na', Math.round(D.naCorr))}</b><span class="agv-t">ficha</span>`;
+    if (estado.pseudo) h += `<span class="agv-k">agua</span><b>${Math.round(estado.na0)}</b><span class="agv-t">ilustr.</span>`;
     h += `<span class="agv-k">Posm</span><b>${q('posm', Math.round(D.posm))}</b><span class="agv-t">ficha</span>`;
     if (estado.urea) h += `<span class="agv-k">efect.</span><b>${q('efect', Math.round(D.posmEf))}</b><span class="agv-t">ficha</span>`;
     h += `<span class="agv-k">Hto</span><b>${q('hto', `${Math.round(D.hto)} %`)}</b>${f.hto != null ? caso : '<span class="agv-t">fisiol.</span>'}`;
+    h += filasLecturaOrina(D.orina, ocultos.has('orina'));
     h += '<span class="agv-pie">Ec. 35.3-35.5 · Hto = hematíes ÷ volemia</span>';
     const el = $('lectura'); el.style.gridTemplateColumns = 'auto auto auto'; poner(el, 'innerHTML', h);
     // «fórmula → números → resultado»: las cifras que ya calculó derivar() (D.posm, D.posmEf), con el mismo redondeo
-    const num = `2 × ${Math.round(D.naMed)} + ${Math.round(estado.glucosa)}/18`, l = [];
+    const num = `2 × ${Math.round(D.naOsm)} + ${Math.round(estado.glucosa)}/18`, l = [];
     if (!ocultos.has('posm') && !ocultos.has('na')) l.push({ titulo: 'Posm (Ec. 35.3)', formula: '2 × Na + glucosa/18 + BUN/2,8', numeros: `${num} + ${Math.round(D.bun)}/2,8`, resultado: String(Math.round(D.posm)), unidad: 'mOsm/kg', origen: 'ficha · mr-osm-calculada' + (estado.urea ? ' · BUN: ilustrativo' : '') });
     if (!ocultos.has('efect') && !ocultos.has('posm') && !ocultos.has('na')) l.push({ titulo: 'Posm efectiva (Ec. 35.4)', formula: '2 × Na + glucosa/18 (sin la urea)', numeros: num, resultado: String(Math.round(D.posmEf)), unidad: 'mOsm/kg', origen: 'ficha · mr-osm-efectiva-calc' });
     pintarFormula($('formula'), l);

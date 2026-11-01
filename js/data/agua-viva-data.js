@@ -159,9 +159,28 @@ export function estadoBase() {
     albBaja: false, inflamacion: false,
     adh: false, glucosa: GLU0, urea: false, perdida: null,
     na0: NA0, bolos3: 0, periodo3: '2h',
+    pseudo: false,           // pseudohiponatremia: el Na⁺ medido (fijo.na) baja sin que baje el del agua; la Posm medida es normal
     fijo: {},                // cifras que pone un caso clínico (Na, Hto): «dato del caso»
+    desmo: false, restr: false, // desmopresina 2 μg SC / 12 h (Tabla 35.4) y restricción hídrica, que es obligatoria con ella
+    orina: null,             // la salida «orina»: null (no se muestra) o { tipo: 'central'|'nefro', osm, mlh, vaso } (ver orinaDe)
     tocado: null             // compartimento tocado en una pregunta
   };
+}
+
+// La orina (Marino cap. 35, mr-di-dx, E p. 7): osmolalidad y diuresis de quien las pone el caso (`dato del caso`; Nicolás: 110 y
+// 400 mL/h). Con vasopresina, en la DI central la osmolalidad sube al menos un 50 %: se da el MÍNIMO (×1,5), no un valor; en la
+// nefrogénica no cambia. Cifras de la nefrogénica del modelo: ilustrativas, dentro de 200-500. Pieza común de `di`,
+// `sobrecorreccion` y `desmopresina`.
+// `acuosa`: la diuresis acuosa espontánea de la sobrecorrección (E p. 14): 180 mL/h es el dato del caso (Casilda); la ficha no da
+// su osmolalidad, así que no se inventa (osm = null, «sin cifra»).
+export const ORINA = { central: { osm: 110, mlh: 400, rango: '<200' }, nefro: { osm: 300, mlh: 400, rango: '200-500' }, acuosa: { osm: null, mlh: 180, rango: 'sin cifra' }, vasoMin: 0.5 };
+export function orinaDe(o, desmo) {
+  if (!o) return null;
+  if (o.tipo === 'acuosa') return { tipo: 'acuosa', osm: null, mlh: desmo ? null : o.mlh, vaso: false, osmVaso: null, subeMin: false, rango: 'sin cifra', respuesta: '', frenada: !!desmo };
+  const central = o.tipo === 'central', osm = o.osm;
+  const osmVaso = o.vaso ? (central ? Math.ceil(osm * (1 + ORINA.vasoMin)) : osm) : null;
+  return { tipo: o.tipo, osm, mlh: o.mlh, vaso: !!o.vaso, osmVaso, subeMin: central, rango: ORINA[o.tipo]?.rango || '',
+    respuesta: !o.vaso ? '' : central ? `≥ ${osmVaso} (sube ≥50 %): central` : 'sin cambio: nefrogénica' };
 }
 
 export function deltaFluido(inf) {
@@ -212,10 +231,12 @@ export function derivar(e) {
   const naMed = e.fijo.na != null ? e.fijo.na : naCorrCalc - dilucion;
   const naCorr = naMed + dilucion;
   const bun = e.urea ? BUN_ALTO : BUN0;
-  const posm = 2 * naMed + e.glucosa / 18 + bun / 2.8;
-  const posmEf = 2 * naMed + e.glucosa / 18;
+  const naOsm = e.pseudo ? naCorrCalc - dilucion : naMed;   // pseudohiponatremia: la osmolalidad medida sale del Na⁺ del agua (E p. 9)
+  const posm = 2 * naOsm + e.glucosa / 18 + bun / 2.8;
+  const posmEf = 2 * naOsm + e.glucosa / 18;
   // Límites del salino 3 % (Tabla 35.3), con la peor subida posible (2 por bolo) o la del caso
   const avisos = [];
+  const sobrecorr = e.fijo.na != null && e.bolos3 > 0 && Math.round(naCorr - e.na0) > 2 * e.bolos3;   // sube más de lo que dan los bolos (E p. 13)
   const subida = e.bolos3 > 0 ? Math.round(naCorr - e.na0) : 0;
   if (e.bolos3 > 0) {
     const lim = e.periodo3 === '2h' ? 5 : 10;
@@ -231,6 +252,7 @@ export function derivar(e) {
   const hiper = e.infusiones.some(i => i.f === 'hiper');
   if (e.adh && hipotonicos > 0) tendNa -= 1;
   if (e.perdida) tendNa += 1;
+  if (e.perdida && e.infusiones.some(i => i.f === 'glucosado')) tendNa -= 1;   // el glucosado repone el agua que la diuresis se lleva (E p. 8): tendencia, sin cifra
   if (hiper) tendNa += 1;              // 7,5 %: el Na⁺ sube, sin cifra en la ficha
   // El mar (células) se hincha o se encoge sin cifra en la ficha: flecha ilustrativa
   let m = 0;
@@ -239,8 +261,10 @@ export function derivar(e) {
   if (e.bolos3) m -= 1;
   const marFlecha = Math.sign(m);
   return {
+    orina: orinaDe(e.orina, e.desmo),
+    sobrecorr, sinRestr: !!e.desmo && !e.restr, desmoAdh: !!e.desmo && e.adh,
     P, base, delta, sinCifra, rango, proporcional, V0, perdidaSangre, perdidaRio, relleno,
-    clase: claseHemorragia(e.hemorragia), hto, htoCalc, naMed, naCorr, bun, posm, posmEf, avisos, subida,
+    clase: claseHemorragia(e.hemorragia), hto, htoCalc, naMed, naOsm, naCorr, bun, posm, posmEf, avisos, subida,
     tendNa, marFlecha, hipotonicos, salino, sangreMl
   };
 }
@@ -678,6 +702,14 @@ export const ESTADOS_ANCLA = {
   hipernatremia: { estado: { na0: 160, reloj: 'dias' }, pestana: 'sodio', lupa: 'neurona' },
   osmolalidad: { estado: { urea: true }, pestana: 'solutos', lupa: 'orilla' },
   hiperglucemia: { estado: { glucosa: 600 }, pestana: 'solutos', lupa: 'neurona' },
+  // Nicolás (dato del caso): Na⁺ 156, orina 110 mOsm/kg y 400 mL/h; Posm 322 sale de la Ec. 35.3 con glucosa 90 y BUN 14
+  di: { estado: { fijo: { na: 156 }, orina: { tipo: 'central', osm: 110, mlh: 400, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
+  pseudo: { estado: { na0: 140, pseudo: true, fijo: { na: 128 } }, pestana: 'sodio', lupa: 'tubo' },
+  // Hipernatremia con diurético (E p. 8): Na⁺ 160 ilustrativo (el de `hipernatremia`); la orina con furosemida lleva ~80 mEq/L
+  'furosemida-glucosado': { estado: { na0: 160, reloj: 'dias', perdida: 'diuretico' }, pestana: 'solutos', lupa: 'neurona' },
+  // Casilda (dato del caso): Na⁺ 116 → 6 h 126 con 180 mL/h de diuresis; un bolo de 150 mL, y sube 10 el primer día
+  sobrecorreccion: { estado: { na0: 116, bolos3: 1, periodo3: '24h', fijo: { na: 126 }, orina: { tipo: 'acuosa', osm: null, mlh: 180, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
+  desmopresina: { estado: { na0: 116, bolos3: 1, periodo3: '24h', fijo: { na: 126 }, orina: { tipo: 'acuosa', osm: null, mlh: 180, vaso: false }, desmo: true, restr: true }, pestana: 'sodio', lupa: 'neurona' },
 };
 
 // ---------- La explicación guiada de cada estado con nombre ----------
@@ -698,7 +730,8 @@ const HP = (id, pag) => ({ libro: 'Marino, cap. 35', ficha: 'mr-hipernatremia', 
 const MAREA = k => ['#agv-tot-' + k, '#agv-dl-' + k];
 export const NOMBRE_ESTADO = { inicio: 'El agua del cuerpo', salino: 'Salino 0,9 %', glucosado: 'Glucosado 5 %', ringer: 'Ringer lactato', albumina5: 'Albúmina 5 %',
   albumina25: 'Albúmina 25 %', hipertonico: 'Salino 7,5 %', salino3: 'Salino 3 %: un bolo', hemorragia: 'Hemorragia del 20 %', reanimacion: 'Reanimación con Ringer',
-  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia' };
+  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia', di: 'Diabetes insípida', pseudo: 'Pseudohiponatremia',
+  'furosemida-glucosado': 'Furosemida y glucosado', sobrecorreccion: 'Sobrecorrección del sodio', desmopresina: 'Desmopresina y restricción' };
 export const GUIAS = {
   inicio: [
     { t: 'Varón de 75 kg: el agua corporal es 0,6 × su peso magro, <span class="hl">45 L</span>.', mirar: 'mar', cita: CR('mar-tabla-10-1', 3) },
@@ -785,6 +818,41 @@ export const GUIAS = {
     { t: 'Glucosa 600: cuando no entra con facilidad en las células, <span class="hl">les saca agua</span>.', mirar: 'mar', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Ese agua diluye el sodio: 2,4 mEq/L menos por cada 100 mg/dL de glucosa. El Na⁺ medido baja a 128.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Na corregido = Na medido + 2,4 × (glucosa − 100)/100: con 600, <span class="hl-azul">140</span>. El ejemplo de la ficha: 130 con 600 → 142.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
+  ],
+  di: [
+    { t: 'Diabetes insípida: el riñón pierde la acción de la ADH y elimina <span class="hl-rojo">una orina casi sin solutos</span>. Aquí, 400 mL/h con osmolalidad de 110 (cifras del caso).', mirar: 'orina', cita: HP('mr-di-dx', 7) },
+    { t: 'Es agua libre que se va: el Na⁺ sube (156) y la osmolalidad del plasma, 322. La orina diluida con plasma hipertónico es la marca de la DI.', resalta: '#agv-lectura', cita: [HP('mr-di-dx', 7), HP('mr-hiperna-normo', 6)], org: 'Na⁺ y Posm: dato del caso' },
+    { t: 'El plasma hipertónico saca agua de la neurona y la encoge.', resalta: '#agv-lupa', cita: HP('mr-hiperna-cerebro', 5) },
+    { t: 'Para distinguir la central de la nefrogénica: osmolalidad de orina a menudo <200 en la central y 200-500 en la nefrogénica (lo que las separa es la vasopresina); con vasopresina, sube al menos un 50 % solo en la central.', e: { orina: { tipo: 'central', osm: 110, mlh: 400, vaso: true } }, resalta: '#agv-lectura', cita: HP('mr-di-dx', 7) },
+    { t: 'El primer paso del diagnóstico es la restricción hídrica completa: si la osmolalidad urinaria no sube más de 30 en unas horas, es DI. En la central se repone la acción con desmopresina, 1 μg SC o 2 μg IV cada 12 h.', mirar: 'orina', cita: [HP('mr-di-dx', 7), HP('mr-desmopresina-di', 7)] },
+  ],
+  pseudo: [
+    { t: 'El plasma tiene una fase acuosa, con el sodio, y otra <span class="hl-azul">no acuosa</span>, con lípidos y proteínas. El laboratorio mide las dos; como el plasma es un 95 % agua, normalmente da casi igual.', lupa: 'tubo', cita: HD('mr-pseudohipona', 8) },
+    { t: 'Con proteínas de <span class="hl-rojo">12 g/dL</span> (normal 5,5-8) o triglicéridos de <span class="hl-rojo">1.500 mg/dL</span> (normal 25-175), la fase no acuosa crece: el Na⁺ medido baja y el del agua no.', lupa: 'tubo', resalta: '#agv-lupa', cita: HD('mr-pseudohipona', 8), org: 'el valor medido de 128 es un dato del caso: la ficha no dice cuánto baja' },
+    { t: 'Se descubre midiendo la osmolalidad: <span class="hl">normal (285-295)</span> en la pseudohiponatremia y baja (<275) en la hiponatremia verdadera.', lupa: 'tubo', resalta: '#agv-lectura', cita: HD('mr-pseudo-dx', 9) },
+    { t: 'La neurona no cambia: el sodio del agua plasmática es el mismo y el agua no se mueve entre el plasma y las células.', lupa: 'neurona', resalta: '#agv-lupa', cita: [HD('mr-pseudohipona', 8), HD('mr-pseudo-dx', 9)], org: 'inferencia: la ficha da el Na⁺ del agua sin cambio y la Posm normal; que el agua no se mueva se deduce' },
+    { t: 'Aparece con hiperproteinemia (mieloma, gammapatías, inmunoglobulinas) o hipertrigliceridemia (pancreatitis, cetoacidosis diabética, alcohol): hay que pensar en ella antes de tratar un Na⁺ bajo.', lupa: 'tubo', cita: HD('mr-tabla-35-2', 8) },
+  ],
+  'furosemida-glucosado': [
+    { t: 'Hipernatremia con sodio en exceso: si el riñón no lo elimina solo, se piensa en un diurético como la furosemida.', mirar: 'mar', cita: HP('mr-hiperna-hiper', 8) },
+    { t: 'La orina con furosemida lleva unos <span class="hl-azul">80 mEq/L</span> de Na⁺, menos que el plasma (aquí 160): sale más agua que sal y la diuresis sola puede <span class="hl-rojo">agravar</span> la hipernatremia.', e: { perdida: 'diuretico' }, mirar: 'orina', resalta: '#agv-lectura', cita: HP('mr-hiperna-hiper', 8), org: 'el Na⁺ 160 es ilustrativo; la ficha no dice cuánto sube' },
+    { t: 'Por eso se combina con <span class="hl">glucosado al 5 %</span>, que repone el agua que se lleva la diuresis.', e: { infusiones: [{ f: 'glucosado', ml: 1000 }] }, mirar: 'mar', cita: HP('mr-hiperna-hiper', 8) },
+    { t: 'El glucosado entra en las células con su agua: de 1 L, dos tercios acaban dentro y solo 100 mL se quedan en el río.', mirar: 'mar', cita: [CR('mar-glucosado-volumen', 11), CR('mar-cristaloides', 6)] },
+    { t: 'El salino isotónico no sirve para esto: corrige la hipotensión, no la hipernatremia. Con la pérdida hipotónica, al autor le parece más adecuado el salino al 0,45 %.', mirar: 'mar', cita: HP('mr-hiperna-tto', 6), org: 'opinión del autor' },
+  ],
+  sobrecorreccion: [
+    { t: 'Casilda, 81 años, con hidroclorotiazida: Na⁺ <span class="hl-rojo">116</span>, confusa y con una convulsión. Se da un bolo de salino al 3 % de 150 mL (2 mL/kg); cada bolo puede subir el Na⁺ hasta 2 mEq/L.', e: { fijo: { na: 116 }, bolos3: 1, periodo3: '2h' }, resalta: '#agv-lectura', cita: HT('mr-tabla-35-3', 13), org: 'Na⁺ 116 y la edad: datos del caso' },
+    { t: 'A las 2 h el Na⁺ es 121: +5, justo en el límite (5 en 2 h). Pero un bolo da como mucho 2: ya sube más de lo que explican los bolos.', e: { fijo: { na: 121 }, periodo3: '2h' }, resalta: '#agv-lectura', cita: HT('mr-tabla-35-3', 13), org: 'Na⁺ 121: dato del caso' },
+    { t: 'A las 6 h aparece una <span class="hl-rojo">diuresis acuosa de 180 mL/h</span> y el Na⁺ llega a 126 (+10): al perder agua, el extracelular se concentra y el sodio sube más deprisa.', e: { fijo: { na: 126 }, periodo3: '24h', orina: { tipo: 'acuosa', osm: null, mlh: 180, vaso: false } }, mirar: 'orina', resalta: '#agv-lectura', cita: HT('mr-sobrecorreccion', 14), org: 'diuresis y Na⁺: datos del caso' },
+    { t: 'Los límites: ≤5 en 2 h, ≤10 en 5 h, ≤10 el primer día y 8 los siguientes, y un final no superior a 130. Pasarse arriesga la desmielinización osmótica.', resalta: '#agv-lectura', cita: HT('mr-tabla-35-3', 13) },
+    { t: 'Ocurre hasta en el 25 % de los casos, aun con prevención, y es más frecuente con fármacos (sobre todo tiazidas) y en la intoxicación hídrica.', mirar: 'orina', cita: HT('mr-sobrecorreccion', 14) },
+  ],
+  desmopresina: [
+    { t: 'Ante un aumento brusco de la diuresis (por ejemplo, <span class="hl-rojo">&gt;100 mL/h</span>) durante el salino al 3 %, o una subida por encima de los límites, se da <span class="hl">desmopresina</span>.', mirar: 'orina', cita: HT('mr-tabla-35-4', 14) },
+    { t: 'La dosis es de 2 μg por vía subcutánea cada 12 h. La desmopresina frena la diuresis acuosa: la orina baja y el Na⁺ deja de subir.', e: { desmo: true, restr: true }, mirar: 'orina', resalta: '#agv-lectura', cita: HT('mr-tabla-35-4', 14), org: 'cuánto baja la diuresis: la ficha no lo dice' },
+    { t: 'La <span class="hl-rojo">restricción hídrica es obligatoria</span> mientras dure; sin ella, el agua retenida puede dar una hiponatremia grave.', e: { desmo: true, restr: true }, resalta: '#agv-lectura', cita: HT('mr-tabla-35-4', 14) },
+    { t: 'No se aconseja si la hiponatremia se debe a una liberación no regulada de ADH (SIADH). Pero el estrés también libera ADH sin control osmótico: la tabla no dice si cuenta aquí.', e: { adh: true }, resalta: '#agv-lectura', cita: [HT('mr-tabla-35-4', 14), HD('mr-estres-adh', 11)], org: 'la fuente no lo dice: el libro no resuelve si el estrés cuenta como ADH no regulada (sin otra fuente citada)' },
+    { t: 'En el paciente con riesgo alto de sobrecorrección (insuficiencia suprarrenal, fármacos, polidipsia primaria) puede darse de forma rutinaria.', mirar: 'orina', cita: HT('mr-sobrecorreccion', 14) },
   ],
 };
 // Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
