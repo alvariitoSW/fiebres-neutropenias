@@ -1,0 +1,43 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 5). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b5-termostato-a.html
+     Termostato, opción A «El termostato de pared»: dial (punto de ajuste) frente a termómetro (real), con sus dos brazos: radiador y caldera.
+     Mandos: pirógeno, carga de calor, carga de frío, antipirético, enfriar y recalentar. Fuente: Marino 2024, caps. 43-44 (docs/marino-2024-abdomen-temperatura-caps39-44.pdf).
+     Sin librerías: SVG y JS puro. Reutiliza js/core/tope.js y frase-vista.js. Con «reducir movimiento» las gotas y el temblor quedan quietos. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El termostato de pared · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b5-termostato-a/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>El termostato de pared</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera">
+    <p class="t">T central <b id="mon-t"></b> °C · ajuste <b id="mon-aj"></b> °C · FC <b id="mon-fc"></b></p>
+    <p class="vit">Escalofrío <b id="mon-esc"></b> · Sudor <b id="mon-sud"></b> · CK <b id="mon-ck"></b> U/L</p>
+    <p class="vit">Ritmo <b id="mon-rit"></b> · Sistema nervioso <b id="mon-snc"></b> <small>(FC, CK y ritmo: ilustr.)</small></p>
+  </section>
+  <section class="zona-escena"><svg id="esc" viewBox="0 0 360 296" role="img" aria-label="Dial del punto de ajuste, termómetro de la temperatura real, radiador (piel) y caldera (músculo)"></svg></section>
+  <p id="idea" class="idea"></p>
+  <section class="figuras" aria-label="Figuras reales del libro">
+    <figure id="fig-osborn" hidden><img src="../../js/modules/libros/img/mar-fig43-1-onda-osborn.jpg" alt="ECG con onda de Osborn (onda J) en hipotermia" width="665" height="276"><figcaption>Figura real: onda de Osborn en un ECG con hipotermia; el libro la llama «una curiosidad» sin valor diagnóstico. Marino, Fig. 43.1, p. 55-56.</figcaption></figure>
+    <figure id="fig-sepsis" hidden><img src="../../js/modules/libros/img/mar-fig44-5-temperatura-mortalidad.jpg" alt="Mortalidad hospitalaria según la temperatura inicial en la sepsis grave" width="596" height="415"><figcaption>Figura real: en 2.225 pacientes con sepsis grave, la mortalidad es menor cuanto mayor es la temperatura inicial. Marino, Fig. 44.5, p. 70-71.</figcaption></figure>
+  </section>
+  <p class="fila-g"><button type="button" id="b-guia" class="b prim">Explícame dial frente a termómetro</button></p>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="tratar" aria-selected="false">Tratar</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Pacientes</button><button type="button" id="b-hora">+1 hora</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-tratar" hidden></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b5-termostato-a/pagina.js"></script>
+</body></html>

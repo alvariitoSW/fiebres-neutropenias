@@ -1,0 +1,48 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css, que se enlaza sin tocarlo). */
+.zona-escena { position: relative; }
+#esc { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#esc text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
+#esc .min { font-size: 9.6px; fill: var(--text-muted); } #esc .min2 { font-size: 9.6px; fill: var(--bg-main); font-weight: 700; }
+#esc .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; } #esc .gran { font-size: 26px; fill: var(--oro); font-weight: 800; }
+#esc .fondo { fill: var(--bg-main); } #esc .colchon { fill: var(--bg-card); stroke: var(--line); } #esc .pata { stroke: var(--line); stroke-width: 3; }
+#esc .almohada { fill: var(--bg-card); stroke: var(--line); } #esc .torso { fill: color-mix(in srgb, var(--accent-yellow) 10%, var(--bg-card)); stroke: var(--line); }
+#esc .sabana { fill: color-mix(in srgb, var(--accent-blue) 12%, var(--bg-main)); stroke: var(--line); }
+#esc .piel { fill: color-mix(in srgb, var(--text-dim) 28%, var(--bg-card)); stroke: var(--text-muted); } #esc .piel.ict { fill: color-mix(in srgb, var(--accent-yellow) 55%, var(--bg-card)); }
+#esc .trazo { fill: none; stroke: var(--text-main); stroke-width: 1.8; stroke-linecap: round; } #esc .trazo.fino { stroke-width: 1.1; }
+#esc .blanco { fill: var(--text-main); } #esc .pupila { fill: var(--bg-main); }
+#esc .antebrazo { stroke: var(--text-dim); stroke-linecap: round; } #esc .palma { fill: color-mix(in srgb, var(--text-dim) 30%, var(--bg-card)); stroke: var(--text-muted); } #esc .dedos { stroke: var(--text-dim); stroke-linecap: round; }
+#esc .higado { fill: color-mix(in srgb, var(--accent-red) 45%, var(--bg-card)); stroke: var(--accent-red); } #esc .higado.dano { fill: color-mix(in srgb, var(--accent-yellow) 40%, var(--bg-card)); stroke-dasharray: 3 2; }
+#esc .linea { fill: none; stroke: var(--text-muted); stroke-width: 2; } #esc .linea.on { stroke: var(--oro); stroke-dasharray: 5 3; }
+#esc .tips { fill: none; stroke: var(--oro); stroke-width: 2.4; stroke-dasharray: 6 3; }
+#esc .marca { fill: none; stroke: var(--oro); stroke-width: 2; stroke-dasharray: 5 3; } #esc .hilo { stroke: var(--oro); stroke-width: 1.5; stroke-dasharray: 3 3; }
+#esc .lupa { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--oro); stroke-width: 1.5; }
+#esc .foco { fill: none; stroke: var(--oro-claro, var(--oro)); stroke-width: 2.4; stroke-dasharray: 6 3; }
+#esc .astro { fill: color-mix(in srgb, var(--accent-purple) 28%, var(--bg-card)); stroke: var(--accent-purple); stroke-width: 2; }
+#esc .hep { fill: color-mix(in srgb, var(--accent-green) 28%, var(--bg-card)); stroke: var(--accent-green); stroke-width: 1.6; } #esc .hep.muerto { fill: var(--bg-main); stroke: var(--text-muted); stroke-dasharray: 3 3; }
+#esc .puerta { fill: var(--bg-main); stroke: var(--text-muted); stroke-dasharray: 3 3; } #esc .cand { fill: var(--text-muted); }
+#esc .colon { fill: color-mix(in srgb, var(--accent-yellow) 12%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 2; } #esc .colon.acido { fill: color-mix(in srgb, var(--accent-green) 16%, var(--bg-main)); stroke: var(--accent-green); }
+#esc .ascitis { fill: color-mix(in srgb, var(--accent-blue) 16%, var(--bg-main)); stroke: var(--line); }
+#esc .filtro { fill: var(--bg-main); stroke: var(--text-muted); stroke-dasharray: 4 3; } #esc .filtro.on { fill: color-mix(in srgb, var(--accent-yellow) 10%, var(--bg-main)); stroke: var(--oro); stroke-dasharray: none; stroke-width: 2; }
+.selector-lupa { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+.selector-lupa button { min-height: 44px; font: 700 .76rem/1.1 var(--sans); } .selector-lupa button[aria-pressed="true"] { background: var(--oro); color: var(--bg-main); }
+#monitor { padding: 6px 8px 28px; min-height: 126px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-card); }
+#monitor .vit { font: .8rem/1.5 var(--sans); } #monitor b { font-variant-numeric: tabular-nums; } #monitor .rojo { color: var(--accent-red); }
+#monitor .nh { font: 700 1rem/1.3 var(--sans); } #monitor .nh small { font: 400 .62rem var(--sans); color: var(--text-muted); }
+.figuras { margin: 6px 0; } .figuras figure { margin: 0; } .figuras img { width: 100%; height: auto; border-radius: 8px; border: 1px solid var(--line); display: block; }
+.figuras figcaption { font: .7rem/1.35 var(--sans); color: var(--text-muted); margin-top: 3px; }
+.ops { display: grid; gap: 4px; } .prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); }
+.prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+.op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.llevas ul { margin: 2px 0 0; padding-left: 18px; font: .8rem/1.4 var(--sans); } .fila-g { display: flex; gap: 6px; flex-wrap: wrap; }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin: 4px 0; } .modos button { min-height: 40px; font: 700 .74rem/1.1 var(--sans); } .modos button[aria-pressed="true"] { background: var(--oro); color: var(--bg-main); }
+.presets { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 38px; font: 700 .68rem/1.1 var(--sans); } .presets button[aria-pressed="true"] { background: var(--oro); color: var(--bg-main); }
+.frase .org { color: var(--text-muted); font-weight: 400; } .dock-pliega { display: grid; gap: 4px; }
+.dock-panel { max-height: 25vh !important; min-height: 0 !important; } .dock-tabs button { min-height: 34px !important; }
+.mando button, .mando select { min-height: 34px; padding: 2px 4px; } .mando .fila > * { min-width: 60px; }
+[aria-pressed="true"].b, .mando .fila button[aria-pressed="true"] { border-color: var(--oro); box-shadow: inset 0 0 0 1px var(--oro); }
+.lista { margin: 4px 0; padding-left: 18px; font: .8rem/1.4 var(--sans); } .plegable summary { min-height: 40px; cursor: pointer; }
+.idea { font: .78rem/1.35 var(--sans) !important; margin: 2px 0 !important; } .idea .cita-pdf, .idea .ver-ficha { min-height: 32px; }
+#monitor { min-height: 104px; padding: 4px 8px 26px; } #monitor .nh small { display: block; } .selector-lupa button { min-height: 40px; }
+#monitor { position: sticky; top: 0; z-index: 6; min-height: 128px; padding: 4px 8px 30px; background: var(--bg-main); } #monitor .vit, #monitor .nh { margin: 0; } #monitor .nh { font-size: .92rem; }
+#monitor:has(.tope-sello:not([hidden])) { padding-bottom: 122px; }
