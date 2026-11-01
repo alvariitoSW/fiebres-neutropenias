@@ -35,3 +35,12 @@ antes de pasarlo.
 - Motor del corazón no monótono por encima de 13,5 cmH₂O de aire pleural (PAM 19,7 a 20; 34 a 40): arreglo del motor aparte.
 - `mejor-peep`: la presión de conducción mínima sale con PEEP 10, no 12 (Fig. 27.5): el caso usa la ficha y lo avisa.
 - Cobertura §5 da PBW 50 a Eulalia; el modelo, 54,2 (fórmula). Juez `--forma` tarda ≈10 min: redirigir a archivo.
+
+## Tras A2 (fin de la sesión 1)
+- A2 juntado: 5 graves ✅; profesor 1, 3-7 ✅; **8 ❌** (figura de la PSV en la Mira de la ficha 10, con enlace a
+  `psv-disparo`) y el barajado de la ficha 2 sin tocar: van al rejuicio.
+- `as1-e3` dice «MDI sin espaciador ≈32 µg (9 %)»: cuenta del constructor (9 % de la Tabla 23.1 sobre 0,36 mg). Quitar o
+  rotular «ilustrativo: cuenta proporcional» con la tabla y la página.
+- Ficha 10: «mask design» (p. 76) queda como «mejoras en las mascarillas» (el juez de nombres internos marca «diseño»
+  en el texto; no se toca el juez). Un fallo «Navegador: page closed» salió en la pasada de A2 al final del barrido
+  móvil: repetir `--ficha …neumo-vni-metodos` sola y ver si se reproduce.
