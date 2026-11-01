@@ -209,7 +209,7 @@ export const MAYEUTICA_NPT = {
     ],
     casos: [
       { id: 'npt-fro', titulo: 'Froilán, 52 años: la bolsa de una isquemia intestinal', corto: 'Caso · Froilán (la pauta)', sub: 'isquemia intestinal, 70 kg, propofol',
-        paciente: { Edad: '52 años', Motivo: 'isquemia intestinal, intestino fuera de uso', Peso: '70 kg', Sedación: 'propofol 10 mL/h' },
+        paciente: { Edad: '52 años', Motivo: 'isquemia intestinal, intestino fuera de uso', Peso: '70 kg', Antes: 'una semana casi sin comer', Sedación: 'propofol 10 mL/h' },
         pasos: [
           { momento: 'Día 3 · calorías y proteína', datos: { 'Peso': '70 kg', 'Proteína': '1,4 g/kg' }, nuevo: ['Peso', 'Proteína'], calculadora: { ir: 'mu-npt-calc', nombre: 'Construir la NPT' },
             pregunta: { id: 'npt-fro-1', tipo: 'test', fuente: 'mu-npt-paso1 · mu-npt-calc',
@@ -343,14 +343,14 @@ export const MAYEUTICA_NPT = {
       { id: 'npt-c-e1', corto: 'hiperglucemia', tipo: 'test', fuente: 'mu-npt-hiperglucemia',
         enunciado: 'En una serie de pacientes con NPT, ¿qué proporción tuvo glucemias >200 mg/dL?',
         opciones: [
-          { t: 'El 45 %, el de esa serie', ok: true },
+          { t: 'El 45 %', ok: true },
           { t: 'El 15 %: pocos pacientes', porque: 'Subestimas la frecuencia: la serie dio el 45 %, y el libro la llama frecuente. Con el 15 % no pensarías en vigilar la glucemia desde el primer día de la bolsa (p. 41).' },
           { t: 'El 75 %: la mayoría', porque: 'Sobrestimas la frecuencia: la serie dio el 45 %. Con el 75 % creerías que la insulina es siempre obligatoria y no ajustarías a cada paciente (p. 41).' }],
         explicacion: '«Glucemia >200 mg/dL en el <span class="hl-rojo">45 %</span> de los pacientes con NPT» (' + pdf(41) + ').' },
       { id: 'npt-c-e2', corto: 'criterios ASPEN', tipo: 'test', fuente: 'mu-real-calc · mu-real-clinica',
         enunciado: 'Alto riesgo de realimentación según el libro. ¿Cuál NO es uno de los cinco criterios?',
         opciones: [
-          { t: 'Pérdida de peso del 5 % en 6 meses', ok: true },
+          { t: 'Haber perdido un 5 % del peso en 6 meses (no en un mes)', ok: true },
           { t: 'IMC ≤18,5 kg/m²', porque: 'Sí es un criterio: IMC ≤18,5. Si lo descartases, nutrirías a ritmo pleno a un desnutrido de riesgo (p. 44).' },
           { t: 'Ingesta pobre en los últimos 5 días', porque: 'Sí es un criterio. Si lo ignoras no pides los electrolitos ni la tiamina antes de nutrir (p. 44).' }],
         explicacion: 'Los cinco: pérdida de peso del <span class="hl-rojo">5 % en un mes</span> o >10 % en 6 meses (un 5 % en 6 meses no cuenta); <span class="hl-rojo">IMC ≤18,5</span>; ingesta pobre 5 días; potasio, fosfato o magnesio bajos de entrada; alto riesgo de desnutrición (p. ej. drogas) (' + pdf(44) + ').' },
@@ -430,7 +430,7 @@ export const MAYEUTICA_NPT = {
               enunciado: 'Engracia, con 400 kcal desde ayer, está débil y el fosfato ha bajado de 2,6 (tras reponerlo) a 0,6 mg/dL. ¿Qué haces?',
               opciones: [
                 { t: 'Frenar el avance de la nutrición y reponer el fosfato: hipofosfatemia por la glucosa', ok: true },
-                { t: 'Subir a 1.000 kcal: la debilidad es de la desnutrición y mejorará al darle más energía', porque: 'La debilidad generalizada es la manifestación de la hipofosfatemia en la Tabla 50.5. Subir la glucosa empeoraría el fosfato (fisiología general: más glucosa arrastra más fosfato a la célula) (p. 42-44).' },
+                { t: 'Subir a 1.000 kcal: la debilidad es de la desnutrición y mejorará al darle más energía', porque: 'La debilidad generalizada es la manifestación de la hipofosfatemia en la Tabla 50.5. Subir la glucosa empeoraría el fosfato: la glucosa arrastra fosfato a la célula (p. 42; Tabla 50.5, p. 43-44).' },
                 { t: 'Suspender la tiamina por si la debilidad es un efecto secundario de la perfusión', porque: 'La debilidad no viene de la tiamina; su déficit da alteración mental y acidosis láctica. Retirarla expondría a la paciente a una encefalopatía (p. 43-44).' }],
               explicacion: 'Debilidad generalizada = <span class="hl-rojo">hipofosfatemia</span> (Tabla 50.5), glucosa-dependiente (' + pdf(42) + ' y ' + pdf(44) + '). El libro manda avanzar solo «según lo permitan» fosfato, potasio y magnesio (' + pdf(41) + '); la reposición, sin cifra aquí, está en la ficha de fósforo del Cap. 38 (Tabla 38.5, pág. 51): <button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fosforo">Hipofosfatemia y su reposición →</button>. Cifras del caso: inventadas.' } },
           { momento: 'Día 4 · el peso sube', datos: { 'Peso': '+2 kg en 48 h', 'Disnea': 'leve, crepitantes' }, nuevo: ['Peso', 'Disnea'],
