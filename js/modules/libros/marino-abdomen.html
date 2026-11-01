@@ -276,7 +276,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Paracetamol</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-paracetamol">
+                    <div class="micro-prof-body" id="ma-fha-paracetamol" data-nombre="Paracetamol">
                         <dl class="kv-row"><dt>Peso</dt><dd>Primera causa en EE. UU. (<strong>46%</strong>) y Reino Unido (<strong>64%</strong>).</dd></dl>
                         <dl class="kv-row"><dt>Mecanismo</dt><dd>Se agota el glutatión hepático (el principal antioxidante intracelular) y un metabolito del paracetamol produce daño oxidativo. Empieza ya a las <strong>12 h</strong> y es máximo a los <strong>3-5 días</strong>; ALT muy alta con bilirrubina poco elevada.</dd></dl>
                         <dl class="kv-row"><dt>Dos trampas</dt><dd>1) La mitad de las sobredosis son <strong>involuntarias</strong> (para aliviar dolor; el paracetamol está en más de 600 productos sin receta). 2) En la mitad de los casos con daño hepático el paracetamol es <span class="hl-rojo">indetectable en plasma</span>: riesgo de no diagnosticar algo tratable.</dd></dl>
@@ -285,7 +285,7 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💉 Otros fármacos</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-farmacos">
+                    <div class="micro-prof-body" id="ma-fha-farmacos" data-nombre="Otros fármacos">
                         <p>Daño dependiente de la dosis o idiosincrásico; más probable en ancianos, debilitados o alcohólicos. Las reacciones <strong>idiosincrásicas</strong> son las peores: supervivencia del <strong>40%</strong> sin trasplante.</p>
                         <div style="overflow-x:auto;">
                         <table class="data-table" id="ma-tabla-39-1">
@@ -306,11 +306,11 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Isquemia</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-isquemia"><p>"Hepatitis isquémica" tras un periodo de hipoperfusión (p. ej. shock hemorrágico): transaminasas muy altas (<strong>&gt;3.000 UI/L</strong>) con bilirrubina poco elevada (<strong>&lt;5 mg/dL</strong>). Suele resolverse si se resuelve la hipoperfusión, pero un <strong>25%</strong> necesita trasplante.</p></div>
+                    <div class="micro-prof-body" id="ma-fha-isquemia" data-nombre="Isquemia"><p>"Hepatitis isquémica" tras un periodo de hipoperfusión (p. ej. shock hemorrágico): transaminasas muy altas (<strong>&gt;3.000 UI/L</strong>) con bilirrubina poco elevada (<strong>&lt;5 mg/dL</strong>). Suele resolverse si se resuelve la hipoperfusión, pero un <strong>25%</strong> necesita trasplante.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🦠 Hepatitis aguda</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-fha-hepatitis">
+                    <div class="micro-prof-body" id="ma-fha-hepatitis" data-nombre="Hepatitis aguda">
                         <dl class="kv-row"><dt>Autoinmune</dt><dd>Inicio más insidioso; historia de autoinmunidad o serologías (ANA, antimúsculo liso). El <strong>80%</strong> en mujeres; hipergammaglobulinemia frecuente.</dd></dl>
                         <dl class="kv-row"><dt>Vírica</dt><dd>&lt;10% en países desarrollados; sobre todo <strong>hepatitis B</strong>, nueva o reactivada por inmunosupresión. Con el fallo ya instaurado, los análogos de nucleósidos aportan poco: supervivencia del <strong>25%</strong> sin trasplante.</dd></dl>
                         <dl class="kv-row"><dt>Otras</dt><dd>Síndrome HELLP, Budd-Chiari (oclusión de las venas hepáticas), otros virus (herpes simple) y neoplasias infiltrantes.</dd></dl>
@@ -383,7 +383,7 @@
             <div class="micro-profiles">
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🥛 Lactulosa</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-lactulosa">
+                    <div class="micro-prof-body" id="ma-eh-lactulosa" data-nombre="Lactulosa">
                         <p>Disacárido que las bacterias lácticas del colon convierten en ácidos grasos de cadena corta; la acidificación de la luz elimina los microbios productores de amonio.</p>
                         <dl class="kv-row"><dt>Oral o por sonda</dt><dd><strong>20-30 g (30-45 mL) cada hora</strong> hasta que haga deposición; luego 20 g (30 mL) cada 8 h, ajustando a <strong>2-3 deposiciones blandas al día</strong>.</dd></dl>
                         <dl class="kv-row"><dt>Enema de retención</dt><dd>200 g (300 mL) en 700 mL de agua del grifo, enema alto, retenido <strong>30-60 min</strong> en Trendelenburg.</dd></dl>
@@ -392,14 +392,14 @@
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>💊 Rifaximina</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg 3 veces al día al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
+                    <div class="micro-prof-body" id="ma-eh-rifaximina" data-nombre="Rifaximina"><p>Antibiótico no absorbible de amplio espectro: <strong>400 mg 3 veces al día al menos 10 días</strong>. Eficaz sola, pero suele combinarse con lactulosa.</p></div>
                 </div>
                 <div class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>🩸 Hemofiltración (CVVH)</span> <span class="toggle-icon">+</span></div>
-                    <div class="micro-prof-body" id="ma-eh-cvvh"><p>Baja el amonio y mejora el pronóstico en el fallo hepático agudo, sobre todo si se mantiene. Hoy se considera <strong>superior a la lactulosa o la rifaximina</strong> en el fallo agudo con encefalopatía. Indicaciones: <strong>oliguria persistente</strong>, <strong>amonio &gt;150 µmol/L</strong> o <strong>edema cerebral</strong>, sea cual sea la creatinina. Cuanto antes, mejor: su eficacia depende del tiempo. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="edema">Ver la CVVH sacar el amonio de la sangre →</button></p></div>
+                    <div class="micro-prof-body" id="ma-eh-cvvh" data-nombre="Hemofiltración (CVVH)"><p>Baja el amonio y mejora el pronóstico en el fallo hepático agudo, sobre todo si se mantiene. Hoy se considera <strong>superior a la lactulosa o la rifaximina</strong> en el fallo agudo con encefalopatía. Indicaciones: <strong>oliguria persistente</strong>, <strong>amonio &gt;150 µmol/L</strong> o <strong>edema cerebral</strong>, sea cual sea la creatinina. Cuanto antes, mejor: su eficacia depende del tiempo. <button type="button" class="especialidad-link" data-especialidad="libros" data-view="hepatocitoVivo" data-hepatocito-vivo="edema">Ver la CVVH sacar el amonio de la sangre →</button></p></div>
                 </div>
             </div>
-            <div class="agua-simulador" id="ma-cvvh-calc">
+            <div class="agua-simulador" id="ma-cvvh-calc" data-nombre="Calculadora: ¿hemofiltración?">
                 <h4 style="color: var(--accent-yellow);">🧮 Fallo hepático agudo con encefalopatía: ¿hemofiltración?</h4>
                 <div class="form-group"><label for="ma-cvvh-nh3">Amonio arterial (µmol/L)</label><input type="number" id="ma-cvvh-nh3" min="0" max="1000" step="1" value="50" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-cvvh-oliguria">Oliguria persistente</label><select id="ma-cvvh-oliguria"><option value="no">No</option><option value="si">Sí</option></select></div>
@@ -482,21 +482,21 @@
                 <p class="article-figure-caption">Figura 39.4 — Antibiótico empírico de la PBE: comunitaria → cefalosporina de 3.ª generación; asociada a cuidados o nosocomial → con muchos resistentes, carbapenémico ± vancomicina o daptomicina; sin ellos, piperacilina-tazobactam.</p>
             </div>
             <dl class="kv-row" id="ma-pbe-resistentes"><dt>Si caben resistentes</dt><dd>Gradación: en la PBE <strong>comunitaria</strong> son improbables; se aíslan típicamente en la <strong>nosocomial</strong> y con menos frecuencia en la asociada a cuidados. Pauta: carbapenémico (p. ej. <strong>meropenem 1 g cada 8 h</strong>), más vancomicina si puede haber SARM o daptomicina si se sospecha enterococo resistente a vancomicina. Nosocomial: aparece tras 48 h de ingreso; asociada a cuidados: en las primeras 48 h en alguien con contacto sanitario en los 90 días previos.</dd></dl>
-            <div class="agua-simulador" id="ma-pbe-calc">
+            <div class="agua-simulador" id="ma-pbe-calc" data-nombre="Calculadora del antibiótico (Fig. 39.4)">
                 <h4 style="color: var(--accent-yellow);">🧭 Antibiótico empírico de la PBE (Figura 39.4)</h4>
                 <div id="ma-pbe-pregunta" style="font-size:0.88rem; margin-bottom:10px;"></div>
                 <div id="ma-pbe-botones" style="display:flex; gap:10px;"></div>
                 <div class="result-box" id="ma-pbe-resultado" style="display:none; text-align:left; margin-top:12px;"></div>
                 <button class="siguiente-ficha-btn" id="ma-pbe-reset" style="display:none; margin-top:10px;">↺ Reiniciar</button>
             </div>
-            <div class="agua-simulador" id="ma-pmn-calc">
+            <div class="agua-simulador" id="ma-pmn-calc" data-nombre="Calculadora de neutrófilos">
                 <h4 style="color: var(--accent-yellow);">🧮 Neutrófilos en ascitis: diagnóstico y respuesta</h4>
                 <div class="form-group"><label for="ma-pmn-inicial">Neutrófilos iniciales (/mm³)</label><input type="number" id="ma-pmn-inicial" min="0" max="50000" step="1" value="800" inputmode="decimal"></div>
                 <div class="form-group"><label for="ma-pmn-48">Neutrófilos a las 48 h (/mm³, opcional)</label><input type="number" id="ma-pmn-48" min="0" max="50000" step="1" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-pmn-resultado"></div>
             </div>
             <dl class="kv-row" id="ma-pbe-albumina"><dt>Albúmina</dt><dd>Mejora la supervivencia en la PBE. Se atribuyó a la función renal (fracaso renal en el <strong>30%</strong> de las PBE, que empeora mucho el pronóstico), pero el beneficio es independiente de la creatinina. Pauta: <strong>1,5 g/kg el día 1 y 1 g/kg el día 3</strong>, con albúmina al 25% (25 g/100 mL) para limitar el volumen.</dd></dl>
-            <div class="agua-simulador" id="ma-alb-calc">
+            <div class="agua-simulador" id="ma-alb-calc" data-nombre="Calculadora de albúmina">
                 <h4 style="color: var(--accent-yellow);">🧮 Albúmina en la PBE</h4>
                 <div class="form-group"><label for="ma-alb-peso">Peso (kg)</label><input type="number" id="ma-alb-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="ma-alb-resultado"></div>
@@ -515,7 +515,7 @@
                 </tbody>
             </table>
             </div>
-            <div class="agua-simulador" id="ma-shr-calc">
+            <div class="agua-simulador" id="ma-shr-calc" data-nombre="Calculadora de criterios de SHR">
                 <h4 style="color: var(--accent-yellow);">✅ ¿Cumple los criterios de SHR?</h4>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-shr-check"> Cirrosis con ascitis</label>
                 <label class="checkbox-label puntuable"><input type="checkbox" class="ma-shr-check"> Creatinina +0,3 mg/dL en 48 h o ≥1,5 × basal</label>
