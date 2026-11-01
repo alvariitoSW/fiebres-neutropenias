@@ -98,6 +98,19 @@ await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-dx', 'pseudo', e => e.pseudo === true && e.na0 === 140 && e.fijo.na === 128, 'pseudo');
 ok(await p.evaluate(() => !document.getElementById('agv-lupa').hidden && document.getElementById('agv-lupa-tubo').getAttribute('aria-pressed') === 'true'), 'el estado pseudo abre la lupa del tubo');
 ok(await p.evaluate(() => /290/.test(document.getElementById('agv-lectura').textContent) && /128/.test(document.getElementById('agv-lectura').textContent)), 'pseudo: Na medido 128 y Posm 290 en la lectura');
+// furosemida-glucosado (E p. 8), sobrecorrección y desmopresina (E p. 13-14): accesos, sello y botones fijos
+await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hipernatremia', 'furosemida-glucosado', e => e.perdida === 'diuretico' && e.na0 === 160, 'furosemida');
+ok(await p.evaluate(() => /80/.test(document.getElementById('agv-frase').textContent) && /glucosado/.test(document.getElementById('agv-frase').textContent)), 'furosemida: la frase dice ~80 mEq/L y el glucosado');
+await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-tto', 'sobrecorreccion', e => e.fijo.na === 126 && e.bolos3 === 1 && e.orina && e.orina.tipo === 'acuosa' && e.orina.mlh === 180, 'sobrecorreccion');
+ok(await p.evaluate(() => { const s = document.getElementById('agv-sello'); return !s.hidden && /desmielinización/.test(s.textContent) && /180/.test(document.getElementById('agv-lectura').textContent) && /126/.test(document.getElementById('agv-lectura').textContent); }), 'sobrecorrección: sello con la consecuencia, Na⁺ 126 y 180 mL/h en la lectura');
+await p.evaluate(() => { window.__desmoBtn = document.getElementById('agv-m-desmo'); window.__restrBtn = document.getElementById('agv-m-restr'); document.querySelector('[data-agv-tab="sodio"]').click(); document.getElementById('agv-m-desmo').click(); });
+await p.waitForTimeout(300);
+ok(await p.evaluate(() => { const s = document.getElementById('agv-sello'); return !s.hidden && /sin restricción/.test(s.textContent) && /restricción hídrica/.test(document.getElementById('agv-frase').textContent); }), 'desmopresina sin restricción: sello y frase de aviso');
+await p.evaluate(() => document.getElementById('agv-m-restr').click()); await p.waitForTimeout(300);
+ok(await p.evaluate(() => document.getElementById('agv-sello').hidden && /frenada/.test(document.getElementById('agv-lectura').textContent) && document.getElementById('agv-m-desmo') === window.__desmoBtn && document.getElementById('agv-m-restr') === window.__restrBtn), 'desmopresina con restricción: diuresis frenada, sello apagado y botones sin rehacer');
+ok(await desborde() <= 0, 'sin desborde con la desmopresina');
+await foto('04c-desmopresina');
+await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-tto', 'desmopresina', e => e.desmo === true && e.restr === true && e.orina && e.orina.tipo === 'acuosa', 'desmopresina');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-tto', 'hiponatremia', e => e.na0 === 122 && e.adh, 'hiponatremia');
 ok(await p.evaluate(() => /^↑ sin cifra$/.test(document.getElementById('agv-dl-mar').textContent)), `mareógrafo del mar: «${await p.evaluate(() => document.getElementById('agv-dl-mar').textContent)}»`);
 await desde('cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs', 'mc-hemorragico-fluidos', 'reanimacion', e => e.hemorragia === 20 && e.infusiones[0]?.ml === 1800, 'reanimacion');
