@@ -40,6 +40,7 @@ import { init as initIonesVivos } from './iones-vivos/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { MAYEUTICA_APENDICES } from '../../data/mayeutica/b6b-apendices.js';
+import { MAYEUTICA_CUANTO } from '../../data/mayeutica/b6b-cuanto.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -218,6 +219,7 @@ export function init() {
     initVisualMarinoCaps45a53();
     // Texto | Visual | Estudiar en las fichas de consulta de los apéndices (6L, después de su vista Visual)
     Object.entries(MAYEUTICA_APENDICES).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_CUANTO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
