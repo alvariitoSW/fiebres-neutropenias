@@ -39,3 +39,19 @@ Frases de mecanismo o conducta escritas por el constructor (no copiadas de la fi
 - Umbral rápido 120 en el sello: «opinión del autor» (rotulado en el propio sello).
 - Duración de rifaximina 0-14 días: el tope 14 del mando es ilustrativo; el mínimo 10 viene de la p. 7.
 - Rótulos de «apagado» en el carril: sin cifra; es la misma regla de hepatocitos vivos (ilustrativa).
+
+## Vuelta 2b (nuevas)
+| Frase nueva | Página |
+|---|---|
+| TIPS: «alivia la hipertensión portal, pero al saltarse el hígado aumenta el riesgo de encefalopatía: sube el amonio» (aviso y frase del mando) | p. 10 |
+| Albúmina 5 %: «5 g/dL, parecida al plasma; cerca del 70 % del volumen expande el plasma; recomendada sobre todo con albúmina <3 g/dL» (sello verde) | p. 5 y p. 9 (Tabla 39.3) |
+| Ringer lactato: «hipotónico, favorece la hiponatremia y empeora el edema cerebral» (aviso, frase y astrocito más hinchado) | p. 5 y p. 9 |
+| Error de Hilario (6 frases, 2 errores: RL y plasma por INR): octreótido 50 µg + 50 µg/h 2-5 d, endoscopia ≤12 h, Hb 7 g/dL con 1:1:1, INR no válido en cirrosis (usar tromboelastografía), ceftriaxona antes de la endoscopia | p. 9 |
+| Ceftriaxona: tabla 1 g/día, texto 2 g: «las fuentes discrepan», sin marcar error | p. 9 |
+| Guía «sano» (3 pasos: colon, carril, urea; amonio <60) y guía «edema» (carril apagado, glutamina que arrastra agua, CVVH) | p. 6, 7, 8 |
+| Cara de West Haven por grado (atención corta, apatía/letargo, estupor, coma) | p. 7 (Tabla 39.2); el dibujo de la cara es ilustrativo |
+
+## Sin cita (vuelta 2b)
+- Salino: «sube la PA, pero menos volumen se queda en el vaso que con albúmina»: `fisiología general`, sin cifra.
+- Cambios de PA y FC por fluido (albúmina +10/+5, FC −6; salino +6/+3, −4; RL +5/+3, −3) y TIPS que divide por 2 la depuración: ilustrativos.
+- Que el RL ensancha el astrocito en +0,2 del eje: ilustrativo (la dirección es de la ficha).

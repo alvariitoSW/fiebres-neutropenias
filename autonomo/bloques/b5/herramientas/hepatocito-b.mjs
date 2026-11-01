@@ -2,6 +2,7 @@
 // Uso: node hepatocito-b.mjs [ancho]   (lanza su propio servidor en el puerto 8157 y lo cierra por su número de proceso)
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { spawn } from 'node:child_process';
+const { ERROR, ERROR2 } = await import(new URL('../../../maquetas/b5-hepatocito-b/pruebas.js', import.meta.url));
 const RAIZ = new URL('../../../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b5/capturas/hepatocito-b/', PORT = 8157;
 const srv = spawn('python3', ['-m', 'http.server', String(PORT)], { cwd: RAIZ, stdio: 'ignore' }); const pid = srv.pid;
 await new Promise((r) => setTimeout(r, 900));
@@ -67,8 +68,20 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   // ---- error
   console.log('-- Error'); await p.evaluate(() => window.__hep.modoPrueba('error')); const gr = await p.$$('#prueba .ops'); ok(gr.length === 5, 'error: 5 frases');
   const e0 = await p.evaluate(() => document.getElementById('hep-svg').textContent.includes('más ácido')); ok(!e0, 'error: se ve «más ácido» antes de contestar');
-  for (let i = 0; i < 5; i++) { const bs = await gr[i].$$('.op'); await bs[i === 1 ? 0 : 1].click(); }
+  ok(ERROR.frases.filter((f) => f.error).length === 1 && ERROR2.frases.filter((f) => f.error).length === 2, 'rondas: 1 error y 2 errores'); ok(ERROR.frases.findIndex((f) => f.error) !== ERROR2.frases.findIndex((f) => f.error) && ERROR.frases.findIndex((f) => f.error) !== 1, 'el error va siempre en 2.ª posición');
+  for (let i = 0; i < 5; i++) { const bs = await gr[i].$$('.op'); await bs[ERROR.frases[i].error ? 0 : 1].click(); }
   await p.waitForTimeout(150); const ef = await p.evaluate(() => ({ fin: document.getElementById('prueba').dataset.fin, ac: document.getElementById('hep-svg').textContent.includes('más ácido') })); console.log(` error resuelto: fin=${ef.fin}, colon acidificado visible=${ef.ac}, amonio ${(await L()).a}`); ok(ef.fin && ef.ac, 'error sin completar'); await desb('error');
+  // ---- Hilario: 2 errores, y el fluido
+  console.log('-- Error de Hilario'); await p.evaluate(() => window.__hep.modoPrueba('hilario')); const gh = await p.$$('#prueba .ops'); ok(gh.length === 6, 'hilario: 6 frases');
+  for (let i = 0; i < 6; i++) { const bs = await gh[i].$$('.op'); await bs[ERROR2.frases[i].error ? 0 : 1].click(); }
+  await p.waitForTimeout(150); const eh = await p.evaluate(() => ({ fin: document.getElementById('prueba').dataset.fin, fl: window.__hep.s.fl })); console.log(' hilario resuelto:', JSON.stringify(eh)); ok(eh.fin && eh.fl === 'alb', 'hilario sin completar'); await desb('hilario');
+  console.log('-- Fluido, TIPS y guías'); await reset('hilario'); const pa0 = await p.evaluate(() => document.getElementById('mon-pa').textContent);
+  for (const f of ['alb', 'sal', 'rl']) { await clic(`[data-fl="${f}"]`); const x = await p.evaluate(() => ({ pa: document.getElementById('mon-pa').textContent, fc: document.getElementById('mon-fc').textContent, sw: +window.__hep.leer().sw.toFixed(2) })); console.log(` ${f}: PA ${pa0} → ${x.pa}, FC ${x.fc}, astrocito ${x.sw}, topes[${await tp()}]`); ok(x.pa !== pa0, `fluido ${f} no cambia la PA`); if (f === 'rl') { ok((await tp()).includes('fl:aviso'), 'RL sin aviso'); await cap('06-rl'); } if (f === 'alb') ok((await tp()).includes('fl:sello'), 'albúmina sin sello 70 %'); }
+  await clic('[data-fl="rl"]'); ok(!(await tp()).includes('fl:'), 'quitar el fluido no quita el tope');
+  await reset('sano'); const a00 = (await L()).a; ok(await clic('#b-tips'), 'TIPS no tocable'); const a01 = (await L()).a; console.log(` TIPS: ${a00} → ${a01} topes[${await tp()}]`); ok(a01 > a00 && (await tp()).includes('tips:aviso'), 'TIPS no sube el amonio o sin aviso'); await cap('07-tips'); await clic('#b-tips');
+  for (const [c, n] of [['sano', 3], ['edema', 3], ['casimira', 4]]) { await reset(c); const k = await p.evaluate(() => document.querySelectorAll('#guia h3').length && /paso 1 de (\d)/.exec(document.querySelector('#guia h3').textContent)[1]); console.log(` guía ${c}: ${k} pasos`); ok(+k === n, `guía ${c} sin ${n} pasos`); }
+  await reset('edema'); const ed = await L(); ok(ed.edema && ed.sw > 0.9, 'preset edema sin astrocito hinchado'); await cap('08-edema');
+  const cw = await p.evaluate(() => ({ svg: document.querySelectorAll('#mon-wh svg.cara-wh').length, t: document.getElementById('mon-wh').textContent })); console.log(' cara West Haven:', JSON.stringify(cw)); ok(cw.svg === 1 && /ilustrativo/.test(cw.t), 'cara de West Haven sin icono o sin «ilustrativo»');
   // ---- caso
   console.log('-- Caso (Casimira, 4 pasos)'); await p.evaluate(() => window.__hep.modoPrueba('caso'));
   const bien = [/^Sí, NAC/, null, /^Albúmina/, /^Consulto/]; let pasosC = 0;
@@ -86,7 +99,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   const interno = await p.evaluate(() => /mar-|§|maqueta|REGLAS|Caso E|b6b|mt-/.test(document.body.innerText)); ok(!interno, 'nombre interno a la vista');
   await reset('sano');
   await clic('#b-cvvh'); await p.waitForTimeout(250);
-  const vis = await p.evaluate(() => { const f = document.getElementById('frase').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(); return { fraseBajoDock: f.bottom > d.top + 1, dock: Math.round(d.height), vh: innerHeight }; }); console.log(' dock', vis.dock, 'de', vis.vh, 'px'); ok(vis.dock < vis.vh * 0.5, 'dock tapa media pantalla'); ok(!vis.fraseBajoDock, 'frase bajo el dock');
+  const vis = await p.evaluate(() => { const f = document.getElementById('frase').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(); return { fraseBajoDock: f.bottom > d.top + 1, dock: Math.round(d.height), vh: innerHeight }; }); console.log(' dock', vis.dock, 'de', vis.vh, 'px'); ok(vis.dock < vis.vh * 0.5, 'dock tapa media pantalla'); const tf = await p.evaluate(() => document.getElementById('dock').offsetHeight + document.getElementById('frase').offsetHeight); console.log(' dock + frase', tf, 'px (máx 267)'); ok(tf <= 270, `dock + frase ${tf} px pasa de ⅓ de 800`); ok(!vis.fraseBajoDock, 'frase bajo el dock');
   const ids = await p.evaluate(() => { const m = {}; document.querySelectorAll('[id]').forEach((e) => { m[e.id] = (m[e.id] || 0) + 1; }); return Object.keys(m).filter((k) => m[k] > 1); }); ok(!ids.length, 'ids duplicados ' + ids); await rotulos('final'); await desb('final');
   await ctx.close();
 }
