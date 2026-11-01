@@ -41,6 +41,7 @@ import { init as initHepatocitoVivo } from './hepatocito-vivo/index.js';
 import { init as initTermostatoVivo } from './termostato-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
+import { MAYEUTICA_B5 } from '../../data/mayeutica/b5.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -213,6 +214,7 @@ export function init() {
     initVisualMarino();
     // Texto | Visual | Mayéutica en las fichas del bloque 1 que ya la tienen (después de su vista Visual)
     Object.entries(MAYEUTICA_B1).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_B5).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     initMarinoRenal();
     initMarinoAbdomen();
     initVisualMarinoCaps31a44();

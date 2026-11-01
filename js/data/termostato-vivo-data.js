@@ -119,7 +119,7 @@ export const APUESTA2 = { enun: 'Dorotea, 55 años, shock séptico y T 39,4 °C.
   ll: [['La fiebre en la sepsis no se baja de rutina.', '71|ma-antipireticos'], ['Asociación observacional (no causa): más temperatura inicial, menos mortalidad.', '71|ma-antipireticos'], ['Sí se baja en la lesión cerebral isquémica (parada, ictus).', '71|ma-antipireticos']] };
 
 // Ficha (pestaña de marino-abdomen.html) de cada párrafo citado: «Ver en la ficha» abre esa pestaña y resalta el párrafo.
-export const TAB_FICHA = { 'ma-calor-hipertermia': 'ma-calor', 'ma-calor-agotamiento': 'ma-calor', 'ma-calor-golpe': 'ma-calor', 'ma-calor-rabdo': 'ma-calor', 'ma-calor-snc': 'ma-calor',
+export const TAB_FICHA = { 'ma-calor-hipertermia': 'ma-calor', 'ma-calor-agotamiento': 'ma-calor', 'ma-calor-golpe': 'ma-calor', 'ma-calor-rabdo': 'ma-calor', 'ma-tabla-43-1': 'ma-calor', 'ma-calor-intro': 'ma-calor',
   'ma-hipertermia-farmacos': 'ma-hipertermia-farmacos', 'ma-hm-que': 'ma-hipertermia-farmacos', 'ma-hm-clinica': 'ma-hipertermia-farmacos', 'ma-hm-tto': 'ma-hipertermia-farmacos', 'ma-snm-que': 'ma-hipertermia-farmacos', 'ma-snm-clinica': 'ma-hipertermia-farmacos', 'ma-snm-tto': 'ma-hipertermia-farmacos',
   'ma-ss-claves': 'ma-hipertermia-farmacos', 'ma-ss-tto': 'ma-hipertermia-farmacos', 'ma-hipo-fisio': 'ma-hipotermia', 'ma-hipo-grados': 'ma-hipotermia', 'ma-hipo-osborn': 'ma-hipotermia',
   'ma-hipo-externo': 'ma-hipotermia', 'ma-fiebre-def': 'ma-fiebre-basicos', 'ma-antipireticos': 'ma-antipireticos', 'ma-antip-paracetamol': 'ma-antipireticos', 'ma-antip-aine': 'ma-antipireticos', 'ma-antip-mantas': 'ma-antipireticos' };
