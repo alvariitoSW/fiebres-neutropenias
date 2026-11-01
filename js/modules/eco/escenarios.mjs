@@ -45,7 +45,7 @@ const tepU = (g) => Math.max(0, g) ** TEP_CURVA;
 // más temprana y la sístole algo más larga hace domo (máximo entre el 30 y el 65 % del chorro; Zoghbi 2017, Fig. 29, PDF p. 49).
 // Valores ILUSTRATIVOS, calibrados a esa forma sin mover vIT, PSAP, FEVD ni TAPSE más de un 5 %
 const TEP_U_MED = 0.66;   // u de g = 0,5
-const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) + 0.03 * Math.max(0, (u - 0.85) / 0.15) }; };
+const tepVd = (u) => { const x = Math.min(1, u / TEP_U_MED), t = Math.max(0, (u - TEP_U_MED) / (1 - TEP_U_MED)), t4 = Math.min(1, t / 0.4); return { f: 0.55 - 0.29 * x + 0.16 * t, durX: 1 + 0.4 * x - 0.1 * t4, ees: 1 + 0.05 * x * (1 - t4) + 0.07 * Math.max(0, (u - 0.85) / 0.15) }; };
 // Con g = 0 el TEP y la HP son el normal del motor: la subida del VD pasa de la del VI (g = 0) a la de la enfermedad (g ≥ FUNDE_VD_G) sin salto
 const FUNDE_VD_G = 0.15, fundeVd = (g) => Math.min(1, Math.max(0, g) / FUNDE_VD_G);
 const DILATADA_V0 = 60;                        // mL, volumen sin tensión del VI en la dilatada (ilustrativo)
@@ -72,7 +72,7 @@ const restrictivo = (g) => Math.max(0, (g - FALLO_DEFECTO) / (1 - FALLO_DEFECTO)
 // llenado rápido: con PAI 28 la E no subía (E/A 1,38) y el TDE era de 220 ms. Con 1,3 (τ del modelo ~33 ms frente a ~28 del
 // normal) y una cámara algo más rígida (el TDE <140 ms con la FE baja es la PTDVI alta, y el TDE depende de la relajación y la
 // rigidez del VI: Nagueh 2025 p. 547, Tabla 4) sale el llenado restrictivo con la PAI alta (grado 3, p. 554). Valores ilustrativos
-const RELAJACION_FER = 1.3, RIGIDEZ_DIL = 1.05;
+const RELAJACION_FER = 1.3, RIGIDEZ_DIL = 1.08;
 const coma = (x, d = 0) => x.toFixed(d).replace('.', ',');
 // HP crónica (cor pulmonale crónico): la resistencia pulmonar sube despacio y el VD se adapta (más contractilidad y pared
 // más gruesa, mioVd), hasta que se dilata y falla. Es el mismo recorrido que la sobrecarga de presión del Atlas · 14

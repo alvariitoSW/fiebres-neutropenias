@@ -53,14 +53,14 @@ export const BASE = {
   // v3m (mv-eco paso 6, 01/11/2026), MEDIDO Y NO APLICADO: con Ees 0,22 y picoAurAntes 0 (abajo) el gradiente VD−AD telediastólico
   // del TEP/HP baja a ≤1,5 mmHg y el VD del TEP masivo vuelve a llenarse en la diástole (sin IT diastólica), pero sube la PVC normal
   // (4,2 → 4,6, fuera del contrato) y cambia la diástole izquierda del atlas. Ver autonomo/bloques/mv-eco/paso6/v3m-informe.md
-  ad: { ees: 0.70, v0: 8,  a: 0.13, b: 0.080 },   // v0 5 → 8: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo
+  ad: { ees: 0.22, v0: 2,  a: 0.13, b: 0.080 },   // v0 5 → 8: solo desplaza el volumen (la presión depende de V−V0); la AD nunca baja de los 15 mL del dibujo
   // tiempos de activación (s). Las sístoles escalan con √(periodo).
   pr: 0.16, tsAur: 0.10, tsVen: 0.45, fSubida: 0.62, qSubida: 0.55,
   // v3m: picoAurAntes (s) = la contracción auricular llega a su pico ese tiempo antes de la sístole ventricular (pr) y se relaja durante
   // la isovolumétrica: la onda A acaba al cerrarse la tricúspide y empezar la IT (Mukherjee 2025, ASE, PDF p. 16 y 18: TCO = del final de la
   // A al comienzo de la E = duración del chorro de IT; onda c en la contracción isovolumétrica, Marino cap. 8, PDF p. 53). null = desde el
   // comienzo del latido (60 ms antes del QRS mecánico), como siempre. anilloAd: descenso x′ de la AD (ver presiones). Los dos, inertes
-  picoAurAntes: null, anilloAd: 0,
+  picoAurAntes: 0, anilloAd: 0,
   // relajación del VI: multiplica la constante de tiempo de la cola exponencial de su activación (1 = normal; >1 =
   // relajación lenta, como en la disfunción diastólica). Ver activacionVi
   relajacion: 1,
@@ -398,7 +398,8 @@ export function crearMotor(ajustes = {}) {
 
   // comienzo de la activación auricular en el latido (s; k = √(T/T70)). picoAurAntes = null: al empezar el latido, como siempre;
   // un número: la activación auricular llega a su pico ese tiempo antes del QRS mecánico (pr)
-  const inicioAur = (k) => p.picoAurAntes == null ? 0 : Math.max(0, p.pr - p.picoAurAntes - 0.5 * p.tsAur * k);
+  const subAur = (k) => (p.fSubidaAur ?? 0.5) * p.tsAur * k, bajaAur = (k) => (1 - (p.fSubidaAur ?? 0.5)) * p.tsAur * k;
+  const inicioAur = (k) => p.picoAurAntes == null ? 0 : Math.max(0, p.pr - p.picoAurAntes - subAur(k));
   function presiones() {
     const T = periodo, k = Math.sqrt(T / (60 / 70));
     const tl = s.tLatido;
@@ -406,7 +407,7 @@ export function crearMotor(ajustes = {}) {
     // (tv0), la activación no baja y el VI no se llena (FC 178: PAM 26). Por encima de ~133 lpm la sístole se acorta más deprisa
     // que √T (la relajación se acelera con la frecuencia y con el simpático: fisiología general; el 0,45 s, ilustrativo)
     const kV = k * Math.min(1, T / T_SIS_APRIETA);
-    const eAur = activacion(tl - inicioAur(k), 0.5 * p.tsAur * k, 0.5 * p.tsAur * k);
+    const eAur = activacion(tl - inicioAur(k), subAur(k), bajaAur(k));
     const tv0 = tl < p.pr ? tl + T - p.pr : tl - p.pr;   // misma continuidad de la cola que en eVi (abajo)
     const eVen = activacion(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida);
     // el VI puede relajarse más despacio que el VD (relajacion): solo se alarga la caída de su activación
@@ -616,7 +617,9 @@ export function crearMotor(ajustes = {}) {
     if (s._aoCerro && s.vMit) s._mitAbrio = true;
     let f;
     if (!s._aoAbrio) {
-      f = s.tLatido < p.pr ? 'A' : 'B';
+      // v4m: con el reloj nuevo (picoAurAntes) la onda A acaba cuando cierra la mitral, no en el QRS (Mukherjee 2025 p. 16 y 18): la fase A
+      // sigue mientras la mitral esté abierta tras pr, y la B (isovolumétrica) empieza al cerrarse
+      f = (s.tLatido < p.pr || (p.picoAurAntes != null && s.vMit)) ? 'A' : 'B';
       // FUSIÓN E-A: si la mitral abre ya dentro de la contracción auricular (taquicardia: la relajación del VI no termina
       // antes de la P), lo que pasa por ella cuando la aurícula ya se relaja (pasada la duración de su activación) es llenado
       // ventricular, no onda A: F/G. Así la E se mide como el pico precoz de la onda fundida (Nagueh 2025, p. 547 (11) y

@@ -15,7 +15,7 @@ export const PRESETS = {
   hfref: { nombre: 'Hipocontráctil', ees: 1.0, rigidez: 1, poscarga: 1, volumen: 600 },
   hfpef: { nombre: 'Rígido', ees: BASE.vi.ees, rigidez: 1.7, poscarga: 1.25, volumen: 700 },
   presion: { nombre: 'Sobrecarga de presión', ees: BASE.vi.ees, rigidez: 1.3, poscarga: 1.9, volumen: 0 },
-  im: { nombre: 'Sobrecarga de volumen (IM)', ees: BASE.vi.ees, rigidez: 0.7, poscarga: 1, volumen: 500, eroa: 0.4, v0: 40 },
+  im: { nombre: 'Sobrecarga de volumen (IM)', ees: BASE.vi.ees, rigidez: 0.7, poscarga: 1, volumen: 500, eroa: 0.6, v0: 40 },
 };
 
 /** Motor asentado con unos ajustes. Puro: lo usan la figura y las pruebas. */
