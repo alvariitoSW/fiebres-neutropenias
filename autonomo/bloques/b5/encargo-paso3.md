@@ -33,3 +33,35 @@ hepatocito, añadiendo NH₃/urea/glutamina sin cambiar lo que hay), ni los huec
 ## «Hecho» del paso 3
 `jueces --modelo <clave> --forma` en verde; prueba propia con barrido sin fallos; lista R2 tachada; 0 errores de
 consola; profesor ≥8,75 (meta 9,5 en modelo vivo nuevo) y auditor sin graves.
+
+## Precisiones tras la revisión del encargo (Explore, 01/11)
+- **Nombres**: `<m>` = `hepatocito` | `termostato`; `<clave>` = `<m>-vivo` (carpeta `js/modules/libros/<clave>/`,
+  prueba `autonomo/pruebas/<clave>.mjs`, datos `js/data/<clave>-data.js`); vista `hepatocitoVivo` | `termostatoVivo`
+  (ya en `MODELOS`); atributo `data-hepatocito-vivo` | `data-termostato-vivo` (sale solo de la clave de `modelosVivos`;
+  `home/index.js` no se toca). Prefijo de ids propio y único: `hpv-` | `tmv-` (renombra `#hep-svg` y demás; el juez
+  mira ids repetidos). Gancho de prueba `window.__hpv` | `window.__tmv`.
+- **Archivos**: fragmento `<clave>.html` (`data-include`, sin `<html>`; molde `iones-vivos.html`) e `index.js` con
+  `init()` que devuelve `{ abrir(estado, origen) }` (molde `iones-vivos/index.js`).
+- **Huecos que faltaban**: `vivos: [ … ]` de `marinoAbdomen` en `libros/index.js` (pon el id de tu tarjeta,
+  `hpv-menu-libros` | `tmv-menu-libros`). La tarjeta lleva `data-lib-corto`, `data-lib-caps`, `data-especialidad="libros"`,
+  `data-view="<vista>"` y `data-<clave>=""` (vacío, obligatorio). Entradas de jueces: forma → `raiz`, `enlace`, `clave`,
+  `modo: { explorar }` (sin Mayéutica aún) y `estados` (todos los presets/estados); movil → selector de la frase viva;
+  topes → `noPulsar`.
+- **Botones en las fichas**: `class="especialidad-link" data-especialidad="libros" data-view="<vista>"
+  data-<clave>="<estado>"`, ≤6, en las fichas que diga la lista R2.
+- **Rutas**: imports `../../../js/core/…` → `../../../core/…`; datos → `../../../data/<clave>-data.js`; `PDF` e `IMG`
+  sin `../../` (`'docs/…pdf'`, `'js/modules/libros/img/…'`, como `iones-vivos-data.js`). Fuera el `<script>` de Motion
+  y la `motionAqui()` del termostato: solo `cargarMotion()` de `core/motion.js`.
+- **Partículas (solo hepatocito)**: NH₃ y glutamina se dan de alta en `js/data/formas-iones.js` (`FORMAS_IONES`; `urea`
+  ya existe; no cambies lo que hay) y el dibujo pasa a `svgParticula()`/`leyendaParticulas()` de `js/core/particulas.js`
+  (no se toca `particulas.js`). El termostato ya las usa.
+- **Molde de la prueba**: las de la maqueta (`autonomo/bloques/b5/herramientas/<m>-b.mjs` y `termostato-b-desborde.mjs`)
+  sobre la app, con el formato de `iones-vivos.mjs` para `--modelo`. El **solape de `<text>`** (getBBox) debe cazar
+  primero los 3 roces conocidos del hepatocito (Astrocito/«Otras vías», «glutamina + agua», línea del TIPS) y luego
+  quedar a 0. Rangos de paciente posible: los de la lista R2 (si falta uno: PA 50-220/30-130, FC 30-200, T 22-44 °C,
+  amonio 0-≥300 µmol/L con «≥» al tope).
+- **Versión**: `jueces` exige el mapa al día. Ejecuta `node autonomo/version.mjs 20261101-90` (hepatocito) o
+  `20261101-91` (termostato) en tu carpeta y súbelo; el conflicto del mapa al juntar lo resuelve el director regenerándolo.
+- La maqueta no se toca; los arreglos (roces, pendientes) se hacen en el destino. Mantén lo que pidió Justicia en la
+  elección (`estado.edema` manda en el paso 4; chips `ilustrativo`/«opinión del autor» en 60-150 y 120; en el
+  termostato, `ilustrativo` en FC/CK por temperatura, 4,5 °C/h y tope 42 °C con su fuente).
