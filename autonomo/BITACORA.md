@@ -387,6 +387,31 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
+y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
+todo» de la 5.ª: toda vuelta cuenta, rejuicio solo bajo 9,5, manda la nota del día del voto (las ramas sin fusionar
+suben a 9,5), nota atada a la receta y anclas de 10, sin fichas a ciegas, registro `bajo-95.md`, solo la maqueta
+elegida llega a 9,5. Tareas nuevas en el tablero: `anclas-profesor` y `bajo-95`.
+
+**✅ 01/11 · Nota de corte del profesor: 9,5 (meta 10)** (decisión tuya, aplicada directa a `main`). Vale en todo lo
+que sigue (`b4`, `b5`, `b6a`, `b6b`, pulmón, eco…) y en lo no juzgado; las 55 fichas con Estudiar no se rejuzgan ahora
+(repaso futuro). Nueva **R10 · Receta del profesor**: criterios de 9,5 y 10 por punto antes de construir; en cada
+juicio, qué falta para 9,5 (o para 10), en la tabla «Vueltas»; tope de 3 vueltas y después al Congreso, que decide o te
+consulta. El gasto extra lo pagas tú; Hacienda no baja la nota. Cambiados: REGLAS §4.8 (R7 y R10), voto del Consejo
+(punto 3), §7 «Cómo se juzga», `CLAUDE.md` §10 y el tablero.
+
+**🆕 01/11 · AI Engineering Hub** (catálogo de ≈110 tutoriales de IA; Consejo 3.ª, acta
+`autonomo/consejo/2026-11-01-3.md`). Nada para la app. El Consejo propone dos mejoras técnicas de los jueces, sin
+tocar la app: **H3** juez que comprueba los enlaces `#page=N` (≈1 M) y **H1** rúbrica por criterio para el auditor
+ciego (≈0,3 M); H2 (Docling para tablas), solo prueba si sobra. Dime si las frenas; si no, entran en la cola.
+
+**🆕 01/11 · El «superagente» de DeepSeek** (tu pregunta: «qué podemos hacer con este repo»; Ciencia + Consejo 2.ª,
+acta `autonomo/consejo/2026-11-01-2.md`, informe `autonomo/ideas/ingenieria-inversa/dsh-superagent.md`, página
+https://claude.ai/artifact/KGS5TExbpZnC7d22LEqMNX). No sirve para la app ni se instala (5-0). Sus ideas sobre cómo
+molestarte lo mínimo, sí. Elige: **paquete `reglas-dsh`** (I1, I2, I3, I5, I7, I8 como aviso, I10; ≈1,7 M) A todo /
+B algunas / C nada · **I9** antes y después en las PR visuales (≈1,5-2 M) sí/no · **I11** «Lo que te toca hoy» en la
+app (≈3-5 M) ahora / tras la reforma / no.
+
 **⏰ Recordatorio: el PDF de Semiología** (el usuario, 01/11: «no tengo el PDF todavía. Déjalo en "Esperando algo tuyo" y recuérdamelo»). Vale el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica*, o los de exploración cardiovascular de Walker (*Clinical Methods*) o Surós/Bates. Con él en `docs/`, se monta el objetivo «Historia clínica» del PIF.
 
 **Resuelto el 01/11 (tus decisiones, puntos 3-5)**: eco paso 5, opción A (≈35 M); PR #2 abierta y aparcada para la fase B; lo opcional (4, 5, 6, 7, 8, 9 y 10 de la lista del Congreso), aprobado con la recomendación del Consejo (las candidatas del 04/11 las decide el Consejo); lo de mirar en el móvil lo miras tú. Sigue esperando de ti: **el PDF de Semiología** y **pegar los tuits #26-28** en la Bandeja (x.com da 402).
@@ -585,7 +610,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
-- 2026-11-01 · **Día libre de Marino** (al Congreso, 16:34): 39 % de la semana hasta el lunes 14:00 para Marino, sin tope de carriles. 12 sesiones: eco, cierre del bloque 3, b4 (4D iones), 4A ácido-base, 4B riñón, 4C agua, modelos del b5 y del b6a, plan de Estudiar del b5 y del b6a, b6b (mapa y maquetas) y rejuicio del corazón del bloque 3. Vídeos de la app y de ingeniería inversa enviados.
+- 2026-11-01 · **Día libre de Marino** (al Congreso, 16:34): 39 % de la semana hasta el lunes 14:00 para Marino, sin tope de carriles. 12 sesiones: eco, cierre del bloque 3, b4 (4D iones), 4A ácido-base, 4B riñón, 4C agua, modelos del b5 y del b6a, plan de Estudiar del b5 y del b6a, b6b (mapa y maquetas) y rejuicio del corazón del bloque 3; a las 17:09, +8 carriles con el Estudiar de los grupos 5A-5D y 6A-6D (planes ya escritos), 18 sesiones; los modelos del b5 y del b6a dirigen y juntan sus grupos. Vídeos de la app y de ingeniería inversa enviados.
 - 2026-11-01 · **Más rápido** (REGLAS §4.17, «Haz A, B y C»): cola en paralelo (4 sesiones: eco, pulmón, `marino-unido`, mapa y maquetas del `b5`), el Consejo sube techos hasta +25 % sin pararte, papeleo mínimo. R1 y R2 de realismo, en §4.16.
 - 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).
 - 2026-11-01 · **Atlas: los 30 capítulos con su texto** (`mr` por la PR #77, Consejo 4-0).
