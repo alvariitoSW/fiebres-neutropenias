@@ -331,7 +331,7 @@ export const MAYEUTICA_CRANEO_2 = {
                 'La hemicraniectomía: Marino solo la nombra en la hemorragia tras el tPA (' + pag(40, 'pág. 40') + '). En el infarto maligno es <span class="hl">otra fuente</span>, DESTINY II (en mayores de 60 años mejoró la supervivencia sin discapacidad grave, 38 % frente a 18 %, pero la mayoría de los supervivientes necesitó ayuda).',
                 'Con GCS 8 la consciencia no protege la vía aérea: <span class="hl">intubación y ventilación</span>, con juicio por la presión intracraneal (' + pag(35, 'pág. 35') + ').'],
               explicacion: 'Marino da el primer y el tercer punto (' + pag(41, 'pág. 41') + ' y ' + pag(35, 'pág. 35') + '); el segundo es de otra fuente.',
-              nota: '<b>Otra fuente.</b> El dato de la hemicraniectomía es de ' + DESTINY + ' (solo el resumen). DESTINY II aleatorizó «within 48 hours» del inicio: es el diseño del estudio, no una indicación de plazo. El grado de recomendación y la ventana horaria quedan como <b>fuente pendiente</b>.' } },
+              nota: '<b>Otra fuente.</b> El dato de la hemicraniectomía es de ' + DESTINY + ' (solo el resumen). DESTINY II aleatorizó «within 48 hours» del inicio: así planteó el ensayo, no es una indicación de plazo. El grado de recomendación y la ventana horaria quedan como <b>fuente pendiente</b>.' } },
         ],
         lleva: [
           'Dos edemas, citotóxico y vasogénico: cuanto mayor el infarto, más edema.',
