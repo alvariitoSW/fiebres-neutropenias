@@ -25,18 +25,18 @@ export const MAYEUTICA_VNI = {
           { t: 'Con un casco transparente durante horas; la CPAP del sueño no tuvo relación con la VNI aguda', porque: `El casco es una alternativa actual, rara en adultos (${p(80)}); la historia pasa por la boquilla y por la mascarilla de la CPAP (${p(76)}).` }],
         explicacion: `La VNI se introdujo en los años 40 <span class="hl-azul">por una boquilla, solo 10-15 minutos</span> (IPPB). La CPAP de los años 80 se hizo popular en la apnea obstructiva del sueño, <span class="hl-azul">mejoró las mascarillas</span>, y en los 90 llegó al fallo respiratorio agudo (${p(76)}).` + enFicha(M, 'nep-historia-vni') },
       { id: 'vni-g2', corto: 'qué sube con la CPAP', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'nep-cpap-presion', origen: 'ficha; el monitor, ilustrativo',
-        modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: sube el mando PEEP (hace de CPAP) de 0 a 10'),
+        modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: abre MANDOS, sube la PEEP de 0 a 10 y mira el panel del corazón (VS 35 → 38)'),
         enunciado: 'Una paciente respira con CPAP de 10 cmH₂O. ¿Qué sube con esa presión y qué no sube?',
         puntos: [
           `<span class="hl-verde">Sube el volumen pulmonar al final de la espiración</span> (la capacidad residual funcional) y evita el colapso de las vías pequeñas y de los alvéolos (${p(77)}).`,
-          `<span class="hl-rojo">No sube el volumen tidal</span>: la CPAP no aumenta cada respiración, y por eso la fuente dice que da solo un soporte de presión limitado (${p(77)}).`],
-        explicacion: `La presión se crea con un flujo constante de aire u oxígeno, habitualmente de <span class="hl-azul">5-10 cmH₂O</span> (${p(77)}). Con el modelo, sube el mando PEEP: la presión de la vía aérea queda fija, no empuja cada respiración.` + enFicha(M, 'nep-cpap-presion') },
+          `<span class="hl-rojo">No sube el volumen tidal</span>: la CPAP no aumenta cada respiración, y la fuente dice que da solo un soporte de presión limitado (${p(77)}).`],
+        explicacion: `La presión se crea con un flujo constante de aire u oxígeno, habitualmente de <span class="hl-azul">5-10 cmH₂O</span> (${p(77)}). En el modelo, al subir la PEEP el efecto que se ve es en el corazón (VS 35 → 38 mL, monitor ilustrativo), no un volumen mayor en cada respiración.` + enFicha(M, 'nep-cpap-presion') },
       { id: 'vni-g3', corto: 'para qué se usa la CPAP', tipo: 'test', fuente: 'nep-cpap-usos',
         enunciado: '¿Para qué se usa sobre todo la CPAP?',
         opciones: [
           { t: 'Es la primera línea del fallo respiratorio agudo hipercápnico, porque da volumen en cada respiración', porque: `La CPAP no aumenta el volumen tidal y rara vez se usa en el fallo respiratorio agudo (${p(77)}). Con esa idea la pondrías a un EPOC que necesita ventilar.` },
           { t: 'Apnea del sueño y edema pulmonar cardiogénico; rara vez en el fallo respiratorio agudo', ok: true },
-          { t: 'Casi solo el fallo respiratorio agudo; en la apnea del sueño es insuficiente porque el colapso es inspiratorio', porque: `El uso principal es la apnea obstructiva del sueño: la presión evita el colapso inspiratorio de la faringe (${p(77)}). Dejarías sin tratar la causa de la obstrucción.` }],
+          { t: 'Sobre todo en el fallo respiratorio agudo; en la apnea del sueño resulta insuficiente porque el colapso es inspiratorio', porque: `El uso principal es la apnea obstructiva del sueño: la presión evita el colapso inspiratorio de la faringe (${p(77)}). Dejarías sin tratar la causa de la obstrucción.` }],
         explicacion: `El uso principal es la <span class="hl-azul">apnea obstructiva del sueño</span>; también ha tenido éxito en el <span class="hl-azul">edema pulmonar cardiogénico agudo</span>, y <span class="hl-rojo">rara vez se usa en el fallo respiratorio agudo</span> (${p(77)}).` + enFicha(M, 'nep-cpap-usos') },
       { id: 'vni-g4', corto: 'IPAP y PEEP', tipo: 'test', fuente: 'nep-bipap', origen: 'ficha; el pico de 15 del monitor, ilustrativo',
         modeloVivo: pv('psv-disparo', '🫁 Presión de soporte: pico 15 = PEEP 5 + soporte 10'),
@@ -59,10 +59,10 @@ export const MAYEUTICA_VNI = {
         modeloVivo: pv('psv-disparo', '🫁 Con el mismo soporte, el volumen lo decide el paciente'),
         enunciado: 'En presión de soporte, ¿quién determina el tiempo de insuflación y el volumen tidal?',
         opciones: [
-          { t: 'El respirador: fijas un tiempo inspiratorio y un volumen y los entrega igual en cada respiración', porque: `Eso es la ventilación controlada. En la PSV es el paciente quien los determina (${p(78)}). Con esa idea no esperarías que el volumen cambie al cambiar su pulmón.` },
-          { t: 'El médico, con el soporte y la frecuencia que programa', porque: `El soporte fija solo la presión; el tiempo y el volumen salen del esfuerzo y de la demanda de flujo del paciente (${p(78)}).` },
+          { t: 'El respirador: fijas un tiempo inspiratorio y un volumen y los entrega igual en cada respiración', porque: `Eso es la ventilación controlada. En la PSV es el paciente quien los determina (${p(79)}). Con esa idea no esperarías que el volumen cambie al cambiar su pulmón.` },
+          { t: 'El médico, con el soporte y la frecuencia que programa', porque: `El soporte fija solo la presión; el tiempo y el volumen salen del esfuerzo y de la demanda de flujo del paciente (${p(79)}).` },
           { t: 'El propio paciente, con su esfuerzo y su demanda de flujo', ok: true }],
-        explicacion: `La interacción permite que <span class="hl-azul">el paciente determine el tiempo de insuflación y el volumen tidal</span>, promueve la sincronía paciente-ventilador y reduce el trabajo respiratorio (${p(78)}). Para qué se reserva la PSV (asincronía y pruebas de respiración espontánea) queda en «Para profundizar».` + enFicha(M, 'nep-psv-uso') },
+        explicacion: `La interacción permite que <span class="hl-azul">el paciente determine el tiempo de insuflación y el volumen tidal</span>, promueve la sincronía paciente-ventilador y reduce el trabajo respiratorio (${p(79)}). Para qué se reserva la PSV (asincronía y pruebas de respiración espontánea) queda en «Para profundizar».` + enFicha(M, 'nep-psv-uso') },
       { id: 'vni-g7', corto: 'PAV frente a PSV', tipo: 'test', fuente: 'nep-pav',
         enunciado: 'La ventilación asistida proporcional (PAV) adapta la presión al paciente. Según Marino, ¿qué ventaja demostrada tiene frente a la presión de soporte?',
         opciones: [
@@ -80,7 +80,7 @@ export const MAYEUTICA_VNI = {
       { id: 'vni-g9', corto: 'el casco', tipo: 'test', fuente: 'nep-casco',
         enunciado: 'Existe una alternativa a la mascarilla ajustada: una capucha transparente con sello blando en el cuello. ¿Qué muestran los estudios que la comparan con la mascarilla facial?',
         opciones: [
-          { t: 'Más intubaciones y más muertes que con la mascarilla, por eso se dejó de usar en adultos', porque: `Muestran lo contrario: menos intubaciones e incluso menos muertes con el casco; si no se usa en adultos es por otra razón (${p(80)}). Descartarías una opción útil.` },
+          { t: 'Más intubaciones y más muertes que con la mascarilla, por eso se dejó de usar en adultos', porque: `Muestran lo contrario: menos intubaciones e incluso menos muertes con el casco; la fuente no explica por qué se usa poco (${p(80)}). Descartarías una opción útil.` },
           { t: 'Resultados iguales a la mascarilla, pero con más fugas', porque: `La fuente no habla de fugas: dice menos intubaciones e incluso menos muertes con el casco (${p(80)}).` },
           { t: 'Menos intubaciones e incluso menos muertes, aunque rara vez se usa en adultos', ok: true }],
         explicacion: `El casco (<i>helmet</i>) muestra <span class="hl-verde">menos intubaciones e incluso menos muertes</span> que la mascarilla facial, pero <span class="hl-rojo">rara vez se usa en adultos</span> (${p(80)}).` + enFicha(M, 'nep-casco') }
@@ -98,7 +98,7 @@ export const MAYEUTICA_VNI = {
         opciones: [
           { t: 'Que ninguna máquina lo compense, por lo que cualquier fuga obliga a pasar a CPAP', porque: `La mayoría de las máquinas de BiPAP pueden compensar las fugas (${p(79)}). Cambiarías de método sin necesidad.` },
           { t: 'Que la compense la mayoría de las máquinas, con la mascarilla ajustada', ok: true },
-          { t: 'Que sea irrelevante: no hace falta ajustar la mascarilla', porque: `Las mascarillas faciales deben ser ajustadas para minimizar fugas (${p(79)}). Sin ajuste, la presión se pierde por el lateral.` }],
+          { t: 'Que la compense subiendo la PEEP hasta que deje de fugar', porque: `Las presiones altas promueven fugas (${p(77)}) y la mascarilla debe ajustarse para minimizarlas (${p(79)}); subir la PEEP incomodaría más a la paciente.` }],
         explicacion: `Las mascarillas deben ser ajustadas para minimizar fugas, <span class="hl-azul">aunque la mayoría de las máquinas de BiPAP pueden compensarlas</span> (${p(79)}).` + enFicha(M, 'nep-mascarillas') },
       { id: 'vni-e3', corto: 'cómo ajusta la PAV', tipo: 'test', fuente: 'nep-pav',
         enunciado: '¿Cómo ajusta la PAV la presión inspiratoria al paciente?',
@@ -107,13 +107,13 @@ export const MAYEUTICA_VNI = {
           { t: 'Cortando la insuflación al 25 % del flujo pico', porque: `Ese es el criterio de fin de la PSV (${p(78)}); la PAV usa la mecánica respiratoria medida (${p(79)}).` },
           { t: 'Midiendo periódicamente la distensibilidad y la resistencia', ok: true }],
         explicacion: `La PAV ajusta la presión inspiratoria pico al trabajo respiratorio con <span class="hl-azul">mediciones periódicas de distensibilidad y resistencia</span>, realizadas de forma propietaria por ventiladores capaces de administrarla (${p(79)}).` + enFicha(M, 'nep-pav') },
-      { id: 'vni-e4', corto: 'corte al 25 %', tipo: 'test', fuente: 'nep-psv-4-puntos', origen: 'ficha; el flujo de 60 L/min, ilustrativo',
-        enunciado: 'En una respiración con presión de soporte el flujo inspiratorio pico fue de 60 L/min. ¿Cuándo termina la insuflación?',
+      { id: 'vni-e4', corto: 'corte al 25 %', tipo: 'test', fuente: 'nep-psv-4-puntos', origen: 'ficha; el flujo de 80 L/min, ilustrativo',
+        enunciado: 'En una respiración con presión de soporte el flujo inspiratorio pico fue de 80 L/min. ¿Cuándo termina la insuflación?',
         opciones: [
-          { t: 'Cuando el flujo cae a 15 L/min, el 25 % del pico', ok: true },
-          { t: 'Cuando el flujo cae a 3 L/min, el 5 % del pico', porque: `El corte es al 25 % del pico (${p(78)}). Con el 5 % la insuflación se alargaría y el paciente lucharía contra el respirador.` },
-          { t: 'Al cabo de un tiempo inspiratorio fijo que programas', porque: `En PSV el paciente determina el tiempo de insuflación; el tiempo fijo es de otros modos (${p(78)}).` }],
-        explicacion: `El 25 % de 60 son <span class="hl-rojo">15 L/min</span>: la insuflación termina cuando el flujo del paciente cae a ese valor (${p(78)}).` + enFicha(M, 'nep-psv-4-puntos') }
+          { t: 'Cuando el flujo cae a 20 L/min, el 25 % del pico', ok: true },
+          { t: 'Cuando el flujo cae a 4 L/min, el 5 % del pico', porque: `El corte es al 25 % del pico (${p(78)}). Con el 5 % la insuflación se alargaría y ${DED} El paciente podría luchar contra el respirador.` },
+          { t: 'Al cabo de un tiempo inspiratorio fijo que programas', porque: `En PSV el paciente determina el tiempo de insuflación; el tiempo fijo es de otros modos (${p(79)}).` }],
+        explicacion: `El 25 % de 80 son <span class="hl-rojo">20 L/min</span>: la insuflación termina cuando el flujo del paciente cae a ese valor (${p(78)}).` + enFicha(M, 'nep-psv-4-puntos') }
     ],
     profundizar: [
       { id: 'nep-psv-uso', titulo: 'Para qué se reserva la presión de soporte (asincronía y pruebas de respiración espontánea)' }
@@ -128,16 +128,16 @@ export const MAYEUTICA_VNI = {
               opciones: [
                 { t: 'PAV: ajusta la presión a su mecánica, que es peor en el edema', porque: `No hay evidencia de que la PAV sea superior a la PSV (${p(79)}); no es una indicación del edema.` },
                 { t: 'CPAP, que ha tenido éxito en el edema pulmonar cardiogénico agudo', ok: true },
-                { t: 'Ninguno: el edema agudo exige intubación inmediata porque la CPAP no hace nada en el pulmón húmedo', porque: `La CPAP ha tenido éxito en el edema pulmonar cardiogénico agudo (${p(77)}). Intubarías sin necesidad a una paciente despierta y cooperadora.` }],
+                { t: 'BiPAP 30/15 desde el inicio: cuanta más presión, antes mejora el edema', porque: `Lo habitual es pico 10-20 y PEEP 5-10; 30/15 queda fuera, se tolera mal y promueve fugas (${p(77)}). La CPAP ya ha tenido éxito en el edema (${p(77)}).` }],
               explicacion: `La CPAP <span class="hl-verde">ha tenido éxito en el edema pulmonar cardiogénico agudo</span> (${p(77)}); sus razones se explican en la ficha siguiente.` + enFicha(M, 'nep-cpap-usos') } },
           { momento: 'CPAP 10', datos: { CPAP: '10 cmH₂O por mascarilla', 'Presión pico y media en el monitor (ilustrativo)': '10 y 10 cmH₂O' }, nuevo: ['CPAP', 'Presión pico y media en el monitor (ilustrativo)'],
             pregunta: { id: 'vni-c2', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'nep-cpap-presion', origen: 'ficha; las cifras del monitor, ilustrativas',
-              modeloVivo: pv('cpap-eap', '🫁 CPAP 10: sube el mando PEEP de 0 a 10'),
-              enunciado: 'Herminia lleva CPAP de 10. En el monitor del modelo (sube el mando PEEP) la presión pico y la media valen 10. ¿Qué hace la presión durante el ciclo y cómo se produce?',
+              modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: abre MANDOS, sube la PEEP de 0 a 10 y mira el panel del corazón (VS 35 → 38)'),
+              enunciado: 'Herminia lleva CPAP de 10. En el monitor (ilustrativo) la presión pico y la media valen 10. ¿Qué hace la presión durante el ciclo y cómo se produce?',
               puntos: [
-                `<span class="hl-azul">Constante en todo el ciclo</span>: la presión al final de la espiración es positiva respecto a la atmosférica y se mantiene durante toda la respiración (${p(77)}); por eso la pico y la media coinciden.`,
+                `<span class="hl-azul">Constante en todo el ciclo</span>: la presión al final de la espiración es positiva respecto a la atmosférica y se mantiene durante toda la respiración (${p(77)}). ${DED} Por eso la pico y la media coinciden en el monitor.`,
                 `<span class="hl-azul">Un flujo continuo</span> de aire u oxígeno, ajustado hasta lograr el nivel de presión deseado (${p(77)}).`],
-              explicacion: `Con CPAP no hay presión de soporte: la presión sube a 10 y ahí se queda. Es la diferencia con el bilevel, donde la presión pico sube desde la PEEP en cada insuflación (${p(77)}).` + enFicha(M, 'nep-cpap-presion') } },
+              explicacion: `La CPAP da solo un soporte de presión limitado: la presión sube a 10 y ahí se queda. Es la diferencia con el bilevel, donde la presión pico sube desde la PEEP en cada insuflación (${p(77)}).` + enFicha(M, 'nep-cpap-presion') } },
           { momento: 'El plan del residente', datos: { Plan: 'cuatro frases del residente' }, nuevo: ['Plan'],
             pregunta: { id: 'vni-c3', tipo: 'error', fuente: 'nep-cpap-presion · nep-pav', origen: 'ficha',
               enunciado: 'Plan del residente para Herminia. Hay dos errores. Encuéntralos.',
@@ -152,16 +152,16 @@ export const MAYEUTICA_VNI = {
               enunciado: 'A la media hora Herminia se arranca la mascarilla y tiene una úlcera en el puente de la nariz. ¿Cómo lo interpretas?',
               opciones: [
                 { t: 'Un fracaso de la CPAP por mala oxigenación: hay que intubar', porque: `Aquí no hay un dato de oxigenación peor; es intolerancia a la mascarilla (${p(79)}). Intubarías por un problema de interfaz.` },
-                { t: 'Un efecto habitual que no cuenta: la mascarilla debe tolerarse siempre, como en la apnea del sueño', porque: `La intolerancia a la mascarilla es una fuente significativa de intentos fallidos (${p(79)}); ignorarla pierde la VNI.` },
+                { t: 'Una alergia al material de la mascarilla, que obliga a suspender la VNI', porque: `Marino describe rotura de la piel por la mascarilla, sobre todo en el puente nasal, e intolerancia a la interfaz (${p(79)}), no una alergia; suspender la VNI dejaría sin soporte a quien se beneficia.` },
                 { t: 'Intolerancia a la mascarilla, causa del 18 % de los fracasos en un estudio', ok: true }],
               explicacion: `Las mascarillas pueden romper la piel, <span class="hl-rojo">especialmente en el puente de la nariz</span>, y la intolerancia explicó el <span class="hl-rojo">18 %</span> de los fracasos de la VNI en un estudio (${p(79)}). ${DED} Lo lógico es resolver la interfaz antes de abandonar el método.` + enFicha(M, 'nep-mascarilla-intolerancia') } },
           { momento: 'El giro · BiPAP', datos: { Presiones: 'IPAP 12 / EPAP 6 cmH₂O', Queja: '«respiro peor» (del paciente)' }, nuevo: ['Presiones', 'Queja'],
             pregunta: { id: 'vni-c5', tipo: 'test', fuente: 'nep-bipap', origen: 'ficha; los datos de Herminia, del caso',
               enunciado: 'Tras cambiar la interfaz pasan a BiPAP 12/6 y Herminia dice que respira peor. Las presiones están en el rango habitual. ¿Qué compruebas primero?',
               opciones: [
-                { t: 'Subes a 20/10 para asegurar volumen: con más presión siempre se ventila mejor', porque: `Presiones más altas se toleran mal y promueven fugas (${p(77)}). Empeoraría su malestar.` },
+                { t: 'Subes a 30/15 para asegurar volumen: con más presión se ventila mejor', porque: `Lo habitual es pico 10-20 y PEEP 5-10; presiones más altas se toleran mal y promueven fugas (${p(77)}). Empeoraría su malestar.` },
                 { t: 'Que dispare cada insuflación y que no haya fugas alrededor de la mascarilla', ok: true },
-                { t: 'Vuelves a la CPAP: la BiPAP no vale en el edema agudo', porque: `La fuente no dice que la BiPAP no valga; el modo depende de que el paciente dispare y de que no haya fugas (${p(77)}).` }],
+                { t: 'Vuelves a la CPAP porque la BiPAP no sirve en el edema agudo', porque: `En el edema CPAP y bilevel son igual de eficaces (${p(83)}): el cambio no resuelve un disparo fallido ni las fugas (${p(77)}), y la paciente seguiría respirando peor.` }],
               explicacion: `El modo es <span class="hl-azul">activado por el paciente</span> (cada insuflación empieza con su esfuerzo) y <span class="hl-azul">las presiones altas promueven fugas</span> (${p(77)}). ${DED} Comprobar el disparo y las fugas sale de ahí.` + enFicha(M, 'nep-bipap') } }
         ],
         lleva: [
@@ -184,7 +184,7 @@ export const MAYEUTICA_VNI = {
           { t: 'Una paciente con estado confusional agudo, que por ahora respira bien', porque: `El estado confusional agudo es una de las seis condiciones de la Tabla 26.1 que descartan la VNI (${p(81)}). Con la máscara puesta no protegería ni pediría ayuda.` },
           { t: 'Un paciente consciente con hematemesis y vómitos persistentes', porque: `Hematemesis o vómitos persistentes están en la lista de exclusión (${p(81)}); con una mascarilla ajustada se aspiraría.` },
           { t: 'Un EPOC hipercápnico somnoliento pero despertable y cooperador', ok: true }],
-        explicacion: `Es candidato quien responde <span class="hl-verde">NO a las seis condiciones</span> (${p(81)}). Basta que sea despertable y cooperador (${p(80)}).` + enFicha(U, 'nep-vni-candidatos') },
+        explicacion: `Es candidato quien responde <span class="hl-verde">NO a las seis condiciones</span> (${p(81)}). Aquí cuenta la condición de que sea despertable y cooperador (${p(80)}).` + enFicha(U, 'nep-vni-candidatos') },
       { id: 'vnu-g2', corto: 'primera línea', tipo: 'test', fuente: 'nep-hipercapnico',
         enunciado: '¿En qué fallo respiratorio es la VNI terapia de primera línea?',
         opciones: [
@@ -198,12 +198,12 @@ export const MAYEUTICA_VNI = {
           { t: 'Por la conciencia a la hora: si sigue obnubilado, ha fallado; la PaCO₂ se mide a las 6 horas', porque: `La alteración mental tarda más en resolverse y no debe usarse como indicación temprana (${p(81)}). Intubarías a quien aún mejora.` },
           { t: 'Por la PaCO₂ a la hora: si no baja al menos un 10 %; la conciencia tarda más y no vale', ok: true },
           { t: 'Por la frecuencia respiratoria a la hora, sin gasometría', porque: `La fuente mide la PaCO₂ a la hora y la compara con el valor basal (${p(81)}).` }],
-        explicacion: `Se comprueba la PaCO₂ tras <span class="hl-rojo">1 hora</span> y se compara con la basal: <span class="hl-rojo">no bajar al menos un 10 %</span> es respuesta pobre. La alteración mental puede tardar más y no sirve de señal temprana (${p(81)}).` + enFicha(U, 'nep-respuesta-1h') },
+        explicacion: `Se comprueba la PaCO₂ tras <span class="hl-rojo">1 hora</span> y se compara con la basal: <span class="hl-rojo">no bajar al menos un 10 %</span> (la fuente lo da como ejemplo: «p. ej., al menos 10 %») es respuesta pobre. La alteración mental puede tardar más y no sirve de señal temprana (${p(81)}).` + enFicha(U, 'nep-respuesta-1h') },
       { id: 'vnu-g4', corto: 'obesidad e hipoventilación', tipo: 'test', fuente: 'nep-sho',
         enunciado: 'Un paciente con síndrome de hipoventilación por obesidad entra en fallo hipercápnico agudo. ¿Qué dice Marino de la VNI?',
         opciones: [
           { t: 'No se usa: no hay estudios que la apoyen y se juzga en casos aislados', porque: `Pese a la escasez de estudios, la evidencia muestra que reduce la intubación (${p(82)}). La negarías a quien se beneficia.` },
-          { t: 'Eficaz para evitar la intubación; vale la misma PaCO₂ a la hora', ok: true },
+          { t: 'Eficaz para evitar la intubación; es razonable asumir la misma PaCO₂ a la hora', ok: true },
           { t: 'Es eficaz, pero se juzga por la oximetría y no por la PaCO₂', porque: `Se asume que vale la evaluación de la PaCO₂ a la hora (${p(82)}); la oximetría no la sustituye.` }],
         explicacion: `La evidencia, aunque escasa, muestra que la VNI <span class="hl-verde">reduce la intubación</span> en este síndrome; es razonable asumir que la <span class="hl-azul">PaCO₂ a la hora</span> también vale (${p(82)}).`,
         nota: `<b>Opinión del autor</b>: Marino da por «razonable» aplicar la evaluación a 1 h porque hay pocos estudios; no lo respalda un dato (${p(82)}).` + enFicha(U, 'nep-sho') },
@@ -218,18 +218,18 @@ export const MAYEUTICA_VNI = {
         enunciado: 'En el fallo respiratorio hipoxémico, ¿qué señal a la hora indica fracaso de la VNI y cuándo debe llevar a intubar?',
         opciones: [
           { t: 'Que el cociente PaO₂/FiO₂ no suba; intubar si la hipoxemia es grave', ok: true },
-          { t: 'Que la SpO₂ siga por debajo de 95 %; intubar siempre sin más', porque: `La fuente usa el cociente PaO₂/FiO₂ a la hora y no un corte de SpO₂ (${p(82)}). Intubarías a pacientes que aún mejoran.` },
+          { t: 'Que la SpO₂ siga por debajo de 95 %; intubar si no llega a ese valor', porque: `La fuente usa el cociente PaO₂/FiO₂ a la hora y no un corte de SpO₂ (${p(82)}). Intubarías a pacientes que aún mejoran.` },
           { t: 'Que la PaCO₂ no baje un 10 %; intubar solo si la conciencia empeora', porque: `Ese es el criterio del fallo hipercápnico (${p(81)}), y la conciencia no debe usarse como señal temprana.` }],
         explicacion: `Si el <span class="hl-rojo">PaO₂/FiO₂ no sube tras 1 hora</span> hay fracaso; es indicación de intubar si la hipoxemia es grave o la enfermedad de base tiene alta tasa de fracaso con VNI (${p(82)}).` + enFicha(U, 'nep-respuesta-pf') },
       { id: 'vnu-g7', corto: 'la PA sube con la insuflación', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-vni-edema',
-        modeloVivo: pv('cpap-eap', '🫁 Herminia: sube la CPAP de 0 a 10 y mira el volumen sistólico'),
+        modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: abre MANDOS, sube la PEEP de 0 a 10 y mira el panel del corazón (VS 35 → 38)'),
         origen: 'ficha; las cifras del monitor, ilustrativas',
         enunciado: 'En el edema agudo de pulmón, la presión arterial sube con cada insuflación a presión positiva y baja al volver la presión. ¿Qué mide el área sombreada de la curva y por qué sube?',
         puntos: [
           `<span class="hl-azul">El área sombreada es proporcional al volumen sistólico</span>: su aumento refleja más volumen eyectado (${p(83)}).`,
           `<span class="hl-rojo">La subida de la presión arterial no es un problema</span>: es un reflejo del mayor volumen sistólico del ventrículo izquierdo (${p(83)}).`,
           `<span class="hl-azul">El mecanismo es una menor poscarga del VI</span>, que se explica en la sección de rendimiento cardíaco (${p(83)}).`],
-        explicacion: `Con el modelo, el volumen sistólico pasa de 35 mL sin CPAP a 38 mL con CPAP 5 y sigue en 38 con 10 (monitor, ilustrativo).` + enFicha(U, 'nep-vni-edema') },
+        explicacion: `Con el modelo, el volumen sistólico pasa de 35 mL sin CPAP a 38 mL con CPAP (monitor, ilustrativo).` + enFicha(U, 'nep-vni-edema') },
       { id: 'vnu-g8', corto: 'HFNO frente a VNI', tipo: 'test', fuente: 'nep-hfno-vni · nep-hfno-preferido',
         enunciado: 'En el fallo respiratorio hipoxémico agudo, ¿cómo se compara el oxígeno nasal de alto flujo (HFNO) con la VNI en intubaciones, y cuál se prefiere?',
         opciones: [
@@ -246,13 +246,13 @@ export const MAYEUTICA_VNI = {
           `<span class="hl-azul">Compresión de las venas pulmonares</span>: la presión suele superar la de las venas y frena el llenado del VI (${p(85)}).`,
           `<span class="hl-azul">Menor presión transmural telediastólica</span>: la pleural positiva baja la presión a través de la pared; pesa más en el VD, de presión de cámara más baja (${p(85)}).`,
           `<span class="hl-rojo">Más resistencia vascular pulmonar</span>: frena la salida del VD y, si falla, el septo empuja al VI y reduce su llenado (${p(85)}-${p(86)}).`],
-        explicacion: `Es «una amenaza real para el llenado cardíaco», <span class="hl-rojo">magnificada por la hipovolemia</span>: evitarla es imperativo con presiones altas (${p(86)}). En el modelo sano, con PEEP 4 → 20 el volumen sistólico baja de 67 a 46 mL y el gasto de 4,9 a 3,8 L/min (monitor, ilustrativo).` + enFicha(U, 'nep-precarga-vias') },
+        explicacion: `Es «una amenaza real para el llenado cardíaco», <span class="hl-rojo">magnificada por la hipovolemia</span>: evitar la hipovolemia es imperativo con presiones altas (${p(86)}). En el modelo sano, con PEEP 4 → 20 el volumen sistólico baja de 67 a 46 mL y el gasto de 4,9 a 3,8 L/min (monitor, ilustrativo).` + enFicha(U, 'nep-precarga-vias') },
       { id: 'vnu-g10', corto: 'pulso paradójico', tipo: 'test', fuente: 'nep-pulso-paradojico-26 · nep-ec-26-1',
         enunciado: 'Un asmático agudo respira solo y su presión sistólica cae más de 10 mmHg en cada inspiración. ¿Qué es y por qué ocurre?',
         opciones: [
           { t: 'Pulso paradójico: el esfuerzo exagerado hace más negativa la pleural y sube la poscarga', ok: true },
           { t: 'Pulso paradójico invertido: la inspiración mejora el llenado del VI y la presión sistólica sube', porque: `El invertido es el aumento inspiratorio con presión positiva (${p(87)}); aquí la caída es por esfuerzo espontáneo.` },
-          { t: 'Normal: la presión sistólica nunca cambia con la respiración si el corazón es sano', porque: `La presión sistólica normalmente disminuye con la inspiración espontánea; lo anormal es la exageración (${p(87)}).` }],
+          { t: 'Normal: en el corazón sano la presión sistólica casi no cambia con la respiración', porque: `La presión sistólica normalmente disminuye con la inspiración espontánea; lo anormal es la exageración (${p(87)}).` }],
         explicacion: `Poscarga = presión de la cámara − presión pleural (Ec. 26.1). La pleural negativa de la inspiración espontánea <span class="hl-azul">aumenta la poscarga del VI</span>; si la caída es exagerada (<span class="hl-rojo">&gt;10 mmHg</span>), es pulso paradójico, como en el asma aguda (${p(87)}). Con presión positiva ocurre lo contrario: la poscarga baja y la sistólica sube.`,
         nota: `<b>Errata de la fuente</b>: el texto (${p(87)}) remite a la «Figura 26.7» para ese aumento inspiratorio; la que muestra la presión arterial con una insuflación es la 26.6 (${p(85)}). La ficha describe el hallazgo y no cita el número.` + enFicha(U, 'nep-pulso-paradojico-26') },
       { id: 'vnu-g11', corto: 'gasto cardíaco: 2 errores', tipo: 'error', fuente: 'nep-gasto · nep-corazon-papel',
@@ -269,7 +269,7 @@ export const MAYEUTICA_VNI = {
         opciones: [
           { t: 'Seguir con la VNI el máximo tiempo posible: intubar en extremis es igual de seguro que antes', porque: `Los retrasos de la intubación crean un riesgo innecesario: las intubaciones emergentes en pacientes in extremis pueden ser problemáticas (${p(88)}).` },
           { t: 'Que el beneficio debe verse a la hora y que el distrés persistente suma riesgo (P-SILI)', ok: true },
-          { t: 'Que la intubación nunca se justifica mientras el paciente respire espontáneamente', porque: `La intubación da mayor control ventilatorio y puede ser necesaria para frenar la progresión del fallo agudo (${p(88)}).` }],
+          { t: 'Que se puede esperar hasta 6 horas si la SpO₂ se mantiene', porque: `El beneficio debe verse tras 1 hora (${p(88)}); esperar más retrasa la intubación y expone al paciente a volúmenes espontáneos altos y a una intubación en extremis.` }],
         explicacion: `La evidencia de beneficio <span class="hl-rojo">debe ser evidente tras 1 hora</span>; el distrés persistente se asocia a volúmenes espontáneos altos, que pueden llevar a la lesión pulmonar autoinducida (P-SILI), y retrasar la intubación es un riesgo (${p(88)}).` + enFicha(U, 'nep-no-olvides-intubar') }
     ],
     examen: [
@@ -279,7 +279,7 @@ export const MAYEUTICA_VNI = {
           { t: 'Mal: bajó 7 mmHg, menos de lo esperable', porque: `El criterio de este capítulo es una bajada de al menos un 10 %, no de 10 mmHg; 7 mmHg son un 11,7 % (${p(81)}). Intubarías a un paciente que responde.` },
           { t: 'Bien: bajó el 11,7 %, más del 10 % que pide el capítulo', ok: true },
           { t: 'No se puede decir sin la conciencia: es el criterio principal a la hora', porque: `La alteración mental tarda más y no debe usarse como señal temprana (${p(81)}).` }],
-        explicacion: `(60 − 53) / 60 = <span class="hl-verde">11,7 %</span>, más del 10 % del cap. 26 (${p(81)}).`,
+        explicacion: `(60 − 53) / 60 = <span class="hl-verde">11,7 %</span>, más del 10 % del cap. 26 (${p(81)}), que lo da como ejemplo («p. ej., al menos 10 %»).`,
         nota: `<b>Las fuentes discrepan</b>: el cap. 23 (<a class="biblio-link" href="${PDF}#page=26" target="_blank" rel="noopener">pág. 26</a>) habla de reducir la PaCO₂ «en 10 mmHg». Con 60 → 53 los dos criterios se separan: se muestran las dos cifras y no se elige una.` + enFicha(U, 'nep-respuesta-1h') },
       { id: 'vnu-e2', corto: 'rechazan intubar', tipo: 'test', fuente: 'nep-vni-candidatos',
         enunciado: 'Los criterios de selección no se aplican a los pacientes que rechazan la intubación. ¿Qué proporción de los que reciben VNI la rechaza?',
@@ -315,8 +315,8 @@ export const MAYEUTICA_VNI = {
       { id: 'nep-poscarga', titulo: 'Qué es la poscarga: más que la resistencia sistémica' }
     ],
     casos: [
-      { id: 'c-vni-herminia2', titulo: 'Herminia, 76 años: la CPAP y su corazón', corto: 'Caso · Herminia (uso clínico)', sub: 'Continúa de la ficha anterior: CPAP 10 bien tolerada tras cambiar la interfaz',
-        paciente: { Edad: '76 años, mujer', Peso: '92 kg, 1,55 m (PBW 47,9 kg)', Antecedentes: 'hipertensión; en la ficha anterior, edema agudo de pulmón con CPAP', Motivo: 'sigue con CPAP 10 cmH₂O' },
+      { id: 'c-vni-herminia2', titulo: 'Herminia, 76 años: la CPAP y su corazón', corto: 'Caso · Herminia (uso clínico)', sub: 'Continúa de la ficha anterior: tras comprobar disparo y fugas con la BiPAP 12/6, vuelve a CPAP 10',
+        paciente: { Edad: '76 años, mujer', Peso: '92 kg, 1,55 m (PBW 47,9 kg)', Antecedentes: 'hipertensión; en la ficha anterior, edema agudo de pulmón con CPAP', Motivo: 'tras comprobar disparo y fugas con la BiPAP 12/6, vuelve a CPAP 10 cmH₂O: en el edema agudo CPAP y ventilación bilevel son igual de eficaces (pág. 83 del PDF)' },
         pasos: [
           { momento: 'Antes de seguir', datos: { Estado: 'despierta, colabora, sin vómitos ni convulsiones (del paciente)', Circulación: 'sin colapso (del paciente)' }, nuevo: ['Estado', 'Circulación'],
             pregunta: { id: 'vnu-c1', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-tabla-26-1', origen: 'ficha; el estado de la paciente, del caso',
@@ -326,21 +326,21 @@ export const MAYEUTICA_VNI = {
                 `<span class="hl-verde">Está despierta y colabora</span>: sin agitación grave, sin estado confusional agudo y sin coma con la vía aérea desprotegida (${p(81)}).`,
                 `<span class="hl-verde">Sin hematemesis ni vómitos persistentes</span> (${p(81)}).`],
               explicacion: `Responde NO a las seis condiciones, así que sigue siendo candidata (${p(81)}).` + enFicha(U, 'nep-tabla-26-1') } },
-          { momento: 'A los 15 minutos', datos: { 'Volumen sistólico (monitor, ilustrativo)': '35 → 38 mL', 'Gasto cardíaco (monitor, ilustrativo)': '3,5 → 3,6 L/min', Observación: 'la presión arterial sube con cada insuflación (del paciente)' }, nuevo: ['Volumen sistólico (monitor, ilustrativo)', 'Gasto cardíaco (monitor, ilustrativo)', 'Observación'],
+          { momento: 'A los 15 minutos', datos: { 'Volumen sistólico (monitor, ilustrativo)': '35 → 38 mL', 'Gasto cardíaco (monitor, ilustrativo)': '3,5 → 3,6 L/min', Observación: 'la presión arterial sube al poner la CPAP (del paciente)' }, nuevo: ['Volumen sistólico (monitor, ilustrativo)', 'Gasto cardíaco (monitor, ilustrativo)', 'Observación'],
             pregunta: { id: 'vnu-c2', tipo: 'test', fuente: 'nep-vni-edema', origen: 'ficha; las cifras del monitor, ilustrativas',
-              modeloVivo: pv('cpap-eap', '🫁 Herminia: CPAP de 0 a 10'),
+              modeloVivo: pv('cpap-eap', '🫁 Herminia con CPAP: abre MANDOS, sube la PEEP de 0 a 10 y mira el panel del corazón (VS 35 → 38)'),
               enunciado: 'Al poner CPAP 10 el monitor del modelo pasa de VS 35 a 38 mL y de GC 3,5 a 3,6 L/min. ¿Cómo lo lees?',
               opciones: [
                 { t: 'Bien: suben un poco, porque la presión positiva le baja la poscarga al VI', ok: true },
                 { t: 'Mal: el VS sube porque la presión comprime el ventrículo y sobrecarga su pared', porque: `La presión positiva disminuye la poscarga del VI; no la aumenta (${p(87)}). Quitarías la CPAP a quien se beneficia.` },
-                { t: 'Irrelevante: el gasto cardíaco no depende de la presión del tórax', porque: `La presión intratorácica positiva puede aumentar el volumen sistólico (${p(83)}).` }],
+                { t: 'Mal: el gasto sube porque la presión positiva aumenta la precarga del VI', porque: `La presión positiva reduce la precarga, no la aumenta (${p(85)}); lo que sube el volumen sistólico es la menor poscarga (${p(83)}). Buscarías la causa donde no está.` }],
               explicacion: `Sube el volumen sistólico por la <span class="hl-azul">menor poscarga</span> del VI (${p(83)}). La magnitud es del modelo (ilustrativa); la fuente da el sentido y no un porcentaje.` + enFicha(U, 'nep-vni-edema') } },
           { momento: 'El giro · la PA', datos: { Plan: 'cuatro frases del residente' }, nuevo: ['Plan'],
             pregunta: { id: 'vnu-c3', tipo: 'error', fuente: 'nep-poscarga-vpp · nep-corazon-papel', origen: 'ficha',
-              enunciado: 'Plan del residente: «la PA sube con cada insuflación». Hay dos errores. Encuéntralos.',
+              enunciado: 'Plan del residente: «la PA ha subido con la CPAP». Hay dos errores. Encuéntralos.',
               frases: [
                 { t: 'Mantengo la CPAP: la paciente la tolera y la presión positiva ayuda en este corazón.' },
-                { t: 'Quito la CPAP: si la PA sube con cada insuflación, aumenta la poscarga del VI.', mal: true, c: 'Con presión positiva la poscarga del VI baja, y la subida de la PA es un reflejo del mayor volumen sistólico.' },
+                { t: 'Quito la CPAP: si la PA sube, aumenta la poscarga del VI.', mal: true, c: 'Con presión positiva la poscarga del VI baja, y la subida de la PA es un reflejo del mayor volumen sistólico.' },
                 { t: 'Sigo midiendo el PaO₂/FiO₂ y la PaCO₂ a la hora para ver si la VNI funciona.' },
                 { t: 'Como Herminia tiene el corazón enfermo, la CPAP le bajará el gasto igual que a un corazón sano.', mal: true, c: 'El corazón que falla está en la parte plana de la curva de precarga y la empinada de la de poscarga: la presión positiva tiende a promover el gasto.' }],
               explicacion: `Dos confusiones: leer la <span class="hl-rojo">subida de la PA</span> como mayor poscarga (es mayor volumen sistólico, ${p(83)}) y olvidar que <span class="hl-azul">el corazón que falla se beneficia</span> (${p(88)}).` + enFicha(U, 'nep-corazon-papel') } },
@@ -355,16 +355,15 @@ export const MAYEUTICA_VNI = {
               explicacion: `Mejoran el <span class="hl-verde">cociente</span> y el <span class="hl-verde">distrés</span>: hay evidencia de beneficio a la hora (${p(82)}, ${p(88)}).` + enFicha(U, 'nep-respuesta-pf') } },
           { momento: 'Furosemida y nitroglicerina', datos: { PA: '100/60 (del paciente)', Tratamiento: 'furosemida y nitroglicerina (del paciente)', CPAP: '10 cmH₂O, sin cambios' }, nuevo: ['PA', 'Tratamiento', 'CPAP'],
             pregunta: { id: 'vnu-c5', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'nep-precarga-vpp · nep-precarga-vias', origen: 'ficha; los datos de Herminia, del caso',
-              modeloVivo: pv('vpp-corazon-normal', '🫁 Con el corazón sano, la misma presión baja el volumen sistólico'),
               enunciado: 'Con la PA en 100/60 tras el diurético y el vasodilatador, ¿por qué la misma CPAP puede perjudicar ahora?',
               puntos: [
                 `<span class="hl-rojo">La hipovolemia magnifica el freno al llenado</span>: la presión positiva es una amenaza para el llenado, mayor si falta volumen (${p(86)}).`,
-                `<span class="hl-azul">El ventrículo derecho es el más sensible</span>: la presión transmural telediastólica cae más porque su presión de cámara es más baja (${p(85)}); si el VD no llena, tampoco el VI.`],
-              explicacion: `Marino pide <span class="hl-rojo">evitar la hipovolemia</span> con presión positiva (${p(86)}). ${DED} Que el diurético y la nitroglicerina bajen el llenado sale de la fisiología general; vigilar la PA y reevaluar la presión es la conducta lógica, no una pauta de la fuente.` + enFicha(U, 'nep-precarga-vpp') } }
+                `<span class="hl-rojo">La PA de 100/60 es la señal</span>: con presión positiva y menos volumen intravascular hay que vigilar el llenado y reevaluar la presión (${p(86)}).`],
+              explicacion: `Marino pide <span class="hl-rojo">evitar la hipovolemia</span> con presión positiva (${p(86)}). La presión positiva ayuda al corazón que falla «mientras no impida el retorno al corazón derecho» (${p(88)}). Que el diurético baja la precarga lo dice Marino en insuficiencia cardíaca aguda (<a class="biblio-link" href="docs/marino-2024-cardiac-disorders-caps18-21.pdf#page=15" target="_blank" rel="noopener">cardíaca, pág. 15</a>); el efecto de la nitroglicerina en la precarga no lo encontré en esos capítulos, la fuente no lo dice.` + enFicha(U, 'nep-precarga-vpp') } }
         ],
         lleva: [
           'Seis condiciones descartan la VNI; se juzga a la hora (PaCO₂ ≥10 % menos, o PaO₂/FiO₂ mayor).',
-          'En el corazón que falla, la presión positiva baja la poscarga del VI y sube el volumen sistólico; la PA que sube con la insuflación lo refleja.',
+          'En el corazón que falla, la presión positiva baja la poscarga del VI y sube el volumen sistólico; la PA que sube lo refleja.',
           'La misma presión frena el llenado en el sano y más en el hipovolémico: vigila el volumen intravascular.'],
         volver: { nombre: 'El papel de la función cardíaca', ancla: 'nep-corazon-papel', modelo: pv('cpap-eap', '🫁 Herminia con CPAP') } }
     ]
