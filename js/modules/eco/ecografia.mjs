@@ -171,7 +171,7 @@ export function planoVista(clave, est) {
   // Dibujo nuevo, vistas de cuatro cámaras: el ecografista orienta la sonda para que entren las dos paredes libres (VD y
   // lateral del VI; Mitchell 2019, ASE, vista apical 4 cámaras). Se gira el haz, en su plano, hasta centrar el contorno
   // epicárdico de los dos ventrículos en el sector, con un margen; en un corazón normal el giro es ~0. No toca la profundidad.
-  if ((clave === 'a4c' || clave === 'sc4c') && dibujoNuevo()) {
+  if (clave === 'a4c' && dibujoNuevo()) {
     const ang = []; const NZ = 14, NF = 90, n0 = nrm(cruz(r, d));
     for (let i = 0; i <= NZ; i++) { const z = -vi.Le * 0.98 + (vi.Le * 0.98) * (i / NZ);
       for (let j = 0; j < NF; j++) { const f = -Math.PI + 2 * Math.PI * j / NF;

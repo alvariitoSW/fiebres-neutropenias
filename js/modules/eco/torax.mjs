@@ -88,7 +88,7 @@ export function construirTorax(partes, ctx) {
   const hacia = (lat) => Math.floor((holguraAtras(resto, lat, R) - 1) / T.paso) * T.paso;
   const P0 = aEje(ctx.arranque), antAo = nuevo ? Math.min(hacia(T.latAo), T.antAo) : hacia(T.latAo), latM = (P0[0] + T.latAo) / 2;
   const antM = Math.min(hacia(latM), (P0[1] + antAo) / 2, P0[1]);
-  const ejeAx = [P0, ...(nuevo ? [[T.latAo, T.antAo, 55], [T.latAo, T.antAo, 30]] : [[latM, antM, 20]]), [T.latAo, antAo, 4], [T.latAo, antAo, -50], [T.latAo, antAo, -100], [T.latAo, antAo, -150]];
+  const ejeAx = [P0, ...(nuevo ? [[T.latAo, antAo, 38], [T.latAo, antAo, 30]] : [[latM, antM, 20]]), [T.latAo, antAo, 4], [T.latAo, antAo, -50], [T.latAo, antAo, -100], [T.latAo, antAo, -150]];
   const eje = ctx.suave(ejeAx.map(p => deEje(p[0], p[1], p[2])), 5);
   const aorta = ctx.tubo(eje, R, 16, (u) => R0 + (R - R0) * paso(0, 0.25, u));
   const piezas = [{ nombre: 'Aorta descendente', ...aorta, color: ctx.colores.arteria, dobleCara: true }];
