@@ -21,7 +21,7 @@ import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMot
 import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, regionZoom, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg } from './doppler.mjs';
+import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg, escalaCw } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a4cVd: 'A4C foco VD', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -607,12 +607,12 @@ export function montarSimulador(raiz, opc = {}) {
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
-  // Escala automática del CW de la IM y la IT, como un ecógrafo: el escalón más pequeño (±150/±250/±400/±500/±700 cm/s, ilustrativo) en que el chorro y el llenado del latido
-  // caben en su lado de la línea de base (≤ 95 %), para que el chorro ocupe la pantalla sin recortarse
+  // Escala automática del CW de la IM y la IT, como un ecógrafo: el escalón más pequeño (ESCALAS_CW de doppler.mjs, ilustrativo) en que el chorro y el llenado del latido
+  // caben en su lado de la línea de base (≤ 100 %), para que el chorro ocupe la pantalla sin recortarse
   let escalaAuto = false;
   function escalarPorPico() {
     const vs = motor.onda.map(x => velCwReg(x, fuenteD, fuenteD.factor, areasD(), datosFlujo())), arriba = Math.max(0, ...vs), abajo = Math.max(0, -Math.min(0, ...vs)), bs = espectro.estado.base;
-    const v = [150, 250, 400, 500, 700].find(e => abajo <= 0.95 * 2 * e * (1 - bs) && arriba <= 0.95 * 2 * e * bs) ?? 700;
+    const v = escalaCw(arriba, abajo, bs);
     if (v === espectro.estado.vmax) return;
     $('#cv-d-escala').value = String(v); espectro.setEscala(v); ultimoTD = null;
   }
