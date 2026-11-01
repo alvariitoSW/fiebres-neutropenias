@@ -19,7 +19,7 @@ function frase(t, o) { fraseT = t; fraseO = o; $('frase-txt').innerHTML = `${t} 
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.titulo, t.texto]));
   if (f === firma) { topeApi.refrescar(); return; } firma = f;
-  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'resang0', 'exc', 'vaso']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'resang0', 'exc', 'vaso', 'tronco', 'dren3', 'mani3', 'tmax']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag ? { p: t.pag, f: t.ficha } : null, origen: t.origen, deshabilita: t.off, bajo: null });
 }
 function pintar() {

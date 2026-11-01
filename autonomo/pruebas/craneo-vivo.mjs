@@ -160,3 +160,4 @@ for (const ANCHO of (ARGS.find((a) => /^\d+$/.test(a)) ? [+ARGS.find((a) => /^\d
 } catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); try { pid && process.kill(pid); } catch {} }
 console.log('\nErrores de consola:', errores.length ? errores.slice(0, 5) : 'ninguno');
 console.log(fallos.length ? 'FALLOS:\n- ' + [...new Set(fallos)].join('\n- ') : 'TODO EN VERDE');
+process.exitCode = fallos.length || errores.length ? 1 : 0;

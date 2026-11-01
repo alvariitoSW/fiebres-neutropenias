@@ -49,10 +49,17 @@ export function topes(s) {
   else if (s.tipo === 'hsa' && !s.exc && s.t === 0 && s.pas > U.pasHic) t.push(T('resang0', 'aviso', 'PAS >140 con aneurisma abierto', 'Riesgo de resangrado: la mejor prevención es cerrar el aneurisma; controla la PAS.', 47, 'mn-hsa-aneurisma', 'ficha · p. 47'));
   else if (s.tipo === 'hsa' && !s.exc && s.t > 3) t.push(T('exc', 'aviso', 'Aneurisma abierto', 'Cerrarlo en 3 días; nunca más allá de 7-10.', 47, 'mn-hsa-aneurisma', 'ficha · p. 47'));
   if (L.hsaDiasEsp) t.push(T('vaso', 'aviso', 'Días 4-14', 'Las arterias de la base se estrechan; el Doppler transcraneal sube su velocidad y el GCS pierde 2 puntos. Vigilar.', 48, 'mn-hsa-vigilar', 'ficha · p. 48'));
+  // Topes de los mandos que no tenían consecuencia (REGLAS §1.14): el modelo no los deja pasar de aquí. Los límites son del modelo (ilustrativos); la ficha no da una dosis máxima.
+  if (s.tipo === 'tronco') t.push(T('tronco', 'sello', 'Lesión del tronco: la masa no aplica', 'En el síndrome del cautiverio el problema es la protuberancia ventral, no la caja: la PIC no sube con más masa.', 3, 'mn-cons-lockedin', 'ficha · p. 3', ['#crv-b-mas', '#crv-b-menos']));
+  if (s.drenaje >= 3) t.push(T('dren3', 'sello', 'Drenaje agotado', 'Tres tramos de LCR: en el modelo no queda más líquido que sacar y la PIC no baja más por esta vía (límite ilustrativo).', 45, 'mn-hic-pic', 'límite del modelo · ilustrativo', ['#crv-b-dren']));
+  if (s.mani >= 3) t.push(T('mani3', 'sello', 'Manitol: tres dosis', 'En el modelo el efecto sobre la PIC no pasa de tres dosis; la ficha prefiere el salino hipertónico y no da una dosis máxima (límite ilustrativo).', 41, 'mn-isq-edema-manejo', 'límite del modelo · ilustrativo', ['#crv-b-mani']));
+  if (s.t >= tMax(s)) t.push(T('tmax', 'sello', 'Fin del seguimiento', hem ? 'A las 12 h el modelo deja de seguir el hematoma: lo que pase después no se simula (límite ilustrativo).' : 'A los 14 días el modelo deja de seguir al paciente: el vasoespasmo de la HSA ocupa los días 4 a 14 (p. 48); en los demás, límite ilustrativo.', hem ? null : 48, hem ? null : 'mn-hsa-nimodipino', hem ? 'límite del modelo · ilustrativo' : 'ficha · p. 48 · límite ilustrativo', ['#crv-b-hora']));
   return t;
 }
+export const tMax = (s) => (s.tipo === 'hematoma' || s.tipo === 'ventricular' ? 12 : 14);
 // Una hora (hematoma) o un día (el resto). Magnitudes: ilustrativas.
 export function avanzar(s) {
+  if (s.t >= tMax(s)) return;
   s.t++;
   if (s.tipo === 'hematoma' || s.tipo === 'ventricular') s.masa = clamp(s.masa + (s.anti !== 'ninguno' && !s.rev ? (s.pas > U.pasHic ? 9 : 6) : s.pas > U.pasHic ? 2 : 0), 0, 100);
   else if (s.tipo === 'edema') s.masa = clamp(s.masa + 6, 0, 100);
