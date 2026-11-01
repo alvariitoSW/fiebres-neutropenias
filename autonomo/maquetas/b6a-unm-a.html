@@ -1,0 +1,46 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 6a). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b6a-unm-a.html
+     Unión neuromuscular viva, opción A «La hendidura»: el nervio, la hendidura con la acetilcolina, las copas de la placa y las tijeras de la acetilcolinesterasa;
+     cada fármaco es una pieza de otra forma; abajo, el pulgar (TOF) y la CV/PIM. Cinco pasos animados con Motion.
+     Fuente: Marino 2024, cap. 46 (docs/marino-2024-neurologia-caps45-47.pdf). -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Unión neuromuscular viva · la hendidura · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b6a-unm-a/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>La hendidura</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-rejilla">
+    <span>TOF<b id="m-tof"></b></span><span>Fuerza<b id="m-fuerza"></b></span><span>CV mL/kg<b id="m-cv"></b></span><span>PIM cmH₂O<b id="m-pim"></b></span>
+    <span>K⁺<b id="m-k"></b></span><span>FC<b id="m-fc"></b></span><span>Secreciones<b id="m-secr"></b></span><span>Ptosis<b id="m-ptosis"></b></span>
+    <span>Receptores<b id="m-rec"></b></span><span>Reloj<b id="m-t"></b></span></div></section>
+  <section class="zona-escena"><svg id="un-svg" viewBox="0 0 360 300" role="img" aria-label="Terminal del nervio con vesículas de acetilcolina, hendidura, placa con receptores y acetilcolinesterasa, fibra muscular, respuestas del pulgar al estímulo y gráfico de la capacidad vital y la presión inspiratoria máxima"></svg></section>
+  <section class="pasos" id="pasos" aria-label="Pasos del ciclo"><div class="fila-p"><button type="button" id="b-play" class="b prim">▶ Reproducir</button><button type="button" id="b-prev" aria-label="Paso anterior">‹</button><button type="button" id="b-next" aria-label="Paso siguiente">›</button>
+    <button type="button" data-paso="1" aria-pressed="false">1</button><button type="button" data-paso="2" aria-pressed="false">2</button><button type="button" data-paso="3" aria-pressed="true">3</button><button type="button" data-paso="4" aria-pressed="false">4</button><button type="button" data-paso="5" aria-pressed="false">5</button></div>
+    <p id="paso-txt" class="paso-txt" aria-live="polite"></p></section>
+  <div id="enlaces" class="enlaces" hidden></div>
+  <div id="avisos"></div>
+  <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <div id="leyenda"></div>
+  <section class="figuras" aria-label="Figura real del libro">
+    <figure id="fig-hielo"><img src="../../js/modules/libros/img/mar-fig46-1-prueba-hielo.jpg" alt="Prueba del hielo positiva en la miastenia gravis: ptosis antes y después de 2 minutos de hielo"><figcaption>Fig. 46.1 · Prueba del hielo positiva (Marino 2024, p. 25). Se enciende con 2 minutos de hielo.</figcaption></figure>
+  </section>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente</button></div>
+  <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b6a-unm-a/pagina.js"></script>
+</body></html>
