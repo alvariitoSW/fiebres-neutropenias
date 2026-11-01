@@ -5,6 +5,7 @@ import { seguirFrase } from '../../../core/frase-vista.js';
 import { PRES, IDEA, IMG, PDF, cita, FUENTES, NOTAS, PROFUNDIZAR, CRECERA } from '../../../data/craneo-vivo-data.js';
 import { nuevo, leer, topes, avanzar, unidad, clamp, TIPOS, pad, pam, U } from './modelo.js';
 import { escena } from './corte.js';
+import { crearMayeutica } from './mayeutica.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { APUESTA, ERROR, CASO, LLEVAS, ERROR_SEG, CASO_SEG } from './pruebas.js';
 import { FUENTES_EXTRA, NOTAS_EXTRA, hsaDtc, svgCaja, textoCaja, svgPpc, svgAuto, textoAuto, textoCo2, svgPenumbra, ICTUS } from './injertos.js';
@@ -33,7 +34,7 @@ function pintar() {
   R.querySelectorAll('[data-anti]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.anti === s.anti)));
   R.querySelectorAll('[data-vent]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.vent === s.vent)));
   R.querySelectorAll('[data-pre]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === preset)));
-  R.querySelectorAll('.modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
+  R.querySelectorAll('.modos [data-modo]').forEach((b) => b.setAttribute('aria-pressed', String(!preg && b.dataset.modo === modo)));
   $('o-mas').textContent = `masa ${s.masa} %`; $('r-pas').value = s.pas; $('o-pas').textContent = `PAS ${s.pas} · PAM ${L.P}`;
   $('b-rev').textContent = s.rev ? 'Revertido ✔' : s.anti === 'ninguno' ? 'Revertir (sin anticoagulante)' : `Revertir: ${REV[s.anti].split(' (')[0]}`;
   $('b-hora').textContent = `Avanzar 1 ${unidad(s)} · ${s.t}`; $('b-dren').textContent = `Drenar LCR · ${s.drenaje}`; $('b-hiper').textContent = `Salino 3 % 250 mL · ${s.hiper}`; $('b-mani').textContent = `Manitol (menos eficaz) · ${s.mani}`;
@@ -111,7 +112,7 @@ R.addEventListener('click', (ev) => {
   const an = ev.target.closest('[data-anti]'); if (an) { s.anti = an.dataset.anti; s.rev = false; return pintar(); }
   const v = ev.target.closest('[data-vent]'); if (v) { s.vent = v.dataset.vent; return pintar(); }
   const pr = ev.target.closest('[data-pre]'); if (pr) return ponerPreset(pr.dataset.pre);
-  const m = ev.target.closest('.modos [data-modo]'); if (m) return modoPrueba(m.dataset.modo);
+  const m = ev.target.closest('.modos [data-modo]'); if (m) { if (preg) setPreg(false); return modoPrueba(m.dataset.modo); }
   const pe = ev.target.closest('[data-pest]'); if (pe) { R.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === pe))); $('dock-panel').hidden = pe.dataset.pest !== 'dar'; $('dock-medir').hidden = pe.dataset.pest === 'dar'; return ajustarDock(); }
 });
 $('mas-mandos').addEventListener('click', () => { const a = $('dock').classList.toggle('abierto'); $('mas-mandos').setAttribute('aria-expanded', String(a)); $('mas-mandos').textContent = a ? 'Menos mandos ▴' : 'Más mandos ▾'; ajustarDock(); });
@@ -127,9 +128,26 @@ topeApi = crearTope({ monitor: $('monitor'), dock: $('dock'), cita: cit });
 $('monitor').after(R.querySelector('.tope-avisos'));   // los avisos bajo el monitor: no engordan el dock fijo
 new ResizeObserver(ajustarDock).observe($('dock')); new ResizeObserver(ajustarDock).observe($('frase'));
 seguirFrase(R, () => $('escena'), { dock: () => $('dock') });
+
+// ---- Preguntas: la Mayéutica del motor común (mayeutica.js) ----
+let preg = false;
+function setPreg(on) {
+  preg = on; if (on) modoPrueba('explorar');
+  $('modo-preguntas').setAttribute('aria-pressed', String(on));
+  R.querySelectorAll('.modos [data-modo]').forEach((b) => b.setAttribute('aria-pressed', String(!on && b.dataset.modo === modo)));
+  $('vista-preguntas').hidden = !on; $('dock-estudio').hidden = !on; $('presets').hidden = on; $('frase').hidden = on; $('idea').hidden = on;
+  R.querySelector('.dock-tabs').hidden = on; $('dock-panel').hidden = on; $('dock-medir').hidden = true;
+  if (on) mayeutica.entrar(); else { oculto = false; ponerPreset(preset); R.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x.dataset.pest === 'dar'))); $('dock-panel').hidden = false; }
+  ajustarDock();
+}
+const mayeutica = crearMayeutica({ R, antes: () => { setPreg(false); ponerPreset('abundio'); },
+  api: { poner: (o, ocu) => { s = nuevo(o); oculto = ocu; foco = []; pintar(); }, oculto: (v) => { oculto = v; pintar(); }, aplicar: (patch) => { Object.assign(s, patch); pintar(); }, leer: () => leer(s) } });
+$('modo-preguntas').addEventListener('click', () => setPreg(true));
+mayeutica.cargar();
 ponerPreset('abundio'); ajustarDock();
 // Estado: «abundio» (un paciente) o «abundio:3» (su explicación guiada en el paso 3). Vacío = Abundio.
 export function abrirEstado(clave) {
+  if (preg) setPreg(false);
   const [c, x] = String(clave || '').split(':'); R.querySelector('.modos [data-modo="explorar"]') && modoPrueba('explorar');
   ponerPreset(PRES[c] ? c : 'abundio', /^\d+$/.test(x || '') ? +x - 1 : 0); ajustarDock();
 }

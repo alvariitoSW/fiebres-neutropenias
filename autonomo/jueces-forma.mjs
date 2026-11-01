@@ -45,6 +45,7 @@ export const BANCOS = [
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'cráneo vivo', datos: 'js/data/craneo-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -90,7 +91,7 @@ export const MODELOS = {
         figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
     // Cráneo vivo (b6a): Explorar | Apuesta | Error | Caso; el estado va en data-craneo-vivo
-    'craneo-vivo': { raiz: '#crv-raiz', enlace: { especialidad: 'libros', view: 'craneoVivo' }, clave: 'craneoVivo', modo: { explorar: '#crv-raiz [data-modo="explorar"]' },
+    'craneo-vivo': { raiz: '#crv-raiz', enlace: { especialidad: 'libros', view: 'craneoVivo' }, clave: 'craneoVivo', modo: { explorar: '#crv-raiz [data-modo="explorar"]', mayeutica: '#crv-modo-preguntas' },
         estados: ['abundio', 'segismundo', 'clotilde', 'petronila', 'leovigildo'] },
     // ·
     // [HUECO plv: 'placa-viva']

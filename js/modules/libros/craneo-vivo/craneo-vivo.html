@@ -4,7 +4,7 @@
          js/data/craneo-vivo-data.js. Prefijo de ids: crv-. -->
     <div class="crv-raiz" id="crv-raiz" data-modelo-vivo>
   <header class="cabecera"><p class="crv-eyebrow">Modelo vivo · Marino caps. 45-47</p><h2 class="crv-titulo">El corte con la cara</h2></header>
-  <div class="modos" id="crv-modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="modos" id="crv-modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button><button type="button" id="crv-modo-preguntas" aria-pressed="false">Preguntas</button></div>
   <div class="presets" id="crv-presets" role="group" aria-label="Paciente"></div>
   <section class="zona-escena" id="crv-escena"><svg id="crv-svg" viewBox="0 0 390 330" role="img" aria-label="Corte coronal del cráneo y la cara del enfermo"></svg></section>
   <section id="crv-monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
@@ -15,6 +15,7 @@
     <div id="crv-pen-caja" hidden><svg id="crv-pen-svg" viewBox="0 0 390 110" role="img" aria-label="Penumbra del ictus en anillos"></svg><div id="crv-ictus-lista"></div></div></details>
   <section id="crv-prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="crv-guia" class="prueba guia" hidden aria-live="polite"></section>
+  <section id="crv-vista-preguntas" class="prueba" hidden aria-live="polite"><div class="crv-formato" id="crv-preg"></div></section>
   <figure class="fig"><img id="crv-fig-img" alt="Imagen real del libro" loading="eager"><figcaption id="crv-fig-cap"></figcaption></figure>
   <section class="bloque">
     <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="crv-fuentes"></ul></details>
@@ -25,6 +26,6 @@
 <div class="dock" id="crv-dock"><div class="dock-in">
   <p class="frase" id="crv-frase" role="status" aria-live="polite"><span class="frase-txt" id="crv-frase-txt"></span></p>
   <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Masa y sangrado</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Presión y respirador</button><button type="button" id="crv-mas-mandos" aria-expanded="false">Más mandos ▾</button></div>
-  <div class="dock-panel" id="crv-dock-panel"></div><div class="dock-panel" id="crv-dock-medir" hidden></div>
+  <div class="dock-panel crv-dock-est" id="crv-dock-estudio" hidden><div class="crv-pasos" id="crv-dock-pasos"></div><div class="crv-dock-est-txt"><span id="crv-dock-est-izq"></span><span id="crv-dock-est-der"></span></div></div><div class="dock-panel" id="crv-dock-panel"></div><div class="dock-panel" id="crv-dock-medir" hidden></div>
 </div></div>
     </div>

@@ -3,6 +3,7 @@
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 import { spawn } from 'node:child_process';
 import { mkdirSync } from 'node:fs';
+import { mayeuticaCraneo } from './craneo-vivo-mayeutica.mjs';
 const RAIZ = new URL('../../', import.meta.url).pathname, CAP = '/tmp/plan-socialista/b6a/capturas/crv/'; mkdirSync(CAP, { recursive: true });
 const ARGS = process.argv.slice(2), URLARG = ARGS.find((a) => /^https?:/.test(a)); const srv = URLARG ? null : spawn('python3', ['-m', 'http.server', '8762'], { cwd: RAIZ, stdio: 'ignore' }); const pid = srv?.pid; const BASE = (URLARG || 'http://127.0.0.1:8762/').replace(/\/?$/, '/');
 await new Promise((r) => setTimeout(r, 900));
@@ -155,6 +156,7 @@ for (const ANCHO of (ARGS.find((a) => /^\d+$/.test(a)) ? [+ARGS.find((a) => /^\d
     await p.evaluate(() => document.getElementById('crv-volver').click()); await p.waitForTimeout(500);
     ok(await p.evaluate((tab) => document.getElementById(tab).offsetHeight > 0, tab), `ficha ${tab}: VOLVER no regresa a la ficha`); console.log(' ficha', tab, '→', r.pac, 'paso', paso, 'ok');
   }
+  await mayeuticaCraneo({ abre: () => abre('abundio'), p, ok, fallos, ANCHO, foto: (n) => p.screenshot({ path: `${CAP}${ANCHO}-${n}.png` }) });
   await ctx.close();
 }
 } catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); try { pid && process.kill(pid); } catch {} }
