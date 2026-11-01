@@ -173,7 +173,8 @@ function estadosParaJugar(tab, d) {
     });
     d.guia.forEach((q, k) => desde(q, `Guía ${k + 1} («${q.corto}»)`));
     d.examen.forEach((q, k) => desde(q, `Examen ${k + 1} («${q.corto}»)`));
-    d.casos.forEach(c => c.pasos.forEach((p, j) => desde(p.pregunta, `Caso, paso ${j + 1}`)));
+    // Con el nombre del paciente si el caso lo trae al principio del título («Toribio, 61 años…»): «Caso de Toribio, paso 1»; si no, «Caso, paso 1».
+    d.casos.forEach(c => { const nombre = c.titulo?.match(/^(\p{Lu}[\p{L}]+),\s*\d+ años/u)?.[1]; c.pasos.forEach((p, j) => desde(p.pregunta, `${nombre ? `Caso de ${nombre}` : 'Caso'}, paso ${j + 1}`)); });
     return lista;
 }
 

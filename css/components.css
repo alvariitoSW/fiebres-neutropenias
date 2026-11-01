@@ -5752,6 +5752,7 @@ body.study-mode-on #eje-raiz .dock { padding-right: 82px; }
 #eje-raiz #eje-sello-zona .tope-sellos:empty { display: none; } #eje-raiz #eje-sello-zona .tope-sello { transform: none; max-height: none; overflow: visible; width: auto; }
 #eje-raiz #eje-sello-zona .tope-sello.cola, #eje-raiz #eje-sello-zona .tope-linea { display: none; } #eje-raiz #eje-sello-zona .tope-sello.tope-compacto small { display: block; }
 #eje-raiz #eje-avisos-zona:empty { display: none; } #eje-raiz #eje-avisos-zona { margin: 2px 0; } #eje-raiz .dock-pliega { display: grid; gap: 4px; }
+#eje-raiz .tope-aviso details > summary { cursor: pointer; list-style: none; min-height: 24px; display: flex; align-items: center; } #eje-raiz .tope-aviso details > summary::-webkit-details-marker { display: none; } #eje-raiz .tope-aviso details[open] > summary { margin-bottom: 2px; }
 .eje-chips { grid-template-columns: repeat(4, minmax(0, 1fr)); } .eje-chips button { min-height: 36px; font-size: .68rem; overflow-wrap: normal; }
 
 /* [HUECO eje: Mayéutica y modos] Las reglas de la Mayéutica del motor (prefijo ejm-), las mismas que las del termostato, y los modos Apuesta, Error y Caso. Solo tokens. */

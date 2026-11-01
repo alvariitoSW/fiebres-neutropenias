@@ -28,7 +28,16 @@ export function montar(R) {
     activos = nuevas;
     // un solo sello a la vista: el primero; los demás quedan como cola (su texto sigue en los avisos y en la frase)
     const ss = [...todos('#eje-sello-zona .tope-sello')]; ss.forEach((e, i) => e.classList.toggle('cola', i > 0));
-    topeApi.refrescar?.(); return lista;
+    plegarAvisos(); topeApi.refrescar?.(); return lista;
+  }
+  // El aviso que no es el tope abierto (el sello) va plegado en una línea: solo su título; al tocarlo se abre con el texto y la cita.
+  function plegarAvisos() {
+    for (const a of todos('#eje-avisos-zona .tope-aviso:not([data-plegado])')) {
+      const b = a.querySelector('b'), sm = a.querySelector('small'), txt = [...a.childNodes].filter((n) => n.nodeType === 3).map((n) => n.textContent.replace(/^⚠\s*/, '')).join('').trim();
+      const d = document.createElement('details'), r = document.createElement('summary'), cuerpo = document.createElement('div');
+      r.textContent = '⚠ ' + (b ? b.textContent : txt); cuerpo.append(txt); if (sm) cuerpo.append(sm);
+      d.append(r, cuerpo); a.replaceChildren(d); a.dataset.plegado = '1';
+    }
   }
   function pintar(anima) {
     const L = leer(s), lista = aplicarTopes(L), P = PRES[s.pac], G = GUIAS[s.pac][1], p = G[paso], q = oculto;
