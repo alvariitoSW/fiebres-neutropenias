@@ -3,7 +3,7 @@
 import { crearTope } from '../../../core/tope.js';
 import { seguirFrase } from '../../../core/frase-vista.js';
 import { leyendaParticulas } from '../../../core/particulas.js';
-import { PDF, PRESETS, FUENTES, NOTAS, PENDIENTE, CRECIMIENTO, P, fichaDe, IDEA } from '../../../data/iones-vivos-data.js';
+import { PDF, PRESETS, FUENTES, NOTAS, PENDIENTE, CRECIMIENTO, P, ESTADOS, fichaDe, IDEAS } from '../../../data/iones-vivos-data.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { nuevo, leer, topes, fmt, clamp, avanzar, vitales, kVer, enParada } from './motor.js';
 import { escena, NOMBRE } from './dibujo.js';
@@ -13,7 +13,7 @@ const $ = (id) => document.getElementById('iov-' + id);
 const R = $('raiz');
 const todos = (q) => R.querySelectorAll(q);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
-let foco = [], guiaApi, topeApi, firma = '', corriendo = false;
+let foco = [], ideaIon = '', guiaApi, topeApi, firma = '', corriendo = false;
 let s = nuevo(), ion = 'k', oculto = false, modo = 'explorar', pausa = false, preset = 'normal';
 const e = { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1, caMg: 90 };
 const FRASES = {
@@ -47,6 +47,8 @@ function pintar() {
   $('ion-svg').innerHTML = escena(ion, s, L, oculto) + focoSvg(foco);
   const v = vitales(s, e, preset); $('mon-pa').textContent = v.pa; $('mon-fc').textContent = v.fc; $('mon-extra').textContent = v.extra;
   $('mon-k').textContent = `K⁺ ${oculto ? '?' : kVer(L.k)}` + (!oculto && L.k >= 6.5 && s.caIV > 0 ? ' · el calcio protege el ECG, el K⁺ no baja' : '');
+  if (ideaIon !== ion) { ideaIon = ion; const [ti, pi] = IDEAS[ion]; $('idea').innerHTML = `${ti} ${cita(pi)} <span class="org">ficha</span>`; }
+  if (ion === 'mg') $('mon-k').textContent += ` · Mg²⁺ ${oculto ? '?' : fmt(L.mg)}`;
   $('nota-ecg').hidden = L.k >= 3.5; $('nota-ecg-txt').textContent = PENDIENTE;
   const marca = (q, f) => todos(q).forEach((b) => b.setAttribute('aria-pressed', String(f(b))));
   marca('.selector-ion button', (b) => b.dataset.ion === ion); marca('.modos button', (b) => b.dataset.modo === modo); marca('.presets button', (b) => b.dataset.pre === preset);
@@ -63,7 +65,9 @@ function hacer(a, o = {}) {
   const L0 = leer(s);
   if (a === 'real') { s.ins = Math.min(4, s.ins + 1); ion = ion === 'ca' ? 'k' : ion; frase(`Entra glucosa con insulina: el K⁺ del suero pasa de ${kVer(L0.k)} a ${kVer(leer(s).k)} sin que el total cambie; el fosfato cae a ${fmt(leer(s).po4)} mg/dL y el Mg²⁺ a ${fmt(leer(s).mg)}.`, 'dirección: ficha · p. 21, 34, 49; cifras ilustrativas'); }
   if (a === 'furo') { s.dK = Math.max(-900, s.dK - P.kFurosemida); s.dMg -= P.mgFurosemida; frase('Furosemida: se van 20 mEq de K⁺ y 6 de Mg²⁺ por la orina; el total baja y el suero apenas lo nota.', 'dirección: ficha · p. 21, 23, 34; cantidades ilustrativas'); }
-  if (a === 'clk') { s.bombas.clk = { rate: e.rate }; avanzar(s, 60); delete s.bombas.clk; frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
+  if (a === 'clk') { s.bombas.clk = { rate: e.rate }; s.clkPerdido = 0; avanzar(s, 60); delete s.bombas.clk; const pf = s.clkPerdido;
+    if (pf >= 0.5) frase(`Con el Mg²⁺ bajo, ${fmt(pf)} de los ${e.rate} mEq de ClK se pierden por la orina: el K⁺ sube poco hasta reponer el Mg.`, 'ficha · p. 35; fracción perdida: ilustrativa');
+    else frase(`ClK ${e.rate} mEq en 1 h: el total sube ${e.rate} mEq; el suero tarda en notarlo si el déficit es grande (parte plana de la curva).`, 'ritmo: ficha · p. 23; curva: p. 20'); }
   if (a === 'mg') { s.mgBolo += 8 * e.g; s.dMg += 4 * e.g; ion = 'mg'; frase(`${e.g} g de MgSO₄ = ${8 * e.g} mEq: la mitad se va por la orina; el suero sube rápido y baja a los 15 minutos.`, 'ficha · p. 36-38; subida: ilustrativa'); }
   if (a === 'esp') { const min = o.min ?? 15; avanzar(s, min); frase(min < 30 ? `Pasan ${min} minutos: el bolo de Mg²⁺ se reparte por el cuerpo y el calcio, a medias de los 30 min tras los que su efecto se acaba.` : `Pasan ${min} minutos: el efecto del calcio ya se ha disipado (30 min en el modelo) y el bolo de Mg²⁺ se ha repartido.`, 'Mg: ficha · p. 37-38; calcio: p. 46 (30-60 min en hiperK, p. 27); tiempos ilustrativos'); }
   if (a === 'ca') { s.caIV += o.mg ?? e.caMg; ion = 'ca'; frase(`${o.mg ?? e.caMg} mg de calcio elemental: el iónico sube de ${fmt(L0.caIon)} a ${fmt(leer(s).caIon)} mg/dL. En la hiperpotasemia (10 mL de gluconato = 90 mg, p. 27) el calcio protege el ECG y el K⁺ no baja: se deduce de la Tabla 36.3.`, 'gluconato 9 y cloruro 27 mg/mL: ficha · p. 27, 45; subida: ilustrativa'); }
@@ -76,10 +80,11 @@ function ponerPreset(clave, paso = 0) {
 function ponerIon(i) { ion = i; frase(FRASES[i], ORIG[i]); pintar(); }
 // ---- Mayéutica (el interruptor Explorar | Preguntas; el motor común, enganchado en mayeutica.js) ----
 // est: { preset, ion, s (cambios al paciente), acc (lo ya hecho: ['ca', mg] o ['esperar', min]) }. Directo al estado: sin frases ni guía.
-function ponerEstadoMay(est) {
+function ponerEstadoMay(est, clave) {
   preset = est.preset; s = nuevo({ ...PRESETS[est.preset].s, ...(est.s || {}) }); Object.assign(e, { via: 'central', rate: 20, g: 4, amp: 'glu', n: 1 }); foco = []; guiaApi.cerrar();
   for (const [a, n] of est.acc || []) { if (a === 'ca') s.caIV += n; else if (a === 'real') s.ins = Math.min(4, s.ins + 1); else if (a === 'esperar') avanzar(s, n); }
-  ion = est.ion; const pr = PRESETS[est.preset].txt; frase(pr || FRASES[ion], pr ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
+  ion = est.ion; const pr = PRESETS[est.preset].txt; frase(est.txt || pr || FRASES[ion], est.txt ? est.org : pr ? 'paciente inventado; cifras de la ficha' : ORIG[ion]); pintar();
+  if (clave) guiaApi.abrir(clave);   // abrirEstado: con su explicación guiada; la Mayéutica llama sin clave (sin guía)
 }
 function taparTodo(si) { oculto = si; pintar(); }
 function accion(a, n) { const i0 = ion; if (a === 'mg2') { e.g = 2; a = 'mg'; } if (a === 'clk40') { e.rate = 40; e.via = 'cava'; a = 'clk'; } hacer(a, a === 'ca' ? { mg: n } : a === 'esp' ? { min: n } : {}); ion = i0; pintar(); }
@@ -120,9 +125,9 @@ function montar() {
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') setModo('explorar', false); ponerPreset(b.dataset.pre); } });
   dock.querySelector('.dock-tabs').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pest]'); if (!b) return; dock.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); dp.hidden = b.dataset.pest !== 'dar'; $('dock-medir').hidden = b.dataset.pest !== 'medir'; ajustarDock(); });
-  guiaApi = crearGuia({ dock: () => $('dock'), caja: $('guia'), hacer, cita, unidades: (n) => { s.units = n; $('r-uni').value = n; ion = 'k'; frase(`${n} concentrados: cada uno trae citrato y 2-3 mEq de K⁺; el K⁺ del suero sube a ${kVer(leer(s).k)} y el iónico baja.`, 'ficha · p. 25, 44; cifras ilustrativas'); pintar(); },
+  guiaApi = crearGuia({ dock: () => $('dock'), caja: $('guia'), hacer, cita, abrirMas: () => { $('mas').open = true; }, unidades: (n) => { s.units = n; $('r-uni').value = n; ion = 'k'; frase(`${n} concentrados: cada uno trae citrato y 2-3 mEq de K⁺; el K⁺ del suero sube a ${kVer(leer(s).k)} y el iónico baja.`, 'ficha · p. 25, 44; cifras ilustrativas'); pintar(); },
     ponerIon: (i) => { ion = i; oculto = false; }, setFoco: (z) => { foco = z; pintar(); } });
-  $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`;
+  
   $('pausa').addEventListener('click', () => { pausa = !pausa; $('pausa').setAttribute('aria-pressed', String(pausa)); });
   $('fuentes').innerHTML = FUENTES.map(([t, p]) => `<li>${t} · ${cita(p)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuentes discrepan' ? 'Las fuentes discrepan' : t === 'fuente no lo dice' ? 'La fuente no lo dice' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
@@ -144,7 +149,9 @@ function bucle() {
 }
 // Estado: «rufino» (un paciente), «rufino:3» (su guía en el paso 3) o «normal:ca» (el paciente normal y ese ion). Vacío = el normal.
 export function abrirEstado(clave) {
-  const [p, x] = String(clave || '').split(':'); if (modo !== 'explorar') setModo('explorar', false);
+  if (modo !== 'explorar') setModo('explorar', false);
+  if (ESTADOS[clave]) { ponerEstadoMay(ESTADOS[clave], clave); bucle(); ajustarDock(); $('iov-guia')?.scrollIntoView({ block: 'nearest' }); return; }
+  const [p, x] = String(clave || '').split(':');
   ponerPreset(PRESETS[p] ? p : 'normal', /^\d+$/.test(x || '') ? +x - 1 : 0);
   if (['k', 'mg', 'ca', 'p'].includes(x)) ponerIon(x);
   bucle(); ajustarDock();

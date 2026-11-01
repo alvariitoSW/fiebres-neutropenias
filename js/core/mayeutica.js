@@ -65,6 +65,7 @@ const MODELOS = {
     nefronaViva: { especialidad: 'nefrologia', view: 'nefrona', nombre: '💧 la nefrona viva' },
     glomerulo: { especialidad: 'nefrologia', view: 'nefrona', nombre: '🫘 el glomérulo vivo' },
     filtroVivo: { especialidad: 'libros', view: 'marinoRenal', nombre: '🧫 el filtro vivo' },
+    ionesVivos: { especialidad: 'libros', view: 'ionesVivos', nombre: '🧂 los iones vivos' },
 };
 // modeloVivo (el modelo grande de la pregunta) sale primero; modelo (p. ej. la vista Visual de la ficha), detrás.
 const modelosDe = o => [].concat(o?.modeloVivo || [], o?.modelo || []);
