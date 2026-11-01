@@ -2,7 +2,7 @@
 // Partículas de la tabla común (js/data/formas-iones.js): NH₃, urea y glutamina, dibujadas con svgParticula.
 import { svgParticula, leyendaParticulas } from '../../../core/particulas.js';
 import { TX, VIAS_APAGADAS } from '../../../data/hepatocito-vivo-data.js';
-import { clamp, fmt, nodosVia, nombresVia } from './modelo.js';
+import { clamp, fmt, nodosVia, nombresVia, phVista } from './modelo.js';
 const NODOS = [['NH₃', 'entra'], ['1.º paso del ciclo', '(mitocondria)'], ['Resto', 'del ciclo'], ['Urea', 'a la sangre']];
 export const ZONAS = { colon: [4, 28, 100, 112], carril: [116, 48, 232, 122], apagadas: [4, 302, 352, 40], arterial: [118, 176, 112, 84], astro: [236, 184, 118, 122], cvvh: [4, 192, 96, 58] };
 const nh3 = (x, y) => svgParticula('nh3', x, y, 3.4);
@@ -24,7 +24,7 @@ export function escena(s, L, oculto) {
   o.push(`<path class="flecha" d="M98 84H116"/>`, tox ? T(113, 78, 'porta', 'min', 'text-anchor="end"') : T(100, 78, 'porta', 'min'));
   // Célula
   o.push(`<rect class="celula" x="116" y="24" width="236" height="148" rx="26"/>`, T(234, 40, 'Hepatocito', 'rot', 'text-anchor="middle"'));
-  o.push(tox ? T(138, 167, 'sinusoide', 'min') : T(120, 168, 'sinusoide', 'min'), T(346, 168, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
+  o.push(tox ? T(138, 167, 'sinusoide', 'min') : T(120, 168, 'sinusoide', 'min'), T(356, 184, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
   const nu = s.via === 'urea' ? Math.round(L.nProd * s.func / 100) : 0;
   if (s.via === 'urea') {
   o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(250, 156, 'Mitocondria', 'min', 'text-anchor="middle"'));
@@ -39,7 +39,7 @@ export function escena(s, L, oculto) {
   for (let i = 0; i < clamp(L.nProd - nu, 0, 6); i++) o.push(nh3(126 + (i % 3) * 9, 78 + Math.floor(i / 3) * 9));
   } else {
   // Vía de un tóxico (paracetamol, alcoholes): las cuatro estaciones del carril cambian de rótulo; sin urea ni mitocondria
-  const v = nodosVia(s), nm = nombresVia(s), tit = s.via === 'paracetamol' ? `Paracetamol · glutatión ${s.glut} %` : `${s.alc === 'met' ? 'Metanol' : 'Etilenglicol'} · pH ${String(s.ph).replace('.', ',')}`;
+  const v = nodosVia(s), nm = nombresVia(s), tit = s.via === 'paracetamol' ? `Paracetamol · glutatión ${s.glut} %` : `${s.alc === 'met' ? 'Metanol' : 'Etilenglicol'} · pH ${String(phVista(s)).replace('.', ',')}`;
   o.push(T(234, 70, tit, 'rot', 'text-anchor="middle"'));
   nm.forEach(([a, b], i) => {
     const x = 144 + i * 59, d = v[i] || { op: 1 };
@@ -61,8 +61,10 @@ export function escena(s, L, oculto) {
       o.push(T(190, 196, 'metabolito tóxico: se acumula', 'rot', 'text-anchor="middle"'));
       for (let i = 0; i < n; i++) { const x = 138 + (i % 6) * 21 + (Math.floor(i / 6) % 2) * 10, y = 220 + Math.floor(i / 6) * 22; o.push(`<path class="aspa" d="M${x} ${y - r}L${x + r} ${y}L${x} ${y + r}L${x - r} ${y}Z"/>`); }
     }
-    o.push(`<path class="puente" d="M98 112H106V204H156" opacity="0.12"/>`, `<rect class="cvvh" x="6" y="196" width="88" height="48" rx="8" opacity="0.12"/>`);
-    o.push(`<circle class="astro" cx="292" cy="240" r="28" opacity="0.12"/>`);
+    // Hemodiálisis en marcha: circuito a la izquierda (sangre sale y vuelve) con su rótulo
+    if (s.hd) o.push(`<rect class="cvvh on" x="6" y="196" width="88" height="48" rx="8"/>`, T(50, 214, 'Hemodiálisis', 'rot', 'text-anchor="middle"'), T(50, 230, 'en marcha', 'min', 'text-anchor="middle"'), `<path class="flecha" d="M94 212H150V176M170 176V228H94"/>`);
+    // Órganos diana del alcohol (ficha p. 26-29): riñón (oxalato) en el etilenglicol, retina en el metanol
+    if (s.via === 'alcoholes') { const met = s.alc === 'met'; o.push(`<circle class="organo" cx="292" cy="240" r="36" fill="none" stroke="var(--accent-red)" stroke-width="2"/>`, T(292, 236, met ? 'Retina' : 'Riñón', 'rot', 'text-anchor="middle"'), T(292, 249, met ? 'fórmico' : 'oxalato', 'min', 'text-anchor="middle"'), T(292, 291, met ? 'visión alterada · p. 28' : 'cristales de oxalato · p. 26-27', 'min', 'text-anchor="middle"')); }
     return o.join('');
   }
   // TIPS: puente que salta el hígado (del colon/porta a la sangre arterial)

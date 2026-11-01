@@ -29,7 +29,7 @@ export function leer(s) {
   const P = PRES[s.pac], hcOn = !!s.hc, toribio = s.pac === 'toribio';
   const falta = !!P.estres && !hcOn && s.estres >= 1;               // Bibiana: el estrés sin cobertura (p. 50)
   const sinHcLevo = s.pac === 'obdulia' && s.hor !== 'ninguna' && !hcOn;   // hormona antes que la hidrocortisona (p. 57): la PA cae
-  const resol = toribio && hcOn ? 12 * rp(s, s.hcD, 3) * clamp(1 - s.na / 0.4, 0, 1) : 0;   // la sepsis cede con los días: sin vasopresor mantiene la PA (ilustrativo)
+  const resol = toribio && hcOn ? 12 * rp(s, s.hcD, 3) * (1 - 0.3 * clamp(s.na / 0.4, 0, 1)) : 0;   // la sepsis cede con los días, pero la noradrenalina sigue sumando PAM con la hidrocortisona (ilustrativo)
   const crudo = P.pam + resol + 6 * (1 - Math.exp(-s.vol / 1500)) + 21.8 * (1 - Math.exp(-s.na / 0.5)) + P.hcEf * s.hc - (falta ? 9 * s.estres : 0) - (sinHcLevo ? 12 : 0) - (s.parada ? 8 : 0);
   const pam = Math.round(clamp(crudo, 30, 140) * 10) / 10;
   let fc = P.fc, t = P.t, na = P.na, lact = P.lact;
