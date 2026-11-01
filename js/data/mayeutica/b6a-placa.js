@@ -464,7 +464,7 @@ export const MAYEUTICA_B6A_PLACA = {
         opciones: [
           { t: '2-3 min, como el sugammadex', porque: 'Eso es el sugammadex. Esperar 2-3 min con neostigmina te llevaría a repetir la dosis y pasarte de 70 µg/kg.' },
           { t: '8-45 min, según relajante y profundidad', ok: true },
-          { t: 'Unos 60 min, como la duración del rocuronio', porque: 'La fuente da 8-45 min (' + pag(31) + '); esperar una hora deja paralizado a quien ya podrías extubar.' }],
+          { t: 'Unos 60 min, como la duración del rocuronio', porque: 'La fuente da 8-45 min según el relajante, la profundidad y el anestésico (' + pag(31) + '); una hora es lo que dura el rocuronio, no lo que tarda la reversión.' }],
         explicacion: '70 µg/kg IV revierte un bloqueo moderado en <span class="hl">8-45 min</span> según el relajante, la profundidad y el anestésico (' + pag(31) + ').',
         nota: NOTA_NEO },
       { id: 'mnr-e5', corto: 'usos de los relajantes', tipo: 'test', fuente: 'mn-bnm-usos',
@@ -552,7 +552,7 @@ export const MAYEUTICA_B6A_PLACA = {
               opciones: [
                 { t: 'Bloqueo residual del cisatracurio: más sugammadex', porque: 'El cisatracurio dura 35-50 min; a los 9 días no es bloqueo residual y el sugammadex ni actúa sobre él.' },
                 { t: 'Neuromiopatía del crítico, sin tratamiento', ok: true },
-                { t: 'Guillain-Barré: IgIV', porque: 'El GBS no aparece tras 9 días de sepsis y relajantes; la IgIV no trata la MCC, que no tiene tratamiento (' + pag(28) + ').' }],
+                { t: 'Guillain-Barré: IgIV', porque: 'La sepsis y los relajantes predisponen a la MCC, no al GBS; y la IgIV no la trata: la MCC no tiene tratamiento (' + pag(28) + ').' }],
               explicacion: 'La inmovilidad (p. ej., por relajantes), la sepsis grave y la hiperglucemia predisponen a la MCC; conducción y EMG o biopsia para distinguir de la PNC; sin tratamiento (' + pag(28) + ').' } },
         ] },
     ],
