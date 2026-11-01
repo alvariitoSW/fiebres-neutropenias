@@ -363,7 +363,7 @@ export const MAYEUTICA_HIGADO = {
         paciente: { Edad: '38 años', Peso: '70 kg', Motivo: 'ingesta masiva de paracetamol (≈70 g, ilustrativo), llega a las 6 h', Estado: 'consciencia deprimida' },
         pasos: [
           { momento: 'En urgencias, a las 6 h', datos: { 'Paracetamol': '950 µg/mL (ilustrativo)', 'Estado': 'encefalopatía: consciencia deprimida', 'Peso': '70 kg', 'Ingesta': '≈70 g hace 6 h (ilustrativo)' }, nuevo: ['Paracetamol', 'Estado', 'Peso', 'Ingesta'],
-            pregunta: T('hig-el-n-1', 'añadir diálisis', 'mt-nac-hd-txt', '950 µg/mL de paracetamol con encefalopatía hepática. ¿Qué haces además de la NAC?',
+            pregunta: T('hig-el-n-1', 'añadir diálisis', 'mt-nac-hd-txt', '950 µg/mL de paracetamol con encefalopatía (consciencia deprimida; la ficha, p. 8, la nombra como indicación aunque el hígado aún no ha fallado: nota de fidelidad). ¿Qué haces además de la NAC?',
               'Hemodiálisis: supera 900 µg/mL y hay encefalopatía',
               [['Repetir el nivel a las 4-6 h y dializar solo si la NAC no baja la cifra', 'La indicación es doble, nivel >900 y encefalopatía, y ya se cumple. Esperar 4-6 h con encefalopatía sería dejar el tóxico circulando (p. 8).'],
                ['Cambiar a NAC oral, que no necesita ajuste, y no dializar', 'La diálisis se añade a la NAC cuando se dan esas dos condiciones; la vía oral no la sustituye. Dejarías sin filtrar un paracetamol altísimo (p. 8).']],

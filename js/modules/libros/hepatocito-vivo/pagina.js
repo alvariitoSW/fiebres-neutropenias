@@ -67,7 +67,7 @@ function pintarTx() {
   for (const id of ['mon-glut', 'mon-met', 'mon-enc']) mostrar(id, par);
   $('mon-reloj').hidden = !par; $('mon-carril').parentElement.hidden = !u;
   $('mon-glut').textContent = `${s.glut} %`; $('mon-met').textContent = s.glut < TX.glutDano ? 'se acumula' : 'neutralizado';
-  const wh = leer(s).wh; $('mon-enc').textContent = wh ? `West Haven ${wh}` : 'no'; 
+  const wh = leer(s).wh; $('mon-enc').textContent = s.enc ? `sí · ${s.enc} (ilustrativo)` : wh ? `West Haven ${wh}` : 'no'; 
   $('mon-par').textContent = `${s.par} µg/mL`; $('mon-reloj').innerHTML = `Reloj <b>${s.h} h</b>`;
   $('mon-alt').textContent = s.lab?.alt ?? '—'; $('mon-inr').textContent = s.lab?.inr ?? '—';
   $('mon-ph').textContent = coma(phVista(s)) + (alc && s.hd ? ' ↑ con diálisis (ilustrativo)' : ''); const il = (x, d) => (x ?? (alc ? `${d} (ilustr.)` : '—')); $('mon-ga').textContent = il(s.ga, 22); $('mon-go').textContent = il(s.go, 30); $('mon-lact').textContent = il(s.lact, 3); $('mon-func').textContent = `${s.func} %`;
