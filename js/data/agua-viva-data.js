@@ -160,8 +160,22 @@ export function estadoBase() {
     adh: false, glucosa: GLU0, urea: false, perdida: null,
     na0: NA0, bolos3: 0, periodo3: '2h',
     fijo: {},                // cifras que pone un caso clínico (Na, Hto): «dato del caso»
+    orina: null,             // la salida «orina»: null (no se muestra) o { tipo: 'central'|'nefro', osm, mlh, vaso } (ver orinaDe)
     tocado: null             // compartimento tocado en una pregunta
   };
+}
+
+// La orina (Marino cap. 35, mr-di-dx, E p. 7): osmolalidad y diuresis de quien las pone el caso (`dato del caso`; Nicolás: 110 y
+// 400 mL/h). Con vasopresina, en la DI central la osmolalidad sube al menos un 50 %: se da el MÍNIMO (×1,5), no un valor; en la
+// nefrogénica no cambia. Cifras de la nefrogénica del modelo: ilustrativas, dentro de 200-500. Pieza común de `di`,
+// `sobrecorreccion` y `desmopresina`.
+export const ORINA = { central: { osm: 110, mlh: 400, rango: '<200' }, nefro: { osm: 300, mlh: 400, rango: '200-500' }, vasoMin: 0.5 };
+export function orinaDe(o) {
+  if (!o) return null;
+  const central = o.tipo === 'central', osm = o.osm;
+  const osmVaso = o.vaso ? (central ? Math.ceil(osm * (1 + ORINA.vasoMin)) : osm) : null;
+  return { tipo: o.tipo, osm, mlh: o.mlh, vaso: !!o.vaso, osmVaso, subeMin: central, rango: ORINA[o.tipo]?.rango || '',
+    respuesta: !o.vaso ? '' : central ? `≥ ${osmVaso} (sube ≥50 %): central` : 'sin cambio: nefrogénica' };
 }
 
 export function deltaFluido(inf) {
@@ -239,6 +253,7 @@ export function derivar(e) {
   if (e.bolos3) m -= 1;
   const marFlecha = Math.sign(m);
   return {
+    orina: orinaDe(e.orina),
     P, base, delta, sinCifra, rango, proporcional, V0, perdidaSangre, perdidaRio, relleno,
     clase: claseHemorragia(e.hemorragia), hto, htoCalc, naMed, naCorr, bun, posm, posmEf, avisos, subida,
     tendNa, marFlecha, hipotonicos, salino, sangreMl
@@ -678,6 +693,8 @@ export const ESTADOS_ANCLA = {
   hipernatremia: { estado: { na0: 160, reloj: 'dias' }, pestana: 'sodio', lupa: 'neurona' },
   osmolalidad: { estado: { urea: true }, pestana: 'solutos', lupa: 'orilla' },
   hiperglucemia: { estado: { glucosa: 600 }, pestana: 'solutos', lupa: 'neurona' },
+  // Nicolás (dato del caso): Na⁺ 156, orina 110 mOsm/kg y 400 mL/h; Posm 322 sale de la Ec. 35.3 con glucosa 90 y BUN 14
+  di: { estado: { fijo: { na: 156 }, orina: { tipo: 'central', osm: 110, mlh: 400, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
 };
 
 // ---------- La explicación guiada de cada estado con nombre ----------
@@ -698,7 +715,7 @@ const HP = (id, pag) => ({ libro: 'Marino, cap. 35', ficha: 'mr-hipernatremia', 
 const MAREA = k => ['#agv-tot-' + k, '#agv-dl-' + k];
 export const NOMBRE_ESTADO = { inicio: 'El agua del cuerpo', salino: 'Salino 0,9 %', glucosado: 'Glucosado 5 %', ringer: 'Ringer lactato', albumina5: 'Albúmina 5 %',
   albumina25: 'Albúmina 25 %', hipertonico: 'Salino 7,5 %', salino3: 'Salino 3 %: un bolo', hemorragia: 'Hemorragia del 20 %', reanimacion: 'Reanimación con Ringer',
-  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia' };
+  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia', di: 'Diabetes insípida' };
 export const GUIAS = {
   inicio: [
     { t: 'Varón de 75 kg: el agua corporal es 0,6 × su peso magro, <span class="hl">45 L</span>.', mirar: 'mar', cita: CR('mar-tabla-10-1', 3) },
@@ -785,6 +802,13 @@ export const GUIAS = {
     { t: 'Glucosa 600: cuando no entra con facilidad en las células, <span class="hl">les saca agua</span>.', mirar: 'mar', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Ese agua diluye el sodio: 2,4 mEq/L menos por cada 100 mg/dL de glucosa. El Na⁺ medido baja a 128.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
     { t: 'Na corregido = Na medido + 2,4 × (glucosa − 100)/100: con 600, <span class="hl-azul">140</span>. El ejemplo de la ficha: 130 con 600 → 142.', resalta: '#agv-lectura', cita: HD('mr-hiperglucemia-na', 9) },
+  ],
+  di: [
+    { t: 'Diabetes insípida: el riñón pierde la acción de la ADH y elimina <span class="hl-rojo">una orina casi sin solutos</span>. Aquí, 400 mL/h con osmolalidad de 110 (cifras del caso).', mirar: 'orina', cita: HP('mr-di-dx', 7) },
+    { t: 'Es agua libre que se va: el Na⁺ sube (156) y la osmolalidad del plasma, 322. La orina diluida con plasma hipertónico es la marca de la DI.', resalta: '#agv-lectura', cita: [HP('mr-di-dx', 7), HP('mr-hiperna-normo', 6)], org: 'Na⁺ y Posm: dato del caso' },
+    { t: 'El plasma hipertónico saca agua de la neurona y la encoge.', resalta: '#agv-lupa', cita: HP('mr-hiperna-cerebro', 5) },
+    { t: 'Para distinguir la central de la nefrogénica: osmolalidad de orina <200 en la central y 200-500 en la nefrogénica; con vasopresina, sube al menos un 50 % solo en la central.', e: { orina: { tipo: 'central', osm: 110, mlh: 400, vaso: true } }, resalta: '#agv-lectura', cita: HP('mr-di-dx', 7) },
+    { t: 'El primer paso del diagnóstico es la restricción hídrica completa: si la osmolalidad urinaria no sube más de 30 en unas horas, es DI. En la central se repone la acción con desmopresina, 1 μg SC o 2 μg IV cada 12 h.', mirar: 'orina', cita: [HP('mr-di-dx', 7), HP('mr-desmopresina-di', 7)] },
   ],
 };
 // Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la

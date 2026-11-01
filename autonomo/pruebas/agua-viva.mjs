@@ -84,6 +84,16 @@ await desde('libros', 'marinoFundamentos', 'panel-marino-fund-tabs', 'mar-crista
 await desde('cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs', 'mc-hemorragico-clasificacion', 'hemorragia', e => e.hemorragia === 20 && e.reloj === '1h', 'hemorragia');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hipernatremia', 'hipernatremia', e => e.na0 === 160 && e.reloj === 'dias', 'hipernatremia');
 ok(await p.evaluate(() => !document.getElementById('agv-lupa').hidden), 'la hipernatremia abre la lupa de la neurona');
+await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hipernatremia', 'di', e => e.orina && e.orina.tipo === 'central' && e.orina.osm === 110 && e.orina.mlh === 400 && e.fijo.na === 156, 'di');
+ok(await p.evaluate(() => /orina/i.test(document.getElementById('agv-lectura').textContent) && /110/.test(document.getElementById('agv-lectura').textContent) && /400/.test(document.getElementById('agv-lectura').textContent)), 'la lectura muestra la orina: 110 mOsm/kg y 400 mL/h');
+// prueba de vasopresina: central sube ≥50 % (≥165), nefrogénica no cambia; el botón existe desde antes y se repinta (no se rehace)
+await p.evaluate(() => { window.__vasoBtn = document.getElementById('agv-m-vaso'); document.querySelector('[data-agv-tab="sodio"]').click(); document.getElementById('agv-m-vaso').click(); });
+await p.waitForTimeout(300);
+ok(await p.evaluate(() => /165/.test(document.getElementById('agv-lectura').textContent) && document.getElementById('agv-m-vaso') === window.__vasoBtn && window.__vasoBtn.getAttribute('aria-pressed') === 'true'), 'vasopresina en la central: ≥165 y el botón sigue siendo el mismo');
+await p.evaluate(() => { document.querySelector('#agv-m-orina [data-v="nefro"]').click(); document.getElementById('agv-m-vaso').click(); }); await p.waitForTimeout(300);
+ok(await p.evaluate(() => /no cambia|sin cambio/i.test(document.getElementById('agv-frase').textContent)), 'vasopresina en la nefrogénica: sin cambio');
+ok(await desborde() <= 0, 'sin desborde con la orina');
+await foto('04b-di');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-dx', 'hiperglucemia', e => e.glucosa === 600, 'hiperglucemia');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-tto', 'hiponatremia', e => e.na0 === 122 && e.adh, 'hiponatremia');
 ok(await p.evaluate(() => /^↑ sin cifra$/.test(document.getElementById('agv-dl-mar').textContent)), `mareógrafo del mar: «${await p.evaluate(() => document.getElementById('agv-dl-mar').textContent)}»`);

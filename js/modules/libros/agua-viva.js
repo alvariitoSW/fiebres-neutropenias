@@ -22,7 +22,7 @@ import { enlacesFuente, origenEnlazado, citaExacta, hrefPdf } from '../../core/c
 import { crearExplicacion } from '../../core/explicacion-guiada.js';
 import {
     FLUIDOS, ORDEN_FLUIDOS, PACIENTES, PERDIDAS, BUN_ALTO, CONCEPTOS, PREGUNTAS, CASOS, ESTADOS_ANCLA, GUIAS, NOMBRE_ESTADO,
-    estadoBase, copia, clamp, fmt, fmtL, dec, pruebasAguaViva,
+    estadoBase, copia, clamp, fmt, fmtL, dec, pruebasAguaViva, ORINA,
 } from '../../data/agua-viva-data.js';
 import {
     $, estado, D, REDUCIR, Lupa, ocultos, initEscena, aplicarModelo, setOcultos, pintarLectura, medir, dibujar,
@@ -91,7 +91,18 @@ function fraseNa() {
     return [`Na⁺ ${na}: entre 135 y 145, el agua no entra ni sale de las células.`, 'ficha · mr-hiponatremia-dx · mr-hipernatremia'];
 }
 
+function fraseOrina(o) {
+    if (!o) return ['Sin dato de orina.', ''];
+    if (o.vaso) return [o.subeMin
+        ? `Con vasopresina la osmolalidad de la orina sube al menos un 50 % (de ${o.osm} a ≥ ${o.osmVaso}): <span class="hl-verde">DI central</span>; el riñón responde, falta la hormona.`
+        : `Con vasopresina la orina no cambia (${o.osm}): <span class="hl-rojo">DI nefrogénica</span>; el riñón no responde a la ADH.`, 'ficha · mr-di-dx'];
+    const na = Math.round(D.naMed);
+    return [o.tipo === 'central'
+        ? `Orina de ${o.osm} mOsm/kg y ${o.mlh} mL/h con Na⁺ ${na}: <span class="hl-rojo">orina casi sin solutos con plasma hipertónico</span>. En la central suele ser <200; la neurona se encoge.`
+        : `Orina de ${o.osm} mOsm/kg (cifra ilustrativa): la nefrogénica da 200-500. <span class="hl-rojo">Orina diluida con plasma hipertónico</span>; falla la respuesta a la ADH.`, 'ficha · mr-di-dx · diuresis y Posm: dato del caso'];
+}
 function fraseDe(v, n) {
+    if (JSON.stringify(v.orina) !== JSON.stringify(n.orina)) return fraseOrina(n.orina);
     if (v.paciente !== n.paciente) {
         const [h, f] = FRASE_INICIO(); return [h + ` Volemia ≈ ${dec(D.V0 / 1000)} L.`, f + ' · mc-hemorragico-clasificacion'];
     }
@@ -188,6 +199,8 @@ function sincronizarMandos() {
     const c = D.clase; const oc = $('o-clase'); oc.textContent = c.n ? `${c.nombre} · Hto ${Math.round(D.hto)} %` : 'Sin pérdida'; oc.className = 'agv-clase agv-c' + c.n;
     for (const id of ['m-reloj', 'm-reloj2']) $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === estado.reloj)));
     $('m-na').value = estado.na0; $('o-na').textContent = estado.na0;
+    $('m-orina').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === (estado.orina ? estado.orina.tipo : ''))));
+    $('m-vaso').disabled = !estado.orina; $('m-vaso').setAttribute('aria-pressed', String(!!(estado.orina && estado.orina.vaso)));
     $('m-glucosa').value = estado.glucosa; $('o-glucosa').textContent = estado.glucosa;
     $('m-adh').setAttribute('aria-pressed', String(estado.adh)); $('m-urea').setAttribute('aria-pressed', String(estado.urea));
     enRaiz('[data-agv-perdida]').forEach(b => b.setAttribute('aria-pressed', String(estado.perdida === b.dataset.agvPerdida)));
@@ -216,6 +229,8 @@ function engancharDock() {
     $('m-hemorragia').addEventListener('input', e => cambiar(s => { s.hemorragia = +e.target.value; }));
     for (const id of ['m-reloj', 'm-reloj2']) $(id).addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.reloj = b.dataset.v; }); });
     $('m-na').addEventListener('input', e => cambiar(s => { s.na0 = +e.target.value; s.bolos3 = 0; s.fijo = {}; }));
+    $('m-orina').addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.orina = b.dataset.v ? { tipo: b.dataset.v, osm: ORINA[b.dataset.v].osm, mlh: ORINA[b.dataset.v].mlh, vaso: false } : null; }); });
+    $('m-vaso').addEventListener('click', () => cambiar(s => { if (s.orina) s.orina.vaso = !s.orina.vaso; }));
     $('m-glucosa').addEventListener('input', e => cambiar(s => { s.glucosa = +e.target.value; }));
     $('m-adh').addEventListener('click', () => cambiar(s => { s.adh = !s.adh; }));
     $('m-urea').addEventListener('click', () => cambiar(s => { s.urea = !s.urea; }));
