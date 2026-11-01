@@ -469,7 +469,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^(Aorta$|Tronco pulmonar|AP )/.test(p.nombre)) { base += p.pos.length / 3; return; }
     // Dibujo nuevo, A4C: el pulmón lateral no se corta en láminas (la línea de pleura salía como una escalera de rayas regulares en el borde del
     // sector); en Lang 2015, Fig. 4 esa zona es sombra oscura sin patrón. La ventana pobre ya la tapa con su sombra irregular (nuevoP).
-    if (P.clave === 'a4c' && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
+    if ((P.clave === 'a4c' || P.clave === 'sc4c') && dibujoNuevo() && /^Pulmón/.test(p.nombre)) { base += p.pos.length / 3; return; }
     const r = ref && ref[k] && ref[k].nombre === p.nombre ? ref[k] : null;
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;
