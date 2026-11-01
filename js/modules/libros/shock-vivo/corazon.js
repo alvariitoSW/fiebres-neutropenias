@@ -82,13 +82,13 @@ export function montarCorazon(svg) {
       + `<text x="${f1(b.x + 2)}" y="${f1(ay - w / 2 - 20)}" style="${txt}">al pulmón ×${String(q).replace('.', ',')} (Qp/Qs)</text>`;
   };
   // capa de la disección (solo Joaquín): colgajo de la íntima y luz falsa en la ascendente (Marino Fig. 20.4, p. 51: el colgajo
-  // separa la luz verdadera de la falsa) y la cizalla ∝ FC × presión de pulso (dirección: p. 52; la escala, ilustrativa)
+  // separa la luz verdadera de la falsa) y la cizalla ∝ FC × IC (p. 51-52: la taquicardia y el gasto la aumentan; la escala, ilustrativa)
   const capaDis = document.createElementNS('http://www.w3.org/2000/svg', 'g'); capaDis.id = 'cor-diseccion'; svg.querySelector('#cor-corazon').append(capaDis);
   let disPrev = '';
   const pintarDis = (cab, info) => {
     const u = cab.lectura?.u;
     if (!info?.diseccion || !u) { if (disPrev) { disPrev = ''; capaDis.innerHTML = ''; } return; }
-    const pp = Math.round(u.pas - u.pad_), idx = cl(u.fc * pp / (140 * 80), 0, 1), k = Math.round(u.fc) + '|' + pp + '|' + (disPrev ? 1 : 0);
+    const ic = cab.lectura.icTotal ?? 0, idx = cl(u.fc * ic / (140 * 4), 0, 1), k = Math.round(u.fc) + '|' + ic.toFixed(1) + '|' + (disPrev ? 1 : 0);
     if (k === disPrev) return; disPrev = k;
     const [ax, ay] = c.puertos().aorta, R = 12.5;
     const txt = 'font:600 11px system-ui,sans-serif;fill:var(--text-main);paint-order:stroke;stroke:var(--bg-main);stroke-width:2px';
@@ -99,12 +99,12 @@ export function montarCorazon(svg) {
     // el indicador: barra de 0 a 1 (ilustrativa) bajo los rótulos, a la izquierda de la aorta
     const bx = ax + 36, by = ay - 4, bw = 84;
     capaDis.innerHTML = `<path d="${falsa}" style="fill:${rojo}" opacity=".35"/><path d="${fl}" style="fill:none;stroke:var(--text-main);stroke-width:1.8;stroke-linecap:round"/>`
-      + `<text x="${f1(ax - 15)}" y="${f1(ay - 9)}" text-anchor="end" style="${txt}">luz verdadera</text>`
       + `<text x="${f1(ax + 15)}" y="${f1(ay - 9)}" style="${txt}">luz falsa</text>`
-      + `<text x="${bx}" y="${by + 9}" style="${txt}">Cizalla (ilustrativa)</text>`
+      + `<text x="${bx}" y="${by + 9}" style="${txt}">Cizalla</text>`
       + `<rect x="${bx}" y="${by + 14}" width="${bw}" height="9" rx="3" style="fill:none;stroke:var(--text-main);stroke-width:1" opacity=".7"/>`
       + `<rect x="${bx + 1}" y="${by + 15}" width="${f1(Math.max(1, (bw - 2) * idx))}" height="7" rx="2" style="fill:${rojo}"/>`
-      + `<text x="${bx}" y="${by + 36}" style="${txt}">FC ${Math.round(u.fc)} × PP ${pp}</text>`;
+      + `<text x="${bx}" y="${by + 36}" style="${txt}">FC ${Math.round(u.fc)} × IC ${ic.toFixed(1).replace('.', ',')}</text>`
+      + `<text x="${bx}" y="${by + 50}" style="${txt}" opacity=".7">escala ilustrativa</text>`;
   };
   return {
     pintar(cab, dt = 1 / 60, quieto = false, info = null) {
