@@ -5,7 +5,7 @@
     <div class="tmv-raiz" id="tmv-raiz" data-modelo-vivo>
       <header class="cabecera"><p class="tmv-eyebrow">Modelo vivo · Marino caps. 43-44</p><h2 class="tmv-titulo">El cuerpo que arde y tirita</h2></header>
 
-  <div class="modos" id="tmv-modos" role="group" aria-label="Modo"><button type="button" class="b" id="tmv-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" id="tmv-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" id="tmv-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" id="tmv-modo-caso" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="modos" id="tmv-modos" role="group" aria-label="Modo"><button type="button" class="b" id="tmv-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" id="tmv-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" id="tmv-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" id="tmv-modo-caso" data-modo="caso" aria-pressed="false">Caso</button><button type="button" class="b" id="tmv-modo-preguntas" data-modo="preguntas" aria-pressed="false">Preguntas</button></div>
   <section id="tmv-prueba" class="prueba" hidden aria-live="polite"></section>
   <p id="tmv-idea" class="idea"></p>
   <section id="tmv-monitor" aria-label="Monitor de cabecera">
@@ -17,6 +17,7 @@
   <div class="capas" role="group" aria-label="Capas del cuerpo"><button type="button" class="b" id="tmv-l-piel" aria-pressed="true">Piel</button><button type="button" class="b" id="tmv-l-mus" aria-pressed="true">Músculo</button><button type="button" class="b" id="tmv-l-cer" aria-pressed="true">Cerebro</button></div>
   <div id="tmv-avisos-zona"></div>
   <section id="tmv-paso-caja" aria-live="polite"></section>
+  <section id="tmv-vista-preguntas" hidden aria-live="polite"><div id="tmv-preg"></div><p class="tmv-para" id="tmv-aviso-tapa">El monitor y el dibujo salen cuando contestes.</p></section>
   <p class="mon-pie" id="tmv-mon-pie"></p>
   <div id="tmv-leyenda"></div>
   <details class="fig" id="tmv-figosb"><summary>Fig. 43.1 · onda de Osborn en la hipotermia (ECG real)</summary><figure style="margin:0"><img id="tmv-imgosb" alt="Electrocardiograma con onda de Osborn en una hipotermia" loading="lazy"><figcaption>Onda de Osborn (Fig. 43.1, Marino 2024, p. 56): inespecífica; no se da una temperatura umbral. Foto real de la ficha.</figcaption></figure></details>
@@ -29,6 +30,7 @@
   </section>
 
 <div class="dock" id="tmv-dock"><div class="dock-in">
+  <div class="tmv-dock-est" id="tmv-dock-estudio"><div class="tmv-pasos" id="tmv-dock-pasos"></div><div class="tmv-dock-est-txt"><span id="tmv-dock-est-izq"></span><span id="tmv-dock-est-der"></span></div></div>
   <p class="frase" id="tmv-frase" role="status" aria-live="polite"><span class="frase-txt" id="tmv-frase-txt"></span></p>
   <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y enlaces</button></div>
   <div class="dock-panel" id="tmv-dock-panel">
