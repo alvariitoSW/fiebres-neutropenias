@@ -69,7 +69,7 @@ const PREG_RECORRIDO = [
       { t: 'Tirita más fuerte y la FC sube: cuanto más frío, más defensa.', porque: 'Esas defensas protegen solo en las fases iniciales (p. 53). Por debajo de 28 °C el escalofrío desaparece (p. 54): esperar más defensa te dejaría sin ver que Honorato se está apagando.' },
       { t: 'Deja de tiritar, la bradicardia empeora y por debajo de 28 °C hay riesgo de fibrilación ventricular.', ok: true },
       { t: 'Se mantiene igual hasta los 24 °C y solo entonces cambia algo.', porque: 'Ya por debajo de 32 °C hay bradicardia que no responde a atropina y por debajo de 28 °C hay riesgo de FV (p. 56). Esperar a los 24 °C sería llegar con asistolia.' },
-      { t: 'La FC sube por el estrés y el escalofrío se mantiene hasta 24 °C.', porque: 'La tabla de la fuente da bradicardia y sin escalofrío en la hipotermia grave (p. 54). Contar con taquicardia retrasaría el recalentamiento.' }],
+      { t: 'La FC sube por el estrés y el escalofrío se mantiene hasta 24 °C, sin cambios en ningún sentido hasta entonces.', porque: 'La tabla de la fuente da bradicardia y sin escalofrío en la hipotermia grave (p. 54). Contar con taquicardia retrasaría el recalentamiento.' }],
     explicacion: 'Moderada (28-31,9 °C): escalofrío reducido o ausente y bradicardia; grave (<28 °C): coma, sin escalofrío, pupilas fijas, hipotensión (Tabla 43.6, p. 54); y riesgo de FV y asistolia por debajo de 28 °C (p. 56).', fuente: ['54|ma-hipo-grados', '56|ma-hipo-arritmias'],
     tocar: { txt: 'Compruébalo: sigue enfriándose', patch: est('hipo', 3), cuenta: (a, d) => `la temperatura baja de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc}, el escalofrío ${d.esc ? 'sigue' : 'desaparece'} y la PA es ${d.pa}.` } },
   { grupo: 'guia', num: 'G8', estado: est('fiebre', 4),
@@ -163,7 +163,7 @@ const CASO_J = { id: 'tmv-jacinta', titulo: 'La rigidez antes que la fiebre (Jac
     enunciado: 'Retirados los dos fármacos, sigue con clonus. <b>¿Qué más?</b>',
     opciones: [
       { t: 'Ciproheptadina por vía oral (también por sonda): 12 mg y luego 2 mg cada 2 h mientras persistan los síntomas.', ok: true },
-      { t: 'Ciproheptadina 12 mg IV, para que actúe más rápido.', porque: 'La ciproheptadina solo existe por vía oral (p. 53). Se puede triturar por sonda nasogástrica.' },
+      { t: 'Ciproheptadina 12 mg IV de carga, para que actúe más rápido y frene antes la subida de temperatura del cuadro.', porque: 'La ciproheptadina solo existe por vía oral (p. 53). Se puede triturar por sonda nasogástrica.' },
       { t: 'Bromocriptina 10 mg tres veces al día, como en el SNM.', porque: 'La bromocriptina es del SNM (p. 51). En el serotoninérgico va un antagonista de la serotonina (p. 53).' },
       { t: 'Rocuronio de entrada, por la rigidez.', porque: 'La parálisis es para la rigidez y la rabdomiólisis que no mejoran con las medidas convencionales (p. 53), no para empezar.' }],
     explicacion: 'Se retira lo que lo causa y se da ciproheptadina solo oral: 12 mg y 2 mg cada 2 h; mantenimiento de 8 mg cada 6 h (p. 53).', fuente: ['53|ma-ss-tto'],
