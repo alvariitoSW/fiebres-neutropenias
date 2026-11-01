@@ -55,7 +55,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
         if (!d.guia?.length) m.push('sin Guía socrática');
         if (!d.examen?.length) m.push('sin Examen');
         if (!d.casos?.length && ficha !== 'mt-cuerpo') m.push('sin casos');
-        const preguntas = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))];
+        const preguntas = [...(d.guia || []), ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))];
         const tests = preguntas.filter(q => q.tipo === 'test');
         let masLarga = 0; const posiciones = {};
         for (const q of preguntas) {
@@ -99,7 +99,7 @@ const largo = s => s.replace(/<[^>]+>/g, '').length;
         const mod = await import(new URL('../../../../js/data/mayeutica/' + arch, import.meta.url));
         let n = 0, larga = 0, corta = 0;
         for (const d of Object.values(mod).flatMap(g => Object.values(g))) {
-            const qs = [...d.guia, ...d.examen, ...d.casos.flatMap(c => c.pasos.map(p => p.pregunta))].filter(q => q.tipo === 'test');
+            const qs = [...(d.guia || []), ...(d.examen || []), ...(d.casos || []).flatMap(c => c.pasos.map(p => p.pregunta))].filter(q => q.tipo === 'test');
             for (const q of qs) {
                 const ls = q.opciones.map(o => largo(o.t)), ok = largo(q.opciones.find(o => o.ok)?.t || '');
                 n++; if (ok === Math.max(...ls)) larga++; if (ok === Math.min(...ls)) corta++;
