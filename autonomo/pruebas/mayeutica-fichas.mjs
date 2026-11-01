@@ -295,7 +295,8 @@ async function correr(ANCHO, REDUCIDO) {
         }
         ok(await p.evaluate(z => /No queda nada por repasar/.test(document.querySelector(z).textContent), ZE), `${ficha}: el repaso se vacía al acertarlas`);
         ok(await p.evaluate(f => document.querySelector(`#${f} .est-ir[data-ir-paso="examen"] .est-marca`).textContent === '✓', ficha), `${ficha}: «Examínate» queda marcado`);
-        // Casos
+        // Casos (mt-cuerpo, ficha de consulta, no tiene caso propio)
+        if (d.casos.length) {
         Z = ZC;
         await pulsar(`${ZE} [data-ir-paso="caso"]`); await p.waitForTimeout(100);
         for (const [k, caso] of d.casos.entries()) {
@@ -308,7 +309,7 @@ async function correr(ANCHO, REDUCIDO) {
                 await siguiente(Z);
             }
             const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent, ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: !!document.querySelector(z + ' .may-modelo') }), Z);
-            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && fin.modelo, `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
+            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && (fin.modelo || !juega.length), `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha${juega.length ? ' y al modelo' : ' (ficha sin modelo vivo: excepción del Congreso del 01/11)'}`);
             ok(await desborde() <= 0, `${ficha}: sin desborde en «Lo que te llevas» (${caso.id})`);
             if (nf === 0 && k === 0) await foto('07-fin-caso', Z);
             if (k < d.casos.length - 1) await pulsar(`${Z} [data-fin="otro"]`);
@@ -318,6 +319,7 @@ async function correr(ANCHO, REDUCIDO) {
         await pulsar(`${Z} [data-may-texto]`); await p.waitForTimeout(900);   // el scroll de «Ver en el texto» es suave
         const ancla = d.casos.at(-1).volver.ancla;
         ok(await p.evaluate(([f, a]) => { const t = document.getElementById(f), e = document.getElementById(a); const r = e.getBoundingClientRect(); return !t.classList.contains('modo-estudiar') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, ancla]), `${ficha}: «Repasar en la ficha» vuelve al texto, a «${ancla}»`);
+        }
         // «Para profundizar»
         await pulsar(`#${ficha} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(150);
         const prof = await p.evaluate(f => {
