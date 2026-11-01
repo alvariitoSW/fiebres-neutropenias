@@ -34,14 +34,14 @@ export const RECETAS_3D_G1 = {
         paneles: [
             { tipo: 'comparar', titulo: 'Cómo se dispara la respiración', columnas: [
                 { titulo: 'Por presión', color: 'dorado', nodos: [{ fuente: '#nep-disparo-presion', etiqueta: 'Deflexión negativa de presión: esfuerzo del paciente' }] },
-                { titulo: 'Por tiempo', color: 'gris', nodos: [{ fuente: '#nep-disparo-presion', etiqueta: 'Sin deflexión: frecuencia preseleccionada' }] }
+                { titulo: 'Por flujo', color: 'verde', nodos: [{ fuente: '#nep-disparo-flujo', etiqueta: 'Casi sin cambio de presión: menos trabajo; hoy es el estándar' }] }
             ] },
             { tipo: 'requisitos', modo: 'ninguno', sinPuerta: true, iconoMarcado: '☑', titulo: 'IMV: ¿buena idea en este paciente? (lista de la ficha)', items: [{ checks: '.neumo-imv-check' }], resultado: ['#neumo-imv-resultado'] },
             { tipo: 'flujo', titulo: 'Subir la PEEP: el reclutamiento y su precio', nodos: [
                 { fuente: '#nep-mejor-peep', etiqueta: 'PEEP ↑: recluta, la compliance sube y la presión de conducción baja', color: 'verde' },
                 { fuente: '#nep-mejor-peep', etiqueta: 'Más allá: sobredistiende, la compliance baja', color: 'amarillo' },
                 { fuente: '#nep-peep-gc', etiqueta: 'El gasto cardíaco puede caer', color: 'rojo' },
-                { fuente: '#nep-peep-gc', etiqueta: 'DO₂ = GC × CaO₂ (Ec. 27.6)', color: 'dorado' }
+                { fuente: '#nep-do2', etiqueta: 'DO₂ = GC × CaO₂ (Ec. 27.6)', color: 'dorado' }
             ] },
             { tipo: 'escalera', titulo: 'Tabla 27.1: ventilación protectora', tabla: 'css:#nep-tabla-27-1 + div table' },
             { tipo: 'racimos', titulo: 'Ajustes prácticos', grupos: [{ titulo: 'Flujo y PEEP oculta', color: 'gris', nodos: ['#nep-flujo-ie', '#nep-ajustes-oculta'] }] },
