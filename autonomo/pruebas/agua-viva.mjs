@@ -95,6 +95,9 @@ ok(await p.evaluate(() => /no cambia|sin cambio/i.test(document.getElementById('
 ok(await desborde() <= 0, 'sin desborde con la orina');
 await foto('04b-di');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-dx', 'hiperglucemia', e => e.glucosa === 600, 'hiperglucemia');
+await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-dx', 'pseudo', e => e.pseudo === true && e.na0 === 140 && e.fijo.na === 128, 'pseudo');
+ok(await p.evaluate(() => !document.getElementById('agv-lupa').hidden && document.getElementById('agv-lupa-tubo').getAttribute('aria-pressed') === 'true'), 'el estado pseudo abre la lupa del tubo');
+ok(await p.evaluate(() => /290/.test(document.getElementById('agv-lectura').textContent) && /128/.test(document.getElementById('agv-lectura').textContent)), 'pseudo: Na medido 128 y Posm 290 en la lectura');
 await desde('libros', 'marinoRenal', 'panel-marino-renal-tabs', 'mr-hiponatremia-tto', 'hiponatremia', e => e.na0 === 122 && e.adh, 'hiponatremia');
 ok(await p.evaluate(() => /^↑ sin cifra$/.test(document.getElementById('agv-dl-mar').textContent)), `mareógrafo del mar: «${await p.evaluate(() => document.getElementById('agv-dl-mar').textContent)}»`);
 await desde('cardiologia', 'merinoCardiologia', 'panel-merino-cardio-tabs', 'mc-hemorragico-fluidos', 'reanimacion', e => e.hemorragia === 20 && e.infusiones[0]?.ml === 1800, 'reanimacion');

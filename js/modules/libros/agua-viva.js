@@ -81,6 +81,9 @@ function fraseHemorragia() {
     const nota = c.n === 4 ? ' <span class="agv-org agv-ilu">Nota de fidelidad: la Tabla 15.1 da dos criterios para la clase IV, >40 % y >30 mL/kg, que no casan con una volemia de 66 mL/kg; aquí manda el %.</span>' : '';
     return [`${c.nombre} (${pct} %, ${fmt(D.perdidaSangre)} mL${c.n === 4 ? '' : `, ${mlkg} mL/kg`}): ${txt}${reloj}${nota}`, 'ficha · mc-hemorragico-clasificacion (Tabla 15.1, Fig. 15.1)'];
 }
+function fraseSeudo() {
+    return [`Na⁺ medido ${Math.round(D.naMed)}, pero <span class="hl-azul">el del agua sigue en ${Math.round(estado.na0)}</span>: con proteínas de 12 g/dL o triglicéridos de 1.500 mg/dL la fase no acuosa del plasma crece. La Posm medida es normal (${Math.round(D.posm)}) y <span class="hl">la neurona no cambia</span>: no hay que tratarla. La ficha no dice cuánto baja el Na⁺.`, 'ficha · mr-pseudohipona · mr-pseudo-dx · dato del caso'];
+}
 function fraseNa() {
     const na = Math.round(D.naMed);
     if (na < 135) return [`Na⁺ ${na}: plasma hipotónico, <span class="hl-rojo">el agua entra en las células</span>: el mar y la neurona se hinchan. Es exceso de agua, no falta de sodio.`, 'ficha · mr-osm-efectiva · mr-hiponatremia-tto'];
@@ -103,6 +106,7 @@ function fraseOrina(o) {
 }
 function fraseDe(v, n) {
     if (JSON.stringify(v.orina) !== JSON.stringify(n.orina)) return fraseOrina(n.orina);
+    if (n.pseudo !== v.pseudo && n.pseudo) return fraseSeudo();
     if (v.paciente !== n.paciente) {
         const [h, f] = FRASE_INICIO(); return [h + ` Volemia ≈ ${dec(D.V0 / 1000)} L.`, f + ' · mc-hemorragico-clasificacion'];
     }
@@ -228,7 +232,7 @@ function engancharDock() {
     enRaiz('.agv-dock-tabs button').forEach(b => b.addEventListener('click', () => pestana(b.dataset.agvTab)));
     $('m-hemorragia').addEventListener('input', e => cambiar(s => { s.hemorragia = +e.target.value; }));
     for (const id of ['m-reloj', 'm-reloj2']) $(id).addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.reloj = b.dataset.v; }); });
-    $('m-na').addEventListener('input', e => cambiar(s => { s.na0 = +e.target.value; s.bolos3 = 0; s.fijo = {}; }));
+    $('m-na').addEventListener('input', e => cambiar(s => { s.na0 = +e.target.value; s.bolos3 = 0; s.pseudo = false; s.fijo = {}; }));
     $('m-orina').addEventListener('click', e => { const b = e.target.closest('button'); if (b) cambiar(s => { s.orina = b.dataset.v ? { tipo: b.dataset.v, osm: ORINA[b.dataset.v].osm, mlh: ORINA[b.dataset.v].mlh, vaso: false } : null; }); });
     $('m-vaso').addEventListener('click', () => cambiar(s => { if (s.orina) s.orina.vaso = !s.orina.vaso; }));
     $('m-glucosa').addEventListener('input', e => cambiar(s => { s.glucosa = +e.target.value; }));
@@ -237,12 +241,13 @@ function engancharDock() {
     enRaiz('[data-agv-perdida]').forEach(b => b.addEventListener('click', () => cambiar(s => { s.perdida = s.perdida === b.dataset.agvPerdida ? null : b.dataset.agvPerdida; })));
     $('m-albbaja').addEventListener('click', () => cambiar(s => { s.albBaja = !s.albBaja; }));
     $('m-inflamacion').addEventListener('click', () => cambiar(s => { s.inflamacion = !s.inflamacion; }));
-    $('m-paciente').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.v !== estado.paciente) cambiar(s => { s.paciente = b.dataset.v; s.infusiones = []; s.hemorragia = 0; s.bolos3 = 0; s.fijo = {}; }); });
+    $('m-paciente').addEventListener('click', e => { const b = e.target.closest('button'); if (b && b.dataset.v !== estado.paciente) cambiar(s => { s.paciente = b.dataset.v; s.infusiones = []; s.hemorragia = 0; s.bolos3 = 0; s.pseudo = false; s.fijo = {}; }); });
     $('m-reinicio').addEventListener('click', () => { const p = estado.paciente; const e = estadoBase(); e.paciente = p; aplicar(e, { reiniciar: true, frase: false }); decir(...FRASE_INICIO()); });
 
     // Lupas y toques en el estuario
     $('lupa-orilla').addEventListener('click', () => Lupa.abierta === 'orilla' ? Lupa.cerrar() : Lupa.abrir('orilla'));
     $('lupa-neurona').addEventListener('click', () => Lupa.abierta === 'neurona' ? Lupa.cerrar() : Lupa.abrir('neurona'));
+    $('lupa-tubo').addEventListener('click', () => Lupa.abierta === 'tubo' ? Lupa.cerrar() : Lupa.abrir('tubo'));
     $('lupa-cerrar').addEventListener('click', () => Lupa.cerrar());
     $('lienzo').addEventListener('click', e => {
         const r = $('lienzo').getBoundingClientRect(); const x = e.clientX - r.left, y = e.clientY - r.top;

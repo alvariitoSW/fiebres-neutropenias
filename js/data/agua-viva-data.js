@@ -159,6 +159,7 @@ export function estadoBase() {
     albBaja: false, inflamacion: false,
     adh: false, glucosa: GLU0, urea: false, perdida: null,
     na0: NA0, bolos3: 0, periodo3: '2h',
+    pseudo: false,           // pseudohiponatremia: el Na⁺ medido (fijo.na) baja sin que baje el del agua; la Posm medida es normal
     fijo: {},                // cifras que pone un caso clínico (Na, Hto): «dato del caso»
     orina: null,             // la salida «orina»: null (no se muestra) o { tipo: 'central'|'nefro', osm, mlh, vaso } (ver orinaDe)
     tocado: null             // compartimento tocado en una pregunta
@@ -226,8 +227,9 @@ export function derivar(e) {
   const naMed = e.fijo.na != null ? e.fijo.na : naCorrCalc - dilucion;
   const naCorr = naMed + dilucion;
   const bun = e.urea ? BUN_ALTO : BUN0;
-  const posm = 2 * naMed + e.glucosa / 18 + bun / 2.8;
-  const posmEf = 2 * naMed + e.glucosa / 18;
+  const naOsm = e.pseudo ? naCorrCalc - dilucion : naMed;   // pseudohiponatremia: la osmolalidad medida sale del Na⁺ del agua (E p. 9)
+  const posm = 2 * naOsm + e.glucosa / 18 + bun / 2.8;
+  const posmEf = 2 * naOsm + e.glucosa / 18;
   // Límites del salino 3 % (Tabla 35.3), con la peor subida posible (2 por bolo) o la del caso
   const avisos = [];
   const subida = e.bolos3 > 0 ? Math.round(naCorr - e.na0) : 0;
@@ -255,7 +257,7 @@ export function derivar(e) {
   return {
     orina: orinaDe(e.orina),
     P, base, delta, sinCifra, rango, proporcional, V0, perdidaSangre, perdidaRio, relleno,
-    clase: claseHemorragia(e.hemorragia), hto, htoCalc, naMed, naCorr, bun, posm, posmEf, avisos, subida,
+    clase: claseHemorragia(e.hemorragia), hto, htoCalc, naMed, naOsm, naCorr, bun, posm, posmEf, avisos, subida,
     tendNa, marFlecha, hipotonicos, salino, sangreMl
   };
 }
@@ -695,6 +697,7 @@ export const ESTADOS_ANCLA = {
   hiperglucemia: { estado: { glucosa: 600 }, pestana: 'solutos', lupa: 'neurona' },
   // Nicolás (dato del caso): Na⁺ 156, orina 110 mOsm/kg y 400 mL/h; Posm 322 sale de la Ec. 35.3 con glucosa 90 y BUN 14
   di: { estado: { fijo: { na: 156 }, orina: { tipo: 'central', osm: 110, mlh: 400, vaso: false } }, pestana: 'sodio', lupa: 'neurona' },
+  pseudo: { estado: { na0: 140, pseudo: true, fijo: { na: 128 } }, pestana: 'sodio', lupa: 'tubo' },
 };
 
 // ---------- La explicación guiada de cada estado con nombre ----------
@@ -715,7 +718,7 @@ const HP = (id, pag) => ({ libro: 'Marino, cap. 35', ficha: 'mr-hipernatremia', 
 const MAREA = k => ['#agv-tot-' + k, '#agv-dl-' + k];
 export const NOMBRE_ESTADO = { inicio: 'El agua del cuerpo', salino: 'Salino 0,9 %', glucosado: 'Glucosado 5 %', ringer: 'Ringer lactato', albumina5: 'Albúmina 5 %',
   albumina25: 'Albúmina 25 %', hipertonico: 'Salino 7,5 %', salino3: 'Salino 3 %: un bolo', hemorragia: 'Hemorragia del 20 %', reanimacion: 'Reanimación con Ringer',
-  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia', di: 'Diabetes insípida' };
+  hiponatremia: 'Hiponatremia', hipernatremia: 'Hipernatremia', osmolalidad: 'Osmolalidad y urea', hiperglucemia: 'Hiperglucemia', di: 'Diabetes insípida', pseudo: 'Pseudohiponatremia' };
 export const GUIAS = {
   inicio: [
     { t: 'Varón de 75 kg: el agua corporal es 0,6 × su peso magro, <span class="hl">45 L</span>.', mirar: 'mar', cita: CR('mar-tabla-10-1', 3) },
@@ -809,6 +812,13 @@ export const GUIAS = {
     { t: 'El plasma hipertónico saca agua de la neurona y la encoge.', resalta: '#agv-lupa', cita: HP('mr-hiperna-cerebro', 5) },
     { t: 'Para distinguir la central de la nefrogénica: osmolalidad de orina <200 en la central y 200-500 en la nefrogénica; con vasopresina, sube al menos un 50 % solo en la central.', e: { orina: { tipo: 'central', osm: 110, mlh: 400, vaso: true } }, resalta: '#agv-lectura', cita: HP('mr-di-dx', 7) },
     { t: 'El primer paso del diagnóstico es la restricción hídrica completa: si la osmolalidad urinaria no sube más de 30 en unas horas, es DI. En la central se repone la acción con desmopresina, 1 μg SC o 2 μg IV cada 12 h.', mirar: 'orina', cita: [HP('mr-di-dx', 7), HP('mr-desmopresina-di', 7)] },
+  ],
+  pseudo: [
+    { t: 'El plasma tiene una fase acuosa, con el sodio, y otra <span class="hl-azul">no acuosa</span>, con lípidos y proteínas. El laboratorio mide las dos; como el plasma es un 95 % agua, normalmente da casi igual.', lupa: 'tubo', cita: HD('mr-pseudohipona', 8) },
+    { t: 'Con proteínas de <span class="hl-rojo">12 g/dL</span> (normal 5,5-8) o triglicéridos de <span class="hl-rojo">1.500 mg/dL</span> (normal 25-175), la fase no acuosa crece: el Na⁺ medido baja y el del agua no.', lupa: 'tubo', resalta: '#agv-lupa', cita: HD('mr-pseudohipona', 8), org: 'el valor medido de 128 es un dato del caso: la ficha no dice cuánto baja' },
+    { t: 'Se descubre midiendo la osmolalidad: <span class="hl">normal (285-295)</span> en la pseudohiponatremia y baja (<275) en la hiponatremia verdadera.', lupa: 'tubo', resalta: '#agv-lectura', cita: HD('mr-pseudo-dx', 9) },
+    { t: 'La neurona no cambia: el sodio del agua plasmática es el mismo y el agua no se mueve entre el plasma y las células.', lupa: 'neurona', resalta: '#agv-lupa', cita: [HD('mr-pseudohipona', 8), HD('mr-pseudo-dx', 9)] },
+    { t: 'Aparece con hiperproteinemia (mieloma, gammapatías, inmunoglobulinas) o hipertrigliceridemia (pancreatitis, cetoacidosis diabética, alcohol): hay que pensar en ella antes de tratar un Na⁺ bajo.', lupa: 'tubo', cita: HD('mr-tabla-35-2', 8) },
   ],
 };
 // Cada estado con nombre: su nombre y sus fuentes como lista (REGLAS §7.11), sin repetir, en el orden de la
