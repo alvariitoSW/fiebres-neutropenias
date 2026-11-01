@@ -24,6 +24,7 @@ const FRASES = {
     'receptor-vivo': '#rcv-frase', 'iones-vivos': '#iov-frase',
     'hepatocito-vivo': '#hpv-frase-txt',
     'termostato-vivo': '#tmv-frase',
+    'eje-vivo': '#eje-frase-txt',
 };
 const ENUNCIADO = 'p[class*="-pregunta"]';
 const SIGUIENTE = '[data-accion="sig"]';
