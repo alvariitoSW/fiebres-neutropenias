@@ -154,7 +154,7 @@ const CASO_J = { id: 'tmv-jacinta', titulo: 'La rigidez antes que la fiebre (Jac
       { t: 'Ciproheptadina oral 12 mg: es el antídoto de esta rigidez.', porque: 'La ciproheptadina es del síndrome serotoninérgico (p. 53). En el SNM se retira el fármaco y puede darse bromocriptina (p. 51).' }],
     explicacion: 'Se retira el fármaco y se hidrata, con profilaxis tromboembólica; la bromocriptina mejora la rigidez en horas (p. 50-51).', fuente: ['50|ma-snm-clinica', '51|ma-snm-tto'],
     tocar: { txt: 'Compruébalo: retira el haloperidol y da el tratamiento', patch: est('snm', 5, 1), cuenta: (a, d) => `la T baja de ${coma(a.T)} a ${coma(d.T)} °C, la FC de ${a.fc} a ${d.fc}, la CK de ${a.ck.toLocaleString('es')} a ${d.ck.toLocaleString('es')} y cede la rigidez.` } },
-  { momento: 'Día 6 · la nota del R1', estado: est('snm', 5), dato: fila('snm', 5, 1, 4), tipo: 'error',
+  { momento: 'Día 6 · la nota del R1', estado: est('snm', 5, 1), dato: fila('snm', 5, 1, 4), tipo: 'error',
     enunciado: 'El R1 deja escrito el plan de Jacinta. <b>Puede haber 0, 1 o 2 errores.</b> Toca las frases que creas falsas.',
     frases: [
       { t: 'Bajo el haloperidol a la mitad hasta que ceda la rigidez.', mal: true, c: 'La medida más importante es retirar el fármaco de inmediato, no reducirlo (p. 50).' },
