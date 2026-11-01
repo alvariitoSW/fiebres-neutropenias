@@ -1,13 +1,14 @@
 // Estudiar (Texto | Estudiar) de las fichas del bloque 6b, grupo 6K · El O₂ que no llega a la mitocondria
 // (Marino, caps. 52-53): mt-salicilatos (19), mt-co (20) y mt-cianuro (21) de js/modules/libros/marino-toxicos.html.
 // La pinta js/core/mayeutica.js. Datos puros. Formato: el de js/data/mayeutica/b1-fluidos.js.
-// Hecha hasta ahora: la 19. Faltan la 20 y la 21 (se añaden a este mismo objeto, con el mismo estilo).
+// Hechas las tres: 19, 20 y 21.
 //
-// Fuente: docs/marino-2024-toxicologia-caps52-53-apendices.pdf; salicilatos, págs. 14-16 (TX; el cap. 52 de
+// Fuente: docs/marino-2024-toxicologia-caps52-53-apendices.pdf; salicilatos, págs. 14-16; CO, 19-22; cianuro, 22-25 (TX; el cap. 52 de
 // «Marino» termina en la 17). Cada explicación y cada distractor dicen su página. Los pacientes se inventan.
 // Cobertura y casos: autonomo/bloques/b6b/cobertura-anexo.md §3 (6K) y tabla de casos (Rosendo, 35).
 
 const TX = 'docs/marino-2024-toxicologia-caps52-53-apendices.pdf';
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoToxicos', panel: 'panel-marino-tox-tabs', tab, enVisual: '', texto });
 const pdf = (p, t = `PDF pág. ${p}`) => `<a class="biblio-link" href="${TX}#page=${p}" target="_blank" rel="noopener">${t}</a>`;
 
 export const MAYEUTICA_OXIGENO = {
@@ -181,6 +182,338 @@ export const MAYEUTICA_OXIGENO = {
       { id: 'mt-sal-otros', titulo: 'Fiebre, sudoración y deshidratación: otro efecto del desacoplamiento' },
       { id: 'mt-sal-niveles', titulo: 'Niveles tóxicos y por qué la intoxicación crónica engaña' },
       { id: 'mt-sal-soporte', titulo: 'El soporte general: líquidos, vasopresores y ventilación' },
+    ],
+  },
+
+  /* =================================================================================================
+     20 · Monóxido de carbono (TX págs. 19-22)
+     ================================================================================================= */
+  'mt-co': {
+    entrada: 'Por qué el pulsioxímetro marca 98 % con la carboxihemoglobina alta, qué le pasa a la PO₂ de los tejidos y cuánto tarda el oxígeno al 100 % en limpiar la sangre.',
+    guia: [
+      { id: 'co-g1', corto: 'afinidad por el hemo', tipo: 'test', fuente: 'mt-co-cohb-txt',
+        enunciado: 'Un poco de CO en el aire basta para intoxicar. ¿Qué lo explica?',
+        opciones: [
+          { t: 'Se une a la hemoglobina en otro sitio y la deforma, de modo que ya no capta O₂', porque: 'Se une al mismo sitio del hemo que el O₂ y compite con él; por eso el O₂ al 100 % desplaza al CO. Con la idea del "otro sitio" no entenderías por qué el oxígeno lo trata (p. 19, 22).' },
+          { t: 'Se une al mismo sitio del hemo con afinidad >200 veces la del O₂: 0,4 mmHg saturan la Hb', ok: true },
+          { t: 'Destruye los hematíes, así que la hemoglobina desaparece y hay que esperar a que se regenere', porque: 'No destruye la hemoglobina: la ocupa (COHb) y se elimina respirando. Si esperaras a la regeneración, no darías O₂ al 100 % y dejarías el CO ocupando el hemo (p. 19, 22).' }],
+        explicacion: 'El CO se une al hemo <span class="hl-azul">en el mismo sitio que el O₂</span> (COHb) con una afinidad <span class="hl-rojo">más de 200 veces mayor</span>; basta una presión de <span class="hl-rojo">0,4 mmHg</span> para saturar la hemoglobina (' + pdf(19) + ').' },
+      { id: 'co-g2', corto: 'la PO₂ venosa', tipo: 'destapa', fuente: 'mt-co-oxigenacion',
+        enunciado: 'Con un 50 % de COHb y la misma extracción de O₂ de siempre (5 mL/dL), ¿qué pasa con la PO₂ venosa? Piensa antes de destapar.',
+        cuantas: 'son tres cosas',
+        puntos: [
+          'El contenido arterial de O₂ <span class="hl">baja en proporción a la COHb</span>: el CO bloquea la unión del O₂.',
+          'Con la misma diferencia arteriovenosa (5 mL/dL) la <span class="hl-rojo">PO₂ venosa cae mucho más</span> que sin CO.',
+          'Esa PO₂ venosa es un reflejo de la PO₂ tisular: es una <span class="hl-azul">prueba indirecta</span> de que el CO empeora la oxigenación de los tejidos.'],
+        explicacion: 'Figura 53.1 y su explicación en ' + pdf(19) + ' y ' + pdf(20) + '. Puedes moverla en el simulador de la ficha (ilustrativo).',
+        modelo: visual('mt-co', 'Mira la Figura 53.1 en la vista Visual') },
+      { id: 'co-g3', corto: 'COHb y gravedad', tipo: 'test', fuente: 'mt-co-otros',
+        enunciado: 'Dos pacientes con la misma COHb están muy distintos de gravedad. ¿Qué sugiere el libro?',
+        opciones: [
+          { t: 'Que el cooxímetro es poco fiable y hay que repetirlo varias veces hasta que el valor cuadre con la clínica', porque: 'El libro no pone en duda la medida: el cooxímetro es la forma de diagnosticarlo. Repetirlo sin parar retrasaría el oxígeno y no explicaría la diferencia (p. 20-21).' },
+          { t: 'Que la gravedad solo depende del tiempo de exposición y la COHb no importa', porque: 'La COHb sigue siendo lo que confirma el diagnóstico (p. 21). Lo que dice el libro es que se correlaciona mal con la gravedad, no que sea irrelevante (p. 20).' },
+          { t: 'Que el CO inhibe también mioglobina y citocromo oxidasa y activa neutrófilos', ok: true }],
+        explicacion: 'Inhibe la <span class="hl-azul">mioglobina</span> y la <span class="hl-azul">citocromo oxidasa</span> (se pasa a metabolismo anaerobio) y activa los neutrófilos; la COHb <span class="hl-rojo">se correlaciona mal con la gravedad</span> (' + pdf(20) + ').' },
+      { id: 'co-g4', corto: 'el 98 %', tipo: 'test', fuente: 'mt-co-pulsioximetria',
+        enunciado: 'Un paciente con cefalea tras una noche con la calefacción de gas tiene una SpO₂ del 98 %. ¿Qué haces?',
+        opciones: [
+          { t: 'Lo descartas: una saturación del 98 % indica que la hemoglobina lleva O₂ normal', porque: 'El pulsioxímetro (2 longitudes de onda) cuenta la COHb como oxihemoglobina y da una cifra falsamente alta. Con ese 98 % darías el alta a una intoxicación en curso (p. 21).' },
+          { t: 'Repites la pulsioximetría en otro dedo para confirmarlo', porque: 'Cambiar de dedo no cambia el principio: a 660 nm la COHb absorbe casi como la oxihemoglobina y se repetiría el error. Perderías tiempo de oxígeno (p. 21).' },
+          { t: 'Pides un cooxímetro: el pulsioxímetro no distingue la COHb', ok: true }],
+        explicacion: 'A 660 nm la COHb absorbe casi como la oxihemoglobina: el pulsioxímetro la cuenta como HbO₂ y da <span class="hl-rojo">una lectura falsamente alta</span>. Hace falta un <span class="hl">cooxímetro de 8 longitudes de onda</span>, disponible en casi todos los laboratorios (' + pdf(21) + ').' },
+      { id: 'co-g5', corto: 'umbral en fumadores', tipo: 'test', fuente: 'mt-co-umbral',
+        enunciado: 'El cooxímetro de un fumador da una COHb del 8 %. ¿Está elevada?',
+        opciones: [
+          { t: 'Sí: el umbral es el 3-4 % para todos', porque: 'El 3-4 % es el umbral de los no fumadores. En fumadores es del 10 %, y con ese error ingresarías a un fumador sano como intoxicado (p. 21).' },
+          { t: 'Sí: cualquier cifra por encima del 1 % es patológica', porque: 'Menos del 1 % es lo normal en no fumadores, pero los fumadores tienen un 3-5 % o más. Con ese criterio todos los fumadores serían intoxicados (p. 21).' },
+          { t: 'No: en fumadores el umbral sube al 10 %', ok: true }],
+        explicacion: 'Sanos no fumadores <span class="hl-verde">&lt;1 %</span>; fumadores <span class="hl-verde">3-5 % o más</span>. Umbral de COHb elevada: <span class="hl">3-4 %</span> en no fumadores y <span class="hl">10 %</span> en fumadores (' + pdf(21) + ').' },
+    ],
+    examen: [
+      { id: 'co-e1', corto: 'nota de urgencias', tipo: 'error', fuente: 'mt-co-clinica · mt-co-dx-cohb',
+        enunciado: 'La nota de un compañero sobre una intoxicación por CO. Encuentra los errores (puede haber 0, 1 o 2).',
+        frases: [
+          { t: 'Primero cefalea (frontal) y mareo; con más exposición, ataxia y confusión.' },
+          { t: 'El color rojo cereza de la piel es un signo frecuente y orienta el diagnóstico.', mal: true,
+            c: 'El rojo cereza se describe clásicamente, pero es <span class="hl-rojo">raro</span> (p. 21): su ausencia no descarta nada.' },
+          { t: 'Con una cefalea típica y el antecedente de la calefacción, el diagnóstico se hace sin analítica.', mal: true,
+            c: 'El diagnóstico <span class="hl-rojo">no es posible solo con signos y síntomas</span>: exige una COHb elevada en sangre (p. 21).' },
+          { t: 'Avisar de que a las 1-4 semanas pueden aparecer deterioro mental y parkinsonismo.' }],
+        explicacion: 'Clínica y diagnóstico en ' + pdf(21) + '.' },
+      { id: 'co-e2', corto: 'cuánto tarda en bajar', tipo: 'test', fuente: 'mt-co-o2 · mt-co-calc',
+        enunciado: 'Una no fumadora llega con una COHb del 25 %. Con O₂ al 100 % y la semivida del libro (74 min), ¿cuánto tarda en llegar al 4 %?',
+        opciones: [
+          { t: 'Unos 196 min (algo más de 3 h): 25 → 4 son unas 2,6 semividas', ok: true },
+          { t: 'Unos 74 min: una semivida y queda normal', porque: 'En una semivida la COHb baja a la mitad (25 → 12,5 %), todavía alta. Si la dieras de alta creyendo que a los 74 min ya está, volvería a casa intoxicada (p. 22).' },
+          { t: 'Unas 14 h: con aire normal sería esa cifra y el O₂ no cambia gran cosa', porque: 'Con aire la semivida es de 320 min (unas 14 h hasta el 4 %); con O₂ al 100 % es de 74, unas 4 veces menos. Quitar el O₂ alargaría la intoxicación (p. 22).' }],
+        explicacion: 'Semivida de la COHb: <span class="hl">320 min con aire</span> y <span class="hl">74 min con O₂ al 100 %</span> (' + pdf(22) + '). De 25 % a 4 % son log₂(25/4) ≈ 2,6 semividas: ≈196 min, la cuenta de la calculadora de la ficha (cálculo propio sobre la cifra del libro, con su nota de fidelidad: el libro habla de «menos de hora y media»).',
+        origen: 'ficha · el cálculo, propio sobre la semivida' },
+      { id: 'co-e3', corto: 'hiperbárico', tipo: 'test', fuente: 'mt-co-hiperbarico',
+        enunciado: 'La familia pide la cámara hiperbárica «porque es lo mejor». ¿Qué dice el libro?',
+        opciones: [
+          { t: 'Que es el tratamiento de elección desde los años 70 en toda intoxicación moderada o grave', porque: 'Se estudia desde los años 70, pero el libro no la da como de elección. Trasladar a todos a una cámara retrasaría el O₂ normobárico que sí funciona (p. 22).' },
+          { t: 'Que está contraindicado porque empeora las secuelas diferidas', porque: 'El libro no la contraindica: dice que quizá reduzca el riesgo de secuelas neuropsiquiátricas diferidas. Lo que falta es prueba convincente (p. 22).' },
+          { t: 'Quizá reduzca las secuelas, pero sin prueba convincente de superar al normobárico', ok: true }],
+        explicacion: 'Estudiada desde los años 70; hay alguna evidencia de que <span class="hl">quizá reduzca el riesgo</span> de secuelas neuropsiquiátricas, pero <span class="hl-rojo">no hay prueba convincente</span> de que supere al O₂ normobárico (' + pdf(22) + ').' },
+      { id: 'co-e4', corto: 'ECG y troponina', tipo: 'test', fuente: 'mt-co-corazon',
+        enunciado: 'Intoxicación moderada por CO, sin dolor torácico ni síntomas cardíacos. ¿Qué pruebas del corazón pides?',
+        opciones: [
+          { t: 'Ninguna si no hay dolor torácico: el CO daña el cerebro, no el corazón', porque: 'Hay lesión miocárdica en cerca del 40 % de las moderadas o graves, y es de mal pronóstico: puede no dar dolor. Sin ECG ni marcadores la pasarías por alto (p. 22).' },
+          { t: 'Solo un ecocardiograma, porque el ECG y la troponina no sirven aquí', porque: 'El libro recomienda ECG y marcadores cardíacos, no el eco. Con solo eco no verías la lesión miocárdica precoz que el ECG y los marcadores sí buscan (p. 22).' },
+          { t: 'ECG y marcadores cardíacos en todas las moderadas o graves', ok: true }],
+        explicacion: 'Lesión miocárdica en cerca del <span class="hl-rojo">40 %</span> de las intoxicaciones moderadas o graves, de mal pronóstico: <span class="hl">ECG y biomarcadores</span> en todas (' + pdf(22) + ').' },
+      { id: 'co-e5', corto: 'humo y lactato', tipo: 'test', fuente: 'mt-co-cianuro',
+        enunciado: 'Salvó a un hombre de un incendio: estable, sin hipotensión, lactato de 12 mmol/L. ¿Qué haces además del oxígeno?',
+        opciones: [
+          { t: 'Nada más: el lactato alto lo explica el CO y la hipoxia', porque: 'El incendio genera también cianhídrico, y con lactato ≥10 mmol/L el libro recomienda tratar el cianuro de forma empírica aunque esté estable (p. 22).' },
+          { t: 'Tratar el cianuro empírico: lactato ≥10 mmol/L', ok: true },
+          { t: 'Esperar a que se inestabilice: antes no hay criterio', porque: 'Los criterios son inestabilidad o lactato ≥10, no las dos cosas. Esperar a la inestabilidad en el humo es peligroso: la parada puede llegar en menos de 5 min (p. 22-23).' }],
+        explicacion: 'Tratamiento empírico del cianuro en el humo con <span class="hl-rojo">inestabilidad hemodinámica</span> o <span class="hl-rojo">lactato ≥10 mmol/L</span> (' + pdf(22) + '). Nota: en la ficha siguiente el corte se imprime como «&gt;10» (' + pdf(24) + ').' },
+    ],
+    casos: [
+      { id: 'co-ata', titulo: 'Atanasio, 64 años: la calefacción de gas', corto: 'Caso · Atanasio (CO)', sub: 'fumador, cefalea y SpO₂ 98 %',
+        paciente: { Edad: '64 años', Antecedente: 'fumador', Motivo: 'cefalea y mareo; calefacción de gas en casa', 'SpO₂': '98 %' },
+        pasos: [
+          { momento: 'Urgencias · el 98 %', datos: { 'SpO₂': '98 %', 'Síntomas': 'cefalea, mareo' }, nuevo: ['SpO₂', 'Síntomas'],
+            pregunta: { id: 'co-ata-1', tipo: 'test', fuente: 'mt-co-pulsioximetria',
+              enunciado: 'Cefalea frontal y mareo, SpO₂ del 98 %. ¿Qué pides primero?',
+              opciones: [
+                { t: 'Cooximetría en sangre: es la que mide la COHb', ok: true },
+                { t: 'Nada: la saturación es normal y es una cefalea tensional', porque: 'El 98 % es falsamente alto si hay COHb: el pulsioxímetro la lee como oxihemoglobina. Con ese razonamiento darías el alta a una intoxicación (p. 21).' },
+                { t: 'Un pulsioxímetro de otra marca, por si este falla', porque: 'Cualquier pulsioxímetro de 2 longitudes de onda cuenta la COHb como HbO₂. Cambiarlo no resuelve el problema, solo retrasa el diagnóstico (p. 21).' }],
+              explicacion: 'El diagnóstico exige una COHb elevada en sangre y se mide con el <span class="hl">cooxímetro</span>; el pulsioxímetro da una lectura falsamente alta (' + pdf(21) + ').' } },
+          { momento: 'Resultado del cooxímetro', datos: { 'COHb': '31 %' }, nuevo: ['COHb'],
+            calculadora: { ir: 'mt-co-sim', nombre: 'Simulador: el CO y la PO₂ venosa' },
+            pregunta: { id: 'co-ata-2', modelo: visual('mt-co', 'Mira el CO en la vista Visual'), tipo: 'test', fuente: 'mt-co-umbral · mt-co-otros',
+              enunciado: 'COHb del 31 % en un fumador. ¿Cómo lo interpretas?',
+              opciones: [
+                { t: 'Normal para un fumador, que tiene un 3-5 % o más', porque: 'Los fumadores tienen un 3-5 % o más; el umbral de COHb elevada es del 10 %. Un 31 % no lo explica el tabaco y lo dejarías sin oxígeno (p. 21).' },
+                { t: 'Poco útil: la COHb se correlaciona mal con la gravedad, así que no cambia nada', porque: 'Se correlaciona mal con la gravedad, pero el diagnóstico exige una COHb elevada. Ignorarla sería no tratar a quien ya tiene el diagnóstico (p. 20-21).' },
+                { t: 'Elevada, aunque sea fumador (umbral del 10 %): hay intoxicación', ok: true }],
+              explicacion: 'Umbral <span class="hl">10 % en fumadores</span> (3-5 % o más es lo habitual en ellos): 31 % es una intoxicación (' + pdf(21) + '). Mira cómo cae la PO₂ venosa en el simulador (ilustrativo).' } },
+          { momento: 'Se empieza el oxígeno', datos: { 'O₂': '100 % con gafas de alto flujo' }, nuevo: ['O₂'],
+            calculadora: { ir: 'mt-co-calc', nombre: 'COHb: ¿alta? y cuánto tarda en bajar' },
+            pregunta: { id: 'co-ata-3', tipo: 'test', fuente: 'mt-co-o2 · mt-co-calc', origen: 'ficha · el cálculo, propio sobre la semivida',
+              enunciado: 'Con O₂ al 100 % (semivida 74 min), ¿cuánto tarda su COHb en bajar del 31 % al umbral de fumador (10 %)? Compruébalo en la calculadora.',
+              opciones: [
+                { t: 'Unos 74 min, una sola semivida', porque: 'En una semivida la COHb baja a la mitad (31 → 15,5 %), aún por encima del 10 %. Darle el alta a esa hora lo devolvería a casa intoxicado (p. 22).' },
+                { t: 'Unos 121 min (2 h): 31 → 10 son 1,6 semividas', ok: true },
+                { t: 'Unas 8,7 h, que es lo que tardaría respirando aire', porque: 'Con aire la semivida es de 320 min, unas 4 veces más. Con las gafas de alto flujo al 100 % bastan unas 2 h: no se trata de esperar (p. 22).' }],
+              explicacion: 'Semivida <span class="hl">74 min con O₂ al 100 %</span> y 320 min con aire (' + pdf(22) + '). 74 × log₂(31/10) ≈ <span class="hl">121 min</span> (con aire serían ≈ 8,7 h): la cuenta de la calculadora, propia sobre la cifra del libro.' } },
+          { momento: 'Antes de nada más', datos: { 'Pregunta': 'de la residente' }, nuevo: ['Pregunta'],
+            pregunta: { id: 'co-ata-4', tipo: 'destapa', fuente: 'mt-co-corazon',
+              enunciado: 'La residente pregunta: «no tiene dolor en el pecho, ¿para qué un ECG y una troponina?». Contéstale con el libro.',
+              cuantas: 'son tres cosas',
+              puntos: [
+                'Hay <span class="hl-rojo">lesión miocárdica en cerca del 40 %</span> de las intoxicaciones moderadas o graves.',
+                'Es un hallazgo de <span class="hl">mal pronóstico</span>.',
+                'Por eso se recomiendan <span class="hl">ECG y biomarcadores cardíacos</span> en todos los casos moderados o graves.'],
+              explicacion: 'Cardiopatía en la intoxicación por CO, en ' + pdf(22) + '.' } },
+          { momento: 'Hora 3 · llega la troponina', datos: { 'Troponina': '0,9 ng/mL', 'ECG': 'ST descendido en V4-V6' }, nuevo: ['Troponina', 'ECG'],
+            pregunta: { id: 'co-ata-5', tipo: 'test', fuente: 'mt-co-hiperbarico · mt-co-corazon', origen: 'ilustrativo: troponina y ECG de un paciente posible',
+              enunciado: 'Troponina de 0,9 y descenso del ST. El cardiólogo propone trasladarlo a la cámara hiperbárica. ¿Qué dice el libro?',
+              opciones: [
+                { t: 'Es lo indicado ahora que hay lesión miocárdica, para dar la máxima oxigenación al corazón', porque: 'La lesión miocárdica es de mal pronóstico, pero el libro no la liga a la cámara. Mover a un paciente inestable sin prueba de beneficio añade riesgo (p. 22).' },
+                { t: 'Sin prueba convincente de superar al O₂ normobárico: sigue con O₂ al 100 % y vigila el corazón', ok: true },
+                { t: 'Está contraindicada por el infarto', porque: 'El libro no la contraindica: simplemente no hay prueba convincente de ventaja. Decir "contraindicada" inventaría una regla (p. 22).' }],
+              explicacion: 'El hiperbárico <span class="hl-rojo">no tiene prueba convincente</span> frente al normobárico (' + pdf(22) + '); la lesión miocárdica es de mal pronóstico y pide ECG y marcadores (' + pdf(22) + '). Las cifras de troponina y ECG son ilustrativas.' } },
+          { momento: 'Se le da el alta de UCI · giro', datos: { 'COHb': '3 %' }, nuevo: ['COHb'],
+            pregunta: { id: 'co-ata-6', tipo: 'error', fuente: 'mt-co-diferidas · mt-co-otros',
+              enunciado: 'Las instrucciones de alta que escribe el residente. Encuentra los errores (puede haber 0, 1 o 2).',
+              frases: [
+                { t: 'Volver si en las próximas 1-4 semanas aparece olvido, torpeza para decidir o temblor y rigidez.' },
+                { t: 'Como la COHb ha vuelto a la normalidad, ya no pueden aparecer secuelas.', mal: true,
+                  c: 'Las secuelas diferidas aparecen a las <span class="hl-rojo">1-4 semanas</span> con la COHb ya normal; su relación con ella <span class="hl">no está clara</span> (p. 21).' },
+                { t: 'Evitar la calefacción de gas hasta que la revisen.' },
+                { t: 'Si una COHb baja al alta, es que no fue grave: no hace falta avisar de nada.', mal: true,
+                  c: 'La COHb <span class="hl-rojo">se correlaciona mal con la gravedad</span> (p. 20): no predice las secuelas.' }],
+              explicacion: 'Secuelas diferidas y correlación con la COHb en ' + pdf(21) + ' y ' + pdf(20) + '. Revisar la calefacción es consejo general.' } },
+          { momento: 'Semana 3 · vuelve', datos: { 'Motivo': 'olvidos y lentitud', 'COHb': 'normal' }, nuevo: ['Motivo', 'COHb'],
+            pregunta: { id: 'co-ata-7', tipo: 'test', fuente: 'mt-co-diferidas',
+              enunciado: 'A la tercera semana su mujer cuenta que olvida cosas y está lento. ¿Qué sospechas?',
+              opciones: [
+                { t: 'Una recaída por volver a exponerse: la COHb de hoy lo confirmaría', porque: 'Nada indica nueva exposición, y la COHb ya normal no descarta secuelas. Buscar solo ahí te haría pasar por alto el cuadro diferido (p. 21).' },
+                { t: 'Secuelas diferidas del CO: a las 1-4 semanas', ok: true },
+                { t: 'Nada relacionado: tan tarde ya no puede ser el CO', porque: 'La ventana de 1-4 semanas es justo la de las secuelas diferidas (deterioro mental y parkinsonismo). Descartarlo es perder el diagnóstico (p. 21).' }],
+              explicacion: 'Tras la intoxicación aguda, a las <span class="hl">1-4 semanas</span> puede aparecer un síndrome neuropsiquiátrico con deterioro mental y parkinsonismo; se desconoce el culpable (' + pdf(21) + ').' } },
+        ],
+        lleva: [
+          'El pulsioxímetro cuenta la COHb como oxihemoglobina: el diagnóstico es con cooxímetro (umbral 3-4 %, 10 % en fumadores).',
+          'O₂ al 100 %: semivida de la COHb de 74 min (320 con aire); ECG y marcadores en los moderados o graves.',
+          'Las secuelas llegan a las 1-4 semanas y la COHb no las predice; el hiperbárico no tiene prueba convincente.'],
+        volver: { nombre: 'Monóxido de carbono', ancla: 'mt-co', modelo: visual('mt-co', 'La vista Visual del monóxido de carbono') } },
+    ],
+    profundizar: [
+      { id: 'mt-co-origen', titulo: 'De dónde sale el CO y por qué ha bajado un 95 % con los catalizadores' },
+      { id: 'mt-co-clinica', titulo: 'El «rojo cereza»: clásico, pero raro' },
+      { id: 'mt-co-o2', titulo: 'La hora y media de oxígeno y su nota de fidelidad' },
+    ],
+  },
+  /* =================================================================================================
+     21 · Cianuro (TX págs. 22-25)
+     ================================================================================================= */
+  'mt-cianuro': {
+    entrada: 'Por qué el cianuro para la mitocondria y sube el lactato, por qué se trata sin esperar el nivel, y qué antídoto se da (y cuál no) según el paciente.',
+    guia: [
+      { id: 'cn-g1', corto: 'por qué sube el lactato', tipo: 'test', fuente: 'mt-cn-mecanismo',
+        enunciado: 'En el cianuro el lactato sube mucho. ¿Por qué?',
+        opciones: [
+          { t: 'Porque bloquea la citocromo oxidasa: sin energía oxidativa, el piruvato no entra en la mitocondria y pasa a lactato', ok: true },
+          { t: 'Porque no llega O₂ a la sangre arterial y los tejidos pasan a metabolismo anaerobio por falta de él', porque: 'Es al revés: el O₂ llega, pero los tejidos no lo usan (la sangre venosa sale "arterializada"). Con esa idea darías más O₂ y no el antídoto (p. 23).' },
+          { t: 'Porque el cianuro daña el hígado y este deja de aclarar el lactato que producen los tejidos', porque: 'El mecanismo del libro es mitocondrial, no hepático. Si lo buscaras en el hígado, retrasarías el antídoto que desbloquea la citocromo oxidasa (p. 23).' }],
+        explicacion: 'El cianuro se une al Fe³⁺ de la <span class="hl-azul">citocromo oxidasa</span> y para la producción oxidativa de energía; el piruvato no entra en la mitocondria y se acumula <span class="hl-purpura">lactato: acidosis láctica progresiva</span>, su seña (' + pdf(23) + ').',
+        modelo: { acidobaseVivo: 'lactica', texto: 'Mira la acidosis láctica en el ácido-base vivo' } },
+      { id: 'cn-g2', corto: 'sangre venosa arterial', tipo: 'destapa', fuente: 'mt-cn-clinica',
+        enunciado: 'En el cianuro, la sangre venosa puede parecer arterial. ¿Por qué? Piensa antes de destapar.',
+        cuantas: 'son tres cosas',
+        puntos: [
+          'Los tejidos <span class="hl-rojo">casi no utilizan el O₂</span> porque la citocromo oxidasa está bloqueada.',
+          'La sangre vuelve con la <span class="hl">PO₂ alta</span>: parece "arterializada".',
+          'Va con un <span class="hl-purpura">lactato muy alto (&gt;10 mmol/L)</span>.'],
+        explicacion: 'Cuadro clínico y analítico, en ' + pdf(23) + '.' },
+      { id: 'cn-g3', corto: 'el nivel', tipo: 'test', fuente: 'mt-cn-dx',
+        enunciado: 'Sospechas cianuro tras un incendio. ¿Esperas al nivel en sangre para dar el antídoto?',
+        opciones: [
+          { t: 'Sí: sin nivel no se puede confirmar y el antídoto tiene riesgos', porque: 'El diagnóstico es clínico: el nivel tarda y los antídotos deben darse ya. Esperarlo costaría minutos que, tras el humo, pueden ser los de la parada (p. 24).' },
+          { t: 'No: el cianuro en sangre no se puede medir', porque: 'Sí se puede (sangre total), pero sirve para documentar: no está disponible de inmediato. Decir que no se mide te haría ignorarlo cuando sirve para dejar constancia (p. 24).' },
+          { t: 'No: el diagnóstico es clínico y el antídoto debe darse ya', ok: true }],
+        explicacion: 'Es un <span class="hl">diagnóstico clínico</span>: el nivel en sangre total sirve para documentar, pero <span class="hl-rojo">no está disponible a tiempo</span> y los antídotos deben darse rápido (' + pdf(24) + ').' },
+      { id: 'cn-g4', corto: 'tiosulfato y riñón', tipo: 'test', fuente: 'mt-cn-tiosulfato',
+        enunciado: 'El tiosulfato convierte el cianuro en tiocianato. ¿Por qué no se da en la insuficiencia renal?',
+        opciones: [
+          { t: 'Porque el tiocianato es neurotóxico y se acumula sin riñón: psicosis aguda', ok: true },
+          { t: 'Porque el tiosulfato deja de convertir el cianuro cuando falla el riñón', porque: 'La conversión no depende del riñón; lo que depende de él es la eliminación del tiocianato. Con esa idea no entenderías el riesgo real, la neurotoxicidad (p. 25).' },
+          { t: 'Porque empeora la acidosis láctica', porque: 'El libro no dice eso: el motivo es el tiocianato que se acumula. Con un riñón sano no habría problema y lo evitarías sin razón (p. 25).' }],
+        explicacion: 'El tiosulfato lo convierte en tiocianato (Ecuación 53.1), que <span class="hl-azul">elimina el riñón</span>; es <span class="hl-rojo">neurotóxico</span> y en la insuficiencia renal se acumula y puede dar una psicosis aguda (' + pdf(24) + ' y ' + pdf(25) + ').' },
+      { id: 'cn-g5', corto: 'nitritos y humo', tipo: 'test', fuente: 'mt-cn-nitritos',
+        enunciado: 'Los nitritos tratan el cianuro formando metahemoglobina. ¿Por qué están contraindicados en la inhalación de humo?',
+        opciones: [
+          { t: 'Porque son poco eficaces en el humo, aunque inocuos', porque: 'El libro les atribuye efectos adversos, no solo poca eficacia. Dar el nitrito de amilo en el incendio añadiría daño a quien ya está hipóxico (p. 25).' },
+          { t: 'Porque la metahemoglobina promueve la hipoxia tisular', ok: true },
+          { t: 'Porque bajan mucho la PA y el paciente ya está hipotenso', porque: 'El motivo del libro es la metahemoglobina, no la PA. Con esa idea los usarías en el humo con PA normal, y empeorarías la hipoxia tisular (p. 25).' }],
+        explicacion: 'Los nitritos forman <span class="hl-azul">metahemoglobina</span> (Hb-Fe³⁺), que capta el cianuro; tienen efectos adversos y están <span class="hl-rojo">contraindicados en el humo</span> porque la metahemoglobina promueve la hipoxia tisular. Solo el nitrito de amilo inhalado, como medida temporal sin vía IV (' + pdf(25) + ').' },
+    ],
+    examen: [
+      { id: 'cn-e1', corto: 'dosis en la parada', tipo: 'test', fuente: 'mt-tabla-53-1 · mt-cn-hidroxo',
+        enunciado: 'Una adulta con cianuro entra en parada cardíaca. ¿Qué hidroxocobalamina le das?',
+        opciones: [
+          { t: '5 g en 15 min, como en cualquier otro caso', porque: 'En la parada el libro da 10 g, no 5. Infundir 5 g y esperar retrasaría el antídoto a quien tiene minutos (p. 24).' },
+          { t: '10 g IV', ok: true },
+          { t: 'Solo tiosulfato sódico 12,5 g, que es el de elección', porque: 'El de elección es la hidroxocobalamina; el tiosulfato se usa en combinación con ella (p. 24-25).' }],
+        explicacion: 'Hidroxocobalamina, <span class="hl">antídoto de elección</span>: 5 g IV en 15 min y <span class="hl-rojo">10 g en la parada</span> (Tabla 53.1, ' + pdf(24) + ').' },
+      { id: 'cn-e2', corto: 'la Tabla 53.1', tipo: 'error', fuente: 'mt-tabla-53-1 · mt-cn-hidroxo',
+        enunciado: 'El resumen de un compañero de la Tabla 53.1. Encuentra los errores (puede haber 0, 1 o 2).',
+        frases: [
+          { t: 'Hidroxocobalamina 5 g IV en 15 min; 10 g en la parada.' },
+          { t: 'Tiosulfato 12,5 g en 50 mL de agua estéril, junto a la hidroxocobalamina; no en la insuficiencia renal.' },
+          { t: 'El nitrito de amilo inhalado es el antídoto de elección cuando hay humo.', mal: true,
+            c: 'Está <span class="hl-rojo">contraindicado en la inhalación de humo</span>; solo es un alivio temporal cuando no hay vía IV (p. 24).' },
+          { t: 'Si la orina se pone roja tras la hidroxocobalamina, hay que suspenderla.', mal: true,
+            c: 'Puede dar <span class="hl">color rojizo en orina y otros líquidos unos días</span>; no es motivo para suspenderla (p. 24).' }],
+        explicacion: 'Tabla 53.1 y comentarios de la hidroxocobalamina, en ' + pdf(24) + '.' },
+      { id: 'cn-e3', corto: 'sólo el Cyanokit', tipo: 'test', fuente: 'mt-cn-kits',
+        enunciado: 'En la parada por cianuro solo tienes un Cyanokit®. ¿Qué te falta?',
+        opciones: [
+          { t: 'La segunda dosis de 5 g, el diluyente y el tiosulfato', ok: true },
+          { t: 'Nada: el Cyanokit trae todos los antídotos', porque: 'Ningún kit los trae todos. El Cyanokit solo trae 5 g de hidroxocobalamina en polvo, sin diluyente, sin segunda dosis ni tiosulfato (p. 25).' },
+          { t: 'Solo el nitrito de amilo, que sí viene en el otro kit y es el principal', porque: 'El nitrito de amilo viene en el Cyanide Antidote Kit y está contraindicado en el humo; el que falta es la segunda dosis (p. 24-25).' }],
+        explicacion: 'Cyanokit®: 5 g de hidroxocobalamina en polvo, <span class="hl-rojo">sin diluyente, sin segunda dosis, sin tiosulfato ni nitrito de amilo</span>. En la parada se necesitan 10 g (' + pdf(24) + ' y ' + pdf(25) + '). El resto es de la lectura propia.',
+        origen: 'ficha · los 10 g en parada y los 5 g del kit' },
+      { id: 'cn-e4', corto: 'nitroprusiato', tipo: 'test', fuente: 'mt-cn-fuentes',
+        enunciado: 'En la UCI, una infusión de nitroprusiato a dosis alta y una acidosis láctica que no para de subir. ¿Qué piensas?',
+        opciones: [
+          { t: 'Un shock séptico: pides cultivos y empiezas antibióticos sin tocar el nitroprusiato', porque: 'Puede coexistir, pero el nitroprusiato es una fuente iatrogénica de cianuro "que nunca debe pasarse por alto". Seguir infundiéndolo agravaría la intoxicación (p. 22).' },
+          { t: 'Cianuro por el nitroprusiato: es una fuente iatrogénica que no hay que olvidar', ok: true },
+          { t: 'Intoxicación por CO: tratas con oxígeno al 100 %', porque: 'El CO viene del humo o de calefacciones, no de la perfusión. Con el O₂ no resolverías un cianuro iatrogénico (p. 19, 22).' }],
+        explicacion: 'Fuentes: inhalación en incendios, ingesta de cianuro potásico o sódico y <span class="hl-rojo">el nitroprusiato</span> sódico en infusión, que «nunca debe pasarse por alto» (' + pdf(22) + '). El caso es inventado.' },
+      { id: 'cn-e5', corto: 'la ingesta', tipo: 'test', fuente: 'mt-cn-clinica · mt-cn-fuentes',
+        enunciado: 'Una mujer tomó cianuro potásico hace 20 minutos y está asintomática. ¿Qué piensas?',
+        opciones: [
+          { t: 'Que es inocuo: tras el cianuro la parada llega en menos de 5 min', porque: 'Esos 5 min son del humo. Tras ingerirlo la evolución puede ser mucho más lenta, de minutos a horas, y la confianza te haría subestimarla (p. 23).' },
+          { t: 'Que es pronto: tras ingerirlo pueden pasar minutos u horas', ok: true },
+          { t: 'Que ya no es peligroso: el ácido gástrico lo neutraliza', porque: 'El ácido gástrico convierte el cianuro en cianhídrico, que es el tóxico: no lo neutraliza (p. 22).' }],
+        explicacion: 'Tras el humo, de los síntomas a la parada puede pasar <span class="hl-rojo">menos de 5 min</span>; tras ingerirlo, <span class="hl">minutos o incluso horas</span> (' + pdf(23) + '); el cianuro potásico se convierte en cianhídrico con la acidez gástrica (' + pdf(22) + ').' },
+    ],
+    casos: [
+      { id: 'cn-teo', titulo: 'Teófila, 29 años: el humo del incendio', corto: 'Caso · Teófila (cianuro)', sub: 'inhalación de humo, shock y fallo renal',
+        paciente: { Edad: '29 años', Motivo: 'inhalación de humo en un incendio doméstico', Llegada: 'confusa, hipotensa' },
+        pasos: [
+          { momento: 'Urgencias · llegada', datos: { 'PA': '70/40 mmHg', 'Antecedente': 'humo' }, nuevo: ['PA', 'Antecedente'],
+            calculadora: { ir: 'mt-cn-calc', nombre: 'Inhalación de humo: ¿tratar el cianuro?' },
+            pregunta: { id: 'cn-teo-1', tipo: 'test', fuente: 'mt-cn-dx', origen: 'ilustrativo: constantes de un paciente posible',
+              enunciado: 'Humo y PA 70/40. ¿Esperas al lactato antes de tratar el cianuro? Compruébalo en la calculadora.',
+              opciones: [
+                { t: 'Sí: sin el lactato no hay criterio', porque: 'Con inestabilidad hemodinámica ya hay criterio, y puede no haber tiempo de esperar el lactato: de los síntomas a la parada pueden pasar menos de 5 min (p. 23-24).' },
+                { t: 'No: la inestabilidad tras el humo basta para tratar', ok: true },
+                { t: 'Sí, pero solo al nivel de cianuro en sangre, que lo confirma', porque: 'El nivel de cianuro no está a tiempo; el diagnóstico es clínico y los antídotos deben darse ya (p. 24).' }],
+              explicacion: 'Sospecha con <span class="hl-rojo">inestabilidad hemodinámica</span> o lactato >10; «puede no haber tiempo de esperar el lactato» (' + pdf(24) + '). Las constantes son ilustrativas.' } },
+          { momento: 'Analítica a los 10 min', datos: { 'Lactato': '14 mmol/L', 'Creatinina': '2,4 mg/dL', 'COHb': '22 %' }, nuevo: ['Lactato', 'Creatinina', 'COHb'],
+            pregunta: { id: 'cn-teo-2', tipo: 'test', fuente: 'mt-cn-dx · mt-cn-mecanismo', origen: 'ilustrativo: analítica de un paciente posible',
+              modelo: { acidobaseVivo: 'lactica', texto: 'Mira la acidosis láctica en el ácido-base vivo' },
+              enunciado: 'Lactato 14, COHb 22 % y creatinina 2,4. ¿Cómo lo interpretas?',
+              opciones: [
+                { t: 'El CO lo explica todo: oxígeno al 100 % y nada más', porque: 'En el humo, el cianuro es indistinguible clínicamente del CO y puede coexistir. Un lactato de 14 con shock obliga a tratar también el cianuro (p. 22, 24).' },
+                { t: 'Tratar los dos: O₂ al 100 % y antídoto', ok: true },
+                { t: 'Solo cianuro: la COHb de 22 % no es relevante', porque: 'Una COHb del 22 % está muy por encima del umbral de 3-4 %: es una intoxicación por CO real y necesita oxígeno al 100 % (p. 21-22).' }],
+              explicacion: 'Un lactato <span class="hl-rojo">&gt;10</span> y shock tras el humo obligan a tratar el cianuro (' + pdf(22) + ' y ' + pdf(24) + '); la COHb de 22 % supera el umbral de 3-4 % y también se trata (' + pdf(21) + '). Las cifras son ilustrativas.' } },
+          { momento: 'El antídoto', datos: { 'Plan': 'hidroxocobalamina' }, nuevo: ['Plan'],
+            calculadora: { ir: 'mt-cn-calc', nombre: 'Inhalación de humo: ¿tratar el cianuro?' },
+            pregunta: { id: 'cn-teo-3', tipo: 'test', fuente: 'mt-tabla-53-1 · mt-cn-hidroxo',
+              enunciado: 'Teófila no está en parada. ¿Qué hidroxocobalamina le pones?',
+              opciones: [
+                { t: '10 g en bolo, para no perder tiempo', porque: 'Los 10 g son para la parada. En el paciente que no está en parada es 5 g en 15 min, con una segunda dosis de 5 g si amenaza la vida (p. 24).' },
+                { t: '5 g de hidroxocobalamina en 1 minuto, para llegar antes', porque: 'La pauta del libro es una infusión de 15 minutos; saltarla es inventar una dosis. Mejor repetir 5 g si sigue amenazada (p. 24).' },
+                { t: '5 g IV en 15 min, y otros 5 g si amenaza la vida', ok: true }],
+              explicacion: 'Hidroxocobalamina, el antídoto de elección: <span class="hl">5 g IV en 15 min</span>; segunda dosis de 5 g si amenaza la vida; <span class="hl-rojo">10 g en la parada</span> (' + pdf(24) + ').' } },
+          { momento: 'Órdenes del residente', datos: { 'Creatinina': '2,4 mg/dL', 'Entorno': 'humo' }, nuevo: ['Entorno'],
+            calculadora: { ir: 'mt-cn-calc', nombre: 'Inhalación de humo: ¿tratar el cianuro?' },
+            pregunta: { id: 'cn-teo-4', tipo: 'error', fuente: 'mt-cn-tiosulfato · mt-cn-nitritos · mt-tabla-53-1',
+              enunciado: 'Las órdenes del residente para Teófila. Encuentra los errores (puede haber 0, 1 o 2).',
+              frases: [
+                { t: 'Hidroxocobalamina 5 g IV en 15 min.' },
+                { t: 'Tiosulfato sódico 12,5 g IV en 50 mL junto a la hidroxocobalamina.', mal: true,
+                  c: '<span class="hl-rojo">No en la insuficiencia renal</span> (creatinina 2,4): el tiocianato es neurotóxico y se acumula (p. 25).' },
+                { t: 'Nitrito de amilo inhalado cada 15 s para ganar tiempo.', mal: true,
+                  c: '<span class="hl-rojo">Contraindicado en la inhalación de humo</span>: la metahemoglobina promueve la hipoxia tisular (p. 25).' },
+                { t: 'Oxígeno al 100 % por el CO.' }],
+              explicacion: 'Tiosulfato en la insuficiencia renal y nitritos en el humo, en ' + pdf(25) + '; Tabla 53.1 en ' + pdf(24) + '.' } },
+          { momento: 'Minuto 4 · giro', datos: { 'Ritmo': 'parada cardíaca' }, nuevo: ['Ritmo'],
+            pregunta: { id: 'cn-teo-5', tipo: 'test', fuente: 'mt-cn-clinica · mt-tabla-53-1',
+              enunciado: 'A los 4 minutos de ingresar, antes de acabar la perfusión, entra en parada. ¿Qué cambia en el antídoto?',
+              opciones: [
+                { t: 'Se pasa a 10 g de hidroxocobalamina, la dosis de la parada', ok: true },
+                { t: 'Se añade el tiosulfato, que es el de elección en la parada', porque: 'El antídoto de elección es la hidroxocobalamina, y el tiosulfato no se da con insuficiencia renal. Lo añadirías con un riñón que no elimina el tiocianato (p. 24-25).' },
+                { t: 'Se cambia a nitrito de amilo inhalado, más rápido que la vía IV', porque: 'Está contraindicado en el humo, y es solo un alivio temporal sin vía IV; Teófila la tiene. Empeoraría la hipoxia tisular (p. 24-25).' }],
+              explicacion: 'De los síntomas a la parada pueden pasar <span class="hl-rojo">menos de 5 min</span> tras el humo (' + pdf(23) + '); en la parada, <span class="hl">10 g</span> de hidroxocobalamina (' + pdf(24) + ').' } },
+          { momento: 'Hora 6 · la familia', datos: { 'Orina': 'roja' }, nuevo: ['Orina'],
+            pregunta: { id: 'cn-teo-6', tipo: 'destapa', fuente: 'mt-cn-hidroxo',
+              enunciado: 'La familia ve que la orina es roja y pregunta si hay hemorragia. ¿Qué respondes con el libro?',
+              cuantas: 'son tres cosas',
+              puntos: [
+                'La hidroxocobalamina se une al cianuro y forma <span class="hl-azul">cianocobalamina</span>, que sale por la orina.',
+                'Puede dar un <span class="hl">color rojizo a la orina y a otros líquidos durante unos días</span>.',
+                'Se considera <span class="hl-verde">segura</span>, aunque puede subir la PA de forma transitoria.'],
+              explicacion: 'Hidroxocobalamina y su seguridad, en ' + pdf(24) + '.' } },
+          { momento: 'Hora 8 · el CO', datos: { 'COHb': '22 %', 'Fumadora': 'no' }, nuevo: ['Fumadora'],
+            calculadora: { ir: 'mt-co-calc', nombre: 'COHb: ¿alta? y cuánto tarda en bajar' },
+            pregunta: { id: 'cn-teo-7', tipo: 'test', fuente: 'mt-co-o2 · mt-co-calc', origen: 'ficha · el cálculo, propio sobre la semivida',
+              enunciado: 'Con O₂ al 100 % (semivida 74 min), ¿cuánto tarda su COHb del 22 % en llegar al 4 %? Compruébalo en la calculadora del CO.',
+              opciones: [
+                { t: 'Unos 182 min (3 h)', ok: true },
+                { t: 'Unos 74 min, una sola semivida', porque: 'Una semivida baja la COHb a la mitad (22 → 11 %), todavía alta. El alta a esa hora devolvería a Teófila con CO en sangre (p. 22).' },
+                { t: 'Unas 13 h, que es lo que tarda con aire', porque: 'Con aire la semivida es de 320 min; con O₂ al 100 % es de 74. Quitar el oxígeno multiplicaría por 4 el tiempo (p. 22).' }],
+              explicacion: '74 × log₂(22/4) ≈ <span class="hl">182 min</span> con O₂ al 100 %, frente a ≈13 h con aire (semividas de 74 y 320 min, ' + pdf(22) + '): cuenta de la calculadora, propia sobre la cifra del libro.' } },
+        ],
+        lleva: [
+          'Tras el humo, inestabilidad o lactato alto: trata el cianuro ya, sin esperar el nivel.',
+          'Hidroxocobalamina 5 g en 15 min (10 g en la parada); tiosulfato no en la insuficiencia renal; nitritos no en el humo.',
+          'El cianuro y el CO coexisten en el humo: el oxígeno al 100 % no sustituye al antídoto.'],
+        volver: { nombre: 'Cianuro', ancla: 'mt-cianuro', modelo: { acidobaseVivo: 'lactica' } } },
+    ],
+    profundizar: [
+      { id: 'mt-cn-historia', titulo: 'Zyklon-B y Jonestown: la historia del cianuro' },
+      { id: 'mt-cn-tiosulfato', titulo: 'La Ecuación 53.1: del cianuro al tiocianato' },
+      { id: 'mt-cn-nitritos', titulo: 'La Ecuación 53.2 y su errata: la cianmetahemoglobina' },
     ],
   },
 };
