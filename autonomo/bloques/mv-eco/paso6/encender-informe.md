@@ -48,3 +48,15 @@ ficheros, suite entera, jueces --eco, --modelo shock-vivo y capturas 390 px (eco
    6,6-7,4 mm en la dilatada) y #19; no se dejó. Sin el giro del haz del A4C también falla: no es el giro. Camino: dirección radial por punto en A1/A3 y la
    del tabique solo en A2 (no probado).
 Suite entera: solo 154 y 223 en rojo reales (el resto, TODO/HUECO conocidos). jueces --eco: ids y consola 390/360 bien; falla por esas 2 pruebas.
+
+## Parte 4 (PARADA: las 2 pruebas siguen en rojo; ningún cambio de código, ambas son del motor/diseño y no se taparon)
+1. TEP, IE (154): `muestrasClave` corregida a Lang 2015 p. 6 («End-systole is best defined as the frame after aortic valve closure or the frame in
+   which the cardiac dimension or volume is smallest»): mínimo volumen del VI = muestra 208 (pVI 79,6, pVD 31,4: pVD/pVI 0,39); primer fotograma de E
+   (220): pVI 71,2, pVD 24,9 (0,35). Con ambas el IE del TEP es 1,00 (telediástole 1,61): por debajo del 0,5 de King (1983) el tabique no se aplana. Además
+   rompe la prueba «HP crónica» (14). Es del MOTOR: el pVD cae a 0,35-0,39 de pVI al cerrar la aórtica (pico 42,6/84,2 = 0,51 solo a mitad de eyección).
+   Con la definición vieja (última muestra de E: pVI 4,4, pVD 8,6) da 1,48; no es telesístole. Revertido `vd.mjs`; decide el director: relajación del VD.
+2. Festones (223): dirección del tabique solo en A2 y radial en A1/A3 (el camino propuesto) hace peor: A3/A2 salen del plano del A4C. Al revés (A2 radial,
+   A1/A3 al tabique, ventana ±0,2 uu) arregla A4C, PLAX, A3C y A2C, pero rompe #18 (dilatada: A2-P2 separadas 6,6 mm) y #19. Además la prueba tenía un
+   fallo oculto detrás: el eje corto mitral corta los 6 festones en 1 instante (pide ≥2); el plano psaxMv fijo a −7 mm solo toca la valva cerrada cuando
+   el abombe es alto (4 de 5 instantes cerrados no cortan nada; abierta, solo A). Ya fallaba en HEAD. Revertido `corazon-geo.mjs`. Falta decidir el plano.
+Sin suite final, jueces ni capturas (presupuesto). Versión 20261101-23 sin cambios.
