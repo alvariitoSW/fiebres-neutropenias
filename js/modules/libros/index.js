@@ -42,6 +42,7 @@ import { init as initTermostatoVivo } from './termostato-vivo/index.js';
 import { montarMayeutica } from '../../core/mayeutica.js';
 import { MAYEUTICA_B1 } from '../../data/mayeutica/b1.js';
 import { MAYEUTICA_APENDICES } from '../../data/mayeutica/b6b-apendices.js';
+import { MAYEUTICA_HIGADO } from '../../data/mayeutica/b6b-higado.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -223,6 +224,8 @@ export function init() {
     initVisualMarinoCaps45a53();
     // Texto | Visual | Estudiar en las fichas de consulta de los apéndices (6L, después de su vista Visual)
     Object.entries(MAYEUTICA_APENDICES).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    // Estudiar en el hígado que se envenena (6I: paracetamol, NAC, alcoholes), con el hepatocito vivo como modelo
+    Object.entries(MAYEUTICA_HIGADO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);

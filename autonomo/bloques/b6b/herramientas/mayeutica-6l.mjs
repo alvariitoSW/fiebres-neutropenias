@@ -24,7 +24,8 @@ const { MAYEUTICA_B2 } = await import(new URL('../../../../js/data/mayeutica/b2.
 const { MAYEUTICA_B3 } = await import(new URL('../../../../js/data/mayeutica/b3.js', import.meta.url));
 // Las fichas con Estudiar de todos los bloques (el nombre MAYEUTICA_B1 se queda para no tocar el resto de la prueba).
 const { MAYEUTICA_APENDICES } = await import(new URL('../../../../js/data/mayeutica/b6b-apendices.js', import.meta.url));
-const MAYEUTICA_B1 = { ...MAYEUTICA_APENDICES };
+const { MAYEUTICA_HIGADO } = await import(new URL('../../../../js/data/mayeutica/b6b-higado.js', import.meta.url));
+const MAYEUTICA_B1 = { ...MAYEUTICA_APENDICES, ...MAYEUTICA_HIGADO };
 // Dónde vive cada ficha: las del bloque 1 en Libros → Marino · Fundamentos; las del bloque 2, en Hematología → Merino HEMATO.
 const NAV_B2 = { especialidad: 'home', view: 'merinoHemato', panel: 'panel-merino-tabs' };
 // Las del bloque 3, en Cardiología → Merino Cardiología (mc-) y Neumología → Merino Neumología (neumo-).
