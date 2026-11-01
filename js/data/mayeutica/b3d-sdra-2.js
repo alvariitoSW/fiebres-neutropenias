@@ -172,7 +172,7 @@ export const MAYEUTICA_SDRA_2 = {
                 `Con oxígeno convencional (hasta 15 L/min) no corrige: se justifica un <span class="hl-azul">ensayo de HFNO</span> (${p(40)}).`,
                 `Mientras, se vigila el esfuerzo: si persiste, se piensa en <span class="hl">intubar antes que después</span> (${p(40)}).`],
               explicacion: `El esfuerzo es el dato; la oxigenación, el motivo de la cánula (${p(40)}).` + enFicha('nep-psili') } },
-          { momento: 'Urgencias · alto flujo', datos: { Oxígeno: 'HFNO 50 L/min, FiO₂ 0,8', FR: '22', 'Vt (monitor)': '335 mL (6,4 mL/kg PBW)', SpO2: '94 %' }, nuevo: ['Oxígeno', 'FR', 'Vt (monitor)', 'SpO2'],
+          { momento: 'Urgencias · alto flujo', datos: { Oxígeno: 'HFNO 50 L/min, FiO₂ 0,8', FR: '22', 'Vt (del modelo, ilustrativo)': '335 mL (6,4 mL/kg PBW)', SpO2: '94 %' }, nuevo: ['Oxígeno', 'FR', 'Vt (del modelo, ilustrativo)', 'SpO2'],
             pregunta: { id: 'snv-c2', tipo: 'test', fuente: 'nep-hfno-sdra', origen: ILU, modelo: pv('hfno', '🫁 Sube el flujo de la cánula a 50 L/min'),
               enunciado: 'Pones HFNO a 50 L/min: bajan la FR (28 → 22) y el Vt (371 → 335 mL). ¿Qué te dice y por qué lo esperabas?',
               opciones: [
@@ -203,7 +203,7 @@ export const MAYEUTICA_SDRA_2 = {
       { id: 'c-snv-isidro', titulo: 'Isidro, 64 años: boca abajo', corto: 'Caso · Isidro (esteroide y prono)', sub: 'SDRA con P/F 120; metilprednisolona y 16 h en prono',
         paciente: { Edad: '64 años, varón', 'Peso y talla': '96 kg, 1,75 m (PBW 70,5 kg)', Motivo: 'neumonía bilateral con SDRA', Soporte: 'ventilado, PEEP 10, noradrenalina estable' },
         pasos: [
-          { momento: 'Día 2', datos: { 'PaO₂/FiO₂': '120', PEEP: '10 cmH₂O', 'Vt (monitor)': '355 mL (5 mL/kg PBW)', 'Meseta (monitor)': '28,7 cmH₂O' }, nuevo: ['PaO₂/FiO₂', 'PEEP', 'Vt (monitor)', 'Meseta (monitor)'],
+          { momento: 'Día 2', datos: { 'PaO₂/FiO₂': '120', PEEP: '10 cmH₂O', 'Vt (del modelo, ilustrativo)': '355 mL (5 mL/kg PBW)', 'Meseta (monitor)': '28,7 cmH₂O' }, nuevo: ['PaO₂/FiO₂', 'PEEP', 'Vt (del modelo, ilustrativo)', 'Meseta (monitor)'],
             pregunta: { id: 'snv-c5', tipo: 'test', fuente: 'nep-prono-cuando · nep-tabla-24-4', origen: ILU, modelo: pv('prono', '🫁 Isidro en supino'),
               enunciado: 'Isidro, ventilado con Vt bajo, tiene P/F 120 con PEEP 10 y consolidación posterior en el TC. ¿Qué propones?',
               opciones: [

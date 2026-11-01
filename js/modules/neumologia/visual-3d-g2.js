@@ -16,6 +16,12 @@ export const RECETAS_3D_G2 = {
                 { fuente: '#nep-psv-4-puntos', etiqueta: '3. Servo: el flujo sigue la demanda y la presión se mantiene', color: 'verde' },
                 { fuente: '#nep-psv-4-puntos', etiqueta: '4. Corte: el flujo cae al 25 % del pico', color: 'rojo' }
             ] },
+            { tipo: 'propio', titulo: 'La presión de soporte, en el pulmón vivo',
+              nota: 'Mismos cuatro puntos, con el respirador delante: el hundimiento de la presión al disparar y el corte cuando el flujo cae al 25 % de su pico.',
+              render(cuerpo) {
+                  if (cuerpo.hasChildNodes()) return;
+                  cuerpo.innerHTML = '<button type="button" class="may-b may-modelo" data-especialidad="libros" data-view="pulmonVivo" data-pulmon-vivo="psv-disparo">🫁 Ver el disparo y el corte de la PSV en el pulmón vivo →</button>';
+              } },
             { tipo: 'racimos', titulo: 'Otros modos e interfaces', grupos: [
                 { titulo: 'PAV', color: 'gris', nodos: [{ fuente: '#nep-pav', etiqueta: 'Ajusta la presión a la mecánica; sin ventaja demostrada' }] },
                 { titulo: 'Mascarillas', color: 'amarillo', nodos: [
