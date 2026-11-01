@@ -387,6 +387,13 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**🆕 01/11 · El «superagente» de DeepSeek** (tu pregunta: «qué podemos hacer con este repo»; Ciencia + Consejo 2.ª,
+acta `autonomo/consejo/2026-11-01-2.md`, informe `autonomo/ideas/ingenieria-inversa/dsh-superagent.md`, página
+https://claude.ai/artifact/KGS5TExbpZnC7d22LEqMNX). No sirve para la app ni se instala (5-0). Sus ideas sobre cómo
+molestarte lo mínimo, sí. Elige: **paquete `reglas-dsh`** (I1, I2, I3, I5, I7, I8 como aviso, I10; ≈1,7 M) A todo /
+B algunas / C nada · **I9** antes y después en las PR visuales (≈1,5-2 M) sí/no · **I11** «Lo que te toca hoy» en la
+app (≈3-5 M) ahora / tras la reforma / no.
+
 **⏰ Recordatorio: el PDF de Semiología** (el usuario, 01/11: «no tengo el PDF todavía. Déjalo en "Esperando algo tuyo" y recuérdamelo»). Vale el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica*, o los de exploración cardiovascular de Walker (*Clinical Methods*) o Surós/Bates. Con él en `docs/`, se monta el objetivo «Historia clínica» del PIF.
 
 **Resuelto el 01/11 (tus decisiones, puntos 3-5)**: eco paso 5, opción A (≈35 M); PR #2 abierta y aparcada para la fase B; lo opcional (4, 5, 6, 7, 8, 9 y 10 de la lista del Congreso), aprobado con la recomendación del Consejo (las candidatas del 04/11 las decide el Consejo); lo de mirar en el móvil lo miras tú. Sigue esperando de ti: **el PDF de Semiología** y **pegar los tuits #26-28** en la Bandeja (x.com da 402).
