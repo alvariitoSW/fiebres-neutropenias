@@ -249,6 +249,9 @@ for (const k of ORDEN_ESTADOS) {
   ok(e.marcas >= 2, `E4a doble disparo: al menos 2 triángulos de disparo bajo la Paw (${e.marcas})`);
   { const vtkg = await cifra('vtkg'); ok(vtkg > 8, `E4a doble disparo: el Vt espirado por kg sube por encima de 8 (${vtkg})`); }
   await mando('pmus', 15); await llenar(); await limpio('doble disparo, Pmus 15'); await foto('e4a-doble');
+  await abrir('disparo-inverso'); await espera(900); await llenar();
+  e = await esf(); ok(e.ef.length >= 3 && e.ef.every((x) => x.tipo === 'inverso') && /disparo inverso/i.test(await p.evaluate(() => document.querySelector('#pul-frase-txt')?.textContent + document.querySelector('#pul-raiz')?.innerText)), `E4a disparo inverso: el estado abre, Ceferino, y todos los esfuerzos (${e.ef.length}) son inversos (Vt ${Math.round(e.ef[0]?.vt)} mL)`);
+  await limpio('disparo inverso'); await foto('e4a-inverso');
   await abrir('p-sili'); await espera(900); await llenar();
   e = await esf(); ok(/P-SILI/.test(e.sello || ''), `E4a P-SILI: con Vt ≥9,5 mL/kg sale el sello (${e.sello})`);
   await mando('pmus', 3); await llenar(); e = await esf(); ok(!/P-SILI/.test(e.sello || ''), 'E4a P-SILI: al bajar el esfuerzo a 3 el sello desaparece');
@@ -299,7 +302,14 @@ for (const k of ORDEN_ESTADOS) {
   await clic('#pul-neumo [data-sitio="clasico"]'); await clic('#pul-neumo [data-nx="desc"]');
   { const r = await p.evaluate(() => ({ msg: document.querySelector('#pul-neumo [data-nx="msg"]').textContent, ptx: document.querySelector('#pul-neumo [data-fila="neumo-p"] .v').textContent, inerte: document.getElementById('pul-dock-panel').inert }));
     ok(/No descomprime/.test(r.msg) && r.inerte && num(r.ptx) === t.ptx, `E4b: el 2.º espacio con aguja corta falla (presión ${r.ptx} igual, sello sigue)`); }
-  await clic('#pul-neumo [data-sitio="correcto"]'); await clic('#pul-neumo [data-nx="desc"]'); await llenar(); await estable();
+  await clic('#pul-neumo [data-sitio="correcto"]'); await clic('#pul-neumo [data-nx="desc"]');
+  { // recuperación gradual (P2): el aire pleural baja por respiraciones, no de golpe; PAM sube y SpO₂ sube sin pasar el basal
+    const p0 = await tomar(); const serie = [p0]; let guardia = 0;
+    while (!REDUCIDO && serie.at(-1).ptx > 0 && guardia++ < 40) { await p.waitForTimeout(1000); const m = await tomar(); if (m.ptx !== serie.at(-1).ptx) serie.push(m); }
+    const ptxs = serie.map(x => x.ptx), pams = serie.map(x => x.pam), spos = serie.map(x => x.spo2);
+    ok(REDUCIDO ? serie.at(-1).ptx === 0 : serie.length >= 4 && serie.length <= 9 && ptxs.every((v, i) => i === 0 || v < ptxs[i - 1]), `P2 recuperación gradual: el aire pleural baja en ${serie.length - 1} pasos (${ptxs.join(' → ')})`);
+    const pn = pams.filter((v, i) => v !== null && serie[i].ptx <= 13.5);/* por encima de 13,5 (parada) el motor del corazón no es monótono: se avisa en el informe */ ok(spos.every((v, i) => i === 0 || v >= spos[i - 1]) && spos.at(-1) <= 98 && pn.every((v, i) => i === 0 || v >= pn[i - 1] - 1) && pn.at(-1) <= a.pam * 1.05, `P2: PAM (${pams.join(' → ')}) y SpO₂ (${spos.join(' → ')}) suben sin pasar el basal (${a.pam}, ${a.spo2})`); }
+  await llenar(); await estable();
   const d = await tomar();
   const fin = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).length, inerte: document.getElementById('pul-dock-panel').inert }));
   ok(d.ptx === 0 && fin.s === 0 && !fin.inerte && d.pam >= a.pam - 2 && d.spo2 === a.spo2 && Math.abs(d.pico - a.pico) < 1, `E4b descompresión correcta: PAM ${t.pam} → ${d.pam}, SpO₂ ${t.spo2} → ${d.spo2}, pico ${d.pico}; sin sello y con los mandos libres`);
