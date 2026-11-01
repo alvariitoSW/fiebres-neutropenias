@@ -85,3 +85,9 @@ estudiar; cifras del motor sin rótulo (`ilustrativo`/`fisiología general`); re
 `node autonomo/jueces.mjs --forma --ficha neumologia:merinoNeumologia:panel-merino-neumo-tabs:<id>` por ficha del
 grupo; si toca el pulmón vivo, `--modelo pulmon-vivo` (y `--modelo shock-vivo` si toca M8). Auditor (sonnet) de las
 preguntas, casos y figuras nuevas contra el PDF; profesor (fable) juzga: ≥8,75 en §7 y §8.
+
+## Fase A ligera (01/11): 0 graves (`auditoria-a.md`)
+- **Ojo**: los 5 criterios del SDRA son la **Tabla 24.2** (la 24.1 son las condiciones predisponentes); la cobertura §4
+  las cruza. Ancla y pregunta, con la tabla que es.
+- Fig. 23.3 paso 3: la app no copia el PEFR de las cajas «incompleta/pobre» (menor; no se pregunta por él).
+- El 22 → 3 % del edema laríngeo sale de una figura no cotejada: el constructor de G5 lo mira en el PDF antes de preguntarlo.
