@@ -3,6 +3,7 @@
 // A 390 y 360 px. Uso: node autonomo/pruebas/hepatocito-vivo.mjs <url-base> [390|360] [--capturas <carpeta>]
 import { chromium, devices } from '/opt/node22/lib/node_modules/playwright/index.mjs';
 const { ERROR, ERROR2 } = await import(new URL('../../js/modules/libros/hepatocito-vivo/pruebas.js', import.meta.url));
+const { mayeutica } = await import('./hepatocito-vivo-mayeutica.mjs');
 const args = process.argv.slice(2), BASE = (args.find(a => /^https?:/.test(a)) || 'http://localhost:8000/').replace(/\/?$/, '/'), CAP = args.includes('--capturas') ? args[args.indexOf('--capturas') + 1].replace(/\/?$/, '/') : '/tmp/plan-socialista/b5/hepatocito/cap/';
 const fallos = [], errores = []; const ok = (c, m) => { if (!c) fallos.push(m); };
 const b = await chromium.launch();
@@ -162,6 +163,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await reset('sano'); for (let i = 0; i < 4; i++) { const h = await p.evaluate((i) => { document.querySelectorAll('#hpv-svg .via-off')[i].dispatchEvent(new MouseEvent('click', { bubbles: true })); const b = document.querySelector('#hpv-frase-txt .ver-ficha'); return b ? b.dataset.resaltar + ' ' + b.dataset.especialidad + '/' + b.dataset.view : null; }, i); ok(h && /^#(ma-fha-paracetamol|mr-cetoacidosis|mar-lactato-aerobio|mt-alcoholes) libros\//.test(h), `vía ${i} sin enlace cruzado real: ${h}`); console.log(` vía ${i}: ${h}`); }
   await p.evaluate(() => { const x = document.createElement('button'); Object.assign(x.dataset, { especialidad: 'libros', view: 'hepatocitoVivo', hepatocitoVivo: 'casimira' }); document.body.append(x); x.click(); x.remove(); }); await p.waitForTimeout(900);
   const mp = await p.evaluate(() => { const r = document.getElementById('hpv-raiz'); return { dock: document.getElementById('hpv-dock').offsetHeight, vh: innerHeight, min: Math.min(...[...r.querySelectorAll('#hpv-svg text')].map((t) => parseFloat(getComputedStyle(t).fontSize) * document.getElementById('hpv-svg').getBoundingClientRect().width / 360)) }; }); console.log(` dock+frase ${mp.dock}px de ${mp.vh} (${Math.round(100 * mp.dock / mp.vh)} %), rótulo mínimo ${mp.min.toFixed(1)} px`); ok(mp.dock <= 253, `dock+frase ${mp.dock}px > 30 % de 844`); ok(mp.min >= 8, `rótulo de ${mp.min.toFixed(1)} px en pantalla (<8)`);
+  await mayeutica({ p, ok, fallos, desb, ANCHO, cap });
   await ctx.close();
 }
 } catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); }

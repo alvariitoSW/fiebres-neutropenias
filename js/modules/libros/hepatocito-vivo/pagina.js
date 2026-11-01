@@ -10,6 +10,7 @@ import { nuevo, leer, topes, fmt, vitales } from './modelo.js';
 import { escena, leyenda, opNodo } from './dibujo.js';
 import { crearGuia, focoSvg } from './guia.js';
 import { cara, WH_TXT } from './cara.js';
+import { crearMayeutica } from './mayeutica.js';
 import { APUESTA, ERROR, ERROR2, CASO, LLEVAS, opciones } from './pruebas.js';
 const $ = (id) => document.getElementById('hpv-' + id);
 const R = $('raiz');
@@ -67,7 +68,18 @@ async function replay() {
 }
 // ---- Pon a prueba ----
 const fin = (caja, clave) => { const b = document.createElement('div'); b.className = 'llevas'; b.innerHTML = '<b>Lo que te llevas</b><ul>' + LLEVAS[clave].map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('') + '</ul>'; caja.append(b); caja.dataset.fin = '1'; };
+// Modo Preguntas (Mayéutica): esconde mandos y frase, enseña el recorrido y el dock de progreso
+function vistaPreguntas(on) {
+  R.classList.toggle('hpv-mayeutica', on); $('vista-preguntas').hidden = !on; $('dock-estudio').hidden = !on;
+  for (const e of [R.querySelector('.dock-tabs'), $('dock-panel'), $('frase'), $('b-replay').parentElement, $('guia'), $('leyenda')]) e.hidden = on;
+  $('dock-medir').hidden = true; verModelo(true);
+  if (!on) { R.querySelector('.dock-tabs [data-pest="dar"]').click(); $('guia').hidden = true; }
+  ajustarDock();
+}
+function verModelo(b) { for (const id of ['monitor', 'escena', 'sello-zona']) $(id).hidden = !b; }
 function modoPrueba(m) {
+  if (modo === 'preguntas') vistaPreguntas(false);
+  if (m === 'preguntas') { modo = m; const c = $('prueba'); c.textContent = ''; c.hidden = true; oculto = false; foco = []; espera = null; guiaApi.cerrar(); vistaPreguntas(true); mayeutica.entrar(); pintar(); return; }
   modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false; foco = []; espera = null; delete caja.dataset.fin; guiaApi.cerrar();
   if (m === 'explorar') { pintar(); return; }
   const def = m === 'apuesta' ? APUESTA : m === 'error' ? ERROR : m === 'hilario' ? ERROR2 : CASO; preset = def.preset; s = nuevo(PRESETS[def.preset].s);
@@ -122,13 +134,19 @@ function montar() {
 function ajustarDock() { R.style.setProperty('--hpv-dock-h', $('dock').offsetHeight + 'px'); }
 // Estado: «casimira» (un paciente), «sano:tips» (ese paciente con el TIPS puesto) o «casimira:rl» / «casimira:alb» (con ese fluido). Vacío = el hígado sano.
 export function abrirEstado(clave) {
-  const [p, x] = String(clave || '').split(':'); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
+  const [p, x] = String(clave || '').split(':'); if (modo === 'preguntas') vistaPreguntas(false); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
   ponerPreset(PRESETS[p] ? p : 'sano');
   if (x === 'tips') { const a0 = fmt(leer(s).a); hacer('tips'); frase(`TIPS puesto: el amonio arterial pasa de ${a0} a ${N()} µmol/L, porque el NH₃ de la porta salta el hígado. Cambia un problema por otro.`, 'ficha · p. 10; cuánto sube: ilustrativo'); }
   else if (x === 'rl' || x === 'alb') hacer('fl', x);
   ajustarDock();
 }
 montar(); ponerPreset('sano', true); ajustarDock();
+const mayeutica = crearMayeutica({
+  poner: (clave, aj, tapado) => { ponerPreset(clave, true); Object.assign(s, aj || {}); oculto = !!tapado; pintar(); },
+  tapar: (b) => { oculto = !!b; pintar(); }, aplicar: (o) => { Object.assign(s, o); pintar(); }, estado: () => s, ver: verModelo, cita, medir: ajustarDock,
+  abrir: (clave) => { modoPrueba('explorar'); ponerPreset(clave); },
+});
+mayeutica.cargar();
 new ResizeObserver(ajustarDock).observe($('dock'));
 seguirFrase(R, () => $('escena'), { dock: () => $('dock') });
 window.__hpv = { get s() { return s; }, leer: () => leer(s), hacer, ponerPreset, modoPrueba, pintar, abrirEstado, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); }, vitales: () => vitales(s) };
