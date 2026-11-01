@@ -100,6 +100,10 @@ export const CAUSAS = [
   // Bicarbonato IV: sobre una láctica grave (HCO₃⁻ 5 y PaCO₂ 18, sobre su línea); solo tendencia (hueco 8)
   { id: 'bicarb', t: 'Bicarbonato IV', e: { hco3: 5, paco2: 18, cl: 104, anion: 'lact', reloj: 'h', farmaco: 'bicarbonato', respirador: true, tendencia: true, obj: 'alveolo', etiqueta: 'Láctica grave + bicarbonato' }, f: 'mr-lactato-bicarbonato#mr-bicarb-contra',
     dice: 'Cada ampolla trae CO₂ (PCO₂ 200 mmHg): si está ventilado, sube la ventilación minuto; vigila el Ca²⁺ iónico.' },
+  // Cetoacidosis alcohólica (Marino p. 28-29): cifras ILUSTRATIVAS de un paciente posible (Na⁺ 136, Cl⁻ 92 por los vómitos,
+  // HCO₃⁻ 18, PaCO₂ 33 → HA 26, pH ≈ 7,36); la fuente solo dice «acidemia leve, algunos alcalémicos».
+  { id: 'caa', t: 'Cetoacidosis alcohólica', e: { na: 136, cl: 92, hco3: 18, paco2: 33, anion: 'ceto', reloj: 'h', etiqueta: 'Cetoacidosis alcohólica' }, f: 'mr-cetoacidosis#mr-caa-diagnostico', fd: 'mr-cetoacidosis#mr-redox',
+    dice: 'Hiato alto sin hiperglucemia, pero el nitroprusiato puede salir <span class="hl-rojo">negativo</span>: el NADH del etanol desvía el acetoacetato a β-hidroxibutirato (hasta 8:1) y la tira no lo detecta. Los vómitos añaden una alcalosis: el pH sale casi normal. Basta salino con glucosa y tiamina (cifras ilustrativas).' },
 ];
 export const CAUSA = Object.fromEntries(CAUSAS.map(c => [c.id, c]));
 

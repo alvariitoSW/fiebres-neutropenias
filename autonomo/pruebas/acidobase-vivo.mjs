@@ -81,6 +81,17 @@ for (const [especialidad, view, panel, tab, cond, vista] of fichas) {
   if (tab === 'mr-alcalosis-mecanismos' || tab === 'mt-alcoholes') await foto('entrada-' + tab);
   ok(await desborda() <= 0, `sin desborde tras ${tab}`);
 }
+// caa: cetoacidosis alcohólica desde su ficha + barrido de extremos de los mandos
+await pulsar({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-cetoacidosis' }); await espera(700);
+await clic('#mr-caa-ver'); await espera(4000);
+{ const p = await P(); ok(await visible() && p.causa === 'caa' && p.estado.hco3 === 18, `ficha caa abre la cetoacidosis alcohólica (causa ${p.causa})`);
+  const fv = await pag.evaluate(() => document.querySelector('#abv-raiz .abv-frase, #abv-raiz [id*="frase"]')?.innerText || document.getElementById('abv-raiz').innerText);
+  ok(/nitroprusiato/.test(fv) && /casi normal/.test(fv), 'caa: la frase viva dice nitroprusiato negativo y pH casi normal');
+  const rangos = await pag.$$('#abv-raiz input[type=range]'); let mal = 0;
+  for (const r of rangos) for (const ext of ['min', 'max']) {
+    await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
+    await espera(150); const q = await P(); if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || await desborda() > 0) mal++; }
+  ok(mal === 0 && rangos.length > 0, `caa: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
 // paso del riñón (paso 4, vómitos → célula del colector)
 await pulsar({ especialidad: 'nefrologia', view: 'acidobase', acidobaseVivo: 'paso-4' }); await espera(5000);
 ok((await P()).estado.obj === 'rinon', 'el paso 4 abre el riñón');
