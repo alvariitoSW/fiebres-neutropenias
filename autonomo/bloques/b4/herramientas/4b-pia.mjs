@@ -6,14 +6,14 @@ const PVC_CONGESTION = +/PVC_CONGESTION = (\d+)/.exec(src)[1];
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const modelo = new Function('clamp', 'PVC_CONGESTION', src.slice(ini, fin) + '; return modelo;')(clamp, PVC_CONGESTION);
 const base = { ieca: false, isglt2: false, deplecion: false, aine: false, estenosis: false, obstruccion: false, obstruccionMantenida: false, albuminuria: false, congestion: false };
-console.log('PAM PIA | PPA(PAM-PIA) grad(PAM-2PIA) | TFG ml/min (125 normal)');
+console.log('PAM PIA | PPA grad(PAM-2PIA) Bowman | TFG ml/min (125 normal)');
 let mal = 0;
 for (const pam of [60, 80, 100]) {
     let prev = Infinity;
-    for (const pia of [0, 7, 12, 20, 30, 40]) {
+    for (const pia of [0, 7, 8, 9, 10, 11, 12, 20, 30, 40]) {
         const M = modelo({ ...base, pam, pia });
         const ppa = pam - pia, grad = pam - 2 * pia;
-        console.log(`${String(pam).padStart(3)} ${String(pia).padStart(3)} | ${String(ppa).padStart(4)} ${String(grad).padStart(4)} | ${M.tfg.toFixed(0).padStart(4)}`);
+        console.log(`${String(pam).padStart(3)} ${String(pia).padStart(3)} | ${String(ppa).padStart(4)} ${String(grad).padStart(4)} ${String(M.pb).padStart(5)} | ${M.tfg.toFixed(0).padStart(4)}`);
         if (M.tfg > prev + 1e-9) { mal++; console.log('  !! sube con la PIA'); }
         prev = M.tfg;
     }

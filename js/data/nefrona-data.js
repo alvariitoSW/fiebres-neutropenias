@@ -152,11 +152,11 @@ export const situacionesNefrona = [
     // ilustrativo. `fraVolumen`: lo mismo con salino 10-20 mL/kg y diuresis >=1 mL/kg/h
     // (70 kg: ~1,7 L/día, ilustrativo).
     { id: 'rabdo', nombre: 'Rabdomiólisis', grupo: 'fra', adh: 1, fuentes: [],
-      texto: 'La <strong>mioglobina</strong> filtrada lesiona el epitelio del túbulo proximal y forma cilindros que obstruyen (Marino cap. 34, p. 51-52). La CK no predice el riesgo renal; la mioglobinuria sí (tira positiva sin hematíes). El volumen agresivo la arrastra.',
+      texto: 'La <strong>mioglobina</strong> liberada por el músculo lesionado puede dañar las células epiteliales del túbulo (Marino cap. 34, p. 52). La mioglobinuria es un componente crítico del diagnóstico (tira positiva sin hematíes); la CK se correlaciona más con la lesión muscular (p. 52). El volumen agresivo favorece el flujo tubular.',
       fra: { tfg: 0.25, rTp: 0.25, rTal: 0.2, M: 450, uosm: 320, V: 1.1, fena: 0.04, nta: true, rabdo: true,
         tabla: { volumen: '—', osm: '—', naOrina: '—', fena: '—', crocrs: '—', feurea: '—', sedimento: 'Tira + sin hematíes (mioglobina >20 μg/l, orina parda)' } },
       fraVolumen: { tfg: 0.25, rTp: 0.25, rTal: 0.2, M: 450, uosm: 320, V: 1.7, fena: 0.04, nta: true, rabdo: true, volumenOn: true,
-        tabla: { volumen: 'Objetivo: ≥1 mL/kg/h tras salino 10-20 mL/kg', osm: '—', naOrina: '—', fena: '—', crocrs: '—', feurea: '—', sedimento: 'Tira + sin hematíes; la mioglobina se arrastra' } },
+        tabla: { volumen: 'Objetivo: ≥1 mL/kg/h tras salino 10-20 mL/kg (el libro imprime «1 mg/kg/hr»: errata, p. 52)', osm: '—', naOrina: '—', fena: '—', crocrs: '—', feurea: '—', sedimento: 'Tira + sin hematíes; la mioglobina se arrastra' } },
     },
     { id: 'obstruccion', nombre: 'Obstrucción (posrenal)', grupo: 'fra', adh: 0.4825, fuentes: [],
       texto: 'El aumento de presión en la vía urinaria se transmite de forma retrógrada hacia el parénquima: al principio disminuye el FG por el aumento de presión intratubular, y después se perpetúa porque el SRAA y el simpático contraen las arteriolas. En la uropatía obstructiva completa hay anuria (<100 ml/día).',

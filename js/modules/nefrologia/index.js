@@ -7,6 +7,7 @@
 import { createViewSwitcher } from '../../core/navigation.js';
 import { openCorkboardTopic } from '../../core/corkboard.js';
 import { arrancar } from '../../core/ui.js';
+import { marcarVolver } from '../../core/volver-ficha.js';
 import { initNefronaViva } from './nefrona-viva.js';
 import { initAcidoBaseVivo } from './acidobase-vivo.js';
 import { initRinon } from './rinon.js';
@@ -67,7 +68,10 @@ export function init() {
     }, (key) => (key === 'acidobase' ? acidoBase?.mostrar() : acidoBase?.ocultar()));
 
     document.querySelectorAll('.btn-volver-nefro-kidney').forEach(b =>
-        b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona?.reset(); }));
+        b.addEventListener('click', () => { nefroLevel.show('kidney'); nefrona?.reset(); setTimeout(() => marcarVolver(volverNefrona, null, null)); }));
+    // «← VOLVER A LA FICHA» de la nefrona viva cuando se entra desde una ficha (data-nefrona-viva); se limpia tras el clic
+    // (en un tic) para que el enlace cruzado de home lea antes los datos de la ficha.
+    const volverNefrona = document.querySelector('#nefro-menu-view .btn-volver-nefro-kidney');
     // Diuréticos de asa cuelga de la nefrona: su "← VOLVER" vuelve a ella.
     document.querySelectorAll('.btn-volver-nefro-menu').forEach(b =>
         b.addEventListener('click', () => nefroLevel.show('nefrona')));
@@ -122,6 +126,6 @@ export function init() {
         irAFicha: nefroLevel.irAFicha,
         // Modelos vivos que se abren en un estado (data-acidobase-vivo="paso-3", "vomitos"…): los
         // resuelve el enlace cruzado de siempre de home/index.js. abrir() cambia él solo a su vista.
-        modelosVivos: { acidobaseVivo: (ancla, origen) => { nefroLevel.show('acidobase'); acidoBase?.abrir(ancla, origen); } },
+        modelosVivos: { nefronaViva: (_v, origen) => { if (origen) marcarVolver(volverNefrona, null, origen); }, acidobaseVivo: (ancla, origen) => { nefroLevel.show('acidobase'); acidoBase?.abrir(ancla, origen); } },
     };
 }

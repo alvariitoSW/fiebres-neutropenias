@@ -62,14 +62,19 @@ const montados = new Map();
 const ESTADOS = { 'k-urgente': { modo: 'hd', k0: 7, horas: 0, calcio: 'no' } };
 document.addEventListener('click', ev => {
     const b = ev.target.closest('[data-filtro-vivo]');
-    if (!b || !ESTADOS[b.dataset.filtroVivo]) return;
+    if (!b) return;
+    // «k-urgente,k0=6.4»: el K⁺ de partida viene del enlace (clamp 5,5-8,5)
+    const [clave, ...extra] = b.dataset.filtroVivo.split(',').map(x => x.trim());
+    if (!ESTADOS[clave]) return;
+    const est = { ...ESTADOS[clave] };
+    for (const x of extra) { const [kk, vv] = x.split('='); if (kk === 'k0' && isFinite(parseFloat(vv))) est.k0 = Math.round(Math.min(8.5, Math.max(5.5, parseFloat(vv))) * 10) / 10; }
     setTimeout(() => {
         const tab = document.getElementById(b.dataset.tab);
         if (!tab) return;
         irAlVisual(tab);
         const f = montados.get(tab.id);
         if (!f) return;
-        f.poner(ESTADOS[b.dataset.filtroVivo]);
+        f.poner(est);
         requestAnimationFrame(() => f.lienzo.scrollIntoView({ behavior: 'smooth', block: 'center' }));
     }, 60);
 });
@@ -257,13 +262,13 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
             if (e.anticoag === 'citrato') items.push(['Ca²⁺ iónico en el circuito', '<0,35 mmol/l', true, '', 'Citrato a 4-6 mmol/l; inhibe la coagulación por debajo de 0,5 y al máximo por debajo de 0,25']);
             items.push(['Filtro coagulado', `${Math.round(coag * 100)}%`, false, coag > 0.5 ? 'malo' : '', coag >= 1 ? 'Sin flujo útil: cambiar el circuito' : 'Avanza más rápido con fracción de filtración alta o flujo bajo']);
         }
+        if (m.has('k')) items.unshift(...lecturasK(e).items);   // antes de pintar los medidores
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(medidor).join('');
         pintarFormula(cuerpo.querySelector('.fv-formula'), md.conv && m.has('dosis') ? [{
             titulo: 'Efluente', formula: 'dosis (ml/kg/h) × peso (kg)',
             numeros: `${e.dosis} × ${PESO}`, resultado: Math.round(M.qef * 60).toLocaleString('es-ES', { useGrouping: true, minimumGroupingDigits: 1 }), unidad: 'ml/h',
             origen: 'fisiología general · dosis: ficha · trr-dosis-base · peso de 70 kg: ilustrativo', prefijos: ['trr'],
         }] : null);
-        if (m.has('k')) { const r = lecturasK(e); items.unshift(...r.items); }
         const av = [];
         if (m.has('k')) av.push(...lecturasK(e).av);
         if (e.modo === 'hd') av.push(['warn', 'Rápida y eficaz, pero su ultrafiltración depende de lo que tolere la tensión: menos estabilidad hemodinámica que la TRR continua.' + enlace(textos.hd)]);
