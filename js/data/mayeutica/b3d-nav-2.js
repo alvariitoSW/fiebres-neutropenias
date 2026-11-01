@@ -1,6 +1,6 @@
 // Mayéutica del bloque 3D, G5: ficha 19 neumo-derrame-antimicrobiano (Marino cap. 29, págs. 45-49 del PDF) y el caso de
-// Casimiro (días 6-13). Formato: cabecera de b1-fluidos.js. Plan: autonomo/bloques/b3/estudio-3d/. Sin «Juega» ni
-// «Compruébalo»: ningún modelo vivo enseña el derrame paraneumónico ni la antibioterapia; el paso «Mira» es la vista Visual.
+// Casimiro (días 6-13). Formato: cabecera de b1-fluidos.js. Plan: autonomo/bloques/b3/estudio-3d/. El derrame lo enseña el
+// estado `derrame-paraneumonico` del pulmón vivo (dea-g3 y dea-g6 lo abren); la antibioterapia no tiene modelo: el paso «Mira» es la vista Visual.
 // Páginas comprobadas con pdftotext en docs/marino-2024-respiratory-management-caps27-30.pdf: frecuencia del derrame y
 // Tabla 29.5, 45; categorías, tubo, antibióticos del derrame y drenaje ineficaz, 46; factores, regímenes, Tabla 29.6 y
 // cultivos negativos, 47; neumonía documentada (7 días) y mortalidad, 48. Los datos «(del caso)» son de un paciente inventado.
@@ -11,6 +11,7 @@ const enFicha = (tab, id) => ` <button type="button" class="may-ir" ${NEU} data-
 const DER = 'neumo-derrame-antimicrobiano';
 const ok = t => ({ t, ok: true });
 const no = (t, porque) => ({ t, porque });
+const pl = (clave, texto) => ({ pulmonVivo: clave, texto });
 const CASO = 'ficha: la regla de cada paso; las cifras del paciente, inventadas';
 
 const DATOS = {
@@ -33,6 +34,7 @@ const DATOS = {
           `<span class="hl-rojo">Categoría 4</span>: purulento, con el análisis de la categoría 3. Tubo torácico (${p(45)}).`],
         explicacion: `La gravedad crece de la 1 a la 4; lo que separa la 2 de la 3 es la infección del líquido (pH, glucosa, Gram o cultivo) junto con la loculación o el tamaño (${p(45)}).` + enFicha(DER, 'nep-derrame-tabla') },
       { id: 'dea-g3', corto: 'categoría 2', tipo: 'test', fuente: 'nep-derrame-cat2', origen: 'ficha: la categoría 2; las cifras del enunciado, ilustrativas',
+        modeloVivo: pl('derrame-paraneumonico', '🫁 Compruébalo con el líquido de Alonso: cambia el pH, la glucosa y el Gram y mira cuándo sale «tubo»'),
         enunciado: 'Un derrame libre de 20 mm que ocupa un tercio del hemitórax; el análisis da pH 7,32, glucosa 90 mg/dL y Gram y cultivo negativos. ¿Qué haces, y qué límite advierte la ficha?',
         opciones: [
           no('Tubo de 8,5-14 Fr desde el principio, porque pasa de 10 mm', `El tubo es de las categorías 3 y 4; en la 2 no hay infección y no se necesita otra intervención (${p(46)}). Pondrías un tubo a un derrame que no lo precisa.`),
@@ -54,6 +56,7 @@ const DATOS = {
           no('Solo gramnegativos con Pseudomonas, con cefepima sola', `Sin vancomicina quedaría sin cubrir el MRSA, que la ficha incluye entre lo que debe cubrir el antibiótico del derrame (${p(46)}).`)],
         explicacion: `El drenaje se combina con antibioterapia empírica; en el hospitalizado cubre <span class="hl-azul">MRSA y entéricos gramnegativos, incluida Pseudomonas</span>: vancomicina más cefepima o piperacilina-tazobactam (${p(46)}).` + enFicha(DER, 'nep-derrame-atb') },
       { id: 'dea-g6', corto: 'drenaje ineficaz', tipo: 'test', fuente: 'nep-derrame-drenaje',
+        modeloVivo: pl('derrame-paraneumonico', '🫁 Pon el tubo en el loculado de Alonso y deja pasar las horas'),
         enunciado: 'Un derrame loculado drena mal por el primer tubo. Antes de leer: ¿qué sigue, y qué se descarta?',
         opciones: [
           no('Fibrinolíticos por el tubo desde el primer momento, para romper las loculaciones', `La ficha no los aconseja en general en el derrame complicado ni en el empiema (${p(46)}); los usarías donde la guía no los respalda.`),
@@ -65,7 +68,7 @@ const DATOS = {
         opciones: [
           no('El de bajo riesgo: la NAV es precoz y no hay shock, y una infección urinaria antigua no cuenta', `La exposición a antibióticos en los últimos 90 días es un factor de riesgo por sí sola (${p(47)}); tratarías con un solo agente a un paciente de alto riesgo.`),
           ok('El de alto riesgo: haber recibido antibióticos en los últimos 90 días es un factor, y con uno basta'),
-          no('El de alto riesgo solo si además hay shock séptico, porque los demás factores no cambian la pauta', `La ficha dice «todo lo siguiente»: cada factor, sin necesidad de shock, lleva al régimen de alto riesgo (${p(47)}); sin cobertura de MRSA podrías dejar sin tratar el germen resistente.`)],
+          no('El de alto riesgo solo si además hay shock séptico, porque los demás factores no cambian la pauta', `El régimen de bajo riesgo es solo para la NAV precoz «without septic shock or any of the other risk factors» (sin shock séptico ni ningún otro factor de riesgo): cada factor, sin necesidad de shock, lleva al régimen de alto riesgo (${p(47)}); sin cobertura de MRSA podrías dejar sin tratar el germen resistente.`)],
         explicacion: `Los cinco factores (inicio tardío, shock séptico, MRSA o multirresistente previo, antibiograma con el 25 % de resistentes y antibióticos en los últimos 90 días) cuentan <span class="hl-rojo">cada uno por separado</span>: con uno basta para el régimen de alto riesgo (${p(47)}).` + enFicha(DER, 'nep-atb-factores') },
       { id: 'dea-g8', corto: 'bajo riesgo', tipo: 'test', fuente: 'nep-atb-bajo', origen: 'ficha; la toxicidad del aminoglucósido, fisiología general',
         enunciado: 'NAV de inicio precoz, sin shock séptico ni ningún otro factor de riesgo. ¿Qué régimen empírico lleva?',

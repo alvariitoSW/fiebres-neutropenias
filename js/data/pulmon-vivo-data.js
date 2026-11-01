@@ -577,3 +577,36 @@ ESTADOS.subglotica = {
 };
 PACIENTES.push({ k: 'gaspar', nombre: 'Gaspar', chip: '67 a · día 4 · tubo con puerto', linea: '67 años, 80 kg, 1,72 m, traumatismo craneal, intubado desde hace 4 días; cabecera elevada. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'subglotica' });
 ORDEN_ESTADOS.push('subglotica');
+
+// ---------------------------------------------------------------- B3-cierre · el derrame paraneumónico (derrame.js)
+FICHA['neumo-derrame-antimicrobiano'] = [NEUMO_E4, 'Derrame paraneumónico y antimicrobianos', 'Derrame paraneumónico', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  derrameTabla: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-tabla', sitio: 'Tabla 29.5: clasificación de los derrames paraneumónicos', p: 45 },
+  derrameCat3: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-cat3', sitio: 'Categoría 3: loculado o >50 % del hemitórax, con datos de infección; tubo de 8,5-14 Fr', p: 46 },
+  derrameCat4: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-cat4', sitio: 'Categoría 4: empiema, drenaje inmediato', p: 46 },
+  derrameDrenaje: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-drenaje', sitio: 'Drenaje ineficaz: segundo tubo con TC, cirugía (VATS); sin fibrinolíticos', p: 46 },
+});
+export const DERRAME = {
+  // categoría por los datos del líquido (Tabla 29.5, cap. 29 p. 45); la tabla no define las mezclas
+  tam: { peq: { et: '<10 mm, libre' }, libre: { et: '>10 mm y <50 % del hemitórax, libre' }, locu: { et: 'Loculado o >50 % del hemitórax' } },
+  tope: 72, aviso: 24, sello: 48, pasoH: 12,   // horas con tubo: ilustrativo. Marino no da ningún plazo para decir que el drenaje es ineficaz (solo «inadecuado»); 24-48 h es la referencia del plan del profesor, sin fuente
+  nivelBase: { 1: 0.12, 2: 0.4, 3: 0.75, 4: 0.75 },   // fracción de la altura del hemitórax ocupada por líquido: ilustrativo
+  spo2: { 1: 97, 2: 96, 3: 93, 4: 93 },   // ilustrativo: la fuente no da saturaciones. El paciente es posible (hospitalizado con neumonía y derrame)
+  figura: null,
+};
+ESTADOS['derrame-paraneumonico'] = {
+  tit: 'Derrame paraneumónico: ¿tubo o no tubo?', pac: 'alonso', corazon: { tipo: 'normal' },
+  resp: { modo: 'vcv', vt: 450, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 }, pulmon: NORMAL, man: {},
+  frase: 'El líquido pleural dice si hace falta tubo: pH, glucosa, Gram y pus lo clasifican en cuatro categorías.',
+  guia: [
+    { t: 'Alonso tiene una neumonía y un derrame pleural. Se clasifica en 4 categorías con el grosor y el carácter del derrame y el análisis del líquido. Elige el tamaño y mira cómo cambia el líquido en el dibujo.', org: 'ficha (cap. 29 p. 45, Tabla 29.5)', s: ['#pul-derrame-dib', '#pul-derrame-tam'], c: C.derrameTabla },
+    { t: 'Cambia pH, glucosa y Gram o cultivo. Con pH >7,20, glucosa >60 mg/dL y Gram y cultivo negativos (categoría 2) no hay infección y no hace falta tubo. Con pH <7,20, glucosa <60 mg/dL y Gram o cultivo positivos en un derrame loculado o de más de la mitad del hemitórax (categoría 3), el drenaje con tubo es obligado.', org: 'ficha (cap. 29 p. 45-46)', s: ['#pul-derrame-liq', '#pul-derrame-cat'], c: C.derrameCat3 },
+    { t: 'Marca «pus»: es la categoría 4, el empiema. Drenaje inmediato, y un tubo fino de 8,5-14 Fr drena igual que uno de 28-36 Fr.', org: 'ficha (cap. 29 p. 46)', s: ['#pul-derrame-pus', '#pul-derrame-cat'], c: C.derrameCat4 },
+    { t: 'En la 3 o la 4, pon el tubo y deja pasar las horas. En el derrame libre el líquido sale; en el loculado queda líquido en bolsas y el drenaje es ineficaz. La ficha dice «difícil de drenar», sin plazo: las 24-48 h del modelo son ilustrativas.', org: 'ficha (cap. 29 p. 46) · las horas: ilustrativo', s: ['#pul-derrame-horas', '#pul-derrame-dib'], c: C.derrameDrenaje },
+    { t: 'Si el primer tubo no basta: otro tubo, mejor guiado por TC, y consulta a cirugía para VATS si persiste. Los fibrinolíticos intrapleurales no se aconsejan en general.', org: 'ficha (cap. 29 p. 46)', s: ['#pul-derrame-msg'], c: C.derrameDrenaje },
+  ],
+  fuentes: [C.derrameTabla, C.derrameCat3, C.derrameCat4, C.derrameDrenaje],
+};
+PACIENTES.push({ k: 'alonso', nombre: 'Alonso', chip: '61 a · neumonía con derrame', linea: '61 años, 1,75 m, neumonía hospitalaria con derrame pleural derecho. PBW 70,6 kg.', talla: 175, sexo: 'v', estado: 'derrame-paraneumonico' });
+ORDEN_ESTADOS.push('derrame-paraneumonico');
+NOTAS.push({ k: 'derrame-ilu', tipo: 'calla', txt: 'Marino da la Tabla 29.5 (grosor, pH, glucosa, Gram o cultivo, pus, tubo sí o no) y dice que el derrame loculado es difícil de drenar y que, si el primer tubo no basta, se pone otro con TC o se consulta a cirugía. No da la LDH, ni un plazo en horas para hablar de drenaje ineficaz, ni cuánto líquido hay en cada categoría, ni saturaciones. Las 24 y 48 h, la altura del líquido y la SpO₂ del dibujo son ilustrativas; las mezclas que la tabla no define (p. ej. derrame libre con pH <7,20) se dicen como tales.', citas: [C.derrameTabla, C.derrameDrenaje] });
