@@ -285,7 +285,7 @@ export const MAYEUTICA_NPT = {
           'Primero lípidos (250 mL al 20 % = 500 kcal) y luego D50 para el resto; en la calculadora, 594 mL con propofol a 10 mL/h.',
           'El propofol cuenta: los mL/h son kcal/h (1 kcal/mL en el cap. 50; 1,1 en el cap. 49).',
           'Con riesgo de realimentación se empieza al 40-50 % y se sube en 4-7 días según fosfato, potasio y magnesio; el propofol y la bolsa suman lípidos: vigilar triglicéridos.'],
-        volver: { nombre: 'Construir la NPT', ancla: 'mu-npt-calc' } },
+        volver: { nombre: 'Construir la NPT', ancla: 'mu-npt-calc', modelo: { murallaViva: 'enteral' } } },
     ],
     profundizar: [
       { id: 'mu-npp-que', titulo: 'Nutrición parenteral periférica: qué es' },
@@ -446,7 +446,7 @@ export const MAYEUTICA_NPT = {
           'IMC ≤18,5 e ingesta pobre 5 días: alto riesgo; electrolitos y tiamina (pauta de la Tabla 48.4, no 100-200 mg) antes de nutrir.',
           'Se empieza al 40-50 % (10-15 kcal/kg/día) o con 150 g de glucosa y se sube en 4-7 días vigilando fosfato, potasio y magnesio.',
           'Debilidad = fosfato; arritmias = potasio y magnesio; alteración mental y lactato = tiamina; edema pulmonar = sodio.'],
-        volver: { nombre: '¿Alto riesgo de realimentación?', ancla: 'mu-real-calc' } },
+        volver: { nombre: '¿Alto riesgo de realimentación?', ancla: 'mu-real-calc', modelo: { acidobaseVivo: 'lactica' } } },
     ],
     profundizar: [
       { id: 'mu-tabla-50-4', titulo: 'Tabla 50.4 · Insulinas y su duración' },

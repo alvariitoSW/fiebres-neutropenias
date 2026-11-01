@@ -446,7 +446,7 @@ export const MAYEUTICA_CUANTO = {
     ],
     profundizar: [
       { id: 'mu-tia-corazon', titulo: 'La miocardiopatía (beriberi húmedo)' },
-      { id: 'mu-tia-neuropatia', titulo: 'La neuropatía periférica' },
+      { id: 'mu-tia-tto', titulo: 'La dosis importa' },
       { id: 'mu-tia-alcohol', titulo: 'El alcohol y la tiamina' },
       { id: 'mu-tia-rm', titulo: 'RM: localizaciones' },
     ],
@@ -554,7 +554,7 @@ export const MAYEUTICA_CUANTO = {
           'Hierro solo con déficit tisular (ferritina <18) y anemia.',
           'Vitamina D <30 nmol/L es grave: 150.000 UI IM.',
           'Selenio IV: máximo 225 µg/día.'],
-        volver: { nombre: 'Cortes de ferritina', ancla: 'mu-ferritina-cortes' } },
+        volver: { nombre: 'Cortes de ferritina', ancla: 'mu-ferritina-cortes', modelo: { acidobaseVivo: 'lactica' } } },
     ],
     profundizar: [
       { id: 'mu-tabla-48-3', titulo: 'Vitaminas: necesidades diarias (Tabla 48.3)' },
