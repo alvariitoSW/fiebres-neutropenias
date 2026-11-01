@@ -149,6 +149,7 @@ export const ESTADOS = {
     normal: { n: 'Normal', p: {}, ficha: 'mar-transporte-o2', pestana: 'sangre', grupo: 'o2' },
     anemia: { n: 'Anemia, gasto fijo', s: 'Hb 7,5', p: { hb: 7.5 }, ficha: 'mar-transporte-o2', pestana: 'sangre', grupo: 'o2' },
     hipoxemia: { n: 'Hipoxemia', s: 'PaO₂ 45', p: { pao2: 45 }, ficha: 'mar-transporte-o2', pestana: 'pulmon', grupo: 'o2' },
+    'hipoxemia-60': { n: 'Umbral del O₂', s: 'PaO₂ 60', p: { pao2: 60 }, ficha: 'mar-transporte-o2', pestana: 'pulmon', grupo: 'o2' },
     'bajo-gasto': { n: 'Bajo gasto', s: 'GC 2,5', p: { gc: 2.5 }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
     umbral: { n: 'Umbral', s: 'extracción 50 %', p: { gc: GC_UMBRAL }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
     dependiente: { n: 'Dependiente', s: 'GC 2', p: { gc: 2 }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
@@ -314,6 +315,11 @@ export const GUIAS = {
         { t: 'La PaO₂ cae a la mitad (90 → 45), pero la SaO₂ solo baja a 78 %: cada hematíe entra con 3 perlas de cada 4.', resalta: '#cpv-zona-arterial', mirar: 'sao2', cita: TO2('mar-anemia-hipoxemia', '70') },
         { t: 'El contenido arterial baja solo un 20 % (20 → 16 mL/dL): mucho menos que con la Hb a la mitad.', mirar: 'cao2', cita: TO2('mar-anemia-hipoxemia', '70-71') },
         { t: 'Es la forma en S: la PaO₂ normal está en la parte plana y puede caer hasta 60 con poco cambio de saturación; la venosa (≈40) está en la parte empinada.', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
+    ],
+    'hipoxemia-60': [
+        { t: 'La PaO₂ baja de 90 a 60, el umbral de la hipoxemia, y la SaO₂ solo baja a 89 %: cada hematíe entra casi lleno (la ficha usa 90 %).', resalta: '#cpv-zona-arterial', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
+        { t: 'El contenido arterial pasa de 20 a ≈18 mL/dL (−9 % con esta curva; −8 % con la SaO₂ de 90 % de la ficha): casi nada frente al −20 % de la PaO₂ de 45.', mirar: 'cao2', cita: TO2('mar-anemia-hipoxemia', '70-71') },
+        { t: 'Está en la parte plana de la curva en S: por eso el umbral de 60 pierde poco oxígeno y la anemia, con Hb 7, mucho más.', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
     ],
     'bajo-gasto': [
         { t: 'El gasto cae a 2,5 L/min: los hematíes pasan más despacio por el capilar.', resalta: '#cpv-zona-capilar', mirar: 'do2', cita: TO2('mar-do2', '72-73'), org: 'la velocidad: ilustrativa' },
