@@ -21,7 +21,7 @@ import { VALVULAS, apertura, estadoGeo, crearTablaFormas, semejantes, extraDeMot
 import { VISTAS, planoVista, medidasCorazon, enPlano, valvasEnPlano, crearEcografo, abanicoVista, direccionHaz, anguloHacia, planoLibre, medirVd, SONDA_CERO, sondaMovida, desviacion, vistaMasParecida } from './ecografia.mjs';
 import { crearModoM } from './modo-m.mjs';
 import { TEJIDOS } from '../../data/eco-tejidos.js';
-import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral } from './doppler.mjs';
+import { areasAnilloDe, fuentesFlujo, fuenteEnMuestra, curvaLatido, medidasLatido, puntosMuestra, velocidadesMuestra, columnaEspectro, mapaColor, velRegMitral, velCwReg } from './doppler.mjs';
 
 export const NOMBRE_VISTA = { a4c: 'A4C', a2c: 'A2C', a3c: 'A3C', plax: 'PLAX', psaxAo: 'PSAX Ao', psaxMv: 'PSAX mitral', psaxPm: 'PSAX papilares', sc4c: 'SC 4C', scVci: 'SC VCI', sse: 'Supraesternal' };
 // orden de los chips: apicales, paraesternal largo, ejes cortos de la base al ápex
@@ -397,6 +397,7 @@ export function montarSimulador(raiz, opc = {}) {
   function elegirModo(m) {
     modoEco = m; $$('[data-modo]').forEach(b => b.classList.toggle('on', b.dataset.modo === m));
     $('#cv-m-zona').hidden = m !== 'M'; $('#cv-d-zona').hidden = m !== 'D';
+    $('#cv-eco-fijo').classList.toggle('cv-sin-fijo', m === 'M' || m === 'D');   // el bloque fijo (imagen + gravedad) taparía el espectro
     if (m === 'M') { modoM.ajustar(); colocarLineaM(); pintarGuia(); }
     if (m === 'D') { espectro.ajustar(); if (!gate) muestraPorDefecto(); else reiniciarD(); }
     ecoPendiente = true;
@@ -589,13 +590,23 @@ export function montarSimulador(raiz, opc = {}) {
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
     ponerBase(k === 'regmitral' || k === 'regtricus' ? 'arriba' : 'centro');   // CW de un chorro que se aleja: línea de base arriba (ilustrativo)
+    escalaAuto = k === 'regmitral' || k === 'regtricus';   // el mando manual manda si el usuario lo toca
     if (k === 'regmitral' || k === 'regtricus') { const e = k === 'regtricus' ? '500' : '250'; $('#cv-d-escala').value = e; espectro.setEscala(+e); }   // el chorro supera los 150 cm/s; la IT con HP llega a ~450 cm/s: el CW no da aliasing
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
+  // Escala automática del CW de la IM y la IT, como un ecógrafo: el escalón más pequeño (±150/±250/±400/±500/±700 cm/s, ilustrativo) en que el chorro y el llenado del latido
+  // caben en su lado de la línea de base (≤ 95 %), para que el chorro ocupe la pantalla sin recortarse
+  let escalaAuto = false;
+  function escalarPorPico() {
+    const vs = motor.onda.map(x => velCwReg(x, fuenteD, fuenteD.factor, areasD(), datosFlujo())), arriba = Math.max(0, ...vs), abajo = Math.max(0, -Math.min(0, ...vs)), bs = espectro.estado.base;
+    const v = [150, 250, 400, 500, 700].find(e => abajo <= 0.95 * 2 * e * (1 - bs) && arriba <= 0.95 * 2 * e * bs) ?? 700;
+    if (v === espectro.estado.vmax) return;
+    $('#cv-d-escala').value = String(v); espectro.setEscala(v); ultimoTD = null;
+  }
   function ponerBase(k) { $('#cv-d-base').value = k; espectro.setBase(k === 'arriba' ? 0.2 : k === 'abajo' ? 0.8 : 0.5); ultimoTD = null; }
   $('#cv-d-base').addEventListener('change', () => ponerBase($('#cv-d-base').value));
-  $('#cv-d-escala').addEventListener('change', () => { espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
+  $('#cv-d-escala').addEventListener('change', () => { escalaAuto = false; espectro.setEscala(+$('#cv-d-escala').value); ultimoTD = null; });
   $('#cv-color').addEventListener('change', () => { colorOn = $('#cv-color').checked; $('#cv-nyquist').hidden = !colorOn; ecoPendiente = true; });
   $('#cv-nyquist').addEventListener('change', () => { nyq = +$('#cv-nyquist').value; ecoPendiente = true; });
   // tocar (o arrastrar) sobre la imagen B en modo Doppler pone el volumen de muestra
@@ -611,6 +622,7 @@ export function montarSimulador(raiz, opc = {}) {
     latidoD = motor.s.nLatido; fuenteD = fuenteEnMuestra(pts, haz, F); angD = null;
     if (fuenteD && fuenteD.tipo === 'valvula') { const j = F.geom.find(x => x.n === fuenteD.n); angD = Math.acos(Math.min(1, Math.abs(haz[0] * j.dir[0] + haz[1] * j.dir[1] + haz[2] * j.dir[2]))) * 180 / Math.PI; }
     medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD, datosFlujo()) : null;
+    if (escalaAuto && medD && medD.tipo === 'regurgitacion' && medD.pico > 0) escalarPorPico();
     pintarResultadoD();
   }
   // El renglón «fórmula → números → resultado» es de la app (core/formula.js); el laboratorio suelto no lo carga y deja el texto de siempre.
@@ -780,21 +792,21 @@ export function montarSimulador(raiz, opc = {}) {
       const pts = puntosMuestra(P, g, haz); let us = velocidadesMuestra(pts, haz, Fd);
       // CW de la IT: el espectro lee el máximo del chorro (vena contracta) por el ángulo del haz, como la curva de las medidas (doppler.mjs, fuenteEnMuestra)
       const esReg = fuenteD && (fuenteD.n === 'regTricus' || fuenteD.n === 'regMitral');
-      if (esReg) { const jt = Fd.valvulas.find(x => x.n === fuenteD.n); us = [jt ? fuenteD.factor * jt.v0 : 0]; }
+      if (esReg) us = [velCwReg(s, fuenteD, fuenteD.factor, areasD(), datosFlujo())];   // chorro sistólico y, en diástole, el llenado E y A de esa válvula
       if (!revision && s === motor.s && ultimoTD !== s.t) {
         // una columna por muestra del motor (2 ms) desde el fotograma anterior: la onda sale con su envolvente y su pendiente, no en escalones.
         // Cada muestra desplaza las velocidades del fotograma por lo que cambia la curva de la fuente entre ese instante y este
         const lote = [], vmaxD = espectro.estado.vmax, baseD = espectro.estado.base, aD = areasD(), mD = datosFlujo();
-        const vEn = (x) => curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
+        const vEn = (x) => esReg ? velCwReg(x, fuenteD, fuenteD.factor, aD, mD) : curvaLatido([x], fuenteD, fuenteD.factor, aD, mD)[0].v;
         if (fuenteD && ultimoTD != null && s.t - ultimoTD < 0.25 && s.t > ultimoTD) {
           const ini = s.t - s.tLatido, cur = motor.ondaActual, prev = motor.onda, v0 = vEn(s);
           const emitir = (x, tAbs) => { if (tAbs <= ultimoTD || tAbs > s.t || Math.round(x.t / 0.002) % 2) return;   // una de cada dos (4 ms ≈ 0,5 px a 390 px): la mitad de coste
            const dv = vEn(x) - v0, uk = esReg ? [vEn(x)] : us.map(u => u + dv);
-            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD, baseD) }); };
+            lote.push({ t: tAbs, columna: (f) => columnaEspectro(uk, f, vmaxD, ++frameD, baseD, esReg) }); };
           if (prev.length && ultimoTD < ini) { const t0 = ini - (prev[prev.length - 1].t + 0.002); for (const x of prev) emitir(x, t0 + x.t); }
           for (const x of cur) emitir(x, ini + x.t);
         }
-        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD, baseD));
+        if (lote.length) espectro.anadirLote(lote); else espectro.anadir(s.t, (f) => columnaEspectro(us, f, vmaxD, ++frameD, baseD, esReg));
         ultimoTD = s.t;
       }
       if (motor.s.nLatido !== latidoD) actualizarMedidasD(pts, haz, Fd);

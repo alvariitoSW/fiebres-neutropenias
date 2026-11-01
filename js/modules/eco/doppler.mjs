@@ -179,7 +179,7 @@ export function puntosMuestra(P, g, haz) {
 export const velocidadesMuestra = (pts, haz, F) => pts.map(p => -dot(velocidad(p, F), haz));
 
 /** Columna del espectro (RGB por fila) para unas velocidades medidas; escala ±vmax, con aliasing. */
-export function columnaEspectro(us, filas, vmax, semilla = 1, base = 0.5) {
+export function columnaEspectro(us, filas, vmax, semilla = 1, base = 0.5, modal = false) {
   const out = new Uint8ClampedArray(filas * 3);
   let a = (semilla * 2654435761) >>> 0; const rnd = () => { a = (a + 0x6d2b79f5) >>> 0; let t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
   const lo = -2 * (1 - base) * vmax, envolver = (u) => ((u - lo) % (2 * vmax) + 2 * vmax) % (2 * vmax) + lo;   // el aliasing envuelve en el rango visible (con la base desplazada, también)
@@ -187,7 +187,7 @@ export function columnaEspectro(us, filas, vmax, semilla = 1, base = 0.5) {
     const vy = 2 * vmax * (base - (y + 0.5) / filas); let I = 0;
     for (const u0 of us) { if (Math.abs(u0) < 4) continue;          // filtro de pared
       const u = envolver(u0), sg = 2.5 + 0.05 * Math.abs(u0), z = (vy - u) / sg;
-      I += Math.exp(-z * z) + (vy * u > 0 && Math.abs(vy) < Math.abs(u) ? 0.12 : 0); }   // relleno hasta la línea de base
+      I += Math.exp(-z * z) + (vy * u > 0 && Math.abs(vy) < Math.abs(u) ? (modal ? 0.03 + 0.1 * Math.pow(vy / u, 2) : 0.12) : 0); }   // relleno hasta la línea de base; con modal (CW de un chorro), borde denso e interior más tenue (densidad modal, Zoghbi 2017 Fig. 29)
     I = I / us.length * (0.7 + 0.6 * rnd()) + 0.03 * rnd();
     const g = 255 * Math.min(1, Math.pow(I, 0.6) * 1.35);
     out[3 * y] = g; out[3 * y + 1] = g * 0.97; out[3 * y + 2] = g * 0.9;
@@ -223,6 +223,17 @@ export function curvaLatido(onda, fuente, factor, areas, m) {
   if (fuente.n === 'regTricus') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velRegTricus(s, m.eroaTricus) }));
   if (fuente.tipo === 'valvula') return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * (fuente.tubo ? velTubo(fuente.n, s, areas) : velOrificio(fuente.n, s, areas)) }));
   return onda.map(s => ({ t: s.t, fase: s.fase, v: factor * velVaso(fuente.vasoTipo, fuente.r, s, m) }));
+}
+
+/**
+ * Velocidad (cm/s, + hacia la sonda) que dibuja el espectro CW de una insuficiencia (IM, IT) en una muestra del motor: el chorro
+ * sistólico (factor · v del chorro, negativo si se aleja) y, en diástole, el llenado de esa válvula (E y A) con el signo contrario,
+ * porque el haz atraviesa el mismo orificio (Zoghbi 2017 Fig. 29: los tres paneles lo muestran). Solo para dibujar: las medidas
+ * (curvaLatido) siguen leyendo el chorro. El ángulo del llenado se toma igual que el del chorro (ilustrativo).
+ */
+export function velCwReg(s, fuente, factor, areas, m) {
+  const mit = fuente.n === 'regMitral', chorro = mit ? velRegMitral(s, m.eroaMitral) : velRegTricus(s, m.eroaTricus);
+  return factor * chorro - factor * velOrificio(mit ? 'mitral' : 'tricus', s, areas);
 }
 
 /** Qué fuente domina en la muestra y con qué factor (velocidad medida / velocidad de la fuente). */
