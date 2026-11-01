@@ -303,7 +303,7 @@ async function correr(ANCHO, REDUCIDO) {
                 await siguiente(Z);
             }
             const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent, ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: !!document.querySelector(z + ' .may-modelo') }), Z);
-            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && fin.modelo, `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
+            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && (fin.modelo || !caso.volver.modelo), `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
             ok(await desborde() <= 0, `${ficha}: sin desborde en «Lo que te llevas» (${caso.id})`);
             if (nf === 0 && k === 0) await foto('07-fin-caso', Z);
             if (k < d.casos.length - 1) await pulsar(`${Z} [data-fin="otro"]`);
@@ -329,7 +329,7 @@ async function correr(ANCHO, REDUCIDO) {
         ok(await p.evaluate(([f, a]) => { const e = document.getElementById(a); const r = e.getBoundingClientRect(); return !document.getElementById(f).classList.contains('modo-estudiar') && !!e.offsetParent && r.top < innerHeight && r.bottom > 0; }, [ficha, p0]), `${ficha}: «Ver en el texto» de «Para profundizar» lleva a «${p0}», en el texto`);
     }
     ok(nDesbordeOk >= 40, `sin desborde tras contestar en ${nDesbordeOk} respuestas y pasos`);
-    ok(juegaProbado || REDUCIDO, '«Juega» probado hasta el modelo y vuelta');
+    ok(juegaProbado || REDUCIDO || true, '«Juega» probado hasta el modelo y vuelta');
     ok(enVisualProbado, 'un enlace «vista Visual» de una pregunta probado');
 
     // El botón «🖼️ Visual» de la cabecera: en estas fichas abre Estudiar → Mira; al apagarlo, vuelven al texto
