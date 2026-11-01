@@ -6,6 +6,8 @@ import { PRES, CLAVES_PACIENTE, GUIAS, IDEA, IMG, PDF, REF, FUENTES, NOTAS, PROF
 import { nuevo, leer, topes, clamp, PROD } from './modelo.js';
 import { hacer } from './acciones.js';
 import { escena, focoSvg, animarEje } from './dibujo.js';
+import { montarMayeutica } from './mayeutica.js';
+import { montarPruebas } from './pruebas.js';
 
 const num = (x) => String(x).replace('.', ',');
 const $ = (id) => document.getElementById('eje-' + id);
@@ -13,7 +15,7 @@ const org = (t) => `<span class="org${/ilustrativ/.test(t) ? ' ilu' : ''}">${t}<
 const cit = (c) => (c && c.p ? cita(c.p, c.f) : '');
 
 export function montar(R) {
-  let s = nuevo('toribio'), lup = 'sr', vista = 'eje', paso = 0, oculto = false, topeApi = null, firma = '', activos = new Set(), guiaOn = true;
+  let s = nuevo('toribio'), lup = 'sr', vista = 'eje', paso = 0, oculto = false, topeApi = null, firma = '', activos = new Set(), guiaOn = true, may = null, pru = null;
   const todos = (q) => R.querySelectorAll(q);
   const frase = (t, o) => { $('frase-txt').innerHTML = `${t} ${org(o)}`; };
 
@@ -30,6 +32,7 @@ export function montar(R) {
   }
   function pintar(anima) {
     const L = leer(s), lista = aplicarTopes(L), P = PRES[s.pac], G = GUIAS[s.pac][1], p = G[paso], q = oculto;
+    R.classList.toggle('oculta', !!q);   // en una apuesta, los sellos y avisos (que dirían la respuesta) esperan a que contestes
     $('svg').innerHTML = escena(s, L, { lup, vista }) + focoSvg(guiaOn && p ? p.z : null);
     $('m-pa').textContent = q ? '?' : `${L.pas}/${L.pad}`; $('m-pam').textContent = q ? '?' : L.pam.toFixed(0); $('m-fc').textContent = L.fc; $('m-rit').textContent = L.ritmo;
     $('m-t').textContent = num(L.t); $('m-na').textContent = L.na; $('m-gl').textContent = L.gluc; $('m-lac').textContent = num(L.lact); $('m-nor').textContent = num(s.na.toFixed(1)); $('m-dia').textContent = s.dia;
@@ -82,9 +85,17 @@ export function montar(R) {
   function ir(o = {}) {
     if (o.pac) elegir(o.pac, o.paso || 0, false); else if (o.paso != null) { paso = clamp(o.paso, 0, GUIAS[s.pac][1].length - 1); vista = GUIAS[s.pac][1][paso].v || 'eje'; }
     if (o.lup) lup = o.lup; if (o.vista) vista = o.vista; if (o.oculto != null) oculto = !!o.oculto; if (o.guia != null) guiaOn = !!o.guia; if (o.set) Object.assign(s, o.set);
-    if (o.hacer) hacerYa(...o.hacer); else pintar(false); return leer(s);
+    if (o.frase) frase(...o.frase);
+    if (o.hacer) hacerYa(...o.hacer); else pintar(!!o.anima); return leer(s);
   }
-  function modoPrueba(m) { oculto = m === 'apuesta'; guiaOn = m === 'explorar'; if (m === 'explorar') vista = GUIAS[s.pac][1][paso]?.v || 'eje'; pintar(false); }
+  // Explorar | Apuesta | Error | Caso | Preguntas (Mayéutica del motor común). `n` es la apuesta, nota o caso que toca.
+  function modoPrueba(m, n = 0) {
+    for (const b of todos('[data-modo]')) b.setAttribute('aria-pressed', String(b.dataset.modo === m));
+    may?.enPreguntas(m === 'preguntas'); pru?.salir();
+    if (m === 'preguntas') { elegir('toribio', 0, false); guiaOn = false; pintar(false); return may.entrar(); }
+    if (m === 'explorar') { oculto = false; guiaOn = true; vista = GUIAS[s.pac][1][paso]?.v || 'eje'; return pintar(false); }
+    pru.entrar(m, n);
+  }
 
   // ---- montaje (una vez) ----
   $('chips').innerHTML = CLAVES_PACIENTE.map((c) => `<button type="button" class="b" data-pre="${c}" aria-pressed="false">${PRES[c].n}</button>`).join('');
@@ -100,7 +111,8 @@ export function montar(R) {
       if (a === 'sig') { if (paso < G.length - 1) return irPaso(paso + 1); guiaOn = false; return pintar(false); }
       if (a === 'haz') { for (const h of [p.haz]) hacerYa(...h); if (p.z) vista = p.v || vista; return pintar(false); } }
     const t = ev.target.closest('button'); if (!t || !R.contains(t) || t.disabled) return;
-    if (t.dataset.pre) return elegir(t.dataset.pre);
+    if (t.dataset.modo) return modoPrueba(t.dataset.modo);
+    if (t.dataset.pre) { if (R.querySelector('#eje-modos [aria-pressed="true"]:not([data-modo="explorar"])')) modoPrueba('explorar'); return elegir(t.dataset.pre); }
     if (t.dataset.lup) { lup = t.dataset.lup; return pintar(true); }
     if (t.id === 'eje-b-mapa') { vista = vista === 'mapa' ? 'eje' : 'mapa'; return pintar(false); }
     if (t.id === 'eje-paso-a-paso') return animarEje($('svg'));
@@ -118,5 +130,6 @@ export function montar(R) {
   // al tocar un mando o un paciente, el dibujo sigue a la vista sobre el dock; los sellos y avisos nuevos empujan el dibujo hacia abajo un instante después, por eso se mira otra vez
   R.addEventListener('click', () => { for (const ms of [0, 160]) setTimeout(() => verFrase($('svg').parentElement, { dock: () => $('dock'), subir: true }), ms); });
   window.__eje = { get s() { return s; }, get vista() { return vista; }, get lup() { return lup; }, leer: () => leer(s), topes: () => topes(s, leer(s)), ir, ESTADOS: PRES, modoPrueba, pintar, elegir };
-  return { abrir: (clave, n) => elegir(clave, n, true), pintar };
+  pru = montarPruebas({ $, ir }); may = montarMayeutica({ R, $, org, ir, leer, modoPrueba }); may.cargar();
+  return { abrir: (clave, n) => { if (R.querySelector('#eje-modos [aria-pressed="true"]:not([data-modo="explorar"])')) modoPrueba('explorar'); elegir(clave, n, true); }, pintar };
 }

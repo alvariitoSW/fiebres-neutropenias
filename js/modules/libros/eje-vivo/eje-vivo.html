@@ -3,14 +3,17 @@
          lo que hace cada mando en acciones.js; física en modelo.js, escena en dibujo.js; datos y fuentes en js/data/eje-vivo-data.js. Prefijo de ids: eje-. -->
     <div class="eje-raiz" id="eje-raiz" data-modelo-vivo>
       <header class="cabecera"><p class="eje-eyebrow">Modelo vivo · Marino cap. 51</p><h2 class="eje-titulo">Dos glándulas, un enfermo</h2></header>
+      <div class="modos" id="eje-modos" role="group" aria-label="Modo"><button type="button" class="b" id="eje-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" id="eje-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" id="eje-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" id="eje-modo-caso" data-modo="caso" aria-pressed="false">Caso</button><button type="button" class="b" id="eje-modo-preguntas" data-modo="preguntas" aria-pressed="false">Preguntas</button></div>
       <div class="eje-chips" id="eje-chips" role="group" aria-label="Paciente"></div>
       <div class="eje-lupas" role="group" aria-label="Lupa y mapa"><button type="button" class="b" id="eje-lupa-sr" data-lup="sr" aria-pressed="true">Lupa: suprarrenal</button><button type="button" class="b" id="eje-lupa-ti" data-lup="ti" aria-pressed="false">Lupa: tiroides</button><button type="button" class="b" id="eje-b-mapa" aria-pressed="false">Ver el mapa</button></div>
+      <section id="eje-prueba" class="prueba" hidden aria-live="polite"></section>
       <section id="eje-monitor" aria-label="Monitor de cabecera"><div class="eje-mon">
         <span>PA <b id="eje-m-pa"></b></span><span>PAM <b id="eje-m-pam"></b></span><span>FC <b id="eje-m-fc"></b></span><span>Ritmo <b id="eje-m-rit"></b></span>
         <span>T °C <b id="eje-m-t"></b></span><span>Na⁺ <b id="eje-m-na"></b></span><span>Glucosa <b id="eje-m-gl"></b></span><span>Lactato <b id="eje-m-lac"></b></span><span>NA <b id="eje-m-nor"></b></span><span>Día <b id="eje-m-dia"></b></span></div></section>
       <div id="eje-sello-zona"></div>
       <section class="eje-zona-escena"><svg id="eje-svg" viewBox="0 0 390 300" role="img" aria-label="Enfermo en la cama con dos lupas y el eje hormonal de la glándula elegida"></svg></section>
       <div id="eje-avisos-zona"></div>
+      <section id="eje-vista-preguntas" hidden aria-live="polite"><div id="eje-preg"></div><p class="ejm-para">Con la PA en «?» eliges primero; sale cuando contestas.</p></section>
       <p id="eje-idea" class="eje-idea"></p>
       <section id="eje-guia" class="eje-guia" aria-live="polite"></section>
       <button type="button" class="b" id="eje-paso-a-paso">▶ Paso a paso: ver cómo se enciende el eje</button>
@@ -20,6 +23,7 @@
       <details class="plegable"><summary>Lo que el modelo podría sumar</summary><ul class="lista" id="eje-crecera"></ul></details>
       <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="eje-profundizar"></ul></details>
       <div class="dock" id="eje-dock"><div class="dock-in">
+        <div class="ejm-dock-est" id="ejm-dock-estudio"><div class="ejm-pasos" id="ejm-dock-pasos"></div><div class="ejm-dock-est-txt"><span id="ejm-dock-est-izq"></span><span id="ejm-dock-est-der"></span></div></div>
         <p class="frase" id="eje-frase" role="status" aria-live="polite"><span class="frase-txt" id="eje-frase-txt"></span></p>
         <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="circ" aria-selected="true">Circulación y corticoide</button><button type="button" role="tab" data-pest="tiro" aria-selected="false">Tiroides</button><button type="button" id="eje-mas" aria-expanded="false">Más mandos ▾</button></div>
         <div class="dock-panel" id="eje-dock-circ">
