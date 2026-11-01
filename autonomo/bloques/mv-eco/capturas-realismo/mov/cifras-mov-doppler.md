@@ -81,61 +81,61 @@ Origen: «monitor» = texto que enseña la app (#cv-l-vi, #cv-d-resultado, #cv-m
 
 ## d-mitral-normal (normal, preajuste mitral)
 - Resultado del Doppler: Mitral · ángulo haz-flujo 16° (se mide v·cos θ) E 69 cm/s · A 61 cm/s · E/A 1,13 (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en Nagueh 2025 p. 551: dos fuentes, sin elegir ganadora) · TDE 192 ms (normal 140-250) Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":69.09,"A":61.02,"ea":1.13,"tde":192,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":69.2,"A":61.11,"ea":1.13,"tde":192,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 106/68 (PAM 87) · FC 71 · GC 5.1 L/min · PVC 4  _[monitor]_
 - TAPSE: 22.9 mm  _[anatomia.mjs]_
 
 ## d-mitral-dilatada (dilatada, g=1, preajuste mitral)
 - Resultado del Doppler: Mitral · ángulo haz-flujo 11° (se mide v·cos θ) E 75 cm/s · A 32 cm/s · E/A 2,35 (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en Nagueh 2025 p. 551: dos fuentes, sin elegir ganadora) · TDE 132 ms (normal 140-250) Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":75.21,"A":31.95,"ea":2.35,"tde":132,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":75.12,"A":31.91,"ea":2.35,"tde":132,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 92/68 (PAM 80) · FC 85 · GC 3.7 L/min · PVC 9  _[monitor]_
 - TAPSE: 15.8 mm  _[anatomia.mjs]_
 
 ## d-mitral-fallo (fallo, g=1, preajuste mitral)
 - Resultado del Doppler: Mitral · ángulo haz-flujo 12° (se mide v·cos θ) Fusión E-A (FC alta): E/A y TDE no medibles. Velocidad pico de la onda fundida 42 cm/s Con la FC alta la contracción auricular empieza antes de que acabe el llenado rápido y las dos ondas se funden en una: no se separa la E de la A ni se mide el tiempo de desaceleración. Nagueh 2025 p. 547 · p. 557 (tabla 7). Origen: ficha.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":36.16,"A":42.06,"ea":0.86,"tde":null,"fusion":true}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":36.16,"A":42.05,"ea":0.86,"tde":null,"fusion":true}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 64/53 (PAM 58) · FC 119 · GC 2.4 L/min · PVC 7  _[monitor]_
 - TAPSE: 9.9 mm  _[anatomia.mjs]_
 
 ## d-mitral-hipertrofia (hipertrofia, g=1, preajuste mitral)
-- Resultado del Doppler: Mitral · ángulo haz-flujo 18° (se mide v·cos θ) E 66 cm/s · A 47 cm/s · E/A 1,40 (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en Nagueh 2025 p. 551: dos fuentes, sin elegir ganadora) · TDE 216 ms (normal 140-250) Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":66.37,"A":47.26,"ea":1.4,"tde":216,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Mitral · ángulo haz-flujo 17° (se mide v·cos θ) E 66 cm/s · A 47 cm/s · E/A 1,40 (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en Nagueh 2025 p. 551: dos fuentes, sin elegir ganadora) · TDE 216 ms (normal 140-250) Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":65.82,"A":46.87,"ea":1.4,"tde":216,"fusion":false}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 97/71 (PAM 84) · FC 76 · GC 3.6 L/min · PVC 7  _[monitor]_
 - TAPSE: 13.5 mm  _[anatomia.mjs]_
 
 ## d-tsvi-normal (normal, preajuste tsvi)
 - Resultado del Doppler: Aórtica · tracto de salida · ángulo haz-flujo 7° (se mide v·cos θ) ITV 21,4 cm (normal 18-22 cm, Ficha 11) · pico 120 cm/s El pico es del modelo: su eyección es más afilada de lo normal (pendiente de calibrar); el ITV no depende de eso.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"eyeccion","pico":119.86,"itv":21.35}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"eyeccion","pico":119.72,"itv":21.35}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 106/68 (PAM 87) · FC 71 · GC 5.1 L/min · PVC 4  _[monitor]_
 - TAPSE: 22.9 mm  _[anatomia.mjs]_
 
 ## d-regmitral-dilatada (dilatada, g=1, preajuste regmitral)
-- Resultado del Doppler: Insuficiencia mitral · chorro · ángulo haz-flujo 20° (se mide v·cos θ) Chorro sistólico hacia la AI (se aleja de la sonda): en la muestra, pico 215 cm/s · ITV 73,0 cm En el orificio el chorro llega a 386 cm/s (ΔP VI−AI ≈ 4v² = 60 mmHg). Vena contracta 0,56 cm (calculada del EROA como un orificio redondo, no medida en la imagen; Zoghbi: <0,3 cm leve, ≥0,7 cm grave; intermedia: los valores intermedios se solapan entre grados, confírmalo con otros métodos). Tras ella el chorro se abre en cono y arrastra sangre: ocupa más AI cuanto más EROA, pero el área del chorro no sirve sola para graduar. En la IM secundaria el orificio es elíptico y la vena contracta en 2D la subestima. Zoghbi p. 328 · p. 308 (área del chorro) Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":215.29,"itv":72.99}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Insuficiencia mitral · chorro · ángulo haz-flujo 20° (se mide v·cos θ) Chorro sistólico hacia la AI (se aleja de la sonda): en la muestra, pico 209 cm/s · ITV 71,0 cm En el orificio el chorro llega a 386 cm/s (ΔP VI−AI ≈ 4v² = 60 mmHg). Vena contracta 0,56 cm (calculada del EROA como un orificio redondo, no medida en la imagen; Zoghbi: <0,3 cm leve, ≥0,7 cm grave; intermedia: los valores intermedios se solapan entre grados, confírmalo con otros métodos). Tras ella el chorro se abre en cono y arrastra sangre: ocupa más AI cuanto más EROA, pero el área del chorro no sirve sola para graduar. En la IM secundaria el orificio es elíptico y la vena contracta en 2D la subestima. Zoghbi p. 328 · p. 308 (área del chorro) Q = EROA · 50 · √ΔP del motor; v = √ΔP / 2 m/s (Bernoulli). En la muestra se mide v·cos θ y baja si no está en el centro del chorro. Ilustrativo.  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":209.41,"itv":71}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 92/68 (PAM 80) · FC 85 · GC 3.7 L/min · PVC 9  _[monitor]_
 - TAPSE: 15.8 mm  _[anatomia.mjs]_
 
 ## d-regmitral-fallo (fallo, g=1, preajuste regmitral)
-- Resultado del Doppler: Mitral · ángulo haz-flujo 12° (se mide v·cos θ) Fusión E-A (FC alta): E/A y TDE no medibles. Velocidad pico de la onda fundida 41 cm/s Con la FC alta la contracción auricular empieza antes de que acabe el llenado rápido y las dos ondas se funden en una: no se separa la E de la A ni se mide el tiempo de desaceleración. Nagueh 2025 p. 547 · p. 557 (tabla 7). Origen: ficha.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":35.67,"A":41.48,"ea":0.86,"tde":null,"fusion":true}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Mitral · ángulo haz-flujo 13° (se mide v·cos θ) Fusión E-A (FC alta): E/A y TDE no medibles. Velocidad pico de la onda fundida 43 cm/s Con la FC alta la contracción auricular empieza antes de que acabe el llenado rápido y las dos ondas se funden en una: no se separa la E de la A ni se mide el tiempo de desaceleración. Nagueh 2025 p. 547 · p. 557 (tabla 7). Origen: ficha.  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"llenado","E":37.07,"A":43.11,"ea":0.86,"tde":null,"fusion":true}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 64/53 (PAM 58) · FC 119 · GC 2.4 L/min · PVC 7  _[monitor]_
 - TAPSE: 9.9 mm  _[anatomia.mjs]_
 
 ## d-it-cw-normal (normal, preajuste regtricus)
-- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 12° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 0,81 m/s · ITV 28,9 cm PSAP estimada = 4·vIT² + PVC = 7 mmHg (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; en la muestra se mide v·cos θ y la PSAP se infraestima si el haz no está alineado con el chorro. Ilustrativo.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":81.3,"itv":28.86,"vIT":0.81,"psap":7.2}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 15° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 1,92 m/s · ITV 68,3 cm PSAP estimada = 4·vIT² + PVC = 20 mmHg (vIT corregida por el ángulo: 1,99 m/s; sin corregir sería 19) (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. La vIT es el pico del latido (la máxima presión VD − AD de ese instante, con la AD de ese instante); la PSAP suma la PVC media, por eso difiere unos mmHg de la presión máxima del VD del motor. Ilustrativo.  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":192.48,"itv":68.26,"vIT":1.92,"psap":19.39}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 105/68 (PAM 86) · FC 72 · GC 5.0 L/min · PVC 5  _[monitor]_
 - TAPSE: 22.2 mm  _[anatomia.mjs]_
 
 ## d-it-cw-hpcronica (hpcronica, g=1, preajuste regtricus)
-- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 22° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 1,00 m/s · ITV 37,7 cm PSAP estimada = 4·vIT² + PVC = 20 mmHg (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; en la muestra se mide v·cos θ y la PSAP se infraestima si el haz no está alineado con el chorro. Ilustrativo.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":99.84,"itv":37.67,"vIT":1,"psap":19.78}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 20° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 3,89 m/s · ITV 146,6 cm PSAP estimada = 4·vIT² + PVC = 84 mmHg (vIT corregida por el ángulo: 4,13 m/s; sin corregir sería 76) (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. La vIT es el pico del latido (la máxima presión VD − AD de ese instante, con la AD de ese instante); la PSAP suma la PVC media, por eso difiere unos mmHg de la presión máxima del VD del motor. Ilustrativo.  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":388.58,"itv":146.55,"vIT":3.89,"psap":76.19}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 83/65 (PAM 74) · FC 93 · GC 2.9 L/min · PVC 16  _[monitor]_
 - TAPSE: 9.1 mm  _[anatomia.mjs]_
 
 ## d-it-cw-tep (tep, g=1, preajuste regtricus)
-- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 23° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 0,66 m/s · ITV 17,5 cm PSAP estimada = 4·vIT² + PVC = 11 mmHg (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; en la muestra se mide v·cos θ y la PSAP se infraestima si el haz no está alineado con el chorro. Ilustrativo.  _[monitor]_
-- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":65.54,"itv":17.5,"vIT":0.66,"psap":11.32}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
+- Resultado del Doppler: Insuficiencia tricuspídea · chorro · ángulo haz-flujo 22° (se mide v·cos θ) Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, vIT 2,40 m/s · ITV 64,0 cm PSAP estimada = 4·vIT² + PVC = 37 mmHg (vIT corregida por el ángulo: 2,59 m/s; sin corregir sería 33) (normal: vIT ≤ 2,8 m/s; > 3,4 m/s sugiere hipertensión pulmonar, ESC/ERS 2022). v = √(ΔP VD−AD / 4) con la presión del motor; el espectro muestra v·cos θ (el haz no está alineado del todo con el chorro) y la PSAP se corrige dividiendo por cos θ, como al alinear el haz. La vIT es el pico del latido (la máxima presión VD − AD de ese instante, con la AD de ese instante); la PSAP suma la PVC media, por eso difiere unos mmHg de la presión máxima del VD del motor. Ilustrativo.  _[monitor]_
+- Medidas internas (E, A, E/A, TDE/DT, pico, ITV): {"tipo":"regurgitacion","pico":239.76,"itv":63.97,"vIT":2.4,"psap":32.6}  _[monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy]_
 - Último latido: PA 65/53 (PAM 59) · FC 118 · GC 2.3 L/min · PVC 10  _[monitor]_
 - TAPSE: 6.8 mm  _[anatomia.mjs]_
 

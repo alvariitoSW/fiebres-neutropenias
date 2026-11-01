@@ -4,19 +4,6 @@
 - fase: A · Contracción auricular
 - titulo: A4C
 - grav: 
-- Último latido: PA 105/67 (PAM 86) · FC 69 · GC 5.0 L/min · PVC 4
-- VI en esta fase: 119 mL · 10 mmHg
-- VD en esta fase: 138 mL · 6 mmHg
-- Aorta: 72 mmHg · AP 13
-- Aurículas: AI 25 · AD 18 mL
-- VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
-- pantalla: mezcla
-
-## normal-psax (normal, psaxPm, dibujo 2)
-- fase: A · Contracción auricular
-- titulo: PSAX papilares
-- grav: 
 - Último latido: PA 105/66 (PAM 86) · FC 69 · GC 5.1 L/min · PVC 4
 - VI en esta fase: 119 mL · 10 mmHg
 - VD en esta fase: 138 mL · 6 mmHg
@@ -24,6 +11,19 @@
 - Aurículas: AI 25 · AD 18 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
 - motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.07 · PVC 4.3
+- pantalla: mezcla
+
+## normal-psax (normal, psaxPm, dibujo 2)
+- fase: A · Contracción auricular
+- titulo: PSAX papilares
+- grav: 
+- Último latido: PA 105/67 (PAM 86) · FC 69 · GC 5.0 L/min · PVC 4
+- VI en esta fase: 119 mL · 10 mmHg
+- VD en esta fase: 138 mL · 6 mmHg
+- Aorta: 72 mmHg · AP 13
+- Aurículas: AI 25 · AD 18 mL
+- VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
+- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## normal-plax (normal, plax, dibujo 2)
