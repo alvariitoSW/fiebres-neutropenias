@@ -25,7 +25,7 @@ Nada que decidir ahora. Para mirarlo: Libros → Marino → «Iones vivos» → 
 | Mayéutica iones vivos | 1 | 6,8 (caso de Adela, §1.12) | sonnet | 54 | 2,1 | Adela: K⁺ que no baja con insulina; dificultad 7,5; forma (buena más larga) |
 | Arreglos | 2 | 8,3 (estado del modelo al destapar) | sonnet | 38 | 0,74 | G1/G5/E4 sin efecto; frase viva arrastrada; citas dobles |
 | Arreglos | 3 | 8,3 (Valentín: K⁺ tapado) | sonnet | 10 | 0,10 | el paso 3 pedía leer un K⁺ tapado |
-| Línea del director | 4 | ver rejuicio2 | — | — | — | — |
+| Línea del director | 4 | **8,8** (todos ≥8,75: meta alcanzada) | — | — | — | — |
 | 4A `caa` + `hcl` | 1 | auditor 0 graves, 2 medianos | sonnet | 42 | 0,46 | caso de HCl sin salino previo |
 | 4A `titulacion` | 1 | — | sonnet | 38 | 0,56 | — |
 
