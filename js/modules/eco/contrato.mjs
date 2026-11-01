@@ -119,18 +119,27 @@ export const SEGMENTOS_REGIONAL = Object.freeze([
 const FEVI_NORMAL = 61, FEVD_NORMAL = 53;
 // McConnell: acinesia de la pared libre del VD con movimiento normal del ápex, específico del TEP agudo y presente en el 20 %
 // (Marino 2024, cap. 22, «Diagnostic Aids», PDF p. 7 de docs/marino-2024-respiratory-management-caps22-26.pdf; no trae página impresa).
-// El libro no da cuánto cae la pared libre ni cuánto se conserva el ápex: MCCONNELL_PARED (la pared libre se mueve la mitad de lo que
-// toca por la FEVD) y APEX_DEFICIT (el ápex pierde la mitad del déficit global) son ILUSTRATIVOS. Así sale a partir del defecto
-// (riesgo intermedio) y la pared libre se aleja del ápex al crecer la gravedad. La isquemia regional del VI es un HUECO: el motor
-// no tiene regiones, así que los 17 del VI son uniformes (FEVI ÷ normal). HP crónica (pared gruesa): hipocinesia global del VD.
-const MCCONNELL_PARED = 0.5, APEX_DEFICIT = 0.5;
+// Fuente de la magnitud: McConnell 1996 (Am J Cardiol 78:469-73, PMID 8752195, https://pubmed.ncbi.nlm.nih.gov/8752195/): en el TEP
+// agudo la excursión de la línea media de la pared libre MEDIA fue −0,2 ± 0,8 mm (acinesia) y la del ápex 5,7 ± 0,8 mm (normal, p = NS);
+// en la HP primaria, anormal en todas las regiones. De ahí: la pared libre media se mueve MCCONNELL_MEDIA (0,15) de lo que toca por la
+// FEVD (≈ acinesia), el ápex se conserva (APEX_DEFICIT 0,1 del déficit global: «normal») y la basal queda en MCCONNELL_PARED (0,5,
+// ILUSTRATIVO: McConnell no mide la base; el TAPSE bajo la pone el motor). La isquemia regional del VI es un HUECO: el motor no tiene
+// regiones, así que los 17 del VI son uniformes (FEVI ÷ normal). HP crónica (pared gruesa): hipocinesia global del VD.
+const MCCONNELL_PARED = 0.5, MCCONNELL_MEDIA = 0.15, APEX_DEFICIT = 0.1;
 const c01 = (x) => Math.min(1, Math.max(0, x));
+const esTep = (motor) => motor.p.rPul >= 2 * BASE.rPul && (motor.p.mioVd ?? 1) <= 1;
 /** `motor` solo se lee: la sobrecarga aguda de presión del VD (TEP) es resistencia pulmonar ≥ 2× la normal con la pared del VD fina (mioVd ≤ 1). */
 export function regionalDe(motor, feVi, feVd) {
   const vi = c01(feVi / FEVI_NORMAL), vd = c01(feVd / FEVD_NORMAL);
-  const tep = motor.p.rPul >= 2 * BASE.rPul && (motor.p.mioVd ?? 1) <= 1;
-  const pared = tep ? vd * MCCONNELL_PARED : vd, apex = tep ? 1 - (1 - vd) * APEX_DEFICIT : vd;
-  return [...Array(17).fill(vi), pared, pared, apex];
+  const tep = esTep(motor);
+  const basal = tep ? vd * MCCONNELL_PARED : vd, media = tep ? vd * MCCONNELL_MEDIA : vd, apex = tep ? 1 - (1 - vd) * APEX_DEFICIT : vd;
+  return [...Array(17).fill(vi), basal, media, apex];
+}
+/** Intensidad 0-1 del signo de McConnell para el dibujo (0 fuera del TEP): crece con el déficit de la FEVD hasta 0,5 de él (ilustrativo). */
+export function mcconnellDe(motor) {
+  const o = motor.onda; if (!esTep(motor) || !o?.length) return 0;
+  const td = Math.max(...o.map(m => m.vvd)), ts = Math.min(...o.map(m => m.vvd));
+  return c01((1 - c01((100 * (td - ts) / td) / FEVD_NORMAL)) / 0.5);
 }
 
 const ORIGEN = Object.fromEntries(lista.map(c => [c.clave, c.origen]));

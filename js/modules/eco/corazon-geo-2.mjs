@@ -8,13 +8,14 @@ import { construirCorazonHoy, baseGeometricaHoy } from './corazon-geo.mjs';
 // P4a-1 · paredVdNormal: la pared libre del VD con el grosor de paredVdDe medido perpendicular a ella (Lang 2015 Tabla 8 p. 20).
 // P4b · septoContinuo: el tabique desde septoSigno del motor, continuo (ESC/ERS 2022 p. 3645 Tabla 10 para el umbral del LVEI).
 // P4a-2 · auVolumen: el corte A4C de la AD recoge el área del volumen del motor (área-longitud, Lang 2015 p. 29 Tabla 12).
-const AJUSTES = { paredVdNormal: true, septoContinuo: true, auVolumen: true, vdLargoPropio: true, septoRecto: 0.75, septoRectoEndo: 0.5, papilaresEscala: true, velosFinos: true, papilaresLibres: true, septoHondo: 0.25, papilaresExp: 2, mitralTh: 0.4, mitralThPunta: 1.0, mitralLargoMm: 18, mitralSepto: true, cuspidesPlanas: true, cavidadNitida: true, esfericidad: 0.14 };
+const AJUSTES = { paredVdNormal: true, septoContinuo: true, auVolumen: true, vdLargoPropio: true, septoRecto: 0.75, septoRectoEndo: 0.5, papilaresEscala: true, velosFinos: true, papilaresLibres: true, septoHondo: 0.25, papilaresExp: 2, mitralTh: 0.4, mitralThPunta: 1.0, mitralLargoMm: 18, mitralSepto: true, cuspidesPlanas: true, cavidadNitida: true, esfericidad: 0.14, mcconnell: true };
 // mitralTh · P5b: la mitral abierta gira 0,75 rad (43°) desde el plano del anillo (hoy 1,2 = 69°): el velo anterior sigue a la cortina aorto-mitral sin quiebro y no forma «gancho» (anatomía: Lang 2015, Zoghbi 2017; ángulo ilustrativo).
 // cavidadNitida · P5a2: el borde endocárdico del VI pequeño (Rm < 26 mm, DTD < 52 mm; Lang 2015 Tabla 2 p. 6) sube hasta +6 dB y la sangre junto a la pared se oscurece (ilustrativo).
 // papilaresExp · P5a: papilares y trabéculas siguen al cuadrado de la proporción de la cavidad (VI pequeño de HP/TEP/derrame): entre los dos no pasan de ~1/3 del diámetro (proporción ilustrativa).
 // septoRecto · el tabique plano se une al círculo con uniones menos redondeadas (0,75 de lo de hoy; con menos, el VD de la TEP g=1 queda a 40,9 mm de base, bajo el 41 de Lang): eje corto en «D» (ESC/ERS 2022 p. 3645 Tabla 10).
 // papilaresEscala · papilares y trabéculas del VI proporcionados a la cavidad: no la llenan en el VI pequeño (HP, TEP).
 // vdLargoPropio · el largo del VD sale de su volumen (raíz cúbica), no del VI (Lang 2015 Tabla 8 p. 20: 71 ± 6 mm; más allá, ilustrativo).
+// mcconnell · M3: la pared libre media del VD queda quieta y el ápex se contrae (TEP; McConnell 1996, PMID 8752195: −0,2 mm en la pared media, 5,7 mm en el ápex). Ver corazon-geo.mjs.
 export function construirCorazon2(estado, opciones = {}) { return construirCorazonHoy(estado, { ...opciones, ajustes: { ...AJUSTES, ...opciones.ajustes } }); }
 export function baseGeometrica2(estado) { return baseGeometricaHoy(estado, AJUSTES); }
 // esfericidad · D4: por encima del volumen normal el largo del VI crece con v^0,14 (no v^0,27): la dilatada grave se ve globular en el A4C y la PLAX
