@@ -209,10 +209,11 @@ export function init() {
     initVisualMarino();
     // Texto | Visual | Mayéutica en las fichas del bloque 1 que ya la tienen (después de su vista Visual)
     Object.entries(MAYEUTICA_B1).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
-    Object.entries(MAYEUTICA_B4).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     initMarinoRenal();
     initMarinoAbdomen();
     initVisualMarinoCaps31a44();
+    // Estudiar del bloque 4 (fichas mr-): después de su vista Visual, que crea el interruptor
+    Object.entries(MAYEUTICA_B4).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     initMarinoNeuro();
     initMarinoNutricion();
     initMarinoToxicos();
