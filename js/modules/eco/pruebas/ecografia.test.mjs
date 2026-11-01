@@ -13,7 +13,9 @@ const m = crearMotor(); m.correr(12);
 const o = m.onda, extra = { vviTd: m.ultimo.edv, vvdTd: m.ultimo.edvD, liquidoPeri: 0 }, OP = { pericardio: true, detalle: true };
 const td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a)), ts = o.reduce((a, b) => (b.vvi < a.vvi ? b : a));
 const geo = (s) => construirCorazon(estadoGeo(s, extra), OP);
-const gTd = geo(td), gTs = geo(ts);
+const gTd = geo(td), gTs = geo(ts); globalThis.__gTd = gTd;
+// Las pruebas de «mejoras a 0» (la imagen de antes) miden el dibujo de antes: su geometría se construye con usarDibujo(1).
+async function viejo(f) { const { usarDibujo } = await import('../corazon-geo.mjs'); const previo = usarDibujo(1); try { return await f({ gTd: geo(td), gTs: geo(ts) }); } finally { usarDibujo(previo); } }
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 const ec = crearEcografo({ ancho: 300, alto: 250 });
 
@@ -83,7 +85,7 @@ test('contraste: el miocardio brilla mucho más que la sangre y el pericardio m�
   // con las mejoras a 0, el contraste de siempre (>25 dB); con las de por defecto, la sangre deja de ser negro absoluto
   // (su grano y la neblina del campo cercano) y el músculo se ve gris medio a propósito: el contraste baja pero sigue siendo grande
   for (const [nombre, m, minimo] of [['mejoras a 0', MEJORAS_CERO, 25], ['mejoras por defecto', undefined, 10]]) {
-    const P = planoVista('psaxPm', td), im = ec.formar(gTd.partes, P, { m });
+    const P = planoVista('psaxPm', td), im = await (m ? viejo(({ gTd }) => ec.formar(gTd.partes, P, { m })) : ec.formar(gTd.partes, P, { m }));
     const media = (fn) => { let s = 0, n = 0; for (let q = 0; q < im.tag.length; q++) if (fn(im.tag[q])) { s += im.db[q]; n++; } return s / n; };
     const vi = im.etiquetas.get('VI'), peri = im.etiquetas.get('Pericardio');
     const dMio = media(t => t === vi), dSangre = media(t => t === 255), dPeri = media(t => t === peri);
@@ -238,7 +240,7 @@ test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris �
   const { crearEcografo: crearAntes } = await import('./ecografia-antes.mjs');
   const { MEJORAS_CERO } = await import('../ecografia.mjs');
   const antes = crearAntes({ ancho: 300, alto: 250 }), nuevo = crearEcografo({ ancho: 300, alto: 250 });
-  for (const v of ['plax', 'psaxPm', 'a4c', 'sc4c']) {
+  await viejo(({ gTd, gTs }) => { for (const v of ['plax', 'psaxPm', 'a4c', 'sc4c']) {
     // sin hueso ni pleura (N3): el ecógrafo de antes no los conoce; lo que se compara son las mejoras de la imagen
     const sinTorax = (g) => g.partes.filter(p => !/^(Vértebra|Pulmón)/.test(p.nombre));
     const P = planoVista(v, td), opc = { ref: sinTorax(gTd), t: 1.3 };
@@ -247,7 +249,7 @@ test('con las mejoras a 0, la imagen es la de antes (diferencia media de gris �
     for (let i = 0; i < a.length; i += 4) { d0 += Math.abs(a[i] - b[i]); d1 += Math.abs(a[i] - c[i]); n++; }
     assert.ok(d0 / n < 0.05, `${v}: con las mejoras a 0 la imagen difiere ${(d0 / n).toFixed(3)} niveles de gris`);
     assert.ok(d1 / n > 3, `${v}: con las mejoras por defecto la imagen apenas cambia (${(d1 / n).toFixed(2)} niveles)`);
-  }
+  } });
 });
 
 // ---- A1 (parada 2 de eco-mega): cuerdas como losa y papilares que se desvanecen lejos de la pared
@@ -303,7 +305,7 @@ test('tabla de tejidos: orden de brillo, origen en cada fila y la imagen lee de 
 
 // ---- A3 (parada 2 de eco-mega): sombra acústica detrás del calcio
 /** Con y sin calcio en la valva aórtica (PLAX): dB medios de lo que hay detrás, solo en haces con valva y tejido detrás. */
-function sombraDetras(calcio, mejoras = {}) {
+function sombraDetras(calcio, mejoras = {}, gTd = globalThis.__gTd) {
   const P = planoVista('plax', td), opc = { ref: gTd.partes, t: 1.3, ventanaVista: VISTAS.plax.ventana, m: mejoras };
   const foto = (r) => ({ db: Float32Array.from(r.db), tag: Uint8Array.from(r.tag), pix: Uint8Array.from(r.pix), etiquetas: r.etiquetas, nb: r.nb, ns: r.ns, dr: r.dr });   // el ecógrafo reutiliza sus búferes
   const sin = foto(ec.formar(gTd.partes, P, opc)), con = foto(ec.formar(gTd.partes, P, { ...opc, calcio }));
@@ -336,8 +338,8 @@ test('calcio: la valva calcificada brilla más que la sana y que el pericardio; 
   assert.ok(max(c) > max(a) + 3, `la valva calcificada (${max(c).toFixed(1)} dB) no brilla más que la sana (${max(a).toFixed(1)})`);
 });
 
-test('calcio: también hay sombra con las mejoras a 0 y no toca lo que queda delante', () => {
-  const r = sombraDetras('^Aórtica', MEJORAS_CERO);
+test('calcio: también hay sombra con las mejoras a 0 y no toca lo que queda delante', async () => {
+  const r = await viejo(({ gTd }) => sombraDetras('^Aórtica', MEJORAS_CERO, gTd));
   assert.ok(r.n > 30 && r.sin - r.con >= 30, `sombra con mejoras a 0: ${(r.sin - r.con).toFixed(1)} dB`);
 });
 
