@@ -19,7 +19,7 @@ function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.titulo, t.texto]));
   if (f === firma) { topeApi.refrescar(); return; } firma = f;
   for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'exc', 'vaso']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
-  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: { p: t.pag, f: t.ficha }, origen: t.origen, deshabilita: t.off, bajo: null });
+  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag ? { p: t.pag, f: t.ficha } : null, origen: t.origen, deshabilita: t.off, bajo: null });
 }
 function pintar() {
   const L = leer(s); aplicarTopes();
@@ -51,7 +51,7 @@ function injertos(L) {
 const msg = { mas: ['Crece la masa: sube la PIC, se desvía la línea media y el uncus se acerca a la tienda.', 'ficha p. 10-11, 45 · cuánto: ilustrativo'], menos: ['Menos masa: baja la presión y el cerebro vuelve a su sitio.', 'ficha p. 45 · ilustrativo'],
   hiper: ['Bolo de salino hipertónico: baja la PIC y sube el Na⁺ (el objetivo es 145-155).', 'ficha p. 41 · cuánto baja: ilustrativo'], mani: ['Manitol: baja la PIC menos que el hipertónico.', 'ficha p. 41 · magnitud ilustrativa'],
   dren: ['Drena LCR: baja la PIC; con sangre ventricular es lo que trata la hidrocefalia.', 'ficha p. 45 · ilustrativo'], rev: ['Anticoagulante revertido: el hematoma deja de crecer.', 'ficha p. 42-44'], cran: ['Se retira el hueso: la caja se abre y la PIC cae.', 'ficha p. 40 · magnitud ilustrativa'],
-  nitro: ['Nitroprusiato: sube la PIC. No se usa en el ictus agudo.', 'ficha p. 36'], exc: ['Aneurisma cerrado: se evita el resangrado.', 'ficha p. 47'], nimo: ['Nimodipino oral 60 mg/4 h: menos déficits, misma supervivencia.', 'ficha p. 48'] };
+  nitro: ['Nitroprusiato: sube la PIC. No se usa en el ictus agudo.', 'ficha p. 36 (evitar); el porqué: inferencia'], exc: ['Aneurisma cerrado: se evita el resangrado.', 'ficha p. 47'], nimo: ['Nimodipino oral 60 mg/4 h: menos déficits, misma supervivencia.', 'ficha p. 48'] };
 function hacer(a, v) {
   if (a === 'mas') s.masa = clamp(s.masa + (v ?? 10), 0, 100); else if (a === 'menos') s.masa = clamp(s.masa - 10, 0, 100);
   else if (a === 'hiper') { s.hiper++; s.na += 5; } else if (a === 'mani') s.mani++; else if (a === 'dren') s.drenaje = Math.min(3, s.drenaje + 1);

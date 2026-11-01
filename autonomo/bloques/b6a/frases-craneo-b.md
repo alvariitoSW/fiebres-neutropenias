@@ -17,3 +17,9 @@ Piensa: enunciado y cada opción de la apuesta, el error y el caso llevan su pá
 - Caso Abundio paso 2: cirugía con hematoma >20 mL y desplazamiento >5 mm: Manual UMI (sin página de Marino; sin cita de PDF). Paso 3: PIC <20 y PPC 50-70: p. 45. Paso 4: ≥48 h, T >36: p. 14. Paso 5: PAM ≥75: p. 15.
 - Error Petronila: cerrar el aneurisma en 3 días, nunca >7-10 (p. 47); tranexámico no (p. 47). Hemicraniectomía solo en el edema maligno: p. 40.
 - Sin cita aún: salino en exceso sube el Na⁺ >155 (p. 41, indirecta); empujar PPC a 100 «sin respaldo» (inferencia sobre p. 45).
+
+## Vuelta 3
+- G1 Abundio paso 2: hematoma 55 mL (>50 mL) con pupila fija; umbrales «>50 mL, o GCS 6-8 con >20 mL y >5 mm»: Manual UMI (manual-umi.html:2097), sin página de Marino. Pupila fija p. 11.
+- G2 Hemicraniectomía en el infarto maligno (≤60 años, ≤48 h): fuente web RCEM (URL en la guía y en las notas); DESTINY II (>60 años): PubMed 24645942. Marino p. 40 solo la nombra en la hemorragia tras tPA. Sin grado de recomendación AHA/ESO (no abierto).
+- H1 Tabla 47.4: rótulo visible «solo la warfarina; resto en la ficha» con enlace p. 44. M1 errata idarucizumab: p. 44 imprime 2,5 mg; ficha técnica eMC/EMA da 5 g (2 × 2,5 g).
+- M2 PAS <140, levetiracetam y EEG continuo → p. 45 (guía Segismundo, tope PAS, error). M3 lado de la masa y orden flexión→extensión: rotulados «inferencia». M4 salino > manitol: ictus (p. 41), extrapolado en Abundio como inferencia; cabecera 30°: Manual UMI. M5 hiperventilación: ya sin enlace a p. 35 (VPP). M6 quitado «tranexámico aumenta trombosis». M7 «Doppler para el vasoespasmo (días 4-14)», p. 48. M8 EEG: «no figura entre las confirmatorias» (p. 16), quitado «solo si no se completa». M9 salino→Na⁺ y PPC 100: inferencias rotuladas, quitado «resangrado». M10 Monro-Kellie: Libro Azul parte 1 p. 3-5 (no Marino); «se ve en la pupila» → vigilancia clínica: inferencia. M11 nitroprusiato: evitar (p. 36); el porqué: inferencia (también en C).

@@ -7,7 +7,7 @@ export function crearGuia({ caja, hacer, setFoco, cita }) {
   const cerrar = () => { caja.hidden = true; g = null; setFoco([]); };
   function paso(k) {
     i = Math.max(0, Math.min(g[1].length - 1, k)); const p = g[1][i]; caja.hidden = false; setFoco(p.z);
-    caja.innerHTML = `<h3>${g[0]} · paso ${i + 1} de ${g[1].length}</h3><p class="enun">${p.t} <span class="org">${p.o}</span> ${cita(p.p, p.f)}</p>
+    caja.innerHTML = `<h3>${g[0]} · paso ${i + 1} de ${g[1].length}</h3><p class="enun">${p.t} <span class="org">${p.o}</span> ${p.url ? cita(p.p, p.f).replace(/href="[^"]*"/, `href="${p.url}"`).replace(/PDF p\. \d+/, p.uw) : cita(p.p, p.f)}</p>
       <div class="fila-g">${p.haz ? `<button type="button" class="b prim" data-g="haz">Hazlo: ${p.btn}</button>` : ''}<button type="button" data-g="ant" ${i ? '' : 'disabled'}>‹ Anterior</button><button type="button" data-g="sig">${i < g[1].length - 1 ? 'Siguiente ›' : 'Cerrar'}</button></div>`;
   }
   caja.addEventListener('click', (ev) => {

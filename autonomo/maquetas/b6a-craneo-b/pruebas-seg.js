@@ -5,7 +5,7 @@ const FICHA = { 35: 'mn-isq-vm', 41: 'mn-isq-edema-manejo', 42: 'mn-hic-warfarin
 const pagDe = (por, p0) => { const m = /\(p\. (\d+)/.exec(por); return FICHA[m ? +m[1] : p0] ? (m ? +m[1] : p0) : p0; };
 const fila = (p0, t, ok, por) => { const p = pagDe(por, p0); return [t, ok, por, p, FICHA[p]]; };
 export const ERROR_SEG = { p: 'segismundo', enun: 'Segismundo, hemorragia intracerebral con warfarina (INR 3,2). El plan que escribe el R1: hay 0, 1 o 2 frases falsas. Toca las que contienen un error; si crees que no hay más, pulsa «No hay más errores».',
-  fr: EA.frases.map((f, i) => { const p = [42, 44, 44][i]; return [f.t, f.error, f.por, p, FICHA[p]]; }),
+  fr: EA.frases.map((f, i) => { const p = [42, 45, 45][i]; return [f.t, f.error, f.por, p, FICHA[p]]; }),
   nada: ['Hay errores: una de las frases falsas sigue sin tocar. Vuelve a leerlas con calma.', 'Ahora sí: ya has encontrado los dos errores.'] };
 const E = [{ tipo: 'ventricular', masa: 52, pas: 196, anti: 'warfarina' }, { tipo: 'ventricular', masa: 73, pas: 190, anti: 'warfarina', rev: true }, { tipo: 'ventricular', masa: 61, pas: 143, anti: 'warfarina', rev: true }, { tipo: 'ventricular', masa: 61, pas: 114, anti: 'warfarina', rev: true, drenaje: 1 }];
 const EF = [{}, {}, { dren: 1, pas: 114 }, { dren: 1 }];

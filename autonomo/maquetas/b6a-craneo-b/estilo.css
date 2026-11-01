@@ -75,3 +75,5 @@ main { gap: 4px; } .idea { font-size: .72rem; margin: 2px 0; } .frase { font-siz
 #dtc-s[hidden] { display: none; }
 #pv-svg text, #pa-svg text, #pen-svg text, #ppc-cab text { font-family: var(--sans); }
 .para .cita-pdf { display: inline; min-height: 0; }
+.para a,.org,.cita a{overflow-wrap:anywhere;word-break:break-word}
+#idea .org,.idea .org,.org{white-space:normal}

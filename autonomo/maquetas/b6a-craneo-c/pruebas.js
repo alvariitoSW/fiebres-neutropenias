@@ -25,7 +25,7 @@ export const CASO = {
     { enun: 'En UCI: PA 188/110, SaO₂ 93 % sin O₂, glucosa 215. Le pusieron tPA hace dos horas. ¿Qué haces con la PA?', orden: [1, 0, 2], pag: '36',
       ops: [{ t: 'Nada: solo se baja por encima de 220/120.', ok: false, por: 'Esa regla es para quien no recibió trombólisis; con 188/110 tras el tPA el riesgo de hemorragia es de 6,4-8,8 % (p. 36, 39).' },
         { t: 'Labetalol 10 mg en bolo: el objetivo es <180/105 durante 24 h.', ok: true, por: 'Tabla 47.2. Se queda en 174/102: el sello verde lo marca (p. 36).', haz: (a) => a.hacer('baja') },
-        { t: 'Nitroprusiato en perfusión, que baja la PA más rápido que el labetalol y el bolo.', ok: false, por: 'Marino lo evita en el ictus: sube la PIC y roba presión de perfusión a la penumbra (p. 36).', haz: (a) => a.hacer('nitro') }] },
+        { t: 'Nitroprusiato en perfusión, que baja la PA más rápido que el labetalol y el bolo.', ok: false, por: 'Marino lo evita en el ictus agudo (p. 36); que suba la PIC y baje la presión de perfusión de la penumbra es fisiología general (inferencia, la p. 36 no lo explica).', haz: (a) => a.hacer('nitro') }] },
     { enun: 'Sigue con SaO₂ 93 % respirando aire. ¿Y el oxígeno?', orden: [0, 1, 2], pag: '35',
       ops: [{ t: 'Gafas a 2 L para llevarla a 98 %.', ok: false, por: 'Pasas de 94 %: peor resultado neurológico y vasos cerebrales más estrechos (p. 34-35).', haz: (a) => a.hacer('fio', { v: 30 }) },
         { t: 'Mascarilla al 60 % hasta que la SaO₂ sea de 100 %, mejor sobrar.', ok: false, por: 'Hiperoxia: el flujo cerebral cae y la SaO₂ por encima de 94 % se asocia a peor evolución (p. 34-35).', haz: (a) => a.hacer('fio', { v: 60 }) },

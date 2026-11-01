@@ -14,8 +14,8 @@ export const ERROR = {
   antes: 'Segismundo, hemorragia intracerebral con warfarina (INR 3,2). El plan que escribe el R1: juzga cada frase.',
   frases: [
     { t: 'Vitamina K 10 mg IV y plasma fresco hasta normalizar el INR.', error: true, por: 'Falso: se revierte con vitamina K 10 mg + concentrado de complejo protrombínico, 25 U/kg si el INR es 2-4 (p. 42-44). El plasma tarda y sobrecarga volumen mientras el hematoma crece.' },
-    { t: 'PAS objetivo <160.', error: true, por: 'Falso: el objetivo de la ficha es PAS <140 (p. 44). Con 160 el hematoma puede seguir creciendo.' },
-    { t: 'Compresión neumática, sin levetiracetam profiláctico y EEG continuo si la consciencia empeora.', error: false, por: 'Cierto (p. 44): sin profilaxis anticonvulsiva y EEG continuo si hay consciencia alterada.' }],
+    { t: 'PAS objetivo <160.', error: true, por: 'Falso: el objetivo de la ficha es PAS <140 (p. 45). Con 160 el hematoma puede seguir creciendo.' },
+    { t: 'Compresión neumática, sin levetiracetam profiláctico y EEG continuo si la consciencia empeora.', error: false, por: 'Cierto (p. 45): sin profilaxis anticonvulsiva y EEG continuo si hay consciencia alterada.' }],
 };
 export const CASO = {
   preset: 'segismundo', pag: 45, titulo: 'Segismundo, 71 años · warfarina, INR 3,2, PA 196/104, GCS 13',
