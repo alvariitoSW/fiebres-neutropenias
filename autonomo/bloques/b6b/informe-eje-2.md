@@ -1,0 +1,10 @@
+# Informe · eje vivo, pieza 2 (Mayéutica) · b6b
+Nuevos: `js/modules/libros/eje-vivo/mayeutica.js`, `pruebas.js` (modos Apuesta/Error/Caso), `js/data/eje-vivo-mayeutica.js` (forma del motor), `js/data/eje-vivo-pruebas.js` (copia de la maqueta `b6b-eje-b/pruebas.js`), `autonomo/pruebas/eje-vivo-mayeutica.mjs`, `autonomo/bloques/b6b/herramientas/eje-cifras-casos.mjs`. Cambiados: `eje-vivo.html` (modos, prueba, vista de preguntas, dock de progreso), `pagina.js` (`modoPrueba`, clase `oculta`, `ir` con `frase`/`anima`), `css/components.css` (hueco eje, +60 l.), `core/mayeutica.js` (`ejeVivo`), `autonomo/jueces-forma.mjs` (banco + modo; commit aparte). Versión 20261101-102.
+## Lista R2 punto 11 (✅)
+2 apuestas (Toribio PA 78/40 NA 0,4; Bibiana cortisol 22), «compruébalo» con el modelo · 2 «encuentra el error» (Obdulia 1, Lucrecia 2; «No hay ningún error» en el modo Error) · 2 casos con giro (Obdulia 4 pasos, día 2; Toribio 3 pasos, día 5) · cada porqué con PDF + «Ver en la ficha» · 3 «Lo que te llevas» con 2 enlaces cada uno · «Otra apuesta / otra nota / otro caso». Punto 4: PA y PAM en «?» hasta contestar; además se esconden sellos y avisos (decían la respuesta).
+## Cifras
+Las de la ficha del paciente salen de `leer()` del modelo; cotejadas con los enunciados (Obdulia 95/49·48·33,5·122 → 110/56·51 → 77/40·52 → 110/56·59·34,8·128; Toribio 99/51 lactato 1,6; apuesta 78/40). Cortisol 28 del día 1 de Toribio: del caso.
+## Frases nuevas
+Solo interfaz: «Elige antes de ver nada», textos del inicio de la Mayéutica, «Otra nota», «Volver al eje de este paciente», momentos («Día 1 · el cortisol»…). El contenido médico es el de la maqueta ya auditada (las inferencias llevan su nota en el texto).
+## No comprobado / riesgo
+Guía socrática de solo 2 preguntas y examen de 2 (el contenido pedido): pocas para el reparto de posiciones; lo mide jueces-forma. Banco de preguntas pequeño → «ideas firmes» tarda. Los modos Apuesta/Error/Caso y la Mayéutica duplican el contenido (misma fuente de datos).
