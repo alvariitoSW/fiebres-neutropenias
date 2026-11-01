@@ -60,18 +60,20 @@ por color.
 ## 6. Pasos
 | Paso | Estado | Salida |
 |---|---|---|
-| 1 · Cobertura (profesor) | en curso (01/11) | `cobertura.md` (+ `cobertura-anexo.md`) |
-| 2 · Maquetas hepatocito y termostato | — | `autonomo/maquetas/b5-{hepatocito,termostato}-<x>.html` + carpeta |
+| 1 · Cobertura (profesor) | ✅ 01/11 (≈86 %; grupos 5A-5D) | `cobertura.md` (+ `cobertura-anexo.md`) |
+| 2 · Maquetas hepatocito y termostato | en curso (01/11) | `autonomo/maquetas/b5-{hepatocito,termostato}-<x>.html` + carpeta |
 | 2 · Juicio y elección (Educación, Consejo) | — | `juicio-*.md`, `eleccion.md` |
 | 3 · Modelos en la app · 4 · Estudiar | tras el `b4` | sesiones aparte |
 
 ## 7. Piezas comunes
-Las nombra la cobertura (§ «Piezas comunes»). De partida: el **hepatocito** como célula reutilizable por b4 y b6b; el
-**monitor + `tope.js`**; un solo motor de Mayéutica; enlaces cruzados al filtro vivo, la nefrona y el shock vivo.
+`cobertura.md` («Piezas comunes») y anexo §6: hepatocito con vías encendibles por datos (en b5 solo `urea`); monitor +
+`js/core/tope.js` + `frase-vista.js`; semáforo antibiótico de la Tabla 41.3 como una sola tabla de datos; un solo motor
+de Mayéutica; enlaces cruzados al filtro vivo, la nefrona, el glomérulo, el capilar y el shock vivo.
 
 ## 8. Pacientes del bloque
-Los da la cobertura (§ «Pacientes»). Ninguno repite nombre de b1-b4 (listas en `autonomo/bloques/b{1,2,3}/encargo.md` § «Pacientes»; de b4: Sofía, Benito, Damián, Rufino,
-Matilde, Gregorio, Casilda, Nicolás, Adela, Valentín, Encarna; más Lucía, Carmen y Teresa de los modelos).
+`cobertura.md` («Pacientes») y anexo §7 (13, con pasos, cifras y página): Hilario 58 · Casimira 44 · Bartolomé 51 ·
+Leocadia 77 · Prudencio 69 · Isidora 63 · Felisa 82 · Ovidio 34 · Marcial 28 · Jacinta 47 · Honorato 72 · Celestino 66 ·
+Dorotea 55. Nadie inventa otro.
 
 ## 9. Encargo de las maquetas (5 fijas: hepatocito A, B, C · termostato A, B)
 
