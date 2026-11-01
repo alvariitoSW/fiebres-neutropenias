@@ -1,7 +1,7 @@
 // Vista Visual del bloque 3D, grupo G1 (respirador): modos, ajuste y PEEP oculta (Marino, caps. 27-28).
 // Recetas para core/visual-kit.js; cada nodo apunta a su texto por id (`fuente: '#nep-…'`); las calculadoras de la
 // ficha se conectan sin copiar su lógica. En las fichas con Estudiar, es el paso «Mira».
-const LAMINAS = { tipo: 'figuras', titulo: 'Las láminas del libro', nota: 'Desliza para verlas; tócalas para ampliarlas.', todas: true };
+// Las figuras 27.1-27.5 y 28.9 son texto en la ficha (sin imagen): se ven vivas en el pulmón vivo.
 
 export const RECETAS_3D_G1 = {
     'neumo-vm-modos': {
@@ -14,8 +14,8 @@ export const RECETAS_3D_G1 = {
             ] },
             { tipo: 'flujo', titulo: 'De la presión pico a la meseta', nodos: [
                 { fuente: '#nep-ec-27-1', etiqueta: 'Pico = Pres + Pel (Ec. 27.1)', color: 'dorado' },
-                { fuente: '#nep-meseta', etiqueta: 'Pausa sin flujo: la presión que queda es la meseta', color: 'azul' },
-                { fuente: '#nep-ec-27-1', etiqueta: 'Pico − meseta = Pres (resistencia de la vía aérea)', color: 'verde' },
+                { fuente: '#nep-fig-27-2', etiqueta: 'Pausa sin flujo: la presión que queda es la meseta', color: 'azul' },
+                { fuente: '#nep-fig-27-2', etiqueta: 'Pico − meseta = Pres (resistencia de la vía aérea)', color: 'verde' },
                 { fuente: '#nep-riesgo-alveolar', etiqueta: 'Riesgo alveolar despreciable con meseta ≤30 cmH₂O', color: 'rojo' }
             ] },
             { tipo: 'calculadora', titulo: 'Compliance estática (calculadora de la ficha)', campos: ['#neumo-cstat-vt', '#neumo-cstat-presion', '#neumo-cstat-peep'], resultado: ['#neumo-cstat-resultado'] },
@@ -25,8 +25,7 @@ export const RECETAS_3D_G1 = {
                 { fuente: '#nep-presion-media', etiqueta: '5-10', en: 7.5, color: 'verde', fila: 'abajo' },
                 { fuente: '#nep-presion-media', etiqueta: '10-20', en: 15, color: 'amarillo', fila: 'abajo' },
                 { fuente: '#nep-presion-media', etiqueta: '20-30', en: 25, color: 'rojo', fila: 'abajo' }
-              ] },
-            LAMINAS
+              ] }
         ]
     },
     'neumo-vm-ajuste': {
@@ -43,22 +42,34 @@ export const RECETAS_3D_G1 = {
                 { fuente: '#nep-peep-gc', etiqueta: 'El gasto cardíaco puede caer', color: 'rojo' },
                 { fuente: '#nep-do2', etiqueta: 'DO₂ = GC × CaO₂ (Ec. 27.6)', color: 'dorado' }
             ] },
-            { tipo: 'escalera', titulo: 'Tabla 27.1: ventilación protectora', tabla: 'css:#nep-tabla-27-1 + div table' },
-            { tipo: 'racimos', titulo: 'Ajustes prácticos', grupos: [{ titulo: 'Flujo y PEEP oculta', color: 'gris', nodos: ['#nep-flujo-ie', '#nep-ajustes-oculta'] }] },
-            LAMINAS
+            { tipo: 'escalera', titulo: 'Tabla 27.1: ventilación protectora, por etapas', nodos: [
+                { fuente: '#nep-tabla-27-1', etiqueta: '1.ª: Vt 8 mL/kg PBW, PEEP 5; bajar 1 mL/kg cada 2 h hasta 6' },
+                { fuente: '#nep-tabla-27-1', etiqueta: '2.ª: meseta >30 → bajar Vt 1 mL/kg hasta meseta <30 o Vt 4' },
+                { fuente: '#nep-tabla-27-1', etiqueta: '3.ª: pH 7,15-7,30 → FR hasta 35; pH <7,15 → FR 35 y subir Vt' },
+                { fuente: '#nep-tabla-27-1', etiqueta: 'Objetivos: SpO₂ 88-95 %, pH 7,30-7,45, FiO₂ ≤60 %' }
+            ] },
+            { tipo: 'racimos', titulo: 'Ajustes prácticos', grupos: [{ titulo: 'Flujo y PEEP oculta', color: 'gris', nodos: ['#nep-flujo-ie', '#nep-ajustes-oculta'] }] }
         ]
     },
     'neumo-peep-oculta': {
         guia: 'La PEEP oculta no se ve en el monitor: se ve el flujo que no llega a cero, se mide ocluyendo y se trata vaciando mejor.',
         paneles: [
-            { tipo: 'racimos', titulo: 'Qué es y qué hace', grupos: [{ titulo: 'Definición y efectos', color: 'rojo', nodos: ['#nep-definicion-oculta', '#nep-efectos'] }] },
+            { tipo: 'comparar', titulo: 'Qué ve el monitor y qué hay dentro', columnas: [
+                { titulo: 'Presión proximal', color: 'dorado', nodos: [{ fuente: '#nep-monitorizacion-oculta', etiqueta: 'Vuelve a 0 al final de la espiración' }] },
+                { titulo: 'Presión alveolar', color: 'rojo', nodos: [{ fuente: '#nep-monitorizacion-oculta', etiqueta: 'Sigue positiva: la PEEP oculta' }] },
+                { titulo: 'Flujo', color: 'azul', nodos: [{ fuente: '#nep-fig-28-9', etiqueta: 'No llega a cero' }] }
+            ] },
+            { tipo: 'racimos', titulo: 'Qué le hace al paciente', grupos: [{ titulo: 'Cuatro efectos', color: 'rojo', nodos: [
+                { fuente: '#nep-efectos', etiqueta: 'PVC espuria' },
+                { fuente: '#nep-efectos', etiqueta: 'Gasto cardíaco ↓' },
+                { fuente: '#nep-efectos', etiqueta: 'Trabajo respiratorio ↑' },
+                { fuente: '#nep-efectos', etiqueta: 'Volutrauma y barotrauma' }] }] },
             { tipo: 'flujo', titulo: 'Ver, medir y tratar', nodos: [
                 { fuente: '#nep-monitorizacion-oculta', etiqueta: 'Ver: el flujo espiratorio no llega a cero', color: 'amarillo' },
                 { fuente: '#nep-oclusion', etiqueta: 'Medir: ocluir al final de la espiración', color: 'dorado' },
                 { fuente: '#nep-manejo-oculta', etiqueta: 'Tratar: Vt ↓, flujo ↑, Ti ↓, FR ↓', color: 'verde' },
                 { fuente: '#nep-peep-aplicada', etiqueta: 'PEEP aplicada justo por debajo de la oculta', color: 'purpura' }
-            ] },
-            LAMINAS
+            ] }
         ]
     }
 };
