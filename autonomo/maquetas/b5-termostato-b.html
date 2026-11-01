@@ -1,0 +1,49 @@
+<!-- PROPUESTA PARA REVISAR (plan socialista, bloque 5). No es parte de la app.
+     Ábrela con el servidor de la app: http://localhost:8000/autonomo/maquetas/b5-termostato-b.html
+     Termostato, opción B «El cuerpo que arde y tirita»: silueta con tres capas (piel, músculo, cerebro) y seis estados en secuencias de 5 pasos.
+     Fuente: Marino 2024, caps. 43-44 (docs/marino-2024-abdomen-temperatura-caps39-44.pdf). Sin mandos continuos de temperatura: la fija el paso.
+     Motion con cargarMotion() para mover la llama; con «reducir movimiento», el estado final. -->
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>El cuerpo que arde y tirita · para revisar</title>
+<link rel="stylesheet" href="b3-ritmo/base.css"><link rel="stylesheet" href="b5-termostato-b/estilo.css">
+</head>
+<body>
+<main>
+  <header class="cabecera"><div class="cab-fila"><h1>El cuerpo que arde y tirita</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
+  <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" class="b" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" class="b" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" class="b" data-modo="error" aria-pressed="false">Error</button><button type="button" class="b" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
+  <p id="idea" class="idea"></p>
+  <section id="monitor" aria-label="Monitor de cabecera">
+    <div class="mon-fila"><span>T central <b id="mon-t"></b> °C</span><span>FC <b id="mon-fc"></b></span><span>CO₂ espirado <b id="mon-co2"></b></span><span>CK <b id="mon-ck"></b></span></div>
+    <div class="mon-fila"><span>Escalofrío <b id="mon-esc"></b></span><span>Sudor <b id="mon-sud"></b></span><span>Rigidez <b id="mon-rig"></b></span></div>
+    <p class="mon-pie" id="mon-pie"></p>
+  </section>
+  <div class="capas" role="group" aria-label="Capas del cuerpo"><button type="button" class="b" id="l-piel" aria-pressed="true">Piel</button><button type="button" class="b" id="l-mus" aria-pressed="true">Músculo</button><button type="button" class="b" id="l-cer" aria-pressed="true">Cerebro</button></div>
+  <section class="zona-escena"><svg id="ter-svg" viewBox="0 0 360 330" role="img" aria-label="Silueta humana con piel, músculo y cerebro; lupa del hipotálamo con el punto de ajuste y la temperatura real; lupa de la fibra muscular con el retículo y el calcio"></svg></section>
+  <section id="paso-caja" aria-live="polite"></section>
+  <div id="leyenda"></div>
+  <details class="fig" id="figosb"><summary>Fig. 43.1 · onda de Osborn en la hipotermia (ECG real)</summary><figure style="margin:0"><img id="imgosb" alt="Electrocardiograma con onda de Osborn en una hipotermia" loading="lazy"><figcaption>Onda de Osborn (Fig. 43.1, Marino 2024, p. 56): inespecífica; no se da una temperatura umbral. Foto real de la ficha.</figcaption></figure></details>
+  <details class="fig" id="fig445"><summary>Fig. 44.5 · temperatura y mortalidad (fiebre)</summary><figure style="margin:0"><img id="img445" alt="Gráfico de la temperatura máxima y la mortalidad en la sepsis" loading="lazy"><figcaption>Fig. 44.5 (Marino 2024, p. 70-71): la fiebre no se baja de rutina en la sepsis.</figcaption></figure></details>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="fuentes"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="profundizar"></ul></details>
+  </section>
+</main>
+<p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
+<div class="dock" id="dock"><div class="dock-in">
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Paciente y enlaces</button></div>
+  <div class="dock-panel" id="dock-panel">
+    <div class="mando"><div class="fila dos"><label>Estado<select id="m-est"></select></label><label>¿Y si…?<select id="m-ysi"></select></label></div></div>
+    <div class="mando"><div class="fila"><button type="button" class="b" id="m-ant">‹ Paso</button><output id="o-paso" class="paso-o"></output><button type="button" class="b" id="m-sig">Paso ›</button></div><button type="button" class="b" id="m-trat" aria-pressed="false"></button></div>
+  </div>
+  <div class="dock-panel" id="dock-medir" hidden>
+    <div class="presets" id="presets"></div>
+    <button type="button" class="b enlace" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="rabdo">Rabdomiólisis en la nefrona viva</button>
+    <button type="button" class="b enlace" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="hiperk">Hiperpotasemia en los iones vivos</button>
+  </div>
+</div></div>
+<p id="toast" class="toast" role="status" hidden></p>
+<script type="module" src="b5-termostato-b/pagina.js"></script>
+</body></html>

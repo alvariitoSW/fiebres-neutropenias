@@ -1,0 +1,59 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css). */
+.zona-escena { position: relative; }
+#ter-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#ter-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
+#ter-svg .min { fill: var(--text-muted); } #ter-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; } #ter-svg .pq { font-size: 8.8px; fill: var(--text-muted); }
+#ter-svg .guion { stroke: var(--text-muted); stroke-dasharray: 3 3; fill: none; }
+#ter-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+#ter-svg .mueve { animation: mueve 2.6s ease-in-out infinite; }
+@keyframes mueve { 0% { transform: translate(0, 0); opacity: 1; } 80%, 100% { transform: translate(var(--dx), var(--dy)); opacity: .15; } }
+@media (prefers-reduced-motion: reduce) { #ter-svg .mueve { animation: none; } }
+#monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; }
+#monitor .mon-fila { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 4px 10px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
+#monitor b { color: var(--text-main); font-size: .95rem; } #monitor #mon-nh3 { font-size: 1.5rem; color: var(--oro); } #monitor .rojo { color: var(--accent-red); }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.modos button, .mando button { min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
+.prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); }
+.prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun, .prueba .ctx { margin: 0; font: .86rem/1.4 var(--sans); }
+.op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); }
+.mando .fila { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; } .mando .fila > * { flex: 1 1 0; min-width: 60px; }
+.mando label { font: 600 .7rem/1.2 var(--sans); color: var(--text-dim); display: grid; gap: 2px; } .mando label output { color: var(--oro); }
+.mando button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); } .mando button { min-height: 34px; padding: 2px 4px; }
+.dock-pliega { display: grid; gap: 4px; } .dock-panel { max-height: 27vh !important; min-height: 0 !important; } .dock-tabs button { min-height: 34px !important; }
+.presets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; } .presets button { min-height: 40px; font: 700 .74rem/1.1 var(--sans); } .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#leyenda .nv-especies { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 600 .74rem/1.2 var(--sans); } #leyenda .nv-especies > span { display: inline-flex; align-items: center; gap: 4px; }
+.idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); } .idea .org, .guia .org, .frase .org { color: var(--text-muted); font-weight: 400; }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+.llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); } .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+.cita { font: .68rem/1.3 var(--sans); } .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; }
+.fig { border: 1px solid var(--line); border-radius: 10px; padding: 4px 8px; background: var(--bg-card); } .fig summary { font: 600 .78rem/1.3 var(--sans); min-height: 32px; display: flex; align-items: center; cursor: pointer; }
+.fig img { width: 100%; height: auto; display: block; border-radius: 6px; background: var(--bg-main); } .fig figcaption { font: .68rem/1.35 var(--sans); color: var(--text-muted); margin-top: 4px; }
+.plegable { border: 1px solid var(--line); border-radius: 10px; padding: 4px 8px; background: var(--bg-card); } .plegable summary { font: 600 .78rem/1.3 var(--sans); min-height: 32px; display: flex; align-items: center; cursor: pointer; }
+.lista { margin: 0; padding-left: 16px; font: .74rem/1.4 var(--sans); } .bloque { display: grid; gap: 6px; }
+.enlace { min-height: 40px; font: 700 .74rem/1.2 var(--sans); }
+#monitor { min-height: 168px; }
+.barra { position: relative; height: 28px; margin: 6px 0 0; border-bottom: 1px solid var(--line); } .barra i { position: absolute; left: 0; bottom: 14px; height: 8px; border-radius: 4px; background: var(--accent-yellow); display: block; max-width: 100%; }
+.barra u { position: absolute; bottom: 10px; height: 16px; border-left: 2px solid var(--accent-red); } .barra span { position: absolute; bottom: -2px; font: 600 .6rem/1 var(--sans); color: var(--text-muted); transform: translateX(3px); }
+/* termostato B */
+#ter-svg .piel { fill: color-mix(in srgb, var(--accent-red) 10%, var(--bg-card)); stroke: var(--line); stroke-width: 1.5; stroke-linecap: round; } #ter-svg line.piel { stroke: color-mix(in srgb, var(--accent-red) 10%, var(--bg-card)); }
+#ter-svg .piel.ce { fill: color-mix(in srgb, var(--text-muted) 16%, var(--bg-card)); } #ter-svg line.piel.ce { stroke: color-mix(in srgb, var(--text-muted) 16%, var(--bg-card)); }
+#ter-svg .vaso { fill: none; stroke-linecap: round; } #ter-svg .vaso.ab { stroke: var(--accent-red); stroke-width: 2.6; } #ter-svg .vaso.ce { stroke: var(--text-muted); stroke-width: 1.4; }
+#ter-svg .mus { stroke: color-mix(in srgb, var(--accent-red) 30%, var(--bg-main)); stroke-linecap: round; } #ter-svg .mus.rig { stroke: color-mix(in srgb, var(--accent-red) 55%, var(--bg-main)); }
+#ter-svg .fibra { fill: none; stroke: var(--text-dim); stroke-width: 1.8; } #ter-svg .fibra.tir { animation: tiembla .18s linear infinite alternate; } #ter-svg .fibra.rig { stroke: var(--text-main); stroke-width: 3; }
+@keyframes tiembla { from { transform: translateX(-1.6px); } to { transform: translateX(1.6px); } }
+#ter-svg .calor { fill: var(--accent-red); stroke: var(--bg-main); stroke-width: .8; animation: mueve 2.6s ease-in-out infinite; }
+#ter-svg .gota { animation: mueve 2.2s ease-in infinite; }
+#ter-svg .lupa { fill: var(--bg-card); stroke: var(--line); stroke-width: 2; } #ter-svg .escala { fill: var(--bg-main); stroke: var(--line); }
+#ter-svg .llama { fill: var(--accent-yellow); stroke: var(--oro); stroke-width: 1.5; } #ter-svg .real { fill: var(--accent-red); stroke: var(--bg-main); }
+#ter-svg .fibra-g { fill: color-mix(in srgb, var(--accent-red) 28%, var(--bg-main)); stroke: var(--text-dim); stroke-width: 1.5; } #ter-svg .fibra-g.contr { stroke: var(--accent-red); stroke-width: 3; }
+#ter-svg .reti { fill: color-mix(in srgb, var(--accent-purple) 18%, var(--bg-main)); stroke: var(--accent-purple); stroke-width: 1.8; }
+#ter-svg .canal rect.ab { fill: var(--accent-red); } #ter-svg .canal rect.ce { fill: var(--accent-green); }
+#ter-svg .foco-r { display: none; }
+.capas { display: flex; gap: 4px; margin: 4px 0; } .capas button { flex: 1 1 0; min-height: 36px; font: 700 .74rem/1.1 var(--sans); } .capas button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#paso-caja { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; background: var(--bg-card); display: grid; gap: 4px; } #paso-caja h3 { margin: 0; font-size: .95rem; } #paso-caja p { margin: 0; font: .84rem/1.4 var(--sans); }
+#paso-caja .fila-g { display: flex; gap: 4px; } #paso-caja .fila-g button { flex: 1 1 0; min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
+#monitor { min-height: 0; } .mando select { min-height: 36px; font: 600 .74rem/1.2 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; width: 100%; }
+.mando .fila.dos > * { flex: 1 1 0; } #m-trat { min-height: 36px; text-align: left; font: 700 .72rem/1.2 var(--sans); }
+.mon-pie { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
