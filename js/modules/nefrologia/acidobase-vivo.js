@@ -1162,7 +1162,7 @@ function fraseGenerica(d) {
   if (c && c.dice) f += c.dice + ' ';
   if (d.HA > 12.5 && !E.tendencia) f += `Hiato <span class="hl-rojo">${fmt(d.HA)}</span>${d.delta != null ? `, delta ${fmt(d.delta, 2)}` : ''}.`;
   else if (E.hco3 < 22 && !E.tendencia && (l.prim === 'acidMet' || l.anadido === 'acidMet')) f += `Hiato normal (${fmt(d.HA)}): hiperclorémica.`;
-  const org = (c ? O('f', c.f) + (c.fd ? O('f', c.fd) : '') : O('f', 'mr-acidobase-analisis#mr-regla-1')) + (CAUSA_ACTUAL && !['normal', 'cad', 'vomitos', 'caa'].includes(CAUSA_ACTUAL) && !['metanol', 'salic', 'lactica', 'hiperaldo', 'mixta', 'respAg', 'respCr', 'acetazol', 'bicarb', 'caa'].includes(CAUSA_ACTUAL) ? O('i', 'HCO₃⁻ dentro del rango de la tabla; PaCO₂ la esperada') : '') + (CAUSA_ACTUAL && ['respAg', 'respCr', 'mixta', 'salic', 'hiperaldo'].includes(CAUSA_ACTUAL) ? O('i', 'Cl⁻ derivado para dejar el HA') : '') + (!CAUSA_ACTUAL && !PASOS.find(p => p.id === pasoActual) ? O('i', 'gasometría del laboratorio') : '');
+  const org = (c ? O('f', c.f) + (c.fd ? O('f', c.fd) : '') : O('f', 'mr-acidobase-analisis#mr-regla-1')) + (CAUSA_ACTUAL && !['normal', 'cad', 'vomitos', 'caa', 'hcl'].includes(CAUSA_ACTUAL) && !['metanol', 'salic', 'lactica', 'hiperaldo', 'mixta', 'respAg', 'respCr', 'acetazol', 'bicarb', 'caa', 'hcl'].includes(CAUSA_ACTUAL) ? O('i', 'HCO₃⁻ dentro del rango de la tabla; PaCO₂ la esperada') : '') + (CAUSA_ACTUAL && ['respAg', 'respCr', 'mixta', 'salic', 'hiperaldo'].includes(CAUSA_ACTUAL) ? O('i', 'Cl⁻ derivado para dejar el HA') : '') + (!CAUSA_ACTUAL && !PASOS.find(p => p.id === pasoActual) ? O('i', 'gasometría del laboratorio') : '');
   return [f, org];
 }
 function pintarTextos() {
@@ -1813,7 +1813,7 @@ function ocultar() {
 // Ancla de estado (data-acidobase-vivo): «paso-0»…«paso-5», «paso-3b»; una causa del laboratorio («vomitos», «cad»,
 // «metanol»…) o su alias legible; «conceptos» o «mayeutica». Vacía: abre la herramienta donde se dejó.
 const ALIAS = {
-  "cetoacidosis-alcoholica": "caa",
+  "cetoacidosis-alcoholica": "caa", "alcalosis-grave": "hcl",
   cetoacidosis: 'cad', 'acidosis-lactica': 'lactica', salicilatos: 'salic', 'epoc-cronica': 'respCr', 'respiratoria-cronica': 'respCr',
   'respiratoria-aguda': 'respAg', hiperaldosteronismo: 'hiperaldo', etilenglicol: 'metanol', acetazolamida: 'acetazol', bicarbonato: 'bicarb',
 };

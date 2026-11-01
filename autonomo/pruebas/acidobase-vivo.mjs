@@ -92,6 +92,17 @@ await clic('#mr-caa-ver'); await espera(4000);
     await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
     await espera(150); const q = await P(); if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || await desborda() > 0) mal++; }
   ok(mal === 0 && rangos.length > 0, `caa: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
+// hcl: alcalosis grave desde su ficha + barrido de extremos
+await pulsar({ especialidad: 'libros', view: 'marinoRenal', panel: 'panel-marino-renal-tabs', tab: 'mr-alcalosis-tratamiento' }); await espera(700);
+await clic('#mr-hcl-ver'); await espera(4000);
+{ const p = await P(); ok(await visible() && p.causa === 'hcl' && p.estado.hco3 === 52, `ficha hcl abre la alcalosis grave (causa ${p.causa})`);
+  const fv = await pag.evaluate(() => document.getElementById('abv-raiz').innerText);
+  ok(/0,2 mEq\/kg\/h/.test(fv) && /vena central/.test(fv), 'hcl: la frase viva da el tope 0,2 mEq/kg/h y la vena central');
+  const rangos = await pag.$$('#abv-raiz input[type=range]'); let mal = 0;
+  for (const r of rangos) for (const ext of ['min', 'max']) {
+    await r.evaluate((el, e) => { el.value = el[e]; el.dispatchEvent(new Event('input', { bubbles: true })); el.dispatchEvent(new Event('change', { bubbles: true })); }, ext);
+    await espera(150); const q = await P(); if (!isFinite(q.estado.hco3) || !isFinite(q.estado.paco2) || await desborda() > 0) mal++; }
+  ok(mal === 0 && rangos.length > 0, `hcl: barrido de ${rangos.length} mandos a sus extremos sin desborde ni cifras rotas`); }
 // paso del riñón (paso 4, vómitos → célula del colector)
 await pulsar({ especialidad: 'nefrologia', view: 'acidobase', acidobaseVivo: 'paso-4' }); await espera(5000);
 ok((await P()).estado.obj === 'rinon', 'el paso 4 abre el riñón');
@@ -179,7 +190,7 @@ ok(contestadas > 20, `sin desborde tras cada una de las ${contestadas} respuesta
 await pag.reload(); await pag.waitForTimeout(1500);
 await pulsar({ especialidad: 'nefrologia', view: 'acidobase', acidobaseVivo: 'mayeutica' }); await espera(1500);
 const marcas = await pag.evaluate(() => ({ on: document.querySelectorAll('#abv-est-prog .abv-on').length, mal: document.querySelectorAll('#abv-est-prog .abv-mal').length }));
-ok(marcas.on === 12 && marcas.mal === 2, `al recargar, siguen 12 aciertos y 2 fallos (${JSON.stringify(marcas)})`);
+ok(marcas.on === PREGUNTAS.length - 2 && marcas.mal === 2, `al recargar, siguen ${PREGUNTAS.length - 2} aciertos y 2 fallos (${JSON.stringify(marcas)})`);
 await clic('#abv-est-ant'); // nada
 await pag.evaluate(() => [...document.querySelectorAll('[data-sig], [data-ir]')]);
 
