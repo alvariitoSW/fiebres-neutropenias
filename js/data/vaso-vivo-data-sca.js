@@ -107,6 +107,7 @@ export function tableroPlaca(e) {
     if (e.t >= 3 && n) c.tapon = C('Trombo', n === 3 ? 'deja de crecer' : 'crece menos', `${n} de 3 interruptores`, 'ficha · p. 47', 'bien');
     if (lisisActiva(e)) {
         c.amenaza = C('Lisis', `TNK ${tnkMg(e.peso)} mg`, 'permeable 85 % a 90 min', 'ficha · p. 44', 'bien');
+        c.tapon = C('Trombo', 'se reabre', 'permeable 85 % a 90 min', 'ficha · p. 44', 'bien');
         c.fib = C('Fibrinógeno', '↓', 'baja al lisar; <100: crio', 'ilustr.', 'aviso', true);
     }
     return c;
