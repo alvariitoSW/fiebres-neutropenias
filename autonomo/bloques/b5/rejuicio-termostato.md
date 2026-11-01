@@ -24,3 +24,18 @@ Base: `node autonomo/bloques/b5/herramientas/termostato-b.mjs` (en verde a 390 y
 4. `dibujo.js` (`.pq` de la lupa) y `estilo.css`: rótulos del dial a 360 px en 8,7 px; subirlos a ≥9 px (§7.7). Opcional: la frase viva en 2 líneas como mucho para bajar dock + frase por debajo del 28 % (hoy 250 px).
 
 No comprobado con los ojos: estados SNM y SS tras la vuelta 2 (solo por el programa: cifras coherentes), la llama con Motion, la ronda 2 del error (0 errores) en pantalla.
+
+## Rejuicio final (vuelta 3 + retoque; profesor, 01/11/2026)
+
+Base: `termostato-b.mjs` en verde (rótulos svg 9,3 / html 9 px, «pisa: []», sin errores; Ovidio paso 4 `T 38.6 pt 38.6 CK 9000`; Juega máximo `golpe+tmax` con una sola caja) + 4 capturas (01 inicio 360, 06 tope 42 a 390, 05 Ovidio paso 4, 08 Juega inicio).
+
+| Criterio | Antes | Ahora | Por qué |
+|---|---|---|---|
+| §7.1 Primera vista | 9,0 | **9,5** | Con dos topes solo se pinta la caja más grave (`pagina.js` l. 50 `cola`, `estilo.css` l. 72); la silueta sigue en la primera pantalla a 390 (captura 06) |
+| §7.3 Resaltado | 9,25 | **9,5** | Una caja, sin bandas repetidas; el tope de 42 °C cita el Libro Azul, sección III, p. 30 |
+| §7.5 Interactivo | 9,25 | **9,5** | Todos los topes con página y consecuencia; la dosis de dantroleno queda rotulada en CRECERA (aceptado) |
+| §7.7 Móvil | 9,0 | **9,5** | Rótulos ≥9 px a 360 (captura 01, legibles); dock + frase 251 px (30 %) con la frase en 2 líneas |
+| §7.11 Fidelidad | 9,25 | **9,5** | `NOTAS` «Buscado y no encontrado» (CK, velocidad de subida: cap. 34, cap. 43 y Libro Azul) y errata p. 52 NMS/SS; Apuesta 2 ya es asociación, no causa |
+| §8 Caso | 9,0 | **9,5** | Ovidio paso 4 da lo medible («38,6 °C con escalofríos y piel fría y cerrada»), la explicación enseña el porqué, CK 9.000 rotulada ilustrativa |
+
+**Global: 9,5. Llega a la meta** de modelo vivo nuevo. Sin pendientes para la maqueta; al llevarla a la app: lista «lo que hace» (R2) y `jueces --modelo`.
