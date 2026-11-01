@@ -11,7 +11,7 @@ const b = await chromium.launch();
 try {
 for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   console.log(`\n===== ${ANCHO} px =====`);
-  const ctx = await b.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: 800 }, deviceScaleFactor: 2 });
+  const ctx = await b.newContext({ ...devices['iPhone 12'], viewport: { width: ANCHO, height: 844 }, deviceScaleFactor: 2 });
   const p = await ctx.newPage();
   p.on('console', (m) => m.type() === 'error' && errores.push(m.text())); p.on('pageerror', (e) => errores.push('pageerror ' + e.message));
   await p.goto('http://127.0.0.1:8262/autonomo/maquetas/b6a-craneo-b.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(700);
@@ -33,19 +33,33 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   };
   await desb('inicio'); console.log('inicio:', await analiza('inicio'), '|', await L(), '| topes', await tp());
   await p.screenshot({ path: `${CAP}01-inicio-${ANCHO}.png` });
+
+  // ---- escena entera sobre el dock, sello bajo el monitor, pupila ↔ sello ----
+  const escena = async (t) => { const r = await p.evaluate(() => { window.scrollTo(0, 0); const sv = document.getElementById('cr-svg').getBoundingClientRect(), d = document.getElementById('dock').getBoundingClientRect(), f = document.getElementById('frase').getBoundingClientRect(), m = document.querySelector('#monitor .mon-fila').getBoundingClientRect(), fila = document.querySelector('#monitor .mon-fila').getBoundingClientRect(); const sel = [...document.querySelectorAll('#monitor .tope-sello')].filter((x) => !x.hidden).map((x) => x.getBoundingClientRect());
+      return { svgB: sv.bottom, dockT: d.top, fraseT: f.top, mon: m.height, solSello: sel.some((x) => x.top < fila.bottom - 0.5 && x.bottom > fila.top), dockH: d.height, fraseH: f.height }; });
+    ok(r.svgB < Math.min(r.dockT, r.fraseT) - 0.5, `${ANCHO} ${t}: el corte llega a ${Math.round(r.svgB)} y la frase/dock empiezan en ${Math.round(Math.min(r.dockT, r.fraseT))}`); ok(r.mon <= 120, `${ANCHO} ${t}: monitor de ${Math.round(r.mon)}px`); ok(!r.solSello, `${ANCHO} ${t}: el sello tapa el monitor`); return r; };
+  const pupilas = async (t) => { const r = await p.evaluate(() => { const c = [...document.querySelectorAll('#cr-svg .pup')], D = c.find((x) => x.dataset.lado === 'D'), I = c.find((x) => x.dataset.lado === 'I'); const act = window.__cr.topes().map((x) => x.clave), l = window.__cr.leer(); return { rD: +D.dataset.r, rI: +I.dataset.r, fD: D.dataset.fija === '1', fI: I.dataset.fija === '1', act, tipo: window.__cr.s.tipo, est: l.est, pup: l.pup, txt: [...document.querySelectorAll('#cr-svg text')].map((x) => x.textContent).filter((x) => /pupila|Reactivas|Dilatadas|Medias|D algo/i.test(x)).join(' ') }; });
+    const uncal = r.act.includes('uncal'), desc = r.act.includes('desc'), me = r.act.includes('me');
+    ok(uncal === (r.rD > r.rI + 2 && r.fD && !r.fI), `${t}: sello uncal=${uncal} y pupilas D${r.rD}${r.fD ? 'f' : ''} I${r.rI}${r.fI ? 'f' : ''}`);
+    if (desc) ok(r.rD >= 9 && r.rI >= 9 && r.fD && r.fI, `${t}: sello descerebración y pupilas no dilatadas fijas`); if (me) ok(r.fD && r.fI && r.rD === r.rI, `${t}: sin flujo y pupilas no medias fijas`);
+    if (r.tipo === 'hsa') ok(!uncal && !(r.rD > r.rI + 2), `${t}: HSA con pupila unilateral`); if (r.est === 0 && r.tipo !== 'tronco') ok(r.rD === 4 && r.rI === 4 && !r.fD && !r.fI, `${t}: PIC normal con pupilas anormales`); return r; };
+  console.log('escena inicio:', JSON.stringify(await escena('inicio')), JSON.stringify(await pupilas('inicio')));
+  for (const [c0, o0] of [['abundio', {}], ['abundio', { masa: 60 }], ['abundio', { masa: 80 }], ['abundio', { masa: 100 }], ['petronila', {}], ['petronila', { pas: 165 }], ['petronila', { masa: 100, pas: 214 }], ['clotilde', { masa: 100 }], ['leovigildo', {}], ['segismundo', {}]]) { await pre(c0, o0); await escena(`${c0} ${JSON.stringify(o0)}`); await pupilas(`${c0} ${JSON.stringify(o0)}`); }
+  await pre('abundio'); await p.screenshot({ path: `${CAP}06-uncal-${ANCHO}.png` }); await pre('abundio', { masa: 80 }); await p.screenshot({ path: `${CAP}07-descer-${ANCHO}.png` });
+  for (const pas of [70, 214]) for (const m of [0, 100]) { await pre('abundio', { masa: m, pas }); const l = await p.evaluate(() => window.__cr.leer()); ok(l.pic <= 80 && l.P <= 150, 'tope PIC/PAM'); if (l.pic >= l.P) ok((await tp()).includes('me:sello'), 'PIC≥PAM sin sello sin flujo'); }
   const im = await p.evaluate(() => new Promise((r) => { const i = document.getElementById('fig-img'); i.complete ? r(i.naturalWidth) : i.addEventListener('load', () => r(i.naturalWidth)); })); ok(im > 0, 'imagen sin cargar'); console.log('imagen', im);
   // ---- mando masa 0 / medio / 100 en cada tipo ----
   for (const tipo of ['hematoma', 'edema', 'ventricular', 'hsa', 'tronco']) {
     for (const m of [0, 50, 100]) { await pre('abundio'); await p.evaluate(([t, m]) => { window.__cr.ponerTipo(t); window.__cr.set({ masa: m }); }, [tipo, m]); console.log(` ${tipo} masa ${m}: ${await L()} topes[${await tp()}]`); await desb(`${tipo} ${m}`); await analiza(`${tipo} ${m}`); }
   }
-  await pre('abundio', { masa: 100 }); ok((await tp()).includes('me:sello'), 'masa 100 sin sello de sin flujo'); ok(!(await clic('b-mas')), 'masa + sigue tocable con el sello'); await p.screenshot({ path: `${CAP}02-sin-flujo-${ANCHO}.png` });
+  await pre('abundio', { masa: 100, pas: 100 }); ok((await tp()).includes('me:sello'), 'masa 100 sin sello de sin flujo'); ok(!(await clic('b-mas')), 'masa + sigue tocable con el sello'); await p.screenshot({ path: `${CAP}02-sin-flujo-${ANCHO}.png` });
   await pre('abundio'); ok((await tp()).includes('uncal:sello'), 'Abundio sin sello uncal'); ok(!(await clic('b-mas')), 'masa + tocable con sello uncal');
   await pre('abundio', { masa: 80 }); ok((await tp()).includes('desc:sello'), 'sin sello de descerebración'); console.log('desc:', await L(), await tp());
   // ---- PAS mín/medio/máx y la regla PIC<PAM, PPC>0 ----
-  for (const pas of [70, 146, 220]) { await pre('abundio', { masa: 20, pas }); console.log(` PAS ${pas}: ${await L()} topes[${await tp()}]`); }
+  for (const pas of [70, 146, 214]) { await pre('abundio', { masa: 20, pas }); console.log(` PAS ${pas}: ${await L()} topes[${await tp()}]`); }
   await pre('abundio', { masa: 0, pas: 70 }); ok((await tp()).includes('ppc:aviso'), 'PPC<50 sin aviso');
-  const inv = await p.evaluate(() => { let mal = 0, n = 0; for (const tipo of ['hematoma', 'edema', 'ventricular', 'hsa', 'tronco']) for (let m = 0; m <= 100; m += 5) for (const pas of [70, 100, 140, 180, 220]) for (const d of [0, 3]) for (const h of [0, 3]) for (const v of ['esp', 'vpp', 'hv']) for (const nitro of [false, true]) {
-      window.__cr.ponerTipo(tipo); window.__cr.set({ masa: m, pas, drenaje: d, hiper: h, vent: v, nitro }); const l = window.__cr.leer(); n++; if (!(l.pic >= 4 && (l.pic < l.P || l.me) && (l.ppc > 0 || l.me) && (!l.me || window.__cr.topes().some((t) => t.clave === 'me')))) mal++; } return { n, mal }; });
+  const inv = await p.evaluate(() => { let mal = 0, n = 0; for (const tipo of ['hematoma', 'edema', 'ventricular', 'hsa', 'tronco']) for (let m = 0; m <= 100; m += 5) for (const pas of [70, 100, 140, 180, 214]) for (const d of [0, 3]) for (const h of [0, 3]) for (const v of ['esp', 'vpp', 'hv']) for (const nitro of [false, true]) {
+      window.__cr.ponerTipo(tipo); window.__cr.set({ masa: m, pas, drenaje: d, hiper: h, vent: v, nitro }); const l = window.__cr.leer(); n++; if (!(l.pic >= 4 && l.pic <= 80 && l.P <= 150 && (tipo !== 'hsa' || !window.__cr.topes().some((t) => t.clave === 'uncal')) && (l.pic < l.P || l.me) && (l.ppc > 0 || l.me) && (!l.me || window.__cr.topes().some((t) => t.clave === 'me')))) mal++; } return { n, mal }; });
   console.log(` invariantes PIC<PAM / PPC>0 / sello al llegar: ${inv.n} combinaciones, ${inv.mal} fallos`); ok(inv.mal === 0, 'combinación con PIC≥PAM sin sello o PPC≤0');
   // ---- topes uno a uno ----
   await pre('segismundo'); console.log('Segismundo:', await L(), await tp()); for (let i = 0; i < 3; i++) await clic('b-hora'); console.log(' +3 h sin revertir:', await L(), await tp()); ok((await tp()).includes('crece:sello'), 'warfarina sin revertir: sin sello'); ok(!(await clic('b-hora')), 'avanzar tocable con sello crece');
@@ -56,7 +70,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   ok((await (async () => { await pre('clotilde'); await p.evaluate(() => window.__cr.set({ sensor: true })); return tp(); })()).includes('edemasens'), 'edema con sensor sin aviso');
   await pre('abundio', { masa: 85, sensor: false }); ok((await tp()).includes('sensor:aviso'), 'GCS≤8 sin sensor sin aviso');
   await pre('abundio', { masa: 20 }); await p.evaluate(() => window.__cr.set({ vent: 'vpp' })); ok((await tp()).includes('vpp:aviso'), 'VPP sin aviso'); await p.evaluate(() => window.__cr.set({ vent: 'hv' })); console.log('hiperventilar:', await L(), await tp());
-  await pre('petronila'); ok((await tp()).includes('resang:sello'), 'HSA día 0 PAS165 sin resangrado'); ok(!(await clic('b-hora')), 'avanzar tocable con resangrado'); console.log('Petronila inicio:', await L(), await tp());
+  await pre('petronila', { pas: 165 }); ok((await tp()).includes('resang:sello'), 'HSA día 0 PAS165 sin resangrado'); ok(!(await clic('b-hora')), 'avanzar tocable con resangrado'); console.log('Petronila inicio:', await L(), await tp()); await pre('petronila'); { const l = await p.evaluate(() => window.__cr.leer()); ok(l.pic <= 25 && l.gcs === 9 && !(await tp()).includes('uncal'), `Petronila nace con PIC ${l.pic} GCS ${l.gcs} ${await tp()}`); await pre('petronila', { pas: 165 }); }
   await clic('b-exc'); ok(!(await tp()).includes('resang'), 'cerrar aneurisma no quita el resangrado'); await p.evaluate(() => window.__cr.set({ t: 5 })); ok((await tp()).includes('vaso:aviso'), 'días 4-14 sin aviso'); console.log('Petronila día 5:', await L(), await tp()); await p.screenshot({ path: `${CAP}03-hsa-dia5-${ANCHO}.png` });
   await pre('petronila', { exc: false, pas: 130, t: 5 }); ok((await tp()).includes('exc:aviso'), 'aneurisma abierto >3 días sin aviso');
   await pre('leovigildo'); console.log('Leovigildo:', await L()); await analiza('leovigildo');
@@ -77,7 +91,7 @@ for (const ANCHO of (process.argv[2] ? [+process.argv[2]] : [390, 360])) {
   await p.evaluate(() => window.__cr.modoPrueba('error')); const fr = await p.$$('#prueba .op'); ok(fr.length === 5, 'error: 5 frases'); await fr[0].click(); ok(!(await p.evaluate(() => document.getElementById('prueba').dataset.fin)), 'error: acabó con una verdadera'); await fr[2].click();
   ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'error sin resolver'); await desb('error resuelto');
   await p.evaluate(() => window.__cr.modoPrueba('caso'));
-  for (let i = 0; i < 3; i++) { const o = await p.$$('#prueba .op'); ok(o.length === 3, `caso paso ${i + 1}`); const tt = await Promise.all(o.map((x) => x.textContent())); const bien = [/^Bolo/, /^Aún no/, /^PAM ≥75/][i]; await o[tt.findIndex((x) => bien.test(x))].click(); console.log(` caso paso ${i + 1}:`, await L()); await desb(`caso ${i + 1}`); await analiza(`caso ${i + 1}`); if (i < 2) await clic2('#prueba [data-sig]'); }
+  for (let i = 0; i < 3; i++) { const o = await p.$$('#prueba .op'); ok(o.length === 3, `caso paso ${i + 1}`); const tt = await Promise.all(o.map((x) => x.textContent())); const bien = [/^Bolo/, /^Aún no/, /^PAM ≥75/][i]; await o[tt.findIndex((x) => bien.test(x))].click(); console.log(` caso paso ${i + 1}:`, await L()); await desb(`caso ${i + 1}`); await escena(`caso ${i + 1}`); await pupilas(`caso ${i + 1}`); await analiza(`caso ${i + 1}`); if (i < 2) await clic2('#prueba [data-sig]'); }
   ok(await p.evaluate(() => !!document.getElementById('prueba').dataset.fin), 'caso sin completar'); await p.screenshot({ path: `${CAP}05-caso-${ANCHO}.png`, fullPage: true });
   // ---- citas con doble enlace; frase y dock ----
   const cc = await p.evaluate(() => ({ n: document.querySelectorAll('.cita').length, mal: [...document.querySelectorAll('.cita')].filter((c) => !c.querySelector('.ver-ficha[data-resaltar]') || !c.querySelector('.cita-pdf')).length })); console.log(' citas', cc); ok(cc.mal === 0, 'cita sin doble enlace');
