@@ -274,7 +274,7 @@ export const MAYEUTICA_TERMOSTATO_FRIO = {
         paciente: { Edad: '55 años', Peso: '70 kg (del caso)', Motivo: 'Shock séptico de origen urinario' },
         lleva: [
           'En la sepsis la fiebre no se baja de rutina: la guía recomienda no suprimirla.',
-          'Tras una parada, con lesión cerebral isquémica, sí se trata, con paracetamol hasta el techo de 3 g/día; Merino Cardiología pone la ventana: mantener ≤37,5 °C durante 72 h salvo que despierte (ficha «Control de temperatura posparada»).',
+          'Tras una parada, con lesión cerebral isquémica, sí se trata, con paracetamol hasta el techo de 3 g/día (p. 72); Merino Cardiología pone la ventana: mantener ≤37,5 °C durante 72 h salvo que despierte (ficha «Control de temperatura posparada»).',
           'La manta de enfriamiento es del golpe de calor, no de la fiebre.'],
         volver: { nombre: 'Mantas de enfriamiento', ancla: 'ma-antip-mantas', modeloVivo: TV('fiebre:5') },
         pasos: [
