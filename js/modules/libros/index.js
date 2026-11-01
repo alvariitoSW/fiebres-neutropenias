@@ -49,6 +49,7 @@ import { MAYEUTICA_CUANTO } from '../../data/mayeutica/b6b-cuanto.js';
 import { MAYEUTICA_ENTERAL } from '../../data/mayeutica/b6b-enteral.js';
 import { MAYEUTICA_NPT } from '../../data/mayeutica/b6b-npt.js';
 import { MAYEUTICA_RECEPTOR } from '../../data/mayeutica/b6b-receptor.js';
+import { MAYEUTICA_OXIGENO } from '../../data/mayeutica/b6b-oxigeno.js';
 import { librosIndice } from '../../data/libros-indice.js';
 
 // Mismo patrón que el resto de especialidades: main.js fusiona banco, temas
@@ -241,6 +242,7 @@ export function init() {
     // Texto | Visual | Estudiar en las fichas de nutrición parenteral (6G, después de su vista Visual)
     Object.entries(MAYEUTICA_NPT).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     Object.entries(MAYEUTICA_RECEPTOR).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
+    Object.entries(MAYEUTICA_OXIGENO).forEach(([ficha, datos]) => montarMayeutica(ficha, datos));
     // Cada modelo vivo arranca por separado: si uno falla (p. ej. una forma de partícula que falta), los demás y el
     // resto de Libros siguen funcionando, y el error queda en la consola.
     const aguaViva = arrancar('río y mar', initAguaViva);
