@@ -190,7 +190,11 @@ export function puntoValva(v, uu, vv) {
   let w = res(BK, esc(v.n, pto(BK, v.n))); w = esc(w, 1 / (largo(w) || 1));
   const la = (v.largoMm ?? l * (v.largoAbierta ?? 1.05)) * vv;
   // thPunta (dibujo nuevo): el ángulo crece de thAbierta en el anillo a thPunta en el borde libre (sin gancho en la base)
-  const girada = (th) => { if (v.haciaSepto) { const f = th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(v.haciaSepto, la * Math.sin(f)), esc(v.n, la * Math.cos(f)))); } const t = v.thPunta === undefined ? th : th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(w, la * Math.cos(t)), esc(v.n, la * Math.sin(t)))); };
+  const girada = (th) => { if (v.haciaSepto) { const f = th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv);
+      let h = v.haciaSepto, lu = la;
+      // 223: con ventanaSepto, fuera de A2 la franja se inclina hacia la línea de cierre (w) con el largo de la cerrada (ver construirCorazonHoy)
+      if (v.ventanaSepto) { const s = v.ventanaSepto(uu); h = sum(esc(v.haciaSepto, s), esc(w, 1 - s)); h = esc(h, 1 / (largo(h) || 1)); lu = (s * la + (1 - s) * l * (v.largoAbierta ?? 1.05) * vv); }
+      return sum(B, sum(esc(h, lu * Math.sin(f)), esc(v.n, lu * Math.cos(f)))); } const t = v.thPunta === undefined ? th : th * (1 + (v.thPunta / v.thAbierta - 1) * vv * vv); return sum(B, sum(esc(w, la * Math.cos(t)), esc(v.n, la * Math.sin(t)))); };
   const media = girada(v.thAbierta / 2), abie = girada(v.thAbierta);
   const k0 = (1 - a) * (1 - 2 * a), k1 = 4 * a * (1 - a), k2 = a * (2 * a - 1);
   return [0, 1, 2].map(c => k0 * cerr[c] + k1 * media[c] + k2 * abie[c]);
@@ -553,6 +557,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const ap = (k) => clamp(estado[k] ?? 0, 0, 1), cg = (k) => clamp(estado['carga_' + k] ?? 0, 0, 1);
   // ajustes.velosFinos (dibujo nuevo): velos con la malla fina (24 pasos del anillo al borde y 24 a lo ancho): el corte del plano sale
   // como una línea suave y no como una poligonal de 7 tramos («cuencos»); el grosor lo da la imagen (TEJIDOS.valva), ilustrativo.
+  const VENTANA_A2 = [0.05, 0.2], TH_ABIERTA_POST = 1.2;   // 223: ver la mitral (ilustrativos)
   const NV_V = opciones.ajustes?.velosFinos ? 24 : 7, NI_T = opciones.ajustes?.velosFinos ? 24 : 12;
   const valva = (v) => rejilla(NI_T, NV_V, (uu, vv) => puntoValva(v, uu, vv));
   const abajo = [0, 0, -1], arriba = [0, 0, 1];
@@ -567,16 +572,24 @@ export function construirCorazonHoy(estado, opciones = {}) {
   const coapM = (t) => { const s0 = 1 - t, P0 = [0.508, 0.79], P1 = [-1.2, 0], P2 = [0.508, -0.79];
     const q = enAnilloM(s0 * s0 * P0[0] + 2 * s0 * t * P1[0] + t * t * P2[0], s0 * s0 * P0[1] + 2 * s0 * t * P1[1] + t * t * P2[1]); return [q[0], q[1], q[2] - tentM]; };
   const baseM = { anillo: anilloMitral, cierre: coapM, n: abajo, prof: 5, pot: 1.3, hundir: 0, abomba: 2.2, apertura: ap('mitral'), carga: cg('mitral'), thAbierta: opciones.ajustes?.mitralTh ?? 1.2, thPunta: opciones.ajustes?.mitralThPunta, largoAbierta: opciones.ajustes?.mitralLargo, largoMm: opciones.ajustes?.mitralLargoMm };
-  if (opciones.ajustes?.mitralSepto) { const d = [ac[0] - mc[0], ac[1] - mc[1]], nd = Math.hypot(d[0], d[1]) || 1; baseM.haciaSepto = [d[0] / nd, d[1] / nd, 0]; }   // dibujo nuevo: la valva anterior abierta se curva hacia el tabique (dirección centro mitral → centro aórtico)
+  if (opciones.ajustes?.mitralSepto) { const d = [ac[0] - mc[0], ac[1] - mc[1]], nd = Math.hypot(d[0], d[1]) || 1; baseM.haciaSepto = [d[0] / nd, d[1] / nd, 0];
+    // 223 · la valva anterior no se traslada entera hacia el tabique: cada franja gira sobre su propia bisagra. Solo el centro (A2) se
+    // vuelca hacia el tracto de salida; hacia las comisuras (A1, A3) cuelga como la cerrada, hacia dentro y con su propio largo,
+    // porque en la comisura las dos valvas son continuas (Hahn 2013 p. 942-943) y el orificio abierto es la «boca de pez» (p. 939).
+    // Así el A4C y el A2C siguen cortando A2 con la valva abierta (p. 932 y 937). Anchura de la ventana (±0,05 plena, 0 a ±0,2): ilustrativa.
+    baseM.ventanaSepto = (uu) => { const x = Math.abs(uu - 0.5); return x <= VENTANA_A2[0] ? 1 : x >= VENTANA_A2[1] ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * (x - VENTANA_A2[0]) / (VENTANA_A2[1] - VENTANA_A2[0])); }; }   // dibujo nuevo: la valva anterior abierta se curva hacia el tabique (dirección centro mitral → centro aórtico)
   // C1 · Festones (Carpentier, Hahn 2013 p. 942-943): uu = 0 es la comisura posteromedial (ψ = 1) y uu = 1 la anterolateral
   // (ψ = −1), en las dos valvas, que cierran en la misma línea con el mismo uu: así A1-A3 quedan frente a P1-P3. Posterior:
   // tres festones con dos hendiduras (P2, el central, el mayor); anterior: sin hendiduras, solo las mismas tres regiones.
   // Límites 0,3 / 0,7 (P2 el 40 %) y hondura de la hendidura (35 % del largo, solo con la valva abierta): ilustrativos.
+  // 223 · la posterior abre como en el dibujo de hoy (1,2 rad = 69° desde el plano del anillo, hacia la pared): mitralTh (0,4) es el ángulo de la
+  // anterior medido desde la vertical y la posterior lo heredaba medido desde el anillo (23°), casi cerrada en diástole; así el eje corto mitral no
+  // veía la «boca de pez» con las dos valvas (Hahn 2013 p. 939). Cifra ilustrativa (la de hoy).
   const FESTONES_M = (l) => [[l + '3', 0, 0.3], [l + '2', 0.3, 0.7], [l + '1', 0.7, 1]];
   const HENDIDURA = 0.35, ANCHO_HEND = 0.05, NU_M = 20;
   const hendidura = (v) => v.hendido ? (uu) => 1 - HENDIDURA * v.apertura * Math.max(0, ...[0.3, 0.7].map(s => 1 - Math.abs(uu - s) / ANCHO_HEND)) : () => 1;
   const valvasM = [{ ...baseM, nombre: 'Mitral anterior', psi: (t) => 1 - 2 * t, festones: FESTONES_M('A') },
-    { ...baseM, thPunta: undefined, largoAbierta: undefined, largoMm: undefined, haciaSepto: undefined, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
+    { ...baseM, thAbierta: TH_ABIERTA_POST, thPunta: undefined, largoAbierta: undefined, largoMm: undefined, haciaSepto: undefined, ventanaSepto: undefined, nombre: 'Mitral posterior', psi: (t) => 1 + (TAU - 2) * t, festones: FESTONES_M('P'), hendido: true }];
   for (const v of valvasM) { v.alto = hendidura(v); v.borde = (uu) => puntoValva(v, uu, v.alto(uu));
     anadirR(v.nombre, rejilla(NU_M, NV_V, (uu, vv) => puntoValva(v, uu, vv * v.alto(uu))), COLORES.valva, { dobleCara: true, segmentos: v.festones, malla: [NU_M, NV_V] }); }
   // B5 · Cortina aorto-mitral: la continuidad fibrosa entre la raíz aórtica (cúspides no coronaria e izquierda) y la valva
