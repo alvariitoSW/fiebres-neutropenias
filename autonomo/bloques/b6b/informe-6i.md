@@ -1,0 +1,13 @@
+# Informe 6I · El hígado que se envenena (Estudiar de mt-paracetamol, mt-nac, mt-alcoholes)
+Archivos: `js/data/mayeutica/b6b-higado.js` (nuevo, ~530 líneas), registro en `js/modules/libros/index.js`, versión 20261101-100, herramientas `autonomo/bloques/b6b/herramientas/{cifras-6i,largos-6i}.mjs` (y `mayeutica-6l.mjs` ahora carga también el 6I).
+Contenido: por ficha Guía (4-5), Examen (4-5), 2-3 casos de 5-6 pasos con giro (Casimira x2, Eufrasia x2, Nicanor, Gumersindo, Ruperto), «Para profundizar». Todo con página (PDF TX) y «Ver en la ficha»; cada estado enlaza el hepatocito vivo (`hepatocitoVivo`).
+Cifras de monitor medidas en la app a 390 px (`cifras-6i.mjs`): Casimira 118/72, 76, ALT 5.800, INR 3,4, amonio 165, WH 2; Eufrasia 118/70, 92; Nicanor 124/76, 88, ALT 900; Gumersindo 110/68, 104, pH 7,05, hiatos 28/40, lactato 6; Ruperto 130/80, 92, pH 7,18.
+Tests: 42; la buena más larga en 2 y más corta en 2 (límite 14); posiciones 15/14/13.
+Jueces: `--ficha` x3 en verde salvo «Forma · termostato vivo» (heredado). Prueba de Mayéutica (mt-*): mis 3 fichas verdes; fallos ajenos (mt-cuerpo del 6L; sondeo «vista Visual», que no aplica aquí).
+Frases de la auditoría del hepatocito aplicadas: «la mayor parte (≈90 %, Fig. 52.2)»; alcohol «puede bajar el glutatión»; fomepizol cada 4 h solo con varias sesiones; sin «>15 g casi segura» ni «el fomepizol no corrige».
+
+## Frases nuevas (para el auditor)
+Con página: vía 90/10 y −70 % (p. 4); 4 g FDA, 7,5-15 g, factores de riesgo, fases (p. 5); nomograma, liberación prolongada, dosis repetidas (p. 6); NAC 150/50/100, parada, ≥6,25 (p. 7); reacciones 9-77 % «sobre todo en la primera hora», >900 + encefalopatía, ≥12,5, 0,4 %, trasplante (p. 8); 600 preparados (p. 3); alcoholes: 80 %, >20 mg/dL, >8 mmol/L, cristales (p. 26-27); fomepizol, Tabla 53.2, pH <7,1, tiamina+piridoxina, 64 % (p. 28); visión 6-24 h, diálisis por visión, folínico, recordar (p. 29).
+Sin cita directa (inferencias de redacción): «el lactato puede despistar» como razón de frase (p. 26-27, se apoya en NADH); «NAC no se para porque baje el nivel» (p. 7, deriva de los 4 criterios); «repetir carga sin indicación = más reacciones» (distractores, p. 7-8); «el nivel puede seguir subiendo en liberación prolongada» (distractor, p. 6); cuentas por peso 8.250 / 688 / 1.125 / 750 mg (ilustrativas, rotuladas); casos y sus ALT/INR/creatinina: pacientes inventados (ALT 4.100, 2.400; creatinina 3,1; nivel 85 a las 8 h).
+## No comprobado / riesgo
+Eufrasia con 950 µg/mL en el día 2 es inventado para el umbral de >900 (clínicamente raro tras 12 g). No miré capturas a mano; la prueba midió desborde en 390/360 y pasó.
