@@ -54,6 +54,7 @@ const DATOS = {
           no('En más de la mitad, pero solo si la intubación fue difícil, con estenosis traqueal como lesión típica', `La dificultad y el tubo grande aumentan el riesgo, pero la lesión aparece en más de la mitad de los intubados más de 12 h; la estenosis traqueal es de la traqueostomía (${p(19)}, ${p(21)}).`)],
         explicacion: `<span class="hl-rojo">Más de la mitad</span> de los intubados más de 12 horas; más frecuente con intubación difícil, tubo grande y duración prolongada. El edema laríngeo da problemas al extubar (${p(19)}).` + enFicha(VA, 'nep-laringe') },
       { id: 'tubo-g6', corto: 'drenaje subglótico', tipo: 'test', fuente: 'nep-subglotico',
+        modeloVivo: { pulmonVivo: 'subglotica', texto: '🫁 Enciende la aspiración subglótica y mira la colección sobre el balón' },
         enunciado: 'Un tubo con drenaje subglótico tiene un conducto por encima del manguito. ¿Qué extrae y qué se espera de él?',
         opciones: [
           no('Las secreciones bronquiales de debajo del manguito, para no tener que aspirar por el tubo, y así evitar la aspiración de las vías por el tubo en cada turno', `El conducto drena lo que se acumula por encima del manguito inflado, no el moco bronquial (${p(19)}-${p(20)}).`),
