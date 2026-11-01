@@ -41,9 +41,9 @@ export const GUIA_VIAS = {
     { t: 'El glutatión neutraliza el metabolito tóxico con su cisteína; cuando se agota, el metabolito queda libre.', z: C, p: P4, o: 'ficha' },
     { t: 'La NAC aporta la cisteína que falta: es el antídoto. IV: 150 mg/kg en 1 h, 50 mg/kg en 4 h y 100 mg/kg en 16 h.', z: C, p: 'TX:7:mt-tabla-52-1', o: 'ficha' },
     { t: 'Empezada pronto, el glutatión se mantiene (en el modelo, el hígado no sufre); empezada tarde, frena lo que falta pero no devuelve los hepatocitos muertos.', z: C, p: P7, o: 'ilustrativo (el freno y cuánto protege; la fuente no lo cuantifica)' }]],
-  hemodialisis: ['Eleuterio · 950 µg/mL y encefalopatía a las 6 h', [
-    { t: 'Ingesta masiva (≈70 g, ilustrativo: el mando llega a 30) y llega a las 6 h con la consciencia deprimida y 950 µg/mL (ilustrativo). Es la fase 1 (antes de las 24 h): el glutatión se agotó con la ingesta y la NAC lo está reponiendo, y el hígado aún no ha muerto; lo urgente es el nivel.', z: C, p: P5, o: 'ficha (fases) · dosis, hora y nivel: ilustrativo' },
-    { t: 'Con paracetamol >900 µg/mL y encefalopatía, la ficha indica hemodiálisis además de la NAC; durante la diálisis, la NAC IV a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina.', z: C, p: P8, o: 'ficha' },
+  hemodialisis: ['Eleuterio · 950 µg/mL a las 6 h', [
+    { t: 'Ingesta masiva (≈70 g, ilustrativo: el mando llega a 30) y llega a las 6 h con 950 µg/mL (ilustrativo). Es la fase 1 (antes de las 24 h): el glutatión se agotó con la ingesta y la NAC lo está reponiendo, y el hígado aún no ha muerto; lo urgente es el nivel; la encefalopatía hepática es de la fase 3 (72-96 h).', z: C, p: P5, o: 'ficha (fases) · dosis, hora y nivel: ilustrativo' },
+    { t: 'Con paracetamol >900 µg/mL y encefalopatía hepática, la ficha indica hemodiálisis además de la NAC; durante la diálisis, la NAC IV a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina.', z: C, p: P8, o: 'ficha' },
     { t: 'La NAC repone la cisteína y la diálisis retira el paracetamol; si el daño progresa a pesar de eso, no devuelven las células muertas.', z: C, p: P7, o: 'ficha · inferencia del modelo' },
     { t: 'Si aparecen signos de daño que progresa pese a la NAC, hay que valorar el trasplante hepático.', z: C, p: P8, o: 'ficha' }]],
   etilenglicol: ['Gumersindo · etilenglicol', [

@@ -52,7 +52,7 @@ const guiaMas = [
     ops: [
       ['Baja la FC y frena la conversión de T4 a T3; la T4 libre sigue alta y aún falta el antitiroideo.', true, '', 54, 'mu-tabla-51-3'],
       ['La T4 libre baja a lo normal en pocos días: el betabloqueante apaga la glándula y sobra el antitiroideo.', false, 'El propranolol no frena la síntesis de T4: eso lo hacen el metimazol o el propiltiouracilo (Tabla 51.4). Sin antitiroideo, la glándula sigue a toda marcha y la T4 libre queda en 2,9.', 55, 'mu-tabla-51-4'],
-      ['Baja la FC, pero sube la T4 libre: el propranolol acelera la síntesis de la glándula.', false, 'El propranolol no toca la síntesis de T4 (eso lo hace el antitiroideo, Tabla 51.4): la T4 libre no sube, se queda en 2,9 mientras no pongas el antitiroideo; creer que la sube haría retirarlo y dejar a Sinforoso a 128 lpm.', 55, 'mu-tabla-51-3'],
+      ['Baja la FC, pero sube la T4 libre: el propranolol acelera la síntesis de la glándula.', false, 'No toca la síntesis: la T4 libre sigue en 2,9 hasta el antitiroideo (Tabla 51.4); creer que la sube haría retirarlo y dejar a Sinforoso a 128 lpm.', 55, 'mu-tabla-51-4'],
     ], tocar: { txt: 'Compruébalo: pon el propranolol', patch: { pac: 'sinforoso', set: { bb: 'prop', bbD: 0 } },
       cuenta: (a, d) => `la FC de Sinforoso pasa de ${a.fc} a ${d.fc} lpm y la T4 libre sigue en 2,9 ng/dL: ha frenado el pulso, no la glándula.` } },
   { num: 'G4', corto: 'Policarpo: cortisol con etomidato', estado: { pac: 'policarpo', lup: 'sr', vista: 'eje' },
