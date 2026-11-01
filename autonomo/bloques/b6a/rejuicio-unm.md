@@ -5,3 +5,8 @@ Miopatía sin guía de 3-5 pasos. Retoques: (1) `estilo.css` sellos en columna, 
 si hay `parada`; (3) `guia.js` pasos de `pnc` y `mcc` (p. 28-29); (4) `unm-b.mjs` mide sellos ≤ techo de la escena y foto
 08 de la lupa; (5) paso 3 de la hendidura: p. 24 solo si habla de anticuerpos, si no `fisiología general`; (6) rótulo «CV»
 en el pulmón.
+
+## Rejuicio final (tras los retoques) — **global 9,5** (meta de maqueta cumplida)
+390 px 9,0→9,5 · modelo y topes 9,25→9,5. Pendiente leve para la app: la prueba vigile también las guías `pnc`/`mcc` y
+la foto 08 enseñe la lupa; aire bajo la escena cuando hay sello grande (la frase fija tapa Pulgar/Pulmón); mecanismo
+de «empeora la miastenia» con fuente externa (§1.15) en «Para profundizar».
