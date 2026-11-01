@@ -7,7 +7,7 @@ import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, extname, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..', '..', '..', '..');
-const OUT = join(RAIZ, 'autonomo/bloques/mv-eco/capturas-realismo/mov'); await mkdir(OUT, { recursive: true });
+const OUT = process.env.OUT || join(RAIZ, 'autonomo/bloques/mv-eco/capturas-realismo/mov'); await mkdir(OUT, { recursive: true });
 const TIPOS = { '.html': 'text/html', '.mjs': 'text/javascript', '.js': 'text/javascript', '.css': 'text/css', '.jpg': 'image/jpeg', '.png': 'image/png' };
 let pw; for (const r of ['playwright', '/opt/node22/lib/node_modules/playwright/index.mjs']) { try { pw = await import(r); break; } catch {} }
 const srv = createServer(async (req, res) => { try { const r = join(RAIZ, decodeURIComponent(new URL(req.url, 'http://x').pathname)); if (!r.startsWith(RAIZ)) throw 0;
@@ -88,9 +88,12 @@ for (const [clave, esc, g, pre] of DOP) {
   try {
   const pg = await abrir(clave, esc, g, null);
   if (clave.startsWith('d-it-') && !(await pg.$(`[data-muestra="${pre}"]`))) { md += `## ${clave}\n- NO CAPTURADA: no hay botón [data-muestra="${pre}"] (la IT CW aún no está en doppler.mjs). Lánzala con IT_PRESET=<nombre> cuando exista.\n\n`; console.log('SALTADA', clave, '(IT CW no existe aún)'); await pg.close(); continue; }
-  await pg.evaluate((p) => { if (p === 'regtricus') window.__motor.p.eroaTricus = 0.1; window.__eco.modo('D'); window.__eco.doppler.muestra(p); }, pre);   // IT: eroaTricus = 0,1 como eroaMitral para la IM (wt/p5f)
+  await pg.evaluate((p) => { if (p === 'regtricus') window.__motor.p.eroaTricus = 0.1; if (p === 'regmitral' && !(window.__motor.p.eroaMitral > 0)) window.__motor.p.eroaMitral = 0.2; window.__eco.modo('D'); window.__eco.doppler.muestra(p); }, pre);   // IT: eroaTricus = 0,1 como eroaMitral para la IM (wt/p5f)
   try { await pg.waitForFunction(() => !/^Midiendo/.test(document.getElementById('cv-d-resultado')?.innerText || 'Midiendo'), null, { timeout: 25000 }); } catch { errores.push(`${clave}: el Doppler no terminó de medir`); }
   await pg.waitForTimeout(3500);
+  // arreglo 5 (v2d): al bajar hasta el espectro, el punto superior de #cv-d debe ser el lienzo, no el bloque fijo de la imagen/gravedad
+  const tapa = await pg.evaluate(() => { const d = document.getElementById('cv-d'); d.scrollIntoView({ block: 'start' }); const r = d.getBoundingClientRect(), e = document.elementFromPoint(r.left + r.width / 2, Math.max(r.top, 0) + 4); return e && !d.parentElement.contains(e) ? (e.id || e.className || e.tagName) : null; });
+  if (tapa) errores.push(`${clave}: el espectro queda tapado por ${tapa}`);
   await recorte(pg, join(OUT, `${clave}.png`));
   const med = await pg.evaluate(() => { const m = window.__eco.doppler.medidas(), f = window.__eco.doppler.fuente(); return { m, n: f?.n }; });
   secc(clave, `${esc}${g != null ? ', g=' + g : ''}, preajuste ${pre}`, [['Resultado del Doppler', await t(pg, 'cv-d-resultado'), 'monitor'], ['Medidas internas (E, A, E/A, TDE/DT, pico, ITV)', JSON.stringify(med.m, (k, v) => typeof v === 'number' ? +v.toFixed(2) : v), 'monitor interno de la app (__eco.doppler.medidas); e′ no la da hoy'],

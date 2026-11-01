@@ -2486,6 +2486,8 @@ body.hay-vista-visual #btn-modo-visual { display: inline-block; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]), .cv-eco-fijo:has(.cv-gravedad:not([hidden])) { position: sticky; top: 0; z-index: 5; background: var(--bg-main); padding-bottom: 4px; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-eco canvas, .cv-eco-fijo:has(.cv-gravedad:not([hidden])) .cv-eco canvas { width: min(100%, 37.5vh); height: auto; margin: 0 auto; }
 .cv-eco-fijo:has(~ .cv-mandos-img[open]) .cv-senal-frase, .cv-eco-fijo:has(.cv-gravedad:not([hidden])) .cv-senal-frase { font-size: 0.74rem; padding: 4px 8px; }
+/* con el modo M o el Doppler abiertos, el bloque no se fija: su texto de gravedad taparía el espectro */
+#cv-eco-fijo.cv-sin-fijo { position: static; }
 /* que la imagen fija no tape el mando al que salta la página */
 .cv-mandos-img[open] :is(input, button, .cv-sonda-fila) { scroll-margin-top: 46vh; }
 
