@@ -19,7 +19,7 @@ import { baseGeometrica, REF, usarDibujo } from './corazon-geo.mjs';
 import { paredesDe } from './anatomia.mjs';
 import { PUNTOS_ABDOMEN } from './abdomen-puntos.mjs';
 import { ARRIBA, DELANTE, DERECHA } from './mat.mjs';
-import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
+import { TEJIDOS, DB_IMAGEN, PERICARDIO_FINO, CAIDA_PROFUNDIDAD, CAIDA_LATERAL, BORDE_ENDO, SURCOS_NUEVO, SOMBRA_NUEVA, PARED_VD_NUEVO, PARED_AURICULAR_NUEVO, DROPOUT_SEPTO } from '../../data/eco-tejidos.js';
 
 const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
 const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -747,6 +747,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         if (dd >= h + 0.35) continue;
         const cc = clamp((h - dd) / 0.35 + 0.5, 0, 1);
         if (variar === 1) a = a0 * amp(PERICARDIO_FINO.moteadoDb * Math.sin(q * 12.9898 + 78.233 * Math.sin(q * 0.371)));
+        else if (variar === 3) a = a0 * amp(PARED_AURICULAR_NUEVO.moteadoDb * Math.sin(q * 12.9898 + 78.233 * Math.sin(q * 0.371)));   // pared auricular: moteado como el miocardio
         if (espec) { if (cc * a > A[q]) A[q] = cc * a; if (cc >= 0.5) { FILL[q] = 0; if (etiquetar && !TAG[q]) TAG[q] = tag; } }
         else { A[q] += cc * (a - A[q]); if (cc >= 0.5) { TAG[q] = tag; FILL[q] = 0; } }
       }
@@ -803,6 +804,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
         if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db + (el.radioCavidad != null ? BORDE_ENDO.extraPequenoDb * clamp((BORDE_ENDO.rmDesdeMm - el.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1) : 0) : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
+        else if (W2 > 0 && dibujoNuevo() && /^(AI|AD|Orejuela)/.test(el.grupo)) trazar(P, el.seg, PARED_AURICULAR_NUEVO.ancho, el.db + PARED_AURICULAR_NUEVO.db * W2, espec, tag, m.especular, 1, false, 3);
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db + (dibujoNuevo() && /^(Grasa|Seno|Coronaria|Vena)/.test(el.grupo) ? SURCOS_NUEVO.db : 0), espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
       }

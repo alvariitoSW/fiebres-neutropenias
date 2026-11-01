@@ -59,4 +59,8 @@ export const DB_IMAGEN = {
 };
 // Pared libre del VD en el dibujo nuevo: es fina y el haz la corta oblicua; en vez de los −3 dB de hoy (más tenue que el VI) se
 // realza unos dB para que se vea al menos al 60 % del tabique (ilustrativo; fisiología general: el VD es músculo, solo más delgado).
+// Pared de las aurículas del dibujo nuevo (con «paredes reales»): ~2,5 mm de grosor y moteado como el miocardio, algo más tenue
+// que el VI (db: dB extra sobre la pared de aurícula; moteadoDb: amplitud del grano). En la eco la pared auricular fina se ve gris
+// y granulosa, no como un alambre (idea de Lang 2015 / Mitchell 2019, que no dan el grosor): grosor y dB, ilustrativos.
+export const PARED_AURICULAR_NUEVO = { ancho: 2.5, db: -4, moteadoDb: 4, origen: 'ilustrativo' };
 export const PARED_VD_NUEVO = { db: 4, origen: 'ilustrativo' };
