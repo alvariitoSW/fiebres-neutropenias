@@ -17,6 +17,7 @@ import { openCorkboardTopic } from '../../core/corkboard.js';
 import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
+import { fraDe, montarVolumen, repintarVolumen, dibujarRabdo, avisosRabdo } from './nefrona-viva-b4.js';
 import { pintarParticula, svgParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const CIF = cifrasNefrona;
@@ -108,7 +109,7 @@ function modelo(sit, farm, glucemia) {
 // Fracaso renal agudo: la orina es la de la Tabla 3 de la ficha (en `fra`),
 // y el reparto por tramos se ajusta para que la animación llegue a ella.
 function modeloFra(s, farm) {
-    const f = s.fra;
+    const f = fraDe(s, farm);
     const M = f.M, Umin = CIF.osmMin, a = s.adh;
     const rDesc = rDescDe(M);
     const aguaCol = CIF.filtradoL * f.tfg * (1 - CIF.aguaProximal) * (1 - rDesc);
@@ -262,7 +263,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         ca: { nombre: 'Ca²⁺', clave: 'ca', tasa: 2.5, r: 2 },
         mg: { nombre: 'Mg²⁺', clave: 'mg', tasa: 2, r: 2 },
         p: { nombre: 'Fosfato', clave: 'p', tasa: 2.5, r: 2.2 },
-        celula: { nombre: 'Célula desprendida (NTA)', clave: 'celula', tasa: 0, r: 2.4 },
+        celula: { nombre: 'Célula desprendida', clave: 'celula', tasa: 0, r: 2.4 },
     };
     // Vista de célula: [nombre del rótulo, color (para rótulos y guías), especie de la tabla].
     // `ca` es el paso de Ca²⁺ y Mg²⁺ entre las células: alterna las dos formas.
@@ -427,7 +428,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         // FRA: cilindros en el colector, obstrucción y perfusión
         if (M.fra) {
             const hialino = !M.fra.nta && !M.fra.obstruccion;
-            if (!M.fra.obstruccion) for (const y of [300, 384]) {
+            if (!M.fra.obstruccion && !M.fra.volumenOn) for (const y of [300, 384]) {
                 c.fillStyle = hialino ? alfa(C.texto, 0.4) : '#7a5230';
                 c.beginPath(); c.roundRect(88.5, y, 7, 24, 3.5); c.fill();
                 if (!hialino) { c.fillStyle = '#c9a678'; for (let k = 0; k < 5; k++) { c.beginPath(); c.arc(90.5 + (k % 2) * 3, y + 4 + k * 4, 0.9, 0, 7); c.fill(); } }
@@ -439,6 +440,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 etiqueta(c, '↑ presión hacia atrás', 160, 300, CLARO.rojo);
             }
             if (!M.fra.nta && !M.fra.obstruccion) etiqueta(c, '↓ perfusión renal', 76, 40, CLARO.rojo);
+            dibujarRabdo(c, M.fra, etiqueta, CLARO.rojo, C.verde);
             if (M.fra.nta) etiqueta(c, 'células desprendidas', 300, 186, CLARO.rojo, 'right');
         }
         // Lo que sigue en la luz (L/día)
@@ -558,7 +560,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         return `<g>${g}<animateMotion dur="${dur}s" begin="${retraso}s" repeatCount="indefinite" path="${ruta}"/>${fade}</g>`;
     }
     const bloqueado = (seg, canal) => {
-        if (M.fra?.nta && (seg === 'tubulo-proximal' || seg === 'asa-ascendente-gruesa')) return { nombre: 'NTA', danio: true };
+        if (M.fra?.nta && (seg === 'tubulo-proximal' || seg === 'asa-ascendente-gruesa')) return { nombre: M.fra.rabdo ? 'daño por mioglobina' : 'NTA', danio: true };
         const f = farmacosNefrona.find(x => x.id === estado.farm);
         if (f.segmento === seg && f.canal === canal) return f;
         return efecto(seg, canal, 'bloquea'); // lo que falla en la situación (ATR, PTH, FGF23)
@@ -685,7 +687,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 const yl = f.y0 + f.h - 4;
                 textos += txt(lblX, yl - (cn.intercalar || esAqp2 || cn.nombre === 'ROMK' || cn.depende || esUrea || bl || danada || sinCanal || act ? 11 : 0), `${cn.nombre}${esAqp2 && !sinCanal ? ` ×${veces} (ADH)` : ''}`, { size: plano ? 9 : 10, peso: 'bold' });
                 let nota = '';
-                if (danada) nota = 'Célula dañada (NTA): apenas reabsorbe';
+                if (danada) nota = `Célula dañada ${M.fra.rabdo ? 'por la mioglobina' : '(NTA)'}: apenas reabsorbe`;
                 else if (bl) nota = bl.nota ?? `Bloqueado: ${bl.nombre}${bl.receptor ? ' (receptor de aldosterona)' : ''}`;
                 else if (sinK) nota = `Sin K⁺ que reciclar: ${sinK.nombre} bloquea ${cn.depende}`;
                 else if (act) nota = act.nota;
@@ -716,7 +718,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 }
                 const yl = f.y0 + f.h - 4;
                 textos += txt(lblX, yl - 11, 'Anhidrasa carbónica (enzima)', { size: 10, peso: 'bold' });
-                textos += txt(lblX, yl, off ? (danada ? 'Célula dañada (NTA)' : bl.nota ?? 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
+                textos += txt(lblX, yl, off ? (danada ? (M.fra.rabdo ? 'Célula dañada por la mioglobina' : 'Célula dañada (NTA)') : bl.nota ?? 'Bloqueada: el HCO₃⁻ se queda en la luz') : 'H⁺ + HCO₃⁻ → CO₂ + H₂O, y al revés dentro', { size: 8, color: off ? CLARO.rojo : C.suave });
             } else if (f.t === 'para') {
                 const yc = f.y0 + f.h / 2;
                 // Sin la carga positiva de la luz (NKCC2 bloqueado), el Ca²⁺ y el Mg²⁺ se quedan en la luz.
@@ -914,7 +916,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
             ['Osmolalidad', `${Math.round(M.Uosm)} mOsm/kg`, extremo, signo(M.Uosm, REF.Uosm), estado.sit === 'siadh' && sinFarm ? 'Ficha: >100 mOsm/kg, inapropiadamente concentrada' : notaOsm(M.Uosm)],
             sit.naOrina && sinFarm
                 ? ['Na⁺ en orina', sit.naOrina, true, 'sube', 'Con ingesta normal de sal y agua']
-                : [enPico() ? 'Na⁺ excretado en el pico' : 'Na⁺ excretado', `${fen < 1.95 ? fen.toFixed(1).replace('.', ',') : Math.round(fen)}% del filtrado`, sinFarm, signo(M.fena, REF.fena, 0.3), 'El resto se reabsorbe'],
+                : [enPico() ? 'Na⁺ excretado en el pico' : 'Na⁺ excretado', `${fen < 1.95 ? fen.toFixed(1).replace('.', ',') : Math.round(fen)}% del filtrado`, sinFarm && estado.sit !== 'rabdo', signo(M.fena, REF.fena, 0.3), estado.sit === 'rabdo' ? 'Ilustrativo: la EFNa puede ser falsamente baja con mioglobinuria (Marino, p. 54)' : 'El resto se reabsorbe'],
             ['K⁺ en orina', `×${num(M.kRel)}`, false, signo(M.kRel, 1, 0.12), M.kRel > 1.15 ? 'Se pierde K⁺' : M.kRel < 0.85 ? 'Se ahorra K⁺' : 'Respecto a lo normal'],
             ['Glucosa', M.gGdia > 0.5 ? `${Math.round(M.gGdia)} g/día` : 'No', M.gGdia <= 0.5 && estado.farm !== 'isglt2', M.gGdia > 0.5 ? 'sube' : '', M.gGdia > 0.5 ? 'Glucosuria' : 'Se reabsorbe el 100%'],
             ['HCO₃⁻', M.hco3 > 0.05 ? 'Sale' : 'Casi nada', false, M.hco3 > 0.05 ? 'sube' : '', M.hco3 > 0.05 ? 'Orina alcalina' : 'Lo recupera el proximal'],
@@ -952,6 +954,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         if (estado.sit === 'siadh') av.push('La orina se parece a la de la deshidratación, pero la sangre no: la ADH actúa sin que el plasma lo pida, el agua retenida diluye el sodio y el riñón sigue eliminando Na⁺ (más de 40 mEq/l en orina).');
         if (estado.sit === 'prerrenal') av.push('Llega poca sangre: se filtra menos, pero el túbulo sano recupera casi todo el sodio y la ADH concentra la orina.');
         if (estado.sit === 'nta') av.push('Las células que se caen viajan con la orina y forman cilindros granulosos en el colector.');
+        av.push(...avisosRabdo(estado));
         if (estado.sit === 'obstruccion') av.push('La orina no puede salir: se acumula en el colector y la presión sube hacia atrás hasta el glomérulo.');
         if (s.aviso && f.id === 'ninguno') av.push(s.aviso);
         if ((M.acido || M.mineral) && f.id !== 'ninguno') av.push('Con un fármaco puesto, las cifras de la orina son las del fármaco; quita el fármaco para ver las de la tabla de la ficha.');
@@ -969,7 +972,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
                 const bl = bloqueado(estado.seg, cn.nombre);
                 const sinK = !bl && cn.depende && bloqueado(estado.seg, cn.depende);
                 const act = efecto(estado.seg, cn.nombre, 'activa');
-                const estadoTxt = bl ? (bl.danio ? 'célula dañada (NTA)' : bl.nota ?? `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : act ? act.nota : '';
+                const estadoTxt = bl ? (bl.danio ? (M.fra.rabdo ? 'célula dañada por la mioglobina' : 'célula dañada (NTA)') : bl.nota ?? `bloqueado por ${bl.nombre}`) : sinK ? `sin K⁺ que reciclar (${sinK.nombre})` : act ? act.nota : '';
                 return `<div class="nv-canal${bl || sinK ? ' bloq' : ''}"><h4>${cn.nombre}${estadoTxt ? ` <span>· ${estadoTxt}</span>` : ''}</h4>${cn.funcion}${cn.diana ? `<div class="nv-canal-diana">Diana: ${cn.diana}</div>` : ''}</div>`;
             }).join('')
             + (d.general ? `<p class="nv-general">${d.general}</p>` : '');
@@ -995,7 +998,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
         raiz.querySelectorAll('#nv-situaciones .visual-mini').forEach(b => { const on = b.dataset.id === estado.sit; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
         raiz.querySelectorAll('#nv-farmacos .visual-mini').forEach(b => { const on = b.dataset.id === estado.farm; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
         $('#nv-glucemia-box').hidden = estado.sit !== 'hiperglucemia';
-        pintarFondo(); pintarMedidores(); pintarExplica();
+        repintarVolumen(raiz, estado); pintarFondo(); pintarMedidores(); pintarExplica();
         lienzo.setAttribute('aria-label', `Nefrona animada. ${situacionesNefrona.find(x => x.id === estado.sit).nombre}${estado.farm !== 'ninguno' ? ' con ' + farmacosNefrona.find(x => x.id === estado.farm).nombre : ''}: orina ${enPico() ? num(M.V * 1000 / 1440) + ' ml/min en el pico' : num(M.V) + ' L/día'}, ${Math.round(M.Uosm)} mOsm/kg.`);
         if (estado.seg) pintarDetalle();
         // Sin tramo elegido no hay célula que pintar (p. ej. un botón de la ficha
@@ -1032,6 +1035,7 @@ export function initNefronaViva({ onCategoria, mostrarVista }) {
 
     chips('#nv-situaciones', situacionesNefrona, 'sit');
     chips('#nv-farmacos', farmacosNefrona, 'farm');
+    montarVolumen(raiz, estado, actualizar);
     actualizar();
 
     return {

@@ -41,6 +41,7 @@ export const BANCOS = [
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemostasia (bloque 2)', datos: 'js/data/mayeutica/b2-hemostasia.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · el shock (bloque 3A)', datos: 'js/data/mayeutica/b3.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · bloque 4 (Marino caps. 31-38)', datos: 'js/data/mayeutica/b4.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · bloque 5 (Marino caps. 39-44)', datos: 'js/data/mayeutica/b5.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'shock vivo', datos: 'js/data/shock-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'pulmón vivo', datos: 'js/data/pulmon-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
@@ -48,6 +49,7 @@ export const BANCOS = [
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'iones vivos', datos: 'js/data/iones-vivos-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'hepatocito vivo', datos: 'js/data/hepatocito-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'termostato vivo', datos: 'js/data/termostato-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
@@ -86,8 +88,8 @@ export const MODELOS = {
     // El corazón eléctrico: el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
-    // Iones vivos (b4): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-iones-vivos)
-    'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar' },
+    // Iones vivos (b4): Explorar | Preguntas (Mayéutica del motor común; el estado va en data-iones-vivos)
+    'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar', mayeutica: '#iov-modo-preguntas' },
         estados: ['normal', 'damian', 'rufino', 'valentin', 'adela'] },
     // Hepatocito vivo (b5): Explorar | Apuesta | Error | Error de Hilario | Caso (Mayéutica del motor común en «Preguntas»: el estado va en data-hepatocito-vivo; «alta:tips» pone el TIPS)
     'hepatocito-vivo': { raiz: '#hpv-raiz', enlace: { especialidad: 'libros', view: 'hepatocitoVivo' }, clave: 'hepatocitoVivo', modo: { explorar: '#hpv-modo-explorar', mayeutica: '#hpv-modo-preguntas' },

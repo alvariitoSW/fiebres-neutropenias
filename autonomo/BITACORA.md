@@ -322,6 +322,13 @@ esta sección.
   `kv-row`; (5) resaltes en la frase viva de la nefrona. Después, `capturas.mjs` y rejuicio solo de esos puntos.
 - **Visto de paso**: la app dice «Texto | Mayéutica | Estudiar» y REGLAS §8 «Texto | Estudiar»: o cambia la regla o la app.
 
+### B-053 · Repaso del Estudiar del `b4` (grupos 4A-4D) a la nota de corte 9,5 · apuntado 2026-11-01
+- **Qué**: las 23 fichas de Marino caps. 31-38 con Estudiar entraron en `main` (PR #82) con su nota de 8,75-9,0. Se
+  juzgaron antes de que la nota de corte pasara a 9,5 (01/11, 17:49), y el usuario decidió que entraran así. Tipo: estudio
+  (rejuicio R8 con receta R10 y vueltas cortas). Lo más bajo: 4B (≥8,75) y 4D, fichas 21-22 (8,75).
+- **Coste**: ≈8-12 M (profesor fable por grupo y constructores sonnet). Dónde: Libros → Marino · Ácido-base, renal y
+  electrolitos. Origen: acta `autonomo/consejo/2026-11-01-pr82.md` (Educación lo pidió como deuda de estudio).
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |
