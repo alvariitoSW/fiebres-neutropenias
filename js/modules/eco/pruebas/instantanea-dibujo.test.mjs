@@ -11,7 +11,8 @@ import os from 'node:os';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { crearMotor } from '../motor.mjs';
 import { ESCENARIOS, ASENTAR_FORMA } from '../escenarios.mjs';
-import { construirCorazon } from '../corazon-geo.mjs';
+import { construirCorazon, usarDibujo } from '../corazon-geo.mjs';
+usarDibujo(1);   // esta instantánea congela el dibujo de antes (también en los hilos)
 import { estadoGeo, extraDeMotor } from '../formas.mjs';
 import { medirForma, CASOS_FORMA, claveCaso } from './medir-forma.mjs';
 
