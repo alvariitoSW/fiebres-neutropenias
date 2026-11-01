@@ -171,7 +171,7 @@ export const MAYEUTICA_TUBO_2 = {
                 ok('Descomprimes ya: una emergencia con shock obstructivo, que puede acabar en actividad eléctrica sin pulso'),
                 no('Subes la PEEP y el volumen para mejorar la saturación mientras se prepara el tubo', `Más presión positiva añade aire a una pleura que ya lo retiene (${p(27)}-${p(28)}); que además empeore el gasto cardíaco es fisiología general.`)],
               explicacion: `Aire pleural a presión → colapso del pulmón, caída progresiva del gasto → <span class="hl-rojo">shock obstructivo</span> y, si no se trata, paro por AESP: se considera en todo ventilado con hipoxemia o hipotensión inexplicadas (${p(27)}-${p(28)}).`,
-              nota: 'La PAM de 59 sale del monitor del modelo (aire pleural de 10,5 cmH₂O): ilustrativa; la fuente no da cifras.' + enFicha(CB, 'nep-neumotorax-tension') } },
+              nota: 'La PAM de 52 sale del monitor del modelo (7 pulsaciones, aire pleural de 10,5 cmH₂O): ilustrativa; la fuente no da cifras.' + enFicha(CB, 'nep-neumotorax-tension') } },
           { momento: 'Día 4 · 48 h con el tubo', datos: { Tubo: '12 Fr', Succión: '−20 cmH₂O', 'Sello de agua': 'burbujea a cada ciclo', Evolución: '48 horas así' }, nuevo: ['Tubo', 'Succión', 'Sello de agua', 'Evolución'],
             pregunta: { id: 'baro-c5', tipo: 'test', fuente: 'nep-succion', origen: ILU,
               enunciado: 'A las 48 horas el drenaje de Rafael, con succión de −20, sigue burbujeando. ¿Qué haces?',
