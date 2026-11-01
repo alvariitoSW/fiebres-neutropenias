@@ -62,3 +62,9 @@
 #hep-svg .aspa { stroke: var(--accent-red); stroke-width: 2.2; fill: none; } #hep-svg .apag { fill: var(--accent-red); font-weight: 700; }
 .chip-ilus { display: inline-block; border: 1px solid var(--text-muted); border-radius: 999px; padding: 0 6px; font: 600 .64rem/1.4 var(--sans); color: var(--text-muted); }
 .crecera li { margin-bottom: 3px; }
+.idea { font-size: .72rem; line-height: 1.3; } .idea .cita, .mon-ch .cita-pdf, .mon-ch .ver-ficha { white-space: nowrap; } .idea .cita { white-space: normal; }
+.cabecera .cab-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; } .cabecera .aviso { padding: 0 6px; }
+#monitor .mon-ch { font-size: .62rem; line-height: 1.3; }
+.idea, .idea .cita, .mon-ch { display: block; } .idea .cita, .idea .org, .mon-ch * { display: inline; }
+.idea .cita a, .idea .cita button, .mon-ch a, .mon-ch button { min-height: 0 !important; height: auto; padding: 0; margin: 0; line-height: 1.3; display: inline; }
+.idea .cita { margin-left: 2px; }

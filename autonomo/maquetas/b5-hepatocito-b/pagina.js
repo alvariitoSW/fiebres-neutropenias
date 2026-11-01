@@ -26,7 +26,7 @@ function pintar() {
   $('hep-svg').innerHTML = escena(s, L, oculto) + focoSvg(foco);
   const v = vitales(s), cap = L.a >= 300;
   $('mon-nh3').textContent = oculto ? '? µmol/L' : `${cap ? '≥' : ''}${fmt(L.a)} µmol/L`; $('mon-wh').textContent = oculto ? '?' : String(L.wh); $('mon-carril').textContent = `${s.func} %`;
-  $('mon-dep').textContent = s.dep ? `${s.dep}/día` : 'sin lactulosa'; $('mon-pa').textContent = v.pa + (v.nota ? ' ' + v.nota : ''); $('mon-fc').textContent = v.fc;
+  $('mon-dep').textContent = s.dep ? `${s.dep} dep./día` : 'no'; $('mon-pa').textContent = v.pa + (v.nota ? ' ' + v.nota : ''); $('mon-fc').textContent = v.fc;
   $('mon-astro').textContent = oculto ? 'Astrocito: ?' : `Astrocito: ${L.sw > 0.4 ? 'hinchado' : 'normal'}`;
   document.querySelectorAll('.modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
   document.querySelectorAll('.presets button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === preset)));

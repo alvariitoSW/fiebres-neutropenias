@@ -10,7 +10,7 @@ export function amonio(s, conCvvh = s.cvvh) {
 export const umbral = (s) => (s.prod === 2 && s.func < 30 ? FIG.umbralRapido : FIG.umbral);
 export const westHaven = (s) => (s.func >= 60 ? 0 : s.func >= 40 ? 1 : s.func >= 15 ? 2 : s.func >= 5 ? 3 : 4);
 export function leer(s) {
-  const a = amonio(s), sw = clamp((a - FIG.normal) / (FIG.cap - FIG.normal), 0, 1);
+  const a = amonio(s), sw0 = clamp((a - FIG.normal) / (FIG.cap - FIG.normal), 0, 1), sw = s.edema ? Math.max(sw0, 0.8) : sw0;
   const n = Math.round(FIG.prod[s.prod] * 4 * (1 - FIG.lactPorDep * Math.min(s.dep, FIG.lactMaxDep)) * (s.rifa ? FIG.rifa : 1));
   return { a, sw, wh: westHaven(s), carril: s.func, sinCvvh: amonio(s, 0), nProd: n, nSale: clamp(Math.round(a / 30), 0, 8), nGlu: Math.round(sw * 6), edema: !!s.edema || a > umbral(s), manda: !!s.edema && a <= umbral(s) };
 }

@@ -23,3 +23,19 @@ Frases de mecanismo o conducta escritas por el constructor (no copiadas de la fi
 - Escala del modelo (A0, frenos, tope del monitor 300) y West Haven por hepatocitos vivos: ilustrativos, anotado en la maqueta.
 - Caso paso 4: con CVVH puesta el amonio del modelo marca 81 y hay edema en la TC: se cuenta como «la CVVH llegó tarde» (p. 8: eficacia dependiente del tiempo), no hay cifra del libro.
 - Cifras de Casimira (ALT 5.800, bilirrubina 2,1, INR 3,4, creatinina 1,1, albúmina 2,6, diuresis 0,3, PA 82/45): paciente inventado del plan del bloque.
+
+## Vuelta 2a (nuevas)
+| Frase nueva | Página |
+|---|---|
+| «Rifaximina: 400 mg tres veces al día durante al menos 10 días, y suele combinarse con lactulosa» (frase del «Error» y aviso del mando de días 0-14) | p. 7 |
+| «Un amonio arterial >150 µmol/L (normal <60) marca un riesgo aumentado de edema cerebral» (frase del «Error» y chip de escala 60/150) | p. 7 |
+| «Es un antibiótico que no se absorbe; solo es eficaz, pero se suele asociar a lactulosa» (explicación de la frase de rifaximina) | p. 7 |
+| «El arterial predice mejor que el venoso al principio» (explicación) | p. 7 |
+| Sello «la TC manda, no la cifra» con edema en el paso 4 (surcos borrados, Fig. 39.2) | p. 6-7 |
+| Aviso de rifaximina <10 días: «un ciclo más corto no es el que describe el libro» | p. 7 (sin consecuencia clínica en la fuente) |
+
+## Sin cita (vuelta 2a)
+- PA 104/60 «con noradrenalina» y FC 92 en el paso 4: paciente inventado; cifras ilustrativas (la ficha no da constantes).
+- Umbral rápido 120 en el sello: «opinión del autor» (rotulado en el propio sello).
+- Duración de rifaximina 0-14 días: el tope 14 del mando es ilustrativo; el mínimo 10 viene de la p. 7.
+- Rótulos de «apagado» en el carril: sin cifra; es la misma regla de hepatocitos vivos (ilustrativa).
