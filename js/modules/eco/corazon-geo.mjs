@@ -1056,8 +1056,8 @@ export function baseGeometricaHoy(estado, ajustes = {}) {
   const mcc = ajustes.mcconnell && estado.vvdTd ? clamp(estado.mcconnell ?? 0, 0, 1) : 0;
   const sReg = mcc > 0 ? (z, f) => { const e = (-z / Lvd - 0.45) / 0.16, d = (anguloNorm(f) - 2.4) / 0.8; return mcc * Math.exp(-e * e - d * d); } : () => 0;
   // El ápex, en cambio, se cierra con la sístole (excursión normal, 5,7 mm de McConnell sobre una luz apical de unos 11 mm: cierra
-  // APEX_CIERRE = 0,85 de su luz (v2g: con 0,5 se leía ~11 px a 390)); p = 1 en cuanto el VD expulsa algo (≥ 5 % de su telediástole), 0 en telediástole. Cifras ilustrativas.
-  const APEX_CIERRE = 0.85, pSis = mcc > 0 ? clamp((1 - vvd / estado.vvdTd) / 0.05, 0, 1) : 0;
+  // APEX_CIERRE = 0,5 de su luz: el ápex se mueve ~5,7 mm, la cifra de McConnell 1996 (5,7 ± 0,8 mm; pubmed 8752195). La v2g lo subió a 0,85 (9,6 mm) para leerse mejor; el director lo devolvió a 0,5: no se exagera la fuente, la legibilidad va por el foco VD); p = 1 en cuanto el VD expulsa algo (≥ 5 % de su telediástole), 0 en telediástole. Cifras ilustrativas.
+  const APEX_CIERRE = 0.5, pSis = mcc > 0 ? clamp((1 - vvd / estado.vvdTd) / 0.05, 0, 1) : 0;
   const qApex = mcc > 0 ? (z, f) => { const e = (-z / Lvd - 0.85) / 0.15, d = (anguloNorm(f) - 2.4) / 0.8; return 1 - APEX_CIERRE * mcc * pSis * Math.exp(-e * e - d * d); } : () => 1;
   // El endocardio de esa zona se queda donde estaba en la telediástole (radio de la geometría del volumen telediastólico): luz objetivo
   // = radio de la telediástole − radio del epicardio del VI de ahora. Así tampoco lo arrastra el tabique. La luz sigue siendo a + A·b con
