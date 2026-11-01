@@ -7,6 +7,9 @@ const enFicha = (tab, id) => ` <button type="button" class="may-ir" data-especia
 const LIBRO_AZUL = '<a class="biblio-link" href="docs/libro-azul-seccion-viii-neurologia-parte1.pdf#page=11" target="_blank" rel="noopener">Libro Azul, PDF pág. 11</a>';
 const DESTINY = '<a class="biblio-link" href="https://pubmed.ncbi.nlm.nih.gov/24645942/" target="_blank" rel="noopener">DESTINY II (PubMed 24645942)</a>';
 
+// La vista Visual de una ficha de Marino Neurología, como botón «modelo» (sale tras contestar).
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoNeuro', panel: 'panel-marino-neuro-tabs', tab, enVisual: '', texto });
+
 export const MAYEUTICA_CRANEO_2 = {
   /* =================================================================================================
      Ficha 11 · Ictus isquémico: medidas generales (cap. 47, págs. 34-37)
@@ -164,7 +167,7 @@ export const MAYEUTICA_CRANEO_2 = {
           'Tras el tPA, PA <180/105 durante 24 h; sin trombólisis, solo si >220/120 y sin pasar del 15 %.',
           'Oxígeno solo con SaO₂ <90 %; el autor pide 90-92 % y no más.',
           'La hemorragia llega en horas: fibrinógeno (crioprecipitado o concentrado) y neurocirugía.'],
-        volver: { nombre: 'Por qué no bajarla', ancla: 'mn-isq-hta' } },
+        volver: { nombre: 'Por qué no bajarla', ancla: 'mn-isq-hta', modelo: visual('mn-ictus-soporte', '👁️ El soporte del ictus en la vista Visual') } },
     ],
     profundizar: [
       { id: 'mn-isq-origen', titulo: 'Origen del ictus isquémico' },
@@ -330,7 +333,7 @@ export const MAYEUTICA_CRANEO_2 = {
           'Dos edemas, citotóxico y vasogénico: cuanto mayor el infarto, más edema.',
           'Sin catéter de PIC: hipertónico en bolos, Na⁺ 145-155; si falla, neurocirugía.',
           'No anticoagular ni dar profilaxis antiepiléptica en el ictus agudo.'],
-        volver: { nombre: 'Manejo del edema', ancla: 'mn-isq-edema-manejo' } },
+        volver: { nombre: 'Manejo del edema', ancla: 'mn-isq-edema-manejo', modelo: { craneoVivo: 'clotilde:3' } } },
     ],
     profundizar: [
       { id: 'mn-isq-tvp', titulo: 'Tromboprofilaxis: el 0,4 % de Alemania' },

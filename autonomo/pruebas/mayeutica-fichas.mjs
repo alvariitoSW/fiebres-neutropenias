@@ -303,7 +303,7 @@ async function correr(ANCHO, REDUCIDO) {
                 await siguiente(Z);
             }
             const fin = await p.evaluate(z => ({ txt: document.querySelector(z).textContent, ficha: !!document.querySelector(z + ' [data-may-texto]'), modelo: !!document.querySelector(z + ' .may-modelo') }), Z);
-            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && (fin.modelo || !caso.volver?.modelo), `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha (y al modelo, si el caso lo declara)`);
+            ok(/Lo que te llevas/.test(fin.txt) && fin.ficha && fin.modelo, `${ficha}: el caso ${caso.id} llega a «Lo que te llevas», con vuelta a la ficha y al modelo`);
             ok(await desborde() <= 0, `${ficha}: sin desborde en «Lo que te llevas» (${caso.id})`);
             if (nf === 0 && k === 0) await foto('07-fin-caso', Z);
             if (k < d.casos.length - 1) await pulsar(`${Z} [data-fin="otro"]`);

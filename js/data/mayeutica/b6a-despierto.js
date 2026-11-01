@@ -224,7 +224,7 @@ export const MAYEUTICA_6A = {
       { id: 'mnd-genoveva', titulo: 'Genoveva, 79 años: la que ayer estaba despierta', corto: 'Caso · Genoveva', sub: 'neumonía, ventilación mecánica; 60 kg',
         paciente: { Edad: '79 años', Peso: '60 kg', Motivo: 'Neumonía en ventilación mecánica', Sedación: 'midazolam' },
         lleva: ['El hipoactivo es el frecuente y se escapa.', 'CAM-ICU = I + II + (III o IV).', 'Ningún fármaco corrige el delirio; con QTc >500 no se aconseja haloperidol.'],
-        volver: { nombre: 'Delirio: Tabla 45.2', ancla: 'mn-tabla-45-2' },
+        volver: { nombre: 'Delirio: Tabla 45.2', ancla: 'mn-tabla-45-2', modelo: visual('mn-delirio', '👁️ CAM-ICU paso a paso (vista Visual)') },
         pasos: [
           { momento: 'Día 2 de ventilación · 10:00', datos: { Estado: 'abre los ojos a la voz, no sigue órdenes, se vuelve a dormir; ayer estaba despierta' }, nuevo: ['Estado'], calculadora: { ir: 'mn-cam-calc', nombre: 'CAM-ICU' },
             pregunta: { id: 'mnd-g-1', corto: 'qué es esto', tipo: 'test', fuente: 'mn-del-tipos · mn-cam-calc',
@@ -373,7 +373,7 @@ export const MAYEUTICA_6A = {
       { id: 'mna-baldomero', titulo: 'Baldomero, 44 años: el reloj desde la última copa', corto: 'Caso · Baldomero', sub: 'pancreatitis; bebe a diario; 70 kg',
         paciente: { Edad: '44 años', Peso: '70 kg', Motivo: 'Pancreatitis', Hábito: 'bebe a diario' },
         lleva: ['La Tabla 45.3 es un reloj desde la última copa.', '30-40 mg de lorazepam en 3-4 h = resistencia: coadyuvante (fenobarbital con cautela; propofol si está intubado).', 'La glucosa gasta la tiamina: el Wernicke se olvida.'],
-        volver: { nombre: 'Abstinencia: Tabla 45.3', ancla: 'mn-tabla-45-3' },
+        volver: { nombre: 'Abstinencia: Tabla 45.3', ancla: 'mn-tabla-45-3', modelo: visual('mn-abstinencia', '👁️ Desde la última copa (vista Visual)') },
         pasos: [
           { momento: 'Hora 10 desde la última copa', datos: { Clínica: 'temblor, ansiedad, náuseas', Constantes: 'FC 104, PA 150/90' }, nuevo: ['Clínica', 'Constantes'], calculadora: { ir: 'mn-oh-calc', nombre: '¿Qué esperar ahora?' },
             pregunta: { id: 'mna-b-1', corto: 'hora 10', tipo: 'test', fuente: 'mn-tabla-45-3 · mn-oh-calc',
