@@ -33,3 +33,18 @@ Falta (geometria.test.mjs, 5 fallos): #28 SC4C VD 10×83 mm (el corte con el pla
 l.174 «dibujo nuevo, 4 cámaras», que además el plano no sale igual); #10/#11 aorta descendente N3 (diámetro del corte 31,2 mm; eje a 4,2 mm de
 otra pieza); #15 festones mitrales (A4C: A3A2/P2P1 da A3,P2); #17 cúspides (PLAX: dos cúspides, ninguna «derecha»). Sin hacer: contrato, resto de
 ficheros, suite entera, jueces --eco, --modelo shock-vivo y capturas 390 px (eco y cap-vd).
+
+## Parte 3 (PARADA por presupuesto; 2 pruebas de la eco en rojo, ambas con causa)
+1. Tabique del TEP: GANANCIA_SEPTO 8→4 (sin saturar). La "telesístole" de la prueba (atlas/vd.mjs muestrasClave) es el último instante de la
+   relajación isovolumétrica: pVI 4,4 y pVD 8,6 mmHg, gradiente 4,2 (septoSigno 0,35); en telediástole 9,2 (0,64). La regla sistólica de King
+   (septoSignoDe con pvi) no entra: su puerta es pVI 20-40 y aquí pVI es 4. En la sístole real del motor pVD pico 42,6 / pVI 84,2 = 0,506, justo en el
+   umbral. Es el MOTOR (la pVD cae a 8,6 al terminar la relajación del VI; en la sobrecarga de presión la relajación del VD es larga): enfermedad.test
+   "índice de excentricidad" queda en rojo (IE telesístole 1,48 < telediástole 1,61). Sin tocar motor ni contrato.
+2. geometria.test: de 5 a 1. #28 SC4C: ya no gira el haz (solo el A4C). #10/#11 aorta descendente: tubo recto detrás (torax.mjs, waypoints a alt 38/30
+   con el ant de atrás; antes iba a ant -28 y se curvaba: corte de 31 mm y 4 mm del AP/pericardio); ahora 23,7 mm y ≥12,8 mm. #17: la malla de las
+   cúspides aórticas decía [12,7] con velosFinos (24×24): valvasEnPlano las descartaba como "recortadas" (error real del dibujo nuevo; ahora [NI_T,NV_V]).
+3. Falta #15 (A4C, A2): causa hallada = ajuste mitralSepto (corazon-geo.mjs l.570 y 193): la valva anterior abierta se curva en una dirección única
+   (centro mitral→aórtico) y A2 sale del plano del A4C. Mezclar la dirección con la radial (K 0,4-0,5) devuelve A2 pero rompe #18 (A2-P2 separadas
+   6,6-7,4 mm en la dilatada) y #19; no se dejó. Sin el giro del haz del A4C también falla: no es el giro. Camino: dirección radial por punto en A1/A3 y la
+   del tabique solo en A2 (no probado).
+Suite entera: solo 154 y 223 en rojo reales (el resto, TODO/HUECO conocidos). jueces --eco: ids y consola 390/360 bien; falla por esas 2 pruebas.
