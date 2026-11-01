@@ -72,7 +72,7 @@ por color; ningún rótulo que se pise con otro.
 ## 6. Pasos
 | Paso | Estado | Salida |
 |---|---|---|
-| 1 · Cobertura (profesor) | en curso | `cobertura.md` (+ `cobertura-anexo.md`) |
+| 1 · Cobertura (profesor) | ✅ 01/11 (≈85 %; grupos 6A-6D) | `cobertura.md` (+ `cobertura-anexo.md`) |
 | 2 · Maquetas cráneo (A, B, C) y unión neuromuscular (A, B) | — | `autonomo/maquetas/b6a-{craneo,unm}-<x>.html` + carpeta |
 | 2 · Juicio y elección (Educación, Consejo) | — | `juicio-*.md`, `eleccion.md` |
 | 3 · Modelos en la app · 4 · Estudiar | más tarde | sesiones aparte |
