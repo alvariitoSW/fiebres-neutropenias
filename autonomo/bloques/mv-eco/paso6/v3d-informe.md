@@ -4,4 +4,4 @@
 **Duración de E/A**: en la IT normal (FC 71) E+llenado sobre la base dura ~290 ms (prueba ≥120 ms en verde). Las «púas» salían de la FC: fallo 122 lpm y TEP 119 lpm dejan ~40 ms de E y A; es del motor (diástole de ~200 ms), no del dibujo.
 ## No comprobado / riesgo
 - **Cifra mala del motor, no tapada**: la A de la tricúspide del normal llega a ~257 cm/s en ~40 ms (qTri 1133 mL/s); real ~30-40 cm/s. En el dibujo se sale por arriba (recorte). Además en el TEP el chorro persiste en diástole y se come la E. Ambos: motor.mjs, otro carril.
-- Captura del TEP tomada al arrancar el trazado (solo un latido); HP y hp no revisadas a ojo. Las pruebas pedidas se lanzaron con la máquina cargada: ver entrega.
+- Captura del TEP tomada al arrancar el trazado (solo un latido); HP y hp no revisadas a ojo. Pruebas pedidas: 87/87 en verde.
