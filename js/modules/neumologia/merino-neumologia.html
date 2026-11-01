@@ -2285,9 +2285,9 @@
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 29.</p>
 
             <p class="section-label">Derrames paraneumónicos</p>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Los derrames pleurales están presentes en el 20-40% de las neumonías en pacientes hospitalizados. Estos <strong>derrames paraneumónicos</strong> pueden ser evidentes en la radiografía de tórax, aunque se recomienda la ecografía para definir la localización y el tamaño del derrame, especialmente si se realiza toracocentesis.</p>
+            <p id="nep-derrame-frecuencia" style="font-size:0.85rem; color:var(--text-dim);">Los derrames pleurales están presentes en el 20-40% de las neumonías en pacientes hospitalizados. Estos <strong>derrames paraneumónicos</strong> pueden ser evidentes en la radiografía de tórax, aunque se recomienda la ecografía para definir la localización y el tamaño del derrame, especialmente si se realiza toracocentesis.</p>
             <dl class="kv-row"><dt>Clasificación</dt><dd>Los derrames paraneumónicos pueden colocarse en 4 categorías de gravedad creciente, resumidas en la Tabla 29.5.</dd></dl>
-            <p class="section-label" style="margin-top:8px;">Tabla 29.5 — Clasificación de los derrames paraneumónicos</p>
+            <p id="nep-derrame-tabla" class="section-label" style="margin-top:8px;">Tabla 29.5 — Clasificación de los derrames paraneumónicos</p>
             <div style="overflow-x:auto;">
             <table class="data-table">
                 <thead><tr><th></th><th>Carácter del derrame</th><th>Análisis del líquido pleural</th><th>Tubo torácico</th></tr></thead>
@@ -2340,36 +2340,36 @@
             <div id="neumo-derrame-resultado" class="result-box"></div>
             <p class="fuente-ficha">Origen: <strong>ficha</strong> — Tabla 29.5 y su texto (págs. 45-46 del PDF). Límite del pH (6,5-7,8): <strong>fisiología general</strong>, no de la ficha. Los casos que la tabla no define (loculado sin infección, o infección sin loculación) no se clasifican.</p>
 
-            <div class="micro-profiles">
-                <div class="micro-prof-item">
+            <div id="nep-derrame-categorias" class="micro-profiles">
+                <div id="nep-derrame-cat1" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>1️⃣ Categoría 1</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Derrames pequeños (&lt;10 mm en imágenes de decúbito, TC, o ecografía), de flujo libre. No se requiere toracocentesis, a menos que la condición clínica del paciente se deteriore y el derrame aumente de tamaño (ver más abajo).</div>
                 </div>
-                <div class="micro-prof-item">
+                <div id="nep-derrame-cat2" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>2️⃣ Categoría 2</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Derrames pequeños a moderados (&gt;10 mm de grosor, pero rellenan menos de la mitad del hemitórax) y de flujo libre. Se aconseja toracocentesis, y debe eliminarse la mayor cantidad de líquido posible. (<em>Nota:</em> algunos aconsejan medir la presión pleural con un manómetro durante el drenaje pleural, y detener el drenaje si la presión pleural alcanza −20 cmH₂O, para prevenir un edema pulmonar por presión negativa.) El análisis del líquido pleural en derrames de categoría 2 no muestra evidencia de infección: es decir, el pH del líquido pleural es &gt;7,20, la glucosa es &gt;60 mg/dl, y la tinción de Gram y el cultivo son negativos. No se necesita ninguna otra intervención para estos derrames.</div>
                 </div>
-                <div class="micro-prof-item">
+                <div id="nep-derrame-cat3" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>3️⃣ Categoría 3</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Los derrames de categoría 3 (también llamados "derrames complicados") están loculados, o rellenan más de la mitad del hemitórax, y el análisis del líquido pleural revela evidencia de infección: es decir, el pH es &lt;7,20, la glucosa es &lt;60 mg/dl, y la tinción de Gram y/o el cultivo son positivos. Se requiere drenaje pleural para estos derrames, usando tubos torácicos de pequeño calibre (8,5-14 French).</div>
                 </div>
-                <div class="micro-prof-item">
+                <div id="nep-derrame-cat4" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>4️⃣ Categoría 4</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">Los derrames de categoría 4 son empiemas; es decir, el líquido pleural es francamente purulento. El drenaje pleural inmediato es esencial. Algunos prefieren tubos torácicos grandes (28-36 French) para drenar el pus, pero <span class="hl-rojo">los tubos de calibre pequeño (8,5-14 French) logran un drenaje equivalente al de los tubos más grandes</span>.</div>
                 </div>
             </div>
 
-            <dl class="kv-row" style="margin-top:8px;"><dt>Antibióticos</dt><dd>El drenaje pleural de derrames paraneumónicos infectados debe combinarse con antibioterapia empírica. Para derrames paraneumónicos en pacientes hospitalizados, la cobertura empírica debe incluir <em>Staphylococcus aureus</em> resistente a meticilina y organismos entéricos gram-negativos, incluida <em>Pseudomonas aeruginosa</em>. Un régimen adecuado sería vancomicina más cefepima o piperacilina/tazobactam.</dd></dl>
-            <dl class="kv-row"><dt>Drenaje ineficaz</dt><dd>Los derrames loculados pueden ser difíciles de drenar. Si el drenaje es inadecuado con el tubo torácico inicial, puede colocarse un tubo adicional (preferiblemente bajo guía de TC). Otros problemas con el drenaje deben motivar una consulta quirúrgica para <em>cirugía toracoscópica videoasistida</em> (VATS), que puede romper las adherencias pleurales sin una toracotomía. La administración intrapleural de agentes fibrinolíticos no se aconseja en general para derrames paraneumónicos complicados y empiema.</dd></dl>
+            <dl id="nep-derrame-atb" class="kv-row" style="margin-top:8px;"><dt>Antibióticos</dt><dd>El drenaje pleural de derrames paraneumónicos infectados debe combinarse con antibioterapia empírica. Para derrames paraneumónicos en pacientes hospitalizados, la cobertura empírica debe incluir <em>Staphylococcus aureus</em> resistente a meticilina y organismos entéricos gram-negativos, incluida <em>Pseudomonas aeruginosa</em>. Un régimen adecuado sería vancomicina más cefepima o piperacilina/tazobactam.</dd></dl>
+            <dl id="nep-derrame-drenaje" class="kv-row"><dt>Drenaje ineficaz</dt><dd>Los derrames loculados pueden ser difíciles de drenar. Si el drenaje es inadecuado con el tubo torácico inicial, puede colocarse un tubo adicional (preferiblemente bajo guía de TC). Otros problemas con el drenaje deben motivar una consulta quirúrgica para <em>cirugía toracoscópica videoasistida</em> (VATS), que puede romper las adherencias pleurales sin una toracotomía. La administración intrapleural de agentes fibrinolíticos no se aconseja en general para derrames paraneumónicos complicados y empiema.</dd></dl>
 
             <p class="section-label" style="margin-top:16px;">Tratamiento antimicrobiano</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Se recomienda la administración pronta de antibióticos empíricos para todos los casos de sospecha de NAV. El régimen antibiótico se determina por los factores de riesgo descritos a continuación.</p>
-            <dl class="kv-row"><dt>Factores de riesgo</dt><dd>Los factores de riesgo para un resultado desfavorable incluyen todo lo siguiente: (a) NAV de inicio tardío, (b) shock séptico, (c) infección previa con <em>Staphylococcus aureus</em> resistente a meticilina (MRSA) o un organismo multirresistente (es decir, resistente a al menos dos clases distintas de antibióticos), (d) un antibiograma hospitalario en el que el 25% de los aislados son organismos resistentes, y (e) exposición a antibióticos en los últimos 90 días.</dd></dl>
+            <dl id="nep-atb-factores" class="kv-row"><dt>Factores de riesgo</dt><dd>Los factores de riesgo para un resultado desfavorable incluyen todo lo siguiente: (a) NAV de inicio tardío, (b) shock séptico, (c) infección previa con <em>Staphylococcus aureus</em> resistente a meticilina (MRSA) o un organismo multirresistente (es decir, resistente a al menos dos clases distintas de antibióticos), (d) un antibiograma hospitalario en el que el 25% de los aislados son organismos resistentes, y (e) exposición a antibióticos en los últimos 90 días.</dd></dl>
 
             <p class="section-label" style="margin-top:8px;">Regímenes empíricos</p>
-            <dl class="kv-row"><dt>Régimen de bajo riesgo</dt><dd>Los casos de inicio precoz de NAV sin shock séptico ni ninguno de los otros factores de riesgo mencionados pueden tratarse con un único agente que cubra <em>S. aureus</em> sensible a meticilina (MSSA), organismos entéricos gram-negativos, y <em>Pseudomonas aeruginosa</em>. Los candidatos incluyen cefepima, levofloxacino, y piperacilina/tazobactam.</dd></dl>
-            <dl class="kv-row"><dt>Régimen de alto riesgo</dt><dd>El régimen empírico de alto riesgo incluye cobertura de MRSA (con vancomicina o linezolid) y cobertura antipseudomonal con un antibiótico β-lactámico (cefepima, levofloxacino, o piperacilina/tazobactam). Si hay un índice alto de sospecha de organismo multirresistente, se recomienda cobertura gram-negativa y antipseudomonal adicional usando un agente no β-lactámico (una fluorquinolona o un aminoglucósido).</dd></dl>
-            <p class="section-label" style="margin-top:8px;">Tabla 29.6 — Regímenes antibióticos empíricos para sospecha de NAV</p>
+            <dl id="nep-atb-bajo" class="kv-row"><dt>Régimen de bajo riesgo</dt><dd>Los casos de inicio precoz de NAV sin shock séptico ni ninguno de los otros factores de riesgo mencionados pueden tratarse con un único agente que cubra <em>S. aureus</em> sensible a meticilina (MSSA), organismos entéricos gram-negativos, y <em>Pseudomonas aeruginosa</em>. Los candidatos incluyen cefepima, levofloxacino, y piperacilina/tazobactam.</dd></dl>
+            <dl id="nep-atb-alto" class="kv-row"><dt>Régimen de alto riesgo</dt><dd>El régimen empírico de alto riesgo incluye cobertura de MRSA (con vancomicina o linezolid) y cobertura antipseudomonal con un antibiótico β-lactámico (cefepima, levofloxacino, o piperacilina/tazobactam). Si hay un índice alto de sospecha de organismo multirresistente, se recomienda cobertura gram-negativa y antipseudomonal adicional usando un agente no β-lactámico (una fluorquinolona o un aminoglucósido).</dd></dl>
+            <p id="nep-atb-tabla" class="section-label" style="margin-top:8px;">Tabla 29.6 — Regímenes antibióticos empíricos para sospecha de NAV</p>
             <div style="overflow-x:auto;">
             <table class="data-table">
                 <thead><tr><th>Pacientes de bajo riesgo</th><th>Pacientes de alto riesgo</th></tr></thead>
@@ -2380,12 +2380,12 @@
             </div>
             <p style="font-size:0.75rem; color:var(--text-muted);">§Incluir el régimen C solo si hay alto riesgo de infección con organismos multirresistentes. MSSA = <em>S. aureus</em> sensible a meticilina.</p>
             <details class="nota-plegable"><summary>Nota de fidelidad: el levofloxacino, ¿β-lactámico?</summary><p style="font-size:0.82rem; color:var(--text-muted);">el párrafo de "Régimen de alto riesgo" de más arriba describe la cobertura antipseudomonal como "un antibiótico β-lactámico (cefepima, levofloxacino, o piperacilina/tazobactam)" — pero la propia Tabla 29.6, justo debajo, clasifica el levofloxacino en el grupo C ("agente <strong>no</strong> β-lactámico"), no en el grupo B (β-lactámicos). El levofloxacino es una fluorquinolona, no un β-lactámico — una inconsistencia interna real de la fuente entre su prosa y su propia tabla, reproducida aquí tal cual sin "corregir" la frase por criterio propio; la clasificación correcta es la que da la Tabla 29.6.</p></details>
-            <p style="font-size:0.85rem; color:var(--text-dim);">Hay una tendencia a continuar antibióticos empíricos pese a cultivos negativos si el paciente está mejorando, pero esto no está justificado, y los antibióticos deberían discontinuarse si todos los cultivos son negativos.</p>
+            <p id="nep-atb-cultivos" style="font-size:0.85rem; color:var(--text-dim);">Hay una tendencia a continuar antibióticos empíricos pese a cultivos negativos si el paciente está mejorando, pero esto no está justificado, y los antibióticos deberían discontinuarse si todos los cultivos son negativos.</p>
 
-            <dl class="kv-row"><dt>Tratamiento de la neumonía documentada</dt><dd>La antibioterapia de la NAV documentada vendrá dictada por las sensibilidades del o los patógenos aislados. La duración recomendada de la antibioterapia es de 7 días.</dd></dl>
+            <dl id="nep-atb-documentada" class="kv-row"><dt>Tratamiento de la neumonía documentada</dt><dd>La antibioterapia de la NAV documentada vendrá dictada por las sensibilidades del o los patógenos aislados. La duración recomendada de la antibioterapia es de 7 días.</dd></dl>
 
             <div class="micro-profiles" style="margin-top:12px;">
-                <div class="micro-prof-item">
+                <div id="nep-atb-mortalidad" class="micro-prof-item">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>❓ El riesgo de mortalidad con la NAV</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body">
                         <p>Como se mencionó al principio de este bloque, varios estudios han mostrado que la NAV tiene poco o ningún impacto sobre las tasas de mortalidad. Esta observación sugiere uno de los siguientes escenarios:</p>
