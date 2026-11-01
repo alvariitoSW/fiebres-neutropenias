@@ -6,6 +6,10 @@ import { montarPantalla, flujoTope } from './pantalla.js';
 import { instalarCss } from '../../../core/dibujo-iso.js';
 import { crearDock } from '../../../core/dock.js';
 import { crearPulmon, pbw, ORIGEN_MODELO, T_PAUSA, T_OCLUSION } from './pulmon.mjs';
+import * as HFN from './hfno.js';
+import * as PR from './prono.js';
+import * as CU from './cuff.js';
+import * as SG from './subglotica.js';
 import { crearTope } from '../../../core/tope.js';
 import { calcularTopes, estable, pasaDeTope, T as TOPE } from './topes.js';
 import { crearEscena, ESCENA_CSS } from './escena.js';
@@ -13,6 +17,7 @@ import * as D from '../../../data/pulmon-vivo-data.js';
 import { montarExtras } from './extras.js';
 import { montarPiensa } from './piensa.js';
 import * as NX from './neumotorax.js';
+import * as DR from './derrame.js';
 import { tau, TAU } from '../../../data/ventilacion-data.js';
 
 export function montarPulmon(raiz) {
@@ -55,13 +60,49 @@ const NOMBRE_MANDO = { pmus: 'Esfuerzo (Pmus)', vt: 'Vt', flujo: 'Flujo', pinsp:
 const api = () => ({ P, est, get L() { return L; }, mon, PANT, tope, llenar: () => { llenarMonitor(); pintarTodo(); } });
 const avisar = (tipo) => raiz.dispatchEvent(new CustomEvent(tipo, { detail: api() }));
 raiz.addEventListener('pul:pedir', () => avisar('pul:estado'));
+// La cánula de alto flujo (hfno.js): el flujo fija el esfuerzo y la FR de Elvira; de ahí salen la FiO₂ al alvéolo y la SpO₂
+function canula(pedido, { ya = false } = {}) {
+  const q = HFN.limitar(pedido), e = HFN.efecto(q), aj = { pmus: e.pmus, frEsp: e.frEsp, peep: est.boca ? D.HFNO.peepBoca : 0 };
+  (ya ? P.ajustarYa : P.ajustar)(aj);
+  est.q = q; est.hfno = HFN.lectura(q, est.fio2, { ...P.S.resp, ...aj }, P.S.pulmon); est.avisoCanula = HFN.avisoCanula(q, est.hfno);
+  topeMando = pedido > D.HFNO.tope ? HFN.selloCanula(pedido, est.hfno) : null;
+}
+// La posición prono (prono.js): las horas fijan la Cstat (el motor la usa) y el P/F (rótulo); una contraindicación marcada impide girar
+function girar(pedido, post, { ya = false } = {}) {
+  const ci = Object.keys(est.ci || {}).find((k) => est.ci[k]), quiere = (pedido > 0 || post) && ci;
+  const lec = PR.lectura(quiere ? 0 : pedido, quiere ? false : post && pedido > 0);
+  P.pulmonAjustar({ c: lec.c }); est.prono = lec; est.avisoCanula = PR.avisoHoras(lec);
+  topeMando = quiere ? PR.selloContra(ci, lec) : pedido > D.PRONO.tope ? PR.selloHoras(pedido, lec) : null;
+}
+// La fuga del cuff (cuff.js): la presión, el edema, el esteroide y el paso fijan los ajustes del motor, la fuga, el aviso y el sello
+function fugar(pedido) {
+  const c = est.cuff, r = CU.evaluar(c, pedido); c.p = r.p;
+  P.ajustarYa(r.resp); P.pulmonAjustar(r.pulmon);
+  if (est.conPmus !== !!c.ext) { est.conPmus = !!c.ext; PANT.verPmus(est.conPmus); }
+  est.interfaz = c.ext ? 'Sin tubo' : 'Tubo'; est.fio2 = 40; c.spo2 = r.lec.spo2; est.avisoCanula = r.aviso; topeMando = r.sello;
+}
+// Secreciones sobre el balón (subglotica.js): la presión del balón y la aspiración fijan los ajustes del motor (los del cuff), el dibujo, el aviso y el sello
+function subglotar(pedido) {
+  const r = SG.evaluar(est.subgl, pedido); est.cuff.p = r.p;
+  P.ajustarYa(r.resp); P.pulmonAjustar(r.pulmon); est.interfaz = 'Tubo'; est.fio2 = 40; est.avisoCanula = r.aviso; topeMando = r.sello;
+}
+function cuffMando(k) {
+  const c = est.cuff;
+  if (k === 'edema') c.edema = !c.edema; else if (k === 'ester') c.ester = !c.ester; else if (k === 'apagar') c.p = 0;
+  else if (k === 'extubar') c.ext = 'recien'; else if (k === 'esperar') c.ext = '30'; else if (k === 'reintubar') { c.ext = null; c.p = D.CUFF.inicio; }
+  fugar(c.p); llenarMonitor();
+}
 function ponerEstado(clave, { llenar = true } = {}) {
   const E = D.ESTADOS[clave]; if (!E) return;
-  est.clave = clave; est.pac = pacDe(E.pac); topeMando = null;
+  est.clave = clave; est.pac = pacDe(E.pac); topeMando = null; est.ansiedad = !!E.ansiedad; est.opi = false;
   if (est.detenido) { est.detenido = false; tope.quitar('detenido'); }
-  est.conPmus = !!E.pmus; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
-  P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp }); P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  est.conPmus = !!E.pmus; est.cpap = !!E.cpap; PANT.verPmus(est.conPmus); SEG = E.seg ?? 12;
+  P.ajustarYa({ ps: 10, frEsp: 16, pmus: 0, tin: 0.8, frNeural: 20, retraso: null, ...E.resp });
+  if (E.hfno) { est.boca = false; est.fio2 = D.HFNO.fio2Mando; canula(D.HFNO.inicio, { ya: true }); } else { est.hfno = null; est.q = null; est.avisoCanula = null; } P.pulmonAjustar({ c: E.pulmon.c, r: E.pulmon.r, rEsp: E.pulmon.rEsp ?? E.pulmon.r, racimo: E.pulmon.racimo ?? 'sano' });
+  if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno && !E.cuff) est.avisoCanula = null; }
+  if (E.cuff || E.subgl) { est.cuff = CU.estado0(); est.subgl = E.subgl ? SG.estado0() : null; if (E.subgl) subglotar(est.cuff.p); else fugar(est.cuff.p); } else { est.cuff = null; est.subgl = null; est.interfaz = null; }
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
+  DR.estado(clave);
   NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
@@ -69,6 +110,8 @@ function ponerEstado(clave, { llenar = true } = {}) {
   avisar('pul:estado');
 }
 // Llena la pantalla de golpe con el modelo ya estable (al cambiar de estado, en pausa o con «reducir movimiento»)
+// La lectura del motor; con el cuff, el volumen espirado descuenta la fuga (cuff.js)
+const leer = () => { const l = P.lectura(); return l && est.cuff ? CU.conFuga(l, est.cuff) : l; };
 function llenarMonitor() {
   if (est.detenido) { const peep = P.S.resp.peep; mon.llenar(() => ({ paw: peep, flujo: 0, vol: 0, fase: 'esp' })); return; }   // sin ventilación: planas en la PEEP
   const cada = SEG / mon.NP, n = Math.round(cada / 0.005);
@@ -80,14 +123,14 @@ function llenarMonitor() {
   const tc = P.duracion();
   for (let i = 0, n85 = Math.round(0.85 * tc / 0.005); i < n85; i++) P.paso(0.005);
   mon.llenar(() => { for (let j = 0; j < n; j++) P.paso(0.005); return muestra(); });
-  L = P.lectura(); tProx = tSim;
+  L = leer(); tProx = tSim;
   avisar('pul:lectura');
 }
 const muestra = () => ({ paw: P.paw, flujo: P.flujo, vol: P.vol, fase: P.fase, pmus: P.pmus, disp: P.disparo ? 1 : 0 });
 function avanzar(dt) {
   const cada = SEG / mon.NP, n = Math.round(dt / 0.005);
   for (let i = 0; i < n; i++) { const f0 = P.fase; P.paso(0.005); if (f0 !== 'insp' && P.fase === 'insp') NX.ciclo(); tSim += 0.005; if (tSim >= tProx) { tProx += cada; mon.empujar(muestra()); } }
-  L = P.lectura() || L;
+  L = leer() || L;
   avisar('pul:lectura');
 }
 
@@ -135,12 +178,16 @@ function pintarCifrasTodo() {
   const hay = aplicarTopes();
   PANT.pintar(L, hay, { tapado: est.tapado, detenido: est.detenido });
   if (est.clave.startsWith('sbt') && l.vtExh > 0 && !est.tapado) { const fvt = (l.frReal || r.frEsp) / (l.vtExh / 1000); PANT.R.info(`<b>FR/Vt ${f0(fvt)}</b> resp/min por litro · FR ${f0(l.frReal || r.frEsp)} · Vt ${f0(l.vtExh)} mL (${f1(l.vtExh / kg)} mL/kg) · predictor de éxito: ${fvt <= 105 ? '≤105' : '>105: fracaso probable'} (Marino cap. 30 p. 52, Tabla 30.1) ${cita(D.C.sbt)}`); }
+  else if (!est.clave.startsWith('sbt')) PANT.R.info('');
   const celda = (k, et, g, t, cls = '') => `<div class="celda ${cls}" data-fila="${k}"><span class="k">${et}</span><span class="g">${est.tapado ? '?' : g}</span><span class="t">${t}</span></div>`;
   $('calc').innerHTML = [
     celda('pres', 'Pico − meseta', f1(l.meseta != null ? l.pico - l.meseta : null), 'Pres, cmH₂O'),
     celda('cstat', 'Cstat', l.cstat != null ? f0(l.cstat) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.cstat == null ? 'mL/cmH₂O' : (l.conPeepTotal ? 'PEEP total' : 'PEEP aplicada') + ' · −3 mL × pico (tubo)', l.cstat == null ? '' : l.cstat < 25 ? 'no' : l.cstat >= 50 ? 'si' : ''),
     celda('dp', 'P. conducción', l.dp != null ? f1(l.dp) : (r.modo === 'psv' ? 'no en PSV' : 'haz pausa'), l.conPeepTotal ? 'meseta − PEEP total' : 'meseta − PEEP aplicada'),
     celda('vtkg', 'Vt/kg PBW', f1(l.vtExh != null ? l.vtExh / kg : null), `PBW ${f1(kg)} kg`, l.vtExh != null && l.vtExh / kg > 8 ? 'no' : ''),
+    ...(est.clave.startsWith('sbt') ? [celda('fvt', 'FR/Vt', l.vtExh > 0 ? f0((l.frReal || r.frEsp) / (l.vtExh / 1000)) : null, 'resp/min por L · éxito 60-105 (Tabla 30.1)', l.vtExh > 0 ? ((l.frReal || r.frEsp) / (l.vtExh / 1000) > 105 ? 'no' : 'si') : '')] : []),
+    ...(est.cuff ? [CU.celda(est.cuff, l, celda)] : []),
+    ...(est.subgl ? [SG.celda(est.subgl, celda)] : []),
     celda('flujofin', 'Flujo fin esp.', f0(l.flujoFinEsp), l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'L/min · no llega a cero' : 'L/min · llega a cero', l.flujoFinEsp != null && l.flujoFinEsp < -2 ? 'no' : 'si'),
   ].join('');
   $('consola').hidden = !l.alarmaPresion;
@@ -151,7 +198,8 @@ function pintarFrase() {
   const E = D.ESTADOS[est.clave];
   const S = est.sello || NX.selloFrase();   // un tope pasado manda sobre la frase del estado: la frase viva dice lo que le pasa al paciente
   $('frase-txt').innerHTML = S ? `<span class="estado">${S.titulo}</span>${S.texto} ${org(S.origen, false)}`
-    : `<span class="estado">${E.tit}</span>${E.frase} ${org('modelo · umbrales: ficha')}`;
+    : est.subgl ? `<span class="estado">${E.tit}</span>${SG.frase(est.subgl, est.cuff.p)}`
+    : `<span class="estado">${E.tit}</span>${est.opi && E.fraseOpi ? E.fraseOpi : E.frase} ${org('modelo · umbrales: ficha')}`;
   $('ficha-pac').innerHTML = `<b>${est.pac.nombre}</b>, ${est.pac.linea}`;
   $('pacientes').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pac === est.pac.k)));
   $('leyenda').querySelectorAll('button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.estado === est.clave)));
@@ -163,9 +211,10 @@ const tope = crearTope({ monitor: PANT.R.curvas, dock: $('dock'), cita });
 const topeVisto = {};
 let topeMando = null;   // el sello de un mando que se pasó del tope y se quedó donde estaba
 function aplicarTopes() {
-  const hay = est.tapado ? {} : calcularTopes(P.S, L, PBW());
+  const hay = est.tapado ? {} : calcularTopes(P.S, est.cuff && L ? { ...L, vtExh: est.cuff.ext ? null : L.vtIns } : L, PBW());
   if (topeMando) hay.sello = { nivel: 'sello', ...topeMando };
-  for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'sello', 'sello2', 'sello3', 'sello4']) {
+  if ((est.hfno || est.prono || est.cuff) && est.avisoCanula) hay.canula = est.avisoCanula;
+  for (const k of ['vtkg', 'meseta', 'pmax', 'pmus', 'canula', 'sello', 'sello2', 'sello3', 'sello4']) {
     const t = hay[k], firma = t ? JSON.stringify(t) : '';
     if (topeVisto[k] === firma) continue;
     topeVisto[k] = firma; if (t) tope.poner(k, t); else tope.quitar(k);
@@ -174,7 +223,7 @@ function aplicarTopes() {
   if (JSON.stringify(antes) !== JSON.stringify(est.sello)) pintarFrase();
   return hay;
 }
-function pintarTodo() { pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); pintarFrase(); pintarMandos(); aplicarTopes(); medirDock(); }
+function pintarTodo() { PR.pintarRacimo($('esc-svg'), est.prono); pintarMonitor(); pintarCifrasTodo(); escena.actualizar(P, L, { reducir: REDUCIR }); SG.dibujar($('esc-svg'), est.subgl); pintarFrase(); pintarMandos(); aplicarTopes(); medirDock(); }
 // Predice y comprueba: mientras el monitor está tapado, la presión alveolar del dibujo tampoco se enseña
 
 // ---------------------------------------------------------------- bucle
@@ -213,15 +262,27 @@ function repintar(panel, html) {
 function pintarMandos() {
   const r = P.S.resp, pu = P.S.pulmon, m = P.S.man, kg = PBW();
   let h = '';
-  if (est.pest === 'resp') {
+  if (est.pest === 'resp' && est.hfno) {
+    h += `<p class="dock-nota dock-grupo"><b>Cánula nasal de alto flujo</b>: sin respirador, sin presión de soporte</p>`;
+    h += desl('canula', 'Flujo de O₂ (cánula)', est.q, D.HFNO.min, D.HFNO.max, D.HFNO.paso, 'L/min', `tope ${D.HFNO.tope}: los equipos dan 40-60 según el fabricante (Marino cap. 25 p. 64) · el efecto en la FR y el esfuerzo: ilustrativo`);
+    h += desl('fio2', 'FiO₂ del mando', est.fio2, 21, 100, 1, '%', `llega al alvéolo: ${f0(est.hfno.fio2Alv)} % (flujo inspiratorio de la paciente ${f0(est.hfno.vi)} L/min, del modelo) · ilustrativo`);
+    h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="boca" aria-pressed="${!!est.boca}">Boca cerrada<small>PEEP 2-3 cmH₂O solo así (Marino cap. 25 p. 65)</small></button></div>`;
+  } else if (est.pest === 'resp' && est.subgl) {
+    h += SG.mandosHtml(est.cuff, est.subgl, desl);
+  } else if (est.pest === 'resp' && est.cuff) {
+    h += CU.mandosHtml(est.cuff, desl);
+  } else if (est.pest === 'resp' && est.prono) {
+    h += PR.mandosHtml(est, desl);
+  } else if (est.pest === 'resp') {
     const psv = r.modo === 'psv', pend = P.pendientes().map((k) => NOMBRE_MANDO[k] || k);
     h += `<div class="seg"><button type="button" data-m="modo" data-v="vcv" aria-pressed="${r.modo === 'vcv'}">VCV<small>volumen control</small></button><button type="button" data-m="modo" data-v="pcv" aria-pressed="${r.modo === 'pcv'}">PCV<small>presión control</small></button><button type="button" data-m="modo" data-v="psv" aria-pressed="${psv}">PSV<small>presión de soporte</small></button></div>`;
     h += `<p class="dock-nota dock-grupo"><b>Ventilar</b> (CO₂): Vt × FR = ${f1(L?.vm)} L/min</p>`;
     if (est.conPmus) h += desl('pmus', 'Esfuerzo (Pmus)', r.pmus ?? 0, 0, TOPE.pmusMax, 0.5, 'cmH₂O', `ilustrativo · aviso a ${TOPE.pmusAviso}; ecuación del movimiento: Libro azul IV p. 511`);
     if (r.modo === 'vcv') h += desl('vt', 'Vt', r.vt, 200, Math.max(r.vt, Math.min(800, Math.floor(TOPE.vtkgMax * kg / 10) * 10)), 10, 'mL', `${f1(r.vt / kg)} mL/kg PBW · tope 12: ARDSNet 2000`) + desl('flujo', 'Flujo', r.flujo, 30, flujoTope(r.vt), 5, 'L/min', 'ficha: 60, ≥80 si distrés');
-    else if (psv) h += desl('ps', 'P. soporte', r.ps, 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
+    else if (psv) h += desl('ps', 'P. soporte', r.ps, est.cpap ? 0 : 5, 20, 1, 'cmH₂O', 'sobre la PEEP · ilustrativo (Marino usa 10 en IMV)');
     else h += desl('pinsp', 'P. insuflación', r.pinsp, 5, 30, 1, 'cmH₂O', 'sobre la PEEP') + desl('ie', 'I:E', r.ie, 1, 4, 0.5, '', `1:${String(r.ie).replace('.', ',')}`);
-    h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, 8, 30, 1, 'rpm', 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
+    h += psv ? desl('frEsp', 'FR del paciente', r.frEsp, est.ansiedad ? D.ANSIEDAD.frMin : 8, est.ansiedad ? D.ANSIEDAD.frMando : 30, 1, 'rpm', est.ansiedad ? `tope ${D.ANSIEDAD.frMax}: FR <40 es predictor de éxito (Marino cap. 30 p. 52) · la FR que pone él: ilustrativo` : 'la pone él · ilustrativo') : desl('fr', 'FR', r.fr, 8, 35, 1, 'rpm', 'ficha cap. 27 p. 14: no pasar de 35');
+    if (est.ansiedad) h += `<div class="rejilla" style="--n:1"><button type="button" class="tog" data-m="opiaceo" aria-pressed="${est.opi}">Opiáceo<small>calma la disnea: ${est.opi ? 'puesto' : 'FR 22, menos esfuerzo'} (cap. 30 p. 55)</small></button></div>`;
     h += desl('pmax', 'Alarma de presión', r.pmax ?? 40, TOPE.pmaxMin, TOPE.pmaxMax, 5, 'cmH₂O', 'ilustrativo');
     h += `<p class="dock-nota dock-grupo"><b>Oxigenar</b> (PaO₂): FiO₂ y PEEP</p>`;
     h += desl('fio2', 'FiO₂', est.fio2, 21, 100, 1, '%', 'ilustrativo: el modelo no calcula gases') + desl('peep', 'PEEP', r.peep, 0, 20, 1, 'cmH₂O', 'ficha cap. 27 p. 15: 5-8; Tabla 27.1 p. 14: 5');
@@ -248,18 +309,32 @@ $('dock-panel').addEventListener('input', (ev) => {
   const i = ev.target.closest('input[type=range]'); if (!i) return;
   cambiarMando(i.dataset.m, +i.value);
 });
+// FR espontánea por encima de 40 (sbt-ansiedad): el mando se queda en 40, que es el predictor «FR <40» de la Tabla 30.1
+function selloFr(pedido) {
+  const l = estable(P.S.resp, P.S.pulmon), fvt = l?.vtExh > 0 ? (l.frReal || D.ANSIEDAD.frMax) / (l.vtExh / 1000) : null;
+  return { k: 'fr-predictor', titulo: 'Predictor fallido: FR no menor de 40', texto: `Pides ${f0(pedido)} por minuto y el mando se queda en ${D.ANSIEDAD.frMax}: la FR <40 es un predictor de éxito de la prueba y a 40 o más ya falla. A ${D.ANSIEDAD.frMax} Benito mueve ${f0(l?.vtExh)} mL (${f1(l?.vtExh / PBW())} mL/kg), volumen minuto ${f1(l?.vm)} L/min y FR/Vt ${f0(fvt)}: si la taquipnea persiste con el Vt aumentado, se piensa en ansiedad; con el Vt bajo, vuelve al respirador.`, cita: D.C.sbt, origen: 'ficha, Tabla 30.1 p. 52 y cap. 30 p. 54 · cifras: ilustrativo' };
+}
 function cambiarMando(k, v) {
   if (k === 'dpsop') k = 'ps';   // la rueda ΔPsop de la pantalla es la presión de soporte
-  if (k === 'fio2') { est.fio2 = v; pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
+  if (k === 'canula') { canula(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarCifrasTodo(); pintarMonitor(); return; }
+  if (k === 'cuff') { if (est.subgl) subglotar(v); else fugar(v); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
+  if (k === 'horas') { girar(v, false); if (REDUCIR || est.pausa) llenarMonitor(); pintarMandos(); pintarTodo(); return; }
+  if (k === 'fio2') { est.fio2 = v; if (est.hfno) { canula(est.q); pintarMandos(); } pintarCifrasTodo(); return; }   // ilustrativo: el modelo no tiene gases
+  if (est.ansiedad && (k === 'frEsp' || k === 'pmus')) est.opi = false;
+  const pedido = v; if (est.ansiedad && k === 'frEsp') v = Math.min(v, D.ANSIEDAD.frMax);
   const antes = k === 'c' || k === 'r' ? P.S.pulmon[k] : P.S.resp[k];
   if (k === 'c' || k === 'r') { P.pulmonAjustar({ [k]: v }); P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); } else P.ajustar({ [k]: v });
   guardarTope(k, antes);
+  if (est.ansiedad && k === 'frEsp' && pedido > D.ANSIEDAD.frMax && !topeMando) topeMando = selloFr(pedido);
   if (k === 'vt' && P.S.resp.modo === 'vcv' && P.S.resp.flujo > flujoTope(P.S.resp.vt)) P.ajustar({ flujo: flujoTope(P.S.resp.vt) });   // Ti mínimo (ilustrativo)
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor();
 }
 // Las pestañas de modo y las teclas de la pantalla
 function cambiarModo(k) {
+  if (est.subgl && k !== 'detener') { PANT.R.info('<b>Secreciones sobre el balón</b> · El modo lo fija el caso: Gaspar está en volumen control · ilustrativo'); return; }
+  if (est.cuff && k !== 'detener') { PANT.R.info('<b>Fuga del cuff</b> · El modo lo fija el paso en que está Benito (volumen control con tubo; sin tubo, respira solo) · ilustrativo'); return; }
+  if (est.hfno && k !== 'detener') { PANT.R.info('<b>Cánula de alto flujo</b> · No hay modos: la paciente respira sola y la cánula solo da flujo · ilustrativo'); return; }
   if (k === 'detener') { detener(!est.detenido); return; }
   if (est.detenido) detener(false);
   const antes = P.S.resp.modo; P.ajustar({ modo: k }); guardarTope('modo', antes);
@@ -292,6 +367,12 @@ $('dock-panel').addEventListener('click', (ev) => {
   else if (k === 'fesp') { est.factorEsp = +b.dataset.v; P.pulmonAjustar({ rEsp: P.S.pulmon.r * est.factorEsp }); }
   else if (k === 'pausa' || k === 'oclusion') { P.maniobra({ [k]: !P.S.man[k] }); topeMando = null; }
   else if (k === 'monpausa') est.pausa = !est.pausa;
+  else if (k === 'pos') { const h = est.prono.h; girar(b.dataset.v === 'supino' ? 0 : b.dataset.v === 'post' ? h : h || D.PRONO.inicio, b.dataset.v === 'post'); }
+  else if (k === 'ci') { est.ci[b.dataset.v] = !est.ci[b.dataset.v]; girar(est.prono.h, est.prono.post); }
+  else if (['edema', 'ester', 'apagar', 'extubar', 'esperar', 'reintubar'].includes(k)) cuffMando(k);
+  else if (k === 'asp') { est.subgl.asp = !est.subgl.asp; subglotar(est.cuff.p); pintarTodo(); }
+  else if (k === 'opiaceo') { est.opi = !est.opi; pintarFrase(); P.ajustar(est.opi ? { frEsp: D.ANSIEDAD.frOpi, frNeural: D.ANSIEDAD.frOpi, pmus: D.ANSIEDAD.pmusOpi } : { frEsp: 30, frNeural: 30, pmus: D.ANSIEDAD.pmus }); topeMando = null; }
+  else if (k === 'boca') { est.boca = !est.boca; canula(est.q); }
   if (REDUCIR || est.pausa) llenarMonitor();
   pintarMandos(); pintarCifrasTodo(); pintarMonitor(); medirDock();
 });
@@ -396,7 +477,8 @@ function abrirEstado(clave) {
   else if (!clave) pintarTodo();
   mon.montar(); llenarMonitor(); pintarTodo(); reanudar();
 }
-NX.montarNeumotorax({ raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() });
+const ctxPanel = { raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() };
+NX.montarNeumotorax(ctxPanel); DR.montarDerrame(ctxPanel);
 let tNx = 0;
 raiz.addEventListener('pul:lectura', () => { const t = performance.now(); if (t - tNx < 300 || !raiz.getClientRects().length) return; tNx = t; NX.vigilar(); });
 window.__pulPruebas = api;   // solo para las pruebas automáticas

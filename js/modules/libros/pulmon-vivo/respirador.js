@@ -12,7 +12,7 @@
 //     casillas:[{ k, et, u, org, ilu }]        k = data-fila (la guía y las pruebas la buscan así); ilu: cifra ilustrativa
 //     mandos:  [{ k, et, u, min, max, paso, org, nota }]   el rango y la nota los da la página en mandos(valores)
 //     teclas:  [{ k, id, et, ico, tipo }]       tipo: 'tog' (se queda pulsada), 'accion' o 'deco' (apagada: decorativa)
-//     interfaz: 'Tubo' | 'VNI'; pie: html del pie (el origen de las cifras)
+//     interfaz: 'Tubo' | 'VNI' | 'Cánula' (cambia con interfaz(txt)); pie: html del pie (el origen de las cifras)
 //     alMando(k, v), alModo(k), alTecla(k), alCasilla(k)
 //   casillas({ k: { v, lim, estado, sub } })   estado: '' | 'aviso' | 'alarma' | 'vacia'
 //   mandos({ k: { v, txt, min, max, paso, apagado, nota } })   apagado: texto del porqué (el mando no se toca)
@@ -123,7 +123,7 @@ export function crearRespirador(cont, cfg) {
   const porK = Object.fromEntries(C.map((c) => [c.k, c]));
   cont.classList.add('resp');
   cont.innerHTML = `
-    <div class="resp-barra">${ADULTO}<span class="resp-modo" data-resp="modo"></span><span class="resp-int">${esc(cfg.interfaz || 'Tubo')}</span>
+    <div class="resp-barra">${ADULTO}<span class="resp-modo" data-resp="modo"></span><span class="resp-int" data-resp="int">${esc(cfg.interfaz || 'Tubo')}</span>
       <span class="resp-alarma" data-resp="alarma" id="pul-resp-alarma" role="status" aria-live="polite"></span>
       <span class="resp-hora" aria-label="Hora y batería (ilustrativo)">🔕 08:15<br>🔋 100 %</span></div>
     <div class="resp-curvas" data-resp="curvas"><svg id="pul-trazas" class="mon-trazas" role="img" aria-label="Curvas del respirador: presión en la vía aérea con la línea roja de Pmáx y la de PEEP, flujo y volumen"></svg></div>
@@ -234,6 +234,7 @@ export function crearRespirador(cont, cfg) {
   }
   return {
     el: cont, mon, curvas: q('curvas'), montar: () => mon.montar(), pintarCurvas, casillas, mandos, modo, alarmas, tecla, info,
+    interfaz: (t) => { const e = q('int'); if (e.textContent !== t) e.textContent = t; },
     congelado: (on) => cont.classList.toggle('congelado', !!on),
     soloLectura: (on) => cont.classList.toggle('solo-lectura', !!on),
     ver: (lista) => { mon.ver(lista); },

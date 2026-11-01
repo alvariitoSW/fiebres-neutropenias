@@ -23,6 +23,8 @@ const CSS = `
 #pul-neumo .nx-msg { margin: 0; font: .76rem/1.4 var(--sans); color: var(--text-dim); }
 #pul-neumo .nx-msg .ok { color: var(--accent-green); font-weight: 700; }
 #pul-neumo .nx-msg .mal { color: var(--accent-red); font-weight: 700; }
+#pul-neumo svg.nx-dib text { font-family: var(--sans); }
+#pul-neumo svg.nx-dib { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 10px; }
 #pul-neumo figure { margin: 0; } #pul-neumo figure img { width: 100%; border-radius: 8px; display: block; } #pul-neumo figcaption { font: .7rem/1.35 var(--sans); color: var(--text-dim); }
 #pul-raiz[data-neumo-sello] #pul-dock-panel { opacity: .45; }
 `;
@@ -30,7 +32,7 @@ const f1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
 const f0 = (n) => String(Math.round(n));
 
 let sec = null, ctx = null, activo = false;
-const nx = { ptx: 0, desc: false, sitio: null, msg: '' };
+const nx = { ptx: 0, ptx0: 0, desc: false, sitio: null, msg: '', pend: null };
 const el = {};
 
 export const ptx = () => (activo ? nx.ptx : 0);
@@ -55,6 +57,19 @@ function pintar() {
   el.desc.disabled = !nx.sitio || nx.desc;
   for (const k of Object.keys(N.sitios)) { el['s_' + k].setAttribute('aria-pressed', String(nx.sitio === k)); el['s_' + k].disabled = nx.desc; }
   if (el.msg.innerHTML !== nx.msg) el.msg.innerHTML = nx.msg;
+  dibujo();
+}
+// El aire pleural crece (t de 0 a 1 hasta el tope), el pulmón del lado afectado se retrae hacia el hilio, el mediastino se va al lado contrario y el diafragma baja
+function dibujo() {
+  const t = Math.min(1, nx.ptx / N.tope), rx = 38 * (1 - 0.8 * t), ry = 40 * (1 - 0.6 * t), cx = 112 + rx, cy = 50;
+  const set = (k, o) => { for (const a in o) el[k].setAttribute(a, o[a]); };
+  set('pulmon', { cx: cx.toFixed(1), cy, rx: rx.toFixed(1), ry: ry.toFixed(1) });
+  set('medi', { cx: (100 - 16 * t).toFixed(1) }); set('trq', { x1: (100 - 12 * t).toFixed(1), x2: (100 - 12 * t).toFixed(1) });
+  el.diaf.setAttribute('d', `M104 ${(92 + 10 * t).toFixed(1)} Q150 ${(78 + 10 * t).toFixed(1)} 190 ${(92 + 10 * t).toFixed(1)}`);
+  el.aire.setAttribute('opacity', t > 0.04 ? '1' : '0'); el.ta.setAttribute('opacity', t > 0.04 ? '1' : '0');
+  set('tl', { y: Math.min(cy + ry + 9, 96).toFixed(1), x: cx.toFixed(1) });
+  el.tl.textContent = t > 0.3 ? 'pulmón colapsado' : 'pulmón';
+  el.tm.textContent = t > 0.2 ? 'mediastino desplazado' : 'mediastino';
 }
 function sello() {
   const { tope, ultima } = ctx, par = parada(), T = activo && nx.ptx >= N.shock && !nx.desc;
@@ -75,6 +90,9 @@ function sello() {
 
 // Una insuflación más: la presión del neumotórax crece (lo llama pagina.js al empezar cada inspiración)
 export function ciclo() {
+  if (activo && nx.desc && nx.ptx > 0) {   // recuperación tras descomprimir: el aire pleural baja linealmente en N.recuperacion respiraciones (ilustrativo)
+    nx.ptx = Math.max(0, nx.ptx - nx.ptx0 / N.recuperacion); if (nx.ptx < 1e-6) nx.ptx = 0; aplicar(); pintar(); return;
+  }
   if (!activo || nx.desc || nx.ptx >= N.tope) return;
   nx.ptx = Math.min(N.tope, nx.ptx + N.paso); aplicar(); pintar();
 }
@@ -82,7 +100,9 @@ export function ciclo() {
 export function estado(clave) {
   activo = clave === CLAVE; if (!sec) return;
   sec.hidden = !activo;
+  nx.pend = null;
   if (activo) { nx.ptx = 0; nx.desc = false; nx.sitio = null; nx.msg = ''; aplicar(); }
+  else { nx.ptx = 0; nx.msg = ''; }   // fuera del estado, las filas ocultas no guardan la presión ni la SpO₂ de la última vez
   sello(); pintar();
 }
 export function vigilar() { if (activo) { sello(); pintar(); } }
@@ -93,6 +113,19 @@ export function montarNeumotorax(c) {
   instalarCss('pul-neumo', CSS);
   sec = document.createElement('section'); sec.id = 'pul-neumo'; sec.hidden = true; sec.setAttribute('aria-label', 'El neumotórax a tensión');
   sec.innerHTML = `<h3>Neumotórax a tensión</h3>
+    <svg class="nx-dib" id="pul-nx-svg" viewBox="0 0 200 124" role="img" aria-label="Tórax de frente: el aire pleural a la derecha de la imagen crece, retrae el pulmón y desplaza el mediastino">
+      <path d="M12 10 H188 Q192 10 192 16 V96 Q192 104 184 104 H16 Q8 104 8 96 V16 Q8 10 12 10 Z" fill="none" stroke="var(--border-color)" stroke-width="2"/>
+      <ellipse cx="56" cy="50" rx="38" ry="40" fill="var(--text-dim)" opacity=".35"/>
+      <rect id="pul-nx-aire" x="106" y="12" width="84" height="90" rx="4" fill="none" stroke="var(--accent-yellow)" stroke-width="1.5" stroke-dasharray="4 3" opacity="0"/>
+      <ellipse id="pul-nx-pulmon" cx="150" cy="50" rx="38" ry="40" fill="var(--text-dim)" opacity=".35"/>
+      <line id="pul-nx-trq" x1="100" y1="10" x2="100" y2="38" stroke="var(--text-main)" stroke-width="3"/>
+      <ellipse id="pul-nx-medi" cx="100" cy="62" rx="14" ry="22" fill="var(--accent-red)" opacity=".6"/>
+      <path id="pul-nx-diaf" d="M104 92 Q150 78 190 92" fill="none" stroke="var(--text-muted)" stroke-width="2"/>
+      <text x="150" y="23" text-anchor="middle" font-size="6.5" fill="var(--accent-yellow)" id="pul-nx-ta">aire pleural</text>
+      <text id="pul-nx-tl" x="150" y="96" text-anchor="middle" font-size="6.5" fill="var(--text-main)">pulmón</text>
+      <text x="56" y="96" text-anchor="middle" font-size="6.5" fill="var(--text-main)">pulmón sano</text>
+      <text id="pul-nx-tm" x="100" y="118" text-anchor="middle" font-size="6.5" fill="var(--text-main)">mediastino</text>
+    </svg>
     <div class="nx-fila">
       <div class="nx-c" data-fila="neumo-p"><span class="t">Presión del neumotórax</span><span class="v">0</span> <span class="t">cmH₂O · ilustrativo</span></div>
       <div class="nx-c" data-fila="neumo-spo2"><span class="t">SpO₂</span><span class="v">98 %</span> <span class="t">ilustrativo</span></div>
@@ -110,20 +143,32 @@ export function montarNeumotorax(c) {
   calc.after(sec);
   const q = (s) => sec.querySelector(s);
   el.pc = q('[data-fila="neumo-p"]'); el.p = el.pc.querySelector('.v'); el.sc = q('[data-fila="neumo-spo2"]'); el.s = el.sc.querySelector('.v');
+  el.pulmon = q('#pul-nx-pulmon'); el.medi = q('#pul-nx-medi'); el.trq = q('#pul-nx-trq'); el.diaf = q('#pul-nx-diaf'); el.aire = q('#pul-nx-aire'); el.tl = q('#pul-nx-tl'); el.tm = q('#pul-nx-tm'); el.ta = q('#pul-nx-ta');
   el.pas = q('[data-nx="pasar"]'); el.desc = q('[data-nx="desc"]'); el.msg = q('[data-nx="msg"]');
   for (const k of Object.keys(N.sitios)) el['s_' + k] = q(`[data-sitio="${k}"]`);
   q('[data-nx="cita"]').innerHTML = ctx.cita(D.C.tension);
   sec.addEventListener('click', (ev) => {
     const b = ev.target.closest('button[data-nx]'); if (!b || b.disabled) return;
     const a = b.dataset.nx;
-    if (a === 'pasar') { for (let i = 0; i < 2; i++) ciclo(); ctx.llenar(); }
-    else if (a === 'sitio') { nx.sitio = b.dataset.sitio; nx.msg = ''; }
+    if (a === 'pasar') { for (let i = 0; i < 2; i++) ciclo(); nx.pend = Math.round(nx.ptx); ctx.llenar(); }
+    else if (a === 'sitio') { nx.sitio = b.dataset.sitio; nx.msg = ''; nx.pend = null; }
     else if (a === 'desc') {
       const s = N.sitios[nx.sitio]; if (!s) return;
-      nx.msg = `<span class="${s.ok ? 'ok' : 'mal'}">${s.ok ? 'Descomprimido.' : 'No descomprime.'}</span> ${s.e} ${ctx.cita(s.c)}`;
-      if (s.ok) { nx.desc = true; nx.ptx = 0; aplicar(); ctx.llenar(); }
+      nx.pend = null;
+      nx.msg = `<span class="${s.ok ? 'ok' : 'mal'}">${s.ok ? 'Descomprimido.' : 'No descomprime.'}</span> ${s.e}${s.ok ? ` Las constantes no vuelven de golpe: en unas ${N.recuperacion} respiraciones (ilustrativo) la presión pleural, la PAM y la SpO₂ regresan a lo normal.` : ''} ${ctx.cita(s.c)}`;
+      if (s.ok) { nx.desc = true; nx.ptx0 = nx.ptx; if (matchMedia('(prefers-reduced-motion: reduce)').matches) nx.ptx = 0; aplicar(); ctx.llenar(); }   // con «reducir movimiento» el reloj no corre: se muestra el estado final
     } else if (a === 'otra') { estado(CLAVE); ctx.llenar(); return; }
     sello(); pintar();
+  });
+  // Una frase por pulsación, con las cifras que el monitor ya enseña (las escribe el corazón al pintar)
+  document.addEventListener('pul:corazon', () => {
+    const u = ctx.ultima(); if (!activo || nx.desc || nx.pend == null || !u || u.pl !== nx.pend) return;
+    nx.pend = null;
+    const p = f1(nx.ptx), sp = f0(spo2());
+    nx.msg = parada() ? `Aire pleural ${p} cmH₂O: sin pulso (actividad eléctrica sin pulso), la SpO₂ ya no se lee. Solo queda descomprimir.`
+      : nx.ptx >= N.shock ? `<span class="mal">Shock obstructivo.</span> Aire pleural ${p} cmH₂O: PAM ${f0(u.pam)}, gasto ${f1(u.gc)} L/min, SpO₂ ${sp} %. Descomprime ya.`
+      : `Aire pleural ${p} cmH₂O: PAM ${f0(u.pam)}, gasto ${f1(u.gc)} L/min, SpO₂ ${sp} %.`;
+    pintar();
   });
   estado(ctx.clave());
 }

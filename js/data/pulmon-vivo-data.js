@@ -10,6 +10,7 @@ export const PDF_LA2 = 'docs/libro-azul-seccion-iv-respiratorio-parte2.pdf';
 const NEUMO = ['neumologia', 'merinoNeumologia', 'panel-merino-neumo-tabs'];
 export const FICHA = {
   'neumo-vm-modos': [NEUMO, 'Ventilación mecánica: los modos', 'VM: modos', PDF_B, 'Marino 2024'],
+  'neumo-o2-sistemas': [NEUMO, 'Oxígeno: sistemas de administración', 'O₂: sistemas', PDF_A, 'Marino 2024'],
   'neumo-vni-metodos': [NEUMO, 'Ventilación no invasiva: métodos', 'VNI: métodos', PDF_A, 'Marino 2024'],
   // El libro azul no tiene ficha en la app: la cita lleva solo al PDF (sin «Ver en la ficha»)
   'libro-azul-resp1': [null, 'El libro azul, sección IV (parte 1)', 'Libro azul IV', PDF_LA1, 'El libro azul IV'],
@@ -73,7 +74,7 @@ export const NOTAS = [
   { k: 'cifras-ilu', tipo: 'calla', txt: 'Ninguna fuente da estas cifras de tope, que son ilustrativas: volumen minuto 2-20 L/min (lo más cercano: «VM alta ≥10 L/min», cap. 27 p. 14; Tuxen 1987 ventiló a 10, 16 y 26 L/min en obstrucción grave), PEEP total ≤20 (el mecanismo está en cap. 28 p. 31-33; Marini 2011 como lectura), alarma de presión 45/50 (el 50 de ARDS Network 2000 es la meseta del brazo tradicional, no un pico; la ficha quiere la meseta ≤30, cap. 27 p. 14), Ti mínimo 0,2 s (sale de Ti = VT ÷ flujo; la ficha pide I:E ≥1:2), compliance mínima 15 (la ficha dice «<25», sin suelo) y resistencia 5/20. Nota: la presión pico depende sobre todo del flujo inspiratorio y no refleja el volumen pulmonar (Tuxen 1987).', citas: [C.t271] },
   { k: 'fr-35', tipo: 'calla', txt: 'La ficha pide no pasar de 35 respiraciones por minuto (cap. 27 p. 14, tabla 27.1). Por encima, el libro advierte de que la respiración rápida favorece la hiperinflación y la PEEP intrínseca, y eso puede bajar el gasto cardíaco (cap. 27 p. 55; lo dice a propósito de las pruebas de respiración espontánea). Tuxen 1987 (PMID 3662241): al subir la frecuencia, menos tiempo espiratorio, más hiperinflación e hipotensión.', citas: [C.t271] },
   { k: 'apnea', tipo: 'calla', txt: 'Al detener la ventilación, la saturación cae y el CO₂ sube en minutos (Farmery 1996; Benumof 1997; Eger 1961). La velocidad depende de la oxigenación previa, el consumo de O₂, el volumen alveolar y el shunt, y es peor en obesos. El modelo no calcula gases y no da cifras por minuto: ninguna de las fuentes abiertas aquí las trae.', citas: [] },
-  { k: 'racimo-ilu', tipo: 'calla', txt: 'El libro describe el fenómeno (cada unidad abre a una presión y se mantiene abierta a otra más baja; abrir y cerrar unas 30 000 veces al día), pero no da las presiones. El racimo usa cuatro unidades con apertura a 16, 20 y 24 cmH₂O y cierre a 6, 8 y 10 (la primera siempre abierta), y una cola que se aplana por encima de 26-29: todo ilustrativo. Es un pulmón de SDRA reclutable inventado, no una medida. La PEEP aplicada "justo por debajo de la oculta" del EPOC (p. 32-33) sigue sin modelarse: aquel colapso es de la vía pequeña en la obstrucción.', citas: [C.histeresis, C.inflexion, C.peepAplicada] },
+  { k: 'racimo-ilu', tipo: 'calla', txt: 'El libro describe el fenómeno (cada unidad abre a una presión y se mantiene abierta a otra más baja; abrir y cerrar unas 30 000 veces al día), pero no da las presiones. El racimo usa cuatro unidades con apertura a 16, 20 y 24 cmH₂O y cierre a 5, 5 y 5 (la primera siempre abierta), y una cola que se aplana por encima de 26-29: todo ilustrativo. Es un pulmón de SDRA reclutable inventado, no una medida. La PEEP aplicada "justo por debajo de la oculta" del EPOC (p. 32-33) sigue sin modelarse: aquel colapso es de la vía pequeña en la obstrucción.', citas: [C.histeresis, C.inflexion, C.peepAplicada] },
   { k: 'dp-sin-objetivo', tipo: 'calla', txt: 'La presión de conducción (meseta − PEEP) se calcula, pero Marino no da un objetivo numérico para ella, así que la calculadora no pone ninguno: el único objetivo de presión del libro es la meseta ≤30. La Fig. 27.5 solo la usa para buscar la mejor PEEP.', citas: [C.cstat, C.protectora] },
   { k: 'psv-ilu', tipo: 'calla', txt: 'En la presión de soporte el modelo pone como ilustrativo lo que Marino no da: la frecuencia del paciente (16 por minuto), la compliance y la resistencia de Herminia, el tiempo que tarda su esfuerzo en llegar al umbral (0,1 s) y la pequeña variación del esfuerzo entre respiraciones (siempre dentro de 2-3 cmH₂O, con semilla fija: sale igual cada vez). El esfuerzo muscular como tal no está en el modelo.', citas: [C.disparo, C.psv4] },
   { k: 'causas-pico', tipo: 'calla', txt: 'Las páginas citadas (cap. 27 pp. 2-4) separan la parte de resistencia de la parte elástica del pico (Ec. 27.1-27.3) pero no enumeran las causas clínicas de un pico alto; el árbol de la página solo reparte entre resistencia y elasticidad y no lista causas.', citas: [C.ec271, C.meseta] },
@@ -210,12 +211,12 @@ export const ESTADOS = {
   },
   'atelectrauma-zeep': {
     tit: 'Sin PEEP: el alvéolo que se abre y se cierra', pac: 'isidro', resp: { modo: 'vcv', vt: 282, fr: 20, peep: 0, flujo: 60, pinsp: 15, ie: 2, pmax: 40 }, pulmon: { c: 19, r: 8, racimo: 'sdra' }, man: { pausa: true },
-    frase: 'Sin PEEP, tres de las cuatro unidades se abren al inspirar y se cierran al espirar, en cada respiración.',
+    frase: 'Sin PEEP, tres de las cuatro unidades se abren al inspirar y se cierran al espirar, en cada respiración. Con PEEP 5 o más ya no se cierran (presiones ilustrativas).',
     piensa: {
-      q: 'Isidro lleva PEEP 5 y tres de sus cuatro unidades se abren y se cierran en cada respiración. Subes la PEEP a 12 cmH₂O. ¿Qué le pasa al alvéolo que se cerraba?',
+      q: 'Isidro lleva PEEP 0 y tres de sus cuatro unidades se abren y se cierran en cada respiración. Subes la PEEP a 12 cmH₂O. ¿Qué le pasa al alvéolo que se cerraba?',
       ops: [
         { t: 'Se cierra aún más, porque más presión al final de la espiración lo comprime.', ok: false, e: 'Al revés: la PEEP sostiene la vía pequeña abierta. Si esto fuera cierto, la cizalla de abrir y cerrar seguiría en cada respiración y la lesión de la vía aérea se acumularía.', c: C.atelect },
-        { t: 'Se queda abierto al espirar y deja de abrirse y cerrarse.', ok: true, e: 'Sus presiones de cierre (6, 8 y 10 cmH₂O en este modelo) quedan por debajo de la PEEP de 12: ya no colapsa al final de la espiración y no hay que volver a abrirlo.', c: C.atelect },
+        { t: 'Se queda abierto al espirar y deja de abrirse y cerrarse.', ok: true, e: 'Sus presiones de cierre (5 cmH₂O en este modelo) quedan por debajo de la PEEP de 12: ya no colapsa al final de la espiración y no hay que volver a abrirlo.', c: C.atelect },
         { t: 'Nada: la PEEP solo cambia la oxigenación, no lo que ocurre dentro del alvéolo.', ok: false, e: 'La PEEP actúa justo ahí: sin ella el espacio aéreo colapsa al final de la espiración, empeora el intercambio de gases y favorece la hipoxemia.', c: C.colapsoPeep },
       ],
       exp: 'Abrir una unidad pide más presión que mantenerla abierta (histéresis): por eso una PEEP por encima de la presión de cierre la deja abierta todo el ciclo. Es el atelectrauma que evita la PEEP.',
@@ -225,7 +226,7 @@ export const ESTADOS = {
       { t: 'Al inspirar, la presión alveolar sube y cada unidad pasa de colapsada a abierta cuando llega a su presión de apertura, una detrás de otra. Mira el racimo mientras sube el volumen.', org: 'ilustrativo', s: ['#pul-esc-racimo', 'vol:insp'], c: C.histeresis },
       { t: 'Sin PEEP, la presión alveolar cae por debajo de la presión de cierre y las tres unidades se colapsan al espirar. En la siguiente respiración hay que abrirlas otra vez: el racimo muestra ese abrir y cerrar a cada ciclo.', org: 'ilustrativo (presiones) · ficha (mecanismo)', s: ['#pul-esc-racimo', 'vol:finesp'], c: C.atelect },
       { t: 'Ese abrir y cerrar crea fuerzas de cizalla que dañan el epitelio de la vía aérea: es el atelectrauma, y se evita o se reduce aplicando PEEP para mantener abierta la vía pequeña al final de la espiración. Con tantas respiraciones al día, la lesión se acumula: el Libro Azul (pág. 67 del PDF) habla de unas 30 000 aperturas y cierres por día.', org: 'ficha · Libro Azul IV, pág. 67 (30 000) · Marino cap. 22 p. 48 (atelectrauma)', s: ['#pul-esc-racimo', '#pul-esc-atel'], c: C.atelect },
-      { t: 'La compliance lo paga: la Cstat sale baja porque parte del pulmón no participa. Sube la PEEP a 12 con el mando y compara: las tres unidades dejan de cerrarse.', org: 'modelo (cifras ilustrativas)', s: ['[data-fila="cstat"]', '#pul-esc-pantalla'], c: C.mejorPeep },
+      { t: 'La compliance lo paga: la Cstat sale baja porque parte del pulmón no participa. Sube la PEEP con el mando y compara: a partir de 5 cmH₂O (ilustrativo) las tres unidades dejan de cerrarse y se apaga el sello.', org: 'modelo (cifras ilustrativas)', s: ['[data-fila="cstat"]', '#pul-esc-pantalla'], c: C.mejorPeep },
     ],
     fuentes: [C.atelect, C.histeresis, C.inflexion, C.mejorPeep],
   },
@@ -256,11 +257,11 @@ export const ESTADOS = {
   // ───────── E3-enganche: el pulmón mueve el corazón (js/modules/libros/pulmon-vivo/corazon.js). `corazon` dice qué corazón se calcula
   // con el motor del corazón (eco/motor.mjs, el del shock vivo): 'ic' = el de Ramiro (RECETA_IC, g = 1), 'normal' = el sano.
   'cpap-eap': {
-    tit: 'CPAP en el edema agudo de pulmón: el corazón que falla eyecta más', pac: 'herminia', corazon: { tipo: 'ic', tope: 10 },
-    resp: { modo: 'psv', vt: 500, fr: 16, peep: 0, flujo: 60, pinsp: 10, ie: 2, pmax: 40, ps: 0, frEsp: 16 }, pulmon: { c: 40, r: 8 }, man: {},
+    tit: 'CPAP en el edema agudo de pulmón: el corazón que falla eyecta más', pac: 'herminia', pmus: true, cpap: true, corazon: { tipo: 'ic', tope: 10 },
+    resp: { modo: 'psv', vt: 500, fr: 16, peep: 0, flujo: 60, pinsp: 10, ie: 2, pmax: 40, ps: 0, frEsp: 20, pmus: 11.5, tin: 1.5 }, pulmon: { c: 40, r: 8 }, man: {},
     frase: 'En el corazón que falla, la presión positiva en el tórax le quita trabajo al ventrículo y el volumen sistólico sube.',
     guia: [
-      { t: 'Herminia, en edema agudo de pulmón, respira con CPAP: una presión constante (usualmente 5-10 cmH₂O) que evita el colapso de las vías pequeñas y los alvéolos al final de la espiración. Aquí el mando PEEP hace de CPAP y el soporte está a 0. Empieza en 0 y súbelo a 5 y a 10.', org: 'ficha · el mando PEEP como CPAP: ilustrativo', s: ['[data-fila="cor-pm"]'], c: { f: 'neumo-vni-metodos', id: 'nep-cpap-presion', sitio: 'CPAP: presión constante, usualmente 5-10 cmH₂O', p: 77 } },
+      { t: 'Herminia, en edema agudo de pulmón, respira con CPAP: una presión constante (usualmente 5-10 cmH₂O) que evita el colapso de las vías pequeñas y los alvéolos al final de la espiración. Aquí el mando PEEP hace de CPAP y el soporte está a 0: el volumen que mueve (unos 350 mL) lo genera su propio esfuerzo contra la compliance, y la CPAP no lo cambia. Empieza en 0 y súbelo a 5 y a 10.', org: 'ficha · el mando PEEP como CPAP y el esfuerzo (Pmus 11,5): ilustrativo', s: ['[data-fila="cor-pm"]'], c: { f: 'neumo-vni-metodos', id: 'nep-cpap-presion', sitio: 'CPAP: presión constante, usualmente 5-10 cmH₂O', p: 77 } },
       { t: 'Esa presión llega a la pleura y rodea al corazón. Marino lo enseña con la presión arterial durante una insuflación con presión positiva: sube mientras sube la presión intratorácica, y el área sombreada de la curva, que es proporcional al volumen sistólico, crece.', s: ['[data-fila="cor-pm"]', '[data-fila="cor-vs"]'], c: { f: 'neumo-vni-uso', id: 'nep-vni-edema', sitio: 'CPAP en el edema agudo de pulmón y el volumen sistólico', p: 83 } },
       { t: 'La razón es la poscarga del ventrículo izquierdo: poscarga = presión de la cámara − presión pleural. Con la pleura más positiva, la pared se mueve hacia dentro con menos esfuerzo en la sístole y la presión positiva asiste al VI en la eyección.', s: ['[data-fila="cor-vs"]'], c: { f: 'neumo-vni-uso', id: 'nep-poscarga-vpp', sitio: 'Poscarga: la presión positiva la baja (Ec. 26.1)', p: 87 } },
       { t: 'El corazón que falla está en la parte plana de la curva de precarga y en la empinada de la de poscarga: bajar la poscarga le ayuda más de lo que le cuesta perder algo de llenado. Mira el VS y el GC del panel al subir la CPAP: suben, y la PAM con ellos.', s: ['[data-fila="cor-vs"]', '[data-fila="cor-gc"]', '[data-fila="cor-pam"]'], c: { f: 'neumo-vni-uso', id: 'nep-corazon-papel', sitio: 'El papel de la función cardíaca', p: 88 } },
@@ -315,7 +316,16 @@ Object.assign(C, {
   inverso: { f: 'libro-azul-resp2', id: null, sitio: 'Desencadenante inverso: sobredistensión; Hering-Breuer, «en proceso de investigación» (pp. 558-559)', p: '94-95' },
   psili: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-psili', sitio: 'P-SILI: esfuerzo aumentado, Vt ≥9,5 mL/kg e intubar antes que después (Fig. 24.4)', p: '40-42' },
   sbt: { f: 'neumo-sbt', id: 'nep-sbt-tabla', sitio: 'Tabla 30.1: criterios y predictores de éxito de la prueba', p: 52 },
+  sbtRapida: { f: 'neumo-sbt', id: 'nep-sbt-rapida', sitio: 'Respiración rápida: la taquipnea puede ser ansiedad (Vt aumentado) o fallo ventilatorio (Vt disminuido)', p: 54 },
+  sbtOpiaceo: { f: 'neumo-sbt', id: 'nep-sbt-manejo', sitio: 'Manejo: si es ansiedad, un sedante; los opiáceos calman la disnea', p: 55 },
   pimax: { f: 'neumo-sbt', id: 'nep-sbt-pimax', sitio: 'Presión inspiratoria máxima: −120 y −84 de media; amenaza a −20 o −30', p: 58 },
+});
+Object.assign(C, {
+  flujoFio2: { f: 'neumo-o2-sistemas', id: 'nep-flujo-fio2', sitio: 'Tasa de flujo y FiO₂: la FiO₂ es el balance entre el flujo de O₂ y el inspiratorio del paciente (15 L/min en reposo, hasta 120 en insuficiencia respiratoria)', p: 61 },
+  hfnoDiseno: { f: 'neumo-o2-sistemas', id: 'nep-hfno-diseno', sitio: 'HFNO: 40-60 L/min, lavado del espacio muerto (30 % del Vt), sumidero y volumen al final de la espiración', p: '64-65' },
+  hfnoPeep: { f: 'neumo-o2-sistemas', id: 'nep-hfno-peep', sitio: 'HFNO: PEEP de 2-3 cmH₂O solo con la boca cerrada', p: 65 },
+  t253: { f: 'neumo-o2-sistemas', id: 'nep-tabla-25-3', sitio: 'Tabla 25.3: beneficios del oxígeno nasal de alto flujo', p: 65 },
+  hfnoSustituye: { f: 'neumo-o2-sistemas', id: 'nep-tabla-25-3', sitio: 'Beneficios clínicos: el HFNO debería sustituir a la oxigenoterapia convencional en la insuficiencia respiratoria hipoxémica aguda', p: '65-66' },
 });
 NOTAS.push(
   { k: 'pmus-ilu', tipo: 'calla', txt: 'La ecuación del movimiento (Libro azul IV, p. 511) incluye el esfuerzo del paciente (Pmus), pero ninguna fuente de este plan da su amplitud ni su duración. Aquí el esfuerzo es ilustrativo: 0 a 15 cmH₂O, con aviso a 12 y duración y ritmo propios de cada estado. La presión inspiratoria máxima de Marino (−120 y −84 cmH₂O de media, y amenaza de la ventilación a −20 o −30; cap. 30 p. 58) es un esfuerzo máximo contra vía cerrada, no el esfuerzo de reposo.', citas: [C.ecMov, C.pimax] },
@@ -323,7 +333,7 @@ NOTAS.push(
 );
 PACIENTES.push(
   { k: 'ceferino', nombre: 'Ceferino', chip: '67 a · neumonía en resolución', linea: '67 años, 1,75 m, neumonía en resolución, sedación ligera: dispara el respirador y se prueba su destete. PBW 70,5 kg.', talla: 175, sexo: 'v', estado: 'asincronia-ineficaz' },
-  { k: 'elvira', nombre: 'Elvira', chip: '45 a · trasplantada renal · P-SILI', linea: '45 años, 58 kg, 1,60 m (talla ilustrativa), trasplantada renal; neumonía con fallo hipoxémico que sigue respirando con mucho esfuerzo; intubada. PBW 52,4 kg.', talla: 160, sexo: 'm', estado: 'p-sili' },
+  { k: 'elvira', nombre: 'Elvira', chip: '45 a · trasplantada renal · P-SILI', linea: '45 años, 58 kg, 1,60 m (talla ilustrativa), trasplantada renal; neumonía con fallo hipoxémico que sigue respirando con mucho esfuerzo (en el P-SILI, intubada con soporte; en el alto flujo, con cánula). PBW 52,4 kg.', talla: 160, sexo: 'm', estado: 'p-sili' },
 );
 const RESP_E4 = { vt: 500, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 };
 Object.assign(ESTADOS, {
@@ -393,7 +403,118 @@ Object.assign(ESTADOS, {
     fuentes: [C.sbt, C.pimax],
   },
 });
-ORDEN_ESTADOS.push('p-sili', 'asincronia-ineficaz', 'doble-disparo', 'sbt-ok', 'sbt-fracaso');
+ESTADOS['disparo-inverso'] = {
+  tit: 'Disparo inverso: el esfuerzo llega con la insuflación ya empezada', pac: 'ceferino', pmus: true, seg: 6, resp: { ...RESP_E4, modo: 'vcv', vt: 400, fr: 12, flujo: 30, pmus: 12, tin: 1.5, frNeural: 20, retraso: 0.4 }, pulmon: { c: 60, r: 8 }, man: {},
+  frase: 'La insuflación la empieza el respirador por tiempo y el esfuerzo llega después: puede disparar otra y apilar el volumen.',
+  guia: [
+    { t: 'Aquí el respirador insufla por tiempo (FR 12) y el esfuerzo de Ceferino llega 0,4 s después de empezar la insuflación, no antes. En la curva «Pmus» el empujón cae ya dentro de la inspiración del respirador; en el disparo normal precede al pico.', org: 'ficha (concepto) · retraso 0,4 s y amplitud 12: ilustrativo', s: ['pmus:insp', 'paw:insp'], c: C.inverso },
+    { t: 'Es el disparo inverso: un nuevo disparo dentro de un ciclo inspiratorio. El libro lo relaciona con la sobredistensión y con el reflejo de Hering-Breuer, pero dice que el mecanismo está en proceso de investigación: por eso aquí es una demostración de lo que se ve, no una explicación cerrada.', org: 'ficha (Libro Azul IV-2, pp. 558-559)', s: ['paw:insp'], c: C.inverso },
+    { t: 'Consecuencia: el esfuerzo sigue cuando acaba la insuflación, baja la Paw por debajo de la PEEP y el respirador dispara una segunda vez. Los dos volúmenes se apilan: programaste 400 mL y entran unos 800 (el doble). Es la misma cadena que el doble disparo.', org: 'ficha (disparo; doble disparo) · 800 mL: modelo', s: ['paw:esp', 'flujo:insp'], c: C.doble },
+    { t: 'Fíjate en la diferencia con el doble disparo: allí el esfuerzo empieza antes de la insuflación y dispara el respirador; aquí la insuflación ya iba en marcha y el esfuerzo la sorprende. Cuando ves un pico de presión extra en plena inspiración, piensa en esta asincronía.', org: 'ficha (definiciones) · lectura de la curva: modelo', s: ['pmus:insp', '#pul-trazas'], c: C.asincronia },
+  ],
+  fuentes: [C.asincronia, C.inverso, C.doble, C.ecMov],
+};
+ESTADOS.hfno = {
+  tit: 'Alto flujo nasal: la cánula que lava el espacio muerto', pac: 'elvira', pmus: true, hfno: true, seg: 8,
+  resp: { ...RESP_E4, modo: 'psv', ps: 0, peep: 0, frEsp: 28, pmus: 14, tin: 1 }, pulmon: { c: 40, r: 8 }, man: {},
+  frase: 'Sin respirador: la cánula solo aporta flujo. Sube el flujo y mira qué le pasa a la FiO₂ que llega al alvéolo y al esfuerzo de Elvira. Con la boca cerrada deja 2-3 cmH₂O de PEEP; abierta, 0: no es VNI (Marino cap. 25, p. 65).',
+  guia: [
+    { t: 'Elvira respira por su cuenta, sin presión de soporte ni PEEP: la cánula nasal de alto flujo es lo único que le llega. Con 10 L/min no se distingue de una cánula convencional: mucho esfuerzo (Pmus 14) y FR de 28.', org: 'ficha (cánula de alto flujo: Marino cap. 25 p. 64) · Pmus 14 y FR 28: ilustrativo', s: ['pmus:insp', '#pul-esc-pantalla'], c: C.hfnoDiseno },
+    { t: 'La FiO₂ que llega al alvéolo no es la del mando: es el balance entre el flujo de O₂ de la cánula y el flujo inspiratorio de la paciente. Si ella inspira más de lo que da la cánula, el sobrante lo toma de la habitación y la FiO₂ baja. Marino cifra el flujo inspiratorio en unos 15 L/min en reposo y hasta 120 en insuficiencia respiratoria.', org: 'ficha (Marino cap. 25 p. 61) · la cifra de la casilla FiO₂: ilustrativo (mezcla lineal)', s: ['[data-fila="fio2"]', 'flujo:insp'], c: C.flujoFio2 },
+    { t: 'Sube el flujo de la cánula hacia 40-60 L/min (los equipos dan 40-60 según el fabricante). Al superar el flujo inspiratorio de Elvira, la cánula cubre toda su inspiración: ya no entra aire de la habitación y la FiO₂ efectiva alcanza la del mando.', org: 'ficha (Marino cap. 25 p. 64) · flujo inspiratorio de Elvira: del modelo', s: ['[data-fila="fio2"]', 'flujo:insp'], c: C.hfnoDiseno },
+    { t: 'Además el flujo alto lava el espacio muerto de la nasofaringe (cerca del 30 % de cada volumen corriente sale del espacio muerto anatómico), evita reinhalar CO₂ y mantiene la FiO₂ aunque ella sobrerrespire. Marino atribuye a todo esto la menor FR y el menor trabajo respiratorio: en la curva «Pmus», el empujón baja de 14 a 8 cmH₂O y la FR de 28 a 20.', org: 'ficha (Marino cap. 25 p. 64-65, Tabla 25.3) · 14→8 y 28→20: ilustrativo', s: ['pmus:insp', '[data-fila="fr"]'], c: C.t253 },
+    { t: 'No es VNI: el alto flujo genera una PEEP baja, de 2-3 cmH₂O, solo con la boca cerrada, algo raro en un paciente con insuficiencia respiratoria. Activa «Boca cerrada» para verla en la PEEP; con la boca abierta, la presión es 0. El aumento del volumen al final de la espiración no se explica solo por esa PEEP.', org: 'ficha (Marino cap. 25 p. 65) · 2,5: punto medio de 2-3', s: ['[data-fila="peeptot"]', 'paw:esp'], c: C.hfnoPeep },
+    { t: 'Lo que cuenta es la comodidad: respirar con menos esfuerzo reduce el riesgo de lesión autoinducida (P-SILI) y puede evitar la intubación. Marino recomienda que el alto flujo sustituya a la oxigenoterapia convencional en la insuficiencia respiratoria hipoxémica aguda.', org: 'ficha (Marino cap. 25 p. 65-66; cap. 24 p. 40-42)', s: ['#pul-esc-pantalla'], c: C.hfnoSustituye },
+  ],
+  fuentes: [C.flujoFio2, C.hfnoDiseno, C.hfnoPeep, C.t253, C.hfnoSustituye],
+};
+export const HFNO = {
+  min: 10, max: 60, tope: 60, paso: 5, inicio: 10, fio2Mando: 80, inspNormal: 15,   // tope: 40-60 L/min según el fabricante (Marino cap. 25 p. 64); 15: p. 61; 10, 5 y 80 (FiO₂ del caso): ilustrativo
+  pmus: [14, 12], frEsp: [28, 20],   // de 10 a 60 L/min (ilustrativo: Marino dice que baja la FR y el trabajo respiratorio, p. 65, pero no da cifras; el Vt se queda en ≈6 mL/kg: lo que baja es la FR)
+  peepBoca: 2.5,   // 2-3 cmH₂O con la boca cerrada (Marino cap. 25 p. 65)
+  spo2: { aire: 84, alta: 95, fio2Alta: 80 },   // los dos puntos del caso de Elvira (SpO₂ 84 con aire; 95 con FiO₂ 80 %): ilustrativo, el modelo no calcula gases
+};
+Object.assign(C, {
+  pronoFisio: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-fisiologia', sitio: 'Prono: más flujo en la región anterior y aireación posterior; mejora la oxigenación y la eliminación de CO₂; sube la distensibilidad', p: '43-44' },
+  pronoCuando: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-cuando', sitio: 'Cuándo usarlo: ventilados con P/F <150 y Vt de ~6 mL/kg (beneficio en la supervivencia)', p: 44 },
+  tabla244: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-tabla-24-4', sitio: 'Tabla 24.4: indicaciones y 5 contraindicaciones absolutas del prono', p: 44 },
+  pronoComo: { f: 'neumo-sdra-no-ventilatorio', id: 'nep-prono-como', sitio: 'Cómo usarlo: al menos 16 h al día con ventilación mecánica; la mejoría que persiste 4 h tras la sesión; complicaciones', p: 45 },
+});
+ESTADOS.prono = {
+  tit: 'Prono: el pulmón se airea por detrás', pac: 'isidro', prono: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 352, fr: 30, peep: 10, flujo: 60, pinsp: 15, ie: 2, pmax: 40 }, pulmon: { c: 19, r: 8 }, man: { pausa: true },
+  frase: 'Girar a Isidro boca abajo airea la zona de atrás, consolidada en supino: la compliance sube y el P/F mejora con las horas.',
+  guia: [
+    { t: 'Isidro tiene un SDRA moderado: P/F 120 con PEEP 10 y FiO₂ 60 % (el caso de la ficha), ventilado con Vt bajo (aquí 5 mL/kg; Marino pide ~6). El TC muestra consolidación densa en la zona posterior: en el racimo, la mitad dorsal está rayada. Cumple la indicación: P/F <150 con FiO₂ ≥60 % y PEEP ≥5.', org: 'ficha (Marino cap. 24 p. 43-44, Tabla 24.4) · P/F 120: caso del plan', s: ['#pul-esc-racimo', '[data-fila="fio2"]'], c: C.pronoCuando },
+    { t: 'Pulsa «Prono» y sube las horas. El prono no solo manda más flujo sanguíneo a la región anterior: también airea los segmentos posteriores, lo que mejora la oxigenación y facilita la salida de CO₂. En el dibujo, la mitad dorsal pasa arriba y sus alvéolos van saliendo del rayado.', org: 'ficha (Marino cap. 24 p. 43-44)', s: ['#pul-esc-racimo'], c: C.pronoFisio },
+    { t: 'Marino dice que con el prono «aumenta la distensibilidad», sin dar cifra. Aquí la Cstat sube con las horas (de 13 a unos 17 mL/cmH₂O en el monitor) y la meseta baja con el mismo Vt, porque hay más pulmón abierto que reparte el volumen.', org: 'ficha (la subida) · las cifras: ilustrativo', s: ['[data-fila="cstat"]', '[data-fila="meseta"]'], c: C.pronoFisio },
+    { t: 'La sesión de un paciente ventilado dura al menos 16 horas al día. A las 16 h el P/F de Isidro sube de 120 a 180, la cifra del caso del plan. Con menos de 16 h sale el aviso. Si se piden más horas, el mando se queda en 16 h: la fuente no da un máximo.', org: 'ficha (≥16 h, Marino cap. 24 p. 45) · 120 → 180: ilustrativo', s: ['[data-fila="fio2"]', '[data-m="horas"]'], c: C.pronoComo },
+    { t: 'Después se evalúa. Pulsa «Supino, 4 h después»: la mejoría persiste (P/F 175, Cstat casi igual) y entonces no hace falta otra sesión. Si no hay beneficio tras la primera sesión, tampoco están justificadas más.', org: 'ficha (Marino cap. 24 p. 45) · 175: ilustrativo', s: ['[data-fila="fio2"]', '[data-fila="cstat"]'], c: C.pronoComo },
+    { t: 'No se puede girar a cualquiera. Abre «Contraindicaciones absolutas» y marca una: hemorragia activa, inestabilidad espinal, fracturas múltiples, presión intracraneal elevada o traqueostomía o esternotomía de menos de 2 semanas. El mando de horas se apaga y sale el sello. Las relativas (shock circulatorio, embarazo, arritmias recientes, tubos de tórax) no se modelan.', org: 'ficha (Marino cap. 24 p. 44, Tabla 24.4)', s: ['#pul-dock-panel'], c: C.tabla244 },
+  ],
+  fuentes: [C.pronoCuando, C.pronoFisio, C.tabla244, C.pronoComo],
+};
+export const PRONO = {
+  tope: 16, inicio: 1, fio2: 60, persiste: 55 / 60, alvCons: 6,   // tope 16 h: mínimo diario con ventilación (Marino cap. 24 p. 45); FiO₂ 60 %: Tabla 24.4; 6 alvéolos de 12 en la mitad dorsal; persiste: 175 de 180 a las 4 h (el caso)
+  c: [19, 24], pf: [120, 180],   // ilustrativo: la ficha solo dice que sube la distensibilidad (p. 43-44); P/F 120 → 180 a las 16 h y 175 4 h después, las cifras del caso del plan
+  contra: [
+    { k: 'hemorragia', et: 'Hemorragia activa' }, { k: 'espinal', et: 'Inestabilidad espinal' }, { k: 'fracturas', et: 'Fracturas múltiples' },
+    { k: 'pic', et: 'Presión intracraneal elevada' }, { k: 'reciente', et: 'Traqueostomía o esternotomía reciente (2 sem)' },
+  ],
+};
+
+// ---------------------------------------------------------------- S3 · fuga del cuff y estridor (Benito; cuff.js)
+FICHA['neumo-weaning-extubacion'] = [NEUMO_E4, 'Destete y extubación', 'Destete y extubación', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  cuffPresion: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-presion', sitio: 'Presión del manguito: no pasar de 25 (isquemia de la mucosa traqueal)', p: 21 },
+  cuffFuga: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-fuga', sitio: 'Fugas del manguito: Vt programado − Vt espirado', p: 22 },
+  cuffSolucion: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-solucion', sitio: 'Si hay fuga: reposicionar y reinflar sin pasar de 25 cmH₂O', p: 22 },
+  cuffPrueba: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-prueba', sitio: 'Prueba de fuga del manguito: inhalado − exhalado, mejor en VCV', p: 59 },
+  cuffRecom: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-recomendacion', sitio: 'Fuga >110 mL: nada más; <110 mL: riesgo ×7, esteroides y VNI', p: 59 },
+  cuffEster: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-esteroides', sitio: 'Metilprednisolona 20 mg/4 h, primera dosis 12 h antes (Fig. 30.5)', p: '59-60' },
+  cuffEstridor: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-estridor', sitio: 'Estridor post-extubación: ruido inspiratorio, aparece con ~50 % de obstrucción', p: 60 },
+  cuffManejo: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-manejo', sitio: 'Estridor: dentro de 30 min; signos de fallo → reintubar sin demora', p: 60 },
+});
+// Sbt-ansiedad (Marino cap. 30 pp. 52-55): FR <40 y FR/Vt 60-105 (Tabla 30.1) y el opiáceo (p. 55) son de la ficha; Pmus, FR 30/22 y compliance: ilustrativo
+export const ANSIEDAD = { pmus: 4.5, frOpi: 22, pmusOpi: 3.5, frMax: 40, frMando: 45, frMin: 10 };
+export const CUFF = {
+  tope: 25, aviso: 20, max: 30, inicio: 25, corte: 110,   // tope 25 (Marino cap. 28 p. 21: 25 mmHg; p. 22: 25 cmH₂O); aviso a 20 = 80 % del tope; corte 110 mL (cap. 30 p. 59); el mando llega a 30 para poder pedir de más
+  fuga0: 200, fugaEdema0: 80,   // fuga con el cuff a 0 sin edema / con edema: ilustrativo (Marino solo da el corte de 110 mL; 80 es la cifra del caso de Benito)
+  riesgo: [22, 3],   // probabilidad de edema laríngeo sin y con esteroide: ilustrativo (Fig. 30.5 solo dice «7 veces menos»; 22/7 ≈ 3)
+  spo2: [96, 86], vt: 410, esp: { pmus: 11, tin: [1.8, 1.1], fr: [16, 26], r: [10, 35] },   // SpO₂ normal / con estridor y FR 26, Tin 1,1 s y resistencia inspiratoria 35: ilustrativo
+};
+NOTAS.push(
+  { k: 'cuff-mmhg', tipo: 'discrepan', txt: 'Marino da el límite de presión del cuff en dos unidades: 25 mmHg (p. 21, la presión de los capilares de la mucosa) y 25 cmH₂O (p. 22, al reponer aire). No son lo mismo: 25 mmHg son unos 34 cmH₂O. El mando usa 25 cmH₂O, el más estricto de los dos; el sello de isquemia cita la primera cifra.', citas: [C.cuffPresion, C.cuffSolucion] },
+  { k: 'cuff-ilu', tipo: 'calla', txt: 'Marino define la fuga como la diferencia entre el volumen inhalado y el exhalado y da el corte de 110 mL, pero no dice cuánto se escapa con cada presión del cuff ni da un valor predictivo positivo del corte (solo que el valor predictivo es limitado). Las fugas del modelo (200 mL con el cuff a 0 y 80 con edema; proporcionales a la presión que falta hasta 25), la probabilidad de edema (22 % → 3 %) y la SpO₂ del estridor son ilustrativas.', citas: [C.cuffPrueba, C.cuffRecom] },
+);
+ESTADOS['fuga-cuff'] = {
+  tit: 'Fuga del cuff: ¿se puede extubar?', pac: 'benito', cuff: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 410, fr: 16, peep: 6, flujo: 60 }, pulmon: { c: 45, r: 10 }, man: {},
+  frase: 'Con el cuff inflado nada se escapa. Desínflalo y la fuga (volumen inspirado − espirado) dice si la laringe de Benito está edematosa.',
+  guia: [
+    { t: 'Benito lleva 7 días intubado y cumple los criterios de destete. Con el cuff a 25 cmH₂O el sello es total: el Vt inspirado (410 mL) y el espirado son iguales y la fuga es 0. Marino pone el tope de presión del cuff en 25: por encima comprime los capilares de la mucosa traqueal y la isquema.', org: 'ficha (cap. 28 p. 21-22) · fuga 0: modelo', s: ['[data-fila="fuga"]', '[data-fila="vt"]'], c: C.cuffPresion },
+    { t: 'Una fuga se estima como la diferencia entre el volumen programado y el espirado. Si bajas el cuff a 15 se oye la fuga y el Vt espirado cae a unos 330 mL (fuga de 80). Aún no es la prueba: con el cuff a medias la fuga solo dice que el sello falla.', org: 'ficha (cap. 28 p. 22) · 80 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffFuga },
+    { t: 'La prueba se hace con el cuff del todo desinflado y en volumen control. Si el aire pasa por una laringe sana, la fuga es grande (aquí 200 mL, ilustrativo): una fuga >110 mL elimina el riesgo de edema laríngeo con un 95 % de certeza aproximada y no hace falta nada más antes de extubar.', org: 'ficha (cap. 30 p. 59) · 200 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffRecom },
+    { t: 'Activa «Edema laríngeo» y vuelve a desinflar: la fuga cae a 80 mL, por debajo de 110. Eso multiplica por 7 el riesgo de edema tras extubar. Marino pide pretratar con metilprednisolona 20 mg cada 4 h (la primera dosis 12 h antes: dada justo antes no sirve) y poner ventilación no invasiva nada más extubar.', org: 'ficha (cap. 30 p. 59-60) · 80 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffEster },
+    { t: 'Extubar con el cuff a 0 y dejar pasar 30 minutos: el estridor aparece casi siempre en ese plazo. Sin esteroide, el flujo inspiratorio se aplana, la FR sube y la saturación cae: signos de fallo inminente, que obligan a reintubar sin demora. Con el esteroide dado 12 h antes no hay estridor: el riesgo baja de 22 % a 3 % (siete veces menos en el estudio; las cifras del modelo son ilustrativas).', org: 'ficha (cap. 30 p. 60) · cifras: ilustrativo', s: ['flujo:insp', '[data-fila="vt"]', '[data-fila="fio2"]'], c: C.cuffManejo },
+  ],
+  fuentes: [C.cuffPresion, C.cuffFuga, C.cuffPrueba, C.cuffRecom, C.cuffEster, C.cuffManejo],
+};
+ESTADOS['sbt-ansiedad'] = {
+  tit: 'Prueba de respiración espontánea: rápido y profundo, ansiedad', pac: 'benito', pmus: true, ansiedad: true, resp: { ...RESP_E4, modo: 'psv', ps: 5, frEsp: 30, pmus: ANSIEDAD.pmus, tin: 1 }, pulmon: { c: 60, r: 5 }, man: {},
+  frase: 'Respira a 30 por minuto, pero con volumen: rápido y profundo es ansiedad, no fracaso. Dale el opiáceo y mira si el Vt cae.',
+  fraseOpi: 'Se calmó (FR 22) y el Vt no cayó: era ansiedad, no fracaso ventilatorio.',
+  guia: [
+    { t: 'Benito (PBW 68 kg) está en la prueba con PSV 5, como en la prueba superada, pero respira a 30 por minuto. Es el motivo de alarma más frecuente: la respiración rápida durante la prueba.', org: 'ficha (cap. 30 p. 54) · FR 30: ilustrativo', s: ['#pul-esc-pantalla'], c: C.sbtRapida },
+    { t: 'Mira el volumen: unos 450 mL (6,6 mL/kg PBW) y un cociente FR/Vt de unos 67, dentro del intervalo de 60 a 105. La ansiedad produce hiperventilación: la frecuencia y el volumen suben a la vez.', org: 'ficha (Tabla 30.1 p. 52; cap. 30 p. 54) · cifras: modelo, compliance 60 ilustrativa', s: ['[data-fila="vt"]'], c: C.sbt },
+    { t: 'Compáralo con el fracaso ventilatorio: allí la frecuencia sube y el volumen baja (rápido y superficial, FR/Vt por encima de 105). Con el Vt aumentado, la causa de la taquipnea es la ansiedad; con el Vt disminuido, el fallo ventilatorio y hay que volver al respirador.', org: 'ficha (cap. 30 p. 54)', s: ['flujo:insp', '[data-fila="vt"]'], c: C.sbtRapida },
+    { t: 'Pulsa «Opiáceo»: la FR baja a 22 y el esfuerzo se reduce, y el Vt se queda en unos 400 mL. Si se sospecha ansiedad se considera un sedante, y los opiáceos son los preferidos porque calman la sensación de disnea.', org: 'ficha (cap. 30 p. 55) · FR 22, Vt 400: ilustrativo', s: ['pmus:insp', '[data-fila="vt"]'], c: C.sbtOpiaceo },
+    { t: 'El mando «FR del paciente» llega hasta 40: la ficha da FR <40 como predictor de éxito. Por encima el mando se queda en 40 y sale el sello.', org: 'ficha (Tabla 30.1 p. 52)', s: ['#pul-esc-pantalla'], c: C.sbt },
+  ],
+  fuentes: [C.sbt, C.sbtRapida, C.sbtOpiaceo],
+};
+PACIENTES.push({ k: 'benito', nombre: 'Benito', chip: '71 a · destete · cuff', linea: '71 años, 78 kg, 1,72 m, FEVI 35 %, día 7 de ventilación por neumonía: cumple los criterios de destete y se le prueba la fuga del cuff. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'fuga-cuff' });
+ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'fuga-cuff', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso', 'sbt-ansiedad');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
@@ -403,6 +524,7 @@ Object.assign(C, {
 });
 export const NEUMOTORAX = {
   tope: 20, shock: 10.5, parada: 13.5, paso: 0.75, spo2Base: 98, spo2PorCmH2O: 0.6,   // ilustrativo: cmH₂O de presión pleural extra (shock obstructivo desde 10,5, donde la PAM del monitor queda en 59 mmHg tras acotar el alivio de la poscarga; parada sin pulso desde 13,5, donde el motor ya da un gasto de 0,2 L/min y una PAM de 18: sin pulso palpable); +0,75 por respiración (2 respiraciones por pulsación = +1,5); SpO₂ = 98 − 0,6 · P
+  recuperacion: 6,   // respiraciones que tarda en volver el aire pleural a 0 tras descomprimir (ilustrativo: Marino no da el tiempo de recuperación)
   figura: 'js/modules/neumologia/img/neumo-fig28-7-radiografia-neumotorax-tension.jpg',
   sitios: {
     correcto: { k: 'correcto', et: '5.º espacio, por delante de la línea axilar media · 14 G, 8 cm', ok: true,
@@ -418,7 +540,7 @@ ESTADOS['neumotorax-tension'] = {
   guia: [
     { t: 'Rafael, el politrauma ventilado, de pronto tiene hipoxemia o hipotensión sin explicación. En el ventilado hay que pensar en el neumotórax a tensión: la presión positiva mete aire en la pleura y no deja que salga. Pulsa «Dejar pasar 2 respiraciones» y mira cómo crece la presión del neumotórax.', org: 'ficha · la presión que crece por ciclo: ilustrativo', s: ['#pul-neumo'], c: C.tension },
     { t: 'Pico y meseta suben juntos, y su diferencia se queda igual. Es una deducción nuestra de las ecuaciones: el pico es resistencia más elasticidad (Ec. 27.1), la meseta es solo la elasticidad (27.2) y su diferencia es la resistencia (27.3). El aire pleural endurece el sistema respiratorio, sube la parte elástica en las dos presiones y la resistencia no cambia.', org: 'deducción de la Ec. 27.1-27.3 · Marino no lo dice', s: ['[data-fila="pico"]', '[data-fila="meseta"]', '[data-fila="pres"]'], c: C.ec271 },
-    { t: 'El aire pleural comprime el pulmón y aumenta la presión intratorácica. Marino lo describe: colapsa el pulmón del mismo lado y produce una caída progresiva del gasto cardíaco que acaba en shock obstructivo y, después, paro por actividad eléctrica sin pulso. En el modelo, desde 10,5 cmH₂O de aire pleural salta el sello de shock obstructivo (con 10,5 la PAM del monitor es ≈59 mmHg y la SpO₂ ≈92 %) y desde 13,5, el de parada sin pulso (sin PAM ni gasto medibles), y a 20 no sube más. Mira la PAM y la SpO₂.', org: 'ficha · cap. 28 p. 28 (shock obstructivo y paro sin pulso) · las cifras y el 10,5 del sello: modelo ilustrativo', s: ['[data-fila="cor-pam"]', '[data-fila="cor-gc"]', '[data-fila="neumo-spo2"]'], c: C.tension },
+    { t: 'El aire pleural comprime el pulmón y aumenta la presión intratorácica. Marino lo describe: colapsa el pulmón del mismo lado y produce una caída progresiva del gasto cardíaco que acaba en shock obstructivo y, después, paro por actividad eléctrica sin pulso. En el modelo, desde 10,5 cmH₂O de aire pleural salta el sello de shock obstructivo (con 10,5 la PAM del monitor es ≈52 mmHg y la SpO₂ ≈92 %) y desde 13,5, el de parada sin pulso (sin PAM ni gasto medibles), y a 20 no sube más. Mira la PAM y la SpO₂.', org: 'ficha · cap. 28 p. 28 (shock obstructivo y paro sin pulso) · las cifras y el 10,5 del sello: modelo ilustrativo', s: ['[data-fila="cor-pam"]', '[data-fila="cor-gc"]', '[data-fila="neumo-spo2"]'], c: C.tension },
     { t: 'Se reconoce fácil en la radiografía portátil: sin marcas pulmonares en el hemitórax afectado, hemidiafragma deprimido y mediastino desplazado al lado contrario (Fig. 28.7). Es una emergencia médica: requiere descompresión inmediata, no esperar a la placa.', org: 'ficha', s: ['#pul-neumo-fig'], c: C.tension },
     { t: 'Descomprime: elige el sitio y pulsa «Descomprimir». El recomendado es un angiocatéter de 14 G y 8 cm en el 5.º espacio intercostal, justo por delante de la línea axilar media. Prueba antes el 2.º espacio en la línea medioclavicular con la aguja corta (5 cm, ilustrativa): es donde más falla.', org: 'ficha', s: ['#pul-neumo-sitios'], c: C.descompresion },
   ],
@@ -426,3 +548,65 @@ ESTADOS['neumotorax-tension'] = {
 };
 ORDEN_ESTADOS.push('neumotorax-tension');
 NOTAS.push({ k: 'neumo-pico-meseta', tipo: 'calla', txt: 'Marino no dice cómo cambian el pico y la meseta en el neumotórax a tensión. Que suban juntos, con la misma diferencia, es una deducción de las Ec. 27.1-27.3 (pico = Pres + Pel; meseta = Pel; pico − meseta = Pres). La presión del neumotórax (1,5 cmH₂O por respiración, sello de shock desde 10,5, sello de parada sin pulso desde 13,5), la SpO₂ (98 − 0,6 por cmH₂O) y los 5 cm de la aguja corta son ilustrativos; la fuente no da cifras de saturación ni de presión pleural, solo dice «hipoxemia o hipotensión inexplicadas».', citas: [C.ec271, C.meseta, C.tension] });
+
+// ---------------------------------------------------------------- M1 · secreciones sobre el balón y aspiración subglótica (subglotica.js)
+FICHA['neumo-nav-prevencion'] = [NEUMO_E4, 'NAV: generalidades y prevención', 'NAV: prevención', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  subglotica: { f: 'neumo-nav-prevencion', id: 'nep-subglotica', sitio: 'Tubo con puerto sobre el manguito, succión continua ≤ −20 cmH₂O: menos NAV', p: 38 },
+  biofilm: { f: 'neumo-cuidado-barotrauma', id: 'nep-aspiracion', sitio: 'Biofilm con patógenos en la superficie interna del tubo (Fig. 28.4)', p: 23 },
+});
+export const SUBGL = {
+  bajo: 15,   // por debajo, el sello falla (hueco entre balón y pared): ilustrativo; Marino no da un mínimo, solo «hasta que no haya fuga audible» (cap. 28 p. 21)
+  succion: 20,   // −20 cmH₂O, «habitualmente no superior» (cap. 29 p. 38): ficha
+  nivel: [1, 0.15],   // altura de la colección sobre el balón sin / con aspiración: ilustrativo
+  gotas: { sin: [2, 4], con: [1, 2] },   // gotas que escurren hacia el pulmón [balón sellado, balón bajo], sin / con aspiración: ilustrativo (Marino solo dice «reducción significativa de NAV»)
+};
+NOTAS.push({ k: 'subgl-ilu', tipo: 'calla', txt: 'Marino dice que el manguito inflado no impide que pasen las secreciones de la boca y que despejarlas por el puerto subglótico (succión continua, habitualmente no superior a −20 cmH₂O) reduce la NAV de forma significativa. No da una presión mínima del balón, ni cuántas secreciones pasan con cada presión, ni cuánto baja la NAV. Los 15 cmH₂O de «balón bajo», la altura de la colección y el número de gotas del dibujo son ilustrativos y solo marcan la dirección.', citas: [C.subglotica, C.cuffFuga] });
+ESTADOS.subglotica = {
+  tit: 'Secreciones sobre el balón: ¿aspiración subglótica?', pac: 'gaspar', subgl: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 410, fr: 16, peep: 6, flujo: 60 }, pulmon: { c: 45, r: 10 }, man: {},
+  frase: 'Las secreciones de la boca se acumulan sobre el balón y un poco baja por los pliegues aunque esté inflado.',
+  guia: [
+    { t: 'Gaspar lleva 4 días intubado. El tubo es un conducto de plástico donde se forma un biofilm con organismos patógenos en la superficie interna (Fig. 28.4): por eso las guías no recomiendan aspirar de rutina, porque el catéter puede desprenderlo hacia el pulmón.', org: 'ficha (cap. 28 p. 23)', s: ['#pul-esc-subgl'], c: C.biofilm },
+    { t: 'El balón inflado sella la tráquea para que el gas del respirador no se escape, pero no impide que las secreciones de la boca se acumulen encima y bajen hacia las vías aéreas inferiores. Mira la colección sobre el balón y las gotas que escurren.', org: 'ficha (cap. 29 p. 38) · gotas y nivel: ilustrativo', s: ['#pul-esc-subgl'], c: C.subglotica },
+    { t: 'Activa la aspiración subglótica: un puerto justo sobre el balón, conectado a succión continua (habitualmente no más de −20 cmH₂O), despeja la colección. En los estudios la NAV baja de forma significativa.', org: 'ficha (cap. 29 p. 38)', s: ['#pul-esc-subgl', '[data-fila="secr"]'], c: C.subglotica },
+    { t: 'Baja la presión del balón por debajo de 15: queda un hueco con la pared, hay fuga audible (el Vt espirado cae) y las secreciones pasan más. El 15 es ilustrativo: Marino pide inflar hasta que no haya fuga audible y no da un mínimo.', org: 'ficha (cap. 28 p. 21-22) · 15 cmH₂O: ilustrativo', s: ['[data-fila="fuga"]', '#pul-esc-subgl'], c: C.cuffFuga },
+    { t: 'Sube la presión por encima de 25: el mando se queda en 25 y sale el sello. Más presión comprime los capilares de la pared de la tráquea (25 mmHg) y la mucosa se isquemia. El balón no se sobreinfla para sellar mejor.', org: 'ficha (cap. 28 p. 21-22: 25 mmHg y 25 cmH₂O, nota de fuentes)', s: ['#pul-esc-subgl'], c: C.cuffPresion },
+  ],
+  fuentes: [C.biofilm, C.subglotica, C.cuffFuga, C.cuffPresion],
+};
+PACIENTES.push({ k: 'gaspar', nombre: 'Gaspar', chip: '67 a · día 4 · tubo con puerto', linea: '67 años, 80 kg, 1,72 m, traumatismo craneal, intubado desde hace 4 días; cabecera elevada. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'subglotica' });
+ORDEN_ESTADOS.push('subglotica');
+
+// ---------------------------------------------------------------- B3-cierre · el derrame paraneumónico (derrame.js)
+FICHA['neumo-derrame-antimicrobiano'] = [NEUMO_E4, 'Derrame paraneumónico y antimicrobianos', 'Derrame paraneumónico', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  derrameTabla: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-tabla', sitio: 'Tabla 29.5: clasificación de los derrames paraneumónicos', p: 45 },
+  derrameCat3: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-cat3', sitio: 'Categoría 3: loculado o >50 % del hemitórax, con datos de infección; tubo de 8,5-14 Fr', p: 46 },
+  derrameCat4: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-cat4', sitio: 'Categoría 4: empiema, drenaje inmediato', p: 46 },
+  derrameDrenaje: { f: 'neumo-derrame-antimicrobiano', id: 'nep-derrame-drenaje', sitio: 'Drenaje ineficaz: segundo tubo con TC, cirugía (VATS); sin fibrinolíticos', p: 46 },
+});
+export const DERRAME = {
+  // categoría por los datos del líquido (Tabla 29.5, cap. 29 p. 45); la tabla no define las mezclas
+  tam: { peq: { et: '<10 mm, libre' }, libre: { et: '>10 mm y <50 % del hemitórax, libre' }, locu: { et: 'Loculado o >50 % del hemitórax' } },
+  tope: 72, aviso: 24, sello: 48, pasoH: 12,   // horas con tubo: ilustrativo. Marino no da ningún plazo para decir que el drenaje es ineficaz (solo «inadecuado»); 24-48 h es la referencia del plan del profesor, sin fuente
+  nivelBase: { 1: 0.12, 2: 0.4, 3: 0.75, 4: 0.75 },   // fracción de la altura del hemitórax ocupada por líquido: ilustrativo
+  spo2: { 1: 97, 2: 96, 3: 93, 4: 93 },   // ilustrativo: la fuente no da saturaciones. El paciente es posible (hospitalizado con neumonía y derrame)
+  figura: null,
+};
+ESTADOS['derrame-paraneumonico'] = {
+  tit: 'Derrame paraneumónico: ¿tubo o no tubo?', pac: 'alonso', corazon: { tipo: 'normal' },
+  resp: { modo: 'vcv', vt: 450, fr: 16, peep: 5, flujo: 60, pinsp: 10, ie: 2, pmax: 40 }, pulmon: NORMAL, man: {},
+  frase: 'El líquido pleural dice si hace falta tubo: pH, glucosa, Gram y pus lo clasifican en cuatro categorías.',
+  guia: [
+    { t: 'Alonso tiene una neumonía y un derrame pleural. Se clasifica en 4 categorías con el grosor y el carácter del derrame y el análisis del líquido. Elige el tamaño y mira cómo cambia el líquido en el dibujo.', org: 'ficha (cap. 29 p. 45, Tabla 29.5)', s: ['#pul-derrame-dib', '#pul-derrame-tam'], c: C.derrameTabla },
+    { t: 'Cambia pH, glucosa y Gram o cultivo. Con pH >7,20, glucosa >60 mg/dL y Gram y cultivo negativos (categoría 2) no hay infección y no hace falta tubo. Con pH <7,20, glucosa <60 mg/dL y Gram o cultivo positivos en un derrame loculado o de más de la mitad del hemitórax (categoría 3), el drenaje con tubo es obligado.', org: 'ficha (cap. 29 p. 45-46)', s: ['#pul-derrame-liq', '#pul-derrame-cat'], c: C.derrameCat3 },
+    { t: 'Marca «pus»: es la categoría 4, el empiema. Drenaje inmediato, y un tubo fino de 8,5-14 Fr drena igual que uno de 28-36 Fr.', org: 'ficha (cap. 29 p. 46)', s: ['#pul-derrame-pus', '#pul-derrame-cat'], c: C.derrameCat4 },
+    { t: 'En la 3 o la 4, pon el tubo y deja pasar las horas. En el derrame libre el líquido sale; en el loculado queda líquido en bolsas y el drenaje es ineficaz. La ficha dice «difícil de drenar», sin plazo: las 24-48 h del modelo son ilustrativas.', org: 'ficha (cap. 29 p. 46) · las horas: ilustrativo', s: ['#pul-derrame-horas', '#pul-derrame-dib'], c: C.derrameDrenaje },
+    { t: 'Si el primer tubo no basta: otro tubo, mejor guiado por TC, y consulta a cirugía para VATS si persiste. Los fibrinolíticos intrapleurales no se aconsejan en general.', org: 'ficha (cap. 29 p. 46)', s: ['#pul-derrame-msg'], c: C.derrameDrenaje },
+  ],
+  fuentes: [C.derrameTabla, C.derrameCat3, C.derrameCat4, C.derrameDrenaje],
+};
+PACIENTES.push({ k: 'alonso', nombre: 'Alonso', chip: '61 a · neumonía con derrame', linea: '61 años, 1,75 m, neumonía hospitalaria con derrame pleural derecho. PBW 70,6 kg.', talla: 175, sexo: 'v', estado: 'derrame-paraneumonico' });
+ORDEN_ESTADOS.push('derrame-paraneumonico');
+NOTAS.push({ k: 'derrame-ilu', tipo: 'calla', txt: 'Marino da la Tabla 29.5 (grosor, pH, glucosa, Gram o cultivo, pus, tubo sí o no) y dice que el derrame loculado es difícil de drenar y que, si el primer tubo no basta, se pone otro con TC o se consulta a cirugía. No da la LDH, ni un plazo en horas para hablar de drenaje ineficaz, ni cuánto líquido hay en cada categoría, ni saturaciones. Las 24 y 48 h, la altura del líquido y la SpO₂ del dibujo son ilustrativas; las mezclas que la tabla no define (p. ej. derrame libre con pH <7,20) se dicen como tales.', citas: [C.derrameTabla, C.derrameDrenaje] });

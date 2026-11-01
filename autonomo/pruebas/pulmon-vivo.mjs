@@ -249,6 +249,9 @@ for (const k of ORDEN_ESTADOS) {
   ok(e.marcas >= 2, `E4a doble disparo: al menos 2 triángulos de disparo bajo la Paw (${e.marcas})`);
   { const vtkg = await cifra('vtkg'); ok(vtkg > 8, `E4a doble disparo: el Vt espirado por kg sube por encima de 8 (${vtkg})`); }
   await mando('pmus', 15); await llenar(); await limpio('doble disparo, Pmus 15'); await foto('e4a-doble');
+  await abrir('disparo-inverso'); await espera(900); await llenar();
+  e = await esf(); ok(e.ef.length >= 3 && e.ef.every((x) => x.tipo === 'inverso') && /disparo inverso/i.test(await p.evaluate(() => document.querySelector('#pul-frase-txt')?.textContent + document.querySelector('#pul-raiz')?.innerText)), `E4a disparo inverso: el estado abre, Ceferino, y todos los esfuerzos (${e.ef.length}) son inversos (Vt ${Math.round(e.ef[0]?.vt)} mL)`);
+  await limpio('disparo inverso'); await foto('e4a-inverso');
   await abrir('p-sili'); await espera(900); await llenar();
   e = await esf(); ok(/P-SILI/.test(e.sello || ''), `E4a P-SILI: con Vt ≥9,5 mL/kg sale el sello (${e.sello})`);
   await mando('pmus', 3); await llenar(); e = await esf(); ok(!/P-SILI/.test(e.sello || ''), 'E4a P-SILI: al bajar el esfuerzo a 3 el sello desaparece');
@@ -256,10 +259,154 @@ for (const k of ORDEN_ESTADOS) {
   await mando('pmus', 15); await llenar(); await limpio('P-SILI, Pmus 15'); e = await esf(); const v15 = await p.evaluate(() => +document.querySelector('#pul-dock-panel input[data-m="pmus"]').value);
   ok(/no fisiológico/.test(e.sello || '') && v15 < 15, `E4a P-SILI: Pmus 15 pasa el tope de 12 mL/kg: sello «${e.sello}» y el mando vuelve a ${v15}`);
   await foto('e4a-psili');
+  // S1 · cánula de alto flujo (hfno): sin lupa ni tipo. Mandos: flujo 10-60, boca cerrada; barrido de extremos 0..120 (doble del tope)
+  await abrir('hfno'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(250); };
+    const hf = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`); return { q: q.est.q, fio2: +c('fio2').querySelector('.v').textContent, spo2: c('fio2').querySelector('.sub').textContent, peep: c('peeptot').querySelector('.v').textContent, pmus: q.P.S.resp.pmus, fr: q.P.S.resp.frEsp, int: document.querySelector('#pul-raiz [data-resp="int"]').textContent, sello: q.est.sello?.titulo || '', alarma: document.querySelector('#pul-resp-alarma')?.textContent || '', frase: document.querySelector('#pul-frase-txt')?.textContent || '' }; });
+    const R = {}; for (const q of [10, 30, 60]) { await mando('canula', q); await llenar(); R[q] = await hf(); await limpio('hfno ' + q + ' L/min'); }
+    ok(R[10].int === 'Cánula' && R[10].pmus === 14 && R[60].pmus === 12 && R[60].fr < R[10].fr, `S1 hfno: interfaz «Cánula»; al subir el flujo de 10 a 60 bajan el esfuerzo (${R[10].pmus} → ${R[60].pmus}) y la FR (${R[10].fr} → ${R[60].fr})`);
+    ok(R[10].fio2 < R[30].fio2 && R[30].fio2 < R[60].fio2 && R[60].fio2 === 80 && R[10].fio2 > 21, `S1 hfno: la FiO₂ al alvéolo sube con el flujo y alcanza la del mando (${R[10].fio2} → ${R[30].fio2} → ${R[60].fio2} con mando 80) · ${R[10].spo2} → ${R[30].spo2} → ${R[60].spo2}`);
+    ok(R[10].peep.replace(',', '.') === '0' && R[60].peep.replace(',', '.') === '0', 'S1 hfno: con la boca abierta no hay PEEP');
+    await mando('canula', 10); await llenar();
+    ok(/Flujo bajo/.test(R[10].alarma + (await p.evaluate(() => document.getElementById('pul-raiz').innerText))), 'S1 hfno: por debajo de 15 L/min avisa de que arrastra aire');
+    await clic('#pul-dock-panel [data-m="boca"]'); await llenar(); const bc = await hf(); ok(+bc.peep.replace(',', '.') === 2.5, `S1 hfno: «Boca cerrada» da la PEEP de 2-3 (${bc.peep})`);
+    await clic('#pul-dock-panel [data-m="boca"]');
+    // tope: el mando llega a 60 y se queda; pedir más (hasta el doble) pone el sello con las constantes de la paciente
+    for (const q of [90, 120]) { await p.evaluate((q) => { const d = document.querySelector('#pul-dock-panel input[data-m="canula"]'); d.max = 200; d.value = q; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, q); const t = await hf(); ok(/Más flujo del que da el equipo/.test(t.sello) && t.q === 60 && t.pmus === 12 && t.fio2 === 80, `S1 hfno tope: pedir ${q} L/min → sello «${t.sello}», el flujo se queda en ${t.q}; Pmus ${t.pmus}, FR ${t.fr}, FiO₂ ${t.fio2}, ${t.spo2}`); await limpio('hfno tope ' + q); }
+    await mando('canula', 30); await llenar(); ok((await hf()).sello === '', 'S1 hfno tope: al volver a un flujo válido el sello se quita');
+    await abrir('p-sili'); await espera(500); ok((await hf()).int === 'Tubo', 'S1 hfno: al salir del estado la interfaz vuelve a «Tubo»');
+    await abrir('hfno'); await espera(500); await llenar(); await foto('s1-hfno');
+    // barrido de motor de 0 al doble del tope: ninguna cifra imposible
+    const H = await import(new URL('../../js/modules/libros/pulmon-vivo/hfno.js', import.meta.url)), PM = await import(new URL('../../js/modules/libros/pulmon-vivo/pulmon.mjs', import.meta.url)), E = ESTADOS.hfno, kgE = PM.pbw(160, 'm'); let mal = [];
+    for (const q of [0, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120]) { const x = H.lectura(q, 80, E.resp, E.pulmon), l = PM.simular({ ...E.resp, pmus: x.pmus, frEsp: x.frEsp }, { ...E.pulmon, rEsp: E.pulmon.r }, {}, { ciclos: 10, ventana: 0.01 }).lectura;
+      if (!(x.fio2Alv >= 21 && x.fio2Alv <= 80 && x.spo2 >= 84 && x.spo2 <= 95 && l.vm >= 2 && l.vm <= 20 && l.vtExh / kgE >= 4 && l.vtExh / kgE <= 12 && x.frEsp >= 14 && x.frEsp <= 30 && l.frReal > 0)) mal.push(`${q}: FiO₂ ${x.fio2Alv} SpO₂ ${x.spo2} VM ${l.vm} Vt/kg ${l.vtExh / kgE}`); }
+    ok(mal.length === 0, `S1 hfno barrido 0-120 L/min: todo paciente posible${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`); }
+  // S2 · prono (Isidro): sin lupa ni tipo. Mandos: posición, horas 0-16, 5 contraindicaciones; barrido de 0 al doble del tope (32 h)
+  await abrir('prono'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(150); await llenar(); };
+    const horas = async (v) => { await p.evaluate(v => { const d = document.querySelector('#pul-dock-panel input[data-m="horas"]'); d.max = 64; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); }, v); await espera(150); await llenar(); };
+    const pr = () => p.evaluate(() => { const c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const pf = c('fio2').querySelector('.sub').textContent.match(/P\/F (\d+) · PaO₂ (\d+)/) || []; return { pf: +pf[1], pao2: +pf[2], vtkg: g('vtkg'), vm: g('vm'), fr: g('fr'), meseta: g('meseta'), dp: g('dp'), cstat: g('cstat'), cons: document.querySelectorAll('.esc-alv.prono-cons').length, sello: [...document.querySelectorAll('#pul-raiz .tope-sello')].map(e => e.textContent).join('|'), horas: +document.querySelector('#pul-dock-panel input[data-m="horas"]').value }; });
+    const sup = await pr(); await limpio('prono supino');
+    await horas(1); const h1 = await pr(); await limpio('prono 1 h'); await horas(16); const h16 = await pr(); await limpio('prono 16 h'); await foto('s2-prono16');
+    ok(sup.pf === 120 && h1.pf > sup.pf && h16.pf === 180 && h16.cstat > sup.cstat && h16.meseta < sup.meseta && h16.cons < sup.cons && sup.cons === 6 && h16.cons === 0, `S2 prono: supino P/F ${sup.pf}, Cstat ${sup.cstat}, meseta ${sup.meseta}, ${sup.cons} alvéolos consolidados → 1 h P/F ${h1.pf} → 16 h P/F ${h16.pf}, Cstat ${h16.cstat}, meseta ${h16.meseta}, ΔP ${h16.dp}, ${h16.cons} consolidados`);
+    ok(/Menos de 16 h/.test(await p.evaluate(() => document.getElementById('pul-dock').innerText + document.getElementById('pul-raiz').innerText)) === false, 'S2 prono: a 16 h no sale el aviso de «menos de 16 h»');
+    await clic('#pul-dock-panel [data-m="pos"][data-v="post"]'); const po = await pr(); await limpio('prono supino 4 h después');
+    ok(po.pf === 175 && po.cstat >= sup.cstat && po.pf < h16.pf, `S2 prono: supino 4 h después mantiene la mejoría (P/F ${po.pf}, Cstat ${po.cstat})`);
+    await clic('#pul-dock-panel [data-m="pos"][data-v="supino"]'); ok((await pr()).pf === 120, 'S2 prono: «Supino» devuelve el P/F de partida');
+    // barrido 0..32 h en el monitor de la app: todo paciente posible
+    let mal = []; for (const h of [0, 1, 4, 8, 12, 15, 16, 24, 32]) { await horas(h); const x = await pr(); const t = JSON.stringify(x);
+      if (!(x.vtkg >= 4 && x.vtkg <= 8 && x.vm >= 5 && x.vm <= 20 && x.fr === 30 && x.meseta <= 30 && x.dp <= 19 && x.pf >= 120 && x.pf <= 180 && x.pao2 >= 60 && x.pao2 <= 120 && x.cstat >= 13 && x.cstat <= 20)) mal.push(h + ': ' + t);
+      if (h === 12) ok(/Menos de 16 h/.test(await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'S2 prono: con 12 h avisa de que son menos de 16 h');
+      if (h > 16) ok(/El mando termina en 16 h/.test(x.sello) && x.horas === 16 && x.pf === 180, `S2 prono tope: pedir ${h} h → sello, el mando se queda en ${x.horas} h, P/F ${x.pf}`);
+      await limpio('prono ' + h + ' h'); }
+    ok(mal.length === 0, `S2 prono barrido 0-32 h: Vt/kg, VM, FR, meseta, ΔP, P/F y Cstat de un paciente posible${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    await horas(10); await clic('#pul-dock-panel [data-m="pos"][data-v="supino"]');
+    // contraindicaciones: cada una de las cinco bloquea el giro con sello, constantes de supino
+    for (const c of ['hemorragia', 'espinal', 'fracturas', 'pic', 'reciente']) { await clic(`#pul-dock-panel [data-m="ci"][data-v="${c}"]`); await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); const x = await pr();
+      ok(/Contraindicación absoluta/.test(x.sello) && x.pf === 120 && x.cons === 6, `S2 prono: con «${c}» no se gira (sello, P/F ${x.pf}, ${x.cons} consolidados)`); await clic(`#pul-dock-panel [data-m="ci"][data-v="${c}"]`); ok(!/Contraindicación/.test((await pr()).sello), `S2 prono: al quitar «${c}» se quita el sello`); }
+    await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); ok((await pr()).pf > 120, 'S2 prono: sin contraindicaciones se puede girar');
+    await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => document.querySelectorAll('.esc-alv.prono-cons').length === 0 && !document.querySelector('#pul-dock-panel [data-m="horas"]')), 'S2 prono: al salir del estado desaparecen los mandos y las rayas');
+    await abrir('prono'); await espera(500); await llenar(); }
+  // M1 · secreciones sobre el balón (Gaspar): mandos = presión del balón 0-30 (tope 25) y aspiración subglótica; barrido de extremos y medio
+  await abrir('subglotica'); await espera(900); await llenar();
+  { const pide = async (v) => { await p.evaluate((v) => { const d = document.querySelector('#pul-dock-panel input[data-m="cuff"]'); d.max = 200; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, v); await espera(150); await llenar(); };
+    const sg = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const l = q.L, v = (e) => e && !e.hasAttribute('hidden'); const d = document.querySelector('#pul-esc-subgl');
+      return { p: q.est.cuff.p, asp: q.est.subgl.asp, vtI: Math.round(l.vtIns), vtE: g('vt'), fuga: g('fuga'), vm: g('vm'), fr: g('fr'), kg: g('vtkg'), sello: q.est.sello?.titulo || '', frase: document.getElementById('pul-frase-txt').innerText, secr: c('secr')?.querySelector('.g')?.textContent || '', visible: v(d), gotas: [...d.querySelectorAll('.sg-gota')].filter((x) => !x.hasAttribute('hidden')).length, chocan: [...d.querySelectorAll('.sg-t')].some((t) => parseFloat(getComputedStyle(t).fontSize) < 9), inicio: !!document.querySelector('#pul-dock-panel [data-m="asp"]'), tope: document.querySelector('#pul-dock-panel input[data-m="cuff"]').max }; });
+    const a = await sg(); await limpio('subglotica inicio'); await foto('m1-inicio');
+    ok(a.visible && a.p === 25 && !a.asp && a.vtE === 410 && a.fuga === 0 && a.secr === 'acumuladas' && a.gotas === 2 && a.inicio, `M1 inicio: balón 25, sin aspiración, secreciones ${a.secr}, ${a.gotas} gotas, Vt esp ${a.vtE}`);
+    const f0 = a.frase; await clicM('asp'); const b = await sg(); await limpio('subglotica aspirando'); await foto('m1-aspirando');
+    ok(b.asp && b.secr === 'despejadas' && b.gotas === 1 && b.frase !== f0, `M1 aspiración: secreciones ${b.secr}, ${b.gotas} gota, la frase viva cambia`);
+    let mal = []; for (const asp of [false, true]) { if ((await sg()).asp !== asp) await clicM('asp');
+      for (const v of [0, 8, 14, 15, 20, 24, 25, 26, 30, 60]) { await pide(v); const x = await sg(); const exp = Math.round(200 * (1 - Math.min(v, 25) / 25));
+        const bajo = v < 15, selloOk = v > 25 ? /lesión de la mucosa/.test(x.sello) : bajo ? /Balón bajo/.test(x.sello) : x.sello === '';
+        const gOk = x.gotas === (asp ? (bajo ? 2 : 1) : (bajo ? 4 : 2));
+        if (!(x.p === Math.min(v, 25) && x.fuga === exp && x.vtE === 410 - exp && x.vtE >= 210 && x.vm >= 3 && x.vm <= 7 && x.fr === 16 && x.kg >= 3 && x.kg <= 6.1 && selloOk && gOk && !/NaN/.test(x.frase))) mal.push(`${asp ? 'asp' : 'sin'} ${v}: ${JSON.stringify({ p: x.p, f: x.fuga, vtE: x.vtE, vm: x.vm, s: x.sello, g: x.gotas })}`); } }
+    ok(mal.length === 0, `M1 barrido balón 0-60 con y sin aspiración: fuga proporcional, Vt esp 210-410, VM 3-7, sello y gotas coherentes${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    await pide(60); const t = await sg(); await limpio('subglotica tope'); await foto('m1-tope');
+    ok(t.p === 25 && /lesión de la mucosa/.test(t.sello) && t.fuga === 0 && t.vtE === 410, `M1 tope: pedir 60 → el mando queda en ${t.p}, sello «${t.sello}»`);
+    await pide(5); await limpio('subglotica balón bajo'); await foto('m1-bajo');
+    await pide(20); ok(/cerca del tope/.test((await sg()).frase + await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'M1: a 20 avisa de que está cerca del tope');
+    await abrir('fuga-cuff'); await espera(500); ok(await p.evaluate(() => !document.querySelector('#pul-esc-subgl') || document.querySelector('#pul-esc-subgl').hasAttribute('hidden')), 'M1: al salir del estado la lupa se oculta');
+    await abrir('subglotica'); await espera(500); await llenar(); }
+  // B3c · derrame paraneumónico (Alonso): Tabla 29.5 (categoría y tubo) y horas con tubo; barrido de todos los datos y del mando 0-72 h
+  await abrir('derrame-paraneumonico'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(150); };
+    const dq = () => p.evaluate(() => { const g = (k) => (document.querySelector(`#pul-derrame [data-fila="${k}"] .v`)?.textContent || ''); const sel = document.querySelector('#pul-raiz .tope-sello, #pul-raiz .tope-aviso');
+      return { vis: !document.getElementById('pul-derrame').hidden && window.__pulPruebas().est.pac.k === 'alonso', cat: document.getElementById('pul-derrame-cat').textContent, liq: parseInt(g('der-liq')), sp: parseInt(g('der-spo2')), tope: [...document.querySelectorAll('#pul-raiz .tope-sello, #pul-raiz .tope-aviso')].filter(e => e.getClientRects().length).map(e => e.textContent).join('|'), msg: document.getElementById('pul-derrame-msg').textContent, pam: document.querySelector('#pul-corazon [data-fila="cor-pam"] .v')?.textContent }; });
+    const g = (gr, v) => clic(`#pul-derrame button[data-g="${gr}"][data-v="${v}"]`);
+    const hset = async (h) => { await p.evaluate((h) => { const r = document.querySelector('#pul-derrame input[type=range]'); r.value = h; r.dispatchEvent(new Event('input', { bubbles: true })); }, h); await espera(200); };
+    let x = await dq(); await limpio('derrame inicio'); await foto('der-inicio');
+    ok(x.vis && /Categoría 2 · NO tubo/.test(x.cat) && x.sp === 96, `Derrame inicio: ${x.cat}, SpO₂ ${x.sp}, PAM ${x.pam}`);
+    const pam0 = x.pam;
+    // barrido de datos: tamaño × pH × glucosa × Gram × pus
+    let mal = [];
+    for (const tam of ['peq', 'libre', 'locu']) for (const ph of ['alto', 'bajo']) for (const gl of ['alta', 'baja']) for (const gr of ['neg', 'pos']) for (const pus of ['no', 'si']) {
+      await g('tam', tam); if (tam !== 'peq') { await g('ph', ph); await g('glu', gl); await g('gram', gr); } await g('pus', pus); x = await dq();
+      const inf = tam === 'peq' ? 0 : (ph === 'bajo') + (gl === 'baja') + (gr === 'pos');
+      const exp = pus === 'si' ? 4 : tam === 'peq' ? 1 : (tam === 'libre' && inf === 0) ? 2 : (tam === 'locu' && inf === 3) ? 3 : 0;
+      const tuboE = exp === 3 || exp === 4 ? /TUBO/ : exp ? /NO tubo/ : /no define/;
+      if (!(tuboE.test(x.cat) && (exp === 0 || x.cat.includes('Categoría ' + exp)) && x.sp >= 90 && x.sp <= 98 && x.liq >= 0 && x.liq <= 80 && x.pam === pam0 && !/NaN|undefined/.test(x.msg + x.cat))) mal.push(`${tam}/${ph}/${gl}/${gr}/${pus}→${x.cat}`);
+    }
+    ok(mal.length === 0, `Derrame barrido de 48 combinaciones de datos: categoría y tubo según la Tabla 29.5, SpO₂ 90-98, PAM sin cambio${mal.length ? ' · fallan ' + mal.slice(0, 4).join(' | ') : ''}`);
+    // categoría 3 loculada: horas 0, 24, 36, 48, 72 con y sin segundo tubo
+    await g('pus', 'no'); await g('tam', 'locu'); await g('ph', 'bajo'); await g('glu', 'baja'); await g('gram', 'pos'); x = await dq();
+    ok(/Categoría 3 · TUBO/.test(x.cat) && x.liq >= 50, `Derrame cat. 3: ${x.cat}, líquido ${x.liq} %`);
+    await clic('#pul-derrame [data-dr="tubo"]'); const res = {};
+    for (const h of [0, 12, 24, 36, 48, 72]) { await hset(h); const y = await dq(); res[h] = y; await limpio('derrame ' + h + ' h'); }
+    await hset(24); await foto('der-24h'); await hset(48); await foto('der-48h');
+    ok(res[0].tope === '' && /Posible drenaje ineficaz/.test(res[24].tope) && /Drenaje ineficaz/.test(res[48].tope) && /Drenaje ineficaz/.test(res[72].tope) && res[72].liq >= 50 && res[72].sp <= 94 && res[72].sp >= 92, `Derrame loculado: sin aviso a 0 h, aviso a 24 h, sello a 48 y 72 h; a 72 h líquido ${res[72].liq} % y SpO₂ ${res[72].sp} % (bolsas)`);
+    await clic('#pul-derrame [data-dr="seg"]'); const s2 = await dq();
+    ok(s2.tope === '' && s2.liq < res[72].liq && s2.sp >= 96, `Derrame 2.º tubo con TC: sin sello, líquido ${s2.liq} %, SpO₂ ${s2.sp} %`);
+    // libre: drena del todo a las 24 h
+    await g('tam', 'libre'); await g('ph', 'bajo'); await g('pus', 'si'); await clic('#pul-derrame [data-dr="tubo"]'); await hset(24); const lib = await dq();
+    ok(/Categoría 4 · TUBO/.test(lib.cat) && lib.liq <= 5 && lib.tope === '' && lib.sp >= 96, `Derrame empiema libre con tubo 24 h: líquido ${lib.liq} %, sin sello`);
+    await abrir('fuga-cuff'); await espera(500); ok(await p.evaluate(() => document.getElementById('pul-derrame').hidden && !document.querySelector('#pul-raiz .tope-sello')), 'Derrame: al salir del estado el panel y su sello se apagan');
+    await abrir('derrame-paraneumonico'); await espera(500); await llenar(); }
+  // S3 · fuga del cuff y estridor (Benito): sin lupa ni tipo. Mandos: presión del cuff 0-30 (tope 25), edema, esteroide, desinflar, extubar, 30 min
+  await abrir('fuga-cuff'); await espera(900); await llenar();
+  { const clic = async (k) => { await p.evaluate(k => document.querySelector(`#pul-dock-panel [data-m="${k}"]`).click(), k); await espera(200); await llenar(); };
+    const cuffPide = async (v) => { await p.evaluate((v) => { const d = document.querySelector('#pul-dock-panel input[data-m="cuff"]'); d.max = 200; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); window.__pulPruebas().llenar(); }, v); await espera(150); await llenar(); };
+    const cf = () => p.evaluate(() => { const q = window.__pulPruebas(), c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const l = q.L;
+      return { p: q.est.cuff.p, ext: q.est.cuff.ext, vtI: Math.round(l.vtIns), vtE: g('vt'), fuga: g('fuga'), vm: g('vm'), fr: g('fr'), kg: g('vtkg'), spo2: +((c('fio2').querySelector('.sub')?.textContent || '').match(/SpO₂ (\d+)/) || [])[1] || null, int: document.querySelector('#pul-raiz [data-resp="int"]').textContent, sello: q.est.sello?.titulo || '', txt: document.getElementById('pul-raiz').innerText, flujo: Math.max(...q.mon.dato('flujo').filter((x) => x != null)), ps: q.P.S.resp.modo }; });
+    const a25 = await cf(); await limpio('cuff 25');
+    ok(a25.p === 25 && a25.vtI === 410 && a25.vtE === 410 && a25.fuga === 0 && a25.int === 'Tubo', `S3 cuff: a 25 Vt insp ${a25.vtI} = Vt esp ${a25.vtE}, fuga ${a25.fuga}`);
+    await cuffPide(15); const a15 = await cf(); await limpio('cuff 15');
+    ok(a15.fuga === 80 && a15.vtE === 330 && /Fuga audible/.test(a15.txt), `S3 cuff: a 15 fuga audible, Vt esp ${a15.vtE}, fuga ${a15.fuga}`);
+    await cuffPide(22); ok(/Cuff cerca del tope/.test((await cf()).txt), 'S3 cuff: a 22 avisa de que está cerca del tope');
+    await clic('apagar'); const sana = await cf(); await limpio('cuff 0 sin edema'); await foto('s3-fuga-sana');
+    ok(sana.p === 0 && sana.fuga === 200 && sana.vtE === 210 && sana.fuga > 110 && /extubar, nada más/.test(sana.txt) && sana.vm >= 2, `S3 cuff 0 sin edema: Vt insp ${sana.vtI}, esp ${sana.vtE}, fuga ${sana.fuga} (>110: «extubar, nada más»)`);
+    await clic('edema'); const ed = await cf(); await limpio('cuff 0 edema'); await foto('s3-fuga-edema');
+    ok(ed.fuga === 80 && ed.vtE === 330 && /Fuga baja: riesgo ×7/.test(ed.sello) && ed.fuga < 110, `S3 cuff 0 con edema: Vt insp ${ed.vtI}, esp ${ed.vtE}, fuga ${ed.fuga} (<110) → sello «${ed.sello}»`);
+    // tope: pedir 26..60 → el mando se queda en 25, sello de isquemia, constantes sin fuga
+    for (const v of [26, 30, 50, 60]) { await cuffPide(v); const t = await cf(); await limpio('cuff pide ' + v);
+      ok(t.p === 25 && /Presión del cuff por encima del tope/.test(t.sello) && t.fuga === 0 && t.vtE === 410 && t.vm >= 6 && t.vm <= 7, `S3 cuff tope: pedir ${v} → sello «${t.sello}», el mando queda en ${t.p}; Vt esp ${t.vtE}, fuga ${t.fuga}`); }
+    await cuffPide(10); ok(!/por encima del tope/.test((await cf()).sello), 'S3 cuff tope: al volver a un valor válido se quita el sello');
+    // barrido del cuff 0..30 con y sin edema: todo paciente posible
+    let mal = []; for (const e of [false, true]) { if (((await p.evaluate(() => window.__pulPruebas().est.cuff.edema)) !== e)) await clic('edema');
+      for (const v of [0, 5, 10, 15, 20, 24, 25, 30, 60]) { await cuffPide(v); const x = await cf(); const exp = Math.round((e ? 80 : 200) * (1 - Math.min(v, 25) / 25));
+        if (!(x.fuga === exp && x.vtE === 410 - exp && x.vtE >= 210 && x.vm >= 3 && x.vm <= 7 && x.fr === 16 && x.kg >= 3 && x.kg <= 6.1)) mal.push(`${e ? 'edema' : 'sano'} ${v}: ${JSON.stringify({ f: x.fuga, vtE: x.vtE, vm: x.vm, kg: x.kg })}`); } }
+    ok(mal.length === 0, `S3 cuff barrido 0-60 cmH₂O con y sin edema: fuga proporcional, Vt esp 210-410, VM 3-7${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    // Extubar: solo con el cuff a 0
+    await clic('edema'); await cuffPide(10);
+    ok(await p.evaluate(() => document.querySelector('#pul-dock-panel [data-m="extubar"]').disabled), 'S3 cuff: «Extubar» apagado con el cuff inflado');
+    await clic('apagar'); await clic('edema');
+    // con edema y sin esteroide: extubar → 30 min → estridor
+    await clic('extubar'); const r0 = await cf(); await limpio('extubado');
+    ok(r0.ext === 'recien' && r0.int === 'Sin tubo' && r0.ps === 'psv' && r0.spo2 === 96 && r0.vm >= 4, `S3 extubado: sin tubo, respira solo (Vt ${r0.vtE}, FR ${r0.fr}, VM ${r0.vm}), SpO₂ ${r0.spo2}`);
+    await clic('esperar'); const es = await cf(); await limpio('estridor'); await foto('s3-estridor');
+    ok(/reintubar sin demora/i.test(es.sello) && es.spo2 === 86 && es.vtE < r0.vtE && es.fr >= 25 && es.vm >= 2 && es.flujo < r0.flujo, `S3 estridor (edema, sin esteroide): sello «${es.sello}», SpO₂ ${es.spo2}, Vt ${es.vtE} (antes ${r0.vtE}), FR ${es.fr}, flujo máx. ${es.flujo.toFixed(1)} (antes ${r0.flujo.toFixed(1)})`);
+    { const v = []; for (let i = 0; i < 4; i++) { await espera(900); v.push((await cf()).vtE); } ok(Math.max(...v) - Math.min(...v) <= 6, `S3 estridor: el Vt espirado en vivo es estable en cada respiración (${v.join(', ')})`); }
+    await clic('reintubar'); const re = await cf(); ok(re.ext === null && re.int === 'Tubo' && re.p === 25 && re.fuga === 0, 'S3 cuff: «Reintubar» vuelve al respirador con el cuff a 25');
+    // con el esteroide 12 h antes: sin estridor
+    await clic('apagar'); await clic('ester'); await clic('extubar'); await clic('esperar'); const st = await cf(); await limpio('con esteroide');
+    ok(st.ext === '30' && !/reintubar sin demora/i.test(st.sello) && !/Volumen bajo/.test(st.txt) && !/Volumen bajo/.test(es.txt) && st.spo2 === 96 && /22 % a 3 %/.test(st.txt) && st.fr === 16, `S3 con metilpred 12 h antes: sin estridor (SpO₂ ${st.spo2}, FR ${st.fr}), riesgo 22 % → 3 %`);
+    await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => !document.querySelector('#pul-dock-panel [data-m="cuff"]') && document.querySelector('#pul-raiz [data-resp="int"]').textContent === 'Tubo'), 'S3 cuff: al salir del estado desaparecen los mandos y la interfaz vuelve a «Tubo»');
+    await abrir('fuga-cuff'); await espera(500); await llenar(); }
   await abrir('sbt-ok'); await espera(900); await llenar(); e = await esf(); const f1v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f2v > 105, `E4a SBT que fracasa: rápida y superficial, FR/Vt ${f2v} > 105 (Marino cap. 30 p. 52)`); await limpio('sbt-fracaso'); await foto('e4a-sbt');
+  await abrir('sbt-ansiedad'); await espera(900); await llenar(); ok(await cifra('fvt') >= 60 && await cifra('fvt') <= 105 && await cifra('vtkg') >= 6 && await cifra('vtkg') <= 7, `sbt-ansiedad: rápido y profundo, casilla f/Vt ${await cifra('fvt')} (60-105) con ${await cifra('vtkg')} mL/kg`); await limpio('sbt-ansiedad');
 }
 // E4b · el neumotórax a tensión (par 9 de papel-pulmon.md §6): pico y meseta suben juntos, la PAM y la SpO₂ caen, el tope deja solo la descompresión
 {
@@ -299,7 +446,14 @@ for (const k of ORDEN_ESTADOS) {
   await clic('#pul-neumo [data-sitio="clasico"]'); await clic('#pul-neumo [data-nx="desc"]');
   { const r = await p.evaluate(() => ({ msg: document.querySelector('#pul-neumo [data-nx="msg"]').textContent, ptx: document.querySelector('#pul-neumo [data-fila="neumo-p"] .v').textContent, inerte: document.getElementById('pul-dock-panel').inert }));
     ok(/No descomprime/.test(r.msg) && r.inerte && num(r.ptx) === t.ptx, `E4b: el 2.º espacio con aguja corta falla (presión ${r.ptx} igual, sello sigue)`); }
-  await clic('#pul-neumo [data-sitio="correcto"]'); await clic('#pul-neumo [data-nx="desc"]'); await llenar(); await estable();
+  await clic('#pul-neumo [data-sitio="correcto"]'); await clic('#pul-neumo [data-nx="desc"]');
+  { // recuperación gradual (P2): el aire pleural baja por respiraciones, no de golpe; PAM sube y SpO₂ sube sin pasar el basal
+    const p0 = await tomar(); const serie = [p0]; let guardia = 0;
+    while (!REDUCIDO && serie.at(-1).ptx > 0 && guardia++ < 40) { await p.waitForTimeout(1000); const m = await tomar(); if (m.ptx !== serie.at(-1).ptx) serie.push(m); }
+    const ptxs = serie.map(x => x.ptx), pams = serie.map(x => x.pam), spos = serie.map(x => x.spo2);
+    ok(REDUCIDO ? serie.at(-1).ptx === 0 : serie.length >= 4 && serie.length <= 9 && ptxs.every((v, i) => i === 0 || v < ptxs[i - 1]), `P2 recuperación gradual: el aire pleural baja en ${serie.length - 1} pasos (${ptxs.join(' → ')})`);
+    const pn = pams.filter((v, i) => v !== null && serie[i].ptx <= 13.5);/* por encima de 13,5 (parada) el motor del corazón no es monótono: se avisa en el informe */ ok(spos.every((v, i) => i === 0 || v >= spos[i - 1]) && spos.at(-1) <= 98 && pn.every((v, i) => i === 0 || v >= pn[i - 1] - 1) && pn.at(-1) <= a.pam * 1.05, `P2: PAM (${pams.join(' → ')}) y SpO₂ (${spos.join(' → ')}) suben sin pasar el basal (${a.pam}, ${a.spo2})`); }
+  await llenar(); await estable();
   const d = await tomar();
   const fin = await p.evaluate(() => ({ s: [...document.querySelectorAll('#pul-raiz .tope-sello')].filter(e => e.getClientRects().length).length, inerte: document.getElementById('pul-dock-panel').inert }));
   ok(d.ptx === 0 && fin.s === 0 && !fin.inerte && d.pam >= a.pam - 2 && d.spo2 === a.spo2 && Math.abs(d.pico - a.pico) < 1, `E4b descompresión correcta: PAM ${t.pam} → ${d.pam}, SpO₂ ${t.spo2} → ${d.spo2}, pico ${d.pico}; sin sello y con los mandos libres`);

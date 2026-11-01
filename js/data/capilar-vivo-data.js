@@ -149,6 +149,7 @@ export const ESTADOS = {
     normal: { n: 'Normal', p: {}, ficha: 'mar-transporte-o2', pestana: 'sangre', grupo: 'o2' },
     anemia: { n: 'Anemia, gasto fijo', s: 'Hb 7,5', p: { hb: 7.5 }, ficha: 'mar-transporte-o2', pestana: 'sangre', grupo: 'o2' },
     hipoxemia: { n: 'Hipoxemia', s: 'PaO₂ 45', p: { pao2: 45 }, ficha: 'mar-transporte-o2', pestana: 'pulmon', grupo: 'o2' },
+    'hipoxemia-60': { n: 'Umbral del O₂', s: 'PaO₂ 60', p: { pao2: 60 }, ficha: 'mar-transporte-o2', pestana: 'pulmon', grupo: 'o2' },
     'bajo-gasto': { n: 'Bajo gasto', s: 'GC 2,5', p: { gc: 2.5 }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
     umbral: { n: 'Umbral', s: 'extracción 50 %', p: { gc: GC_UMBRAL }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
     dependiente: { n: 'Dependiente', s: 'GC 2', p: { gc: 2 }, ficha: 'mar-extraccion-lactato', pestana: 'corazon', grupo: 'o2' },
@@ -173,6 +174,7 @@ export const ESTADOS = {
     taco: { n: 'TACO', s: 'el alvéolo', p: { hb: 8, compensa: true, pao2: 55, alveolo: 'taco' }, ficha: 'merino-riesgos', lupa: 'alveolo', pestana: 'pulmon', grupo: 'anemia' },
     // Cap. 17 (ficha «Fisiopatología de la inflamación: ROS»): `ros` solo cambia el dibujo de la lupa y el tope del O₂; no toca la fisiología
     neutrofilo: { n: 'Estallido', s: 'el neutrófilo', p: { ros: 'neutrofilo' }, ficha: 'mc-inflamacion-ros', lupa: 'neutrofilo', pestana: 'pulmon', grupo: 'ros' },
+    toxicidad: { n: 'O₂ de más', s: 'FiO₂ y horas', p: { ros: 'toxicidad' }, ficha: 'neumo-o2-toxicidad', lupa: 'neutrofilo', pestana: 'pulmon', grupo: 'ros' },
     reperfusion: { n: 'Reperfusión', s: 'otro órgano', p: { ros: 'reperfusion' }, ficha: 'mc-inflamacion-ros', lupa: 'neutrofilo', pestana: 'pulmon', grupo: 'ros' },
 };
 // El estado al que llega un estado con bolsa (la transfusión ya puesta): Hb de llegada con el gasto quieto.
@@ -293,6 +295,8 @@ const RIE = (id, pag) => ({ ...L12, ficha: 'merino-riesgos', id, pag });
 const L17 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 17', pdf: 'docs/marino-2024-shock-caps14-17.pdf' };
 const L21 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 21', pdf: 'docs/marino-2024-cardiac-disorders-caps18-21.pdf' };
 const ROS = (id, pag) => ({ ...L17, ficha: 'mc-inflamacion-ros', id, pag });
+const L25 = { libro: 'Marino, The ICU Book (5.ª ed.), cap. 25', pdf: 'docs/marino-2024-respiratory-management-caps22-26.pdf' };
+const TOX = (id, pag) => ({ ...L25, ficha: 'neumo-o2-toxicidad', id, pag });
 const POS = (id, pag) => ({ ...L21, ficha: 'mc-posresucitacion', id, pag });
 const ILU = 'cifras del modelo: ilustrativas';
 const INF = HEMODERIVADOS.ch.infusion;   // Tabla 12.4: tiempos de infusión por gravedad (p. 10)
@@ -314,6 +318,11 @@ export const GUIAS = {
         { t: 'La PaO₂ cae a la mitad (90 → 45), pero la SaO₂ solo baja a 78 %: cada hematíe entra con 3 perlas de cada 4.', resalta: '#cpv-zona-arterial', mirar: 'sao2', cita: TO2('mar-anemia-hipoxemia', '70') },
         { t: 'El contenido arterial baja solo un 20 % (20 → 16 mL/dL): mucho menos que con la Hb a la mitad.', mirar: 'cao2', cita: TO2('mar-anemia-hipoxemia', '70-71') },
         { t: 'Es la forma en S: la PaO₂ normal está en la parte plana y puede caer hasta 60 con poco cambio de saturación; la venosa (≈40) está en la parte empinada.', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
+    ],
+    'hipoxemia-60': [
+        { t: 'La PaO₂ baja de 90 a 60, el umbral de la hipoxemia, y la SaO₂ solo baja a 89 %: cada hematíe entra casi lleno (la ficha usa 90 %).', resalta: '#cpv-zona-arterial', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
+        { t: 'El contenido arterial pasa de 20 a ≈18 mL/dL (−9 % con esta curva; −8 % con la SaO₂ de 90 % de la ficha): casi nada frente al −20 % de la PaO₂ de 45.', mirar: 'cao2', cita: TO2('mar-anemia-hipoxemia', '70-71') },
+        { t: 'Está en la parte plana de la curva en S: por eso el umbral de 60 pierde poco oxígeno y la anemia, con Hb 7, mucho más.', mirar: 'sao2', cita: TO2('mar-curva-forma', '68') },
     ],
     'bajo-gasto': [
         { t: 'El gasto cae a 2,5 L/min: los hematíes pasan más despacio por el capilar.', resalta: '#cpv-zona-capilar', mirar: 'do2', cita: TO2('mar-do2', '72-73'), org: 'la velocidad: ilustrativa' },
@@ -445,6 +454,12 @@ export const GUIAS = {
         { t: 'O₂ → radical superóxido (O₂·) → con 2 H⁺ → peróxido de hidrógeno (H₂O₂).', resalta: '#cpv-lupa-cadena', cita: ROS('mc-fig-17-1', '54') },
         { t: 'El H₂O₂ se bifurca: con Fe²⁺/Fe³⁺ da radical hidroxilo (HO·); con Cl⁻ y mieloperoxidasa, hipoclorito, el ingrediente activo de la lejía doméstica.', resalta: '#cpv-lupa-fork', cita: ROS('mc-fig-17-1', '54') },
         { t: 'Son armas contra los microbios (sin NADPH oxidasa, en la enfermedad granulomatosa crónica, hay infecciones recurrentes), pero también dañan al huésped, incluidos el endotelio y su glucocálix, cuando las ROS superan a los antioxidantes: estrés oxidante.', cita: [ROS('mc-ros', '53-55'), ROS('mc-lesion-oxidante', '55')] },
+    ],
+    toxicidad: [
+        { t: 'El O₂ llega a agua con 4 electrones, pero solo se le puede añadir uno por reacción: por el camino quedan superóxido, peróxido de hidrógeno e hidroxilo (Fig. 25.6). Normalmente ≥95 % llega a agua y solo ~3 % deja ROS dañinas.', resalta: '#cpv-lupa-cadena', cita: [TOX('nep-tox-metabolismo', '66'), TOX('nep-tox-porcentaje', '66-67')] },
+        { t: 'Los antioxidantes frenan cada paso: la SOD quita el superóxido (y fabrica H₂O₂), el glutatión con la peroxidasa de selenio reduce el H₂O₂ a agua, y las vitaminas E y C barren radicales. En el crítico es común que estén bajos.', resalta: '#cpv-lupa-defensas', cita: [TOX('nep-sod-enzima', '69'), TOX('nep-tox-glutation', '70'), TOX('nep-tox-vit-e', '71'), TOX('nep-tox-fio2', '72')] },
+        { t: 'Sube la FiO₂: el umbral clásico es 60 % (menor capacidad vital por encima), pero ese número no cuenta los antioxidantes; en el crítico lo tóxico es «mucho más bajo». Mira cómo crecen los radicales frente a las defensas.', resalta: '#cpv-tox-fio', cita: TOX('nep-tox-fio2', '71-72'), org: 'las barras: ilustrativas' },
+        { t: 'Ahora deja pasar el tiempo con FiO₂ 100 %: en voluntarios sanos, a las 6-12 h hay traqueobronquitis y menos capacidad vital (atribuida a atelectasia por absorción); en 5 pacientes en coma con 3-4 días de O₂ puro, y en 1 voluntario con 4,5 días, lesión pulmonar inflamatoria. Es el tope del mando.', resalta: '#cpv-tox-hor', cita: TOX('nep-tox-humanos', '72'), org: 'las barras: ilustrativas' },
     ],
     reperfusion: [
         { t: 'El peróxido de hidrógeno se mueve libremente por los tejidos y puede entrar en el torrente sanguíneo.', resalta: '#cpv-lupa-vaso', cita: ROS('mc-lesion-oxidante-foco', '55') },
