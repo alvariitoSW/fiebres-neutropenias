@@ -49,7 +49,7 @@ export const MAYEUTICA_TUBO_2 = {
         opciones: [
           no('Son sinónimos: los dos nombran el escape de gas desde los alvéolos', `No lo son: el escape de gas es el barotrauma; el volutrauma es la rotura de la interfaz alveolo-capilar por sobredistensión (${p(25)}).`),
           no('El barotrauma expresa la deformación del alvéolo y el volutrauma la presión transpulmonar', `Es al revés: el volutrauma expresa la deformación (strain) y el barotrauma el estrés, la presión transpulmonar (${p(25)}).`),
-          ok('El volutrauma expresa la deformación del alvéolo por sobredistensión; el barotrauma, el escape de gas, que expresa el estrés: la presión transpulmonar')],
+          ok('Volutrauma: deformación del alvéolo por sobredistensión; barotrauma: escape de gas, que expresa el estrés')],
         explicacion: `<span class="hl-purpura">Volutrauma = strain</span> (deformación): rompe la interfaz alveolo-capilar y da un infiltrado parecido al SDRA. <span class="hl-purpura">Barotrauma = stress</span> (presión transpulmonar): el gas escapa de los alvéolos (${p(25)}).` + enFicha(CB, 'nep-barotrauma') },
       { id: 'baro-g6', corto: 'adónde va el gas', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-presentacion-baro',
         enunciado: 'El gas escapa de un alvéolo roto en un ventilado. ¿Por dónde se abre paso y cómo termina?',
@@ -143,7 +143,7 @@ export const MAYEUTICA_TUBO_2 = {
               frases: [
                 { t: 'Aspiro solo si veo secreciones o un patrón de dientes de sierra en la curva de flujo.' },
                 { t: 'Instilo 5 mL de suero salino cada 4 horas para fluidificar las secreciones.', mal: true, c: `El salino rutinario no se recomienda: no reduce la viscosidad y arrastra gérmenes del biofilm del tubo (${p(24)}).` },
-                { t: 'La auscultación es simétrica, así que descarto un neumotórax.', mal: true, c: `En el ventilado los ruidos del tubo y de la tubuladura se confunden con los del pulmón: su ausencia o presencia no es fiable (${p(26)}).` },
+                { t: 'La auscultación es simétrica, así que descarto un neumotórax.', mal: true, c: `En el ventilado los ruidos del tubo y de la tubuladura se confunden con los del pulmón: la auscultación es poco fiable y una simétrica no descarta el neumotórax (${p(26)}).` },
                 { t: 'Vigilo la saturación y la FC mientras aspiro.' }],
               explicacion: 'Dos errores: el salino de rutina y fiarse de la auscultación para descartar el neumotórax.',
               nota: 'La frecuencia de 4 horas es del caso; la fuente solo dice que no se instila de rutina.' + enFicha(CB, 'nep-salino') } },
@@ -164,15 +164,15 @@ export const MAYEUTICA_TUBO_2 = {
                 no('Un deslizamiento normal, que descarta el neumotórax', `Si el deslizamiento reaparece solo en un punto, ese punto marca dónde vuelven a tocarse las pleuras: el borde del neumotórax (${p(27)}).`)],
               explicacion: `El <span class="hl-rojo">punto pulmonar</span> es donde las dos pleuras vuelven a contactar y reaparece el deslizamiento; es patognomónico (${p(27)}).` + enFicha(CB, 'nep-eco-pleural') } },
           { momento: 'Día 2 · giro: se hunde', datos: { PAM: '≈59 mmHg (monitor del modelo, ilustrativo)', Presiones: 'pico y meseta siguen subiendo', Aire: 'el pulmón del lado afectado, colapsado' }, nuevo: ['PAM', 'Presiones', 'Aire'],
-            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar 2 respiraciones'),
+            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar respiraciones hasta el sello de shock (unas 5: aire pleural 10,5 cmH₂O, PAM ≈59)'),
               enunciado: 'Con el neumotórax confirmado, la PAM de Rafael cae a 59 y el pico y la meseta suben a cada respiración. ¿Qué haces?',
               opciones: [
                 no('Pides una radiografía de control para confirmar antes de actuar y esperando a que suba la PAM por sí sola', `El neumotórax a tensión es una emergencia médica y requiere descompresión inmediata (${p(28)}-${p(29)}).`),
                 ok('Descomprimes ya: una emergencia con shock obstructivo, que puede acabar en actividad eléctrica sin pulso'),
-                no('Subes la PEEP y el volumen para mejorar la saturación mientras se prepara el tubo', `Más presión positiva añade aire a una pleura que ya lo retiene y empeora el gasto cardíaco (${p(27)}-${p(28)}).`)],
+                no('Subes la PEEP y el volumen para mejorar la saturación mientras se prepara el tubo', `Más presión positiva añade aire a una pleura que ya lo retiene (${p(27)}-${p(28)}); que además empeore el gasto cardíaco es fisiología general.`)],
               explicacion: `Aire pleural a presión → colapso del pulmón, caída progresiva del gasto → <span class="hl-rojo">shock obstructivo</span> y, si no se trata, paro por AESP: se considera en todo ventilado con hipoxemia o hipotensión inexplicadas (${p(27)}-${p(28)}).`,
               nota: 'La PAM de 59 sale del monitor del modelo (aire pleural de 10,5 cmH₂O): ilustrativa; la fuente no da cifras.' + enFicha(CB, 'nep-neumotorax-tension') } },
-          { momento: 'Día 2 · tras el tubo', datos: { Tubo: '12 Fr', Succión: '−20 cmH₂O', 'Sello de agua': 'burbujea a cada ciclo', Evolución: '48 horas así' }, nuevo: ['Tubo', 'Succión', 'Sello de agua', 'Evolución'],
+          { momento: 'Día 4 · 48 h con el tubo', datos: { Tubo: '12 Fr', Succión: '−20 cmH₂O', 'Sello de agua': 'burbujea a cada ciclo', Evolución: '48 horas así' }, nuevo: ['Tubo', 'Succión', 'Sello de agua', 'Evolución'],
             pregunta: { id: 'baro-c5', tipo: 'test', fuente: 'nep-succion', origen: ILU,
               enunciado: 'A las 48 horas el drenaje de Rafael, con succión de −20, sigue burbujeando. ¿Qué haces?',
               opciones: [
