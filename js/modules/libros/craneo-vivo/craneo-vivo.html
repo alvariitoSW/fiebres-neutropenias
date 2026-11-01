@@ -1,0 +1,30 @@
+    <button class="back-btn btn-volver-libros-menu" id="crv-volver">← VOLVER</button>
+    <!-- Cráneo vivo: el corte con la cara (Marino caps. 45-47). Modelo vivo de Libros. Viene de la maqueta aprobada
+         autonomo/maquetas/b6a-craneo-b.html. Lógica en craneo-vivo/index.js (arranque) y pagina.js; datos y fuentes en
+         js/data/craneo-vivo-data.js. Prefijo de ids: crv-. -->
+    <div class="crv-raiz" id="crv-raiz" data-modelo-vivo>
+  <header class="cabecera"><p class="crv-eyebrow">Modelo vivo · Marino caps. 45-47</p><h2 class="crv-titulo">El corte con la cara</h2></header>
+  <div class="modos" id="crv-modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
+  <div class="presets" id="crv-presets" role="group" aria-label="Paciente"></div>
+  <section class="zona-escena" id="crv-escena"><svg id="crv-svg" viewBox="0 0 390 330" role="img" aria-label="Corte coronal del cráneo y la cara del enfermo"></svg></section>
+  <section id="crv-monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
+    <span>PA <b id="crv-m-pa"></b></span><span>PAM <b id="crv-m-pam"></b></span><span>PIC <b id="crv-m-pic"></b></span><span>PPC <b id="crv-m-ppc"></b></span><span>GCS <b id="crv-m-gcs"></b></span><span>Na⁺ <b id="crv-m-na"></b></span><span>Tiempo <b id="crv-m-t"></b></span><span id="crv-dtc-s" hidden>Doppler <b id="crv-m-dtc"></b></span></div></section>
+  <p id="crv-idea" class="idea"></p>
+  <details class="plegable" id="crv-pv-det"><summary>La caja cerrada: por qué sube la presión</summary><svg id="crv-pv-svg" viewBox="0 0 390 150" role="img" aria-label="Curva presión-volumen y reparto de lo que ocupa la caja"></svg><p id="crv-pv-txt" class="para"></p></details>
+  <details class="plegable" id="crv-pa-det"><summary>Flujo, autorregulación, CO₂ y penumbra</summary><svg id="crv-pa-svg" viewBox="0 0 390 124" role="img" aria-label="Autorregulación del flujo cerebral"></svg><p id="crv-pa-txt" class="para"></p><p id="crv-co2-txt" class="para"></p>
+    <div id="crv-pen-caja" hidden><svg id="crv-pen-svg" viewBox="0 0 390 110" role="img" aria-label="Penumbra del ictus en anillos"></svg><div id="crv-ictus-lista"></div></div></details>
+  <section id="crv-prueba" class="prueba" hidden aria-live="polite"></section>
+  <section id="crv-guia" class="prueba guia" hidden aria-live="polite"></section>
+  <figure class="fig"><img id="crv-fig-img" alt="Imagen real del libro" loading="eager"><figcaption id="crv-fig-cap"></figcaption></figure>
+  <section class="bloque">
+    <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="crv-fuentes"></ul></details>
+    <details class="plegable"><summary>Lo que crecerá</summary><ul class="lista" id="crv-crecera"></ul></details>
+    <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="crv-notas"></div></details>
+    <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="crv-profundizar"></ul></details>
+  </section>
+<div class="dock" id="crv-dock"><div class="dock-in">
+  <p class="frase" id="crv-frase" role="status" aria-live="polite"><span class="frase-txt" id="crv-frase-txt"></span></p>
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Masa y sangrado</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Presión y respirador</button><button type="button" id="crv-mas-mandos" aria-expanded="false">Más mandos ▾</button></div>
+  <div class="dock-panel" id="crv-dock-panel"></div><div class="dock-panel" id="crv-dock-medir" hidden></div>
+</div></div>
+    </div>

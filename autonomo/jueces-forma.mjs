@@ -89,7 +89,9 @@ export const MODELOS = {
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa
         figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
-    // [HUECO crv: 'craneo-vivo']
+    // Cráneo vivo (b6a): Explorar | Apuesta | Error | Caso; el estado va en data-craneo-vivo
+    'craneo-vivo': { raiz: '#crv-raiz', enlace: { especialidad: 'libros', view: 'craneoVivo' }, clave: 'craneoVivo', modo: { explorar: '#crv-raiz [data-modo="explorar"]' },
+        estados: ['abundio', 'segismundo', 'clotilde', 'petronila', 'leovigildo'] },
     // ·
     // [HUECO plv: 'placa-viva']
 };
