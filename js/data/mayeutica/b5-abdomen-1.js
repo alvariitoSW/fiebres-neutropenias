@@ -194,7 +194,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
           { t: 'Los capilares fugan y la hipovolemia puede producir más necrosis pancreática añadida', ok: true },
           { t: 'Se retiene líquido en exceso por la sed y el edema; lo que hay que evitar es el volumen', porque: 'La pancreatitis grave pierde líquido intravascular por capilares con fuga. Restringir el volumen por miedo al edema extiende la necrosis.' }],
         explicacion: `La pancreatitis grave se asocia con pérdida de líquido intravascular por <span class="hl-azul">capilares sistémicos con fuga</span>, y la hipovolemia resultante puede producir <span class="hl-rojo">más necrosis pancreática</span>; por eso se recomienda atender el volumen pronto (${pag(21)}).` },
-      { id: 'ptt-g2', corto: 'Ringer o salino', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: [{ aguaViva: 'ringer', texto: '🌊 Ringer lactato' }, { aguaViva: 'salino', texto: '🌊 Salino 0,9 %' }],
+      { id: 'ptt-g2', corto: 'Ringer o salino', tipo: 'test', fuente: 'ma-panc-fluidos', modelo: [{ aguaViva: 'ringer', texto: '🌊 Ringer lactato: dónde acaba el litro' }, { aguaViva: 'salino', texto: '🌊 Salino 0,9 %: dónde acaba el litro' }],
         enunciado: 'Pancreatitis grave con hipovolemia. ¿Qué cristaloide eliges, y en qué caso no lo usarías?',
         opciones: [
           { t: 'Salino al 0,9 %, el suero fisiológico, siempre; el Ringer solo en la hipocalcemia', porque: 'Marino recomienda Ringer lactato, con mejores resultados que el salino, y lo contraindica en la hipercalcemia, no en la hipocalcemia. Con salino pierdes el beneficio demostrado.' },
@@ -326,7 +326,7 @@ export const MAYEUTICA_ABDOMEN_1 = {
         paciente: { Edad: '51 años', Peso: '80 kg', Motivo: 'Pancreatitis aguda por TG 3.200 mg/dL, ya diagnosticada' },
         pasos: [
           { momento: 'Día 1 · 09:30', datos: { PA: '98/60 mmHg', FC: '112 lpm', Hto: '51 %', Calcio: '9,0 mg/dL' }, nuevo: ['PA', 'FC', 'Hto', 'Calcio'], calculadora: { ir: 'ma-rl-resultado', nombre: 'Ringer lactato en la pancreatitis' },
-            pregunta: { id: 'c1-2', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc', origen: CASO, modelo: { aguaViva: 'ringer', texto: '🌊 Ringer lactato' },
+            pregunta: { id: 'c1-2', tipo: 'test', fuente: 'ma-panc-fluidos · ma-rl-calc', origen: CASO, modelo: { aguaViva: 'ringer', texto: '🌊 Ringer lactato: dónde acaba el litro' },
               enunciado: 'Recuerda: Bartolomé, 51 años, dolor típico y lipasa 40 veces el límite: pancreatitis aguda ya diagnosticada. Pesa 80 kg, está hipovolémico (PA 98/60, FC 112, Hto 51 %) y calcio normal. La pauta de Marino es para la pancreatitis grave; con su hipovolemia y la causa por TG la tratas como tal. ¿Qué fluido y cuánto?',
               opciones: [
                 { t: 'Salino al 0,9 %: bolo de 1.600 mL (20 mL/kg) y luego 240 mL/h (3 mL/kg/h)', porque: 'Es la pauta agresiva: sobrecarga de volumen y edema de pared sin mejorar el pronóstico. Además, el RL ha dado mejores resultados que el salino.' },
