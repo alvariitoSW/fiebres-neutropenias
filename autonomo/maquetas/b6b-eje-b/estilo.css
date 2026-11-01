@@ -20,8 +20,8 @@
 .mando button { min-height: 34px; padding: 2px 4px; font: 600 .7rem/1.15 var(--sans); } .mando button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
 .mando output { color: var(--oro); font: 700 .72rem var(--sans); text-align: center; } .mando b.dock-nota { font: 700 .66rem/1.2 var(--sans); color: var(--text-dim); } .peq { font: .64rem/1.3 var(--sans); color: var(--text-muted); }
 .modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button { min-height: 34px; } .modos button[aria-pressed="true"], .presets button[aria-pressed="true"], .lupas button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
-.presets { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 34px; font: 700 .58rem/1.1 var(--sans); padding: 2px 0; }
-.lupas { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 3px; margin: 3px 0; } .lupas button { min-height: 34px; font: 600 .66rem/1.1 var(--sans); }
+.presets { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 34px; font: 700 .54rem/1.1 var(--sans); padding: 2px 0; }
+.lupas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin: 3px 0; } .lupas button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); } .lupas button { min-height: 34px; font: 600 .66rem/1.1 var(--sans); }
 .prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); } .prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
 .op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
 .por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
@@ -34,3 +34,6 @@
 .cabecera .cab-fila h1 { font-size: 1rem; } .cabecera .aviso { margin: 0; font-size: .64rem; } main { gap: 4px; } .frase { font-size: .74rem; line-height: 1.22; } .frase-txt { max-height: 2.5em; overflow-y: auto; }
 #dock .dock-panel { max-height: 90px !important; min-height: 0 !important; overflow-y: auto; } #dock.abierto .dock-panel { max-height: 30vh !important; } .dock-tabs { grid-auto-columns: minmax(0, 1fr) auto; } .dock-tabs button { min-height: 34px !important; }
 #mas-mandos { background: transparent; border: 0; color: var(--text-dim); font: 600 .7rem/1.1 var(--sans); padding: 0 6px; } .dock-pliega { display: grid; gap: 4px; }
+#eje-svg .miembro { stroke: var(--text-muted); stroke-width: 2; fill: none; stroke-linecap: round; } #eje-svg .caja { fill: none; stroke: var(--text-muted); } #eje-svg .norm { fill: color-mix(in srgb, var(--accent-green) 22%, transparent); stroke: var(--accent-green); }
+#eje-svg .pt { fill: var(--oro); stroke: var(--text-main); } #eje-svg .pt.hueco { fill: none; stroke: var(--oro); stroke-width: 2; stroke-dasharray: 3 2; }
+#eje-svg .b-r { fill: color-mix(in srgb, var(--accent-red) 40%, var(--bg-main)); } #eje-svg .b-a { fill: color-mix(in srgb, var(--accent-yellow) 30%, var(--bg-main)); } #eje-svg .b-v { fill: color-mix(in srgb, var(--accent-green) 35%, var(--bg-main)); }

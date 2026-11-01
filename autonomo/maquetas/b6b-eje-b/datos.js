@@ -7,15 +7,17 @@ export const REF = {
   la: citaWeb('Libro Azul, cap. 45, p. 4-6', LA + '#page=4'),
   younes: citaWeb('Younes 2017', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC5682381'),
   huang: citaWeb('Huang-Bianco 2008', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC3133953'),
+  langouche: citaWeb('Langouche 2023', 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10638597'),
 };
 export const IMG = ['mar-fig51-1-supresion-suprarrenal.jpg', 'Fig. 51.1 · mecanismos de la supresión suprarrenal en el enfermo crítico', 49, 'mu-sr-eje'];
-// Constantes de cada paciente: del caso (ilustrativo) · pam = PAM base del caso (sin suero, noradrenalina ni hidrocortisona).
+// Constantes de cada paciente: del caso (ilustrativo) · pam = PAM base del caso (sin suero, noradrenalina ni hidrocortisona) · Bibiana nace sin hipotensión: solo cae con el estrés sin cobertura.
 export const PRES = {
   toribio: { n: 'Toribio', e: 61, lup: 'sr', circ: true, vol0: 3000, na0: 0.4, pam: 35.8, hcEf: 14, fc: 118, ritmo: 'sinusal', t: 38.9, na: 138, gluc: 150, lact: 4.2, caso: 'Shock séptico' },
-  bibiana: { n: 'Bibiana', e: 74, lup: 'sr', circ: true, vol0: 0, na0: 0, pam: 62.7, hcEf: 12, fc: 96, ritmo: 'sinusal', t: 36.8, na: 139, gluc: 110, lact: 1.1, caso: 'Prednisona un año' },
+  bibiana: { n: 'Bibiana', e: 74, lup: 'sr', circ: true, vol0: 0, na0: 0, pam: 78, hcEf: 12, estres: true, fc: 96, ritmo: 'sinusal', t: 36.8, na: 139, gluc: 110, lact: 1.1, caso: 'Prednisona un año' },
   sinforoso: { n: 'Sinforoso', e: 82, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 86, hcEf: 0, fc: 128, ritmo: 'FA', t: 37.2, na: 136, gluc: 105, lact: 1.0, caso: 'Letargia y FA' },
   lucrecia: { n: 'Lucrecia', e: 31, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 81, hcEf: 0, fc: 152, ritmo: 'sinusal', t: 40.8, na: 138, gluc: 140, lact: 1.8, caso: 'Graves y neumonía' },
-  obdulia: { n: 'Obdulia', e: 77, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 64, hcEf: 0, fc: 48, ritmo: 'sinusal', t: 33.5, na: 122, gluc: 98, lact: 1.2, caso: 'Hallada en casa' },
+  obdulia: { n: 'Obdulia', e: 77, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 64, hcEf: 10, fc: 48, ritmo: 'sinusal', t: 33.5, na: 122, gluc: 98, lact: 1.2, caso: 'Hallada en casa' },
+  policarpo: { n: 'Policarpo', e: 70, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 90, hcEf: 0, fc: 78, ritmo: 'FA', t: 36.9, na: 139, gluc: 102, lact: 1.1, caso: 'Amiodarona por FA' },
   fulgencio: { n: 'Fulgencio', e: 66, lup: 'ti', circ: false, vol0: 0, na0: 0, pam: 84, hcEf: 0, fc: 98, ritmo: 'sinusal', t: 38.1, na: 139, gluc: 118, lact: 1.4, caso: 'UCI día 5' },
 };
 export const IDEA = 'Dos glándulas pueden fallar en el mismo enfermo: la suprarrenal (la PA que no sube con suero) y el tiroides (la fiebre, el pulso o el frío). Cada lupa enseña el eje de una: hipotálamo → hipófisis → glándula, con su freno. <span class="org">clínica y dosis: Marino cap. 51, p. 48-57 · el freno (retroalimentación): Libro Azul p. 4-6 y Younes · constantes: ilustrativo</span>';
@@ -23,29 +25,34 @@ export const IDEA = 'Dos glándulas pueden fallar en el mismo enfermo: la suprar
 export const GUIAS = {
   toribio: ['Toribio · la PA que no sube', [
     { t: 'Tres litros de suero y noradrenalina a 0,4, y la PA sigue en 78/40. La clínica principal de la insuficiencia suprarrenal del crítico es la hipotensión que no responde a volumen.', z: 'suero', p: 50, f: 'mu-sr-clinica', o: 'ficha p. 50' },
-    { t: 'Mira la lupa: en la Fig. 51.1 las citocinas inflamatorias bloquean el hipotálamo, la glándula y la respuesta del órgano. Por eso falta cortisol justo cuando más se necesita.', z: 'eje', p: 49, f: 'mu-sr-eje', o: 'ficha, Fig. 51.1 · cuánto falta: ilustrativo' },
-    { t: 'En el shock séptico no hace falta medir el cortisol: se da hidrocortisona 100 mg cada 8 h, que entra por fuera.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 51', haz: ['hc'], btn: 'hidrocortisona 100 mg' },
-    { t: 'Se retira cuando se resuelve la causa y ya no hay vasopresor, con el lactato normal, y poco a poco.', z: 'suero', p: 51, f: 'mu-sr-retirada', o: 'ficha p. 51' }]],
+    { t: 'Mira la lupa: en la Fig. 51.1 las citocinas inflamatorias bloquean el hipotálamo, la glándula y la respuesta del órgano. Así el cortisol no alcanza lo que el estrés exige, aunque la cifra total pueda salir normal o alta.', z: 'eje', p: 49, f: 'mu-sr-eje', o: 'ficha, Fig. 51.1 · cortisol total normal o alto: Langouche 2023 · cuánto falta: ilustrativo', x: 'langouche' },
+    { t: 'Con hipotensión que no responde al volumen ni a dosis moderadas de vasopresor, no hace falta esperar al cortisol: se da hidrocortisona 100 mg cada 8 h, que entra por fuera.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 51', haz: ['hc'], btn: 'hidrocortisona 100 mg' },
+    { t: 'Pasan tres días: el lactato baja. Se retira cuando se resuelve la causa, ya no hay vasopresor y el lactato es normal, y poco a poco. Pasa 3 días sin noradrenalina y retírala con el botón de abajo (apagado mientras haya vasopresor o el lactato siga alto).', z: 'suero', p: 51, f: 'mu-sr-retirada', o: 'ficha p. 51 · el reloj y cuánto baja el lactato: ilustrativo', haz: ['retg'], btn: 'pasar 3 días sin noradrenalina' }]],
   bibiana: ['Bibiana · el eje dormido', [
     { t: 'Un año con prednisona 10 mg: el corticoide de fuera frena el hipotálamo (Fig. 51.1) y, sin ACTH, la suprarrenal se atrofia.', z: 'eje', p: 49, f: 'mu-sr-eje', o: 'ficha, Fig. 51.1 · atrofia: Younes 2017', x: 'younes' },
-    { t: 'Su cortisol aleatorio es 22 µg/dL: entre 10 y 35 no decide. Hace falta medir la ACTH o hacer la prueba.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 51' },
-    { t: 'Tras 250 µg de ACTH, el cortisol sube de 22 a 28: aumento de 6, menor de 9 µg/dL, es supresión. Un aumento de 9 o más no habría descartado la secundaria.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 50-51 · las cifras de Bibiana son del caso' },
-    { t: 'La hidrocortisona de la ficha es 100 mg cada 8 h. Tras un uso crónico, el eje puede tardar de 6 a 12 meses en recuperarse (serie pediátrica).', z: 'eje', p: 51, f: 'mu-sr-tto', o: 'dosis: ficha p. 51 · 6-12 meses: Younes 2017', x: 'younes', haz: ['hc'], btn: 'hidrocortisona 100 mg' }]],
+    { t: 'Su cortisol aleatorio es 22 µg/dL: entre 10 y 35 no decide. Hace falta medir la ACTH o hacer la prueba. Esos cortes de la ficha son los del enfermo crítico.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 50-51 · cortes del paciente crítico', v: 'mapa' },
+    { t: 'Tras 250 µg de ACTH, el cortisol sube de 22 a 28: aumento de 6, menor de 9 µg/dL, es supresión. Un aumento de 9 o más no habría descartado la secundaria.', z: 'eje', p: 51, f: 'mu-sr-practica', o: 'ficha p. 50-51 · las cifras de Bibiana son del caso', v: 'mapa', haz: ['acth'], btn: 'prueba de ACTH 250 µg' },
+    { t: 'Hoy la operan: sube la demanda de cortisol (el estrés) y, sin cobertura, la glándula atrofiada no responde y la PA cae. Sube el estrés y míralo en el monitor.', z: 'rinon', p: 50, f: 'mu-sr-clinica', o: 'ficha p. 50 (la hipotensión de la insuficiencia suprarrenal) · cuánto cae la PA: ilustrativo', haz: ['es+'], btn: 'estrés +1' },
+    { t: 'La ficha da 100 mg cada 8 h para el shock séptico; para la supresión por corticoide exógeno o la cirugía no trae otra pauta. Aquí, con la cobertura puesta, la PA se sostiene. Tras un uso crónico, el eje puede tardar de 6 a 12 meses en recuperarse (serie pediátrica).', z: 'eje', p: 51, f: 'mu-sr-tto', o: 'dosis del shock séptico: ficha p. 51 · 6-12 meses: Younes 2017 · la ficha no trae pauta perioperatoria', x: 'younes', haz: ['hc'], btn: 'hidrocortisona 100 mg' }]],
   sinforoso: ['Sinforoso · dormido y en FA', [
     { t: 'En el anciano, la tirotoxicosis puede ser apática: letargia y fibrilación auricular, sin la agitación de la forma típica.', z: 'cuello', p: 53, f: 'mu-ti-clinica', o: 'ficha p. 53' },
-    { t: 'TSH menor de 0,01 y T4 libre 2,9: la glándula trabaja sola y apaga la TSH (patrón T4 alta, TSH baja): hipertiroidismo primario.', z: 'eje', p: 53, f: 'mu-tabla-51-2', o: 'ficha, Tabla 51.2 · unidad de la TSH: ver notas' },
+    { t: 'TSH menor de 0,01 y T4 libre 2,9: la glándula trabaja sola y apaga la TSH (patrón T4 alta, TSH baja): hipertiroidismo primario.', z: 'eje', p: 53, f: 'mu-tabla-51-2', o: 'ficha, Tabla 51.2 · unidad de la TSH: ver notas', v: 'mapa' },
     { t: 'Se trata con metimazol 10-20 mg al día y propranolol oral 10-40 mg, 3-4 veces al día.', z: 'eje', p: 55, f: 'mu-tabla-51-4', o: 'ficha, Tablas 51.3 y 51.4 (p. 54-55)', haz: ['atd', 'mti'], btn: 'metimazol' }]],
   lucrecia: ['Lucrecia · tormenta tiroidea', [
     { t: 'Graves con neumonía, 40,8 °C, FC 152 y delirio: tormenta tiroidea. Mortalidad de hasta el 25 % pese al tratamiento.', z: 'termo', p: 53, f: 'mu-ti-tormenta', o: 'ficha p. 53' },
-    { t: 'El antitiroideo de elección en la tormenta es el propiltiouracilo: bloquea la síntesis y la conversión de T4 a T3. Carga de 500-1.000 mg y luego 250 mg cada 4 h.', z: 'eje', p: 55, f: 'mu-tabla-51-4', o: 'ficha, Tabla 51.4', haz: ['atd', 'ptu'], btn: 'propiltiouracilo' },
-    { t: 'El yodo (5 gotas cada 6 h) se añade al antitiroideo, nunca solo. Bloquea la síntesis y la secreción de T4.', z: 'eje', p: 55, f: 'mu-ti-yodo', o: 'ficha p. 55', haz: ['yodo'], btn: 'yodo' },
+    { t: 'El antitiroideo de elección en la tormenta es el propiltiouracilo: bloquea la síntesis y la conversión de T4 a T3. Carga de 500-1.000 mg y luego 250 mg cada 4 h. El yodo (5 gotas cada 6 h) se añade después al antitiroideo, en combinación: bloquea la síntesis y la secreción de T4.', z: 'eje', p: 55, f: 'mu-tabla-51-4', o: 'ficha, Tabla 51.4 y texto (p. 55)', haz: ['atd', 'ptu'], btn: 'propiltiouracilo' },
     { t: 'Propranolol oral 60-80 mg cada 4 h: frena la taquicardia y, a dosis altas, la conversión de T4 a T3.', z: 'cuello', p: 54, f: 'mu-tabla-51-3', o: 'ficha, Tabla 51.3 (la maqueta enseña solo la vía oral)', haz: ['bb', 'prop'], btn: 'propranolol oral' },
-    { t: 'La tormenta acelera el metabolismo del cortisol y deja una insuficiencia relativa: hidrocortisona 300 mg de carga y 100 mg cada 8 h.', z: 'rinon', p: 55, f: 'mu-ti-tormenta-extra', o: 'ficha p. 55', haz: ['hc'], btn: 'hidrocortisona 300 + 100/8 h' }]],
+    { t: 'La tormenta acelera el metabolismo del cortisol y deja una insuficiencia relativa: hidrocortisona 300 mg de carga y 100 mg cada 8 h.', z: 'rinon', p: 55, f: 'mu-ti-tormenta-extra', o: 'ficha p. 55', haz: ['hc'], btn: 'hidrocortisona 300 + 100/8 h' },
+    { t: 'Pasan los días con todo puesto: baja la fiebre, baja el pulso y el sello de la tormenta se retira. Avanza el reloj y míralo en el termómetro.', z: 'termo', p: 53, f: 'mu-ti-tormenta', o: 'sentido: ficha p. 53-55 · cuántos días y cuánto baja: ilustrativo', haz: ['d7'], btn: '+7 días' }]],
   obdulia: ['Obdulia · frío y confusa', [
     { t: 'Consciencia deprimida, hipotermia (33,5 °C), Na⁺ 122 e inestabilidad: el coma mixedematoso. Mortalidad de hasta el 60 % incluso tratado.', z: 'termo', p: 56, f: 'mu-hipo-coma', o: 'ficha p. 56-57' },
-    { t: 'TSH 48 con T4 libre 0,2: la T4 baja siempre; la TSH alta indica que el fallo es de la glándula (primario). La TSH está baja si el fallo es hipotálamo-hipofisario.', z: 'eje', p: 56, f: 'mu-hipo-dx', o: 'ficha p. 56' },
+    { t: 'TSH 48 con T4 libre 0,2: la T4 baja siempre; la TSH alta indica que el fallo es de la glándula (primario). La TSH está baja si el fallo es hipotálamo-hipofisario.', z: 'eje', p: 56, f: 'mu-hipo-dx', o: 'ficha p. 56', v: 'mapa' },
     { t: 'Primero la hidrocortisona 100 mg IV cada 8 h: suele haber insuficiencia suprarrenal y la primera dosis va antes de la hormona tiroidea.', z: 'rinon', p: 57, f: 'mu-hipo-coma-tto', o: 'ficha p. 57', haz: ['hc'], btn: 'hidrocortisona 100 mg' },
     { t: 'Después, levotiroxina en bolo IV lento de 200-400 µg. La liotironina (5-20 µg de carga) se puede añadir porque la conversión de T4 a T3 está deprimida.', z: 'eje', p: 57, f: 'mu-hipo-coma-tto', o: 'ficha p. 57', haz: ['levo'], btn: 'levotiroxina IV' }]],
+  policarpo: ['Policarpo · amiodarona', [
+    { t: 'Toma amiodarona por la fibrilación auricular: T4 libre alta (2,4 ng/dL) con TSH normal. No es hipertiroidismo.', z: 'eje', p: 54, f: 'mu-ti-hipertiroxinemia', o: 'ficha p. 54 · Tabla 51.2 · las cifras son del caso', v: 'mapa' },
+    { t: 'Es la hipertiroxinemia eutiroidea por fármacos (amiodarona, heparina): T4 alta con TSH normal, sin enfermedad tiroidea. La T3 puede salir baja.', z: 'cuello', p: 54, f: 'mu-ti-hipertiroxinemia', o: 'ficha p. 54' },
+    { t: 'No se trata: la ficha dice que la T4 alta con TSH normal por fármacos no requiere tratamiento. Prueba a darle metimazol.', z: 'eje', p: 54, f: 'mu-ti-hipertiroxinemia', o: 'ficha p. 54', haz: ['atd', 'mti'], btn: 'metimazol' }]],
   fulgencio: ['Fulgencio · el tiroides sano', [
     { t: 'Neumonía en el día 5: T3 libre y T4 libre bajas con TSH normal. Es el patrón del 30-50 % de los pacientes de UCI (eutiroideo enfermo).', z: 'eje', p: 56, f: 'mu-hipo-eutiroideo', o: 'ficha p. 56' },
     { t: 'La causa es la peor conversión de T4 a T3 en los tejidos: las desyodasas desvían la T4 hacia T3 inversa (inactiva).', z: 'eje', p: 56, f: 'mu-hipo-eutiroideo', o: 'ficha p. 56 · desyodasas: Huang-Bianco 2008', x: 'huang' },
@@ -56,14 +63,16 @@ export const FUENTES = [
   ['Retroalimentación negativa y cadena TRH → TSH → T4 → T3: Libro Azul, sección VI, cap. 45 «Respuesta endocrina al estrés» (PDF p. 4-6)', 'otra fuente'],
   ['Los corticoides exógenos frenan hipotálamo e hipófisis, la suprarrenal se atrofia y el eje tarda 6-12 meses: Younes AK, Younes NK. Transl Pediatr 2017;6(4):269-273 (PMID 29184808; serie pediátrica)', 'otra fuente'],
   ['Desyodasas D1/D2/D3, T3 baja y T3 inversa alta en el crítico: Huang SA, Bianco AC. Nat Clin Pract Endocrinol Metab 2008 (PMID 18212764)', 'otra fuente'],
-  ['Constantes de cada paciente, volumen de suero, noradrenalina y cuánto sube la PA: ilustrativo (los casos son inventados)', 'ilustrativo'],
+  ['Cortisol total y libre en el crítico: Langouche L et al. Endocr Rev 2023;44(6):1096-1106 (PMID 37409973)', 'otra fuente'],
+  ['Constantes de cada paciente, el reloj en días, volumen de suero, noradrenalina, cuánto sube o baja la PA, la T y la FC con el tratamiento: ilustrativo (los casos son inventados; el sentido de cada cambio es el de la ficha)', 'ilustrativo'],
 ];
 export const NOTAS = [
   ['Las fuentes discrepan (unidad de la TSH)', 'Marino escribe la TSH en mU/dL en el texto y en mU/mL en la Tabla 51.2 (p. 53). La maqueta usa la unidad de la tabla.'],
   ['La fuente no lo dice (propranolol IV)', 'La Tabla 51.3 (p. 54) da «60-80 mg IV o por vía oral cada 4 h» en la tormenta, sin dosis intravenosa propia. La maqueta enseña solo la vía oral.'],
   ['La fuente no lo dice (cortisol libre)', 'Marino no da la cifra de la CBG en el crítico: solo que cae hasta un 50 % en el enfermo agudo (p. 48). Langouche 2023 dice que cae en horas y deja alto el cortisol libre; sin cifra.'],
+  ['La fuente no lo dice (pauta perioperatoria)', 'La dosis de 100 mg cada 8 h (p. 51) es la del shock séptico. Para la supresión por corticoide exógeno o la cirugía la ficha no trae otra pauta; los cortes de cortisol (10, 35) y la prueba de ACTH son los del paciente crítico (p. 50-51).'],
   ['Opinión del autor (Marino, p. 57)', '«Mucho ruido y pocas nueces»: no hay evidencia de que los corticoides mejoren la evolución en el shock séptico, y el eutiroideo enfermo no se trata.'],
   ['Las fuentes discrepan (causa de la T3 baja)', 'La literatura discute si la causa es una D1 baja o una D3 reactivada (Huang-Bianco). La maqueta dibuja la tijera «lenta» sin elegir.'],
 ];
-export const PROFUNDIZAR = ['Prueba de estimulación con ACTH y su interpretación (ficha, p. 50-51; calculadora de la ficha de suprarrenal).', 'Equivalencias de los corticoides (Tabla 51.1, p. 51).', 'Hipertiroxinemia eutiroidea por amiodarona o heparina (p. 54): T4 alta con TSH normal no se trata.', 'Calculadoras de la ficha: tormenta tiroidea y levotiroxina.'];
-export const CRECERA = ['Mando de «crisis de asma» también en otros pacientes y esmolol en infusión con su dosis.', 'Prueba de ACTH como mando propio y la CBG con su cifra (hueco de fuente).', 'Ligar este modelo con el termostato (fiebre) y con el shock séptico del receptor vivo.'];
+export const PROFUNDIZAR = ['Prueba de estimulación con ACTH y su interpretación (ficha, p. 50-51; calculadora de la ficha de suprarrenal).', 'Equivalencias de los corticoides (Tabla 51.1, p. 51).', 'Hipertiroxinemia por heparina y otros fármacos (p. 54); la amiodarona se ve en Policarpo.', 'Dosis habitual de levotiroxina en el hipotiroidismo: 75-150 µg/día (p. 56).', 'Si hay alergia al yodo: litio 300 mg cada 8 h; PTU (necrosis hepática) y metimazol (colestasis) (p. 55).', 'Fludrocortisona 50 µg al día, opcional en el shock séptico (p. 51).', 'Calculadoras de la ficha: tormenta tiroidea y levotiroxina.'];
+export const CRECERA = ['Mando de «crisis de asma» también en otros pacientes y esmolol en infusión con su dosis.', 'Prueba de ACTH como mando propio con su tope y la CBG con su cifra (hueco de fuente).', 'Ligar este modelo con el termostato (fiebre) y con el shock séptico del receptor vivo.'];

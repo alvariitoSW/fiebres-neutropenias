@@ -13,11 +13,11 @@
   <header class="cabecera"><div class="cab-fila"><h1>Dos glándulas, un enfermo</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
   <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
   <div class="presets" id="presets" role="group" aria-label="Paciente"></div>
-  <div class="lupas" role="group" aria-label="Lupa"><button type="button" data-lup="sr" aria-pressed="true">Lupa suprarrenal</button><button type="button" data-lup="ti" aria-pressed="false">Lupa tiroides</button><button type="button" id="paso-a-paso">Ver el eje paso a paso</button></div>
+  <div class="lupas" role="group" aria-label="Lupa y vista"><button type="button" data-lup="sr" aria-pressed="true">Suprarrenal</button><button type="button" data-lup="ti" aria-pressed="false">Tiroides</button><button type="button" id="paso-a-paso">Paso a paso</button><button type="button" id="b-mapa" aria-pressed="false">Ver el mapa</button></div>
   <section class="zona-escena"><svg id="eje-svg" viewBox="0 0 390 300" role="img" aria-label="Enfermo en la cama con dos lupas y el eje hormonal de la glándula elegida"></svg></section>
   <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
     <span>PA <b id="m-pa"></b></span><span>PAM <b id="m-pam"></b></span><span>FC <b id="m-fc"></b></span><span>Ritmo <b id="m-rit"></b></span>
-    <span>T °C <b id="m-t"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Glucosa <b id="m-gl"></b></span><span>Lactato <b id="m-lac"></b></span><span>NA <b id="m-nor"></b></span></div></section>
+    <span>T °C <b id="m-t"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Glucosa <b id="m-gl"></b></span><span>Lactato <b id="m-lac"></b></span><span>NA <b id="m-nor"></b></span><span>Día <b id="m-dia"></b></span></div></section>
   <p id="idea" class="idea"></p>
   <section id="prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="guia" class="prueba guia" aria-live="polite"></section>
