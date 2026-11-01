@@ -77,7 +77,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
         enunciado: 'Un paciente con colecistitis alitiásica tiene hemocultivos positivos. ¿Qué espera encontrar y qué debe cubrir el antibiótico empírico?',
         opciones: [
           { t: 'Cocos grampositivos de la piel, y bastaría con vancomicina', porque: 'La vancomicina es de mala penetración en la bilis y no cubre gramnegativos: el paciente seguiría con el foco biliar sin tratar.' },
-          { t: 'Gramnegativos aerobios: cubrir enterobacterias', ok: true },
+          { t: 'Bacilos gramnegativos aerobios: cubrir enterobacterias', ok: true },
           { t: 'Anaerobios en exclusiva, y basta con metronidazol', porque: 'El hallazgo casi constante son los gramnegativos aerobios. Un esquema solo contra anaerobios deja sin cubrir a los gérmenes que dan la bacteriemia.' }],
         explicacion: 'Los hemocultivos son positivos en el 90 % y se aíslan <span class="hl">bacilos gramnegativos aerobios casi siempre</span>; el empírico debe cubrir los gramnegativos entéricos' + pg(26, 27) + '.' },
       { id: 'cole-e2', corto: 'RM y TC', tipo: 'test', fuente: 'ma-cole-hida',
@@ -99,7 +99,7 @@ export const MAYEUTICA_ABDOMEN_2 = {
         opciones: [
           { t: 'Más leve: sin obstrucción del cístico, la inflamación es menor', porque: 'Es al revés: es más grave. Tratarla como una litiásica leve retrasa una intervención que no admite demora.' },
           { t: 'Igual: solo cambia la causa y se maneja del mismo modo', porque: 'No es igual: puede empeorar muy rápido. Esperar la evolución con tratamiento conservador da tiempo a la gangrena.' },
-          { t: 'Más grave, y puede deteriorarse muy deprisa', ok: true }],
+          { t: 'Más grave que la litiásica, y puede deteriorarse muy deprisa', ok: true }],
         explicacion: '<span class="hl-rojo">Más grave que la litiásica</span> (' + pag(25, 'pág. 25') + '); puede empeorar muy rápido, por eso «la intervención pronta es obligada»: colecistectomía laparoscópica o, si está inestable, drenaje percutáneo' + pg(27) + '.' },
       { id: 'cole-e5', corto: 'lo que la eco no ve', tipo: 'test', fuente: 'ma-cole-eco',
         enunciado: 'Marino cita para la eco una sensibilidad del 81 %. Si la hicieras a 100 pacientes con colecistitis, ¿a cuántos no se la verías?',
