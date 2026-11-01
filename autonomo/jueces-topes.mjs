@@ -33,7 +33,7 @@ const AJUSTES = {
     // Lo recorre pruebas/pulmon-vivo.mjs (bloque «E4b»): pico y meseta suben juntos, PAM y SpO₂ caen, el sitio clásico falla y el correcto los recupera.
     'pulmon-vivo': { noPulsar: /^(Empezar otra vez)/ },
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
-    'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
+    'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar|Preguntas|Explorar|Ya lo tengo|Empezar la guía|Ir a los casos|Seguir|Empezar de cero|Abrir el modelo)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
 // Botones que nunca son mandos: navegación, cambio de modo, enlaces cruzados, cerrar lupas, explicaciones y reinicios.

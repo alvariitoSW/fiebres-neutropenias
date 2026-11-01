@@ -45,6 +45,7 @@ export const BANCOS = [
     { nombre: 'vaso que sangra', datos: 'js/data/vaso-vivo-data.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'iones vivos', datos: 'js/data/iones-vivos-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -81,8 +82,8 @@ export const MODELOS = {
     // El corazón eléctrico: el estado va en data-ritmo-vivo
     'ritmo-vivo': { raiz: '#rtv-raiz', enlace: { especialidad: 'libros', view: 'ritmoVivo' }, clave: 'ritmoVivo', modo: { explorar: '#rtv-modo-explorar', mayeutica: '#rtv-modo-preguntas' },
         estados: ['sinusal', 'fa:dilt', 'nodal', 'wpw', 'torsade', 'fv', 'stemi'] },
-    // Iones vivos (b4): Explorar | Apuesta | Error | Caso (sin Mayéutica del motor común todavía: el estado va en data-iones-vivos)
-    'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar' },
+    // Iones vivos (b4): Explorar | Preguntas (Mayéutica del motor común; el estado va en data-iones-vivos)
+    'iones-vivos': { raiz: '#iov-raiz', enlace: { especialidad: 'libros', view: 'ionesVivos' }, clave: 'ionesVivos', modo: { explorar: '#iov-modo-explorar', mayeutica: '#iov-modo-preguntas' },
         estados: ['normal', 'damian', 'rufino', 'valentin', 'adela'] },
     // El receptor vivo (b3)
     'receptor-vivo': { raiz: '#rcv-raiz', enlace: { especialidad: 'libros', view: 'receptorVivo' }, clave: 'receptorVivo', modo: { explorar: '#rcv-modo-explorar', mayeutica: '#rcv-modo-preguntas' },
