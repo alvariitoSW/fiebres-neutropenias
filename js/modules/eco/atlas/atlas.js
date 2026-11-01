@@ -25,6 +25,7 @@ export const CAPITULOS = {
   eject: { html: 'cap-sistolica.html', figura: () => import('./sistolica.mjs'), sub: 'Volúmenes del VI por discos sobre el corazón de la app' },
   fill: { html: 'cap-diastolica.html', figura: () => import('./diastolica.mjs'), sub: 'Del llenado normal al restrictivo, con el motor de la app' },
   rv: { html: 'cap-vd.html', figura: () => import('./vd.mjs'), sub: 'Sobrecarga de presión, de volumen y TEP agudo, con el motor de la app' },
+  mr: { html: 'cap-mr.html', sub: 'De leve a grave: chorro, vena contracta, PISA, volumen y fracción regurgitantes, y estadios' },
   ar: { html: 'cap-ar.html', sub: 'De leve a grave con disfunción del VI: graduación integrada y estadios' },
   segments: { html: 'cap-segments.html', sub: 'Los 17 segmentos, el índice de contractilidad y los territorios de la DA, la CD y la Cx' },
   peri: { html: 'cap-peri.html', sub: 'Del derrame al taponamiento; constricción frente a miocardiopatía restrictiva' },
