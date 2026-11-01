@@ -1,0 +1,34 @@
+    <button class="back-btn btn-volver-libros-menu" id="hpv-volver">← VOLVER</button>
+    <!-- Hepatocito vivo: la fábrica por dentro (Marino cap. 39). Modelo vivo de Libros. Viene de la maqueta aprobada
+         autonomo/maquetas/b5-hepatocito-b.html. Lógica en hepatocito-vivo/index.js (arranque) y pagina.js; datos y fuentes en
+         js/data/hepatocito-vivo-data.js. Prefijo de ids: hpv-. -->
+    <div class="hpv-raiz" id="hpv-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="hpv-eyebrow">Modelo vivo · Marino cap. 39</p><h2 class="hpv-titulo">La fábrica por dentro</h2></header>
+      <p id="hpv-idea" class="idea"></p>
+      <div class="modos" id="hpv-modos" role="group" aria-label="Modo"><button type="button" id="hpv-modo-explorar" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" id="hpv-modo-apuesta" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" id="hpv-modo-error" data-modo="error" aria-pressed="false">Error</button><button type="button" id="hpv-modo-hilario" data-modo="hilario" aria-pressed="false">Error de Hilario</button><button type="button" id="hpv-modo-caso" data-modo="caso" aria-pressed="false">Caso</button></div>
+      <section id="hpv-prueba" class="prueba" hidden aria-live="polite"></section>
+      <section id="hpv-monitor" aria-label="Monitor de cabecera">
+        <div class="mon-fila"><span>NH₃ arterial <b id="hpv-mon-nh3"></b></span><span>West Haven <b id="hpv-mon-wh"></b></span><span>Carril <b id="hpv-mon-carril"></b></span></div>
+        <div class="mon-fila"><span>Lactulosa <b id="hpv-mon-dep"></b></span><span>PA <b id="hpv-mon-pa"></b> · FC <b id="hpv-mon-fc"></b></span><span id="hpv-mon-astro"></span></div>
+        <p class="mon-ch cita"><span class="chip-ilus">ilustrativo</span> escala 60 / 150 µmol/L: normal &lt;60, riesgo &gt;150 <a class="cita-pdf" href="docs/marino-2024-abdomen-temperatura-caps39-44.pdf#page=7" target="_blank" rel="noopener">PDF p. 7</a> · <button type="button" class="ver-ficha" data-especialidad="libros" data-view="marinoAbdomen" data-panel="panel-marino-abd-tabs" data-tab="ma-encefalopatia-hepatica" data-resaltar="#ma-eh-amonio">Ver en la ficha</button></p>
+      </section>
+      <section class="zona-escena" id="hpv-escena"><svg id="hpv-svg" viewBox="0 22 360 324" role="img" aria-label="Un hepatocito grande: entra el amonio del colon, el carril de la urea lo procesa y lo que sobra llega al astrocito"></svg></section>
+      <div class="mando"><button type="button" id="hpv-b-replay" class="btn-replay">▶ Ver el carril de la urea paso a paso</button></div>
+      <section id="hpv-guia" class="prueba guia" hidden aria-live="polite"></section>
+      <div id="hpv-leyenda"></div>
+      <details class="plegable" id="hpv-fig"><summary>Figura del libro · Fig. 39.2 · TC de cráneo antes y después del edema</summary>
+        <figure class="fig-tc"><img id="hpv-img-tc" loading="lazy" alt="Dos TC de cráneo de un paciente con fallo hepático agudo, antes y después del edema cerebral: a la derecha se borran los surcos" src="js/modules/libros/img/mar-fig39-2-tc-edema-cerebral.jpg">
+        <figcaption>TC de cráneo en el fallo hepático agudo, antes (izquierda) y después (derecha) del edema cerebral: se borran los surcos y se pierde la interfaz entre sustancia gris y blanca. Imagen de Marino (Reference 6), la misma que ya está en la ficha. <span id="hpv-cita-fig"></span></figcaption></figure>
+        <p class="min-nota">Hueco reservado: aquí irá la Fig. 52.2 cuando se encienda la vía del paracetamol.</p></details>
+      <section class="bloque">
+        <details class="plegable"><summary>Cómo crece este modelo</summary><ul class="lista crecera" id="hpv-crecera"></ul></details>
+        <details class="plegable"><summary>Las fuentes de este modelo</summary><ul class="lista" id="hpv-fuentes"></ul></details>
+        <details class="plegable"><summary>Notas: lo que la fuente no dice, lo que discrepa</summary><div class="bloque" id="hpv-notas"></div></details>
+        <details class="plegable"><summary>Para profundizar: lo que el modelo no enseña</summary><ul class="lista" id="hpv-profundizar"></ul></details>
+      </section>
+      <div class="dock" id="hpv-dock"><div class="dock-in">
+        <p class="frase" id="hpv-frase" role="status" aria-live="polite"><span class="frase-txt" id="hpv-frase-txt"></span></p>
+        <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Mandos</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Pacientes</button></div>
+        <div class="dock-panel" id="hpv-dock-panel"></div><div class="dock-panel" id="hpv-dock-medir" hidden></div>
+      </div></div>
+    </div>

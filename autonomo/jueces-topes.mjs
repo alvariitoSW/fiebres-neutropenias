@@ -34,7 +34,8 @@ const AJUSTES = {
     'pulmon-vivo': { noPulsar: /^(Empezar otra vez)/ },
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
-    // [HUECO hepatocito: noPulsar]
+    // Hepatocito vivo: la guía (Hazlo / Siguiente), el carril animado y las respuestas de las pruebas no son mandos que acumulen
+    'hepatocito-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|▶ Ver el carril|Ver la frase buena|Ver la modalidad)/ },
     // [HUECO termostato: noPulsar]
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
 };
