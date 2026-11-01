@@ -172,6 +172,8 @@ function renal() {
                 { titulo: 'EF de urea', color: 'verde', nodos: [n('#mr-efu', 'EFU (con diuréticos)')] }
             ] },
             calc('Índices urinarios (calculadora de la ficha)', ['#mr-ind-nau', '#mr-ind-nap', '#mr-ind-cru', '#mr-ind-crp', '#mr-ind-ureau', '#mr-ind-ureap', '#mr-ind-diur'], ['#mr-indices-resultado']),
+            { tipo: 'propio', titulo: 'Glomérulo vivo: congestión y presión abdominal', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'pia', 'congestion'] }) },
             panelNefronaViva([['prerrenal', 'IRA prerrenal'], ['nta', 'Necrosis tubular aguda'], ['obstruccion', 'Obstrucción']]),
             retoVolumen,
             { tipo: 'racimos', titulo: 'Qué hacer', grupos: [{ titulo: 'Manejo', color: 'purpura', nodos: [n('#mr-reto-volumen', 'Reto de volumen'), n('#mr-furosemida-fra', 'Furosemida'), n('#mr-dopamina-baja', 'Dopamina a dosis baja')] }] }
