@@ -645,3 +645,10 @@ Caso 4 (`js/data/agua-viva-caso-teresa.js`): hemorragia clase II; P3 «decide si
 el estuario, Ringer o sangre); cifras del monitor, no de la maqueta. Al abrir la Mayéutica, `pintarDiasAtras` con preguntas de 6
 fichas parecidas leídas de `mayeutica-fichas-v1` (guarda sin `resultado`). Pareja gemela de la prueba de 3 días:
 `mar-cristaloides` frente a `mar-coloides` (`prueba-3-dias.md`). Parte `autonomo/partes/2026-10-30-educacion-app-rio.md`.
+
+## Marino unido en su portada (B-048, 01/11/2026)
+El usuario (30/10) pidió ver en Libros → Marino los temas de cardio y neumo. La portada suma dos tarjetas de enlace cruzado,
+«Corazón y shock» (caps. 14-21 → Merino Cardiología) y «Pulmón y respirador» (caps. 22-30 → Merino Neumología), con su entrada
+en `BLOQUES` de `libros/index.js` (`marinoCorazon`, `marinoPulmon`: cuentan fichas y ponen la tira de modelos vivos en esos
+cuadernos). La pestaña Modelos vivos se agrupa en 6 temas (`.lib-vivos-grupo`), con los mismos ids. Las fichas no se mueven.
+Parte `autonomo/partes/2026-11-01-marino-unido.md`.

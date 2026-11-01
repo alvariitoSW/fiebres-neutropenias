@@ -484,3 +484,11 @@ aparte) y tres rangos cambiados por decisión del usuario (pseudohipertrofia con
 hipertrofia en todo el mando): nuevo 0/147, hoy 1/147. El motor del TEP no cambió (los «29 mL» eran el volumen de la
 fase A). Realismo del profesor 8,7 (meta 9,5); el interruptor sigue apagado hasta que el usuario decida. Parte:
 `autonomo/partes/2026-10-31-mv-eco-4.md`.
+
+## mv-eco-2a5, paso 5: hacia el realismo 9,5 (01/11/2026)
+Doppler continuo de la insuficiencia tricuspídea (vIT y PSAP = 4v² + PVC, desde la presión del motor; botón «Chorro de IT»,
+escala ±500, el CW lee el máximo del haz); espectro PW y modo M pintados cada 4 ms desde las muestras del motor; rótulos de la
+escala cada 1 m/s. Solo en el dibujo nuevo: VI pequeño con cavidad negra y borde nítido, mitral sin gancho y valva anterior que
+llega al tabique (EPSS 6,7 mm), cúspides aórticas planas, A4C sin las rayas del pulmón y subcostal del derrame limpio. Realismo
+8,58 → 9,0 (Doppler 8,5); el usuario eligió ir al 9,5 cambiando el motor (paso 6). Interruptor apagado. Parte:
+`autonomo/partes/2026-11-01-mv-eco-5.md`.
