@@ -7,15 +7,16 @@ import { cargarMotion, sinMovimiento } from '../../../js/core/motion.js';
 import { leyendaParticulas } from '../../../js/core/particulas.js';
 import { PDF, PRESETS, IDEA, FUENTES, NOTAS, PROFUNDIZAR, CRECERA, TABLA, DUR, NOMBRE, fichaDe, pagDe } from './datos.js';
 import { nuevo, cambiar, leer, fmt, clamp } from './modelo.js';
+import { NEO, bloqueoDe, sugNecesita } from './bloqueo-motor.js';
 import { topes } from './topes.js';
 import { escena, lupa } from './dibujo.js';
 import { crearGuia } from './guia.js';
 import { APUESTA, ERROR, CASO, LLEVAS, opciones } from './pruebas.js';
 const $ = (id) => document.getElementById(id);
-let s = nuevo('flor'), clave = 'flor', modo = 'explorar', oculto = false, foco = [], guiaApi, topeApi, firma = '';
+let ultEst = '', s = nuevo('flor'), clave = 'flor', modo = 'explorar', oculto = false, foco = [], guiaApi, topeApi, firma = '';
 const cita = (c) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${pagDe(c)}" target="_blank" rel="noopener">PDF p. ${pagDe(c)}</a> · <button type="button" class="ver-ficha" data-resaltar="#${fichaDe(c)}" data-pag-ficha="${pagDe(c)}">p. ${pagDe(c)} · Ver en la ficha</button></span>`;
 function frase(t, org) { $('frase-txt').innerHTML = `${t} <span class="org">${org}</span>`; }
-const TODOS = ['neo70', 'neo5', 'succik', 'rocaire', 'sugmal', 'tof0', 'par48', 'intub', 'piri', 'ses', 'igiv', 'sintto', 'mccrap', 'farm', 'hielo2'];
+const TODOS = ['succiK', 'parada', 'neo70', 'neo5', 'succik', 'rocaire', 'sugmal', 'tof0', 'par48', 'intub', 'piri', 'ses', 'igiv', 'sintto', 'mccrap', 'farm', 'hielo2'];
 function aplicarTopes(L) {
   const lista = topes(s, L), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
@@ -27,20 +28,22 @@ function pintar() {
   $('est').innerHTML = escena(s, L, oculto, foco); $('un-lupa').innerHTML = lupa(s, L);
   const q = oculto ? '?' : null, mg = s.est === 'miastenia';
   $('m-cond').textContent = q || L.cond; $('m-tof').textContent = s.est === 'bloqueo' && s.rel ? L.tof + '/4' : '4/4'; $('m-f').textContent = L.f + ' %';
-  $('m-ref').textContent = q || L.ref; $('m-lcr').textContent = q || L.lcr; const apnea = s.est === 'bloqueo' && s.rel && L.tof === 0; $('m-cv').textContent = apnea ? 'apnea' : `${Math.round(L.cv)} mL · ${fmt(L.cvkg, 1)}`; $('m-pim').textContent = apnea ? 'apnea' : '−' + L.f;
+  $('m-ref').textContent = q || L.ref; $('m-lcr').textContent = q || L.lcr; const apnea = s.est === 'bloqueo' && s.rel && L.tof === 0; $('m-cv').innerHTML = apnea ? 'apnea' : `${Math.round(L.cv)} mL<small>${fmt(L.cvkg, 1)} mL/kg${s.cvFijo ? ' · fija' : ''}</small>`; $('m-pim').textContent = apnea ? 'apnea' : '−' + L.f;
   $('m-fc').textContent = L.fc; $('m-pa').textContent = L.pa; $('m-k').textContent = fmt(s.k, 1); $('m-hielo').textContent = L.ptosis == null ? '—' : '+' + L.ptosis + ' mm'; $('m-sec').textContent = L.sec ? 'aumentan' : '—';
   const tb = $('tabla-466'); tb.dataset.col = s.est === 'gbs' ? '1' : mg ? '2' : '';
   topeApi.refrescar(); $('b-dia-').disabled = s.dia <= 0;
   document.querySelectorAll('[data-est]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.est === s.est)));
   document.querySelectorAll('[data-estim]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.estim === s.estim)));
-  $('b-via').setAttribute('aria-pressed', String(s.via)); $('b-via').textContent = s.via ? 'Vía aérea: asegurada' : 'Vía aérea: sin asegurar';
-  $('b-hielo').textContent = s.hielo ? `Hielo: ${s.hielo} min` : 'Hielo 2 min'; $('b-neo').textContent = `Neostigmina +35 µg/kg (${s.neo})`;
+  $('b-via').setAttribute('aria-pressed', String(s.via)); $('b-via').textContent = s.via ? 'Intubado (vía asegurada)' : 'Intubar (vía sin asegurar)';
+  $('b-hielo').textContent = s.hielo ? `Hielo: ${s.hielo} min` : 'Hielo 2 min'; $('b-neo').textContent = `Neostigmina +35 µg/kg (${s.neo} de ${NEO.max})`;
   $('b-pla').textContent = `Plasmaféresis +1 sesión (${s.ses})`; $('b-perf-mas').textContent = `Perfusión + (${s.perf})`;
   document.querySelectorAll('[data-modo]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
   document.querySelectorAll('[data-pre]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.pre === clave)));
   $('detalle-lupa').classList.toggle('foco-caja', foco.includes('lupa')); $('tabla-466').classList.toggle('foco-caja', foco.includes('tabla'));
   if (foco.includes('lupa')) $('detalle-lupa').open = true;
-  $('pulmon-vivo').hidden = !(L.intub && (s.est === 'gbs' || mg));
+  $('pulmon-vivo').hidden = !(s.via && L.crit);
+  $('ritmo-vivo').hidden = !(s.rel === 'succi' && s.k >= 5.5);
+  if (s.est !== ultEst) { ultEst = s.est; $('detalle-lupa').open = s.est === 'miastenia' || s.est === 'bloqueo'; }
 }
 async function pulso() {
   const d = $('imp'); if (!d) return; const L = leer(s), tope = s.est === 'bloqueo' && s.rel && L.tof === 0 ? 140 : 264;
@@ -57,15 +60,15 @@ function hacer(a, o = {}) {
   if (a === 'igiv') { if (s.est === 'pnc' || s.est === 'mcc') t = 'No hay tratamiento específico para este cuadro.'; else { s.igiv = s.dia; if (s.t0 == null) s.t0 = s.dia; t = 'IgIV 2 g/kg en 2-5 días. La fuerza no sube hasta el día 4-5: pasa el reloj para verlo.'; } org = 'ficha · p. 26-27; subida ilustrativa'; }
   if (a === 'pla') { s.ses++; if (s.t0 == null) s.t0 = s.dia; t = s.ses < 2 ? 'Primera sesión de plasmaféresis (5 en 7-10 días, 1-1,5 volúmenes).' : `Sesión ${s.ses}: la fuerza empieza a subir desde la segunda sesión.`; org = 'ficha · p. 26; subida ilustrativa'; }
   if (a === 'piri') { s.piri = true; s.piriOk = !L0.intub; t = s.est === 'miastenia' ? (L0.intub ? 'Piridostigmina con insuficiencia respiratoria: no mejora lo que importa y llena de secreciones la vía aérea.' : 'Piridostigmina: mejora algo la fuerza, pero aumenta las secreciones.') : 'La piridostigmina trata la miastenia; aquí no actúa.'; org = 'ficha · p. 26; subida ilustrativa'; }
-  if (a === 'via') { s.via = !s.via; t = s.via ? 'Vía aérea asegurada: si no se intuba antes, el rocuronio no deja sin respirar.' : 'Sin vía aérea.'; org = 'ficha · p. 30-31'; }
-  if (a === 'succi' || a === 'roc' || a === 'cis') { if (!blq && s.est !== 'mcc') { cambiar(s, 'bloqueo'); } s.rel = a; s.min = 0; s.sug = 0; s.neo = 0; s.perf = 0; if (a === 'succi') s.k = +(s.k + 0.5).toFixed(1); const L = leer(s);
-    t = a === 'succi' ? `Succinilcolina 1 mg/kg: despolariza la placa y la deja abierta; el K⁺ sube 0,5 mEq/L (ahora ${fmt(s.k, 1)}). Dura 7-12 min.` : a === 'roc' ? 'Rocuronio 1 mg/kg: un tapón sobre la copa compite con la ACh. Actúa en 1,5-3 min y dura 50-70 min (el texto dice 30-70).' : 'Cisatracurio 0,15-0,2 mg/kg: tapón más lento (5-7 min) y dura 35-50 min; ni riñón ni hígado.'; org = 'ficha · p. 29-30; duración ilustrativa'; }
+  if (a === 'via') { s.via = !s.via; s.cvFijo = s.via && L0.crit ? { cv: L0.cv, cvkg: L0.cvkg } : null; if (s.via) s.dSin = 0; t = s.via ? (s.cvFijo ? `Intubado con CV ${Math.round(L0.cv)} mL (${fmt(L0.cvkg, 1)} mL/kg): la CV del monitor queda fija, ya no se mide. En la app se abre el pulmón vivo con estas cifras.` : 'Vía aérea asegurada: el rocuronio ya no deja sin respirar.') : 'Sin vía aérea.'; org = 'ficha · p. 25, 30-31'; }
+  if (a === 'succi' || a === 'roc' || a === 'cis') { if (!blq && s.est !== 'mcc') { cambiar(s, 'bloqueo'); } s.rel = a; s.min = 0; s.sug = 0; s.sugOk = false; s.sugT = null; s.neo = 0; s.neoOk = false; s.neoT = null; s.perf = 0; s.perfT = null; if (a === 'succi') s.k = +(s.k + 0.5).toFixed(1); const L = leer(s);
+    t = a === 'succi' ? `Succinilcolina 1 mg/kg: despolariza la placa y la deja abierta; el K⁺ sube 0,5 mEq/L (ahora ${fmt(s.k, 1)}). Empieza en 1-1,5 min (aún no: TOF 4/4) y dura 7-12 min.` : a === 'roc' ? 'Rocuronio 1 mg/kg: un tapón sobre la copa compite con la ACh. Empieza en 1,5-3 min (ahora el TOF sigue 4/4; pasa el reloj) y dura 50-70 min (el texto dice 30-70).' : 'Cisatracurio 0,15-0,2 mg/kg: tapón más lento, empieza en 5-7 min (ahora el TOF sigue 4/4) y dura 35-50 min; ni riñón ni hígado.'; org = 'ficha · p. 29-30 (Tabla 46.7); duración ilustrativa'; }
   if (a === 'min') { s.min += 10; t = blq && s.rel ? `Pasan ${s.min} min: TOF ${leer(s).tof}/4.` : 'El reloj de minutos solo cuenta con un relajante puesto.'; org = 'ficha · p. 29-30; punto medio ilustrativo'; }
-  if (a === 'neo') { s.neo += 35; const L = leer(s); t = `Neostigmina ${s.neo} µg/kg: la ACh se acumula y gana la competición; también bradicardia (FC ${L.fc}) y secreciones.`; org = 'ficha · p. 31; +1 respuesta por 35 µg/kg ilustrativo'; }
-  if (a === 'sug') { s.sug = o.v; t = s.rel === 'roc' ? `Sugammadex ${o.v} mg/kg: envuelve al rocuronio y lo saca de la hendidura en 2-3 min.` : `Sugammadex ${o.v} mg/kg: solo vale con aminoesteroides (rocuronio); aquí no actúa.`; org = 'ficha · p. 31'; }
-  if (a === 'perfMas' || a === 'perfMenos') { s.perf = clamp(s.perf + (a === 'perfMas' ? 1 : -1), 0, 3); t = s.rel && s.rel !== 'succi' ? `Perfusión nivel ${s.perf}: TOF ${leer(s).tof}/4. El objetivo es 1-2 respuestas.` : 'La perfusión es de rocuronio (5-12 µg/kg/min) o cisatracurio (1-3 µg/kg/min); pon uno antes.'; org = 'ficha · p. 30; niveles ilustrativos'; }
+  if (a === 'neo') { s.neo = Math.min(NEO.max, s.neo + NEO.paso); s.neoOk = s.neoOk || (blq && !!s.rel && L0.tof >= 2); s.neoT ??= s.min; const L = leer(s); t = `Neostigmina ${s.neo} µg/kg: ${s.neoOk ? 'la ACh se acumula y revierte un bloqueo moderado en 8-45 min; pasa el reloj.' : 'con el bloqueo profundo (TOF 0-1) no revierte nada: espera a que haya 2 respuestas.'} Sí hay bradicardia (FC ${L.fc}) y secreciones. Tope: 70 µg/kg.`; org = 'ficha · p. 31 (tope 70 µg/kg); 8-45 min y caída de FC ilustrativas'; }
+  if (a === 'sug') { const need = sugNecesita(s, L0.tof); s.sug = o.v; s.sugOk = o.v >= need; s.sugT = s.min; if (s.rel === 'roc') s.min += 3; t = s.rel === 'roc' ? (s.sugOk ? `Sugammadex ${o.v} mg/kg: envuelve al rocuronio y lo saca de la hendidura en 2-3 min (pasan 3).` : `Sugammadex ${o.v} mg/kg es poco: hacían falta ${need} mg/kg (16 si es inmediato, 4 profundo, 2 moderado); el bloqueo solo baja a medias.`) : `Sugammadex ${o.v} mg/kg: solo vale con aminoesteroides (rocuronio); aquí no actúa.`; org = 'ficha · p. 31 (2 moderado · 4 profundo · 16 inmediato)'; }
+  if (a === 'perfMas' || a === 'perfMenos') { const p0 = s.perf; s.perf = clamp(s.perf + (a === 'perfMas' ? 1 : -1), 0, 3); if (!p0 && s.perf) s.perfT = s.min; t = s.rel && s.rel !== 'succi' ? `Perfusión nivel ${s.perf} (rocuronio 5-12 µg/kg/min o cisatracurio 1-3 µg/kg/min): TOF ${leer(s).tof}/4 cuando pase el reloj. El objetivo es 1-2 respuestas.` : 'La perfusión es de rocuronio (5-12 µg/kg/min) o cisatracurio (1-3 µg/kg/min); pon uno antes.'; org = 'ficha · p. 29-30; niveles ilustrativos'; }
   if (a === 'farm') { s.farm = o.v; if (o.v === 'cort') s.cort = true; const n = { gent: 'La gentamicina', mg: 'El magnesio', cort: 'El corticoide a dosis alta' }[o.v]; t = s.est === 'miastenia' ? `${n} dificulta la transmisión (Tabla 46.5): la fuerza cae.` : `${n} está en la Tabla 46.5 de la miastenia; aquí no hay miastenia.`; org = 'ficha · p. 24; el mecanismo no lo da Marino; caída ilustrativa'; }
-  if (a === 'dia') { s.dia = o.v != null ? o.v : s.dia + 1; const L = leer(s); t = `Día ${s.dia}: fuerza ${L.f} %, CV ${fmt(L.cvkg, 1)} mL/kg.`; org = 'dirección: ficha · p. 26-28; magnitud ilustrativa'; }
+  if (a === 'dia') { const d0 = s.dia; s.dia = o.v != null ? o.v : s.dia + 1; if (L0.intub) { s.dSin += s.dia - d0; if (s.dSin >= 2 && s.dStop == null) s.dStop = s.dia; } const L = leer(s); t = `Día ${s.dia}: fuerza ${L.f} %, CV ${fmt(L.cvkg, 1)} mL/kg${L.aut ? `. Inestabilidad autonómica: FC ${L.fc} y PA ${L.pa} (el día anterior oscilaba al otro extremo)` : ''}.`; org = 'dirección: ficha · p. 26-28; magnitud ilustrativa'; }
   if (a === 'diaMenos') { s.dia = Math.max(0, s.dia - 1); t = `Día ${s.dia}.`; org = 'ficha'; }
   frase(t, org); pintar();
 }
@@ -116,7 +119,7 @@ function montar() {
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuentes discrepan' ? 'Las fuentes discrepan' : t === 'fuente no lo dice' ? 'La fuente no lo dice' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
   $('crecera').innerHTML = CRECERA.map((t) => `<li>${t}</li>`).join(''); $('profundizar').innerHTML = PROFUNDIZAR.map((t) => `<li>${t}</li>`).join('');
   $('leyenda').innerHTML = leyendaParticulas(['k', 'igg'], { titulo: 'Qué es cada partícula' }) + '<p class="min-nota">Manguitos: mielina. Copas: receptores. Tapón: relajante. Y roja: anticuerpo. Aspas: acetilcolinesterasa. Línea de la campana: 15 mL/kg. Cifras de fuerza, CV y PIM: ilustrativas.</p>';
-  topeApi = crearTope({ monitor: $('monitor'), dock, cita });
+  topeApi = crearTope({ monitor: $('sellos'), dock, cita });
 }
 function ajustar() { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px'); }
 montar(); ponerPreset('flor'); ajustar();

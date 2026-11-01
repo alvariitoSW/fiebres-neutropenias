@@ -11,8 +11,8 @@ export const GUIAS = {
     { t: 'El hielo sobre el ojo cerrado 2 minutos recupera la ptosis (+2 mm es positivo). El mecanismo no lo da Marino.', z: ['barras'], p: '24:mn-mg-hielo', o: 'ficha', haz: ['hielo'], btn: 'Hielo 2 min' },
     { t: 'Un aminoglucósido dificulta la transmisión (Tabla 46.5): la fuerza cae. Pulsa «Gentamicina».', z: ['placa', 'lupa'], p: '24:mn-tabla-46-5', o: 'ficha; caída ilustrativa', haz: ['farm', { v: 'gent' }], btn: 'Gentamicina' }]],
   mel: ['Melquíades · relajante', [
-    { t: 'Con K⁺ 6,1 la succinilcolina está contraindicada: sube otros 0,5 mEq/L. Mira el sello.', z: ['placa'], p: '30:mn-bnm-contra', o: 'ficha' },
-    { t: 'Rocuronio 1 mg/kg tapa los receptores: el TOF cae a 0/4. Pulsa «Rocuronio».', z: ['pulgar', 'lupa'], p: '29:mn-relajantes', o: 'ficha', haz: ['roc'], btn: 'Rocuronio' },
+    { t: 'Con K⁺ 6,1 la succinilcolina está contraindicada: sube otros 0,5 mEq/L. Mira el aviso; si la pulsas, sale el sello.', z: ['placa'], p: '30:mn-bnm-contra', o: 'ficha' },
+    { t: 'Rocuronio 1 mg/kg tapa los receptores: empieza en 1,5-3 min (al principio el TOF sigue 4/4) y cae a 0/4. Pulsa «Rocuronio» y pasa el reloj.', z: ['pulgar', 'lupa'], p: '29:mn-relajantes', o: 'ficha', haz: ['roc'], btn: 'Rocuronio' },
     { t: 'Si no se intuba, a los 3 minutos dura una hora. Sugammadex 16 mg/kg lo revierte en 2-3 minutos.', z: ['pulgar'], p: '31:mn-bnm-sugammadex', o: 'ficha', haz: ['min', 3], btn: '+10 min ×3' },
     { t: 'En la perfusión el objetivo es 1-2 respuestas del TOF, no 0.', z: ['pulgar'], p: '30:mn-bnm-monitor', o: 'ficha' }]],
 };

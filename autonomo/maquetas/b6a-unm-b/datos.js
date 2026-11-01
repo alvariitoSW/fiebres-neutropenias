@@ -15,7 +15,7 @@ export const ESTADOS = {
   miastenia: { n: 'Miastenia', f0: 27, lesion: [1, 'Lesión: receptores de la placa'] },
   pnc: { n: 'Polineuropatía', f0: 45, lesion: [0, 'Lesión: axón'] },
   mcc: { n: 'Miopatía del crítico', f0: 40, lesion: [2, 'Lesión: fibra (miosina)'] },
-  bloqueo: { n: 'Relajante', f0: 100, lesion: [1, 'Placa tapada por el relajante'] },
+  bloqueo: { n: 'Relajante', f0: 100, lesion: [1, 'Placa tapada por el relajante'], perfusion: 'rocuronio 5-12 µg/kg/min o cisatracurio 1-3 µg/kg/min (N p. 29)' },
 };
 export const PRESETS = {
   flor: { nombre: 'Florentina 52 · debilidad tras diarrea', est: 'gbs', peso: 60, f0: 26, k: 4.2, txt: 'Florentina, 52 años, 60 kg: dos semanas tras una diarrea por Campylobacter, debilidad simétrica ascendente, arreflexia y sin ptosis.' },

@@ -2,13 +2,13 @@
 import { sacudidas } from './modelo.js';
 import { ESTADOS } from './datos.js';
 const X = [[6, 106], [116, 48], [164, 70], [236, 56], [294, 60]];   // x, ancho de cada eslabón
-const ZONAS = { axon: [4, 38, 108, 66], placa: [114, 38, 52, 66], fibra: [162, 38, 74, 66], pulgar: [234, 38, 60, 66], pulmon: [292, 34, 64, 74], barras: [4, 112, 352, 146] };
+const ZONAS = { axon: [4, 38, 108, 66], placa: [114, 38, 52, 66], fibra: [162, 38, 74, 66], pulgar: [234, 38, 60, 66], pulmon: [292, 34, 64, 74], barras: [4, 108, 352, 74] };
 export function escena(s, L, oculto, foco) {
   const gbs = s.est === 'gbs', pnc = s.est === 'pnc', mcc = s.est === 'mcc', blq = s.est === 'bloqueo' && s.rel && L.tof < 4, mg = s.est === 'miastenia';
   let o = '';
   // 1 axón con manguitos de mielina (en el GBS faltan trozos; en la polineuropatía el axón se adelgaza)
   o += `<line class="axon${pnc ? ' fino' : ''}" x1="8" y1="70" x2="112" y2="70"/>`;
-  for (let i = 0; i < 4; i++) o += `<rect class="mielina${gbs && i % 2 ? ' rota' : ''}" x="${14 + i * 24}" y="62" width="${gbs && i % 2 ? 10 : 18}" height="16" rx="4"/>`;
+  for (let i = 0; i < 4; i++) o += `<rect class="mielina${gbs && i % 2 ? ' rota' : ''}" x="${14 + i * 24}" y="62" width="${gbs && i % 2 ? 10 : 18}" height="16" rx="8"/>`;
   // 2 placa (se tapa con el relajante), 3 fibra con sarcómeros, 4 pulgar, 5 campana
   o += `<rect class="placa${blq ? ' tapada' : ''}" x="120" y="54" width="40" height="32" rx="6"/>`;
   for (let i = 0; i < 3; i++) o += `<path class="copa" d="M${128 + i * 12},58 q4,12 8,0"/>`;
@@ -16,15 +16,16 @@ export function escena(s, L, oculto, foco) {
   for (let i = 0; i < 7; i++) o += `<line class="sarco${mcc && i % 2 ? ' perdida' : ''}" x1="${174 + i * 8}" y1="60" x2="${174 + i * 8}" y2="80"/>`;
   const ang = Math.round(55 * (1 - L.f / 100));   // aducción del pulgar: con fuerza plena queda pegado a la palma; sin fuerza se abre
   o += `<rect class="pulgar-c" x="240" y="66" width="48" height="30" rx="8"/><g transform="rotate(${-ang} 262 74)"><rect class="pulgar-r" x="256" y="40" width="14" height="38" rx="7" opacity="${(0.25 + 0.75 * L.f / 100).toFixed(2)}"/></g>`;
-  o += `<rect class="campana" x="300" y="44" width="48" height="52" rx="5"/><rect class="campana-n" x="302" y="${96 - 50 * L.f / 100}" width="44" height="${50 * L.f / 100}"/><line class="tope15" x1="300" x2="348" y1="${96 - 50 * 15 / 70}" y2="${96 - 50 * 15 / 70}"/>`;
+  const lob = 'M312,48 q-12,6 -12,32 q0,16 10,16 q6,0 6,-12 z M324,48 q12,6 12,32 q0,16 -10,16 q-6,0 -6,-12 z', nv = 50 * L.f / 100;   // dos pulmones; el nivel es la CV
+  o += `<clipPath id="cl-pul"><path d="${lob}"/></clipPath><path class="campana" d="${lob}"/><rect class="campana-n" clip-path="url(#cl-pul)" x="298" y="${96 - nv}" width="42" height="${nv}"/><line class="tope15" x1="298" x2="340" y1="${96 - 50 * 15 / 70}" y2="${96 - 50 * 15 / 70}"/>`;
   o += '<path class="flecha" d="M112,70 h6 M160,70 h6 M232,70 h6 M290,70 h6"/>';
   [['Axón', 60], ['Placa', 140], ['Fibra', 199], ['Pulgar', 264], ['Pulmón', 324]].forEach(([t, x]) => { o += `<text class="rot" x="${x}" y="108" text-anchor="middle">${t}</text>`; });
   const le = ESTADOS[s.est].lesion;
   if (le && !oculto) { const cx = X[le[0]][0] + X[le[0]][1] / 2; o += `<text class="oro" x="${Math.min(300, Math.max(70, cx))}" y="28" text-anchor="middle">${le[1]}</text><path class="marca" d="M${cx - 5},34 h10 l-5,8 z"/>`; }
   // sacudidas
   const sa = sacudidas(s, L), est = { unico: 'estímulo único', rep: 'estímulo repetido ×10', tof: 'TOF: 4 estímulos' }[s.estim];
-  o += `<text class="min" x="8" y="128">Sacudidas del pulgar · ${est}</text><g id="barras">`;
-  sa.forEach((a, i) => { const h = Math.max(1, 90 * a); o += `<rect class="barra${a < 0.05 ? ' vacia' : ''}" x="${14 + i * 30}" y="${238 - h}" width="22" height="${h}" rx="3"/><text class="min" x="${25 + i * 30}" y="252" text-anchor="middle">${i + 1}</text>`; });
+  o += `<text class="min" x="8" y="118">Sacudidas del pulgar · ${est}</text><g id="barras">`;
+  sa.forEach((a, i) => { const h = Math.max(1, 42 * a); o += `<rect class="barra${a < 0.05 ? ' vacia' : ''}" x="${14 + i * 30}" y="${166 - h}" width="22" height="${h}" rx="3"/><text class="min" x="${25 + i * 30}" y="178" text-anchor="middle">${i + 1}</text>`; });
   o += '</g>';
   for (const z of foco) if (ZONAS[z]) o += `<rect class="foco" x="${ZONAS[z][0]}" y="${ZONAS[z][1]}" width="${ZONAS[z][2]}" height="${ZONAS[z][3]}" rx="8"/>`;
   return o;
