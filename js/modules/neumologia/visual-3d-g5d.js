@@ -15,6 +15,12 @@ export const RECETAS_3D_G5D = {
             { tipo: 'calculadora', titulo: 'Clasificador de derrame paraneumónico (calculadora de la ficha)',
               campos: ['#neumo-derrame-purulento', '#neumo-derrame-grosor', '#neumo-derrame-loculado', '#neumo-derrame-ph', '#neumo-derrame-glucosa', '#neumo-derrame-gram'],
               resultado: ['#neumo-derrame-resultado'] },
+            { tipo: 'propio', titulo: 'El derrame, en el pulmón vivo',
+              nota: 'Los datos del líquido encienden la categoría y dicen si hace falta tubo; con tubo, las horas muestran por qué el derrame loculado drena mal.',
+              render(cuerpo) {
+                  if (cuerpo.hasChildNodes()) return;
+                  cuerpo.innerHTML = '<button type="button" class="may-b may-modelo" data-especialidad="libros" data-view="pulmonVivo" data-pulmon-vivo="derrame-paraneumonico">🫁 Ver el derrame y el tubo en el pulmón vivo →</button>';
+              } },
             { tipo: 'comparar', titulo: 'Tubo para el pus: fino frente a grueso', columnas: [
                 { titulo: '8,5-14 Fr', color: 'verde', nodos: [{ fuente: '#nep-derrame-cat4', etiqueta: 'Calibre pequeño: drenaje equivalente' }] },
                 { titulo: '28-36 Fr', color: 'dorado', nodos: [{ fuente: '#nep-derrame-cat4', etiqueta: 'Calibre grande: lo prefieren algunos, sin mejor drenaje' }] }

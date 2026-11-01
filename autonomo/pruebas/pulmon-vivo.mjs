@@ -328,6 +328,40 @@ for (const k of ORDEN_ESTADOS) {
     await pide(20); ok(/cerca del tope/.test((await sg()).frase + await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'M1: a 20 avisa de que está cerca del tope');
     await abrir('fuga-cuff'); await espera(500); ok(await p.evaluate(() => !document.querySelector('#pul-esc-subgl') || document.querySelector('#pul-esc-subgl').hasAttribute('hidden')), 'M1: al salir del estado la lupa se oculta');
     await abrir('subglotica'); await espera(500); await llenar(); }
+  // B3c · derrame paraneumónico (Alonso): Tabla 29.5 (categoría y tubo) y horas con tubo; barrido de todos los datos y del mando 0-72 h
+  await abrir('derrame-paraneumonico'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(150); };
+    const dq = () => p.evaluate(() => { const g = (k) => (document.querySelector(`#pul-derrame [data-fila="${k}"] .v`)?.textContent || ''); const sel = document.querySelector('#pul-raiz .tope-sello, #pul-raiz .tope-aviso');
+      return { vis: !document.getElementById('pul-derrame').hidden && window.__pulPruebas().est.pac.k === 'alonso', cat: document.getElementById('pul-derrame-cat').textContent, liq: parseInt(g('der-liq')), sp: parseInt(g('der-spo2')), tope: [...document.querySelectorAll('#pul-raiz .tope-sello, #pul-raiz .tope-aviso')].filter(e => e.getClientRects().length).map(e => e.textContent).join('|'), msg: document.getElementById('pul-derrame-msg').textContent, pam: document.querySelector('#pul-corazon [data-fila="cor-pam"] .v')?.textContent }; });
+    const g = (gr, v) => clic(`#pul-derrame button[data-g="${gr}"][data-v="${v}"]`);
+    const hset = async (h) => { await p.evaluate((h) => { const r = document.querySelector('#pul-derrame input[type=range]'); r.value = h; r.dispatchEvent(new Event('input', { bubbles: true })); }, h); await espera(200); };
+    let x = await dq(); await limpio('derrame inicio'); await foto('der-inicio');
+    ok(x.vis && /Categoría 2 · NO tubo/.test(x.cat) && x.sp === 96, `Derrame inicio: ${x.cat}, SpO₂ ${x.sp}, PAM ${x.pam}`);
+    const pam0 = x.pam;
+    // barrido de datos: tamaño × pH × glucosa × Gram × pus
+    let mal = [];
+    for (const tam of ['peq', 'libre', 'locu']) for (const ph of ['alto', 'bajo']) for (const gl of ['alta', 'baja']) for (const gr of ['neg', 'pos']) for (const pus of ['no', 'si']) {
+      await g('tam', tam); if (tam !== 'peq') { await g('ph', ph); await g('glu', gl); await g('gram', gr); } await g('pus', pus); x = await dq();
+      const inf = tam === 'peq' ? 0 : (ph === 'bajo') + (gl === 'baja') + (gr === 'pos');
+      const exp = pus === 'si' ? 4 : tam === 'peq' ? 1 : (tam === 'libre' && inf === 0) ? 2 : (tam === 'locu' && inf === 3) ? 3 : 0;
+      const tuboE = exp === 3 || exp === 4 ? /TUBO/ : exp ? /NO tubo/ : /no define/;
+      if (!(tuboE.test(x.cat) && (exp === 0 || x.cat.includes('Categoría ' + exp)) && x.sp >= 90 && x.sp <= 98 && x.liq >= 0 && x.liq <= 80 && x.pam === pam0 && !/NaN|undefined/.test(x.msg + x.cat))) mal.push(`${tam}/${ph}/${gl}/${gr}/${pus}→${x.cat}`);
+    }
+    ok(mal.length === 0, `Derrame barrido de 48 combinaciones de datos: categoría y tubo según la Tabla 29.5, SpO₂ 90-98, PAM sin cambio${mal.length ? ' · fallan ' + mal.slice(0, 4).join(' | ') : ''}`);
+    // categoría 3 loculada: horas 0, 24, 36, 48, 72 con y sin segundo tubo
+    await g('pus', 'no'); await g('tam', 'locu'); await g('ph', 'bajo'); await g('glu', 'baja'); await g('gram', 'pos'); x = await dq();
+    ok(/Categoría 3 · TUBO/.test(x.cat) && x.liq >= 50, `Derrame cat. 3: ${x.cat}, líquido ${x.liq} %`);
+    await clic('#pul-derrame [data-dr="tubo"]'); const res = {};
+    for (const h of [0, 12, 24, 36, 48, 72]) { await hset(h); const y = await dq(); res[h] = y; await limpio('derrame ' + h + ' h'); }
+    await hset(24); await foto('der-24h'); await hset(48); await foto('der-48h');
+    ok(res[0].tope === '' && /Posible drenaje ineficaz/.test(res[24].tope) && /Drenaje ineficaz/.test(res[48].tope) && /Drenaje ineficaz/.test(res[72].tope) && res[72].liq >= 50 && res[72].sp <= 94 && res[72].sp >= 92, `Derrame loculado: sin aviso a 0 h, aviso a 24 h, sello a 48 y 72 h; a 72 h líquido ${res[72].liq} % y SpO₂ ${res[72].sp} % (bolsas)`);
+    await clic('#pul-derrame [data-dr="seg"]'); const s2 = await dq();
+    ok(s2.tope === '' && s2.liq < res[72].liq && s2.sp >= 96, `Derrame 2.º tubo con TC: sin sello, líquido ${s2.liq} %, SpO₂ ${s2.sp} %`);
+    // libre: drena del todo a las 24 h
+    await g('tam', 'libre'); await g('ph', 'bajo'); await g('pus', 'si'); await clic('#pul-derrame [data-dr="tubo"]'); await hset(24); const lib = await dq();
+    ok(/Categoría 4 · TUBO/.test(lib.cat) && lib.liq <= 5 && lib.tope === '' && lib.sp >= 96, `Derrame empiema libre con tubo 24 h: líquido ${lib.liq} %, sin sello`);
+    await abrir('fuga-cuff'); await espera(500); ok(await p.evaluate(() => document.getElementById('pul-derrame').hidden && !document.querySelector('#pul-raiz .tope-sello')), 'Derrame: al salir del estado el panel y su sello se apagan');
+    await abrir('derrame-paraneumonico'); await espera(500); await llenar(); }
   // S3 · fuga del cuff y estridor (Benito): sin lupa ni tipo. Mandos: presión del cuff 0-30 (tope 25), edema, esteroide, desinflar, extubar, 30 min
   await abrir('fuga-cuff'); await espera(900); await llenar();
   { const clic = async (k) => { await p.evaluate(k => document.querySelector(`#pul-dock-panel [data-m="${k}"]`).click(), k); await espera(200); await llenar(); };

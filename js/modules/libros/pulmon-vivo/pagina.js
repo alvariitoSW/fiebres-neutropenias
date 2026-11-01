@@ -17,6 +17,7 @@ import * as D from '../../../data/pulmon-vivo-data.js';
 import { montarExtras } from './extras.js';
 import { montarPiensa } from './piensa.js';
 import * as NX from './neumotorax.js';
+import * as DR from './derrame.js';
 import { tau, TAU } from '../../../data/ventilacion-data.js';
 
 export function montarPulmon(raiz) {
@@ -101,6 +102,7 @@ function ponerEstado(clave, { llenar = true } = {}) {
   if (E.prono) { est.ci = {}; est.fio2 = D.PRONO.fio2; girar(0, false); } else { est.prono = null; if (!E.hfno && !E.cuff) est.avisoCanula = null; }
   if (E.cuff || E.subgl) { est.cuff = CU.estado0(); est.subgl = E.subgl ? SG.estado0() : null; if (E.subgl) subglotar(est.cuff.p); else fugar(est.cuff.p); } else { est.cuff = null; est.subgl = null; est.interfaz = null; }
   raiz.querySelector('.fig-esq').textContent = E.pulmon.racimo ? 'Racimo de 4 unidades · ilustrativo' : 'Un compartimento · fisiología general'; P.maniobra({ pausa: !!E.man.pausa, oclusion: !!E.man.oclusion });
+  DR.estado(clave);
   NX.estado(clave);   // E4b: el neumotórax a tensión (apaga o enciende su panel y deja la compliance en su sitio)
   est.factorEsp = E.pulmon.rEsp ? Math.round(E.pulmon.rEsp / E.pulmon.r) : 1;
   if (llenar) llenarMonitor();
@@ -475,7 +477,8 @@ function abrirEstado(clave) {
   else if (!clave) pintarTodo();
   mon.montar(); llenarMonitor(); pintarTodo(); reanudar();
 }
-NX.montarNeumotorax({ raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() });
+const ctxPanel = { raiz, P, tope, cita, dockPanel: $('dock-panel'), clave: () => est.clave, frase: () => pintarFrase(), llenar: () => { llenarMonitor(); pintarTodo(); }, ultima: () => window.__pulCorazon?.() };
+NX.montarNeumotorax(ctxPanel); DR.montarDerrame(ctxPanel);
 let tNx = 0;
 raiz.addEventListener('pul:lectura', () => { const t = performance.now(); if (t - tNx < 300 || !raiz.getClientRects().length) return; tNx = t; NX.vigilar(); });
 window.__pulPruebas = api;   // solo para las pruebas automáticas
