@@ -26,7 +26,8 @@ export const ESCENA_CSS = `
 .esc-alv { fill: var(--accent-green); fill-opacity: .55; stroke: var(--accent-green); stroke-width: .8; }
 .esc-racimo.terracota .esc-alv { fill: url(#pul-esc-rayas); stroke: var(--accent-red); }
 .esc-racimo.hiper .esc-alv { stroke: var(--accent-yellow); }
-.esc-alv.cerrada { fill: url(#pul-esc-rayas); stroke: var(--accent-red); }
+.esc-alv.cerrada, .esc-alv.prono-cons { fill: url(#pul-esc-rayas); stroke: var(--accent-red); }
+.esc-et { font-size: 9px; fill: var(--text-dim); }
 .esc-alv.abrecierra { stroke: var(--accent-red); stroke-width: 1.6; stroke-dasharray: 3 2; }
 .esc-alv.sobre { stroke: var(--accent-yellow); stroke-width: 1.6; }
 .esc-capilar { fill: none; stroke: var(--accent-red); stroke-width: .7; opacity: .6; }

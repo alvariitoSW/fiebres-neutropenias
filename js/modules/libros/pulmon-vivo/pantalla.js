@@ -103,7 +103,7 @@ export function montarPantalla(cont, { P, PBW, est, seg, cita, alMando, alModo, 
       vt: { v: v(f0(l.vtExh)), sub: tapado || l.vtExh == null ? '' : `${f1(l.vtExh / kg)} /kg`, lim: `≤${vtMax}` },
       vm: { v: v(f1(l.vm)), lim: `<span>≤${TOPE.vmMax}</span><span>≥${TOPE.vmMin}</span>` },
       ie: { v: v(l.ie != null && isFinite(l.ie) ? `1:${f1(l.ie)}` : null) },
-      fio2: est.hfno ? { v: f0(est.hfno.fio2Alv), sub: `SpO₂ ${f0(est.hfno.spo2)} %` } : { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
+      fio2: est.prono ? { v: f0(est.fio2), sub: `P/F ${est.prono.pf} · PaO₂ ${est.prono.pao2}` } : est.hfno ? { v: f0(est.hfno.fio2Alv), sub: `SpO₂ ${f0(est.hfno.spo2)} %` } : { v: f0(est.fio2) }, frespon: r.modo === 'psv' ? { v: v(f0(l.frReal)) } : {}, vmespon: r.modo === 'psv' ? { v: v(f1(l.vm)) } : {},
     };
     for (const [k, n] of Object.entries(marca)) if (val[k] && !tapado) val[k].estado = n;
     R.casillas(val);

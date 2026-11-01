@@ -281,6 +281,32 @@ for (const k of ORDEN_ESTADOS) {
     for (const q of [0, 5, 10, 15, 20, 30, 40, 50, 60, 90, 120]) { const x = H.lectura(q, 80, E.resp, E.pulmon), l = PM.simular({ ...E.resp, pmus: x.pmus, frEsp: x.frEsp }, { ...E.pulmon, rEsp: E.pulmon.r }, {}, { ciclos: 10, ventana: 0.01 }).lectura;
       if (!(x.fio2Alv >= 21 && x.fio2Alv <= 80 && x.spo2 >= 84 && x.spo2 <= 95 && l.vm >= 2 && l.vm <= 20 && l.vtExh / kgE >= 4 && l.vtExh / kgE <= 12 && x.frEsp >= 14 && x.frEsp <= 30 && l.frReal > 0)) mal.push(`${q}: FiO₂ ${x.fio2Alv} SpO₂ ${x.spo2} VM ${l.vm} Vt/kg ${l.vtExh / kgE}`); }
     ok(mal.length === 0, `S1 hfno barrido 0-120 L/min: todo paciente posible${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`); }
+  // S2 · prono (Isidro): sin lupa ni tipo. Mandos: posición, horas 0-16, 5 contraindicaciones; barrido de 0 al doble del tope (32 h)
+  await abrir('prono'); await espera(900); await llenar();
+  { const clic = async (sel) => { await p.evaluate(sel => document.querySelector(sel).click(), sel); await espera(150); await llenar(); };
+    const horas = async (v) => { await p.evaluate(v => { const d = document.querySelector('#pul-dock-panel input[data-m="horas"]'); d.max = 64; d.value = v; d.dispatchEvent(new Event('input', { bubbles: true })); }, v); await espera(150); await llenar(); };
+    const pr = () => p.evaluate(() => { const c = (k) => document.querySelector(`#pul-raiz [data-fila="${k}"]`), g = (k) => +(c(k)?.querySelector('.v, .g')?.textContent || 'NaN').replace(',', '.'); const pf = c('fio2').querySelector('.sub').textContent.match(/P\/F (\d+) · PaO₂ (\d+)/) || []; return { pf: +pf[1], pao2: +pf[2], vtkg: g('vtkg'), vm: g('vm'), fr: g('fr'), meseta: g('meseta'), dp: g('dp'), cstat: g('cstat'), cons: document.querySelectorAll('.esc-alv.prono-cons').length, sello: [...document.querySelectorAll('#pul-raiz .tope-sello')].map(e => e.textContent).join('|'), horas: +document.querySelector('#pul-dock-panel input[data-m="horas"]').value }; });
+    const sup = await pr(); await limpio('prono supino');
+    await horas(1); const h1 = await pr(); await limpio('prono 1 h'); await horas(16); const h16 = await pr(); await limpio('prono 16 h'); await foto('s2-prono16');
+    ok(sup.pf === 120 && h1.pf > sup.pf && h16.pf === 180 && h16.cstat > sup.cstat && h16.meseta < sup.meseta && h16.cons < sup.cons && sup.cons === 6 && h16.cons === 0, `S2 prono: supino P/F ${sup.pf}, Cstat ${sup.cstat}, meseta ${sup.meseta}, ${sup.cons} alvéolos consolidados → 1 h P/F ${h1.pf} → 16 h P/F ${h16.pf}, Cstat ${h16.cstat}, meseta ${h16.meseta}, ΔP ${h16.dp}, ${h16.cons} consolidados`);
+    ok(/Menos de 16 h/.test(await p.evaluate(() => document.getElementById('pul-dock').innerText + document.getElementById('pul-raiz').innerText)) === false, 'S2 prono: a 16 h no sale el aviso de «menos de 16 h»');
+    await clic('#pul-dock-panel [data-m="pos"][data-v="post"]'); const po = await pr(); await limpio('prono supino 4 h después');
+    ok(po.pf === 175 && po.cstat >= sup.cstat && po.pf < h16.pf, `S2 prono: supino 4 h después mantiene la mejoría (P/F ${po.pf}, Cstat ${po.cstat})`);
+    await clic('#pul-dock-panel [data-m="pos"][data-v="supino"]'); ok((await pr()).pf === 120, 'S2 prono: «Supino» devuelve el P/F de partida');
+    // barrido 0..32 h en el monitor de la app: todo paciente posible
+    let mal = []; for (const h of [0, 1, 4, 8, 12, 15, 16, 24, 32]) { await horas(h); const x = await pr(); const t = JSON.stringify(x);
+      if (!(x.vtkg >= 4 && x.vtkg <= 8 && x.vm >= 5 && x.vm <= 20 && x.fr === 30 && x.meseta <= 30 && x.dp <= 19 && x.pf >= 120 && x.pf <= 180 && x.pao2 >= 60 && x.pao2 <= 120 && x.cstat >= 13 && x.cstat <= 20)) mal.push(h + ': ' + t);
+      if (h === 12) ok(/Menos de 16 h/.test(await p.evaluate(() => document.getElementById('pul-raiz').innerText)), 'S2 prono: con 12 h avisa de que son menos de 16 h');
+      if (h > 16) ok(/El mando termina en 16 h/.test(x.sello) && x.horas === 16 && x.pf === 180, `S2 prono tope: pedir ${h} h → sello, el mando se queda en ${x.horas} h, P/F ${x.pf}`);
+      await limpio('prono ' + h + ' h'); }
+    ok(mal.length === 0, `S2 prono barrido 0-32 h: Vt/kg, VM, FR, meseta, ΔP, P/F y Cstat de un paciente posible${mal.length ? ' · fallan ' + mal.join(' | ') : ''}`);
+    await horas(10); await clic('#pul-dock-panel [data-m="pos"][data-v="supino"]');
+    // contraindicaciones: cada una de las cinco bloquea el giro con sello, constantes de supino
+    for (const c of ['hemorragia', 'espinal', 'fracturas', 'pic', 'reciente']) { await clic(`#pul-dock-panel [data-m="ci"][data-v="${c}"]`); await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); const x = await pr();
+      ok(/Contraindicación absoluta/.test(x.sello) && x.pf === 120 && x.cons === 6, `S2 prono: con «${c}» no se gira (sello, P/F ${x.pf}, ${x.cons} consolidados)`); await clic(`#pul-dock-panel [data-m="ci"][data-v="${c}"]`); ok(!/Contraindicación/.test((await pr()).sello), `S2 prono: al quitar «${c}» se quita el sello`); }
+    await clic('#pul-dock-panel [data-m="pos"][data-v="prono"]'); ok((await pr()).pf > 120, 'S2 prono: sin contraindicaciones se puede girar');
+    await abrir('sdra-protector'); await espera(500); ok(await p.evaluate(() => document.querySelectorAll('.esc-alv.prono-cons').length === 0 && !document.querySelector('#pul-dock-panel [data-m="horas"]')), 'S2 prono: al salir del estado desaparecen los mandos y las rayas');
+    await abrir('prono'); await espera(500); await llenar(); }
   await abrir('sbt-ok'); await espera(900); await llenar(); e = await esf(); const f1v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
   ok(f1v >= 60 && f1v <= 105, `E4a SBT que sale bien: FR/Vt ${f1v} entre 60 y 105 (Tabla 30.1)`); await limpio('sbt-ok');
   await abrir('sbt-fracaso'); await espera(900); await llenar(); e = await esf(); const f2v = +(e.info.match(/FR\/Vt (\d+)/) || [])[1];
