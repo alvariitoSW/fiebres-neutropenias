@@ -252,7 +252,7 @@ export const MAYEUTICA_TERMOSTATO_FRIO = {
         opciones: [
           { t: 'Prostaglandina E: aspirina, paracetamol y AINE; en la UCI, los dos últimos', ok: true },
           { t: 'La IL-1 directamente; el paracetamol es el único usado en la UCI y los AINE se evitan', porque: 'La ficha dice que interfieren con la prostaglandina E, y en la UCI se usan el paracetamol y los AINE. Descartar los AINE reduce las opciones sin base.' },
-          { t: 'La serotonina; los más usados son los IMAO', porque: 'Eso es el síndrome serotoninérgico, no la fiebre; los IMAO (como el linezolid) pueden provocar SS.' }],
+          { t: 'La interleucina 1 directamente; aspirina, paracetamol y AINE, los tres de uso habitual en la UCI', porque: 'La ficha dice que interfieren con la prostaglandina E, no con la IL-1, y que en la UCI solo se usan el paracetamol y los AINE (p. 71). Con esa idea pautarías aspirina, que la ficha no usa en la UCI.' }],
         explicacion: `Interfieren con la prostaglandina E, mediadora de la fiebre: aspirina, paracetamol y AINE; en la UCI se usan los dos últimos (${pag(71, 'p. 71')}).` },
       { id: 'ant-e3a', corto: 'asociación o causa', tipo: 'test', fuente: 'ma-antip-clinica · ma-tabla-fig44-5',
         enunciado: 'Un residente dice: «la Fig. 44.5 demuestra que subir la temperatura de un séptico baja su mortalidad». ¿Qué le contestas?',
@@ -274,7 +274,7 @@ export const MAYEUTICA_TERMOSTATO_FRIO = {
         paciente: { Edad: '55 años', Peso: '70 kg (del caso)', Motivo: 'Shock séptico de origen urinario' },
         lleva: [
           'En la sepsis la fiebre no se baja de rutina: la guía recomienda no suprimirla.',
-          'Tras una parada, con lesión cerebral isquémica, sí se trata, con paracetamol hasta el techo de 3 g/día.',
+          'Tras una parada, con lesión cerebral isquémica, sí se trata, con paracetamol hasta el techo de 3 g/día (p. 72); Merino Cardiología pone la ventana: mantener ≤37,5 °C durante 72 h salvo que despierte (ficha «Control de temperatura posparada»).',
           'La manta de enfriamiento es del golpe de calor, no de la fiebre.'],
         volver: { nombre: 'Mantas de enfriamiento', ancla: 'ma-antip-mantas', modeloVivo: TV('fiebre:5') },
         pasos: [

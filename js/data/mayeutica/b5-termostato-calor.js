@@ -142,7 +142,7 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
                 { t: 'Seguir enfriando hasta 35 °C para tener margen.', mal: true, c: 'El objetivo es <span class="hl">38 °C</span>: más frío provoca escalofrío y la temperatura vuelve a subir (p. 47).' },
                 { t: 'Volumen mientras se enfría.' }],
               explicacion: `Inmersión en agua fría en el lugar; en urgencias, hielo y mantas de enfriamiento; objetivo 38 °C (${pag(47, 'p. 47')}).` } },
-          { momento: 'Hora 7 · giro', datos: { Constantes: 'T 38,6 °C, piel fría y cerrada', Exploración: 'escalofríos', Contexto: 'sigue con las mantas de enfriamiento puestas desde la hora 6 por error del turno' }, nuevo: ['Constantes', 'Exploración'],
+          { momento: 'Hora 7 · giro', datos: { Constantes: 'T 38,6 °C, piel fría y cerrada', Exploración: 'escalofríos', Contexto: 'sigue con las mantas de enfriamiento puestas desde la hora 6 por error del turno' }, nuevo: ['Constantes', 'Exploración', 'Contexto'],
             pregunta: { id: 'cal-c1-5', tipo: 'test', fuente: 'ma-calor-externo · ma-calor-hipertermia',
               enunciado: 'Ovidio sigue con las mantas de enfriamiento aunque ya estaba en 38 °C, y vuelve a subir la temperatura mientras tirita. ¿Qué haces?',
               opciones: [
