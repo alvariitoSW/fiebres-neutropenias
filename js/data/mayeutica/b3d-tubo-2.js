@@ -164,8 +164,8 @@ export const MAYEUTICA_TUBO_2 = {
                 no('Un deslizamiento normal, que descarta el neumotórax', `Si el deslizamiento reaparece solo en un punto, ese punto marca dónde vuelven a tocarse las pleuras: el borde del neumotórax (${p(27)}).`)],
               explicacion: `El <span class="hl-rojo">punto pulmonar</span> es donde las dos pleuras vuelven a contactar y reaparece el deslizamiento; es patognomónico (${p(27)}).` + enFicha(CB, 'nep-eco-pleural') } },
           { momento: 'Día 2 · giro: se hunde', datos: { PAM: '≈52 mmHg (monitor del modelo, ilustrativo)', Presiones: 'pico y meseta siguen subiendo', Aire: 'el pulmón del lado afectado, colapsado' }, nuevo: ['PAM', 'Presiones', 'Aire'],
-            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar respiraciones hasta el sello de shock (unas 7: aire pleural 10,5 cmH₂O, PAM ≈52)'),
-              enunciado: 'Con el neumotórax confirmado, la PAM de Rafael cae a 59 y el pico y la meseta suben a cada respiración. ¿Qué haces?',
+            pregunta: { id: 'baro-c4', tipo: 'test', fuente: 'nep-neumotorax-tension', origen: 'ficha: la urgencia; la PAM, ilustrativa del monitor del modelo', modelo: pv('neumotorax-tension', '🫁 Rafael: deja pasar respiraciones hasta el sello de shock (unas 7 pulsaciones, de 1,5 cmH₂O cada una: aire pleural 10,5 cmH₂O, PAM 52 en el monitor)'),
+              enunciado: 'Con el neumotórax confirmado, la PAM de Rafael cae a 52 mmHg y el pico y la meseta suben a cada respiración. ¿Qué haces?',
               opciones: [
                 no('Pides una radiografía de control para confirmar antes de actuar y esperando a que suba la PAM por sí sola', `El neumotórax a tensión es una emergencia médica y requiere descompresión inmediata (${p(28)}-${p(29)}).`),
                 ok('Descomprimes ya: una emergencia con shock obstructivo, que puede acabar en actividad eléctrica sin pulso'),
