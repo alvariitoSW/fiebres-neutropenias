@@ -9,10 +9,12 @@ export const glutDe = (s) => Math.round(clamp(100 - (s.dosis - (s.bebedor ? TX.a
 export const p450 = (s) => +(s.dosis * (0.1 + 0.4 * clamp((s.dosis - TX.saturaG) / 11, 0, 1))).toFixed(1);
 export const conjugado = (s) => +(s.dosis - p450(s)).toFixed(1);
 // Reloj: fase 1 (<24 h) sin daño, fase 2 (24-72 h) el daño sube, fase 3 (72-96 h) lo completa (p. 5). La NAC frena el daño.
+// La NAC frena el daño desde la hora en que empieza (s.hNac); el daño ya hecho no se deshace (los hepatocitos muertos no vuelven).
 export function funcDe(s) {
-  const D = s.glut < TX.glutDano ? Math.min(95, 40 + 55 * (TX.glutDano - s.glut) / TX.glutDano) : 0, h = s.h;
-  const fase = h < 24 ? 0 : h <= 72 ? 0.6 * (h - 24) / 48 : 0.6 + 0.4 * Math.min(1, (h - 72) / 24);
-  return clamp(Math.round((100 - D * fase * (s.nac ? TX.nacFreno : 1)) / 5) * 5, 0, 100);
+  const g0 = s.glut0 ?? s.glut, D = g0 < TX.glutDano ? Math.min(95, 40 + 55 * (TX.glutDano - g0) / TX.glutDano) : 0;
+  const fase = (h) => (h < 24 ? 0 : h <= 72 ? 0.6 * (h - 24) / 48 : 0.6 + 0.4 * Math.min(1, (h - 72) / 24));
+  const h = s.h, hN = s.nac ? Math.min(h, s.hNac ?? h) : h, perdido = D * (fase(hN) + (fase(h) - fase(hN)) * (s.nac ? TX.nacFreno : 1));
+  return clamp(Math.round((100 - perdido) / 5) * 5, 0, 100);
 }
 // Opacidad y marca de las cuatro estaciones de la vía activa
 export function nodosVia(s) {
@@ -67,10 +69,12 @@ export function topesTx(s) {
     else if (s.h === 4 && s.par > TX.nomo && !s.rep) t.push({ c: 'nomo', n: 'aviso', titulo: 'Sobre la línea de las 4 h', texto: `${s.par} µg/mL a las 4 h está por encima de 150: se trata con NAC. La línea baja hasta 5 a las 24 h; el nivel solo vale con una ingestión aguda de hora conocida.`, pag: tx(6, 'mt-para-nomograma'), origen: 'ficha · p. 6', bajo: '#hpv-m-via' });
     if (s.rep || s.h > 24) t.push({ c: 'nomo2', n: 'aviso', titulo: s.rep ? 'Dosis repetidas: el nivel no predice' : 'Pasadas 24 h el nomograma no sirve', texto: s.rep ? 'Con dosis repetidas no hay hora de ingestión: el nomograma no vale y se decide por la clínica y la ALT.' : 'El nomograma llega hasta las 24 h: después se decide por la ALT y la clínica, aunque el paracetamol sea indetectable.', pag: tx(6, 'mt-para-nomograma'), origen: 'ficha · p. 6', bajo: '#hpv-m-via' });
     if (s.bebedor) t.push({ c: 'alcohol', n: 'aviso', titulo: 'Con alcohol, tóxico por debajo de 4 g', texto: 'El alcohol crónico induce el P450 y, por la mala nutrición, puede bajar el glutatión (p. 5, «probablemente»): la dosis tóxica es menor (desnutrición e inductores, igual).', pag: tx(5, 'mt-para-riesgo'), origen: 'ficha · p. 5; cuánto baja el umbral: ilustrativo', bajo: '#hpv-m-via' });
+    if (s.nac && s.hNac !== undefined && s.hNac >= 48) t.push({ c: 'nactarde', n: 'aviso', titulo: 'NAC tardía: frena, no devuelve', texto: `La NAC empezó a las ${s.hNac} h: frena el daño que falta, pero los hepatocitos ya muertos no vuelven (ilustrativo; el libro no cuantifica el freno).`, pag: tx(7, 'mt-nac-por-que'), origen: 'ficha · p. 7; el freno: ilustrativo', bajo: '#hpv-m-via' });
     if (s.nac) t.push({ c: 'nac', n: 'aviso', titulo: 'NAC en marcha', texto: 'IV: 150 mg/kg en 1 h, 50 mg/kg en 4 h y 100 mg/kg en 16 h (300 mg/kg en 21 h). Se para con paracetamol <10, AST/ALT normales o −25-50 %, INR <2 y el paciente bien; si no, 6,25 mg/kg/h como mínimo.', pag: tx(7, 'mt-tabla-52-1'), origen: 'ficha · p. 7', bajo: '#hpv-m-via' });
   }
   if (s.via === 'alcoholes') {
-    if (s.ph < TX.phDialisis) t.push({ c: 'phdial', n: 'sello', titulo: `pH ${String(s.ph).replace('.', ',')}: diálisis ya`, texto: 'Con pH <7,1 o daño orgánico, hemodiálisis; con hemodiálisis el fomepizol se repite cada 4 h solo si hacen falta varias sesiones (Tabla 53.2, p. 28). Es un paciente en acidosis grave.', pag: tx(28, 'mt-alc-hd'), origen: 'ficha · p. 28', bajo: '#hpv-m-via' });
+    if (s.ph < TX.phDialisis && !s.hd) t.push({ c: 'phdial', n: 'sello', titulo: `pH ${String(s.ph).replace('.', ',')}: diálisis ya`, texto: 'Con pH <7,1 o daño orgánico, hemodiálisis; con hemodiálisis el fomepizol se repite cada 4 h solo si hacen falta varias sesiones (Tabla 53.2, p. 28). Es un paciente en acidosis grave.', pag: tx(28, 'mt-alc-hd'), origen: 'ficha · p. 28', bajo: '#hpv-m-via' });
+    else if (s.ph < TX.phDialisis) t.push({ c: 'phdial', n: 'aviso', tono: 'ok', titulo: 'Diálisis en marcha: sello en pausa', texto: `El pH de partida (${String(s.ph).replace('.', ',')}) pedía diálisis y ya está en marcha: quita los ácidos y el pH tiende a subir (cuánto, el libro no lo cuantifica: ilustrativo).`, pag: tx(28, 'mt-alc-hd'), origen: 'ficha · p. 28; el ritmo de subida: ilustrativo', bajo: '#hpv-m-via' });
     if (s.alc === 'met' && s.vision && !s.hd) t.push({ c: 'vision', n: 'aviso', titulo: 'Alteración visual: diálisis', texto: 'En el metanol, la alteración visual también indica diálisis (aparece a las 6-24 h).', pag: tx(29, 'mt-alc-hd'), origen: 'ficha · p. 28-29', bajo: '#hpv-m-via' });
     if (s.fomep && !s.hd && s.ph >= TX.phDialisis) t.push({ c: 'fomep', n: 'aviso', titulo: 'Fomepizol', texto: 'Bloquea la alcohol deshidrogenasa: deja de fabricarse el ácido. Mejor en las primeras 4 h (p. 28); que no corrija el ácido ya formado es inferencia del modelo.', pag: tx(28, 'mt-tabla-53-2'), origen: 'ficha · p. 27-28', bajo: '#hpv-m-via' });
     if (s.hd) t.push({ c: 'hdal', n: 'aviso', titulo: 'Hemodiálisis', texto: 'Quita el alcohol y los ácidos. El fomepizol se repite cada 4 h solo si hacen falta varias sesiones (Tabla 53.2, p. 28).', pag: tx(28, 'mt-alc-hd'), origen: 'ficha · p. 28-29', bajo: '#hpv-m-via' });

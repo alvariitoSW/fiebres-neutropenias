@@ -20,6 +20,54 @@ export const GUIA = ['Casimira · fallo hepático agudo', [
   { t: 'El amonio cruza la barrera hematoencefálica; el astrocito lo usa para hacer glutamina, que arrastra agua y lo hincha (edema citotóxico). Con más de 150 µmol/L arteriales el riesgo de edema cerebral está aumentado (normal <60).', z: ['astro'], p: 6, o: 'ficha (barrera y glutamina: p. 6; >150 µmol/L: p. 7)' },
   { t: 'Lactulosa y rifaximina frenan la producción en el colon; en el fallo agudo la CVVH es superior y se empieza cuanto antes. Pulsa «Hazlo»: enciende la CVVH y mira bajar el amonio.', z: ['cvvh', 'colon'], p: 8, o: 'ficha', haz: 'cvvh', btn: 'Encender la CVVH' },
 ]];
+// Guías de las vías de los tóxicos (cap. 52-53): 3-4 pasos que señalan las cuatro estaciones. Páginas del PDF de toxicología ('TX:página:id de la ficha').
+const P4 = 'TX:4:mt-para-mecanismo', P5 = 'TX:5:mt-para-fases', P6 = 'TX:6:mt-para-nomograma', P7 = 'TX:7:mt-nac-por-que', P8 = 'TX:8:mt-nac-hd-txt', P26 = 'TX:26:mt-eg-mecanismo', P27 = 'TX:27:mt-alc-fomepizol', P28 = 'TX:28:mt-alc-hd', P28c = 'TX:28:mt-alc-coadyuvantes';
+const C = ['carril'];
+export const GUIA_VIAS = {
+  terapeutico: ['Paracetamol a dosis terapéutica', [
+    { t: 'Casi todo el paracetamol se conjuga con sulfato y glucurónido y sale por la orina (el libro dice «la mayor parte»; el ≈90 % es orientativo).', z: C, p: P4, o: 'ficha' },
+    { t: 'Una fracción, ≈10 %, la oxida el P450 a un metabolito tóxico. Con hasta 4 g/día es poco y el glutatión lo neutraliza con su cisteína: glutatión 100 %, nada se acumula.', z: C, p: P5, o: 'ficha (4 g/día; el reparto exacto es ilustrativo)' },
+    { t: 'Sube la dosis a más de 4 g y mira cómo la conjugación se satura y el glutatión empieza a bajar.', z: C, p: P5, o: 'ficha · cuánto baja por gramo: ilustrativo' }]],
+  sobredosis: ['Eufrasia · sobredosis a las 4 h', [
+    { t: 'Casi todo el paracetamol se conjuga y se elimina por la orina; un ≈10 % lo oxida el P450 a un metabolito tóxico, que el glutatión neutraliza con su cisteína.', z: C, p: P4, o: 'ficha' },
+    { t: 'Con 12 g la conjugación (hasta 4 g/día) se satura, el P450 fabrica más metabolito y el glutatión se agota (−70 % ya es daño). El hígado aún no ha sufrido: es la fase 1, antes de las 24 h.', z: C, p: P5, o: 'ficha (rango tóxico 7,5-15 g; fases) · cifras del modelo ilustrativas' },
+    { t: 'A las 4 h, 180 µg/mL está por encima de la línea de 150: se trata con NAC. El nivel solo vale con una ingestión aguda de hora conocida.', z: C, p: P6, o: 'ficha' },
+    { t: 'La NAC repone la cisteína y, con ella, el glutatión. Pulsa «Hazlo» y mira cómo el metabolito deja de acumularse.', z: C, p: P7, o: 'ficha · cuánto sube el glutatión: ilustrativo', haz: 'nac', btn: 'Poner la NAC' }]],
+  'riesgo-alcohol': ['Nicanor · alcohol crónico y dosis repetidas', [
+    { t: 'Con alcohol crónico el P450 está inducido y, por la mala nutrición, el glutatión puede estar bajo: el libro dice «probablemente». La dosis tóxica es menor de 4 g.', z: C, p: 'TX:5:mt-para-riesgo', o: 'ficha · cuánto baja el umbral: ilustrativo' },
+    { t: 'Tomó 5 g/día durante 4 días: con dosis repetidas no hay hora de ingestión y el nomograma no sirve. Se decide por la clínica y la ALT (900).', z: C, p: P6, o: 'ficha' },
+    { t: 'El paracetamol es indetectable en el plasma en cerca de la mitad de los casos con daño hepático: se decide por la ALT y la clínica, y la NAC se da igual.', z: C, p: 3, o: 'ficha · p. 3 y 6' }]],
+  nac: ['NAC · reponer la cisteína', [
+    { t: 'El glutatión neutraliza el metabolito tóxico con su cisteína; cuando se agota, el metabolito queda libre.', z: C, p: P4, o: 'ficha' },
+    { t: 'La NAC aporta la cisteína que falta: es el antídoto. IV: 150 mg/kg en 1 h, 50 mg/kg en 4 h y 100 mg/kg en 16 h.', z: C, p: 'TX:7:mt-tabla-52-1', o: 'ficha' },
+    { t: 'Empezada pronto, el glutatión se mantiene y el hígado no sufre. Empezada tarde, frena lo que falta pero no devuelve los hepatocitos muertos (cuánto frena: ilustrativo).', z: C, p: P7, o: 'ficha · el freno: ilustrativo' }]],
+  hemodialisis: ['Eleuterio · 950 µg/mL y encefalopatía', [
+    { t: 'A las 72 h el glutatión se agotó hace tiempo: el metabolito tóxico se acumuló y la mayoría de los hepatocitos murió (fase 2-3). La encefalopatía ya es West Haven 2; las cifras de ALT, INR y hepatocitos son ilustrativas.', z: C, p: P5, o: 'ficha (fases) · cifras ilustrativas' },
+    { t: 'Con paracetamol >900 µg/mL y encefalopatía, la ficha indica hemodiálisis además de la NAC; durante la diálisis, la NAC IV a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina.', z: C, p: P8, o: 'ficha' },
+    { t: 'La NAC y la diálisis frenan lo que falta, pero no resucitan las células muertas: por eso los hepatocitos no suben.', z: C, p: P7, o: 'ficha · inferencia del modelo' },
+    { t: 'Si aparecen signos de daño que progresa pese a la NAC, hay que valorar el trasplante hepático.', z: C, p: P8, o: 'ficha' }]],
+  etilenglicol: ['Gumersindo · etilenglicol', [
+    { t: 'La alcohol deshidrogenasa del hígado convierte el etilenglicol en ácido glicólico, glioxílico y oxálico; es la enzima que lo vuelve tóxico.', z: C, p: P26, o: 'ficha' },
+    { t: 'El metabolismo gasta NAD y produce NADH: sube el lactato. Por eso el pH está en 7,05 con hiato aniónico alto.', z: C, p: P26, o: 'ficha · cifras del paciente inventadas' },
+    { t: 'El ácido oxálico precipita con calcio como cristales de oxalato en el túbulo renal y en la orina.', z: C, p: 'TX:27:mt-eg-cristales', o: 'ficha' },
+    { t: 'Con pH <7,1 hace falta hemodiálisis; el fomepizol bloquea la enzima. Pulsa «Hazlo» para bloquearla.', z: C, p: P28, o: 'ficha', haz: 'fomep', btn: 'Poner fomepizol' }]],
+  metanol: ['Ruperto · metanol', [
+    { t: 'La alcohol deshidrogenasa convierte el metanol en formaldehído y ácido fórmico, un ácido fuerte que produce acidosis con hiato aniónico alto.', z: C, p: P26, o: 'ficha' },
+    { t: 'El ácido fórmico inhibe la citocromo oxidasa y bloquea la energía celular; los tejidos más vulnerables son la retina, el nervio óptico y los ganglios basales.', z: C, p: 'TX:27:mt-met-mecanismo', o: 'ficha' },
+    { t: 'Los escotomas a las 9 h indican daño ocular: la alteración visual es, por sí sola, indicación de diálisis. El ácido folínico convierte el fórmico en metabolitos no tóxicos.', z: C, p: 'TX:29:mt-alc-hd', o: 'ficha' }]],
+  fomepizol: ['Fomepizol · bloquear la enzima', [
+    { t: 'El fomepizol bloquea la alcohol deshidrogenasa: deja de fabricarse el ácido tóxico (se ve la estación apagada).', z: C, p: P27, o: 'ficha' },
+    { t: 'Mejor si empieza en las primeras 4 h tras la ingestión; se mantiene hasta que el alcohol en plasma baja de 20 mg/dL y el pH se normaliza.', z: C, p: 'TX:28:mt-tabla-53-2', o: 'ficha' },
+    { t: 'No retira el ácido ya formado: con pH <7,1 sigue haciendo falta la hemodiálisis (inferencia del modelo).', z: C, p: P28, o: 'ficha (pH <7,1) · el resto: inferencia del modelo' }]],
+  'hemodialisis-alcohol': ['Hemodiálisis en los alcoholes tóxicos', [
+    { t: 'La hemodiálisis aumenta el aclaramiento del etilenglicol y de todos sus metabolitos.', z: C, p: P28, o: 'ficha' },
+    { t: 'Indicaciones inmediatas: pH <7,1 o daño orgánico (coma, convulsiones, insuficiencia renal); en el metanol también la alteración visual.', z: C, p: P28, o: 'ficha' },
+    { t: 'Con varias sesiones, el fomepizol pasa a 15 mg/kg cada 4 h. En el modelo el pH tiende a subir y el sello de «diálisis ya» queda en pausa mientras dura (cuánto sube: ilustrativo).', z: C, p: 'TX:28:mt-tabla-53-2', o: 'ficha (pauta) · subida del pH: ilustrativa' }]],
+  coadyuvantes: ['Coadyuvantes · desviar el metabolismo', [
+    { t: 'En el etilenglicol, la tiamina (100 mg IV al día) y la piridoxina (100 mg IV al día) desvían el ácido glioxílico hacia productos no tóxicos.', z: C, p: P28c, o: 'ficha' },
+    { t: 'Son un apoyo: no sustituyen al fomepizol ni a la hemodiálisis cuando el pH está por debajo de 7,1.', z: C, p: P28, o: 'ficha · inferencia del modelo' }]],
+};
+const ALIAS = { eufrasia: 'sobredosis', nicanor: 'riesgo-alcohol', eleuterio: 'hemodialisis', gumersindo: 'etilenglicol', ruperto: 'metanol' };
 export const focoSvg = (zs = []) => zs.map((z) => { const [x, y, w, h] = ZONAS[z]; return `<rect class="foco" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>`; }).join('');
 import { verFrase } from '../../../core/frase-vista.js';
 export function crearGuia({ dock, caja, hacer, setFoco, cita }) {
@@ -34,5 +82,5 @@ export function crearGuia({ dock, caja, hacer, setFoco, cita }) {
     const b = ev.target.closest('[data-g]'); if (!b || !g) return; const a = b.dataset.g;
     if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); } else if (a === 'haz') { hacer(g[1][i].haz); setFoco(g[1][i].z); }
   });
-  return { abrir: (clave) => { g = { casimira: GUIA, sano: GUIA_SANO, edema: GUIA_EDEMA, hilario: GUIA_HILARIO, alta: GUIA_ALTA }[clave]; if (!g) return cerrar(); paso(0); }, cerrar };
+  return { abrir: (clave) => { g = { casimira: GUIA, sano: GUIA_SANO, edema: GUIA_EDEMA, hilario: GUIA_HILARIO, alta: GUIA_ALTA, ...GUIA_VIAS }[clave] || GUIA_VIAS[ALIAS[clave]]; if (!g) return cerrar(); paso(0); }, cerrar };
 }

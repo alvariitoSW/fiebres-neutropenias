@@ -26,7 +26,7 @@ const N = () => (oculto ? '?' : fmt(leer(s).a));
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
-  for (const c of ['dosis', 'fase3', 'hd', 'nomo', 'nomo2', 'alcohol', 'nac', 'phdial', 'vision', 'fomep', 'hdal', 'edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis', 'tips', 'fl']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const c of ['dosis', 'fase3', 'hd', 'nomo', 'nomo2', 'alcohol', 'nac', 'phdial', 'vision', 'fomep', 'hdal', 'edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis', 'tips', 'fl', 'nactarde']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
   for (const t of lista) topeApi.poner(t.c, { nivel: t.n, tono: t.tono || '', titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo || null });
 }
 function pintar() {
@@ -51,21 +51,37 @@ function pintar() {
 }
 // Vías de los tóxicos: mandos que se enseñan según la vía, monitor del hígado y figura real de la vía (todo ya creado; solo se repinta)
 const coma = (x) => String(x).replace('.', ',');
+let viaPintada = null;
 function pintarTx() {
-  const v = s.via, par = v === 'paracetamol', alc = v === 'alcoholes';
+  const v = s.via, par = v === 'paracetamol', alc = v === 'alcoholes', u = v === 'urea', V = viaDe(v), pr = modo === 'preguntas';
   R.querySelectorAll('[data-via-sel]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.viaSel === v)));
-  for (const id of ['m-prod', 'm-dep', 'm-rifa', 'm-tips', 'm-fl']) $(id).hidden = v !== 'urea';
-  $('m-par').hidden = !par; $('m-alc').hidden = !alc; $('mon-tx').hidden = v === 'urea';
+  for (const id of ['m-prod', 'm-dep', 'm-rifa', 'm-tips', 'm-fl', 'm-cvvh']) $(id).hidden = !u;
+  $('m-par').hidden = !par; $('m-alc').hidden = !alc; $('mon-tx').hidden = u;
+  // Con una vía de tóxicos, la pantalla deja de ser la de la urea: monitor, título, leyenda, modos y figura son los de la vía
+  for (const id of ['mon-nh3', 'mon-wh', 'mon-dep']) $(id).parentElement.hidden = !u;
+  $('mon-astro').hidden = !u; R.querySelector('.mon-ch').hidden = !u; $('fig').hidden = !u;
+  $('leyenda').hidden = !u || pr; $('b-replay').parentElement.hidden = !u || pr;
+  R.querySelectorAll('#hpv-modos [data-modo]').forEach((b) => { if (['apuesta', 'error', 'hilario', 'caso'].includes(b.dataset.modo)) b.hidden = !u; });
   const mostrar = (id, on) => { $(id).parentElement.hidden = !on; };
   mostrar('mon-par', par); mostrar('mon-alt', par); mostrar('mon-ph', alc); mostrar('mon-ga', alc); mostrar('mon-lact', alc);
-  $('mon-reloj').hidden = !par; $('mon-carril').parentElement.hidden = v !== 'urea';
+  for (const id of ['mon-glut', 'mon-met', 'mon-enc']) mostrar(id, par);
+  $('mon-reloj').hidden = !par; $('mon-carril').parentElement.hidden = !u;
+  $('mon-glut').textContent = `${s.glut} %`; $('mon-met').textContent = s.glut < TX.glutDano ? 'se acumula' : 'neutralizado';
+  const wh = leer(s).wh; $('mon-enc').textContent = wh ? `West Haven ${wh}` : 'no'; 
   $('mon-par').textContent = `${s.par} µg/mL`; $('mon-reloj').innerHTML = `Reloj <b>${s.h} h</b>`;
   $('mon-alt').textContent = s.lab?.alt ?? '—'; $('mon-inr').textContent = s.lab?.inr ?? '—';
-  $('mon-ph').textContent = coma(s.ph); $('mon-ga').textContent = s.ga ?? '—'; $('mon-go').textContent = s.go ?? '—'; $('mon-lact').textContent = s.lact ?? '—';
-  if (par) { $('o-dosis').textContent = s.dosis; $('r-dosis').value = s.dosis; $('o-h').textContent = s.h; $('r-h').value = s.h; $('o-par').textContent = s.par; $('r-par').value = s.par; $('b-nac').setAttribute('aria-pressed', String(!!s.nac)); $('b-nac').textContent = `NAC · ${s.nac ? 'en marcha' : 'sin NAC'}`; $('b-beb').setAttribute('aria-pressed', String(!!s.bebedor)); $('b-beb').textContent = `Alcohol crónico · ${s.bebedor ? 'sí' : 'no'}`; }
+  $('mon-ph').textContent = coma(s.ph) + (alc && s.hd ? ' ↑ con diálisis' : ''); $('mon-ga').textContent = s.ga ?? '—'; $('mon-go').textContent = s.go ?? '—'; $('mon-lact').textContent = s.lact ?? '—';
+  if (par) { $('o-dosis').textContent = s.dosis; $('r-dosis').value = s.dosis; $('o-h').textContent = s.h; $('r-h').value = s.h; $('o-par').textContent = s.par; $('r-par').value = s.par; $('b-nac').setAttribute('aria-pressed', String(!!s.nac)); $('b-nac').textContent = `NAC · ${s.nac ? 'en marcha' : 'sin NAC'}`; $('b-beb').setAttribute('aria-pressed', String(!!s.bebedor)); $('b-beb').textContent = `Alcohol crónico · ${s.bebedor ? 'sí' : 'no'}`; $('b-hdp').setAttribute('aria-pressed', String(!!s.hd)); $('b-hdp').textContent = `Hemodiálisis · ${s.hd ? 'sí' : 'no'}`; }
   if (alc) { $('o-ph').textContent = coma(s.ph); $('r-ph').value = s.ph; R.querySelectorAll('[data-alc]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.alc === s.alc))); for (const [id, k, t] of [['b-fomep', 'fomep', 'Fomepizol'], ['b-coad', 'coad', s.alc === 'met' ? 'Ácido folínico' : 'Tiamina + piridoxina'], ['b-hd', 'hd', 'Hemodiálisis']]) { $(id).setAttribute('aria-pressed', String(!!s[k])); $(id).textContent = `${t} · ${s[k] ? 'sí' : 'no'}`; } }
-  const f = FIG_VIA[v], det = $('fig-via'); det.hidden = !f;
+  if (viaPintada !== v) { // título, subtítulo con su cita y figura de la vía: solo al cambiar de vía
+    viaPintada = v; const o = R.__orig;
+    R.querySelector('.hpv-eyebrow').textContent = V.eyebrow || o.eyebrow; R.querySelector('.hpv-titulo').textContent = V.titulo || o.titulo; $('svg').setAttribute('aria-label', V.aria || o.aria);
+    $('idea').innerHTML = V.idea ? `${V.idea[0]} ${cita(V.idea[1])} <span class="org">ficha</span>` : o.idea;
+    const f = FIG_VIA[v], det = $('fig-via'); det.hidden = !f; if (f) det.open = true;
+  }
+  const f = FIG_VIA[v];
   if (f) { $('fig-via-t').textContent = `Figura del libro · ${f[0]}`; const im = $('img-via'); const src = IMG_VIA[v]; if (!im.src.endsWith(src)) im.src = src; $('fig-via-c').innerHTML = `${f[0]}, de Marino (cap. ${v === 'paracetamol' ? 52 : 53}). ${cita(f[1], f[2], 'TX')}`; }
+  else $('fig-via').hidden = true;
 }
 // Cada acción cambia el estado y dice, en una frase, qué se ve y de dónde sale
 function hacer(a, v) {
@@ -80,21 +96,21 @@ function hacer(a, v) {
   pintar();
 }
 // Recalcula el glutatión y los hepatocitos tras tocar la dosis, el reloj o la NAC. Los hepatocitos nunca suben por encima de los del paciente (func0): el daño hecho no se deshace.
-function recalc() { if (s.glut0 === undefined) s.glut0 = s.glut; s.glut = s.nac ? Math.min(100, s.glut0 + 50) : s.glut0; s.func = Math.min(s.func0 ?? 100, funcDe(s)); s.lab = null; }
+function recalc() { if (s.glut0 === undefined) s.glut0 = s.glut; if (!s.nac) s.hNac = undefined; else if (s.hNac === undefined) s.hNac = s.h; s.glut = s.nac ? Math.min(100, s.glut0 + 50) : s.glut0; s.func = Math.min(s.func0 ?? 100, funcDe(s)); s.lab = null; }
 function tx(a, v) {
   const O = 'ficha · p. 4-5; el reparto exacto es ilustrativo';
   if (a === 'via') { s.via = v; frase(v === 'paracetamol' ? 'Paracetamol: casi todo se conjuga y sale por la orina (≈90 %; el libro dice «la mayor parte»); un ≈10 % lo oxida el P450 a un metabolito tóxico que el glutatión neutraliza con su cisteína.' : v === 'alcoholes' ? 'Etilenglicol y metanol: la alcohol deshidrogenasa del hígado los convierte en ácidos tóxicos y sube el NADH, y con él el lactato.' : 'Vía de la urea: el hígado convierte el NH₃ en urea.', v === 'paracetamol' ? 'ficha · p. 4' : v === 'alcoholes' ? 'ficha · p. 26' : 'ficha · p. 6'); return; }
   if (a === 'dosis') { s.dosis = v; s.glut0 = glutDe(s); recalc(); frase(v > TX.saturaG ? `${v} g: la conjugación (hasta 4 g/día) se satura, el P450 fabrica ${p450(s)} g de metabolito y el glutatión baja a ${s.glut} %.` : `${v} g: la conjugación aguanta y el glutatión se mantiene en ${s.glut} %.`, O); }
   if (a === 'h') { s.h = v; recalc(); frase(v < 24 ? `Hora ${v}: fase 1, aún sin daño en el hígado.` : v <= 72 ? `Hora ${v}: fase 2; con el glutatión agotado, los hepatocitos mueren (quedan ${s.func} %; ilustrativo).` : `Hora ${v}: fase 3, el fallo se completa (hepatocitos ${s.func} %).`, 'ficha · p. 5 (fases 24/72/96 h); cuántos mueren por hora: ilustrativo'); }
   if (a === 'par') { s.par = v; frase(v > TX.hdPar ? `${v} µg/mL: más de 900; con encefalopatía, hemodiálisis.` : `Paracetamol ${v} µg/mL. A las 4 h, por encima de 150 se trata con NAC.`, 'ficha · p. 6 y 8'); }
-  if (a === 'nac') { s.nac = s.nac ? 0 : 1; recalc(); frase(s.nac ? `NAC: repone la cisteína, el glutatión sube a ${s.glut} % y los hepatocitos dejan de caer.` : 'Sin NAC: el glutatión sigue agotado y, sin esa reposición, los hepatocitos mueren (efecto de la NAC y muerte celular: ilustrativo).', 'ficha · p. 7; cuánto sube el glutatión: ilustrativo'); }
+  if (a === 'nac') { s.nac = s.nac ? 0 : 1; recalc(); frase(s.nac ? `NAC desde la hora ${s.hNac}: repone la cisteína, el glutatión sube a ${s.glut} % y la caída de hepatocitos se frena desde ahí; los que ya murieron (quedan ${s.func} %) no vuelven.` : 'Sin NAC: el glutatión sigue agotado y, sin esa reposición, los hepatocitos mueren (efecto de la NAC y muerte celular: ilustrativo).', 'ficha · p. 7; cuánto sube el glutatión y cuánto frena: ilustrativo'); }
   if (a === 'bebedor') { s.bebedor = s.bebedor ? 0 : 1; s.glut0 = glutDe(s); recalc(); frase(s.bebedor ? `Con alcohol crónico el P450 está inducido y, por la mala nutrición, el glutatión puede estar bajo (p. 5, «probablemente»): con ${s.dosis} g queda en ${s.glut} %.` : 'Sin alcohol crónico.', 'ficha · p. 5; cuánto baja el umbral: ilustrativo'); }
   if (a === 'alc') { s.alc = v; s.vision = v === 'met' ? 1 : 0; frase(v === 'met' ? 'Metanol: la alcohol deshidrogenasa lo pasa a ácido fórmico, que inhibe la citocromo oxidasa y daña la retina.' : 'Etilenglicol: el hígado lo pasa por ácidos fuertes hasta el oxálico, que forma cristales en el túbulo.', 'ficha · p. 26-28'); }
   if (a === 'ph') { s.ph = v; frase(v < TX.phDialisis ? `pH ${coma(v)}: por debajo de 7,1 hace falta diálisis.` : `pH ${coma(v)}: sin criterio de diálisis por el pH.`, 'ficha · p. 28'); }
-  if (a === 'fomep' || a === 'coad' || a === 'hd') { s[a] = s[a] ? 0 : 1; frase(a === 'fomep' ? (s.fomep ? 'Fomepizol: bloquea la alcohol deshidrogenasa (p. 27); mejor en las primeras 4 h (p. 28).' : 'Sin fomepizol.') : a === 'coad' ? (s.coad ? 'Coadyuvantes: desvían el metabolismo hacia productos no tóxicos.' : 'Sin coadyuvantes.') : (s.hd ? 'Hemodiálisis: quita el tóxico y los ácidos.' : 'Sin hemodiálisis.'), 'ficha · p. 27-29'); }
+  if (a === 'fomep' || a === 'coad' || a === 'hd') { s[a] = s[a] ? 0 : 1; frase(a === 'fomep' ? (s.fomep ? `Fomepizol: bloquea la alcohol deshidrogenasa y deja de fabricarse el ${s.alc === 'met' ? 'ácido fórmico' : 'ácido glicólico y oxálico'} (p. 27); mejor en las primeras 4 h (p. 28). El ácido ya formado sigue ahí: ${s.ph < TX.phDialisis ? 'con este pH hace falta diálisis' : 'vigila el pH'} (inferencia del modelo).` : 'Sin fomepizol: la enzima sigue fabricando ácido.') : a === 'coad' ? (s.coad ? (s.alc === 'met' ? 'Ácido folínico: convierte el ácido fórmico en metabolitos no tóxicos (p. 29); es el coadyuvante del metanol, en lugar de la tiamina y la piridoxina.' : 'Tiamina y piridoxina: desvían el ácido glioxílico hacia productos no tóxicos (p. 28); no sustituyen al fomepizol ni a la diálisis.') : 'Sin coadyuvantes.') : (s.hd ? (s.via === 'paracetamol' ? 'Hemodiálisis: con paracetamol >900 µg/mL y encefalopatía quita el fármaco de la sangre, junto con la NAC (a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina). No devuelve hepatocitos.' : `Hemodiálisis: quita el ${s.alc === 'met' ? 'metanol' : 'etilenglicol'} y sus ácidos; el pH tiende a subir y el sello de «diálisis ya» queda en pausa mientras dura (cuánto sube: ilustrativo).`) : 'Sin hemodiálisis.'), 'ficha · p. 27-29; efecto sobre el pH: ilustrativo'); }
 }
-function ponerPreset(clave, sinGuia) {
-  preset = clave; s = nuevo(PRESETS[clave].s); s.func0 = s.func; if (s.glut0 === undefined) s.glut0 = s.glut; oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(clave);
+function ponerPreset(clave, sinGuia, guiaClave) {
+  preset = clave; s = nuevo(PRESETS[clave].s); s.func0 = s.func; if (s.glut0 === undefined) s.glut0 = s.glut; oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(guiaClave || clave);
 }
 async function replay() {
   const nodos = [...R.querySelectorAll('#hpv-svg [data-nodo]')];
@@ -140,13 +156,15 @@ function caso(i, caja) {
 }
 // ---- Montaje (una vez) ----
 function montar() {
+  R.__orig = { eyebrow: R.querySelector('.hpv-eyebrow').textContent, titulo: R.querySelector('.hpv-titulo').textContent, aria: $('svg').getAttribute('aria-label'), idea: '' };
+  $('mon-tx').insertAdjacentHTML('afterbegin', '<span>Glutatión <b id="hpv-mon-glut" style="font-size:1.25em;color:var(--accent-yellow)"></b></span><span>Metabolito tóxico <b id="hpv-mon-met"></b></span><span>Encefalopatía <b id="hpv-mon-enc"></b> <i class="chip-ilus">ilustrativo</i></span>');
   const seg = (id, attr, vals) => `<div class="fila" id="hpv-${id}">${vals.map(([v, t]) => `<button type="button" data-${attr}="${v}" aria-pressed="false">${t}</button>`).join('')}</div>`;
   $('dock-panel').innerHTML = `
    <div class="mando" id="hpv-m-via"><b class="dock-nota">Vía del hepatocito</b><div class="fila">${VIAS.filter((v) => v.on).map((v) => `<button type="button" data-via-sel="${v.id}" aria-pressed="false">${v.nombre}</button>`).join('')}</div></div>
    <div class="mando" id="hpv-m-par" hidden><label>Paracetamol ingerido: <output id="hpv-o-dosis"></output> g (tope 30)<input type="range" id="hpv-r-dosis" min="0" max="30" step="1" value="4"></label>
      <label>Reloj desde la ingesta: <output id="hpv-o-h"></output> h<input type="range" id="hpv-r-h" min="0" max="96" step="4" value="0"></label>
      <label>Paracetamol en sangre: <output id="hpv-o-par"></output> µg/mL<input type="range" id="hpv-r-par" min="0" max="1000" step="10" value="0"></label>
-     <div class="fila"><button type="button" id="hpv-b-nac" class="b" aria-pressed="false">NAC</button><button type="button" id="hpv-b-beb" class="b" aria-pressed="false">Alcohol crónico</button></div></div>
+     <div class="fila"><button type="button" id="hpv-b-nac" class="b" aria-pressed="false">NAC</button><button type="button" id="hpv-b-beb" class="b" aria-pressed="false">Alcohol crónico</button><button type="button" id="hpv-b-hdp" class="b" aria-pressed="false">Hemodiálisis</button></div></div>
    <div class="mando" id="hpv-m-alc" hidden><div class="fila"><button type="button" data-alc="eg" aria-pressed="false">Etilenglicol</button><button type="button" data-alc="met" aria-pressed="false">Metanol</button></div>
      <label>pH: <output id="hpv-o-ph"></output><input type="range" id="hpv-r-ph" min="6.8" max="7.6" step="0.05" value="7.4"></label>
      <div class="fila"><button type="button" id="hpv-b-fomep" class="b" aria-pressed="false">Fomepizol</button><button type="button" id="hpv-b-coad" class="b" aria-pressed="false">Coadyuvantes</button><button type="button" id="hpv-b-hd" class="b" aria-pressed="false">Hemodiálisis</button></div></div>
@@ -163,14 +181,14 @@ function montar() {
   for (const [id, a] of [['r-dosis', 'dosis'], ['r-h', 'h'], ['r-par', 'par'], ['r-ph', 'ph']]) $(id).addEventListener('input', (ev) => hacer(a, +ev.target.value));
   $('r-func').addEventListener('input', (ev) => { s.func0 = +ev.target.value; hacer('func', +ev.target.value); }); $('r-rifa').addEventListener('input', (ev) => hacer('rifa', +ev.target.value));
   $('dock-panel').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b || b.disabled) return;
-    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'hpv-b-cvvh') hacer('cvvh'); else if (b.id === 'hpv-b-tips') hacer('tips'); else if (b.dataset.fl) hacer('fl', b.dataset.fl); else if (b.dataset.viaSel) hacer('via', b.dataset.viaSel); else if (b.dataset.alc) hacer('alc', b.dataset.alc); else if (b.id === 'hpv-b-nac') hacer('nac'); else if (b.id === 'hpv-b-beb') hacer('bebedor'); else if (b.id === 'hpv-b-fomep') hacer('fomep'); else if (b.id === 'hpv-b-coad') hacer('coad'); else if (b.id === 'hpv-b-hd') hacer('hd'); });
+    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'hpv-b-cvvh') hacer('cvvh'); else if (b.id === 'hpv-b-tips') hacer('tips'); else if (b.dataset.fl) hacer('fl', b.dataset.fl); else if (b.dataset.viaSel) hacer('via', b.dataset.viaSel); else if (b.dataset.alc) hacer('alc', b.dataset.alc); else if (b.id === 'hpv-b-nac') hacer('nac'); else if (b.id === 'hpv-b-beb') hacer('bebedor'); else if (b.id === 'hpv-b-fomep') hacer('fomep'); else if (b.id === 'hpv-b-coad') hacer('coad'); else if (b.id === 'hpv-b-hd' || b.id === 'hpv-b-hdp') hacer('hd'); });
   $('modos').addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); });
   $('b-replay').addEventListener('click', replay);
   $('svg').addEventListener('click', (ev) => { const g = ev.target.closest('.via-off'); if (g) { const [n, d] = VIAS_APAGADAS[+g.dataset.via]; frase(`${n}: ${d}. Aquí no hace nada. ${ir(VIAS_APAGADAS[+g.dataset.via][2], 'Ver en la ficha')}`, 'otras fichas del libro'); } });
   const dock = $('dock'); dock.querySelector('.dock-tabs').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pest]'); if (!b) return; dock.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === b))); $('dock-panel').hidden = b.dataset.pest !== 'dar'; $('dock-medir').hidden = b.dataset.pest !== 'medir'; ajustarDock(); });
   $('leyenda').innerHTML = leyenda();
   guiaApi = crearGuia({ dock: () => $('dock'), caja: $('guia'), hacer: (a) => hacer(a, 1), setFoco: (z) => { foco = z; pintar(); }, cita });
-  $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`; $('cita-fig').innerHTML = cita(6);
+  $('idea').innerHTML = R.__orig.idea = `${IDEA[0]} ${cita(IDEA[1])} <span class="org">ficha</span>`; $('cita-fig').innerHTML = cita(6);
   $('fuentes').innerHTML = FUENTES.map(([t, p, k]) => `<li>${t} · ${k === 'TX' ? cita(p, p < 20 ? (p === 4 ? 'mt-para-mecanismo' : p === 6 ? 'mt-para-nomograma' : p === 7 ? 'mt-tabla-52-1' : 'mt-nac-hd-txt') : (p === 28 ? 'mt-tabla-53-2' : 'mt-eg-mecanismo'), 'TX') : cita(p)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuente no lo dice' ? 'La fuente no lo dice' : t === 'las fuentes discrepan' ? 'Las fuentes discrepan' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
   $('crecera').innerHTML = CRECERA.map(([t, id, pg]) => `<li>${t} ${cita(pg, id)}</li>`).join('');
@@ -182,8 +200,8 @@ function ajustarDock() { R.style.setProperty('--hpv-dock-h', $('dock').offsetHei
 export function abrirEstado(clave) {
   const [p0, x] = String(clave || '').split(':'); const es = VIAS.flatMap((v) => Object.entries(v.estados || {}).filter(([k]) => k === p0).map(([, e]) => e))[0];
   const p = PRESETS[p0] ? p0 : es ? es[0] : p0; if (modo === 'preguntas') vistaPreguntas(false); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
-  ponerPreset(PRESETS[p] ? p : 'sano');
-  if (!PRESETS[p0] && es) { Object.assign(s, es[1]); if (es[1].nac !== undefined || es[1].dosis !== undefined) recalc(); pintar(); }
+  ponerPreset(PRESETS[p] ? p : 'sano', false, es ? p0 : undefined);
+  if (!PRESETS[p0] && es) { Object.assign(s, es[1]); if (es[1].nac !== undefined || es[1].dosis !== undefined) recalc(); if (es[2]) frase(es[2], es[3]); pintar(); }
   if (x === 'tips') { const a0 = fmt(leer(s).a); hacer('tips'); frase(`TIPS puesto: el amonio arterial pasa de ${a0} a ${N()} µmol/L, porque el NH₃ de la porta salta el hígado. Cambia un problema por otro.`, 'ficha · p. 10; cuánto sube: ilustrativo'); }
   else if (x === 'rl' || x === 'alb') hacer('fl', x);
   ajustarDock();
