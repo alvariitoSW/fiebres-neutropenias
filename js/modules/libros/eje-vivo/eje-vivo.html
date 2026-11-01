@@ -1,0 +1,18 @@
+    <button class="back-btn btn-volver-libros-menu" id="eje-volver">← VOLVER</button>
+    <!-- Eje hormonal vivo: dos glándulas, un enfermo (Marino cap. 51). Modelo vivo de Libros. Viene de la maqueta aprobada
+         autonomo/maquetas/b6b-eje-b.html. Arranque en eje-vivo/index.js; física en modelo.js, escena en dibujo.js; datos y fuentes en
+         js/data/eje-vivo-data.js. Prefijo de ids: eje-. -->
+    <div class="eje-raiz" id="eje-raiz" data-modelo-vivo>
+      <header class="cabecera"><p class="eje-eyebrow">Modelo vivo · Marino cap. 51</p><h2 class="eje-titulo">Dos glándulas, un enfermo</h2></header>
+      <div class="eje-chips" id="eje-chips" role="group" aria-label="Paciente"></div>
+      <div class="eje-lupas" role="group" aria-label="Lupa"><button type="button" class="b" id="eje-lupa-sr" data-lup="sr" aria-pressed="true">Lupa: suprarrenal</button><button type="button" class="b" id="eje-lupa-ti" data-lup="ti" aria-pressed="false">Lupa: tiroides</button></div>
+      <section id="eje-monitor" aria-label="Monitor de cabecera"><div class="eje-mon">
+        <span>PA <b id="eje-m-pa"></b></span><span>PAM <b id="eje-m-pam"></b></span><span>FC <b id="eje-m-fc"></b></span><span>Ritmo <b id="eje-m-rit"></b></span>
+        <span>T °C <b id="eje-m-t"></b></span><span>Na⁺ <b id="eje-m-na"></b></span><span>Glucosa <b id="eje-m-gl"></b></span><span>Lactato <b id="eje-m-lac"></b></span><span>NA <b id="eje-m-nor"></b></span><span>Día <b id="eje-m-dia"></b></span></div></section>
+      <div id="eje-sello-zona"></div>
+      <section class="eje-zona-escena"><svg id="eje-svg" viewBox="0 0 390 300" role="img" aria-label="Enfermo en la cama con dos lupas y el eje hormonal de la glándula elegida"></svg></section>
+      <p id="eje-idea" class="eje-idea"></p>
+      <section id="eje-guia" class="eje-guia" aria-live="polite"></section>
+      <!-- [HUECO 1b: pagina.js · dock con mandos, frase viva, «Ver el mapa», guía de 3-5 pasos con Motion, Fig. 51.1, fuentes y notas, prueba] -->
+      <div id="eje-pagina"></div>
+    </div>
