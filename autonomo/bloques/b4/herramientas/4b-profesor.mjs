@@ -32,14 +32,14 @@ let nFotos = 0;
 const b = await chromium.launch();
 const ctx = await b.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true });
 const p = await ctx.newPage();
-const errores = [];
-p.on('console', m => { if (m.type() === 'error' && !/favicon/.test(m.text())) errores.push(m.text()); });
+const errores = [], avisos = [];
+p.on('console', m => { if (m.type() === 'warning') avisos.push(m.text().slice(0, 160)); if (m.type() === 'error' && !/favicon/.test(m.text())) errores.push(m.text()); });
 p.on('pageerror', e => errores.push('PAGE ' + e.message));
 const pulsar = sel => p.evaluate(s => { const e = document.querySelector(s); if (!e) throw new Error('no hay ' + s); e.click(); }, sel);
 const texto = (sel, n = 500) => p.evaluate(([s, k]) => (document.querySelector(s)?.textContent || '(nada)').replace(/\s+/g, ' ').trim().slice(0, k), [sel, n]);
 const desborde = () => p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
 const foto = async (nombre, sel) => {
-    if (!CAPTURAS || nFotos >= 10) return;
+    if (!CAPTURAS || nFotos >= 6) return;
     if (sel) await p.evaluate(s => document.querySelector(s)?.scrollIntoView({ block: 'start' }), sel);
     await p.waitForTimeout(500);
     nFotos++; await p.screenshot({ path: `${CAPTURAS}${nombre}.png` }); say(`   📷 ${nombre}.png`);
@@ -107,13 +107,11 @@ try {
     await p.goto(BASE + 'index.html');
     await p.waitForFunction(() => document.getElementById('mar-cristaloides')?.querySelector(':scope > .vista-estudiar') && document.getElementById('mr-fra-criterios')?.querySelector(':scope > .vista-visual'), null, { timeout: 60000 });
     await p.waitForTimeout(1500);
-    // Si el Estudiar del 4B no está montado (en libros/index.js se monta antes de initVisualMarinoCaps31a44, que crea el
-    // interruptor), lo monta desde la página con los módulos ya cargados, para poder juzgar el contenido. Se anota como fallo.
-    const montadoApp = await p.evaluate(() => !!document.getElementById('mr-fra-criterios')?.querySelector(':scope > .vista-estudiar'));
-    say(`   Estudiar del 4B montado por la app al arrancar: ${montadoApp}${montadoApp ? '' : '  ❌ FALLO GRAVE (lo monto yo desde la página para seguir)'}`);
-    if (!montadoApp) await p.evaluate(async () => { const m = await import('/js/core/mayeutica.js'); const d = await import('/js/data/mayeutica/b4.js'); Object.entries(d.MAYEUTICA_B4).forEach(([f, x]) => m.montarMayeutica(f, x)); });
-    try { await p.waitForFunction(() => document.getElementById('mr-fra-criterios')?.querySelector(':scope > .vista-estudiar'), null, { timeout: 10000 }); }
-    catch (e) { say('   arranque: ' + JSON.stringify(await p.evaluate(() => ({ ficha: !!document.getElementById('mr-fra-criterios'), hijos: document.getElementById('mr-fra-criterios')?.children.length, estudiar: !!document.getElementById('mr-fra-criterios')?.querySelector('.vista-estudiar'), b1: !!document.getElementById('mar-cristaloides')?.querySelector('.vista-estudiar') })))); throw e; }
+    // Rejuicio: el Estudiar del 4B debe montarlo la app sola (navegador limpio). Si no, es fallo grave y se para.
+    const montadoApp = await p.evaluate(fs => fs.map(f => f + ':' + !!document.getElementById(f)?.querySelector(':scope > .vista-estudiar')).join(' '), FICHAS);
+    say(`   Estudiar del 4B montado por la app al arrancar: ${montadoApp}`);
+    say(`   warnings de consola al arrancar: ${avisos.length ? avisos.join(' // ') : 'ninguno'}`);
+    if (/false/.test(montadoApp)) throw new Error('Estudiar sin montar: FALLO GRAVE');
 
     // ---------- 1. Primera ficha con los dos toques reales ----------
     say('\n══ Dos toques reales hasta mr-fra-criterios');
@@ -138,10 +136,12 @@ try {
         await p.evaluate(ff => document.getElementById(ff).scrollIntoView({ block: 'start' }), f);
         say(`   primera pantalla: ${await texto(`#${f} > .vista-texto`, 420)}`);
         say(`   botones a modelos en el texto: ${await p.evaluate(ff => [...document.querySelectorAll(`#${ff} [data-glomerulo], #${ff} [data-nefrona-viva], #${ff} [data-filtro-vivo]`)].map(b => b.textContent.trim().slice(0, 60)).join(' | '), f)}`);
-        if (f === 'mr-fra-criterios') await foto('c01-criterios-primera', `#${f}`);
+        if (f === 'mr-fra-criterios') 
 
         // Estudiar → Mira
         await pulsar(`#${f} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(500);
+        try { await p.waitForFunction(ff => !!document.querySelector(`#${ff} .est-ir[data-ir-paso="juega"]`), f, { timeout: 5000 }); }
+        catch { say('   ❌ sin resumen de pasos: ' + JSON.stringify(await p.evaluate(ff => { const t = document.getElementById(ff); return { clases: t.className, est: !!t.querySelector(':scope > .vista-estudiar'), toggle: [...t.querySelectorAll(':scope > .vista-toggle button')].map(b => b.dataset.vista + (b.classList.contains('active') ? '(on)' : '')).join('|'), estudiarHtml: t.querySelector(':scope > .vista-estudiar')?.innerHTML.slice(0, 200) }; }, f))); await pulsar(`#${f} > .vista-toggle [data-vista="estudiar"]`); await p.waitForTimeout(800); }
         say(`   resumen: ${await p.evaluate(ff => [...document.querySelectorAll(`#${ff} .est-ir`)].map(b => b.textContent.replace(/\s+/g, ' ').trim()).join(' | '), f)}`);
         say(`   Mira (paneles): ${await p.evaluate(ff => [...document.querySelectorAll(`#${ff} .est-paso[data-paso="mira"] .vista-visual h3, #${ff} .est-paso[data-paso="mira"] .vista-visual h4, #${ff} .est-paso[data-paso="mira"] .vista-visual .vk-titulo`)].map(h => h.textContent.trim()).join(' | ').slice(0, 400), f)}`);
         say(`   entrada: ${d.entrada}`);
@@ -150,12 +150,14 @@ try {
         if (f === 'mr-fra-criterios') {
             await pulsar(`#${f} [data-glomerulo="critico"]`); await p.waitForTimeout(800);
             say(`   glomérulo crítico: ${JSON.stringify(await lecturas(f))}`);
-            await foto('c02-criterios-glomerulo-critico', `#${f} .est-paso[data-paso="mira"] .gl-escenario`);
+            
         }
         if (f === 'mr-fra-causas') {
             await pulsar(`#${f} [data-glomerulo="pam=75,pia=19"]`); await p.waitForTimeout(800);
             say(`   glomérulo PAM 75 PIA 19: ${JSON.stringify(await lecturas(f))}`);
-            await foto('c03-causas-glomerulo-pia19', `#${f} .est-paso[data-paso="mira"] .gl-escenario`);
+            await foto('r01-causas-glomerulo-pia19', `#${f} .est-paso[data-paso="mira"] .gl-escenario`);
+            say(`   fórmula PIA 19: ${await texto(`#${f} .gl-formula`, 300)}`);
+            for (const v of [0, 7, 12, 19, 25, 30]) { await rango(`#${f} .gl-pia`, v); await p.waitForTimeout(250); say(`   PIA ${v}: Bowman en dibujo «${await p.evaluate(ff => [...document.querySelectorAll(`#${ff} .gl-escenario text`)].map(t => t.textContent).find(t => /Bowman/.test(t)) || null, f)}» · ${await texto(`#${f} .gl-medidores`, 260)}`); }
             await rango(`#${f} .gl-pia`, 40); await p.waitForTimeout(400);
             say(`   PIA al tope (40): ${JSON.stringify(await lecturas(f))}`);
             await rango(`#${f} .gl-pam`, 60); await rango(`#${f} .gl-pia`, 20); await p.waitForTimeout(400);
@@ -169,7 +171,7 @@ try {
             say(`   filtro k-urgente (inicio): ${JSON.stringify(await lecturas(f))}`);
             say(`   modos: ${await p.evaluate(ff => [...document.querySelectorAll(`#${ff} [data-fv="modo"]`)].map(b => b.textContent.trim() + (b.classList.contains('on') ? '(on)' : '')).join(' | '), f)}`);
             await rango(`#${f} [data-fv-rango="horas"]`, 3); await p.waitForTimeout(300);
-            say(`   HD 3 h: ${JSON.stringify(await lecturas(f))}`);
+            say(`   HD 3 h: ${JSON.stringify(await lecturas(f))}`); await foto('r06-trr-filtro-k-esperado', `#${f} .est-paso[data-paso="mira"] .gl-medidores`);
             await pulsar(`#${f} [data-fv="calcio"][data-valor="si"]`); await rango(`#${f} [data-fv-rango="k0"]`, 8.5); await rango(`#${f} [data-fv-rango="horas"]`, 4); await p.waitForTimeout(300);
             say(`   K 8,5 + calcio, 4 h: ${JSON.stringify(await lecturas(f))}`);
             if (await p.evaluate(ff => !!document.querySelector(`#${ff} [data-fv="modo"][data-valor="hf"]`), f)) { await pulsar(`#${f} [data-fv="modo"][data-valor="hf"]`); await p.waitForTimeout(300); say(`   hemofiltración 4 h: ${JSON.stringify(await lecturas(f))}`); await pulsar(`#${f} [data-fv="modo"][data-valor="hd"]`); }
@@ -190,11 +192,11 @@ try {
         for (const [i, q] of d.guia.slice(0, 3).entries()) {
             say(`  [${q.id}] ${q.enunciado}`);
             await contestar(q, i === 0, ZG);
-            if (f === 'mr-fra-causas' && q.tipo === 'destapa') await foto('c04-causas-destapa', `${ZG} .may-res`);
-            if (f === 'mr-fra-indices' && q.id === 'rin-ind-g4') await comprobarModelo(ZG, f, 'data-nefrona-viva', 'c05-nefrona-prerrenal-furosemida', async () => say(`   nefrona: ${JSON.stringify(await nefronaTxt())}`));
+            
+            if (f === 'mr-fra-indices' && q.id === 'rin-ind-g4') await comprobarModelo(ZG, f, 'data-nefrona-viva', 'r02-nefrona-prerrenal-furosemida', async () => say(`   nefrona: ${JSON.stringify(await nefronaTxt())}`));
             await siguiente(ZG);
         }
-        if (f === 'mr-fra-indices' && d.guia.length > 3) { const q = d.guia[3]; say(`  [${q.id}] ${q.enunciado}`); await contestar(q, false, ZG); await comprobarModelo(ZG, f, 'data-nefrona-viva', 'c05-nefrona-prerrenal-furosemida', async () => say(`   nefrona: ${JSON.stringify(await nefronaTxt())}`)); await siguiente(ZG); }
+        if (f === 'mr-fra-indices' && d.guia.length > 3) { const q = d.guia[3]; say(`  [${q.id}] ${q.enunciado}`); await contestar(q, false, ZG); await comprobarModelo(ZG, f, 'data-nefrona-viva', 'r02-nefrona-prerrenal-furosemida', async () => say(`   nefrona: ${JSON.stringify(await nefronaTxt())}`)); await siguiente(ZG); }
 
         // Examínate: la de «error» y otra
         await irPaso(f, 'examen'); await p.waitForTimeout(200);
@@ -204,7 +206,7 @@ try {
             if (i > 1 && q.tipo !== 'error') { await siguienteSinContestar(ZE, q); continue; }
             say(`  [${q.id}] ${q.enunciado}`);
             await contestar(q, q.tipo === 'error', ZE);
-            if (f === 'mr-trr' && q.tipo === 'error') await foto('c10-trr-examen-error', `${ZE} .may-res`);
+            
             await siguiente(ZE);
         }
         say(`   final del examen: ${await texto(ZE, 200)}`);
@@ -220,15 +222,15 @@ try {
                     say(`  ${fichaPac.dia} · nuevo: ${fichaPac.nuevos}`);
                     say(`  [${paso.pregunta.id}] ${paso.pregunta.enunciado}`);
                     const r = await contestar(paso.pregunta, j === 1, ZC);
-                    if (caso.id === 'rin-mat' && paso.pregunta.id === 'rin-mat-4') await comprobarModelo(ZC, f, 'data-glomerulo', null, async () => say(`   glomérulo: ${JSON.stringify(await lecturas(f))}`));
-                    if (caso.id === 'rin-mat' && paso.pregunta.id === 'rin-mat-6') await foto('c06-matilde-error', `${ZC} .may-res`);
-                    if (caso.id === 'rin-gregorio' && j === 0) await comprobarModelo(ZC, f, 'data-nefrona-viva', 'c08-nefrona-rabdo-salino', async () => { say(`   nefrona rabdo: ${JSON.stringify(await nefronaTxt())}`); await pulsar('#nv-rabdo-volumen'); await p.waitForTimeout(600); say(`   nefrona rabdo + salino: ${JSON.stringify(await nefronaTxt())}`); say(`   desborde nefrona: ${await desborde()} px`); });
-                    if (caso.id === 'rin-adela' && paso.pregunta.id === 'rin-ad-3') await comprobarModelo(ZC, f, 'data-filtro-vivo', 'c09-filtro-k-urgente-adela', async () => say(`   filtro: ${JSON.stringify(await lecturas(f))}`));
+                    if (caso.id === 'rin-mat' && paso.pregunta.id === 'rin-mat-4') await comprobarModelo(ZC, f, 'data-glomerulo', 'r03-matilde-glomerulo-indices', async () => { say(`   glomérulo: ${JSON.stringify(await lecturas(f))}`); say(`   ficha activa: ${await p.evaluate(() => [...document.querySelectorAll('.tab-content.active')].filter(t => t.offsetParent).map(t => t.id).join(','))}`); say(`   fórmula: ${await texto(`#${f} .gl-formula`, 300)}`); });
+                    
+                    if (caso.id === 'rin-gregorio' && j === 0) await comprobarModelo(ZC, f, 'data-nefrona-viva', 'r04-nefrona-rabdo-salino', async () => { say(`   nefrona rabdo: ${JSON.stringify(await nefronaTxt())}`); await pulsar('#nv-rabdo-volumen'); await p.waitForTimeout(600); say(`   nefrona rabdo + salino: ${JSON.stringify(await nefronaTxt())}`); say(`   desborde nefrona: ${await desborde()} px`); });
+                    if (caso.id === 'rin-adela' && paso.pregunta.id === 'rin-ad-3') await comprobarModelo(ZC, f, 'data-filtro-vivo', 'r05-filtro-k-urgente-adela', async () => { say(`   filtro: ${JSON.stringify(await lecturas(f))}`); say(`   k0 del mando: ${await p.evaluate(ff => document.querySelector(`#${ff} [data-fv-rango="k0"]`)?.value, f)} · ficha activa: ${await p.evaluate(() => [...document.querySelectorAll('.tab-content.active')].filter(t => t.offsetParent).map(t => t.id).join(','))}`); });
                     await siguiente(ZC);
                 }
                 say(`   fin: ${await texto(ZC, 700)}`);
                 say(`   desborde: ${await desborde()} px`);
-                if (caso.id === 'rin-mat') await foto('c07-matilde-fin', ZC);
+                
             }
         }
         // Para profundizar
