@@ -1,0 +1,80 @@
+/* Solo tokens de la app (los trae b3-ritmo/base.css, que se enlaza sin tocarlo). */
+.zona-escena { position: relative; }
+#hep-svg { width: 100%; height: auto; display: block; background: var(--bg-main); border-radius: 12px; border: 1px solid var(--line); }
+#hep-svg text { font: 600 9.6px/1 system-ui, sans-serif; fill: var(--text-dim); }
+#hep-svg .min { font-size: 9.6px; fill: var(--text-muted); } #hep-svg .min2 { font-size: 9.6px; fill: var(--bg-main); font-weight: 700; }
+#hep-svg .rot { font-size: 10.5px; fill: var(--text-main); font-weight: 700; letter-spacing: .02em; }
+#hep-svg .oro { fill: var(--oro); font-weight: 800; }
+#hep-svg .gran { font-size: 30px; fill: var(--oro); font-weight: 800; }
+#hep-svg .fuera { fill: color-mix(in srgb, var(--accent-blue) 14%, var(--bg-main)); stroke: var(--line); }
+.selector-ion { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; }
+.selector-ion button, .mando button, .mando select { min-height: 40px; font: 700 .76rem/1.15 var(--sans); }
+.selector-ion button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+#monitor { border: 1px solid var(--line); border-radius: 12px; background: var(--bg-main); padding: 4px 8px 6px; margin: 4px 0; }
+#monitor .mon-fila { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; font: 600 .72rem/1.3 var(--sans); color: var(--text-dim); }
+#monitor .vit b { color: var(--text-main); font-size: .9rem; }
+#ecg { width: 100%; height: 66px; display: block; } #ecg path { fill: none; stroke: var(--accent-green); stroke-width: 1.6; }
+#nota-ecg { font: .66rem/1.3 var(--sans); color: var(--text-muted); margin: 2px 0 0; }
+.mando { display: grid; gap: 4px; padding: 4px 0; border-top: 1px solid var(--line); }
+.mando .fila { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; } .mando .fila > * { flex: 1 1 0; min-width: 72px; }
+.mando label { font: 600 .7rem/1.2 var(--sans); color: var(--text-dim); display: grid; gap: 2px; } .mando label output { color: var(--oro); }
+.modos { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; margin: 4px 0; } .modos button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.prueba { border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 6px 0; display: grid; gap: 6px; background: var(--bg-card); }
+.prueba h3 { margin: 0; font-size: .95rem; } .prueba .enun { margin: 0; font: .86rem/1.4 var(--sans); }
+.op { text-align: left; min-height: 44px; font: .8rem/1.35 var(--sans); } .op.bien { border-color: var(--accent-green); } .op.mal { border-color: var(--accent-red); } .op.neutra { opacity: .6; }
+.por { margin: 0; font: .78rem/1.4 var(--sans); } .por.ok { color: var(--accent-green); } .por.no { color: var(--accent-red); }
+.frase .org { color: var(--text-muted); font-weight: 400; }
+.presets { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 3px; } .presets button { min-height: 38px; font: 700 .68rem/1.1 var(--sans); } .presets button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
+.dock-pliega { display: grid; gap: 4px; }
+.dock-panel { max-height: 25vh !important; min-height: 0 !important; }
+.dock-tabs button { min-height: 34px !important; }
+.mando button, .mando select { min-height: 34px; padding: 2px 4px; }
+.mando .fila > * { min-width: 60px; }
+#monitor #ecg { height: 54px; }
+#leyenda .nv-especies { display: flex; flex-wrap: wrap; gap: 6px 14px; font: 600 .74rem/1.2 var(--sans); } #leyenda .nv-especies > span { display: inline-flex; align-items: center; gap: 4px; }
+.idea .cita { white-space: nowrap; }
+#hep-svg .foco { fill: color-mix(in srgb, var(--accent-yellow) 10%, transparent); stroke: var(--oro); stroke-width: 2.5; stroke-dasharray: 6 3; pointer-events: none; }
+.idea { margin: 4px 0; font: 600 .78rem/1.35 var(--sans); color: var(--text-main); } .idea .org, .guia .org { color: var(--text-muted); font-weight: 400; }
+.guia .fila-g { display: flex; flex-wrap: wrap; gap: 4px; } .guia .fila-g > * { flex: 1 1 0; min-width: 84px; min-height: 40px; font: 700 .74rem/1.15 var(--sans); }
+.llevas { border-top: 1px solid var(--line); padding-top: 4px; font: .78rem/1.4 var(--sans); } .llevas ul { margin: 2px 0 0; padding-left: 16px; }
+.cita { font: .68rem/1.3 var(--sans); } .ver-ficha { border: 0; background: none; color: var(--accent-blue); text-decoration: underline; padding: 0; min-height: 0; cursor: pointer; font: inherit; }
+.toast { position: fixed; left: 8px; right: 8px; bottom: calc(var(--dock-h, 190px) + var(--frase-h, 60px) + 8px); z-index: 40; margin: 0; padding: 6px 10px; border: 1px solid var(--oro); border-radius: 10px; background: var(--bg-card); font: .76rem/1.35 var(--sans); }
+#hep-svg .tanque { fill: color-mix(in srgb, var(--accent-yellow) 8%, var(--bg-main)); stroke: var(--line); stroke-width: 1.5; }
+#hep-svg .celula { fill: color-mix(in srgb, var(--bg-card) 90%, transparent); stroke: var(--oro); stroke-width: 2; }
+#hep-svg .mito { fill: color-mix(in srgb, var(--accent-purple) 14%, transparent); stroke: var(--accent-purple); stroke-width: 1.6; }
+#hep-svg .nd { fill: var(--bg-main); stroke: var(--oro); stroke-width: 2; } #hep-svg .num { font-size: 11px; fill: var(--text-main); font-weight: 800; }
+#hep-svg .flecha { stroke: var(--text-muted); stroke-width: 1.6; fill: none; marker-end: none; } #hep-svg .bilis { stroke: var(--accent-green); stroke-width: 3; }
+#hep-svg .bact { fill: var(--accent-green); stroke: var(--bg-main); }
+#hep-svg .p-nh3 { fill: var(--accent-yellow); stroke: var(--bg-main); stroke-width: 1; } #hep-svg .p-urea { fill: var(--accent-green); stroke: var(--bg-main); stroke-width: 1; } #hep-svg .p-glu { fill: var(--accent-purple); stroke: var(--bg-main); stroke-width: 1; }
+#hep-svg .gris { fill: color-mix(in srgb, var(--text-muted) 14%, var(--bg-main)); stroke: var(--text-muted); stroke-dasharray: 3 2; } #hep-svg .cand { fill: var(--text-muted); } #hep-svg .cand-a { fill: none; stroke: var(--text-muted); stroke-width: 1.4; }
+#hep-svg .via-off { cursor: pointer; }
+#hep-svg .cvvh { fill: none; stroke: var(--text-muted); stroke-width: 1.6; stroke-dasharray: 4 3; } #hep-svg .cvvh.on { fill: color-mix(in srgb, var(--accent-green) 22%, transparent); stroke: var(--accent-green); stroke-dasharray: none; stroke-width: 2.2; }
+#hep-svg .astro { fill: color-mix(in srgb, var(--accent-purple) 18%, var(--bg-main)); stroke: var(--accent-purple); stroke-width: 2.4; } #hep-svg .astro.hincha { stroke: var(--accent-red); stroke-width: 3.2; }
+#hep-svg .bloqueo { opacity: .5; }
+.fig-tc img { width: 100%; height: auto; display: block; border-radius: 8px; } .fig-tc figcaption { font: .7rem/1.35 var(--sans); color: var(--text-muted); margin-top: 3px; }
+.plegable summary { cursor: pointer; font: 700 .76rem/1.3 var(--sans); min-height: 32px; display: flex; align-items: center; }
+.btn-replay { min-height: 36px; font: 700 .76rem/1.15 var(--sans); }
+.mando output { color: var(--oro); }
+#monitor { min-height: 0; padding: 3px 8px; margin: 2px 0; } #monitor .mon-fila { gap: 2px 8px; flex-wrap: wrap; font-size: .7rem; line-height: 1.25; } #monitor .mon-ch { margin: 1px 0 0; }
+.cabecera h1 { font-size: 1.05rem; margin: 0; } .cabecera .aviso { margin: 0; font-size: .66rem; }
+.idea { margin: 2px 0; }
+.dock-panel { max-height: 22vh !important; }
+#hep-svg .aspa { stroke: var(--accent-red); stroke-width: 2.2; fill: none; } #hep-svg .apag { fill: var(--accent-red); font-weight: 700; }
+.chip-ilus { display: inline-block; border: 1px solid var(--text-muted); border-radius: 999px; padding: 0 6px; font: 600 .64rem/1.4 var(--sans); color: var(--text-muted); }
+.crecera li { margin-bottom: 3px; }
+.idea { font-size: .72rem; line-height: 1.3; } .idea .cita, .mon-ch .cita-pdf, .mon-ch .ver-ficha { white-space: nowrap; } .idea .cita { white-space: normal; }
+.cabecera .cab-fila { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; } .cabecera .aviso { padding: 0 6px; }
+#monitor .mon-ch { font-size: .62rem; line-height: 1.3; }
+.idea, .idea .cita, .mon-ch { display: block; } .idea .cita, .idea .org, .mon-ch * { display: inline; }
+.idea .cita a, .idea .cita button, .mon-ch a, .mon-ch button { min-height: 0 !important; height: auto; padding: 0; margin: 0; line-height: 1.3; display: inline; }
+.idea .cita { margin-left: 2px; }
+#hep-svg .puente { fill: none; stroke: var(--text-muted); stroke-width: 2; stroke-dasharray: 4 3; } #hep-svg .puente.on { stroke: var(--accent-red); stroke-width: 3.4; stroke-dasharray: none; }
+#hep-svg .p-agua { fill: none; stroke: var(--accent-blue); stroke-width: 1.4; }
+.cara-wh { vertical-align: middle; } .cara-wh .pi { fill: color-mix(in srgb, var(--accent-yellow) 18%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.2; } .cara-wh .tr { fill: none; stroke: var(--text-main); stroke-width: 1.4; stroke-linecap: round; } .cara-wh .pu { fill: var(--text-main); }
+.modos { grid-template-columns: repeat(5, minmax(0, 1fr)); } .modos button { padding-left: 2px; padding-right: 2px; font-size: .72rem; }
+.dock-panel { max-height: 15vh !important; }
+/* Jerarquía del monitor: solo el amonio (grande, oro) y el West Haven mandan; el resto, en peso normal */
+#monitor .mon-fila b { font-weight: 400; color: var(--text-main); }
+#monitor #mon-nh3 { font-weight: 800; font-size: 1.15rem; color: var(--accent-yellow); }
+#monitor #mon-wh { font-weight: 800; }
+#monitor .vit b { font-size: .8rem; }

@@ -35,6 +35,9 @@ export const FORMAS_IONES = {
     // Moléculas y células
     glu: { nombre: 'Glucosa', forma: 'copo', color: '--accent-yellow' },
     urea: { nombre: 'Urea', forma: 'hexagono', color: '--text-muted' },
+    // Hepatocito vivo (Marino cap. 39, bloque 5): el amoníaco (círculo ámbar) y la glutamina del astrocito (rombo verde); la urea es la de arriba.
+    nh3: { nombre: 'NH₃ (amonio)', forma: 'circulo', color: '--accent-yellow' },
+    glutamina: { nombre: 'Glutamina', forma: 'rombo', color: '--accent-green' },
     alb: { nombre: 'Albúmina', forma: 'grano', color: '--accent-purple' },
     alb25: { nombre: 'Albúmina 25 %', forma: 'grano1', color: '--accent-purple' }, // grano con un halo (lámina: «25 %: con halo»)
     cito: { nombre: 'Citoquinas', forma: 'trebol', color: '--text-dim' },
