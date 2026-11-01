@@ -5538,3 +5538,149 @@ body.study-mode-on #hpv-raiz .dock { padding-right: 82px; }
 #hpv-raiz #hpv-sello-zona .tope-linea { display: none; }
 #hpv-raiz .paso.plegado { font: 600 .74rem/1.3 var(--sans); color: var(--text-muted); border-left: 2px solid var(--accent-green); padding-left: 8px; }
 #hpv-raiz .mando label { display: block; } #hpv-raiz .mando label output { display: inline; }
+
+/* [HUECO hepatocito: la Mayéutica del hepatocito vivo (interruptor, pregunta, caso)] */
+#hpv-raiz .hpv-objetivos { list-style: none; margin: 0 0 6px; padding: 0; display: grid; gap: 8px; }
+#hpv-raiz .hpv-objetivo { display: grid; gap: 4px; font-size: .86rem; overflow-wrap: anywhere; }
+#hpv-raiz .hpv-objetivo small { color: var(--text-dim); }
+#hpv-raiz .hpv-objetivo-ver summary { cursor: pointer; color: var(--accent-yellow); font-size: .84rem; padding: 4px 0; }
+#hpv-raiz .hpv-consecuencia { display: grid; gap: 4px; font-size: .86rem; overflow-wrap: anywhere; }
+#hpv-raiz .hpv-consecuencia p { margin: 0; }
+#hpv-raiz .hpv-interruptor { display: grid; grid-template-columns: repeat(2, 1fr); border: 1px solid var(--border-color); border-radius: 999px; overflow: hidden; font: .86rem var(--sans); }
+#hpv-raiz .hpv-interruptor button { min-height: 44px; background: transparent; color: var(--text-muted); border: 0; font: inherit; cursor: pointer; padding: 0 6px; }
+#hpv-raiz .hpv-interruptor button + button { border-left: 1px solid var(--border-color); }
+#hpv-raiz .hpv-interruptor button[aria-selected="true"] { background: var(--accent-yellow); color: var(--bg-main); font-weight: 600; }
+#hpv-raiz button.hpv-b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--text-main); border: 1px solid var(--border-color);
+  border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+#hpv-raiz button.hpv-b.hpv-prim { background: var(--accent-yellow); color: var(--bg-main); border-color: var(--accent-yellow); }
+#hpv-raiz button.hpv-b.hpv-link { background: transparent; color: var(--accent-yellow); border-style: dashed; }
+#hpv-raiz button.hpv-b:disabled { opacity: .5; cursor: default; }
+#hpv-raiz button.hpv-b small { display: block; font-weight: 400; font-size: .7rem; opacity: .85; }
+#hpv-raiz button.hpv-b[aria-pressed="true"] { border-color: var(--accent-yellow); }
+#hpv-raiz button:focus-visible, #hpv-raiz input:focus-visible, #hpv-raiz summary:focus-visible { outline: 2px solid var(--accent-yellow); outline-offset: 2px; }
+#hpv-raiz .hpv-fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#hpv-raiz .hpv-dock-estudio { display: grid; gap: 4px; }
+#hpv-raiz .hpv-pasos { display: flex; gap: 4px; align-items: center; min-height: 12px; }
+#hpv-raiz .hpv-pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+#hpv-raiz .hpv-pasos i.hpv-on { background: var(--accent-yellow); border-color: var(--accent-yellow); }
+#hpv-raiz .hpv-pasos i.hpv-mal { background: var(--accent-red); border-color: var(--accent-red); }
+#hpv-raiz .hpv-pasos i.hpv-aqui { box-shadow: 0 0 0 2px var(--accent-blue); }
+#hpv-raiz .hpv-dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--text-muted); display: flex; justify-content: space-between; gap: 8px; min-height: 18px; }
+#hpv-raiz .hpv-formato { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 14px; padding: 14px; display: grid; gap: 10px; min-width: 0; }
+#hpv-raiz .hpv-cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+#hpv-raiz .hpv-num { font: 700 .76rem var(--sans); color: var(--accent-yellow); border: 1px solid var(--accent-yellow); border-radius: 6px; padding: 1px 7px; }
+#hpv-raiz .hpv-serie { font: 700 .66rem var(--sans); letter-spacing: .05em; text-transform: uppercase; color: var(--bg-main); background: var(--text-dim); border-radius: 4px; padding: 1px 6px; }
+#hpv-raiz .hpv-serie.hpv-examen { background: var(--accent-purple); color: var(--text-main); }
+#hpv-raiz .hpv-tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); }
+#hpv-raiz .hpv-para { font: .82rem/1.45 var(--sans); color: var(--text-muted); }
+#hpv-raiz .hpv-pregunta { font-size: 1rem; line-height: 1.45; }
+#hpv-raiz .hpv-op { display: grid; gap: 8px; }
+#hpv-raiz .hpv-respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; }
+#hpv-raiz .hpv-ok { color: var(--accent-green); font: 600 .9rem var(--sans); }
+#hpv-raiz .hpv-mal { color: var(--accent-red); font: 600 .9rem var(--sans); }
+#hpv-raiz .hpv-punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+#hpv-raiz .hpv-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+#hpv-raiz .hpv-frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--serif); background: transparent; color: var(--text-main); border: 1px solid var(--card2);
+  border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+#hpv-raiz .hpv-frase-e .hpv-n { font: 700 .76rem var(--sans); color: var(--text-muted); padding-top: 3px; }
+#hpv-raiz .hpv-frase-e.hpv-marcada { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .1); }
+#hpv-raiz .hpv-frase-e.hpv-acierto { border-color: var(--accent-green); }
+#hpv-raiz .hpv-frase-e.hpv-fallo { border-color: var(--accent-red); background: rgba(184, 92, 62, .12); }
+#hpv-raiz .hpv-correccion { font: .88rem/1.45 var(--sans); color: var(--text-dim); padding: 2px 0 0 26px; }
+#hpv-raiz .hpv-mando { border: 1px dashed var(--accent-yellow); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+#hpv-raiz .hpv-mando .hpv-para { color: var(--text-dim); }
+#hpv-raiz .hpv-pista { font: .84rem/1.4 var(--sans); color: var(--accent-yellow); }
+#hpv-raiz .hpv-fuente-p { font: .72rem/1.6 var(--sans); color: var(--text-muted); }
+#hpv-raiz .hpv-fuente-p .hpv-org { white-space: normal; overflow-wrap: anywhere; display: inline-block; margin: 1px 0; }
+#hpv-raiz .hpv-ir-texto { display: inline-flex; align-items: center; min-height: 44px; margin: 2px 4px 2px 0; padding: 0 10px; border: 1px dashed var(--border-color);
+  border-radius: 999px; background: transparent; color: var(--accent-yellow); font: 600 .72rem/1.2 var(--sans); text-align: left; cursor: pointer; }
+#hpv-raiz button.hpv-b.hpv-link { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; }
+#hpv-raiz .hpv-dia { font: 700 .76rem var(--sans); color: var(--accent-yellow); letter-spacing: .06em; text-transform: uppercase; }
+#hpv-raiz .hpv-paciente { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; background: var(--card2); border-radius: 10px; padding: 10px 12px; font: .84rem/1.4 var(--sans); margin: 0; }
+#hpv-raiz .hpv-paciente dt { color: var(--text-muted); }
+#hpv-raiz .hpv-paciente dd { margin: 0; font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+#hpv-raiz .hpv-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+#hpv-raiz .hpv-lleva li { font: .94rem/1.45 var(--serif); }
+#hpv-raiz .hpv-ruta { font: .84rem/1.5 var(--sans); color: var(--text-dim); display: grid; gap: 4px; }
+#hpv-raiz .hpv-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#hpv-raiz .hpv-casos-lista { display: grid; gap: 8px; }
+@media (prefers-reduced-motion: no-preference) { #hpv-raiz .hpv-entra { animation: hpv-entra .25s ease-out; } }
+@keyframes hpv-entra { from { opacity: .4; transform: translateY(4px); } to { opacity: 1; transform: none; } }#hpv-raiz .hpv-dock-estudio { padding-top: 2px; }
+#hpv-raiz .hpv-formato [data-accion], #hpv-raiz .hpv-formato .hpv-mando, #hpv-raiz .hpv-formato .hpv-respuesta { scroll-margin-bottom: calc(var(--hpv-dock-h, 170px) + 16px); }
+#hpv-raiz.hpv-mayeutica .hpv-mini-cap > b, #hpv-raiz.hpv-mayeutica .hpv-mini-cap > span { display: none; }   /* el rótulo de la lupa nombra el ritmo: daría la respuesta */
+#hpv-raiz .modos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+#hpv-raiz .hpv-fuente-p .cita { display: inline-block; margin: 0 6px 2px 0; }
+#hpv-raiz .hpv-bloque, #hpv-raiz .hpv-formato { min-width: 0; }
+#hpv-raiz .hpv-dock-estudio { display: grid; gap: 4px; }
+#hpv-raiz .hpv-dock-estudio[hidden] { display: none; }
+/* [FIN HUECO hepatocito] */
+/* ===== Termostato vivo · Mayéutica (modo Preguntas). Las mismas reglas que el receptor vivo, con el prefijo tmv-. Solo tokens. ===== */
+#tmv-raiz button.tmv-b { min-height: 44px; font: 600 .86rem/1.2 var(--sans); background: var(--card2); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; cursor: pointer; text-align: left; }
+#tmv-raiz button.tmv-b.tmv-prim { background: var(--oro); color: var(--bg); border-color: var(--oro); }
+#tmv-raiz button.tmv-b:disabled { opacity: .55; cursor: default; }
+#tmv-raiz .tmv-fila { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+#tmv-raiz .tmv-para { font: .82rem/1.45 var(--sans); color: var(--muted); }
+#tmv-raiz .tmv-pasos { display: flex; gap: 4px; }
+#tmv-raiz .tmv-pasos i { flex: 1; height: 6px; border-radius: 3px; background: var(--card2); border: 1px solid rgba(196, 154, 74, .2); }
+#tmv-raiz .tmv-pasos i.tmv-on { background: var(--oro); border-color: var(--oro); }
+#tmv-raiz .tmv-pasos i.tmv-mal { background: var(--rojo); border-color: var(--rojo); }
+#tmv-raiz .tmv-pasos i.tmv-aqui { box-shadow: 0 0 0 2px var(--oro-claro); }
+#tmv-raiz .tmv-formato { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+#tmv-raiz .tmv-cab-preg { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; }
+#tmv-raiz .tmv-num { font: 700 .76rem var(--sans); color: var(--oro); border: 1px solid var(--oro); border-radius: 6px; padding: 1px 7px; }
+#tmv-raiz .tmv-tipo { font: 600 .68rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+#tmv-raiz .tmv-grupo { font: 700 .66rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--bg); background: var(--dim); border-radius: 6px; padding: 1px 6px; }
+#tmv-raiz .tmv-grupo.tmv-examen { background: var(--rojo); color: var(--fg); }
+#tmv-raiz .tmv-grupo.tmv-caso { background: var(--purpura); color: var(--fg); }
+#tmv-raiz .tmv-pregunta { font-size: 1rem; line-height: 1.45; }
+#tmv-raiz .tmv-op { display: grid; gap: 8px; }
+#tmv-raiz .tmv-op button.tmv-elegida-bien { border-color: var(--verde); }
+#tmv-raiz .tmv-op button.tmv-elegida-mal { border-color: var(--rojo); }
+#tmv-raiz .tmv-respuesta { background: var(--card2); border-radius: 10px; padding: 12px; display: grid; gap: 8px; min-width: 0; font: .9rem/1.45 var(--serif); }
+#tmv-raiz .tmv-ok { color: var(--verde); font: 600 .9rem var(--sans); }
+#tmv-raiz .tmv-mal { color: var(--rojo); font: 600 .9rem var(--sans); }
+#tmv-raiz .tmv-dia { font: 700 .74rem var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--purpura); }
+#tmv-raiz dl.tmv-paciente { display: grid; grid-template-columns: auto 1fr; gap: 2px 10px; margin: 0; font: .82rem/1.35 var(--sans); background: var(--card2); border-radius: 10px; padding: 8px 10px; }
+#tmv-raiz dl.tmv-paciente dt { color: var(--muted); }
+#tmv-raiz dl.tmv-paciente dd { margin: 0; color: var(--fg); }
+#tmv-raiz dl.tmv-paciente dd.tmv-cambia { color: var(--rojo); font-weight: 600; }
+#tmv-raiz .tmv-formato [data-accion], .tmv-formato button { scroll-margin-bottom: calc(var(--tmv-dock-h, 190px) + 16px); }
+#tmv-raiz .tmv-eyebrow { font: 600 .68rem var(--sans); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+#tmv-raiz .tmv-h { font: 600 1.15rem/1.25 var(--serif); margin: 2px 0 6px; }
+#tmv-raiz .tmv-ruta { font: .84rem/1.5 var(--sans); color: var(--dim); display: grid; gap: 4px; }
+#tmv-raiz .tmv-punto { display: flex; gap: 10px; align-items: flex-start; font: .94rem/1.45 var(--serif); cursor: pointer; min-height: 44px; padding: 4px 0; }
+#tmv-raiz .tmv-punto input { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--accent-green); flex: none; }
+#tmv-raiz .tmv-frase-e { display: flex; gap: 10px; width: 100%; min-height: 44px; font: .95rem/1.45 var(--serif); background: transparent; color: var(--text-main); border: 1px solid var(--card2); border-radius: 8px; padding: 8px 10px; text-align: left; cursor: pointer; }
+#tmv-raiz .tmv-frase-e .tmv-n { font: 700 .76rem var(--sans); color: var(--muted); padding-top: 3px; }
+#tmv-raiz .tmv-frase-e.tmv-marcada { border-color: var(--accent-yellow); background: rgba(207, 154, 62, .1); }
+#tmv-raiz .tmv-frase-e.tmv-acierto { border-color: var(--accent-green); }
+#tmv-raiz .tmv-frase-e.tmv-fallo { border-color: var(--accent-red); background: rgba(184, 92, 62, .12); }
+#tmv-raiz .tmv-correccion { font: .88rem/1.45 var(--sans); color: var(--dim); padding: 2px 0 0 26px; }
+#tmv-raiz .tmv-mando { border: 1px dashed var(--accent-yellow); border-radius: 12px; padding: 8px 10px; display: grid; gap: 6px; background: rgba(207, 154, 62, .06); }
+#tmv-raiz .tmv-mando .tmv-pista { font: .84rem/1.4 var(--sans); color: var(--accent-yellow); }
+#tmv-raiz .tmv-fuente-p { font: .72rem/1.6 var(--sans); color: var(--muted); }
+#tmv-raiz .tmv-lleva { display: grid; gap: 6px; margin: 0; padding-left: 20px; }
+#tmv-raiz .tmv-lleva li { font: .94rem/1.45 var(--serif); }
+#tmv-raiz .tmv-repaso-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+#tmv-raiz .tmv-casos-lista { display: grid; gap: 8px; }
+#tmv-raiz .tmv-casos-lista button small { display: block; font-weight: 400; color: var(--muted); }
+#tmv-raiz button.tmv-b.tmv-link { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: center; text-align: left; background: transparent; border-style: dashed; color: var(--accent-yellow); }
+#tmv-raiz .tmv-nuevo { font: 700 .62rem var(--sans); letter-spacing: .06em; text-transform: uppercase; border: 1px solid var(--rojo); border-radius: 4px; padding: 0 4px; }
+#tmv-raiz .tmv-consecuencia p { margin: 2px 0 0; }
+#tmv-raiz .tmv-dock-est { display: grid; gap: 4px; padding: 6px 0; }
+#tmv-raiz .tmv-entra { animation: tmv-entra .25s ease-out; }
+@keyframes tmv-entra { from { opacity: .3; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { #tmv-raiz .tmv-entra { animation: none; } }
+#tmv-raiz #tmv-dock-estudio, #tmv-raiz #tmv-aviso-tapa { display: none; }
+#tmv-raiz.preg-on #tmv-dock-estudio { display: grid; }
+#tmv-raiz.preg-on .dock .frase, #tmv-raiz.preg-on .dock .dock-tabs, #tmv-raiz.preg-on .dock .dock-panel,
+#tmv-raiz.preg-on #tmv-idea, #tmv-raiz.preg-on #tmv-paso-caja, #tmv-raiz.preg-on #tmv-prueba, #tmv-raiz.preg-on #tmv-mon-pie, #tmv-raiz.preg-on #tmv-leyenda,
+#tmv-raiz.preg-on details.fig, #tmv-raiz.preg-on section.bloque { display: none; }
+#tmv-raiz.tapado #tmv-monitor, #tmv-raiz.tapado #tmv-sello-zona, #tmv-raiz.tapado #tmv-avisos-zona, #tmv-raiz.tapado #tmv-escena, #tmv-raiz.tapado .capas,
+#tmv-raiz.sin-modelo #tmv-monitor, #tmv-raiz.sin-modelo #tmv-sello-zona, #tmv-raiz.sin-modelo #tmv-avisos-zona, #tmv-raiz.sin-modelo #tmv-escena, #tmv-raiz.sin-modelo .capas { display: none; }
+#tmv-raiz.tapado #tmv-aviso-tapa { display: block; }
+#tmv-raiz #tmv-preg { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px; min-width: 0; }
+#tmv-raiz .modos { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+#tmv-raiz .modos button { padding: 8px 2px; text-align: center; }
+#tmv-raiz .tmv-pasos i.tmv-on { background: var(--oro); border-color: var(--oro); }
+#tmv-raiz .tmv-dock-est-txt { font: .74rem/1.3 var(--sans); color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }

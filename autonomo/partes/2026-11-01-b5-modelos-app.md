@@ -19,8 +19,15 @@ pruebas propias con barrido de extremos (70 y 64 combinaciones) y solapes de `<t
 ## Para el usuario
 Nada que decidir (no es parada). Para mirarlo: Libros → Marino → tarjetas «Hepatocito vivo» y «El cuerpo que arde y tirita».
 
+## Mayéutica de los modelos (misma sesión, por encargo de la bitácora)
+Hepatocito: 13 preguntas y 2 casos (Casimira, Hilario); termostato: 13 preguntas y 2 casos (Jacinta, Honorato). Auditor:
+hepatocito 1 grave (CVVH «depende de mantenerla»; la p. 8 dice empezar cuanto antes) + 5 medianos; termostato 0 graves + 5
+medianos. Todo corregido; las tres pruebas en verde sobre la rama juntada (versión 20261101-95). `jueces --modelo
+hepatocito-vivo --modelo termostato-vivo --forma`: ✅ todos a favor en la versión -94 (antes de la Mayéutica); **falta
+pasarlos otra vez con la Mayéutica** y el juicio del profesor de la Mayéutica: los hace quien junte 5A-5D.
+
 ## Siguiente
-Mayéutica de cada modelo (sesiones aparte, ramas `wt/b5-may-*`) y el Estudiar 5A-5D con los planes ya en `main`.
+Juntar el Estudiar 5A-5D (ramas `auto/b5-5a…5d`) en `auto/b5`, jueces enteros, profesor de la Mayéutica, PR #78 y Consejo.
 
 ## Propuestas sobre las reglas
 - **Huecos contiguos chocan siempre al fusionar** (los 6 archivos de registro dieron conflicto): un hueco por modelo
@@ -44,6 +51,10 @@ pasó dos veces la suite de `jueces-movil` de 40 min dentro de su conversación;
 y los jueces los pase el director, como en la vuelta 2), constructor termostato 1,8 M, director 1,1 M.
 
 ## Cuentas
+**Con la Mayéutica**: `gasto.mjs --clave b5` = **12,1 M** frente a 12,0 M del presupuesto entero del paso 3 (+1 %; sin juicio
+del profesor de la Mayéutica todavía, ≈0,4 M). Director 2,1 M (una sola sesión, ≈200 pasos: pasó del tope de 150 de §4.16
+por encadenar la Mayéutica). Lo de abajo es el corte antes de la Mayéutica.
+
 Presupuesto del paso 3 sin Mayéutica: 12,0 − 3,2 (Mayéutica y su juicio) − 1,1 (2.ª sesión del director) = 7,7 M.
 Gastado ≈8,4 M con el cierre. Desvío **+9 %** (el constructor del hepatocito, por los jueces dentro). Bloque b5:
 ≈11 + 8,4 = ≈19,4 M de 45-63; quedan ≈26-44 M para la Mayéutica (≈3,2 M) y el Estudiar.
