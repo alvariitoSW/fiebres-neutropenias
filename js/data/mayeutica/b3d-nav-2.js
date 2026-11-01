@@ -60,14 +60,13 @@ const DATOS = {
           ok('Un segundo tubo, mejor con guía de TC; después, consulta de cirugía'),
           no('Retirar el tubo y hacer toracocentesis repetidas, porque está loculado', `En los derrames complicados el drenaje pleural es obligado (${p(46)}); sin tubo, las loculaciones infectadas seguirían sin vaciarse.`)],
         explicacion: `Si el drenaje con el primer tubo no basta, se coloca <span class="hl-azul">otro tubo, preferiblemente guiado por TC</span>; si persisten los problemas, consulta quirúrgica. Los fibrinolíticos intrapleurales no se aconsejan en general (${p(46)}).` + enFicha(DER, 'nep-derrame-drenaje') },
-      { id: 'dea-g7', corto: 'los 5 factores', tipo: 'destapa', cuantas: 'son cinco factores', fuente: 'nep-atb-factores',
-        enunciado: 'Antes de elegir el régimen de una NAV: ¿cuáles son los 5 factores de riesgo de mal resultado?',
-        puntos: [
-          `<span class="hl-rojo">(a) NAV de inicio tardío y (b) shock séptico</span> (${p(47)}).`,
-          `<span class="hl-rojo">(c)</span> Infección previa por MRSA o por un organismo multirresistente, es decir, resistente a al menos dos clases de antibióticos (${p(47)}).`,
-          `<span class="hl-rojo">(d)</span> Un antibiograma del hospital con el 25 % de los aislados resistentes (${p(47)}).`,
-          `<span class="hl-rojo">(e)</span> Haber recibido antibióticos en los últimos 90 días (${p(47)}).`],
-        explicacion: `La ficha dice «todo lo siguiente»: cualquiera de los cinco lleva al régimen de alto riesgo, y el de bajo riesgo exige que no haya ninguno (${p(47)}).` + enFicha(DER, 'nep-atb-factores') },
+      { id: 'dea-g7', corto: 'un solo factor basta', tipo: 'test', fuente: 'nep-atb-factores', origen: 'ficha; los datos del paciente, inventados',
+        enunciado: 'NAV de inicio precoz, sin shock séptico, en un paciente que recibió antibióticos hace 60 días por una infección urinaria. ¿Qué régimen empírico lleva?',
+        opciones: [
+          no('El de bajo riesgo: la NAV es precoz y no hay shock, y una infección urinaria antigua no cuenta', `La exposición a antibióticos en los últimos 90 días es un factor de riesgo por sí sola (${p(47)}); tratarías con un solo agente a un paciente de alto riesgo.`),
+          ok('El de alto riesgo: haber recibido antibióticos en los últimos 90 días es un factor, y con uno basta'),
+          no('El de alto riesgo solo si además hay shock séptico, porque los demás factores no cambian la pauta', `La ficha dice «todo lo siguiente»: cada factor, sin necesidad de shock, lleva al régimen de alto riesgo (${p(47)}); sin cobertura de MRSA podrías dejar sin tratar el germen resistente.`)],
+        explicacion: `Los cinco factores (inicio tardío, shock séptico, MRSA o multirresistente previo, antibiograma con el 25 % de resistentes y antibióticos en los últimos 90 días) cuentan <span class="hl-rojo">cada uno por separado</span>: con uno basta para el régimen de alto riesgo (${p(47)}).` + enFicha(DER, 'nep-atb-factores') },
       { id: 'dea-g8', corto: 'bajo riesgo', tipo: 'test', fuente: 'nep-atb-bajo', origen: 'ficha; la toxicidad del aminoglucósido, fisiología general',
         enunciado: 'NAV de inicio precoz, sin shock séptico ni ningún otro factor de riesgo. ¿Qué régimen empírico lleva?',
         opciones: [
