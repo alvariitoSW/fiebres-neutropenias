@@ -55,3 +55,16 @@ Frases de mecanismo o conducta escritas por el constructor (no copiadas de la fi
 - Salino: «sube la PA, pero menos volumen se queda en el vaso que con albúmina»: `fisiología general`, sin cifra.
 - Cambios de PA y FC por fluido (albúmina +10/+5, FC −6; salino +6/+3, −4; RL +5/+3, −3) y TIPS que divide por 2 la depuración: ilustrativos.
 - Que el RL ensancha el astrocito en +0,2 del eje: ilustrativo (la dirección es de la ficha).
+
+## Vuelta 3 (arreglos de auditoría y rejuicio)
+Frases nuevas o cambiadas, con su página:
+- Ciclo de la urea: «caja ciclo de la urea» ficha · p. 6; las cuatro estaciones y el CO₂ en la mitocondria, rotulados `fisiología general` en pantalla (guía, frase viva, rótulo de la mitocondria y nota «la fuente no lo dice»). Sin cita web.
+- «En el fallo agudo la CVVH es superior a la lactulosa y la rifaximina» · p. 8 (guía de edema, sello de edema).
+- Sello sin TC: «Riesgo alto de edema», «riesgo aumentado» con amonio >150 · p. 7; con TC: «Edema cerebral» (Fig. 39.2).
+- Hipovolemia a las 6 deposiciones: `fisiología general`, cifra ilustrativa; el objetivo 2-3 · p. 7. Aviso con 4 deposiciones: umbral 4 = opinión del autor (p. 7 da objetivo 2-3 y reducir ante diarrea).
+- «Vasopresor» (no noradrenalina) · p. 5 «vasopresores si hacen falta».
+- Enema: 200 g de lactulosa (300 mL) en 700 mL de agua · p. 7. Profundizar: AKI 70 % y TRR más decidida porque quita amonio · p. 5.
+- Ceftriaxona 1 g/día 5-7 días (Tabla 39.3) frente a 2 g del texto · p. 9; nota «tabla y texto de Marino discrepan». PAM 65 (Tabla 39.3) · p. 9; PAM de Hilario ≈ 62 = (85+2×50)/3, cálculo.
+- «Transfundir por el INR solo añade volumen»: razonamiento del autor, `fisiología general` (sin página). «Pasar de 100 µmol/L»: ilustrativo.
+- Barrera hematoencefálica y glutamina · p. 6 (antes p. 7); TIPS · p. 10 (antes p. 9).
+- Guías cortas Hilario y «Sangrado digestivo»: PAM p. 9 (Tabla 39.3), intestino p. 6, >150 p. 7, umbral 120 opinión del autor. Sin frases sin cita salvo las rotuladas.

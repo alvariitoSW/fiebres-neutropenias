@@ -1,10 +1,12 @@
 // Lectura del estado: el paso fija la temperatura (no hay mando continuo de T) y el tratamiento/«¿y si…?» la modifican.
 import { ESTADOS, YSI } from './datos.js';
+import { leerLibre, topesLibre } from './termostato-libre.js';
 export const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 export const fmt = (v, d = 1) => (v == null ? '—' : v.toFixed(d).replace('.', ','));
 export const nuevo = () => ({ est: 'fiebre', paso: 1, trat: 0, ysi: null });
 export function leer(s) {
   const E = ESTADOS[s.est], P = E.pasos[s.paso - 1];
+  if (s.est === 'juega') return { ...P, ...leerLibre(s.j), nombre: E.nombre, pac: s.j.pac || E.pac, tratado: false };
   const l = { cap: 1, esc: 0, sud: 0, rig: 0, ca: 0, clon: 0, ...P, ...(s.trat ? P.con : {}) };
   if (s.ysi === 'fiebre') { l.esc = 1; l.cap = 0; }            // manta: vasoconstricción y escalofrío (p. 72)
   l.nombre = E.nombre; l.pac = E.pac; l.tratado = !!(s.trat && P.con);
@@ -12,6 +14,7 @@ export function leer(s) {
 }
 const fv = (s, k) => (s.ysi === k);
 export function topes(s, l) {
+  if (s.est === 'juega') return topesLibre(s.j, l);
   const t = [], E = s.est, p = s.paso;
   if (s.ysi) { const y = YSI[s.ysi]; t.push({ c: 'ysi', n: 'sello', titulo: y.t, texto: y.x, pag: y.c, origen: y.o + '; las cifras del paciente son ilustrativas', off: ['#m-trat'] }); }
   if (E === 'golpe' && !s.ysi && l.T >= 41) t.push({ c: 'golpe', n: 'sello', titulo: 'Golpe de calor', texto: `T ${fmt(l.T)} °C, sin sudor, PA ${l.pa}, FC ${l.fc}: el cerebro falla. Enfriar ya, hasta 38 °C.`, pag: '46|ma-calor-golpe', origen: 'umbral ≥41 °C: ficha p. 46-47; PA y FC ilustrativas', bajo: '#m-trat' });

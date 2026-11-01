@@ -24,7 +24,7 @@ export function escena(s, L, oculto) {
   // Célula
   o.push(`<rect class="celula" x="116" y="24" width="236" height="148" rx="26"/>`, T(234, 40, 'Hepatocito', 'rot', 'text-anchor="middle"'));
   o.push(T(120, 167, 'sinusoide', 'min'), T(346, 167, 'bilis', 'min', 'text-anchor="end"'), `<path class="bilis" d="M352 150H358"/>`);
-  o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(234, 160, 'Mitocondria', 'min', 'text-anchor="middle"'));
+  o.push(`<ellipse class="mito" cx="234" cy="108" rx="112" ry="56"/>`, T(234, 70, `Carril de la urea · ${L.carril} %`, 'rot', 'text-anchor="middle"'), T(234, 160, 'Mitocondria (fisiología general)', 'min', 'text-anchor="middle"'));
   NODOS.forEach(([a, b], i) => {
     const x = 152 + i * 58, op = opNodo(s.func, i);
     o.push(`<g class="nodo" data-nodo="${i}" opacity="${op}"><circle class="nd" cx="${x}" cy="94" r="13"/>${T(x, 98, i + 1, 'num', 'text-anchor="middle"')}${T(x, 121, a, 'min', 'text-anchor="middle"')}${T(x, 132, b, 'min', 'text-anchor="middle"')}`);
@@ -40,7 +40,7 @@ export function escena(s, L, oculto) {
   VIAS_APAGADAS.forEach(([n], i) => { const x = 6 + (i % 2) * 176, y = 311 + Math.floor(i / 2) * 17;
     o.push(`<g class="via-off" data-via="${i}"><rect class="gris" x="${x}" y="${y}" width="170" height="15" rx="5"/><rect class="cand" x="${x + 6}" y="${y + 6}" width="7" height="6" rx="1"/><path class="cand-a" d="M${x + 7.5} ${y + 6}V${y + 4.5}a2 2 0 0 1 4 0V${y + 6}"/>${T(x + 20, y + 11, n.split(' ')[0] + ' · apagada', 'min')}</g>`); });
   // TIPS: puente que salta el hígado (del colon/porta a la sangre arterial)
-  o.push(`<path class="${s.tips ? 'puente on' : 'puente'}" d="M98 112C106 140 108 186 156 204"/>`, T(103, 190, s.tips ? 'TIPS' : 'TIPS: apagado', s.tips ? 'rot' : 'min'));
+  o.push(`<path class="${s.tips ? 'puente on' : 'puente'}" d="M98 112C106 140 108 186 156 204"/>`, T(94, 172, s.tips ? 'TIPS' : 'TIPS: apagado', s.tips ? 'rot' : 'min', 'text-anchor="end"'));
   if (s.tips) for (let i = 0; i < 3; i++) o.push(nh3(100 + i * 2, 124 + i * 20));
   // Sangre arterial y CVVH (a la izquierda del astrocito)
   o.push(`<path class="flecha" d="M160 172V214"/>`, `<path class="flecha" d="M160 220H206"/>`, T(166, 200, 'sangre arterial', 'min'));

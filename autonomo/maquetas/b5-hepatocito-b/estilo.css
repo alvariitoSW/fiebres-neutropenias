@@ -73,3 +73,8 @@
 .cara-wh { vertical-align: middle; } .cara-wh .pi { fill: color-mix(in srgb, var(--accent-yellow) 18%, var(--bg-main)); stroke: var(--text-muted); stroke-width: 1.2; } .cara-wh .tr { fill: none; stroke: var(--text-main); stroke-width: 1.4; stroke-linecap: round; } .cara-wh .pu { fill: var(--text-main); }
 .modos { grid-template-columns: repeat(5, minmax(0, 1fr)); } .modos button { padding-left: 2px; padding-right: 2px; font-size: .72rem; }
 .dock-panel { max-height: 15vh !important; }
+/* Jerarquía del monitor: solo el amonio (grande, oro) y el West Haven mandan; el resto, en peso normal */
+#monitor .mon-fila b { font-weight: 400; color: var(--text-main); }
+#monitor #mon-nh3 { font-weight: 800; font-size: 1.15rem; color: var(--accent-yellow); }
+#monitor #mon-wh { font-weight: 800; }
+#monitor .vit b { font-size: .8rem; }

@@ -58,7 +58,7 @@ function ponerPreset(clave, sinGuia) {
 }
 async function replay() {
   const nodos = [...document.querySelectorAll('#hep-svg [data-nodo]')];
-  frase('Cuatro pasos: el NH₃ entra, se une al CO₂ en la mitocondria, pasa por el ciclo de la urea y sale como urea a la sangre. Cada paso se apaga cuando faltan hepatocitos.', 'ficha · p. 6; los pasos intermedios del ciclo se omiten');
+  frase('Cuatro estaciones del dibujo: el NH₃ entra, se une al CO₂ en la mitocondria, pasa por el ciclo de la urea y sale como urea a la sangre. Cada paso se apaga cuando faltan hepatocitos.', 'ciclo de la urea: ficha · p. 6; las cuatro estaciones y el CO₂ en la mitocondria: fisiología general');
   if (sinMovimiento()) return;
   const M = await cargarMotion().catch(() => null); if (!M) return;
   nodos.forEach((g, i) => M.animate(g, { opacity: [0.15, opNodo(s.func, i)] }, { duration: 0.5, delay: i * 0.6 }));
@@ -76,7 +76,7 @@ function modoPrueba(m) {
   } else if (m === 'error' || m === 'hilario') {
     oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes; caja.append(p); let hechas = 0;
     def.frases.forEach((f) => { const c = document.createElement('div'), t = document.createElement('p'); t.className = 'enun'; t.textContent = f.t; c.append(t); const b = document.createElement('div'); b.className = 'ops'; c.append(b); caja.append(c);
-      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; if (m === 'hilario') hacer('fl', 'alb'); else hacer('dep', 3); fin(caja, def.clave); } }); });
+      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por, piensa: f.error }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; if (m === 'hilario') hacer('fl', 'alb'); else hacer('dep', 3); fin(caja, def.clave); } }); });
   } else caso(0, caja);
   pintar();
 }
@@ -85,7 +85,7 @@ function caso(i, caja) {
   const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${CASO.pasos.length}. ${st.enun}`; const o = document.createElement('div'); c.append(p, o); caja.append(c);
   const sigue = () => { pintar(); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja); }); c.append(b); } else { $('fig').open = true; const f = document.createElement('button'); f.type = 'button'; f.className = 'b'; f.id = 'b-filtro'; f.textContent = 'Abrir el filtro vivo del amonio'; f.addEventListener('click', () => toast('En la app, este botón abre el filtro vivo en el estado «amonio»; VOLVER te trae a esta ficha.')); c.append(f); fin(caja, 'caso'); } };
   if (st.mando) { espera = () => { espera = null; const r = document.createElement('p'); r.className = 'por ok'; r.textContent = st.ok; c.append(r); sigue(); }; frase(st.enun, 'paciente inventado; ficha · p. 8'); pintar(); return; }
-  opciones(o, st.ops, () => sigue(), st.orden); frase(`Paso ${i + 1}: ${fmt(leer(s).a)} µmol/L de amonio arterial en el modelo (ilustrativo).`, 'paciente inventado; cifras ilustrativas'); pintar();
+  opciones(o, st.ops, (op) => { if (op.ok && st.alAcertar) { Object.assign(s, st.alAcertar); frase(`PA y FC con albúmina 5 %: ${vitales(s).pa}, FC ${vitales(s).fc} (ilustrativo).`, 'ficha · p. 5 (albúmina); cambios ilustrativos'); } sigue(); }, st.orden); frase(`Paso ${i + 1}: ${fmt(leer(s).a)} µmol/L de amonio arterial en el modelo (ilustrativo).`, 'paciente inventado; cifras ilustrativas'); pintar();
 }
 const toast = (t) => { const e = $('toast'); e.textContent = t; e.hidden = false; clearTimeout(e._t); e._t = setTimeout(() => { e.hidden = true; }, 3000); };
 // ---- Montaje (una vez) ----

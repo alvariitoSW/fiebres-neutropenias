@@ -66,3 +66,5 @@
 #sello-zona .tope-sello { max-height: none; overflow: visible; width: auto; }
 #sello-zona .tope-linea { position: static; } #sello-zona .tope-linea span { white-space: normal; overflow: visible; text-overflow: clip; }
 #sello-zona .tope-mon { height: auto; }
+.juega-on .lt { display: none; } #mando-juega .fila > * { min-width: 0; } #mando-juega button { font: 700 .7rem/1.1 var(--sans); } #mando-juega select { min-height: 36px; font: 600 .72rem/1.1 var(--sans); background: var(--bg-main); color: var(--text-main); border: 1px solid var(--line); border-radius: 8px; }
+.juega-on #dock-panel .mando { padding: 2px 0; }

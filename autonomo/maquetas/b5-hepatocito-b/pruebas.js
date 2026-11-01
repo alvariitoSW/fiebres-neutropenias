@@ -7,7 +7,7 @@ export const APUESTA = {
   ops: [
     { t: 'Por más producción: sin el hígado, las bacterias del colon fabrican más amonio de lo normal.', ok: false, por: 'Si frenas solo la producción con lactulosa y no cuentas con el carril apagado, el amonio sigue subiendo y llega al astrocito.' },
     { t: 'Por menos depuración: el colon produce lo mismo y el carril de la urea deja pasar NH₃.', ok: true, por: 'El hígado es el que aclara el amonio convirtiéndolo en urea; si ese mecanismo falla, el amonio sube de forma progresiva (p. 6). El modelo marca unos 113 µmol/L (cifra ilustrativa) con la misma producción.' },
-    { t: 'No sube: el músculo y el riñón lo compensan.', ok: false, por: 'Músculo y riñón producen en menor grado, no depuran: la paciente acumularía amonio hasta pasar de 100 µmol/L.' }],
+    { t: 'No sube: el músculo y el riñón lo compensan.', ok: false, por: 'Músculo y riñón producen en menor grado, no depuran: la paciente acumularía amonio hasta pasar de 100 µmol/L (cifra ilustrativa del modelo).' }],
   orden: [0, 1, 2], tras: (a) => a.poner({ func: 30 }),
 };
 export const ERROR = {
@@ -29,8 +29,8 @@ export const ERROR2 = {
     { t: 'Ringer lactato 1.000 mL para sostener la PA mientras llega la sangre.', error: true, por: 'Falso: el Ringer lactato es hipotónico y no se recomienda, porque añade riesgo de edema cerebral; con albúmina <3 g/dL se usa albúmina al 5 % (p. 9, p. 5). Lo verás en el astrocito.' },
     { t: 'Endoscopia en las primeras 12 horas.', error: false, por: 'Tabla 39.3 (p. 9): también identifica el origen y permite clipar o ligar el vaso.' },
     { t: 'Transfundir hasta una hemoglobina de 7 g/dL, con hematíes, plasma y plaquetas 1:1:1.', error: false, por: 'Objetivo de Hb 7 g/dL y proporción 1:1:1 (Tabla 39.3, p. 9).' },
-    { t: 'Plasma hasta INR <1,5 antes de la endoscopia.', error: true, por: 'Falso: en la cirrosis el INR no mide el riesgo de sangrado; la hemostasia se guía con tromboelastografía (p. 9). Transfundir por el INR solo añade volumen.' },
-    { t: 'Ceftriaxona antes de la endoscopia.', error: false, por: 'La primera dosis va antes de la endoscopia (p. 9). Ojo: la tabla dice 1 g/día y el texto 2 g; las fuentes discrepan, y no se marca como error.' }],
+    { t: 'Plasma hasta INR <1,5 antes de la endoscopia.', error: true, por: 'Falso: en la cirrosis el INR no mide el riesgo de sangrado; la hemostasia se guía con tromboelastografía (p. 9). (Que transfundir por el INR solo añade volumen es razonamiento del autor, fisiología general.)' },
+    { t: 'Ceftriaxona antes de la endoscopia.', error: false, por: 'La primera dosis va antes de la endoscopia (p. 9). Ojo: la Tabla 39.3 dice 1 g/día durante 5-7 días y el texto 2 g «en la mayoría de guías»: tabla y texto de Marino discrepan, y no se marca como error.' }],
 };
 export const CASO = {
   preset: 'casimira', titulo: 'Casimira, 44 años · paracetamol en tres productos',
@@ -41,13 +41,13 @@ export const CASO = {
         { t: 'Solo si han pasado menos de 10 h desde la ingesta; después ya no cambia el pronóstico.', ok: false, por: 'Ella lleva 36 h: la dejarías sin tratamiento aunque aún le sirve (p. 3).' }] },
     { enun: 'Día 2: desorientada en el tiempo (West Haven 2), creatinina 1,1 mg/dL y amonio arterial 165 µmol/L. Enciende en el dock el mando que corresponde.', estado: { func: 20, vit: { pa: '110/68', fc: '92' } }, pag: 8, mando: 'cvvh',
       ok: 'Bien: CVVH con amonio >150, sea cual sea la creatinina; en el fallo agudo es superior a la lactulosa y la rifaximina, y cuanto antes mejor (p. 8).' },
-    { enun: 'Día 3: diuresis 0,3 mL/kg/h, PA 82/45, albúmina 2,6 g/dL. ¿Qué fluido y qué vasopresor?', estado: { func: 15, cvvh: 1, vit: { pa: '82/45', fc: '112' } }, pag: 5, orden: [2, 0, 1],
-      ops: [{ t: 'Ringer lactato en bolos para reponer volumen y noradrenalina si la PA no sube.', ok: false, por: 'El Ringer lactato baja el sodio y favorece el edema cerebral: no es el fluido de ella (p. 5).' },
-        { t: 'Albúmina al 5 % y noradrenalina; nada de Ringer lactato.', ok: true, por: 'La albúmina al 5 % deja el 70 % en el espacio intravascular y no baja el sodio (p. 5).' },
+    { enun: 'Día 3: diuresis 0,3 mL/kg/h, PA 82/45, albúmina 2,6 g/dL. ¿Qué fluido y qué vasopresor?', estado: { func: 15, cvvh: 1, vit: { pa: '82/45', fc: '112' } }, pag: 5, orden: [2, 0, 1], alAcertar: { fl: 'alb' },
+      ops: [{ t: 'Ringer lactato en bolos para reponer volumen y un vasopresor si la PA no sube.', ok: false, por: 'El Ringer lactato baja el sodio y favorece el edema cerebral: no es el fluido de ella (p. 5).' },
+        { t: 'Albúmina al 5 % y un vasopresor si hace falta; nada de Ringer lactato.', ok: true, por: 'La albúmina al 5 % deja el 70 % en el espacio intravascular y no baja el sodio; los vasopresores se usan si hacen falta (p. 5).' },
         { t: 'Furosemida para sacar la oliguria y luego volumen.', ok: false, por: 'Vacías más el espacio intravascular con 82/45: la hipotensión empeora (fisiología general).' }] },
-    { enun: 'Día 4: estupor, desorientada en lugar y tiempo (West Haven 3). La TC muestra surcos borrados, como la Fig. 39.2. ¿Qué haces?', estado: { func: 8, cvvh: 1, edema: true, vit: { pa: '104/60', fc: '92', nota: 'con noradrenalina' } }, pag: 8, orden: [1, 2, 0],
+    { enun: 'Día 4: estupor, desorientada en lugar y tiempo (West Haven 3). La TC muestra surcos borrados, como la Fig. 39.2. ¿Qué haces?', estado: { func: 8, cvvh: 1, edema: true, fl: null, vit: { pa: '104/60', fc: '92', nota: 'con vasopresor' } }, pag: 8, orden: [1, 2, 0],
       ops: [{ t: 'Consulto ya con trasplante: es el tratamiento definitivo (mortalidad del 80 al 33 %).', ok: true, por: 'Hay que avisar al equipo de trasplante ante toda encefalopatía progresiva (p. 8).' },
-        { t: 'Subo la lactulosa hasta 5-6 deposiciones al día para bajar el amonio más deprisa que con la CVVH.', ok: false, por: 'Deshidratas a una paciente hipotensa y no tratas la causa; el sello de hipovolemia salta a las 6 deposiciones (p. 7).' },
+        { t: 'Subo la lactulosa hasta 5-6 deposiciones al día para bajar el amonio más deprisa que con la CVVH.', ok: false, por: 'Deshidratas a una paciente hipotensa y no tratas la causa; el objetivo del libro son 2-3 (p. 7); que el sello de hipovolemia salte a las 6 es fisiología general, cifra ilustrativa.' },
         { t: 'Mantengo la CVVH 48 h más y reevalúo antes de llamar a nadie.', ok: false, por: 'Con encefalopatía progresiva, esperar es perder la ventana: el trasplante es el tratamiento definitivo (p. 8).' }] },
   ],
 };
@@ -64,7 +64,7 @@ export function opciones(caja, ops, alResponder, orden0) {
     b.addEventListener('click', () => {
       if (caja.dataset.hecho) return; caja.dataset.hecho = '1';
       [...caja.children].forEach((x, j) => { x.disabled = true; x.classList.add(ops[orden[j]].ok ? 'bien' : (x === b ? 'mal' : 'neutra')); });
-      const p = document.createElement('p'); p.className = 'por ' + (ops[i].ok ? 'ok' : 'no'); p.textContent = (ops[i].ok ? 'Bien. ' : 'No. ') + ops[i].por; caja.append(p); alResponder(ops[i], i);
+      const p = document.createElement('p'); p.className = 'por ' + (ops[i].ok ? 'ok' : 'no'); if (ops[i].ok && ops[i].piensa) { p.textContent = 'Bien: es un error. Antes de ver la corrección, piensa cómo sería la frase buena.'; const v = document.createElement('button'); v.type = 'button'; v.className = 'b'; v.textContent = 'Ver la frase buena'; v.addEventListener('click', () => { v.remove(); p.textContent = 'Bien. ' + ops[i].por; }); caja.append(p, v); } else { p.textContent = (ops[i].ok ? 'Bien. ' : 'No. ') + ops[i].por; caja.append(p); } alResponder(ops[i], i);
     });
     caja.append(b);
   }
