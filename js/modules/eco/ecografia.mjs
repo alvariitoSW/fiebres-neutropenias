@@ -336,15 +336,15 @@ export function regionZoom(P, est) {
     const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
     if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } }
   if (u0 > u1) return centro;
-  const ap = enPlano(P, [0, 0, -g.vi.Le]); u0 = Math.min(u0, ap[0]); u1 = Math.max(u1, ap[0]); v0 = Math.min(v0, ap[1]); v1 = Math.max(v1, ap[1]);
   // v3g: el anillo tricuspídeo y la AD (el encuadre no los recorta): los puntos de la AD que caen en el plano ensanchan la caja
-  try { const ad = construirCorazon(est, { pericardio: false, detalle: false }).partes.find(p => p.nombre === 'AD');
-    for (let i = 0; ad && i < ad.pos.length; i += 3) { const [u, v, n] = enPlano(P, [ad.pos[i], ad.pos[i + 1], ad.pos[i + 2]]);
-      if (Math.abs(n) < 3 && v > 5 && v < P.prof) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); } } } catch { /* sin AD: queda la caja del VD */ }
-  // la ventana del zoom ×2 abarca ~98 mm de profundidad (lienzo de 300 px a 1,53 px/mm, a la mitad): si la caja es más alta (VD + ápex + AD), manda
-  // lo que pide la vista, el anillo tricuspídeo y la AD (el suelo de la AD queda dentro) y el ápex del VI se sale por arriba
-  const VENT = 98, m = 4;
-  return { u: (u0 + u1) / 2, v: v1 - v0 > VENT ? v1 + m - VENT / 2 : (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0 };
+  let vAnillo = v0;
+  try { const partes = construirCorazon(est, { pericardio: false, detalle: false }).partes;
+    for (const nom of ['AD', 'Tricúspide']) { const ad = partes.find(p => p.nombre === nom);
+      for (let i = 0; ad && i < ad.pos.length; i += 3) { const [u, v, n] = enPlano(P, [ad.pos[i], ad.pos[i + 1], ad.pos[i + 2]]);
+        if (Math.abs(n) < 3 && v > 5 && v < P.prof) { u0 = Math.min(u0, u); u1 = Math.max(u1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); if (nom === 'Tricúspide') vAnillo = Math.max(vAnillo, v); } } } } catch { /* sin AD: queda la caja del VD */ }
+  // Devuelve la caja (ápex del VD y pared libre arriba, anillo tricuspídeo y AD abajo); `aplicarZoom` calcula la ventana con la escala real del lienzo:
+  // la ventana del ×2 abarca la mitad del lienzo (~87 mm de alto en un móvil); si la caja es más alta, manda el ápex del VD (McConnell) y el anillo.
+  return { u: (u0 + u1) / 2, v: (v0 + v1) / 2, ancho: u1 - u0, alto: v1 - v0, u0, u1, v0, v1, vAnillo };
 }
 
 // ---------------------------------------------------------------------------- qué es cada pieza en la imagen

@@ -157,9 +157,14 @@ export function montarSimulador(raiz, opc = {}) {
   function aplicarZoom() {
     const b = $('#cv-zoom'), ins = $('#cv-eco-zoom'); if (!b) return;
     b.setAttribute('aria-pressed', String(zoomEco)); b.classList.toggle('on', zoomEco); b.textContent = zoomEco ? 'Quitar zoom ×2' : 'Zoom ×2 en la región'; ins.hidden = !zoomEco;
-    ecoC.classList.toggle('zoom', zoomEco); if (!zoomEco || !ecoGeom || !planoEco) { ecoC.style.transform = ''; return; }
+    ajustarEco(); // el lienzo se repinta al doble de resolución (no se estira la imagen)
+    ecoC.classList.toggle('zoom', zoomEco); if (!zoomEco) { ecoC.style.transform = ''; return; } if (!ecoGeom || !planoEco) return;
     if (!regionZ || regionZ.P !== planoEco) regionZ = { P: planoEco, ...regionZoom(planoEco, estGeo) };
-    const W = ecoC.width, H = ecoC.height, x = ecoGeom.cx + regionZ.u * ecoGeom.k, y = ecoGeom.arriba + regionZ.v * ecoGeom.k;
+    const W = ecoC.width, H = ecoC.height, k = ecoGeom.k, m = 4, R = regionZ;
+    let vc = R.v; // alto de la ventana en mm del plano: media altura del lienzo; manda el ápex del VD, luego el anillo, luego la AD
+    if (R.v0 !== undefined) { const wv = H / 2 / k, alto = Math.max(R.v0, R.v1) - R.v0, hi = R.v0 - m, lo = R.vAnillo + m - wv; // top permitido: [lo, hi]
+      const top = alto + 2 * m <= wv ? R.v0 - m - (wv - alto - 2 * m) / 2 : lo <= hi ? Math.min(hi, Math.max(lo, (R.v0 + R.v1) / 2 - wv / 2)) : hi; vc = top + wv / 2; }
+    const x = ecoGeom.cx + R.u * k, y = ecoGeom.arriba + vc * k;
     const tx = clamp(W / 2 - 2 * x, -W, 0), ty = clamp(H / 2 - 2 * y, -H, 0);
     ecoC.style.transform = `translate(${(tx / W * 100).toFixed(2)}%, ${(ty / H * 100).toFixed(2)}%) scale(2)`;
   }
@@ -380,9 +385,9 @@ export function montarSimulador(raiz, opc = {}) {
     ecoCtx.globalAlpha = 1; ecoCtx.fillStyle = ficha('--accent-yellow') || 'white'; ecoCtx.textAlign = 'left'; ecoCtx.textBaseline = 'middle'; ecoCtx.fillText(rotulo, lx + 5 * px, ly + h / 2 + px); ecoCtx.restore();
   }
   function ajustarEco() {
-    const w = Math.round(ecoC.clientWidth * Math.min(dpr(), 1.5)), h = Math.round(w * 0.8);
+    const w = Math.round(ecoC.clientWidth * Math.min(dpr(), 1.5)) * (zoomEco ? 2 : 1), h = Math.round(w * 0.8);
     if (!w || (ecografo && ecoC.width === w)) return;
-    ecoC.width = w; ecoC.height = h; ecosNivel = []; nivelEco = 0; emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
+    ecoC.width = w; ecoC.height = h; ecoGeom = null; ecosNivel = []; nivelEco = 0; emaEco = 0; desdeCambioEco = 0; ecografo = ecoDeNivel(); ecoImg = ecoCtx.createImageData(w, h); ecoPendiente = true;
   }
   // ---- Modo M (modo-m.mjs): una línea del modo B a lo largo del tiempo, con calibres
   let modoEco = 'B', thetaM = 0, medir = 'libre', ultimoTM = null, ecoGeom = null;
