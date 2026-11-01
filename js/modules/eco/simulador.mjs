@@ -527,12 +527,12 @@ export function montarSimulador(raiz, opc = {}) {
   let colorOn = false, nyq = 60, gate = null, ultimoTD = null, fuenteD = null, medD = null, latidoD = -1, frameD = 0, angD = null;
   const espectro = crearModoM($('#cv-d'), $('#cv-d-capa'), { eje: 'vel', onMedida: pintarCalibresD });
   espectro.setEscala(+$('#cv-d-escala').value);
-  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral });
+  const datosFlujo = () => ({ rRetorno: motor.p.rRetorno, pvc: motor.ultimo ? motor.ultimo.pvc : motor.s.pad, eroaMitral: motor.p.eroaMitral, eroaTricus: motor.p.eroaTricus });
   let areasTd = null;   // áreas de anillo de la telediástole de referencia (anillosDe: del corazón, no del dibujo)
   const areasD = () => areasTd;
   // dónde va la muestra en cada caso: justo pasadas las valvas en las AV; justo por debajo en las sigmoideas
   const PRESETS = { mitral: { vista: 'a4c', n: 'mitral', off: 8 }, tsvi: { vista: 'a3c', n: 'aortica', off: -7 },
-    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
+    tricus: { vista: 'a4c', n: 'tricus', off: 8 }, regmitral: { vista: 'a4c', n: 'regMitral', off: 6 }, regtricus: { vista: 'a4c', n: 'regTricus', off: 6 }, pulmonar: { vista: 'psaxAo', n: 'pulmonar', off: -6 },
     // subcostal VCI: la VCI 3 cm por debajo del hiato y la suprahepática que mejor cae en el corte (VExUS)
     vci: { vista: 'scVci', vaso: 'vci' }, vpulm: { vista: 'a4c', venaPulm: true }, suprahep: { vista: 'scVci', vaso: 'hepatica' } };
   const PRESET_VISTA = { a4c: 'mitral', a3c: 'tsvi', psaxAo: 'pulmonar', scVci: 'suprahep' };
@@ -588,7 +588,7 @@ export function montarSimulador(raiz, opc = {}) {
     }
     else { const F = fuentesFlujo(refGeoTd.flujo, muestraTd(), areasD(), [], datosFlujo()), j = F.geom.find(x => x.n === pr.n); if (!j) return; p = sumV(j.c, escV(j.dir, pr.off)); }
     const [u, v] = enPlano(planoEco, p);
-    if (k === 'regmitral') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
+    if (k === 'regmitral' || k === 'regtricus') { $('#cv-d-escala').value = '250'; espectro.setEscala(250); }   // el chorro supera los 150 cm/s
     gate = { u, v }; reiniciarD(); marcarPreset(k);
   }
   $('#cv-d-presets').addEventListener('click', (e) => { const b = e.target.closest('[data-muestra]'); if (b) ponerMuestra(b.dataset.muestra); });
@@ -607,7 +607,7 @@ export function montarSimulador(raiz, opc = {}) {
   function actualizarMedidasD(pts, haz, F) {
     latidoD = motor.s.nLatido; fuenteD = fuenteEnMuestra(pts, haz, F); angD = null;
     if (fuenteD && fuenteD.tipo === 'valvula') { const j = F.geom.find(x => x.n === fuenteD.n); angD = Math.acos(Math.min(1, Math.abs(haz[0] * j.dir[0] + haz[1] * j.dir[1] + haz[2] * j.dir[2]))) * 180 / Math.PI; }
-    medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD) : null;
+    medD = fuenteD ? medidasLatido(curvaLatido(motor.onda, fuenteD, fuenteD.factor, areasD(), datosFlujo()), fuenteD, datosFlujo()) : null;
     pintarResultadoD();
   }
   // El renglón «fórmula → números → resultado» es de la app (core/formula.js); el laboratorio suelto no lo carga y deja el texto de siempre.
@@ -632,6 +632,12 @@ export function montarSimulador(raiz, opc = {}) {
         poner(okEA && okT ? 'ok' : 'warn', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · <b>E/A ${fx(medD.ea, 2)}</b> (normal 1-1,5 en la Ficha 5; 0,69-2,73 a 20-60 años en <a href="docs/nagueh-2025-funcion-diastolica-hfpef-ase.pdf#page=15" target="_blank" rel="noopener">Nagueh 2025 p. 551</a>: dos fuentes, sin elegir ganadora) · TDE ${fx(medD.tde)} ms (normal 140-250)`
           + `<br><span class="cv-muted">Referencias de la Ficha 5 de Fisiopatología UCI · Cardiología. Las velocidades son del modelo (flujo del motor entre el área del anillo); el TDE sale de la inercia de la sangre que cruza la mitral (calibrada en el motor).</span>`);
       } else poner('', cab + `E ${fx(medD.E)} cm/s · A ${fx(medD.A)} cm/s · E/A ${fx(medD.ea, 2)}<br><span class="cv-muted">La app no tiene todavía cifras de referencia del llenado tricuspídeo. Ilustrativo.</span>`);
+      return;
+    }
+    if (medD.tipo === 'regurgitacion' && medD.vIT != null) {
+      poner('warn', cab + `Chorro sistólico hacia la AD (se aleja de la sonda): en la muestra, <b>vIT ${fx(medD.vIT, 2)} m/s</b> · ITV ${fx(medD.itv, 1)} cm`
+        + (medD.psap != null ? `<br>PSAP estimada = 4·vIT² + PVC = <b>${fx(medD.psap)} mmHg</b> (normal: vIT ≤ 2,8 m/s; &gt; 3,4 m/s sugiere hipertensión pulmonar, <a href="docs/esc-ers-2022-hipertension-pulmonar-parte1.pdf" target="_blank" rel="noopener">ESC/ERS 2022</a>).` : '')
+        + `<br><span class="cv-muted">v = √(ΔP VD−AD / 4) con la presión del motor; en la muestra se mide v·cos θ y la PSAP se infraestima si el haz no está alineado con el chorro. Ilustrativo.</span>`);
       return;
     }
     if (medD.tipo === 'regurgitacion') {
