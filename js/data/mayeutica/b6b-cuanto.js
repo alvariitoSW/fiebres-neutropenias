@@ -352,10 +352,10 @@ export const MAYEUTICA_CUANTO = {
       { id: 'cu-ti-g6', corto: 'la pauta', tipo: 'test', fuente: 'mu-tia-tto · mu-tabla-48-4',
         enunciado: 'Sospechas déficit de tiamina en un paciente crítico. ¿Qué pauta pones?',
         opciones: [
-          { t: '500 mg IV/8 h 2-3 días; 100 mg/día 3-5 días; 100 mg/día', porque: 'El segundo escalón vuelve a la dosis convencional de 100 mg/día, que el libro considera inadecuada para corregir el déficit. Lo dejarías sin corregir (p. 11).' },
-          { t: '500 mg orales/8 h 2-3 días; 250 mg orales/día 3-5 días; 100 mg/día', porque: 'Al inicio se prefiere la vía intravenosa: la absorción oral es errática en el crítico. El tratamiento fallaría por mala absorción (p. 11).' },
-          { t: '500 mg IV/8 h 2-3 días; 250 mg IV/día 3-5 días; 100 mg/día', ok: true }],
-        explicacion: 'La dosis de 100 mg/día <span class="hl-rojo">no corrige</span> el déficit; la pauta es la de la Tabla 48.4 (500 mg IV/8 h, luego 250 mg IV/día y 100 mg/día), con la vía IV siempre al principio (' + pdf(9) + ' y ' + pdf(11) + ').' },
+          { t: '500 mg IV/8 h 2-3 días; 100 mg/día 3-5 días; 100 mg orales/8 h 1-2 semanas; 100 mg/día', porque: 'El segundo escalón vuelve a la dosis convencional de 100 mg/día, que el libro considera inadecuada para corregir el déficit. Lo dejarías sin corregir (p. 11).' },
+          { t: '500 mg orales/8 h 2-3 días; 250 mg orales/día 3-5 días; 100 mg orales/8 h 1-2 semanas; 100 mg/día', porque: 'Al inicio se prefiere la vía intravenosa: la absorción oral es errática en el crítico. El tratamiento fallaría por mala absorción (p. 11).' },
+          { t: '500 mg IV/8 h 2-3 días; 250 mg IV/día 3-5 días; 100 mg orales/8 h 1-2 semanas; 100 mg/día', ok: true }],
+        explicacion: 'La dosis de 100 mg/día <span class="hl-rojo">no corrige</span> el déficit; la pauta es la de la Tabla 48.4 (500 mg IV/8 h, luego 250 mg IV/día, 100 mg orales/8 h y 100 mg/día), con la vía IV siempre al principio (' + pdf(9) + ' y ' + pdf(11) + ').' },
     ],
     examen: [
       { id: 'cu-ti-e1', corto: 'shock séptico', tipo: 'test', fuente: 'mu-tia-otros',
