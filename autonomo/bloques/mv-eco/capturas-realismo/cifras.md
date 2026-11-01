@@ -10,7 +10,7 @@
 - Aorta: 72 mmHg · AP 13
 - Aurículas: AI 25 · AD 18 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
+- motor: FC 69 · PAM 86 · PA 105/67 · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## normal-psax (normal, psaxPm, dibujo 2)
@@ -23,7 +23,7 @@
 - Aorta: 72 mmHg · AP 13
 - Aurículas: AI 25 · AD 18 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
+- motor: FC 69 · PAM 86 · PA 105/67 · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## normal-plax (normal, plax, dibujo 2)
@@ -36,7 +36,7 @@
 - Aorta: 72 mmHg · AP 13
 - Aurículas: AI 25 · AD 18 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 120 mL · VD 138 mL
-- motor: FC 69 · PAM 86 · PA 105/undefined · GC 5.03 · PVC 4.3
+- motor: FC 69 · PAM 86 · PA 105/67 · GC 5.03 · PVC 4.3
 - pantalla: mezcla
 
 ## hp-a4c (hpcronica, g=1, a4c, dibujo 2)
@@ -49,7 +49,7 @@
 - Aorta: 70 mmHg · AP 43
 - Aurículas: AI 23 · AD 42 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 60 mL · VD 227 mL
-- motor: FC 94 · PAM 76 · PA 86/undefined · GC 3.02 · PVC 15.5
+- motor: FC 94 · PAM 76 · PA 86/67 · GC 3.02 · PVC 15.5
 - pantalla: mezcla
 
 ## hp-psax (hpcronica, g=1, psaxPm, dibujo 2)
@@ -62,7 +62,7 @@
 - Aorta: 70 mmHg · AP 43
 - Aurículas: AI 23 · AD 42 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 60 mL · VD 227 mL
-- motor: FC 94 · PAM 76 · PA 86/undefined · GC 3.02 · PVC 15.5
+- motor: FC 94 · PAM 76 · PA 86/67 · GC 3.02 · PVC 15.5
 - pantalla: mezcla
 
 ## tep-a4c (tep, g=1, a4c, dibujo 2)
@@ -75,7 +75,7 @@
 - Aorta: 57 mmHg · AP 23
 - Aurículas: AI 29 · AD 32 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 46 mL · VD 218 mL
-- motor: FC 118 · PAM 59 · PA 66/undefined · GC 2.37 · PVC 9.4
+- motor: FC 118 · PAM 59 · PA 66/53 · GC 2.37 · PVC 9.4
 - pantalla: mezcla
 
 ## tep-psax (tep, g=1, psaxPm, dibujo 2)
@@ -88,7 +88,7 @@
 - Aorta: 57 mmHg · AP 23
 - Aurículas: AI 29 · AD 32 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 46 mL · VD 218 mL
-- motor: FC 118 · PAM 59 · PA 66/undefined · GC 2.37 · PVC 9.4
+- motor: FC 118 · PAM 59 · PA 66/53 · GC 2.37 · PVC 9.4
 - pantalla: mezcla
 
 ## dilatada-a4c (dilatada, g=1, a4c, dibujo 2)
@@ -101,7 +101,7 @@
 - Aorta: 73 mmHg · AP 31
 - Aurículas: AI 71 · AD 22 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 211 mL · VD 155 mL
-- motor: FC 85 · PAM 80 · PA 92/undefined · GC 3.75 · PVC 9.3
+- motor: FC 85 · PAM 80 · PA 92/68 · GC 3.75 · PVC 9.3
 - pantalla: mezcla
 
 ## derrame-sc4c (derrame, g=1, sc4c, dibujo 2)
@@ -114,7 +114,7 @@
 - Aorta: 58 mmHg · AP 14
 - Aurículas: AI 30 · AD 18 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 44 mL · VD 46 mL
-- motor: FC 118 · PAM 60 · PA 66/undefined · GC 2.36 · PVC 10
+- motor: FC 118 · PAM 60 · PA 66/54 · GC 2.36 · PVC 10
 - pantalla: mezcla
 
 ## hipertrofia-plax (hipertrofia, g=1, plax, dibujo 2)
@@ -127,7 +127,7 @@
 - Aorta: 75 mmHg · AP 29
 - Aurículas: AI 50 · AD 23 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 88 mL · VD 162 mL
-- motor: FC 76 · PAM 84 · PA 97/undefined · GC 3.63 · PVC 6.5
+- motor: FC 76 · PAM 84 · PA 97/71 · GC 3.63 · PVC 6.5
 - pantalla: mezcla
 
 ## hp-a4c-dibujo-hoy (hpcronica, g=1, a4c, dibujo 1)
@@ -140,7 +140,7 @@
 - Aorta: 70 mmHg · AP 43
 - Aurículas: AI 23 · AD 42 mL
 - VI/VD telediastólico (el que dibuja la imagen): VI 60 mL · VD 227 mL
-- motor: FC 94 · PAM 76 · PA 86/undefined · GC 3.02 · PVC 15.5
+- motor: FC 94 · PAM 76 · PA 86/67 · GC 3.02 · PVC 15.5
 - pantalla: mezcla
 
 ## Errores de consola
