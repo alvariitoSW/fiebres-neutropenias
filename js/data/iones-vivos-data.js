@@ -9,7 +9,7 @@ export const MG_REPARTO = [['Hueso', 53, 1060], ['Músculo', 27, 540], ['Tejido 
 
 // Lo que escribimos nosotros como parámetro del dibujo (ilustrativo; la fuente da la dirección, no el tamaño)
 export const P = {
-  kInsulina: 0.5, mgInsulina: 0.12, poInsulina: 0.9,   // cuánto baja el suero cada dosis de «realimentar» (E p. 21, 34, 49: la dirección)
+  kInsulina: 0.6, mgInsulina: 0.12, poInsulina: 0.9,   // cuánto baja el suero cada dosis de «realimentar» (E p. 21, 34, 49: la dirección; K⁺ 0,6: la bajada mínima de la insulina, p. 28)
   kFurosemida: 20, mgFurosemida: 6,                     // mEq que se van por la orina en cada dosis (E p. 33-34: la dirección)
   mgPendiente: 0.0035, mgBase: 1.45,                    // mEq/L de Mg por cada mEq de déficit total; Mg normal ~1,4 (E p. 32, ejemplo 1,7 mg/dL = 1,4 mEq/L)
   phK: 3, phCa: 2.0,                                    // K sérico y Ca iónico por cada unidad de pH (E p. 20 flechas; p. 44)
