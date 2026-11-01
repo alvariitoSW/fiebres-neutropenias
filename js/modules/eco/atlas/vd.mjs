@@ -89,11 +89,13 @@ export function indiceExcentricidad(g, z) {
 // nivel del eje corto de los papilares (ecografia.mjs, VISTAS.psaxPm): −0,45 de la longitud del VI telediastólico
 const nivelPm = (g) => -0.45 * g.vi.L;
 
-/** Muestras clave del último latido: telediástole (VI lleno), telesístole del VI (final de su relajación isovolumétrica, VI
- *  todavía en su volumen mínimo) y el máximo y el mínimo del VD. */
+/** Muestras clave del último latido: telediástole (VI lleno), telesístole del VI y el máximo y el mínimo del VD. Telesístole según
+ *  Lang 2015 (p. 6): «the frame after aortic valve closure or the frame in which the cardiac dimension or volume is smallest»; aquí, la
+ *  muestra de volumen mínimo del VI. (Antes era la última muestra de la relajación isovolumétrica: la apertura mitral, con la pVI ya
+ *  en ~4 mmHg; eso no es telesístole.) */
 export function muestrasClave(o) {
   const td = o.reduce((a, x) => (x.vvi > a.vvi ? x : a));
-  const iE = o.filter(x => x.fase === 'E'), es = iE.length ? iE[iE.length - 1] : o.reduce((a, x) => (x.vvi < a.vvi ? x : a));
+  const es = o.reduce((a, x) => (x.vvi < a.vvi ? x : a));
   return { td, es, tdD: o.reduce((a, x) => (x.vvd > a.vvd ? x : a)), tsD: o.reduce((a, x) => (x.vvd < a.vvd ? x : a)) };
 }
 
