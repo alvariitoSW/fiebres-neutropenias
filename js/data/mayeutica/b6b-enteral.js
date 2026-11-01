@@ -158,8 +158,8 @@ export const MAYEUTICA_ENTERAL = {
       { id: 'en-f-g1', corto: 'densidad y diarrea', tipo: 'test', fuente: 'mu-for-densidad · mu-tabla-49-2',
         enunciado: 'No hay restricción de líquidos. ¿Por qué eliges una fórmula de 1-1,2 kcal/mL y no una de 2?',
         opciones: [
-          { t: 'Porque las de 2 kcal/mL llevan menos proteína que las estándar en cada litro', porque: 'Twocal HN lleva 84 g/L, más que las estándar de 35-65 g/L (p. 20). Elegirías por un motivo falso y desaprovecharías una fórmula útil cuando haya que restringir volumen.' },
           { t: 'Porque a más densidad, más osmolalidad, y eso promueve la diarrea', ok: true },
+          { t: 'Porque las de 2 kcal/mL llevan menos proteína que las estándar en cada litro', porque: 'Twocal HN lleva 84 g/L, más que las estándar de 35-65 g/L (p. 20). Elegirías por un motivo falso y desaprovecharías una fórmula útil cuando haya que restringir volumen.' },
           { t: 'Porque las de 2 kcal/mL no cubren el gasto en reposo', porque: 'Cubren el mismo gasto con menos volumen; por eso se usan con restricción de líquidos, no porque no alcancen (p. 20).' }],
         explicacion: 'Las fórmulas de 1 y 1,2 kcal/mL son las habituales porque las más densas tienen <span class="hl-rojo">mayor osmolalidad</span> y promueven diarrea: Osmolite 1.2 tiene 360 mOsm/kg y Twocal HN, 710. Las de 1,5-2 kcal/mL, si el líquido es una prioridad (' + pdf(20) + ').' },
       { id: 'en-f-g2', corto: 'omega-3 y arginina', tipo: 'destapa', fuente: 'mu-for-omega3 · mu-for-pescado-uso · mu-for-arginina',
@@ -182,8 +182,8 @@ export const MAYEUTICA_ENTERAL = {
       { id: 'en-f-e1', corto: 'dos fibras', tipo: 'test', fuente: 'mu-for-fibra',
         enunciado: 'Un residente dice que toda la fibra de la fórmula «hace lo mismo». ¿Qué le corriges?',
         opciones: [
-          { t: 'La fermentable da butirato, combustible del colonocito; la no fermentable retiene agua y ablanda las heces', ok: true },
           { t: 'La fermentable retiene agua en la luz y ablanda las heces; la no fermentable alimenta al colonocito con butirato', porque: 'Los papeles están al revés: la que fermentan las bacterias da los ácidos grasos de cadena corta (butirato) y la otra crea la fuerza osmótica (p. 21).' },
+          { t: 'La fermentable da butirato, combustible del colonocito; la no fermentable retiene agua y ablanda las heces', ok: true },
           { t: 'Las dos son fermentables y hacen lo mismo; solo cambia la cantidad de fibra por litro de fórmula', porque: 'Hay dos tipos con efecto distinto, y las fórmulas llevan una mezcla (la de más fibra es Jevity). Con ese error esperarías de la fibra un efecto que no tiene (p. 21).' }],
         explicacion: '<span class="hl-azul">Fermentable</span>: butirato como combustible del colonocito y crecimiento de microbios no patógenos. <span class="hl">No fermentable</span>: residuo osmótico que aumenta el agua de las heces (' + pdf(21) + ').' },
       { id: 'en-f-e2', corto: 'qué lleva la fórmula', tipo: 'error', fuente: 'mu-for-hc · mu-for-lipidos · mu-for-omega3',
@@ -212,8 +212,8 @@ export const MAYEUTICA_ENTERAL = {
             pregunta: { id: 'en-f-c2', tipo: 'test', fuente: 'mu-for-densidad · mu-tabla-49-2',
               enunciado: 'Diarrea acuosa con la fórmula puesta. ¿Qué rasgo de la fórmula la explica?',
               opciones: [
-                { t: 'Su alta osmolalidad (710 mOsm/kg) arrastra agua a la luz', ok: true },
                 { t: 'Que lleva poca fibra (5 g/L) para ablandar y regular el tránsito', porque: 'La fibra no es el problema ni la solución: las fórmulas con fibra mezclan fermentable y no fermentable y no aportan ventaja en la diarrea (p. 32).' },
+                { t: 'Su alta osmolalidad (710 mOsm/kg) arrastra agua a la luz', ok: true },
                 { t: 'Que lleva proteína entera (polimérica) y no predigerida', porque: 'El texto no responsabiliza a la proteína entera: son las fórmulas hiperosmolares las que pueden causar diarrea acuosa (p. 32).' }],
               explicacion: 'Las fórmulas suelen ser <span class="hl-rojo">hiperosmolares</span> y arrastran agua a la luz del intestino (' + pdf(32) + '); la Tabla 49.2 da 710 mOsm/kg a Twocal HN (' + pdf(20) + ').' } },
           { momento: 'Día 10 · el plan', datos: { Dilema: 'la diarrea pide menos osmolalidad, el volumen pide más densidad' }, nuevo: ['Dilema'],
