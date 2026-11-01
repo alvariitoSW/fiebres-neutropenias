@@ -53,7 +53,7 @@ export const RECETAS_3D_G4 = {
                 { titulo: 'Alto flujo', color: 'dorado', nodos: [
                     { fuente: '#nep-reservorio', etiqueta: 'Reservorio: teórica 100 %, real ≈80 %' },
                     { fuente: '#nep-arrastre', etiqueta: 'Arrastre: FiO₂ constante; flujo total ≥60 L/min' },
-                    { fuente: '#nep-oxymask', etiqueta: 'OxyMask: O₂ alto con flujo bajo' }] }
+                    { fuente: '#nep-oxymask', etiqueta: 'OxyMask: O₂ alto con flujo bajo; sin más ventajas que el alto flujo' }] }
             ] },
             { tipo: 'flujo', titulo: 'Alto flujo nasal: del mezclador al volumen espiratorio', nodos: [
                 { fuente: '#nep-hfno-diseno', etiqueta: 'Mezclador: FiO₂ y flujo por separado', color: 'dorado' },

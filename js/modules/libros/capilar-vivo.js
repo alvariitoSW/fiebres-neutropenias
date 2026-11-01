@@ -47,13 +47,13 @@ function decir(html, fuente, ilu) {
     $('lamina').setAttribute('aria-label', fraseEl.textContent);
     if (!REDUCIR && fraseEl.animate) fraseEl.animate([{ opacity: 0.3, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 350, easing: 'ease-out' });
 }
-// El tope del O₂ (Tabla 21.4, p. 66-67): en los estados de las ROS, O₂ de más con SaO₂ ≥90 % agrava la lesión neurológica
+// El tope del O₂ (Tabla 21.4, p. 66-67): solo en el estado del posparo (reperfusión), no en el estallido del neutrófilo, O₂ de más con SaO₂ ≥90 % agrava la lesión neurológica
 let tope = null, topeVisto = '';
 function topeOxigeno() {
     const bn = document.querySelector('[data-cpv-lupa="neutrofilo"]'); if (bn) bn.hidden = !estado.ros;
     if (!tope) return;
-    const exceso = !!estado.ros && estado.pao2 > estadoBase().pao2 && D.R.sao2 >= 90;
-    const firma = estado.ros ? (exceso ? 'sello' : 'aviso') : '';
+    const exceso = estado.ros === 'reperfusion' && estado.pao2 > estadoBase().pao2 && D.R.sao2 >= 90;
+    const firma = estado.ros === 'reperfusion' ? (exceso ? 'sello' : 'aviso') : '';
     if (firma === topeVisto) return; topeVisto = firma;
     tope.quitar('hiperoxia');
     // solo aviso, nunca sello: la fuente no da un techo de PaO₂ ni una consecuencia medida; da el criterio de uso (O₂ solo si SaO₂ <90 %)
@@ -115,7 +115,7 @@ function fraseDe(prev, e) {
     // La anemia con el gasto fijo (la cuenta del cap. 9): el cap. 12 dice que el corazón compensa (corrección del bloque 2)
     const siCompensa = ' <button type="button" class="cpv-ir-estado" data-cpv-ir-estado="anemia-compensada">¿Y si el corazón compensa? →</button>';
     if (cambio('hb')) return e.hb === 7.5 && e.pao2 === 90 ? [`Con la Hb a la mitad, <span class="hl-rojo">la fila tiene huecos</span> y el contenido cae a la mitad: de 20 a ${Math.round(D.cao2)} mL/dL. <b>Con el gasto fijo</b> (si el corazón no compensara), cada hematíe soltaría más: la extracción llegaría al ${R.dif} %.${siCompensa}`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2) · la fila: ilustrativa'] : [`Hb ${dec(e.hb, 1)} con el gasto fijo: CaO₂ ${dec(R.cao2, 1)} mL/dL y aporte ${mil(R.do2)} mL/min (con Hb 15, 20 y 985).${e.hb < 15 ? siCompensa : ''}`, 'ficha · mar-cao2-9 · mar-do2'];
-    if (e.ros && cambio('pao2') && e.pao2 > estadoBase().pao2 && R.sao2 >= 90) return [`PaO₂ ${e.pao2}, SaO₂ ${R.sao2} %: <span class="hl-rojo">O₂ sin indicación</span>: solo si la SaO₂ es &lt;90 % (Tabla 21.4).`, 'ficha · mc-posresucitacion#mc-tabla-21-4 · p. 66 · PaO₂ por encima de la base: ilustrativa'];
+    if (e.ros === 'reperfusion' && cambio('pao2') && e.pao2 > estadoBase().pao2 && R.sao2 >= 90) return [`PaO₂ ${e.pao2}, SaO₂ ${R.sao2} %: <span class="hl-rojo">O₂ sin indicación</span>: solo si la SaO₂ es &lt;90 % (Tabla 21.4).`, 'ficha · mc-posresucitacion#mc-tabla-21-4 · p. 66 · PaO₂ por encima de la base: ilustrativa'];
     if (cambio('pao2')) return e.pao2 === 45 ? [`PaO₂ a la mitad: SaO₂ ${R.sao2} %, CaO₂ ${Math.round(D.cao2)} mL/dL: <span class="hl">solo un 20 % menos</span>.`, 'ficha · mar-anemia-hipoxemia (Fig. 9.2)'] : e.pao2 >= 60 ? [`PaO₂ ${e.pao2}: SaO₂ ${R.sao2} %. <span class="hl">Casi no cambia: estás en la parte plana</span> de la curva.`, 'ficha · mar-curva-forma · curva: fisiología general'] : [`PaO₂ ${e.pao2}: ya en la parte empinada; la SaO₂ cae deprisa (${R.sao2} %).`, 'ficha · mar-curva-forma · curva: fisiología general'];
     if (cambio('gc') || (prev && prev.frio !== e.frio)) {
         if (D.porAporte) return [`El aporte cayó a ${mil(R.do2)} mL/min: los hematíes <span class="hl-rojo">salen con la mitad de las perlas vacías</span> (extracción del 50 %, SvO₂ ${R.svo2} %) y el consumo ya depende del aporte (VO₂ ${R.vo2}).`, 'ficha · mar-extraccion-curva (Fig. 9.3)'];

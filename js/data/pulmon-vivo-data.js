@@ -415,7 +415,7 @@ ESTADOS['disparo-inverso'] = {
 ESTADOS.hfno = {
   tit: 'Alto flujo nasal: la cánula que lava el espacio muerto', pac: 'elvira', pmus: true, hfno: true, seg: 8,
   resp: { ...RESP_E4, modo: 'psv', ps: 0, peep: 0, frEsp: 28, pmus: 14, tin: 1 }, pulmon: { c: 40, r: 8 }, man: {},
-  frase: 'Sin respirador: la cánula solo aporta flujo. Sube el flujo y mira qué le pasa a la FiO₂ que llega al alvéolo y al esfuerzo de Elvira.',
+  frase: 'Sin respirador: la cánula solo aporta flujo. Sube el flujo y mira qué le pasa a la FiO₂ que llega al alvéolo y al esfuerzo de Elvira. Con la boca cerrada deja 2-3 cmH₂O de PEEP; abierta, 0: no es VNI (Marino cap. 25, p. 65).',
   guia: [
     { t: 'Elvira respira por su cuenta, sin presión de soporte ni PEEP: la cánula nasal de alto flujo es lo único que le llega. Con 10 L/min no se distingue de una cánula convencional: mucho esfuerzo (Pmus 14) y FR de 28.', org: 'ficha (cánula de alto flujo: Marino cap. 25 p. 64) · Pmus 14 y FR 28: ilustrativo', s: ['pmus:insp', '#pul-esc-pantalla'], c: C.hfnoDiseno },
     { t: 'La FiO₂ que llega al alvéolo no es la del mando: es el balance entre el flujo de O₂ de la cánula y el flujo inspiratorio de la paciente. Si ella inspira más de lo que da la cánula, el sobrante lo toma de la habitación y la FiO₂ baja. Marino cifra el flujo inspiratorio en unos 15 L/min en reposo y hasta 120 en insuficiencia respiratoria.', org: 'ficha (Marino cap. 25 p. 61) · la cifra de la casilla FiO₂: ilustrativo (mezcla lineal)', s: ['[data-fila="fio2"]', 'flujo:insp'], c: C.flujoFio2 },

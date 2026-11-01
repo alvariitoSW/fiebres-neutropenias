@@ -8,7 +8,7 @@ export const RECETAS_3D_G4B = {
             { tipo: 'flujo', titulo: 'Figura 25.6: del O₂ al agua, un electrón cada vez', nodos: [
                 { fuente: '#nep-tox-fig-25-6', etiqueta: 'O₂ + 1 e⁻ → superóxido (radical)', color: 'amarillo' },
                 { fuente: '#nep-tox-fig-25-6', etiqueta: 'Superóxido + 1 e⁻ + 2H⁺ (SOD) → peróxido de hidrógeno', color: 'dorado' },
-                { fuente: '#nep-tox-fig-25-6', etiqueta: 'H₂O₂ + 1 e⁻ (Fe²⁺ → Fe³⁺) → hidroxilo (radical)', color: 'rojo' },
+                { fuente: '#nep-tox-fig-25-6', etiqueta: 'H₂O₂ + 1 e⁻ (Fe²⁺ → Fe³⁺) → hidroxilo (radical) + ion OH⁻', color: 'rojo' },
                 { fuente: '#nep-tox-fig-25-6', etiqueta: 'Hidroxilo + 1 e⁻ + 2H⁺ → 2 H₂O', color: 'verde' },
                 { fuente: '#nep-tox-porcentaje', etiqueta: 'Normal: ≥95 % llega a agua; ~3 % deja ROS', color: 'gris' }
             ] },
