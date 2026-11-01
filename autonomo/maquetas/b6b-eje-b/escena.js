@@ -1,6 +1,6 @@
 // Eje B · la escena (SVG 390×300): arriba el enfermo en la cama con suero, noradrenalina y termómetro y sus dos lupas; abajo la lupa abierta
 // con el eje de tres estaciones (óvalo = hipotálamo, gota = hipófisis, triángulo sobre riñón = suprarrenal, mariposa = tiroides).
-import { eje, FILAS, PROD } from './modelo.js';
+import { eje, FILAS, PROD, acthVals } from './modelo.js';
 export const ZONAS = { cuello: [28, 44, 58, 50], rinon: [78, 44, 60, 66], suero: [256, 4, 74, 98], termo: [334, 4, 52, 100], eje: [4, 126, 382, 170] };
 const CX = [48, 143, 238, 333], CY = 176;
 const niv = (v) => (v > .7 ? '↑' : v < .25 ? '↓' : 'N');
@@ -39,10 +39,12 @@ function barraCortisol(s, a) {
   let h = rb(0, 10, 'b-r') + rb(10, 35, 'b-a') + rb(35, 60, 'b-v');
   h += T(20, 170, '0', 'min', 'middle') + T(x(10), 170, '10', 'min', 'middle') + T(x(35), 170, '35', 'min', 'middle') + T(366, 170, '60', 'min', 'end');
   h += T(x(5), 238, 'supresión', 'min', 'middle') + T(x(22.5), 238, 'indeterminado', 'min', 'middle') + T(x(47.5), 238, 'adecuada', 'min', 'middle');
-  if (s.pac !== 'bibiana') return h + T(14, 258, s.pac === 'toribio' ? 'No hace falta medirlo: se trata ya (ficha p. 51)' : 'Cortisol no pedido en este caso', 'rot');
-  h += `<path class="pt" d="M${x(22) - 5} 207 h10 l-5 -10 z"/>` + T(x(22), 218, '22', 'rot', 'middle');
-  if (s.acth) h += `<path class="pt hueco" d="M${x(28) - 5} 207 h10 l-5 -10 z"/>` + T(x(28) + 14, 218, '28', 'rot', 'middle') + T(14, 254, 'Tras 250 µg de ACTH sube 6: menos de 9 = supresión.', 'rot') + T(14, 267, 'Con 9 o más, no descarta la secundaria.', 'min');
+  const av = acthVals(s);
+  if (!av || (s.pac !== 'bibiana' && !s.acth)) return h + T(14, 258, s.pac === 'toribio' ? 'No hace falta medirlo: se trata ya (ficha p. 51)' : 'Cortisol no pedido en este caso', 'rot');
+  h += `<path class="pt" d="M${x(av.b) - 5} 207 h10 l-5 -10 z"/>` + T(x(av.b), 218, String(av.b), 'rot', 'middle');
+  if (s.acth) h += `<path class="pt hueco" d="M${x(av.post) - 5} 207 h10 l-5 -10 z"/>` + T(x(av.post) + 14, 218, String(av.post), 'rot', 'middle') + T(14, 254, `Tras 250 µg de ACTH sube ${av.d}: ${av.d < 9 ? 'menos de 9 = supresión.' : '9 o más: respuesta normal.'}`, 'rot') + T(14, 267, 'Con 9 o más, no descarta la secundaria.', 'min');
   else h += T(14, 254, 'Entre 10 y 35 no decide: mide la ACTH o haz la prueba.', 'rot');
+  if (s.pac !== 'bibiana') return h;
   return h + T(14, 284, `Necesita ≈${PROD[s.estres]} mg/día (15-25 en reposo, 350 máx.: ficha p. 48)`, 'min dim');
 }
 const filaDe = (lb) => { const a = lb.t4 > 1.8 ? 'u' : lb.t4 < 0.8 ? 'd' : 'n', b = lb.tsh > 4.5 ? 'u' : lb.tsh < 0.3 ? 'd' : 'n'; return { nn: 'normal', ud: 'hyper', nd: 't3tox', un: 'hiperx', du: 'hipoP', dd: 'hipoS', dn: 'euS' }[a + b]; };

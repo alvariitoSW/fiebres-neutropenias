@@ -3,15 +3,15 @@
 import { crearTope } from '../../../js/core/tope.js';
 import { seguirFrase } from '../../../js/core/frase-vista.js';
 import { PRES, IDEA, IMG, PDF, cita, REF, FUENTES, NOTAS, PROFUNDIZAR, CRECERA, GUIAS } from './datos.js';
-import { nuevo, leer, topes, clamp, toribioRet, PROD, U } from './modelo.js';
+import { nuevo, leer, topes, clamp, toribioRet, PROD, U, acthVals } from './modelo.js';
 import { escena, focoSvg } from './escena.js';
-import { APUESTAS, ERRORES, CASO } from './pruebas.js';
+import { APUESTAS, ERRORES, CASOS } from './pruebas.js';
 const $ = (id) => document.getElementById(id);
 const REDUCIR = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const num = (x) => String(x).replace('.', ',');
 let s = nuevo('toribio'), modo = 'explorar', oculto = false, preset = 'toribio', lup = 'sr', foco = null, topeApi, firma = '', guiaI = 0, guiaC = null, vista = 'eje';
-const NOTRATA = { fulgencio: 'eutiro', policarpo: 'hiperx' };
-const CLAVES = ['vol', 'nat', 'na2', 'tormenta', 'fc140', 'mixedema', 'levo', 'yodo', 'eutiro', 'asma', 'ptu', 'prop', 'imposible', 'hiperx', 'amio', 'dia', 'estresMax', 'estres2', 'sincob', 'retirar'];
+const NOTRATA = { fulgencio: 'eutiro', get policarpo() { return s.farm === 'amio' || s.farm === 'hep' ? 'hiperx' : ''; } };
+const CLAVES = ['vol', 'nat', 'na2', 'tormenta', 'fc140', 'mixedema', 'levo', 'yodo', 'eutiro', 'asma', 'ptu', 'prop', 'imposible', 'hiperx', 'amio', 'dia', 'estresMax', 'estres2', 'sincob', 'retirar', 'deltaBajo', 'deltaAlto', 'farmEje', 'rebote'];
 const cit = (c) => (c && c.p ? cita(c.p, c.f) : '');
 const frase = (t, o) => { $('frase-txt').innerHTML = `${t} <span class="org">${o}</span>`; };
 function aplicarTopes(L) {
@@ -37,6 +37,8 @@ function pintar() {
   document.querySelectorAll('[data-bb]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.bb === s.bb)));
   $('b-vol').textContent = `Suero +500 mL · ${num(s.vol / 1000)} L`; $('o-na').textContent = `NA ${num(s.na.toFixed(1))} µg/kg/min`;
   $('b-hc').textContent = s.hc ? 'Hidrocortisona dada ✔' : s.pac === 'lucrecia' ? 'Hidrocortisona 300 mg + 100 mg/8 h' : 'Hidrocortisona 100 mg/8 h'; $('b-hc').setAttribute('aria-pressed', String(!!s.hc)); $('b-hc').disabled = !!s.hc;
+  $('mando-acth').hidden = !acthVals(s); $('b-acth').disabled = s.acth; $('b-acth').setAttribute('aria-pressed', String(s.acth)); $('b-acth').textContent = s.acth ? 'Prueba de ACTH hecha ✔' : 'Prueba de ACTH 250 µg';
+  $('mando-farm').hidden = s.pac !== 'policarpo'; document.querySelectorAll('[data-farm]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.farm === s.farm)));
   $('b-yodo').setAttribute('aria-pressed', String(s.yodo)); $('b-yodo').textContent = s.yodo ? 'Yodo puesto ✔' : 'Yodo 5 gotas/6 h';
   $('b-levo').setAttribute('aria-pressed', String(s.hor === 'levo')); $('b-lio').setAttribute('aria-pressed', String(s.hor === 'lio'));
   $('b-asma').hidden = s.pac !== 'lucrecia'; $('b-asma').setAttribute('aria-pressed', String(s.crisis)); $('b-asma').textContent = s.crisis ? 'Crisis de asma: sí' : 'Crisis de asma: no';
@@ -69,7 +71,8 @@ function dosis(a, v) {
     d1: [relojFrase(), 'el reloj y cuánto cambia: ilustrativo · sentido: ficha p. 51-57'], d7: [relojFrase(), 'el reloj y cuánto cambia: ilustrativo · sentido: ficha p. 51-57'], retg: [relojFrase(), 'el reloj y cuánto cambia: ilustrativo · sentido: ficha p. 51'],
     ret: ['Retirada gradual de la hidrocortisona: se hace al resolverse la causa, sin vasopresor y con el lactato normal.', 'ficha p. 51'],
     'es+': [`Estrés ${s.estres}: sube la demanda de cortisol; una glándula sana llega como mucho a 350 mg/día.`, 'ficha p. 48 · cuánto cae la PA sin cobertura: ilustrativo'], 'es-': [`Estrés ${s.estres}: baja la demanda de cortisol.`, 'ficha p. 48'],
-    acth: ['Prueba de ACTH, 250 µg: el cortisol de Bibiana sube de 22 a 28, un aumento de 6, menor de 9 µg/dL: supresión.', 'ficha p. 50-51 · las cifras de Bibiana son del caso'],
+    acth: (() => { const q = acthVals(s); return q ? [`Prueba de ACTH, 250 µg: el cortisol sube de ${q.b} a ${q.post} µg/dL, un aumento de ${q.d}${q.d < 9 ? ', menor de 9: supresión' : ', de 9 o más: no descarta la secundaria'}.`, 'ficha p. 50-51 · cifras ilustrativas'] : null; })(),
+    farm: [`${{ amio: 'Amiodarona', hep: 'Heparina', eto: 'Etomidato', keto: 'Ketoconazol' }[v]}: ${{ amio: 'bloquea la conversión de T4 a T3; T4 alta, TSH normal y T3 baja. No se trata.', hep: 'activa la lipoproteína lipasa y los ácidos grasos libres desplazan la T4: T4 alta con TSH normal. No se trata.', eto: 'inhibe la síntesis de cortisol: cortisol bajo y ACTH alta.', keto: 'inhibe la síntesis de cortisol: cortisol bajo y ACTH alta.' }[v]}`, 'ficha p. 50 y 54'],
     pat: [s.pat === 't3tox' ? 'T3-toxicosis: T4 libre normal con TSH baja (Tabla 51.2).' : s.pat === 'hipoS' ? 'Hipotiroidismo secundario: T4 libre baja con TSH baja, el fallo es hipotálamo-hipofisario.' : 'El laboratorio del caso.', 'ficha, Tabla 51.2 (p. 53) · las cifras son ilustrativas'], lio: ['Liotironina IV: carga de 5-20 µg y 2,5-10 µg cada 8 h hasta que despierte.', 'ficha p. 57'],
   };
   return m[a === 'atd' || a === 'bb' ? v : a];
@@ -83,7 +86,7 @@ function hacer(a, v) {
   else if (a === 'retg') { s.dia = Math.min(U.dia, s.dia + 3); s.na = 0; }
   else if (a === 'ret') { if (s.pac === 'toribio' && s.hc && !toribioRet(s, leer(s))) s.ret = true; }
   else if (a === 'es+') s.estres = Math.min(3, s.estres + 1); else if (a === 'es-') s.estres = Math.max(0, s.estres - 1);
-  else if (a === 'acth') s.acth = true; else if (a === 'pat') s.pat = v;
+  else if (a === 'farm') { s.farm = v; s.acth = false; lup = v === 'eto' || v === 'keto' ? 'sr' : 'ti'; } else if (a === 'acth') { s.acth = true; lup = 'sr'; } else if (a === 'pat') s.pat = v;
   else if (a === 'atd') { if (NOTRATA[s.pac] && v !== 'ninguno') s.intento = NOTRATA[s.pac]; else { s.atd = v; s.atdD = v === 'ninguno' ? null : s.dia; } }
   else if (a === 'yodo') { if (NOTRATA[s.pac]) s.intento = NOTRATA[s.pac]; else if (s.atd === 'ninguno') s.intento = 'yodo'; else { s.yodo = !s.yodo; s.yodoD = s.yodo ? s.dia : null; } }
   else if (a === 'bb') { if (s.crisis && v !== 'ninguno') s.intento = 'bb'; else { s.bb = v; s.bbD = v === 'ninguno' ? null : s.dia; } }
@@ -113,17 +116,17 @@ function modoPrueba(m, k = 0) {
   if (m === 'explorar') { oculto = false; vista = 'eje'; return pintar(); }
   if (m === 'apuesta') { const A = APUESTAS[k % APUESTAS.length]; caja.dataset.k = k % APUESTAS.length; s = nuevo(A.p); lup = PRES[A.p].lup; vista = A.vista; oculto = true; caja.innerHTML = `<h3>Apuesta</h3><p class="enun">${A.enun}</p>${opsHtml(A.ops)}`; }
   if (m === 'error') { const E = ERRORES[k % ERRORES.length]; caja.dataset.k = k % ERRORES.length; s = nuevo(E.p); lup = E.lup; vista = 'eje'; oculto = false; caja.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${E.enun}</p>${opsHtml(E.fr, '<button type="button" class="op neutra" data-nada="1">No hay ningún error</button>')}`; }
-  if (m === 'caso') { oculto = false; lup = 'ti'; return paso(0); }
+  if (m === 'caso') { oculto = false; caja.dataset.k = k % CASOS.length; lup = CASOS[k % CASOS.length].lup; return paso(0); }
   pintar();
 }
-function paso(i) { const p = CASO.pasos[i]; s = { ...nuevo('obdulia'), ...p.e }; vista = p.vista; $('prueba').dataset.paso = i; $('prueba').dataset.fin = ''; $('prueba').innerHTML = `<h3>Caso · ${CASO.titulo} · paso ${i + 1} de ${CASO.pasos.length}</h3><p class="enun">${p.enun}</p>${opsHtml(p.ops)}`; pintar(); }
+function paso(i) { const C = CASOS[+$('prueba').dataset.k], p = C.pasos[i]; s = { ...nuevo(C.pac), ...p.e }; vista = p.vista; $('prueba').dataset.paso = i; $('prueba').dataset.fin = ''; $('prueba').innerHTML = `<h3>Caso · ${C.titulo} · paso ${i + 1} de ${C.pasos.length}</h3><p class="enun">${p.enun}</p>${opsHtml(p.ops)}`; pintar(); }
 $('prueba').addEventListener('click', (ev) => {
   const sig = ev.target.closest('[data-sig]'); if (sig) return paso(+sig.dataset.sig);
   const otro = ev.target.closest('[data-otro]'); if (otro) return modoPrueba(otro.dataset.otro, +$('prueba').dataset.k + 1);
   const b = ev.target.closest('.op'); if (!b || b.disabled) return; const i = +b.dataset.i, caja = $('prueba'), r = caja.querySelector('.resp');
   const dar = (o, ok, acum) => { b.classList.add(ok ? 'bien' : 'mal'); const h = `<p class="por ${ok ? 'ok' : 'no'}">${ok ? '✔ ' : '✖ '}${o[2]} ${cita(o[3], o[4])}</p>`; if (acum) r.insertAdjacentHTML('beforeend', h); else r.innerHTML = h; };
   const cerrar = () => { caja.querySelectorAll('.op').forEach((x) => (x.disabled = true)); caja.dataset.fin = '1'; };
-  const otra = (que, n) => { if (n > 1) r.insertAdjacentHTML('beforeend', `<button type="button" class="b prim" data-otro="${que}">Otra ${que === 'apuesta' ? 'apuesta' : 'nota'}</button>`); };
+  const otra = (que, n) => { if (n > 1) r.insertAdjacentHTML('beforeend', `<button type="button" class="b prim" data-otro="${que}">Otra ${que === 'apuesta' ? 'apuesta' : que === 'caso' ? 'historia' : 'nota'}</button>`); };
   if (modo === 'apuesta') { const A = APUESTAS[+caja.dataset.k], o = A.ops[i]; dar(o, o[1]); cerrar(); oculto = false; if (o[1]) Object.assign(s, A.fin); pintar(); if (o[1]) secuencia(); otra('apuesta', APUESTAS.length); }
   else if (modo === 'error') {
     const E = ERRORES[+caja.dataset.k], n = E.fr.filter((x) => x[1]).length;
@@ -131,14 +134,15 @@ $('prueba').addEventListener('click', (ev) => {
     const o = E.fr[i]; dar(o, o[1], true); b.disabled = true; if (o[1]) caja.dataset.found = +caja.dataset.found + 1;
     if (+caja.dataset.found >= n) { cerrar(); otra('error', ERRORES.length); }
   } else if (modo === 'caso') {
-    const k = +caja.dataset.paso, o = CASO.pasos[k].ops[i]; dar(o, o[1]); cerrar(); Object.assign(s, o[5] || {}); pintar();
-    if (k < CASO.pasos.length - 1) r.insertAdjacentHTML('beforeend', `<button type="button" class="b prim" data-sig="${k + 1}">Siguiente paso</button>`);
-    else r.insertAdjacentHTML('beforeend', `<div class="llevas"><b>Lo que te llevas</b><ul>${CASO.llevas.map((x) => `<li>${x[0]} ${cita(x[1], x[2])}</li>`).join('')}</ul></div>`);
+    const C = CASOS[+caja.dataset.k], k = +caja.dataset.paso, o = C.pasos[k].ops[i]; dar(o, o[1]); cerrar(); Object.assign(s, o[5] || {}); pintar();
+    if (k < C.pasos.length - 1) r.insertAdjacentHTML('beforeend', `<button type="button" class="b prim" data-sig="${k + 1}">Siguiente paso</button>`);
+    else r.insertAdjacentHTML('beforeend', `<div class="llevas"><b>Lo que te llevas</b><ul>${C.llevas.map((x) => `<li>${x[0]} ${cita(x[1], x[2])}</li>`).join('')}</ul></div>`), otra('caso', CASOS.length);
   }
 });
 // ---- el dock: botones creados una vez ----
 $('dock-panel').innerHTML = `
   <div class="mando"><b class="dock-nota">Circulación</b><div class="fila"><button type="button" id="b-vol" data-a="vol" class="b"></button></div><div class="fila"><button type="button" data-a="na-" class="b">NA −0,1</button><output id="o-na"></output><button type="button" data-a="na+" class="b">NA +0,1</button></div><span class="peq">Cuánto sube la PA con suero y noradrenalina: ilustrativo</span></div>
+  <div class="mando" id="mando-acth" hidden><b class="dock-nota">Prueba de ACTH</b><div class="fila"><button type="button" id="b-acth" data-a="acth" class="b" aria-pressed="false"></button></div><span class="peq">Aumento del cortisol a los 60 min: menor de 9 = supresión (ficha p. 50)</span></div>
   <div class="mando"><b class="dock-nota">Corticoide</b><div class="fila"><button type="button" id="b-hc" data-a="hc" class="b" aria-pressed="false"></button><button type="button" id="b-ret" data-a="ret" class="b" aria-pressed="false"></button></div></div>
   <div class="mando" id="mando-es" hidden><b class="dock-nota">Estrés (cirugía, infección)</b><div class="fila"><button type="button" data-a="es-" class="b">Estrés −1</button><output id="o-es"></output><button type="button" data-a="es+" class="b">Estrés +1</button></div><span class="peq">De 0 a 3. Cuánto cae la PA sin cobertura: ilustrativo</span></div>
   <div class="mando"><b class="dock-nota">Reloj</b><div class="fila"><button type="button" data-a="d1" class="b">+1 día</button><button type="button" data-a="d7" class="b">+7 días</button></div><span class="peq">Los días y cuánto cambia el enfermo: ilustrativo</span></div>`;
@@ -148,10 +152,12 @@ $('dock-tiro').innerHTML = `
   <div class="mando"><b class="dock-nota">Betabloqueante oral o esmolol</b>${seg('bb', [['ninguno', 'Ninguno'], ['prop', 'Propranolol oral'], ['meto', 'Metoprolol'], ['esmolol', 'Esmolol IV']])}<div class="fila"><button type="button" id="b-asma" data-a="asma" class="b" aria-pressed="false"></button></div></div>
   <div class="mando"><b class="dock-nota">Hormona tiroidea</b><div class="fila"><button type="button" id="b-levo" data-a="levo" class="b" aria-pressed="false">Levotiroxina IV 200-400 µg</button><button type="button" id="b-lio" data-a="lio" class="b" aria-pressed="false">Liotironina IV 5-20 µg</button></div></div>
   <div class="mando" id="mando-pat" hidden><b class="dock-nota">Patrón del laboratorio (Tabla 51.2)</b><div class="fila"><button type="button" data-pat="" class="b" aria-pressed="false">Del caso</button><button type="button" data-pat="t3tox" class="b" aria-pressed="false">T3-toxicosis</button><button type="button" data-pat="hipoS" class="b" aria-pressed="false">Hipot. secundario</button></div></div>
+  <div class="mando" id="mando-farm" hidden><b class="dock-nota">Fármaco que corta el eje</b>${seg('farm', [['amio', 'Amiodarona'], ['hep', 'Heparina'], ['eto', 'Etomidato'], ['keto', 'Ketoconazol']])}</div>
   <div class="mando"><b class="dock-nota">Reloj</b><div class="fila"><button type="button" data-a="d1" class="b">+1 día</button><button type="button" data-a="d7" class="b">+7 días</button></div></div>`;
 $('presets').innerHTML = Object.entries(PRES).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.n}</button>`).join('');
 document.addEventListener('click', (ev) => {
   const a = ev.target.closest('[data-a]'); if (a && !a.disabled && a.closest('#dock')) return hacer(a.dataset.a);
+  const fa = ev.target.closest('[data-farm]'); if (fa && !fa.disabled) return hacer('farm', fa.dataset.farm);
   const at = ev.target.closest('[data-atd]'); if (at && !at.disabled) return hacer('atd', at.dataset.atd);
   const bb = ev.target.closest('[data-bb]'); if (bb && !bb.disabled) return hacer('bb', bb.dataset.bb);
   const pt = ev.target.closest('[data-pat]'); if (pt) return hacer('pat', pt.dataset.pat);

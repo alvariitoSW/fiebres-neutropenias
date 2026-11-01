@@ -31,7 +31,7 @@ export const ERRORES = [
       ['Mortalidad de hasta el 60 % pese al tratamiento.', true, 'Error: en la tormenta es de hasta el 25 %; el 60 % es la del coma mixedematoso.', 53, 'mu-ti-tormenta'],
     ] },
 ];
-export const CASO = { titulo: 'Obdulia, 77 años', pasos: [
+const OBDULIA = { pac: 'obdulia', lup: 'ti', titulo: 'Obdulia, 77 años', pasos: [
   { e: {}, vista: 'eje', enun: 'Hallada en casa: T 33,5 °C, Na⁺ 122, FC 48 y confusa. ¿Qué haces al llegar?', ops: [
     ['Espero a la TSH antes de dar nada: sin el resultado del laboratorio no empiezo ningún tratamiento.', false, 'Pierdes horas con una mortalidad de hasta el 60 % incluso tratada: hay que tratarla ya.', 57, 'mu-hipo-coma'],
     ['Sospecho mixedema, pido TSH y T4 libre y pongo hidrocortisona 100 mg IV sin esperar.', true, 'Hidrocortisona desde el principio: suele haber insuficiencia suprarrenal asociada.', 57, 'mu-hipo-coma-tto', { hc: 1, hcD: 0 }],
@@ -53,3 +53,24 @@ export const CASO = { titulo: 'Obdulia, 77 años', pasos: [
     ['Levotiroxina 50-100 µg/día (la IV, el 75 % de esa dosis) y liotironina 2,5-10 µg IV cada 8 h.', true, 'Es el mantenimiento de la ficha: la liotironina sigue hasta que despierte y se estabilice.', 57, 'mu-hipo-coma-tto'],
   ] },
 ], llevas: [['La primera dosis de hidrocortisona va antes que la hormona tiroidea; sin ella, la presión cae.', 57, 'mu-hipo-coma-tto'], ['Levotiroxina IV lenta de 200-400 µg y, de mantenimiento, 50-100 µg/día (la IV, el 75 %); la liotironina sigue hasta que despierte.', 57, 'mu-hipo-coma-tto'], ['Hipotermia, Na⁺ bajo y TSH alta con T4 baja: mixedema; mortalidad de hasta el 60 %.', 56, 'mu-hipo-coma']] };
+
+// Toribio, 61: el seguimiento de la apuesta (ya con hidrocortisona). Sus cifras de cortisol, PA y lactato son del caso o ilustrativas; el sentido, el de la ficha (p. 51).
+const TORIBIO = { pac: 'toribio', lup: 'sr', titulo: 'Toribio, 61 años (seguimiento)', pasos: [
+  { e: { hc: 1, hcD: 0, dia: 1 }, vista: 'mapa', enun: 'Día 1: ayer le pusiste hidrocortisona 100 mg cada 8 h; sigue con noradrenalina 0,4 y hoy llega el cortisol que extrajo urgencias: 28 µg/dL, nada bajo. El residente propone suspender la hidrocortisona porque «el cortisol sale normal». ¿Qué haces?', ops: [
+    ['Sigo con la hidrocortisona: en el shock séptico el cortisol no hace falta para decidir, y su cifra no cambia la pauta.', true, 'En el shock séptico el cortisol no es necesario para decidir quién se beneficia: se prueba hidrocortisona intravenosa. El enfermo crítico puede tener un cortisol total normal o alto y aun así una acción insuficiente en los tejidos.', 51, 'mu-sr-practica'],
+    ['La suspendo: con 28 µg/dL la suprarrenal responde y la hidrocortisona sobra.', false, 'Con hipotensión que no responde, la cifra no decide en el shock séptico; quitarla devolvería la PA a 78/40.', 51, 'mu-sr-practica'],
+    ['Pido la prueba de ACTH para confirmar y no sigo hasta tener el aumento del cortisol.', false, 'El shock séptico es la excepción a la prueba: mientras esperas, Toribio queda sin tratamiento de la hipotensión que no responde.', 51, 'mu-sr-practica'],
+  ] },
+  { e: { hc: 1, hcD: 0, dia: 3 }, vista: 'eje', enun: 'Día 3: PA 99/51 con noradrenalina 0,4 y lactato 1,6. ¿Qué haces con la hidrocortisona?', ops: [
+    ['La retiro hoy de golpe: la PA ya es buena y el lactato normal.', false, 'Sigue la noradrenalina, y la retirada brusca da un rebote de mediadores proinflamatorios con la PA otra vez lábil.', 51, 'mu-sr-retirada'],
+    ['La mantengo hasta quitar la noradrenalina y entonces la bajo poco a poco, durante al menos unos días.', true, 'Se retira al resolverse la causa, en el shock séptico sin vasopresor y con el lactato normal, y poco a poco.', 51, 'mu-sr-retirada'],
+    ['La dejo a 100 mg cada 8 h hasta el alta, por si acaso.', false, 'La ficha la retira al resolverse la causa; mantenerla sin motivo expone a Toribio a más corticoide.', 51, 'mu-sr-retirada'],
+  ] },
+  { e: { hc: 1, hcD: 0, dia: 5, parada: true }, vista: 'eje', enun: 'Día 5: otro residente la suspendió de golpe el día 4. Hoy Toribio tiene la PA lábil y la FC sube. ¿Qué haces?', ops: [
+    ['Reinicio la hidrocortisona y la retiro de nuevo poco a poco, durante al menos unos días.', true, 'La retirada brusca da un rebote de mediadores proinflamatorios; la ficha pide retirarla poco a poco, durante al menos unos días.', 51, 'mu-sr-retirada', { parada: false }],
+    ['Lo atribuyo a fiebre medicamentosa y subo la noradrenalina.', false, 'La ficha no dice que la hidrocortisona dé fiebre al quitarla: subir la noradrenalina trata la cifra y deja el rebote sin explicar.', 51, 'mu-sr-retirada'],
+    ['Concluyo que la suprarrenal se atrofió en cuatro días y la mantengo de por vida.', false, 'La atrofia exige semanas de corticoide; con menos de 10-14 días el eje se recupera pronto (Younes 2017). Mantenerla sin fin expone a más corticoide.', 51, 'mu-sr-retirada'],
+  ] },
+], llevas: [['En el shock séptico no se espera al cortisol, y su cifra no cambia la hidrocortisona.', 51, 'mu-sr-practica'], ['Se retira sin vasopresor y con lactato normal, poco a poco.', 51, 'mu-sr-retirada'], ['Retirada brusca: rebote de mediadores proinflamatorios.', 51, 'mu-sr-retirada']] };
+export const CASOS = [OBDULIA, TORIBIO];
+export const CASO = OBDULIA;
