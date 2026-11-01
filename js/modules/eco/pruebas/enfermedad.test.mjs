@@ -106,14 +106,17 @@ test('TEP: cumple los criterios de Lang del VD (basal, FAC, FE, TAPSE) y la rela
 
 // Índice de excentricidad del VI (IE = D2/D1 en el eje corto, D2 paralelo al tabique). Mukherjee 2025 (Tabla 2 y texto):
 // >1 anormal, y en sístole indica sobrecarga de presión; su cuadro de grupos usa >1,1 (las dos cifras se comprueban).
-// Ryan 1985 (Atlas · 14): 1,44 ± 0,16 en telesístole en la sobrecarga de presión. Telesístole = fin de la relajación
-// isovolumétrica del VI (VI en su volumen mínimo; atlas/vd.mjs, muestrasClave).
+// Ryan 1985 (Atlas · 14): 1,44 ± 0,16 en telesístole en la sobrecarga de presión. IE de telesístole = máximo septoSigno entre el
+// cierre aórtico y la apertura mitral + 20 ms (atlas/vd.mjs, muestraIeSistole); los volúmenes, con el volumen mínimo (Lang 2015 p. 6).
 test('índice de excentricidad: normal ≈ 1 en telediástole y telesístole; TEP > 1,1 en telesístole (Mukherjee 2025, Ryan 1985)', () => {
   const n = medirVdAtlas(normal), t = medirVdAtlas(correr('tep'));
   assert.ok(n.eiD <= 1.1 && n.eiS <= 1.1, `normal: TD ${n.eiD.toFixed(2)}, TS ${n.eiS.toFixed(2)}`);
   assert.ok(t.eiS > 1.1, `TEP, telesístole: ${t.eiS.toFixed(2)} (> 1 Mukherjee; > 1,1 su cuadro de grupos)`);
-  assert.ok(t.eiS >= t.eiD - 0.01, `TEP: telesístole ${t.eiS.toFixed(2)} no menor que telediástole ${t.eiD.toFixed(2)}`);
-  assert.ok(Math.abs(t.eiS - 1.44) <= 0.16 + 0.1, `TEP: ${t.eiS.toFixed(2)} cerca de Ryan 1985 (1,44 ± 0,16)`);
+  // 154 (decisión del usuario, 01/11/2026, tras el consejo de 3 expertos): rangos por enfermedad en vez de «TS ≥ TD». TEP AGUDO:
+  // IE en telediástole 1,21 ± 0,21 (Demertzis 2025, PMC12485522) → 1,1-1,4; en telesístole (máximo abombamiento tras el cierre
+  // aórtico, atlas/vd.mjs, muestraIeSistole) 1,2-1,65 (por encima del umbral de Mukherjee y dentro de Ryan 1985, 1,44 ± 0,16, ±0,05).
+  assert.ok(t.eiD >= 1.1 && t.eiD <= 1.4, `TEP agudo, telediástole: ${t.eiD.toFixed(2)} (1,1-1,4; Demertzis 2025: 1,21 ± 0,21)`);
+  assert.ok(t.eiS >= 1.2 && t.eiS <= 1.65, `TEP agudo, telesístole: ${t.eiS.toFixed(2)} (1,2-1,65)`);
 });
 
 // P6 · HP crónica frente a TEP agudo. Pared libre del VD (RVWT) en telediástole: normal <5 mm, leve 5-7, moderada >7-9, grave >9
@@ -126,6 +129,11 @@ test('HP crónica frente a TEP agudo: pared del VD gruesa en la crónica y fina 
   assert.ok(mh.paredVd > 5, `HP crónica: pared del VD ${mh.paredVd.toFixed(1)} mm (>5 mm, Mukherjee p. 145)`);
   assert.ok(mt.paredVd <= 5, `TEP agudo: pared del VD ${mt.paredVd.toFixed(1)} mm (≤5: pared fina)`);
   assert.ok(ih.eiS > 1.1, `HP crónica: IE en telesístole ${ih.eiS.toFixed(2)} (>1 sobrecarga de presión)`);
+  // 154 (decisión del usuario, 01/11/2026): la sobrecarga de presión crónica aplana MÁS en telesístole que en telediástole.
+  // Ryan 1985 (JACC 5:918, PMID 3973294): TS 1,44 ± 0,16 (aquí ±0,26: 1,18-1,70) y TD 1,26 ± 0,11; McGettrick 2022 (PMID 36582741):
+  // TS 1,3 ± 0,5, TD 1,22 ± 0,2.
+  assert.ok(Math.abs(ih.eiS - 1.44) <= 0.26, `HP crónica, telesístole: ${ih.eiS.toFixed(2)} (Ryan 1985: 1,44 ± 0,26)`);
+  assert.ok(ih.eiS > ih.eiD, `HP crónica: telesístole ${ih.eiS.toFixed(2)} > telediástole ${ih.eiD.toFixed(2)} (Ryan 1985, McGettrick 2022)`);
   assert.ok(hp.ultimo.paps > tep.ultimo.paps + 10 && hp.ultimo.paps > 34, `PAPs ${hp.ultimo.paps.toFixed(0)} (HP) frente a ${tep.ultimo.paps.toFixed(0)} (TEP); normal ≤34`);
   assert.ok(it.eiS > 1.1, 'TEP: también aplana el tabique, así que no es el IE lo que los distingue');
 });
