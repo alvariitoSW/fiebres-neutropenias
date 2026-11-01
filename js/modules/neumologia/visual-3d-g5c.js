@@ -44,7 +44,7 @@ export const RECETAS_3D_G5C = {
     'neumo-nav-diagnostico': {
         guia: 'La clínica no diagnostica la NAV; el Gram dice si la muestra sirve y el cultivo cuantitativo del BAL, con umbral 10⁴, es el más fiable, todo antes del antibiótico.',
         paneles: [
-            { tipo: 'linea', titulo: 'Razón de probabilidades: la clínica frente a la línea del 10', min: 0, max: 12, unidad: 'razón de probabilidades', ticks: [0, 2, 4, 6, 8, 10, 12],
+            { tipo: 'linea', titulo: 'Razón de probabilidades diagnóstica: la clínica frente a la línea del 10', min: 0, max: 12, unidad: 'razón de probabilidades', ticks: [0, 2, 4, 6, 8, 10, 12],
               bandas: [{ desde: 10, hasta: 12, texto: 'Prueba fiable ≥10', color: 'verde', alinear: 'fin' }],
               nodos: [
                 { fuente: '#nep-tabla-29-3', etiqueta: 'Los cuatro criterios clínicos: 2,1 a 2,8', en: 2.5, color: 'rojo', fila: 'abajo' },

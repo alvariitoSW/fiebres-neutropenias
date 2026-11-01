@@ -184,7 +184,7 @@ const DATOS = {
      Ficha 18 · NAV: diagnóstico clínico y microbiológico (cap. 29, págs. 39-45) y el caso de Casimiro, día 6
      ================================================================================================= */
   [ND]: {
-    entrada: 'La clínica no diagnostica la NAV (razón de probabilidades de 2 a 3, lejos de 10); el Gram dice si la muestra sirve y el cultivo cuantitativo del BAL (umbral 10⁴) es el más fiable, todo antes del antibiótico.',
+    entrada: 'La clínica no diagnostica la NAV (razón de probabilidades diagnóstica de 2 a 3, lejos de 10); el Gram dice si la muestra sirve y el cultivo cuantitativo del BAL (umbral 10⁴) es el más fiable, todo antes del antibiótico.',
     guia: [
       { id: 'nvd-g1', corto: 'criterios clínicos', tipo: 'test', fuente: 'nep-nav-criterios-clinicos · nep-tabla-29-3', origen: FIC,
         enunciado: 'Antes de ver la Tabla 29.3: ¿qué cuatro criterios clínicos se usan para diagnosticar la NAV y cómo rinden?',
@@ -192,14 +192,14 @@ const DATOS = {
           no('Fiebre, leucocitosis, secreciones purulentas e infiltrado; juntos dan una razón ≥10 y bastan para diagnosticar', `La fuente concluye lo contrario: la razón de cada criterio es pobre (2,1-2,8) y el diagnóstico no es posible con criterios clínicos solos (${p(39)}-${p(40)}).`),
           ok('Fiebre, leucocitosis, secreciones e infiltrado nuevo; cada uno con una razón de solo 2,1 a 2,8'),
           no('Fiebre, hipoxemia, taquicardia e infiltrado; el infiltrado, con razón ≥10, confirma la neumonía', `Los criterios son otros y el infiltrado tiene una razón de solo 2,8, con una especificidad del 26 % (${p(39)}-${p(40)}).`)],
-        explicacion: `Fiebre o hipotermia, leucocitosis o leucopenia, aumento o cambio de las secreciones e infiltrado nuevo o progresivo: <span class="hl-rojo">su sello es la falta de fiabilidad</span>; una prueba fiable tiene una razón de probabilidades ≥10 y estas dan 2,1-2,8 (${p(39)}-${p(40)}).` + enFicha(ND, 'nep-tabla-29-3') },
+        explicacion: `Fiebre o hipotermia, leucocitosis o leucopenia, aumento o cambio de las secreciones e infiltrado nuevo o progresivo: <span class="hl-rojo">su sello es la falta de fiabilidad</span>; una prueba fiable tiene una razón de probabilidades diagnóstica ≥10 y estas dan 2,1-2,8 (${p(39)}-${p(40)}).` + enFicha(ND, 'nep-tabla-29-3') },
       { id: 'nvd-g2', corto: 'el infiltrado', tipo: 'destapa', cuantas: 'son cuatro cosas', fuente: 'nep-rx-nav · nep-fig-29-3', origen: FIC,
         enunciado: 'Un ventilado con fiebre tiene un infiltrado nuevo en la placa portátil. ¿Cuántas veces es neumonía y por qué no basta la placa?',
         puntos: [
           `La neumonía es solo <span class="hl-rojo">un tercio</span> de los infiltrados de los pacientes de UCI (${p(40)}).`,
           `El infiltrado tiene sensibilidad del 89 %, pero una especificidad de solo el 26 % (${p(40)}).`,
           `Otras causas: atelectasia focal, edema pulmonar y SDRA (${p(40)}).`,
-          `La placa supina tras espirar apiña las marcas de la base derecha y <span class="hl-azul">simula una neumonía basilar</span> (Figura 29.3, ${p(40)}).`],
+          `La placa supina tras espirar apiña las marcas de la base derecha y <span class="hl-azul">simula una neumonía basilar</span> (Figura 29.3, ${p(41)}).`],
         explicacion: `El infiltrado es muy sensible pero poco específico: ver uno nuevo no basta (${p(40)}).` + enFicha(ND, 'nep-rx-nav') },
       { id: 'nvd-g3', corto: 'hemocultivos', tipo: 'test', fuente: 'nep-microbiologia', origen: FIC,
         enunciado: 'En la sospecha de NAV, ¿qué valor tienen los hemocultivos para identificar al germen del pulmón?',
@@ -220,7 +220,7 @@ const DATOS = {
         opciones: [
           no('Un cultivo positivo confirma al culpable; uno negativo no excluye la infección porque falla mucho', `Es al revés: el cualitativo es muy sensible, así que un negativo excluye una infección tratable, y un positivo no es fiable por la contaminación con la boca (${p(42)}).`),
           ok('Un negativo permite excluir una infección tratable; un positivo no identifica de forma fiable al culpable'),
-          no('Ambos resultados son fiables si el aspirado se toma antes del antibiótico y se procesa pronto', `Tomarlo antes del antibiótico es necesario, pero no corrige la contaminación con secreciones de la boca y la vía aérea superior (${p(42)}).`)],
+          no('Ambos resultados son fiables si el aspirado se toma antes del antibiótico y se procesa pronto', `Tomarlo antes del antibiótico es lo que piden las guías (${p(45)}), pero no corrige la contaminación con secreciones de la boca y la vía aérea superior (${p(42)}).`)],
         explicacion: `Sensibilidad alta (habitualmente >90 %) y especificidad muy baja: el negativo <span class="hl-verde">excluye</span> una infección tratable y el positivo <span class="hl-rojo">no sirve</span> como prueba del culpable (${p(42)}).` + enFicha(ND, 'nep-cualitativos') },
       { id: 'nvd-g6', corto: 'cuantitativo', tipo: 'test', fuente: 'nep-cuantitativos', origen: FIC,
         enunciado: 'En el mismo aspirado, ¿qué gana el cultivo cuantitativo frente al cualitativo y qué pierde?',
@@ -255,28 +255,28 @@ const DATOS = {
         opciones: [
           no('Más fiable que el BAL, pero menos específico que el aspirado traqueal cuantitativo', `Es menos fiable que el BAL (razón 5,1 frente a 9,6) y más específico que el aspirado (77 % frente a 68 %) (${p(43)}, ${p(45)}).`),
           ok('Menos fiable que el BAL (5,1 frente a 9,6) pero más específico que el aspirado (77 % frente a 68 %)'),
-          no('Igual de fiable que el BAL, porque ambos se cultivan en forma cuantitativa en el laboratorio', `Su razón de probabilidades es 5,1, por debajo del 9,6 del BAL (${p(43)}); la ficha lo describe como menos fiable (${p(45)}).`)],
+          no('Igual de fiable que el BAL, porque ambos se cultivan en forma cuantitativa en el laboratorio', `Su razón de probabilidades diagnóstica es 5,1, por debajo del 9,6 del BAL (${p(43)}); la ficha lo describe como menos fiable (${p(45)}).`)],
         explicacion: `Umbral de <span class="hl-azul">10³ UFC/mL</span>, razón 5,1: menos fiable que el BAL (9,6) y más específico que el aspirado (Tabla 29.4, ${p(43)}; ${p(45)}).` + enFicha(ND, 'nep-psb') },
       { id: 'nvd-g11', corto: 'nota de manejo', tipo: 'error', fuente: 'nep-gram · nep-metodo-preferido-nav', origen: FIC,
-        enunciado: 'Nota de manejo de una sospecha de NAV. Hay dos errores. Encuéntralos.',
+        enunciado: 'Nota de manejo de una sospecha de NAV. Hay un error. Encuéntralo.',
         frases: [
           { t: 'Miro el Gram del aspirado antes de decidir si se cultiva.' },
           { t: 'Empiezo el antibiótico ahora y hago el BAL por la tarde.', mal: true, c: `Estos cultivos deben obtenerse antes de iniciar el antibiótico empírico (${p(45)}).` },
-          { t: 'Aspirado con 15 escamosas por campo: muestra válida para cultivo.', mal: true, c: `Más de 10 escamosas por campo de bajo poder indican contaminación con la boca: no es apropiada para cultivo (${p(41)}).` },
+          { t: 'Aspirado con 15 escamosas por campo: la muestra no es apropiada para cultivo.' },
           { t: 'En el BAL, el umbral de positividad es 10⁴ UFC/mL.' }],
-        explicacion: 'Dos errores: el antibiótico va después de la muestra, y una muestra con muchas escamosas no se cultiva.' + enFicha(ND, 'nep-metodo-preferido-nav') },
+        explicacion: 'Un error: el antibiótico va después de la muestra. Las más de 10 escamosas por campo sí invalidan el aspirado (Marino, p. 41).' + enFicha(ND, 'nep-metodo-preferido-nav') },
       { id: 'nvd-g12', corto: 'qué método', tipo: 'test', fuente: 'nep-metodo-preferido-nav · nep-nav-autor-prefiere', origen: FIC,
         enunciado: 'Las guías discrepan sobre cómo cultivar. ¿Qué recomienda cada una?',
         opciones: [
           no('Las internacionales, el aspirado traqueal; las de EE. UU., el BAL por su mejor rendimiento', `Está invertido: las internacionales prefieren cultivos cuantitativos de BAL, mini-BAL o PSB, y las de EE. UU. los cultivos traqueales rutinarios (${p(45)}).`),
-          ok('Las internacionales, cultivos cuantitativos (BAL, mini-BAL o PSB); las de EE. UU., el cultivo traqueal rutinario; ambas, antes del antibiótico'),
+          ok('Internacionales, cuantitativos; EE. UU., traqueal rutinario; ambas antes del antibiótico'),
           no('Las dos prefieren el BAL; difieren en si la muestra se toma antes o después del antibiótico', `Las de EE. UU. prefieren el cultivo traqueal porque BAL y PSB no mejoran los resultados clínicos, y ambas piden la muestra antes del antibiótico (${p(45)}).`)],
         explicacion: `Internacionales: cuantitativos con BAL, mini-BAL o PSB (menos falsos positivos y menos antibióticos de más); EE. UU.: cultivos traqueales, porque lo invasivo no mejora los resultados clínicos (${p(45)}).`,
         nota: `<strong>Opinión del autor.</strong> «Elige tú mismo», dice Marino, aunque cree que deberían preferirse los métodos de mejor rendimiento (el BAL) y que el mini-BAL ahorraría el coste de la broncoscopia (${p(45)}).` + enFicha(ND, 'nep-metodo-preferido-nav') },
     ],
     examen: [
       { id: 'nvd-e1', corto: 'razón del infiltrado', tipo: 'test', fuente: 'nep-tabla-29-3', origen: FIC,
-        enunciado: 'De los cuatro criterios clínicos de la Tabla 29.3, ¿cuál tiene la mayor razón de probabilidades y qué especificidad tiene?',
+        enunciado: 'De los cuatro criterios clínicos de la Tabla 29.3, ¿cuál tiene la mayor razón de probabilidades diagnóstica y qué especificidad tiene?',
         opciones: [
           no('El infiltrado en la radiografía: razón 2,8 con especificidad del 89 %', `El 89 % es su sensibilidad; su especificidad es del 26 % (${p(40)}). Creer que es específico llevaría a tratar como neumonía cualquier infiltrado.`),
           no('La leucocitosis: razón 2,6 con una especificidad del 59 %', `La mayor razón es la del infiltrado, 2,8; la leucocitosis tiene 2,6 (${p(39)}-${p(40)}).`),
@@ -288,7 +288,7 @@ const DATOS = {
         opciones: [
           no('10⁴, 10³ y 10⁵ UFC/mL', `El BAL se positiviza a 10⁴, no a 10⁵; con 10⁵ en el BAL se perderían casos con 10⁴ (${p(43)}).`),
           ok('10⁵, 10³ y 10⁴ UFC/mL'),
-          no('10³, 10⁴ y 10⁵ UFC/mL', `Es el orden inverso al correcto: el aspirado necesita 10⁵ por su contaminación con la boca y el cepillo, 10³ (Tabla 29.4, ${p(43)}).`)],
+          no('10³, 10⁴ y 10⁵ UFC/mL', `Los tres valores están en otro orden: el aspirado es 10⁵, el cepillo 10³ y el BAL 10⁴ (Tabla 29.4, ${p(43)}); con 10³ en el aspirado se daría por infección cualquier colonización.`)],
         explicacion: `Tabla 29.4: aspirado traqueal <span class="hl-azul">10⁵</span>, cepillo protegido <span class="hl-azul">10³</span>, BAL <span class="hl-azul">10⁴</span> UFC/mL (${p(43)}).` + enFicha(ND, 'nep-tabla-29-4') },
       { id: 'nvd-e3', corto: 'intracelulares >3 %', tipo: 'test', fuente: 'nep-intracelulares', origen: FIC,
         enunciado: 'En el BAL hay organismos intracelulares en una proporción de las células. ¿Qué proporción hace que la probabilidad de neumonía supere el 90 %?',
@@ -305,11 +305,11 @@ const DATOS = {
           no('Sensibilidad >90 % y especificidad del 68 %, igual que el cuantitativo', `El 68 % es la especificidad del cuantitativo (10⁵); la del cualitativo es del 15-40 % (${p(42)}).`)],
         explicacion: `<span class="hl-azul">Sensibilidad >90 %, especificidad 15-40 %</span>: por eso un negativo excluye y un positivo no confirma al culpable (${p(42)}).` + enFicha(ND, 'nep-cualitativos') },
       { id: 'nvd-e5', corto: 'razón del BAL', tipo: 'test', fuente: 'nep-tabla-29-4 · nep-bal-cuantitativo', origen: FIC,
-        enunciado: 'El BAL cuantitativo tiene una razón de probabilidades de 9,6. ¿Qué significa?',
+        enunciado: 'El BAL cuantitativo tiene una razón de probabilidades diagnóstica de 9,6. ¿Qué significa?',
         opciones: [
           no('Que supera el 10 de una prueba fiable, así que un BAL positivo confirma la NAV', `9,6 queda por debajo de 10, y la propia ficha dice que, aun siendo el más fiable, sensibilidad y especificidad lo dejan lejos de lo ideal (${p(43)}).`),
           ok('Que es el más fiable de los cultivos, pero no llega al 10 de una prueba fiable'),
-          no('Que es el menos fiable de los tres, por tener la menor razón de probabilidades', `Es la mayor de los tres (aspirado 6,6; cepillo 5,1) (${p(43)}).`)],
+          no('Que es el menos fiable de los tres, por tener la menor razón de probabilidades diagnóstica', `Es la mayor de los tres (aspirado 6,6; cepillo 5,1) (${p(43)}).`)],
         explicacion: `Razón <span class="hl-azul">9,6</span> frente a 6,6 y 5,1: <span class="hl-verde">el más fiable</span>, con sensibilidad 71 % y especificidad 80 %, pero «lejos de ser ideal» (Tabla 29.4, ${p(43)}).` + enFicha(ND, 'nep-tabla-29-4') },
       { id: 'nvd-e6', corto: 'tabla 29.3 o 29.4', tipo: 'test', fuente: 'nep-nav-nota-29-4 · nep-rx-nav', origen: FIC,
         enunciado: 'El texto de la fuente (pág. 40) atribuye la especificidad del 26 % del infiltrado a la «Tabla 29.4». ¿A qué tabla pertenece?',
@@ -324,7 +324,7 @@ const DATOS = {
       { id: 'c-nvd-casimiro', titulo: 'Casimiro, 68 años: ¿tiene una NAV?', corto: 'Caso · Casimiro (diagnóstico)', sub: 'Día 6 de ventilación, fiebre e infiltrado; del Gram al BAL',
         paciente: { Edad: '68 años, varón', Peso: '75 kg', Antecedentes: 'neurocrítico, en ventilación mecánica', Motivo: 'Día 6 de ventilación (del caso)' },
         pasos: [
-          { momento: 'Día 6 · la sospecha', datos: { Temperatura: 'fiebre', Leucocitos: '16.000/µL (del paciente)', Secreciones: 'purulentas', Placa: 'infiltrado basal derecho' }, nuevo: ['Temperatura', 'Leucocitos', 'Secreciones', 'Placa'],
+          { momento: 'Día 6 · la sospecha', datos: { Temperatura: 'fiebre', Leucocitos: '16.000/µL (del paciente)', Secreciones: 'purulentas', Placa: 'infiltrado basal derecho', Hemodinámica: 'PA 85/50; empieza noradrenalina' }, nuevo: ['Temperatura', 'Leucocitos', 'Secreciones', 'Placa', 'Hemodinámica'],
             pregunta: { id: 'nvd-c1', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'nep-nav-criterios-clinicos · nep-rx-nav', origen: CASO,
               enunciado: 'Casimiro cumple los cuatro criterios clásicos: fiebre, leucocitos altos, secreciones purulentas e infiltrado. ¿Es una NAV?',
               puntos: [
@@ -367,7 +367,7 @@ const DATOS = {
               explicacion: `Supera el umbral de <span class="hl-azul">10⁴ UFC/mL</span>; el BAL es el cultivo más fiable, con sensibilidad 71 % y especificidad 80 % (${p(43)}). El tratamiento queda para la ficha siguiente.` + enFicha(ND, 'nep-tabla-29-4') } },
         ],
         lleva: [
-          'La clínica no diagnostica la NAV: la razón de probabilidades es de 2 a 3 y se necesita ≥10.' + enFicha(ND, 'nep-tabla-29-3'),
+          'La clínica no diagnostica la NAV: la razón de probabilidades diagnóstica es de 2 a 3 y se necesita ≥10.' + enFicha(ND, 'nep-tabla-29-3'),
           'El Gram va primero: más de 10 escamosas por campo, la muestra no vale para cultivar.' + enFicha(ND, 'nep-gram'),
           'El BAL (10⁴) es el cultivo más fiable, y se toma antes del antibiótico.' + enFicha(ND, 'nep-tabla-29-4')],
         volver: { nombre: 'Valor de los cultivos cuantitativos', ancla: 'nep-tabla-29-4' } },
