@@ -10,8 +10,10 @@ export const nuevo = (o = {}) => ({ dK: 0, dMg: 0, po4b: 3.5, alb: 4, ph: 7.4, u
 // Lo que cada dosis de insulina mueve del suero a la célula (ilustrativo; la fuente da la dirección): en unidades del suero y en partículas del dibujo
 export const flujos = (s) => ({ kShift: P.kInsulina * s.ins, mgShift: P.mgInsulina * s.ins, pShift: P.poInsulina * s.ins, partK: s.ins ? Math.min(6, 2 + 2 * s.ins) : 0, partP: 3 * s.ins });
 // Avanza el reloj `min` minutos: las bombas dan su dosis; el bolo de Mg baja con el tiempo (el libro dice que empieza a caer a los 15 min, p. 38, sin dar semivida: el ritmo es ilustrativo) y el efecto del calcio IV se acaba a los 30 min (p. 46; 30-60 min en hiperK, p. 27). Los tiempos son ilustrativos.
+// Acople Mg→K. Libro (E p. 35): «the hypokalemia that accompanies Mg depletion can be refractory to K+ replacement, and Mg replacement is necessary before the hypokalemia can be corrected». La fracción que se pierde es ilustrativa (P.clkPerdidaMax).
+export const fraccionPerdida = (mg) => P.clkPerdidaMax * clamp((P.mgUmbral - mg) / (P.mgUmbral - P.mgPiso), 0, 1);
 export function avanzar(s, min) {
-  if (s.bombas.clk) s.dK = Math.min(FIG.dKmax, s.dK + s.bombas.clk.rate * min / 60);
+  if (s.bombas.clk) { const dosis = s.bombas.clk.rate * min / 60, perd = dosis * fraccionPerdida(leer(s).mg); s.clkPerdido = perd; s.dK = Math.min(FIG.dKmax, s.dK + dosis - perd); }
   s.mgBolo *= 0.5 ** (min / 15); s.caIV = Math.max(0, s.caIV * (1 - min / 30)); s.t += min;
 }
 export const FIG = { dKmin: -900, dKmax: 300 };
@@ -19,12 +21,13 @@ export function leer(s) {
   const dKef = s.dK + P.kPorUnidad * s.units;   // los concentrados traen 2-3 mEq de K⁺ cada uno (E p. 25)
   const f = flujos(s), k = curvaK(dKef) - f.kShift - P.phK * (s.ph - 7.4);
   const mg = P.mgBase + P.mgPendiente * s.dMg - f.mgShift + s.mgBolo * 0.4 / P.mgPlasmaL;
-  const po4 = Math.max(0, s.po4b - f.pShift);
+  // Alcalosis respiratoria (E p. 49): «Respiratory alkalosis can increase intracellular pH... glucose and PO4 movement into cells»: solo con pH alto de origen respiratorio
+  const po4Crudo = s.po4b - f.pShift - (s.resp && s.ph > 7.4 ? P.poResp * (s.ph - 7.4) / 0.1 : 0), po4 = Math.max(P.poMin, po4Crudo);   // nunca se enseña 0: por debajo de P.poMin, sello
   const unidos = CA.albumina * s.alb / 4;
   const ion = Math.max(0.8, CA.ion - P.phCa * (s.ph - 7.4) - P.citrato * s.units + P.caIVpor100 * s.caIV / 100);
   const total = CA.ion + CA.quelatos + unidos;             // el ensayo mide las tres fracciones: el pH y el citrato no lo mueven
   const caQuel = CA.quelatos + P.citrato * s.units, caAlb = Math.max(0.2, total - ion - caQuel);
-  return { k, mg, po4, caIon: ion, caIonMmol: ion * 0.25, caTotal: total, caAlb, caQuel, mgTotal: 2000 + s.dMg, mgPlasma: 6 * mg / P.mgBase, kTotal: 3500 + dKef, dKef };
+  return { k, mg, po4, po4Imposible: po4Crudo < P.poMin, caIon: ion, caIonMmol: ion * 0.25, caTotal: total, caAlb, caQuel, mgTotal: 2000 + s.dMg, mgPlasma: 6 * mg / P.mgBase, kTotal: 3500 + dKef, dKef };
 }
 // Los topes que dependen del estado (los de ClK y calcio IV dependen además de lo que está elegido en el dock)
 export function topes(s, e = {}) {
@@ -36,7 +39,8 @@ export function topes(s, e = {}) {
   else if (L.mg > TOPES.mg.bloqueo) t.push({ c: 'mg', n: 'aviso', titulo: 'Bloqueo AV completo', texto: 'Mg²⁺ por encima de 10 mEq/L: bloqueo AV completo. No sigas.', pag: 39, origen: TOPES.mg.origen });
   if (L.caIonMmol < TOPES.ca.grave) t.push({ c: 'ca', n: 'sello', titulo: 'Hipotensión y ectopia', texto: `Ca iónico ${L.caIonMmol.toFixed(2).replace('.', ',')} mmol/L (<0,65): PA 84/50, FC 112 con extrasístoles ventriculares (constantes ilustrativas).`, pag: 45, origen: TOPES.ca.origen });
   else if (L.caIonMmol < TOPES.ca.severa) t.push({ c: 'ca', n: 'aviso', titulo: 'Hipocalcemia grave', texto: 'Ca iónico <0,9 mmol/L: grave en la transfusión masiva (E p. 44). Se acerca a 0,65.', pag: 44, origen: TOPES.ca.origen });
-  if (L.po4 < TOPES.po4.grave) t.push({ c: 'po4', n: 'sello', titulo: 'Hipofosfatemia grave', texto: `Fosfato ${L.po4.toFixed(1).replace('.', ',')} mg/dL (<1): debilidad respiratoria. FR 28, SatO₂ 89 % (constantes ilustrativas).`, pag: 49, origen: TOPES.po4.origen, off: ['#iov-b-real'] });
+  if (L.po4Imposible) t.push({ c: 'nofis', n: 'sello', titulo: 'Combinación no fisiológica', texto: `Fosfato por debajo de ${fmt(P.poMin)} mg/dL: no es un paciente posible (el libro llama grave a menos de 1, p. 49). Tope ilustrativo.`, pag: 49, origen: 'ficha · p. 49; tope 0,3: ilustrativo', off: ['#iov-b-real'] });
+  else if (L.po4 < TOPES.po4.grave) t.push({ c: 'po4', n: 'sello', titulo: 'Hipofosfatemia grave', texto: `Fosfato ${L.po4.toFixed(1).replace('.', ',')} mg/dL (<1): debilidad respiratoria. FR 28, SatO₂ 89 % (constantes ilustrativas).`, pag: 49, origen: TOPES.po4.origen, off: ['#iov-b-real'] });
   if (e.caMg > TOPES.caIV.bolo) t.push({ c: 'caiv', n: 'sello', titulo: 'Bolo de calcio excesivo', texto: `${e.caMg} mg de calcio elemental de golpe: por encima de los 200 mg del bolo recomendado (después, 1-2 mg/kg/h); el calcio IV puede dañar la célula (p. 46). Tope ilustrativo.`, pag: 45, origen: TOPES.caIV.origen, off: ['#iov-b-ca'] });
   if (L.dKef <= -900 || L.dKef >= 300) t.push({ c: 'nofis', n: 'sello', titulo: 'Combinación no fisiológica', texto: 'El potasio total sale de la Fig. 36.2: el suero y el total ya no caben en la curva.', pag: 20, origen: 'ficha · p. 20', off: ['#iov-b-furo', '#iov-b-clk'] });
   else if (L.k < 1.5) t.push({ c: 'nofis', n: 'sello', titulo: 'Combinación no fisiológica', texto: 'K⁺ por debajo de 1,5 mEq/L: no es un paciente posible; la curva de la Fig. 36.2 acaba en 1,9. Corrige el pH o la insulina.', pag: 20, origen: 'ficha · p. 20; tope 1,5: ilustrativo', off: ['#iov-b-furo', '#iov-b-real'] });
@@ -50,7 +54,7 @@ export function vitales(s, e = {}, preset = 'normal') {
   if (act.includes('clk') || act.includes('mg')) return { pa: '0/0', fc: 0, extra: 'parada', regla: 'ClK >20 mEq/h por la cava superior (p. 23) o Mg²⁺ >13 mEq/L (p. 39)' };
   if (act.includes('ca')) return { pa: '84/50', fc: 112, extra: 'ectopia · ' + o, regla: 'Ca iónico <0,65 mmol/L (p. 45)' };
   if (act.includes('hiperk')) return { pa: '90/54', fc: 46, extra: 'bradicardia · ' + o, regla: 'K⁺ ≥7 mEq/L (ilustrativo; el libro: grave >6,5, p. 27)' };
-  if (act.includes('po4')) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % (ilustrativas) · ' + o, regla: 'Fosfato <1 mg/dL (p. 49)' };
+  if (act.includes('po4') || leer(s).po4Imposible) return { pa, fc: Math.max(fc, 96), extra: 'FR 28 · SatO₂ 89 % (ilustrativas) · ' + o, regla: 'Fosfato <1 mg/dL (p. 49)' };
   return { pa, fc, extra: o, regla: '' };
 }
 export const fmt = (x, d = 1) => (+x).toFixed(d).replace('.', ',');

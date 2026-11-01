@@ -5,6 +5,8 @@
 // calculadoras de la ficha se conectan, nunca se copian.
 import { montarVisual } from '../../core/visual-kit.js';
 import { panelNefronaViva } from '../nefrologia/nefrona-viva.js';
+import { montarGlomerulo } from '../nefrologia/glomerulo-vivo.js';
+import { montarFiltro } from '../nefrologia/filtro-vivo.js';
 import { curvaPh, mapaGasometria, icebergK, escalaHiperMg, cineticaEnzimas, semaforoAntibioticos, simuladorSalino, retoVolumen, asistenteVisual } from './visual-marino-piezas.js';
 import { DI_WIZARD } from './marino-renal.js';
 import { PBE_WIZARD, CDI_WIZARD } from './marino-abdomen.js';
@@ -130,6 +132,8 @@ function renal() {
         guia: 'KDIGO: creatinina o diuresis; y por qué la creatinina engaña en la UCI.',
         paneles: [
             FIGURAS,
+            { tipo: 'propio', titulo: 'Glomérulo vivo: la creatinina engaña', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'critico'], textos: { critico: 'mr-creatinina-critico' } }) },
             calc('¿Cumple criterios de FRA? (Tabla 34.1)', ['#mr-kdigo-basal', '#mr-kdigo-actual', '#mr-kdigo-tiempo', '#mr-kdigo-diuresis'], ['#mr-kdigo-resultado']),
             calc('Filtrado estimado (calculadora de la ficha)', ['#mr-fg-edad', '#mr-fg-peso', '#mr-fg-cr', '#mr-fg-sexo'], ['#mr-fg-resultado']),
             { tipo: 'racimos', titulo: 'Los límites de la creatinina', grupos: [{ titulo: 'Creatinina', color: 'rojo', nodos: [n('#mr-creatinina-limites', 'Tres límites de la creatinina'), n('#mr-creatinina-critico', 'En el crítico'), n('#mr-cistatina', 'Cistatina C')] }] }
@@ -141,6 +145,8 @@ function renal() {
             FIGURAS,
             { tipo: 'racimos', titulo: 'Mecanismos (Tabla 34.2)', tabla: '#mr-tabla-34-2', color: 'rojo' },
             { tipo: 'flujo', titulo: 'El gradiente de filtración', nodos: [n('#mr-gradiente-filtracion', 'Gradiente de filtración', 'dorado'), [n('#mr-congestion', 'Congestión venosa', 'amarillo'), n('#mr-gradiente-pia', 'Presión abdominal', 'rojo')]] },
+            { tipo: 'propio', titulo: 'Glomérulo vivo: congestión y presión abdominal', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'pia', 'congestion'], textos: { pia: 'mr-gradiente-pia', congestion: 'mr-congestion' } }) },
             calc('Presión abdominal (calculadora de la ficha)', ['#mr-pia-pam', '#mr-pia-valor', '#mr-pia-unidad', '#mr-pia-organo'], ['#mr-pia-resultado']),
             { tipo: 'racimos', titulo: 'Presión intraabdominal', grupos: [{ titulo: 'PIA', color: 'purpura', nodos: [n('#mr-pia-definiciones', 'Definiciones'), n('#mr-ppa', 'Presión de perfusión abdominal'), n('#mr-pia-medida', 'Cómo medirla')] }] }
         ]
@@ -166,6 +172,8 @@ function renal() {
                 { titulo: 'EF de urea', color: 'verde', nodos: [n('#mr-efu', 'EFU (con diuréticos)')] }
             ] },
             calc('Índices urinarios (calculadora de la ficha)', ['#mr-ind-nau', '#mr-ind-nap', '#mr-ind-cru', '#mr-ind-crp', '#mr-ind-ureau', '#mr-ind-ureap', '#mr-ind-diur'], ['#mr-indices-resultado']),
+            { tipo: 'propio', titulo: 'Glomérulo vivo: congestión y presión abdominal', render: (c, x) => montarGlomerulo(c, x, {
+                mandos: ['pam', 'pia', 'congestion'] }) },
             panelNefronaViva([['prerrenal', 'IRA prerrenal'], ['nta', 'Necrosis tubular aguda'], ['obstruccion', 'Obstrucción']]),
             retoVolumen,
             { tipo: 'racimos', titulo: 'Qué hacer', grupos: [{ titulo: 'Manejo', color: 'purpura', nodos: [n('#mr-reto-volumen', 'Reto de volumen'), n('#mr-furosemida-fra', 'Furosemida'), n('#mr-dopamina-baja', 'Dopamina a dosis baja')] }] }
@@ -175,6 +183,7 @@ function renal() {
         guia: 'Difusión o convección: qué limpia cada técnica.',
         paneles: [
             FIGURAS,
+            { tipo: 'propio', titulo: 'K⁺ urgente: cuánto baja con cada técnica', nota: 'Elige el K⁺ de partida, la técnica y las horas de tratamiento.', render: (c, ctx) => montarFiltro(c, ctx, { textos: { hd: 'mr-hemodialisis', cont: 'mr-hemofiltracion' }, mandos: ['modo', 'k'], inicial: { modo: 'hd', k0: 7, horas: 0, calcio: 'no' } }) },
             { tipo: 'comparar', titulo: 'Las técnicas', columnas: [
                 { titulo: 'Hemodiálisis', color: 'dorado', nodos: [n('#mr-hemodialisis', 'Difusión')] },
                 { titulo: 'Hemofiltración', color: 'verde', nodos: [n('#mr-hemofiltracion', 'Convección')] },

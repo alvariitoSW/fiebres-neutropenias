@@ -417,8 +417,8 @@
             <div class="agua-simulador" id="mr-ab-calc">
                 <h4 style="color: var(--accent-blue);">🧮 El método de Marino, aplicado a tu gasometría</h4>
                 <p class="subtitle">Etapas I y II con las reglas y ecuaciones de la ficha. Si sale una acidosis metabólica, sigue con la calculadora de los gaps.</p>
-                <div class="form-group"><label for="mr-ab-ph">pH</label><input type="number" id="mr-ab-ph" min="6.8" max="7.8" step="0.01" value="7.28" inputmode="decimal"></div>
-                <div class="form-group"><label for="mr-ab-pco2">PaCO₂ (mmHg)</label><input type="number" id="mr-ab-pco2" min="10" max="120" step="1" value="23" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-ab-ph">pH</label><input type="number" id="mr-ab-ph" min="6.8" max="7.8" step="0.01" value="7.32" inputmode="decimal"></div>
+                <div class="form-group"><label for="mr-ab-pco2">PaCO₂ (mmHg)</label><input type="number" id="mr-ab-pco2" min="10" max="120" step="1" value="28" inputmode="decimal"></div>
                 <div class="form-group"><label for="mr-ab-hco3">HCO₃⁻ (mEq/L)</label><input type="number" id="mr-ab-hco3" min="2" max="60" step="1" value="14" inputmode="decimal"></div>
                 <div class="tfg-estado tfg-estado-ok" id="mr-ab-resultado"></div>
                 <p class="subtitle" style="margin-top:8px;">El HCO₃⁻ que escribas aquí pasa solo a la calculadora del hiato aniónico y el delta.</p>
@@ -621,6 +621,7 @@
                 <p class="article-figure-caption">Figura 32.2 — Curva de titulación del sistema ácido carbónico-bicarbonato: su rango eficaz (sombreado) no coincide con el pH fisiológico.</p>
             </div>
             <dl class="kv-row" id="mr-bicarb-tampon"><dt>El bicarbonato no es un buen tampón</dt><dd>El pK del ácido carbónico es <strong>6,1</strong>, y un tampón solo es eficaz a ±1 unidad de su pK: entre <strong>5,1 y 7,1</strong>, fuera del pH extracelular habitual. Más que un tampón, el HCO₃⁻ es el <strong>producto final del transporte de CO₂</strong> (el CO₂ entra al hematíe, la anhidrasa carbónica da H⁺ + HCO₃⁻, la Hb tampona el H⁺ y el HCO₃⁻ sale al plasma a cambio de cloro).</dd></dl>
+            <p><button type="button" id="mr-titulacion-ver" class="especialidad-link" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="titulacion">⚖️ Ver la curva de titulación del bicarbonato en el ácido-base vivo (pK 6,1) →</button></p>
             <dl class="kv-row" id="mr-bicarb-contra"><dt>Contraproducente</dt><dd>Genera CO₂, que entra en las células y el LCR y <strong>baja su pH</strong>; las soluciones estándar tienen una PCO₂ de <strong>200 mmHg</strong>: son una carga de CO₂ que hay que eliminar por el pulmón. Además, puede <strong>subir el lactato</strong> (más producción por la alcalosis).</dd></dl>
             <dl class="kv-row" id="mr-bicarb-recomendacion"><dt>Recomendación</dt><dd>Pese a la falta de beneficio, la mayoría de expertos lo recomiendan en la acidosis láctica grave con <strong>pH ≤7,1 y/o HCO₃⁻ ≤5 mEq/L</strong>. Al autor le parece más razonable limitarlo a los pacientes <strong>hemodinámicamente inestables</strong> (p. ej., con vasopresores). Es probablemente más útil con <strong>insuficiencia renal</strong> (parte del problema es la pérdida de HCO₃⁻).</dd></dl>
             <dl class="kv-row" id="mr-bicarb-deficit"><dt>Déficit de HCO₃⁻</dt><dd><span class="hl-azul">Déficit (mEq) = 0,6 × peso (kg) × (15 − HCO₃⁻ medido)</span> (Ecuación 32.2; 15 = HCO₃⁻ deseado). Se repone <strong>la mitad</strong>; si mejora la hemodinámica, se sigue para mantener 15 mEq/L; si no, no se insiste.</dd></dl>
@@ -727,6 +728,7 @@
             <dl class="kv-row" id="mr-caa-diagnostico"><dt>Diagnóstico</dt><dd>Historia + deshidratación + HA elevado + cetonas sin hiperglucemia. Pero el <strong>nitroprusiato puede ser negativo</strong> (el NADH desvía el AcAc a β-OHB). El etanol en sangre puede ser negativo. Descarta pancreatitis.</dd></dl>
             <dl class="kv-row" id="mr-caa-tratamiento"><dt>Tratamiento</dt><dd>Sencillo: <strong>salino con glucosa</strong>. La glucosa corrige la acidosis y el volumen favorece la eliminación de cetonas; se resuelve en ~24 h. Corrige los electrolitos y da <strong>tiamina</strong> (la glucosa agota las reservas escasas).</dd></dl>
 
+            <p><button type="button" id="mr-caa-ver" class="especialidad-link" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="caa">⚖️ Ver la cetoacidosis alcohólica en el ácido-base vivo (hiato alto, pH casi normal) →</button></p>
             <div class="warning-box" id="mr-no-acidosis"><strong>No te fijes en la acidosis.</strong> 1) El problema de la acidosis láctica y la cetoacidosis es la causa, no la acidosis: trata la causa. 2) El bicarbonato no es un tampón en el rango fisiológico: es un alcalinizante ineficaz y quizá dañino.</div>
 
             <p><button type="button" class="especialidad-link" data-especialidad="sobrevivirUmi" data-view="manualUmi" data-panel="panel-manual-umi-tabs" data-tab="umi-glucemia">🩸 Algoritmos de insulina y pauta móvil (Manual UMI) →</button></p>
@@ -927,7 +929,8 @@
                 <li><strong>Ritmo</strong>: <strong>≤0,2 mEq/kg/h</strong>, por una vena central grande. No hace falta reponer todo: se para cuando el pH baja a un valor aceptable (p. ej., &lt;7,5).</li>
             </ol>
             <div class="warning-box" id="mr-hcl-riesgo"><strong>Corrosivo.</strong> La extravasación produce necrosis tisular grave, incluso por vía central.</div>
-            <div class="agua-simulador" id="mr-hcl-calc">
+
+            <p><button type="button" id="mr-hcl-ver" class="especialidad-link" data-especialidad="nefrologia" data-view="acidobase" data-acidobase-vivo="hcl">⚖️ Ver la alcalosis grave en el ácido-base vivo (HCO₃⁻ 52, pH ≈7,57) →</button></p>            <div class="agua-simulador" id="mr-hcl-calc">
                 <h4 style="color: var(--accent-purple);">🧮 Déficit de H⁺ y HCl 0,1 N</h4>
                 <p class="subtitle">Ecuación 33.4 y Tabla 33.3. Solo con HCO₃⁻ &gt;50 o pH &gt;7,55.</p>
                 <div class="form-group"><label for="mr-hcl-peso">Peso magro (kg)</label><input type="number" id="mr-hcl-peso" min="20" max="300" step="1" value="70" inputmode="decimal"></div>
@@ -982,6 +985,7 @@
                 <li>No solo se filtra: también se <strong>secreta</strong> en los túbulos.</li>
             </ol>
             <dl class="kv-row" id="mr-creatinina-critico"><dt>En el crítico</dt><dd>Se pierde alrededor del <strong>2% de la masa muscular al día</strong>, y en la sepsis se produce menos creatina. Las estimaciones del filtrado basadas en la creatinina <span class="hl-rojo">sobrestiman sistemáticamente el filtrado real</span> en el crítico, con consecuencias para valorar la función renal y para dosificar fármacos.</dd></dl>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-criterios" data-glomerulo="critico">🧪 Ver en el glomérulo cómo la creatinina sobrestima el filtrado →</button></p>
             <div class="article-figure" id="mar-img-34-1">
                 <img src="js/modules/libros/img/mar-fig34-1-formulas-fg.jpg" alt="Fórmulas de Cockcroft-Gault y MDRD para estimar el filtrado glomerular" loading="lazy">
                 <p class="article-figure-caption">Figura 34.1 — Fórmulas populares para estimar el filtrado glomerular con la creatinina. MDRD = Modification of Diet in Renal Disease (en mL/min/1,73 m²; 1,73 m² es la superficie corporal de un adulto de 63 kg y 1,70 m).</p>
@@ -1051,6 +1055,7 @@
                         <p>En una revisión de unos <strong>80.000</strong> pacientes hospitalizados con insuficiencia cardíaca, el <strong>63%</strong> tenía disfunción renal.</p>
                         <dl class="kv-row" id="mr-congestion"><dt>La congestión cuenta</dt><dd>Además de la menor presión de perfusión, la <strong>presión venosa central alta</strong> baja el filtrado. En pacientes con catéter de arteria pulmonar, la presión auricular derecha fue el <strong>único</strong> parámetro que se correlacionó con la disfunción renal. Probablemente pesa más la perfusión en la insuficiencia cardíaca aguda y la congestión en la crónica descompensada.</dd></dl>
                         <p>Por la misma razón, cualquier causa de hipertensión pulmonar e insuficiencia derecha puede producir FRA.</p>
+                        <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas" data-glomerulo="congestion">💧 Ver la congestión venosa en el glomérulo →</button></p>
                         <p><button type="button" class="especialidad-link" data-especialidad="uciPapers" data-view="vexus" data-panel="panel-vexus-tabs" data-tab="vexus-mullens">🫀 Mullens 2009 y la congestión venosa (VExUS) →</button></p>
                     </div>
                 </div>
@@ -1066,6 +1071,7 @@
                         <dl class="kv-row" id="mr-pia-causas"><dt>Qué la sube</dt><dd>Trauma o cirugía abdominal, y en el paciente médico: distensión gástrica, obstrucción intestinal, íleo, ascitis, edema de pared intestinal, hepatomegalia, presión positiva, cabecera elevada y obesidad. Hipertensión intraabdominal en hasta el <strong>60%</strong> de las UCI médicas y quirúrgicas.</dd></dl>
                         <dl class="kv-row" id="mr-pia-cristaloides"><dt>Los cristaloides</dt><dd>Una causa frecuente y poco reconocida: edema de las vísceras. Con un balance positivo <strong>&gt;5 L en 24 h</strong>, el <strong>85%</strong> tenía hipertensión intraabdominal y el <strong>25%</strong> síndrome compartimental.</dd></dl>
                         <dl class="kv-row" id="mr-pia-medida"><dt>Cómo medirla</dt><dd>La exploración física no la detecta: presión en la <strong>vejiga vaciada</strong> con sondas específicas. a) Supino, transductor a cero en la línea medioaxilar. b) <strong>25 mL</strong> de salino en la vejiga 30-60 s antes. c) Al <strong>final de la espiración</strong> y sin contracción abdominal. Se expresa en <strong>mmHg</strong> (1 mmHg = 1,36 cmH₂O).</dd></dl>
+                        <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-fra-causas" data-glomerulo="pam=75,pia=19">🫃 Ver una PIA de 19 mmHg en el glomérulo (PAM 75) →</button></p>
                         <div class="agua-simulador" id="mr-pia-calc">
                             <h4 style="color: var(--accent-yellow);">🧮 Presión de perfusión abdominal y gradiente de filtración</h4>
                             <p class="subtitle">Ecuaciones 34.2 y 34.3.</p>
@@ -1139,6 +1145,7 @@
             </ol>
             <details class="nota-plegable"><summary>📝 Nota de fidelidad</summary><p class="fuente-ficha">Nota de fidelidad: el texto dice "1 mg/kg/hr" para la diuresis objetivo; por el contexto se trata de mL/kg/h.</p></details>
             <dl class="kv-row" id="mr-rabdo-trr"><dt>Diálisis</dt><dd>Hasta el <strong>30%</strong> necesita terapia de reemplazo renal.</dd></dl>
+            <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="rabdo">🫘 Ver la rabdomiólisis en la nefrona viva →</button></p>
 
             <p class="fuente-ficha" style="margin-top:12px;">📚 Fuente completa: <a class="biblio-link" href="docs/marino-2024-acido-base-renal-caps31-34.pdf#page=51" target="_blank" rel="noopener">Marino PL. The ICU Book, 5.ª ed., Cap. 34 "Acute Kidney Injury" →</a></p>
         </div>
@@ -1167,6 +1174,7 @@
             <dl class="kv-row" id="mr-na-orina"><dt>Na⁺ en orina</dt><dd>La hipoperfusión ahorra sodio (Na⁺ urinario &lt;20); la lesión tubular lo pierde (&gt;40). <strong>Excepciones</strong>: con diuréticos o con ERC (pérdida "obligada") la hipoperfusión puede dar Na⁺ &gt;40.</dd></dl>
             <dl class="kv-row" id="mr-efna"><dt>Excreción fraccional de Na⁺</dt><dd><span class="hl-azul">EFNa (%) = (U/P Na) / (U/P Cr)</span> (Ecuación 34.4). Normal ≈1%; <strong>&lt;1%</strong> con hipoperfusión; <strong>&gt;2%</strong> con lesión tubular. <strong>Excepciones</strong>: sube (&gt;1%) con diuréticos y ERC; puede ser falsamente baja (&lt;1%) en la lesión tubular de la <strong>sepsis</strong> o la <strong>mioglobinuria</strong>.</dd></dl>
             <dl class="kv-row" id="mr-efu"><dt>Excreción fraccional de urea</dt><dd><span class="hl-azul">EFU (%) = (U/P urea) / (U/P Cr)</span> (Ecuación 34.5). <strong>&lt;35%</strong> con hipoperfusión, <strong>&gt;50%</strong> con lesión tubular. Su gran ventaja: <span class="hl-verde">no la alteran los diuréticos</span>.</dd></dl>
+            <p><button type="button" class="especialidad-link" data-especialidad="nefrologia" data-view="nefrona" data-nefrona-viva="prerrenal|furosemida">🫘 Prerrenal con furosemida en la nefrona viva →</button></p>
             <div class="agua-simulador" id="mr-indices-calc">
                 <h4 style="color: var(--accent-yellow);">🧮 EFNa y EFU (Ecuaciones 34.4 y 34.5)</h4>
                 <p class="subtitle">Muestras de orina y plasma a la vez. La urea es opcional.</p>
@@ -1228,6 +1236,7 @@
                     <p><span class="hl-rojo">Inconveniente</span>: lenta para residuos nitrogenados e hiperpotasemia grave.</p>
                 </div>
             </div>
+            <p><button type="button" class="especialidad-link" data-especialidad="libros" data-view="marinoRenal" data-panel="panel-marino-renal-tabs" data-tab="mr-trr" data-filtro-vivo="k-urgente">⏱️ K⁺ urgente: cuánto baja con cada técnica →</button></p>
             <div class="article-figure" id="mar-img-34-5">
                 <img src="js/modules/libros/img/mar-fig34-5-cateter-hemodialisis.jpg" alt="Catéter venoso central de hemodiálisis con dos luces de 12 G" loading="lazy">
                 <p class="article-figure-caption">Figura 34.5 — Catéter venoso central de hemodiálisis: dos canales de 12 G y 20 cm de longitud.</p>
@@ -1350,6 +1359,7 @@
 
             <p class="section-label">Normovolémica: pérdida de agua libre</p>
             <dl class="kv-row" id="mr-hiperna-normo"><dt>Mecanismo</dt><dd>Agua perdida sin apenas sodio; frecuente en la UCI cuando se repone con un líquido <strong>hipertónico respecto al perdido</strong> (se repone el sodio, pero queda un déficit de agua). También es lo típico de la diabetes insípida.</dd></dl>
+            <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="di">🌊 Ver la orina diluida y la prueba de vasopresina (río y mar) →</button></p>
             <div class="micro-profiles">
                 <div class="micro-prof-item" id="mr-di">
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')">
@@ -1376,6 +1386,7 @@
 
             <p class="section-label">Hipervolémica</p>
             <dl class="kv-row" id="mr-hiperna-hiper"><dt>Por exceso de sodio</dt><dd>Bicarbonato sódico o, más a menudo, <strong>exceso de salino isotónico</strong> para reponer pérdidas hipotónicas. Con riñón normal se elimina rápido. Si no, furosemida, pero el Na⁺ de la orina con furosemida (~80 mEq/L) es menor que el plasmático y la diuresis puede <strong>agravar</strong> la hipernatremia: combinarla con glucosado al 5%.</dd></dl>
+            <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="furosemida-glucosado">🌊 Ver por qué la furosemida sola agrava la hipernatremia, y el glucosado (río y mar) →</button></p>
 
             <div class="compare-box blue" style="margin-top:12px;">
                 <p><strong>🔗 Comparativa de fuentes.</strong> La ficha de hipernatremia de Nefrología trae el test de deshidratación en dos fases y la copeptina, con cortes de osmolalidad urinaria propios (Nefrología al día y protocolo del hospital).</p>
@@ -1403,6 +1414,7 @@
                 </tbody>
             </table>
             <dl class="kv-row" id="mr-pseudo-dx"><dt>Cómo se descubre</dt><dd>Midiendo la osmolalidad: <strong>normal (285-295)</strong> en la pseudohiponatremia y <strong>baja (&lt;275)</strong> en la verdadera.</dd></dl>
+            <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="pseudo">🧪 Ver el tubo de la pseudohiponatremia en el río y mar →</button></p>
             <dl class="kv-row" id="mr-hiperglucemia-na"><dt>Hiperglucemia</dt><dd>La glucosa que no entra en las células saca agua de ellas y diluye el sodio: <strong>2,4 mEq/L menos por cada 100 mg/dL</strong> de glucosa. <span class="hl-azul">Na corregido = Na medido + 2,4 × (glucosa − 100)/100</span> (Ecuación 35.5). Ejemplo: Na 130 con glucosa 600 → 142.</dd></dl>
             <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="hiperglucemia">🌊 Ver cómo la glucosa diluye el sodio en el río y mar →</button></p>
             <div class="agua-simulador" id="mr-nacorr-calc">
@@ -1505,6 +1517,7 @@
             <p class="section-label">Desmielinización osmótica y sobrecorrección</p>
             <dl class="kv-row" id="mr-sdo"><dt>Síndrome de desmielinización osmótica</dt><dd>Corregir demasiado deprisa, o pasarse de la normalidad, daña la mielina del tronco ("mielinólisis central pontina"). Curso <strong>bifásico</strong>: alteración mental y convulsiones que mejoran, y después deterioro profundo con disartria, alteraciones oculomotoras, tetraparesia e incluso enclaustramiento. Más riesgo en la hiponatremia <strong>crónica</strong>. Por eso: máximo <strong>8-10 mEq/L en cualquier periodo de 24 h</strong> y punto final de <strong>130 mEq/L</strong> (por debajo de lo normal, como margen de seguridad).</dd></dl>
             <dl class="kv-row" id="mr-sobrecorreccion"><dt>Sobrecorrección</dt><dd>Hasta en un <strong>25%</strong>, incluso con medidas preventivas: una <strong>diuresis acuosa espontánea</strong> durante el salino hipertónico concentra el sodio. Más frecuente en la hiponatremia por fármacos (sobre todo tiazidas) y por intoxicación hídrica. La desmopresina la previene o la frena.</dd></dl>
+            <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="sobrecorreccion">🌊 Ver la diuresis acuosa que sobrecorrige el sodio (río y mar) →</button></p>
             <table class="data-table" id="mr-tabla-35-4">
                 <thead><tr><th colspan="2">Tabla 35.4 — Desmopresina para prevenir o revertir la sobrecorrección</th></tr></thead>
                 <tbody>
@@ -1513,6 +1526,7 @@
                     <tr><td>Precauciones</td><td>No se aconseja si la hiponatremia se debe a liberación no regulada de ADH · <strong>restricción hídrica obligatoria</strong> mientras dure</td></tr>
                 </tbody>
             </table>
+            <p class="nv-chips"><button type="button" class="especialidad-link" data-especialidad="libros" data-view="aguaViva" data-agua-viva="desmopresina">🌊 Ver cómo la desmopresina frena la diuresis, con restricción hídrica (río y mar) →</button></p>
 
             <p class="section-label">Hiponatremia asintomática</p>
             <dl class="kv-row" id="mr-asinto-hipo"><dt>Hipovolémica</dt><dd>Salino isotónico para la presión y la perfusión; el Na⁺ quizá no mejore hasta tratar la causa.</dd></dl>
@@ -1834,7 +1848,7 @@
                     <div class="micro-prof-head" onclick="this.classList.toggle('open'); this.nextElementSibling.classList.toggle('active')"><span>⚡ Otros electrolitos</span> <span class="toggle-icon">+</span></div>
                     <div class="micro-prof-body" id="mr-mg-electrolitos">
                         <p>No hay manifestaciones específicas del déficit; lo que hace sospecharlo son sus compañeros: Na⁺, K⁺, fosfato y calcio bajos.</p>
-                        <dl class="kv-row"><dt>Hipopotasemia</dt><dd>En el <strong>40%</strong>. Lo importante: <span class="hl-rojo">puede ser refractaria a la reposición de K⁺</span> hasta que se repone el Mg.</dd></dl>
+                        <dl class="kv-row" id="mr-mg-hipok"><dt>Hipopotasemia</dt><dd>En el <strong>40%</strong>. Lo importante: <span class="hl-rojo">puede ser refractaria a la reposición de K⁺</span> hasta que se repone el Mg.</dd></dl>
                         <dl class="kv-row"><dt>Hipocalcemia</dt><dd>Menor liberación de PTH y menor respuesta del órgano diana a ella; tampoco se corrige hasta corregir el Mg.</dd></dl>
                         <dl class="kv-row"><dt>Hipofosfatemia</dt><dd>Es <strong>causa</strong>, no efecto, del déficit de Mg: aumenta su eliminación renal.</dd></dl>
                     </div>

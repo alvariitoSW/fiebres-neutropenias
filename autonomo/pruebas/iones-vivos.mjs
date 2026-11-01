@@ -18,7 +18,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await p.goto(BASE + 'index.html', { waitUntil: 'networkidle' }); await p.waitForTimeout(1200); await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'ionesVivos', ionesVivos: '' }); document.body.append(t); t.click(); t.remove(); }); await p.waitForFunction(() => window.__iones, null, { timeout: 8000 }); await p.waitForTimeout(600);
   const I = (f, ...a) => p.evaluate(([f, a]) => { const r = new Function('I', 'a', 'return (' + f + ')(I,a)')(window.__iones, a); return r; }, [f.toString(), a]);
   const desb = async (t) => { const d = await p.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth); ok(d <= 0, `${ANCHO}: desborde ${d}px en ${t}`); };
-  const L = () => p.evaluate(() => { const l = window.__iones.leer(); return Object.fromEntries(Object.entries(l).map(([k, v]) => [k, +v.toFixed(2)])); });
+  const L = () => p.evaluate(() => { const l = window.__iones.leer(); return Object.fromEntries(Object.entries(l).map(([k, v]) => [k, typeof v === 'number' ? +v.toFixed(2) : v])); });
   const tp = () => p.evaluate(() => window.__iones.topes().map((t) => t.clave + ':' + t.nivel).sort().join(' '));
   const clic = (id, n = 1) => p.evaluate(([id, n]) => { for (let i = 0; i < n; i++) { const e = document.getElementById(id); if (e.disabled) return false; e.click(); } return true; }, [id, n]);
   const sel = (q) => p.evaluate((q) => document.querySelector(q).click(), q);
@@ -31,7 +31,9 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   // ---- mandos: mínimo / medio / máximo ----
   console.log('-- Realimentar (0..4 dosis): K, Mg, fosfato');
   await resetea('damian'); for (let i = 0; i <= 4; i++) { const l = await L(); console.log(` ins ${i}: K ${l.k} Mg ${l.mg} PO4 ${l.po4} topes[${await tp()}]`); if (i < 4) await clic('iov-b-real'); }
-  ok((await tp()).includes('po4:sello'), 'po4 <1 sin sello'); ok(!(await clic('iov-b-real')), 'Realimentar sigue tocable con el sello de fosfato');
+  ok((await tp()).includes('po4:sello') && await p.evaluate(() => document.getElementById('iov-b-real').disabled), 'con el sello de fosfato <1, Realimentar debe quedar apagado');
+  await resetea('damian'); await clic('iov-b-real'); const l1 = await L(); ok(Math.abs(l1.po4 - 0.9) < 0.05 && (await tp()).includes('po4:sello') && !(await tp()).includes('nofis'), `1 dosis: fosfato ${l1.po4} (debe ser 0,9, sello grave, sin no fisiológica)`);
+  await p.evaluate(() => window.__iones.set({ ins: 2 })); const l2 = await L(); console.log(` 2 dosis (por la guía o a mano): fosfato ${l2.po4} topes[${await tp()}]`); ok((await tp()).includes('nofis:sello') && l2.po4 >= 0.3, 'fosfato <0,3: sin sello «no fisiológica» o se enseña 0');
   console.log('-- Furosemida hasta el fondo'); await resetea('normal'); let n = 0; while (await clic('iov-b-furo')) { n++; if (n > 60) break; } const lf = await L(); console.log(` ${n} dosis: K ${lf.k} Mg ${lf.mg} total ${lf.kTotal} topes[${await tp()}]`); ok((await tp()).includes('nofis:sello'), 'sin «combinación no fisiológica» en el déficit');
   console.log('-- ClK (10/20/40 × vía)'); await resetea('normal');
   for (const [r, v] of [[10, 'periferica'], [20, 'central'], [40, 'central'], [40, 'cava'], [20, 'cava']]) { await sel(`[data-rate="${r}"]`); await sel(`[data-via="${v}"]`); const t = await tp(); console.log(` ${r} mEq/h ${v}: topes[${t}]  botón ${(await p.evaluate(() => document.getElementById('iov-b-clk').disabled)) ? 'apagado' : 'activo'}`); if (r === 40 && v === 'cava') { ok(t.includes('clk:sello'), 'cava+40 sin sello asistolia'); CAP && await p.screenshot({ path: `${CAP}03-tope-clk-${ANCHO}.png` }); } if (r === 20 && v === 'cava') ok(!t.includes('clk:sello'), '20 por cava no debería sellar'); }
@@ -82,18 +84,74 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await resetea('normal'); await p.evaluate(() => window.__iones.set({ ins: 4, po4b: 1 })); ok((await L()).po4 >= 0, 'fosfato negativo');
   // citas: todas las del documento llevan su botón doble
   const cc = await p.evaluate(() => ({ cita: document.querySelectorAll('#iov-raiz .cita').length, sinBoton: [...document.querySelectorAll('#iov-raiz .cita')].filter((c) => !c.querySelector('.ver-ficha[data-resaltar]') || !c.querySelector('.cita-pdf')).length })); console.log(` citas a la vista: ${cc.cita}, sin doble botón: ${cc.sinBoton}`); ok(cc.sinBoton === 0, 'cita sin doble botón');
-  // ---- apuesta, error, caso ----
-  console.log('-- Apuesta'); await p.evaluate(() => window.__iones.modoPrueba('apuesta')); const kA = (await L()).k; const monK0 = await p.evaluate(() => document.getElementById('iov-mon-k').textContent); const vent0 = await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('?')); console.log(` antes de contestar: monitor «${monK0}», ventana con «?»=${vent0}`); ok(monK0.includes('?') && vent0, 'apuesta: K no oculto');
-  const ops = await p.$$('#iov-prueba .op'); ok(ops.length === 3, 'apuesta: 3 opciones'); ok(!(await p.evaluate(() => document.getElementById('iov-prueba').innerHTML.includes('data-ok'))), 'respuesta en el HTML');
-  const txt = await Promise.all(ops.map((o) => o.textContent())); const iok = txt.findIndex((t) => t.startsWith('Baja')); await ops[iok].click(); await p.waitForTimeout(200);
-  console.log(` K antes ${kA} → después ${(await L()).k}; fosfato ${(await L()).po4}; fin=${await p.evaluate(() => document.getElementById('iov-prueba').dataset.fin)}`); ok((await L()).k < kA, 'apuesta: el K no bajó'); console.log(' monitor tras contestar:', await p.evaluate(() => document.getElementById('iov-mon-k').textContent), '· lleva-te:', await p.evaluate(() => document.querySelectorAll('#iov-prueba .llevas li .ver-ficha').length)); ok(await p.evaluate(() => document.querySelectorAll('#iov-prueba .llevas li').length >= 2), 'sin «Lo que te llevas»'); await desb('apuesta respondida'); await rotulos('apuesta');
-  console.log('-- Error'); await p.evaluate(() => window.__iones.modoPrueba('error')); const ocu = await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('iónico 4,6')); ok(!ocu, 'error: el iónico se ve antes de contestar');
-  const grupos = await p.$$('#iov-prueba .ops'); ok(grupos.length === 3, 'error: 3 frases'); for (let i = 0; i < 3; i++) { const bs = await grupos[i].$$('.op'); await bs[i < 2 ? 0 : 1].click(); }
-  await p.waitForTimeout(150); console.log(` error resuelto: fin=${await p.evaluate(() => document.getElementById('iov-prueba').dataset.fin)} iónico visible=${await p.evaluate(() => document.getElementById('iov-ion-svg').textContent.includes('iónico'))}`); ok(await p.evaluate(() => !!document.getElementById('iov-prueba').dataset.fin), 'error sin completar'); await desb('error'); CAP && await p.screenshot({ path: `${CAP}06-error-${ANCHO}.png`, fullPage: true });
-  console.log('-- Caso (Valentín, 3 pasos)'); await p.evaluate(() => window.__iones.modoPrueba('caso'));
-  const bien = [/^Pido/, /^22 mL/, /^Sigo/];
-  for (let i = 0; i < 3; i++) { const o = await p.$$(`#iov-prueba .paso:nth-of-type(${i + 1}) .op`); ok(o.length === 3, `caso paso ${i + 1}: opciones`); const tt = await Promise.all(o.map((x) => x.textContent())); await o[tt.findIndex((t) => bien[i].test(t))].click(); await p.waitForTimeout(120); const l = await L(); console.log(` paso ${i + 1}: Ca iónico ${l.caIon} (${l.caIonMmol} mmol/L) K ${l.k} Ca total ${l.caTotal} topes[${await tp()}]`); await desb('caso ' + (i + 1)); if (i < 2) await p.evaluate(() => [...document.querySelectorAll('#iov-prueba .b.prim')].at(-1).click()); }
-  ok(await p.evaluate(() => !!document.getElementById('iov-prueba').dataset.fin), 'caso sin completar'); CAP && await p.screenshot({ path: `${CAP}07-caso-${ANCHO}.png`, fullPage: true });
+  // ---- La Mayéutica: las 13 preguntas (acertando y fallando), el repaso y los 2 casos; sin desborde tras cada respuesta ----
+  console.log('-- Mayéutica');
+  {
+    await resetea('normal'); await p.waitForTimeout(200);
+    const DATOS = await p.evaluate(async () => { const m = await import('/js/data/iones-vivos-preguntas.js'); return JSON.parse(JSON.stringify({ P: m.PREGUNTAS, C: m.CASOS })); });
+    const { P: PREG, C: CASOS } = DATOS;
+    const clicM = (s) => p.evaluate((s) => { const e = document.querySelector(s); if (!e) return false; e.click(); return true; }, s);
+    const cuenta = (s) => p.evaluate((s) => document.querySelectorAll(s).length, s);
+    const textoDe = (h) => p.evaluate((h) => { const d = document.createElement('div'); d.innerHTML = h; return d.textContent.trim(); }, h);
+    const libre = async (t) => { await p.waitForTimeout(500); const r = await p.evaluate(() => { const s = document.querySelector('#iov-preg [data-accion="sig"]'); const d = document.getElementById('iov-dock').getBoundingClientRect(); if (!s) return { sin: true }; const b = s.getBoundingClientRect(); return { bottom: b.bottom, dock: d.top }; });
+      await desb(t); ok(r.sin || r.bottom <= r.dock + 1, `${ANCHO}: ${t}: «Siguiente» a la vista sobre el dock`); };
+    const contestar = async (q, bien, et) => {
+      if (q.tipo === 'test') {
+        ok((await cuenta('#iov-preg [data-op]')) === 0, `${et}: las opciones no están en el HTML antes de «Ya lo tengo»`);
+        await clicM('#iov-preg [data-accion="ops"]');
+        const quiero = q.opciones.find((o) => !!o.ok === bien) || q.opciones[0], txt = await textoDe(quiero.t);
+        ok(await p.evaluate((txt) => { const b = [...document.querySelectorAll('#iov-preg [data-op]')].find((x) => x.textContent.trim() === txt); if (!b) return false; b.click(); return true; }, txt), `${et}: elige una opción`);
+        ok(await p.evaluate((b) => !!document.querySelector('#iov-preg .iov-' + (b ? 'ok' : 'mal')), bien), `${et}: dice ${bien ? 'Bien' : 'qué le habría pasado'}`);
+      } else if (q.tipo === 'destapa') {
+        await clicM('#iov-preg [data-accion="destapa"]'); await p.evaluate((b) => document.querySelectorAll('#iov-preg input[type=checkbox]').forEach((c) => { if (b) c.checked = true; }), bien); await clicM('#iov-preg [data-accion="puntos"]');
+      } else if (q.tipo === 'error') {
+        await p.evaluate(([b, mal]) => document.querySelectorAll('#iov-preg [data-fr]').forEach((x, i) => { if (b === mal[i]) x.click(); }), [true, q.frases.map((f) => !!f.mal)]);
+        if (!bien) await p.evaluate(() => document.querySelector('#iov-preg [data-fr]').click());
+        await clicM('#iov-preg [data-accion="corregir"]'); await clicM('#iov-preg [data-ver]');
+      }
+      await libre(et);
+    };
+    await clicM('#iov-modo-preguntas'); await p.waitForTimeout(400);
+    ok(await p.evaluate(() => !document.getElementById('iov-vista-preguntas').hidden && document.getElementById('iov-dock-in').hidden && !document.getElementById('iov-dock-estudio').hidden), 'Mayéutica: abre la vista de preguntas y el dock de progreso');
+    await desb('Mayéutica: inicio'); CAP && await p.screenshot({ path: `${CAP}08-may-inicio-${ANCHO}.png` });
+    await clicM('[data-ir="recorrido"]'); await p.waitForTimeout(300);
+    ok(PREG.length === 13, `13 preguntas (hay ${PREG.length})`);
+    for (let i = 0; i < PREG.length; i++) {
+      const q = PREG[i], bien = i % 2 === 0;
+      const antes = await p.evaluate(() => ({ svg: document.getElementById('iov-ion-svg').textContent, mon: document.getElementById('iov-mon-k').textContent }));
+      ok(/\?/.test(antes.svg + antes.mon), `${q.num}: las cifras del suero están tapadas antes de contestar`);
+      if (i === 0) CAP && await p.screenshot({ path: `${CAP}09-may-pregunta-${ANCHO}.png` });
+      await contestar(q, bien, `${q.num} ${bien ? 'acertada' : 'fallada'}`);
+      const des = await p.evaluate(() => document.getElementById('iov-mon-k').textContent); ok(!/\?/.test(des), `${q.num}: tras contestar el modelo enseña la cifra (${des})`);
+      if (i === 1) CAP && await p.screenshot({ path: `${CAP}10-may-respuesta-${ANCHO}.png` });
+      await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(250);
+    }
+    const nBien = PREG.filter((_, i) => i % 2 === 0).length, nRep = await cuenta('#iov-preg [data-rep]');
+    ok(nRep === PREG.length - nBien, `repaso: vuelven las falladas (${PREG.length - nBien}; salen ${nRep})`);
+    for (let k = 0; k < PREG.length; k++) { const id = await p.evaluate(() => document.querySelector('#iov-preg [data-rep]')?.dataset.rep); if (!id) break; await clicM(`#iov-preg [data-rep="${id}"]`); await p.waitForTimeout(250); await contestar(PREG.find((q) => q.id === id), true, `repaso ${id}`); await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(250); }
+    ok((await cuenta('#iov-preg [data-rep]')) === 0, 'repaso: tras acertarlas, no queda nada');
+    await clicM('#iov-preg [data-ir="casos"]'); await p.waitForTimeout(250); await desb('casos: lista');
+    for (let c = 0; c < CASOS.length; c++) {
+      await clicM(`#iov-preg [data-caso="${c}"]`); await p.waitForTimeout(300);
+      const C = CASOS[c];
+      for (let i = 0; i < C.pasos.length; i++) {
+        const q = C.pasos[i].pregunta, bien = i !== 1;
+        ok(await p.evaluate(() => !!document.querySelector('#iov-preg dl.iov-paciente') && !!document.querySelector('#iov-preg .iov-dia')), `${C.corto} paso ${i + 1}: ficha del paciente y momento`);
+        const estado = await p.evaluate(() => ({ k: document.getElementById('iov-mon-k').textContent, ion: document.querySelector('.selector-ion [aria-pressed="true"]')?.dataset.ion }));
+        if (c === 0 && i === 3) CAP && await p.screenshot({ path: `${CAP}11-may-caso-${ANCHO}.png` });
+        await contestar(q, bien, `${C.corto} paso ${i + 1} (${estado.k})`);
+        const cif = await p.evaluate(() => ({ k: document.getElementById('iov-mon-k').textContent, ca: window.__iones.leer().caIonMmol, kv: window.__iones.leer().k })); console.log(`  ${C.corto} paso ${i + 1}: monitor «${cif.k}» · Ca iónico ${cif.ca.toFixed(2)} mmol/L`);
+        await clicM('#iov-preg [data-accion="sig"]'); await p.waitForTimeout(300);
+      }
+      ok(/lo que te llevas/i.test(await p.evaluate(() => document.getElementById('iov-preg').innerText)), `${C.corto}: final con «Lo que te llevas»`);
+      ok(await p.evaluate(() => { const b = document.querySelector('#iov-preg [data-especialidad][data-resaltar]'); return !!b && !!document.querySelector(b.dataset.resaltar); }), `${C.corto}: «Repasar en la ficha» apunta a un párrafo que existe`);
+      await desb(`${C.corto}: final`);
+      if (c === 0) { await clicM('#iov-preg [data-fin="modelo"]'); await p.waitForTimeout(300); ok(await p.evaluate(() => !document.getElementById('iov-dock-in').hidden), 'caso: «Abrir el modelo» vuelve a Explorar'); await clicM('#iov-modo-preguntas'); await p.waitForTimeout(300); await clicM('[data-ir="casos"]'); await p.waitForTimeout(250); }
+    }
+    const faltan = await p.evaluate(async (ids) => { const m = await import('/js/data/iones-vivos-data.js'); return ids.filter((pg) => !m.PAG_FICHA[pg] && !m.fichaDe(pg)); }, [19, 20, 21, 23, 24, 25, 27, 28, 29, 37, 38, 43, 44, 45, 46, 49]);
+    ok(faltan.length === 0, 'cada página citada tiene su párrafo de la ficha');
+    await p.evaluate(() => window.__iones.setModo('explorar')); await p.waitForTimeout(200); await desb('Mayéutica → Explorar');
+  }
   // ---- Los 4 pendientes del rejuicio y el ECG plano con la parada ----
   console.log('-- Pendientes');
   await resetea('rufino'); await p.waitForTimeout(150);
@@ -125,6 +183,32 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
     const abre = await p.evaluate(() => !!document.getElementById('iov-raiz')?.offsetParent); ok(b !== null && abre, `ficha ${f}: su botón (${b}) abre los iones vivos`);
     await desb('ficha ' + f); await p.evaluate(() => document.getElementById('iov-volver').click()); await p.waitForTimeout(600);
     ok(await p.evaluate((f) => !!document.getElementById(f)?.offsetParent, f), `ficha ${f}: «← VOLVER» vuelve a la ficha`);
+  }
+  // ---- Estados con nombre (abrirEstado) y acople Mg→K ----
+  console.log('-- Estados con nombre');
+  const est = async (c) => { await p.evaluate((c) => window.__iones.abrirEstado(c), c); await p.waitForTimeout(150); };
+  const clk1h = async () => { const k0 = (await L()).k; await p.evaluate(() => { window.__iones.e.rate = 20; window.__iones.e.via = 'central'; window.__iones.hacer('clk'); }); return +((await L()).k - k0).toFixed(2); };
+  const frs = () => p.evaluate(() => document.getElementById('iov-frase-txt').textContent);
+  const R6 = {};
+  for (const c of ['mg-bajo', 'reponer-mg', 'hipermg', 'transfusion', 'realimentar', 'alcalosis-resp']) { await est(c); await desb('estado ' + c); R6[c] = await L(); ok((await frs()).length > 20, 'estado sin frase: ' + c); console.log(` ${c}: K ${R6[c].k} Mg ${R6[c].mg} PO4 ${R6[c].po4} Ca ${R6[c].caIon} topes[${await tp()}]`); }
+  await est('mg-bajo'); const dBajo = await clk1h(); const fBajo = await frs(); await est('reponer-mg'); const dOk = await clk1h();
+  console.log(` ClK 20 mEq × 1 h: ΔK con Mg bajo ${dBajo}, con Mg repuesto ${dOk}`); ok(dBajo < dOk * 0.85 && dOk > 0, 'mg-bajo: el ClK sube el K tanto como con Mg normal'); ok(/Mg²⁺ bajo/.test(fBajo), 'mg-bajo: la frase viva no lo dice');
+  // Cifras del monitor de cada estado (K, Mg, Ca iónico mmol/L, fosfato) y ΔK con ClK 20 mEq/h × 8 h
+  for (const c of ['mg-bajo', 'reponer-mg', 'transfusion', 'realimentar']) { const l = R6[c]; console.log(` monitor ${c}: K ${l.k} · Mg ${l.mg} · Ca iónico ${l.caIonMmol} mmol/L · fosfato ${l.po4}`); }
+  ok(Math.abs(R6['mg-bajo'].k - 2.8) < 0.06 && Math.abs(R6['mg-bajo'].mg - 1.0) < 0.06, 'mg-bajo: K 2,8 y Mg 1,0 en el monitor'); ok(Math.abs(R6.transfusion.caIonMmol - 0.6) < 0.02, 'transfusion: Ca iónico ≠ 0,60'); ok(Math.abs(R6.realimentar.po4 - 0.9) < 0.05, 'realimentar: fosfato ≠ 0,9');
+  const k8 = async (c) => { await est(c); const k0 = (await L()).k; await p.evaluate(() => { window.__iones.e.rate = 20; window.__iones.e.via = 'central'; for (let i = 0; i < 8; i++) window.__iones.hacer('clk'); }); return +((await L()).k - k0).toFixed(2); };
+  const d8b = await k8('mg-bajo'), d8o = await k8('reponer-mg'); console.log(` ClK 20 mEq/h × 8 h: ΔK con Mg 1,0 ${d8b}, con Mg repuesto ${d8o}`); ok(d8b < d8o * 0.4, 'mg-bajo: el contraste a 8 h no se ve');
+  for (const c of ['mg-bajo', 'reponer-mg', 'hipermg', 'transfusion', 'realimentar', 'alcalosis-resp']) { await est(c); const g = await p.evaluate(() => { const h = document.querySelector('#iov-guia h3')?.textContent || ''; return { vis: !document.getElementById('iov-guia').hidden, n: +(h.match(/de (\d)$/) || [])[1], mg: document.getElementById('iov-mon-k').textContent, mas: document.getElementById('iov-mas').open }; }); ok(g.vis && g.n >= 3 && g.n <= 5, `estado ${c}: guía de ${g.n} pasos`); if (c === 'mg-bajo' || c === 'reponer-mg') { if (c === 'mg-bajo') await sel('#iov-guia [data-paso="sig"]'); const m = await p.evaluate(() => document.getElementById('iov-mon-k').textContent); ok(/Mg²⁺ \d/.test(m), c + ': el Mg²⁺ no se ve en el monitor (' + m + ')'); for (let i = 0; i < 4; i++) await sel('#iov-guia [data-paso="sig"]'); } await desb('guía ' + c); }
+  await est('mg-bajo'); for (let i = 0; i < 3; i++) await sel('#iov-guia [data-paso="sig"]'); ok(await p.evaluate(() => document.getElementById('iov-mas').open), 'mg-bajo: «Más mandos» cerrado en el paso del ClK');
+  await est('mg-bajo'); await p.evaluate(() => { window.__iones.e.g = 6; for (let i = 0; i < 3; i++) { window.__iones.hacer('mg'); window.__iones.hacer('esp'); } }); const dMgDado = await clk1h(); console.log(` tras 3×6 g de MgSO4: ΔK ${dMgDado}`); ok(dMgDado > dBajo, 'tras dar MgSO4 el ClK no mejora');
+  ok(R6.hipermg.mg >= 10, 'hipermg: Mg < 10'); await est('hipermg'); ok((await tp()).includes('mg:aviso'), 'hipermg: sin aviso de bloqueo AV');
+  await est('normal'); const po7 = (await L()).po4; ok(R6['alcalosis-resp'].po4 < po7, `alcalosis-resp: fosfato ${R6['alcalosis-resp'].po4} no menor que ${po7}`);
+  ok(R6.transfusion.k > 4.5 && R6.realimentar.po4 < 1.8, 'transfusión o realimentar sin efecto');
+  console.log('-- Barrido de extremos del acople (Mg 0,5 / 1,1 / 1,45 / 3 × ClK 10/20/40 × 1-6 h)');
+  for (const mgv of [0.5, 1.1, 1.45, 3]) for (const r of [10, 20, 40]) {
+    await resetea('rufino'); const dMg = (mgv - 1.45) / 0.0035; await p.evaluate(([d, r]) => { window.__iones.set({ dMg: d }); window.__iones.e.rate = r; window.__iones.e.via = 'central'; }, [dMg, r]);
+    for (let h = 0; h < 6; h++) { await p.evaluate(() => window.__iones.hacer('clk')); const l = await L(); ok(Number.isFinite(l.k) && l.k >= 1.5 && l.k <= 8, `barrido Mg ${mgv} ClK ${r} h${h + 1}: K ${l.k}`); }
+    console.log(` Mg ${mgv} ClK ${r}: K final ${(await L()).k}`);
   }
   ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id^="iov-"]')].map(e => e.id); return ids.length === new Set(ids).size; }), 'ids iov- sin duplicar');
   await ctx.close();

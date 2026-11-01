@@ -25,6 +25,8 @@ import { irAlTexto } from '../../core/vista-visual.js';
 import { CLARO, alfa } from './potasio-escena.js';
 import { clamp } from '../../core/ui.js';
 import { pintarFormula } from '../../core/formula.js';
+import { HTML_K, lecturasK, horaTope } from './filtro-vivo-k.js';
+import { irAlVisual } from '../../core/vista-visual.js';
 import { pintarParticula, colorParticula, leyendaParticulas } from '../../core/particulas.js';
 
 const W = 360, H = 300;
@@ -54,6 +56,29 @@ const TIPOS = {
 const RADIO_EXTRA = { agua: 1.7, cit: 1.9 };
 const CLAVE = { cit: 'citrato' };
 
+// Filtros montados, por ficha: un botón con data-filtro-vivo="k-urgente" y la navegación de data-especialidad/
+// data-view/data-panel/data-tab abre el filtro con el estado puesto (mismo patrón que glomerulo-vivo.js).
+const montados = new Map();
+const ESTADOS = { 'k-urgente': { modo: 'hd', k0: 7, horas: 0, calcio: 'no' } };
+document.addEventListener('click', ev => {
+    const b = ev.target.closest('[data-filtro-vivo]');
+    if (!b) return;
+    // «k-urgente,k0=6.4»: el K⁺ de partida viene del enlace (clamp 5,5-8,5)
+    const [clave, ...extra] = b.dataset.filtroVivo.split(',').map(x => x.trim());
+    if (!ESTADOS[clave]) return;
+    const est = { ...ESTADOS[clave] };
+    for (const x of extra) { const [kk, vv] = x.split('='); if (kk === 'k0' && isFinite(parseFloat(vv))) est.k0 = Math.round(Math.min(8.5, Math.max(5.5, parseFloat(vv))) * 10) / 10; }
+    setTimeout(() => {
+        const tab = document.getElementById(b.dataset.tab);
+        if (!tab) return;
+        irAlVisual(tab);
+        const f = montados.get(tab.id);
+        if (!f) return;
+        f.poner(est);
+        requestAnimationFrame(() => f.lienzo.scrollIntoView({ behavior: 'smooth', block: 'center' }));
+    }, 60);
+});
+
 export function montarFiltro(cuerpo, { tab }, opciones) {
     const reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const css = getComputedStyle(document.documentElement);
@@ -63,7 +88,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
     const COLOR = { cit: tk('--accent-yellow'), ca: colorParticula('ca'), agua: colorParticula('agua') };
     const LEYENDA = [{ clave: 'rbc' }, { clave: 'alb' }, { clave: 'urea' }, { clave: 'k' }, { clave: 'cito', nombre: 'Citoquinas (mayor tamaño)' }, { clave: 'ca' },
         ...(opciones.mandos.includes('anticoag') ? [{ clave: 'citrato' }, { clave: 'cacit' }] : []), { clave: 'agua', nombre: 'Agua / reposición' }];
-    const e = { modo: 'hf', dosis: 25, reposicion: 'post', qb: 150, anticoag: 'citrato', ...opciones.inicial };
+    const e = { modo: 'hf', dosis: 25, reposicion: 'post', qb: 150, anticoag: 'citrato', k0: 7, horas: 0, calcio: 'no', ...opciones.inicial };
     const m = new Set(opciones.mandos);
     // Sin el mando de anticoagulación, el filtro no se coagula ni se dibuja el citrato.
     const conAc = m.has('anticoag');
@@ -80,6 +105,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         ${m.has('dosis') ? deslizador('dosis', 'Flujo del efluente', 15, 70, 5, 'ml/kg/h') : ''}
         ${m.has('qb') ? deslizador('qb', 'Flujo sanguíneo', 80, 250, 10, 'ml/min') : ''}
         ${m.has('reposicion') ? chips('reposicion', { pre: 'Reposición prefiltro', post: 'Reposición posfiltro' }) : ''}
+        ${m.has('k') ? HTML_K(e) : ''}
         ${m.has('anticoag') ? chips('anticoag', ANTICOAG) : ''}
         ${m.has('anticoag') ? '<div class="nv-chips"><button type="button" class="visual-mini" data-fv-cambiar>Cambiar el filtro</button></div>' : ''}
         <div class="nv-medidores gl-medidores"></div>
@@ -236,6 +262,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
             if (e.anticoag === 'citrato') items.push(['Ca²⁺ iónico en el circuito', '<0,35 mmol/l', true, '', 'Citrato a 4-6 mmol/l; inhibe la coagulación por debajo de 0,5 y al máximo por debajo de 0,25']);
             items.push(['Filtro coagulado', `${Math.round(coag * 100)}%`, false, coag > 0.5 ? 'malo' : '', coag >= 1 ? 'Sin flujo útil: cambiar el circuito' : 'Avanza más rápido con fracción de filtración alta o flujo bajo']);
         }
+        if (m.has('k')) items.unshift(...lecturasK(e).items);   // antes de pintar los medidores
         cuerpo.querySelector('.gl-medidores').innerHTML = items.map(medidor).join('');
         pintarFormula(cuerpo.querySelector('.fv-formula'), md.conv && m.has('dosis') ? [{
             titulo: 'Efluente', formula: 'dosis (ml/kg/h) × peso (kg)',
@@ -243,6 +270,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
             origen: 'fisiología general · dosis: ficha · trr-dosis-base · peso de 70 kg: ilustrativo', prefijos: ['trr'],
         }] : null);
         const av = [];
+        if (m.has('k')) av.push(...lecturasK(e).av);
         if (e.modo === 'hd') av.push(['warn', 'Rápida y eficaz, pero su ultrafiltración depende de lo que tolere la tensión: menos estabilidad hemodinámica que la TRR continua.' + enlace(textos.hd)]);
         if (e.modo === 'hib') av.push(['ok', 'Combinan rasgos de la HD y de la TRR continua: 8-16 h, con velocidades de ultrafiltración y aclaramiento intermedias.' + enlace(textos.hib)]);
         if (e.modo === 'hf') av.push(['ok', 'Gradual y estable: mejor control del balance hídrico, a costa de inmovilizar al paciente y del riesgo de hipotermia.' + enlace(textos.cont)]);
@@ -256,6 +284,13 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
     let ultimaCoag = -1;
     function actualizar() {
         M = modelo();
+        if (m.has('k')) {   // el reloj se apaga en el tope: el K⁺ no baja del suelo
+            e.horas = Math.min(e.horas, horaTope(e.k0, e.modo));
+            const rh = cuerpo.querySelector('[data-fv-rango="horas"]'); rh.value = e.horas;
+            cuerpo.querySelector('[data-fv-out="horas"]').textContent = `${e.horas} h`;
+            cuerpo.querySelector('[data-fv-out="k0"]').textContent = `${e.k0} mEq/L`;
+            cuerpo.querySelector('[data-fv-rango="k0"]').value = e.k0;
+        }
         cuerpo.querySelectorAll('[data-fv]').forEach(b => { const on = e[b.dataset.fv] === b.dataset.valor; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
         cuerpo.querySelectorAll('[data-fv="reposicion"]').forEach(b => { b.disabled = !M.md.conv; });
         const dosis = cuerpo.querySelector('[data-fv-rango="dosis"]'); if (dosis) dosis.disabled = !M.md.conv;
@@ -271,7 +306,7 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
     });
     cuerpo.querySelectorAll('[data-fv-rango]').forEach(r => r.addEventListener('input', () => {
         const k = r.dataset.fvRango; e[k] = +r.value;
-        cuerpo.querySelector(`[data-fv-out="${k}"]`).textContent = `${e[k]} ${k === 'dosis' ? 'ml/kg/h' : 'ml/min'}`;
+        cuerpo.querySelector(`[data-fv-out="${k}"]`).textContent = `${e[k]} ${{ dosis: 'ml/kg/h', k0: 'mEq/L', horas: 'h' }[k] || 'ml/min'}`;
         actualizar();
     }));
 
@@ -286,5 +321,6 @@ export function montarFiltro(cuerpo, { tab }, opciones) {
         if (m.has('anticoag') && Math.round(coag * 100) !== ultimaCoag) actualizar();
         if (visible) raf = requestAnimationFrame(bucle);
     };
+    montados.set(tab.id, { lienzo, poner: est => { Object.assign(e, est); actualizar(); } });
     new IntersectionObserver(([en]) => { visible = en.isIntersecting; ultimo = 0; if (visible && !raf) raf = requestAnimationFrame(bucle); }).observe(lienzo);
 }

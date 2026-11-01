@@ -6,7 +6,7 @@ export const GUIAS = {
     { t: 'El 98 % del K⁺ está dentro de las células; fuera queda el 2 % (todo el líquido extracelular) y el suero es solo ~0,4 %. Por eso un 3,5 no dice cuánto falta.', ion: 'k', z: ['fuera', 'dentro', 'ven'], p: 18, o: 'ficha' },
     { t: 'El punto está en la parte plana de la curva: bajar 1 mEq/L cuesta un déficit de 200-400 mEq.', ion: 'k', z: ['fig'], p: 19, o: 'ficha' },
     { t: 'Pulsa «Realimentar»: la insulina mete K⁺ en la célula, el suero baja y el total no cambia. Mira las partículas pasar.', ion: 'k', z: ['fuera', 'dentro'], p: 21, o: 'ficha (dirección); cifra ilustrativa', haz: ['real'], btn: 'Realimentar' },
-    { t: 'El fosfato también cae: por debajo de 1 mg/dL es grave (sello). El salto de una dosis es ilustrativo: en el libro baja en días de nutrición parenteral (Fig. 38.2).', ion: 'p', z: ['fig', 'ven'], p: 49, o: 'ficha (dirección); tiempo ilustrativo', haz: ['real'], btn: 'Realimentar otra vez' }]],
+    { t: 'El fosfato también cae: una dosis lo deja en 0,9 mg/dL, por debajo de 1 (grave, sello); otra lo llevaría por debajo de 0,3 y el modelo lo sella como combinación no fisiológica. El salto es ilustrativo: en el libro baja en días de nutrición parenteral (Fig. 38.2).', ion: 'p', z: ['fig', 'ven'], p: 49, o: 'ficha (dirección); tiempo y tope 0,3 ilustrativos', haz: ['real'], btn: 'Realimentar otra vez' }]],
   rufino: ['Rufino · sonda nasogástrica y furosemida', [
     { t: 'Con el K⁺ bajo, el suero ya está en la parte plana de la curva: el déficit total es de cientos de mEq.', ion: 'k', z: ['fig', 'ven'], p: 19, o: 'ficha' },
     { t: 'Pulsa «Furosemida»: el riñón pierde K⁺ y Mg²⁺; el total baja y el suero apenas lo nota.', ion: 'k', z: ['dentro', 'ven'], p: 34, o: 'ficha (dirección); cantidades ilustrativas', haz: ['furo'], btn: 'Furosemida' },
@@ -23,14 +23,43 @@ export const GUIAS = {
     { t: 'No hay relación previsible entre el K⁺ y el ECG: solo 40 % de los que pasan de 7 mEq/L tienen cambios.', ion: 'k', z: ['ven', 'fig'], p: 26, o: 'ficha' },
     { t: 'Pulsa «Dar 90 mg de calcio» (10 mL de gluconato al 10 % en 3 min, repetible a los 5): antagoniza la despolarización y el efecto cede en 30-60 min, así que se combina con las demás medidas. Que el K⁺ del suero no baje se deduce de la Tabla 36.3.', ion: 'k', z: ['ven'], p: 27, o: 'ficha; «el K⁺ no baja»: se deduce de la Tabla 36.3', haz: ['ca', { mg: 90 }], btn: 'Dar 90 mg de calcio' }]],
 };
+// Explicación guiada de cada estado con nombre (abrirEstado). Mismo formato que GUIAS; `mas: true` abre «Más mandos» (ClK, MgSO₄, calcio).
+export const GUIAS_ESTADO = {
+  'mg-bajo': ['Rufino · K⁺ 2,8 y Mg²⁺ 1,0 mEq/L', [
+    { t: 'K⁺ 2,8 mEq/L con pH 7,52: hipopotasemia. El suero está en la parte plana de la curva, así que el déficit total es de cientos de mEq.', ion: 'k', z: ['fig', 'ven'], p: 19, o: 'ficha' },
+    { t: 'Mira el Mg²⁺ en el monitor: 1,0 mEq/L, por debajo de lo normal (1,4-2,0 mEq/L, Tabla 37.2, E p. 33). El suero es solo el 0,3 % del Mg del cuerpo.', ion: 'mg', z: ['dep', 'ven'], p: 32, o: 'ficha; cifra del paciente: ilustrativa' },
+    { t: 'La hipopotasemia que acompaña a la falta de Mg puede no corregirse con ClK hasta reponer el Mg.', ion: 'k', z: ['dentro', 'ven'], p: 35, o: 'ficha' },
+    { t: 'Pulsa «Pasar 1 h de ClK» (20 mEq/h): con el Mg²⁺ bajo se pierde ~¾ por la orina y el K⁺ casi no sube. Compara después con «Mg repuesto».', ion: 'k', z: ['ven', 'fig'], p: 35, o: 'ficha (dirección); fracción ilustrativa', haz: ['clk'], btn: 'Pasar 1 h de ClK', mas: true }]],
+  'reponer-mg': ['Rufino · con el Mg repuesto', [
+    { t: 'El Mg²⁺ del suero vuelve a ~1,4 mEq/L (míralo en el monitor): el depósito se ha repuesto, el K⁺ sigue en 2,8.', ion: 'mg', z: ['dep', 'ven'], p: 32, o: 'ficha; Mg repuesto: ilustrativo' },
+    { t: '«Mg replacement is necessary before the hypokalemia can be corrected»: con el Mg bajo el ClK se pierde; con el Mg repuesto, se queda.', ion: 'k', z: ['dentro', 'ven'], p: 35, o: 'ficha' },
+    { t: 'Pulsa «Pasar 1 h de ClK» (20 mEq/h, p. 23): ahora el K⁺ del suero sube todo lo que da la curva.', ion: 'k', z: ['ven', 'fig'], p: 35, o: 'ficha (dirección); ritmo: p. 23', haz: ['clk'], btn: 'Pasar 1 h de ClK', mas: true }]],
+  hipermg: ['Mg²⁺ muy alto · bolo excesivo', [
+    { t: 'Un bolo enorme de MgSO₄ sube el Mg²⁺ del suero por encima de 10 mEq/L (la cifra del bolo es ilustrativa).', ion: 'mg', z: ['ven', 'fig'], p: 37, o: 'ficha (dirección); bolo ilustrativo' },
+    { t: 'Con más de 10 mEq/L hay bloqueo AV completo; con más de 13, parada cardíaca (sello).', ion: 'mg', z: ['ven'], p: 39, o: 'ficha' },
+    { t: 'Pulsa «Esperar 15 min»: el bolo empieza a caer a los 15 minutos (el ritmo es ilustrativo).', ion: 'mg', z: ['ven', 'fig'], p: 38, o: 'ficha (dirección); ritmo ilustrativo', haz: ['esp'], btn: 'Esperar 15 min', mas: true }]],
+  transfusion: ['Valentín · 15 concentrados', [
+    { t: 'El calcio total (8,4) parece casi normal: mide las tres fracciones juntas. El iónico, el que actúa, está en 0,60 mmol/L.', ion: 'ca', z: ['fig'], p: 43, o: 'ficha; cifras del paciente: ilustrativas' },
+    { t: 'El citrato de las bolsas quela el calcio: baja la parte iónica y el total apenas se mueve. Por debajo de 0,9 mmol/L es grave en la transfusión (E p. 44); por debajo de 0,65 hay hipotensión y ectopia (E p. 45) (sello).', ion: 'ca', z: ['fig', 'ven'], p: 44, o: 'ficha' },
+    { t: 'Cada concentrado de 18 días trae 2-3 mEq de K⁺: el suero sube hasta ~6 mEq/L.', ion: 'k', z: ['ven', 'fig'], p: 25, o: 'ficha; cifra del suero: ilustrativa' },
+    { t: 'Pulsa «Dar 200 mg de calcio»: el bolo recomendado sube el calcio y vuelve a caer a los 30 minutos; después, 1-2 mg/kg/h.', ion: 'ca', z: ['ven', 'fig'], p: 46, o: 'ficha', haz: ['ca', { mg: 200 }], btn: 'Dar 200 mg de calcio', mas: true }]],
+  realimentar: ['Damián · una dosis de insulina con glucosa', [
+    { t: 'Con una dosis, el fosfato del suero baja de 1,8 a 0,9 mg/dL: por debajo de 1 es grave (sello). Casi todo el fosfato está dentro de la célula (E p. 48).', ion: 'p', z: ['fuera', 'dentro', 'ven'], p: 48, o: 'ficha (dirección); cifra ilustrativa' },
+    { t: 'El K⁺ (2,9) y el Mg²⁺ (1,1 mEq/L) también caen del suero hacia la célula sin que el total cambie: la insulina mete el K⁺ (E p. 21) y también el Mg²⁺ (E p. 34).', ion: 'k', z: ['fuera', 'dentro', 'ven'], p: 34, o: 'ficha (dirección); cifras ilustrativas' },
+    { t: 'Pulsa «Realimentar otra vez»: el fosfato bajaría de 0,3 mg/dL y el modelo lo sella como combinación no fisiológica.', ion: 'p', z: ['fig', 'ven'], p: 49, o: 'ficha (dirección); tope 0,3 ilustrativo', haz: ['real'], btn: 'Realimentar otra vez' }]],
+  'alcalosis-resp': ['Hiperventilación · pH 7,56', [
+    { t: 'En la alcalosis respiratoria el pH sube por la hiperventilación (aquí 7,56, ilustrativo).', ion: 'p', z: ['ven'], p: 49, o: 'ficha; pH del paciente: ilustrativo' },
+    { t: 'La alcalosis respiratoria sube el pH intracelular y arrastra glucosa y fosfato a la célula: el suero baja de 3,5 a ~3,0 mg/dL (el tamaño es ilustrativo).', ion: 'p', z: ['fuera', 'dentro', 'ven'], p: 49, o: 'ficha (dirección); tamaño ilustrativo' },
+    { t: 'La misma alcalosis une calcio a la albúmina: baja el iónico sin tocar el total.', ion: 'ca', z: ['fig', 'ven'], p: 44, o: 'ficha' }]],
+};
 export const focoSvg = (zs = []) => zs.map((z) => { const [x, y, w, h] = ZONAS[z]; return `<rect class="foco" x="${x}" y="${y}" width="${w}" height="${h}" rx="8"/>`; }).join('');
 // api: { caja, hacer(a, o), unidades(n), ponerIon(i), setFoco(zs), cita(p) }. Devuelve { abrir(preset), cerrar() }.
 import { verFrase } from '../../../core/frase-vista.js';
-export function crearGuia({ dock, caja, hacer, unidades, ponerIon, setFoco, cita }) {
+export function crearGuia({ dock, caja, hacer, unidades, ponerIon, setFoco, cita, abrirMas }) {
   let g = null, i = 0;
   const cerrar = () => { caja.hidden = true; g = null; setFoco([]); };
   function paso(k) {
-    i = Math.max(0, Math.min(g[1].length - 1, k)); const p = g[1][i]; caja.hidden = false; ponerIon(p.ion); setFoco(p.z);
+    i = Math.max(0, Math.min(g[1].length - 1, k)); const p = g[1][i]; caja.hidden = false; if (p.mas && abrirMas) abrirMas(); ponerIon(p.ion); setFoco(p.z);
     caja.innerHTML = `<h3>${g[0]} · paso ${i + 1} de ${g[1].length}</h3><p class="enun">${p.t} <span class="org">${p.o}</span> ${cita(p.p)}</p>
       <div class="fila-g">${p.haz ? `<button type="button" class="b prim" data-paso="haz">Hazlo: ${p.btn}</button>` : ''}<button type="button" data-paso="ant" ${i ? '' : 'disabled'}>‹ Anterior</button><button type="button" data-paso="sig">${i < g[1].length - 1 ? 'Siguiente ›' : 'Cerrar'}</button></div>`;
     verFrase(caja, { dock, techo: 8, margen: 6 });
@@ -38,7 +67,7 @@ export function crearGuia({ dock, caja, hacer, unidades, ponerIon, setFoco, cita
   caja.addEventListener('click', (ev) => {
     const b = ev.target.closest('[data-paso]'); if (!b || !g) return; const a = b.dataset.paso, p = g[1][i];
     if (a === 'ant') paso(i - 1); else if (a === 'sig') { if (i < g[1].length - 1) paso(i + 1); else cerrar(); }
-    else if (a === 'haz') { if (p.haz[0] === 'unidades') unidades(p.haz[1]); else hacer(p.haz[0], p.haz[1]); ponerIon(p.ion); setFoco(p.z); }
+    else if (a === 'haz') { if (p.haz[0] === 'unidades') unidades(p.haz[1]); else hacer(p.haz[0], p.haz[1]); ponerIon(p.ion); setFoco(p.z); const ver = () => verFrase(caja, { dock, techo: 8, margen: 6 }); ver(); requestAnimationFrame(() => requestAnimationFrame(ver)); }   // el aviso que sale tras «Hazlo» hace crecer el dock: se vuelve a mirar dos fotogramas después
   });
-  return { abrir: (clave, k = 0) => { if (!GUIAS[clave]) return cerrar(); g = GUIAS[clave]; paso(k); }, cerrar };
+  return { abrir: (clave, k = 0) => { const G = GUIAS[clave] || GUIAS_ESTADO[clave]; if (!G) return cerrar(); g = G; paso(k); }, cerrar };
 }

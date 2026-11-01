@@ -74,14 +74,14 @@ function figK(s, L, oculto) {
   o += `<line class="guia" x1="${dx}" y1="420" x2="${dx}" y2="${yc}"/><circle class="punto" cx="${dx}" cy="${yc}" r="6"/>`;
   // La cifra va fija en la cabecera: junto al punto chocaba con las leyendas (rejuicio R8).
   o += txt(336, 262, `K⁺ ${oculto ? '?' : kVer(L.k)} · Δ ${L.dKef > 0 ? '+' : ''}${Math.round(L.dKef)} mEq`, 'class="rot" text-anchor="end"');
-  o += txt(44, 300, 'Plano a la izquierda: déficit de 200-400 mEq por 1 mEq/L', 'class="min"') + txt(120, 314, 'a la derecha: 100-200', 'class="min"');
+  if (!oculto) o += txt(44, 300, 'Plano a la izquierda: déficit de 200-400 mEq por 1 mEq/L', 'class="min"') + txt(120, 314, 'a la derecha: 100-200', 'class="min"');
   return o + (s.ins ? txt(44, 330, 'Insulina: el suero baja, el total no cambia', 'class="min"') : '');
 }
-function figMg(s, L) {
+function figMg(s, L, oculto) {
   const w = 300, f = L.mgTotal / 2000;
   let o = txt(10, 262, 'El número del suero es el 0,3 % del total', 'class="rot"');
   o += caja(26, 276, w, 24, 'dentro') + caja(26, 276, w * Math.min(1, f), 24, 'lleno') + txt(32, 292, `Total ${fmt(L.mgTotal, 0)} mEq (de 2.000)`, 'class="rot"');
-  o += caja(26, 316, w, 24, 'fuera') + caja(26, 316, Math.max(2, w * L.mgPlasma / 2000), 24, 'lleno') + txt(32, 332, `Plasma ${fmt(L.mgPlasma)} mEq → suero ${fmt(L.mg)} mEq/L`, 'class="rot"');
+  o += caja(26, 316, w, 24, 'fuera') + caja(26, 316, Math.max(2, w * L.mgPlasma / 2000), 24, 'lleno') + txt(32, 332, oculto ? 'Plasma ? → suero ?' : `Plasma ${fmt(L.mgPlasma)} mEq → suero ${fmt(L.mg)} mEq/L`, 'class="rot"');
   o += txt(26, 362, MG_REPARTO.map(([n, p]) => `${n} ${String(p).replace('.', ',')} %`).join(' · '), 'class="min"');
   return o + txt(26, 380, 'Tabla 37.1: el Mg puede ser normal con el total vacío', 'class="min"');
 }
@@ -103,7 +103,7 @@ function figP(s, L, oculto) {
   return o + `<rect class="ca-i" x="30" y="${416 - L.po4 * 14}" width="60" height="${L.po4 * 14}"/>` + txt(60, 432, oculto ? '?' : `${fmt(L.po4)} mg/dL`, 'class="min" text-anchor="middle"') + `<line class="guia" x1="20" y1="${416 - 14}" x2="150" y2="${416 - 14}"/>` + txt(156, 406, '1 mg/dL: debajo, grave (p. 49)', 'class="min"');
 }
 export function escena(ion, s, L, oculto = false) {
-  const fig = ion === 'k' ? figK(s, L, oculto) : ion === 'mg' ? figMg(s, L) : ion === 'ca' ? figCa(s, L, oculto) : figP(s, L, oculto);
+  const fig = ion === 'k' ? figK(s, L, oculto) : ion === 'mg' ? figMg(s, L, oculto) : ion === 'ca' ? figCa(s, L, oculto) : figP(s, L, oculto);
   return deposito(ion, s, L) + ventana(ion, L, oculto) + fig;
 }
 export const NOMBRE = NOM;

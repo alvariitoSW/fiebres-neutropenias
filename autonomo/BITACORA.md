@@ -15,6 +15,7 @@ Orden que propongo (de arriba abajo). Cada tarea pasa por las fases que dice; ve
 esta sección.
 
 ### B-001 · Preguntas para estudiar en la app · apuntado 2026-10-14
+- **❌ Cerrada el 01/11/2026 (tu decisión, art. 7 de la reforma: «Cerrar: sustituida»)**: la sustituye el Estudiar de cada ficha. Pasa al historial en la próxima limpieza.
 - **Lo que dijiste**: «lo primero […] la tarea de preguntas está por hacer, sería la primera cosa».
 - **Cómo lo entiendo**: tipo `visual`. Llevar la maqueta aprobada (`autonomo/modelos/preguntas-para-estudiar.html`) a
   la app: interruptor **Texto | Visual | Preguntas**, recorrido en orden, repaso de lo fallado, caso clínico, y los
@@ -321,6 +322,13 @@ esta sección.
   `kv-row`; (5) resaltes en la frase viva de la nefrona. Después, `capturas.mjs` y rejuicio solo de esos puntos.
 - **Visto de paso**: la app dice «Texto | Mayéutica | Estudiar» y REGLAS §8 «Texto | Estudiar»: o cambia la regla o la app.
 
+### B-053 · Repaso del Estudiar del `b4` (grupos 4A-4D) a la nota de corte 9,5 · apuntado 2026-11-01
+- **Qué**: las 23 fichas de Marino caps. 31-38 con Estudiar entraron en `main` (PR #82) con su nota de 8,75-9,0. Se
+  juzgaron antes de que la nota de corte pasara a 9,5 (01/11, 17:49), y el usuario decidió que entraran así. Tipo: estudio
+  (rejuicio R8 con receta R10 y vueltas cortas). Lo más bajo: 4B (≥8,75) y 4D, fichas 21-22 (8,75).
+- **Coste**: ≈8-12 M (profesor fable por grupo y constructores sonnet). Dónde: Libros → Marino · Ácido-base, renal y
+  electrolitos. Origen: acta `autonomo/consejo/2026-11-01-pr82.md` (Educación lo pidió como deuda de estudio).
+
 ## 2. En marcha (ya en el tablero)
 
 | Clave | Qué | Estado | Desde | Nota |
@@ -396,6 +404,8 @@ esta sección.
 El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
+
+**✅ 01/11 · Reforma de la Constitución: los 9 artículos aprobados** (acta `autonomo/consejo/2026-11-01-reforma-constitucional.md`; votados uno a uno en la sesión de debate). Tus votos, literales: art. 1 **con cambios**; arts. 2, 3, 4, 5, 6, 7 y 8 **«Sí»**; art. 9 **«Sí, con la medida»**. Cambio del art. 1, tus palabras: «Yo, como gobernador decido todo lo que se hace, pero tras formar este gobierno, hay funciones en las que DELEGO en el gobierno con su buena fé y siempre siguiendo la filosofía de la app. Entonces yo he dado la orden de todas estas funciones delegarlas en el gobierno, con la condición de que se me informe de lo que se está haciendo, con sesiones de control, que ya hay cosas que intentan hacer esa función pero quizá deberiamos hacer una skill de esto o algo para dejarlo mejor entendido». Forma de la sesión de control: «Puede ser una parte de la skill de bitácora, o una diferente, se puede plantear su fusión en algo mejorado» (el Consejo te traerá opciones para elegir). Decisiones sueltas: art. 2, tramos del Consejo; art. 3, **«La del día del voto»** (se mantiene); art. 4, **«Sí, voz de España»** (fuera la voz mexicana de Exteriores); art. 7, **«Cerrar: sustituida»** (B-001); siguiente paso, **«Al tablero»**. → Tarea `reforma-constitucion` en el tablero (Objetivo L, n.º 13; ≈5,8 M, techo 7,3 M).
 
 **✅ 01/11 · Consejos 4.ª (Sonnet) y 5.ª (Fable): nota 9,5, sin contradicciones** (actas `autonomo/consejo/2026-11-01-4.md`
 y `-5.md`). Aprobado por ti: alinear profesor y skills (punto 1), modelo grande en el Consejo y el Congreso, y «sí a
