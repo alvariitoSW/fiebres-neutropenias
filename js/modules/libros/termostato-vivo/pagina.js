@@ -9,10 +9,11 @@ import { PDF, IMG, LIBRO_AZUL, TAB_FICHA, IDEA, ESTADOS, YSI, FUENTES, NOTAS, PR
 import { nuevo, leer, topes, fmt, clamp } from './modelo.js';
 import { nuevoLibre, pasar, enfriar, recalentar, antipiretico, fraseLibre } from './libre.js';
 import { escena } from './dibujo.js';
+import { montarMayeutica } from './mayeutica.js';
 const $ = (id) => document.getElementById('tmv-' + id);
 const R = $('raiz');
 const todos = (q) => R.querySelectorAll(q);
-let s = nuevo(), modo = 'explorar', activos = new Set(), topeApi, prev = { pt: 37 }, oculto = false, ronda = 0, casoN = 0, apN = 0, casoAct = CASO;
+let may = null, s = nuevo(), modo = 'explorar', activos = new Set(), topeApi, prev = { pt: 37 }, oculto = false, ronda = 0, casoN = 0, apN = 0, casoAct = CASO;
 const capas = { piel: true, mus: true, cer: true }, CAPA = { cer: 'cer', piel: 'piel', mus: 'mus', ret: 'mus' };
 // Cada cita: «PDF p. N» (abre el libro) y «p. N · Ver en la ficha» (el enlace cruzado de siempre, al párrafo exacto de la ficha)
 const cita = (c) => { const [p, id] = String(c).split('|');
@@ -59,7 +60,7 @@ const fraseDe = () => { if (s.est === 'juega') { const [x, p, o] = fraseLibre(s.
 function verFoco() { requestAnimationFrame(() => requestAnimationFrame(() => { const e = $('svg').querySelector('.foco'), d = $('dock'); if (!e || !d.offsetHeight) return;
   const r = e.getBoundingClientRect(), bajo = innerHeight - d.offsetHeight - 8, dy = r.bottom > bajo ? Math.min(r.bottom - bajo, r.top - 8) : r.top < 8 ? r.top - 8 : 0;
   if (Math.abs(dy) > 1) scrollBy({ top: dy, behavior: 'instant' }); })); }
-function ir(p) { Object.assign(s, p); if (s.est === 'juega' && (p.est === 'juega' || !s.j)) s.j = p.j || nuevoLibre(); if (s.est === 'juega') s.paso = 1; s.paso = clamp(s.paso, 1, 5); fraseDe(); pintar(); if (p.paso != null || p.est || p.ysi) verFoco(); }
+function ir(p0) { const { quieto, ...p } = p0; Object.assign(s, p); if (s.est === 'juega' && (p.est === 'juega' || !s.j)) s.j = p.j || nuevoLibre(); if (s.est === 'juega') s.paso = 1; s.paso = clamp(s.paso, 1, 5); fraseDe(); pintar(); if (!quieto && (p.paso != null || p.est || p.ysi)) verFoco(); }
 function mandos() {
   $('m-est').innerHTML = Object.entries(ESTADOS).map(([k, e]) => `<option value="${k}">${e.nombre}</option>`).join('');
   $('m-ysi').innerHTML = '<option value="">De la ficha</option>' + Object.entries(YSI).map(([k, y]) => `<option value="${k}">${y.n}</option>`).join('');
@@ -80,7 +81,9 @@ function mandos() {
 // ---- pruebas ----
 function modoPrueba(m) {
   modo = m; oculto = false; for (const b of todos('[data-modo]')) b.setAttribute('aria-pressed', b.dataset.modo === m);
-  const c = $('prueba'); c.hidden = m === 'explorar'; c.innerHTML = ''; delete c.dataset.fin;
+  const c = $('prueba'); c.hidden = m === 'explorar' || m === 'preguntas'; c.innerHTML = ''; delete c.dataset.fin;
+  may?.enPreguntas(m === 'preguntas');
+  if (m === 'preguntas') { s = { est: 'fiebre', paso: 1, trat: 0, ysi: null }; fraseDe(); pintar(); may.entrar(); return; }
   if (m === 'explorar') { fraseDe(); return pintar(); }
   if (m === 'apuesta') { s = { est: 'hm', paso: 1, trat: 0, ysi: null }; oculto = true; apuesta(); }
   if (m === 'error') { s = { est: 'snm', paso: 4, trat: 0, ysi: null }; error(); }
@@ -143,6 +146,7 @@ function pagina() {
   const ajustar = () => R.style.setProperty('--tmv-dock-h', $('dock').offsetHeight + 'px');
   new ResizeObserver(ajustar).observe($('dock')); ajustar();
   window.__tmv = { get caso() { return casoAct; }, rondaDatos: (r) => ERROR.rondas[r % ERROR.rondas.length].map((f) => f.mal), get s() { return s; }, leer: () => leer(s), topes: () => topes(s, leer(s)), ir, modoPrueba, pintar, ESTADOS };
+  may = montarMayeutica({ R, $, cita, org, ir, leer, modoPrueba }); may.cargar();
   ir({});
 }
 pagina();
