@@ -387,6 +387,11 @@ El resto del tablero sigue `aparcada`.
 
 ## 3. Esperando algo tuyo
 
+**🆕 01/11 · AI Engineering Hub** (catálogo de ≈110 tutoriales de IA; Consejo 3.ª, acta
+`autonomo/consejo/2026-11-01-3.md`). Nada para la app. El Consejo propone dos mejoras técnicas de los jueces, sin
+tocar la app: **H3** juez que comprueba los enlaces `#page=N` (≈1 M) y **H1** rúbrica por criterio para el auditor
+ciego (≈0,3 M); H2 (Docling para tablas), solo prueba si sobra. Dime si las frenas; si no, entran en la cola.
+
 **🆕 01/11 · El «superagente» de DeepSeek** (tu pregunta: «qué podemos hacer con este repo»; Ciencia + Consejo 2.ª,
 acta `autonomo/consejo/2026-11-01-2.md`, informe `autonomo/ideas/ingenieria-inversa/dsh-superagent.md`, página
 https://claude.ai/artifact/KGS5TExbpZnC7d22LEqMNX). No sirve para la app ni se instala (5-0). Sus ideas sobre cómo
