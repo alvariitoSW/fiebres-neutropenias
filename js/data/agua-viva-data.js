@@ -835,7 +835,7 @@ export const GUIAS = {
   ],
   'furosemida-glucosado': [
     { t: 'Hipernatremia con sodio en exceso: si el riñón no lo elimina solo, se piensa en un diurético como la furosemida.', mirar: 'mar', cita: HP('mr-hiperna-hiper', 8) },
-    { t: 'La orina con furosemida lleva unos <span class="hl-azul">80 mEq/L</span> de Na⁺, menos que el plasma (aquí 160): sale más agua que sal y la diuresis sola puede <span class="hl-rojo">agravar</span> la hipernatremia.', e: { perdida: 'diuretico' }, mirar: 'orina', resalta: '#agv-lectura', cita: HP('mr-hiperna-hiper', 8), org: 'el Na⁺ 160 es ilustrativo; la ficha no dice cuánto sube' },
+    { t: 'La orina con furosemida lleva unos <span class="hl-azul">80 mEq/L</span> de Na⁺, menos que el plasma (aquí 160): sale más agua que sal y la diuresis sola puede <span class="hl-rojo">agravar</span> la hipernatremia.', e: { perdida: 'diuretico' }, mirar: 'orina', lupa: null, resalta: '#agv-lectura', cita: HP('mr-hiperna-hiper', 8), org: 'el Na⁺ 160 es ilustrativo; la ficha no dice cuánto sube' },
     { t: 'Por eso se combina con <span class="hl">glucosado al 5 %</span>, que repone el agua que se lleva la diuresis.', e: { infusiones: [{ f: 'glucosado', ml: 1000 }] }, mirar: 'mar', cita: HP('mr-hiperna-hiper', 8) },
     { t: 'El glucosado entra en las células con su agua: de 1 L, dos tercios acaban dentro y solo 100 mL se quedan en el río.', mirar: 'mar', cita: [CR('mar-glucosado-volumen', 11), CR('mar-cristaloides', 6)] },
     { t: 'El salino isotónico no sirve para esto: corrige la hipotensión, no la hipernatremia. Con la pérdida hipotónica, al autor le parece más adecuado el salino al 0,45 %.', mirar: 'mar', cita: HP('mr-hiperna-tto', 6), org: 'opinión del autor' },
