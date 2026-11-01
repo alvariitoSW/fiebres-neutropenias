@@ -4,6 +4,7 @@
 import { montarVisual } from '../../core/visual-kit.js';
 import { RECETAS_3D_G1 } from './visual-3d-g1.js';
 import { RECETAS_3D_G2 } from './visual-3d-g2.js';
+import { RECETAS_3D_G2B } from './visual-3d-g2b.js';
 import { RECETAS_3D_G3 } from './visual-3d-g3.js';
 import { RECETAS_3D_G4 } from './visual-3d-g4.js';
 import { RECETAS_3D_G5 } from './visual-3d-g5.js';
@@ -47,7 +48,7 @@ const RECETAS = {
     }
 };
 
-const TODAS = { ...RECETAS, ...RECETAS_3D_G1, ...RECETAS_3D_G2, ...RECETAS_3D_G3, ...RECETAS_3D_G4, ...RECETAS_3D_G5 };
+const TODAS = { ...RECETAS, ...RECETAS_3D_G1, ...RECETAS_3D_G2, ...RECETAS_3D_G2B, ...RECETAS_3D_G3, ...RECETAS_3D_G4, ...RECETAS_3D_G5 };
 
 export function init() {
     for (const [ficha, receta] of Object.entries(TODAS)) montarVisual(ficha, receta);
