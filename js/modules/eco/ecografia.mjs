@@ -54,6 +54,9 @@ export const VISTAS = {
   psaxMv: { corto: 'PSAX', nombre: 'Paraesternal eje corto · válvula mitral', ventana: 'paraesternal', prof: 140, angulo: 80, nivel: () => -7 },
   psaxPm: { corto: 'PSAX', nombre: 'Paraesternal eje corto · músculos papilares', ventana: 'paraesternal', prof: 140, angulo: 80, nivel: (vi) => -0.45 * vi.L },
   a4c: { corto: 'A4C', nombre: 'Apical 4 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
+  // foco VD (Mitchell 2019 p. 26 y Tabla 3, p. 30; Lang 2015 p. 17): desde el A4C, la sonda gira un poco en sentido antihorario
+  // en el ápex hasta el máximo de área del VD, con el VI parcial a la derecha y la pared libre entera
+  a4cVd: { corto: 'A4C VD', nombre: 'Apical 4 cámaras · foco VD', ventana: 'apical', prof: 170, angulo: 80 },
   a2c: { corto: 'A2C', nombre: 'Apical 2 cámaras', ventana: 'apical', prof: 170, angulo: 80 },
   a3c: { corto: 'A3C', nombre: 'Apical 3 cámaras (eje largo)', ventana: 'apical', prof: 170, angulo: 80 },
   // subcostal: la sonda bajo la apófisis xifoides, el haz hacia arriba y a la izquierda a través del hígado
@@ -119,6 +122,22 @@ export function planoVista(clave, est) {
     porTres(o, asc, desc, sum(esc(asc, 0.5), esc(desc, 0.5)));
   } else if (v.ventana === 'apical') {
     if (clave === 'a4c') apical(A(mix2(g.ct, g.mc, 0.55), 8), [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0]);      // VI a la derecha
+    else if (clave === 'a4cVd') {
+      // foco VD: el haz por el eje del VI y el plano del A4C girado sobre ese eje el ángulo que da más área de VD (Mitchell p. 26: «rotated slightly
+      // counterclockwise ... to maximize the RV area»; sin inclinar hacia delante, hacia el cinco cámaras). Tope ±22° («slightly»).
+      const T = [0, 0, 8], r4 = [g.mc[0] - g.ct[0], g.mc[1] - g.ct[1], 0], O4 = [0, 0, -vi.Le - HUECO], d4 = nrm(res(T, O4));
+      const area = (rr) => { const n0 = nrm(cruz(rr, d4)); let n = 0;
+        for (let u = -70; u <= 70; u += 2) for (let v = 20; v <= 170; v += 2) {
+          const p = sum(O4, sum(esc(rr, u), esc(d4, v))), zp = p[2]; if (zp >= 0 || zp < -g.Lvd) continue;
+          const f = Math.atan2(p[1], p[0]), rho = Math.hypot(p[0], p[1]);
+          if (g.ventana(f) > 0) { const re = g.rEpiVi(zp, f); if (rho > re && rho < re + g.wRV(zp, f)) n++; } }
+        return n; };
+      let mejor = 0, aMax = -1;
+      for (let gr = -22; gr <= 22; gr += 2) { const a = gr * Math.PI / 180, c = Math.cos(a), s = Math.sin(a), q = [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0];
+        const A2 = area(perp(q, d4)); if (A2 > aMax) { aMax = A2; mejor = a; } }
+      const c = Math.cos(mejor), s = Math.sin(mejor);
+      apical(T, [r4[0] * c - r4[1] * s, r4[0] * s + r4[1] * c, 0]);
+    }
     else if (clave === 'a3c') apical(A(mix2(g.mc, g.ac, 0.5), 8), [g.ac[0] - g.mc[0], g.ac[1] - g.mc[1], 0]);  // aorta a la derecha
     else {
       // 2 cámaras: el plano por el eje que menos toca la media luna del VD (que abarca más de media vuelta),
@@ -156,6 +175,22 @@ export function planoVista(clave, est) {
       // si aun girado el contorno no cabe (VD muy dilatado), se abre el sector lo justo, con margen (tope 110°)
       mitad = clamp((Math.max(...ang) - Math.min(...ang)) / 2 + ENCUADRE_A4C.margenRad, mitad, 0.96);
       const giro = clamp((Math.min(...ang) + Math.max(...ang)) / 2, -0.5, 0.5);
+      if (Math.abs(giro) > 0.01) { const d2 = nrm(sum(esc(d, Math.cos(giro)), esc(r, Math.sin(giro)))); r = nrm(cruz(d2, n0)); d = d2; }
+    }
+  }
+  if (clave === 'a4cVd') {
+    // foco VD: el sector se abre para que entre toda la pared libre del VD y se desplaza hacia el VD (un 30 % de su semiancho):
+    // el VD ocupa el centro y la pared lateral del VI queda parcial a la derecha. Ilustrativo (Lang 2015 p. 17: ápex del VI hacia el centro).
+    // Un sector más estrecho (zoom) daba una cuña sin VI ni aurículas: no se usa.
+    const ang = []; const NZ = 14, NF = 90, n0 = nrm(cruz(r, d));
+    for (let i = 0; i <= NZ; i++) { const z = -vi.Le * 0.98 + (vi.Le * 0.98) * (i / NZ);
+      for (let j = 0; j < NF; j++) { const f = -Math.PI + 2 * Math.PI * j / NF;
+        for (const p of [g.epiVi(z, f), (z > -g.Lvd ? g.epiVd(z, f) : null)]) { if (!p) continue;
+          const q = res(p, O); if (Math.abs(dot(q, n0)) < 5 && dot(q, d) > 35) ang.push(Math.atan2(dot(q, r), dot(q, d))); } } }
+    if (ang.length > 10) {
+      const lo = Math.min(...ang), hi = Math.max(...ang), medio = (hi - lo) / 2;
+      mitad = clamp(medio * 0.85 + ENCUADRE_A4C.margenRad, mitad, 0.96);
+      const giro = clamp((lo + hi) / 2 - 0.3 * medio, -0.5, 0.5);
       if (Math.abs(giro) > 0.01) { const d2 = nrm(sum(esc(d, Math.cos(giro)), esc(r, Math.sin(giro)))); r = nrm(cruz(d2, n0)); d = d2; }
     }
   }
