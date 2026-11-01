@@ -37,7 +37,7 @@ export const MAYEUTICA_SCA = {
       { id: 'scd-g3', corto: 'la MPO y la lejía', tipo: 'test', fuente: 'mc-placa', modeloVivo: vv('placa', '🩸 Tiempo 2: la mieloperoxidasa'),
         enunciado: 'Un compañero dice que la mieloperoxidasa (MPO) «es la lejía de la placa». ¿Qué es y qué hace?',
         opciones: [
-          { t: 'Una enzima de los leucocitos que genera hipoclorito, el principio activo de la lejía, y oxida las lipoproteínas de la placa', ok: true },
+          { t: 'Una enzima de los leucocitos que genera hipoclorito, el principio activo de la lejía, y oxida las lipoproteínas', ok: true },
           { t: 'Un marcador de necrosis, como la troponina, que sube en sangre cuando el miocito ya está muerto y confirma el infarto', porque: `La MPO se mide en la placa y su nivel plasmático se correlaciona con la presencia y la gravedad de la enfermedad coronaria (${p(39)}); no es el marcador de necrosis del protocolo, que es la hs-cTn (${p(41)}).` },
           { t: 'Una enzima del hígado que limpia las lipoproteínas de la placa y la estabiliza', porque: `La libera el leucocito y oxida las lipoproteínas de la placa (${p(39)}); estabilizarla sería lo contrario: en las autopsias tiñe el sitio de la rotura.` }],
         explicacion: `La MPO, liberada por leucocitos, <span class="hl-azul">genera hipoclorito</span> (el ingrediente activo de la lejía doméstica) y oxida las lipoproteínas de la placa; hay correlación directa entre su nivel plasmático y la enfermedad coronaria, y en las autopsias tiñe de forma extensa el sitio de rotura (${p(39)}).`,
