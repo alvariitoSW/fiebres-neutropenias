@@ -10,3 +10,10 @@ Con página (cotejar con el auditor):
 - Locked-in (protuberancia ventral, ojos verticales y parpadeo): p. 3. Muerte encefálica (≥48 h, T >36, PAM ≥75, EEG no vale): p. 14-16.
 Sin cita / magnitudes `ilustrativo` (rotuladas): curva PIC–masa y estadios por PIC (20/30/40/50/60), cuánto baja cada drenaje/bolo/manitol/craniectomía, +5 mEq/L de Na⁺ por bolo, crecimiento por hora (+6/+9), PAD = 55 % de la PAS, Na⁺ inicial 138, forma de la masa. Hiperventilación: Manual UMI. «Retira» del brazo en el estadio 2 es mío (Marino no lo gradúa).
 Piensa: enunciado y cada opción de la apuesta, el error y el caso llevan su página en la explicación (apuesta p. 10-11; error p. 47-48; caso p. 41, 35, 11, 14-16); distractores = qué le pasaría al paciente.
+
+## Vuelta 2a (arreglos)
+- HSA sin herniación uncal (pupila bilateral solo con compresión del tronco): p. 10-11, Tabla 45.4. GCS 9 de Petronila: ilustrativo.
+- Sello «sin flujo» con PIC ≥ PAM o PPC <10: p. 14-15 (la muerte encefálica exige la Tabla 45.6); umbral PPC <10: ilustrativo. Topes PIC 80 y PAM 150: fisiología general.
+- Caso Abundio paso 2: cirugía con hematoma >20 mL y desplazamiento >5 mm: Manual UMI (sin página de Marino; sin cita de PDF). Paso 3: PIC <20 y PPC 50-70: p. 45. Paso 4: ≥48 h, T >36: p. 14. Paso 5: PAM ≥75: p. 15.
+- Error Petronila: cerrar el aneurisma en 3 días, nunca >7-10 (p. 47); tranexámico no (p. 47). Hemicraniectomía solo en el edema maligno: p. 40.
+- Sin cita aún: salino en exceso sube el Na⁺ >155 (p. 41, indirecta); empujar PPC a 100 «sin respaldo» (inferencia sobre p. 45).

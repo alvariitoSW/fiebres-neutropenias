@@ -16,8 +16,8 @@ function frase(t, o) { fraseT = t; fraseO = o; $('frase-txt').innerHTML = `${t} 
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.titulo, t.texto]));
   if (f === firma) { topeApi.refrescar(); return; } firma = f;
-  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'exc', 'vaso']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
-  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: { p: t.pag, f: t.ficha }, origen: t.origen, deshabilita: t.off, bajo: t.n === 'aviso' ? '#dock-panel' : null });
+  for (const c of ['me', 'desc', 'uncal', 'ppc', 'pic', 'pic80', 'sensor', 'edemasens', 'crece', 'pas', 'nitro', 'vpp', 'na', 'cran', 'resang', 'exc', 'vaso']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: { p: t.pag, f: t.ficha }, origen: t.origen, deshabilita: t.off, bajo: null });
 }
 function pintar() {
   const L = leer(s); aplicarTopes();
@@ -61,7 +61,7 @@ function modoPrueba(m) {
   modo = m; const caja = $('prueba'); fin = ''; caja.dataset.fin = ''; caja.hidden = m === 'explorar'; caja.innerHTML = ''; $('guia').hidden = m !== 'explorar' || $('guia').hidden;
   if (m === 'explorar') { oculto = false; return pintar(); }
   if (m === 'apuesta') { s = nuevo(PRES.abundio[1]); oculto = true; caja.innerHTML = `<h3>Apuesta</h3><p class="enun">${APUESTA.enun}</p><div class="ops">${APUESTA.ops.map((o, i) => `<button type="button" class="op" data-i="${i}">${o[0]}</button>`).join('')}</div><div class="resp"></div>`; }
-  if (m === 'error') { s = nuevo(PRES.petronila[1]); oculto = false; caja.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${ERROR.enun}</p><div class="ops">${ERROR.fr.map((o, i) => `<button type="button" class="op" data-i="${i}">${o[0]}</button>`).join('')}</div><div class="resp"></div>`; }
+  if (m === 'error') { s = nuevo(PRES.petronila[1]); oculto = false; caja.innerHTML = `<h3>Encuentra el error</h3><p class="enun">${ERROR.enun}</p><div class="ops">${ERROR.fr.map((o, i) => `<button type="button" class="op" data-i="${i}">${o[0]}</button>`).join('')}<button type="button" class="op neutra" data-nada="1">No hay más errores</button></div><div class="resp"></div>`; }
   if (m === 'caso') { oculto = false; paso(0); return; }
   pintar();
 }
@@ -73,7 +73,10 @@ $('prueba').addEventListener('click', (ev) => {
   const b = ev.target.closest('.op'); if (!b || b.disabled) return; const i = +b.dataset.i, caja = $('prueba'), r = caja.querySelector('.resp');
   const dar = (o, ok) => { b.classList.add(ok ? 'bien' : 'mal'); r.innerHTML = `<p class="por ${ok ? 'ok' : 'no'}">${ok ? '✔ ' : '✖ '}${o[2]} ${cita(o[3], o[4])}</p>`; };
   if (modo === 'apuesta') { const o = APUESTA.ops[i]; dar(o, o[1]); caja.querySelectorAll('.op').forEach((x) => (x.disabled = true)); oculto = false; s.masa = APUESTA.fin.masa; fin = 'ok'; caja.dataset.fin = '1'; frase('Sin operar, la compresión baja por el tronco y la mano pasa a flexión y extensión.', 'ficha p. 10-11'); pintar(); }
-  else if (modo === 'error') { const o = ERROR.fr[i]; dar(o, o[1]); if (o[1]) { caja.querySelectorAll('.op').forEach((x) => (x.disabled = true)); fin = 'ok'; caja.dataset.fin = '1'; } else b.disabled = true; }
+  else if (modo === 'error') {
+    const hallados = () => caja.querySelectorAll('.op.bien').length, total = ERROR.fr.filter((x) => x[1]).length, cerrar = () => { caja.querySelectorAll('.op').forEach((x) => (x.disabled = true)); fin = 'ok'; caja.dataset.fin = '1'; };
+    if (b.dataset.nada) { const falta = hallados() < total; r.insertAdjacentHTML('beforeend', `<p class="por ${falta ? 'no' : 'ok'}">${falta ? '✖ ' : '✔ '}${ERROR.nada[falta ? 0 : 1]}</p>`); if (!falta) cerrar(); return; }
+    const o = ERROR.fr[i]; r.querySelectorAll('.por').forEach((x) => x.remove()); dar(o, o[1]); if (!o[1]) b.disabled = true; if (hallados() >= total) cerrar(); }
   else if (modo === 'caso') {
     const k = +caja.dataset.paso, o = CASO.pasos[k].ops[i]; dar(o, o[1]); caja.querySelectorAll('.op').forEach((x) => (x.disabled = true));
     const ef = o[5] || {}; if (ef.hiper) { s.hiper++; s.na += 5; } if (ef.vent) s.vent = ef.vent; if (ef.masa) s.masa = ef.masa; pintar();
@@ -89,7 +92,7 @@ $('dock-panel').innerHTML = `
   <div class="mando"><b class="dock-nota">Anticoagulante (crece el hematoma hasta revertirlo)</b>${seg('s-anti', 'anti', [['ninguno', 'Ninguno'], ['warfarina', 'Warfarina'], ['dabigatrán', 'Dabigatrán'], ['apixabán', 'Apixabán']])}<div class="fila"><button type="button" id="b-rev" data-a="rev" class="b"></button><button type="button" id="b-hora" data-a="hora" class="b"></button></div></div>
   <div class="mando"><b class="dock-nota">Cirugía y aneurisma</b><div class="fila"><button type="button" id="b-cran" data-a="cran" class="b"></button><button type="button" id="b-exc" data-a="exc" class="b"></button><button type="button" id="b-nimo" data-a="nimo" class="b"></button></div></div>`;
 $('dock-medir').innerHTML = `
-  <div class="mando"><label>Presión arterial <output id="o-pas"></output><input type="range" id="r-pas" min="70" max="220" step="2" value="128"></label><span class="peq">PAD supuesta = 55 % de la PAS · ilustrativo</span><button type="button" id="b-nitro" data-a="nitro" class="b"></button></div>
+  <div class="mando"><label>Presión arterial <output id="o-pas"></output><input type="range" id="r-pas" min="70" max="214" step="2" value="128"></label><span class="peq">PAD supuesta = 55 % de la PAS · ilustrativo</span><button type="button" id="b-nitro" data-a="nitro" class="b"></button></div>
   <div class="mando"><b class="dock-nota">Bajar la presión</b><div class="fila"><button type="button" id="b-dren" data-a="dren" class="b"></button></div><div class="fila"><button type="button" id="b-hiper" data-a="hiper" class="b"></button><button type="button" id="b-mani" data-a="mani" class="b"></button></div></div>
   <div class="mando"><b class="dock-nota">Respirador</b>${seg('s-vent', 'vent', [['esp', 'Espontánea'], ['vpp', 'Presión positiva'], ['hv', 'Hiperventilar']])}<button type="button" id="b-sens" data-a="sens" class="b"></button></div>`;
 $('presets').innerHTML = Object.entries(PRES).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v[0]}</button>`).join('');
@@ -103,6 +106,7 @@ document.addEventListener('click', (ev) => {
   const pe = ev.target.closest('[data-pest]'); if (pe) { document.querySelectorAll('[data-pest]').forEach((x) => x.setAttribute('aria-selected', String(x === pe))); $('dock-panel').hidden = pe.dataset.pest !== 'dar'; $('dock-medir').hidden = pe.dataset.pest === 'dar'; return ajustarDock(); }
   const vf = ev.target.closest('.ver-ficha'); if (vf) { const t2 = $('toast'); t2.textContent = `En la app: abre la ficha y resalta el párrafo #${vf.dataset.resaltar.slice(1)} (p. ${vf.dataset.pag}).`; t2.hidden = false; setTimeout(() => (t2.hidden = true), 3000); }
 });
+$('mas-mandos').addEventListener('click', () => { const a = $('dock').classList.toggle('abierto'); $('mas-mandos').setAttribute('aria-expanded', String(a)); $('mas-mandos').textContent = a ? 'Menos mandos ▴' : 'Más mandos ▾'; ajustarDock(); });
 $('r-pas').addEventListener('input', () => { s.pas = +$('r-pas').value; pintar(); });
 $('fuentes').innerHTML = FUENTES.map((f) => `<li>${f[0]} <span class="org">${f[1]}</span></li>`).join('') + `<li><a href="${PDF}" target="_blank" rel="noopener">Abrir el PDF</a></li>`;
 $('notas').innerHTML = NOTAS.map((n) => `<p class="para"><b>${n[0]}:</b> ${n[1]}</p>`).join('');
@@ -112,6 +116,7 @@ function ajustarDock() { document.documentElement.style.setProperty('--dock-h', 
 const guiaApi = crearGuia({ caja: $('guia'), hacer: (a, v) => (a === 'hora3' ? hacer('hora3') : hacer(a, v)), setFoco: (z) => { foco = z; $('cr-svg').innerHTML = escena(s, leer(s), { oculto }) + focoSvg(foco); }, cita: cit0 });
 function cit0(p, f) { return cita(p, f); }
 topeApi = crearTope({ monitor: $('monitor'), dock: $('dock'), cita: cit });
+$('monitor').after(document.querySelector('.tope-avisos'));   // los avisos bajo el monitor: no engordan el dock fijo
 new ResizeObserver(ajustarDock).observe($('dock')); new ResizeObserver(ajustarDock).observe($('frase'));
 seguirFrase(document.body, () => $('frase'), { dock: () => $('dock') });
 ponerPreset('abundio');

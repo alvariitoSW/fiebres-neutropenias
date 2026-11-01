@@ -12,12 +12,12 @@
 <main>
   <header class="cabecera"><div class="cab-fila"><h1>El corte con la cara</h1></div><p class="aviso">Para revisar: aún no está en la app</p></header>
   <div class="modos" id="modos" role="group" aria-label="Modo"><button type="button" data-modo="explorar" aria-pressed="true">Explorar</button><button type="button" data-modo="apuesta" aria-pressed="false">Apuesta</button><button type="button" data-modo="error" aria-pressed="false">Error</button><button type="button" data-modo="caso" aria-pressed="false">Caso</button></div>
-  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
-  <p id="idea" class="idea"></p>
   <div class="presets" id="presets" role="group" aria-label="Paciente"></div>
+  <section class="zona-escena"><svg id="cr-svg" viewBox="0 0 390 330" role="img" aria-label="Corte coronal del cráneo y la cara del enfermo"></svg></section>
   <section id="monitor" aria-label="Monitor de cabecera"><div class="mon-fila">
     <span>PA <b id="m-pa"></b></span><span>PAM <b id="m-pam"></b></span><span>PIC <b id="m-pic"></b></span><span>PPC <b id="m-ppc"></b></span><span>GCS <b id="m-gcs"></b></span><span>Na⁺ <b id="m-na"></b></span><span>Tiempo <b id="m-t"></b></span></div></section>
-  <section class="zona-escena"><svg id="cr-svg" viewBox="0 0 390 330" role="img" aria-label="Corte coronal del cráneo y la cara del enfermo"></svg></section>
+  <p id="idea" class="idea"></p>
+  <section id="prueba" class="prueba" hidden aria-live="polite"></section>
   <section id="guia" class="prueba guia" hidden aria-live="polite"></section>
   <figure class="fig"><img id="fig-img" alt="Imagen real del libro" loading="eager"><figcaption id="fig-cap"></figcaption></figure>
   <section class="bloque">
@@ -29,7 +29,7 @@
 </main>
 <p class="frase" id="frase" role="status" aria-live="polite"><span class="frase-txt" id="frase-txt"></span></p>
 <div class="dock" id="dock"><div class="dock-in">
-  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Masa y sangrado</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Presión y respirador</button></div>
+  <div class="dock-tabs" role="tablist" aria-label="Mandos"><button type="button" role="tab" data-pest="dar" aria-selected="true">Masa y sangrado</button><button type="button" role="tab" data-pest="medir" aria-selected="false">Presión y respirador</button><button type="button" id="mas-mandos" aria-expanded="false">Más mandos ▾</button></div>
   <div class="dock-panel" id="dock-panel"></div><div class="dock-panel" id="dock-medir" hidden></div>
 </div></div>
 <p id="toast" class="toast" role="status" hidden></p>

@@ -6,7 +6,7 @@ export const IMG = { hematoma: ['mar-fig47-3-hematoma.jpg', 'Fig. 47.3 · hemato
   tronco: ['mar-fig45-1-causas-consciencia.jpg', 'Fig. 45.1 · causas de la alteración de la consciencia', 4, 'mn-cons-causas'] };
 export const PRES = {
   abundio: ['Abundio · TCE', { tipo: 'hematoma', masa: 68, pas: 136 }], segismundo: ['Segismundo · warfarina', { tipo: 'hematoma', masa: 52, pas: 196, anti: 'warfarina' }],
-  clotilde: ['Clotilde · infarto grande', { tipo: 'edema', masa: 50, pas: 150, sensor: false }], petronila: ['Petronila · HSA', { tipo: 'hsa', masa: 25, pas: 165 }],
+  clotilde: ['Clotilde · infarto grande', { tipo: 'edema', masa: 50, pas: 150, sensor: false }], petronila: ['Petronila · HSA', { tipo: 'hsa', masa: 25, pas: 130 }],
   leovigildo: ['Leovigildo · protuberancia', { tipo: 'tronco', pas: 170 }] };
 export const IDEA = 'El cráneo es una caja cerrada: si crece algo dentro, la presión sube, el cerebro se desplaza por la tienda y lo ves en la pupila y en la mano. <span class="org">Marino p. 10-11, 45 · cuánto sube cada cosa: ilustrativo</span>';
 const Z = { uncus: 'uncus', tronco: 'tronco', ventr: 'ventr', cist: 'cist', cara: 'cara', mano: 'mano' };
@@ -39,7 +39,11 @@ export const GUIAS = {
     { t: 'La presión no está alta: aquí el problema no es la caja, es el tronco. Mismo corte, otra lesión.', z: ['tronco'], p: 3, f: 'mn-cons-lockedin', o: 'ficha' }]],
 };
 export const FUENTES = [['Marino, UCI (2024), cap. 45 · p. 2-18, cap. 47 · p. 34-51', 'PDF'], ['Ficha «Hemorragia intracerebral» y «HSA» de la app, con la PPC', 'ficha'], ['Manual UMI de la app, hipertensión intracraneal: PPC <50 a evitar, hiperventilación 30-35 transitoria', 'otra fuente ya cotejada']];
-export const NOTAS = [['la fuente no dice', 'Marino no trae Monro-Kellie, la curva presión-volumen ni la autorregulación (solo una mención, p. 45). La forma de la subida de la PIC con la masa es ilustrativa. Otra fuente pendiente.'],
+export const NOTAS = [['ilustrativo', 'La magnitud de la craniectomía, del manitol, del salino y de la masa, y el umbral «PPC <10 = sin flujo», son ilustrativos: Marino solo dice «sube» y «baja». Ninguna de esas cifras es de Marino.'],
+  ['fisiología general', 'Topes del monitor: PIC máxima 80 mmHg y PAM máxima 150 mmHg (el modelo no muestra cifras mayores). Son fisiología general, no una cifra de la ficha.'],
+  ['la fuente no dice', 'GCS 9 de la HSA al ingreso y el «retira» del brazo en el estadio 2: ilustrativos; Marino no gradúa el GCS de cada tipo de masa.'],
+  ['la fuente no dice', 'Umbral quirúrgico del hematoma (>20 mL y desplazamiento >5 mm): viene del Manual UMI de la app, no de Marino.'],
+['la fuente no dice', 'Marino no trae Monro-Kellie, la curva presión-volumen ni la autorregulación (solo una mención, p. 45). La forma de la subida de la PIC con la masa es ilustrativa. Otra fuente pendiente.'],
   ['la fuente no dice', 'Cuánto baja la PIC cada drenaje, el salino o el manitol, y el tamaño de la masa que provoca cada signo: solo «sube» y «baja». Magnitudes ilustrativas; la presión diastólica supuesta es el 55 % de la sistólica.'],
   ['las fuentes discrepan', 'Convulsiones tras el ictus: 2-5 % (Tabla 46.1) frente a 20 % (p. 41). No afecta a este modelo.'],
   ['opinión del autor', 'La idarucizumab de la Tabla 47.4 aparece con una dosis en miligramos en el texto del libro; este modelo no la muestra.']];
