@@ -136,7 +136,7 @@ export const MAYEUTICA_6A = {
     ],
     profundizar: [
       { id: 'mn-cons-ansiedad' }, { id: 'mn-cons-psicosis' }, { id: 'mn-cons-estupor' },
-      { id: 'mn-convulsiones', titulo: 'Crisis y estado epiléptico', nota: 'Las crisis no convulsivas se pasan por alto a menudo (p. 4); su ficha está en este mismo cuaderno.' }
+      { id: 'mn-conv-parciales', titulo: 'Crisis parciales complejas (no convulsivas)', nota: 'Las crisis no convulsivas se pasan por alto a menudo (p. 4); su ficha está en este mismo cuaderno.' }
     ]
   },
 
