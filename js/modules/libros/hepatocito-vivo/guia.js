@@ -30,25 +30,25 @@ export const GUIA_VIAS = {
     { t: 'Sube la dosis a más de 4 g y mira cómo la conjugación se satura y el glutatión empieza a bajar.', z: C, p: P5, o: 'ficha · cuánto baja por gramo: ilustrativo' }]],
   sobredosis: ['Eufrasia · sobredosis a las 4 h', [
     { t: 'Casi todo el paracetamol se conjuga y se elimina por la orina; un ≈10 % lo oxida el P450 a un metabolito tóxico, que el glutatión neutraliza con su cisteína.', z: C, p: P4, o: 'ficha' },
-    { t: 'Con 12 g la conjugación (hasta 4 g/día) se satura, el P450 fabrica más metabolito y el glutatión se agota (−70 % ya es daño). El hígado aún no ha sufrido: es la fase 1, antes de las 24 h.', z: C, p: P5, o: 'ficha (rango tóxico 7,5-15 g; fases) · cifras del modelo ilustrativas' },
+    { t: 'Con 12 g la conjugación (hasta 4 g/día) se satura, el P450 fabrica más metabolito y el glutatión se agota (−70 % ya es daño, p. 4). El hígado aún no ha sufrido: es la fase 1, antes de las 24 h.', z: C, p: P4, o: 'ficha (−70 %, p. 4; rango tóxico 7,5-15 g y fases, p. 5) · cifras del modelo ilustrativas' },
     { t: 'A las 4 h, 180 µg/mL está por encima de la línea de 150: se trata con NAC. El nivel solo vale con una ingestión aguda de hora conocida.', z: C, p: P6, o: 'ficha' },
     { t: 'La NAC repone la cisteína y, con ella, el glutatión. Pulsa «Hazlo» y mira cómo el metabolito deja de acumularse.', z: C, p: P7, o: 'ficha · cuánto sube el glutatión: ilustrativo', haz: 'nac', btn: 'Poner la NAC' }]],
   'riesgo-alcohol': ['Nicanor · alcohol crónico y dosis repetidas', [
     { t: 'Con alcohol crónico el P450 está inducido y, por la mala nutrición, el glutatión puede estar bajo: el libro dice «probablemente». La dosis tóxica es menor de 4 g.', z: C, p: 'TX:5:mt-para-riesgo', o: 'ficha · cuánto baja el umbral: ilustrativo' },
-    { t: 'Tomó 5 g/día durante 4 días: con dosis repetidas no hay hora de ingestión y el nomograma no sirve. Se decide por la clínica y la ALT (900).', z: C, p: P6, o: 'ficha' },
+    { t: 'Tomó 5 g/día durante 4 días: con dosis repetidas no hay hora de ingestión y el nomograma no sirve. Se decide por la clínica y la ALT (900); el nivel no predice (p. 7).', z: C, p: P7, o: 'ficha · p. 6-7' },
     { t: 'El paracetamol es indetectable en el plasma en cerca de la mitad de los casos con daño hepático: se decide por la ALT y la clínica, y la NAC se da igual.', z: C, p: 3, o: 'ficha · p. 3 y 6' }]],
   nac: ['NAC · reponer la cisteína', [
     { t: 'El glutatión neutraliza el metabolito tóxico con su cisteína; cuando se agota, el metabolito queda libre.', z: C, p: P4, o: 'ficha' },
     { t: 'La NAC aporta la cisteína que falta: es el antídoto. IV: 150 mg/kg en 1 h, 50 mg/kg en 4 h y 100 mg/kg en 16 h.', z: C, p: 'TX:7:mt-tabla-52-1', o: 'ficha' },
-    { t: 'Empezada pronto, el glutatión se mantiene y el hígado no sufre. Empezada tarde, frena lo que falta pero no devuelve los hepatocitos muertos (cuánto frena: ilustrativo).', z: C, p: P7, o: 'ficha · el freno: ilustrativo' }]],
-  hemodialisis: ['Eleuterio · 950 µg/mL y encefalopatía', [
-    { t: 'A las 72 h el glutatión se agotó hace tiempo: el metabolito tóxico se acumuló y la mayoría de los hepatocitos murió (fase 2-3). La encefalopatía ya es West Haven 2; las cifras de ALT, INR y hepatocitos son ilustrativas.', z: C, p: P5, o: 'ficha (fases) · cifras ilustrativas' },
+    { t: 'Empezada pronto, el glutatión se mantiene (en el modelo, el hígado no sufre); empezada tarde, frena lo que falta pero no devuelve los hepatocitos muertos.', z: C, p: P7, o: 'ilustrativo (el freno y cuánto protege; la fuente no lo cuantifica)' }]],
+  hemodialisis: ['Eleuterio · 950 µg/mL y encefalopatía a las 6 h', [
+    { t: 'Ingesta masiva (≈70 g, ilustrativo: el mando llega a 30) y llega a las 6 h con la consciencia deprimida y 950 µg/mL (ilustrativo). Es la fase 1 (antes de las 24 h): el glutatión está agotado, pero el hígado aún no ha muerto; lo urgente es el nivel.', z: C, p: P5, o: 'ficha (fases) · dosis, hora y nivel: ilustrativo' },
     { t: 'Con paracetamol >900 µg/mL y encefalopatía, la ficha indica hemodiálisis además de la NAC; durante la diálisis, la NAC IV a 12,5 mg/kg/h como mínimo, porque la diálisis también la elimina.', z: C, p: P8, o: 'ficha' },
-    { t: 'La NAC y la diálisis frenan lo que falta, pero no resucitan las células muertas: por eso los hepatocitos no suben.', z: C, p: P7, o: 'ficha · inferencia del modelo' },
+    { t: 'La NAC repone la cisteína y la diálisis retira el paracetamol; si el daño progresa a pesar de eso, no devuelven las células muertas.', z: C, p: P7, o: 'ficha · inferencia del modelo' },
     { t: 'Si aparecen signos de daño que progresa pese a la NAC, hay que valorar el trasplante hepático.', z: C, p: P8, o: 'ficha' }]],
   etilenglicol: ['Gumersindo · etilenglicol', [
     { t: 'La alcohol deshidrogenasa del hígado convierte el etilenglicol en ácido glicólico, glioxílico y oxálico; es la enzima que lo vuelve tóxico.', z: C, p: P26, o: 'ficha' },
-    { t: 'El metabolismo gasta NAD y produce NADH: sube el lactato. Por eso el pH está en 7,05 con hiato aniónico alto.', z: C, p: P26, o: 'ficha · cifras del paciente inventadas' },
+    { t: 'El metabolismo gasta NAD y produce NADH, y además sube el lactato; la acidosis (pH 7,05, hiato aniónico alto) es sobre todo de los ácidos glicólico y oxálico.', z: C, p: P26, o: 'ficha (p. 26-27) · cifras del paciente inventadas' },
     { t: 'El ácido oxálico precipita con calcio como cristales de oxalato en el túbulo renal y en la orina.', z: C, p: 'TX:27:mt-eg-cristales', o: 'ficha' },
     { t: 'Con pH <7,1 hace falta hemodiálisis; el fomepizol bloquea la enzima. Pulsa «Hazlo» para bloquearla.', z: C, p: P28, o: 'ficha', haz: 'fomep', btn: 'Poner fomepizol' }]],
   metanol: ['Ruperto · metanol', [
