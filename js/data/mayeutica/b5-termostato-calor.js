@@ -6,6 +6,8 @@
 const PDF = 'docs/marino-2024-abdomen-temperatura-caps39-44.pdf';
 const pag = (n, txt) => `<a class="biblio-link" href="${PDF}#page=${n}" target="_blank" rel="noopener">${txt || `PDF pág. ${n}`}</a>`;
 const TV = e => ({ termostatoVivo: e });
+// La vista Visual de la ficha, como botón «modelo» (sale tras contestar).
+const visual = (tab, texto) => ({ especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab, enVisual: '', texto });
 
 export const MAYEUTICA_TERMOSTATO_CALOR = {
   /* =================================================================================================
@@ -31,11 +33,12 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
       { id: 'cal-g3', corto: 'secar el sudor', tipo: 'test', fuente: 'ma-calor-evaporacion',
         enunciado: 'Un compañero seca con una toalla el sudor que corre por la espalda de un corredor sobrecalentado, «para que no se ahogue la piel». ¿Enfría eso?',
         opciones: [
-          { t: 'Sí: la piel seca disipa mejor el calor', porque: 'Lo que enfría no es el sudor en la piel, sino que se evapore: 580 kcal por litro. Quitarlo con una toalla elimina el agua antes de que se lleve calor.' },
+          { t: 'Sí: la piel seca y bien aireada disipa mejor el calor que la piel mojada', porque: 'Lo que enfría no es el sudor en la piel, sino que se evapore: 580 kcal por litro. Quitarlo con una toalla elimina el agua antes de que se lleve calor.' },
           { t: 'No: enfría la evaporación (580 kcal por litro); secarlo no enfría', ok: true },
           { t: 'Solo si es sudor frío, que ya ha cedido su calor', porque: 'La ficha no distingue «sudor frío»: pide que el sudor se evapore, y eso necesita aire que lo renueve (ventilador). Con esta idea se dejaría sin abanicar al paciente.' }],
         explicacion: `Evaporar 1 L de sudor se lleva <span class="hl">580 kcal</span>, un cuarto del calor que produce en un día un adulto en reposo; el sudor térmico llega a 1-2 L/h (más de 1.000 kcal en una hora). El sudor tiene que evaporarse: <span class="hl-rojo">secarlo no enfría</span> (${pag(46, 'p. 46')}).` },
       { id: 'cal-g4', corto: 'agotamiento o golpe', tipo: 'destapa', cuantas: 'son tres cosas', fuente: 'ma-tabla-43-1 · ma-calor-agotamiento · ma-calor-golpe', modeloVivo: TV('golpe:2'),
+        modelo: visual('ma-calor', '🖼️ La Tabla 43.1 en la vista Visual'),
         enunciado: 'Dos corredores llegan acalorados. ¿Qué separa el agotamiento por calor del golpe de calor? Tres rasgos.',
         puntos: [
           'La <span class="hl-rojo">temperatura</span>: 38-39 °C en el agotamiento, ≥41 °C en el golpe.',
@@ -63,14 +66,14 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
         enunciado: 'Ante un corredor con 41,8 °C, delirio e hipotensión, un residente descarta golpe de calor porque «aún suda». ¿Qué dice la ficha?',
         opciones: [
           { t: 'Tiene razón: sin anhidrosis no hay golpe de calor', porque: 'La ficha dice que la anhidrosis es típica, no constante. Con ese criterio dejarías sin enfriar a quien sigue sudando y ya tiene el cerebro afectado.' },
-          { t: 'Solo se ve en el golpe clásico, no en el de esfuerzo', porque: 'La ficha no limita la anhidrosis a una forma; el de esfuerzo es de hecho el más grave. Si lo descartas por sudar, retrasas el tratamiento del cuadro más grave.' },
+          { t: 'Solo se ve en el golpe clásico, por el ambiente, y no en el de esfuerzo', porque: 'La ficha no limita la anhidrosis a una forma; el de esfuerzo es de hecho el más grave. Si lo descartas por sudar, retrasas el tratamiento del cuadro más grave.' },
           { t: 'La anhidrosis es típica pero no constante: no descarta el golpe', ok: true }],
         explicacion: `Golpe de calor: ≥41 °C, disfunción neurológica, hipotensión y fallo multiorgánico; <span class="hl-rojo">la anhidrosis es típica, no constante</span> (${pag(47, 'p. 47')}).` },
       { id: 'cal-e2', corto: 'el agotamiento', tipo: 'test', fuente: 'ma-calor-agotamiento',
         enunciado: 'Una operaria llega con 38,6 °C, calambres y náuseas, deshidratada y mentalmente normal, y ha bebido solo agua. ¿Qué haces?',
         opciones: [
-          { t: 'Volumen y medidas generales (aire acondicionado); sin enfriamiento activo; ojo con la hiponatremia por reponer con agua', ok: true },
-          { t: 'Salino frío a 4 °C y hielo en ingles y axilas hasta 38 °C', porque: 'Es el enfriamiento activo del golpe. En el agotamiento la ficha dice que no hace falta; enfriarla de más provoca escalofrío sin beneficio.' },
+          { t: 'Volumen y medidas generales; sin enfriar de forma activa; ojo a la hiponatremia', ok: true },
+          { t: 'Salino frío a 4 °C y hielo en ingles, axilas y cuello hasta 38 °C, por precaución', porque: 'Es el enfriamiento activo del golpe. En el agotamiento la ficha dice que no hace falta; enfriarla de más provoca escalofrío sin beneficio.' },
           { t: 'Paracetamol, porque la temperatura es de 38,6 °C', porque: 'Es una hipertermia, no una fiebre: el antipirético no actúa, y no trata la deshidratación que es lo característico del cuadro.' }],
         explicacion: `Agotamiento: deshidratación sin compromiso hemodinámico, con hiper- o hiponatremia si se repone con agua; <span class="hl">no hace falta enfriar de forma activa</span> (${pag(46, 'p. 46')}).` },
       { id: 'cal-e3', corto: 'la CK', tipo: 'test', fuente: 'ma-calor-rabdo',
@@ -83,8 +86,8 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
       { id: 'cal-e4', corto: 'enfriar por dentro', tipo: 'test', fuente: 'ma-calor-interno',
         enunciado: 'Una UCI dispone de un catéter intravascular de enfriamiento automático. ¿Qué dice la ficha?',
         opciones: [
-          { t: 'Enfrían más rápido, pero necesitan vía central y su efecto en el pronóstico no está estudiado', ok: true },
-          { t: 'Son de elección porque mejoran la supervivencia en el golpe de calor', porque: 'La ficha dice lo contrario: su efecto en el pronóstico no está estudiado. Presentarlos como de elección retrasa el enfriamiento externo, que sí está disponible.' },
+          { t: 'Enfrían más rápido, pero exigen vía central y no se conoce su efecto en el pronóstico', ok: true },
+          { t: 'Son de elección porque mejoran la supervivencia en el golpe de calor y se ponen antes que el hielo', porque: 'La ficha dice lo contrario: su efecto en el pronóstico no está estudiado. Presentarlos como de elección retrasa el enfriamiento externo, que sí está disponible.' },
           { t: 'No enfrían más que el hielo y tienen más complicaciones', porque: 'La ficha dice que enfrían más rápido. Descartarlos por una creencia sin fuente deja fuera una opción útil en un paciente con vía central.' }],
         explicacion: `Interno: suero salino frío (4 °C); los dispositivos intravasculares enfrían más rápido pero necesitan <span class="hl">vía central</span> y su efecto en el pronóstico no está estudiado (${pag(47, 'p. 47')}).` },
       { id: 'cal-e5', corto: 'esfuerzo o clásico', tipo: 'test', fuente: 'ma-calor-golpe',
@@ -108,7 +111,7 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
             pregunta: { id: 'cal-c1-1', tipo: 'test', fuente: 'ma-calor-golpe · ma-calor-externo', modeloVivo: TV('golpe:4'),
               enunciado: '¿Qué haces primero?',
               opciones: [
-                { t: 'Paracetamol 1 g IV y observar si baja', porque: 'No es fiebre: el punto de ajuste no se ha movido y el antipirético no actúa. Con delirio a 41,6 °C, cada minuto sin enfriar suma daño cerebral.' },
+                { t: 'Paracetamol 1 g IV y observar durante una hora si baja la temperatura central', porque: 'No es fiebre: el punto de ajuste no se ha movido y el antipirético no actúa. Con delirio a 41,6 °C, cada minuto sin enfriar suma daño cerebral.' },
                 { t: 'Enfriar ya (evaporación y hielo en ingles, axilas y cuello) y dar volumen', ok: true },
                 { t: 'Hidratar por vía oral y trasladar a observación', porque: 'Con delirio e hipotensión es un golpe de calor, no un agotamiento; sin enfriamiento activo el calor sigue dañando el cerebro y los órganos.' }],
               explicacion: `Golpe de calor: <span class="hl-rojo">volumen y enfriamiento activo hasta 38 °C</span>; en urgencias, hielo en ingles y axilas, cuello y tórax alto (${pag(47, 'p. 47')}).` } },
@@ -162,19 +165,19 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
   'ma-hipertermia-farmacos': {
     entrada: 'Tres músculos que arden por tres fármacos con el termostato quieto: cuál es cuál, qué se ve primero y qué se da (y qué no).',
     guia: [
-      { id: 'fm-g1', corto: 'el CO₂ primero', tipo: 'test', fuente: 'ma-hm-clinica', modeloVivo: TV('hm:3'),
+      { id: 'fm-g1i', corto: 'el CO₂ primero', tipo: 'test', fuente: 'ma-hm-clinica', modeloVivo: TV('hm:3'),
         enunciado: 'Marcial, 28 años, 10 minutos con sevoflurano y succinilcolina. Antes de mirar el modelo: ¿qué sube primero, la temperatura o el CO₂ espirado, y por qué?',
         opciones: [
-          { t: 'La temperatura: el músculo caliente es lo primero que se nota', porque: 'La temperatura tarda: a menudo pasa de 40 °C ya tarde. Esperar la fiebre es llegar con rigidez, potasio alto y rabdomiólisis.' },
+          { t: 'La temperatura: el músculo caliente es lo primero que se nota y el CO₂ solo cambia después', porque: 'La temperatura tarda: a menudo pasa de 40 °C ya tarde. Esperar la fiebre es llegar con rigidez, potasio alto y rabdomiólisis.' },
           { t: 'El CO₂ espirado, por el hipermetabolismo del músculo; la temperatura llega más tarde', ok: true },
           { t: 'Ninguno: el primer signo es siempre la rigidez del masetero', porque: 'La rigidez llega minutos u horas después del CO₂. Si solo vigilas el masetero te pierdes la ventana en la que el dantroleno salva más.' }],
         explicacion: `Primer signo, a menudo: una <span class="hl-rojo">subida brusca e inesperada del CO₂ espirado</span> (hipermetabolismo por desacoplamiento de la fosforilación oxidativa). Después, rigidez; la temperatura sube más tarde (${pag(49, 'p. 49')}).` },
       { id: 'fm-g2', corto: 'dantroleno 75 kg', tipo: 'test', fuente: 'ma-tabla-43-2 · ma-hm-tto', origen: 'ilustrativo: 75 kg × 1-2 mg/kg', modeloVivo: TV('hm:5'),
         enunciado: 'Marcial pesa 75 kg y tiene rigidez y CO₂ de 68 mmHg. Puedes usar la calculadora de dosis de la ficha. ¿Qué dantroleno pones, y hasta cuándo?',
         opciones: [
-          { t: '75-150 mg IV rápidos, repetidos hasta que ceda o se lleguen a 10 mg/kg (750 mg); luego 1-2 mg/kg cada 6 h al menos 24 h', ok: true },
+          { t: '75-150 mg IV rápidos, repetidos hasta que ceda o hasta 750 mg (10 mg/kg); luego 1-2 mg/kg cada 6 h', ok: true },
           { t: '1 mg/kg IV cada 8 h hasta 10 mg/kg', porque: 'Es la pauta del SNM grave, no de la hipertermia maligna. En Marcial, bolos cada 8 h dejarían el canal de calcio abierto durante horas.' },
-          { t: '75 mg en una dosis y esperar a ver si cede la rigidez', porque: 'La pauta pide repetir cada pocos minutos hasta que ceda. Una sola dosis deja el canal abierto, con más calor y rabdomiólisis.' }],
+          { t: '75 mg en una sola dosis y esperar una hora a ver si cede la rigidez y baja el CO₂ antes de repetir la dosis', porque: 'La pauta pide repetir cada pocos minutos hasta que ceda. Una sola dosis deja el canal abierto, con más calor y rabdomiólisis.' }],
         explicacion: `Tabla 43.2: dantroleno 1-2 mg/kg en bolo rápido, repetido cada pocos minutos hasta que ceda o se lleguen a <span class="hl-rojo">10 mg/kg acumulados</span>; después 1-2 mg/kg cada 6 h al menos 24 h (${pag(48, 'p. 48')}). Para 75 kg: 75-150 mg y tope de 750 mg (cuenta <span class="hl">ilustrativa</span>).` },
       { id: 'fm-g3', corto: 'si llega tarde', tipo: 'destapa', cuantas: 'son dos cosas', fuente: 'ma-hm-tto', modeloVivo: TV('hm:4'),
         enunciado: 'El adjunto pregunta: «¿qué pasa si el dantroleno llega tarde?». Dos cosas.',
@@ -186,7 +189,7 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
         enunciado: 'Jacinta, 47 años, lleva días con haloperidol: está rígida y confusa, pero con 37,6 °C. ¿Descarta eso el síndrome neuroléptico maligno?',
         opciones: [
           { t: 'Sí: sin fiebre no hay SNM', porque: 'La fiebre puede retrasarse 8-10 h tras la rigidez. Mientras tanto la rigidez sigue produciendo calor y el haloperidol seguiría puesto.' },
-          { t: 'Sí, si la CK es normal; y si no lo es, es una distonía', porque: 'La CK separa distonía y SNM (solo algo alta frente a >1.000), pero no se usa para descartar el SNM por la fiebre. Un SNM puede avanzar con la CK alta y sin fiebre.' },
+          { t: 'Sí, si la CK es normal; y si no lo es, es una distonía o una agitación', porque: 'La CK separa distonía y SNM (solo algo alta frente a >1.000), pero no se usa para descartar el SNM por la fiebre. Un SNM puede avanzar con la CK alta y sin fiebre.' },
           { t: 'No: la fiebre puede llegar 8-10 h después de la rigidez', ok: true }],
         explicacion: `<span class="hl-rojo">La fiebre puede retrasarse 8-10 h tras la rigidez</span>; hiperactividad autonómica y, en los graves, rigidez «en tubo de plomo» (${pag(50, 'p. 50')}).` },
       { id: 'fm-g5', corto: 'distonía o SNM', tipo: 'test', fuente: 'ma-snm-clinica',
@@ -207,7 +210,7 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
       { id: 'fm-g7', corto: 'SS o SNM', tipo: 'test', fuente: 'ma-ss-claves · ma-ss-snm', modeloVivo: TV('ss:3'),
         enunciado: 'Predice y compruébalo: Jacinta, ahora con linezolid y fentanilo, tiene rigidez, confusión y 38,0 °C. ¿Qué signo apunta al síndrome serotoninérgico y no al SNM?',
         opciones: [
-          { t: 'La fiebre, que en el SNM no existe', porque: 'Los dos tienen fiebre; en el SS solo en el 60 %. Ese criterio no los separa y podrías tratar un SS como SNM.' },
+          { t: 'La fiebre, porque en el SNM no existe y en el SS siempre está presente', porque: 'Los dos tienen fiebre; en el SS solo en el 60 %. Ese criterio no los separa y podrías tratar un SS como SNM.' },
           { t: 'La hiperreflexia y el clonus; el clonus ocular es el más fiable', ok: true },
           { t: 'La CK, que en el SS siempre pasa de 1.000 U/L', porque: 'La rabdomiólisis aparece en el 15 % del SS; la CK >1.000 es del SNM. Confiar en ella llevaría a tratar el SNM sin mirar los reflejos.' }],
         explicacion: `Lo que distingue al SS del SNM es la <span class="hl-rojo">hiperreflexia y el clonus</span>; el clonus ocular (movimientos horizontales espontáneos), aunque raro, es el hallazgo más fiable. En el SS grave la rigidez puede taparlos (${pag(52, 'p. 52')}).` },
@@ -221,14 +224,14 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
         explicacion: `Retirar los serotoninérgicos; ciproheptadina oral 12 mg, 2 mg/2 h y mantenimiento 8 mg/6 h; rocuronio si la rigidez grave y la rabdomiólisis son refractarias (${pag(53, 'p. 53')}).` },
     ],
     examen: [
-      { id: 'fm-e1', corto: 'la herencia', tipo: 'test', fuente: 'ma-hm-que · ma-hm-tto',
+      { id: 'fm-e1a', corto: 'la herencia', tipo: 'test', fuente: 'ma-hm-que · ma-hm-tto',
         enunciado: 'Marcial se recupera de una hipertermia maligna. ¿Qué haces antes del alta?',
         opciones: [
-          { t: 'Pulsera médica y avisar a la familia directa: herencia autosómica dominante (1 de cada 50.000)', ok: true },
-          { t: 'Nada especial: es una reacción idiosincrásica y no vuelve a ocurrir', porque: 'La idiosincrasia es del SNM. La hipertermia maligna es hereditaria: el siguiente anestésico halogenado en Marcial o en un familiar puede repetirla.' },
+          { t: 'Pulsera médica y avisar a la familia directa: herencia autosómica dominante', ok: true },
+          { t: 'Nada especial: es una reacción idiosincrásica del paciente y no vuelve a ocurrir con otro anestésico', porque: 'La idiosincrasia es del SNM. La hipertermia maligna es hereditaria: el siguiente anestésico halogenado en Marcial o en un familiar puede repetirla.' },
           { t: 'Solo avisar al anestesista, la familia no tiene riesgo', porque: 'Con herencia dominante, un hijo o hermano puede tener la misma susceptibilidad. Sin aviso, el siguiente quirófano repite el cuadro.' }],
         explicacion: `Trastorno hereditario, autosómico dominante, 1 de cada 50.000 adultos; al alta, pulsera médica y avisar a la familia directa (${pag(48, 'p. 48')} y ${pag(49, '49')}).` },
-      { id: 'fm-e2', corto: 'efectos del dantroleno', tipo: 'test', fuente: 'ma-hm-tto',
+      { id: 'fm-e2d', corto: 'efectos del dantroleno', tipo: 'test', fuente: 'ma-hm-tto',
         enunciado: 'Tras dantroleno, Marcial no puede apretar con la mano. ¿Qué es?',
         opciones: [
           { t: 'Una debilidad (sobre todo de la prensión) que cede en 2-4 días', ok: true },
@@ -245,8 +248,8 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
       { id: 'fm-e4', corto: 'ciproheptadina', tipo: 'test', fuente: 'ma-ss-tto',
         enunciado: 'Un paciente con SS no puede tragar. ¿Cómo das la ciproheptadina?',
         opciones: [
-          { t: 'Por vía intravenosa, igual que otros antagonistas', porque: 'No existe forma IV de la ciproheptadina. Esperar un preparado que no hay deja al paciente sin tratamiento mientras sigue agitado.' },
-          { t: 'Triturada por sonda: 12 mg, luego 2 mg cada 2 h y mantenimiento de 8 mg cada 6 h; seda', ok: true },
+          { t: 'Por vía intravenosa lenta, igual que otros antagonistas de uso habitual en la planta', porque: 'No existe forma IV de la ciproheptadina. Esperar un preparado que no hay deja al paciente sin tratamiento mientras sigue agitado.' },
+          { t: 'Triturada por sonda: 12 mg, luego 2 mg/2 h y mantenimiento 8 mg/6 h; seda', ok: true },
           { t: 'No se da: el sedante empeora la agitación', porque: 'La ficha dice lo contrario: la sedación ayuda con la agitación. Renunciar al fármaco alarga el cuadro.' }],
         explicacion: `Ciproheptadina (solo oral; se puede triturar por sonda): 12 mg, luego 2 mg cada 2 h y mantenimiento de 8 mg cada 6 h; <span class="hl">seda</span> (${pag(53, 'p. 53')}).` },
       { id: 'fm-e5', corto: 'tabla 43.5', tipo: 'test', fuente: 'ma-tabla-43-5 · ma-ss-claves',
@@ -259,8 +262,8 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
       { id: 'fm-e6', corto: 'bromocriptina', tipo: 'test', fuente: 'ma-snm-tto',
         enunciado: 'Pautas la bromocriptina en un SNM. ¿Qué esperas y qué vigilas?',
         opciones: [
-          { t: 'Mejora de la rigidez en horas y respuesta completa en días; vigilar hipotensión y alucinaciones', ok: true },
-          { t: 'Respuesta inmediata en minutos como el dantroleno IV; sin efectos adversos', porque: 'La bromocriptina no actúa en minutos y tiene efectos adversos (hipotensión y alucinaciones). Prometer una respuesta inmediata lleva a escalar sin motivo.' },
+          { t: 'Mejora en horas y respuesta completa en días; vigilar hipotensión y alucinaciones', ok: true },
+          { t: 'Respuesta inmediata en minutos como el dantroleno IV; sin efectos adversos relevantes en la UCI', porque: 'La bromocriptina no actúa en minutos y tiene efectos adversos (hipotensión y alucinaciones). Prometer una respuesta inmediata lleva a escalar sin motivo.' },
           { t: 'Solo funciona en el SS, no en el SNM', porque: 'Es un agonista dopaminérgico, útil en el SNM; en un SS no actúa sobre la serotonina y la rigidez seguiría sin tratar.' }],
         explicacion: `Bromocriptina 10 mg VO 3 veces al día: mejora en horas, respuesta completa en días; hipotensión y alucinaciones (${pag(51, 'p. 51')}).` },
     ],
@@ -322,7 +325,7 @@ export const MAYEUTICA_TERMOSTATO_CALOR = {
               enunciado: '¿SNM que recae o SS?',
               opciones: [
                 { t: 'SNM por el linezolid, que bloquea dopamina', porque: 'El linezolid es un IMAO (Tabla 43.4): sube la serotonina y no bloquea la dopamina. Tratarlo como SNM perpetúa el cuadro.' },
-                { t: 'Hipertermia maligna: el clonus ocular es su primer signo', porque: 'No hubo halogenado ni succinilcolina, y el primer signo de la HM es el CO₂, no el clonus ocular. Dar dantroleno aquí no resuelve nada.' },
+                { t: 'Hipertermia maligna: el clonus ocular es su primer signo y el dantroleno lo resuelve', porque: 'No hubo halogenado ni succinilcolina, y el primer signo de la HM es el CO₂, no el clonus ocular. Dar dantroleno aquí no resuelve nada.' },
                 { t: 'SS: hiperreflexia, mioclonías y clonus ocular; la T normal no lo descartaría', ok: true }],
               explicacion: `Lo específico del SS es la hiperreflexia, las mioclonías y el clonus; el ocular es el más fiable (${pag(52, 'p. 52')}). La temperatura sube solo en el 60 %.` } },
           { momento: 'Día 9 · tratamiento',

@@ -34,6 +34,8 @@ export const BANCOS = [
     { nombre: 'fichas · fluidos', datos: 'js/data/mayeutica/b1-fluidos.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · hemodinámica', datos: 'js/data/mayeutica/b1-hemodinamica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · oxígeno', datos: 'js/data/mayeutica/b1-oxigeno.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · termostato (calor)', datos: 'js/data/mayeutica/b5-termostato-calor.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'fichas · termostato (frío)', datos: 'js/data/mayeutica/b5-termostato-frio.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · accesos', datos: 'js/data/mayeutica/b1-accesos.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sin modelo', datos: 'js/data/mayeutica/b1-sin-modelo.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'fichas · sangre (bloque 2)', datos: 'js/data/mayeutica/b2-sangre.js', motor: 'js/core/mayeutica-motor.js' },
