@@ -428,7 +428,7 @@ ESTADOS.hfno = {
 };
 export const HFNO = {
   min: 10, max: 60, tope: 60, paso: 5, inicio: 10, fio2Mando: 80, inspNormal: 15,   // tope: 40-60 L/min según el fabricante (Marino cap. 25 p. 64); 15: p. 61; 10, 5 y 80 (FiO₂ del caso): ilustrativo
-  pmus: [14, 8], frEsp: [28, 20],   // de 10 a 60 L/min (ilustrativo: Marino dice que baja la FR y el trabajo respiratorio, p. 65, pero no da cifras)
+  pmus: [14, 12], frEsp: [28, 20],   // de 10 a 60 L/min (ilustrativo: Marino dice que baja la FR y el trabajo respiratorio, p. 65, pero no da cifras; el Vt se queda en ≈6 mL/kg: lo que baja es la FR)
   peepBoca: 2.5,   // 2-3 cmH₂O con la boca cerrada (Marino cap. 25 p. 65)
   spo2: { aire: 84, alta: 95, fio2Alta: 80 },   // los dos puntos del caso de Elvira (SpO₂ 84 con aire; 95 con FiO₂ 80 %): ilustrativo, el modelo no calcula gases
 };
