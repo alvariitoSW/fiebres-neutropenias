@@ -124,7 +124,7 @@ export const MAYEUTICA_EPOC = {
           { t: 'Se usa si la respuesta no basta, pero al menos 3 estudios no lo apoyan', ok: true }],
         explicacion: `Terapia combinada <span class="hl-azul">solo cuando la respuesta a los β₂-agonistas es insatisfactoria</span>, aunque <span class="hl-rojo">al menos 3 estudios no la respaldan</span> (${p(25)}).` + enFicha(EV, 'nep-tabla-23-4') },
       { id: 'ev-e5', corto: 'antibiótico 5-7 d', tipo: 'test', fuente: 'nep-antibioticos-epoc',
-        enunciado: 'Un EPOC con VMI recibe antibiótico empírico. ¿Qué cobertura y qué duración sugiere Marino?',
+        enunciado: 'Un EPOC con VMI recibe antibiótico empírico. ¿Qué espectro y qué duración sugiere Marino?',
         opciones: [
           { t: 'Grampositivos y gramnegativos (p. ej. cefepima), 5-7 días', ok: true },
           { t: 'Solo grampositivos, dos semanas, para cubrir el neumococo del esputo', porque: `Sugiere un espectro que cubra grampositivos y gramnegativos (p. ej. cefepima) durante 5-7 días (${p(26)}); con un espectro solo grampositivo dejarías sin tratar a Pseudomonas en un ventilado.` },
