@@ -26,7 +26,8 @@ export function enfriar(s, k) {
   if (k === 'manta' && fiebre) { s.flags.manta = true; s.real = clamp(s.real + 0.4, TOPE.min, TOPE.max); return; }   // p. 72
   if (fiebre) {   // el ajuste está alto: bajar de él es «frío» para el hipotálamo; escalofrío y rebote, con suelo 1 °C bajo el ajuste (p. 45 y 72)
     const aj = ajuste(s), nuevo = s.real - ENF[k];
-    if (nuevo < aj) { s.flags.febrilFrio = true; s.real = clamp(Math.max(nuevo + 0.4, aj - 1), TOPE.min, TOPE.max); } else s.real = clamp(nuevo, TOPE.min, TOPE.max);
+    // rebote de +0,4 °C; nunca sube T ni baja más de 1 °C bajo el ajuste
+    if (nuevo < aj) { s.flags.febrilFrio = true; s.real = clamp(Math.max(nuevo + 0.4, Math.min(s.real, aj - 1)), TOPE.min, TOPE.max); } else s.real = clamp(nuevo, TOPE.min, TOPE.max);
     return;
   }
   if (s.real <= TOPE.parar) { s.flags.parar = true; s.real = clamp(s.real + 0.4, TOPE.min, TOPE.max); return; }   // p. 47

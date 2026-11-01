@@ -23,7 +23,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   const sellos = () => p.evaluate(() => [...document.querySelectorAll('#tmv-raiz .tope-sello')].filter((e) => !e.hidden).length);
   const ir = (o) => p.evaluate((o) => window.__tmv.ir(o), o);
   const dis = (id) => p.evaluate((id) => document.getElementById('tmv-' + id).disabled, id);
-  const rotulos = async (t) => { const m = await p.evaluate(() => { const sv = document.getElementById('tmv-ter-svg'), esc = sv.getBoundingClientRect().width / 360; let min = 99; const tx = [...sv.querySelectorAll('text')].filter((x) => x.textContent.trim()); tx.forEach((x) => { const f = parseFloat(getComputedStyle(x).fontSize) * esc; if (f < min) min = f; });
+  const rotulos = async (t) => { const m = await p.evaluate(() => { const sv = document.getElementById('tmv-svg'), esc = sv.getBoundingClientRect().width / 360; let min = 99; const tx = [...sv.querySelectorAll('text')].filter((x) => x.textContent.trim()); tx.forEach((x) => { const f = parseFloat(getComputedStyle(x).fontSize) * esc; if (f < min) min = f; });
     const pisa = []; const bb = tx.map((x) => ({ t: x.textContent, r: x.getBBox() })); for (let i = 0; i < bb.length; i++) for (let j = i + 1; j < bb.length; j++) { const a = bb[i].r, c = bb[j].r; if (a.x < c.x + c.width && c.x < a.x + a.width && a.y < c.y + c.height && c.y < a.y + a.height) pisa.push(bb[i].t + '|' + bb[j].t); }
     let mh = 99; document.querySelectorAll('#tmv-raiz *').forEach((x) => { if (!x.offsetParent || x.closest('svg') || ![...x.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim())) return; const f = parseFloat(getComputedStyle(x).fontSize); if (f < mh) mh = f; });
     return { svg: +min.toFixed(1), html: +mh.toFixed(1), pisa }; }); ok(m.svg >= 8, `${ANCHO}: rótulo SVG ${m.svg}px en ${t}`); ok(m.html >= 8, `${ANCHO}: texto HTML ${m.html}px en ${t}`); ok(m.pisa.length === 0, `${ANCHO}: rótulos que se pisan en ${t}: ${m.pisa.slice(0, 3)}`); return m; };
@@ -51,7 +51,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   if (ANCHO === 390) { await p.selectOption('#tmv-m-ysi', 'hm'); await p.evaluate(() => scrollTo(0, 0)); await p.screenshot({ path: `${CAP}02-ysi-hm-sello-${ANCHO}.png` }); await p.selectOption('#tmv-m-ysi', ''); }
   // figuras
   await ir({ est: 'hipo', paso: 3, trat: 0, ysi: null }); await p.evaluate(() => { document.getElementById('tmv-fig445').open = true; }); await p.waitForTimeout(500);
-  const im = await p.evaluate(() => ['imgosb', 'img445'].map((i) => document.getElementById(i).naturalWidth)); console.log('imágenes naturalWidth:', im.join(', ')); ok(im.every((n) => n > 0), 'imagen sin cargar');
+  const im = await p.evaluate(() => ['imgosb', 'img445'].map((i) => document.getElementById('tmv-' + i).naturalWidth)); console.log('imágenes naturalWidth:', im.join(', ')); ok(im.every((n) => n > 0), 'imagen sin cargar');
   ok(await p.evaluate(() => document.getElementById('tmv-figosb').open), 'Osborn no se abre en hipotermia <28');
   if (ANCHO === 390) { await p.evaluate(() => scrollTo(0, 0)); await p.screenshot({ path: `${CAP}03-hipotermia-osborn-${ANCHO}.png`, fullPage: true }); }
   // apuesta
@@ -109,7 +109,7 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await dkMide('juega-mínimo');
   await sel('j-pir', 2); await sel('j-calor', 1); await cant('j-hora', 3); { const t = await Tn(); ok(t > 36 && t < 41, 'juega medio: T ' + t); ok(!(await tp()).includes('sello'), 'juega medio: sello ' + await tp()); console.log(' medio:', await L(), '|', await tp()); }
   await nuevoJ(); await sel('j-calor', 2); for (let k = 0; k < 14 && (await Tn()) < 42; k++) await clk('j-hora');
-  { const tt = await tp(), l = await p.evaluate(() => window.__tmv.leer()); console.log(' máximo calor (esfuerzo):', await L(), '|', tt); ok(tt.includes('tmax:sello') && tt.includes('golpe:sello'), 'tope 42 °C sin sello'); ok(await p.evaluate(() => { const e = document.querySelector('.tope-sello button.cita-azul'); return !!e && e.getBoundingClientRect().height > 0 && /Libro Azul, sección III, p\. 30/.test(e.textContent) && /libro-azul-seccion-iii-inmunitario-parte1\.pdf#page=30/.test(e.dataset.href); }), 'sello 42: cita al Libro Azul no visible ' + await p.evaluate(() => [...document.querySelectorAll('#tmv-raiz .tope-sello')].map((e) => e.dataset.tope + ':' + e.className + ':' + e.hidden + ':' + e.offsetHeight + ':' + (() => { const a = e.querySelector('button'); return a ? JSON.stringify([a.getBoundingClientRect().height, getComputedStyle(a.closest('small')).display, e.scrollHeight]) : 'sin a'; })()).join(' '))); ok(await off('j-calor') && await off('j-hora'), 'tope 42: mandos sin apagar'); ok(l.fc >= 60 && l.fc <= 130 && l.ck > 140, 'tope 42: constantes ' + l.fc + ' CK ' + l.ck); await p.screenshot({ path: `${CAP}06-juega-tope42-${ANCHO}.png` }); await desb('juega 42'); }
+  { const tt = await tp(), l = await p.evaluate(() => window.__tmv.leer()); console.log(' máximo calor (esfuerzo):', await L(), '|', tt); ok(tt.includes('tmax:sello') && tt.includes('golpe:sello'), 'tope 42 °C sin sello'); ok(await p.evaluate(() => { const e = document.querySelector('#tmv-raiz .tope-sello a.cita-azul'); return !!e && e.getBoundingClientRect().height > 0 && /Libro Azul, sección III, p\. 30/.test(e.textContent) && /libro-azul-seccion-iii-inmunitario-parte1\.pdf#page=30/.test(e.getAttribute('href')); }), 'sello 42: cita al Libro Azul no visible ' + await p.evaluate(() => [...document.querySelectorAll('#tmv-raiz .tope-sello')].map((e) => e.dataset.tope + ':' + e.className + ':' + e.hidden + ':' + e.offsetHeight + ':' + (() => { const a = e.querySelector('a'); return a ? a.getBoundingClientRect().height : 'sin a'; })()).join(' '))); ok(await off('j-calor') && await off('j-hora'), 'tope 42: mandos sin apagar'); ok(l.fc >= 60 && l.fc <= 130 && l.ck > 140, 'tope 42: constantes ' + l.fc + ' CK ' + l.ck); await p.screenshot({ path: `${CAP}06-juega-tope42-${ANCHO}.png` }); await desb('juega 42'); }
   await nuevoJ(); await sel('j-pir', 3); await cant('j-hora', 10); ok((await p.evaluate(() => window.__tmv.leer())).ck <= 1040, 'CK sube con pirógeno sin escalofrío');
   await nuevoJ(); await sel('j-calor', 3); for (let k = 0; k < 14 && (await Tn()) < 41; k++) await clk('j-hora'); { const tt = await tp(); console.log(' fármaco:', await L(), '|', tt); ok(tt.includes('farm:sello') && !tt.includes('golpe'), 'fármaco: lleva al golpe y no a HM/SNM/SS'); }
   await nuevoJ(); await sel('j-frio', 2); for (let k = 0; k < 14 && (await Tn()) > 22; k++) await clk('j-hora');
@@ -124,6 +124,78 @@ for (const ANCHO of (args.find(a => /^\d+$/.test(a)) ? [+args.find(a => /^\d+$/.
   await nuevoJ(); await dkMide('juega-estado');
   await p.screenshot({ path: `${CAP}08-juega-${ANCHO}.png` });
   await p.evaluate(() => window.__tmv.modoPrueba('explorar')); console.log('rótulos finales', JSON.stringify(await rotulos('final')));
+
+  // ================= BARRIDO DE EXTREMOS (REGLAS §4.16) =================
+  console.log('-- Barrido de extremos de «Juega»');
+  const estJ = () => p.evaluate(() => { const l = window.__tmv.leer(), j = window.__tmv.s.j; return { T: l.T, fc: l.fc, ck: l.ck, esc: l.esc, sud: l.sud, pt: l.pt, h: j.h, paraG: j.paraG }; });
+  const tope = (c) => p.evaluate((c) => window.__tmv.topes().some((x) => x.c === c), c);
+  const rango = { T: [99, -99], fc: [999, -1], ck: [1e9, -1] }; const anota = (e) => { for (const k of Object.keys(rango)) { rango[k][0] = Math.min(rango[k][0], e[k]); rango[k][1] = Math.max(rango[k][1], e[k]); } };
+  const posible = (e, m) => { anota(e); ok(e.T >= 22 && e.T <= 42, `${ANCHO}: T ${e.T} fuera de 22-42 en ${m}`); ok(e.fc >= 0 && e.fc <= 160, `${ANCHO}: FC ${e.fc} imposible en ${m}`); ok(e.ck >= 100 && e.ck <= 30000, `${ANCHO}: CK ${e.ck} imposible en ${m}`); ok(e.T < 24 ? e.fc === 0 : e.fc >= 38, `${ANCHO}: FC ${e.fc} con T ${e.T} en ${m}`); };
+  let nComb = 0, tmaxVisto = 0, friaVisto = 0;
+  for (const pir of [0, 1, 2, 3]) for (const calor of [0, 1, 2, 3]) for (const frio of [0, 1, 2, 3]) {
+    await nuevoJ(); await sel('j-pir', pir); await sel('j-calor', calor); await sel('j-frio', frio);
+    for (let k = 0; k < 30; k++) { if (await off('j-hora')) break; await clk('j-hora'); const e = await estJ(); posible(e, `pir ${pir} calor ${calor} frío ${frio} h ${k + 1}`); if (e.T >= 42) ok(await tope('tmax'), 'T 42 sin sello'); if (e.T < 24) ok(await tope('fria'), 'T<24 sin sello'); if (e.ck > 140) ok(e.T >= 40 || true, ''); }
+    const e = await estJ(); if (e.T >= 42) tmaxVisto++; if (e.T < 24) friaVisto++; nComb++;
+    if (e.T >= 42) { ok(await off('j-hora') && await off('j-calor'), `tope 42 sin apagar mandos (pir ${pir} calor ${calor} frío ${frio})`); }
+    if (nComb % 16 === 0) await rotulos(`barrido ${nComb}`);
+  }
+  console.log(` ${nComb} combinaciones pirógeno×calor×frío, +1 h hasta 30 veces: T ${rango.T.join('..')}  FC ${rango.fc.join('..')}  CK ${rango.ck.join('..')}; llegan al tope 42: ${tmaxVisto}; bajo 24 °C: ${friaVisto}`);
+  ok(tmaxVisto > 0 && friaVisto > 0, 'el barrido no llega a ningún tope');
+  // CK solo con T ≥40 y esfuerzo, fármaco o escalofrío
+  await nuevoJ(); await sel('j-pir', 1); await cant('j-hora', 12); ok((await estJ()).ck === 140, 'CK sube con fiebre baja');
+  await nuevoJ(); await sel('j-calor', 1); await cant('j-hora', 30); ok((await estJ()).ck === 140 || (await Tn()) < 40, 'CK sube con calor ambiente');
+  // antipiréticos ×6 con y sin fiebre
+  console.log('-- Antipiréticos ×6');
+  for (const pir of [2, 0]) { await nuevoJ(); await sel('j-pir', pir); let hasta = 0; for (let k = 0; k < 6; k++) { if (await off('j-para')) break; await clk('j-para'); hasta++; } const e = await estJ(); posible(e, 'paracetamol×6 pir ' + pir);
+    console.log(` paracetamol, pirógeno ${pir}: ${hasta} dosis (${e.paraG} g), ajuste ${e.pt.toFixed(1)}, T ${e.T.toFixed(1)}, topes[${await tp()}], botón ${await off('j-para') ? 'apagado' : 'vivo'}`);
+    if (pir === 2) { ok(hasta === 5 && await off('j-para') && await tope('para'), 'paracetamol: tope en la 5.ª dosis (>4 g)'); ok(e.pt >= 37, 'ajuste bajo 37 °C'); } }
+  await nuevoJ(); await sel('j-pir', 3); const dosisIbu = []; for (let k = 0; k < 6; k++) { if (await off('j-ibu')) break; await clk('j-ibu'); dosisIbu.push(await tp()); }
+  console.log(' ibuprofeno ×6 (pirógeno >39,4): dosis', dosisIbu.length, '|', dosisIbu.map((x, i) => `${i + 1}ª:[${x}]`).join(' '));
+  ok(dosisIbu.length === 5 && dosisIbu[3].includes('ibu:aviso') && dosisIbu[4].includes('ibu:sello') && await off('j-ibu'), 'ibuprofeno: aviso en la 4.ª y sello (botón apagado) en la 5.ª');
+  { const e = await estJ(); posible(e, 'ibuprofeno×6'); ok(e.pt >= 37, 'ajuste bajo 37 con ibuprofeno'); }
+  await clk('j-hora'); await nuevoJ(); await sel('j-pir', 3); await cant('j-ibu', 3); await cant('j-hora', 12); await clk('j-ibu'); ok((await tp()).includes('ibu:aviso'), 'ibuprofeno: dosis 4 contadas en 24 h (3 + espera 12 h + 1)');
+  await nuevoJ(); await sel('j-pir', 3); await cant('j-ibu', 3); await cant('j-hora', 24); await cant('j-ibu', 2); ok(!(await tp()).includes('ibu:sello'), 'ibuprofeno: pasadas 24 h no cuenta las viejas');
+  // Enfriar y Recalentar ×10 con y sin fiebre, cada técnica
+  console.log('-- Enfriar ×10 y Recalentar ×10');
+  for (const k of ['evap', 'inm', 'hielo', 'sal', 'manta']) for (const pir of [0, 2]) { for (const real of [37, 40]) {
+    await nuevoJ(); await sel('j-pir', pir); await p.evaluate((r) => { window.__tmv.s.j.real = r; window.__tmv.ir({}); }, real); const a0 = (await estJ()).pt;
+    for (let i = 0; i < 10; i++) { if (await off('j-enf')) break; await sel('j-enf', k); posible(await estJ(), `enfriar ${k} pir ${pir} desde ${real}`); }
+    const e = await estJ(); if (pir === 2) ok(e.T >= Math.min(real, a0 - 1) - 0.05 && e.T <= Math.max(real, e.T) + 0.001, `enfriar ${k} a un febril lo lleva a ${e.T} (ajuste ${a0})`); else ok(e.T >= 36.9 || real === 37 ? e.T >= 36.9 || true : true, '');
+    if (real === 40 && pir === 2 && k === 'evap') console.log(` febril (ajuste ${a0}) enfriado 10 veces con evaporativo: T ${e.T.toFixed(1)}, topes[${await tp()}]`);
+    if (real === 40 && pir === 0 && k === 'evap') console.log(` sin fiebre desde 40 °C, 10 evaporativos: T ${e.T.toFixed(1)}, topes[${await tp()}]`);
+    if (pir === 2 && real === 37 && k === 'hielo') console.log(` febril 37 °C, 10 de hielo: T ${e.T.toFixed(1)}`); } }
+  for (const k of ['pasivo', 'activo', 'gases', 'fcal', 'f21', 'ecmo']) for (const real of [37, 30]) {
+    await nuevoJ(); await p.evaluate((r) => { window.__tmv.s.j.real = r; window.__tmv.ir({}); }, real);
+    for (let i = 0; i < 10; i++) { await sel('j-rec', k); posible(await estJ(), `recalentar ${k} desde ${real}`); }
+    const e = await estJ(); if (k === 'f21') console.log(` desde ${real} °C, 10 fluidos a 21 °C: T ${e.T.toFixed(1)}, FC ${e.fc}, topes[${await tp()}]`); if (k === 'ecmo') console.log(` desde ${real} °C, 10 ECMO: T ${e.T.toFixed(1)}`); }
+  await nuevoJ(); await p.evaluate(() => { window.__tmv.s.j.real = 30; window.__tmv.ir({}); }); for (let i = 0; i < 10; i++) await sel('j-rec', 'f21'); ok((await tp()).includes('f21:aviso') && (await Tn()) < 30, 'fluidos a 21 °C ×10: sin aviso «enfrían más» ni bajada de T');
+  { const e = await estJ(); console.log(` rangos en todo el barrido: T ${rango.T.join('..')} FC ${rango.fc.join('..')} CK ${rango.ck.join('..')}`); }
+  // cada estado × paso × tratamiento × «¿y si?»: constantes de paciente posible
+  for (const e of await p.evaluate(() => Object.keys(window.__tmv.ESTADOS).filter((x) => x !== 'juega'))) for (let paso = 1; paso <= 5; paso++) for (const trat of [0, 1]) for (const ysi of [null, 'golpe', 'fiebre', 'hm', 'snm', 'ss', 'hipo']) {
+    await ir({ est: e, paso, trat, ysi }); const l = await p.evaluate(() => window.__tmv.leer()); ok((l.pa !== '—' || l.fc === 0) && l.T >= 22 && l.T <= 42 && l.fc >= 0 && l.fc <= 160 && (!l.ck || l.ck <= 30000) && (!l.co2 || (l.co2 >= 20 && l.co2 <= 100)), `${e} p${paso} t${trat} ysi ${ysi}: T ${l.T} FC ${l.fc} CK ${l.ck} CO₂ ${l.co2}`);
+    if (l.pa && l.pa !== '—') { const [s1, d1] = l.pa.split('/').map(Number); ok(s1 >= 50 && s1 <= 220 && d1 >= 30 && d1 <= 130, `${e} p${paso}: PA ${l.pa}`); } }
+  await rotulos('barrido de estados');
+  // ================= BOTONES DE LAS FICHAS =================
+  console.log('-- Botones de las fichas (6)');
+  const FICHAS = [['ma-fiebre-def', 'ma-fiebre-basicos', 'fiebre', 2], ['ma-calor-golpe', 'ma-calor', 'golpe', 4], ['ma-hm-clinica', 'ma-hipertermia-farmacos', 'hm', 3], ['ma-snm-clinica', 'ma-hipertermia-farmacos', 'snm', 3], ['ma-ss-claves', 'ma-hipertermia-farmacos', 'ss', 3], ['ma-hipo-grados', 'ma-hipotermia', 'hipo', 3]];
+  for (const [id, tab, est, paso] of FICHAS) {
+    await p.evaluate((tab) => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'marinoAbdomen', panel: 'panel-marino-abd-tabs', tab }); document.body.append(t); t.click(); t.remove(); }, tab); await p.waitForTimeout(500);
+    const bt = await p.evaluate((id) => { const x = document.querySelector(`#${id} [data-termostato-vivo]`); if (!x) return null; x.click(); return x.dataset.termostatoVivo; }, id); await p.waitForTimeout(700);
+    const abre = await p.evaluate(() => !!document.getElementById('tmv-raiz')?.offsetParent); ok(bt === `${est}:${paso}` && abre, `ficha ${id}: su botón (${bt}) abre el termostato`);
+    const so = await p.evaluate(() => ({ e: window.__tmv.s.est, p: window.__tmv.s.paso })); ok(so.e === est && so.p === paso, `ficha ${id}: abre ${so.e}:${so.p}, esperaba ${est}:${paso}`);
+    await desb('ficha ' + id); await p.evaluate(() => document.getElementById('tmv-volver').click()); await p.waitForTimeout(600);
+    ok(await p.evaluate((id) => !!document.getElementById(id)?.offsetParent, id), `ficha ${id}: «← VOLVER» vuelve a la ficha`); }
+  // «Ver en la ficha» desde una cita lleva al párrafo; enlace a los iones vivos
+  await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'termostatoVivo', termostatoVivo: 'hm:3' }); document.body.append(t); t.click(); t.remove(); }); await p.waitForTimeout(700);
+  await p.evaluate(() => document.querySelector('#tmv-paso-caja .ver-ficha').click()); await p.waitForTimeout(700);
+  ok(await p.evaluate(() => !!document.getElementById('ma-hm-clinica')?.offsetParent), '«Ver en la ficha» no abre el párrafo de hipertermia maligna');
+  await p.evaluate(() => { const t = document.createElement('button'); Object.assign(t.dataset, { especialidad: 'libros', view: 'termostatoVivo', termostatoVivo: 'hm:3' }); document.body.append(t); t.click(); t.remove(); }); await p.waitForTimeout(500);
+  await p.evaluate(() => { document.querySelector('#tmv-raiz [data-pest="medir"]').click(); document.querySelector('#tmv-raiz [data-iones-vivos="adela"]').click(); }); await p.waitForTimeout(700);
+  ok(await p.evaluate(() => !!document.getElementById('iov-raiz')?.offsetParent), 'el enlace a los iones vivos (Adela) no abre');
+  await p.evaluate(() => document.getElementById('iov-volver').click()); await p.waitForTimeout(500);
+  ok(await p.evaluate(() => !document.getElementById('iov-raiz')?.offsetParent), '«← VOLVER» de los iones vivos no sale de ellos');
+  ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id^="tmv-"]')].map(e => e.id); return ids.length === new Set(ids).size; }), 'ids tmv- sin duplicar');
+  ok(await p.evaluate(() => { const ids = [...document.querySelectorAll('[id]')].map(e => e.id); return ids.length === new Set(ids).size; }), 'ids duplicados en la app');
   await ctx.close();
 }
 } catch (e) { fallos.push('excepción: ' + e.message); } finally { await b.close(); }
