@@ -21,7 +21,7 @@ export const FIG = { A0: 36.3, kBasal: 0.02, kCvvh: 0.35, prod: [0.6, 1, 1.6], l
 export const PRESETS = {
   sano: { nombre: 'Hígado sano', s: { func: 100, prod: 1, dep: 0, rifa: 0, cvvh: 0 }, txt: 'Con el hígado entero, el carril de la urea procesa casi todo el NH₃ que llega por la porta: el amonio arterial queda por debajo de 60 µmol/L.' },
   casimira: { nombre: 'Casimira', s: { func: 20, prod: 1, dep: 0, rifa: 0, cvvh: 0 }, txt: 'Casimira, 44 años, fallo hepático agudo por paracetamol: quedan pocos hepatocitos y el amonio arterial marca 165 µmol/L (más de 150).' },
-  edema: { nombre: 'Edema cerebral', s: { func: 5, prod: 1, dep: 0, rifa: 0, cvvh: 0 }, txt: 'Casi sin hepatocitos: el amonio arterial pasa de 150 y el astrocito se hincha de agua; es el cuadro que la CVVH debe evitar.' },
+  edema: { nombre: 'Edema cerebral', s: { func: 5, prod: 1, dep: 0, rifa: 0, cvvh: 0, edema: true }, txt: 'Casi sin hepatocitos: el amonio arterial pasa de 150 y el astrocito se hincha de agua; es el cuadro que la CVVH debe evitar.' },
   hilario: { nombre: 'Hilario', s: { func: 52, prod: 1, dep: 0, rifa: 0, cvvh: 0, vit: { pa: '85/50', fc: '118' } }, txt: 'Hilario, 58 años, cirrótico alcohólico con hematemesis: PA 85/50 (PAM ≈ 62; la Tabla 39.3 pide PAM 65, p. 9), FC 118 (paciente inventado).' },
   alta: { nombre: 'Sangrado digestivo', s: { func: 25, prod: 2, dep: 0, rifa: 0, cvvh: 0 }, txt: 'Poco hígado y mucha producción intestinal de NH₃ (por ejemplo, tras una hemorragia digestiva): el amonio sube antes de lo que marca el umbral habitual.' },
 };
@@ -32,6 +32,7 @@ export const NOTAS = [
   ['fuente no lo dice', 'La relación exacta entre amonio y West Haven: el libro dice que se correlaciona «en muchos casos, no en todos» (p. 7). Aquí el grado cambia con los hepatocitos vivos, no con una tabla de amonio.'],
   ['fuente no lo dice', 'Los pasos intermedios del ciclo de la urea (y el CO₂ en la mitocondria): el libro solo lo nombra (p. 6); la cadena de cuatro estaciones del dibujo es fisiología general, no de la ficha.'],
   ['las fuentes discrepan', 'Ceftriaxona antes de la endoscopia: la Tabla 39.3 dice 1 g/día durante 5-7 días y el texto (p. 9) 2 g «en la mayoría de guías». Las dos son de Marino; se muestran las dos.'],
+  ['opinión del autor', 'Los cortes de West Haven según los hepatocitos vivos (60 / 40 / 15 / 5 %) son una escala del modelo, ilustrativa: la ficha (Tabla 39.2, p. 7) describe los grados por la clínica, no por un porcentaje de hígado.'],
   ['opinión del autor', 'Que más producción intestinal y menos del 30 % de hepatocitos adelanten el riesgo de edema (umbral ilustrativo de 120 en el modelo) es una simplificación del modelo; el libro solo da >150 y que el amonio arterial predice mejor que el venoso al principio (p. 7).'],
 ];
 export const PROFUNDIZAR = [['Asterixis y signos motores: pueden aparecer en cualquier fase (p. 6)', 6], ['Enema de retención: 200 g de lactulosa (300 mL) mezclados con 700 mL de agua, 30-60 min en Trendelenburg (p. 7)', 7], ['Trasplante: mortalidad del fallo agudo del 80 al 33 % (p. 8)', 8], ['Amonio arterial frente a venoso (p. 7)', 7], ['Lesión renal aguda en el 70 % del fallo hepático agudo; la terapia de reemplazo renal se usa con más decisión porque también quita amonio (p. 5)', 5], ['Ceftriaxona 1 g/día durante 5-7 días en el sangrado por varices (Tabla 39.3, p. 9)', 9]];
@@ -44,6 +45,7 @@ export const CRECERA = [
   ['Peritonitis bacteriana y síndrome hepatorrenal: el riñón del cirrótico, con el filtro vivo', 'ma-pbe-shr', 10],
   ['Paracetamol: la vía del glutatión y la NAC', 'ma-fha-paracetamol', 3]];
 export const ASTRO = ['El astrocito grande (con su glutamina y su agua) ocupará el hueco de la derecha del dibujo; hoy se ve en tamaño normal.', 'ma-eh-nh3', 6];
+export const TRR_FICHA = ['nefrologia', 'trr', 'panel-trr-tabs', 'trr-indicaciones'];
 export const FILTRO_AMONIO = 'ma-eh-amonio';
 export const FLUIDOS = { alb: { n: 'Albúmina 5 %', dpa: [10, 5], dfc: -6 }, sal: { n: 'Salino', dpa: [6, 3], dfc: -4 }, rl: { n: 'Ringer lactato', dpa: [5, 3], dfc: -3 } };
 export const IDEA = ['El hígado convierte el NH₃ del intestino en urea; si falla, el NH₃ llega al astrocito, que lo vuelve glutamina y se hincha de agua.', 6];

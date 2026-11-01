@@ -5525,5 +5525,12 @@ body.study-mode-on #hpv-raiz .dock { padding-right: 82px; }
 #hpv-raiz .mando button[aria-pressed="true"], #hpv-raiz .mando .fila button[aria-pressed="true"] { border-color: var(--oro); color: var(--oro); }
 /* [FIN hepatocito vivo] */
 /* hepatocito: con un sello, el monitor crece para que lo quepa entero (el sello se pinta sobre el monitor) */
-#hpv-raiz #hpv-monitor:has(.tope-sello) { min-height: 215px; }
+#hpv-raiz #hpv-sello-zona { position: relative; }
+#hpv-raiz #hpv-sello-zona .tope-mon { position: static; inset: auto; height: auto; }
+#hpv-raiz #hpv-sello-zona .tope-sellos { position: static; transform: none; width: auto; max-width: 100%; max-height: none; bottom: auto; padding: 0; margin: 4px 0; overflow: visible; }
+#hpv-raiz #hpv-sello-zona .tope-sellos:empty { display: none; }
+#hpv-raiz #hpv-sello-zona .tope-sello { transform: none; max-height: none; overflow: visible; width: auto; }
+#hpv-raiz #hpv-sello-zona .tope-sello.tope-compacto small { display: block; }
+#hpv-raiz #hpv-sello-zona .tope-linea { display: none; }
+#hpv-raiz .paso.plegado { font: 600 .74rem/1.3 var(--sans); color: var(--text-muted); border-left: 2px solid var(--accent-green); padding-left: 8px; }
 #hpv-raiz .mando label { display: block; } #hpv-raiz .mando label output { display: inline; }

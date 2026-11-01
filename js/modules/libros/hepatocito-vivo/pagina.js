@@ -5,7 +5,7 @@
 import { crearTope } from '../../../core/tope.js';
 import { seguirFrase } from '../../../core/frase-vista.js';
 import { cargarMotion, sinMovimiento } from '../../../core/motion.js';
-import { PDF, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe, CRECERA, UBICACION, FLUIDOS } from '../../../data/hepatocito-vivo-data.js';
+import { PDF, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe, CRECERA, UBICACION, FLUIDOS, TRR_FICHA } from '../../../data/hepatocito-vivo-data.js';
 import { nuevo, leer, topes, fmt, vitales } from './modelo.js';
 import { escena, leyenda, opNodo } from './dibujo.js';
 import { crearGuia, focoSvg } from './guia.js';
@@ -85,9 +85,9 @@ function modoPrueba(m) {
 function caso(i, caja) {
   const st = CASO.pasos[i]; Object.assign(s, st.estado); oculto = false; foco = [];
   const c = document.createElement('div'); c.className = 'paso'; const p = document.createElement('p'); p.className = 'enun'; p.textContent = `Paso ${i + 1} de ${CASO.pasos.length}. ${st.enun}`; const o = document.createElement('div'); c.append(p, o); caja.append(c);
-  const sigue = () => { pintar(); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); caso(i + 1, caja); }); c.append(b); } else { $('fig').open = true; const f = document.createElement('button'); f.type = 'button'; f.className = 'b ver-ficha'; f.id = 'hpv-b-filtro'; f.textContent = 'Ver la modalidad de TRR (Nefrología)'; Object.assign(f.dataset, { especialidad: 'nefrologia', view: 'trr', panel: 'panel-trr-tabs', tab: 'trr-modalidad' }); c.append(f); fin(caja, 'caso'); } };
+  const sigue = () => { pintar(); $('monitor').scrollIntoView({ block: 'start', behavior: 'auto' }); if (i + 1 < CASO.pasos.length) { const b = document.createElement('button'); b.type = 'button'; b.className = 'b prim'; b.textContent = 'Siguiente paso'; b.addEventListener('click', () => { b.remove(); c.classList.add('plegado'); c.textContent = `Paso ${i + 1} ✓ ${st.corto}`; caso(i + 1, caja); }); c.append(b); } else { $('fig').open = true; const f = document.createElement('button'); f.type = 'button'; f.className = 'b ver-ficha'; f.id = 'hpv-b-filtro'; f.textContent = 'Ver las indicaciones de TRR (en general; la ficha no trata la CVVH del amonio)'; Object.assign(f.dataset, { especialidad: TRR_FICHA[0], view: TRR_FICHA[1], panel: TRR_FICHA[2], tab: TRR_FICHA[3] }); c.append(f); fin(caja, 'caso'); } };
   if (st.mando) { espera = () => { espera = null; const r = document.createElement('p'); r.className = 'por ok'; r.textContent = st.ok; c.append(r); sigue(); }; frase(st.enun, 'paciente inventado; ficha · p. 8'); pintar(); return; }
-  opciones(o, st.ops, (op) => { if (op.ok && st.alAcertar) { Object.assign(s, st.alAcertar); frase(`PA y FC con albúmina 5 %: ${vitales(s).pa}, FC ${vitales(s).fc} (ilustrativo).`, 'ficha · p. 5 (albúmina); cambios ilustrativos'); } sigue(); }, st.orden); frase(`Paso ${i + 1}: ${fmt(leer(s).a)} µmol/L de amonio arterial en el modelo (ilustrativo).`, 'paciente inventado; cifras ilustrativas'); pintar();
+  opciones(o, st.ops, (op) => { if (!op.ok && op.alFallar) hacer('fl', op.alFallar.fl); if (op.ok && st.alAcertar) { Object.assign(s, st.alAcertar); frase(`PA y FC con albúmina 5 %: ${vitales(s).pa}, FC ${vitales(s).fc} (ilustrativo).`, 'ficha · p. 5 (albúmina); cambios ilustrativos'); } sigue(); }, st.orden); frase(`Paso ${i + 1}: ${fmt(leer(s).a)} µmol/L de amonio arterial en el modelo (ilustrativo).`, 'paciente inventado; cifras ilustrativas'); pintar();
 }
 // ---- Montaje (una vez) ----
 function montar() {
@@ -117,14 +117,15 @@ function montar() {
   $('notas').innerHTML = NOTAS.map(([t, x]) => `<p><b>${t === 'fuente no lo dice' ? 'La fuente no lo dice' : t === 'las fuentes discrepan' ? 'Las fuentes discrepan' : 'Opinión del autor'}.</b> ${x}</p>`).join('');
   $('crecera').innerHTML = CRECERA.map(([t, id, pg]) => `<li>${t} ${cita(pg, id)}</li>`).join('');
   $('profundizar').innerHTML = PROFUNDIZAR.map(([t, p]) => `<li>${t} ${cita(p)}</li>`).join('');
-  topeApi = crearTope({ monitor: $('monitor'), dock, cita });
+  topeApi = crearTope({ monitor: $('sello-zona'), dock, cita });
 }
 function ajustarDock() { R.style.setProperty('--hpv-dock-h', $('dock').offsetHeight + 'px'); }
-// Estado: «casimira» (un paciente) o «alta:tips» (ese paciente con el TIPS puesto). Vacío = el hígado sano.
+// Estado: «casimira» (un paciente), «sano:tips» (ese paciente con el TIPS puesto) o «casimira:rl» / «casimira:alb» (con ese fluido). Vacío = el hígado sano.
 export function abrirEstado(clave) {
   const [p, x] = String(clave || '').split(':'); modo = 'explorar'; $('prueba').hidden = true; $('prueba').textContent = ''; delete $('prueba').dataset.fin;
   ponerPreset(PRESETS[p] ? p : 'sano');
-  if (x === 'tips') hacer('tips');
+  if (x === 'tips') { const a0 = fmt(leer(s).a); hacer('tips'); frase(`TIPS puesto: el amonio arterial pasa de ${a0} a ${N()} µmol/L, porque el NH₃ de la porta salta el hígado. Cambia un problema por otro.`, 'ficha · p. 10; cuánto sube: ilustrativo'); }
+  else if (x === 'rl' || x === 'alb') hacer('fl', x);
   ajustarDock();
 }
 montar(); ponerPreset('sano', true); ajustarDock();
