@@ -35,7 +35,7 @@ const AJUSTES = {
     // Iones vivos: «Hazlo / Siguiente / Cerrar» de la guía son pasos y «Esperar 15 min» un reloj que solo deja decaer el bolo: no son mandos que acumulen (la prueba propia los recorre)
     'iones-vivos': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Pausa|Esperar)/ },
     'receptor-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|▶ Paso|■ Parar)/ },
-    // [HUECO crv: 'craneo-vivo']
+    'craneo-vivo': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Más mandos|Menos mandos)/ },
     // ·
     // Placa viva: «Hazlo / Siguiente / Cerrar» de la guía, «Ver el ciclo», los pasos de la lupa y el reloj (+10 min, Día ±1) no son mandos de dosis (la prueba propia recorre todos)
     'placa-viva': { noPulsar: /^(Explícam|Empezar de nuevo|Reiniciar|Reinicio|Volver|←|Hazlo|Siguiente|Cerrar|‹ Anterior|Ver el ciclo|\d )/ },

@@ -1,0 +1,11 @@
+# Arreglo del cráneo vivo (b6a) · vuelta de auditoría y profesor
+✅ A1 resangrado: sin «más grave / máximo en primeros días» (G6, E2, E5); «más riesgo de resangrar»; p. 47 solo da PAS <140, cerrar <3 días (nunca >7-10), tranexámico no.
+✅ A2 G4 «el hipertónico saca agua»: rótulo fisiología general, sin cita p. 41 al mecanismo.
+✅ A3 E6 hemicraniectomía: sin orden de conducta; la correcta = ≤60 años, ≤48 h, menos mortalidad (RCEM); Marino p. 40 solo la nombra.
+✅ Hueco G5: CCP 25/35/50 U/kg por INR 2-4/4-6/>6 (Tabla 47.4, p. 44); PAS <140 → p. 45.
+✅ Menores: lado de la pupila y sucesión flexión→extensión→flaccidez rotulados (fisiología general / inferencia) en G2, G3, E1, LLEVAS y sello uncal; G3 distractor 4 y G7 distractor 4 cambiados; G4 «objetivo habitual 145-155», sin «empeora el edema»; Segismundo paso 3 sin «bajar la PAM a 80» (drenar LCR y PAS <140, p. 45); Abundio paso 3 y LLEVAS: PIC <20 / PPC 50-70 son de la HIC de Marino; sello tronco ilustrativo.
+✅ Retoques: (1) fuera Apuesta/Error/Caso, «Preguntas» → «Mayéutica»; (2) pregunta bajo el monitor, guía oculta, `subir` al monitor; (3) Segismundo paso 1 «encuentra el error» (E3 pasa ahí, sale del examen) y Abundio paso 5 «piensa y destapa»; (4) avisos al 80 % (dren2, mani2, tfin); (5) meseta del edema (+6/día 5 días, luego −3, nota «la fuente no lo dice») y 12 h con ancla p. 42 «horas: ilustrativo»; (6) «Volver al cráneo de este paciente» abre Segismundo en su último paso.
+✅ prueba craneo-vivo.mjs 390+360 en verde (3 líneas ✅ nuevas); jueces --modelo craneo-vivo en verde; --forma: cráneo 16 tests, larga 4, corta 1, posiciones 5/5/4/2.
+Frases nuevas (sin página): ninguna nueva de mecanismo; las rotuladas «fisiología general»: pupila fija del lado de la masa (G2, E1), hipertónico saca agua (G4), 130-135 sin gradiente osmótico (G4), sucesión de posturas (G3, E1). Sin fuente aún: pico del edema del infarto (nota).
+Visto de paso: el código viejo de Apuesta/Error/Caso sigue en pagina.js/pruebas.js (sin botón); se puede borrar. Sube `?v=` el director (cambió craneo-vivo.html y módulos). La tira de modos usa un `style` en línea de 2 columnas (no toqué components.css).
+No comprobado / riesgo: no abrí AHA/ESO para el orden médico-cirugía; E6 dist. 2 («75 años, 5 días») es mi lectura del límite de RCEM; capturas vistas: solo G1 a 390.

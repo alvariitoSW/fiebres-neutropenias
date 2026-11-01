@@ -46,6 +46,7 @@ export const BANCOS = [
     { nombre: 'corazón eléctrico', datos: 'js/data/ritmo-vivo-preguntas.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'receptor vivo', datos: 'js/data/receptor-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
     { nombre: 'placa viva', datos: 'js/data/placa-viva-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
+    { nombre: 'cráneo vivo', datos: 'js/data/craneo-vivo-mayeutica.js', motor: 'js/core/mayeutica-motor.js' },
 ];
 
 /* ---------- Los modelos vivos en el navegador ---------- */
@@ -90,7 +91,9 @@ export const MODELOS = {
         // el monitor y la Fig. 1 también son la imagen de sus mandos (las cifras y la dosis), no solo la lupa
         figuras: ['#rcv-monitor', '#rcv-fig1'],
         estados: ['na-baja', 'na-alta', 'dobutamina', 'betabloqueo', 'cocaina', 'bronquio'] },
-    // [HUECO crv: 'craneo-vivo']
+    // Cráneo vivo (b6a): Explorar | Apuesta | Error | Caso; el estado va en data-craneo-vivo
+    'craneo-vivo': { raiz: '#crv-raiz', enlace: { especialidad: 'libros', view: 'craneoVivo' }, clave: 'craneoVivo', modo: { explorar: '#crv-raiz [data-modo="explorar"]', mayeutica: '#crv-modo-preguntas' },
+        estados: ['abundio', 'segismundo', 'clotilde', 'petronila', 'leovigildo'] },
     // ·
     // Placa viva: Explorar | Preguntas (Mayéutica del motor común): el estado va en data-placa-viva
     'placa-viva': { raiz: '#plv-raiz', enlace: { especialidad: 'libros', view: 'placaViva' }, clave: 'placaViva', modo: { explorar: '#plv-modo-explorar', mayeutica: '#plv-modo-preguntas' },
