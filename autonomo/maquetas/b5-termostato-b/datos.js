@@ -45,12 +45,12 @@ export const ESTADOS = {
 };
 // «¿Y si…?»: la combinación equivocada de cada estado y lo que le pasa al paciente.
 export const YSI = {
-  golpe: { n: 'Paracetamol en el golpe de calor', c: '45|ma-calor-hipertermia', t: 'Sin efecto: no es fiebre', x: 'En la hipertermia el punto de ajuste no se ha movido. El paracetamol baja el ajuste, no quita calor: Ovidio sigue en 41,6 °C con delirio y PA 86/48.', o: 'ficha · p. 45' },
-  fiebre: { n: 'Manta de enfriamiento en la fiebre', c: '72|ma-antip-mantas', t: 'Contraproducente: escalofrío', x: 'Dorotea (39,6 °C) ya tiene el ajuste alto. La manta cierra aún más la piel y le provoca escalofríos: produce más calor de lo que quita.', o: 'ficha · p. 72' },
-  hm: { n: 'Solo hielo, sin dantroleno', c: '48|ma-hipertermia-farmacos', t: 'Sin dantroleno el canal sigue abierto', x: 'Marcial se enfría por fuera, pero el músculo sigue soltando Ca²⁺: T 40,3 °C, K⁺ 6,2 y CK 24.000. La mortalidad era ≥70 % antes del dantroleno y baja a ≤10 % con él.', o: 'ficha · p. 48-49' },
-  snm: { n: 'Seguir con haloperidol en el SNM', c: '51|ma-snm-tto', t: 'Hay que retirar el fármaco', x: 'Jacinta sigue bloqueando la dopamina: la rigidez no cede, la CK sube de 3.400 y se arriesga la rabdomiólisis y el riñón.', o: 'ficha · p. 50-51' },
-  ss: { n: 'Ciproheptadina IV en el SS', c: '53|ma-ss-tto', t: 'Solo existe por vía oral', x: 'La ciproheptadina solo se da por vía oral. Con linezolid y fentanilo aún en marcha, Jacinta no mejora: clonus ocular y FC 122.', o: 'ficha · p. 53' },
-  hipo: { n: 'Fluidos a 21 °C en la hipotermia', c: '56|ma-hipo-externo', t: 'Enfrían más al paciente', x: 'Un fluido a 21 °C está más frío que Honorato (27,4 °C): lo enfría aún más. Los fluidos se infunden calientes, aunque no recalientan.', o: 'ficha · p. 56' },
+  golpe: { n: 'Paracetamol en el golpe de calor', c: '45|ma-calor-hipertermia', t: 'Sin efecto: no es fiebre', x: 'El ajuste no se ha movido: Ovidio sigue en 41,6 °C con delirio y PA 86/48.', o: 'ficha · p. 45' },
+  fiebre: { n: 'Manta de enfriamiento en la fiebre', c: '72|ma-antip-mantas', t: 'Contraproducente: escalofrío', x: 'Dorotea (39,6 °C): la piel se cierra más y tirita, que produce más calor.', o: 'ficha · p. 72' },
+  hm: { n: 'Solo hielo, sin dantroleno', c: '48|ma-hipertermia-farmacos', t: 'Sin dantroleno el canal sigue abierto', x: 'Marcial: T 40,3 °C, K⁺ 6,2, CK 24.000. Mortalidad ≥70 % sin dantroleno; ≤10 % con él.', o: 'ficha · p. 48-49' },
+  snm: { n: 'Seguir con haloperidol en el SNM', c: '51|ma-snm-tto', t: 'Hay que retirar el fármaco', x: 'Jacinta: la rigidez no cede y la CK sigue sobre 3.400 (rabdomiólisis).', o: 'ficha · p. 50-51' },
+  ss: { n: 'Ciproheptadina IV en el SS', c: '53|ma-ss-tto', t: 'Solo existe por vía oral', x: 'Jacinta (clonus ocular, FC 122): la ciproheptadina solo se da por vía oral.', o: 'ficha · p. 53' },
+  hipo: { n: 'Fluidos a 21 °C en la hipotermia', c: '56|ma-hipo-externo', t: 'Enfrían más al paciente', x: 'A 21 °C están más fríos que Honorato (27,4 °C): lo enfrían. Se infunden calientes.', o: 'ficha · p. 56' },
 };
 export const APUESTA = { enun: 'Marcial, 28 años, lleva 10 minutos con sevoflurano y succinilcolina en quirófano. ¿Cuál es el primer signo que verás, la fiebre o el CO₂?', ok: 1, ops: [
   ['La fiebre: pasa de 40 °C en cuestión de minutos', 'Esperar la fiebre es llegar tarde: cuando llega, ya hay rigidez, T ≥40 °C, K⁺ alto y rabdomiólisis.'],

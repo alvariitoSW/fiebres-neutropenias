@@ -33,7 +33,7 @@ export function escena(l, capas, foco, cerrado) {
   o += `<g id="c-cer"${on('cer')}><circle class="lupa" cx="290" cy="76" r="62"/><line class="guion" x1="154" y1="36" x2="238" y2="52"/>`;
   o += `<text class="rot" x="290" y="26" text-anchor="middle">Hipotálamo</text><rect class="escala" x="262" y="${base - 52}" width="6" height="52" rx="3"/>`;
   o += `<g id="llama" transform="translate(0 0)"><path class="llama" d="M265 ${base} q-10 -${hF * 0.5} 0 -${hF} q10 ${hF * 0.4} 0 ${hF} z" /></g>`;
-  o += `<path class="real" d="M300 ${yR} l-9 -5 l0 10 z"/><text class="pq" x="284" y="46">llama: ajuste ${fmt(l.pt)}</text><text class="pq" x="284" y="58">flecha: real ${fmt(l.T)}</text>`;
+  o += `<path class="real" d="M300 ${yR} l-9 -5 l0 10 z"/><text class="pq" x="276" y="46">ajuste ${fmt(l.pt)}</text><text class="pq" x="276" y="58">real ${fmt(l.T)}</text>`;
   o += `<text class="pq" x="290" y="130" text-anchor="middle">${l.clon ? 'clonus ocular' : ''}</text>${ring('cer', 290, 76, 66)}</g>`;
   // ---- lupa retículo ----
   o += `<g id="c-ret"${on('mus')}><circle class="lupa" cx="290" cy="238" r="58"/><line class="guion" x1="174" y1="210" x2="236" y2="226"/>`;

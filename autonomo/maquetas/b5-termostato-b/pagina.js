@@ -109,7 +109,7 @@ function pagina() {
   const dock = $('dock');
   topeApi = crearTope({ monitor: $('monitor'), dock, cita });
   $('idea').innerHTML = `${IDEA[0]} ${cita(IDEA[1])} ${org('ficha')}`;
-  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Llama amarilla: punto de ajuste; triángulo rojo: temperatura real.</p>';
+  $('leyenda').innerHTML = leyendaParticulas(['agua', { clave: 'ca', nombre: 'Ca²⁺' }]) + '<p class="para">Punto rojo: calor. Vasos largos y rojos: piel abierta; cortos y grises: piel cerrada. Llama amarilla: punto de ajuste; flecha roja: temperatura real.</p>';
   $('paso-caja').innerHTML = '<h3 id="pc-t"></h3><p id="pc-x"></p><p id="pc-c"></p><div class="fila-g"><button type="button" class="b prim" id="pc-sig">Siguiente paso</button></div>';
   $('fuentes').innerHTML = FUENTES.map(([t, o]) => `<li>${t} ${org(o)}</li>`).join('');
   $('notas').innerHTML = NOTAS.map(([k, t]) => `<p class="para"><b>${k}.</b> ${t}</p>`).join('');
