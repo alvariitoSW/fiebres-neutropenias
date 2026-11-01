@@ -460,7 +460,44 @@ export const PRONO = {
     { k: 'pic', et: 'Presión intracraneal elevada' }, { k: 'reciente', et: 'Traqueostomía o esternotomía reciente (2 sem)' },
   ],
 };
-ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
+
+// ---------------------------------------------------------------- S3 · fuga del cuff y estridor (Benito; cuff.js)
+FICHA['neumo-weaning-extubacion'] = [NEUMO_E4, 'Destete y extubación', 'Destete y extubación', PDF_B, 'Marino 2024'];
+Object.assign(C, {
+  cuffPresion: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-presion', sitio: 'Presión del manguito: no pasar de 25 (isquemia de la mucosa traqueal)', p: 21 },
+  cuffFuga: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-fuga', sitio: 'Fugas del manguito: Vt programado − Vt espirado', p: 22 },
+  cuffSolucion: { f: 'neumo-cuidado-barotrauma', id: 'nep-cuff-solucion', sitio: 'Si hay fuga: reposicionar y reinflar sin pasar de 25 cmH₂O', p: 22 },
+  cuffPrueba: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-prueba', sitio: 'Prueba de fuga del manguito: inhalado − exhalado, mejor en VCV', p: 59 },
+  cuffRecom: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-recomendacion', sitio: 'Fuga >110 mL: nada más; <110 mL: riesgo ×7, esteroides y VNI', p: 59 },
+  cuffEster: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-esteroides', sitio: 'Metilprednisolona 20 mg/4 h, primera dosis 12 h antes (Fig. 30.5)', p: '59-60' },
+  cuffEstridor: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-estridor', sitio: 'Estridor post-extubación: ruido inspiratorio, aparece con ~50 % de obstrucción', p: 60 },
+  cuffManejo: { f: 'neumo-weaning-extubacion', id: 'nep-cuff-manejo', sitio: 'Estridor: dentro de 30 min; signos de fallo → reintubar sin demora', p: 60 },
+});
+export const CUFF = {
+  tope: 25, aviso: 20, max: 30, inicio: 25, corte: 110,   // tope 25 (Marino cap. 28 p. 21: 25 mmHg; p. 22: 25 cmH₂O); aviso a 20 = 80 % del tope; corte 110 mL (cap. 30 p. 59); el mando llega a 30 para poder pedir de más
+  fuga0: 200, fugaEdema0: 80,   // fuga con el cuff a 0 sin edema / con edema: ilustrativo (Marino solo da el corte de 110 mL; 80 es la cifra del caso de Benito)
+  riesgo: [22, 3],   // probabilidad de edema laríngeo sin y con esteroide: ilustrativo (Fig. 30.5 solo dice «7 veces menos»; 22/7 ≈ 3)
+  spo2: [96, 86], vt: 410, esp: { pmus: 11, tin: [1.8, 1.1], fr: [16, 26], r: [10, 35] },   // SpO₂ normal / con estridor y FR 26, Tin 1,1 s y resistencia inspiratoria 35: ilustrativo
+};
+NOTAS.push(
+  { k: 'cuff-mmhg', tipo: 'discrepan', txt: 'Marino da el límite de presión del cuff en dos unidades: 25 mmHg (p. 21, la presión de los capilares de la mucosa) y 25 cmH₂O (p. 22, al reponer aire). No son lo mismo: 25 mmHg son unos 34 cmH₂O. El mando usa 25 cmH₂O, el más estricto de los dos; el sello de isquemia cita la primera cifra.', citas: [C.cuffPresion, C.cuffSolucion] },
+  { k: 'cuff-ilu', tipo: 'calla', txt: 'Marino define la fuga como la diferencia entre el volumen inhalado y el exhalado y da el corte de 110 mL, pero no dice cuánto se escapa con cada presión del cuff ni da un valor predictivo positivo del corte (solo que el valor predictivo es limitado). Las fugas del modelo (200 mL con el cuff a 0 y 80 con edema; proporcionales a la presión que falta hasta 25), la probabilidad de edema (22 % → 3 %) y la SpO₂ del estridor son ilustrativas.', citas: [C.cuffPrueba, C.cuffRecom] },
+);
+ESTADOS['fuga-cuff'] = {
+  tit: 'Fuga del cuff: ¿se puede extubar?', pac: 'benito', cuff: true,
+  resp: { ...RESP_E4, modo: 'vcv', vt: 410, fr: 16, peep: 6, flujo: 60 }, pulmon: { c: 45, r: 10 }, man: {},
+  frase: 'Con el cuff inflado nada se escapa. Desínflalo y la fuga (volumen inspirado − espirado) dice si la laringe de Benito está edematosa.',
+  guia: [
+    { t: 'Benito lleva 7 días intubado y cumple los criterios de destete. Con el cuff a 25 cmH₂O el sello es total: el Vt inspirado (410 mL) y el espirado son iguales y la fuga es 0. Marino pone el tope de presión del cuff en 25: por encima comprime los capilares de la mucosa traqueal y la isquema.', org: 'ficha (cap. 28 p. 21-22) · fuga 0: modelo', s: ['[data-fila="fuga"]', '[data-fila="vt"]'], c: C.cuffPresion },
+    { t: 'Una fuga se estima como la diferencia entre el volumen programado y el espirado. Si bajas el cuff a 15 se oye la fuga y el Vt espirado cae a unos 330 mL (fuga de 80). Aún no es la prueba: con el cuff a medias la fuga solo dice que el sello falla.', org: 'ficha (cap. 28 p. 22) · 80 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffFuga },
+    { t: 'La prueba se hace con el cuff del todo desinflado y en volumen control. Si el aire pasa por una laringe sana, la fuga es grande (aquí 200 mL, ilustrativo): una fuga >110 mL elimina el riesgo de edema laríngeo con un 95 % de certeza aproximada y no hace falta nada más antes de extubar.', org: 'ficha (cap. 30 p. 59) · 200 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffRecom },
+    { t: 'Activa «Edema laríngeo» y vuelve a desinflar: la fuga cae a 80 mL, por debajo de 110. Eso multiplica por 7 el riesgo de edema tras extubar. Marino pide pretratar con metilprednisolona 20 mg cada 4 h (la primera dosis 12 h antes: dada justo antes no sirve) y poner ventilación no invasiva nada más extubar.', org: 'ficha (cap. 30 p. 59-60) · 80 mL: ilustrativo', s: ['[data-fila="fuga"]'], c: C.cuffEster },
+    { t: 'Extubar con el cuff a 0 y dejar pasar 30 minutos: el estridor aparece casi siempre en ese plazo. Sin esteroide, el flujo inspiratorio se aplana, la FR sube y la saturación cae: signos de fallo inminente, que obligan a reintubar sin demora. Con el esteroide dado 12 h antes no hay estridor: el riesgo baja de 22 % a 3 % (siete veces menos en el estudio; las cifras del modelo son ilustrativas).', org: 'ficha (cap. 30 p. 60) · cifras: ilustrativo', s: ['flujo:insp', '[data-fila="vt"]', '[data-fila="fio2"]'], c: C.cuffManejo },
+  ],
+  fuentes: [C.cuffPresion, C.cuffFuga, C.cuffPrueba, C.cuffRecom, C.cuffEster, C.cuffManejo],
+};
+PACIENTES.push({ k: 'benito', nombre: 'Benito', chip: '71 a · destete · cuff', linea: '71 años, 78 kg, 1,72 m, FEVI 35 %, día 7 de ventilación por neumonía: cumple los criterios de destete y se le prueba la fuga del cuff. PBW 68 kg.', talla: 172, sexo: 'v', estado: 'fuga-cuff' });
+ORDEN_ESTADOS.push('p-sili', 'hfno', 'prono', 'fuga-cuff', 'asincronia-ineficaz', 'doble-disparo', 'disparo-inverso', 'sbt-ok', 'sbt-fracaso');
 
 // ---------------------------------------------------------------- E4b · el neumotórax a tensión en el ventilado (neumotorax.js)
 FICHA['neumo-cuidado-barotrauma'] = [NEUMO_E4, 'Cuidado del tubo y barotrauma', 'Barotrauma', PDF_B, 'Marino 2024'];
