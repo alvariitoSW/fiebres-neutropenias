@@ -1,7 +1,6 @@
 import json, wave, numpy as np
-from tts2 import say
+from voz import decir; from reparto import REPARTO
 FPS=25
-V={'tra':('es_ES-davefx-medium',0,1.0,1.0),'int':('es_ES-sharvard-medium',0,1.0,1.0),'hac':('es_ES-sharvard-medium',0,0.92,1.08),'edu':('es_ES-sharvard-medium',1,1.0,1.0),'jus':('es_ES-sharvard-medium',1,0.93,1.05),'cie':('es_AR-daniela-high',0,1.0,1.0),'ext':('es_MX-ald-medium',0,1.0,1.0)}
 G=[ # (quién, texto, pausa después)
  ('tra','Se abre la sesión. Soy el ministro de Transportes: llevo la bitácora y el calendario. El gobernador pide mucho y rápido, y lo lee todo en el móvil. Me obliga a ser breve.',0.7),
  ('int','Ministro del Interior. Dirijo las obras con siete agentes. El gobernador dice «aplica todo», y confía. Mi única pesadilla es la PR cincuenta y uno.',0.7),
@@ -15,7 +14,7 @@ G=[ # (quién, texto, pausa después)
  ('tra','Aprobado por unanimidad. Se levanta la sesión.',1.8)]
 t=2.6; clips=[]; SR=22050
 for i,(k,tx,pausa) in enumerate(G):
-    f=f'audio/c{i:02d}.wav'; say(tx.replace('«','').replace('»',''),*V[k],f)
+    f=f'audio/c{i:02d}.wav'; decir(tx.replace('«','').replace('»',''),REPARTO[k],f)
     w=wave.open(f); a=np.frombuffer(w.readframes(w.getnframes()),dtype=np.int16).astype(np.float32)
     d=len(a)/SR; clips.append(dict(k=k,tx=tx,t0=round(t,3),d=round(d,3),a=a)); t+=d+pausa
 T=t+1.0; mix=np.zeros(int(T*SR)+1,np.float32)

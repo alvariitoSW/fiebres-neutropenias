@@ -1,7 +1,6 @@
 import json, wave, sys, numpy as np
-sys.path.insert(0,'..'); from tts2 import say
+sys.path.insert(0,'..'); from voz import decir; from reparto import REPARTO
 FPS=25; SR=22050; rng=np.random.default_rng(7)
-V={'tra':('es_ES-davefx-medium',0,1.0,1.0),'p1':('es_ES-sharvard-medium',0,1.07,0.95),'p2':('es_MX-claude-high',0,1.0,0.95)}
 LLEGA=9.6  # segundos de entrada (pasillo + sala)
 G=[ # (quién, plano, hablado, subtítulo, pausa)
  ('tra','atril','Buenas tardes, estimados ciudadanos y ciudadanas. Comparezco ante ustedes y ante los medios de comunicación para comunicarles los acuerdos del Consejo de Ministros.',None,0.5),
@@ -14,7 +13,7 @@ G=[ # (quién, plano, hablado, subtítulo, pausa)
 ]
 t=LLEGA; clips=[]
 for i,(k,plano,tx,sub,p) in enumerate(G):
-    f=f'audio/c{i:02d}.wav'; say(tx,*V[k],f)
+    f=f'audio/c{i:02d}.wav'; decir(tx,REPARTO[k],f,sala=True)
     w=wave.open(f); a=np.frombuffer(w.readframes(w.getnframes()),dtype=np.int16).astype(np.float32)
     clips.append(dict(k=k,plano=plano,sub=sub or tx,t0=round(t,3),d=round(len(a)/SR,3),a=a)); t+=len(a)/SR+p
 T=t; mix=np.zeros(int(T*SR)+SR,np.float32)
