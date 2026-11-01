@@ -663,9 +663,9 @@
             <table class="data-table">
                 <thead><tr><th>% PEFR predicho</th><th>Gravedad de la obstrucción</th></tr></thead>
                 <tbody>
-                    <tr><td>≥70%</td><td>Leve</td></tr>
-                    <tr><td>40-69%</td><td>Moderada</td></tr>
-                    <tr><td>&lt;40%</td><td>Grave</td></tr>
+                    <tr id="nep-pefr-70"><td>≥70%</td><td>Leve</td></tr>
+                    <tr id="nep-pefr-40-69"><td>40-69%</td><td>Moderada</td></tr>
+                    <tr id="nep-pefr-40"><td>&lt;40%</td><td>Grave</td></tr>
                 </tbody>
             </table>
             </div>
@@ -902,8 +902,8 @@
             <p id="nep-estrategias-ventilador" class="section-label" style="margin-top:16px;">Estrategias del ventilador</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">Los siguientes ajustes están diseñados para limitar la hiperinflación dinámica (y las consecuencias adversas de presiones intratorácicas altas) durante la ventilación mecánica:</p>
             <ul class="term-chips">
-                <li>Evitar volúmenes de insuflación que excedan 6-8 mL/kg</li>
-                <li>Maximizar el tiempo permitido para la exhalación: (a) enlenteciendo una frecuencia respiratoria rápida con sedación, si es posible, y (b) aumentando la tasa de flujo inspiratorio si es necesario, de modo que la insuflación pulmonar solo represente 1/3 del ciclo respiratorio</li>
+                <li id="nep-estrategia-volumen">Evitar volúmenes de insuflación que excedan 6-8 mL/kg</li>
+                <li id="nep-estrategia-tiempo">Maximizar el tiempo permitido para la exhalación: (a) enlenteciendo una frecuencia respiratoria rápida con sedación, si es posible, y (b) aumentando la tasa de flujo inspiratorio si es necesario, de modo que la insuflación pulmonar solo represente 1/3 del ciclo respiratorio</li>
             </ul>
             <p style="font-size:0.85rem; color:var(--text-dim);">El manejo de la hiperinflación y la PEEP intrínseca durante la ventilación mecánica se describe con más detalle en la <button type="button" class="neumo-internal-link" style="display:inline;margin:0;padding:0;" data-especialidad="neumologia" data-view="merinoNeumologia" data-panel="panel-merino-neumo-tabs" data-tab="neumo-peep-oculta">PEEP oculta (intrínseca) →</button>.</p>
 
@@ -1529,7 +1529,7 @@
             <h3 style="color: var(--accent-purple);">Ventilación no invasiva: métodos</h3>
             <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px;">Fuente: Marino PL. <em>The ICU Book</em>, 5.ª ed., Cap. 26 "Noninvasive Ventilation".</p>
 
-            <p id="nep-historia-vni" style="font-size:0.85rem; color:var(--text-dim);">La respiración a presión positiva no invasiva se introdujo en los años 1940 (una década antes de la ventilación mecánica convencional), pero se administraba a través de una boquilla, y solo podía usarse durante periodos breves (10-15 minutos). Durante los siguientes 40 años, este método de "respiración a presión positiva intermitente" (IPPB) se usó para administrar broncodilatadores inhalados, y para prevenir la atelectasia postoperatoria. El uso de "presión positiva continua en la vía aérea" (CPAP) se introdujo a principios de los años 1980, y ganó tracción rápidamente como tratamiento para la apnea obstructiva del sueño. Esto llevó a mejoras en el desarrollo de las mascarillas, y en la década de 1990 empezaron a aparecer reportes sobre el uso de respiración a presión positiva a través de mascarillas faciales para manejar el fallo respiratorio agudo. Desde entonces, la popularidad de la <em>ventilación no invasiva</em> se ha disparado, pero los beneficios han sido variables (como se describe en este bloque).</p>
+            <p id="nep-historia-vni" style="font-size:0.85rem; color:var(--text-dim);">La respiración a presión positiva no invasiva se introdujo en los años 1940 (una década antes de la ventilación mecánica convencional), pero se administraba a través de una boquilla, y solo podía usarse durante periodos breves (10-15 minutos). Durante los siguientes 40 años, este método de "respiración a presión positiva intermitente" (IPPB) se usó para administrar broncodilatadores inhalados, y para prevenir la atelectasia postoperatoria. El uso de "presión positiva continua en la vía aérea" (CPAP) se introdujo a principios de los años 1980, y ganó tracción rápidamente como tratamiento para la apnea obstructiva del sueño. Esto llevó a mejoras en el diseño de las mascarillas, y en la década de 1990 empezaron a aparecer reportes sobre el uso de respiración a presión positiva a través de mascarillas faciales para manejar el fallo respiratorio agudo. Desde entonces, la popularidad de la <em>ventilación no invasiva</em> se ha disparado, pero los beneficios han sido variables (como se describe en este bloque).</p>
 
             <p class="section-label">Métodos de ventilación no invasiva</p>
             <p style="font-size:0.85rem; color:var(--text-dim);">A continuación, una descripción de los principales métodos de respiración asistida por presión que no requieren intubación endotraqueal.</p>

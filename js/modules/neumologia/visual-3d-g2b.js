@@ -8,13 +8,13 @@ export const RECETAS_3D_G2B = {
         guia: 'El PEFR mide la obstrucción a pie de cama; el espaciador multiplica por dos lo que llega al pulmón; y la PEEP intrínseca refleja la gravedad.',
         paneles: [
             { tipo: 'escalera', titulo: 'Gravedad según el PEFR (% predicho)', nodos: [
-                { fuente: '≥70%', etiqueta: '≥70 %: obstrucción leve' },
-                { fuente: '40-69%', etiqueta: '40-69 %: moderada' },
-                { fuente: '<40%', etiqueta: '<40 %: grave' }
+                { fuente: '#nep-pefr-70', etiqueta: '≥70 %: obstrucción leve', color: 'verde' },
+                { fuente: '#nep-pefr-40-69', etiqueta: '40-69 %: moderada', color: 'amarillo' },
+                { fuente: '#nep-pefr-40', etiqueta: '<40 %: grave', color: 'rojo' }
             ] },
             { tipo: 'calculadora', titulo: 'Clasificador de gravedad por PEFR (el de la ficha)', campos: ['#neumo-pefr-input'], resultado: ['#neumo-pefr-resultado'] },
             { tipo: 'barras', titulo: 'Tabla 23.1: adónde va el fármaco', tabla: '#nep-tabla-23-1',
-              series: [{ col: 1, nombre: 'Nebulizador (2,5 mg)', color: 'dorado' }, { col: 3, nombre: 'MDI + espaciador (200 μg)', color: 'verde' }] },
+              series: [{ col: 1, nombre: 'Nebulizador (2,5 mg)', color: 'dorado' }, { col: 2, nombre: 'MDI sin espaciador (200 μg)', color: 'rojo' }, { col: 3, nombre: 'MDI + espaciador (200 μg)', color: 'verde' }] },
             { tipo: 'comparar', titulo: 'Nebulizador | MDI con espaciador', columnas: [
                 { titulo: 'Nebulizador', color: 'dorado', nodos: [{ fuente: '#nep-neb-vs-mdi', etiqueta: '2,5 mg dados: 12 % al pulmón = 300 μg' }] },
                 { titulo: 'MDI + espaciador', color: 'verde', nodos: [{ fuente: '#nep-neb-vs-mdi', etiqueta: '0,36 mg (4 puffs) dados: 20 % al pulmón = 72 μg' }] }
@@ -41,7 +41,7 @@ export const RECETAS_3D_G2B = {
                 { fuente: '#nep-tabla-23-2', etiqueta: 'Corticoides: 40-80 mg de prednisona o metilprednisolona; 7-10 días' },
                 { fuente: '#nep-tabla-23-2', etiqueta: 'Magnesio: 2 g de MgSO₄ IV en 15-30 min' }
             ] },
-            { tipo: 'barras', titulo: 'Tabla 23.3: potencia de cada corticoide', tabla: '#nep-tabla-23-3',
+            { tipo: 'barras', titulo: 'Tabla 23.3: potencia de cada corticoide', nota: 'La tabla da para la dexametasona un rango (30-40); la barra dibuja el primer valor.', tabla: '#nep-tabla-23-3',
               series: [{ col: 2, nombre: 'Antiinflamatoria relativa', color: 'verde' }, { col: 3, nombre: 'Mineralocorticoide relativa', color: 'rojo' }] },
             { tipo: 'racimos', titulo: 'Si el asma no cede', grupos: [
                 { titulo: 'Adyuvantes', color: 'purpura', nodos: [
@@ -83,8 +83,8 @@ export const RECETAS_3D_G2B = {
                     { fuente: '#nep-vpp-consecuencias', etiqueta: 'La presión positiva parte de una base más alta y agrava la hiperinflación' }] },
                 { titulo: 'Cómo verlo', color: 'purpura', nodos: [{ fuente: '#nep-monitor-flujo', etiqueta: 'Flujo espiratorio al final de la espiración = hiperinflación dinámica' }] },
                 { titulo: 'Qué hacer', color: 'verde', nodos: [
-                    { fuente: 'Evitar volúmenes de insuflación', etiqueta: 'Volumen insuflado ≤6-8 mL/kg' },
-                    { fuente: 'Maximizar el tiempo', etiqueta: 'Más tiempo para exhalar: frecuencia menor y flujo inspiratorio mayor' }] }
+                    { fuente: '#nep-estrategia-volumen', etiqueta: 'Volumen insuflado ≤6-8 mL/kg' },
+                    { fuente: '#nep-estrategia-tiempo', etiqueta: 'Más tiempo para exhalar: frecuencia menor y flujo inspiratorio mayor' }] }
             ] }
         ]
     }

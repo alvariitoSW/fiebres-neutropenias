@@ -32,26 +32,26 @@ export const RECETAS_3D_G2 = {
                 { titulo: 'Si hay alguna, no VNI', color: 'rojo', tabla: '#nep-tabla-26-1' },
                 { titulo: 'Si todas son NO', color: 'verde', nodos: [{ fuente: '#nep-vni-candidatos', etiqueta: 'Candidato a ventilación no invasiva' }] }
             ] },
-            { tipo: 'barras', titulo: 'Fig. 26.4: VNI en la exacerbación de EPOC (%)', tabla: '#nep-fig-26-4',
+            { tipo: 'barras', titulo: 'Fig. 26.4: VNI en la exacerbación de EPOC (%)', nota: 'Las cifras son las etiquetas de la figura; las alturas dibujadas en el PDF no coinciden exactamente con ellas.', tabla: '#nep-fig-26-4',
               series: [{ col: 1, nombre: 'Sin VNI', color: 'rojo' }, { col: 2, nombre: 'Con VNI', color: 'verde' }] },
             { tipo: 'barras', titulo: 'Fig. 26.5: fracaso de la VNI según la causa (%)', tabla: '#nep-fig-26-5',
               series: [{ col: 1, nombre: 'Fracaso', color: 'amarillo' }] },
             { tipo: 'calculadora', titulo: 'Respuesta a la primera hora (evaluador de la ficha)', campos: ['#neumo-vni-respuesta-tipo', '#neumo-vni-respuesta-basal', '#neumo-vni-respuesta-1h'], resultado: ['#neumo-vni-respuesta-resultado'] },
             { tipo: 'comparar', titulo: 'Presión positiva según el corazón', columnas: [
-                { titulo: 'Corazón sano', color: 'amarillo', nodos: [{ fuente: '#nep-corazon-papel', etiqueta: 'Precarga empinada, poscarga plana: el gasto baja' }] },
-                { titulo: 'Corazón que falla', color: 'verde', nodos: [{ fuente: '#nep-corazon-papel', etiqueta: 'Precarga plana, poscarga empinada: el gasto sube' }] }
+                { titulo: 'Corazón sano', color: 'amarillo', nodos: [{ fuente: '#nep-corazon-papel', etiqueta: 'Precarga empinada, poscarga plana: el gasto tiende a bajar' }] },
+                { titulo: 'Corazón que falla', color: 'verde', nodos: [{ fuente: '#nep-corazon-papel', etiqueta: 'Precarga plana, poscarga empinada: el gasto tiende a subir' }] }
             ] },
             { tipo: 'flujo', titulo: 'Cuatro formas de frenar el llenado', nodos: [
                 { fuente: '#nep-precarga-vias', etiqueta: '1. Menos gradiente de entrada venosa: llena menos el VD', color: 'dorado' },
                 { fuente: '#nep-precarga-vias', etiqueta: '2. Comprime las venas pulmonares: llena menos el VI', color: 'purpura' },
                 { fuente: '#nep-precarga-vias', etiqueta: '3. Baja la presión transmural: más efecto en el VD', color: 'amarillo' },
-                { fuente: '#nep-precarga-vias', etiqueta: '4. Sube la resistencia pulmonar: el septo empuja al VI', color: 'rojo' },
+                { fuente: '#nep-precarga-vias', etiqueta: '4. Sube la resistencia pulmonar: si el VD falla, el septo empuja al VI', color: 'rojo' },
                 { fuente: '#nep-precarga-vpp', etiqueta: 'La hipovolemia lo magnifica', color: 'rojo' }
             ] },
             { tipo: 'flujo', titulo: 'Poscarga = presión de la cámara − presión pleural', nodos: [
                 { fuente: '#nep-ec-26-1', etiqueta: 'Ec. 26.1: la pleural resta', color: 'dorado' },
-                { fuente: '#nep-pulso-paradojico-26', etiqueta: 'Pleural negativa: poscarga ↑ (pulso paradójico >10)', color: 'amarillo' },
-                { fuente: '#nep-poscarga-vpp', etiqueta: 'Pleural positiva: poscarga ↓, volumen sistólico ↑', color: 'verde' }
+                { fuente: '#nep-pulso-paradojico-26', etiqueta: 'Pleural negativa: poscarga ↑; si es exagerada, pulso paradójico (>10)', color: 'amarillo' },
+                { fuente: '#nep-poscarga-vpp', etiqueta: 'Pleural positiva: poscarga ↓, el volumen sistólico tiende a subir', color: 'verde' }
             ] }
         ]
     }
