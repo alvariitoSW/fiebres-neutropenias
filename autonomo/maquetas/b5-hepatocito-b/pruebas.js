@@ -11,15 +11,26 @@ export const APUESTA = {
   orden: [0, 1, 2], tras: (a) => a.poner({ func: 30 }),
 };
 export const ERROR = {
-  preset: 'casimira', pag: 7,
+  preset: 'casimira', pag: 7, clave: 'error',
   antes: 'Texto de la guardia para una paciente con encefalopatía hepática. Hay 0, 1 o 2 errores: juzga cada frase antes de ver qué hace la lactulosa en el colon.',
-  frases: [  // orden: 5 frases, 1 error (la 3.ª); el recuento «hay 0, 1 o 2» no dice cuántos hay
-
+  frases: [
     { t: 'Objetivo de lactulosa: 2-3 deposiciones blandas al día; si aparece diarrea, se reduce o se para.', error: false, por: 'Cierto (p. 7): la diarrea osmótica obliga a reducir o parar.' },
-    { t: 'Las bacterias lácticas convierten la lactulosa en ácidos grasos de cadena corta, la luz se alcaliniza y desaparecen los productores de amonio.', error: true, por: 'Falso: la luz se acidifica, y ese ácido es lo que elimina los microbios productores de amonio (p. 7). Con una luz alcalina el amonio seguiría subiendo.' },
     { t: 'Rifaximina: 400 mg tres veces al día durante al menos 10 días, y suele combinarse con lactulosa.', error: false, por: 'Cierto (p. 7): es un antibiótico que no se absorbe; solo, es eficaz, pero se suele asociar a lactulosa.' },
     { t: 'Un amonio arterial >150 µmol/L (normal <60) marca un riesgo aumentado de edema cerebral.', error: false, por: 'Cierto (p. 7); el arterial lo predice mejor que el venoso al principio.' },
+    { t: 'Las bacterias lácticas convierten la lactulosa en ácidos grasos de cadena corta, la luz se alcaliniza y desaparecen los productores de amonio.', error: true, por: 'Falso: la luz se acidifica, y ese ácido es lo que elimina los microbios productores de amonio (p. 7). Con una luz alcalina el amonio seguiría subiendo.' },
     { t: 'La CVVH se plantea con oliguria persistente, amonio >150 µmol/L o edema cerebral, sea cual sea la creatinina.', error: false, por: 'Cierto (p. 8): el criterio no depende de la creatinina.' }],
+};
+// Segunda ronda, con dos errores (el 2.º y el 5.º): el plan de hemorragia por varices de Hilario (Tabla 39.3 y texto, p. 9)
+export const ERROR2 = {
+  preset: 'hilario', pag: 9, clave: 'hilario',
+  antes: 'Hilario, cirrótico con hematemesis. Plan escrito por un compañero. Hay 0, 1 o 2 errores: juzga cada frase.',
+  frases: [
+    { t: 'Octreótido 50 µg en bolo y 50 µg/h durante 2-5 días.', error: false, por: 'Es la pauta de la Tabla 39.3 (p. 9).' },
+    { t: 'Ringer lactato 1.000 mL para sostener la PA mientras llega la sangre.', error: true, por: 'Falso: el Ringer lactato es hipotónico y no se recomienda, porque añade riesgo de edema cerebral; con albúmina <3 g/dL se usa albúmina al 5 % (p. 9, p. 5). Lo verás en el astrocito.' },
+    { t: 'Endoscopia en las primeras 12 horas.', error: false, por: 'Tabla 39.3 (p. 9): también identifica el origen y permite clipar o ligar el vaso.' },
+    { t: 'Transfundir hasta una hemoglobina de 7 g/dL, con hematíes, plasma y plaquetas 1:1:1.', error: false, por: 'Objetivo de Hb 7 g/dL y proporción 1:1:1 (Tabla 39.3, p. 9).' },
+    { t: 'Plasma hasta INR <1,5 antes de la endoscopia.', error: true, por: 'Falso: en la cirrosis el INR no mide el riesgo de sangrado; la hemostasia se guía con tromboelastografía (p. 9). Transfundir por el INR solo añade volumen.' },
+    { t: 'Ceftriaxona antes de la endoscopia.', error: false, por: 'La primera dosis va antes de la endoscopia (p. 9). Ojo: la tabla dice 1 g/día y el texto 2 g; las fuentes discrepan, y no se marca como error.' }],
 };
 export const CASO = {
   preset: 'casimira', titulo: 'Casimira, 44 años · paracetamol en tres productos',
@@ -41,6 +52,7 @@ export const CASO = {
   ],
 };
 export const LLEVAS = {
+  hilario: [['Con albúmina <3 g/dL, albúmina al 5 %: el 70 % del volumen se queda en el vaso; evita fluidos hipotónicos como el Ringer lactato.', 9], ['En la cirrosis el INR no mide el riesgo de sangrado: guía la hemostasia con tromboelastografía.', 9], ['Octreótido, antibiótico antes de la endoscopia, endoscopia en 12 h y Hb 7 g/dL.', 9]],
   apuesta: [['Si falla el hígado, el amonio sube por menos depuración: el carril de la urea se apaga.', 6], ['El astrocito convierte el amonio en glutamina, que arrastra agua.', 6]],
   error: [['La lactulosa acidifica la luz y elimina los productores de amonio; objetivo 2-3 deposiciones blandas.', 7], ['CVVH: oliguria, amonio >150 o edema, sea cual sea la creatinina.', 8]],
   caso: [['>150 µmol/L = CVVH ya, aunque la creatinina sea normal.', 8], ['Albúmina al 5 % y no Ringer lactato en el fallo hepático agudo.', 5], ['Encefalopatía progresiva: avisar a trasplante.', 8]],

@@ -9,7 +9,9 @@ import { PDF, PRESETS, FUENTES, NOTAS, PROFUNDIZAR, VIAS_APAGADAS, IDEA, fichaDe
 import { nuevo, leer, topes, fmt, vitales } from './modelo.js';
 import { escena, leyenda, opNodo } from './dibujo.js';
 import { crearGuia, focoSvg } from './guia.js';
-import { APUESTA, ERROR, CASO, LLEVAS, opciones } from './pruebas.js';
+import { cara, WH_TXT } from './cara.js';
+import { FLUIDOS } from './datos.js';
+import { APUESTA, ERROR, ERROR2, CASO, LLEVAS, opciones } from './pruebas.js';
 const $ = (id) => document.getElementById(id);
 let s = nuevo(), modo = 'explorar', preset = 'sano', oculto = false, foco = [], guiaApi, topeApi, firma = '', espera = null;
 const cita = (c, id) => `<span class="cita"><a class="cita-pdf" href="${PDF}#page=${c}" target="_blank" rel="noopener">PDF p. ${c}</a> · <button type="button" class="ver-ficha" data-resaltar="#${id || fichaDe(c)}" data-pag-ficha="${c}">p. ${c} · Ver en la ficha</button></span>`;
@@ -18,14 +20,14 @@ const N = () => (oculto ? '?' : fmt(leer(s).a));
 function aplicarTopes() {
   const lista = topes(s), f = JSON.stringify(lista.map((t) => [t.c, t.n, t.texto]));
   if (f === firma) return; firma = f;
-  for (const c of ['edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
-  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo || null });
+  for (const c of ['edema', 'diarrea', 'hipovol', 'cvvh', 'rifa', 'nofis', 'tips', 'fl']) if (!lista.some((t) => t.c === c)) topeApi.quitar(c);
+  for (const t of lista) topeApi.poner(t.c, { nivel: t.n, tono: t.tono || '', titulo: t.titulo, texto: t.texto, cita: t.pag, origen: t.origen, deshabilita: t.off || [], bajo: t.bajo || null });
 }
 function pintar() {
   const L = leer(s); aplicarTopes();
   $('hep-svg').innerHTML = escena(s, L, oculto) + focoSvg(foco);
   const v = vitales(s), cap = L.a >= 300;
-  $('mon-nh3').textContent = oculto ? '? µmol/L' : `${cap ? '≥' : ''}${fmt(L.a)} µmol/L`; $('mon-wh').textContent = oculto ? '?' : String(L.wh); $('mon-carril').textContent = `${s.func} %`;
+  $('mon-nh3').textContent = oculto ? '? µmol/L' : `${cap ? '≥' : ''}${fmt(L.a)} µmol/L`; $('mon-wh').innerHTML = oculto ? '?' : `${cara(L.wh)} ${L.wh} · ${WH_TXT[L.wh]} <i class="chip-ilus">ilustrativo</i>`; $('mon-carril').textContent = `${s.func} %`;
   $('mon-dep').textContent = s.dep ? `${s.dep} dep./día` : 'no'; $('mon-pa').textContent = v.pa + (v.nota ? ' ' + v.nota : ''); $('mon-fc').textContent = v.fc;
   $('mon-astro').textContent = oculto ? 'Astrocito: ?' : `Astrocito: ${L.sw > 0.4 ? 'hinchado' : 'normal'}`;
   document.querySelectorAll('.modos button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.modo === modo)));
@@ -34,6 +36,8 @@ function pintar() {
   document.querySelectorAll('[data-dep]').forEach((b) => b.setAttribute('aria-pressed', String(+b.dataset.dep === s.dep)));
   $('o-rifa').textContent = s.rifa; if (+$('r-rifa').value !== s.rifa) $('r-rifa').value = s.rifa;
   $('b-cvvh').textContent = `Hemofiltración (CVVH) · ${s.cvvh ? 'encendida' : 'apagada'}`; $('b-cvvh').setAttribute('aria-pressed', String(!!s.cvvh));
+  $('b-tips').textContent = `TIPS · ${s.tips ? 'puesto' : 'sin TIPS'}`; $('b-tips').setAttribute('aria-pressed', String(!!s.tips));
+  document.querySelectorAll('[data-fl]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.fl === s.fl)));
   $('o-func').textContent = s.func; if (+$('r-func').value !== s.func) $('r-func').value = s.func;
   if (L.edema && !oculto) $('fig').open = true;
   topeApi.refrescar(); $('leyenda').innerHTML = leyenda();
@@ -45,10 +49,12 @@ function hacer(a, v) {
   if (a === 'dep') { s.dep = v; frase(v ? `Lactulosa con ${v} deposiciones/día: la luz del colon se acidifica y desaparecen los productores de amonio; amonio ${N()} µmol/L.` : 'Sin lactulosa: el colon sigue fabricando amonio sin freno.', 'ficha · p. 7; efecto ilustrativo'); }
   if (a === 'rifa') { s.rifa = v; frase(v ? `Rifaximina ${v} día${v > 1 ? 's' : ''}: antibiótico que no se absorbe; frena a las bacterias productoras. ${v < 10 ? 'La ficha pide al menos 10 días. ' : ''}Amonio ${N()} µmol/L.` : 'Sin rifaximina.', 'ficha · p. 7 (400 mg ×3, ≥10 días); efecto ilustrativo'); }
   if (a === 'cvvh') { s.cvvh = v === 1 ? 1 : s.cvvh ? 0 : 1; frase(s.cvvh ? `CVVH: filtra el NH₃ de la sangre sin pasar por el hígado; amonio ${N()} µmol/L. En el fallo agudo es superior y cuanto antes mejor.` : 'CVVH apagada.', 'ficha · p. 8; efecto ilustrativo'); if (s.cvvh && typeof espera === 'function') espera(); }
+  if (a === 'tips') { s.tips = s.tips ? 0 : 1; frase(s.tips ? `TIPS: la sangre de la porta salta el hígado y el NH₃ llega entero a la sangre arterial (${N()} µmol/L). Cambia un problema por otro: más riesgo de encefalopatía.` : 'Sin TIPS: la porta pasa por el hepatocito.', 'ficha · p. 10; cuánto sube: ilustrativo'); }
+  if (a === 'fl') { s.fl = s.fl === v ? null : v; const f = s.fl && FLUIDOS[s.fl]; frase(!f ? 'Sin fluido.' : s.fl === 'alb' ? `Albúmina 5 %: cerca del 70 % del volumen se queda en el vaso; PA ${vitales(s).pa}, FC ${vitales(s).fc}.` : s.fl === 'rl' ? `Ringer lactato: hipotónico, favorece la hiponatremia y el astrocito se hincha más (PA ${vitales(s).pa}). No es el fluido recomendado.` : `Salino: sube la PA (${vitales(s).pa}) pero menos volumen se queda en el vaso que con albúmina.`, s.fl === 'sal' ? 'fisiología general; cambios de PA y FC ilustrativos' : 'ficha · p. 5 y 9; cambios de PA y FC ilustrativos'); }
   pintar();
 }
-function ponerPreset(clave) {
-  preset = clave; s = nuevo(PRESETS[clave].s); oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); guiaApi.abrir(clave);
+function ponerPreset(clave, sinGuia) {
+  preset = clave; s = nuevo(PRESETS[clave].s); oculto = false; foco = []; frase(PRESETS[clave].txt, 'paciente inventado; cifras ilustrativas, umbrales de la ficha · p. 6-8'); pintar(); if (sinGuia) guiaApi.cerrar(); else guiaApi.abrir(clave);
 }
 async function replay() {
   const nodos = [...document.querySelectorAll('#hep-svg [data-nodo]')];
@@ -62,15 +68,15 @@ const fin = (caja, clave) => { const b = document.createElement('div'); b.classN
 function modoPrueba(m) {
   modo = m; const caja = $('prueba'); caja.textContent = ''; caja.hidden = m === 'explorar'; oculto = false; foco = []; espera = null; delete caja.dataset.fin; guiaApi.cerrar();
   if (m === 'explorar') { pintar(); return; }
-  const def = m === 'apuesta' ? APUESTA : m === 'error' ? ERROR : CASO; preset = def.preset; s = nuevo(PRESETS[def.preset].s);
-  const tit = document.createElement('h3'); tit.textContent = m === 'apuesta' ? 'Apuesta antes de tocar' : m === 'error' ? 'Encuentra el error (hay 0, 1 o 2)' : CASO.titulo; caja.append(tit);
+  const def = m === 'apuesta' ? APUESTA : m === 'error' ? ERROR : m === 'hilario' ? ERROR2 : CASO; preset = def.preset; s = nuevo(PRESETS[def.preset].s);
+  const tit = document.createElement('h3'); tit.textContent = m === 'apuesta' ? 'Apuesta antes de tocar' : m === 'error' || m === 'hilario' ? 'Encuentra el error (hay 0, 1 o 2)' : CASO.titulo; caja.append(tit);
   if (m === 'apuesta') {
     oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes + ' ' + def.pregunta; const c = document.createElement('div'); c.className = 'ops'; caja.append(p, c);
     opciones(c, def.ops, () => { oculto = false; def.tras({ poner: (o) => { Object.assign(s, o); frase(`Con ${s.func} % de hepatocitos y la misma producción, el amonio arterial sube a ${fmt(leer(s).a)} µmol/L: menos depuración, no más producción.`, 'dirección: ficha · p. 6; cifra ilustrativa'); } }); pintar(); fin(caja, 'apuesta'); }, def.orden);
-  } else if (m === 'error') {
+  } else if (m === 'error' || m === 'hilario') {
     oculto = true; const p = document.createElement('p'); p.className = 'enun'; p.textContent = def.antes; caja.append(p); let hechas = 0;
     def.frases.forEach((f) => { const c = document.createElement('div'), t = document.createElement('p'); t.className = 'enun'; t.textContent = f.t; c.append(t); const b = document.createElement('div'); b.className = 'ops'; c.append(b); caja.append(c);
-      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; hacer('dep', 3); fin(caja, 'error'); } }); });
+      opciones(b, [{ t: 'Es un error', ok: f.error, por: f.por }, { t: 'Es correcta', ok: !f.error, por: f.por }], () => { if (++hechas === def.frases.length) { oculto = false; if (m === 'hilario') hacer('fl', 'alb'); else hacer('dep', 3); fin(caja, def.clave); } }); });
   } else caso(0, caja);
   pintar();
 }
@@ -90,13 +96,15 @@ function montar() {
    <div class="mando" id="m-prod"><b class="dock-nota">Producción intestinal de NH₃ (ilustrativa)</b>${seg('s-prod', 'prod', [[0, 'Baja'], [1, 'Normal'], [2, 'Alta']])}</div>
    <div class="mando" id="m-dep"><b class="dock-nota">Lactulosa: deposiciones al día</b>${seg('s-dep', 'dep', [[0, 'Sin'], [2, '2'], [3, '3'], [4, '4'], [6, '6']])}</div>
    <div class="mando" id="m-rifa"><label>Rifaximina 400 mg ×3: <output id="o-rifa"></output> días (ficha: ≥10)<input type="range" id="r-rifa" min="0" max="14" step="1" value="0"></label></div>
+   <div class="mando" id="m-tips"><button type="button" id="b-tips" class="b" aria-pressed="false">TIPS</button></div>
+   <div class="mando" id="m-fl"><b class="dock-nota">Fluido (bolo)</b><div class="fila">${Object.entries(FLUIDOS).map(([k, f]) => `<button type="button" data-fl="${k}" aria-pressed="false">${f.n}</button>`).join('')}</div></div>
    <div class="mando" id="m-cvvh"><button type="button" id="b-cvvh" class="b" aria-pressed="false">CVVH</button></div>`;
   $('dock-medir').innerHTML = '<div class="mando"><div class="presets" id="presets"></div></div>';
   $('presets').innerHTML = Object.entries(PRESETS).map(([k, v]) => `<button type="button" data-pre="${k}" aria-pressed="false">${v.nombre}</button>`).join('');
   $('presets').addEventListener('click', (ev) => { const b = ev.target.closest('[data-pre]'); if (b) { if (modo !== 'explorar') { modo = 'explorar'; $('prueba').hidden = true; } ponerPreset(b.dataset.pre); } });
   $('r-func').addEventListener('input', (ev) => hacer('func', +ev.target.value)); $('r-rifa').addEventListener('input', (ev) => hacer('rifa', +ev.target.value));
   $('dock-panel').addEventListener('click', (ev) => { const b = ev.target.closest('button'); if (!b || b.disabled) return;
-    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'b-cvvh') hacer('cvvh'); });
+    if (b.dataset.prod) hacer('prod', +b.dataset.prod); else if (b.dataset.dep) hacer('dep', +b.dataset.dep); else if (b.id === 'b-cvvh') hacer('cvvh'); else if (b.id === 'b-tips') hacer('tips'); else if (b.dataset.fl) hacer('fl', b.dataset.fl); });
   $('modos').addEventListener('click', (ev) => { const b = ev.target.closest('[data-modo]'); if (b) modoPrueba(b.dataset.modo); });
   $('b-replay').addEventListener('click', replay);
   $('hep-svg').addEventListener('click', (ev) => { const g = ev.target.closest('.via-off'); if (g) { const [n, d] = VIAS_APAGADAS[+g.dataset.via]; frase(`${n}: ${d}. Aquí no hace nada. <button type="button" class="ver-ficha" data-resaltar="#${VIAS_APAGADAS[+g.dataset.via][2]}" data-pag-ficha="${VIAS_APAGADAS[+g.dataset.via][3] || ''}">Ver en la ficha</button>`, 'otras fichas del libro'); } });
@@ -111,7 +119,7 @@ function montar() {
   topeApi = crearTope({ monitor: $('monitor'), dock, cita });
 }
 function ajustarDock() { document.documentElement.style.setProperty('--dock-h', $('dock').offsetHeight + 'px'); document.documentElement.style.setProperty('--frase-h', $('frase').offsetHeight + 'px'); }
-montar(); ponerPreset('sano'); ajustarDock();
+montar(); ponerPreset('sano', true); ajustarDock();
 new ResizeObserver(ajustarDock).observe($('dock')); new ResizeObserver(ajustarDock).observe($('frase'));
 seguirFrase(document.body, () => $('frase'), { dock: () => $('dock') });
 window.__hep = { get s() { return s; }, leer: () => leer(s), hacer, ponerPreset, modoPrueba, pintar, topes: () => topeApi.activos(), set: (o) => { Object.assign(s, o); pintar(); }, vitales: () => vitales(s) };
