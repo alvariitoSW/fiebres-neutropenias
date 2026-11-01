@@ -14,7 +14,8 @@ export const P = {
   mgPendiente: 0.0035, mgBase: 1.45,                    // mEq/L de Mg por cada mEq de déficit total; Mg normal ~1,4 (E p. 32, ejemplo 1,7 mg/dL = 1,4 mEq/L)
   phK: 3, phCa: 2.0,                                    // K sérico y Ca iónico por cada unidad de pH (E p. 20 flechas; p. 44)
   citrato: 0.17, kPorUnidad: 2.5,                       // Ca iónico (mg/dL) que quela cada concentrado; K del concentrado 2-3 mEq (E p. 24-25)
-  mgUmbral: 1.4, mgPiso: 0.8, clkPerdidaMax: 0.75,     // acople Mg→K: con el Mg²⁺ bajo parte del ClK se va por la orina (E p. 35: la dirección). Umbral ≈ límite bajo normal (p. 32); piso 0,8 mEq/L; hasta el 75 % se pierde: ilustrativo
+  mgUmbral: 1.4, mgPiso: 1.0, clkPerdidaMax: 0.75,     // acople Mg→K: con el Mg²⁺ bajo parte del ClK se va por la orina (E p. 35: la dirección). Umbral ≈ límite bajo normal (p. 32); con Mg²⁺ ≤1,0 mEq/L (el de Rufino) se pierde ~¾ del ClK: ilustrativo
+  poMin: 0.3,                                           // fosfato sérico mínimo de un paciente posible (mg/dL): por debajo, sello «no fisiológica». Tope ilustrativo (el libro llama grave a <1, p. 49)
   poResp: 0.3,                                          // mg/dL de fosfato que baja cada 0,1 de pH de origen respiratorio (E p. 49: la dirección; la cifra, ilustrativa)
   mgPlasmaL: 4.3, caIVpor100: 0.5,                      // litros donde cae el bolo de Mg (6 mEq / 1,4 mEq/L); mg/dL de Ca iónico por cada 100 mg (ilustrativo: el libro, p. 46, da +0,5 mg/dL de Ca TOTAL por 200 mg)
 };
@@ -34,11 +35,11 @@ export const PRESETS = {
 };
 // Estados con nombre (abrirEstado): formato de ponerEstadoMay { preset, ion, s, acc } + txt de una frase con su página.
 export const ESTADOS = {
-  'mg-bajo': { preset: 'rufino', ion: 'k', s: {}, txt: 'Rufino con el Mg²⁺ bajo: la hipopotasemia que acompaña a la falta de Mg puede no corregirse con ClK hasta reponerlo (E p. 35). Prueba a dar ClK.', org: 'ficha · p. 35' },
-  'reponer-mg': { preset: 'rufino', ion: 'mg', s: { dMg: -10 }, txt: 'Rufino con el Mg repuesto: ahora el ClK sí sube el K⁺ del suero (E p. 35: «Mg replacement is necessary before the hypokalemia can be corrected»).', org: 'ficha · p. 35; Mg repuesto: ilustrativo' },
+  'mg-bajo': { preset: 'rufino', ion: 'k', s: { dK: -243, dMg: -130 }, txt: 'Rufino (K⁺ 2,8 y Mg²⁺ 1,0 mEq/L) con el Mg²⁺ bajo: la hipopotasemia que acompaña a la falta de Mg puede no corregirse con ClK hasta reponerlo (E p. 35). Prueba a dar ClK.', org: 'ficha · p. 35' },
+  'reponer-mg': { preset: 'rufino', ion: 'mg', s: { dK: -243, dMg: -10 }, txt: 'Rufino (K⁺ 2,8 mEq/L) con el Mg repuesto: ahora el ClK sí sube el K⁺ del suero (E p. 35: «Mg replacement is necessary before the hypokalemia can be corrected»).', org: 'ficha · p. 35; Mg repuesto: ilustrativo' },
   hipermg: { preset: 'normal', ion: 'mg', s: { mgBolo: 100 }, txt: 'Mg²⁺ por encima de 10 mEq/L: bloqueo AV completo (E p. 39).', org: 'ficha · p. 39; bolo: ilustrativo' },
-  transfusion: { preset: 'valentin', ion: 'ca', s: { units: 16 }, txt: 'Valentín con 16 concentrados: cada uno trae 2-3 mEq de K⁺ y citrato que quela el calcio iónico (E p. 25, 44).', org: 'ficha · p. 25, 44; cifras ilustrativas' },
-  realimentar: { preset: 'damian', ion: 'p', s: {}, acc: [['real'], ['real']], txt: 'Damián con dos dosis de insulina y glucosa: el fosfato, el K⁺ y el Mg²⁺ del suero se hunden hacia la célula (E p. 49).', org: 'dirección: ficha · p. 21, 34, 49; cifras ilustrativas' },
+  transfusion: { preset: 'valentin', ion: 'ca', s: { units: 15 }, txt: 'Valentín con 15 concentrados (Ca iónico 0,60 mmol/L): cada uno trae 2-3 mEq de K⁺ y citrato que quela el calcio iónico (E p. 25, 44).', org: 'ficha · p. 25, 44; cifras ilustrativas' },
+  realimentar: { preset: 'damian', ion: 'p', s: {}, acc: [['real']], txt: 'Damián con una dosis de insulina y glucosa: el fosfato (0,9 mg/dL), el K⁺ y el Mg²⁺ del suero se hunden hacia la célula (E p. 49).', org: 'dirección: ficha · p. 21, 34, 49; cifras ilustrativas' },
   'alcalosis-resp': { preset: 'normal', ion: 'p', s: { ph: 7.56, resp: true }, txt: 'Hiperventilación (alcalosis respiratoria): el fosfato entra en la célula y el suero baja (E p. 49).', org: 'dirección: ficha · p. 49; tamaño ilustrativo' },
 };
 // Fuentes y notas (lista, REGLAS §7.11)
@@ -56,7 +57,7 @@ export const NOTAS = [
   ['fuente no lo dice', 'Fosfato potásico: 4,5 mEq/mL (p. 23); la Tabla 38.5 (p. 51) imprime «K⁺: 4.3 mEq/L» (por litro): probable errata de «mEq/mL», que es lo que usa el dibujo. Del mismo modo, la p. 18 imprime «50 mg/kg» de potasio total y la Fig. 36.1 «50 mEq/kg»: se usa mEq.'],
   ['fuente no lo dice', 'El efecto del pH sobre el K⁺ (3 mEq/L por unidad) es ilustrativo: la Fig. 36.2 (p. 20) da la dirección, pero el libro dice que la alcalosis tiene un efecto variable e impredecible (p. 21) y que la acidosis láctica no se asocia a hiperpotasemia (p. 24).'],
   ['fuente no lo dice', 'Los sellos de K⁺ (aviso ≥6, sello ≥7) son ilustrativos: el libro llama grave a más de 6,5 mEq/L (p. 27). «La mitad por la orina» del MgSO₄ es de la pauta de hipomagnesemia leve con riñón normal (p. 37) y el dibujo la aplica a cualquier dosis; 8 mEq por gramo es del MgSO₄·7H₂O (p. 37); la retención de Mg es poco fiable con mala función renal (p. 38).'],
-  ['fuente no lo dice', 'Cuánto ClK se pierde por la orina con el Mg²⁺ bajo: el libro dice que la hipopotasemia con falta de Mg puede ser refractoria al ClK (p. 35), sin dar fracción; el dibujo pierde hasta el 75 % cuando el Mg²⁺ baja de 1,4 a 0,8 mEq/L (ilustrativo). Tampoco da cuánto baja el fosfato con la alcalosis respiratoria (p. 49): 0,3 mg/dL por 0,1 de pH, ilustrativo.'],
+  ['fuente no lo dice', 'Cuánto ClK se pierde por la orina con el Mg²⁺ bajo: el libro dice que la hipopotasemia con falta de Mg puede ser refractoria al ClK (p. 35), sin dar fracción; el dibujo pierde ~¾ cuando el Mg²⁺ llega a 1,0 mEq/L (de 1,4 hacia abajo, en proporción; ilustrativo). Tampoco da cuánto baja el fosfato con la alcalosis respiratoria (p. 49): 0,3 mg/dL por 0,1 de pH, ilustrativo.'],
   ['opinión del autor', 'Cloruro cálcico solo en el colapso circulatorio (p. 27, 45): el libro lo recomienda así.'],
 ];
 export const CRECIMIENTO = [
@@ -74,9 +75,16 @@ export const PAG_FICHA = {
   18: ['mr-hipopotasemia', 'mr-k-total'], 19: ['mr-hipopotasemia', 'mr-k-curva'], 20: ['mr-hipopotasemia', 'mr-k-curva'], 21: ['mr-hipopotasemia', 'mr-hipok-redistribucion'],
   22: ['mr-hipopotasemia', 'mr-hipok-arritmias'], 23: ['mr-hipopotasemia', 'mr-kcl-ritmo'], 24: ['mr-hiperk-causas', 'mr-hiperk-acidosis'], 25: ['mr-hiperk-causas', 'mr-hiperk-transfusion'],
   26: ['mr-hiperk-causas', 'mr-ecg-correlacion'], 27: ['mr-hiperk-tratamiento', 'mr-calcio-preparados'], 32: ['mr-magnesio-deficit', 'mr-tabla-37-1'], 33: ['mr-magnesio-deficit', 'mr-mg-orina'],
-  34: ['mr-magnesio-deficit', 'mr-mg-farmacos'], 36: ['mr-magnesio-deficit', 'mr-mg-neuro'], 37: ['mr-magnesio-reposicion', 'mr-mg-leve'], 38: ['mr-magnesio-reposicion', 'mr-mg-retencion'], 39: ['mr-magnesio-reposicion', 'mr-hipermg-umbral'],
+  34: ['mr-magnesio-deficit', 'mr-mg-farmacos'], 35: ['mr-magnesio-deficit', 'mr-mg-electrolitos'], 36: ['mr-magnesio-deficit', 'mr-mg-neuro'], 37: ['mr-magnesio-reposicion', 'mr-mg-leve'], 38: ['mr-magnesio-reposicion', 'mr-mg-retencion'], 39: ['mr-magnesio-reposicion', 'mr-hipermg-umbral'],
   42: ['mr-calcio-hipoca', 'mr-ca-fracciones'], 43: ['mr-calcio-hipoca', 'mr-ca-albumina'], 44: ['mr-calcio-hipoca', 'mr-hipoca-transfusion'], 45: ['mr-calcio-hipoca', 'mr-ca-pauta'],
   46: ['mr-calcio-hipoca', 'mr-ca-cuidado'], 49: ['mr-fosforo', 'mr-hipop-glucosa'], 51: ['mr-fosforo', 'mr-fosfato-soluciones'],
 };
 export const fichaDe = (p) => PAG_FICHA[p] || PAG_FICHA[Math.max(...Object.keys(PAG_FICHA).filter((k) => +k <= p).map(Number), 18)];
 export const IDEA = ['Una misma bajada del K⁺ del suero esconde el doble de potasio perdido que el que sobra en una subida: lo que ves es una ventanita.', 19];
+// Una idea de cabecera por ion (la del ion que se mira). La del K⁺ es IDEA; las otras tres, con su página del PDF.
+export const IDEAS = {
+  k: IDEA,
+  mg: ['El suero guarda solo el 0,3 % del magnesio del cuerpo: puede salir normal con el depósito vacío.', 32],
+  ca: ['El laboratorio mide el calcio total; el iónico, el que actúa, puede estar bajo con el total casi normal.', 43],
+  p: ['El fosfato está casi todo dentro de la célula: la insulina y la alcalosis respiratoria lo meten y el suero se hunde.', 49],
+};
