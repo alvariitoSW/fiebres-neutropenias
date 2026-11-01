@@ -9,4 +9,12 @@ Injertos: de A, astrocito grande (glutamina y agua), puente del TIPS, filtro de 
 `ilustrativo` 60/150; de C, cara de West Haven junto al grado, mando de fluido (albúmina 5 % / salino / RL) y el error
 de 6 frases de Hilario. Vuelta 2: los 9 arreglos de `juicio-hepatocito.md` + los injertos, en dos encargos.
 
-## Termostato → (pendiente)
+## Termostato → **B «El cuerpo que arde y tirita»** (B 4 · A 0)
+Notas de Educación: A 8,8 · B 8,8 (empate; gana la que reutiliza motores: `tope`, `frase-vista`, `particulas`,
+`cargarMotion` con el patrón de los receptores; la única que explica la ficha 16: Ca²⁺, CO₂, rigidez).
+Educación B · Interior B (crece añadiendo estados en datos) · Justicia B (A da un síndrome equivocado a 41 °C, sube la
+CK con la fiebre, «sin efecto» en reposo; en las dos, `ilustrativo` en FC/CK por temperatura, 4,5 °C/h y tope 42 °C) ·
+Hacienda B (un estado «Juega» reutiliza el modelo continuo de A).
+Injertos de A: dial y termómetro grandes en la lupa del hipotálamo; estado «Juega» con el modelo continuo y sus topes
+(42, 22, 38 °C, 3 g) sin sus tres fallos; error de Ovidio (2 errores) y su caso con el giro del día 2; `CRECERA` y
+`FICHA`. Vuelta 2: los 9 arreglos de `juicio-termostato.md` + los injertos, en dos encargos.
