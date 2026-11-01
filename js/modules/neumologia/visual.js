@@ -8,6 +8,11 @@ import { RECETAS_3D_G2B } from './visual-3d-g2b.js';
 import { RECETAS_3D_G3 } from './visual-3d-g3.js';
 import { RECETAS_3D_G4 } from './visual-3d-g4.js';
 import { RECETAS_3D_G5 } from './visual-3d-g5.js';
+import { RECETAS_3D_G3B } from './visual-3d-g3b.js';
+import { RECETAS_3D_G4B } from './visual-3d-g4b.js';
+import { RECETAS_3D_G5B } from './visual-3d-g5b.js';
+import { RECETAS_3D_G5C } from './visual-3d-g5c.js';
+import { RECETAS_3D_G5D } from './visual-3d-g5d.js';
 
 const LAMINAS = { tipo: 'figuras', titulo: 'Las láminas del libro', nota: 'Desliza para verlas; tócalas para ampliarlas.', todas: true };
 
@@ -48,7 +53,7 @@ const RECETAS = {
     }
 };
 
-const TODAS = { ...RECETAS, ...RECETAS_3D_G1, ...RECETAS_3D_G2, ...RECETAS_3D_G2B, ...RECETAS_3D_G3, ...RECETAS_3D_G4, ...RECETAS_3D_G5 };
+const TODAS = { ...RECETAS, ...RECETAS_3D_G1, ...RECETAS_3D_G2, ...RECETAS_3D_G2B, ...RECETAS_3D_G3, ...RECETAS_3D_G4, ...RECETAS_3D_G5, ...RECETAS_3D_G3B, ...RECETAS_3D_G4B, ...RECETAS_3D_G5B, ...RECETAS_3D_G5C, ...RECETAS_3D_G5D };
 
 export function init() {
     for (const [ficha, receta] of Object.entries(TODAS)) montarVisual(ficha, receta);

@@ -261,6 +261,15 @@ lo demás basta el 8 (R7); el rejuicio solo puntúa lo que quedó por debajo (R8
 director partido en dos sesiones por parada (≤150 pasos); pieza de física del motor a 1,2 M con profesor al acabarla;
 `git merge-base origin/main origin/auto/<clave>` antes de presupuestar una tarea que continúa una PR antigua.
 
+### Más rápido (aprobado por el usuario el 01/11/2026; REGLAS §4.17; manda sobre lo anterior si choca)
+
+- **En paralelo**: al cerrar, abre **todas** las tareas de la cola que no compartan archivos con lo que ya corre
+  (hasta 7 sesiones; 4 carriles de Marino), no solo la siguiente.
+- **Techos**: si vas a pasarte, pide al Consejo (un agente barato) subir hasta **+25 %** y **sigue sin parar al
+  usuario**; anótalo en `SESIONES.md`. Solo por encima de ese +25 % del techo del usuario paras y comparece.
+- **Papeleo mínimo**: acta solo al fusionar una PR (≤15 líneas); parte de ≈10 líneas + «Vueltas», «Gasto» y
+  «Cuentas»; en el tablero, sustituye la fila de estado por una o dos líneas con el enlace al parte.
+
 ### Fase R · Revisar lo ya construido (tareas `revision`)
 
 Para lo que ya está en la app y ya tiene su fuente: **no se construye nada, se revisa**. Trabajadores revisores,

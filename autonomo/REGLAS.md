@@ -449,6 +449,27 @@ sección que necesites, y lee el `README.md` del módulo que toques (p. ej. `js/
       rama `auto/<clave>` vieja, el director pasa `git merge-base origin/main origin/auto/<clave>`. Si no hay historia
       común (o es muy antigua), se presupuesta como rama nueva desde `main` que copia lo útil, no como continuación.
       (Visto en `mr`: `auto/mr` no compartía historia con `main` y hubo que abrir `auto/mr-texto`.)
+    - **Juicio de realismo: primero la herramienta de capturas** (aprobada el 01/11, parte `mv-eco-5`): un juicio de
+      realismo con criterios nuevos (movimiento, Doppler, modo M…) no empieza sin la herramienta que los captura; sin
+      ella, el criterio no se da por «sin juzgar». (En el paso 4 de la eco quedaron sin juzgar y en el 5 fueron las
+      notas más bajas, 8,25 y 7,5, con el presupuesto ya gastado.)
+    - **Presupuesto de realismo por criterio que falta** (aprobada el 01/11, parte `mv-eco-5`): ≈0,5 M por cada
+      criterio por debajo de la meta, no por la lista de arreglos del profesor anterior.
+
+17. **Más rápido: en paralelo, sin esperar al usuario y con menos papeleo** (aprobado por el usuario el 01/11/2026:
+    «Haz A, B y C»; él preguntó «por qué narices avanzamos tan lento»):
+    - **A · En paralelo**: la cola del tablero no va en fila india. Todo lo que no comparte archivos con lo que ya
+      corre se lanza a la vez (hasta 7 sesiones con la vía libre; máx. 4 carriles de Marino). Al cerrar, cada
+      director abre **todas** las tareas de la cola que ya puedan ir, no solo la siguiente.
+    - **B · El Consejo sube techos hasta +25 %**: si una tarea o bloque va a pasarse de su presupuesto o de su techo,
+      el Consejo (un agente barato, dos dictámenes, ≤8 líneas) puede subirlo **hasta un 25 %** sin parar al usuario y
+      la sesión sigue. Se le cuenta después, en la fila de `SESIONES.md` y en el rumbo. Por encima del +25 % del
+      techo aprobado por el usuario, sí se para y comparece ante él. (Sustituye, para los techos, a la reserva del
+      «presupuesto» de §4.12 y §4.15 hasta ese 25 %.)
+    - **C · Menos papeleo**: **acta solo para fusionar una PR** (≤15 líneas); las demás decisiones del Consejo, una
+      línea en el parte. **Parte de ≈10 líneas** (qué se hizo, notas, qué falta, lo que necesita del usuario) más las
+      tablas «Vueltas», «Gasto» y «Cuentas», que lee Hacienda. En el tablero, la fila de estado se **sustituye** (una o
+      dos líneas con el enlace al parte), no se le añade historia: la historia está en el parte.
 
 ## 5. Lo que el agente puede y no puede tocar
 

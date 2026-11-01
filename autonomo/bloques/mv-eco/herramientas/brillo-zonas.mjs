@@ -6,8 +6,8 @@ import { construirCorazon, usarDibujo } from '../../../../js/modules/eco/corazon
 import { estadoGeo, extraDeMotor } from '../../../../js/modules/eco/formas.mjs';
 import { planoVista, crearEcografo } from '../../../../js/modules/eco/ecografia.mjs';
 const LISTAR = process.argv[2] === 'listar';
-const VISTAS = ['a4c', 'psaxPm', 'plax'];
-const ZONAS = ['tabique', 'pared libre VD', 'pared lateral VI', 'pericardio', 'sangre VI', 'sangre VD'];
+const VISTAS = process.env.VISTAS ? process.env.VISTAS.split(',') : ['a4c', 'psaxPm', 'plax'];
+const ZONAS = ['tabique', 'pared libre VD', 'pared lateral VI', 'pericardio', 'sangre VI', 'sangre VD', 'centro VI', 'centro VD'];
 const ec = crearEcografo({});
 function medir(esc, g, vista, dib) {
   usarDibujo(dib);
@@ -15,7 +15,7 @@ function medir(esc, g, vista, dib) {
   if (esc !== 'normal') { ESCENARIOS[esc].aplicar(m, g); m.correr(ESCENARIOS[esc].forma ? 200 : 40); }
   const o = m.onda, td = o.reduce((a, b) => (b.vvi > a.vvi ? b : a));
   const geo = construirCorazon(estadoGeo(td, extraDeMotor(m)), { pericardio: true, detalle: true });
-  const P = planoVista(vista, td), im = ec.formar(geo.partes, P, { ref: geo.partes, t: 0, m: { ventana: 0 } });
+  const P = planoVista(vista, td), im = ec.formar(geo.partes, P, { ref: geo.partes, t: 0, m: { ventana: 0, ...(process.env.M ? JSON.parse(process.env.M) : {}) } });
   if (LISTAR) { console.log(vista, [...im.etiquetas.keys()].join(' | ')); return null; }
   const gris = (x, y) => { const px = Math.round(im.cx + x * im.escala), py = Math.round(im.arriba + y * im.escala); if (px < 0 || py < 0 || px >= im.ancho || py >= im.alto) return null; const q = 4 * (py * im.ancho + px); return (im.pix[q] + im.pix[q + 1] + im.pix[q + 2]) / 3; };
   const T = (re) => new Set([...im.etiquetas].filter(([k]) => re.test(k)).map(([, v]) => v));
@@ -28,6 +28,8 @@ function medir(esc, g, vista, dib) {
   const cuarto = (a, alto) => { const o = [...a].sort((p, q) => proj(p) - proj(q)); const n = Math.floor(o.length / 4); return alto ? o.slice(-n) : o.slice(0, n); };
   const sangreDe = (cv) => sang.filter(q => Math.hypot(im.x[q] - cv[0], im.y[q] - cv[1]) < 40 && Math.hypot(im.x[q] - cVI[0], im.y[q] - cVI[1]) <= Math.hypot(im.x[q] - cVD[0], im.y[q] - cVD[1]) === (cv === cVI));
   const grupos = { 'tabique': cuarto(wVI, true), 'pared libre VD': cuarto(wVD, false), 'pared lateral VI': cuarto(wVI, false), 'pericardio': cel(t => tPer.has(t)), 'sangre VI': sangreDe(cVI), 'sangre VD': sangreDe(cVD) };
+  // centro: sangre a menos de 6 mm del centro de masa de la sangre de esa cavidad (lejos de las paredes)
+  for (const [n, a] of [['centro VI', grupos['sangre VI']], ['centro VD', grupos['sangre VD']]]) { if (!a.length) { grupos[n] = []; continue; } const c = cen(a); grupos[n] = a.filter(q => Math.hypot(im.x[q] - c[0], im.y[q] - c[1]) < 6); }
   const r = {};
   for (const [z, a] of Object.entries(grupos)) {
     const acc = { medio: [0, 0], lejos: [0, 0], todo: [0, 0] };
@@ -37,7 +39,7 @@ function medir(esc, g, vista, dib) {
   return r;
 }
 const filas = [];
-for (const [esc, g] of [['normal', undefined], ['hpcronica', 1]]) for (const vista of VISTAS) for (const dib of [1, 2]) {
+for (const [esc, g] of (process.env.CASOS ? JSON.parse(process.env.CASOS) : [['normal', undefined], ['hpcronica', 1]])) for (const vista of VISTAS) for (const dib of [1, 2]) {
   const r = medir(esc, g, vista, dib); if (r) filas.push([esc, vista, dib === 2 ? 'nuevo' : 'hoy', ...Object.values(r)]);
 }
 if (!LISTAR) { console.log(['caso', 'vista', 'dibujo', ...ZONAS].join('\t') + '   (medio 50-100 mm / lejano >100 mm / todo)'); for (const f of filas) console.log(f.join('\t')); }

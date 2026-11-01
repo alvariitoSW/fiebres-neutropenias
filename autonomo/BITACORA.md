@@ -315,7 +315,7 @@ esta sección.
 
 | Clave | Qué | Estado | Desde | Nota |
 |---|---|---|---|---|
-| cola del 01/11 | **Tu orden del 01/11**: (a) eco, arreglos del paso 5 y rejuicio → (b) `b3-pulmon-estudio` y `b3-cierre` → (c) `marino-unido` → (d) `b5`, `b6a`, `b6b` → (e) `reforma-techo` por trozos | (a) **en curso** en su sesión (`auto/mv-eco-2a5`); (b) sesión abierta el 01/11; el resto, cada director abre la siguiente | 2026-11-01 | Interior y Hacienda vigilan; comparece la tarea que pida >25 %; vía libre hasta el 22/11 |
+| cola del 01/11 | **Tu orden del 01/11**: (a) eco, arreglos del paso 5 y rejuicio → (b) `b3-pulmon-estudio` y `b3-cierre` → (c) `marino-unido` → (d) `b5`, `b6a`, `b6b` → (e) `reforma-techo` por trozos | (a) **en curso** en su sesión (`auto/mv-eco-2a5`); (b) **en curso** en `auto/b3d-estudio` (presupuesto ≈38,4 M tras Hacienda; quedan ≈5,6 M del techo del `b3d` para `b3-cierre`, que pide 8-14: posible comparecencia al cerrar); el resto, cada director abre la siguiente | 2026-11-01 | Interior y Hacienda vigilan; comparece la tarea que pida >25 %; vía libre hasta el 22/11 |
 | `mv-eco-2a5` | **B-045, paso 5, opción A**: techo de `mv-eco` a ≈35 M (+2,5 M), los 8 arreglos del juicio 1 (`autonomo/bloques/mv-eco/paso5/juicio-1.md`; el que más sube: espectro y modo M «en escalera») y un rejuicio, buscando el 9,5 | en curso | 2026-11-01 | El dibujo nuevo sigue apagado hasta el 9,5 |
 | `atlas-fase-b` (B-006 y B-002) | **Fase B del atlas**: figura y Estudiar de los 30 capítulos con el ecógrafo nuevo; empieza por `mr` sobre la **PR #2, abierta y aparcada** (no se cierra) | aparcada hasta que el dibujo nuevo llegue al 9,5 | 2026-11-01 | ≈30-45 M, del techo de la reforma; recomendación del Consejo |
 | `acod-lazos`, `preguntas-viejas`, `radar-tuits`, `estudio-04-11` | **Los opcionales del punto 3**, aprobados con la recomendación del Consejo: calculadora de ACOD (fichas técnicas y EHRA, no CardioTeca) y lazos P-V tras la eco; preguntas viejas fuera de Marino al final, si cabe; tuits por tandas, sin prisa; las candidatas del 04/11 **las decide el Consejo**; solape de bloques de Marino, sí (máx. 4 carriles) | en el tablero (trozos 17c-17f de `reforma-techo` y fila 7 de la Ley de Ciencia) | 2026-11-01 | ≈1,5-5 M, 10-15 M y 1-2 M por tanda |
@@ -390,6 +390,10 @@ El resto del tablero sigue `aparcada`.
 **⏰ Recordatorio: el PDF de Semiología** (el usuario, 01/11: «no tengo el PDF todavía. Déjalo en "Esperando algo tuyo" y recuérdamelo»). Vale el capítulo cardiovascular de Argente y Álvarez, *Semiología Médica*, o los de exploración cardiovascular de Walker (*Clinical Methods*) o Surós/Bates. Con él en `docs/`, se monta el objetivo «Historia clínica» del PIF.
 
 **Resuelto el 01/11 (tus decisiones, puntos 3-5)**: eco paso 5, opción A (≈35 M); PR #2 abierta y aparcada para la fase B; lo opcional (4, 5, 6, 7, 8, 9 y 10 de la lista del Congreso), aprobado con la recomendación del Consejo (las candidatas del 04/11 las decide el Consejo); lo de mirar en el móvil lo miras tú. Sigue esperando de ti: **el PDF de Semiología** y **pegar los tuits #26-28** en la Bandeja (x.com da 402).
+
+✅ 01/11 («Sí, R1 y R2») → REGLAS §4.16. **Propuestas de regla del parte `mv-eco-5` (01/11, en `auto/mv-eco-2a5`)**:
+- Un juicio de realismo con criterios nuevos (movimiento, Doppler) lleva **antes** su herramienta de capturas (en el paso 4 quedaron «sin juzgar» y en el 5 fueron las notas más bajas, 8,25 y 7,5, con el presupuesto ya gastado).
+- Presupuestos de realismo **por criterio que falta** (≈0,5 M cada uno), no por la lista del profesor anterior.
 
 **Resuelto el 30/10 (Consejos 13.ª y 14.ª)**: puntos 2 a 7 de la lista de abajo (2 semanas, sin techos, maqueta del `b4` y demás las elige Educación, bloques solapados, atlas fase B si cabe, preguntas viejas fuera de Marino como están). **Nuevo**: captura de Ajustes → Uso el 31/10 por la noche y cada mañana.
 
@@ -550,6 +554,8 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 5. 💡 Lo que yo propondría (no lo has pedido tú)
 
+- **Ahorro · Presupuesto de maquetas con injertos y vuelta 3** (propuesto 2026-11-01 por /ahorro) · Visto en: `2026-10-30-b4-iones` (3.ª vuelta y dictamen de Educación sin presupuesto, +0,62 M) y `2026-11-01-b5-maquetas` (vueltas 2a/2b por los injertos +0,8 M y vuelta 3 tras el auditor +1,1 M; +24 %) · Cambio: en la tabla «Presupuestos vigentes», la elegida de unas maquetas se presupuesta como «vuelta 2 = arreglos (sonnet 30 / 0,5 M) + injertos de las perdedoras (sonnet 30 / 0,5 M) + vuelta 3 tras el auditor (sonnet 25 / 0,4 M)», y el juicio de Educación por modelo (fable 30 / 0,6 M para 2-3 maquetas) en lugar de uno por maqueta · Ahorro esperado: no baja el gasto, quita el desvío (≈+20 %) y evita comparecer; el juicio por modelo ahorra ≈0,3-0,6 M por bloque.
+
 - **✅ 01/11: aprobadas todas las pendientes de Hacienda** («PUNTO 5 (ahorro), aprobadas todas las pendientes») y la del parte de `mr` → REGLAS §4.16 (`reglas-01-11`). No queda ninguna propuesta de ahorro pendiente.
 - ✅ 01/11 (REGLAS §4.16) **Ahorro · Continuar una PR antigua: `git merge-base` antes de presupuestar** (parte de `mr`, 01/11) · Visto en: `mr` (`auto/mr` no compartía historia con `main`; hubo que abrir `auto/mr-texto`).
 - ✅ 01/11 (REGLAS §4.16) **Ahorro · Pieza de motor nueva: barrido de extremos en su primera prueba** (propuesto 2026-10-31 por /ahorro) · Visto en: `b3-paso4` g4 (CPAP en Mateo, PAM 15) y `b3d` (alivio de la poscarga sin techo: VS 232 mL con 30 cmH₂O; neumotórax a saltos; 3 vueltas, ≈2,5 M) · Cambio: toda pieza de motor nueva lleva en su prueba un barrido de 0 al doble de su tope en cada paciente que la use, con «VS ≤ 1,4 × basal» y «paciente posible» (§1.14), antes de entregar · Ahorro esperado: ≈1,5-2,5 M por pieza de motor (una o dos vueltas de arreglos y un rejuicio).
@@ -578,6 +584,7 @@ su «hecho») · el «sigue» de `educacion-app` (lo manda quien fusione el `b3`
 
 ## 6. Hecho (últimos 7 días)
 
+- 2026-11-01 · **Más rápido** (REGLAS §4.17, «Haz A, B y C»): cola en paralelo (4 sesiones: eco, pulmón, `marino-unido`, mapa y maquetas del `b5`), el Consejo sube techos hasta +25 % sin pararte, papeleo mínimo. R1 y R2 de realismo, en §4.16.
 - 2026-11-01 · **Tus decisiones de los puntos 3-5**, al tablero: cola (a)-(e), eco al 9,5 con techo ≈35 M, PR #2 aparcada, opcionales con la recomendación del Consejo y los ahorros en REGLAS §4.16 (`reglas-01-11`).
 - 2026-11-01 · **Atlas: los 30 capítulos con su texto** (`mr` por la PR #77, Consejo 4-0).
 - 2026-11-01 · **Consejo del 01/11** (vídeo https://claude.ai/artifact/RTgGFnbio4SJAA52ZH6Lf3): vía libre hasta el 22/11; eco al 9,5 antes de encender el dibujo nuevo; `mr` a `main` solo con texto; 6 recortes de ahorro aprobados (`reglas-01-11`); Radiología parte 2 aparcada; Semiología espera tu PDF.

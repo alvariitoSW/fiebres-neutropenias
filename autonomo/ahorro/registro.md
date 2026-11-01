@@ -2,9 +2,12 @@
 
 Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a mano.
 
-**Último parte revisado:** `2026-11-01-mr.md` (pasada del 01/11: 0,71 M frente a 0,6 M, +18 %; sin propuesta nueva, un patrón suelto abajo)
+**Último parte revisado:** `2026-11-01-b5-maquetas.md` (pasada del 01/11: ≈11,0 M frente a 8,85 M, +24 %; una propuesta: presupuesto de maquetas con injertos y vuelta 3)
 
 ## Patrones sueltos (vistos una vez; esperan una segunda)
+- (b5, 01/11) Constructor de una vuelta 3 con 24 arreglos y una búsqueda de fuentes en el mismo encargo (58 pasos, 0,84 M). Si se repite: la búsqueda de fuentes (§1.15) en un encargo sonnet de ≤10 pasos aparte.
+- (b5, 01/11) Solapes de texto en SVG que ningún programa de prueba mide (los vio el director en una captura). Si se repite: el molde de `herramientas/*.mjs` compara las cajas de los `<text>`.
+- (b5, 01/11) Director 2,3 M en una sola sesión de ≈200 pasos (confirma la regla ya aprobada de partir al director, §4.16; no se cumplió).
 - (mr, 01/11) Tarea que continúa una rama anterior al 28/10 (main rehecho): la rama no comparte historia con `main`, el plan «fusionar main en la rama» no sirve y el director gasta en diagnosticarlo. Si se repite: comprobar `git merge-base` al presupuestar y llevar el contenido a una rama nueva desde `main`.
 - (shock-scai, 31/10) Los menores de una auditoría en una vuelta aparte del constructor (1,7 M por 7 menores de texto, por
   repetir la prueba larga). Si se repite: los menores de la auditoría, dentro del encargo de la vuelta del profesor.
@@ -67,3 +70,4 @@ Lo lleva la skill `/ahorro` (`.claude/skills/ahorro/SKILL.md`). No se edita a ma
 | 2026-10-30 | Hacienda no junta piezas con prueba propia en un encargo | propuesta |
 | 2026-10-30 | Director del paso 4 a 1,3 M | propuesta |
 | 2026-10-31 | Continuar al mismo constructor solo si el primero acabó en ≤30 pasos | propuesta |
+- **Presupuesto de maquetas con injertos y vuelta 3** (01/11, b4-iones + b5): propuesta.

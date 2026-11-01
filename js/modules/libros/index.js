@@ -55,7 +55,7 @@ export const quizTemas = [
     ...enBloque(temasMarinoToxicos, 'Marino · Tóxicos y apéndices (caps. 52-53)'),
 ];
 
-// Los 6 bloques de Marino: vista → su cuaderno, su banco de preguntas y los modelos vivos que enlazan sus fichas
+// Los 9 bloques de Marino (6 viven en Libros; Sangre, Corazón y Pulmón, en Merino): vista → su cuaderno, su banco de preguntas y los modelos vivos que enlazan sus fichas
 // (los botones de la pestaña Modelos vivos de la portada, por id).
 const BLOQUES = {
     marinoFundamentos: { vista: 'marino-fund-view', panel: 'panel-marino-fund-tabs', nombre: 'Fundamentos', preguntas: preguntasMarinoFundamentos, vivos: ['ctv-menu-libros', 'mur-menu-libros', 'tel-menu-libros', 'inm-menu-libros', 'cpv-menu-libros', 'agv-menu-libros'] },
@@ -63,6 +63,10 @@ const BLOQUES = {
     // de Libros); aquí solo cuenta sus fichas y pone la tira de sus modelos vivos en ese cuaderno. Sus preguntas de
     // repaso están en el quiz de Hematología.
     marinoSangre: { vista: 'merino-hemato-view', panel: 'panel-merino-tabs', nombre: 'Sangre y hemostasia', preguntas: [], vivos: ['cpv-menu-libros', 'vso-menu-libros', 'tel-menu-libros'] },
+    // Caps. 14-21 (Merino Cardiología) y 22-30 (Merino Neumología): igual que Sangre, enlaces cruzados a sus cuadernos;
+    // aquí solo cuentan sus fichas y ponen la tira de sus modelos vivos. Sus preguntas, en el quiz de cada especialidad.
+    marinoCorazon: { vista: 'merino-cardio-view', panel: 'panel-merino-cardio-tabs', nombre: 'Corazón y shock', preguntas: [], vivos: ['shv-menu-libros', 'rcv-menu-libros', 'rtv-menu-libros'] },
+    marinoPulmon: { vista: 'merino-neumo-view', panel: 'panel-merino-neumo-tabs', nombre: 'Pulmón y respirador', preguntas: [], vivos: ['pul-menu-libros'] },
     marinoRenal: { vista: 'marino-renal-view', panel: 'panel-marino-renal-tabs', nombre: 'Ácido-base, renal y electrolitos', preguntas: preguntasMarinoRenal, vivos: ['abv-menu-libros', 'agv-menu-libros', 'iov-menu-libros'] },
     marinoAbdomen: { vista: 'marino-abd-view', panel: 'panel-marino-abd-tabs', nombre: 'Abdomen y temperatura', preguntas: preguntasMarinoAbdomen, vivos: [] },
     marinoNeuro: { vista: 'marino-neuro-view', panel: 'panel-marino-neuro-tabs', nombre: 'Neurología', preguntas: preguntasMarinoNeuro, vivos: [] },

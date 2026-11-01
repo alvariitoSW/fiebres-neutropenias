@@ -4667,6 +4667,9 @@ body.study-mode-on .inm-dock { padding-right: 82px; }
 .lib-plegable[open] { padding-bottom: 12px; }
 .lib-plegable-dato { font-size: 0.72rem; font-weight: 400; color: var(--text-muted); }
 .lib-plegable-txt { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 10px; }
+.lib-panel-nota + .lib-vivos-grupo { margin-top: 0; }
+.lib-vivos-grupo { margin: 16px 0 8px; font-size: 0.82rem; font-weight: 700; color: var(--text-main); }
+.lib-vivos-grupo-caps { margin-left: 4px; font-size: 0.68rem; font-weight: 400; color: var(--text-muted); font-family: 'Courier New', monospace; }
 .lib-vivos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .lib-vivos .const-node { flex-direction: column; gap: 6px; align-items: stretch; margin: 0; padding: 10px; border: 1px solid var(--border-color); border-radius: 12px; background: var(--bg-card); }
 .lib-vivos .const-orb { width: 40px; height: 40px; font-size: 1.1rem; }
