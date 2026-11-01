@@ -2979,6 +2979,7 @@ body.study-mode-on .abv-dock { padding-right: 82px; }
 .agv-raiz .agv-escena.agv-con-lupa .agv-lupa-btn, .agv-raiz .agv-escena.agv-con-lupa .agv-chapa { display: none; }
 .agv-raiz #agv-lupa-orilla { left: 6px; }
 .agv-raiz #agv-lupa-neurona { right: 6px; }
+.agv-raiz #agv-lupa-tubo { left: 50%; transform: translateX(-50%); }
 .agv-raiz .agv-lupa { position: absolute; border-radius: 50%; border: 3px double var(--accent-blue); background: var(--bg-main); overflow: hidden;
   box-shadow: 0 0 0 1px rgba(23, 20, 15, 1), 0 10px 30px rgba(23, 20, 15, .9); }
 .agv-raiz .agv-lupa canvas { display: block; width: 100%; height: 100%; }
