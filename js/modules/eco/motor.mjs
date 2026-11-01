@@ -198,17 +198,6 @@ export const BASE = {
   // contrae más tiempo que el VI (asincronía interventricular; fisiología general): su presión sigue alta cuando el VI
   // ya se relaja y el tabique se aplana al final de la sístole. Ver Atlas · 14
   durVd: 1,
-  // 154 · RELAJACIÓN RETRASADA DEL VD CON POSCARGA ALTA. En la sobrecarga de presión el VD empieza a acortarse a la vez que el VI pero
-  // llega a su máximo más tarde: retraso izquierda-derecha del pico 94 ± 41 ms en 21 pacientes con HAP (PAPm 55 ± 13), sin retraso en el
-  // comienzo (−1 ± 16 ms), por alargarse el acortamiento del VD; se asocia a la tensión de su pared y al abombamiento del tabique hacia el
-  // VI, máximo a los 395 ± 45 ms, ya cerrada la aórtica (Marcus JT et al., J Am Coll Cardiol 2008;51:750-7, PMID 18279740, resumen).
-  // Aquí: el VD termina su sístole retrasoVdPorK × (k − 1) s más tarde (tope retrasoVdTope), con k el múltiplo de la resistencia pulmonar
-  // de referencia (inverso de escalarRPul). Lo que ya alarga durVd (escenarios, HP crónica) cuenta como parte de ese retraso; el resto se
-  // pone como una meseta en el máximo de la activación (× √T, como el resto de la sístole). Con k ≤ 1 (poscarga normal) no hay meseta y el
-  // VD es el de siempre. Las dos constantes, ILUSTRATIVAS (la fuente da el retraso en la HAP, no su ley): el tope de 100 ms queda dentro de
-  // 94 ± 41 ms; el TEP del defecto (k ≈ 4,6) da ~70 ms. Que el retraso exista también en el TEP agudo es extrapolación del motor (la fuente
-  // estudia HAP; la asocia a la tensión de pared, alta en el VD agudo de pared fina)
-  retrasoVdPorK: 0.025, retrasoVdTope: 0.10,
   // fracción de subida de la activación del VD (null = la del VI). Con la del VI la presión VD−AD en el chorro de IT acaba en rampa en la
   // sobrecarga de presión; subiendo antes hace domo (Zoghbi 2017, Fig. 29, PDF p. 49). Lo fijan las enfermedades en escenarios.mjs. ILUSTRATIVO
   fSubidaVd: null, qSubidaVd: null,
@@ -308,11 +297,6 @@ function activacion(t, t1, t2, q = 1) {
 // pendiente logarítmica en ese punto (τ = 0,162·t2), multiplicada por r (relajación lenta)
 const T_SIS_APRIETA = 0.45;   // s
 const U_COLA = 0.7, E_COLA = 0.5 * (1 + Math.cos(Math.PI * U_COLA)), K_COLA = E_COLA / (0.5 * Math.PI * Math.sin(Math.PI * U_COLA));
-// Activación del VD con meseta: igual que activacion, pero se queda en 1 durante «meseta» s antes de caer (154, ver retrasoVdPorK)
-function activacionVd(t, t1, t2, q, meseta) {
-  if (!(meseta > 0) || t < t1) return activacion(t, t1, t2, q);
-  return t < t1 + meseta ? 1 : activacion(t - meseta, t1, t2, q);
-}
 function activacionVi(t, t1, t2, q, r) {
   if (t < t1 + U_COLA * t2) return activacion(t, t1, t2, q);
   return E_COLA * Math.exp(-(t - t1 - U_COLA * t2) / (K_COLA * t2 * r));
@@ -431,10 +415,7 @@ export function crearMotor(ajustes = {}) {
     s.eVi = activacionVi(tv0, p.fSubida * p.tsVen * kV, (1 - p.fSubida) * p.tsVen * kV, p.qSubida, p.relajacion);
     // activación del VD: la del VI salvo que su sístole dure más (durVd)
     const fV = p.fSubidaVd ?? p.fSubida, qV = p.qSubidaVd ?? p.qSubida;
-    const kPul = (p.rPul - BASE.rPul) / 0.095 + 1, retrasoVd = Math.min(p.retrasoVdTope, p.retrasoVdPorK * Math.max(0, kPul - 1));
-    const mesetaVd = Math.max(0, retrasoVd - Math.max(0, p.durVd - 1) * p.tsVen) * kV;
-    s.mesetaVd = mesetaVd;
-    const eVd = activacionVd(tv0, fV * p.tsVen * kV * p.durVd, (1 - fV) * p.tsVen * kV * p.durVd, qV, mesetaVd);
+    const eVd = activacion(tv0, fV * p.tsVen * kV * p.durVd, (1 - fV) * p.tsVen * kV * p.durVd, qV);
     s.eAur = eAur; s.eVen = eVen; s.eVd = eVd;
     const vCor = s.vad + s.vvd + s.vai + s.vvi + s.liquidoPeri;
     s.pperi = p.kPeri * Math.exp((vCor - p.v0Peri - s.estiraPeri) / p.phiPeri);
