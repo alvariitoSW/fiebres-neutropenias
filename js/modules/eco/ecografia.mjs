@@ -452,6 +452,7 @@ function cortarLineas(p, P, h = 2) {
  * ref: las mismas piezas en la forma de referencia (telediástole), o null.
  */
 export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = true } = {}) {
+  let radioVI = null;
   const grupos = new Map(), lineas = [], valvas = [], tubos = [], mascara = { tipo: 'mascara', seg: [] }, peri = [];
   let base = 0;
   partes.forEach((p, k) => {
@@ -470,6 +471,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     const c = cortarPieza(p, P, r, base); base += p.pos.length / 3;
     if (!c.seg.length) return;
     const el = { seg: c.seg, segRef: c.segRef, claves: c.claves, nombre: p.nombre };
+    if (p.radioCavidad != null && t.grupo === 'VI') radioVI = p.radioCavidad;
     if (t.clase === 'pared') { if (!grupos.has(t.grupo)) grupos.set(t.grupo, { db: t.db, trozos: [] }); grupos.get(t.grupo).trozos.push(el); }
     else if (t.clase === 'pericardio') { mascara.seg.push(...c.seg); peri.push({ tipo: 'linea', seg: c.seg, segRef: c.segRef, db: dibujoNuevo() ? PERICARDIO_FINO.db : t.db, ancho: dibujoNuevo() ? PERICARDIO_FINO.ancho : t.ancho, grupo: 'Pericardio' }); }
     else if (t.clase === 'tubo' || t.clase === 'vaso') tubos.push({ ...el, t });
@@ -487,7 +489,7 @@ export function elementosDelCorte(partes, P, ref = null, { cuerdasYPapilares = t
     const segRef = conRef ? trozos.flatMap(x => x.segRef).concat(puentesRef) : null;
     out.push({ tipo: 'relleno', seg, segRef, db, grupo: g, abiertos });
     // borde de la pared: más brillante donde el haz le da de frente (reflexión especular)
-    out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g });
+    out.push({ tipo: 'linea', seg, segRef, db: DB.borde, ancho: 1.1, especular: DB.especular, grupo: g, radioCavidad: g === 'VI' ? radioVI : null });
   }
   // papilares y trabéculas: nacen de la pared, así que lo que queda lejos de ella se desvanece (en formar)
   const paredVI = cuerdasYPapilares && grupos.has('VI') ? grupos.get('VI').trozos.flatMap(x => x.seg) : null;
@@ -796,7 +798,7 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
         // paredes reales: el borde de la pared ya no es una línea brillante; queda una interfase fina, algo más clara
         // que el músculo solo donde el haz llega de frente (el pericardio y las válvulas siguen siendo líneas)
         const W2 = m.paredes, borde = !!el.especular && W2 > 0;
-        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
+        if (borde) trazar(P, el.seg, el.ancho * (1 - (el.grupo === 'VD' ? 0.65 : 0.45) * W2), (dibujoNuevo() ? el.db + BORDE_ENDO.db + (el.radioCavidad != null ? BORDE_ENDO.extraPequenoDb * clamp((BORDE_ENDO.rmDesdeMm - el.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1) : 0) : el.db - (el.grupo === 'VD' ? 7 : 3) * W2), espec - (el.grupo === 'VD' ? 6 : 3) * W2, tag, m.especular, 1 - W2);
         // paredes reales: las aurículas y el anillo de la base (una sola capa) tampoco son líneas gruesas y brillantes
         else if (W2 > 0 && /^(AI|AD|Orejuela|Base V)/.test(el.grupo)) trazar(P, el.seg, el.ancho * (1 - (/^AD/.test(el.grupo) ? 0.7 : 0.4) * W2), el.db - (/^AD/.test(el.grupo) ? 15 : 8) * W2, espec, tag, m.especular);
         else trazar(P, el.seg, el.ancho, el.db + (dibujoNuevo() && /^(Grasa|Seno|Coronaria|Vena)/.test(el.grupo) ? SURCOS_NUEVO.db : 0), espec, tag, m.especular, 1, el.grupo === 'Pericardio', dibujoNuevo() ? (el.grupo === 'Pericardio' ? 1 : /^Fosa oval/.test(el.grupo) ? 2 : 0) : 0);   // el pericardio es solo una línea: lleva su etiqueta aunque dependa del ángulo
@@ -872,7 +874,13 @@ export function crearEcografo({ ancho = 360, alto = 300, nb = 192, ns = 448 } = 
       }
     }
     reloj.push(performance.now());
-    desenfocar(I); desenfocar(Q); reloj.push(performance.now());
+    desenfocar(I); desenfocar(Q);
+    // dibujo nuevo, VI pequeño (Rm < 26 mm, diámetro <52 mm): el borde nítido de la cavidad. La mezcla lateral de la pared hacia la sangre
+    // se reduce (la sangre conserva solo el resto del halo): nitidez ilustrativa, sin dato de fuente
+    const elRC = dibujoNuevo() ? els.find(e => e.radioCavidad != null) : null;
+    if (elRC) { const kc = clamp((BORDE_ENDO.rmDesdeMm - elRC.radioCavidad) / BORDE_ENDO.rmRangoMm, 0, 1), fS = 1 - BORDE_ENDO.mezclaSangre * kc;
+      if (kc > 0) for (let q = 0; q < N; q++) if (TAG[q] === 255) { I[q] *= fS; Q[q] *= fS; } }
+    reloj.push(performance.now());
     // ganancia por profundidad: 4 mandos repartidos de arriba abajo, interpolados
     const TG = new Float32Array(ns);
     if (m.tgc > 0 && o.tgc) for (let j = 0; j < ns; j++) { const f = j / (ns - 1) * 3, k = Math.min(2, Math.floor(f)), u = f - k; TG[j] = o.tgc[k] + (o.tgc[k + 1] - o.tgc[k]) * u; }

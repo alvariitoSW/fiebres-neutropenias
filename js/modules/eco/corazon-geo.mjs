@@ -246,7 +246,7 @@ export function construirCorazonHoy(estado, opciones = {}) {
   // --- Ventrículo izquierdo ---
   const zEndo = (u) => -vi.L * (1 - Math.pow(1 - u, 1.6));
   const zEpi = (u) => -vi.Le * (1 - Math.pow(1 - u, 1.6));
-  anadir('VI endocardio', conAO(invertir(rejilla(NZe, NPe, (u, v) => endoViT(zEndo(u), phi0 + v * span))), aoEndoVi), COLORES.endocardio, { dobleCara: true });
+  anadir('VI endocardio', conAO(invertir(rejilla(NZe, NPe, (u, v) => endoViT(zEndo(u), phi0 + v * span))), aoEndoVi), COLORES.endocardio, opciones.ajustes?.cavidadNitida ? { dobleCara: true, radioCavidad: vi.Rm } : { dobleCara: true });   // radioCavidad (mm, dibujo nuevo): el eco afina el borde del VI pequeño
   anadir('VI epicardio', conAO(rejilla(NZ, NPe, (u, v) => epiVi(zEpi(u), phi0 + v * span)), aoEpiVi), COLORES.miocardio);
   if (corte) {
     for (const ph of [phi0, phi0 + Math.PI])

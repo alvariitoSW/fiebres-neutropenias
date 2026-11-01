@@ -41,7 +41,8 @@ export const CAIDA_PROFUNDIDAD = { desdeMm: 20, dbPorMm: 0.06, origen: 'ilustrat
 // del abanico (dB en el borde, ∝ e²; ilustrativo; la teoría de la sonda de sector, POCUS I cap. 2, p. 41 impresa, no da cifras).
 export const CAIDA_LATERAL = { dbBorde: 5, topeDb: 5, origen: 'ilustrativo' };
 // Borde endocárdico (dibujo nuevo): interfaz sangre-tejido, unos dB sobre el miocardio medio, sin ser una línea dibujada (ilustrativo).
-export const BORDE_ENDO = { db: 1, origen: 'ilustrativo' };
+// extraPequenoDb: el borde del VI de diámetro <52 mm (Rm < 26 mm) sube hasta +5 dB más (+6 en total); el DTD normal es 42-58 mm (Lang 2015, Tabla 2, p. 6)
+export const BORDE_ENDO = { db: 1, extraPequenoDb: 5, rmDesdeMm: 26, rmRangoMm: 8, mezclaSangre: 0.8, origen: 'ilustrativo' };
 // Surco AV, coronarias, venas y seno coronario del dibujo nuevo: cortan el plano como bandas que se cruzan detrás de la aurícula (la «cruz»
 // del PLAX); se apagan unos dB para que no compitan con la pared posterior (ilustrativo).
 export const SURCOS_NUEVO = { db: -9, origen: 'ilustrativo' };
